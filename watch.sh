@@ -2,6 +2,9 @@
 
 trap 'jobs -p | xargs kill' EXIT
 
+mkdir -p dist/css
+mkdir -p dist/js
+
 sass --watch scss:dist/css --sourcemap=none &
 
 if [ $1 != "jeremyisbadatnode" ]; then
