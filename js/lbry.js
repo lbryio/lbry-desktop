@@ -1,6 +1,6 @@
 var lbry = {
   isConnected: false,
-  rootPath: '../../web/',
+  rootPath: '.',
   colors: {
     primary: '#155B4A'
   }

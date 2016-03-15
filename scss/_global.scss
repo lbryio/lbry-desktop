@@ -1,0 +1,115 @@
+@charset "UTF-8";
+
+$spacing-vertical: 24px;
+
+$color-primary: #155B4A;
+$color-light-alt: hsl(hue($color-primary), 15, 85);
+$color-text-dark: #000;
+$color-money: #216C2A;
+$color-meta-light: #505050;
+
+$font-size: 18px;
+
+$mobile-width-threshold: 801px;
+$max-content-width: 1000px;
+$max-text-width: 660px;
+
+
+@mixin clearfix()
+{
+    &:before, &:after
+    {
+      content: " ";
+      display: table;
+    }
+    &:after
+    {
+        clear: both;
+    }
+}
+
+@mixin border-radius($radius)
+{
+  -webkit-border-radius: $radius;
+     -moz-border-radius: $radius;
+      -ms-border-radius: $radius;
+          border-radius: $radius;
+}
+
+@mixin display-flex()
+{
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+}
+
+@mixin flex($columns)
+{
+  -webkit-flex: $columns;
+     -moz-flex: $columns;
+      -ms-flex: $columns;
+          flex: $columns;
+}
+
+@mixin flex-flow($flow) {
+  -webkit-flex-flow: $flow;
+     -moz-flex-flow: $flow;
+      -ms-flex-flow: $flow;
+          flex-flow: $flow;
+}
+
+@mixin flex-direction($direction) {
+  -webkit-flex-direction: $direction;
+     -moz-flex-direction: $direction;
+      -ms-flex-direction: $direction;
+          flex-direction: $direction;
+}
+
+@mixin absolute-center()
+{
+  @include display-flex();
+  -webkit-box-align: center;
+     -moz-box-align: center;
+     -ms-flex-align: center;
+  -webkit-align-items: center;
+          align-items: center;
+  -webkit-box-pack: center;
+     -moz-box-pack: center;
+     -ms-flex-pack: center;
+  -webkit-justify-content: center;
+          justify-content: center;
+}
+
+@mixin linear-gradient($from-color, $to-color) {
+  background-color: $to-color; /* Fallback Color */
+  background-image: -webkit-linear-gradient(top, $from-color, $to-color); /* Chrome 10+, Saf5.1+, iOS 5+ */
+  background-image:    -moz-linear-gradient(top, $from-color, $to-color); /* FF3.6 */
+  background-image:     -ms-linear-gradient(top, $from-color, $to-color); /* IE10 */
+  background-image:         linear-gradient(top, $from-color, $to-color);
+}
+
+@mixin box-sizing( $type: border-box ) {
+    -webkit-box-sizing: $type;
+       -moz-box-sizing: $type;
+         -o-box-sizing: $type;
+        -ms-box-sizing: $type;
+            box-sizing: $type;
+}
+
+@mixin background-size ($size) {
+    -webkit-background-size: $size;
+    -moz-background-size: $size;
+    -o-background-size: $size;
+    background-size: $size;
+}
+
+@mixin offscreen() {
+  position: absolute;
+  left: -9999px;
+  top:auto;
+  width:1px;
+  height:1px;
+  overflow:hidden;
+}

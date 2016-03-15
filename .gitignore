@@ -1,0 +1,3 @@
+dist/css/*
+dist/js/*
+.sass-cache
