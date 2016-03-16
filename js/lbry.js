@@ -6,6 +6,15 @@ var lbry = {
   }
 };
 
+lbry.call = function(method, params, callback)
+{
+  /*
+   * XHR magic
+   */
+  //when XHR returns and is successful
+  // callback(JSON.parse(xhr.responseText));
+}
+
 //core
 lbry.connect = function(callback)
 {
@@ -16,24 +25,16 @@ lbry.connect = function(callback)
   }, 1500);
 }
 
-lbry.getBalance = function()
+lbry.getBalance = function(callback)
 {
-  var method = "get_balance";
-  var request = new XmlRpcRequest("http://localhost:7080/", method);  
-  var amount = Number(request.send().parseXML());
-  return amount;
+  lbry.call("get_balance", {}, callback);
 }
 
 lbry.search = function(query, callback)
 {
   //simulate searching via setTimeout with
   setTimeout(function() {
-      var method = "search_nametrie"
-      var request = new XmlRpcRequest("http://localhost:7080/", method);
-      request.addParam(query);
-      var results = request.send().parseXML();
-
-    callback(results);
+    lbry.call("search_nametrie", { query: query }, callback);
   }, 300);
 }
 
