@@ -16,7 +16,7 @@ lbry.call = function (method, params, callback)
     if (method_output.code !== 200) {
         throw new Error('Call to method ' + method + ' failed with message: ' + method_output.message);
     }
-
+    console.log(method_output.result);
     callback(method_output.result);
   });
   xhr.open('POST', 'http://localhost:5279/lbryapi', true);

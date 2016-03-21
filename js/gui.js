@@ -177,7 +177,7 @@ var SearchResults = React.createClass({
     console.log('results');
     this.props.results.forEach(function(result) {
       rows.push(
-        <SearchResultRow name={result.name} title={result.title} imgUrl={result.img}
+        <SearchResultRow name={result.name} title={result.title} imgUrl={result.thumbnail}
                           description={result.description} cost_est={result.cost_est} />
       );
     });
@@ -191,7 +191,7 @@ var SearchResults = React.createClass({
 });
 
 var searchRowImgStyle = {
-  maxHeight: '200px',
+  maxHeight: '100px',
   display: 'block',
   marginLeft: 'auto',
   marginRight: 'auto',
@@ -304,8 +304,8 @@ var Discover = React.createClass({
         <section><input type="search" style={searchInputStyle} onChange={this.onQueryChange}
           placeholder="Find movies, music, games, and more"/></section>
         { this.state.searching ? <SearchActive /> : null }
-        { !this.state.searching && this.state.result.length ? <SearchResults results={this.state.result} /> : null }
-        { !this.state.searching && !this.state.result.length && this.state.query ? <SearchNoResults query={this.state.query} /> : null }
+        { !this.state.searching && this.state.results.length ? <SearchResults results={this.state.results} /> : null }
+        { !this.state.searching && !this.state.results.length && this.state.query ? <SearchNoResults query={this.state.query} /> : null }
       </main>
     );
   }
