@@ -120,7 +120,7 @@ var Header = React.createClass({
           <CreditAmount amount={this.state.balance}/>
         </span>
         <div style={logoStyle}>
-          <img src="../../web/img/lbry-dark-1600x528.png" style={imgStyle}/>
+          <img src="./img/lbry-dark-1600x528.png" style={imgStyle}/>
         </div>
       </header>
     );
@@ -304,8 +304,8 @@ var Discover = React.createClass({
         <section><input type="search" style={searchInputStyle} onChange={this.onQueryChange}
           placeholder="Find movies, music, games, and more"/></section>
         { this.state.searching ? <SearchActive /> : null }
-        { !this.state.searching && this.state.results.length ? <SearchResults results={this.state.results} /> : null }
-        { !this.state.searching && !this.state.results.length && this.state.query ? <SearchNoResults query={this.state.query} /> : null }
+        { !this.state.searching && this.state.result.length ? <SearchResults results={this.state.result} /> : null }
+        { !this.state.searching && !this.state.result.length && this.state.query ? <SearchNoResults query={this.state.query} /> : null }
       </main>
     );
   }

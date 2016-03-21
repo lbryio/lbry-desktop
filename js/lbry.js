@@ -23,7 +23,7 @@ lbry.call = function (method, params, callback)
   xhr.send(JSON.stringify({
     'jsonrpc': '2.0',
     'method': method,
-    'params': params,
+    'params': [params, ],
     'id': 0
   }));
 }
@@ -45,10 +45,7 @@ lbry.getBalance = function(callback)
 
 lbry.search = function(query, callback)
 {
-  //simulate searching via setTimeout with
-  setTimeout(function() {
-    lbry.call("search_nametrie", { query: query }, callback);
-  }, 300);
+  lbry.call("search_nametrie", { "search": query }, callback);
 }
 
 //utilities
