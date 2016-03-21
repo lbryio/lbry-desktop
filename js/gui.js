@@ -101,12 +101,23 @@ var logoStyle = {
 };
 
 var Header = React.createClass({
+  getInitialState: function() {
+    return {
+      balance: 0
+    };
+  },
+  componentDidMount: function() {
+    lbry.getBalance(function(balance) {
+      this.setState({
+        balance: balance
+      });
+    }.bind(this));
+  },
   render: function() {
-    var balance = lbry.getBalance();
     return (
       <header>
         <span style={balanceStyle}>
-          <CreditAmount amount={balance}/>
+          <CreditAmount amount={this.state.balance}/>
         </span>
         <div style={logoStyle}>
           <img src="../../web/img/lbry-dark-1600x528.png" style={imgStyle}/>

@@ -6,13 +6,26 @@ var lbry = {
   }
 };
 
-lbry.call = function(method, params, callback)
+lbry.call = function (method, params, callback)
 {
-  /*
-   * XHR magic
-   */
-  //when XHR returns and is successful
-  // callback(JSON.parse(xhr.responseText));
+  var xhr = new XMLHttpRequest;
+  xhr.addEventListener('load', function() {
+    // The response from the HTTP endpoint has a "result" key containing a JSON string of the output of the JSON-RPC method itself
+    var method_output = JSON.parse(JSON.parse(xhr.responseText).result);
+
+    if (method_output.code !== 200) {
+        throw new Error('Call to method ' + method + ' failed with message: ' + method_output.message);
+    }
+
+    callback(method_output.result);
+  });
+  xhr.open('POST', 'http://localhost:5279/lbryapi', true);
+  xhr.send(JSON.stringify({
+    'jsonrpc': '2.0',
+    'method': method,
+    'params': params,
+    'id': 0
+  }));
 }
 
 //core
