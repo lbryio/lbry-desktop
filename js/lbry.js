@@ -31,11 +31,24 @@ lbry.call = function (method, params, callback)
 //core
 lbry.connect = function(callback)
 {
-  //dummy connect function - one of the first things we should do is dump people to get help if it can't connect
-  setTimeout(function() {
-    lbry.isConnected = true;
-    callback();
-  }, 1500);
+  // Check every half second to see if the daemon's running.
+  // Returns true to callback once connected, or false if it takes too long and we give up.
+  var try_num = 0;
+  var check_connected = setInterval(function() {
+    lbry.call('is_running', {}, function(is_running) {
+      if (is_running) {
+        lbry.isConnected = true;
+        clearInterval(check_connected);
+        callback(true);
+      } else {
+        if (try_num >= 20) { // Move this into a constant or config option
+          clearInterval(check_connected);
+          callback(false);
+        }
+        try_num++;
+      }
+    });
+  }, 500);
 }
 
 lbry.getBalance = function(callback)
