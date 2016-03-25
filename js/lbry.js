@@ -6,7 +6,7 @@ var lbry = {
   }
 };
 
-lbry.call = function (method, params, callback)
+lbry.call = function (method, params, callback, connectFailedCallback)
 {
   var xhr = new XMLHttpRequest;
   xhr.addEventListener('load', function() {
@@ -19,6 +19,13 @@ lbry.call = function (method, params, callback)
     console.log(method_output.result);
     callback(method_output.result);
   });
+
+  if (connectFailedCallback) {
+    xhr.addEventListener('error', function (e) {
+      connectFailedCallback(e);
+    });
+  }
+
   xhr.open('POST', 'http://localhost:5279/lbryapi', true);
   xhr.send(JSON.stringify({
     'jsonrpc': '2.0',
@@ -33,23 +40,33 @@ lbry.connect = function(callback)
 {
   // Check every half second to see if the daemon's running.
   // Returns true to callback once connected, or false if it takes too long and we give up.
-  var try_num = 0;
-  var check_connected = setInterval(function() {
-    lbry.call('is_running', {}, function(is_running) {
-      if (is_running) {
+  function checkDaemonRunning(tryNum=0) {
+    lbry.daemonRunningStatus(function (runningStatus) {
+      if (runningStatus) {
         lbry.isConnected = true;
-        clearInterval(check_connected);
         callback(true);
       } else {
-        if (try_num >= 20) { // Move this into a constant or config option
-          clearInterval(check_connected);
+        if (tryNum <= 50) { // Move # of tries into constant or config option
+          setTimeout(function () {
+            checkDaemonRunning(tryNum + 1);
+          }, 500);
+        } else {
           callback(false);
         }
-        try_num++;
       }
     });
-  }, 500);
+  }
+  checkDaemonRunning();
 }
+
+lbry.daemonRunningStatus = function (callback) {
+  // Returns true/false whether the daemon is running (i.e. fully conncected to the network),
+  // or null if the AJAX connection to the daemon fails.
+
+  lbry.call('is_running', {}, callback, function () {
+    callback(null);
+  });
+};
 
 lbry.getBalance = function(callback)
 {
