@@ -25,6 +25,14 @@ sup, sub {
 sup { top: -0.4em; }
 sub { top: 0.4em; }
 
+.fade-in-link {
+  opacity: 0.55;
+  transition: opacity .225s ease;
+  &:hover {
+    opacity: 1;
+  }
+}
+
 input[type="search"]
 {
   border: 0 none;

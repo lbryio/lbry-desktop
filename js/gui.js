@@ -14,9 +14,10 @@ var Link = React.createClass({
     console.log(this.props);
     var href = this.props.href ? this.props.href : 'javascript:;',
         icon = this.props.icon ? <Icon icon={this.props.icon} />  : '',
-        className = this.props.button ? 'button-block button-' + this.props.button : 'button-text';
+        className = (this.props.button ? 'button-block button-' + this.props.button : 'button-text') +
+                    (this.props.fadeIn ? ' fade-in-link' : '');
     return (
-      <a className={className} href={href}>
+      <a className={className} href={href} style={this.props.style ? this.props.style : ''}>
         {this.props.icon ? icon : '' }
         {this.props.label}
       </a>
@@ -68,7 +69,13 @@ var creditAmountStyle = {
 }, estimateStyle = {
   marginLeft : '5px',
   color: '#aaa',
-}
+}, menuStyle = {
+  position: 'relative',
+  top: '3px',
+  marginLeft: '2px'
+}, menuItemStyle = {
+  marginLeft: '3px'
+};
 
 var CreditAmount = React.createClass({
   propTypes: {
@@ -77,9 +84,14 @@ var CreditAmount = React.createClass({
   render: function() {
     var formattedAmount = lbry.formatCredits(this.props.amount);
     return (
-      <span className="credit-amount">
-        <span style={creditAmountStyle}>{formattedAmount}</span>
-        { this.props.isEstimate ? <span style={estimateStyle}>(est)</span> : null }
+      <span className='top-bar'>
+        <span className="credit-amount">
+          <span style={creditAmountStyle}>{formattedAmount}</span>
+          { this.props.isEstimate ? <span style={estimateStyle}>(est)</span> : null }
+        </span>
+        <span className='menu' style={menuStyle}>
+          <Link href='#' icon="icon-gear" fadeIn={true} style={menuItemStyle} />
+        </span>
       </span>
     );
   }
