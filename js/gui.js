@@ -17,7 +17,7 @@ var Link = React.createClass({
         className = (this.props.button ? 'button-block button-' + this.props.button : 'button-text') +
                     (this.props.fadeIn ? ' fade-in-link' : '');
     return (
-      <a className={className} href={href} style={this.props.style ? this.props.style : ''}>
+      <a className={className} href={href} style={this.props.style ? this.props.style : {}}>
         {this.props.icon ? icon : '' }
         {this.props.label}
       </a>
@@ -187,6 +187,7 @@ var SearchResults = React.createClass({
   render: function() {
     var rows = [];
     console.log('results');
+    console.log('made it here');
     this.props.results.forEach(function(result) {
       rows.push(
         <SearchResultRow name={result.name} title={result.title} imgUrl={result.thumbnail}
