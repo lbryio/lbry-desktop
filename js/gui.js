@@ -118,14 +118,6 @@ var topBarStyle = {
   'float': 'right'
 };
 
-var menuStyle = {
-  position: 'relative',
-  top: '3px',
-  marginLeft: '2px'
-}, menuItemStyle = {
-  marginLeft: '3px'
-};
-
 var TopBar = React.createClass({
   getInitialState: function() {
     return {
@@ -143,17 +135,33 @@ var TopBar = React.createClass({
   render: function() {
     return (
       <span className='top-bar' style={topBarStyle}>
-      <span style={balanceStyle}>
-        <CreditAmount amount={this.state.balance}/>
+        <span style={balanceStyle}>
+          <CreditAmount amount={this.state.balance}/>
+        </span>
+        <Menu />
       </span>
-      <span className='menu' style={menuStyle}>
-        <Link href='#' icon="icon-gear" fadeIn={true} style={menuItemStyle} />
-      </span>
-    </span>
     );
   }
 });
 
+var menuStyle = {
+  position: 'relative',
+  top: '3px',
+  marginLeft: '2px'
+}, menuItemStyle = {
+  marginLeft: '3px'
+};
+
+
+var Menu = React.createClass({
+  render: function() {
+    return (
+      <span className='menu' style={menuStyle}>
+        <Link href='#' icon="icon-gear" fadeIn={true} style={menuItemStyle} />
+      </span>
+    )
+  }
+});
 
 
 //component/discover.js
