@@ -190,7 +190,7 @@ var SearchResults = React.createClass({
     console.log('made it here');
     this.props.results.forEach(function(result) {
       rows.push(
-        <SearchResultRow name={result.name} title={result.title} imgUrl={result.thumbnail}
+        <SearchResultRow name={result.name} title={result.stream_name} imgUrl={result.thumbnail}
                           description={result.description} cost_est={result.cost_est} />
       );
     });
