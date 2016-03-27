@@ -69,12 +69,6 @@ var creditAmountStyle = {
 }, estimateStyle = {
   marginLeft : '5px',
   color: '#aaa',
-}, menuStyle = {
-  position: 'relative',
-  top: '3px',
-  marginLeft: '2px'
-}, menuItemStyle = {
-  marginLeft: '3px'
 };
 
 var CreditAmount = React.createClass({
@@ -84,19 +78,13 @@ var CreditAmount = React.createClass({
   render: function() {
     var formattedAmount = lbry.formatCredits(this.props.amount);
     return (
-      <span className='top-bar'>
-        <span className="credit-amount">
-          <span style={creditAmountStyle}>{formattedAmount}</span>
-          { this.props.isEstimate ? <span style={estimateStyle}>(est)</span> : null }
-        </span>
-        <span className='menu' style={menuStyle}>
-          <Link href='#' icon="icon-gear" fadeIn={true} style={menuItemStyle} />
-        </span>
+      <span className="credit-amount">
+        <span style={creditAmountStyle}>{formattedAmount}</span>
+        { this.props.isEstimate ? <span style={estimateStyle}>(est)</span> : null }
       </span>
     );
   }
 });
-
 
 //component/header.js
 var logoStyle = {
@@ -105,7 +93,7 @@ var logoStyle = {
   maxHeight: '80px',
 },
     balanceStyle = {
-  float: 'right',
+//  float: 'right',
   marginTop: '3px'
 },
     imgStyle = { //@TODO: remove this, img should be properly scaled once size is settled
@@ -113,6 +101,32 @@ var logoStyle = {
 };
 
 var Header = React.createClass({
+  render: function() {
+    return (
+      <header>
+        <TopBar />
+        <div style={logoStyle}>
+          <img src="./img/lbry-dark-1600x528.png" style={imgStyle}/>
+        </div>
+      </header>
+    );
+  }
+});
+
+
+var topBarStyle = {
+  'float': 'right'
+};
+
+var menuStyle = {
+  position: 'relative',
+  top: '3px',
+  marginLeft: '2px'
+}, menuItemStyle = {
+  marginLeft: '3px'
+};
+
+var TopBar = React.createClass({
   getInitialState: function() {
     return {
       balance: 0
@@ -125,19 +139,22 @@ var Header = React.createClass({
       });
     }.bind(this));
   },
+
   render: function() {
     return (
-      <header>
-        <span style={balanceStyle}>
-          <CreditAmount amount={this.state.balance}/>
-        </span>
-        <div style={logoStyle}>
-          <img src="./img/lbry-dark-1600x528.png" style={imgStyle}/>
-        </div>
-      </header>
+      <span className='top-bar' style={topBarStyle}>
+      <span style={balanceStyle}>
+        <CreditAmount amount={this.state.balance}/>
+      </span>
+      <span className='menu' style={menuStyle}>
+        <Link href='#' icon="icon-gear" fadeIn={true} style={menuItemStyle} />
+      </span>
+    </span>
     );
   }
 });
+
+
 
 //component/discover.js
 
