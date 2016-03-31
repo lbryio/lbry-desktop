@@ -17,7 +17,7 @@ var Link = React.createClass({
         className = (this.props.button ? 'button-block button-' + this.props.button : 'button-text') +
                     (this.props.fadeIn ? ' fade-in-link' : '');
     return (
-      <a className={className} href={href} style={this.props.style ? this.props.style : {}}>
+      <a className={className} href={href} style={this.props.style ? this.props.style : {}} onClick={this.props.onClick}>
         {this.props.icon ? icon : '' }
         {this.props.label}
       </a>
@@ -104,7 +104,6 @@ var Header = React.createClass({
   render: function() {
     return (
       <header>
-        <TopBar />
         <div style={logoStyle}>
           <img src="./img/lbry-dark-1600x528.png" style={imgStyle}/>
         </div>
@@ -112,7 +111,6 @@ var Header = React.createClass({
     );
   }
 });
-
 
 var topBarStyle = {
   'float': 'right'
@@ -138,7 +136,7 @@ var TopBar = React.createClass({
         <span style={balanceStyle}>
           <CreditAmount amount={this.state.balance}/>
         </span>
-        <Menu />
+        <Menu onPageChosen={this.props.onPageChosen}/>
       </span>
     );
   }
@@ -152,12 +150,15 @@ var menuStyle = {
   marginLeft: '3px'
 };
 
+var chooseSettingsPage = function() {
+  this.props.onPageChosen('settings');
+};
 
 var Menu = React.createClass({
   render: function() {
     return (
       <span className='menu' style={menuStyle}>
-        <Link href='#' icon="icon-gear" fadeIn={true} style={menuItemStyle} />
+        <Link href='#' icon="icon-gear" fadeIn={true} style={menuItemStyle} onClick={chooseSettingsPage.bind(this)}/>
       </span>
     )
   }
@@ -349,20 +350,68 @@ var Discover = React.createClass({
   }
 });
 
-//component/home.js
+var HomePage = React.createClass({
+  render: function() {
+    return (
+      <div>
+        <Header />
+        <Discover />
+      </div>
+    );
+  }
+});
 
-var homeStyles = {
+var settingsPageStyles = {
+  paddingTop: '80px'
+}, settingsPageHeaderStyles = {
+  textAlign: 'center'
+}, settingsBottomButtonsStyles = {
+  textAlign: 'center'
+};
+
+var SettingsPage = React.createClass({
+  render: function() {
+    return (
+      <div style={settingsPageStyles}>
+        <h3 style={settingsPageHeaderStyles}>Settings</h3>
+        <p>Lots of settings and stuff</p>
+        <p style={ {paddingTop: '100px', paddingBottom: '100px'} }>...</p> {/* Placeholder */}
+
+        <div style={settingsBottomButtonsStyles}>
+          <Link href="#" onClick={this.props.onExit} label="Done" button="primary" icon="icon-check"/>
+        </div>
+      </div>
+    );
+  }
+});
+
+
+var appStyles = {
     width: '800px',
     marginLeft: 'auto',
     marginRight: 'auto',
 };
-
-var Home = React.createClass({
+var App = React.createClass({
+  getInitialState: function() {
+    return {
+      viewingPage: 'home'
+    }
+  },
+  handlePageChosen: function(page) {
+    this.setState({
+      viewingPage: page
+    });
+  },
   render: function() {
+    if (this.state.viewingPage == 'home') {
+      var content = <HomePage/>;
+    } else if (this.state.viewingPage == 'settings') {
+      var content = <SettingsPage onExit={this.handlePageChosen.bind(this, 'home')}/>;
+    }
     return (
-      <div style={homeStyles}>
-        <Header />
-        <Discover />
+      <div style={appStyles}>
+      <TopBar onPageChosen={this.handlePageChosen}/>
+      {content}
       </div>
     );
   }
@@ -378,7 +427,7 @@ var init = function() {
   );
 
   lbry.connect(function() {
-    ReactDOM.render(<Home/>, canvas);
+    ReactDOM.render(<App/>, canvas);
   })
 };
 
