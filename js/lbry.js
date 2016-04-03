@@ -15,7 +15,10 @@ lbry.call = function (method, params, callback, connectFailedCallback)
     if (response.error) {
       throw new Error('Call to method ' + method + ' failed with message: ' + response.error);
     }
-    callback(response.result); 
+
+    if (callback) {
+      callback(response.result);       
+    }
   });
 
   if (connectFailedCallback) {
@@ -64,6 +67,14 @@ lbry.daemonRunningStatus = function (callback) {
   lbry.call('is_running', {}, callback, function () {
     callback(null);
   });
+};
+
+lbry.getSettings = function(callback) {
+  lbry.call('get_settings', {}, callback);
+};
+
+lbry.setSettings = function(settings, callback) {
+  lbry.call('set_settings', settings, callback);
 };
 
 lbry.getBalance = function(callback)

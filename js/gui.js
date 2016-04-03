@@ -362,23 +362,128 @@ var HomePage = React.createClass({
 });
 
 var settingsPageStyles = {
-  paddingTop: '80px'
+  paddingTop: '60px',
+  fontSize: '16px',
 }, settingsPageHeaderStyles = {
   textAlign: 'center'
 }, settingsBottomButtonsStyles = {
   textAlign: 'center'
+}, settingsSectionStyles = {
+  paddingBottom: '15px',
+}, settingsQuestionStyles = {
+  display: 'block',
+}, settingsRadioOptionStyles = {
+  display: 'block',
+  marginLeft: '13px'
+}, settingsCheckBoxOptionStyles = {
+  display: 'block',
+  marginLeft: '13px'
+}, settingsNumberFieldStyles = {
+  width: '40px'
 };
 
 var SettingsPage = React.createClass({
+  storeSetting: function(setting, val) {
+    var settings = Object.assign({}, this.state.settings);
+    settings[setting] = val;
+    this.setState({
+      'settings': settings
+    });
+  },
+  onRunOnStartChange: function (event) {
+    this.storeSetting('run_on_startup', event.target.checked);
+  },
+  onDownloadDirPrefChange: function(useCustom) {
+    this.setState({
+      isCustomDownloadDirectory: useCustom
+    });
+  },
+  onMaxUploadPrefChange: function(isLimited) {
+    this.setState({
+      isMaxUpload: isLimited
+    });
+  },
+  onMaxDownloadPrefChange: function(isLimited) {
+    this.setState({
+      isMaxDownload: isLimited
+    });
+  },
+  getInitialState: function() {
+     return {
+      settings: null,
+      isCustomDownloadDirectory: false,
+      isBandwidthCap: false
+    }
+  },
+  componentWillMount: function() {
+    lbry.getSettings(function(settings) {
+      this.setState({
+        settings: settings
+      });
+    }.bind(this));
+  },
+  onDone: function() {
+    lbry.setSettings(this.state.settings);
+    this.props.closeCallback();
+  },
   render: function() {
+    if (!this.state.settings) { // If the settings aren't loaded yet, don't render anything.
+      return null;
+    }
+
     return (
       <div style={settingsPageStyles}>
-        <h3 style={settingsPageHeaderStyles}>Settings</h3>
-        <p>Lots of settings and stuff</p>
-        <p style={ {paddingTop: '100px', paddingBottom: '100px'} }>...</p> {/* Placeholder */}
+        <h1 style={settingsPageHeaderStyles}>Settings</h1>
+        <section style={settingsSectionStyles}>
+        <h4>Run on startup</h4>
+        <label style={settingsCheckBoxOptionStyles}>
+          <input type="checkbox" onChange={this.onRunOnStartChange} defaultChecked={false} /> Run LBRY automatically when I start my computer
+        </label>
+        </section>
 
+        <section style={settingsSectionStyles}>
+          <h4>Download directory</h4>
+          <span style={settingsQuestionStyles}>Where would you like files you download from LBRY to be saved?</span>
+          <label style={settingsRadioOptionStyles}>
+            <input type="radio" name="download_dir_pref" defaultChecked={true} onChange={this.onDownloadDirPrefChange.bind(this, false)}/> My "Downloads" directory
+          </label>
+          <label style={settingsRadioOptionStyles}>
+            <input type="radio" name="download_dir_pref" onChange={this.onDownloadDirPrefChange.bind(this, true)}/> Somewhere else
+          </label>
+          <label className={ this.state.isCustomDownloadDirectory ? '' : 'hidden'}>
+             Download directory: <input type="text" style={{width: '300px'}} defaultValue={this.state.settings['default_download_directory']}/>
+          </label>
+        </section>
+
+        <section style={settingsSectionStyles}>
+          <h4>Bandwidth limits</h4>
+          <span style={settingsQuestionStyles}>How much of your upload bandwidth may LBRY use?</span>
+          <label style={settingsRadioOptionStyles}>
+            <input type="radio" name="max_upload_pref" onChange={this.onMaxUploadPrefChange.bind(this, false)}/> Unlimited
+          </label>
+          <label style={settingsRadioOptionStyles}>
+            <input type="radio" name="max_upload_pref" onChange={this.onMaxUploadPrefChange.bind(this, true)}/> Choose limit...
+          </label>
+          <label className={ this.state.isMaxUpload ? '' : 'hidden'}>
+             Maximum upload rate <input type="number" min="0" step=".5" defaultValue={this.state.settings['max_upload']} style={settingsNumberFieldStyles}/> MB/s
+          </label>
+          <span style={settingsQuestionStyles}>How much of your download bandwidth may LBRY use?</span>
+          <label style={settingsRadioOptionStyles}>
+            <input type="radio" name="max_download_pref" onChange={this.onMaxDownloadPrefChange.bind(this, false)}/> Unlimited
+          </label>
+          <label style={settingsRadioOptionStyles}>
+            <input type="radio" name="max_download_pref" onChange={this.onMaxDownloadPrefChange.bind(this, true)}/> Choose limit...
+          </label>
+          <label className={ this.state.isMaxDownload ? '' : 'hidden'}>
+            Maximum download rate <input type="number" min="0" step=".5" defaultValue={this.state.settings['max_download']} style={settingsNumberFieldStyles}/> MB/s
+          </label>
+        </section>
+        <section style={settingsSectionStyles}>
+        <h4>Default payment rules</h4>
+        ...
+        </section>
         <div style={settingsBottomButtonsStyles}>
-          <Link href="#" onClick={this.props.onExit} label="Done" button="primary" icon="icon-check"/>
+          <Link href="#" onClick={this.onDone} label="Done" button="primary" icon="icon-check"/>
         </div>
       </div>
     );
@@ -406,7 +511,7 @@ var App = React.createClass({
     if (this.state.viewingPage == 'home') {
       var content = <HomePage/>;
     } else if (this.state.viewingPage == 'settings') {
-      var content = <SettingsPage onExit={this.handlePageChosen.bind(this, 'home')}/>;
+      var content = <SettingsPage closeCallback={this.handlePageChosen.bind(this, 'home')}/>;
     }
     return (
       <div style={appStyles}>

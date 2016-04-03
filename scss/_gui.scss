@@ -33,6 +33,10 @@ sub { top: 0.4em; }
   }
 }
 
+.hidden {
+  display: none;
+}
+
 input[type="search"]
 {
   border: 0 none;
