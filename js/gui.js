@@ -372,6 +372,11 @@ var settingsPageStyles = {
   paddingBottom: '15px',
 }, settingsQuestionStyles = {
   display: 'block',
+}, maxDownloadQuestionStyles = {
+  display: 'block',
+  paddingTop: '3px'
+}, maxUploadQuestionStyles = {
+  display: 'block'
 }, settingsRadioOptionStyles = {
   display: 'block',
   marginLeft: '13px'
@@ -380,6 +385,11 @@ var settingsPageStyles = {
   marginLeft: '13px'
 }, settingsNumberFieldStyles = {
   width: '40px'
+}, downloadDirectoryLabelStyles = {
+  fontSize: '.9em',
+  marginLeft: '13px'
+}, downloadDirectoryFieldStyles= {
+  width: '300px'
 };
 
 var SettingsPage = React.createClass({
@@ -393,26 +403,36 @@ var SettingsPage = React.createClass({
   onRunOnStartChange: function (event) {
     this.storeSetting('run_on_startup', event.target.checked);
   },
-  onDownloadDirPrefChange: function(useCustom) {
-    this.setState({
-      isCustomDownloadDirectory: useCustom
-    });
+  onDownloadDirChange: function(event) {
+    this.storeSetting('default_download_directory', event.target.value);
   },
   onMaxUploadPrefChange: function(isLimited) {
+    if (!isLimited) {
+      this.storeSetting('max_upload', 0.0);
+    }
     this.setState({
       isMaxUpload: isLimited
     });
   },
+  onMaxUploadFieldChange: function(event) {
+    this.storeSetting('max_upload', Number(event.target.value));
+  },
   onMaxDownloadPrefChange: function(isLimited) {
+    if (!isLimited) {
+      this.storeSetting('max_download', 0.0);
+    }
     this.setState({
       isMaxDownload: isLimited
     });
   },
+  onMaxDownloadFieldChange: function(event) {
+    this.storeSetting('max_download', Number(event.target.value));
+  },
   getInitialState: function() {
-     return {
-      settings: null,
-      isCustomDownloadDirectory: false,
-      isBandwidthCap: false
+    return {
+      isMaxUpload: false,
+      isMaxDownload: false,
+      settings: null
     }
   },
   componentWillMount: function() {
@@ -443,44 +463,28 @@ var SettingsPage = React.createClass({
 
         <section style={settingsSectionStyles}>
           <h4>Download directory</h4>
-          <span style={settingsQuestionStyles}>Where would you like files you download from LBRY to be saved?</span>
-          <label style={settingsRadioOptionStyles}>
-            <input type="radio" name="download_dir_pref" defaultChecked={true} onChange={this.onDownloadDirPrefChange.bind(this, false)}/> My "Downloads" directory
-          </label>
-          <label style={settingsRadioOptionStyles}>
-            <input type="radio" name="download_dir_pref" onChange={this.onDownloadDirPrefChange.bind(this, true)}/> Somewhere else
-          </label>
-          <label className={ this.state.isCustomDownloadDirectory ? '' : 'hidden'}>
-             Download directory: <input type="text" style={{width: '300px'}} defaultValue={this.state.settings['default_download_directory']}/>
-          </label>
+          <span style={settingsQuestionStyles}>Where would you like the files you download from LBRY to be saved?</span>
+          <label htmlFor="default_download_directory" style={downloadDirectoryLabelStyles}>Download directory: </label><input style={downloadDirectoryFieldStyles} type="text" name="default_download_directory" defaultValue={this.state.settings['default_download_directory']} onChange={this.onDownloadDirChange}/>
         </section>
 
         <section style={settingsSectionStyles}>
           <h4>Bandwidth limits</h4>
-          <span style={settingsQuestionStyles}>How much of your upload bandwidth may LBRY use?</span>
+          <span style={maxUploadQuestionStyles}>How much of your upload bandwidth may LBRY use?</span>
           <label style={settingsRadioOptionStyles}>
             <input type="radio" name="max_upload_pref" onChange={this.onMaxUploadPrefChange.bind(this, false)}/> Unlimited
           </label>
           <label style={settingsRadioOptionStyles}>
-            <input type="radio" name="max_upload_pref" onChange={this.onMaxUploadPrefChange.bind(this, true)}/> Choose limit...
+            <input type="radio" name="max_upload_pref" onChange={this.onMaxUploadPrefChange.bind(this, true)}/> { this.state.isMaxUpload ? 'Up to' : 'Choose limit...' }
+            <span className={ this.state.isMaxUpload ? '' : 'hidden'}> <input type="number" min="0" step=".5" defaultValue={this.state.settings['max_upload']} style={settingsNumberFieldStyles} onChange={this.onMaxUploadFieldChange}/> MB/s</span>
           </label>
-          <label className={ this.state.isMaxUpload ? '' : 'hidden'}>
-             Maximum upload rate <input type="number" min="0" step=".5" defaultValue={this.state.settings['max_upload']} style={settingsNumberFieldStyles}/> MB/s
-          </label>
-          <span style={settingsQuestionStyles}>How much of your download bandwidth may LBRY use?</span>
+          <span style={maxDownloadQuestionStyles}>How much of your download bandwidth may LBRY use?</span>
           <label style={settingsRadioOptionStyles}>
             <input type="radio" name="max_download_pref" onChange={this.onMaxDownloadPrefChange.bind(this, false)}/> Unlimited
           </label>
           <label style={settingsRadioOptionStyles}>
-            <input type="radio" name="max_download_pref" onChange={this.onMaxDownloadPrefChange.bind(this, true)}/> Choose limit...
+            <input type="radio" name="max_download_pref" onChange={this.onMaxDownloadPrefChange.bind(this, true)}/> { this.state.isMaxDownload ? 'Up to' : 'Choose limit...' }
+            <span className={ this.state.isMaxDownload ? '' : 'hidden'}> <input type="number" min="0" step=".5" defaultValue={this.state.settings['max_download']} style={settingsNumberFieldStyles} onChange={this.onMaxDownloadFieldChange}/> MB/s</span>
           </label>
-          <label className={ this.state.isMaxDownload ? '' : 'hidden'}>
-            Maximum download rate <input type="number" min="0" step=".5" defaultValue={this.state.settings['max_download']} style={settingsNumberFieldStyles}/> MB/s
-          </label>
-        </section>
-        <section style={settingsSectionStyles}>
-        <h4>Default payment rules</h4>
-        ...
         </section>
         <div style={settingsBottomButtonsStyles}>
           <Link href="#" onClick={this.onDone} label="Done" button="primary" icon="icon-check"/>
