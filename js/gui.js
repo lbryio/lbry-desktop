@@ -403,7 +403,7 @@ var SettingsPage = React.createClass({
   onRunOnStartChange: function (event) {
     this.storeSetting('run_on_startup', event.target.checked);
   },
-  onChareDataChange: function (event) {
+  onShareDataChange: function (event) {
     this.storeSetting('upload_log', event.target.checked);
   },
   onDownloadDirChange: function(event) {
@@ -433,15 +433,15 @@ var SettingsPage = React.createClass({
   },
   getInitialState: function() {
     return {
-      isMaxUpload: false,
-      isMaxDownload: false,
       settings: null
     }
   },
   componentWillMount: function() {
     lbry.getSettings(function(settings) {
       this.setState({
-        settings: settings
+        settings: settings,
+        isMaxUpload: settings.max_upload != 0,
+        isMaxDownload: settings.max_download != 0
       });
     }.bind(this));
   },
@@ -460,7 +460,7 @@ var SettingsPage = React.createClass({
         <section style={settingsSectionStyles}>
         <h4>Run on startup</h4>
         <label style={settingsCheckBoxOptionStyles}>
-          <input type="checkbox" onChange={this.onRunOnStartChange} defaultChecked={false} /> Run LBRY automatically when I start my computer
+          <input type="checkbox" onChange={this.onRunOnStartChange} defaultChecked={this.state.settings.run_on_startup} /> Run LBRY automatically when I start my computer
         </label>
         </section>
 
@@ -472,25 +472,25 @@ var SettingsPage = React.createClass({
         <section style={settingsSectionStyles}>
           <h4>Share diagnostic data</h4>
           <label style={settingsCheckBoxOptionStyles}>
-            <input type="checkbox" onChange={this.onShareDataChange} defaultChecked={false} /> Help make LBRY better by contributing diagnostic data about my usage
+            <input type="checkbox" onChange={this.onShareDataChange} defaultChecked={this.state.settings.upload_log} /> Help make LBRY better by contributing diagnostic data about my usage
           </label>
         </section>
         <section style={settingsSectionStyles}>
           <h4>Bandwidth limits</h4>
           <span style={maxUploadQuestionStyles}>How much of your upload bandwidth may LBRY use?</span>
           <label style={settingsRadioOptionStyles}>
-            <input type="radio" name="max_upload_pref" onChange={this.onMaxUploadPrefChange.bind(this, false)}/> Unlimited
+            <input type="radio" name="max_upload_pref" onChange={this.onMaxUploadPrefChange.bind(this, false)} defaultChecked={!this.state.isMaxUpload}/> Unlimited
           </label>
           <label style={settingsRadioOptionStyles}>
-            <input type="radio" name="max_upload_pref" onChange={this.onMaxUploadPrefChange.bind(this, true)}/> { this.state.isMaxUpload ? 'Up to' : 'Choose limit...' }
+            <input type="radio" name="max_upload_pref" onChange={this.onMaxUploadPrefChange.bind(this, true)} defaultChecked={this.state.isMaxUpload}/> { this.state.isMaxUpload ? 'Up to' : 'Choose limit...' }
             <span className={ this.state.isMaxUpload ? '' : 'hidden'}> <input type="number" min="0" step=".5" defaultValue={this.state.settings['max_upload']} style={settingsNumberFieldStyles} onChange={this.onMaxUploadFieldChange}/> MB/s</span>
           </label>
           <span style={maxDownloadQuestionStyles}>How much of your download bandwidth may LBRY use?</span>
           <label style={settingsRadioOptionStyles}>
-            <input type="radio" name="max_download_pref" onChange={this.onMaxDownloadPrefChange.bind(this, false)}/> Unlimited
+            <input type="radio" name="max_download_pref" onChange={this.onMaxDownloadPrefChange.bind(this, false)} defaultChecked={!this.state.isMaxDownload}/> Unlimited
           </label>
           <label style={settingsRadioOptionStyles}>
-            <input type="radio" name="max_download_pref" onChange={this.onMaxDownloadPrefChange.bind(this, true)}/> { this.state.isMaxDownload ? 'Up to' : 'Choose limit...' }
+            <input type="radio" name="max_download_pref" onChange={this.onMaxDownloadPrefChange.bind(this, true)} defaultChecked={this.state.isMaxDownload}/> { this.state.isMaxDownload ? 'Up to' : 'Choose limit...' }
             <span className={ this.state.isMaxDownload ? '' : 'hidden'}> <input type="number" min="0" step=".5" defaultValue={this.state.settings['max_download']} style={settingsNumberFieldStyles} onChange={this.onMaxDownloadFieldChange}/> MB/s</span>
           </label>
         </section>
