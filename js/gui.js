@@ -514,6 +514,13 @@ var App = React.createClass({
       viewingPage: 'home'
     }
   },
+  componentDidMount: function() {
+    lbry.getStartNotice(function(notice) {
+      if (notice) {
+        alert(notice);
+      }
+    });
+  },
   handlePageChosen: function(page) {
     this.setState({
       viewingPage: page

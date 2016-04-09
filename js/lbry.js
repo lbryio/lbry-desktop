@@ -69,6 +69,10 @@ lbry.daemonRunningStatus = function (callback) {
   });
 };
 
+lbry.getStartNotice = function(callback) {
+  lbry.call('get_start_notice', {}, callback);
+}
+
 lbry.getSettings = function(callback) {
   lbry.call('get_settings', {}, callback);
 };
