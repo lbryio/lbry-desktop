@@ -467,7 +467,7 @@ var SettingsPage = React.createClass({
         <section style={settingsSectionStyles}>
           <h4>Download directory</h4>
           <span style={settingsQuestionStyles}>Where would you like the files you download from LBRY to be saved?</span>
-          <label htmlFor="default_download_directory" style={downloadDirectoryLabelStyles}>Download directory: </label><input style={downloadDirectoryFieldStyles} type="text" name="default_download_directory" defaultValue={this.state.settings['default_download_directory']} onChange={this.onDownloadDirChange}/>
+          <label htmlFor="default_download_directory" style={downloadDirectoryLabelStyles}>Download directory </label><input style={downloadDirectoryFieldStyles} type="text" name="default_download_directory" defaultValue={this.state.settings.default_download_directory} onChange={this.onDownloadDirChange}/>
         </section>
         <section style={settingsSectionStyles}>
           <h4>Share diagnostic data</h4>
@@ -483,7 +483,7 @@ var SettingsPage = React.createClass({
           </label>
           <label style={settingsRadioOptionStyles}>
             <input type="radio" name="max_upload_pref" onChange={this.onMaxUploadPrefChange.bind(this, true)} defaultChecked={this.state.isMaxUpload}/> { this.state.isMaxUpload ? 'Up to' : 'Choose limit...' }
-            <span className={ this.state.isMaxUpload ? '' : 'hidden'}> <input type="number" min="0" step=".5" defaultValue={this.state.settings['max_upload']} style={settingsNumberFieldStyles} onChange={this.onMaxUploadFieldChange}/> MB/s</span>
+            <span className={ this.state.isMaxUpload ? '' : 'hidden'}> <input type="number" min="0" step=".5" defaultValue={this.state.settings.max_upload} style={settingsNumberFieldStyles} onChange={this.onMaxUploadFieldChange}/> MB/s</span>
           </label>
           <span style={maxDownloadQuestionStyles}>How much of your download bandwidth may LBRY use?</span>
           <label style={settingsRadioOptionStyles}>
@@ -491,7 +491,7 @@ var SettingsPage = React.createClass({
           </label>
           <label style={settingsRadioOptionStyles}>
             <input type="radio" name="max_download_pref" onChange={this.onMaxDownloadPrefChange.bind(this, true)} defaultChecked={this.state.isMaxDownload}/> { this.state.isMaxDownload ? 'Up to' : 'Choose limit...' }
-            <span className={ this.state.isMaxDownload ? '' : 'hidden'}> <input type="number" min="0" step=".5" defaultValue={this.state.settings['max_download']} style={settingsNumberFieldStyles} onChange={this.onMaxDownloadFieldChange}/> MB/s</span>
+            <span className={ this.state.isMaxDownload ? '' : 'hidden'}> <input type="number" min="0" step=".5" defaultValue={this.state.settings.max_download} style={settingsNumberFieldStyles} onChange={this.onMaxDownloadFieldChange}/> MB/s</span>
           </label>
         </section>
         <div style={settingsBottomButtonsStyles}>
