@@ -403,6 +403,9 @@ var SettingsPage = React.createClass({
   onRunOnStartChange: function (event) {
     this.storeSetting('run_on_startup', event.target.checked);
   },
+  onChareDataChange: function (event) {
+    this.storeSetting('upload_log', event.target.checked);
+  },
   onDownloadDirChange: function(event) {
     this.storeSetting('default_download_directory', event.target.value);
   },
@@ -466,7 +469,12 @@ var SettingsPage = React.createClass({
           <span style={settingsQuestionStyles}>Where would you like the files you download from LBRY to be saved?</span>
           <label htmlFor="default_download_directory" style={downloadDirectoryLabelStyles}>Download directory: </label><input style={downloadDirectoryFieldStyles} type="text" name="default_download_directory" defaultValue={this.state.settings['default_download_directory']} onChange={this.onDownloadDirChange}/>
         </section>
-
+        <section style={settingsSectionStyles}>
+          <h4>Share diagnostic data</h4>
+          <label style={settingsCheckBoxOptionStyles}>
+            <input type="checkbox" onChange={this.onShareDataChange} defaultChecked={false} /> Help make LBRY better by contributing diagnostic data about my usage
+          </label>
+        </section>
         <section style={settingsSectionStyles}>
           <h4>Bandwidth limits</h4>
           <span style={maxUploadQuestionStyles}>How much of your upload bandwidth may LBRY use?</span>
