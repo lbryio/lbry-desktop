@@ -16,16 +16,11 @@ var App = React.createClass({
       }
     });
   },
-  setPage: function(page) {
-    this.setState({
-      viewingPage: page
-    });
-  },
   render: function() {
     if (this.state.viewingPage == 'home') {
-      var content = <HomePage setPage={this.setPage}/>;
+      var content = <HomePage />;
     } else if (this.state.viewingPage == 'settings') {
-      var content = <SettingsPage closeCallback={this.setPage.bind(this, 'home')} setPage={this.setPage} />;
+      var content = <SettingsPage />;
     }
     return (
       <div style={appStyles}>
