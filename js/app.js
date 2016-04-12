@@ -9,6 +9,15 @@ var App = React.createClass({
       viewingPage: window.location.search === '?settings' ? 'settings' : 'home'
     }
   },
+  componentWillMount: function() {
+    lbry.checkNewVersionAvailable(function(isAvailable) {
+      if (isAvailable) {
+        alert("The version of LBRY you're using is not up to date.\n\n" +
+              "You'll now be taken to lbry.io, where you can download the latest version.");
+        window.location = "http://www.lbry.io/" + (navigator.userAgent.indexOf('Mac OS X') != -1 ? 'osx' : 'linux');
+      }
+    });
+  },
   componentDidMount: function() {
     lbry.getStartNotice(function(notice) {
       if (notice) {
