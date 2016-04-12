@@ -6,17 +6,17 @@ var lbry = {
   }
 };
 
-lbry.call = function (method, params, callback, connectFailedCallback)
+lbry.call = function (method, params, callback, errorCallback, connectFailedCallback)
 {
   var xhr = new XMLHttpRequest;
   xhr.addEventListener('load', function() {
     var response = JSON.parse(xhr.responseText);
 
     if (response.error) {
-      throw new Error('Call to method ' + method + ' failed with message: ' + response.error);
-    }
-
-    if (callback) {
+      if (errorCallback) {
+        errorCallback(response.error);        
+      }
+    } else if (callback) {
       callback(response.result);       
     }
   });
@@ -64,7 +64,7 @@ lbry.daemonRunningStatus = function (callback) {
   // Returns true/false whether the daemon is running (i.e. fully conncected to the network),
   // or null if the AJAX connection to the daemon fails.
 
-  lbry.call('is_running', {}, callback, function () {
+  lbry.call('is_running', {}, callback, null, function () {
     callback(null);
   });
 };
