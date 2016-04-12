@@ -47,7 +47,7 @@ lbry.connect = function(callback)
         lbry.isConnected = true;
         callback(true);
       } else {
-        if (tryNum <= 50) { // Move # of tries into constant or config option
+        if (tryNum <= 600) { // Move # of tries into constant or config option
           setTimeout(function () {
             checkDaemonRunning(tryNum + 1);
           }, 500);
