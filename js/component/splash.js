@@ -17,8 +17,26 @@ var SplashScreen = React.createClass({
     message: React.PropTypes.string,
     onLoadDone: React.PropTypes.func,
   },
+  updateStatus: function(checkNum=0, was_lagging=false) {
+      lbry.getDaemonStatus((status) => {
+        if (status.code == 'started') {
+          this.props.onLoadDone();
+          return;
+        }
+
+        if (!was_lagging && status.is_lagging) { // We just started lagging
+          alert(status.message);
+        }
+
+        if (checkNum < 600) {
+          setTimeout(() => {
+            this.updateStatus(checkNum + 1, status.is_lagging);
+          }, 500);
+        }
+      });
+  },
   componentDidMount: function() {
-    lbry.connect(this.props.onLoadDone);
+    this.updateStatus();
   },
   render: function() {
     var imgSrc = lbry.imagePath('lbry-white-485x160.png');
