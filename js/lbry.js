@@ -94,7 +94,7 @@ lbry.search = function(query, callback)
 lbry.checkNewVersionAvailable = function(callback) {
   lbry.call('version', {}, function() {
     // If the "version" method is available, we have a daemon new enough to do version checking
-    lbry.call('check_for_new_version', callback);
+    lbry.call('check_for_new_version', {}, callback);
   }, function(err) {
     if (err.fault == 'NoSuchFunction') {
       // If it's not available, we're definitely in an old version
