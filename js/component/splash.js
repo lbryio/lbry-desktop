@@ -9,13 +9,22 @@ var splashStyle = {
   alignItems: 'center',
   justifyContent: 'center'
 }, splashMessageStyle = {
-  marginTop: '24px'
+  marginTop: '24px',
+  width: '325px',
+  textAlign: 'center',
+}, splashDetailsStyle = {
+  color: '#c3c3c3',
 };
 
 var SplashScreen = React.createClass({
   propTypes: {
     message: React.PropTypes.string,
     onLoadDone: React.PropTypes.func,
+  },
+  getInitialState: function() {
+    return {
+      details: 'Starting daemon'
+    }
   },
   updateStatus: function(checkNum=0, was_lagging=false) {
       lbry.getDaemonStatus((status) => {
@@ -24,8 +33,14 @@ var SplashScreen = React.createClass({
           return;
         }
 
-        if (!was_lagging && status.is_lagging) { // We just started lagging
-          alert(status.message);
+        if (status.is_lagging) {
+          if (!was_lagging) { // We just started lagging, so display message as alert
+            alert(status.message);
+          }
+        } else { // Not lagging, so display the message normally
+          this.setState({
+            details: status.message
+          });
         }
 
         if (checkNum < 600) {
@@ -48,6 +63,7 @@ var SplashScreen = React.createClass({
             {this.props.message}
             <span className="busy-indicator"></span>
           </h3>
+          <span style={splashDetailsStyle}>{this.state.details}...</span>
         </div>
       </div>
     );
