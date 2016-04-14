@@ -3,13 +3,11 @@ var init = function() {
   var canvas = document.getElementById('canvas');
 
   ReactDOM.render(
-    <SplashScreen message="Connecting"/>,
+    <SplashScreen message="Connecting" onLoadDone={function() {
+      ReactDOM.render(<App/>, canvas);
+    }}/>,
     canvas
   );
-
-  lbry.connect(function() {
-    ReactDOM.render(<App/>, canvas);
-  })
 };
 
 init();

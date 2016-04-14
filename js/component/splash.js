@@ -15,6 +15,10 @@ var splashStyle = {
 var SplashScreen = React.createClass({
   propTypes: {
     message: React.PropTypes.string,
+    onLoadDone: React.PropTypes.func,
+  },
+  componentDidMount: function() {
+    lbry.connect(this.props.onLoadDone);
   },
   render: function() {
     var imgSrc = lbry.imagePath('lbry-white-485x160.png');
