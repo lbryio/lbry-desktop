@@ -1,9 +1,12 @@
 //component/icon.js
 
 var Icon = React.createClass({
+  propTypes: {
+    style: React.PropTypes.object,
+  },
   render: function() {
     var className = 'icon ' + this.props.icon;
-    return <span className={className}></span>
+    return <span className={className} style={this.props.style}></span>
   }
 });
 
