@@ -88,7 +88,15 @@ var searchRowImgStyle = {
 
 var SearchResultRow = React.createClass({
   render: function() {
-    var uri = 'lbry://' + this.props.name;
+    var displayURI = 'lbry://' + this.props.name;
+
+    // No support for lbry:// URLs in Windows or on Chrome yet
+    if (/windows|win32/i.test(navigator.userAgent) || (window.chrome && window.navigator.vendor == "Google Inc.")) {
+      var linkURI = window.location.host + "/view?name=" + this.props.name;
+    } else {
+      var linkURI = displayURI;
+    }
+
     return (
       <div className="row-fluid">
         <div className="span3">
@@ -99,11 +107,11 @@ var SearchResultRow = React.createClass({
             <CreditAmount amount={this.props.cost_est} isEstimate={true}/>
           </span>
           <h2>{this.props.title}</h2>
-          <div style={searchRowNameStyle}>{uri}</div>
+          <div style={searchRowNameStyle}>{displayURI}</div>
           <p style={searchRowDescriptionStyle}>{this.props.description}</p>
           <div>
-            <Link href={uri} label="Watch" icon="icon-play" button="primary" />
-            <Link href={uri} label="Download" icon="icon-download" button="alt" />
+            <Link href={linkURI} label="Watch" icon="icon-play" button="primary" />
+            <Link href={linkURI} label="Download" icon="icon-download" button="alt" />
           </div>
         </div>
       </div>
