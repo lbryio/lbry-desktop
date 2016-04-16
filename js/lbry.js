@@ -6,16 +6,19 @@ var lbry = {
   }
 };
 
-lbry.call = function (method, params, callback, connectFailedCallback)
+lbry.call = function (method, params, callback, errorCallback, connectFailedCallback)
 {
   var xhr = new XMLHttpRequest;
   xhr.addEventListener('load', function() {
     var response = JSON.parse(xhr.responseText);
 
     if (response.error) {
-      throw new Error('Call to method ' + method + ' failed with message: ' + response.error);
+      if (errorCallback) {
+        errorCallback(response.error);        
+      }
+    } else if (callback) {
+      callback(response.result);       
     }
-    callback(response.result); 
   });
 
   if (connectFailedCallback) {
@@ -44,7 +47,7 @@ lbry.connect = function(callback)
         lbry.isConnected = true;
         callback(true);
       } else {
-        if (tryNum <= 50) { // Move # of tries into constant or config option
+        if (tryNum <= 600) { // Move # of tries into constant or config option
           setTimeout(function () {
             checkDaemonRunning(tryNum + 1);
           }, 500);
@@ -61,9 +64,25 @@ lbry.daemonRunningStatus = function (callback) {
   // Returns true/false whether the daemon is running (i.e. fully conncected to the network),
   // or null if the AJAX connection to the daemon fails.
 
-  lbry.call('is_running', {}, callback, function () {
+  lbry.call('is_running', {}, callback, null, function () {
     callback(null);
   });
+};
+
+lbry.getDaemonStatus = function (callback) {
+  lbry.call('daemon_status', {}, callback);
+};
+
+lbry.getStartNotice = function(callback) {
+  lbry.call('get_start_notice', {}, callback);
+}
+
+lbry.getSettings = function(callback) {
+  lbry.call('get_settings', {}, callback);
+};
+
+lbry.setSettings = function(settings, callback) {
+  lbry.call('set_settings', settings, callback);
 };
 
 lbry.getBalance = function(callback)
@@ -74,6 +93,18 @@ lbry.getBalance = function(callback)
 lbry.search = function(query, callback)
 {
   lbry.call("search_nametrie", { "search": query }, callback);
+}
+
+lbry.checkNewVersionAvailable = function(callback) {
+  lbry.call('version', {}, function() {
+    // If the "version" method is available, we have a daemon new enough to do version checking
+    lbry.call('check_for_new_version', {}, callback);
+  }, function(err) {
+    if (err.fault == 'NoSuchFunction') {
+      // If it's not available, we're definitely in an old version
+      callback(true);
+    }
+  });
 }
 
 //utilities

@@ -13,7 +13,16 @@ body
     position: relative;
 }
 
-h1 { font-size: 2.0em; }
+section
+{
+  margin-bottom: $spacing-vertical;
+  &:last-child
+  {
+    margin-bottom: 0;
+  }
+}
+
+h1 { font-size: 2.0em; margin-bottom: $spacing-vertical / 2; margin-top: $spacing-vertical * 1.5; }
 h2 { font-size: 1.75em; }
 h3 { font-size: 1.4em; }
 h4 { font-size: 1.2em; }
@@ -24,13 +33,15 @@ sup, sub {
 }
 sup { top: -0.4em; }
 sub { top: 0.4em; }
+label { cursor: pointer; }
 
-.fade-in-link {
-  opacity: 0.55;
-  transition: opacity .225s ease;
-  &:hover {
-    opacity: 1;
-  }
+header
+{
+  line-height: $spacing-vertical;
+}
+
+.hidden {
+  display: none;
 }
 
 input[type="search"]
@@ -102,4 +113,21 @@ input[type="search"]
 {
   color: $color-primary;
   text-decoration: underline;
+  &:hover
+  {
+    opacity: 0.70;
+    transition: opacity .225s ease;
+  }
+}
+
+.fade-in-link {
+
+  &:hover {
+    opacity: 1;
+  }
+}
+
+.help
+{
+  color: $color-help;
 }
