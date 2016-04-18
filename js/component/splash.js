@@ -25,7 +25,7 @@ var SplashScreen = React.createClass({
       isLagging: false,
     }
   },
-  updateStatus: function(checkNum=0, was_lagging=false) {
+  updateStatus: function(was_lagging=false) {
       lbry.getDaemonStatus((status) => {
         if (status.code == 'started') {
           this.props.onLoadDone();
@@ -37,11 +37,9 @@ var SplashScreen = React.createClass({
           isLagging: status.is_lagging,
         });
 
-        if (checkNum < 600) {
-          setTimeout(() => {
-            this.updateStatus(checkNum + 1, status.is_lagging);
-          }, 500);
-        }
+        setTimeout(() => {
+          this.updateStatus(status.is_lagging);
+        }, 500);
       });
   },
   componentDidMount: function() {
