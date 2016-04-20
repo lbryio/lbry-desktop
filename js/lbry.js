@@ -95,6 +95,10 @@ lbry.search = function(query, callback)
   lbry.call("search_nametrie", { "search": query }, callback);
 }
 
+lbry.getVersionInfo = function(callback) {
+  lbry.call('version', {}, callback);
+};
+
 lbry.checkNewVersionAvailable = function(callback) {
   lbry.call('version', {}, function() {
     // If the "version" method is available, we have a daemon new enough to do version checking
@@ -132,3 +136,7 @@ lbry.imagePath = function(file)
 { 
   return lbry.rootPath + '/img/' + file; 
 }
+
+lbry.stop = function(callback) {
+  lbry.call('stop', {}, callback);
+};
