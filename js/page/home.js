@@ -202,7 +202,7 @@ var Header = React.createClass({
   render: function() {
     return (
       <header>
-        <TopBar onPageChosen={this.handlePageChosen}/>
+        <TopBar />
         <div style={logoStyle}>
           <img src="./img/lbry-dark-1600x528.png" style={imgStyle}/>
         </div>
@@ -216,12 +216,19 @@ var topBarStyle = {
 },
 balanceStyle = {
   'marginRight': '5px'
+},
+closeIconStyle = {
+  'color': '#ff5155'
 };
 
 var TopBar = React.createClass({
+  onClose: function() {
+    window.location.href = "?start";
+  },
   getInitialState: function() {
     return {
-      balance: 0
+      balance: 0,
+      showClose: /linux/i.test(navigator.userAgent) // @TODO: find a way to use getVersionInfo() here without messy state management
     };
   },
   componentDidMount: function() {
@@ -241,6 +248,8 @@ var TopBar = React.createClass({
         <Link href='/?settings' icon='icon-gear' />
         { ' ' }
         <Link href='/?help' icon='icon-question-circle' />
+        { ' ' }
+        <Link href="/?start" onClick={this.onClose} icon="icon-close" style={closeIconStyle} hidden={!this.state.showClose} />
       </span>
     );
   }

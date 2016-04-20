@@ -6,7 +6,7 @@ var appStyles = {
 var App = React.createClass({
   getInitialState: function() {
     var query = window.location.search.slice(1);
-    if (query == 'settings' || query == 'help') {
+    if (['settings', 'help', 'start'].indexOf(query) != -1) {
       var viewingPage = query;
     } else {
       var viewingPage = 'home';
@@ -54,6 +54,8 @@ var App = React.createClass({
       var content = <SettingsPage />;
     } else if (this.state.viewingPage == 'help') {
       var content = <HelpPage />;
+    } else if (this.state.viewingPage == 'start') {
+      var content = <StartPage />;
     }
     return (
       <div style={appStyles}>
