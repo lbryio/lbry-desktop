@@ -5,9 +5,16 @@ var appStyles = {
 };
 var App = React.createClass({
   getInitialState: function() {
-    return {
-      viewingPage: window.location.search === '?settings' ? 'settings' : 'home'
+    var query = window.location.search.slice(1);
+    if (query == 'settings' || query == 'help') {
+      var viewingPage = query;
+    } else {
+      var viewingPage = 'home';
     }
+
+    return {
+      viewingPage: viewingPage
+    };
   },
   componentWillMount: function() {
     lbry.checkNewVersionAvailable(function(isAvailable) {
@@ -45,6 +52,8 @@ var App = React.createClass({
       var content = <HomePage />;
     } else if (this.state.viewingPage == 'settings') {
       var content = <SettingsPage />;
+    } else if (this.state.viewingPage == 'help') {
+      var content = <HelpPage />;
     }
     return (
       <div style={appStyles}>

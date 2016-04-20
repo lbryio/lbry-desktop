@@ -238,7 +238,9 @@ var TopBar = React.createClass({
         <span style={balanceStyle}>
           <CreditAmount amount={this.state.balance}/>
         </span>
-        <Link href='/?settings' icon="icon-gear" />
+        <Link href='/?settings' icon='icon-gear' />
+        { ' ' }
+        <Link href='/?help' icon='icon-question-circle' />
       </span>
     );
   }
