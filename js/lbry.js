@@ -95,6 +95,10 @@ lbry.search = function(query, callback)
   lbry.call("search_nametrie", { "search": query }, callback);
 }
 
+lbry.getStream = function(name, callback) {
+  lbry.call('get', { 'name': name }, callback);
+};
+
 lbry.getVersionInfo = function(callback) {
   lbry.call('version', {}, callback);
 };
