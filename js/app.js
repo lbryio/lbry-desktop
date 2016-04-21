@@ -5,15 +5,19 @@ var appStyles = {
 };
 var App = React.createClass({
   getInitialState: function() {
-    var query = window.location.search.slice(1);
-    if (['settings', 'help', 'start'].indexOf(query) != -1) {
-      var viewingPage = query;
+    // For now, routes are in format ?page or ?page=args
+    var match, param, val;
+    [match, param, val] = window.location.search.match(/\??([^=]*)(?:=(.*))?/);
+
+    if (['settings', 'help', 'start', 'watch'].indexOf(param) != -1) {
+      var viewingPage = param;
     } else {
       var viewingPage = 'home';
     }
 
     return {
-      viewingPage: viewingPage
+      viewingPage: viewingPage,
+      pageArgs: val,
     };
   },
   componentWillMount: function() {
@@ -54,6 +58,8 @@ var App = React.createClass({
       var content = <SettingsPage />;
     } else if (this.state.viewingPage == 'help') {
       var content = <HelpPage />;
+    } else if (this.state.viewingPage == 'watch') {
+      var content = <WatchPage name={this.state.pageArgs}/>;
     } else if (this.state.viewingPage == 'start') {
       var content = <StartPage />;
     }
