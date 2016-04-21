@@ -16,7 +16,7 @@ var Link = React.createClass({
     var href = this.props.href ? this.props.href : 'javascript:;',
       icon = this.props.icon ? <Icon icon={this.props.icon} />  : '',
       className = (this.props.button ? 'button-block button-' + this.props.button : 'button-text') +
-                  (this.props.hidden ? ' hidden' : '');
+                  (this.props.hidden ? ' hidden' : '') + (this.props.disabled ? ' disabled' : '');
     return (
       <a className={className} href={href} style={this.props.style ? this.props.style : {}} onClick={this.props.onClick}>
         {this.props.icon ? icon : '' }

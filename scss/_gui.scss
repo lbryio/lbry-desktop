@@ -44,6 +44,11 @@ header
   display: none;
 }
 
+.disabled {
+  pointer-events: none;
+  opacity: 0.7;
+}
+
 input[type="search"]
 {
   border: 0 none;

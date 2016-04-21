@@ -87,6 +87,21 @@ var searchRowImgStyle = {
 
 
 var SearchResultRow = React.createClass({
+  getInitialState: function() {
+    return {
+      downloading: false
+    }
+  },
+  startDownload: function() {
+    if (!this.state.downloading) {
+      this.setState({
+        downloading: true
+      });
+      lbry.getStream(this.props.name, (streamInfo) => {
+        alert('Downloading ' + this.props.title + ' to ' + streamInfo.path);
+      });
+    }
+  },
   render: function() {
     var displayURI = 'lbry://' + this.props.name;
 
@@ -111,7 +126,8 @@ var SearchResultRow = React.createClass({
           <p style={searchRowDescriptionStyle}>{this.props.description}</p>
           <div>
             <Link href={linkURI} label="Watch" icon="icon-play" button="primary" />
-            <Link href={linkURI} label="Download" icon="icon-download" button="alt" />
+            <Link onClick={this.startDownload} label={this.state.downloading ? "Downloading" : "Download"}
+                  disabled={this.state.downloading} icon="icon-download" button="alt" />
           </div>
         </div>
       </div>
