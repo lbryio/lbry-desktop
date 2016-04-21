@@ -92,7 +92,7 @@ var SearchResultRow = React.createClass({
 
     // No support for lbry:// URLs in Windows or on Chrome yet
     if (/windows|win32/i.test(navigator.userAgent) || (window.chrome && window.navigator.vendor == "Google Inc.")) {
-      var linkURI = window.location.host + "/view?name=" + this.props.name;
+      var linkURI = "/view?name=" + this.props.name;
     } else {
       var linkURI = displayURI;
     }
