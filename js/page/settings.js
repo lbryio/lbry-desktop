@@ -29,7 +29,7 @@ var SettingsPage = React.createClass({
     this.storeSetting('upload_log', event.target.checked);
   },
   onDownloadDirChange: function(event) {
-    this.storeSetting('default_download_directory', event.target.value);
+    this.storeSetting('download_directory', event.target.value);
   },
   onMaxUploadPrefChange: function(isLimited) {
     if (!isLimited) {
@@ -84,7 +84,7 @@ var SettingsPage = React.createClass({
         <section>
           <h4>Download directory</h4>
           <div className="help">Where would you like the files you download from LBRY to be saved?</div>
-          <input style={downloadDirectoryFieldStyles} type="text" name="default_download_directory" defaultValue={this.state.settings.default_download_directory} onChange={this.onDownloadDirChange}/>
+          <input style={downloadDirectoryFieldStyles} type="text" name="download_directory" defaultValue={this.state.settings.download_directory} onChange={this.onDownloadDirChange}/>
         </section>
         <section>
           <h4>Max Upload</h4>

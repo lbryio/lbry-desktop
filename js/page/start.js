@@ -5,8 +5,8 @@ var StartPage = React.createClass({
   render: function() {
     return (
       <main>
-        <h1>LBRY is not running</h1>
-        <Link href="lbry://lbry" label="Start LBRY" />
+        <h1>LBRY has closed</h1>
+        <Link href="lbry://lbry" label="Click here to start LBRY" />
       </main>
     );
   }
