@@ -115,6 +115,15 @@ lbry.checkNewVersionAvailable = function(callback) {
   });
 }
 
+lbry.reportBug = function(message, callback) {
+  lbry.call('upload_log', {
+    name_prefix: 'report',
+    exclude_previous: false,
+    force: true,
+    message: message
+  }, callback);
+}
+
 //utilities
 lbry.formatCredits = function(amount, precision)
 {
