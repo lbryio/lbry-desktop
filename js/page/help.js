@@ -30,9 +30,8 @@ var HelpPage = React.createClass({
           <br></br>
           <h3>None of this applies to me, or it didn't work</h3>
           <p>
-              <Link href="/report" label="<< Click here to send us a bug report"/>
+              Please <Link href="/?report" label="send us a bug report"/>. Thanks!
               <br></br>
-              <Link href="https://github.com/lbryio/lbry/issues" label="<< Report an issue on github"/>
           </p>
           <br></br>
           <br></br>
