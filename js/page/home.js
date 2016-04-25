@@ -115,7 +115,7 @@ var SearchResultRow = React.createClass({
     return (
       <div className="row-fluid">
         <div className="span3">
-          <img src={this.props.imgUrl} alt="Photo for {this.props.title}" style={searchRowImgStyle} />
+          <img src={this.props.imgUrl} alt={'Photo for ' + (this.props.title || this.props.name)} style={searchRowImgStyle} />
         </div>
         <div className="span9">
           <span style={searchRowCostStyle}>
