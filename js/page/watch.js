@@ -18,6 +18,15 @@ var WatchPage = React.createClass({
   componentDidMount: function() {
     lbry.getStream(this.props.name);
     this.updateLoadStatus();
+    setTimeout(() => { this.reloadIfNeeded() }, 15000);
+  },
+  reloadIfNeeded: function() {
+    // Fallback option for loading problems: every 15 seconds, if the video hasn't reported being
+    // playable yet, ask it to reload.
+    if (!this.state.readyToPlay) {
+      console.log("Trying again");
+      this._video.load()
+    }
   },
   onCanPlay: function() {
     this.setState({
@@ -39,6 +48,7 @@ var WatchPage = React.createClass({
           loadStatusMessage: "Buffering",
           downloadStarted: true,
         });
+        setTimeout(() => { this.reloadIfNeeded() }, 15000);
       }
     });
   },
@@ -50,7 +60,7 @@ var WatchPage = React.createClass({
       // When the video is actually ready to play, the loading text is hidden and the video shown.
       var video = <video src={"/view?name=" + this.props.name} style={videoStyle}
                          className={this.state.readyToPlay ? '' : 'hidden'} controls
-                         onCanPlay={this.onCanPlay} />;
+                         onCanPlay={this.onCanPlay} ref={(video) => {this._video = video}}/>;
     }
 
     return (
