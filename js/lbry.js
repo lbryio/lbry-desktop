@@ -99,6 +99,10 @@ lbry.getStream = function(name, callback) {
   lbry.call('get', { 'name': name }, callback);
 };
 
+lbry.getFileStatus = function(name, callback) {
+  lbry.call('get_lbry_file', { 'name': name }, callback);
+}
+
 lbry.getVersionInfo = function(callback) {
   lbry.call('version', {}, callback);
 };
