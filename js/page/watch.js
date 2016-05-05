@@ -10,6 +10,7 @@ var WatchPage = React.createClass({
   },
   getInitialState: function() {
     return {
+      downloadStarted: false,
       readyToPlay: false,
       loadStatusMessage: "Requesting stream",
     };
@@ -18,32 +19,48 @@ var WatchPage = React.createClass({
     lbry.getStream(this.props.name);
     this.updateLoadStatus();
   },
+  onCanPlay: function() {
+    this.setState({
+      readyToPlay: true
+    });
+  },
   updateLoadStatus: function() {
     lbry.getFileStatus(this.props.name, (status) => {
-      if (status.code != 'running') {
-        this.loadStatusMessage = status.message;
+      if (!status || status.code != 'running' || status.written_bytes == 0) {
+        // Download hasn't started yet, so update status message (if available) then try again
+        if (status) {
+          this.setState({
+            loadStatusMessage: status.message
+          });
+        }
         setTimeout(() => { this.updateLoadStatus() }, 250);
       } else {
         this.setState({
-          readyToPlay: true
+          loadStatusMessage: "Buffering",
+          downloadStarted: true,
         });
       }
     });
   },
   render: function() {
-    if (!this.state.readyToPlay) {
-      return (
-        <main>
-        <h3>Loading lbry://{this.props.name}</h3>
-        {this.state.loadStatusMessage}
-        </main>
-      );
+    if (!this.state.downloadStarted) {
+      var video = null;
     } else {
-      return (
-        <main>
-        <video style={videoStyle} src={"/view?name=" + this.props.name} controls />;
-        </main>
-      );
+      // If the download has started, render the <video> behind the scenes so it can start loading.
+      // When the video is actually ready to play, the loading text is hidden and the video shown.
+      var video = <video src={"/view?name=" + this.props.name} style={videoStyle}
+                         className={this.state.readyToPlay ? '' : 'hidden'} controls
+                         onCanPlay={this.onCanPlay} />;
     }
+
+    return (
+      <main>
+      <div className={this.state.readyToPlay ? 'hidden' : ''}>
+        <h3>Loading lbry://{this.props.name}</h3>
+        {this.state.loadStatusMessage}...
+      </div>
+      {video}
+      </main>
+    );
   }
 });
