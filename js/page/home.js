@@ -87,12 +87,27 @@ var searchRowImgStyle = {
 
 
 var SearchResultRow = React.createClass({
+  getInitialState: function() {
+    return {
+      downloading: false
+    }
+  },
+  startDownload: function() {
+    if (!this.state.downloading) {
+      this.setState({
+        downloading: true
+      });
+      lbry.getStream(this.props.name, (streamInfo) => {
+        alert('Downloading ' + this.props.title + ' to ' + streamInfo.path);
+      });
+    }
+  },
   render: function() {
     var displayURI = 'lbry://' + this.props.name;
 
     // No support for lbry:// URLs in Windows or on Chrome yet
     if (/windows|win32/i.test(navigator.userAgent) || (window.chrome && window.navigator.vendor == "Google Inc.")) {
-      var linkURI = window.location.host + "/view?name=" + this.props.name;
+      var linkURI = "/?watch=" + this.props.name;
     } else {
       var linkURI = displayURI;
     }
@@ -100,7 +115,7 @@ var SearchResultRow = React.createClass({
     return (
       <div className="row-fluid">
         <div className="span3">
-          <img src={this.props.imgUrl} alt="Photo for {this.props.title}" style={searchRowImgStyle} />
+          <img src={this.props.imgUrl} alt={'Photo for ' + (this.props.title || this.props.name)} style={searchRowImgStyle} />
         </div>
         <div className="span9">
           <span style={searchRowCostStyle}>
@@ -111,7 +126,8 @@ var SearchResultRow = React.createClass({
           <p style={searchRowDescriptionStyle}>{this.props.description}</p>
           <div>
             <Link href={linkURI} label="Watch" icon="icon-play" button="primary" />
-            <Link href={linkURI} label="Download" icon="icon-download" button="alt" />
+            <Link onClick={this.startDownload} label={this.state.downloading ? "Downloading" : "Download"}
+                  disabled={this.state.downloading} icon="icon-download" button="alt" />
           </div>
         </div>
       </div>
@@ -202,7 +218,7 @@ var Header = React.createClass({
   render: function() {
     return (
       <header>
-        <TopBar onPageChosen={this.handlePageChosen}/>
+        <TopBar />
         <div style={logoStyle}>
           <img src="./img/lbry-dark-1600x528.png" style={imgStyle}/>
         </div>
@@ -216,12 +232,19 @@ var topBarStyle = {
 },
 balanceStyle = {
   'marginRight': '5px'
+},
+closeIconStyle = {
+  'color': '#ff5155'
 };
 
 var TopBar = React.createClass({
+  onClose: function() {
+    window.location.href = "?start";
+  },
   getInitialState: function() {
     return {
-      balance: 0
+      balance: 0,
+      showClose: /linux/i.test(navigator.userAgent) // @TODO: find a way to use getVersionInfo() here without messy state management
     };
   },
   componentDidMount: function() {
@@ -238,7 +261,11 @@ var TopBar = React.createClass({
         <span style={balanceStyle}>
           <CreditAmount amount={this.state.balance}/>
         </span>
-        <Link href='/?settings' icon="icon-gear" />
+        <Link href='/?settings' icon='icon-gear' />
+        { ' ' }
+        <Link href='/?help' icon='icon-question-circle' />
+        { ' ' }
+        <Link href="/?start" onClick={this.onClose} icon="icon-close" style={closeIconStyle} hidden={!this.state.showClose} />
       </span>
     );
   }

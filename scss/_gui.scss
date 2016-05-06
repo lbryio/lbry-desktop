@@ -40,8 +40,19 @@ header
   line-height: $spacing-vertical;
 }
 
+p
+{
+  margin-bottom: 0.8em;
+}
+
+
 .hidden {
   display: none;
+}
+
+.disabled {
+  pointer-events: none;
+  opacity: 0.7;
 }
 
 input[type="search"]
@@ -86,6 +97,10 @@ input[type="search"]
   {
     margin-left: 20px;
   }
+  .icon
+  {
+    top: 0em;
+  }
   .icon:first-child
   {
     padding-right: 5px;
@@ -118,6 +133,11 @@ input[type="search"]
     opacity: 0.70;
     transition: opacity .225s ease;
   }
+}
+
+.icon {
+  position: relative;
+  top: 0.16em;
 }
 
 .fade-in-link {

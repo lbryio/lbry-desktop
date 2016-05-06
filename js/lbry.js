@@ -95,6 +95,18 @@ lbry.search = function(query, callback)
   lbry.call("search_nametrie", { "search": query }, callback);
 }
 
+lbry.getStream = function(name, callback) {
+  lbry.call('get', { 'name': name }, callback);
+};
+
+lbry.getFileStatus = function(name, callback) {
+  lbry.call('get_lbry_file', { 'name': name }, callback);
+}
+
+lbry.getVersionInfo = function(callback) {
+  lbry.call('version', {}, callback);
+};
+
 lbry.checkNewVersionAvailable = function(callback) {
   lbry.call('version', {}, function() {
     // If the "version" method is available, we have a daemon new enough to do version checking
@@ -105,6 +117,15 @@ lbry.checkNewVersionAvailable = function(callback) {
       callback(true);
     }
   });
+}
+
+lbry.reportBug = function(message, callback) {
+  lbry.call('upload_log', {
+    name_prefix: 'report',
+    exclude_previous: false,
+    force: true,
+    message: message
+  }, callback);
 }
 
 //utilities
@@ -132,3 +153,7 @@ lbry.imagePath = function(file)
 { 
   return lbry.rootPath + '/img/' + file; 
 }
+
+lbry.stop = function(callback) {
+  lbry.call('stop', {}, callback);
+};
