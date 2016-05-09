@@ -44,13 +44,6 @@ var App = React.createClass({
       }
     });
   },
-  componentDidMount: function() {
-    lbry.getStartNotice(function(notice) {
-      if (notice) {
-        alert(notice);
-      }
-    });
-  },
   render: function() {
     if (this.state.viewingPage == 'home') {
       var content = <HomePage />;

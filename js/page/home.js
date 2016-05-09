@@ -272,6 +272,13 @@ var TopBar = React.createClass({
 });
 
 var HomePage = React.createClass({
+  componentDidMount: function() {
+    lbry.getStartNotice(function(notice) {
+      if (notice) {
+        alert(notice);
+      }
+    });
+  },
   render: function() {
     return (
       <div>
