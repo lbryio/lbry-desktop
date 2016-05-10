@@ -103,6 +103,10 @@ lbry.getFileStatus = function(name, callback) {
   lbry.call('get_lbry_file', { 'name': name }, callback);
 }
 
+lbry.getFilesInfo = function(callback) {
+  lbry.call('get_lbry_files', {}, callback);
+}
+
 lbry.getVersionInfo = function(callback) {
   lbry.call('version', {}, callback);
 };
