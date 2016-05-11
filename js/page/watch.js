@@ -18,14 +18,13 @@ var WatchPage = React.createClass({
   componentDidMount: function() {
     lbry.getStream(this.props.name);
     this.updateLoadStatus();
-    setTimeout(() => { this.reloadIfNeeded() }, 15000);
   },
   reloadIfNeeded: function() {
     // Fallback option for loading problems: every 15 seconds, if the video hasn't reported being
     // playable yet, ask it to reload.
     if (!this.state.readyToPlay) {
-      console.log("Trying again");
       this._video.load()
+      setTimeout(() => { this.reloadIfNeeded() }, 15000);
     }
   },
   onCanPlay: function() {
