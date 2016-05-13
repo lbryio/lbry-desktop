@@ -1,5 +1,7 @@
 dist/css/*
 dist/js/*
+!dist/js/flowplayer/
+!dist/js/flowplayer/
 node_modules
 .sass-cache
 .idea
