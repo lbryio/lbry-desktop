@@ -107,6 +107,18 @@ lbry.getFilesInfo = function(callback) {
   lbry.call('get_lbry_files', {}, callback);
 }
 
+lbry.startFile = function(name, callback) {
+  lbry.call('start_lbry_file', { name: name }, callback);
+}
+
+lbry.stopFile = function(name, callback) {
+  lbry.call('stop_lbry_file', { name: name }, callback);
+}
+
+lbry.deleteFile = function(name, callback) {
+  lbry.call('delete_lbry_file', { name: name }, callback)
+}
+
 lbry.getVersionInfo = function(callback) {
   lbry.call('version', {}, callback);
 };
