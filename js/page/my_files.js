@@ -1,17 +1,64 @@
-var MyFilesCellStyle = {
-  padding: '3px',
-  border: '2px solid black',
+var removeIconColumnStyle = {
+  fontSize: '1.3em',
+  height: '120px',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+},
+progressBarStyle = {
+  height: '15px',
+  width: '230px',
+  backgroundColor: '#444',
+  border: '2px solid #eee',
+  display: 'inline-block',
 };
 
 var MyFilesRow = React.createClass({
+  onRemoveClicked: function() {
+     var alertText = 'Are you sure you\'d like to remove "' + this.props.title + '?" This will ' +
+                     (this.completed ? ' stop the download and ' : '') +
+                     'permanently remove the file from your system.';
+
+    if (confirm(alertText)) {
+      lbry.deleteFile(this.props.lbryUri);
+    }
+  },
+  onPauseResumeClicked: function() {
+    if (this.props.stopped) {
+      lbry.startFile(this.props.lbryUri);
+    } else {
+      lbry.stopFile(this.props.lbryUri);
+    }
+  },
   render: function() {
+    if (this.props.completed) {
+      var pauseLink = null;
+      var curProgressBarStyle = {display: 'none'};
+    } else {
+      var pauseLink = <Link icon={this.props.stopped ? 'icon-play' : 'icon-pause'}
+                            label={this.props.stopped ? 'Resume download' : 'Pause download'}
+                            onClick={() => { this.onPauseResumeClicked() }} />;
+
+      var curProgressBarStyle = Object.assign({}, progressBarStyle);
+      curProgressBarStyle.width = this.props.ratioLoaded * 230;
+      curProgressBarStyle.borderRightWidth = 230 - (this.props.ratioLoaded * 230) + 2;    
+    }
     return (
-      <tr>
-        <td style={MyFilesCellStyle}>{this.props.streamName}</td>
-        <td style={MyFilesCellStyle}>{this.props.completed ? 'True' : 'False'}</td>
-        <td style={MyFilesCellStyle}><Link label={this.props.stopped ? 'Start' : 'Stop'} /></td>        
-        <td style={MyFilesCellStyle}><Link label="Cancel" /></td>        
-      </tr>
+      <div className="row-fluid">
+        <div className="span3">
+          <img src={this.props.imgUrl} style={searchRowImgStyle} alt={'Photo for ' + (this.props.title || this.props.name)} style={searchRowImgStyle} />
+        </div>
+        <div className="span6">
+          <h2>{this.props.title}</h2>
+          <div className={this.props.completed ? 'hidden' : ''} style={curProgressBarStyle}></div>
+          { ' ' }
+          {this.props.completed ? 'Download complete' : (parseInt(this.props.ratioLoaded * 100) + '%')}
+          <div>{ pauseLink }</div>
+        </div>
+        <div className="span1" style={removeIconColumnStyle}>
+          <Link icon="icon-close" title="Remove file" onClick={this.onPauseResumeClicked} /><br />
+        </div>
+      </div>
     );
   }
 });
@@ -23,39 +70,34 @@ var MyFilesPage = React.createClass({
     };
   },
   componentWillMount: function() {
+    this.updateFilesInfo();
+  },
+  updateFilesInfo: function() {
     lbry.getFilesInfo((filesInfo) => {
       this.setState({
-        filesInfo: filesInfo
+        filesInfo: (filesInfo ? filesInfo : []),
       });
+      setTimeout(() => { this.updateFilesInfo() }, 1000);
     });
   },
   render: function() {
-    if (!this.state.filesInfo) {
+    if (this.state.filesInfo === null) {
       return null;
     } else {
-      var rows = [];
-      for (let fileInfo of this.state.filesInfo) {
-        console.log(fileInfo);
-        rows.push(<MyFilesRow streamName={fileInfo.stream_name} completed={fileInfo.completed} />);
+      if (this.state.filesInfo.length == 0) {
+        var content = <span>You haven't downloaded anything from LBRY yet. Go <Link href="/" label="search for your first download" />!</span>;
+      } else {
+        var content = [];
+        for (let {completed, written_bytes, total_bytes, lbry_uri, metadata} of this.state.filesInfo) {
+          let {name, stopped, thumbnail} = metadata;
+          content.push(<MyFilesRow lbryUri={lbry_uri} title={name} completed={completed} stopped={stopped}
+                                   ratioLoaded={written_bytes / total_bytes} imgUrl={thumbnail}/>);
+        }
       }
-      console.log(rows);
       return (
         <main>
         <h1>My files</h1>
-        <table>
-          <thead>
-            <tr>
-              <th style={MyFilesCellStyle}>Stream name</th>
-              <th style={MyFilesCellStyle}>Completed</th>
-              <th style={MyFilesCellStyle}>Toggle</th>
-              <th style={MyFilesCellStyle}>Remove</th>
-            </tr>
-          </thead>
-        <tbody>
-          {rows}
-        </tbody>
-        </table>
-
+        {content}
         <section>
           <Link href="/" label="<< Return" />
         </section>
