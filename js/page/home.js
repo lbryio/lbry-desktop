@@ -262,11 +262,8 @@ var TopBar = React.createClass({
           <CreditAmount amount={this.state.balance}/>
         </span>
         <Link href='/?files' title="My Files" icon='icon-cloud-download' />
-        { ' ' }
         <Link href='/?settings' title="Settings" icon='icon-gear' />
-        { ' ' }
         <Link href='/?help' title="Help" icon='icon-question-circle' />
-        { ' ' }
         <Link href="/?start" title="Start" onClick={this.onClose} icon="icon-close"
               style={closeIconStyle} hidden={!this.state.showClose} />
       </span>

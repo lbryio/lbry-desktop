@@ -128,6 +128,10 @@ input[type="search"]
 {
   color: $color-primary;
   text-decoration: underline;
+  .icon:first-child
+  {
+    padding-right: 5px;
+  }
   &:hover
   {
     opacity: 0.70;
@@ -135,7 +139,7 @@ input[type="search"]
   }
 }
 
-.icon {
+.icon:only-child {
   position: relative;
   top: 0.16em;
 }
