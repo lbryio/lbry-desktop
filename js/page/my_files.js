@@ -56,7 +56,7 @@ var MyFilesRow = React.createClass({
           <div>{ pauseLink }</div>
         </div>
         <div className="span1" style={removeIconColumnStyle}>
-          <Link icon="icon-close" title="Remove file" onClick={this.onPauseResumeClicked} /><br />
+          <Link icon="icon-close" title="Remove file" onClick={() => { this.onRemoveClicked() } } /><br />
         </div>
       </div>
     );
@@ -88,8 +88,8 @@ var MyFilesPage = React.createClass({
         var content = <span>You haven't downloaded anything from LBRY yet. Go <Link href="/" label="search for your first download" />!</span>;
       } else {
         var content = [];
-        for (let {completed, written_bytes, total_bytes, lbry_uri, metadata} of this.state.filesInfo) {
-          let {name, stopped, thumbnail} = metadata;
+        for (let {completed, written_bytes, total_bytes, lbry_uri, stopped, metadata} of this.state.filesInfo) {
+          let {name, thumbnail} = metadata;
           content.push(<MyFilesRow lbryUri={lbry_uri} title={name} completed={completed} stopped={stopped}
                                    ratioLoaded={written_bytes / total_bytes} imgUrl={thumbnail}/>);
         }
