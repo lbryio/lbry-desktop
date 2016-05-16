@@ -135,6 +135,119 @@ var SearchResultRow = React.createClass({
   }
 });
 
+var featuredContentItemStyle = {
+  fontSize: '0.95em',
+  marginBottom: '10px',
+}, featuredContentItemInfoColumnStyle = {
+  position: 'relative',
+  left: '26px',
+}, featuredContentItemImgStyle = {
+  maxHeight: '90px',
+  display: 'block',
+  marginLeft: 'auto',
+  marginRight: 'auto',
+  float: 'left',
+}, featuredContentItemDescriptionStyle = {
+  color: '#444',
+  marginBottom: '5px',
+  fontSize: '0.9em',
+  width: '250px',
+}, featuredContentItemCostStyle = {
+  display: 'block',
+  float: 'right',
+  position: 'relative',
+  left: '-35px',
+  fontSize: '0.95em',
+};
+
+var FeaturedContentItem = React.createClass({
+  propTypes: {
+    name: React.PropTypes.string,
+  },
+  startDownload: function() {
+    if (!this.state.downloading) {
+      this.setState({
+        downloading: true
+      });
+      lbry.getStream(this.props.name, (streamInfo) => {
+        alert('Downloading ' + this._title + ' to ' + streamInfo.path);
+      });
+    }
+  },
+  getInitialState: function() {
+    return {
+      metadata: null,
+      title: null,
+    };
+  },
+  componentWillMount: function() {
+    lbry.resolveName(this.props.name, (metadata) => {
+      this.setState({
+        metadata: metadata,
+        title: metadata.name || metadata.stream_name || ('lbry://' + this.props.name),
+      })
+    });
+  },
+  render: function() {
+    if (this.state.metadata == null) {
+      // Still waiting for metadata
+      return null;
+    }
+
+    // No support for lbry:// URLs in Windows or on Chrome yet
+    if (/windows|win32/i.test(navigator.userAgent) || (window.chrome && window.navigator.vendor == "Google Inc.")) {
+      var watchUri = "/?watch=" + this.props.name;
+    } else {
+      var watchUri = 'lbry://' + this.props.name;
+    }
+
+    var metadata = this.state.metadata;
+
+    return (<div className="row-fluid" style={featuredContentItemStyle}>
+      <div className="span3">
+        <img src={metadata.thumbnail} alt={'Photo for ' + this.state.title} style={featuredContentItemImgStyle} />
+      </div>
+      <div className="span9" style={featuredContentItemInfoColumnStyle}>
+        <h4>{this.state.title}</h4>
+        <p style={featuredContentItemDescriptionStyle}>{metadata.description}</p>
+        <div>
+          <Link href={watchUri} label="Watch" icon="icon-play" />
+          { ' ' }
+          <Link onClick={this.startDownload} label={this.state.downloading ? "Downloading" : "Download"}
+                disabled={this.state.downloading} icon="icon-download" />
+          <div style={featuredContentItemCostStyle}><CreditAmount amount={0.0} isEstimate={true}/></div>
+        </div>
+      </div>
+    </div>);
+  }
+});
+
+var featuredContentStyle = {
+  width: '100%',
+},
+featuredContentColsStyle = {
+  marginLeft: '0px',
+};
+
+var FeaturedContent = React.createClass({
+  render: function() {
+    return (<section style={featuredContentStyle}>
+    <h3>Featured content</h3>
+      <div className="row-fluid">
+      <div className="span6" style={featuredContentColsStyle}>
+        <FeaturedContentItem name="wonderfullife" /> {/* When ready, change to one/two/three/four/five/six */}
+        <FeaturedContentItem name="wonderfullife" />
+        <FeaturedContentItem name="wonderfullife" />
+      </div>
+      <div className="span6" style={featuredContentColsStyle}>
+        <FeaturedContentItem name="wonderfullife" />
+        <FeaturedContentItem name="wonderfullife" />
+        <FeaturedContentItem name="wonderfullife" />
+      </div>
+    </div>
+    </section>);
+  }
+});
 
 var discoverMainStyle = {
   color: '#333'
@@ -200,6 +313,7 @@ var Discover = React.createClass({
         { this.state.searching ? <SearchActive /> : null }
         { !this.state.searching && this.state.results.length ? <SearchResults results={this.state.results} /> : null }
         { !this.state.searching && !this.state.results.length && this.state.query ? <SearchNoResults query={this.state.query} /> : null }
+        { !this.state.query ? <FeaturedContent /> : null }
       </main>
     );
   }
