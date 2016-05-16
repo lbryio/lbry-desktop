@@ -46,7 +46,7 @@ var MyFilesRow = React.createClass({
     return (
       <div className="row-fluid">
         <div className="span3">
-          <img src={this.props.imgUrl} style={searchRowImgStyle} alt={'Photo for ' + (this.props.title || this.props.name)} style={searchRowImgStyle} />
+          <img src={this.props.imgUrl} style={searchRowImgStyle} alt={'Photo for ' + this.props.title} style={searchRowImgStyle} />
         </div>
         <div className="span6">
           <h2>{this.props.title}</h2>
@@ -89,9 +89,11 @@ var MyFilesPage = React.createClass({
       } else {
         var content = [];
         for (let {completed, written_bytes, total_bytes, lbry_uri, stopped, metadata} of this.state.filesInfo) {
-          let {name, thumbnail} = metadata;
-          content.push(<MyFilesRow lbryUri={lbry_uri} title={name} completed={completed} stopped={stopped}
-                                   ratioLoaded={written_bytes / total_bytes} imgUrl={thumbnail}/>);
+          let {name, stream_name, thumbnail} = metadata;
+          var title = (name || stream_name || ('lbry://' + lbry_uri));
+          var ratioLoaded = written_bytes / total_bytes;
+          content.push(<MyFilesRow lbryUri={lbry_uri} title={title} completed={completed} stopped={stopped}
+                                   ratioLoaded={ratioLoaded} imgUrl={thumbnail}/>);
         }
       }
       return (
