@@ -92,26 +92,7 @@ var SearchResultRow = React.createClass({
       downloading: false
     }
   },
-  startDownload: function() {
-    if (!this.state.downloading) {
-      this.setState({
-        downloading: true
-      });
-      lbry.getStream(this.props.name, (streamInfo) => {
-        alert('Downloading ' + this.props.title + ' to ' + streamInfo.path);
-      });
-    }
-  },
   render: function() {
-    var displayURI = 'lbry://' + this.props.name;
-
-    // No support for lbry:// URLs in Windows or on Chrome yet
-    if (/windows|win32/i.test(navigator.userAgent) || (window.chrome && window.navigator.vendor == "Google Inc.")) {
-      var linkURI = "/?watch=" + this.props.name;
-    } else {
-      var linkURI = displayURI;
-    }
-
     return (
       <div className="row-fluid">
         <div className="span3">
@@ -122,12 +103,11 @@ var SearchResultRow = React.createClass({
             <CreditAmount amount={this.props.cost_est} isEstimate={true}/>
           </span>
           <h2>{this.props.title}</h2>
-          <div style={searchRowNameStyle}>{displayURI}</div>
+          <div style={searchRowNameStyle}>lbry://{this.props.name}</div>
           <p style={searchRowDescriptionStyle}>{this.props.description}</p>
           <div>
-            <Link href={linkURI} label="Watch" icon="icon-play" button="primary" />
-            <Link onClick={this.startDownload} label={this.state.downloading ? "Downloading" : "Download"}
-                  disabled={this.state.downloading} icon="icon-download" button="alt" />
+            <WatchLink streamName={this.props.name} button="primary" />
+            <DownloadLink streamName={this.props.name} button="alt" />
           </div>
         </div>
       </div>
@@ -164,16 +144,6 @@ var FeaturedContentItem = React.createClass({
   propTypes: {
     name: React.PropTypes.string,
   },
-  startDownload: function() {
-    if (!this.state.downloading) {
-      this.setState({
-        downloading: true
-      });
-      lbry.getStream(this.props.name, (streamInfo) => {
-        alert('Downloading ' + this._title + ' to ' + streamInfo.path);
-      });
-    }
-  },
   getInitialState: function() {
     return {
       metadata: null,
@@ -194,13 +164,6 @@ var FeaturedContentItem = React.createClass({
       return null;
     }
 
-    // No support for lbry:// URLs in Windows or on Chrome yet
-    if (/windows|win32/i.test(navigator.userAgent) || (window.chrome && window.navigator.vendor == "Google Inc.")) {
-      var watchUri = "/?watch=" + this.props.name;
-    } else {
-      var watchUri = 'lbry://' + this.props.name;
-    }
-
     var metadata = this.state.metadata;
 
     return (<div className="row-fluid" style={featuredContentItemStyle}>
@@ -211,10 +174,9 @@ var FeaturedContentItem = React.createClass({
         <h4>{this.state.title}</h4>
         <p style={featuredContentItemDescriptionStyle}>{metadata.description}</p>
         <div>
-          <Link href={watchUri} label="Watch" icon="icon-play" />
+          <WatchLink streamName={this.props.name} />
           { ' ' }
-          <Link onClick={this.startDownload} label={this.state.downloading ? "Downloading" : "Download"}
-                disabled={this.state.downloading} icon="icon-download" />
+          <DownloadLink streamName={this.props.name} />
           <div style={featuredContentItemCostStyle}><CreditAmount amount={0.0} isEstimate={true}/></div>
         </div>
       </div>
