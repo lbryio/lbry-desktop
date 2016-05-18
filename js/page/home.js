@@ -273,9 +273,9 @@ var Discover = React.createClass({
         <section><input type="search" style={searchInputStyle} onChange={this.onQueryChange}
                         placeholder="Find movies, music, games, and more"/></section>
         { this.state.searching ? <SearchActive /> : null }
-        { !this.state.searching && this.state.results.length ? <SearchResults results={this.state.results} /> : null }
-        { !this.state.searching && !this.state.results.length && this.state.query ? <SearchNoResults query={this.state.query} /> : null }
-        { !this.state.query ? <FeaturedContent /> : null }
+        { !this.state.searching && this.state.query && this.state.results.length ? <SearchResults results={this.state.results} /> : null }
+        { !this.state.searching && this.state.query && !this.state.results.length ? <SearchNoResults query={this.state.query} /> : null }
+        { !this.state.query && !this.state.searching ? <FeaturedContent /> : null }
       </main>
     );
   }
