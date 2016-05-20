@@ -17,7 +17,6 @@ myFilesRowImgStyle = {
   display: 'block',
   marginLeft: 'auto',
   marginRight: 'auto',
-  float: 'left'
 };
 
 var MyFilesRow = React.createClass({
