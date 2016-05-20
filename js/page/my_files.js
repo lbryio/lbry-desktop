@@ -38,6 +38,8 @@ var MyFilesRow = React.createClass({
     }
   },
   render: function() {
+    var progressBarWidth = 230; // Move this somewhere better
+
     if (this.props.completed) {
       var pauseLink = null;
       var curProgressBarStyle = {display: 'none'};
@@ -47,12 +49,12 @@ var MyFilesRow = React.createClass({
                             onClick={() => { this.onPauseResumeClicked() }} />;
 
       var curProgressBarStyle = Object.assign({}, progressBarStyle);
-      curProgressBarStyle.width = this.props.ratioLoaded * 230;
-      curProgressBarStyle.borderRightWidth = 230 - (this.props.ratioLoaded * 230) + 2;    
+      curProgressBarStyle.width = Math.floor(this.props.ratioLoaded * progressBarWidth) + 'px';
+      curProgressBarStyle.borderRightWidth = progressBarWidth - Math.ceil(this.props.ratioLoaded * progressBarWidth) + 2;
     }
 
     if (this.props.showWatchButton) {
-      var watchButton = <WatchLink streamName={this.props.lbryUri} button='primary' />
+      var watchButton = <WatchLink streamName={this.props.lbryUri} />
     } else {
       var watchButton = null;
     }
