@@ -52,16 +52,9 @@ var MyFilesRow = React.createClass({
     }
 
     if (this.props.showWatchButton) {
-      // No support for lbry:// URLs in Windows or on Chrome yet
-      if (/windows|win32/i.test(navigator.userAgent) || (window.chrome && window.navigator.vendor == "Google Inc.")) {
-        var watchUri = "/?watch=" + this.props.lbryUri;
-      } else {
-        var watchUri = 'lbry://' + this.props.lbryUri;
-      }
-
-      var watchLink = <Link href={watchUri} label="Watch" icon="icon-play" button="primary" />;
+      var watchButton = <WatchLink streamName={this.props.lbryUri} button='primary' />
     } else {
-      var watchLink = null;
+      var watchButton = null;
     }
 
     return (
@@ -75,7 +68,7 @@ var MyFilesRow = React.createClass({
           { ' ' }
           {this.props.completed ? 'Download complete' : (parseInt(this.props.ratioLoaded * 100) + '%')}
           <div>{ pauseLink }</div>
-          <div>{ watchLink }</div>
+          <div>{ watchButton }</div>
         </div>
         <div className="span1" style={removeIconColumnStyle}>
           <Link icon="icon-close" title="Remove file" onClick={() => { this.onRemoveClicked() } } /><br />
