@@ -118,25 +118,20 @@ var SearchResultRow = React.createClass({
 var featuredContentItemStyle = {
   fontSize: '0.95em',
   marginBottom: '10px',
-}, featuredContentItemInfoColumnStyle = {
-  position: 'relative',
-  left: '26px',
 }, featuredContentItemImgStyle = {
   maxHeight: '90px',
   display: 'block',
   marginLeft: 'auto',
   marginRight: 'auto',
+  marginTop: '5px',
   float: 'left',
 }, featuredContentItemDescriptionStyle = {
   color: '#444',
   marginBottom: '5px',
   fontSize: '0.9em',
-  width: '250px',
 }, featuredContentItemCostStyle = {
   display: 'block',
   float: 'right',
-  position: 'relative',
-  left: '-35px',
   fontSize: '0.95em',
 };
 
@@ -166,29 +161,27 @@ var FeaturedContentItem = React.createClass({
 
     var metadata = this.state.metadata;
 
-    return (<div className="row-fluid" style={featuredContentItemStyle}>
-      <div className="span3">
-        <img src={metadata.thumbnail} alt={'Photo for ' + this.state.title} style={featuredContentItemImgStyle} />
-      </div>
-      <div className="span9" style={featuredContentItemInfoColumnStyle}>
-        <h4>{this.state.title}</h4>
-        <p style={featuredContentItemDescriptionStyle}>{metadata.description}</p>
-        <div>
-          <WatchLink streamName={this.props.name} />
-          { ' ' }
-          <DownloadLink streamName={this.props.name} />
-          <div style={featuredContentItemCostStyle}><CreditAmount amount={0.0} isEstimate={true}/></div>
+    return (
+      <div className="row-fluid" style={featuredContentItemStyle}>
+        <div className="span4">
+          <img src={metadata.thumbnail} alt={'Photo for ' + this.state.title} style={featuredContentItemImgStyle} />
         </div>
-      </div>
-    </div>);
+        <div className="span8">
+          <h4>{this.state.title}</h4>
+          <p style={featuredContentItemDescriptionStyle}>{metadata.description}</p>
+          <div>
+            <WatchLink streamName={this.props.name} />
+            { ' ' }
+            <DownloadLink streamName={this.props.name} />
+            <div style={featuredContentItemCostStyle}><CreditAmount amount={0.0} isEstimate={true}/></div>
+          </div>
+        </div>
+      </div>);
   }
 });
 
 var featuredContentStyle = {
   width: '100%',
-},
-featuredContentColsStyle = {
-  marginLeft: '0px',
 };
 
 var FeaturedContent = React.createClass({
@@ -196,12 +189,12 @@ var FeaturedContent = React.createClass({
     return (<section style={featuredContentStyle}>
     <h3>Featured content</h3>
       <div className="row-fluid">
-      <div className="span6" style={featuredContentColsStyle}>
+      <div className="span6">
         <FeaturedContentItem name="wonderfullife" /> {/* When ready, change to one/two/three/four/five/six */}
         <FeaturedContentItem name="wonderfullife" />
         <FeaturedContentItem name="wonderfullife" />
       </div>
-      <div className="span6" style={featuredContentColsStyle}>
+      <div className="span6">
         <FeaturedContentItem name="wonderfullife" />
         <FeaturedContentItem name="wonderfullife" />
         <FeaturedContentItem name="wonderfullife" />
