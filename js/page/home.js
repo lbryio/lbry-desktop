@@ -299,6 +299,9 @@ var Header = React.createClass({
 var topBarStyle = {
   'float': 'right'
 },
+menuStyle = {
+  'fontSize': '1.1em',
+},
 balanceStyle = {
   'marginRight': '5px'
 },
@@ -330,11 +333,13 @@ var TopBar = React.createClass({
         <span style={balanceStyle}>
           <CreditAmount amount={this.state.balance}/>
         </span>
+        <span style={menuStyle}>
         <Link href='/?files' title="My Files" icon='icon-cloud-download' />
         <Link href='/?settings' title="Settings" icon='icon-gear' />
         <Link href='/?help' title="Help" icon='icon-question-circle' />
         <Link href="/?start" title="Start" onClick={this.onClose} icon="icon-close"
               style={closeIconStyle} hidden={!this.state.showClose} />
+        </span>
       </span>
     );
   }
