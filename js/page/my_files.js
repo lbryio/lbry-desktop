@@ -13,11 +13,11 @@ progressBarStyle = {
   display: 'inline-block',
 },
 myFilesRowImgStyle = {
-    maxHeight: '100px',
-    display: 'block',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    float: 'left'
+  maxHeight: '100px',
+  display: 'block',
+  marginLeft: 'auto',
+  marginRight: 'auto',
+  float: 'left'
 };
 
 var MyFilesRow = React.createClass({
