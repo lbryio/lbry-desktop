@@ -252,7 +252,6 @@ var mainMenuStyle = {
 };
 
 var MainMenu = React.createClass({
-  _showClose: /linux/i.test(navigator.userAgent), // @TODO: find a way to use getVersionInfo() here without messy state management
   propTypes: {
     show: React.PropTypes.bool,
   },
@@ -262,13 +261,15 @@ var MainMenu = React.createClass({
     }
   },
   render: function() {
+    var isLinux = /linux/i.test(navigator.userAgent); // @TODO: find a way to use getVersionInfo() here without messy state management
     return (
       <div style={mainMenuStyle} className={this.props.show ? '' : 'hidden'}>
         <Link href='/?files' label="My Files" icon='icon-cloud-download' style={mainMenuItemStyle}/>
         <Link href='/?settings' label="Settings" icon='icon-gear' style={mainMenuItemStyle}/>
         <Link href='/?help' label="Help" icon='icon-question-circle' style={mainMenuItemStyle}/>
-        <Link href="/?start" label="Exit LBRY" icon="icon-close"
-              hidden={!this.props.show} style={mainMenuItemStyle} />
+        {isLinux ? <Link href="/?start" label="Exit LBRY" icon="icon-close"
+                         hidden={!this.props.show} style={mainMenuItemStyle} />
+                 : null}
       </div>
     );
   }
