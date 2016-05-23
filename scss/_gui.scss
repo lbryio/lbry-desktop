@@ -13,6 +13,16 @@ body
     position: relative;
 }
 
+.page {
+  margin-left: auto;
+  margin-right: auto;
+  width: 800px;
+
+  &.full-width {
+    width: 100%;
+  }
+}
+
 section
 {
   margin-bottom: $spacing-vertical;

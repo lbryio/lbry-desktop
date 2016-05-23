@@ -281,7 +281,7 @@ var HomePage = React.createClass({
   },
   render: function() {
     return (
-      <div>
+      <div className="page">
         <Header />
         <Discover />
       </div>

@@ -125,7 +125,7 @@ var MyFilesPage = React.createClass({
       }
     }
     return (
-      <main>
+      <main className="page">
       <h1>My files</h1>
       {content}
       <section>

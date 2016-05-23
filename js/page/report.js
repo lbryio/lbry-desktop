@@ -20,7 +20,7 @@ var ReportPage = React.createClass({
   },
   render: function() {
     return (
-      <main>
+      <main className="page">
         <h1>Report a bug</h1>
         <section>
         <p>Please describe the problem you experienced and any information you think might be useful to us. Links to screenshots are great!</p>

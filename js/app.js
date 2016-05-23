@@ -1,8 +1,3 @@
-var appStyles = {
-  width: '800px',
-  marginLeft: 'auto',
-  marginRight: 'auto',
-};
 var App = React.createClass({
   getInitialState: function() {
     // For now, routes are in format ?page or ?page=args
@@ -46,24 +41,19 @@ var App = React.createClass({
   },
   render: function() {
     if (this.state.viewingPage == 'home') {
-      var content = <HomePage />;
+      return <HomePage />;
     } else if (this.state.viewingPage == 'settings') {
-      var content = <SettingsPage />;
+      return <SettingsPage />;
     } else if (this.state.viewingPage == 'help') {
-      var content = <HelpPage />;
+      return <HelpPage />;
     } else if (this.state.viewingPage == 'watch') {
-      var content = <WatchPage name={this.state.pageArgs}/>;
+      return <WatchPage name={this.state.pageArgs}/>;
     } else if (this.state.viewingPage == 'report') {
-      var content = <ReportPage />;
+      return <ReportPage />;
     } else if (this.state.viewingPage == 'files') {
-      var content = <MyFilesPage />;
+      return <MyFilesPage />;
     } else if (this.state.viewingPage == 'start') {
-      var content = <StartPage />;
+      return <StartPage />;
     }
-    return (
-      <div style={appStyles}>
-        {content}
-      </div>
-    );
   }
 });
