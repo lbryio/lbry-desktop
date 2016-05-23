@@ -126,6 +126,7 @@ var MyFilesPage = React.createClass({
     }
     return (
       <main className="page">
+      <SubPageLogo />
       <h1>My files</h1>
       {content}
       <section>

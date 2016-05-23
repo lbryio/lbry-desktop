@@ -74,6 +74,7 @@ var SettingsPage = React.createClass({
 
     return (
       <main className="page">
+        <SubPageLogo />
         <h1>Settings</h1>
         <section>
           <h4>Run on startup</h4>

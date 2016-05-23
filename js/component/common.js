@@ -50,3 +50,14 @@ var CreditAmount = React.createClass({
     );
   }
 });
+
+var subPageLogoStyle = {
+  maxWidth: '150px',
+  display: 'block',
+  marginTop: '36px',
+};
+var SubPageLogo = React.createClass({
+  render: function() {
+    return <img src="img/lbry-dark-1600x528.png" style={subPageLogoStyle} />;
+  }
+});
