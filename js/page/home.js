@@ -228,7 +228,9 @@ var Header = React.createClass({
 });
 
 var topBarStyle = {
-  'float': 'right'
+  'float': 'right',
+  'position': 'relative',
+  'height': '26px',
 },
 balanceStyle = {
   'marginRight': '5px'
@@ -237,14 +239,46 @@ closeIconStyle = {
   'color': '#ff5155'
 };
 
-var TopBar = React.createClass({
-  onClose: function() {
-    window.location.href = "?start";
+
+var mainMenuStyle = {
+  position: 'absolute',
+  whiteSpace: 'nowrap',
+  border: '1px solid #aaa',
+  padding: '2px',
+  top: '26px',
+  right: '0px',
+}, mainMenuItemStyle = {
+  display: 'block',
+};
+
+var MainMenu = React.createClass({
+  _showClose: /linux/i.test(navigator.userAgent), // @TODO: find a way to use getVersionInfo() here without messy state management
+  propTypes: {
+    show: React.PropTypes.bool,
   },
+  getDefaultProps: function() {
+    return {
+      show: false,
+    }
+  },
+  render: function() {
+    return (
+      <div style={mainMenuStyle} className={this.props.show ? '' : 'hidden'}>
+        <Link href='/?files' label="My Files" icon='icon-cloud-download' style={mainMenuItemStyle}/>
+        <Link href='/?settings' label="Settings" icon='icon-gear' style={mainMenuItemStyle}/>
+        <Link href='/?help' label="Help" icon='icon-question-circle' style={mainMenuItemStyle}/>
+        <Link href="/?start" label="Exit LBRY" icon="icon-close"
+              hidden={!this.props.show} style={mainMenuItemStyle} />
+      </div>
+    );
+  }
+});
+
+var TopBar = React.createClass({
   getInitialState: function() {
     return {
       balance: 0,
-      showClose: /linux/i.test(navigator.userAgent) // @TODO: find a way to use getVersionInfo() here without messy state management
+      menuOpen: false,
     };
   },
   componentDidMount: function() {
@@ -254,18 +288,23 @@ var TopBar = React.createClass({
       });
     }.bind(this));
   },
-
+  onClose: function() {
+    window.location.href = "?start";
+  },
+  toggleMenu: function() {
+    this.setState({
+      menuOpen: !this.state.menuOpen,
+    });
+  },
   render: function() {
     return (
       <span className='top-bar' style={topBarStyle}>
         <span style={balanceStyle}>
           <CreditAmount amount={this.state.balance}/>
         </span>
-        <Link href='/?files' title="My Files" icon='icon-cloud-download' />
-        <Link href='/?settings' title="Settings" icon='icon-gear' />
-        <Link href='/?help' title="Help" icon='icon-question-circle' />
-        <Link href="/?start" title="Start" onClick={this.onClose} icon="icon-close"
-              style={closeIconStyle} hidden={!this.state.showClose} />
+
+        <Link onClick={this.toggleMenu} title="Menu" icon='icon-bars' />
+        <MainMenu show={this.state.menuOpen} />
       </span>
     );
   }
