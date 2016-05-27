@@ -23,6 +23,12 @@ body
   }
 }
 
+.icon-fixed-width {
+  /* This borrowed is from a component of Font Awesome we're not using, maybe add it? */
+  width: (18em / 14);
+  text-align: center;
+}
+
 section
 {
   margin-bottom: $spacing-vertical;
@@ -137,15 +143,30 @@ input[type="search"]
 .button-text
 {
   color: $color-primary;
-  text-decoration: underline;
-  .icon:first-child
+  .icon
   {
-    padding-right: 5px;
+    &:first-child {
+      padding-right: 5px;
+    }
+    &:last-child:not(:only-child) {
+      padding-left: 5px;
+    }
+  }
+
+  &:not(.no-underline) {
+    text-decoration: underline;
+    .icon {
+      text-decoration: none;
+    }
   }
   &:hover
   {
     opacity: 0.70;
     transition: opacity .225s ease;
+    text-decoration: underline;
+    .icon {
+      text-decoration: none;
+    }
   }
 }
 
