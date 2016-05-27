@@ -3,9 +3,10 @@
 var Icon = React.createClass({
   propTypes: {
     style: React.PropTypes.object,
+    fixed: React.PropTypes.boolean,
   },
   render: function() {
-    var className = 'icon ' + this.props.icon;
+    var className = 'icon ' + ('fixed' in this.props ? 'icon-fixed-width ' : '') + this.props.icon;
     return <span className={className} style={this.props.style}></span>
   }
 });
@@ -26,6 +27,53 @@ var Link = React.createClass({
     );
   }
 });
+
+// Generic menu styles
+var menuStyle = {
+  border: '1px solid #aaa',
+  padding: '2px',
+  whiteSpace: 'nowrap',
+};
+
+var Menu = React.createClass({
+  render: function() {
+    return (
+      <div style={menuStyle}>
+        {this.props.children}
+      </div>
+    );
+  }
+});
+
+var menuItemStyle = {
+  display: 'block',
+};
+var MenuItem = React.createClass({
+  propTypes: {
+    href: React.PropTypes.string,
+    label: React.PropTypes.string,
+    icon: React.PropTypes.string,
+    onClick: React.PropTypes.function,
+  },
+  getDefaultProps: function() {
+    return {
+      iconPosition: 'left',
+    }
+  },
+  render: function() {
+    var icon = (this.props.icon ? <Icon icon={this.props.icon} fixed /> : null);
+
+    return (
+      <a style={menuItemStyle} href={this.props.href} label={this.props.label} title={this.props.label}
+         className="button-text no-underline">
+        {this.props.iconPosition == 'left' ? icon : null}
+        {this.props.label}
+        {this.props.iconPosition == 'left' ? null : icon}
+      </a>
+    );
+  }
+});
+
 
 var creditAmountStyle = {
   color: '#216C2A',

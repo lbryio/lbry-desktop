@@ -234,21 +234,12 @@ var topBarStyle = {
 },
 balanceStyle = {
   'marginRight': '5px'
-},
-closeIconStyle = {
-  'color': '#ff5155'
 };
-
 
 var mainMenuStyle = {
   position: 'absolute',
-  whiteSpace: 'nowrap',
-  border: '1px solid #aaa',
-  padding: '2px',
   top: '26px',
   right: '0px',
-}, mainMenuItemStyle = {
-  display: 'block',
 };
 
 var MainMenu = React.createClass({
@@ -264,12 +255,13 @@ var MainMenu = React.createClass({
     var isLinux = /linux/i.test(navigator.userAgent); // @TODO: find a way to use getVersionInfo() here without messy state management
     return (
       <div style={mainMenuStyle} className={this.props.show ? '' : 'hidden'}>
-        <Link href='/?files' label="My Files" icon='icon-cloud-download' style={mainMenuItemStyle}/>
-        <Link href='/?settings' label="Settings" icon='icon-gear' style={mainMenuItemStyle}/>
-        <Link href='/?help' label="Help" icon='icon-question-circle' style={mainMenuItemStyle}/>
-        {isLinux ? <Link href="/?start" label="Exit LBRY" icon="icon-close"
-                         hidden={!this.props.show} style={mainMenuItemStyle} />
-                 : null}
+        <Menu>
+          <MenuItem href='/?files' label="My Files" icon='icon-cloud-download' />
+          <MenuItem href='/?settings' label="Settings" icon='icon-gear' />
+          <MenuItem href='/?help' label="Help" icon='icon-question-circle' />
+          {isLinux ? <MenuItem href="/?start" label="Exit LBRY" icon="icon-close" />
+                   : null}
+        </Menu>
       </div>
     );
   }
