@@ -36,9 +36,36 @@ var menuStyle = {
 };
 
 var Menu = React.createClass({
+  handleWindowClick: function(e) {
+    if (this.props.toggleButton && ReactDOM.findDOMNode(this.props.toggleButton).contains(e.target)) {
+      // Toggle button was clicked
+      this.setState({
+        open: !this.state.open
+      });
+    } else if (this.state.open && !this.refs.div.contains(e.target)) {
+      // Menu is open and user clicked outside of it
+      this.setState({
+        open: false
+      });
+    }
+  },
+  propTypes: {
+    openButton: React.PropTypes.element,
+  },
+  getInitialState: function() {
+    return {
+      open: false,
+    };
+  },
+  componentDidMount: function() {
+    window.addEventListener('click', this.handleWindowClick, false);
+  },
+  componentWillUnmount: function() {
+    window.removeEventListener('click', this.handleWindowClick, false);
+  },
   render: function() {
     return (
-      <div style={menuStyle}>
+      <div ref='div' style={menuStyle} className={this.state.open ? '' : 'hidden'}>
         {this.props.children}
       </div>
     );
@@ -74,7 +101,6 @@ var MenuItem = React.createClass({
   }
 });
 
-
 var creditAmountStyle = {
   color: '#216C2A',
   fontWeight: 'bold',
@@ -104,6 +130,7 @@ var subPageLogoStyle = {
   display: 'block',
   marginTop: '36px',
 };
+
 var SubPageLogo = React.createClass({
   render: function() {
     return <img src="img/lbry-dark-1600x528.png" style={subPageLogoStyle} />;

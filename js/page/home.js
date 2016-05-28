@@ -243,19 +243,11 @@ var mainMenuStyle = {
 };
 
 var MainMenu = React.createClass({
-  propTypes: {
-    show: React.PropTypes.bool,
-  },
-  getDefaultProps: function() {
-    return {
-      show: false,
-    }
-  },
   render: function() {
     var isLinux = /linux/i.test(navigator.userAgent); // @TODO: find a way to use getVersionInfo() here without messy state management
     return (
-      <div style={mainMenuStyle} className={this.props.show ? '' : 'hidden'}>
-        <Menu>
+      <div style={mainMenuStyle}>
+        <Menu {...this.props}>
           <MenuItem href='/?files' label="My Files" icon='icon-cloud-download' />
           <MenuItem href='/?settings' label="Settings" icon='icon-gear' />
           <MenuItem href='/?help' label="Help" icon='icon-question-circle' />
@@ -271,7 +263,6 @@ var TopBar = React.createClass({
   getInitialState: function() {
     return {
       balance: 0,
-      menuOpen: false,
     };
   },
   componentDidMount: function() {
@@ -284,11 +275,6 @@ var TopBar = React.createClass({
   onClose: function() {
     window.location.href = "?start";
   },
-  toggleMenu: function() {
-    this.setState({
-      menuOpen: !this.state.menuOpen,
-    });
-  },
   render: function() {
     return (
       <span className='top-bar' style={topBarStyle}>
@@ -296,8 +282,8 @@ var TopBar = React.createClass({
           <CreditAmount amount={this.state.balance}/>
         </span>
 
-        <Link onClick={this.toggleMenu} title="Menu" icon='icon-bars' />
-        <MainMenu show={this.state.menuOpen} />
+        <Link ref="menuButton" title="LBRY Menu" icon="icon-bars" />
+        <MainMenu toggleButton={this.refs.menuButton} />
       </span>
     );
   }
