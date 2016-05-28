@@ -31,7 +31,7 @@ var Link = React.createClass({
 // Generic menu styles
 var menuStyle = {
   border: '1px solid #aaa',
-  padding: '2px',
+  padding: '4px',
   whiteSpace: 'nowrap',
 };
 
