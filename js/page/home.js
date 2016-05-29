@@ -268,7 +268,7 @@ var Discover = React.createClass({
         { this.state.searching ? <SearchActive /> : null }
         { !this.state.searching && this.state.query && this.state.results.length ? <SearchResults results={this.state.results} /> : null }
         { !this.state.searching && this.state.query && !this.state.results.length ? <SearchNoResults query={this.state.query} /> : null }
-        { !this.state.query && !this.state.searching ? <FeaturedContent /> : null }
+        {/* !this.state.query && !this.state.searching ? <FeaturedContent /> : null */}
       </main>
     );
   }
