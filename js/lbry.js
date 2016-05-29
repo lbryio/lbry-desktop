@@ -95,6 +95,10 @@ lbry.search = function(query, callback)
   lbry.call("search_nametrie", { "search": query }, callback);
 }
 
+lbry.resolveName = function(name, callback, ec) {
+  lbry.call('resolve_name', { 'name': name }, callback);
+}
+
 lbry.getStream = function(name, callback) {
   lbry.call('get', { 'name': name }, callback);
 };

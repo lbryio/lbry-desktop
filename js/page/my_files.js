@@ -13,11 +13,10 @@ progressBarStyle = {
   display: 'inline-block',
 },
 myFilesRowImgStyle = {
-    maxHeight: '100px',
-    display: 'block',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-    float: 'left'
+  maxHeight: '100px',
+  display: 'block',
+  marginLeft: 'auto',
+  marginRight: 'auto',
 };
 
 var MyFilesRow = React.createClass({
@@ -38,6 +37,8 @@ var MyFilesRow = React.createClass({
     }
   },
   render: function() {
+    var progressBarWidth = 230; // Move this somewhere better
+
     if (this.props.completed) {
       var pauseLink = null;
       var curProgressBarStyle = {display: 'none'};
@@ -47,21 +48,14 @@ var MyFilesRow = React.createClass({
                             onClick={() => { this.onPauseResumeClicked() }} />;
 
       var curProgressBarStyle = Object.assign({}, progressBarStyle);
-      curProgressBarStyle.width = this.props.ratioLoaded * 230;
-      curProgressBarStyle.borderRightWidth = 230 - (this.props.ratioLoaded * 230) + 2;    
+      curProgressBarStyle.width = Math.floor(this.props.ratioLoaded * progressBarWidth) + 'px';
+      curProgressBarStyle.borderRightWidth = progressBarWidth - Math.ceil(this.props.ratioLoaded * progressBarWidth) + 2;
     }
 
     if (this.props.showWatchButton) {
-      // No support for lbry:// URLs in Windows or on Chrome yet
-      if (/windows|win32/i.test(navigator.userAgent) || (window.chrome && window.navigator.vendor == "Google Inc.")) {
-        var watchUri = "/?watch=" + this.props.lbryUri;
-      } else {
-        var watchUri = 'lbry://' + this.props.lbryUri;
-      }
-
-      var watchLink = <Link href={watchUri} label="Watch" icon="icon-play" button="primary" />;
+      var watchButton = <WatchLink streamName={this.props.lbryUri} />
     } else {
-      var watchLink = null;
+      var watchButton = null;
     }
 
     return (
@@ -75,7 +69,7 @@ var MyFilesRow = React.createClass({
           { ' ' }
           {this.props.completed ? 'Download complete' : (parseInt(this.props.ratioLoaded * 100) + '%')}
           <div>{ pauseLink }</div>
-          <div>{ watchLink }</div>
+          <div>{ watchButton }</div>
         </div>
         <div className="span1" style={removeIconColumnStyle}>
           <Link icon="icon-close" title="Remove file" onClick={() => { this.onRemoveClicked() } } /><br />
@@ -128,7 +122,9 @@ var MyFilesPage = React.createClass({
       <main className="page">
       <SubPageLogo />
       <h1>My files</h1>
+      <section>
       {content}
+      </section>
       <section>
         <Link href="/" label="<< Return" />
       </section>

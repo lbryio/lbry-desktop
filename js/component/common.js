@@ -28,6 +28,76 @@ var Link = React.createClass({
   }
 });
 
+var DownloadLink = React.createClass({
+  propTypes: {
+    type: React.PropTypes.string,
+    streamName: React.PropTypes.string,
+    label: React.PropTypes.string,
+    downloadingLabel: React.PropTypes.string,
+    button: React.PropTypes.string,
+    style: React.PropTypes.object,
+    hidden: React.PropTypes.bool,
+  },
+  getDefaultProps: function() {
+    return {
+      icon: 'icon-download',
+      label: 'Download',
+      downloadingLabel: 'Downloading...',
+    }
+  },
+  getInitialState: function() {
+    return {
+      downloading: false,
+    }
+  },
+  startDownload: function() {
+    if (!this.state.downloading) { //@TODO: Continually update this.state.downloading based on actual status of file
+      this.setState({
+        downloading: true
+      });
+
+      lbry.getStream(this.props.streamName, (streamInfo) => {
+        alert('Downloading to ' + streamInfo.path);
+        console.log(streamInfo);
+      });
+    }
+  },
+  render: function() {
+    var label = (!this.state.downloading ? this.props.label : this.props.downloadingLabel);
+    return <Link button={this.props.button} hidden={this.props.hidden} style={this.props.style}
+                 disabled={this.state.downloading} label={label} icon={this.props.icon} onClick={this.startDownload} />;
+  }
+});
+
+var WatchLink = React.createClass({
+  propTypes: {
+    type: React.PropTypes.string,
+    streamName: React.PropTypes.string,
+    label: React.PropTypes.string,
+    button: React.PropTypes.string,
+    style: React.PropTypes.object,
+    hidden: React.PropTypes.bool,
+  },
+
+  getDefaultProps: function() {
+    return {
+      icon: 'icon-play',
+      label: 'Watch',
+    }
+  },
+
+  render: function() {
+    // No support for lbry:// URLs in Windows or on Chrome yet
+    if (/windows|win32/i.test(navigator.userAgent) || (window.chrome && window.navigator.vendor == "Google Inc.")) {
+      var uri = "/?watch=" + this.props.streamName;
+    } else {
+      var uri = 'lbry://' + this.props.streamName;
+    }
+    return <Link button={this.props.button} hidden={this.props.hidden} style={this.props.style}
+                 href={uri} label={this.props.label} icon={this.props.icon} onClick={this.onClick} />;
+  }
+});
+
 // Generic menu styles
 var menuStyle = {
   border: '1px solid #aaa',
@@ -64,8 +134,9 @@ var Menu = React.createClass({
     window.removeEventListener('click', this.handleWindowClick, false);
   },
   render: function() {
+    console.log('menuStyle is', menuStyle); 
     return (
-      <div ref='div' style={menuStyle} className={this.state.open ? '' : 'hidden'}>
+      <div ref='div' style={menuStyle} className={this.state.open ? 'thediv' : 'hidden'}>
         {this.props.children}
       </div>
     );

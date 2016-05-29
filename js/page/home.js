@@ -92,26 +92,7 @@ var SearchResultRow = React.createClass({
       downloading: false
     }
   },
-  startDownload: function() {
-    if (!this.state.downloading) {
-      this.setState({
-        downloading: true
-      });
-      lbry.getStream(this.props.name, (streamInfo) => {
-        alert('Downloading ' + this.props.title + ' to ' + streamInfo.path);
-      });
-    }
-  },
   render: function() {
-    var displayURI = 'lbry://' + this.props.name;
-
-    // No support for lbry:// URLs in Windows or on Chrome yet
-    if (/windows|win32/i.test(navigator.userAgent) || (window.chrome && window.navigator.vendor == "Google Inc.")) {
-      var linkURI = "/?watch=" + this.props.name;
-    } else {
-      var linkURI = displayURI;
-    }
-
     return (
       <div className="row-fluid">
         <div className="span3">
@@ -122,12 +103,11 @@ var SearchResultRow = React.createClass({
             <CreditAmount amount={this.props.cost_est} isEstimate={true}/>
           </span>
           <h2>{this.props.title}</h2>
-          <div style={searchRowNameStyle}>{displayURI}</div>
+          <div style={searchRowNameStyle}>lbry://{this.props.name}</div>
           <p style={searchRowDescriptionStyle}>{this.props.description}</p>
           <div>
-            <Link href={linkURI} label="Watch" icon="icon-play" button="primary" />
-            <Link onClick={this.startDownload} label={this.state.downloading ? "Downloading" : "Download"}
-                  disabled={this.state.downloading} icon="icon-download" button="alt" />
+            <WatchLink streamName={this.props.name} button="primary" />
+            <DownloadLink streamName={this.props.name} button="alt" />
           </div>
         </div>
       </div>
@@ -135,6 +115,94 @@ var SearchResultRow = React.createClass({
   }
 });
 
+var featuredContentItemStyle = {
+  fontSize: '0.95em',
+  marginBottom: '10px',
+}, featuredContentItemImgStyle = {
+  maxHeight: '90px',
+  display: 'block',
+  marginLeft: 'auto',
+  marginRight: 'auto',
+  marginTop: '5px',
+  float: 'left',
+}, featuredContentItemDescriptionStyle = {
+  color: '#444',
+  marginBottom: '5px',
+  fontSize: '0.9em',
+}, featuredContentItemCostStyle = {
+  display: 'block',
+  float: 'right',
+  fontSize: '0.95em',
+};
+
+var FeaturedContentItem = React.createClass({
+  propTypes: {
+    name: React.PropTypes.string,
+  },
+  getInitialState: function() {
+    return {
+      metadata: null,
+      title: null,
+    };
+  },
+  componentWillMount: function() {
+    lbry.resolveName(this.props.name, (metadata) => {
+      this.setState({
+        metadata: metadata,
+        title: metadata.name || metadata.stream_name || ('lbry://' + this.props.name),
+      })
+    });
+  },
+  render: function() {
+    if (this.state.metadata == null) {
+      // Still waiting for metadata
+      return null;
+    }
+
+    var metadata = this.state.metadata;
+
+    return (
+      <div className="row-fluid" style={featuredContentItemStyle}>
+        <div className="span4">
+          <img src={metadata.thumbnail} alt={'Photo for ' + this.state.title} style={featuredContentItemImgStyle} />
+        </div>
+        <div className="span8">
+          <h4>{this.state.title}</h4>
+          <p style={featuredContentItemDescriptionStyle}>{metadata.description}</p>
+          <div>
+            <WatchLink streamName={this.props.name} />
+            { ' ' }
+            <DownloadLink streamName={this.props.name} />
+            <div style={featuredContentItemCostStyle}><CreditAmount amount={0.0} isEstimate={true}/></div>
+          </div>
+        </div>
+      </div>);
+  }
+});
+
+var featuredContentStyle = {
+  width: '100%',
+};
+
+var FeaturedContent = React.createClass({
+  render: function() {
+    return (<section style={featuredContentStyle}>
+    <h3>Featured content</h3>
+      <div className="row-fluid">
+      <div className="span6">
+        <FeaturedContentItem name="wonderfullife" /> {/* When ready, change to one/two/three/four/five/six */}
+        <FeaturedContentItem name="wonderfullife" />
+        <FeaturedContentItem name="wonderfullife" />
+      </div>
+      <div className="span6">
+        <FeaturedContentItem name="wonderfullife" />
+        <FeaturedContentItem name="wonderfullife" />
+        <FeaturedContentItem name="wonderfullife" />
+      </div>
+    </div>
+    </section>);
+  }
+});
 
 var discoverMainStyle = {
   color: '#333'
@@ -198,8 +266,9 @@ var Discover = React.createClass({
         <section><input type="search" style={searchInputStyle} onChange={this.onQueryChange}
                         placeholder="Find movies, music, games, and more"/></section>
         { this.state.searching ? <SearchActive /> : null }
-        { !this.state.searching && this.state.results.length ? <SearchResults results={this.state.results} /> : null }
-        { !this.state.searching && !this.state.results.length && this.state.query ? <SearchNoResults query={this.state.query} /> : null }
+        { !this.state.searching && this.state.query && this.state.results.length ? <SearchResults results={this.state.results} /> : null }
+        { !this.state.searching && this.state.query && !this.state.results.length ? <SearchNoResults query={this.state.query} /> : null }
+        {/* !this.state.query && !this.state.searching ? <FeaturedContent /> : null */}
       </main>
     );
   }
@@ -281,7 +350,6 @@ var TopBar = React.createClass({
         <span style={balanceStyle}>
           <CreditAmount amount={this.state.balance}/>
         </span>
-
         <Link ref="menuButton" title="LBRY Menu" icon="icon-bars" />
         <MainMenu toggleButton={this.refs.menuButton} />
       </span>
