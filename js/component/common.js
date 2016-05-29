@@ -134,9 +134,8 @@ var Menu = React.createClass({
     window.removeEventListener('click', this.handleWindowClick, false);
   },
   render: function() {
-    console.log('menuStyle is', menuStyle); 
     return (
-      <div ref='div' style={menuStyle} className={this.state.open ? 'thediv' : 'hidden'}>
+      <div ref='div' style={menuStyle} className={this.state.open ? '' : 'hidden'}>
         {this.props.children}
       </div>
     );
