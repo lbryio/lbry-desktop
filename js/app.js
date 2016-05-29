@@ -1,15 +1,10 @@
-var appStyles = {
-  width: '800px',
-  marginLeft: 'auto',
-  marginRight: 'auto',
-};
 var App = React.createClass({
   getInitialState: function() {
     // For now, routes are in format ?page or ?page=args
     var match, param, val;
     [match, param, val] = window.location.search.match(/\??([^=]*)(?:=(.*))?/);
 
-    if (['settings', 'help', 'start', 'watch', 'report'].indexOf(param) != -1) {
+    if (['settings', 'help', 'start', 'watch', 'report', 'files'].indexOf(param) != -1) {
       var viewingPage = param;
     } else {
       var viewingPage = 'home';
@@ -44,31 +39,21 @@ var App = React.createClass({
       }
     });
   },
-  componentDidMount: function() {
-    lbry.getStartNotice(function(notice) {
-      if (notice) {
-        alert(notice);
-      }
-    });
-  },
   render: function() {
     if (this.state.viewingPage == 'home') {
-      var content = <HomePage />;
+      return <HomePage />;
     } else if (this.state.viewingPage == 'settings') {
-      var content = <SettingsPage />;
+      return <SettingsPage />;
     } else if (this.state.viewingPage == 'help') {
-      var content = <HelpPage />;
+      return <HelpPage />;
     } else if (this.state.viewingPage == 'watch') {
-      var content = <WatchPage name={this.state.pageArgs}/>;
+      return <WatchPage name={this.state.pageArgs}/>;
     } else if (this.state.viewingPage == 'report') {
-      var content = <ReportPage />;
+      return <ReportPage />;
+    } else if (this.state.viewingPage == 'files') {
+      return <MyFilesPage />;
     } else if (this.state.viewingPage == 'start') {
-      var content = <StartPage />;
+      return <StartPage />;
     }
-    return (
-      <div style={appStyles}>
-        {content}
-      </div>
-    );
   }
 });

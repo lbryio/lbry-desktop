@@ -13,6 +13,22 @@ body
     position: relative;
 }
 
+.page {
+  margin-left: auto;
+  margin-right: auto;
+  width: 800px;
+
+  &.full-width {
+    width: 100%;
+  }
+}
+
+.icon-fixed-width {
+  /* This borrowed is from a component of Font Awesome we're not using, maybe add it? */
+  width: (18em / 14);
+  text-align: center;
+}
+
 section
 {
   margin-bottom: $spacing-vertical;
@@ -22,7 +38,7 @@ section
   }
 }
 
-h1 { font-size: 2.0em; margin-bottom: $spacing-vertical / 2; margin-top: $spacing-vertical * 1.5; }
+h1 { font-size: 2.0em; margin-bottom: $spacing-vertical / 2; margin-top: $spacing-vertical; }
 h2 { font-size: 1.75em; }
 h3 { font-size: 1.4em; }
 h4 { font-size: 1.2em; }
@@ -127,15 +143,34 @@ input[type="search"]
 .button-text
 {
   color: $color-primary;
-  text-decoration: underline;
+  .icon
+  {
+    &:first-child {
+      padding-right: 5px;
+    }
+    &:last-child:not(:only-child) {
+      padding-left: 5px;
+    }
+  }
+
+  &:not(.no-underline) {
+    text-decoration: underline;
+    .icon {
+      text-decoration: none;
+    }
+  }
   &:hover
   {
     opacity: 0.70;
     transition: opacity .225s ease;
+    text-decoration: underline;
+    .icon {
+      text-decoration: none;
+    }
   }
 }
 
-.icon {
+.icon:only-child {
   position: relative;
   top: 0.16em;
 }

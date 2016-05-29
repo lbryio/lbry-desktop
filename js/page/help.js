@@ -3,7 +3,8 @@
 var HelpPage = React.createClass({
   render: function() {
     return (
-      <main>
+      <main className="page">
+        <SubPageLogo />
         <h1>Troubleshooting</h1>
         <p>Here are the most commonly encountered problems and what to try doing about them.</p>
 

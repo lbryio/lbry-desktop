@@ -1,6 +1,6 @@
 var videoStyle = {
   width: '100%',
-  height: '100%',
+//  height: '100%',
   backgroundColor: '#000'
 };
 
@@ -19,19 +19,6 @@ var WatchPage = React.createClass({
     lbry.getStream(this.props.name);
     this.updateLoadStatus();
   },
-  reloadIfNeeded: function() {
-    // Fallback option for loading problems: every 15 seconds, if the video hasn't reported being
-    // playable yet, ask it to reload.
-    if (!this.state.readyToPlay) {
-      this._video.load()
-      setTimeout(() => { this.reloadIfNeeded() }, 15000);
-    }
-  },
-  onCanPlay: function() {
-    this.setState({
-      readyToPlay: true
-    });
-  },
   updateLoadStatus: function() {
     lbry.getFileStatus(this.props.name, (status) => {
       if (!status || status.code != 'running' || status.written_bytes == 0) {
@@ -44,31 +31,20 @@ var WatchPage = React.createClass({
         setTimeout(() => { this.updateLoadStatus() }, 250);
       } else {
         this.setState({
-          loadStatusMessage: "Buffering",
-          downloadStarted: true,
-        });
-        setTimeout(() => { this.reloadIfNeeded() }, 15000);
+          readyToPlay: true
+        })
+        flowplayer('player', 'js/flowplayer/flowplayer-3.2.18.swf');
       }
     });
   },
   render: function() {
-    if (!this.state.downloadStarted) {
-      var video = null;
-    } else {
-      // If the download has started, render the <video> behind the scenes so it can start loading.
-      // When the video is actually ready to play, the loading text is hidden and the video shown.
-      var video = <video src={"/view?name=" + this.props.name} style={videoStyle}
-                         className={this.state.readyToPlay ? '' : 'hidden'} controls
-                         onCanPlay={this.onCanPlay} ref={(video) => {this._video = video}}/>;
-    }
-
     return (
-      <main>
+      <main className="page full-width">
       <div className={this.state.readyToPlay ? 'hidden' : ''}>
         <h3>Loading lbry://{this.props.name}</h3>
         {this.state.loadStatusMessage}...
       </div>
-      {video}
+      <a id="player" href={"/view?name=" + this.props.name} style={videoStyle} />
       </main>
     );
   }

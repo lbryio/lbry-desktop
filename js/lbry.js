@@ -103,6 +103,22 @@ lbry.getFileStatus = function(name, callback) {
   lbry.call('get_lbry_file', { 'name': name }, callback);
 }
 
+lbry.getFilesInfo = function(callback) {
+  lbry.call('get_lbry_files', {}, callback);
+}
+
+lbry.startFile = function(name, callback) {
+  lbry.call('start_lbry_file', { name: name }, callback);
+}
+
+lbry.stopFile = function(name, callback) {
+  lbry.call('stop_lbry_file', { name: name }, callback);
+}
+
+lbry.deleteFile = function(name, callback) {
+  lbry.call('delete_lbry_file', { name: name }, callback)
+}
+
 lbry.getVersionInfo = function(callback) {
   lbry.call('version', {}, callback);
 };
@@ -154,6 +170,26 @@ lbry.imagePath = function(file)
   return lbry.rootPath + '/img/' + file; 
 }
 
+lbry.getMediaType = function(filename) {
+  var dotIndex = filename.lastIndexOf('.');
+  if (dotIndex == -1) {
+    return 'unknown';
+  }
+
+  var ext = filename.substr(dotIndex + 1);
+  if (/^mp4|mov|m4v|flv|f4v$/i.test(ext)) {
+    return 'video';
+  } else if (/^mp3|m4a|aac|wav|flac|ogg$/i.test(ext)) {
+    return 'audio';
+  } else if (/^html|htm|pdf|odf|doc|docx|md|markdown|txt$/i.test(ext)) {
+    return 'document';
+  } else {
+    return 'unknown';
+  }
+}
+
 lbry.stop = function(callback) {
   lbry.call('stop', {}, callback);
 };
+
+
