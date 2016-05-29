@@ -1,9 +1,44 @@
-var removeIconColumnStyle = {
-  fontSize: '1.3em',
+var myFilesRowMoreMenuStyle = {
+  position: 'absolute',
+  display: 'block',
+  top: '26px',
+  left: '-13px',
+};
+var MyFilesRowMoreMenu = React.createClass({
+  onDeleteClicked: function() {
+     var alertText = 'Are you sure you\'d like to remove "' + this.props.title + '?" This will ' +
+                     (this.completed ? ' stop the download and ' : '') +
+                     'permanently remove the file from your system.';
+
+    if (confirm(alertText)) {
+      lbry.deleteFile(this.props.lbryUri);
+    }
+  },
+  render: function() {
+    return (
+      <div style={myFilesRowMoreMenuStyle}>
+        <Menu {...this.props}>
+          <MenuItem onClick={function() { alert('Make me work please!') }} label="Open in Finder" />
+          <MenuItem onClick={function() { alert('Make me work please!') }} label="Remove from LBRY" />
+          <MenuItem onClick={this.onDeleteClicked} label="Remove and delete file" />
+        </Menu>
+      </div>
+    );
+  }
+});
+
+var moreButtonColumnStyle = {
   height: '120px',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
+},
+moreButtonContainerStyle = {
+  display: 'block',
+  position: 'relative',
+},
+moreButtonStyle = {
+  fontSize: '1.3em',
 },
 progressBarStyle = {
   height: '15px',
@@ -18,17 +53,7 @@ myFilesRowImgStyle = {
   marginLeft: 'auto',
   marginRight: 'auto',
 };
-
 var MyFilesRow = React.createClass({
-  onRemoveClicked: function() {
-     var alertText = 'Are you sure you\'d like to remove "' + this.props.title + '?" This will ' +
-                     (this.completed ? ' stop the download and ' : '') +
-                     'permanently remove the file from your system.';
-
-    if (confirm(alertText)) {
-      lbry.deleteFile(this.props.lbryUri);
-    }
-  },
   onPauseResumeClicked: function() {
     if (this.props.stopped) {
       lbry.startFile(this.props.lbryUri);
@@ -71,8 +96,12 @@ var MyFilesRow = React.createClass({
           <div>{ pauseLink }</div>
           <div>{ watchButton }</div>
         </div>
-        <div className="span1" style={removeIconColumnStyle}>
-          <Link icon="icon-close" title="Remove file" onClick={() => { this.onRemoveClicked() } } /><br />
+        <div className="span1" style={moreButtonColumnStyle}>
+          <div style={moreButtonContainerStyle}>
+            <Link style={moreButtonStyle} ref="moreButton" icon="icon-ellipsis-h" title="More Options" />
+            <MyFilesRowMoreMenu toggleButton={this.refs.moreButton} title={this.props.title}
+                                lbryUri={this.props.lbryUri} />
+          </div>
         </div>
       </div>
     );
