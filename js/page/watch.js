@@ -1,6 +1,6 @@
 var videoStyle = {
   width: '100%',
-  height: '100%',
+//  height: '100%',
   backgroundColor: '#000'
 };
 
@@ -39,7 +39,7 @@ var WatchPage = React.createClass({
   },
   render: function() {
     return (
-      <main>
+      <main className="page full-width">
       <div className={this.state.readyToPlay ? 'hidden' : ''}>
         <h3>Loading lbry://{this.props.name}</h3>
         {this.state.loadStatusMessage}...

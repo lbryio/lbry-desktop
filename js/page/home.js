@@ -297,26 +297,41 @@ var Header = React.createClass({
 });
 
 var topBarStyle = {
-  'float': 'right'
-},
-menuStyle = {
-  'fontSize': '1.1em',
+  'float': 'right',
+  'position': 'relative',
+  'height': '26px',
 },
 balanceStyle = {
   'marginRight': '5px'
-},
-closeIconStyle = {
-  'color': '#ff5155'
 };
 
+var mainMenuStyle = {
+  position: 'absolute',
+  top: '26px',
+  right: '0px',
+};
+
+var MainMenu = React.createClass({
+  render: function() {
+    var isLinux = /linux/i.test(navigator.userAgent); // @TODO: find a way to use getVersionInfo() here without messy state management
+    return (
+      <div style={mainMenuStyle}>
+        <Menu {...this.props}>
+          <MenuItem href='/?files' label="My Files" icon='icon-cloud-download' />
+          <MenuItem href='/?settings' label="Settings" icon='icon-gear' />
+          <MenuItem href='/?help' label="Help" icon='icon-question-circle' />
+          {isLinux ? <MenuItem href="/?start" label="Exit LBRY" icon="icon-close" />
+                   : null}
+        </Menu>
+      </div>
+    );
+  }
+});
+
 var TopBar = React.createClass({
-  onClose: function() {
-    window.location.href = "?start";
-  },
   getInitialState: function() {
     return {
       balance: 0,
-      showClose: /linux/i.test(navigator.userAgent) // @TODO: find a way to use getVersionInfo() here without messy state management
     };
   },
   componentDidMount: function() {
@@ -326,20 +341,17 @@ var TopBar = React.createClass({
       });
     }.bind(this));
   },
-
+  onClose: function() {
+    window.location.href = "?start";
+  },
   render: function() {
     return (
       <span className='top-bar' style={topBarStyle}>
         <span style={balanceStyle}>
           <CreditAmount amount={this.state.balance}/>
         </span>
-        <span style={menuStyle}>
-        <Link href='/?files' title="My Files" icon='icon-cloud-download' />
-        <Link href='/?settings' title="Settings" icon='icon-gear' />
-        <Link href='/?help' title="Help" icon='icon-question-circle' />
-        <Link href="/?start" title="Start" onClick={this.onClose} icon="icon-close"
-              style={closeIconStyle} hidden={!this.state.showClose} />
-        </span>
+        <Link ref="menuButton" title="LBRY Menu" icon="icon-bars" />
+        <MainMenu toggleButton={this.refs.menuButton} />
       </span>
     );
   }
@@ -355,7 +367,7 @@ var HomePage = React.createClass({
   },
   render: function() {
     return (
-      <div>
+      <div className="page">
         <Header />
         <Discover />
       </div>

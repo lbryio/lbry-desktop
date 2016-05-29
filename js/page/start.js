@@ -4,7 +4,8 @@ var StartPage = React.createClass({
   },
   render: function() {
     return (
-      <main>
+      <main className="page">
+        <SubPageLogo />
         <h1>LBRY has closed</h1>
         <Link href="lbry://lbry" label="Click here to start LBRY" />
       </main>
