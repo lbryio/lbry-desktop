@@ -135,12 +135,18 @@ lbry.getVersionInfo = function(callback) {
 };
 
 lbry.checkNewVersionAvailable = function(callback) {
-  lbry.call('version', {}, function() {
-    // If the "version" method is available, we have a daemon new enough to do version checking
-    lbry.call('check_for_new_version', {}, callback);
+  lbry.call('version', {}, function(versionInfo) {
+    var maj, min, patch;
+    [maj, min, patch] = versionInfo.lbrynet_version.split('.');
+
+    var remoteMaj, remoteMin, remotePatch;
+    [remoteMaj, remoteMin, remotePatch] = versionInfo.remote_lbrynet.split('.');
+
+    var newVersionAvailable = (maj < remoteMaj || min < remoteMin || patch < remotePatch);
+    callback(newVersionAvailable);
   }, function(err) {
     if (err.fault == 'NoSuchFunction') {
-      // If it's not available, we're definitely in an old version
+      // Really old daemon that can't report a version
       callback(true);
     }
   });
