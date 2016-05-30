@@ -119,8 +119,15 @@ lbry.stopFile = function(name, callback) {
   lbry.call('stop_lbry_file', { name: name }, callback);
 }
 
-lbry.deleteFile = function(name, callback) {
-  lbry.call('delete_lbry_file', { name: name }, callback)
+lbry.deleteFile = function(name, deleteTargetFile=true, callback) {
+  lbry.call('delete_lbry_file', {
+    name: name,
+    delete_target_file: deleteTargetFile,
+  }, callback);
+}
+
+lbry.revealFile = function(path, callback) {
+  lbry.call('reveal', { path: path }, callback);
 }
 
 lbry.getVersionInfo = function(callback) {
