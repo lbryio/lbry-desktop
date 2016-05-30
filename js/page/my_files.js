@@ -24,7 +24,7 @@ var MyFilesRowMoreMenu = React.createClass({
     return (
       <div style={moreMenuStyle}>
         <Menu {...this.props}>
-          <MenuItem onClick={this.onRevealClicked} label="Reveal in Finder" />
+          <MenuItem onClick={this.onRevealClicked} label="Reveal file" /> {/* @TODO: Switch to OS specific wording */}
           <MenuItem onClick={this.onRemoveClicked} label="Remove from LBRY" />
           <MenuItem onClick={this.onDeleteClicked} label="Remove and delete file" />
         </Menu>
