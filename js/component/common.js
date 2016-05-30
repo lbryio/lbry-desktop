@@ -161,8 +161,8 @@ var MenuItem = React.createClass({
     var icon = (this.props.icon ? <Icon icon={this.props.icon} fixed /> : null);
 
     return (
-      <a style={menuItemStyle} href={this.props.href} label={this.props.label} title={this.props.label}
-         className="button-text no-underline">
+      <a style={menuItemStyle} className="button-text no-underline" onClick={this.props.onClick}
+         href={this.props.href || 'javascript:'} label={this.props.label}>
         {this.props.iconPosition == 'left' ? icon : null}
         {this.props.label}
         {this.props.iconPosition == 'left' ? null : icon}

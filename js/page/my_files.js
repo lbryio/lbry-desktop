@@ -1,9 +1,50 @@
-var removeIconColumnStyle = {
-  fontSize: '1.3em',
+var moreMenuStyle = {
+  position: 'absolute',
+  display: 'block',
+  top: '26px',
+  left: '-13px',
+};
+var MyFilesRowMoreMenu = React.createClass({
+  onRevealClicked: function() {
+    lbry.revealFile(this.props.path);
+  },
+  onRemoveClicked: function() {
+    lbry.deleteFile(this.props.lbryUri, false);
+  },
+  onDeleteClicked: function() {
+     var alertText = 'Are you sure you\'d like to delete "' + this.props.title + '?" This will ' +
+                     (this.completed ? ' stop the download and ' : '') +
+                     'permanently remove the file from your system.';
+
+    if (confirm(alertText)) {
+      lbry.deleteFile(this.props.lbryUri);
+    }
+  },
+  render: function() {
+    return (
+      <div style={moreMenuStyle}>
+        <Menu {...this.props}>
+          <MenuItem onClick={this.onRevealClicked} label="Reveal in Finder" />
+          <MenuItem onClick={this.onRemoveClicked} label="Remove from LBRY" />
+          <MenuItem onClick={this.onDeleteClicked} label="Remove and delete file" />
+        </Menu>
+      </div>
+    );
+  }
+});
+
+var moreButtonColumnStyle = {
   height: '120px',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
+},
+moreButtonContainerStyle = {
+  display: 'block',
+  position: 'relative',
+},
+moreButtonStyle = {
+  fontSize: '1.3em',
 },
 progressBarStyle = {
   height: '15px',
@@ -12,23 +53,13 @@ progressBarStyle = {
   border: '2px solid #eee',
   display: 'inline-block',
 },
-myFilesRowImgStyle = {
+artStyle = {
   maxHeight: '100px',
   display: 'block',
   marginLeft: 'auto',
   marginRight: 'auto',
 };
-
 var MyFilesRow = React.createClass({
-  onRemoveClicked: function() {
-     var alertText = 'Are you sure you\'d like to remove "' + this.props.title + '?" This will ' +
-                     (this.completed ? ' stop the download and ' : '') +
-                     'permanently remove the file from your system.';
-
-    if (confirm(alertText)) {
-      lbry.deleteFile(this.props.lbryUri);
-    }
-  },
   onPauseResumeClicked: function() {
     if (this.props.stopped) {
       lbry.startFile(this.props.lbryUri);
@@ -37,7 +68,9 @@ var MyFilesRow = React.createClass({
     }
   },
   render: function() {
-    var progressBarWidth = 230; // Move this somewhere better
+    //@TODO: Convert progress bar to reusable component
+
+    var progressBarWidth = 230;
 
     if (this.props.completed) {
       var pauseLink = null;
@@ -61,7 +94,7 @@ var MyFilesRow = React.createClass({
     return (
       <div className="row-fluid">
         <div className="span3">
-          <img src={this.props.imgUrl} alt={'Photo for ' + this.props.title} style={myFilesRowImgStyle} />
+          <img src={this.props.imgUrl} alt={'Photo for ' + this.props.title} style={artStyle} />
         </div>
         <div className="span6">
           <h2>{this.props.title}</h2>
@@ -71,8 +104,13 @@ var MyFilesRow = React.createClass({
           <div>{ pauseLink }</div>
           <div>{ watchButton }</div>
         </div>
-        <div className="span1" style={removeIconColumnStyle}>
-          <Link icon="icon-close" title="Remove file" onClick={() => { this.onRemoveClicked() } } /><br />
+        <div className="span1" style={moreButtonColumnStyle}>
+          <div style={moreButtonContainerStyle}>
+            <Link style={moreButtonStyle} ref="moreButton" icon="icon-ellipsis-h" title="More Options" />
+            <MyFilesRowMoreMenu toggleButton={this.refs.moreButton} title={this.props.title}
+                                lbryUri={this.props.lbryUri} fileName={this.props.fileName}
+                                path={this.props.path}/>
+          </div>
         </div>
       </div>
     );
@@ -106,7 +144,8 @@ var MyFilesPage = React.createClass({
     } else {
       var content = [];
       for (let fileInfo of this.state.filesInfo) {
-        let {completed, written_bytes, total_bytes, lbry_uri, file_name, stopped, metadata} = fileInfo;
+        let {completed, written_bytes, total_bytes, lbry_uri, file_name, download_path,
+             stopped, metadata} = fileInfo;
         let {name, stream_name, thumbnail} = metadata;
 
         var title = (name || stream_name || ('lbry://' + lbry_uri));
@@ -114,7 +153,7 @@ var MyFilesPage = React.createClass({
         var showWatchButton = (lbry.getMediaType(file_name) == 'video');
 
         content.push(<MyFilesRow lbryUri={lbry_uri} title={title} completed={completed} stopped={stopped}
-                                 ratioLoaded={ratioLoaded} imgUrl={thumbnail}
+                                 ratioLoaded={ratioLoaded} imgUrl={thumbnail} path={download_path}
                                  showWatchButton={showWatchButton}/>);
       }
     }
