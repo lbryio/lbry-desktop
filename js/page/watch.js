@@ -1,8 +1,3 @@
-var videoStyle = {
-  maxWidth: '100%',
-  maxHeight: '100%',
-};
-
 var WatchPage = React.createClass({
   propTypes: {
     name: React.PropTypes.string,
@@ -34,9 +29,9 @@ var WatchPage = React.createClass({
           readyToPlay: true,
           mimeType: status.mime_type,
         })
-        var player = new MediaElementPlayer('#player', {
+        var player = new MediaElementPlayer(this.refs.player, {
           mode: 'shim', // Force Flash (for now)
-          // enableAutosize: true,
+          setDimensions: false,
         });
       }
     });
@@ -48,8 +43,8 @@ var WatchPage = React.createClass({
         <h3>Loading lbry://{this.props.name}</h3>
         {this.state.loadStatusMessage}...
       </div>
-      <video id="player" style={videoStyle} width="100%" height="100%">
-        <source type={this.state.mimeType} src={"/view?name=" + this.props.name} />
+      <video ref="player" width="100%" height="100%">
+        <source type={this.state.mimeType} src={'/view?name=' + this.props.name} />
       </video>
       </main>
     );
