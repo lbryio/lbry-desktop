@@ -47,7 +47,7 @@ var SearchResults = React.createClass({
     console.log('made it here');
     this.props.results.forEach(function(result) {
       rows.push(
-        <SearchResultRow name={result.name} title={result.stream_name} imgUrl={result.thumbnail}
+        <SearchResultRow name={result.name} title={result.title} imgUrl={result.thumbnail}
                          description={result.description} cost_est={result.cost_est} />
       );
     });
@@ -149,7 +149,7 @@ var FeaturedContentItem = React.createClass({
     lbry.resolveName(this.props.name, (metadata) => {
       this.setState({
         metadata: metadata,
-        title: metadata.name || metadata.stream_name || ('lbry://' + this.props.name),
+        title: metadata.title || ('lbry://' + this.props.name),
       })
     });
   },
