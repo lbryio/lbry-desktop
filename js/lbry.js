@@ -142,7 +142,19 @@ lbry.checkNewVersionAvailable = function(callback) {
     var remoteMaj, remoteMin, remotePatch;
     [remoteMaj, remoteMin, remotePatch] = versionInfo.remote_lbrynet.split('.');
 
-    var newVersionAvailable = !(maj >= remoteMaj && min >= remoteMin && patch >= remotePatch);
+    if (maj < remoteMaj) {
+      var newVersionAvailable = true;
+    } else if (maj == remoteMaj) {
+      if (min < remoteMin) {
+        var newVersionAvailable = true;
+      } else if (min == remoteMin) {
+        var newVersionAvailable = (patch < remotePatch);
+      } else {
+        var newVersionAvailable = false;
+      }
+    } else {
+      var newVersionAvailable = false;
+    }
     callback(newVersionAvailable);
   }, function(err) {
     if (err.fault == 'NoSuchFunction') {
