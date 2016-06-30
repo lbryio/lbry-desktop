@@ -142,7 +142,7 @@ lbry.checkNewVersionAvailable = function(callback) {
     var remoteMaj, remoteMin, remotePatch;
     [remoteMaj, remoteMin, remotePatch] = versionInfo.remote_lbrynet.split('.');
 
-    var newVersionAvailable = (maj < remoteMaj || min < remoteMin || patch < remotePatch);
+    var newVersionAvailable = !(maj >= remoteMaj && min >= remoteMin && patch >= remotePatch);
     callback(newVersionAvailable);
   }, function(err) {
     if (err.fault == 'NoSuchFunction') {
