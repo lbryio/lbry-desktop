@@ -19,8 +19,10 @@ var ClaimCodePage = React.createClass({
   handleSubmit: function() {
     if (!this.refs.code.value) {
       alert('Please enter an invitation code or choose "Skip."');
+      return;
     } else if (!this.refs.email.value) {
       alert('Please enter an email address or choose "Skip."');
+      return;
     }
 
     this.setState({
