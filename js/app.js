@@ -4,7 +4,7 @@ var App = React.createClass({
     var match, param, val;
     [match, param, val] = window.location.search.match(/\??([^=]*)(?:=(.*))?/);
 
-    if (['settings', 'help', 'start', 'watch', 'report', 'files'].indexOf(param) != -1) {
+    if (['settings', 'help', 'start', 'watch', 'report', 'files', 'claim'].indexOf(param) != -1) {
       var viewingPage = param;
     } else {
       var viewingPage = 'home';
@@ -56,6 +56,8 @@ var App = React.createClass({
       return <MyFilesPage />;
     } else if (this.state.viewingPage == 'start') {
       return <StartPage />;
+    } else if (this.state.viewingPage == 'claim') {
+      return <ClaimCodePage />;
     }
   }
 });

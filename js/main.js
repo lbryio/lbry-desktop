@@ -4,7 +4,19 @@ var init = function() {
 
   ReactDOM.render(
     <SplashScreen message="Connecting" onLoadDone={function() {
-      ReactDOM.render(<App/>, canvas);
+      // On home page, if the balance is 0, display claim code page instead of home page.
+      // Find somewhere better for this logic
+      if (window.location.search == '' || window.location.search == '?' || window.location.search == 'home') {
+        lbry.getBalance((balance) => {
+          if (balance <= 0) {
+            window.location.href = '?claim';
+          } else {
+            ReactDOM.render(<App/>, canvas);
+          }
+        });
+      } else {
+        ReactDOM.render(<App/>, canvas);
+      }
     }}/>,
     canvas
   );
