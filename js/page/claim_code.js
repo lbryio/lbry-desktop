@@ -13,12 +13,14 @@ var claimCodePageStyle = {
 var ClaimCodePage = React.createClass({
   getInitialState: function() {
     return {
-      submitting: false,
+     i submitting: false,
     }
   },
   handleSubmit: function() {
     if (!this.refs.code.value) {
-      alert('Please enter an invitation code or choose "Skip."')
+      alert('Please enter an invitation code or choose "Skip."');
+    } else if (!this.refs.email.value) {
+      alert('Please enter an email address or choose "Skip."');
     }
 
     this.setState({
@@ -56,7 +58,7 @@ var ClaimCodePage = React.createClass({
 
       xhr.open('POST', 'https://invites.lbry.io', true);
       xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-      xhr.send('code=' + code + '&address=' + address + (email ? ('&email=' + email) : ''));
+      xhr.send('code=' + code + '&address=' + address + '&email=' + email);
     });
   },
   handleSkip: function() {
@@ -68,9 +70,9 @@ var ClaimCodePage = React.createClass({
       <main className="page" style={claimCodePageStyle}>
       <h1>Claim your beta invitation code</h1>
       <section style={claimCodeContentStyle}>
-        <p>Thanks for beta testing LBRY! Enter your invitation code below to receive your 200 free LBRY credits.</p>
-        <p>You may also enter your email address. This will add you to our mailing list (if you're not already on it)
-           as well as making you eligible for future rewards for beta testers.</p>
+        <p>Thanks for beta testing LBRY! Enter your invitation code and email address below to receive your 200 free
+           LBRY credits.</p>
+        <p>You will be added to our mailing list (if you're not already on it) and will be eligible for future rewards for beta testers.</p>
       </section>
       <section>
         <form>
