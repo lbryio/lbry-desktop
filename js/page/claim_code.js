@@ -13,7 +13,7 @@ var claimCodePageStyle = {
 var ClaimCodePage = React.createClass({
   getInitialState: function() {
     return {
-     i submitting: false,
+      submitting: false,
     }
   },
   handleSubmit: function() {
