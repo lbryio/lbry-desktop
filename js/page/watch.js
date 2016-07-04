@@ -44,7 +44,7 @@ var WatchPage = React.createClass({
         {this.state.loadStatusMessage}...
       </div>
       <video ref="player" width="100%" height="100%">
-        <source type={this.state.mimeType == 'audio/m4a' ? 'video/mp4' : this.state.mimeType} src={'/view?name=' + this.props.name} />
+        <source type={(this.state.mimeType == 'audio/m4a' || this.state.mimeType == 'audio/mp4a-latm') ? 'video/mp4' : this.state.mimeType} src={'/view?name=' + this.props.name} />
       </video>
       </main>
     );
