@@ -1,9 +1,3 @@
-var videoStyle = {
-  width: '100%',
-//  height: '100%',
-  backgroundColor: '#000'
-};
-
 var WatchPage = React.createClass({
   propTypes: {
     name: React.PropTypes.string,
@@ -13,6 +7,7 @@ var WatchPage = React.createClass({
       downloadStarted: false,
       readyToPlay: false,
       loadStatusMessage: "Requesting stream",
+      mimeType: null,
     };
   },
   componentDidMount: function() {
@@ -31,20 +26,26 @@ var WatchPage = React.createClass({
         setTimeout(() => { this.updateLoadStatus() }, 250);
       } else {
         this.setState({
-          readyToPlay: true
+          readyToPlay: true,
+          mimeType: status.mime_type,
         })
-        flowplayer('player', 'js/flowplayer/flowplayer-3.2.18.swf');
+        var player = new MediaElementPlayer(this.refs.player, {
+          mode: 'shim', // Force Flash (for now)
+          setDimensions: false,
+        });
       }
     });
   },
   render: function() {
     return (
-      <main className="page full-width">
+      <main className="page full-screen">
       <div className={this.state.readyToPlay ? 'hidden' : ''}>
         <h3>Loading lbry://{this.props.name}</h3>
         {this.state.loadStatusMessage}...
       </div>
-      <a id="player" href={"/view?name=" + this.props.name} style={videoStyle} />
+      <video ref="player" width="100%" height="100%">
+        <source type={this.state.mimeType} src={'/view?name=' + this.props.name} />
+      </video>
       </main>
     );
   }

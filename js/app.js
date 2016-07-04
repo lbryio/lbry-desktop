@@ -32,11 +32,10 @@ var App = React.createClass({
           // On OS X with version <= 0.2.2, we need to notify user to close manually close LBRY
           message += '\n\nBefore installing the new version, make sure to exit LBRY, if you started the app ' +
                      'click that LBRY icon in your status bar and choose "Quit."';
-        } else {
-          lbry.stop();
         }
 
         if (window.confirm(message)) {
+          lbry.stop();
           window.location = 'http://www.lbry.io/get';
         };
       });
