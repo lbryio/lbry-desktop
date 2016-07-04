@@ -85,7 +85,7 @@ var ClaimCodePage = React.createClass({
       <section>
         <Link button="primary" label={this.state.submitting ? "Submitting..." : "Submit"}
               disabled={this.state.submitting} onClick={this.handleSubmit} />
-        <Link button="primary" label="Skip" disabled={this.state.submitting} onClick={this.handleSkip} />
+        <Link button="alt" label="Skip" disabled={this.state.submitting} onClick={this.handleSkip} />
       </section>
       </main>
     );
