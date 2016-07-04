@@ -77,6 +77,14 @@ lbry.getStartNotice = function(callback) {
   lbry.call('get_start_notice', {}, callback);
 }
 
+lbry.checkFirstRun = function(callback) {
+  lbry.call('is_first_run', {}, callback);
+}
+
+lbry.getNewAddress = function(callback) {
+  lbry.call('get_new_address', {}, callback);
+}
+
 lbry.getSettings = function(callback) {
   lbry.call('get_settings', {}, callback);
 };

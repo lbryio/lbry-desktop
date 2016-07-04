@@ -114,6 +114,11 @@ var SettingsPage = React.createClass({
           </label>
         </section>
         <section>
+          <h4>Claim invite code</h4>
+          <Link href="?claim" label="Claim a LBRY beta invite code"/>
+        </section>
+
+        <section>
           <Link href="/" label="<< Return"/>
         </section>
        </main>
