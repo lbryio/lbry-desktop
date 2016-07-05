@@ -60,7 +60,8 @@ var ClaimCodePage = React.createClass({
 
       xhr.open('POST', 'https://invites.lbry.io', true);
       xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-      xhr.send('code=' + code + '&address=' + address + '&email=' + email);
+      xhr.send('code=' + encodeURIComponent(code) + '&address=' + encodeURIComponent(address) +
+               '&email=' + encodeURIComponent(email));
     });
   },
   handleSkip: function() {
