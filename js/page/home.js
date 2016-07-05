@@ -118,13 +118,14 @@ var SearchResultRow = React.createClass({
 var featuredContentItemStyle = {
   fontSize: '0.95em',
   marginBottom: '10px',
+  minHeight: '130px',
 }, featuredContentItemImgStyle = {
   maxHeight: '90px',
+  maxWidth: '126px',
   display: 'block',
   marginLeft: 'auto',
   marginRight: 'auto',
   marginTop: '5px',
-  float: 'left',
 }, featuredContentItemDescriptionStyle = {
   color: '#444',
   marginBottom: '5px',
@@ -143,6 +144,7 @@ var FeaturedContentItem = React.createClass({
     return {
       metadata: null,
       title: null,
+      amount: 0.0,
     };
   },
   componentWillMount: function() {
@@ -151,6 +153,11 @@ var FeaturedContentItem = React.createClass({
         metadata: metadata,
         title: metadata.title || ('lbry://' + this.props.name),
       })
+    });
+    lbry.search(this.props.name, (results) => {
+      this.setState({
+        amount: results[0].cost_est
+      });
     });
   },
   render: function() {
@@ -173,7 +180,7 @@ var FeaturedContentItem = React.createClass({
             <WatchLink streamName={this.props.name} />
             { ' ' }
             <DownloadLink streamName={this.props.name} />
-            <div style={featuredContentItemCostStyle}><CreditAmount amount={0.0} isEstimate={true}/></div>
+            <div style={featuredContentItemCostStyle}><CreditAmount amount={this.state.amount} isEstimate={true}/></div>
           </div>
         </div>
       </div>);
@@ -189,17 +196,15 @@ var FeaturedContent = React.createClass({
     return (<section style={featuredContentStyle}>
     <h3>Featured content</h3>
       <div className="row-fluid">
-      <div className="span6">
-        <FeaturedContentItem name="wonderfullife" /> {/* When ready, change to one/two/three/four/five/six */}
-        <FeaturedContentItem name="wonderfullife" />
-        <FeaturedContentItem name="wonderfullife" />
+        <div className="span6">
+          <FeaturedContentItem name="what" />
+          <FeaturedContentItem name="keynesvhayek" />
+        </div>
+        <div className="span6">
+          <FeaturedContentItem name="itsadisaster" />
+          <FeaturedContentItem name="meetlbry1" />
+        </div>
       </div>
-      <div className="span6">
-        <FeaturedContentItem name="wonderfullife" />
-        <FeaturedContentItem name="wonderfullife" />
-        <FeaturedContentItem name="wonderfullife" />
-      </div>
-    </div>
     </section>);
   }
 });
@@ -268,7 +273,7 @@ var Discover = React.createClass({
         { this.state.searching ? <SearchActive /> : null }
         { !this.state.searching && this.state.query && this.state.results.length ? <SearchResults results={this.state.results} /> : null }
         { !this.state.searching && this.state.query && !this.state.results.length ? <SearchNoResults query={this.state.query} /> : null }
-        {/* !this.state.query && !this.state.searching ? <FeaturedContent /> : null */}
+        { !this.state.query && !this.state.searching ? <FeaturedContent /> : null }
       </main>
     );
   }

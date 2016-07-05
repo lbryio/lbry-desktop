@@ -79,7 +79,7 @@ var ClaimCodePage = React.createClass({
       <section>
         <form>
           <section><label style={claimCodeLabelStyle} htmlFor="code">Invitation code</label><input name="code" ref="code" /></section>
-          <section><label style={claimCodeLabelStyle} htmlFor="email">Email (optional)</label><input name="email" ref="email" /></section>
+          <section><label style={claimCodeLabelStyle} htmlFor="email">Email</label><input name="email" ref="email" /></section>
         </form>
       </section>
       <section>
