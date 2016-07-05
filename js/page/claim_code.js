@@ -40,7 +40,7 @@ var ClaimCodePage = React.createClass({
         var response = JSON.parse(xhr.responseText);
 
         if (response.success) {
-          alert('Your invite code has been redeemed! 200 LBRY credits will be added to your balance shortly.');
+          alert('Your invite code has been redeemed! The credits will be added to your balance shortly.');
           // Send them to "landing" instead of "home" (home will just trigger the message all over again until the credits arrive)
           window.location = '?landing';
         } else {
@@ -75,7 +75,7 @@ var ClaimCodePage = React.createClass({
       <main className="page" style={claimCodePageStyle}>
       <h1>Claim your beta invitation code</h1>
       <section style={claimCodeContentStyle}>
-        <p>Thanks for beta testing LBRY! Enter your invitation code and email address below to receive your 200 free
+        <p>Thanks for beta testing LBRY! Enter your invitation code and email address below to receive your initial
            LBRY credits.</p>
         <p>You will be added to our mailing list (if you're not already on it) and will be eligible for future rewards for beta testers.</p>
       </section>
