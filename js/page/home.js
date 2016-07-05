@@ -117,7 +117,7 @@ var SearchResultRow = React.createClass({
 
 var featuredContentItemStyle = {
   fontSize: '0.95em',
-  marginBottom: '10px',
+  marginTop: '10px',
   minHeight: '130px',
 }, featuredContentItemImgStyle = {
   maxHeight: '90px',
@@ -130,6 +130,7 @@ var featuredContentItemStyle = {
   color: '#444',
   marginBottom: '5px',
   fontSize: '0.9em',
+  minHeight: '74px',
 }, featuredContentItemCostStyle = {
   display: 'block',
   float: 'right',
@@ -156,7 +157,7 @@ var FeaturedContentItem = React.createClass({
     });
     lbry.search(this.props.name, (results) => {
       this.setState({
-        amount: results[0].cost_est
+        amount: (results ? results[0].cost_est : 0.0)
       });
     });
   },
@@ -168,10 +169,23 @@ var FeaturedContentItem = React.createClass({
 
     var metadata = this.state.metadata;
 
+    if ('narrow' in this.props) {
+      // Workaround -- narrow thumbnails look a bit funky without some extra left margin.
+      // Find a way to do this in CSS.
+
+      var thumbStyle = Object.assign({}, featuredContentItemImgStyle, {
+        position: 'relative',
+        maxHeight: '102px',
+        left: '13px',
+      });
+    } else {
+      var thumbStyle = featuredContentItemImgStyle;
+    }
+
     return (
       <div className="row-fluid" style={featuredContentItemStyle}>
         <div className="span4">
-          <img src={metadata.thumbnail} alt={'Photo for ' + this.state.title} style={featuredContentItemImgStyle} />
+          <img src={metadata.thumbnail} alt={'Photo for ' + this.state.title} style={thumbStyle} />
         </div>
         <div className="span8">
           <h4>{this.state.title}</h4>
@@ -189,6 +203,7 @@ var FeaturedContentItem = React.createClass({
 
 var featuredContentStyle = {
   width: '100%',
+  marginTop: '-8px',
 };
 
 var FeaturedContent = React.createClass({
@@ -201,7 +216,7 @@ var FeaturedContent = React.createClass({
           <FeaturedContentItem name="keynesvhayek" />
         </div>
         <div className="span6">
-          <FeaturedContentItem name="itsadisaster" />
+          <FeaturedContentItem name="itsadisaster" narrow />
           <FeaturedContentItem name="meetlbry1" />
         </div>
       </div>
@@ -307,7 +322,9 @@ var topBarStyle = {
   'height': '26px',
 },
 balanceStyle = {
-  'marginRight': '5px'
+  'marginRight': '5px',
+  'position': 'relative',
+  'top': '1px',
 };
 
 var mainMenuStyle = {

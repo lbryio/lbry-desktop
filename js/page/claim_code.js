@@ -8,6 +8,8 @@ var claimCodePageStyle = {
   display: 'inline-block',
   cursor: 'default',
   width: '130px',
+  textAlign: 'right',
+  marginRight: '6px',
 };
 
 var ClaimCodePage = React.createClass({
@@ -78,7 +80,7 @@ var ClaimCodePage = React.createClass({
         <p>You will be added to our mailing list (if you're not already on it) and will be eligible for future rewards for beta testers.</p>
       </section>
       <section>
-        <form>
+        <form onSubmit={this.handleSubmit}>
           <section><label style={claimCodeLabelStyle} htmlFor="code">Invitation code</label><input name="code" ref="code" /></section>
           <section><label style={claimCodeLabelStyle} htmlFor="email">Email</label><input name="email" ref="email" /></section>
         </form>
