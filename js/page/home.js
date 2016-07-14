@@ -43,29 +43,29 @@ var SearchNoResults = React.createClass({
 var SearchResults = React.createClass({
   render: function() {
     var rows = [];
-    console.log('results');
-    console.log('made it here');
     this.props.results.forEach(function(result) {
       rows.push(
         <SearchResultRow name={result.name} title={result.title} imgUrl={result.thumbnail}
                          description={result.description} cost_est={result.cost_est} />
       );
     });
-    console.log(this.props.results);
-    console.log(rows);
-    console.log('done');
     return (
       <section>{rows}</section>
     );
   }
 });
 
-var searchRowImgStyle = {
-    maxHeight: '100px',
+var
+  searchRowImgStyle = {
+    maxWidth: '100%',
+    maxHeight: '250px',
     display: 'block',
     marginLeft: 'auto',
     marginRight: 'auto',
     float: 'left'
+  },
+  searchRowTitleStyle = {
+    fontWeight: 'bold'
   },
   searchRowCostStyle = {
     float: 'right',
@@ -102,7 +102,7 @@ var SearchResultRow = React.createClass({
           <span style={searchRowCostStyle}>
             <CreditAmount amount={this.props.cost_est} isEstimate={true}/>
           </span>
-          <h2>{this.props.title}</h2>
+          <h2 style={searchRowTitleStyle}>{this.props.title}</h2>
           <div style={searchRowNameStyle}>lbry://{this.props.name}</div>
           <p style={searchRowDescriptionStyle}>{this.props.description}</p>
           <div>
@@ -118,23 +118,26 @@ var SearchResultRow = React.createClass({
 var featuredContentItemStyle = {
   fontSize: '0.95em',
   marginTop: '10px',
-  minHeight: '130px',
+  maxHeight: '220px'
 }, featuredContentItemImgStyle = {
-  maxHeight: '90px',
-  maxWidth: '126px',
+  maxWidth: '100%',
+  maxHeight: '100%',
   display: 'block',
   marginLeft: 'auto',
   marginRight: 'auto',
   marginTop: '5px',
+}, featuredContentHeaderStyle = {
+  fontWeight: 'bold',
+  marginBottom: '5px'
+}, featuredContentSubheaderStyle = {
+  marginBottom: '10px',
+  fontSize: '0.9em'
 }, featuredContentItemDescriptionStyle = {
   color: '#444',
   marginBottom: '5px',
   fontSize: '0.9em',
-  minHeight: '74px',
 }, featuredContentItemCostStyle = {
-  display: 'block',
-  float: 'right',
-  fontSize: '0.95em',
+  float: 'right'
 };
 
 var FeaturedContentItem = React.createClass({
@@ -188,14 +191,14 @@ var FeaturedContentItem = React.createClass({
           <img src={metadata.thumbnail} alt={'Photo for ' + this.state.title} style={thumbStyle} />
         </div>
         <div className="span8">
-          <h4>{this.state.title}</h4>
-          <p style={featuredContentItemDescriptionStyle}>{metadata.description}</p>
-          <div>
-            <WatchLink streamName={this.props.name} />
-            { ' ' }
-            <DownloadLink streamName={this.props.name} />
+          <h4 style={featuredContentHeaderStyle}>{this.state.title}</h4>
+          <div style={featuredContentSubheaderStyle}>
             <div style={featuredContentItemCostStyle}><CreditAmount amount={this.state.amount} isEstimate={true}/></div>
+            <WatchLink streamName={this.props.name} />
+            &nbsp;&nbsp;&nbsp;
+            <DownloadLink streamName={this.props.name} />
           </div>
+          <p style={featuredContentItemDescriptionStyle}>{metadata.description}</p>
         </div>
       </div>);
   }
@@ -209,14 +212,20 @@ var featuredContentStyle = {
 var FeaturedContent = React.createClass({
   render: function() {
     return (<section style={featuredContentStyle}>
-    <h3>Featured content</h3>
+    <h3>Featured Content</h3>
       <div className="row-fluid">
         <div className="span6">
           <FeaturedContentItem name="what" />
-          <FeaturedContentItem name="keynesvhayek" />
         </div>
         <div className="span6">
           <FeaturedContentItem name="itsadisaster" narrow />
+        </div>
+      </div>
+      <div className="row-fluid">
+        <div className="span6">
+          <FeaturedContentItem name="keynesvhayek" />
+        </div>
+        <div className="span6">
           <FeaturedContentItem name="meetlbry1" />
         </div>
       </div>
