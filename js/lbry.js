@@ -108,8 +108,11 @@ lbry.search = function(query, callback)
   lbry.call("search_nametrie", { "search": query }, callback);
 }
 
-lbry.resolveName = function(name, callback, ec) {
-  lbry.call('resolve_name', { 'name': name }, callback);
+lbry.resolveName = function(name, callback) {
+  lbry.call('resolve_name', { 'name': name }, callback, () => {
+    // For now, assume any error means the name was not resolved
+    callback(null);
+  });
 }
 
 lbry.getStream = function(name, callback) {
@@ -149,6 +152,14 @@ lbry.deleteFile = function(name, deleteTargetFile=true, callback) {
 
 lbry.revealFile = function(path, callback) {
   lbry.call('reveal', { path: path }, callback);
+}
+
+lbry.publish = function(params, callback, errorCallback) {
+  // Use ES6 named arguments instead of directly passing param dict?
+  lbry.call('publish', params, callback, () => {
+    // Change this to return error message or failure code
+    callback(null);
+  });
 }
 
 lbry.publish = function(params, callback) {
