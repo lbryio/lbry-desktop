@@ -18,7 +18,7 @@ var formatItemStyle = {
 }, formatItemDescriptionStyle = {
   color: '#444',
   marginBottom: '5px',
-  fontSize: '0.9em',
+  fontSize: '1.2em',
 }, formatItemMetadataStyle = {
   color: '#444',
   marginBottom: '5px',
@@ -40,7 +40,7 @@ var FormatItem = React.createClass({
           <img src={this.props.metadata.thumbnail} alt={'Photo for ' + this.props.metadata.title} style={formatItemImgStyle} />
         </div>
         <div className="span8">
-          <h4 style={formatHeaderStyle}>{this.props.metadata.title}</h4>
+          <h4 style={formatItemMetadataStyle}><b>Address:</b> {this.props.name}</h4>
           <div style={formatSubheaderStyle}>
             <div style={formatItemCostStyle}><CreditAmount amount={this.props.amount} isEstimate={true}/></div>
             <WatchLink streamName={this.props.name} />
@@ -49,9 +49,9 @@ var FormatItem = React.createClass({
           </div>
           <p style={formatItemDescriptionStyle}>{this.props.metadata.description}</p>
           <div>
-            <span style={formatItemMetadataStyle}>Author: {this.props.metadata.author}</span><br />
-            <span style={formatItemMetadataStyle}>Language: {this.props.metadata.language}</span><br />
-            <span style={formatItemMetadataStyle}>License: {this.props.metadata.license}</span><br />
+            <span style={formatItemMetadataStyle}><b>Author:</b> {this.props.metadata.author}</span><br />
+            <span style={formatItemMetadataStyle}><b>Language:</b> {this.props.metadata.language}</span><br />
+            <span style={formatItemMetadataStyle}><b>License:</b> {this.props.metadata.license}</span><br />
           </div>
         </div>
       </div>
@@ -91,7 +91,7 @@ var FormatsSection = React.createClass({
 
     return (
       <div>
-        <h1>{this.props.name}</h1>
+        <h1 style={formatHeaderStyle}>{this.state.metadata.title}</h1>
       {/* In future, anticipate multiple formats, just a guess at what it could look like
       // var formats = metadata.formats
       // return (<tbody>{formats.map(function(format,i){ */}
