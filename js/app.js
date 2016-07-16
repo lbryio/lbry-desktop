@@ -59,7 +59,7 @@ var App = React.createClass({
     } else if (this.state.viewingPage == 'claim') {
       return <ClaimCodePage />;
     } else if (this.state.viewingPage == 'show') {
-      return <DetailPage />;
+      return <DetailPage name={this.state.pageArgs}/>;
     }
   }
 });

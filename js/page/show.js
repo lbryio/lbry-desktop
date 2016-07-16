@@ -37,21 +37,21 @@ var FormatItem = React.createClass({
     return (
       <div className="row-fluid" style={formatItemStyle}>
         <div className="span4">
-          <img src={metadata.thumbnail} alt={'Photo for ' + this.props.metadata.title} style={thumbStyle} />
+          <img src={this.props.metadata.thumbnail} alt={'Photo for ' + this.props.metadata.title} style={formatItemImgStyle} />
         </div>
         <div className="span8">
-          <h4 style={formatHeaderStyle}>{this.state.title}</h4>
+          <h4 style={formatHeaderStyle}>{this.props.metadata.title}</h4>
           <div style={formatSubheaderStyle}>
             <div style={formatItemCostStyle}><CreditAmount amount={this.props.amount} isEstimate={true}/></div>
             <WatchLink streamName={this.props.name} />
             &nbsp;&nbsp;&nbsp;
             <DownloadLink streamName={this.props.name} />
           </div>
-          <p style={formatItemDescriptionStyle}>{metadata.description}</p>
+          <p style={formatItemDescriptionStyle}>{this.props.metadata.description}</p>
           <div>
-            <span style={formatItemMetadataStyle}>Author: {metadata.author}</span><br />
-            <span style={formatItemMetadataStyle}>Language: {metadata.language}</span><br />
-            <span style={formatItemMetadataStyle}>License: {metadata.license}</span><br />
+            <span style={formatItemMetadataStyle}>Author: {this.props.metadata.author}</span><br />
+            <span style={formatItemMetadataStyle}>Language: {this.props.metadata.language}</span><br />
+            <span style={formatItemMetadataStyle}>License: {this.props.metadata.license}</span><br />
           </div>
         </div>
       </div>
@@ -90,14 +90,14 @@ var FormatsSection = React.createClass({
     var format = this.state.metadata;
 
     return (
-      <h1>this.props.name</h1>
-      <section>
-    // In future, anticipate multiple formats, just a guess at what it could look like
-    // var formats = metadata.formats
-    // return (<tbody>{formats.map(function(format,i){
-        <FormatItem metadata=format>
-    //  })}</tbody>);
-      </section>);
+      <div>
+        <h1>{this.props.name}</h1>
+      {/* In future, anticipate multiple formats, just a guess at what it could look like
+      // var formats = metadata.formats
+      // return (<tbody>{formats.map(function(format,i){ */}
+          <FormatItem metadata={format} amount={this.state.amount} name={this.props.name}/>
+      {/*  })}</tbody>); */}
+      </div>);
   }
 });
 
@@ -109,7 +109,7 @@ var DetailPage = React.createClass({
     return (
       <main className="page">
         <SubPageLogo />
-        <FormatsSection name=name/>
+        <FormatsSection name={this.props.name}/>
         <section>
           <Link href="/" label="<< Return" />
         </section>
