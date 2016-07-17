@@ -87,12 +87,8 @@ var WatchLink = React.createClass({
   },
 
   render: function() {
-    // No support for lbry:// URLs in Windows or on Chrome yet
-    if (/windows|win32/i.test(navigator.userAgent) || (window.chrome && window.navigator.vendor == "Google Inc.")) {
-      var uri = "/?watch=" + this.props.streamName;
-    } else {
-      var uri = 'lbry://' + this.props.streamName;
-    }
+    var uri = "/?watch=" + this.props.streamName;
+    
     return <Link button={this.props.button} hidden={this.props.hidden} style={this.props.style}
                  href={uri} label={this.props.label} icon={this.props.icon} onClick={this.onClick} />;
   }

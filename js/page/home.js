@@ -191,7 +191,7 @@ var FeaturedContentItem = React.createClass({
           <img src={metadata.thumbnail} alt={'Photo for ' + this.state.title} style={thumbStyle} />
         </div>
         <div className="span8">
-          <h4 style={featuredContentHeaderStyle}>{this.state.title}</h4>
+          <h4 style={featuredContentHeaderStyle}><a href={'/?show=' + this.props.name}>{this.state.title}</a></h4>
           <div style={featuredContentSubheaderStyle}>
             <div style={featuredContentItemCostStyle}><CreditAmount amount={this.state.amount} isEstimate={true}/></div>
             <WatchLink streamName={this.props.name} />
