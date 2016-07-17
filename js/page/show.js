@@ -41,7 +41,7 @@ var FormatItem = React.createClass({
     var author = results.author;
     var language = results.language;
     var license = results.license;
-    var fileContentType = results.content_type;
+    var fileContentType = results['content-type'];
 
     return (
       <div className="row-fluid" style={formatItemStyle}>
