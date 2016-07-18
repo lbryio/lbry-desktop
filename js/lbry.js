@@ -98,6 +98,11 @@ lbry.getBalance = function(callback)
   lbry.call("get_balance", {}, callback);
 }
 
+lbry.sendToAddress = function(amount, address, callback)
+{
+  lbry.call("send_to_address", { "amount" : amount, "address": address }, callback);
+}
+
 lbry.search = function(query, callback)
 {
   lbry.call("search_nametrie", { "search": query }, callback);
