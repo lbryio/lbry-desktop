@@ -27,7 +27,7 @@ var SendToAddressSection = React.createClass({
       results: "",
     });
 
-    lbry.sendToAddress((results) => {
+    lbry.sendToAddress(this.state.amount, this.state.address, (results) => {
       if(results === true)
       {
         this.setState({
