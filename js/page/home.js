@@ -376,12 +376,12 @@ var mainMenuStyle = {
 var MainMenu = React.createClass({
   render: function() {
     var isLinux = /linux/i.test(navigator.userAgent); // @TODO: find a way to use getVersionInfo() here without messy state management
-    // @TODO: Need a wallet icon
+    
     return (
       <div style={mainMenuStyle}>
         <Menu {...this.props}>
           <MenuItem href='/?files' label="My Files" icon='icon-cloud-download' />
-          <MenuItem href='/?wallet' label="My Wallet" icon='icon-gear' />
+          <MenuItem href='/?wallet' label="My Wallet" icon='icon-bank' />
           <MenuItem href='/?settings' label="Settings" icon='icon-gear' />
           <MenuItem href='/?help' label="Help" icon='icon-question-circle' />
           {isLinux ? <MenuItem href="/?start" label="Exit LBRY" icon="icon-close" />
