@@ -97,7 +97,7 @@ var MyFilesRow = React.createClass({
           <img src={this.props.imgUrl} alt={'Photo for ' + this.props.title} style={artStyle} />
         </div>
         <div className="span6">
-          <h2>{this.props.title}</h2>
+          <h2><a href={'/?show=' + this.props.lbryUri}>{this.props.title}</a></h2>
           <div className={this.props.completed ? 'hidden' : ''} style={curProgressBarStyle}></div>
           { ' ' }
           {this.props.completed ? 'Download complete' : (parseInt(this.props.ratioLoaded * 100) + '%')}

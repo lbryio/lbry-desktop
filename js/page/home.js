@@ -102,7 +102,7 @@ var SearchResultRow = React.createClass({
           <span style={searchRowCostStyle}>
             <CreditAmount amount={this.props.cost_est} isEstimate={true}/>
           </span>
-          <h2 style={searchRowTitleStyle}>{this.props.title}</h2>
+          <h2 style={searchRowTitleStyle}><a href={'/?show=' + this.props.name}>{this.props.title}</a></h2>
           <div style={searchRowNameStyle}>lbry://{this.props.name}</div>
           <p style={searchRowDescriptionStyle}>{this.props.description}</p>
           <div>
@@ -191,7 +191,7 @@ var FeaturedContentItem = React.createClass({
           <img src={metadata.thumbnail} alt={'Photo for ' + this.state.title} style={thumbStyle} />
         </div>
         <div className="span8">
-          <h4 style={featuredContentHeaderStyle}>{this.state.title}</h4>
+          <h4 style={featuredContentHeaderStyle}><a href={'/?show=' + this.props.name}>{this.state.title}</a></h4>
           <div style={featuredContentSubheaderStyle}>
             <div style={featuredContentItemCostStyle}><CreditAmount amount={this.state.amount} isEstimate={true}/></div>
             <WatchLink streamName={this.props.name} />
