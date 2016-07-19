@@ -36,7 +36,7 @@ var App = React.createClass({
 
         if (window.confirm(message)) {
           lbry.stop();
-          window.location = 'https://www.lbry.io/get';
+          window.location = 'https://lbry.io/get';
         };
       });
     });
