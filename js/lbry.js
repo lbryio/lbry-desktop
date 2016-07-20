@@ -162,11 +162,6 @@ lbry.publish = function(params, callback, errorCallback) {
   });
 }
 
-lbry.publish = function(params, callback) {
-  // Use ES6 named arguments instead of directly passing param dict?
-  lbry.call('publish', params, callback);
-}
-
 lbry.getVersionInfo = function(callback) {
   lbry.call('version', {}, callback);
 };
