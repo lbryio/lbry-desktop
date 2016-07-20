@@ -58,6 +58,8 @@ var App = React.createClass({
       return <StartPage />;
     } else if (this.state.viewingPage == 'claim') {
       return <ClaimCodePage />;
+    } else if (this.state.viewingPage == 'wallet') {
+      return <WalletPage />;
     } else if (this.state.viewingPage == 'show') {
       return <DetailPage name={this.state.pageArgs}/>;
     } else if (this.state.viewingPage == 'wallet') {
