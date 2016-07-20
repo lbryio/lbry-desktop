@@ -11,5 +11,8 @@ These steps will get you to change-reload-see:
 - Install babel (`npm install -g babel-cli babel-preset-es2015 babel-preset-react`)
 - Install [SASS](http://sass-lang.com/install)
 - Run ./watch.sh
-- Open dist/index.html
+- Run lbrynet-daemon --ui=/full/path/to/dist/
 - Changes made in `js` and `sass` will be auto compiled to `dist`
+- `lbrynet-daemon --branch=branchname` can be used to test remote branches
+- `lbry.call('configure_ui', {path: '/path/to/ui'})` can be used in JS console on web ui to switch ui path
+- Occasionally refreshing the cache may be necessary for changes to show up in browser
