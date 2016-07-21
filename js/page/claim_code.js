@@ -67,7 +67,7 @@ var ClaimCodePage = React.createClass({
     });
   },
   handleSkip: function() {
-    //alert('Welcome to LBRY! You can visit the Settings page to redeem an invite code at any time.');
+    alert('Welcome to LBRY! You can visit the Settings page to redeem an invite code at any time.');
     window.location = '?landing';
   },
   render: function() {
@@ -75,22 +75,20 @@ var ClaimCodePage = React.createClass({
       <main className="page" style={claimCodePageStyle}>
       <h1>Claim your beta invitation code</h1>
       <section style={claimCodeContentStyle}>
-        <strong>Invitations are paused</strong>. We are working through some issues with the system. It will be back online tomorrow.
-
-        {/* <p>Thanks for beta testing LBRY! Enter your invitation code and email address below to receive your initial
+        <p>Thanks for beta testing LBRY! Enter your invitation code and email address below to receive your initial
            LBRY credits.</p>
-        <p>You will be added to our mailing list (if you're not already on it) and will be eligible for future rewards for beta testers.</p> */}
+        <p>You will be added to our mailing list (if you're not already on it) and will be eligible for future rewards for beta testers.</p>
       </section>
       <section>
         <form onSubmit={this.handleSubmit}>
-          <section><label style={claimCodeLabelStyle} htmlFor="code">Invitation code</label><input name="code" ref="code" disabled="disabled" style={ {backgroundColor: '#efefef'} } /></section>
-          <section><label style={claimCodeLabelStyle} htmlFor="email">Email</label><input name="email" ref="email" disabled="disabled" style={ {backgroundColor: '#efefef'} } /></section>
+          <section><label style={claimCodeLabelStyle} htmlFor="code">Invitation code</label><input name="code" ref="code" /></section>
+          <section><label style={claimCodeLabelStyle} htmlFor="email">Email</label><input name="email" ref="email" /></section>
         </form>
       </section>
       <section>
-        {/* <Link button="primary" label={this.state.submitting ? "Submitting..." : "Submit"}
-                 disabled={this.state.submitting} onClick={this.handleSubmit} /> */}
-        <Link button="alt" label="OK" disabled={this.state.submitting} onClick={this.handleSkip} />
+        <Link button="primary" label={this.state.submitting ? "Submitting..." : "Submit"}
+              disabled={this.state.submitting} onClick={this.handleSubmit} />
+        <Link button="alt" label="Skip" disabled={this.state.submitting} onClick={this.handleSkip} />
       </section>
       </main>
     );
