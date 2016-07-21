@@ -16,3 +16,10 @@ These steps will get you to change-reload-see:
 - `lbrynet-daemon --branch=branchname` can be used to test remote branches
 - `lbry.call('configure_ui', {path: '/path/to/ui'})` can be used in JS console on web ui to switch ui path
 - Occasionally refreshing the cache may be necessary for changes to show up in browser
+
+## Common Issues
+1. Error: Couldn't find preset "es2015" relative to directory "js"
+
+Fix with:
+npm install babel-preset-es2015 --save
+npm install babel-preset-react --save
