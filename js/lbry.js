@@ -156,9 +156,11 @@ lbry.revealFile = function(path, callback) {
 
 lbry.publish = function(params, callback, errorCallback) {
   // Use ES6 named arguments instead of directly passing param dict?
-  lbry.call('publish', params, callback, () => {
-    // Change this to return error message or failure code
-    callback(null);
+  lbry.call('publish', params, callback, (errorInfo) => {
+    callback({
+      name: fault.fault,
+      message: fault.faultString,
+    });
   });
 }
 

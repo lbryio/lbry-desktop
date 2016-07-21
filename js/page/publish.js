@@ -11,6 +11,10 @@ var publishNumberInputStyle = {
 
 var PublishPage = React.createClass({
   publish: function() {
+    this.setState({
+      submitting: true,
+    });
+
     var metadata = {
       title: this.refs.meta_title.value,
       author: this.refs.meta_author.value,
@@ -23,16 +27,39 @@ var PublishPage = React.createClass({
       metadata.thumbnail = this.refs.meta_thumbnail.value;
     }
 
-    if (this.state.isFee) {
-      metadata.fee = parseFloat(this.state.fee);
-    }
+    var doPublish = () => {
+      lbry.publish({
+        name: this.state.name,
+        file_path: this._tempFilePath,
+        bid: parseFloat(this.state.bid),
+        metadata: metadata,
+      }, (message) => {
+        this.handlePublishSuccess(this.state.name, this.state.title);
+        this.setState({
+          submitting: false,
+        });
+      }, (error) => {
+        this.handlePublishError(error);
+        this.setState({
+          submitting: false,
+        });
+      });
+    };
 
-    lbry.publish({
-      name: this.state.name,
-      file_path: this._tempFilePath,
-      bid: parseFloat(this.state.bid),
-      metadata: metadata,
-    });
+    if (this.state.isFee) {
+      lbry.getNewAddress((address) => {
+        metadata.fee = {
+          'LBC': {
+            amount: parseFloat(this.state.fee),
+            address: address,
+          },
+        };
+
+        doPublish();
+      });
+    } else {
+      doPublish();
+    }
   },
   getInitialState: function() {
     this._tempFilePath = null;
@@ -46,7 +73,17 @@ var PublishPage = React.createClass({
       uploadProgress: 0.0,
       uploaded: false,
       tempFileReady: false,
+      submitting: false,
     };
+  },
+  handlePublishSuccess: function(name, title) {
+    alert(`Your file ${title} has been published to LBRY at the address lbry://${name}!\n\n` +
+          `You will now be taken to your My Files page, where your newly published file should appear within a few minutes.`);
+    window.location = "?myfiles";
+  },
+  handlePublishError: function(error) {
+    alert(`The following error occurred when attempting to publish your file:\n\n` +
+          error.message);
   },
   handleNameChange: function(event) {
     var name = event.target.value;
@@ -242,7 +279,7 @@ var PublishPage = React.createClass({
         <section><label for="meta_thumbnail" style={publishFieldLabelStyle}>Thumbnail URL</label> <input ref="meta_thumbnail" name="thumbnail" placeholder="http://mycompany.com/images/ep_1.jpg" style={publishFieldStyle} /></section>
 
         <section>
-        <Link button="primary" label="Publish" onClick={this.publish} disabled={!this.readyToPublish()} />
+        <Link button="primary" label="Publish" onClick={this.publish} disabled={!this.readyToPublish() || this.state.submitting} />
         </section>
         <section>
           <Link href="/" label="<< Return"/>
