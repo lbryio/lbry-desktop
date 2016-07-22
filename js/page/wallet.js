@@ -32,7 +32,7 @@ var SendToAddressSection = React.createClass({
       if(results === true)
       {
         this.setState({
-          results: "Your transaction was completed successfully.",
+          results: "Your transaction was successfully placed in the queue.",
         });
       }
       else
