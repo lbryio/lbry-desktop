@@ -203,19 +203,19 @@ var PublishPage = React.createClass({
       <main className="page">
         <SubPageLogo />
         <h1>Publish Content</h1>
-        <section>
-          <h4>LBRY name</h4>
-          <div className="help">What LBRY name would you like to claim for this file?</div>
+        <section className="section-block">
+          <h4>LBRY Name</h4>
           lbry://<input type="text" ref="name" onChange={this.handleNameChange} />
           {
             (!this.state.name ? '' :
               (this.state.nameResolved ? <em> This name is currently claimed for <strong>{lbry.formatCredits(this.state.claimValue)}</strong> credits</em>
                                        : <em> This name is available</em>))
           }
+          <div className="help">What LBRY name would you like to claim for this file?</div>
         </section>
 
-        <section>
-          <h4>Choose file</h4>
+        <section className="section-block">
+          <h4>Choose File</h4>
           <form>
             <input name="file" type="file" onChange={this.handleFileChange} />
             { !this.state.fileInfo ? '' :
@@ -227,38 +227,39 @@ var PublishPage = React.createClass({
           </form>
         </section>
 
-        <section>
-          <h4>Bid amount</h4>
-          <section className="help">How much would you like to bid for this name?
-          { !this.state.nameResolved ? <span> Since this name is not currently resolved, you may bid as low as you want, but higher bids help prevent others from claiming your name.</span>
-                                     : <span> You must bid over <strong>{lbry.formatCredits(this.state.claimValue)}</strong> credits to claim this name.</span> }
-          </section>
+        <section className="section-block">
+          <h4>Bid Amount</h4>
           Credits <input style={publishNumberInputStyle} type="text" onChange={this.handleBidChange} value={this.state.bid} placeholder={this.state.nameResolved ? lbry.formatCredits(this.state.claimValue + 10) : 100} />
           {this.state.bid && isNaN(this.state.bid) ? <span className="warning"> Must be a number</span> : ''}
+          <div className="help">How much would you like to bid for this name?
+          { !this.state.nameResolved ? <span> Since this name is not currently resolved, you may bid as low as you want, but higher bids help prevent others from claiming your name.</span>
+                                     : <span> You must bid over <strong>{lbry.formatCredits(this.state.claimValue)}</strong> credits to claim this name.</span> }
+          </div>
         </section>
 
-        <section>
+        <section className="section-block">
           <h4>Fee</h4>
-          <section className="help">How much would you like to charge for this file? </section>
-          <label style={settingsRadioOptionStyles}>
-            <input type="radio" onChange={ () => { this.handleFeePrefChange(false) } } checked={!this.state.isFee} /> No fee
-          </label>
-          <label style={settingsRadioOptionStyles}>
-            <input type="radio" onChange={ () => { this.handleFeePrefChange(true) } } checked={this.state.isFee} /> { !this.state.isFee ? 'Choose fee...' : 'Fee (in LBRY credits) ' }
-            <input className={ this.state.isFee ? '' : 'hidden '} onChange={this.handleFeeChange} placeholder="5.5" style={publishNumberInputStyle} />
-            {this.state.fee && isNaN(this.state.fee) ? <span className="warning"> Must be a number</span> : ''}
-          </label>
+          <div className="spacer-bottom--sm">
+            <label>
+             <input type="radio" onChange={ () => { this.handleFeePrefChange(false) } } checked={!this.state.isFee} /> No fee
+            </label>
+            <label>
+             <input type="radio" onChange={ () => { this.handleFeePrefChange(true) } } checked={this.state.isFee} /> { !this.state.isFee ? 'Choose fee...' : 'Fee (in LBRY credits) ' }
+             <input type="text" className={ this.state.isFee ? '' : 'hidden '} onChange={this.handleFeeChange} placeholder="5.5" style={publishNumberInputStyle} />
+             {this.state.fee && isNaN(this.state.fee) ? <span className="warning"> Must be a number</span> : ''}
+            </label>
+          </div> 
+          <div className="help">How much would you like to charge for this file? </div>
         </section>
 
 
-        <section>
-          <h4>Your content</h4>
+        <section className="section-block">
+          <h4>Your Content</h4>
 
-          <section><label for="title" style={publishFieldLabelStyle}>Title</label> <input ref="meta_title" name="title" placeholder="My Show, Episode 1" style={publishFieldStyle} /></section>
-          <section><label for="author" style={publishFieldLabelStyle}>Author</label> <input ref="meta_author" name="author" placeholder="My Company, Inc." style={publishFieldStyle} /></section>
-          <section><label for="license" style={publishFieldLabelStyle}>License info</label> <input ref="meta_license" name="license" placeholder={'Copyright My Company, Inc. ' + (new Date().getFullYear()) + '.'} style={publishFieldStyle} /></section>
-          <section>
-            <label for="language" style={publishFieldLabelStyle}>Language</label> <select ref="meta_language" name="language">
+          <label for="title">Title</label><input type="text" ref="meta_title" name="title" placeholder="My Show, Episode 1" style={publishFieldStyle} /> 
+          <label for="author">Author</label><input type="text" ref="meta_author" name="author" placeholder="My Company, Inc." style={publishFieldStyle} />
+          <label for="license">License info</label><input type="text" ref="meta_license" name="license" placeholder={'Copyright My Company, Inc. ' + (new Date().getFullYear()) + '.'} style={publishFieldStyle} />
+          <label for="language">Language</label> <select ref="meta_language" name="language">
                <option value="en" selected>English</option>
                <option value="zh">Chinese</option>
                <option value="fr">French</option>
@@ -267,23 +268,19 @@ var PublishPage = React.createClass({
                <option value="ru">Russian</option>
                <option value="es">Spanish</option>
             </select>
-          </section>
 
-          <section>
-            <label for="description" style={publishFieldLabelStyle}>Description</label> <textarea ref="meta_description" name="description" placeholder="Description of your content" style={publishFieldStyle}></textarea>
-          </section>
+          <label for="description">Description</label> <textarea ref="meta_description" name="description" placeholder="Description of your content" style={publishFieldStyle}></textarea>
         </section>
 
-        <h4>Additional content information (optional)</h4>
+        
 
-        <section><label for="meta_thumbnail" style={publishFieldLabelStyle}>Thumbnail URL</label> <input ref="meta_thumbnail" name="thumbnail" placeholder="http://mycompany.com/images/ep_1.jpg" style={publishFieldStyle} /></section>
+        <section className="section-block"><h4>Additional Content Information (Optional)</h4>
+        <label for="meta_thumbnail">Thumbnail URL</label> <input type="text" ref="meta_thumbnail" name="thumbnail" placeholder="http://mycompany.com/images/ep_1.jpg" style={publishFieldStyle} /></section>
 
-        <section>
-        <Link button="primary" label="Publish" onClick={this.publish} disabled={!this.readyToPublish() || this.state.submitting} />
-        </section>
-        <section>
-          <Link href="/" label="<< Return"/>
-        </section>
+        <div className="footer-buttons">
+          <Link button="alt" href="/" label="Cancel"/>
+          <Link button="primary" label="Publish" onClick={this.publish} disabled={!this.readyToPublish() || this.state.submitting} />
+         </div>
        </main>
     );
   }
