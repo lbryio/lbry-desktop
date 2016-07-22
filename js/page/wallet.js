@@ -40,6 +40,10 @@ var SendToAddressSection = React.createClass({
           results: "Something went wrong: " + results
         });
       }
+    }, (error) => {
+      this.setState({
+        results: "Something went wrong: " + error.faultString + " " + error.faultCode
+      })
     });
   },
   getInitialState: function() {
@@ -59,7 +63,7 @@ var SendToAddressSection = React.createClass({
   },
   setAmount: function(event) {
     this.setState({
-      amount: event.target.value,
+      amount: parseFloat(event.target.value),
     })
   },
   setAddress: function(event) {
@@ -72,7 +76,7 @@ var SendToAddressSection = React.createClass({
       <div>
         <h1>Send To Address:</h1>
         <label for="balance">Balance: {this.state.balance}</label><br />
-        <label for="amount">Amount:</label> <input id="amount" type="number" size="10" onChange={this.setAmount}></input><br />
+        <label for="amount">Amount:</label> <input id="amount" type="text" size="10" onChange={this.setAmount}></input><br />
         <label for="address">Address:</label> <input id="address" type="text" size="60" onChange={this.setAddress}></input><br />
         <button type="button" onClick={this.sendToAddress}>Send Amount to Address</button><br /><br />
         <h4>Results:</h4>
