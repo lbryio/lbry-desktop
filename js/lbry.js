@@ -144,11 +144,16 @@ lbry.getVersionInfo = function(callback) {
 
 lbry.checkNewVersionAvailable = function(callback) {
   lbry.call('version', {}, function(versionInfo) {
-    var maj, min, patch;
-    [maj, min, patch] = versionInfo.lbrynet_version.split('.');
+    var ver = versionInfo.lbrynet_version.split('.');
 
-    var remoteMaj, remoteMin, remotePatch;
-    [remoteMaj, remoteMin, remotePatch] = versionInfo.remote_lbrynet.split('.');
+    var maj = parseInt(ver[0]),
+        min = parseInt(ver[1]),
+        patch = parseInt(ver[2]);
+
+    var remoteVer = versionInfo.remote_lbrynet.split('.');
+    var remoteMaj = parseInt(remoteVer[0]),
+        remoteMin = parseInt(remoteVer[1]),
+        remotePatch = parseInt(remoteVer[2]);
 
     if (maj < remoteMaj) {
       var newVersionAvailable = true;
