@@ -14,8 +14,9 @@ var NewAddressSection = React.createClass({
   render: function() {
     return (
       <div>
-        <h1>Create New Address:</h1>
-        <button type="button" onClick={this.generateAddress}>Generate New Address</button> <input type="text" size="60" value={this.state.address}></input>
+        <h1>Generate New Address:</h1>
+        <input type="text" size="60" value={this.state.address}></input><br /><br />
+        <Link button="primary" label="Generate" onClick={this.generateAddress} />
       </div>
     );
   }
@@ -74,13 +75,13 @@ var SendToAddressSection = React.createClass({
   render: function() {
     return (
       <div>
-        <h1>Send To Address:</h1>
-        <label for="balance">Balance: {this.state.balance}</label><br />
-        <label for="amount">Amount:</label> <input id="amount" type="text" size="10" onChange={this.setAmount}></input><br />
-        <label for="address">Address:</label> <input id="address" type="text" size="60" onChange={this.setAddress}></input><br />
-        <button type="button" onClick={this.sendToAddress}>Send Amount to Address</button><br /><br />
+        <h1>Send Amount To Address:</h1>
+        <label for="balance">Balance: {this.state.balance}</label><br /><br />
+        <label for="amount">Amount:</label> <input id="amount" type="text" size="10" onChange={this.setAmount}></input><br /><br />
+        <label for="address">Address:</label> <input id="address" type="text" size="60" onChange={this.setAddress}></input><br /><br />
+        <Link button="primary" label="Send" onClick={this.sendToAddress} disabled={!(parseFloat(this.state.amount) > 0.0) || this.state.address == ""} /><br /><br />
         <h4>Results:</h4>
-        <span>{this.state.results}</span>
+        <span>{this.state.results}</span><br />
       </div>
     );
   }
