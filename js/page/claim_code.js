@@ -44,7 +44,7 @@ var ClaimCodePage = React.createClass({
           // Send them to "landing" instead of "home" (home will just trigger the message all over again until the credits arrive)
           window.location = '?landing';
         } else {
-          alert("You've entered an invalid code, or one that's already been claimed. Please check your code and try again.");
+          alert(response.reason);
           this.setState({
             submitting: false
           });
