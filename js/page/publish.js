@@ -79,7 +79,7 @@ var PublishPage = React.createClass({
   handlePublishSuccess: function(name, title) {
     alert(`Your file ${title} has been published to LBRY at the address lbry://${name}!\n\n` +
           `You will now be taken to your My Files page, where your newly published file should appear within a few minutes.`);
-    window.location = "?myfiles";
+    window.location = "?files";
   },
   handlePublishError: function(error) {
     alert(`The following error occurred when attempting to publish your file:\n\n` +
