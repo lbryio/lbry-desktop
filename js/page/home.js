@@ -1,9 +1,18 @@
-var searchInputStyle = {
-    width: '400px',
+var
+  searchContainerStyle = {
     display: 'block',
     marginBottom: '48px',
     marginLeft: 'auto',
-    marginRight: 'auto'
+    marginRight: 'auto',
+    textAlign: 'center'
+  },
+  protocolLabelStyle = {
+    color: '#888',
+    fontSize: '0.9em',
+    marginRight: '2px'
+  },
+  searchInputStyle = {
+    width: '400px',
   },
   fetchResultsStyle = {
     color: '#888',
@@ -320,8 +329,13 @@ var Discover = React.createClass({
     console.log(this.state);
     return (
       <main style={discoverMainStyle}>
-        <section><input type="search" style={searchInputStyle} onChange={this.onQueryChange}
-                        placeholder="Find movies, music, games, and more"/></section>
+        <section>
+          <div style={searchContainerStyle}>
+            <span style={protocolLabelStyle}>lbry://</span>
+            <input type="search" style={searchInputStyle} onChange={this.onQueryChange}
+                          placeholder="lbrydomainname"/>
+          </div>
+        </section>
         { this.state.searching ? <SearchActive /> : null }
         { !this.state.searching && this.state.query && this.state.results.length ? <SearchResults results={this.state.results} /> : null }
         { !this.state.searching && this.state.query && !this.state.results.length ? <SearchNoResults query={this.state.query} /> : null }
