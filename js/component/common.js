@@ -11,19 +11,73 @@ var Icon = React.createClass({
   }
 });
 
-var Link = React.createClass({
+var toolTipStyle = {
+  position: 'absolute',
+  top: '100%',
+  left: '-120px',
+  width: '260px',
+  padding: '15px',
+  border: '1px solid #aaa',
+  fontSize: '14px',
+};
+var ToolTip = React.createClass({
+  propTypes: {
+    open: React.PropTypes.bool.isRequired,
+    onMouseOut: React.PropTypes.func
+  },
   render: function() {
-    console.log(this.props);
+    return (
+      <div className={this.props.open ? '' : 'hidden'} style={toolTipStyle} onMouseOut={this.props.onMouseOut}>
+        {this.props.children}
+      </div>
+    );
+  }
+});
+
+var linkContainerStyle = {
+  position: 'relative',
+};
+var Link = React.createClass({
+  getInitialState: function() {
+    return {
+      showTooltip: false,
+    };
+  },
+  handleClick: function() {
+    if (this.props.tooltip) {
+      this.setState({
+        showTooltip: !this.state.showTooltip,
+      });
+    }
+    if (this.props.onClick) {
+      this.props.onClick();
+    }
+  },
+  handleTooltipMouseOut: function() {
+    this.setState({
+      showTooltip: false,
+    });
+  },
+  render: function() {
     var href = this.props.href ? this.props.href : 'javascript:;',
       icon = this.props.icon ? <Icon icon={this.props.icon} />  : '',
       className = (this.props.button ? 'button-block button-' + this.props.button : 'button-text') +
                   (this.props.hidden ? ' hidden' : '') + (this.props.disabled ? ' disabled' : '');
+
+
     return (
-      <a className={className} href={href} style={this.props.style ? this.props.style : {}}
-        title={this.props.title} onClick={this.props.onClick}>
-        {this.props.icon ? icon : '' }
-        {this.props.label}
-      </a>
+      <span style={linkContainerStyle}>
+        <a className={className} href={href} style={this.props.style ? this.props.style : {}}
+          title={this.props.title} onClick={this.handleClick}>
+          {this.props.icon ? icon : '' }
+          {this.props.label}
+        </a>
+        {(!this.props.tooltip ? null :
+          <ToolTip open={this.state.showTooltip} onMouseOut={this.handleTooltipMouseOut}>
+            {this.props.tooltip}
+          </ToolTip>
+        )}
+      </span>
     );
   }
 });
