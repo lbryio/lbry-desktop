@@ -50,7 +50,7 @@ var PublishPage = React.createClass({
 
     var licenseUrl = this.refs.meta_license_url.getValue();
     if (licenseUrl != '') {
-      metadata.license.url = this.refs.meta_license_url.getValue();
+      metadata.license.url = licenseUrl;
     }
 
     var doPublish = () => {
