@@ -1,4 +1,4 @@
-var publishNumberInputStyle = {
+var publishNumberStyle = {
   width: '50px',
 }, publishFieldLabelStyle = {
   display: 'inline-block',
@@ -10,21 +10,47 @@ var publishNumberInputStyle = {
 };
 
 var PublishPage = React.createClass({
-  publish: function() {
+  _requiredFields: ['name', 'file', 'meta_title', 'meta_author', 'meta_license', 'meta_description'],
+
+  handleSubmit: function() {
     this.setState({
       submitting: true,
     });
 
-    var metadata = {
-      title: this.refs.meta_title.value,
-      author: this.refs.meta_author.value,
-      description: this.refs.meta_description.value,
-      language: this.refs.meta_language.value,
-      license: this.refs.meta_license.value,
-    };
+    var missingFieldFound = false;
+    for (let fieldName of this._requiredFields) {
+      var field = this.refs[fieldName];
+      if (field.getValue() == '') {
+        field.warnRequired();
+        if (!missingFieldFound) {
+          field.focus();
+          missingFieldFound = true;
+        }
+      }
+    }
 
-    if (this.refs.meta_thumbnail.value) {
-      metadata.thumbnail = this.refs.meta_thumbnail.value;
+    if (missingFieldFound) {
+      this.setState({
+        submitting: false,
+      });
+      //return;
+    }
+
+    var metadata = {};
+    for (let metaField of ['meta_title', 'meta_author', 'meta_description', 'meta_thumbnail',
+                           'meta_language']) {
+      var value = this.refs[metaField].getValue();
+      if (value != '') {
+        metadata[metaField] = value;
+      }
+    }
+
+    metadata.license = {};
+    metadata.license.name = this.refs.meta_license.getValue();
+
+    var licenseUrl = this.refs.meta_license_url.getValue();
+    if (licenseUrl != '') {
+      metadata.license.url = this.refs.meta_license_url.getValue();
     }
 
     var doPublish = () => {
@@ -34,7 +60,7 @@ var PublishPage = React.createClass({
         bid: parseFloat(this.state.bid),
         metadata: metadata,
       }, (message) => {
-        this.handlePublishSuccess(this.state.name, this.state.title);
+        this.handlePublishSuccess();
         this.setState({
           submitting: false,
         });
@@ -76,8 +102,8 @@ var PublishPage = React.createClass({
       submitting: false,
     };
   },
-  handlePublishSuccess: function(name, title) {
-    alert(`Your file ${title} has been published to LBRY at the address lbry://${name}!\n\n` +
+  handlePublishSuccess: function() {
+    alert(`Your file ${this.refs.meta_title.value} has been published to LBRY at the address lbry://${this.state.name}!\n\n` +
           `You will now be taken to your My Files page, where your newly published file should appear within a few minutes.`);
     window.location = "?files";
   },
@@ -200,12 +226,12 @@ var PublishPage = React.createClass({
     }
 
     return (
-      <main className="page">
+      <main className="page" ref="page">
         <SubPageLogo />
         <h1>Publish Content</h1>
         <section className="section-block">
           <h4>LBRY Name</h4>
-          lbry://<input type="text" ref="name" onChange={this.handleNameChange} />
+          lbry://<FormField type="text" ref="name" onChange={this.handleNameChange} />
           {
             (!this.state.name ? '' :
               (this.state.nameResolved ? <em> This name is currently claimed for <strong>{lbry.formatCredits(this.state.claimValue)}</strong> credits</em>
@@ -217,7 +243,7 @@ var PublishPage = React.createClass({
         <section className="section-block">
           <h4>Choose File</h4>
           <form>
-            <input name="file" type="file" onChange={this.handleFileChange} />
+            <FormField name="file" ref="file" type="file" onChange={this.handleFileChange} />
             { !this.state.fileInfo ? '' :
                 (!this.state.tempFileReady ? <div>
                                                <progress {...progressOpts}></progress>
@@ -229,7 +255,7 @@ var PublishPage = React.createClass({
 
         <section className="section-block">
           <h4>Bid Amount</h4>
-          Credits <input style={publishNumberInputStyle} type="text" onChange={this.handleBidChange} value={this.state.bid} placeholder={this.state.nameResolved ? lbry.formatCredits(this.state.claimValue + 10) : 100} />
+          Credits <FormField style={publishNumberStyle} type="text" onChange={this.handleBidChange} value={this.state.bid} placeholder={this.state.nameResolved ? lbry.formatCredits(this.state.claimValue + 10) : 100} />
           {this.state.bid && isNaN(this.state.bid) ? <span className="warning"> Must be a number</span> : ''}
           <div className="help">How much would you like to bid for this name?
           { !this.state.nameResolved ? <span> Since this name is not currently resolved, you may bid as low as you want, but higher bids help prevent others from claiming your name.</span>
@@ -241,11 +267,11 @@ var PublishPage = React.createClass({
           <h4>Fee</h4>
           <div className="spacer-bottom--sm">
             <label>
-             <input type="radio" onChange={ () => { this.handleFeePrefChange(false) } } checked={!this.state.isFee} /> No fee
+             <FormField type="radio" onChange={ () => { this.handleFeePrefChange(false) } } checked={!this.state.isFee} /> No fee
             </label>
             <label>
-             <input type="radio" onChange={ () => { this.handleFeePrefChange(true) } } checked={this.state.isFee} /> { !this.state.isFee ? 'Choose fee...' : 'Fee (in LBRY credits) ' }
-             <input type="text" className={ this.state.isFee ? '' : 'hidden '} onChange={this.handleFeeChange} placeholder="5.5" style={publishNumberInputStyle} />
+             <FormField type="radio" onChange={ () => { this.handleFeePrefChange(true) } } checked={this.state.isFee} /> { !this.state.isFee ? 'Choose fee...' : 'Fee (in LBRY credits) ' }
+             <FormField type="text" hidden={!this.state.isFee} onChange={this.handleFeeChange} placeholder="5.5" style={publishNumberStyle} />
              {this.state.fee && isNaN(this.state.fee) ? <span className="warning"> Must be a number</span> : ''}
             </label>
           </div> 
@@ -256,10 +282,10 @@ var PublishPage = React.createClass({
         <section className="section-block">
           <h4>Your Content</h4>
 
-          <label for="title">Title</label><input type="text" ref="meta_title" name="title" placeholder="My Show, Episode 1" style={publishFieldStyle} /> 
-          <label for="author">Author</label><input type="text" ref="meta_author" name="author" placeholder="My Company, Inc." style={publishFieldStyle} />
-          <label for="license">License info</label><input type="text" ref="meta_license" name="license" placeholder={'Copyright My Company, Inc. ' + (new Date().getFullYear()) + '.'} style={publishFieldStyle} />
-          <label for="language">Language</label> <select ref="meta_language" name="language">
+          <label htmlFor="title">Title</label><FormField type="text" ref="meta_title" name="title" placeholder="My Show, Episode 1" style={publishFieldStyle} />
+          <label htmlFor="author">Author</label><FormField type="text" ref="meta_author" name="author" placeholder="My Company, Inc." style={publishFieldStyle} />
+          <label htmlFor="license">License info</label><FormField type="text" ref="meta_license" name="license" defaultValue="Creative Commons Attribution 3.0 United States" style={publishFieldStyle} />
+          <label htmlFor="language">Language</label> <FormField type="select" ref="meta_language" name="language">
                <option value="en" selected>English</option>
                <option value="zh">Chinese</option>
                <option value="fr">French</option>
@@ -267,19 +293,22 @@ var PublishPage = React.createClass({
                <option value="jp">Japanese</option>
                <option value="ru">Russian</option>
                <option value="es">Spanish</option>
-            </select>
+            </FormField>
 
-          <label for="description">Description</label> <textarea ref="meta_description" name="description" placeholder="Description of your content" style={publishFieldStyle}></textarea>
+          <label htmlFor="description">Description</label> <FormField type="textarea" ref="meta_description" name="description" placeholder="Description of your content" style={publishFieldStyle} />
         </section>
 
         
 
-        <section className="section-block"><h4>Additional Content Information (Optional)</h4>
-        <label for="meta_thumbnail">Thumbnail URL</label> <input type="text" ref="meta_thumbnail" name="thumbnail" placeholder="http://mycompany.com/images/ep_1.jpg" style={publishFieldStyle} /></section>
+        <section className="section-block">
+          <h4>Additional Content Information (Optional)</h4>
+          <label htmlFor="meta_thumbnail">Thumbnail URL</label> <FormField type="text" ref="meta_thumbnail" name="thumbnail" placeholder="http://mycompany.com/images/ep_1.jpg" style={publishFieldStyle} />
+          <label htmlFor="meta_license_url">License URL</label> <FormField type="text" ref="meta_license_url" name="license_url" defaultValue="https://creativecommons.org/licenses/by/3.0/us/legalcode" style={publishFieldStyle} />
+        </section>
 
         <div className="footer-buttons">
           <Link button="alt" href="/" label="Cancel"/>
-          <Link button="primary" label="Publish" onClick={this.publish} disabled={!this.readyToPublish() || this.state.submitting} />
+          <Link button="primary" label="Publish" onClick={this.handleSubmit} disabled={this.state.submitting} />
          </div>
        </main>
     );
