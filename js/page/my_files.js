@@ -146,6 +146,13 @@ var MyFilesPage = React.createClass({
       for (let fileInfo of this.state.filesInfo) {
         let {completed, written_bytes, total_bytes, lbry_uri, file_name, download_path,
              stopped, metadata} = fileInfo;
+
+        if (!metadata)
+        {
+          console.log('Empty metadata, skipping render');
+          continue;
+        }
+
         let {title, thumbnail} = metadata;
 
         var ratioLoaded = written_bytes / total_bytes;
