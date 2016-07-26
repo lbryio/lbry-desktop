@@ -106,6 +106,12 @@ $max-text-width: 660px;
     background-size: $size;
 }
 
+@mixin placeholder {
+  &::-webkit-input-placeholder {@content}
+  &:-moz-placeholder {@content}
+  &:-ms-input-placeholder {@content}
+}
+
 @mixin offscreen() {
   position: absolute;
   left: -9999px;

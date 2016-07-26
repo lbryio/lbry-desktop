@@ -119,6 +119,9 @@ input[type="search"]
 
 input[type="text"], textarea
 {
+  @include placeholder {
+    color: lighten($color-text-dark, 60%);
+  }
   border: 0 none;
   border: 2px solid rgba(160,160,160,.5);
   padding-left: 5px;
