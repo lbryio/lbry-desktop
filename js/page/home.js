@@ -207,18 +207,38 @@ var FeaturedContentItem = React.createClass({
 var featuredContentStyle = {
   width: '100%',
   marginTop: '-8px',
+}, featuredContentLegendStyle = {
+  fontSize: '12px',
+  color: '#aaa',
+  verticalAlign: '15%',
 };
 
 var FeaturedContent = React.createClass({
   render: function() {
     return (<section style={featuredContentStyle}>
-    <h3>Featured Content</h3>
+      <div className="row-fluid">
+        <div className="span6">
+          <h3>Featured Content</h3>
+        </div>
+        <div className="span6">
+          <h3>Community Content <Link style={featuredContentLegendStyle} label="What's this?" tooltip='Community Content is a public space where anyone can share content with the rest of the LBRY community. Bid on the names "one," "two," "three" and "four" to put your content here!' /></h3>
+        </div>
+      </div>
+
       <div className="row-fluid">
         <div className="span6">
           <FeaturedContentItem name="what" />
         </div>
         <div className="span6">
-          <FeaturedContentItem name="itsadisaster" narrow />
+          <FeaturedContentItem name="one" narrow />
+        </div>
+      </div>
+      <div className="row-fluid">
+        <div className="span6">
+          <FeaturedContentItem name="itsadisaster" />
+        </div>
+        <div className="span6">
+          <FeaturedContentItem name="two" />
         </div>
       </div>
       <div className="row-fluid">
@@ -226,7 +246,15 @@ var FeaturedContent = React.createClass({
           <FeaturedContentItem name="keynesvhayek" />
         </div>
         <div className="span6">
+          <FeaturedContentItem name="three" />
+        </div>
+      </div>
+      <div className="row-fluid">
+        <div className="span6">
           <FeaturedContentItem name="meetlbry1" />
+        </div>
+        <div className="span6">
+          <FeaturedContentItem name="four" />
         </div>
       </div>
     </section>);
