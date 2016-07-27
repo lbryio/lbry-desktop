@@ -20,7 +20,7 @@ var PublishPage = React.createClass({
     var missingFieldFound = false;
     for (let fieldName of this._requiredFields) {
       var field = this.refs[fieldName];
-      if (field.getValue() == '') {
+      if (field.getValue() === '') {
         field.warnRequired();
         if (!missingFieldFound) {
           field.focus();
@@ -36,15 +36,15 @@ var PublishPage = React.createClass({
       return;
     }
 
-    var metadata = {};
-    for (let metaField of ['meta_title', 'meta_author', 'meta_description', 'meta_thumbnail',
-                           'meta_language']) {
-      var value = this.refs[metaField].getValue();
-      if (value != '') {
+    var metadata = {ver: '0.0.2'};
+    for (let metaField of ['title', 'author', 'description', 'thumbnail', 'license', 'license_url', 'language', 'nsfw']) {
+      var value = this.refs['meta_' + metaField].getValue();
+      if (value) {
         metadata[metaField] = value;
       }
     }
 
+    /*
     metadata.license = {};
     metadata.license.name = this.refs.meta_license.getValue();
 
@@ -52,8 +52,19 @@ var PublishPage = React.createClass({
     if (licenseUrl != '') {
       metadata.license.url = licenseUrl;
     }
+    */
+
+    var licenseUrl = this.refs.meta_license_url.getValue();
+    if (licenseUrl) {
+      metadata.license_url = licenseUrl;
+    }
 
     var doPublish = () => {
+      console.log({name: this.state.name,
+        file_path: this._tempFilePath,
+        bid: parseFloat(this.state.bid),
+        metadata: metadata,
+      });
       lbry.publish({
         name: this.state.name,
         file_path: this._tempFilePath,
@@ -209,22 +220,24 @@ var PublishPage = React.createClass({
     var bidFloat = parseFloat(this.state.bid);
     return (this.state.name && this.state.fileInfo && !isNaN(bidFloat) && (!this.state.claimValue || bidFloat > this.state.claimValue));
   },
-  render: function() {
+  componentDidUpdate: function() {
     if (this.state.fileInfo && !this.state.tempFileReady) {
       // A file was chosen but the daemon hasn't finished processing it yet, i.e. it's loading, so
-      // we need a value for the progress bar.
+      // we're displaying a progress bar and need a value for it.
+
+      // React can't unset the "value" prop (to show an "indeterminate" bar) after it's already
+      // been set, so we have to manage it manually.
 
       if (!this.state.uploaded) {
         // Still uploading
-        var progressOpts = {
-          value: this.state.uploadProgress,
-        };
+        this.refs.progress.setAttribute('value', this.state.uploadProgress);
       } else {
         // Fully uploaded and waiting for server to finish processing, so set progress bar to "indeterminite"
-        var progressOpts = {};
+        this.refs.progress.removeAttribute('value');
       }
     }
-
+  },
+  render: function() {
     return (
       <main className="page" ref="page">
         <SubPageLogo />
@@ -246,7 +259,7 @@ var PublishPage = React.createClass({
             <FormField name="file" ref="file" type="file" onChange={this.handleFileChange} />
             { !this.state.fileInfo ? '' :
                 (!this.state.tempFileReady ? <div>
-                                               <progress {...progressOpts}></progress>
+                                               <progress ref='progress'></progress>
                                                {!this.state.uploaded ? <span> Importing file into LBRY...</span> : <span> Processing file...</span>}
                                              </div>
                                            : <div>File ready for publishing!</div>) }
@@ -296,6 +309,8 @@ var PublishPage = React.createClass({
             </FormField>
 
           <label htmlFor="description">Description</label> <FormField type="textarea" ref="meta_description" name="description" placeholder="Description of your content" style={publishFieldStyle} />
+
+           <div><label><FormField type="checkbox" ref="meta_nsfw" name="nsfw" placeholder="Description of your content" /> Not Safe For Work</label></div>
         </section>
 
         
@@ -308,7 +323,7 @@ var PublishPage = React.createClass({
 
         <div className="footer-buttons">
           <Link button="alt" href="/" label="Cancel"/>
-          <Link button="primary" label="Publish" onClick={this.handleSubmit} disabled={this.state.submitting} />
+          <Link button="primary" label={!this.state.submitting ? 'Publish' : 'Publishing...'} onClick={this.handleSubmit} disabled={this.state.submitting} />
          </div>
        </main>
     );
