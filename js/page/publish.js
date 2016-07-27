@@ -114,7 +114,7 @@ var PublishPage = React.createClass({
     };
   },
   handlePublishSuccess: function() {
-    alert(`Your file ${this.refs.meta_title.value} has been published to LBRY at the address lbry://${this.state.name}!\n\n` +
+    alert(`Your file ${this.refs.meta_title.getValue()} has been published to LBRY at the address lbry://${this.state.name}!\n\n` +
           `You will now be taken to your My Files page, where your newly published file should appear within a few minutes.`);
     window.location = "?files";
   },
