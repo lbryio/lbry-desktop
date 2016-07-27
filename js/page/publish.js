@@ -33,7 +33,7 @@ var PublishPage = React.createClass({
       this.setState({
         submitting: false,
       });
-      //return;
+      return;
     }
 
     var metadata = {};
