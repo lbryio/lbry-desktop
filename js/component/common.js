@@ -13,11 +13,13 @@ var Icon = React.createClass({
 
 var toolTipStyle = {
   position: 'absolute',
+  zIndex: '1',
   top: '100%',
   left: '-120px',
   width: '260px',
   padding: '15px',
   border: '1px solid #aaa',
+  backgroundColor: '#fff',
   fontSize: '14px',
 };
 var ToolTip = React.createClass({

@@ -239,12 +239,12 @@ var FeaturedContent = React.createClass({
           <FeaturedContentItem name="what" />
         </div>
         <div className="span6">
-          <FeaturedContentItem name="one" narrow />
+          <FeaturedContentItem name="one" />
         </div>
       </div>
       <div className="row-fluid">
         <div className="span6">
-          <FeaturedContentItem name="itsadisaster" />
+          <FeaturedContentItem name="itsadisaster" narrow />
         </div>
         <div className="span6">
           <FeaturedContentItem name="two" />
