@@ -269,7 +269,6 @@ var PublishPage = React.createClass({
         <section className="section-block">
           <h4>Bid Amount</h4>
           Credits <FormField style={publishNumberStyle} type="text" onChange={this.handleBidChange} value={this.state.bid} placeholder={this.state.nameResolved ? lbry.formatCredits(this.state.claimValue + 10) : 100} />
-          {this.state.bid && isNaN(this.state.bid) ? <span className="warning"> Must be a number</span> : ''}
           <div className="help">How much would you like to bid for this name?
           { !this.state.nameResolved ? <span> Since this name is not currently resolved, you may bid as low as you want, but higher bids help prevent others from claiming your name.</span>
                                      : <span> You must bid over <strong>{lbry.formatCredits(this.state.claimValue)}</strong> credits to claim this name.</span> }
@@ -285,7 +284,6 @@ var PublishPage = React.createClass({
             <label>
              <FormField type="radio" onChange={ () => { this.handleFeePrefChange(true) } } checked={this.state.isFee} /> { !this.state.isFee ? 'Choose fee...' : 'Fee (in LBRY credits) ' }
              <FormField type="text" hidden={!this.state.isFee} onChange={this.handleFeeChange} placeholder="5.5" style={publishNumberStyle} />
-             {this.state.fee && isNaN(this.state.fee) ? <span className="warning"> Must be a number</span> : ''}
             </label>
           </div> 
           <div className="help">How much would you like to charge for this file? </div>
