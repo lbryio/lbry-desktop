@@ -39,7 +39,7 @@ var PublishPage = React.createClass({
     var metadata = {ver: '0.0.2'};
     for (let metaField of ['title', 'author', 'description', 'thumbnail', 'license', 'license_url', 'language', 'nsfw']) {
       var value = this.refs['meta_' + metaField].getValue();
-      if (value) {
+      if (value === '') {
         metadata[metaField] = value;
       }
     }
