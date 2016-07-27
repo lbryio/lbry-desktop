@@ -187,7 +187,7 @@ var FormField = React.createClass({
     }
   },
   componentWillMount: function() {
-    if (['text', 'radio', 'file'].indexOf(this.props.type) != -1) {
+    if (['text', 'radio', 'checkbox', 'file'].indexOf(this.props.type) != -1) {
       this._element = 'input';
       this._type = this.props.type;
     } else {
@@ -215,7 +215,11 @@ var FormField = React.createClass({
     this.refs.field.focus();
   },
   getValue: function() {
-    return this.refs.field.value;
+    if (this.props.type == 'checkbox') {
+      return this.refs.field.checked;
+    } else {
+      return this.refs.field.value;
+    }
   },
   render: function() {
     var warningStyle = Object.assign({}, requiredFieldWarningStyle);
