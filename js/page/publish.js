@@ -141,13 +141,11 @@ var PublishPage = React.createClass({
           nameResolved: false,
         });
       } else {
-        lbry.search(name, (results) => {
-          var claimValue = results[0].value;
-
+        lbry.getClaimInfo(name, (claimInfo) => {
           this.setState({
             name: name,
             nameResolved: true,
-            claimValue: parseFloat(claimValue),
+            claimValue: parseFloat(claimInfo.amount),
           });
         });
       }
