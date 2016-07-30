@@ -115,6 +115,10 @@ lbry.getClaimInfo = function(name, callback) {
   lbry.call('get_claim_info', { name: name }, callback);
 }
 
+lbry.getCostEstimate = function(name, callback) {
+  lbry.call('get_est_cost', { name: name }, callback);
+}
+
 lbry.getFileStatus = function(name, callback) {
   lbry.call('get_lbry_file', { 'name': name }, callback);
 }
