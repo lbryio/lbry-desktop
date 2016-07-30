@@ -169,9 +169,9 @@ var FeaturedContentItem = React.createClass({
         title: metadata.title || ('lbry://' + this.props.name),
       })
     });
-    lbry.search(this.props.name, (results) => {
+    lbry.getCostEstimate(this.props.name, (amount) => {
       this.setState({
-        amount: (results ? results[0].cost_est : 0.0)
+        amount: amount,
       });
     });
   },
