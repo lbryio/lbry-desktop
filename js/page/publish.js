@@ -10,7 +10,7 @@ var publishNumberStyle = {
 };
 
 var PublishPage = React.createClass({
-  _requiredFields: ['name', 'file', 'meta_title', 'meta_author', 'meta_license', 'meta_description'],
+  _requiredFields: ['name', 'file', 'bid', 'meta_title', 'meta_author', 'meta_license', 'meta_description'],
 
   handleSubmit: function() {
     this.setState({
@@ -85,11 +85,10 @@ var PublishPage = React.createClass({
 
     if (this.state.isFee) {
       lbry.getNewAddress((address) => {
-        metadata.fee = {
-          'LBC': {
-            amount: parseFloat(this.state.fee),
-            address: address,
-          },
+        metadata.fee = {};
+        metadata.fee[this.state.feeCurrency] = {
+          amount: parseFloat(this.state.feeAmount),
+          address: address,
         };
 
         doPublish();
@@ -104,6 +103,8 @@ var PublishPage = React.createClass({
     return {
       name: '',
       bid: '',
+      feeAmount: '',
+      feeCurrency: '',
       nameResolved: false,
       claimValue: 0.0,
       fileInfo: null,
@@ -156,9 +157,14 @@ var PublishPage = React.createClass({
       bid: event.target.value,
     });
   },
-  handleFeeChange: function(event) {
+  handleFeeAmountChange: function(event) {
     this.setState({
-      fee: event.target.value,
+      feeAmount: event.target.value,
+    });
+  },
+  handleFeeCurrencyChange: function(event) {
+    this.setState({
+      feeCurrency: event.target.value,
     });
   },
   handleFileChange: function(event) {
@@ -266,7 +272,7 @@ var PublishPage = React.createClass({
 
         <section className="section-block">
           <h4>Bid Amount</h4>
-          Credits <FormField style={publishNumberStyle} type="text" onChange={this.handleBidChange} value={this.state.bid} placeholder={this.state.nameResolved ? lbry.formatCredits(this.state.claimValue + 10) : 100} />
+          Credits <FormField ref="bid" style={publishNumberStyle} type="text" onChange={this.handleBidChange} value={this.state.bid} placeholder={this.state.nameResolved ? lbry.formatCredits(this.state.claimValue + 10) : 100} />
           <div className="help">How much would you like to bid for this name?
           { !this.state.nameResolved ? <span> Since this name is not currently resolved, you may bid as low as you want, but higher bids help prevent others from claiming your name.</span>
                                      : <span> You must bid over <strong>{lbry.formatCredits(this.state.claimValue)}</strong> credits to claim this name.</span> }
@@ -280,11 +286,19 @@ var PublishPage = React.createClass({
              <FormField type="radio" onChange={ () => { this.handleFeePrefChange(false) } } checked={!this.state.isFee} /> No fee
             </label>
             <label>
-             <FormField type="radio" onChange={ () => { this.handleFeePrefChange(true) } } checked={this.state.isFee} /> { !this.state.isFee ? 'Choose fee...' : 'Fee (in LBRY credits) ' }
-             <FormField type="text" hidden={!this.state.isFee} onChange={this.handleFeeChange} placeholder="5.5" style={publishNumberStyle} />
+             <FormField type="radio" onChange={ () => { this.handleFeePrefChange(true) } } checked={this.state.isFee} /> { !this.state.isFee ? 'Choose fee...' : 'Fee ' }
+             <span className={!this.state.isFee ? 'hidden' : ''}>
+               <FormField type="text" onChange={this.handleFeeAmountChange} style={publishNumberStyle} /> <FormField type="select" onChange={this.handleFeeCurrencyChange}>
+                 <option value="USD">dollars</option>
+                 <option value="LBC">LBRY credits</option>
+               </FormField>
+               </span>
             </label>
           </div> 
-          <div className="help">How much would you like to charge for this file? </div>
+          <div className="help">
+            <p>How much would you like to charge for this file?</p>
+            If you choose to price this content in dollars, the number of credits charged will be adjusted based on the value of LBRY credits at the time of purchase.
+          </div>
         </section>
 
 
