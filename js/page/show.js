@@ -29,19 +29,23 @@ var formatItemStyle = {
 
 var FormatItem = React.createClass({
   propTypes: {
-    results: React.PropTypes.object,
+    claimInfo: React.PropTypes.object,
+    amount: React.PropTypes.number,
+    name: React.PropTypes.string,
   },
   render: function() {
-    var results = this.props.results;
-    var name = results.name;
-    var thumbnail = results.thumbnail;
-    var title = results.title;
-    var amount = results.cost_est ? results.cost_est : 0.0;
-    var description = results.description;
-    var author = results.author;
-    var language = results.language;
-    var license = results.license;
-    var fileContentType = results['content-type'];
+    var name = this.props.name;
+
+    var claimInfo = this.props.claimInfo;
+    var thumbnail = claimInfo.thumbnail;
+    var title = claimInfo.title;
+    var description = claimInfo.description;
+    var author = claimInfo.author;
+    var language = claimInfo.language;
+    var license = claimInfo.license;
+    var fileContentType = claimInfo['content-type'];
+
+    var amount = this.props.amount || 0.0;
 
     return (
       <div className="row-fluid" style={formatItemStyle}>
@@ -71,12 +75,13 @@ var FormatItem = React.createClass({
 
 var FormatsSection = React.createClass({
   propTypes: {
-    results: React.PropTypes.object,
+    claimInfo: React.PropTypes.object,
+    amount: React.PropTypes.number,
     name: React.PropTypes.string,
   },
   render: function() {
     var name = this.props.name;
-    var format = this.props.results;
+    var format = this.props.claimInfo;
     var title = format.title;
 
     if(format == null)
@@ -91,9 +96,9 @@ var FormatsSection = React.createClass({
       <div>
         <h1 style={formatHeaderStyle}>{title}</h1>
       {/* In future, anticipate multiple formats, just a guess at what it could look like
-      // var formats = this.props.results.formats
+      // var formats = this.props.claimInfo.formats
       // return (<tbody>{formats.map(function(format,i){ */}
-          <FormatItem results={format}/>
+          <FormatItem name={name} claimInfo={format} amount={this.props.amount} />
       {/*  })}</tbody>); */}
       </div>);
   }
@@ -105,32 +110,39 @@ var DetailPage = React.createClass({
   },
   getInitialState: function() {
     return {
-      results: null,
+      claimInfo: null,
+      amount: null,
       searching: true,
     };
   },
   componentWillMount: function() {
-    lbry.search(this.props.name, (results) => {
+    lbry.getClaimInfo(this.props.name, (claimInfo) => {
       this.setState({
-        results: results[0],
+        claimInfo: claimInfo.value,
         searching: false,
+      });
+    });
+
+    lbry.getCostEstimate(this.props.name, (amount) => {
+      this.setState({
+        amount: amount,
       });
     });
   },
   render: function() {
-    if (this.state.results == null && this.state.searching) {
+    if (this.state.claimInfo == null && this.state.searching) {
       // Still waiting for metadata
       return null;
     }
 
     var name = this.props.name;
-    var metadata = this.state.metadata;
-    var results = this.state.results;
+    var claimInfo = this.state.claimInfo;
+    var amount = this.state.amount;
 
     return (
       <main className="page">
         <SubPageLogo />
-        <FormatsSection name={name} results={results}/>
+        <FormatsSection name={name} claimInfo={claimInfo} amount={amount} />
         <section>
           <Link href="/" label="<< Return" />
         </section>
