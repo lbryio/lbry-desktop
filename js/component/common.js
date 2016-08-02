@@ -106,6 +106,17 @@ var DownloadLink = React.createClass({
       downloading: false,
     }
   },
+  handleClick: function() {
+    lbry.getCostEstimate(this.props.streamName, (amount) => {
+      lbry.getBalance((balance) => {
+        if (amount > balance) {
+          alert("You don't have enough LBRY credits to pay for this stream.");
+        } else {
+          this.startDownload();
+        }
+      });
+    });
+  },
   startDownload: function() {
     if (!this.state.downloading) { //@TODO: Continually update this.state.downloading based on actual status of file
       this.setState({
@@ -121,7 +132,7 @@ var DownloadLink = React.createClass({
   render: function() {
     var label = (!this.state.downloading ? this.props.label : this.props.downloadingLabel);
     return <Link button={this.props.button} hidden={this.props.hidden} style={this.props.style}
-                 disabled={this.state.downloading} label={label} icon={this.props.icon} onClick={this.startDownload} />;
+                 disabled={this.state.downloading} label={label} icon={this.props.icon} onClick={this.handleClick} />;
   }
 });
 
@@ -134,7 +145,17 @@ var WatchLink = React.createClass({
     style: React.PropTypes.object,
     hidden: React.PropTypes.bool,
   },
-
+  handleClick: function() {
+    lbry.getCostEstimate(this.props.streamName, (amount) => {
+      lbry.getBalance((balance) => {
+        if (amount > balance) {
+          alert("You don't have enough LBRY credits to pay for this stream.");
+        } else {
+          window.location = '?watch=' + this.props.streamName;                  
+        }
+      });
+    });
+  },
   getDefaultProps: function() {
     return {
       icon: 'icon-play',
@@ -142,11 +163,9 @@ var WatchLink = React.createClass({
     }
   },
 
-  render: function() {
-    var uri = "/?watch=" + this.props.streamName;
-    
+  render: function() {    
     return <Link button={this.props.button} hidden={this.props.hidden} style={this.props.style}
-                 href={uri} label={this.props.label} icon={this.props.icon} onClick={this.onClick} />;
+                 label={this.props.label} icon={this.props.icon} onClick={this.handleClick} />;
   }
 });
 
