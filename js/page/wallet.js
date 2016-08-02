@@ -24,6 +24,17 @@ var NewAddressSection = React.createClass({
 
 var SendToAddressSection = React.createClass({
   sendToAddress: function() {
+    if (this.state.amount > this.state.balance)
+    {
+      alert("The amount you're trying to send is greater than the number of credits in your wallet.");
+      return;
+    }
+    else if ((this.state.balance - this.state.amount) < 1)
+    {
+      alert("Insufficient balance: after this transaction you would have less than 1 LBC in your wallet.")
+      return;
+    }
+
     this.setState({
       results: "",
     });
