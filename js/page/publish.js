@@ -220,10 +220,6 @@ var PublishPage = React.createClass({
       isFee: feeEnabled
     });
   },
-  readyToPublish: function() {
-    var bidFloat = parseFloat(this.state.bid);
-    return (this.state.name && this.state.fileInfo && !isNaN(bidFloat) && (!this.state.claimValue || bidFloat > this.state.claimValue));
-  },
   componentDidUpdate: function() {
     if (this.state.fileInfo && !this.state.tempFileReady) {
       // A file was chosen but the daemon hasn't finished processing it yet, i.e. it's loading, so
