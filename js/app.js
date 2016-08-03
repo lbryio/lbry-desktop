@@ -22,21 +22,26 @@ var App = React.createClass({
       }
 
       var message = 'The version of LBRY you\'re using is not up to date.\n\n' +
-                    'Would you like to visit lbry.io now to get the latest version?';
+                    'Choose "OK" to download the latest version."';
 
       lbry.getVersionInfo(function(versionInfo) {
-        var maj, min, patch;
-        [maj, min, patch] = versionInfo.lbrynet_version.split('.');
+        if (versionInfo.os_system == 'Darwin') {
+          var updateUrl = 'https://lbry.io/get/lbry.dmg';
 
-        if (versionInfo.os_system == 'Darwin' && maj == 0 && min <= 2 && patch <= 2) {
-          // On OS X with version <= 0.2.2, we need to notify user to close manually close LBRY
-          message += '\n\nBefore installing the new version, make sure to exit LBRY, if you started the app ' +
-                     'click that LBRY icon in your status bar and choose "Quit."';
+          var maj, min, patch;
+          [maj, min, patch] = versionInfo.lbrynet_version.split('.');
+          if (maj == 0 && min <= 2 && patch <= 2) {
+            // On OS X with version <= 0.2.2, we need to notify user to close manually close LBRY
+            message += '\n\nBefore installing the new version, make sure to exit LBRY, if you started the app ' +
+                       'click that LBRY icon in your status bar and choose "Quit."';
+          }
+        } else {
+          var updateUrl = 'https://lbry.io/get/lbry.deb';
         }
 
         if (window.confirm(message)) {
           lbry.stop();
-          window.location = 'https://github.com/lbryio/lbry/releases';
+          window.location = updateUrl;
         };
       });
     });
