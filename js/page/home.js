@@ -34,7 +34,7 @@ var SearchNoResults = React.createClass({
     return (
       <section style={searchNoResultsStyle}>
         <span style={searchNoResultsMessageStyle}>No one has checked anything in for {this.props.query} yet.</span>
-        <Link label="Be the first" href="javascript:alert('aww I do nothing')" />
+        <Link label="Be the first" href="?publish" />
       </section>
     );
   }
