@@ -5,7 +5,7 @@ $spacing-vertical: 24px;
 $color-primary: #155B4A;
 $color-light-alt: hsl(hue($color-primary), 15, 85);
 $color-text-dark: #000;
-$color-help: #666;
+$color-help: rgba(0,0,0,.6);
 $color-money: #216C2A;
 $color-meta-light: #505050;
 
@@ -104,6 +104,12 @@ $max-text-width: 660px;
     -moz-background-size: $size;
     -o-background-size: $size;
     background-size: $size;
+}
+
+@mixin placeholder {
+  &::-webkit-input-placeholder {@content}
+  &:-moz-placeholder {@content}
+  &:-ms-input-placeholder {@content}
 }
 
 @mixin offscreen() {
