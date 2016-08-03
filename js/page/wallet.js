@@ -13,11 +13,11 @@ var NewAddressSection = React.createClass({
   },
   render: function() {
     return (
-      <div>
-        <h1>Generate New Address:</h1>
-        <input type="text" size="60" value={this.state.address}></input><br /><br />
+      <section>
+        <h1>Generate New Address</h1>
+        <section><input type="text" size="60" value={this.state.address}></input></section>
         <Link button="primary" label="Generate" onClick={this.generateAddress} />
-      </div>
+      </section>
     );
   }
 });
@@ -80,15 +80,19 @@ var SendToAddressSection = React.createClass({
   },
   render: function() {
     return (
-      <div>
-        <h1>Send Amount To Address:</h1>
-        <label for="balance">Balance: {this.state.balance}</label><br /><br />
-        <label for="amount">Amount:</label> <input id="amount" type="text" size="10" onChange={this.setAmount}></input><br /><br />
-        <label for="address">Address:</label> <input id="address" type="text" size="60" onChange={this.setAddress}></input><br /><br />
-        <Link button="primary" label="Send" onClick={this.sendToAddress} disabled={!(parseFloat(this.state.amount) > 0.0) || this.state.address == ""} /><br /><br />
-        <h4>Results:</h4>
-        <span>{this.state.results}</span><br />
-      </div>
+      <section>
+        <h1>Send Credits</h1>
+        <section>
+          <section><label for="balance">Balance {this.state.balance}</label></section>
+          <label for="amount">Amount <input id="amount" type="text" size="10" onChange={this.setAmount}></input></label>
+          <label for="address">Recipient address <input id="address" type="text" size="60" onChange={this.setAddress}></input></label>
+          <Link button="primary" label="Send" onClick={this.sendToAddress} disabled={!(parseFloat(this.state.amount) > 0.0) || this.state.address == ""} />
+        </section>
+        <section className={!this.state.results ? 'hidden' : ''}>
+          <h4>Results:</h4>
+          {this.state.results}
+        </section>
+      </section>
     );
   }
 });
@@ -98,8 +102,8 @@ var WalletPage = React.createClass({
     return (
       <main className="page">
         <SubPageLogo />
-        <NewAddressSection /><br />
-        <SendToAddressSection /><br />
+        <NewAddressSection />
+        <SendToAddressSection />
         <section>
           <Link href="/" label="<< Return" />
         </section>

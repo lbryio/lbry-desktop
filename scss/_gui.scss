@@ -7,7 +7,7 @@ html
 }
 body
 {
-    font-family: 'Raleway', sans-serif;
+    font-family: 'Source Sans Pro', sans-serif;
     line-height: 1.3333;
     min-height: 100%;
     position: relative;
@@ -17,6 +17,7 @@ body
   margin-left: auto;
   margin-right: auto;
   width: 800px;
+  padding-bottom: $spacing-vertical*3;
 
   &.full-screen {
     width: 100%;
@@ -33,16 +34,43 @@ body
 section
 {
   margin-bottom: $spacing-vertical;
+  section {
+    /* Smaller padding around inner sections */
+    margin-bottom: $spacing-vertical / 4;
+  }
   &:last-child
   {
     margin-bottom: 0;
   }
 }
 
-h1 { font-size: 2.0em; margin-bottom: $spacing-vertical / 2; margin-top: $spacing-vertical; }
-h2 { font-size: 1.75em; }
+.section-block {
+  background-color: rgba(0,0,0,.05);
+  padding: $spacing-vertical;
+  border-radius: 2px;
+  margin-bottom: $spacing-vertical;
+}
+
+h1 { 
+  font-size: 2.0em; 
+  margin-bottom: $spacing-vertical; 
+  margin-top: $spacing-vertical*2; 
+  font-family: 'Raleway', sans-serif;
+}
+
+h2 { 
+  font-size: 1.75em; 
+}
+
 h3 { font-size: 1.4em; }
-h4 { font-size: 1.2em; }
+
+h4 { 
+  font-weight: 600;
+  font-size: 1.2em; 
+  margin: 0;
+  margin-bottom: $spacing-vertical/2;
+}
+
 h5 { font-size: 1.1em; }
 sup, sub {
  vertical-align: baseline;
@@ -50,7 +78,11 @@ sup, sub {
 }
 sup { top: -0.4em; }
 sub { top: 0.4em; }
-label { cursor: pointer; }
+
+label { 
+  cursor: default; 
+  display: block;
+}
 
 header
 {
@@ -62,6 +94,9 @@ p
   margin-bottom: 0.8em;
 }
 
+textarea {
+  height: 190px;
+}
 
 .hidden {
   display: none;
@@ -75,10 +110,25 @@ p
 input[type="search"]
 {
   border: 0 none;
-  border: 1px solid rgba(160,160,160,.5);
+  border: 2px solid rgba(160,160,160,.5);
   padding-left: 5px;
   padding-right: 5px;
-  height: $spacing-vertical * 1.5;
+  line-height: $spacing-vertical * 1.5;
+  margin-bottom: $spacing-vertical/2;
+}
+
+input[type="text"], textarea
+{
+  border: 0 none;
+  border: 2px solid rgba(160,160,160,.5);
+  padding-left: 5px;
+  padding-right: 5px;
+  line-height: $spacing-vertical;
+  margin-bottom: $spacing-vertical/2;
+}
+
+select {
+  margin-bottom: $spacing-vertical/2;
 }
 
 .busy-indicator
@@ -106,10 +156,13 @@ input[type="search"]
   display: inline-block;
   height: $spacing-vertical * 1.5;
   line-height: $spacing-vertical * 1.5;
-  padding: 0 15px;
+  padding: 0 30px;
   text-decoration: none;
   border: 0 none;
   text-align: center;
+  border-radius: 2px;
+  box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12);
+  text-transform: uppercase;
   + .button-block
   {
     margin-left: 20px;
@@ -131,15 +184,12 @@ input[type="search"]
 .button-primary
 {
   color: white;
-  @include linear-gradient(lighten($color-primary, 5), darken($color-primary, 5));
   background-color: $color-primary;
-  border: 1px solid black;
+
 }
 .button-alt
 {
-  @include linear-gradient(lighten($color-light-alt, 5), darken($color-light-alt, 5));
-  color: hsl(hue($color-primary), 85, 15);
-  border: 1px solid darken($color-primary, 10);
+  background-color: rgba(0,0,0,.15);
 }
 .button-text
 {
@@ -171,6 +221,11 @@ input[type="search"]
   }
 }
 
+.footer-buttons {
+  display: flex;
+  justify-content: center;
+}
+
 .icon:only-child {
   position: relative;
   top: 0.16em;
@@ -183,7 +238,11 @@ input[type="search"]
   }
 }
 
-.help
-{
+.help {
+  font-size: .85em;
   color: $color-help;
+}
+
+.spacer-bottom--sm {
+  margin-bottom: $spacing-vertical/2;
 }
