@@ -382,8 +382,8 @@ var MainMenu = React.createClass({
         <Menu {...this.props}>
           <MenuItem href='/?files' label="My Files" icon='icon-cloud-download' />
           <MenuItem href='/?wallet' label="My Wallet" icon='icon-bank' />
-          <MenuItem href='/?settings' label="Settings" icon='icon-gear' />
           <MenuItem href='/?publish' label="Publish" icon='icon-upload' />
+          <MenuItem href='/?settings' label="Settings" icon='icon-gear' />
           <MenuItem href='/?help' label="Help" icon='icon-question-circle' />
           {isLinux ? <MenuItem href="/?start" label="Exit LBRY" icon="icon-close" />
                    : null}
