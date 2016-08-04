@@ -11,6 +11,22 @@ var Icon = React.createClass({
   }
 });
 
+var TruncatedText = React.createClass({
+  propTypes: {
+    limit: React.PropTypes.string,
+  },
+  getDefaultProps: function() {
+    return {
+      limit: 250,
+    }
+  },
+  render: function() {
+    var text = this.props.children;
+    var limit = this.props.limit;
+    return <span>{text.slice(0, limit) + (text.length > limit ? ' ...' : '')}</span>;
+  }
+});
+
 var toolTipStyle = {
   position: 'absolute',
   zIndex: '1',
