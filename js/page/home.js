@@ -94,7 +94,7 @@ var SearchResultRow = React.createClass({
   },
   render: function() {
     return (
-      <div className="row-fluid">
+      <section className="row-fluid">
         <div className="span3">
           <img src={this.props.imgUrl} alt={'Photo for ' + (this.props.title || this.props.name)} style={searchRowImgStyle} />
         </div>
@@ -107,10 +107,11 @@ var SearchResultRow = React.createClass({
           <p style={searchRowDescriptionStyle}>{this.props.description}</p>
           <div>
             <WatchLink streamName={this.props.name} button="primary" />
+            { ' ' }
             <DownloadLink streamName={this.props.name} button="alt" />
           </div>
         </div>
-      </div>
+      </section>
     );
   }
 });
