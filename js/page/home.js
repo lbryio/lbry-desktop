@@ -201,8 +201,7 @@ var FeaturedContentItem = React.createClass({
             &nbsp;&nbsp;&nbsp;
             <DownloadLink streamName={this.props.name} />
           </div>
-          <p style={featuredContentItemDescriptionStyle}>{metadata.description.slice(0, this._maxDescriptionLength) +
-                                                          (metadata.description.length > this._maxDescriptionLength ? ' ...' : '')}</p>
+          <p style={featuredContentItemDescriptionStyle}><TruncatedText>{metadata.description}</TruncatedText></p>
         </div>
       </div>);
   }
