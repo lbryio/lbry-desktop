@@ -329,6 +329,7 @@ var PublishPage = React.createClass({
 
         <div className="footer-buttons">
           <Link button="alt" href="/" label="Cancel"/>
+          { ' ' }
           <Link button="primary" label={!this.state.submitting ? 'Publish' : 'Publishing...'} onClick={this.handleSubmit} disabled={this.state.submitting} />
          </div>
        </main>
