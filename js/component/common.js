@@ -3,7 +3,7 @@
 var Icon = React.createClass({
   propTypes: {
     style: React.PropTypes.object,
-    fixed: React.PropTypes.boolean,
+    fixed: React.PropTypes.bool,
   },
   render: function() {
     var className = 'icon ' + ('fixed' in this.props ? 'icon-fixed-width ' : '') + this.props.icon;
@@ -13,7 +13,7 @@ var Icon = React.createClass({
 
 var TruncatedText = React.createClass({
   propTypes: {
-    limit: React.PropTypes.string,
+    limit: React.PropTypes.number,
   },
   getDefaultProps: function() {
     return {
@@ -167,7 +167,7 @@ var WatchLink = React.createClass({
         if (amount > balance) {
           alert("You don't have enough LBRY credits to pay for this stream.");
         } else {
-          window.location = '?watch=' + this.props.streamName;                  
+          window.location = '?watch=' + this.props.streamName;
         }
       });
     });
@@ -179,7 +179,7 @@ var WatchLink = React.createClass({
     }
   },
 
-  render: function() {    
+  render: function() {
     return <Link button={this.props.button} hidden={this.props.hidden} style={this.props.style}
                  label={this.props.label} icon={this.props.icon} onClick={this.handleClick} />;
   }
@@ -312,7 +312,7 @@ var MenuItem = React.createClass({
     href: React.PropTypes.string,
     label: React.PropTypes.string,
     icon: React.PropTypes.string,
-    onClick: React.PropTypes.function,
+    onClick: React.PropTypes.func,
   },
   getDefaultProps: function() {
     return {

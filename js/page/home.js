@@ -45,7 +45,7 @@ var SearchResults = React.createClass({
     var rows = [];
     this.props.results.forEach(function(result) {
       rows.push(
-        <SearchResultRow name={result.name} title={result.title} imgUrl={result.thumbnail}
+        <SearchResultRow key={result.name} name={result.name} title={result.title} imgUrl={result.thumbnail}
                          description={result.description} cost_est={result.cost_est} />
       );
     });
@@ -158,7 +158,7 @@ var FeaturedContentItem = React.createClass({
     lbry.resolveName(this.props.name, (metadata) => {
       this.setState({
         metadata: metadata,
-        title: metadata.title || ('lbry://' + this.props.name),
+        title: metadata && metadata.title ? metadata.title : ('lbry://' + this.props.name),
       })
     });
     lbry.getCostEstimate(this.props.name, (amount) => {
@@ -282,7 +282,6 @@ var Discover = React.createClass({
   search: function() {
     if (this.state.query)
     {
-      console.log('search');
       lbry.search(this.state.query, this.searchCallback.bind(this, this.state.query));
     }
     else
@@ -320,7 +319,6 @@ var Discover = React.createClass({
   },
 
   render: function() {
-    console.log(this.state);
     return (
       <main style={discoverMainStyle}>
         <section><input type="search" style={searchInputStyle} onChange={this.onQueryChange}
@@ -376,7 +374,7 @@ var mainMenuStyle = {
 var MainMenu = React.createClass({
   render: function() {
     var isLinux = /linux/i.test(navigator.userAgent); // @TODO: find a way to use getVersionInfo() here without messy state management
-    
+
     return (
       <div style={mainMenuStyle}>
         <Menu {...this.props}>

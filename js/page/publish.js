@@ -290,7 +290,7 @@ var PublishPage = React.createClass({
                </FormField>
                </span>
             </label>
-          </div> 
+          </div>
           <div className="help">
             <p>How much would you like to charge for this file?</p>
             If you choose to price this content in dollars, the number of credits charged will be adjusted based on the value of LBRY credits at the time of purchase.
@@ -304,8 +304,8 @@ var PublishPage = React.createClass({
           <label htmlFor="title">Title</label><FormField type="text" ref="meta_title" name="title" placeholder="My Show, Episode 1" style={publishFieldStyle} />
           <label htmlFor="author">Author</label><FormField type="text" ref="meta_author" name="author" placeholder="My Company, Inc." style={publishFieldStyle} />
           <label htmlFor="license">License info</label><FormField type="text" ref="meta_license" name="license" defaultValue="Creative Commons Attribution 3.0 United States" style={publishFieldStyle} />
-          <label htmlFor="language">Language</label> <FormField type="select" ref="meta_language" name="language">
-               <option value="en" selected>English</option>
+          <label htmlFor="language">Language</label> <FormField type="select" defaultValue="en" ref="meta_language" name="language">
+               <option value="en">English</option>
                <option value="zh">Chinese</option>
                <option value="fr">French</option>
                <option value="de">German</option>
@@ -319,7 +319,7 @@ var PublishPage = React.createClass({
            <div><label><FormField type="checkbox" ref="meta_nsfw" name="nsfw" placeholder="Description of your content" /> Not Safe For Work</label></div>
         </section>
 
-        
+
 
         <section className="section-block">
           <h4>Additional Content Information (Optional)</h4>

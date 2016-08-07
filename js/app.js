@@ -1,17 +1,15 @@
 var App = React.createClass({
   getInitialState: function() {
     // For now, routes are in format ?page or ?page=args
-    var match, param, val;
+    var match, param, val, viewingPage;
     [match, param, val] = window.location.search.match(/\??([^=]*)(?:=(.*))?/);
 
-    if (['settings', 'help', 'start', 'watch', 'report', 'files', 'claim', 'show', 'wallet', 'publish'].indexOf(param) != -1) {
-      var viewingPage = param;
-    } else {
-      var viewingPage = 'home';
+    if (param && ['settings', 'help', 'start', 'watch', 'report', 'files', 'claim', 'show', 'wallet', 'publish'].indexOf(param) != -1) {
+      viewingPage = param;
     }
 
     return {
-      viewingPage: viewingPage,
+      viewingPage: viewingPage ? viewingPage : 'home',
       pageArgs: val,
     };
   },
@@ -22,7 +20,7 @@ var App = React.createClass({
       }
 
       var message = 'The version of LBRY you\'re using is not up to date.\n\n' +
-                    'Choose "OK" to download the latest version."';
+        'Choose "OK" to download the latest version."';
 
       lbry.getVersionInfo(function(versionInfo) {
         if (versionInfo.os_system == 'Darwin') {
@@ -33,7 +31,7 @@ var App = React.createClass({
           if (maj == 0 && min <= 2 && patch <= 2) {
             // On OS X with version <= 0.2.2, we need to notify user to close manually close LBRY
             message += '\n\nBefore installing the new version, make sure to exit LBRY, if you started the app ' +
-                       'click that LBRY icon in your status bar and choose "Quit."';
+              'click that LBRY icon in your status bar and choose "Quit."';
           }
         } else {
           var updateUrl = 'https://lbry.io/get/lbry.deb';
