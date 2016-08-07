@@ -1,8 +1,30 @@
+var Link = React.createClass({
+  handleClick: function() {
+    if (this.props.onClick) {
+      this.props.onClick();
+    }
+  },
+  render: function() {
+    var href = this.props.href ? this.props.href : 'javascript:;',
+      icon = this.props.icon ? <Icon icon={this.props.icon} />  : '',
+      className = (this.props.button ? 'button-block button-' + this.props.button : 'button-text') +
+        (this.props.hidden ? ' hidden' : '') + (this.props.disabled ? ' disabled' : '') + ' ' + this.props.className;
+
+    return (
+      <a className={className} href={href} style={this.props.style ? this.props.style : {}}
+         title={this.props.title} onClick={this.handleClick}>
+        {this.props.icon ? icon : '' }
+        {this.props.label}
+      </a>
+    );
+  }
+});
+
 var linkContainerStyle = {
   position: 'relative',
 };
 
-var Link = React.createClass({
+var ToolTipLink = React.createClass({
   getInitialState: function() {
     return {
       showTooltip: false,
@@ -46,6 +68,7 @@ var Link = React.createClass({
     );
   }
 });
+
 
 var ReturnLink = React.createClass({
   render: function() {
