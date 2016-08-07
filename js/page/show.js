@@ -141,7 +141,6 @@ var DetailPage = React.createClass({
 
     return (
       <main className="page">
-        <SubPageLogo />
         <FormatsSection name={name} claimInfo={claimInfo} amount={amount} />
         <section>
           <ReturnLink />

@@ -38,7 +38,7 @@ var WatchPage = React.createClass({
   },
   render: function() {
     return (
-      <main className="page full-screen">
+      <main className="full-screen">
       <div className={this.state.readyToPlay ? 'hidden' : ''}>
         <h3>Loading lbry://{this.props.name}</h3>
         {this.state.loadStatusMessage}...

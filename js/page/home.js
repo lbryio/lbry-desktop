@@ -332,94 +332,6 @@ var Discover = React.createClass({
   }
 });
 
-var logoStyle = {
-    padding: '48px 12px',
-    textAlign: 'center',
-    maxHeight: '80px',
-  },
-  imgStyle = { //@TODO: remove this, img should be properly scaled once size is settled
-    height: '80px'
-  };
-
-var Header = React.createClass({
-  render: function() {
-    return (
-      <header>
-        <TopBar />
-        <div style={logoStyle}>
-          <img src="./img/lbry-dark-1600x528.png" style={imgStyle}/>
-        </div>
-      </header>
-    );
-  }
-});
-
-var topBarStyle = {
-  'float': 'right',
-  'position': 'relative',
-  'height': '26px',
-},
-balanceStyle = {
-  'marginRight': '5px',
-  'position': 'relative',
-  'top': '1px',
-};
-
-var mainMenuStyle = {
-  position: 'absolute',
-  top: '26px',
-  right: '0px',
-};
-
-var MainMenu = React.createClass({
-  render: function() {
-    var isLinux = /linux/i.test(navigator.userAgent); // @TODO: find a way to use getVersionInfo() here without messy state management
-
-    return (
-      <div style={mainMenuStyle}>
-        <Menu {...this.props}>
-          <MenuItem href='/?files' label="My Files" icon='icon-cloud-download' />
-          <MenuItem href='/?wallet' label="My Wallet" icon='icon-bank' />
-          <MenuItem href='/?publish' label="Publish" icon='icon-upload' />
-          <MenuItem href='/?settings' label="Settings" icon='icon-gear' />
-          <MenuItem href='/?help' label="Help" icon='icon-question-circle' />
-          {isLinux ? <MenuItem href="/?start" label="Exit LBRY" icon="icon-close" />
-                   : null}
-        </Menu>
-      </div>
-    );
-  }
-});
-
-var TopBar = React.createClass({
-  getInitialState: function() {
-    return {
-      balance: 0,
-    };
-  },
-  componentDidMount: function() {
-    lbry.getBalance(function(balance) {
-      this.setState({
-        balance: balance
-      });
-    }.bind(this));
-  },
-  onClose: function() {
-    window.location.href = "?start";
-  },
-  render: function() {
-    return (
-      <span className='top-bar' style={topBarStyle}>
-        <span style={balanceStyle}>
-          <CreditAmount amount={this.state.balance}/>
-        </span>
-        <Link ref="menuButton" title="LBRY Menu" icon="icon-bars" />
-        <MainMenu toggleButton={this.refs.menuButton} />
-      </span>
-    );
-  }
-});
-
 var HomePage = React.createClass({
   componentDidMount: function() {
     lbry.getStartNotice(function(notice) {
@@ -430,10 +342,7 @@ var HomePage = React.createClass({
   },
   render: function() {
     return (
-      <div className="page">
-        <Header />
-        <Discover />
-      </div>
+      <Discover />
     );
   }
 });

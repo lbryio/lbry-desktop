@@ -261,7 +261,6 @@ var PublishPage = React.createClass({
   render: function() {
     return (
       <main className="page" ref="page">
-        <SubPageLogo />
         <h1>Publish Content</h1>
         <section className="section-block">
           <h4>LBRY Name</h4>

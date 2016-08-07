@@ -101,7 +101,6 @@ var WalletPage = React.createClass({
   render: function() {
     return (
       <main className="page">
-        <SubPageLogo />
         <NewAddressSection />
         <SendToAddressSection />
         <section>

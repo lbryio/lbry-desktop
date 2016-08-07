@@ -21,7 +21,6 @@ var ReportPage = React.createClass({
   render: function() {
     return (
       <main className="page">
-        <SubPageLogo />
         <h1>Report an Issue</h1>
         <section>
         <p>Please describe the problem you experienced and any information you think might be useful to us. Links to screenshots are great!</p>
