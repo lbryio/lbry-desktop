@@ -23,7 +23,6 @@ var Drawer = React.createClass({
     }.bind(this));
   },
   render: function() {
-    var isLinux = /linux/i.test(navigator.userAgent); // @TODO: find a way to use getVersionInfo() here without messy state management
     return (
       <nav id="drawer">
         <div id="drawer-handle">
@@ -36,7 +35,6 @@ var Drawer = React.createClass({
         <DrawerItem href="/?wallet" viewingPage={this.props.viewingPage}  label={ lbry.formatCredits(this.state.balance) } icon="icon-bank" />
         <DrawerItem href='/?settings' viewingPage={this.props.viewingPage}  label="Settings" icon='icon-gear' />
         <DrawerItem href='/?help' viewingPage={this.props.viewingPage}  label="Help" icon='icon-question-circle' />
-        {isLinux ? <DrawerItem href="/?start" viewingPage={this.props.viewingPage} label="Exit LBRY" icon="icon-close" /> : null}
       </nav>
     );
   }

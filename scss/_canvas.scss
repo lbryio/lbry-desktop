@@ -70,14 +70,23 @@ body
 #main-content
 {
   background: $color-canvas;
+  min-height: 100vh;
 }
+
+$header-icon-size: 1.5em;
 
 .open-drawer-link, .close-drawer-link
 {
   display: inline-block;
-  font-size: 1.5em;
+  font-size: $header-icon-size;
   padding: 0 18px 0 6px;
   float: left;
+}
+.close-lbry-link
+{
+  font-size: $header-icon-size;
+  float: right;
+  padding: 0 6px 0 18px;
 }
 
 .page {
