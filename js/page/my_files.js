@@ -151,15 +151,18 @@ var MyFilesPage = React.createClass({
       var content = <span>You haven't downloaded anything from LBRY yet. Go <Link href="/" label="search for your first download" />!</span>;
     } else {
       var content = [],
-          keyIndex = 0;
+          seenUris = {};
+
       for (let fileInfo of this.state.filesInfo) {
         let {completed, written_bytes, total_bytes, lbry_uri, file_name, download_path,
           stopped, metadata} = fileInfo;
 
-        if (!metadata)
+        if (!metadata || seenUris[lbry_uri])
         {
           continue;
         }
+
+        seenUris[lbry_uri] = true;
 
         let {title, thumbnail} = metadata;
 
@@ -175,7 +178,7 @@ var MyFilesPage = React.createClass({
         var ratioLoaded = written_bytes / total_bytes;
         var showWatchButton = (lbry.getMediaType(file_name) == 'video' || lbry.getMediaType(file_name) == 'audio');
 
-        content.push(<MyFilesRow key={lbry_uri + (++keyIndex)} lbryUri={lbry_uri} title={title || ('lbry://' + lbry_uri)} completed={completed} stopped={stopped}
+        content.push(<MyFilesRow key={lbry_uri} lbryUri={lbry_uri} title={title || ('lbry://' + lbry_uri)} completed={completed} stopped={stopped}
                                  ratioLoaded={ratioLoaded} imgUrl={thumbnail} path={download_path}
                                  showWatchButton={showWatchButton} pending={pending} />);
       }
