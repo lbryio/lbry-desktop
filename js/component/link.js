@@ -6,12 +6,14 @@ var Link = React.createClass({
   },
   render: function() {
     var href = this.props.href ? this.props.href : 'javascript:;',
-      icon = this.props.icon ? <Icon icon={this.props.icon} />  : '',
-      className = (this.props.button ? 'button-block button-' + this.props.button : 'button-text') +
-        (this.props.hidden ? ' hidden' : '') + (this.props.disabled ? ' disabled' : '') + ' ' + this.props.className;
+      icon = this.props.icon ? <Icon icon={this.props.icon} fixed={true} />  : '',
+      className = (this.props.className ? this.props.className : '') +
+        (this.props.button ? ' button-block button-' + this.props.button : '') +
+        (this.props.hidden ? ' hidden' : '') +
+        (this.props.disabled ? ' disabled' : '');
 
     return (
-      <a className={className} href={href} style={this.props.style ? this.props.style : {}}
+      <a className={className ? className : 'button-text'} href={href} style={this.props.style ? this.props.style : {}}
          title={this.props.title} onClick={this.handleClick}>
         {this.props.icon ? icon : '' }
         {this.props.label}
@@ -48,13 +50,14 @@ var ToolTipLink = React.createClass({
   render: function() {
     var href = this.props.href ? this.props.href : 'javascript:;',
       icon = this.props.icon ? <Icon icon={this.props.icon} />  : '',
-      className = (this.props.button ? 'button-block button-' + this.props.button : 'button-text') +
-        (this.props.hidden ? ' hidden' : '') + (this.props.disabled ? ' disabled' : '') + ' ' + this.props.className;
-
+      className = this.props.className +
+        (this.props.button ? ' button-block button-' + this.props.button : '') +
+        (this.props.hidden ? ' hidden' : '') +
+        (this.props.disabled ? ' disabled' : '');
 
     return (
       <span style={linkContainerStyle}>
-        <a className={className} href={href} style={this.props.style ? this.props.style : {}}
+        <a className={className ? className : 'button-text'} href={href} style={this.props.style ? this.props.style : {}}
            title={this.props.title} onClick={this.handleClick}>
           {this.props.icon ? icon : '' }
           {this.props.label}

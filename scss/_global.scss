@@ -15,6 +15,8 @@ $mobile-width-threshold: 801px;
 $max-content-width: 1000px;
 $max-text-width: 660px;
 
+$header-height: $spacing-vertical * 1.5;
+
 
 @mixin clearfix()
 {

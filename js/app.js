@@ -18,7 +18,8 @@ var App = React.createClass({
   },
   componentWillMount: function() {
     lbry.checkNewVersionAvailable(function(isAvailable) {
-      if (!isAvailable) {
+
+      if (!isAvailable || sessionStorage.getItem('upgradeSkipped')) {
         return;
       }
 
@@ -40,9 +41,12 @@ var App = React.createClass({
           var updateUrl = 'https://lbry.io/get/lbry.deb';
         }
 
-        if (window.confirm(message)) {
+        if (window.confirm(message))
+        {
           lbry.stop();
           window.location = updateUrl;
+        } else {
+          sessionStorage.setItem('upgradeSkipped', true);
         };
       });
     });

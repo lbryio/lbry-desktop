@@ -25,10 +25,21 @@ body
   min-height: 100vh;
   left: 0;
   top: 0;
-  .button-text
+  .drawer-item
   {
     display: block;
+    padding: $spacing-vertical / 2;
+    font-size: 1.2em;
+    .icon
+    {
+      margin-right: 6px;
+    }
   }
+}
+#drawer-handle
+{
+  padding: $spacing-vertical / 2;
+  max-height: $header-height;
 }
 
 #window.drawer-closed
@@ -39,6 +50,21 @@ body
 {
   #main-content { margin-left: 240px; }
   .open-drawer-link { display: none; }
+}
+
+#header
+{
+  background: $color-primary;
+  color: white;
+  height: $header-height;
+  padding: $spacing-vertical / 2;
+}
+
+.open-drawer-link, .close-drawer-link
+{
+  display: inline-block;
+  font-size: 1.5em;
+  padding: 0 18px 0 6px;
 }
 
 .page {

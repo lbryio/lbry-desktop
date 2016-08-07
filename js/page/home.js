@@ -335,6 +335,7 @@ var Discover = React.createClass({
 
 var HomePage = React.createClass({
   componentDidMount: function() {
+    document.title = "Discover";
     lbry.getStartNotice(function(notice) {
       if (notice) {
         alert(notice);

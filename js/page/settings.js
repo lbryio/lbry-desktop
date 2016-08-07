@@ -58,6 +58,9 @@ var SettingsPage = React.createClass({
       settings: null
     }
   },
+  componentDidMount: function() {
+    document.title = "Settings";
+  },
   componentWillMount: function() {
     lbry.getSettings(function(settings) {
       this.setState({
