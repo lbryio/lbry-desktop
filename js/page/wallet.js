@@ -104,6 +104,10 @@ var WalletPage = React.createClass({
         <NewAddressSection />
         <SendToAddressSection />
         <section>
+          <h4>Claim invite code</h4>
+          <Link href="?claim" label="Claim a LBRY beta invite code"/>
+        </section>
+        <section>
           <ReturnLink />
         </section>
       </main>

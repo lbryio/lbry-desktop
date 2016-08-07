@@ -64,13 +64,16 @@ body
   height: $header-height;
   padding: $spacing-vertical / 2;
   h1 { font-size: 1.8em;   line-height: $header-height; }
-  margin-bottom: $spacing-vertical;
 }
 
 #main-content
 {
   background: $color-canvas;
   min-height: 100vh;
+  main
+  {
+    padding: $spacing-vertical;
+  }
 }
 
 $header-icon-size: 1.5em;
@@ -89,13 +92,23 @@ $header-icon-size: 1.5em;
   padding: 0 6px 0 18px;
 }
 
-.page {
+.card {
   margin-left: auto;
   margin-right: auto;
   max-width: 800px;
   padding: $spacing-vertical;
   background: $color-bg;
+  h3, h4
+  {
+    margin-bottom: $spacing-vertical / 2;
+    margin-top: $spacing-vertical;
+    &:first-child
+    {
+      margin-top: 0;
+    }
+  }
 }
+
 .full-screen
 {
   width: 100%;

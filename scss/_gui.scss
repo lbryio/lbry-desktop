@@ -59,6 +59,10 @@ label {
 p
 {
   margin-bottom: 0.8em;
+  &:last-child
+  {
+    margin-bottom: 0;
+  }
 }
 
 textarea {
