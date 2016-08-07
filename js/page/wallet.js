@@ -105,7 +105,7 @@ var WalletPage = React.createClass({
         <NewAddressSection />
         <SendToAddressSection />
         <section>
-          <Link href="/" label="<< Return" />
+          <ReturnLink />
         </section>
       </main>
     );

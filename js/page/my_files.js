@@ -191,7 +191,7 @@ var MyFilesPage = React.createClass({
           {content}
         </section>
         <section>
-          <Link href="/" label="<< Return" />
+          <ReturnLink />
         </section>
       </main>
     );

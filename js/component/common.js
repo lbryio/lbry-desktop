@@ -55,6 +55,7 @@ var ToolTip = React.createClass({
 var linkContainerStyle = {
   position: 'relative',
 };
+
 var Link = React.createClass({
   getInitialState: function() {
     return {
@@ -97,6 +98,16 @@ var Link = React.createClass({
         )}
       </span>
     );
+  }
+});
+
+var ReturnLink = React.createClass({
+  render: function() {
+    return <div style={ { padding: '24px 0' } }><Link
+      href={this.props.href ? this.props.href : '/'}
+      icon="icon-chevron-left"
+      label={this.props.label ? this.props.label : 'Return'}
+    /></div>;
   }
 });
 
@@ -365,6 +376,6 @@ var subPageLogoStyle = {
 
 var SubPageLogo = React.createClass({
   render: function() {
-    return <img src="img/lbry-dark-1600x528.png" style={subPageLogoStyle} />;
+    return <a href="/"><img src="img/lbry-dark-1600x528.png" style={subPageLogoStyle} /></a>;
   }
 });

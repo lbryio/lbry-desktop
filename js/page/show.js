@@ -144,7 +144,7 @@ var DetailPage = React.createClass({
         <SubPageLogo />
         <FormatsSection name={name} claimInfo={claimInfo} amount={amount} />
         <section>
-          <Link href="/" label="<< Return" />
+          <ReturnLink />
         </section>
       </main>);
   }

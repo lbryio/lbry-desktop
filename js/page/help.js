@@ -26,7 +26,7 @@ var HelpPage = React.createClass({
         <h3>None of this applies to me, or it didn't work.</h3>
         <p>Please <Link href="/?report" label="send us a bug report" />. Thanks!</p>
         <section>
-          <Link href="/" label="<< Return" />
+          <ReturnLink />
         </section>
       </main>
     );

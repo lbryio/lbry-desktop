@@ -119,7 +119,7 @@ var SettingsPage = React.createClass({
         </section>
 
         <section>
-          <Link href="/" label="<< Return"/>
+          <ReturnLink />
         </section>
        </main>
     );
