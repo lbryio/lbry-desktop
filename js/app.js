@@ -59,30 +59,45 @@ var App = React.createClass({
     sessionStorage.setItem('drawerOpen', false);
     this.setState({ drawerOpen: false });
   },
+  getMainContent: function()
+  {
+    switch(this.state.viewingPage)
+    {
+      case 'home':
+        return <HomePage />;
+      case 'settings':
+        return <SettingsPage />;
+      case 'help':
+        return <HelpPage />;
+      case 'watch':
+        return <WatchPage name={this.state.pageArgs} />;
+      case 'report':
+        return <ReportPage />;
+      case 'files':
+        return <MyFilesPage />;
+      case 'start':
+        return <StartPage />;
+      case 'claim':
+        return <ClaimCodePage />;
+      case 'wallet':
+        return <WalletPage />;
+      case 'show':
+        return <DetailPage name={this.state.pageArgs} />;
+      case 'wallet':
+        return <WalletPage />;
+      case 'publish':
+        return <PublishPage />;
+    }
+  },
   render: function() {
-    console.log(this.state);
+    var mainContent = this.getMainContent();
+
     return (
       <div id="window" className={ this.state.drawerOpen ? 'drawer-open' : 'drawer-closed' }>
-        <Drawer onCloseDrawer={this.closeDrawer} />
+        <Drawer onCloseDrawer={this.closeDrawer} viewingPage={this.state.viewingPage} />
         <div id="main-content">
           <Header onOpenDrawer={this.openDrawer} />
-          {(() => {
-            switch(this.state.viewingPage)
-            {
-              case 'home': return <HomePage />;
-              case 'settings': return <SettingsPage />;
-              case 'help': return <HelpPage />;
-              case 'watch': return <WatchPage name={this.state.pageArgs}/>;
-              case 'report': return <ReportPage />;
-              case 'files': return <MyFilesPage />;
-              case 'start': return <StartPage />;
-              case 'claim': return <ClaimCodePage />;
-              case 'wallet': return <WalletPage />;
-              case 'show':  return <DetailPage name={this.state.pageArgs}/>;
-              case 'wallet': return <WalletPage />;
-              case 'publish': return <PublishPage />;
-            }
-          })()}
+          {mainContent}
         </div>
       </div>
     );

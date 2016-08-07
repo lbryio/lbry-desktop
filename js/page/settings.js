@@ -77,7 +77,6 @@ var SettingsPage = React.createClass({
 
     return (
       <main className="page">
-        <h1>Settings</h1>
         <section>
           <h4>Run on startup</h4>
           <label style={settingsCheckBoxOptionStyles}>

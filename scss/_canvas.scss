@@ -35,11 +35,16 @@ body
       margin-right: 6px;
     }
   }
+  .drawer-item-selected
+  {
+    background: $color-canvas;
+  }
 }
 #drawer-handle
 {
   padding: $spacing-vertical / 2;
   max-height: $header-height;
+  text-align: center;
 }
 
 #window.drawer-closed
@@ -58,6 +63,13 @@ body
   color: white;
   height: $header-height;
   padding: $spacing-vertical / 2;
+  h1 { font-size: 1.8em;   line-height: $header-height; }
+  margin-bottom: $spacing-vertical;
+}
+
+#main-content
+{
+  background: $color-canvas;
 }
 
 .open-drawer-link, .close-drawer-link
@@ -65,13 +77,15 @@ body
   display: inline-block;
   font-size: 1.5em;
   padding: 0 18px 0 6px;
+  float: left;
 }
 
 .page {
   margin-left: auto;
   margin-right: auto;
-  width: 800px;
-  padding-bottom: $spacing-vertical*3;
+  max-width: 800px;
+  padding: $spacing-vertical;
+  background: $color-bg;
 }
 .full-screen
 {

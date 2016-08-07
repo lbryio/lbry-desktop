@@ -1,6 +1,7 @@
 var DrawerItem = React.createClass({
   render: function() {
-    return <Link {...this.props} className="drawer-item" />
+    var isSelected = this.props.viewingPage == this.props.href.substr(2);
+    return <Link {...this.props} className={ 'drawer-item ' + (isSelected ? 'drawer-item-selected' : '') } />
   }
 });
 
@@ -26,16 +27,16 @@ var Drawer = React.createClass({
     return (
       <nav id="drawer">
         <div id="drawer-handle">
-          <Link title="Close" onClick={this.props.onCloseDrawer} icon="icon-bars" className="button-text close-drawer-link"/>
+          <Link title="Close" onClick={this.props.onCloseDrawer} icon="icon-bars" className="close-drawer-link"/>
           <a href="/"><img src="./img/lbry-dark-1600x528.png" style={drawerImageStyle}/></a>
         </div>
-        <DrawerItem href='/?home' label="Discover" icon="icon-search"  />
-        <DrawerItem href='/?publish' label="Publish" icon="icon-upload" />
-        <DrawerItem href='/?files' label="My Files" icon='icon-cloud-download' />
-        <DrawerItem href="/?wallet" label={ lbry.formatCredits(this.state.balance) } icon="icon-bank" />
-        <DrawerItem href='/?settings' label="Settings" icon='icon-gear' />
-        <DrawerItem href='/?help' label="Help" icon='icon-question-circle' />
-        {isLinux ? <DrawerItem href="/?start" label="Exit LBRY" icon="icon-close" /> : null}
+        <DrawerItem href='/?home' viewingPage={this.props.viewingPage} label="Discover" icon="icon-search"  />
+        <DrawerItem href='/?publish' viewingPage={this.props.viewingPage} label="Publish" icon="icon-upload" />
+        <DrawerItem href='/?files' viewingPage={this.props.viewingPage}  label="My Files" icon='icon-cloud-download' />
+        <DrawerItem href="/?wallet" viewingPage={this.props.viewingPage}  label={ lbry.formatCredits(this.state.balance) } icon="icon-bank" />
+        <DrawerItem href='/?settings' viewingPage={this.props.viewingPage}  label="Settings" icon='icon-gear' />
+        <DrawerItem href='/?help' viewingPage={this.props.viewingPage}  label="Help" icon='icon-question-circle' />
+        {isLinux ? <DrawerItem href="/?start" viewingPage={this.props.viewingPage} label="Exit LBRY" icon="icon-close" /> : null}
       </nav>
     );
   }

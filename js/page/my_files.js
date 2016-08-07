@@ -131,6 +131,9 @@ var MyFilesPage = React.createClass({
       filesInfo: null,
     };
   },
+  componentDidMount: function() {
+    document.title = "My Files";
+  },
   componentWillMount: function() {
     this.updateFilesInfo();
   },
@@ -185,7 +188,6 @@ var MyFilesPage = React.createClass({
     }
     return (
       <main className="page">
-        <h1>My Files</h1>
         <section>
           {content}
         </section>

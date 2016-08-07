@@ -241,6 +241,9 @@ var PublishPage = React.createClass({
       isFee: feeEnabled
     });
   },
+  componentDidMount: function() {
+    document.title = "Publish";
+  },
   componentDidUpdate: function() {
     if (this.state.fileInfo && !this.state.tempFileReady) {
       // A file was chosen but the daemon hasn't finished processing it yet, i.e. it's loading, so
@@ -261,7 +264,6 @@ var PublishPage = React.createClass({
   render: function() {
     return (
       <main className="page" ref="page">
-        <h1>Publish Content</h1>
         <section className="section-block">
           <h4>LBRY Name</h4>
           lbry://<FormField type="text" ref="name" onChange={this.handleNameChange} />

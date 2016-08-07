@@ -26,7 +26,7 @@ section
   margin-bottom: $spacing-vertical;
 }
 
-h1 {
+main h1 {
   font-size: 2.0em;
   margin-bottom: $spacing-vertical;
   margin-top: $spacing-vertical*2;
@@ -40,10 +40,7 @@ h2 {
 h3 { font-size: 1.4em; }
 
 h4 {
-  font-weight: 600;
   font-size: 1.2em;
-  margin: 0;
-  margin-bottom: $spacing-vertical/2;
 }
 
 h5 { font-size: 1.1em; }
@@ -57,11 +54,6 @@ sub { top: 0.4em; }
 label {
   cursor: default;
   display: block;
-}
-
-header
-{
-  line-height: $spacing-vertical;
 }
 
 p
