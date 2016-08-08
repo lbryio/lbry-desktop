@@ -1,11 +1,4 @@
-var searchInputStyle = {
-    width: '400px',
-    display: 'block',
-    marginBottom: '48px',
-    marginLeft: 'auto',
-    marginRight: 'auto'
-  },
-  fetchResultsStyle = {
+var fetchResultsStyle = {
     color: '#888',
     textAlign: 'center',
     fontSize: '1.2em'
@@ -56,9 +49,13 @@ var SearchResults = React.createClass({
 });
 
 var
+  searchRowStyle = {
+    height: '160px',
+    overflowY: 'hidden'
+  },
   searchRowImgStyle = {
     maxWidth: '100%',
-    maxHeight: '250px',
+    maxHeight: '16  0px',
     display: 'block',
     marginLeft: 'auto',
     marginRight: 'auto',
@@ -69,19 +66,11 @@ var
   },
   searchRowCostStyle = {
     float: 'right',
-    marginLeft: '20px',
-    marginTop: '5px',
-    display: 'inline-block'
-  },
-  searchRowNameStyle = {
-    fontSize: '0.9em',
-    color: '#666',
-    marginBottom: '24px',
-    clear: 'both'
   },
   searchRowDescriptionStyle = {
     color : '#444',
     marginBottom: '24px',
+    marginTop: '12px',
     fontSize: '0.9em'
   };
 
@@ -94,8 +83,9 @@ var SearchResultRow = React.createClass({
   },
   render: function() {
     return (
+
       <section className="card">
-        <div className="row-fluid">
+        <div className="row-fluid" style={searchRowStyle}>
           <div className="span3">
             <img src={this.props.imgUrl} alt={'Photo for ' + (this.props.title || this.props.name)} style={searchRowImgStyle} />
           </div>
@@ -103,14 +93,13 @@ var SearchResultRow = React.createClass({
             <span style={searchRowCostStyle}>
               <CreditAmount amount={this.props.cost_est} isEstimate={true}/>
             </span>
-            <h2 style={searchRowTitleStyle}><a href={'/?show=' + this.props.name}>{this.props.title}</a></h2>
-            <div style={searchRowNameStyle}>lbry://{this.props.name}</div>
-            <p style={searchRowDescriptionStyle}><TruncatedText>{this.props.description}</TruncatedText></p>
+            <div className="meta">lbry://{this.props.name}</div>
+            <h3 style={searchRowTitleStyle}><a href={'/?show=' + this.props.name}>{this.props.title}</a></h3>
             <div>
               <WatchLink streamName={this.props.name} button="primary" />
-              { ' ' }
-              <DownloadLink streamName={this.props.name} button="alt" />
+              <DownloadLink streamName={this.props.name} button="text" />
             </div>
+            <p style={searchRowDescriptionStyle}>{this.props.description}</p>
           </div>
         </div>
       </section>
@@ -118,34 +107,13 @@ var SearchResultRow = React.createClass({
   }
 });
 
-var featuredContentItemStyle = {
-  height: '120px',
-  overflowY: 'hidden'
-}, featuredContentItemImgStyle = {
-  maxWidth: '100%',
-  maxHeight: '120px',
-  display: 'block',
-  marginLeft: 'auto',
-  marginRight: 'auto'
-}, featuredContentHeaderStyle = {
-  fontWeight: 'bold',
-  marginBottom: '5px'
-}, featuredContentSubheaderStyle = {
-  marginBottom: '10px',
-  fontSize: '0.9em'
-}, featuredContentItemDescriptionStyle = {
-  color: '#444',
-  fontSize: '0.9em',
-}, featuredContentItemCostStyle = {
-  float: 'right'
-};
+
 
 var FeaturedContentItem = React.createClass({
-  _maxDescriptionLength: 250,
-
   propTypes: {
     name: React.PropTypes.string,
   },
+
   getInitialState: function() {
     return {
       metadata: null,
@@ -153,6 +121,7 @@ var FeaturedContentItem = React.createClass({
       amount: 0.0,
     };
   },
+
   componentWillMount: function() {
     lbry.resolveName(this.props.name, (metadata) => {
       this.setState({
@@ -166,45 +135,14 @@ var FeaturedContentItem = React.createClass({
       });
     });
   },
+
   render: function() {
     if (this.state.metadata == null) {
       // Still waiting for metadata
       return null;
     }
-
-    var metadata = this.state.metadata;
-
-    if ('narrow' in this.props) {
-      // Workaround -- narrow thumbnails look a bit funky without some extra left margin.
-      // Find a way to do this in CSS.
-
-      var thumbStyle = Object.assign({}, featuredContentItemImgStyle, {
-        position: 'relative',
-        maxHeight: '102px',
-        left: '13px',
-      });
-    } else {
-      var thumbStyle = featuredContentItemImgStyle;
-    }
-
-    return (
-      <section className="card">
-        <div className="row-fluid" style={featuredContentItemStyle}>
-          <div className="span4">
-            <img src={metadata.thumbnail} alt={'Photo for ' + this.state.title} style={thumbStyle} />
-          </div>
-          <div className="span8">
-            <h4 style={featuredContentHeaderStyle}><a href={'/?show=' + this.props.name}>{this.state.title}</a></h4>
-            <div style={featuredContentSubheaderStyle}>
-              <div style={featuredContentItemCostStyle}><CreditAmount amount={this.state.amount} isEstimate={true}/></div>
-              <WatchLink streamName={this.props.name} />
-              &nbsp;&nbsp;&nbsp;
-              <DownloadLink streamName={this.props.name} />
-            </div>
-            <p style={featuredContentItemDescriptionStyle}><TruncatedText>{metadata.description}</TruncatedText></p>
-          </div>
-        </div>
-      </section>);
+    return <SearchResultRow name={this.props.name} title={this.state.title} imgUrl={this.state.metadata.thumbnail}
+                     description={this.state.metadata.description} cost_est={this.state.amount} />;
   }
 });
 
@@ -244,7 +182,7 @@ var DiscoverPage = React.createClass({
   componentDidUpdate: function() {
     if (this.props.query)
     {
-      lbry.search(this.props.query, this.searchCallback.bind(this, this.props.query));
+      lbry.search(this.props.query, this.searchCallback);
     }
   },
 
@@ -255,18 +193,20 @@ var DiscoverPage = React.createClass({
   getInitialState: function() {
     return {
       results: [],
+      query: this.props.query,
       searching: this.props.query && this.props.query.length > 0
     };
   },
 
-  searchCallback: function(originalQuery, results) {
+  searchCallback: function(results) {
     console.log('search callback');
     console.log(this.state);
+    console.log(this.props);
     if (this.state.searching) //could have canceled while results were pending, in which case nothing to do
     {
       this.setState({
         results: results,
-        searching: this.props.query != originalQuery, //multiple searches can be out, we're only done if we receive one we actually care about
+        searching: false //multiple searches can be out, we're only done if we receive one we actually care about
       });
     }
   },

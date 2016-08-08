@@ -16,7 +16,7 @@ $drawer-width: 240px;
 #drawer
 {
   width: $drawer-width;
-  position: absolute;
+  position: fixed;
   min-height: 100vh;
   left: 0;
   top: 0;
@@ -118,6 +118,13 @@ $drawer-width: 240px;
     margin-bottom: $spacing-vertical / 2;
     margin-top: $spacing-vertical;
     &:first-child
+    {
+      margin-top: 0;
+    }
+  }
+  .meta
+  {
+    + h2, + h3, + h4
     {
       margin-top: 0;
     }

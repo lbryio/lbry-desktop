@@ -110,7 +110,6 @@ input[type="text"], input[type="search"], textarea
   display: inline-block;
   height: $spacing-vertical * 1.5;
   line-height: $spacing-vertical * 1.5;
-  padding: 0 30px;
   text-decoration: none;
   border: 0 none;
   text-align: center;
@@ -118,7 +117,7 @@ input[type="text"], input[type="search"], textarea
   text-transform: uppercase;
   + .button-block
   {
-    margin-left: 20px;
+    margin-left: 12px;
   }
   .icon
   {
@@ -139,11 +138,17 @@ input[type="text"], input[type="search"], textarea
   color: white;
   background-color: $color-primary;
   box-shadow: $default-box-shadow;
+  padding: 0 12px;
 }
 .button-alt
 {
   background-color: rgba(0,0,0,.15);
   box-shadow: $default-box-shadow;
+  padding: 0 12px;
+}
+.button-cancel
+{
+  padding: 0 12px;
 }
 .button-text
 {
@@ -183,6 +188,12 @@ input[type="text"], input[type="search"], textarea
 .help {
   font-size: .85em;
   color: $color-help;
+}
+
+.meta
+{
+  font-size: 0.9em;
+  color: $color-meta-light;
 }
 
 .form-row
