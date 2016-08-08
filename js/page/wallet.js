@@ -82,19 +82,24 @@ var SendToAddressSection = React.createClass({
     return (
       <section className="card">
         <h3>Send Credits</h3>
-        <section>
+        <div className="form-row">
           <label htmlFor="amount">Amount <input id="amount" type="text" size="10" onChange={this.setAmount}></input></label>
+        </div>
+        <div className="form-row">
           <label htmlFor="address">Recipient address <input id="address" type="text" size="60" onChange={this.setAddress}></input></label>
+        </div>
+        <div className="form-row">
           <Link button="primary" label="Send" onClick={this.sendToAddress} disabled={!(parseFloat(this.state.amount) > 0.0) || this.state.address == ""} />
-        </section>
+        </div>
         {
           this.state.results ?
-          <section>
+          <div className="form-row">
             <h4>Results</h4>
             {this.state.results}
-          </section>
+          </div>
           : ''
         }
+      </section>
     );
   }
 });

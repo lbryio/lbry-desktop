@@ -263,20 +263,22 @@ var PublishPage = React.createClass({
   },
   render: function() {
     return (
-      <main className="page" ref="page">
-        <section className="section-block">
+      <main ref="page">
+        <section className="card">
           <h4>LBRY Name</h4>
-          lbry://<FormField type="text" ref="name" onChange={this.handleNameChange} />
-          {
-            (!this.state.name ? '' :
-              (! this.state.nameResolved ? <em> This name is available</em>
-                                         : (this.state.nameIsMine ? <em> You already control this name. You can use this page to update your claim.</em>
-                                                                  : <em> This name is currently claimed for <strong>{lbry.formatCredits(this.state.claimValue)}</strong> credits.</em>)))
-          }
-          <div className="help">What LBRY name would you like to claim for this file?</div>
+          <div className="form-row">
+            lbry://<FormField type="text" ref="name" onChange={this.handleNameChange} />
+            {
+              (!this.state.name ? '' :
+                (! this.state.nameResolved ? <em> This name is available</em>
+                                           : (this.state.nameIsMine ? <em> You already control this name. You can use this page to update your claim.</em>
+                                                                    : <em> This name is currently claimed for <strong>{lbry.formatCredits(this.state.claimValue)}</strong> credits.</em>)))
+            }
+            <div className="help">What LBRY name would you like to claim for this file?</div>
+          </div>
         </section>
 
-        <section className="section-block">
+        <section className="card">
           <h4>Choose File</h4>
           <form>
             <FormField name="file" ref="file" type="file" onChange={this.handleFileChange} />
@@ -290,19 +292,21 @@ var PublishPage = React.createClass({
           { this.state.nameIsMine ? <div className="help">If you don't choose a file, the file from your existing claim will be used.</div> : null }
         </section>
 
-        <section className="section-block">
+        <section className="card">
           <h4>Bid Amount</h4>
-          Credits <FormField ref="bid" style={publishNumberStyle} type="text" onChange={this.handleBidChange} value={this.state.bid} placeholder={this.state.nameResolved ? lbry.formatCredits(this.state.claimValue + 10) : 100} />
-          <div className="help">How much would you like to bid for this name?
-          { !this.state.nameResolved ? <span> Since this name is not currently resolved, you may bid as low as you want, but higher bids help prevent others from claiming your name.</span>
-                                     : (this.state.nameIsMine ? <span> Your current bid is <strong>{lbry.formatCredits(this.state.claimValue)}</strong> credits.</span>
-                                                              : <span> You must bid over <strong>{lbry.formatCredits(this.state.claimValue)}</strong> credits to claim this name.</span>) }
+          <div className="form-row">
+            Credits <FormField ref="bid" style={publishNumberStyle} type="text" onChange={this.handleBidChange} value={this.state.bid} placeholder={this.state.nameResolved ? lbry.formatCredits(this.state.claimValue + 10) : 100} />
+            <div className="help">How much would you like to bid for this name?
+            { !this.state.nameResolved ? <span> Since this name is not currently resolved, you may bid as low as you want, but higher bids help prevent others from claiming your name.</span>
+                                       : (this.state.nameIsMine ? <span> Your current bid is <strong>{lbry.formatCredits(this.state.claimValue)}</strong> credits.</span>
+                                                                : <span> You must bid over <strong>{lbry.formatCredits(this.state.claimValue)}</strong> credits to claim this name.</span>) }
+            </div>
           </div>
         </section>
 
-        <section className="section-block">
+        <section className="card">
           <h4>Fee</h4>
-          <div className="spacer-bottom--sm">
+          <div className="form-row">
             <label>
              <FormField type="radio" onChange={ () => { this.handleFeePrefChange(false) } } checked={!this.state.isFee} /> No fee
             </label>
@@ -315,20 +319,27 @@ var PublishPage = React.createClass({
                </FormField>
                </span>
             </label>
-          </div>
-          <div className="help">
-            <p>How much would you like to charge for this file?</p>
-            If you choose to price this content in dollars, the number of credits charged will be adjusted based on the value of LBRY credits at the time of purchase.
+            <div className="help">
+              <p>How much would you like to charge for this file?</p>
+              If you choose to price this content in dollars, the number of credits charged will be adjusted based on the value of LBRY credits at the time of purchase.
+            </div>
           </div>
         </section>
 
 
-        <section className="section-block">
+        <section className="card">
           <h4>Your Content</h4>
 
-          <label htmlFor="title">Title</label><FormField type="text" ref="meta_title" name="title" placeholder="My Show, Episode 1" style={publishFieldStyle} />
-          <label htmlFor="author">Author</label><FormField type="text" ref="meta_author" name="author" placeholder="My Company, Inc." style={publishFieldStyle} />
+          <div className="form-row">
+            <label htmlFor="title">Title</label><FormField type="text" ref="meta_title" name="title" placeholder="My Show, Episode 1" style={publishFieldStyle} />
+          </div>
+          <div className="form-row">
+            <label htmlFor="author">Author</label><FormField type="text" ref="meta_author" name="author" placeholder="My Company, Inc." style={publishFieldStyle} />
+          </div>
+          <div className="form-row">
           <label htmlFor="license">License info</label><FormField type="text" ref="meta_license" name="license" defaultValue="Creative Commons Attribution 3.0 United States" style={publishFieldStyle} />
+          </div>
+          <div className="form-row">
           <label htmlFor="language">Language</label> <FormField type="select" defaultValue="en" ref="meta_language" name="language">
                <option value="en">English</option>
                <option value="zh">Chinese</option>
@@ -338,24 +349,30 @@ var PublishPage = React.createClass({
                <option value="ru">Russian</option>
                <option value="es">Spanish</option>
             </FormField>
-
-          <label htmlFor="description">Description</label> <FormField type="textarea" ref="meta_description" name="description" placeholder="Description of your content" style={publishFieldStyle} />
-
-           <div><label><FormField type="checkbox" ref="meta_nsfw" name="nsfw" placeholder="Description of your content" /> Not Safe For Work</label></div>
+          </div>
+          <div className="form-row">
+            <label htmlFor="description">Description</label> <FormField type="textarea" ref="meta_description" name="description" placeholder="Description of your content" style={publishFieldStyle} />
+          </div>
+          <div className="form-row">
+            <label><FormField type="checkbox" ref="meta_nsfw" name="nsfw" placeholder="Description of your content" /> Not Safe For Work</label>
+          </div>
         </section>
 
 
 
-        <section className="section-block">
+        <section className="card">
           <h4>Additional Content Information (Optional)</h4>
-          <label htmlFor="meta_thumbnail">Thumbnail URL</label> <FormField type="text" ref="meta_thumbnail" name="thumbnail" placeholder="http://mycompany.com/images/ep_1.jpg" style={publishFieldStyle} />
-          <label htmlFor="meta_license_url">License URL</label> <FormField type="text" ref="meta_license_url" name="license_url" defaultValue="https://creativecommons.org/licenses/by/3.0/us/legalcode" style={publishFieldStyle} />
+          <div className="form-row">
+            <label htmlFor="meta_thumbnail">Thumbnail URL</label> <FormField type="text" ref="meta_thumbnail" name="thumbnail" placeholder="http://mycompany.com/images/ep_1.jpg" style={publishFieldStyle} />
+          </div>
+          <div className="form-row">
+            <label htmlFor="meta_license_url">License URL</label> <FormField type="text" ref="meta_license_url" name="license_url" defaultValue="https://creativecommons.org/licenses/by/3.0/us/legalcode" style={publishFieldStyle} />
+          </div>
         </section>
 
-        <div className="footer-buttons">
-          <Link button="alt" href="/" label="Cancel"/>
-          { ' ' }
+        <div className="card-series-submit">
           <Link button="primary" label={!this.state.submitting ? 'Publish' : 'Publishing...'} onClick={this.handleSubmit} disabled={this.state.submitting} />
+          <Link button="cancel" href="/" label="Cancel"/>
          </div>
        </main>
     );

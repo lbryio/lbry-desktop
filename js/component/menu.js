@@ -1,8 +1,6 @@
 // Generic menu styles
 var menuStyle = {
-  border: '1px solid #aaa',
-  padding: '4px',
-  whiteSpace: 'nowrap',
+  whiteSpace: 'nowrap'
 };
 
 var Menu = React.createClass({
