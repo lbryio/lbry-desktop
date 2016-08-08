@@ -104,7 +104,7 @@ var PublishPage = React.createClass({
       name: '',
       bid: '',
       feeAmount: '',
-      feeCurrency: '',
+      feeCurrency: 'USD',
       nameResolved: false,
       claimValue: 0.0,
       fileInfo: null,
@@ -285,7 +285,7 @@ var PublishPage = React.createClass({
              <FormField type="radio" onChange={ () => { this.handleFeePrefChange(true) } } checked={this.state.isFee} /> { !this.state.isFee ? 'Choose fee...' : 'Fee ' }
              <span className={!this.state.isFee ? 'hidden' : ''}>
                <FormField type="text" onChange={this.handleFeeAmountChange} style={publishNumberStyle} /> <FormField type="select" onChange={this.handleFeeCurrencyChange}>
-                 <option value="USD">dollars</option>
+                 <option value="USD">US Dollars</option>
                  <option value="LBC">LBRY credits</option>
                </FormField>
                </span>
