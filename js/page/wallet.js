@@ -15,8 +15,8 @@ var NewAddressSection = React.createClass({
     return (
       <section className="card">
         <h3>Generate New Address</h3>
-        <section><input type="text" size="60" value={this.state.address}></input></section>
-        <Link button="primary" label="Generate" onClick={this.generateAddress} />
+        <div className="form-row"><input type="text" size="60" value={this.state.address}></input></div>
+        <div className="form-row form-row-submit"><Link button="primary" label="Generate" onClick={this.generateAddress} /></div>
       </section>
     );
   }
@@ -83,12 +83,14 @@ var SendToAddressSection = React.createClass({
       <section className="card">
         <h3>Send Credits</h3>
         <div className="form-row">
-          <label htmlFor="amount">Amount <input id="amount" type="text" size="10" onChange={this.setAmount}></input></label>
+          <label htmlFor="amount">Amount</label>
+          <input id="amount" type="text" size="10" onChange={this.setAmount}></input>
         </div>
         <div className="form-row">
-          <label htmlFor="address">Recipient address <input id="address" type="text" size="60" onChange={this.setAddress}></input></label>
+          <label htmlFor="address">Recipient address</label>
+          <input id="address" type="text" size="60" onChange={this.setAddress}></input>
         </div>
-        <div className="form-row">
+        <div className="form-row form-row-submit">
           <Link button="primary" label="Send" onClick={this.sendToAddress} disabled={!(parseFloat(this.state.amount) > 0.0) || this.state.address == ""} />
         </div>
         {

@@ -195,4 +195,8 @@ input[type="text"], input[type="search"], textarea
   {
     margin-top: $spacing-vertical / 2;
   }
+  + .form-row-submit
+  {
+    margin-top: $spacing-vertical;
+  }
 }
