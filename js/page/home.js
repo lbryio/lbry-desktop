@@ -104,7 +104,7 @@ var SearchResultRow = React.createClass({
           </span>
           <h2 style={searchRowTitleStyle}><a href={'/?show=' + this.props.name}>{this.props.title}</a></h2>
           <div style={searchRowNameStyle}>lbry://{this.props.name}</div>
-          <p style={searchRowDescriptionStyle}>{this.props.description}</p>
+          <p style={searchRowDescriptionStyle}><TruncatedText>{this.props.description}</TruncatedText></p>
           <div>
             <WatchLink streamName={this.props.name} button="primary" />
             { ' ' }
