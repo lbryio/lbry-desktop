@@ -67,7 +67,7 @@ $drawer-width: 240px;
 #window.drawer-open
 {
   #main-content { margin-left: $drawer-width; }
-  .open-drawer-link { display: none; }
+  .open-drawer-link { visibility: hidden; }
 }
 
 #header
@@ -81,7 +81,7 @@ $drawer-width: 240px;
   left: 0;
   width: 100%;
   box-sizing: border-box;
-  h1 { font-size: 1.8em; line-height: $header-height - $spacing-vertical; }
+  h1 { font-size: 1.8em; line-height: $header-height - $spacing-vertical; display: inline-block; }
   &.header-scrolled
   {
     box-shadow: $default-box-shadow;

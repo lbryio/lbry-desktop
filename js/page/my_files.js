@@ -126,6 +126,7 @@ var MyFilesRow = React.createClass({
 });
 
 var MyFilesPage = React.createClass({
+  fileTimeout: null,
   getInitialState: function() {
     return {
       filesInfo: null,
@@ -137,12 +138,18 @@ var MyFilesPage = React.createClass({
   componentWillMount: function() {
     this.updateFilesInfo();
   },
+  componentWillUnmount: function() {
+    if (this.fileTimeout)
+    {
+      clearTimeout(this.fileTimeout);
+    }
+  },
   updateFilesInfo: function() {
     lbry.getFilesInfo((filesInfo) => {
       this.setState({
         filesInfo: (filesInfo ? filesInfo : []),
       });
-      setTimeout(() => { this.updateFilesInfo() }, 1000);
+      this.fileTimeout = setTimeout(() => { this.updateFilesInfo() }, 1000);
     });
   },
   render: function() {

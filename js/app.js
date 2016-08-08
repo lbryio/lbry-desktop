@@ -6,15 +6,22 @@ var App = React.createClass({
 
     [match, param, val] = window.location.search.match(/\??([^=]*)(?:=(.*))?/);
 
-    if (param && ['settings', 'help', 'start', 'watch', 'report', 'files', 'claim', 'show', 'wallet', 'publish'].indexOf(param) != -1) {
+    if (param && ['settings', 'discover', 'help', 'start', 'watch', 'report', 'files', 'claim', 'show', 'wallet', 'publish'].indexOf(param) != -1) {
       viewingPage = param;
     }
-  
+
     return {
-      viewingPage: viewingPage ? viewingPage : 'home',
+      viewingPage: viewingPage ? viewingPage : 'discover',
       drawerOpen: drawerOpenRaw !== null ? JSON.parse(drawerOpenRaw) : true,
       pageArgs: val,
     };
+  },
+  componentDidMount: function() {
+    lbry.getStartNotice(function(notice) {
+      if (notice) {
+        alert(notice);
+      }
+    });
   },
   componentWillMount: function() {
     lbry.checkNewVersionAvailable(function(isAvailable) {
@@ -59,12 +66,15 @@ var App = React.createClass({
     sessionStorage.setItem('drawerOpen', false);
     this.setState({ drawerOpen: false });
   },
+  onSearchStart: function() {
+    this.setState({ viewingPage: 'discover' });
+  },
   getMainContent: function()
   {
     switch(this.state.viewingPage)
     {
-      case 'home':
-        return <HomePage />;
+      case 'discover':
+        return <DiscoverPage />;
       case 'settings':
         return <SettingsPage />;
       case 'help':
@@ -83,8 +93,6 @@ var App = React.createClass({
         return <WalletPage />;
       case 'show':
         return <DetailPage name={this.state.pageArgs} />;
-      case 'wallet':
-        return <WalletPage />;
       case 'publish':
         return <PublishPage />;
     }
@@ -96,7 +104,7 @@ var App = React.createClass({
       <div id="window" className={ this.state.drawerOpen ? 'drawer-open' : 'drawer-closed' }>
         <Drawer onCloseDrawer={this.closeDrawer} viewingPage={this.state.viewingPage} />
         <div id="main-content">
-          <Header onOpenDrawer={this.openDrawer} />
+          <Header onOpenDrawer={this.openDrawer} onSearchStart={this.onSearchStart} />
           {mainContent}
         </div>
       </div>

@@ -265,12 +265,12 @@ var FeaturedContent = React.createClass({
   }
 });
 
-var discoverMainStyle = {
-  color: '#333'
-};
-
-var Discover = React.createClass({
+var DiscoverPage = React.createClass({
   userTypingTimer: null,
+
+  componentDidMount: function() {
+    document.title = "Discover";
+  },
 
   getInitialState: function() {
     return {
@@ -321,30 +321,12 @@ var Discover = React.createClass({
 
   render: function() {
     return (
-      <main style={discoverMainStyle}>
-        <section><input type="search" style={searchInputStyle} onChange={this.onQueryChange}
-                        placeholder="Find movies, music, games, and more"/></section>
+      <main>
         { this.state.searching ? <SearchActive /> : null }
         { !this.state.searching && this.state.query && this.state.results.length ? <SearchResults results={this.state.results} /> : null }
         { !this.state.searching && this.state.query && !this.state.results.length ? <SearchNoResults query={this.state.query} /> : null }
         { !this.state.query && !this.state.searching ? <FeaturedContent /> : null }
       </main>
-    );
-  }
-});
-
-var HomePage = React.createClass({
-  componentDidMount: function() {
-    document.title = "Discover";
-    lbry.getStartNotice(function(notice) {
-      if (notice) {
-        alert(notice);
-      }
-    });
-  },
-  render: function() {
-    return (
-      <Discover />
     );
   }
 });

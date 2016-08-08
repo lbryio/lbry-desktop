@@ -14,10 +14,10 @@ lbry.call = function (method, params, callback, errorCallback, connectFailedCall
 
     if (response.error) {
       if (errorCallback) {
-        errorCallback(response.error);        
+        errorCallback(response.error);
       }
     } else if (callback) {
-      callback(response.result);       
+      callback(response.result);
     }
   });
 
@@ -33,7 +33,7 @@ lbry.call = function (method, params, callback, errorCallback, connectFailedCall
     'method': method,
     'params': [params, ],
     'id': 0
-  }));    
+  }));
 }
 
 //core
@@ -223,7 +223,7 @@ lbry.loadJs = function(src, type, onload)
   var lbryScriptTag = document.getElementById('lbry'),
       newScriptTag = document.createElement('script'),
       type = type || 'text/javascript';
-      
+
   newScriptTag.src = src;
   newScriptTag.type = type;
   if (onload)
@@ -234,8 +234,8 @@ lbry.loadJs = function(src, type, onload)
 }
 
 lbry.imagePath = function(file)
-{ 
-  return lbry.rootPath + '/img/' + file; 
+{
+  return lbry.rootPath + '/img/' + file;
 }
 
 lbry.getMediaType = function(filename) {
