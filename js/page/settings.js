@@ -78,13 +78,13 @@ var SettingsPage = React.createClass({
     return (
       <main>
         <section className="card">
-          <h3>Run on startup</h3>
+          <h3>Run on Startup</h3>
           <label style={settingsCheckBoxOptionStyles}>
             <input type="checkbox" onChange={this.onRunOnStartChange} defaultChecked={this.state.settings.run_on_startup} /> Run LBRY automatically when I start my computer
           </label>
         </section>
         <section className="card">
-          <h3>Download directory</h3>
+          <h3>Download Directory</h3>
           <div className="help">Where would you like the files you download from LBRY to be saved?</div>
           <input style={downloadDirectoryFieldStyles} type="text" name="download_directory" defaultValue={this.state.settings.download_directory} onChange={this.onDownloadDirChange}/>
         </section>
@@ -108,7 +108,7 @@ var SettingsPage = React.createClass({
           </label>
         </section>
         <section className="card">
-          <h3>Share diagnostic data</h3>
+          <h3>Share Diagnostic Data</h3>
           <label style={settingsCheckBoxOptionStyles}>
             <input type="checkbox" onChange={this.onShareDataChange} defaultChecked={this.state.settings.upload_log} /> Help make LBRY better by contributing diagnostic data about my usage
           </label>

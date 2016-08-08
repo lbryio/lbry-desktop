@@ -16,7 +16,8 @@ var Link = React.createClass({
       <a className={className ? className : 'button-text'} href={href} style={this.props.style ? this.props.style : {}}
          title={this.props.title} onClick={this.handleClick}>
         {this.props.icon ? icon : '' }
-        {this.props.label}
+        <span className="link-label">{this.props.label}</span>
+        {this.props.badge ? <span className="badge">{this.props.badge}</span> : '' }
       </a>
     );
   }
@@ -69,17 +70,6 @@ var ToolTipLink = React.createClass({
         )}
       </span>
     );
-  }
-});
-
-
-var ReturnLink = React.createClass({
-  render: function() {
-    return <div style={ { padding: '24px 0' } }><Link
-      href={this.props.href ? this.props.href : '/'}
-      icon="icon-chevron-left"
-      label={this.props.label ? this.props.label : 'Return'}
-    /></div>;
   }
 });
 

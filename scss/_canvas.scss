@@ -9,41 +9,54 @@ body
 {
   font-family: 'Source Sans Pro', sans-serif;
   line-height: 1.3333;
-  min-height: 100%;
-  position: relative;
 }
 
-#window
-{
-  position: relative;
-}
+$drawer-width: 240px;
 
 #drawer
 {
-  width: 240px;
+  width: $drawer-width;
   position: absolute;
   min-height: 100vh;
   left: 0;
   top: 0;
+  background: $color-bg;
+  z-index: 1;
   .drawer-item
   {
     display: block;
     padding: $spacing-vertical / 2;
     font-size: 1.2em;
+    height: $spacing-vertical * 1.5;
     .icon
     {
       margin-right: 6px;
+    }
+    .link-label
+    {
+      line-height: $spacing-vertical * 1.5;
+    }
+    .badge
+    {
+      float: right;
+      background: $color-money;
+      display: inline-block;
+      padding: 2px;
+      color: white;
+      margin-top: $spacing-vertical * 0.25 - 2;
+      border-radius: 2px;
     }
   }
   .drawer-item-selected
   {
     background: $color-canvas;
+    color: $color-primary;
   }
 }
 #drawer-handle
 {
   padding: $spacing-vertical / 2;
-  max-height: $header-height;
+  max-height: $header-height - $spacing-vertical;
   text-align: center;
 }
 
@@ -53,7 +66,7 @@ body
 }
 #window.drawer-open
 {
-  #main-content { margin-left: 240px; }
+  #main-content { margin-left: $drawer-width; }
   .open-drawer-link { display: none; }
 }
 
@@ -62,16 +75,26 @@ body
   background: $color-primary;
   color: white;
   height: $header-height;
-  padding: $spacing-vertical / 2;
-  h1 { font-size: 1.8em;   line-height: $header-height; }
+  padding: $spacing-vertical / 2 $spacing-vertical / 2 $spacing-vertical / 2 $drawer-width + $spacing-vertical / 2;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  box-sizing: border-box;
+  h1 { font-size: 1.8em; line-height: $header-height - $spacing-vertical; }
+  &.header-scrolled
+  {
+    box-shadow: $default-box-shadow;
+  }
 }
 
 #main-content
 {
   background: $color-canvas;
-  min-height: 100vh;
+  min-height: calc(100vh - 60px); //should be -$header-height, but I'm dumb I guess? It wouldn't work
   main
   {
+    margin-top: $header-height;
     padding: $spacing-vertical;
   }
 }
@@ -98,6 +121,12 @@ $header-icon-size: 1.5em;
   max-width: 800px;
   padding: $spacing-vertical;
   background: $color-bg;
+  box-shadow: $default-box-shadow;
+  border-radius: 2px;
+  h2
+  {
+    margin-bottom: $spacing-vertical;
+  }
   h3, h4
   {
     margin-bottom: $spacing-vertical / 2;

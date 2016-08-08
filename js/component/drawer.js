@@ -32,7 +32,7 @@ var Drawer = React.createClass({
         <DrawerItem href='/?home' viewingPage={this.props.viewingPage} label="Discover" icon="icon-search"  />
         <DrawerItem href='/?publish' viewingPage={this.props.viewingPage} label="Publish" icon="icon-upload" />
         <DrawerItem href='/?files' viewingPage={this.props.viewingPage}  label="My Files" icon='icon-cloud-download' />
-        <DrawerItem href="/?wallet" viewingPage={this.props.viewingPage}  label={ lbry.formatCredits(this.state.balance) } icon="icon-bank" />
+        <DrawerItem href="/?wallet" viewingPage={this.props.viewingPage}  label="My Wallet" badge={lbry.formatCredits(this.state.balance) } icon="icon-bank" />
         <DrawerItem href='/?settings' viewingPage={this.props.viewingPage}  label="Settings" icon='icon-gear' />
         <DrawerItem href='/?help' viewingPage={this.props.viewingPage}  label="Help" icon='icon-question-circle' />
       </nav>

@@ -1,6 +1,4 @@
-var claimCodePageStyle = {
-  textAlign: 'center',
-}, claimCodeContentStyle = {
+var claimCodeContentStyle = {
   display: 'inline-block',
   textAlign: 'left',
   width: '600px',
@@ -72,24 +70,26 @@ var ClaimCodePage = React.createClass({
   },
   render: function() {
     return (
-      <main className="page" style={claimCodePageStyle}>
-      <h1>Claim your beta invitation code</h1>
-      <section style={claimCodeContentStyle}>
-        <p>Thanks for beta testing LBRY! Enter your invitation code and email address below to receive your initial
-           LBRY credits.</p>
-        <p>You will be added to our mailing list (if you're not already on it) and will be eligible for future rewards for beta testers.</p>
-      </section>
-      <section>
-        <form onSubmit={this.handleSubmit}>
-          <section><label style={claimCodeLabelStyle} htmlFor="code">Invitation code</label><input name="code" ref="code" /></section>
-          <section><label style={claimCodeLabelStyle} htmlFor="email">Email</label><input name="email" ref="email" /></section>
-        </form>
-      </section>
-      <section>
-        <Link button="primary" label={this.state.submitting ? "Submitting..." : "Submit"}
-              disabled={this.state.submitting} onClick={this.handleSubmit} />
-        <Link button="alt" label="Skip" disabled={this.state.submitting} onClick={this.handleSkip} />
-      </section>
+      <main>
+        <div className="card">
+          <h2>Claim your beta invitation code</h2>
+          <section style={claimCodeContentStyle}>
+            <p>Thanks for beta testing LBRY! Enter your invitation code and email address below to receive your initial
+               LBRY credits.</p>
+            <p>You will be added to our mailing list (if you're not already on it) and will be eligible for future rewards for beta testers.</p>
+          </section>
+          <section>
+            <form onSubmit={this.handleSubmit}>
+              <section><label style={claimCodeLabelStyle} htmlFor="code">Invitation code</label><input name="code" ref="code" /></section>
+              <section><label style={claimCodeLabelStyle} htmlFor="email">Email</label><input name="email" ref="email" /></section>
+            </form>
+          </section>
+          <section>
+            <Link button="primary" label={this.state.submitting ? "Submitting..." : "Submit"}
+                  disabled={this.state.submitting} onClick={this.handleSubmit} />
+            <Link button="alt" label="Skip" disabled={this.state.submitting} onClick={this.handleSkip} />
+          </section>
+        </div>
       </main>
     );
   }

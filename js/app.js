@@ -9,7 +9,7 @@ var App = React.createClass({
     if (param && ['settings', 'help', 'start', 'watch', 'report', 'files', 'claim', 'show', 'wallet', 'publish'].indexOf(param) != -1) {
       viewingPage = param;
     }
-
+  
     return {
       viewingPage: viewingPage ? viewingPage : 'home',
       drawerOpen: drawerOpenRaw !== null ? JSON.parse(drawerOpenRaw) : true,

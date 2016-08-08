@@ -61,6 +61,10 @@ var creditAmountStyle = {
   color: '#aaa',
 };
 
+var CurrencySymbol = React.createClass({
+  render: function() { return <span>LBC</span>; }
+});
+
 var CreditAmount = React.createClass({
   propTypes: {
     amount: React.PropTypes.number,

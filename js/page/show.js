@@ -142,9 +142,6 @@ var DetailPage = React.createClass({
     return (
       <main className="page">
         <FormatsSection name={name} claimInfo={claimInfo} amount={amount} />
-        <section>
-          <ReturnLink />
-        </section>
       </main>);
   }
 });

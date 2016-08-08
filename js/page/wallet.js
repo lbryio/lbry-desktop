@@ -13,8 +13,8 @@ var NewAddressSection = React.createClass({
   },
   render: function() {
     return (
-      <section>
-        <h1>Generate New Address</h1>
+      <section className="card">
+        <h3>Generate New Address</h3>
         <section><input type="text" size="60" value={this.state.address}></input></section>
         <Link button="primary" label="Generate" onClick={this.generateAddress} />
       </section>
@@ -80,35 +80,57 @@ var SendToAddressSection = React.createClass({
   },
   render: function() {
     return (
-      <section>
-        <h1>Send Credits</h1>
+      <section className="card">
+        <h3>Send Credits</h3>
         <section>
-          <section><label for="balance">Balance {this.state.balance}</label></section>
-          <label for="amount">Amount <input id="amount" type="text" size="10" onChange={this.setAmount}></input></label>
-          <label for="address">Recipient address <input id="address" type="text" size="60" onChange={this.setAddress}></input></label>
+          <label htmlFor="amount">Amount <input id="amount" type="text" size="10" onChange={this.setAmount}></input></label>
+          <label htmlFor="address">Recipient address <input id="address" type="text" size="60" onChange={this.setAddress}></input></label>
           <Link button="primary" label="Send" onClick={this.sendToAddress} disabled={!(parseFloat(this.state.amount) > 0.0) || this.state.address == ""} />
         </section>
-        <section className={!this.state.results ? 'hidden' : ''}>
-          <h4>Results:</h4>
-          {this.state.results}
-        </section>
-      </section>
+        {
+          this.state.results ?
+          <section>
+            <h4>Results</h4>
+            {this.state.results}
+          </section>
+          : ''
+        }
     );
   }
 });
 
 var WalletPage = React.createClass({
+  componentDidMount: function() {
+    document.title = "My Wallet";
+  },
+  /*
+  Below should be refactored so that balance is shared all of wallet page. Or even broader?
+  What is the proper React pattern for sharing a global state like balance?
+   */
+  getInitialState: function() {
+    return {
+      balance: "Checking balance...",
+    }
+  },
+  componentWillMount: function() {
+    lbry.getBalance((results) => {
+      this.setState({
+        balance: results,
+      });
+    });
+  },
   render: function() {
     return (
       <main className="page">
-        <NewAddressSection />
-        <SendToAddressSection />
-        <section>
-          <h4>Claim invite code</h4>
-          <Link href="?claim" label="Claim a LBRY beta invite code"/>
+        <section className="card">
+          <h3>Balance</h3>
+          {this.state.balance} <CurrencySymbol />
         </section>
-        <section>
-          <ReturnLink />
+        <SendToAddressSection />
+        <NewAddressSection />
+        <section className="card">
+          <h3>Claim Invite Code</h3>
+          <Link href="?claim" label="Claim a LBRY beta invite code" button="alt" />
         </section>
       </main>
     );
