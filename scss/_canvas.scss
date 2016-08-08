@@ -68,6 +68,7 @@ $drawer-width: 240px;
 {
   #main-content { margin-left: $drawer-width; }
   .open-drawer-link { visibility: hidden; }
+  #header { padding-left: $drawer-width + $spacing-vertical / 2; }
 }
 
 #header
@@ -75,16 +76,27 @@ $drawer-width: 240px;
   background: $color-primary;
   color: white;
   height: $header-height;
-  padding: $spacing-vertical / 2 $spacing-vertical / 2 $spacing-vertical / 2 $drawer-width + $spacing-vertical / 2;
+  padding: $spacing-vertical / 2;
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   box-sizing: border-box;
-  h1 { font-size: 1.8em; line-height: $header-height - $spacing-vertical; display: inline-block; }
+  h1 { font-size: 1.8em; line-height: $header-height - $spacing-vertical; display: inline-block; float: left; }
   &.header-scrolled
   {
     box-shadow: $default-box-shadow;
+  }
+}
+.header-search
+{
+  margin-left: 60px;
+  text-align: center;
+  input[type="search"] {
+    background: rgba(255, 255, 255, 0.3);
+    color: white;
+    width: 400px;
+    @include placeholder-color(#e8e8e8);
   }
 }
 
@@ -97,6 +109,19 @@ $drawer-width: 240px;
     margin-top: $header-height;
     padding: $spacing-vertical;
   }
+  h2
+  {
+    margin-bottom: $spacing-vertical;
+  }
+  h3, h4
+  {
+    margin-bottom: $spacing-vertical / 2;
+    margin-top: $spacing-vertical;
+    &:first-child
+    {
+      margin-top: 0;
+    }
+  }
 }
 
 $header-icon-size: 1.5em;
@@ -105,7 +130,7 @@ $header-icon-size: 1.5em;
 {
   display: inline-block;
   font-size: $header-icon-size;
-  padding: 0 18px 0 6px;
+  padding: 2px 6px 0 6px;
   float: left;
 }
 .close-lbry-link
@@ -123,19 +148,7 @@ $header-icon-size: 1.5em;
   background: $color-bg;
   box-shadow: $default-box-shadow;
   border-radius: 2px;
-  h2
-  {
-    margin-bottom: $spacing-vertical;
-  }
-  h3, h4
-  {
-    margin-bottom: $spacing-vertical / 2;
-    margin-top: $spacing-vertical;
-    &:first-child
-    {
-      margin-top: 0;
-    }
-  }
+
 }
 
 .full-screen

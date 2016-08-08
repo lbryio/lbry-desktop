@@ -66,15 +66,18 @@ var App = React.createClass({
     sessionStorage.setItem('drawerOpen', false);
     this.setState({ drawerOpen: false });
   },
-  onSearchStart: function() {
-    this.setState({ viewingPage: 'discover' });
+  onSearch: function(term) {
+    this.setState({
+      viewingPage: 'discover',
+      pageArgs: term
+    });
   },
   getMainContent: function()
   {
     switch(this.state.viewingPage)
     {
       case 'discover':
-        return <DiscoverPage />;
+        return <DiscoverPage query={this.state.pageArgs} />;
       case 'settings':
         return <SettingsPage />;
       case 'help':
@@ -104,7 +107,7 @@ var App = React.createClass({
       <div id="window" className={ this.state.drawerOpen ? 'drawer-open' : 'drawer-closed' }>
         <Drawer onCloseDrawer={this.closeDrawer} viewingPage={this.state.viewingPage} />
         <div id="main-content">
-          <Header onOpenDrawer={this.openDrawer} onSearchStart={this.onSearchStart} />
+          <Header onOpenDrawer={this.openDrawer} onSearch={this.onSearch} />
           {mainContent}
         </div>
       </div>

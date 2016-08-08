@@ -13,20 +13,22 @@ var Header = React.createClass({
       { subtree: true, characterData: true, childList: true }
     );
   },
-  componentDidMount() {
+  componentDidMount: function() {
     document.addEventListener('scroll', this.handleScroll);
   },
-  componentWillUnmount() {
+  componentWillUnmount: function() {
     document.removeEventListener('scroll', this.handleScroll);
+    if (this.userTypingTimer)
+    {
+      clearTimeout(this.userTypingTimer);
+    }
   },
-  handleScroll() {
+  handleScroll: function() {
     this.setState({
       isScrolled: event.srcElement.body.scrollTop > 0
     });
   },
   onQueryChange: function(event) {
-
-    this.props.onSearchStart();
 
     if (this.userTypingTimer)
     {
@@ -34,20 +36,21 @@ var Header = React.createClass({
     }
 
     //@TODO: Switch to React.js timing
-    this.userTypingTimer = setTimeout(this.search, 800); // 800ms delay, tweak for faster/slower
+    var searchTerm = event.target.value;
+    this.userTypingTimer = setTimeout(() => {
+      this.props.onSearch(searchTerm);
+    }, 800); // 800ms delay, tweak for faster/slower
 
-    // this.setState({
-    //   searching: event.target.value.length > 0,
-    //   query: event.target.value
-    // });
   },
   render: function() {
     return (
       <header id="header" className={this.state.isScrolled ? 'header-scrolled' : 'header-unscrolled'}>
         <Link onClick={this.props.onOpenDrawer} icon="icon-bars" className="open-drawer-link" />
         <h1>{ this.state.title }</h1>
-        <input type="search" onChange={this.onQueryChange}
+        <div className="header-search">
+          <input type="search" onChange={this.onQueryChange}
                placeholder="Find movies, music, games, and more"/>
+        </div>
       </header>
     );
   }
