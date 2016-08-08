@@ -104,13 +104,15 @@ var App = React.createClass({
     var mainContent = this.getMainContent();
 
     return (
-      <div id="window" className={ this.state.drawerOpen ? 'drawer-open' : 'drawer-closed' }>
-        <Drawer onCloseDrawer={this.closeDrawer} viewingPage={this.state.viewingPage} />
-        <div id="main-content">
-          <Header onOpenDrawer={this.openDrawer} onSearch={this.onSearch} />
-          {mainContent}
+      this.state.viewingPage == 'watch' ?
+        mainContent :
+        <div id="window" className={ this.state.drawerOpen ? 'drawer-open' : 'drawer-closed' }>
+          <Drawer onCloseDrawer={this.closeDrawer} viewingPage={this.state.viewingPage} />
+          <div id="main-content">
+            <Header onOpenDrawer={this.openDrawer} onSearch={this.onSearch} />
+            {mainContent}
+          </div>
         </div>
-      </div>
     );
   }
 });
