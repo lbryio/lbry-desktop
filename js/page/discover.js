@@ -50,16 +50,15 @@ var SearchResults = React.createClass({
 
 var
   searchRowStyle = {
-    height: '160px',
+    height: (24 * 7) + 'px',
     overflowY: 'hidden'
   },
   searchRowImgStyle = {
     maxWidth: '100%',
-    maxHeight: '16  0px',
+    maxHeight: (24 * 7) + 'px',
     display: 'block',
     marginLeft: 'auto',
-    marginRight: 'auto',
-    float: 'left'
+    marginRight: 'auto'
   },
   searchRowTitleStyle = {
     fontWeight: 'bold'
@@ -69,7 +68,6 @@ var
   },
   searchRowDescriptionStyle = {
     color : '#444',
-    marginBottom: '24px',
     marginTop: '12px',
     fontSize: '0.9em'
   };
