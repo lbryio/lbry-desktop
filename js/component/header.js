@@ -7,7 +7,7 @@ var Header = React.createClass({
   },
   componentWillMount: function() {
     new MutationObserver(function(mutations) {
-      this.setState({ title: mutations[0].target.innerHTML });
+      this.setState({ title: mutations[0].target.textContent });
     }.bind(this)).observe(
       document.querySelector('title'),
       { subtree: true, characterData: true, childList: true }
