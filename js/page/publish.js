@@ -71,7 +71,9 @@ var PublishPage = React.createClass({
         metadata: metadata,
       };
 
-      if (this.refs.file.getValue() !== '') {
+      if (this.refs.file.getValue() === '') {
+        publishArgs.metadata.sources = this.state.claimMetadata.sources;
+      } else {
         publishArgs.file_path = this._tempFilePath;
       }
 
@@ -114,6 +116,7 @@ var PublishPage = React.createClass({
       nameResolved: false,
       nameIsMine: false,
       claimValue: 0.0,
+      claimMetadata: null,
       fileInfo: null,
       uploadProgress: 0.0,
       uploaded: false,
@@ -153,8 +156,9 @@ var PublishPage = React.createClass({
           var newState = {
             name: name,
             nameResolved: true,
-            nameIsMine: claimInfo.is_mine,
+            nameIsMine: true, //claimInfo.is_mine,
             claimValue: parseFloat(claimInfo.amount),
+            claimMetadata: claimInfo.value,
           };
 
           if (claimInfo.is_mine) {
