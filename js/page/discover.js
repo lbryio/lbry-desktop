@@ -37,10 +37,12 @@ var SearchResults = React.createClass({
   render: function() {
     var rows = [];
     this.props.results.forEach(function(result) {
-      rows.push(
-        <SearchResultRow key={result.name} name={result.name} title={result.title} imgUrl={result.thumbnail}
-                         description={result.description} cost_est={result.cost_est} />
-      );
+      if (!result.nsfw) {
+        rows.push(
+          <SearchResultRow key={result.name} name={result.name} title={result.title} imgUrl={result.thumbnail}
+                           description={result.description} cost_est={result.cost_est} />
+        );
+      }
     });
     return (
       <div>{rows}</div>
