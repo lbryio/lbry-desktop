@@ -66,7 +66,7 @@ var PublishPage = React.createClass({
         metadata: metadata,
       });
       lbry.publish({
-        name: this.state.name,
+        name: this.refs.name.getValue(),
         file_path: this._tempFilePath,
         bid: parseFloat(this.state.bid),
         metadata: metadata,
