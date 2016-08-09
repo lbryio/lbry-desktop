@@ -178,8 +178,13 @@ var DiscoverPage = React.createClass({
   userTypingTimer: null,
 
   componentDidUpdate: function() {
-    if (this.props.query)
+    if (this.props.query != this.state.query)
     {
+      this.setState({
+        searching: true,
+        query: this.props.query,
+      });
+
       lbry.search(this.props.query, this.searchCallback);
     }
   },
@@ -197,6 +202,7 @@ var DiscoverPage = React.createClass({
   },
 
   searchCallback: function(results) {
+    console.log('results:', results)
     console.log('search callback');
     console.log(this.state);
     console.log(this.props);
