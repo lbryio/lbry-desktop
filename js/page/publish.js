@@ -10,15 +10,20 @@ var publishNumberStyle = {
 };
 
 var PublishPage = React.createClass({
-  _requiredFields: ['name', 'file', 'bid', 'meta_title', 'meta_author', 'meta_license', 'meta_description'],
+  _requiredFields: ['name', 'bid', 'meta_title', 'meta_author', 'meta_license', 'meta_description'],
 
   handleSubmit: function() {
     this.setState({
       submitting: true,
     });
 
+    var checkFields = this._requiredFields.slice();
+    if (!this.state.nameIsMine) {
+      checkFields.push('file');
+    }
+
     var missingFieldFound = false;
-    for (let fieldName of this._requiredFields) {
+    for (let fieldName of checkFields) {
       var field = this.refs[fieldName];
       if (field.getValue() === '') {
         field.warnRequired();
@@ -60,17 +65,20 @@ var PublishPage = React.createClass({
     }
 
     var doPublish = () => {
-      console.log({name: this.state.name,
-        file_path: this._tempFilePath,
+      var publishArgs = {
+        name: this.state.name,
         bid: parseFloat(this.state.bid),
         metadata: metadata,
-      });
-      lbry.publish({
-        name: this.refs.name.getValue(),
-        file_path: this._tempFilePath,
-        bid: parseFloat(this.state.bid),
-        metadata: metadata,
-      }, (message) => {
+      };
+
+      if (this.refs.file.getValue() === '') {
+        publishArgs.metadata.sources = this.state.claimMetadata.sources;
+      } else {
+        publishArgs.file_path = this._tempFilePath;
+      }
+
+      console.log(publishArgs);
+      lbry.publish(publishArgs, (message) => {
         this.handlePublishSuccess();
         this.setState({
           submitting: false,
@@ -106,7 +114,9 @@ var PublishPage = React.createClass({
       feeAmount: '',
       feeCurrency: 'USD',
       nameResolved: false,
+      nameIsMine: false,
       claimValue: 0.0,
+      claimMetadata: null,
       fileInfo: null,
       uploadProgress: 0.0,
       uploaded: false,
@@ -143,11 +153,22 @@ var PublishPage = React.createClass({
         });
       } else {
         lbry.getClaimInfo(name, (claimInfo) => {
-          this.setState({
+          var newState = {
             name: name,
             nameResolved: true,
+            nameIsMine: true, //claimInfo.is_mine,
             claimValue: parseFloat(claimInfo.amount),
-          });
+            claimMetadata: claimInfo.value,
+          };
+
+          if (claimInfo.is_mine) {
+            newState.bid = claimInfo.amount;
+          } else if (this.state.nameIsMine && !claimInfo.name_is_mine) {
+            // Just changed away from a name we control, so clear pre-fill
+            newState.bid = '';
+          }
+
+          this.setState(newState);
         });
       }
     });
@@ -247,8 +268,9 @@ var PublishPage = React.createClass({
           lbry://<FormField type="text" ref="name" onChange={this.handleNameChange} />
           {
             (!this.state.name ? '' :
-              (this.state.nameResolved ? <em> This name is currently claimed for <strong>{lbry.formatCredits(this.state.claimValue)}</strong> credits</em>
-                                       : <em> This name is available</em>))
+              (! this.state.nameResolved ? <em> This name is available</em>
+                                         : (this.state.nameIsMine ? <em> You already control this name. You can use this page to update your claim.</em>
+                                                                  : <em> This name is currently claimed for <strong>{lbry.formatCredits(this.state.claimValue)}</strong> credits.</em>)))
           }
           <div className="help">What LBRY name would you like to claim for this file?</div>
         </section>
@@ -264,6 +286,7 @@ var PublishPage = React.createClass({
                                              </div>
                                            : <div>File ready for publishing!</div>) }
           </form>
+          { this.state.nameIsMine ? <div className="help">If you don't choose a file, the file from your existing claim will be used.</div> : null }
         </section>
 
         <section className="section-block">
@@ -271,7 +294,8 @@ var PublishPage = React.createClass({
           Credits <FormField ref="bid" style={publishNumberStyle} type="text" onChange={this.handleBidChange} value={this.state.bid} placeholder={this.state.nameResolved ? lbry.formatCredits(this.state.claimValue + 10) : 100} />
           <div className="help">How much would you like to bid for this name?
           { !this.state.nameResolved ? <span> Since this name is not currently resolved, you may bid as low as you want, but higher bids help prevent others from claiming your name.</span>
-                                     : <span> You must bid over <strong>{lbry.formatCredits(this.state.claimValue)}</strong> credits to claim this name.</span> }
+                                     : (this.state.nameIsMine ? <span> Your current bid is <strong>{lbry.formatCredits(this.state.claimValue)}</strong> credits.</span>
+                                                              : <span> You must bid over <strong>{lbry.formatCredits(this.state.claimValue)}</strong> credits to claim this name.</span>) }
           </div>
         </section>
 
