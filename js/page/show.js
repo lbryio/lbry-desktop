@@ -1,30 +1,10 @@
-var formatItemStyle = {
-  fontSize: '0.95em',
-  marginTop: '10px',
-  maxHeight: '220px'
-}, formatItemImgStyle = {
+var formatItemImgStyle = {
   maxWidth: '100%',
   maxHeight: '100%',
   display: 'block',
   marginLeft: 'auto',
   marginRight: 'auto',
   marginTop: '5px',
-}, formatHeaderStyle = {
-  fontWeight: 'bold',
-  marginBottom: '5px'
-}, formatSubheaderStyle = {
-  marginBottom: '10px',
-  fontSize: '0.9em'
-}, formatItemDescriptionStyle = {
-  color: '#444',
-  marginBottom: '5px',
-  fontSize: '1.2em',
-}, formatItemMetadataStyle = {
-  color: '#444',
-  marginBottom: '5px',
-  fontSize: '0.9em',
-}, formatItemCostStyle = {
-  float: 'right'
 };
 
 var FormatItem = React.createClass({
@@ -34,7 +14,6 @@ var FormatItem = React.createClass({
     name: React.PropTypes.string,
   },
   render: function() {
-    var name = this.props.name;
 
     var claimInfo = this.props.claimInfo;
     var thumbnail = claimInfo.thumbnail;
@@ -48,25 +27,33 @@ var FormatItem = React.createClass({
     var amount = this.props.amount || 0.0;
 
     return (
-      <div className="row-fluid" style={formatItemStyle}>
+      <div className="row-fluid">
         <div className="span4">
           <img src={thumbnail} alt={'Photo for ' + title} style={formatItemImgStyle} />
         </div>
         <div className="span8">
-          <h4 style={formatItemMetadataStyle}><b>Address:</b> {name}</h4>
-          <h4 style={formatItemMetadataStyle}><b>Content-Type:</b> {fileContentType}</h4>
-          <div style={formatSubheaderStyle}>
-            <div style={formatItemCostStyle}><CreditAmount amount={amount} isEstimate={true}/></div>
-            <WatchLink streamName={name} />
-            &nbsp;&nbsp;&nbsp;
-            <DownloadLink streamName={name} />
-          </div>
-          <p style={formatItemDescriptionStyle}>{description}</p>
-          <div>
-            <span style={formatItemMetadataStyle}><b>Author:</b> {author}</span><br />
-            <span style={formatItemMetadataStyle}><b>Language:</b> {language}</span><br />
-            <span style={formatItemMetadataStyle}><b>License:</b> {license}</span><br />
-          </div>
+          <p>{description}</p>
+          <table className="table-standard">
+            <tbody>
+              <tr>
+                <td>Content-Type</td><td>{fileContentType}</td>
+              </tr>
+              <tr>
+                <td>Cost</td><td><CreditAmount amount={amount} isEstimate={true}/></td>
+              </tr>
+              <tr>
+                <td>Author</td><td>{author}</td>
+              </tr>
+              <tr>
+                <td>Language</td><td>{language}</td>
+              </tr>
+              <tr>
+                <td>License</td><td>{license}</td>
+              </tr>
+            </tbody>
+          </table>
+          <WatchLink streamName={this.props.name} button="primary" />
+          <DownloadLink streamName={this.props.name} button="alt" />
         </div>
       </div>
       );
@@ -88,17 +75,18 @@ var FormatsSection = React.createClass({
     {
       return (
         <div>
-          <h1 style={formatHeaderStyle}>Sorry, no results found for "{name}".</h1>
+          <h2>Sorry, no results found for "{name}".</h2>
         </div>);
     }
 
     return (
       <div>
-        <h1 style={formatHeaderStyle}>{title}</h1>
+        <div className="meta">lbry://{name}</div>
+        <h2>{title}</h2>
       {/* In future, anticipate multiple formats, just a guess at what it could look like
       // var formats = this.props.claimInfo.formats
       // return (<tbody>{formats.map(function(format,i){ */}
-          <FormatItem name={name} claimInfo={format} amount={this.props.amount} />
+          <FormatItem claimInfo={format} amount={this.props.amount} />
       {/*  })}</tbody>); */}
       </div>);
   }
@@ -116,6 +104,8 @@ var DetailPage = React.createClass({
     };
   },
   componentWillMount: function() {
+    document.title = 'lbry://' + this.props.name;
+
     lbry.getClaimInfo(this.props.name, (claimInfo) => {
       this.setState({
         claimInfo: claimInfo.value,
@@ -140,11 +130,9 @@ var DetailPage = React.createClass({
     var amount = this.state.amount;
 
     return (
-      <main className="page">
-        <SubPageLogo />
-        <FormatsSection name={name} claimInfo={claimInfo} amount={amount} />
-        <section>
-          <Link href="/" label="<< Return" />
+      <main>
+        <section className="card">
+          <FormatsSection name={name} claimInfo={claimInfo} amount={amount} />
         </section>
       </main>);
   }

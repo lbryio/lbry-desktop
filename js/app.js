@@ -1,21 +1,32 @@
 var App = React.createClass({
   getInitialState: function() {
     // For now, routes are in format ?page or ?page=args
-    var match, param, val, viewingPage;
+    var match, param, val, viewingPage,
+        drawerOpenRaw = sessionStorage.getItem('drawerOpen');
+
     [match, param, val] = window.location.search.match(/\??([^=]*)(?:=(.*))?/);
 
-    if (param && ['settings', 'help', 'start', 'watch', 'report', 'files', 'claim', 'show', 'wallet', 'publish'].indexOf(param) != -1) {
+    if (param && ['settings', 'discover', 'help', 'start', 'watch', 'report', 'files', 'claim', 'show', 'wallet', 'publish'].indexOf(param) != -1) {
       viewingPage = param;
     }
 
     return {
-      viewingPage: viewingPage ? viewingPage : 'home',
+      viewingPage: viewingPage ? viewingPage : 'discover',
+      drawerOpen: drawerOpenRaw !== null ? JSON.parse(drawerOpenRaw) : true,
       pageArgs: val,
     };
   },
+  componentDidMount: function() {
+    lbry.getStartNotice(function(notice) {
+      if (notice) {
+        alert(notice);
+      }
+    });
+  },
   componentWillMount: function() {
     lbry.checkNewVersionAvailable(function(isAvailable) {
-      if (!isAvailable) {
+
+      if (!isAvailable || sessionStorage.getItem('upgradeSkipped')) {
         return;
       }
 
@@ -37,38 +48,71 @@ var App = React.createClass({
           var updateUrl = 'https://lbry.io/get/lbry.deb';
         }
 
-        if (window.confirm(message)) {
+        if (window.confirm(message))
+        {
           lbry.stop();
           window.location = updateUrl;
+        } else {
+          sessionStorage.setItem('upgradeSkipped', true);
         };
       });
     });
   },
-  render: function() {
-    if (this.state.viewingPage == 'home') {
-      return <HomePage />;
-    } else if (this.state.viewingPage == 'settings') {
-      return <SettingsPage />;
-    } else if (this.state.viewingPage == 'help') {
-      return <HelpPage />;
-    } else if (this.state.viewingPage == 'watch') {
-      return <WatchPage name={this.state.pageArgs}/>;
-    } else if (this.state.viewingPage == 'report') {
-      return <ReportPage />;
-    } else if (this.state.viewingPage == 'files') {
-      return <MyFilesPage />;
-    } else if (this.state.viewingPage == 'start') {
-      return <StartPage />;
-    } else if (this.state.viewingPage == 'claim') {
-      return <ClaimCodePage />;
-    } else if (this.state.viewingPage == 'wallet') {
-      return <WalletPage />;
-    } else if (this.state.viewingPage == 'show') {
-      return <DetailPage name={this.state.pageArgs}/>;
-    } else if (this.state.viewingPage == 'wallet') {
-      return <WalletPage />;
-    } else if (this.state.viewingPage == 'publish') {
-      return <PublishPage />;
+  openDrawer: function() {
+    sessionStorage.setItem('drawerOpen', true);
+    this.setState({ drawerOpen: true });
+  },
+  closeDrawer: function() {
+    sessionStorage.setItem('drawerOpen', false);
+    this.setState({ drawerOpen: false });
+  },
+  onSearch: function(term) {
+    this.setState({
+      viewingPage: 'discover',
+      pageArgs: term
+    });
+  },
+  getMainContent: function()
+  {
+    switch(this.state.viewingPage)
+    {
+      case 'discover':
+        return <DiscoverPage query={this.state.pageArgs} />;
+      case 'settings':
+        return <SettingsPage />;
+      case 'help':
+        return <HelpPage />;
+      case 'watch':
+        return <WatchPage name={this.state.pageArgs} />;
+      case 'report':
+        return <ReportPage />;
+      case 'files':
+        return <MyFilesPage />;
+      case 'start':
+        return <StartPage />;
+      case 'claim':
+        return <ClaimCodePage />;
+      case 'wallet':
+        return <WalletPage />;
+      case 'show':
+        return <DetailPage name={this.state.pageArgs} />;
+      case 'publish':
+        return <PublishPage />;
     }
+  },
+  render: function() {
+    var mainContent = this.getMainContent();
+
+    return (
+      this.state.viewingPage == 'watch' ?
+        mainContent :
+        <div id="window" className={ this.state.drawerOpen ? 'drawer-open' : 'drawer-closed' }>
+          <Drawer onCloseDrawer={this.closeDrawer} viewingPage={this.state.viewingPage} />
+          <div id="main-content">
+            <Header onOpenDrawer={this.openDrawer} onSearch={this.onSearch} />
+            {mainContent}
+          </div>
+        </div>
+    );
   }
 });

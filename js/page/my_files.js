@@ -24,9 +24,11 @@ var MyFilesRowMoreMenu = React.createClass({
     return (
       <div style={moreMenuStyle}>
         <Menu {...this.props}>
-          <MenuItem onClick={this.onRevealClicked} label="Reveal file" /> {/* @TODO: Switch to OS specific wording */}
-          <MenuItem onClick={this.onRemoveClicked} label="Remove from LBRY" />
-          <MenuItem onClick={this.onDeleteClicked} label="Remove and delete file" />
+          <section className="card">
+            <MenuItem onClick={this.onRevealClicked} label="Reveal file" /> {/* @TODO: Switch to OS specific wording */}
+            <MenuItem onClick={this.onRemoveClicked} label="Remove from LBRY" />
+            <MenuItem onClick={this.onDeleteClicked} label="Remove and delete file" />
+          </section>
         </Menu>
       </div>
     );
@@ -92,54 +94,66 @@ var MyFilesRow = React.createClass({
     }
 
     return (
-      <div className="row-fluid">
-        <div className="span3">
-          {this.props.imgUrl ? <img src={this.props.imgUrl} alt={'Photo for ' + this.props.title} style={artStyle} /> : null}
-        </div>
-        <div className="span6">
-          <h2>{this.props.pending ? this.props.title : <a href={'/?show=' + this.props.lbryUri}>{this.props.title}</a>}</h2>
-          {this.props.pending ? <em>This file is pending confirmation</em>
-            : (
-             <div>
-               <div className={this.props.completed ? 'hidden' : ''} style={curProgressBarStyle}></div>
-               { ' ' }
-               {this.props.completed ? 'Download complete' : (parseInt(this.props.ratioLoaded * 100) + '%')}
-               <div>{ pauseLink }</div>
-               <div>{ watchButton }</div>
+      <section className="card">
+        <div className="row-fluid">
+          <div className="span3">
+            {this.props.imgUrl ? <img src={this.props.imgUrl} alt={'Photo for ' + this.props.title} style={artStyle} /> : null}
+          </div>
+          <div className="span8">
+            <h3>{this.props.pending ? this.props.title : <a href={'/?show=' + this.props.lbryUri}>{this.props.title}</a>}</h3>
+            {this.props.pending ? <em>This file is pending confirmation</em>
+              : (
+               <div>
+                 <div className={this.props.completed ? 'hidden' : ''} style={curProgressBarStyle}></div>
+                 { ' ' }
+                 {this.props.completed ? 'Download complete' : (parseInt(this.props.ratioLoaded * 100) + '%')}
+                 <div>{ pauseLink }</div>
+                 <div>{ watchButton }</div>
+               </div>
+             )
+            }
+          </div>
+          <div className="span1" style={moreButtonColumnStyle}>
+            {this.props.pending ? null :
+             <div style={moreButtonContainerStyle}>
+               <Link style={moreButtonStyle} ref="moreButton" icon="icon-ellipsis-h" title="More Options" />
+               <MyFilesRowMoreMenu toggleButton={this.refs.moreButton} title={this.props.title}
+                                   lbryUri={this.props.lbryUri} fileName={this.props.fileName}
+                                   path={this.props.path}/>
              </div>
-           )
-          }
+            }
+          </div>
         </div>
-        <div className="span1" style={moreButtonColumnStyle}>
-          {this.props.pending ? null :
-           <div style={moreButtonContainerStyle}>
-             <Link style={moreButtonStyle} ref="moreButton" icon="icon-ellipsis-h" title="More Options" />
-             <MyFilesRowMoreMenu toggleButton={this.refs.moreButton} title={this.props.title}
-                                 lbryUri={this.props.lbryUri} fileName={this.props.fileName}
-                                 path={this.props.path}/>
-           </div>
-          }
-        </div>
-      </div>
+      </section>
     );
   }
 });
 
 var MyFilesPage = React.createClass({
+  fileTimeout: null,
   getInitialState: function() {
     return {
       filesInfo: null,
     };
   },
+  componentDidMount: function() {
+    document.title = "My Files";
+  },
   componentWillMount: function() {
     this.updateFilesInfo();
+  },
+  componentWillUnmount: function() {
+    if (this.fileTimeout)
+    {
+      clearTimeout(this.fileTimeout);
+    }
   },
   updateFilesInfo: function() {
     lbry.getFilesInfo((filesInfo) => {
       this.setState({
         filesInfo: (filesInfo ? filesInfo : []),
       });
-      setTimeout(() => { this.updateFilesInfo() }, 1000);
+      this.fileTimeout = setTimeout(() => { this.updateFilesInfo() }, 1000);
     });
   },
   render: function() {
@@ -151,15 +165,18 @@ var MyFilesPage = React.createClass({
       var content = <span>You haven't downloaded anything from LBRY yet. Go <Link href="/" label="search for your first download" />!</span>;
     } else {
       var content = [],
-          keyIndex = 0;
+          seenUris = {};
+
       for (let fileInfo of this.state.filesInfo) {
         let {completed, written_bytes, total_bytes, lbry_uri, file_name, download_path,
           stopped, metadata} = fileInfo;
 
-        if (!metadata)
+        if (!metadata || seenUris[lbry_uri])
         {
           continue;
         }
+
+        seenUris[lbry_uri] = true;
 
         let {title, thumbnail} = metadata;
 
@@ -175,21 +192,14 @@ var MyFilesPage = React.createClass({
         var ratioLoaded = written_bytes / total_bytes;
         var showWatchButton = (lbry.getMediaType(file_name) == 'video' || lbry.getMediaType(file_name) == 'audio');
 
-        content.push(<MyFilesRow key={lbry_uri + (++keyIndex)} lbryUri={lbry_uri} title={title || ('lbry://' + lbry_uri)} completed={completed} stopped={stopped}
+        content.push(<MyFilesRow key={lbry_uri} lbryUri={lbry_uri} title={title || ('lbry://' + lbry_uri)} completed={completed} stopped={stopped}
                                  ratioLoaded={ratioLoaded} imgUrl={thumbnail} path={download_path}
                                  showWatchButton={showWatchButton} pending={pending} />);
       }
     }
     return (
       <main className="page">
-        <SubPageLogo />
-        <h1>My Files</h1>
-        <section>
-          {content}
-        </section>
-        <section>
-          <Link href="/" label="<< Return" />
-        </section>
+        {content}
       </main>
     );
   }
