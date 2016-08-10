@@ -146,6 +146,10 @@ var PublishPage = React.createClass({
     }
 
     lbry.resolveName(name, (info) => {
+      if (name != this.refs.name.getValue()) {
+        return;
+      }
+
       if (!info) {
         this.setState({
           name: name,
@@ -153,10 +157,14 @@ var PublishPage = React.createClass({
         });
       } else {
         lbry.getClaimInfo(name, (claimInfo) => {
+          if (name != this.refs.name.getValue()) {
+            return;
+          }
+
           var newState = {
             name: name,
             nameResolved: true,
-            nameIsMine: true, //claimInfo.is_mine,
+            nameIsMine: claimInfo.is_mine,
             claimValue: parseFloat(claimInfo.amount),
             claimMetadata: claimInfo.value,
           };
@@ -270,7 +278,7 @@ var PublishPage = React.createClass({
             lbry://<FormField type="text" ref="name" onChange={this.handleNameChange} />
             {
               (!this.state.name ? '' :
-                (! this.state.nameResolved ? <em> This name is available</em>
+                (! this.state.nameResolved ? <em> This name is available: {this.state.name}</em>
                                            : (this.state.nameIsMine ? <em> You already control this name. You can use this page to update your claim.</em>
                                                                     : <em> This name is currently claimed for <strong>{lbry.formatCredits(this.state.claimValue)}</strong> credits.</em>)))
             }
