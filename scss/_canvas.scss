@@ -21,7 +21,7 @@ $drawer-width: 240px;
   left: 0;
   top: 0;
   background: $color-bg;
-  z-index: 1;
+  z-index: 3;
   .drawer-item
   {
     display: block;
@@ -81,6 +81,7 @@ $drawer-width: 240px;
   top: 0;
   left: 0;
   width: 100%;
+  z-index: 2;
   box-sizing: border-box;
   h1 { font-size: 1.8em; line-height: $header-height - $spacing-vertical; display: inline-block; float: left; }
   &.header-scrolled
