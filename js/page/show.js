@@ -106,16 +106,12 @@ var DetailPage = React.createClass({
   componentWillMount: function() {
     document.title = 'lbry://' + this.props.name;
 
-    lbry.getClaimInfo(this.props.name, (claimInfo) => {
+    lbry.search(this.props.name, (results) => {
+      var result = results[0];
       this.setState({
-        claimInfo: claimInfo.value,
+        amount: result.amount,
+        claimInfo: result.value,
         searching: false,
-      });
-    });
-
-    lbry.getCostEstimate(this.props.name, (amount) => {
-      this.setState({
-        amount: amount,
       });
     });
   },

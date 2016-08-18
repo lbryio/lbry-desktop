@@ -123,16 +123,14 @@ var FeaturedContentItem = React.createClass({
   },
 
   componentWillMount: function() {
-    lbry.resolveName(this.props.name, (metadata) => {
+    lbry.search(this.props.name, (results) => {
+      var result = results[0];
+      var metadata = result.value;
       this.setState({
         metadata: metadata,
+        amount: result.cost,
         title: metadata && metadata.title ? metadata.title : ('lbry://' + this.props.name),
       })
-    });
-    lbry.getCostEstimate(this.props.name, (amount) => {
-      this.setState({
-        amount: amount,
-      });
     });
   },
 
