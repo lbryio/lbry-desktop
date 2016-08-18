@@ -110,7 +110,7 @@ lbry.sendToAddress = function(amount, address, callback, errorCallback)
 
 lbry.search = function(query, callback)
 {
-  lbry.call("search_nametrie", { "search": query }, callback);
+  lbry.lighthouse.call('search', [query], callback);
 }
 
 lbry.resolveName = function(name, callback) {

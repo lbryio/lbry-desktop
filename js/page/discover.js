@@ -37,10 +37,10 @@ var SearchResults = React.createClass({
   render: function() {
     var rows = [];
     this.props.results.forEach(function(result) {
-      if (!result.nsfw) {
+      if (!result.value.nsfw) {
         rows.push(
-          <SearchResultRow key={result.name} name={result.name} title={result.title} imgUrl={result.thumbnail}
-                           description={result.description} cost_est={result.cost_est} />
+          <SearchResultRow key={result.name} name={result.name} title={result.value.title} imgUrl={result.value.thumbnail}
+                           description={result.value.description} cost={result.cost} />
         );
       }
     });
@@ -91,7 +91,7 @@ var SearchResultRow = React.createClass({
           </div>
           <div className="span9">
             <span style={searchRowCostStyle}>
-              <CreditAmount amount={this.props.cost_est} isEstimate={true}/>
+              <CreditAmount amount={this.props.cost} isEstimate={true}/>
             </span>
             <div className="meta">lbry://{this.props.name}</div>
             <h3 style={searchRowTitleStyle}><a href={'/?show=' + this.props.name}>{this.props.title}</a></h3>
@@ -142,7 +142,7 @@ var FeaturedContentItem = React.createClass({
       return null;
     }
     return <SearchResultRow name={this.props.name} title={this.state.title} imgUrl={this.state.metadata.thumbnail}
-                     description={this.state.metadata.description} cost_est={this.state.amount} />;
+                     description={this.state.metadata.description} cost={this.state.amount} />;
   }
 });
 
