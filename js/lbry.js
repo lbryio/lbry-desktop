@@ -1,13 +1,13 @@
 var lbry = {
   isConnected: false,
   rootPath: '.',
+  daemonConnectionString: 'http://localhost:5279/lbryapi',
   colors: {
     primary: '#155B4A'
   }
 };
 
-lbry.call = function (method, params, callback, errorCallback, connectFailedCallback)
-{
+lbry.jsonrpc_call = function (connectionString, method, params, callback, errorCallback, connectFailedCallback) {
   var xhr = new XMLHttpRequest;
   xhr.addEventListener('load', function() {
     var response = JSON.parse(xhr.responseText);
@@ -27,14 +27,19 @@ lbry.call = function (method, params, callback, errorCallback, connectFailedCall
     });
   }
 
-  xhr.open('POST', 'http://localhost:5279/lbryapi', true);
+  xhr.open('POST', connectionString, true);
   xhr.send(JSON.stringify({
     'jsonrpc': '2.0',
     'method': method,
-    'params': [params, ],
+    'params': params,
     'id': 0
   }));
 }
+
+lbry.call = function (method, params, callback, errorCallback, connectFailedCallback) {
+  lbry.jsonrpc_call(lbry.daemonConnectionString, method, [params], callback, errorCallback, connectFailedCallback);
+}
+
 
 //core
 lbry.connect = function(callback)
