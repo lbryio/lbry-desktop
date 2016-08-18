@@ -73,7 +73,7 @@ var CreditAmount = React.createClass({
     var formattedAmount = lbry.formatCredits(this.props.amount);
     return (
       <span className="credit-amount">
-        <span style={creditAmountStyle}>{formattedAmount} credits</span>
+        <span style={creditAmountStyle}>{formattedAmount}</span>
         { this.props.isEstimate ? <span style={estimateStyle}>(est)</span> : null }
       </span>
     );
