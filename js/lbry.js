@@ -220,7 +220,7 @@ lbry.reportBug = function(message, callback) {
 //utilities
 lbry.formatCredits = function(amount, precision)
 {
-  return amount.toFixed(precision || 1);
+  return amount.toFixed(precision || 1).replace(/\.?0+$/, '');
 }
 
 lbry.loadJs = function(src, type, onload)
