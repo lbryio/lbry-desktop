@@ -91,7 +91,7 @@ var SearchResultRow = React.createClass({
           </div>
           <div className="span9">
             <span style={searchRowCostStyle}>
-              <CreditAmount amount={this.props.cost} isEstimate={true}/>
+              <CreditAmount amount={this.props.cost} isEstimate={!this.props.available}/>
             </span>
             <div className="meta">lbry://{this.props.name}</div>
             <h3 style={searchRowTitleStyle}><a href={'/?show=' + this.props.name}>{this.props.title}</a></h3>
@@ -129,6 +129,7 @@ var FeaturedContentItem = React.createClass({
       this.setState({
         metadata: metadata,
         amount: result.cost,
+        available: result.available,
         title: metadata && metadata.title ? metadata.title : ('lbry://' + this.props.name),
       })
     });
@@ -139,8 +140,10 @@ var FeaturedContentItem = React.createClass({
       // Still waiting for metadata
       return null;
     }
+
     return <SearchResultRow name={this.props.name} title={this.state.title} imgUrl={this.state.metadata.thumbnail}
-                     description={this.state.metadata.description} cost={this.state.amount} />;
+                     description={this.state.metadata.description} cost={this.state.amount}
+                     available={this.state.available} />;
   }
 });
 

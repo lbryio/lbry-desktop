@@ -57,7 +57,7 @@ var creditAmountStyle = {
   fontWeight: 'bold',
   fontSize: '0.8em'
 }, estimateStyle = {
-  marginLeft : '5px',
+  fontSize: '0.8em',
   color: '#aaa',
 };
 
@@ -73,8 +73,8 @@ var CreditAmount = React.createClass({
     var formattedAmount = lbry.formatCredits(this.props.amount);
     return (
       <span className="credit-amount">
-        <span style={creditAmountStyle}>{formattedAmount}</span>
-        { this.props.isEstimate ? <span style={estimateStyle}>(est)</span> : null }
+        <span style={creditAmountStyle}>{formattedAmount} {parseFloat(formattedAmount) == 1.0 ? 'credit' : 'credits'}</span>
+        { this.props.isEstimate ? <span style={estimateStyle}> (est)</span> : null }
       </span>
     );
   }
