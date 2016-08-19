@@ -25,7 +25,7 @@ var Header = React.createClass({
   },
   handleScroll: function() {
     this.setState({
-      isScrolled: event.srcElement.body.scrollTop > 0
+      isScrolled: document.body.scrollTop > 0
     });
   },
   onQueryChange: function(event) {
