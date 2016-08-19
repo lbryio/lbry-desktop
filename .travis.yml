@@ -2,15 +2,13 @@ language: node_js
 node_js: 5
 
 install:
-  - gem install sass
-  - npm install -g babel-cli
-  - npm install babel-preset-es2015 babel-preset-react
+  - npm install
 
 script:
   - mkdir -p dist/css dist/js
-  - sass scss/all.scss dist/css/all.css
-  - babel -V
-  - babel --presets es2015,react --out-dir dist/js js
+  - node_modules/.bin/node-sass scss/all.scss dist/css/all.css
+  - node_modules/.bin/babel -V
+  - node_modules/.bin/babel --presets es2015,react --out-dir dist/js js
   - mkdir upload
   - cd dist; zip -r ../upload/dist.zip *; cd -
   - .travis/echo_sha.sh > upload/data.json
