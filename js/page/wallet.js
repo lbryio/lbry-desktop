@@ -117,6 +117,7 @@ var WalletPage = React.createClass({
   getInitialState: function() {
     return {
       balance: "Checking balance...",
+      txlog: "Loading transactions...",
     }
   },
   componentWillMount: function() {
@@ -124,6 +125,21 @@ var WalletPage = React.createClass({
       this.setState({
         balance: results,
       });
+    });
+    console.log('Trying to get transaction history...')
+    lbry.call('get_transaction_history', {}, (results) => {
+      console.log('Got transaction history:')
+      console.log(results)
+      var out = 'Transaction history loaded.'
+      if (results.length == 0) {
+        out = 'No transactions yet.'
+      } else {
+        out = JSON.stringify(results)
+      }
+      console.log(out)
+      this.setState({
+        txlog: out,
+      })
     });
   },
   render: function() {
@@ -138,6 +154,10 @@ var WalletPage = React.createClass({
         <section className="card">
           <h3>Claim Invite Code</h3>
           <Link href="?claim" label="Claim a LBRY beta invite code" button="alt" />
+        </section>
+        <section className="card">
+          <h3>Transaction History</h3>
+          {this.state.txlog}
         </section>
       </main>
     );
