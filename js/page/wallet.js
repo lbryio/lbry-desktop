@@ -131,6 +131,7 @@ var WalletPage = React.createClass({
       if (results.length == 0) {
         out = 'No transactions yet.';
       } else {
+        var condensedTransactions = {};
         var rows = [];
         rows.push(<tr className="transaction_history">
                     <th className="transaction_history">Amount</th>
@@ -139,18 +140,29 @@ var WalletPage = React.createClass({
                     <th className="transaction_history">Transaction</th>
                   </tr>);
         results.forEach(function(tx) {
-          rows.push(<tr className="transaction_history">
-                      <td className="transaction_history">{ (tx["amount"]>0 ? '+' : '' ) + tx["amount"] }</td>
-                      <td className="transaction_history">{ (new Date(parseInt(tx["time"])*1000)).toLocaleTimeString() }</td>
-                      <td className="transaction_history">{ (new Date(parseInt(tx["time"])*1000)).toLocaleDateString() }</td>
-                      <td className="transaction_history">
-                        <a className="transaction_explorer_link" href={"https://explorer.lbry.io/tx/"+tx["txid"]}>
-                          { tx["txid"] }
-                        </a>
-                      </td>
-                    </tr>)
+          var txid = tx["txid"];
+          if (!(txid in condensedTransactions)) {
+            condensedTransactions[txid] = 0;
+          }
+          condensedTransactions[txid] += parseFloat(tx["amount"]);
         });
-        out = <table className="transaction_history">{rows}</table>
+        results.forEach(function(tx) {
+          var txid = tx["txid"];
+          var txval = condensedTransactions[txid];
+          var txdate = new Date(parseInt(tx["time"])*1000);
+          if (txid in condensedTransactions && txval != 0) {
+            rows.push(<tr key={txid} className="transaction_history">
+                        <td className="transaction_history">{ (txval>0 ? '+' : '' ) + txval }</td>
+                        <td className="transaction_history">{ txdate.toLocaleTimeString() }</td>
+                        <td className="transaction_history">{ txdate.toLocaleDateString() }</td>
+                        <td className="transaction_history">
+                          <a className="transaction_explorer_link" href={"https://explorer.lbry.io/tx/"+txid}>{txid}</a>
+                        </td>
+                      </tr>);
+            delete condensedTransactions[tx["txid"]];
+          }
+        });
+        out = <table className="transaction_history"><tbody>{rows}</tbody></table>
       }
       this.setState({
         txlog: out,
