@@ -141,8 +141,8 @@ var WalletPage = React.createClass({
         results.forEach(function(tx) {
           rows.push(<tr className="transaction_history">
                       <td className="transaction_history">{ (tx["amount"]>0 ? '+' : '' ) + tx["amount"] }</td>
-                      <td className="transaction_history">{ (new Date(tx["time"])).toLocaleTimeString() }</td>
-                      <td className="transaction_history">{ (new Date(tx["time"])).toLocaleDateString() }</td>
+                      <td className="transaction_history">{ (new Date(parseInt(tx["time"])*1000)).toLocaleTimeString() }</td>
+                      <td className="transaction_history">{ (new Date(parseInt(tx["time"])*1000)).toLocaleDateString() }</td>
                       <td className="transaction_history">
                         <a className="transaction_explorer_link" href={"https://explorer.lbry.io/tx/"+tx["txid"]}>
                           { tx["txid"] }
