@@ -117,13 +117,44 @@ var WalletPage = React.createClass({
   getInitialState: function() {
     return {
       balance: "Checking balance...",
+      txlog: "Loading transactions...",
     }
   },
   componentWillMount: function() {
     lbry.getBalance((results) => {
       this.setState({
         balance: results,
-      });
+      })
+    });
+    lbry.call('get_transaction_history', {}, (results) => {
+      var out = 'Transaction history loaded.'
+      if (results.length == 0) {
+        out = 'No transactions yet.';
+      } else {
+        var rows = [];
+        rows.push(<tr className="transaction_history">
+                    <th className="transaction_history">Amount</th>
+                    <th className="transaction_history">Time</th>
+                    <th className="transaction_history">Date</th>
+                    <th className="transaction_history">Transaction</th>
+                  </tr>);
+        results.forEach(function(tx) {
+          rows.push(<tr className="transaction_history">
+                      <td className="transaction_history">{ (tx["amount"]>0 ? '+' : '' ) + tx["amount"] }</td>
+                      <td className="transaction_history">{ (new Date(tx["time"])).toLocaleTimeString() }</td>
+                      <td className="transaction_history">{ (new Date(tx["time"])).toLocaleDateString() }</td>
+                      <td className="transaction_history">
+                        <a className="transaction_explorer_link" href={"https://explorer.lbry.io/tx/"+tx["txid"]}>
+                          { tx["txid"] }
+                        </a>
+                      </td>
+                    </tr>)
+        });
+        out = <table className="transaction_history">{rows}</table>
+      }
+      this.setState({
+        txlog: out,
+      })
     });
   },
   render: function() {
@@ -138,6 +169,10 @@ var WalletPage = React.createClass({
         <section className="card">
           <h3>Claim Invite Code</h3>
           <Link href="?claim" label="Claim a LBRY beta invite code" button="alt" />
+        </section>
+        <section className="card">
+          <h3>Transaction History</h3>
+          {this.state.txlog}
         </section>
       </main>
     );
