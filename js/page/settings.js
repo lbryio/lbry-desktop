@@ -22,6 +22,9 @@ var SettingsPage = React.createClass({
     });
     lbry.setSettings(settings);
   },
+  onRunOnNsfwChange: function (event) {
+    this.storeSetting('show_nsfw', event.target.checked);
+  },
   onRunOnStartChange: function (event) {
     this.storeSetting('run_on_startup', event.target.checked);
   },
@@ -77,6 +80,12 @@ var SettingsPage = React.createClass({
 
     return (
       <main>
+        <section className="card">
+          <h3>Content Filtering</h3>
+          <label style={settingsCheckBoxOptionStyles}>
+            <input type="checkbox" onChange={this.onRunOnNsfwChange} defaultChecked={this.state.settings.show_nsfw} /> Show NSFW content
+          </label>
+        </section>
         <section className="card">
           <h3>Run on Startup</h3>
           <label style={settingsCheckBoxOptionStyles}>
