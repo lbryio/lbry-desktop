@@ -152,8 +152,8 @@ var FeaturedContentItem = React.createClass({
   },
 
   render: function() {
-    if (this.state.metadata == null) {
-      // Still waiting for metadata
+    if (this.state.metadata == null || this.state.metadata.nsfw) {
+      // Still waiting for metadata, or item is NSFW
       return null;
     }
 
