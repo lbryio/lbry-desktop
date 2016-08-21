@@ -160,7 +160,7 @@ var MyFilesPage = React.createClass({
     if (this.state.filesInfo === null) {
       return (
         <main className="page">
-          <span>Loading...</span>
+          <BusyMessage message="Loading" />
         </main>
       );
     }

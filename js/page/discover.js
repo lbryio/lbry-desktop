@@ -8,8 +8,7 @@ var SearchActive = React.createClass({
   render: function() {
     return (
       <div style={fetchResultsStyle}>
-        Looking up the Dewey Decimals
-        <span className="busy-indicator"></span>
+        <BusyMessage message="Looking up the Dewey Decimals" />
       </div>
     );
   }

@@ -27,6 +27,15 @@ var TruncatedText = React.createClass({
   }
 });
 
+var BusyMessage = React.createClass({
+  propTypes: {
+    message: React.PropTypes.string
+  },
+  render: function() {
+    return <span>{this.props.message} <span className="busy-indicator"></span></span>
+  }
+});
+
 var toolTipStyle = {
   position: 'absolute',
   zIndex: '1',

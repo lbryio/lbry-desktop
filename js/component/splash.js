@@ -52,8 +52,7 @@ var SplashScreen = React.createClass({
         <img src={imgSrc} alt="LBRY"/>
         <div style={splashMessageStyle}>
           <h3>
-            {this.props.message}
-            <span className="busy-indicator"></span>
+            <BusyMessage message={this.props.message} />
           </h3>
           <Icon icon='icon-warning' style={this.state.isLagging ? {} : { display: 'none' }}/> <span style={ this.state.isLagging ? {} : {'color': '#c3c3c3'} }>{this.state.details}</span>
         </div>
