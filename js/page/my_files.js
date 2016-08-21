@@ -158,7 +158,11 @@ var MyFilesPage = React.createClass({
   },
   render: function() {
     if (this.state.filesInfo === null) {
-      return null;
+      return (
+        <main className="page">
+          <BusyMessage message="Loading" />
+        </main>
+      );
     }
 
     if (!this.state.filesInfo.length) {

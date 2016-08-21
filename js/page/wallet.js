@@ -99,7 +99,7 @@ var SendToAddressSection = React.createClass({
             <h4>Results</h4>
             {this.state.results}
           </div>
-          : ''
+            : ''
         }
       </section>
     );
@@ -111,8 +111,8 @@ var WalletPage = React.createClass({
     document.title = "My Wallet";
   },
   /*
-  Below should be refactored so that balance is shared all of wallet page. Or even broader?
-  What is the proper React pattern for sharing a global state like balance?
+   Below should be refactored so that balance is shared all of wallet page. Or even broader?
+   What is the proper React pattern for sharing a global state like balance?
    */
   getInitialState: function() {
     return {
