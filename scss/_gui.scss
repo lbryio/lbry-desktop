@@ -212,12 +212,3 @@ input[type="text"], input[type="search"], textarea
     margin-top: $spacing-vertical;
   }
 }
-
-td.transaction_history, tr.transaction_history {
-    padding: 4px;
-}
-a.transaction_explorer_link {
-    color: $color-primary;
-    text-decoration: underline;
-    font-family: monospace;
-}

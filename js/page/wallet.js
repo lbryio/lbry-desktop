@@ -133,11 +133,11 @@ var WalletPage = React.createClass({
       } else {
         var condensedTransactions = {};
         var rows = [];
-        rows.push(<tr className="transaction_history">
-                    <th className="transaction_history">Amount</th>
-                    <th className="transaction_history">Time</th>
-                    <th className="transaction_history">Date</th>
-                    <th className="transaction_history">Transaction</th>
+        rows.push(<tr>
+                    <th>Amount</th>
+                    <th>Time</th>
+                    <th>Date</th>
+                    <th>Transaction</th>
                   </tr>);
         results.forEach(function(tx) {
           var txid = tx["txid"];
@@ -151,18 +151,18 @@ var WalletPage = React.createClass({
           var txval = condensedTransactions[txid];
           var txdate = new Date(parseInt(tx["time"])*1000);
           if (txid in condensedTransactions && txval != 0) {
-            rows.push(<tr key={txid} className="transaction_history">
-                        <td className="transaction_history">{ (txval>0 ? '+' : '' ) + txval }</td>
-                        <td className="transaction_history">{ txdate.toLocaleTimeString() }</td>
-                        <td className="transaction_history">{ txdate.toLocaleDateString() }</td>
-                        <td className="transaction_history">
+            rows.push(<tr key={txid}>
+                        <td>{ (txval>0 ? '+' : '' ) + txval }</td>
+                        <td>{ txdate.toLocaleTimeString() }</td>
+                        <td>{ txdate.toLocaleDateString() }</td>
+                        <td>
                           <a className="transaction_explorer_link" href={"https://explorer.lbry.io/tx/"+txid}>{txid}</a>
                         </td>
                       </tr>);
             delete condensedTransactions[tx["txid"]];
           }
         });
-        out = <table className="transaction_history"><tbody>{rows}</tbody></table>
+        out = <table className="table-standard"><tbody>{rows}</tbody></table>
       }
       this.setState({
         txlog: out,
@@ -182,7 +182,7 @@ var WalletPage = React.createClass({
           <h3>Claim Invite Code</h3>
           <Link href="?claim" label="Claim a LBRY beta invite code" button="alt" />
         </section>
-        <section className="card">
+        <section className="card" style={{'overflowX': 'auto'}}>
           <h3>Transaction History</h3>
           {this.state.txlog}
         </section>
