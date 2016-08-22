@@ -14,6 +14,7 @@ var settingsRadioOptionStyles = {
 };
 
 var SettingsPage = React.createClass({
+  _initClientSettings: null,
   onRunOnStartChange: function (event) {
     lbry.setDaemonSetting('run_on_startup', event.target.checked);
   },
@@ -52,6 +53,7 @@ var SettingsPage = React.createClass({
   },
   componentDidMount: function() {
     document.title = "Settings";
+    this._initClientSettings = lbry.getClientSettings();
   },
   componentWillMount: function() {
     lbry.getDaemonSettings(function(settings) {
@@ -61,6 +63,9 @@ var SettingsPage = React.createClass({
         isMaxDownload: settings.max_download != 0
       });
     }.bind(this));
+  },
+  onShowNsfwChange: function(event) {
+    lbry.setClientSetting('showNsfw', event.target.checked);
   },
   render: function() {
     if (!this.state.initDaemonSettings) {
@@ -102,6 +107,12 @@ var SettingsPage = React.createClass({
               <span className={ this.state.isMaxDownload ? '' : 'hidden'}> <input type="number" min="0" step=".5" defaultValue={this.state.initDaemonSettings.max_download} style={settingsNumberFieldStyles} onChange={this.onMaxDownloadFieldChange}/> MB/s</span>
             </label>
           </div>
+        </section>
+        <section className="card">
+          <h3>Content</h3>
+          <label style={settingsCheckBoxOptionStyles}>
+            <input type="checkbox" onChange={this.onShowNsfwChange} defaultChecked={this._initClientSettings.showNsfw} /> Include Not Safe For Work content in search results and Commmunity Content
+          </label>
         </section>
         <section className="card">
           <h3>Share Diagnostic Data</h3>

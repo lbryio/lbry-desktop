@@ -5,7 +5,9 @@ var lbry = {
   colors: {
     primary: '#155B4A'
   },
-  defaultClientSettings: {}
+  defaultClientSettings: {
+    showNsfw: false,
+  }
 };
 
 lbry.jsonrpc_call = function (connectionString, method, params, callback, errorCallback, connectFailedCallback) {

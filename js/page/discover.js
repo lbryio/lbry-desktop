@@ -34,9 +34,10 @@ var SearchNoResults = React.createClass({
 
 var SearchResults = React.createClass({
   render: function() {
+    var showNsfw = lbry.getClientSetting('showNsfw');
     var rows = [];
     this.props.results.forEach(function(result) {
-      if (!result.value.nsfw) {
+      if (showNsfw || !result.value.nsfw) {
         rows.push(
           <SearchResultRow key={result.name} name={result.name} title={result.value.title} imgUrl={result.value.thumbnail}
                            description={result.value.description} cost={result.cost} />
@@ -157,10 +158,10 @@ var FeaturedContentItem = React.createClass({
       return null;
     }
 
-    //@TODO: Make this check the "show NSFW" setting once it's implemented
+    var blur = !lbry.getClientSetting('showNsfw') && this.state.metadata.nsfw;
 
     return (<div style={featuredContentItemContainerStyle} onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
-      <div className={this.state.metadata.nsfw ? 'blur' : ''}>
+      <div className={blur ? 'blur' : ''}>
         <SearchResultRow name={this.props.name} title={this.state.title} imgUrl={this.state.metadata.thumbnail}
                    description={this.state.metadata.description} cost={this.state.amount}
                    available={this.state.available} />
