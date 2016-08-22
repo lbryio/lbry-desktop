@@ -206,17 +206,25 @@ var DiscoverPage = React.createClass({
   componentDidUpdate: function() {
     if (this.props.query != this.state.query)
     {
-      this.setState({
-        searching: true,
-        query: this.props.query,
-      });
-
-      lbry.search(this.props.query, this.searchCallback);
+      this.handleSearchChanged();
     }
+  },
+
+  handleSearchChanged: function() {
+    this.setState({
+      searching: true,
+      query: this.props.query,
+    });
+
+    lbry.search(this.props.query, this.searchCallback);
   },
 
   componentDidMount: function() {
     document.title = "Discover";
+    if (this.props.query !== '') {
+      // Rendering with a query already typed
+      this.handleSearchChanged();
+    }
   },
 
   getInitialState: function() {
