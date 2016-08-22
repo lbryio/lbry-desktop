@@ -86,7 +86,7 @@ var FormatsSection = React.createClass({
       {/* In future, anticipate multiple formats, just a guess at what it could look like
       // var formats = this.props.claimInfo.formats
       // return (<tbody>{formats.map(function(format,i){ */}
-          <FormatItem claimInfo={format} amount={this.props.amount} />
+          <FormatItem claimInfo={format} amount={this.props.amount} name={this.props.name} />
       {/*  })}</tbody>); */}
       </div>);
   }
