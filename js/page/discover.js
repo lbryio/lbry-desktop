@@ -106,7 +106,9 @@ var SearchResultRow = React.createClass({
   }
 });
 
-
+var featuredContentItemContainerStyle = {
+  position: 'relative',
+};
 
 var FeaturedContentItem = React.createClass({
   propTypes: {
@@ -118,7 +120,22 @@ var FeaturedContentItem = React.createClass({
       metadata: null,
       title: null,
       amount: 0.0,
+      overlayShowing: false,
     };
+  },
+
+  handleMouseOver: function() {
+    if (this.state.metadata && this.state.metadata.nsfw) {
+      this.setState({
+        overlayShowing: true,
+      });
+    }
+  },
+
+  handleMouseOut: function() {
+    this.setState({
+      overlayShowing: false,
+    });
   },
 
   componentWillMount: function() {
@@ -140,9 +157,16 @@ var FeaturedContentItem = React.createClass({
       return null;
     }
 
-    return <SearchResultRow name={this.props.name} title={this.state.title} imgUrl={this.state.metadata.thumbnail}
-                     description={this.state.metadata.description} cost={this.state.amount}
-                     available={this.state.available} />;
+    //@TODO: Make this check the "show NSFW" setting once it's implemented
+
+    return (<div style={featuredContentItemContainerStyle} onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
+      <div className={this.state.metadata.nsfw ? 'blur' : ''}>
+        <SearchResultRow name={this.props.name} title={this.state.title} imgUrl={this.state.metadata.thumbnail}
+                   description={this.state.metadata.description} cost={this.state.amount}
+                   available={this.state.available} />
+      </div>
+      {!this.state.overlayShowing ? null : <div className='translucent-overlay'><p>This content is Not Safe For Work. To show NSFW content in Community Content and search results, visit the <Link href="?settings" label="Settings page" /> and enable the option "Show NSFW content."</p></div>}
+    </div>);
   }
 });
 
