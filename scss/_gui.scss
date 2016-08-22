@@ -17,6 +17,10 @@ section
   {
     margin-bottom: 0;
   }
+  &:only-child {
+    /* If it's an only child, assume it's part of a React layout that will handle the last child condition on its own */
+    margin-bottom: $spacing-vertical;
+  }
 }
 
 main h1 {

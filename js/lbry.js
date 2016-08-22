@@ -4,6 +4,9 @@ var lbry = {
   daemonConnectionString: 'http://localhost:5279/lbryapi',
   colors: {
     primary: '#155B4A'
+  },
+  defaultClientSettings: {
+    showNsfw: false,
   }
 };
 
@@ -90,13 +93,20 @@ lbry.getNewAddress = function(callback) {
   lbry.call('get_new_address', {}, callback);
 }
 
-lbry.getSettings = function(callback) {
+lbry.getDaemonSettings = function(callback) {
   lbry.call('get_settings', {}, callback);
-};
+}
 
-lbry.setSettings = function(settings, callback) {
+lbry.setDaemonSettings = function(settings, callback) {
   lbry.call('set_settings', settings, callback);
-};
+}
+
+lbry.setDaemonSetting = function(setting, value, callback) {
+  var setSettingsArgs = {};
+  setSettingsArgs[setting] = value;
+  lbry.call('set_settings', setSettingsArgs, callback)
+}
+
 
 lbry.getBalance = function(callback)
 {
@@ -207,6 +217,31 @@ lbry.checkNewVersionAvailable = function(callback) {
     }
   });
 }
+
+lbry.getClientSettings = function() {
+  var outSettings = {};
+  for (let setting of Object.keys(lbry.defaultClientSettings)) {
+    var localStorageVal = localStorage.getItem('setting_' + setting);
+    outSettings[setting] = (localStorageVal === null ? lbry.defaultClientSettings[setting] : JSON.parse(localStorageVal));
+  }
+  return outSettings;
+}
+
+lbry.getClientSetting = function(setting) {
+  var localStorageVal = localStorage.getItem('setting_' + setting);
+  return (localStorageVal === null ? lbry.defaultClientSettings[setting] : JSON.parse(localStorageVal));
+}
+
+lbry.setClientSettings = function(settings) {
+  for (let setting of Object.keys(settings)) {
+    lbry.setClientSetting(setting, settings[setting]);
+  }
+}
+
+lbry.setClientSetting = function(setting, value) {
+  return localStorage.setItem('setting_' + setting, JSON.stringify(value));
+}
+
 
 lbry.reportBug = function(message, callback) {
   lbry.call('upload_log', {
