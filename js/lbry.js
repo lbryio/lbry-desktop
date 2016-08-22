@@ -4,7 +4,8 @@ var lbry = {
   daemonConnectionString: 'http://localhost:5279/lbryapi',
   colors: {
     primary: '#155B4A'
-  }
+  },
+  defaultClientSettings: {}
 };
 
 lbry.jsonrpc_call = function (connectionString, method, params, callback, errorCallback, connectFailedCallback) {
@@ -103,6 +104,7 @@ lbry.setDaemonSetting = function(setting, value, callback) {
   setSettingsArgs[setting] = value;
   lbry.call('set_settings', setSettingsArgs, callback)
 }
+
 
 lbry.getBalance = function(callback)
 {
@@ -213,6 +215,31 @@ lbry.checkNewVersionAvailable = function(callback) {
     }
   });
 }
+
+lbry.getClientSettings = function() {
+  var outSettings = {};
+  for (let setting of Object.keys(lbry.defaultClientSettings)) {
+    var localStorageVal = localStorage.getItem('setting_' + setting);
+    outSettings[setting] = (localStorageVal === null ? lbry.defaultClientSettings[setting] : JSON.parse(localStorageVal));
+  }
+  return outSettings;
+}
+
+lbry.getClientSetting = function(setting) {
+  var localStorageVal = localStorage.getItem('setting_' + setting);
+  return (localStorageVal === null ? lbry.defaultClientSettings[setting] : JSON.parse(localStorageVal));
+}
+
+lbry.setClientSettings = function(settings) {
+  for (let setting of Object.keys(settings)) {
+    lbry.setClientSetting(setting, settings[setting]);
+  }
+}
+
+lbry.setClientSetting = function(setting, value) {
+  return localStorage.setItem('setting_' + setting, JSON.stringify(value));
+}
+
 
 lbry.reportBug = function(message, callback) {
   lbry.call('upload_log', {
