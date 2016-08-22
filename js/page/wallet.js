@@ -57,7 +57,7 @@ var SendToAddressSection = React.createClass({
     return {
       address: "",
       amount: 0.0,
-      balance: "Checking balance...",
+      balance: <BusyMessage message="Checking balance" />,
       results: "",
     }
   },
@@ -116,8 +116,8 @@ var WalletPage = React.createClass({
    */
   getInitialState: function() {
     return {
-      balance: "Checking balance...",
-      txlog: "Loading transactions...",
+      balance: <BusyMessage message="Checking balance" />,
+      txlog: <BusyMessage message="Loading transactions" />,
     }
   },
   componentWillMount: function() {
@@ -127,7 +127,7 @@ var WalletPage = React.createClass({
       })
     });
     lbry.call('get_transaction_history', {}, (results) => {
-      var out = 'Transaction history loaded.'
+      var out = '(You should never see this message. -- wallet.js WalletPage componentWillMount)'
       if (results.length == 0) {
         out = 'No transactions yet.';
       } else {
