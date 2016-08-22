@@ -90,13 +90,19 @@ lbry.getNewAddress = function(callback) {
   lbry.call('get_new_address', {}, callback);
 }
 
-lbry.getSettings = function(callback) {
+lbry.getDaemonSettings = function(callback) {
   lbry.call('get_settings', {}, callback);
-};
+}
 
-lbry.setSettings = function(settings, callback) {
+lbry.setDaemonSettings = function(settings, callback) {
   lbry.call('set_settings', settings, callback);
-};
+}
+
+lbry.setDaemonSetting = function(setting, value, callback) {
+  var setSettingsArgs = {};
+  setSettingsArgs[setting] = value;
+  lbry.call('set_settings', setSettingsArgs, callback)
+}
 
 lbry.getBalance = function(callback)
 {
