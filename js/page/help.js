@@ -1,10 +1,39 @@
 //@TODO: Customize advice based on OS
 
 var HelpPage = React.createClass({
+  getInitialState: function() {
+    return {
+      versionInfo: null,
+    };
+  },
+  componentWillMount: function() {
+    lbry.getVersionInfo((info) => {
+      this.setState({
+        versionInfo: info,
+      });
+    });
+  },
   componentDidMount: function() {
     document.title = "Help";
   },
   render: function() {
+    var ver = this.state.versionInfo;
+
+    if (ver) {
+      if (ver.os_system == 'Darwin') {
+        var osName = (parseInt(ver.os_release.match(/^\d+/)) < 16 ? 'Mac OS X' : 'Mac OS');
+
+        var platform = osName + ' ' + ver.os_release;
+        var newVerLink = 'https://lbry.io/get/lbry.dmg';
+      } else if (ver.os_system == 'Linux') {
+        var platform = 'Linux (' + ver.platform + ')';
+        var newVerLink = 'https://lbry.io/get/lbry.deb';
+      } else {
+        var platform = 'Windows (' + ver.platform + ')';
+        var newVerLink = 'https://lbry.io/get/lbry.msi';
+      }     
+    }
+ 
     return (
       <main className="page">
         <section className="card">
@@ -44,6 +73,20 @@ var HelpPage = React.createClass({
           <h3>None of this applies to me, or it didn't work.</h3>
           <p>Please <Link href="/?report" label="send us a bug report" />. Thanks!</p>
         </section>
+        {!ver ? null : 
+          <section className="card">
+            <h3>About LBRY</h3>
+            <p><strong>LBRY version</strong> {ver.lbrynet_version}</p>
+            <p><strong>Platform</strong> {platform}</p>
+            {ver.lbrynet_update_available
+              ? <p>A newer version of LBRY is available. <Link href={newVerLink} label={"Download LBRY " + ver.remote_lbrynet + " now!"} /></p>
+              : (ver.lbryum_update_available
+                  ? <p>You are running version {ver.lbryum_version} of lbryum, the wallet software used to store and process transactions between you and other LBRY users. A newer version is available. <Link href={newVerLink} label="Upgrade LBRY now" /> to get lbryum {ver.remote_lbryum}!</p>
+                  : <p>Your copy of LBRY is up to date.</p>)
+            }
+
+          </section>
+        }
       </main>
     );
   }
