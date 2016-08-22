@@ -190,28 +190,6 @@ input[type="text"], input[type="search"], textarea
   top: 0.16em;
 }
 
-.blur {
-  -webkit-filter: blur($blur-intensity);
-  -moz-filter: blur($blur-intensity);
-  -o-filter: blur($blur-intensity);
-  -ms-filter: blur($blur-intensity);
-  filter: blur($blur-intensity);
-}
-
-.translucent-overlay {
-  position: absolute;
-  left: 0px;
-  right: 0px;
-  top: 0px;
-  bottom: 0px;
-  padding: 5%;
-  background-color: rgba(210, 210, 210, 0.8);
-  color: #fff;
-  display: flex;
-  align-items: center;
-  font-weight: 600;
-}
-
 .help {
   font-size: .85em;
   color: $color-help;

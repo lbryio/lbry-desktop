@@ -109,9 +109,12 @@ var SettingsPage = React.createClass({
         </section>
         <section className="card">
           <h3>Content</h3>
-          <label style={settingsCheckBoxOptionStyles}>
-            <input type="checkbox" onChange={this.onShowNsfwChange} defaultChecked={this.state.showNsfw} /> Include Not Safe For Work content in search results and Commmunity Content
-          </label>
+          <div className="form-row">
+            <label style={settingsCheckBoxOptionStyles}>
+              <input type="checkbox" onChange={this.onShowNsfwChange} defaultChecked={this.state.showNsfw} /> Show NSFW Content
+            </label>
+            <div className="help">NSFW content may include nudity, intense sexuality, profanity, or other adult content.</div>
+          </div>
         </section>
         <section className="card">
           <h3>Share Diagnostic Data</h3>

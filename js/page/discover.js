@@ -34,15 +34,13 @@ var SearchNoResults = React.createClass({
 
 var SearchResults = React.createClass({
   render: function() {
-    var showNsfw = lbry.getClientSetting('showNsfw');
     var rows = [];
     this.props.results.forEach(function(result) {
-      if (showNsfw || !result.value.nsfw) {
-        rows.push(
-          <SearchResultRow key={result.name} name={result.name} title={result.value.title} imgUrl={result.value.thumbnail}
-                           description={result.value.description} cost={result.cost} />
-        );
-      }
+      console.log(result);
+      rows.push(
+        <SearchResultRow key={result.name} name={result.name} title={result.value.title} imgUrl={result.value.thumbnail}
+                         description={result.value.description} cost={result.cost} nsfw={result.value.nsfw} />
+      );
     });
     return (
       <div>{rows}</div>
@@ -78,14 +76,25 @@ var
 var SearchResultRow = React.createClass({
   getInitialState: function() {
     return {
-      downloading: false
+      downloading: false,
+      isHovered: false,
     }
   },
+  handleMouseOver: function() {
+    this.setState({
+      isHovered: true,
+    });
+  },
+  handleMouseOut: function() {
+    this.setState({
+      isHovered: false,
+    });
+  },
   render: function() {
+    var obscureNsfw = !lbry.getClientSetting('showNsfw') && this.props.nsfw;
     return (
-
-      <section className="card">
-        <div className="row-fluid" style={searchRowStyle}>
+      <section className={ 'card ' + (obscureNsfw ? 'card-obscured' : '') } onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
+        <div className="row-fluid card-content" style={searchRowStyle}>
           <div className="span3">
             <img src={this.props.imgUrl} alt={'Photo for ' + (this.props.title || this.props.name)} style={searchRowImgStyle} />
           </div>
@@ -102,6 +111,15 @@ var SearchResultRow = React.createClass({
             <p style={searchRowDescriptionStyle}>{this.props.description}</p>
           </div>
         </div>
+        {
+          !obscureNsfw || !this.state.isHovered ? null :
+            <div className='card-overlay'>
+              <p>
+                This content is Not Safe For Work.
+                To view adult content, please change your <Link href="?settings" label="Settings" />.
+              </p>
+            </div>
+        }
       </section>
     );
   }
@@ -112,6 +130,8 @@ var featuredContentItemContainerStyle = {
 };
 
 var FeaturedContentItem = React.createClass({
+  resolveSearch: false,
+
   propTypes: {
     name: React.PropTypes.string,
   },
@@ -125,48 +145,38 @@ var FeaturedContentItem = React.createClass({
     };
   },
 
-  handleMouseOver: function() {
-    if (this.state.metadata && this.state.metadata.nsfw) {
-      this.setState({
-        overlayShowing: true,
-      });
-    }
+  componentWillUnmount: function() {
+    this.resolveSearch = false;
   },
 
-  handleMouseOut: function() {
-    this.setState({
-      overlayShowing: false,
-    });
-  },
+  componentDidMount: function() {
+    this.resolveSearch = true;
 
-  componentWillMount: function() {
-    lbry.search(this.props.name, (results) => {
+    lbry.search(this.props.name, function(results) {
       var result = results[0];
       var metadata = result.value;
-      this.setState({
-        metadata: metadata,
-        amount: result.cost,
-        available: result.available,
-        title: metadata && metadata.title ? metadata.title : ('lbry://' + this.props.name),
-      })
-    });
+      if (this.resolveSearch)
+      {
+        this.setState({
+          metadata: metadata,
+          amount: result.cost,
+          available: result.available,
+          title: metadata && metadata.title ? metadata.title : ('lbry://' + this.props.name),
+        });
+      }
+    }.bind(this));
   },
 
   render: function() {
-    if (this.state.metadata == null || (this.state.metadata.nsfw && !(lbry.setSettings(settings)['show_nsfw']))) {
-      // Still waiting for metadata, or item is NSFW
+    if (this.state.metadata === null) {
+      // Still waiting for metadata, skip render
       return null;
     }
 
-    var blur = !lbry.getClientSetting('showNsfw') && this.state.metadata.nsfw;
-
-    return (<div style={featuredContentItemContainerStyle} onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
-      <div className={blur ? 'blur' : ''}>
-        <SearchResultRow name={this.props.name} title={this.state.title} imgUrl={this.state.metadata.thumbnail}
-                   description={this.state.metadata.description} cost={this.state.amount}
-                   available={this.state.available} />
-      </div>
-      {!this.state.overlayShowing ? null : <div className='translucent-overlay'><p>This content is Not Safe For Work. To show NSFW content in Community Content and search results, visit the <Link href="?settings" label="Settings page" /> and enable the option "Show NSFW content."</p></div>}
+    return (<div style={featuredContentItemContainerStyle}>
+      <SearchResultRow name={this.props.name} title={this.state.title} imgUrl={this.state.metadata.thumbnail}
+                 description={this.state.metadata.description} cost={this.state.amount} nsfw={this.state.metadata.nsfw}
+                 available={this.state.available} />
     </div>);
   }
 });
@@ -237,10 +247,6 @@ var DiscoverPage = React.createClass({
   },
 
   searchCallback: function(results) {
-    console.log('results:', results)
-    console.log('search callback');
-    console.log(this.state);
-    console.log(this.props);
     if (this.state.searching) //could have canceled while results were pending, in which case nothing to do
     {
       this.setState({
