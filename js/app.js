@@ -31,7 +31,7 @@ var App = React.createClass({
       }
 
       var message = 'The version of LBRY you\'re using is not up to date.\n\n' +
-        'Choose "OK" to download the latest version."';
+        'Choose "OK" to download the latest version.';
 
       lbry.getVersionInfo(function(versionInfo) {
         if (versionInfo.os_system == 'Darwin') {
