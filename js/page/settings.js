@@ -113,7 +113,10 @@ var SettingsPage = React.createClass({
             <label style={settingsCheckBoxOptionStyles}>
               <input type="checkbox" onChange={this.onShowNsfwChange} defaultChecked={this.state.showNsfw} /> Show NSFW Content
             </label>
-            <div className="help">NSFW content may include nudity, intense sexuality, profanity, or other adult content.</div>
+            <div className="help">
+              NSFW content may include nudity, intense sexuality, profanity, or other adult content.
+              By displaying NSFW content, you are affirming you are of legal age to view mature content in your country or jurisdiction.
+            </div>
           </div>
         </section>
         <section className="card">
