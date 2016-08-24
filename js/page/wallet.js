@@ -146,7 +146,7 @@ var WalletPage = React.createClass({
           }
           condensedTransactions[txid] += parseFloat(tx["amount"]);
         });
-        results.forEach(function(tx) {
+        results.reverse().forEach(function(tx) {
           var txid = tx["txid"];
           var txval = condensedTransactions[txid];
           var txdate = new Date(parseInt(tx["time"])*1000);
