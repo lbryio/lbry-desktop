@@ -64,18 +64,20 @@ var HelpPage = React.createClass({
               : <p>Your copy of LBRY is up to date.</p>
             }
             <table className="table-standard">
-              <tr>
-                <th>lbrynet (data)</th>
-                <td>{ver.lbrynet_version}</td>
-              </tr>
-              <tr>
-                <th>lbryum (wallet)</th>
-                <td>{ver.lbryum_version}</td>
-              </tr>
-              <tr>
-                <th>Platform</th>
-                <td>{platform}</td>
-              </tr>
+              <tbody>
+                <tr>
+                  <th>lbrynet (data)</th>
+                  <td>{ver.lbrynet_version}</td>
+                </tr>
+                <tr>
+                  <th>lbryum (wallet)</th>
+                  <td>{ver.lbryum_version}</td>
+                </tr>
+                <tr>
+                  <th>Platform</th>
+                  <td>{platform}</td>
+                </tr>
+              </tbody>
             </table>
           </section>
         }

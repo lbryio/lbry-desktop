@@ -157,6 +157,30 @@ $header-icon-size: 1.5em;
   box-shadow: $default-box-shadow;
   border-radius: 2px;
 }
+.card-obscured
+{
+  position: relative;
+}
+.card-obscured .card-content {
+  -webkit-filter: blur($blur-intensity);
+  -moz-filter: blur($blur-intensity);
+  -o-filter: blur($blur-intensity);
+  -ms-filter: blur($blur-intensity);
+  filter: blur($blur-intensity);
+}
+.card-overlay {
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  top: 0px;
+  bottom: 0px;
+  padding: 20px;
+  background-color: rgba(128, 128, 128, 0.8);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+}
 
 .card-series-submit
 {
