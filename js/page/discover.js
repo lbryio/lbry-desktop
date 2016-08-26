@@ -36,12 +36,11 @@ var SearchResults = React.createClass({
   render: function() {
     var rows = [];
     this.props.results.forEach(function(result) {
-      if (!result.value.nsfw) {
-        rows.push(
-          <SearchResultRow key={result.name} name={result.name} title={result.value.title} imgUrl={result.value.thumbnail}
-                           description={result.value.description} cost={result.cost} />
-        );
-      }
+      console.log(result);
+      rows.push(
+        <SearchResultRow key={result.name} name={result.name} title={result.value.title} imgUrl={result.value.thumbnail}
+                         description={result.value.description} cost={result.cost} nsfw={result.value.nsfw} />
+      );
     });
     return (
       <div>{rows}</div>
@@ -77,16 +76,27 @@ var
 var SearchResultRow = React.createClass({
   getInitialState: function() {
     return {
-      downloading: false
+      downloading: false,
+      isHovered: false,
     }
   },
+  handleMouseOver: function() {
+    this.setState({
+      isHovered: true,
+    });
+  },
+  handleMouseOut: function() {
+    this.setState({
+      isHovered: false,
+    });
+  },
   render: function() {
+    var obscureNsfw = !lbry.getClientSetting('showNsfw') && this.props.nsfw;
     return (
-
-      <section className="card">
-        <div className="row-fluid" style={searchRowStyle}>
+      <section className={ 'card ' + (obscureNsfw ? 'card-obscured' : '') } onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
+        <div className="row-fluid card-content" style={searchRowStyle}>
           <div className="span3">
-            <img src={this.props.imgUrl} alt={'Photo for ' + (this.props.title || this.props.name)} style={searchRowImgStyle} />
+            <img src={this.props.imgUrl || '/img/default-thumb.svg'} alt={'Photo for ' + (this.props.title || this.props.name)} style={searchRowImgStyle} />
           </div>
           <div className="span9">
             <span style={searchRowCostStyle}>
@@ -101,14 +111,27 @@ var SearchResultRow = React.createClass({
             <p style={searchRowDescriptionStyle}>{this.props.description}</p>
           </div>
         </div>
+        {
+          !obscureNsfw || !this.state.isHovered ? null :
+            <div className='card-overlay'>
+              <p>
+                This content is Not Safe For Work.
+                To view adult content, please change your <Link href="?settings" label="Settings" />.
+              </p>
+            </div>
+        }
       </section>
     );
   }
 });
 
-
+var featuredContentItemContainerStyle = {
+  position: 'relative',
+};
 
 var FeaturedContentItem = React.createClass({
+  resolveSearch: false,
+
   propTypes: {
     name: React.PropTypes.string,
   },
@@ -118,31 +141,43 @@ var FeaturedContentItem = React.createClass({
       metadata: null,
       title: null,
       amount: 0.0,
+      overlayShowing: false,
     };
   },
 
-  componentWillMount: function() {
-    lbry.search(this.props.name, (results) => {
+  componentWillUnmount: function() {
+    this.resolveSearch = false;
+  },
+
+  componentDidMount: function() {
+    this.resolveSearch = true;
+
+    lbry.search(this.props.name, function(results) {
       var result = results[0];
       var metadata = result.value;
-      this.setState({
-        metadata: metadata,
-        amount: result.cost,
-        available: result.available,
-        title: metadata && metadata.title ? metadata.title : ('lbry://' + this.props.name),
-      })
-    });
+      if (this.resolveSearch)
+      {
+        this.setState({
+          metadata: metadata,
+          amount: result.cost,
+          available: result.available,
+          title: metadata && metadata.title ? metadata.title : ('lbry://' + this.props.name),
+        });
+      }
+    }.bind(this));
   },
 
   render: function() {
-    if (this.state.metadata == null) {
-      // Still waiting for metadata
+    if (this.state.metadata === null) {
+      // Still waiting for metadata, skip render
       return null;
     }
 
-    return <SearchResultRow name={this.props.name} title={this.state.title} imgUrl={this.state.metadata.thumbnail}
-                     description={this.state.metadata.description} cost={this.state.amount}
-                     available={this.state.available} />;
+    return (<div style={featuredContentItemContainerStyle}>
+      <SearchResultRow name={this.props.name} title={this.state.title} imgUrl={this.state.metadata.thumbnail || '/img/default-thumb.svg'}
+                 description={this.state.metadata.description} cost={this.state.amount} nsfw={this.state.metadata.nsfw}
+                 available={this.state.available} />
+    </div>);
   }
 });
 
@@ -160,16 +195,19 @@ var FeaturedContent = React.createClass({
           <h3>Featured Content</h3>
           <FeaturedContentItem name="what" />
           <FeaturedContentItem name="itsadisaster" />
-          <FeaturedContentItem name="keynesvhayek" />
-          <FeaturedContentItem name="meetlbry1" />
+          <FeaturedContentItem name="coloradobridge" />
+          <FeaturedContentItem name="samhyde2070" />
+          <FeaturedContentItem name="LendersDen" />
+
         </div>
         <div className="span6">
           <h3>Community Content <ToolTipLink style={featuredContentLegendStyle} label="What's this?"
-            tooltip='Community Content is a public space where anyone can share content with the rest of the LBRY community. Bid on the names "one," "two," "three" and "four" to put your content here!' /></h3>
+            tooltip='Community Content is a public space where anyone can share content with the rest of the LBRY community. Bid on the names "one," "two," "three," "four" and "five" to put your content here!' /></h3>
           <FeaturedContentItem name="one" />
           <FeaturedContentItem name="two" />
           <FeaturedContentItem name="three" />
           <FeaturedContentItem name="four" />
+          <FeaturedContentItem name="five" />
         </div>
       </div>
     );
@@ -182,17 +220,25 @@ var DiscoverPage = React.createClass({
   componentDidUpdate: function() {
     if (this.props.query != this.state.query)
     {
-      this.setState({
-        searching: true,
-        query: this.props.query,
-      });
-
-      lbry.search(this.props.query, this.searchCallback);
+      this.handleSearchChanged();
     }
+  },
+
+  handleSearchChanged: function() {
+    this.setState({
+      searching: true,
+      query: this.props.query,
+    });
+
+    lbry.search(this.props.query, this.searchCallback);
   },
 
   componentDidMount: function() {
     document.title = "Discover";
+    if (this.props.query !== '') {
+      // Rendering with a query already typed
+      this.handleSearchChanged();
+    }
   },
 
   getInitialState: function() {
@@ -204,10 +250,6 @@ var DiscoverPage = React.createClass({
   },
 
   searchCallback: function(results) {
-    console.log('results:', results)
-    console.log('search callback');
-    console.log(this.state);
-    console.log(this.props);
     if (this.state.searching) //could have canceled while results were pending, in which case nothing to do
     {
       this.setState({

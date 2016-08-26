@@ -12,6 +12,7 @@ var FormatItem = React.createClass({
     claimInfo: React.PropTypes.object,
     amount: React.PropTypes.number,
     name: React.PropTypes.string,
+    available: React.PropTypes.string,
   },
   render: function() {
 
@@ -24,12 +25,13 @@ var FormatItem = React.createClass({
     var license = claimInfo.license;
     var fileContentType = claimInfo['content-type'];
 
+    var available = this.props.available;
     var amount = this.props.amount || 0.0;
 
     return (
       <div className="row-fluid">
         <div className="span4">
-          <img src={thumbnail} alt={'Photo for ' + title} style={formatItemImgStyle} />
+          <img src={thumbnail || '/img/default-thumb.svg'} alt={'Photo for ' + title} style={formatItemImgStyle} />
         </div>
         <div className="span8">
           <p>{description}</p>
@@ -39,7 +41,7 @@ var FormatItem = React.createClass({
                 <td>Content-Type</td><td>{fileContentType}</td>
               </tr>
               <tr>
-                <td>Cost</td><td><CreditAmount amount={amount} isEstimate={true}/></td>
+                <td>Cost</td><td><CreditAmount amount={amount} isEstimate={!available}/></td>
               </tr>
               <tr>
                 <td>Author</td><td>{author}</td>
@@ -65,6 +67,7 @@ var FormatsSection = React.createClass({
     claimInfo: React.PropTypes.object,
     amount: React.PropTypes.number,
     name: React.PropTypes.string,
+    available: React.PropTypes.string,
   },
   render: function() {
     var name = this.props.name;
@@ -86,7 +89,7 @@ var FormatsSection = React.createClass({
       {/* In future, anticipate multiple formats, just a guess at what it could look like
       // var formats = this.props.claimInfo.formats
       // return (<tbody>{formats.map(function(format,i){ */}
-          <FormatItem claimInfo={format} amount={this.props.amount} />
+          <FormatItem claimInfo={format} amount={this.props.amount} name={this.props.name} available={this.props.available} />
       {/*  })}</tbody>); */}
       </div>);
   }
@@ -109,7 +112,8 @@ var DetailPage = React.createClass({
     lbry.search(this.props.name, (results) => {
       var result = results[0];
       this.setState({
-        amount: result.amount,
+        amount: result.cost,
+        available: result.available,
         claimInfo: result.value,
         searching: false,
       });
@@ -122,13 +126,14 @@ var DetailPage = React.createClass({
     }
 
     var name = this.props.name;
+    var available = this.state.available;
     var claimInfo = this.state.claimInfo;
     var amount = this.state.amount;
 
     return (
       <main>
         <section className="card">
-          <FormatsSection name={name} claimInfo={claimInfo} amount={amount} />
+          <FormatsSection name={name} claimInfo={claimInfo} amount={amount} available={available} />
         </section>
       </main>);
   }

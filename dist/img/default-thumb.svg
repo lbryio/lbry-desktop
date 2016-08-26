@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="288">
+<rect fill="#09f911" width="96" height="288"/>
+<rect fill="#029d74" width="96" height="288" x="96"/>
+<rect fill="#e35bd8" width="96" height="288" x="192"/>
+<rect fill="#4156c5" width="96" height="288" x="288"/>
+<rect fill="#635688" width="96" height="288" x="384"/>
+<text font-size="32" fill="white" font-family="Bitstream Vera Sans" x="388.1" y="269.3">+<tspan font-size="48">C0</tspan></text>
+</svg>

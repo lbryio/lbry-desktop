@@ -41,7 +41,16 @@ var PublishPage = React.createClass({
       return;
     }
 
-    var metadata = {ver: '0.0.2'};
+    if (this.state.nameIsMine) {
+      // Pre-populate with existing metadata
+      var metadata = Object.assign({}, this.state.claimMetadata);
+      if (this.refs.file.getValue() !== '') {
+        delete metadata.sources;
+      }
+    } else {
+      var metadata = {};
+    }
+    metadata['ver'] = '0.0.2';
     for (let metaField of ['title', 'author', 'description', 'thumbnail', 'license', 'license_url', 'language', 'nsfw']) {
       var value = this.refs['meta_' + metaField].getValue();
       if (value !== '') {
@@ -71,9 +80,7 @@ var PublishPage = React.createClass({
         metadata: metadata,
       };
 
-      if (this.refs.file.getValue() === '') {
-        publishArgs.metadata.sources = this.state.claimMetadata.sources;
-      } else {
+      if (this.refs.file.getValue() !== '') {
         publishArgs.file_path = this._tempFilePath;
       }
 
