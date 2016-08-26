@@ -31,7 +31,7 @@ var FormatItem = React.createClass({
     return (
       <div className="row-fluid">
         <div className="span4">
-          <img src={thumbnail} alt={'Photo for ' + title} style={formatItemImgStyle} />
+          <img src={thumbnail || '/img/default-thumb.svg'} alt={'Photo for ' + title} style={formatItemImgStyle} />
         </div>
         <div className="span8">
           <p>{description}</p>
