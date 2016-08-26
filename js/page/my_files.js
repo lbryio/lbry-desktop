@@ -57,6 +57,7 @@ var moreButtonColumnStyle = {
   },
   artStyle = {
     maxHeight: '100px',
+    maxWidth: '100%',
     display: 'block',
     marginLeft: 'auto',
     marginRight: 'auto',
