@@ -195,16 +195,19 @@ var FeaturedContent = React.createClass({
           <h3>Featured Content</h3>
           <FeaturedContentItem name="what" />
           <FeaturedContentItem name="itsadisaster" />
-          <FeaturedContentItem name="keynesvhayek" />
-          <FeaturedContentItem name="meetlbry1" />
+          <FeaturedContentItem name="coloradobridge" />
+          <FeaturedContentItem name="samhyde2070" />
+          <FeaturedContentItem name="lendersden" />
+
         </div>
         <div className="span6">
           <h3>Community Content <ToolTipLink style={featuredContentLegendStyle} label="What's this?"
-            tooltip='Community Content is a public space where anyone can share content with the rest of the LBRY community. Bid on the names "one," "two," "three" and "four" to put your content here!' /></h3>
+            tooltip='Community Content is a public space where anyone can share content with the rest of the LBRY community. Bid on the names "one," "two," "three," "four" and "five" to put your content here!' /></h3>
           <FeaturedContentItem name="one" />
           <FeaturedContentItem name="two" />
           <FeaturedContentItem name="three" />
           <FeaturedContentItem name="four" />
+          <FeaturedContentItem name="five" />
         </div>
       </div>
     );
