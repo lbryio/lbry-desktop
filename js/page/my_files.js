@@ -54,7 +54,7 @@ var moreButtonColumnStyle = {
     backgroundColor: '#444',
     border: '2px solid #eee',
     display: 'inline-block',
-  },
+  }, 
   artStyle = {
     maxHeight: '100px',
     maxWidth: '100%',
