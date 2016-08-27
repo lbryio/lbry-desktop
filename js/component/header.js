@@ -44,14 +44,41 @@ var Header = React.createClass({
   },
   render: function() {
     return (
-      <header id="header" className={this.state.isScrolled ? 'header-scrolled' : 'header-unscrolled'}>
-        <Link onClick={this.props.onOpenDrawer} icon="icon-bars" className="open-drawer-link" />
-        <h1>{ this.state.title }</h1>
-        <div className="header-search">
-          <input type="search" onChange={this.onQueryChange}
-               placeholder="Find movies, music, games, and more"/>
+      <header id="header" className={ (this.state.isScrolled ? 'header-scrolled' : 'header-unscrolled') + ' ' + (this.props.links ? 'header-with-subnav' : 'header-no-subnav') }>
+        <div className="header-top-bar">
+          <Link onClick={this.props.onOpenDrawer} icon="icon-bars" className="open-drawer-link" />
+          <h1>{ this.state.title }</h1>
+          <div className="header-search">
+            <input type="search" onChange={this.onQueryChange}
+                 placeholder="Find movies, music, games, and more"/>
+          </div>
         </div>
+        {
+          this.props.links ?
+            <SubHeader links={this.props.links} viewingPage={this.props.viewingPage} /> :
+            ''
+        }
       </header>
+    );
+  }
+});
+
+var SubHeader =  React.createClass({
+  render: function() {
+    var links = [],
+        viewingUrl = '?' + this.props.viewingPage;
+    
+    for (let link of Object.keys(this.props.links)) {
+      links.push(
+        <a href={link} key={link} className={ viewingUrl == link ? 'sub-header-selected' : 'sub-header-unselected' }>
+          {this.props.links[link]}
+        </a>
+      );
+    }
+    return (
+      <nav className="sub-header">
+        {links}
+      </nav>
     );
   }
 });

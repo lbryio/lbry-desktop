@@ -4,14 +4,11 @@ var App = React.createClass({
     var match, param, val, viewingPage,
         drawerOpenRaw = sessionStorage.getItem('drawerOpen');
 
-    [match, param, val] = window.location.search.match(/\??([^=]*)(?:=(.*))?/);
+    [match, viewingPage, val] = window.location.search.match(/\??([^=]*)(?:=(.*))?/);
 
-    if (param && ['settings', 'discover', 'help', 'start', 'watch', 'report', 'files', 'claim', 'show', 'wallet', 'publish'].indexOf(param) != -1) {
-      viewingPage = param;
-    }
 
     return {
-      viewingPage: viewingPage ? viewingPage : 'discover',
+      viewingPage: viewingPage,
       drawerOpen: drawerOpenRaw !== null ? JSON.parse(drawerOpenRaw) : true,
       pageArgs: val,
     };
@@ -72,12 +69,28 @@ var App = React.createClass({
       pageArgs: term
     });
   },
+  getHeaderLinks: function()
+  {
+    switch(this.state.viewingPage)
+    {
+      case 'wallet':
+      case 'send':
+      case 'receive':
+      case 'claim':
+        return {
+          '?wallet' : 'Overview',
+          '?send' : 'Send',
+          '?receive' : 'Receive',
+          '?claim' : 'Claim Beta Code'
+        };
+      default:
+        return null;
+    }
+  },
   getMainContent: function()
   {
     switch(this.state.viewingPage)
     {
-      case 'discover':
-        return <DiscoverPage query={this.state.pageArgs} />;
       case 'settings':
         return <SettingsPage />;
       case 'help':
@@ -93,23 +106,33 @@ var App = React.createClass({
       case 'claim':
         return <ClaimCodePage />;
       case 'wallet':
-        return <WalletPage />;
+      case 'send':
+      case 'receive':
+        return <WalletPage viewingPage={this.state.viewingPage} />;
+      case 'send':
+        return <SendPage />;
+      case 'receive':
+        return <ReceivePage />;
       case 'show':
         return <DetailPage name={this.state.pageArgs} />;
       case 'publish':
         return <PublishPage />;
+      case 'discover':
+      default:
+        return <DiscoverPage query={this.state.pageArgs} />;
     }
   },
   render: function() {
-    var mainContent = this.getMainContent();
+    var mainContent = this.getMainContent(),
+        headerLinks = this.getHeaderLinks();
 
     return (
       this.state.viewingPage == 'watch' ?
         mainContent :
         <div id="window" className={ this.state.drawerOpen ? 'drawer-open' : 'drawer-closed' }>
           <Drawer onCloseDrawer={this.closeDrawer} viewingPage={this.state.viewingPage} />
-          <div id="main-content">
-            <Header onOpenDrawer={this.openDrawer} onSearch={this.onSearch} />
+          <div id="main-content" className={ headerLinks ? 'with-sub-nav' : 'no-sub-nav' }>
+            <Header onOpenDrawer={this.openDrawer} onSearch={this.onSearch} links={headerLinks} viewingPage={this.state.viewingPage} />
             {mainContent}
           </div>
         </div>

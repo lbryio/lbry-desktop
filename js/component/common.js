@@ -77,9 +77,10 @@ var CurrencySymbol = React.createClass({
 var CreditAmount = React.createClass({
   propTypes: {
     amount: React.PropTypes.number,
+    precision: React.PropTypes.number
   },
   render: function() {
-    var formattedAmount = lbry.formatCredits(this.props.amount);
+    var formattedAmount = lbry.formatCredits(this.props.amount, this.props.precision ? this.props.precision : 1);
     return (
       <span className="credit-amount">
         <span style={creditAmountStyle}>{formattedAmount} {parseFloat(formattedAmount) == 1.0 ? 'credit' : 'credits'}</span>

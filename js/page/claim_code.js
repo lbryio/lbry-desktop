@@ -65,7 +65,7 @@ var ClaimCodePage = React.createClass({
     });
   },
   handleSkip: function() {
-    alert('Welcome to LBRY! You can visit the Settings page to redeem an invite code at any time.');
+    alert('Welcome to LBRY! You can visit the Wallet page to redeem an invite code at any time.');
     window.location = '?landing';
   },
   render: function() {

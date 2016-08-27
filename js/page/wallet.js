@@ -106,7 +106,94 @@ var SendToAddressSection = React.createClass({
   }
 });
 
+
+var TransactionList = React.createClass({
+  getInitialState: function() {
+    return {
+      transactionItems: null,
+    }
+  },
+  componentWillMount: function() {
+    lbry.call('get_transaction_history', {}, (results) => {
+      if (results.length == 0) {
+        this.setState({ transactionItems: [] })
+      } else {
+        var transactionItems = [],
+            condensedTransactions = {};
+
+        results.forEach(function(tx) {
+          var txid = tx["txid"];
+          if (!(txid in condensedTransactions)) {
+            condensedTransactions[txid] = 0;
+          }
+          condensedTransactions[txid] += parseFloat(tx["value"]);
+        });
+        
+        results.reverse().forEach(function(tx) {
+          var txid = tx["txid"];
+          if (condensedTransactions[txid] && condensedTransactions[txid] > 0)
+          {
+            transactionItems.push({
+              id: txid,
+              date: new Date(parseInt(tx["timestamp"]) * 1000),
+              amount: condensedTransactions[txid]
+            });
+            delete condensedTransactions[txid];
+          }
+        });
+
+        this.setState({ transactionItems: transactionItems });
+      }
+    });
+  },
+  render: function() {
+    var rows = [];
+    if (this.state.transactionItems && this.state.transactionItems.length > 0)
+    {
+      this.state.transactionItems.forEach(function(item) {
+        rows.push(
+          <tr key={item.id}>
+            <td>{ (item.amount > 0 ? '+' : '' ) + item.amount }</td>
+            <td>{ item.date.toLocaleDateString() }</td>
+            <td>{ item.date.toLocaleTimeString() }</td>
+            <td>
+              <a className="button-text" href={"https://explorer.lbry.io/tx/"+item.id} target="_blank">{item.id.substr(0, 7)}</a>
+            </td>
+          </tr>
+        );
+      });
+    }
+    return (
+      <section className="card">
+        <h3>Transaction History</h3>
+        { this.state.transactionItems === null ? <BusyMessage message="Loading transactions" /> : '' }
+        { this.state.transactionItems && rows.length === 0 ? <div className="empty">You have no transactions.</div> : '' }
+        { this.state.transactionItems && rows.length > 0 ?
+          <table className="table-standard table-stretch">
+            <thead>
+              <tr>
+                <th>Amount</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Transaction</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rows}
+            </tbody>
+          </table>
+            : ''
+        }
+      </section>
+    );
+  }
+});
+
+
 var WalletPage = React.createClass({
+  propTypes: {
+    viewingPage: React.PropTypes.string,
+  },
   componentDidMount: function() {
     document.title = "My Wallet";
   },
@@ -116,8 +203,7 @@ var WalletPage = React.createClass({
    */
   getInitialState: function() {
     return {
-      balance: <BusyMessage message="Checking balance" />,
-      txlog: <BusyMessage message="Loading transactions" />,
+      balance: null,
     }
   },
   componentWillMount: function() {
@@ -126,66 +212,18 @@ var WalletPage = React.createClass({
         balance: results,
       })
     });
-    lbry.call('get_transaction_history', {}, (results) => {
-      var out = '(You should never see this message. -- wallet.js WalletPage componentWillMount)'
-      if (results.length == 0) {
-        out = 'No transactions yet.';
-      } else {
-        var condensedTransactions = {};
-        var rows = [];
-        rows.push(<tr>
-                    <th>Amount</th>
-                    <th>Time</th>
-                    <th>Date</th>
-                    <th>Transaction</th>
-                  </tr>);
-        results.forEach(function(tx) {
-          var txid = tx["txid"];
-          if (!(txid in condensedTransactions)) {
-            condensedTransactions[txid] = 0;
-          }
-          condensedTransactions[txid] += parseFloat(tx["amount"]);
-        });
-        results.reverse().forEach(function(tx) {
-          var txid = tx["txid"];
-          var txval = condensedTransactions[txid];
-          var txdate = new Date(parseInt(tx["time"])*1000);
-          if (txid in condensedTransactions && txval != 0) {
-            rows.push(<tr key={txid}>
-                        <td>{ (txval>0 ? '+' : '' ) + txval }</td>
-                        <td>{ txdate.toLocaleTimeString() }</td>
-                        <td>{ txdate.toLocaleDateString() }</td>
-                        <td>
-                          <a className="transaction_explorer_link" href={"https://explorer.lbry.io/tx/"+txid}>{txid}</a>
-                        </td>
-                      </tr>);
-            delete condensedTransactions[tx["txid"]];
-          }
-        });
-        out = <table className="table-standard"><tbody>{rows}</tbody></table>
-      }
-      this.setState({
-        txlog: out,
-      })
-    });
   },
   render: function() {
     return (
       <main className="page">
         <section className="card">
           <h3>Balance</h3>
-          {this.state.balance} <CurrencySymbol />
+          { this.state.balance === null ? <BusyMessage message="Checking balance" /> : ''}
+          { this.state.balance !== null ? <CreditAmount amount={this.state.balance} precision={8} /> : '' }
         </section>
-        <SendToAddressSection />
-        <NewAddressSection />
-        <section className="card">
-          <h3>Claim Invite Code</h3>
-          <Link href="?claim" label="Claim a LBRY beta invite code" button="alt" />
-        </section>
-        <section className="card" style={{'overflowX': 'auto'}}>
-          <h3>Transaction History</h3>
-          {this.state.txlog}
-        </section>
+        { this.props.viewingPage === 'wallet' ? <TransactionList /> : '' }
+        { this.props.viewingPage === 'send' ? <SendToAddressSection /> : '' }
+        { this.props.viewingPage === 'receive' ? <NewAddressSection /> : '' }
       </main>
     );
   }

@@ -67,7 +67,7 @@ $drawer-width: 240px;
 #window.drawer-open
 {
   #main-content { margin-left: $drawer-width; }
-  .open-drawer-link { visibility: hidden; }
+  .open-drawer-link { display: none }
   #header { padding-left: $drawer-width + $spacing-vertical / 2; }
 }
 
@@ -75,8 +75,12 @@ $drawer-width: 240px;
 {
   background: $color-primary;
   color: white;
-  height: $header-height;
-  padding: $spacing-vertical / 2;
+  &.header-no-subnav {
+    height: $header-height;
+  }
+  &.header-with-subnav {
+    height: $header-height * 2;
+  }
   position: fixed;
   top: 0;
   left: 0;
@@ -88,6 +92,10 @@ $drawer-width: 240px;
   {
     box-shadow: $default-box-shadow;
   }
+}
+.header-top-bar
+{
+  padding: $spacing-vertical / 2;
 }
 .header-search
 {
@@ -101,13 +109,54 @@ $drawer-width: 240px;
   }
 }
 
+nav.sub-header
+{
+  background: $color-primary;
+  text-transform: uppercase;
+  padding: $spacing-vertical / 2;
+  > a
+  {
+    $sub-header-selected-underline-height: 2px;
+    display: inline-block;
+    margin: 0 15px;
+    padding: 0 5px;
+    line-height: $header-height - $spacing-vertical - $sub-header-selected-underline-height;
+    color: #e8e8e8;
+    &:first-child
+    {
+      margin-left: 0;
+    }
+    &:last-child
+    {
+      margin-right: 0;
+    }
+    &.sub-header-selected
+    {
+      border-bottom: $sub-header-selected-underline-height solid #fff;
+      color: #fff;
+    }
+    &:hover
+    {
+      color: #fff;
+    }
+  }
+}
+
 #main-content
 {
   background: $color-canvas;
-  min-height: calc(100vh - 60px); //should be -$header-height, but I'm dumb I guess? It wouldn't work
+  &.no-sub-nav
+  {
+    min-height: calc(100vh - 60px); //should be -$header-height, but I'm dumb I guess? It wouldn't work
+    main { margin-top: $header-height; }
+  }
+  &.with-sub-nav
+  {
+    min-height: calc(100vh - 120px); //should be -$header-height, but I'm dumb I guess? It wouldn't work
+    main { margin-top: $header-height * 2; }
+  }
   main
   {
-    margin-top: $header-height;
     padding: $spacing-vertical;
   }
   h2
