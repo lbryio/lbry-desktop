@@ -23,8 +23,7 @@ var FormatItem = React.createClass({
     var author = claimInfo.author;
     var language = claimInfo.language;
     var license = claimInfo.license;
-    var fileContentType = claimInfo['content-type'];
-
+    var fileContentType = (claimInfo.content_type || claimInfo['content-type']);
     var available = this.props.available;
     var amount = this.props.amount || 0.0;
 
