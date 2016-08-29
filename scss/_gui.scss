@@ -9,10 +9,6 @@
 section
 {
   margin-bottom: $spacing-vertical;
-  section {
-    /* Smaller padding around inner sections */
-    margin-bottom: $spacing-vertical / 4;
-  }
   &:last-child
   {
     margin-bottom: 0;
@@ -62,10 +58,6 @@ p
   }
 }
 
-textarea {
-  height: 190px;
-}
-
 .hidden {
   display: none;
 }
@@ -80,14 +72,16 @@ input[type="text"], input[type="search"], textarea
   @include placeholder {
     color: lighten($color-text-dark, 60%);
   }
-  border: 0 none;
   border: 2px solid rgba(160,160,160,.5);
   padding-left: 5px;
   padding-right: 5px;
-  height: $spacing-vertical * 1.5;
-  line-height: $spacing-vertical - 4;
   box-sizing: border-box;
   -webkit-appearance: none;
+}
+input[type="text"], input[type="search"]
+{
+  line-height: $spacing-vertical - 4;
+  height: $spacing-vertical * 1.5;
 }
 
 .busy-indicator

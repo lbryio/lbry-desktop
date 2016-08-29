@@ -12,7 +12,7 @@ var FormatItem = React.createClass({
     claimInfo: React.PropTypes.object,
     amount: React.PropTypes.number,
     name: React.PropTypes.string,
-    available: React.PropTypes.string,
+    available: React.PropTypes.bool,
   },
   render: function() {
 
@@ -34,27 +34,31 @@ var FormatItem = React.createClass({
         </div>
         <div className="span8">
           <p>{description}</p>
-          <table className="table-standard">
-            <tbody>
-              <tr>
-                <td>Content-Type</td><td>{fileContentType}</td>
-              </tr>
-              <tr>
-                <td>Cost</td><td><CreditAmount amount={amount} isEstimate={!available}/></td>
-              </tr>
-              <tr>
-                <td>Author</td><td>{author}</td>
-              </tr>
-              <tr>
-                <td>Language</td><td>{language}</td>
-              </tr>
-              <tr>
-                <td>License</td><td>{license}</td>
-              </tr>
-            </tbody>
-          </table>
-          <WatchLink streamName={this.props.name} button="primary" />
-          <DownloadLink streamName={this.props.name} button="alt" />
+          <section>
+            <table className="table-standard">
+              <tbody>
+                <tr>
+                  <td>Content-Type</td><td>{fileContentType}</td>
+                </tr>
+                <tr>
+                  <td>Cost</td><td><CreditAmount amount={amount} isEstimate={!available}/></td>
+                </tr>
+                <tr>
+                  <td>Author</td><td>{author}</td>
+                </tr>
+                <tr>
+                  <td>Language</td><td>{language}</td>
+                </tr>
+                <tr>
+                  <td>License</td><td>{license}</td>
+                </tr>
+              </tbody>
+            </table>
+          </section>
+          <section>
+            <WatchLink streamName={this.props.name} button="primary" />
+            <DownloadLink streamName={this.props.name} button="alt" />
+          </section>
         </div>
       </div>
       );
@@ -66,7 +70,7 @@ var FormatsSection = React.createClass({
     claimInfo: React.PropTypes.object,
     amount: React.PropTypes.number,
     name: React.PropTypes.string,
-    available: React.PropTypes.string,
+    available: React.PropTypes.bool,
   },
   render: function() {
     var name = this.props.name;
