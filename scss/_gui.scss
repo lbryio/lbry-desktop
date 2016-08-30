@@ -195,6 +195,12 @@ input[type="text"], input[type="search"]
   color: $color-meta-light;
 }
 
+.empty
+{
+  color: $color-meta-light;
+  font-style: italic;
+}
+
 .form-row
 {
   + .form-row

@@ -57,7 +57,7 @@ var SendToAddressSection = React.createClass({
     return {
       address: "",
       amount: 0.0,
-      balance: "Checking balance...",
+      balance: <BusyMessage message="Checking balance" />,
       results: "",
     }
   },
@@ -106,7 +106,94 @@ var SendToAddressSection = React.createClass({
   }
 });
 
+
+var TransactionList = React.createClass({
+  getInitialState: function() {
+    return {
+      transactionItems: null,
+    }
+  },
+  componentWillMount: function() {
+    lbry.call('get_transaction_history', {}, (results) => {
+      if (results.length == 0) {
+        this.setState({ transactionItems: [] })
+      } else {
+        var transactionItems = [],
+            condensedTransactions = {};
+
+        results.forEach(function(tx) {
+          var txid = tx["txid"];
+          if (!(txid in condensedTransactions)) {
+            condensedTransactions[txid] = 0;
+          }
+          condensedTransactions[txid] += parseFloat(tx["value"]);
+        });
+        
+        results.reverse().forEach(function(tx) {
+          var txid = tx["txid"];
+          if (condensedTransactions[txid] && condensedTransactions[txid] > 0)
+          {
+            transactionItems.push({
+              id: txid,
+              date: new Date(parseInt(tx["timestamp"]) * 1000),
+              amount: condensedTransactions[txid]
+            });
+            delete condensedTransactions[txid];
+          }
+        });
+
+        this.setState({ transactionItems: transactionItems });
+      }
+    });
+  },
+  render: function() {
+    var rows = [];
+    if (this.state.transactionItems && this.state.transactionItems.length > 0)
+    {
+      this.state.transactionItems.forEach(function(item) {
+        rows.push(
+          <tr key={item.id}>
+            <td>{ (item.amount > 0 ? '+' : '' ) + item.amount }</td>
+            <td>{ item.date.toLocaleDateString() }</td>
+            <td>{ item.date.toLocaleTimeString() }</td>
+            <td>
+              <a className="button-text" href={"https://explorer.lbry.io/tx/"+item.id} target="_blank">{item.id.substr(0, 7)}</a>
+            </td>
+          </tr>
+        );
+      });
+    }
+    return (
+      <section className="card">
+        <h3>Transaction History</h3>
+        { this.state.transactionItems === null ? <BusyMessage message="Loading transactions" /> : '' }
+        { this.state.transactionItems && rows.length === 0 ? <div className="empty">You have no transactions.</div> : '' }
+        { this.state.transactionItems && rows.length > 0 ?
+          <table className="table-standard table-stretch">
+            <thead>
+              <tr>
+                <th>Amount</th>
+                <th>Date</th>
+                <th>Time</th>
+                <th>Transaction</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rows}
+            </tbody>
+          </table>
+            : ''
+        }
+      </section>
+    );
+  }
+});
+
+
 var WalletPage = React.createClass({
+  propTypes: {
+    viewingPage: React.PropTypes.string,
+  },
   componentDidMount: function() {
     document.title = "My Wallet";
   },
@@ -116,14 +203,14 @@ var WalletPage = React.createClass({
    */
   getInitialState: function() {
     return {
-      balance: "Checking balance...",
+      balance: null,
     }
   },
   componentWillMount: function() {
     lbry.getBalance((results) => {
       this.setState({
         balance: results,
-      });
+      })
     });
   },
   render: function() {
@@ -131,14 +218,12 @@ var WalletPage = React.createClass({
       <main className="page">
         <section className="card">
           <h3>Balance</h3>
-          {this.state.balance} <CurrencySymbol />
+          { this.state.balance === null ? <BusyMessage message="Checking balance" /> : ''}
+          { this.state.balance !== null ? <CreditAmount amount={this.state.balance} precision={8} /> : '' }
         </section>
-        <SendToAddressSection />
-        <NewAddressSection />
-        <section className="card">
-          <h3>Claim Invite Code</h3>
-          <Link href="?claim" label="Claim a LBRY beta invite code" button="alt" />
-        </section>
+        { this.props.viewingPage === 'wallet' ? <TransactionList /> : '' }
+        { this.props.viewingPage === 'send' ? <SendToAddressSection /> : '' }
+        { this.props.viewingPage === 'receive' ? <NewAddressSection /> : '' }
       </main>
     );
   }
