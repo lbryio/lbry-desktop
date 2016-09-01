@@ -1,22 +1,39 @@
-var NewAddressSection = React.createClass({
-  generateAddress: function() {
-    lbry.getNewAddress((results) => {
+var addressRefreshButtonStyle = {
+  fontSize: '11pt',
+};
+var AddressSection = React.createClass({
+  _refreshAddress: function() {
+    lbry.getNewAddress((address) => {
+      localStorage.setItem('wallet_address', address);
       this.setState({
-        address: results,
-      })
+        address: address,
+      });
     });
   },
   getInitialState: function() {
     return {
-      address: "",
+      address: null,
+    }
+  },
+  componentWillMount: function() {
+    var address = localStorage.getItem('wallet_address');
+    if (address === null) {
+      self._refreshAddress();
+    } else {
+      this.setState({
+        address: address,
+      });
     }
   },
   render: function() {
     return (
       <section className="card">
-        <h3>Generate New Address</h3>
-        <div className="form-row"><input type="text" size="60" value={this.state.address}></input></div>
-        <div className="form-row form-row-submit"><Link button="primary" label="Generate" onClick={this.generateAddress} /></div>
+        <h3>Wallet Address</h3>
+        <p><Address address={this.state.address} /> <Link text="Get new address" icon='icon-refresh' onClick={this._refreshAddress} style={addressRefreshButtonStyle} /></p>
+        <div className="help">
+          <p>Other LBRY users may send credits to you by entering this address on the "Send" page.</p>
+          You can generate a new address at any time, and any previous addresses will continue to work. Using multiple addresses can be helpful for keeping track of incoming payments from multiple sources.
+        </div>
       </section>
     );
   }
@@ -223,7 +240,7 @@ var WalletPage = React.createClass({
         </section>
         { this.props.viewingPage === 'wallet' ? <TransactionList /> : '' }
         { this.props.viewingPage === 'send' ? <SendToAddressSection /> : '' }
-        { this.props.viewingPage === 'receive' ? <NewAddressSection /> : '' }
+        { this.props.viewingPage === 'receive' ? <AddressSection /> : '' }
       </main>
     );
   }
