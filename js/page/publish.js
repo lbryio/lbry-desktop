@@ -141,9 +141,9 @@ var PublishPage = React.createClass({
           error.message);
   },
   handleNameChange: function(event) {
-    var name = event.target.value;
+    var rawName = event.target.value;
 
-    if (!name) {
+    if (!rawName) {
       this.setState({
         name: '',
         nameResolved: false,
@@ -152,8 +152,11 @@ var PublishPage = React.createClass({
       return;
     }
 
+    var name = lbry.formatName(rawName);
+
     lbry.resolveName(name, (info) => {
-      if (name != this.refs.name.getValue()) {
+      if (name != lbry.formatName(this.refs.name.getValue())) {
+        // A new name has been typed already, so bail
         return;
       }
 
@@ -285,9 +288,9 @@ var PublishPage = React.createClass({
             lbry://<FormField type="text" ref="name" onChange={this.handleNameChange} />
             {
               (!this.state.name ? '' :
-                (! this.state.nameResolved ? <em> This name is available: {this.state.name}</em>
-                                           : (this.state.nameIsMine ? <em> You already control this name. You can use this page to update your claim.</em>
-                                                                    : <em> This name is currently claimed for <strong>{lbry.formatCredits(this.state.claimValue)}</strong> credits.</em>)))
+                (! this.state.nameResolved ? <em> The name <strong>{this.state.name}</strong> is available.</em>
+                                           : (this.state.nameIsMine ? <em> You already control the name <strong>{this.state.name}</strong>. You can use this page to update your claim.</em>
+                                                                    : <em> The name {this.state.name} is currently claimed for <strong>{lbry.formatCredits(this.state.claimValue)}</strong> credits.</em>)))
             }
             <div className="help">What LBRY name would you like to claim for this file?</div>
           </div>
