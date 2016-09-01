@@ -258,6 +258,11 @@ lbry.formatCredits = function(amount, precision)
   return amount.toFixed(precision || 1).replace(/\.?0+$/, '');
 }
 
+lbry.formatName = function(name) {
+  // Converts LBRY name to standard format (all lower case, no special characters)
+  return name.toLowerCase().replace(/[^a-z0-9\-]/, '');
+}
+
 lbry.loadJs = function(src, type, onload)
 {
   var lbryScriptTag = document.getElementById('lbry'),
