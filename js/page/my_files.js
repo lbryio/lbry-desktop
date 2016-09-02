@@ -195,7 +195,9 @@ var MyFilesPage = React.createClass({
         }
 
         var ratioLoaded = written_bytes / total_bytes;
-        var showWatchButton = (lbry.getMediaType(file_name) == 'video' || lbry.getMediaType(file_name) == 'audio');
+
+        var mediaType = lbry.getMediaType(metadata.content_type, file_name);
+        var showWatchButton = (mediaType == 'video');
 
         content.push(<MyFilesRow key={lbry_uri} lbryUri={lbry_uri} title={title || ('lbry://' + lbry_uri)} completed={completed} stopped={stopped}
                                  ratioLoaded={ratioLoaded} imgUrl={thumbnail} path={download_path}
