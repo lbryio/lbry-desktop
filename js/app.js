@@ -41,8 +41,12 @@ var App = React.createClass({
             message += '\n\nBefore installing the new version, make sure to exit LBRY, if you started the app ' +
               'click that LBRY icon in your status bar and choose "Quit."';
           }
-        } else {
+        } else if (versionInfo.os_system == 'Linux') {
           var updateUrl = 'https://lbry.io/get/lbry.deb';
+        } else if (versionInfo.os_system == 'Windows') {
+          var updateUrl = 'https://lbry.io/get/lbry.msi';
+        } else {
+          var updateUrl = 'https://lbry.io/get';
         }
 
         if (window.confirm(message))
