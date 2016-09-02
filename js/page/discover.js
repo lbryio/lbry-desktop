@@ -96,13 +96,13 @@ var SearchResultRow = React.createClass({
       <section className={ 'card ' + (obscureNsfw ? 'card-obscured' : '') } onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
         <div className="row-fluid card-content" style={searchRowStyle}>
           <div className="span3">
-            <img src={this.props.imgUrl || '/img/default-thumb.svg'} alt={'Photo for ' + (this.props.title || this.props.name)} style={searchRowImgStyle} />
+            <a href={'/?show=' + this.props.name}><img src={this.props.imgUrl || '/img/default-thumb.svg'} alt={'Photo for ' + (this.props.title || this.props.name)} style={searchRowImgStyle} /></a>
           </div>
           <div className="span9">
             <span style={searchRowCostStyle}>
               <CreditAmount amount={this.props.cost} isEstimate={!this.props.available}/>
             </span>
-            <div className="meta">lbry://{this.props.name}</div>
+            <div className="meta"><a href={'/?show=' + this.props.name}>lbry://{this.props.name}</a></div>
             <h3 style={searchRowTitleStyle}><a href={'/?show=' + this.props.name}>{this.props.title}</a></h3>
             <div>
               <WatchLink streamName={this.props.name} button="primary" />
