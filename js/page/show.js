@@ -24,6 +24,7 @@ var FormatItem = React.createClass({
     var language = claimInfo.language;
     var license = claimInfo.license;
     var fileContentType = (claimInfo.content_type || claimInfo['content-type']);
+    var mediaType = lbry.getMediaType(fileContentType);
     var available = this.props.available;
     var amount = this.props.amount || 0.0;
 
@@ -56,7 +57,7 @@ var FormatItem = React.createClass({
             </table>
           </section>
           <section>
-            <WatchLink streamName={this.props.name} button="primary" />
+            {mediaType == 'video' ? <WatchLink streamName={this.props.name} button="primary" /> : null}
             <DownloadLink streamName={this.props.name} button="alt" />
           </section>
         </div>

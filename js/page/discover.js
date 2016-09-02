@@ -105,7 +105,7 @@ var SearchResultRow = React.createClass({
             <div className="meta"><a href={'/?show=' + this.props.name}>lbry://{this.props.name}</a></div>
             <h3 style={searchRowTitleStyle}><a href={'/?show=' + this.props.name}>{this.props.title}</a></h3>
             <div>
-              <WatchLink streamName={this.props.name} button="primary" />
+              {this.props.mediaType == 'video' ? <WatchLink streamName={this.props.name} button="primary" /> : null}
               <DownloadLink streamName={this.props.name} button="text" />
             </div>
             <p style={searchRowDescriptionStyle}>{this.props.description}</p>
@@ -175,8 +175,8 @@ var FeaturedContentItem = React.createClass({
 
     return (<div style={featuredContentItemContainerStyle}>
       <SearchResultRow name={this.props.name} title={this.state.title} imgUrl={this.state.metadata.thumbnail || '/img/default-thumb.svg'}
-                 description={this.state.metadata.description} cost={this.state.amount} nsfw={this.state.metadata.nsfw}
-                 available={this.state.available} />
+                 description={this.state.metadata.description} mediaType={lbry.getMediaType(this.state.metadata.content_type)}
+                 cost={this.state.amount} nsfw={this.state.metadata.nsfw} available={this.state.available} />
     </div>);
   }
 });
