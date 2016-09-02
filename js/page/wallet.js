@@ -18,10 +18,16 @@ var AddressSection = React.createClass({
   componentWillMount: function() {
     var address = localStorage.getItem('wallet_address');
     if (address === null) {
-      self._refreshAddress();
+      this._refreshAddress();
     } else {
-      this.setState({
-        address: address,
+      lbry.checkAddressIsMine(address, (isMine) => {
+        if (isMine) {
+          this.setState({
+            address: address,
+          });
+        } else {
+          this._refreshAddress();
+        }
       });
     }
   },
