@@ -283,21 +283,25 @@ lbry.imagePath = function(file)
   return lbry.rootPath + '/img/' + file;
 }
 
-lbry.getMediaType = function(filename) {
-  var dotIndex = filename.lastIndexOf('.');
-  if (dotIndex == -1) {
-    return 'unknown';
-  }
-
-  var ext = filename.substr(dotIndex + 1);
-  if (/^mp4|mov|m4v|flv|f4v$/i.test(ext)) {
-    return 'video';
-  } else if (/^mp3|m4a|aac|wav|flac|ogg$/i.test(ext)) {
-    return 'audio';
-  } else if (/^html|htm|pdf|odf|doc|docx|md|markdown|txt$/i.test(ext)) {
-    return 'document';
+lbry.getMediaType = function(contentType, fileName) {
+  if (contentType) {
+    return /^[^/]+/.exec(contentType);
   } else {
-    return 'unknown';
+    var dotIndex = filename.lastIndexOf('.');
+    if (dotIndex == -1) {
+      return 'unknown';
+    }
+
+    var ext = filename.substr(dotIndex + 1);
+    if (/^mp4|mov|m4v|flv|f4v$/i.test(ext)) {
+      return 'video';
+    } else if (/^mp3|m4a|aac|wav|flac|ogg$/i.test(ext)) {
+      return 'audio';
+    } else if (/^html|htm|pdf|odf|doc|docx|md|markdown|txt$/i.test(ext)) {
+      return 'document';
+    } else {
+      return 'unknown';
+    }
   }
 }
 
