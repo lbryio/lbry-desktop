@@ -107,6 +107,7 @@ var DetailPage = React.createClass({
       claimInfo: null,
       amount: null,
       searching: true,
+      matchFound: null,
     };
   },
   componentWillMount: function() {
@@ -114,12 +115,21 @@ var DetailPage = React.createClass({
 
     lbry.search(this.props.name, (results) => {
       var result = results[0];
-      this.setState({
-        amount: result.cost,
-        available: result.available,
-        claimInfo: result.value,
-        searching: false,
-      });
+
+      if (result.name != this.props.name) {
+        this.setState({
+          searching: false,
+          matchFound: false,
+        });
+      } else {
+        this.setState({
+          amount: result.cost,
+          available: result.available,
+          claimInfo: result.value,
+          searching: false,
+          matchFound: true,
+        });  
+      }
     });
   },
   render: function() {
@@ -136,7 +146,14 @@ var DetailPage = React.createClass({
     return (
       <main>
         <section className="card">
-          <FormatsSection name={name} claimInfo={claimInfo} amount={amount} available={available} />
+          {this.state.matchFound ? (
+            <FormatsSection name={name} claimInfo={claimInfo} amount={amount} available={available} />
+          ) : (
+            <div>
+              <h2>No content</h2>
+              There is no content available at the name <strong>lbry://{this.props.name}</strong>. If you reached this page from a link within the LBRY interface, please <Link href="/?report" label="report a bug" />. Thanks!
+            </div>
+          )}
         </section>
       </main>);
   }
