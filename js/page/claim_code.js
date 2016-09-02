@@ -39,8 +39,8 @@ var ClaimCodePage = React.createClass({
 
         if (response.success) {
           alert('Your invite code has been redeemed! The credits will be added to your balance shortly.');
-          // Send them to "landing" instead of "home" (home will just trigger the message all over again until the credits arrive)
-          window.location = '?landing';
+          localStorage.setItem('claimCodeDone', true);
+          window.location = '?home';
         } else {
           alert(response.reason);
           this.setState({
@@ -66,7 +66,8 @@ var ClaimCodePage = React.createClass({
   },
   handleSkip: function() {
     alert('Welcome to LBRY! You can visit the Wallet page to redeem an invite code at any time.');
-    window.location = '?landing';
+    localStorage.setItem('claimCodeDone', true);
+    window.location = '?home';
   },
   render: function() {
     return (
