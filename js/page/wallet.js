@@ -120,22 +120,20 @@ var TransactionList = React.createClass({
       } else {
         var transactionItems = [],
             condensedTransactions = {};
-
         results.forEach(function(tx) {
           var txid = tx["txid"];
           if (!(txid in condensedTransactions)) {
             condensedTransactions[txid] = 0;
           }
-          condensedTransactions[txid] += parseFloat(tx["value"]);
+          condensedTransactions[txid] += parseFloat(tx["amount"]);
         });
-        
         results.reverse().forEach(function(tx) {
           var txid = tx["txid"];
-          if (condensedTransactions[txid] && condensedTransactions[txid] > 0)
+          if (condensedTransactions[txid] && condensedTransactions[txid] != 0)
           {
             transactionItems.push({
               id: txid,
-              date: new Date(parseInt(tx["timestamp"]) * 1000),
+              date: new Date(parseInt(tx["time"]) * 1000),
               amount: condensedTransactions[txid]
             });
             delete condensedTransactions[txid];
