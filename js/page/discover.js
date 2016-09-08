@@ -37,9 +37,11 @@ var SearchResults = React.createClass({
     var rows = [];
     this.props.results.forEach(function(result) {
       console.log(result);
+      var mediaType = lbry.getMediaType(result.value.content_type);
       rows.push(
         <SearchResultRow key={result.name} name={result.name} title={result.value.title} imgUrl={result.value.thumbnail}
-                         description={result.value.description} cost={result.cost} nsfw={result.value.nsfw} />
+                         description={result.value.description} cost={result.cost} nsfw={result.value.nsfw}
+                         mediaType={mediaType}  />
       );
     });
     return (
