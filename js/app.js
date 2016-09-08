@@ -81,11 +81,13 @@ var App = React.createClass({
       case 'send':
       case 'receive':
       case 'claim':
+      case 'referral':
         return {
           '?wallet' : 'Overview',
           '?send' : 'Send',
           '?receive' : 'Receive',
-          '?claim' : 'Claim Beta Code'
+          '?claim' : 'Claim Beta Code',
+          '?referral' : 'Claim Referral',
         };
       default:
         return null;
@@ -109,6 +111,8 @@ var App = React.createClass({
         return <StartPage />;
       case 'claim':
         return <ClaimCodePage />;
+      case 'referral':
+        return <ReferralPage />;
       case 'wallet':
       case 'send':
       case 'receive':
