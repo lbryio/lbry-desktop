@@ -286,13 +286,13 @@ lbry.imagePath = function(file)
 lbry.getMediaType = function(contentType, fileName) {
   if (contentType) {
     return /^[^/]+/.exec(contentType);
-  } else {
-    var dotIndex = filename.lastIndexOf('.');
+  } else if (fileName) {
+    var dotIndex = fileName.lastIndexOf('.');
     if (dotIndex == -1) {
       return 'unknown';
     }
 
-    var ext = filename.substr(dotIndex + 1);
+    var ext = fileName.substr(dotIndex + 1);
     if (/^mp4|mov|m4v|flv|f4v$/i.test(ext)) {
       return 'video';
     } else if (/^mp3|m4a|aac|wav|flac|ogg$/i.test(ext)) {
@@ -302,6 +302,8 @@ lbry.getMediaType = function(contentType, fileName) {
     } else {
       return 'unknown';
     }
+  } else {
+    return 'unknown';
   }
 }
 
