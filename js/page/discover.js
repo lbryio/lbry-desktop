@@ -197,9 +197,9 @@ var FeaturedContent = React.createClass({
           <h3>Featured Content</h3>
           <FeaturedContentItem name="what" />
           <FeaturedContentItem name="itsadisaster" />
+          <FeaturedContentItem name="rickandmortyrapgod" />
           <FeaturedContentItem name="coloradobridge" />
-          <FeaturedContentItem name="samhyde2070" />
-          <FeaturedContentItem name="LendersDen" />
+          <FeaturedContentItem name="LooseCannon" />
 
         </div>
         <div className="span6">
