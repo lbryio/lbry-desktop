@@ -87,7 +87,7 @@ var App = React.createClass({
           '?send' : 'Send',
           '?receive' : 'Receive',
           '?claim' : 'Claim Beta Code',
-          '?referral' : 'Claim Referral',
+          '?referral' : 'Check Referral Credit',
         };
       default:
         return null;

@@ -38,9 +38,9 @@ var ReferralPage = React.createClass({
         var response = JSON.parse(xhr.responseText);
 
         if (response.success) {
-          var credits = response.activationCredits + response.referralCredits;
-          alert('Your referral code has been redeemed! ' + credits + ' credits will be added to ' +
-                'your balance shortly.');
+          alert('You have earned ' + response.referralCredits + ' credits from referrals and ' +
+                response.activationCredits + ' credits from activations.');
+
           window.location = '?home';
         } else {
           alert(response.reason);
@@ -68,9 +68,10 @@ var ReferralPage = React.createClass({
     return (
       <main>
         <div className="card">
-          <h2>Claim your referral credits</h2>
+          <h2>Check your referral credits</h2>
           <section style={referralCodeContentStyle}>
-            <p>Did you refer someone to LBRY? Enter your referral code and email address below to receive your credits!</p>
+            <p>Have you referred others to LBRY? Enter your referral code and email address below to check how many credits you've earned!</p>
+            <p>As a reminder, your referral code is the same as your LBRY invitation code.</p>
           </section>
           <section>
             <form onSubmit={this.handleSubmit}>
