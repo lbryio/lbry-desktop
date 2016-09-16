@@ -86,11 +86,11 @@ var PublishPage = React.createClass({
 
       console.log(publishArgs);
       lbry.publish(publishArgs, (message) => {
-        this.handlePublishSuccess();
+        this.handlePublishStarted();
         this.setState({
           submitting: false,
         });
-      }, (error) => {
+      }, null, (error) => {
         this.handlePublishError(error);
         this.setState({
           submitting: false,
@@ -131,7 +131,7 @@ var PublishPage = React.createClass({
       submitting: false,
     };
   },
-  handlePublishSuccess: function() {
+  handlePublishStarted: function() {
     alert(`Your file ${this.refs.meta_title.getValue()} has been published to LBRY at the address lbry://${this.state.name}!\n\n` +
           `You will now be taken to your My Files page, where your newly published file will be listed. Your file will take a few minutes to appear for other LBRY users; until then it will be listed as "pending."`);
     window.location = "?files";
