@@ -138,6 +138,10 @@ lbry.getClaimInfo = function(name, callback) {
   lbry.call('get_claim_info', { name: name }, callback);
 }
 
+lbry.getMyClaim = function(name, callback) {
+  lbry.call('get_my_claim', { name: name }, callback);
+}
+
 lbry.getCostEstimate = function(name, callback) {
   lbry.call('get_est_cost', { name: name }, callback);
 }
