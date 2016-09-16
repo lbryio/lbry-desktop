@@ -110,6 +110,7 @@ var MyFilesRow = React.createClass({
                  {this.props.completed ? 'Download complete' : (parseInt(this.props.ratioLoaded * 100) + '%')}
                  <div>{ pauseLink }</div>
                  <div>{ watchButton }</div>
+                 {this.props.available ? null : <p><em>This file is now uploading to Reflector. This service hosts a copy of the file on LBRY's servers so that it's available even if no one with the file is online.</em></p>}
                </div>
              )
             }
@@ -131,10 +132,13 @@ var MyFilesRow = React.createClass({
 });
 
 var MyFilesPage = React.createClass({
-  fileTimeout: null,
+  _fileTimeout: null,
+  _fileInfoCheckNum: 0,
+
   getInitialState: function() {
     return {
       filesInfo: null,
+      filesAvailable: {},
     };
   },
   componentDidMount: function() {
@@ -144,17 +148,51 @@ var MyFilesPage = React.createClass({
     this.updateFilesInfo();
   },
   componentWillUnmount: function() {
-    if (this.fileTimeout)
+    if (this._fileTimeout)
     {
-      clearTimeout(this.fileTimeout);
+      clearTimeout(this._fileTimeout);
     }
   },
   updateFilesInfo: function() {
     lbry.getFilesInfo((filesInfo) => {
+      if (!filesInfo) {
+        filesInfo = [];
+      }
+
+      if (!(this._fileInfoCheckNum % 5)) {
+        // Time to update file availability status
+
+        for (let fileInfo of filesInfo) {
+          let name = fileInfo.lbry_uri;
+
+          lbry.search(name, (results) => {
+            var result = results[0];
+
+            if (result.name != name) {
+              // File not listed in Lighthouse
+              var available = false;
+            } else {
+              var available = result.available;
+            }
+
+            if (typeof this.state.filesAvailable[name] === 'undefined' || available != this.state.filesAvailable[name]) {
+              var newFilesAvailable = Object.assign({}, this.state.filesAvailable);
+              newFilesAvailable[name] = available;
+              this.setState({
+                filesAvailable: newFilesAvailable,
+              });
+            }
+          });
+        }
+      }
+
+      this._fileInfoCheckNum += 1;
+
       this.setState({
-        filesInfo: (filesInfo ? filesInfo : []),
+        filesInfo: filesInfo,
       });
-      this.fileTimeout = setTimeout(() => { this.updateFilesInfo() }, 1000);
+
+      this._fileTimeout = setTimeout(() => { this.updateFilesInfo() }, 1000);
     });
   },
   render: function() {
@@ -201,7 +239,8 @@ var MyFilesPage = React.createClass({
 
         content.push(<MyFilesRow key={lbry_uri} lbryUri={lbry_uri} title={title || ('lbry://' + lbry_uri)} completed={completed} stopped={stopped}
                                  ratioLoaded={ratioLoaded} imgUrl={thumbnail} path={download_path}
-                                 showWatchButton={showWatchButton} pending={pending} />);
+                                 showWatchButton={showWatchButton} pending={pending}
+                                 available={this.state.filesAvailable[lbry_uri]} />);
       }
     }
     return (
