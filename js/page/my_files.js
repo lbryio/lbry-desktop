@@ -110,7 +110,7 @@ var MyFilesRow = React.createClass({
                  {this.props.completed ? 'Download complete' : (parseInt(this.props.ratioLoaded * 100) + '%')}
                  <div>{ pauseLink }</div>
                  <div>{ watchButton }</div>
-                 {this.props.available ? null : <p><em>This file is now uploading to Reflector. This service hosts a copy of the file on LBRY's servers so that it's available even if no one with the file is online.</em></p>}
+                 {this.props.available ? null : <p><em>This file is uploading to Reflector. Reflector is a service that hosts a copy of the file on LBRY's servers so that it's available even if no one with the file is online.</em></p>}
                </div>
              )
             }
