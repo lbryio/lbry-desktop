@@ -18,7 +18,7 @@ var PublishPage = React.createClass({
     });
 
     var checkFields = this._requiredFields.slice();
-    if (!this.state.nameIsMine) {
+    if (!this.state.myClaimExists) {
       checkFields.push('file');
     }
 
@@ -43,7 +43,7 @@ var PublishPage = React.createClass({
 
     if (this.state.nameIsMine) {
       // Pre-populate with existing metadata
-      var metadata = Object.assign({}, this.state.claimMetadata);
+      var metadata = Object.assign({}, this.state.myClaimMetadata);
       if (this.refs.file.getValue() !== '') {
         delete metadata.sources;
       }
@@ -111,9 +111,10 @@ var PublishPage = React.createClass({
       feeAmount: '',
       feeCurrency: 'USD',
       nameResolved: false,
-      nameIsMine: false,
-      claimValue: 0.0,
-      claimMetadata: null,
+      topClaimValue: 0.0,
+      myClaimValue: 0.0,
+      myClaimMetadata: null,
+      myClaimExists: null,
       fileInfo: null,
       copyrightNotice: '',
       otherLicenseDescription: '',
@@ -159,27 +160,33 @@ var PublishPage = React.createClass({
           nameResolved: false,
         });
       } else {
-        lbry.getClaimInfo(name, (claimInfo) => {
-          if (name != this.refs.name.getValue()) {
-            return;
-          }
+        lbry.getMyClaim(name, (myClaimInfo) => {
+          lbry.getClaimInfo(name, (claimInfo) => {
+            if (name != this.refs.name.getValue()) {
+              return;
+            }
 
-          var newState = {
-            name: name,
-            nameResolved: true,
-            nameIsMine: claimInfo.is_mine,
-            claimValue: parseFloat(claimInfo.amount),
-            claimMetadata: claimInfo.value,
-          };
+            var topClaimIsMine = (myClaimInfo && myClaimInfo.amount >= claimInfo.amount);
 
-          if (claimInfo.is_mine) {
-            newState.bid = claimInfo.amount;
-          } else if (this.state.nameIsMine && !claimInfo.name_is_mine) {
-            // Just changed away from a name we control, so clear pre-fill
-            newState.bid = '';
-          }
+            var newState = {
+              name: name,
+              nameResolved: true,
+              topClaimValue: parseFloat(claimInfo.amount),
+              myClaimExists: !!myClaimInfo,
+              myClaimValue: parseFloat(myClaimInfo.amount),
+              myClaimMetadata: myClaimInfo.value,
+              topClaimIsMine: topClaimIsMine,
+            };
 
-          this.setState(newState);
+            if (topClaimIsMine) {
+              newState.bid = myClaimInfo.amount;
+            } else if (this.state.myClaimMetadata) {
+              // Just changed away from a name we have a claim on, so clear pre-fill
+              newState.bid = '';
+            }
+
+            this.setState(newState);
+          });
         });
       }
     });
@@ -320,8 +327,8 @@ var PublishPage = React.createClass({
             {
               (!this.state.name ? '' :
                 (! this.state.nameResolved ? <em> The name <strong>{this.state.name}</strong> is available.</em>
-                                           : (this.state.nameIsMine ? <em> You already control the name <strong>{this.state.name}</strong>. You can use this page to update your claim.</em>
-                                                                    : <em> The name {this.state.name} is currently claimed for <strong>{lbry.formatCredits(this.state.claimValue)}</strong> credits.</em>)))
+                                           : (this.state.myClaimExists ? <em> You already have a claim on the name <strong>{this.state.name}</strong>. You can use this page to update your claim.</em>
+                                                                       : <em> The name {this.state.name} is currently claimed for <strong>{lbry.formatCredits(this.state.topClaimValue)}</strong> credits.</em>)))
             }
             <div className="help">What LBRY name would you like to claim for this file?</div>
           </div>
@@ -338,17 +345,19 @@ var PublishPage = React.createClass({
                                              </div>
                                            : <div>File ready for publishing!</div>) }
           </form>
-          { this.state.nameIsMine ? <div className="help">If you don't choose a file, the file from your existing claim will be used.</div> : null }
+          { this.state.myClaimExists ? <div className="help">If you don't choose a file, the file from your existing claim will be used.</div> : null }
         </section>
 
         <section className="card">
           <h4>Bid Amount</h4>
           <div className="form-row">
-            Credits <FormField ref="bid" style={publishNumberStyle} type="text" onChange={this.handleBidChange} value={this.state.bid} placeholder={this.state.nameResolved ? lbry.formatCredits(this.state.claimValue + 10) : 100} />
+            Credits <FormField ref="bid" style={publishNumberStyle} type="text" onChange={this.handleBidChange} value={this.state.bid} placeholder={this.state.nameResolved ? lbry.formatCredits(this.state.topClaimValue + 10) : 100} />
             <div className="help">How much would you like to bid for this name?
             { !this.state.nameResolved ? <span> Since this name is not currently resolved, you may bid as low as you want, but higher bids help prevent others from claiming your name.</span>
-                                       : (this.state.nameIsMine ? <span> Your current bid is <strong>{lbry.formatCredits(this.state.claimValue)}</strong> credits.</span>
-                                                                : <span> You must bid over <strong>{lbry.formatCredits(this.state.claimValue)}</strong> credits to claim this name.</span>) }
+                                       : (this.state.topClaimIsMine ? <span> You currently control this name with a bid of <strong>{lbry.formatCredits(this.state.myClaimValue)}</strong> credits.</span>
+                                                                    : (this.state.myClaimExists ? <span> You have a non-winning bid on this name for <strong>{lbry.formatCredits(this.state.myClaimValue)}</strong> credits.
+                                                                                                         To control this name, you'll need to increase your bid to at least <strong>{lbry.formatCredits(this.state.myClaimValue)}</strong> credits.</span>
+                                                                                                : <span> You must bid over <strong>{lbry.formatCredits(this.state.topClaimValue)}</strong> credits to claim this name.</span>)) }
             </div>
           </div>
         </section>
