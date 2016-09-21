@@ -287,7 +287,7 @@ var PublishPage = React.createClass({
     } else if (this.state.otherLicenseChosen) {
       return this.state.otherLicenseUrl;
     } else {
-      return this.refs.meta_license.getSelectedElement().getAttribute('data-url');
+      return this.refs.meta_license.getSelectedElement().getAttribute('data-url') || '' ;
     }
   },
   componentDidMount: function() {
