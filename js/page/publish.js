@@ -261,7 +261,7 @@ var PublishPage = React.createClass({
 
     if (licenseType == 'copyright') {
       var author = this.refs.meta_author.getValue();
-      newState.copyrightNotice = '\u{00a9} ' + (new Date().getFullYear()) + (author ? ' ' + author : '');
+      newState.copyrightNotice = 'Copyright ' + (new Date().getFullYear()) + (author ? ' ' + author : '');
     }
 
     this.setState(newState);
