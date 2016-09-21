@@ -261,8 +261,7 @@ var PublishPage = React.createClass({
 
     if (licenseType == 'copyright') {
       var author = this.refs.meta_author.getValue();
-      newState.copyrightNotice = '\u{00a9} ' + (new Date().getFullYear()) + (author ? ' ' + author : '') +
-                                 '. All rights reserved.';
+      newState.copyrightNotice = '\u{00a9} ' + (new Date().getFullYear()) + (author ? ' ' + author : '');
     }
 
     this.setState(newState);
@@ -395,7 +394,7 @@ var PublishPage = React.createClass({
             <option data-url="https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International</option>
             <option data-url="https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International</option>
             <option>Public Domain</option>
-            <option data-license-type="copyright" {... this.state.copyrightChosen ? {value: this.state.copyrightNotice} : {}}>Copyright, All Rights Reserved ...</option>
+            <option data-license-type="copyright" {... this.state.copyrightChosen ? {value: this.state.copyrightNotice} : {}}>Copyrighted...</option>
             <option data-license-type="other" {... this.state.otherLicenseChosen ? {value: this.state.otherLicenseDescription} : {}}>Other...</option>
           </FormField>
           <FormField type="hidden" ref="meta_license_url" name="license_url" value={this.getLicenseUrl()} />
