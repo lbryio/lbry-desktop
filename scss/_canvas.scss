@@ -206,6 +206,9 @@ $header-icon-size: 1.5em;
   box-shadow: $default-box-shadow;
   border-radius: 2px;
 }
+.card-compact {
+  padding: 22px;
+}
 .card-obscured
 {
   position: relative;
