@@ -203,7 +203,7 @@ var FeaturedContentItem = React.createClass({
     return (<div style={featuredContentItemContainerStyle}>
       <SearchResultRow name={this.props.name} title={this.state.title} imgUrl={this.state.metadata.thumbnail || '/img/default-thumb.svg'}
                  description={this.state.metadata.description} mediaType={lbry.getMediaType(this.state.metadata.content_type)}
-                 cost={this.state.amount} nsfw={this.state.metadata.nsfw} available={this.state.available} />
+                 cost={this.state.amount} nsfw={this.state.metadata.nsfw} available={this.state.available} compact />
     </div>);
   }
 });
