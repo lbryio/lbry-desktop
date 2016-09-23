@@ -134,6 +134,8 @@ var MyFilesRow = React.createClass({
 var MyFilesPage = React.createClass({
   _fileTimeout: null,
   _fileInfoCheckNum: 0,
+  _filesOwnership: {},
+  _filesOwnershipLoaded: false,
 
   getInitialState: function() {
     return {
@@ -141,10 +143,16 @@ var MyFilesPage = React.createClass({
       filesAvailable: {},
     };
   },
+  getDefaultProps: function() {
+    return {
+      show: null,
+    };
+  },
   componentDidMount: function() {
     document.title = "My Files";
   },
   componentWillMount: function() {
+    this.getFilesOwnership();
     this.updateFilesInfo();
   },
   componentWillUnmount: function() {
@@ -152,6 +160,27 @@ var MyFilesPage = React.createClass({
     {
       clearTimeout(this._fileTimeout);
     }
+  },
+  getFilesOwnership: function() {
+    lbry.getFilesInfo((filesInfo) => {
+      var ownershipLoadedCount = 0;
+      for (let i = 0; i < filesInfo.length; i++) {
+        let fileInfo = filesInfo[i];
+        lbry.call('get_my_claim', {name: fileInfo.lbry_uri}, (claim) => {
+          this._filesOwnership[fileInfo.lbry_uri] = false;
+          ownershipLoadedCount++;
+          if (ownershipLoadedCount >= filesInfo.length) {
+            this._filesOwnershipLoaded = true;
+          }
+        }, (err) => {
+          this._filesOwnership[fileInfo.lbry_uri] = true;
+          ownershipLoadedCount++;
+          if (ownershipLoadedCount >= filesInfo.length) {
+            this._filesOwnershipLoaded = true;
+          }
+        });
+      }
+    });
   },
   updateFilesInfo: function() {
     lbry.getFilesInfo((filesInfo) => {
@@ -196,7 +225,7 @@ var MyFilesPage = React.createClass({
     });
   },
   render: function() {
-    if (this.state.filesInfo === null) {
+    if (this.state.filesInfo === null || !this._filesOwnershipLoaded) {
       return (
         <main className="page">
           <BusyMessage message="Loading" />
@@ -214,7 +243,8 @@ var MyFilesPage = React.createClass({
         let {completed, written_bytes, total_bytes, lbry_uri, file_name, download_path,
           stopped, metadata} = fileInfo;
 
-        if (!metadata || seenUris[lbry_uri])
+        if (!metadata || seenUris[lbry_uri] || (this.props.show == 'downloaded' && this._filesOwnership[lbry_uri]) ||
+            (this.props.show == 'published' && !this._filesOwnership[lbry_uri]))
         {
           continue;
         }
