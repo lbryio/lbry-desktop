@@ -134,7 +134,7 @@ var PublishPage = React.createClass({
   handlePublishStarted: function() {
     alert(`Your file ${this.refs.meta_title.getValue()} has been published to LBRY at the address lbry://${this.state.name}!\n\n` +
           `You will now be taken to your My Files page, where your newly published file will be listed. Your file will take a few minutes to appear for other LBRY users; until then it will be listed as "pending."`);
-    window.location = "?files";
+    window.location = "?published";
   },
   handlePublishError: function(error) {
     alert(`The following error occurred when attempting to publish your file:\n\n` +
