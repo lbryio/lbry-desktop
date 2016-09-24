@@ -107,7 +107,11 @@ var MyFilesRow = React.createClass({
                <div>
                  <div className={this.props.completed ? 'hidden' : ''} style={curProgressBarStyle}></div>
                  { ' ' }
-                 {this.props.completed ? 'Download complete' : (parseInt(this.props.ratioLoaded * 100) + '%')}
+                 {this.props.completed
+                   ? (this.props.isMine
+                      ? 'Published'
+                      : 'Download complete')
+                   : (parseInt(this.props.ratioLoaded * 100) + '%')}
                  <div>{ pauseLink }</div>
                  <div>{ watchButton }</div>
                </div>
@@ -233,9 +237,10 @@ var MyFilesPage = React.createClass({
         let {completed, written_bytes, total_bytes, lbry_uri, file_name, download_path,
           stopped, metadata} = fileInfo;
 
-        if (!metadata || seenUris[lbry_uri] || (this.props.show == 'downloaded' && this._filesOwnership[lbry_uri]) ||
-            (this.props.show == 'published' && !this._filesOwnership[lbry_uri]))
-        {
+        var isMine = this._filesOwnership[lbry_uri];
+
+        if (!metadata || seenUris[lbry_uri] || (this.props.show == 'downloaded' && isMine) ||
+            (this.props.show == 'published' && !isMine)) {
           continue;
         }
 
@@ -260,7 +265,7 @@ var MyFilesPage = React.createClass({
         content.push(<MyFilesRow key={lbry_uri} lbryUri={lbry_uri} title={title || ('lbry://' + lbry_uri)} completed={completed} stopped={stopped}
                                  ratioLoaded={ratioLoaded} imgUrl={thumbnail} path={download_path}
                                  showWatchButton={showWatchButton} pending={pending}
-                                 available={this.state.filesAvailable[lbry_uri]} />);
+                                 available={this.state.filesAvailable[lbry_uri]} isMine={isMine} />);
       }
     }
     return (
