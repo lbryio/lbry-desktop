@@ -55,6 +55,9 @@ var
     height: (24 * 7) + 'px',
     overflowY: 'hidden'
   },
+  searchRowCompactStyle = {
+    height: '180px',
+  },
   searchRowImgStyle = {
     maxWidth: '100%',
     maxHeight: (24 * 7) + 'px',
@@ -64,6 +67,10 @@ var
   },
   searchRowTitleStyle = {
     fontWeight: 'bold'
+  },
+  searchRowTitleCompactStyle = {
+    fontSize: '1.25em',
+    lineHeight: '1.15',
   },
   searchRowCostStyle = {
     float: 'right',
@@ -94,9 +101,17 @@ var SearchResultRow = React.createClass({
   },
   render: function() {
     var obscureNsfw = !lbry.getClientSetting('showNsfw') && this.props.nsfw;
+    if (!this.props.compact) {
+      var style = searchRowStyle;
+      var titleStyle = searchRowTitleStyle;
+    } else {
+      var style = Object.assign({}, searchRowStyle, searchRowCompactStyle);
+      var titleStyle = Object.assign({}, searchRowTitleStyle, searchRowTitleCompactStyle);
+    }
+
     return (
-      <section className={ 'card ' + (obscureNsfw ? 'card-obscured' : '') } onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
-        <div className="row-fluid card-content" style={searchRowStyle}>
+      <section className={ 'card ' + (obscureNsfw ? 'card-obscured ' : '') + (this.props.compact ? 'card-compact' : '')} onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
+        <div className="row-fluid card-content" style={style}>
           <div className="span3">
             <a href={'/?show=' + this.props.name}><img src={this.props.imgUrl || '/img/default-thumb.svg'} alt={'Photo for ' + (this.props.title || this.props.name)} style={searchRowImgStyle} /></a>
           </div>
@@ -105,12 +120,22 @@ var SearchResultRow = React.createClass({
               <CreditAmount amount={this.props.cost} isEstimate={!this.props.available}/>
             </span>
             <div className="meta"><a href={'/?show=' + this.props.name}>lbry://{this.props.name}</a></div>
-            <h3 style={searchRowTitleStyle}><a href={'/?show=' + this.props.name}>{this.props.title}</a></h3>
+            <h3 style={titleStyle}>
+              <a href={'/?show=' + this.props.name}>
+                <TruncatedText {...this.props.compact ? {limit: 50} : {}}>
+                  {this.props.title}
+                </TruncatedText>
+              </a>
+            </h3>
             <div>
               {this.props.mediaType == 'video' ? <WatchLink streamName={this.props.name} button="primary" /> : null}
               <DownloadLink streamName={this.props.name} button="text" />
             </div>
-            <p style={searchRowDescriptionStyle}>{this.props.description}</p>
+            <p style={searchRowDescriptionStyle}>
+              <TruncatedText {... this.props.compact ? {limit: 123} : {}}>
+                {this.props.description}
+              </TruncatedText>
+            </p>
           </div>
         </div>
         {
@@ -178,7 +203,7 @@ var FeaturedContentItem = React.createClass({
     return (<div style={featuredContentItemContainerStyle}>
       <SearchResultRow name={this.props.name} title={this.state.title} imgUrl={this.state.metadata.thumbnail || '/img/default-thumb.svg'}
                  description={this.state.metadata.description} mediaType={lbry.getMediaType(this.state.metadata.content_type)}
-                 cost={this.state.amount} nsfw={this.state.metadata.nsfw} available={this.state.available} />
+                 cost={this.state.amount} nsfw={this.state.metadata.nsfw} available={this.state.available} compact />
     </div>);
   }
 });
