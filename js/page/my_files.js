@@ -110,6 +110,7 @@ var MyFilesRow = React.createClass({
                  {this.props.completed ? 'Download complete' : (parseInt(this.props.ratioLoaded * 100) + '%')}
                  <div>{ pauseLink }</div>
                  <div>{ watchButton }</div>
+                 {this.props.available ? null : <p><em>This file is uploading to Reflector. Reflector is a service that hosts a copy of the file on LBRY's servers so that it's available even if no one with the file is online.</em></p>}
                </div>
              )
             }
@@ -131,34 +132,91 @@ var MyFilesRow = React.createClass({
 });
 
 var MyFilesPage = React.createClass({
-  fileTimeout: null,
+  _fileTimeout: null,
+  _fileInfoCheckNum: 0,
+  _filesOwnership: {},
+
   getInitialState: function() {
     return {
       filesInfo: null,
+      filesOwnershipLoaded: false,
+      filesAvailable: {},
+    };
+  },
+  getDefaultProps: function() {
+    return {
+      show: null,
     };
   },
   componentDidMount: function() {
     document.title = "My Files";
   },
   componentWillMount: function() {
+    this.getFilesOwnership();
     this.updateFilesInfo();
   },
   componentWillUnmount: function() {
-    if (this.fileTimeout)
+    if (this._fileTimeout)
     {
-      clearTimeout(this.fileTimeout);
+      clearTimeout(this._fileTimeout);
     }
+  },
+  getFilesOwnership: function() {
+    lbry.getFilesInfo((filesInfo) => {
+      var ownershipLoadedCount = 0;
+      for (let i = 0; i < filesInfo.length; i++) {
+        let fileInfo = filesInfo[i];
+        lbry.getMyClaim(fileInfo.lbry_uri, (claim) => {
+          this._filesOwnership[fileInfo.lbry_uri] = !!claim;
+          ownershipLoadedCount++;
+          if (ownershipLoadedCount >= filesInfo.length) {
+            this.setState({
+              filesOwnershipLoaded: true,
+            });
+          }
+        });
+      }
+    });
   },
   updateFilesInfo: function() {
     lbry.getFilesInfo((filesInfo) => {
+      if (!filesInfo) {
+        filesInfo = [];
+      }
+
+      if (!(this._fileInfoCheckNum % 5)) {
+        // Time to update file availability status
+
+        for (let fileInfo of filesInfo) {
+          let name = fileInfo.lbry_uri;
+
+          lbry.search(name, (results) => {
+            var result = results[0];
+
+            var available = result.name == name && result.available;
+
+            if (typeof this.state.filesAvailable[name] === 'undefined' || available != this.state.filesAvailable[name]) {
+              var newFilesAvailable = Object.assign({}, this.state.filesAvailable);
+              newFilesAvailable[name] = available;
+              this.setState({
+                filesAvailable: newFilesAvailable,
+              });
+            }
+          });
+        }
+      }
+
+      this._fileInfoCheckNum += 1;
+
       this.setState({
-        filesInfo: (filesInfo ? filesInfo : []),
+        filesInfo: filesInfo,
       });
-      this.fileTimeout = setTimeout(() => { this.updateFilesInfo() }, 1000);
+
+      this._fileTimeout = setTimeout(() => { this.updateFilesInfo() }, 1000);
     });
   },
   render: function() {
-    if (this.state.filesInfo === null) {
+    if (this.state.filesInfo === null || !this.state.filesOwnershipLoaded) {
       return (
         <main className="page">
           <BusyMessage message="Loading" />
@@ -176,7 +234,8 @@ var MyFilesPage = React.createClass({
         let {completed, written_bytes, total_bytes, lbry_uri, file_name, download_path,
           stopped, metadata} = fileInfo;
 
-        if (!metadata || seenUris[lbry_uri])
+        if (!metadata || seenUris[lbry_uri] || (this.props.show == 'downloaded' && this._filesOwnership[lbry_uri]) ||
+            (this.props.show == 'published' && !this._filesOwnership[lbry_uri]))
         {
           continue;
         }
@@ -201,7 +260,8 @@ var MyFilesPage = React.createClass({
 
         content.push(<MyFilesRow key={lbry_uri} lbryUri={lbry_uri} title={title || ('lbry://' + lbry_uri)} completed={completed} stopped={stopped}
                                  ratioLoaded={ratioLoaded} imgUrl={thumbnail} path={download_path}
-                                 showWatchButton={showWatchButton} pending={pending} />);
+                                 showWatchButton={showWatchButton} pending={pending}
+                                 available={this.state.filesAvailable[lbry_uri]} />);
       }
     }
     return (

@@ -138,6 +138,10 @@ lbry.getClaimInfo = function(name, callback) {
   lbry.call('get_claim_info', { name: name }, callback);
 }
 
+lbry.getMyClaim = function(name, callback) {
+  lbry.call('get_my_claim', { name: name }, callback);
+}
+
 lbry.getCostEstimate = function(name, callback) {
   lbry.call('get_est_cost', { name: name }, callback);
 }
@@ -169,14 +173,42 @@ lbry.revealFile = function(path, callback) {
   lbry.call('reveal', { path: path }, callback);
 }
 
-lbry.publish = function(params, callback, errorCallback) {
+lbry.getFileInfoWhenListed = function(name, callback, timeoutCallback, tryNum=0) {
+  // Calls callback with file info when it appears in the list of files returned by lbry.getFilesInfo().
+  // If timeoutCallback is provided, it will be called if the file fails to appear.
+  lbry.getFilesInfo(function(filesInfo) {
+    for (var fileInfo of filesInfo) {
+      if (fileInfo.lbry_uri == name) {
+        callback(fileInfo);
+        return;
+      }
+    }
+
+    if (tryNum <= 200) {
+      setTimeout(function() { lbry.getFileInfoWhenListed(name, callback, timeoutCallback, tryNum + 1) }, 250);
+    } else if (timeoutCallback) {
+      timeoutCallback();
+    }
+  });
+}
+
+lbry.publish = function(params, fileListedCallback, publishedCallback, errorCallback) {
+  // Publishes a file.
+  // The optional fileListedCallback is called when the file becomes available in
+  // lbry.getFilesInfo() during the publish process.
+
   // Use ES6 named arguments instead of directly passing param dict?
-  lbry.call('publish', params, callback, (errorInfo) => {
+  lbry.call('publish', params, publishedCallback, (errorInfo) => {
     errorCallback({
       name: fault.fault,
       message: fault.faultString,
     });
   });
+  if (fileListedCallback) {
+    lbry.getFileInfoWhenListed(params.name, function(fileInfo) {
+      fileListedCallback(fileInfo);
+    });
+  }
 }
 
 lbry.getVersionInfo = function(callback) {

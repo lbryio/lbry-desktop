@@ -89,6 +89,12 @@ var App = React.createClass({
           '?claim' : 'Claim Beta Code',
           '?referral' : 'Check Referral Credit',
         };
+      case 'downloaded':
+      case 'published':
+        return {
+          '?downloaded': 'Downloaded',
+          '?published': 'Published',
+        };
       default:
         return null;
     }
@@ -105,8 +111,10 @@ var App = React.createClass({
         return <WatchPage name={this.state.pageArgs} />;
       case 'report':
         return <ReportPage />;
-      case 'files':
-        return <MyFilesPage />;
+      case 'downloaded':
+        return <MyFilesPage show="downloaded" />;
+      case 'published':
+        return <MyFilesPage show="published" />;
       case 'start':
         return <StartPage />;
       case 'claim':
