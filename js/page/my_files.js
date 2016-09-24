@@ -197,12 +197,7 @@ var MyFilesPage = React.createClass({
           lbry.search(name, (results) => {
             var result = results[0];
 
-            if (result.name != name) {
-              // File not listed in Lighthouse
-              var available = false;
-            } else {
-              var available = result.available;
-            }
+            var available = result.name == name && result.available;
 
             if (typeof this.state.filesAvailable[name] === 'undefined' || available != this.state.filesAvailable[name]) {
               var newFilesAvailable = Object.assign({}, this.state.filesAvailable);
