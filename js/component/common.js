@@ -89,3 +89,17 @@ var CreditAmount = React.createClass({
     );
   }
 });
+
+var addressStyle = {
+  fontFamily: '"Consolas", "Lucida Console", "Adobe Source Code Pro", monospace',
+};
+var Address = React.createClass({
+  propTypes: {
+    address: React.PropTypes.string,
+  },
+  render: function() {
+    return (
+      <span style={addressStyle}>{this.props.address}</span>
+    );
+  }
+});

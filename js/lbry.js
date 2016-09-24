@@ -93,6 +93,10 @@ lbry.getNewAddress = function(callback) {
   lbry.call('get_new_address', {}, callback);
 }
 
+lbry.checkAddressIsMine = function(address, callback) { 
+  lbry.call('address_is_mine', {address: address}, callback);
+}
+
 lbry.getDaemonSettings = function(callback) {
   lbry.call('get_settings', {}, callback);
 }
