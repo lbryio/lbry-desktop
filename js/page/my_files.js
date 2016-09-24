@@ -135,11 +135,11 @@ var MyFilesPage = React.createClass({
   _fileTimeout: null,
   _fileInfoCheckNum: 0,
   _filesOwnership: {},
-  _filesOwnershipLoaded: false,
 
   getInitialState: function() {
     return {
       filesInfo: null,
+      filesOwnershipLoaded: false,
       filesAvailable: {},
     };
   },
@@ -170,13 +170,17 @@ var MyFilesPage = React.createClass({
           this._filesOwnership[fileInfo.lbry_uri] = false;
           ownershipLoadedCount++;
           if (ownershipLoadedCount >= filesInfo.length) {
-            this._filesOwnershipLoaded = true;
+            this.setState({
+              filesOwnershipLoaded: true,
+            });
           }
         }, (err) => {
           this._filesOwnership[fileInfo.lbry_uri] = true;
           ownershipLoadedCount++;
           if (ownershipLoadedCount >= filesInfo.length) {
-            this._filesOwnershipLoaded = true;
+            this.setState({
+              filesOwnershipLoaded: true,
+            });
           }
         });
       }
@@ -220,7 +224,7 @@ var MyFilesPage = React.createClass({
     });
   },
   render: function() {
-    if (this.state.filesInfo === null || !this._filesOwnershipLoaded) {
+    if (this.state.filesInfo === null || !this.state.filesOwnershipLoaded) {
       return (
         <main className="page">
           <BusyMessage message="Loading" />
