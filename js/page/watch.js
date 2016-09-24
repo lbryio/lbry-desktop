@@ -39,7 +39,7 @@ var WatchPage = React.createClass({
   render: function() {
     return (
       !this.state.readyToPlay
-        ? <LoadScreen message={'Loading video'} details={this.state.loadStatusMessage} />
+        ? <LoadScreen message={'Loading video...'} details={this.state.loadStatusMessage} />
         : <main className="full-screen">
             <video ref="player" width="100%" height="100%">
               <source type={(this.state.mimeType == 'audio/m4a' || this.state.mimeType == 'audio/mp4a-latm') ? 'video/mp4' : this.state.mimeType} src={'/view?name=' + this.props.name} />
