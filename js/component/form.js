@@ -51,6 +51,9 @@ var FormField = React.createClass({
       return this.refs.field.value;
     }
   },
+  getSelectedElement: function() {
+    return this.refs.field.options[this.refs.field.selectedIndex];
+  },
   render: function() {
     var warningStyle = Object.assign({}, requiredFieldWarningStyle);
     if (this.state.warningState == 'fading') {

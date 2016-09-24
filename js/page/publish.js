@@ -58,16 +58,6 @@ var PublishPage = React.createClass({
       }
     }
 
-    /*
-    metadata.license = {};
-    metadata.license.name = this.refs.meta_license.getValue();
-
-    var licenseUrl = this.refs.meta_license_url.getValue();
-    if (licenseUrl != '') {
-      metadata.license.url = licenseUrl;
-    }
-    */
-
     var licenseUrl = this.refs.meta_license_url.getValue();
     if (licenseUrl) {
       metadata.license_url = licenseUrl;
@@ -125,6 +115,9 @@ var PublishPage = React.createClass({
       claimValue: 0.0,
       claimMetadata: null,
       fileInfo: null,
+      copyrightNotice: '',
+      otherLicenseDescription: '',
+      otherLicenseUrl: '',
       uploadProgress: 0.0,
       uploaded: false,
       tempFileReady: false,
@@ -259,6 +252,44 @@ var PublishPage = React.createClass({
       isFee: feeEnabled
     });
   },
+  handeLicenseChange: function(event) {
+    var licenseType = event.target.options[event.target.selectedIndex].getAttribute('data-license-type');
+    var newState = {
+      copyrightChosen: licenseType == 'copyright',
+      otherLicenseChosen: licenseType == 'other',
+    };
+
+    if (licenseType == 'copyright') {
+      var author = this.refs.meta_author.getValue();
+      newState.copyrightNotice = 'Copyright ' + (new Date().getFullYear()) + (author ? ' ' + author : '');
+    }
+
+    this.setState(newState);
+  },
+  handleCopyrightNoticeChange: function(event) {
+    this.setState({
+      copyrightNotice: event.target.value,
+    });
+  },
+  handleOtherLicenseDescriptionChange: function(event) {
+    this.setState({
+      otherLicenseDescription: event.target.value,
+    });
+  },
+  handleOtherLicenseUrlChange: function(event) {
+    this.setState({
+      otherLicenseUrl: event.target.value,
+    });
+  },
+  getLicenseUrl: function() {
+    if (!this.refs.meta_license) {
+      return '';
+    } else if (this.state.otherLicenseChosen) {
+      return this.state.otherLicenseUrl;
+    } else {
+      return this.refs.meta_license.getSelectedElement().getAttribute('data-url') || '' ;
+    }
+  },
   componentDidMount: function() {
     document.title = "Publish";
   },
@@ -355,8 +386,35 @@ var PublishPage = React.createClass({
             <label htmlFor="author">Author</label><FormField type="text" ref="meta_author" name="author" placeholder="My Company, Inc." style={publishFieldStyle} />
           </div>
           <div className="form-row">
-          <label htmlFor="license">License info</label><FormField type="text" ref="meta_license" name="license" defaultValue="Creative Commons Attribution 3.0 United States" style={publishFieldStyle} />
+          <label htmlFor="license">License</label><FormField type="select" ref="meta_license" name="license" onChange={this.handeLicenseChange}>
+            <option data-url="https://creativecommons.org/licenses/by/4.0/legalcode">Creative Commons Attribution 4.0 International</option>
+            <option data-url="https://creativecommons.org/licenses/by-sa/4.0/legalcode">Creative Commons Attribution-ShareAlike 4.0 International</option>
+            <option data-url="https://creativecommons.org/licenses/by-nd/4.0/legalcode">Creative Commons Attribution-NoDerivatives 4.0 International</option>
+            <option data-url="https://creativecommons.org/licenses/by-nc/4.0/legalcode">Creative Commons Attribution-NonCommercial 4.0 International</option>
+            <option data-url="https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International</option>
+            <option data-url="https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International</option>
+            <option>Public Domain</option>
+            <option data-license-type="copyright" {... this.state.copyrightChosen ? {value: this.state.copyrightNotice} : {}}>Copyrighted...</option>
+            <option data-license-type="other" {... this.state.otherLicenseChosen ? {value: this.state.otherLicenseDescription} : {}}>Other...</option>
+          </FormField>
+          <FormField type="hidden" ref="meta_license_url" name="license_url" value={this.getLicenseUrl()} />
           </div>
+          {this.state.copyrightChosen
+            ? <div className="form-row">
+                <label htmlFor="copyright-notice" value={this.state.copyrightNotice}>Copyright notice</label><FormField type="text" name="copyright-notice" value={this.state.copyrightNotice} onChange={this.handleCopyrightNoticeChange} style={publishFieldStyle} />
+              </div>
+            : null}
+          {this.state.otherLicenseChosen
+            ? <div className="form-row">
+                <label htmlFor="other-license-description">License description</label><FormField type="text" name="other-license-description" onChange={this.handleOtherLicenseDescriptionChange} style={publishFieldStyle} />
+              </div>
+            : null}
+          {this.state.otherLicenseChosen
+            ? <div className="form-row">
+                <label htmlFor="other-license-url">License URL</label> <FormField type="text" name="other-license-url" style={publishFieldStyle} onChange={this.handleOtherLicenseUrlChange} />
+              </div>
+            : null}
+
           <div className="form-row">
           <label htmlFor="language">Language</label> <FormField type="select" defaultValue="en" ref="meta_language" name="language">
                <option value="en">English</option>
@@ -382,9 +440,6 @@ var PublishPage = React.createClass({
           <h4>Additional Content Information (Optional)</h4>
           <div className="form-row">
             <label htmlFor="meta_thumbnail">Thumbnail URL</label> <FormField type="text" ref="meta_thumbnail" name="thumbnail" placeholder="http://mycompany.com/images/ep_1.jpg" style={publishFieldStyle} />
-          </div>
-          <div className="form-row">
-            <label htmlFor="meta_license_url">License URL</label> <FormField type="text" ref="meta_license_url" name="license_url" defaultValue="https://creativecommons.org/licenses/by/3.0/us/legalcode" style={publishFieldStyle} />
           </div>
         </section>
 
