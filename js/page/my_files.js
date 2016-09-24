@@ -169,8 +169,16 @@ var MyFilesPage = React.createClass({
       var ownershipLoadedCount = 0;
       for (let i = 0; i < filesInfo.length; i++) {
         let fileInfo = filesInfo[i];
-        lbry.getMyClaim(fileInfo.lbry_uri, (claim) => {
+        lbry.call('get_my_claim', {name: fileInfo.lbry_uri}, (claim) => {
           this._filesOwnership[fileInfo.lbry_uri] = !!claim;
+          ownershipLoadedCount++;
+          if (ownershipLoadedCount >= filesInfo.length) {
+            this.setState({
+              filesOwnershipLoaded: true,
+            });
+          }
+        }, (claim) => {
+          this._filesOwnership[fileInfo.lbry_uri] = true;
           ownershipLoadedCount++;
           if (ownershipLoadedCount >= filesInfo.length) {
             this.setState({
