@@ -328,7 +328,7 @@ var PublishPage = React.createClass({
               (!this.state.name ? '' :
                 (! this.state.nameResolved ? <em> The name <strong>{this.state.name}</strong> is available.</em>
                                            : (this.state.myClaimExists ? <em> You already have a claim on the name <strong>{this.state.name}</strong>. You can use this page to update your claim.</em>
-                                                                       : <em> The name {this.state.name} is currently claimed for <strong>{lbry.formatCredits(this.state.topClaimValue)}</strong> credits.</em>)))
+                                                                       : <em> The name <strong>{this.state.name}</strong> is currently claimed for <strong>{lbry.formatCredits(this.state.topClaimValue)}</strong> credits.</em>)))
             }
             <div className="help">What LBRY name would you like to claim for this file?</div>
           </div>
