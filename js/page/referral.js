@@ -38,8 +38,13 @@ var ReferralPage = React.createClass({
         var response = JSON.parse(xhr.responseText);
 
         if (response.success) {
-          alert('You have earned ' + response.referralCredits + ' credits from referrals and ' +
-                response.activationCredits + ' credits from activations.');
+          if (response.referralCredits > 0) {
+            alert('You have earned ' + response.referralCredits + ' credits from referrals. ' +
+              'We will credit your account shortly. Thanks!');
+          } else {
+            alert('You have not earned any new referral credits since the last time you checked. ' +
+              'Please check back in a week or two.');
+          }
 
           window.location = '?home';
         } else {

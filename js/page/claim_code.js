@@ -38,7 +38,16 @@ var ClaimCodePage = React.createClass({
         var response = JSON.parse(xhr.responseText);
 
         if (response.success) {
-          alert('Your invite code has been redeemed! The credits will be added to your balance shortly.');
+          var redeemMessage = 'Your invite code has been redeemed. ';
+          if (response.referralCredits > 0) {
+            redeemMessage += 'You have also earned ' + response.referralCredits + ' credits from referrals. A total of ' +
+              (response.activationCredits + response.referralCredits) + ' will be added to your balance shortly.';
+          } else if(response.activationCredits > 0) {
+            redeemMessage += response.activationCredits + ' credits will be added to your balance shortly.';
+          } else {
+            redeemMessage += 'The credits will be added to your balance shortly.';
+          }
+          alert(redeemMessage);
           localStorage.setItem('claimCodeDone', true);
           window.location = '?home';
         } else {
