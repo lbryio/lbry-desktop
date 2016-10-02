@@ -2,7 +2,7 @@ var moreMenuStyle = {
   position: 'absolute',
   display: 'block',
   top: '26px',
-  left: '-13px',
+  right: '13px',
 };
 var MyFilesRowMoreMenu = React.createClass({
   onRevealClicked: function() {
