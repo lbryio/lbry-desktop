@@ -24,4 +24,4 @@ deploy:
   upload-dir: ${TRAVIS_BRANCH}
   local_dir: upload
   on:
-    all_branches: true
+    tags: true
