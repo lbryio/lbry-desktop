@@ -12,7 +12,11 @@ var publishNumberStyle = {
 var PublishPage = React.createClass({
   _requiredFields: ['name', 'bid', 'meta_title', 'meta_author', 'meta_license', 'meta_description'],
 
-  handleSubmit: function() {
+  handleSubmit: function(event) {
+    if (typeof event !== 'undefined') {
+      event.preventDefault();
+    }
+
     this.setState({
       submitting: true,
     });
@@ -456,6 +460,7 @@ var PublishPage = React.createClass({
           <div className="card-series-submit">
            <Link button="primary" label={!this.state.submitting ? 'Publish' : 'Publishing...'} onClick={this.handleSubmit} disabled={this.state.submitting} />
            <Link button="cancel" href="/" label="Cancel"/>
+           <input type='submit' className='hidden' />
           </div>
         </form>
       </main>
