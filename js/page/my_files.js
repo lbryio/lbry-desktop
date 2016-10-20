@@ -166,6 +166,13 @@ var MyFilesPage = React.createClass({
   },
   getFilesOwnership: function() {
     lbry.getFilesInfo((filesInfo) => {
+      if (!filesInfo) {
+        this.setState({
+          filesOwnershipLoaded: true,
+        });
+        return;
+      }
+
       var ownershipLoadedCount = 0;
       for (let i = 0; i < filesInfo.length; i++) {
         let fileInfo = filesInfo[i];
