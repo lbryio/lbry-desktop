@@ -11,35 +11,37 @@ var App = React.createClass({
       viewingPage: viewingPage,
       drawerOpen: drawerOpenRaw !== null ? JSON.parse(drawerOpenRaw) : true,
       pageArgs: val,
+      modal: null,
+      startNotice: null,
+      updateUrl: null,
+      isOldOSX: null,
     };
   },
   componentDidMount: function() {
     lbry.getStartNotice(function(notice) {
       if (notice) {
-        alert(notice);
+        this.setState({
+          modal: 'startNotice',
+          startNotice: notice
+        });
       }
     });
   },
   componentWillMount: function() {
-    lbry.checkNewVersionAvailable(function(isAvailable) {
-
+    lbry.checkNewVersionAvailable((isAvailable) => {
       if (!isAvailable || sessionStorage.getItem('upgradeSkipped')) {
         return;
       }
 
-      var message = 'The version of LBRY you\'re using is not up to date.\n\n' +
-        'Choose "OK" to download the latest version.';
-
-      lbry.getVersionInfo(function(versionInfo) {
+      lbry.getVersionInfo((versionInfo) => {
+        var isOldOSX = false;
         if (versionInfo.os_system == 'Darwin') {
           var updateUrl = 'https://lbry.io/get/lbry.dmg';
 
           var maj, min, patch;
           [maj, min, patch] = versionInfo.lbrynet_version.split('.');
           if (maj == 0 && min <= 2 && patch <= 2) {
-            // On OS X with version <= 0.2.2, we need to notify user to close manually close LBRY
-            message += '\n\nBefore installing the new version, make sure to exit LBRY, if you started the app ' +
-              'click that LBRY icon in your status bar and choose "Quit."';
+            isOldOSX = true;
           }
         } else if (versionInfo.os_system == 'Linux') {
           var updateUrl = 'https://lbry.io/get/lbry.deb';
@@ -49,13 +51,11 @@ var App = React.createClass({
           var updateUrl = 'https://lbry.io/get';
         }
 
-        if (window.confirm(message))
-        {
-          lbry.stop();
-          window.location = updateUrl;
-        } else {
-          sessionStorage.setItem('upgradeSkipped', true);
-        };
+        this.setState({
+          modal: 'upgrade',
+          isOldOSX: isOldOSX,
+          updateUrl: updateUrl,
+        })
       });
     });
   },
@@ -66,6 +66,21 @@ var App = React.createClass({
   closeDrawer: function() {
     sessionStorage.setItem('drawerOpen', false);
     this.setState({ drawerOpen: false });
+  },
+  closeModal: function() {
+    this.setState({
+      modal: null,
+    });
+  },
+  handleUpgradeClicked: function() {
+    lbry.stop();
+    window.location = this.state.updateUrl;
+  },
+  handleSkipClicked: function() {
+    sessionStorage.setItem('upgradeSkipped', true);
+    this.setState({
+      modal: null,
+    });
   },
   onSearch: function(term) {
     this.setState({
@@ -151,6 +166,17 @@ var App = React.createClass({
             <Header onOpenDrawer={this.openDrawer} onSearch={this.onSearch} links={headerLinks} viewingPage={this.state.viewingPage} />
             {mainContent}
           </div>
+          <Modal isOpen={this.state.modal == 'startNotice'} onConfirmed={this.closeModal}>
+            {this.state.startNotice}
+          </Modal>
+          <Modal isOpen={this.state.modal == 'upgrade'} type="confirm" confirmButtonLabel="Upgrade" abortButtonLabel="Skip"
+                 onConfirmed={this.handleUpgradeClicked} onAborted={this.handleSkipClicked} >
+            <p>The version of LBRY you're using is not up to date. Choose "Upgrade" to get the latest version.</p>
+            {this.state.isOldOSX
+              ? <p>Before installing the new version, make sure to exit LBRY. If you started the app, click the LBRY icon in your status bar and choose "Quit."</p>
+              : null}
+
+          </Modal>
         </div>
     );
   }
