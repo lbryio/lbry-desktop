@@ -14,6 +14,10 @@ var ClaimCodePage = React.createClass({
   getInitialState: function() {
     return {
       submitting: false,
+      modal: null,
+      referralCredits: null,
+      activationCredits: null,
+      failureReason: null,
     }
   },
   handleSubmit: function(event) {
@@ -22,15 +26,19 @@ var ClaimCodePage = React.createClass({
     }
 
     if (!this.refs.code.value) {
-      alert('Please enter an invitation code or choose "Skip."');
+      this.setState({
+        modal: 'missingCode',
+      });
       return;
     } else if (!this.refs.email.value) {
-      alert('Please enter an email address or choose "Skip."');
+      this.setState({
+        modal: 'missingEmail',
+      });
       return;
     }
 
     this.setState({
-      submitting: true
+      submitting: true,
     });
 
     lbry.getNewAddress((address) => {
@@ -42,33 +50,25 @@ var ClaimCodePage = React.createClass({
         var response = JSON.parse(xhr.responseText);
 
         if (response.success) {
-          var redeemMessage = 'Your invite code has been redeemed. ';
-          if (response.referralCredits > 0) {
-            redeemMessage += 'You have also earned ' + response.referralCredits + ' credits from referrals. A total of ' +
-              (response.activationCredits + response.referralCredits) + ' will be added to your balance shortly.';
-          } else if(response.activationCredits > 0) {
-            redeemMessage += response.activationCredits + ' credits will be added to your balance shortly.';
-          } else {
-            redeemMessage += 'The credits will be added to your balance shortly.';
-          }
-          alert(redeemMessage);
-          localStorage.setItem('claimCodeDone', true);
-          window.location = '?home';
-        } else {
-          alert(response.reason);
           this.setState({
-            submitting: false
+            modal: 'codeRedeemed',
+            referralCredits: response.referralCredits,
+            activationCredits: response.activationCredits,
+          });
+        } else {
+          this.setState({
+            submitting: false,
+            modal: 'codeRedeemFailed',
+            failureReason: response.reason,
           });
         }
       });
 
       xhr.addEventListener('error', () => {
         this.setState({
-          submitting: false
+          submitting: false,
+          modal: 'couldNotConnect',
         });
-        alert('LBRY couldn\'t connect to our servers to confirm your invitation code. Please check your ' +
-              'internet connection. If you continue to have problems, you can still browse LBRY and ' +
-              'visit the Settings page to redeem your code later.');
       });
 
       xhr.open('POST', 'https://invites.lbry.io', true);
@@ -78,9 +78,18 @@ var ClaimCodePage = React.createClass({
     });
   },
   handleSkip: function() {
-    alert('Welcome to LBRY! You can visit the Wallet page to redeem an invite code at any time.');
+    this.setState({
+      modal: 'skipped',
+    });
+  },
+  handleFinished: function() {
     localStorage.setItem('claimCodeDone', true);
     window.location = '?home';
+  },
+  closeModal: function() {
+    this.setState({
+      modal: null,
+    });
   },
   render: function() {
     return (
@@ -105,6 +114,31 @@ var ClaimCodePage = React.createClass({
             </section>
           </div>
         </form>
+        <Modal isOpen={this.state.modal == 'missingCode'} onConfirmed={this.closeModal}>
+          Please enter an invitation code or choose "Skip."
+        </Modal>
+        <Modal isOpen={this.state.modal == 'missingEmail'} onConfirmed={this.closeModal}>
+          Please enter an email address or choose "Skip."
+        </Modal>
+        <Modal isOpen={this.state.modal == 'codeRedeemFailed'} onConfirmed={this.closeModal}>
+          {this.state.failureReason}
+        </Modal>
+        <Modal isOpen={this.state.modal == 'codeRedeemed'} onConfirmed={this.handleFinished}>
+          Your invite code has been redeemed.
+          {this.state.referralCredits > 0
+            ? `You have also earned {referralCredits} credits from referrals. A total of {activationCredits + referralCredits}
+                    will be added to your balance shortly.`
+            : (this.state.activationCredits > 0
+                ? `{this.state.activationCredits} credits will be added to your balance shortly.`
+                : 'The credits will be added to your balance shortly.')}
+        </Modal>
+        <Modal isOpen={this.state.modal == 'skipped'} onConfirmed={this.handleFinished}>
+          Welcome to LBRY! You can visit the Wallet page to redeem an invite code at any time.
+        </Modal>
+        <Modal isOpen={this.state.modal == 'couldNotConnect'} onConfirmed={this.closeModal}>
+          <p>LBRY couldn't connect to our servers to confirm your invitation code. Please check your internet connection.</p>
+          If you continue to have problems, you can still browse LBRY and visit the Settings page to redeem your code later.
+        </Modal>
       </main>
     );
   }
