@@ -30,6 +30,18 @@ lbry.jsonrpc_call = function (connectionString, method, params, callback, errorC
     if (response.error) {
       if (errorCallback) {
         errorCallback(response.error);
+      } else {
+        var errorEvent = new CustomEvent('unhandledRPCError', {
+          detail: {
+            connectionString: connectionString,
+            method: method,
+            params: params,
+            code: response.error.code,
+            message: response.error.message,
+            data: response.error.data
+          }
+        });
+        document.dispatchEvent(errorEvent)
       }
     } else if (callback) {
       callback(response.result);

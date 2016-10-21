@@ -1,4 +1,13 @@
 var App = React.createClass({
+  _error_key_labels: {
+    connectionString: 'API Connection String',
+    method: 'Method',
+    params: 'Parameters',
+    code: 'Error code',
+    message: 'Error message',
+    data: 'Error data',
+  },
+
   getInitialState: function() {
     // For now, routes are in format ?page or ?page=args
     var match, param, val, viewingPage,
@@ -11,6 +20,7 @@ var App = React.createClass({
       viewingPage: viewingPage,
       drawerOpen: drawerOpenRaw !== null ? JSON.parse(drawerOpenRaw) : true,
       pageArgs: val,
+      errorInfo: null,
       modal: null,
       startNotice: null,
       updateUrl: null,
@@ -28,6 +38,10 @@ var App = React.createClass({
     });
   },
   componentWillMount: function() {
+    document.addEventListener('unhandledRPCError', (event) => {
+      this.alertError(event.detail);
+    });
+
     lbry.checkNewVersionAvailable((isAvailable) => {
       if (!isAvailable || sessionStorage.getItem('upgradeSkipped')) {
         return;
@@ -86,6 +100,19 @@ var App = React.createClass({
     this.setState({
       viewingPage: 'discover',
       pageArgs: term
+    });
+  },
+  alertError: function(error) {
+    var errorInfoList = [];
+    for (let key of Object.keys(error)) {
+      let val = key == 'params' ? JSON.stringify(error[key]) : error[key];
+      let label = this._error_key_labels[key];
+      errorInfoList.push(<li><strong>{label}</strong>: <code>{val}</code></li>);
+    }
+
+    this.setState({
+      modal: 'error',
+      errorInfo: <ul>{errorInfoList}</ul>,
     });
   },
   getHeaderLinks: function()
@@ -176,6 +203,11 @@ var App = React.createClass({
               ? <p>Before installing the new version, make sure to exit LBRY. If you started the app, click the LBRY icon in your status bar and choose "Quit."</p>
               : null}
 
+          </Modal>
+          <Modal isOpen={this.state.modal == 'error'}>
+            <h3>Error</h3>
+            <p>Sorry, but LBRY has encountered an error! Please <Link href="/?report" label="report a bug" /> and include the details below.</p>
+            {this.state.errorInfo}
           </Modal>
         </div>
     );
