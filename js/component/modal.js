@@ -30,21 +30,17 @@ var Modal = React.createClass({
 
     props.onCloseRequested = props.onAborted || props.onConfirmed;
 
-    if (this.props.type == 'alert') {
-      var buttons = (
-        <div className="modal__buttons">
-          <Link button="primary" label={props.confirmButtonLabel} className="modal__button" onClick={props.onConfirmed} />
-        </div>
-      );
-    } else if (this.props.type == 'confirm') {
-      var buttons = (
-        <div className="modal__buttons">
-          <Link button="alt" label={props.abortButtonLabel} className="modal__button" onClick={props.onAborted} />
-          <Link button="primary" label={props.confirmButtonLabel} className="modal__button" onClick={props.onConfirmed} />
-        </div>
-      );
-    } else {
+    if (this.props.type == 'custom') {
       var buttons = null;
+    } else {
+      var buttons = (
+        <div className="modal__buttons">
+          {this.props.type == 'confirm'
+            ? <Link button="alt" label={props.abortButtonLabel} className="modal__button" onClick={props.onAborted} />
+            : null}
+          <Link button="primary" label={props.confirmButtonLabel} className="modal__button" onClick={props.onConfirmed} />
+        </div>
+      );
     }
 
     return (
