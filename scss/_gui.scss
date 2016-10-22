@@ -78,6 +78,11 @@ label {
   display: block;
 }
 
+code {
+  font: 0.8em Consolas, 'Lucida Console', 'Source Sans', monospace;
+  background-color: #eee;
+}
+
 p
 {
   margin-bottom: 0.8em;
@@ -229,6 +234,7 @@ input[type="text"], input[type="search"]
   }
 }
 
+
 .modal-overlay {
   position: fixed;
   display: flex;
@@ -267,4 +273,16 @@ input[type="text"], input[type="search"]
 
 .modal__button {
   margin: 0px 6px;
+}
+
+
+.modal__error-list {
+  border: 1px solid #eee;
+  padding: 8px;
+  list-style: none;
+}
+
+.error-modal {
+  max-width: none;
+  width: 400px;
 }

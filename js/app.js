@@ -112,7 +112,7 @@ var App = React.createClass({
 
     this.setState({
       modal: 'error',
-      errorInfo: <ul>{errorInfoList}</ul>,
+      errorInfo: <ul className="modal__error-list">{errorInfoList}</ul>,
     });
   },
   getHeaderLinks: function()
@@ -204,7 +204,7 @@ var App = React.createClass({
               : null}
 
           </Modal>
-          <Modal isOpen={this.state.modal == 'error'}>
+          <Modal isOpen={this.state.modal == 'error'} className='error-modal'>
             <h3>Error</h3>
             <p>Sorry, but LBRY has encountered an error! Please <Link href="/?report" label="report a bug" /> and include the details below.</p>
             {this.state.errorInfo}
