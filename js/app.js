@@ -107,7 +107,7 @@ var App = React.createClass({
     for (let key of Object.keys(error)) {
       let val = typeof error[key] == 'string' ? error[key] : JSON.stringify(error[key]);
       let label = this._error_key_labels[key];
-      errorInfoList.push(<li><strong>{label}</strong>: <code>{val}</code></li>);
+      errorInfoList.push(<li key={key}><strong>{label}</strong>: <code>{val}</code></li>);
     }
 
     this.setState({
