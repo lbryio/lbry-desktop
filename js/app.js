@@ -38,7 +38,7 @@ var App = React.createClass({
     });
   },
   componentWillMount: function() {
-    document.addEventListener('unhandledRPCError', (event) => {
+    document.addEventListener('unhandledError', (event) => {
       this.alertError(event.detail);
     });
 
