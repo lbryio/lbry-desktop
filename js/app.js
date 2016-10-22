@@ -1,6 +1,6 @@
 var App = React.createClass({
   _error_key_labels: {
-    connectionString: 'API Connection String',
+    connectionString: 'API connection string',
     method: 'Method',
     params: 'Parameters',
     code: 'Error code',
