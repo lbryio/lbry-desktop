@@ -105,7 +105,7 @@ var App = React.createClass({
   alertError: function(error) {
     var errorInfoList = [];
     for (let key of Object.keys(error)) {
-      let val = key == 'params' ? JSON.stringify(error[key]) : error[key];
+      let val = typeof error[key] == 'string' ? error[key] : JSON.stringify(error[key]);
       let label = this._error_key_labels[key];
       errorInfoList.push(<li><strong>{label}</strong>: <code>{val}</code></li>);
     }
