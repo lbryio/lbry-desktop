@@ -204,7 +204,7 @@ var App = React.createClass({
               : null}
 
           </Modal>
-          <Modal isOpen={this.state.modal == 'error'} className='error-modal'>
+          <Modal isOpen={this.state.modal == 'error'} className='error-modal' onConfirmed={this.closeModal}>
             <h3>Error</h3>
             <p>Sorry, but LBRY has encountered an error! Please <Link href="/?report" label="report a bug" /> and include the details below.</p>
             {this.state.errorInfo}
