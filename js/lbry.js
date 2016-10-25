@@ -36,9 +36,9 @@ lbry.jsonrpc_call = function (connectionString, method, params, callback, errorC
             connectionString: connectionString,
             method: method,
             params: params,
-            code: response.error.code,
-            message: response.error.message,
-            data: response.error.data
+            code: response.error.faultCode,
+            message: response.error.fault,
+            data: response.error.faultString
           }
         });
         document.dispatchEvent(errorEvent)
