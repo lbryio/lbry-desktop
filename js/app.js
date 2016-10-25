@@ -204,10 +204,14 @@ var App = React.createClass({
               : null}
 
           </Modal>
-          <Modal isOpen={this.state.modal == 'error'} className='error-modal' onConfirmed={this.closeModal}>
+          <Modal isOpen={this.state.modal == 'error'} type='custom' className='error-modal' overlayClassName='error-modal-overlay'>
             <h3>Error</h3>
-            <p>Sorry, but LBRY has encountered an error! Please <Link href="/?report" label="report a bug" /> and include the details below.</p>
+            <div className="error-modal__layout">
+              <Icon icon="icon-warning" className="error-modal__warning-icon" />
+              <p>Sorry, but LBRY has encountered an error! This has been reported and we will investigate the problem.</p>
+            </div>
             {this.state.errorInfo}
+            <Link button="alt" label="OK" className="modal__button" onClick={this.closeModal} />
           </Modal>
         </div>
     );

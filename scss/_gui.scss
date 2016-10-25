@@ -282,7 +282,22 @@ input[type="text"], input[type="search"]
   list-style: none;
 }
 
+.error-modal-overlay {
+  background: rgba(#000, .85);
+}
+
 .error-modal {
   max-width: none;
   width: 400px;
+}
+
+.error-modal__layout {
+  display: flex;
+  padding: 0px 8px 10px 10px;
+}
+
+.error-modal .icon-warning {
+  font-size: 48px;
+  color: $color-money;
+  margin-right: 7px;
 }
