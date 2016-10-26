@@ -12,7 +12,11 @@ var publishNumberStyle = {
 var PublishPage = React.createClass({
   _requiredFields: ['name', 'bid', 'meta_title', 'meta_author', 'meta_license', 'meta_description'],
 
-  handleSubmit: function() {
+  handleSubmit: function(event) {
+    if (typeof event !== 'undefined') {
+      event.preventDefault();
+    }
+
     this.setState({
       submitting: true,
     });
@@ -250,8 +254,10 @@ var PublishPage = React.createClass({
         });
       })
 
+      var formData = new FormData(fileInput.form);
+      formData.append('file', fileInput.files[0]);
       xhr.open('POST', '/upload', true);
-      xhr.send(new FormData(fileInput.form));
+      xhr.send(formData);
     }
   },
   handleFeePrefChange: function(feeEnabled) {
@@ -320,23 +326,23 @@ var PublishPage = React.createClass({
   render: function() {
     return (
       <main ref="page">
-        <section className="card">
-          <h4>LBRY Name</h4>
-          <div className="form-row">
-            lbry://<FormField type="text" ref="name" onChange={this.handleNameChange} />
-            {
-              (!this.state.name ? '' :
-                (! this.state.nameResolved ? <em> The name <strong>{this.state.name}</strong> is available.</em>
-                                           : (this.state.myClaimExists ? <em> You already have a claim on the name <strong>{this.state.name}</strong>. You can use this page to update your claim.</em>
-                                                                       : <em> The name <strong>{this.state.name}</strong> is currently claimed for <strong>{lbry.formatCredits(this.state.topClaimValue)}</strong> credits.</em>)))
-            }
-            <div className="help">What LBRY name would you like to claim for this file?</div>
-          </div>
-        </section>
+        <form onSubmit={this.handleSubmit}>
+          <section className="card">
+            <h4>LBRY Name</h4>
+            <div className="form-row">
+              lbry://<FormField type="text" ref="name" onChange={this.handleNameChange} />
+              {
+                (!this.state.name ? '' :
+                  (! this.state.nameResolved ? <em> The name <strong>{this.state.name}</strong> is available.</em>
+                                             : (this.state.myClaimExists ? <em> You already have a claim on the name <strong>{this.state.name}</strong>. You can use this page to update your claim.</em>
+                                                                         : <em> The name <strong>{this.state.name}</strong> is currently claimed for <strong>{lbry.formatCredits(this.state.topClaimValue)}</strong> credits.</em>)))
+              }
+              <div className="help">What LBRY name would you like to claim for this file?</div>
+            </div>
+          </section>
 
-        <section className="card">
-          <h4>Choose File</h4>
-          <form>
+          <section className="card">
+            <h4>Choose File</h4>
             <FormField name="file" ref="file" type="file" onChange={this.handleFileChange} />
             { !this.state.fileInfo ? '' :
                 (!this.state.tempFileReady ? <div>
@@ -344,119 +350,120 @@ var PublishPage = React.createClass({
                                                {!this.state.uploaded ? <span> Importing file into LBRY...</span> : <span> Processing file...</span>}
                                              </div>
                                            : <div>File ready for publishing!</div>) }
-          </form>
-          { this.state.myClaimExists ? <div className="help">If you don't choose a file, the file from your existing claim will be used.</div> : null }
-        </section>
+            { this.state.myClaimExists ? <div className="help">If you don't choose a file, the file from your existing claim will be used.</div> : null }
+          </section>
 
-        <section className="card">
-          <h4>Bid Amount</h4>
-          <div className="form-row">
-            Credits <FormField ref="bid" style={publishNumberStyle} type="text" onChange={this.handleBidChange} value={this.state.bid} placeholder={this.state.nameResolved ? lbry.formatCredits(this.state.topClaimValue + 10) : 100} />
-            <div className="help">How much would you like to bid for this name?
-            { !this.state.nameResolved ? <span> Since this name is not currently resolved, you may bid as low as you want, but higher bids help prevent others from claiming your name.</span>
-                                       : (this.state.topClaimIsMine ? <span> You currently control this name with a bid of <strong>{lbry.formatCredits(this.state.myClaimValue)}</strong> credits.</span>
-                                                                    : (this.state.myClaimExists ? <span> You have a non-winning bid on this name for <strong>{lbry.formatCredits(this.state.myClaimValue)}</strong> credits.
-                                                                                                         To control this name, you'll need to increase your bid to at least <strong>{lbry.formatCredits(this.state.myClaimValue)}</strong> credits.</span>
-                                                                                                : <span> You must bid over <strong>{lbry.formatCredits(this.state.topClaimValue)}</strong> credits to claim this name.</span>)) }
+          <section className="card">
+            <h4>Bid Amount</h4>
+            <div className="form-row">
+              Credits <FormField ref="bid" style={publishNumberStyle} type="text" onChange={this.handleBidChange} value={this.state.bid} placeholder={this.state.nameResolved ? lbry.formatCredits(this.state.topClaimValue + 10) : 100} />
+              <div className="help">How much would you like to bid for this name?
+              { !this.state.nameResolved ? <span> Since this name is not currently resolved, you may bid as low as you want, but higher bids help prevent others from claiming your name.</span>
+                                         : (this.state.topClaimIsMine ? <span> You currently control this name with a bid of <strong>{lbry.formatCredits(this.state.myClaimValue)}</strong> credits.</span>
+                                                                      : (this.state.myClaimExists ? <span> You have a non-winning bid on this name for <strong>{lbry.formatCredits(this.state.myClaimValue)}</strong> credits.
+                                                                                                           To control this name, you'll need to increase your bid to at least <strong>{lbry.formatCredits(this.state.myClaimValue)}</strong> credits.</span>
+                                                                                                  : <span> You must bid over <strong>{lbry.formatCredits(this.state.topClaimValue)}</strong> credits to claim this name.</span>)) }
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
 
-        <section className="card">
-          <h4>Fee</h4>
-          <div className="form-row">
-            <label>
-             <FormField type="radio" onChange={ () => { this.handleFeePrefChange(false) } } checked={!this.state.isFee} /> No fee
-            </label>
-            <label>
-             <FormField type="radio" onChange={ () => { this.handleFeePrefChange(true) } } checked={this.state.isFee} /> { !this.state.isFee ? 'Choose fee...' : 'Fee ' }
-             <span className={!this.state.isFee ? 'hidden' : ''}>
-               <FormField type="text" onChange={this.handleFeeAmountChange} style={publishNumberStyle} /> <FormField type="select" onChange={this.handleFeeCurrencyChange}>
-                 <option value="USD">US Dollars</option>
-                 <option value="LBC">LBRY credits</option>
-               </FormField>
-               </span>
-            </label>
-            <div className="help">
-              <p>How much would you like to charge for this file?</p>
-              If you choose to price this content in dollars, the number of credits charged will be adjusted based on the value of LBRY credits at the time of purchase.
+          <section className="card">
+            <h4>Fee</h4>
+            <div className="form-row">
+              <label>
+               <FormField type="radio" onChange={ () => { this.handleFeePrefChange(false) } } checked={!this.state.isFee} /> No fee
+              </label>
+              <label>
+               <FormField type="radio" onChange={ () => { this.handleFeePrefChange(true) } } checked={this.state.isFee} /> { !this.state.isFee ? 'Choose fee...' : 'Fee ' }
+               <span className={!this.state.isFee ? 'hidden' : ''}>
+                 <FormField type="text" onChange={this.handleFeeAmountChange} style={publishNumberStyle} /> <FormField type="select" onChange={this.handleFeeCurrencyChange}>
+                   <option value="USD">US Dollars</option>
+                   <option value="LBC">LBRY credits</option>
+                 </FormField>
+                 </span>
+              </label>
+              <div className="help">
+                <p>How much would you like to charge for this file?</p>
+                If you choose to price this content in dollars, the number of credits charged will be adjusted based on the value of LBRY credits at the time of purchase.
+              </div>
             </div>
-          </div>
-        </section>
+          </section>
 
 
-        <section className="card">
-          <h4>Your Content</h4>
+          <section className="card">
+            <h4>Your Content</h4>
 
-          <div className="form-row">
-            <label htmlFor="title">Title</label><FormField type="text" ref="meta_title" name="title" placeholder="My Show, Episode 1" style={publishFieldStyle} />
-          </div>
-          <div className="form-row">
-            <label htmlFor="author">Author</label><FormField type="text" ref="meta_author" name="author" placeholder="My Company, Inc." style={publishFieldStyle} />
-          </div>
-          <div className="form-row">
-          <label htmlFor="license">License</label><FormField type="select" ref="meta_license" name="license" onChange={this.handeLicenseChange}>
-            <option data-url="https://creativecommons.org/licenses/by/4.0/legalcode">Creative Commons Attribution 4.0 International</option>
-            <option data-url="https://creativecommons.org/licenses/by-sa/4.0/legalcode">Creative Commons Attribution-ShareAlike 4.0 International</option>
-            <option data-url="https://creativecommons.org/licenses/by-nd/4.0/legalcode">Creative Commons Attribution-NoDerivatives 4.0 International</option>
-            <option data-url="https://creativecommons.org/licenses/by-nc/4.0/legalcode">Creative Commons Attribution-NonCommercial 4.0 International</option>
-            <option data-url="https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International</option>
-            <option data-url="https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International</option>
-            <option>Public Domain</option>
-            <option data-license-type="copyright" {... this.state.copyrightChosen ? {value: this.state.copyrightNotice} : {}}>Copyrighted...</option>
-            <option data-license-type="other" {... this.state.otherLicenseChosen ? {value: this.state.otherLicenseDescription} : {}}>Other...</option>
-          </FormField>
-          <FormField type="hidden" ref="meta_license_url" name="license_url" value={this.getLicenseUrl()} />
-          </div>
-          {this.state.copyrightChosen
-            ? <div className="form-row">
-                <label htmlFor="copyright-notice" value={this.state.copyrightNotice}>Copyright notice</label><FormField type="text" name="copyright-notice" value={this.state.copyrightNotice} onChange={this.handleCopyrightNoticeChange} style={publishFieldStyle} />
-              </div>
-            : null}
-          {this.state.otherLicenseChosen
-            ? <div className="form-row">
-                <label htmlFor="other-license-description">License description</label><FormField type="text" name="other-license-description" onChange={this.handleOtherLicenseDescriptionChange} style={publishFieldStyle} />
-              </div>
-            : null}
-          {this.state.otherLicenseChosen
-            ? <div className="form-row">
-                <label htmlFor="other-license-url">License URL</label> <FormField type="text" name="other-license-url" style={publishFieldStyle} onChange={this.handleOtherLicenseUrlChange} />
-              </div>
-            : null}
-
-          <div className="form-row">
-          <label htmlFor="language">Language</label> <FormField type="select" defaultValue="en" ref="meta_language" name="language">
-               <option value="en">English</option>
-               <option value="zh">Chinese</option>
-               <option value="fr">French</option>
-               <option value="de">German</option>
-               <option value="jp">Japanese</option>
-               <option value="ru">Russian</option>
-               <option value="es">Spanish</option>
+            <div className="form-row">
+              <label htmlFor="title">Title</label><FormField type="text" ref="meta_title" name="title" placeholder="My Show, Episode 1" style={publishFieldStyle} />
+            </div>
+            <div className="form-row">
+              <label htmlFor="author">Author</label><FormField type="text" ref="meta_author" name="author" placeholder="My Company, Inc." style={publishFieldStyle} />
+            </div>
+            <div className="form-row">
+            <label htmlFor="license">License</label><FormField type="select" ref="meta_license" name="license" onChange={this.handeLicenseChange}>
+              <option data-url="https://creativecommons.org/licenses/by/4.0/legalcode">Creative Commons Attribution 4.0 International</option>
+              <option data-url="https://creativecommons.org/licenses/by-sa/4.0/legalcode">Creative Commons Attribution-ShareAlike 4.0 International</option>
+              <option data-url="https://creativecommons.org/licenses/by-nd/4.0/legalcode">Creative Commons Attribution-NoDerivatives 4.0 International</option>
+              <option data-url="https://creativecommons.org/licenses/by-nc/4.0/legalcode">Creative Commons Attribution-NonCommercial 4.0 International</option>
+              <option data-url="https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International</option>
+              <option data-url="https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International</option>
+              <option>Public Domain</option>
+              <option data-license-type="copyright" {... this.state.copyrightChosen ? {value: this.state.copyrightNotice} : {}}>Copyrighted...</option>
+              <option data-license-type="other" {... this.state.otherLicenseChosen ? {value: this.state.otherLicenseDescription} : {}}>Other...</option>
             </FormField>
-          </div>
-          <div className="form-row">
-            <label htmlFor="description">Description</label> <FormField type="textarea" ref="meta_description" name="description" placeholder="Description of your content" style={publishFieldStyle} />
-          </div>
-          <div className="form-row">
-            <label><FormField type="checkbox" ref="meta_nsfw" name="nsfw" placeholder="Description of your content" /> Not Safe For Work</label>
-          </div>
-        </section>
+            <FormField type="hidden" ref="meta_license_url" name="license_url" value={this.getLicenseUrl()} />
+            </div>
+            {this.state.copyrightChosen
+              ? <div className="form-row">
+                  <label htmlFor="copyright-notice" value={this.state.copyrightNotice}>Copyright notice</label><FormField type="text" name="copyright-notice" value={this.state.copyrightNotice} onChange={this.handleCopyrightNoticeChange} style={publishFieldStyle} />
+                </div>
+              : null}
+            {this.state.otherLicenseChosen
+              ? <div className="form-row">
+                  <label htmlFor="other-license-description">License description</label><FormField type="text" name="other-license-description" onChange={this.handleOtherLicenseDescriptionChange} style={publishFieldStyle} />
+                </div>
+              : null}
+            {this.state.otherLicenseChosen
+              ? <div className="form-row">
+                  <label htmlFor="other-license-url">License URL</label> <FormField type="text" name="other-license-url" style={publishFieldStyle} onChange={this.handleOtherLicenseUrlChange} />
+                </div>
+              : null}
+
+            <div className="form-row">
+            <label htmlFor="language">Language</label> <FormField type="select" defaultValue="en" ref="meta_language" name="language">
+                 <option value="en">English</option>
+                 <option value="zh">Chinese</option>
+                 <option value="fr">French</option>
+                 <option value="de">German</option>
+                 <option value="jp">Japanese</option>
+                 <option value="ru">Russian</option>
+                 <option value="es">Spanish</option>
+              </FormField>
+            </div>
+            <div className="form-row">
+              <label htmlFor="description">Description</label> <FormField type="textarea" ref="meta_description" name="description" placeholder="Description of your content" style={publishFieldStyle} />
+            </div>
+            <div className="form-row">
+              <label><FormField type="checkbox" ref="meta_nsfw" name="nsfw" placeholder="Description of your content" /> Not Safe For Work</label>
+            </div>
+          </section>
 
 
 
-        <section className="card">
-          <h4>Additional Content Information (Optional)</h4>
-          <div className="form-row">
-            <label htmlFor="meta_thumbnail">Thumbnail URL</label> <FormField type="text" ref="meta_thumbnail" name="thumbnail" placeholder="http://mycompany.com/images/ep_1.jpg" style={publishFieldStyle} />
-          </div>
-        </section>
+          <section className="card">
+            <h4>Additional Content Information (Optional)</h4>
+            <div className="form-row">
+              <label htmlFor="meta_thumbnail">Thumbnail URL</label> <FormField type="text" ref="meta_thumbnail" name="thumbnail" placeholder="http://mycompany.com/images/ep_1.jpg" style={publishFieldStyle} />
+            </div>
+          </section>
 
-        <div className="card-series-submit">
-          <Link button="primary" label={!this.state.submitting ? 'Publish' : 'Publishing...'} onClick={this.handleSubmit} disabled={this.state.submitting} />
-          <Link button="cancel" href="/" label="Cancel"/>
-         </div>
-       </main>
+          <div className="card-series-submit">
+           <Link button="primary" label={!this.state.submitting ? 'Publish' : 'Publishing...'} onClick={this.handleSubmit} disabled={this.state.submitting} />
+           <Link button="cancel" href="/" label="Cancel"/>
+           <input type='submit' className='hidden' />
+          </div>
+        </form>
+      </main>
     );
   }
 });

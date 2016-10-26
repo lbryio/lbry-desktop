@@ -16,7 +16,11 @@ var ReferralPage = React.createClass({
       submitting: false,
     }
   },
-  handleSubmit: function() {
+  handleSubmit: function(event) {
+    if (typeof event !== 'undefined') {
+      event.preventDefault();
+    }
+
     if (!this.refs.code.value) {
       alert('Please enter a referral code.');
       return;
@@ -72,23 +76,24 @@ var ReferralPage = React.createClass({
   render: function() {
     return (
       <main>
-        <div className="card">
-          <h2>Check your referral credits</h2>
-          <section style={referralCodeContentStyle}>
-            <p>Have you referred others to LBRY? Enter your referral code and email address below to check how many credits you've earned!</p>
-            <p>As a reminder, your referral code is the same as your LBRY invitation code.</p>
-          </section>
-          <section>
-            <form onSubmit={this.handleSubmit}>
+        <form onSubmit={this.handleSubmit}>
+          <div className="card">
+            <h2>Check your referral credits</h2>
+            <section style={referralCodeContentStyle}>
+              <p>Have you referred others to LBRY? Enter your referral code and email address below to check how many credits you've earned!</p>
+              <p>As a reminder, your referral code is the same as your LBRY invitation code.</p>
+            </section>
+            <section>
               <section><label style={referralCodeLabelStyle} htmlFor="code">Referral code</label><input name="code" ref="code" /></section>
               <section><label style={referralCodeLabelStyle} htmlFor="email">Email</label><input name="email" ref="email" /></section>
-            </form>
-          </section>
-          <section>
-            <Link button="primary" label={this.state.submitting ? "Submitting..." : "Submit"}
-                  disabled={this.state.submitting} onClick={this.handleSubmit} />
-          </section>
-        </div>
+            </section>
+            <section>
+              <Link button="primary" label={this.state.submitting ? "Submitting..." : "Submit"}
+                    disabled={this.state.submitting} onClick={this.handleSubmit} />
+              <input type='submit' className='hidden' />
+            </section>
+          </div>
+        </form>
       </main>
     );
   }

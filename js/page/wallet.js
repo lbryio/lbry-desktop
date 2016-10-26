@@ -2,7 +2,11 @@ var addressRefreshButtonStyle = {
   fontSize: '11pt',
 };
 var AddressSection = React.createClass({
-  _refreshAddress: function() {
+  _refreshAddress: function(event) {
+    if (typeof event !== 'undefined') {
+      event.preventDefault();
+    }
+
     lbry.getNewAddress((address) => {
       localStorage.setItem('wallet_address', address);
       this.setState({
@@ -35,7 +39,8 @@ var AddressSection = React.createClass({
     return (
       <section className="card">
         <h3>Wallet Address</h3>
-        <p><Address address={this.state.address} /> <Link text="Get new address" icon='icon-refresh' onClick={this._refreshAddress} style={addressRefreshButtonStyle} /></p>
+        <Address address={this.state.address} /> <Link text="Get new address" icon='icon-refresh' onClick={this._refreshAddress} style={addressRefreshButtonStyle} />
+        <input type='submit' className='hidden' />
         <div className="help">
           <p>Other LBRY users may send credits to you by entering this address on the "Send" page.</p>
           You can generate a new address at any time, and any previous addresses will continue to work. Using multiple addresses can be helpful for keeping track of incoming payments from multiple sources.
@@ -46,7 +51,11 @@ var AddressSection = React.createClass({
 });
 
 var SendToAddressSection = React.createClass({
-  sendToAddress: function() {
+  handleSubmit: function(event) {
+    if (typeof event !== 'undefined') {
+      event.preventDefault();
+    }
+
     if ((this.state.balance - this.state.amount) < 1)
     {
       alert("Insufficient balance: after this transaction you would have less than 1 LBC in your wallet.")
@@ -104,26 +113,29 @@ var SendToAddressSection = React.createClass({
   render: function() {
     return (
       <section className="card">
-        <h3>Send Credits</h3>
-        <div className="form-row">
-          <label htmlFor="amount">Amount</label>
-          <input id="amount" type="text" size="10" onChange={this.setAmount}></input>
-        </div>
-        <div className="form-row">
-          <label htmlFor="address">Recipient address</label>
-          <input id="address" type="text" size="60" onChange={this.setAddress}></input>
-        </div>
-        <div className="form-row form-row-submit">
-          <Link button="primary" label="Send" onClick={this.sendToAddress} disabled={!(parseFloat(this.state.amount) > 0.0) || this.state.address == ""} />
-        </div>
-        {
-          this.state.results ?
+        <form onSubmit={this.handleSubmit}>
+          <h3>Send Credits</h3>
           <div className="form-row">
-            <h4>Results</h4>
-            {this.state.results}
+            <label htmlFor="amount">Amount</label>
+            <input id="amount" type="text" size="10" onChange={this.setAmount}></input>
           </div>
-            : ''
-        }
+          <div className="form-row">
+            <label htmlFor="address">Recipient address</label>
+            <input id="address" type="text" size="60" onChange={this.setAddress}></input>
+          </div>
+          <div className="form-row form-row-submit">
+            <Link button="primary" label="Send" onClick={this.handleSubmit} disabled={!(parseFloat(this.state.amount) > 0.0) || this.state.address == ""} />
+            <input type='submit' className='hidden' />
+          </div>
+          {
+            this.state.results ?
+            <div className="form-row">
+              <h4>Results</h4>
+              {this.state.results}
+            </div>
+              : ''
+          }
+        </form>
       </section>
     );
   }
