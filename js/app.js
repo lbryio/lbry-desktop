@@ -112,7 +112,7 @@ var App = React.createClass({
 
     this.setState({
       modal: 'error',
-      errorInfo: <ul className="modal__error-list">{errorInfoList}</ul>,
+      errorInfo: <ul className="error-modal__error-list">{errorInfoList}</ul>,
     });
   },
   getHeaderLinks: function()
@@ -204,14 +204,17 @@ var App = React.createClass({
               : null}
 
           </Modal>
-          <Modal isOpen={this.state.modal == 'error'} type='custom' className='error-modal' overlayClassName='error-modal-overlay'>
-            <h3>Error</h3>
-            <div className="error-modal__layout">
-              <Icon icon="icon-warning" className="error-modal__warning-icon" />
-              <p>Sorry, but LBRY has encountered an error! This has been reported and we will investigate the problem.</p>
+          <Modal isOpen={this.state.modal == 'error'} type="custom" className="error-modal" overlayClassName="error-modal-overlay"  >
+            <h3 className="modal__header">Error</h3>
+
+            <div className="error-modal__content">
+              <div><img className="error-modal__warning-symbol" src={lbry.imagePath('warning.png')} /></div>
+              <p>We're sorry that LBRY has encountered an error. This has been reported and we will investigate the problem.</p>
             </div>
             {this.state.errorInfo}
-            <Link button="alt" label="OK" className="modal__button" onClick={this.closeModal} />
+            <div className="modal__buttons">
+              <Link button="alt" label="OK" className="modal__button" onClick={this.closeModal} />
+            </div>
           </Modal>
         </div>
     );

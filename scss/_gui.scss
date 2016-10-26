@@ -260,8 +260,12 @@ input[type="text"], input[type="search"]
   overflow: auto;
   border-radius: 4px;
   outline: none;
-  padding: 40px;
+  padding: 36px;
   max-width: 250px;
+}
+
+.modal__header {
+   margin-bottom: 5px;
 }
 
 .modal__buttons {
@@ -275,15 +279,14 @@ input[type="text"], input[type="search"]
   margin: 0px 6px;
 }
 
-
-.modal__error-list {
+.error-modal__error-list {
   border: 1px solid #eee;
   padding: 8px;
   list-style: none;
 }
 
 .error-modal-overlay {
-  background: rgba(#000, .85);
+  background: rgba(#000, .88);
 }
 
 .error-modal {
@@ -291,13 +294,12 @@ input[type="text"], input[type="search"]
   width: 400px;
 }
 
-.error-modal__layout {
+.error-modal__content {
   display: flex;
   padding: 0px 8px 10px 10px;
 }
 
-.error-modal .icon-warning {
-  font-size: 48px;
-  color: $color-money;
+.error-modal__warning-symbol {
+  margin-top: 6px;
   margin-right: 7px;
 }
