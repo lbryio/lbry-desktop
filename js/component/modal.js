@@ -5,12 +5,16 @@ var Modal = React.createClass({
     onAborted: React.PropTypes.func,
     confirmButtonLabel: React.PropTypes.string,
     abortButtonLabel: React.PropTypes.string,
+    confirmButtonDisabled: React.PropTypes.bool,
+    abortButtonDisabled: React.PropTypes.bool,
   },
   getDefaultProps: function() {
     return {
       type: 'alert',
       confirmButtonLabel: 'OK',
       abortButtonLabel: 'Cancel',
+      confirmButtonDisabled: false,
+      abortButtonDisabled: false,
     };
   },
   render: function() {
@@ -36,9 +40,9 @@ var Modal = React.createClass({
       var buttons = (
         <div className="modal__buttons">
           {this.props.type == 'confirm'
-            ? <Link button="alt" label={props.abortButtonLabel} className="modal__button" onClick={props.onAborted} />
+            ? <Link button="alt" label={props.abortButtonLabel} className="modal__button" disabled={this.props.abortButtonDisabled} onClick={props.onAborted} />
             : null}
-          <Link button="primary" label={props.confirmButtonLabel} className="modal__button" onClick={props.onConfirmed} />
+          <Link button="primary" label={props.confirmButtonLabel} className="modal__button" disabled={this.props.confirmButtonDisabled} onClick={props.onConfirmed} />
         </div>
       );
     }
