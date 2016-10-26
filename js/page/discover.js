@@ -122,7 +122,7 @@ var SearchResultRow = React.createClass({
             <div className="meta"><a href={'/?show=' + this.props.name}>lbry://{this.props.name}</a></div>
             <h3 style={titleStyle}>
               <a href={'/?show=' + this.props.name}>
-                <TruncatedText {...this.props.compact ? {limit: 50} : {}}>
+                <TruncatedText lines={3}>
                   {this.props.title}
                 </TruncatedText>
               </a>
@@ -132,7 +132,7 @@ var SearchResultRow = React.createClass({
               <DownloadLink streamName={this.props.name} button="text" />
             </div>
             <p style={searchRowDescriptionStyle}>
-              <TruncatedText {... this.props.compact ? {limit: 123} : {}}>
+              <TruncatedText lines={3}>
                 {this.props.description}
               </TruncatedText>
             </p>

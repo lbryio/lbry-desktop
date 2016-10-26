@@ -13,17 +13,27 @@ var Icon = React.createClass({
 
 var TruncatedText = React.createClass({
   propTypes: {
-    limit: React.PropTypes.number,
+    lines: React.PropTypes.number,
+    height: React.PropTypes.string,
+    auto: React.PropTypes.bool,
   },
   getDefaultProps: function() {
     return {
-      limit: 250,
+      lines: null,
+      height: null,
+      auto: true,
     }
+  },
+  componentDidMount: function() {
+    console.log('span is', this.refs.span);
+    console.log('type of lines is', typeof this.props.lines)
+    $clamp(this.refs.span, {
+      clamp: this.props.lines || this.props.height || 'auto',
+    });
   },
   render: function() {
     var text = this.props.children;
-    var limit = this.props.limit;
-    return <span>{text.slice(0, limit) + (text.length > limit ? ' ...' : '')}</span>;
+    return <span ref="span">{text}</span>;
   }
 });
 
