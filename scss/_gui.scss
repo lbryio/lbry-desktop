@@ -132,6 +132,13 @@ input[type="text"], input[type="search"]
   }
 }
 
+.button-container {
+  + .button-container
+  {
+    margin-left: 12px;
+  }
+}
+
 .button-block
 {
   cursor: pointer;
@@ -143,10 +150,6 @@ input[type="text"], input[type="search"]
   text-align: center;
   border-radius: 2px;
   text-transform: uppercase;
-  + .button-block
-  {
-    margin-left: 12px;
-  }
   .icon
   {
     top: 0em;

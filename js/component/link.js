@@ -132,7 +132,7 @@ var DownloadLink = React.createClass({
   render: function() {
     var label = (!this.state.downloading ? this.props.label : this.props.downloadingLabel);
     return (
-      <span>
+      <span className="button-container">
         <Link button={this.props.button} hidden={this.props.hidden} style={this.props.style}
               disabled={this.state.downloading} label={label} icon={this.props.icon} onClick={this.handleClick} />
         <Modal isOpen={this.state.modal == 'downloadStarted'} onConfirmed={this.closeModal}>
@@ -186,7 +186,7 @@ var WatchLink = React.createClass({
   },
   render: function() {
     return (
-      <span>
+      <span className="button-container">
         <Link button={this.props.button} hidden={this.props.hidden} style={this.props.style}
                    label={this.props.label} icon={this.props.icon} onClick={this.handleClick} />
         <Modal isOpen={this.state.modal == 'notEnoughCredits'} onConfirmed={this.closeModal}>
