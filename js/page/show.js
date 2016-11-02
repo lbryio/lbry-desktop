@@ -60,6 +60,9 @@ var FormatItem = React.createClass({
             {mediaType == 'video' ? <WatchLink streamName={this.props.name} button="primary" /> : null}
             <DownloadLink streamName={this.props.name} button="alt" />
           </section>
+          <section>
+            <Link href="https://lbry.io/dmca" label="report" className="button-text-help" />
+          </section>
         </div>
       </div>
       );
