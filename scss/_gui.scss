@@ -182,6 +182,11 @@ input[type="text"], input[type="search"]
 {
   @include text-link();
 }
+.button-text-help
+{
+  @include text-link(#5b8c80);
+  font-size: 0.8em;
+}
 
 .icon:only-child {
   position: relative;
