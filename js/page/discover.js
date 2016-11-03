@@ -220,11 +220,11 @@ var FeaturedContent = React.createClass({
       <div className="row-fluid">
         <div className="span6">
           <h3>Featured Content</h3>
-          <FeaturedContentItem name="what" />
+          <FeaturedContentItem name="bellflower" />
           <FeaturedContentItem name="itsadisaster" />
-          <FeaturedContentItem name="superman1940-e4" />
-          <FeaturedContentItem name="skateyrselfclean" />
-          <FeaturedContentItem name="gtasoc" />
+          <FeaturedContentItem name="dopeman" />
+          <FeaturedContentItem name="smlawncare" />
+          <FeaturedContentItem name="cinemasix" />
 
         </div>
         <div className="span6">
