@@ -242,6 +242,10 @@ lbry.getFilesInfo = function(callback) {
   lbry.call('get_lbry_files', {}, callback);
 }
 
+lbry.getMyClaims = function(callback) {
+  lbry.call('get_name_claims', {}, callback);
+}
+
 lbry.startFile = function(name, callback) {
   lbry.call('start_lbry_file', { name: name }, callback);
 }
