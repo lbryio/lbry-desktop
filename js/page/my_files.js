@@ -268,10 +268,14 @@ var MyFilesPage = React.createClass({
           <BusyMessage message="Loading" />
         </main>
       );
-    }
-
-    if (!this.state.filesInfo.length) {
-      var content = <span>You haven't downloaded anything from LBRY yet. Go <Link href="/" label="search for your first download" />!</span>;
+    } else if (!this.state.filesInfo.length) {
+      return (
+        <main className="page">
+          {this.props.show == 'downloaded'
+            ? <span>You haven't downloaded anything from LBRY yet. Go <Link href="/" label="search for your first download" />!</span>
+            : <span>You haven't published anything to LBRY yet.</span>}
+        </main>
+      );
     } else {
       var content = [],
           seenUris = {};
