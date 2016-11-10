@@ -14,6 +14,9 @@ var ReferralPage = React.createClass({
   getInitialState: function() {
     return {
       submitting: false,
+      modal: null,
+      referralCredits: null,
+      failureReason: null,
     }
   },
   handleSubmit: function(event) {
@@ -22,15 +25,17 @@ var ReferralPage = React.createClass({
     }
 
     if (!this.refs.code.value) {
-      alert('Please enter a referral code.');
-      return;
+      this.setState({
+        modal: 'missingCode',
+      });
     } else if (!this.refs.email.value) {
-      alert('Please enter an email address.');
-      return;
+      this.setState({
+        modal: 'missingEmail',
+      });
     }
 
     this.setState({
-      submitting: true
+      submitting: true,
     });
 
     lbry.getNewAddress((address) => {
@@ -42,29 +47,24 @@ var ReferralPage = React.createClass({
         var response = JSON.parse(xhr.responseText);
 
         if (response.success) {
-          if (response.referralCredits > 0) {
-            alert('You have earned ' + response.referralCredits + ' credits from referrals. ' +
-              'We will credit your account shortly. Thanks!');
-          } else {
-            alert('You have not earned any new referral credits since the last time you checked. ' +
-              'Please check back in a week or two.');
-          }
-
-          window.location = '?home';
-        } else {
-          alert(response.reason);
           this.setState({
-            submitting: false
+            modal: 'referralInfo',
+            referralCredits: response.referralCredits,
+          });
+        } else {
+          this.setState({
+            submitting: false,
+            modal: 'lookupFailed',
+            failureReason: response.reason,
           });
         }
       });
 
       xhr.addEventListener('error', () => {
         this.setState({
-          submitting: false
+          submitting: false,
+          modal: 'couldNotConnect',
         });
-        alert('LBRY couldn\'t connect to our servers to confirm your referral code. Please check your ' +
-              'internet connection.');
       });
 
       xhr.open('POST', 'https://invites.lbry.io/check', true);
@@ -72,6 +72,15 @@ var ReferralPage = React.createClass({
       xhr.send('code=' + encodeURIComponent(code) + '&address=' + encodeURIComponent(address) +
                '&email=' + encodeURIComponent(email));
     });
+  },
+  closeModal: function() {
+    this.setState({
+      modal: null,
+    });
+  },
+  handleFinished: function() {
+    localStorage.setItem('claimCodeDone', true);
+    window.location = '?home';
   },
   render: function() {
     return (
@@ -94,6 +103,17 @@ var ReferralPage = React.createClass({
             </section>
           </div>
         </form>
+        <Modal isOpen={this.state.modal == 'referralInfo'} onConfirmed={this.handleFinished}>
+          {this.state.referralCredits > 0
+            ? `You have earned {response.referralCredits} credits from referrals. We will credit your account shortly. Thanks!`
+            : 'You have not earned any new referral credits since the last time you checked. Please check back in a week or two.'}
+        </Modal>
+        <Modal isOpen={this.state.modal == 'lookupFailed'} onConfirmed={this.closeModal}>
+          {this.state.failureReason}
+        </Modal>
+        <Modal isOpen={this.state.modal == 'couldNotConnect'} onConfirmed={this.closeModal}>
+          LBRY couldn't connect to our servers to confirm your referral code. Please check your internet connection.
+        </Modal>
       </main>
     );
   }

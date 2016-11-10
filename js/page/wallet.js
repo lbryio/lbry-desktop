@@ -17,6 +17,7 @@ var AddressSection = React.createClass({
   getInitialState: function() {
     return {
       address: null,
+      modal: null,
     }
   },
   componentWillMount: function() {
@@ -58,7 +59,9 @@ var SendToAddressSection = React.createClass({
 
     if ((this.state.balance - this.state.amount) < 1)
     {
-      alert("Insufficient balance: after this transaction you would have less than 1 LBC in your wallet.")
+      this.setState({
+        modal: 'insufficientBalance',
+      });
       return;
     }
 
@@ -83,6 +86,11 @@ var SendToAddressSection = React.createClass({
       this.setState({
         results: "Something went wrong: " + error.faultString + " " + error.faultCode
       })
+    });
+  },
+  closeModal: function() {
+    this.setState({
+      modal: null,
     });
   },
   getInitialState: function() {
@@ -136,6 +144,9 @@ var SendToAddressSection = React.createClass({
               : ''
           }
         </form>
+        <Modal isOpen={this.state.modal === 'insufficientBalance'} onConfirmed={this.closeModal}>
+          Insufficient balance: after this transaction you would have less than 1 LBC in your wallet.
+        </Modal>
       </section>
     );
   }

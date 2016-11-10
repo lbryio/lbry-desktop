@@ -81,14 +81,8 @@ var PublishPage = React.createClass({
       console.log(publishArgs);
       lbry.publish(publishArgs, (message) => {
         this.handlePublishStarted();
-        this.setState({
-          submitting: false,
-        });
       }, null, (error) => {
         this.handlePublishError(error);
-        this.setState({
-          submitting: false,
-        });
       });
     };
 
@@ -125,18 +119,26 @@ var PublishPage = React.createClass({
       otherLicenseUrl: '',
       uploadProgress: 0.0,
       uploaded: false,
+      errorMessage: null,
       tempFileReady: false,
       submitting: false,
+      modal: null,
     };
   },
   handlePublishStarted: function() {
-    alert(`Your file ${this.refs.meta_title.getValue()} has been published to LBRY at the address lbry://${this.state.name}!\n\n` +
-          `You will now be taken to your My Files page, where your newly published file will be listed. Your file will take a few minutes to appear for other LBRY users; until then it will be listed as "pending."`);
+    this.setState({
+      modal: 'publishStarted',
+    });
+  },
+  handlePublishStartedConfirmed: function() {
     window.location = "?published";
   },
   handlePublishError: function(error) {
-    alert(`The following error occurred when attempting to publish your file:\n\n` +
-          error.message);
+    this.setState({
+      submitting: false,
+      modal: 'error',
+      errorMessage: error.message,
+    });
   },
   handleNameChange: function(event) {
     var rawName = event.target.value;
@@ -463,6 +465,14 @@ var PublishPage = React.createClass({
            <input type='submit' className='hidden' />
           </div>
         </form>
+
+        <Modal isOpen={this.state.modal == 'publishStarted'} onConfirmed={this.handlePublishStartedConfirmed}>
+          <p>Your file has been published to LBRY at the address <code>lbry://{this.state.name}</code>!</p>
+          You will now be taken to your My Files page, where your newly published file will be listed. The file will take a few minutes to appear for other LBRY users; until then it will be listed as "pending."
+        </Modal>
+        <Modal isOpen={this.state.modal == 'error'} onConfirmed={this.closeModal}>
+          The following error occurred when attempting to publish your file: {this.state.errorMessage}
+        </Modal>
       </main>
     );
   }

@@ -132,6 +132,13 @@ input[type="text"], input[type="search"]
   }
 }
 
+.button-container {
+  + .button-container
+  {
+    margin-left: 12px;
+  }
+}
+
 .button-block
 {
   cursor: pointer;
@@ -143,10 +150,6 @@ input[type="text"], input[type="search"]
   text-align: center;
   border-radius: 2px;
   text-transform: uppercase;
-  + .button-block
-  {
-    margin-left: 12px;
-  }
   .icon
   {
     top: 0em;
@@ -224,4 +227,44 @@ input[type="text"], input[type="search"]
   {
     margin-top: $spacing-vertical;
   }
+}
+
+.modal-overlay {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  background-color: rgba(255, 255, 255, 0.74902);
+  z-index: 9999;
+}
+
+.modal {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  border: 1px solid rgb(204, 204, 204);
+  background: rgb(255, 255, 255);
+  overflow: auto;
+  border-radius: 4px;
+  outline: none;
+  padding: 40px;
+  max-width: 250px;
+}
+
+.modal__buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-top: 15px;
+}
+
+.modal__button {
+  margin: 0px 6px;
 }

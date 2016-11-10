@@ -93,13 +93,22 @@ var DownloadLink = React.createClass({
   getInitialState: function() {
     return {
       downloading: false,
+      filePath: null,
+      modal: null,
     }
+  },
+  closeModal: function() {
+    this.setState({
+      modal: null,
+    })
   },
   handleClick: function() {
     lbry.getCostEstimate(this.props.streamName, (amount) => {
       lbry.getBalance((balance) => {
         if (amount > balance) {
-          alert("You don't have enough LBRY credits to pay for this stream.");
+          this.setState({
+            modal: 'notEnoughCredits',
+          });
         } else {
           this.startDownload();
         }
@@ -113,15 +122,27 @@ var DownloadLink = React.createClass({
       });
 
       lbry.getStream(this.props.streamName, (streamInfo) => {
-        alert('Downloading to ' + streamInfo.path);
-        console.log(streamInfo);
+        this.setState({
+          modal: 'downloadStarted',
+          filePath: streamInfo.path,
+        });
       });
     }
   },
   render: function() {
     var label = (!this.state.downloading ? this.props.label : this.props.downloadingLabel);
-    return <Link button={this.props.button} hidden={this.props.hidden} style={this.props.style}
-                 disabled={this.state.downloading} label={label} icon={this.props.icon} onClick={this.handleClick} />;
+    return (
+      <span className="button-container">
+        <Link button={this.props.button} hidden={this.props.hidden} style={this.props.style}
+              disabled={this.state.downloading} label={label} icon={this.props.icon} onClick={this.handleClick} />
+        <Modal isOpen={this.state.modal == 'downloadStarted'} onConfirmed={this.closeModal}>
+          Downloading to {this.state.filePath}
+        </Modal>
+        <Modal isOpen={this.state.modal == 'notEnoughCredits'} onConfirmed={this.closeModal}>
+          You don't have enough LBRY credits to pay for this stream.
+        </Modal>
+      </span>
+    );
   }
 });
 
@@ -138,11 +159,23 @@ var WatchLink = React.createClass({
     lbry.getCostEstimate(this.props.streamName, (amount) => {
       lbry.getBalance((balance) => {
         if (amount > balance) {
-          alert("You don't have enough LBRY credits to pay for this stream.");
+          this.setState({
+            modal: 'notEnoughCredits',
+          });
         } else {
           window.location = '?watch=' + this.props.streamName;
         }
       });
+    });
+  },
+  getInitialState: function() {
+    return {
+      modal: null,
+    };
+  },
+  closeModal: function() {
+    this.setState({
+      modal: null,
     });
   },
   getDefaultProps: function() {
@@ -151,9 +184,15 @@ var WatchLink = React.createClass({
       label: 'Watch',
     }
   },
-
   render: function() {
-    return <Link button={this.props.button} hidden={this.props.hidden} style={this.props.style}
-                 label={this.props.label} icon={this.props.icon} onClick={this.handleClick} />;
+    return (
+      <span className="button-container">
+        <Link button={this.props.button} hidden={this.props.hidden} style={this.props.style}
+                   label={this.props.label} icon={this.props.icon} onClick={this.handleClick} />
+        <Modal isOpen={this.state.modal == 'notEnoughCredits'} onConfirmed={this.closeModal}>
+          You don't have enough LBRY credits to pay for this stream.
+        </Modal>
+      </span>
+    );
   }
 });
