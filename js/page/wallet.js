@@ -179,7 +179,7 @@ var TransactionList = React.createClass({
           {
             transactionItems.push({
               id: txid,
-              date: new Date(parseInt(tx["timestamp"]) * 1000),
+              date: tx["timestamp"] ? (new Date(parseInt(tx["timestamp"]) * 1000)) : null,
               amount: condensedTransactions[txid]
             });
             delete condensedTransactions[txid];
@@ -198,8 +198,8 @@ var TransactionList = React.createClass({
         rows.push(
           <tr key={item.id}>
             <td>{ (item.amount > 0 ? '+' : '' ) + item.amount }</td>
-            <td>{ item.date.toLocaleDateString() }</td>
-            <td>{ item.date.toLocaleTimeString() }</td>
+            <td>{ item.date ? item.date.toLocaleDateString() : <span className="empty">(Transaction pending)</span> }</td>
+            <td>{ item.date ? item.date.toLocaleTimeString() : <span className="empty">(Transaction pending)</span> }</td>
             <td>
               <a className="button-text" href={"https://explorer.lbry.io/tx/"+item.id} target="_blank">{item.id.substr(0, 7)}</a>
             </td>
