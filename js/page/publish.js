@@ -337,7 +337,7 @@ var PublishPage = React.createClass({
                 (!this.state.name ? '' :
                   (! this.state.nameResolved ? <em> The name <strong>{this.state.name}</strong> is available.</em>
                                              : (this.state.myClaimExists ? <em> You already have a claim on the name <strong>{this.state.name}</strong>. You can use this page to update your claim.</em>
-                                                                         : <em> The name <strong>{this.state.name}</strong> is currently claimed for <strong>{this.state.topClaimValue}</strong> credits.</em>)))
+                                                                         : <em> The name <strong>{this.state.name}</strong> is currently claimed for <strong>{this.state.topClaimValue}</strong> {this.state.topClaimValue == 1 ? 'credit' : 'credits'}.</em>)))
               }
               <div className="help">What LBRY name would you like to claim for this file?</div>
             </div>
@@ -361,10 +361,10 @@ var PublishPage = React.createClass({
               Credits <FormField ref="bid" style={publishNumberStyle} type="text" onChange={this.handleBidChange} value={this.state.bid} placeholder={this.state.nameResolved ? this.state.topClaimValue + 10 : 100} />
               <div className="help">How much would you like to bid for this name?
               { !this.state.nameResolved ? <span> Since this name is not currently resolved, you may bid as low as you want, but higher bids help prevent others from claiming your name.</span>
-                                         : (this.state.topClaimIsMine ? <span> You currently control this name with a bid of <strong>{this.state.myClaimValue}</strong> credits.</span>
-                                                                      : (this.state.myClaimExists ? <span> You have a non-winning bid on this name for <strong>{this.state.myClaimValue}</strong> credits.
-                                                                                                           To control this name, you'll need to increase your bid to more than <strong>{this.state.topClaimValue}</strong> credits.</span>
-                                                                                                  : <span> You must bid over <strong>{this.state.topClaimValue}</strong> credits to claim this name.</span>)) }
+                                         : (this.state.topClaimIsMine ? <span> You currently control this name with a bid of <strong>{this.state.myClaimValue}</strong> {this.state.myClaimValue == 1 ? 'credit' : 'credits'}.</span>
+                                                                      : (this.state.myClaimExists ? <span> You have a non-winning bid on this name for <strong>{this.state.myClaimValue}</strong> {this.state.myClaimValue == 1 ? 'credit' : 'credits'}.
+                                                                                                           To control this name, you'll need to increase your bid to more than <strong>{this.state.topClaimValue}</strong> {this.state.topClaimValue == 1 ? 'credit' : 'credits'}.</span>
+                                                                                                  : <span> You must bid over <strong>{this.state.topClaimValue}</strong> {this.state.topClaimValue == 1 ? 'credit' : 'credits'} to claim this name.</span>)) }
               </div>
             </div>
           </section>
