@@ -115,7 +115,7 @@ var MyFilesRow = React.createClass({
       <section className="card">
         <div className="row-fluid">
           <div className="span3">
-            <img src={this.props.imgUrl || '/img/default-thumb.svg'} alt={'Photo for ' + this.props.title} style={artStyle} />
+            <Thumbnail src={this.props.imgUrl} alt={'Photo for ' + this.props.title} style={artStyle} />
           </div>
           <div className="span8">
             <h3>{this.props.pending ? this.props.title : <a href={'/?show=' + this.props.lbryUri}>{this.props.title}</a>}</h3>
