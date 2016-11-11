@@ -363,7 +363,7 @@ var PublishPage = React.createClass({
               { !this.state.nameResolved ? <span> Since this name is not currently resolved, you may bid as low as you want, but higher bids help prevent others from claiming your name.</span>
                                          : (this.state.topClaimIsMine ? <span> You currently control this name with a bid of <strong>{this.state.myClaimValue}</strong> credits.</span>
                                                                       : (this.state.myClaimExists ? <span> You have a non-winning bid on this name for <strong>{this.state.myClaimValue}</strong> credits.
-                                                                                                           To control this name, you'll need to increase your bid to at least <strong>{this.state.myClaimValue}</strong> credits.</span>
+                                                                                                           To control this name, you'll need to increase your bid to more than <strong>{this.state.topClaimValue}</strong> credits.</span>
                                                                                                   : <span> You must bid over <strong>{this.state.topClaimValue}</strong> credits to claim this name.</span>)) }
               </div>
             </div>
