@@ -122,11 +122,6 @@ lbry.sendToAddress = function(amount, address, callback, errorCallback)
   lbry.call("send_amount_to_address", { "amount" : amount, "address": address }, callback, errorCallback);
 }
 
-lbry.search = function(query, callback)
-{
-  lbry.lighthouse.call('search', [query], callback);
-}
-
 lbry.resolveName = function(name, callback) {
   lbry.call('resolve_name', { 'name': name }, callback, () => {
     // For now, assume any error means the name was not resolved

@@ -117,7 +117,7 @@ var DetailPage = React.createClass({
   componentWillMount: function() {
     document.title = 'lbry://' + this.props.name;
 
-    lbry.search(this.props.name, (results) => {
+    lbry.lighthouse.search(this.props.name, (results) => {
       var result = results[0];
 
       if (result.name != this.props.name) {

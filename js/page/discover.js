@@ -179,7 +179,7 @@ var FeaturedContentItem = React.createClass({
   componentDidMount: function() {
     this.resolveSearch = true;
 
-    lbry.search(this.props.name, function(results) {
+    lbry.lighthouse.search(this.props.name, function(results) {
       var result = results[0];
       var metadata = result.value;
       if (this.resolveSearch)
@@ -257,7 +257,7 @@ var DiscoverPage = React.createClass({
       query: this.props.query,
     });
 
-    lbry.search(this.props.query, this.searchCallback);
+    lbry.lighthouse.search(this.props.query, this.searchCallback);
   },
 
   componentDidMount: function() {
