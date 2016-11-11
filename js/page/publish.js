@@ -337,7 +337,7 @@ var PublishPage = React.createClass({
                 (!this.state.name ? '' :
                   (! this.state.nameResolved ? <em> The name <strong>{this.state.name}</strong> is available.</em>
                                              : (this.state.myClaimExists ? <em> You already have a claim on the name <strong>{this.state.name}</strong>. You can use this page to update your claim.</em>
-                                                                         : <em> The name <strong>{this.state.name}</strong> is currently claimed for <strong>{lbry.formatCredits(this.state.topClaimValue)}</strong> credits.</em>)))
+                                                                         : <em> The name <strong>{this.state.name}</strong> is currently claimed for <strong>{this.state.topClaimValue}</strong> credits.</em>)))
               }
               <div className="help">What LBRY name would you like to claim for this file?</div>
             </div>
@@ -358,13 +358,13 @@ var PublishPage = React.createClass({
           <section className="card">
             <h4>Bid Amount</h4>
             <div className="form-row">
-              Credits <FormField ref="bid" style={publishNumberStyle} type="text" onChange={this.handleBidChange} value={this.state.bid} placeholder={this.state.nameResolved ? lbry.formatCredits(this.state.topClaimValue + 10) : 100} />
+              Credits <FormField ref="bid" style={publishNumberStyle} type="text" onChange={this.handleBidChange} value={this.state.bid} placeholder={this.state.nameResolved ? this.state.topClaimValue + 10 : 100} />
               <div className="help">How much would you like to bid for this name?
               { !this.state.nameResolved ? <span> Since this name is not currently resolved, you may bid as low as you want, but higher bids help prevent others from claiming your name.</span>
-                                         : (this.state.topClaimIsMine ? <span> You currently control this name with a bid of <strong>{lbry.formatCredits(this.state.myClaimValue)}</strong> credits.</span>
-                                                                      : (this.state.myClaimExists ? <span> You have a non-winning bid on this name for <strong>{lbry.formatCredits(this.state.myClaimValue)}</strong> credits.
-                                                                                                           To control this name, you'll need to increase your bid to at least <strong>{lbry.formatCredits(this.state.myClaimValue)}</strong> credits.</span>
-                                                                                                  : <span> You must bid over <strong>{lbry.formatCredits(this.state.topClaimValue)}</strong> credits to claim this name.</span>)) }
+                                         : (this.state.topClaimIsMine ? <span> You currently control this name with a bid of <strong>{this.state.myClaimValue}</strong> credits.</span>
+                                                                      : (this.state.myClaimExists ? <span> You have a non-winning bid on this name for <strong>{this.state.myClaimValue}</strong> credits.
+                                                                                                           To control this name, you'll need to increase your bid to at least <strong>{this.state.myClaimValue}</strong> credits.</span>
+                                                                                                  : <span> You must bid over <strong>{this.state.topClaimValue}</strong> credits to claim this name.</span>)) }
               </div>
             </div>
           </section>
