@@ -10,8 +10,20 @@ var lbry = {
   }
 };
 
-lbry.jsonrpc_call = function (connectionString, method, params, callback, errorCallback, connectFailedCallback) {
+lbry.jsonrpc_call = function (connectionString, method, params, callback, errorCallback, connectFailedCallback, timeout) {
   var xhr = new XMLHttpRequest;
+  if (typeof connectFailedCallback !== 'undefined') {
+    if (timeout) {
+      xhr.timeout = timeout;
+    }
+
+    xhr.addEventListener('error', function (e) {
+      connectFailedCallback(e);
+    });
+    xhr.addEventListener('timeout', function() {
+      connectFailedCallback(new Error('XMLHttpRequest connection timed out'));
+    })
+  }
   xhr.addEventListener('load', function() {
     var response = JSON.parse(xhr.responseText);
 
@@ -23,12 +35,6 @@ lbry.jsonrpc_call = function (connectionString, method, params, callback, errorC
       callback(response.result);
     }
   });
-
-  if (connectFailedCallback) {
-    xhr.addEventListener('error', function (e) {
-      connectFailedCallback(e);
-    });
-  }
 
   xhr.open('POST', connectionString, true);
   xhr.send(JSON.stringify({
@@ -120,11 +126,6 @@ lbry.getBalance = function(callback)
 lbry.sendToAddress = function(amount, address, callback, errorCallback)
 {
   lbry.call("send_amount_to_address", { "amount" : amount, "address": address }, callback, errorCallback);
-}
-
-lbry.search = function(query, callback)
-{
-  lbry.lighthouse.call('search', [query], callback);
 }
 
 lbry.resolveName = function(name, callback) {
