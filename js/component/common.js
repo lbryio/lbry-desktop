@@ -113,3 +113,36 @@ var Address = React.createClass({
     );
   }
 });
+
+var Thumbnail = React.createClass({
+  _defaultImageUri: '/img/default-thumb.svg',
+  _maxLoadTime: 10000,
+
+  propTypes: {
+    src: React.PropTypes.string.isRequired,
+  },
+  handleError: function() {
+    if (this.state.imageUrl != this._defaultImageUri) {
+      this.setState({
+        imageUri: this._defaultImageUri,
+      });
+    }
+  },
+  getInitialState: function() {
+    return {
+      imageUri: this.props.src || this._defaultImageUri,
+    };
+  },
+  componentDidMount: function() {
+    setTimeout(() => {
+      if (!this.refs.img.complete) {
+        this.setState({
+          imageUri: this._defaultImageUri,
+        });
+      }
+    }, this._maxLoadTime);
+  },
+  render: function() {
+    return <img ref="img" onError={this.handleError} {... this.props} src={this.state.imageUri} /> 
+  },
+});
