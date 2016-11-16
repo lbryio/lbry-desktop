@@ -297,7 +297,7 @@ lbry.formatCredits = function(amount, precision)
 
 lbry.formatName = function(name) {
   // Converts LBRY name to standard format (all lower case, no special characters, spaces replaced by dashes)
-  name = name.replace(" ", "-");
+  name = name.replace('/\s+/g', '-');
   name = name.toLowerCase().replace(/[^a-z0-9\-]/g, '');
   return name;
 }
