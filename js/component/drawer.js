@@ -1,6 +1,12 @@
 var DrawerItem = React.createClass({
+  getDefaultProps: function() {
+    return {
+      subPages: [],
+    };
+  },
   render: function() {
-    var isSelected = this.props.viewingPage == this.props.href.substr(2);
+    var isSelected = (this.props.viewingPage == this.props.href.substr(2) ||
+                      this.props.subPages.indexOf(this.props.viewingPage) != -1);
     return <Link {...this.props} className={ 'drawer-item ' + (isSelected ? 'drawer-item-selected' : '') } />
   }
 });
@@ -32,8 +38,8 @@ var Drawer = React.createClass({
         </div>
         <DrawerItem href='/?discover' viewingPage={this.props.viewingPage} label="Discover" icon="icon-search"  />
         <DrawerItem href='/?publish' viewingPage={this.props.viewingPage} label="Publish" icon="icon-upload" />
-        <DrawerItem href='/?downloaded' viewingPage={this.props.viewingPage}  label="My Files" icon='icon-cloud-download' />
-        <DrawerItem href="/?wallet" viewingPage={this.props.viewingPage}  label="My Wallet" badge={lbry.formatCredits(this.state.balance) } icon="icon-bank" />
+        <DrawerItem href='/?downloaded' subPages={['published']} viewingPage={this.props.viewingPage}  label="My Files" icon='icon-cloud-download' />
+        <DrawerItem href="/?wallet" subPages={['send', 'receive', 'claim', 'referral']} viewingPage={this.props.viewingPage}  label="My Wallet" badge={lbry.formatCredits(this.state.balance) } icon="icon-bank" />
         <DrawerItem href='/?settings' viewingPage={this.props.viewingPage}  label="Settings" icon='icon-gear' />
         <DrawerItem href='/?help' viewingPage={this.props.viewingPage}  label="Help" icon='icon-question-circle' />
         {isLinux ? <Link href="/?start" icon="icon-close" className="close-lbry-link" /> : null}

@@ -17,6 +17,7 @@ var AddressSection = React.createClass({
   getInitialState: function() {
     return {
       address: null,
+      modal: null,
     }
   },
   componentWillMount: function() {
@@ -58,7 +59,9 @@ var SendToAddressSection = React.createClass({
 
     if ((this.state.balance - this.state.amount) < 1)
     {
-      alert("Insufficient balance: after this transaction you would have less than 1 LBC in your wallet.")
+      this.setState({
+        modal: 'insufficientBalance',
+      });
       return;
     }
 
@@ -83,6 +86,11 @@ var SendToAddressSection = React.createClass({
       this.setState({
         results: "Something went wrong: " + error.faultString + " " + error.faultCode
       })
+    });
+  },
+  closeModal: function() {
+    this.setState({
+      modal: null,
     });
   },
   getInitialState: function() {
@@ -136,6 +144,9 @@ var SendToAddressSection = React.createClass({
               : ''
           }
         </form>
+        <Modal isOpen={this.state.modal === 'insufficientBalance'} onConfirmed={this.closeModal}>
+          Insufficient balance: after this transaction you would have less than 1 LBC in your wallet.
+        </Modal>
       </section>
     );
   }
@@ -168,7 +179,7 @@ var TransactionList = React.createClass({
           {
             transactionItems.push({
               id: txid,
-              date: new Date(parseInt(tx["timestamp"]) * 1000),
+              date: tx["timestamp"] ? (new Date(parseInt(tx["timestamp"]) * 1000)) : null,
               amount: condensedTransactions[txid]
             });
             delete condensedTransactions[txid];
@@ -187,8 +198,8 @@ var TransactionList = React.createClass({
         rows.push(
           <tr key={item.id}>
             <td>{ (item.amount > 0 ? '+' : '' ) + item.amount }</td>
-            <td>{ item.date.toLocaleDateString() }</td>
-            <td>{ item.date.toLocaleTimeString() }</td>
+            <td>{ item.date ? item.date.toLocaleDateString() : <span className="empty">(Transaction pending)</span> }</td>
+            <td>{ item.date ? item.date.toLocaleTimeString() : <span className="empty">(Transaction pending)</span> }</td>
             <td>
               <a className="button-text" href={"https://explorer.lbry.io/tx/"+item.id} target="_blank">{item.id.substr(0, 7)}</a>
             </td>

@@ -81,14 +81,8 @@ var PublishPage = React.createClass({
       console.log(publishArgs);
       lbry.publish(publishArgs, (message) => {
         this.handlePublishStarted();
-        this.setState({
-          submitting: false,
-        });
       }, null, (error) => {
         this.handlePublishError(error);
-        this.setState({
-          submitting: false,
-        });
       });
     };
 
@@ -125,18 +119,26 @@ var PublishPage = React.createClass({
       otherLicenseUrl: '',
       uploadProgress: 0.0,
       uploaded: false,
+      errorMessage: null,
       tempFileReady: false,
       submitting: false,
+      modal: null,
     };
   },
   handlePublishStarted: function() {
-    alert(`Your file ${this.refs.meta_title.getValue()} has been published to LBRY at the address lbry://${this.state.name}!\n\n` +
-          `You will now be taken to your My Files page, where your newly published file will be listed. Your file will take a few minutes to appear for other LBRY users; until then it will be listed as "pending."`);
+    this.setState({
+      modal: 'publishStarted',
+    });
+  },
+  handlePublishStartedConfirmed: function() {
     window.location = "?published";
   },
   handlePublishError: function(error) {
-    alert(`The following error occurred when attempting to publish your file:\n\n` +
-          error.message);
+    this.setState({
+      submitting: false,
+      modal: 'error',
+      errorMessage: error.message,
+    });
   },
   handleNameChange: function(event) {
     var rawName = event.target.value;
@@ -335,7 +337,7 @@ var PublishPage = React.createClass({
                 (!this.state.name ? '' :
                   (! this.state.nameResolved ? <em> The name <strong>{this.state.name}</strong> is available.</em>
                                              : (this.state.myClaimExists ? <em> You already have a claim on the name <strong>{this.state.name}</strong>. You can use this page to update your claim.</em>
-                                                                         : <em> The name <strong>{this.state.name}</strong> is currently claimed for <strong>{lbry.formatCredits(this.state.topClaimValue)}</strong> credits.</em>)))
+                                                                         : <em> The name <strong>{this.state.name}</strong> is currently claimed for <strong>{this.state.topClaimValue}</strong> {this.state.topClaimValue == 1 ? 'credit' : 'credits'}.</em>)))
               }
               <div className="help">What LBRY name would you like to claim for this file?</div>
             </div>
@@ -356,13 +358,13 @@ var PublishPage = React.createClass({
           <section className="card">
             <h4>Bid Amount</h4>
             <div className="form-row">
-              Credits <FormField ref="bid" style={publishNumberStyle} type="text" onChange={this.handleBidChange} value={this.state.bid} placeholder={this.state.nameResolved ? lbry.formatCredits(this.state.topClaimValue + 10) : 100} />
+              Credits <FormField ref="bid" style={publishNumberStyle} type="text" onChange={this.handleBidChange} value={this.state.bid} placeholder={this.state.nameResolved ? this.state.topClaimValue + 10 : 100} />
               <div className="help">How much would you like to bid for this name?
               { !this.state.nameResolved ? <span> Since this name is not currently resolved, you may bid as low as you want, but higher bids help prevent others from claiming your name.</span>
-                                         : (this.state.topClaimIsMine ? <span> You currently control this name with a bid of <strong>{lbry.formatCredits(this.state.myClaimValue)}</strong> credits.</span>
-                                                                      : (this.state.myClaimExists ? <span> You have a non-winning bid on this name for <strong>{lbry.formatCredits(this.state.myClaimValue)}</strong> credits.
-                                                                                                           To control this name, you'll need to increase your bid to at least <strong>{lbry.formatCredits(this.state.myClaimValue)}</strong> credits.</span>
-                                                                                                  : <span> You must bid over <strong>{lbry.formatCredits(this.state.topClaimValue)}</strong> credits to claim this name.</span>)) }
+                                         : (this.state.topClaimIsMine ? <span> You currently control this name with a bid of <strong>{this.state.myClaimValue}</strong> {this.state.myClaimValue == 1 ? 'credit' : 'credits'}.</span>
+                                                                      : (this.state.myClaimExists ? <span> You have a non-winning bid on this name for <strong>{this.state.myClaimValue}</strong> {this.state.myClaimValue == 1 ? 'credit' : 'credits'}.
+                                                                                                           To control this name, you'll need to increase your bid to more than <strong>{this.state.topClaimValue}</strong> {this.state.topClaimValue == 1 ? 'credit' : 'credits'}.</span>
+                                                                                                  : <span> You must bid over <strong>{this.state.topClaimValue}</strong> {this.state.topClaimValue == 1 ? 'credit' : 'credits'} to claim this name.</span>)) }
               </div>
             </div>
           </section>
@@ -463,6 +465,14 @@ var PublishPage = React.createClass({
            <input type='submit' className='hidden' />
           </div>
         </form>
+
+        <Modal isOpen={this.state.modal == 'publishStarted'} onConfirmed={this.handlePublishStartedConfirmed}>
+          <p>Your file has been published to LBRY at the address <code>lbry://{this.state.name}</code>!</p>
+          You will now be taken to your My Files page, where your newly published file will be listed. The file will take a few minutes to appear for other LBRY users; until then it will be listed as "pending."
+        </Modal>
+        <Modal isOpen={this.state.modal == 'error'} onConfirmed={this.closeModal}>
+          The following error occurred when attempting to publish your file: {this.state.errorMessage}
+        </Modal>
       </main>
     );
   }

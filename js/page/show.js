@@ -31,7 +31,7 @@ var FormatItem = React.createClass({
     return (
       <div className="row-fluid">
         <div className="span4">
-          <img src={thumbnail || '/img/default-thumb.svg'} alt={'Photo for ' + title} style={formatItemImgStyle} />
+          <Thumbnail src={thumbnail} alt={'Photo for ' + title} style={formatItemImgStyle} />
         </div>
         <div className="span8">
           <p>{description}</p>
@@ -117,7 +117,7 @@ var DetailPage = React.createClass({
   componentWillMount: function() {
     document.title = 'lbry://' + this.props.name;
 
-    lbry.search(this.props.name, (results) => {
+    lbry.lighthouse.search(this.props.name, (results) => {
       var result = results[0];
 
       if (result.name != this.props.name) {

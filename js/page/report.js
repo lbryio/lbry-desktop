@@ -6,9 +6,9 @@ var ReportPage = React.createClass({
       });
       lbry.reportBug(this._messageArea.value, () => {
         this.setState({
-          submitting: false
+          submitting: false,
+          modal: 'submitted',
         });
-        alert("Your bug report has been submitted! Thank you for your feedback.");
       });
       this._messageArea.value = '';
     }
@@ -16,9 +16,15 @@ var ReportPage = React.createClass({
   componentDidMount: function() {
     document.title = "Report an Issue";
   },
+  closeModal: function() {
+    this.setState({
+      modal: null,
+    })
+  },
   getInitialState: function() {
     return {
       submitting: false,
+      modal: null,
     }
   },
   render: function() {
@@ -38,6 +44,9 @@ var ReportPage = React.createClass({
           <h3>Developer?</h3>
           You can also <Link href="https://github.com/lbryio/lbry/issues" label="submit an issue on GitHub"/>.
         </section>
+        <Modal isOpen={this.state.modal == 'submitted'} onConfirmed={this.closeModal}>
+          Your bug report has been submitted! Thank you for your feedback.
+        </Modal>
       </main>
     );
   }

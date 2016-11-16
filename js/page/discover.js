@@ -113,7 +113,7 @@ var SearchResultRow = React.createClass({
       <section className={ 'card ' + (obscureNsfw ? 'card-obscured ' : '') + (this.props.compact ? 'card-compact' : '')} onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
         <div className="row-fluid card-content" style={style}>
           <div className="span3">
-            <a href={'/?show=' + this.props.name}><img src={this.props.imgUrl || '/img/default-thumb.svg'} alt={'Photo for ' + (this.props.title || this.props.name)} style={searchRowImgStyle} /></a>
+            <a href={'/?show=' + this.props.name}><Thumbnail src={this.props.imgUrl} alt={'Photo for ' + (this.props.title || this.props.name)} style={searchRowImgStyle} /></a>
           </div>
           <div className="span9">
             <span style={searchRowCostStyle}>
@@ -179,7 +179,7 @@ var FeaturedContentItem = React.createClass({
   componentDidMount: function() {
     this.resolveSearch = true;
 
-    lbry.search(this.props.name, function(results) {
+    lbry.lighthouse.search(this.props.name, function(results) {
       var result = results[0];
       var metadata = result.value;
       if (this.resolveSearch)
@@ -201,7 +201,7 @@ var FeaturedContentItem = React.createClass({
     }
 
     return (<div style={featuredContentItemContainerStyle}>
-      <SearchResultRow name={this.props.name} title={this.state.title} imgUrl={this.state.metadata.thumbnail || '/img/default-thumb.svg'}
+      <SearchResultRow name={this.props.name} title={this.state.title} imgUrl={this.state.metadata.thumbnail}
                  description={this.state.metadata.description} mediaType={lbry.getMediaType(this.state.metadata.content_type)}
                  cost={this.state.amount} nsfw={this.state.metadata.nsfw} available={this.state.available} compact />
     </div>);
@@ -257,7 +257,7 @@ var DiscoverPage = React.createClass({
       query: this.props.query,
     });
 
-    lbry.search(this.props.query, this.searchCallback);
+    lbry.lighthouse.search(this.props.query, this.searchCallback);
   },
 
   componentDidMount: function() {

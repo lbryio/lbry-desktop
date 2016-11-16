@@ -5,31 +5,48 @@ var moreMenuStyle = {
   right: '13px',
 };
 var MyFilesRowMoreMenu = React.createClass({
-  onRevealClicked: function() {
+  propTypes: {
+    title: React.PropTypes.string.isRequired,
+    path: React.PropTypes.string.isRequired,
+    completed: React.PropTypes.bool.isRequired,
+    lbryUri: React.PropTypes.string.isRequired,
+  },
+  handleRevealClicked: function() {
     lbry.revealFile(this.props.path);
   },
-  onRemoveClicked: function() {
+  handleRemoveClicked: function() {
     lbry.deleteFile(this.props.lbryUri, false);
   },
-  onDeleteClicked: function() {
-    var alertText = 'Are you sure you\'d like to delete "' + this.props.title + '?" This will ' +
-      (this.completed ? ' stop the download and ' : '') +
-      'permanently remove the file from your system.';
-
-    if (confirm(alertText)) {
-      lbry.deleteFile(this.props.lbryUri);
-    }
+  handleDeleteClicked: function() {
+    this.setState({
+      modal: 'confirmDelete',
+    });
+  },
+  handleDeleteConfirmed: function() {
+    lbry.deleteFile(this.props.lbryUri);
+    lbry.setState({
+      modal: null,
+    });
+  },
+  getInitialState: function() {
+    return {
+      modal: null,
+    };
   },
   render: function() {
     return (
       <div style={moreMenuStyle}>
         <Menu {...this.props}>
           <section className="card">
-            <MenuItem onClick={this.onRevealClicked} label="Reveal file" /> {/* @TODO: Switch to OS specific wording */}
-            <MenuItem onClick={this.onRemoveClicked} label="Remove from LBRY" />
-            <MenuItem onClick={this.onDeleteClicked} label="Remove and delete file" />
+            <MenuItem onClick={this.handleRevealClicked} label="Reveal file" /> {/* @TODO: Switch to OS specific wording */}
+            <MenuItem onClick={this.handleRemoveClicked} label="Remove from LBRY" />
+            <MenuItem onClick={this.handleDeleteClicked} label="Remove and delete file" />
           </section>
         </Menu>
+        <Modal isOpen={this.state.modal == 'confirmDelete'} type="confirm" confirmButtonLabel="Delete File" onConfirmed={this.handleDeleteConfirmed}>
+          Are you sure you'd like to delete <cite>{this.props.title}</cite>? This will {this.props.completed ? ' stop the download and ' : ''}
+          permanently remove the file from your system.
+        </Modal>
       </div>
     );
   }
@@ -98,7 +115,7 @@ var MyFilesRow = React.createClass({
       <section className="card">
         <div className="row-fluid">
           <div className="span3">
-            <img src={this.props.imgUrl || '/img/default-thumb.svg'} alt={'Photo for ' + this.props.title} style={artStyle} />
+            <Thumbnail src={this.props.imgUrl} alt={'Photo for ' + this.props.title} style={artStyle} />
           </div>
           <div className="span8">
             <h3>{this.props.pending ? this.props.title : <a href={'/?show=' + this.props.lbryUri}>{this.props.title}</a>}</h3>
@@ -123,8 +140,8 @@ var MyFilesRow = React.createClass({
              <div style={moreButtonContainerStyle}>
                <Link style={moreButtonStyle} ref="moreButton" icon="icon-ellipsis-h" title="More Options" />
                <MyFilesRowMoreMenu toggleButton={this.refs.moreButton} title={this.props.title}
-                                   lbryUri={this.props.lbryUri} fileName={this.props.fileName}
-                                   path={this.props.path}/>
+                                   completed={this.props.completed} lbryUri={this.props.lbryUri}
+                                   fileName={this.props.fileName} path={this.props.path}/>
              </div>
             }
           </div>
@@ -208,7 +225,11 @@ var MyFilesPage = React.createClass({
         for (let fileInfo of filesInfo) {
           let name = fileInfo.lbry_uri;
 
-          lbry.search(name, (results) => {
+          if (name === null) {
+            continue;
+          }
+
+          lbry.lighthouse.search(name, (results) => {
             var result = results[0];
 
             var available = result.name == name && result.available;
