@@ -1,4 +1,13 @@
 var App = React.createClass({
+  _error_key_labels: {
+    connectionString: 'API connection string',
+    method: 'Method',
+    params: 'Parameters',
+    code: 'Error code',
+    message: 'Error message',
+    data: 'Error data',
+  },
+
   getInitialState: function() {
     // For now, routes are in format ?page or ?page=args
     var match, param, val, viewingPage,
@@ -11,6 +20,7 @@ var App = React.createClass({
       viewingPage: viewingPage,
       drawerOpen: drawerOpenRaw !== null ? JSON.parse(drawerOpenRaw) : true,
       pageArgs: val,
+      errorInfo: null,
       modal: null,
       startNotice: null,
       updateUrl: null,
@@ -28,6 +38,10 @@ var App = React.createClass({
     });
   },
   componentWillMount: function() {
+    document.addEventListener('unhandledError', (event) => {
+      this.alertError(event.detail);
+    });
+
     lbry.checkNewVersionAvailable((isAvailable) => {
       if (!isAvailable || sessionStorage.getItem('upgradeSkipped')) {
         return;
@@ -86,6 +100,19 @@ var App = React.createClass({
     this.setState({
       viewingPage: 'discover',
       pageArgs: term
+    });
+  },
+  alertError: function(error) {
+    var errorInfoList = [];
+    for (let key of Object.keys(error)) {
+      let val = typeof error[key] == 'string' ? error[key] : JSON.stringify(error[key]);
+      let label = this._error_key_labels[key];
+      errorInfoList.push(<li key={key}><strong>{label}</strong>: <code>{val}</code></li>);
+    }
+
+    this.setState({
+      modal: 'error',
+      errorInfo: <ul className="error-modal__error-list">{errorInfoList}</ul>,
     });
   },
   getHeaderLinks: function()
@@ -176,6 +203,18 @@ var App = React.createClass({
               ? <p>Before installing the new version, make sure to exit LBRY. If you started the app, click the LBRY icon in your status bar and choose "Quit."</p>
               : null}
 
+          </Modal>
+          <Modal isOpen={this.state.modal == 'error'} type="custom" className="error-modal" overlayClassName="error-modal-overlay"  >
+            <h3 className="modal__header">Error</h3>
+
+            <div className="error-modal__content">
+              <div><img className="error-modal__warning-symbol" src={lbry.imagePath('warning.png')} /></div>
+              <p>We're sorry that LBRY has encountered an error. This has been reported and we will investigate the problem.</p>
+            </div>
+            {this.state.errorInfo}
+            <div className="modal__buttons">
+              <Link button="alt" label="OK" className="modal__button" onClick={this.closeModal} />
+            </div>
           </Modal>
         </div>
     );

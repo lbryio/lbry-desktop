@@ -225,6 +225,10 @@ var MyFilesPage = React.createClass({
         for (let fileInfo of filesInfo) {
           let name = fileInfo.lbry_uri;
 
+          if (name === null) {
+            continue;
+          }
+
           lbry.lighthouse.search(name, (results) => {
             var result = results[0];
 
