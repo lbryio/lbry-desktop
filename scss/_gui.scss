@@ -234,6 +234,57 @@ input[type="text"], input[type="search"]
   }
 }
 
+.form-field-container {
+  display: inline-block;
+}
+
+.form-field-advice-container {
+  position: relative;
+  width: 100%;
+}
+
+.form-field-advice {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  white-space: nowrap;
+
+  transition: opacity 400ms ease-in;
+}
+
+.form-field-advice--fading {
+  opacity: 0;
+}
+
+.form-field-advice__arrow {
+  font-size: 22px;
+  line-height: 0.3;
+  color: darken($color-primary, 5%);
+}
+
+
+.form-field-advice__content-container {
+  display: inline-block;
+
+  text-align: center;
+}
+
+.form-field-advice__content {
+  display: inline-block;
+
+  padding: 5px;
+  border-radius: 2px;
+
+  background-color: darken($color-primary, 5%);
+  color: #fff;
+}
+
 
 .modal-overlay {
   position: fixed;
