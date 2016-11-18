@@ -111,6 +111,7 @@ var PublishPage = React.createClass({
     this._tempFilePath = null;
 
     return {
+      rawName: '',
       name: '',
       bid: '',
       feeAmount: '',
@@ -152,12 +153,17 @@ var PublishPage = React.createClass({
 
     if (!rawName) {
       this.setState({
+        rawName: '',
         name: '',
         nameResolved: false,
       });
 
       return;
     }
+
+    this.setState({
+      rawName: rawName,
+    });
 
     var name = lbry.formatName(rawName);
 
@@ -340,7 +346,7 @@ var PublishPage = React.createClass({
           <section className="card">
             <h4>LBRY Name</h4>
             <div className="form-row">
-              lbry://<FormField type="text" ref="name" onChange={this.handleNameChange} />
+              lbry://<FormField type="text" ref="name" value={this.state.rawName} onChange={this.handleNameChange} />
               {
                 (!this.state.name ? '' :
                   (! this.state.nameResolved ? <em> The name <strong>{this.state.name}</strong> is available.</em>
