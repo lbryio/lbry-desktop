@@ -161,14 +161,19 @@ var PublishPage = React.createClass({
       return;
     }
 
+    if (!lbry.nameIsValid(rawName, false)) {
+      this.refs.name.showAdvice('LBRY names must contain only letters, numbers and dashes.');
+      return;
+    }
+
     this.setState({
       rawName: rawName,
     });
 
-    var name = lbry.formatName(rawName);
+    var name = rawName.toLowerCase();
 
     lbry.resolveName(name, (info) => {
-      if (name != lbry.formatName(this.refs.name.getValue())) {
+      if (name != this.refs.name.getValue().toLowerCase()) {
         // A new name has been typed already, so bail
         return;
       }
