@@ -168,6 +168,23 @@ var MyFilesPage = React.createClass({
   _fileTimeout: null,
   _fileInfoCheckRate: 300,
   _fileInfoCheckNum: 0,
+  _sortFunctions: {
+    date: function(filesInfo) {
+      return filesInfo.reverse();
+    },
+    title: function(filesInfo) {
+      return filesInfo.sort(function(a, b) {
+        return ((a.metadata ? a.metadata.title.toLowerCase() : a.name) >
+                (b.metadata ? b.metadata.title.toLowerCase() : b.name));
+      });
+    },
+    filename: function(filesInfo) {
+      return filesInfo.sort(function(a, b) {
+        return (a.file_name.toLowerCase() >
+                b.file_name.toLowerCase());
+      });
+    },
+  },
 
   getInitialState: function() {
     return {
