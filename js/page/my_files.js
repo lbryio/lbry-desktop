@@ -24,7 +24,7 @@ var MyFilesRowMoreMenu = React.createClass({
   },
   handleDeleteConfirmed: function() {
     lbry.deleteFile(this.props.lbryUri);
-    lbry.setState({
+    this.setState({
       modal: null,
     });
   },
