@@ -28,6 +28,11 @@ var MyFilesRowMoreMenu = React.createClass({
       modal: null,
     });
   },
+  closeModal: function() {
+    this.setState({
+      modal: null,
+    });
+  },
   getInitialState: function() {
     return {
       modal: null,
@@ -43,7 +48,8 @@ var MyFilesRowMoreMenu = React.createClass({
             <MenuItem onClick={this.handleDeleteClicked} label="Remove and delete file" />
           </section>
         </Menu>
-        <Modal isOpen={this.state.modal == 'confirmDelete'} type="confirm" confirmButtonLabel="Delete File" onConfirmed={this.handleDeleteConfirmed}>
+        <Modal isOpen={this.state.modal == 'confirmDelete'} type="confirm" confirmButtonLabel="Delete File"
+               onConfirmed={this.handleDeleteConfirmed} onAborted={this.closeModal}>
           Are you sure you'd like to delete <cite>{this.props.title}</cite>? This will {this.props.completed ? ' stop the download and ' : ''}
           permanently remove the file from your system.
         </Modal>
