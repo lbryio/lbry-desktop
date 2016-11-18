@@ -1,4 +1,5 @@
 var FormField = React.createClass({
+  _fieldRequiredText: 'This field is required',
   _type: null,
   _element: null,
 
@@ -8,7 +9,8 @@ var FormField = React.createClass({
   },
   getInitialState: function() {
     return {
-      warningState: 'hidden',
+      adviceState: 'hidden',
+      adviceText: null,
     }
   },
   componentWillMount: function() {
@@ -20,21 +22,25 @@ var FormField = React.createClass({
       this._element = this.props.type;
     }
   },
-  warnRequired: function() {
+  showAdvice: function(text) {
     this.setState({
-      warningState: 'shown',
+      adviceState: 'shown',
+      adviceText: text,
     });
 
     setTimeout(() => {
       this.setState({
-        warningState: 'fading',
+        adviceState: 'fading',
       });
       setTimeout(() => {
         this.setState({
-          warningState: 'hidden',
+          adviceState: 'hidden',
         });
       }, 450);
     }, 5000);
+  },
+  warnRequired: function() {
+    this.showAdvice(this._fieldRequiredText);
   },
   focus: function() {
     this.refs.field.focus();
@@ -61,7 +67,7 @@ var FormField = React.createClass({
           {...otherProps}>
           {this.props.children}
         </this._element>
-        <FormFieldAdvice field={this.refs.field} state={this.state.warningState}>This field is required</FormFieldAdvice>
+        <FormFieldAdvice field={this.refs.field} state={this.state.adviceState}>{this.state.adviceText}</FormFieldAdvice>
       </div>
     );
   }
