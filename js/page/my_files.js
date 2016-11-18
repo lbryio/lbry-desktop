@@ -174,6 +174,7 @@ var MyFilesPage = React.createClass({
     },
     title: function(filesInfo) {
       return filesInfo.sort(function(a, b) {
+        console.log('in title sort. a is', a, '; b is', b)
         return ((a.metadata ? a.metadata.title.toLowerCase() : a.name) >
                 (b.metadata ? b.metadata.title.toLowerCase() : b.name));
       });
@@ -191,6 +192,7 @@ var MyFilesPage = React.createClass({
       filesInfo: null,
       publishedFilesSdHashes: null,
       filesAvailable: {},
+      sortBy: 'date',
     };
   },
   getDefaultProps: function() {
@@ -233,6 +235,17 @@ var MyFilesPage = React.createClass({
       clearTimeout(this._fileTimeout);
     }
   },
+  setFilesInfo: function(filesInfo) {
+    this.setState({
+      filesInfo: this._sortFunctions[this.state.sortBy](filesInfo),
+    });
+  },
+  handleSortChanged: function(event) {
+    this.setState({
+      sortBy: event.target.value,
+      filesInfo: this._sortFunctions[event.target.value](this.state.filesInfo),
+    });
+  },
   updateFilesInfo: function() {
     this._fileInfoCheckNum += 1;
 
@@ -249,9 +262,7 @@ var MyFilesPage = React.createClass({
               newFilesInfo.push(fileInfo);
             }
             if (claimInfoProcessedCount >= claimsInfo.length) {
-              this.setState({
-                filesInfo: newFilesInfo
-              });
+              this.setFilesInfo(newFilesInfo);
 
               this._fileTimeout = setTimeout(() => { this.updateFilesInfo() }, 1000);
             }
@@ -262,11 +273,9 @@ var MyFilesPage = React.createClass({
       // We're in the Downloaded tab, so populate this.state.filesInfo with files the user has in
       // lbrynet, with published files filtered out.
       lbry.getFilesInfo((filesInfo) => {
-        this.setState({
-          filesInfo: filesInfo.filter(({sd_hash}) => {
-            return this.state.publishedFilesSdHashes.indexOf(sd_hash) == -1;
-          }),
-        });
+        this.setFilesInfo(filesInfo.filter(({sd_hash}) => {
+          return this.state.publishedFilesSdHashes.indexOf(sd_hash) == -1;
+        }));
 
         let newFilesAvailable;
         if (!(this._fileInfoCheckNum % this._fileInfoCheckRate)) {
@@ -344,6 +353,14 @@ var MyFilesPage = React.createClass({
     }
     return (
       <main className="page">
+        <span className='sort-section'>
+          Sort by { ' ' }
+          <FormField type="select" onChange={this.handleSortChanged}>
+            <option value="date">Date</option>
+            <option value="title">Title</option>
+            <option value="filename">File name</option>
+          </FormField>
+        </span>
         {content}
       </main>
     );

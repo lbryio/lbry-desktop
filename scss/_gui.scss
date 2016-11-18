@@ -284,6 +284,16 @@ input[type="text"], input[type="search"]
 }
 
 
+.sort-section {
+  display: block;
+  margin-bottom: 5px;
+
+
+  text-align: right;
+  font-size: 0.85em;
+  color: $color-help;
+}
+
 .modal-overlay {
   position: fixed;
   display: flex;
