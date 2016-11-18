@@ -164,6 +164,7 @@ var PublishPage = React.createClass({
         this.setState({
           name: name,
           nameResolved: false,
+          myClaimExists: false,
         });
       } else {
         lbry.getMyClaim(name, (myClaimInfo) => {
