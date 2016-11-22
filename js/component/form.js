@@ -1,9 +1,5 @@
-var requiredFieldWarningStyle = {
-  color: '#cc0000',
-  transition: 'opacity 400ms ease-in',
-};
-
 var FormField = React.createClass({
+  _fieldRequiredText: 'This field is required',
   _type: null,
   _element: null,
 
@@ -13,7 +9,8 @@ var FormField = React.createClass({
   },
   getInitialState: function() {
     return {
-      warningState: 'hidden',
+      adviceState: 'hidden',
+      adviceText: null,
     }
   },
   componentWillMount: function() {
@@ -25,21 +22,25 @@ var FormField = React.createClass({
       this._element = this.props.type;
     }
   },
-  warnRequired: function() {
+  showAdvice: function(text) {
     this.setState({
-      warningState: 'shown',
+      adviceState: 'shown',
+      adviceText: text,
     });
 
     setTimeout(() => {
       this.setState({
-        warningState: 'fading',
+        adviceState: 'fading',
       });
       setTimeout(() => {
         this.setState({
-          warningState: 'hidden',
+          adviceState: 'hidden',
         });
       }, 450);
     }, 5000);
+  },
+  warnRequired: function() {
+    this.showAdvice(this._fieldRequiredText);
   },
   focus: function() {
     this.refs.field.focus();
@@ -55,24 +56,43 @@ var FormField = React.createClass({
     return this.refs.field.options[this.refs.field.selectedIndex];
   },
   render: function() {
-    var warningStyle = Object.assign({}, requiredFieldWarningStyle);
-    if (this.state.warningState == 'fading') {
-      warningStyle.opacity = '0';
-    }
-
     // Pass all unhandled props to the field element
     var otherProps = Object.assign({}, this.props);
     delete otherProps.type;
     delete otherProps.hidden;
 
     return (
-      <span className={this.props.hidden ? 'hidden' : ''}>
-        <this._element type={this._type} name={this.props.name} ref="field" placeholder={this.props.placeholder}
-          {...otherProps}>
-          {this.props.children}
-        </this._element>
-        <span className={this.state.warningState == 'hidden' ? 'hidden' : ''} style={warningStyle}> This field is required</span>
-      </span>
+      !this.props.hidden
+        ? <div className="form-field-container">
+            <this._element type={this._type} className="form-field" name={this.props.name} ref="field" placeholder={this.props.placeholder}
+              {...otherProps}>
+              {this.props.children}
+            </this._element>
+            <FormFieldAdvice field={this.refs.field} state={this.state.adviceState}>{this.state.adviceText}</FormFieldAdvice>
+          </div>
+        : null
+    );
+  }
+});
+
+var FormFieldAdvice = React.createClass({
+  propTypes: {
+    state: React.PropTypes.string.isRequired,
+  },
+  render: function() {
+    return (
+      this.props.state != 'hidden'
+        ? <div className="form-field-advice-container">
+            <div className={'form-field-advice' + (this.props.state == 'fading' ? ' form-field-advice--fading' : '')}>
+              <Icon icon="icon-caret-up" className="form-field-advice__arrow" />
+              <div className="form-field-advice__content-container">
+                <span className="form-field-advice__content">
+                  {this.props.children}
+                </span>
+              </div>
+            </div>
+          </div>
+        : null
     );
   }
 });

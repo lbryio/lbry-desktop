@@ -4,9 +4,11 @@ var Icon = React.createClass({
   propTypes: {
     style: React.PropTypes.object,
     fixed: React.PropTypes.bool,
+    className: React.PropTypes.string,
   },
   render: function() {
-    var className = 'icon ' + ('fixed' in this.props ? 'icon-fixed-width ' : '') + this.props.icon;
+    var className = ('icon ' + ('fixed' in this.props ? 'icon-fixed-width ' : '') + this.props.icon + ' ' +
+                     (this.props.className || ''));
     return <span className={className} style={this.props.style}></span>
   }
 });

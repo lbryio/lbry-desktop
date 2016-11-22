@@ -38,7 +38,14 @@ var PublishPage = React.createClass({
       }
     }
 
-    if (missingFieldFound) {
+    let fileProcessing = false;
+    if (this.state.fileInfo && !this.state.tempFileReady) {
+      this.refs.file.showAdvice('Your file is still processing.');
+      this.refs.file.focus();
+      fileProcessing = true;
+    }
+
+    if (missingFieldFound || fileProcessing) {
       this.setState({
         submitting: false,
       });
