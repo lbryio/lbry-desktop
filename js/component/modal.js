@@ -1,3 +1,8 @@
+import React from 'react';
+import ReactModal from 'react-modal';
+import {Link} from './link.js';
+
+
 var Modal = React.createClass({
   propTypes: {
     type: React.PropTypes.oneOf(['alert', 'confirm', 'custom']),
@@ -57,3 +62,5 @@ var Modal = React.createClass({
     );
   }
 });
+
+export default Modal;

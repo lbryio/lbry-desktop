@@ -1,3 +1,7 @@
+import React from 'react';
+import lbry from '../lbry.js';
+import {Thumbnail} from '../component/common.js';
+
 var formatItemImgStyle = {
   maxWidth: '100%',
   maxHeight: '100%',
@@ -162,3 +166,5 @@ var DetailPage = React.createClass({
       </main>);
   }
 });
+
+export default DetailPage;

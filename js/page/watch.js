@@ -1,3 +1,7 @@
+import React from 'react';
+import lbry from '../lbry.js';
+import MediaElementPlayer from 'mediaelement';
+
 var WatchPage = React.createClass({
   propTypes: {
     name: React.PropTypes.string,
@@ -49,3 +53,5 @@ var WatchPage = React.createClass({
     );
   }
 });
+
+export default WatchPage;

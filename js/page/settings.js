@@ -1,3 +1,6 @@
+import React from 'react';
+import lbry from '../lbry.js';
+
 var settingsRadioOptionStyles = {
   display: 'block',
   marginLeft: '13px'
@@ -129,3 +132,6 @@ var SettingsPage = React.createClass({
     );
   }
 });
+
+
+export default SettingsPage;

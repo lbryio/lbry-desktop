@@ -1,6 +1,9 @@
-//component/icon.js
+import React from 'react';
+import lbry from '../lbry.js';
+import $clamp from 'clamp';
 
-var Icon = React.createClass({
+//component/icon.js
+export let Icon = React.createClass({
   propTypes: {
     style: React.PropTypes.object,
     fixed: React.PropTypes.bool,
@@ -13,7 +16,7 @@ var Icon = React.createClass({
   }
 });
 
-var TruncatedText = React.createClass({
+export let TruncatedText = React.createClass({
   propTypes: {
     lines: React.PropTypes.number,
     height: React.PropTypes.string,
@@ -39,7 +42,7 @@ var TruncatedText = React.createClass({
   }
 });
 
-var BusyMessage = React.createClass({
+export let BusyMessage = React.createClass({
   propTypes: {
     message: React.PropTypes.string
   },
@@ -59,7 +62,7 @@ var toolTipStyle = {
   backgroundColor: '#fff',
   fontSize: '14px',
 };
-var ToolTip = React.createClass({
+export let ToolTip = React.createClass({
   propTypes: {
     open: React.PropTypes.bool.isRequired,
     onMouseOut: React.PropTypes.func
@@ -82,11 +85,11 @@ var creditAmountStyle = {
   color: '#aaa',
 };
 
-var CurrencySymbol = React.createClass({
+export let CurrencySymbol = React.createClass({
   render: function() { return <span>LBC</span>; }
 });
 
-var CreditAmount = React.createClass({
+export let CreditAmount = React.createClass({
   propTypes: {
     amount: React.PropTypes.number,
     precision: React.PropTypes.number
@@ -105,7 +108,7 @@ var CreditAmount = React.createClass({
 var addressStyle = {
   fontFamily: '"Consolas", "Lucida Console", "Adobe Source Code Pro", monospace',
 };
-var Address = React.createClass({
+export let Address = React.createClass({
   propTypes: {
     address: React.PropTypes.string,
   },
@@ -116,7 +119,7 @@ var Address = React.createClass({
   }
 });
 
-var Thumbnail = React.createClass({
+export let Thumbnail = React.createClass({
   _defaultImageUri: '/img/default-thumb.svg',
   _maxLoadTime: 10000,
 

@@ -1,3 +1,10 @@
+import React from 'react';
+
+var requiredFieldWarningStyle = {
+  color: '#cc0000',
+  transition: 'opacity 400ms ease-in',
+};
+
 var FormField = React.createClass({
   _fieldRequiredText: 'This field is required',
   _type: null,
@@ -96,3 +103,5 @@ var FormFieldAdvice = React.createClass({
     );
   }
 });
+
+export default FormField;

@@ -1,3 +1,8 @@
+import React from 'react';
+import lbry from '../lbry.js';
+import Modal from '../component/modal.js';
+import {Link} from '../component/link.js';
+
 var claimCodeContentStyle = {
   display: 'inline-block',
   textAlign: 'left',
@@ -143,3 +148,5 @@ var ClaimCodePage = React.createClass({
     );
   }
 });
+
+export default ClaimCodePage;

@@ -1,3 +1,6 @@
+import React from 'react';
+import lbry from '../lbry.js';
+
 var StartPage = React.createClass({
   componentWillMount: function() {
     lbry.stop();
@@ -14,3 +17,5 @@ var StartPage = React.createClass({
     );
   }
 });
+
+export default StartPage;

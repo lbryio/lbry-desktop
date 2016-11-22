@@ -390,3 +390,4 @@ lbry.stop = function(callback) {
 };
 
 
+export default lbry;

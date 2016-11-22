@@ -1,3 +1,7 @@
+import React from 'react';
+import lbry from '../lbry.js';
+import LoadScreen from './load_screen.js';
+
 var SplashScreen = React.createClass({
   propTypes: {
     message: React.PropTypes.string,
@@ -33,3 +37,5 @@ var SplashScreen = React.createClass({
     return <LoadScreen message={this.props.message} details={this.state.details} isWarning={this.state.isLagging} />;
   }
 });
+
+export default SplashScreen;

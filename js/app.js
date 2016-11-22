@@ -1,3 +1,23 @@
+import React from 'react';
+import lbry from './lbry.js';
+import SettingsPage from './page/settings.js';
+import HelpPage from './page/help.js';
+import WatchPage from './page/watch.js';
+import ReportPage from './page/report.js';
+import MyFilesPage from './page/my_files.js';
+import StartPage from './page/start.js';
+import ClaimCodePage from './page/claim_code.js';
+import ReferralPage from './page/referral.js';
+import WalletPage from './page/wallet.js';
+import DetailPage from './page/show.js';
+import PublishPage from './page/publish.js';
+import DiscoverPage from './page/discover.js';
+import SplashScreen from './component/splash.js';
+import Drawer from './component/drawer.js';
+import Header from './component/header.js';
+import Modal from './component/modal.js';
+import {Link} from './component/link.js';
+
 var App = React.createClass({
   _error_key_labels: {
     connectionString: 'API connection string',
@@ -220,3 +240,6 @@ var App = React.createClass({
     );
   }
 });
+
+
+export default App;

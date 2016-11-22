@@ -1,3 +1,10 @@
+import React from 'react';
+import lbry from '../lbry.js';
+import {Link} from '../component/link.js';
+import Modal from '../component/modal.js';
+import {Address, BusyMessage, CreditAmount} from '../component/common.js';
+
+
 var addressRefreshButtonStyle = {
   fontSize: '11pt',
 };
@@ -272,3 +279,5 @@ var WalletPage = React.createClass({
     );
   }
 });
+
+export default WalletPage;

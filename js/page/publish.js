@@ -1,3 +1,10 @@
+import React from 'react';
+import lbry from '../lbry.js';
+import FormField from '../component/form.js';
+import {Link} from '../component/link.js';
+import Modal from '../component/modal.js';
+
+
 var publishNumberStyle = {
   width: '50px',
 }, publishFieldLabelStyle = {
@@ -496,3 +503,5 @@ var PublishPage = React.createClass({
     );
   }
 });
+
+export default PublishPage;

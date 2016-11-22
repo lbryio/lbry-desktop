@@ -1,4 +1,6 @@
-lbry.lighthouse = {
+import lbry from './lbry.js';
+
+var lighthouse = {
   _search_timeout: 5000,
   _max_search_tries: 5,
 
@@ -15,22 +17,24 @@ lbry.lighthouse = {
 
   search: function(query, callback) {
     let handleSearchFailed = function(tryNum=0) {
-      if (tryNum > lbry.lighthouse._max_search_tries) {
-        throw new Error(`Could not connect to Lighthouse server. Last server attempted: ${lbry.lighthouse.server}`);
+      if (tryNum > lighthouse._max_search_tries) {
+        throw new Error(`Could not connect to Lighthouse server. Last server attempted: ${lighthouse.server}`);
       } else {
         // Randomly choose one of the other search servers to switch to
-        let otherServers = lbry.lighthouse.servers.slice();
-        otherServers.splice(otherServers.indexOf(lbry.lighthouse.server), 1);
-        lbry.lighthouse.server = otherServers[Math.round(Math.random() * (otherServers.length - 1))];
+        let otherServers = lighthouse.servers.slice();
+        otherServers.splice(otherServers.indexOf(lighthouse.server), 1);
+        lighthouse.server = otherServers[Math.round(Math.random() * (otherServers.length - 1))];
 
-        lbry.lighthouse.call('search', [query], callback, undefined, function() {
+        lighthouse.call('search', [query], callback, undefined, function() {
           handleSearchFailed(tryNum + 1);
-        }, lbry.lighthouse._search_timeout);
+        }, lighthouse._search_timeout);
       }
     }
 
-    lbry.lighthouse.call('search', [query], callback, undefined, function() { handleSearchFailed() }, lbry.lighthouse._search_timeout);
+    lighthouse.call('search', [query], callback, undefined, function() { handleSearchFailed() }, lighthouse._search_timeout);
   }
 };
 
-lbry.lighthouse.server = lbry.lighthouse.servers[Math.round(Math.random() * (lbry.lighthouse.servers.length - 1))];
+lighthouse.server = lighthouse.servers[Math.round(Math.random() * (lighthouse.servers.length - 1))];
+
+export default lighthouse;

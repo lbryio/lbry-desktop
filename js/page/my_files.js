@@ -1,3 +1,9 @@
+import React from 'react';
+import lbry from '../lbry.js';
+import {Link, WatchLink} from '../component/link.js';
+import Modal from '../component/modal.js';
+import {BusyMessage, Thumbnail} from '../component/common.js';
+
 var moreMenuStyle = {
   position: 'absolute',
   display: 'block',
@@ -317,3 +323,6 @@ var MyFilesPage = React.createClass({
     );
   }
 });
+
+
+export default MyFilesPage;
