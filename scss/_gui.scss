@@ -240,18 +240,15 @@ input[type="text"], input[type="search"]
 
 .form-field-advice-container {
   position: relative;
-  width: 100%;
 }
 
 .form-field-advice {
   position: absolute;
   top: 0px;
   left: 0px;
-  width: 100%;
 
   display: flex;
   flex-direction: column;
-  justify-content: center;
 
   white-space: nowrap;
 
@@ -263,6 +260,9 @@ input[type="text"], input[type="search"]
 }
 
 .form-field-advice__arrow {
+  text-align: left;
+  padding-left: 18px;
+
   font-size: 22px;
   line-height: 0.3;
   color: darken($color-primary, 5%);
@@ -271,8 +271,6 @@ input[type="text"], input[type="search"]
 
 .form-field-advice__content-container {
   display: inline-block;
-
-  text-align: center;
 }
 
 .form-field-advice__content {
