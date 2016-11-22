@@ -9,6 +9,7 @@ module.exports = {
   entry: "./js/main.js",
   output: {
     path: path.join(PATHS.dist, 'js'),
+    publicPath: '/js/',
     filename: "bundle.js"
   },
   devtool: 'source-map',
