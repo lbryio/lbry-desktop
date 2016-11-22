@@ -62,13 +62,15 @@ var FormField = React.createClass({
     delete otherProps.hidden;
 
     return (
-      <div className={'form-field-container' + (this.props.hidden ? ' hidden' : '')}>
-        <this._element type={this._type} className="form-field" name={this.props.name} ref="field" placeholder={this.props.placeholder}
-          {...otherProps}>
-          {this.props.children}
-        </this._element>
-        <FormFieldAdvice field={this.refs.field} state={this.state.adviceState}>{this.state.adviceText}</FormFieldAdvice>
-      </div>
+      !this.props.hidden
+        ? <div className="form-field-container">
+            <this._element type={this._type} className="form-field" name={this.props.name} ref="field" placeholder={this.props.placeholder}
+              {...otherProps}>
+              {this.props.children}
+            </this._element>
+            <FormFieldAdvice field={this.refs.field} state={this.state.adviceState}>{this.state.adviceText}</FormFieldAdvice>
+          </div>
+        : null
     );
   }
 });
