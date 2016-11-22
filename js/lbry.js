@@ -351,7 +351,7 @@ lbry.loadJs = function(src, type, onload)
   newScriptTag.type = type;
   if (onload)
   {
-    newScript.onload = onload;
+    newScriptTag.onload = onload;
   }
   lbryScriptTag.parentNode.insertBefore(newScriptTag, lbryScriptTag);
 }

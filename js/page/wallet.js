@@ -15,7 +15,7 @@ var AddressSection = React.createClass({
     }
 
     lbry.getNewAddress((address) => {
-      localStorage.setItem('wallet_address', address);
+      window.localStorage.setItem('wallet_address', address);
       this.setState({
         address: address,
       });
@@ -28,7 +28,7 @@ var AddressSection = React.createClass({
     }
   },
   componentWillMount: function() {
-    var address = localStorage.getItem('wallet_address');
+    var address = window.localStorage.getItem('wallet_address');
     if (address === null) {
       this._refreshAddress();
     } else {

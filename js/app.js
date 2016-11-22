@@ -187,10 +187,6 @@ var App = React.createClass({
       case 'send':
       case 'receive':
         return <WalletPage viewingPage={this.state.viewingPage} />;
-      case 'send':
-        return <SendPage />;
-      case 'receive':
-        return <ReceivePage />;
       case 'show':
         return <DetailPage name={this.state.pageArgs} />;
       case 'publish':
