@@ -333,6 +333,11 @@ lbry.formatName = function(name) {
   return name;
 }
 
+lbry.nameIsValid = function(name, checkCase=true) {
+  const regexp = new RegExp('^[a-z0-9-]+$', checkCase ? '' : 'i');
+  return regexp.test(name);
+}
+
 lbry.loadJs = function(src, type, onload)
 {
   var lbryScriptTag = document.getElementById('lbry'),

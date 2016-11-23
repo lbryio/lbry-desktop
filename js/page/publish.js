@@ -111,6 +111,7 @@ var PublishPage = React.createClass({
     this._tempFilePath = null;
 
     return {
+      rawName: '',
       name: '',
       bid: '',
       feeAmount: '',
@@ -152,6 +153,7 @@ var PublishPage = React.createClass({
 
     if (!rawName) {
       this.setState({
+        rawName: '',
         name: '',
         nameResolved: false,
       });
@@ -159,10 +161,19 @@ var PublishPage = React.createClass({
       return;
     }
 
-    var name = lbry.formatName(rawName);
+    if (!lbry.nameIsValid(rawName, false)) {
+      this.refs.name.showAdvice('LBRY names must contain only letters, numbers and dashes.');
+      return;
+    }
+
+    this.setState({
+      rawName: rawName,
+    });
+
+    var name = rawName.toLowerCase();
 
     lbry.resolveName(name, (info) => {
-      if (name != lbry.formatName(this.refs.name.getValue())) {
+      if (name != this.refs.name.getValue().toLowerCase()) {
         // A new name has been typed already, so bail
         return;
       }
@@ -340,7 +351,7 @@ var PublishPage = React.createClass({
           <section className="card">
             <h4>LBRY Name</h4>
             <div className="form-row">
-              lbry://<FormField type="text" ref="name" onChange={this.handleNameChange} />
+              lbry://<FormField type="text" ref="name" value={this.state.rawName} onChange={this.handleNameChange} />
               {
                 (!this.state.name ? '' :
                   (! this.state.nameResolved ? <em> The name <strong>{this.state.name}</strong> is available.</em>
