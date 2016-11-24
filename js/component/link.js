@@ -116,10 +116,17 @@ var DownloadLink = React.createClass({
           });
         } else {
           lbry.getStream(this.props.streamName, (streamInfo) => {
-            this.setState({
-              modal: 'downloadStarted',
-              filePath: streamInfo.path,
-            });
+            if (typeof streamInfo !== 'object') {
+              this.setState({
+                modal: 'timedOut',
+                downloading: false,
+              });
+            } else {
+              this.setState({
+                modal: 'downloadStarted',
+                filePath: streamInfo.path,
+              });
+            }
           });
         }
       });
@@ -136,6 +143,9 @@ var DownloadLink = React.createClass({
         </Modal>
         <Modal isOpen={this.state.modal == 'notEnoughCredits'} onConfirmed={this.closeModal}>
           You don't have enough LBRY credits to pay for this stream.
+        </Modal>
+        <Modal isOpen={this.state.modal == 'timedOut'} onConfirmed={this.closeModal}>
+          LBRY was unable to download the stream <strong>lbry://{this.props.streamName}</strong>.
         </Modal>
       </span>
     );
