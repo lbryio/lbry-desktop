@@ -152,11 +152,15 @@ var WatchLink = React.createClass({
     hidden: React.PropTypes.bool,
   },
   handleClick: function() {
+    this.setState({
+      loading: true,
+    })
     lbry.getCostEstimate(this.props.streamName, (amount) => {
       lbry.getBalance((balance) => {
         if (amount > balance) {
           this.setState({
             modal: 'notEnoughCredits',
+            loading: false,
           });
         } else {
           window.location = '?watch=' + this.props.streamName;
@@ -167,6 +171,7 @@ var WatchLink = React.createClass({
   getInitialState: function() {
     return {
       modal: null,
+      loading: false,
     };
   },
   closeModal: function() {
@@ -184,7 +189,8 @@ var WatchLink = React.createClass({
     return (
       <span className="button-container">
         <Link button={this.props.button} hidden={this.props.hidden} style={this.props.style}
-                   label={this.props.label} icon={this.props.icon} onClick={this.handleClick} />
+              disabled={this.state.loading} label={this.props.label} icon={this.props.icon}
+              onClick={this.handleClick} />
         <Modal isOpen={this.state.modal == 'notEnoughCredits'} onConfirmed={this.closeModal}>
           You don't have enough LBRY credits to pay for this stream.
         </Modal>
