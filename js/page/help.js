@@ -17,9 +17,11 @@ var HelpPage = React.createClass({
     document.title = "Help";
   },
   render: function() {
-    let ver, osName, platform, newVerLink;
+    let ver, osName, platform, newVerLink, lbryId;
     if (this.state.versionInfo) {
       ver = this.state.versionInfo;
+
+      lbryId = ver.lbry_id;
 
       if (ver.os_system == 'Darwin') {
         osName = (parseInt(ver.os_release.match(/^\d+/)) < 16 ? 'Mac OS X' : 'Mac OS');
@@ -79,6 +81,10 @@ var HelpPage = React.createClass({
                 <tr>
                   <th>Platform</th>
                   <td>{platform}</td>
+                </tr>
+                <tr>
+                  <th>Installation ID</th>
+                  <td>{lbryId}</td>
                 </tr>
               </tbody>
             </table>
