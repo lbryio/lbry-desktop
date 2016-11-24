@@ -103,29 +103,27 @@ var DownloadLink = React.createClass({
     })
   },
   handleClick: function() {
-    if (!this.state.downloading) { //@TODO: Continually update this.state.downloading based on actual status of file
-      this.setState({
-        downloading: true
-      });
+    this.setState({
+      downloading: true
+    });
 
-      lbry.getCostEstimate(this.props.streamName, (amount) => {
-        lbry.getBalance((balance) => {
-          if (amount > balance) {
+    lbry.getCostEstimate(this.props.streamName, (amount) => {
+      lbry.getBalance((balance) => {
+        if (amount > balance) {
+          this.setState({
+            modal: 'notEnoughCredits',
+            downloading: false
+          });
+        } else {
+          lbry.getStream(this.props.streamName, (streamInfo) => {
             this.setState({
-              modal: 'notEnoughCredits',
-              downloading: false
+              modal: 'downloadStarted',
+              filePath: streamInfo.path,
             });
-          } else {
-            lbry.getStream(this.props.streamName, (streamInfo) => {
-              this.setState({
-                modal: 'downloadStarted',
-                filePath: streamInfo.path,
-              });
-            });
-          }
-        });
+          });
+        }
       });
-    }
+    });
   },
   render: function() {
     var label = (!this.state.downloading ? this.props.label : this.props.downloadingLabel);
