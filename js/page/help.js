@@ -17,21 +17,26 @@ var HelpPage = React.createClass({
     document.title = "Help";
   },
   render: function() {
-    var ver = this.state.versionInfo;
+    let ver, osName, platform, newVerLink, lbryId;
+    if (this.state.versionInfo) {
+      ver = this.state.versionInfo;
 
-    if (ver) {
+      lbryId = ver.lbry_id;
+
       if (ver.os_system == 'Darwin') {
-        var osName = (parseInt(ver.os_release.match(/^\d+/)) < 16 ? 'Mac OS X' : 'Mac OS');
+        osName = (parseInt(ver.os_release.match(/^\d+/)) < 16 ? 'Mac OS X' : 'Mac OS');
 
-        var platform = osName + ' ' + ver.os_release;
-        var newVerLink = 'https://lbry.io/get/lbry.dmg';
+        platform = `${osName} ${ver.os_release}`
+        newVerLink = 'https://lbry.io/get/lbry.dmg';
       } else if (ver.os_system == 'Linux') {
-        var platform = 'Linux (' + ver.platform + ')';
-        var newVerLink = 'https://lbry.io/get/lbry.deb';
+        platform = `Linux (${ver.platform})`;
+        newVerLink = 'https://lbry.io/get/lbry.deb';
       } else {
-        var platform = 'Windows (' + ver.platform + ')';
-        var newVerLink = 'https://lbry.io/get/lbry.msi';
+        platform = `Windows (${ver.platform})`;
+        newVerLink = 'https://lbry.io/get/lbry.msi';
       }
+    } else {
+      ver = null;
     }
 
     return (
@@ -60,7 +65,7 @@ var HelpPage = React.createClass({
           <section className="card">
             <h3>About</h3>
             {ver.lbrynet_update_available || ver.lbryum_update_available ?
-              <p>A newer version of LBRY is available. <Link href={newVerLink} label={"Download LBRY " + ver.remote_lbrynet + " now!"} /></p>
+              <p>A newer version of LBRY is available. <Link href={newVerLink} label={`Download LBRY ${ver.remote_lbrynet} now!`} /></p>
               : <p>Your copy of LBRY is up to date.</p>
             }
             <table className="table-standard">
@@ -76,6 +81,10 @@ var HelpPage = React.createClass({
                 <tr>
                   <th>Platform</th>
                   <td>{platform}</td>
+                </tr>
+                <tr>
+                  <th>Installation ID</th>
+                  <td>{lbryId}</td>
                 </tr>
               </tbody>
             </table>
