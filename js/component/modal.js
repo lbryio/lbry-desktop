@@ -49,7 +49,9 @@ var Modal = React.createClass({
 
     return (
       <ReactModal {...props}>
-         {this.props.children}
+         <div>
+           {this.props.children}
+         </div>
          {buttons}
       </ReactModal>
     );
