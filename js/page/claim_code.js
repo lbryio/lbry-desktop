@@ -126,10 +126,10 @@ var ClaimCodePage = React.createClass({
         <Modal isOpen={this.state.modal == 'codeRedeemed'} onConfirmed={this.handleFinished}>
           Your invite code has been redeemed.
           {this.state.referralCredits > 0
-            ? `You have also earned {referralCredits} credits from referrals. A total of {activationCredits + referralCredits}
+            ? `You have also earned ${referralCredits} credits from referrals. A total of ${activationCredits + referralCredits}
                     will be added to your balance shortly.`
             : (this.state.activationCredits > 0
-                ? `{this.state.activationCredits} credits will be added to your balance shortly.`
+                ? `${this.state.activationCredits} credits will be added to your balance shortly.`
                 : 'The credits will be added to your balance shortly.')}
         </Modal>
         <Modal isOpen={this.state.modal == 'skipped'} onConfirmed={this.handleFinished}>
