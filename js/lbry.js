@@ -310,6 +310,9 @@ lbry.setClientSetting = function(setting, value) {
   return localStorage.setItem('setting_' + setting, JSON.stringify(value));
 }
 
+lbry.getSessionInfo = function(callback) {
+  lbry.call('get_lbry_session_info', {}, callback);
+}
 
 lbry.reportBug = function(message, callback) {
   lbry.call('upload_log', {
