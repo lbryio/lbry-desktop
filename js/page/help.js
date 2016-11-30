@@ -4,6 +4,7 @@ var HelpPage = React.createClass({
   getInitialState: function() {
     return {
       versionInfo: null,
+      lbryId: null,
     };
   },
   componentWillMount: function() {
@@ -12,16 +13,19 @@ var HelpPage = React.createClass({
         versionInfo: info,
       });
     });
+    lbry.getSessionInfo((info) => {
+      this.setState({
+        lbryId: info.lbry_id,
+      });
+    });
   },
   componentDidMount: function() {
     document.title = "Help";
   },
   render: function() {
-    let ver, osName, platform, newVerLink, lbryId;
+    let ver, osName, platform, newVerLink;
     if (this.state.versionInfo) {
       ver = this.state.versionInfo;
-
-      lbryId = ver.lbry_id;
 
       if (ver.os_system == 'Darwin') {
         osName = (parseInt(ver.os_release.match(/^\d+/)) < 16 ? 'Mac OS X' : 'Mac OS');
@@ -84,7 +88,7 @@ var HelpPage = React.createClass({
                 </tr>
                 <tr>
                   <th>Installation ID</th>
-                  <td>{lbryId}</td>
+                  <td>{this.state.lbryId}</td>
                 </tr>
               </tbody>
             </table>
