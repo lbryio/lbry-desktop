@@ -352,3 +352,7 @@ input[type="text"], input[type="search"]
   margin-top: 6px;
   margin-right: 7px;
 }
+
+.download-started-modal__file-path {
+  word-break: break-all;
+}
