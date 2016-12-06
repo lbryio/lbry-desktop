@@ -2,6 +2,7 @@ var lbry = {
   isConnected: false,
   rootPath: '.',
   daemonConnectionString: 'http://localhost:5279/lbryapi',
+  webUiUri: 'http://localhost:5279',
   colors: {
     primary: '#155B4A'
   },
