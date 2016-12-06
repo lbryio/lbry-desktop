@@ -179,8 +179,15 @@ lbry.getMyClaim = function(name, callback) {
   lbry.call('get_my_claim', { name: name }, callback);
 }
 
-lbry.getCostEstimate = function(name, callback) {
+lbry.getKeyFee = function(name, callback) {
   lbry.call('get_est_cost', { name: name }, callback);
+}
+
+lbry.getTotalCost = function(name, size, callback) {
+  lbry.call('get_est_cost', {
+    name: name,
+    size: size,
+  }, callback);
 }
 
 lbry.getPeersForBlobHash = function(blobHash, callback) {
