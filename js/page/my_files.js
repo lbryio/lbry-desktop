@@ -232,24 +232,17 @@ var MyFilesPage = React.createClass({
         filesInfo = [];
       }
 
-      if (!(this._fileInfoCheckNum % 5)) {
+      let newFilesAvailable;
+      if (!(this._fileInfoCheckNum % 300)) {
         // Time to update file availability status
 
+        newFilesAvailable = {};
+        let filePeersCheckCount = 0;
         for (let fileInfo of filesInfo) {
-          let name = fileInfo.lbry_uri;
-
-          if (name === null) {
-            continue;
-          }
-
-          lighthouse.search(name, (results) => {
-            var result = results[0];
-
-            var available = result.name == name && result.available;
-
-            if (typeof this.state.filesAvailable[name] === 'undefined' || available != this.state.filesAvailable[name]) {
-              var newFilesAvailable = Object.assign({}, this.state.filesAvailable);
-              newFilesAvailable[name] = available;
+          lbry.getPeersForBlobHash(fileInfo.sd_hash, (peers) => {
+            filePeersCheckCount++;
+            newFilesAvailable[fileInfo.sd_hash] = peers.length >= 0;
+            if (filePeersCheckCount >= filesInfo.length) {
               this.setState({
                 filesAvailable: newFilesAvailable,
               });
@@ -284,7 +277,7 @@ var MyFilesPage = React.createClass({
 
       for (let fileInfo of this.state.filesInfo) {
         let {completed, written_bytes, total_bytes, lbry_uri, file_name, download_path,
-          stopped, metadata} = fileInfo;
+          stopped, metadata, sd_hash} = fileInfo;
 
         var isMine = this._filesOwnership[lbry_uri];
 
@@ -314,7 +307,7 @@ var MyFilesPage = React.createClass({
         content.push(<MyFilesRow key={lbry_uri} lbryUri={lbry_uri} title={title || ('lbry://' + lbry_uri)} completed={completed} stopped={stopped}
                                  ratioLoaded={ratioLoaded} imgUrl={thumbnail} path={download_path}
                                  showWatchButton={showWatchButton} pending={pending}
-                                 available={this.state.filesAvailable[lbry_uri]} isMine={isMine} />);
+                                 available={this.state.filesAvailable[sd_hash]} isMine={isMine} />);
       }
     }
     return (
