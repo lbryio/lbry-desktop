@@ -183,6 +183,10 @@ lbry.getCostEstimate = function(name, callback) {
   lbry.call('get_est_cost', { name: name }, callback);
 }
 
+lbry.getPeersForBlobHash = function(blobHash, callback) {
+  lbry.call('get_peers_for_hash', { blob_hash: blobHash }, callback)
+}
+
 lbry.getFileStatus = function(name, callback) {
   lbry.call('get_lbry_file', { 'name': name }, callback);
 }
