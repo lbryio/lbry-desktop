@@ -1,3 +1,8 @@
+import React from 'react';
+import lbry from '../lbry.js';
+import {Link} from '../component/link.js';
+import Modal from '../component/modal.js';
+
 var referralCodeContentStyle = {
   display: 'inline-block',
   textAlign: 'left',
@@ -118,3 +123,5 @@ var ReferralPage = React.createClass({
     );
   }
 });
+
+export default ReferralPage;

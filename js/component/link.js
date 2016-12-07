@@ -1,4 +1,10 @@
-var Link = React.createClass({
+import React from 'react';
+import lbry from '../lbry.js';
+import Modal from './modal.js';
+import {Icon, ToolTip} from './common.js';
+
+
+export let Link = React.createClass({
   handleClick: function() {
     if (this.props.onClick) {
       this.props.onClick();
@@ -27,7 +33,7 @@ var linkContainerStyle = {
   position: 'relative',
 };
 
-var ToolTipLink = React.createClass({
+export let ToolTipLink = React.createClass({
   getInitialState: function() {
     return {
       showTooltip: false,
@@ -73,7 +79,7 @@ var ToolTipLink = React.createClass({
   }
 });
 
-var DownloadLink = React.createClass({
+export let DownloadLink = React.createClass({
   propTypes: {
     type: React.PropTypes.string,
     streamName: React.PropTypes.string,
@@ -153,7 +159,7 @@ var DownloadLink = React.createClass({
   }
 });
 
-var WatchLink = React.createClass({
+export let WatchLink = React.createClass({
   propTypes: {
     type: React.PropTypes.string,
     streamName: React.PropTypes.string,

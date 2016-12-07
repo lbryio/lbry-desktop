@@ -1,4 +1,10 @@
-//main.js
+import React from 'react';
+import ReactDOM from 'react-dom';
+import lbry from './lbry.js';
+import App from './app.js';
+import SplashScreen from './component/splash.js';
+
+
 var init = function() {
   var canvas = document.getElementById('canvas');
 

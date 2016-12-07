@@ -1,3 +1,9 @@
+import React from 'react';
+import lbry from '../lbry.js';
+import lighthouse from '../lighthouse.js';
+import {Link, ToolTipLink, DownloadLink, WatchLink} from '../component/link.js';
+import {Thumbnail, CreditAmount, TruncatedText} from '../component/common.js';
+
 var fetchResultsStyle = {
     color: '#888',
     textAlign: 'center',
@@ -179,7 +185,7 @@ var FeaturedContentItem = React.createClass({
   componentDidMount: function() {
     this.resolveSearch = true;
 
-    lbry.lighthouse.search(this.props.name, function(results) {
+    lighthouse.search(this.props.name, function(results) {
       var result = results[0];
       var metadata = result.value;
       if (this.resolveSearch)
@@ -257,7 +263,7 @@ var DiscoverPage = React.createClass({
       query: this.props.query,
     });
 
-    lbry.lighthouse.search(this.props.query, this.searchCallback);
+    lighthouse.search(this.props.query, this.searchCallback);
   },
 
   componentDidMount: function() {
@@ -297,3 +303,5 @@ var DiscoverPage = React.createClass({
     );
   }
 });
+
+export default DiscoverPage;

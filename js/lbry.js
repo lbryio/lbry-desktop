@@ -2,6 +2,7 @@ var lbry = {
   isConnected: false,
   rootPath: '.',
   daemonConnectionString: 'http://localhost:5279/lbryapi',
+  webUiUri: 'http://localhost:5279',
   colors: {
     primary: '#155B4A'
   },
@@ -351,7 +352,7 @@ lbry.loadJs = function(src, type, onload)
   newScriptTag.type = type;
   if (onload)
   {
-    newScript.onload = onload;
+    newScriptTag.onload = onload;
   }
   lbryScriptTag.parentNode.insertBefore(newScriptTag, lbryScriptTag);
 }
@@ -390,3 +391,4 @@ lbry.stop = function(callback) {
 };
 
 
+export default lbry;

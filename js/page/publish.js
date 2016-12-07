@@ -1,3 +1,10 @@
+import React from 'react';
+import lbry from '../lbry.js';
+import FormField from '../component/form.js';
+import {Link} from '../component/link.js';
+import Modal from '../component/modal.js';
+
+
 var publishNumberStyle = {
   width: '50px',
 }, publishFieldLabelStyle = {
@@ -277,7 +284,7 @@ var PublishPage = React.createClass({
 
       var formData = new FormData(fileInput.form);
       formData.append('file', fileInput.files[0]);
-      xhr.open('POST', '/upload', true);
+      xhr.open('POST', lbry.webUiUri + '/upload', true);
       xhr.send(formData);
     }
   },
@@ -344,6 +351,7 @@ var PublishPage = React.createClass({
       }
     }
   },
+  // Also getting a type warning here too
   render: function() {
     return (
       <main ref="page">
@@ -496,3 +504,5 @@ var PublishPage = React.createClass({
     );
   }
 });
+
+export default PublishPage;

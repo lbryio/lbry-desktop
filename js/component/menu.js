@@ -1,3 +1,7 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+import {Icon} from './common.js';
+
 // Generic menu styles
 var menuStyle = {
   whiteSpace: 'nowrap'
@@ -68,3 +72,5 @@ var MenuItem = React.createClass({
     );
   }
 });
+
+export default Menu;

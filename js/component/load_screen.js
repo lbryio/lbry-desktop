@@ -1,3 +1,7 @@
+import React from 'react';
+import lbry from '../lbry.js';
+import {BusyMessage, Icon} from './common.js';
+
 var loadScreenStyle = {
   color: 'white',
   backgroundImage: 'url(' + lbry.imagePath('lbry-bg.png') + ')',
@@ -47,3 +51,6 @@ var LoadScreen = React.createClass({
     );
   }
 });
+
+
+export default LoadScreen;
