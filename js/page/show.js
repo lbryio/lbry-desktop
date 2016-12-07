@@ -1,6 +1,8 @@
 import React from 'react';
 import lbry from '../lbry.js';
-import {Thumbnail} from '../component/common.js';
+import lighthouse from '../lighthouse.js';
+import {CreditAmount, Thumbnail} from '../component/common.js';
+import {Link, DownloadLink, WatchLink} from '../component/link.js';
 
 var formatItemImgStyle = {
   maxWidth: '100%',
