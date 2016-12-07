@@ -16,9 +16,9 @@ var formatItemImgStyle = {
 var FormatItem = React.createClass({
   propTypes: {
     claimInfo: React.PropTypes.object,
-    amount: React.PropTypes.number,
+    cost: React.PropTypes.number,
     name: React.PropTypes.string,
-    available: React.PropTypes.bool,
+    costIncludesData: React.PropTypes.bool,
   },
   render: function() {
 
@@ -31,8 +31,8 @@ var FormatItem = React.createClass({
     var license = claimInfo.license;
     var fileContentType = (claimInfo.content_type || claimInfo['content-type']);
     var mediaType = lbry.getMediaType(fileContentType);
-    var available = this.props.available;
-    var amount = this.props.amount || 0.0;
+    var costIncludesData = this.props.costIncludesData;
+    var cost = this.props.cost || 0.0;
 
     return (
       <div className="row-fluid">
@@ -48,7 +48,7 @@ var FormatItem = React.createClass({
                   <td>Content-Type</td><td>{fileContentType}</td>
                 </tr>
                 <tr>
-                  <td>Cost</td><td><CreditAmount amount={amount} isEstimate={!available}/></td>
+                  <td>Cost</td><td><CreditAmount amount={cost} isEstimate={!costIncludesData}/></td>
                 </tr>
                 <tr>
                   <td>Author</td><td>{author}</td>
@@ -78,9 +78,9 @@ var FormatItem = React.createClass({
 var FormatsSection = React.createClass({
   propTypes: {
     claimInfo: React.PropTypes.object,
-    amount: React.PropTypes.number,
+    cost: React.PropTypes.number,
     name: React.PropTypes.string,
-    available: React.PropTypes.bool,
+    costIncludesData: React.PropTypes.bool,
   },
   render: function() {
     var name = this.props.name;
@@ -102,7 +102,7 @@ var FormatsSection = React.createClass({
       {/* In future, anticipate multiple formats, just a guess at what it could look like
       // var formats = this.props.claimInfo.formats
       // return (<tbody>{formats.map(function(format,i){ */}
-          <FormatItem claimInfo={format} amount={this.props.amount} name={this.props.name} available={this.props.available} />
+          <FormatItem claimInfo={format} cost={this.props.cost} name={this.props.name} costIncludesData={this.props.costIncludesData} />
       {/*  })}</tbody>); */}
       </div>);
   }
@@ -114,8 +114,8 @@ var DetailPage = React.createClass({
   },
   getInitialState: function() {
     return {
-      claimInfo: null,
-      amount: null,
+      metadata: null,
+      cost: null,
       searching: true,
       matchFound: null,
     };
@@ -133,9 +133,9 @@ var DetailPage = React.createClass({
         });
       } else {
         this.setState({
-          amount: result.cost,
-          available: result.available,
-          claimInfo: result.value,
+          cost: result.cost,
+          costIncludesData: result.costIncludesData,
+          metadata: result.value,
           searching: false,
           matchFound: true,
         });  
@@ -143,21 +143,20 @@ var DetailPage = React.createClass({
     });
   },
   render: function() {
-    if (this.state.claimInfo == null && this.state.searching) {
-      // Still waiting for metadata
+    if (this.state.metadata == null) {
       return null;
     }
 
     var name = this.props.name;
-    var available = this.state.available;
-    var claimInfo = this.state.claimInfo;
-    var amount = this.state.amount;
+    var costIncludesData = this.state.costIncludesData;
+    var metadata = this.state.metadata;
+    var cost = this.state.cost;
 
     return (
       <main>
         <section className="card">
           {this.state.matchFound ? (
-            <FormatsSection name={name} claimInfo={claimInfo} amount={amount} available={available} />
+            <FormatsSection name={name} claimInfo={metadata} cost={cost} costIncludesData={costIncludesData} />
           ) : (
             <div>
               <h2>No content</h2>
