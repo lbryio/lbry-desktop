@@ -116,30 +116,25 @@ var DetailPage = React.createClass({
     return {
       metadata: null,
       cost: null,
-      searching: true,
-      matchFound: null,
+      costIncludesData: null,
+      nameLookupComplete: null,
     };
   },
   componentWillMount: function() {
     document.title = 'lbry://' + this.props.name;
 
-    lighthouse.search(this.props.name, (results) => {
-      var result = results[0];
+    lbry.resolveName(this.props.name, (metadata) => {
+      this.setState({
+        metadata: metadata,
+        nameLookupComplete: true,
+      });
+    });
 
-      if (result.name != this.props.name) {
-        this.setState({
-          searching: false,
-          matchFound: false,
-        });
-      } else {
-        this.setState({
-          cost: result.cost,
-          costIncludesData: result.costIncludesData,
-          metadata: result.value,
-          searching: false,
-          matchFound: true,
-        });  
-      }
+    lbry.getCostInfoForName(this.props.name, ({cost, includesData}) => {
+      this.setState({
+        cost: cost,
+        costIncludesData: includesData,
+      });
     });
   },
   render: function() {
@@ -155,7 +150,7 @@ var DetailPage = React.createClass({
     return (
       <main>
         <section className="card">
-          {this.state.matchFound ? (
+          {this.state.nameLookupComplete ? (
             <FormatsSection name={name} claimInfo={metadata} cost={cost} costIncludesData={costIncludesData} />
           ) : (
             <div>
