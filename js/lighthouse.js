@@ -36,6 +36,10 @@ var lighthouse = {
     }
 
     lighthouse.call('search', [query], callback, errorCallback, function() { handleSearchFailed() }, lighthouse._search_timeout);
+  },
+
+  getSizeForName: function(name, callback, errorCallback, connectFailedCallback, timeout) {
+    return lighthouse.call('get_size_for_name', [name], callback, errorCallback, connectFailedCallback, timeout);
   }
 };
 
