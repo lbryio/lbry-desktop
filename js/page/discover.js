@@ -122,9 +122,11 @@ var SearchResultRow = React.createClass({
             <a href={'/?show=' + this.props.name}><Thumbnail src={this.props.imgUrl} alt={'Photo for ' + (this.props.title || this.props.name)} style={searchRowImgStyle} /></a>
           </div>
           <div className="span9">
-            <span style={searchRowCostStyle}>
-              <CreditAmount amount={this.props.cost} isEstimate={!this.props.available}/>
-            </span>
+            {'cost' in this.props
+              ? <span style={searchRowCostStyle}>
+                  <CreditAmount amount={this.props.cost} isEstimate={!this.props.available}/>
+                </span>
+              : null}
             <div className="meta"><a href={'/?show=' + this.props.name}>lbry://{this.props.name}</a></div>
             <h3 style={titleStyle}>
               <a href={'/?show=' + this.props.name}>
@@ -173,7 +175,7 @@ var FeaturedContentItem = React.createClass({
     return {
       metadata: null,
       title: null,
-      amount: 0.0,
+      cost: null,
       overlayShowing: false,
     };
   },
@@ -206,10 +208,11 @@ var FeaturedContentItem = React.createClass({
       return null;
     }
 
+    const costProp = this.state.cost === null ? {} : {cost: this.state.cost}
     return (<div style={featuredContentItemContainerStyle}>
       <SearchResultRow name={this.props.name} title={this.state.title} imgUrl={this.state.metadata.thumbnail}
                  description={this.state.metadata.description} mediaType={lbry.getMediaType(this.state.metadata.content_type)}
-                 cost={this.state.amount} nsfw={this.state.metadata.nsfw} available={this.state.available} compact />
+                 nsfw={this.state.metadata.nsfw} compact {... costProp} />
     </div>);
   }
 });
