@@ -198,7 +198,7 @@ var App = React.createClass({
           </Modal>
           <Modal isOpen={this.state.modal == 'upgrade'} type="confirm" confirmButtonLabel="Upgrade" abortButtonLabel="Skip"
                  onConfirmed={this.handleUpgradeClicked} onAborted={this.handleSkipClicked} >
-            <p>The version of LBRY you're using is not up to date. Choose "Upgrade" to get the latest version.</p>
+            <p>Your version of LBRY is out of date and may be unreliable or insecure.</p>
             {this.state.isOldOSX
               ? <p>Before installing the new version, make sure to exit LBRY. If you started the app, click the LBRY icon in your status bar and choose "Quit."</p>
               : null}
