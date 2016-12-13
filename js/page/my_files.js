@@ -166,6 +166,7 @@ var MyFilesRow = React.createClass({
 
 var MyFilesPage = React.createClass({
   _fileTimeout: null,
+  _fileInfoCheckRate: 300,
   _fileInfoCheckNum: 0,
   _filesOwnership: {},
 
@@ -233,7 +234,7 @@ var MyFilesPage = React.createClass({
       }
 
       let newFilesAvailable;
-      if (!(this._fileInfoCheckNum % 300)) {
+      if (!(this._fileInfoCheckNum % this._fileInfoCheckRate)) {
         // Time to update file availability status
 
         newFilesAvailable = {};
