@@ -46,8 +46,7 @@ var SearchResults = React.createClass({
       var mediaType = lbry.getMediaType(result.value.content_type);
       rows.push(
         <SearchResultRow key={result.name} name={result.name} title={result.value.title} imgUrl={result.value.thumbnail}
-                         description={result.value.description} cost={result.cost} nsfw={result.value.nsfw}
-                         mediaType={mediaType}  />
+                         description={result.value.description} nsfw={result.value.nsfw} mediaType={mediaType} />
       );
     });
     return (
@@ -93,6 +92,8 @@ var SearchResultRow = React.createClass({
     return {
       downloading: false,
       isHovered: false,
+      cost: null,
+      costIncludesData: null,
     }
   },
   handleMouseOver: function() {
@@ -104,6 +105,21 @@ var SearchResultRow = React.createClass({
     this.setState({
       isHovered: false,
     });
+  },
+  componentWillMount: function() {
+    if ('cost' in this.props) {
+      this.setState({
+        cost: this.props.cost,
+        costIncludesData: this.props.costIncludesData,
+      });
+    } else {
+      lbry.getCostInfoForName(this.props.name, ({cost, includesData}) => {
+        this.setState({
+          cost: cost,
+          costIncludesData: includesData,
+        });
+      });
+    }
   },
   render: function() {
     var obscureNsfw = !lbry.getClientSetting('showNsfw') && this.props.nsfw;
@@ -122,9 +138,11 @@ var SearchResultRow = React.createClass({
             <a href={'/?show=' + this.props.name}><Thumbnail src={this.props.imgUrl} alt={'Photo for ' + (this.props.title || this.props.name)} style={searchRowImgStyle} /></a>
           </div>
           <div className="span9">
-            <span style={searchRowCostStyle}>
-              <CreditAmount amount={this.props.cost} isEstimate={!this.props.available}/>
-            </span>
+            {this.state.cost !== null
+              ? <span style={searchRowCostStyle}>
+                  <CreditAmount amount={this.state.cost} isEstimate={!this.state.costIncludesData}/>
+                </span>
+              : null}
             <div className="meta"><a href={'/?show=' + this.props.name}>lbry://{this.props.name}</a></div>
             <h3 style={titleStyle}>
               <a href={'/?show=' + this.props.name}>
@@ -173,7 +191,7 @@ var FeaturedContentItem = React.createClass({
     return {
       metadata: null,
       title: null,
-      amount: 0.0,
+      cost: null,
       overlayShowing: false,
     };
   },
@@ -183,21 +201,18 @@ var FeaturedContentItem = React.createClass({
   },
 
   componentDidMount: function() {
-    this.resolveSearch = true;
+    this._isMounted = true;
 
-    lighthouse.search(this.props.name, function(results) {
-      var result = results[0];
-      var metadata = result.value;
-      if (this.resolveSearch)
-      {
-        this.setState({
-          metadata: metadata,
-          amount: result.cost,
-          available: result.available,
-          title: metadata && metadata.title ? metadata.title : ('lbry://' + this.props.name),
-        });
+    lbry.resolveName(this.props.name, (metadata) => {
+      if (!this._isMounted) {
+        return;
       }
-    }.bind(this));
+
+      this.setState({
+        metadata: metadata,
+        title: metadata && metadata.title ? metadata.title : ('lbry://' + this.props.name),
+      });
+    });
   },
 
   render: function() {
@@ -209,7 +224,7 @@ var FeaturedContentItem = React.createClass({
     return (<div style={featuredContentItemContainerStyle}>
       <SearchResultRow name={this.props.name} title={this.state.title} imgUrl={this.state.metadata.thumbnail}
                  description={this.state.metadata.description} mediaType={lbry.getMediaType(this.state.metadata.content_type)}
-                 cost={this.state.amount} nsfw={this.state.metadata.nsfw} available={this.state.available} compact />
+                 nsfw={this.state.metadata.nsfw} compact />
     </div>);
   }
 });

@@ -1,3 +1,5 @@
+import lighthouse from './lighthouse.js';
+
 var lbry = {
   isConnected: false,
   rootPath: '.',
@@ -179,12 +181,57 @@ lbry.getMyClaim = function(name, callback) {
   lbry.call('get_my_claim', { name: name }, callback);
 }
 
-lbry.getCostEstimate = function(name, callback) {
+lbry.getKeyFee = function(name, callback) {
   lbry.call('get_est_cost', { name: name }, callback);
+}
+
+lbry.getTotalCost = function(name, size, callback) {
+  lbry.call('get_est_cost', {
+    name: name,
+    size: size,
+  }, callback);
 }
 
 lbry.getPeersForBlobHash = function(blobHash, callback) {
   lbry.call('get_peers_for_hash', { blob_hash: blobHash }, callback)
+}
+
+lbry.getCostInfoForName = function(name, callback) {
+  /**
+   * Takes a LBRY name; will first try and calculate a total cost using
+   * Lighthouse. If Lighthouse can't be reached, it just retrives the
+   * key fee.
+   *
+   * Returns an object with members:
+   *   - cost: Number; the calculated cost of the name
+   *   - includes_data: Boolean; indicates whether or not the data fee info
+   *     from Lighthouse is included.
+   */
+  function getCostWithData(size, callback) {
+    lbry.getTotalCost(name, size, (cost) => {
+      callback({
+        cost: cost,
+        includesData: true,
+      });
+    });
+  }
+
+  function getCostNoData(name, callback) {
+    lbry.getKeyFee(name, (cost) => {
+      callback({
+        cost: cost,
+        includesData: false,
+      });
+    });
+  }
+
+  lighthouse.getSizeForName(name, (size) => {
+    getCostWithData(name, size, callback);
+  }, () => {
+    getCostNoData(name, callback);
+  }, () => {
+    getCostNoData(name, callback);
+  });
 }
 
 lbry.getFileStatus = function(name, callback) {
