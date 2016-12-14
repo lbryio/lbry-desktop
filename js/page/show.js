@@ -142,10 +142,10 @@ var DetailPage = React.createClass({
       return null;
     }
 
-    var name = this.props.name;
-    var costIncludesData = this.state.costIncludesData;
-    var metadata = this.state.metadata;
-    var cost = this.state.cost;
+    const name = this.props.name;
+    const costIncludesData = this.state.costIncludesData;
+    const metadata = this.state.metadata;
+    const cost = this.state.cost;
 
     return (
       <main>
