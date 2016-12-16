@@ -122,7 +122,7 @@ export let DownloadLink = React.createClass({
           });
         } else {
           lbry.getStream(this.props.streamName, (streamInfo) => {
-            if (typeof streamInfo !== 'object') {
+            if (streamInfo === null || typeof streamInfo !== 'object') {
               this.setState({
                 modal: 'timedOut',
                 downloading: false,
