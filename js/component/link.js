@@ -113,16 +113,16 @@ export let DownloadLink = React.createClass({
       downloading: true
     });
 
-    lbry.getCostEstimate(this.props.streamName, (amount) => {
+    lbry.getCostInfoForName(this.props.streamName, ({cost}) => {
       lbry.getBalance((balance) => {
-        if (amount > balance) {
+        if (cost > balance) {
           this.setState({
             modal: 'notEnoughCredits',
             downloading: false
           });
         } else {
           lbry.getStream(this.props.streamName, (streamInfo) => {
-            if (typeof streamInfo !== 'object') {
+            if (streamInfo === null || typeof streamInfo !== 'object') {
               this.setState({
                 modal: 'timedOut',
                 downloading: false,
@@ -172,9 +172,9 @@ export let WatchLink = React.createClass({
     this.setState({
       loading: true,
     })
-    lbry.getCostEstimate(this.props.streamName, (amount) => {
+    lbry.getCostInfoForName(this.props.streamName, ({cost}) => {
       lbry.getBalance((balance) => {
-        if (amount > balance) {
+        if (cost > balance) {
           this.setState({
             modal: 'notEnoughCredits',
             loading: false,
