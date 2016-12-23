@@ -1,6 +1,7 @@
 import React from 'react';
 import lbry from '../lbry.js';
 import lighthouse from '../lighthouse.js';
+import FileTile from '../component/file-tile.js';
 import {Link, ToolTipLink, DownloadLink, WatchLink} from '../component/link.js';
 import {Thumbnail, CreditAmount, TruncatedText, BusyMessage} from '../component/common.js';
 
@@ -222,9 +223,9 @@ var FeaturedContentItem = React.createClass({
     }
 
     return (<div style={featuredContentItemContainerStyle}>
-      <SearchResultRow name={this.props.name} title={this.state.title} imgUrl={this.state.metadata.thumbnail}
-                 description={this.state.metadata.description} mediaType={lbry.getMediaType(this.state.metadata.content_type)}
-                 nsfw={this.state.metadata.nsfw} compact />
+      <FileTile name={this.props.name} title={this.state.title} imgUrl={this.state.metadata.thumbnail}
+                description={this.state.metadata.description} mediaType={lbry.getMediaType(this.state.metadata.content_type)}
+                nsfw={this.state.metadata.nsfw} compact />
     </div>);
   }
 });

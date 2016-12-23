@@ -367,3 +367,39 @@ input[type="text"], input[type="search"]
   word-break: break-all;
 }
 
+
+.file-tile--compact {
+  height: 180px;
+}
+
+.file-tile__row {
+  height: 24px * 7;
+  overflow-y: hidden;
+}
+
+.file-tile__thumbnail {
+  max-width: 100%;
+  max-height: 24px * 7;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.file-tile__title {
+  font-weight: bold;
+}
+
+.file-tile__title--compact {
+  font-size: 1.25em;
+  line-height: 1.15;
+}
+
+.file-tile__cost {
+  float: right;
+}
+
+.file-tile__description {
+  color: #444;
+  margin-top: 12px;
+  font-size: 0.9em;
+}
