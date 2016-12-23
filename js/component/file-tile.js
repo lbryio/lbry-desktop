@@ -38,7 +38,7 @@ let FileTile = React.createClass({
     }
   },
   render: function() {
-    var obscureNsfw = !lbry.getClientSetting('showNsfw') && this.props.nsfw;
+    let obscureNsfw = !lbry.getClientSetting('showNsfw') && this.props.nsfw;
     return (
       <section className={ 'file-tile card ' + (obscureNsfw ? 'card-obscured ' : '') + (this.props.compact ? 'file-tile--compact' : '')} onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
         <div className="row-fluid card-content file-tile__row">
@@ -70,15 +70,14 @@ let FileTile = React.createClass({
             </p>
           </div>
         </div>
-        {
-          !obscureNsfw || !this.state.isHovered ? null :
-            <div className='card-overlay'>
+        {obscureNsfw && this.state.isHovered
+          ? <div className='card-overlay'>
               <p>
                 This content is Not Safe For Work.
                 To view adult content, please change your <Link href="?settings" label="Settings" />.
               </p>
             </div>
-        }
+          : null}
       </section>
     );
   }
