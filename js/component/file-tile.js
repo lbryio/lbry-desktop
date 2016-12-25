@@ -4,12 +4,26 @@ import {Link, DownloadLink, WatchLink} from '../component/link.js';
 import {Thumbnail, TruncatedText, CreditAmount} from '../component/common.js';
 
 let FileTile = React.createClass({
+  propTypes: {
+    name: React.PropTypes.string.isRequired,
+    mediaType: React.PropTypes.string.isRequired, 
+    title: React.PropTypes.string.isRequired,
+    description: React.PropTypes.string,
+    compact: React.PropTypes.boolean,
+    cost: React.PropTypes.number,
+    costIncludesData: React.PropTypes.boolean,
+  },
   getInitialState: function() {
     return {
       downloading: false,
       isHovered: false,
       cost: null,
       costIncludesData: null,
+    }
+  },
+  getDefaultProps: function() {
+    return {
+      compact: false,
     }
   },
   handleMouseOver: function() {
