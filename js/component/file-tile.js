@@ -75,8 +75,10 @@ let FileTile = React.createClass({
             </h3>
             <div>
               {this.props.mediaType == 'video' ? <WatchLink streamName={this.props.name} button="primary" /> : null}
-              <DownloadLink streamName={this.props.name} button="text" />
-            </div>
+              {!this.props.isMine
+                ? <DownloadLink streamName={this.props.name} button="text" />
+                : null}
+             </div>
             <p className="file-tile__description">
               <TruncatedText lines={3}>
                 {this.props.description}

@@ -3,6 +3,7 @@ import lbry from '../lbry.js';
 import {Link, WatchLink} from '../component/link.js';
 import {Menu, MenuItem} from '../component/menu.js';
 import FormField from '../component/form.js';
+import FileTile from '../component/file-tile.js';
 import Modal from '../component/modal.js';
 import {BusyMessage, Thumbnail} from '../component/common.js';
 
@@ -93,77 +94,7 @@ var moreButtonColumnStyle = {
     marginLeft: 'auto',
     marginRight: 'auto',
   };
-var MyFilesRow = React.createClass({
-  onPauseResumeClicked: function() {
-    if (this.props.stopped) {
-      lbry.startFile(this.props.lbryUri);
-    } else {
-      lbry.stopFile(this.props.lbryUri);
-    }
-  },
-  render: function() {
-    //@TODO: Convert progress bar to reusable component
 
-    var progressBarWidth = 230;
-
-    if (this.props.completed) {
-      var pauseLink = null;
-      var curProgressBarStyle = {display: 'none'};
-    } else {
-      var pauseLink = <Link icon={this.props.stopped ? 'icon-play' : 'icon-pause'}
-                            label={this.props.stopped ? 'Resume download' : 'Pause download'}
-                            onClick={() => { this.onPauseResumeClicked() }} />;
-
-      var curProgressBarStyle = Object.assign({}, progressBarStyle);
-      curProgressBarStyle.width = Math.floor(this.props.ratioLoaded * progressBarWidth) + 'px';
-      curProgressBarStyle.borderRightWidth = progressBarWidth - Math.ceil(this.props.ratioLoaded * progressBarWidth) + 2;
-    }
-
-    if (this.props.showWatchButton) {
-      var watchButton = <WatchLink streamName={this.props.lbryUri} />
-    } else {
-      var watchButton = null;
-    }
-
-    return (
-      <section className="card">
-        <div className="row-fluid">
-          <div className="span3">
-            <Thumbnail src={this.props.imgUrl} alt={'Photo for ' + this.props.title} style={artStyle} />
-          </div>
-          <div className="span8">
-            <h3>{this.props.pending ? this.props.title : <a href={'/?show=' + this.props.lbryUri}>{this.props.title}</a>}</h3>
-            {this.props.pending ? <em>This file is pending confirmation</em>
-              : (
-               <div>
-                 <div className={this.props.completed ? 'hidden' : ''} style={curProgressBarStyle}></div>
-                 { ' ' }
-                 {this.props.completed
-                   ? (this.props.isMine
-                      ? 'Published'
-                      : 'Download complete')
-                   : (parseInt(this.props.ratioLoaded * 100) + '%')}
-                 <div>{ pauseLink }</div>
-                 <div>{ watchButton }</div>
-               </div>
-             )
-            }
-          </div>
-          <div className="span1" style={moreButtonColumnStyle}>
-            {this.props.pending ? null :
-             <div style={moreButtonContainerStyle}>
-               <Link style={moreButtonStyle} ref="moreButton" icon="icon-ellipsis-h" title="More Options" />
-               <MyFilesRowMoreMenu toggleButton={this.refs.moreButton} title={this.props.title}
-                                   completed={this.props.completed} lbryUri={this.props.lbryUri}
-                                   fileName={this.props.fileName} path={this.props.path}/>
-             </div>
-            }
-          </div>
-        </div>
-      </section>
-    );
-  }
-});
 
 var MyFilesPage = React.createClass({
   _fileTimeout: null,
@@ -354,7 +285,7 @@ var MyFilesPage = React.createClass({
         var mediaType = lbry.getMediaType(metadata.content_type, file_name);
         var showWatchButton = (mediaType == 'video');
 
-        content.push(<MyFilesRow key={lbry_uri} lbryUri={lbry_uri} title={title || ('lbry://' + lbry_uri)} completed={completed} stopped={stopped}
+        content.push(<FileTile key={lbry_uri} lbryUri={lbry_uri} title={title || ('lbry://' + lbry_uri)} completed={completed} stopped={stopped}
                                  ratioLoaded={ratioLoaded} imgUrl={thumbnail} path={download_path}
                                  showWatchButton={showWatchButton} pending={pending}
                                  available={this.state.filesAvailable[sd_hash]} isMine={this.props.show == 'published'} />);
