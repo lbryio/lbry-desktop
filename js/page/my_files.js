@@ -2,6 +2,7 @@ import React from 'react';
 import lbry from '../lbry.js';
 import {Link, WatchLink} from '../component/link.js';
 import {Menu, MenuItem} from '../component/menu.js';
+import FormField from '../component/form.js';
 import Modal from '../component/modal.js';
 import {BusyMessage, Thumbnail} from '../component/common.js';
 
