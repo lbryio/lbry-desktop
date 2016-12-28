@@ -242,6 +242,22 @@ lbry.getFilesInfo = function(callback) {
   lbry.call('get_lbry_files', {}, callback);
 }
 
+lbry.getFileInfoByName = function(name, callback) {
+  lbry.call('get_lbry_file', {name: name}, callback);
+}
+
+lbry.getFileInfoBySdHash = function(sdHash, callback) {
+  lbry.call('get_lbry_file', {sd_hash: sdHash}, callback);
+}
+
+lbry.getFileInfoByFilename = function(filename, callback) {
+  lbry.call('get_lbry_file', {file_name: filename}, callback);
+}
+
+lbry.getMyClaims = function(callback) {
+  lbry.call('get_name_claims', {}, callback);
+}
+
 lbry.startFile = function(name, callback) {
   lbry.call('start_lbry_file', { name: name }, callback);
 }
