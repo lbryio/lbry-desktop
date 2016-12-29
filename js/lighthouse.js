@@ -5,9 +5,9 @@ var lighthouse = {
   _max_search_tries: 5,
 
   servers: [
-    'http://lighthouse1.lbry.io:50005',
-    'http://lighthouse2.lbry.io:50005',
-    'http://lighthouse3.lbry.io:50005',
+    'http://lighthouse4.lbry.io:50005',
+    'http://lighthouse5.lbry.io:50005',
+    'http://lighthouse6.lbry.io:50005',
   ],
   path: '/',
 
