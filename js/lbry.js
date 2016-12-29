@@ -207,7 +207,7 @@ lbry.getCostInfoForName = function(name, callback) {
    *   - includes_data: Boolean; indicates whether or not the data fee info
    *     from Lighthouse is included.
    */
-  function getCostWithData(size, callback) {
+  function getCostWithData(name, size, callback) {
     lbry.getTotalCost(name, size, (cost) => {
       callback({
         cost: cost,
