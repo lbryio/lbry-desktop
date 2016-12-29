@@ -1,3 +1,9 @@
+import React from 'react';
+import lbry from '../lbry.js';
+import lighthouse from '../lighthouse.js';
+import {CreditAmount, Thumbnail} from '../component/common.js';
+import {Link, DownloadLink, WatchLink} from '../component/link.js';
+
 var formatItemImgStyle = {
   maxWidth: '100%',
   maxHeight: '100%',
@@ -10,9 +16,9 @@ var formatItemImgStyle = {
 var FormatItem = React.createClass({
   propTypes: {
     claimInfo: React.PropTypes.object,
-    amount: React.PropTypes.number,
+    cost: React.PropTypes.number,
     name: React.PropTypes.string,
-    available: React.PropTypes.bool,
+    costIncludesData: React.PropTypes.bool,
   },
   render: function() {
 
@@ -25,8 +31,8 @@ var FormatItem = React.createClass({
     var license = claimInfo.license;
     var fileContentType = (claimInfo.content_type || claimInfo['content-type']);
     var mediaType = lbry.getMediaType(fileContentType);
-    var available = this.props.available;
-    var amount = this.props.amount || 0.0;
+    var costIncludesData = this.props.costIncludesData;
+    var cost = this.props.cost || 0.0;
 
     return (
       <div className="row-fluid">
@@ -42,7 +48,7 @@ var FormatItem = React.createClass({
                   <td>Content-Type</td><td>{fileContentType}</td>
                 </tr>
                 <tr>
-                  <td>Cost</td><td><CreditAmount amount={amount} isEstimate={!available}/></td>
+                  <td>Cost</td><td><CreditAmount amount={cost} isEstimate={!costIncludesData}/></td>
                 </tr>
                 <tr>
                   <td>Author</td><td>{author}</td>
@@ -72,9 +78,9 @@ var FormatItem = React.createClass({
 var FormatsSection = React.createClass({
   propTypes: {
     claimInfo: React.PropTypes.object,
-    amount: React.PropTypes.number,
+    cost: React.PropTypes.number,
     name: React.PropTypes.string,
-    available: React.PropTypes.bool,
+    costIncludesData: React.PropTypes.bool,
   },
   render: function() {
     var name = this.props.name;
@@ -96,7 +102,7 @@ var FormatsSection = React.createClass({
       {/* In future, anticipate multiple formats, just a guess at what it could look like
       // var formats = this.props.claimInfo.formats
       // return (<tbody>{formats.map(function(format,i){ */}
-          <FormatItem claimInfo={format} amount={this.props.amount} name={this.props.name} available={this.props.available} />
+          <FormatItem claimInfo={format} cost={this.props.cost} name={this.props.name} costIncludesData={this.props.costIncludesData} />
       {/*  })}</tbody>); */}
       </div>);
   }
@@ -108,50 +114,44 @@ var DetailPage = React.createClass({
   },
   getInitialState: function() {
     return {
-      claimInfo: null,
-      amount: null,
-      searching: true,
-      matchFound: null,
+      metadata: null,
+      cost: null,
+      costIncludesData: null,
+      nameLookupComplete: null,
     };
   },
   componentWillMount: function() {
     document.title = 'lbry://' + this.props.name;
 
-    lbry.lighthouse.search(this.props.name, (results) => {
-      var result = results[0];
+    lbry.resolveName(this.props.name, (metadata) => {
+      this.setState({
+        metadata: metadata,
+        nameLookupComplete: true,
+      });
+    });
 
-      if (result.name != this.props.name) {
-        this.setState({
-          searching: false,
-          matchFound: false,
-        });
-      } else {
-        this.setState({
-          amount: result.cost,
-          available: result.available,
-          claimInfo: result.value,
-          searching: false,
-          matchFound: true,
-        });  
-      }
+    lbry.getCostInfoForName(this.props.name, ({cost, includesData}) => {
+      this.setState({
+        cost: cost,
+        costIncludesData: includesData,
+      });
     });
   },
   render: function() {
-    if (this.state.claimInfo == null && this.state.searching) {
-      // Still waiting for metadata
+    if (this.state.metadata == null) {
       return null;
     }
 
-    var name = this.props.name;
-    var available = this.state.available;
-    var claimInfo = this.state.claimInfo;
-    var amount = this.state.amount;
+    const name = this.props.name;
+    const costIncludesData = this.state.costIncludesData;
+    const metadata = this.state.metadata;
+    const cost = this.state.cost;
 
     return (
       <main>
         <section className="card">
-          {this.state.matchFound ? (
-            <FormatsSection name={name} claimInfo={claimInfo} amount={amount} available={available} />
+          {this.state.nameLookupComplete ? (
+            <FormatsSection name={name} claimInfo={metadata} cost={cost} costIncludesData={costIncludesData} />
           ) : (
             <div>
               <h2>No content</h2>
@@ -162,3 +162,5 @@ var DetailPage = React.createClass({
       </main>);
   }
 });
+
+export default DetailPage;

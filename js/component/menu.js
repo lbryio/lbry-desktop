@@ -1,9 +1,13 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+import {Icon} from './common.js';
+
 // Generic menu styles
-var menuStyle = {
+export let menuStyle = {
   whiteSpace: 'nowrap'
 };
 
-var Menu = React.createClass({
+export let Menu = React.createClass({
   handleWindowClick: function(e) {
     if (this.props.toggleButton && ReactDOM.findDOMNode(this.props.toggleButton).contains(e.target)) {
       // Toggle button was clicked
@@ -40,10 +44,10 @@ var Menu = React.createClass({
   }
 });
 
-var menuItemStyle = {
+export let menuItemStyle = {
   display: 'block',
 };
-var MenuItem = React.createClass({
+export let MenuItem = React.createClass({
   propTypes: {
     href: React.PropTypes.string,
     label: React.PropTypes.string,

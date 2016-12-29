@@ -1,9 +1,14 @@
 //@TODO: Customize advice based on OS
+//@TODO: Customize advice based on OS
+import React from 'react';
+import lbry from '../lbry.js';
+import {Link} from '../component/link.js';
 
 var HelpPage = React.createClass({
   getInitialState: function() {
     return {
       versionInfo: null,
+      lbryId: null,
     };
   },
   componentWillMount: function() {
@@ -12,26 +17,34 @@ var HelpPage = React.createClass({
         versionInfo: info,
       });
     });
+    lbry.getSessionInfo((info) => {
+      this.setState({
+        lbryId: info.lbry_id,
+      });
+    });
   },
   componentDidMount: function() {
     document.title = "Help";
   },
   render: function() {
-    var ver = this.state.versionInfo;
+    let ver, osName, platform, newVerLink;
+    if (this.state.versionInfo) {
+      ver = this.state.versionInfo;
 
-    if (ver) {
       if (ver.os_system == 'Darwin') {
-        var osName = (parseInt(ver.os_release.match(/^\d+/)) < 16 ? 'Mac OS X' : 'Mac OS');
+        osName = (parseInt(ver.os_release.match(/^\d+/)) < 16 ? 'Mac OS X' : 'Mac OS');
 
-        var platform = osName + ' ' + ver.os_release;
-        var newVerLink = 'https://lbry.io/get/lbry.dmg';
+        platform = `${osName} ${ver.os_release}`
+        newVerLink = 'https://lbry.io/get/lbry.dmg';
       } else if (ver.os_system == 'Linux') {
-        var platform = 'Linux (' + ver.platform + ')';
-        var newVerLink = 'https://lbry.io/get/lbry.deb';
+        platform = `Linux (${ver.platform})`;
+        newVerLink = 'https://lbry.io/get/lbry.deb';
       } else {
-        var platform = 'Windows (' + ver.platform + ')';
-        var newVerLink = 'https://lbry.io/get/lbry.msi';
+        platform = `Windows (${ver.platform})`;
+        newVerLink = 'https://lbry.io/get/lbry.msi';
       }
+    } else {
+      ver = null;
     }
 
     return (
@@ -60,7 +73,7 @@ var HelpPage = React.createClass({
           <section className="card">
             <h3>About</h3>
             {ver.lbrynet_update_available || ver.lbryum_update_available ?
-              <p>A newer version of LBRY is available. <Link href={newVerLink} label={"Download LBRY " + ver.remote_lbrynet + " now!"} /></p>
+              <p>A newer version of LBRY is available. <Link href={newVerLink} label={`Download LBRY ${ver.remote_lbrynet} now!`} /></p>
               : <p>Your copy of LBRY is up to date.</p>
             }
             <table className="table-standard">
@@ -77,6 +90,10 @@ var HelpPage = React.createClass({
                   <th>Platform</th>
                   <td>{platform}</td>
                 </tr>
+                <tr>
+                  <th>Installation ID</th>
+                  <td>{this.state.lbryId}</td>
+                </tr>
               </tbody>
             </table>
           </section>
@@ -85,3 +102,5 @@ var HelpPage = React.createClass({
     );
   }
 });
+
+export default HelpPage;

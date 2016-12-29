@@ -1,3 +1,10 @@
+import React from 'react';
+import lbry from '../lbry.js';
+import {Link} from '../component/link.js';
+import Modal from '../component/modal.js';
+import {Address, BusyMessage, CreditAmount} from '../component/common.js';
+
+
 var addressRefreshButtonStyle = {
   fontSize: '11pt',
 };
@@ -8,7 +15,7 @@ var AddressSection = React.createClass({
     }
 
     lbry.getNewAddress((address) => {
-      localStorage.setItem('wallet_address', address);
+      window.localStorage.setItem('wallet_address', address);
       this.setState({
         address: address,
       });
@@ -21,7 +28,7 @@ var AddressSection = React.createClass({
     }
   },
   componentWillMount: function() {
-    var address = localStorage.getItem('wallet_address');
+    var address = window.localStorage.getItem('wallet_address');
     if (address === null) {
       this._refreshAddress();
     } else {
@@ -272,3 +279,5 @@ var WalletPage = React.createClass({
     );
   }
 });
+
+export default WalletPage;

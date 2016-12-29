@@ -1,3 +1,6 @@
+import React from 'react';
+import {Link} from './link.js';
+
 var Header = React.createClass({
   getInitialState: function() {
     return {
@@ -82,3 +85,5 @@ var SubHeader =  React.createClass({
     );
   }
 });
+
+export default Header;

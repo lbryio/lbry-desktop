@@ -1,3 +1,11 @@
+import React from 'react';
+import lbry from '../lbry.js';
+import {Link, WatchLink} from '../component/link.js';
+import {Menu, MenuItem} from '../component/menu.js';
+import FormField from '../component/form.js';
+import Modal from '../component/modal.js';
+import {BusyMessage, Thumbnail} from '../component/common.js';
+
 var moreMenuStyle = {
   position: 'absolute',
   display: 'block',
@@ -24,7 +32,12 @@ var MyFilesRowMoreMenu = React.createClass({
   },
   handleDeleteConfirmed: function() {
     lbry.deleteFile(this.props.lbryUri);
-    lbry.setState({
+    this.setState({
+      modal: null,
+    });
+  },
+  closeModal: function() {
+    this.setState({
       modal: null,
     });
   },
@@ -43,7 +56,8 @@ var MyFilesRowMoreMenu = React.createClass({
             <MenuItem onClick={this.handleDeleteClicked} label="Remove and delete file" />
           </section>
         </Menu>
-        <Modal isOpen={this.state.modal == 'confirmDelete'} type="confirm" confirmButtonLabel="Delete File" onConfirmed={this.handleDeleteConfirmed}>
+        <Modal isOpen={this.state.modal == 'confirmDelete'} type="confirm" confirmButtonLabel="Delete File"
+               onConfirmed={this.handleDeleteConfirmed} onAborted={this.closeModal}>
           Are you sure you'd like to delete <cite>{this.props.title}</cite>? This will {this.props.completed ? ' stop the download and ' : ''}
           permanently remove the file from your system.
         </Modal>
@@ -153,14 +167,33 @@ var MyFilesRow = React.createClass({
 
 var MyFilesPage = React.createClass({
   _fileTimeout: null,
+  _fileInfoCheckRate: 300,
   _fileInfoCheckNum: 0,
-  _filesOwnership: {},
+  _sortFunctions: {
+    date: function(filesInfo) {
+      return filesInfo.reverse();
+    },
+    title: function(filesInfo) {
+      return filesInfo.sort(function(a, b) {
+        console.log('in title sort. a is', a, '; b is', b)
+        return ((a.metadata ? a.metadata.title.toLowerCase() : a.name) >
+                (b.metadata ? b.metadata.title.toLowerCase() : b.name));
+      });
+    },
+    filename: function(filesInfo) {
+      return filesInfo.sort(function(a, b) {
+        return (a.file_name.toLowerCase() >
+                b.file_name.toLowerCase());
+      });
+    },
+  },
 
   getInitialState: function() {
     return {
       filesInfo: null,
-      filesOwnershipLoaded: false,
+      publishedFilesSdHashes: null,
       filesAvailable: {},
+      sortBy: 'date',
     };
   },
   getDefaultProps: function() {
@@ -172,8 +205,30 @@ var MyFilesPage = React.createClass({
     document.title = "My Files";
   },
   componentWillMount: function() {
-    this.getFilesOwnership();
-    this.updateFilesInfo();
+    if (this.props.show == 'downloaded') {
+      this.getPublishedFilesSdHashes(() => {
+        this.updateFilesInfo();
+      });
+    } else {
+      this.updateFilesInfo();
+    }
+  },
+  getPublishedFilesSdHashes: function(callback) {
+    // Determines which files were published by the user and saves their SD hashes in
+    // this.state.publishedFilesSdHashes. Used on the Downloads page to filter out claims published
+    // by the user.
+    var publishedFilesSdHashes = [];
+    lbry.getMyClaims((claimsInfo) => {
+      for (let claimInfo of claimsInfo) {
+        let metadata = JSON.parse(claimInfo.value);
+        publishedFilesSdHashes.push(metadata.sources.lbry_sd_hash);
+      }
+
+      this.setState({
+        publishedFilesSdHashes: publishedFilesSdHashes,
+      });
+      callback();
+    });
   },
   componentWillUnmount: function() {
     if (this._fileTimeout)
@@ -181,102 +236,95 @@ var MyFilesPage = React.createClass({
       clearTimeout(this._fileTimeout);
     }
   },
-  getFilesOwnership: function() {
-    lbry.getFilesInfo((filesInfo) => {
-      if (!filesInfo) {
-        this.setState({
-          filesOwnershipLoaded: true,
-        });
-        return;
-      }
-
-      var ownershipLoadedCount = 0;
-      for (let i = 0; i < filesInfo.length; i++) {
-        let fileInfo = filesInfo[i];
-        lbry.call('get_my_claim', {name: fileInfo.lbry_uri}, (claim) => {
-          this._filesOwnership[fileInfo.lbry_uri] = !!claim;
-          ownershipLoadedCount++;
-          if (ownershipLoadedCount >= filesInfo.length) {
-            this.setState({
-              filesOwnershipLoaded: true,
-            });
-          }
-        }, (claim) => {
-          this._filesOwnership[fileInfo.lbry_uri] = true;
-          ownershipLoadedCount++;
-          if (ownershipLoadedCount >= filesInfo.length) {
-            this.setState({
-              filesOwnershipLoaded: true,
-            });
-          }
-        });
-      }
+  setFilesInfo: function(filesInfo) {
+    this.setState({
+      filesInfo: this._sortFunctions[this.state.sortBy](filesInfo),
+    });
+  },
+  handleSortChanged: function(event) {
+    this.setState({
+      sortBy: event.target.value,
+      filesInfo: this._sortFunctions[event.target.value](this.state.filesInfo),
     });
   },
   updateFilesInfo: function() {
-    lbry.getFilesInfo((filesInfo) => {
-      if (!filesInfo) {
-        filesInfo = [];
-      }
+    this._fileInfoCheckNum += 1;
 
-      if (!(this._fileInfoCheckNum % 5)) {
-        // Time to update file availability status
+    if (this.props.show == 'published') {
+      // We're in the Published tab, so populate this.state.filesInfo with data from the user's claims
+      lbry.getMyClaims((claimsInfo) => {
+        let newFilesInfo = [];
+        let claimInfoProcessedCount = 0;
+        for (let claimInfo of claimsInfo) {
+          let metadata = JSON.parse(claimInfo.value);
+          lbry.getFileInfoBySdHash(metadata.sources.lbry_sd_hash, (fileInfo) => {
+            claimInfoProcessedCount++;
+            if (fileInfo !== false) {
+              newFilesInfo.push(fileInfo);
+            }
+            if (claimInfoProcessedCount >= claimsInfo.length) {
+              this.setFilesInfo(newFilesInfo);
 
-        for (let fileInfo of filesInfo) {
-          let name = fileInfo.lbry_uri;
-
-          if (name === null) {
-            continue;
-          }
-
-          lbry.lighthouse.search(name, (results) => {
-            var result = results[0];
-
-            var available = result.name == name && result.available;
-
-            if (typeof this.state.filesAvailable[name] === 'undefined' || available != this.state.filesAvailable[name]) {
-              var newFilesAvailable = Object.assign({}, this.state.filesAvailable);
-              newFilesAvailable[name] = available;
-              this.setState({
-                filesAvailable: newFilesAvailable,
-              });
+              this._fileTimeout = setTimeout(() => { this.updateFilesInfo() }, 1000);
             }
           });
         }
-      }
-
-      this._fileInfoCheckNum += 1;
-
-      this.setState({
-        filesInfo: filesInfo,
       });
+    } else {
+      // We're in the Downloaded tab, so populate this.state.filesInfo with files the user has in
+      // lbrynet, with published files filtered out.
+      lbry.getFilesInfo((filesInfo) => {
+        this.setFilesInfo(filesInfo.filter(({sd_hash}) => {
+          return this.state.publishedFilesSdHashes.indexOf(sd_hash) == -1;
+        }));
 
-      this._fileTimeout = setTimeout(() => { this.updateFilesInfo() }, 1000);
-    });
+        let newFilesAvailable;
+        if (!(this._fileInfoCheckNum % this._fileInfoCheckRate)) {
+          // Time to update file availability status
+
+          newFilesAvailable = {};
+          let filePeersCheckCount = 0;
+          for (let {sd_hash} of filesInfo) {
+            lbry.getPeersForBlobHash(sd_hash, (peers) => {
+              filePeersCheckCount++;
+              newFilesAvailable[sd_hash] = peers.length >= 0;
+              if (filePeersCheckCount >= filesInfo.length) {
+                this.setState({
+                  filesAvailable: newFilesAvailable,
+                });
+              }
+            });
+          }
+        }
+
+        this._fileTimeout = setTimeout(() => { this.updateFilesInfo() }, 1000);
+      })
+    }
   },
   render: function() {
-    if (this.state.filesInfo === null || !this.state.filesOwnershipLoaded) {
+    if (this.state.filesInfo === null || (this.props.show == 'downloaded' && this.state.publishedFileSdHashes === null)) {
       return (
         <main className="page">
           <BusyMessage message="Loading" />
         </main>
       );
-    }
-
-    if (!this.state.filesInfo.length) {
-      var content = <span>You haven't downloaded anything from LBRY yet. Go <Link href="/" label="search for your first download" />!</span>;
+    } else if (!this.state.filesInfo.length) {
+      return (
+        <main className="page">
+          {this.props.show == 'downloaded'
+            ? <span>You haven't downloaded anything from LBRY yet. Go <Link href="/" label="search for your first download" />!</span>
+            : <span>You haven't published anything to LBRY yet.</span>}
+        </main>
+      );
     } else {
       var content = [],
           seenUris = {};
 
       for (let fileInfo of this.state.filesInfo) {
         let {completed, written_bytes, total_bytes, lbry_uri, file_name, download_path,
-          stopped, metadata} = fileInfo;
+          stopped, metadata, sd_hash} = fileInfo;
 
-        var isMine = this._filesOwnership[lbry_uri];
-
-        if (!metadata || seenUris[lbry_uri] || (this.props.show == 'downloaded' && isMine) ||
-            (this.props.show == 'published' && !isMine)) {
+        if (!metadata || seenUris[lbry_uri]) {
           continue;
         }
 
@@ -301,13 +349,24 @@ var MyFilesPage = React.createClass({
         content.push(<MyFilesRow key={lbry_uri} lbryUri={lbry_uri} title={title || ('lbry://' + lbry_uri)} completed={completed} stopped={stopped}
                                  ratioLoaded={ratioLoaded} imgUrl={thumbnail} path={download_path}
                                  showWatchButton={showWatchButton} pending={pending}
-                                 available={this.state.filesAvailable[lbry_uri]} isMine={isMine} />);
+                                 available={this.state.filesAvailable[sd_hash]} isMine={this.props.show == 'published'} />);
       }
     }
     return (
       <main className="page">
+        <span className='sort-section'>
+          Sort by { ' ' }
+          <FormField type="select" onChange={this.handleSortChanged}>
+            <option value="date">Date</option>
+            <option value="title">Title</option>
+            <option value="filename">File name</option>
+          </FormField>
+        </span>
         {content}
       </main>
     );
   }
 });
+
+
+export default MyFilesPage;

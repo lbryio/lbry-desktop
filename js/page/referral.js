@@ -1,3 +1,8 @@
+import React from 'react';
+import lbry from '../lbry.js';
+import {Link} from '../component/link.js';
+import Modal from '../component/modal.js';
+
 var referralCodeContentStyle = {
   display: 'inline-block',
   textAlign: 'left',
@@ -105,7 +110,7 @@ var ReferralPage = React.createClass({
         </form>
         <Modal isOpen={this.state.modal == 'referralInfo'} onConfirmed={this.handleFinished}>
           {this.state.referralCredits > 0
-            ? `You have earned {response.referralCredits} credits from referrals. We will credit your account shortly. Thanks!`
+            ? `You have earned ${response.referralCredits} credits from referrals. We will credit your account shortly. Thanks!`
             : 'You have not earned any new referral credits since the last time you checked. Please check back in a week or two.'}
         </Modal>
         <Modal isOpen={this.state.modal == 'lookupFailed'} onConfirmed={this.closeModal}>
@@ -118,3 +123,5 @@ var ReferralPage = React.createClass({
     );
   }
 });
+
+export default ReferralPage;

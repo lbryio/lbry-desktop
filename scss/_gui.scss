@@ -234,6 +234,65 @@ input[type="text"], input[type="search"]
   }
 }
 
+.form-field-container {
+  display: inline-block;
+}
+
+.form-field-advice-container {
+  position: relative;
+}
+
+.form-field-advice {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+
+  display: flex;
+  flex-direction: column;
+
+  white-space: nowrap;
+
+  transition: opacity 400ms ease-in;
+}
+
+.form-field-advice--fading {
+  opacity: 0;
+}
+
+.form-field-advice__arrow {
+  text-align: left;
+  padding-left: 18px;
+
+  font-size: 22px;
+  line-height: 0.3;
+  color: darken($color-primary, 5%);
+}
+
+
+.form-field-advice__content-container {
+  display: inline-block;
+}
+
+.form-field-advice__content {
+  display: inline-block;
+
+  padding: 5px;
+  border-radius: 2px;
+
+  background-color: darken($color-primary, 5%);
+  color: #fff;
+}
+
+
+.sort-section {
+  display: block;
+  margin-bottom: 5px;
+
+
+  text-align: right;
+  font-size: 0.85em;
+  color: $color-help;
+}
 
 .modal-overlay {
   position: fixed;
@@ -302,4 +361,8 @@ input[type="text"], input[type="search"]
 .error-modal__warning-symbol {
   margin-top: 6px;
   margin-right: 7px;
+}
+
+.download-started-modal__file-path {
+  word-break: break-all;
 }

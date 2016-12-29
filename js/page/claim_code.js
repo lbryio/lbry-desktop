@@ -1,3 +1,8 @@
+import React from 'react';
+import lbry from '../lbry.js';
+import Modal from '../component/modal.js';
+import {Link} from '../component/link.js';
+
 var claimCodeContentStyle = {
   display: 'inline-block',
   textAlign: 'left',
@@ -126,10 +131,10 @@ var ClaimCodePage = React.createClass({
         <Modal isOpen={this.state.modal == 'codeRedeemed'} onConfirmed={this.handleFinished}>
           Your invite code has been redeemed.
           {this.state.referralCredits > 0
-            ? `You have also earned {referralCredits} credits from referrals. A total of {activationCredits + referralCredits}
+            ? `You have also earned ${referralCredits} credits from referrals. A total of ${activationCredits + referralCredits}
                     will be added to your balance shortly.`
             : (this.state.activationCredits > 0
-                ? `{this.state.activationCredits} credits will be added to your balance shortly.`
+                ? `${this.state.activationCredits} credits will be added to your balance shortly.`
                 : 'The credits will be added to your balance shortly.')}
         </Modal>
         <Modal isOpen={this.state.modal == 'skipped'} onConfirmed={this.handleFinished}>
@@ -143,3 +148,5 @@ var ClaimCodePage = React.createClass({
     );
   }
 });
+
+export default ClaimCodePage;

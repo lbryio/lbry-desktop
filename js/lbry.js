@@ -1,7 +1,10 @@
+import lighthouse from './lighthouse.js';
+
 var lbry = {
   isConnected: false,
   rootPath: '.',
   daemonConnectionString: 'http://localhost:5279/lbryapi',
+  webUiUri: 'http://localhost:5279',
   colors: {
     primary: '#155B4A'
   },
@@ -178,8 +181,57 @@ lbry.getMyClaim = function(name, callback) {
   lbry.call('get_my_claim', { name: name }, callback);
 }
 
-lbry.getCostEstimate = function(name, callback) {
+lbry.getKeyFee = function(name, callback) {
   lbry.call('get_est_cost', { name: name }, callback);
+}
+
+lbry.getTotalCost = function(name, size, callback) {
+  lbry.call('get_est_cost', {
+    name: name,
+    size: size,
+  }, callback);
+}
+
+lbry.getPeersForBlobHash = function(blobHash, callback) {
+  lbry.call('get_peers_for_hash', { blob_hash: blobHash }, callback)
+}
+
+lbry.getCostInfoForName = function(name, callback) {
+  /**
+   * Takes a LBRY name; will first try and calculate a total cost using
+   * Lighthouse. If Lighthouse can't be reached, it just retrives the
+   * key fee.
+   *
+   * Returns an object with members:
+   *   - cost: Number; the calculated cost of the name
+   *   - includes_data: Boolean; indicates whether or not the data fee info
+   *     from Lighthouse is included.
+   */
+  function getCostWithData(name, size, callback) {
+    lbry.getTotalCost(name, size, (cost) => {
+      callback({
+        cost: cost,
+        includesData: true,
+      });
+    });
+  }
+
+  function getCostNoData(name, callback) {
+    lbry.getKeyFee(name, (cost) => {
+      callback({
+        cost: cost,
+        includesData: false,
+      });
+    });
+  }
+
+  lighthouse.getSizeForName(name, (size) => {
+    getCostWithData(name, size, callback);
+  }, () => {
+    getCostNoData(name, callback);
+  }, () => {
+    getCostNoData(name, callback);
+  });
 }
 
 lbry.getFileStatus = function(name, callback) {
@@ -188,6 +240,22 @@ lbry.getFileStatus = function(name, callback) {
 
 lbry.getFilesInfo = function(callback) {
   lbry.call('get_lbry_files', {}, callback);
+}
+
+lbry.getFileInfoByName = function(name, callback) {
+  lbry.call('get_lbry_file', {name: name}, callback);
+}
+
+lbry.getFileInfoBySdHash = function(sdHash, callback) {
+  lbry.call('get_lbry_file', {sd_hash: sdHash}, callback);
+}
+
+lbry.getFileInfoByFilename = function(filename, callback) {
+  lbry.call('get_lbry_file', {file_name: filename}, callback);
+}
+
+lbry.getMyClaims = function(callback) {
+  lbry.call('get_name_claims', {}, callback);
 }
 
 lbry.startFile = function(name, callback) {
@@ -310,6 +378,9 @@ lbry.setClientSetting = function(setting, value) {
   return localStorage.setItem('setting_' + setting, JSON.stringify(value));
 }
 
+lbry.getSessionInfo = function(callback) {
+  lbry.call('get_lbry_session_info', {}, callback);
+}
 
 lbry.reportBug = function(message, callback) {
   lbry.call('upload_log', {
@@ -327,8 +398,15 @@ lbry.formatCredits = function(amount, precision)
 }
 
 lbry.formatName = function(name) {
-  // Converts LBRY name to standard format (all lower case, no special characters)
-  return name.toLowerCase().replace(/[^a-z0-9\-]/g, '');
+  // Converts LBRY name to standard format (all lower case, no special characters, spaces replaced by dashes)
+  name = name.replace('/\s+/g', '-');
+  name = name.toLowerCase().replace(/[^a-z0-9\-]/g, '');
+  return name;
+}
+
+lbry.nameIsValid = function(name, checkCase=true) {
+  const regexp = new RegExp('^[a-z0-9-]+$', checkCase ? '' : 'i');
+  return regexp.test(name);
 }
 
 lbry.loadJs = function(src, type, onload)
@@ -341,7 +419,7 @@ lbry.loadJs = function(src, type, onload)
   newScriptTag.type = type;
   if (onload)
   {
-    newScript.onload = onload;
+    newScriptTag.onload = onload;
   }
   lbryScriptTag.parentNode.insertBefore(newScriptTag, lbryScriptTag);
 }
@@ -380,3 +458,4 @@ lbry.stop = function(callback) {
 };
 
 
+export default lbry;

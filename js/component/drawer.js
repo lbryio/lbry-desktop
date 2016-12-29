@@ -1,3 +1,7 @@
+import lbry from '../lbry.js';
+import React from 'react';
+import {Link} from './link.js';
+
 var DrawerItem = React.createClass({
   getDefaultProps: function() {
     return {
@@ -47,3 +51,6 @@ var Drawer = React.createClass({
     );
   }
 });
+
+
+export default Drawer;

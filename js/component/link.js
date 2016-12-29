@@ -1,4 +1,10 @@
-var Link = React.createClass({
+import React from 'react';
+import lbry from '../lbry.js';
+import Modal from './modal.js';
+import {Icon, ToolTip} from './common.js';
+
+
+export let Link = React.createClass({
   handleClick: function() {
     if (this.props.onClick) {
       this.props.onClick();
@@ -27,7 +33,7 @@ var linkContainerStyle = {
   position: 'relative',
 };
 
-var ToolTipLink = React.createClass({
+export let ToolTipLink = React.createClass({
   getInitialState: function() {
     return {
       showTooltip: false,
@@ -73,7 +79,7 @@ var ToolTipLink = React.createClass({
   }
 });
 
-var DownloadLink = React.createClass({
+export let DownloadLink = React.createClass({
   propTypes: {
     type: React.PropTypes.string,
     streamName: React.PropTypes.string,
@@ -107,16 +113,16 @@ var DownloadLink = React.createClass({
       downloading: true
     });
 
-    lbry.getCostEstimate(this.props.streamName, (amount) => {
+    lbry.getCostInfoForName(this.props.streamName, ({cost}) => {
       lbry.getBalance((balance) => {
-        if (amount > balance) {
+        if (cost > balance) {
           this.setState({
             modal: 'notEnoughCredits',
             downloading: false
           });
         } else {
           lbry.getStream(this.props.streamName, (streamInfo) => {
-            if (typeof streamInfo !== 'object') {
+            if (streamInfo === null || typeof streamInfo !== 'object') {
               this.setState({
                 modal: 'timedOut',
                 downloading: false,
@@ -138,8 +144,9 @@ var DownloadLink = React.createClass({
       <span className="button-container">
         <Link button={this.props.button} hidden={this.props.hidden} style={this.props.style}
               disabled={this.state.downloading} label={label} icon={this.props.icon} onClick={this.handleClick} />
-        <Modal isOpen={this.state.modal == 'downloadStarted'} onConfirmed={this.closeModal}>
-          Downloading to {this.state.filePath}
+        <Modal className="download-started-modal" isOpen={this.state.modal == 'downloadStarted'} onConfirmed={this.closeModal}>
+          <p>Downloading to:</p>
+          <div className="download-started-modal__file-path">{this.state.filePath}</div>
         </Modal>
         <Modal isOpen={this.state.modal == 'notEnoughCredits'} onConfirmed={this.closeModal}>
           You don't have enough LBRY credits to pay for this stream.
@@ -152,7 +159,7 @@ var DownloadLink = React.createClass({
   }
 });
 
-var WatchLink = React.createClass({
+export let WatchLink = React.createClass({
   propTypes: {
     type: React.PropTypes.string,
     streamName: React.PropTypes.string,
@@ -165,9 +172,9 @@ var WatchLink = React.createClass({
     this.setState({
       loading: true,
     })
-    lbry.getCostEstimate(this.props.streamName, (amount) => {
+    lbry.getCostInfoForName(this.props.streamName, ({cost}) => {
       lbry.getBalance((balance) => {
-        if (amount > balance) {
+        if (cost > balance) {
           this.setState({
             modal: 'notEnoughCredits',
             loading: false,

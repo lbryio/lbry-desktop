@@ -1,3 +1,10 @@
+import React from 'react';
+import lbry from '../lbry.js';
+import FormField from '../component/form.js';
+import {Link} from '../component/link.js';
+import Modal from '../component/modal.js';
+
+
 var publishNumberStyle = {
   width: '50px',
 }, publishFieldLabelStyle = {
@@ -38,7 +45,14 @@ var PublishPage = React.createClass({
       }
     }
 
-    if (missingFieldFound) {
+    let fileProcessing = false;
+    if (this.state.fileInfo && !this.state.tempFileReady) {
+      this.refs.file.showAdvice('Your file is still processing.');
+      this.refs.file.focus();
+      fileProcessing = true;
+    }
+
+    if (missingFieldFound || fileProcessing) {
       this.setState({
         submitting: false,
       });
@@ -104,6 +118,7 @@ var PublishPage = React.createClass({
     this._tempFilePath = null;
 
     return {
+      rawName: '',
       name: '',
       bid: '',
       feeAmount: '',
@@ -145,6 +160,7 @@ var PublishPage = React.createClass({
 
     if (!rawName) {
       this.setState({
+        rawName: '',
         name: '',
         nameResolved: false,
       });
@@ -152,10 +168,19 @@ var PublishPage = React.createClass({
       return;
     }
 
-    var name = lbry.formatName(rawName);
+    if (!lbry.nameIsValid(rawName, false)) {
+      this.refs.name.showAdvice('LBRY names must contain only letters, numbers and dashes.');
+      return;
+    }
+
+    this.setState({
+      rawName: rawName,
+    });
+
+    var name = rawName.toLowerCase();
 
     lbry.resolveName(name, (info) => {
-      if (name != lbry.formatName(this.refs.name.getValue())) {
+      if (name != this.refs.name.getValue().toLowerCase()) {
         // A new name has been typed already, so bail
         return;
       }
@@ -164,6 +189,7 @@ var PublishPage = React.createClass({
         this.setState({
           name: name,
           nameResolved: false,
+          myClaimExists: false,
         });
       } else {
         lbry.getMyClaim(name, (myClaimInfo) => {
@@ -258,7 +284,7 @@ var PublishPage = React.createClass({
 
       var formData = new FormData(fileInput.form);
       formData.append('file', fileInput.files[0]);
-      xhr.open('POST', '/upload', true);
+      xhr.open('POST', lbry.webUiUri + '/upload', true);
       xhr.send(formData);
     }
   },
@@ -325,6 +351,7 @@ var PublishPage = React.createClass({
       }
     }
   },
+  // Also getting a type warning here too
   render: function() {
     return (
       <main ref="page">
@@ -332,7 +359,7 @@ var PublishPage = React.createClass({
           <section className="card">
             <h4>LBRY Name</h4>
             <div className="form-row">
-              lbry://<FormField type="text" ref="name" onChange={this.handleNameChange} />
+              lbry://<FormField type="text" ref="name" value={this.state.rawName} onChange={this.handleNameChange} />
               {
                 (!this.state.name ? '' :
                   (! this.state.nameResolved ? <em> The name <strong>{this.state.name}</strong> is available.</em>
@@ -477,3 +504,5 @@ var PublishPage = React.createClass({
     );
   }
 });
+
+export default PublishPage;

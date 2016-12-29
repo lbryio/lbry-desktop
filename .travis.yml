@@ -7,8 +7,7 @@ install:
 script:
   - mkdir -p dist/css dist/js
   - node_modules/.bin/node-sass scss/all.scss dist/css/all.css
-  - node_modules/.bin/babel -V
-  - node_modules/.bin/babel --presets es2015,react --out-dir dist/js js
+  - node_modules/.bin/webpack
   - mkdir upload
   - cd dist; zip -r ../upload/dist.zip *; cd -
   - .travis/echo_sha.sh > upload/data.json

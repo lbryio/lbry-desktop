@@ -1,3 +1,6 @@
+import React from 'react';
+import lbry from '../lbry.js';
+
 var ReportPage = React.createClass({
   submitMessage: function() {
     if (this._messageArea.value) {
@@ -51,3 +54,5 @@ var ReportPage = React.createClass({
     );
   }
 });
+
+export default ReportPage;
