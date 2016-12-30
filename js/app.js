@@ -39,7 +39,7 @@ var App = React.createClass({
     return {
       viewingPage: viewingPage,
       drawerOpen: drawerOpenRaw !== null ? JSON.parse(drawerOpenRaw) : true,
-      pageArgs: val,
+      pageArgs: typeof val !== 'undefined' ? val : null,
       errorInfo: null,
       modal: null,
       startNotice: null,
@@ -193,7 +193,7 @@ var App = React.createClass({
         return <PublishPage />;
       case 'discover':
       default:
-        return <DiscoverPage query={this.state.pageArgs} />;
+        return <DiscoverPage {... this.state.pageArgs !== null ? {query: this.state.pageArgs} : {} } />;
     }
   },
   render: function() {
