@@ -2,7 +2,7 @@ import React from 'react';
 import lbry from '../lbry.js';
 import lighthouse from '../lighthouse.js';
 import {Link, ToolTipLink, DownloadLink, WatchLink} from '../component/link.js';
-import {Thumbnail, CreditAmount, TruncatedText} from '../component/common.js';
+import {Thumbnail, CreditAmount, TruncatedText, BusyMessage} from '../component/common.js';
 
 var fetchResultsStyle = {
     color: '#888',
