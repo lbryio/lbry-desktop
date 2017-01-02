@@ -1,4 +1,6 @@
 import React from 'react';
+import {Link} from '../component/link.js';
+import Modal from '../component/modal.js';
 import lbry from '../lbry.js';
 
 var ReportPage = React.createClass({
