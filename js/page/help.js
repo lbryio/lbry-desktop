@@ -27,7 +27,7 @@ var HelpPage = React.createClass({
     document.title = "Help";
   },
   render: function() {
-    let ver, osName, platform, newVerLink;
+    let ver, osName, platform, newVerLink, uiVersion;
     if (this.state.versionInfo) {
       ver = this.state.versionInfo;
 
@@ -42,6 +42,12 @@ var HelpPage = React.createClass({
       } else {
         platform = `Windows (${ver.platform})`;
         newVerLink = 'https://lbry.io/get/lbry.msi';
+      }
+
+      if (ver.ui_version == 'user-specified') {
+        uiVersion = '(User specified)';
+      } else {
+        uiVersion = ver.ui_version || '(Unknown)';
       }
     } else {
       ver = null;
@@ -85,6 +91,10 @@ var HelpPage = React.createClass({
                 <tr>
                   <th>lbryum (wallet)</th>
                   <td>{ver.lbryum_version}</td>
+                </tr>
+                <tr>
+                  <th>lbry-web-ui (interface)</th>
+                  <td>{uiVersion}</td>
                 </tr>
                 <tr>
                   <th>Platform</th>
