@@ -386,10 +386,7 @@ lbry.getSessionInfo = function(callback) {
 }
 
 lbry.reportBug = function(message, callback) {
-  lbry.call('upload_log', {
-    name_prefix: 'report',
-    exclude_previous: false,
-    force: true,
+  lbry.call('report_bug', {
     message: message
   }, callback);
 }
