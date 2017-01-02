@@ -1,6 +1,6 @@
 @import "global";
 
-@mixin text-link($color: $color-primary, $hover-opacity: 0.70) {
+@mixin text-link($color: $color-primary, $hover-opacity: 0.70, $mirror: false) {
   color: $color;
   .icon
   {
@@ -26,6 +26,19 @@
     .icon {
       text-decoration: none;
     }
+  }
+
+  @if $mirror == false {
+    color: $color;
+  }
+  @else {
+    color: $color-bg;
+    background-color: $color;
+    position: absolute;
+    white-space: nowrap;
+    overflow: hidden;
+    top: 0px;
+    left: 0px;
   }
 }
 
@@ -138,6 +151,9 @@ input[type="text"], input[type="search"]
 }
 
 .button-container {
+  position: relative;
+  display: inline-block;
+
   + .button-container
   {
     margin-left: 12px;
@@ -181,6 +197,19 @@ input[type="text"], input[type="search"]
   background-color: rgba(0,0,0,.15);
   box-shadow: $default-box-shadow;
   padding: 0 12px;
+}
+.button-download
+{
+  padding: 0 6px;
+
+  text-decoration: none !important;
+
+  &:not(.button-download--mirror) {
+    @include text-link(darken($color-primary, 1%));
+  }
+  &.button-download--mirror {
+    @include text-link(darken($color-primary, 1%), $mirror: true);
+  }
 }
 .button-cancel
 {

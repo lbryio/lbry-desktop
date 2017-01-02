@@ -83,22 +83,20 @@ export let DownloadLink = React.createClass({
   propTypes: {
     type: React.PropTypes.string,
     streamName: React.PropTypes.string,
+    sdHash: React.PropTypes.string,
     label: React.PropTypes.string,
-    downloadingLabel: React.PropTypes.string,
     button: React.PropTypes.string,
-    style: React.PropTypes.object,
     hidden: React.PropTypes.bool,
   },
   getDefaultProps: function() {
     return {
       icon: 'icon-download',
       label: 'Download',
-      downloadingLabel: 'Downloading...',
+      downloading: false,
     }
   },
   getInitialState: function() {
     return {
-      downloading: false,
       filePath: null,
       modal: null,
     }
@@ -109,23 +107,17 @@ export let DownloadLink = React.createClass({
     })
   },
   handleClick: function() {
-    this.setState({
-      downloading: true
-    });
-
     lbry.getCostInfoForName(this.props.streamName, ({cost}) => {
       lbry.getBalance((balance) => {
         if (cost > balance) {
           this.setState({
             modal: 'notEnoughCredits',
-            downloading: false
           });
         } else {
           lbry.getStream(this.props.streamName, (streamInfo) => {
             if (streamInfo === null || typeof streamInfo !== 'object') {
               this.setState({
                 modal: 'timedOut',
-                downloading: false,
               });
             } else {
               this.setState({
@@ -139,11 +131,15 @@ export let DownloadLink = React.createClass({
     });
   },
   render: function() {
-    var label = (!this.state.downloading ? this.props.label : this.props.downloadingLabel);
+    const label = 'progress' in this.props ? `${parseInt(this.props.progress * 100)}% complete` : this.props.label;
     return (
       <span className="button-container">
-        <Link button={this.props.button} hidden={this.props.hidden} style={this.props.style}
-              disabled={this.state.downloading} label={label} icon={this.props.icon} onClick={this.handleClick} />
+        <Link className="button-download" button={this.props.button} hidden={this.props.hidden} label={label}
+              icon={this.props.icon} onClick={this.handleClick} />
+        {'progress' in this.props
+          ? <Link className="button-download button-download--mirror" button={this.props.button} hidden={this.props.hidden} label={label}
+                  icon={this.props.icon} onClick={this.handleClick} style={{width: `${this.props.progress * 100}%`}} />
+          : null}
         <Modal className="download-started-modal" isOpen={this.state.modal == 'downloadStarted'}
                contentLabel="Download started" onConfirmed={this.closeModal}>
           <p>Downloading to:</p>
@@ -168,7 +164,6 @@ export let WatchLink = React.createClass({
     streamName: React.PropTypes.string,
     label: React.PropTypes.string,
     button: React.PropTypes.string,
-    style: React.PropTypes.object,
     hidden: React.PropTypes.bool,
   },
   handleClick: function() {
@@ -207,7 +202,7 @@ export let WatchLink = React.createClass({
   },
   render: function() {
     return (
-      <span className="button-container">
+      <div className="button-container">
         <Link button={this.props.button} hidden={this.props.hidden} style={this.props.style}
               disabled={this.state.loading} label={this.props.label} icon={this.props.icon}
               onClick={this.handleClick} />
@@ -215,7 +210,7 @@ export let WatchLink = React.createClass({
                onConfirmed={this.closeModal}>
           You don't have enough LBRY credits to pay for this stream.
         </Modal>
-      </span>
+      </div>
     );
   }
 });
