@@ -4,6 +4,9 @@ import {Link, DownloadLink, WatchLink} from '../component/link.js';
 import {Thumbnail, TruncatedText, CreditAmount} from '../component/common.js';
 
 let FileTile = React.createClass({
+  _isMounted: false,
+  _statusCheckInterval: 5000,
+
   propTypes: {
     name: React.PropTypes.string.isRequired,
     mediaType: React.PropTypes.string.isRequired, 
@@ -13,12 +16,38 @@ let FileTile = React.createClass({
     cost: React.PropTypes.number,
     costIncludesData: React.PropTypes.boolean,
   },
+  updateFileInfo: function(progress=null) {
+    const updateStatusCallback = ((result) => {
+      if (!this._isMounted || 'fileInfo' in this.props) {
+        /**
+         * The component was unmounted, or a file info data structure has now been provided by the
+         * containing component.
+         */
+         return;
+      }
+
+      this.setState({
+        fileInfo: result || null,
+      });
+
+      setTimeout(() => { this.updateFileInfo() }, this._statusCheckInterval);
+    });
+
+    if ('sdHash' in this.props) {
+      lbry.getFileInfoBySdHash(this.props.sdHash, updateStatusCallback);
+    } else if ('name' in this.props) {
+      lbry.getFileInfoByName(this.props.name, updateStatusCallback);
+    } else {
+      throw new Error("No progress, stream name or sd hash passed to FileTile");
+    }
+  },
   getInitialState: function() {
     return {
       downloading: false,
       isHovered: false,
       cost: null,
       costIncludesData: null,
+      fileInfo: 'fileInfo' in this.props ? this.props.fileInfo : null,
     }
   },
   getDefaultProps: function() {
@@ -51,8 +80,23 @@ let FileTile = React.createClass({
       });
     }
   },
+  componentDidMount: function() {
+    this._isMounted = true;
+    this.updateFileInfo();
+  },
+  componentWillUnmount: function() {
+    this._isMounted = false;
+  },
   render: function() {
-    let obscureNsfw = !lbry.getClientSetting('showNsfw') && this.props.nsfw;
+    const obscureNsfw = !lbry.getClientSetting('showNsfw') && this.props.nsfw;
+
+    let downloadLinkExtraProps = {};
+    if (this.state.fileInfo !== null) {
+      const {written_bytes, total_bytes, completed} = this.state.fileInfo;
+      downloadLinkExtraProps['progress'] = written_bytes / total_bytes;
+      downloadLinkExtraProps['downloading'] = !completed;
+    }
+
     return (
       <section className={ 'file-tile card ' + (obscureNsfw ? 'card-obscured ' : '') + (this.props.compact ? 'file-tile--compact' : '')} onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
         <div className="row-fluid card-content file-tile__row">
@@ -76,7 +120,7 @@ let FileTile = React.createClass({
             <div>
               {this.props.mediaType == 'video' ? <WatchLink streamName={this.props.name} button="primary" /> : null}
               {!this.props.isMine
-                ? <DownloadLink streamName={this.props.name} button="text" />
+                ? <DownloadLink streamName={this.props.name} button="text" {... downloadLinkExtraProps}/>
                 : null}
              </div>
             <p className="file-tile__description">
