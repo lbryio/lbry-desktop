@@ -2,7 +2,7 @@ import React from 'react';
 import lbry from '../lbry.js';
 import lighthouse from '../lighthouse.js';
 import {Link, ToolTipLink, DownloadLink, WatchLink} from '../component/link.js';
-import {Thumbnail, CreditAmount, TruncatedText} from '../component/common.js';
+import {Thumbnail, CreditAmount, TruncatedText, BusyMessage} from '../component/common.js';
 
 var fetchResultsStyle = {
     color: '#888',
@@ -268,20 +268,27 @@ var DiscoverPage = React.createClass({
   componentDidUpdate: function() {
     if (this.props.query != this.state.query)
     {
-      this.handleSearchChanged();
+      this.handleSearchChanged(this.props.query);
     }
   },
 
-  handleSearchChanged: function() {
-    this.setState({
-      searching: true,
-      query: this.props.query,
-    });
-
-    lighthouse.search(this.props.query, this.searchCallback);
+  componentWillReceiveProps: function(nextProps, nextState) {
+    if (nextProps.query != nextState.query)
+    {
+      this.handleSearchChanged(nextProps.query);
+    }
   },
 
-  componentDidMount: function() {
+  handleSearchChanged: function(query) {
+    this.setState({
+      searching: true,
+      query: query,
+    });
+
+    lighthouse.search(query, this.searchCallback);
+  },
+
+  componentWillMount: function() {
     document.title = "Discover";
     if (this.props.query) {
       // Rendering with a query already typed
@@ -293,7 +300,7 @@ var DiscoverPage = React.createClass({
     return {
       results: [],
       query: this.props.query,
-      searching: this.props.query && this.props.query.length > 0
+      searching: ('query' in this.props) && (this.props.query.length > 0)
     };
   },
 
