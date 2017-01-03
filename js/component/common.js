@@ -30,8 +30,6 @@ export let TruncatedText = React.createClass({
     }
   },
   componentDidMount: function() {
-    console.log('span is', this.refs.span);
-    console.log('type of lines is', typeof this.props.lines)
     $clamp(this.refs.span, {
       clamp: this.props.lines || this.props.height || 'auto',
     });

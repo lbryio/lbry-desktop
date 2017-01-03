@@ -6,7 +6,7 @@ const PATHS = {
 };
 
 module.exports = {
-  entry: "./js/main.js",
+  entry: ['babel-polyfill', './js/main.js'],
   output: {
     path: path.join(PATHS.dist, 'js'),
     publicPath: '/js/',
