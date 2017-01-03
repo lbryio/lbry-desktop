@@ -1,6 +1,8 @@
 import React from 'react';
 import lbry from '../lbry.js';
+import LoadScreen from '../component/load_screen.js'
 import MediaElementPlayer from 'mediaelement';
+
 
 var WatchPage = React.createClass({
   propTypes: {
