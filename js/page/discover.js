@@ -292,7 +292,7 @@ var DiscoverPage = React.createClass({
     document.title = "Discover";
     if (this.props.query) {
       // Rendering with a query already typed
-      this.handleSearchChanged();
+      this.handleSearchChanged(this.props.query);
     }
   },
 
