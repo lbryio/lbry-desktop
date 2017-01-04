@@ -246,18 +246,28 @@ var MyFilesPage = React.createClass({
     if (this.props.show == 'published') {
       // We're in the Published tab, so populate this.state.filesInfo with data from the user's claims
       lbry.getMyClaims((claimsInfo) => {
-        let newFilesInfo = [];
+        /**
+         * Build newFilesInfo as a sparse array and drop elements in at the same position they
+         * occur in claimsInfo, so the order is preserved even if the API calls inside this loop
+         * return out of order.
+         */
+
+        let newFilesInfo = Array(claimsInfo.length);
         let claimInfoProcessedCount = 0;
-        for (let claimInfo of claimsInfo) {
+        for (let [i, claimInfo] of claimsInfo.entries()) {
           let metadata = JSON.parse(claimInfo.value);
           lbry.getFileInfoBySdHash(metadata.sources.lbry_sd_hash, (fileInfo) => {
             claimInfoProcessedCount++;
             if (fileInfo !== false) {
-              newFilesInfo.push(fileInfo);
+              newFilesInfo[i] = fileInfo;
             }
             if (claimInfoProcessedCount >= claimsInfo.length) {
+              /**
+               * newFilesInfo may have gaps from claims that don't have associated files in
+               * lbrynet, so filter out any missing elements
+               */
               this.setState({
-                filesInfo: newFilesInfo,
+                filesInfo: newFilesInfo.filter(function() { return true }),
               });
 
               this._fileTimeout = setTimeout(() => { this.updateFilesInfo() }, 1000);
