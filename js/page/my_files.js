@@ -175,7 +175,6 @@ var MyFilesPage = React.createClass({
     },
     title: function(filesInfo) {
       return filesInfo.sort(function(a, b) {
-        console.log('in title sort. a is', a, '; b is', b)
         return ((a.metadata ? a.metadata.title.toLowerCase() : a.name) >
                 (b.metadata ? b.metadata.title.toLowerCase() : b.name));
       });
@@ -236,15 +235,9 @@ var MyFilesPage = React.createClass({
       clearTimeout(this._fileTimeout);
     }
   },
-  setFilesInfo: function(filesInfo) {
-    this.setState({
-      filesInfo: this._sortFunctions[this.state.sortBy](filesInfo),
-    });
-  },
   handleSortChanged: function(event) {
     this.setState({
       sortBy: event.target.value,
-      filesInfo: this._sortFunctions[event.target.value](this.state.filesInfo),
     });
   },
   updateFilesInfo: function() {
@@ -253,17 +246,29 @@ var MyFilesPage = React.createClass({
     if (this.props.show == 'published') {
       // We're in the Published tab, so populate this.state.filesInfo with data from the user's claims
       lbry.getMyClaims((claimsInfo) => {
-        let newFilesInfo = [];
+        /**
+         * Build newFilesInfo as a sparse array and drop elements in at the same position they
+         * occur in claimsInfo, so the order is preserved even if the API calls inside this loop
+         * return out of order.
+         */
+
+        let newFilesInfo = Array(claimsInfo.length);
         let claimInfoProcessedCount = 0;
-        for (let claimInfo of claimsInfo) {
+        for (let [i, claimInfo] of claimsInfo.entries()) {
           let metadata = JSON.parse(claimInfo.value);
           lbry.getFileInfoBySdHash(metadata.sources.lbry_sd_hash, (fileInfo) => {
             claimInfoProcessedCount++;
             if (fileInfo !== false) {
-              newFilesInfo.push(fileInfo);
+              newFilesInfo[i] = fileInfo;
             }
             if (claimInfoProcessedCount >= claimsInfo.length) {
-              this.setFilesInfo(newFilesInfo);
+              /**
+               * newFilesInfo may have gaps from claims that don't have associated files in
+               * lbrynet, so filter out any missing elements
+               */
+              this.setState({
+                filesInfo: newFilesInfo.filter(function() { return true }),
+              });
 
               this._fileTimeout = setTimeout(() => { this.updateFilesInfo() }, 1000);
             }
@@ -274,9 +279,11 @@ var MyFilesPage = React.createClass({
       // We're in the Downloaded tab, so populate this.state.filesInfo with files the user has in
       // lbrynet, with published files filtered out.
       lbry.getFilesInfo((filesInfo) => {
-        this.setFilesInfo(filesInfo.filter(({sd_hash}) => {
-          return this.state.publishedFilesSdHashes.indexOf(sd_hash) == -1;
-        }));
+        this.setState({
+          filesInfo: filesInfo.filter(({sd_hash}) => {
+            return this.state.publishedFilesSdHashes.indexOf(sd_hash) == -1;
+          }),
+        });
 
         let newFilesAvailable;
         if (!(this._fileInfoCheckNum % this._fileInfoCheckRate)) {
@@ -320,7 +327,8 @@ var MyFilesPage = React.createClass({
       var content = [],
           seenUris = {};
 
-      for (let fileInfo of this.state.filesInfo) {
+      const filesInfoSorted = this._sortFunctions[this.state.sortBy](this.state.filesInfo);
+      for (let fileInfo of filesInfoSorted) {
         let {completed, written_bytes, total_bytes, lbry_uri, file_name, download_path,
           stopped, metadata, sd_hash} = fileInfo;
 

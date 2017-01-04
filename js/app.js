@@ -13,6 +13,7 @@ import DetailPage from './page/show.js';
 import PublishPage from './page/publish.js';
 import DiscoverPage from './page/discover.js';
 import SplashScreen from './component/splash.js';
+import DeveloperPage from './page/developer.js';
 import Drawer from './component/drawer.js';
 import Header from './component/header.js';
 import Modal from './component/modal.js';
@@ -39,7 +40,7 @@ var App = React.createClass({
     return {
       viewingPage: viewingPage,
       drawerOpen: drawerOpenRaw !== null ? JSON.parse(drawerOpenRaw) : true,
-      pageArgs: val,
+      pageArgs: typeof val !== 'undefined' ? val : null,
       errorInfo: null,
       modal: null,
       startNotice: null,
@@ -191,9 +192,11 @@ var App = React.createClass({
         return <DetailPage name={this.state.pageArgs} />;
       case 'publish':
         return <PublishPage />;
+      case 'developer':
+        return <DeveloperPage />;
       case 'discover':
       default:
-        return <DiscoverPage query={this.state.pageArgs} />;
+        return <DiscoverPage {... this.state.pageArgs !== null ? {query: this.state.pageArgs} : {} } />;
     }
   },
   render: function() {
