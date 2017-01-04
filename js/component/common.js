@@ -120,6 +120,7 @@ export let Address = React.createClass({
 export let Thumbnail = React.createClass({
   _defaultImageUri: '/img/default-thumb.svg',
   _maxLoadTime: 10000,
+  _isMounted: false,
 
   propTypes: {
     src: React.PropTypes.string.isRequired,
@@ -137,13 +138,17 @@ export let Thumbnail = React.createClass({
     };
   },
   componentDidMount: function() {
+    this._isMounted = true;
     setTimeout(() => {
-      if (!this.refs.img.complete) {
+      if (this._isMounted && !this.refs.img.complete) {
         this.setState({
           imageUri: this._defaultImageUri,
         });
       }
     }, this._maxLoadTime);
+  },
+  componentWillUnmount: function() {
+    this._isMounted = false;
   },
   render: function() {
     return <img ref="img" onError={this.handleError} {... this.props} src={this.state.imageUri} /> 
