@@ -175,7 +175,6 @@ var MyFilesPage = React.createClass({
     },
     title: function(filesInfo) {
       return filesInfo.sort(function(a, b) {
-        console.log('in title sort. a is', a, '; b is', b)
         return ((a.metadata ? a.metadata.title.toLowerCase() : a.name) >
                 (b.metadata ? b.metadata.title.toLowerCase() : b.name));
       });
@@ -236,15 +235,9 @@ var MyFilesPage = React.createClass({
       clearTimeout(this._fileTimeout);
     }
   },
-  setFilesInfo: function(filesInfo) {
-    this.setState({
-      filesInfo: this._sortFunctions[this.state.sortBy](filesInfo),
-    });
-  },
   handleSortChanged: function(event) {
     this.setState({
       sortBy: event.target.value,
-      filesInfo: this._sortFunctions[event.target.value](this.state.filesInfo),
     });
   },
   updateFilesInfo: function() {
@@ -263,7 +256,9 @@ var MyFilesPage = React.createClass({
               newFilesInfo.push(fileInfo);
             }
             if (claimInfoProcessedCount >= claimsInfo.length) {
-              this.setFilesInfo(newFilesInfo);
+              this.setState({
+                filesInfo: newFilesInfo,
+              });
 
               this._fileTimeout = setTimeout(() => { this.updateFilesInfo() }, 1000);
             }
@@ -274,9 +269,11 @@ var MyFilesPage = React.createClass({
       // We're in the Downloaded tab, so populate this.state.filesInfo with files the user has in
       // lbrynet, with published files filtered out.
       lbry.getFilesInfo((filesInfo) => {
-        this.setFilesInfo(filesInfo.filter(({sd_hash}) => {
-          return this.state.publishedFilesSdHashes.indexOf(sd_hash) == -1;
-        }));
+        this.setState({
+          filesInfo: filesInfo.filter(({sd_hash}) => {
+            return this.state.publishedFilesSdHashes.indexOf(sd_hash) == -1;
+          }),
+        });
 
         let newFilesAvailable;
         if (!(this._fileInfoCheckNum % this._fileInfoCheckRate)) {
@@ -320,7 +317,8 @@ var MyFilesPage = React.createClass({
       var content = [],
           seenUris = {};
 
-      for (let fileInfo of this.state.filesInfo) {
+      const filesInfoSorted = this._sortFunctions[this.state.sortBy](this.state.filesInfo);
+      for (let fileInfo of filesInfoSorted) {
         let {completed, written_bytes, total_bytes, lbry_uri, file_name, download_path,
           stopped, metadata, sd_hash} = fileInfo;
 
