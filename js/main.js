@@ -7,8 +7,8 @@ import SplashScreen from './component/splash.js';
 
 
 var init = function() {
+  window.lbry = lbry;
   if (lbry.getClientSetting('debug')) {
-    window.lbry = lbry;
     window.lighthouse = lighthouse;
   }
 
