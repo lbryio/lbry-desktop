@@ -122,7 +122,7 @@ var MyFilesPage = React.createClass({
     return {
       filesInfo: null,
       publishedFilesSdHashes: null,
-      filesAvailable: {},
+      filesAvailable: null,
       sortBy: 'date',
     };
   },
@@ -260,8 +260,7 @@ var MyFilesPage = React.createClass({
 
       const filesInfoSorted = this._sortFunctions[this.state.sortBy](this.state.filesInfo);
       for (let fileInfo of filesInfoSorted) {
-        let {completed, written_bytes, total_bytes, lbry_uri, file_name, download_path,
-          stopped, metadata, sd_hash} = fileInfo;
+        let {completed, lbry_uri, sd_hash, metadata, download_path, stopped, pending} = fileInfo;
 
         if (!metadata || seenUris[lbry_uri]) {
           continue;
@@ -269,26 +268,9 @@ var MyFilesPage = React.createClass({
 
         seenUris[lbry_uri] = true;
 
-        let {title, thumbnail} = metadata;
-
-        if (!fileInfo.pending && typeof metadata == 'object') {
-          var {title, thumbnail} = metadata;
-          var pending = false;
-        } else {
-          var title = null;
-          var thumbnail = null;
-          var pending = true;
-        }
-
-        var ratioLoaded = written_bytes / total_bytes;
-
-        var mediaType = lbry.getMediaType(metadata.content_type, file_name);
-        var showWatchButton = (mediaType == 'video');
-
-        content.push(<FileTile key={lbry_uri} lbryUri={lbry_uri} title={title || ('lbry://' + lbry_uri)} completed={completed} stopped={stopped}
-                                 ratioLoaded={ratioLoaded} imgUrl={thumbnail} path={download_path}
-                                 showWatchButton={showWatchButton} pending={pending}
-                                 available={this.state.filesAvailable[sd_hash]} isMine={this.props.show == 'published'} />);
+        content.push(<FileTile name={lbry_uri} sdHash={sd_hash} isMine={this.props.show == 'published'} local={true}
+                               metadata={metadata} completed={completed} stopped={stopped} pending={pending} path={download_path}
+                               {... this.state.filesAvailable !== null ? {available: this.state.filesAvailable[sd_hash]} : {}} />);
       }
     }
     return (
