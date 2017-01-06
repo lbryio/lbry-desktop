@@ -198,16 +198,17 @@ input[type="text"], input[type="search"]
   box-shadow: $default-box-shadow;
   padding: 0 12px;
 }
+
 .button-download
 {
   padding: 0 6px;
 
   text-decoration: none !important;
 
-  &:not(.button-download--mirror) {
+  &.button-download--bg  {
     @include text-link(darken($color-primary, 1%));
   }
-  &.button-download--mirror {
+  &.button-download--fg {
     @include text-link(darken($color-primary, 1%), $mirror: true);
   }
 }

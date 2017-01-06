@@ -86,27 +86,12 @@ export let DownloadLink = React.createClass({
     sdHash: React.PropTypes.string,
     label: React.PropTypes.string,
     button: React.PropTypes.string,
+    state: React.PropTypes.oneOf(['not-started', 'downloading', 'done']),
+    progress: React.PropTypes.number,
+    path: React.PropTypes.string,
     hidden: React.PropTypes.bool,
   },
-  getDefaultProps: function() {
-    return {
-      icon: 'icon-download',
-      label: 'Download',
-      downloading: false,
-    }
-  },
-  getInitialState: function() {
-    return {
-      filePath: null,
-      modal: null,
-    }
-  },
-  closeModal: function() {
-    this.setState({
-      modal: null,
-    })
-  },
-  handleClick: function() {
+  tryDownload: function() {
     lbry.getCostInfoForName(this.props.streamName, ({cost}) => {
       lbry.getBalance((balance) => {
         if (cost > balance) {
@@ -130,8 +115,53 @@ export let DownloadLink = React.createClass({
       });
     });
   },
+  getDefaultProps: function() {
+    return {
+      state: 'not-started',
+    }
+  },
+  getInitialState: function() {
+    return {
+      filePath: null,
+      modal: null,
+    }
+  },
+  closeModal: function() {
+    this.setState({
+      modal: null,
+    })
+  },
+  handleClick: function() {
+    if (this.props.state == 'not-started') {
+      this.tryDownload();
+    } else if (this.props.state == 'done') {
+      lbry.revealFile(this.props.path);
+    }
+  },
   render: function() {
-    const label = 'progress' in this.props ? `${parseInt(this.props.progress * 100)}% complete` : this.props.label;
+    let linkBlock;
+    if (this.props.state == 'not-started') {
+      linkBlock = (
+        <Link button="text" label="Download" icon="icon-download" onClick={this.handleClick} />
+      );
+    } else if (this.props.state == 'downloading') {
+      const label = `${parseInt(this.props.progress * 100)}% complete`;
+      linkBlock = (
+        <span>
+           <Link button="download" className="button-download--bg" label={label} icon="icon-download"
+                 onClick={this.handleClick} />
+           <Link button="download" className="button-download--fg" label={label} icon="icon-download"
+                 onClick={this.handleClick} style={{width: `${this.props.progress * 100}%`}} />
+         </span>
+      );
+    } else if (this.props.state == 'done') {
+      linkBlock = (
+        <Link button="alt" label="Open" icon='icon-external-link-square' onClick={this.handleClick} />
+      );
+    } else {
+      throw new Error(`Unknown download state ${this.props.state} passed to DownloadLink`);
+    }
+
     return (
       <span className="button-container">
         <Link className="button-download" button={this.props.button} hidden={this.props.hidden} label={label}
