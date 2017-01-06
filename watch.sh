@@ -19,4 +19,4 @@ fi
 $DIR/node_modules/.bin/node-sass --output $DIR/dist/css --sourcemap=none $DIR/scss/
 $DIR/node_modules/.bin/node-sass --output $DIR/dist/css --sourcemap=none --watch $DIR/scss/ &
 
-$DIR/node_modules/.bin/babel --presets es2015,react --out-dir $DIR/dist/js/ --watch $DIR/js/
+node_modules/.bin/webpack --progress --colors --watch

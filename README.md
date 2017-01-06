@@ -8,11 +8,10 @@ These steps will get you to change-reload-see:
 
 - Install [LBRY](https://github.com/lbryio/lbry/releases)
 - Install node and npm ([this gist may be useful](https://gist.github.com/isaacs/579814))
-- Run `./watch.sh` (this will `npm install` dependencies)
-- Run `lbrynet-daemon --ui=/full/path/to/dist/`
-- Changes made in `js` and `sass` will be auto compiled to `dist`
+- Run `./watch.sh` (this will `npm install` dependencies). Changes made in `sass` and `js` will be auto compiled to `dist`
+- Run `lbrynet-daemon --ui=/full/path/to/dist/` to start LBRY
+- `lbry.call('configure_ui', {path: '/path/to/ui'})` can be used in JS console on web ui to switch ui path. This is also needed to trigger a reload after making changes to the UI.
 - `lbrynet-daemon --branch=branchname` can be used to test remote branches
-- `lbry.call('configure_ui', {path: '/path/to/ui'})` can be used in JS console on web ui to switch ui path
 - Occasionally refreshing the cache may be necessary for changes to show up in browser
 
 ## Common Issues
