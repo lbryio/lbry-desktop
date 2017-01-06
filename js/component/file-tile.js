@@ -8,16 +8,18 @@ let FileTile = React.createClass({
   _statusCheckInterval: 5000,
 
   propTypes: {
-    name: React.PropTypes.string.isRequired,
-    mediaType: React.PropTypes.string.isRequired, 
-    title: React.PropTypes.string.isRequired,
-    description: React.PropTypes.string,
-    compact: React.PropTypes.boolean,
+    metadata: React.PropTypes.object.isRequired,
+    name: React.PropTypes.string,
+    sdHash: React.PropTypes.string,
+    available: React.PropTypes.bool,
+    isMine: React.PropTypes.bool,
+    local: React.PropTypes.bool,
+    path: React.PropTypes.string,
     cost: React.PropTypes.number,
-    costIncludesData: React.PropTypes.boolean,
+    costIncludesData: React.PropTypes.bool,
   },
   updateFileInfo: function(progress=null) {
-    const updateStatusCallback = ((result) => {
+    const updateStatusCallback = ((fileInfo) => {
       if (!this._isMounted || 'fileInfo' in this.props) {
         /**
          * The component was unmounted, or a file info data structure has now been provided by the
@@ -27,7 +29,8 @@ let FileTile = React.createClass({
       }
 
       this.setState({
-        fileInfo: result || null,
+        fileInfo: fileInfo || null,
+        local: !!fileInfo,
       });
 
       setTimeout(() => { this.updateFileInfo() }, this._statusCheckInterval);
@@ -35,11 +38,37 @@ let FileTile = React.createClass({
 
     if ('sdHash' in this.props) {
       lbry.getFileInfoBySdHash(this.props.sdHash, updateStatusCallback);
+      this.getIsMineIfNeeded(this.props.sdHash);
     } else if ('name' in this.props) {
-      lbry.getFileInfoByName(this.props.name, updateStatusCallback);
+      lbry.getFileInfoByName(this.props.name, (fileInfo) => {
+        this.getIsMineIfNeeded(fileInfo.sd_hash);
+
+        updateStatusCallback(fileInfo);
+      });
     } else {
       throw new Error("No progress, stream name or sd hash passed to FileTile");
     }
+  },
+  getIsMineIfNeeded: function(sdHash) {
+    if (this.state.isMine !== null) {
+      // The info was already provided by this.props.isMine
+      return;
+    }
+
+    lbry.getMyClaims((claimsInfo) => {
+      for (let {value} of claimsInfo) {
+        if (JSON.parse(value).sources.lbry_sd_hash == sdHash) {
+          this.setState({
+            isMine: true,
+          });
+          return;
+        }
+      }
+
+      this.setState({
+        isMine: false,
+      });
+    });
   },
   getInitialState: function() {
     return {
@@ -48,6 +77,8 @@ let FileTile = React.createClass({
       cost: null,
       costIncludesData: null,
       fileInfo: 'fileInfo' in this.props ? this.props.fileInfo : null,
+      isMine: 'isMine' in this.props ? this.props.isMine : null,
+      local: 'local' in this.props ? this.props.local : null,
     }
   },
   getDefaultProps: function() {
@@ -66,6 +97,8 @@ let FileTile = React.createClass({
     });
   },
   componentWillMount: function() {
+    this.updateFileInfo();
+
     if ('cost' in this.props) {
       this.setState({
         cost: this.props.cost,
@@ -82,29 +115,39 @@ let FileTile = React.createClass({
   },
   componentDidMount: function() {
     this._isMounted = true;
-    this.updateFileInfo();
   },
   componentWillUnmount: function() {
     this._isMounted = false;
   },
   render: function() {
+    if (this.state.isMine === null || this.state.local === null) {
+      // Can't render until we know whether we own the file and if we have a local copy
+      return null;
+    }
+
     const obscureNsfw = !lbry.getClientSetting('showNsfw') && this.props.nsfw;
 
     let downloadLinkExtraProps = {};
-    if (this.state.fileInfo !== null) {
-      const {written_bytes, total_bytes, completed} = this.state.fileInfo;
-      downloadLinkExtraProps['progress'] = written_bytes / total_bytes;
-      downloadLinkExtraProps['downloading'] = !completed;
+    if (this.state.fileInfo === null) {
+      downloadLinkExtraProps.state = 'not-started';
+    } else if (!this.state.fileInfo.completed) {
+      downloadLinkExtraProps.state = 'downloading';
+
+      const {written_bytes, total_bytes, path} = this.state.fileInfo;
+      downloadLinkExtraProps.progress = written_bytes / total_bytes;
+    } else {
+      downloadLinkExtraProps.state = 'done';
+      downloadLinkExtraProps.path = this.state.fileInfo.download_path;
     }
 
     return (
       <section className={ 'file-tile card ' + (obscureNsfw ? 'card-obscured ' : '') + (this.props.compact ? 'file-tile--compact' : '')} onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
         <div className="row-fluid card-content file-tile__row">
           <div className="span3">
-            <a href={'/?show=' + this.props.name}><Thumbnail className="file-tile__thumbnail" src={this.props.imgUrl} alt={'Photo for ' + (this.props.title || this.props.name)} /></a>
+            <a href={'/?show=' + this.props.name}><Thumbnail className="file-tile__thumbnail" src={this.props.metadata.thumbnail} alt={'Photo for ' + (this.props.metadata.title || this.props.name)} /></a>
           </div>
           <div className="span9">
-            {this.state.cost !== null
+            {this.state.cost !== null && !this.state.local
               ? <span className="file-tile__cost">
                   <CreditAmount amount={this.state.cost} isEstimate={!this.state.costIncludesData}/>
                 </span>
@@ -113,19 +156,19 @@ let FileTile = React.createClass({
             <h3 className={'file-tile__title ' + (this.props.compact ? 'file-tile__title--compact' : '')}>
               <a href={'/?show=' + this.props.name}>
                 <TruncatedText lines={3}>
-                  {this.props.title}
+                  {this.props.metadata.title}
                 </TruncatedText>
               </a>
             </h3>
             <div>
-              {this.props.mediaType == 'video' ? <WatchLink streamName={this.props.name} button="primary" /> : null}
+              {this.props.metadata.content_type.startsWith('video/') ? <WatchLink streamName={this.props.name} button="primary" /> : null}
               {!this.props.isMine
                 ? <DownloadLink streamName={this.props.name} button="text" {... downloadLinkExtraProps}/>
                 : null}
              </div>
             <p className="file-tile__description">
               <TruncatedText lines={3}>
-                {this.props.description}
+                {this.props.metadata.description}
               </TruncatedText>
             </p>
           </div>
