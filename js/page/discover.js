@@ -99,9 +99,7 @@ var FeaturedContentItem = React.createClass({
     }
 
     return (<div style={featuredContentItemContainerStyle}>
-      <FileTile name={this.props.name} title={this.state.title} imgUrl={this.state.metadata.thumbnail}
-                description={this.state.metadata.description} mediaType={lbry.getMediaType(this.state.metadata.content_type)}
-                nsfw={this.state.metadata.nsfw} compact />
+      <FileTile name={this.props.name} metadata={this.state.metadata} compact />
     </div>);
   }
 });
