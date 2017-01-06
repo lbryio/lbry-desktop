@@ -42,137 +42,13 @@ var SearchNoResults = React.createClass({
 var SearchResults = React.createClass({
   render: function() {
     var rows = [];
-    this.props.results.forEach(function(result) {
-      console.log(result);
-      var mediaType = lbry.getMediaType(result.value.content_type);
+    this.props.results.forEach(function({name, sources, value}) {
       rows.push(
-        <SearchResultRow key={result.name} name={result.name} title={result.value.title} imgUrl={result.value.thumbnail}
-                         description={result.value.description} nsfw={result.value.nsfw} mediaType={mediaType} />
+        <FileTile key={name} name={name} sdHash={sources.lbry_sd_hash} metadata={value} />
       );
     });
     return (
       <div>{rows}</div>
-    );
-  }
-});
-
-var
-  searchRowStyle = {
-    height: (24 * 7) + 'px',
-    overflowY: 'hidden'
-  },
-  searchRowCompactStyle = {
-    height: '180px',
-  },
-  searchRowImgStyle = {
-    maxWidth: '100%',
-    maxHeight: (24 * 7) + 'px',
-    display: 'block',
-    marginLeft: 'auto',
-    marginRight: 'auto'
-  },
-  searchRowTitleStyle = {
-    fontWeight: 'bold'
-  },
-  searchRowTitleCompactStyle = {
-    fontSize: '1.25em',
-    lineHeight: '1.15',
-  },
-  searchRowCostStyle = {
-    float: 'right',
-  },
-  searchRowDescriptionStyle = {
-    color : '#444',
-    marginTop: '12px',
-    fontSize: '0.9em'
-  };
-
-
-var SearchResultRow = React.createClass({
-  getInitialState: function() {
-    return {
-      downloading: false,
-      isHovered: false,
-      cost: null,
-      costIncludesData: null,
-    }
-  },
-  handleMouseOver: function() {
-    this.setState({
-      isHovered: true,
-    });
-  },
-  handleMouseOut: function() {
-    this.setState({
-      isHovered: false,
-    });
-  },
-  componentWillMount: function() {
-    if ('cost' in this.props) {
-      this.setState({
-        cost: this.props.cost,
-        costIncludesData: this.props.costIncludesData,
-      });
-    } else {
-      lbry.getCostInfoForName(this.props.name, ({cost, includesData}) => {
-        this.setState({
-          cost: cost,
-          costIncludesData: includesData,
-        });
-      });
-    }
-  },
-  render: function() {
-    var obscureNsfw = !lbry.getClientSetting('showNsfw') && this.props.nsfw;
-    if (!this.props.compact) {
-      var style = searchRowStyle;
-      var titleStyle = searchRowTitleStyle;
-    } else {
-      var style = Object.assign({}, searchRowStyle, searchRowCompactStyle);
-      var titleStyle = Object.assign({}, searchRowTitleStyle, searchRowTitleCompactStyle);
-    }
-
-    return (
-      <section className={ 'card ' + (obscureNsfw ? 'card-obscured ' : '') + (this.props.compact ? 'card-compact' : '')} onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
-        <div className="row-fluid card-content" style={style}>
-          <div className="span3">
-            <a href={'/?show=' + this.props.name}><Thumbnail src={this.props.imgUrl} alt={'Photo for ' + (this.props.title || this.props.name)} style={searchRowImgStyle} /></a>
-          </div>
-          <div className="span9">
-            {this.state.cost !== null
-              ? <span style={searchRowCostStyle}>
-                  <CreditAmount amount={this.state.cost} isEstimate={!this.state.costIncludesData}/>
-                </span>
-              : null}
-            <div className="meta"><a href={'/?show=' + this.props.name}>lbry://{this.props.name}</a></div>
-            <h3 style={titleStyle}>
-              <a href={'/?show=' + this.props.name}>
-                <TruncatedText lines={3}>
-                  {this.props.title}
-                </TruncatedText>
-              </a>
-            </h3>
-            <div>
-              {this.props.mediaType == 'video' ? <WatchLink streamName={this.props.name} button="primary" /> : null}
-              <DownloadLink streamName={this.props.name} button="text" />
-            </div>
-            <p style={searchRowDescriptionStyle}>
-              <TruncatedText lines={3}>
-                {this.props.description}
-              </TruncatedText>
-            </p>
-          </div>
-        </div>
-        {
-          !obscureNsfw || !this.state.isHovered ? null :
-            <div className='card-overlay'>
-              <p>
-                This content is Not Safe For Work.
-                To view adult content, please change your <Link href="?settings" label="Settings" />.
-              </p>
-            </div>
-        }
-      </section>
     );
   }
 });
