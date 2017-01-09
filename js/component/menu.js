@@ -8,26 +8,14 @@ export let menuStyle = {
 };
 
 export let Menu = React.createClass({
-  handleWindowClick: function(e) {
-    if (this.props.toggleButton && ReactDOM.findDOMNode(this.props.toggleButton).contains(e.target)) {
-      // Toggle button was clicked
-      this.setState({
-        open: !this.state.open
-      });
-    } else if (this.state.open && !this.refs.div.contains(e.target)) {
-      // Menu is open and user clicked outside of it
-      this.setState({
-        open: false
-      });
-    }
-  },
   propTypes: {
-    openButton: React.PropTypes.element,
+    onClickOut: React.PropTypes.func.isRequired,
   },
-  getInitialState: function() {
-    return {
-      open: false,
-    };
+  handleWindowClick: function(e) {
+    if (!this._div.contains(e.target)) {
+      // Menu is open and user clicked outside of it
+      this.props.onClickOut();
+    }
   },
   componentDidMount: function() {
     window.addEventListener('click', this.handleWindowClick, false);
@@ -36,8 +24,10 @@ export let Menu = React.createClass({
     window.removeEventListener('click', this.handleWindowClick, false);
   },
   render: function() {
+    const {onClickOut, ...other} = this.props;
     return (
-      <div ref='div' style={menuStyle} className={this.state.open ? '' : 'hidden'}>
+      <div ref={(div) => this._div = div} className={'menu ' + (this.props.className || '')}
+           {... other}>
         {this.props.children}
       </div>
     );
