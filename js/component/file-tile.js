@@ -5,7 +5,7 @@ import {Thumbnail, TruncatedText, CreditAmount} from '../component/common.js';
 
 let FileTile = React.createClass({
   _isMounted: false,
-  _statusCheckInterval: 5000,
+  _fileInfoCheckInterval: 5000,
 
   propTypes: {
     metadata: React.PropTypes.object.isRequired,
@@ -19,7 +19,7 @@ let FileTile = React.createClass({
     costIncludesData: React.PropTypes.bool,
   },
   updateFileInfo: function(progress=null) {
-    const updateStatusCallback = ((fileInfo) => {
+    const updateFileInfoCallback = ((fileInfo) => {
       if (!this._isMounted || 'fileInfo' in this.props) {
         /**
          * The component was unmounted, or a file info data structure has now been provided by the
@@ -33,17 +33,17 @@ let FileTile = React.createClass({
         local: !!fileInfo,
       });
 
-      setTimeout(() => { this.updateFileInfo() }, this._statusCheckInterval);
+      setTimeout(() => { this.updateFileInfo() }, this._fileInfoCheckInterval);
     });
 
     if ('sdHash' in this.props) {
-      lbry.getFileInfoBySdHash(this.props.sdHash, updateStatusCallback);
+      lbry.getFileInfoBySdHash(this.props.sdHash, updateFileInfoCallback);
       this.getIsMineIfNeeded(this.props.sdHash);
     } else if ('name' in this.props) {
       lbry.getFileInfoByName(this.props.name, (fileInfo) => {
         this.getIsMineIfNeeded(fileInfo.sd_hash);
 
-        updateStatusCallback(fileInfo);
+        updateFileInfoCallback(fileInfo);
       });
     } else {
       throw new Error("No progress, stream name or sd hash passed to FileTile");
