@@ -397,6 +397,18 @@ input[type="text"], input[type="search"]
   word-break: break-all;
 }
 
+.menu {
+  white-space: nowrap;
+}
+
+.menu__menu-item {
+  display: block;
+  text-decoration: none !important;
+  &:hover {
+    text-decoration: underline !important;
+  }
+}
+
 
 .file-tile--compact {
   height: 180px;

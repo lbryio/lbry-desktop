@@ -2,11 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import {Icon} from './common.js';
 
-// Generic menu styles
-export let menuStyle = {
-  whiteSpace: 'nowrap'
-};
-
 export let Menu = React.createClass({
   propTypes: {
     onClickOut: React.PropTypes.func.isRequired,
@@ -34,9 +29,6 @@ export let Menu = React.createClass({
   }
 });
 
-export let menuItemStyle = {
-  display: 'block',
-};
 export let MenuItem = React.createClass({
   propTypes: {
     href: React.PropTypes.string,
@@ -53,7 +45,7 @@ export let MenuItem = React.createClass({
     var icon = (this.props.icon ? <Icon icon={this.props.icon} fixed /> : null);
 
     return (
-      <a style={menuItemStyle} className="button-text no-underline" onClick={this.props.onClick}
+      <a className="button-text menu__menu-item" onClick={this.props.onClick}
          href={this.props.href || 'javascript:'} label={this.props.label}>
         {this.props.iconPosition == 'left' ? icon : null}
         {this.props.label}
