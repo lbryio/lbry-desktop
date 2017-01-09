@@ -33,16 +33,27 @@ export let Link = React.createClass({
       (!this.props.className && !this.props.button ? 'button-text' : '') +
       (this.props.disabled ? ' disabled' : '');
 
+    let content;
+    if (this.props.children) { // Custom content
+      content = this.props.children;
+    } else {
+      content = (
+        <span>
+          {'icon' in this.props
+            ? <Icon icon={this.props.icon} fixed={true} />
+            : null}
+           <span className="link-label">{this.props.label}</span>
+          {'badge' in this.props
+            ? <span className="badge">{this.props.badge}</span>
+            : null}
+        </span>
+      );
+    }
+
     return (
       <a className={className} href={this.props.href || 'javascript:;'} title={this.props.title}
          onClick={this.handleClick} {... 'style' in this.props ? {style: this.props.style} : {}}>
-        {'icon' in this.props
-          ? <Icon icon={this.props.icon} fixed={true} />
-          : null}
-        <span className="link-label">{this.props.label}</span>
-        {'badge' in this.props
-          ? <span className="badge">{this.props.badge}</span>
-          : null}
+         {content}
       </a>
     );
   }

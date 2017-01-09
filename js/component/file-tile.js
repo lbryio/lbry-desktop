@@ -163,7 +163,7 @@ let FileTile = React.createClass({
             <div>
               {this.props.metadata.content_type.startsWith('video/') ? <WatchLink streamName={this.props.name} button="primary" /> : null}
               {!this.props.isMine
-                ? <DownloadLink streamName={this.props.name} button="text" {... downloadLinkExtraProps}/>
+                ? <DownloadLink streamName={this.props.name} metadata={this.props.metadata} button="text" {... downloadLinkExtraProps}/>
                 : null}
              </div>
             <p className="file-tile__description">
