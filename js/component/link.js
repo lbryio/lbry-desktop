@@ -1,6 +1,8 @@
 import React from 'react';
 import lbry from '../lbry.js';
+import FormField from './form.js';
 import Modal from './modal.js';
+import {Menu, MenuItem} from './menu.js';
 import {Icon, ToolTip} from './common.js';
 
 
@@ -109,17 +111,62 @@ export let ToolTipLink = React.createClass({
   }
 });
 
+export let DropDown = React.createClass({
+  propTypes: {
+    onCaretClick: React.PropTypes.func,
+  },
+  handleCaretClicked: function(event) {
+    /**
+     * The menu handles caret clicks via a window event listener, so we just need to prevent clicks
+     * on the caret from bubbling up to the link
+     */
+    this.setState({
+      menuOpen: !this.state.menuOpen,
+    });
+    event.stopPropagation();
+    return false;
+  },
+  closeMenu: function(event) {
+    this.setState({
+      menuOpen: false,
+    });
+  },
+  getInitialState: function() {
+    return {
+      menuOpen: false,
+    };
+  },
+  render: function() {
+    const {onCaretClick, ...other} = this.props;
+    return (
+      <div>
+        <Link {...other}>
+          <span className="link-label">{this.props.label}</span>
+          <Icon icon="icon-caret-down" fixed={true} onClick={this.handleCaretClicked} />
+        </Link>
+        {this.state.menuOpen
+          ? <Menu onClickOut={this.closeMenu}>
+              {this.props.children}
+            </Menu>
+          : null}
+      </div>
+    );
+  }
+});
+
 export let DownloadLink = React.createClass({
   propTypes: {
     type: React.PropTypes.string,
     streamName: React.PropTypes.string,
     sdHash: React.PropTypes.string,
+    metadata: React.PropTypes.object,
     label: React.PropTypes.string,
     button: React.PropTypes.string,
     state: React.PropTypes.oneOf(['not-started', 'downloading', 'done']),
     progress: React.PropTypes.number,
     path: React.PropTypes.string,
     hidden: React.PropTypes.bool,
+    deleteChecked: React.PropTypes.bool,
   },
   tryDownload: function() {
     lbry.getCostInfoForName(this.props.streamName, ({cost}) => {
@@ -145,6 +192,30 @@ export let DownloadLink = React.createClass({
       });
     });
   },
+  openMenu: function() {
+    this.setState({
+      menuOpen: !this.state.menuOpen,
+    });
+  },
+  handleDeleteCheckboxClicked: function(event) {
+    this.setState({
+      deleteChecked: event.target.checked,
+    });
+  },
+  handleRevealClicked: function() {
+    lbry.revealFile(this.props.path);
+  },
+  handleRemoveClicked: function() {
+    this.setState({
+      modal: 'confirmRemove',
+    });
+  },
+  handleRemoveConfirmed: function() {
+    lbry.deleteFile(this.props.sdHash || this.props.streamName, this.state.deleteChecked);
+    this.setState({
+      modal: null,
+    });
+  },
   getDefaultProps: function() {
     return {
       state: 'not-started',
@@ -154,6 +225,7 @@ export let DownloadLink = React.createClass({
     return {
       filePath: null,
       modal: null,
+      menuOpen: false,
     }
   },
   closeModal: function() {
@@ -186,7 +258,10 @@ export let DownloadLink = React.createClass({
       );
     } else if (this.props.state == 'done') {
       linkBlock = (
-        <Link button="alt" label="Open" icon='icon-external-link-square' onClick={this.handleClick} />
+        <DropDown button="alt" label="Open" onClick={this.handleClick} onCaretClick={this.openMenu}>
+          <MenuItem onClick={this.handleRevealClicked} label="Open in Folder" />
+          <MenuItem onClick={this.handleRemoveClicked} label="Remove..." />
+        </DropDown>
       );
     } else {
       throw new Error(`Unknown download state ${this.props.state} passed to DownloadLink`);
@@ -212,6 +287,12 @@ export let DownloadLink = React.createClass({
         <Modal isOpen={this.state.modal == 'timedOut'} contentLabel="Download failed"
                onConfirmed={this.closeModal}>
           LBRY was unable to download the stream <strong>lbry://{this.props.streamName}</strong>.
+        </Modal>
+        <Modal isOpen={this.state.modal == 'confirmRemove'} type="confirm" confirmButtonLabel="Remove"
+               onConfirmed={this.handleRemoveConfirmed} onAborted={this.closeModal}>
+          <p>Are you sure you'd like to remove <cite>{this.props.metadata.title}</cite> from LBRY?</p>
+
+          <label><FormField type="checkbox" checked={this.state.deleteChecked} onClick={this.handleDeleteCheckboxClicked} /> Delete this file from my computer</label>
         </Modal>
       </span>
     );

@@ -1,100 +1,10 @@
 import React from 'react';
 import lbry from '../lbry.js';
-import {Link, WatchLink} from '../component/link.js';
-import {Menu, MenuItem} from '../component/menu.js';
+import {Link} from '../component/link.js';
 import FormField from '../component/form.js';
 import FileTile from '../component/file-tile.js';
 import Modal from '../component/modal.js';
 import {BusyMessage, Thumbnail} from '../component/common.js';
-
-var moreMenuStyle = {
-  position: 'absolute',
-  display: 'block',
-  top: '26px',
-  right: '13px',
-};
-var MyFilesRowMoreMenu = React.createClass({
-  propTypes: {
-    title: React.PropTypes.string.isRequired,
-    path: React.PropTypes.string.isRequired,
-    completed: React.PropTypes.bool.isRequired,
-    lbryUri: React.PropTypes.string.isRequired,
-  },
-  handleRevealClicked: function() {
-    lbry.revealFile(this.props.path);
-  },
-  handleRemoveClicked: function() {
-    lbry.deleteFile(this.props.lbryUri, false);
-  },
-  handleDeleteClicked: function() {
-    this.setState({
-      modal: 'confirmDelete',
-    });
-  },
-  handleDeleteConfirmed: function() {
-    lbry.deleteFile(this.props.lbryUri);
-    this.setState({
-      modal: null,
-    });
-  },
-  closeModal: function() {
-    this.setState({
-      modal: null,
-    });
-  },
-  getInitialState: function() {
-    return {
-      modal: null,
-    };
-  },
-  render: function() {
-    return (
-      <div style={moreMenuStyle}>
-        <Menu {...this.props}>
-          <section className="card">
-            <MenuItem onClick={this.handleRevealClicked} label="Reveal file" /> {/* @TODO: Switch to OS specific wording */}
-            <MenuItem onClick={this.handleRemoveClicked} label="Remove from LBRY" />
-            <MenuItem onClick={this.handleDeleteClicked} label="Remove and delete file" />
-          </section>
-        </Menu>
-        <Modal isOpen={this.state.modal == 'confirmDelete'} contentLabel="Confirm delete" type="confirm" confirmButtonLabel="Delete File"
-               onConfirmed={this.handleDeleteConfirmed} onAborted={this.closeModal}>
-          Are you sure you'd like to delete <cite>{this.props.title}</cite>? This will {this.props.completed ? ' stop the download and ' : ''}
-          permanently remove the file from your system.
-        </Modal>
-      </div>
-    );
-  }
-});
-
-var moreButtonColumnStyle = {
-    height: '120px',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  moreButtonContainerStyle = {
-    display: 'block',
-    position: 'relative',
-  },
-  moreButtonStyle = {
-    fontSize: '1.3em',
-  },
-  progressBarStyle = {
-    height: '15px',
-    width: '230px',
-    backgroundColor: '#444',
-    border: '2px solid #eee',
-    display: 'inline-block',
-  }, 
-  artStyle = {
-    maxHeight: '100px',
-    maxWidth: '100%',
-    display: 'block',
-    marginLeft: 'auto',
-    marginRight: 'auto',
-  };
-
 
 var MyFilesPage = React.createClass({
   _fileTimeout: null,
