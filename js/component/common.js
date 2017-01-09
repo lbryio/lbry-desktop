@@ -5,14 +5,15 @@ import $clamp from 'clamp';
 //component/icon.js
 export let Icon = React.createClass({
   propTypes: {
-    style: React.PropTypes.object,
-    fixed: React.PropTypes.bool,
+    icon: React.PropTypes.string.isRequired,
     className: React.PropTypes.string,
+    fixed: React.PropTypes.bool,
   },
   render: function() {
-    var className = ('icon ' + ('fixed' in this.props ? 'icon-fixed-width ' : '') + this.props.icon + ' ' +
-                     (this.props.className || ''));
-    return <span className={className} style={this.props.style}></span>
+    const {fixed, className, ...other} = this.props;
+    const spanClassName = ('icon ' + ('fixed' in this.props ? 'icon-fixed-width ' : '') +
+                           this.props.icon + ' ' + (this.props.className || ''));
+    return <span className={spanClassName} {... other}></span>
   }
 });
 
