@@ -194,7 +194,7 @@ input[type="text"], input[type="search"]
 }
 .button-alt
 {
-  background-color: rgba(0,0,0,.15);
+  background-color: $color-bg-alt;
   box-shadow: $default-box-shadow;
   padding: 0 12px;
 }
@@ -398,7 +398,12 @@ input[type="text"], input[type="search"]
 }
 
 .menu {
+  position: fixed;
   white-space: nowrap;
+  background-color: $color-bg-alt;
+  box-shadow: $default-box-shadow;
+  padding: $spacing-vertical;
+  border-radius: 2px;
 }
 
 .menu__menu-item {
