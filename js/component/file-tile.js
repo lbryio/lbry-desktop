@@ -9,12 +9,12 @@ let FileTile = React.createClass({
 
   propTypes: {
     metadata: React.PropTypes.object.isRequired,
+    fileInfo: React.PropTypes.string,
     name: React.PropTypes.string,
     sdHash: React.PropTypes.string,
     available: React.PropTypes.bool,
     isMine: React.PropTypes.bool,
     local: React.PropTypes.bool,
-    path: React.PropTypes.string,
     cost: React.PropTypes.number,
     costIncludesData: React.PropTypes.bool,
   },
