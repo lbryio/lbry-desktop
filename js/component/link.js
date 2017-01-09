@@ -5,25 +5,44 @@ import {Icon, ToolTip} from './common.js';
 
 
 export let Link = React.createClass({
+  propTypes: {
+    label: React.PropTypes.string,
+    icon: React.PropTypes.string,
+    button: React.PropTypes.string,
+    badge: React.PropTypes.string,
+    hidden: React.PropTypes.bool,
+  },
+  getDefaultProps: function() {
+    return {
+      hidden: false,
+      disabled: false,
+    };
+  },
   handleClick: function() {
     if (this.props.onClick) {
       this.props.onClick();
     }
   },
   render: function() {
-    var href = this.props.href ? this.props.href : 'javascript:;',
-      icon = this.props.icon ? <Icon icon={this.props.icon} fixed={true} />  : '',
-      className = (this.props.className ? this.props.className : '') +
-        (this.props.button ? ' button-block button-' + this.props.button : '') +
-        (this.props.hidden ? ' hidden' : '') +
-        (this.props.disabled ? ' disabled' : '');
+    if (this.props.hidden) {
+      return null;
+    }
+
+    const className = (this.props.className || '') +
+      (this.props.button ? ' button-block button-' + this.props.button : '') +
+      (!this.props.className && !this.props.button ? 'button-text' : '') +
+      (this.props.disabled ? ' disabled' : '');
 
     return (
-      <a className={className ? className : 'button-text'} href={href} style={this.props.style ? this.props.style : {}}
-         title={this.props.title} onClick={this.handleClick}>
-        {this.props.icon ? icon : '' }
+      <a className={className} href={this.props.href || 'javascript:;'} title={this.props.title}
+         onClick={this.handleClick} {... 'style' in this.props ? {style: this.props.style} : {}}>
+        {'icon' in this.props
+          ? <Icon icon={this.props.icon} fixed={true} />
+          : null}
         <span className="link-label">{this.props.label}</span>
-        {this.props.badge ? <span className="badge">{this.props.badge}</span> : '' }
+        {'badge' in this.props
+          ? <span className="badge">{this.props.badge}</span>
+          : null}
       </a>
     );
   }
