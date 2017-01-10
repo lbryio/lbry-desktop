@@ -226,6 +226,7 @@ export let DownloadLink = React.createClass({
       filePath: null,
       modal: null,
       menuOpen: false,
+      deleteChecked: false,
     }
   },
   closeModal: function() {
