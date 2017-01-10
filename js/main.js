@@ -26,14 +26,7 @@ var init = function() {
           }
         });
       } else {
-        if (localStorage.getItem('platform') === null) {
-          lbry.getVersionInfo(({os_system}) => {
-            localStorage.setItem('platform', os_system);
-            ReactDOM.render(<App/>, canvas);
-          });
-        } else {
-          ReactDOM.render(<App/>, canvas);
-        }
+        ReactDOM.render(<App/>, canvas);
       }
     }}/>,
     canvas

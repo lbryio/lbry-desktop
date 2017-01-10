@@ -257,7 +257,7 @@ export let DownloadLink = React.createClass({
          </span>
       );
     } else if (this.props.state == 'done') {
-      const openInFolderMessage = localStorage.getItem('platform') == 'Darwin' ? 'Open in Finder' : 'Open in Folder';
+      const openInFolderMessage = window.navigator.platform.startsWith('Mac') ? 'Open in Finder' : 'Open in Folder';
       linkBlock = (
         <DropDown button="alt" label="Open" onClick={this.handleClick} onCaretClick={this.openMenu}>
           <MenuItem onClick={this.handleRevealClicked} label={openInFolderMessage} />
