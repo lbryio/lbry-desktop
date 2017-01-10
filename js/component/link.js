@@ -188,7 +188,6 @@ export let DownloadLink = React.createClass({
               });
             } else {
               this.setState({
-                modal: 'downloadStarted',
                 filePath: streamInfo.path,
                 attemptingDownload: false,
               });
@@ -288,17 +287,6 @@ export let DownloadLink = React.createClass({
 
     return (
       <span className="button-container">
-        <Link className="button-download" button={this.props.button} hidden={this.props.hidden} label={label}
-              icon={this.props.icon} onClick={this.handleClick} />
-        {'progress' in this.props
-          ? <Link className="button-download button-download--mirror" button={this.props.button} hidden={this.props.hidden} label={label}
-                  icon={this.props.icon} onClick={this.handleClick} style={{width: `${this.props.progress * 100}%`}} />
-          : null}
-        <Modal className="download-started-modal" isOpen={this.state.modal == 'downloadStarted'}
-               contentLabel="Download started" onConfirmed={this.closeModal}>
-          <p>Downloading to:</p>
-          <div className="download-started-modal__file-path">{this.state.filePath}</div>
-        </Modal>
         <Modal isOpen={this.state.modal == 'notEnoughCredits'} contentLabel="Not enough credits"
                onConfirmed={this.closeModal}>
           You don't have enough LBRY credits to pay for this stream.
