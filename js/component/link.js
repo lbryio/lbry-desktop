@@ -242,6 +242,13 @@ export let DownloadLink = React.createClass({
     }
   },
   render: function() {
+    const openInFolderMessage = window.navigator.platform.startsWith('Mac') ? 'Open in Finder' : 'Open in Folder';
+
+    const dropDownItems = [
+      <MenuItem onClick={this.handleRevealClicked} label={openInFolderMessage} />,
+      <MenuItem onClick={this.handleRemoveClicked} label="Remove..." />,
+    ];
+
     let linkBlock;
     if (this.props.state == 'not-started') {
       linkBlock = (
@@ -251,18 +258,20 @@ export let DownloadLink = React.createClass({
       const label = `${parseInt(this.props.progress * 100)}% complete`;
       linkBlock = (
         <span>
-           <Link button="download" className="button-download--bg" label={label} icon="icon-download"
-                 onClick={this.handleClick} />
-           <Link button="download" className="button-download--fg" label={label} icon="icon-download"
-                 onClick={this.handleClick} style={{width: `${this.props.progress * 100}%`}} />
-         </span>
+          <DropDown button="download" className="button-download--bg" label={label} icon="icon-download"
+                    onClick={this.handleClick}>
+            {dropDownItems}
+          </DropDown>
+          <DropDown button="download" className="button-download--fg" label={label} icon="icon-download"
+                    onClick={this.handleClick} style={{width: `${this.props.progress * 100}%`}}>
+            {dropDownItems}
+          </DropDown>
+        </span>
       );
     } else if (this.props.state == 'done') {
-      const openInFolderMessage = window.navigator.platform.startsWith('Mac') ? 'Open in Finder' : 'Open in Folder';
       linkBlock = (
         <DropDown button="alt" label="Open" onClick={this.handleClick} onCaretClick={this.openMenu}>
-          <MenuItem onClick={this.handleRevealClicked} label={openInFolderMessage} />
-          <MenuItem onClick={this.handleRemoveClicked} label="Remove..." />
+          {dropDownItems}
         </DropDown>
       );
     } else {
