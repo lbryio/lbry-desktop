@@ -169,22 +169,28 @@ export let DownloadLink = React.createClass({
     deleteChecked: React.PropTypes.bool,
   },
   tryDownload: function() {
+    this.setState({
+      attemptingDownload: true,
+    });
     lbry.getCostInfoForName(this.props.streamName, ({cost}) => {
       lbry.getBalance((balance) => {
         if (cost > balance) {
           this.setState({
             modal: 'notEnoughCredits',
+            attemptingDownload: false,
           });
         } else {
           lbry.getStream(this.props.streamName, (streamInfo) => {
             if (streamInfo === null || typeof streamInfo !== 'object') {
               this.setState({
                 modal: 'timedOut',
+                attemptingDownload: false,
               });
             } else {
               this.setState({
                 modal: 'downloadStarted',
                 filePath: streamInfo.path,
+                attemptingDownload: false,
               });
             }
           });
@@ -227,6 +233,7 @@ export let DownloadLink = React.createClass({
       modal: null,
       menuOpen: false,
       deleteChecked: false,
+      attemptingDownload: false,
     }
   },
   closeModal: function() {
@@ -250,12 +257,9 @@ export let DownloadLink = React.createClass({
     ];
 
     let linkBlock;
-    if (this.props.state == 'not-started') {
-      linkBlock = (
-        <Link button="text" label="Download" icon="icon-download" onClick={this.handleClick} />
-      );
-    } else if (this.props.state == 'downloading') {
-      const label = `${parseInt(this.props.progress * 100)}% complete`;
+    if (this.state.attemptingDownload || this.props.state == 'downloading') {
+      const progress = this.state.attemptingDownload ? 0 : this.props.progress;
+      const label = `${parseInt(progress * 100)}% complete`;
       linkBlock = (
         <span>
           <DropDown button="download" className="button-download--bg" label={label} icon="icon-download"
@@ -263,10 +267,14 @@ export let DownloadLink = React.createClass({
             {dropDownItems}
           </DropDown>
           <DropDown button="download" className="button-download--fg" label={label} icon="icon-download"
-                    onClick={this.handleClick} style={{width: `${this.props.progress * 100}%`}}>
+                    onClick={this.handleClick} style={{width: `${progress * 100}%`}}>
             {dropDownItems}
           </DropDown>
         </span>
+      );
+    } else if (this.props.state == 'not-started') {
+      linkBlock = (
+        <Link button="text" label="Download" icon="icon-download" onClick={this.handleClick} />
       );
     } else if (this.props.state == 'done') {
       linkBlock = (
