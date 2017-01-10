@@ -42,9 +42,9 @@ var SearchNoResults = React.createClass({
 var SearchResults = React.createClass({
   render: function() {
     var rows = [];
-    this.props.results.forEach(function({name, sources, value}) {
+    this.props.results.forEach(function({name, value}) {
       rows.push(
-        <FileTile key={name} name={name} sdHash={sources.lbry_sd_hash} metadata={value} />
+        <FileTile key={name} name={name} sdHash={value.sources.lbry_sd_hash} metadata={value} />
       );
     });
     return (
