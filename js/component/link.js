@@ -114,6 +114,12 @@ export let ToolTipLink = React.createClass({
 export let DropDown = React.createClass({
   propTypes: {
     onCaretClick: React.PropTypes.func,
+    showCaret: React.PropTypes.bool,
+  },
+  getDefaultProps: function() {
+    return {
+      showCaret: true,
+    };
   },
   handleCaretClicked: function(event) {
     /**
@@ -142,7 +148,9 @@ export let DropDown = React.createClass({
       <div>
         <Link {...other}>
           <span className="link-label">{this.props.label}</span>
-          <Icon icon="icon-caret-down" fixed={true} onClick={this.handleCaretClicked} />
+          {this.props.showCaret
+            ? <Icon icon="icon-caret-down" fixed={true} onClick={this.handleCaretClicked} />
+            : null}
         </Link>
         {this.state.menuOpen
           ? <Menu onClickOut={this.closeMenu}>
@@ -262,11 +270,12 @@ export let DownloadLink = React.createClass({
       linkBlock = (
         <span>
           <DropDown button="download" className="button-download--bg" label={label} icon="icon-download"
-                    onClick={this.handleClick}>
+                    onClick={this.handleClick} showCaret={!this.state.attemptingDownload}>
             {dropDownItems}
           </DropDown>
           <DropDown button="download" className="button-download--fg" label={label} icon="icon-download"
-                    onClick={this.handleClick} style={{width: `${progress * 100}%`}}>
+                    onClick={this.handleClick} showCaret={!this.state.attemptingDownload}
+                    style={{width: `${progress * 100}%`}}>
             {dropDownItems}
           </DropDown>
         </span>
