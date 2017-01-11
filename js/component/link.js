@@ -114,12 +114,6 @@ export let ToolTipLink = React.createClass({
 export let DropDown = React.createClass({
   propTypes: {
     onCaretClick: React.PropTypes.func,
-    showCaret: React.PropTypes.bool,
-  },
-  getDefaultProps: function() {
-    return {
-      showCaret: true,
-    };
   },
   handleCaretClicked: function(event) {
     /**
@@ -148,9 +142,7 @@ export let DropDown = React.createClass({
       <div>
         <Link {...other}>
           <span className="link-label">{this.props.label}</span>
-          {this.props.showCaret
-            ? <Icon icon="icon-caret-down" fixed={true} onClick={this.handleCaretClicked} />
-            : null}
+          <Icon icon="icon-caret-down" fixed={true} onClick={this.handleCaretClicked} />
         </Link>
         {this.state.menuOpen
           ? <Menu onClickOut={this.closeMenu}>
@@ -264,18 +256,19 @@ export let DownloadLink = React.createClass({
     ];
 
     let linkBlock;
-    if (this.state.attemptingDownload || this.props.state == 'downloading') {
-      const progress = this.state.attemptingDownload ? 0 : this.props.progress;
-      const label = `${parseInt(progress * 100)}% complete`;
+    if (this.state.attemptingDownload) {
+      linkBlock = <Link button="text" className="button-download button-download--bg"
+                        label="Connecting..." icon="icon-download" />
+    } else if (this.props.state == 'downloading') {
+      const label = `${parseInt(this.props.progress * 100)}% complete`;
       linkBlock = (
         <span>
           <DropDown button="download" className="button-download--bg" label={label} icon="icon-download"
-                    onClick={this.handleClick} showCaret={!this.state.attemptingDownload}>
+                    onClick={this.handleClick}>
             {dropDownItems}
           </DropDown>
           <DropDown button="download" className="button-download--fg" label={label} icon="icon-download"
-                    onClick={this.handleClick} showCaret={!this.state.attemptingDownload}
-                    style={{width: `${progress * 100}%`}}>
+                    onClick={this.handleClick} style={{width: `${this.props.progress * 100}%`}}>
             {dropDownItems}
           </DropDown>
         </span>
