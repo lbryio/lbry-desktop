@@ -251,8 +251,8 @@ export let DownloadLink = React.createClass({
     const openInFolderMessage = window.navigator.platform.startsWith('Mac') ? 'Open in Finder' : 'Open in Folder';
 
     const dropDownItems = [
-      <MenuItem onClick={this.handleRevealClicked} label={openInFolderMessage} />,
-      <MenuItem onClick={this.handleRemoveClicked} label="Remove..." />,
+      <MenuItem key={0} onClick={this.handleRevealClicked} label={openInFolderMessage} />,
+      <MenuItem key={1} onClick={this.handleRemoveClicked} label="Remove..." />,
     ];
 
     let linkBlock;
