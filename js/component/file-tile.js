@@ -128,13 +128,12 @@ let FileTile = React.createClass({
     this._isMounted = false;
   },
   render: function() {
-    // Can't render until we know whether we own the file and if we have a local copy
     if (this.state.isMine === null || this.state.local === null ||
         (this.props.hideOnRemove && this.state.removeConfirmed)) {
       return null;
     }
 
-    const obscureNsfw = !lbry.getClientSetting('showNsfw') && this.props.nsfw;
+    const obscureNsfw = !lbry.getClientSetting('showNsfw') && this.props.metadata.nsfw;
 
     let downloadLinkExtraProps = {};
     if (this.state.fileInfo === null) {
