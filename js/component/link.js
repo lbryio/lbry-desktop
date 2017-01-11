@@ -251,7 +251,7 @@ export let DownloadLink = React.createClass({
     if (this.props.state == 'not-started') {
       this.tryDownload();
     } else if (this.props.state == 'done') {
-      lbry.revealFile(this.props.path);
+      lbry.openFile(this.props.path);
     }
   },
   render: function() {

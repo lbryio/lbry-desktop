@@ -272,8 +272,12 @@ lbry.deleteFile = function(name, deleteTargetFile=true, callback) {
   }, callback);
 }
 
+lbry.openFile = function(path, callback) {
+  lbry.call('open_file', {path: path}, callback);
+}
+
 lbry.revealFile = function(path, callback) {
-  lbry.call('reveal', { path: path }, callback);
+  lbry.call('reveal', {path: path}, callback);
 }
 
 lbry.getFileInfoWhenListed = function(name, callback, timeoutCallback, tryNum=0) {
