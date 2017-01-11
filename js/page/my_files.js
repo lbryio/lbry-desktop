@@ -178,7 +178,7 @@ var MyFilesPage = React.createClass({
 
         seenUris[lbry_uri] = true;
 
-        content.push(<FileTile name={lbry_uri} sdHash={sd_hash} isMine={this.props.show == 'published'} local={true}
+        content.push(<FileTile name={lbry_uri} sdHash={sd_hash} isMine={this.props.show == 'published'} local={true} hideOnRemove={true}
                                metadata={metadata} completed={completed} stopped={stopped} pending={pending} path={download_path}
                                {... this.state.filesAvailable !== null ? {available: this.state.filesAvailable[sd_hash]} : {}} />);
       }

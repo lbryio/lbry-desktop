@@ -167,6 +167,7 @@ export let DownloadLink = React.createClass({
     path: React.PropTypes.string,
     hidden: React.PropTypes.bool,
     deleteChecked: React.PropTypes.bool,
+    onRemoveConfirmed: React.PropTypes.func,
   },
   tryDownload: function() {
     this.setState({
@@ -217,13 +218,18 @@ export let DownloadLink = React.createClass({
   },
   handleRemoveConfirmed: function() {
     lbry.deleteFile(this.props.sdHash || this.props.streamName, this.state.deleteChecked);
+    if (this.props.onRemoveConfirmed) {
+      this.props.onRemoveConfirmed();
+    }
     this.setState({
       modal: null,
+      attemptingRemove: true,
     });
   },
   getDefaultProps: function() {
     return {
       state: 'not-started',
+      hideOnDelete: false,
     }
   },
   getInitialState: function() {
@@ -233,6 +239,7 @@ export let DownloadLink = React.createClass({
       menuOpen: false,
       deleteChecked: false,
       attemptingDownload: false,
+      attemptingRemove: false,
     }
   },
   closeModal: function() {
@@ -256,7 +263,9 @@ export let DownloadLink = React.createClass({
     ];
 
     let linkBlock;
-    if (this.state.attemptingDownload) {
+    if (this.state.attemptingRemove || this.props.state == 'not-started') {
+        linkBlock = <Link button="text" label="Download" icon="icon-download" onClick={this.handleClick} />;
+    } else if (this.state.attemptingDownload) {
       linkBlock = <Link button="text" className="button-download button-download--bg"
                         label="Connecting..." icon="icon-download" />
     } else if (this.props.state == 'downloading') {
@@ -272,10 +281,6 @@ export let DownloadLink = React.createClass({
             {dropDownItems}
           </DropDown>
         </span>
-      );
-    } else if (this.props.state == 'not-started') {
-      linkBlock = (
-        <Link button="text" label="Download" icon="icon-download" onClick={this.handleClick} />
       );
     } else if (this.props.state == 'done') {
       linkBlock = (

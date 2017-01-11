@@ -17,6 +17,7 @@ let FileTile = React.createClass({
     local: React.PropTypes.bool,
     cost: React.PropTypes.number,
     costIncludesData: React.PropTypes.bool,
+    hideOnRemove: React.PropTypes.bool,
   },
   updateFileInfo: function(progress=null) {
     const updateFileInfoCallback = ((fileInfo) => {
@@ -73,6 +74,7 @@ let FileTile = React.createClass({
   getInitialState: function() {
     return {
       downloading: false,
+      removeConfirmed: false,
       isHovered: false,
       cost: null,
       costIncludesData: null,
@@ -84,6 +86,7 @@ let FileTile = React.createClass({
   getDefaultProps: function() {
     return {
       compact: false,
+      hideOnRemove: false,
     }
   },
   handleMouseOver: function() {
@@ -94,6 +97,11 @@ let FileTile = React.createClass({
   handleMouseOut: function() {
     this.setState({
       isHovered: false,
+    });
+  },
+  handleRemoveConfirmed: function() {
+    this.setState({
+      removeConfirmed: true,
     });
   },
   componentWillMount: function() {
@@ -120,8 +128,9 @@ let FileTile = React.createClass({
     this._isMounted = false;
   },
   render: function() {
-    if (this.state.isMine === null || this.state.local === null) {
-      // Can't render until we know whether we own the file and if we have a local copy
+    // Can't render until we know whether we own the file and if we have a local copy
+    if (this.state.isMine === null || this.state.local === null ||
+        (this.props.hideOnRemove && this.state.removeConfirmed)) {
       return null;
     }
 
@@ -163,7 +172,8 @@ let FileTile = React.createClass({
             <div>
               {this.props.metadata.content_type.startsWith('video/') ? <WatchLink streamName={this.props.name} button="primary" /> : null}
               {!this.props.isMine
-                ? <DownloadLink streamName={this.props.name} metadata={this.props.metadata} button="text" {... downloadLinkExtraProps}/>
+                ? <DownloadLink streamName={this.props.name} metadata={this.props.metadata} button="text"
+                                onRemoveConfirmed={this.handleRemoveConfirmed} {... downloadLinkExtraProps}/>
                 : null}
              </div>
             <p className="file-tile__description">
