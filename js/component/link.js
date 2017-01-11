@@ -289,6 +289,7 @@ export let DownloadLink = React.createClass({
 
     return (
       <span className="button-container">
+        {linkBlock}
         <Modal isOpen={this.state.modal == 'notEnoughCredits'} contentLabel="Not enough credits"
                onConfirmed={this.closeModal}>
           You don't have enough LBRY credits to pay for this stream.
@@ -297,8 +298,9 @@ export let DownloadLink = React.createClass({
                onConfirmed={this.closeModal}>
           LBRY was unable to download the stream <strong>lbry://{this.props.streamName}</strong>.
         </Modal>
-        <Modal isOpen={this.state.modal == 'confirmRemove'} type="confirm" confirmButtonLabel="Remove"
-               onConfirmed={this.handleRemoveConfirmed} onAborted={this.closeModal}>
+        <Modal isOpen={this.state.modal == 'confirmRemove'} contentLabel="Not enough credits"
+               type="confirm" confirmButtonLabel="Remove" onConfirmed={this.handleRemoveConfirmed}
+               onAborted={this.closeModal}>
           <p>Are you sure you'd like to remove <cite>{this.props.metadata.title}</cite> from LBRY?</p>
 
           <label><FormField type="checkbox" checked={this.state.deleteChecked} onClick={this.handleDeleteCheckboxClicked} /> Delete this file from my computer</label>
