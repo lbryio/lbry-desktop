@@ -2,7 +2,7 @@ const path = require('path');
 
 const PATHS = {
   app: path.join(__dirname, 'app'),
-  dist: path.join(__dirname, 'dist')
+  dist: path.join(__dirname, '..', 'app', 'dist')
 };
 
 module.exports = {
@@ -10,9 +10,12 @@ module.exports = {
   output: {
     path: path.join(PATHS.dist, 'js'),
     publicPath: '/js/',
-    filename: "bundle.js"
+    filename: "bundle.js",
+    pathinfo: true
   },
-  devtool: 'source-map',
+  debug: true,
+  cache: true,
+  devtool: 'eval',
   module: {
     preLoaders: [
       {
@@ -27,7 +30,7 @@ module.exports = {
       {
 	test: /\.jsx?$/,
 	loader: 'babel',
-        query: {
+	query: {
           cacheDirectory: true,
           presets:[ 'es2015', 'react', 'stage-2' ]
         }
