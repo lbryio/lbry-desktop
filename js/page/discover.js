@@ -41,11 +41,15 @@ var SearchNoResults = React.createClass({
 
 var SearchResults = React.createClass({
   render: function() {
-    var rows = [];
+    var rows = [],
+        seenNames = {}; //fix this when the search API returns claim IDs
     this.props.results.forEach(function({name, value}) {
-      rows.push(
-        <FileTile key={name} name={name} />
-      );
+      if (!seenNames[name]) {
+        seenNames[name] = name;
+        rows.push(
+          <FileTile key={name} name={name} />
+        );
+      }
     });
     return (
       <div>{rows}</div>
