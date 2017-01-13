@@ -506,7 +506,7 @@ lbry.fileInfoSubscribeByName = function(name, callback) {
 // }
 
 lbry.fileInfoUnsubscribe = function(name, subscribeId) {
-  delete lbry._fileInfoSubscribeCallbacks[name][subscribeId];
+  lbry._fileInfoSubscribeCallbacks[name] = lbry._fileInfoSubscribeCallbacks[name].splice(subscribeId, 1);
 }
 
 export default lbry;

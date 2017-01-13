@@ -168,7 +168,7 @@ export let FileActions = React.createClass({
   componentWillUnmount: function() {
     this._isMounted = false;
     if (this._fileInfoSubscribeId) {
-      lbry.fileInfoUnsubscribe(this.props.name, this._fileInfoSubscribeId);
+      lbry.fileInfoUnsubscribe(this.props.streamName, this._fileInfoSubscribeId);
     }
   },
   render: function() {

@@ -124,7 +124,7 @@ export let Thumbnail = React.createClass({
   _isMounted: false,
 
   propTypes: {
-    src: React.PropTypes.string.isRequired,
+    src: React.PropTypes.string,
   },
   handleError: function() {
     if (this.state.imageUrl != this._defaultImageUri) {

@@ -44,7 +44,7 @@ var SearchResults = React.createClass({
     var rows = [];
     this.props.results.forEach(function({name, value}) {
       rows.push(
-        <FileTile key={name} name={name} sdHash={value.sources.lbry_sd_hash} metadata={value} />
+        <FileTile key={name} name={name} />
       );
     });
     return (
