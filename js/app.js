@@ -190,7 +190,8 @@ var App = React.createClass({
   },
   render: function() {
     var mainContent = this.getMainContent(),
-        headerLinks = this.getHeaderLinks();
+        headerLinks = this.getHeaderLinks(),
+        searchQuery = this.state.viewingPage == 'discover' && this.state.pageArgs ? this.state.pageArgs : '';
 
     return (
       this.state.viewingPage == 'watch' ?
@@ -198,7 +199,7 @@ var App = React.createClass({
         <div id="window" className={ this.state.drawerOpen ? 'drawer-open' : 'drawer-closed' }>
           <Drawer onCloseDrawer={this.closeDrawer} viewingPage={this.state.viewingPage} />
           <div id="main-content" className={ headerLinks ? 'with-sub-nav' : 'no-sub-nav' }>
-            <Header onOpenDrawer={this.openDrawer} onSearch={this.onSearch} links={headerLinks} viewingPage={this.state.viewingPage} />
+            <Header onOpenDrawer={this.openDrawer} initialQuery={searchQuery} onSearch={this.onSearch} links={headerLinks} viewingPage={this.state.viewingPage} />
             {mainContent}
           </div>
           <Modal isOpen={this.state.modal == 'upgrade'} contentLabel="Update available"
