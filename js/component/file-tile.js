@@ -51,22 +51,44 @@ let FilePrice = React.createClass({
 
 /*should be merged into FileTile once FileTile is refactored to take a single id*/
 export let FileTileStream = React.createClass({
+  _fileInfoSubscribeId: null,
+  _isMounted: null,
+
   propTypes: {
     metadata: React.PropTypes.object,
     sdHash: React.PropTypes.string,
+    hideOnRemove: React.PropTypes.bool,
     hidePrice: React.PropTypes.bool,
     obscureNsfw: React.PropTypes.bool
   },
   getInitialState: function() {
     return {
       showNsfwHelp: false,
-      isRemoved: false
+      isHidden: false
     }
   },
   getDefaultProps: function() {
     return {
       obscureNsfw: !lbry.getClientSetting('showNsfw'),
       hidePrice: false
+    }
+  },
+  componentDidMount: function() {
+    this._isMounted = true;
+    if (this.props.hideOnRemove) {
+      lbry.fileInfoSubscribe(this.props.sdHash, this.onFileInfoUpdate);
+    }
+  },
+  componentWillUnmount: function() {
+    if (this._fileInfoSubscribeId) {
+      lbry.fileInfoUnsubscribe(this.props.sdHash, this._fileInfoSubscribeId);
+    }
+  },
+  onFileInfoUpdate: function(fileInfo) {
+    if (!fileInfo && this._isMounted && this.props.hideOnRemove) {
+      this.setState({
+        isHidden: true
+      });
     }
   },
   handleMouseOver: function() {
@@ -84,6 +106,10 @@ export let FileTileStream = React.createClass({
     }
   },
   render: function() {
+    if (this.state.isHidden) {
+      return null;
+    }
+
     const metadata = this.props.metadata || {},
           obscureNsfw = this.props.obscureNsfw && metadata.nsfw,
           title =  metadata.title ? metadata.title : ('lbry://' + this.props.name);

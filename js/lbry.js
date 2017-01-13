@@ -463,7 +463,6 @@ lbry._fileInfoSubscribeCallbacks = {};
 lbry._fileInfoSubscribeInterval = 5000;
 lbry._claimIdOwnershipCache = {}; // should be claimId!!! But not
 
-
 lbry._updateClaimOwnershipCache = function(claimId) {
   lbry.getMyClaims((claimsInfo) => {
     lbry._claimIdOwnershipCache[claimId] = !!claimsInfo.reduce(function(match, claimInfo) {
