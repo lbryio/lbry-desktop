@@ -114,7 +114,7 @@ let FileTileStream = React.createClass({
             <div className="meta"><a href={'/?show=' + this.props.name}>lbry://{this.props.name}</a></div>
             <h3 className="file-tile__title">
               <a href={'/?show=' + this.props.name}>
-                <TruncatedText lines={2}>
+                <TruncatedText lines={1}>
                   {title}
                 </TruncatedText>
               </a>
