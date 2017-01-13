@@ -34,7 +34,7 @@ var WatchPage = React.createClass({
           mimeType: status.mime_type,
         })
         var player = new MediaElementPlayer(this.refs.player, {
-          mode: 'auto_plugin',
+          mode: 'shim',
           plugins: ['flash'],
           setDimensions: false,
         });
