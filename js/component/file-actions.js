@@ -56,11 +56,10 @@ export let FileActions = React.createClass({
 
   propTypes: {
     streamName: React.PropTypes.string,
-    sdHash: React.PropTypes.string,
+    sdHash: React.PropTypes.string.isRequired,
     metadata: React.PropTypes.object,
     path: React.PropTypes.string,
     hidden: React.PropTypes.bool,
-    onRemoveConfirmed: React.PropTypes.func,
     deleteChecked: React.PropTypes.bool,
   },
   getInitialState: function() {
@@ -137,9 +136,10 @@ export let FileActions = React.createClass({
     });
   },
   handleRemoveConfirmed: function() {
-    lbry.deleteFile(this.props.sdHash || this.props.streamName, this.state.deleteChecked);
-    if (this.props.onRemoveConfirmed) {
-      this.props.onRemoveConfirmed();
+    if (this.props.streamName) {
+      lbry.deleteFile(this.props.streamName, this.state.deleteChecked);
+    } else {
+      alert('this file cannot be deleted because lbry is a retarded piece of shit');
     }
     this.setState({
       modal: null,
@@ -155,20 +155,12 @@ export let FileActions = React.createClass({
   },
   componentDidMount: function() {
     this._isMounted = true;
-
-    if ('sdHash' in this.props) {
-      alert('render by sd hash is broken');
-      lbry.fileInfoSubscribeByStreamHash(this.props.sdHash, this.fileInfoU);
-    } else if ('streamName' in this.props) {
-      this._fileInfoSubscribeId = lbry.fileInfoSubscribeByName(this.props.streamName, this.onFileInfoUpdate);
-    } else {
-      throw new Error("No stream name or sd hash passed to FileTile");
-    }
+    this._fileInfoSubscribeId = lbry.fileInfoSubscribe(this.props.sdHash, this.onFileInfoUpdate);
   },
   componentWillUnmount: function() {
     this._isMounted = false;
     if (this._fileInfoSubscribeId) {
-      lbry.fileInfoUnsubscribe(this.props.streamName, this._fileInfoSubscribeId);
+      lbry.fileInfoUnsubscribe(this.props.sdHash, this._fileInfoSubscribeId);
     }
   },
   render: function() {
@@ -178,7 +170,7 @@ export let FileActions = React.createClass({
     }
     const openInFolderMessage = window.navigator.platform.startsWith('Mac') ? 'Open in Finder' : 'Open in Folder',
           showMenu = !this.state.attemptingRemove && this.state.fileInfo !== null;
-    
+
     let linkBlock;
     if (this.state.attemptingRemove || (this.state.fileInfo === false && !this.state.attemptingDownload)) {
       linkBlock = <Link button="text" label="Download" icon="icon-download" onClick={this.onDownloadClick} />;

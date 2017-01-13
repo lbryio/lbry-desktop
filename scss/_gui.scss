@@ -347,12 +347,6 @@ input[type="text"], input[type="search"]
   margin: 0px 6px;
 }
 
-.error-modal__error-list {
-  border: 1px solid #eee;
-  padding: 8px;
-  list-style: none;
-}
-
 .error-modal-overlay {
   background: rgba(#000, .88);
 }
@@ -371,12 +365,15 @@ input[type="text"], input[type="search"]
   word-break: break-all;
 }
 
-
 .error-modal {
   max-width: none;
   width: 400px;
 }
 .error-modal__error-list { /*shitty hack/temp fix for long errors making modals unusable*/
+  border: 1px solid #eee;
+  padding: 8px;
+  list-style: none;
   max-height: 400px;
+  max-width: 400px;
   overflow-y: hidden;
 }

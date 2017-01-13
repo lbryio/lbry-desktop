@@ -55,8 +55,7 @@ export let FileTileStream = React.createClass({
     metadata: React.PropTypes.object,
     sdHash: React.PropTypes.string,
     hidePrice: React.PropTypes.bool,
-    obscureNsfw: React.PropTypes.bool,
-    hideOnRemove: React.PropTypes.bool
+    obscureNsfw: React.PropTypes.bool
   },
   getInitialState: function() {
     return {
@@ -66,7 +65,6 @@ export let FileTileStream = React.createClass({
   },
   getDefaultProps: function() {
     return {
-      hideOnRemove: false,
       obscureNsfw: !lbry.getClientSetting('showNsfw'),
       hidePrice: false
     }
@@ -85,19 +83,11 @@ export let FileTileStream = React.createClass({
       });
     }
   },
-  onRemove: function() {
-    this.setState({
-      isRemoved: true,
-    });
-  },
   render: function() {
-    if (this.props.metadata === null || (this.props.hideOnRemove && this.state.isRemoved)) {
-      return null;
-    }
-
     const metadata = this.props.metadata || {},
           obscureNsfw = this.props.obscureNsfw && metadata.nsfw,
           title =  metadata.title ? metadata.title : ('lbry://' + this.props.name);
+
     return (
       <section className={ 'file-tile card ' + (obscureNsfw ? 'card-obscured ' : '') } onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
         <div className="row-fluid card-content file-tile__row">
@@ -116,7 +106,7 @@ export let FileTileStream = React.createClass({
                 </TruncatedText>
               </a>
             </h3>
-            <FileActions streamName={this.props.name} metadata={metadata} />
+            <FileActions streamName={this.props.name} sdHash={this.props.sdHash} metadata={metadata} />
             <p className="file-tile__description">
               <TruncatedText lines={3}>
                 {metadata.description}
@@ -141,7 +131,7 @@ export let FileTile = React.createClass({
   _isMounted: false,
 
   propTypes: {
-    name: React.PropTypes.string
+    name: React.PropTypes.string.isRequired
   },
 
   getInitialState: function() {
@@ -167,7 +157,7 @@ export let FileTile = React.createClass({
     this._isMounted = false;
   },
   render: function() {
-    if (this.state.metadata === null || this.state.sdHash === null) {
+    if (!this.state.metadata || !this.state.sdHash) {
       return null;
     }
 
