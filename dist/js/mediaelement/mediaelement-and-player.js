@@ -309,6 +309,16 @@ mejs.PluginDetector = {
 
 	// main public function to test a plug version number PluginDetector.hasPluginVersion('flash',[9,0,125]);
 	hasPluginVersion: function(plugin, v) {
+		/**
+		 * Workaround for LBRY: Safari now reports Flash being disabled even when it's installed.
+		 * So we have to pretend we know it's installed. (This also makes sure that users of all
+		 * browsers get a "missing plugin" message if they don't have Flash installed.)
+		 */
+
+		if (plugin == 'flash') {
+			return true;
+		}
+
 		var pv = this.plugins[plugin];
 		v[1] = v[1] || 0;
 		v[2] = v[2] || 0;
