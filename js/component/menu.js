@@ -42,21 +42,20 @@ export let DropDownMenu = React.createClass({
       window.removeEventListener('click', this.handleWindowClick, false);
     }
   },
-  onMenuIconClick: function() {
+  onMenuIconClick: function(e) {
     this.setState({
       menuOpen: !this.state.menuOpen,
     });
     if (!this.state.menuOpen && !this._isWindowClickBound) {
       this._isWindowClickBound = true;
       window.addEventListener('click', this.handleWindowClick, false);
+      e.stopPropagation();
     }
     return false;
   },
   handleWindowClick: function(e) {
     if (this.state.menuOpen &&
           (!this._menuDiv || !this._menuDiv.contains(e.target))) {
-      console.log('menu closing disabled due to auto close on click, fix me');
-      return;
       this.setState({
         menuOpen: false
       });

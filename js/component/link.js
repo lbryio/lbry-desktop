@@ -15,9 +15,9 @@ export let Link = React.createClass({
       disabled: false,
     };
   },
-  handleClick: function() {
+  handleClick: function(e) {
     if (this.props.onClick) {
-      this.props.onClick();
+      this.props.onClick(e);
     }
   },
   render: function() {
