@@ -43,20 +43,9 @@ var App = React.createClass({
       pageArgs: typeof val !== 'undefined' ? val : null,
       errorInfo: null,
       modal: null,
-      startNotice: null,
       updateUrl: null,
       isOldOSX: null,
     };
-  },
-  componentDidMount: function() {
-    lbry.getStartNotice(function(notice) {
-      if (notice) {
-        this.setState({
-          modal: 'startNotice',
-          startNotice: notice
-        });
-      }
-    });
   },
   componentWillMount: function() {
     document.addEventListener('unhandledError', (event) => {
@@ -212,9 +201,6 @@ var App = React.createClass({
             <Header onOpenDrawer={this.openDrawer} onSearch={this.onSearch} links={headerLinks} viewingPage={this.state.viewingPage} />
             {mainContent}
           </div>
-          <Modal isOpen={this.state.modal == 'startNotice'} onConfirmed={this.closeModal}>
-            {this.state.startNotice}
-          </Modal>
           <Modal isOpen={this.state.modal == 'upgrade'} type="confirm" confirmButtonLabel="Upgrade" abortButtonLabel="Skip"
                  onConfirmed={this.handleUpgradeClicked} onAborted={this.handleSkipClicked} >
             <p>Your version of LBRY is out of date and may be unreliable or insecure.</p>
