@@ -2,6 +2,8 @@
 
 $spacing-vertical: 24px;
 
+$padding-button: 12px;
+
 $color-primary: #155B4A;
 $color-light-alt: hsl(hue($color-primary), 15, 85);
 $color-text-dark: #000;
@@ -18,7 +20,8 @@ $mobile-width-threshold: 801px;
 $max-content-width: 1000px;
 $max-text-width: 660px;
 
-$header-height: $spacing-vertical * 2.5;
+$height-header: $spacing-vertical * 2.5;
+$height-button: $spacing-vertical * 1.5;
 
 $default-box-shadow: 0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12);
 

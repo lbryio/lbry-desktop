@@ -1,6 +1,6 @@
 @import "global";
 
-@mixin text-link($color: $color-primary, $hover-opacity: 0.70, $mirror: false) {
+@mixin text-link($color: $color-primary, $hover-opacity: 0.70) {
   color: $color;
   .icon
   {
@@ -28,18 +28,7 @@
     }
   }
 
-  @if $mirror == false {
-    color: $color;
-  }
-  @else {
-    color: $color-bg;
-    background-color: $color;
-    position: absolute;
-    white-space: nowrap;
-    overflow: hidden;
-    top: 0px;
-    left: 0px;
-  }
+  color: $color;
 }
 
 .icon-fixed-width {
@@ -156,16 +145,15 @@ input[type="text"], input[type="search"]
 
   + .button-container
   {
-    margin-left: 12px;
+    margin-left: $padding-button;
   }
 }
 
-.button-block
+.button-block, .faux-button-block
 {
-  cursor: pointer;
   display: inline-block;
-  height: $spacing-vertical * 1.5;
-  line-height: $spacing-vertical * 1.5;
+  height: $height-button;
+  line-height: $height-button;
   text-decoration: none;
   border: 0 none;
   text-align: center;
@@ -184,37 +172,28 @@ input[type="text"], input[type="search"]
     padding-left: 5px;
   }
 }
+.button-block
+{
+  cursor: pointer;
+}
 
 .button-primary
 {
   color: white;
   background-color: $color-primary;
   box-shadow: $default-box-shadow;
-  padding: 0 12px;
+  padding: 0 $padding-button;
 }
 .button-alt
 {
   background-color: $color-bg-alt;
   box-shadow: $default-box-shadow;
-  padding: 0 12px;
+  padding: 0 $padding-button;
 }
 
-.button-download
-{
-  padding: 0 6px;
-
-  text-decoration: none !important;
-
-  &.button-download--bg  {
-    @include text-link(darken($color-primary, 1%));
-  }
-  &.button-download--fg {
-    @include text-link(darken($color-primary, 1%), $mirror: true);
-  }
-}
 .button-cancel
 {
-  padding: 0 12px;
+  padding: 0 $padding-button;
 }
 .button-text
 {
@@ -378,11 +357,6 @@ input[type="text"], input[type="search"]
   background: rgba(#000, .88);
 }
 
-.error-modal {
-  max-width: none;
-  width: 400px;
-}
-
 .error-modal__content {
   display: flex;
   padding: 0px 8px 10px 10px;
@@ -397,56 +371,12 @@ input[type="text"], input[type="search"]
   word-break: break-all;
 }
 
-.menu {
-  position: fixed;
-  white-space: nowrap;
-  background-color: $color-bg-alt;
-  box-shadow: $default-box-shadow;
-  padding: $spacing-vertical;
-  border-radius: 2px;
+
+.error-modal {
+  max-width: none;
+  width: 400px;
 }
-
-.menu__menu-item {
-  display: block;
-  text-decoration: none !important;
-  &:hover {
-    text-decoration: underline !important;
-  }
-}
-
-
-.file-tile--compact {
-  height: 180px;
-}
-
-.file-tile__row {
-  height: 24px * 7;
+.error-modal__error-list { /*shitty hack/temp fix for long errors making modals unusable*/
+  max-height: 400px;
   overflow-y: hidden;
-}
-
-.file-tile__thumbnail {
-  max-width: 100%;
-  max-height: 24px * 7;
-  display: block;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.file-tile__title {
-  font-weight: bold;
-}
-
-.file-tile__title--compact {
-  font-size: 1.25em;
-  line-height: 1.15;
-}
-
-.file-tile__cost {
-  float: right;
-}
-
-.file-tile__description {
-  color: #444;
-  margin-top: 12px;
-  font-size: 0.9em;
 }

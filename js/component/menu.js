@@ -1,35 +1,8 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import {Icon} from './common.js';
+import {Link} from '../component/link.js';
 
-export let Menu = React.createClass({
-  propTypes: {
-    onClickOut: React.PropTypes.func.isRequired,
-  },
-  handleWindowClick: function(e) {
-    if (!this._div.contains(e.target)) {
-      // Menu is open and user clicked outside of it
-      this.props.onClickOut();
-    }
-  },
-  componentDidMount: function() {
-    window.addEventListener('click', this.handleWindowClick, false);
-  },
-  componentWillUnmount: function() {
-    window.removeEventListener('click', this.handleWindowClick, false);
-  },
-  render: function() {
-    const {onClickOut, ...other} = this.props;
-    return (
-      <div ref={(div) => this._div = div} className={'menu ' + (this.props.className || '')}
-           {... other}>
-        {this.props.children}
-      </div>
-    );
-  }
-});
-
-export let MenuItem = React.createClass({
+export let DropDownMenuItem = React.createClass({
   propTypes: {
     href: React.PropTypes.string,
     label: React.PropTypes.string,
@@ -45,12 +18,64 @@ export let MenuItem = React.createClass({
     var icon = (this.props.icon ? <Icon icon={this.props.icon} fixed /> : null);
 
     return (
-      <a className="button-text menu__menu-item" onClick={this.props.onClick}
+      <a className="menu__menu-item" onClick={this.props.onClick}
          href={this.props.href || 'javascript:'} label={this.props.label}>
         {this.props.iconPosition == 'left' ? icon : null}
         {this.props.label}
         {this.props.iconPosition == 'left' ? null : icon}
       </a>
+    );
+  }
+});
+
+export let DropDownMenu = React.createClass({
+  _isWindowClickBound: false,
+  _menuDiv: null,
+
+  getInitialState: function() {
+    return {
+      menuOpen: false,
+    };
+  },
+  componentWillUnmount: function() {
+    if (this._isWindowClickBound) {
+      window.removeEventListener('click', this.handleWindowClick, false);
+    }
+  },
+  onMenuIconClick: function() {
+    this.setState({
+      menuOpen: !this.state.menuOpen,
+    });
+    if (!this.state.menuOpen && !this._isWindowClickBound) {
+      this._isWindowClickBound = true;
+      window.addEventListener('click', this.handleWindowClick, false);
+    }
+    return false;
+  },
+  handleWindowClick: function(e) {
+    if (this.state.menuOpen &&
+          (!this._menuDiv || !this._menuDiv.contains(e.target))) {
+      console.log('menu closing disabled due to auto close on click, fix me');
+      return;
+      this.setState({
+        menuOpen: false
+      });
+    }
+  },
+  render: function() {
+    if (!this.state.menuOpen && this._isWindowClickBound) {
+      this._isWindowClickBound = false;
+      window.removeEventListener('click', this.handleWindowClick, false);
+    }
+    return (
+      <div className="button-container">
+        <Link ref={(span) => this._menuButton = span} icon="icon-ellipsis-v" onClick={this.onMenuIconClick} />
+        {this.state.menuOpen
+          ? <div ref={(div) => this._menuDiv = div} className="menu">
+              {this.props.children}
+            </div>
+          : null}
+      </div>
     );
   }
 });

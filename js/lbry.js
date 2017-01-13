@@ -132,7 +132,7 @@ lbry.getNewAddress = function(callback) {
   lbry.call('get_new_address', {}, callback);
 }
 
-lbry.checkAddressIsMine = function(address, callback) { 
+lbry.checkAddressIsMine = function(address, callback) {
   lbry.call('address_is_mine', {address: address}, callback);
 }
 
@@ -457,5 +457,56 @@ lbry.stop = function(callback) {
   lbry.call('stop', {}, callback);
 };
 
+lbry.fileInfo = {};
+lbry._fileInfoSubscribeIdCounter = 0;
+lbry._fileInfoSubscribeCallbacks = {};
+lbry._fileInfoSubscribeInterval = 5000;
+lbry._claimIdOwnershipCache = {}; // should be claimId!!! But not
+
+
+lbry._updateClaimOwnershipCache = function(claimId) {
+  lbry.getMyClaims((claimsInfo) => {
+    lbry._claimIdOwnershipCache[claimId] = !!claimsInfo.reduce(function(match, claimInfo) {
+      return match || claimInfo.claim_id == claimId;
+    });
+  });
+};
+
+lbry._updateSubscribedFileInfoByName = function(name) {
+  lbry.getFileInfoByName(name, (fileInfo) => {
+    if (fileInfo) {
+      if (this._claimIdOwnershipCache[fileInfo.claim_id] === undefined) {
+        lbry._updateClaimOwnershipCache(fileInfo.claim_id);
+      }
+      fileInfo.isMine = !!this._claimIdOwnershipCache[fileInfo.claim_id];
+    }
+    this._fileInfoSubscribeCallbacks[name].forEach(function(callback) {
+      callback(fileInfo);
+    });
+  });
+  setTimeout(() => { this._updateSubscribedFileInfoByName(name) }, lbry._fileInfoSubscribeInterval);
+}
+
+lbry.fileInfoSubscribeByName = function(name, callback) {
+  if (!lbry._fileInfoSubscribeCallbacks[name])
+  {
+    lbry._fileInfoSubscribeCallbacks[name] = [];
+  }
+
+  const subscribeId = ++lbry._fileInfoSubscribeIdCounter;
+  lbry._fileInfoSubscribeCallbacks[name][subscribeId] = callback;
+  lbry._updateSubscribedFileInfoByName(name);
+  return subscribeId;
+}
+
+// lbry.fileInfoSubscribeByStreamHash = function(sdHash, callback) {
+//   lbry.getFileInfoBySdHash(this.props.sdHash, this.updateFileInfoCallback);
+//   this.getIsMineIfNeeded(this.props.sdHash);
+//   setTimeout(() => { this.updateFileInfo() }, this._fileInfoCheckInterval);
+// }
+
+lbry.fileInfoUnsubscribe = function(name, subscribeId) {
+  delete lbry._fileInfoSubscribeCallbacks[name][subscribeId];
+}
 
 export default lbry;

@@ -2,7 +2,8 @@ import React from 'react';
 import lbry from '../lbry.js';
 import lighthouse from '../lighthouse.js';
 import {CreditAmount, Thumbnail} from '../component/common.js';
-import {Link, DownloadLink, WatchLink} from '../component/link.js';
+import {FileActions} from '../component/file-actions.js';
+import {Link} from '../component/link.js';
 
 var formatItemImgStyle = {
   maxWidth: '100%',
@@ -62,10 +63,7 @@ var FormatItem = React.createClass({
               </tbody>
             </table>
           </section>
-          <section>
-            {mediaType == 'video' ? <WatchLink streamName={this.props.name} button="primary" /> : null}
-            <DownloadLink streamName={this.props.name} button="alt" />
-          </section>
+          <FileActions />
           <section>
             <Link href="https://lbry.io/dmca" label="report" className="button-text-help" />
           </section>

@@ -3,6 +3,9 @@
 @import "_icons";
 @import "_mediaelement";
 @import "_canvas";
-@import "_table";
 @import "_gui";
+@import "component/_table";
+@import "component/_file-actions.scss";
+@import "component/_file-tile.scss";
+@import "component/_menu.scss";
 @import "page/_developer.scss";

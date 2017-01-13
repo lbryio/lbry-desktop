@@ -152,6 +152,6 @@ export let Thumbnail = React.createClass({
     this._isMounted = false;
   },
   render: function() {
-    return <img ref="img" onError={this.handleError} {... this.props} src={this.state.imageUri} /> 
+    return <img ref="img" onError={this.handleError} {... this.props} src={this.state.imageUri} />
   },
 });

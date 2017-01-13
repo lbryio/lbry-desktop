@@ -1,0 +1,27 @@
+@import "../global";
+
+.file-tile__row {
+  height: $spacing-vertical * 7;
+}
+
+.file-tile__thumbnail {
+  max-width: 100%;
+  max-height: $spacing-vertical * 7;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.file-tile__title {
+  font-weight: bold;
+}
+
+.file-tile__cost {
+  float: right;
+}
+
+.file-tile__description {
+  color: #444;
+  margin-top: 12px;
+  font-size: 0.9em;
+}

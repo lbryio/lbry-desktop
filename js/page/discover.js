@@ -2,8 +2,8 @@ import React from 'react';
 import lbry from '../lbry.js';
 import lighthouse from '../lighthouse.js';
 import FileTile from '../component/file-tile.js';
-import {Link, ToolTipLink, DownloadLink, WatchLink} from '../component/link.js';
-import {Thumbnail, CreditAmount, TruncatedText, BusyMessage} from '../component/common.js';
+import {Link, ToolTipLink} from '../component/link.js';
+import {BusyMessage} from '../component/common.js';
 
 var fetchResultsStyle = {
     color: '#888',
@@ -53,57 +53,6 @@ var SearchResults = React.createClass({
   }
 });
 
-var featuredContentItemContainerStyle = {
-  position: 'relative',
-};
-
-var FeaturedContentItem = React.createClass({
-  resolveSearch: false,
-
-  propTypes: {
-    name: React.PropTypes.string,
-  },
-
-  getInitialState: function() {
-    return {
-      metadata: null,
-      title: null,
-      cost: null,
-      overlayShowing: false,
-    };
-  },
-
-  componentWillUnmount: function() {
-    this.resolveSearch = false;
-  },
-
-  componentDidMount: function() {
-    this._isMounted = true;
-
-    lbry.resolveName(this.props.name, (metadata) => {
-      if (!this._isMounted) {
-        return;
-      }
-
-      this.setState({
-        metadata: metadata,
-        title: metadata && metadata.title ? metadata.title : ('lbry://' + this.props.name),
-      });
-    });
-  },
-
-  render: function() {
-    if (this.state.metadata === null) {
-      // Still waiting for metadata, skip render
-      return null;
-    }
-
-    return (<div style={featuredContentItemContainerStyle}>
-      <FileTile name={this.props.name} metadata={this.state.metadata} compact />
-    </div>);
-  }
-});
-
 var featuredContentLegendStyle = {
   fontSize: '12px',
   color: '#aaa',
@@ -116,21 +65,21 @@ var FeaturedContent = React.createClass({
       <div className="row-fluid">
         <div className="span6">
           <h3>Featured Content</h3>
-          <FeaturedContentItem name="bellflower" />
-          <FeaturedContentItem name="itsadisaster" />
-          <FeaturedContentItem name="dopeman" />
-          <FeaturedContentItem name="smlawncare" />
-          <FeaturedContentItem name="cinemasix" />
+          <FileTile name="bellflower" />
+          <FileTile name="itsadisaster" />
+          <FileTile name="dopeman" />
+          <FileTile name="smlawncare" />
+          <FileTile name="cinemasix" />
 
         </div>
         <div className="span6">
           <h3>Community Content <ToolTipLink style={featuredContentLegendStyle} label="What's this?"
             tooltip='Community Content is a public space where anyone can share content with the rest of the LBRY community. Bid on the names "one," "two," "three," "four" and "five" to put your content here!' /></h3>
-          <FeaturedContentItem name="one" />
-          <FeaturedContentItem name="two" />
-          <FeaturedContentItem name="three" />
-          <FeaturedContentItem name="four" />
-          <FeaturedContentItem name="five" />
+          <FileTile name="one" />
+          <FileTile name="two" />
+          <FileTile name="three" />
+          <FileTile name="four" />
+          <FileTile name="five" />
         </div>
       </div>
     );
