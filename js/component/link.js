@@ -144,14 +144,17 @@ export let DownloadLink = React.createClass({
       <span className="button-container">
         <Link button={this.props.button} hidden={this.props.hidden} style={this.props.style}
               disabled={this.state.downloading} label={label} icon={this.props.icon} onClick={this.handleClick} />
-        <Modal className="download-started-modal" isOpen={this.state.modal == 'downloadStarted'} onConfirmed={this.closeModal}>
+        <Modal className="download-started-modal" isOpen={this.state.modal == 'downloadStarted'}
+               contentLabel="Download started" onConfirmed={this.closeModal}>
           <p>Downloading to:</p>
           <div className="download-started-modal__file-path">{this.state.filePath}</div>
         </Modal>
-        <Modal isOpen={this.state.modal == 'notEnoughCredits'} onConfirmed={this.closeModal}>
+        <Modal isOpen={this.state.modal == 'notEnoughCredits'} contentLabel="Not enough credits"
+               onConfirmed={this.closeModal}>
           You don't have enough LBRY credits to pay for this stream.
         </Modal>
-        <Modal isOpen={this.state.modal == 'timedOut'} onConfirmed={this.closeModal}>
+        <Modal isOpen={this.state.modal == 'timedOut'} contentLabel="Download failed"
+               onConfirmed={this.closeModal}>
           LBRY was unable to download the stream <strong>lbry://{this.props.streamName}</strong>.
         </Modal>
       </span>
@@ -208,7 +211,8 @@ export let WatchLink = React.createClass({
         <Link button={this.props.button} hidden={this.props.hidden} style={this.props.style}
               disabled={this.state.loading} label={this.props.label} icon={this.props.icon}
               onClick={this.handleClick} />
-        <Modal isOpen={this.state.modal == 'notEnoughCredits'} onConfirmed={this.closeModal}>
+        <Modal isOpen={this.state.modal == 'notEnoughCredits'} contentLabel="Not enough credits"
+               onConfirmed={this.closeModal}>
           You don't have enough LBRY credits to pay for this stream.
         </Modal>
       </span>

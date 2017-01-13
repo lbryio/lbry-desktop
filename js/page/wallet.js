@@ -151,7 +151,8 @@ var SendToAddressSection = React.createClass({
               : ''
           }
         </form>
-        <Modal isOpen={this.state.modal === 'insufficientBalance'} onConfirmed={this.closeModal}>
+        <Modal isOpen={this.state.modal === 'insufficientBalance'} contentLabel="Insufficient balance"
+               onConfirmed={this.closeModal}>
           Insufficient balance: after this transaction you would have less than 1 LBC in your wallet.
         </Modal>
       </section>

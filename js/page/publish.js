@@ -493,11 +493,13 @@ var PublishPage = React.createClass({
           </div>
         </form>
 
-        <Modal isOpen={this.state.modal == 'publishStarted'} onConfirmed={this.handlePublishStartedConfirmed}>
+        <Modal isOpen={this.state.modal == 'publishStarted'} contentLabel="File published"
+               onConfirmed={this.handlePublishStartedConfirmed}>
           <p>Your file has been published to LBRY at the address <code>lbry://{this.state.name}</code>!</p>
           You will now be taken to your My Files page, where your newly published file will be listed. The file will take a few minutes to appear for other LBRY users; until then it will be listed as "pending."
         </Modal>
-        <Modal isOpen={this.state.modal == 'error'} onConfirmed={this.closeModal}>
+        <Modal isOpen={this.state.modal == 'error'} contentLabel="Error publishing file"
+               onConfirmed={this.closeModal}>
           The following error occurred when attempting to publish your file: {this.state.errorMessage}
         </Modal>
       </main>

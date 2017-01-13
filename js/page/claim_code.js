@@ -119,16 +119,20 @@ var ClaimCodePage = React.createClass({
             </section>
           </div>
         </form>
-        <Modal isOpen={this.state.modal == 'missingCode'} onConfirmed={this.closeModal}>
+        <Modal isOpen={this.state.modal == 'missingCode'} contentLabel="Invitation code required"
+               onConfirmed={this.closeModal}>
           Please enter an invitation code or choose "Skip."
         </Modal>
-        <Modal isOpen={this.state.modal == 'missingEmail'} onConfirmed={this.closeModal}>
+        <Modal isOpen={this.state.modal == 'missingEmail'} contentLabel="Email required"
+               onConfirmed={this.closeModal}>
           Please enter an email address or choose "Skip."
         </Modal>
-        <Modal isOpen={this.state.modal == 'codeRedeemFailed'} onConfirmed={this.closeModal}>
+        <Modal isOpen={this.state.modal == 'codeRedeemFailed'} contentLabel="Failed to redeem code"
+               onConfirmed={this.closeModal}>
           {this.state.failureReason}
         </Modal>
-        <Modal isOpen={this.state.modal == 'codeRedeemed'} onConfirmed={this.handleFinished}>
+        <Modal isOpen={this.state.modal == 'codeRedeemed'} contentLabel="Code redeemed"
+               onConfirmed={this.handleFinished}>
           Your invite code has been redeemed.
           {this.state.referralCredits > 0
             ? `You have also earned ${referralCredits} credits from referrals. A total of ${activationCredits + referralCredits}
@@ -137,10 +141,12 @@ var ClaimCodePage = React.createClass({
                 ? `${this.state.activationCredits} credits will be added to your balance shortly.`
                 : 'The credits will be added to your balance shortly.')}
         </Modal>
-        <Modal isOpen={this.state.modal == 'skipped'} onConfirmed={this.handleFinished}>
+        <Modal isOpen={this.state.modal == 'skipped'} contentLabel="Welcome to LBRY"
+               onConfirmed={this.handleFinished}>
           Welcome to LBRY! You can visit the Wallet page to redeem an invite code at any time.
         </Modal>
-        <Modal isOpen={this.state.modal == 'couldNotConnect'} onConfirmed={this.closeModal}>
+        <Modal isOpen={this.state.modal == 'couldNotConnect'} contentLabel="Could not connect"
+               onConfirmed={this.closeModal}>
           <p>LBRY couldn't connect to our servers to confirm your invitation code. Please check your internet connection.</p>
           If you continue to have problems, you can still browse LBRY and visit the Settings page to redeem your code later.
         </Modal>
