@@ -50,27 +50,25 @@ let FilePrice = React.createClass({
 });
 
 /*should be merged into FileTile once FileTile is refactored to take a single id*/
-let FileTileStream = React.createClass({
+export let FileTileStream = React.createClass({
   propTypes: {
     metadata: React.PropTypes.object,
     sdHash: React.PropTypes.string,
-    showPrice: React.PropTypes.bool,
+    hidePrice: React.PropTypes.bool,
     obscureNsfw: React.PropTypes.bool,
     hideOnRemove: React.PropTypes.bool
   },
-
   getInitialState: function() {
     return {
       showNsfwHelp: false,
       isRemoved: false
     }
   },
-
   getDefaultProps: function() {
     return {
       hideOnRemove: false,
       obscureNsfw: !lbry.getClientSetting('showNsfw'),
-      showPrice: true
+      hidePrice: false
     }
   },
   handleMouseOver: function() {
@@ -100,7 +98,6 @@ let FileTileStream = React.createClass({
     const metadata = this.props.metadata || {},
           obscureNsfw = this.props.obscureNsfw && metadata.nsfw,
           title =  metadata.title ? metadata.title : ('lbry://' + this.props.name);
-
     return (
       <section className={ 'file-tile card ' + (obscureNsfw ? 'card-obscured ' : '') } onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
         <div className="row-fluid card-content file-tile__row">
@@ -108,7 +105,7 @@ let FileTileStream = React.createClass({
             <a href={'/?show=' + this.props.name}><Thumbnail className="file-tile__thumbnail" src={metadata.thumbnail} alt={'Photo for ' + (title || this.props.name)} /></a>
           </div>
           <div className="span9">
-            { this.props.showPrice
+            { !this.props.hidePrice
               ? <FilePrice name={this.props.name} />
               : null}
             <div className="meta"><a href={'/?show=' + this.props.name}>lbry://{this.props.name}</a></div>
@@ -140,7 +137,7 @@ let FileTileStream = React.createClass({
   }
 });
 
-let FileTile = React.createClass({
+export let FileTile = React.createClass({
   _isMounted: false,
 
   propTypes: {
@@ -177,5 +174,3 @@ let FileTile = React.createClass({
     return <FileTileStream name={this.props.name} sdHash={this.state.sdHash} metadata={this.state.metadata} />;
   }
 });
-
-export default FileTile;

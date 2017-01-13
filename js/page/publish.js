@@ -91,8 +91,7 @@ var PublishPage = React.createClass({
       if (this.refs.file.getValue() !== '') {
         publishArgs.file_path = this._tempFilePath;
       }
-
-      console.log(publishArgs);
+      
       lbry.publish(publishArgs, (message) => {
         this.handlePublishStarted();
       }, null, (error) => {

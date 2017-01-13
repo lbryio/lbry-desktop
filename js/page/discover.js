@@ -1,7 +1,7 @@
 import React from 'react';
 import lbry from '../lbry.js';
 import lighthouse from '../lighthouse.js';
-import FileTile from '../component/file-tile.js';
+import {FileTile} from '../component/file-tile.js';
 import {Link, ToolTipLink} from '../component/link.js';
 import {BusyMessage} from '../component/common.js';
 

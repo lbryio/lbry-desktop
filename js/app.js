@@ -4,7 +4,7 @@ import SettingsPage from './page/settings.js';
 import HelpPage from './page/help.js';
 import WatchPage from './page/watch.js';
 import ReportPage from './page/report.js';
-import MyFilesPage from './page/my_files.js';
+import {MyFilesPage} from './page/my_files.js';
 import StartPage from './page/start.js';
 import ClaimCodePage from './page/claim_code.js';
 import ReferralPage from './page/referral.js';

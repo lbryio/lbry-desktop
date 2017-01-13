@@ -2,11 +2,10 @@ import React from 'react';
 import lbry from '../lbry.js';
 import {Link} from '../component/link.js';
 import FormField from '../component/form.js';
-import FileTile from '../component/file-tile.js';
-import Modal from '../component/modal.js';
+import {FileTileStream} from '../component/file-tile.js';
 import {BusyMessage, Thumbnail} from '../component/common.js';
 
-var MyFilesPage = React.createClass({
+export let MyFilesPage = React.createClass({
   _fileTimeout: null,
   _fileInfoCheckRate: 300,
   _fileInfoCheckNum: 0,
@@ -170,17 +169,14 @@ var MyFilesPage = React.createClass({
 
       const filesInfoSorted = this._sortFunctions[this.state.sortBy](this.state.filesInfo);
       for (let fileInfo of filesInfoSorted) {
-        let {completed, lbry_uri, sd_hash, metadata, download_path, stopped, pending} = fileInfo;
+        let {lbry_uri, sd_hash, metadata} = fileInfo;
 
         if (!metadata || seenUris[lbry_uri]) {
           continue;
         }
 
         seenUris[lbry_uri] = true;
-
-        content.push(<FileTile name={lbry_uri} sdHash={sd_hash} isMine={this.props.show == 'published'} showPrice={false} hideOnRemove={true}
-                               metadata={metadata} completed={completed} stopped={stopped} pending={pending} path={download_path}
-                               {... this.state.filesAvailable !== null ? {available: this.state.filesAvailable[sd_hash]} : {}} />);
+        content.push(<FileTileStream name={lbry_uri} sdHash={sd_hash} hideOnRemove={true} hidePrice={true}   metadata={metadata} />);
       }
     }
     return (
@@ -198,5 +194,3 @@ var MyFilesPage = React.createClass({
     );
   }
 });
-
-export default MyFilesPage;

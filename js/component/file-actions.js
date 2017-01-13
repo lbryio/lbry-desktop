@@ -178,7 +178,7 @@ export let FileActions = React.createClass({
     }
     const openInFolderMessage = window.navigator.platform.startsWith('Mac') ? 'Open in Finder' : 'Open in Folder',
           showMenu = !this.state.attemptingRemove && this.state.fileInfo !== null;
-
+    
     let linkBlock;
     if (this.state.attemptingRemove || (this.state.fileInfo === false && !this.state.attemptingDownload)) {
       linkBlock = <Link button="text" label="Download" icon="icon-download" onClick={this.onDownloadClick} />;
