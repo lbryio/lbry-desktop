@@ -480,17 +480,21 @@ lbry._updateSubscribedFileInfoByName = function(name) {
       }
       fileInfo.isMine = !!this._claimIdOwnershipCache[fileInfo.claim_id];
     }
-    this._fileInfoSubscribeCallbacks[name].forEach(function(callback) {
-      callback(fileInfo);
+    Object.keys(this._fileInfoSubscribeCallbacks[name]).forEach(function(subscribeId) {
+      lbry._fileInfoSubscribeCallbacks[name][subscribeId](fileInfo);
     });
   });
-  setTimeout(() => { this._updateSubscribedFileInfoByName(name) }, lbry._fileInfoSubscribeInterval);
+  if (Object.keys(this._fileInfoSubscribeCallbacks[name]).length) {
+    setTimeout(() => {
+      this._updateSubscribedFileInfoByName(name)
+    }, lbry._fileInfoSubscribeInterval);
+  }
 }
 
 lbry.fileInfoSubscribeByName = function(name, callback) {
   if (!lbry._fileInfoSubscribeCallbacks[name])
   {
-    lbry._fileInfoSubscribeCallbacks[name] = [];
+    lbry._fileInfoSubscribeCallbacks[name] = {};
   }
 
   const subscribeId = ++lbry._fileInfoSubscribeIdCounter;
@@ -506,7 +510,7 @@ lbry.fileInfoSubscribeByName = function(name, callback) {
 // }
 
 lbry.fileInfoUnsubscribe = function(name, subscribeId) {
-  lbry._fileInfoSubscribeCallbacks[name] = lbry._fileInfoSubscribeCallbacks[name].splice(subscribeId, 1);
+  delete lbry._fileInfoSubscribeCallbacks[name][subscribeId];
 }
 
 export default lbry;
