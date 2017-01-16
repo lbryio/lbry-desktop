@@ -177,27 +177,26 @@ input[type="text"], input[type="search"]
   cursor: pointer;
 }
 
+.button__content {
+  margin: 0 $padding-button;
+}
+
 .button-primary
 {
   color: white;
   background-color: $color-primary;
   box-shadow: $default-box-shadow;
-  padding: 0 $padding-button;
 }
 .button-alt
 {
   background-color: $color-bg-alt;
   box-shadow: $default-box-shadow;
-  padding: 0 $padding-button;
 }
 
-.button-cancel
-{
-  padding: 0 $padding-button;
-}
 .button-text
 {
   @include text-link();
+  display: inline-block;
 }
 .button-text-help
 {

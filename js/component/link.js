@@ -34,23 +34,19 @@ export let Link = React.createClass({
     if (this.props.children) { // Custom content
       content = this.props.children;
     } else {
-      content = (
-        <span>
-          {'icon' in this.props
-            ? <Icon icon={this.props.icon} fixed={true} />
-            : null}
-           <span className="link-label">{this.props.label}</span>
-          {'badge' in this.props
-            ? <span className="badge">{this.props.badge}</span>
-            : null}
-        </span>
-      );
+      content = [
+        'icon' in this.props ? <Icon icon={this.props.icon} fixed={true} /> : null,
+         <span className="link-label">{this.props.label}</span>,
+        'badge' in this.props ? <span className="badge">{this.props.badge}</span> : null,
+      ];
     }
 
     return (
       <a className={className} href={this.props.href || 'javascript:;'} title={this.props.title}
          onClick={this.handleClick} {... 'style' in this.props ? {style: this.props.style} : {}}>
-         {content}
+         {this.props.button
+           ? <span className="button__content">{content}</span>
+           : content}
       </a>
     );
   }

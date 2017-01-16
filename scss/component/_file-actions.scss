@@ -9,15 +9,11 @@ $color-download: #444;
 
 .file-actions__download-status-bar
 {
-  padding-right: $padding-button;
-  padding-left: $padding-button;
   position: relative;
   color: $color-download;
 }
 .file-actions__download-status-bar-overlay
 {
-  padding-right: $padding-button;
-  padding-left: $padding-button;
   background: $color-download;
   color: white;
   position: absolute;

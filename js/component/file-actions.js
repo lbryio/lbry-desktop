@@ -178,7 +178,7 @@ export let FileActions = React.createClass({
       const
         progress = this.state.fileInfo ? this.state.fileInfo.written_bytes / this.state.fileInfo.total_bytes * 100 : 0,
         label = this.state.fileInfo ? progress.toFixed(0) + '% complete' : 'Connecting...',
-        labelWithIcon = <span><Icon icon="icon-download" />{label}</span>;
+        labelWithIcon = <span className="button__content"><Icon icon="icon-download" />{label}</span>;
 
       linkBlock =
         <div className="faux-button-block file-actions__download-status-bar">
