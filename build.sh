@@ -3,7 +3,10 @@
 set -o xtrace
 set -eu
 
-cd lbrynet
+cd electron
+npm install
+
+cd ../lbrynet
 pyinstaller lbry.py -y --windowed --onefile --icon=../../lbry/packaging/osx/lbry-osx-app/app.icns
 
 cd ../../lbry-web-ui
