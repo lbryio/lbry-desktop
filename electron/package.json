@@ -1,0 +1,8 @@
+{
+  "name": "LBRY",
+  "version": "0.1.0",
+  "main": "main.js",
+  "dependencies": {
+    "jayson": "^2.0.2"
+  }
+}
