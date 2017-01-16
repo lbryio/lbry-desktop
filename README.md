@@ -4,16 +4,7 @@ An electron version of the LBRY application.
 
 ## Setup
 
-Need to have the lbry-web-ui and lbry repos in a folder next to
-lbry-electron.  For example, my directory structure looks like
-
-```
-$HOME/projects/lbryio/lbry
-$HOME/projects/lbryio/lbry-web-ui
-$HOME/projects/lbryio/lbry-electron
-```
-
-Additionally, lbrynet needs to be installed along with pyinstaller, and you
+The lbrynet needs to be installed along with pyinstaller, and you
 need everything to be able to build the lbry-web-ui
 
 ## Build
