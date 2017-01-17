@@ -25,12 +25,12 @@ module.exports = {
     loaders: [
       { test: /\.css$/, loader: "style!css" },
       {
-	test: /\.jsx?$/,
-	// Enable caching for improved performance during development
-	// It uses default OS directory by default. If you need
-	// something more custom, pass a path to it.
-	// I.e., babel?cacheDirectory=<path>
-	loader: 'babel?cacheDirectory'
+	    test: /\.jsx?$/,
+	    loader: 'babel',
+        query: {
+          cacheDirectory: true,
+          presets:[ 'es2015', 'react', 'stage-3' ]
+        }
       }
     ]
   }

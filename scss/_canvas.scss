@@ -56,7 +56,7 @@ $drawer-width: 240px;
 #drawer-handle
 {
   padding: $spacing-vertical / 2;
-  max-height: $header-height - $spacing-vertical;
+  max-height: $height-header - $spacing-vertical;
   text-align: center;
 }
 
@@ -76,10 +76,10 @@ $drawer-width: 240px;
   background: $color-primary;
   color: white;
   &.header-no-subnav {
-    height: $header-height;
+    height: $height-header;
   }
   &.header-with-subnav {
-    height: $header-height * 2;
+    height: $height-header * 2;
   }
   position: fixed;
   top: 0;
@@ -87,7 +87,7 @@ $drawer-width: 240px;
   width: 100%;
   z-index: 2;
   box-sizing: border-box;
-  h1 { font-size: 1.8em; line-height: $header-height - $spacing-vertical; display: inline-block; float: left; }
+  h1 { font-size: 1.8em; line-height: $height-header - $spacing-vertical; display: inline-block; float: left; }
   &.header-scrolled
   {
     box-shadow: $default-box-shadow;
@@ -120,7 +120,7 @@ nav.sub-header
     display: inline-block;
     margin: 0 15px;
     padding: 0 5px;
-    line-height: $header-height - $spacing-vertical - $sub-header-selected-underline-height;
+    line-height: $height-header - $spacing-vertical - $sub-header-selected-underline-height;
     color: #e8e8e8;
     &:first-child
     {
@@ -147,13 +147,13 @@ nav.sub-header
   background: $color-canvas;
   &.no-sub-nav
   {
-    min-height: calc(100vh - 60px); //should be -$header-height, but I'm dumb I guess? It wouldn't work
-    main { margin-top: $header-height; }
+    min-height: calc(100vh - 60px); //should be -$height-header, but I'm dumb I guess? It wouldn't work
+    main { margin-top: $height-header; }
   }
   &.with-sub-nav
   {
-    min-height: calc(100vh - 120px); //should be -$header-height, but I'm dumb I guess? It wouldn't work
-    main { margin-top: $header-height * 2; }
+    min-height: calc(100vh - 120px); //should be -$height-header, but I'm dumb I guess? It wouldn't work
+    main { margin-top: $height-header * 2; }
   }
   main
   {
@@ -205,9 +205,6 @@ $header-icon-size: 1.5em;
   background: $color-bg;
   box-shadow: $default-box-shadow;
   border-radius: 2px;
-}
-.card-compact {
-  padding: 22px;
 }
 .card-obscured
 {

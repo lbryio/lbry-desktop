@@ -1,8 +1,9 @@
 import React from 'react';
 import lbry from '../lbry.js';
 import lighthouse from '../lighthouse.js';
-import {Link, ToolTipLink, DownloadLink, WatchLink} from '../component/link.js';
-import {Thumbnail, CreditAmount, TruncatedText, BusyMessage} from '../component/common.js';
+import {FileTile} from '../component/file-tile.js';
+import {Link, ToolTipLink} from '../component/link.js';
+import {BusyMessage} from '../component/common.js';
 
 var fetchResultsStyle = {
     color: '#888',
@@ -40,192 +41,19 @@ var SearchNoResults = React.createClass({
 
 var SearchResults = React.createClass({
   render: function() {
-    var rows = [];
-    this.props.results.forEach(function(result) {
-      console.log(result);
-      var mediaType = lbry.getMediaType(result.value.content_type);
-      rows.push(
-        <SearchResultRow key={result.name} name={result.name} title={result.value.title} imgUrl={result.value.thumbnail}
-                         description={result.value.description} nsfw={result.value.nsfw} mediaType={mediaType} />
-      );
+    var rows = [],
+        seenNames = {}; //fix this when the search API returns claim IDs
+    this.props.results.forEach(function({name, value}) {
+      if (!seenNames[name]) {
+        seenNames[name] = name;
+        rows.push(
+          <FileTile key={name} name={name} />
+        );
+      }
     });
     return (
       <div>{rows}</div>
     );
-  }
-});
-
-var
-  searchRowStyle = {
-    height: (24 * 7) + 'px',
-    overflowY: 'hidden'
-  },
-  searchRowCompactStyle = {
-    height: '180px',
-  },
-  searchRowImgStyle = {
-    maxWidth: '100%',
-    maxHeight: (24 * 7) + 'px',
-    display: 'block',
-    marginLeft: 'auto',
-    marginRight: 'auto'
-  },
-  searchRowTitleStyle = {
-    fontWeight: 'bold'
-  },
-  searchRowTitleCompactStyle = {
-    fontSize: '1.25em',
-    lineHeight: '1.15',
-  },
-  searchRowCostStyle = {
-    float: 'right',
-  },
-  searchRowDescriptionStyle = {
-    color : '#444',
-    marginTop: '12px',
-    fontSize: '0.9em'
-  };
-
-
-var SearchResultRow = React.createClass({
-  getInitialState: function() {
-    return {
-      downloading: false,
-      isHovered: false,
-      cost: null,
-      costIncludesData: null,
-    }
-  },
-  handleMouseOver: function() {
-    this.setState({
-      isHovered: true,
-    });
-  },
-  handleMouseOut: function() {
-    this.setState({
-      isHovered: false,
-    });
-  },
-  componentWillMount: function() {
-    if ('cost' in this.props) {
-      this.setState({
-        cost: this.props.cost,
-        costIncludesData: this.props.costIncludesData,
-      });
-    } else {
-      lbry.getCostInfoForName(this.props.name, ({cost, includesData}) => {
-        this.setState({
-          cost: cost,
-          costIncludesData: includesData,
-        });
-      });
-    }
-  },
-  render: function() {
-    var obscureNsfw = !lbry.getClientSetting('showNsfw') && this.props.nsfw;
-    if (!this.props.compact) {
-      var style = searchRowStyle;
-      var titleStyle = searchRowTitleStyle;
-    } else {
-      var style = Object.assign({}, searchRowStyle, searchRowCompactStyle);
-      var titleStyle = Object.assign({}, searchRowTitleStyle, searchRowTitleCompactStyle);
-    }
-
-    return (
-      <section className={ 'card ' + (obscureNsfw ? 'card-obscured ' : '') + (this.props.compact ? 'card-compact' : '')} onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
-        <div className="row-fluid card-content" style={style}>
-          <div className="span3">
-            <a href={'/?show=' + this.props.name}><Thumbnail src={this.props.imgUrl} alt={'Photo for ' + (this.props.title || this.props.name)} style={searchRowImgStyle} /></a>
-          </div>
-          <div className="span9">
-            {this.state.cost !== null
-              ? <span style={searchRowCostStyle}>
-                  <CreditAmount amount={this.state.cost} isEstimate={!this.state.costIncludesData}/>
-                </span>
-              : null}
-            <div className="meta"><a href={'/?show=' + this.props.name}>lbry://{this.props.name}</a></div>
-            <h3 style={titleStyle}>
-              <a href={'/?show=' + this.props.name}>
-                <TruncatedText lines={3}>
-                  {this.props.title}
-                </TruncatedText>
-              </a>
-            </h3>
-            <div>
-              {this.props.mediaType == 'video' ? <WatchLink streamName={this.props.name} button="primary" /> : null}
-              <DownloadLink streamName={this.props.name} button="text" />
-            </div>
-            <p style={searchRowDescriptionStyle}>
-              <TruncatedText lines={3}>
-                {this.props.description}
-              </TruncatedText>
-            </p>
-          </div>
-        </div>
-        {
-          !obscureNsfw || !this.state.isHovered ? null :
-            <div className='card-overlay'>
-              <p>
-                This content is Not Safe For Work.
-                To view adult content, please change your <Link href="?settings" label="Settings" />.
-              </p>
-            </div>
-        }
-      </section>
-    );
-  }
-});
-
-var featuredContentItemContainerStyle = {
-  position: 'relative',
-};
-
-var FeaturedContentItem = React.createClass({
-  resolveSearch: false,
-
-  propTypes: {
-    name: React.PropTypes.string,
-  },
-
-  getInitialState: function() {
-    return {
-      metadata: null,
-      title: null,
-      cost: null,
-      overlayShowing: false,
-    };
-  },
-
-  componentWillUnmount: function() {
-    this.resolveSearch = false;
-  },
-
-  componentDidMount: function() {
-    this._isMounted = true;
-
-    lbry.resolveName(this.props.name, (metadata) => {
-      if (!this._isMounted) {
-        return;
-      }
-
-      this.setState({
-        metadata: metadata,
-        title: metadata && metadata.title ? metadata.title : ('lbry://' + this.props.name),
-      });
-    });
-  },
-
-  render: function() {
-    if (this.state.metadata === null) {
-      // Still waiting for metadata, skip render
-      return null;
-    }
-
-    return (<div style={featuredContentItemContainerStyle}>
-      <SearchResultRow name={this.props.name} title={this.state.title} imgUrl={this.state.metadata.thumbnail}
-                 description={this.state.metadata.description} mediaType={lbry.getMediaType(this.state.metadata.content_type)}
-                 nsfw={this.state.metadata.nsfw} compact />
-    </div>);
   }
 });
 
@@ -241,21 +69,21 @@ var FeaturedContent = React.createClass({
       <div className="row-fluid">
         <div className="span6">
           <h3>Featured Content</h3>
-          <FeaturedContentItem name="bellflower" />
-          <FeaturedContentItem name="itsadisaster" />
-          <FeaturedContentItem name="dopeman" />
-          <FeaturedContentItem name="smlawncare" />
-          <FeaturedContentItem name="cinemasix" />
+          <FileTile name="bellflower" />
+          <FileTile name="itsadisaster" />
+          <FileTile name="dopeman" />
+          <FileTile name="smlawncare" />
+          <FileTile name="cinemasix" />
 
         </div>
         <div className="span6">
           <h3>Community Content <ToolTipLink style={featuredContentLegendStyle} label="What's this?"
             tooltip='Community Content is a public space where anyone can share content with the rest of the LBRY community. Bid on the names "one," "two," "three," "four" and "five" to put your content here!' /></h3>
-          <FeaturedContentItem name="one" />
-          <FeaturedContentItem name="two" />
-          <FeaturedContentItem name="three" />
-          <FeaturedContentItem name="four" />
-          <FeaturedContentItem name="five" />
+          <FileTile name="one" />
+          <FileTile name="two" />
+          <FileTile name="three" />
+          <FileTile name="four" />
+          <FileTile name="five" />
         </div>
       </div>
     );

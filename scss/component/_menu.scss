@@ -1,0 +1,21 @@
+@import "../global";
+
+$border-radius-menu: 2px;
+
+.menu {
+  position: absolute;
+  white-space: nowrap;
+  background-color: white;
+  box-shadow: $default-box-shadow;
+  border-radius: $border-radius-menu;
+  padding-top: $spacing-vertical / 2;
+  padding-bottom: $spacing-vertical / 2;
+}
+
+.menu__menu-item {
+  display: block;
+  padding: $spacing-vertical / 4 $spacing-vertical / 2;
+  &:hover {
+    background: $color-bg-alt;
+  }
+}

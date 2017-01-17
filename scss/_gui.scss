@@ -27,6 +27,8 @@
       text-decoration: none;
     }
   }
+
+  color: $color;
 }
 
 .icon-fixed-width {
@@ -138,18 +140,20 @@ input[type="text"], input[type="search"]
 }
 
 .button-container {
+  position: relative;
+  display: inline-block;
+
   + .button-container
   {
-    margin-left: 12px;
+    margin-left: $padding-button;
   }
 }
 
-.button-block
+.button-block, .faux-button-block
 {
-  cursor: pointer;
   display: inline-block;
-  height: $spacing-vertical * 1.5;
-  line-height: $spacing-vertical * 1.5;
+  height: $height-button;
+  line-height: $height-button;
   text-decoration: none;
   border: 0 none;
   text-align: center;
@@ -168,27 +172,31 @@ input[type="text"], input[type="search"]
     padding-left: 5px;
   }
 }
+.button-block
+{
+  cursor: pointer;
+}
+
+.button__content {
+  margin: 0 $padding-button;
+}
 
 .button-primary
 {
   color: white;
   background-color: $color-primary;
   box-shadow: $default-box-shadow;
-  padding: 0 12px;
 }
 .button-alt
 {
-  background-color: rgba(0,0,0,.15);
+  background-color: $color-bg-alt;
   box-shadow: $default-box-shadow;
-  padding: 0 12px;
 }
-.button-cancel
-{
-  padding: 0 12px;
-}
+
 .button-text
 {
   @include text-link();
+  display: inline-block;
 }
 .button-text-help
 {
@@ -338,19 +346,8 @@ input[type="text"], input[type="search"]
   margin: 0px 6px;
 }
 
-.error-modal__error-list {
-  border: 1px solid #eee;
-  padding: 8px;
-  list-style: none;
-}
-
 .error-modal-overlay {
   background: rgba(#000, .88);
-}
-
-.error-modal {
-  max-width: none;
-  width: 400px;
 }
 
 .error-modal__content {
@@ -367,3 +364,15 @@ input[type="text"], input[type="search"]
   word-break: break-all;
 }
 
+.error-modal {
+  max-width: none;
+  width: 400px;
+}
+.error-modal__error-list { /*shitty hack/temp fix for long errors making modals unusable*/
+  border: 1px solid #eee;
+  padding: 8px;
+  list-style: none;
+  max-height: 400px;
+  max-width: 400px;
+  overflow-y: hidden;
+}

@@ -132,7 +132,7 @@ lbry.getNewAddress = function(callback) {
   lbry.call('get_new_address', {}, callback);
 }
 
-lbry.checkAddressIsMine = function(address, callback) { 
+lbry.checkAddressIsMine = function(address, callback) {
   lbry.call('address_is_mine', {address: address}, callback);
 }
 
@@ -265,22 +265,29 @@ lbry.stopFile = function(name, callback) {
   lbry.call('stop_lbry_file', { name: name }, callback);
 }
 
-lbry.deleteFile = function(name, deleteTargetFile=true, callback) {
+lbry.removeFile = function(sdHash, name, deleteTargetFile=true, callback) { // Name param is temporary until the API can delete by unique ID (SD hash, claim ID etc.)
+  this._removedFiles.push(sdHash);
+  this._updateSubscribedFileInfo(sdHash);
+
   lbry.call('delete_lbry_file', {
     name: name,
     delete_target_file: deleteTargetFile,
   }, callback);
 }
 
-lbry.revealFile = function(path, callback) {
-  lbry.call('reveal', { path: path }, callback);
+lbry.openFile = function(sdHash, callback) {
+  lbry.call('open', {sd_hash: sdHash}, callback);
+}
+
+lbry.revealFile = function(sdHash, callback) {
+  lbry.call('reveal', {sd_hash: sdHash}, callback);
 }
 
 lbry.getFileInfoWhenListed = function(name, callback, timeoutCallback, tryNum=0) {
   // Calls callback with file info when it appears in the list of files returned by lbry.getFilesInfo().
   // If timeoutCallback is provided, it will be called if the file fails to appear.
-  lbry.getFilesInfo(function(filesInfo) {
-    for (var fileInfo of filesInfo) {
+  lbry.getFilesInfo(function(fileInfos) {
+    for (var fileInfo of fileInfos) {
       if (fileInfo.lbry_uri == name) {
         callback(fileInfo);
         return;
@@ -453,5 +460,64 @@ lbry.stop = function(callback) {
   lbry.call('stop', {}, callback);
 };
 
+lbry.fileInfo = {};
+lbry._fileInfoSubscribeIdCounter = 0;
+lbry._fileInfoSubscribeCallbacks = {};
+lbry._fileInfoSubscribeInterval = 5000;
+lbry._removedFiles = [];
+lbry._claimIdOwnershipCache = {}; // should be claimId!!! But not
+
+lbry._updateClaimOwnershipCache = function(claimId) {
+  lbry.getMyClaims((claimInfos) => {
+    lbry._claimIdOwnershipCache[claimId] = !!claimInfos.reduce(function(match, claimInfo) {
+      return match || claimInfo.claim_id == claimId;
+    });
+  });
+};
+
+lbry._updateSubscribedFileInfo = function(sdHash) {
+  const callSubscribedCallbacks = (sdHash, fileInfo) => {
+    for (let [subscribeId, callback] of Object.entries(this._fileInfoSubscribeCallbacks[sdHash])) {
+      callback(fileInfo);
+    }
+  }
+
+  if (lbry._removedFiles.includes(sdHash)) {
+    callSubscribedCallbacks(sdHash, false);
+  } else {
+    lbry.getFileInfoBySdHash(sdHash, (fileInfo) => {
+      if (fileInfo) {
+        if (this._claimIdOwnershipCache[fileInfo.claim_id] === undefined) {
+          this._updateClaimOwnershipCache(fileInfo.claim_id);
+        }
+        fileInfo.isMine = !!this._claimIdOwnershipCache[fileInfo.claim_id];
+      }
+
+      callSubscribedCallbacks(sdHash, fileInfo);
+    });
+  }
+
+  if (Object.keys(this._fileInfoSubscribeCallbacks[sdHash]).length) {
+    setTimeout(() => {
+      this._updateSubscribedFileInfo(sdHash);
+    }, lbry._fileInfoSubscribeInterval);
+  }
+}
+
+lbry.fileInfoSubscribe = function(sdHash, callback) {
+  if (!lbry._fileInfoSubscribeCallbacks[sdHash])
+  {
+    lbry._fileInfoSubscribeCallbacks[sdHash] = {};
+  }
+
+  const subscribeId = ++lbry._fileInfoSubscribeIdCounter;
+  lbry._fileInfoSubscribeCallbacks[sdHash][subscribeId] = callback;
+  lbry._updateSubscribedFileInfo(sdHash);
+  return subscribeId;
+}
+
+lbry.fileInfoUnsubscribe = function(name, subscribeId) {
+  delete lbry._fileInfoSubscribeCallbacks[name][subscribeId];
+}
 
 export default lbry;

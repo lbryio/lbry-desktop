@@ -4,7 +4,6 @@ import SettingsPage from './page/settings.js';
 import HelpPage from './page/help.js';
 import WatchPage from './page/watch.js';
 import ReportPage from './page/report.js';
-import MyFilesPage from './page/my_files.js';
 import StartPage from './page/start.js';
 import ClaimCodePage from './page/claim_code.js';
 import ReferralPage from './page/referral.js';
@@ -14,6 +13,7 @@ import PublishPage from './page/publish.js';
 import DiscoverPage from './page/discover.js';
 import SplashScreen from './component/splash.js';
 import DeveloperPage from './page/developer.js';
+import {FileListDownloaded, FileListPublished} from './page/file-list.js';
 import Drawer from './component/drawer.js';
 import Header from './component/header.js';
 import Modal from './component/modal.js';
@@ -164,9 +164,9 @@ var App = React.createClass({
       case 'report':
         return <ReportPage />;
       case 'downloaded':
-        return <MyFilesPage show="downloaded" />;
+        return <FileListDownloaded />;
       case 'published':
-        return <MyFilesPage show="published" />;
+        return <FileListPublished />;
       case 'start':
         return <StartPage />;
       case 'claim':
@@ -190,7 +190,8 @@ var App = React.createClass({
   },
   render: function() {
     var mainContent = this.getMainContent(),
-        headerLinks = this.getHeaderLinks();
+        headerLinks = this.getHeaderLinks(),
+        searchQuery = this.state.viewingPage == 'discover' && this.state.pageArgs ? this.state.pageArgs : '';
 
     return (
       this.state.viewingPage == 'watch' ?
@@ -198,7 +199,7 @@ var App = React.createClass({
         <div id="window" className={ this.state.drawerOpen ? 'drawer-open' : 'drawer-closed' }>
           <Drawer onCloseDrawer={this.closeDrawer} viewingPage={this.state.viewingPage} />
           <div id="main-content" className={ headerLinks ? 'with-sub-nav' : 'no-sub-nav' }>
-            <Header onOpenDrawer={this.openDrawer} onSearch={this.onSearch} links={headerLinks} viewingPage={this.state.viewingPage} />
+            <Header onOpenDrawer={this.openDrawer} initialQuery={searchQuery} onSearch={this.onSearch} links={headerLinks} viewingPage={this.state.viewingPage} />
             {mainContent}
           </div>
           <Modal isOpen={this.state.modal == 'upgrade'} contentLabel="Update available"
