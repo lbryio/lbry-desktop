@@ -55,7 +55,7 @@ export let FileListDownloaded = React.createClass({
     } else {
       return (
         <main className="page">
-          <FileList fileInfos={this.state.fileInfos} />
+          <FileList fileInfos={this.state.fileInfos} hidePrices={true} />
         </main>
       );
     }
@@ -149,7 +149,13 @@ export let FileList = React.createClass({
     },
   },
   propTypes: {
-    fileInfos: React.PropTypes.array.isRequired
+    fileInfos: React.PropTypes.array.isRequired,
+    hidePrices: React.PropTypes.bool,
+  },
+  getDefaultProps: function() {
+    return {
+      hidePrices: false,
+    };
   },
   getInitialState: function() {
     return {
@@ -174,7 +180,8 @@ export let FileList = React.createClass({
       }
 
       seenUris[lbry_uri] = true;
-      content.push(<FileTileStream key={lbry_uri} name={lbry_uri} hideOnRemove={true} sdHash={sd_hash} hidePrice={true} metadata={metadata} />);
+      content.push(<FileTileStream key={lbry_uri} name={lbry_uri} hideOnRemove={true} sdHash={sd_hash}
+                                   hidePrice={this.props.hidePrices} metadata={metadata} />);
     }
 
     return (
