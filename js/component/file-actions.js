@@ -118,7 +118,7 @@ export let FileActions = React.createClass({
   },
   onOpenClick: function() {
     if (this.state.fileInfo && this.state.fileInfo.completed) {
-      lbry.openFile(this.state.fileInfo.download_path);
+      lbry.openFile(this.props.sdHash);
     }
   },
   handleDeleteCheckboxClicked: function(event) {
@@ -128,7 +128,7 @@ export let FileActions = React.createClass({
   },
   handleRevealClicked: function() {
     if (this.state.fileInfo && this.state.fileInfo.download_path) {
-      lbry.revealFile(this.state.fileInfo.download_path);
+      lbry.revealFile(this.props.sdHash);
     }
   },
   handleRemoveClicked: function() {
