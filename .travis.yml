@@ -18,4 +18,3 @@ install:
   - npm install electron-packager -g
   - ./build.sh
   - electron-packager --electron-version=1.4.14 --overwrite electron LBRY
-
