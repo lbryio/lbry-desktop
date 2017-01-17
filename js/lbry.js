@@ -265,7 +265,10 @@ lbry.stopFile = function(name, callback) {
   lbry.call('stop_lbry_file', { name: name }, callback);
 }
 
-lbry.deleteFile = function(name, deleteTargetFile=true, callback) {
+lbry.removeFile = function(sdHash, name, deleteTargetFile=true, callback) { // Name param is temporary until the API can delete by unique ID (SD hash, claim ID etc.)
+  this._removedFiles.push(sdHash);
+  this._updateSubscribedFileInfo(sdHash);
+
   lbry.call('delete_lbry_file', {
     name: name,
     delete_target_file: deleteTargetFile,
@@ -461,6 +464,7 @@ lbry.fileInfo = {};
 lbry._fileInfoSubscribeIdCounter = 0;
 lbry._fileInfoSubscribeCallbacks = {};
 lbry._fileInfoSubscribeInterval = 5000;
+lbry._removedFiles = [];
 lbry._claimIdOwnershipCache = {}; // should be claimId!!! But not
 
 lbry._updateClaimOwnershipCache = function(claimId) {
@@ -472,20 +476,30 @@ lbry._updateClaimOwnershipCache = function(claimId) {
 };
 
 lbry._updateSubscribedFileInfo = function(sdHash) {
-  lbry.getFileInfoBySdHash(sdHash, (fileInfo) => {
-    if (fileInfo) {
-      if (this._claimIdOwnershipCache[fileInfo.claim_id] === undefined) {
-        lbry._updateClaimOwnershipCache(fileInfo.claim_id);
-      }
-      fileInfo.isMine = !!this._claimIdOwnershipCache[fileInfo.claim_id];
-    }
-    Object.keys(this._fileInfoSubscribeCallbacks[sdHash]).forEach(function(subscribeId) {
-      lbry._fileInfoSubscribeCallbacks[sdHash][subscribeId](fileInfo);
+  const callSubscribedCallbacks = (sdHash, fileInfo) => {
+    Object.keys(this._fileInfoSubscribeCallbacks[sdHash]).forEach((subscribeId) => {
+      this._fileInfoSubscribeCallbacks[sdHash][subscribeId](fileInfo);
     });
-  });
+  }
+
+  if (lbry._removedFiles.includes(sdHash)) {
+    callSubscribedCallbacks(sdHash, false);
+  } else {
+    lbry.getFileInfoBySdHash(sdHash, (fileInfo) => {
+      if (fileInfo) {
+        if (this._claimIdOwnershipCache[fileInfo.claim_id] === undefined) {
+          this._updateClaimOwnershipCache(fileInfo.claim_id);
+        }
+        fileInfo.isMine = !!this._claimIdOwnershipCache[fileInfo.claim_id];
+      }
+
+      callSubscribedCallbacks(sdHash, fileInfo);
+    });
+  }
+
   if (Object.keys(this._fileInfoSubscribeCallbacks[sdHash]).length) {
     setTimeout(() => {
-      this._updateSubscribedFileInfo(sdHash)
+      this._updateSubscribedFileInfo(sdHash);
     }, lbry._fileInfoSubscribeInterval);
   }
 }

@@ -61,6 +61,7 @@ export let FileActions = React.createClass({
     path: React.PropTypes.string,
     hidden: React.PropTypes.bool,
     deleteChecked: React.PropTypes.bool,
+    onRemove: React.PropTypes.function,
   },
   getInitialState: function() {
     return {
@@ -137,14 +138,13 @@ export let FileActions = React.createClass({
   },
   handleRemoveConfirmed: function() {
     if (this.props.streamName) {
-      lbry.deleteFile(this.props.streamName, this.state.deleteChecked);
+      lbry.removeFile(this.props.sdHash, this.props.streamName, this.state.deleteChecked);
     } else {
       alert('this file cannot be deleted because lbry is a retarded piece of shit');
     }
     this.setState({
       modal: null,
       fileInfo: false,
-      attemptingRemove: true,
       attemptingDownload: false
     });
   },
@@ -169,10 +169,10 @@ export let FileActions = React.createClass({
       return <section className="file-actions--stub"></section>;
     }
     const openInFolderMessage = window.navigator.platform.startsWith('Mac') ? 'Open in Finder' : 'Open in Folder',
-          showMenu = !this.state.attemptingRemove && this.state.fileInfo !== null;
+          showMenu = !!this.state.fileInfo;
 
     let linkBlock;
-    if (this.state.attemptingRemove || (this.state.fileInfo === false && !this.state.attemptingDownload)) {
+    if (this.state.fileInfo === false && !this.state.attemptingDownload) {
       linkBlock = <Link button="text" label="Download" icon="icon-download" onClick={this.onDownloadClick} />;
     } else if (this.state.attemptingDownload || !this.state.fileInfo.completed) {
       const
