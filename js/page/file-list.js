@@ -19,11 +19,11 @@ export let FileListDownloaded = React.createClass({
     document.title = "Downloaded Files";
 
     let publishedFilesSdHashes = [];
-    lbry.getMyClaims((claimsInfo) => {
+    lbry.getMyClaims((claimInfos) => {
 
       if (!this._isMounted) { return; }
 
-      for (let claimInfo of claimsInfo) {
+      for (let claimInfo of claimInfos) {
         let metadata = JSON.parse(claimInfo.value);
         publishedFilesSdHashes.push(metadata.sources.lbry_sd_hash);
       }
@@ -74,23 +74,23 @@ export let FileListPublished = React.createClass({
     this._isMounted = true;
     document.title = "Published Files";
 
-    lbry.getMyClaims((claimsInfo) => {
+    lbry.getMyClaims((claimInfos) => {
       /**
        * Build newFileInfos as a sparse array and drop elements in at the same position they
-       * occur in claimsInfo, so the order is preserved even if the API calls inside this loop
+       * occur in claimInfos, so the order is preserved even if the API calls inside this loop
        * return out of order.
        */
-      let newFileInfos = Array(claimsInfo.length),
+      let newFileInfos = Array(claimInfos.length),
         claimInfoProcessedCount = 0;
 
-      for (let [i, claimInfo] of claimsInfo.entries()) {
+      for (let [i, claimInfo] of claimInfos.entries()) {
         let metadata = JSON.parse(claimInfo.value);
         lbry.getFileInfoBySdHash(metadata.sources.lbry_sd_hash, (fileInfo) => {
           claimInfoProcessedCount++;
           if (fileInfo !== false) {
             newFileInfos[i] = fileInfo;
           }
-          if (claimInfoProcessedCount >= claimsInfo.length) {
+          if (claimInfoProcessedCount >= claimInfos.length) {
             /**
              * newfileInfos may have gaps from claims that don't have associated files in
              * lbrynet, so filter out any missing elements

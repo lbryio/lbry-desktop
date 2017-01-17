@@ -286,8 +286,8 @@ lbry.revealFile = function(path, callback) {
 lbry.getFileInfoWhenListed = function(name, callback, timeoutCallback, tryNum=0) {
   // Calls callback with file info when it appears in the list of files returned by lbry.getFilesInfo().
   // If timeoutCallback is provided, it will be called if the file fails to appear.
-  lbry.getFilesInfo(function(filesInfo) {
-    for (var fileInfo of filesInfo) {
+  lbry.getFilesInfo(function(fileInfos) {
+    for (var fileInfo of fileInfos) {
       if (fileInfo.lbry_uri == name) {
         callback(fileInfo);
         return;
@@ -468,8 +468,8 @@ lbry._removedFiles = [];
 lbry._claimIdOwnershipCache = {}; // should be claimId!!! But not
 
 lbry._updateClaimOwnershipCache = function(claimId) {
-  lbry.getMyClaims((claimsInfo) => {
-    lbry._claimIdOwnershipCache[claimId] = !!claimsInfo.reduce(function(match, claimInfo) {
+  lbry.getMyClaims((claimInfos) => {
+    lbry._claimIdOwnershipCache[claimId] = !!claimInfos.reduce(function(match, claimInfo) {
       return match || claimInfo.claim_id == claimId;
     });
   });
