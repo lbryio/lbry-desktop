@@ -43,20 +43,9 @@ var App = React.createClass({
       pageArgs: typeof val !== 'undefined' ? val : null,
       errorInfo: null,
       modal: null,
-      startNotice: null,
       updateUrl: null,
       isOldOSX: null,
     };
-  },
-  componentDidMount: function() {
-    lbry.getStartNotice(function(notice) {
-      if (notice) {
-        this.setState({
-          modal: 'startNotice',
-          startNotice: notice
-        });
-      }
-    });
   },
   componentWillMount: function() {
     document.addEventListener('unhandledError', (event) => {
@@ -212,18 +201,17 @@ var App = React.createClass({
             <Header onOpenDrawer={this.openDrawer} onSearch={this.onSearch} links={headerLinks} viewingPage={this.state.viewingPage} />
             {mainContent}
           </div>
-          <Modal isOpen={this.state.modal == 'startNotice'} onConfirmed={this.closeModal}>
-            {this.state.startNotice}
-          </Modal>
-          <Modal isOpen={this.state.modal == 'upgrade'} type="confirm" confirmButtonLabel="Upgrade" abortButtonLabel="Skip"
-                 onConfirmed={this.handleUpgradeClicked} onAborted={this.handleSkipClicked} >
+          <Modal isOpen={this.state.modal == 'upgrade'} contentLabel="Update available"
+                 type="confirm" confirmButtonLabel="Upgrade" abortButtonLabel="Skip"
+                 onConfirmed={this.handleUpgradeClicked} onAborted={this.handleSkipClicked}>
             <p>Your version of LBRY is out of date and may be unreliable or insecure.</p>
             {this.state.isOldOSX
               ? <p>Before installing the new version, make sure to exit LBRY. If you started the app, click the LBRY icon in your status bar and choose "Quit."</p>
               : null}
 
           </Modal>
-          <Modal isOpen={this.state.modal == 'error'} type="custom" className="error-modal" overlayClassName="error-modal-overlay"  >
+          <Modal isOpen={this.state.modal == 'error'} contentLabel="Error" type="custom"
+                 className="error-modal" overlayClassName="error-modal-overlay"  >
             <h3 className="modal__header">Error</h3>
 
             <div className="error-modal__content">
