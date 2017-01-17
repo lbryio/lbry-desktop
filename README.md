@@ -31,5 +31,3 @@ process management is very poor and the lbrynet process might not be shut-down w
 is closed. Also, if the lbrynet daemon dies, there is no attempt to restart it.
 
 
-
-
