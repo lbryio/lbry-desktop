@@ -477,9 +477,9 @@ lbry._updateClaimOwnershipCache = function(claimId) {
 
 lbry._updateSubscribedFileInfo = function(sdHash) {
   const callSubscribedCallbacks = (sdHash, fileInfo) => {
-    Object.keys(this._fileInfoSubscribeCallbacks[sdHash]).forEach((subscribeId) => {
-      this._fileInfoSubscribeCallbacks[sdHash][subscribeId](fileInfo);
-    });
+    for (let [subscribeId, callback] of Object.entries(this._fileInfoSubscribeCallbacks[sdHash])) {
+      callback(fileInfo);
+    }
   }
 
   if (lbry._removedFiles.includes(sdHash)) {
