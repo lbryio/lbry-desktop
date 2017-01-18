@@ -5,6 +5,12 @@ set -eu
 
 ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
+if [ -n "${TEAMCITY_VERSION:-}" ]; then
+  # install dependencies
+  $ROOT/prebuild.sh
+fi
+
+
 (
   cd "$ROOT/electron"
   npm install
@@ -41,17 +47,22 @@ cp -R "$ROOT/lbry-web-ui/dist" "$ROOT/electron/"
 mv "$ROOT/lbrynet/dist/lbry" "$ROOT/electron/dist"
 
 if [ -n "${TEAMCITY_VERSION:-}" ]; then
-  # macOS
-  electron-packager --electron-version=1.4.14 --platform=darwin --overwrite "$ROOT/electron" LBRY
+  electron-packager --electron-version=1.4.14 --overwrite "$ROOT/electron" LBRY
 
-  # linux
-  electron-packager --electron-version=1.4.14 --platform=linux --overwrite "$ROOT/electron" LBRY
   (
     cd "$ROOT"
-    tar cvzf lbry.tgz "LBRY-linux-x64/"
-  )
+    if [ "$(uname)" == "Darwin" ]; then
+      OS="osx"
+      PLATFORM="darwin"
+    elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
+      OS="linux"
+      PLATFORM="linux"
+    else
+      OS="unknown"
+    fi
 
-  #windows ... coming soon
+    tar cvzf "lbry-${OS}.tgz" "LBRY-${PLATFORM}-x64/"
+  )
 
   echo 'Build and packaging complete.'
 else
