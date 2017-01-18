@@ -40,7 +40,7 @@ fi
 
 if $LINUX; then
   INSTALL="$SUDO apt-get install --no-install-recommends -y"
-  $INSTALL build-essential libssl-dev libffi-dev libgmp3-dev
+  $INSTALL build-essential libssl-dev libffi-dev libgmp3-dev python2.7-dev
 elif $OSX && ! cmd_exists brew ; then
   /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 fi
@@ -48,7 +48,7 @@ fi
 
 if ! cmd_exists python; then
   if $LINUX; then
-    $INSTALL python2.7 python2.7-dev
+    $INSTALL python2.7
   elif $OSX; then
     brew install python
   fi
