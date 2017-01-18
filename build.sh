@@ -36,7 +36,7 @@ ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
   git reset --hard origin/master
 )
 
-cp --recursive "$ROOT/lbry-web-ui/dist" "$ROOT/electron/"
+cp -R "$ROOT/lbry-web-ui/dist" "$ROOT/electron/"
 
 mv "$ROOT/lbrynet/dist/lbry" "$ROOT/electron/dist"
 
