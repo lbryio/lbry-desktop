@@ -40,4 +40,6 @@ cp -R "$ROOT/lbry-web-ui/dist" "$ROOT/electron/"
 
 mv "$ROOT/lbrynet/dist/lbry" "$ROOT/electron/dist"
 
+electron-packager --electron-version=1.4.14 --overwrite "$ROOT/electron" LBRY
+
 echo 'Build complete. Run `electron electron` to launch the app'
