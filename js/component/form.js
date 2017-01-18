@@ -1,4 +1,5 @@
 import React from 'react';
+import {Icon} from './common.js';
 
 var requiredFieldWarningStyle = {
   color: '#cc0000',

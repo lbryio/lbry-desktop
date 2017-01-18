@@ -308,12 +308,7 @@ lbry.publish = function(params, fileListedCallback, publishedCallback, errorCall
   // lbry.getFilesInfo() during the publish process.
 
   // Use ES6 named arguments instead of directly passing param dict?
-  lbry.call('publish', params, publishedCallback, (errorInfo) => {
-    errorCallback({
-      name: fault.fault,
-      message: fault.faultString,
-    });
-  });
+  lbry.call('publish', params, publishedCallback, errorCallback);
   if (fileListedCallback) {
     lbry.getFileInfoWhenListed(params.name, function(fileInfo) {
       fileListedCallback(fileInfo);

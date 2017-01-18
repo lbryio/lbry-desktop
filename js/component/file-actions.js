@@ -61,7 +61,7 @@ export let FileActions = React.createClass({
     path: React.PropTypes.string,
     hidden: React.PropTypes.bool,
     deleteChecked: React.PropTypes.bool,
-    onRemove: React.PropTypes.function,
+    onRemove: React.PropTypes.func,
   },
   getInitialState: function() {
     return {
@@ -191,7 +191,7 @@ export let FileActions = React.createClass({
 
     return (
       <section className="file-actions">
-        {this.props.metadata.content_type.startsWith('video/') ? <WatchLink streamName={this.props.streamName} /> : null}
+        {(this.props.metadata.content_type && this.props.metadata.content_type.startsWith('video/')) ? <WatchLink streamName={this.props.streamName} /> : null}
         {this.state.fileInfo !== null || this.state.fileInfo.isMine ?
           <div className="button-container">{linkBlock}</div>
           : null}
