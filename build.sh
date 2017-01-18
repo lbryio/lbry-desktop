@@ -1,4 +1,4 @@
-#! /bin/bash
+#!/bin/bash
 
 set -o xtrace
 set -eu
