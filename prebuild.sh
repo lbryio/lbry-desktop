@@ -28,6 +28,15 @@ cmd_exists() {
 }
 
 
+GITUSERNAME=$(git config --global --get user.name)
+GITEMAIL=$(git config --global --get user.email)
+if [ -z "$GITUSERNAME" ]; then
+  git config --global user.name "$(whoami)"
+fi
+if [ -z "$GITEMAIL" ]; then
+  git config --global user.email "$(whoami)@lbry.io"
+fi
+
 
 if $LINUX; then
   INSTALL="$SUDO apt-get install --no-install-recommends -y"
