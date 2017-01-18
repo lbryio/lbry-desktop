@@ -16,7 +16,9 @@ if [ -d "$VENV" ]; then
   rm -rf "$VENV"
 fi
 virtualenv "$VENV"
+set +e
 source "$VENV/bin/activate"
+set -e
 
 
 (
