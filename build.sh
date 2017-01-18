@@ -20,11 +20,13 @@ pyinstaller lbry.py -y --windowed --onefile --icon=../lbry/packaging/osx/lbry-os
 cd ../lbry-web-ui
 git fetch
 git reset --hard origin/master
+# git reset --hard origin/development
 git cherry-pick 06224b1d2cf4bf1f63d95031502260dd9c3ec5c1
 npm install
 node_modules/.bin/node-sass --output dist/css --sourcemap=none scss/
-webpack
+node_modules/.bin/webpack
 git reset --hard origin/master
+# git reset --hard origin/development
 
 cd ..
 cp -R lbry-web-ui/dist electron/

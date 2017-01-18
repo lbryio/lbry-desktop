@@ -15,6 +15,6 @@ install:
   - pip install pyinstaller
   - wget https://nodejs.org/dist/v6.9.4/node-v6.9.4.pkg
   - sudo installer -pkg node-v6.9.4.pkg -target /
-  - npm install electron-packager -g
+  - sudo npm install electron-packager -g
   - ./build.sh
   - electron-packager --electron-version=1.4.14 --overwrite electron LBRY

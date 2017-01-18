@@ -2,6 +2,8 @@
 
 An electron version of the LBRY application.
 
+This repo uses submodules, so clone it using --recursive
+
 ## Setup
 
 The lbrynet needs to be installed along with pyinstaller, and you
