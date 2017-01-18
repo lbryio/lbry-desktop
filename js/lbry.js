@@ -90,17 +90,18 @@ lbry.call = function (method, params, callback, errorCallback, connectFailedCall
 //core
 lbry.connect = function(callback)
 {
-  // Check every half second to see if the daemon's running.
-  // Returns true to callback once connected, or false if it takes too long and we give up.
-  function checkDaemonRunning(tryNum=0) {
-    lbry.daemonRunningStatus(function (runningStatus) {
+  // Check every half second to see if the daemon is accepting connections
+  // Once this returns True, can call getDaemonStatus to see where
+  // we are in the startup process
+  function checkDaemonStarted(tryNum=0) {
+    lbry.isDaemonAcceptingConnections(function (runningStatus) {
       if (runningStatus) {
         lbry.isConnected = true;
         callback(true);
       } else {
         if (tryNum <= 600) { // Move # of tries into constant or config option
           setTimeout(function () {
-            checkDaemonRunning(tryNum + 1);
+            checkDaemonStarted(tryNum + 1);
           }, 500);
         } else {
           callback(false);
@@ -108,16 +109,12 @@ lbry.connect = function(callback)
       }
     });
   }
-  checkDaemonRunning();
+  checkDaemonStarted();
 }
 
-lbry.daemonRunningStatus = function (callback) {
-  // Returns true/false whether the daemon is running (i.e. fully conncected to the network),
-  // or null if the AJAX connection to the daemon fails.
-
-  lbry.call('is_running', {}, callback, null, function () {
-    callback(null);
-  });
+lbry.isDaemonAcceptingConnections = function (callback) {
+  // Returns true/false whether the daemon is at a point it will start returning status
+  lbry.call('status', {}, () => callback(true), null, () => callback(false))
 };
 
 lbry.getDaemonStatus = function (callback) {
