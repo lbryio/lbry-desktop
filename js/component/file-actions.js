@@ -61,7 +61,7 @@ export let FileActions = React.createClass({
     path: React.PropTypes.string,
     hidden: React.PropTypes.bool,
     deleteChecked: React.PropTypes.bool,
-    onRemove: React.PropTypes.function,
+    onRemove: React.PropTypes.func,
   },
   getInitialState: function() {
     return {
