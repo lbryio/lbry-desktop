@@ -29,5 +29,3 @@ This also probably works for windows and linux, but I haven't tested it
 This app works by launching the lbrynet daemon in a seperate process.  Currently the
 process management is very poor and the lbrynet process might not be shut-down when the app
 is closed. Also, if the lbrynet daemon dies, there is no attempt to restart it.
-
-
