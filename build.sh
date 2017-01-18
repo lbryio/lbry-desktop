@@ -11,7 +11,10 @@ if [ -n "${TEAMCITY_VERSION:-}" ]; then
 fi
 
 
-VENV="$ROOT/venv"
+VENV="$ROOT/build_venv"
+if [ -d "$VENV" ]; then
+  rm -rf "$VENV"
+fi
 virtualenv "$VENV"
 source "$VENV/bin/activate"
 
