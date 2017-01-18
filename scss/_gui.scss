@@ -198,6 +198,10 @@ input[type="text"], input[type="search"]
 {
   @include text-link();
   display: inline-block;
+
+  .button__content {
+    margin: 0 $padding-text-link;
+  }
 }
 .button-text-help
 {

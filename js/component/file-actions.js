@@ -185,7 +185,7 @@ let FileActionsRow = React.createClass({
         </div>
       );
     } else {
-      linkBlock = <Link button="text" label="Open" icon="icon-folder-open" onClick={this.onOpenClick} />;
+      linkBlock = <Link label="Open" icon="icon-folder-open" onClick={this.onOpenClick} />;
     }
 
     return (

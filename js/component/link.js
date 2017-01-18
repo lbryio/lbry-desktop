@@ -28,7 +28,8 @@ export let Link = React.createClass({
     /* The way the class name is generated here is a mess -- refactor */
 
     const className = (this.props.className || '') +
-      (this.props.button ? ' button-block button-' + this.props.button : '') +
+      (!this.props.className && !this.props.button ? 'button-block button-text' : '') + // Non-button links get the same look as text buttons
+      (this.props.button ? 'button-block button-' + this.props.button : '') +
       (this.props.disabled ? ' disabled' : '');
 
     let content;
@@ -45,9 +46,9 @@ export let Link = React.createClass({
     return (
       <a className={className} href={this.props.href || 'javascript:;'} title={this.props.title}
          onClick={this.handleClick} {... 'style' in this.props ? {style: this.props.style} : {}}>
-         {('button' in this.props) && this.props.button != 'text'
-           ? <span className="button__content">{content}</span>
-           : content}
+        {'button' in this.props
+          ? <span className="button__content">{content}</span>
+          : content}
       </a>
     );
   }
