@@ -41,7 +41,8 @@ cp -R "$ROOT/lbry-web-ui/dist" "$ROOT/electron/"
 mv "$ROOT/lbrynet/dist/lbry" "$ROOT/electron/dist"
 
 if [ -n "${TEAMCITY_VERSION:-}" ]; then
-  electron-packager --electron-version=1.4.14 --all --overwrite "$ROOT/electron" LBRY
+  electron-packager --electron-version=1.4.14 --platform=darwin --overwrite "$ROOT/electron" LBRY
+  electron-packager --electron-version=1.4.14 --platform=linux --overwrite "$ROOT/electron" LBRY
   echo 'Build and packaging complete.'
 else
   echo 'Build complete. Run `electron electron` to launch the app'
