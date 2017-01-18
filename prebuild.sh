@@ -75,6 +75,10 @@ if $LINUX && ! (pip list --format=columns | grep --quiet setuptools); then
   $SUDO pip install setuptools
 fi
 
+if ! cmd_exists virtualenv; then
+  $SUDO pip install virtualenv
+fi
+
 if ! cmd_exists pyinstaller; then
   $SUDO pip install pyinstaller
 fi

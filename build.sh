@@ -11,6 +11,11 @@ if [ -n "${TEAMCITY_VERSION:-}" ]; then
 fi
 
 
+VENV="$ROOT/venv"
+virtualenv "$VENV"
+source "$VENV/bin/activate"
+
+
 (
   cd "$ROOT/electron"
   npm install
@@ -68,3 +73,5 @@ if [ -n "${TEAMCITY_VERSION:-}" ]; then
 else
   echo 'Build complete. Run `electron electron` to launch the app'
 fi
+
+deactivate
