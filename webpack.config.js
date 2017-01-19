@@ -8,7 +8,7 @@ const PATHS = {
 module.exports = {
   entry: ['babel-polyfill', './js/main.js'],
   output: {
-    path: path.join(PATHS.dist, 'js'),
+    path: path.join(__dirname, '..', 'electron', 'dist', 'js'),
     publicPath: '/js/',
     filename: "bundle.js"
   },
