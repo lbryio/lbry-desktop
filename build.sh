@@ -8,17 +8,16 @@ ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 if [ -n "${TEAMCITY_VERSION:-}" ]; then
   # install dependencies
   $ROOT/prebuild.sh
-fi
 
-
-VENV="$ROOT/build_venv"
-if [ -d "$VENV" ]; then
-  rm -rf "$VENV"
+  VENV="$ROOT/build_venv"
+  if [ -d "$VENV" ]; then
+    rm -rf "$VENV"
+  fi
+  virtualenv "$VENV"
+  set +u
+  source "$VENV/bin/activate"
+  set -u
 fi
-virtualenv "$VENV"
-set +u
-source "$VENV/bin/activate"
-set -u
 
 
 (
@@ -43,13 +42,9 @@ set -u
 
 (
   cd "$ROOT/lbry-web-ui"
-  git fetch
-  git reset --hard origin/master
-  git cherry-pick 06224b1d2cf4bf1f63d95031502260dd9c3ec5c1
   npm install
   node_modules/.bin/node-sass --output dist/css --sourcemap=none scss/
   node_modules/.bin/webpack
-  git reset --hard origin/master
 )
 
 cp -R "$ROOT/lbry-web-ui/dist" "$ROOT/electron/"
@@ -79,4 +74,6 @@ else
   echo 'Build complete. Run `electron electron` to launch the app'
 fi
 
-deactivate
+if [ -n "${TEAMCITY_VERSION:-}" ]; then
+  deactivate
+fi
