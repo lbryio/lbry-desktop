@@ -2,6 +2,10 @@ import React from 'react';
 import lbry from '../lbry.js';
 import LoadScreen from '../component/load_screen.js'
 
+const fs = require('fs');
+const VideoStream = require('videostream');
+
+
 var WatchPage = React.createClass({
   propTypes: {
     name: React.PropTypes.string,
@@ -22,6 +26,7 @@ var WatchPage = React.createClass({
     lbry.getFileStatus(this.props.name, (status) => {
       if (!status || status.code != 'running' || status.written_bytes == 0) {
         // Download hasn't started yet, so update status message (if available) then try again
+	// TODO: Would be nice to check if we have the MOOV before starting playing
         if (status) {
           this.setState({
             loadStatusMessage: status.message
@@ -33,11 +38,17 @@ var WatchPage = React.createClass({
           readyToPlay: true,
           mimeType: status.mime_type,
         })
-        var player = new MediaElementPlayer(this.refs.player, {
-          mode: 'shim',
-          plugins: ['flash'],
-          setDimensions: false,
-        });
+	const mediaFile = {
+	  createReadStream: function (opts) {
+	    // Return a readable stream that provides the bytes
+	    // between offsets "start" and "end" inclusive
+	    console.log('Stream between ' + opts.start + ' and ' + opts.end + '.');
+	    return fs.createReadStream(status.download_path, opts)
+	  }
+	}
+	var elem = this.refs.video;
+	var videostream = VideoStream(mediaFile, elem);
+	elem.play();
       }
     });
   },
@@ -46,8 +57,7 @@ var WatchPage = React.createClass({
       !this.state.readyToPlay
         ? <LoadScreen message={'Loading video...'} details={this.state.loadStatusMessage} />
         : <main className="full-screen">
-            <video ref="player" width="100%" height="100%">
-              <source type={(this.state.mimeType == 'audio/m4a' || this.state.mimeType == 'audio/mp4a-latm') ? 'video/mp4' : this.state.mimeType} src={lbry.webUiUri + '/view?name=' + this.props.name} />
+            <video controls width="100%" height="100%" id="video" ref="video">
             </video>
           </main>
     );
