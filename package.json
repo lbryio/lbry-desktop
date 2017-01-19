@@ -27,7 +27,8 @@
     "node-sass": "^3.8.0",
     "react": "^15.4.0",
     "react-dom": "^15.4.0",
-    "react-modal": "^1.5.2"
+    "react-modal": "^1.5.2",
+    "videostream": "^2.4.2"
   },
   "devDependencies": {
     "babel": "^6.5.2",
@@ -45,6 +46,7 @@
     "eslint-plugin-jsx-a11y": "^2.2.3",
     "eslint-plugin-react": "^6.7.1",
     "node-sass": "^3.13.0",
-    "webpack": "^1.13.3"
+    "webpack": "^1.13.3",
+    "webpack-target-electron-renderer": "^0.4.0"
   }
 }
