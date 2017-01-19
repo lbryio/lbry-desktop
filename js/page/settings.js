@@ -51,7 +51,8 @@ var SettingsPage = React.createClass({
   getInitialState: function() {
     return {
       settings: null,
-      showNsfw: lbry.getClientSetting('showNsfw')
+      showNsfw: lbry.getClientSetting('showNsfw'),
+      showUnavailable: lbry.getClientSetting('showUnavailable'),
     }
   },
   componentDidMount: function() {
@@ -68,6 +69,9 @@ var SettingsPage = React.createClass({
   },
   onShowNsfwChange: function(event) {
     lbry.setClientSetting('showNsfw', event.target.checked);
+  },
+  onShowUnavailableChange: function(event) {
+    lbry.setClientSetting('showUnavailable', event.target.checked);
   },
   render: function() {
     if (!this.state.daemonSettings) {
@@ -114,12 +118,23 @@ var SettingsPage = React.createClass({
           <h3>Content</h3>
           <div className="form-row">
             <label style={settingsCheckBoxOptionStyles}>
-              <input type="checkbox" onChange={this.onShowNsfwChange} defaultChecked={this.state.showNsfw} /> Show NSFW Content
+              <input type="checkbox" onChange={this.onShowNsfwChange} defaultChecked={this.state.showNsfw} /> Show NSFW content
             </label>
             <div className="help">
               NSFW content may include nudity, intense sexuality, profanity, or other adult content.
               By displaying NSFW content, you are affirming you are of legal age to view mature content in your country or jurisdiction.
             </div>
+          </div>
+        </section>
+        <section className="card">
+          <h3>Search</h3>
+          <div className="form-row">
+          <div className="help">
+            Would you like search results to include items that are not currently available for download?
+          </div>
+          <label style={settingsCheckBoxOptionStyles}>
+            <input type="checkbox" onChange={this.onShowUnavailableChange} defaultChecked={this.state.showUnavailable} /> Show unavailable content in search results
+          </label>
           </div>
         </section>
         <section className="card">

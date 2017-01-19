@@ -64,13 +64,23 @@ export let FileTileStream = React.createClass({
   getInitialState: function() {
     return {
       showNsfwHelp: false,
-      isHidden: false
+      isHidden: false,
+      available: null,
     }
   },
   getDefaultProps: function() {
     return {
       obscureNsfw: !lbry.getClientSetting('showNsfw'),
       hidePrice: false
+    }
+  },
+  componentWillMount: function() {
+    if (!('available' in this.props)) {
+      lbry.getPeersForBlobHash(this.props.sdHash, (peers) => {
+        this.setState({
+          available: peers.length > 0,
+        });
+      });
     }
   },
   componentDidMount: function() {
@@ -83,6 +93,9 @@ export let FileTileStream = React.createClass({
     if (this._fileInfoSubscribeId) {
       lbry.fileInfoUnsubscribe(this.props.sdHash, this._fileInfoSubscribeId);
     }
+  },
+  isAvailable: function() {
+    return 'available' in this.props ? this.props.available : this.state.available;
   },
   onFileInfoUpdate: function(fileInfo) {
     if (!fileInfo && this._isMounted && this.props.hideOnRemove) {
@@ -106,7 +119,7 @@ export let FileTileStream = React.createClass({
     }
   },
   render: function() {
-    if (this.state.isHidden) {
+    if (this.state.isHidden || (!lbry.getClientSetting('showUnavailable') && !this.isAvailable())) {
       return null;
     }
 
@@ -157,7 +170,8 @@ export let FileTile = React.createClass({
   _isMounted: false,
 
   propTypes: {
-    name: React.PropTypes.string.isRequired
+    name: React.PropTypes.string.isRequired,
+    available: React.PropTypes.bool,
   },
 
   getInitialState: function() {
@@ -187,6 +201,7 @@ export let FileTile = React.createClass({
       return null;
     }
 
-    return <FileTileStream name={this.props.name} sdHash={this.state.sdHash} metadata={this.state.metadata} />;
+    return <FileTileStream name={this.props.name} available={this.props.available} sdHash={this.state.sdHash}
+                           metadata={this.state.metadata} />;
   }
 });
