@@ -50,17 +50,6 @@ export let BusyMessage = React.createClass({
   }
 });
 
-var toolTipStyle = {
-  position: 'absolute',
-  zIndex: '1',
-  top: '100%',
-  left: '-120px',
-  width: '260px',
-  padding: '15px',
-  border: '1px solid #aaa',
-  backgroundColor: '#fff',
-  fontSize: '14px',
-};
 export let ToolTip = React.createClass({
   propTypes: {
     open: React.PropTypes.bool.isRequired,
@@ -68,7 +57,7 @@ export let ToolTip = React.createClass({
   },
   render: function() {
     return (
-      <div className={this.props.open ? '' : 'hidden'} style={toolTipStyle} onMouseOut={this.props.onMouseOut}>
+      <div className={'tooltip ' + (this.props.className || '') + (this.props.open ? '' : ' hidden')} onMouseOut={this.props.onMouseOut}>
         {this.props.children}
       </div>
     );

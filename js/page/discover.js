@@ -65,6 +65,9 @@ var featuredContentLegendStyle = {
 
 var FeaturedContent = React.createClass({
   render: function() {
+    const toolTipText = ('Community Content is a public space where anyone can share content with the ' +
+                        'rest of the LBRY community. Bid on the names "one," "two," "three," "four" and ' +
+                        '"five" to put your content here!');
     return (
       <div className="row-fluid">
         <div className="span6">
@@ -77,8 +80,11 @@ var FeaturedContent = React.createClass({
 
         </div>
         <div className="span6">
-          <h3>Community Content <ToolTipLink style={featuredContentLegendStyle} label="What's this?"
-            tooltip='Community Content is a public space where anyone can share content with the rest of the LBRY community. Bid on the names "one," "two," "three," "four" and "five" to put your content here!' /></h3>
+          <h3>
+            Community Content {' '}
+            <ToolTipLink label="What's this?"
+                         tooltip={toolTipText} />
+          </h3>
           <FileTile name="one" />
           <FileTile name="two" />
           <FileTile name="three" />
