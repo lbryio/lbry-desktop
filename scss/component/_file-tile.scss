@@ -4,6 +4,10 @@
   height: $spacing-vertical * 7;
 }
 
+.file-tile__row--unavailable {
+  opacity: 0.65;
+}
+
 .file-tile__thumbnail {
   max-width: 100%;
   max-height: $spacing-vertical * 7;

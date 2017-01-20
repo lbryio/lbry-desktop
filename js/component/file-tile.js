@@ -129,7 +129,7 @@ export let FileTileStream = React.createClass({
 
     return (
       <section className={ 'file-tile card ' + (obscureNsfw ? 'card-obscured ' : '') } onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
-        <div className="row-fluid card-content file-tile__row">
+        <div className={"row-fluid card-content file-tile__row"}>
           <div className="span3">
             <a href={'/?show=' + this.props.name}><Thumbnail className="file-tile__thumbnail" src={metadata.thumbnail} alt={'Photo for ' + (title || this.props.name)} /></a>
           </div>
@@ -201,7 +201,6 @@ export let FileTile = React.createClass({
       return null;
     }
 
-    return <FileTileStream name={this.props.name} available={this.props.available} sdHash={this.state.sdHash}
-                           metadata={this.state.metadata} />;
+    return <FileTileStream sdHash={this.state.sdHash} metadata={this.state.metadata} {... this.props} />;
   }
 });
