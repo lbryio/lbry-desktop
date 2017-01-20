@@ -1,6 +1,6 @@
 import React from 'react';
 import lbry from '../lbry.js';
-import {Link} from '../component/link.js';
+import {Link, ToolTipLink} from '../component/link.js';
 import {FileActions} from '../component/file-actions.js';
 import {Thumbnail, TruncatedText, CreditAmount} from '../component/common.js';
 
@@ -125,11 +125,18 @@ export let FileTileStream = React.createClass({
 
     const metadata = this.props.metadata || {},
           obscureNsfw = this.props.obscureNsfw && metadata.nsfw,
-          title =  metadata.title ? metadata.title : ('lbry://' + this.props.name);
-
+          title = metadata.title ? metadata.title : ('lbry://' + this.props.name),
+          showUnavailable = this.isAvailable() === false,
+          unavailableMessage = ("The content on LBRY is hosted by its users. It appears there are no " +
+                                "users connected that have this file at the moment.");
     return (
       <section className={ 'file-tile card ' + (obscureNsfw ? 'card-obscured ' : '') } onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
-        <div className={"row-fluid card-content file-tile__row"}>
+        {showUnavailable
+          ? <div className='file-tile__not-available-message'>
+              This file is not currently available. <ToolTipLink label="Why?" tooltip={unavailableMessage} className="not-available-tooltip-link" />
+            </div>
+          : null}
+        <div className={"row-fluid card-content file-tile__row" + (showUnavailable ? ' file-tile__row--unavailable' : '')}>
           <div className="span3">
             <a href={'/?show=' + this.props.name}><Thumbnail className="file-tile__thumbnail" src={metadata.thumbnail} alt={'Photo for ' + (title || this.props.name)} /></a>
           </div>
