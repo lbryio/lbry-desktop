@@ -50,20 +50,6 @@ export let BusyMessage = React.createClass({
   }
 });
 
-export let ToolTip = React.createClass({
-  propTypes: {
-    open: React.PropTypes.bool.isRequired,
-    onMouseOut: React.PropTypes.func
-  },
-  render: function() {
-    return (
-      <div className={'tooltip ' + (this.props.className || '') + (this.props.open ? '' : ' hidden')} onMouseOut={this.props.onMouseOut}>
-        {this.props.children}
-      </div>
-    );
-  }
-});
-
 var creditAmountStyle = {
   color: '#216C2A',
   fontWeight: 'bold',

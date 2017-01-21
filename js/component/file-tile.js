@@ -1,6 +1,6 @@
 import React from 'react';
 import lbry from '../lbry.js';
-import {Link, ToolTipLink} from '../component/link.js';
+import {Link} from '../component/link.js';
 import {FileActions} from '../component/file-actions.js';
 import {Thumbnail, TruncatedText, CreditAmount} from '../component/common.js';
 

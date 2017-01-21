@@ -2,7 +2,8 @@ import React from 'react';
 import lbry from '../lbry.js';
 import lighthouse from '../lighthouse.js';
 import {FileTile} from '../component/file-tile.js';
-import {Link, ToolTipLink} from '../component/link.js';
+import {Link} from '../component/link.js';
+import {ToolTip} from '../component/tooltip.js';
 import {BusyMessage} from '../component/common.js';
 
 var fetchResultsStyle = {
@@ -81,9 +82,8 @@ var FeaturedContent = React.createClass({
         </div>
         <div className="span6">
           <h3>
-            Community Content {' '}
-            <ToolTipLink label="What's this?"
-                         tooltip={toolTipText} />
+            Community Content
+            <ToolTip label="What's this?" body={toolTipText} className="tooltip--header"/>
           </h3>
           <FileTile name="one" />
           <FileTile name="two" />

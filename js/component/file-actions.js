@@ -2,9 +2,9 @@ import React from 'react';
 import lbry from '../lbry.js';
 import {Link} from '../component/link.js';
 import {Icon} from '../component/common.js';
-import FileUnavailableMessage from '../component/file-unavailable-message.js';
 import Modal from './modal.js';
 import FormField from './form.js';
+import {ToolTip} from '../component/tooltip.js';
 import {DropDownMenu, DropDownMenuItem} from './menu.js';
 
 let WatchLink = React.createClass({
@@ -51,18 +51,14 @@ let WatchLink = React.createClass({
   }
 });
 
-export let FileActions = React.createClass({
+let FileActionsRow = React.createClass({
   _isMounted: false,
   _fileInfoSubscribeId: null,
 
   propTypes: {
     streamName: React.PropTypes.string,
     sdHash: React.PropTypes.string.isRequired,
-    metadata: React.PropTypes.object,
-    path: React.PropTypes.string,
-    hidden: React.PropTypes.bool,
-    deleteChecked: React.PropTypes.bool,
-    onRemove: React.PropTypes.func,
+    metadata: React.PropTypes.object
   },
   getInitialState: function() {
     return {
@@ -71,9 +67,7 @@ export let FileActions = React.createClass({
       menuOpen: false,
       deleteChecked: false,
       attemptingDownload: false,
-      attemptingRemove: false,
-      available: null,
-      forceShowActions: false,
+      attemptingRemove: false
     }
   },
   onFileInfoUpdate: function(fileInfo) {
@@ -139,11 +133,6 @@ export let FileActions = React.createClass({
       modal: 'confirmRemove',
     });
   },
-  showActions: function() {
-    this.setState({
-      forceShowActions: true,
-    });
-  },
   handleRemoveConfirmed: function() {
     if (this.props.streamName) {
       lbry.removeFile(this.props.sdHash, this.props.streamName, this.state.deleteChecked);
@@ -164,15 +153,6 @@ export let FileActions = React.createClass({
   componentDidMount: function() {
     this._isMounted = true;
     this._fileInfoSubscribeId = lbry.fileInfoSubscribe(this.props.sdHash, this.onFileInfoUpdate);
-    lbry.getPeersForBlobHash(this.props.sdHash, (peers) => {
-      if (!this._isMounted) {
-        return;
-      }
-
-      this.setState({
-        available: peers.length > 0,
-      });
-    });
   },
   componentWillUnmount: function() {
     this._isMounted = false;
@@ -183,15 +163,11 @@ export let FileActions = React.createClass({
   render: function() {
     if (this.state.fileInfo === null)
     {
-      return <section className="file-actions--stub"></section>;
-    }
-
-    if (this.state.available === false && !this.state.forceShowActions) {
-      return <FileUnavailableMessage onShowActionsClicked={this.showActions} />;
+      return null;
     }
 
     const openInFolderMessage = window.navigator.platform.startsWith('Mac') ? 'Open in Finder' : 'Open in Folder',
-          showMenu = !!this.state.fileInfo;
+      showMenu = !!this.state.fileInfo;
 
     let linkBlock;
     if (this.state.fileInfo === false && !this.state.attemptingDownload) {
@@ -213,10 +189,10 @@ export let FileActions = React.createClass({
     }
 
     return (
-      <section className="file-actions">
+      <div>
         {(this.props.metadata.content_type && this.props.metadata.content_type.startsWith('video/')) ? <WatchLink streamName={this.props.streamName} /> : null}
         {this.state.fileInfo !== null || this.state.fileInfo.isMine ?
-          <div className="button-container">{linkBlock}</div>
+         <div className="button-container">{linkBlock}</div>
           : null}
         { showMenu ?
           <DropDownMenu>
@@ -238,7 +214,62 @@ export let FileActions = React.createClass({
 
           <label><FormField type="checkbox" checked={this.state.deleteChecked} onClick={this.handleDeleteCheckboxClicked} /> Delete this file from my computer</label>
         </Modal>
-      </section>
+      </div>
     );
+  }
+});
+
+export let FileActions = React.createClass({
+  _isMounted: false,
+  _fileInfoSubscribeId: null,
+
+  propTypes: {
+    streamName: React.PropTypes.string,
+    sdHash: React.PropTypes.string.isRequired,
+    metadata: React.PropTypes.object
+  },
+  getInitialState: function() {
+    return {
+      available: true,
+      forceShowActions: false,
+    }
+  },
+  onShowFileActionsRowClicked: function() {
+    this.setState({
+      forceShowActions: true,
+    });
+  },
+  componentDidMount: function() {
+    this._isMounted = true;
+    lbry.getPeersForBlobHash(this.props.sdHash, (peers) => {
+      if (!this._isMounted) {
+        return;
+      }
+
+      this.setState({
+        available: peers.length > 0,
+      });
+    });
+  },
+  componentWillUnmount: function() {
+    this._isMounted = false;
+  },
+  render: function() {
+    return (<section className="file-actions">
+      {
+        this.state.available || this.state.forceShowActions ?
+         <FileActionsRow sdHash={this.props.sdHash} metadata={this.props.metadata} streamName={this.props.streamName} /> :
+         (<div>
+           <div className="button-container empty">This file is not currently available.</div>
+           <div className="button-container">
+             <ToolTip label="Why?"
+                      body="The content on LBRY is hosted by its users. It appears there are no users connected that have this file at the moment" />
+           </div>
+           <div className="button-container">
+             <Link label="Try Anyway" className="button-text" onClick={this.onShowFileActionsRowClicked} />
+           </div>
+         </div>)
+      }
+    </section>);
   }
 });

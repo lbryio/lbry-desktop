@@ -1,13 +1,35 @@
+@import "../global";
+
 .tooltip {
-  text-align: left;
+  position: relative;
+}
+
+.tooltip__link {
+  @include text-link();
+}
+
+.tooltip__body {
+  $tooltip-body-width: 300px;
+
   position: absolute;
   z-index: 1;
-  top: 100%;
-  left: -120px;
-  width: 260px;
-  padding: 15px;
+  left: 50%;
+  margin-left: $tooltip-body-width * -1 / 2;
+
+  box-sizing: border-box;
+  padding: $spacing-vertical / 2;
+  width: $tooltip-body-width;
   border: 1px solid #aaa;
   color: $color-text-dark;
   background-color: $color-bg;
-  font-size: 14px;
+  font-size: $font-size * 7/8;
+  line-height: $font-line-height;
+  box-shadow: $default-box-shadow;
+}
+
+.tooltip--header .tooltip__link {
+  @include text-link(#aaa);
+  font-size: $font-size * 3/4;
+  margin-left: $padding-button;
+  vertical-align: middle;
 }
