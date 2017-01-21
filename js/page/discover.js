@@ -43,11 +43,11 @@ var SearchResults = React.createClass({
   render: function() {
     var rows = [],
         seenNames = {}; //fix this when the search API returns claim IDs
-    this.props.results.forEach(function({name}) {
+    this.props.results.forEach(function({name, value}) {
       if (!seenNames[name]) {
         seenNames[name] = name;
         rows.push(
-          <FileTile key={name} name={name} />
+          <FileTile key={name} name={name} sdHash={value.sources.lbry_sd_hash} />
         );
       }
     });
