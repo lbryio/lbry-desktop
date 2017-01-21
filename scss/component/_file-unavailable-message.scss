@@ -1,0 +1,13 @@
+.file-unavailable-message {
+  font-size: 14px;
+
+  .not-available-tooltip-link__tooltip { /* temporary */
+    left: -225px;
+  }
+
+  .not-available-tooltip-link__link {
+    @include text-link();
+    font-size: 14px;
+    vertical-align: baseline;
+  }
+}
