@@ -2,6 +2,7 @@ import React from 'react';
 import lbry from '../lbry.js';
 import {Link} from '../component/link.js';
 import {Icon} from '../component/common.js';
+import FileUnavailableMessage from '../component/file-unavailable-message.js';
 import Modal from './modal.js';
 import FormField from './form.js';
 import {DropDownMenu, DropDownMenuItem} from './menu.js';
@@ -71,6 +72,8 @@ export let FileActions = React.createClass({
       deleteChecked: false,
       attemptingDownload: false,
       attemptingRemove: false,
+      available: null,
+      forceShowActions: false,
     }
   },
   onFileInfoUpdate: function(fileInfo) {
@@ -136,6 +139,11 @@ export let FileActions = React.createClass({
       modal: 'confirmRemove',
     });
   },
+  showActions: function() {
+    this.setState({
+      forceShowActions: true,
+    });
+  },
   handleRemoveConfirmed: function() {
     if (this.props.streamName) {
       lbry.removeFile(this.props.sdHash, this.props.streamName, this.state.deleteChecked);
@@ -156,6 +164,15 @@ export let FileActions = React.createClass({
   componentDidMount: function() {
     this._isMounted = true;
     this._fileInfoSubscribeId = lbry.fileInfoSubscribe(this.props.sdHash, this.onFileInfoUpdate);
+    lbry.getPeersForBlobHash(this.props.sdHash, (peers) => {
+      if (!this._isMounted) {
+        return;
+      }
+
+      this.setState({
+        available: peers.length > 0,
+      });
+    });
   },
   componentWillUnmount: function() {
     this._isMounted = false;
@@ -168,6 +185,11 @@ export let FileActions = React.createClass({
     {
       return <section className="file-actions--stub"></section>;
     }
+
+    if (this.state.available === false && !this.state.forceShowActions) {
+      return <FileUnavailableMessage onShowActionsClicked={this.showActions} />;
+    }
+
     const openInFolderMessage = window.navigator.platform.startsWith('Mac') ? 'Open in Finder' : 'Open in Folder',
           showMenu = !!this.state.fileInfo;
 
@@ -180,11 +202,12 @@ export let FileActions = React.createClass({
         label = this.state.fileInfo ? progress.toFixed(0) + '% complete' : 'Connecting...',
         labelWithIcon = <span className="button__content"><Icon icon="icon-download" />{label}</span>;
 
-      linkBlock =
+      linkBlock = (
         <div className="faux-button-block file-actions__download-status-bar">
           <div className="faux-button-block file-actions__download-status-bar-overlay" style={{ width: progress + '%' }}>{labelWithIcon}</div>
           {labelWithIcon}
-        </div>;
+        </div>
+      );
     } else {
       linkBlock = <Link button="text" label="Open" icon="icon-folder-open" onClick={this.onOpenClick} />;
     }

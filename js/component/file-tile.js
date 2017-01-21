@@ -74,13 +74,6 @@ export let FileTileStream = React.createClass({
       hidePrice: false
     }
   },
-  componentWillMount: function() {
-    lbry.getPeersForBlobHash(this.props.sdHash, (peers) => {
-      this.setState({
-        available: peers.length > 0,
-      });
-    });
-  },
   componentDidMount: function() {
     this._isMounted = true;
     if (this.props.hideOnRemove) {
@@ -114,26 +107,16 @@ export let FileTileStream = React.createClass({
     }
   },
   render: function() {
-    const isUnavailable = this.state.available === false;
-
-    if (this.state.isHidden || (!lbry.getClientSetting('showUnavailable') && isUnavailable)) {
+    if (this.state.isHidden) {
       return null;
     }
 
     const metadata = this.props.metadata || {},
           obscureNsfw = this.props.obscureNsfw && metadata.nsfw,
-          title = metadata.title ? metadata.title : ('lbry://' + this.props.name),
-          showAsAvailable = this.state.available !== false,
-          unavailableMessage = ("The content on LBRY is hosted by its users. It appears there are no " +
-                                "users connected that have this file at the moment.");
+          title = metadata.title ? metadata.title : ('lbry://' + this.props.name);
     return (
       <section className={ 'file-tile card ' + (obscureNsfw ? 'card-obscured ' : '') } onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
-        {isUnavailable
-          ? <div className='file-tile__not-available-message'>
-              This file is not currently available. <ToolTipLink label="Why?" tooltip={unavailableMessage} className="not-available-tooltip-link" />
-            </div>
-          : null}
-        <div className={"row-fluid card-content file-tile__row" + (isUnavailable ? ' file-tile__row--unavailable' : '')}>
+        <div className={"row-fluid card-content file-tile__row"}>
           <div className="span3">
             <a href={'/?show=' + this.props.name}><Thumbnail className="file-tile__thumbnail" src={metadata.thumbnail} alt={'Photo for ' + (title || this.props.name)} /></a>
           </div>
