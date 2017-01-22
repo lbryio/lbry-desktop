@@ -8,7 +8,7 @@ html
 body
 {
   font-family: 'Source Sans Pro', sans-serif;
-  line-height: 1.3333;
+  line-height: $font-line-height;
 }
 
 $drawer-width: 240px;

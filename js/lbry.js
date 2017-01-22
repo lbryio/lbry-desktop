@@ -10,6 +10,7 @@ var lbry = {
   },
   defaultClientSettings: {
     showNsfw: false,
+    showUnavailable: true,
     debug: false,
     useCustomLighthouseServers: false,
     customLighthouseServers: [],

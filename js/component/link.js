@@ -1,5 +1,5 @@
 import React from 'react';
-import {Icon, ToolTip} from './common.js';
+import {Icon} from './common.js';
 
 export let Link = React.createClass({
   propTypes: {
@@ -49,56 +49,6 @@ export let Link = React.createClass({
            ? <span className="button__content">{content}</span>
            : content}
       </a>
-    );
-  }
-});
-
-var linkContainerStyle = {
-  position: 'relative',
-};
-
-export let ToolTipLink = React.createClass({
-  getInitialState: function() {
-    return {
-      showTooltip: false,
-    };
-  },
-  handleClick: function() {
-    if (this.props.tooltip) {
-      this.setState({
-        showTooltip: !this.state.showTooltip,
-      });
-    }
-    if (this.props.onClick) {
-      this.props.onClick();
-    }
-  },
-  handleTooltipMouseOut: function() {
-    this.setState({
-      showTooltip: false,
-    });
-  },
-  render: function() {
-    var href = this.props.href ? this.props.href : 'javascript:;',
-      icon = this.props.icon ? <Icon icon={this.props.icon} />  : '',
-      className = this.props.className +
-        (this.props.button ? ' button-block button-' + this.props.button : '') +
-        (this.props.hidden ? ' hidden' : '') +
-        (this.props.disabled ? ' disabled' : '');
-
-    return (
-      <span style={linkContainerStyle}>
-        <a className={className ? className : 'button-text'} href={href} style={this.props.style ? this.props.style : {}}
-           title={this.props.title} onClick={this.handleClick}>
-          {this.props.icon ? icon : '' }
-          {this.props.label}
-        </a>
-        {(!this.props.tooltip ? null :
-          <ToolTip open={this.state.showTooltip} onMouseOut={this.handleTooltipMouseOut}>
-            {this.props.tooltip}
-          </ToolTip>
-        )}
-      </span>
     );
   }
 });

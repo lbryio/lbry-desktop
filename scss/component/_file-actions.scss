@@ -2,9 +2,10 @@
 
 $color-download: #444;
 
-.file-actions--stub
+.file-actions
 {
-  height: $height-button;
+  line-height: $height-button;
+  min-height: $height-button;
 }
 
 .file-actions__download-status-bar

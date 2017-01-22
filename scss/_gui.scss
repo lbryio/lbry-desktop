@@ -1,7 +1,7 @@
 @import "global";
 
 @mixin text-link($color: $color-primary, $hover-opacity: 0.70) {
-  color: $color;
+
   .icon
   {
     &:first-child {
@@ -29,6 +29,7 @@
   }
 
   color: $color;
+  cursor: pointer;
 }
 
 .icon-fixed-width {
@@ -200,7 +201,7 @@ input[type="text"], input[type="search"]
 }
 .button-text-help
 {
-  @include text-link(#5b8c80);
+  @include text-link(#aaa);
   font-size: 0.8em;
 }
 

@@ -64,7 +64,8 @@ export let FileTileStream = React.createClass({
   getInitialState: function() {
     return {
       showNsfwHelp: false,
-      isHidden: false
+      isHidden: false,
+      available: null,
     }
   },
   getDefaultProps: function() {
@@ -112,11 +113,10 @@ export let FileTileStream = React.createClass({
 
     const metadata = this.props.metadata || {},
           obscureNsfw = this.props.obscureNsfw && metadata.nsfw,
-          title =  metadata.title ? metadata.title : ('lbry://' + this.props.name);
-
+          title = metadata.title ? metadata.title : ('lbry://' + this.props.name);
     return (
       <section className={ 'file-tile card ' + (obscureNsfw ? 'card-obscured ' : '') } onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
-        <div className="row-fluid card-content file-tile__row">
+        <div className={"row-fluid card-content file-tile__row"}>
           <div className="span3">
             <a href={'/?show=' + this.props.name}><Thumbnail className="file-tile__thumbnail" src={metadata.thumbnail} alt={'Photo for ' + (title || this.props.name)} /></a>
           </div>
@@ -157,7 +157,8 @@ export let FileTile = React.createClass({
   _isMounted: false,
 
   propTypes: {
-    name: React.PropTypes.string.isRequired
+    name: React.PropTypes.string.isRequired,
+    available: React.PropTypes.bool,
   },
 
   getInitialState: function() {
@@ -187,6 +188,6 @@ export let FileTile = React.createClass({
       return null;
     }
 
-    return <FileTileStream name={this.props.name} sdHash={this.state.sdHash} metadata={this.state.metadata} />;
+    return <FileTileStream sdHash={this.state.sdHash} metadata={this.state.metadata} {... this.props} />;
   }
 });
