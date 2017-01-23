@@ -5,7 +5,7 @@ This is the web-based frontend for the LBRY network. It is automatically install
 ## Development Setup
 
 - Install [LBRY](https://github.com/lbryio/lbry/releases)
-- Install node and npm ([this gist may be useful](https://gist.github.com/isaacs/579814))
+- Install node and npm (if you can, [use this](https://github.com/nodesource/distributions). if not, [this gist may be useful](https://gist.github.com/isaacs/579814))
 - Checkout this project via git
 - Run `./watch.sh` (this will `npm install` dependencies)
 - Run LBRY
