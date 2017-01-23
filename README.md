@@ -1,23 +1,28 @@
 # LBRY Web User Interface
 
-This is the frontend for LBRY's in-browser application, that is automatically installed when a user installs [LBRY](https://github.com/lbryio/lbry).
+This is the web-based frontend for the LBRY network. It is automatically installed when a user installs [LBRY](https://github.com/lbryio/lbry).
 
 ## Development Setup
 
-These steps will get you to change-reload-see:
-
 - Install [LBRY](https://github.com/lbryio/lbry/releases)
 - Install node and npm ([this gist may be useful](https://gist.github.com/isaacs/579814))
-- Run `./watch.sh` (this will `npm install` dependencies). Changes made in `sass` and `js` will be auto compiled to `dist`
-- Run `lbrynet-daemon --ui=/full/path/to/dist/` to start LBRY
-- `lbry.call('configure_ui', {path: '/path/to/ui'})` can be used in JS console on web ui to switch ui path. This is also needed to trigger a reload after making changes to the UI.
-- `lbrynet-daemon --branch=branchname` can be used to test remote branches
-- Occasionally refreshing the cache may be necessary for changes to show up in browser
+- Checkout this project via git
+- Run `./watch.sh` (this will `npm install` dependencies)
+- Run LBRY
 
-## Common Issues
-1. Error: Couldn't find preset "es2015" relative to directory "js"
+While `watch.sh` is running, any change made to the `js` or `scss` folders will automatically be compiled into the `dist` folder.
 
-Fix with:
+While changes will automatically compile, they will not automatically be loaded by the app. Every time a file changes, you must run:
 
-    npm install babel-preset-es2015 --save
-    npm install babel-preset-react --save
+`lbrynet-cli configure_ui path=/path/to/repo/dist`
+
+Then reload the page. This call can also be made directly via the browser Javascript console:
+
+`lbry.call('configure_ui', {path: '/path/to/ui'})`
+
+To reset your UI to the version packaged with the application, run:
+
+`lbrynet-cli configure_ui branch=master`
+
+This command also works to test non-released branches of `lbry-web-ui`
+
