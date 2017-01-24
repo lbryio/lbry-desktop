@@ -10,6 +10,7 @@ $border-radius-menu: 2px;
   border-radius: $border-radius-menu;
   padding-top: $spacing-vertical / 2;
   padding-bottom: $spacing-vertical / 2;
+  z-index: 1;
 }
 
 .menu__menu-item {
