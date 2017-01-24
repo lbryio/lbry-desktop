@@ -176,7 +176,7 @@ let FileActionsRow = React.createClass({
       const
         progress = this.state.fileInfo ? this.state.fileInfo.written_bytes / this.state.fileInfo.total_bytes * 100 : 0,
         label = this.state.fileInfo ? progress.toFixed(0) + '% complete' : 'Connecting...',
-        labelWithIcon = <span className="button__content"><Icon icon="icon-download" />{label}</span>;
+        labelWithIcon = <span className="button__content"><Icon icon="icon-download" /><span>{label}</span></span>;
 
       linkBlock = (
         <div className="faux-button-block file-actions__download-status-bar">
@@ -185,7 +185,7 @@ let FileActionsRow = React.createClass({
         </div>
       );
     } else {
-      linkBlock = <Link button="text" label="Open" icon="icon-folder-open" onClick={this.onOpenClick} />;
+      linkBlock = <Link label="Open" icon="icon-folder-open" onClick={this.onOpenClick} />;
     }
 
     return (
@@ -263,7 +263,7 @@ export let FileActions = React.createClass({
            <div className="button-container empty">This file is not currently available.</div>
            <div className="button-container">
              <ToolTip label="Why?"
-                      body="The content on LBRY is hosted by its users. It appears there are no users connected that have this file at the moment" />
+                      body="The content on LBRY is hosted by its users. It appears there are no users connected that have this file at the moment." />
            </div>
            <div className="button-container">
              <Link label="Try Anyway" className="button-text" onClick={this.onShowFileActionsRowClicked} />

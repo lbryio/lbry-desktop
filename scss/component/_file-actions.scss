@@ -8,6 +8,12 @@ $color-download: #444;
   min-height: $height-button;
 }
 
+.file-actions__download-status-bar, .file-actions__download-status-bar-overlay {
+   .button__content {
+     margin: 0 $padding-text-link;
+   }
+}
+
 .file-actions__download-status-bar
 {
   position: relative;
