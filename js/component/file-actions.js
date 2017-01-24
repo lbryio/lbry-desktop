@@ -263,7 +263,7 @@ export let FileActions = React.createClass({
            <div className="button-container empty">This file is not currently available.</div>
            <div className="button-container">
              <ToolTip label="Why?"
-                      body="The content on LBRY is hosted by its users. It appears there are no users connected that have this file at the moment" />
+                      body="The content on LBRY is hosted by its users. It appears there are no users connected that have this file at the moment." />
            </div>
            <div className="button-container">
              <Link label="Try Anyway" className="button-text" onClick={this.onShowFileActionsRowClicked} />
