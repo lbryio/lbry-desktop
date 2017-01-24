@@ -5,6 +5,7 @@ var lbry = {
   rootPath: '.',
   daemonConnectionString: 'http://localhost:5279/lbryapi',
   webUiUri: 'http://localhost:5279',
+  peerListTimeout: 6000,
   colors: {
     primary: '#155B4A'
   },
@@ -190,7 +191,18 @@ lbry.getTotalCost = function(name, size, callback) {
 }
 
 lbry.getPeersForBlobHash = function(blobHash, callback) {
-  lbry.call('peer_list', { blob_hash: blobHash }, callback);
+  let timedOut = false;
+  const timeout = setTimeout(() => {
+    timedOut = true;
+    callback([]);
+  }, lbry.peerListTimeout);
+
+  lbry.call('peer_list', { blob_hash: blobHash }, function(peers) {
+    if (!timedOut) {
+      clearTimeout(timeout);
+      callback(peers);
+    }
+  });
 }
 
 lbry.getCostInfoForName = function(name, callback) {
