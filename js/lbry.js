@@ -190,7 +190,7 @@ lbry.getTotalCost = function(name, size, callback) {
 }
 
 lbry.getPeersForBlobHash = function(blobHash, callback) {
-  lbry.call('get_peers_for_hash', { blob_hash: blobHash }, callback)
+  lbry.call('peer_list', { blob_hash: blobHash }, callback);
 }
 
 lbry.getCostInfoForName = function(name, callback) {
