@@ -28,6 +28,8 @@ let FilePrice = React.createClass({
           costIncludesData: includesData,
         });
       }
+    }, () => {
+      // If we get an error looking up cost information, do nothing
     });
   },
 

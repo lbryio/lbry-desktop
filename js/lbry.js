@@ -179,15 +179,15 @@ lbry.getMyClaim = function(name, callback) {
   lbry.call('get_my_claim', { name: name }, callback);
 }
 
-lbry.getKeyFee = function(name, callback) {
-  lbry.call('get_est_cost', { name: name }, callback);
+lbry.getKeyFee = function(name, callback, errorCallback) {
+  lbry.call('stream_cost_estimate', { name: name }, callback, errorCallback);
 }
 
-lbry.getTotalCost = function(name, size, callback) {
-  lbry.call('get_est_cost', {
+lbry.getTotalCost = function(name, size, callback, errorCallback) {
+  lbry.call('stream_cost_estimate', {
     name: name,
     size: size,
-  }, callback);
+  }, callback, errorCallback);
 }
 
 lbry.getPeersForBlobHash = function(blobHash, callback) {
@@ -205,7 +205,7 @@ lbry.getPeersForBlobHash = function(blobHash, callback) {
   });
 }
 
-lbry.getCostInfoForName = function(name, callback) {
+lbry.getCostInfoForName = function(name, callback, errorCallback) {
   /**
    * Takes a LBRY name; will first try and calculate a total cost using
    * Lighthouse. If Lighthouse can't be reached, it just retrives the
@@ -216,30 +216,30 @@ lbry.getCostInfoForName = function(name, callback) {
    *   - includes_data: Boolean; indicates whether or not the data fee info
    *     from Lighthouse is included.
    */
-  function getCostWithData(name, size, callback) {
+  function getCostWithData(name, size, callback, errorCallback) {
     lbry.getTotalCost(name, size, (cost) => {
       callback({
         cost: cost,
         includesData: true,
       });
-    });
+    }, errorCallback);
   }
 
-  function getCostNoData(name, callback) {
+  function getCostNoData(name, callback, errorCallback) {
     lbry.getKeyFee(name, (cost) => {
       callback({
         cost: cost,
         includesData: false,
       });
-    });
+    }, errorCallback);
   }
 
   lighthouse.getSizeForName(name, (size) => {
-    getCostWithData(name, size, callback);
+    getCostWithData(name, size, callback, errorCallback);
   }, () => {
-    getCostNoData(name, callback);
+    getCostNoData(name, callback, errorCallback);
   }, () => {
-    getCostNoData(name, callback);
+    getCostNoData(name, callback, errorCallback);
   });
 }
 
