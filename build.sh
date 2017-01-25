@@ -4,6 +4,12 @@ set -o xtrace
 set -eu
 
 ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+if [ "$(uname)" == "Darwin" ]; then
+    ICON="$ROOT/package/osx/app.icns"
+else
+    ICON="$ROOT/package/icons/lbry48.png"
+fi
+
 
 if [ -n "${TEAMCITY_VERSION:-}" ]; then
   # install dependencies
@@ -17,6 +23,7 @@ if [ -n "${TEAMCITY_VERSION:-}" ]; then
   set +u
   source "$VENV/bin/activate"
   set -u
+  pip install -U pip setuptools
 fi
 
 
@@ -27,17 +34,13 @@ fi
 
 (
   cd "$ROOT/lbry"
-  git fetch
-  git reset --hard origin/master
-  git cherry-pick bd75e88ebebb67897c62a1ee1d3228fd269677dc
   pip install -r requirements.txt
   pip install .
-  git reset --hard origin/master
 )
 
 (
   cd "$ROOT/lbrynet"
-  pyinstaller lbry.py -y --windowed --onefile --icon="$ROOT/lbry/packaging/osx/lbry-osx-app/app.icns"
+  pyinstaller lbry.py -y --windowed --onefile --icon="${ICON}"
 )
 
 (
@@ -52,21 +55,25 @@ cp -R "$ROOT/lbry-web-ui/dist" "$ROOT/electron/"
 mv "$ROOT/lbrynet/dist/lbry" "$ROOT/electron/dist"
 
 if [ -n "${TEAMCITY_VERSION:-}" ]; then
-  electron-packager --electron-version=1.4.14 --overwrite "$ROOT/electron" LBRY
+  electron-packager --electron-version=1.4.14 --overwrite "$ROOT/electron" LBRY --icon="${ICON}"
+  # TODO: sign the app
 
   (
+    cd "$ROOT/lbry"
+    VERSION=$(python setup.py -V)
     cd "$ROOT"
     if [ "$(uname)" == "Darwin" ]; then
-      OS="osx"
       PLATFORM="darwin"
+      mv "LBRY-${PLATFORM}-x64/LBRY.app" "$ROOT/lbry/package/osx/lbry-osx-app/LBRY.app"
+      cd "$ROOT/lbry/packaging/osx/lbry-osx-app"
+      dmgbuild -s dmg_settings.py "LBRY" "lbry-${VERSION}.dmg"
     elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
       OS="linux"
       PLATFORM="linux"
+      tar cvzf "lbry-${OS}.tgz" "LBRY-${PLATFORM}-x64/"
     else
       OS="unknown"
     fi
-
-    tar cvzf "lbry-${OS}.tgz" "LBRY-${PLATFORM}-x64/"
   )
 
   echo 'Build and packaging complete.'

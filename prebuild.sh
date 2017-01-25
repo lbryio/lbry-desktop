@@ -27,7 +27,7 @@ cmd_exists() {
   return $?
 }
 
-
+set +eu
 GITUSERNAME=$(git config --global --get user.name)
 GITEMAIL=$(git config --global --get user.email)
 if [ -z "$GITUSERNAME" ]; then
@@ -36,6 +36,7 @@ fi
 if [ -z "$GITEMAIL" ]; then
   git config --global user.email "$(whoami)@lbry.io"
 fi
+set -eu
 
 
 if $LINUX; then
@@ -94,4 +95,8 @@ fi
 
 if ! cmd_exists electron-packager; then
   $SUDO npm install --global electron-packager
+fi
+
+if $OSX && ! cmd_exists dmgbuild; then
+  $SUDO pip install dmgbuild
 fi
