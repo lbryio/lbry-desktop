@@ -185,7 +185,7 @@ let FileActionsRow = React.createClass({
         </div>
       );
     } else {
-      linkBlock = <Link label="Open" icon="icon-folder-open" onClick={this.onOpenClick} />;
+      linkBlock = <Link label="Open" button="text" icon="icon-folder-open" onClick={this.onOpenClick} />;
     }
 
     return (
@@ -266,7 +266,7 @@ export let FileActions = React.createClass({
                       body="The content on LBRY is hosted by its users. It appears there are no users connected that have this file at the moment." />
            </div>
            <div className="button-container">
-             <Link label="Try Anyway" className="button-text" onClick={this.onShowFileActionsRowClicked} />
+             <Link label="Try Anyway" onClick={this.onShowFileActionsRowClicked} />
            </div>
          </div>)
       }
