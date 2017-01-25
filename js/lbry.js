@@ -176,7 +176,9 @@ lbry.getClaimInfo = function(name, callback) {
 }
 
 lbry.getMyClaim = function(name, callback) {
-  lbry.call('get_my_claim', { name: name }, callback);
+  lbry.call('claim_list_mine', {}, (claims) => {
+    callback(claims.find((claim) => claim.name == name) || null);
+  });
 }
 
 lbry.getKeyFee = function(name, callback, errorCallback) {
