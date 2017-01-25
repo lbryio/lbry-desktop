@@ -67,6 +67,7 @@ if [ -n "${TEAMCITY_VERSION:-}" ]; then
       mv "LBRY-${PLATFORM}-x64/LBRY.app" "$ROOT/package/osx/LBRY.app"
       cd "$ROOT/package/osx/"
       dmgbuild -s dmg_settings.py "LBRY" "lbry-${VERSION}.dmg"
+      mv "lbry-${VERSION}.dmg" "${ROOT}"
     elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
       OS="linux"
       PLATFORM="linux"
