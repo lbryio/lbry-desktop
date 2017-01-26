@@ -35,6 +35,11 @@ fi
 (
   cd "$ROOT/lbry"
   pip install -r requirements.txt
+  # need to install our version of lbryum, not
+  # what is currently on master
+  pushd "$ROOT/lbryum"
+  pip install .
+  popd
   pip install .
 )
 
@@ -57,16 +62,20 @@ mv "$ROOT/lbrynet/dist/lbry" "$ROOT/electron/dist"
 
 if [ -n "${TEAMCITY_VERSION:-}" ]; then
   electron-packager --electron-version=1.4.14 --overwrite "$ROOT/electron" LBRY --icon="${ICON}"
-  # TODO: sign the app
 
   (
-    cd "$ROOT/lbry"
+    pushd "$ROOT/lbry"
     VERSION=$(python setup.py -V)
-    cd "$ROOT"
+    popd
     if [ "$(uname)" == "Darwin" ]; then
       PLATFORM="darwin"
+      rm -rf "$ROOT/package/osx/LBRY.app"
       mv "LBRY-${PLATFORM}-x64/LBRY.app" "$ROOT/package/osx/LBRY.app"
       cd "$ROOT/package/osx/"
+      security unlock-keychain -p ${KEYCHAIN_PASSWORD} osx-build.keychain
+      codesign --deep -s "${LBRY_DEVELOPER_ID}" -f LBRY.app
+      # check if the signing actually worked
+      codesign -vvv LBRY.app/
       dmgbuild -s dmg_settings.py "LBRY" "lbry-${VERSION}.dmg"
       mv "lbry-${VERSION}.dmg" "${ROOT}"
     elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
