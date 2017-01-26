@@ -146,7 +146,7 @@ export let FileTileStream = React.createClass({
           ? <div className='card-overlay'>
            <p>
              This content is Not Safe For Work.
-             To view adult content, please change your <Link href="?settings" label="Settings" />.
+             To view adult content, please change your <Link className="button-text" href="?settings" label="Settings" />.
            </p>
          </div>
           : null}

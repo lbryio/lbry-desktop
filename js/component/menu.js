@@ -68,7 +68,7 @@ export let DropDownMenu = React.createClass({
     }
     return (
       <div className="button-container">
-        <Link ref={(span) => this._menuButton = span} icon="icon-ellipsis-v" onClick={this.onMenuIconClick} />
+        <Link ref={(span) => this._menuButton = span} button="text" icon="icon-ellipsis-v" onClick={this.onMenuIconClick} />
         {this.state.menuOpen
           ? <div ref={(div) => this._menuDiv = div} className="menu">
               {this.props.children}
