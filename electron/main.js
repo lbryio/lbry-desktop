@@ -43,7 +43,7 @@ function lauchDaemon() {
       app.quit();
     } else {
       win.loadURL(`file://${__dirname}/dist/warning.html`);
-      setTimeout(5000, app.quit)
+      setTimeout(app.quit, 5000)
     }
   });
   console.log('lbrynet daemon has launched')

@@ -40,7 +40,7 @@ fi
 
 (
   cd "$ROOT/lbrynet"
-  pyinstaller lbry.py -y --windowed --onefile --icon="${ICON}"
+  pyinstaller lbry.onefile.spec -y --windowed --onefile
 )
 
 (
@@ -48,11 +48,12 @@ fi
   npm install
   node_modules/.bin/node-sass --output dist/css --sourcemap=none scss/
   node_modules/.bin/webpack
+  rm -rf "$ROOT/electron/dist"
+  cp -r dist "$ROOT/electron/dist"
 )
 
-cp -R "$ROOT/lbry-web-ui/dist" "$ROOT/electron/"
-
 mv "$ROOT/lbrynet/dist/lbry" "$ROOT/electron/dist"
+
 
 if [ -n "${TEAMCITY_VERSION:-}" ]; then
   electron-packager --electron-version=1.4.14 --overwrite "$ROOT/electron" LBRY --icon="${ICON}"
