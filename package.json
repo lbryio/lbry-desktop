@@ -1,13 +1,10 @@
 {
-  "name": "LBRY",
-  "version": "0.1.0",
-  "main": "main.js",
-  "description": "LBRY is a fully decentralized, open-source protocol facilitating the discovery, access, and (sometimes) purchase of data.",
-  "author": "lbry.io",
-  "dependencies": {
-    "jayson": "^2.0.2"
-  },
+  "postinstall": "install-app-deps",
   "build": {
+    "asar": false,
+    "directories": {
+      "app": "app"
+    },
     "appId": "io.lbry.LBRY",
     "mac": {
       "category": "public.app-category.utilities",
@@ -31,8 +28,9 @@
         "x": 200,
         "y": 200,
         "width": 500,
-        "height": 320
-      }
+        "height": 300
+      },
+      "backgroundColor": "155B4A"
     }
   },
   "devDependencies": {

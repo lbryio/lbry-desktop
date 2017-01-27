@@ -5,9 +5,9 @@ set -eu
 
 ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 if [ "$(uname)" == "Darwin" ]; then
-    ICON="$ROOT/package/osx/app.icns"
+    ICON="$ROOT/build/icon.icns"
 else
-    ICON="$ROOT/package/icons/lbry48.png"
+    ICON="$ROOT/build/icons/lbry48.png"
 fi
 
 
@@ -28,7 +28,7 @@ fi
 
 
 (
-  cd "$ROOT/electron"
+  cd "$ROOT/app"
   npm install
 )
 
@@ -53,15 +53,15 @@ fi
   npm install
   node_modules/.bin/node-sass --output dist/css --sourcemap=none scss/
   node_modules/.bin/webpack
-  rm -rf "$ROOT/electron/dist"
-  cp -r dist "$ROOT/electron/dist"
+  rm -rf "$ROOT/app/dist"
+  cp -r dist "$ROOT/app/dist"
 )
 
-mv "$ROOT/lbrynet/dist/lbry" "$ROOT/electron/dist"
+mv "$ROOT/lbrynet/dist/lbry" "$ROOT/app/dist"
 
 
 if [ -n "${TEAMCITY_VERSION:-}" ]; then
-  electron-packager --electron-version=1.4.14 --overwrite "$ROOT/electron" LBRY --icon="${ICON}"
+  electron-packager --electron-version=1.4.14 --overwrite "$ROOT/app" LBRY --icon="${ICON}"
 
   (
     pushd "$ROOT/lbry"
