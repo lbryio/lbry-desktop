@@ -92,11 +92,3 @@ if ! cmd_exists node; then
     brew install node
   fi
 fi
-
-if ! cmd_exists electron-packager; then
-  $SUDO npm install --global electron-packager
-fi
-
-if $OSX && ! cmd_exists dmgbuild; then
-  $SUDO pip install dmgbuild
-fi

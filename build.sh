@@ -61,23 +61,10 @@ mv "$ROOT/lbrynet/dist/lbry" "$ROOT/app/dist"
 
 
 if [ -n "${TEAMCITY_VERSION:-}" ]; then
-  electron-packager --electron-version=1.4.14 --overwrite "$ROOT/app" LBRY --icon="${ICON}"
 
   (
-    pushd "$ROOT/lbry"
-    VERSION=$(python setup.py -V)
-    popd
     if [ "$(uname)" == "Darwin" ]; then
-      PLATFORM="darwin"
-      rm -rf "$ROOT/package/osx/LBRY.app"
-      mv "LBRY-${PLATFORM}-x64/LBRY.app" "$ROOT/package/osx/LBRY.app"
-      cd "$ROOT/package/osx/"
       security unlock-keychain -p ${KEYCHAIN_PASSWORD} osx-build.keychain
-      codesign --deep -s "${LBRY_DEVELOPER_ID}" -f LBRY.app
-      # check if the signing actually worked
-      codesign -vvv LBRY.app/
-      dmgbuild -s dmg_settings.py "LBRY" "lbry-${VERSION}.dmg"
-      mv "lbry-${VERSION}.dmg" "${ROOT}"
     elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
       OS="linux"
       PLATFORM="linux"
@@ -86,6 +73,8 @@ if [ -n "${TEAMCITY_VERSION:-}" ]; then
       OS="unknown"
     fi
   )
+
+  node_modules/.bin/build
 
   echo 'Build and packaging complete.'
 else
