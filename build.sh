@@ -23,25 +23,20 @@ if [ -n "${TEAMCITY_VERSION:-}" ]; then
   set +u
   source "$VENV/bin/activate"
   set -u
-  pip install -U pip setuptools
+  pip install -U pip setuptools pyinstaller
 fi
 
+npm install
 
-(
-  cd "$ROOT/app"
-  npm install
-)
-
-(
-  cd "$ROOT/lbry"
-  pip install -r requirements.txt
-  # need to install our version of lbryum, not
-  # what is currently on master
-  pushd "$ROOT/lbryum"
-  pip install .
-  popd
-  pip install .
-)
+pushd "$ROOT/lbry"
+pip install -r requirements.txt
+# need to install our version of lbryum, not
+# what is currently on master
+pushd "$ROOT/lbryum"
+pip install .
+popd
+pip install .
+popd
 
 (
   cd "$ROOT/lbrynet"
