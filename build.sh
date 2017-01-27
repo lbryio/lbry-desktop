@@ -59,21 +59,12 @@ mv "$ROOT/lbrynet/dist/lbry" "$ROOT/app/dist"
 
 
 if [ -n "${TEAMCITY_VERSION:-}" ]; then
-
-  (
-    if [ "$(uname)" == "Darwin" ]; then
-      security unlock-keychain -p ${KEYCHAIN_PASSWORD} osx-build.keychain
-    elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
-      OS="linux"
-      PLATFORM="linux"
-      tar cvzf "lbry-${OS}.tgz" "LBRY-${PLATFORM}-x64/"
-    else
-      OS="unknown"
-    fi
-  )
+  if [ "$(uname)" == "Darwin" ]; then
+    security unlock-keychain -p ${KEYCHAIN_PASSWORD} osx-build.keychain
+  fi
 
   node_modules/.bin/build
-
+  
   echo 'Build and packaging complete.'
 else
   echo 'Build complete. Run `electron electron` to launch the app'
