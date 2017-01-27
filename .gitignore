@@ -1,4 +1,5 @@
-electron/dist
-electron/node_modules
+app/dist
+app/node_modules
 node_modules
 LBRY-darwin-x64
+dist
