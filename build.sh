@@ -27,6 +27,9 @@ if [ -n "${TEAMCITY_VERSION:-}" ]; then
 fi
 
 npm install
+pushd $ROOT/app
+npm install
+popd
 
 pushd "$ROOT/lbry"
 pip install -r requirements.txt
