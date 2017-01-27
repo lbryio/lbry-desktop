@@ -80,10 +80,6 @@ if ! cmd_exists virtualenv; then
   $SUDO pip install virtualenv
 fi
 
-if ! cmd_exists pyinstaller; then
-  $SUDO pip install pyinstaller
-fi
-
 if ! cmd_exists node; then
   if $LINUX; then
     curl -sL https://deb.nodesource.com/setup_7.x | $SUDO -E bash -
