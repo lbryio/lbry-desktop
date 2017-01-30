@@ -232,6 +232,7 @@ export let FileActions = React.createClass({
     return {
       available: true,
       forceShowActions: false,
+      fileInfo: null,
     }
   },
   onShowFileActionsRowClicked: function() {
@@ -239,8 +240,14 @@ export let FileActions = React.createClass({
       forceShowActions: true,
     });
   },
+  onFileInfoUpdate: function(fileInfo) {
+    this.setState({
+      fileInfo: fileInfo,
+    });
+  },
   componentDidMount: function() {
     this._isMounted = true;
+    this._fileInfoSubscribeId = lbry.fileInfoSubscribe(this.props.sdHash, this.onFileInfoUpdate);
     lbry.getPeersForBlobHash(this.props.sdHash, (peers) => {
       if (!this._isMounted) {
         return;
@@ -255,20 +262,25 @@ export let FileActions = React.createClass({
     this._isMounted = false;
   },
   render: function() {
+    const fileInfo = this.state.fileInfo;
+    if (fileInfo === null) {
+      return null;
+    }
+
     return (<section className="file-actions">
       {
-        this.state.available || this.state.forceShowActions ?
-         <FileActionsRow sdHash={this.props.sdHash} metadata={this.props.metadata} streamName={this.props.streamName} /> :
-         (<div>
-           <div className="button-container empty">This file is not currently available.</div>
-           <div className="button-container">
-             <ToolTip label="Why?"
-                      body="The content on LBRY is hosted by its users. It appears there are no users connected that have this file at the moment." />
-           </div>
-           <div className="button-container">
-             <Link label="Try Anyway" onClick={this.onShowFileActionsRowClicked} />
-           </div>
-         </div>)
+        fileInfo || this.state.available || this.state.forceShowActions
+          ? <FileActionsRow sdHash={this.props.sdHash} metadata={this.props.metadata} streamName={this.props.streamName} />
+          : <div>
+              <div className="button-container empty">This file is not currently available.</div>
+              <div className="button-container">
+                <ToolTip label="Why?"
+                         body="The content on LBRY is hosted by its users. It appears there are no users connected that have this file at the moment." />
+              </div>
+              <div className="button-container">
+                <Link label="Try Anyway" onClick={this.onShowFileActionsRowClicked} />
+              </div>
+            </div>
       }
     </section>);
   }
