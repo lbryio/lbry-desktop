@@ -1,5 +1,19 @@
 # -*- mode: python -*-
+import platform
+import os
+
 import lbryum
+
+cwd = os.getcwd()
+if os.path.basename(cwd) != 'lbrynet':
+    raise Exception('The build needs to be run from the same directory as the spec file')
+repo_base = os.path.abspath(os.path.join(cwd, '..'))
+
+system = platform.system()
+if system == 'Darwin':
+    icns = os.path.join(repo_base, 'build', 'icon.icns')
+else:
+    icns = os.path.join(repo_base, 'package', 'icons', '256x256.png')
 
 block_cipher = None
 languages = (
@@ -9,7 +23,7 @@ languages = (
 
 a = Analysis(
     ['lbry.py'],
-    pathex=['/Users/jobevers/projects/lbryio/lbry-electron/lbrynet'],
+    pathex=[cwd],
     binaries=None,
     datas=[
         (
@@ -42,12 +56,13 @@ exe = EXE(
     debug=False,
     strip=False,
     upx=True,
-    console=False , icon='/Users/jobevers/projects/lbryio/lbry-electron/package/osx/app.icns'
+    console=False,
+    icon=icns
 )
 
 app = BUNDLE(
     exe,
     name='lbry.app',
-    icon='/Users/jobevers/projects/lbryio/lbry-electron/package/osx/app.icns',
+    icon=icns,
     bundle_identifier=None
 )

@@ -43,7 +43,7 @@ popd
 
 (
   cd "$ROOT/lbrynet"
-  pyinstaller lbry.onefile.spec -y --windowed --onefile
+  pyinstaller -y lbry.onefile.spec
 )
 
 (
