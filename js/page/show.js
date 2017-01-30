@@ -22,7 +22,6 @@ var FormatItem = React.createClass({
     costIncludesData: React.PropTypes.bool,
   },
   render: function() {
-
     var claimInfo = this.props.claimInfo;
     var thumbnail = claimInfo.thumbnail;
     var title = claimInfo.title;
@@ -63,7 +62,7 @@ var FormatItem = React.createClass({
               </tbody>
             </table>
           </section>
-          <FileActions />
+          <FileActions streamName={this.props.name} sdHash={claimInfo.sources.lbry_sd_hash} metadata={claimInfo} />
           <section>
             <Link href="https://lbry.io/dmca" label="report" className="button-text-help" />
           </section>
