@@ -1,0 +1,27 @@
+@import "../global";
+
+.load-screen {
+  color: white;
+  background-image: url("/img/lbry-bg.png");
+  background-size: cover;
+  min-height: 100vh;
+  min-width: 100vw;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.load-screen__message {
+  margin-top: 24px;
+  width: 325px;
+  text-align: center;
+}
+
+.load-screen__details--warning {
+  color: $color-warning;
+}
+
+.load-screen__cancel-link {
+  color: white;
+}
