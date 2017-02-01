@@ -18,6 +18,10 @@
   text-align: center;
 }
 
+.load-screen__details {
+  color: $color-load-screen-text;
+}
+
 .load-screen__details--warning {
   color: $color-warning;
 }
