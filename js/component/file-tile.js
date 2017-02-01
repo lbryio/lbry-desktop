@@ -115,7 +115,7 @@ export let FileTileStream = React.createClass({
 
     const metadata = this.props.metadata;
     const isConfirmed = typeof metadata == 'object';
-    const title = isConfirmed ? metadata.title : this.props.name;
+    const title = isConfirmed ? metadata.title : ('lbry://' + this.props.name);
     const obscureNsfw = this.props.obscureNsfw && isConfirmed && metadata.nsfw;
     return (
       <section className={ 'file-tile card ' + (obscureNsfw ? 'card-obscured ' : '') } onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
@@ -127,7 +127,7 @@ export let FileTileStream = React.createClass({
             { !this.props.hidePrice
               ? <FilePrice name={this.props.name} />
               : null}
-            <div className="meta"><a href={'/?show=' + this.props.name}>{isConfirmed ? metadata.title : ('lbry://' + this.props.name)}</a></div>
+            <div className="meta"><a href={'/?show=' + this.props.name}>{'lbry://' + this.props.name}</a></div>
             <h3 className="file-tile__title">
               <a href={'/?show=' + this.props.name}>
                 <TruncatedText lines={1}>
