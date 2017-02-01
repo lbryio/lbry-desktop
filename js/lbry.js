@@ -306,10 +306,10 @@ lbry.getFileInfoWhenListed = function(name, callback, timeoutCallback, tryNum=0)
       }
     }
 
-    if (tryNum <= 200) {
-      setTimeout(function() { lbry.getFileInfoWhenListed(name, callback, timeoutCallback, tryNum + 1) }, 250);
-    } else if (timeoutCallback) {
+    if (timeoutCallback && tryNum > 200) {
       timeoutCallback();
+    } else {
+      setTimeout(function() { lbry.getFileInfoWhenListed(name, callback, timeoutCallback, tryNum + 1) }, 250);
     }
   });
 }
