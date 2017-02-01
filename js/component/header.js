@@ -52,7 +52,7 @@ var Header = React.createClass({
           <Link onClick={this.props.onOpenDrawer} icon="icon-bars" className="open-drawer-link" />
           <h1>{ this.state.title }</h1>
           <div className="header-search">
-            <input type="search" onChange={this.onQueryChange}
+            <input type="search" onChange={this.onQueryChange} defaultValue={this.props.initialQuery}
                  placeholder="Find movies, music, games, and more"/>
           </div>
         </div>
@@ -70,7 +70,7 @@ var SubHeader =  React.createClass({
   render: function() {
     var links = [],
         viewingUrl = '?' + this.props.viewingPage;
-    
+
     for (let link of Object.keys(this.props.links)) {
       links.push(
         <a href={link} key={link} className={ viewingUrl == link ? 'sub-header-selected' : 'sub-header-unselected' }>

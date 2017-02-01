@@ -5,11 +5,13 @@ var lbry = {
   rootPath: '.',
   daemonConnectionString: 'http://localhost:5279/lbryapi',
   webUiUri: 'http://localhost:5279',
+  peerListTimeout: 6000,
   colors: {
     primary: '#155B4A'
   },
   defaultClientSettings: {
     showNsfw: false,
+    showUnavailable: true,
     debug: false,
     useCustomLighthouseServers: false,
     customLighthouseServers: [],
@@ -90,17 +92,18 @@ lbry.call = function (method, params, callback, errorCallback, connectFailedCall
 //core
 lbry.connect = function(callback)
 {
-  // Check every half second to see if the daemon's running.
-  // Returns true to callback once connected, or false if it takes too long and we give up.
-  function checkDaemonRunning(tryNum=0) {
-    lbry.daemonRunningStatus(function (runningStatus) {
+  // Check every half second to see if the daemon is accepting connections
+  // Once this returns True, can call getDaemonStatus to see where
+  // we are in the startup process
+  function checkDaemonStarted(tryNum=0) {
+    lbry.isDaemonAcceptingConnections(function (runningStatus) {
       if (runningStatus) {
         lbry.isConnected = true;
         callback(true);
       } else {
         if (tryNum <= 600) { // Move # of tries into constant or config option
           setTimeout(function () {
-            checkDaemonRunning(tryNum + 1);
+            checkDaemonStarted(tryNum + 1);
           }, 500);
         } else {
           callback(false);
@@ -108,16 +111,12 @@ lbry.connect = function(callback)
       }
     });
   }
-  checkDaemonRunning();
+  checkDaemonStarted();
 }
 
-lbry.daemonRunningStatus = function (callback) {
-  // Returns true/false whether the daemon is running (i.e. fully conncected to the network),
-  // or null if the AJAX connection to the daemon fails.
-
-  lbry.call('is_running', {}, callback, null, function () {
-    callback(null);
-  });
+lbry.isDaemonAcceptingConnections = function (callback) {
+  // Returns true/false whether the daemon is at a point it will start returning status
+  lbry.call('status', {}, () => callback(true), null, () => callback(false))
 };
 
 lbry.getDaemonStatus = function (callback) {
@@ -132,7 +131,7 @@ lbry.getNewAddress = function(callback) {
   lbry.call('get_new_address', {}, callback);
 }
 
-lbry.checkAddressIsMine = function(address, callback) { 
+lbry.checkAddressIsMine = function(address, callback) {
   lbry.call('address_is_mine', {address: address}, callback);
 }
 
@@ -177,25 +176,38 @@ lbry.getClaimInfo = function(name, callback) {
 }
 
 lbry.getMyClaim = function(name, callback) {
-  lbry.call('get_my_claim', { name: name }, callback);
+  lbry.call('claim_list_mine', {}, (claims) => {
+    callback(claims.find((claim) => claim.name == name) || null);
+  });
 }
 
-lbry.getKeyFee = function(name, callback) {
-  lbry.call('get_est_cost', { name: name }, callback);
+lbry.getKeyFee = function(name, callback, errorCallback) {
+  lbry.call('stream_cost_estimate', { name: name }, callback, errorCallback);
 }
 
-lbry.getTotalCost = function(name, size, callback) {
-  lbry.call('get_est_cost', {
+lbry.getTotalCost = function(name, size, callback, errorCallback) {
+  lbry.call('stream_cost_estimate', {
     name: name,
     size: size,
-  }, callback);
+  }, callback, errorCallback);
 }
 
 lbry.getPeersForBlobHash = function(blobHash, callback) {
-  lbry.call('get_peers_for_hash', { blob_hash: blobHash }, callback)
+  let timedOut = false;
+  const timeout = setTimeout(() => {
+    timedOut = true;
+    callback([]);
+  }, lbry.peerListTimeout);
+
+  lbry.call('peer_list', { blob_hash: blobHash }, function(peers) {
+    if (!timedOut) {
+      clearTimeout(timeout);
+      callback(peers);
+    }
+  });
 }
 
-lbry.getCostInfoForName = function(name, callback) {
+lbry.getCostInfoForName = function(name, callback, errorCallback) {
   /**
    * Takes a LBRY name; will first try and calculate a total cost using
    * Lighthouse. If Lighthouse can't be reached, it just retrives the
@@ -206,30 +218,30 @@ lbry.getCostInfoForName = function(name, callback) {
    *   - includes_data: Boolean; indicates whether or not the data fee info
    *     from Lighthouse is included.
    */
-  function getCostWithData(name, size, callback) {
+  function getCostWithData(name, size, callback, errorCallback) {
     lbry.getTotalCost(name, size, (cost) => {
       callback({
         cost: cost,
         includesData: true,
       });
-    });
+    }, errorCallback);
   }
 
-  function getCostNoData(name, callback) {
+  function getCostNoData(name, callback, errorCallback) {
     lbry.getKeyFee(name, (cost) => {
       callback({
         cost: cost,
         includesData: false,
       });
-    });
+    }, errorCallback);
   }
 
   lighthouse.getSizeForName(name, (size) => {
-    getCostWithData(name, size, callback);
+    getCostWithData(name, size, callback, errorCallback);
   }, () => {
-    getCostNoData(name, callback);
+    getCostNoData(name, callback, errorCallback);
   }, () => {
-    getCostNoData(name, callback);
+    getCostNoData(name, callback, errorCallback);
   });
 }
 
@@ -265,32 +277,39 @@ lbry.stopFile = function(name, callback) {
   lbry.call('stop_lbry_file', { name: name }, callback);
 }
 
-lbry.deleteFile = function(name, deleteTargetFile=true, callback) {
+lbry.removeFile = function(sdHash, name, deleteTargetFile=true, callback) { // Name param is temporary until the API can delete by unique ID (SD hash, claim ID etc.)
+  this._removedFiles.push(sdHash);
+  this._updateSubscribedFileInfo(sdHash);
+
   lbry.call('delete_lbry_file', {
     name: name,
     delete_target_file: deleteTargetFile,
   }, callback);
 }
 
-lbry.revealFile = function(path, callback) {
-  lbry.call('reveal', { path: path }, callback);
+lbry.openFile = function(sdHash, callback) {
+  lbry.call('open', {sd_hash: sdHash}, callback);
+}
+
+lbry.revealFile = function(sdHash, callback) {
+  lbry.call('reveal', {sd_hash: sdHash}, callback);
 }
 
 lbry.getFileInfoWhenListed = function(name, callback, timeoutCallback, tryNum=0) {
   // Calls callback with file info when it appears in the list of files returned by lbry.getFilesInfo().
   // If timeoutCallback is provided, it will be called if the file fails to appear.
-  lbry.getFilesInfo(function(filesInfo) {
-    for (var fileInfo of filesInfo) {
+  lbry.getFilesInfo(function(fileInfos) {
+    for (var fileInfo of fileInfos) {
       if (fileInfo.lbry_uri == name) {
         callback(fileInfo);
         return;
       }
     }
 
-    if (tryNum <= 200) {
-      setTimeout(function() { lbry.getFileInfoWhenListed(name, callback, timeoutCallback, tryNum + 1) }, 250);
-    } else if (timeoutCallback) {
+    if (timeoutCallback && tryNum > 200) {
       timeoutCallback();
+    } else {
+      setTimeout(function() { lbry.getFileInfoWhenListed(name, callback, timeoutCallback, tryNum + 1) }, 250);
     }
   });
 }
@@ -301,12 +320,7 @@ lbry.publish = function(params, fileListedCallback, publishedCallback, errorCall
   // lbry.getFilesInfo() during the publish process.
 
   // Use ES6 named arguments instead of directly passing param dict?
-  lbry.call('publish', params, publishedCallback, (errorInfo) => {
-    errorCallback({
-      name: fault.fault,
-      message: fault.faultString,
-    });
-  });
+  lbry.call('publish', params, publishedCallback, errorCallback);
   if (fileListedCallback) {
     lbry.getFileInfoWhenListed(params.name, function(fileInfo) {
       fileListedCallback(fileInfo);
@@ -453,5 +467,64 @@ lbry.stop = function(callback) {
   lbry.call('stop', {}, callback);
 };
 
+lbry.fileInfo = {};
+lbry._fileInfoSubscribeIdCounter = 0;
+lbry._fileInfoSubscribeCallbacks = {};
+lbry._fileInfoSubscribeInterval = 5000;
+lbry._removedFiles = [];
+lbry._claimIdOwnershipCache = {}; // should be claimId!!! But not
+
+lbry._updateClaimOwnershipCache = function(claimId) {
+  lbry.getMyClaims((claimInfos) => {
+    lbry._claimIdOwnershipCache[claimId] = !!claimInfos.reduce(function(match, claimInfo) {
+      return match || claimInfo.claim_id == claimId;
+    });
+  });
+};
+
+lbry._updateSubscribedFileInfo = function(sdHash) {
+  const callSubscribedCallbacks = (sdHash, fileInfo) => {
+    for (let [subscribeId, callback] of Object.entries(this._fileInfoSubscribeCallbacks[sdHash])) {
+      callback(fileInfo);
+    }
+  }
+
+  if (lbry._removedFiles.includes(sdHash)) {
+    callSubscribedCallbacks(sdHash, false);
+  } else {
+    lbry.getFileInfoBySdHash(sdHash, (fileInfo) => {
+      if (fileInfo) {
+        if (this._claimIdOwnershipCache[fileInfo.claim_id] === undefined) {
+          this._updateClaimOwnershipCache(fileInfo.claim_id);
+        }
+        fileInfo.isMine = !!this._claimIdOwnershipCache[fileInfo.claim_id];
+      }
+
+      callSubscribedCallbacks(sdHash, fileInfo);
+    });
+  }
+
+  if (Object.keys(this._fileInfoSubscribeCallbacks[sdHash]).length) {
+    setTimeout(() => {
+      this._updateSubscribedFileInfo(sdHash);
+    }, lbry._fileInfoSubscribeInterval);
+  }
+}
+
+lbry.fileInfoSubscribe = function(sdHash, callback) {
+  if (!lbry._fileInfoSubscribeCallbacks[sdHash])
+  {
+    lbry._fileInfoSubscribeCallbacks[sdHash] = {};
+  }
+
+  const subscribeId = ++lbry._fileInfoSubscribeIdCounter;
+  lbry._fileInfoSubscribeCallbacks[sdHash][subscribeId] = callback;
+  lbry._updateSubscribedFileInfo(sdHash);
+  return subscribeId;
+}
+
+lbry.fileInfoUnsubscribe = function(name, subscribeId) {
+  delete lbry._fileInfoSubscribeCallbacks[name][subscribeId];
+}
 
 export default lbry;

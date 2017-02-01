@@ -1,0 +1,32 @@
+@import "../global";
+
+$color-download: #444;
+
+.file-actions
+{
+  line-height: $height-button;
+  min-height: $height-button;
+}
+
+.file-actions__download-status-bar, .file-actions__download-status-bar-overlay {
+   .button__content {
+     margin: 0 $padding-text-link;
+   }
+}
+
+.file-actions__download-status-bar
+{
+  position: relative;
+  color: $color-download;
+}
+.file-actions__download-status-bar-overlay
+{
+  background: $color-download;
+  color: white;
+  position: absolute;
+  white-space: nowrap;
+  overflow: hidden;
+  z-index: 1;
+  top: 0px;
+  left: 0px;
+}
