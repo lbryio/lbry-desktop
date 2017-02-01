@@ -114,7 +114,7 @@ var ReferralPage = React.createClass({
             ? `You have earned ${response.referralCredits} credits from referrals. We will credit your account shortly. Thanks!`
             : 'You have not earned any new referral credits since the last time you checked. Please check back in a week or two.'}
         </Modal>
-        <Modal isOpen={this.state.modal == 'lookupFailed'} contentLabel={failureReason}
+        <Modal isOpen={this.state.modal == 'lookupFailed'} contentLabel={this.state.failureReason}
                onConfirmed={this.closeModal}>
           {this.state.failureReason}
         </Modal>
