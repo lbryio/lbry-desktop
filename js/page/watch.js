@@ -1,4 +1,6 @@
 import React from 'react';
+import {Icon} from '../component/common.js';
+import {Link} from '../component/link.js';
 import lbry from '../lbry.js';
 import LoadScreen from '../component/load_screen.js'
 
@@ -21,6 +23,9 @@ var WatchPage = React.createClass({
   componentDidMount: function() {
     lbry.getStream(this.props.name);
     this.updateLoadStatus();
+  },
+  handleBackClicked: function() {
+    history.back();
   },
   updateLoadStatus: function() {
     lbry.getFileStatus(this.props.name, (status) => {
@@ -56,9 +61,19 @@ var WatchPage = React.createClass({
     return (
       !this.state.readyToPlay
         ? <LoadScreen message={'Loading video...'} details={this.state.loadStatusMessage} />
-        : <main className="full-screen">
-            <video controls width="100%" height="100%" id="video" ref="video">
-            </video>
+        : <main className="video full-screen">
+            <video controls width="100%" height="100%" id="video" ref="video"></video>
+            <div className="video__overlay">
+              <div className="video__back">
+                <Link icon="icon-arrow-circle-o-left" className="video__back-link" onClick={this.handleBackClicked}/>
+                <div className="video__back-label">
+                  <Icon icon="icon-caret-left" className="video__back-label-arrow" />
+                  <div className="video__back-label-content">
+                    Back to LBRY
+                  </div>
+                </div>
+              </div>
+            </div>
           </main>
     );
   }
