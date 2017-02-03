@@ -29,7 +29,7 @@ var WatchPage = React.createClass({
 	// TODO: Would be nice to check if we have the MOOV before starting playing
         if (status) {
           this.setState({
-            loadStatusMessage: status.message
+            loadStatusMessage: status.message,
           });
         }
         setTimeout(() => { this.updateLoadStatus() }, 250);
@@ -57,8 +57,7 @@ var WatchPage = React.createClass({
       !this.state.readyToPlay
         ? <LoadScreen message={'Loading video...'} details={this.state.loadStatusMessage} />
         : <main className="full-screen">
-            <video controls width="100%" height="100%" id="video" ref="video">
-            </video>
+            <video width="100%" height="100%" id="video" ref="video" src={'/view?name=' + this.props.name} />
           </main>
     );
   }
