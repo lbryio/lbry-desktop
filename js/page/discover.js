@@ -73,10 +73,10 @@ var FeaturedContent = React.createClass({
       <div className="row-fluid">
         <div className="span6">
           <h3>Featured Content</h3>
-          <FileTile name="bellflower" />
+          <FileTile name="coherence" />
           <FileTile name="itsadisaster" />
-          <FileTile name="dopeman" />
-          <FileTile name="smlawncare" />
+          <FileTile name="mikehill-blockbuster" />
+          <FileTile name="bellflower" />
           <FileTile name="cinemasix" />
 
         </div>
