@@ -1,18 +1,17 @@
 language: node_js
 node_js: 5
-rvm: 2.2
 
 install:
   - npm install
 
 script:
+  - rvm install 2.3.1 && rvm use 2.3.1 && gem install danger --version '~> 4.0' && danger
   - mkdir -p dist/css dist/js
   - node_modules/.bin/node-sass scss/all.scss dist/css/all.css
   - node_modules/.bin/webpack
   - mkdir upload
   - cd dist; zip -r ../upload/dist.zip *; cd -
   - .travis/echo_sha.sh > upload/data.json
-  - gem install danger --version '~> 4.0' && danger
 
 deploy:
   provider: s3
