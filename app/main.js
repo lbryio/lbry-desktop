@@ -36,7 +36,7 @@ function lauchDaemon() {
     return;
   }
   console.log(`${__dirname}/dist/lbry`);
-  subpy = require('child_process').spawn(`${__dirname}/dist/lbry`, ['--no-launch', '--log-to-console'], {stdio: ['ignore', process.stdout, process.stderr]})
+  subpy = require('child_process').spawn(`${__dirname}/dist/lbry`, ['--verbose'], {stdio: ['ignore', process.stdout, process.stderr]})
   subpy.on('exit', () => {
     console.log('The daemon has exited. Quitting the app');
     subpy = null;
