@@ -56,6 +56,9 @@ var FormField = React.createClass({
   getValue: function() {
     if (this.props.type == 'checkbox') {
       return this.refs.field.checked;
+    }
+    else if (this.props.type == 'file') {
+      return this.refs.field.files[0].path;
     } else {
       return this.refs.field.value;
     }
