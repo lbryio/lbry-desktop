@@ -33,18 +33,21 @@
   opacity: 1;
 }
 
+$video-back-background: #333;
+$video-back-size: 20px;
+
 .video__back-label-arrow {
-  color: darken($color-primary, 5%);
-  font-size: 20px;
+  color: $video-back-background;
+  font-size: $video-back-size;
 }
 
 .video__back-label-content {
   display: inline-block;
   margin-left: -2px;
-  font-size: 20px;
-  padding: 10px;
+  font-size: $video-back-size;
+  padding: $spacing-vertical / 2;
   border-radius: 3px;
-  background-color: darken($color-primary, 5%);
+  background-color: $video-back-background;
   color: #fff;
   pointer-events: none;
 }
