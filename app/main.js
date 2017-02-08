@@ -56,12 +56,16 @@ function lauchDaemon() {
 app.on('ready', function(){
     // Check if the daemon is already running. If we get
     // an error its because its not running
+    console.log('Checking for lbrynet daemon')
     client.request(
 	'status', [],
 	function (err, res) {
 	    // Did it all work ? 
 	    if (err) {
+		console.log('lbrynet daemon needs to be launched')
 		lauchDaemon();
+	    } else {
+		console.log('lbrynet daemon is already running')
 	    }
 	}
     );
