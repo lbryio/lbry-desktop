@@ -67,7 +67,7 @@ if [ -n "${TEAMCITY_VERSION:-}" ]; then
   
   echo 'Build and packaging complete.'
 else
-  echo 'Build complete. Run `electron electron` to launch the app'
+  echo 'Build complete. Run `./node_modules/.bin/electron app` to launch the app'
 fi
 
 if [ -n "${TEAMCITY_VERSION:-}" ]; then
