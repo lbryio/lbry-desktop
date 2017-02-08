@@ -11,6 +11,7 @@ script:
   - mkdir upload
   - cd dist; zip -r ../upload/dist.zip *; cd -
   - .travis/echo_sha.sh > upload/data.json
+  - rvm list rubies
   - rvm use 2.3.1 && gem install danger --version '~> 4.0' && danger
 
 deploy:
