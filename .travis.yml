@@ -1,6 +1,13 @@
 language: node_js
 node_js: 5
 
+# note that travis still builds PRs so that covers
+# other branches
+branches:
+  only: 
+    - master
+    - development
+
 install:
   - npm install
 
