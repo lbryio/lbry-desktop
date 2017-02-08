@@ -9,10 +9,11 @@ branches:
     - development
 
 install:
+  - rvm install 2.3.1
   - npm install
 
 script:
-  - rvm install 2.3.1 && rvm use 2.3.1 && gem install danger --version '~> 4.0' && danger
+  - rvm use 2.3.1 && gem install danger --version '~> 4.0' && danger
   - mkdir -p dist/css dist/js
   - node_modules/.bin/node-sass scss/all.scss dist/css/all.css
   - node_modules/.bin/webpack
