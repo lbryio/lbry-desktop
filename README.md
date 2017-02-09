@@ -6,17 +6,17 @@ This repo uses submodules, so clone it using --recursive
 
 ## Setup
 
-The lbrynet needs to be installed along with pyinstaller, and you
+The lbrynet library needs to be installed along with pyinstaller, and you
 need everything to be able to build the lbry-web-ui
 
 ## Build
 
 run `./build.sh` to create a lbry executable, bundle the front-end and move
-everything into the the electron repo
+everything into the `app` folder
 
 ## Run
 
-`electron electron`
+`./node_modules/.bin/electron app`
 
 ## Package
 
