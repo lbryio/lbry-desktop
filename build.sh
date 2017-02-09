@@ -63,7 +63,7 @@ if [ -n "${TEAMCITY_VERSION:-}" ]; then
     security unlock-keychain -p ${KEYCHAIN_PASSWORD} osx-build.keychain
   fi
 
-  node_modules/.bin/build
+  node_modules/.bin/build -p onTagOrDraft
   
   echo 'Build and packaging complete.'
 else
