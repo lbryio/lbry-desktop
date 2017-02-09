@@ -63,7 +63,11 @@ if [ -n "${TEAMCITY_VERSION:-}" ]; then
     security unlock-keychain -p ${KEYCHAIN_PASSWORD} osx-build.keychain
   fi
 
-  node_modules/.bin/build -p onTagOrDraft
+  set +e
+  export CI_BUILD_TAG=$(git describe --exact-match)
+  set -e
+
+  node_modules/.bin/build -p onTag
   
   echo 'Build and packaging complete.'
 else
