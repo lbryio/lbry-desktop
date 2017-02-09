@@ -1,6 +1,6 @@
 import React from 'react';
 import lbry from '../lbry.js';
-import $clamp from 'clamp-js';
+import $clamp from 'clamp-js-main';
 
 //component/icon.js
 export let Icon = React.createClass({
