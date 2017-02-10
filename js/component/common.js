@@ -1,6 +1,6 @@
 import React from 'react';
 import lbry from '../lbry.js';
-import $clamp from 'clamp-js';
+import $clamp from 'clamp-js-main';
 
 //component/icon.js
 export let Icon = React.createClass({
@@ -31,13 +31,17 @@ export let TruncatedText = React.createClass({
     }
   },
   componentDidMount: function() {
+    // Manually round up the line height, because clamp.js doesn't like fractional-pixel line heights.
+
+    // Need to work directly on the style object because setting the style prop doesn't update internal styles right away.
+    this.refs.span.style.lineHeight = Math.ceil(parseFloat(getComputedStyle(this.refs.span).lineHeight)) + 'px';
+
     $clamp(this.refs.span, {
       clamp: this.props.lines || this.props.height || 'auto',
     });
   },
   render: function() {
-    var text = this.props.children;
-    return <span ref="span">{text}</span>;
+    return <span ref="span" className="truncated-text">{this.props.children}</span>;
   }
 });
 
