@@ -1,6 +1,12 @@
-const {app, BrowserWindow} = require('electron')
+const {app, BrowserWindow} = require('electron');
+var path = require('path');
+
 var jayson = require('jayson');
-var client = jayson.client.http('http://localhost:5279/lbryapi');
+// tree-kill has better cross-platform handling of
+// killing a process.  child-process.kill was unreliable
+var kill = require('tree-kill');
+
+let client = jayson.client.http('http://localhost:5279/lbryapi');
 
 
 // Keep a global reference of the window object, if you don't, the window will
@@ -35,8 +41,14 @@ function lauchDaemon() {
   if (subpy) {
     return;
   }
-  console.log(`${__dirname}/dist/lbry`);
-  subpy = require('child_process').spawn(`${__dirname}/dist/lbry`, ['--verbose'], {stdio: ['ignore', process.stdout, process.stderr]})
+  console.log(`${__dirname}`);
+  executable = path.join(__dirname, 'dist', 'lbrynet-daemon');
+  subpy = require('child_process').spawn(executable, ['--verbose'])//, {stdio: ['ignore', process.stdout, process.stderr]});
+  // Need to handle the data event instead of attaching to
+  // process.stdout because the latter doesn't work. I believe on
+  // windows it buffers stdout and we don't get any meaningful output
+  subpy.stdout.on('data', (buf) => {console.log(String(buf).trim());});
+  subpy.stderr.on('data', (buf) => {console.log(String(buf).trim());});
   subpy.on('exit', () => {
     console.log('The daemon has exited. Quitting the app');
     subpy = null;
@@ -88,8 +100,11 @@ app.on('before-quit', (event) => {
     if (win) {
       win.loadURL(`file://${__dirname}/dist/quit.html`);
     }
-    quitting = true;  
-    subpy.kill('SIGINT');
+    quitting = true;
+    console.log('Killing lbrynet-daemon process');
+    kill(subpy.pid, undefined, (err) => {
+      console.log('Killed lbrynet-daemon process');
+    });
   }
 })
 

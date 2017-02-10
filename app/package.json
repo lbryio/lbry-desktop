@@ -8,6 +8,9 @@
     "name": "Job Evers-Meltzer"
   },
   "dependencies": {
-    "jayson": "^2.0.2"
+    "install": "^0.8.7",
+    "jayson": "^2.0.2",
+    "npm": "^4.2.0",
+    "tree-kill": "^1.1.0"
   }
 }

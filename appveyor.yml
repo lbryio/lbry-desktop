@@ -1,0 +1,42 @@
+# Test against the latest version of this Node.js version
+environment:
+  nodejs_version: "6"
+
+clone_folder: C:\projects\lbry-electron
+
+# Install scripts. (runs after repo cloning)
+install:
+  # needed to deal with submodules
+  - git submodule update --init --recursive
+  - python set-version.py
+  # Get the latest stable version of Node.js or io.js
+  - ps: Install-Product node $env:nodejs_version
+  # install modules
+  - npm install
+  - cd app
+  - npm install
+  - cd ..
+  # create lbrynet-daemon executable
+  - cd lbrynet
+  - ps: .\build.ps1
+  - cd ..
+  # build ui
+  - cd lbry-web-ui
+  - npm install
+  - node_modules\.bin\node-sass --output dist\css --sourcemap=none scss\
+  - node_modules\.bin\webpack
+  - ps: Copy-Item dist ..\app\ -recurse
+  - cd ..
+  - ps: Copy-Item lbrynet\dist\lbrynet-daemon.exe app\dist
+
+build_script:
+  # build electron app
+  - node_modules\.bin\build -p never
+  # for debugging, see what was built
+  - dir dist
+
+test: off
+
+artifacts:
+  - path: dist\*.zip
+    name: LBRY

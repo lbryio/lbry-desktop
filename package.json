@@ -34,6 +34,9 @@
     },
     "linux": {
       "target": "deb"
+    },
+    "win": {
+      "target": "zip"
     }
   },
   "devDependencies": {
