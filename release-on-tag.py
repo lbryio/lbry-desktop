@@ -80,7 +80,7 @@ def check_repo_has_tag(repo, target_tag):
 
 def get_release(current_repo, current_tag=None, draft=False):
     assert current_tag or draft, 'either current_tag or draft must be set'
-    need_new_release = True
+    need_new_release = False
     if not draft and current_tag:
         try:
             release = current_repo.get_release(current_tag)
@@ -92,7 +92,14 @@ def get_release(current_repo, current_tag=None, draft=False):
         tag = current_tag or 'draft'
         release_name = current_tag or 'draft'
         msg = 'Release' # TODO: parse changelogs to get a better message
-        release = current_repo.create_git_release(tag, release_name, msg, draft)
+        try:
+            # we have a race condition where its possible that between checking
+            # for the release and now, another build agent has come along and already
+            # created a release
+            release = current_repo.create_git_release(tag, release_name, msg, draft)
+        except github.GithubException:
+            log.info('Failed to create a release, maybe somebody already has', exc_info=True)
+            release = current_repo.get_release(current_tag)
     return release
 
 
