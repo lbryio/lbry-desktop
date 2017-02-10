@@ -62,8 +62,11 @@ def get_system():
 
 
 def current_repo_name():
-    pattern = 'github.com[:/](.*).git'
-    m = re.search(pattern, subprocess.check_output('git remote -v'.split()))
+    pattern = 'github.com[:/](.*)\.git'
+    remote = subprocess.check_output('git remote -v'.split())
+    m = re.search(pattern, remote)
+    if not m:
+        raise Exception('Unable to parse repo name from remote: {}'.format(remote))
     return m.group(1)
 
 
