@@ -67,13 +67,18 @@ if [ -n "${TEAMCITY_VERSION:-}" ]; then
   export CI_BUILD_TAG=$(git describe --exact-match)
   set -e
 
-  node_modules/.bin/build -p always
-  
+  node_modules/.bin/build
+
   echo 'Build and packaging complete.'
 else
   echo 'Build complete. Run `./node_modules/.bin/electron app` to launch the app'
 fi
 
 if [ -n "${TEAMCITY_VERSION:-}" ]; then
+  # electron-build has a publish feature, but I had a hard time getting
+  # it to reliably work and it also seemed difficult to configure. Not proud of
+  # this, but it seemed better to write my own.
+  pip install PyGithub uritemplate
+  python release-on-tag.py --force
   deactivate
 fi
