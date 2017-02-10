@@ -1,10 +1,19 @@
 language: node_js
 node_js: 5
 
+# note that travis still builds PRs so that covers
+# other branches
+branches:
+  only: 
+    - master
+    - development
+
 install:
+  - rvm install 2.3.1
   - npm install
 
 script:
+  - rvm use 2.3.1 && gem install danger --version '~> 4.0' && danger
   - mkdir -p dist/css dist/js
   - node_modules/.bin/node-sass scss/all.scss dist/css/all.css
   - node_modules/.bin/webpack
