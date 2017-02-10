@@ -121,6 +121,10 @@ input[type="text"], input[type="search"]
   height: $spacing-vertical * 1.5;
 }
 
+.truncated-text {
+  display: inline-block;
+}
+
 .busy-indicator
 {
   background: url('../img/busy.gif') no-repeat center center;
