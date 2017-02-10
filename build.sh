@@ -67,7 +67,7 @@ if [ -n "${TEAMCITY_VERSION:-}" ]; then
   export CI_BUILD_TAG=$(git describe --exact-match)
   set -e
 
-  node_modules/.bin/build
+  node_modules/.bin/build -p never
 
   echo 'Build and packaging complete.'
 else
