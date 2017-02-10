@@ -24,6 +24,7 @@ if [ -n "${TEAMCITY_VERSION:-}" ]; then
   source "$VENV/bin/activate"
   set -u
   pip install -U pip setuptools pyinstaller
+  python set-version.py
 fi
 
 npm install
@@ -75,6 +76,6 @@ if [ -n "${TEAMCITY_VERSION:-}" ]; then
   # it to reliably work and it also seemed difficult to configure. Not proud of
   # this, but it seemed better to write my own.
   pip install PyGithub uritemplate
-  python release-on-tag.py --force
+  python release-on-tag.py
   deactivate
 fi
