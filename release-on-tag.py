@@ -1,4 +1,5 @@
 import argparse
+import glob
 import json
 import logging
 import os
@@ -34,6 +35,7 @@ def main(args=None):
     else:
         artifact = get_artifact()
 
+    current_tag = None
     if not args.force:
         try:
             current_tag = subprocess.check_output(
@@ -73,7 +75,8 @@ def check_repo_has_tag(repo, target_tag):
     return False
 
 
-def get_release(current_repo, current_tag, draft=False):
+def get_release(current_repo, current_tag=None, draft=False):
+    assert current_tag or draft, 'either current_tag or draft must be set'
     need_new_release = True
     if not draft and current_tag:
         try:
@@ -86,7 +89,7 @@ def get_release(current_repo, current_tag, draft=False):
         tag = current_tag or 'draft'
         release_name = current_tag or 'draft'
         msg = 'Release' # TODO: parse changelogs to get a better message
-        release = current_repo.create_git_release(current_tag, current_tag, msg, draft)
+        release = current_repo.create_git_release(tag, release_name, msg, draft)
     return release
 
 
