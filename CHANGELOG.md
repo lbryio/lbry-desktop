@@ -6,3 +6,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 (Note for Alex: fill in what kind of versioning we want to use)
 
 ## [Unreleased]
+### Changed
+ * Use local file for publishing
+ * Use local file and html5 for video playback
+ * Misc changes needed to make UI compatible with electron
