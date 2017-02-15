@@ -10,8 +10,14 @@ else
     ICON="$ROOT/build/icons/lbry48.png"
 fi
 
-
+FULL_BUILD="${FULL_BUILD:-false}"
 if [ -n "${TEAMCITY_VERSION:-}" ]; then
+  FULL_BUILD="true"
+elif [ -n "${APPVEYOR:-}" ]; then
+  FULL_BUILD="true"
+fi
+
+if [ "$FULL_BUILD" == "true" ]; then
   # install dependencies
   $ROOT/prebuild.sh
 
@@ -56,10 +62,10 @@ popd
   cp -r dist "$ROOT/app/dist"
 )
 
-mv "$ROOT/lbrynet/dist/lbry" "$ROOT/app/dist"
+mv "$ROOT/lbrynet/dist/lbrynet-daemon" "$ROOT/app/dist"
 
 
-if [ -n "${TEAMCITY_VERSION:-}" ]; then
+if [ "$FULL_BUILD" == "true" ]; then
   if [ "$(uname)" == "Darwin" ]; then
     security unlock-keychain -p ${KEYCHAIN_PASSWORD} osx-build.keychain
   fi
@@ -71,7 +77,7 @@ else
   echo 'Build complete. Run `./node_modules/.bin/electron app` to launch the app'
 fi
 
-if [ -n "${TEAMCITY_VERSION:-}" ]; then
+if [ "$FULL_BUILD" == "true" ]; then
   # electron-build has a publish feature, but I had a hard time getting
   # it to reliably work and it also seemed difficult to configure. Not proud of
   # this, but it seemed better to write my own.
