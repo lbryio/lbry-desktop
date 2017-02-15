@@ -24,7 +24,7 @@ var WatchPage = React.createClass({
   },
   updateLoadStatus: function() {
     lbry.getFileStatus(this.props.name, (status) => {
-      if (!status || status.code != 'running' || status.written_bytes == 0) {
+      if (!status || ['running', 'stopped'].includes(status.code) || status.written_bytes == 0) {
         // Download hasn't started yet, so update status message (if available) then try again
 	// TODO: Would be nice to check if we have the MOOV before starting playing
         if (status) {
