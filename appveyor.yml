@@ -2,6 +2,8 @@
 environment:
   nodejs_version: "6"
 
+skip_branch_with_pr: true
+
 clone_folder: C:\projects\lbry-electron
 
 # Install scripts. (runs after repo cloning)
