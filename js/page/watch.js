@@ -1,4 +1,6 @@
 import React from 'react';
+import {Icon} from '../component/common.js';
+import {Link} from '../component/link.js';
 import lbry from '../lbry.js';
 import LoadScreen from '../component/load_screen.js'
 
@@ -7,6 +9,10 @@ const VideoStream = require('videostream');
 
 
 var WatchPage = React.createClass({
+  _isMounted: false,
+  _controlsHideDelay: 3000, // Note: this needs to be shorter than the built-in delay in Electron, or Electron will hide the controls before us
+  _controlsHideTimeout: null,
+
   propTypes: {
     name: React.PropTypes.string,
   },
@@ -16,20 +22,55 @@ var WatchPage = React.createClass({
       readyToPlay: false,
       loadStatusMessage: "Requesting stream",
       mimeType: null,
+      controlsShown: false,
     };
   },
   componentDidMount: function() {
     lbry.getStream(this.props.name);
     this.updateLoadStatus();
   },
+  handleBackClicked: function() {
+    history.back();
+  },
+  handleMouseMove: function() {
+    if (this._controlsTimeout) {
+      clearTimeout(this._controlsTimeout);
+    }
+
+    if (!this.state.controlsShown) {
+      this.setState({
+        controlsShown: true,
+      });
+    }
+    this._controlsTimeout = setTimeout(() => {
+      if (!this.isMounted) {
+        return;
+      }
+
+      this.setState({
+        controlsShown: false,
+      });
+    }, this._controlsHideDelay);
+  },
+  handleMouseOut: function() {
+    if (this._controlsTimeout) {
+      clearTimeout(this._controlsTimeout);
+    }
+
+    if (this.state.controlsShown) {
+      this.setState({
+        controlsShown: false,
+      });
+    }
+  },
   updateLoadStatus: function() {
     lbry.getFileStatus(this.props.name, (status) => {
-      if (!status || status.code != 'running' || status.written_bytes == 0) {
+      if (!status || !['running', 'stopped'].includes(status.code) || status.written_bytes == 0) {
         // Download hasn't started yet, so update status message (if available) then try again
 	// TODO: Would be nice to check if we have the MOOV before starting playing
         if (status) {
           this.setState({
-            loadStatusMessage: status.message
+            loadStatusMessage: status.message,
           });
         }
         setTimeout(() => { this.updateLoadStatus() }, 250);
@@ -56,9 +97,22 @@ var WatchPage = React.createClass({
     return (
       !this.state.readyToPlay
         ? <LoadScreen message={'Loading video...'} details={this.state.loadStatusMessage} />
-        : <main className="full-screen">
-            <video controls width="100%" height="100%" id="video" ref="video">
-            </video>
+        : <main className="video full-screen" onMouseMove={this.handleMouseMove} onMouseOut={this.handleMouseOut}>
+            <video width="100%" height="100%" id="video" ref="video" src={'/view?name=' + this.props.name}
+                   controls={this.state.controlsShown}/>
+            {this.state.controlsShown
+              ? <div className="video__overlay">
+                  <div className="video__back">
+                    <Link icon="icon-arrow-circle-o-left" className="video__back-link" onClick={this.handleBackClicked}/>
+                    <div className="video__back-label">
+                      <Icon icon="icon-caret-left" className="video__back-label-arrow" />
+                      <div className="video__back-label-content">
+                        Back to LBRY
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              : null}
           </main>
     );
   }
