@@ -53,14 +53,6 @@ def main(args=None):
     upload_asset(release, asset_to_upload, gh_token)
 
 
-def get_system():
-    system = platform.system()
-    if system == 'Darwin':
-        return 'macOS'
-    else:
-        return system
-
-
 def current_repo_name():
     pattern = 'github.com[:/](.*)\.git'
     remote = subprocess.check_output('git remote -v'.split())
@@ -137,7 +129,7 @@ def upload_asset(release, asset_to_upload, token):
         return
 
     upload_uri = uritemplate.expand(
-        release.upload_url, {'name': basename, 'label': get_system()})
+        release.upload_url, {'name': basename})
     # using requests.post fails miserably with SSL EPIPE errors. I spent
     # half a day trying to debug before deciding to switch to curl.
     cmd = [
