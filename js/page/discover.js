@@ -65,20 +65,26 @@ var featuredContentLegendStyle = {
 };
 
 var FeaturedContent = React.createClass({
+  getInitialState: function() {
+    return {
+      featuredNames: [],
+    };
+  },
+  componentWillMount: function() {
+    lbry.getFeaturedDiscoverNames().then((featuredNames) => {
+      this.setState({ featuredNames: featuredNames });
+    });
+  },
   render: function() {
     const toolTipText = ('Community Content is a public space where anyone can share content with the ' +
                         'rest of the LBRY community. Bid on the names "one," "two," "three," "four" and ' +
                         '"five" to put your content here!');
+
     return (
       <div className="row-fluid">
         <div className="span6">
           <h3>Featured Content</h3>
-          <FileTile name="coherence" />
-          <FileTile name="itsadisaster" />
-          <FileTile name="mikehill-blockbuster" />
-          <FileTile name="bellflower" />
-          <FileTile name="cinemasix" />
-
+          { this.state.featuredNames.map((name) => { return <FileTile key={name} name={name} /> }) }
         </div>
         <div className="span6">
           <h3>
