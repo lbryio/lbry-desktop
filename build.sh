@@ -30,7 +30,8 @@ if [ "$FULL_BUILD" == "true" ]; then
   source "$VENV/bin/activate"
   set -u
   pip install -U pip setuptools pyinstaller
-  python set-version.py
+  python set_version.py
+  python set_build.py
 fi
 
 npm install

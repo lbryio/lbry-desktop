@@ -10,7 +10,8 @@ clone_folder: C:\projects\lbry-electron
 install:
   # needed to deal with submodules
   - git submodule update --init --recursive
-  - python set-version.py
+  - python set_version.py
+  - python set_build.py
   # Get the latest stable version of Node.js or io.js
   - ps: Install-Product node $env:nodejs_version
   # install modules
