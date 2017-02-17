@@ -41,7 +41,7 @@ build_script:
 test: off
 
 artifacts:
-  - path: dist\*.zip
+  - path: dist\*.exe
     name: LBRY
 
 deploy:
