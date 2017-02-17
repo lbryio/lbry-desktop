@@ -207,6 +207,10 @@ lbry.getPeersForBlobHash = function(blobHash, callback) {
   });
 }
 
+lbry.getStreamAvailability = function(name, callback) {
+  lbry.call('get_availability', {name: name}, callback);
+}
+
 lbry.getCostInfoForName = function(name, callback, errorCallback) {
   /**
    * Takes a LBRY name; will first try and calculate a total cost using
