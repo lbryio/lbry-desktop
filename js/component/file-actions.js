@@ -248,13 +248,13 @@ export let FileActions = React.createClass({
   componentDidMount: function() {
     this._isMounted = true;
     this._fileInfoSubscribeId = lbry.fileInfoSubscribe(this.props.sdHash, this.onFileInfoUpdate);
-    lbry.getPeersForBlobHash(this.props.sdHash, (peers) => {
+    lbry.getStreamAvailability(this.props.streamName, (availability) => {
       if (!this._isMounted) {
         return;
       }
 
       this.setState({
-        available: peers.length > 0,
+        available: availability > 0,
       });
     });
   },
