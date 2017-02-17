@@ -1,1 +1,1 @@
-lbrynet>=0.5.0
+lbrynet>=0.8.4
