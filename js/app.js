@@ -19,6 +19,11 @@ import Header from './component/header.js';
 import Modal from './component/modal.js';
 import {Link} from './component/link.js';
 
+
+const remote = require('electron').remote;
+const {download} = remote.require('electron-dl');
+
+
 var App = React.createClass({
   _error_key_labels: {
     connectionString: 'API connection string',
@@ -78,7 +83,7 @@ var App = React.createClass({
         this.setState({
           modal: 'upgrade',
           isOldOSX: isOldOSX,
-          updateUrl: updateUrl,
+          updateUrl: versionInfo.lbrynet_update_url,
         })
       });
     });
@@ -97,8 +102,14 @@ var App = React.createClass({
     });
   },
   handleUpgradeClicked: function() {
-    lbry.stop();
-    window.location = this.state.updateUrl;
+    // TODO: create a callback for onProgress and have the UI
+    //       show download progress
+    // TODO: remove the saveAs popup. Thats just me being lazy and having
+    //       some indication that the download is happening
+    // TODO: calling lbry.stop() ends up displaying the "daemon
+    //       unexpectedly stopped" page. Have a better way of shutting down
+    download(remote.getCurrentWindow(), this.state.updateUrl, {saveAs: true})
+      .then(dl => lbry.stop())
   },
   handleSkipClicked: function() {
     sessionStorage.setItem('upgradeSkipped', true);
