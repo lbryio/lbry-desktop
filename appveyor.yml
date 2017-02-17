@@ -51,7 +51,7 @@ deploy:
     auth_token:
       secure: LiI5jyuHUw6XbH4kC3gP1HX4P/v4rwD/gCNtaFhQu2AvJz1/1wALkp5ECnIxRySN
     artifact: LBRY
-    draft: true
+    draft: false
     prerelease: true
     on:
       appveyor_repo_tag: true        # deploy on tag push only
