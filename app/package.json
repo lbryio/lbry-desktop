@@ -8,6 +8,7 @@
     "name": "Job Evers-Meltzer"
   },
   "dependencies": {
+    "electron-dl": "^1.6.0",
     "install": "^0.8.7",
     "jayson": "^2.0.2",
     "npm": "^4.2.0",

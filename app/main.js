@@ -1,4 +1,5 @@
 const {app, BrowserWindow} = require('electron');
+
 var path = require('path');
 
 var jayson = require('jayson');
@@ -43,7 +44,7 @@ function lauchDaemon() {
   }
   console.log(`${__dirname}`);
   executable = path.join(__dirname, 'dist', 'lbrynet-daemon');
-  subpy = require('child_process').spawn(executable, ['--verbose'])//, {stdio: ['ignore', process.stdout, process.stderr]});
+  subpy = require('child_process').spawn(executable)//, {stdio: ['ignore', process.stdout, process.stderr]});
   // Need to handle the data event instead of attaching to
   // process.stdout because the latter doesn't work. I believe on
   // windows it buffers stdout and we don't get any meaningful output
