@@ -177,7 +177,8 @@ export let FileTile = React.createClass({
     this._isMounted = true;
 
     lbry.resolveName(this.props.name, (metadata) => {
-      if (this._isMounted) {
+      if (this._isMounted && metadata) {
+        // In case of a failed lookup, metadata will be null, in which case the component will never display
         this.setState({
           sdHash: metadata.sources.lbry_sd_hash,
           metadata: metadata,
