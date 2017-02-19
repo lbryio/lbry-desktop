@@ -249,13 +249,18 @@ export let FileActions = React.createClass({
     this._isMounted = true;
     this._fileInfoSubscribeId = lbry.fileInfoSubscribe(this.props.sdHash, this.onFileInfoUpdate);
     lbry.getStreamAvailability(this.props.streamName, (availability) => {
-      if (!this._isMounted) {
-        return;
+      if (this._isMounted) {
+        this.setState({
+          available: availability > 0,
+        });
       }
-
-      this.setState({
-        available: availability > 0,
-      });
+    }, () => {
+      // Take any error to mean the file is unavailable
+      if (this._isMounted) {
+        this.setState({
+          available: false,
+        });
+      }
     });
   },
   componentWillUnmount: function() {

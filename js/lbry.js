@@ -207,8 +207,8 @@ lbry.getPeersForBlobHash = function(blobHash, callback) {
   });
 }
 
-lbry.getStreamAvailability = function(name, callback) {
-  lbry.call('get_availability', {name: name}, callback);
+lbry.getStreamAvailability = function(name, callback, errorCallback) {
+  lbry.call('get_availability', {name: name}, callback, errorCallback);
 }
 
 lbry.getCostInfoForName = function(name, callback, errorCallback) {
