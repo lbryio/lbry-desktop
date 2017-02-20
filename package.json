@@ -1,6 +1,6 @@
 {
   "name": "lbry-web-ui",
-  "version": "1.0.0",
+  "version": "0.9.0rc6",
   "description": "LBRY web ui",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
