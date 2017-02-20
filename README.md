@@ -1,33 +1,38 @@
-# LBRY Electron
+# LBRY App
 
-An electron version of the LBRY application.
+A decentralized content marketplace built on top of the [lbry protocol](https://github.com/lbryio/lbry)
+
+Check out the [release page](https://github.com/lbryio/lbry-app/releases/latest) to get started.
+
+
+## Development
 
 This repo uses submodules, so clone it using --recursive
 
-## Setup
+We do most of our development work on linux and macOS so we don't have
+any instructions for creating a development setup on windows.  You can
+checkout out the build steps in [appveyor.yml](https://github.com/lbryio/lbry-app/blob/master/appveyor.yml) and probably figure out something from there.
 
-The lbrynet library needs to be installed along with pyinstaller, and you
-need everything to be able to build the lbry-web-ui
+### Setup
 
-## Build
+The
+[lbrynet library](https://github.com/lbryio/lbry/blob/master/INSTALL.md) needs
+to be installed along with pyinstaller. You also need to be
+able to build the lbry-web-ui, so have node, webpack, etc installed.
 
-run `./build.sh` to create a lbry executable, bundle the front-end and move
-everything into the `app` folder
+### Build
 
-## Run
+run `./build.sh`
+
+This builds the UI assets and puts them into `app/dist`. It also builds `app/dist/lbrynet-daemon`.
+
+### Run
 
 `./node_modules/.bin/electron app`
 
-## Package
+### Package
 
-To build a distributable package for OSX, run (on an OSX machine):
+We use [electron-builder](https://github.com/electron-userland/electron-builder)
+to create distributable packages, which is run by calling:
 
-`electron-packager --electron-version=1.4.14 --overwrite electron LBRY`
-
-This also probably works for windows and linux, but I haven't tested it
-
-## TODO
-
-This app works by launching the lbrynet daemon in a seperate process.  Currently the
-process management is very poor and the lbrynet process might not be shut-down when the app
-is closed. Also, if the lbrynet daemon dies, there is no attempt to restart it.
+`node_modules/.bin/build -p never`
