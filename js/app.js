@@ -1,4 +1,6 @@
 import React from 'react';
+import {Line} from 'rc-progress';
+
 import lbry from './lbry.js';
 import SettingsPage from './page/settings.js';
 import HelpPage from './page/help.js';
@@ -18,6 +20,12 @@ import Drawer from './component/drawer.js';
 import Header from './component/header.js';
 import Modal from './component/modal.js';
 import {Link} from './component/link.js';
+
+
+const {remote, ipcRenderer} = require('electron');
+const {download} = remote.require('electron-dl');
+
+const UPDATE_URL = 'https://lbry.io/get/latest';
 
 var App = React.createClass({
   _error_key_labels: {
@@ -43,8 +51,8 @@ var App = React.createClass({
       pageArgs: typeof val !== 'undefined' ? val : null,
       errorInfo: null,
       modal: null,
-      updateUrl: null,
       isOldOSX: null,
+      downloadProgress: null,
     };
   },
   componentWillMount: function() {
@@ -60,21 +68,12 @@ var App = React.createClass({
       lbry.getVersionInfo((versionInfo) => {
         var isOldOSX = false;
         if (versionInfo.os_system == 'Darwin') {
-          var updateUrl = 'https://lbry.io/get/lbry.dmg';
-
           var maj, min, patch;
           [maj, min, patch] = versionInfo.lbrynet_version.split('.');
           if (maj == 0 && min <= 2 && patch <= 2) {
             isOldOSX = true;
           }
-        } else if (versionInfo.os_system == 'Linux') {
-          var updateUrl = 'https://lbry.io/get/lbry.deb';
-        } else if (versionInfo.os_system == 'Windows') {
-          var updateUrl = 'https://lbry.io/get/lbry.msi';
-        } else {
-          var updateUrl = 'https://lbry.io/get';
         }
-
         this.setState({
           modal: 'upgrade',
           isOldOSX: isOldOSX,
@@ -97,8 +96,18 @@ var App = React.createClass({
     });
   },
   handleUpgradeClicked: function() {
-    lbry.stop();
-    window.location = this.state.updateUrl;
+    // TODO: create a callback for onProgress and have the UI
+    //       show download progress
+    // TODO: remove the saveAs popup. Thats just me being lazy and having
+    //       some indication that the download is happening
+    // TODO: calling lbry.stop() ends up displaying the "daemon
+    //       unexpectedly stopped" page. Have a better way of shutting down
+    let options = {
+      onProgress: (p) => this.setState({downloadProgress: Math.round(p * 100)}),
+    }
+    download(remote.getCurrentWindow(), UPDATE_URL, options)
+      .then(dl => ipcRenderer.send('shutdown'));
+    this.setState({modal: 'downloading'});
   },
   handleSkipClicked: function() {
     sessionStorage.setItem('upgradeSkipped', true);
@@ -210,6 +219,11 @@ var App = React.createClass({
               ? <p>Before installing the new version, make sure to exit LBRY. If you started the app, click the LBRY icon in your status bar and choose "Quit."</p>
               : null}
 
+          </Modal>
+          // TODO: have color refence css color-primary
+          <Modal isOpen={this.state.modal == 'downloading'} contentLabel="Downloading Update" type="custom">
+            Downloading Update: {this.state.downloadProgress}% Complete
+            <Line percent={this.state.downloadProgress} strokeWidth="4"/>
           </Modal>
           <Modal isOpen={this.state.modal == 'error'} contentLabel="Error" type="custom"
                  className="error-modal" overlayClassName="error-modal-overlay"  >
