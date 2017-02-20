@@ -1,4 +1,4 @@
-const {app, BrowserWindow} = require('electron');
+const {app, BrowserWindow, ipcMain} = require('electron');
 
 var path = require('path');
 
@@ -17,6 +17,7 @@ let win
 let subpy
 // set to true when the quitting sequence has started
 let quitting = false;
+
 
 function createWindow () {
   // Create the browser window.
@@ -44,7 +45,7 @@ function lauchDaemon() {
   }
   console.log(`${__dirname}`);
   executable = path.join(__dirname, 'dist', 'lbrynet-daemon');
-  subpy = require('child_process').spawn(executable)//, {stdio: ['ignore', process.stdout, process.stderr]});
+  subpy = require('child_process').spawn(executable)
   // Need to handle the data event instead of attaching to
   // process.stdout because the latter doesn't work. I believe on
   // windows it buffers stdout and we don't get any meaningful output
@@ -56,6 +57,7 @@ function lauchDaemon() {
     if (quitting) {
       app.quit();
     } else {
+      // TODO: maybe it would be better to restart the daemon?
       win.loadURL(`file://${__dirname}/dist/warning.html`);
       setTimeout(app.quit, 5000)
     }
@@ -71,9 +73,8 @@ app.on('ready', function(){
     // an error its because its not running
     console.log('Checking for lbrynet daemon')
     client.request(
-	'status', [],
-	function (err, res) {
-	    // Did it all work ? 
+        'status', [],
+        function (err, res) {
 	    if (err) {
 		console.log('lbrynet daemon needs to be launched')
 		lauchDaemon();
@@ -96,18 +97,13 @@ app.on('window-all-closed', () => {
 })
 
 app.on('before-quit', (event) => {
-  if (subpy != null) {
-    event.preventDefault()
-    if (win) {
-      win.loadURL(`file://${__dirname}/dist/quit.html`);
-    }
-    quitting = true;
-    console.log('Killing lbrynet-daemon process');
-    kill(subpy.pid, undefined, (err) => {
-      console.log('Killed lbrynet-daemon process');
-    });
+  if (subpy == null) {
+    return
   }
+  event.preventDefault();
+  shutdownDaemon();
 })
+
 
 app.on('activate', () => {
   // On macOS it's common to re-create a window in the app when the
@@ -117,5 +113,24 @@ app.on('activate', () => {
   }
 })
 
-// In this file you can include the rest of your app's specific main process
-// code. You can also put them in separate files and require them here.
+
+function shutdownDaemon() {
+  console.log('Shutdown triggered');
+  if (subpy == null) {
+    // TODO: In this case, we didn't start the process so I'm hesitant
+    //       to shut it down. We might want to send a stop command
+    //       though instead of just letting it run.
+    console.log('Not killing lbrynet because we did not start it')
+    return
+  }
+  if (win) {
+    win.loadURL(`file://${__dirname}/dist/quit.html`);
+  }
+  quitting = true;
+  console.log('Killing lbrynet-daemon process');
+  kill(subpy.pid, undefined, (err) => {
+    console.log('Killed lbrynet-daemon process');
+  });
+}
+
+ipcMain.on('shutdown', shutdownDaemon);
