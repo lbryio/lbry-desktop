@@ -25,6 +25,7 @@
     "clamp-js-main": "^0.11.1",
     "mediaelement": "^2.23.4",
     "node-sass": "^3.8.0",
+    "rc-progress": "^2.0.6",
     "react": "^15.4.0",
     "react-dom": "^15.4.0",
     "react-modal": "^1.5.2",
