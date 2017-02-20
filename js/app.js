@@ -25,7 +25,6 @@ import {Link} from './component/link.js';
 const {remote, ipcRenderer} = require('electron');
 const {download} = remote.require('electron-dl');
 
-const UPDATE_URL = 'https://lbry.io/get/latest';
 
 var App = React.createClass({
   _error_key_labels: {
@@ -51,6 +50,7 @@ var App = React.createClass({
       pageArgs: typeof val !== 'undefined' ? val : null,
       errorInfo: null,
       modal: null,
+      updateUrl: null,
       isOldOSX: null,
       downloadProgress: null,
     };
@@ -68,15 +68,28 @@ var App = React.createClass({
       lbry.getVersionInfo((versionInfo) => {
         var isOldOSX = false;
         if (versionInfo.os_system == 'Darwin') {
+          var updateUrl = 'https://lbry.io/get/lbry.dmg';
+
           var maj, min, patch;
           [maj, min, patch] = versionInfo.lbrynet_version.split('.');
           if (maj == 0 && min <= 2 && patch <= 2) {
             isOldOSX = true;
           }
+        } else if (versionInfo.os_system == 'Linux') {
+          var updateUrl = 'https://lbry.io/get/lbry.deb';
+        } else if (versionInfo.os_system == 'Windows') {
+	  // A little weird, but for electron, the installer is
+	  // actually an exe. Maybe a better url would
+	  // be something like /get/windows ?
+          var updateUrl = 'https://lbry.io/get/lbry.msi';
+        } else {
+          var updateUrl = 'https://lbry.io/get';
         }
+
         this.setState({
           modal: 'upgrade',
           isOldOSX: isOldOSX,
+          updateUrl: updateUrl,
         })
       });
     });
@@ -104,7 +117,7 @@ var App = React.createClass({
     let options = {
       onProgress: (p) => this.setState({downloadProgress: Math.round(p * 100)}),
     }
-    download(remote.getCurrentWindow(), UPDATE_URL, options)
+    download(remote.getCurrentWindow(), this.state.updateUrl, options)
       .then(dl => ipcRenderer.send('shutdown'));
     this.setState({modal: 'downloading'});
   },
