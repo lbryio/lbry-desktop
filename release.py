@@ -71,12 +71,18 @@ def main():
 
     # ensure that we have changelog entries for each part
     for repo in repos:
-        if not repo.has_changes():
-            continue
-        entry = repo.get_changelog_entry().strip()
-        if not entry:
-            raise Exception('Changelog is missing for {}'.format(repo.name))
-        changelogs[repo.name] = entry
+        if repo.has_changes():
+            entry = repo.get_changelog_entry().strip()
+            if not entry:
+                raise Exception('Changelog is missing for {}'.format(repo.name))
+            changelogs[repo.name] = entry
+        else:
+            log.warning('Submodule %s has no changes.', repo.name)
+            if repo.name == 'lbryum':
+                # The other repos have their version track each other so need to bump
+                # them even if there aren't any changes, but lbryum should only be
+                # bumped if it has changes
+                continue
         part = get_part(args, repo.name)
         if not part:
             raise Exception('Cannot bump version for {}: no part specified'.format(repo.name))
@@ -207,4 +213,8 @@ def pushd(new_dir):
 
 
 if __name__ == '__main__':
+    log = logging.getLogger('release')
+    logging.basicConfig("%(asctime)s %(levelname)-8s %(name)s:%(lineno)d: %(message)s")
     sys.exit(main())
+else:
+    log = logging.getLogger('__name__')

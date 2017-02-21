@@ -7,7 +7,7 @@ import platform
 import re
 import subprocess
 import sys
-import zipfile
+
 
 import github
 import requests
@@ -40,16 +40,13 @@ def main(args=None):
         # TODO: maybe this should be an error
         return
 
-    artifact = get_artifact()
+    app = get_app_artifact()
     release = get_release(app_repo, current_tag)
-    upload_asset(release, artifact, gh_token)
+    upload_asset(release, app, gh_token)
 
+    daemon = get_daemon_artifact()
     release = get_release(daemon_repo, current_tag)
-    artifact = os.path.join('app', 'dist', 'lbrynet-daemon')
-    if platform.system() == 'Windows':
-        artifact += '.exe'
-    asset_to_upload = get_asset(artifact, get_system_label())
-    upload_asset(release, asset_to_upload, gh_token)
+    upload_asset(release, daemon, gh_token)
 
 
 def check_repo_has_tag(repo, target_tag):
@@ -67,7 +64,7 @@ def get_release(current_repo, current_tag):
     raise Exception('No release for {} was found'.format(current_tag))
 
 
-def get_artifact():
+def get_app_artifact():
     system = platform.system()
     if system == 'Darwin':
         return glob.glob('dist/mac/LBRY*.dmg')[0]
@@ -79,22 +76,8 @@ def get_artifact():
         raise Exception("I don't know about any artifact on {}".format(system))
 
 
-def get_system_label():
-    system = platform.system()
-    if system == 'Darwin':
-        return 'macOS'
-    else:
-        return system
-
-
-def get_asset(filename, label):
-    label = '-{}'.format(label)
-    base, ext = os.path.splitext(filename)
-    # TODO: probably want to clean this up
-    zipfilename = '{}{}.zip'.format(base, label)
-    with zipfile.ZipFile(zipfilename, 'w') as myzip:
-        myzip.write(filename)
-    return zipfilename
+def get_daemon_artifact():
+    return glob.glob('dist/*.zip')[0]
 
 
 def upload_asset(release, asset_to_upload, token):
@@ -105,9 +88,11 @@ def upload_asset(release, asset_to_upload, token):
         release.upload_url, {'name': basename})
     # using requests.post fails miserably with SSL EPIPE errors. I spent
     # half a day trying to debug before deciding to switch to curl.
+    #
+    # TODO: actually set the content type
     cmd = [
         'curl', '-sS', '-X', 'POST', '-u', ':{}'.format(os.environ['GH_TOKEN']),
-        '--header', 'Content-Type:application/zip',
+        '--header', 'Content-Type:application/octet-stream',
         '--data-binary', '@{}'.format(asset_to_upload), upload_uri
     ]
     raw_output = subprocess.check_output(cmd, stderr=subprocess.STDOUT)
@@ -128,7 +113,7 @@ def is_asset_already_uploaded(release, basename):
 
 if __name__ == '__main__':
     log = logging.getLogger('release-on-tag')
-    log_support.configure_console(level='DEBUG')
+    log_support.configure_console(level='INFO')
     sys.exit(main())
 else:
     log = logging.getLogger(__name__)

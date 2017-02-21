@@ -72,6 +72,7 @@ if [ "$FULL_BUILD" == "true" ]; then
   fi
 
   node_modules/.bin/build -p never
+  python zip_daemon.py
 
   echo 'Build and packaging complete.'
 else
