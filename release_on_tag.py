@@ -57,7 +57,10 @@ def check_repo_has_tag(repo, target_tag):
 
 
 def get_release(current_repo, current_tag):
-    return current_repo.get_release(current_tag)
+    for release in current_repo.get_releases():
+        if release.tag_name == current_tag:
+            return release
+    raise Exception('No release for {} was found'.format(current_tag))
 
 
 def get_artifact():

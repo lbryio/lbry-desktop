@@ -39,6 +39,7 @@ build_script:
   - node_modules\.bin\build -p never
   # for debugging, see what was built
   - dir dist
+  - pip install PyGithub uritemplate
   - python release_on_tag.py
 
 test: off
