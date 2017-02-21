@@ -29,7 +29,7 @@ export let Link = React.createClass({
 
     const className = (this.props.className || '') +
       (!this.props.className && !this.props.button ? 'button-text' : '') + // Non-button links get the same look as text buttons
-      (this.props.button ? 'button-block button-' + this.props.button : '') +
+      (this.props.button ? ' button-block button-' + this.props.button + ' button-set-item' : '') +
       (this.props.disabled ? ' disabled' : '');
 
     let content;
