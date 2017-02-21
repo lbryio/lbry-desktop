@@ -1,6 +1,8 @@
 # Test against the latest version of this Node.js version
 environment:
   nodejs_version: "6"
+  GH_TOKEN:
+    secure: LiI5jyuHUw6XbH4kC3gP1HX4P/v4rwD/gCNtaFhQu2AvJz1/1wALkp5ECnIxRySN
 
 skip_branch_with_pr: true
 
@@ -37,21 +39,12 @@ build_script:
   - node_modules\.bin\build -p never
   # for debugging, see what was built
   - dir dist
+  - pip install PyGithub uritemplate
+  - python release_on_tag.py
 
 test: off
+
 
 artifacts:
   - path: dist\*.exe
     name: LBRY
-
-deploy:
-  - provider: GitHub
-    release: $(APPVEYOR_REPO_TAG_NAME)
-    description: 'Release'
-    auth_token:
-      secure: LiI5jyuHUw6XbH4kC3gP1HX4P/v4rwD/gCNtaFhQu2AvJz1/1wALkp5ECnIxRySN
-    artifact: LBRY
-    draft: false
-    prerelease: true
-    on:
-      appveyor_repo_tag: true        # deploy on tag push only
