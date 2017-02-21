@@ -25,14 +25,13 @@ module.exports = {
     loaders: [
       { test: /\.css$/, loader: "style!css" },
       {
-	test: /\.jsx?$/,
-	loader: 'babel',
+	    test: /\.jsx?$/,
+	    loader: 'babel',
         query: {
           cacheDirectory: true,
           presets:[ 'es2015', 'react', 'stage-2' ]
         }
       }
     ]
-  },
-  target: 'electron-main',
+  }
 };

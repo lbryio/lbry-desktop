@@ -98,7 +98,7 @@ export let Address = React.createClass({
 });
 
 export let Thumbnail = React.createClass({
-  _defaultImageUri: lbry.imagePath('default-thumb.svg'),
+  _defaultImageUri: '/img/default-thumb.svg',
   _maxLoadTime: 10000,
   _isMounted: false,
 
