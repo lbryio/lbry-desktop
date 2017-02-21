@@ -207,6 +207,10 @@ lbry.getPeersForBlobHash = function(blobHash, callback) {
   });
 }
 
+lbry.getStreamAvailability = function(name, callback, errorCallback) {
+  lbry.call('get_availability', {name: name}, callback, errorCallback);
+}
+
 lbry.getCostInfoForName = function(name, callback, errorCallback) {
   /**
    * Takes a LBRY name; will first try and calculate a total cost using
@@ -245,8 +249,23 @@ lbry.getCostInfoForName = function(name, callback, errorCallback) {
   });
 }
 
-lbry.getFileStatus = function(name, callback) {
-  lbry.call('get_lbry_file', { 'name': name }, callback);
+lbry.getFeaturedDiscoverNames = function(callback) {
+  return new Promise(function(resolve, reject) {
+    var xhr = new XMLHttpRequest;
+    xhr.open('GET', 'https://api.lbry.io/discover/list', true);
+    xhr.onload = () => {
+      if (xhr.status === 200) {
+        resolve(JSON.parse(xhr.responseText));
+      } else {
+        reject(Error('Failed to fetch featured names.'));
+      }
+    };
+    xhr.send();
+  });
+}
+
+lbry.getFileStatus = function(name, callback, errorCallback) {
+  lbry.call('get_lbry_file', { 'name': name }, callback, errorCallback);
 }
 
 lbry.getFilesInfo = function(callback) {
@@ -296,22 +315,23 @@ lbry.revealFile = function(sdHash, callback) {
 }
 
 lbry.getFileInfoWhenListed = function(name, callback, timeoutCallback, tryNum=0) {
-  // Calls callback with file info when it appears in the list of files returned by lbry.getFilesInfo().
-  // If timeoutCallback is provided, it will be called if the file fails to appear.
-  lbry.getFilesInfo(function(fileInfos) {
-    for (var fileInfo of fileInfos) {
-      if (fileInfo.lbry_uri == name) {
-        callback(fileInfo);
-        return;
-      }
-    }
-
+  function scheduleNextCheckOrTimeout() {
     if (timeoutCallback && tryNum > 200) {
       timeoutCallback();
     } else {
-      setTimeout(function() { lbry.getFileInfoWhenListed(name, callback, timeoutCallback, tryNum + 1) }, 250);
+      setTimeout(() => lbry.getFileInfoWhenListed(name, callback, timeoutCallback, tryNum + 1), 250);
     }
-  });
+  }
+
+  // Calls callback with file info when it appears in the lbrynet file manager.
+  // If timeoutCallback is provided, it will be called if the file fails to appear.
+  lbry.getFileStatus(name, (fileInfo) => {
+    if (fileInfo) {
+      callback(fileInfo);
+    } else {
+      scheduleNextCheckOrTimeout();
+    }
+  }, () => scheduleNextCheckOrTimeout());
 }
 
 lbry.publish = function(params, fileListedCallback, publishedCallback, errorCallback) {

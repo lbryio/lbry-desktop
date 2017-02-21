@@ -3,7 +3,7 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
-The UI versions track the corresponding version in https://github.com/lbryio/lbry
+The LBRY Web UI comes bundled as part of [LBRY App](https://github.com/lbryio/lbry-app). Web UI version numbers track corresponding version of LBRY App.
 
 ## [Unreleased]
 ### Changed
