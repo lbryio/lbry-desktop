@@ -133,7 +133,7 @@ def check_bumpversion():
         output = output.strip()
         if output != 'bumpversion 0.5.4-lbry':
             requireNewVersion()
-    except subprocess.CalledProcessError:
+    except subprocess.CalledProcessError, OSError:
         requireNewVersion()
 
 def get_part(args, name):
