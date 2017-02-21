@@ -17,14 +17,6 @@ from lbrynet.core import log_support
 
 
 def main(args=None):
-    gh_token = os.environ['GH_TOKEN']
-    auth = github.Github(gh_token)
-    app_repo = auth.get_repo('lbryio/lbry-app')
-    # TODO: switch lbryio/lbrynet-daemon to lbryio/lbry
-    daemon_repo = auth.get_repo('lbryio/lbrynet-daemon')
-
-    artifact = get_artifact()
-
     current_tag = None
     try:
         current_tag = subprocess.check_output(
@@ -32,11 +24,23 @@ def main(args=None):
     except subprocess.CalledProcessError:
         log.info('Stopping as we are not currently on a tag')
         return
+
+    if 'GH_TOKEN' not in os.environ:
+        print 'Must set GH_TOKEN in order to publish assets to a release'
+        return
+
+    gh_token = os.environ['GH_TOKEN']
+    auth = github.Github(gh_token)
+    app_repo = auth.get_repo('lbryio/lbry-app')
+    # TODO: switch lbryio/lbrynet-daemon to lbryio/lbry
+    daemon_repo = auth.get_repo('lbryio/lbrynet-daemon')
+
     if not check_repo_has_tag(app_repo, current_tag):
         log.info('Tag %s is not in repo %s', current_tag, app_repo)
         # TODO: maybe this should be an error
         return
 
+    artifact = get_artifact()
     release = get_release(app_repo, current_tag)
     upload_asset(release, artifact, gh_token)
 
