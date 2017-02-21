@@ -214,7 +214,7 @@ def pushd(new_dir):
 
 if __name__ == '__main__':
     log = logging.getLogger('release')
-    logging.basicConfig("%(asctime)s %(levelname)-8s %(name)s:%(lineno)d: %(message)s")
+    logging.basicConfig(format="%(asctime)s %(levelname)-8s %(name)s:%(lineno)d: %(message)s")
     sys.exit(main())
 else:
     log = logging.getLogger('__name__')
