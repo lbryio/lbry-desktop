@@ -1,6 +1,6 @@
 # LBRY App
 
-This is a graphical browser for the decentralized content marketplace provided by the [lbry protocol](https://github.com/lbryio/lbry).
+This is a graphical browser for the decentralized content marketplace provided by the [LBRY](https://lbry.io) protocol. It is essentially the [lbry daemon](https://github.com/lbryio/lbry) bundled with the [lbry web ui](https://github.com/lbryio/lbry-web-ui) in an [Electron](http://electron.atom.io/) application.
 
 ## Installing
 
