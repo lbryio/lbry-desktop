@@ -2,6 +2,10 @@
 
 $border-radius-menu: 2px;
 
+.menu-container {
+  display: inline-block;
+}
+
 .menu {
   position: absolute;
   white-space: nowrap;

@@ -41,7 +41,7 @@ let WatchLink = React.createClass({
   },
   render: function() {
     return (
-      <div className="button-container">
+      <div className="button-set-item">
         <Link button="primary" disabled={this.state.loading} label="Watch" icon="icon-play" onClick={this.handleClick} />
         <Modal contentLabel="Not enough credits" isOpen={this.state.modal == 'notEnoughCredits'} onConfirmed={this.closeModal}>
           You don't have enough LBRY credits to pay for this stream.
@@ -179,7 +179,7 @@ let FileActionsRow = React.createClass({
         labelWithIcon = <span className="button__content"><Icon icon="icon-download" /><span>{label}</span></span>;
 
       linkBlock = (
-        <div className="faux-button-block file-actions__download-status-bar">
+        <div className="faux-button-block file-actions__download-status-bar button-set-item">
           <div className="faux-button-block file-actions__download-status-bar-overlay" style={{ width: progress + '%' }}>{labelWithIcon}</div>
           {labelWithIcon}
         </div>
@@ -191,8 +191,8 @@ let FileActionsRow = React.createClass({
     return (
       <div>
         {(this.props.metadata.content_type && this.props.metadata.content_type.startsWith('video/')) ? <WatchLink streamName={this.props.streamName} /> : null}
-        {this.state.fileInfo !== null || this.state.fileInfo.isMine ?
-         <div className="button-container">{linkBlock}</div>
+        {this.state.fileInfo !== null || this.state.fileInfo.isMine
+          ? linkBlock
           : null}
         { showMenu ?
           <DropDownMenu>
@@ -277,14 +277,11 @@ export let FileActions = React.createClass({
         fileInfo || this.state.available || this.state.forceShowActions
           ? <FileActionsRow sdHash={this.props.sdHash} metadata={this.props.metadata} streamName={this.props.streamName} />
           : <div>
-              <div className="button-container empty">This file is not currently available.</div>
-              <div className="button-container">
-                <ToolTip label="Why?"
-                         body="The content on LBRY is hosted by its users. It appears there are no users connected that have this file at the moment." />
-              </div>
-              <div className="button-container">
-                <Link label="Try Anyway" onClick={this.onShowFileActionsRowClicked} />
-              </div>
+              <div className="button-set-item empty">This file is not currently available.</div>
+              <ToolTip label="Why?"
+                       body="The content on LBRY is hosted by its users. It appears there are no users connected that have this file at the moment."
+                       className="button-set-item" />
+              <Link label="Try Anyway" onClick={this.onShowFileActionsRowClicked} className="button-set-item" />
             </div>
       }
     </section>);

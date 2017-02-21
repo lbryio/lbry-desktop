@@ -144,11 +144,11 @@ input[type="text"], input[type="search"]
   }
 }
 
-.button-container {
+.button-set-item {
   position: relative;
   display: inline-block;
 
-  + .button-container
+  + .button-set-item
   {
     margin-left: $padding-button;
   }
