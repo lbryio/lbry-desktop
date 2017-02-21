@@ -28,7 +28,6 @@ var SplashScreen = React.createClass({
       });
 
       lbry.resolveName('one', () => {
-	window.sessionStorage.setItem('loaded', 'y')
         this.props.onLoadDone();
       });
       return;

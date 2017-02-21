@@ -45,7 +45,14 @@ var PublishPage = React.createClass({
       }
     }
 
-    if (missingFieldFound) {
+    let fileProcessing = false;
+    if (this.state.fileInfo && !this.state.tempFileReady) {
+      this.refs.file.showAdvice('Your file is still processing.');
+      this.refs.file.focus();
+      fileProcessing = true;
+    }
+
+    if (missingFieldFound || fileProcessing) {
       this.setState({
         submitting: false,
       });
@@ -82,7 +89,7 @@ var PublishPage = React.createClass({
       };
 
       if (this.refs.file.getValue() !== '') {
-	publishArgs.file_path = this.refs.file.getValue();
+        publishArgs.file_path = this._tempFilePath;
       }
       
       lbry.publish(publishArgs, (message) => {
@@ -107,6 +114,8 @@ var PublishPage = React.createClass({
     }
   },
   getInitialState: function() {
+    this._tempFilePath = null;
+
     return {
       rawName: '',
       name: '',
@@ -118,12 +127,14 @@ var PublishPage = React.createClass({
       myClaimValue: 0.0,
       myClaimMetadata: null,
       myClaimExists: null,
+      fileInfo: null,
       copyrightNotice: '',
       otherLicenseDescription: '',
       otherLicenseUrl: '',
       uploadProgress: 0.0,
       uploaded: false,
       errorMessage: null,
+      tempFileReady: false,
       submitting: false,
       modal: null,
     };
@@ -225,6 +236,56 @@ var PublishPage = React.createClass({
       feeCurrency: event.target.value,
     });
   },
+  handleFileChange: function(event) {
+    event.preventDefault();
+
+    var fileInput = event.target;
+
+    this._tempFilePath = null;
+    if (fileInput.files.length == 0) {
+      // File was removed
+      this.setState({
+        fileInfo: null,
+        uploadProgress: 0.0,
+        uploaded: false,
+        tempFileReady: false,
+      });
+    } else {
+      var file = fileInput.files[0];
+      this.setState({
+        fileInfo: {
+          name: file.name,
+          size: file.size,
+        },
+        uploadProgress: 0.0,
+        uploaded: false,
+        tempFileReady: false,
+      });
+
+      var xhr = new XMLHttpRequest();
+      xhr.upload.addEventListener('progress', (event) => {
+        this.setState({
+          uploadProgress: (event.loaded / event.total),
+        });
+      });
+      xhr.upload.addEventListener('load', (event) => {
+        this.setState({
+          uploaded: true,
+        });
+      });
+      xhr.addEventListener('load', (event) => {
+        this._tempFilePath = JSON.parse(xhr.responseText);
+        this.setState({
+          tempFileReady: true,
+        });
+      })
+
+      var formData = new FormData(fileInput.form);
+      formData.append('file', fileInput.files[0]);
+      xhr.open('POST', lbry.webUiUri + '/upload', true);
+      xhr.send(formData);
+    }
+  },
   handleFeePrefChange: function(feeEnabled) {
     this.setState({
       isFee: feeEnabled
@@ -272,6 +333,21 @@ var PublishPage = React.createClass({
     document.title = "Publish";
   },
   componentDidUpdate: function() {
+    if (this.state.fileInfo && !this.state.tempFileReady) {
+      // A file was chosen but the daemon hasn't finished processing it yet, i.e. it's loading, so
+      // we're displaying a progress bar and need a value for it.
+
+      // React can't unset the "value" prop (to show an "indeterminate" bar) after it's already
+      // been set, so we have to manage it manually.
+
+      if (!this.state.uploaded) {
+        // Still uploading
+        this.refs.progress.setAttribute('value', this.state.uploadProgress);
+      } else {
+        // Fully uploaded and waiting for server to finish processing, so set progress bar to "indeterminite"
+        this.refs.progress.removeAttribute('value');
+      }
+    }
   },
   // Also getting a type warning here too
   render: function() {
@@ -294,7 +370,13 @@ var PublishPage = React.createClass({
 
           <section className="card">
             <h4>Choose File</h4>
-            <FormField name="file" ref="file" type="file" />
+            <FormField name="file" ref="file" type="file" onChange={this.handleFileChange} />
+            { !this.state.fileInfo ? '' :
+                (!this.state.tempFileReady ? <div>
+                                               <progress ref='progress'></progress>
+                                               {!this.state.uploaded ? <span> Importing file into LBRY...</span> : <span> Processing file...</span>}
+                                             </div>
+                                           : <div>File ready for publishing!</div>) }
             { this.state.myClaimExists ? <div className="help">If you don't choose a file, the file from your existing claim will be used.</div> : null }
           </section>
 
