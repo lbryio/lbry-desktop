@@ -20,6 +20,9 @@ CHANGELOG_END_RE = re.compile(r'^\#\# \[.*\] - \d{4}-\d{2}-\d{2}')
 # if we come across a section header between two release section headers
 # then we probably have an improperly formatted changelog
 CHANGELOG_ERROR_RE = re.compile(r'^\#\# ')
+NO_CHANGE = ('No change since the last release. This release is simply a placeholder'
+             ' so that LBRY and LBRY App track the same version')
+
 
 
 def main():
@@ -88,8 +91,10 @@ def main():
     current_tag = base.git.describe()
 
     github_repo.create_git_release(current_tag, current_tag, release_msg, draft=True)
+    lbrynet_daemon_release_msg = changelogs.get('lbry', NO_CHANGE)
     auth.get_repo('lbryio/lbrynet-daemon').create_git_release(
-        current_tag, current_tag, changelogs['lbry'], draft=True)
+        current_tag, current_tag, lbrynet_daemon_release_msg, draft=True)
+
     for repo in repos:
         repo.git.push(follow_tags=True)
     base.git.push(follow_tags=True, recurse_submodules='check')
