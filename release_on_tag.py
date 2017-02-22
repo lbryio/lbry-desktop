@@ -132,7 +132,3 @@ if __name__ == '__main__':
     sys.exit(main())
 else:
     log = logging.getLogger(__name__)
-
-
-
-"my name = ﷽"
