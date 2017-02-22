@@ -84,6 +84,7 @@ def upload_asset(release, asset_to_upload, token):
     basename = os.path.basename(asset_to_upload)
     if is_asset_already_uploaded(release, basename):
         return
+    print 'Release upload url:', release.upload_url
     upload_uri = uritemplate.expand(
         release.upload_url, {'name': basename})
     # using requests.post fails miserably with SSL EPIPE errors. I spent
@@ -95,6 +96,9 @@ def upload_asset(release, asset_to_upload, token):
         '--header', 'Content-Type:application/octet-stream',
         '--data-binary', '@{}'.format(asset_to_upload), upload_uri
     ]
+    print 'Calling curl:'
+    print cmd
+    print
     p = subprocess.Popen(cmd, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
     stdout, stderr = p.communicate()
     print 'curl return code:', p.returncode
