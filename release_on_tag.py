@@ -92,9 +92,13 @@ def upload_asset(release, asset_to_upload, token):
     #
     # TODO: actually set the content type
     cmd = [
-        'curl', '-sS', '-X', 'POST', '-u', ':{}'.format(os.environ['GH_TOKEN']),
+        'curl',
+        '-sS',
+        '-X', 'POST',
+        '-u', ':{}'.format(os.environ['GH_TOKEN']),
         '--header', 'Content-Type:application/octet-stream',
-        '--data-binary', '@{}'.format(asset_to_upload), upload_uri
+        '--data-binary', '@{}'.format(asset_to_upload),
+        upload_uri
     ]
     print 'Calling curl:'
     print cmd
@@ -105,9 +109,9 @@ def upload_asset(release, asset_to_upload, token):
     if stderr:
         print 'stderr output from curl:'
         print stderr
-    output = json.loads(stdout)
     print 'stdout from curl:'
     print stdout
+    output = json.loads(stdout)
     if 'errors' in output:
         raise Exception(output)
     else:
@@ -128,3 +132,7 @@ if __name__ == '__main__':
     sys.exit(main())
 else:
     log = logging.getLogger(__name__)
+
+
+
+"my name = ﷽"
