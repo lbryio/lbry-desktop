@@ -16,17 +16,17 @@ VALID_SECTIONS = ['Added', 'Changed', 'Deprecated', 'Removed', 'Fixed', 'Securit
 
 
 # allocate some entries to cut-down on merge conflicts
-TEMPLATE = """## Added
+TEMPLATE = """### Added
   *
   *
   *
 
-## Changed
+### Changed
   *
   *
   *
 
-## Fixed
+### Fixed
   *
   *
   *
@@ -65,7 +65,8 @@ def bump(changelog, version):
             unreleased_end_found = True
             continue
         if CHANGELOG_ERROR_RE.search(line):
-            raise Exception(err.format(filename, 'unexpected section header found'))
+            raise Exception(
+                'Failed to parse {}: {}'.format(filename, 'unexpected section header found'))
         unreleased.append(line)
 
     today = datetime.datetime.today()
@@ -118,7 +119,7 @@ def normalize(lines):
     for section in VALID_SECTIONS:
         if section not in sections:
             continue
-        output.append('## {}'.format(section))
+        output.append('### {}'.format(section))
         for entry in sections[section]:
             output.append(' * {}'.format(entry))
     return output
