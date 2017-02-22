@@ -95,8 +95,15 @@ def upload_asset(release, asset_to_upload, token):
         '--header', 'Content-Type:application/octet-stream',
         '--data-binary', '@{}'.format(asset_to_upload), upload_uri
     ]
-    raw_output = subprocess.check_output(cmd, stderr=subprocess.STDOUT)
-    output = json.loads(raw_output)
+    p = subprocess.Popen(cmd, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+    stdout, stderr = p.communicate()
+    print 'curl return code:', p.returncode
+    if stderr:
+        print 'stderr output from curl:'
+        print stderr
+    output = json.loads(stdout)
+    print 'stdout from curl:'
+    print stdout
     if 'errors' in output:
         raise Exception(output)
     else:
