@@ -19,24 +19,28 @@ import changelog
 
 NO_CHANGE = ('No change since the last release. This release is simply a placeholder'
              ' so that LBRY and LBRY App track the same version')
-
+DEFAULT_BRANCHES = {
+    'lbry': 'master',
+    'lbry-app': 'master',
+    'lbry-web-ui': 'development',
+    'lbryum': 'master'
+}
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("lbry_part", help="part of lbry version to bump")
     parser.add_argument("--lbryum_part", help="part of lbryum version to bump")
     parser.add_argument("--ui-part", help="part of the ui to bump")
-    parser.add_argument("--branch", default='master', help="branch to use for each repo")
+    parser.add_argument("--branch", help="branch to use for each repo; useful for testing")
     parser.add_argument("--last-release")
     parser.add_argument("--skip-sanity-checks", action="store_true")
     args = parser.parse_args()
 
-    branch = args.branch
-
     base = git.Repo(os.getcwd())
+    branch = get_branch('lbry-app', args.branch)
 
     if not args.skip_sanity_checks:
-        run_sanity_checks(base, args)
+        run_sanity_checks(base, branch)
 
     if args.last_release:
         last_release = args.last_release
@@ -65,9 +69,9 @@ def main():
 
     changelogs = {}
 
-    # ensure that we have changelog entries for each part
     for repo in repos:
         logging.info('Processing repo: %s', repo.name)
+        repo.checkout(args.branch)
         if repo.has_changes():
             entry = repo.get_changelog_entry()
             if not entry:
@@ -101,6 +105,11 @@ def main():
     #base.git.push(follow_tags=True, recurse_submodules='check')
 
 
+def get_branch(repo_name, override=None):
+    if override:
+        return override
+    return DEFAULT_BRANCHES[repo_name]
+
 def get_release_msg(changelogs, names):
     lines = []
     for name in names:
@@ -112,8 +121,7 @@ def get_release_msg(changelogs, names):
     return '\n'.join(lines)
 
 
-def run_sanity_checks(base, args):
-    branch = args.branch
+def run_sanity_checks(base, branch):
     if base.is_dirty():
         print 'Cowardly refusing to release a dirty repo'
         sys.exit(1)
@@ -173,8 +181,10 @@ class Repo(object):
     def save_commit(self):
         self.saved_commit = self.git_repo.commit()
 
-    def checkout(self, branch):
+    def checkout(self, override=None):
+        branch = get_branch(self.name, override)
         self.git_repo.git.checkout(branch)
+        self.git_repo.git.pull(rebase=True)
 
     def get_changelog_entry(self):
         filename = os.path.join(self.directory, 'CHANGELOG.md')
