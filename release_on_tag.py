@@ -40,13 +40,13 @@ def main(args=None):
         # TODO: maybe this should be an error
         return
 
-    app = get_app_artifact()
-    release = get_release(app_repo, current_tag)
-    upload_asset(release, app, gh_token)
-
     daemon = get_daemon_artifact()
     release = get_release(daemon_repo, current_tag)
     upload_asset(release, daemon, gh_token)
+
+    app = get_app_artifact()
+    release = get_release(app_repo, current_tag)
+    upload_asset(release, app, gh_token)
 
 
 def check_repo_has_tag(repo, target_tag):
