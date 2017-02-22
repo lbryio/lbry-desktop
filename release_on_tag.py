@@ -81,6 +81,15 @@ def get_daemon_artifact():
 
 
 def upload_asset(release, asset_to_upload, token):
+    count = 0
+    while count < 10:
+        try:
+            return _upload_asset(release, asset_to_upload, token)
+        except Exception:
+            count += 1
+
+
+def _upload_asset(release, asset_to_upload, token):
     basename = os.path.basename(asset_to_upload)
     if is_asset_already_uploaded(release, basename):
         return
