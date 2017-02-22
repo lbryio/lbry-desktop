@@ -48,6 +48,7 @@ def main():
         response = requests.get('https://api.github.com/repos/lbryio/lbry-app/releases/latest')
         data = response.json()
         last_release = data['tag_name']
+        logging.info('Last release: %s', last_release)
 
     gh_token = os.environ['GH_TOKEN']
     auth = github.Github(gh_token)
