@@ -78,14 +78,15 @@ def main():
         repo.checkout(args.branch)
         if repo.has_changes():
             entry = repo.get_changelog_entry()
-            if not entry:
+            if entry:
+                changelogs[repo.name] = entry.strip()
+                repo.add_changelog()
+            else:
                 msg = 'Changelog entry is missing for {}'.format(repo.name)
                 if args.require_changelog:
                     raise Exception(msg)
                 else:
                     logging.warning(msg)
-            else:
-                changelogs[repo.name] = entry.strip()
         else:
             logging.warning('Submodule %s has no changes.', repo.name)
             if repo.name == 'lbryum':
@@ -114,13 +115,14 @@ def main():
         base.git.push(follow_tags=True, recurse_submodules='check')
     else:
         logging.info('Skipping push; you will have to reset and delete tags if '
-                 'you want to run this script again')
+                     'you want to run this script again')
 
 
 def get_branch(repo_name, override=None):
     if override:
         return override
     return DEFAULT_BRANCHES[repo_name]
+
 
 def get_release_msg(changelogs, names):
     lines = []
@@ -201,6 +203,10 @@ class Repo(object):
     def get_changelog_entry(self):
         filename = os.path.join(self.directory, 'CHANGELOG.md')
         return changelog.bump(filename, self.new_version())
+
+    def add_changelog(self):
+        with pushd(self.directory):
+            self.git_repo.git.add('CHANGELOG.md')
 
     def new_version(self):
         if self._bumped:
