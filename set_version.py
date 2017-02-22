@@ -16,8 +16,18 @@ def main():
         version = args.version
     else:
         tag = subprocess.check_output(['git', 'describe']).strip()
-        version = get_version_from_tag(tag)
+        try:
+            version = get_version_from_tag(tag)
+        except InvalidVersionTag:
+            # this should be an error but its easier to handle here
+            # than in the calling scripts.
+            print 'Tag cannot be converted to a version, Exitting'
+            return
     set_version(version)
+
+
+class InvalidVersionTag(Exception):
+    pass
 
 
 def get_version_from_tag(tag):
@@ -25,7 +35,7 @@ def get_version_from_tag(tag):
     if match:
         return match.group(1)
     else:
-        raise Exception('Failed to parse version from tag {}'.format(tag))
+        raise InvalidVersionTag('Failed to parse version from tag {}'.format(tag))
 
 
 def set_version(version):
