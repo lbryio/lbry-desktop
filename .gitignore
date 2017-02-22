@@ -7,3 +7,4 @@ lbrynet/build
 lbrynet/venv
 .#*
 build_venv
+*.pyc

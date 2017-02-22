@@ -14,12 +14,8 @@ import git
 import github
 import requests
 
+import changelog
 
-CHANGELOG_START_RE = re.compile(r'^\#\# \[Unreleased\]')
-CHANGELOG_END_RE = re.compile(r'^\#\# \[.*\] - \d{4}-\d{2}-\d{2}')
-# if we come across a section header between two release section headers
-# then we probably have an improperly formatted changelog
-CHANGELOG_ERROR_RE = re.compile(r'^\#\# ')
 NO_CHANGE = ('No change since the last release. This release is simply a placeholder'
              ' so that LBRY and LBRY App track the same version')
 
@@ -54,7 +50,7 @@ def main():
     github_repo = auth.get_repo('lbryio/lbry-app')
 
     names = ['lbry', 'lbry-web-ui', 'lbryum']
-    repos = [Repo(name) for name in names]
+    repos = [Repo(name, get_part(args, name)) for name in names]
 
     # in order to see if we've had any change in the submodule, we need to checkout
     # our last release, see what commit we were on, and then compare that to
@@ -71,6 +67,8 @@ def main():
 
     # ensure that we have changelog entries for each part
     for repo in repos:
+        print repo.new_version()
+        sys.exit(1)
         if repo.has_changes():
             entry = repo.get_changelog_entry().strip()
             if not entry:
@@ -83,8 +81,7 @@ def main():
                 # them even if there aren't any changes, but lbryum should only be
                 # bumped if it has changes
                 continue
-        part = get_part(args, repo.name)
-        if not part:
+        if not repo.part:
             raise Exception('Cannot bump version for {}: no part specified'.format(repo.name))
         repo.bumpversion(part)
 
@@ -156,11 +153,13 @@ def get_part(args, name):
 
 
 class Repo(object):
-    def __init__(self, name):
+    def __init__(self, name, part):
         self.name = name
+        self.part = part
         self.directory = os.path.join(os.getcwd(), name)
         self.git_repo = git.Repo(self.directory)
         self.saved_commit = None
+        self._bumped = False
 
     def has_changes(self):
         return self.git_repo.commit() == self.saved_commit
@@ -173,31 +172,22 @@ class Repo(object):
 
     def get_changelog_entry(self):
         filename = os.path.join(self.directory, 'CHANGELOG.md')
-        err = 'Had trouble parsing changelog {}: {}'
-        output = []
-        start_found = False
-        with open(filename) as fp:
-            for line in fp:
-                if not start_found:
-                    if CHANGELOG_START_RE.search(line):
-                        start_found = True
-                    continue
-                if CHANGELOG_END_RE.search(line):
-                    return ''.join(output)
-                if CHANGELOG_ERROR_RE.search(line):
-                    raise Exception(err.format(filename, 'unexpected section header found'))
-                output.append(line)
-        # if we get here there was no previous release section, which is a problem
-        if start_found:
-            # TODO: once the lbry-web-ui has a released entry, uncomment this error
-            # raise Exception(err.format(filename, 'Reached end of file'))
-            return ''.join(output)
-        else:
-            raise Exception(err.format(filename, 'Unreleased section not found'))
+        return changelog.bump(filename, self.new_version())
 
-    def bumpversion(self, part):
+    def new_version(self):
+        if self._bumped:
+            raise Exception('Cannot calculate a new version on an already bumped repo')
         with pushd(self.directory):
-            subprocess.check_call(['bumpversion', part])
+            output = subprocess.check_output(
+                ['bumpversion', '--dry-run', '--list', '--allow-dirty', self.part])
+            return re.search('^new_version=(.*)$', output).group(1)
+
+    def bumpversion(self):
+        if self._bumped:
+            raise Exception('Cowardly refusing to bump a repo twice')
+        with pushd(self.directory):
+            subprocess.check_call(['bumpversion', '--allow-dirty', self.part])
+            self._bumped = True
 
     @property
     def git(self):
