@@ -16,9 +16,9 @@ import requests
 
 import changelog
 
+
 NO_CHANGE = ('No change since the last release. This release is simply a placeholder'
              ' so that LBRY and LBRY App track the same version')
-
 
 
 def main():
@@ -67,23 +67,21 @@ def main():
 
     # ensure that we have changelog entries for each part
     for repo in repos:
-        print repo.new_version()
-        sys.exit(1)
+        logging.info('Processing repo: %s', repo.name)
         if repo.has_changes():
-            entry = repo.get_changelog_entry().strip()
+            entry = repo.get_changelog_entry()
             if not entry:
                 raise Exception('Changelog is missing for {}'.format(repo.name))
-            changelogs[repo.name] = entry
+            else:
+                changelogs[repo.name] = entry.strip()
         else:
-            log.warning('Submodule %s has no changes.', repo.name)
+            logging.warning('Submodule %s has no changes.', repo.name)
             if repo.name == 'lbryum':
                 # The other repos have their version track each other so need to bump
                 # them even if there aren't any changes, but lbryum should only be
                 # bumped if it has changes
                 continue
-        if not repo.part:
-            raise Exception('Cannot bump version for {}: no part specified'.format(repo.name))
-        repo.bumpversion(part)
+        repo.bumpversion()
 
     release_msg = get_release_msg(changelogs, names)
 
@@ -98,9 +96,9 @@ def main():
     auth.get_repo('lbryio/lbrynet-daemon').create_git_release(
         current_tag, current_tag, lbrynet_daemon_release_msg, draft=True)
 
-    for repo in repos:
-        repo.git.push(follow_tags=True)
-    base.git.push(follow_tags=True, recurse_submodules='check')
+    #for repo in repos:
+    #    repo.git.push(follow_tags=True)
+    #base.git.push(follow_tags=True, recurse_submodules='check')
 
 
 def get_release_msg(changelogs, names):
@@ -122,12 +120,18 @@ def run_sanity_checks(base, args):
     if base.active_branch.name != branch:
         print 'Cowardly refusing to release when not on the {} branch'.format(branch)
         sys.exit(1)
-    origin = base.remotes.origin
-    origin.fetch()
-    if base.commit() != origin.refs[branch].commit:
-        print 'Cowardly refusing to release when not synced with origin'
+    if is_behind(base, branch):
+        print 'Cowardly refusing to release when behind origin'
         sys.exit(1)
     check_bumpversion()
+
+
+def is_behind(base, branch):
+    base.remotes.origin.fetch()
+    rev_list = '{branch}...origin/{branch}'.format(branch=branch)
+    commits_behind = base.git.rev_list(rev_list, right_only=True, count=True)
+    commits_behind = int(commits_behind)
+    return commits_behind > 0
 
 
 def check_bumpversion():
@@ -143,6 +147,7 @@ def check_bumpversion():
             requireNewVersion()
     except (subprocess.CalledProcessError, OSError) as err:
         requireNewVersion()
+
 
 def get_part(args, name):
     if name == 'lbry-web-ui':
@@ -162,7 +167,8 @@ class Repo(object):
         self._bumped = False
 
     def has_changes(self):
-        return self.git_repo.commit() == self.saved_commit
+        logging.info('%s =? %s', self.git_repo.commit(), self.saved_commit)
+        return self.git_repo.commit() != self.saved_commit
 
     def save_commit(self):
         self.saved_commit = self.git_repo.commit()
@@ -177,14 +183,18 @@ class Repo(object):
     def new_version(self):
         if self._bumped:
             raise Exception('Cannot calculate a new version on an already bumped repo')
+        if not self.part:
+            raise Exception('Cannot calculate a new version without a part')
         with pushd(self.directory):
             output = subprocess.check_output(
                 ['bumpversion', '--dry-run', '--list', '--allow-dirty', self.part])
-            return re.search('^new_version=(.*)$', output).group(1)
+            return re.search('^new_version=(.*)$', output, re.M).group(1)
 
     def bumpversion(self):
         if self._bumped:
             raise Exception('Cowardly refusing to bump a repo twice')
+        if not self.part:
+            raise Exception('Cannot bump version for {}: no part specified'.format(repo.name))
         with pushd(self.directory):
             subprocess.check_call(['bumpversion', '--allow-dirty', self.part])
             self._bumped = True
@@ -203,8 +213,10 @@ def pushd(new_dir):
 
 
 if __name__ == '__main__':
-    log = logging.getLogger('release')
-    logging.basicConfig(format="%(asctime)s %(levelname)-8s %(name)s:%(lineno)d: %(message)s")
+    logging.basicConfig(
+        format="%(asctime)s %(levelname)-8s %(name)s:%(lineno)d: %(message)s",
+        level='INFO'
+    )
     sys.exit(main())
 else:
     log = logging.getLogger('__name__')

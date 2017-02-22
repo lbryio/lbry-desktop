@@ -84,7 +84,7 @@ def bump(changelog, version):
         + ''.join(rest)
     )
     with open(changelog, 'w') as fp:
-        fp.write(new_changelog)
+        fp.write(changelog_data)
     return '\n'.join(released) + '\n\n'
 
 
