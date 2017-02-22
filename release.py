@@ -34,6 +34,9 @@ def main():
     parser.add_argument("--branch", help="branch to use for each repo; useful for testing")
     parser.add_argument("--last-release")
     parser.add_argument("--skip-sanity-checks", action="store_true")
+    parser.add_argument("--require-changelog", action="store_true")
+    parser.add_argument("--skip-push", action="store_true",
+                        help="Set to not push changes to remote repo")
     args = parser.parse_args()
 
     base = git.Repo(os.getcwd())
@@ -61,12 +64,12 @@ def main():
     # our last release, see what commit we were on, and then compare that to
     # current
     base.git.checkout(last_release)
-    base.submodule_update()
+    base.git.submodule('update')
     for repo in repos:
         repo.save_commit()
 
     base.git.checkout(branch)
-    base.submodule_update()
+    base.git.submodule('update')
 
     changelogs = {}
 
@@ -76,7 +79,11 @@ def main():
         if repo.has_changes():
             entry = repo.get_changelog_entry()
             if not entry:
-                raise Exception('Changelog is missing for {}'.format(repo.name))
+                msg = 'Changelog entry is missing for {}'.format(repo.name)
+                if args.require_changelog:
+                    raise Exception(msg)
+                else:
+                    logging.warning(msg)
             else:
                 changelogs[repo.name] = entry.strip()
         else:
@@ -101,9 +108,13 @@ def main():
     auth.get_repo('lbryio/lbrynet-daemon').create_git_release(
         current_tag, current_tag, lbrynet_daemon_release_msg, draft=True)
 
-    #for repo in repos:
-    #    repo.git.push(follow_tags=True)
-    #base.git.push(follow_tags=True, recurse_submodules='check')
+    if not args.skip_push:
+        for repo in repos:
+            repo.git.push(follow_tags=True)
+        base.git.push(follow_tags=True, recurse_submodules='check')
+    else:
+        logging.info('Skipping push; you will have to reset and delete tags if '
+                 'you want to run this script again')
 
 
 def get_branch(repo_name, override=None):
