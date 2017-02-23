@@ -281,7 +281,7 @@ export let FileActions = React.createClass({
               <ToolTip label="Why?"
                        body="The content on LBRY is hosted by its users. It appears there are no users connected that have this file at the moment."
                        className="button-set-item" />
-              <Link label="Try Anyway" onClick={this.onShowFileActionsRowClicked} className="button-set-item" />
+              <Link label="Try Anyway" onClick={this.onShowFileActionsRowClicked} className="button-text button-set-item" />
             </div>
       }
     </section>);
