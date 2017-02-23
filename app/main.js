@@ -31,8 +31,12 @@ function lauchDaemon() {
   if (subpy) {
     return;
   }
-  console.log(`${__dirname}`);
-  executable = path.join(__dirname, 'dist', 'lbrynet-daemon');
+  if (process.env.LBRY_DAEMON) {
+    executable = process.env.LBRY_DAEMON;
+  } else {
+    executable = path.join(__dirname, 'dist', 'lbrynet-daemon');
+  }
+  console.log('Launching daemon: ' + executable)
   subpy = require('child_process').spawn(executable)
   // Need to handle the data event instead of attaching to
   // process.stdout because the latter doesn't work. I believe on
