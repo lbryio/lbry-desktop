@@ -58,7 +58,7 @@ let FileActionsRow = React.createClass({
   propTypes: {
     streamName: React.PropTypes.string,
     sdHash: React.PropTypes.string.isRequired,
-    metadata: React.PropTypes.object
+    metadata: React.PropTypes.oneOfType([React.PropTypes.object, React.PropTypes.string]),
   },
   getInitialState: function() {
     return {
@@ -226,7 +226,7 @@ export let FileActions = React.createClass({
   propTypes: {
     streamName: React.PropTypes.string,
     sdHash: React.PropTypes.string.isRequired,
-    metadata: React.PropTypes.object
+    metadata: React.PropTypes.oneOfType([React.PropTypes.object, React.PropTypes.string]),
   },
   getInitialState: function() {
     return {
@@ -281,7 +281,7 @@ export let FileActions = React.createClass({
               <ToolTip label="Why?"
                        body="The content on LBRY is hosted by its users. It appears there are no users connected that have this file at the moment."
                        className="button-set-item" />
-              <Link label="Try Anyway" onClick={this.onShowFileActionsRowClicked} className="button-set-item" />
+              <Link label="Try Anyway" onClick={this.onShowFileActionsRowClicked} className="button-text button-set-item" />
             </div>
       }
     </section>);
