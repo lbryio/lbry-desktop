@@ -19,15 +19,13 @@ let quitting = false;
 function createWindow () {
   win = new BrowserWindow({backgroundColor: '#155b4a'})
   win.maximize()
-
   //win.webContents.openDevTools()
-
   win.loadURL(`file://${__dirname}/dist/index.html`)
-
   win.on('closed', () => {
     win = null
   })
 };
+
 
 function lauchDaemon() {
   if (subpy) {
@@ -62,26 +60,26 @@ function lauchDaemon() {
 
 
 app.on('ready', function(){
-    launchDaemonIfNotRunning();
-    createWindow();
+  launchDaemonIfNotRunning();
+  createWindow();
 });
 
 
 function launchDaemonIfNotRunning() {
-    // Check if the daemon is already running. If we get
-    // an error its because its not running
-    console.log('Checking for lbrynet daemon');
-    client.request(
-        'status', [],
-        function (err, res) {
-	    if (err) {
-		console.log('lbrynet daemon needs to be launched')
-		lauchDaemon();
-	    } else {
-		console.log('lbrynet daemon is already running')
-	    }
-	}
-    );
+  // Check if the daemon is already running. If we get
+  // an error its because its not running
+  console.log('Checking for lbrynet daemon');
+  client.request(
+    'status', [],
+    function (err, res) {
+      if (err) {
+        console.log('lbrynet daemon needs to be launched')
+        lauchDaemon();
+      } else {
+        console.log('lbrynet daemon is already running')
+      }
+    }
+  );
 }
 
 
