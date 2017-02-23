@@ -130,15 +130,16 @@ def _curl_uploader(upload_uri, asset_to_upload, token):
         '-sS',
         '-X', 'POST',
         '-u', ':{}'.format(os.environ['GH_TOKEN']),
-        '--header', 'Content-Type: application/json',
-        '--data-binary', str('@{}'.format(asset_to_upload)),
-        str(upload_uri)
+        '--header', 'Content-Type: application/octet-stream',
+        '--data-binary', '@-',
+        upload_uri
     ]
     #'-d', '{"some_key": "some_value"}',
     print 'Calling curl:'
     print cmd
     print
-    p = subprocess.Popen(cmd, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
+    with open(asset_to_upload, 'rb') as fp:
+        p = subprocess.Popen(cmd, stdin=fp, stderr=subprocess.PIPE, stdout=subprocess.PIPE)
     stdout, stderr = p.communicate()
     print 'curl return code:', p.returncode
     if stderr:
