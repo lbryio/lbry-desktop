@@ -34,7 +34,7 @@ def main(args=None):
     auth = github.Github(gh_token)
     app_repo = auth.get_repo('lbryio/lbry-app')
     # TODO: switch lbryio/lbrynet-daemon to lbryio/lbry
-    daemon_repo = auth.get_repo('lbryio/lbrynet-daemon')
+    daemon_repo = auth.get_repo('lbryio/lbry')
 
     if not check_repo_has_tag(app_repo, current_tag):
         log.info('Tag %s is not in repo %s', current_tag, app_repo)
@@ -42,9 +42,8 @@ def main(args=None):
         return
 
     daemon = get_daemon_artifact()
-    os.rename(daemon, 'daemon')
     release = get_release(daemon_repo, current_tag)
-    upload_asset(release, 'daemon', gh_token)
+    upload_asset(release, daemon, gh_token)
 
     app = get_app_artifact()
     release = get_release(app_repo, current_tag)
@@ -87,11 +86,9 @@ def upload_asset(release, asset_to_upload, token):
     if is_asset_already_uploaded(release, basename):
         return
     count = 0
-    uploaders = [_requests_uploader, _curl_uploader]
     while count < 10:
-        uploader = uploaders[count % len(uploaders)]
         try:
-            return _upload_asset(release, asset_to_upload, token, uploader)
+            return _upload_asset(release, asset_to_upload, token, _curl_uploader)
         except Exception:
             log.exception('Failed to upload')
             count += 1
@@ -110,6 +107,7 @@ def _upload_asset(release, asset_to_upload, token, uploader):
         log.info('Successfully uploaded to %s', output['browser_download_url'])
 
 
+# requests doesn't work on windows / linux / osx.
 def _requests_uploader(upload_uri, asset_to_upload, token):
     log.info('Using requests to upload %s to %s', asset_to_upload, upload_uri)
     with open(asset_to_upload, 'rb') as f:
