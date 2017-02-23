@@ -52,7 +52,7 @@ var WatchPage = React.createClass({
       });
     }, this._controlsHideDelay);
   },
-  handleMouseOut: function() {
+  handleMouseLeave: function() {
     if (this._controlsTimeout) {
       clearTimeout(this._controlsTimeout);
     }
@@ -97,7 +97,7 @@ var WatchPage = React.createClass({
     return (
       !this.state.readyToPlay
         ? <LoadScreen message={'Loading video...'} details={this.state.loadStatusMessage} />
-        : <main className="video full-screen" onMouseMove={this.handleMouseMove} onMouseOut={this.handleMouseOut}>
+        : <main className="video full-screen" onMouseMove={this.handleMouseMove} onMouseLeave={this.handleMouseLeave}>
             <video controls width="100%" height="100%" id="video" ref="video"></video>
             {this.state.controlsShown
               ? <div className="video__overlay">
