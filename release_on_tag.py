@@ -97,8 +97,7 @@ def upload_asset(release, asset_to_upload, token):
 def _upload_asset(release, asset_to_upload, token, uploader):
     basename = os.path.basename(asset_to_upload)
     upload_uri = uritemplate.expand(
-        release.upload_url,
-        {'name': ''.join([random.choice('abcdef') for _ in range(10)])}
+        release.upload_url
     )
     output = uploader(upload_uri, asset_to_upload, token)
     if 'errors' in output:
