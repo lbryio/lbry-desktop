@@ -84,6 +84,7 @@ if [ "$FULL_BUILD" == "true" ]; then
   # it to reliably work and it also seemed difficult to configure. Not proud of
   # this, but it seemed better to write my own.
   pip install PyGithub uritemplate
+  pip install -U requests[security]
   python release_on_tag.py
   deactivate
 fi

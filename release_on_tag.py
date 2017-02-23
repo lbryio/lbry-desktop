@@ -4,6 +4,7 @@ import json
 import logging
 import os
 import platform
+import random
 import re
 import subprocess
 import sys
@@ -89,15 +90,18 @@ def upload_asset(release, asset_to_upload, token):
     while count < 10:
         uploader = uploaders[count % len(uploaders)]
         try:
-            return _upload_asset_requests(release, asset_to_upload, token, uploader)
+            return _upload_asset(release, asset_to_upload, token, uploader)
         except Exception:
             log.exception('Failed to upload')
             count += 1
 
 
-def _upload_asset_requests(release, asset_to_upload, token, uploader):
+def _upload_asset(release, asset_to_upload, token, uploader):
     basename = os.path.basename(asset_to_upload)
-    upload_uri = uritemplate.expand(release.upload_url, {'name': basename})
+    upload_uri = uritemplate.expand(
+        release.upload_url,
+        {'name': ''.join([random.choice('abcdef') for _ in range(10)])}
+    )
     output = uploader(upload_uri, asset_to_upload, token)
     if 'errors' in output:
         raise Exception(output)

@@ -41,6 +41,7 @@ build_script:
   - python zip_daemon.py
   - dir dist
   - pip install PyGithub uritemplate
+  - pip install -U requests[security]
   - python release_on_tag.py
 
 test: off
