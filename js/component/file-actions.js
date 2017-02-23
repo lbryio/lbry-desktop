@@ -10,23 +10,32 @@ import {DropDownMenu, DropDownMenuItem} from './menu.js';
 let WatchLink = React.createClass({
   propTypes: {
     streamName: React.PropTypes.string,
+    downloadStarted: React.PropTypes.bool,
+  },
+  startVideo: function() {
+    window.location = '?watch=' + this.props.streamName;
   },
   handleClick: function() {
     this.setState({
       loading: true,
-    })
-    lbry.getCostInfoForName(this.props.streamName, ({cost}) => {
-      lbry.getBalance((balance) => {
-        if (cost > balance) {
-          this.setState({
-            modal: 'notEnoughCredits',
-            loading: false,
-          });
-        } else {
-          window.location = '?watch=' + this.props.streamName;
-        }
-      });
     });
+
+    if (this.props.downloadStarted) {
+      this.startVideo();
+    } else {
+      lbry.getCostInfoForName(this.props.streamName, ({cost}) => {
+        lbry.getBalance((balance) => {
+          if (cost > balance) {
+            this.setState({
+              modal: 'notEnoughCredits',
+              loading: false,
+            });
+          } else {
+            this.startVideo();
+          }
+        });
+      });
+    }
   },
   getInitialState: function() {
     return {
@@ -190,7 +199,9 @@ let FileActionsRow = React.createClass({
 
     return (
       <div>
-        {(this.props.metadata.content_type && this.props.metadata.content_type.startsWith('video/')) ? <WatchLink streamName={this.props.streamName} /> : null}
+        {this.props.metadata.content_type && this.props.metadata.content_type.startsWith('video/')
+          ? <WatchLink streamName={this.props.streamName} downloadStarted={!!this.state.fileInfo} />
+          : null}
         {this.state.fileInfo !== null || this.state.fileInfo.isMine
           ? linkBlock
           : null}
