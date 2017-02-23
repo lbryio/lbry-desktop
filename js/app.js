@@ -232,7 +232,6 @@ var App = React.createClass({
               : null}
 
           </Modal>
-          // TODO: have color refence css color-primary
           <Modal isOpen={this.state.modal == 'downloading'} contentLabel="Downloading Update" type="custom">
             Downloading Update: {this.state.downloadProgress}% Complete
             <Line percent={this.state.downloadProgress} strokeWidth="4"/>
