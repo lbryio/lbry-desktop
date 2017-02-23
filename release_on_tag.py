@@ -108,11 +108,11 @@ def _upload_asset(release, asset_to_upload, token):
     # TODO: actually set the content type
     cmd = [
         'curl',
+        '--data-binary', str('@{}'.format(asset_to_upload)),
         '-sS',
+        '--header', 'Content-Type:application/octet-stream',
         '-X', 'POST',
         '-u', ':{}'.format(os.environ['GH_TOKEN']),
-        '--header', 'Content-Type:application/octet-stream',
-        '--data-binary', str('@{}'.format(asset_to_upload)),
         str(upload_uri)
     ]
     print 'Calling curl:'
