@@ -34,7 +34,7 @@ var LoadScreen = React.createClass({
             <BusyMessage message={this.props.message} />
           </h3>
           {this.props.isWarning ? <Icon icon="icon-warning" /> : null} <span className={'load-screen__details ' + (this.props.isWarning ? 'load-screen__details--warning' : '')}>{this.props.details}</span>
-          {this.props.isWarning
+          {window.history.length > 1
             ? <div><Link label="Cancel" onClick={this.handleCancelClick} className='load-screen__cancel-link button-text' /></div>
             : null}
         </div>

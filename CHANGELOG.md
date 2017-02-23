@@ -18,7 +18,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
   *
 
 ### Fixed
-  *
+  * On load screen, always show Cancel link if a previous page is available
   *
   *
 
