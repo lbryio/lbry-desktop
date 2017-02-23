@@ -18,7 +18,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
   *
 
 ### Fixed
-  *
+  * When user hits "Watch," don't check balance if download already started
   *
   *
 
