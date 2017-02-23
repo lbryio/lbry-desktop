@@ -131,10 +131,10 @@ def _curl_uploader(upload_uri, asset_to_upload, token):
         '-X', 'POST',
         '-u', ':{}'.format(os.environ['GH_TOKEN']),
         '--header', 'Content-Type: application/json',
-        '-d', '{"some_key": "some_value"}',
+        '--data-binary', str('@{}'.format(asset_to_upload)),
         str(upload_uri)
     ]
-    # '--data-binary', str('@{}'.format(asset_to_upload)),
+    #'-d', '{"some_key": "some_value"}',
     print 'Calling curl:'
     print cmd
     print
