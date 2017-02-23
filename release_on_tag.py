@@ -33,7 +33,6 @@ def main(args=None):
     gh_token = os.environ['GH_TOKEN']
     auth = github.Github(gh_token)
     app_repo = auth.get_repo('lbryio/lbry-app')
-    # TODO: switch lbryio/lbrynet-daemon to lbryio/lbry
     daemon_repo = auth.get_repo('lbryio/lbry')
 
     if not check_repo_has_tag(app_repo, current_tag):

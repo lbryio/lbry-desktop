@@ -106,7 +106,7 @@ def main():
 
     github_repo.create_git_release(current_tag, current_tag, release_msg, draft=True)
     lbrynet_daemon_release_msg = changelogs.get('lbry', NO_CHANGE)
-    auth.get_repo('lbryio/lbrynet-daemon').create_git_release(
+    auth.get_repo('lbryio/lbry').create_git_release(
         current_tag, current_tag, lbrynet_daemon_release_msg, draft=True)
 
     if not args.skip_push:
