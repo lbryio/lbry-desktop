@@ -94,7 +94,10 @@ def _upload_asset(release, asset_to_upload, token):
     if is_asset_already_uploaded(release, basename):
         return
     print 'Release upload url:', release.upload_url
-    upload_uri = uritemplate.expand(release.upload_url, {'name': platform.system()})
+    upload_uri = uritemplate.expand(
+        release.upload_url,
+        {'name': ''.join([random.choice('abcde') for _ in range(5)])}
+    )
     print upload_uri
     print repr(upload_uri)
     print asset_to_upload
