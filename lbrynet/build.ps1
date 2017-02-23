@@ -16,9 +16,7 @@ python.exe setupmingw32.py install
 cd ..\..\
 Remove-Item -Recurse -Force temp
 
-pip.exe install -r windows-requirements.txt
-pip.exe install ..\lbryum
-pip.exe install ..\lbry
 pip.exe install pyinstaller
+pip.exe install -r windows.txt
 
 pyinstaller -y lbry.onefile.spec

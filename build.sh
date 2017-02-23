@@ -39,18 +39,9 @@ pushd $ROOT/app
 npm install
 popd
 
-pushd "$ROOT/lbry"
-pip install -r requirements.txt
-# need to install our version of lbryum, not
-# what is currently on master
-pushd "$ROOT/lbryum"
-pip install .
-popd
-pip install .
-popd
-
 (
   cd "$ROOT/lbrynet"
+  pip install -r posix.txt
   pyinstaller -y lbry.onefile.spec
 )
 
