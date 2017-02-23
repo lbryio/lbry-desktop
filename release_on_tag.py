@@ -96,6 +96,12 @@ def _upload_asset(release, asset_to_upload, token):
     print 'Release upload url:', release.upload_url
     upload_uri = uritemplate.expand(
         release.upload_url, {'name': basename})
+    print upload_uri
+    print repr(upload_uri)
+    print asset_to_upload
+    print repr(asset_to_upload)
+    print asset_to_upload.strip()
+    print repr(asset_to_upload.strip())
     # using requests.post fails miserably with SSL EPIPE errors. I spent
     # half a day trying to debug before deciding to switch to curl.
     #
