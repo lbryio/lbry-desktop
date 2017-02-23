@@ -1,11 +1,13 @@
 import os
 import platform
+import subprocess
 import sys
 import zipfile
 
 
 def main():
-    zipfilename = 'lbrynet-daemon-{}.zip'.format(get_system_label())
+    tag = subprocess.check_output(['git', 'describe']).strip()
+    zipfilename = 'lbrynet-daemon-{}-{}.zip'.format(tag, get_system_label())
     full_filename = os.path.join('dist', zipfilename)
     executable = 'lbrynet-daemon'
     if platform.system() == 'Windows':
