@@ -97,7 +97,8 @@ def upload_asset(release, asset_to_upload, token):
 def _upload_asset(release, asset_to_upload, token, uploader):
     basename = os.path.basename(asset_to_upload)
     upload_uri = uritemplate.expand(
-        release.upload_url
+        release.upload_url,
+        {'name': basename}
     )
     output = uploader(upload_uri, asset_to_upload, token)
     if 'errors' in output:
@@ -115,6 +116,9 @@ def _requests_uploader(upload_uri, asset_to_upload, token):
     return output
 
 
+# curl -H "Content-Type: application/json" -X POST -d '{"username":"xyz","password":"xyz"}' http://localhost:3000/api/login
+
+
 def _curl_uploader(upload_uri, asset_to_upload, token):
     # using requests.post fails miserably with SSL EPIPE errors. I spent
     # half a day trying to debug before deciding to switch to curl.
@@ -126,10 +130,11 @@ def _curl_uploader(upload_uri, asset_to_upload, token):
         '-sS',
         '-X', 'POST',
         '-u', ':{}'.format(os.environ['GH_TOKEN']),
-        '--header', 'Content-Type:application/octet-stream',
-        '--data-binary', str('@{}'.format(asset_to_upload)),
+        '--header', 'Content-Type: application/json',
+        '-d', '{"some_key": "some_value"}',
         str(upload_uri)
     ]
+    # '--data-binary', str('@{}'.format(asset_to_upload)),
     print 'Calling curl:'
     print cmd
     print
