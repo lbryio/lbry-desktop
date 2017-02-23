@@ -57,7 +57,7 @@ export let FileTileStream = React.createClass({
   _isMounted: null,
 
   propTypes: {
-    metadata: React.PropTypes.object,
+    metadata: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.object]),
     sdHash: React.PropTypes.string,
     hideOnRemove: React.PropTypes.bool,
     hidePrice: React.PropTypes.bool,

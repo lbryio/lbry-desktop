@@ -58,7 +58,7 @@ let FileActionsRow = React.createClass({
   propTypes: {
     streamName: React.PropTypes.string,
     sdHash: React.PropTypes.string.isRequired,
-    metadata: React.PropTypes.object
+    metadata: React.PropTypes.oneOfType([React.PropTypes.object, React.PropTypes.string]),
   },
   getInitialState: function() {
     return {
@@ -226,7 +226,7 @@ export let FileActions = React.createClass({
   propTypes: {
     streamName: React.PropTypes.string,
     sdHash: React.PropTypes.string.isRequired,
-    metadata: React.PropTypes.object
+    metadata: React.PropTypes.oneOfType([React.PropTypes.object, React.PropTypes.string]),
   },
   getInitialState: function() {
     return {
