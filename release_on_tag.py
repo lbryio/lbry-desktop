@@ -81,40 +81,51 @@ def get_daemon_artifact():
 
 
 def upload_asset(release, asset_to_upload, token):
-    count = 0
-    while count < 10:
-        try:
-            return _upload_asset(release, asset_to_upload, token)
-        except Exception:
-            count += 1
-
-
-def _upload_asset(release, asset_to_upload, token):
     basename = os.path.basename(asset_to_upload)
     if is_asset_already_uploaded(release, basename):
         return
-    print 'Release upload url:', release.upload_url
-    upload_uri = uritemplate.expand(
-        release.upload_url,
-        {'name': ''.join([random.choice('abcde') for _ in range(5)])}
-    )
-    print upload_uri
-    print repr(upload_uri)
-    print asset_to_upload
-    print repr(asset_to_upload)
-    print asset_to_upload.strip()
-    print repr(asset_to_upload.strip())
+    count = 0
+    uploaders = [_requests_uploader, _curl_uploader]
+    while count < 10:
+        uploader = uploaders[count % len(uploaders)]
+        try:
+            return _upload_asset_requests(release, asset_to_upload, token, uploader)
+        except Exception:
+            log.exception('Failed to upload')
+            count += 1
+
+
+def _upload_asset_requests(release, asset_to_upload, token, uploader):
+    basename = os.path.basename(asset_to_upload)
+    upload_uri = uritemplate.expand(release.upload_url, {'name': basename})
+    output = uploader(upload_uri, asset_to_upload, token)
+    if 'errors' in output:
+        raise Exception(output)
+    else:
+        log.info('Successfully uploaded to %s', output['browser_download_url'])
+
+
+def _requests_uploader(upload_uri, asset_to_upload, token):
+    log.info('Using requests to upload %s to %s', asset_to_upload, upload_uri)
+    with open(asset_to_upload, 'rb') as f:
+        response = requests.post(upload_uri, data=f, auth=('', token))
+    output = response.json()
+    return output
+
+
+def _curl_uploader(upload_uri, asset_to_upload, token):
     # using requests.post fails miserably with SSL EPIPE errors. I spent
     # half a day trying to debug before deciding to switch to curl.
     #
     # TODO: actually set the content type
+    log.info('Using curl to upload %s to %s', asset_to_upload, upload_uri)
     cmd = [
         'curl',
-        '--data-binary', str('@{}'.format(asset_to_upload)),
         '-sS',
-        '--header', 'Content-Type:application/octet-stream',
         '-X', 'POST',
         '-u', ':{}'.format(os.environ['GH_TOKEN']),
+        '--header', 'Content-Type:application/octet-stream',
+        '--data-binary', str('@{}'.format(asset_to_upload)),
         str(upload_uri)
     ]
     print 'Calling curl:'
@@ -129,10 +140,7 @@ def _upload_asset(release, asset_to_upload, token):
     print 'stdout from curl:'
     print stdout
     output = json.loads(stdout)
-    if 'errors' in output:
-        raise Exception(output)
-    else:
-        log.info('Successfully uploaded to %s', output['browser_download_url'])
+    return output
 
 
 def is_asset_already_uploaded(release, basename):
