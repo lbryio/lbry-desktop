@@ -3,6 +3,7 @@
 import React from 'react';
 import lbry from '../lbry.js';
 import {Link} from '../component/link.js';
+import {version as uiVersion} from 'json!../../package.json';
 
 var HelpPage = React.createClass({
   getInitialState: function() {
@@ -27,7 +28,7 @@ var HelpPage = React.createClass({
     document.title = "Help";
   },
   render: function() {
-    let ver, osName, platform, newVerLink, uiVersion;
+    let ver, osName, platform, newVerLink;
     if (this.state.versionInfo) {
       ver = this.state.versionInfo;
 
@@ -42,12 +43,6 @@ var HelpPage = React.createClass({
       } else {
         platform = `Windows (${ver.platform})`;
         newVerLink = 'https://lbry.io/get/lbry.msi';
-      }
-
-      if (ver.ui_version == 'user-specified') {
-        uiVersion = '(User specified)';
-      } else {
-        uiVersion = ver.ui_version || '(Unknown)';
       }
     } else {
       ver = null;

@@ -20,7 +20,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
 ### Fixed
   * On load screen, always show Cancel link if a previous page is available
   * When user hits "Watch," don't check balance if download already started
-  *
+  * Restore UI version on Help page
   *
 
 ## [0.9.0rc9] - 2017-02-22
