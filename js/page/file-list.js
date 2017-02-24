@@ -75,6 +75,12 @@ export let FileListPublished = React.createClass({
     document.title = "Published Files";
 
     lbry.getMyClaims((claimInfos) => {
+      if (claimInfos.length == 0) {
+        this.setState({
+          fileInfos: [],
+        });
+      }
+
       /**
        * Build newFileInfos as a sparse array and drop elements in at the same position they
        * occur in claimInfos, so the order is preserved even if the API calls inside this loop
@@ -116,7 +122,7 @@ export let FileListPublished = React.createClass({
     else if (!this.state.fileInfos.length) {
       return (
         <main className="page">
-          <span>You haven't published anything to LBRY yet.</span> Try <Link href="/?publish" label="publishing" />!
+          <span>You haven't published anything to LBRY yet.</span> Try <Link href="index.html?publish" label="publishing" />!
         </main>
       );
     }
