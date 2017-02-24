@@ -252,9 +252,11 @@ export let FileActions = React.createClass({
     });
   },
   onFileInfoUpdate: function(fileInfo) {
-    this.setState({
-      fileInfo: fileInfo,
-    });
+    if (this.isMounted) {
+      this.setState({
+        fileInfo: fileInfo,
+      });      
+    }
   },
   componentDidMount: function() {
     this._isMounted = true;
