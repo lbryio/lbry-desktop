@@ -75,6 +75,12 @@ export let FileListPublished = React.createClass({
     document.title = "Published Files";
 
     lbry.getMyClaims((claimInfos) => {
+      if (claimInfos.length == 0) {
+        this.setState({
+          fileInfos: [],
+        });
+      }
+
       /**
        * Build newFileInfos as a sparse array and drop elements in at the same position they
        * occur in claimInfos, so the order is preserved even if the API calls inside this loop
