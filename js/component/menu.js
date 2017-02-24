@@ -42,7 +42,7 @@ export let DropDownMenu = React.createClass({
       window.removeEventListener('click', this.handleWindowClick, false);
     }
   },
-  onMenuIconClick: function(e) {
+  handleMenuIconClick: function(e) {
     this.setState({
       menuOpen: !this.state.menuOpen,
     });
@@ -52,6 +52,12 @@ export let DropDownMenu = React.createClass({
       e.stopPropagation();
     }
     return false;
+  },
+  handleMenuClick: function(e) {
+    // Event bubbles up to the menu after a link is clicked
+    this.setState({
+      menuOpen: false,
+    });
   },
   handleWindowClick: function(e) {
     if (this.state.menuOpen &&
@@ -68,9 +74,9 @@ export let DropDownMenu = React.createClass({
     }
     return (
       <div className="menu-container">
-        <Link ref={(span) => this._menuButton = span} button="text" icon="icon-ellipsis-v" onClick={this.onMenuIconClick} />
+        <Link ref={(span) => this._menuButton = span} button="text" icon="icon-ellipsis-v" onClick={this.handleMenuIconClick} />
         {this.state.menuOpen
-          ? <div ref={(div) => this._menuDiv = div} className="menu">
+          ? <div ref={(div) => this._menuDiv = div} className="menu" onClick={this.handleMenuClick}>
               {this.props.children}
             </div>
           : null}
