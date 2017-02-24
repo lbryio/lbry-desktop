@@ -116,7 +116,7 @@ export let FileListPublished = React.createClass({
     else if (!this.state.fileInfos.length) {
       return (
         <main className="page">
-          <span>You haven't published anything to LBRY yet.</span> Try <Link href="/?publish" label="publishing" />!
+          <span>You haven't published anything to LBRY yet.</span> Try <Link href="index.html?publish" label="publishing" />!
         </main>
       );
     }
