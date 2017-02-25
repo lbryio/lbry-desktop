@@ -18,7 +18,7 @@ import DeveloperPage from './page/developer.js';
 import {FileListDownloaded, FileListPublished} from './page/file-list.js';
 import Drawer from './component/drawer.js';
 import Header from './component/header.js';
-import Modal from './component/modal.js';
+import {Modal, ExpandableModal} from './component/modal.js';
 import {Link} from './component/link.js';
 
 
@@ -236,19 +236,16 @@ var App = React.createClass({
             Downloading Update: {this.state.downloadProgress}% Complete
             <Line percent={this.state.downloadProgress} strokeWidth="4"/>
           </Modal>
-          <Modal isOpen={this.state.modal == 'error'} contentLabel="Error" type="custom"
-                 className="error-modal" overlayClassName="error-modal-overlay"  >
+          <ExpandableModal isOpen={this.state.modal == 'error'} contentLabel="Error" className="error-modal"
+                           overlayClassName="error-modal-overlay" onConfirmed={this.closeModal}
+                           extraContent={this.state.errorInfo}>
             <h3 className="modal__header">Error</h3>
 
             <div className="error-modal__content">
               <div><img className="error-modal__warning-symbol" src={lbry.imagePath('warning.png')} /></div>
               <p>We're sorry that LBRY has encountered an error. This has been reported and we will investigate the problem.</p>
             </div>
-            {this.state.errorInfo}
-            <div className="modal__buttons">
-              <Link button="alt" label="OK" className="modal__button" onClick={this.closeModal} />
-            </div>
-          </Modal>
+          </ExpandableModal>
         </div>
     );
   }

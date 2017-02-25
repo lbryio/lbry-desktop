@@ -13,7 +13,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
   *
 
 ### Changed
-  *
+  * In error modal, hide details in expandable section
   *
   *
 
