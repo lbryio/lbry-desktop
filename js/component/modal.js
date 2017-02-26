@@ -3,7 +3,7 @@ import ReactModal from 'react-modal';
 import {Link} from './link.js';
 
 
-var Modal = React.createClass({
+export const Modal = React.createClass({
   propTypes: {
     type: React.PropTypes.oneOf(['alert', 'confirm', 'custom']),
     onConfirmed: React.PropTypes.func,
@@ -23,42 +23,61 @@ var Modal = React.createClass({
     };
   },
   render: function() {
-    var props = Object.assign({}, this.props);
-
-    if (typeof props.className == 'undefined') {
-      props.className = 'modal';
-    } else {
-      props.className += ' modal';
-    }
-
-    if (typeof props.overlayClassName == 'undefined') {
-      props.overlayClassName = 'modal-overlay';
-    } else {
-      props.overlayClassName += ' modal-overlay';
-    }
-
-    props.onCloseRequested = props.onAborted || props.onConfirmed;
-
-    if (this.props.type == 'custom') {
-      var buttons = null;
-    } else {
-      var buttons = (
-        <div className="modal__buttons">
-          {this.props.type == 'confirm'
-            ? <Link button="alt" label={props.abortButtonLabel} className="modal__button" disabled={this.props.abortButtonDisabled} onClick={props.onAborted} />
-            : null}
-          <Link button="primary" label={props.confirmButtonLabel} className="modal__button" disabled={this.props.confirmButtonDisabled} onClick={props.onConfirmed} />
-        </div>
-      );
-    }
-
     return (
-      <ReactModal {...props}>
-         <div>
-           {this.props.children}
-         </div>
-         {buttons}
+      <ReactModal onCloseRequested={this.props.onAborted || this.props.onConfirmed} {...this.props}
+                  className={(this.props.className || '') + ' modal'}
+                  overlayClassName={(this.props.overlayClassName || '') + ' modal-overlay'}>
+        <div>
+          {this.props.children}
+        </div>
+        {this.props.type == 'custom' // custom modals define their own buttons
+          ? null
+          : <div className="modal__buttons">
+              {this.props.type == 'confirm'
+                ? <Link button="alt" label={this.props.abortButtonLabel} className="modal__button" disabled={this.props.abortButtonDisabled} onClick={this.props.onAborted} />
+                : null}
+              <Link button="primary" label={this.props.confirmButtonLabel} className="modal__button" disabled={this.props.confirmButtonDisabled} onClick={this.props.onConfirmed} />
+            </div>}
       </ReactModal>
+    );
+  }
+});
+
+export const ExpandableModal = React.createClass({
+  propTypes: {
+    expandButtonLabel: React.PropTypes.string,
+    extraContent: React.PropTypes.element,
+  },
+  getDefaultProps: function() {
+    return {
+      confirmButtonLabel: 'OK',
+      expandButtonLabel: 'Show More...',
+      hideButtonLabel: 'Show Less',
+    }
+  },
+  getInitialState: function() {
+    return {
+      expanded: false,
+    }
+  },
+  toggleExpanded: function() {
+    this.setState({
+      expanded: !this.state.expanded,
+    });
+  },
+  render: function() {
+    return (
+      <Modal type="custom" {... this.props}>
+        {this.props.children}
+        {this.state.expanded
+          ? this.props.extraContent
+          : null}
+        <div className="modal__buttons">
+          <Link button="primary" label={this.props.confirmButtonLabel} className="modal__button" onClick={this.props.onConfirmed} />
+          <Link button="alt" label={!this.state.expanded ? this.props.expandButtonLabel : this.props.hideButtonLabel}
+                className="modal__button" onClick={this.toggleExpanded} />
+        </div>
+      </Modal>
     );
   }
 });
