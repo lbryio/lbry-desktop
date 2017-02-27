@@ -255,7 +255,7 @@ lbry.getFeaturedDiscoverNames = function(callback) {
     xhr.open('GET', 'https://api.lbry.io/discover/list', true);
     xhr.onload = () => {
       if (xhr.status === 200) {
-        responseData = JSON.parse(xhr.responseText);
+        var responseData = JSON.parse(xhr.responseText);
         if (responseData.data) //new signature, once api.lbry.io is updated
         {
           resolve(responseData.data);
