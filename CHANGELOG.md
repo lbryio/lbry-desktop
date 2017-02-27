@@ -8,20 +8,30 @@ Web UI version numbers should always match the corresponding version of LBRY App
 
 ## [Unreleased]
 ### Added
-  * "Back to LBRY" button on Watch page
+  *
   *
   *
 
 ### Changed
-  * In error modal, hide details in expandable section
+  *
   *
   *
 
 ### Fixed
-  * On load screen, always show Cancel link if a previous page is available
-  * When user hits "Watch," don't check balance if download already started
-  * Restore UI version on Help page
-  * Fix sorting on My Files page
+  *
+  *
+  *
+
+## [0.9.0rc11] - 2017-02-27
+### Added
+ * "Back to LBRY" button on Watch page
+### Changed
+ * In error modal, hide details in expandable section
+### Fixed
+ * On load screen, always show Cancel link if a previous page is available
+ * When user hits "Watch," don't check balance if download already started
+ * Restore UI version on Help page
+ * Fix sorting on My Files page
 
 ## [0.9.0rc9] - 2017-02-22
 ### Changed
