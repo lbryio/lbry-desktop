@@ -403,9 +403,9 @@ var PublishPage = React.createClass({
           </section>
 
           <div className="card-series-submit">
-           <Link button="primary" label={!this.state.submitting ? 'Publish' : 'Publishing...'} onClick={this.handleSubmit} disabled={this.state.submitting} />
-           <Link button="cancel" href="/" label="Cancel"/>
-           <input type='submit' className='hidden' />
+            <Link button="primary" label={!this.state.submitting ? 'Publish' : 'Publishing...'} onClick={this.handleSubmit} disabled={this.state.submitting} />
+            <Link button="cancel" onClick={window.history.back} label="Cancel" />
+            <input type="submit" className="hidden" />
           </div>
         </form>
 

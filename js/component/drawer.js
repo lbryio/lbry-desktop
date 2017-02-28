@@ -37,7 +37,7 @@ var Drawer = React.createClass({
       <nav id="drawer">
         <div id="drawer-handle">
           <Link title="Close" onClick={this.props.onCloseDrawer} icon="icon-bars" className="close-drawer-link"/>
-        <a href="/"><img src={lbry.imagePath("lbry-dark-1600x528.png")} style={drawerImageStyle}/></a>
+          <a href="index.html?discover"><img src={lbry.imagePath("lbry-dark-1600x528.png")} style={drawerImageStyle}/></a>
         </div>
         <DrawerItem href='index.html?discover' viewingPage={this.props.viewingPage} label="Discover" icon="icon-search"  />
         <DrawerItem href='index.html?publish' viewingPage={this.props.viewingPage} label="Publish" icon="icon-upload" />
