@@ -4,18 +4,6 @@ import FormField from '../component/form.js';
 import {Link} from '../component/link.js';
 import Modal from '../component/modal.js';
 
-
-var publishNumberStyle = {
-  width: '50px',
-}, publishFieldLabelStyle = {
-  display: 'inline-block',
-  width: '118px',
-  textAlign: 'right',
-  verticalAlign: 'top',
-}, publishFieldStyle = {
-  width: '330px',
-};
-
 var PublishPage = React.createClass({
   _requiredFields: ['name', 'bid', 'meta_title', 'meta_author', 'meta_license', 'meta_description'],
 
@@ -301,7 +289,7 @@ var PublishPage = React.createClass({
           <section className="card">
             <h4>Bid Amount</h4>
             <div className="form-row">
-              Credits <FormField ref="bid" style={publishNumberStyle} type="text" onChange={this.handleBidChange} value={this.state.bid} placeholder={this.state.nameResolved ? this.state.topClaimValue + 10 : 100} />
+              Credits <FormField ref="bid" type="text-number" onChange={this.handleBidChange} value={this.state.bid} placeholder={this.state.nameResolved ? this.state.topClaimValue + 10 : 100} />
               <div className="help">How much would you like to bid for this name?
               { !this.state.nameResolved ? <span> Since this name is not currently resolved, you may bid as low as you want, but higher bids help prevent others from claiming your name.</span>
                                          : (this.state.topClaimIsMine ? <span> You currently control this name with a bid of <strong>{this.state.myClaimValue}</strong> {this.state.myClaimValue == 1 ? 'credit' : 'credits'}.</span>
@@ -321,7 +309,7 @@ var PublishPage = React.createClass({
               <label>
                <FormField type="radio" onChange={ () => { this.handleFeePrefChange(true) } } checked={this.state.isFee} /> { !this.state.isFee ? 'Choose fee...' : 'Fee ' }
                <span className={!this.state.isFee ? 'hidden' : ''}>
-                 <FormField type="text" onChange={this.handleFeeAmountChange} style={publishNumberStyle} /> <FormField type="select" onChange={this.handleFeeCurrencyChange}>
+                 <FormField type="text-number" onChange={this.handleFeeAmountChange} /> <FormField type="select" onChange={this.handleFeeCurrencyChange}>
                    <option value="USD">US Dollars</option>
                    <option value="LBC">LBRY credits</option>
                  </FormField>
@@ -339,10 +327,10 @@ var PublishPage = React.createClass({
             <h4>Your Content</h4>
 
             <div className="form-row">
-              <label htmlFor="title">Title</label><FormField type="text" ref="meta_title" name="title" placeholder="My Show, Episode 1" style={publishFieldStyle} />
+              <label htmlFor="title">Title</label><FormField type="text" ref="meta_title" name="title" placeholder="My Show, Episode 1" />
             </div>
             <div className="form-row">
-              <label htmlFor="author">Author</label><FormField type="text" ref="meta_author" name="author" placeholder="My Company, Inc." style={publishFieldStyle} />
+              <label htmlFor="author">Author</label><FormField type="text" ref="meta_author" name="author" placeholder="My Company, Inc." />
             </div>
             <div className="form-row">
             <label htmlFor="license">License</label><FormField type="select" ref="meta_license" name="license" onChange={this.handeLicenseChange}>
@@ -360,17 +348,17 @@ var PublishPage = React.createClass({
             </div>
             {this.state.copyrightChosen
               ? <div className="form-row">
-                  <label htmlFor="copyright-notice" value={this.state.copyrightNotice}>Copyright notice</label><FormField type="text" name="copyright-notice" value={this.state.copyrightNotice} onChange={this.handleCopyrightNoticeChange} style={publishFieldStyle} />
+                  <label htmlFor="copyright-notice" value={this.state.copyrightNotice}>Copyright notice</label><FormField type="text" name="copyright-notice" value={this.state.copyrightNotice} onChange={this.handleCopyrightNoticeChange} />
                 </div>
               : null}
             {this.state.otherLicenseChosen
               ? <div className="form-row">
-                  <label htmlFor="other-license-description">License description</label><FormField type="text" name="other-license-description" onChange={this.handleOtherLicenseDescriptionChange} style={publishFieldStyle} />
+                  <label htmlFor="other-license-description">License description</label><FormField type="text" name="other-license-description" onChange={this.handleOtherLicenseDescriptionChange} />
                 </div>
               : null}
             {this.state.otherLicenseChosen
               ? <div className="form-row">
-                  <label htmlFor="other-license-url">License URL</label> <FormField type="text" name="other-license-url" style={publishFieldStyle} onChange={this.handleOtherLicenseUrlChange} />
+                  <label htmlFor="other-license-url">License URL</label> <FormField type="text" name="other-license-url" onChange={this.handleOtherLicenseUrlChange} />
                 </div>
               : null}
 
@@ -386,7 +374,7 @@ var PublishPage = React.createClass({
               </FormField>
             </div>
             <div className="form-row">
-              <label htmlFor="description">Description</label> <FormField type="textarea" ref="meta_description" name="description" placeholder="Description of your content" style={publishFieldStyle} />
+              <label htmlFor="description">Description</label> <FormField type="textarea" ref="meta_description" name="description" placeholder="Description of your content" />
             </div>
             <div className="form-row">
               <label><FormField type="checkbox" ref="meta_nsfw" name="nsfw" placeholder="Description of your content" /> Not Safe For Work</label>
@@ -398,7 +386,7 @@ var PublishPage = React.createClass({
           <section className="card">
             <h4>Additional Content Information (Optional)</h4>
             <div className="form-row">
-              <label htmlFor="meta_thumbnail">Thumbnail URL</label> <FormField type="text" ref="meta_thumbnail" name="thumbnail" placeholder="http://mycompany.com/images/ep_1.jpg" style={publishFieldStyle} />
+              <label htmlFor="meta_thumbnail">Thumbnail URL</label> <FormField type="text" ref="meta_thumbnail" name="thumbnail" placeholder="http://mycompany.com/images/ep_1.jpg" />
             </div>
           </section>
 
