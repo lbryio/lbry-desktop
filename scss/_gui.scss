@@ -308,6 +308,13 @@ input[type="text"], input[type="search"]
   color: #fff;
 }
 
+.form-field-label {
+  width: 118px;
+  text-align: right;
+  vertical-align: top;
+  display: inline-block;
+}
+
 
 .sort-section {
   display: block;
