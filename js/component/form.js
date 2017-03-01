@@ -22,9 +22,12 @@ var FormField = React.createClass({
     }
   },
   componentWillMount: function() {
-    if (['text', 'radio', 'checkbox', 'file'].indexOf(this.props.type) != -1) {
+    if (['text', 'radio', 'checkbox', 'file'].includes(this.props.type)) {
       this._element = 'input';
       this._type = this.props.type;
+    } else if (this.props.type == 'text-number') {
+      this._element = 'input';
+      this._type = 'text';
     } else {
       // Non <input> field, e.g. <select>, <textarea>
       this._element = this.props.type;
@@ -56,8 +59,7 @@ var FormField = React.createClass({
   getValue: function() {
     if (this.props.type == 'checkbox') {
       return this.refs.field.checked;
-    }
-    else if (this.props.type == 'file') {
+    } else if (this.props.type == 'file') {
       return this.refs.field.files[0].path;
     } else {
       return this.refs.field.value;
@@ -68,7 +70,7 @@ var FormField = React.createClass({
   },
   render: function() {
     // Pass all unhandled props to the field element
-    var otherProps = Object.assign({}, this.props);
+    const otherProps = Object.assign({}, this.props);
     delete otherProps.type;
     delete otherProps.hidden;
 
@@ -76,6 +78,7 @@ var FormField = React.createClass({
       !this.props.hidden
         ? <div className="form-field-container">
             <this._element type={this._type} className="form-field" name={this.props.name} ref="field" placeholder={this.props.placeholder}
+              className={'form-field--' + this.props.type + ' ' + (this.props.className || '')}
               {...otherProps}>
               {this.props.children}
             </this._element>

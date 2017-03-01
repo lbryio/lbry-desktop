@@ -255,6 +255,14 @@ input[type="text"], input[type="search"]
   display: inline-block;
 }
 
+.form-field--text {
+  width: 330px;
+}
+
+.form-field--text-number {
+  width: 50px;
+}
+
 .form-field-advice-container {
   position: relative;
 }
