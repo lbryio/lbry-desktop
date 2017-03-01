@@ -13,8 +13,8 @@ Web UI version numbers should always match the corresponding version of LBRY App
   *
 
 ### Changed
-  *
-  *
+  * Improved ability to style FormFields and form field labels
+  * Refactored Publish page to use form field changes
   *
 
 ### Fixed
