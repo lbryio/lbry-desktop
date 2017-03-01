@@ -33,12 +33,11 @@ var Drawer = React.createClass({
     }.bind(this));
   },
   render: function() {
-    var isLinux = false && /linux/i.test(navigator.userAgent); // @TODO: find a way to use getVersionInfo() here without messy state management
     return (
       <nav id="drawer">
         <div id="drawer-handle">
           <Link title="Close" onClick={this.props.onCloseDrawer} icon="icon-bars" className="close-drawer-link"/>
-        <a href="/"><img src={lbry.imagePath("lbry-dark-1600x528.png")} style={drawerImageStyle}/></a>
+          <a href="index.html?discover"><img src={lbry.imagePath("lbry-dark-1600x528.png")} style={drawerImageStyle}/></a>
         </div>
         <DrawerItem href='index.html?discover' viewingPage={this.props.viewingPage} label="Discover" icon="icon-search"  />
         <DrawerItem href='index.html?publish' viewingPage={this.props.viewingPage} label="Publish" icon="icon-upload" />
@@ -46,7 +45,6 @@ var Drawer = React.createClass({
         <DrawerItem href="index.html?wallet" subPages={['send', 'receive', 'claim', 'referral']} viewingPage={this.props.viewingPage}  label="My Wallet" badge={lbry.formatCredits(this.state.balance) } icon="icon-bank" />
         <DrawerItem href='index.html?settings' viewingPage={this.props.viewingPage}  label="Settings" icon='icon-gear' />
         <DrawerItem href='index.html?help' viewingPage={this.props.viewingPage}  label="Help" icon='icon-question-circle' />
-        {isLinux ? <Link href="index.html?start" icon="icon-close" className="close-lbry-link" /> : null}
       </nav>
     );
   }
