@@ -255,6 +255,14 @@ input[type="text"], input[type="search"]
   display: inline-block;
 }
 
+.form-field--text {
+  width: 330px;
+}
+
+.form-field--text-number {
+  width: 50px;
+}
+
 .form-field-advice-container {
   position: relative;
 }
@@ -298,6 +306,13 @@ input[type="text"], input[type="search"]
 
   background-color: darken($color-primary, 5%);
   color: #fff;
+}
+
+.form-field-label {
+  width: 118px;
+  text-align: right;
+  vertical-align: top;
+  display: inline-block;
 }
 
 
