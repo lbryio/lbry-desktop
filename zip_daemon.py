@@ -19,9 +19,9 @@ def main():
 def get_system_label():
     system = platform.system()
     if system == 'Darwin':
-        return 'macOS'
+        return 'macos'
     else:
-        return system
+        return system.lower()
 
 
 if __name__ == '__main__':

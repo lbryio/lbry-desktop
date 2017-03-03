@@ -4,6 +4,8 @@ set -o xtrace
 set -eu
 
 ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+cd "$ROOT"
+
 if [ "$(uname)" == "Darwin" ]; then
     ICON="$ROOT/build/icon.icns"
 else
@@ -11,9 +13,7 @@ else
 fi
 
 FULL_BUILD="${FULL_BUILD:-false}"
-if [ -n "${TEAMCITY_VERSION:-}" ]; then
-  FULL_BUILD="true"
-elif [ -n "${APPVEYOR:-}" ]; then
+if [ -n "${TEAMCITY_VERSION:-}" -o -n "${APPVEYOR:-}" ]; then
   FULL_BUILD="true"
 fi
 
@@ -30,18 +30,19 @@ if [ "$FULL_BUILD" == "true" ]; then
   source "$VENV/bin/activate"
   set -u
   pip install -U pip setuptools pyinstaller
-  python set_version.py
-  python set_build.py
+  python "$ROOT/set_version.py"
+  python "$ROOT/set_build.py"
 fi
 
 npm install
-pushd $ROOT/app
-npm install
-popd
+(
+  cd "$ROOT/app"
+  npm install
+)
 
 (
-  cd "$ROOT/lbrynet"
-  pip install -r posix.txt
+  cd "$ROOT/lbrynet-daemon"
+  pip install -r linux_macos.txt
   pyinstaller -y lbry.onefile.spec
 )
 
@@ -54,7 +55,7 @@ popd
   cp -r dist "$ROOT/app/dist"
 )
 
-mv "$ROOT/lbrynet/dist/lbrynet-daemon" "$ROOT/app/dist"
+mv "$ROOT/lbrynet-daemon/dist/lbrynet-daemon" "$ROOT/app/dist"
 
 
 if [ "$FULL_BUILD" == "true" ]; then

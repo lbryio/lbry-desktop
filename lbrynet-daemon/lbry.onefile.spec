@@ -6,7 +6,7 @@ import lbryum
 
 
 cwd = os.getcwd()
-if os.path.basename(cwd) != 'lbrynet':
+if os.path.basename(cwd) != 'lbrynet-daemon':
     raise Exception('The build needs to be run from the same directory as the spec file')
 repo_base = os.path.abspath(os.path.join(cwd, '..'))
 

@@ -121,7 +121,7 @@ function shutdownDaemon() {
     // TODO: In this case, we didn't start the process so I'm hesitant
     //       to shut it down. We might want to send a stop command
     //       though instead of just letting it run.
-    console.log('Not killing lbrynet because we did not start it')
+    console.log('Not killing lbrynet daemon because we did not start it')
     return
   }
   if (win) {
