@@ -173,8 +173,7 @@ def check_bumpversion():
 
 def get_part(args, name):
     if name == 'lbry-web-ui':
-        part = getattr(args, 'ui_part')
-        return part or args.lbry_part
+        return args.ui_part or args.lbry_part
     else:
         return getattr(args, name + '_part')
 

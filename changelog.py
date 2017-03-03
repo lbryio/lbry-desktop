@@ -66,7 +66,7 @@ def bump(changelog, version):
             continue
         if CHANGELOG_ERROR_RE.search(line):
             raise Exception(
-                'Failed to parse {}: {}'.format(filename, 'unexpected section header found'))
+                'Failed to parse {}: {}'.format(changelog, 'unexpected section header found'))
         unreleased.append(line)
 
     today = datetime.datetime.today()
