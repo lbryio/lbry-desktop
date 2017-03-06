@@ -1,9 +1,9 @@
 [submodule "lbry-web-ui"]
 	path = lbry-web-ui
-	url = https://github.com/lbryio/lbry-web-ui.git
+	url = git@github.com:lbryio/lbry-web-ui.git
 [submodule "lbry"]
 	path = lbry
-	url = https://github.com/lbryio/lbry.git
+	url = git@github.com:lbryio/lbry.git
 [submodule "lbryum"]
 	path = lbryum
-	url = https://github.com/lbryio/lbryum.git
+	url = git@github.com:lbryio/lbryum.git
