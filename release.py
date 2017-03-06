@@ -149,7 +149,7 @@ def main():
         current_tag, current_tag, lbrynet_daemon_release_msg, draft=True)
 
     if not args.skip_push:
-        for repo in repos:
+        for repo in repos.values():
             repo.git.push(follow_tags=True)
         base.git.push(follow_tags=True, recurse_submodules='check')
     else:
