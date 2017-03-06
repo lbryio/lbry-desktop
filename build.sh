@@ -29,7 +29,7 @@ if [ "$FULL_BUILD" == "true" ]; then
   set +u
   source "$VENV/bin/activate"
   set -u
-  pip install -U pip setuptools pyinstaller
+  pip install -r "$ROOT/requirements.txt"
   python "$ROOT/set_version.py"
   python "$ROOT/set_build.py"
 fi
@@ -75,8 +75,6 @@ if [ "$FULL_BUILD" == "true" ]; then
   # electron-build has a publish feature, but I had a hard time getting
   # it to reliably work and it also seemed difficult to configure. Not proud of
   # this, but it seemed better to write my own.
-  pip install PyGithub uritemplate
-  pip install -U requests[security]
   python release_on_tag.py
   deactivate
 fi
