@@ -40,8 +40,7 @@ build_script:
   # for debugging, see what was built
   - python zip_daemon.py
   - dir dist
-  - pip install PyGithub uritemplate
-  - pip install -U requests[security]
+  - pip install -r requirements.txt
   - python release_on_tag.py
 
 test: off

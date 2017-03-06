@@ -1,7 +1,7 @@
 #!/bin/bash
 
-set -o xtrace
-set -eu
+set -euo pipefail
+set -x
 
 ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 cd "$ROOT"
@@ -34,29 +34,51 @@ if [ "$FULL_BUILD" == "true" ]; then
   python "$ROOT/set_build.py"
 fi
 
+rm -rf "$ROOT/app/dist"
+
 npm install
-(
-  cd "$ROOT/app"
-  npm install
-)
+
+####################
+#  lbrynet-daemon  #
+####################
 
 (
   cd "$ROOT/lbrynet-daemon"
   pip install -r linux_macos.txt
   pyinstaller -y lbry.onefile.spec
 )
+if [ "$FULL_BUILD" == "true" ]; then
+  # electron-build has a publish feature, but I had a hard time getting
+  # it to reliably work and it also seemed difficult to configure. Not proud of
+  # this, but it seemed better to write my own.
+  python release_on_tag.py
+fi
+mv "$ROOT/lbrynet-daemon/dist/lbrynet-daemon" "$ROOT/app/dist"
+
+
+
+############
+#    UI    #
+############
 
 (
   cd "$ROOT/lbry-web-ui"
   npm install
   node_modules/.bin/node-sass --output dist/css --sourcemap=none scss/
   node_modules/.bin/webpack
-  rm -rf "$ROOT/app/dist"
   cp -r dist "$ROOT/app/dist"
 )
 
-mv "$ROOT/lbrynet-daemon/dist/lbrynet-daemon" "$ROOT/app/dist"
 
+
+###################
+#  Build the app  #
+###################
+
+(
+  cd "$ROOT/app"
+  npm install
+)
 
 if [ "$FULL_BUILD" == "true" ]; then
   if [ "$(uname)" == "Darwin" ]; then
@@ -66,15 +88,9 @@ if [ "$FULL_BUILD" == "true" ]; then
   node_modules/.bin/build -p never
   python zip_daemon.py
 
+  deactivate
+
   echo 'Build and packaging complete.'
 else
   echo 'Build complete. Run `./node_modules/.bin/electron app` to launch the app'
-fi
-
-if [ "$FULL_BUILD" == "true" ]; then
-  # electron-build has a publish feature, but I had a hard time getting
-  # it to reliably work and it also seemed difficult to configure. Not proud of
-  # this, but it seemed better to write my own.
-  python release_on_tag.py
-  deactivate
 fi

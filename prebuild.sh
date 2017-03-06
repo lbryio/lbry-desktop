@@ -29,10 +29,10 @@ cmd_exists() {
 
 set +eu
 GITUSERNAME=$(git config --global --get user.name)
-GITEMAIL=$(git config --global --get user.email)
 if [ -z "$GITUSERNAME" ]; then
   git config --global user.name "$(whoami)"
 fi
+GITEMAIL=$(git config --global --get user.email)
 if [ -z "$GITEMAIL" ]; then
   git config --global user.email "$(whoami)@lbry.io"
 fi
