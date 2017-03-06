@@ -46,7 +46,7 @@ def main():
         choices=LBRY_PARTS
     )
     parser.add_argument(
-        "--lbryum_part", help="part of lbryum version to bump",
+        "--lbryum-part", help="part of lbryum version to bump",
         choices=LBRYUM_PARTS
     )
     parser.add_argument(
@@ -74,6 +74,9 @@ def main():
 
     if not args.skip_sanity_checks:
         run_sanity_checks(base, branch)
+
+    base_repo = Repo('lbry-app', args.lbry_part, os.getcwd())
+    base_repo.assert_new_tag_is_absent()
 
     if args.last_release:
         last_release = args.last_release
@@ -105,6 +108,10 @@ def main():
 
     get_lbryum_part_if_needed(repos['lbryum'])
 
+    # bumpversion will fail if there is already the tag we want in the repo
+    for repo in repos.values():
+        repo.assert_new_tag_is_absent()
+
     for repo in repos.values():
         logging.info('Processing repo: %s', repo.name)
         repo.checkout(args.branch)
@@ -132,8 +139,8 @@ def main():
 
     for name in names:
         base.git.add(name)
-    subprocess.check_call(['bumpversion', args.lbry_part, '--allow-dirty'])
 
+    base_repo.bumpversion()
     current_tag = base.git.describe()
 
     github_repo.create_git_release(current_tag, current_tag, release_msg, draft=True)
@@ -147,7 +154,8 @@ def main():
         base.git.push(follow_tags=True, recurse_submodules='check')
     else:
         logging.info('Skipping push; you will have to reset and delete tags if '
-                     'you want to run this script again')
+                     'you want to run this script again. Take a look at reset.sh; '
+                     'it probably does what you want.')
 
 
 def get_gh_token():
@@ -237,10 +245,10 @@ def get_part(args, name):
 
 
 class Repo(object):
-    def __init__(self, name, part):
+    def __init__(self, name, part, directory=None):
         self.name = name
         self.part = part
-        self.directory = os.path.join(os.getcwd(), name)
+        self.directory = directory or os.path.join(os.getcwd(), name)
         self.git_repo = git.Repo(self.directory)
         self.saved_commit = None
         self._bumped = False
@@ -283,6 +291,17 @@ class Repo(object):
         with pushd(self.directory):
             subprocess.check_call(['bumpversion', '--allow-dirty', self.part])
             self._bumped = True
+
+    def assert_new_tag_is_absent(self):
+        new_tag = 'v' + self.new_version()
+        tags = self.git_repo.git.tag()
+        if new_tag in tags.split('\n'):
+            raise Exception('Tag {} is already present in repo {}.'.format(new_tag, self.name))
+
+    def reset(self):
+        branch = get_branch(self.name)
+        self.git_repo.git.reset(branch, hard=True)
+        # TODO: also delete any extra tags that might have been added
 
     @property
     def git(self):
