@@ -158,7 +158,7 @@ def is_behind(base, branch):
 
 def check_bumpversion():
 
-    def requireNewVersion():
+    def require_new_version():
         print 'Install bumpversion: pip install -U git+https://github.com/lbryio/bumpversion.git'
         sys.exit(1)
 
@@ -166,15 +166,14 @@ def check_bumpversion():
         output = subprocess.check_output(['bumpversion', '-v'], stderr=subprocess.STDOUT)
         output = output.strip()
         if output != 'bumpversion 0.5.4-lbry':
-            requireNewVersion()
+            require_new_version()
     except (subprocess.CalledProcessError, OSError) as err:
-        requireNewVersion()
+        require_new_version()
 
 
 def get_part(args, name):
     if name == 'lbry-web-ui':
-        part = getattr(args, 'ui_part')
-        return part or args.lbry_part
+        return args.ui_part or args.lbry_part
     else:
         return getattr(args, name + '_part')
 

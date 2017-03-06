@@ -1,6 +1,5 @@
 """Set the build version to be 'dev', 'qa', 'rc', 'release'"""
 
-import json
 import os.path
 import re
 import subprocess

@@ -22,7 +22,7 @@ install:
   - npm install
   - cd ..
   # create lbrynet-daemon executable
-  - cd lbrynet
+  - cd lbrynet-daemon
   - ps: .\build.ps1
   - cd ..
   # build ui
@@ -32,7 +32,7 @@ install:
   - node_modules\.bin\webpack
   - ps: Copy-Item dist ..\app\ -recurse
   - cd ..
-  - ps: Copy-Item lbrynet\dist\lbrynet-daemon.exe app\dist
+  - ps: Copy-Item lbrynet-daemon\dist\lbrynet-daemon.exe app\dist
 
 build_script:
   # build electron app

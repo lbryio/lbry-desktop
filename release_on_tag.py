@@ -1,14 +1,10 @@
-import argparse
 import glob
 import json
 import logging
 import os
 import platform
-import random
-import re
 import subprocess
 import sys
-
 
 import github
 import requests
@@ -17,8 +13,7 @@ import uritemplate
 from lbrynet.core import log_support
 
 
-def main(args=None):
-    current_tag = None
+def main():
     try:
         current_tag = subprocess.check_output(
             ['git', 'describe', '--exact-match', 'HEAD']).strip()
@@ -133,7 +128,7 @@ def _curl_uploader(upload_uri, asset_to_upload, token):
         '--data-binary', '@-',
         upload_uri
     ]
-    #'-d', '{"some_key": "some_value"}',
+    # '-d', '{"some_key": "some_value"}',
     print 'Calling curl:'
     print cmd
     print

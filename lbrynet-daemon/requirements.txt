@@ -10,7 +10,7 @@ googlefinance==0.7
 jsonrpc==1.2
 jsonrpclib==0.1.7
 jsonschema==2.5.1
-# for electron, we install lbryum, lbrynet using submodules
+# for electron, we install lbryum, lbry using submodules
 ../lbryum
 ../lbry
 pbkdf2==1.3
