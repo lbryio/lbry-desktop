@@ -35,6 +35,7 @@ if [ "$FULL_BUILD" == "true" ]; then
 fi
 
 rm -rf "$ROOT/app/dist"
+mkdir -p "$ROOT/app/dist"
 
 npm install
 
@@ -53,7 +54,7 @@ if [ "$FULL_BUILD" == "true" ]; then
   # this, but it seemed better to write my own.
   python release_on_tag.py
 fi
-mv "$ROOT/lbrynet-daemon/dist/lbrynet-daemon" "$ROOT/app/dist"
+mv "$ROOT/lbrynet-daemon/dist/lbrynet-daemon" "$ROOT/app/dist/"
 
 
 
@@ -66,7 +67,7 @@ mv "$ROOT/lbrynet-daemon/dist/lbrynet-daemon" "$ROOT/app/dist"
   npm install
   node_modules/.bin/node-sass --output dist/css --sourcemap=none scss/
   node_modules/.bin/webpack
-  cp -r dist "$ROOT/app/dist"
+  cp -r "dist/*" "$ROOT/app/dist/"
 )
 
 
