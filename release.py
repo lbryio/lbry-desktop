@@ -19,22 +19,52 @@ import changelog
 
 NO_CHANGE = ('No change since the last release. This release is simply a placeholder'
              ' so that LBRY and LBRY App track the same version')
+TOKEN_MSG = """
+Please enter your personal access token. If you don't have one
+See https://github.com/lbryio/lbry-app/wiki/Release-Script#generate-a-personal-access-token
+for instructions on how to generate one.
+
+You can also set the GH_TOKEN environment variable to avoid seeing this message
+in the future"""
 DEFAULT_BRANCHES = {
     'lbry': 'master',
     'lbry-app': 'master',
     'lbry-web-ui': 'development',
     'lbryum': 'master'
 }
+# TODO: ask bumpversion for these
+LBRY_PARTS = ('major', 'minor', 'patch', 'release', 'candidate')
+LBRYUM_PARTS = ('major', 'minor', 'patch')
+LBRYUM_MSG = """The lbryum repo has changes but you didn't specify how to bump the
+version. Please enter one of {}""".format(', '.join(LBRYUM_PARTS))
+
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("lbry_part", help="part of lbry version to bump")
-    parser.add_argument("--lbryum_part", help="part of lbryum version to bump")
-    parser.add_argument("--ui-part", help="part of the ui to bump")
+    parser.add_argument(
+        "lbry_part", help="part of lbry version to bump",
+        choices=LBRY_PARTS
+    )
+    parser.add_argument(
+        "--lbryum_part", help="part of lbryum version to bump",
+        choices=LBRYUM_PARTS
+    )
+    parser.add_argument(
+        "--ui-part", help="part of the ui to bump",
+        choices=LBRY_PARTS
+    )
     parser.add_argument("--branch", help="branch to use for each repo; useful for testing")
-    parser.add_argument("--last-release")
+    parser.add_argument(
+        "--last-release",
+        help=("manually set the last release version. The default is to query and parse the"
+              " value from the rlease page.")
+    )
     parser.add_argument("--skip-sanity-checks", action="store_true")
-    parser.add_argument("--require-changelog", action="store_true")
+    parser.add_argument(
+        "--require-changelog", action="store_true",
+        help=("Set this flag to raise an exception if a submodules has changes without a"
+              " corresponding changelog entry. The default is to log a warning")
+    )
     parser.add_argument("--skip-push", action="store_true",
                         help="Set to not push changes to remote repo")
     args = parser.parse_args()
@@ -53,19 +83,19 @@ def main():
         last_release = data['tag_name']
         logging.info('Last release: %s', last_release)
 
-    gh_token = os.environ['GH_TOKEN']
+    gh_token = get_gh_token()
     auth = github.Github(gh_token)
     github_repo = auth.get_repo('lbryio/lbry-app')
 
     names = ['lbry', 'lbry-web-ui', 'lbryum']
-    repos = [Repo(name, get_part(args, name)) for name in names]
+    repos = {name: Repo(name, get_part(args, name)) for name in names}
 
     # in order to see if we've had any change in the submodule, we need to checkout
     # our last release, see what commit we were on, and then compare that to
     # current
     base.git.checkout(last_release)
     base.git.submodule('update')
-    for repo in repos:
+    for repo in repos.values():
         repo.save_commit()
 
     base.git.checkout(branch)
@@ -73,7 +103,9 @@ def main():
 
     changelogs = {}
 
-    for repo in repos:
+    get_lbryum_part_if_needed(repos['lbryum'])
+
+    for repo in repos.values():
         logging.info('Processing repo: %s', repo.name)
         repo.checkout(args.branch)
         if repo.has_changes():
@@ -116,6 +148,32 @@ def main():
     else:
         logging.info('Skipping push; you will have to reset and delete tags if '
                      'you want to run this script again')
+
+
+def get_gh_token():
+    if 'GH_TOKEN' in os.environ:
+        gh_token = os.environ['GH_TOKEN']
+    else:
+        print TOKEN_MSG
+        inpt = raw_input('token: ')
+        gh_token = inpt.strip()
+    return gh_token
+
+
+def get_lbryum_part_if_needed(repo):
+    if repo.has_changes():
+        if not repo.part:
+            get_lbryum_part(repo)
+
+
+def get_lbryum_part(repo):
+    print LBRYUM_MSG
+    while True:
+        part = raw_input('part: ')
+        if part in LBRYUM_PARTS:
+            repo.part = part
+            break
+        print 'Invalid part. Enter one of {}'.format(', '.join(LBRYUM_PARTS))
 
 
 def get_branch(repo_name, override=None):
