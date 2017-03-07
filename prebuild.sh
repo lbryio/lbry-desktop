@@ -71,7 +71,7 @@ if ! cmd_exists pip; then
   fi
 fi
 
-if $LINUX && ! (pip list --format=columns | grep --quiet setuptools); then
+if $LINUX && [ "$(pip list --format=columns | grep setuptools | wc -l)" -ge 1 ]; then
   #$INSTALL python-setuptools
   $SUDO pip install setuptools
 fi

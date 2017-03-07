@@ -34,27 +34,12 @@ if [ "$FULL_BUILD" == "true" ]; then
   python "$ROOT/set_build.py"
 fi
 
-rm -rf "$ROOT/app/dist"
+[ -d "$ROOT/dist" ] && rm -rf "$ROOT/dist"
+mkdir -p "$ROOT/dist"
+[ -d "$ROOT/app/dist" ] && rm -rf "$ROOT/app/dist"
 mkdir -p "$ROOT/app/dist"
 
 npm install
-
-####################
-#  lbrynet-daemon  #
-####################
-
-(
-  cd "$ROOT/lbrynet-daemon"
-  pip install -r linux_macos.txt
-  pyinstaller -y lbry.onefile.spec
-)
-if [ "$FULL_BUILD" == "true" ]; then
-  # electron-build has a publish feature, but I had a hard time getting
-  # it to reliably work and it also seemed difficult to configure. Not proud of
-  # this, but it seemed better to write my own.
-  python release_on_tag.py
-fi
-mv "$ROOT/lbrynet-daemon/dist/lbrynet-daemon" "$ROOT/app/dist/"
 
 
 
@@ -67,9 +52,22 @@ mv "$ROOT/lbrynet-daemon/dist/lbrynet-daemon" "$ROOT/app/dist/"
   npm install
   node_modules/.bin/node-sass --output dist/css --sourcemap=none scss/
   node_modules/.bin/webpack
-  cp -r "dist/*" "$ROOT/app/dist/"
+  cp -r dist/* "$ROOT/app/dist/"
 )
 
+
+
+####################
+#  lbrynet-daemon  #
+####################
+
+(
+  cd "$ROOT/lbrynet-daemon"
+  pip install -r linux_macos.txt
+  pyinstaller -y lbry.onefile.spec
+  mv dist/lbrynet-daemon "$ROOT/app/dist/"
+)
+python zip_daemon.py
 
 
 ###################
@@ -87,7 +85,11 @@ if [ "$FULL_BUILD" == "true" ]; then
   fi
 
   node_modules/.bin/build -p never
-  python zip_daemon.py
+
+  # electron-build has a publish feature, but I had a hard time getting
+  # it to reliably work and it also seemed difficult to configure. Not proud of
+  # this, but it seemed better to write my own.
+  python release_on_tag.py
 
   deactivate
 
