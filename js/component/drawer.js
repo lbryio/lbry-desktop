@@ -21,10 +21,9 @@ var drawerImageStyle = { //@TODO: remove this, img should be properly scaled onc
 
 var Drawer = React.createClass({
   handleLogoClicked: function(event) {
-    if (event.shiftKey && (event.ctrlKey || event.metaKey)) {
+    if (event.ctrlKey && event.shiftKey) {
       window.location.href = 'index.html?developer'
       event.preventDefault();
-      return false;
     }
   },
   getInitialState: function() {
