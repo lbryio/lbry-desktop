@@ -49,7 +49,7 @@ export let FileListDownloaded = React.createClass({
     } else if (!this.state.fileInfos.length) {
       return (
         <main className="page">
-          <span>You haven't downloaded anything from LBRY yet. Go <Link href="/" label="search for your first download" />!</span>
+          <span>You haven't downloaded anything from LBRY yet. Go <Link href="/index.html?discover" label="search for your first download" />!</span>
         </main>
       );
     } else {
