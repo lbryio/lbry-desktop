@@ -1,9 +1,10 @@
 import lighthouse from './lighthouse.js';
+import jsonrpc from './jsonrpc.js';
 
 const {remote} = require('electron');
 const menu = remote.require('./menu/main-menu');
 
-var lbry = {
+let lbry = {
   isConnected: false,
   rootPath: '.',
   daemonConnectionString: 'http://localhost:5279/lbryapi',
@@ -22,74 +23,8 @@ var lbry = {
   }
 };
 
-lbry.jsonrpc_call = function (connectionString, method, params, callback, errorCallback, connectFailedCallback, timeout) {
-  var xhr = new XMLHttpRequest;
-  if (typeof connectFailedCallback !== 'undefined') {
-    if (timeout) {
-      xhr.timeout = timeout;
-    }
-
-    xhr.addEventListener('error', function (e) {
-      connectFailedCallback(e);
-    });
-    xhr.addEventListener('timeout', function() {
-      connectFailedCallback(new Error('XMLHttpRequest connection timed out'));
-    })
-  }
-  xhr.addEventListener('load', function() {
-    var response = JSON.parse(xhr.responseText);
-
-    if (response.error) {
-      if (errorCallback) {
-        errorCallback(response.error);
-      } else {
-        var errorEvent = new CustomEvent('unhandledError', {
-          detail: {
-            connectionString: connectionString,
-            method: method,
-            params: params,
-            code: response.error.code,
-            message: response.error.message,
-            data: response.error.data
-          }
-        });
-        document.dispatchEvent(errorEvent)
-      }
-    } else if (callback) {
-      callback(response.result);
-    }
-  });
-
-  if (connectFailedCallback) {
-    xhr.addEventListener('error', function (event) {
-      connectFailedCallback(event);
-    });
-  } else {
-    xhr.addEventListener('error', function (event) {
-      var errorEvent = new CustomEvent('unhandledError', {
-        detail: {
-          connectionString: connectionString,
-          method: method,
-          params: params,
-          code: xhr.status,
-          message: 'Connection to API server failed'
-        }
-      });
-      document.dispatchEvent(errorEvent);
-    });
-  }
-
-  xhr.open('POST', connectionString, true);
-  xhr.send(JSON.stringify({
-    'jsonrpc': '2.0',
-    'method': method,
-    'params': params,
-    'id': 0
-  }));
-}
-
 lbry.call = function (method, params, callback, errorCallback, connectFailedCallback) {
-  lbry.jsonrpc_call(lbry.daemonConnectionString, method, [params], callback, errorCallback, connectFailedCallback);
+  jsonrpc.call(lbry.daemonConnectionString, method, [params], callback, errorCallback, connectFailedCallback);
 }
 
 
@@ -244,10 +179,8 @@ lbry.getCostInfoForName = function(name, callback, errorCallback) {
     }, errorCallback);
   }
 
-  lighthouse.getSizeForName(name, (size) => {
+  lighthouse.get_size_for_name(name).then((size) => {
     getCostWithData(name, size, callback, errorCallback);
-  }, () => {
-    getCostNoData(name, callback, errorCallback);
   }, () => {
     getCostNoData(name, callback, errorCallback);
   });
@@ -329,7 +262,7 @@ lbry.getFileInfoWhenListed = function(name, callback, timeoutCallback, tryNum=0)
 
   // Calls callback with file info when it appears in the lbrynet file manager.
   // If timeoutCallback is provided, it will be called if the file fails to appear.
-  lbry.getFileStatus(name, (fileInfo) => {
+  lbry.file_list({name: name}).then(([fileInfo]) => {
     if (fileInfo) {
       callback(fileInfo);
     } else {
@@ -559,5 +492,19 @@ lbry.showMenuIfNeeded = function() {
   }
   sessionStorage.setItem('menuShown', chosenMenu);
 };
+
+lbry = new Proxy(lbry, {
+  get: function(target, name) {
+    if (name in target) {
+      return target[name];
+    }
+
+    return function(params={}) {
+      return new Promise((resolve, reject) => {
+        jsonrpc.call(lbry.connectionString, name, [params], resolve, reject, reject);
+      });
+    };
+  }
+});
 
 export default lbry;

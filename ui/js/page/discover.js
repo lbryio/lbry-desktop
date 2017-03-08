@@ -125,7 +125,7 @@ var DiscoverPage = React.createClass({
       query: query,
     });
 
-    lighthouse.search(query, this.searchCallback);
+    lighthouse.search(query).then(this.searchCallback);
   },
 
   componentWillMount: function() {
