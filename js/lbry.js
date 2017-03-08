@@ -314,14 +314,6 @@ lbry.removeFile = function(sdHash, name, deleteTargetFile=true, callback) { // N
   }, callback);
 }
 
-lbry.openFile = function(sdHash, callback) {
-  lbry.call('open', {sd_hash: sdHash}, callback);
-}
-
-lbry.revealFile = function(sdHash, callback) {
-  lbry.call('reveal', {sd_hash: sdHash}, callback);
-}
-
 lbry.getFileInfoWhenListed = function(name, callback, timeoutCallback, tryNum=0) {
   function scheduleNextCheckOrTimeout() {
     if (timeoutCallback && tryNum > 200) {
