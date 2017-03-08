@@ -18,23 +18,15 @@ export let FileListDownloaded = React.createClass({
     this._isMounted = true;
     document.title = "Downloaded Files";
 
-    let publishedFilesSdHashes = [];
-    lbry.getMyClaims((claimInfos) => {
-
+    lbry.claim_list_mine().then((myClaimInfos) => {
       if (!this._isMounted) { return; }
 
-      for (let claimInfo of claimInfos) {
-        let metadata = JSON.parse(claimInfo.value);
-        publishedFilesSdHashes.push(metadata.sources.lbry_sd_hash);
-      }
-
-      lbry.getFilesInfo((fileInfos) => {
+      lbry.file_list().then((fileInfos) => {
         if (!this._isMounted) { return; }
 
+        const myClaimOutpoints = myClaimInfos.map(({txid, nOut}) => txid + ':' + nOut);
         this.setState({
-          fileInfos: fileInfos.filter(({sd_hash}) => {
-            return publishedFilesSdHashes.indexOf(sd_hash) == -1;
-          })
+          fileInfos: fileInfos.filter(({outpoint}) => !myClaimOutpoints.includes(outpoint)),
         });
       });
     });
@@ -74,41 +66,17 @@ export let FileListPublished = React.createClass({
     this._isMounted = true;
     document.title = "Published Files";
 
-    lbry.getMyClaims((claimInfos) => {
-      if (claimInfos.length == 0) {
+    lbry.claim_list_mine().then((claimInfos) => {
+      if (!this._isMounted) { return; }
+
+      lbry.file_list().then((fileInfos) => {
+        if (!this._isMounted) { return; }
+
+        const myClaimOutpoints = claimInfos.map(({txid, nOut}) => txid + ':' + nOut);
         this.setState({
-          fileInfos: [],
+          fileInfos: fileInfos.filter(({outpoint}) => myClaimOutpoints.includes(outpoint)),
         });
-      }
-
-      /**
-       * Build newFileInfos as a sparse array and drop elements in at the same position they
-       * occur in claimInfos, so the order is preserved even if the API calls inside this loop
-       * return out of order.
-       */
-      let newFileInfos = Array(claimInfos.length),
-        claimInfoProcessedCount = 0;
-
-      for (let [i, claimInfo] of claimInfos.entries()) {
-        let metadata = JSON.parse(claimInfo.value);
-        lbry.getFileInfoBySdHash(metadata.sources.lbry_sd_hash, (fileInfo) => {
-          claimInfoProcessedCount++;
-          if (fileInfo !== false) {
-            newFileInfos[i] = fileInfo;
-          }
-          if (claimInfoProcessedCount >= claimInfos.length) {
-            /**
-             * newfileInfos may have gaps from claims that don't have associated files in
-             * lbrynet, so filter out any missing elements
-             */
-            this.setState({
-              fileInfos: newFileInfos.filter(function () {
-                return true
-              }),
-            });
-          }
-        });
-      }
+      });
     });
   },
   render: function () {
@@ -192,15 +160,13 @@ export let FileList = React.createClass({
         seenUris = {};
 
     const fileInfosSorted = this._sortFunctions[this.state.sortBy](this.props.fileInfos);
-    for (let fileInfo of fileInfosSorted) {
-      let {lbry_uri, sd_hash, metadata} = fileInfo;
-
+    for (let {lbry_uri, outpoint, metadata} of fileInfosSorted) {
       if (!metadata || seenUris[lbry_uri]) {
         continue;
       }
 
       seenUris[lbry_uri] = true;
-      content.push(<FileTileStream key={lbry_uri} name={lbry_uri} hideOnRemove={true} sdHash={sd_hash}
+      content.push(<FileTileStream key={lbry_uri} name={lbry_uri} hideOnRemove={true} outpoint={outpoint}
                                    hidePrice={this.props.hidePrices} metadata={metadata} />);
     }
 

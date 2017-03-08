@@ -12,6 +12,7 @@ var WatchPage = React.createClass({
   _isMounted: false,
   _controlsHideDelay: 3000, // Note: this needs to be shorter than the built-in delay in Electron, or Electron will hide the controls before us
   _controlsHideTimeout: null,
+  _outpoint: null,
 
   propTypes: {
     name: React.PropTypes.string,
@@ -26,8 +27,10 @@ var WatchPage = React.createClass({
     };
   },
   componentDidMount: function() {
-    lbry.getStream(this.props.name);
-    this.updateLoadStatus();
+    lbry.get({name: this.props.name}, (fileInfo) => {
+      this._outpoint = fileInfo.outpoint;
+      this.updateLoadStatus();
+    });
   },
   handleBackClicked: function() {
     history.back();
@@ -64,10 +67,13 @@ var WatchPage = React.createClass({
     }
   },
   updateLoadStatus: function() {
-    lbry.getFileStatus(this.props.name, (status) => {
+    api.file_list({
+      outpoint: this._outpoint,
+      full_status: true,
+    }, ([status]) => {
       if (!status || !['running', 'stopped'].includes(status.code) || status.written_bytes == 0) {
         // Download hasn't started yet, so update status message (if available) then try again
-	// TODO: Would be nice to check if we have the MOOV before starting playing
+        // TODO: Would be nice to check if we have the MOOV before starting playing
         if (status) {
           this.setState({
             loadStatusMessage: status.message
@@ -79,17 +85,17 @@ var WatchPage = React.createClass({
           readyToPlay: true,
           mimeType: status.mime_type,
         })
-	const mediaFile = {
-	  createReadStream: function (opts) {
-	    // Return a readable stream that provides the bytes
-	    // between offsets "start" and "end" inclusive
-	    console.log('Stream between ' + opts.start + ' and ' + opts.end + '.');
-	    return fs.createReadStream(status.download_path, opts)
-	  }
-	}
-	var elem = this.refs.video;
-	var videostream = VideoStream(mediaFile, elem);
-	elem.play();
+        const mediaFile = {
+          createReadStream: function (opts) {
+            // Return a readable stream that provides the bytes
+            // between offsets "start" and "end" inclusive
+            console.log('Stream between ' + opts.start + ' and ' + opts.end + '.');
+            return fs.createReadStream(status.download_path, opts)
+          }
+        };
+        var elem = this.refs.video;
+        var videostream = VideoStream(mediaFile, elem);
+        elem.play();
       }
     });
   },
