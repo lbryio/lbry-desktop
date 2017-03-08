@@ -5,13 +5,13 @@ import FormField from '../component/form.js';
 const DeveloperPage = React.createClass({
   getInitialState: function() {
     return {
-      showDeveloperMenu: lbry.getClientSetting('menu') == 'developer',
+      showDeveloperMenu: lbry.getClientSetting('showDeveloperMenu'),
       useCustomLighthouseServers: lbry.getClientSetting('useCustomLighthouseServers'),
       customLighthouseServers: lbry.getClientSetting('customLighthouseServers').join('\n'),
     };
   },
   handleShowDeveloperMenuChange: function(event) {
-    lbry.setClientSetting('menu', event.target.checked ? 'developer' : 'normal');
+    lbry.setClientSetting('showDeveloperMenu', event.target.checked);
     lbry.showMenuIfNeeded();
     this.setState({
       showDeveloperMenu: event.target.checked,

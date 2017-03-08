@@ -18,7 +18,7 @@ var lbry = {
     debug: false,
     useCustomLighthouseServers: false,
     customLighthouseServers: [],
-    menu: 'normal',
+    showDeveloperMenubar: false,
   }
 };
 
@@ -560,15 +560,12 @@ lbry.fileInfoUnsubscribe = function(name, subscribeId) {
 }
 
 lbry.showMenuIfNeeded = function() {
-  const showingMenu = sessionStorage.getItem('menuShown');
-  const chosenMenu = lbry.getClientSetting('menu');
-  if (!showingMenu || showingMenu != chosenMenu) {
-    if (chosenMenu == 'normal') {
-      menu.showNormalMenubar();
-    } else {
-      menu.showDeveloperMenubar();
-    }
+  const showingMenu = sessionStorage.getItem('menuShown') || null;
+  const chosenMenu = lbry.getClientSetting('showDeveloperMenu') ? 'developer' : 'normal';
+  if (chosenMenu != showingMenu) {
+    menu.showMenubar(chosenMenu == 'developer');
   }
+  sessionStorage.setItem('menuShown', chosenMenu);
 };
 
 export default lbry;
