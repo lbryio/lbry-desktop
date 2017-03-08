@@ -5,6 +5,7 @@ dist
 /app/dist
 /app/node_modules
 /build_venv
+/lbry-app-venv
 /lbrynet-daemon/build
 /lbrynet-daemon/venv
 /.idea
