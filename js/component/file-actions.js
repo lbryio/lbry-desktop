@@ -7,6 +7,8 @@ import FormField from './form.js';
 import {ToolTip} from '../component/tooltip.js';
 import {DropDownMenu, DropDownMenuItem} from './menu.js';
 
+const {shell} = require('electron');
+
 let WatchLink = React.createClass({
   propTypes: {
     streamName: React.PropTypes.string,
@@ -123,8 +125,8 @@ let FileActionsRow = React.createClass({
     }
   },
   onOpenClick: function() {
-    if (this.state.fileInfo && this.state.fileInfo.completed) {
-      lbry.openFile(this.props.sdHash);
+    if (this.state.fileInfo && this.state.fileInfo.download_path) {
+      shell.openItem(this.state.fileInfo.download_path);
     }
   },
   handleDeleteCheckboxClicked: function(event) {
@@ -134,7 +136,7 @@ let FileActionsRow = React.createClass({
   },
   handleRevealClicked: function() {
     if (this.state.fileInfo && this.state.fileInfo.download_path) {
-      lbry.revealFile(this.props.sdHash);
+      shell.showItemInFolder(this.state.fileInfo.download_path);
     }
   },
   handleRemoveClicked: function() {
