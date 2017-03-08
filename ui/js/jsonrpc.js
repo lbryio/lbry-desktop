@@ -57,13 +57,17 @@ jsonrpc.call = function (connectionString, method, params, callback, errorCallba
     });
   }
 
+  const counter = parseInt(sessionStorage.getItem('JSONRPCCounter') || 0);
+
   xhr.open('POST', connectionString, true);
   xhr.send(JSON.stringify({
     'jsonrpc': '2.0',
     'method': method,
     'params': params,
-    'id': 0
+    'id': counter,
   }));
+
+  sessionStorage.setItem('JSONRPCCounter', counter + 1);
 };
 
 export default jsonrpc;
