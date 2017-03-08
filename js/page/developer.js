@@ -5,15 +5,16 @@ import FormField from '../component/form.js';
 const DeveloperPage = React.createClass({
   getInitialState: function() {
     return {
-      debugMode: lbry.getClientSetting('debug'),
+      showDeveloperMenu: lbry.getClientSetting('showDeveloperMenu'),
       useCustomLighthouseServers: lbry.getClientSetting('useCustomLighthouseServers'),
       customLighthouseServers: lbry.getClientSetting('customLighthouseServers').join('\n'),
     };
   },
-  handleDebugModeChange: function(event) {
-    lbry.setClientSetting('debug', event.target.checked);
+  handleShowDeveloperMenuChange: function(event) {
+    lbry.setClientSetting('showDeveloperMenu', event.target.checked);
+    lbry.showMenuIfNeeded();
     this.setState({
-      debugMode: event.target.checked,
+      showDeveloperMenu: event.target.checked,
     });
   },
   handleUseCustomLighthouseServersChange: function(event) {
@@ -22,19 +23,13 @@ const DeveloperPage = React.createClass({
       useCustomLighthouseServers: event.target.checked,
     });
   },
-  handleCustomLighthouseServersChange: function(event) {
-    lbry.setClientSetting('customLighthouseServers', event.target.value.trim().split('\n'));
-    this.setState({
-      customLighthouseServers: event.target.value,
-    });
-  },
   render: function() {
     return (
       <main>
         <section className="card">
           <h3>Developer Settings</h3>
           <div className="form-row">
-            <label><FormField type="checkbox" onChange={this.handleDebugModeChange} checked={this.state.debugMode} /> Enable debug mode (exposes LBRY modules in global scope)</label>
+            <label><FormField type="checkbox" onChange={this.handleShowDeveloperMenuChange} checked={this.state.showDeveloperMenu} /> Show developer menu</label>
           </div>
           <div className="form-row">
             <label><FormField type="checkbox" onChange={this.handleUseCustomLighthouseServersChange} checked={this.state.useCustomLighthouseServers} /> Use custom search servers</label>

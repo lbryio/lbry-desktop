@@ -8,8 +8,8 @@ Web UI version numbers should always match the corresponding version of LBRY App
 
 ## [Unreleased]
 ### Added
-  *
-  *
+  * A way to access the Developer Settings panel in Electron (Ctrl-Shift or Cmd-Shift and click logo)
+  * Option in Developer Settings to toggle developer menu
   *
 
 ### Changed

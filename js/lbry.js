@@ -1,5 +1,8 @@
 import lighthouse from './lighthouse.js';
 
+const {remote} = require('electron');
+const menu = remote.require('./menu/main-menu');
+
 var lbry = {
   isConnected: false,
   rootPath: '.',
@@ -15,6 +18,7 @@ var lbry = {
     debug: false,
     useCustomLighthouseServers: false,
     customLighthouseServers: [],
+    showDeveloperMenubar: false,
   }
 };
 
@@ -546,5 +550,14 @@ lbry.fileInfoSubscribe = function(sdHash, callback) {
 lbry.fileInfoUnsubscribe = function(name, subscribeId) {
   delete lbry._fileInfoSubscribeCallbacks[name][subscribeId];
 }
+
+lbry.showMenuIfNeeded = function() {
+  const showingMenu = sessionStorage.getItem('menuShown') || null;
+  const chosenMenu = lbry.getClientSetting('showDeveloperMenu') ? 'developer' : 'normal';
+  if (chosenMenu != showingMenu) {
+    menu.showMenubar(chosenMenu == 'developer');
+  }
+  sessionStorage.setItem('menuShown', chosenMenu);
+};
 
 export default lbry;

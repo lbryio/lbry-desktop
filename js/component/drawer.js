@@ -20,6 +20,12 @@ var drawerImageStyle = { //@TODO: remove this, img should be properly scaled onc
 };
 
 var Drawer = React.createClass({
+  handleLogoClicked: function(event) {
+    if (event.ctrlKey && event.shiftKey) {
+      window.location.href = 'index.html?developer'
+      event.preventDefault();
+    }
+  },
   getInitialState: function() {
     return {
       balance: 0,
@@ -37,7 +43,7 @@ var Drawer = React.createClass({
       <nav id="drawer">
         <div id="drawer-handle">
           <Link title="Close" onClick={this.props.onCloseDrawer} icon="icon-bars" className="close-drawer-link"/>
-          <a href="index.html?discover"><img src={lbry.imagePath("lbry-dark-1600x528.png")} style={drawerImageStyle}/></a>
+          <a href="index.html?discover" onMouseUp={this.handleLogoClicked}><img src={lbry.imagePath("lbry-dark-1600x528.png")} style={drawerImageStyle}/></a>
         </div>
         <DrawerItem href='index.html?discover' viewingPage={this.props.viewingPage} label="Discover" icon="icon-search"  />
         <DrawerItem href='index.html?publish' viewingPage={this.props.viewingPage} label="Publish" icon="icon-upload" />

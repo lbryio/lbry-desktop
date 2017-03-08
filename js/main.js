@@ -5,6 +5,7 @@ import lighthouse from './lighthouse.js';
 import App from './app.js';
 import SplashScreen from './component/splash.js';
 
+lbry.showMenuIfNeeded();
 
 var init = function() {
   window.lbry = lbry;
