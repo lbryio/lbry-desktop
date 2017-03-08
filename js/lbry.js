@@ -18,7 +18,7 @@ var lbry = {
     debug: false,
     useCustomLighthouseServers: false,
     customLighthouseServers: [],
-    showDeveloperMenubar: false,
+    showDeveloperMenu: false,
   }
 };
 
