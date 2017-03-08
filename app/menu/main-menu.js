@@ -2,75 +2,106 @@ const {Menu} = require('electron');
 const electron = require('electron');
 const app = electron.app;
 
-const template = [
+const baseTemplate = [
   {
     label: 'Edit',
     submenu: [
       {
-        role: 'undo'
+        role: 'undo',
       },
       {
-        role: 'redo'
+        role: 'redo',
       },
       {
-        type: 'separator'
+        type: 'separator',
       },
       {
-        role: 'cut'
+        role: 'cut',
       },
       {
-        role: 'copy'
+        role: 'copy',
       },
       {
-        role: 'paste'
+        role: 'paste',
       },
-      {
-        role: 'delete'
-      },
-      {
-        role: 'selectall'
-      }
     ]
   },
   {
     label: 'Help',
     submenu: [
       {
-        label: 'FAQ',
-        click () { require('electron').shell.openExternal('https://lbry.io/faq') }
+        label: 'Help',
+        click(item, focusedWindow) {
+          if (focusedWindow) {
+            focusedWindow.loadURL(`file://${__dirname}/../dist/index.html?help`);
+          }
+        }
       }
     ]
   }
 ];
 
-module.exports = {
-  showNormalMenubar: () => {
-    const menu = Menu.buildFromTemplate(template);
-    Menu.setApplicationMenu(menu);
-  },
-  showDeveloperMenubar: () => {
-    const devTemplate = template.slice();
-    devTemplate.push({
-      label: 'Developer',
-      submenu: [
-        {
-          label: 'Reload',
-          accelerator: 'CmdOrCtrl+R',
-          click (item, focusedWindow) {
-            if (focusedWindow) focusedWindow.reload()
-          }
-        },
-        {
-          label: 'Toggle Developer Tools',
-          accelerator: process.platform === 'darwin' ? 'Alt+Command+I' : 'Ctrl+Shift+I',
-          click (item, focusedWindow) {
-            if (focusedWindow) focusedWindow.webContents.toggleDevTools()
-          }
-        },
-      ]
-    });
+const macOSAppMenuTemplate = {
+  label: app.getName(),
+  submenu: [
+    {
+      role: 'about',
+    },
+    {
+      type: 'separator',
+    },
+    {
+      role: 'hide',
+    },
+    {
+      role: 'hideothers',
+    },
+    {
+      role: 'unhide',
+    },
+    {
+      type: 'separator',
+    },
+    {
+      role: 'quit',
+    },
+  ]
+};
 
-    const menu = Menu.buildFromTemplate(devTemplate);
-    Menu.setApplicationMenu(menu);
-  }
+const developerMenuTemplate = {
+  label: 'Developer',
+  submenu: [
+    {
+      label: 'Reload',
+      accelerator: 'CmdOrCtrl+R',
+      click(item, focusedWindow) {
+        if (focusedWindow) {
+          focusedWindow.reload();
+        }
+      }
+    },
+    {
+      label: 'Toggle Developer Tools',
+      accelerator: process.platform == 'darwin' ? 'Alt+Command+I' : 'Ctrl+Shift+I',
+      click(item, focusedWindow) {
+        if (focusedWindow) {
+          focusedWindow.webContents.toggleDevTools();
+        }
+      }
+    },
+  ]
+};
+
+module.exports = {
+  showMenubar(showDeveloperMenu) {
+    let template = baseTemplate.slice();
+    if (process.platform === 'darwin') {
+      template.unshift(macOSAppMenuTemplate);
+    }
+    if (showDeveloperMenu) {
+      template.push(developerMenuTemplate);
+    }
+
+    Menu.setApplicationMenu(Menu.buildFromTemplate(template));
+  },
 };
