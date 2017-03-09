@@ -26,7 +26,7 @@ install:
   - ps: .\build.ps1
   - cd ..
   # build ui
-  - cd lbry-web-ui
+  - cd ui
   - npm install
   - node_modules\.bin\node-sass --output dist\css --sourcemap=none scss\
   - node_modules\.bin\webpack

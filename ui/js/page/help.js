@@ -80,15 +80,15 @@ var HelpPage = React.createClass({
             <table className="table-standard">
               <tbody>
                 <tr>
-                  <th>lbrynet (data)</th>
+                  <th>daemon (lbrynet)</th>
                   <td>{ver.lbrynet_version}</td>
                 </tr>
                 <tr>
-                  <th>lbryum (wallet)</th>
+                  <th>wallet (lbryum)</th>
                   <td>{ver.lbryum_version}</td>
                 </tr>
                 <tr>
-                  <th>lbry-web-ui (interface)</th>
+                  <th>interface</th>
                   <td>{uiVersion}</td>
                 </tr>
                 <tr>

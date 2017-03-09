@@ -48,7 +48,7 @@ npm install
 ############
 
 (
-  cd "$ROOT/lbry-web-ui"
+  cd "$ROOT/ui"
   npm install
   node_modules/.bin/node-sass --output dist/css --sourcemap=none scss/
   node_modules/.bin/webpack

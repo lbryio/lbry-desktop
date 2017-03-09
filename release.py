@@ -28,7 +28,6 @@ in the future"""
 DEFAULT_BRANCHES = {
     'lbry': 'master',
     'lbry-app': 'master',
-    'lbry-web-ui': 'development',
     'lbryum': 'master'
 }
 # TODO: ask bumpversion for these
@@ -89,7 +88,7 @@ def main():
     auth = github.Github(gh_token)
     github_repo = auth.get_repo('lbryio/lbry-app')
 
-    names = ['lbry', 'lbry-web-ui', 'lbryum']
+    names = ['lbry', 'lbryum']
     repos = {name: Repo(name, get_part(args, name)) for name in names}
 
     # in order to see if we've had any change in the submodule, we need to checkout
@@ -232,8 +231,7 @@ def check_bumpversion():
 
 
 def get_part(args, name):
-    value = args.ui_part if name == 'lbry-web-ui' else getattr(args, name + '_part')
-    return value or args.lbry_part
+    return getattr(args, name + '_part') or args.lbry_part
 
 
 class Repo(object):

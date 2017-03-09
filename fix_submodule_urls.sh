@@ -11,4 +11,3 @@ cd "DIR"
 
 git config submodule.lbry.url git@github.com:lbryio/lbry.git
 git config submodule.lbryum.url git@github.com:lbryio/lbryum.git
-git config submodule.lbry-web-ui.url git@github.com:lbryio/lbry-web-ui.git

@@ -7,11 +7,6 @@ git tag -d $(git describe)
 git reset --hard origin/master
 popd
 
-pushd lbry-web-ui
-git tag -d $(git describe)
-git reset --hard origin/development
-popd
-
 pushd lbryum
 git tag -d $(git describe)
 git reset --hard origin/master
