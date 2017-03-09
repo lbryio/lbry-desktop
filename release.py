@@ -16,7 +16,6 @@ import requests
 
 import changelog
 
-
 NO_CHANGE = ('No change since the last release. This release is simply a placeholder'
              ' so that LBRY and LBRY App track the same version')
 TOKEN_MSG = """
@@ -94,8 +93,7 @@ def main():
     repos = {name: Repo(name, get_part(args, name)) for name in names}
 
     # in order to see if we've had any change in the submodule, we need to checkout
-    # our last release, see what commit we were on, and then compare that to
-    # current
+    # our last release, see what commit we were on, and then compare that to current
     base.git.checkout(last_release)
     base.git.submodule('update')
     for repo in repos.values():
@@ -107,10 +105,6 @@ def main():
     changelogs = {}
 
     get_lbryum_part_if_needed(repos['lbryum'])
-
-    # bumpversion will fail if there is already the tag we want in the repo
-    for repo in repos.values():
-        repo.assert_new_tag_is_absent()
 
     for repo in repos.values():
         logging.info('Processing repo: %s', repo.name)
@@ -133,6 +127,8 @@ def main():
                 # them even if there aren't any changes, but lbryum should only be
                 # bumped if it has changes
                 continue
+        # bumpversion will fail if there is already the tag we want in the repo
+        repo.assert_new_tag_is_absent()
         repo.bumpversion()
 
     release_msg = get_release_msg(changelogs, names)
@@ -169,9 +165,8 @@ def get_gh_token():
 
 
 def get_lbryum_part_if_needed(repo):
-    if repo.has_changes():
-        if not repo.part:
-            get_lbryum_part(repo)
+    if repo.has_changes() and not repo.part:
+        get_lbryum_part(repo)
 
 
 def get_lbryum_part(repo):
@@ -223,7 +218,6 @@ def is_behind(base, branch):
 
 
 def check_bumpversion():
-
     def require_new_version():
         print 'Install bumpversion: pip install -U git+https://github.com/lbryio/bumpversion.git'
         sys.exit(1)
@@ -238,10 +232,8 @@ def check_bumpversion():
 
 
 def get_part(args, name):
-    if name == 'lbry-web-ui':
-        return args.ui_part or args.lbry_part
-    else:
-        return getattr(args, name + '_part')
+    value = args.ui_part if name == 'lbry-web-ui' else getattr(args, name + '_part')
+    return value or args.lbry_part
 
 
 class Repo(object):
