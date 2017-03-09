@@ -68,7 +68,7 @@ npm install
   pyinstaller -y lbry.onefile.spec
   mv dist/lbrynet-daemon "$ROOT/app/dist/"
 )
-python zip_daemon.py
+python "$BUILD_DIR/zip_daemon.py"
 
 
 ###################
@@ -90,7 +90,7 @@ if [ "$FULL_BUILD" == "true" ]; then
   # electron-build has a publish feature, but I had a hard time getting
   # it to reliably work and it also seemed difficult to configure. Not proud of
   # this, but it seemed better to write my own.
-  python release_on_tag.py
+  python "$BUILD_DIR/release_on_tag.py"
 
   deactivate
 
