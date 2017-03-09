@@ -1,0 +1,44 @@
+body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, input, select, textarea, p, blockquote, th, td, iframe
+{
+    margin:0;
+    padding:0;
+}
+input:focus, textarea:focus
+{
+    outline: 0;
+}
+table 
+{
+  border-collapse: collapse;
+  border-spacing:0;
+}
+fieldset, img, iframe 
+{
+	border: 0;
+}
+h1, h2, h3, h4, h5, h6 
+{
+    font-weight:normal;
+}
+ol, ul
+{
+    list-style-position: inside;
+    > li { list-style-position: inside; }
+}
+input, textarea, select 
+{
+	font-family:inherit;
+	font-size:inherit;
+	font-weight:inherit;
+}
+img {
+  width: auto\9;
+  height: auto;
+  vertical-align: middle;
+  -ms-interpolation-mode: bicubic;
+}
+a
+{
+    color: inherit;
+    text-decoration: none;
+}

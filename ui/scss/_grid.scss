@@ -1,0 +1,87 @@
+@import "global";
+
+$gutter_fluid: 4;
+
+[class*="span"] {
+  min-height: 1px;
+  max-width: 100%;
+}
+
+.span12 { width: 100%; }
+.span11 { width: 91.666%; }
+.span10 { width: 83.333%; }
+.span9 { width: 75%; }
+.span8 { width: 66.666%; }
+.span7 { width: 58.333%; }
+.span6 { width: 50%; }
+.span5 { width: 41.666%; }
+.span4 { width: 33.333%; }
+.span3 { width: 25%; }
+.span2 { width: 16.666%; }
+.span1 { width: 8.333%; }
+
+.row-fluid {
+  width: 100%;
+  > [class*="span"] {
+    float: left;
+    width: 100%;
+    margin-left: 1% * $gutter_fluid;
+    &:first-child
+    {
+      margin-left: 0;
+    }
+  }
+
+  $column_width: (100% - $gutter_fluid * 11) / 12;
+
+  > .span12 { width: $column_width * 12 + $gutter_fluid * 11; }
+  > .span11 { width: $column_width * 11 + $gutter_fluid * 10; }
+  > .span10 { width: $column_width * 10 + $gutter_fluid * 9; }
+  > .span9 { width: $column_width * 9 + $gutter_fluid * 8; }
+  > .span8 { width: $column_width * 8 + $gutter_fluid * 7; }
+  > .span7 { width: $column_width * 7 + $gutter_fluid * 6; }
+  > .span6 { width: $column_width * 6 + $gutter_fluid * 5; }
+  > .span5 { width: $column_width * 5 + $gutter_fluid * 4; }
+  > .span4 { width: $column_width * 4 + $gutter_fluid * 3; }
+  > .span3 { width: $column_width * 3 + $gutter_fluid * 2; }
+  > .span2 { width: $column_width * 2 + $gutter_fluid * 1; }
+  > .span1 { width: $column_width; }
+}
+
+.tile-fluid {
+  width: 100%;
+  > [class*="span"] {
+    float: left;
+  }
+}
+
+.column-fluid {
+  @include display-flex();
+  flex-wrap: wrap;
+  > [class*="span"] {
+    @include display-flex();
+    @include flex(1 0 auto);
+    overflow: hidden;
+    justify-content: center;
+  }
+}
+
+.row-fluid, .tile-fluid {
+  @include clearfix();
+}
+
+@media (max-width: $mobile-width-threshold) {
+  .row-fluid, .tile-fluid, .column-fluid {
+    width: 100%;
+  }
+  .pull-left, .pull-right
+  {
+    float: none;
+  }
+  [class*="span"] {
+    float: none !important;
+    width: 100% !important;
+    margin-left: 0 !important;
+    display: block !important;
+  }
+}

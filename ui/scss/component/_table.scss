@@ -1,0 +1,55 @@
+@import "../global";
+
+table.table-standard {
+  word-wrap: break-word;
+  max-width: 100%;
+
+  th, td {
+    padding: $spacing-vertical/2 8px;
+  }
+  th {
+    font-weight: bold;
+    font-size: 0.9em;
+  }
+  td {
+    vertical-align: top;
+  }
+  thead th, > tr:first-child th {
+    vertical-align: bottom;
+    font-weight: bold;
+    font-size: 0.9em;
+    padding: $spacing-vertical/4+1 8px $spacing-vertical/4-2;
+    text-align: left;
+    border-bottom: 1px solid #e2e2e2;
+    img {
+      vertical-align: text-bottom;
+    }
+  }
+  tr.thead:not(:first-child) th {
+    border-top: 1px solid #e2e2e2;
+  }
+  tfoot td {
+    padding: $spacing-vertical / 2 8px;
+    font-size: .85em;
+  }
+  tbody {
+    tr {
+      &:nth-child(even):not(.odd) {
+        background-color: #f4f4f4;
+      }
+      &:nth-child(odd):not(.even) {
+        background-color: white;
+      }
+      &.thead {
+        background: none;
+      }
+      td {
+        border: 0 none;
+      }
+    }
+  }
+}
+
+table.table-stretch {
+  width: 100%;
+}

@@ -1,0 +1,35 @@
+language: node_js
+node_js: 5
+
+# note that travis still builds PRs so that covers
+# other branches
+branches:
+  only: 
+    - master
+    - development
+
+install:
+  - rvm install 2.3.1
+  - npm install
+
+script:
+  - rvm use 2.3.1 && gem install danger --version '~> 4.0' && danger
+  - mkdir -p dist/css dist/js
+  - node_modules/.bin/node-sass scss/all.scss dist/css/all.css
+  - node_modules/.bin/webpack
+  - mkdir upload
+  - cd dist; zip -r ../upload/dist.zip *; cd -
+  - .travis/echo_sha.sh > upload/data.json
+
+deploy:
+  provider: s3
+  access_key_id:
+    secure: "LjqvQ2MQj8fbumcnIKZC5wa03s3SIAnaLdOrmi7uRcltKIMko20QluRlpXipmYLdDRBg9sZrGgHJzN2QMZBk29XDsPhnFTG5Mhnaf9Ycxac2dy6FABtarNXjEOSH6Vv+Z96W8NkNTly7Okgyg0lXylTi1rLm/JxW14z+SrDPBOVPx5i4Wemd/y4Qx/5Oy611jaZIC4tExL+KWLCfX6tCgg1iE1vnJ22DAjNVlUOmZrLpuhuz/d/4mgkjtZvHAENDPmTItoN6WXxWPspMuaBaSMsj5OuhXqfro8BygbalWfUN7bSMvCqvO+irC6PBeZ4ntq675fS6g9Xb0vzZ6KnNck40PdHXdZRb4wvseqphCL4Xy9cLgUfND3GhxDtStJlqpMeaCg5Yjd9JknQjfCteObLqVeHyjIbWUNsQlyyQcgrVdAQRQiImG+do5qWQXC/02YqxffGJxW/6iQUC/TqC6vNoTKbMSVlccHExt9wnoooZ8D7MT7oN4BCk8bw+G/momH03hGoI0xffcVM9mN+y4z3/BbDX+bn/H5J2cmGWVFZHcOcbY+ehsTmdcqmm+KeePIpKmP6bD7waSUp+czXMgAgfjlWKuzmOFVxvlTo/rLzj5NlIH35RtIKOoVjU8kHzYI1aWAKIHNTHHrUJp4aVYeYGw5y2oejaHnO0ltmVoog="
+  secret_access_key:
+    secure: "cAWUhKK+2//JBmV2ohcLs3WTDgDWAMK2RxDrwTqUBEeOdAHMRnEVR++a7fzEL+2dcYi939ZaynNXS5JFJANdjIEKmSWDtvyszyl5MWH0xERZtD0K0xs9bNXS8Un6UrTxhaatmQmqx0KokdUmdH5iqB02BBCKLuwGEjMcUVbadXkp+F8Pd4EXmDPbYHQ2eNo87FzQ7dCQ+GOyQBDNM1Orq+hOKiqJOzB9sDWKShsMTeq5Hyb1oji3cAxTyi6niJ/M/46NokLrPT0xrJLxy+sw5k2106SJXyofJsW1UVOsa5Nxx/suJTv2D0E6d7Ei1XYNnkAbDltu1m9wMq2xqLyoxfdvcC7bxr/NcUZ+DTCKcsM5oa8CiL/y+sOpB8ia0CjO3WBebIUWQAhyswQb312rYsbfQXscb5TnheS+wo4Z1MLse7fSm6jzZRZwqGi27GxC7SFWkSkBwHgaQ8tA7mzsdi6DFmz/KrnwgzqzFRkGg9d0RNXVfUN09p0GJr9drVS1DscVYWGhhD1eDKAIEaEd89u0vKF83zLk73UuNVZA38kkERtLwv7Yr1rRdftL3/gt6fMiW//JQB9sRWV0fDfiWbV2vaki6c/0s6moX00UBuZq21FEpx8puylUOwkXNlQK6TH/bw41ikrRMO156njokYOwLgQaebI/Mb0Cwi32gOU="
+  bucket: lbry-ui
+  skip_cleanup: true
+  upload-dir: ${TRAVIS_BRANCH}
+  local_dir: upload
+  on:
+    all_branches: true

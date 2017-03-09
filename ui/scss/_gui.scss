@@ -1,0 +1,403 @@
+@import "global";
+
+@mixin text-link($color: $color-primary, $hover-opacity: 0.70) {
+
+  .icon
+  {
+    &:first-child {
+      padding-right: 5px;
+    }
+    &:last-child:not(:only-child) {
+      padding-left: 5px;
+    }
+  }
+
+  &:not(.no-underline) {
+    text-decoration: underline;
+    .icon {
+      text-decoration: none;
+    }
+  }
+  &:hover
+  {
+    opacity: $hover-opacity;
+    transition: opacity .225s ease;
+    text-decoration: underline;
+    .icon {
+      text-decoration: none;
+    }
+  }
+
+  color: $color;
+  cursor: pointer;
+}
+
+.icon-fixed-width {
+  /* This borrowed is from a component of Font Awesome we're not using, maybe add it? */
+  width: (18em / 14);
+  text-align: center;
+}
+
+section
+{
+  margin-bottom: $spacing-vertical;
+  &:last-child
+  {
+    margin-bottom: 0;
+  }
+  &:only-child {
+    /* If it's an only child, assume it's part of a React layout that will handle the last child condition on its own */
+    margin-bottom: $spacing-vertical;
+  }
+}
+
+main h1 {
+  font-size: 2.0em;
+  margin-bottom: $spacing-vertical;
+  margin-top: $spacing-vertical*2;
+  font-family: 'Raleway', sans-serif;
+}
+
+h2 {
+  font-size: 1.75em;
+}
+
+h3 { font-size: 1.4em; }
+
+h4 {
+  font-size: 1.2em;
+}
+
+h5 { font-size: 1.1em; }
+sup, sub {
+ vertical-align: baseline;
+ position: relative;
+}
+sup { top: -0.4em; }
+sub { top: 0.4em; }
+
+label {
+  cursor: default;
+  display: block;
+}
+
+code {
+  font: 0.8em Consolas, 'Lucida Console', 'Source Sans', monospace;
+  background-color: #eee;
+}
+
+p
+{
+  margin-bottom: 0.8em;
+  &:last-child
+  {
+    margin-bottom: 0;
+  }
+}
+
+.hidden {
+  display: none;
+}
+
+.disabled {
+  pointer-events: none;
+  opacity: 0.7;
+}
+
+input[type="text"], input[type="search"], textarea
+{
+  @include placeholder {
+    color: lighten($color-text-dark, 60%);
+  }
+  border: 2px solid rgba(160,160,160,.5);
+  padding-left: 5px;
+  padding-right: 5px;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+}
+input[type="text"], input[type="search"]
+{
+  line-height: $spacing-vertical - 4;
+  height: $spacing-vertical * 1.5;
+}
+
+.truncated-text {
+  display: inline-block;
+}
+
+.busy-indicator
+{
+  background: url('../img/busy.gif') no-repeat center center;
+  display: inline-block;
+  margin: -1em 0;
+  min-width: 16px;
+  min-height: 8px;
+  vertical-align: middle;
+  padding: 0 30px;
+  &:last-child
+  {
+    padding-right: 2px;
+  }
+  &:first-child
+  {
+    padding-left: 2px;
+  }
+}
+
+.button-set-item {
+  position: relative;
+  display: inline-block;
+
+  + .button-set-item
+  {
+    margin-left: $padding-button;
+  }
+}
+
+.button-block, .faux-button-block
+{
+  display: inline-block;
+  height: $height-button;
+  line-height: $height-button;
+  text-decoration: none;
+  border: 0 none;
+  text-align: center;
+  border-radius: 2px;
+  text-transform: uppercase;
+  .icon
+  {
+    top: 0em;
+  }
+  .icon:first-child
+  {
+    padding-right: 5px;
+  }
+  .icon:last-child
+  {
+    padding-left: 5px;
+  }
+}
+.button-block
+{
+  cursor: pointer;
+}
+
+.button__content {
+  margin: 0 $padding-button;
+}
+
+.button-primary
+{
+  color: white;
+  background-color: $color-primary;
+  box-shadow: $default-box-shadow;
+}
+.button-alt
+{
+  background-color: $color-bg-alt;
+  box-shadow: $default-box-shadow;
+}
+
+.button-text
+{
+  @include text-link();
+  display: inline-block;
+
+  .button__content {
+    margin: 0 $padding-text-link;
+  }
+}
+.button-text-help
+{
+  @include text-link(#aaa);
+  font-size: 0.8em;
+}
+
+.icon:only-child {
+  position: relative;
+  top: 0.16em;
+}
+
+.help {
+  font-size: .85em;
+  color: $color-help;
+}
+
+.meta
+{
+  font-size: 0.9em;
+  color: $color-meta-light;
+}
+
+.empty
+{
+  color: $color-meta-light;
+  font-style: italic;
+}
+
+.form-row
+{
+  + .form-row
+  {
+    margin-top: $spacing-vertical / 2;
+  }
+  .help
+  {
+    margin-top: $spacing-vertical / 2;
+  }
+  + .form-row-submit
+  {
+    margin-top: $spacing-vertical;
+  }
+}
+
+.form-field-container {
+  display: inline-block;
+}
+
+.form-field--text {
+  width: 330px;
+}
+
+.form-field--text-number {
+  width: 50px;
+}
+
+.form-field-advice-container {
+  position: relative;
+}
+
+.form-field-advice {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+
+  display: flex;
+  flex-direction: column;
+
+  white-space: nowrap;
+
+  transition: opacity 400ms ease-in;
+}
+
+.form-field-advice--fading {
+  opacity: 0;
+}
+
+.form-field-advice__arrow {
+  text-align: left;
+  padding-left: 18px;
+
+  font-size: 22px;
+  line-height: 0.3;
+  color: darken($color-primary, 5%);
+}
+
+
+.form-field-advice__content-container {
+  display: inline-block;
+}
+
+.form-field-advice__content {
+  display: inline-block;
+
+  padding: 5px;
+  border-radius: 2px;
+
+  background-color: darken($color-primary, 5%);
+  color: #fff;
+}
+
+.form-field-label {
+  width: 118px;
+  text-align: right;
+  vertical-align: top;
+  display: inline-block;
+}
+
+
+.sort-section {
+  display: block;
+  margin-bottom: 5px;
+
+
+  text-align: right;
+  font-size: 0.85em;
+  color: $color-help;
+}
+
+.modal-overlay {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  background-color: rgba(255, 255, 255, 0.74902);
+  z-index: 9999;
+}
+
+.modal {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  border: 1px solid rgb(204, 204, 204);
+  background: rgb(255, 255, 255);
+  overflow: auto;
+  border-radius: 4px;
+  outline: none;
+  padding: 36px;
+  max-width: 250px;
+}
+
+.modal__header {
+   margin-bottom: 5px;
+   text-align: center;
+}
+
+.modal__buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-top: 15px;
+}
+
+.modal__button {
+  margin: 0px 6px;
+}
+
+.error-modal-overlay {
+  background: rgba(#000, .88);
+}
+
+.error-modal__content {
+  display: flex;
+  padding: 0px 8px 10px 10px;
+}
+
+.error-modal__warning-symbol {
+  margin-top: 6px;
+  margin-right: 7px;
+}
+
+.download-started-modal__file-path {
+  word-break: break-all;
+}
+
+.error-modal {
+  max-width: none;
+  width: 400px;
+}
+.error-modal__error-list { /*shitty hack/temp fix for long errors making modals unusable*/
+  border: 1px solid #eee;
+  padding: 8px;
+  list-style: none;
+  max-height: 400px;
+  max-width: 400px;
+  overflow-y: hidden;
+}

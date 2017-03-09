@@ -1,0 +1,7 @@
+dist/css/*
+dist/js/*
+!dist/js/mediaelement
+node_modules
+.sass-cache
+.idea
+.DS_Store

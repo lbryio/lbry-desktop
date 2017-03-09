@@ -1,0 +1,246 @@
+@import "global";
+
+html
+{
+  height: 100%;
+  font-size: $font-size;
+}
+body
+{
+  font-family: 'Source Sans Pro', sans-serif;
+  line-height: $font-line-height;
+}
+
+$drawer-width: 240px;
+
+#drawer
+{
+  width: $drawer-width;
+  position: fixed;
+  min-height: 100vh;
+  left: 0;
+  top: 0;
+  background: $color-bg;
+  z-index: 3;
+  .drawer-item
+  {
+    display: block;
+    padding: $spacing-vertical / 2;
+    font-size: 1.2em;
+    height: $spacing-vertical * 1.5;
+    .icon
+    {
+      margin-right: 6px;
+    }
+    .link-label
+    {
+      line-height: $spacing-vertical * 1.5;
+    }
+    .badge
+    {
+      float: right;
+      background: $color-money;
+      display: inline-block;
+      padding: 2px;
+      color: white;
+      margin-top: $spacing-vertical * 0.25 - 2;
+      border-radius: 2px;
+    }
+  }
+  .drawer-item-selected
+  {
+    background: $color-canvas;
+    color: $color-primary;
+  }
+}
+#drawer-handle
+{
+  padding: $spacing-vertical / 2;
+  max-height: $height-header - $spacing-vertical;
+  text-align: center;
+}
+
+#window.drawer-closed
+{
+  #drawer { display: none }
+}
+#window.drawer-open
+{
+  #main-content { margin-left: $drawer-width; }
+  .open-drawer-link { display: none }
+  #header { padding-left: $drawer-width + $spacing-vertical / 2; }
+}
+
+#header
+{
+  background: $color-primary;
+  color: white;
+  &.header-no-subnav {
+    height: $height-header;
+  }
+  &.header-with-subnav {
+    height: $height-header * 2;
+  }
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 2;
+  box-sizing: border-box;
+  h1 { font-size: 1.8em; line-height: $height-header - $spacing-vertical; display: inline-block; float: left; }
+  &.header-scrolled
+  {
+    box-shadow: $default-box-shadow;
+  }
+}
+.header-top-bar
+{
+  padding: $spacing-vertical / 2;
+}
+.header-search
+{
+  margin-left: 60px;
+  text-align: center;
+  input[type="search"] {
+    background: rgba(255, 255, 255, 0.3);
+    color: white;
+    width: 400px;
+    @include placeholder-color(#e8e8e8);
+  }
+}
+
+nav.sub-header
+{
+  background: $color-primary;
+  text-transform: uppercase;
+  padding: $spacing-vertical / 2;
+  > a
+  {
+    $sub-header-selected-underline-height: 2px;
+    display: inline-block;
+    margin: 0 15px;
+    padding: 0 5px;
+    line-height: $height-header - $spacing-vertical - $sub-header-selected-underline-height;
+    color: #e8e8e8;
+    &:first-child
+    {
+      margin-left: 0;
+    }
+    &:last-child
+    {
+      margin-right: 0;
+    }
+    &.sub-header-selected
+    {
+      border-bottom: $sub-header-selected-underline-height solid #fff;
+      color: #fff;
+    }
+    &:hover
+    {
+      color: #fff;
+    }
+  }
+}
+
+#main-content
+{
+  background: $color-canvas;
+  &.no-sub-nav
+  {
+    min-height: calc(100vh - 60px); //should be -$height-header, but I'm dumb I guess? It wouldn't work
+    main { margin-top: $height-header; }
+  }
+  &.with-sub-nav
+  {
+    min-height: calc(100vh - 120px); //should be -$height-header, but I'm dumb I guess? It wouldn't work
+    main { margin-top: $height-header * 2; }
+  }
+  main
+  {
+    padding: $spacing-vertical;
+  }
+  h2
+  {
+    margin-bottom: $spacing-vertical;
+  }
+  h3, h4
+  {
+    margin-bottom: $spacing-vertical / 2;
+    margin-top: $spacing-vertical;
+    &:first-child
+    {
+      margin-top: 0;
+    }
+  }
+  .meta
+  {
+    + h2, + h3, + h4
+    {
+      margin-top: 0;
+    }
+  }
+}
+
+$header-icon-size: 1.5em;
+
+.open-drawer-link, .close-drawer-link
+{
+  display: inline-block;
+  font-size: $header-icon-size;
+  padding: 2px 6px 0 6px;
+  float: left;
+}
+.close-lbry-link
+{
+  font-size: $header-icon-size;
+  float: right;
+  padding: 0 6px 0 18px;
+}
+
+.card {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 800px;
+  padding: $spacing-vertical;
+  background: $color-bg;
+  box-shadow: $default-box-shadow;
+  border-radius: 2px;
+}
+.card-obscured
+{
+  position: relative;
+}
+.card-obscured .card-content {
+  -webkit-filter: blur($blur-intensity);
+  -moz-filter: blur($blur-intensity);
+  -o-filter: blur($blur-intensity);
+  -ms-filter: blur($blur-intensity);
+  filter: blur($blur-intensity);
+}
+.card-overlay {
+  position: absolute;
+  left: 0px;
+  right: 0px;
+  top: 0px;
+  bottom: 0px;
+  padding: 20px;
+  background-color: rgba(128, 128, 128, 0.8);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  font-weight: 600;
+}
+
+.card-series-submit
+{
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 800px;
+  padding: $spacing-vertical / 2;
+}
+
+.full-screen
+{
+  width: 100%;
+  height: 100%;
+}
