@@ -8,12 +8,12 @@ Web UI version numbers should always match the corresponding version of LBRY App
 
 ## [Unreleased]
 ### Added
-  * A way to access the Developer Settings panel in Electron (Ctrl-Shift and click logo)
-  * Option in Developer Settings to toggle developer menu
+  *
+  *
   *
 
 ### Changed
-  * Open and reveal files using Electron instead of daemon
+  *
   *
   *
 
@@ -21,6 +21,13 @@ Web UI version numbers should always match the corresponding version of LBRY App
   *
   *
   *
+
+## [0.9.0rc15] - 2017-03-09
+### Added
+ * A way to access the Developer Settings panel in Electron (Ctrl-Shift and click logo)
+ * Option in Developer Settings to toggle developer menu
+### Changed
+ * Open and reveal files using Electron instead of daemon
 
 ## [0.9.0rc12] - 2017-03-06
 ### Changed
