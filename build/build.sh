@@ -3,13 +3,14 @@
 set -euo pipefail
 set -x
 
-ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )"
 cd "$ROOT"
+BUILD_DIR="$ROOT/build"
 
 if [ "$(uname)" == "Darwin" ]; then
-    ICON="$ROOT/build/icon.icns"
+    ICON="$BUILD_DIR/icon.icns"
 else
-    ICON="$ROOT/build/icons/lbry48.png"
+    ICON="$BUILD_DIR/icons/lbry48.png"
 fi
 
 FULL_BUILD="${FULL_BUILD:-false}"
@@ -19,9 +20,9 @@ fi
 
 if [ "$FULL_BUILD" == "true" ]; then
   # install dependencies
-  $ROOT/prebuild.sh
+  $BUILD_DIR/prebuild.sh
 
-  VENV="$ROOT/build_venv"
+  VENV="$BUILD_DIR/venv"
   if [ -d "$VENV" ]; then
     rm -rf "$VENV"
   fi
@@ -29,9 +30,9 @@ if [ "$FULL_BUILD" == "true" ]; then
   set +u
   source "$VENV/bin/activate"
   set -u
-  pip install -r "$ROOT/requirements.txt"
-  python "$ROOT/set_version.py"
-  python "$ROOT/set_build.py"
+  pip install -r "$BUILD_DIR/requirements.txt"
+  python "$BUILD_DIR/set_version.py"
+  python "$BUILD_DIR/set_build.py"
 fi
 
 [ -d "$ROOT/dist" ] && rm -rf "$ROOT/dist"

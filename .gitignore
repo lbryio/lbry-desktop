@@ -4,7 +4,7 @@ dist
 
 /app/dist
 /app/node_modules
-/build_venv
+/build/venv
 /lbry-app-venv
 /lbrynet-daemon/build
 /lbrynet-daemon/venv
