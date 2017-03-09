@@ -160,13 +160,13 @@ export let FileList = React.createClass({
         seenUris = {};
 
     const fileInfosSorted = this._sortFunctions[this.state.sortBy](this.props.fileInfos);
-    for (let {lbry_uri, outpoint, metadata} of fileInfosSorted) {
-      if (!metadata || seenUris[lbry_uri]) {
+    for (let {name, outpoint, metadata} of fileInfosSorted) {
+      if (!metadata || seenUris[name]) {
         continue;
       }
 
-      seenUris[lbry_uri] = true;
-      content.push(<FileTileStream key={lbry_uri} name={lbry_uri} hideOnRemove={true} outpoint={outpoint}
+      seenUris[name] = true;
+      content.push(<FileTileStream key={outpoint} outpoint={outpoint} name={name} hideOnRemove={true}
                                    hidePrice={this.props.hidePrices} metadata={metadata} />);
     }
 
