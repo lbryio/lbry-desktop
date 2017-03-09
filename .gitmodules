@@ -1,6 +1,3 @@
-[submodule "lbry-web-ui"]
-	path = lbry-web-ui
-	url = https://github.com/lbryio/lbry-web-ui.git
 [submodule "lbry"]
 	path = lbry
 	url = https://github.com/lbryio/lbry.git
