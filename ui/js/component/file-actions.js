@@ -68,7 +68,7 @@ let FileActionsRow = React.createClass({
 
   propTypes: {
     streamName: React.PropTypes.string,
-    sdHash: React.PropTypes.string.isRequired,
+    outpoint: React.PropTypes.string.isRequired,
     metadata: React.PropTypes.oneOfType([React.PropTypes.object, React.PropTypes.string]),
   },
   getInitialState: function() {
@@ -145,11 +145,7 @@ let FileActionsRow = React.createClass({
     });
   },
   handleRemoveConfirmed: function() {
-    if (this.props.streamName) {
-      lbry.removeFile(this.props.sdHash, this.props.streamName, this.state.deleteChecked);
-    } else {
-      alert('this file cannot be deleted because lbry is a retarded piece of shit');
-    }
+    lbry.removeFile(this.props.outpoint, this.state.deleteChecked);
     this.setState({
       modal: null,
       fileInfo: false,
@@ -163,12 +159,12 @@ let FileActionsRow = React.createClass({
   },
   componentDidMount: function() {
     this._isMounted = true;
-    this._fileInfoSubscribeId = lbry.fileInfoSubscribe(this.props.sdHash, this.onFileInfoUpdate);
+    this._fileInfoSubscribeId = lbry.fileInfoSubscribe(this.props.outpoint, this.onFileInfoUpdate);
   },
   componentWillUnmount: function() {
     this._isMounted = false;
     if (this._fileInfoSubscribeId) {
-      lbry.fileInfoUnsubscribe(this.props.sdHash, this._fileInfoSubscribeId);
+      lbry.fileInfoUnsubscribe(this.props.outpoint, this._fileInfoSubscribeId);
     }
   },
   render: function() {
@@ -238,7 +234,7 @@ export let FileActions = React.createClass({
 
   propTypes: {
     streamName: React.PropTypes.string,
-    sdHash: React.PropTypes.string.isRequired,
+    outpoint: React.PropTypes.string.isRequired,
     metadata: React.PropTypes.oneOfType([React.PropTypes.object, React.PropTypes.string]),
   },
   getInitialState: function() {
@@ -262,7 +258,7 @@ export let FileActions = React.createClass({
   },
   componentDidMount: function() {
     this._isMounted = true;
-    this._fileInfoSubscribeId = lbry.fileInfoSubscribe(this.props.sdHash, this.onFileInfoUpdate);
+    this._fileInfoSubscribeId = lbry.fileInfoSubscribe(this.props.outpoint, this.onFileInfoUpdate);
     lbry.getStreamAvailability(this.props.streamName, (availability) => {
       if (this._isMounted) {
         this.setState({
@@ -290,7 +286,7 @@ export let FileActions = React.createClass({
     return (<section className="file-actions">
       {
         fileInfo || this.state.available || this.state.forceShowActions
-          ? <FileActionsRow sdHash={this.props.sdHash} metadata={this.props.metadata} streamName={this.props.streamName} />
+          ? <FileActionsRow outpoint={this.props.outpoint} metadata={this.props.metadata} streamName={this.props.streamName} />
           : <div>
               <div className="button-set-item empty">This file is not currently available.</div>
               <ToolTip label="Why?"

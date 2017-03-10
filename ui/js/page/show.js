@@ -19,6 +19,7 @@ var FormatItem = React.createClass({
     claimInfo: React.PropTypes.object,
     cost: React.PropTypes.number,
     name: React.PropTypes.string,
+    outpoint: React.PropTypes.string,
     costIncludesData: React.PropTypes.bool,
   },
   render: function() {
@@ -62,7 +63,7 @@ var FormatItem = React.createClass({
               </tbody>
             </table>
           </section>
-          <FileActions streamName={this.props.name} sdHash={claimInfo.sources.lbry_sd_hash} metadata={claimInfo} />
+          <FileActions streamName={this.props.name} outpoint={this.props.outpoint} metadata={claimInfo} />
           <section>
             <Link href="https://lbry.io/dmca" label="report" className="button-text-help" />
           </section>
@@ -120,9 +121,10 @@ var DetailPage = React.createClass({
   componentWillMount: function() {
     document.title = 'lbry://' + this.props.name;
 
-    lbry.resolveName(this.props.name, (metadata) => {
+    lbry.claim_show({name: this.props.name}, ({name, txid, nout, value}) => {
       this.setState({
-        metadata: metadata,
+        outpoint: txid + ':' + nout,
+        metadata: value,
         nameLookupComplete: true,
       });
     });
@@ -143,12 +145,13 @@ var DetailPage = React.createClass({
     const costIncludesData = this.state.costIncludesData;
     const metadata = this.state.metadata;
     const cost = this.state.cost;
+    const outpoint = this.state.outpoint;
 
     return (
       <main>
         <section className="card">
           {this.state.nameLookupComplete ? (
-            <FormatsSection name={name} claimInfo={metadata} cost={cost} costIncludesData={costIncludesData} />
+            <FormatsSection name={name} outpoint={outpoint} claimInfo={metadata} cost={cost} costIncludesData={costIncludesData} />
           ) : (
             <div>
               <h2>No content</h2>

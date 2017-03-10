@@ -209,26 +209,6 @@ lbry.getFeaturedDiscoverNames = function(callback) {
   });
 }
 
-lbry.getFileStatus = function(name, callback, errorCallback) {
-  lbry.call('get_lbry_file', { 'name': name }, callback, errorCallback);
-}
-
-lbry.getFilesInfo = function(callback) {
-  lbry.call('get_lbry_files', {}, callback);
-}
-
-lbry.getFileInfoByName = function(name, callback) {
-  lbry.call('get_lbry_file', {name: name}, callback);
-}
-
-lbry.getFileInfoBySdHash = function(sdHash, callback) {
-  lbry.call('get_lbry_file', {sd_hash: sdHash}, callback);
-}
-
-lbry.getFileInfoByFilename = function(filename, callback) {
-  lbry.call('get_lbry_file', {file_name: filename}, callback);
-}
-
 lbry.getMyClaims = function(callback) {
   lbry.call('get_name_claims', {}, callback);
 }
@@ -241,14 +221,14 @@ lbry.stopFile = function(name, callback) {
   lbry.call('stop_lbry_file', { name: name }, callback);
 }
 
-lbry.removeFile = function(sdHash, name, deleteTargetFile=true, callback) { // Name param is temporary until the API can delete by unique ID (SD hash, claim ID etc.)
-  this._removedFiles.push(sdHash);
-  this._updateSubscribedFileInfo(sdHash);
+lbry.removeFile = function(outpoint, deleteTargetFile=true, callback) {
+  this._removedFiles.push(outpoint);
+  this._updateSubscribedFileInfo(outpoint);
 
-  lbry.call('delete_lbry_file', {
-    name: name,
+  lbry.file_delete({
+    outpoint: outpoint,
     delete_target_file: deleteTargetFile,
-  }, callback);
+  }).then(callback);
 }
 
 lbry.getFileInfoWhenListed = function(name, callback, timeoutCallback, tryNum=0) {
@@ -429,7 +409,7 @@ lbry._fileInfoSubscribeIdCounter = 0;
 lbry._fileInfoSubscribeCallbacks = {};
 lbry._fileInfoSubscribeInterval = 5000;
 lbry._removedFiles = [];
-lbry._claimIdOwnershipCache = {}; // should be claimId!!! But not
+lbry._claimIdOwnershipCache = {};
 
 lbry._updateClaimOwnershipCache = function(claimId) {
   lbry.getMyClaims((claimInfos) => {
@@ -439,17 +419,17 @@ lbry._updateClaimOwnershipCache = function(claimId) {
   });
 };
 
-lbry._updateSubscribedFileInfo = function(sdHash) {
-  const callSubscribedCallbacks = (sdHash, fileInfo) => {
-    for (let [subscribeId, callback] of Object.entries(this._fileInfoSubscribeCallbacks[sdHash])) {
+lbry._updateSubscribedFileInfo = function(outpoint) {
+  const callSubscribedCallbacks = (outpoint, fileInfo) => {
+    for (let [subscribeId, callback] of Object.entries(this._fileInfoSubscribeCallbacks[outpoint])) {
       callback(fileInfo);
     }
   }
 
-  if (lbry._removedFiles.includes(sdHash)) {
-    callSubscribedCallbacks(sdHash, false);
+  if (lbry._removedFiles.includes(outpoint)) {
+    callSubscribedCallbacks(outpoint, false);
   } else {
-    lbry.getFileInfoBySdHash(sdHash, (fileInfo) => {
+    lbry.file_list({outpoint: outpoint}).then(([fileInfo]) => {
       if (fileInfo) {
         if (this._claimIdOwnershipCache[fileInfo.claim_id] === undefined) {
           this._updateClaimOwnershipCache(fileInfo.claim_id);
@@ -457,26 +437,26 @@ lbry._updateSubscribedFileInfo = function(sdHash) {
         fileInfo.isMine = !!this._claimIdOwnershipCache[fileInfo.claim_id];
       }
 
-      callSubscribedCallbacks(sdHash, fileInfo);
+      callSubscribedCallbacks(outpoint, fileInfo);
     });
   }
 
-  if (Object.keys(this._fileInfoSubscribeCallbacks[sdHash]).length) {
+  if (Object.keys(this._fileInfoSubscribeCallbacks[outpoint]).length) {
     setTimeout(() => {
-      this._updateSubscribedFileInfo(sdHash);
+      this._updateSubscribedFileInfo(outpoint);
     }, lbry._fileInfoSubscribeInterval);
   }
 }
 
-lbry.fileInfoSubscribe = function(sdHash, callback) {
-  if (!lbry._fileInfoSubscribeCallbacks[sdHash])
+lbry.fileInfoSubscribe = function(outpoint, callback) {
+  if (!lbry._fileInfoSubscribeCallbacks[outpoint])
   {
-    lbry._fileInfoSubscribeCallbacks[sdHash] = {};
+    lbry._fileInfoSubscribeCallbacks[outpoint] = {};
   }
 
   const subscribeId = ++lbry._fileInfoSubscribeIdCounter;
-  lbry._fileInfoSubscribeCallbacks[sdHash][subscribeId] = callback;
-  lbry._updateSubscribedFileInfo(sdHash);
+  lbry._fileInfoSubscribeCallbacks[outpoint][subscribeId] = callback;
+  lbry._updateSubscribedFileInfo(outpoint);
   return subscribeId;
 }
 
@@ -501,7 +481,7 @@ lbry = new Proxy(lbry, {
 
     return function(params={}) {
       return new Promise((resolve, reject) => {
-        jsonrpc.call(lbry.connectionString, name, [params], resolve, reject, reject);
+        jsonrpc.call(lbry.daemonConnectionString, name, [params], resolve, reject, reject);
       });
     };
   }
