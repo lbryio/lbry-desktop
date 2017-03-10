@@ -8,9 +8,9 @@ Web UI version numbers should always match the corresponding version of LBRY App
 
 ## [Unreleased]
 ### Added
-  *
-  *
-  *
+  * You can now make API calls directly on the lbry module, e.g. lbry.peer_list()
+  * New-style API calls return promises instead of using callbacks
+  * Wherever possible, use outpoints for unique IDs instead of names or SD hashes
 
 ### Changed
   *

@@ -9,9 +9,7 @@ lbry.showMenuIfNeeded();
 
 var init = function() {
   window.lbry = lbry;
-  if (lbry.getClientSetting('debug')) {
-    window.lighthouse = lighthouse;
-  }
+  window.lighthouse = lighthouse;
 
   var canvas = document.getElementById('canvas');
   if (window.sessionStorage.getItem('loaded') == 'y') {

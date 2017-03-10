@@ -1,9 +1,10 @@
 import lighthouse from './lighthouse.js';
+import jsonrpc from './jsonrpc.js';
 
 const {remote} = require('electron');
 const menu = remote.require('./menu/main-menu');
 
-var lbry = {
+let lbry = {
   isConnected: false,
   rootPath: '.',
   daemonConnectionString: 'http://localhost:5279/lbryapi',
@@ -22,74 +23,8 @@ var lbry = {
   }
 };
 
-lbry.jsonrpc_call = function (connectionString, method, params, callback, errorCallback, connectFailedCallback, timeout) {
-  var xhr = new XMLHttpRequest;
-  if (typeof connectFailedCallback !== 'undefined') {
-    if (timeout) {
-      xhr.timeout = timeout;
-    }
-
-    xhr.addEventListener('error', function (e) {
-      connectFailedCallback(e);
-    });
-    xhr.addEventListener('timeout', function() {
-      connectFailedCallback(new Error('XMLHttpRequest connection timed out'));
-    })
-  }
-  xhr.addEventListener('load', function() {
-    var response = JSON.parse(xhr.responseText);
-
-    if (response.error) {
-      if (errorCallback) {
-        errorCallback(response.error);
-      } else {
-        var errorEvent = new CustomEvent('unhandledError', {
-          detail: {
-            connectionString: connectionString,
-            method: method,
-            params: params,
-            code: response.error.code,
-            message: response.error.message,
-            data: response.error.data
-          }
-        });
-        document.dispatchEvent(errorEvent)
-      }
-    } else if (callback) {
-      callback(response.result);
-    }
-  });
-
-  if (connectFailedCallback) {
-    xhr.addEventListener('error', function (event) {
-      connectFailedCallback(event);
-    });
-  } else {
-    xhr.addEventListener('error', function (event) {
-      var errorEvent = new CustomEvent('unhandledError', {
-        detail: {
-          connectionString: connectionString,
-          method: method,
-          params: params,
-          code: xhr.status,
-          message: 'Connection to API server failed'
-        }
-      });
-      document.dispatchEvent(errorEvent);
-    });
-  }
-
-  xhr.open('POST', connectionString, true);
-  xhr.send(JSON.stringify({
-    'jsonrpc': '2.0',
-    'method': method,
-    'params': params,
-    'id': 0
-  }));
-}
-
 lbry.call = function (method, params, callback, errorCallback, connectFailedCallback) {
-  lbry.jsonrpc_call(lbry.daemonConnectionString, method, [params], callback, errorCallback, connectFailedCallback);
+  jsonrpc.call(lbry.daemonConnectionString, method, [params], callback, errorCallback, connectFailedCallback);
 }
 
 
@@ -244,10 +179,8 @@ lbry.getCostInfoForName = function(name, callback, errorCallback) {
     }, errorCallback);
   }
 
-  lighthouse.getSizeForName(name, (size) => {
+  lighthouse.get_size_for_name(name).then((size) => {
     getCostWithData(name, size, callback, errorCallback);
-  }, () => {
-    getCostNoData(name, callback, errorCallback);
   }, () => {
     getCostNoData(name, callback, errorCallback);
   });
@@ -276,26 +209,6 @@ lbry.getFeaturedDiscoverNames = function(callback) {
   });
 }
 
-lbry.getFileStatus = function(name, callback, errorCallback) {
-  lbry.call('get_lbry_file', { 'name': name }, callback, errorCallback);
-}
-
-lbry.getFilesInfo = function(callback) {
-  lbry.call('get_lbry_files', {}, callback);
-}
-
-lbry.getFileInfoByName = function(name, callback) {
-  lbry.call('get_lbry_file', {name: name}, callback);
-}
-
-lbry.getFileInfoBySdHash = function(sdHash, callback) {
-  lbry.call('get_lbry_file', {sd_hash: sdHash}, callback);
-}
-
-lbry.getFileInfoByFilename = function(filename, callback) {
-  lbry.call('get_lbry_file', {file_name: filename}, callback);
-}
-
 lbry.getMyClaims = function(callback) {
   lbry.call('get_name_claims', {}, callback);
 }
@@ -308,14 +221,14 @@ lbry.stopFile = function(name, callback) {
   lbry.call('stop_lbry_file', { name: name }, callback);
 }
 
-lbry.removeFile = function(sdHash, name, deleteTargetFile=true, callback) { // Name param is temporary until the API can delete by unique ID (SD hash, claim ID etc.)
-  this._removedFiles.push(sdHash);
-  this._updateSubscribedFileInfo(sdHash);
+lbry.removeFile = function(outpoint, deleteTargetFile=true, callback) {
+  this._removedFiles.push(outpoint);
+  this._updateSubscribedFileInfo(outpoint);
 
-  lbry.call('delete_lbry_file', {
-    name: name,
+  lbry.file_delete({
+    outpoint: outpoint,
     delete_target_file: deleteTargetFile,
-  }, callback);
+  }).then(callback);
 }
 
 lbry.getFileInfoWhenListed = function(name, callback, timeoutCallback, tryNum=0) {
@@ -329,7 +242,7 @@ lbry.getFileInfoWhenListed = function(name, callback, timeoutCallback, tryNum=0)
 
   // Calls callback with file info when it appears in the lbrynet file manager.
   // If timeoutCallback is provided, it will be called if the file fails to appear.
-  lbry.getFileStatus(name, (fileInfo) => {
+  lbry.file_list({name: name}).then(([fileInfo]) => {
     if (fileInfo) {
       callback(fileInfo);
     } else {
@@ -496,7 +409,7 @@ lbry._fileInfoSubscribeIdCounter = 0;
 lbry._fileInfoSubscribeCallbacks = {};
 lbry._fileInfoSubscribeInterval = 5000;
 lbry._removedFiles = [];
-lbry._claimIdOwnershipCache = {}; // should be claimId!!! But not
+lbry._claimIdOwnershipCache = {};
 
 lbry._updateClaimOwnershipCache = function(claimId) {
   lbry.getMyClaims((claimInfos) => {
@@ -506,17 +419,17 @@ lbry._updateClaimOwnershipCache = function(claimId) {
   });
 };
 
-lbry._updateSubscribedFileInfo = function(sdHash) {
-  const callSubscribedCallbacks = (sdHash, fileInfo) => {
-    for (let [subscribeId, callback] of Object.entries(this._fileInfoSubscribeCallbacks[sdHash])) {
+lbry._updateSubscribedFileInfo = function(outpoint) {
+  const callSubscribedCallbacks = (outpoint, fileInfo) => {
+    for (let [subscribeId, callback] of Object.entries(this._fileInfoSubscribeCallbacks[outpoint])) {
       callback(fileInfo);
     }
   }
 
-  if (lbry._removedFiles.includes(sdHash)) {
-    callSubscribedCallbacks(sdHash, false);
+  if (lbry._removedFiles.includes(outpoint)) {
+    callSubscribedCallbacks(outpoint, false);
   } else {
-    lbry.getFileInfoBySdHash(sdHash, (fileInfo) => {
+    lbry.file_list({outpoint: outpoint}).then(([fileInfo]) => {
       if (fileInfo) {
         if (this._claimIdOwnershipCache[fileInfo.claim_id] === undefined) {
           this._updateClaimOwnershipCache(fileInfo.claim_id);
@@ -524,26 +437,26 @@ lbry._updateSubscribedFileInfo = function(sdHash) {
         fileInfo.isMine = !!this._claimIdOwnershipCache[fileInfo.claim_id];
       }
 
-      callSubscribedCallbacks(sdHash, fileInfo);
+      callSubscribedCallbacks(outpoint, fileInfo);
     });
   }
 
-  if (Object.keys(this._fileInfoSubscribeCallbacks[sdHash]).length) {
+  if (Object.keys(this._fileInfoSubscribeCallbacks[outpoint]).length) {
     setTimeout(() => {
-      this._updateSubscribedFileInfo(sdHash);
+      this._updateSubscribedFileInfo(outpoint);
     }, lbry._fileInfoSubscribeInterval);
   }
 }
 
-lbry.fileInfoSubscribe = function(sdHash, callback) {
-  if (!lbry._fileInfoSubscribeCallbacks[sdHash])
+lbry.fileInfoSubscribe = function(outpoint, callback) {
+  if (!lbry._fileInfoSubscribeCallbacks[outpoint])
   {
-    lbry._fileInfoSubscribeCallbacks[sdHash] = {};
+    lbry._fileInfoSubscribeCallbacks[outpoint] = {};
   }
 
   const subscribeId = ++lbry._fileInfoSubscribeIdCounter;
-  lbry._fileInfoSubscribeCallbacks[sdHash][subscribeId] = callback;
-  lbry._updateSubscribedFileInfo(sdHash);
+  lbry._fileInfoSubscribeCallbacks[outpoint][subscribeId] = callback;
+  lbry._updateSubscribedFileInfo(outpoint);
   return subscribeId;
 }
 
@@ -559,5 +472,19 @@ lbry.showMenuIfNeeded = function() {
   }
   sessionStorage.setItem('menuShown', chosenMenu);
 };
+
+lbry = new Proxy(lbry, {
+  get: function(target, name) {
+    if (name in target) {
+      return target[name];
+    }
+
+    return function(params={}) {
+      return new Promise((resolve, reject) => {
+        jsonrpc.call(lbry.daemonConnectionString, name, [params], resolve, reject, reject);
+      });
+    };
+  }
+});
 
 export default lbry;

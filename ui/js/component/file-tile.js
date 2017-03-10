@@ -58,7 +58,7 @@ export let FileTileStream = React.createClass({
 
   propTypes: {
     metadata: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.object]),
-    sdHash: React.PropTypes.string,
+    outpoint: React.PropTypes.string,
     hideOnRemove: React.PropTypes.bool,
     hidePrice: React.PropTypes.bool,
     obscureNsfw: React.PropTypes.bool
@@ -79,12 +79,12 @@ export let FileTileStream = React.createClass({
   componentDidMount: function() {
     this._isMounted = true;
     if (this.props.hideOnRemove) {
-      lbry.fileInfoSubscribe(this.props.sdHash, this.onFileInfoUpdate);
+      lbry.fileInfoSubscribe(this.props.outpoint, this.onFileInfoUpdate);
     }
   },
   componentWillUnmount: function() {
     if (this._fileInfoSubscribeId) {
-      lbry.fileInfoUnsubscribe(this.props.sdHash, this._fileInfoSubscribeId);
+      lbry.fileInfoUnsubscribe(this.props.outpoint, this._fileInfoSubscribeId);
     }
   },
   onFileInfoUpdate: function(fileInfo) {
@@ -135,7 +135,7 @@ export let FileTileStream = React.createClass({
                 </TruncatedText>
               </a>
             </h3>
-            <FileActions streamName={this.props.name} sdHash={this.props.sdHash} metadata={metadata} />
+            <FileActions streamName={this.props.name} outpoint={this.props.outpoint} metadata={metadata} />
             <p className="file-tile__description">
               <TruncatedText lines={3}>
                 {isConfirmed
@@ -168,7 +168,7 @@ export let FileTile = React.createClass({
 
   getInitialState: function() {
     return {
-      sdHash: null,
+      outpoint: null,
       metadata: null
     }
   },
@@ -176,12 +176,12 @@ export let FileTile = React.createClass({
   componentDidMount: function() {
     this._isMounted = true;
 
-    lbry.resolveName(this.props.name, (metadata) => {
-      if (this._isMounted && metadata) {
+    lbry.claim_show({name: this.props.name}).then(({value, txid, nout}) => {
+      if (this._isMounted && value) {
         // In case of a failed lookup, metadata will be null, in which case the component will never display
         this.setState({
-          sdHash: metadata.sources.lbry_sd_hash,
-          metadata: metadata,
+          outpoint: txid + ':' + nout,
+          metadata: value,
         });
       }
     });
@@ -190,10 +190,10 @@ export let FileTile = React.createClass({
     this._isMounted = false;
   },
   render: function() {
-    if (!this.state.metadata || !this.state.sdHash) {
+    if (!this.state.metadata || !this.state.outpoint) {
       return null;
     }
 
-    return <FileTileStream sdHash={this.state.sdHash} metadata={this.state.metadata} {... this.props} />;
+    return <FileTileStream outpoint={this.state.outpoint} metadata={this.state.metadata} {... this.props} />;
   }
 });
