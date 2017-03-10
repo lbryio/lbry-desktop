@@ -24,7 +24,7 @@ export let FileListDownloaded = React.createClass({
       lbry.file_list().then((fileInfos) => {
         if (!this._isMounted) { return; }
 
-        const myClaimOutpoints = myClaimInfos.map(({txid, nOut}) => txid + ':' + nOut);
+        const myClaimOutpoints = myClaimInfos.map(({txid, nout}) => txid + ':' + nout);
         this.setState({
           fileInfos: fileInfos.filter(({outpoint}) => !myClaimOutpoints.includes(outpoint)),
         });
@@ -72,7 +72,7 @@ export let FileListPublished = React.createClass({
       lbry.file_list().then((fileInfos) => {
         if (!this._isMounted) { return; }
 
-        const myClaimOutpoints = claimInfos.map(({txid, nOut}) => txid + ':' + nOut);
+        const myClaimOutpoints = claimInfos.map(({txid, nout}) => txid + ':' + nout);
         this.setState({
           fileInfos: fileInfos.filter(({outpoint}) => myClaimOutpoints.includes(outpoint)),
         });
