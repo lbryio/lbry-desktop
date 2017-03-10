@@ -1,16 +1,21 @@
-#! /bin/bash
+#!/bin/bash
 
-set -eu -o xtrace
+set -euxo pipefail
 
-pushd lbry
-git tag -d $(git describe)
-git reset --hard origin/master
-popd
+ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )"
+cd "$ROOT"
 
-pushd lbryum
-git tag -d $(git describe)
-git reset --hard origin/master
-popd
+(
+  cd lbry
+  git tag -d $(git describe)
+  git reset --hard origin/master
+)
+
+(
+  cd lbryum
+  git tag -d $(git describe)
+  git reset --hard origin/master
+)
 
 git tag -d $(git describe)
 git reset --hard HEAD~1
