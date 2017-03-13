@@ -4,7 +4,13 @@ This is a graphical browser for the decentralized content marketplace provided b
 
 ## Installing
 
-Check out the [release page](https://github.com/lbryio/lbry-app/releases/latest) to download a binary.
+We provide installers for Windows, macOS, and Debian-based Linux.
+
+| Windows | macOS | Linux |
+| --- | --- | --- |
+| [Download](https://lbry.io/get/lbry.msi) | [Download](https://lbry.io/get/lbry.dmg) | [Download](https://lbry.io/get/lbry.deb) |
+
+Our [releases page](https://github.com/lbryio/lbry-app/releases/latest) also contains the latest release, pre-releases, and past builds.
 
 To install from source or make changes to the application, continue reading below.
 
