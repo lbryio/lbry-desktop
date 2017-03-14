@@ -16,25 +16,9 @@ import requests
 
 import changelog
 
-NO_CHANGE = ('No change since the last release. This release is simply a placeholder'
-             ' so that LBRY and LBRY App track the same version')
-TOKEN_MSG = """
-Please enter your personal access token. If you don't have one
-See https://github.com/lbryio/lbry-app/wiki/Release-Script#generate-a-personal-access-token
-for instructions on how to generate one.
-
-You can also set the GH_TOKEN environment variable to avoid seeing this message
-in the future"""
-DEFAULT_BRANCHES = {
-    'lbry': 'master',
-    'lbry-app': 'master',
-    'lbryum': 'master'
-}
 # TODO: ask bumpversion for these
 LBRY_PARTS = ('major', 'minor', 'patch', 'release', 'candidate')
 LBRYUM_PARTS = ('major', 'minor', 'patch')
-LBRYUM_MSG = """The lbryum repo has changes but you didn't specify how to bump the
-version. Please enter one of {}""".format(', '.join(LBRYUM_PARTS))
 
 
 def main():
@@ -47,15 +31,11 @@ def main():
         "--lbryum-part", help="part of lbryum version to bump",
         choices=LBRYUM_PARTS
     )
-    parser.add_argument(
-        "--ui-part", help="part of the ui to bump",
-        choices=LBRY_PARTS
-    )
     parser.add_argument("--branch", help="branch to use for each repo; useful for testing")
     parser.add_argument(
         "--last-release",
         help=("manually set the last release version. The default is to query and parse the"
-              " value from the rlease page.")
+              " value from the release page.")
     )
     parser.add_argument("--skip-sanity-checks", action="store_true")
     parser.add_argument(
@@ -139,7 +119,9 @@ def main():
     current_tag = base.git.describe()
 
     github_repo.create_git_release(current_tag, current_tag, release_msg, draft=True)
-    lbrynet_daemon_release_msg = changelogs.get('lbry', NO_CHANGE)
+    no_change_msg = ('No change since the last release. This release is simply a placeholder'
+                     ' so that LBRY and LBRY App track the same version')
+    lbrynet_daemon_release_msg = changelogs.get('lbry', no_change_msg)
     auth.get_repo('lbryio/lbry').create_git_release(
         current_tag, current_tag, lbrynet_daemon_release_msg, draft=True)
 
@@ -157,7 +139,13 @@ def get_gh_token():
     if 'GH_TOKEN' in os.environ:
         gh_token = os.environ['GH_TOKEN']
     else:
-        print TOKEN_MSG
+        print """
+Please enter your personal access token. If you don't have one
+See https://github.com/lbryio/lbry-app/wiki/Release-Script#generate-a-personal-access-token
+for instructions on how to generate one.
+
+You can also set the GH_TOKEN environment variable to avoid seeing this message
+in the future"""
         inpt = raw_input('token: ')
         gh_token = inpt.strip()
     return gh_token
@@ -169,7 +157,8 @@ def get_lbryum_part_if_needed(repo):
 
 
 def get_lbryum_part(repo):
-    print LBRYUM_MSG
+    print """The lbryum repo has changes but you didn't specify how to bump the
+version. Please enter one of {}""".format(', '.join(LBRYUM_PARTS))
     while True:
         part = raw_input('part: ')
         if part in LBRYUM_PARTS:
@@ -179,9 +168,7 @@ def get_lbryum_part(repo):
 
 
 def get_branch(repo_name, override=None):
-    if override:
-        return override
-    return DEFAULT_BRANCHES[repo_name]
+    return override or 'master'
 
 
 def get_release_msg(changelogs, names):
