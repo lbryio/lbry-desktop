@@ -429,7 +429,10 @@ lbry._updateSubscribedFileInfo = function(outpoint) {
   if (lbry._removedFiles.includes(outpoint)) {
     callSubscribedCallbacks(outpoint, false);
   } else {
-    lbry.file_list({outpoint: outpoint}).then(([fileInfo]) => {
+    lbry.file_list({
+      outpoint: outpoint,
+      full_status: true,
+    }).then(([fileInfo]) => {
       if (fileInfo) {
         if (this._claimIdOwnershipCache[fileInfo.claim_id] === undefined) {
           this._updateClaimOwnershipCache(fileInfo.claim_id);
