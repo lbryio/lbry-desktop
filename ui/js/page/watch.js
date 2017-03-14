@@ -27,7 +27,7 @@ var WatchPage = React.createClass({
     };
   },
   componentDidMount: function() {
-    lbry.get({name: this.props.name}, (fileInfo) => {
+    lbry.get({name: this.props.name}).then((fileInfo) => {
       this._outpoint = fileInfo.outpoint;
       this.updateLoadStatus();
     });
@@ -67,11 +67,11 @@ var WatchPage = React.createClass({
     }
   },
   updateLoadStatus: function() {
-    api.file_list({
+    lbry.file_list({
       outpoint: this._outpoint,
       full_status: true,
-    }, ([status]) => {
-      if (!status || !['running', 'stopped'].includes(status.code) || status.written_bytes == 0) {
+    }).then(([status]) => {
+      if (!status || status.written_bytes == 0) {
         // Download hasn't started yet, so update status message (if available) then try again
         // TODO: Would be nice to check if we have the MOOV before starting playing
         if (status) {
