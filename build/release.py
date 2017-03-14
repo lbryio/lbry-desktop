@@ -7,12 +7,12 @@ import contextlib
 import logging
 import os
 import re
+import string
 import subprocess
 import sys
 
 import git
 import github
-import requests
 
 import changelog
 
@@ -28,27 +28,34 @@ def main():
         choices=LBRY_PARTS
     )
     parser.add_argument(
+        "--skip-lbryum", help="skip bumping lbryum, even if there are changes",
+        action="store_true",
+    )
+    parser.add_argument(
         "--lbryum-part", help="part of lbryum version to bump",
         choices=LBRYUM_PARTS
     )
-    parser.add_argument("--branch", help="branch to use for each repo; useful for testing")
     parser.add_argument(
         "--last-release",
         help=("manually set the last release version. The default is to query and parse the"
               " value from the release page.")
     )
-    parser.add_argument("--skip-sanity-checks", action="store_true")
+    parser.add_argument(
+        "--skip-sanity-checks", action="store_true")
     parser.add_argument(
         "--require-changelog", action="store_true",
         help=("Set this flag to raise an exception if a submodules has changes without a"
               " corresponding changelog entry. The default is to log a warning")
     )
-    parser.add_argument("--skip-push", action="store_true",
-                        help="Set to not push changes to remote repo")
+    parser.add_argument(
+        "--skip-push", action="store_true",
+        help="Set to not push changes to remote repo"
+    )
+
     args = parser.parse_args()
 
     base = git.Repo(os.getcwd())
-    branch = get_branch('lbry-app', args.branch)
+    branch = 'master'
 
     if not args.skip_sanity_checks:
         run_sanity_checks(base, branch)
@@ -56,39 +63,28 @@ def main():
     base_repo = Repo('lbry-app', args.lbry_part, os.getcwd())
     base_repo.assert_new_tag_is_absent()
 
-    if args.last_release:
-        last_release = args.last_release
-    else:
-        response = requests.get('https://api.github.com/repos/lbryio/lbry-app/releases/latest')
-        data = response.json()
-        last_release = data['tag_name']
-        logging.info('Last release: %s', last_release)
+    last_release = args.last_release or base_repo.get_last_tag()
+    logging.info('Last release: %s', last_release)
 
     gh_token = get_gh_token()
     auth = github.Github(gh_token)
     github_repo = auth.get_repo('lbryio/lbry-app')
 
-    names = ['lbry', 'lbryum']
+    names = ['lbryum', 'lbry']
     repos = {name: Repo(name, get_part(args, name)) for name in names}
-
-    # in order to see if we've had any change in the submodule, we need to checkout
-    # our last release, see what commit we were on, and then compare that to current
-    base.git.checkout(last_release)
-    base.git.submodule('update')
-    for repo in repos.values():
-        repo.save_commit()
-
-    base.git.checkout(branch)
-    base.git.submodule('update')
 
     changelogs = {}
 
-    get_lbryum_part_if_needed(repos['lbryum'])
-
     for repo in repos.values():
         logging.info('Processing repo: %s', repo.name)
-        repo.checkout(args.branch)
-        if repo.has_changes():
+        repo.checkout(branch)
+        last_submodule_hash = base_repo.get_submodule_hash(last_release, repo.name)
+        if repo.has_changes_from_revision(last_submodule_hash):
+            if repo.name == 'lbryum':
+                if args.skip_lbryum:
+                    continue
+                if not repo.part:
+                    repo.part = get_lbryum_part()
             entry = repo.get_changelog_entry()
             if entry:
                 changelogs[repo.name] = entry.strip()
@@ -137,7 +133,7 @@ def main():
 
 def get_gh_token():
     if 'GH_TOKEN' in os.environ:
-        gh_token = os.environ['GH_TOKEN']
+        return os.environ['GH_TOKEN']
     else:
         print """
 Please enter your personal access token. If you don't have one
@@ -146,29 +142,17 @@ for instructions on how to generate one.
 
 You can also set the GH_TOKEN environment variable to avoid seeing this message
 in the future"""
-        inpt = raw_input('token: ')
-        gh_token = inpt.strip()
-    return gh_token
+        return raw_input('token: ').strip()
 
 
-def get_lbryum_part_if_needed(repo):
-    if repo.has_changes() and not repo.part:
-        get_lbryum_part(repo)
-
-
-def get_lbryum_part(repo):
+def get_lbryum_part():
     print """The lbryum repo has changes but you didn't specify how to bump the
-version. Please enter one of {}""".format(', '.join(LBRYUM_PARTS))
+version. Please enter one of: {}""".format(', '.join(LBRYUM_PARTS))
     while True:
-        part = raw_input('part: ')
+        part = raw_input('part: ').strip()
         if part in LBRYUM_PARTS:
-            repo.part = part
-            break
-        print 'Invalid part. Enter one of {}'.format(', '.join(LBRYUM_PARTS))
-
-
-def get_branch(repo_name, override=None):
-    return override or 'master'
+            return part
+        print 'Invalid part. Enter one of: {}'.format(', '.join(LBRYUM_PARTS))
 
 
 def get_release_msg(changelogs, names):
@@ -230,15 +214,22 @@ class Repo(object):
         self.saved_commit = None
         self._bumped = False
 
-    def has_changes(self):
-        logging.info('%s =? %s', self.git_repo.commit(), self.saved_commit)
-        return self.git_repo.commit() != self.saved_commit
+    def get_last_tag(self):
+        return string.split(self.git_repo.git.describe(tags=True), '-')[0]
+
+    def get_submodule_hash(self, revision, submodule_path):
+        line = getattr(self.git_repo.git, 'ls-tree')(revision, submodule_path)
+        return string.split(line)[2] if line else None
+
+    def has_changes_from_revision(self, revision):
+        logging.info('%s =? %s', self.git_repo.commit(), revision)
+        return self.git_repo.commit() != revision
 
     def save_commit(self):
         self.saved_commit = self.git_repo.commit()
+        logging.info('Saved ', self.git_repo.commit(), self.saved_commit)
 
-    def checkout(self, override=None):
-        branch = get_branch(self.name, override)
+    def checkout(self, branch):
         self.git_repo.git.checkout(branch)
         self.git_repo.git.pull(rebase=True)
 
@@ -274,11 +265,6 @@ class Repo(object):
         tags = self.git_repo.git.tag()
         if new_tag in tags.split('\n'):
             raise Exception('Tag {} is already present in repo {}.'.format(new_tag, self.name))
-
-    def reset(self):
-        branch = get_branch(self.name)
-        self.git_repo.git.reset(branch, hard=True)
-        # TODO: also delete any extra tags that might have been added
 
     @property
     def git(self):
