@@ -22,7 +22,7 @@ import {Modal, ExpandableModal} from './component/modal.js';
 import {Link} from './component/link.js';
 
 
-const {remote, ipcRenderer} = require('electron');
+const {remote, ipcRenderer, shell} = require('electron');
 const {download} = remote.require('electron-dl');
 
 
@@ -58,6 +58,19 @@ var App = React.createClass({
   componentWillMount: function() {
     document.addEventListener('unhandledError', (event) => {
       this.alertError(event.detail);
+    });
+
+    //open links in external browser
+    document.addEventListener('click', function(event) {
+      var target = event.target;
+      while (target && target !== document) {
+        if (target.matches('a[href^="http"]')) {
+          event.preventDefault();
+          shell.openExternal(target.href);
+          return;
+        }
+        target = target.parentNode;
+      }
     });
 
     lbry.checkNewVersionAvailable((isAvailable) => {
