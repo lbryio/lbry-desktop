@@ -222,8 +222,9 @@ class Repo(object):
         return string.split(line)[2] if line else None
 
     def has_changes_from_revision(self, revision):
-        logging.info('%s =? %s', self.git_repo.commit(), revision)
-        return self.git_repo.commit() != revision
+        commit = str(self.git_repo.commit())
+        logging.info('%s =? %s', commit, revision)
+        return commit != revision
 
     def save_commit(self):
         self.saved_commit = self.git_repo.commit()
