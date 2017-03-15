@@ -21,8 +21,8 @@ install:
   - cd app
   - npm install
   - cd ..
-  # create lbrynet-daemon executable
-  - cd lbrynet-daemon
+  # create daemon and cli executable
+  - cd daemon
   - ps: .\build.ps1
   - cd ..
   # build ui
@@ -32,7 +32,9 @@ install:
   - node_modules\.bin\webpack
   - ps: Copy-Item dist ..\app\ -recurse
   - cd ..
-  - ps: Copy-Item lbrynet-daemon\dist\lbrynet-daemon.exe app\dist
+  # copy executables into ui
+  - ps: Copy-Item daemon\dist\lbrynet-daemon.exe app\dist
+  - ps: Copy-Item daemon\dist\lbrynet-cli.exe app\dist
 
 build_script:
   # build electron app

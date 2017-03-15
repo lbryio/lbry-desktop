@@ -19,4 +19,5 @@ Remove-Item -Recurse -Force temp
 pip.exe install pyinstaller
 pip.exe install -r windows.txt
 
-pyinstaller -y lbry.onefile.spec
+pyinstaller -y daemon.onefile.spec
+pyinstaller -y cli.onefile.spec

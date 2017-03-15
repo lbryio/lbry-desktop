@@ -6,7 +6,7 @@ import lbryum
 
 
 cwd = os.getcwd()
-if os.path.basename(cwd) != 'lbrynet-daemon':
+if os.path.basename(cwd) != 'daemon':
     raise Exception('The build needs to be run from the same directory as the spec file')
 repo_base = os.path.abspath(os.path.join(cwd, '..'))
 
@@ -42,7 +42,7 @@ datas = [
 
 
 a = Analysis(
-    ['lbry.py'],
+    ['cli.py'],
     pathex=[cwd],
     binaries=None,
     datas=datas,
@@ -68,7 +68,7 @@ exe = EXE(
     a.binaries,
     a.zipfiles,
     a.datas,
-    name='lbrynet-daemon',
+    name='lbrynet-cli',
     debug=False,
     strip=False,
     upx=True,
