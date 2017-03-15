@@ -114,7 +114,10 @@ def main():
     base_repo.bumpversion()
     current_tag = base.git.describe()
 
-    github_repo.create_git_release(current_tag, current_tag, release_msg, draft=True)
+    is_rc = re.match('\drc\d+$', current_tag) is not None
+
+    github_repo.create_git_release(current_tag, current_tag, release_msg, draft=True,
+                                   prerelease=is_rc)
     no_change_msg = ('No change since the last release. This release is simply a placeholder'
                      ' so that LBRY and LBRY App track the same version')
     lbrynet_daemon_release_msg = changelogs.get('lbry', no_change_msg)
