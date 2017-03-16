@@ -2,8 +2,6 @@
 import platform
 import os
 
-import lbryum
-
 
 cwd = os.getcwd()
 if os.path.basename(cwd) != 'daemon':
@@ -22,30 +20,14 @@ else:
     print 'Warning: System {} has no icons'.format(system)
     icns = None
 
-
 block_cipher = None
-
-
-languages = (
-    'chinese_simplified.txt', 'japanese.txt', 'spanish.txt',
-    'english.txt', 'portuguese.txt'
-)
-
-
-datas = [
-    (
-        os.path.join(os.path.dirname(lbryum.__file__), 'wordlist', language),
-        'lbryum/wordlist'
-    )
-    for language in languages
-]
 
 
 a = Analysis(
     ['cli.py'],
     pathex=[cwd],
     binaries=None,
-    datas=datas,
+    datas=[],
     hiddenimports=[],
     hookspath=[],
     runtime_hooks=[],
@@ -55,12 +37,11 @@ a = Analysis(
     cipher=block_cipher
 )
 
-
 pyz = PYZ(
-    a.pure, a.zipped_data,
+    a.pure,
+    a.zipped_data,
     cipher=block_cipher
 )
-
 
 exe = EXE(
     pyz,

@@ -59,7 +59,7 @@ npm install
 
 
 ####################
-#  lbrynet-daemon  #
+#  daemon and cli  #
 ####################
 
 (
@@ -67,7 +67,7 @@ npm install
   pip install -r linux_macos.txt
   pyinstaller -y daemon.onefile.spec
   pyinstaller -y cli.onefile.spec
-  mv dist/lbrynet-daemon "$ROOT/app/dist/"
+  mv dist/lbrynet-daemon dist/lbrynet-cli "$ROOT/app/dist/"
 )
 python "$BUILD_DIR/zip_daemon.py"
 
