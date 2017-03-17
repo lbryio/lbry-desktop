@@ -5,7 +5,16 @@ import lighthouse from './lighthouse.js';
 import App from './app.js';
 import SplashScreen from './component/splash.js';
 
+const {remote} = require('electron');
+const contextMenu = remote.require('./menu/context-menu');
+
 lbry.showMenuIfNeeded();
+
+window.addEventListener('contextmenu', (event) => {
+  contextMenu.showContextMenu(remote.getCurrentWindow(), event.x, event.y,
+                              lbry.getClientSetting('showDeveloperMenu'));
+  event.preventDefault();
+});
 
 var init = function() {
   window.lbry = lbry;
