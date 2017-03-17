@@ -24,6 +24,9 @@ import {Link} from './component/link.js';
 
 const {remote, ipcRenderer, shell} = require('electron');
 const {download} = remote.require('electron-dl');
+const os = require('os');
+const path = require('path');
+const app = require('electron').remote.app;
 
 
 var App = React.createClass({
@@ -36,6 +39,19 @@ var App = React.createClass({
     data: 'Error data',
   },
 
+  _upgradeDownloadItem: null,
+  _version: null,
+
+  // Temporary workaround since electron-dl throws errors when you try to get the filename
+  getUpgradeFilename: function() {
+    if (os.platform() == 'darwin') {
+      return `LBRY-${this._version}.dmg`;
+    } else if (os.platform() == 'linux') {
+      return `LBRY-${this._version}.deb`;
+    } else {
+      return `LBRY-${this._version}_amd64.deb`;
+    }
+  },
   getInitialState: function() {
     // For now, routes are in format ?page or ?page=args
     var match, param, val, viewingPage,
@@ -53,6 +69,7 @@ var App = React.createClass({
       updateUrl: null,
       isOldOSX: null,
       downloadProgress: null,
+      downloadComplete: false,
     };
   },
   componentWillMount: function() {
@@ -79,6 +96,8 @@ var App = React.createClass({
       }
 
       lbry.getVersionInfo((versionInfo) => {
+        this._version = versionInfo.lbrynet_version; // temp for building upgrade filename
+
         var isOldOSX = false;
         if (versionInfo.os_system == 'Darwin') {
           var updateUrl = 'https://lbry.io/get/lbry.dmg';
@@ -123,16 +142,50 @@ var App = React.createClass({
   handleUpgradeClicked: function() {
     // TODO: create a callback for onProgress and have the UI
     //       show download progress
-    // TODO: remove the saveAs popup. Thats just me being lazy and having
-    //       some indication that the download is happening
     // TODO: calling lbry.stop() ends up displaying the "daemon
     //       unexpectedly stopped" page. Have a better way of shutting down
+    let dir = app.getPath('temp');
     let options = {
       onProgress: (p) => this.setState({downloadProgress: Math.round(p * 100)}),
-    }
+      directory: dir,
+    };
     download(remote.getCurrentWindow(), this.state.updateUrl, options)
-      .then(dl => ipcRenderer.send('shutdown'));
+      .then(downloadItem => {
+        /**
+         * TODO: get the download path directly from the download object. It should just be
+         * downloadItem.getSavePath(), but the copy on the main process is being garbage collected
+         * too soon.
+         */
+
+        this._upgradeDownloadItem = downloadItem;
+        this._upgradeDownloadPath = path.join(dir, this.getUpgradeFilename());
+        this.setState({
+          downloadComplete: true
+        });
+      });
     this.setState({modal: 'downloading'});
+  },
+  handleStartUpgradeClicked: function() {
+    ipcRenderer.send('upgrade', this._upgradeDownloadPath);
+  },
+  cancelUpgrade: function() {
+    if (this._upgradeDownloadItem) {
+      /*
+       * Right now the remote reference to the download item gets garbage collected as soon as the
+       * the download is over (maybe even earlier), so trying to cancel a finished download may
+       * throw an error.
+       */
+      try {
+        this._upgradeDownloadItem.cancel();
+      } catch (err) {
+        // Do nothing
+      }
+    }
+    this.setState({
+      downloadProgress: null,
+      downloadComplete: false,
+      modal: null,
+    });
   },
   handleSkipClicked: function() {
     sessionStorage.setItem('upgradeSkipped', true);
@@ -246,8 +299,14 @@ var App = React.createClass({
 
           </Modal>
           <Modal isOpen={this.state.modal == 'downloading'} contentLabel="Downloading Update" type="custom">
-            Downloading Update: {this.state.downloadProgress}% Complete
+            Downloading Update{this.state.downloadProgress ? `: ${this.state.downloadProgress}% Complete` : null}
             <Line percent={this.state.downloadProgress} strokeWidth="4"/>
+            <div className="modal__buttons">
+             <Link button="alt" label="Cancel" className="modal__button" onClick={this.cancelUpgrade} />
+             {this.state.downloadComplete
+                ? <Link button="primary" label="Begin Upgrade" className="modal__button" onClick={this.handleStartUpgradeClicked} />
+                : null}
+            </div>
           </Modal>
           <ExpandableModal isOpen={this.state.modal == 'error'} contentLabel="Error" className="error-modal"
                            overlayClassName="error-modal-overlay" onConfirmed={this.closeModal}

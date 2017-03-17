@@ -1,4 +1,4 @@
-const {app, BrowserWindow, ipcMain} = require('electron');
+const {app, BrowserWindow, ipcMain, shell} = require('electron');
 const path = require('path');
 const jayson = require('jayson');
 // tree-kill has better cross-platform handling of
@@ -27,7 +27,7 @@ function createWindow () {
 };
 
 
-function lauchDaemon() {
+function launchDaemon() {
   if (subpy) {
     return;
   }
@@ -78,7 +78,7 @@ function launchDaemonIfNotRunning() {
     function (err, res) {
       if (err) {
         console.log('lbrynet daemon needs to be launched')
-        lauchDaemon();
+        launchDaemon();
       } else {
         console.log('lbrynet daemon is already running')
       }
@@ -116,22 +116,49 @@ app.on('activate', () => {
 
 
 function shutdownDaemon() {
-  console.log('Shutdown triggered');
-  if (subpy == null) {
+  if (subpy) {
+    console.log('Killing lbrynet-daemon process');
+    kill(subpy.pid, undefined, (err) => {
+      console.log('Killed lbrynet-daemon process');
+    });
+  } else {
+    client.request('stop', []);
+    // TODO: If the daemon errors or times out when we make this request, find
+    // the process and force quit it.
+  }
+
+  // Is it safe to start the installer before the daemon finishes running?
+  // If not, we should wait until the daemon is closed before we start the install.
+}
+
+function shutdown() {
+  /* if (!subpy) {
     // TODO: In this case, we didn't start the process so I'm hesitant
     //       to shut it down. We might want to send a stop command
     //       though instead of just letting it run.
     console.log('Not killing lbrynet daemon because we did not start it')
     return
-  }
+  } */
   if (win) {
     win.loadURL(`file://${__dirname}/dist/quit.html`);
   }
   quitting = true;
-  console.log('Killing lbrynet-daemon process');
-  kill(subpy.pid, undefined, (err) => {
-    console.log('Killed lbrynet-daemon process');
-  });
+  shutdownDaemon();
 }
 
-ipcMain.on('shutdown', shutdownDaemon);
+function upgrade(event, installerPath) {
+  app.on('quit', () => {
+    console.log('installerPath is', installerPath);
+    shell.openItem(installerPath);
+    console.log('after installerPath');
+  });
+  if (win) {
+    win.loadURL(`file://${__dirname}/dist/upgrade.html`);
+  }
+  quitting = true;
+  shutdownDaemon();
+}
+
+ipcMain.on('upgrade', upgrade);
+
+ipcMain.on('shutdown', shutdown);
