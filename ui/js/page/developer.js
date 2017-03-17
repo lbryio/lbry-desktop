@@ -48,7 +48,7 @@ const DeveloperPage = React.createClass({
       }
       catch (e) {}
       if (!upgradeSent) {
-        alert('Failed to start upgrade. Is "' + this.state.upgradePath.replace("C:\\fakepath\\", "") + '" a valid path to the upgrade?');
+        alert('Failed to start upgrade. Is "' + this.state.upgradePath + '" a valid path to the upgrade?');
       }
     }
   },
