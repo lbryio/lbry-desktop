@@ -13,7 +13,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
   * Wherever possible, use outpoints for unique IDs instead of names or SD hashes
 
 ### Changed
-  *
+  * Update process now easier and more reliable
   *
   *
 

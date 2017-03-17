@@ -33,10 +33,10 @@ export const Modal = React.createClass({
         {this.props.type == 'custom' // custom modals define their own buttons
           ? null
           : <div className="modal__buttons">
-              {this.props.type == 'confirm'
-                ? <Link button="alt" label={this.props.abortButtonLabel} className="modal__button" disabled={this.props.abortButtonDisabled} onClick={this.props.onAborted} />
-                : null}
-              <Link button="primary" label={this.props.confirmButtonLabel} className="modal__button" disabled={this.props.confirmButtonDisabled} onClick={this.props.onConfirmed} />
+             <Link button="primary" label={this.props.confirmButtonLabel} className="modal__button" disabled={this.props.confirmButtonDisabled} onClick={this.props.onConfirmed} />
+             {this.props.type == 'confirm'
+               ? <Link button="alt" label={this.props.abortButtonLabel} className="modal__button" disabled={this.props.abortButtonDisabled} onClick={this.props.onAborted} />
+               : null}
             </div>}
       </ReactModal>
     );
