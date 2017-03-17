@@ -110,10 +110,7 @@ var App = React.createClass({
         } else if (versionInfo.os_system == 'Linux') {
           var updateUrl = 'https://lbry.io/get/lbry.deb';
         } else if (versionInfo.os_system == 'Windows') {
-	  // A little weird, but for electron, the installer is
-	  // actually an exe. Maybe a better url would
-	  // be something like /get/windows ?
-          var updateUrl = 'https://lbry.io/get/lbry.msi';
+          var updateUrl = 'https://lbry.io/get/lbry.exe';
         } else {
           var updateUrl = 'https://lbry.io/get';
         }
@@ -299,13 +296,21 @@ var App = React.createClass({
 
           </Modal>
           <Modal isOpen={this.state.modal == 'downloading'} contentLabel="Downloading Update" type="custom">
-            Downloading Update{this.state.downloadProgress ? `: ${this.state.downloadProgress}% Complete` : null}
+            Downloading Update{this.state.downloadProgress ? `: ${this.state.downloadProgress}%` : null}
             <Line percent={this.state.downloadProgress} strokeWidth="4"/>
+            {this.state.downloadComplete ? (
+               <div>
+                 <br />
+                 <p>Click "Begin Upgrade" to start the upgrade process.</p>
+                 <p>The app will close, and you will be prompted to install the latest version of LBRY.</p>
+                 <p>After the install is complete, please reopen the app.</p>
+               </div>
+             ) : null }
             <div className="modal__buttons">
-             <Link button="alt" label="Cancel" className="modal__button" onClick={this.cancelUpgrade} />
-             {this.state.downloadComplete
+              {this.state.downloadComplete
                 ? <Link button="primary" label="Begin Upgrade" className="modal__button" onClick={this.handleStartUpgradeClicked} />
                 : null}
+              <Link button="alt" label="Cancel" className="modal__button" onClick={this.cancelUpgrade} />
             </div>
           </Modal>
           <ExpandableModal isOpen={this.state.modal == 'error'} contentLabel="Error" className="error-modal"

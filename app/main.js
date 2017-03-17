@@ -115,16 +115,19 @@ app.on('activate', () => {
 })
 
 
-function shutdownDaemon() {
+function shutdownDaemon(evenIfNotStartedByApp = false) {
   if (subpy) {
     console.log('Killing lbrynet-daemon process');
     kill(subpy.pid, undefined, (err) => {
       console.log('Killed lbrynet-daemon process');
     });
-  } else {
-    client.request('stop', []);
+  } else if (evenIfNotStartedByApp) {
+    console.log('Killing lbrynet-daemon, even though app did not start it');
+    client.request('daemon_stop', []);
     // TODO: If the daemon errors or times out when we make this request, find
     // the process and force quit it.
+  } else {
+    console.log('Not killing lbrynet-daemon because app did not start it')
   }
 
   // Is it safe to start the installer before the daemon finishes running?
@@ -132,13 +135,6 @@ function shutdownDaemon() {
 }
 
 function shutdown() {
-  /* if (!subpy) {
-    // TODO: In this case, we didn't start the process so I'm hesitant
-    //       to shut it down. We might want to send a stop command
-    //       though instead of just letting it run.
-    console.log('Not killing lbrynet daemon because we did not start it')
-    return
-  } */
   if (win) {
     win.loadURL(`file://${__dirname}/dist/quit.html`);
   }
@@ -148,15 +144,18 @@ function shutdown() {
 
 function upgrade(event, installerPath) {
   app.on('quit', () => {
-    console.log('installerPath is', installerPath);
     shell.openItem(installerPath);
-    console.log('after installerPath');
   });
   if (win) {
     win.loadURL(`file://${__dirname}/dist/upgrade.html`);
   }
   quitting = true;
-  shutdownDaemon();
+  shutdownDaemon(true);
+  // wait for daemon to shut down before upgrading
+  // what to do if no shutdown in a long time?
+  console.log('Update downloaded to ', installerPath);
+  console.log('The app will close, and you will be prompted to install the latest version of LBRY.');
+  console.log('After the install is complete, please reopen the app.');
 }
 
 ipcMain.on('upgrade', upgrade);

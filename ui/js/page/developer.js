@@ -1,6 +1,10 @@
 import lbry from '../lbry.js';
 import React from 'react';
 import FormField from '../component/form.js';
+import {Link} from '../component/link.js';
+
+const fs = require('fs');
+const {ipcRenderer} = require('electron');
 
 const DeveloperPage = React.createClass({
   getInitialState: function() {
@@ -8,6 +12,7 @@ const DeveloperPage = React.createClass({
       showDeveloperMenu: lbry.getClientSetting('showDeveloperMenu'),
       useCustomLighthouseServers: lbry.getClientSetting('useCustomLighthouseServers'),
       customLighthouseServers: lbry.getClientSetting('customLighthouseServers').join('\n'),
+      upgradePath: '',
     };
   },
   handleShowDeveloperMenuChange: function(event) {
@@ -22,6 +27,30 @@ const DeveloperPage = React.createClass({
     this.setState({
       useCustomLighthouseServers: event.target.checked,
     });
+  },
+  handleUpgradeFileChange: function(event) {
+    this.setState({
+      upgradePath: event.target.files[0].path,
+    });
+  },
+  handleForceUpgradeClick: function() {
+    let upgradeSent = false;
+    if (!this.state.upgradePath) {
+      alert('Please select a file to upgrade from');
+    } else {
+      try {
+        const stats = fs.lstatSync(this.state.upgradePath);
+        if (stats.isFile()) {
+          console.log('Starting upgrade using ' + this.state.upgradePath);
+          ipcRenderer.send('upgrade', this.state.upgradePath);
+          upgradeSent = true;
+        }
+      }
+      catch (e) {}
+      if (!upgradeSent) {
+        alert('Failed to start upgrade. Is "' + this.state.upgradePath.replace("C:\\fakepath\\", "") + '" a valid path to the upgrade?');
+      }
+    }
   },
   render: function() {
     return (
@@ -42,6 +71,13 @@ const DeveloperPage = React.createClass({
                 </label>
               </div>
             : null}
+        </section>
+        <section className="card">
+          <div className="form-row">
+            <FormField name="file" ref="file" type="file" onChange={this.handleUpgradeFileChange}/>
+            &nbsp;
+            <Link label="Force Upgrade" button="alt" onClick={this.handleForceUpgradeClick} />
+          </div>
         </section>
       </main>
     );
