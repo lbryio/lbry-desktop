@@ -35,6 +35,8 @@ TEMPLATE = """### Added
 
 
 def main():
+    print "i am broken"
+    return 1
     parser = argparse.ArgumentParser()
     parser.add_argument('changelog')
     parser.add_argument('version')
