@@ -27,6 +27,7 @@ const {download} = remote.require('electron-dl');
 const os = require('os');
 const path = require('path');
 const app = require('electron').remote.app;
+const fs = remote.require('fs');
 
 
 var App = React.createClass({
@@ -137,16 +138,14 @@ var App = React.createClass({
     });
   },
   handleUpgradeClicked: function() {
-    // TODO: create a callback for onProgress and have the UI
-    //       show download progress
-    // TODO: calling lbry.stop() ends up displaying the "daemon
-    //       unexpectedly stopped" page. Have a better way of shutting down
-    let dir = app.getPath('temp');
+    // Make a new directory within temp directory so the filename is guaranteed to be available
+    const dir = fs.mkdtempSync(app.getPath('temp') + require('path').sep);
+
     let options = {
       onProgress: (p) => this.setState({downloadProgress: Math.round(p * 100)}),
       directory: dir,
     };
-    download(remote.getCurrentWindow(), this.state.updateUrl, options)
+    download(remote.getCurrentWindow(), this.getUpdateUrl(), options)
       .then(downloadItem => {
         /**
          * TODO: get the download path directly from the download object. It should just be
