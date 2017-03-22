@@ -1,10 +1,9 @@
-const {app, BrowserWindow, ipcMain} = require('electron');
+const {app, BrowserWindow, ipcMain, shell} = require('electron');
 const path = require('path');
 const jayson = require('jayson');
 // tree-kill has better cross-platform handling of
 // killing a process.  child-process.kill was unreliable
 const kill = require('tree-kill');
-const child_process = require('child_process');
 
 
 let client = jayson.client.http('http://localhost:5279/lbryapi');
@@ -38,7 +37,7 @@ function launchDaemon() {
     executable = path.join(__dirname, 'dist', 'lbrynet-daemon');
   }
   console.log('Launching daemon: ' + executable)
-  subpy = child_process.spawn(executable)
+  subpy = require('child_process').spawn(executable)
   // Need to handle the data event instead of attaching to
   // process.stdout because the latter doesn't work. I believe on
   // windows it buffers stdout and we don't get any meaningful output
@@ -87,31 +86,6 @@ function launchDaemonIfNotRunning() {
   );
 }
 
-/*
- * Last resort for killing unresponsive daemon instances.
- * Looks for any processes called "lbrynet-daemon" and
- * tries to force kill them.
- */
-function forceKillAllDaemons() {
-  console.log("Attempting to force kill any running lbrynet-daemon instances...");
-
-  const fgrepOut = child_process.spawnSync('pgrep', ['-x', 'lbrynet-daemon'], {encoding: 'utf8'}).stdout;
-  const daemonPids = fgrepOut.split(/[^\d]+/).filter((pid) => pid);
-  if (!daemonPids) {
-    console.log('No lbrynet-daemon found running.');
-  } else {
-    console.log(`Found ${daemonPids.length} running daemon instances. Attempting to force kill...`);
-
-    for (const pid of daemonPids) {
-      kill(pid, 'SIGKILL', (err) => {
-        if (err) {
-          console.log(`Failed to force kill running daemon with pid ${pid}. Error message: ${err.message}`);
-        }
-      });
-    }
-  }
-}
-
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
@@ -148,17 +122,10 @@ function shutdownDaemon(evenIfNotStartedByApp = false) {
       console.log('Killed lbrynet-daemon process');
     });
   } else if (evenIfNotStartedByApp) {
-    console.log('Stopping lbrynet-daemon, even though app did not start it');
-    client.request('daemon_stop', [], (err, res) => {
-      if (err) {
-        // We could get an error because the daemon is already stopped (good)
-        // or because it's running but not responding properly (bad).
-        // So try to force kill any daemons that are still running.
-
-        console.log('received error when stopping lbrynet-daemon. Error message: {err.message}');
-        forceKillAllDaemons();
-      }
-    });
+    console.log('Killing lbrynet-daemon, even though app did not start it');
+    client.request('daemon_stop', []);
+    // TODO: If the daemon errors or times out when we make this request, find
+    // the process and force quit it.
   } else {
     console.log('Not killing lbrynet-daemon because app did not start it')
   }
@@ -177,10 +144,7 @@ function shutdown() {
 
 function upgrade(event, installerPath) {
   app.on('quit', () => {
-    // shell.openItem doesn't reliably work from the app process, so run xdg-open directly
-    child_process.spawn('xdg-open', [installerPath], {
-      stdio: 'ignore',
-    });
+    shell.openItem(installerPath);
   });
   if (win) {
     win.loadURL(`file://${__dirname}/dist/upgrade.html`);
