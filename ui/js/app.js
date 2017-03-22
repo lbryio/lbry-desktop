@@ -44,7 +44,6 @@ var App = React.createClass({
   _version: null,
 
   getUpdateUrl: function() {
-    console.log('os.platform is', os.platform());
     switch (os.platform()) {
       case 'darwin':
         return 'https://lbry.io/get/lbry.dmg';
