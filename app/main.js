@@ -93,10 +93,10 @@ function launchDaemonIfNotRunning() {
  * tries to force kill them.
  */
 function forceKillAllDaemons() {
-  console.log("Attempting to force kill any running lbrynet-daemon instances...");
+  console.log('Attempting to force kill any running lbrynet-daemon instances...');
 
   const fgrepOut = child_process.spawnSync('pgrep', ['-x', 'lbrynet-daemon'], {encoding: 'utf8'}).stdout;
-  const daemonPids = fgrepOut.split(/[^\d]+/).filter((pid) => pid);
+  const daemonPids = fgrepOut.match(/\d+/g);
   if (!daemonPids) {
     console.log('No lbrynet-daemon found running.');
   } else {
