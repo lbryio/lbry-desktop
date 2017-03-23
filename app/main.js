@@ -5,16 +5,23 @@ const jayson = require('jayson');
 // killing a process.  child-process.kill was unreliable
 const kill = require('tree-kill');
 const child_process = require('child_process');
+const assert = require('assert');
 
 
 let client = jayson.client.http('http://localhost:5279/lbryapi');
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
-let win
+let win;
 // Also keep the daemon subprocess alive
-let subpy
-// set to true when the quitting sequence has started
-let quitting = false;
+let daemonSubprocess;
+
+// This is set to true right before we try to kill the daemon subprocess --
+// if it dies when we haven't made a request, we want to alert the user.
+let daemonSubprocessKillRequested = false;
+
+// When a quit is attempted, we cancel the quit, do some preparations, then
+// this is set to true and app.quit() is called again to quit for real.
+let readyToQuit = false;
 
 /*
  * Replacement for Electron's shell.openItem. The Electron version doesn't
@@ -50,40 +57,49 @@ function createWindow () {
   })
 };
 
+function handleDaemonSubprocessExited() {
+  console.log('The daemon has exited.');
+  daemonSubprocess = null;
+  if (!daemonSubprocessKillRequested) {
+    // We didn't stop down the daemon subprocess on purpose, so display a
+    // warning and schedule a quit.
+    //
+    // TODO: maybe it would be better to restart the daemon?
+    console.log('Did not display, so scheduling quit');
+    if (win) {
+      win.loadURL(`file://${__dirname}/dist/warning.html`);
+    }
+    setTimeout(quitNow, 5000);
+  }
+}
+
 
 function launchDaemon() {
-  if (subpy) {
-    return;
-  }
+  assert(!daemonSubprocess, 'Tried to launch daemon twice');
+
   if (process.env.LBRY_DAEMON) {
     executable = process.env.LBRY_DAEMON;
   } else {
     executable = path.join(__dirname, 'dist', 'lbrynet-daemon');
   }
   console.log('Launching daemon: ' + executable)
-  subpy = child_process.spawn(executable)
+  daemonSubprocess = child_process.spawn(executable)
   // Need to handle the data event instead of attaching to
   // process.stdout because the latter doesn't work. I believe on
   // windows it buffers stdout and we don't get any meaningful output
-  subpy.stdout.on('data', (buf) => {console.log(String(buf).trim());});
-  subpy.stderr.on('data', (buf) => {console.log(String(buf).trim());});
-  subpy.on('exit', () => {
-    console.log('The daemon has exited. Quitting the app');
-    subpy = null;
-    if (quitting) {
-      // If quitting is True it means that we were expecting the daemon
-      // to be shutdown so we can quit right away
-      app.quit();
-    } else {
-      // Otherwise, this shutdown was a surprise so display a warning
-      // and schedule a quit
-      //
-      // TODO: maybe it would be better to restart the daemon?
-      win.loadURL(`file://${__dirname}/dist/warning.html`);
-      setTimeout(app.quit, 5000)
-    }
-  });
+  daemonSubprocess.stdout.on('data', (buf) => {console.log(String(buf).trim());});
+  daemonSubprocess.stderr.on('data', (buf) => {console.log(String(buf).trim());});
+  daemonSubprocess.on('exit', handleDaemonSubprocessExited);
   console.log('lbrynet daemon has launched')
+}
+
+/*
+ * Quits without any preparation (when a quit is requested, we abort the quit, try to shut down
+ * the daemon, and then call this to quit for real).
+ */
+function quitNow() {
+  readyToQuit = true;
+  app.quit();
 }
 
 
@@ -91,7 +107,6 @@ app.on('ready', function(){
   launchDaemonIfNotRunning();
   createWindow();
 });
-
 
 function launchDaemonIfNotRunning() {
   // Check if the daemon is already running. If we get
@@ -115,20 +130,26 @@ function launchDaemonIfNotRunning() {
  * Looks for any processes called "lbrynet-daemon" and
  * tries to force kill them.
  */
-function forceKillAllDaemons() {
+function forceKillAllDaemonsAndQuit() {
   console.log('Attempting to force kill any running lbrynet-daemon instances...');
 
   const fgrepOut = child_process.spawnSync('pgrep', ['-x', 'lbrynet-daemon'], {encoding: 'utf8'}).stdout;
   const daemonPids = fgrepOut.match(/\d+/g);
   if (!daemonPids) {
     console.log('No lbrynet-daemon found running.');
+    quitNow();
   } else {
     console.log(`Found ${daemonPids.length} running daemon instances. Attempting to force kill...`);
 
     for (const pid of daemonPids) {
+      const daemonKillAttemptsComplete = 0;
       kill(pid, 'SIGKILL', (err) => {
+        daemonKillAttemptsComplete++;
         if (err) {
           console.log(`Failed to force kill running daemon with pid ${pid}. Error message: ${err.message}`);
+        }
+        if (daemonKillAttemptsComplete >= daemonPids.length) {
+          quitNow();
         }
       });
     }
@@ -147,12 +168,15 @@ app.on('window-all-closed', () => {
 
 
 app.on('before-quit', (event) => {
-  if (subpy == null) {
-    return
+  if (!readyToQuit) {
+    // We need to shutdown the daemons before we're ready to actually quit. This
+    // event will be triggered re-entrantly once preparation is done.
+    event.preventDefault();
+    shutdownDaemonAndQuit();
+  } else {
+    console.log('Quitting.')
   }
-  event.preventDefault();
-  shutdownDaemon();
-})
+});
 
 
 app.on('activate', () => {
@@ -161,14 +185,17 @@ app.on('activate', () => {
   if (win === null) {
     createWindow()
   }
-})
+});
 
-
-function shutdownDaemon(evenIfNotStartedByApp = false) {
-  if (subpy) {
+// When a quit is attempted, this is called, it attempts to shutdown the daemon,
+// and then calls app.quit() to quit for real.
+function shutdownDaemonAndQuit(shutdownEvenIfNotStartedByApp = false) {
+  if (daemonSubprocess) {
     console.log('Killing lbrynet-daemon process');
-    kill(subpy.pid, undefined, (err) => {
+    kill(daemonSubprocess.pid, undefined, (err) => {
       console.log('Killed lbrynet-daemon process');
+      requestedDaemonSubprocessKilled = true;
+      quitNow();
     });
   } else if (evenIfNotStartedByApp) {
     console.log('Stopping lbrynet-daemon, even though app did not start it');
@@ -179,42 +206,41 @@ function shutdownDaemon(evenIfNotStartedByApp = false) {
         // So try to force kill any daemons that are still running.
 
         console.log('received error when stopping lbrynet-daemon. Error message: {err.message}');
-        forceKillAllDaemons();
+        forceKillAllDaemonsAndQuit();
+      } else {
+        console.log('Successfully stopped daemon via RPC call.')
+        quitNow();
       }
     });
   } else {
-    console.log('Not killing lbrynet-daemon because app did not start it')
+    console.log('Not killing lbrynet-daemon because app did not start it');
+    quitNow();
   }
 
   // Is it safe to start the installer before the daemon finishes running?
   // If not, we should wait until the daemon is closed before we start the install.
 }
 
-function shutdown() {
-  if (win) {
-    win.loadURL(`file://${__dirname}/dist/quit.html`);
-  }
-  quitting = true;
-  shutdownDaemon();
-}
-
 function upgrade(event, installerPath) {
+  console.log('top of upgrade()')
+
   app.on('quit', () => {
+    console.log('Launching upgrade installer at', installerPath);
+    // This gets triggered called after *all* other quit-related events, so
+    // we'll only get here if we're fully prepared and quitting for real.
     openItem(installerPath);
   });
 
   if (win) {
     win.loadURL(`file://${__dirname}/dist/upgrade.html`);
   }
-  quitting = true;
-  shutdownDaemon(true);
+
+  app.quit();
   // wait for daemon to shut down before upgrading
   // what to do if no shutdown in a long time?
-  console.log('Update downloaded to ', installerPath);
+  console.log('Update downloaded to', installerPath);
   console.log('The app will close, and you will be prompted to install the latest version of LBRY.');
   console.log('After the install is complete, please reopen the app.');
 }
 
 ipcMain.on('upgrade', upgrade);
-
-ipcMain.on('shutdown', shutdown);
