@@ -16,6 +16,29 @@ let subpy
 // set to true when the quitting sequence has started
 let quitting = false;
 
+/*
+ * Replacement for Electron's shell.openItem. The Electron version doesn't
+ * reliably work from the main process, and we need to be able to run it
+ * when no windows are open.
+ */
+function openItem(fullPath) {
+    const subprocOptions = {
+      detached: true,
+      stdio: 'ignore',
+    };
+
+    let child;
+    if (process.platform == 'darwin') {
+      child = child_process.spawn('open', [fullPath], subprocOptions);
+    } else if (process.platform == 'linux') {
+      child = child_process.spawn('xdg-open', [fullPath], subprocOptions);
+    } else if (process.platform == 'win32') {
+      child = child_process.execSync('start', [fullPath], subprocOptions);
+    }
+
+    // Causes child process reference to be garbage collected, allowing main process to exit
+    child.unref();
+}
 
 function createWindow () {
   win = new BrowserWindow({backgroundColor: '#155b4a'})
@@ -177,11 +200,9 @@ function shutdown() {
 
 function upgrade(event, installerPath) {
   app.on('quit', () => {
-    // shell.openItem doesn't reliably work from the app process, so run xdg-open directly
-    child_process.spawn('xdg-open', [installerPath], {
-      stdio: 'ignore',
-    });
+    openItem(installerPath);
   });
+
   if (win) {
     win.loadURL(`file://${__dirname}/dist/upgrade.html`);
   }
