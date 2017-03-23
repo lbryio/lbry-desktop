@@ -24,7 +24,6 @@ import {Link} from './component/link.js';
 
 const {remote, ipcRenderer, shell} = require('electron');
 const {download} = remote.require('electron-dl');
-const os = require('os');
 const path = require('path');
 const app = require('electron').remote.app;
 const fs = remote.require('fs');
@@ -44,23 +43,29 @@ var App = React.createClass({
   _version: null,
 
   getUpdateUrl: function() {
-    switch (os.platform()) {
+    switch (process.platform) {
       case 'darwin':
         return 'https://lbry.io/get/lbry.dmg';
       case 'linux':
         return 'https://lbry.io/get/lbry.deb';
       case 'win32':
-        return 'https://lbry.io/get/lbry.exe'; // should now be msi
+        return 'https://lbry.io/get/lbry.exe';
+      default:
+        throw 'Unknown platform';
     }
   },
-  // Temporary workaround since electron-dl throws errors when you try to get the filename
+  // Hard code the filenames as a temporary workaround, because
+  // electron-dl throws errors when you try to get the filename
   getUpgradeFilename: function() {
-    if (os.platform() == 'darwin') {
-      return `LBRY-${this._version}.dmg`;
-    } else if (os.platform() == 'linux') {
-      return `LBRY_${this._version}_amd64.deb`;
-    } else {
-      return `LBRY.Setup.${this._version}.exe`;
+    switch (process.platform) {
+      case 'darwin':
+        return `LBRY-${this._version}.dmg`;
+      case 'linux':
+        return `LBRY_${this._version}_amd64.deb`;
+      case 'windows':
+        return `LBRY.Setup.${this._version}.exe`;
+      default:
+        throw 'Unknown platform';
     }
   },
   getInitialState: function() {
