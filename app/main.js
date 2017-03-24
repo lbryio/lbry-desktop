@@ -15,8 +15,8 @@ let win;
 // Also keep the daemon subprocess alive
 let daemonSubprocess;
 
-// This is set to true right before we try to kill the daemon subprocess --
-// if it dies when we haven't made a request, we want to alert the user.
+// This is set to true right before we try to shut the daemon subprocess --
+// if it dies when we didn't ask it to shut down, we want to alert the user.
 let daemonSubprocessKillRequested = false;
 
 // When a quit is attempted, we cancel the quit, do some preparations, then
@@ -61,15 +61,18 @@ function handleDaemonSubprocessExited() {
   console.log('The daemon has exited.');
   daemonSubprocess = null;
   if (!daemonSubprocessKillRequested) {
-    // We didn't stop down the daemon subprocess on purpose, so display a
+    // We didn't stop the daemon subprocess on purpose, so display a
     // warning and schedule a quit.
     //
     // TODO: maybe it would be better to restart the daemon?
-    console.log('Did not display, so scheduling quit');
     if (win) {
+      console.log('Did not request daemon stop, so quitting in 5 seconds.');
       win.loadURL(`file://${__dirname}/dist/warning.html`);
+      setTimeout(quitNow, 5000);
+    } else {
+      console.log('Did not request daemon stop, so quitting.');
+      quitNow();
     }
-    setTimeout(quitNow, 5000);
   }
 }
 
@@ -82,7 +85,7 @@ function launchDaemon() {
   } else {
     executable = path.join(__dirname, 'dist', 'lbrynet-daemon');
   }
-  console.log('Launching daemon: ' + executable)
+  console.log('Launching daemon:', executable)
   daemonSubprocess = child_process.spawn(executable)
   // Need to handle the data event instead of attaching to
   // process.stdout because the latter doesn't work. I believe on
@@ -94,8 +97,9 @@ function launchDaemon() {
 }
 
 /*
- * Quits without any preparation (when a quit is requested, we abort the quit, try to shut down
- * the daemon, and then call this to quit for real).
+ * Quits without any preparation. When a quit is requested (either through the
+ * interface or through app.quit()), we abort the quit, try to shut down the daemon,
+ * and then call this to quit for real.
  */
 function quitNow() {
   readyToQuit = true;
@@ -169,7 +173,7 @@ app.on('window-all-closed', () => {
 
 app.on('before-quit', (event) => {
   if (!readyToQuit) {
-    // We need to shutdown the daemons before we're ready to actually quit. This
+    // We need to shutdown the daemon before we're ready to actually quit. This
     // event will be triggered re-entrantly once preparation is done.
     event.preventDefault();
     shutdownDaemonAndQuit();
@@ -187,9 +191,9 @@ app.on('activate', () => {
   }
 });
 
-// When a quit is attempted, this is called, it attempts to shutdown the daemon,
-// and then calls app.quit() to quit for real.
-function shutdownDaemonAndQuit(shutdownEvenIfNotStartedByApp = false) {
+// When a quit is attempted, this is called. It attempts to shutdown the daemon,
+// then calls quitNow() to quit for real.
+function shutdownDaemonAndQuit(evenIfNotStartedByApp = false) {
   if (daemonSubprocess) {
     console.log('Killing lbrynet-daemon process');
     kill(daemonSubprocess.pid, undefined, (err) => {
@@ -205,7 +209,7 @@ function shutdownDaemonAndQuit(shutdownEvenIfNotStartedByApp = false) {
         // or because it's running but not responding properly (bad).
         // So try to force kill any daemons that are still running.
 
-        console.log('received error when stopping lbrynet-daemon. Error message: {err.message}');
+        console.log(`received error when stopping lbrynet-daemon. Error message: ${err.message}`);
         forceKillAllDaemonsAndQuit();
       } else {
         console.log('Successfully stopped daemon via RPC call.')
@@ -222,8 +226,6 @@ function shutdownDaemonAndQuit(shutdownEvenIfNotStartedByApp = false) {
 }
 
 function upgrade(event, installerPath) {
-  console.log('top of upgrade()')
-
   app.on('quit', () => {
     console.log('Launching upgrade installer at', installerPath);
     // This gets triggered called after *all* other quit-related events, so

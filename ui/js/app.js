@@ -49,7 +49,7 @@ var App = React.createClass({
       case 'linux':
         return 'https://lbry.io/get/lbry.deb';
       case 'win32':
-        return 'https://lbry.io/get/lbry.exe'; // should now be msi
+        return 'https://lbry.io/get/lbry.exe';
     }
   },
   // Hard code the filenames as a temporary workaroound, because
