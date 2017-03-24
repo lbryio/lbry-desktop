@@ -47,6 +47,19 @@ function openItem(fullPath) {
     child.unref();
 }
 
+function getPidsForProcessName(name) {
+  if (process.platform == 'windows') {
+    const tasklistOut = child_process.execSync('tasklist',
+      ['/fi', `Imagename eq ${name}.exe`, '/nh'],
+      {encoding: 'utf8'}
+    ).stdout;
+    return tasklistOut.match(/[^\n]+/g).map((line) => line.split(/\s+/)[1]); // Second column of every non-empty line
+  } else {
+    const pgrepOut = child_process.spawnSync('pgrep', ['-x', name], {encoding: 'utf8'}).stdout;
+    return pgrepOut.match(/\d+/g);
+  }
+}
+
 function createWindow () {
   win = new BrowserWindow({backgroundColor: '#155b4a'})
   win.maximize()
@@ -137,8 +150,7 @@ function launchDaemonIfNotRunning() {
 function forceKillAllDaemonsAndQuit() {
   console.log('Attempting to force kill any running lbrynet-daemon instances...');
 
-  const fgrepOut = child_process.spawnSync('pgrep', ['-x', 'lbrynet-daemon'], {encoding: 'utf8'}).stdout;
-  const daemonPids = fgrepOut.match(/\d+/g);
+  const daemonPids = getPidsForProcessName('lbrynet-daemon');
   if (!daemonPids) {
     console.log('No lbrynet-daemon found running.');
     quitNow();
