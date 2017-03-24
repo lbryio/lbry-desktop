@@ -47,9 +47,9 @@ var App = React.createClass({
     if (os.platform() == 'darwin') {
       return `LBRY-${this._version}.dmg`;
     } else if (os.platform() == 'linux') {
-      return `LBRY-${this._version}.deb`;
+      return `LBRY_${this._version}_amd64.deb`;
     } else {
-      return `LBRY-${this._version}_amd64.deb`;
+      return `LBRY.Setup.${this._version}.exe`;
     }
   },
   getInitialState: function() {
