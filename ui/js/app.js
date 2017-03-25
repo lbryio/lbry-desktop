@@ -24,9 +24,9 @@ import {Link} from './component/link.js';
 
 const {remote, ipcRenderer, shell} = require('electron');
 const {download} = remote.require('electron-dl');
-const os = require('os');
 const path = require('path');
 const app = require('electron').remote.app;
+const fs = remote.require('fs');
 
 
 var App = React.createClass({
@@ -42,14 +42,30 @@ var App = React.createClass({
   _upgradeDownloadItem: null,
   _version: null,
 
-  // Temporary workaround since electron-dl throws errors when you try to get the filename
+  getUpdateUrl: function() {
+    switch (process.platform) {
+      case 'darwin':
+        return 'https://lbry.io/get/lbry.dmg';
+      case 'linux':
+        return 'https://lbry.io/get/lbry.deb';
+      case 'win32':
+        return 'https://lbry.io/get/lbry.exe';
+      default:
+        throw 'Unknown platform';
+    }
+  },
+  // Hard code the filenames as a temporary workaround, because
+  // electron-dl throws errors when you try to get the filename
   getUpgradeFilename: function() {
-    if (os.platform() == 'darwin') {
-      return `LBRY-${this._version}.dmg`;
-    } else if (os.platform() == 'linux') {
-      return `LBRY_${this._version}_amd64.deb`;
-    } else {
-      return `LBRY.Setup.${this._version}.exe`;
+    switch (process.platform) {
+      case 'darwin':
+        return `LBRY-${this._version}.dmg`;
+      case 'linux':
+        return `LBRY_${this._version}_amd64.deb`;
+      case 'windows':
+        return `LBRY.Setup.${this._version}.exe`;
+      default:
+        throw 'Unknown platform';
     }
   },
   getInitialState: function() {
@@ -66,8 +82,6 @@ var App = React.createClass({
       pageArgs: typeof val !== 'undefined' ? val : null,
       errorInfo: null,
       modal: null,
-      updateUrl: null,
-      isOldOSX: null,
       downloadProgress: null,
       downloadComplete: false,
     };
@@ -90,38 +104,20 @@ var App = React.createClass({
       }
     });
 
-    lbry.checkNewVersionAvailable((isAvailable) => {
-      if (!isAvailable || sessionStorage.getItem('upgradeSkipped')) {
-        return;
-      }
-
-      lbry.getVersionInfo((versionInfo) => {
-        this._version = versionInfo.lbrynet_version; // temp for building upgrade filename
-
-        var isOldOSX = false;
-        if (versionInfo.os_system == 'Darwin') {
-          var updateUrl = 'https://lbry.io/get/lbry.dmg';
-
-          var maj, min, patch;
-          [maj, min, patch] = versionInfo.lbrynet_version.split('.');
-          if (maj == 0 && min <= 2 && patch <= 2) {
-            isOldOSX = true;
-          }
-        } else if (versionInfo.os_system == 'Linux') {
-          var updateUrl = 'https://lbry.io/get/lbry.deb';
-        } else if (versionInfo.os_system == 'Windows') {
-          var updateUrl = 'https://lbry.io/get/lbry.exe';
-        } else {
-          var updateUrl = 'https://lbry.io/get';
+    if (!sessionStorage.getItem('upgradeSkipped')) {
+      lbry.checkNewVersionAvailable(({isAvailable}) => {
+        if (!isAvailable) {
+          return;
         }
 
-        this.setState({
-          modal: 'upgrade',
-          isOldOSX: isOldOSX,
-          updateUrl: updateUrl,
-        })
+        lbry.getVersionInfo((versionInfo) => {
+          this._version = versionInfo.lbrynet_version;
+          this.setState({
+            modal: 'upgrade',
+          });
+        });
       });
-    });
+    }
   },
   openDrawer: function() {
     sessionStorage.setItem('drawerOpen', true);
@@ -137,16 +133,14 @@ var App = React.createClass({
     });
   },
   handleUpgradeClicked: function() {
-    // TODO: create a callback for onProgress and have the UI
-    //       show download progress
-    // TODO: calling lbry.stop() ends up displaying the "daemon
-    //       unexpectedly stopped" page. Have a better way of shutting down
-    let dir = app.getPath('temp');
+    // Make a new directory within temp directory so the filename is guaranteed to be available
+    const dir = fs.mkdtempSync(app.getPath('temp') + require('path').sep);
+
     let options = {
       onProgress: (p) => this.setState({downloadProgress: Math.round(p * 100)}),
       directory: dir,
     };
-    download(remote.getCurrentWindow(), this.state.updateUrl, options)
+    download(remote.getCurrentWindow(), this.getUpdateUrl(), options)
       .then(downloadItem => {
         /**
          * TODO: get the download path directly from the download object. It should just be
@@ -289,11 +283,7 @@ var App = React.createClass({
           <Modal isOpen={this.state.modal == 'upgrade'} contentLabel="Update available"
                  type="confirm" confirmButtonLabel="Upgrade" abortButtonLabel="Skip"
                  onConfirmed={this.handleUpgradeClicked} onAborted={this.handleSkipClicked}>
-            <p>Your version of LBRY is out of date and may be unreliable or insecure.</p>
-            {this.state.isOldOSX
-              ? <p>Before installing the new version, make sure to exit LBRY. If you started the app, click the LBRY icon in your status bar and choose "Quit."</p>
-              : null}
-
+            Your version of LBRY is out of date and may be unreliable or insecure.
           </Modal>
           <Modal isOpen={this.state.modal == 'downloading'} contentLabel="Downloading Update" type="custom">
             Downloading Update{this.state.downloadProgress ? `: ${this.state.downloadProgress}%` : null}
