@@ -159,13 +159,15 @@ function forceKillAllDaemonsAndQuit() {
     console.log(`Found ${daemonPids.length} running daemon instances. Attempting to force kill...`);
 
     for (const pid of daemonPids) {
-      const daemonKillAttemptsComplete = 0;
+      let daemonKillAttemptsComplete = 0;
       kill(pid, 'SIGKILL', (err) => {
         daemonKillAttemptsComplete++;
         if (err) {
-          console.log(`Failed to force kill running daemon with pid ${pid}. Error message: ${err.message}`);
+          console.log(`Failed to force kill daemon task with pid ${pid}. Error message: ${err.message}`);
+        } else {
+          console.log(`Force killed daemon task with pid ${pid}.`);
         }
-        if (daemonKillAttemptsComplete >= daemonPids.length) {
+        if (daemonKillAttemptsComplete >= daemonPids.length - 1) {
           quitNow();
         }
       });
@@ -209,9 +211,9 @@ app.on('activate', () => {
 function shutdownDaemonAndQuit(evenIfNotStartedByApp = false) {
   if (daemonSubprocess) {
     console.log('Killing lbrynet-daemon process');
+    daemonSubprocessKillRequested = true;
     kill(daemonSubprocess.pid, undefined, (err) => {
       console.log('Killed lbrynet-daemon process');
-      requestedDaemonSubprocessKilled = true;
       quitNow();
     });
   } else if (evenIfNotStartedByApp) {
@@ -250,7 +252,7 @@ function upgrade(event, installerPath) {
     win.loadURL(`file://${__dirname}/dist/upgrade.html`);
   }
 
-  app.quit();
+  shutdownDaemonAndQuit(true);
   // wait for daemon to shut down before upgrading
   // what to do if no shutdown in a long time?
   console.log('Update downloaded to', installerPath);
