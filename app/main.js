@@ -40,7 +40,7 @@ function openItem(fullPath) {
     } else if (process.platform == 'linux') {
       child = child_process.spawn('xdg-open', [fullPath], subprocOptions);
     } else if (process.platform == 'win32') {
-      child = child_process.execSync('start', [fullPath], subprocOptions);
+      child = child_process.spawn(fullPath, [], subprocOptions);
     }
 
     // Causes child process reference to be garbage collected, allowing main process to exit
@@ -48,12 +48,13 @@ function openItem(fullPath) {
 }
 
 function getPidsForProcessName(name) {
-  if (process.platform == 'windows') {
-    const tasklistOut = child_process.execSync('tasklist',
-      ['/fi', `Imagename eq ${name}.exe`, '/nh'],
-      {encoding: 'utf8'}
-    ).stdout;
-    return tasklistOut.match(/[^\n]+/g).map((line) => line.split(/\s+/)[1]); // Second column of every non-empty line
+  if (process.platform == 'win32') {
+    const tasklistOut = child_process.execSync(`tasklist /fi "Imagename eq ${name}.exe" /nh`, {encoding: 'utf8'});
+    if (tasklistOut.startsWith('INFO')) {
+      return [];
+    } else {
+      return tasklistOut.match(/[^\r\n]+/g).map((line) => line.split(/\s+/)[1]); // Second column of every non-empty line
+    }
   } else {
     const pgrepOut = child_process.spawnSync('pgrep', ['-x', name], {encoding: 'utf8'}).stdout;
     return pgrepOut.match(/\d+/g);
