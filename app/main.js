@@ -17,7 +17,7 @@ let quitting = false;
 
 
 function createWindow () {
-  win = new BrowserWindow({backgroundColor: '#155b4a'})
+  win = new BrowserWindow({backgroundColor: '#155B4A'}) //$color-primary
   win.maximize()
   //win.webContents.openDevTools()
   win.loadURL(`file://${__dirname}/dist/index.html`)

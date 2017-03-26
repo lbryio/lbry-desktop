@@ -223,7 +223,7 @@ lbry.stopFile = function(name, callback) {
 
 lbry.removeFile = function(outpoint, deleteTargetFile=true, callback) {
   this._removedFiles.push(outpoint);
-  this._updateSubscribedFileInfo(outpoint);
+  this._updateFileInfoSubscribers(outpoint);
 
   lbry.file_delete({
     outpoint: outpoint,
@@ -405,9 +405,11 @@ lbry.stop = function(callback) {
 };
 
 lbry.fileInfo = {};
-lbry._fileInfoSubscribeIdCounter = 0;
+lbry._subscribeIdCount = 0;
 lbry._fileInfoSubscribeCallbacks = {};
 lbry._fileInfoSubscribeInterval = 5000;
+lbry._balanceSubscribeCallbacks = {};
+lbry._balanceSubscribeInterval = 5000;
 lbry._removedFiles = [];
 lbry._claimIdOwnershipCache = {};
 
@@ -419,7 +421,7 @@ lbry._updateClaimOwnershipCache = function(claimId) {
   });
 };
 
-lbry._updateSubscribedFileInfo = function(outpoint) {
+lbry._updateFileInfoSubscribers = function(outpoint) {
   const callSubscribedCallbacks = (outpoint, fileInfo) => {
     for (let [subscribeId, callback] of Object.entries(this._fileInfoSubscribeCallbacks[outpoint])) {
       callback(fileInfo);
@@ -446,7 +448,7 @@ lbry._updateSubscribedFileInfo = function(outpoint) {
 
   if (Object.keys(this._fileInfoSubscribeCallbacks[outpoint]).length) {
     setTimeout(() => {
-      this._updateSubscribedFileInfo(outpoint);
+      this._updateFileInfoSubscribers(outpoint);
     }, lbry._fileInfoSubscribeInterval);
   }
 }
@@ -457,14 +459,39 @@ lbry.fileInfoSubscribe = function(outpoint, callback) {
     lbry._fileInfoSubscribeCallbacks[outpoint] = {};
   }
 
-  const subscribeId = ++lbry._fileInfoSubscribeIdCounter;
+  const subscribeId = ++lbry._subscribeIdCount;
   lbry._fileInfoSubscribeCallbacks[outpoint][subscribeId] = callback;
-  lbry._updateSubscribedFileInfo(outpoint);
+  lbry._updateFileInfoSubscribers(outpoint);
   return subscribeId;
 }
 
-lbry.fileInfoUnsubscribe = function(name, subscribeId) {
-  delete lbry._fileInfoSubscribeCallbacks[name][subscribeId];
+lbry.fileInfoUnsubscribe = function(outpoint, subscribeId) {
+  delete lbry._fileInfoSubscribeCallbacks[outpoint][subscribeId];
+}
+
+lbry._updateBalanceSubscribers = function() {
+  lbry.get_balance().then(function(balance) {
+    for (let [subscribeId, callback] of Object.entries(lbry._balanceSubscribeCallbacks)) {
+      callback(balance);
+    }
+  });
+
+  if (Object.keys(lbry._balanceSubscribeCallbacks).length) {
+    setTimeout(() => {
+      lbry._updateBalanceSubscribers();
+    }, lbry._balanceSubscribeInterval);
+  }
+}
+
+lbry.balanceSubscribe = function(callback) {
+  const subscribeId = ++lbry._subscribeIdCount;
+  lbry._balanceSubscribeCallbacks[subscribeId] = callback;
+  lbry._updateBalanceSubscribers();
+  return subscribeId;
+}
+
+lbry.balanceUnsubscribe = function(subscribeId) {
+  delete lbry._balanceSubscribeCallbacks[subscribeId];
 }
 
 lbry.showMenuIfNeeded = function() {

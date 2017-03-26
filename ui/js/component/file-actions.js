@@ -253,7 +253,7 @@ export let FileActions = React.createClass({
     if (this.isMounted) {
       this.setState({
         fileInfo: fileInfo,
-      });      
+      });
     }
   },
   componentDidMount: function() {
@@ -276,6 +276,9 @@ export let FileActions = React.createClass({
   },
   componentWillUnmount: function() {
     this._isMounted = false;
+    if (this._fileInfoSubscribeId) {
+      lbry.fileInfoUnsubscribe(this.props.outpoint, this._fileInfoSubscribeId);
+    }
   },
   render: function() {
     const fileInfo = this.state.fileInfo;
