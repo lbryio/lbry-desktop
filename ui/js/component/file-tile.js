@@ -79,7 +79,7 @@ export let FileTileStream = React.createClass({
   componentDidMount: function() {
     this._isMounted = true;
     if (this.props.hideOnRemove) {
-      lbry.fileInfoSubscribe(this.props.outpoint, this.onFileInfoUpdate);
+      this._fileInfoSubscribeId = lbry.fileInfoSubscribe(this.props.outpoint, this.onFileInfoUpdate);
     }
   },
   componentWillUnmount: function() {
@@ -121,15 +121,15 @@ export let FileTileStream = React.createClass({
       <section className={ 'file-tile card ' + (obscureNsfw ? 'card-obscured ' : '') } onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
         <div className={"row-fluid card-content file-tile__row"}>
           <div className="span3">
-            <a href={'/?show=' + this.props.name}><Thumbnail className="file-tile__thumbnail" src={metadata.thumbnail} alt={'Photo for ' + (title || this.props.name)} /></a>
+            <a href={'?show=' + this.props.name}><Thumbnail className="file-tile__thumbnail" src={metadata.thumbnail} alt={'Photo for ' + (title || this.props.name)} /></a>
           </div>
           <div className="span9">
             { !this.props.hidePrice
               ? <FilePrice name={this.props.name} />
               : null}
-            <div className="meta"><a href={'index.html?show=' + this.props.name}>{'lbry://' + this.props.name}</a></div>
+            <div className="meta"><a href={'?show=' + this.props.name}>{'lbry://' + this.props.name}</a></div>
             <h3 className="file-tile__title">
-              <a href={'index.html?show=' + this.props.name}>
+              <a href={'?show=' + this.props.name}>
                 <TruncatedText lines={1}>
                   {title}
                 </TruncatedText>

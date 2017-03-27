@@ -41,7 +41,7 @@ export let FileListDownloaded = React.createClass({
     } else if (!this.state.fileInfos.length) {
       return (
         <main className="page">
-          <span>You haven't downloaded anything from LBRY yet. Go <Link href="/index.html?discover" label="search for your first download" />!</span>
+          <span>You haven't downloaded anything from LBRY yet. Go <Link href="?discover" label="search for your first download" />!</span>
         </main>
       );
     } else {
@@ -90,7 +90,7 @@ export let FileListPublished = React.createClass({
     else if (!this.state.fileInfos.length) {
       return (
         <main className="page">
-          <span>You haven't published anything to LBRY yet.</span> Try <Link href="index.html?publish" label="publishing" />!
+          <span>You haven't published anything to LBRY yet.</span> Try <Link href="?publish" label="publishing" />!
         </main>
       );
     }

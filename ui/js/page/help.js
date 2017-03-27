@@ -67,7 +67,7 @@ var HelpPage = React.createClass({
         <section className="card">
           <h3>Report a Bug</h3>
           <p>Did you find something wrong?</p>
-          <p><Link href="index.html?report" label="Submit a Bug Report" icon="icon-bug" button="alt" /></p>
+          <p><Link href="?report" label="Submit a Bug Report" icon="icon-bug" button="alt" /></p>
           <div className="meta">Thanks! LBRY is made by its users.</div>
         </section>
         {!ver ? null :

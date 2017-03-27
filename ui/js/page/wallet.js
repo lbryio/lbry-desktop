@@ -243,6 +243,8 @@ var TransactionList = React.createClass({
 
 
 var WalletPage = React.createClass({
+  _balanceSubscribeId: null,
+
   propTypes: {
     viewingPage: React.PropTypes.string,
   },
@@ -259,11 +261,16 @@ var WalletPage = React.createClass({
     }
   },
   componentWillMount: function() {
-    lbry.getBalance((results) => {
+    this._balanceSubscribeId = lbry.balanceSubscribe((results) => {
       this.setState({
         balance: results,
       })
     });
+  },
+  componentWillUnmount: function() {
+    if (this._balanceSubscribeId) {
+      lbry.balanceUnsubscribe(this._balanceSubscribeId);
+    }
   },
   render: function() {
     return (

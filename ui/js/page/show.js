@@ -155,7 +155,7 @@ var DetailPage = React.createClass({
           ) : (
             <div>
               <h2>No content</h2>
-              There is no content available at the name <strong>lbry://{this.props.name}</strong>. If you reached this page from a link within the LBRY interface, please <Link href="index.html?report" label="report a bug" />. Thanks!
+              There is no content available at the name <strong>lbry://{this.props.name}</strong>. If you reached this page from a link within the LBRY interface, please <Link href="?report" label="report a bug" />. Thanks!
             </div>
           )}
         </section>

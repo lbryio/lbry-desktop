@@ -40,8 +40,15 @@ var App = React.createClass({
   },
 
   _upgradeDownloadItem: null,
+  _isMounted: false,
   _version: null,
 
+  // Temporary workaround since electron-dl throws errors when you try to get the filename
+  getDefaultProps: function() {
+    return {
+      address: window.location.search
+    };
+  },
   getUpdateUrl: function() {
     switch (process.platform) {
       case 'darwin':
@@ -68,37 +75,45 @@ var App = React.createClass({
         throw 'Unknown platform';
     }
   },
-  getInitialState: function() {
+  getViewingPageAndArgs: function(address) {
     // For now, routes are in format ?page or ?page=args
-    var match, param, val, viewingPage,
-        drawerOpenRaw = sessionStorage.getItem('drawerOpen');
-
-    [match, viewingPage, val] = window.location.search.match(/\??([^=]*)(?:=(.*))?/);
-
-
+    let [isMatch, viewingPage, pageArgs] = address.match(/\??([^=]*)(?:=(.*))?/);
     return {
       viewingPage: viewingPage,
+      pageArgs: pageArgs === undefined ? null : pageArgs
+    };
+  },
+  getInitialState: function() {
+    var match, param, val, viewingPage, pageArgs,
+        drawerOpenRaw = sessionStorage.getItem('drawerOpen');
+
+    return Object.assign(this.getViewingPageAndArgs(this.props.address), {
       drawerOpen: drawerOpenRaw !== null ? JSON.parse(drawerOpenRaw) : true,
-      pageArgs: typeof val !== 'undefined' ? val : null,
       errorInfo: null,
       modal: null,
       downloadProgress: null,
       downloadComplete: false,
-    };
+    });
   },
   componentWillMount: function() {
     document.addEventListener('unhandledError', (event) => {
       this.alertError(event.detail);
     });
 
-    //open links in external browser
-    document.addEventListener('click', function(event) {
+    //open links in external browser and skip full redraw on changing page
+    document.addEventListener('click', (event) => {
       var target = event.target;
       while (target && target !== document) {
         if (target.matches('a[href^="http"]')) {
           event.preventDefault();
           shell.openExternal(target.href);
           return;
+        }
+        if (target.matches('a[href^="?"]')) {
+          event.preventDefault();
+          if (this._isMounted) {
+            this.setState(this.getViewingPageAndArgs(target.getAttribute('href')));
+          }
         }
         target = target.parentNode;
       }
@@ -131,6 +146,12 @@ var App = React.createClass({
     this.setState({
       modal: null,
     });
+  },
+  componentDidMount: function() {
+    this._isMounted = true;
+  },
+  componentWillUnmount: function() {
+    this._isMounted = false;
   },
   handleUpgradeClicked: function() {
     // Make a new directory within temp directory so the filename is guaranteed to be available
