@@ -91,7 +91,7 @@ var SendToAddressSection = React.createClass({
       }
     }, (error) => {
       this.setState({
-        results: "Something went wrong: " + error.faultString + " " + error.faultCode
+        results: "Something went wrong: " + error.message
       })
     });
   },
