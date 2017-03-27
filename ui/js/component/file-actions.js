@@ -179,7 +179,7 @@ let FileActionsRow = React.createClass({
     let linkBlock;
     if (this.state.fileInfo === false && !this.state.attemptingDownload) {
       linkBlock = <Link button="text" label="Download" icon="icon-download" onClick={this.onDownloadClick} />;
-    } else if (this.state.attemptingDownload || !this.state.fileInfo.completed) {
+    } else if (this.state.attemptingDownload || (!this.state.fileInfo.completed && !this.state.fileInfo.isMine)) {
       const
         progress = this.state.fileInfo ? this.state.fileInfo.written_bytes / this.state.fileInfo.total_bytes * 100 : 0,
         label = this.state.fileInfo ? progress.toFixed(0) + '% complete' : 'Connecting...',
