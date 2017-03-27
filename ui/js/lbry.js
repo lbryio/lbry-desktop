@@ -423,7 +423,7 @@ lbry._updateClaimOwnershipCache = function(claimId) {
 
 lbry._updateFileInfoSubscribers = function(outpoint) {
   const callSubscribedCallbacks = (outpoint, fileInfo) => {
-    for (let [subscribeId, callback] of Object.entries(this._fileInfoSubscribeCallbacks[outpoint])) {
+    for (let callback of Object.values(this._fileInfoSubscribeCallbacks[outpoint])) {
       callback(fileInfo);
     }
   }
@@ -471,7 +471,7 @@ lbry.fileInfoUnsubscribe = function(outpoint, subscribeId) {
 
 lbry._updateBalanceSubscribers = function() {
   lbry.get_balance().then(function(balance) {
-    for (let [subscribeId, callback] of Object.entries(lbry._balanceSubscribeCallbacks)) {
+    for (let callback of Object.values(lbry._balanceSubscribeCallbacks)) {
       callback(balance);
     }
   });

@@ -60,8 +60,7 @@ var App = React.createClass({
   },
   getViewingPageAndArgs: function(address) {
     // For now, routes are in format ?page or ?page=args
-    let isMatch, viewingPage, pageArgs;
-    [isMatch, viewingPage, pageArgs] = address.match(/\??([^=]*)(?:=(.*))?/);
+    let [isMatch, viewingPage, pageArgs] = address.match(/\??([^=]*)(?:=(.*))?/);
     return {
       viewingPage: viewingPage,
       pageArgs: pageArgs === undefined ? null : pageArgs
@@ -87,7 +86,7 @@ var App = React.createClass({
     });
 
     //open links in external browser and skip full redraw on changing page
-    document.addEventListener('click', function(event) {
+    document.addEventListener('click', (event) => {
       var target = event.target;
       while (target && target !== document) {
         if (target.matches('a[href^="http"]')) {
@@ -103,7 +102,7 @@ var App = React.createClass({
         }
         target = target.parentNode;
       }
-    }.bind(this));
+    });
 
     lbry.checkNewVersionAvailable((isAvailable) => {
       if (!isAvailable || sessionStorage.getItem('upgradeSkipped')) {
