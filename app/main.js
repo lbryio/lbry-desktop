@@ -40,7 +40,7 @@ function openItem(fullPath) {
     } else if (process.platform == 'linux') {
       child = child_process.spawn('xdg-open', [fullPath], subprocOptions);
     } else if (process.platform == 'win32') {
-      child = child_process.execSync('start', [fullPath], subprocOptions);
+      child = child_process.spawn(fullPath, [], subprocOptions);
     }
 
     // Causes child process reference to be garbage collected, allowing main process to exit
@@ -48,12 +48,13 @@ function openItem(fullPath) {
 }
 
 function getPidsForProcessName(name) {
-  if (process.platform == 'windows') {
-    const tasklistOut = child_process.execSync('tasklist',
-      ['/fi', `Imagename eq ${name}.exe`, '/nh'],
-      {encoding: 'utf8'}
-    ).stdout;
-    return tasklistOut.match(/[^\n]+/g).map((line) => line.split(/\s+/)[1]); // Second column of every non-empty line
+  if (process.platform == 'win32') {
+    const tasklistOut = child_process.execSync(`tasklist /fi "Imagename eq ${name}.exe" /nh`, {encoding: 'utf8'});
+    if (tasklistOut.startsWith('INFO')) {
+      return [];
+    } else {
+      return tasklistOut.match(/[^\r\n]+/g).map((line) => line.split(/\s+/)[1]); // Second column of every non-empty line
+    }
   } else {
     const pgrepOut = child_process.spawnSync('pgrep', ['-x', name], {encoding: 'utf8'}).stdout;
     return pgrepOut.match(/\d+/g);
@@ -158,13 +159,15 @@ function forceKillAllDaemonsAndQuit() {
     console.log(`Found ${daemonPids.length} running daemon instances. Attempting to force kill...`);
 
     for (const pid of daemonPids) {
-      const daemonKillAttemptsComplete = 0;
+      let daemonKillAttemptsComplete = 0;
       kill(pid, 'SIGKILL', (err) => {
         daemonKillAttemptsComplete++;
         if (err) {
-          console.log(`Failed to force kill running daemon with pid ${pid}. Error message: ${err.message}`);
+          console.log(`Failed to force kill daemon task with pid ${pid}. Error message: ${err.message}`);
+        } else {
+          console.log(`Force killed daemon task with pid ${pid}.`);
         }
-        if (daemonKillAttemptsComplete >= daemonPids.length) {
+        if (daemonKillAttemptsComplete >= daemonPids.length - 1) {
           quitNow();
         }
       });
@@ -208,9 +211,9 @@ app.on('activate', () => {
 function shutdownDaemonAndQuit(evenIfNotStartedByApp = false) {
   if (daemonSubprocess) {
     console.log('Killing lbrynet-daemon process');
+    daemonSubprocessKillRequested = true;
     kill(daemonSubprocess.pid, undefined, (err) => {
       console.log('Killed lbrynet-daemon process');
-      requestedDaemonSubprocessKilled = true;
       quitNow();
     });
   } else if (evenIfNotStartedByApp) {
@@ -249,7 +252,7 @@ function upgrade(event, installerPath) {
     win.loadURL(`file://${__dirname}/dist/upgrade.html`);
   }
 
-  app.quit();
+  shutdownDaemonAndQuit(true);
   // wait for daemon to shut down before upgrading
   // what to do if no shutdown in a long time?
   console.log('Update downloaded to', installerPath);
