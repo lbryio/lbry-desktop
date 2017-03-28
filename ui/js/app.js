@@ -9,6 +9,8 @@ import ReportPage from './page/report.js';
 import StartPage from './page/start.js';
 import ClaimCodePage from './page/claim_code.js';
 import ReferralPage from './page/referral.js';
+import RewardsPage from './page/rewards.js';
+import RewardPage from './page/reward.js';
 import WalletPage from './page/wallet.js';
 import ShowPage from './page/show.js';
 import PublishPage from './page/publish.js';
@@ -233,12 +235,14 @@ var App = React.createClass({
       case 'receive':
       case 'claim':
       case 'referral':
+      case 'rewards':
         return {
-          '?wallet' : 'Overview',
-          '?send' : 'Send',
-          '?receive' : 'Receive',
-          '?claim' : 'Claim Beta Code',
-          '?referral' : 'Check Referral Credit',
+          '?wallet': 'Overview',
+          '?send': 'Send',
+          '?receive': 'Receive',
+          '?claim': 'Claim Beta Code',
+          '?referral': 'Check Referral Credit',
+          '?rewards': 'Rewards',
         };
       case 'downloaded':
       case 'published':
@@ -272,6 +276,10 @@ var App = React.createClass({
         return <ClaimCodePage />;
       case 'referral':
         return <ReferralPage />;
+      case 'rewards':
+        return <RewardsPage />;
+      case 'reward':
+        return <RewardPage name={this.state.pageArgs} />;
       case 'wallet':
       case 'send':
       case 'receive':
