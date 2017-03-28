@@ -8,7 +8,7 @@ We provide installers for Windows, macOS, and Debian-based Linux.
 
 | Windows | macOS | Linux |
 | --- | --- | --- |
-| [Download](https://lbry.io/get/lbry.msi) | [Download](https://lbry.io/get/lbry.dmg) | [Download](https://lbry.io/get/lbry.deb) |
+| [Download](https://lbry.io/get/lbry.exe) | [Download](https://lbry.io/get/lbry.dmg) | [Download](https://lbry.io/get/lbry.deb) |
 
 Our [releases page](https://github.com/lbryio/lbry-app/releases/latest) also contains the latest release, pre-releases, and past builds.
 
