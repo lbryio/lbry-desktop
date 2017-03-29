@@ -21,7 +21,7 @@ var SettingsPage = React.createClass({
     lbry.setDaemonSetting('run_on_startup', event.target.checked);
   },
   onShareDataChange: function (event) {
-    lbry.setDaemonSetting('upload_log', event.target.checked);
+    lbry.setDaemonSetting('share_debug_info', event.target.checked);
   },
   onDownloadDirChange: function(event) {
     lbry.setDaemonSetting('download_directory', event.target.value);
@@ -133,14 +133,16 @@ var SettingsPage = React.createClass({
             Would you like search results to include items that are not currently available for download?
           </div>
           <label style={settingsCheckBoxOptionStyles}>
-            <input type="checkbox" onChange={this.onShowUnavailableChange} defaultChecked={this.state.showUnavailable} /> Show unavailable content in search results
+            <input type="checkbox" onChange={this.onShowUnavailableChange} defaultChecked={this.state.showUnavailable} />
+            Show unavailable content in search results
           </label>
           </div>
         </section>
         <section className="card">
           <h3>Share Diagnostic Data</h3>
           <label style={settingsCheckBoxOptionStyles}>
-            <input type="checkbox" onChange={this.onShareDataChange} defaultChecked={this.state.daemonSettings.upload_log} /> Help make LBRY better by contributing diagnostic data about my usage
+            <input type="checkbox" onChange={this.onShareDataChange} defaultChecked={this.state.daemonSettings.share_debug_info} />
+            Help make LBRY better by contributing diagnostic data about my usage
           </label>
         </section>
        </main>
