@@ -1,31 +1,24 @@
 import React from 'react';
 import lbry from '../lbry.js';
+import {CreditAmount} from '../component/common.js';
 import Modal from '../component/modal.js';
 import {Link} from '../component/link.js';
+import lbryio from '../lbryio.js';
 
-// Placeholder for something like api.lbry.io/reward_type/list */
-function apiRewardTypeList() {
-  return [
-    {
-      name: 'link_github',
-      title: 'Link your GitHub account',
-      description: 'Link LBRY to your GitHub account',
-      value: 50,
-      claimed: false,
-    },
-  ];
-}
-
-var RewardTile = React.createClass({
+const RewardTile = React.createClass({
   propTypes: {
-    name: React.PropTypes.string,
-    title: React.PropTypes.string,
+    name: React.PropTypes.string.isRequired,
+    title: React.PropTypes.string.isRequired,
+    description: React.PropTypes.string.isRequired,
+    claimed: React.PropTypes.bool.isRequired,
+    value: React.PropTypes.number.isRequired,
   },
   render: function() {
     return (
       <section className="card">
         <div className={"row-fluid card-content"}>
           <h3><Link label={this.props.title} href={'?reward=' + this.props.name} /></h3>
+          <CreditAmount amount={this.props.value} />
           <section>{this.props.description}</section>
           {this.props.claimed
               ? <span className="empty">This reward has been claimed.</span>
@@ -38,8 +31,10 @@ var RewardTile = React.createClass({
 
 var RewardsPage = React.createClass({
   componentWillMount: function() {
-    this.setState({
-      rewardTypes: apiRewardTypeList(),
+    lbryio.call('reward_type', 'list', {}).then((rewardTypes) => {
+      this.setState({
+        rewardTypes: rewardTypes,
+      });
     });
   },
   getInitialState: function() {
@@ -56,7 +51,7 @@ var RewardsPage = React.createClass({
             {!this.state.rewardTypes
               ? null
               : this.state.rewardTypes.map(({name, title, description, claimed, value}) => {
-                return <RewardTile name={name} title={title} description={description} claimed={claimed} value={value} />;
+                return <RewardTile key={name} name={name} title={title} description={description} claimed={claimed} value={value} />;
               })}
           </div>
         </form>
