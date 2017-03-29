@@ -1,19 +1,80 @@
 import React from 'react';
+import lbryio from '../lbryio.js';
+import {Link} from '../component/link.js';
+import {CreditAmount} from '../component/common.js';
 
-// Placeholder for something like api.lbry.io/reward_type/get/[name] */
-function apiRewardTypeGet(name) {
-  return {
-    name: 'reward1',
-    title: 'Reward 1',
-    description: 'Reward 1 description',
-    value: 50,
-    claimed: true,
-  };
-}
+const {shell} = require('electron');
+const querystring = require('querystring');
+
+const GITHUB_CLIENT_ID = '6baf581d32bad60519';
+
+const LinkGithubReward = React.createClass({
+  propTypes: {
+    onClaimed: React.PropTypes.func,
+  },
+  _launchLinkPage: function() {
+    const githubAuthParams = {
+      client_id: GITHUB_CLIENT_ID,
+      redirect_uri: 'https://lbry.io/',
+      scope: 'user:email,public_repo',
+      allow_signup: false,
+    }
+    shell.openExternal('https://github.com/login/oauth/authorize?' + querystring.stringify(githubAuthParams));
+  },
+  handleConfirmClicked: function() {
+    this.setState({
+      confirming: true,
+    });
+
+    lbryio.call('reward', 'new', {
+      reward_type: 'new_developer',
+      access_token: 'token will go here',
+    }, 'post').then((response) => {
+      console.log('response:', response);
+
+      this.props.onClaimed(); // This will trigger another API call to show that we succeeded
+
+      this.setState({
+        confirming: false,
+      });
+    }, (error) => {
+      console.log('failed with error:', error);
+      this.setState({
+        confirming: false,
+      });
+    });
+  },
+  getInitialState: function() {
+    return {
+      confirming: false,
+    };
+  },
+  render: function() {
+    return (
+      <section>
+        <section className="reward-page__details">
+          <p><Link button="alt" label="Link with GitHub" onClick={this._launchLinkPage} /></p>
+          <p>This will open browser window where you can authorize GitHub to link your account to LBRY. This will record your email (no spam) and star the LBRY repo.</p>
+          <p>Once you're finished, you may confirm you've linked the account to receive your reward.</p>
+        </section>
+
+        <Link button="primary" label={this.state.confirming ? 'Confirming...' : 'Confirm'}
+              onClick={this.handleConfirmClicked} />
+      </section>
+    );
+  }
+});
 
 const RewardPage = React.createClass({
   propTypes: {
-    name: React.PropTypes.string,
+    name: React.PropTypes.string.isRequired,
+  },
+  _getRewardType: function() {
+    lbryio.call('reward_type', 'get', this.props.name).then((rewardType) => {
+      this.setState({
+        rewardType: rewardType,
+      });
+    });
   },
   getInitialState: function() {
     return {
@@ -21,22 +82,28 @@ const RewardPage = React.createClass({
     };
   },
   componentWillMount: function() {
-    this.setState({
-      rewardType: apiRewardTypeGet(this.props.name),
-    });
+    this._getRewardType();
   },
   render: function() {
     if (!this.state.rewardType) {
       return null;
     }
 
-    let {title, description, value} = this.state.rewardType;
+    let Reward;
+    if (this.props.name == 'link_github') {
+      Reward = LinkGithubReward;
+    }
+
+    const {title, description, value} = this.state.rewardType;
     return (
       <main>
         <section className="card">
           <h2>{title}</h2>
-          <p>{description}</p>
-          {/* Most likely have a component included here for each reward (e.g. WatchVideoReward) */}
+          <CreditAmount amount={value} />
+          <p>{this.state.rewardType.claimed
+            ? <span class="empty">This reward has been claimed.</span>
+            : description}</p>
+          <Reward onClaimed={this._getRewardType} />
         </section>
       </main>
     );
