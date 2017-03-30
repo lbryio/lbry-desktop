@@ -2,7 +2,7 @@ const querystring = require('querystring');
 
 const lbryio = {};
 
-const CONNECTION_STRING = 'https://api.lbry.io/';
+const CONNECTION_STRING = 'https://apidev.lbry.tech/';
 
 const mocks = {
   'reward_type.get': (name) => {
@@ -72,18 +72,20 @@ lbryio.call = function(resource, action, params, method='get') {
           }));
         }
       } else {
-        resolve(response.result);
+        resolve(response.data);
       }
     });
 
     console.log('about to call xhr.open');
-    xhr.open(method, CONNECTION_STRING + resource + '/' + action, true);
 
-    if (method == 'post') {
+    if (method == 'get') {
+      xhr.open('get', CONNECTION_STRING + resource + '/' + action + '?' + querystring.stringify(params), true);
+      xhr.send();
+    } else if (method == 'post') {
+      xhr.open('post', CONNECTION_STRING + resource + '/' + action, true);
       xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      xhr.send(querystring.stringify(params));
     }
-
-    xhr.send(querystring.stringify(params));
   });
 };
 
