@@ -25,22 +25,23 @@ var init = function() {
     ReactDOM.render(<App/>, canvas)
   } else {
     ReactDOM.render(
-	<SplashScreen message="Connecting" onLoadDone={function() {
-	  // Redirect to the claim code page if needed. Find somewhere better for this logic
-	  if (!localStorage.getItem('claimCodeDone') && window.location.search == '' || window.location.search == '?' || window.location.search == 'discover') {
+      (
+        <SplashScreen message="Connecting" onLoadDone={function() {
+          // Redirect to the claim code page if needed. Find somewhere better for this logic
+          if (!localStorage.getItem('claimCodeDone') && ['', '?', 'discover'].contains(window.location.search)) {
             lbry.getBalance((balance) => {
               if (balance <= 0) {
-		window.location.href = '?claim';
+                window.location.href = '?claim';
               } else {
-		ReactDOM.render(<App/>, canvas);
+                ReactDOM.render(<App/>, canvas);
               }
             });
-	  } else {
+          } else {
             ReactDOM.render(<App/>, canvas);
-	  }
-	}}/>,
-      canvas
-    );
+          }
+        }}/>
+      ),
+      canvas);
   }
 };
 
