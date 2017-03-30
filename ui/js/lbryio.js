@@ -57,18 +57,17 @@ lbryio.call = function(resource, action, params, method='get') {
       console.log('loaded');
       const response = JSON.parse(xhr.responseText);
 
-      if (response.error) {
+      if (!response.success) {
         if (reject) {
           reject(new Error(response.error));
         } else {
           document.dispatchEvent(new CustomEvent('unhandledError', {
             detail: {
               connectionString: connectionString,
-              method: method,
+              method: action,
               params: params,
-              code: response.error.code,
               message: response.error.message,
-              data: response.error.data,
+              ... response.error.data ? {data: response.error.data} : {},
             }
           }));
         }
@@ -79,6 +78,11 @@ lbryio.call = function(resource, action, params, method='get') {
 
     console.log('about to call xhr.open');
     xhr.open(method, CONNECTION_STRING + resource + '/' + action, true);
+
+    if (method == 'post') {
+      xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    }
+
     xhr.send(querystring.stringify(params));
   });
 };
