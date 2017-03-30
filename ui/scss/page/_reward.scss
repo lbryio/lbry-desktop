@@ -1,3 +1,5 @@
+@import "../global";
+
 .reward-page__details {
-  background-color: rgba(0, 0, 0, 0.01);
+  background-color: lighten($color-canvas, 1.5%);
 }
