@@ -28,18 +28,13 @@ const mocks = {
 };
 
 lbryio.call = function(resource, action, params, method='get') {
-  console.log('top of lbryio.call')
   return new Promise((resolve, reject) => {
-    console.log('top of promise handler')
     /* temp code for mocks */
     if (`${resource}.${action}` in mocks) {
-      console.log(`found ${resource}.${action} in mocks`)
       resolve(mocks[`${resource}.${action}`](params));
-      console.log('...resolved.');
       return;
-    } else {
-      console.log(`did not find ${resource}.${action} in mocks`);
     }
+
     /* end temp */
 
     console.log('about to create xhr object');

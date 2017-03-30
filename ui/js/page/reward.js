@@ -13,34 +13,38 @@ const LinkGithubReward = React.createClass({
     onClaimed: React.PropTypes.func,
   },
   _launchLinkPage: function() {
-    const githubAuthParams = {
+    /* const githubAuthParams = {
       client_id: GITHUB_CLIENT_ID,
       redirect_uri: 'https://lbry.io/',
       scope: 'user:email,public_repo',
       allow_signup: false,
     }
-    shell.openExternal('https://github.com/login/oauth/authorize?' + querystring.stringify(githubAuthParams));
+    shell.openExternal('https://github.com/login/oauth/authorize?' + querystring.stringify(githubAuthParams)); */
+    shell.openExternal('https://lbry.io');
   },
   handleConfirmClicked: function() {
     this.setState({
       confirming: true,
     });
 
-    lbryio.call('reward', 'new', {
-      reward_type: 'new_developer',
-      access_token: 'token will go here',
-    }, 'post').then((response) => {
-      console.log('response:', response);
+    lbry.get_new_address().then((address) => {
+      lbryio.call('reward', 'new', {
+        reward_type: 'new_developer',
+        access_token: '**access token here**',
+        wallet_address: address,
+      }, 'post').then((response) => {
+        console.log('response:', response);
 
-      this.props.onClaimed(); // This will trigger another API call to show that we succeeded
+        this.props.onClaimed(); // This will trigger another API call to show that we succeeded
 
-      this.setState({
-        confirming: false,
-      });
-    }, (error) => {
-      console.log('failed with error:', error);
-      this.setState({
-        confirming: false,
+        this.setState({
+          confirming: false,
+        });
+      }, (error) => {
+        console.log('failed with error:', error);
+        this.setState({
+          confirming: false,
+        });
       });
     });
   },
@@ -54,7 +58,7 @@ const LinkGithubReward = React.createClass({
       <section>
         <section className="reward-page__details">
           <p><Link button="alt" label="Link with GitHub" onClick={this._launchLinkPage} /></p>
-          <p>This will open browser window where you can authorize GitHub to link your account to LBRY. This will record your email (no spam) and star the LBRY repo.</p>
+          <p>This will open a browser window where you can authorize GitHub to link your account to LBRY. This will record your email (no spam) and star the LBRY repo.</p>
           <p>Once you're finished, you may confirm you've linked the account to receive your reward.</p>
         </section>
 
