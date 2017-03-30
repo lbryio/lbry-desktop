@@ -1,6 +1,7 @@
 import React from 'react';
 import lbryio from '../lbryio.js';
 import {Link} from '../component/link.js';
+import Notice from '../component/notice.js';
 import {CreditAmount} from '../component/common.js';
 
 const {shell} = require('electron');
@@ -39,11 +40,13 @@ const LinkGithubReward = React.createClass({
 
         this.setState({
           confirming: false,
+          error: null,
         });
       }, (error) => {
         console.log('failed with error:', error);
         this.setState({
           confirming: false,
+          error: error,
         });
       });
     });
@@ -51,6 +54,7 @@ const LinkGithubReward = React.createClass({
   getInitialState: function() {
     return {
       confirming: false,
+      error: null,
     };
   },
   render: function() {
@@ -61,6 +65,11 @@ const LinkGithubReward = React.createClass({
           <p>This will open a browser window where you can authorize GitHub to link your account to LBRY. This will record your email (no spam) and star the LBRY repo.</p>
           <p>Once you're finished, you may confirm you've linked the account to receive your reward.</p>
         </section>
+        {this.state.error
+          ? <Notice isError>
+              {this.state.error.message}
+            </Notice>
+          : null}
 
         <Link button="primary" label={this.state.confirming ? 'Confirming...' : 'Confirm'}
               onClick={this.handleConfirmClicked} />
