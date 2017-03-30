@@ -60,8 +60,8 @@ const LinkGithubReward = React.createClass({
   render: function() {
     return (
       <section>
+        <p><Link button="alt" label="Link with GitHub" onClick={this._launchLinkPage} /></p>
         <section className="reward-page__details">
-          <p><Link button="alt" label="Link with GitHub" onClick={this._launchLinkPage} /></p>
           <p>This will open a browser window where you can authorize GitHub to link your account to LBRY. This will record your email (no spam) and star the LBRY repo.</p>
           <p>Once you're finished, you may confirm you've linked the account to receive your reward.</p>
         </section>
