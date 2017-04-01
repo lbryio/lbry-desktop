@@ -5,6 +5,7 @@ import {FileTile} from '../component/file-tile.js';
 import {Link} from '../component/link.js';
 import {ToolTip} from '../component/tooltip.js';
 import {BusyMessage} from '../component/common.js';
+import {Welcome} from '../component/welcome.js';
 
 var fetchResultsStyle = {
     color: '#888',
@@ -105,10 +106,20 @@ var FeaturedContent = React.createClass({
 var DiscoverPage = React.createClass({
   userTypingTimer: null,
 
+  propTypes: {
+    showWelcome: React.PropTypes.bool.isRequired,
+  },
+
   componentDidUpdate: function() {
     if (this.props.query != this.state.query)
     {
       this.handleSearchChanged(this.props.query);
+    }
+  },
+
+  getDefaultProps: function() {
+    return {
+      showWelcome: false,
     }
   },
 
@@ -128,6 +139,12 @@ var DiscoverPage = React.createClass({
     lighthouse.search(query).then(this.searchCallback);
   },
 
+  handleWelcomeDone: function() {
+    this.setState({
+      welcomeComplete: true,
+    });
+  },
+
   componentWillMount: function() {
     document.title = "Discover";
     if (this.props.query) {
@@ -138,6 +155,7 @@ var DiscoverPage = React.createClass({
 
   getInitialState: function() {
     return {
+      welcomeComplete: false,
       results: [],
       query: this.props.query,
       searching: ('query' in this.props) && (this.props.query.length > 0)
@@ -161,6 +179,7 @@ var DiscoverPage = React.createClass({
         { !this.state.searching && this.props.query && this.state.results.length ? <SearchResults results={this.state.results} /> : null }
         { !this.state.searching && this.props.query && !this.state.results.length ? <SearchNoResults query={this.props.query} /> : null }
         { !this.props.query && !this.state.searching ? <FeaturedContent /> : null }
+        <Welcome isOpen={this.props.showWelcome && !this.state.welcomeComplete} onDone={this.handleWelcomeDone} />
       </main>
     );
   }
