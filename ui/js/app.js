@@ -48,7 +48,6 @@ var App = React.createClass({
   _isMounted: false,
   _version: null,
 
-  // Temporary workaround since electron-dl throws errors when you try to get the filename
   getDefaultProps: function() {
     return {
       address: window.location.search
