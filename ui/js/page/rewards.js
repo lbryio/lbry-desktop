@@ -1,9 +1,9 @@
 import React from 'react';
 import lbry from '../lbry.js';
+import lbryio from '../lbryio.js';
 import {CreditAmount} from '../component/common.js';
 import Modal from '../component/modal.js';
 import {Link} from '../component/link.js';
-import lbryio from '../lbryio.js';
 
 const RewardTile = React.createClass({
   propTypes: {

@@ -39,6 +39,7 @@ lbryio.call = function(resource, action, params, method='get') {
 
     console.log('about to create xhr object');
     const xhr = new XMLHttpRequest;
+
     xhr.addEventListener('error', function (error) {
       console.log('received XHR error:', error);
       reject(error);
