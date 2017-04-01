@@ -2,7 +2,8 @@ import React from 'react';
 import {Line} from 'rc-progress';
 
 import lbry from './lbry.js';
-import RegisterPage from './page/register.js';
+import lbryio from './lbryio.js';
+import EmailPage from './page/email.js';
 import SettingsPage from './page/settings.js';
 import HelpPage from './page/help.js';
 import WatchPage from './page/watch.js';
@@ -41,7 +42,7 @@ var App = React.createClass({
     message: 'Error message',
     data: 'Error data',
   },
-  _fullScreenPages: ['register', 'watch'],
+  _fullScreenPages: ['watch'],
 
   _upgradeDownloadItem: null,
   _isMounted: false,
@@ -260,8 +261,6 @@ var App = React.createClass({
   {
     switch(this.state.viewingPage)
     {
-      case 'register':
-        return <RegisterPage />;
       case 'settings':
         return <SettingsPage />;
       case 'help':
@@ -292,6 +291,8 @@ var App = React.createClass({
         return <ShowPage uri={this.state.pageArgs} />;
       case 'publish':
         return <PublishPage />;
+      case 'email':
+        return <EmailPage />;
       case 'developer':
         return <DeveloperPage />;
       case 'discover':

@@ -4,16 +4,9 @@ import {getLocal, setLocal} from '../utils.js';
 import FormField from '../component/form.js'
 import {Link} from '../component/link.js'
 
-const RegisterPage = React.createClass({
-  _getRewardType: function() {
-    lbryio.call('reward_type', 'get', this.props.name).then((rewardType) => {
-      this.setState({
-        rewardType: rewardType,
-      });
-    });
-  },
+const EmailPage = React.createClass({
   handleSubmit: function(event) {
-    if (event !== 'undefined') {
+    if (event !== undefined) {
       event.preventDefault();
     }
 
@@ -45,4 +38,4 @@ const RegisterPage = React.createClass({
   }
 });
 
-export default RegisterPage;
+export default EmailPage;
