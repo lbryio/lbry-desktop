@@ -47,26 +47,4 @@ let init = function() {
   }
 };
 
-if (localStorage.getItem('accessToken') || window.location.search == '?register') {
-  // User is already registered, or on the registration page
-  init();
-} else {
-  // Send 
-  lbry.status().then(({installation_id}) => {
-    installation_id += parseInt(Date.now(), 10); // temp
-    installation_id += "X".repeat(96 - installation_id.length); // temp
-    lbryio.call('user_install', 'exists', {app_id: installation_id}).then((userExists) => {
-      if (userExists) {
-        /* TODO: somehow user exists with the same installation ID, but we don't have the token recorded. What do we do here? */
-      } else {
-        lbryio.call('user', 'new', {
-          language: 'en',
-          app_id: installation_id,
-        }, 'post').then(({ID}) => {
-          localStorage.setItem('accessToken', ID);
-          window.location = '?register';
-        });
-      }
-    });
-  });
-}
+init();
