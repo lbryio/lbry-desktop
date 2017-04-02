@@ -80,15 +80,22 @@ lbryio.call = function(resource, action, params, method='get') {
 
     console.log('about to call xhr.open');
 
+    // For social media auth:
+    //const accessToken = localStorage.getItem('accessToken');
+    //const fullParams = {...params, ... accessToken ? {access_token: accessToken} : {}};
+
+    // Temp app ID based auth:
+    const fullParams = {app_id: localStorage.getItem('appId'), ...params};
+
     if (method == 'get') {
-      console.info('GET ', CONNECTION_STRING + resource + '/' + action, ' | params:', params);
-      xhr.open('get', CONNECTION_STRING + resource + '/' + action + '?' + querystring.stringify(params), true);
+      console.info('GET ', CONNECTION_STRING + resource + '/' + action, ' | params:', fullParams);
+      xhr.open('get', CONNECTION_STRING + resource + '/' + action + '?' + querystring.stringify(fullParams), true);
       xhr.send();
     } else if (method == 'post') {
-      console.info('POST ', CONNECTION_STRING + resource + '/' + action, '| params: ', params);
+      console.info('POST ', CONNECTION_STRING + resource + '/' + action, '| params: ', fullParams);
       xhr.open('post', CONNECTION_STRING + resource + '/' + action, true);
       xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-      xhr.send(querystring.stringify(params));
+      xhr.send(querystring.stringify(fullParams));
     }
   });
 };
