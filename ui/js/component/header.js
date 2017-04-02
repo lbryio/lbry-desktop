@@ -1,5 +1,6 @@
 import React from 'react';
 import {Link} from './link.js';
+import NotificationBar from './notification-bar.js';
 
 var Header = React.createClass({
   getInitialState: function() {
@@ -61,6 +62,7 @@ var Header = React.createClass({
             <SubHeader links={this.props.links} viewingPage={this.props.viewingPage} /> :
             ''
         }
+        <NotificationBar />
       </header>
     );
   }

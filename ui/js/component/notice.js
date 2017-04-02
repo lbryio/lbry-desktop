@@ -15,7 +15,7 @@ export const Notice = React.createClass({
   },
   render: function() {
     return (
-      <section className={'notice' + (this.props.isError ? ' notice--error' : '')}>
+      <section className={'notice ' + (this.props.isError ? 'notice--error ' : '') + (this.props.className || '')}>
         {this.props.children}
       </section>
     );
