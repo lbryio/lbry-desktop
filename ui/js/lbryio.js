@@ -24,6 +24,14 @@ const mocks = {
         claimed: false,
       },
     ];
+  },
+  'reward.new': ({reward_type}) => {
+    return {
+      UserID: localStorage.getItem('accessToken'),
+      UserWalletID: 123,
+      RewardType: reward_type,
+      RewardAmount: 50,
+    };
   }
 };
 
