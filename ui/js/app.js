@@ -104,6 +104,7 @@ var App = React.createClass({
             app_id: installation_id,
           }, 'post').then(({ID}) => {
             localStorage.setItem('accessToken', ID);
+            localStorage.setItem('appId', installation_id);
             this.setState({
               registrationCheckComplete: true,
               justRegistered: true,
