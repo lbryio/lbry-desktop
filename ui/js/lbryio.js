@@ -5,7 +5,7 @@ const lbryio = {};
 const CONNECTION_STRING = 'https://apidev.lbry.tech/';
 
 const mocks = {
-  'reward_type.get': (name) => {
+  'reward_type.get': ({name}) => {
     return {
       name: 'link_github',
       title: 'Link your GitHub account',
@@ -35,7 +35,7 @@ const mocks = {
   }
 };
 
-lbryio.call = function(resource, action, params, method='get') {
+lbryio.call = function(resource, action, params={}, method='get') {
   return new Promise((resolve, reject) => {
     /* temp code for mocks */
     if (`${resource}.${action}` in mocks) {

@@ -1,8 +1,4 @@
 import React from 'react';
-import lbry from '../lbry.js';
-import {Link} from '../component/link.js';
-import {FileActions} from '../component/file-actions.js';
-import {Thumbnail, TruncatedText, CreditAmount} from '../component/common.js';
 
 export const Notice = React.createClass({
   propTypes: {
