@@ -25,14 +25,6 @@ const mocks = {
       },
     ];
   },
-  'reward.new': ({reward_type}) => {
-    return {
-      UserID: localStorage.getItem('accessToken'),
-      UserWalletID: 123,
-      RewardType: reward_type,
-      RewardAmount: 50,
-    };
-  }
 };
 
 lbryio.call = function(resource, action, params={}, method='get') {
