@@ -70,8 +70,10 @@ npm install
   # for electron, we install lbryum and lbry using submodules
   echo "../lbryum" >> requirements.txt
   echo "../lbry" >> requirements.txt
+  # also add pyinstaller
+  echo "PyInstaller==3.2.1" >> requirements.txt
 
-  pip install -r linux_macos.txt
+  pip install -r requirements.txt
   pyinstaller -y daemon.onefile.spec
   pyinstaller -y cli.onefile.spec
   mv dist/lbrynet-daemon dist/lbrynet-cli "$ROOT/app/dist/"

@@ -1,3 +1,0 @@
--r requirements.txt
-# miniupnpc is installed manually
-./gmpy-1.17-cp27-none-win32.whl
