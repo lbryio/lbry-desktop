@@ -1,4 +1,2 @@
 -r requirements.txt
-miniupnpc==1.9
-gmpy==1.17
 PyInstaller==3.2.1
