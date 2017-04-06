@@ -64,6 +64,13 @@ npm install
 
 (
   cd "$ROOT/daemon"
+
+  # copy requirements from lbry, but remove lbryum (we'll add it back in below)
+  grep -v lbryum "$ROOT/lbry/requirements.txt" > requirements.txt
+  # for electron, we install lbryum and lbry using submodules
+  echo "../lbryum" >> requirements.txt
+  echo "../lbry" >> requirements.txt
+
   pip install -r linux_macos.txt
   pyinstaller -y daemon.onefile.spec
   pyinstaller -y cli.onefile.spec

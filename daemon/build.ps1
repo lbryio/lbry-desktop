@@ -16,6 +16,12 @@ python.exe setupmingw32.py install
 cd ..\..\
 Remove-Item -Recurse -Force temp
 
+# copy requirements from lbry, but remove lbryum (we'll add it back in below)
+Get-Content ..\lbry\requirements.txt | Where-Object {$_ -notmatch 'lbryum'} | Set-Content requirements.txt
+# for electron, we install lbryum and lbry using submodules
+Add-Content requirements.txt "`n../lbryum"
+Add-Content requirements.txt "`n../lbry"
+
 pip.exe install pyinstaller
 pip.exe install -r windows.txt
 
