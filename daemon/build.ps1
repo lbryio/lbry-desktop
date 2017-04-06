@@ -17,8 +17,7 @@ cd ..\..\
 Remove-Item -Recurse -Force temp
 
 # copy requirements from lbry, but remove lbryum (we'll add it back in below) and gmpy and miniupnpc (installed manually)
-$Skip = @("*lbryum*","*gmpy*","*miniupnpc*")
-Get-Content ..\lbry\requirements.txt | Where-Object {$_ -notlike $Skip} | Set-Content requirements.txt
+Get-Content ..\lbry\requirements.txt | Select-String -Pattern 'lbryum|gmpy|miniupnpc' -NotMatch | Out-File requirements.txt
 # for electron, we install lbryum and lbry using submodules
 Add-Content requirements.txt "`n../lbryum"
 Add-Content requirements.txt "`n../lbry"
