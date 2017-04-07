@@ -1,7 +1,7 @@
 import React from 'react';
 import lbry from '../lbry.js';
 import lbryuri from '../lbryuri.js';
-import {Link} from '../component/link.js';
+import Link from 'component/link';
 import {FileActions} from '../component/file-actions.js';
 import {BusyMessage, TruncatedText, FilePrice} from '../component/common.js';
 import UriIndicator from '../component/channel-indicator.js';

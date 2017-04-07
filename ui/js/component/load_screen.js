@@ -1,7 +1,7 @@
 import React from 'react';
 import lbry from '../lbry.js';
 import {BusyMessage, Icon} from './common.js';
-import {Link} from '../component/link.js'
+import Link from 'component/link'
 
 var LoadScreen = React.createClass({
   propTypes: {
