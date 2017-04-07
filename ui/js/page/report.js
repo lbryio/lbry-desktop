@@ -1,5 +1,5 @@
 import React from 'react';
-import {Link} from '../component/link.js';
+import Link from 'component/link';
 import Modal from '../component/modal.js';
 import lbry from '../lbry.js';
 

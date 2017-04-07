@@ -2,7 +2,7 @@ import React from 'react';
 import lbry from '../lbry.js';
 import uri from '../uri.js';
 import FormField from '../component/form.js';
-import {Link} from '../component/link.js';
+import Link from 'component/link';
 import Modal from '../component/modal.js';
 
 var PublishPage = React.createClass({
@@ -84,7 +84,7 @@ var PublishPage = React.createClass({
       if (this.refs.file.getValue() !== '') {
 	publishArgs.file_path = this.refs.file.getValue();
       }
-      
+
       lbry.publish(publishArgs, (message) => {
         this.handlePublishStarted();
       }, null, (error) => {

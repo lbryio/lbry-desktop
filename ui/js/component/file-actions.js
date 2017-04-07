@@ -1,6 +1,6 @@
 import React from 'react';
 import lbry from '../lbry.js';
-import {Link} from '../component/link.js';
+import Link from 'component/link';
 import {Icon} from '../component/common.js';
 import Modal from './modal.js';
 import FormField from './form.js';
