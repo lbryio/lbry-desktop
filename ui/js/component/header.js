@@ -1,7 +1,7 @@
 import React from 'react';
 import lbryuri from '../lbryuri.js';
-import Link from 'component/link';
 import {Icon, CreditAmount} from './common.js';
+import Link from 'component/link';
 
 var Header = React.createClass({
   _balanceSubscribeId: null,

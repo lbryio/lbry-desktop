@@ -15,6 +15,7 @@ const app = {
 }
 global.app = app;
 module.exports = app;
+
 //
 // import React from 'react';
 // import {Line} from 'rc-progress';
