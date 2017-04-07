@@ -1,5 +1,8 @@
 const {app, BrowserWindow, ipcMain} = require('electron');
 const url = require('url');
+
+require('electron-debug')({showDevTools: true});
+
 const path = require('path');
 const jayson = require('jayson');
 const semver = require('semver');

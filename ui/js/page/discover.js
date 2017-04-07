@@ -1,6 +1,8 @@
 import React from 'react';
-import lbryio from '../lbryio.js';
-import {FileTile, FileTileStream} from '../component/file-tile.js';
+import lbry from '../lbry.js';
+import lighthouse from '../lighthouse.js';
+import {FileTile} from '../component/file-tile.js';
+import Link from 'component/link';
 import {ToolTip} from '../component/tooltip.js';
 
 const communityCategoryToolTipText = ('Community Content is a public space where anyone can share content with the ' +

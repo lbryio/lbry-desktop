@@ -1,6 +1,6 @@
 import React from 'react';
 import lbryuri from '../lbryuri.js';
-import {Link} from './link.js';
+import Link from 'component/link';
 import {Icon, CreditAmount} from './common.js';
 
 var Header = React.createClass({
