@@ -1,6 +1,6 @@
 import React from 'react';
 import {Icon} from '../component/common.js';
-import {Link} from '../component/link.js';
+import Link from 'component/link';
 import lbry from '../lbry.js';
 import LoadScreen from '../component/load_screen.js'
 

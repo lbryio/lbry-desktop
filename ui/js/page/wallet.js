@@ -1,6 +1,6 @@
 import React from 'react';
 import lbry from '../lbry.js';
-import {Link} from '../component/link.js';
+import Link from 'component/link';
 import Modal from '../component/modal.js';
 import {Address, BusyMessage, CreditAmount} from '../component/common.js';
 
