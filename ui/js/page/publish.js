@@ -67,6 +67,7 @@ var PublishPage = React.createClass({
         name: this.state.name,
         bid: parseFloat(this.state.bid),
         metadata: metadata,
+        ... this.state.channel != 'new' && this.state.channel != 'none' ? {channel_name: this.state.channel} : {},
       };
 
       if (this.refs.file.getValue() !== '') {
@@ -96,11 +97,15 @@ var PublishPage = React.createClass({
   },
   getInitialState: function() {
     return {
+      channels: null,
       rawName: '',
       name: '',
       bid: '',
       feeAmount: '',
       feeCurrency: 'USD',
+      channel: 'none',
+      newChannelName: '@',
+      newChannelBid: '',
       nameResolved: false,
       topClaimValue: 0.0,
       myClaimValue: 0.0,
@@ -113,6 +118,7 @@ var PublishPage = React.createClass({
       uploaded: false,
       errorMessage: null,
       submitting: false,
+      creatingChannel: false,
       modal: null,
     };
   },
@@ -247,6 +253,51 @@ var PublishPage = React.createClass({
       otherLicenseUrl: event.target.value,
     });
   },
+  handleChannelChange: function (event) {
+    const channel = event.target.value;
+
+    this.setState({
+      channel: channel,
+    });
+  },
+  handleNewChannelNameChange: function (event) {
+    const newChannelName = (event.target.value.startsWith('@') ? event.target.value : '@' + event.target.value);
+
+    if (newChannelName.length > 1 && !lbry.nameIsValid(newChannelName.substr(1), false)) {
+      this.refs.newChannelName.showAdvice('LBRY channel names must contain only letters, numbers and dashes.');
+      return;
+    }
+
+    this.setState({
+      newChannelName: newChannelName,
+    });
+  },
+  handleNewChannelBidChange: function (event) {
+    this.setState({
+      newChannelBid: event.target.value,
+    });
+  },
+  handleCreateChannelClick: function (event) {
+    this.setState({
+      creatingChannel: true,
+    });
+
+    lbry.channel_new({channel_name: this.state.newChannelName, amount: parseInt(this.state.newChannelBid)}).then(() => {
+      this.setState({
+        creatingChannel: false,
+      });
+
+      this.forceUpdate();
+      this.setState({
+        channel: name,
+      });
+    }, (error) => {
+      // TODO: add error handling
+      this.setState({
+        creatingChannel: false,
+      });
+    });
+  },
   getLicenseUrl: function() {
     if (!this.refs.meta_license) {
       return '';
@@ -256,6 +307,13 @@ var PublishPage = React.createClass({
       return this.refs.meta_license.getSelectedElement().getAttribute('data-url') || '' ;
     }
   },
+  componentWillMount: function() {
+    lbry.channel_list_mine().then((channels) => {
+      this.setState({
+        channels: channels,
+      });
+    });
+  },
   componentDidMount: function() {
     document.title = "Publish";
   },
@@ -263,6 +321,10 @@ var PublishPage = React.createClass({
   },
   // Also getting a type warning here too
   render: function() {
+    if (this.state.channels === null) {
+      return null;
+    }
+
     return (
       <main ref="page">
         <form onSubmit={this.handleSubmit}>
@@ -277,6 +339,26 @@ var PublishPage = React.createClass({
                                                                          : <em> The name <strong>{this.state.name}</strong> is currently claimed for <strong>{this.state.topClaimValue}</strong> {this.state.topClaimValue == 1 ? 'credit' : 'credits'}.</em>)))
               }
               <div className="help">What LBRY name would you like to claim for this file?</div>
+            </div>
+          </section>
+
+          <section className="card">
+            <h4>Channel</h4>
+            <div className="form-row">
+              <FormField type="select" onChange={this.handleChannelChange} value={this.state.channel}>
+                <option key="none" value="none">None</option>
+                {this.state.channels.map(({name}) => <option key={name} value={name}>{name}</option>)}
+                <option key="new" value="new">New channel...</option>
+              </FormField>
+              {this.state.channel == 'new'
+                ? <section>
+                    <label>Name <FormField type="text" onChange={this.handleNewChannelNameChange} ref={newChannelName => { this.refs.newChannelName = newChannelName }}
+                                                   value={this.state.newChannelName} /></label>
+                    <label>Bid amount <FormField type="text-number" onChange={this.handleNewChannelBidChange} value={this.state.newChannelBid} /> LBC</label>
+                    <Link button="primary" label={!this.state.creatingChannel ? 'Create channel' : 'Creating channel...'} onClick={this.handleCreateChannelClick} disabled={this.state.creatingChannel} />
+                  </section>
+                : null}
+              <div className="help">What channel would you like to publish this file under?</div>
             </div>
           </section>
 
