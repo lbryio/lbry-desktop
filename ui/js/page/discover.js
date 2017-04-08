@@ -48,7 +48,7 @@ var SearchResults = React.createClass({
       if (!seenNames[name]) {
         seenNames[name] = name;
         rows.push(
-          <FileTile key={name} name={name} sdHash={value.sources.lbry_sd_hash} />
+          <FileTile key={name} uri={name} sdHash={value.sources.lbry_sd_hash} />
         );
       }
     });
@@ -84,18 +84,18 @@ var FeaturedContent = React.createClass({
       <div className="row-fluid">
         <div className="span6">
           <h3>Featured Content</h3>
-          { this.state.featuredNames.map((name) => { return <FileTile key={name} name={name} /> }) }
+          { this.state.featuredNames.map((name) => { return <FileTile key={name} uri={name} /> }) }
         </div>
         <div className="span6">
           <h3>
             Community Content
             <ToolTip label="What's this?" body={toolTipText} className="tooltip--header"/>
           </h3>
-          <FileTile name="one" />
-          <FileTile name="two" />
-          <FileTile name="three" />
-          <FileTile name="four" />
-          <FileTile name="five" />
+          <FileTile uri="one" />
+          <FileTile uri="two" />
+          <FileTile uri="three" />
+          <FileTile uri="four" />
+          <FileTile uri="five" />
         </div>
       </div>
     );

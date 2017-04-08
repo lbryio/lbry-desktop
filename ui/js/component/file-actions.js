@@ -70,6 +70,7 @@ let FileActionsRow = React.createClass({
     streamName: React.PropTypes.string,
     outpoint: React.PropTypes.string.isRequired,
     metadata: React.PropTypes.oneOfType([React.PropTypes.object, React.PropTypes.string]),
+    contentType: React.PropTypes.string,
   },
   getInitialState: function() {
     return {
@@ -197,7 +198,7 @@ let FileActionsRow = React.createClass({
 
     return (
       <div>
-        {this.props.metadata.content_type && this.props.metadata.content_type.startsWith('video/')
+        {this.props.contentType && this.props.contentType.startsWith('video/')
           ? <WatchLink streamName={this.props.streamName} downloadStarted={!!this.state.fileInfo} />
           : null}
         {this.state.fileInfo !== null || this.state.fileInfo.isMine
@@ -236,6 +237,7 @@ export let FileActions = React.createClass({
     streamName: React.PropTypes.string,
     outpoint: React.PropTypes.string.isRequired,
     metadata: React.PropTypes.oneOfType([React.PropTypes.object, React.PropTypes.string]),
+    contentType: React.PropTypes.string,
   },
   getInitialState: function() {
     return {
@@ -289,7 +291,8 @@ export let FileActions = React.createClass({
     return (<section className="file-actions">
       {
         fileInfo || this.state.available || this.state.forceShowActions
-          ? <FileActionsRow outpoint={this.props.outpoint} metadata={this.props.metadata} streamName={this.props.streamName} />
+          ? <FileActionsRow outpoint={this.props.outpoint} metadata={this.props.metadata} streamName={this.props.streamName}
+                            contentType={this.props.contentType} />
           : <div>
               <div className="button-set-item empty">This file is not currently available.</div>
               <ToolTip label="Why?"
