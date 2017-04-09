@@ -1,0 +1,66 @@
+@import "global";
+
+/* this probably shouldn't exist but it does so here we are - Jeremy */
+
+
+textarea,
+select,
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="number"],
+input[type="search"],
+input[type="date"] {
+  @include placeholder {
+    color: lighten($color-text-dark, 60%);
+  }
+  transition: all $transition-standard;
+  cursor: pointer;
+  padding-left: 1px;
+  padding-right: 1px;
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  &[readonly] {
+    background-color: #bbb;
+  }
+}
+
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="number"],
+input[type="search"],
+input[type="date"] {
+  border-bottom: 2px solid $color-form-border;
+  line-height: $spacing-vertical - 4;
+  height: $spacing-vertical * 1.5;
+  &.form-field__input--error {
+    border-color: $color-error;
+  }
+}
+
+textarea:focus,
+input[type="text"]:focus,
+input[type="password"]:focus,
+input[type="email"]:focus,
+input[type="number"]:focus,
+input[type="search"]:focus,
+input[type="date"]:focus {
+  border-color: $color-primary;
+}
+
+textarea {
+  border: 2px solid $color-form-border;
+}
+
+.form-row
+{
+  + .form-row
+  {
+    margin-top: $spacing-vertical;
+  }
+  + .form-row-submit
+  {
+    margin-top: $spacing-vertical;
+  }
+}

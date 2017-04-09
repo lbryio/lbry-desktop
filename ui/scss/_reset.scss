@@ -3,20 +3,20 @@ body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fiel
     margin:0;
     padding:0;
 }
-input:focus, textarea:focus
+:focus
 {
-    outline: 0;
+  outline: 0;
 }
-table 
+table
 {
   border-collapse: collapse;
   border-spacing:0;
 }
-fieldset, img, iframe 
+fieldset, img, iframe
 {
 	border: 0;
 }
-h1, h2, h3, h4, h5, h6 
+h1, h2, h3, h4, h5, h6
 {
     font-weight:normal;
 }
@@ -25,11 +25,12 @@ ol, ul
     list-style-position: inside;
     > li { list-style-position: inside; }
 }
-input, textarea, select 
+input, textarea, select
 {
-	font-family:inherit;
-	font-size:inherit;
-	font-weight:inherit;
+  font-family:inherit;
+  font-size:inherit;
+  font-weight:inherit;
+  border: 0 none;
 }
 img {
   width: auto\9;

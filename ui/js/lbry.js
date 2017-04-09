@@ -118,37 +118,41 @@ lbry.call = function (method, params, callback, errorCallback, connectFailedCall
 
 
 //core
-lbry.connect = function(callback)
-{
-  // Check every half second to see if the daemon is accepting connections
-  // Once this returns True, can call getDaemonStatus to see where
-  // we are in the startup process
-  function checkDaemonStarted(tryNum=0) {
-    lbry.isDaemonAcceptingConnections(function (runningStatus) {
-      if (runningStatus) {
-        lbry.isConnected = true;
-        callback(true);
-      } else {
-        if (tryNum <= 600) { // Move # of tries into constant or config option
-          setTimeout(function () {
-            checkDaemonStarted(tryNum + 1);
-          }, 500);
-        } else {
-          callback(false);
-        }
+lbry._connectPromise = null;
+lbry.connect = function() {
+  if (lbry._connectPromise === null) {
+
+    lbry._connectPromise = new Promise((resolve, reject) => {
+
+      // Check every half second to see if the daemon is accepting connections
+      function checkDaemonStarted(tryNum = 0) {
+        lbry.isDaemonAcceptingConnections(function (runningStatus) {
+          if (runningStatus) {
+            resolve(true);
+          }
+          else {
+            if (tryNum <= 600) { // Move # of tries into constant or config option
+              setTimeout(function () {
+                checkDaemonStarted(tryNum + 1);
+              }, tryNum < 100 ? 200 : 1000);
+            }
+            else {
+              reject(new Error("Unable to connect to LBRY"));
+            }
+          }
+        });
       }
+
+      checkDaemonStarted();
     });
   }
-  checkDaemonStarted();
+
+  return lbry._connectPromise;
 }
 
 lbry.isDaemonAcceptingConnections = function (callback) {
   // Returns true/false whether the daemon is at a point it will start returning status
   lbry.call('status', {}, () => callback(true), null, () => callback(false))
-};
-
-lbry.getDaemonStatus = function (callback) {
-  lbry.call('daemon_status', {}, callback);
 };
 
 lbry.checkFirstRun = function(callback) {
@@ -430,6 +434,10 @@ lbry.getClientSettings = function() {
 
 lbry.getClientSetting = function(setting) {
   var localStorageVal = localStorage.getItem('setting_' + setting);
+  if (setting == 'showDeveloperMenu')
+  {
+    return true;
+  }
   return (localStorageVal === null ? lbry.defaultClientSettings[setting] : JSON.parse(localStorageVal));
 }
 

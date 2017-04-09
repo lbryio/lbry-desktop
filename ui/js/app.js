@@ -47,12 +47,6 @@ var App = React.createClass({
   _upgradeDownloadItem: null,
   _isMounted: false,
   _version: null,
-
-  getDefaultProps: function() {
-    return {
-      address: window.location.search
-    };
-  },
   getUpdateUrl: function() {
     switch (process.platform) {
       case 'darwin':
@@ -87,54 +81,19 @@ var App = React.createClass({
       pageArgs: pageArgs === undefined ? null : pageArgs
     };
   },
-  updateRegistrationStatus: function() {
-    if (localStorage.getItem('accessToken')) {
-      this.setState({
-        registrationCheckComplete: true,
-      });
-    } else {
-      lbry.status().then(({installation_id}) => {
-        installation_id += parseInt(Date.now(), 10); // temp
-        installation_id += "X".repeat(96 - installation_id.length); // temp
-        lbryio.call('user_install', 'exists', {app_id: installation_id}).then((userExists) => {
-          // TODO: deal with case where user exists already with the same app ID, but we have no access token.
-          // Possibly merge in to the existing user with the same app ID.
-          lbryio.call('user', 'new', {
-            language: 'en',
-            app_id: installation_id,
-          }, 'post').then(({ID}) => {
-            localStorage.setItem('accessToken', ID);
-            localStorage.setItem('appId', installation_id);
-            this.setState({
-              registrationCheckComplete: true,
-              justRegistered: true,
-            });
-          });
-        })
-      });
-    }
-  },
   getInitialState: function() {
     var match, param, val, viewingPage, pageArgs,
         drawerOpenRaw = sessionStorage.getItem('drawerOpen');
 
-    return Object.assign(this.getViewingPageAndArgs(this.props.address), {
+    return Object.assign(this.getViewingPageAndArgs(window.location.search), {
       drawerOpen: drawerOpenRaw !== null ? JSON.parse(drawerOpenRaw) : true,
       errorInfo: null,
       modal: null,
       downloadProgress: null,
       downloadComplete: false,
-      registrationCheckComplete: null,
-      justRegistered: false,
     });
   },
   componentWillMount: function() {
-    if (!localStorage.getItem('accessToken') && window.location.search != '?discover') {
-      // User isn't registered but somehow made it to a page other than Discover, so send them to
-      // Discover to get them registered and show them the welcome screen.
-      window.location.search = '?discover';
-    }
-
     document.addEventListener('unhandledError', (event) => {
       this.alertError(event.detail);
     });
@@ -172,8 +131,6 @@ var App = React.createClass({
         });
       });
     }
-
-    this.updateRegistrationStatus();
   },
   openDrawer: function() {
     sessionStorage.setItem('drawerOpen', true);
@@ -337,10 +294,6 @@ var App = React.createClass({
     }
   },
   render: function() {
-    if (!this.state.registrationCheckComplete) {
-      return null;
-    }
-
     var mainContent = this.getMainContent(),
         headerLinks = this.getHeaderLinks(),
         searchQuery = this.state.viewingPage == 'discover' && this.state.pageArgs ? this.state.pageArgs : '';
