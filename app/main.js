@@ -1,4 +1,7 @@
 const {app, BrowserWindow, ipcMain} = require('electron');
+
+require('electron-debug')({showDevTools: true});
+
 const path = require('path');
 const jayson = require('jayson');
 // tree-kill has better cross-platform handling of

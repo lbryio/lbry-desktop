@@ -3,7 +3,7 @@ import lbry from '../lbry.js';
 import lighthouse from '../lighthouse.js';
 import {CreditAmount, Thumbnail} from '../component/common.js';
 import {FileActions} from '../component/file-actions.js';
-import {Link} from '../component/link.js';
+import Link from 'component/link';
 
 var formatItemImgStyle = {
   maxWidth: '100%',

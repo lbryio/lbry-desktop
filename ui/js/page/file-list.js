@@ -1,6 +1,6 @@
 import React from 'react';
 import lbry from '../lbry.js';
-import {Link} from '../component/link.js';
+import Link from 'component/link';
 import FormField from '../component/form.js';
 import {FileTileStream} from '../component/file-tile.js';
 import {BusyMessage, Thumbnail} from '../component/common.js';

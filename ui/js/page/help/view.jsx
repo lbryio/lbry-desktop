@@ -1,9 +1,9 @@
 //@TODO: Customize advice based on OS
 //@TODO: Customize advice based on OS
 import React from 'react';
-import lbry from '../lbry.js';
-import {Link} from '../component/link.js';
-import {version as uiVersion} from 'json!../../package.json';
+import lbry from 'lbry.js';
+import Link from 'component/link';
+import {version as uiVersion} from 'json!../../../package.json';
 
 var HelpPage = React.createClass({
   getInitialState: function() {

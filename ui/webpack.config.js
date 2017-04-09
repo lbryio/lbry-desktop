@@ -1,4 +1,5 @@
 const path = require('path');
+const appPath = path.resolve(__dirname, 'js');
 
 const PATHS = {
   app: path.join(__dirname, 'app'),
@@ -13,6 +14,10 @@ module.exports = {
     filename: "bundle.js"
   },
   devtool: 'source-map',
+  resolve: {
+    root: appPath,
+    extensions: ['', '.js', '.jsx', '.css'],
+  },
   module: {
     preLoaders: [
       {
@@ -25,8 +30,8 @@ module.exports = {
     loaders: [
       { test: /\.css$/, loader: "style!css" },
       {
-	test: /\.jsx?$/,
-	loader: 'babel',
+        test: /\.jsx?$/,
+        loader: 'babel',
         query: {
           cacheDirectory: true,
           presets:[ 'es2015', 'react', 'stage-2' ]
