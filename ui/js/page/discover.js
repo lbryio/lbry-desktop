@@ -5,7 +5,6 @@ import {FileTile} from '../component/file-tile.js';
 import {Link} from '../component/link.js';
 import {ToolTip} from '../component/tooltip.js';
 import {BusyMessage} from '../component/common.js';
-import {Welcome} from '../component/welcome.js';
 
 var fetchResultsStyle = {
     color: '#888',
@@ -174,13 +173,12 @@ var DiscoverPage = React.createClass({
   },
 
   render: function() {
+    //{ !this.props.query && !this.state.searching ? <FeaturedContent /> : null }
     return (
       <main>
         { this.state.searching ? <SearchActive /> : null }
         { !this.state.searching && this.props.query && this.state.results.length ? <SearchResults results={this.state.results} /> : null }
         { !this.state.searching && this.props.query && !this.state.results.length ? <SearchNoResults query={this.props.query} /> : null }
-        { !this.props.query && !this.state.searching ? <FeaturedContent /> : null }
-        <Welcome isOpen={this.props.showWelcome && !this.state.welcomeComplete} onDone={this.handleWelcomeDone} />
       </main>
     );
   }

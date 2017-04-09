@@ -1,8 +1,15 @@
+import {getLocal, setLocal} from './utils.js';
+import lbry from './lbry.js';
+
 const querystring = require('querystring');
 
-const lbryio = {};
+const lbryio = {
+  _accessToken: getLocal('accessToken'),
+  _authenticationPromise: null,
+  _user : null
+};
 
-const CONNECTION_STRING = 'https://apidev.lbry.tech/';
+const CONNECTION_STRING = 'http://localhost:8080/';
 
 const mocks = {
   'reward_type.get': ({name}) => {
@@ -37,25 +44,18 @@ lbryio.call = function(resource, action, params={}, method='get') {
 
     /* end temp */
 
-    console.log('about to create xhr object');
     const xhr = new XMLHttpRequest;
 
-    xhr.addEventListener('error', function (error) {
-      console.log('received XHR error:', error);
-      reject(error);
+    xhr.addEventListener('error', function (event) {
+      reject(new Error("Something went wrong making an internal API call."));
     });
 
 
-    console.log('about to add timeout listener');
     xhr.addEventListener('timeout', function() {
-      console.log('XHR timed out');
-
       reject(new Error('XMLHttpRequest connection timed out'));
     });
 
-    console.log('about to create load listener');
     xhr.addEventListener('load', function() {
-      console.log('loaded');
       const response = JSON.parse(xhr.responseText);
 
       if (!response.success) {
@@ -78,14 +78,12 @@ lbryio.call = function(resource, action, params={}, method='get') {
       }
     });
 
-    console.log('about to call xhr.open');
-
     // For social media auth:
     //const accessToken = localStorage.getItem('accessToken');
     //const fullParams = {...params, ... accessToken ? {access_token: accessToken} : {}};
 
     // Temp app ID based auth:
-    const fullParams = {app_id: localStorage.getItem('appId'), ...params};
+    const fullParams = {app_id: lbryio._accessToken, ...params};
 
     if (method == 'get') {
       console.info('GET ', CONNECTION_STRING + resource + '/' + action, ' | params:', fullParams);
@@ -99,5 +97,70 @@ lbryio.call = function(resource, action, params={}, method='get') {
     }
   });
 };
+
+lbryio.setAccessToken = (token) => {
+  setLocal('accessToken', token)
+  lbryio._accessToken = token
+}
+
+lbryio.authenticate = () => {
+  if (lbryio._authenticationPromise === null) {
+    lbryio._authenticationPromise = new Promise((resolve, reject) => {
+      lbry.status().then(({installation_id}) => {
+
+        //temp hack for installation_ids being wrong
+        installation_id += "Y".repeat(96 - installation_id.length)
+
+        function setCurrentUser() {
+          lbryio.call('user', 'me').then((data) => {
+              lbryio.user = data
+              resolve(data)
+          }).catch(function(err) {
+            lbryio.setAccessToken(null);
+            reject(err);
+          })
+        }
+
+        if (!lbryio._accessToken) {
+          lbryio.call('user', 'new', {
+            language: 'en',
+            app_id: installation_id,
+          }, 'post').then(function(responseData) {
+            if (!responseData.ID) {
+              reject(new Error("Received invalid authentication response."));
+            }
+            lbryio.setAccessToken(installation_id)
+            setCurrentUser()
+          }).catch(function(error) {
+
+            /*
+               until we have better error code format, assume all errors are duplicate application id
+               if we're wrong, this will be caught by later attempts to make a valid call
+             */
+            lbryio.setAccessToken(installation_id)
+            setCurrentUser()
+          })
+        } else {
+          setCurrentUser()
+        }
+        // if (!lbryio._
+         //(data) => {
+          // resolve(data)
+          // localStorage.setItem('accessToken', ID);
+          // localStorage.setItem('appId', installation_id);
+          // this.setState({
+          //   registrationCheckComplete: true,
+          //   justRegistered: true,
+          // });
+        //});
+        // lbryio.call('user_install', 'exists', {app_id: installation_id}).then((userExists) => {
+        //   // TODO: deal with case where user exists already with the same app ID, but we have no access token.
+        //   // Possibly merge in to the existing user with the same app ID.
+        // })
+      }).catch(reject);
+    });
+  }
+  return lbryio._authenticationPromise;
+}
 
 export default lbryio;

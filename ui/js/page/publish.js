@@ -162,7 +162,7 @@ var PublishPage = React.createClass({
     }
 
     if (!lbry.nameIsValid(rawName, false)) {
-      this.refs.name.showAdvice('LBRY names must contain only letters, numbers and dashes.');
+      this.refs.name.showError('LBRY names must contain only letters, numbers and dashes.');
       return;
     }
 

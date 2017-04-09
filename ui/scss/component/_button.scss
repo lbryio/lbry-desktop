@@ -1,0 +1,78 @@
+@import "../global";
+
+$button-focus-shift: 12%;
+
+.button-set-item {
+  position: relative;
+  display: inline-block;
+
+  + .button-set-item
+  {
+    margin-left: $padding-button;
+  }
+}
+
+.button-block, .faux-button-block
+{
+  display: inline-block;
+  height: $height-button;
+  line-height: $height-button;
+  text-decoration: none;
+  border: 0 none;
+  text-align: center;
+  border-radius: 2px;
+  text-transform: uppercase;
+  .icon
+  {
+    top: 0em;
+  }
+  .icon:first-child
+  {
+    padding-right: 5px;
+  }
+  .icon:last-child
+  {
+    padding-left: 5px;
+  }
+}
+.button-block
+{
+  cursor: pointer;
+}
+
+.button__content {
+  margin: 0 $padding-button;
+}
+
+.button-primary
+{
+  $color-button-text: white;
+  color: darken($color-button-text, $button-focus-shift * 0.5);
+  background-color: $color-primary;
+  box-shadow: $default-box-shadow;
+  &:focus {
+    color: $color-button-text;
+    //box-shadow: $focus-box-shadow;
+    background-color: mix(black, $color-primary, $button-focus-shift)
+  }
+}
+.button-alt
+{
+  background-color: $color-bg-alt;
+  box-shadow: $default-box-shadow;
+}
+
+.button-text
+{
+  @include text-link();
+  display: inline-block;
+
+  .button__content {
+    margin: 0 $padding-text-link;
+  }
+}
+.button-text-help
+{
+  @include text-link(#aaa);
+  font-size: 0.8em;
+}

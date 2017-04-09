@@ -1,0 +1,36 @@
+@import "../global";
+
+.form-field {
+  display: inline-block;
+}
+
+.form-field__label {
+  margin-top: $spacing-vertical * 2/3;
+  margin-bottom: $spacing-vertical * 1/3;
+  line-height: 1;
+}
+
+.form-field__label--error {
+  color: $color-error;
+}
+
+.form-field__input-text {
+  width: 330px;
+}
+
+.form-field__input-text-number {
+  width: 50px;
+}
+
+.form-field__error, .form-field__helper {
+  margin-top: $spacing-vertical * 1/3;
+  font-size: 0.8em;
+  transition: opacity $transition-standard;
+}
+
+.form-field__error {
+  color: $color-error;
+}
+.form-field__helper {
+  color: $color-help;
+}

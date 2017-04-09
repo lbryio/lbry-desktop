@@ -10,7 +10,6 @@ const MESSAGES = {
 const rewards = {};
 
 rewards.claimReward = function(type) {
-  console.log('top of claimReward')
   return new Promise((resolve, reject) => {
     console.log('top of promise body')
     lbry.get_new_address().then((address) => {
@@ -30,7 +29,7 @@ rewards.claimReward = function(type) {
         document.dispatchEvent(new CustomEvent('globalNotice', {
           detail: {
             message: MESSAGES[type],
-            isError: false,            
+            isError: false,
           },
         }));
 
@@ -41,7 +40,7 @@ rewards.claimReward = function(type) {
         document.dispatchEvent(new CustomEvent('globalNotice', {
           detail: {
             message: `Failed to claim reward: ${error.message}`,
-            isError: true,            
+            isError: true,
           },
         }));
         document.dispatchEvent(new CustomEvent('rewardFailed', error));

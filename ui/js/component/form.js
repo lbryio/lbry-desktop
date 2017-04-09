@@ -6,6 +6,8 @@ var requiredFieldWarningStyle = {
   transition: 'opacity 400ms ease-in',
 };
 
+var formFieldCounter = 0;
+
 var FormField = React.createClass({
   _fieldRequiredText: 'This field is required',
   _type: null,
@@ -13,11 +15,12 @@ var FormField = React.createClass({
 
   propTypes: {
     type: React.PropTypes.string.isRequired,
+    row: React.PropTypes.bool,
     hidden: React.PropTypes.bool,
   },
   getInitialState: function() {
     return {
-      adviceState: 'hidden',
+      errorState: 'hidden',
       adviceText: null,
     }
   },
@@ -33,25 +36,25 @@ var FormField = React.createClass({
       this._element = this.props.type;
     }
   },
-  showAdvice: function(text) {
+  showError: function(text) {
     this.setState({
-      adviceState: 'shown',
+      errorState: 'shown',
       adviceText: text,
     });
 
-    setTimeout(() => {
-      this.setState({
-        adviceState: 'fading',
-      });
-      setTimeout(() => {
-        this.setState({
-          adviceState: 'hidden',
-        });
-      }, 450);
-    }, 5000);
+    // setTimeout(() => {
+    //   this.setState({
+    //     errorState: 'fading',
+    //   });
+    //   setTimeout(() => {
+    //     this.setState({
+    //       errorState: 'hidden',
+    //     });
+    //   }, 450);
+    // }, 5000);
   },
   warnRequired: function() {
-    this.showAdvice(this._fieldRequiredText);
+    this.showError(this._fieldRequiredText);
   },
   focus: function() {
     this.refs.field.focus();
@@ -70,43 +73,39 @@ var FormField = React.createClass({
   },
   render: function() {
     // Pass all unhandled props to the field element
-    const otherProps = Object.assign({}, this.props);
+    const otherProps = Object.assign({}, this.props),
+          hasError = this.state.errorState != 'hidden';
     delete otherProps.type;
     delete otherProps.hidden;
+    delete otherProps.label;
+    delete otherProps.row;
+    delete otherProps.helper;
 
-    return (
-      !this.props.hidden
-        ? <div className="form-field-container">
-            <this._element type={this._type} className="form-field" name={this.props.name} ref="field" placeholder={this.props.placeholder}
-              className={'form-field--' + this.props.type + ' ' + (this.props.className || '')}
-              {...otherProps}>
-              {this.props.children}
-            </this._element>
-            <FormFieldAdvice field={this.refs.field} state={this.state.adviceState}>{this.state.adviceText}</FormFieldAdvice>
-          </div>
-        : null
-    );
-  }
-});
+    ++formFieldCounter;
+    const elementId = "form-field-" + formFieldCounter
 
-var FormFieldAdvice = React.createClass({
-  propTypes: {
-    state: React.PropTypes.string.isRequired,
-  },
-  render: function() {
+    if (this.props.hidden) {
+      return null;
+    }
+
+    const field = <div className="form-field">
+      { this.props.label ?
+        <div className={"form-field__label " + (hasError ? 'form-field__label--error' : '')}>
+          <label htmlFor={elementId}>{this.props.label}</label>
+        </div> : ''
+      }
+      <this._element id={elementId} type={this._type} name={this.props.name} ref="field" placeholder={this.props.placeholder}
+                     className={'form-field__input form-field__input-' + this.props.type + ' ' + (this.props.className || '') + (hasError ? 'form-field__input--error' : '')}
+        {...otherProps}>
+        {this.props.children}
+      </this._element>
+      { !hasError && this.props.helper ?  <div className="form-field__helper">{this.props.helper}</div> : '' }
+      { hasError ?  <div className="form-field__error">{this.state.adviceText}</div> : '' }
+    </div>
     return (
-      this.props.state != 'hidden'
-        ? <div className="form-field-advice-container">
-            <div className={'form-field-advice' + (this.props.state == 'fading' ? ' form-field-advice--fading' : '')}>
-              <Icon icon="icon-caret-up" className="form-field-advice__arrow" />
-              <div className="form-field-advice__content-container">
-                <span className="form-field-advice__content">
-                  {this.props.children}
-                </span>
-              </div>
-            </div>
-          </div>
-        : null
+      this.props.row ?
+        <div className="form-row">{field}</div> :
+        field
     );
   }
 });

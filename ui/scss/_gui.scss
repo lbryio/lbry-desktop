@@ -21,7 +21,7 @@
   &:hover
   {
     opacity: $hover-opacity;
-    transition: opacity .225s ease;
+    transition: opacity $transition-standard;
     text-decoration: underline;
     .icon {
       text-decoration: none;
@@ -76,11 +76,6 @@ sup, sub {
 sup { top: -0.4em; }
 sub { top: 0.4em; }
 
-label {
-  cursor: default;
-  display: block;
-}
-
 code {
   font: 0.8em Consolas, 'Lucida Console', 'Source Sans', monospace;
   background-color: #eee;
@@ -102,23 +97,6 @@ p
 .disabled {
   pointer-events: none;
   opacity: 0.7;
-}
-
-input[type="text"], input[type="search"], textarea
-{
-  @include placeholder {
-    color: lighten($color-text-dark, 60%);
-  }
-  border: 2px solid rgba(160,160,160,.5);
-  padding-left: 5px;
-  padding-right: 5px;
-  box-sizing: border-box;
-  -webkit-appearance: none;
-}
-input[type="text"], input[type="search"]
-{
-  line-height: $spacing-vertical - 4;
-  height: $spacing-vertical * 1.5;
 }
 
 .truncated-text {
@@ -144,75 +122,6 @@ input[type="text"], input[type="search"]
   }
 }
 
-.button-set-item {
-  position: relative;
-  display: inline-block;
-
-  + .button-set-item
-  {
-    margin-left: $padding-button;
-  }
-}
-
-.button-block, .faux-button-block
-{
-  display: inline-block;
-  height: $height-button;
-  line-height: $height-button;
-  text-decoration: none;
-  border: 0 none;
-  text-align: center;
-  border-radius: 2px;
-  text-transform: uppercase;
-  .icon
-  {
-    top: 0em;
-  }
-  .icon:first-child
-  {
-    padding-right: 5px;
-  }
-  .icon:last-child
-  {
-    padding-left: 5px;
-  }
-}
-.button-block
-{
-  cursor: pointer;
-}
-
-.button__content {
-  margin: 0 $padding-button;
-}
-
-.button-primary
-{
-  color: white;
-  background-color: $color-primary;
-  box-shadow: $default-box-shadow;
-}
-.button-alt
-{
-  background-color: $color-bg-alt;
-  box-shadow: $default-box-shadow;
-}
-
-.button-text
-{
-  @include text-link();
-  display: inline-block;
-
-  .button__content {
-    margin: 0 $padding-text-link;
-  }
-}
-.button-text-help
-{
-  @include text-link(#aaa);
-  font-size: 0.8em;
-}
-
 .icon:only-child {
   position: relative;
   top: 0.16em;
@@ -234,87 +143,6 @@ input[type="text"], input[type="search"]
   color: $color-meta-light;
   font-style: italic;
 }
-
-.form-row
-{
-  + .form-row
-  {
-    margin-top: $spacing-vertical / 2;
-  }
-  .help
-  {
-    margin-top: $spacing-vertical / 2;
-  }
-  + .form-row-submit
-  {
-    margin-top: $spacing-vertical;
-  }
-}
-
-.form-field-container {
-  display: inline-block;
-}
-
-.form-field--text {
-  width: 330px;
-}
-
-.form-field--text-number {
-  width: 50px;
-}
-
-.form-field-advice-container {
-  position: relative;
-}
-
-.form-field-advice {
-  position: absolute;
-  top: 0px;
-  left: 0px;
-
-  display: flex;
-  flex-direction: column;
-
-  white-space: nowrap;
-
-  transition: opacity 400ms ease-in;
-}
-
-.form-field-advice--fading {
-  opacity: 0;
-}
-
-.form-field-advice__arrow {
-  text-align: left;
-  padding-left: 18px;
-
-  font-size: 22px;
-  line-height: 0.3;
-  color: darken($color-primary, 5%);
-}
-
-
-.form-field-advice__content-container {
-  display: inline-block;
-}
-
-.form-field-advice__content {
-  display: inline-block;
-
-  padding: 5px;
-  border-radius: 2px;
-
-  background-color: darken($color-primary, 5%);
-  color: #fff;
-}
-
-.form-field-label {
-  width: 118px;
-  text-align: right;
-  vertical-align: top;
-  display: inline-block;
-}
-
 
 .sort-section {
   display: block;
@@ -350,7 +178,6 @@ input[type="text"], input[type="search"]
   background: rgb(255, 255, 255);
   overflow: auto;
   border-radius: 4px;
-  outline: none;
   padding: 36px;
   max-width: 250px;
 }
