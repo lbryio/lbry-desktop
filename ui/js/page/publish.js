@@ -77,7 +77,7 @@ var PublishPage = React.createClass({
         name: this.state.name,
         bid: parseFloat(this.state.bid),
         metadata: metadata,
-        ... this.state.channel != 'new' && this.state.channel != 'none' ? {channel_name: this.state.channel} : {},
+        ... this.state.channel != 'new' && this.state.channel != 'anonymous' ? {channel_name: this.state.channel} : {},
       };
 
       if (this.refs.file.getValue() !== '') {
@@ -113,7 +113,7 @@ var PublishPage = React.createClass({
       bid: '',
       feeAmount: '',
       feeCurrency: 'USD',
-      channel: 'none',
+      channel: 'anonymous',
       newChannelName: '@',
       newChannelBid: '',
       nameResolved: false,
@@ -352,7 +352,7 @@ var PublishPage = React.createClass({
             <h4>Channel</h4>
             <div className="form-row">
               <FormField type="select" onChange={this.handleChannelChange} value={this.state.channel}>
-                <option key="none" value="none">None</option>
+                <option key="anonymous" value="anonymous">Anonymous</option>
                 {this.state.channels.map(({name}) => <option key={name} value={name}>{name}</option>)}
                 <option key="new" value="new">New channel...</option>
               </FormField>
