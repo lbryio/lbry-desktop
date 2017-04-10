@@ -62,7 +62,6 @@ lbryio.call = function(resource, action, params={}, method='get') {
           }));
         }
       } else {
-        console.info(`${resource}.${action} response data:`, response);
         resolve(response.data);
       }
     });
@@ -75,11 +74,9 @@ lbryio.call = function(resource, action, params={}, method='get') {
     const fullParams = {app_id: lbryio._accessToken, ...params};
 
     if (method == 'get') {
-      console.info('GET ', CONNECTION_STRING + resource + '/' + action, ' | params:', fullParams);
       xhr.open('get', CONNECTION_STRING + resource + '/' + action + '?' + querystring.stringify(fullParams), true);
       xhr.send();
     } else if (method == 'post') {
-      console.info('POST ', CONNECTION_STRING + resource + '/' + action, '| params: ', fullParams);
       xhr.open('post', CONNECTION_STRING + resource + '/' + action, true);
       xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
       xhr.send(querystring.stringify(fullParams));

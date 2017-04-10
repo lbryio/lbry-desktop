@@ -157,7 +157,7 @@ export const AuthOverlay = React.createClass({
 
   getInitialState: function() {
     return {
-      stage: "welcome",
+      stage: "pending",
       stageProps: {}
     };
   },
@@ -167,36 +167,36 @@ export const AuthOverlay = React.createClass({
     });
   },
   componentWillMount: function() {
-    // lbryio.authenticate().then(function(user) {
-    //   if (!user.HasVerifiedEmail) { //oops I fucked this up
-    //     this.setState({
-    //       stage: "email",
-    //       stageProps: {
-    //         onEmailSaved: function() {
-    //           this.setState({
-    //             stage: "confirm",
-    //             stageProps: {
-    //               onEmailConfirmed: function() { this.setState({ stage: "welcome"}) }.bind(this)
-    //             }
-    //           })
-    //         }.bind(this)
-    //       }
-    //     })
-    //   } else {
-    //     this.endAuth()
-    //   }
-    // }.bind(this)).catch((err) => {
-    //   this.setState({
-    //     stage: "error",
-    //     stageProps: { errorText: err.message }
-    //   })
-    //   document.dispatchEvent(new CustomEvent('unhandledError', {
-    //     detail: {
-    //       message: err.message,
-    //       data: err.stack
-    //     }
-    //   }));
-    // })
+    lbryio.authenticate().then(function(user) {
+      if (!user.HasVerifiedEmail) { //oops I fucked this up
+        this.setState({
+          stage: "email",
+          stageProps: {
+            onEmailSaved: function() {
+              this.setState({
+                stage: "confirm",
+                stageProps: {
+                  onEmailConfirmed: function() { this.setState({ stage: "welcome"}) }.bind(this)
+                }
+              })
+            }.bind(this)
+          }
+        })
+      } else {
+        this.endAuth()
+      }
+    }.bind(this)).catch((err) => {
+      this.setState({
+        stage: "error",
+        stageProps: { errorText: err.message }
+      })
+      document.dispatchEvent(new CustomEvent('unhandledError', {
+        detail: {
+          message: err.message,
+          data: err.stack
+        }
+      }));
+    })
   },
   render: function() {
     if (!this.state.stage || lbryio.user && lbryio.user.HasVerifiedEmail) {

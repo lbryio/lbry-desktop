@@ -140,6 +140,7 @@ export let FileTileStream = React.createClass({
             { !this.props.hidePrice
               ? <FilePrice uri={this.props.uri} />
               : null}
+<<<<<<< dd3f3ec4d00066633b136925111bae7193b3c6a8
             <div className="card__title-primary">
               <div className="meta"><a href={'?show=' + this.props.uri}>{lbryUri}</a></div>
               <h3>
@@ -159,9 +160,25 @@ export let FileTileStream = React.createClass({
                   {isConfirmed
                      ? metadata.description
                      : <span className="empty">This file is pending confirmation.</span>}
+=======
+            <div className="meta"><a href={'?show=' + this.props.uri}>{'lbry://' + this.props.uri}</a></div>
+            <h3 className="file-tile__title">
+              <a href={'?show=' + this.props.uri}>
+                <TruncatedText lines={1}>
+                  {title}
+>>>>>>> more
                 </TruncatedText>
-              </p>
-            </div>
+              </a>
+            </h3>
+            <ChannelIndicator uri={this.props.uri} claimInfo={this.props.claimInfo} />
+            <FileActions uri={this.props.uri} outpoint={this.props.outpoint} metadata={metadata} contentType={this._contentType} />
+            <p className="file-tile__description">
+              <TruncatedText lines={3}>
+                {isConfirmed
+                  ? metadata.description
+                  : <span className="empty">This file is pending confirmation.</span>}
+              </TruncatedText>
+            </p>
           </div>
         </div>
         {this.state.showNsfwHelp
@@ -180,9 +197,12 @@ export let FileTileStream = React.createClass({
 export let FileCardStream = React.createClass({
   _fileInfoSubscribeId: null,
   _isMounted: null,
+  _metadata: null,
+
 
   propTypes: {
-    metadata: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.object]),
+    uri: React.PropTypes.string,
+    claimInfo: React.PropTypes.object,
     outpoint: React.PropTypes.string,
     hideOnRemove: React.PropTypes.bool,
     hidePrice: React.PropTypes.bool,
@@ -207,6 +227,11 @@ export let FileCardStream = React.createClass({
       this._fileInfoSubscribeId = lbry.fileInfoSubscribe(this.props.outpoint, this.onFileInfoUpdate);
     }
   },
+  componentWillMount: function() {
+    const {value: {stream: {metadata, source: {contentType}}}} = this.props.claimInfo;
+    this._metadata = metadata;
+    this._contentType = contentType;
+  },
   componentWillUnmount: function() {
     if (this._fileInfoSubscribeId) {
       lbry.fileInfoUnsubscribe(this.props.outpoint, this._fileInfoSubscribeId);
@@ -220,7 +245,7 @@ export let FileCardStream = React.createClass({
     }
   },
   handleMouseOver: function() {
-    if (this.props.obscureNsfw && this.props.metadata && this.props.metadata.nsfw) {
+    if (this.props.obscureNsfw && this.props.metadata && this._metadata.nsfw) {
       this.setState({
         showNsfwHelp: true,
       });
@@ -238,11 +263,16 @@ export let FileCardStream = React.createClass({
       return null;
     }
 
+<<<<<<< dd3f3ec4d00066633b136925111bae7193b3c6a8
     const lbryUri = uri.normalizeLbryUri(this.props.uri);
     const metadata = this.props.metadata;
+=======
+    const metadata = this._metadata;
+>>>>>>> more
     const isConfirmed = typeof metadata == 'object';
     const title = isConfirmed ? metadata.title : lbryUri;
     const obscureNsfw = this.props.obscureNsfw && isConfirmed && metadata.nsfw;
+    console.log(this.props);
     return (
       <section className={ 'card card--small ' + (obscureNsfw ? 'card--obscured ' : '') } onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
         <div className="card__inner">
@@ -254,10 +284,15 @@ export let FileCardStream = React.createClass({
                 </TruncatedText>
               </a>
             </h4>
+<<<<<<< dd3f3ec4d00066633b136925111bae7193b3c6a8
             <div className="card__subtitle"><a href={'?show=' + lbryUri}>{lbryUri}</a></div></div>
             <ChannelIndicator uri={lbryUri} metadata={metadata} contentType={this.props.contentType}
                             hasSignature={this.props.hasSignature} signatureIsValid={this.props.signatureIsValid} />
 
+=======
+            <ChannelIndicator uri={this.props.uri} claimInfo={this.props.claimInfo} />
+          </div>
+>>>>>>> more
           <div className="card__media">
             <a href={'?show=' + this.props.uri}><Thumbnail src={metadata.thumbnail} alt={'Photo for ' + (title || this.props.uri)} /></a>
           </div>
@@ -325,7 +360,11 @@ export let FileTile = React.createClass({
 
     const {txid, nout, has_signature, signature_is_valid,
            value: {stream: {metadata, source: {contentType}}}} = this.state.claimInfo;
-    return <FileTileStream outpoint={txid + ':' + nout} metadata={metadata} contentType={contentType}
-                           hasSignature={has_signature} signatureIsValid={signature_is_valid} {... this.props} />;
+    return
+    return this.props.displayStyle == 'card' ?
+           <FileCardStream outpoint={txid + ':' + nout} metadata={metadata} contentType={contentType}
+              hasSignature={has_signature} signatureIsValid={signature_is_valid} {... this.props}/> :
+          <FileTileStream outpoint={txid + ':' + nout} metadata={metadata} contentType={contentType}
+          hasSignature={has_signature} signatureIsValid={signature_is_valid} {... this.props} />;
   }
 });
