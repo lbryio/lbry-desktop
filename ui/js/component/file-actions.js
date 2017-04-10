@@ -261,7 +261,7 @@ export let FileActions = React.createClass({
   componentDidMount: function() {
     this._isMounted = true;
     this._fileInfoSubscribeId = lbry.fileInfoSubscribe(this.props.outpoint, this.onFileInfoUpdate);
-    lbry.getStreamAvailability(this.props.streamName, (availability) => {
+    lbry.getStreamAvailability(this.props.uri, (availability) => {
       if (this._isMounted) {
         this.setState({
           available: availability > 0,
