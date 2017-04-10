@@ -72,7 +72,7 @@ var FeaturedCategory = React.createClass({
               <ToolTip label="What's this?" body={communityCategoryToolTipText} className="tooltip--header"/>
               : '' }</h3>
           : '' }
-        { this.props.names.map((name) => { return <FileTile key={name} displayStyle="card" name={name} uri={name} /> }) }
+        { this.props.names.map((name) => { return <FileTile key={name} displayStyle="card" uri={name} /> }) }
     </div>)
   }
 })
