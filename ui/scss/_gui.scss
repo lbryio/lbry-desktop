@@ -38,6 +38,7 @@
   text-align: center;
 }
 
+/*
 section
 {
   margin-bottom: $spacing-vertical;
@@ -46,10 +47,10 @@ section
     margin-bottom: 0;
   }
   &:only-child {
-    /* If it's an only child, assume it's part of a React layout that will handle the last child condition on its own */
     margin-bottom: $spacing-vertical;
   }
 }
+*/
 
 main h1 {
   font-size: 2.0em;
@@ -178,7 +179,8 @@ p
   background: rgb(255, 255, 255);
   overflow: auto;
   border-radius: 4px;
-  padding: 36px;
+  padding: $spacing-vertical;
+  box-shadow: $default-box-shadow;
   max-width: 250px;
 }
 

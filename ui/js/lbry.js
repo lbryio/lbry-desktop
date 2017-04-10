@@ -282,29 +282,6 @@ lbry.getCostInfo = function(lbryUri, callback, errorCallback) {
   });
 }
 
-lbry.getFeaturedDiscoverNames = function(callback) {
-  return new Promise(function(resolve, reject) {
-    var xhr = new XMLHttpRequest;
-    xhr.open('GET', 'https://api.lbry.io/discover/list', true);
-    xhr.onload = () => {
-      if (xhr.status === 200) {
-        var responseData = JSON.parse(xhr.responseText);
-        if (responseData.data) //new signature, once api.lbry.io is updated
-        {
-          resolve(responseData.data);
-        }
-        else
-        {
-          resolve(responseData);
-        }
-      } else {
-        reject(Error('Failed to fetch featured names.'));
-      }
-    };
-    xhr.send();
-  });
-}
-
 lbry.getMyClaims = function(callback) {
   lbry.call('get_name_claims', {}, callback);
 }

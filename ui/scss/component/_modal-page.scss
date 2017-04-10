@@ -19,14 +19,16 @@
   justify-content: center;
   align-items: center;
 
+  border: 1px solid rgb(204, 204, 204);
+  background: rgb(255, 255, 255);
+  overflow: auto;
+}
+
+.modal-page--full {
   left: 0;
   right: 0;
   top: 0;
   bottom: 0;
-
-  border: 1px solid rgb(204, 204, 204);
-  background: rgb(255, 255, 255);
-  overflow: auto;
 }
 
 /*

@@ -47,7 +47,7 @@ let FilePrice = React.createClass({
     }
 
     return (
-      <span className="file-tile__cost">
+      <span className="file-price">
         <CreditAmount amount={this.state.cost} isEstimate={!this.state.costIncludesData}/>
       </span>
     );
@@ -131,8 +131,8 @@ export let FileTileStream = React.createClass({
     const title = isConfirmed ? metadata.title : lbryUri;
     const obscureNsfw = this.props.obscureNsfw && isConfirmed && metadata.nsfw;
     return (
-      <section className={ 'file-tile card ' + (obscureNsfw ? 'card-obscured ' : '') } onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
-        <div className={"row-fluid card-content file-tile__row"}>
+      <section className={ 'file-tile card ' + (obscureNsfw ? 'card--obscured ' : '') } onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
+        <div className={"row-fluid card__inner file-tile__row"}>
           <div className="span3">
             <a href={'?show=' + lbryUri}><Thumbnail className="file-tile__thumbnail" src={metadata.thumbnail} alt={'Photo for ' + (title || this.props.uri)} /></a>
           </div>
@@ -140,24 +140,139 @@ export let FileTileStream = React.createClass({
             { !this.props.hidePrice
               ? <FilePrice uri={this.props.uri} />
               : null}
-            <div className="meta"><a href={'?show=' + this.props.uri}>{lbryUri}</a></div>
-            <h3 className="file-tile__title">
+            <div className="card__title-primary">
+              <div className="meta"><a href={'?show=' + this.props.uri}>{lbryUri}</a></div>
+              <h3>
+                <a href={'?show=' + this.props.uri}>
+                  <TruncatedText lines={1}>
+                    {title}
+                  </TruncatedText>
+                </a>
+              </h3>
+            </div>
+            <div className="card__actions">
+              <FileActions uri={this.props.uri} outpoint={this.props.outpoint} metadata={metadata} contentType={this.props.contentType} />
+            </div>
+            <div className="card__content">
+              <p className="file-tile__description">
+                <TruncatedText lines={3}>
+                  {isConfirmed
+                     ? metadata.description
+                     : <span className="empty">This file is pending confirmation.</span>}
+                </TruncatedText>
+              </p>
+            </div>
+          </div>
+        </div>
+        {this.state.showNsfwHelp
+          ? <div className='card-overlay'>
+           <p>
+             This content is Not Safe For Work.
+             To view adult content, please change your <Link className="button-text" href="?settings" label="Settings" />.
+           </p>
+         </div>
+          : null}
+      </section>
+    );
+  }
+});
+
+export let FileCardStream = React.createClass({
+  _fileInfoSubscribeId: null,
+  _isMounted: null,
+
+  propTypes: {
+    metadata: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.object]),
+    outpoint: React.PropTypes.string,
+    hideOnRemove: React.PropTypes.bool,
+    hidePrice: React.PropTypes.bool,
+    obscureNsfw: React.PropTypes.bool
+  },
+  getInitialState: function() {
+    return {
+      showNsfwHelp: false,
+      isHidden: false,
+      available: null,
+    }
+  },
+  getDefaultProps: function() {
+    return {
+      obscureNsfw: !lbry.getClientSetting('showNsfw'),
+      hidePrice: false
+    }
+  },
+  componentDidMount: function() {
+    this._isMounted = true;
+    if (this.props.hideOnRemove) {
+      this._fileInfoSubscribeId = lbry.fileInfoSubscribe(this.props.outpoint, this.onFileInfoUpdate);
+    }
+  },
+  componentWillUnmount: function() {
+    if (this._fileInfoSubscribeId) {
+      lbry.fileInfoUnsubscribe(this.props.outpoint, this._fileInfoSubscribeId);
+    }
+  },
+  onFileInfoUpdate: function(fileInfo) {
+    if (!fileInfo && this._isMounted && this.props.hideOnRemove) {
+      this.setState({
+        isHidden: true
+      });
+    }
+  },
+  handleMouseOver: function() {
+    if (this.props.obscureNsfw && this.props.metadata && this.props.metadata.nsfw) {
+      this.setState({
+        showNsfwHelp: true,
+      });
+    }
+  },
+  handleMouseOut: function() {
+    if (this.state.showNsfwHelp) {
+      this.setState({
+        showNsfwHelp: false,
+      });
+    }
+  },
+  render: function() {
+    if (this.state.isHidden) {
+      return null;
+    }
+
+    const lbryUri = uri.normalizeLbryUri(this.props.uri);
+    const metadata = this.props.metadata;
+    const isConfirmed = typeof metadata == 'object';
+    const title = isConfirmed ? metadata.title : lbryUri;
+    const obscureNsfw = this.props.obscureNsfw && isConfirmed && metadata.nsfw;
+    return (
+      <section className={ 'card card--small ' + (obscureNsfw ? 'card--obscured ' : '') } onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
+        <div className="card__inner">
+          <div className="card__title-identity">
+            <h4>
               <a href={'?show=' + this.props.uri}>
                 <TruncatedText lines={1}>
                   {title}
                 </TruncatedText>
               </a>
-            </h3>
+            </h4>
+            <div className="card__subtitle"><a href={'?show=' + lbryUri}>{lbryUri}</a></div></div>
             <ChannelIndicator uri={lbryUri} metadata={metadata} contentType={this.props.contentType}
-                              hasSignature={this.props.hasSignature} signatureIsValid={this.props.signatureIsValid} />
-            <FileActions uri={this.props.uri} outpoint={this.props.outpoint} metadata={metadata} contentType={this.props.contentType} />
-            <p className="file-tile__description">
-              <TruncatedText lines={3}>
+                            hasSignature={this.props.hasSignature} signatureIsValid={this.props.signatureIsValid} />
+
+          <div className="card__media">
+            <a href={'?show=' + this.props.uri}><Thumbnail src={metadata.thumbnail} alt={'Photo for ' + (title || this.props.uri)} /></a>
+          </div>
+          { !this.props.hidePrice
+            ? <FilePrice uri={this.props.uri} />
+            : null}
+          <div className="card__content card__subtext card__subtext--two-lines">
+              <TruncatedText lines={2}>
                 {isConfirmed
-                   ? metadata.description
-                   : <span className="empty">This file is pending confirmation.</span>}
+                  ? metadata.description
+                  : <span className="empty">This file is pending confirmation.</span>}
               </TruncatedText>
-            </p>
+          </div>
+          <div className="card__actions card__actions--bottom">
+            <FileActions uri={this.props.uri} outpoint={this.props.outpoint} metadata={metadata} contentType={this.props.contentType} />
           </div>
         </div>
         {this.state.showNsfwHelp

@@ -1,4 +1,4 @@
-import {getLocal, setLocal} from './utils.js';
+import {getLocal, getSession, setSession, setLocal} from './utils.js';
 import lbry from './lbry.js';
 
 const querystring = require('querystring');
@@ -20,18 +20,7 @@ const mocks = {
       value: 50,
       claimed: false,
     };
-  },
-  'reward_type.list': () => {
-    return [
-      {
-        name: 'link_github',
-        title: 'Link your GitHub account',
-        description: 'Link LBRY to your GitHub account',
-        value: 50,
-        claimed: false,
-      },
-    ];
-  },
+  }
 };
 
 lbryio.call = function(resource, action, params={}, method='get') {
@@ -103,7 +92,7 @@ lbryio.setAccessToken = (token) => {
   lbryio._accessToken = token
 }
 
-lbryio.authenticate = () => {
+lbryio.authenticate = function() {
   if (lbryio._authenticationPromise === null) {
     lbryio._authenticationPromise = new Promise((resolve, reject) => {
       lbry.status().then(({installation_id}) => {
@@ -117,7 +106,12 @@ lbryio.authenticate = () => {
               resolve(data)
           }).catch(function(err) {
             lbryio.setAccessToken(null);
-            reject(err);
+            if (!getSession('reloadedOnFailedAuth')) {
+              setSession('reloadedOnFailedAuth', true)
+              window.location.reload();
+            } else {
+              reject(err);
+            }
           })
         }
 

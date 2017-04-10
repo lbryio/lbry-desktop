@@ -2,10 +2,10 @@
 
 .file-tile__row {
   height: $spacing-vertical * 7;
-}
 
-.file-tile__row--unavailable {
-  opacity: 0.5;
+  .file-price {
+    float: right;
+  }
 }
 
 .file-tile__thumbnail {
@@ -18,10 +18,6 @@
 
 .file-tile__title {
   font-weight: bold;
-}
-
-.file-tile__cost {
-  float: right;
 }
 
 .file-tile__description {

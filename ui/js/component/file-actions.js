@@ -3,7 +3,7 @@ import lbry from '../lbry.js';
 import {Link} from '../component/link.js';
 import {Icon} from '../component/common.js';
 import Modal from './modal.js';
-import FormField from './form.js';
+import {FormField} from './form.js';
 import {ToolTip} from '../component/tooltip.js';
 import {DropDownMenu, DropDownMenuItem} from './menu.js';
 
@@ -53,7 +53,7 @@ let WatchLink = React.createClass({
   render: function() {
     return (
       <div className="button-set-item">
-        <Link button="primary" disabled={this.state.loading} label="Watch" icon="icon-play" onClick={this.handleClick} />
+        <Link button={ this.props.button ? this.props.button : 'alt' } disabled={this.state.loading} label="Watch" icon="icon-play" onClick={this.handleClick} />
         <Modal contentLabel="Not enough credits" isOpen={this.state.modal == 'notEnoughCredits'} onConfirmed={this.closeModal}>
           You don't have enough LBRY credits to pay for this stream.
         </Modal>

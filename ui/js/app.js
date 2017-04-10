@@ -2,22 +2,18 @@ import React from 'react';
 import {Line} from 'rc-progress';
 
 import lbry from './lbry.js';
-import lbryio from './lbryio.js';
 import EmailPage from './page/email.js';
 import SettingsPage from './page/settings.js';
 import HelpPage from './page/help.js';
 import WatchPage from './page/watch.js';
 import ReportPage from './page/report.js';
 import StartPage from './page/start.js';
-import ClaimCodePage from './page/claim_code.js';
-import ReferralPage from './page/referral.js';
 import RewardsPage from './page/rewards.js';
 import RewardPage from './page/reward.js';
 import WalletPage from './page/wallet.js';
 import ShowPage from './page/show.js';
 import PublishPage from './page/publish.js';
 import DiscoverPage from './page/discover.js';
-import SplashScreen from './component/splash.js';
 import DeveloperPage from './page/developer.js';
 import {FileListDownloaded, FileListPublished} from './page/file-list.js';
 import Drawer from './component/drawer.js';
@@ -229,15 +225,11 @@ var App = React.createClass({
       case 'wallet':
       case 'send':
       case 'receive':
-      case 'claim':
-      case 'referral':
       case 'rewards':
         return {
           '?wallet': 'Overview',
           '?send': 'Send',
           '?receive': 'Receive',
-          '?claim': 'Claim Beta Code',
-          '?referral': 'Check Referral Credit',
           '?rewards': 'Rewards',
         };
       case 'downloaded':
@@ -268,14 +260,8 @@ var App = React.createClass({
         return <FileListPublished />;
       case 'start':
         return <StartPage />;
-      case 'claim':
-        return <ClaimCodePage />;
-      case 'referral':
-        return <ReferralPage />;
       case 'rewards':
-        return <RewardsPage />;
-      case 'reward':
-        return <RewardPage name={this.state.pageArgs} />;
+        return <RewardsPage />; 
       case 'wallet':
       case 'send':
       case 'receive':
