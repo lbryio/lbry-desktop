@@ -288,6 +288,11 @@ var PublishPage = React.createClass({
     });
   },
   handleCreateChannelClick: function (event) {
+    if (this.state.newChannelName.length < 5) {
+      this.refs.newChannelName.showAdvice('LBRY channel names must be at least 4 characters in length.');
+      return;
+    }
+
     this.setState({
       creatingChannel: true,
     });
