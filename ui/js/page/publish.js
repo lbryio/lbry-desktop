@@ -307,7 +307,8 @@ var PublishPage = React.createClass({
         this._updateChannelList(newChannelName);
       }, 5000);
     }, (error) => {
-      // TODO: add error handling
+      // TODO: better error handling
+      this.refs.newChannelName.showAdvice('Unable to create channel due to an internal error.');
       this.setState({
         creatingChannel: false,
       });
