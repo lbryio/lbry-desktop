@@ -46,7 +46,7 @@ var ClaimCodePage = React.createClass({
       submitting: true,
     });
 
-    lbry.getNewAddress((address) => {
+    lbry.getUnusedAddress((address) => {
       var code = this.refs.code.value;
       var email = this.refs.email.value;
 

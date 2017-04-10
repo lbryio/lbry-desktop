@@ -155,7 +155,11 @@ lbry.checkFirstRun = function(callback) {
 }
 
 lbry.getNewAddress = function(callback) {
-  lbry.call('get_new_address', {}, callback);
+  lbry.call('wallet_new_address', {}, callback);
+}
+
+lbry.getUnusedAddress = function(callback) {
+  lbry.call('wallet_unused_address', {}, callback);
 }
 
 lbry.checkAddressIsMine = function(address, callback) {
@@ -177,17 +181,18 @@ lbry.setDaemonSetting = function(setting, value, callback) {
 }
 
 
-lbry.getBalance = function(callback)
-{
-  lbry.call("get_balance", {}, callback);
+lbry.getBalance = function(callback) {
+  lbry.call("wallet_balance", {}, callback);
 }
 
-lbry.sendToAddress = function(amount, address, callback, errorCallback)
-{
+lbry.sendToAddress = function(amount, address, callback, errorCallback) {
   lbry.call("send_amount_to_address", { "amount" : amount, "address": address }, callback, errorCallback);
 }
 
 lbry.resolveName = function(name, callback) {
+  if (!name) {
+    throw new Error(`Name required.`);
+  }
   lbry.call('resolve_name', { 'name': name }, callback, () => {
     // For now, assume any error means the name was not resolved
     callback(null);
@@ -195,10 +200,16 @@ lbry.resolveName = function(name, callback) {
 }
 
 lbry.getStream = function(name, callback) {
+  if (!name) {
+    throw new Error(`Name required.`);
+  }
   lbry.call('get', { 'name': name }, callback);
 };
 
 lbry.getClaimInfo = function(name, callback) {
+  if (!name) {
+    throw new Error(`Name required.`);
+  }
   lbry.call('get_claim_info', { name: name }, callback);
 }
 
@@ -209,10 +220,16 @@ lbry.getMyClaim = function(name, callback) {
 }
 
 lbry.getKeyFee = function(name, callback, errorCallback) {
+  if (!name) {
+    throw new Error(`Name required.`);
+  }
   lbry.call('stream_cost_estimate', { name: name }, callback, errorCallback);
 }
 
 lbry.getTotalCost = function(name, size, callback, errorCallback) {
+  if (!name) {
+    throw new Error(`Name required.`);
+  }
   lbry.call('stream_cost_estimate', {
     name: name,
     size: size,
@@ -235,6 +252,9 @@ lbry.getPeersForBlobHash = function(blobHash, callback) {
 }
 
 lbry.getStreamAvailability = function(name, callback, errorCallback) {
+  if (!name) {
+    throw new Error(`Name required.`);
+  }
   lbry.call('get_availability', {name: name}, callback, errorCallback);
 }
 
@@ -249,6 +269,10 @@ lbry.getCostInfoForName = function(name, callback, errorCallback) {
    *   - includes_data: Boolean; indicates whether or not the data fee info
    *     from Lighthouse is included.
    */
+  if (!name) {
+    throw new Error(`Name required.`);
+  }
+
   function getCostWithData(name, size, callback, errorCallback) {
     lbry.getTotalCost(name, size, (cost) => {
       callback({

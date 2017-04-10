@@ -92,7 +92,7 @@ var PublishPage = React.createClass({
     };
 
     if (this.state.isFee) {
-      lbry.getNewAddress((address) => {
+      lbry.getUnusedAddress((address) => {
         metadata.fee = {};
         metadata.fee[this.state.feeCurrency] = {
           amount: parseFloat(this.state.feeAmount),

@@ -14,6 +14,19 @@ var AddressSection = React.createClass({
       event.preventDefault();
     }
 
+    lbry.getUnusedAddress((address) => {
+      window.localStorage.setItem('wallet_address', address);
+      this.setState({
+        address: address,
+      });
+    });
+  },
+
+  _getNewAddress: function(event) {
+    if (typeof event !== 'undefined') {
+      event.preventDefault();
+    }
+
     lbry.getNewAddress((address) => {
       window.localStorage.setItem('wallet_address', address);
       this.setState({
@@ -21,6 +34,7 @@ var AddressSection = React.createClass({
       });
     });
   },
+
   getInitialState: function() {
     return {
       address: null,
@@ -47,7 +61,7 @@ var AddressSection = React.createClass({
     return (
       <section className="card">
         <h3>Wallet Address</h3>
-        <Address address={this.state.address} /> <Link text="Get new address" icon='icon-refresh' onClick={this._refreshAddress} style={addressRefreshButtonStyle} />
+        <Address address={this.state.address} /> <Link text="Get new address" icon='icon-refresh' onClick={this._getNewAddress} style={addressRefreshButtonStyle} />
         <input type='submit' className='hidden' />
         <div className="help">
           <p>Other LBRY users may send credits to you by entering this address on the "Send" page.</p>
