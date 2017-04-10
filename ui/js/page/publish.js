@@ -7,6 +7,16 @@ import Modal from '../component/modal.js';
 var PublishPage = React.createClass({
   _requiredFields: ['name', 'bid', 'meta_title', 'meta_author', 'meta_license', 'meta_description'],
 
+  _updateChannelList: function(channel) {
+    // Calls API to update displayed list of channels. If a channel name is provided, will select
+    // that channel at the same time (used immediately after creating a channel)
+    lbry.channel_list_mine().then((channels) => {
+      this.setState({
+        channels: channels,
+        ... channel ? {channel} : {}
+      });
+    });
+  },
   handleSubmit: function(event) {
     if (typeof event !== 'undefined') {
       event.preventDefault();
@@ -67,7 +77,7 @@ var PublishPage = React.createClass({
         name: this.state.name,
         bid: parseFloat(this.state.bid),
         metadata: metadata,
-        ... this.state.channel != 'new' && this.state.channel != 'none' ? {channel_name: this.state.channel} : {},
+        ... this.state.channel != 'new' && this.state.channel != 'anonymous' ? {channel_name: this.state.channel} : {},
       };
 
       if (this.refs.file.getValue() !== '') {
@@ -103,7 +113,7 @@ var PublishPage = React.createClass({
       bid: '',
       feeAmount: '',
       feeCurrency: 'USD',
-      channel: 'none',
+      channel: 'anonymous',
       newChannelName: '@',
       newChannelBid: '',
       nameResolved: false,
@@ -278,21 +288,27 @@ var PublishPage = React.createClass({
     });
   },
   handleCreateChannelClick: function (event) {
+    if (this.state.newChannelName.length < 5) {
+      this.refs.newChannelName.showAdvice('LBRY channel names must be at least 4 characters in length.');
+      return;
+    }
+
     this.setState({
       creatingChannel: true,
     });
 
-    lbry.channel_new({channel_name: this.state.newChannelName, amount: parseInt(this.state.newChannelBid)}).then(() => {
-      this.setState({
-        creatingChannel: false,
-      });
+    const newChannelName = this.state.newChannelName;
+    lbry.channel_new({channel_name: newChannelName, amount: parseInt(this.state.newChannelBid)}).then(() => {
+      setTimeout(() => {
+        this.setState({
+          creatingChannel: false,
+        });
 
-      this.forceUpdate();
-      this.setState({
-        channel: name,
-      });
+        this._updateChannelList(newChannelName);
+      }, 5000);
     }, (error) => {
-      // TODO: add error handling
+      // TODO: better error handling
+      this.refs.newChannelName.showAdvice('Unable to create channel due to an internal error.');
       this.setState({
         creatingChannel: false,
       });
@@ -308,11 +324,7 @@ var PublishPage = React.createClass({
     }
   },
   componentWillMount: function() {
-    lbry.channel_list_mine().then((channels) => {
-      this.setState({
-        channels: channels,
-      });
-    });
+    this._updateChannelList();
   },
   componentDidMount: function() {
     document.title = "Publish";
@@ -346,7 +358,7 @@ var PublishPage = React.createClass({
             <h4>Channel</h4>
             <div className="form-row">
               <FormField type="select" onChange={this.handleChannelChange} value={this.state.channel}>
-                <option key="none" value="none">None</option>
+                <option key="anonymous" value="anonymous">Anonymous</option>
                 {this.state.channels.map(({name}) => <option key={name} value={name}>{name}</option>)}
                 <option key="new" value="new">New channel...</option>
               </FormField>
