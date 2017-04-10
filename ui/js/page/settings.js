@@ -95,12 +95,12 @@ var SettingsPage = React.createClass({
           </div>
           <div className="card__content">
             <h4>Max Upload</h4>
-            <FormField type="radio"
+            <FormRow type="radio"
                        name="max_upload_pref"
                        onChange={this.onMaxUploadPrefChange.bind(this, false)}
                        defaultChecked={!this.state.isMaxUpload}
                        label="Unlimited" />
-            <FormField type="radio"
+            <FormRow type="radio"
                        name="max_upload_pref"
                        onChange={this.onMaxUploadPrefChange.bind(this, true)}
                        defaultChecked={this.state.isMaxUpload}
@@ -116,20 +116,23 @@ var SettingsPage = React.createClass({
           </div>
           <div className="card__content">
             <h4>Max Download</h4>
-            <label style={settingsRadioOptionStyles}>
-              <input type="radio" name="max_download_pref" onChange={this.onMaxDownloadPrefChange.bind(this, false)} defaultChecked={!this.state.isMaxDownload}/> Unlimited
-            </label>
+            <FormField label="Unlimited"
+                       type="radio"
+                       name="max_download_pref"
+                       onChange={this.onMaxDownloadPrefChange.bind(this, false)}
+                       defaultChecked={!this.state.isMaxDownload} />
+            { /*
             <label style={settingsRadioOptionStyles}>
               <input type="radio" name="max_download_pref" onChange={this.onMaxDownloadPrefChange.bind(this, true)} defaultChecked={this.state.isMaxDownload}/> { this.state.isMaxDownload ? 'Up to' : 'Choose limit...' }
               <span className={ this.state.isMaxDownload ? '' : 'hidden'}> <input type="number" min="0" step=".5" defaultValue={this.state.daemonSettings.max_download} style={settingsNumberFieldStyles} onChange={this.onMaxDownloadFieldChange}/> MB/s</span>
-            </label>
+            </label> */ }
           </div>
         </section>
         <section className="card">
           <div className="card__content">
             <h3>Content</h3>
           </div>
-          <div class="card__content">
+          <div className="card__content">
             <FormRow type="checkbox"
                      onChange={this.onShowUnavailableChange}
                      defaultChecked={this.state.showUnavailable}
@@ -145,7 +148,7 @@ var SettingsPage = React.createClass({
           <div className="card__content">
             <h3>Share Diagnostic Data</h3>
           </div>
-          <div class="card__content">
+          <div className="card__content">
             <FormRow type="checkbox"
                      onChange={this.onShareDataChange}
                      defaultChecked={this.state.daemonSettings.share_debug_info}

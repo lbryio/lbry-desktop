@@ -1,21 +1,21 @@
 @import "../global";
 
+$width-input-border: 2px;
+
 .form-row-submit
 {
   margin-top: $spacing-vertical;
 }
 
-$height-input: $spacing-vertical * 1.5;
-
 .form-row__label-row {
   margin-top: $spacing-vertical * 2/3;
   margin-bottom: $spacing-vertical * 1/3;
   line-height: 1;
+  font-size: 0.9em;
 }
 .form-row__label-row--prefix {
   float: left;
   margin-right: 5px;
-  line-height: $height-input;
 }
 
 .form-field {
@@ -26,8 +26,19 @@ $height-input: $spacing-vertical * 1.5;
     cursor: pointer;
   }
 
+  select {
+    transition: outline $transition-standard;
+    cursor: pointer;
+    box-sizing: border-box;
+    padding-left: 5px;
+    padding-right: 5px;
+    height: $spacing-vertical;
+    &:focus {
+      outline: $width-input-border solid $color-primary;
+    }
+  }
+
   textarea,
-  select,
   input[type="text"],
   input[type="password"],
   input[type="email"],
@@ -54,9 +65,10 @@ $height-input: $spacing-vertical * 1.5;
   input[type="number"],
   input[type="search"],
   input[type="date"] {
-    border-bottom: 2px solid $color-form-border;
-    line-height: $spacing-vertical - 4;
-    height: $height-input;
+    border-bottom: $width-input-border solid $color-form-border;
+    line-height: 1px;
+    padding-top: $spacing-vertical * 1/3;
+    padding-bottom: $spacing-vertical * 1/3;
     &.form-field__input--error {
       border-color: $color-error;
     }
@@ -73,7 +85,7 @@ $height-input: $spacing-vertical * 1.5;
   }
 
   textarea {
-    border: 2px solid $color-form-border;
+    border: $width-input-border solid $color-form-border;
   }
 }
 
@@ -93,7 +105,12 @@ $height-input: $spacing-vertical * 1.5;
 }
 
 .form-field__input-number {
-  width: 100px;
+  width: 70px;
+  text-align: right;
+}
+
+.form-field__input-textarea {
+  width: 330px;
 }
 
 .form-field__error, .form-field__helper {

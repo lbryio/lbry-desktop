@@ -294,7 +294,7 @@ export let FileActions = React.createClass({
           ? <FileActionsRow outpoint={this.props.outpoint} metadata={this.props.metadata} uri={this.props.uri}
                             contentType={this.props.contentType} />
           : <div>
-              <div className="button-set-item empty">This file is not currently available.</div>
+              <div className="button-set-item empty">Content unavailable.</div>
               <ToolTip label="Why?"
                        body="The content on LBRY is hosted by its users. It appears there are no users connected that have this file at the moment."
                        className="button-set-item" />

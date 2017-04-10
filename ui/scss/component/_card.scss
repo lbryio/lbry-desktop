@@ -95,8 +95,9 @@ $width-card-small: $spacing-vertical * 12;
 }
 
 .card__subtitle {
-  color: $color-meta-light;
+  color: $color-help;
   font-size: 0.85em;
+  line-height: $font-line-height * 1 / 0.85;
 }
 
 .card-series-submit
