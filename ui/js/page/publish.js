@@ -7,6 +7,16 @@ import Modal from '../component/modal.js';
 var PublishPage = React.createClass({
   _requiredFields: ['name', 'bid', 'meta_title', 'meta_author', 'meta_license', 'meta_description'],
 
+  _updateChannelList: function(channel) {
+    // Calls API to update displayed list of channels. If a channel name is provided, will select
+    // that channel at the same time (used immediately after creating a channel)
+    lbry.channel_list_mine().then((channels) => {
+      this.setState({
+        channels: channels,
+        ... channel ? {channel} : {}
+      });
+    });
+  },
   handleSubmit: function(event) {
     if (typeof event !== 'undefined') {
       event.preventDefault();
@@ -282,15 +292,15 @@ var PublishPage = React.createClass({
       creatingChannel: true,
     });
 
-    lbry.channel_new({channel_name: this.state.newChannelName, amount: parseInt(this.state.newChannelBid)}).then(() => {
-      this.setState({
-        creatingChannel: false,
-      });
+    const newChannelName = this.state.newChannelName;
+    lbry.channel_new({channel_name: newChannelName, amount: parseInt(this.state.newChannelBid)}).then(() => {
+      setTimeout(() => {
+        this.setState({
+          creatingChannel: false,
+        });
 
-      this.forceUpdate();
-      this.setState({
-        channel: name,
-      });
+        this._updateChannelList(newChannelName);
+      }, 5000);
     }, (error) => {
       // TODO: add error handling
       this.setState({
@@ -308,11 +318,7 @@ var PublishPage = React.createClass({
     }
   },
   componentWillMount: function() {
-    lbry.channel_list_mine().then((channels) => {
-      this.setState({
-        channels: channels,
-      });
-    });
+    this._updateChannelList();
   },
   componentDidMount: function() {
     document.title = "Publish";
