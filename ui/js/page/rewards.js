@@ -1,28 +1,34 @@
 import React from 'react';
 import lbry from '../lbry.js';
 import lbryio from '../lbryio.js';
-import {CreditAmount} from '../component/common.js';
+import {CreditAmount, Icon} from '../component/common.js';
+import rewards from '../rewards.js';
 import Modal from '../component/modal.js';
-import {Link} from '../component/link.js';
+import {RewardLink} from '../component/link.js';
 
 const RewardTile = React.createClass({
   propTypes: {
-    name: React.PropTypes.string.isRequired,
+    type: React.PropTypes.string.isRequired,
     title: React.PropTypes.string.isRequired,
     description: React.PropTypes.string.isRequired,
     claimed: React.PropTypes.bool.isRequired,
     value: React.PropTypes.number.isRequired,
+    onRewardClaim: React.PropTypes.func
   },
   render: function() {
     return (
       <section className="card">
-        <div className={"row-fluid card-content"}>
-          <h3><Link label={this.props.title} href={'?reward=' + this.props.name} /></h3>
-          <CreditAmount amount={this.props.value} />
-          <section>{this.props.description}</section>
-          {this.props.claimed
-              ? <span className="empty">This reward has been claimed.</span>
-              : <Link button="primary" label="Start reward" href={'?reward=' + this.props.name} />}
+        <div className="card__inner">
+          <div className="card__title-primary">
+            <CreditAmount amount={this.props.value} />
+            <h3>{this.props.title}</h3>
+          </div>
+          <div className="card__actions">
+            {this.props.claimed
+              ? <span><Icon icon="icon-check" /> Reward claimed.</span>
+              : <RewardLink {...this.props} />}
+          </div>
+          <div className="card__content">{this.props.description}</div>
         </div>
       </section>
     );
@@ -31,29 +37,29 @@ const RewardTile = React.createClass({
 
 var RewardsPage = React.createClass({
   componentWillMount: function() {
-    lbryio.call('reward_type', 'list', {}).then((rewardTypes) => {
-      this.setState({
-        rewardTypes: rewardTypes,
-      });
-    });
+    this.loadRewards()
   },
   getInitialState: function() {
     return {
-      rewardTypes: null,
+      userRewards: null,
     };
+  },
+  loadRewards: function() {
+    lbryio.call('reward', 'list', {}).then((userRewards) => {
+      this.setState({
+        userRewards: userRewards,
+      });
+    });
   },
   render: function() {
     return (
       <main>
         <form onSubmit={this.handleSubmit}>
-          <div className="card">
-            <h2>Rewards</h2>
-            {!this.state.rewardTypes
-              ? null
-              : this.state.rewardTypes.map(({name, title, description, claimed, value}) => {
-                return <RewardTile key={name} name={name} title={title} description={description} claimed={claimed} value={value} />;
-              })}
-          </div>
+          {!this.state.userRewards
+            ? null
+            : this.state.userRewards.map(({RewardType, RewardTitle, RewardDescription, TransactionID, RewardAmount}) => {
+              return <RewardTile key={RewardType} onRewardClaim={this.loadRewards} type={RewardType} title={RewardTitle} description={RewardDescription} claimed={!!TransactionID} value={RewardAmount} />;
+            })}
         </form>
       </main>
     );

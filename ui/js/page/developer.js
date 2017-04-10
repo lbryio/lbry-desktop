@@ -1,6 +1,6 @@
 import lbry from '../lbry.js';
 import React from 'react';
-import FormField from '../component/form.js';
+import {FormField} from '../component/form.js';
 import {Link} from '../component/link.js';
 
 const fs = require('fs');

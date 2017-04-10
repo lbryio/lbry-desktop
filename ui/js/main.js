@@ -5,8 +5,8 @@ import lbryio from './lbryio.js';
 import lighthouse from './lighthouse.js';
 import App from './app.js';
 import SplashScreen from './component/splash.js';
+import SnackBar from './component/snack-bar.js';
 import {AuthOverlay} from './component/auth.js';
-import {Welcome} from './component/welcome.js';
 
 const {remote} = require('electron');
 const contextMenu = remote.require('./menu/context-menu');
@@ -28,12 +28,12 @@ let init = function() {
     lbryio.authenticate() //start auth process as soon as soon as we can get an install ID
   })
 
-  async function onDaemonReady() {
+  function onDaemonReady() {
     window.sessionStorage.setItem('loaded', 'y'); //once we've made it here once per session, we don't need to show splash again
-    ReactDOM.render(<div><AuthOverlay /><App /></div>, canvas)
+    ReactDOM.render(<div><AuthOverlay /><App /><SnackBar /></div>, canvas)
   }
 
-  if (window.sessionStorage.getItem('loaded') == 'y' && false) {
+  if (window.sessionStorage.getItem('loaded') == 'y') {
     onDaemonReady();
   } else {
     ReactDOM.render(<SplashScreen message="Connecting" onLoadDone={onDaemonReady} />, canvas);

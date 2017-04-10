@@ -1,7 +1,7 @@
 import React from 'react';
 import lbry from '../lbry.js';
 import uri from '../uri.js';
-import FormField from '../component/form.js';
+import {FormField, FormRow} from '../component/form.js';
 import {Link} from '../component/link.js';
 import Modal from '../component/modal.js';
 
@@ -36,7 +36,7 @@ var PublishPage = React.createClass({
     for (let fieldName of checkFields) {
       var field = this.refs[fieldName];
       if (field.getValue() === '') {
-        field.warnRequired();
+        field.showRequiredError();
         if (!missingFieldFound) {
           field.focus();
           missingFieldFound = true;
@@ -84,7 +84,7 @@ var PublishPage = React.createClass({
       if (this.refs.file.getValue() !== '') {
 	publishArgs.file_path = this.refs.file.getValue();
       }
-      
+
       lbry.publish(publishArgs, (message) => {
         this.handlePublishStarted();
       }, null, (error) => {
@@ -344,9 +344,12 @@ var PublishPage = React.createClass({
       <main ref="page">
         <form onSubmit={this.handleSubmit}>
           <section className="card">
-            <h4>LBRY Name</h4>
-            <div className="form-row">
-              <FormField type="text" ref="name" value={this.state.rawName} onChange={this.handleNameChange} />
+            <div className="card__title-primary">
+              <h4>LBRY Name</h4>
+            </div>
+            <div className="card__content">
+              <FormRow label="lbry://" type="text" ref="name" placeholder="lbry://myname" value={this.state.rawName} onChange={this.handleNameChange}
+                       helper={(<div>What LBRY name would you like to claim for this file? <Link label="Read more" href="https://lbry.io/faq/naming" />.</div>)} />
               {
                 (!this.state.name
                   ? null
@@ -356,7 +359,6 @@ var PublishPage = React.createClass({
                         ? <em> You already have a claim on the name <strong>{this.state.name}</strong>. You can use this page to update your claim.</em>
                         : <em> The name <strong>{this.state.name}</strong> is currently claimed for <strong>{this.state.topClaimValue}</strong> {this.state.topClaimValue == 1 ? 'credit' : 'credits'}.</em>)))
               }
-              <div className="help">What LBRY name would you like to claim for this file?</div>
             </div>
           </section>
 
@@ -381,9 +383,11 @@ var PublishPage = React.createClass({
           </section>
 
           <section className="card">
-            <h4>Choose File</h4>
-            <FormField name="file" ref="file" type="file" />
-            { this.state.myClaimExists ? <div className="help">If you don't choose a file, the file from your existing claim will be used.</div> : null }
+            <div className="card__title-primary"><h4>Choose File</h4></div>
+            <div className="card__content">
+              <FormField name="file" ref="file" type="file" />
+              { this.state.myClaimExists ? <div className="help">If you don't choose a file, the file from your existing claim will be used.</div> : null }
+            </div>
           </section>
 
           <section className="card">

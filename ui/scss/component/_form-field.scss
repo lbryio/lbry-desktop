@@ -1,13 +1,87 @@
 @import "../global";
 
-.form-field {
-  display: inline-block;
+.form-row-submit
+{
+  margin-top: $spacing-vertical;
 }
 
-.form-field__label {
+$height-input: $spacing-vertical * 1.5;
+
+.form-row__label-row {
   margin-top: $spacing-vertical * 2/3;
   margin-bottom: $spacing-vertical * 1/3;
   line-height: 1;
+}
+.form-row__label-row--prefix {
+  float: left;
+  margin-right: 5px;
+  line-height: $height-input;
+}
+
+.form-field {
+  display: inline-block;
+
+  input[type="checkbox"],
+  input[type="radio"] {
+    cursor: pointer;
+  }
+
+  textarea,
+  select,
+  input[type="text"],
+  input[type="password"],
+  input[type="email"],
+  input[type="number"],
+  input[type="search"],
+  input[type="date"] {
+    @include placeholder {
+      color: lighten($color-text-dark, 60%);
+    }
+    transition: all $transition-standard;
+    cursor: pointer;
+    padding-left: 1px;
+    padding-right: 1px;
+    box-sizing: border-box;
+    -webkit-appearance: none;
+    &[readonly] {
+      background-color: #bbb;
+    }
+  }
+
+  input[type="text"],
+  input[type="password"],
+  input[type="email"],
+  input[type="number"],
+  input[type="search"],
+  input[type="date"] {
+    border-bottom: 2px solid $color-form-border;
+    line-height: $spacing-vertical - 4;
+    height: $height-input;
+    &.form-field__input--error {
+      border-color: $color-error;
+    }
+  }
+
+  textarea:focus,
+  input[type="text"]:focus,
+  input[type="password"]:focus,
+  input[type="email"]:focus,
+  input[type="number"]:focus,
+  input[type="search"]:focus,
+  input[type="date"]:focus {
+    border-color: $color-primary;
+  }
+
+  textarea {
+    border: 2px solid $color-form-border;
+  }
+}
+
+.form-field__label {
+  &[for] {  cursor: pointer; }
+  > input[type="checkbox"], input[type="radio"] {
+    margin-right: 6px;
+  }
 }
 
 .form-field__label--error {
@@ -18,8 +92,8 @@
   width: 330px;
 }
 
-.form-field__input-text-number {
-  width: 50px;
+.form-field__input-number {
+  width: 100px;
 }
 
 .form-field__error, .form-field__helper {

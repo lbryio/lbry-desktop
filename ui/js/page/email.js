@@ -1,7 +1,7 @@
 import React from 'react';
 import lbryio from '../lbryio.js';
 import {getLocal, setLocal} from '../utils.js';
-import FormField from '../component/form.js'
+import {FormField} from '../component/form.js'
 import {Link} from '../component/link.js'
 import rewards from '../rewards.js';
 
@@ -12,7 +12,7 @@ const EmailPage = React.createClass({
     }
 
     if (!this.state.email) {
-      this._emailField.warnRequired();
+      this._emailField.showRequiredError();
     }
   },
   componentWillMount: function() {
