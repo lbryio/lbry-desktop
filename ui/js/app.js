@@ -10,7 +10,7 @@ import StartPage from './page/start.js';
 import ClaimCodePage from './page/claim_code.js';
 import ReferralPage from './page/referral.js';
 import WalletPage from './page/wallet.js';
-import DetailPage from './page/show.js';
+import ShowPage from './page/show.js';
 import PublishPage from './page/publish.js';
 import DiscoverPage from './page/discover.js';
 import SplashScreen from './component/splash.js';
@@ -277,7 +277,7 @@ var App = React.createClass({
       case 'receive':
         return <WalletPage viewingPage={this.state.viewingPage} />;
       case 'show':
-        return <DetailPage name={this.state.pageArgs} />;
+        return <ShowPage uri={this.state.pageArgs} />;
       case 'publish':
         return <PublishPage />;
       case 'developer':
