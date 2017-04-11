@@ -1,0 +1,18 @@
+# Test against the latest version of this Node.js version
+environment:
+  nodejs_version: "7"
+  GH_TOKEN:
+    secure: LiI5jyuHUw6XbH4kC3gP1HX4P/v4rwD/gCNtaFhQu2AvJz1/1wALkp5ECnIxRySN
+
+skip_branch_with_pr: true
+
+clone_folder: C:\projects\lbry-app
+
+build_script:
+  - ps: build\build.ps1
+
+test: off
+
+artifacts:
+  - path: dist\*.exe
+    name: LBRY
