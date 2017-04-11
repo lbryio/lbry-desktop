@@ -305,14 +305,6 @@ lbry.getMyClaims = function(callback) {
   lbry.call('get_name_claims', {}, callback);
 }
 
-lbry.startFile = function(name, callback) {
-  lbry.call('start_lbry_file', { name: name }, callback);
-}
-
-lbry.stopFile = function(name, callback) {
-  lbry.call('stop_lbry_file', { name: name }, callback);
-}
-
 lbry.removeFile = function(outpoint, deleteTargetFile=true, callback) {
   this._removedFiles.push(outpoint);
   this._updateFileInfoSubscribers(outpoint);

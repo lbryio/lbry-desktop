@@ -340,12 +340,15 @@ var PublishPage = React.createClass({
           <section className="card">
             <h4>LBRY Name</h4>
             <div className="form-row">
-              lbry://<FormField type="text" ref="name" value={this.state.rawName} onChange={this.handleNameChange} />
+              <FormField type="text" ref="name" value={this.state.rawName} onChange={this.handleNameChange} />
               {
-                (!this.state.name ? '' :
-                  (! this.state.nameResolved ? <em> The name <strong>{this.state.name}</strong> is available.</em>
-                                             : (this.state.myClaimExists ? <em> You already have a claim on the name <strong>{this.state.name}</strong>. You can use this page to update your claim.</em>
-                                                                         : <em> The name <strong>{this.state.name}</strong> is currently claimed for <strong>{this.state.topClaimValue}</strong> {this.state.topClaimValue == 1 ? 'credit' : 'credits'}.</em>)))
+                (!this.state.name
+                  ? null
+                  : (!this.state.nameResolved
+                      ? <em> The name <strong>{this.state.name}</strong> is available.</em>
+                      : (this.state.myClaimExists
+                        ? <em> You already have a claim on the name <strong>{this.state.name}</strong>. You can use this page to update your claim.</em>
+                        : <em> The name <strong>{this.state.name}</strong> is currently claimed for <strong>{this.state.topClaimValue}</strong> {this.state.topClaimValue == 1 ? 'credit' : 'credits'}.</em>)))
               }
               <div className="help">What LBRY name would you like to claim for this file?</div>
             </div>
