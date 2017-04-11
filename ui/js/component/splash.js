@@ -27,8 +27,8 @@ var SplashScreen = React.createClass({
         isLagging: false
       });
 
-      lbry.resolveName('one', () => {
-	window.sessionStorage.setItem('loaded', 'y')
+      lbry.resolve({uri: 'lbry://one'}).then(() => {
+        window.sessionStorage.setItem('loaded', 'y')
         this.props.onLoadDone();
       });
       return;
