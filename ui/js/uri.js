@@ -115,4 +115,10 @@ uri.buildLbryUri = function(uriObj, includeProto=true) {
          (path ? `/${path}` : '');
 }
 
+/* Takes a parseable LBRY URI and converts it to standard, canonical format (currently this just
+ * consists of making sure it has a lbry:// prefix) */
+uri.normalizeLbryUri = function(lbryUri) {
+  return uri.buildLbryUri(uri.parseLbryUri(lbryUri));
+}
+
 export default uri;
