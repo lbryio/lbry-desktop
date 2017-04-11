@@ -11,11 +11,11 @@ const {shell} = require('electron');
 
 let WatchLink = React.createClass({
   propTypes: {
-    streamName: React.PropTypes.string,
+    uri: React.PropTypes.string,
     downloadStarted: React.PropTypes.bool,
   },
   startVideo: function() {
-    window.location = '?watch=' + this.props.streamName;
+    window.location = '?watch=' + this.props.uri;
   },
   handleClick: function() {
     this.setState({
@@ -25,7 +25,7 @@ let WatchLink = React.createClass({
     if (this.props.downloadStarted) {
       this.startVideo();
     } else {
-      lbry.getCostInfoForName(this.props.streamName, ({cost}) => {
+      lbry.getCostInfo(this.props.uri, ({cost}) => {
         lbry.getBalance((balance) => {
           if (cost > balance) {
             this.setState({
@@ -67,10 +67,10 @@ let FileActionsRow = React.createClass({
   _fileInfoSubscribeId: null,
 
   propTypes: {
-    streamName: React.PropTypes.string,
+    uri: React.PropTypes.string,
     outpoint: React.PropTypes.string.isRequired,
     metadata: React.PropTypes.oneOfType([React.PropTypes.object, React.PropTypes.string]),
-    contentType: React.PropTypes.string,
+    contentType: React.PropTypes.string.isRequired,
   },
   getInitialState: function() {
     return {
@@ -95,7 +95,7 @@ let FileActionsRow = React.createClass({
       attemptingDownload: true,
       attemptingRemove: false
     });
-    lbry.getCostInfoForName(this.props.streamName, ({cost}) => {
+    lbry.getCostInfo(this.props.uri, ({cost}) => {
       lbry.getBalance((balance) => {
         if (cost > balance) {
           this.setState({
@@ -103,7 +103,7 @@ let FileActionsRow = React.createClass({
             attemptingDownload: false,
           });
         } else {
-          lbry.getStream(this.props.streamName, (streamInfo) => {
+          lbry.get({uri: this.props.uri}).then((streamInfo) => {
             if (streamInfo === null || typeof streamInfo !== 'object') {
               this.setState({
                 modal: 'timedOut',
@@ -199,7 +199,7 @@ let FileActionsRow = React.createClass({
     return (
       <div>
         {this.props.contentType && this.props.contentType.startsWith('video/')
-          ? <WatchLink streamName={this.props.streamName} downloadStarted={!!this.state.fileInfo} />
+          ? <WatchLink uri={this.props.uri} downloadStarted={!!this.state.fileInfo} />
           : null}
         {this.state.fileInfo !== null || this.state.fileInfo.isMine
           ? linkBlock
@@ -215,7 +215,7 @@ let FileActionsRow = React.createClass({
         </Modal>
         <Modal isOpen={this.state.modal == 'timedOut'} contentLabel="Download failed"
                onConfirmed={this.closeModal}>
-          LBRY was unable to download the stream <strong>lbry://{this.props.streamName}</strong>.
+          LBRY was unable to download the stream <strong>lbry://{this.props.uri}</strong>.
         </Modal>
         <Modal isOpen={this.state.modal == 'confirmRemove'} contentLabel="Not enough credits"
                type="confirm" confirmButtonLabel="Remove" onConfirmed={this.handleRemoveConfirmed}
@@ -234,7 +234,7 @@ export let FileActions = React.createClass({
   _fileInfoSubscribeId: null,
 
   propTypes: {
-    streamName: React.PropTypes.string,
+    uri: React.PropTypes.string,
     outpoint: React.PropTypes.string.isRequired,
     metadata: React.PropTypes.oneOfType([React.PropTypes.object, React.PropTypes.string]),
     contentType: React.PropTypes.string,
@@ -262,6 +262,7 @@ export let FileActions = React.createClass({
     this._isMounted = true;
     this._fileInfoSubscribeId = lbry.fileInfoSubscribe(this.props.outpoint, this.onFileInfoUpdate);
     lbry.getStreamAvailability(this.props.uri, (availability) => {
+    lbry.get_availability({uri: this.props.uri}, (availability) => {
       if (this._isMounted) {
         this.setState({
           available: availability > 0,
@@ -291,7 +292,7 @@ export let FileActions = React.createClass({
     return (<section className="file-actions">
       {
         fileInfo || this.state.available || this.state.forceShowActions
-          ? <FileActionsRow outpoint={this.props.outpoint} metadata={this.props.metadata} streamName={this.props.streamName}
+          ? <FileActionsRow outpoint={this.props.outpoint} metadata={this.props.metadata} uri={this.props.uri}
                             contentType={this.props.contentType} />
           : <div>
               <div className="button-set-item empty">This file is not currently available.</div>

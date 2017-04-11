@@ -1,5 +1,6 @@
 import lighthouse from './lighthouse.js';
 import jsonrpc from './jsonrpc.js';
+import uri from './uri.js';
 import {getLocal, setLocal} from './utils.js';
 
 const {remote} = require('electron');
@@ -219,23 +220,6 @@ lbry.getMyClaim = function(name, callback) {
   });
 }
 
-lbry.getKeyFee = function(name, callback, errorCallback) {
-  if (!name) {
-    throw new Error(`Name required.`);
-  }
-  lbry.call('stream_cost_estimate', { name: name }, callback, errorCallback);
-}
-
-lbry.getTotalCost = function(name, size, callback, errorCallback) {
-  if (!name) {
-    throw new Error(`Name required.`);
-  }
-  lbry.call('stream_cost_estimate', {
-    name: name,
-    size: size,
-  }, callback, errorCallback);
-}
-
 lbry.getPeersForBlobHash = function(blobHash, callback) {
   let timedOut = false;
   const timeout = setTimeout(() => {
@@ -251,16 +235,9 @@ lbry.getPeersForBlobHash = function(blobHash, callback) {
   });
 }
 
-lbry.getStreamAvailability = function(name, callback, errorCallback) {
-  if (!name) {
-    throw new Error(`Name required.`);
-  }
-  lbry.call('get_availability', {name: name}, callback, errorCallback);
-}
-
-lbry.getCostInfoForName = function(name, callback, errorCallback) {
+lbry.getCostInfo = function(lbryUri, callback, errorCallback) {
   /**
-   * Takes a LBRY name; will first try and calculate a total cost using
+   * Takes a LBRY URI; will first try and calculate a total cost using
    * Lighthouse. If Lighthouse can't be reached, it just retrives the
    * key fee.
    *
@@ -274,7 +251,7 @@ lbry.getCostInfoForName = function(name, callback, errorCallback) {
   }
 
   function getCostWithData(name, size, callback, errorCallback) {
-    lbry.getTotalCost(name, size, (cost) => {
+    lbry.stream_cost_estimate({name, size}).then((cost) => {
       callback({
         cost: cost,
         includesData: true,
@@ -283,13 +260,16 @@ lbry.getCostInfoForName = function(name, callback, errorCallback) {
   }
 
   function getCostNoData(name, callback, errorCallback) {
-    lbry.getKeyFee(name, (cost) => {
+    lbry.stream_cost_estimate({name}).then((cost) => {
       callback({
         cost: cost,
         includesData: false,
       });
     }, errorCallback);
   }
+
+  const uriObj = uri.parseLbryUri(lbryUri);
+  const name = uriObj.path || uriObj.name;
 
   lighthouse.get_size_for_name(name).then((size) => {
     getCostWithData(name, size, callback, errorCallback);

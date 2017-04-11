@@ -1,5 +1,6 @@
 import React from 'react';
 import lbry from '../lbry.js';
+import uri from '../uri.js';
 import {Link} from '../component/link.js';
 import {FileActions} from '../component/file-actions.js';
 import {Thumbnail, TruncatedText, CreditAmount} from '../component/common.js';
@@ -22,14 +23,15 @@ let FilePrice = React.createClass({
   componentDidMount: function() {
     this._isMounted = true;
 
-    lbry.getCostInfoForName(this.props.uri, ({cost, includesData}) => {
+    lbry.getCostInfo(this.props.uri, ({cost, includesData}) => {
       if (this._isMounted) {
         this.setState({
           cost: cost,
           costIncludesData: includesData,
         });
       }
-    }, () => {
+    }, (err) => {
+      console.log('error from getCostInfo callback:', err)
       // If we get an error looking up cost information, do nothing
     });
   },
@@ -56,12 +58,14 @@ let FilePrice = React.createClass({
 export let FileTileStream = React.createClass({
   _fileInfoSubscribeId: null,
   _isMounted: null,
-  _metadata: null,
 
   propTypes: {
     uri: React.PropTypes.string,
-    claimInfo: React.PropTypes.object,
+    metadata: React.PropTypes.object.isRequired,
+    contentType: React.PropTypes.string.isRequired,
     outpoint: React.PropTypes.string,
+    hasSignature: React.PropTypes.bool,
+    signatureIsValid: React.PropTypes.bool,
     hideOnRemove: React.PropTypes.bool,
     hidePrice: React.PropTypes.bool,
     obscureNsfw: React.PropTypes.bool
@@ -76,13 +80,9 @@ export let FileTileStream = React.createClass({
   getDefaultProps: function() {
     return {
       obscureNsfw: !lbry.getClientSetting('showNsfw'),
-      hidePrice: false
+      hidePrice: false,
+      hasSignature: false,
     }
-  },
-  componentWillMount: function() {
-    const {value: {stream: {metadata, source: {contentType}}}} = this.props.claimInfo;
-    this._metadata = metadata;
-    this._contentType = contentType;
   },
   componentDidMount: function() {
     this._isMounted = true;
@@ -103,7 +103,7 @@ export let FileTileStream = React.createClass({
     }
   },
   handleMouseOver: function() {
-    if (this.props.obscureNsfw && this.props.metadata && this._metadata.nsfw) {
+    if (this.props.obscureNsfw && this.props.metadata && this.props.metadata.nsfw) {
       this.setState({
         showNsfwHelp: true,
       });
@@ -117,25 +117,30 @@ export let FileTileStream = React.createClass({
     }
   },
   render: function() {
+    console.log('rendering.')
     if (this.state.isHidden) {
+      console.log('hidden, so returning null')
       return null;
     }
 
-    const metadata = this._metadata;
+    console.log("inside FileTileStream. metadata is", this.props.metadata)
+
+    const lbryUri = uri.normalizeLbryUri(this.props.uri);
+    const metadata = this.props.metadata;
     const isConfirmed = typeof metadata == 'object';
-    const title = isConfirmed ? metadata.title : ('lbry://' + this.props.uri);
+    const title = isConfirmed ? metadata.title : lbryUri;
     const obscureNsfw = this.props.obscureNsfw && isConfirmed && metadata.nsfw;
     return (
       <section className={ 'file-tile card ' + (obscureNsfw ? 'card-obscured ' : '') } onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
         <div className={"row-fluid card-content file-tile__row"}>
           <div className="span3">
-            <a href={'?show=' + this.props.uri}><Thumbnail className="file-tile__thumbnail" src={metadata.thumbnail} alt={'Photo for ' + (title || this.props.uri)} /></a>
+            <a href={'?show=' + lbryUri}><Thumbnail className="file-tile__thumbnail" src={metadata.thumbnail} alt={'Photo for ' + (title || this.props.uri)} /></a>
           </div>
           <div className="span9">
             { !this.props.hidePrice
               ? <FilePrice uri={this.props.uri} />
               : null}
-            <div className="meta"><a href={'?show=' + this.props.uri}>{'lbry://' + this.props.uri}</a></div>
+            <div className="meta"><a href={'?show=' + this.props.uri}>{lbryUri}</a></div>
             <h3 className="file-tile__title">
               <a href={'?show=' + this.props.uri}>
                 <TruncatedText lines={1}>
@@ -143,8 +148,9 @@ export let FileTileStream = React.createClass({
                 </TruncatedText>
               </a>
             </h3>
-            <ChannelIndicator uri={this.props.uri} claimInfo={this.props.claimInfo} />
-            <FileActions uri={this.props.uri} outpoint={this.props.outpoint} metadata={metadata} contentType={this._contentType} />
+            <ChannelIndicator uri={lbryUri} metadata={metadata} contentType={this.props.contentType}
+                              hasSignature={this.props.hasSignature} signatureIsValid={this.props.signatureIsValid} />
+            <FileActions uri={this.props.uri} outpoint={this.props.outpoint} metadata={metadata} contentType={this.props.contentType} />
             <p className="file-tile__description">
               <TruncatedText lines={3}>
                 {isConfirmed
@@ -186,11 +192,9 @@ export let FileTile = React.createClass({
     this._isMounted = true;
 
     lbry.resolve({uri: this.props.uri}).then(({claim: claimInfo}) => {
-      const {value: {stream: {metadata}}, txid, nout} = claimInfo;
       if (this._isMounted && claimInfo.value.stream.metadata) {
         // In case of a failed lookup, metadata will be null, in which case the component will never display
         this.setState({
-          outpoint: txid + ':' + nout,
           claimInfo: claimInfo,
         });
       }
@@ -200,11 +204,13 @@ export let FileTile = React.createClass({
     this._isMounted = false;
   },
   render: function() {
-    if (!this.state.claimInfo || !this.state.outpoint) {
+    if (!this.state.claimInfo) {
       return null;
     }
 
-    return <FileTileStream outpoint={this.state.outpoint} claimInfo={this.state.claimInfo}
-                           {... this.props} uri={this.props.uri}/>;
+    const {txid, nout, has_signature, signature_is_valid,
+           value: {stream: {metadata, source: {contentType}}}} = this.state.claimInfo;
+    return <FileTileStream outpoint={txid + ':' + nout} metadata={metadata} contentType={contentType}
+                           hasSignature={has_signature} signatureIsValid={signature_is_valid} {... this.props} />;
   }
 });
