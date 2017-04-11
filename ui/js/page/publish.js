@@ -61,7 +61,7 @@ var PublishPage = React.createClass({
       var metadata = {};
     }
 
-    for (let metaField of ['title', 'author', 'description', 'thumbnail', 'license', 'license_url', 'language', 'nsfw']) {
+    for (let metaField of ['title', 'description', 'thumbnail', 'license', 'license_url', 'language', 'nsfw']) {
       var value = this.refs['meta_' + metaField].getValue();
       if (value !== '') {
         metadata[metaField] = value;
@@ -113,7 +113,7 @@ var PublishPage = React.createClass({
       channels: null,
       rawName: '',
       name: '',
-      bid: '',
+      bid: 0.01,
       hasFile: false,
       feeAmount: '',
       feeCurrency: 'USD',
@@ -491,7 +491,6 @@ var PublishPage = React.createClass({
                              type="number"
                              step="0.01"
                              label="Deposit"
-                             defaultValue="0.01"
                              onChange={this.handleBidChange}
                              value={this.state.bid}
                              placeholder={this.state.nameResolved ? this.state.topClaimValue + 10 : 100}
