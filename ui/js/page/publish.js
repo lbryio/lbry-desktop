@@ -1,5 +1,6 @@
 import React from 'react';
 import lbry from '../lbry.js';
+import uri from '../uri.js';
 import FormField from '../component/form.js';
 import {Link} from '../component/link.js';
 import Modal from '../component/modal.js';
@@ -169,49 +170,45 @@ var PublishPage = React.createClass({
       rawName: rawName,
     });
 
-    var name = rawName.toLowerCase();
-
-    lbry.resolveName(name, (info) => {
+    const name = rawName.toLowerCase();
+    lbry.resolve({uri: name}).then((info) => {
       if (name != this.refs.name.getValue().toLowerCase()) {
         // A new name has been typed already, so bail
         return;
       }
+      lbry.getMyClaim(name, (myClaimInfo) => {
+        lbry.getClaimInfo(name, (claimInfo) => {
+          if (name != this.refs.name.getValue()) {
+            return;
+          }
 
-      if (!info) {
-        this.setState({
-          name: name,
-          nameResolved: false,
-          myClaimExists: false,
+          const topClaimIsMine = (myClaimInfo && myClaimInfo.amount >= claimInfo.amount);
+          const newState = {
+            name: name,
+            nameResolved: true,
+            topClaimValue: parseFloat(claimInfo.amount),
+            myClaimExists: !!myClaimInfo,
+            myClaimValue: myClaimInfo ? parseFloat(myClaimInfo.amount) : null,
+            myClaimMetadata: myClaimInfo ? myClaimInfo.value : null,
+            topClaimIsMine: topClaimIsMine,
+          };
+
+          if (topClaimIsMine) {
+            newState.bid = myClaimInfo.amount;
+          } else if (this.state.myClaimMetadata) {
+            // Just changed away from a name we have a claim on, so clear pre-fill
+            newState.bid = '';
+          }
+
+          this.setState(newState);
         });
-      } else {
-        lbry.getMyClaim(name, (myClaimInfo) => {
-          lbry.getClaimInfo(name, (claimInfo) => {
-            if (name != this.refs.name.getValue()) {
-              return;
-            }
-
-            const topClaimIsMine = (myClaimInfo && myClaimInfo.amount >= claimInfo.amount);
-            const newState = {
-              name: name,
-              nameResolved: true,
-              topClaimValue: parseFloat(claimInfo.amount),
-              myClaimExists: !!myClaimInfo,
-              myClaimValue: myClaimInfo ? parseFloat(myClaimInfo.amount) : null,
-              myClaimMetadata: myClaimInfo ? myClaimInfo.value : null,
-              topClaimIsMine: topClaimIsMine,
-            };
-
-            if (topClaimIsMine) {
-              newState.bid = myClaimInfo.amount;
-            } else if (this.state.myClaimMetadata) {
-              // Just changed away from a name we have a claim on, so clear pre-fill
-              newState.bid = '';
-            }
-
-            this.setState(newState);
-          });
-        });
-      }
+      });
+    }, () => { // Assume an error means the name is available
+      this.setState({
+        name: name,
+        nameResolved: false,
+        myClaimExists: false,
+      });
     });
   },
   handleBidChange: function(event) {
@@ -343,12 +340,15 @@ var PublishPage = React.createClass({
           <section className="card">
             <h4>LBRY Name</h4>
             <div className="form-row">
-              lbry://<FormField type="text" ref="name" value={this.state.rawName} onChange={this.handleNameChange} />
+              <FormField type="text" ref="name" value={this.state.rawName} onChange={this.handleNameChange} />
               {
-                (!this.state.name ? '' :
-                  (! this.state.nameResolved ? <em> The name <strong>{this.state.name}</strong> is available.</em>
-                                             : (this.state.myClaimExists ? <em> You already have a claim on the name <strong>{this.state.name}</strong>. You can use this page to update your claim.</em>
-                                                                         : <em> The name <strong>{this.state.name}</strong> is currently claimed for <strong>{this.state.topClaimValue}</strong> {this.state.topClaimValue == 1 ? 'credit' : 'credits'}.</em>)))
+                (!this.state.name
+                  ? null
+                  : (!this.state.nameResolved
+                      ? <em> The name <strong>{this.state.name}</strong> is available.</em>
+                      : (this.state.myClaimExists
+                        ? <em> You already have a claim on the name <strong>{this.state.name}</strong>. You can use this page to update your claim.</em>
+                        : <em> The name <strong>{this.state.name}</strong> is currently claimed for <strong>{this.state.topClaimValue}</strong> {this.state.topClaimValue == 1 ? 'credit' : 'credits'}.</em>)))
               }
               <div className="help">What LBRY name would you like to claim for this file?</div>
             </div>

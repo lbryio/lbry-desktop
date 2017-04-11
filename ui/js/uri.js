@@ -74,12 +74,12 @@ uri.parseLbryUri = function(lbryUri, requireProto=false) {
     throw new Error(`Invalid claim ID ${claimId}.`);
   }
 
-  if (bidPosition && !bidPosition.match(/^-?[1-9][0-9]+$/)) {
-    throw new Error('Bid position must be a number.');
+  if (claimSequence && !claimSequence.match(/^-?[1-9][0-9]*$/)) {
+    throw new Error('Claim sequence must be a number.');
   }
 
-  if (claimSequence && !claimSequence.match(/^-?[1-9][0-9]+$/)) {
-    throw new Error('Claim sequence must be a number.');
+  if (bidPosition && !bidPosition.match(/^-?[1-9][0-9]*$/)) {
+    throw new Error('Bid position must be a number.');
   }
 
   // Validate path
@@ -113,6 +113,12 @@ uri.buildLbryUri = function(uriObj, includeProto=true) {
          (claimSequence ? `:${claimSequence}` : '') +
          (bidPosition ? `\$${bidPosition}` : '') +
          (path ? `/${path}` : '');
+}
+
+/* Takes a parseable LBRY URI and converts it to standard, canonical format (currently this just
+ * consists of making sure it has a lbry:// prefix) */
+uri.normalizeLbryUri = function(lbryUri) {
+  return uri.buildLbryUri(uri.parseLbryUri(lbryUri));
 }
 
 export default uri;

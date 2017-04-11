@@ -1,5 +1,6 @@
 import React from 'react';
 import lbry from '../lbry.js';
+import uri from '../uri.js';
 import {Link} from '../component/link.js';
 import FormField from '../component/form.js';
 import {FileTileStream} from '../component/file-tile.js';
@@ -160,14 +161,14 @@ export let FileList = React.createClass({
         seenUris = {};
 
     const fileInfosSorted = this._sortFunctions[this.state.sortBy](this.props.fileInfos);
-    for (let {name, outpoint, metadata} of fileInfosSorted) {
+    for (let {name, outpoint, metadata: {stream: {metadata}}, mime_type, claim_id} of fileInfosSorted) {
       if (!metadata || seenUris[name]) {
         continue;
       }
 
       seenUris[name] = true;
-      content.push(<FileTileStream key={outpoint} outpoint={outpoint} name={name} hideOnRemove={true}
-                                   hidePrice={this.props.hidePrices} metadata={metadata} />);
+      content.push(<FileTileStream key={outpoint} outpoint={outpoint} uri={uri.buildLbryUri({name, claimId: claim_id})} hideOnRemove={true}
+                                   hidePrice={this.props.hidePrices} metadata={metadata} contentType={mime_type} />);
     }
 
     return (

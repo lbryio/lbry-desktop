@@ -6,11 +6,11 @@ import {Icon} from './common.js';
 const ChannelIndicator = React.createClass({
   propTypes: {
     uri: React.PropTypes.string.isRequired,
-    claimInfo: React.PropTypes.object.isRequired,
+    hasSignature: React.PropTypes.bool.isRequired,
+    signatureIsValid: React.PropTypes.bool,
   },
   render: function() {
-    const {name, has_signature, signature_is_valid} = this.props.claimInfo;
-    if (!has_signature) {
+    if (!this.props.hasSignature) {
       return null;
     }
 
@@ -24,7 +24,7 @@ const ChannelIndicator = React.createClass({
     const channelUri = uri.buildLbryUri(channelUriObj, false);
 
     let icon, modifier;
-    if (!signature_is_valid) {
+    if (this.props.signatureIsValid) {
       icon = 'icon-check-circle';
       modifier = 'valid';
     } else {

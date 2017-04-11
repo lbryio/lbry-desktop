@@ -1,6 +1,7 @@
 import React from 'react';
 import lbry from '../lbry.js';
 import lighthouse from '../lighthouse.js';
+import uri from '../uri.js';
 import {CreditAmount, Thumbnail} from '../component/common.js';
 import {FileActions} from '../component/file-actions.js';
 import {Link} from '../component/link.js';
@@ -16,22 +17,16 @@ var formatItemImgStyle = {
 
 var FormatItem = React.createClass({
   propTypes: {
-    claimInfo: React.PropTypes.object,
+    metadata: React.PropTypes.object,
+    contentType: React.PropTypes.string,
     cost: React.PropTypes.number,
-    name: React.PropTypes.string,
+    uri: React.PropTypes.string,
     outpoint: React.PropTypes.string,
     costIncludesData: React.PropTypes.bool,
   },
   render: function() {
-    var claimInfo = this.props.claimInfo;
-    var thumbnail = claimInfo.thumbnail;
-    var title = claimInfo.title;
-    var description = claimInfo.description;
-    var author = claimInfo.author;
-    var language = claimInfo.language;
-    var license = claimInfo.license;
-    var fileContentType = (claimInfo.content_type || claimInfo['content-type']);
-    var mediaType = lbry.getMediaType(fileContentType);
+    const {thumbnail, author, title, description, language, license} = this.props.metadata;
+    const mediaType = lbry.getMediaType(this.props.contentType);
     var costIncludesData = this.props.costIncludesData;
     var cost = this.props.cost || 0.0;
 
@@ -46,7 +41,7 @@ var FormatItem = React.createClass({
             <table className="table-standard">
               <tbody>
                 <tr>
-                  <td>Content-Type</td><td>{fileContentType}</td>
+                  <td>Content-Type</td><td>{this.props.contentType}</td>
                 </tr>
                 <tr>
                   <td>Cost</td><td><CreditAmount amount={cost} isEstimate={!costIncludesData}/></td>
@@ -63,7 +58,7 @@ var FormatItem = React.createClass({
               </tbody>
             </table>
           </section>
-          <FileActions streamName={this.props.name} outpoint={this.props.outpoint} metadata={claimInfo} />
+          <FileActions uri={this._uri} outpoint={this.props.outpoint} metadata={this.props.metadata} contentType={this.props.contentType} />
           <section>
             <Link href="https://lbry.io/dmca" label="report" className="button-text-help" />
           </section>
@@ -75,17 +70,15 @@ var FormatItem = React.createClass({
 
 var FormatsSection = React.createClass({
   propTypes: {
-    claimInfo: React.PropTypes.object,
+    uri: React.PropTypes.string,
+    outpoint: React.PropTypes.string,
+    metadata: React.PropTypes.object,
+    contentType: React.PropTypes.string,
     cost: React.PropTypes.number,
-    name: React.PropTypes.string,
     costIncludesData: React.PropTypes.bool,
   },
   render: function() {
-    var name = this.props.name;
-    var format = this.props.claimInfo;
-    var title = format.title;
-
-    if(format == null)
+    if(this.props.metadata == null)
     {
       return (
         <div>
@@ -95,41 +88,46 @@ var FormatsSection = React.createClass({
 
     return (
       <div>
-        <div className="meta">lbry://{name}</div>
-        <h2>{title}</h2>
+        <div className="meta">{this.props.uri}</div>
+        <h2>{this.props.metadata.title}</h2>
       {/* In future, anticipate multiple formats, just a guess at what it could look like
-      // var formats = this.props.claimInfo.formats
+      // var formats = this.props.metadata.formats
       // return (<tbody>{formats.map(function(format,i){ */}
-          <FormatItem claimInfo={format} cost={this.props.cost} name={this.props.name} costIncludesData={this.props.costIncludesData} />
+          <FormatItem metadata={this.props.metadata} contentType={this.props.contentType} cost={this.props.cost} uri={this.props.uri} outpoint={this.props.outpoint} costIncludesData={this.props.costIncludesData} />
       {/*  })}</tbody>); */}
       </div>);
   }
 });
 
-var DetailPage = React.createClass({
+var ShowPage = React.createClass({
+  _uri: null,
+
   propTypes: {
-    name: React.PropTypes.string,
+    uri: React.PropTypes.string,
   },
   getInitialState: function() {
     return {
       metadata: null,
+      contentType: null,
       cost: null,
       costIncludesData: null,
-      nameLookupComplete: null,
+      uriLookupComplete: null,
     };
   },
   componentWillMount: function() {
-    document.title = 'lbry://' + this.props.name;
+    this._uri = uri.normalizeLbryUri(this.props.uri);
+    document.title = this._uri;
 
-    lbry.claim_show({name: this.props.name}, ({name, txid, nout, value}) => {
+    lbry.resolve({uri: this._uri}).then(({txid, nout, claim: {value: {stream: {metadata, source: {contentType}}}}}) => {
       this.setState({
         outpoint: txid + ':' + nout,
-        metadata: value,
-        nameLookupComplete: true,
+        metadata: metadata,
+        contentType: contentType,
+        uriLookupComplete: true,
       });
     });
 
-    lbry.getCostInfoForName(this.props.name, ({cost, includesData}) => {
+    lbry.getCostInfo(this._uri, ({cost, includesData}) => {
       this.setState({
         cost: cost,
         costIncludesData: includesData,
@@ -141,21 +139,15 @@ var DetailPage = React.createClass({
       return null;
     }
 
-    const name = this.props.name;
-    const costIncludesData = this.state.costIncludesData;
-    const metadata = this.state.metadata;
-    const cost = this.state.cost;
-    const outpoint = this.state.outpoint;
-
     return (
       <main>
         <section className="card">
-          {this.state.nameLookupComplete ? (
-            <FormatsSection name={name} outpoint={outpoint} claimInfo={metadata} cost={cost} costIncludesData={costIncludesData} />
+          {this.state.uriLookupComplete ? (
+            <FormatsSection uri={this._uri} outpoint={this.state.outpoint} metadata={this.state.metadata} cost={this.state.cost} costIncludesData={this.state.costIncludesData} contentType={this.state.contentType} />
           ) : (
             <div>
               <h2>No content</h2>
-              There is no content available at the name <strong>lbry://{this.props.name}</strong>. If you reached this page from a link within the LBRY interface, please <Link href="?report" label="report a bug" />. Thanks!
+              There is no content available at <strong>{this._uri}</strong>. If you reached this page from a link within the LBRY interface, please <Link href="?report" label="report a bug" />. Thanks!
             </div>
           )}
         </section>
@@ -163,4 +155,4 @@ var DetailPage = React.createClass({
   }
 });
 
-export default DetailPage;
+export default ShowPage;

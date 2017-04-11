@@ -84,7 +84,7 @@ var FeaturedContent = React.createClass({
       <div className="row-fluid">
         <div className="span6">
           <h3>Featured Content</h3>
-          { this.state.featuredNames.map((name) => { return <FileTile key={name} uri={name} /> }) }
+          { this.state.featuredNames.map(name => <FileTile key={name} uri={name} />) }
         </div>
         <div className="span6">
           <h3>

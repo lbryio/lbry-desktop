@@ -15,7 +15,7 @@ var WatchPage = React.createClass({
   _outpoint: null,
 
   propTypes: {
-    name: React.PropTypes.string,
+    uri: React.PropTypes.string,
   },
   getInitialState: function() {
     return {
@@ -27,7 +27,7 @@ var WatchPage = React.createClass({
     };
   },
   componentDidMount: function() {
-    lbry.get({name: this.props.name}).then((fileInfo) => {
+    lbry.get({uri: this.props.uri}).then((fileInfo) => {
       this._outpoint = fileInfo.outpoint;
       this.updateLoadStatus();
     });
