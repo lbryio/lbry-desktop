@@ -171,43 +171,49 @@ var PublishPage = React.createClass({
     });
 
     const name = rawName.toLowerCase();
-    lbry.resolve({uri: name}).then((info) => {
+    lbry.getMyClaim(name, (myClaimInfo) => {
       if (name != this.refs.name.getValue().toLowerCase()) {
         // A new name has been typed already, so bail
         return;
       }
-      lbry.getMyClaim(name, (myClaimInfo) => {
-        lbry.getClaimInfo(name, (claimInfo) => {
-          if (name != this.refs.name.getValue()) {
-            return;
-          }
+      lbry.resolve({uri: name}).then((claimInfo) => {
+        if (name != this.refs.name.getValue()) {
+          return;
+        }
 
-          const topClaimIsMine = (myClaimInfo && myClaimInfo.amount >= claimInfo.amount);
+        if (!claimInfo) {
+          this.setState({
+            name: name,
+            nameResolved: false,
+            myClaimExists: false,
+          });
+        } else {
+          const topClaimIsMine = (myClaimInfo && myClaimInfo.claim.amount >= claimInfo.claim.amount);
           const newState = {
             name: name,
             nameResolved: true,
-            topClaimValue: parseFloat(claimInfo.amount),
+            topClaimValue: parseFloat(claimInfo.claim.amount),
             myClaimExists: !!myClaimInfo,
-            myClaimValue: myClaimInfo ? parseFloat(myClaimInfo.amount) : null,
+            myClaimValue: myClaimInfo ? parseFloat(myClaimInfo.claim.amount) : null,
             myClaimMetadata: myClaimInfo ? myClaimInfo.value : null,
             topClaimIsMine: topClaimIsMine,
           };
 
           if (topClaimIsMine) {
-            newState.bid = myClaimInfo.amount;
+            newState.bid = myClaimInfo.claim.amount;
           } else if (this.state.myClaimMetadata) {
             // Just changed away from a name we have a claim on, so clear pre-fill
             newState.bid = '';
           }
 
           this.setState(newState);
+        }
+      }, () => { // Assume an error means the name is available
+        this.setState({
+          name: name,
+          nameResolved: false,
+          myClaimExists: false,
         });
-      });
-    }, () => { // Assume an error means the name is available
-      this.setState({
-        name: name,
-        nameResolved: false,
-        myClaimExists: false,
       });
     });
   },
