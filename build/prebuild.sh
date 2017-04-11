@@ -72,7 +72,6 @@ if ! cmd_exists pip; then
 fi
 
 if $LINUX && [ "$(pip list --format=columns | grep setuptools | wc -l)" -ge 1 ]; then
-  #$INSTALL python-setuptools
   $SUDO pip install setuptools
 fi
 
@@ -86,5 +85,16 @@ if ! cmd_exists node; then
     $INSTALL nodejs
   elif $OSX; then
     brew install node
+  fi
+fi
+
+if ! cmd_exists unzip; then
+  if $LINUX; then
+    $INSTALL unzip
+  elif $OSX; then
+    echo "unzip required"
+    exit 1
+    # not sure this works, but OSX should come with unzip
+    # brew install unzip
   fi
 fi

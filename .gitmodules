@@ -1,6 +1,0 @@
-[submodule "lbry"]
-	path = lbry
-	url = https://github.com/lbryio/lbry.git
-[submodule "lbryum"]
-	path = lbryum
-	url = https://github.com/lbryio/lbryum.git
