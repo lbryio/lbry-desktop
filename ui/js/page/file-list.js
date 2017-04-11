@@ -161,13 +161,19 @@ export let FileList = React.createClass({
         seenUris = {};
 
     const fileInfosSorted = this._sortFunctions[this.state.sortBy](this.props.fileInfos);
-    for (let {name, outpoint, metadata: {stream: {metadata}}, mime_type, claim_id} of fileInfosSorted) {
+    for (let {outpoint, name, channel_name, metadata: {stream: {metadata}}, mime_type, claim_id} of fileInfosSorted) {
       if (!metadata || seenUris[name]) {
         continue;
       }
 
+      let fileUri;
+      if (channel_name === undefined) {
+        fileUri = uri.buildLbryUri({name});
+      } else {
+        fileUri = uri.buildLbryUri({name: channel_name, path: name});
+      }
       seenUris[name] = true;
-      content.push(<FileTileStream key={outpoint} outpoint={outpoint} uri={uri.buildLbryUri({name, claimId: claim_id})} hideOnRemove={true}
+      content.push(<FileTileStream key={outpoint} outpoint={outpoint} uri={fileUri} hideOnRemove={true}
                                    hidePrice={this.props.hidePrices} metadata={metadata} contentType={mime_type} />);
     }
 
