@@ -259,7 +259,7 @@ var App = React.createClass({
       case 'help':
         return <HelpPage />;
       case 'watch':
-        return <WatchPage name={this.state.pageArgs} />;
+        return <WatchPage uri={this.state.pageArgs} />;
       case 'report':
         return <ReportPage />;
       case 'downloaded':
