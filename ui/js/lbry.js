@@ -247,20 +247,11 @@ lbry.getCostInfo = function(lbryUri, callback, errorCallback) {
     throw new Error(`URI required.`);
   }
 
-  function getCostWithData(lbryUri, size, callback, errorCallback) {
-    lbry.stream_cost_estimate({uri: lbryUri, size}).then((cost) => {
+  function getCost(lbryUri, size, callback, errorCallback) {
+    lbry.stream_cost_estimate({uri: lbryUri, ... size !== null ? {size} : {}}).then((cost) => {
       callback({
         cost: cost,
-        includesData: true,
-      });
-    }, errorCallback);
-  }
-
-  function getCostNoData(lbryUri, callback, errorCallback) {
-    lbry.stream_cost_estimate({uri: lbryUri}).then((cost) => {
-      callback({
-        cost: cost,
-        includesData: false,
+        includesData: size !== null,
       });
     }, errorCallback);
   }
@@ -269,9 +260,9 @@ lbry.getCostInfo = function(lbryUri, callback, errorCallback) {
   const name = uriObj.path || uriObj.name;
 
   lighthouse.get_size_for_name(name).then((size) => {
-    getCostWithData(name, size, callback, errorCallback);
+    getCost(name, size, callback, errorCallback);
   }, () => {
-    getCostNoData(name, callback, errorCallback);
+    getCost(name, null, callback, errorCallback);
   });
 }
 
