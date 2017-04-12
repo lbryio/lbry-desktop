@@ -247,8 +247,8 @@ lbry.getCostInfo = function(lbryUri, callback, errorCallback) {
     throw new Error(`URI required.`);
   }
 
-  function getCostWithData(name, size, callback, errorCallback) {
-    lbry.stream_cost_estimate({name, size}).then((cost) => {
+  function getCostWithData(lbryUri, size, callback, errorCallback) {
+    lbry.stream_cost_estimate({uri: lbryUri, size}).then((cost) => {
       callback({
         cost: cost,
         includesData: true,
@@ -256,8 +256,8 @@ lbry.getCostInfo = function(lbryUri, callback, errorCallback) {
     }, errorCallback);
   }
 
-  function getCostNoData(name, callback, errorCallback) {
-    lbry.stream_cost_estimate({name}).then((cost) => {
+  function getCostNoData(lbryUri, callback, errorCallback) {
+    lbry.stream_cost_estimate({uri: lbryUri}).then((cost) => {
       callback({
         cost: cost,
         includesData: false,
