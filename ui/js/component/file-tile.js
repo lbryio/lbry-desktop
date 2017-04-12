@@ -4,7 +4,7 @@ import uri from '../uri.js';
 import {Link} from '../component/link.js';
 import {FileActions} from '../component/file-actions.js';
 import {Thumbnail, TruncatedText, CreditAmount} from '../component/common.js';
-import ChannelIndicator from '../component/channel-indicator.js';
+import UriIndicator from '../component/channel-indicator.js';
 
 let FilePrice = React.createClass({
   _isMounted: false,
@@ -41,15 +41,10 @@ let FilePrice = React.createClass({
   },
 
   render: function() {
-    if (this.state.cost === null)
-    {
-      return null;
-    }
-
     return (
-      <span className="file-price">
-        <CreditAmount amount={this.state.cost} isEstimate={!this.state.costIncludesData}/>
-      </span>
+          this.state.cost !== null ?
+            <CreditAmount amount={this.state.cost} isEstimate={!this.state.costIncludesData}/> :
+            <span className="credit-amount">...</span>
     );
   }
 });
@@ -117,13 +112,9 @@ export let FileTileStream = React.createClass({
     }
   },
   render: function() {
-    console.log('rendering.')
     if (this.state.isHidden) {
-      console.log('hidden, so returning null')
       return null;
     }
-
-    console.log("inside FileTileStream. metadata is", this.props.metadata)
 
     const lbryUri = uri.normalizeLbryUri(this.props.uri);
     const metadata = this.props.metadata;
@@ -140,7 +131,6 @@ export let FileTileStream = React.createClass({
             { !this.props.hidePrice
               ? <FilePrice uri={this.props.uri} />
               : null}
-<<<<<<< dd3f3ec4d00066633b136925111bae7193b3c6a8
             <div className="card__title-primary">
               <div className="meta"><a href={'?show=' + this.props.uri}>{lbryUri}</a></div>
               <h3>
@@ -158,27 +148,11 @@ export let FileTileStream = React.createClass({
               <p className="file-tile__description">
                 <TruncatedText lines={3}>
                   {isConfirmed
-                     ? metadata.description
-                     : <span className="empty">This file is pending confirmation.</span>}
-=======
-            <div className="meta"><a href={'?show=' + this.props.uri}>{'lbry://' + this.props.uri}</a></div>
-            <h3 className="file-tile__title">
-              <a href={'?show=' + this.props.uri}>
-                <TruncatedText lines={1}>
-                  {title}
->>>>>>> more
+                    ? metadata.description
+                    : <span className="empty">This file is pending confirmation.</span>}
                 </TruncatedText>
-              </a>
-            </h3>
-            <ChannelIndicator uri={this.props.uri} claimInfo={this.props.claimInfo} />
-            <FileActions uri={this.props.uri} outpoint={this.props.outpoint} metadata={metadata} contentType={this._contentType} />
-            <p className="file-tile__description">
-              <TruncatedText lines={3}>
-                {isConfirmed
-                  ? metadata.description
-                  : <span className="empty">This file is pending confirmation.</span>}
-              </TruncatedText>
-            </p>
+              </p>
+            </div>
           </div>
         </div>
         {this.state.showNsfwHelp
@@ -218,7 +192,8 @@ export let FileCardStream = React.createClass({
   getDefaultProps: function() {
     return {
       obscureNsfw: !lbry.getClientSetting('showNsfw'),
-      hidePrice: false
+      hidePrice: false,
+      hasSignature: false,
     }
   },
   componentDidMount: function() {
@@ -226,11 +201,6 @@ export let FileCardStream = React.createClass({
     if (this.props.hideOnRemove) {
       this._fileInfoSubscribeId = lbry.fileInfoSubscribe(this.props.outpoint, this.onFileInfoUpdate);
     }
-  },
-  componentWillMount: function() {
-    const {value: {stream: {metadata, source: {contentType}}}} = this.props.claimInfo;
-    this._metadata = metadata;
-    this._contentType = contentType;
   },
   componentWillUnmount: function() {
     if (this._fileInfoSubscribeId) {
@@ -245,79 +215,56 @@ export let FileCardStream = React.createClass({
     }
   },
   handleMouseOver: function() {
-    if (this.props.obscureNsfw && this.props.metadata && this._metadata.nsfw) {
-      this.setState({
-        showNsfwHelp: true,
-      });
-    }
+    this.setState({
+      hovered: true,
+    });
   },
   handleMouseOut: function() {
-    if (this.state.showNsfwHelp) {
-      this.setState({
-        showNsfwHelp: false,
-      });
-    }
+    this.setState({
+      hovered: false,
+    });
   },
   render: function() {
     if (this.state.isHidden) {
       return null;
     }
 
-<<<<<<< dd3f3ec4d00066633b136925111bae7193b3c6a8
     const lbryUri = uri.normalizeLbryUri(this.props.uri);
     const metadata = this.props.metadata;
-=======
-    const metadata = this._metadata;
->>>>>>> more
     const isConfirmed = typeof metadata == 'object';
     const title = isConfirmed ? metadata.title : lbryUri;
     const obscureNsfw = this.props.obscureNsfw && isConfirmed && metadata.nsfw;
-    console.log(this.props);
+    const primaryUrl = '?watch=' + lbryUri;
     return (
-      <section className={ 'card card--small ' + (obscureNsfw ? 'card--obscured ' : '') } onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
+      <section className={ 'card card--small card--link ' + (obscureNsfw ? 'card--obscured ' : '') } onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
         <div className="card__inner">
-          <div className="card__title-identity">
-            <h4>
-              <a href={'?show=' + this.props.uri}>
-                <TruncatedText lines={1}>
-                  {title}
+          <a href={primaryUrl} className="card__link">
+            <div className="card__title-identity">
+              <h5><TruncatedText lines={1}>{title}</TruncatedText></h5>
+              <div className="card__subtitle">
+                { !this.props.hidePrice ? <span style={{float: "right"}}><FilePrice uri={this.props.uri} /></span>  : null}
+                <UriIndicator uri={lbryUri} metadata={metadata} contentType={this.props.contentType}
+                              hasSignature={this.props.hasSignature} signatureIsValid={this.props.signatureIsValid} />
+              </div>
+            </div>
+            <div className="card__media" style={{ backgroundImage: "url('" + metadata.thumbnail + "')" }}></div>
+            <div className="card__content card__subtext card__subtext--two-lines">
+                <TruncatedText lines={2}>
+                  {isConfirmed
+                    ? metadata.description
+                    : <span className="empty">This file is pending confirmation.</span>}
                 </TruncatedText>
-              </a>
-            </h4>
-<<<<<<< dd3f3ec4d00066633b136925111bae7193b3c6a8
-            <div className="card__subtitle"><a href={'?show=' + lbryUri}>{lbryUri}</a></div></div>
-            <ChannelIndicator uri={lbryUri} metadata={metadata} contentType={this.props.contentType}
-                            hasSignature={this.props.hasSignature} signatureIsValid={this.props.signatureIsValid} />
-
-=======
-            <ChannelIndicator uri={this.props.uri} claimInfo={this.props.claimInfo} />
-          </div>
->>>>>>> more
-          <div className="card__media">
-            <a href={'?show=' + this.props.uri}><Thumbnail src={metadata.thumbnail} alt={'Photo for ' + (title || this.props.uri)} /></a>
-          </div>
-          { !this.props.hidePrice
-            ? <FilePrice uri={this.props.uri} />
+            </div>
+          </a>
+          {this.state.showNsfwHelp && this.state.hovered
+            ? <div className='card-overlay'>
+             <p>
+               This content is Not Safe For Work.
+               To view adult content, please change your <Link className="button-text" href="?settings" label="Settings" />.
+             </p>
+           </div>
             : null}
-          <div className="card__content card__subtext card__subtext--two-lines">
-              <TruncatedText lines={2}>
-                {isConfirmed
-                  ? metadata.description
-                  : <span className="empty">This file is pending confirmation.</span>}
-              </TruncatedText>
-          </div>
-          <div className="card__actions card__actions--bottom">
-            <FileActions uri={this.props.uri} outpoint={this.props.outpoint} metadata={metadata} contentType={this.props.contentType} />
-          </div>
         </div>
-        {this.state.showNsfwHelp
-          ? <div className='card-overlay'>
-           <p>
-             This content is Not Safe For Work.
-             To view adult content, please change your <Link className="button-text" href="?settings" label="Settings" />.
-           </p>
-         </div>
-          : null}
       </section>
     );
   }
@@ -360,7 +307,7 @@ export let FileTile = React.createClass({
 
     const {txid, nout, has_signature, signature_is_valid,
            value: {stream: {metadata, source: {contentType}}}} = this.state.claimInfo;
-    return
+
     return this.props.displayStyle == 'card' ?
            <FileCardStream outpoint={txid + ':' + nout} metadata={metadata} contentType={contentType}
               hasSignature={has_signature} signatureIsValid={signature_is_valid} {... this.props}/> :

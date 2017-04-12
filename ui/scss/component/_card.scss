@@ -76,22 +76,36 @@ $padding-card-horizontal: $spacing-vertical * 2/3;
   font-weight: 600;
 }
 
-.card__media img {
-  max-width: 100%;;
+$card-link-scaling: 1.1;
+.card__link {
   display: block;
-  margin-left: auto;
-  margin-right: auto;
+}
+.card--link:hover {
+  position: relative;
+  z-index: 1;
+  box-shadow: $focus-box-shadow;
+  transform: scale($card-link-scaling);
+  transform-origin: 50% 50%;
+  overflow-x: visible;
+  overflow-y: visible;
+}
+
+.card__media {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
 }
 
 $width-card-small: $spacing-vertical * 12;
+$height-card-small: $spacing-vertical * 15;
+
 .card--small {
   width: $width-card-small;
+  overflow-x: hidden;
+  white-space: normal;
 }
 .card--small .card__media {
-  max-height: $width-card-small * 9 / 16;
-  img {
-    max-height: $width-card-small * 9 / 16;
-  }
+  height: $width-card-small * 9 / 16;
 }
 
 .card__subtitle {
@@ -117,6 +131,13 @@ $width-card-small: $spacing-vertical * 12;
   + .card-row {
     margin-top: $spacing-vertical * 1/3;
   }
+}
+.card-row--small {
+  overflow-x: auto;
+  overflow-y: hidden;
+  white-space: nowrap;
+  padding-left: 20px;
+  margin-left: -20px; /*hacky way to give space for hover */  
 }
 .card-row__header {
   margin-bottom: $spacing-vertical / 3;

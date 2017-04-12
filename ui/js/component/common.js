@@ -54,15 +54,6 @@ export let BusyMessage = React.createClass({
   }
 });
 
-var creditAmountStyle = {
-  color: '#216C2A',
-  fontWeight: 'bold',
-  fontSize: '0.8em'
-}, estimateStyle = {
-  fontSize: '0.8em',
-  color: '#aaa',
-};
-
 export let CurrencySymbol = React.createClass({
   render: function() { return <span>LBC</span>; }
 });
@@ -76,8 +67,8 @@ export let CreditAmount = React.createClass({
     var formattedAmount = lbry.formatCredits(this.props.amount, this.props.precision ? this.props.precision : 1);
     return (
       <span className="credit-amount">
-        <span style={creditAmountStyle}>{formattedAmount} {parseFloat(formattedAmount) == 1.0 ? 'credit' : 'credits'}</span>
-        { this.props.isEstimate ? <span style={estimateStyle}> (est)</span> : null }
+        <span>{formattedAmount} {parseFloat(formattedAmount) == 1.0 ? 'credit' : 'credits'}</span>
+        { this.props.isEstimate ? <span style={estimateStyle}>*</span> : null }
       </span>
     );
   }

@@ -106,6 +106,8 @@ var App = React.createClass({
         if (target.matches('a[href^="?"]')) {
           event.preventDefault();
           if (this._isMounted) {
+            history.pushState({}, document.title, target.getAttribute('href'));
+            this.registerHistoryPop();
             this.setState(this.getViewingPageAndArgs(target.getAttribute('href')));
           }
         }
@@ -146,6 +148,11 @@ var App = React.createClass({
   },
   componentWillUnmount: function() {
     this._isMounted = false;
+  },
+  registerHistoryPop: function() {
+    window.addEventListener("popstate", function() {
+      this.setState(this.getViewingPageAndArgs(location.pathname));
+    }.bind(this));
   },
   handleUpgradeClicked: function() {
     // Make a new directory within temp directory so the filename is guaranteed to be available
@@ -261,7 +268,7 @@ var App = React.createClass({
       case 'start':
         return <StartPage />;
       case 'rewards':
-        return <RewardsPage />; 
+        return <RewardsPage />;
       case 'wallet':
       case 'send':
       case 'receive':
