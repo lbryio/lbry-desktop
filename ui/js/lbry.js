@@ -243,6 +243,10 @@ lbry.getCostInfo = function(lbryUri, callback, errorCallback) {
    *   - includes_data: Boolean; indicates whether or not the data fee info
    *     from Lighthouse is included.
    */
+  if (!lbryUri) {
+    throw new Error(`URI required.`);
+  }
+
   function getCostWithData(name, size, callback, errorCallback) {
     lbry.stream_cost_estimate({name, size}).then((cost) => {
       callback({
