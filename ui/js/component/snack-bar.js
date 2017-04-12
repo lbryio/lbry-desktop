@@ -13,7 +13,6 @@ export const SnackBar = React.createClass({
     }
   },
   handleSnackReceived: function(event) {
-    // console.log(event);
     // if (this._hideTimeout) {
     //   clearTimeout(this._hideTimeout);
     // }

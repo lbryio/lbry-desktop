@@ -204,13 +204,6 @@ lbry.resolveName = function(name, callback) {
   });
 }
 
-lbry.getStream = function(name, callback) {
-  if (!name) {
-    throw new Error(`Name required.`);
-  }
-  lbry.call('get', { 'name': name }, callback);
-};
-
 lbry.getClaimInfo = function(name, callback) {
   if (!name) {
     throw new Error(`Name required.`);
@@ -653,6 +646,14 @@ lbry.claim_list_mine = function(params={}) {
     }, reject, reject);
   });
 }
+
+// lbry.get = function(params={}) {
+//   return function(params={}) {
+//     return new Promise((resolve, reject) => {
+//       jsonrpc.call(lbry.daemonConnectionString, "get", [params], resolve, reject, reject);
+//     });
+//   };
+// }
 
 lbry = new Proxy(lbry, {
   get: function(target, name) {

@@ -6,7 +6,7 @@ export const ModalPage = React.createClass({
     return (
       <ReactModal onCloseRequested={this.props.onAborted || this.props.onConfirmed} {...this.props}
                   className={(this.props.className || '') + ' modal-page'}
-                  overlayClassName={(this.props.overlayClassName || '') + ' modal-page-overlay'}>
+                  overlayClassName="modal-overlay">
         <div className="modal-page__content">
           {this.props.children}
         </div>

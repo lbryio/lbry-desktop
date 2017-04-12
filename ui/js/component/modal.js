@@ -6,6 +6,7 @@ import {Link} from './link.js';
 export const Modal = React.createClass({
   propTypes: {
     type: React.PropTypes.oneOf(['alert', 'confirm', 'custom']),
+    overlay: React.PropTypes.bool,
     onConfirmed: React.PropTypes.func,
     onAborted: React.PropTypes.func,
     confirmButtonLabel: React.PropTypes.string,
@@ -16,6 +17,7 @@ export const Modal = React.createClass({
   getDefaultProps: function() {
     return {
       type: 'alert',
+      overlay: true,
       confirmButtonLabel: 'OK',
       abortButtonLabel: 'Cancel',
       confirmButtonDisabled: false,
@@ -26,7 +28,7 @@ export const Modal = React.createClass({
     return (
       <ReactModal onCloseRequested={this.props.onAborted || this.props.onConfirmed} {...this.props}
                   className={(this.props.className || '') + ' modal'}
-                  overlayClassName={(this.props.overlayClassName || '') + ' modal-overlay'}>
+                  overlayClassName={[null, undefined, ""].indexOf(this.props.overlayClassName) === -1 ? this.props.overlayClassName : 'modal-overlay'}>
         <div>
           {this.props.children}
         </div>

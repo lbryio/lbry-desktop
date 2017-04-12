@@ -60,7 +60,8 @@ export let RewardLink = React.createClass({
   propTypes: {
     type: React.PropTypes.string.isRequired,
     claimed: React.PropTypes.bool,
-    onRewardClaim: React.PropTypes.func
+    onRewardClaim: React.PropTypes.func,
+    onRewardFailure: React.PropTypes.func
   },
   refreshClaimable: function() {
     switch(this.props.type) {
@@ -92,7 +93,6 @@ export let RewardLink = React.createClass({
       pending: true
     })
     rewards.claimReward(this.props.type).then(function(reward) {
-      console.log(reward);
       this.setState({
         pending: false,
         errorMessage: null
@@ -108,6 +108,9 @@ export let RewardLink = React.createClass({
     }.bind(this))
   },
   clearError: function() {
+    if (this.props.onRewardFailure) {
+      this.props.onRewardFailure()
+    }
     this.setState({
       errorMessage: null
     })
@@ -117,7 +120,7 @@ export let RewardLink = React.createClass({
       <div className="reward-link">
         {this.props.claimed
           ? <span><Icon icon="icon-check" /> Reward claimed.</span>
-          : <Link button="alt" disabled={this.state.pending || !this.state.claimable } label="Claim Reward" onClick={this.claimReward} />}
+          : <Link button={this.props.button ? this.props.button : 'alt'} disabled={this.state.pending || !this.state.claimable } label="Claim Reward" onClick={this.claimReward} />}
         {this.state.errorMessage ?
          <Modal isOpen={true} contentLabel="Reward Claim Error" className="error-modal" onConfirmed={this.clearError}>
            {this.state.errorMessage}
