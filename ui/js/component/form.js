@@ -15,6 +15,8 @@ export let FormField = React.createClass({
 
   propTypes: {
     type: React.PropTypes.string.isRequired,
+    prefix: React.PropTypes.string,
+    postfix: React.PropTypes.string,
     hasError: React.PropTypes.bool
   },
   getInitialState: function() {
@@ -41,9 +43,6 @@ export let FormField = React.createClass({
       errorMessage: text,
     });
   },
-  showRequiredError: function() {
-    this.showError(this._fieldRequiredText);
-  },
   focus: function() {
     this.refs.field.focus();
   },
@@ -51,7 +50,7 @@ export let FormField = React.createClass({
     if (this.props.type == 'checkbox') {
       return this.refs.field.checked;
     } else if (this.props.type == 'file') {
-      return this.refs.field.files.length && this.refs.field.files[0].path;
+      return !!(this.refs.field.files.length && this.refs.field.files[0].path);
     } else {
       return this.refs.field.value;
     }
@@ -69,6 +68,9 @@ export let FormField = React.createClass({
     delete otherProps.type;
     delete otherProps.label;
     delete otherProps.hasError;
+    delete otherProps.className;
+    delete otherProps.postfix;
+    delete otherProps.prefix;
 
     const element = <this._element id={elementId} type={this._type} name={this.props.name} ref="field" placeholder={this.props.placeholder}
                                     className={'form-field__input form-field__input-' + this.props.type + ' ' + (this.props.className || '') + (isError ? 'form-field__input--error' : '')}
@@ -77,34 +79,24 @@ export let FormField = React.createClass({
     </this._element>;
 
     return <div className="form-field">
+      { this.props.prefix ? <span className="form-field__prefix">{this.props.prefix}</span> : '' }
       { renderElementInsideLabel ?
           <label htmlFor={elementId} className={"form-field__label " + (isError ? 'form-field__label--error' : '')}>
             {element}
             {this.props.label}
-          </label> : element }
-      { isError ?  <div className="form-field__error">{this.state.errorMessage}</div> : '' }
+          </label> :
+        element }
+      { this.props.postfix ? <span className="form-field__postfix">{this.props.postfix}</span> : '' }
+      { isError && this.state.errorMessage ?  <div className="form-field__error">{this.state.errorMessage}</div> : '' }
     </div>
-    return (
-      this.props.row ?
-        <div className="form-row">{field}</div> :
-        field
-    );
   }
 })
 
 export let FormRow = React.createClass({
+  _fieldRequiredText: 'This field is required',
   propTypes: {
     label: React.PropTypes.string,
     // helper: React.PropTypes.html,
-  },
-  getValue: function() {
-    if (this.props.type == 'checkbox') {
-      return this.refs.field.checked;
-    } else if (this.props.type == 'file') {
-      return this.refs.field.files[0].path;
-    } else {
-      return this.refs.field.value;
-    }
   },
   getInitialState: function() {
     return {
@@ -118,11 +110,23 @@ export let FormRow = React.createClass({
       errorMessage: text,
     });
   },
+  showRequiredError: function() {
+    this.showError(this._fieldRequiredText);
+  },
+  clearError: function(text) {
+    this.setState({
+      isError: false,
+      errorMessage: ''
+    });
+  },
   getValue: function() {
     return this.refs.field.getValue();
   },
   getSelectedElement: function() {
     return this.refs.field.getSelectedElement();
+  },
+  focus: function() {
+    this.refs.field.focus();
   },
   render: function() {
     const fieldProps = Object.assign({}, this.props),

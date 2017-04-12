@@ -1,16 +1,19 @@
 @import "../global";
 
 .file-tile__row {
-  height: $spacing-vertical * 7;
-
   .credit-amount {
     float: right;
+  }
+  //Hack! Remove below!
+  .card__title-primary {
+    margin-top: $spacing-vertical * 2/3;
   }
 }
 
 .file-tile__thumbnail {
   max-width: 100%;
   max-height: $spacing-vertical * 7;
+  vertical-align: middle;
   display: block;
   margin-left: auto;
   margin-right: auto;

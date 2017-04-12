@@ -2,7 +2,6 @@ import React from 'react';
 import {Line} from 'rc-progress';
 
 import lbry from './lbry.js';
-import EmailPage from './page/email.js';
 import SettingsPage from './page/settings.js';
 import HelpPage from './page/help.js';
 import WatchPage from './page/watch.js';
@@ -277,8 +276,6 @@ var App = React.createClass({
         return <ShowPage uri={this.state.pageArgs} />;
       case 'publish':
         return <PublishPage />;
-      case 'email':
-        return <EmailPage />;
       case 'developer':
         return <DeveloperPage />;
       case 'discover':

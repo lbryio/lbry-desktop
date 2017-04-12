@@ -152,7 +152,7 @@ var SendToAddressSection = React.createClass({
             <h3>Send Credits</h3>
           </div>
           <div className="card__content">
-            <FormRow label="Amount" step="0.01" type="number" placeholder="1.23" size="10" onChange={this.setAmount} />
+            <FormRow label="Amount" postfix="LBC" step="0.01" type="number" placeholder="1.23" size="10" onChange={this.setAmount} />
           </div>
           <div className="card__content">
             <FormRow label="Recipient Address" placeholder="bbFxRyXXXXXXXXXXXZD8nE7XTLUxYnddTs" type="text" size="60" onChange={this.setAddress} />

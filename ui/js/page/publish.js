@@ -6,7 +6,7 @@ import {Link} from '../component/link.js';
 import Modal from '../component/modal.js';
 
 var PublishPage = React.createClass({
-  _requiredFields: ['name', 'bid', 'meta_title'],
+  _requiredFields: ['meta_title', 'name', 'bid'],
 
   _updateChannelList: function(channel) {
     // Calls API to update displayed list of channels. If a channel name is provided, will select
@@ -27,19 +27,23 @@ var PublishPage = React.createClass({
       submitting: true,
     });
 
-    var checkFields = this._requiredFields.slice();
+    let checkFields = this._requiredFields;
     if (!this.state.myClaimExists) {
-      checkFields.push('file');
+      checkFields.unshift('file');
     }
 
-    var missingFieldFound = false;
+    let missingFieldFound = false;
     for (let fieldName of checkFields) {
-      var field = this.refs[fieldName];
-      if (field.getValue() === '') {
-        field.showRequiredError();
-        if (!missingFieldFound) {
-          field.focus();
-          missingFieldFound = true;
+      const field = this.refs[fieldName];
+      if (field) {
+        if (field.getValue() === '' || field.getValue() === false) {
+          field.showRequiredError();
+          if (!missingFieldFound) {
+            field.focus();
+            missingFieldFound = true;
+          }
+        } else {
+          field.clearError();
         }
       }
     }
@@ -281,6 +285,8 @@ var PublishPage = React.createClass({
     if (newChannelName.length > 1 && !lbry.nameIsValid(newChannelName.substr(1), false)) {
       this.refs.newChannelName.showError('LBRY channel names must contain only letters, numbers and dashes.');
       return;
+    } else {
+      this.refs.newChannelName.clearError()
     }
 
     this.setState({
@@ -351,16 +357,23 @@ var PublishPage = React.createClass({
     } else if (this.state.myClaimExists) {
       return "You have already used this URL. Publishing to it again will update your previous publish."
     } else if (this.state.topClaimValue) {
-      return <span>A deposit of at least <strong>{this.state.topClaimValue}</strong> {this.state.topClaimValue == 1 ? 'credit' : 'credits'}
+      return <span>A deposit of at least <strong>{this.state.topClaimValue}</strong> {this.state.topClaimValue == 1 ? 'credit ' : 'credits '}
                   is required to win <strong>{this.state.name}</strong>. However, you can still get a perminent URL for any amount.</span>
     } else {
       return '';
     }
   },
+  closeModal: function() {
+    this.setState({
+      modal: null,
+    });
+  },
   render: function() {
     if (this.state.channels === null) {
       return null;
     }
+
+    const lbcInputHelp = "This LBC remains yours and the deposit can be undone at any time."
 
     return (
       <main ref="page">
@@ -377,10 +390,17 @@ var PublishPage = React.createClass({
                        helper={this.state.myClaimExists ? "If you don't choose a file, the file from your existing claim will be used." : null}/>
             </div>
             { !this.state.hasFile ? '' :
+                <div>
                 <div className="card__content">
-                  <FormRow label="Title" type="text" ref="meta_title" name="title" placeholder="Me Not Being A Loser" />
+                  <FormRow label="Title" type="text" ref="meta_title" name="title" placeholder="UFOs Are Real" />
+                </div>
+                <div className="card__content">
                   <FormRow type="text" label="Thumbnail URL" ref="meta_thumbnail" name="thumbnail" placeholder="http://mycompany.com/images/ep_1.jpg" />
+                </div>
+                <div className="card__content">
                   <FormRow label="Description" type="textarea" ref="meta_description" name="description" placeholder="Description of your content" />
+                </div>
+                <div className="card__content">
                   <FormRow label="Language" type="select" defaultValue="en" ref="meta_language" name="language">
                     <option value="en">English</option>
                     <option value="zh">Chinese</option>
@@ -390,12 +410,15 @@ var PublishPage = React.createClass({
                     <option value="ru">Russian</option>
                     <option value="es">Spanish</option>
                   </FormRow>
+                </div>
+                <div className="card__content">
                   <FormRow type="select" label="Maturity" defaultValue="en" ref="meta_nsfw" name="nsfw">
                     <option value=""></option>
                     <option value="0">All Ages</option>
                     <option value="1">Adults Only</option>
                   </FormRow>
-                </div> }
+                </div>
+              </div>}
           </section>
 
           <section className="card">
@@ -409,27 +432,28 @@ var PublishPage = React.createClass({
               <div className="form-row__label-row">
                 <label className="form-row__label">Price</label>
               </div>
-              <FormRow label="Free" type="radio" name="isFree" value="1" onChange={ () => { this.handleFeePrefChange(false) } } checked={!this.state.isFee} />
+              <FormRow label="Free" type="radio" name="isFree" value="1" onChange={ () => { this.handleFeePrefChange(false) } } defaultChecked={!this.state.isFee} />
               <FormField type="radio" name="isFree" label={!this.state.isFee ? 'Choose price...' : 'Price ' }
-                         onChange={ () => { this.handleFeePrefChange(true) } } checked={this.state.isFee} />
+                         onChange={ () => { this.handleFeePrefChange(true) } } defaultChecked={this.state.isFee} />
              <span className={!this.state.isFee ? 'hidden' : ''}>
-               <FormField type="number" step="0.01" placeholder="1.00" onChange={this.handleFeeAmountChange} /> <FormField type="select" onChange={this.handleFeeCurrencyChange}>
+               <FormField type="number" className="form-field__input--inline" step="0.01" placeholder="1.00" onChange={this.handleFeeAmountChange} /> <FormField type="select" onChange={this.handleFeeCurrencyChange}>
                <option value="USD">US Dollars</option>
                <option value="LBC">LBRY credits</option>
              </FormField>
                </span>
               { this.state.isFee ?
-                  <div className="help">
+                  <div className="form-field__helper">
                     If you choose to price this content in dollars, the number of credits charged will be adjusted based on the value of LBRY credits at the time of purchase.
                   </div> : '' }
               <FormRow label="License" type="select" ref="meta_license" name="license" onChange={this.handleLicenseChange}>
+                <option></option>
+                <option>Public Domain</option>
                 <option data-url="https://creativecommons.org/licenses/by/4.0/legalcode">Creative Commons Attribution 4.0 International</option>
                 <option data-url="https://creativecommons.org/licenses/by-sa/4.0/legalcode">Creative Commons Attribution-ShareAlike 4.0 International</option>
                 <option data-url="https://creativecommons.org/licenses/by-nd/4.0/legalcode">Creative Commons Attribution-NoDerivatives 4.0 International</option>
                 <option data-url="https://creativecommons.org/licenses/by-nc/4.0/legalcode">Creative Commons Attribution-NonCommercial 4.0 International</option>
                 <option data-url="https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International</option>
                 <option data-url="https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International</option>
-                <option>Public Domain</option>
                 <option data-license-type="copyright" {... this.state.copyrightChosen ? {value: this.state.copyrightNotice} : {}}>Copyrighted...</option>
                 <option data-license-type="other" {... this.state.otherLicenseChosen ? {value: this.state.otherLicenseDescription} : {}}>Other...</option>
               </FormRow>
@@ -465,7 +489,13 @@ var PublishPage = React.createClass({
                <div className="card__content">
                  <FormRow label="Name" type="text" onChange={this.handleNewChannelNameChange} ref={newChannelName => { this.refs.newChannelName = newChannelName }}
                           value={this.state.newChannelName} />
-                 <FormRow label="Deposit" step="0.01" defaultValue="0.01" type="number" onChange={this.handleNewChannelBidChange} value={this.state.newChannelBid} />
+                 <FormRow label="Deposit"
+                          postfix="LBC"
+                          step="0.01"
+                          type="number"
+                          helper={lbcInputHelp}
+                          onChange={this.handleNewChannelBidChange}
+                          value={this.state.newChannelBid ? this.state.newChannelBid : '10'} />
                  <div className="form-row-submit">
                     <Link button="primary" label={!this.state.creatingChannel ? 'Creating identity' : 'Creating identity...'} onClick={this.handleCreateChannelClick} disabled={this.state.creatingChannel} />
                  </div>
@@ -477,11 +507,11 @@ var PublishPage = React.createClass({
           <section className="card">
             <div className="card__title-primary">
               <h4>Address</h4>
-              <div className="card__subtitle">Where should this content permanently reside?</div>
+              <div className="card__subtitle">Where should this content permanently reside? <Link label="Read more" href="https://lbry.io/faq/naming" />.</div>
             </div>
             <div className="card__content">
-              <FormRow label="lbry://" type="text" ref="name" placeholder="lbry://myname" value={this.state.rawName} onChange={this.handleNameChange}
-                       helper={(<div>Select a URL for this publish. <Link label="Read more" href="https://lbry.io/faq/naming" />.</div>)} />
+              <FormRow prefix="lbry://" type="text" ref="name" placeholder="myname" value={this.state.rawName} onChange={this.handleNameChange}
+                       helper={this.getNameBidHelpText()} />
             </div>
             { this.state.rawName ?
                 <div className="card__content">
@@ -489,10 +519,11 @@ var PublishPage = React.createClass({
                              type="number"
                              step="0.01"
                              label="Deposit"
+                             postfix="LBC"
                              onChange={this.handleBidChange}
-                             value={this.state.bid}
+                             value={this.state.bid ? this.state.bid : '1'}
                              placeholder={this.state.nameResolved ? this.state.topClaimValue + 10 : 100}
-                             helper={this.getNameBidHelpText()} />
+                             helper={lbcInputHelp} />
                 </div> : '' }
           </section>
 
