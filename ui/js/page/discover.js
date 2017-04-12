@@ -65,7 +65,7 @@ const communityCategoryToolTipText = ('Community Content is a public space where
 
 var FeaturedCategory = React.createClass({
   render: function() {
-    return (<div className="card-row">
+    return (<div className="card-row card-row--small">
         { this.props.category ?
           <h3 className="card-row__header">{this.props.category}
             { this.props.category == "community" ?
@@ -80,21 +80,28 @@ var FeaturedCategory = React.createClass({
 var FeaturedContent = React.createClass({
   getInitialState: function() {
     return {
-      featuredNames: {},
+      featuredUris: {},
     };
   },
   componentWillMount: function() {
-    lbryio.call('discover', 'list', { version: "early-access" } ).then((featuredNames) => {
-      this.setState({ featuredNames: featuredNames });
+    lbryio.call('discover', 'list', { version: "early-access" } ).then(({Categories, Uris}) => {
+      let featuredUris = {}
+      Categories.forEach((category) => {
+        if (Uris[category] && Uris[category].length) {
+          featuredUris[category] = Uris[category]
+        }
+      })
+      this.setState({ featuredUris: featuredUris });
     });
   },
   render: function() {
-    console.log(this.state.featuredNames);
     return (
       <div>
         {
-          Object.keys(this.state.featuredNames).map(function(category) {
-            return <FeaturedCategory key={category} category={category} names={this.state.featuredNames[category]} />
+          Object.keys(this.state.featuredUris).map(function(category) {
+            return this.state.featuredUris[category].length ?
+                   <FeaturedCategory key={category} category={category} names={this.state.featuredUris[category]} /> :
+                   '';
           }.bind(this))
         }
       </div>

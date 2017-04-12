@@ -373,8 +373,6 @@ var PublishPage = React.createClass({
               </div>
             </div>
             <div className="card__content">
-              <FormRow label="lbry://" type="text" ref="name" placeholder="lbry://myname" value={this.state.rawName} onChange={this.handleNameChange}
-                       helper={(<div>What LBRY name would you like to claim for this file? <Link label="Read more" href="https://lbry.io/faq/naming" />.</div>)} />
               <FormRow name="file" label="File" ref="file" type="file" onChange={this.onFileChange}
                        helper={this.state.myClaimExists ? "If you don't choose a file, the file from your existing claim will be used." : null}/>
             </div>

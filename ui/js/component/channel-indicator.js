@@ -3,20 +3,18 @@ import lbry from '../lbry.js';
 import uri from '../uri.js';
 import {Icon} from './common.js';
 
-const ChannelIndicator = React.createClass({
+const UriIndicator = React.createClass({
   propTypes: {
     uri: React.PropTypes.string.isRequired,
     hasSignature: React.PropTypes.bool.isRequired,
     signatureIsValid: React.PropTypes.bool,
   },
   render: function() {
-    if (!this.props.hasSignature) {
-      return null;
-    }
 
     const uriObj = uri.parseLbryUri(this.props.uri);
-    if (!uriObj.isChannel) {
-      return null;
+
+    if (!this.props.hasSignature || !uriObj.isChannel) {
+      return <span className="empty">Anonymous</span>;
     }
 
     const channelUriObj = Object.assign({}, uriObj);
@@ -25,7 +23,6 @@ const ChannelIndicator = React.createClass({
 
     let icon, modifier;
     if (this.props.signatureIsValid) {
-      icon = 'icon-check-circle';
       modifier = 'valid';
     } else {
       icon = 'icon-times-circle';
@@ -33,11 +30,13 @@ const ChannelIndicator = React.createClass({
     }
     return (
       <span>
-        by <strong>{channelUri}</strong> {' '}
-        <Icon icon={icon} className={`channel-indicator__icon channel-indicator__icon--${modifier}`} />
+        {channelUri} {' '}
+        { !this.props.signatureIsValid ?
+          <Icon icon={icon} className={`channel-indicator__icon channel-indicator__icon--${modifier}`} /> :
+          '' }
       </span>
     );
   }
 });
 
-export default ChannelIndicator;
+export default UriIndicator;

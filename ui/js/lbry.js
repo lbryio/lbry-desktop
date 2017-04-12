@@ -250,10 +250,6 @@ lbry.getCostInfo = function(lbryUri, callback, errorCallback) {
    *   - includes_data: Boolean; indicates whether or not the data fee info
    *     from Lighthouse is included.
    */
-  if (!name) {
-    throw new Error(`Name required.`);
-  }
-
   function getCostWithData(name, size, callback, errorCallback) {
     lbry.stream_cost_estimate({name, size}).then((cost) => {
       callback({
@@ -507,7 +503,7 @@ lbry.stop = function(callback) {
 lbry.fileInfo = {};
 lbry._subscribeIdCount = 0;
 lbry._fileInfoSubscribeCallbacks = {};
-lbry._fileInfoSubscribeInterval = 5000;
+lbry._fileInfoSubscribeInterval = 500000;
 lbry._balanceSubscribeCallbacks = {};
 lbry._balanceSubscribeInterval = 5000;
 lbry._removedFiles = [];
@@ -519,6 +515,7 @@ lbry._updateClaimOwnershipCache = function(claimId) {
       return match || claimInfo.claim_id == claimId;
     });
   });
+
 };
 
 lbry._updateFileInfoSubscribers = function(outpoint) {

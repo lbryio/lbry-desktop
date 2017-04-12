@@ -88,8 +88,9 @@ var FormatsSection = React.createClass({
 
     return (
       <div>
+        { this.props.metadata.thumbnail ? <div style={{backgroundImage: this.props.metadata.thumbnail}}></div> : '' }
+        <h1>{this.props.metadata.title}</h1>
         <div className="meta">{this.props.uri}</div>
-        <h2>{this.props.metadata.title}</h2>
       {/* In future, anticipate multiple formats, just a guess at what it could look like
       // var formats = this.props.metadata.formats
       // return (<tbody>{formats.map(function(format,i){ */}
@@ -141,7 +142,6 @@ var ShowPage = React.createClass({
 
     return (
       <main>
-        <section className="card">
           {this.state.uriLookupComplete ? (
             <FormatsSection uri={this._uri} outpoint={this.state.outpoint} metadata={this.state.metadata} cost={this.state.cost} costIncludesData={this.state.costIncludesData} contentType={this.state.contentType} />
           ) : (
@@ -150,7 +150,6 @@ var ShowPage = React.createClass({
               There is no content available at <strong>{this._uri}</strong>. If you reached this page from a link within the LBRY interface, please <Link href="?report" label="report a bug" />. Thanks!
             </div>
           )}
-        </section>
       </main>);
   }
 });

@@ -11,7 +11,7 @@ body
   line-height: $font-line-height;
 }
 
-$drawer-width: 240px;
+$drawer-width: 220px;
 
 #drawer
 {
@@ -39,12 +39,8 @@ $drawer-width: 240px;
     .badge
     {
       float: right;
-      background: $color-money;
-      display: inline-block;
-      padding: 2px;
-      color: white;
       margin-top: $spacing-vertical * 0.25 - 2;
-      border-radius: 2px;
+      background: $color-money;
     }
   }
   .drawer-item-selected
@@ -52,6 +48,19 @@ $drawer-width: 240px;
     background: $color-canvas;
     color: $color-primary;
   }
+}
+.badge
+{
+  background: $color-money;
+  display: inline-block;
+  padding: 2px;
+  color: white;
+  border-radius: 2px;
+}
+.credit-amount
+{
+  font-weight: bold;
+  color: $color-money;
 }
 #drawer-handle
 {
