@@ -86,12 +86,10 @@ var PublishPage = React.createClass({
       };
 
       if (this.refs.file.getValue() !== '') {
-	publishArgs.file_path = this.refs.file.getValue();
+	      publishArgs.file_path = this.refs.file.getValue();
       }
 
-      console.log(publishArgs);
       lbry.publish(publishArgs, (message) => {
-        console.log(message);
         this.handlePublishStarted();
       }, null, (error) => {
         this.handlePublishError(error);
@@ -117,13 +115,13 @@ var PublishPage = React.createClass({
       channels: null,
       rawName: '',
       name: '',
-      bid: 0.01,
+      bid: 1,
       hasFile: false,
       feeAmount: '',
       feeCurrency: 'USD',
       channel: 'anonymous',
       newChannelName: '@',
-      newChannelBid: '',
+      newChannelBid: 10,
       nameResolved: false,
       topClaimValue: 0.0,
       myClaimValue: 0.0,
@@ -392,10 +390,10 @@ var PublishPage = React.createClass({
             { !this.state.hasFile ? '' :
                 <div>
                 <div className="card__content">
-                  <FormRow label="Title" type="text" ref="meta_title" name="title" placeholder="UFOs Are Real" />
+                  <FormRow label="Title" type="text" ref="meta_title" name="title" placeholder="Titular Title" />
                 </div>
                 <div className="card__content">
-                  <FormRow type="text" label="Thumbnail URL" ref="meta_thumbnail" name="thumbnail" placeholder="http://mycompany.com/images/ep_1.jpg" />
+                  <FormRow type="text" label="Thumbnail URL" ref="meta_thumbnail" name="thumbnail" placeholder="http://spee.ch/mylogo" />
                 </div>
                 <div className="card__content">
                   <FormRow label="Description" type="textarea" ref="meta_description" name="description" placeholder="Description of your content" />
@@ -495,7 +493,7 @@ var PublishPage = React.createClass({
                           type="number"
                           helper={lbcInputHelp}
                           onChange={this.handleNewChannelBidChange}
-                          value={this.state.newChannelBid ? this.state.newChannelBid : '10'} />
+                          value={this.state.newChannelBid} />
                  <div className="form-row-submit">
                     <Link button="primary" label={!this.state.creatingChannel ? 'Creating identity' : 'Creating identity...'} onClick={this.handleCreateChannelClick} disabled={this.state.creatingChannel} />
                  </div>
@@ -521,7 +519,7 @@ var PublishPage = React.createClass({
                              label="Deposit"
                              postfix="LBC"
                              onChange={this.handleBidChange}
-                             value={this.state.bid ? this.state.bid : '1'}
+                             value={this.state.bid}
                              placeholder={this.state.nameResolved ? this.state.topClaimValue + 10 : 100}
                              helper={lbcInputHelp} />
                 </div> : '' }

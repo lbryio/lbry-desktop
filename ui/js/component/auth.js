@@ -104,20 +104,20 @@ const ConfirmEmailStage = React.createClass({
 });
 
 const WelcomeStage = React.createClass({
-  onRewardClaim: function() {
-    console.log('omg');
-  },
   render: function() {
+    // <p>Thank you
     return (
       <section>
         <h3 className="modal__header">Welcome to LBRY.</h3>
-        <p>LBRY is the first community controlled content marketplace.</p>
-        <p>Since you're new here, we'll toss you some credits.</p>
+        <p>LBRY is kind of like a centaur. Totally normal up top, and <em>way different</em> underneath.</p>
+        <p>On the upper level, LBRY is like other popular video and media sites.</p>
+        <p>Below, LBRY is like nothing else. Through blockchain and decentralization, LBRY is controlled by it's users -- that is, you.</p>
+        <p>Here is a reward for reading our weird centaur metaphor:</p>
         <div style={{textAlign: "center", marginBottom: "12px"}}>
           <RewardLink type="new_user" onRewardClaim={this.onRewardClaim} />
         </div>
-        <p>LBC is blah blah blah.</p>
-        <p>And remember, LBRY is a beta and be safe!</p>
+        <p>This reward earned you <em>LBC</em>. LBC is used to watch stuff and to have say in how the network works.</p>
+        <p>But no need to understand it all just yet! Try watching something next.</p>
       </section>
     );
   }
@@ -157,7 +157,7 @@ export const AuthOverlay = React.createClass({
 
   getInitialState: function() {
     return {
-      stage: "pending",
+      stage: null,
       stageProps: {}
     };
   },
@@ -200,7 +200,9 @@ export const AuthOverlay = React.createClass({
   },
   render: function() {
     if (!this.state.stage || lbryio.user && lbryio.user.HasVerifiedEmail) {
-      return null;
+      if (this.state.stage != "welcome") {
+        return null;
+      }
     }
     const StageContent = this._stages[this.state.stage];
     return (

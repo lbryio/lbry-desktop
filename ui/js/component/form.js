@@ -50,7 +50,8 @@ export let FormField = React.createClass({
     if (this.props.type == 'checkbox') {
       return this.refs.field.checked;
     } else if (this.props.type == 'file') {
-      return !!(this.refs.field.files.length && this.refs.field.files[0].path);
+      return this.refs.field.files.length && this.refs.field.files[0].path ?
+                this.refs.field.files[0].path : null;
     } else {
       return this.refs.field.value;
     }
