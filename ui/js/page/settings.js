@@ -78,20 +78,21 @@ var SettingsPage = React.createClass({
     if (!this.state.daemonSettings) {
       return null;
     }
-
+/*
+ <section className="card">
+ <div className="card__content">
+ <h3>Run on Startup</h3>
+ </div>
+ <div className="card__content">
+ <FormRow type="checkbox"
+ onChange={this.onRunOnStartChange}
+ defaultChecked={this.state.daemonSettings.run_on_startup}
+ label="Run LBRY automatically when I start my computer" />
+ </div>
+ </section>
+ */
     return (
       <main>
-        <section className="card">
-          <div className="card__content">
-            <h3>Run on Startup</h3>
-          </div>
-          <div className="card__content">
-            <FormRow type="checkbox"
-                     onChange={this.onRunOnStartChange}
-                     defaultChecked={this.state.daemonSettings.run_on_startup}
-                     label="Run LBRY automatically when I start my computer" />
-          </div>
-        </section>
         <section className="card">
           <div className="card__content">
             <h3>Download Directory</h3>

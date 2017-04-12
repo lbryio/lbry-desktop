@@ -104,21 +104,45 @@ const ConfirmEmailStage = React.createClass({
 });
 
 const WelcomeStage = React.createClass({
+  propTypes: {
+    endAuth: React.PropTypes.func,
+  },
+  getInitialState: function() {
+    return {
+      hasReward: false,
+      rewardAmount: null,
+    }
+  },
+  onRewardClaim: function(reward) {
+    this.setState({
+      hasReward: true,
+      rewardAmount: reward
+    })
+  },
   render: function() {
-    // <p>Thank you
     return (
-      <section>
-        <h3 className="modal__header">Welcome to LBRY.</h3>
-        <p>LBRY is kind of like a centaur. Totally normal up top, and <em>way different</em> underneath.</p>
-        <p>On the upper level, LBRY is like other popular video and media sites.</p>
-        <p>Below, LBRY is like nothing else. Through blockchain and decentralization, LBRY is controlled by it's users -- that is, you.</p>
-        <p>Here is a reward for reading our weird centaur metaphor:</p>
-        <div style={{textAlign: "center", marginBottom: "12px"}}>
-          <RewardLink type="new_user" onRewardClaim={this.onRewardClaim} />
-        </div>
-        <p>This reward earned you <em>LBC</em>. LBC is used to watch stuff and to have say in how the network works.</p>
-        <p>But no need to understand it all just yet! Try watching something next.</p>
-      </section>
+      !this.state.hasReward ?
+        <Modal type="custom" isOpen={true} contentLabel="Welcome to LBRY" {...this.props}>
+          <section>
+            <h3 className="modal__header">Welcome to LBRY.</h3>
+            <p>LBRY is kind of like a centaur. Totally normal up top, and <em>way different</em> underneath.</p>
+            <p>On the upper level, LBRY is like other popular video and media sites.</p>
+            <p>Below, LBRY is like nothing else. Using blockchain and decentralization, LBRY is controlled by its users -- that is, you -- and no one else.</p>
+            <p>Thanks for being a part of it! Here's a nickel, kid.</p>
+            <div style={{textAlign: "center", marginBottom: "12px"}}>
+              <RewardLink type="new_user" button="primary" onRewardClaim={this.onRewardClaim} onRewardFailure={this.props.endAuth} />
+            </div>
+          </section>
+         </Modal> :
+         <Modal type="alert" overlayClassName="modal-overlay modal-overlay--clear" isOpen={true} contentLabel="Welcome to LBRY" {...this.props} onConfirmed={this.props.endAuth}>
+          <section>
+            <h3 className="modal__header">About Your Reward</h3>
+            <p>You earned a reward of 5 LBRY credits, or <em>LBC</em>.</p>
+            <p>This reward will show in your Wallet momentarily, likely while you are reading this message.</p>
+            <p>LBC is used to compensate creators, to publish, and to have say in how the network works.</p>
+            <p>No need to understand it all just yet! Try watching or downloading something next.</p>
+          </section>
+      </Modal>
     );
   }
 });
@@ -152,12 +176,11 @@ export const AuthOverlay = React.createClass({
     error: ErrorStage,
     email: SubmitEmailStage,
     confirm: ConfirmEmailStage,
-    welcome: WelcomeStage,
+    welcome: WelcomeStage
   },
-
   getInitialState: function() {
     return {
-      stage: null,
+      stage: "pending",
       stageProps: {}
     };
   },
@@ -183,7 +206,13 @@ export const AuthOverlay = React.createClass({
           }
         })
       } else {
-        this.endAuth()
+        lbryio.call('reward', 'list', {}).then(function(userRewards) {
+          userRewards.filter(function(reward) {
+            return reward.RewardType == "new_user" && reward.TransactionID;
+          }).length ?
+             this.endAuth() :
+             this.setState({ stage: "welcome" })
+        }.bind(this));
       }
     }.bind(this)).catch((err) => {
       this.setState({
@@ -199,21 +228,17 @@ export const AuthOverlay = React.createClass({
     })
   },
   render: function() {
-    if (!this.state.stage || lbryio.user && lbryio.user.HasVerifiedEmail) {
-      if (this.state.stage != "welcome") {
+    if (!this.state.stage) {
         return null;
-      }
     }
     const StageContent = this._stages[this.state.stage];
     return (
       this.state.stage != "welcome" ?
-          <ModalPage className="modal-page--full"isOpen={true} contentLabel="Authentication" {...this.props}>
+          <ModalPage className="modal-page--full" isOpen={true} contentLabel="Authentication" {...this.props}>
             <h1>LBRY Early Access</h1>
             <StageContent {...this.state.stageProps} />
           </ModalPage> :
-          <Modal isOpen={true} contentLabel="Welcome to LBRY" {...this.props} onConfirmed={this.endAuth}>
-            <StageContent {...this.state.stageProps} />
-          </Modal>
+          <StageContent endAuth={this.endAuth} {...this.state.stageProps}  />
     );
   }
 });

@@ -3,11 +3,25 @@ import lbry from '../lbry.js';
 import uri from '../uri.js';
 import {FormField, FormRow} from '../component/form.js';
 import {Link} from '../component/link.js';
+import rewards from '../rewards.js';
 import Modal from '../component/modal.js';
 
 var PublishPage = React.createClass({
   _requiredFields: ['meta_title', 'name', 'bid'],
 
+  _requestPublishReward: function() {
+    lbryio.call('reward', 'list', {}).then(function(userRewards) {
+      //already rewarded
+      if (userRewards.filter(function (reward) {
+          return reward.RewardType == rewards.TYPE_FIRST_PUBLISH && reward.TransactionID;
+        }).length) {
+        return;
+      }
+      else {
+        rewards.claimReward(rewards.TYPE_FIRST_PUBLISH)
+      }
+    });
+  },
   _updateChannelList: function(channel) {
     // Calls API to update displayed list of channels. If a channel name is provided, will select
     // that channel at the same time (used immediately after creating a channel)
@@ -334,6 +348,7 @@ var PublishPage = React.createClass({
   },
   componentWillMount: function() {
     this._updateChannelList();
+    this._requestPublishReward();
   },
   componentDidMount: function() {
     document.title = "Publish";
