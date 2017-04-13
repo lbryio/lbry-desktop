@@ -161,10 +161,18 @@ export let FileList = React.createClass({
         seenUris = {};
 
     const fileInfosSorted = this._sortFunctions[this.state.sortBy](this.props.fileInfos);
-    for (let {outpoint, name, channel_name, metadata: {stream: {metadata}}, mime_type, claim_id, has_signature, signature_is_valid} of fileInfosSorted) {
-      if (!metadata || seenUris[name]) {
+    for (let {outpoint, name, channel_name, metadata, mime_type, claim_id, has_signature, signature_is_valid} of fileInfosSorted) {
+      if (seenUris[name] || !claim_id) {
         continue;
       }
+
+      let streamMetadata;
+      if (metadata) {
+        streamMetadata = metadata.stream.metadata;
+      } else {
+        streamMetadata = null;
+      }
+
 
       let fileUri;
       if (!channel_name) {
@@ -174,7 +182,7 @@ export let FileList = React.createClass({
       }
       seenUris[name] = true;
       content.push(<FileTileStream key={outpoint} outpoint={outpoint} uri={fileUri} hideOnRemove={true}
-                                   hidePrice={this.props.hidePrices} metadata={metadata} contentType={mime_type}
+                                   hidePrice={this.props.hidePrices} metadata={streamMetadata} contentType={mime_type}
                                    hasSignature={has_signature} signatureIsValid={signature_is_valid} />);
     }
 

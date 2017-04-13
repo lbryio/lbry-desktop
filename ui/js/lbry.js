@@ -65,7 +65,7 @@ function pendingPublishToDummyClaim({channel_name, name, outpoint, claim_id, txi
 }
 
 function pendingPublishToDummyFileInfo({name, outpoint, claim_id}) {
-  return {name, outpoint, claim_id, metadata: {stream: {metadata: 'Attempting publication'}}};
+  return {name, outpoint, claim_id, null};
 }
 
 
