@@ -162,7 +162,7 @@ export let FileList = React.createClass({
 
     const fileInfosSorted = this._sortFunctions[this.state.sortBy](this.props.fileInfos);
     for (let {outpoint, name, channel_name, metadata: {stream: {metadata}}, mime_type, claim_id, has_signature, signature_is_valid} of fileInfosSorted) {
-      if (!metadata || seenUris[name]) {
+      if (!metadata || seenUris[name] || channel_name === null) {
         continue;
       }
 

@@ -10,24 +10,32 @@ const menu = remote.require('./menu/main-menu');
  * Records a publish attempt in local storage. Returns a dictionary with all the data needed to
  * needed to make a dummy claim or file info object.
  */
-function savePendingPublish(name) {
+function savePendingPublish({name, channel_name}) {
+  const lbryUri = uri.buildLbryUri({name, channel_name}, false);
   const pendingPublishes = getLocal('pendingPublishes') || [];
   const newPendingPublish = {
-    claim_id: 'pending_claim_' + name,
-    txid: 'pending_' + name,
+    name, channel_name,
+    claim_id: 'pending_claim_' + lbryUri,
+    txid: 'pending_' + lbryUri,
     nout: 0,
-    outpoint: 'pending_' + name + ':0',
-    name: name,
+    outpoint: 'pending_' + lbryUri + ':0',
     time: Date.now(),
   };
   setLocal('pendingPublishes', [...pendingPublishes, newPendingPublish]);
   return newPendingPublish;
 }
 
-function removePendingPublish({name, outpoint}) {
-  setLocal('pendingPublishes', getPendingPublishes().filter(
-    (pub) => pub.name != name && pub.outpoint != outpoint
-  ));
+
+/**
+ * If there is a pending publish with the given name or outpoint, remove it.
+ * A channel name may also be provided along with name.
+ */
+function removePendingPublishIfNeeded({name, channel_name, outpoint}) {
+  function pubMatches(pub) {
+    return pub.outpoint === outpoint || (pub.name === name && (!channel_name || pub.channel_name === channel_name));
+  }
+
+  setLocal('pendingPublishes', getPendingPublishes().filter(pub => !pubMatches(pub)));
 }
 
 /**
@@ -36,59 +44,28 @@ function removePendingPublish({name, outpoint}) {
  */
 function getPendingPublishes() {
   const pendingPublishes = getLocal('pendingPublishes') || [];
-
-  const newPendingPublishes = [];
-  for (let pendingPublish of pendingPublishes) {
-    if (Date.now() - pendingPublish.time <= lbry.pendingPublishTimeout) {
-      newPendingPublishes.push(pendingPublish);
-    }
-  }
+  const newPendingPublishes = pendingPublishes.filter(pub => Date.now() - pub.time <= lbry.pendingPublishTimeout);
   setLocal('pendingPublishes', newPendingPublishes);
-  return newPendingPublishes
+  return newPendingPublishes;
 }
 
 /**
- * Gets a pending publish attempt by its name or (fake) outpoint. If none is found (or one is found
- * but it has timed out), returns null.
+ * Gets a pending publish attempt by its name or (fake) outpoint. A channel name can also be
+ * provided along withe the name. If no pending publish is found, returns null.
  */
-function getPendingPublish({name, outpoint}) {
+function getPendingPublish({name, channel_name, outpoint}) {
   const pendingPublishes = getPendingPublishes();
-  const pendingPublishIndex = pendingPublishes.findIndex(
-    ({name: itemName, outpoint: itemOutpoint}) => itemName == name || itemOutpoint == outpoint
-  );
-  const pendingPublish = pendingPublishes[pendingPublishIndex];
-
-  if (pendingPublishIndex == -1) {
-    return null;
-  } else if (Date.now() - pendingPublish.time > lbry.pendingPublishTimeout) {
-    // Pending publish timed out, so remove it from the stored list and don't match
-
-    const newPendingPublishes = pendingPublishes.slice();
-    newPendingPublishes.splice(pendingPublishIndex, 1);
-    setLocal('pendingPublishes', newPendingPublishes);
-    return null;
-  } else {
-    return pendingPublish;
-  }
+  return pendingPublishes.find(
+    pub => pub.outpoint === outpoint || (pub.name === name && (!channel_name || pub.channel_name === channel_name))
+  ) || null;
 }
 
-function pendingPublishToDummyClaim({name, outpoint, claim_id, txid, nout}) {
-  return {
-    name: name,
-    outpoint: outpoint,
-    claim_id: claim_id,
-    txid: txid,
-    nout: nout,
-  };
+function pendingPublishToDummyClaim({channel_name, name, outpoint, claim_id, txid, nout}) {
+  return {name, outpoint, claim_id, txid, nout, ... channel_name ? {channel_name} : {}};
 }
 
 function pendingPublishToDummyFileInfo({name, outpoint, claim_id}) {
-  return {
-    name: name,
-    outpoint: outpoint,
-    claim_id: claim_id,
-    metadata: "Attempting publication",
-  };
+  return {name, outpoint, claim_id, metadata: {stream: {metadata: 'Attempting publication'}}};
 }
 
 
@@ -243,20 +220,15 @@ lbry.getCostInfo = function(lbryUri, callback, errorCallback) {
    *   - includes_data: Boolean; indicates whether or not the data fee info
    *     from Lighthouse is included.
    */
-  function getCostWithData(name, size, callback, errorCallback) {
-    lbry.stream_cost_estimate({name, size}).then((cost) => {
-      callback({
-        cost: cost,
-        includesData: true,
-      });
-    }, errorCallback);
+  if (!lbryUri) {
+    throw new Error(`URI required.`);
   }
 
-  function getCostNoData(name, callback, errorCallback) {
-    lbry.stream_cost_estimate({name}).then((cost) => {
+  function getCost(lbryUri, size, callback, errorCallback) {
+    lbry.stream_cost_estimate({uri: lbryUri, ... size !== null ? {size} : {}}).then((cost) => {
       callback({
         cost: cost,
-        includesData: false,
+        includesData: size !== null,
       });
     }, errorCallback);
   }
@@ -265,9 +237,9 @@ lbry.getCostInfo = function(lbryUri, callback, errorCallback) {
   const name = uriObj.path || uriObj.name;
 
   lighthouse.get_size_for_name(name).then((size) => {
-    getCostWithData(name, size, callback, errorCallback);
+    getCost(name, size, callback, errorCallback);
   }, () => {
-    getCostNoData(name, callback, errorCallback);
+    getCost(name, null, callback, errorCallback);
   });
 }
 
@@ -335,12 +307,14 @@ lbry.publish = function(params, fileListedCallback, publishedCallback, errorCall
     returnedPending = true;
 
     if (publishedCallback) {
-      savePendingPublish(params.name);
+      const {name, channel_name} = params;
+      savePendingPublish({name, ... channel_name ? {channel_name} : {}});
       publishedCallback(true);
     }
 
     if (fileListedCallback) {
-      savePendingPublish(params.name);
+      const {name, channel_name} = params;
+      savePendingPublish({name, ... channel_name ? {channel_name} : {}});
       fileListedCallback(true);
     }
   }, 2000);
@@ -604,14 +578,14 @@ lbry.showMenuIfNeeded = function() {
  */
 lbry.file_list = function(params={}) {
   return new Promise((resolve, reject) => {
-    const {name, outpoint} = params;
+    const {name, channel_name, outpoint} = params;
 
     /**
      * If we're searching by outpoint, check first to see if there's a matching pending publish.
      * Pending publishes use their own faux outpoints that are always unique, so we don't need
      * to check if there's a real file.
      */
-    if (outpoint !== undefined) {
+    if (outpoint) {
       const pendingPublish = getPendingPublish({outpoint});
       if (pendingPublish) {
         resolve([pendingPublishToDummyFileInfo(pendingPublish)]);
@@ -620,14 +594,8 @@ lbry.file_list = function(params={}) {
     }
 
     lbry.call('file_list', params, (fileInfos) => {
-      // Remove any pending publications that are now listed in the file manager
+      removePendingPublishIfNeeded({name, channel_name, outpoint});
 
-      const pendingPublishes = getPendingPublishes();
-      for (let {name: itemName} of fileInfos) {
-        if (pendingPublishes.find(() => name == itemName)) {
-          removePendingPublish({name: name});
-        }
-      }
       const dummyFileInfos = getPendingPublishes().map(pendingPublishToDummyFileInfo);
       resolve([...fileInfos, ...dummyFileInfos]);
     }, reject, reject);
@@ -637,13 +605,13 @@ lbry.file_list = function(params={}) {
 lbry.claim_list_mine = function(params={}) {
   return new Promise((resolve, reject) => {
     lbry.call('claim_list_mine', params, (claims) => {
-      // Filter out pending publishes when the name is already in the file manager
-      const dummyClaims = getPendingPublishes().filter(
-        (pub) => !claims.find(({name}) => name == pub.name)
-      ).map(pendingPublishToDummyClaim);
+      for (let {name, channel_name, txid, nout} of claims) {
+        removePendingPublishIfNeeded({name, channel_name, outpoint: txid + ':' + nout});
+      }
 
+      const dummyClaims = getPendingPublishes().map(pendingPublishToDummyClaim);
       resolve([...claims, ...dummyClaims]);
-    }, reject, reject);
+    }, reject, reject)
   });
 }
 
