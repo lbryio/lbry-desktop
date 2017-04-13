@@ -13,7 +13,7 @@ export let FileTileStream = React.createClass({
 
   propTypes: {
     uri: React.PropTypes.string,
-    metadata: React.PropTypes.object.isRequired,
+    metadata: React.PropTypes.object,
     contentType: React.PropTypes.string.isRequired,
     outpoint: React.PropTypes.string,
     hasSignature: React.PropTypes.bool,
@@ -75,14 +75,14 @@ export let FileTileStream = React.createClass({
 
     const lbryUri = uri.normalizeLbryUri(this.props.uri);
     const metadata = this.props.metadata;
-    const isConfirmed = typeof metadata == 'object';
+    const isConfirmed = !!metadata;
     const title = isConfirmed ? metadata.title : lbryUri;
     const obscureNsfw = this.props.obscureNsfw && isConfirmed && metadata.nsfw;
     return (
       <section className={ 'file-tile card ' + (obscureNsfw ? 'card--obscured ' : '') } onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
         <div className={"row-fluid card__inner file-tile__row"}>
           <div className="span3">
-            <a href={'?show=' + lbryUri}><Thumbnail className="file-tile__thumbnail" src={metadata.thumbnail} alt={'Photo for ' + (title || this.props.uri)} /></a>
+            <a href={'?show=' + lbryUri}><Thumbnail className="file-tile__thumbnail" {... metadata && metadata.thumbnail ? {src: metadata.thumbnail} : {}} alt={'Photo for ' + (title || this.props.uri)} /></a>
           </div>
           <div className="span9">
             { !this.props.hidePrice
@@ -188,7 +188,7 @@ export let FileCardStream = React.createClass({
 
     const lbryUri = uri.normalizeLbryUri(this.props.uri);
     const metadata = this.props.metadata;
-    const isConfirmed = typeof metadata == 'object';
+    const isConfirmed = !!metadata;
     const title = isConfirmed ? metadata.title : lbryUri;
     const obscureNsfw = this.props.obscureNsfw && isConfirmed && metadata.nsfw;
     const primaryUrl = '?show=' + lbryUri;

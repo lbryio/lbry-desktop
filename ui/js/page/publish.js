@@ -81,14 +81,16 @@ var PublishPage = React.createClass({
       var metadata = {};
     }
 
-    for (let metaField of ['title', 'description', 'thumbnail', 'license', 'license_url', 'language', 'nsfw']) {
+    for (let metaField of ['title', 'description', 'thumbnail', 'license', 'license_url', 'language']) {
       var value = this.refs['meta_' + metaField].getValue();
       if (value !== '') {
         metadata[metaField] = value;
       }
     }
 
-    var licenseUrl = this.refs.meta_license_url.getValue();
+    metadata.nsfw = Boolean(parseInt(!!this.refs.meta_nsfw.getValue()));
+
+    const licenseUrl = this.refs.meta_license_url.getValue();
     if (licenseUrl) {
       metadata.license_url = licenseUrl;
     }
@@ -428,7 +430,7 @@ var PublishPage = React.createClass({
                 </div>
                 <div className="card__content">
                   <FormRow type="select" label="Maturity" defaultValue="en" ref="meta_nsfw" name="nsfw">
-                    <option value=""></option>
+                    {/* <option value=""></option> */}
                     <option value="0">All Ages</option>
                     <option value="1">Adults Only</option>
                   </FormRow>
