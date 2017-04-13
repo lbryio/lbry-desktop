@@ -18,9 +18,9 @@ export function setLocal(key, value) {
  * Thin wrapper around localStorage.getItem(). Parses JSON and returns undefined if the value
  * is not set yet.
  */
-export function getSession(key) {
+export function getSession(key, fallback=undefined) {
   const itemRaw = sessionStorage.getItem(key);
-  return itemRaw === null ? undefined : JSON.parse(itemRaw);
+  return itemRaw === null ? fallback : JSON.parse(itemRaw);
 }
 
 /**

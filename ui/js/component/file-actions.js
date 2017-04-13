@@ -2,7 +2,7 @@ import React from 'react';
 import lbry from '../lbry.js';
 import {Link} from '../component/link.js';
 import {Icon} from '../component/common.js';
-import Modal from './modal.js';
+import {Modal} from './modal.js';
 import {FormField} from './form.js';
 import {ToolTip} from '../component/tooltip.js';
 import {DropDownMenu, DropDownMenuItem} from './menu.js';
@@ -25,7 +25,7 @@ let WatchLink = React.createClass({
     if (this.props.downloadStarted) {
       this.startVideo();
     } else {
-      lbry.getCostInfo(this.props.uri, ({cost}) => {
+      lbry.getCostInfo(this.props.uri).then(({cost}) => {
         lbry.getBalance((balance) => {
           if (cost > balance) {
             this.setState({
@@ -79,7 +79,8 @@ let FileActionsRow = React.createClass({
       menuOpen: false,
       deleteChecked: false,
       attemptingDownload: false,
-      attemptingRemove: false
+      attemptingRemove: false,
+      affirmedPurchase: false
     }
   },
   onFileInfoUpdate: function(fileInfo) {
@@ -95,14 +96,16 @@ let FileActionsRow = React.createClass({
       attemptingDownload: true,
       attemptingRemove: false
     });
-    lbry.getCostInfo(this.props.uri, ({cost}) => {
+    lbry.getCostInfo(this.props.uri).then(({cost}) => {
+      console.log(cost);
+      console.log(this.props.uri);
       lbry.getBalance((balance) => {
         if (cost > balance) {
           this.setState({
             modal: 'notEnoughCredits',
             attemptingDownload: false,
           });
-        } else {
+        } else if (this.state.affirmedPurchase) {
           lbry.get({uri: this.props.uri}).then((streamInfo) => {
             if (streamInfo === null || typeof streamInfo !== 'object') {
               this.setState({
@@ -111,6 +114,11 @@ let FileActionsRow = React.createClass({
               });
             }
           });
+        } else {
+          this.setState({
+            attemptingDownload: false,
+            modal: 'affirmPurchase'
+          })
         }
       });
     });
@@ -152,6 +160,13 @@ let FileActionsRow = React.createClass({
       fileInfo: false,
       attemptingDownload: false
     });
+  },
+  onAffirmPurchase: function() {
+    this.setState({
+      affirmedPurchase: true,
+      modal: null
+    });
+    this.tryDownload();
   },
   openMenu: function() {
     this.setState({
@@ -209,6 +224,10 @@ let FileActionsRow = React.createClass({
             <DropDownMenuItem key={0} onClick={this.handleRevealClicked} label={openInFolderMessage} />
             <DropDownMenuItem key={1} onClick={this.handleRemoveClicked} label="Remove..." />
           </DropDownMenu> : '' }
+        <Modal type="confirm" isOpen={this.state.modal == 'affirmPurchase'}
+               contentLabel="Confirm Purchase"  onConfirmed={this.onAffirmPurchase} onAborted={this.closeModal}>
+          Confirm you want to purchase this bro.
+        </Modal>
         <Modal isOpen={this.state.modal == 'notEnoughCredits'} contentLabel="Not enough credits"
                onConfirmed={this.closeModal}>
           You don't have enough LBRY credits to pay for this stream.
@@ -261,6 +280,7 @@ export let FileActions = React.createClass({
   componentDidMount: function() {
     this._isMounted = true;
     this._fileInfoSubscribeId = lbry.fileInfoSubscribe(this.props.outpoint, this.onFileInfoUpdate);
+
     lbry.get_availability({uri: this.props.uri}, (availability) => {
       if (this._isMounted) {
         this.setState({

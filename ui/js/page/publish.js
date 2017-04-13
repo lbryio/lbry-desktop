@@ -4,6 +4,7 @@ import uri from '../uri.js';
 import {FormField, FormRow} from '../component/form.js';
 import {Link} from '../component/link.js';
 import rewards from '../rewards.js';
+import lbryio from '../lbryio.js';
 import Modal from '../component/modal.js';
 
 var PublishPage = React.createClass({
@@ -26,6 +27,7 @@ var PublishPage = React.createClass({
     // Calls API to update displayed list of channels. If a channel name is provided, will select
     // that channel at the same time (used immediately after creating a channel)
     lbry.channel_list_mine().then((channels) => {
+      rewards.claimReward(rewards.TYPE_FIRST_CHANNEL)
       this.setState({
         channels: channels,
         ... channel ? {channel} : {}
@@ -348,7 +350,7 @@ var PublishPage = React.createClass({
   },
   componentWillMount: function() {
     this._updateChannelList();
-    this._requestPublishReward();
+    // this._requestPublishReward();
   },
   componentDidMount: function() {
     document.title = "Publish";
@@ -510,7 +512,7 @@ var PublishPage = React.createClass({
                           onChange={this.handleNewChannelBidChange}
                           value={this.state.newChannelBid} />
                  <div className="form-row-submit">
-                    <Link button="primary" label={!this.state.creatingChannel ? 'Creating identity' : 'Creating identity...'} onClick={this.handleCreateChannelClick} disabled={this.state.creatingChannel} />
+                    <Link button="primary" label={!this.state.creatingChannel ? 'Create identity' : 'Creating identity...'} onClick={this.handleCreateChannelClick} disabled={this.state.creatingChannel} />
                  </div>
                 </div>
               : null}

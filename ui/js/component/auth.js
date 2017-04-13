@@ -40,7 +40,7 @@ const SubmitEmailStage = React.createClass({
     return (
       <section>
         <form onSubmit={this.handleSubmit}>
-          <FormRow ref={(ref) => { this._emailRow = ref }} type="text" label="Email" placeholder="webmaster@toplbryfan.com"
+          <FormRow ref={(ref) => { this._emailRow = ref }} type="text" label="Email" placeholder="admin@toplbryfan.com"
                      name="email" value={this.state.email}
                      onChange={this.handleEmailChanged} />
           <div className="form-row-submit">
@@ -125,9 +125,9 @@ const WelcomeStage = React.createClass({
         <Modal type="custom" isOpen={true} contentLabel="Welcome to LBRY" {...this.props}>
           <section>
             <h3 className="modal__header">Welcome to LBRY.</h3>
-            <p>LBRY is kind of like a centaur. Totally normal up top, and <em>way different</em> underneath.</p>
+            <p>Using LBRY is like dating a centaur. Totally normal up top, and <em>way different</em> underneath.</p>
             <p>On the upper level, LBRY is like other popular video and media sites.</p>
-            <p>Below, LBRY is like nothing else. Using blockchain and decentralization, LBRY is controlled by its users -- that is, you -- and no one else.</p>
+            <p>Below, LBRY is like nothing else. Using blockchain and decentralization, LBRY is controlled by its users -- you -- and no one else.</p>
             <p>Thanks for being a part of it! Here's a nickel, kid.</p>
             <div style={{textAlign: "center", marginBottom: "12px"}}>
               <RewardLink type="new_user" button="primary" onRewardClaim={this.onRewardClaim} onRewardFailure={this.props.endAuth} />
@@ -180,7 +180,7 @@ export const AuthOverlay = React.createClass({
   },
   getInitialState: function() {
     return {
-      stage: "pending",
+      stage: null,
       stageProps: {}
     };
   },

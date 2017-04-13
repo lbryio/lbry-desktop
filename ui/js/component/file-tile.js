@@ -3,51 +3,8 @@ import lbry from '../lbry.js';
 import uri from '../uri.js';
 import {Link} from '../component/link.js';
 import {FileActions} from '../component/file-actions.js';
-import {Thumbnail, TruncatedText, CreditAmount} from '../component/common.js';
+import {Thumbnail, TruncatedText, FilePrice} from '../component/common.js';
 import UriIndicator from '../component/channel-indicator.js';
-
-let FilePrice = React.createClass({
-  _isMounted: false,
-
-  propTypes: {
-    uri: React.PropTypes.string
-  },
-
-  getInitialState: function() {
-    return {
-      cost: null,
-      costIncludesData: null,
-    }
-  },
-
-  componentDidMount: function() {
-    this._isMounted = true;
-
-    lbry.getCostInfo(this.props.uri, ({cost, includesData}) => {
-      if (this._isMounted) {
-        this.setState({
-          cost: cost,
-          costIncludesData: includesData,
-        });
-      }
-    }, (err) => {
-      console.log('error from getCostInfo callback:', err)
-      // If we get an error looking up cost information, do nothing
-    });
-  },
-
-  componentWillUnmount: function() {
-    this._isMounted = false;
-  },
-
-  render: function() {
-    return (
-          this.state.cost !== null ?
-            <CreditAmount amount={this.state.cost} isEstimate={!this.state.costIncludesData}/> :
-            <span className="credit-amount">...</span>
-    );
-  }
-});
 
 /*should be merged into FileTile once FileTile is refactored to take a single id*/
 export let FileTileStream = React.createClass({
@@ -234,7 +191,7 @@ export let FileCardStream = React.createClass({
     const isConfirmed = typeof metadata == 'object';
     const title = isConfirmed ? metadata.title : lbryUri;
     const obscureNsfw = this.props.obscureNsfw && isConfirmed && metadata.nsfw;
-    const primaryUrl = '?watch=' + lbryUri;
+    const primaryUrl = '?show=' + lbryUri;
     return (
       <section className={ 'card card--small card--link ' + (obscureNsfw ? 'card--obscured ' : '') } onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
         <div className="card__inner">
@@ -242,7 +199,7 @@ export let FileCardStream = React.createClass({
             <div className="card__title-identity">
               <h5><TruncatedText lines={1}>{title}</TruncatedText></h5>
               <div className="card__subtitle">
-                { !this.props.hidePrice ? <span style={{float: "right"}}><FilePrice uri={this.props.uri} /></span>  : null}
+                { !this.props.hidePrice ? <span style={{float: "right"}}><FilePrice uri={this.props.uri} metadata={metadata} /></span>  : null}
                 <UriIndicator uri={lbryUri} metadata={metadata} contentType={this.props.contentType}
                               hasSignature={this.props.hasSignature} signatureIsValid={this.props.signatureIsValid} />
               </div>
@@ -288,11 +245,12 @@ export let FileTile = React.createClass({
   componentDidMount: function() {
     this._isMounted = true;
 
-    lbry.resolve({uri: this.props.uri}).then(({claim: claimInfo}) => {
-      if (this._isMounted && claimInfo.value.stream.metadata) {
+    lbry.resolve({uri: this.props.uri}).then((resolutionInfo) => {
+      if (this._isMounted && resolutionInfo && resolutionInfo.claim && resolutionInfo.claim.value &&
+                    resolutionInfo.claim.value.stream && resolutionInfo.claim.value.stream.metadata) {
         // In case of a failed lookup, metadata will be null, in which case the component will never display
         this.setState({
-          claimInfo: claimInfo,
+          claimInfo: resolutionInfo.claim,
         });
       }
     });

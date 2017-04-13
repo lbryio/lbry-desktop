@@ -1,7 +1,7 @@
 import lighthouse from './lighthouse.js';
 import jsonrpc from './jsonrpc.js';
 import uri from './uri.js';
-import {getLocal, setLocal} from './utils.js';
+import {getLocal, getSession, setSession, setLocal} from './utils.js';
 
 const {remote} = require('electron');
 const menu = remote.require('./menu/main-menu');
@@ -93,7 +93,6 @@ lbry.call = function (method, params, callback, errorCallback, connectFailedCall
   jsonrpc.call(lbry.daemonConnectionString, method, [params], callback, errorCallback, connectFailedCallback);
 }
 
-
 //core
 lbry._connectPromise = null;
 lbry.connect = function() {
@@ -171,16 +170,6 @@ lbry.sendToAddress = function(amount, address, callback, errorCallback) {
   lbry.call("send_amount_to_address", { "amount" : amount, "address": address }, callback, errorCallback);
 }
 
-lbry.resolveName = function(name, callback) {
-  if (!name) {
-    throw new Error(`Name required.`);
-  }
-  lbry.call('resolve_name', { 'name': name }, callback, () => {
-    // For now, assume any error means the name was not resolved
-    callback(null);
-  });
-}
-
 lbry.getClaimInfo = function(name, callback) {
   if (!name) {
     throw new Error(`Name required.`);
@@ -209,7 +198,7 @@ lbry.getPeersForBlobHash = function(blobHash, callback) {
   });
 }
 
-lbry.getCostInfo = function(lbryUri, callback, errorCallback) {
+lbry.getCostInfo = function(lbryUri) {
   /**
    * Takes a LBRY URI; will first try and calculate a total cost using
    * Lighthouse. If Lighthouse can't be reached, it just retrives the
@@ -223,24 +212,29 @@ lbry.getCostInfo = function(lbryUri, callback, errorCallback) {
   if (!lbryUri) {
     throw new Error(`URI required.`);
   }
+  return new Promise((resolve, reject) => {
+    function getCost(lbryUri, size) {
+      lbry.stream_cost_estimate({uri: lbryUri, ... size !== null ? {size} : {}}).then((cost) => {
+        callback({
+          cost: cost,
+          includesData: size !== null,
+        });
+      }, reject);
+    }
 
-  function getCost(lbryUri, size, callback, errorCallback) {
-    lbry.stream_cost_estimate({uri: lbryUri, ... size !== null ? {size} : {}}).then((cost) => {
-      callback({
-        cost: cost,
-        includesData: size !== null,
-      });
-    }, errorCallback);
-  }
+    const uriObj = uri.parseLbryUri(lbryUri);
+    const name = uriObj.path || uriObj.name;
 
-  const uriObj = uri.parseLbryUri(lbryUri);
-  const name = uriObj.path || uriObj.name;
-
-  lighthouse.get_size_for_name(name).then((size) => {
-    getCost(name, size, callback, errorCallback);
-  }, () => {
-    getCost(name, null, callback, errorCallback);
-  });
+    lighthouse.get_size_for_name(name).then((size) => {
+      if (size) {
+        getCost(name, size);
+      } else {
+        getCost(name, null);
+      }
+    }, () => {
+      getCost(name, null);
+    });
+  })
 }
 
 lbry.getMyClaims = function(callback) {
@@ -612,6 +606,25 @@ lbry.claim_list_mine = function(params={}) {
       const dummyClaims = getPendingPublishes().map(pendingPublishToDummyClaim);
       resolve([...claims, ...dummyClaims]);
     }, reject, reject)
+  });
+}
+
+lbry.resolve = function(params={}) {
+  const claimCacheKey = 'resolve_claim_cache',
+        claimCache = getSession(claimCacheKey, {})
+  return new Promise((resolve, reject) => {
+    if (!params.uri) {
+      throw "Resolve has hacked cache on top of it that requires a URI"
+    }
+    if (params.uri && claimCache[params.uri]) {
+      resolve(claimCache[params.uri]);
+    } else {
+      lbry.call('resolve', params, function(data) {
+        claimCache[params.uri] = data;
+        setSession(claimCacheKey, claimCache)
+        resolve(data)
+      }, reject)
+    }
   });
 }
 
