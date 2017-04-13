@@ -8,7 +8,7 @@ import lbryio from '../lbryio.js';
 import Modal from '../component/modal.js';
 
 var PublishPage = React.createClass({
-  _requiredFields: ['meta_title', 'name', 'bid'],
+  _requiredFields: ['meta_title', 'name', 'bid', 'tos_agree'],
 
   _requestPublishReward: function() {
     lbryio.call('reward', 'list', {}).then(function(userRewards) {
@@ -314,6 +314,11 @@ var PublishPage = React.createClass({
       newChannelBid: event.target.value,
     });
   },
+  handleTOSChange: function(event) {
+    this.setState({
+      TOSAgreed: event.target.checked,
+    });
+  },
   handleCreateChannelClick: function (event) {
     if (this.state.newChannelName.length < 5) {
       this.refs.newChannelName.showError('LBRY channel names must be at least 4 characters in length.');
@@ -542,6 +547,17 @@ var PublishPage = React.createClass({
                              placeholder={this.state.nameResolved ? this.state.topClaimValue + 10 : 100}
                              helper={lbcInputHelp} />
                 </div> : '' }
+          </section>
+
+          <section className="card">
+            <div className="card__title-primary">
+              <h4>Terms of Service</h4>
+            </div>
+            <div className="card__content">
+              <FormRow label={
+                <span>I agree to the <Link href="https://www.lbry.io/termsofservice" label="LBRY terms of service" checked={this.state.TOSAgreed} /></span>
+              } type="checkbox" name="tos_agree" ref={(field) => { this.refs.tos_agree = field }} onChange={this.handleTOSChange} />
+            </div>
           </section>
 
           <div className="card-series-submit">
