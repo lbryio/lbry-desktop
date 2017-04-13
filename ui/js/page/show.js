@@ -62,7 +62,6 @@ let ShowPage = React.createClass({
     document.title = this._uri;
 
     lbry.resolve({uri: this._uri}).then(({ claim: {txid, nout, has_signature, signature_is_valid, value: {stream: {metadata, source: {contentType}}}}}) => {
-      console.log({txid, nout, claim: {value: {stream: {metadata, source: {contentType}}}}} );
       this.setState({
         outpoint: txid + ':' + nout,
         metadata: metadata,
@@ -86,17 +85,15 @@ let ShowPage = React.createClass({
     }
 
     //                  <div className="card__media" style={{ backgroundImage: "url('" + metadata.thumbnail + "')" }}></div>
-
     const
       metadata = this.state.uriLookupComplete ? this.state.metadata : null,
       title = this.state.uriLookupComplete ? metadata.title : this._uri;
 
-    console.log(metadata);
     return (
       <main className="constrained-page">
         <section className="show-page-media">
-          { this.props.contentType && this.props.contentType.startsWith('video/') ?
-              <Video className="video-embedded" uri={this._uri} /> :
+          { this.state.contentType && this.state.contentType.startsWith('video/') ?
+              <Video className="video-embedded" uri={this._uri} metadata={metadata} /> :
               <Thumbnail src={metadata.thumbnail} /> }
         </section>
         <section className="card">

@@ -3,4 +3,7 @@
 .show-page-media {
   text-align: center;
   margin-bottom: $spacing-vertical;
+  img {
+    max-width: 100%;
+  }
 }
