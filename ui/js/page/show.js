@@ -2,105 +2,45 @@ import React from 'react';
 import lbry from '../lbry.js';
 import lighthouse from '../lighthouse.js';
 import uri from '../uri.js';
-import {CreditAmount, Thumbnail} from '../component/common.js';
+import {Video} from '../page/watch.js'
+import {TruncatedText, Thumbnail, FilePrice, BusyMessage} from '../component/common.js';
 import {FileActions} from '../component/file-actions.js';
 import {Link} from '../component/link.js';
-
-var formatItemImgStyle = {
-  maxWidth: '100%',
-  maxHeight: '100%',
-  display: 'block',
-  marginLeft: 'auto',
-  marginRight: 'auto',
-  marginTop: '5px',
-};
+import UriIndicator from '../component/channel-indicator.js';
 
 var FormatItem = React.createClass({
   propTypes: {
     metadata: React.PropTypes.object,
     contentType: React.PropTypes.string,
-    cost: React.PropTypes.number,
     uri: React.PropTypes.string,
     outpoint: React.PropTypes.string,
-    costIncludesData: React.PropTypes.bool,
   },
   render: function() {
     const {thumbnail, author, title, description, language, license} = this.props.metadata;
     const mediaType = lbry.getMediaType(this.props.contentType);
-    var costIncludesData = this.props.costIncludesData;
-    var cost = this.props.cost || 0.0;
 
     return (
-      <div className="row-fluid">
-        <div className="span4">
-          <Thumbnail src={thumbnail} alt={'Photo for ' + title} style={formatItemImgStyle} />
-        </div>
-        <div className="span8">
-          <p>{description}</p>
-          <section>
-            <table className="table-standard">
-              <tbody>
-                <tr>
-                  <td>Content-Type</td><td>{this.props.contentType}</td>
-                </tr>
-                <tr>
-                  <td>Cost</td><td><CreditAmount amount={cost} isEstimate={!costIncludesData}/></td>
-                </tr>
-                <tr>
-                  <td>Author</td><td>{author}</td>
-                </tr>
-                <tr>
-                  <td>Language</td><td>{language}</td>
-                </tr>
-                <tr>
-                  <td>License</td><td>{license}</td>
-                </tr>
-              </tbody>
-            </table>
-          </section>
-          <FileActions uri={this._uri} outpoint={this.props.outpoint} metadata={this.props.metadata} contentType={this.props.contentType} />
-          <section>
-            <Link href="https://lbry.io/dmca" label="report" className="button-text-help" />
-          </section>
-        </div>
-      </div>
-      );
+      <table className="table-standard">
+        <tbody>
+          <tr>
+            <td>Content-Type</td><td>{this.props.contentType}</td>
+          </tr>
+          <tr>
+            <td>Author</td><td>{author}</td>
+          </tr>
+          <tr>
+            <td>Language</td><td>{language}</td>
+          </tr>
+          <tr>
+            <td>License</td><td>{license}</td>
+          </tr>
+        </tbody>
+      </table>
+    );
   }
 });
 
-var FormatsSection = React.createClass({
-  propTypes: {
-    uri: React.PropTypes.string,
-    outpoint: React.PropTypes.string,
-    metadata: React.PropTypes.object,
-    contentType: React.PropTypes.string,
-    cost: React.PropTypes.number,
-    costIncludesData: React.PropTypes.bool,
-  },
-  render: function() {
-    if(this.props.metadata == null)
-    {
-      return (
-        <div>
-          <h2>Sorry, no results found for "{name}".</h2>
-        </div>);
-    }
-
-    return (
-      <div>
-        { this.props.metadata.thumbnail ? <div style={{backgroundImage: this.props.metadata.thumbnail}}></div> : '' }
-        <h1>{this.props.metadata.title}</h1>
-        <div className="meta">{this.props.uri}</div>
-      {/* In future, anticipate multiple formats, just a guess at what it could look like
-      // var formats = this.props.metadata.formats
-      // return (<tbody>{formats.map(function(format,i){ */}
-          <FormatItem metadata={this.props.metadata} contentType={this.props.contentType} cost={this.props.cost} uri={this.props.uri} outpoint={this.props.outpoint} costIncludesData={this.props.costIncludesData} />
-      {/*  })}</tbody>); */}
-      </div>);
-  }
-});
-
-var ShowPage = React.createClass({
+let ShowPage = React.createClass({
   _uri: null,
 
   propTypes: {
@@ -110,6 +50,8 @@ var ShowPage = React.createClass({
     return {
       metadata: null,
       contentType: null,
+      hasSignature: false,
+      signatureIsValid: false,
       cost: null,
       costIncludesData: null,
       uriLookupComplete: null,
@@ -119,16 +61,19 @@ var ShowPage = React.createClass({
     this._uri = uri.normalizeLbryUri(this.props.uri);
     document.title = this._uri;
 
-    lbry.resolve({uri: this._uri}).then(({txid, nout, claim: {value: {stream: {metadata, source: {contentType}}}}}) => {
+    lbry.resolve({uri: this._uri}).then(({ claim: {txid, nout, has_signature, signature_is_valid, value: {stream: {metadata, source: {contentType}}}}}) => {
+      console.log({txid, nout, claim: {value: {stream: {metadata, source: {contentType}}}}} );
       this.setState({
         outpoint: txid + ':' + nout,
         metadata: metadata,
+        hasSignature: has_signature,
+        signatureIsValid: signature_is_valid,
         contentType: contentType,
         uriLookupComplete: true,
       });
     });
 
-    lbry.getCostInfo(this._uri, ({cost, includesData}) => {
+    lbry.getCostInfo(this._uri).then(({cost, includesData}) => {
       this.setState({
         cost: cost,
         costIncludesData: includesData,
@@ -140,17 +85,51 @@ var ShowPage = React.createClass({
       return null;
     }
 
+    //                  <div className="card__media" style={{ backgroundImage: "url('" + metadata.thumbnail + "')" }}></div>
+
+    const
+      metadata = this.state.uriLookupComplete ? this.state.metadata : null,
+      title = this.state.uriLookupComplete ? metadata.title : this._uri;
+
     return (
-      <main>
-          {this.state.uriLookupComplete ? (
-            <FormatsSection uri={this._uri} outpoint={this.state.outpoint} metadata={this.state.metadata} cost={this.state.cost} costIncludesData={this.state.costIncludesData} contentType={this.state.contentType} />
-          ) : (
-            <div>
-              <h2>No content</h2>
-              There is no content available at <strong>{this._uri}</strong>. If you reached this page from a link within the LBRY interface, please <Link href="?report" label="report a bug" />. Thanks!
+      <main className="constrained-page">
+        <section className="show-page-media">
+          { this.props.contentType && this.props.contentType.startsWith('video/') ?
+              <Video className="video-embedded" uri={this._uri} /> :
+              <Thumbnail src={metadata.thumbnail} /> }
+        </section>
+        <section className="card">
+          <div className="card__inner">
+            <div className="card__title-identity">
+              <span style={{float: "right"}}><FilePrice uri={this._uri} /></span>
+              <h1>{title}</h1>
+              { this.state.uriLookupComplete ?
+                <div>
+                  <div className="card__subtitle">
+                    <UriIndicator uri={this._uri} hasSignature={this.state.hasSignature} signatureIsValid={this.state.signatureIsValid} />
+                  </div>
+                  <div className="card__actions">
+                    <FileActions uri={this._uri} outpoint={this.state.outpoint} metadata={this.state.metadata} contentType={this.state.contentType} />
+                  </div>
+                </div> : '' }
             </div>
-          )}
-      </main>);
+            { this.state.uriLookupComplete ?
+                <div>
+                  <div className="card__content card__subtext card__subtext card__subtext--allow-newlines">
+                    {metadata.description}
+                  </div>
+                </div>
+              : <BusyMessage message="Loading..." /> }
+          </div>
+          <div className="card__content">
+            <FormatItem metadata={metadata} contentType={this.state.contentType} cost={this.state.cost} uri={this._uri} outpoint={this.state.outpoint} costIncludesData={this.state.costIncludesData}  />
+          </div>
+          <div className="card__content">
+            <Link href="https://lbry.io/dmca" label="report" className="button-text-help" />
+          </div>
+        </section>
+      </main>
+    );
   }
 });
 

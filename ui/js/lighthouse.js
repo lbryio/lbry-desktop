@@ -21,11 +21,7 @@ function getServers() {
 
 function call(method, params, callback, errorCallback) {
   if (connectTryNum > maxQueryTries) {
-    if (connectFailedCallback) {
-      connectFailedCallback();
-    } else {
-      throw new Error(`Could not connect to Lighthouse server. Last server attempted: ${server}`);
-    }
+    errorCallback(new Error(`Could not connect to Lighthouse server. Last server attempted: ${server}`));
   }
 
   /**
@@ -48,7 +44,7 @@ function call(method, params, callback, errorCallback) {
   }, () => {
     connectTryNum++;
     call(method, params, callback, errorCallback);
-  });
+  }, queryTimeout);
 }
 
 const lighthouse = new Proxy({}, {

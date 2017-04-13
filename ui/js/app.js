@@ -287,7 +287,7 @@ var App = React.createClass({
     var mainContent = this.getMainContent(),
         headerLinks = this.getHeaderLinks(),
         searchQuery = this.state.viewingPage == 'discover' && this.state.pageArgs ? this.state.pageArgs : '';
-
+    
     return (
       this._fullScreenPages.includes(this.state.viewingPage) ?
         mainContent :
