@@ -198,24 +198,26 @@ lbry.getPeersForBlobHash = function(blobHash, callback) {
   });
 }
 
+/**
+ * Takes a LBRY URI; will first try and calculate a total cost using
+ * Lighthouse. If Lighthouse can't be reached, it just retrives the
+ * key fee.
+ *
+ * Returns an object with members:
+ *   - cost: Number; the calculated cost of the name
+ *   - includes_data: Boolean; indicates whether or not the data fee info
+ *     from Lighthouse is included.
+ */
 lbry.getCostInfo = function(lbryUri) {
-  /**
-   * Takes a LBRY URI; will first try and calculate a total cost using
-   * Lighthouse. If Lighthouse can't be reached, it just retrives the
-   * key fee.
-   *
-   * Returns an object with members:
-   *   - cost: Number; the calculated cost of the name
-   *   - includes_data: Boolean; indicates whether or not the data fee info
-   *     from Lighthouse is included.
-   */
-  if (!lbryUri) {
-    throw new Error(`URI required.`);
-  }
   return new Promise((resolve, reject) => {
+
+    if (!lbryUri) {
+      reject(new Error(`URI required.`));
+    }
+
     function getCost(lbryUri, size) {
       lbry.stream_cost_estimate({uri: lbryUri, ... size !== null ? {size} : {}}).then((cost) => {
-        callback({
+        resolve({
           cost: cost,
           includesData: size !== null,
         });
