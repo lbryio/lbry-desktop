@@ -121,7 +121,7 @@ export let FilePrice = React.createClass({
   render: function() {
     if (this.state.cost === null && this.props.metadata) {
       if (!this.props.metadata.fee) {
-        return <span className="credit-amount">free</span>;
+        return <span className="credit-amount">free*</span>;
       } else {
         if (this.props.metadata.fee.currency === "LBC") {
           return <CreditAmount label={false} amount={this.props.metadata.fee.amount} isEstimate={true} />
