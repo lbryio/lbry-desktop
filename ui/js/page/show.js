@@ -80,21 +80,17 @@ let ShowPage = React.createClass({
     });
   },
   render: function() {
-    if (this.state.metadata == null) {
-      return null;
-    }
-
-    //                  <div className="card__media" style={{ backgroundImage: "url('" + metadata.thumbnail + "')" }}></div>
     const
       metadata = this.state.uriLookupComplete ? this.state.metadata : null,
       title = this.state.uriLookupComplete ? metadata.title : this._uri;
 
+    console.log(metadata);
     return (
       <main className="constrained-page">
         <section className="show-page-media">
           { this.state.contentType && this.state.contentType.startsWith('video/') ?
               <Video className="video-embedded" uri={this._uri} metadata={metadata} /> :
-              <Thumbnail src={metadata.thumbnail} /> }
+              (metadata ? <Thumbnail src={metadata.thumbnail} /> : <Thumbnail />) }
         </section>
         <section className="card">
           <div className="card__inner">
@@ -117,11 +113,12 @@ let ShowPage = React.createClass({
                     {metadata.description}
                   </div>
                 </div>
-              : <BusyMessage message="Loading..." /> }
+              : <div className="card__content"><BusyMessage message="Loading magic decentralized data..." /></div> }
           </div>
-          <div className="card__content">
-            <FormatItem metadata={metadata} contentType={this.state.contentType} cost={this.state.cost} uri={this._uri} outpoint={this.state.outpoint} costIncludesData={this.state.costIncludesData}  />
-          </div>
+          { metadata ?
+              <div className="card__content">
+                <FormatItem metadata={metadata} contentType={this.state.contentType} cost={this.state.cost} uri={this._uri} outpoint={this.state.outpoint} costIncludesData={this.state.costIncludesData}  />
+              </div> : '' }
           <div className="card__content">
             <Link href="https://lbry.io/dmca" label="report" className="button-text-help" />
           </div>

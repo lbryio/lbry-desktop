@@ -2,10 +2,86 @@ import React from 'react';
 import {Icon, Thumbnail} from '../component/common.js';
 import {Link} from '../component/link.js';
 import lbry from '../lbry.js';
+import Modal from '../component/modal.js';
 import LoadScreen from '../component/load_screen.js'
 
 const fs = require('fs');
 const VideoStream = require('videostream');
+
+export let WatchLink = React.createClass({
+  propTypes: {
+    uri: React.PropTypes.string,
+    downloadStarted: React.PropTypes.bool,
+    onGet: React.PropTypes.func
+  },
+  getInitialState: function() {
+    affirmedPurchase: false
+  },
+  onAffirmPurchase: function() {
+    lbry.get({uri: this.props.uri}).then((streamInfo) => {
+      if (streamInfo === null || typeof streamInfo !== 'object') {
+        this.setState({
+          modal: 'timedOut',
+          attemptingDownload: false,
+        });
+      }
+    });
+    if (this.props.onGet) {
+      this.props.onGet()
+    }
+  },
+  onWatchClick: function() {
+    this.setState({
+      loading: true
+    });
+    lbry.getCostInfo(this.props.uri).then(({cost}) => {
+      lbry.getBalance((balance) => {
+        if (cost > balance) {
+          this.setState({
+            modal: 'notEnoughCredits',
+            attemptingDownload: false,
+          });
+        } else if (cost <= 0.01) {
+          this.onAffirmPurchase()
+        } else {
+          this.setState({
+            modal: 'affirmPurchase'
+          });
+        }
+      });
+    });
+  },
+  getInitialState: function() {
+    return {
+      modal: null,
+      loading: false,
+    };
+  },
+  closeModal: function() {
+    this.setState({
+      loading: false,
+      modal: null,
+    });
+  },
+  render: function() {
+    return (<div>
+      <Link button={ this.props.button ? this.props.button : null }
+            disabled={this.state.loading}
+            label={this.props.label ? this.props.label : ""}
+            className={this.props.className}
+            icon="icon-play"
+            onClick={this.onWatchClick} />
+      <Modal contentLabel="Not enough credits" isOpen={this.state.modal == 'notEnoughCredits'} onConfirmed={this.closeModal}>
+        You don't have enough LBRY credits to pay for this stream.
+      </Modal>
+      <Modal type="confirm" isOpen={this.state.modal == 'affirmPurchase'}
+             contentLabel="Confirm Purchase"  onConfirmed={this.onAffirmPurchase} onAborted={this.closeModal}>
+        Confirm you want to purchase this bro.
+      </Modal>
+    </div>);
+  }
+});
+
 
 export let Video = React.createClass({
   _isMounted: false,
@@ -27,22 +103,7 @@ export let Video = React.createClass({
       controlsShown: false,
     };
   },
-  start: function() {
-    // lbry.getCostInfo(this.props.uri).then(({cost}) => {
-    //   lbry.getBalance((balance) => {
-    //     if (cost > balance) {
-    //       this.setState({
-    //         modal: 'notEnoughCredits',
-    //         loading: false,
-    //       });
-    //     } else {
-    //       this.startVideo();
-    //     }
-    //   });
-    // // });
-    // <Modal contentLabel="Not enough credits" isOpen={this.state.modal == 'notEnoughCredits'} onConfirmed={this.closeModal}>
-    //   You don't have enough LBRY credits to pay for this stream.
-    // </Modal>
+  onGet: function() {
     lbry.get({uri: this.props.uri}).then((fileInfo) => {
       this._outpoint = fileInfo.outpoint;
       this.updateLoadStatus();
@@ -127,9 +188,8 @@ export let Video = React.createClass({
           !this.state.readyToPlay  ?
             <span>this is the world's world loading screen and we shipped our software with it anyway... <br/><br/>{this.state.loadStatusMessage}</span> :
             <video controls id="video" ref="video"></video> :
-          <div className="video__cover">
-            <Thumbnail src={this.props.metadata.thumbnail} />
-            <a className="video__play-button" onClick={this.start}><Icon icon="icon-play" /></a>
+          <div className="video__cover" style={{backgroundImage: 'url("' + this.props.metadata.thumbnail + '")'}}>
+            <WatchLink className="video__play-button" uri={this.props.uri} onGet={this.onGet} icon="icon-play"></WatchLink>
           </div>
       }</div>
     );

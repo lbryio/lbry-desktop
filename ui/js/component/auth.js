@@ -137,7 +137,7 @@ const WelcomeStage = React.createClass({
          <Modal type="alert" overlayClassName="modal-overlay modal-overlay--clear" isOpen={true} contentLabel="Welcome to LBRY" {...this.props} onConfirmed={this.props.endAuth}>
           <section>
             <h3 className="modal__header">About Your Reward</h3>
-            <p>You earned a reward of 5 LBRY credits, or <em>LBC</em>.</p>
+            <p>You earned a reward of %award% LBRY credits, or <em>LBC</em>.</p>
             <p>This reward will show in your Wallet momentarily, likely while you are reading this message.</p>
             <p>LBC is used to compensate creators, to publish, and to have say in how the network works.</p>
             <p>No need to understand it all just yet! Try watching or downloading something next.</p>

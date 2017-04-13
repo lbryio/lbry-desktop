@@ -30,11 +30,9 @@ video {
   text-align: center;
   height: 100%;
   width: 100%;
-  img {
-    max-width: 100%;
-    max-height: 100%;
-    vertical-align: middle;
-  }
+  background-size: auto 100%;
+  background-position: center center;
+  background-repeat: no-repeat;
   position: relative;
   &:hover {
     .video__play-button { @include absolute-center(); }

@@ -27,7 +27,6 @@ let FileActionsRow = React.createClass({
       deleteChecked: false,
       attemptingDownload: false,
       attemptingRemove: false,
-      affirmedPurchase: false
     }
   },
   onFileInfoUpdate: function(fileInfo) {
