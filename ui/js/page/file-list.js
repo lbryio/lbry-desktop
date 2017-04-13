@@ -162,12 +162,12 @@ export let FileList = React.createClass({
 
     const fileInfosSorted = this._sortFunctions[this.state.sortBy](this.props.fileInfos);
     for (let {outpoint, name, channel_name, metadata: {stream: {metadata}}, mime_type, claim_id, has_signature, signature_is_valid} of fileInfosSorted) {
-      if (!metadata || seenUris[name] || channel_name === null) {
+      if (!metadata || seenUris[name]) {
         continue;
       }
 
       let fileUri;
-      if (channel_name === undefined) {
+      if (!channel_name) {
         fileUri = uri.buildLbryUri({name});
       } else {
         fileUri = uri.buildLbryUri({name: channel_name, path: name});

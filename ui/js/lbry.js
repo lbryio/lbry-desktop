@@ -208,35 +208,48 @@ lbry.getPeersForBlobHash = function(blobHash, callback) {
  *   - includes_data: Boolean; indicates whether or not the data fee info
  *     from Lighthouse is included.
  */
+lbry.costPromiseCache = {}
 lbry.getCostInfo = function(lbryUri) {
-  return new Promise((resolve, reject) => {
+  if (lbry.costPromiseCache[lbryUri] === undefined) {
+    const COST_INFO_CACHE_KEY = 'cost_info_cache';
+    lbry.costPromiseCache[lbryUri] = new Promise((resolve, reject) => {
+      let costInfoCache = getSession(COST_INFO_CACHE_KEY, {})
 
-    if (!lbryUri) {
-      reject(new Error(`URI required.`));
-    }
-
-    function getCost(lbryUri, size) {
-      lbry.stream_cost_estimate({uri: lbryUri, ... size !== null ? {size} : {}}).then((cost) => {
-        resolve({
-          cost: cost,
-          includesData: size !== null,
-        });
-      }, reject);
-    }
-
-    const uriObj = uri.parseLbryUri(lbryUri);
-    const name = uriObj.path || uriObj.name;
-
-    lighthouse.get_size_for_name(name).then((size) => {
-      if (size) {
-        getCost(name, size);
-      } else {
-        getCost(name, null);
+      if (!lbryUri) {
+        reject(new Error(`URI required.`));
       }
-    }, () => {
-      getCost(name, null);
+
+      if (costInfoCache[lbryUri] && costInfoCache[lbryUri].cost) {
+        return resolve(costInfoCache[lbryUri])
+      }
+
+      function getCost(lbryUri, size) {
+        lbry.stream_cost_estimate({uri: lbryUri, ... size !== null ? {size} : {}}).then((cost) => {
+          costInfoCache[lbryUri] = {
+            cost: cost,
+            includesData: size !== null,
+          };
+          setSession(COST_INFO_CACHE_KEY, costInfoCache);
+          resolve(costInfoCache[lbryUri]);
+        }, reject);
+      }
+
+      const uriObj = uri.parseLbryUri(lbryUri);
+      const name = uriObj.path || uriObj.name;
+
+      lighthouse.get_size_for_name(name).then((size) => {
+        if (size) {
+          getCost(name, size);
+        }
+        else {
+          getCost(name, null);
+        }
+      }, () => {
+        getCost(name, null);
+      });
     });
-  })
+  }
+  return lbry.costPromiseCache[lbryUri];
 }
 
 lbry.getMyClaims = function(callback) {

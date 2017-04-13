@@ -1,8 +1,8 @@
 import lbry from './lbry.js';
 import jsonrpc from './jsonrpc.js';
 
-const queryTimeout = 5000;
-const maxQueryTries = 5;
+const queryTimeout = 3000;
+const maxQueryTries = 2;
 const defaultServers = [
   'http://lighthouse4.lbry.io:50005',
   'http://lighthouse5.lbry.io:50005',
@@ -20,8 +20,9 @@ function getServers() {
 }
 
 function call(method, params, callback, errorCallback) {
-  if (connectTryNum > maxQueryTries) {
+  if (connectTryNum >= maxQueryTries) {
     errorCallback(new Error(`Could not connect to Lighthouse server. Last server attempted: ${server}`));
+    return;
   }
 
   /**

@@ -91,6 +91,7 @@ let ShowPage = React.createClass({
       metadata = this.state.uriLookupComplete ? this.state.metadata : null,
       title = this.state.uriLookupComplete ? metadata.title : this._uri;
 
+    console.log(metadata);
     return (
       <main className="constrained-page">
         <section className="show-page-media">
@@ -101,7 +102,7 @@ let ShowPage = React.createClass({
         <section className="card">
           <div className="card__inner">
             <div className="card__title-identity">
-              <span style={{float: "right"}}><FilePrice uri={this._uri} /></span>
+              <span style={{float: "right"}}><FilePrice uri={this._uri} metadata={metadata} /></span>
               <h1>{title}</h1>
               { this.state.uriLookupComplete ?
                 <div>
@@ -109,7 +110,7 @@ let ShowPage = React.createClass({
                     <UriIndicator uri={this._uri} hasSignature={this.state.hasSignature} signatureIsValid={this.state.signatureIsValid} />
                   </div>
                   <div className="card__actions">
-                    <FileActions uri={this._uri} outpoint={this.state.outpoint} metadata={this.state.metadata} contentType={this.state.contentType} />
+                    <FileActions uri={this._uri} outpoint={this.state.outpoint} metadata={metadata} contentType={this.state.contentType} />
                   </div>
                 </div> : '' }
             </div>
