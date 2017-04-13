@@ -1,12 +1,55 @@
 video {
-  border: 1px solid red;
-  object-fill: contain;
+  object-fit: contain;
+  box-sizing: border-box;
+  max-height: 100%;
+  max-width: 100%;
 }
 
+.video {
+  background: #000;
+  color: white;
+}
+
+
 .video-embedded {
-  max-width: 100%;
-  height: 0;
-  padding-bottom: 63%;
+  $height-embedded: $width-page-constrained * 9 / 16;
+  max-width: $width-page-constrained;
+  max-height: $height-embedded;
   video {
+    height: 100%;
   }
+  &.video--hidden {
+    height: $height-embedded;
+  }
+  &.video--active {
+    background: none;
+  }
+}
+
+.video__cover {
+  text-align: center;
+  height: 100%;
+  width: 100%;
+  img {
+    max-width: 100%;
+    max-height: 100%;
+    vertical-align: middle;
+  }
+  position: relative;
+  &:hover {
+    .video__play-button { @include absolute-center(); }
+  }
+}
+.video__play-button {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+  display: none;
+  font-size: $spacing-vertical * 3;
+  color: white;
+  z-index: 1;
+  background: $color-black-transparent;
+  left: 0;
+  top: 0;
 }

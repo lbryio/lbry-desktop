@@ -19,7 +19,7 @@ var PublishPage = React.createClass({
         return;
       }
       else {
-        // rewards.claimReward(rewards.TYPE_FIRST_PUBLISH)
+        rewards.claimReward(rewards.TYPE_FIRST_PUBLISH)
       }
     });
   },
@@ -27,7 +27,7 @@ var PublishPage = React.createClass({
     // Calls API to update displayed list of channels. If a channel name is provided, will select
     // that channel at the same time (used immediately after creating a channel)
     lbry.channel_list_mine().then((channels) => {
-      // rewards.claimReward(rewards.TYPE_FIRST_CHANNEL)
+      rewards.claimReward(rewards.TYPE_FIRST_CHANNEL)
       this.setState({
         channels: channels,
         ... channel ? {channel} : {}

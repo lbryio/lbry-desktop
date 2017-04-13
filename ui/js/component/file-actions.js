@@ -9,59 +9,6 @@ import {DropDownMenu, DropDownMenuItem} from './menu.js';
 
 const {shell} = require('electron');
 
-let WatchLink = React.createClass({
-  propTypes: {
-    uri: React.PropTypes.string,
-    downloadStarted: React.PropTypes.bool,
-  },
-  startVideo: function() {
-    window.location = '?watch=' + this.props.uri;
-  },
-  handleClick: function() {
-    this.setState({
-      loading: true,
-    });
-
-    if (this.props.downloadStarted) {
-      this.startVideo();
-    } else {
-      lbry.getCostInfo(this.props.uri).then(({cost}) => {
-        lbry.getBalance((balance) => {
-          if (cost > balance) {
-            this.setState({
-              modal: 'notEnoughCredits',
-              loading: false,
-            });
-          } else {
-            this.startVideo();
-          }
-        });
-      });
-    }
-  },
-  getInitialState: function() {
-    return {
-      modal: null,
-      loading: false,
-    };
-  },
-  closeModal: function() {
-    this.setState({
-      modal: null,
-    });
-  },
-  render: function() {
-    return (
-      <div className="button-set-item">
-        <Link button={ this.props.button ? this.props.button : 'alt' } disabled={this.state.loading} label="Watch" icon="icon-play" onClick={this.handleClick} />
-        <Modal contentLabel="Not enough credits" isOpen={this.state.modal == 'notEnoughCredits'} onConfirmed={this.closeModal}>
-          You don't have enough LBRY credits to pay for this stream.
-        </Modal>
-      </div>
-    );
-  }
-});
-
 let FileActionsRow = React.createClass({
   _isMounted: false,
   _fileInfoSubscribeId: null,
@@ -213,9 +160,6 @@ let FileActionsRow = React.createClass({
 
     return (
       <div>
-        {this.props.contentType && this.props.contentType.startsWith('video/')
-          ? <WatchLink uri={this.props.uri} downloadStarted={!!this.state.fileInfo} />
-          : null}
         {this.state.fileInfo !== null || this.state.fileInfo.isMine
           ? linkBlock
           : null}

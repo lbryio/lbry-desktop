@@ -30,6 +30,7 @@ let init = function() {
 
   function onDaemonReady() {
     window.sessionStorage.setItem('loaded', 'y'); //once we've made it here once per session, we don't need to show splash again
+    //<AuthOverlay  />
     ReactDOM.render(<div><App /><SnackBar /></div>, canvas)
   }
 
