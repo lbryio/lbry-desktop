@@ -140,11 +140,11 @@ var PublishPage = React.createClass({
       channel: 'anonymous',
       newChannelName: '@',
       newChannelBid: 10,
-      nameResolved: false,
+      nameResolved: null,
+      myClaimExists: null,
       topClaimValue: 0.0,
       myClaimValue: 0.0,
       myClaimMetadata: null,
-      myClaimExists: null,
       copyrightNotice: '',
       otherLicenseDescription: '',
       otherLicenseUrl: '',
@@ -189,31 +189,35 @@ var PublishPage = React.createClass({
       return;
     }
 
+    const name = rawName.toLowerCase();
     this.setState({
       rawName: rawName,
+      name: name,
+      nameResolved: null,
+      myClaimExists: null,
     });
 
-    const name = rawName.toLowerCase();
     lbry.getMyClaim(name, (myClaimInfo) => {
-      if (name != this.refs.name.getValue().toLowerCase()) {
+      if (name != this.state.name) {
         // A new name has been typed already, so bail
         return;
       }
+
+      this.setState({
+        myClaimExists: !!myClaimInfo,
+      });
       lbry.resolve({uri: name}).then((claimInfo) => {
-        if (name != this.refs.name.getValue()) {
+        if (name != this.state.name) {
           return;
         }
 
         if (!claimInfo) {
           this.setState({
-            name: name,
             nameResolved: false,
-            myClaimExists: false,
           });
         } else {
           const topClaimIsMine = (myClaimInfo && myClaimInfo.claim.amount >= claimInfo.claim.amount);
           const newState = {
-            name: name,
             nameResolved: true,
             topClaimValue: parseFloat(claimInfo.claim.amount),
             myClaimExists: !!myClaimInfo,
@@ -374,13 +378,13 @@ var PublishPage = React.createClass({
   getNameBidHelpText: function() {
     if (!this.state.name) {
       return "Select a URL for this publish.";
-    } else if (!this.state.nameResolved) {
+    } else if (this.state.nameResolved === false) {
       return "This URL is unused.";
     } else if (this.state.myClaimExists) {
       return "You have already used this URL. Publishing to it again will update your previous publish."
     } else if (this.state.topClaimValue) {
       return <span>A deposit of at least <strong>{this.state.topClaimValue}</strong> {this.state.topClaimValue == 1 ? 'credit ' : 'credits '}
-                  is required to win <strong>{this.state.name}</strong>. However, you can still get a perminent URL for any amount.</span>
+                  is required to win <strong>{this.state.name}</strong>. However, you can still get a permanent URL for any amount.</span>
     } else {
       return '';
     }
@@ -447,7 +451,7 @@ var PublishPage = React.createClass({
             <div className="card__title-primary">
               <h4>Access</h4>
               <div className="card__subtitle">
-                How much does this content cost ?
+                How much does this content cost?
               </div>
             </div>
             <div className="card__content">
