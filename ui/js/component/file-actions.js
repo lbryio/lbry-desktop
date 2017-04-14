@@ -182,7 +182,7 @@ let FileActionsRow = React.createClass({
         <Modal isOpen={this.state.modal == 'confirmRemove'} contentLabel="Not enough credits"
                type="confirm" confirmButtonLabel="Remove" onConfirmed={this.handleRemoveConfirmed}
                onAborted={this.closeModal}>
-          <p>Are you sure you'd like to remove <cite>{this.props.metadata.title}</cite> from LBRY?</p>
+          <p>Are you sure you'd like to remove <cite>{this.props.metadata ? this.props.metadata.title : this.props.uri}</cite> from LBRY?</p>
 
           <label><FormField type="checkbox" checked={this.state.deleteChecked} onClick={this.handleDeleteCheckboxClicked} /> Delete this file from my computer</label>
         </Modal>
