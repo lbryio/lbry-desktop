@@ -5,6 +5,7 @@ import Modal from './modal.js';
 import ModalPage from './modal-page.js';
 import {Link, RewardLink} from '../component/link.js';
 import {FormField, FormRow} from '../component/form.js';
+import {CreditAmount} from '../component/common.js';
 import rewards from '../rewards.js';
 
 
@@ -114,9 +115,10 @@ const WelcomeStage = React.createClass({
     }
   },
   onRewardClaim: function(reward) {
+    console.log(reward);
     this.setState({
       hasReward: true,
-      rewardAmount: reward
+      rewardAmount: reward.amount
     })
   },
   render: function() {
@@ -127,8 +129,8 @@ const WelcomeStage = React.createClass({
             <h3 className="modal__header">Welcome to LBRY.</h3>
             <p>Using LBRY is like dating a centaur. Totally normal up top, and <em>way different</em> underneath.</p>
             <p>On the upper level, LBRY is like other popular video and media sites.</p>
-            <p>Below, LBRY is like nothing else. Using blockchain and decentralization, LBRY is controlled by its users -- you -- and no one else.</p>
-            <p>Thanks for being a part of it! Here's a nickel, kid.</p>
+            <p>Below, LBRY is controlled by its users -- you -- through the power of blockchain and decentralization.</p>
+            <p>Thanks for making it possible! Here's a nickel, kid.</p>
             <div style={{textAlign: "center", marginBottom: "12px"}}>
               <RewardLink type="new_user" button="primary" onRewardClaim={this.onRewardClaim} onRewardFailure={this.props.endAuth} />
             </div>
@@ -137,8 +139,8 @@ const WelcomeStage = React.createClass({
          <Modal type="alert" overlayClassName="modal-overlay modal-overlay--clear" isOpen={true} contentLabel="Welcome to LBRY" {...this.props} onConfirmed={this.props.endAuth}>
           <section>
             <h3 className="modal__header">About Your Reward</h3>
-            <p>You earned a reward of %award% LBRY credits, or <em>LBC</em>.</p>
-            <p>This reward will show in your Wallet momentarily, likely while you are reading this message.</p>
+            <p>You earned a reward of <CreditAmount amount={this.state.rewardAmount} label={false} /> LBRY credits, or <em>LBC</em>.</p>
+            <p>This reward will show in your Wallet momentarily, probably while you are reading this message.</p>
             <p>LBC is used to compensate creators, to publish, and to have say in how the network works.</p>
             <p>No need to understand it all just yet! Try watching or downloading something next.</p>
           </section>

@@ -96,7 +96,7 @@ export let FormField = React.createClass({
 export let FormRow = React.createClass({
   _fieldRequiredText: 'This field is required',
   propTypes: {
-    label: React.PropTypes.string,
+    label: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.element])
     // helper: React.PropTypes.html,
   },
   getInitialState: function() {

@@ -42,6 +42,7 @@ var RewardsPage = React.createClass({
   getInitialState: function() {
     return {
       userRewards: null,
+      failed: null
     };
   },
   loadRewards: function() {
@@ -49,6 +50,8 @@ var RewardsPage = React.createClass({
       this.setState({
         userRewards: userRewards,
       });
+    }, () => {
+      this.setState({failed: true })
     });
   },
   render: function() {
@@ -56,7 +59,7 @@ var RewardsPage = React.createClass({
       <main>
         <form onSubmit={this.handleSubmit}>
           {!this.state.userRewards
-            ? null
+            ? (this.state.failed ? <div className="empty">Failed to load rewards.</div> : '')
             : this.state.userRewards.map(({RewardType, RewardTitle, RewardDescription, TransactionID, RewardAmount}) => {
               return <RewardTile key={RewardType} onRewardClaim={this.loadRewards} type={RewardType} title={RewardTitle} description={RewardDescription} claimed={!!TransactionID} value={RewardAmount} />;
             })}

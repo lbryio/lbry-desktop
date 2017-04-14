@@ -81,6 +81,7 @@ var FeaturedContent = React.createClass({
   getInitialState: function() {
     return {
       featuredUris: {},
+      failed: false
     };
   },
   componentWillMount: function() {
@@ -92,19 +93,25 @@ var FeaturedContent = React.createClass({
         }
       })
       this.setState({ featuredUris: featuredUris });
+    }, () => {
+      this.setState({
+        failed: true
+      })
     });
   },
   render: function() {
     return (
-      <div>
-        {
-          Object.keys(this.state.featuredUris).map(function(category) {
-            return this.state.featuredUris[category].length ?
-                   <FeaturedCategory key={category} category={category} names={this.state.featuredUris[category]} /> :
-                   '';
-          }.bind(this))
-        }
-      </div>
+      this.state.failed ?
+        <div className="empty">Failed to load landing content.</div> :
+        <div>
+          {
+              Object.keys(this.state.featuredUris).map(function(category) {
+                return this.state.featuredUris[category].length ?
+                       <FeaturedCategory key={category} category={category} names={this.state.featuredUris[category]} /> :
+                       '';
+              }.bind(this))
+          }
+        </div>
     );
   }
 });

@@ -6,7 +6,8 @@ const querystring = require('querystring');
 const lbryio = {
   _accessToken: getLocal('accessToken'),
   _authenticationPromise: null,
-  _user : null
+  _user : null,
+  enabled: false
 };
 
 const CONNECTION_STRING = 'http://localhost:8080/';
@@ -25,6 +26,10 @@ const mocks = {
 
 lbryio.call = function(resource, action, params={}, method='get') {
   return new Promise((resolve, reject) => {
+    if (!lbryio.enabled) {
+      reject(new Error("LBRY interal API is disabled"))
+      return
+    }
     /* temp code for mocks */
     if (`${resource}.${action}` in mocks) {
       resolve(mocks[`${resource}.${action}`](params));
@@ -90,6 +95,14 @@ lbryio.setAccessToken = (token) => {
 }
 
 lbryio.authenticate = function() {
+  if (!lbryio.enabled) {
+    return new Promise((resolve, reject) => {
+      resolve({
+        ID: 1,
+        HasVerifiedEmail: true
+      })
+    })
+  }
   if (lbryio._authenticationPromise === null) {
     lbryio._authenticationPromise = new Promise((resolve, reject) => {
       lbry.status().then(({installation_id}) => {

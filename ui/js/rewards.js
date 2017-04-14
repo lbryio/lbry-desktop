@@ -24,6 +24,10 @@ rewards.TYPE_NEW_DEVELOPER = "new_developer",
 rewards.claimReward = function (type) {
 
   function requestReward(resolve, reject, params) {
+    if (!lbryio.enabled) {
+      reject(new Error("Rewards are not enabled."))
+      return;
+    }
     lbryio.call('reward', 'new', params, 'post').then(({RewardAmount}) => {
       const
         message = rewardMessage(type, RewardAmount),

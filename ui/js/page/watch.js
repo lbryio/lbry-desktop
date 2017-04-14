@@ -3,6 +3,7 @@ import {Icon, Thumbnail} from '../component/common.js';
 import {Link} from '../component/link.js';
 import lbry from '../lbry.js';
 import Modal from '../component/modal.js';
+import lbryio from '../lbryio.js';
 import LoadScreen from '../component/load_screen.js'
 
 const fs = require('fs');
@@ -25,6 +26,12 @@ export let WatchLink = React.createClass({
           attemptingDownload: false,
         });
       }
+
+      lbryio.call('file', 'view', {
+        uri: this.props.uri,
+        outpoint: streamInfo.outpoint,
+        claimId: streamInfo.claim_id
+      })
     });
     if (this.props.onGet) {
       this.props.onGet()

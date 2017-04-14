@@ -43,8 +43,6 @@ let FileActionsRow = React.createClass({
       attemptingRemove: false
     });
     lbry.getCostInfo(this.props.uri).then(({cost}) => {
-      console.log(cost);
-      console.log(this.props.uri);
       lbry.getBalance((balance) => {
         if (cost > balance) {
           this.setState({

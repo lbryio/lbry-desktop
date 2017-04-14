@@ -62,7 +62,7 @@ function getPidsForProcessName(name) {
 }
 
 function createWindow () {
-  win = new BrowserWindow({backgroundColor: '#155B4A', minWidth: 800, minHeight: 1000 }) //$color-primary
+  win = new BrowserWindow({backgroundColor: '#155B4A', minWidth: 800, minHeight: 600 }) //$color-primary
   win.maximize()
   win.webContents.openDevTools();
   win.loadURL(`file://${__dirname}/dist/index.html`)

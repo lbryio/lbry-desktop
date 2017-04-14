@@ -92,20 +92,20 @@ export let RewardLink = React.createClass({
     this.setState({
       pending: true
     })
-    rewards.claimReward(this.props.type).then(function(reward) {
+    rewards.claimReward(this.props.type).then((reward) => {
       this.setState({
         pending: false,
         errorMessage: null
       })
       if (this.props.onRewardClaim) {
-        this.props.onRewardClaim();
+        this.props.onRewardClaim(reward);
       }
-    }.bind(this)).catch(function(error) {
+    }).catch((error) => {
       this.setState({
         errorMessage: error.message,
         pending: false
       })
-    }.bind(this))
+    })
   },
   clearError: function() {
     if (this.props.onRewardFailure) {
@@ -120,7 +120,8 @@ export let RewardLink = React.createClass({
       <div className="reward-link">
         {this.props.claimed
           ? <span><Icon icon="icon-check" /> Reward claimed.</span>
-          : <Link button={this.props.button ? this.props.button : 'alt'} disabled={this.state.pending || !this.state.claimable } label="Claim Reward" onClick={this.claimReward} />}
+          : <Link button={this.props.button ? this.props.button : 'alt'} disabled={this.state.pending || !this.state.claimable }
+                  label={ this.state.pending ? "Claiming..." : "Claim Reward"} onClick={this.claimReward} />}
         {this.state.errorMessage ?
          <Modal isOpen={true} contentLabel="Reward Claim Error" className="error-modal" onConfirmed={this.clearError}>
            {this.state.errorMessage}
