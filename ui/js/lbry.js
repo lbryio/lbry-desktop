@@ -11,7 +11,12 @@ const menu = remote.require('./menu/main-menu');
  * needed to make a dummy claim or file info object.
  */
 function savePendingPublish({name, channel_name}) {
-  const lbryUri = uri.buildLbryUri({name, channel_name}, false);
+  let lbryUri;
+  if (channel_name) {
+    lbryUri = uri.buildLbryUri({name: channel_name, path: name}, false);
+  } else {
+    lbryUri = uri.buildLbryUri({name: name}, false);
+  }
   const pendingPublishes = getLocal('pendingPublishes') || [];
   const newPendingPublish = {
     name, channel_name,
@@ -61,13 +66,13 @@ function getPendingPublish({name, channel_name, outpoint}) {
 }
 
 function pendingPublishToDummyClaim({channel_name, name, outpoint, claim_id, txid, nout}) {
-  return {name, outpoint, claim_id, txid, nout, ... channel_name ? {channel_name} : {}};
+  return {name, outpoint, claim_id, txid, nout, channel_name};
 }
 
 function pendingPublishToDummyFileInfo({name, outpoint, claim_id}) {
-  return {name, outpoint, claim_id, null};
+  return {name, outpoint, claim_id, metadata: null};
 }
-
+window.pptdfi = pendingPublishToDummyFileInfo;
 
 let lbry = {
   isConnected: false,
@@ -316,14 +321,13 @@ lbry.publish = function(params, fileListedCallback, publishedCallback, errorCall
     returnedPending = true;
 
     if (publishedCallback) {
-      const {name, channel_name} = params;
-      savePendingPublish({name, ... channel_name ? {channel_name} : {}});
+      savePendingPublish({name: params.name, channel_name: params.channel_name});
       publishedCallback(true);
     }
 
     if (fileListedCallback) {
       const {name, channel_name} = params;
-      savePendingPublish({name, ... channel_name ? {channel_name} : {}});
+      savePendingPublish({name: params.name, channel_name: params.channel_name});
       fileListedCallback(true);
     }
   }, 2000);
