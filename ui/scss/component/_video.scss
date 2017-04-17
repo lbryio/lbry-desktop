@@ -12,17 +12,17 @@ video {
 
 
 .video-embedded {
-  $height-embedded: $width-page-constrained * 9 / 16;
   max-width: $width-page-constrained;
-  max-height: $height-embedded;
+  max-height: $height-video-embedded;
+  height: $height-video-embedded;
   video {
     height: 100%;
   }
   &.video--hidden {
-    height: $height-embedded;
+    height: $height-video-embedded;
   }
   &.video--active {
-    background: none;
+    /*background: none;*/
   }
 }
 

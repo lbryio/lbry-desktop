@@ -81,14 +81,14 @@ export let FileTileStream = React.createClass({
     return (
       <section className={ 'file-tile card ' + (obscureNsfw ? 'card--obscured ' : '') } onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
         <div className={"row-fluid card__inner file-tile__row"}>
-          <div className="span3">
+          <div className="span3 file-tile__thumbnail-container">
             <a href={'?show=' + lbryUri}><Thumbnail className="file-tile__thumbnail" {... metadata && metadata.thumbnail ? {src: metadata.thumbnail} : {}} alt={'Photo for ' + (title || this.props.uri)} /></a>
           </div>
           <div className="span9">
-            { !this.props.hidePrice
-              ? <FilePrice uri={this.props.uri} />
-              : null}
             <div className="card__title-primary">
+              { !this.props.hidePrice
+                ? <FilePrice uri={this.props.uri} />
+                : null}
               <div className="meta"><a href={'?show=' + this.props.uri}>{lbryUri}</a></div>
               <h3>
                 <a href={'?show=' + this.props.uri}>
@@ -103,7 +103,7 @@ export let FileTileStream = React.createClass({
             </div>
             <div className="card__content">
               <p className="file-tile__description">
-                <TruncatedText lines={3}>
+                <TruncatedText lines={2}>
                   {isConfirmed
                     ? metadata.description
                     : <span className="empty">This file is pending confirmation.</span>}

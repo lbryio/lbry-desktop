@@ -4,6 +4,8 @@ import uri from '../uri.js';
 import {Link} from '../component/link.js';
 import {FormField} from '../component/form.js';
 import {FileTileStream} from '../component/file-tile.js';
+import rewards from '../rewards.js';
+import lbryio from '../lbryio.js';
 import {BusyMessage, Thumbnail} from '../component/common.js';
 
 
@@ -31,6 +33,9 @@ export let FileListDownloaded = React.createClass({
         });
       });
     });
+  },
+  componentWillUnmount: function() {
+    this._isMounted = false;
   },
   render: function() {
     if (this.state.fileInfos === null) {
@@ -63,8 +68,22 @@ export let FileListPublished = React.createClass({
       fileInfos: null,
     };
   },
+  _requestPublishReward: function() {
+    lbryio.call('reward', 'list', {}).then(function(userRewards) {
+      //already rewarded
+      if (userRewards.filter(function (reward) {
+          return reward.RewardType == rewards.TYPE_FIRST_PUBLISH && reward.TransactionID;
+        }).length) {
+        return;
+      }
+      else {
+        rewards.claimReward(rewards.TYPE_FIRST_PUBLISH).catch(() => {})
+      }
+    });
+  },
   componentDidMount: function () {
     this._isMounted = true;
+    this._requestPublishReward();
     document.title = "Published Files";
 
     lbry.claim_list_mine().then((claimInfos) => {
@@ -79,6 +98,9 @@ export let FileListPublished = React.createClass({
         });
       });
     });
+  },
+  componentWillUnmount: function() {
+    this._isMounted = false;
   },
   render: function () {
     if (this.state.fileInfos === null) {

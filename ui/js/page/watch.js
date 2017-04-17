@@ -4,6 +4,7 @@ import {Link} from '../component/link.js';
 import lbry from '../lbry.js';
 import Modal from '../component/modal.js';
 import lbryio from '../lbryio.js';
+import rewards from '../rewards.js';
 import LoadScreen from '../component/load_screen.js'
 
 const fs = require('fs');
@@ -182,6 +183,9 @@ export let Video = React.createClass({
             return fs.createReadStream(status.download_path, opts)
           }
         };
+
+        rewards.claimNextPurchaseReward()
+
         var elem = this.refs.video;
         var videostream = VideoStream(mediaFile, elem);
         elem.play();

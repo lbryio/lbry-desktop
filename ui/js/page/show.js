@@ -83,7 +83,7 @@ let ShowPage = React.createClass({
     const
       metadata = this.state.uriLookupComplete ? this.state.metadata : null,
       title = this.state.uriLookupComplete ? metadata.title : this._uri;
-    
+
     return (
       <main className="constrained-page">
         <section className="show-page-media">

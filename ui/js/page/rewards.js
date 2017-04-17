@@ -55,6 +55,7 @@ var RewardsPage = React.createClass({
     });
   },
   render: function() {
+    console.log(this.state.userRewards);
     return (
       <main>
         <form onSubmit={this.handleSubmit}>
