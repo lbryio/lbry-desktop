@@ -4,9 +4,7 @@ import jsonrpc from './jsonrpc.js';
 const queryTimeout = 3000;
 const maxQueryTries = 2;
 const defaultServers = [
-  'http://lighthouse4.lbry.io:50005',
-  'http://lighthouse5.lbry.io:50005',
-  'http://lighthouse6.lbry.io:50005',
+  'http://lighthouse7.lbry.io:50005',
 ];
 const path = '/';
 
