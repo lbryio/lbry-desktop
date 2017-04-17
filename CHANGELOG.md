@@ -18,6 +18,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
   * New publishes now display immediately in My Files, even before they hit the lbrynet file manager.
   * New welcome flow for new users
   * Redesigned UI for Discover
+  * Handle more of price calculations at the daemon layer to improve page load time
 
 ### Changed
   * Update process now easier and more reliable
