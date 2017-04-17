@@ -55,6 +55,7 @@ let ShowPage = React.createClass({
       cost: null,
       costIncludesData: null,
       uriLookupComplete: null,
+      isDownloaded: null,
     };
   },
   componentWillMount: function() {
@@ -62,8 +63,16 @@ let ShowPage = React.createClass({
     document.title = this._uri;
 
     lbry.resolve({uri: this._uri}).then(({ claim: {txid, nout, has_signature, signature_is_valid, value: {stream: {metadata, source: {contentType}}}}}) => {
+      const outpoint = txid + ':' + nout;
+
+      lbry.file_list({outpoint}).then((fileInfo) => {
+        this.setState({
+          isDownloaded: fileInfo.length > 0,
+        });
+      });
+
       this.setState({
-        outpoint: txid + ':' + nout,
+        outpoint: outpoint,
         metadata: metadata,
         hasSignature: has_signature,
         signatureIsValid: signature_is_valid,
@@ -80,21 +89,21 @@ let ShowPage = React.createClass({
     });
   },
   render: function() {
-    const
-      metadata = this.state.uriLookupComplete ? this.state.metadata : null,
-      title = this.state.uriLookupComplete ? metadata.title : this._uri;
-
+    const metadata = this.state.metadata;
+    const title = metadata ? this.state.metadata.title : this._uri;
     return (
       <main className="constrained-page">
         <section className="show-page-media">
           { this.state.contentType && this.state.contentType.startsWith('video/') ?
-              <Video className="video-embedded" uri={this._uri} metadata={metadata} /> :
+              <Video className="video-embedded" uri={this._uri} metadata={metadata} outpoint={this.state.outpoint} /> :
               (metadata ? <Thumbnail src={metadata.thumbnail} /> : <Thumbnail />) }
         </section>
         <section className="card">
           <div className="card__inner">
             <div className="card__title-identity">
-              <span style={{float: "right"}}><FilePrice uri={this._uri} metadata={metadata} /></span>
+              {this.state.isDownloaded === false
+                ? <span style={{float: "right"}}><FilePrice uri={this._uri} metadata={this.state.metadata} /></span>
+                : null}
               <h1>{title}</h1>
               { this.state.uriLookupComplete ?
                 <div>
