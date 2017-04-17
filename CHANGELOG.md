@@ -16,11 +16,13 @@ Web UI version numbers should always match the corresponding version of LBRY App
   * New-style API calls return promises instead of using callbacks
   * Wherever possible, use outpoints for unique IDs instead of names or SD hashes
   * New publishes now display immediately in My Files, even before they hit the lbrynet file manager.
+  * New welcome flow for new users
+  * Redesigned UI for Discover
 
 ### Changed
   * Update process now easier and more reliable
   * Cleaned up shutdown logic
-  *
+  * Support lbry v0.10 API signatures
 
 ### Fixed
   * Fix Watch page and progress bars for new API changes
