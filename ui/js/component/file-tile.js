@@ -257,6 +257,10 @@ export let FileTile = React.createClass({
   },
   render: function() {
     if (!this.state.claimInfo) {
+      if (this.props.displayStyle == 'card') {
+        return <FileCardStream outpoint={null} metadata={{title: this.props.uri, description: "Loading..."}} contentType={null} hidePrice={true}
+                               hasSignature={false} signatureIsValid={false} uri={this.props.uri} />
+      }
       return null;
     }
 
