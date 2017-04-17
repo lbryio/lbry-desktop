@@ -10,7 +10,8 @@ const lbryio = {
   enabled: false
 };
 
-const CONNECTION_STRING = 'http://localhost:8080/';
+const CONNECTION_STRING = 'https://api.lbry.io/';
+const EXCHANGE_RATE_TIMEOUT = 20 * 60 * 1000;
 
 const mocks = {
   'reward_type.get': ({name}) => {
@@ -24,12 +25,32 @@ const mocks = {
   }
 };
 
-lbryio.call = function(resource, action, params={}, method='get') {
+
+lbryio.getExchangeRates = function() {
   return new Promise((resolve, reject) => {
-    if (!lbryio.enabled && (resource != 'discover' || action != 'list')) {
-      reject(new Error("LBRY internal API is disabled"))
+    const cached = getSession('exchangeRateCache');
+    if (!cached || Date.now() - cached.time > EXCHANGE_RATE_TIMEOUT) {
+      lbryio.call('lbc', 'exchange_rate', {}, 'get', true).then(({lbc_usd, lbc_btc, btc_usd}) => {
+        const rates = {lbc_usd, lbc_btc, btc_usd};
+        setSession('exchangeRateCache', {
+          rates: rates,
+          time: Date.now(),
+        });
+        resolve(rates);
+      });
+    } else {
+      resolve(cached.rates);
+    }
+  });
+}
+
+lbryio.call = function(resource, action, params={}, method='get', evenIfDisabled=false) { // evenIfDisabled is just for development, when we may have some calls working and some not
+  return new Promise((resolve, reject) => {
+    if (!lbryio.enabled && !evenIfDisabled && (resource != 'discover' || action != 'list')) {
+      reject(new Error("LBRY interal API is disabled"))
       return
     }
+
     /* temp code for mocks */
     if (`${resource}.${action}` in mocks) {
       resolve(mocks[`${resource}.${action}`](params));

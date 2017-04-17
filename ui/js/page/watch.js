@@ -1,5 +1,5 @@
 import React from 'react';
-import {Icon, Thumbnail} from '../component/common.js';
+import {Icon, Thumbnail, FilePrice} from '../component/common.js';
 import {Link} from '../component/link.js';
 import lbry from '../lbry.js';
 import Modal from '../component/modal.js';
@@ -13,13 +13,14 @@ const VideoStream = require('videostream');
 export let WatchLink = React.createClass({
   propTypes: {
     uri: React.PropTypes.string,
+    metadata: React.PropTypes.object,
     downloadStarted: React.PropTypes.bool,
-    onGet: React.PropTypes.func
+    onGet: React.PropTypes.func,
   },
   getInitialState: function() {
     affirmedPurchase: false
   },
-  onAffirmPurchase: function() {
+  play: function() {
     lbry.get({uri: this.props.uri}).then((streamInfo) => {
       if (streamInfo === null || typeof streamInfo !== 'object') {
         this.setState({
@@ -50,10 +51,16 @@ export let WatchLink = React.createClass({
             attemptingDownload: false,
           });
         } else if (cost <= 0.01) {
-          this.onAffirmPurchase()
+          this.play()
         } else {
-          this.setState({
-            modal: 'affirmPurchase'
+          lbry.file_list({outpoint: this.props.outpoint}).then((fileInfo) => {
+            if (fileInfo) { // Already downloaded
+              this.play();
+            } else {
+              this.setState({
+                modal: 'affirmPurchase'
+              });
+            }
           });
         }
       });
@@ -83,8 +90,8 @@ export let WatchLink = React.createClass({
         You don't have enough LBRY credits to pay for this stream.
       </Modal>
       <Modal type="confirm" isOpen={this.state.modal == 'affirmPurchase'}
-             contentLabel="Confirm Purchase"  onConfirmed={this.onAffirmPurchase} onAborted={this.closeModal}>
-        Do you want to purchase this?
+             contentLabel="Confirm Purchase"  onConfirmed={this.play} onAborted={this.closeModal}>
+        Are you sure you'd like to buy <strong>{this.props.metadata.title}</strong> for <strong><FilePrice uri={this.props.uri} metadata={this.props.metadata} label={false} look="plain" /></strong> credits?
       </Modal>
     </div>);
   }
@@ -95,10 +102,11 @@ export let Video = React.createClass({
   _isMounted: false,
   _controlsHideDelay: 3000, // Note: this needs to be shorter than the built-in delay in Electron, or Electron will hide the controls before us
   _controlsHideTimeout: null,
-  _outpoint: null,
 
   propTypes: {
-    uri: React.PropTypes.string,
+    uri: React.PropTypes.string.isRequired,
+    metadata: React.PropTypes.object,
+    outpoint: React.PropTypes.string,
   },
   getInitialState: function() {
     return {
@@ -113,7 +121,6 @@ export let Video = React.createClass({
   },
   onGet: function() {
     lbry.get({uri: this.props.uri}).then((fileInfo) => {
-      this._outpoint = fileInfo.outpoint;
       this.updateLoadStatus();
     });
     this.setState({
@@ -158,7 +165,7 @@ export let Video = React.createClass({
   },
   updateLoadStatus: function() {
     lbry.file_list({
-      outpoint: this._outpoint,
+      outpoint: this.props.outpoint,
       full_status: true,
     }).then(([status]) => {
       if (!status || status.written_bytes == 0) {
@@ -200,7 +207,7 @@ export let Video = React.createClass({
             <span>this is the world's world loading screen and we shipped our software with it anyway... <br/><br/>{this.state.loadStatusMessage}</span> :
             <video controls id="video" ref="video"></video> :
           <div className="video__cover" style={{backgroundImage: 'url("' + this.props.metadata.thumbnail + '")'}}>
-            <WatchLink className="video__play-button" uri={this.props.uri} onGet={this.onGet} icon="icon-play"></WatchLink>
+            <WatchLink className="video__play-button" uri={this.props.uri} metadata={this.props.metadata} outpoint={this.props.outpoint} onGet={this.onGet} icon="icon-play"></WatchLink>
           </div>
       }</div>
     );
