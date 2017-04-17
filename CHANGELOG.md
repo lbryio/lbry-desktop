@@ -22,6 +22,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
 
 ### Changed
   * Update process now easier and more reliable
+  * Updated search to be compatible with new Lighthouse servers
   * Cleaned up shutdown logic
   * Support lbry v0.10 API signatures
 
