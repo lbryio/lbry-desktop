@@ -8,7 +8,7 @@ const lbryio = {
   _authenticationPromise: null,
   _user : null,
   enabled: false
-};
+};                            
 
 const CONNECTION_STRING = 'http://localhost:8080/';
 
