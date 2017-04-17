@@ -8,9 +8,9 @@ const lbryio = {
   _authenticationPromise: null,
   _user : null,
   enabled: false
-};                            
+};
 
-const CONNECTION_STRING = 'http://localhost:8080/';
+const CONNECTION_STRING = 'https://api.lbry.io/';
 
 const mocks = {
   'reward_type.get': ({name}) => {
@@ -26,7 +26,7 @@ const mocks = {
 
 lbryio.call = function(resource, action, params={}, method='get') {
   return new Promise((resolve, reject) => {
-    if (!lbryio.enabled) {
+    if (!lbryio.enabled && (resource != 'discover' || action != 'list')) {
       reject(new Error("LBRY interal API is disabled"))
       return
     }
