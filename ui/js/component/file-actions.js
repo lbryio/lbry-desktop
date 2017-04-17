@@ -1,7 +1,8 @@
 import React from 'react';
 import lbry from '../lbry.js';
+import uri from '../uri.js';
 import {Link} from '../component/link.js';
-import {Icon} from '../component/common.js';
+import {Icon, FilePrice} from '../component/common.js';
 import {Modal} from './modal.js';
 import {FormField} from './form.js';
 import {ToolTip} from '../component/tooltip.js';
@@ -155,6 +156,8 @@ let FileActionsRow = React.createClass({
       linkBlock = <Link label="Open" button="text" icon="icon-folder-open" onClick={this.onOpenClick} />;
     }
 
+    const lbryUri = uri.normalizeLbryUri(this.props.uri);
+    const title = this.props.metadata ? this.props.metadata.title : lbryUri;
     return (
       <div>
         {this.state.fileInfo !== null || this.state.fileInfo.isMine
@@ -167,7 +170,7 @@ let FileActionsRow = React.createClass({
           </DropDownMenu> : '' }
         <Modal type="confirm" isOpen={this.state.modal == 'affirmPurchase'}
                contentLabel="Confirm Purchase"  onConfirmed={this.onAffirmPurchase} onAborted={this.closeModal}>
-          Do you want to purchase this?
+          Are you sure you'd like to buy <strong>{title}</strong> for <strong><FilePrice uri={lbryUri} metadata={this.props.metadata} label={false} look="plain" /></strong> credits?
         </Modal>
         <Modal isOpen={this.state.modal == 'notEnoughCredits'} contentLabel="Not enough credits"
                onConfirmed={this.closeModal}>
@@ -175,12 +178,12 @@ let FileActionsRow = React.createClass({
         </Modal>
         <Modal isOpen={this.state.modal == 'timedOut'} contentLabel="Download failed"
                onConfirmed={this.closeModal}>
-          LBRY was unable to download the stream <strong>lbry://{this.props.uri}</strong>.
+          LBRY was unable to download the stream <strong>{lbryUri}</strong>.
         </Modal>
         <Modal isOpen={this.state.modal == 'confirmRemove'} contentLabel="Not enough credits"
                type="confirm" confirmButtonLabel="Remove" onConfirmed={this.handleRemoveConfirmed}
                onAborted={this.closeModal}>
-          <p>Are you sure you'd like to remove <cite>{this.props.metadata ? this.props.metadata.title : this.props.uri}</cite> from LBRY?</p>
+          <p>Are you sure you'd like to remove <cite>{title}</cite> from LBRY?</p>
 
           <label><FormField type="checkbox" checked={this.state.deleteChecked} onClick={this.handleDeleteCheckboxClicked} /> Delete this file from my computer</label>
         </Modal>

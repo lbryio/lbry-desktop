@@ -1,5 +1,5 @@
 import React from 'react';
-import {Icon, Thumbnail} from '../component/common.js';
+import {Icon, Thumbnail, FilePrice} from '../component/common.js';
 import {Link} from '../component/link.js';
 import lbry from '../lbry.js';
 import Modal from '../component/modal.js';
@@ -13,8 +13,9 @@ const VideoStream = require('videostream');
 export let WatchLink = React.createClass({
   propTypes: {
     uri: React.PropTypes.string,
+    metadata: React.PropTypes.object,
     downloadStarted: React.PropTypes.bool,
-    onGet: React.PropTypes.func
+    onGet: React.PropTypes.func,
   },
   getInitialState: function() {
     affirmedPurchase: false
@@ -84,7 +85,7 @@ export let WatchLink = React.createClass({
       </Modal>
       <Modal type="confirm" isOpen={this.state.modal == 'affirmPurchase'}
              contentLabel="Confirm Purchase"  onConfirmed={this.onAffirmPurchase} onAborted={this.closeModal}>
-        Do you want to purchase this?
+        Are you sure you'd like to buy <strong>{this.props.metadata.title}</strong> for <strong><FilePrice uri={this.props.uri} metadata={this.props.metadata} label={false} look="plain" /></strong> credits?
       </Modal>
     </div>);
   }
@@ -200,7 +201,7 @@ export let Video = React.createClass({
             <span>this is the world's world loading screen and we shipped our software with it anyway... <br/><br/>{this.state.loadStatusMessage}</span> :
             <video controls id="video" ref="video"></video> :
           <div className="video__cover" style={{backgroundImage: 'url("' + this.props.metadata.thumbnail + '")'}}>
-            <WatchLink className="video__play-button" uri={this.props.uri} onGet={this.onGet} icon="icon-play"></WatchLink>
+            <WatchLink className="video__play-button" uri={this.props.uri} metadata={this.props.metadata} onGet={this.onGet} icon="icon-play"></WatchLink>
           </div>
       }</div>
     );
