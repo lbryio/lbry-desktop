@@ -57,14 +57,10 @@ $drawer-width: 220px;
   color: white;
   border-radius: 2px;
 }
-.credit-amount
+.credit-amount--indicator
 {
   font-weight: bold;
   color: $color-money;
-}
-.credit-amount--estimate {
-  font-style: italic;
-  color: $color-meta-light;
 }
 #drawer-handle
 {

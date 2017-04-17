@@ -62,18 +62,20 @@ export let CreditAmount = React.createClass({
   propTypes: {
     amount: React.PropTypes.number.isRequired,
     precision: React.PropTypes.number,
-    label: React.PropTypes.bool
+    label: React.PropTypes.bool,
+    look: React.PropTypes.oneOf(['indicator', 'plain']),
   },
   getDefaultProps: function() {
     return {
       precision: 1,
       label: true,
+      look: 'indicator',
     }
   },
   render: function() {
     var formattedAmount = lbry.formatCredits(this.props.amount, this.props.precision);
     return (
-      <span className="credit-amount">
+      <span className={`credit-amount credit-amount--${this.props.look}`}>
         <span>
           {formattedAmount}
           {this.props.label ?
@@ -91,6 +93,13 @@ export let FilePrice = React.createClass({
   propTypes: {
     metadata: React.PropTypes.object,
     uri: React.PropTypes.string.isRequired,
+    look: React.PropTypes.oneOf(['indicator', 'plain']),
+  },
+
+  getDefaultProps: function() {
+    return {
+      look: 'indicator',
+    }
   },
 
   getInitialState: function() {
@@ -121,19 +130,19 @@ export let FilePrice = React.createClass({
   render: function() {
     if (this.state.cost === null && this.props.metadata) {
       if (!this.props.metadata.fee) {
-        return <span className="credit-amount">free*</span>;
+        return <span className={`credit-amount credit-amount--${this.props.look}`}>free*</span>;
       } else {
         if (this.props.metadata.fee.currency === "LBC") {
           return <CreditAmount label={false} amount={this.props.metadata.fee.amount} isEstimate={true} />
         } else if (this.props.metadata.fee.currency === "USD") {
-          return <span className="credit-amount">???</span>;
+          return <span className={`credit-amount credit-amount--${this.props.look}`}>???</span>;
         }
       }
     }
     return (
       this.state.cost !== null ?
-      <CreditAmount amount={this.state.cost} label={false} isEstimate={!this.state.isEstimate}/> :
-      <span className="credit-amount">???</span>
+      <CreditAmount amount={this.state.cost} label={false} isEstimate={!this.state.isEstimate} look={this.props.look} /> :
+      <span className={`credit-amount credit-amount--${this.props.look}`}>???</span>
     );
   }
 });
