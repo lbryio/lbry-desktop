@@ -648,6 +648,23 @@ lbry.resolve = function(params={}) {
   });
 }
 
+// Adds caching.
+lbry.settings_get = function(params={}) {
+  return new Promise((resolve, reject) => {
+    if (params.allow_cached) {
+      const cached = getSession('settings');
+      if (cached) {
+        return resolve(cached);
+      }
+    }
+
+    lbry.call('settings_get', {}, (settings) => {
+      setSession('settings', settings);
+      resolve(settings);
+    });
+  });
+}
+
 // lbry.get = function(params={}) {
 //   return function(params={}) {
 //     return new Promise((resolve, reject) => {
