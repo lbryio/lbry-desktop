@@ -167,7 +167,7 @@ let FileActionsRow = React.createClass({
           </DropDownMenu> : '' }
         <Modal type="confirm" isOpen={this.state.modal == 'affirmPurchase'}
                contentLabel="Confirm Purchase"  onConfirmed={this.onAffirmPurchase} onAborted={this.closeModal}>
-          Confirm you want to purchase this bro.
+          Do you want to purchase this?
         </Modal>
         <Modal isOpen={this.state.modal == 'notEnoughCredits'} contentLabel="Not enough credits"
                onConfirmed={this.closeModal}>

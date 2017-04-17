@@ -34,9 +34,7 @@ video {
   background-position: center center;
   background-repeat: no-repeat;
   position: relative;
-  &:hover {
-    .video__play-button { @include absolute-center(); }
-  }
+  .video__play-button { @include absolute-center(); }
 }
 .video__play-button {
   position: absolute;
@@ -48,6 +46,11 @@ video {
   color: white;
   z-index: 1;
   background: $color-black-transparent;
+  opacity: 0.6;
   left: 0;
   top: 0;
+  &:hover {
+    opacity: 1;
+    transition: opacity $transition-standard;
+  }
 }

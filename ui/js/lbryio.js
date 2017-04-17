@@ -10,7 +10,7 @@ const lbryio = {
   enabled: false
 };
 
-const CONNECTION_STRING = 'https://api.lbry.io/';
+const CONNECTION_STRING = 'http://localhost:8080/';
 
 const mocks = {
   'reward_type.get': ({name}) => {
@@ -27,7 +27,7 @@ const mocks = {
 lbryio.call = function(resource, action, params={}, method='get') {
   return new Promise((resolve, reject) => {
     if (!lbryio.enabled && (resource != 'discover' || action != 'list')) {
-      reject(new Error("LBRY interal API is disabled"))
+      reject(new Error("LBRY internal API is disabled"))
       return
     }
     /* temp code for mocks */
@@ -105,10 +105,9 @@ lbryio.authenticate = function() {
   }
   if (lbryio._authenticationPromise === null) {
     lbryio._authenticationPromise = new Promise((resolve, reject) => {
-      lbry.status().then(({installation_id}) => {
+      lbry.status().then((response) => {
 
-        //temp hack for installation_ids being wrong
-        installation_id += "Y".repeat(96 - installation_id.length)
+        let installation_id = response.installation_id;
 
         function setCurrentUser() {
           lbryio.call('user', 'me').then((data) => {

@@ -32,7 +32,7 @@ export let WatchLink = React.createClass({
         uri: this.props.uri,
         outpoint: streamInfo.outpoint,
         claimId: streamInfo.claim_id
-      })
+      }).catch(() => {})
     });
     if (this.props.onGet) {
       this.props.onGet()
@@ -84,7 +84,7 @@ export let WatchLink = React.createClass({
       </Modal>
       <Modal type="confirm" isOpen={this.state.modal == 'affirmPurchase'}
              contentLabel="Confirm Purchase"  onConfirmed={this.onAffirmPurchase} onAborted={this.closeModal}>
-        Confirm you want to purchase this bro.
+        Do you want to purchase this?
       </Modal>
     </div>);
   }

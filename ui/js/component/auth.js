@@ -41,7 +41,7 @@ const SubmitEmailStage = React.createClass({
     return (
       <section>
         <form onSubmit={this.handleSubmit}>
-          <FormRow ref={(ref) => { this._emailRow = ref }} type="text" label="Email" placeholder="admin@toplbryfan.com"
+          <FormRow ref={(ref) => { this._emailRow = ref }} type="text" label="Email" placeholder="scrwvwls@lbry.io"
                      name="email" value={this.state.email}
                      onChange={this.handleEmailChanged} />
           <div className="form-row-submit">
@@ -128,9 +128,9 @@ const WelcomeStage = React.createClass({
           <section>
             <h3 className="modal__header">Welcome to LBRY.</h3>
             <p>Using LBRY is like dating a centaur. Totally normal up top, and <em>way different</em> underneath.</p>
-            <p>On the upper level, LBRY is like other popular video and media sites.</p>
-            <p>Below, LBRY is controlled by its users -- you -- through the power of blockchain and decentralization.</p>
-            <p>Thanks for making it possible! Here's a nickel, kid.</p>
+            <p>Up top, LBRY is similar to popular media sites.</p>
+            <p>Below, LBRY is controlled by users -- you -- via blockchain and decentralization.</p>
+            <p>Thank you for making content freedom possible! Here's a nickel, kid.</p>
             <div style={{textAlign: "center", marginBottom: "12px"}}>
               <RewardLink type="new_user" button="primary" onRewardClaim={this.onRewardClaim} onRewardFailure={this.props.endAuth} />
             </div>
@@ -143,6 +143,7 @@ const WelcomeStage = React.createClass({
             <p>This reward will show in your Wallet momentarily, probably while you are reading this message.</p>
             <p>LBC is used to compensate creators, to publish, and to have say in how the network works.</p>
             <p>No need to understand it all just yet! Try watching or downloading something next.</p>
+            <p>Finally, know that LBRY is a beta and that it earns the name.</p>
           </section>
       </Modal>
     );
@@ -156,6 +157,7 @@ const ErrorStage = React.createClass({
       <section>
         <p>An error was encountered that we cannot continue from.</p>
         <p>At least we're earning the name beta.</p>
+        { this.props.errorText ? <p>Message: {this.props.errorText}</p> : '' }
         <Link button="alt" label="Try Reload" onClick={() => { window.location.reload() } } />
       </section>
     );
