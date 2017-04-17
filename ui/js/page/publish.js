@@ -1,17 +1,20 @@
 import React from 'react';
 import lbry from '../lbry.js';
 import uri from '../uri.js';
-import FormField from '../component/form.js';
+import {FormField, FormRow} from '../component/form.js';
 import {Link} from '../component/link.js';
+import rewards from '../rewards.js';
+import lbryio from '../lbryio.js';
 import Modal from '../component/modal.js';
 
 var PublishPage = React.createClass({
-  _requiredFields: ['name', 'bid', 'meta_title', 'meta_author', 'meta_license', 'meta_description'],
+  _requiredFields: ['meta_title', 'name', 'bid', 'tos_agree'],
 
   _updateChannelList: function(channel) {
     // Calls API to update displayed list of channels. If a channel name is provided, will select
     // that channel at the same time (used immediately after creating a channel)
     lbry.channel_list_mine().then((channels) => {
+      rewards.claimReward(rewards.TYPE_FIRST_CHANNEL).then(() => {}, () => {})
       this.setState({
         channels: channels,
         ... channel ? {channel} : {}
@@ -27,19 +30,23 @@ var PublishPage = React.createClass({
       submitting: true,
     });
 
-    var checkFields = this._requiredFields.slice();
+    let checkFields = this._requiredFields;
     if (!this.state.myClaimExists) {
-      checkFields.push('file');
+      checkFields.unshift('file');
     }
 
-    var missingFieldFound = false;
+    let missingFieldFound = false;
     for (let fieldName of checkFields) {
-      var field = this.refs[fieldName];
-      if (field.getValue() === '') {
-        field.warnRequired();
-        if (!missingFieldFound) {
-          field.focus();
-          missingFieldFound = true;
+      const field = this.refs[fieldName];
+      if (field) {
+        if (field.getValue() === '' || field.getValue() === false) {
+          field.showRequiredError();
+          if (!missingFieldFound) {
+            field.focus();
+            missingFieldFound = true;
+          }
+        } else {
+          field.clearError();
         }
       }
     }
@@ -61,14 +68,16 @@ var PublishPage = React.createClass({
       var metadata = {};
     }
 
-    for (let metaField of ['title', 'author', 'description', 'thumbnail', 'license', 'license_url', 'language', 'nsfw']) {
+    for (let metaField of ['title', 'description', 'thumbnail', 'license', 'license_url', 'language']) {
       var value = this.refs['meta_' + metaField].getValue();
       if (value !== '') {
         metadata[metaField] = value;
       }
     }
 
-    var licenseUrl = this.refs.meta_license_url.getValue();
+    metadata.nsfw = Boolean(parseInt(!!this.refs.meta_nsfw.getValue()));
+
+    const licenseUrl = this.refs.meta_license_url.getValue();
     if (licenseUrl) {
       metadata.license_url = licenseUrl;
     }
@@ -82,9 +91,9 @@ var PublishPage = React.createClass({
       };
 
       if (this.refs.file.getValue() !== '') {
-	publishArgs.file_path = this.refs.file.getValue();
+	      publishArgs.file_path = this.refs.file.getValue();
       }
-      
+
       lbry.publish(publishArgs, (message) => {
         this.handlePublishStarted();
       }, null, (error) => {
@@ -111,17 +120,18 @@ var PublishPage = React.createClass({
       channels: null,
       rawName: '',
       name: '',
-      bid: '',
+      bid: 1,
+      hasFile: false,
       feeAmount: '',
       feeCurrency: 'USD',
       channel: 'anonymous',
       newChannelName: '@',
-      newChannelBid: '',
-      nameResolved: false,
+      newChannelBid: 10,
+      nameResolved: null,
+      myClaimExists: null,
       topClaimValue: 0.0,
       myClaimValue: 0.0,
       myClaimMetadata: null,
-      myClaimExists: null,
       copyrightNotice: '',
       otherLicenseDescription: '',
       otherLicenseUrl: '',
@@ -162,35 +172,39 @@ var PublishPage = React.createClass({
     }
 
     if (!lbry.nameIsValid(rawName, false)) {
-      this.refs.name.showAdvice('LBRY names must contain only letters, numbers and dashes.');
+      this.refs.name.showError('LBRY names must contain only letters, numbers and dashes.');
       return;
     }
 
+    const name = rawName.toLowerCase();
     this.setState({
       rawName: rawName,
+      name: name,
+      nameResolved: null,
+      myClaimExists: null,
     });
 
-    const name = rawName.toLowerCase();
     lbry.getMyClaim(name, (myClaimInfo) => {
-      if (name != this.refs.name.getValue().toLowerCase()) {
+      if (name != this.state.name) {
         // A new name has been typed already, so bail
         return;
       }
+
+      this.setState({
+        myClaimExists: !!myClaimInfo,
+      });
       lbry.resolve({uri: name}).then((claimInfo) => {
-        if (name != this.refs.name.getValue()) {
+        if (name != this.state.name) {
           return;
         }
 
         if (!claimInfo) {
           this.setState({
-            name: name,
             nameResolved: false,
-            myClaimExists: false,
           });
         } else {
           const topClaimIsMine = (myClaimInfo && myClaimInfo.claim.amount >= claimInfo.claim.amount);
           const newState = {
-            name: name,
             nameResolved: true,
             topClaimValue: parseFloat(claimInfo.claim.amount),
             myClaimExists: !!myClaimInfo,
@@ -237,7 +251,7 @@ var PublishPage = React.createClass({
       isFee: feeEnabled
     });
   },
-  handeLicenseChange: function(event) {
+  handleLicenseChange: function(event) {
     var licenseType = event.target.options[event.target.selectedIndex].getAttribute('data-license-type');
     var newState = {
       copyrightChosen: licenseType == 'copyright',
@@ -245,8 +259,7 @@ var PublishPage = React.createClass({
     };
 
     if (licenseType == 'copyright') {
-      var author = this.refs.meta_author.getValue();
-      newState.copyrightNotice = 'Copyright ' + (new Date().getFullYear()) + (author ? ' ' + author : '');
+      newState.copyrightNotice = 'All rights reserved.'
     }
 
     this.setState(newState);
@@ -277,8 +290,10 @@ var PublishPage = React.createClass({
     const newChannelName = (event.target.value.startsWith('@') ? event.target.value : '@' + event.target.value);
 
     if (newChannelName.length > 1 && !lbry.nameIsValid(newChannelName.substr(1), false)) {
-      this.refs.newChannelName.showAdvice('LBRY channel names must contain only letters, numbers and dashes.');
+      this.refs.newChannelName.showError('LBRY channel names must contain only letters, numbers and dashes.');
       return;
+    } else {
+      this.refs.newChannelName.clearError()
     }
 
     this.setState({
@@ -290,9 +305,14 @@ var PublishPage = React.createClass({
       newChannelBid: event.target.value,
     });
   },
+  handleTOSChange: function(event) {
+    this.setState({
+      TOSAgreed: event.target.checked,
+    });
+  },
   handleCreateChannelClick: function (event) {
     if (this.state.newChannelName.length < 5) {
-      this.refs.newChannelName.showAdvice('LBRY channel names must be at least 4 characters in length.');
+      this.refs.newChannelName.showError('LBRY channel names must be at least 4 characters in length.');
       return;
     }
 
@@ -311,7 +331,7 @@ var PublishPage = React.createClass({
       }, 5000);
     }, (error) => {
       // TODO: better error handling
-      this.refs.newChannelName.showAdvice('Unable to create channel due to an internal error.');
+      this.refs.newChannelName.showError('Unable to create channel due to an internal error.');
       this.setState({
         creatingChannel: false,
       });
@@ -334,159 +354,199 @@ var PublishPage = React.createClass({
   },
   componentDidUpdate: function() {
   },
-  // Also getting a type warning here too
+  onFileChange: function() {
+    if (this.refs.file.getValue()) {
+      this.setState({ hasFile: true })
+    } else {
+      this.setState({ hasFile: false })
+    }
+  },
+  getNameBidHelpText: function() {
+    if (!this.state.name) {
+      return "Select a URL for this publish.";
+    } else if (this.state.nameResolved === false) {
+      return "This URL is unused.";
+    } else if (this.state.myClaimExists) {
+      return "You have already used this URL. Publishing to it again will update your previous publish."
+    } else if (this.state.topClaimValue) {
+      return <span>A deposit of at least <strong>{this.state.topClaimValue}</strong> {this.state.topClaimValue == 1 ? 'credit ' : 'credits '}
+                  is required to win <strong>{this.state.name}</strong>. However, you can still get a permanent URL for any amount.</span>
+    } else {
+      return '';
+    }
+  },
+  closeModal: function() {
+    this.setState({
+      modal: null,
+    });
+  },
   render: function() {
     if (this.state.channels === null) {
       return null;
     }
 
+    const lbcInputHelp = "This LBC remains yours and the deposit can be undone at any time."
+
     return (
       <main ref="page">
         <form onSubmit={this.handleSubmit}>
           <section className="card">
-            <h4>LBRY Name</h4>
-            <div className="form-row">
-              <FormField type="text" ref="name" value={this.state.rawName} onChange={this.handleNameChange} />
-              {
-                (!this.state.name
-                  ? null
-                  : (!this.state.nameResolved
-                      ? <em> The name <strong>{this.state.name}</strong> is available.</em>
-                      : (this.state.myClaimExists
-                        ? <em> You already have a claim on the name <strong>{this.state.name}</strong>. You can use this page to update your claim.</em>
-                        : <em> The name <strong>{this.state.name}</strong> is currently claimed for <strong>{this.state.topClaimValue}</strong> {this.state.topClaimValue == 1 ? 'credit' : 'credits'}.</em>)))
-              }
-              <div className="help">What LBRY name would you like to claim for this file?</div>
+            <div className="card__title-primary">
+              <h4>Content</h4>
+              <div className="card__subtitle">
+                What are you publishing?
+              </div>
+            </div>
+            <div className="card__content">
+              <FormRow name="file" label="File" ref="file" type="file" onChange={this.onFileChange}
+                       helper={this.state.myClaimExists ? "If you don't choose a file, the file from your existing claim will be used." : null}/>
+            </div>
+            { !this.state.hasFile ? '' :
+                <div>
+                <div className="card__content">
+                  <FormRow label="Title" type="text" ref="meta_title" name="title" placeholder="Titular Title" />
+                </div>
+                <div className="card__content">
+                  <FormRow type="text" label="Thumbnail URL" ref="meta_thumbnail" name="thumbnail" placeholder="http://spee.ch/mylogo" />
+                </div>
+                <div className="card__content">
+                  <FormRow label="Description" type="textarea" ref="meta_description" name="description" placeholder="Description of your content" />
+                </div>
+                <div className="card__content">
+                  <FormRow label="Language" type="select" defaultValue="en" ref="meta_language" name="language">
+                    <option value="en">English</option>
+                    <option value="zh">Chinese</option>
+                    <option value="fr">French</option>
+                    <option value="de">German</option>
+                    <option value="jp">Japanese</option>
+                    <option value="ru">Russian</option>
+                    <option value="es">Spanish</option>
+                  </FormRow>
+                </div>
+                <div className="card__content">
+                  <FormRow type="select" label="Maturity" defaultValue="en" ref="meta_nsfw" name="nsfw">
+                    {/* <option value=""></option> */}
+                    <option value="0">All Ages</option>
+                    <option value="1">Adults Only</option>
+                  </FormRow>
+                </div>
+              </div>}
+          </section>
+
+          <section className="card">
+            <div className="card__title-primary">
+              <h4>Access</h4>
+              <div className="card__subtitle">
+                How much does this content cost?
+              </div>
+            </div>
+            <div className="card__content">
+              <div className="form-row__label-row">
+                <label className="form-row__label">Price</label>
+              </div>
+              <FormRow label="Free" type="radio" name="isFree" value="1" onChange={ () => { this.handleFeePrefChange(false) } } defaultChecked={!this.state.isFee} />
+              <FormField type="radio" name="isFree" label={!this.state.isFee ? 'Choose price...' : 'Price ' }
+                         onChange={ () => { this.handleFeePrefChange(true) } } defaultChecked={this.state.isFee} />
+             <span className={!this.state.isFee ? 'hidden' : ''}>
+               <FormField type="number" className="form-field__input--inline" step="0.01" placeholder="1.00" onChange={this.handleFeeAmountChange} /> <FormField type="select" onChange={this.handleFeeCurrencyChange}>
+               <option value="USD">US Dollars</option>
+               <option value="LBC">LBRY credits</option>
+             </FormField>
+               </span>
+              { this.state.isFee ?
+                  <div className="form-field__helper">
+                    If you choose to price this content in dollars, the number of credits charged will be adjusted based on the value of LBRY credits at the time of purchase.
+                  </div> : '' }
+              <FormRow label="License" type="select" ref="meta_license" name="license" onChange={this.handleLicenseChange}>
+                <option></option>
+                <option>Public Domain</option>
+                <option data-url="https://creativecommons.org/licenses/by/4.0/legalcode">Creative Commons Attribution 4.0 International</option>
+                <option data-url="https://creativecommons.org/licenses/by-sa/4.0/legalcode">Creative Commons Attribution-ShareAlike 4.0 International</option>
+                <option data-url="https://creativecommons.org/licenses/by-nd/4.0/legalcode">Creative Commons Attribution-NoDerivatives 4.0 International</option>
+                <option data-url="https://creativecommons.org/licenses/by-nc/4.0/legalcode">Creative Commons Attribution-NonCommercial 4.0 International</option>
+                <option data-url="https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International</option>
+                <option data-url="https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International</option>
+                <option data-license-type="copyright" {... this.state.copyrightChosen ? {value: this.state.copyrightNotice} : {}}>Copyrighted...</option>
+                <option data-license-type="other" {... this.state.otherLicenseChosen ? {value: this.state.otherLicenseDescription} : {}}>Other...</option>
+              </FormRow>
+              <FormField type="hidden" ref="meta_license_url" name="license_url" value={this.getLicenseUrl()} />
+              {this.state.copyrightChosen
+                ?  <FormRow label="Copyright notice" type="text" name="copyright-notice"
+                            value={this.state.copyrightNotice} onChange={this.handleCopyrightNoticeChange} />
+                : null}
+              {this.state.otherLicenseChosen ?
+               <FormRow label="License description" type="text" name="other-license-description" onChange={this.handleOtherLicenseDescriptionChange} />
+                : null}
+              {this.state.otherLicenseChosen ?
+               <FormRow label="License URL" type="text" name="other-license-url" onChange={this.handleOtherLicenseUrlChange} />
+                : null}
             </div>
           </section>
 
           <section className="card">
-            <h4>Channel</h4>
-            <div className="form-row">
-              <FormField type="select" onChange={this.handleChannelChange} value={this.state.channel}>
+            <div className="card__title-primary">
+              <h4>Identity</h4>
+              <div className="card__subtitle">
+                Who created this content?
+              </div>
+            </div>
+            <div className="card__content">
+              <FormRow type="select" tabIndex="1" onChange={this.handleChannelChange} value={this.state.channel}>
                 <option key="anonymous" value="anonymous">Anonymous</option>
                 {this.state.channels.map(({name}) => <option key={name} value={name}>{name}</option>)}
-                <option key="new" value="new">New channel...</option>
-              </FormField>
-              {this.state.channel == 'new'
-                ? <section>
-                    <label>Name <FormField type="text" onChange={this.handleNewChannelNameChange} ref={newChannelName => { this.refs.newChannelName = newChannelName }}
-                                                   value={this.state.newChannelName} /></label>
-                    <label>Bid amount <FormField type="text-number" onChange={this.handleNewChannelBidChange} value={this.state.newChannelBid} /> LBC</label>
-                    <Link button="primary" label={!this.state.creatingChannel ? 'Create channel' : 'Creating channel...'} onClick={this.handleCreateChannelClick} disabled={this.state.creatingChannel} />
-                  </section>
-                : null}
-              <div className="help">What channel would you like to publish this file under?</div>
+                <option key="new" value="new">New identity...</option>
+              </FormRow>
             </div>
-          </section>
-
-          <section className="card">
-            <h4>Choose File</h4>
-            <FormField name="file" ref="file" type="file" />
-            { this.state.myClaimExists ? <div className="help">If you don't choose a file, the file from your existing claim will be used.</div> : null }
-          </section>
-
-          <section className="card">
-            <h4>Bid Amount</h4>
-            <div className="form-row">
-              Credits <FormField ref="bid" type="text-number" onChange={this.handleBidChange} value={this.state.bid} placeholder={this.state.nameResolved ? this.state.topClaimValue + 10 : 100} />
-              <div className="help">How much would you like to bid for this name?
-              { !this.state.nameResolved ? <span> Since this name is not currently resolved, you may bid as low as you want, but higher bids help prevent others from claiming your name.</span>
-                                         : (this.state.topClaimIsMine ? <span> You currently control this name with a bid of <strong>{this.state.myClaimValue}</strong> {this.state.myClaimValue == 1 ? 'credit' : 'credits'}.</span>
-                                                                      : (this.state.myClaimExists ? <span> You have a non-winning bid on this name for <strong>{this.state.myClaimValue}</strong> {this.state.myClaimValue == 1 ? 'credit' : 'credits'}.
-                                                                                                           To control this name, you'll need to increase your bid to more than <strong>{this.state.topClaimValue}</strong> {this.state.topClaimValue == 1 ? 'credit' : 'credits'}.</span>
-                                                                                                  : <span> You must bid over <strong>{this.state.topClaimValue}</strong> {this.state.topClaimValue == 1 ? 'credit' : 'credits'} to claim this name.</span>)) }
-              </div>
-            </div>
-          </section>
-
-          <section className="card">
-            <h4>Fee</h4>
-            <div className="form-row">
-              <label>
-               <FormField type="radio" onChange={ () => { this.handleFeePrefChange(false) } } checked={!this.state.isFee} /> No fee
-              </label>
-              <label>
-               <FormField type="radio" onChange={ () => { this.handleFeePrefChange(true) } } checked={this.state.isFee} /> { !this.state.isFee ? 'Choose fee...' : 'Fee ' }
-               <span className={!this.state.isFee ? 'hidden' : ''}>
-                 <FormField type="text-number" onChange={this.handleFeeAmountChange} /> <FormField type="select" onChange={this.handleFeeCurrencyChange}>
-                   <option value="USD">US Dollars</option>
-                   <option value="LBC">LBRY credits</option>
-                 </FormField>
-                 </span>
-              </label>
-              <div className="help">
-                <p>How much would you like to charge for this file?</p>
-                If you choose to price this content in dollars, the number of credits charged will be adjusted based on the value of LBRY credits at the time of purchase.
-              </div>
-            </div>
-          </section>
-
-
-          <section className="card">
-            <h4>Your Content</h4>
-
-            <div className="form-row">
-              <label htmlFor="title">Title</label><FormField type="text" ref="meta_title" name="title" placeholder="My Show, Episode 1" />
-            </div>
-            <div className="form-row">
-              <label htmlFor="author">Author</label><FormField type="text" ref="meta_author" name="author" placeholder="My Company, Inc." />
-            </div>
-            <div className="form-row">
-            <label htmlFor="license">License</label><FormField type="select" ref="meta_license" name="license" onChange={this.handeLicenseChange}>
-              <option data-url="https://creativecommons.org/licenses/by/4.0/legalcode">Creative Commons Attribution 4.0 International</option>
-              <option data-url="https://creativecommons.org/licenses/by-sa/4.0/legalcode">Creative Commons Attribution-ShareAlike 4.0 International</option>
-              <option data-url="https://creativecommons.org/licenses/by-nd/4.0/legalcode">Creative Commons Attribution-NoDerivatives 4.0 International</option>
-              <option data-url="https://creativecommons.org/licenses/by-nc/4.0/legalcode">Creative Commons Attribution-NonCommercial 4.0 International</option>
-              <option data-url="https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International</option>
-              <option data-url="https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International</option>
-              <option>Public Domain</option>
-              <option data-license-type="copyright" {... this.state.copyrightChosen ? {value: this.state.copyrightNotice} : {}}>Copyrighted...</option>
-              <option data-license-type="other" {... this.state.otherLicenseChosen ? {value: this.state.otherLicenseDescription} : {}}>Other...</option>
-            </FormField>
-            <FormField type="hidden" ref="meta_license_url" name="license_url" value={this.getLicenseUrl()} />
-            </div>
-            {this.state.copyrightChosen
-              ? <div className="form-row">
-                  <label htmlFor="copyright-notice" value={this.state.copyrightNotice}>Copyright notice</label><FormField type="text" name="copyright-notice" value={this.state.copyrightNotice} onChange={this.handleCopyrightNoticeChange} />
+            {this.state.channel == 'new' ?
+               <div className="card__content">
+                 <FormRow label="Name" type="text" onChange={this.handleNewChannelNameChange} ref={newChannelName => { this.refs.newChannelName = newChannelName }}
+                          value={this.state.newChannelName} />
+                 <FormRow label="Deposit"
+                          postfix="LBC"
+                          step="0.01"
+                          type="number"
+                          helper={lbcInputHelp}
+                          onChange={this.handleNewChannelBidChange}
+                          value={this.state.newChannelBid} />
+                 <div className="form-row-submit">
+                    <Link button="primary" label={!this.state.creatingChannel ? 'Create identity' : 'Creating identity...'} onClick={this.handleCreateChannelClick} disabled={this.state.creatingChannel} />
+                 </div>
                 </div>
               : null}
-            {this.state.otherLicenseChosen
-              ? <div className="form-row">
-                  <label htmlFor="other-license-description">License description</label><FormField type="text" name="other-license-description" onChange={this.handleOtherLicenseDescriptionChange} />
-                </div>
-              : null}
-            {this.state.otherLicenseChosen
-              ? <div className="form-row">
-                  <label htmlFor="other-license-url">License URL</label> <FormField type="text" name="other-license-url" onChange={this.handleOtherLicenseUrlChange} />
-                </div>
-              : null}
-
-            <div className="form-row">
-            <label htmlFor="language">Language</label> <FormField type="select" defaultValue="en" ref="meta_language" name="language">
-                 <option value="en">English</option>
-                 <option value="zh">Chinese</option>
-                 <option value="fr">French</option>
-                 <option value="de">German</option>
-                 <option value="jp">Japanese</option>
-                 <option value="ru">Russian</option>
-                 <option value="es">Spanish</option>
-              </FormField>
-            </div>
-            <div className="form-row">
-              <label htmlFor="description">Description</label> <FormField type="textarea" ref="meta_description" name="description" placeholder="Description of your content" />
-            </div>
-            <div className="form-row">
-              <label><FormField type="checkbox" ref="meta_nsfw" name="nsfw" placeholder="Description of your content" /> Not Safe For Work</label>
-            </div>
           </section>
 
 
+          <section className="card">
+            <div className="card__title-primary">
+              <h4>Address</h4>
+              <div className="card__subtitle">Where should this content permanently reside? <Link label="Read more" href="https://lbry.io/faq/naming" />.</div>
+            </div>
+            <div className="card__content">
+              <FormRow prefix="lbry://" type="text" ref="name" placeholder="myname" value={this.state.rawName} onChange={this.handleNameChange}
+                       helper={this.getNameBidHelpText()} />
+            </div>
+            { this.state.rawName ?
+                <div className="card__content">
+                  <FormRow ref="bid"
+                             type="number"
+                             step="0.01"
+                             label="Deposit"
+                             postfix="LBC"
+                             onChange={this.handleBidChange}
+                             value={this.state.bid}
+                             placeholder={this.state.nameResolved ? this.state.topClaimValue + 10 : 100}
+                             helper={lbcInputHelp} />
+                </div> : '' }
+          </section>
 
           <section className="card">
-            <h4>Additional Content Information (Optional)</h4>
-            <div className="form-row">
-              <label htmlFor="meta_thumbnail">Thumbnail URL</label> <FormField type="text" ref="meta_thumbnail" name="thumbnail" placeholder="http://mycompany.com/images/ep_1.jpg" />
+            <div className="card__title-primary">
+              <h4>Terms of Service</h4>
+            </div>
+            <div className="card__content">
+              <FormRow label={
+                <span>I agree to the <Link href="https://www.lbry.io/termsofservice" label="LBRY terms of service" checked={this.state.TOSAgreed} /></span>
+              } type="checkbox" name="tos_agree" ref={(field) => { this.refs.tos_agree = field }} onChange={this.handleTOSChange} />
             </div>
           </section>
 
@@ -500,7 +560,7 @@ var PublishPage = React.createClass({
         <Modal isOpen={this.state.modal == 'publishStarted'} contentLabel="File published"
                onConfirmed={this.handlePublishStartedConfirmed}>
           <p>Your file has been published to LBRY at the address <code>lbry://{this.state.name}</code>!</p>
-          You will now be taken to your My Files page, where your newly published file will be listed. The file will take a few minutes to appear for other LBRY users; until then it will be listed as "pending."
+          <p>The file will take a few minutes to appear for other LBRY users. Until then it will be listed as "pending" under your published files.</p>
         </Modal>
         <Modal isOpen={this.state.modal == 'error'} contentLabel="Error publishing file"
                onConfirmed={this.closeModal}>

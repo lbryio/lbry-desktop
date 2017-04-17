@@ -13,11 +13,12 @@ var SplashScreen = React.createClass({
       isLagging: false,
     }
   },
-  updateStatus: function(was_lagging=false) {
-    lbry.getDaemonStatus(this._updateStatusCallback);
+  updateStatus: function() {
+    lbry.status().then(this._updateStatusCallback);
   },
   _updateStatusCallback: function(status) {
-    if (status.code == 'started') {
+    const startupStatus = status.startup_status
+    if (startupStatus.code == 'started') {
       // Wait until we are able to resolve a name before declaring
       // that we are done.
       // TODO: This is a hack, and the logic should live in the daemon
@@ -34,20 +35,28 @@ var SplashScreen = React.createClass({
       return;
     }
     this.setState({
-      details: status.message + (status.is_lagging ? '' : '...'),
-      isLagging: status.is_lagging,
+      details: startupStatus.message + (startupStatus.is_lagging ? '' : '...'),
+      isLagging: startupStatus.is_lagging,
     });
     setTimeout(() => {
-      this.updateStatus(status.is_lagging);
+      this.updateStatus();
     }, 500);
   },
   componentDidMount: function() {
-    lbry.connect((connected) => {
-      this.updateStatus();
-    });
+    lbry.connect().then((isConnected) => {
+      if (isConnected) {
+        this.updateStatus();
+      } else {
+        this.setState({
+          isLagging: true,
+          message: "Failed to connect to LBRY",
+          details: "LBRY was unable to start and connect properly."
+        })
+      }
+    })
   },
   render: function() {
-    return <LoadScreen message={this.props.message} details={this.state.details} isWarning={this.state.isLagging} />;
+    return <LoadScreen message={this.props.message} details={this.state.details} isWarning={this.state.isLagging} />
   }
 });
 

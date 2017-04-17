@@ -1,5 +1,6 @@
 import React from 'react';
 import {Link} from './link.js';
+import {Icon} from './common.js';
 
 var Header = React.createClass({
   getInitialState: function() {
@@ -52,6 +53,7 @@ var Header = React.createClass({
           <Link onClick={this.props.onOpenDrawer} icon="icon-bars" className="open-drawer-link" />
           <h1>{ this.state.title }</h1>
           <div className="header-search">
+            <Icon icon="icon-search" />
             <input type="search" onChange={this.onQueryChange} defaultValue={this.props.initialQuery}
                  placeholder="Find movies, music, games, and more"/>
           </div>

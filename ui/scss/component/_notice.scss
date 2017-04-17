@@ -1,0 +1,18 @@
+@import "../global";
+
+.notice {
+    padding: 10px 20px;
+    border: 1px solid #000;
+    text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+    border-radius: 5px;
+
+    color: #468847;
+    background-color: #dff0d8;
+    border-color: #d6e9c6;
+}
+
+.notice--error {
+    color: #b94a48;
+    background-color: #f2dede;
+    border-color: #eed3d7;
+}

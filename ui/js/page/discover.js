@@ -1,5 +1,6 @@
 import React from 'react';
 import lbry from '../lbry.js';
+import lbryio from '../lbryio.js';
 import lighthouse from '../lighthouse.js';
 import {FileTile} from '../component/file-tile.js';
 import {Link} from '../component/link.js';
@@ -58,46 +59,59 @@ var SearchResults = React.createClass({
   }
 });
 
-var featuredContentLegendStyle = {
-  fontSize: '12px',
-  color: '#aaa',
-  verticalAlign: '15%',
-};
+const communityCategoryToolTipText = ('Community Content is a public space where anyone can share content with the ' +
+'rest of the LBRY community. Bid on the names "one," "two," "three," "four" and ' +
+'"five" to put your content here!');
+
+var FeaturedCategory = React.createClass({
+  render: function() {
+    return (<div className="card-row card-row--small">
+        { this.props.category ?
+          <h3 className="card-row__header">{this.props.category}
+            { this.props.category == "community" ?
+              <ToolTip label="What's this?" body={communityCategoryToolTipText} className="tooltip--header"/>
+              : '' }</h3>
+          : '' }
+        { this.props.names.map((name) => { return <FileTile key={name} displayStyle="card" uri={name} /> }) }
+    </div>)
+  }
+})
 
 var FeaturedContent = React.createClass({
   getInitialState: function() {
     return {
-      featuredNames: [],
+      featuredUris: {},
+      failed: false
     };
   },
   componentWillMount: function() {
-    lbry.getFeaturedDiscoverNames().then((featuredNames) => {
-      this.setState({ featuredNames: featuredNames });
+    lbryio.call('discover', 'list', { version: "early-access" } ).then(({Categories, Uris}) => {
+      let featuredUris = {}
+      Categories.forEach((category) => {
+        if (Uris[category] && Uris[category].length) {
+          featuredUris[category] = Uris[category]
+        }
+      })
+      this.setState({ featuredUris: featuredUris });
+    }, () => {
+      this.setState({
+        failed: true
+      })
     });
   },
   render: function() {
-    const toolTipText = ('Community Content is a public space where anyone can share content with the ' +
-                        'rest of the LBRY community. Bid on the names "one," "two," "three," "four" and ' +
-                        '"five" to put your content here!');
-
     return (
-      <div className="row-fluid">
-        <div className="span6">
-          <h3>Featured Content</h3>
-          { this.state.featuredNames.map(name => <FileTile key={name} uri={name} />) }
+      this.state.failed ?
+        <div className="empty">Failed to load landing content.</div> :
+        <div>
+          {
+              Object.keys(this.state.featuredUris).map(function(category) {
+                return this.state.featuredUris[category].length ?
+                       <FeaturedCategory key={category} category={category} names={this.state.featuredUris[category]} /> :
+                       '';
+              }.bind(this))
+          }
         </div>
-        <div className="span6">
-          <h3>
-            Community Content
-            <ToolTip label="What's this?" body={toolTipText} className="tooltip--header"/>
-          </h3>
-          <FileTile uri="one" />
-          <FileTile uri="two" />
-          <FileTile uri="three" />
-          <FileTile uri="four" />
-          <FileTile uri="five" />
-        </div>
-      </div>
     );
   }
 });
@@ -105,10 +119,20 @@ var FeaturedContent = React.createClass({
 var DiscoverPage = React.createClass({
   userTypingTimer: null,
 
+  propTypes: {
+    showWelcome: React.PropTypes.bool.isRequired,
+  },
+
   componentDidUpdate: function() {
     if (this.props.query != this.state.query)
     {
       this.handleSearchChanged(this.props.query);
+    }
+  },
+
+  getDefaultProps: function() {
+    return {
+      showWelcome: false,
     }
   },
 
@@ -128,8 +152,15 @@ var DiscoverPage = React.createClass({
     lighthouse.search(query).then(this.searchCallback);
   },
 
+  handleWelcomeDone: function() {
+    this.setState({
+      welcomeComplete: true,
+    });
+  },
+
   componentWillMount: function() {
     document.title = "Discover";
+
     if (this.props.query) {
       // Rendering with a query already typed
       this.handleSearchChanged(this.props.query);
@@ -138,6 +169,7 @@ var DiscoverPage = React.createClass({
 
   getInitialState: function() {
     return {
+      welcomeComplete: false,
       results: [],
       query: this.props.query,
       searching: ('query' in this.props) && (this.props.query.length > 0)

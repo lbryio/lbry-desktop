@@ -1,28 +1,32 @@
 import React from 'react';
 import {Icon} from './common.js';
 
-var requiredFieldWarningStyle = {
-  color: '#cc0000',
-  transition: 'opacity 400ms ease-in',
-};
+var formFieldCounter = 0,
+    formFieldNestedLabelTypes = ['radio', 'checkbox'];
 
-var FormField = React.createClass({
+function formFieldId() {
+  return "form-field-" + (++formFieldCounter);
+}
+
+export let FormField = React.createClass({
   _fieldRequiredText: 'This field is required',
   _type: null,
   _element: null,
 
   propTypes: {
     type: React.PropTypes.string.isRequired,
-    hidden: React.PropTypes.bool,
+    prefix: React.PropTypes.string,
+    postfix: React.PropTypes.string,
+    hasError: React.PropTypes.bool
   },
   getInitialState: function() {
     return {
-      adviceState: 'hidden',
-      adviceText: null,
+      isError: null,
+      errorMessage: null,
     }
   },
   componentWillMount: function() {
-    if (['text', 'radio', 'checkbox', 'file'].includes(this.props.type)) {
+    if (['text', 'number', 'radio', 'checkbox', 'file'].includes(this.props.type)) {
       this._element = 'input';
       this._type = this.props.type;
     } else if (this.props.type == 'text-number') {
@@ -33,25 +37,11 @@ var FormField = React.createClass({
       this._element = this.props.type;
     }
   },
-  showAdvice: function(text) {
+  showError: function(text) {
     this.setState({
-      adviceState: 'shown',
-      adviceText: text,
+      isError: true,
+      errorMessage: text,
     });
-
-    setTimeout(() => {
-      this.setState({
-        adviceState: 'fading',
-      });
-      setTimeout(() => {
-        this.setState({
-          adviceState: 'hidden',
-        });
-      }, 450);
-    }, 5000);
-  },
-  warnRequired: function() {
-    this.showAdvice(this._fieldRequiredText);
   },
   focus: function() {
     this.refs.field.focus();
@@ -60,7 +50,8 @@ var FormField = React.createClass({
     if (this.props.type == 'checkbox') {
       return this.refs.field.checked;
     } else if (this.props.type == 'file') {
-      return this.refs.field.files[0].path;
+      return this.refs.field.files.length && this.refs.field.files[0].path ?
+                this.refs.field.files[0].path : null;
     } else {
       return this.refs.field.value;
     }
@@ -70,45 +61,94 @@ var FormField = React.createClass({
   },
   render: function() {
     // Pass all unhandled props to the field element
-    const otherProps = Object.assign({}, this.props);
+    const otherProps = Object.assign({}, this.props),
+          isError = this.state.isError !== null ? this.state.isError : this.props.hasError,
+          elementId = this.props.id ? this.props.id : formFieldId(),
+          renderElementInsideLabel = this.props.label && formFieldNestedLabelTypes.includes(this.props.type);
+
     delete otherProps.type;
-    delete otherProps.hidden;
+    delete otherProps.label;
+    delete otherProps.hasError;
+    delete otherProps.className;
+    delete otherProps.postfix;
+    delete otherProps.prefix;
 
-    return (
-      !this.props.hidden
-        ? <div className="form-field-container">
-            <this._element type={this._type} className="form-field" name={this.props.name} ref="field" placeholder={this.props.placeholder}
-              className={'form-field--' + this.props.type + ' ' + (this.props.className || '')}
-              {...otherProps}>
-              {this.props.children}
-            </this._element>
-            <FormFieldAdvice field={this.refs.field} state={this.state.adviceState}>{this.state.adviceText}</FormFieldAdvice>
-          </div>
-        : null
-    );
+    const element = <this._element id={elementId} type={this._type} name={this.props.name} ref="field" placeholder={this.props.placeholder}
+                                    className={'form-field__input form-field__input-' + this.props.type + ' ' + (this.props.className || '') + (isError ? 'form-field__input--error' : '')}
+      {...otherProps}>
+      {this.props.children}
+    </this._element>;
+
+    return <div className="form-field">
+      { this.props.prefix ? <span className="form-field__prefix">{this.props.prefix}</span> : '' }
+      { renderElementInsideLabel ?
+          <label htmlFor={elementId} className={"form-field__label " + (isError ? 'form-field__label--error' : '')}>
+            {element}
+            {this.props.label}
+          </label> :
+        element }
+      { this.props.postfix ? <span className="form-field__postfix">{this.props.postfix}</span> : '' }
+      { isError && this.state.errorMessage ?  <div className="form-field__error">{this.state.errorMessage}</div> : '' }
+    </div>
   }
-});
+})
 
-var FormFieldAdvice = React.createClass({
+export let FormRow = React.createClass({
+  _fieldRequiredText: 'This field is required',
   propTypes: {
-    state: React.PropTypes.string.isRequired,
+    label: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.element])
+    // helper: React.PropTypes.html,
+  },
+  getInitialState: function() {
+    return {
+      isError: false,
+      errorMessage: null,
+    }
+  },
+  showError: function(text) {
+    this.setState({
+      isError: true,
+      errorMessage: text,
+    });
+  },
+  showRequiredError: function() {
+    this.showError(this._fieldRequiredText);
+  },
+  clearError: function(text) {
+    this.setState({
+      isError: false,
+      errorMessage: ''
+    });
+  },
+  getValue: function() {
+    return this.refs.field.getValue();
+  },
+  getSelectedElement: function() {
+    return this.refs.field.getSelectedElement();
+  },
+  focus: function() {
+    this.refs.field.focus();
   },
   render: function() {
-    return (
-      this.props.state != 'hidden'
-        ? <div className="form-field-advice-container">
-            <div className={'form-field-advice' + (this.props.state == 'fading' ? ' form-field-advice--fading' : '')}>
-              <Icon icon="icon-caret-up" className="form-field-advice__arrow" />
-              <div className="form-field-advice__content-container">
-                <span className="form-field-advice__content">
-                  {this.props.children}
-                </span>
-              </div>
-            </div>
-          </div>
-        : null
-    );
-  }
-});
+    const fieldProps = Object.assign({}, this.props),
+          elementId = formFieldId(),
+          renderLabelInFormField = formFieldNestedLabelTypes.includes(this.props.type);
 
-export default FormField;
+    if (!renderLabelInFormField) {
+      delete fieldProps.label;
+    }
+    delete fieldProps.helper;
+
+    return <div className="form-row">
+      { this.props.label && !renderLabelInFormField ?
+        <div className={"form-row__label-row " + (this.props.labelPrefix ? "form-row__label-row--prefix" : "") }>
+          <label htmlFor={elementId} className={"form-field__label " + (this.state.isError ? 'form-field__label--error' : '')}>
+            {this.props.label}
+          </label>
+        </div> : '' }
+      <FormField ref="field" hasError={this.state.isError} {...fieldProps} />
+      { !this.state.isError && this.props.helper ?  <div className="form-field__helper">{this.props.helper}</div> : '' }
+      { this.state.isError ?  <div className="form-field__error">{this.state.errorMessage}</div> : '' }
+    </div>
+  }
+})

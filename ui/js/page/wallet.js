@@ -2,12 +2,9 @@ import React from 'react';
 import lbry from '../lbry.js';
 import {Link} from '../component/link.js';
 import Modal from '../component/modal.js';
+import {FormField, FormRow} from '../component/form.js';
 import {Address, BusyMessage, CreditAmount} from '../component/common.js';
 
-
-var addressRefreshButtonStyle = {
-  fontSize: '11pt',
-};
 var AddressSection = React.createClass({
   _refreshAddress: function(event) {
     if (typeof event !== 'undefined') {
@@ -27,12 +24,12 @@ var AddressSection = React.createClass({
       event.preventDefault();
     }
 
-    lbry.getNewAddress((address) => {
+    lbry.wallet_new_address().then(function(address) {
       window.localStorage.setItem('wallet_address', address);
       this.setState({
         address: address,
       });
-    });
+    }.bind(this))
   },
 
   getInitialState: function() {
@@ -60,12 +57,20 @@ var AddressSection = React.createClass({
   render: function() {
     return (
       <section className="card">
-        <h3>Wallet Address</h3>
-        <Address address={this.state.address} /> <Link text="Get new address" icon='icon-refresh' onClick={this._getNewAddress} style={addressRefreshButtonStyle} />
-        <input type='submit' className='hidden' />
-        <div className="help">
-          <p>Other LBRY users may send credits to you by entering this address on the "Send" page.</p>
-          You can generate a new address at any time, and any previous addresses will continue to work. Using multiple addresses can be helpful for keeping track of incoming payments from multiple sources.
+        <div className="card__title-primary">
+          <h3>Wallet Address</h3>
+        </div>
+        <div className="card__content">
+          <Address address={this.state.address} />
+        </div>
+        <div className="card__actions">
+          <Link label="Get New Address" button="primary" icon='icon-refresh' onClick={this._getNewAddress} />
+        </div>
+        <div className="card__content">
+          <div className="help">
+            <p>Other LBRY users may send credits to you by entering this address on the "Send" page.</p>
+            <p>You can generate a new address at any time, and any previous addresses will continue to work. Using multiple addresses can be helpful for keeping track of incoming payments from multiple sources.</p>
+          </div>
         </div>
       </section>
     );
@@ -143,27 +148,26 @@ var SendToAddressSection = React.createClass({
     return (
       <section className="card">
         <form onSubmit={this.handleSubmit}>
-          <h3>Send Credits</h3>
-          <div className="form-row">
-            <label htmlFor="amount">Amount</label>
-            <input id="amount" type="text" size="10" onChange={this.setAmount}></input>
+          <div className="card__title-primary">
+            <h3>Send Credits</h3>
           </div>
-          <div className="form-row">
-            <label htmlFor="address">Recipient address</label>
-            <input id="address" type="text" size="60" onChange={this.setAddress}></input>
+          <div className="card__content">
+            <FormRow label="Amount" postfix="LBC" step="0.01" type="number" placeholder="1.23" size="10" onChange={this.setAmount} />
           </div>
-          <div className="form-row form-row-submit">
+          <div className="card__content">
+            <FormRow label="Recipient Address" placeholder="bbFxRyXXXXXXXXXXXZD8nE7XTLUxYnddTs" type="text" size="60" onChange={this.setAddress} />
+          </div>
+          <div className="card__actions card__actions--form-submit">
             <Link button="primary" label="Send" onClick={this.handleSubmit} disabled={!(parseFloat(this.state.amount) > 0.0) || this.state.address == ""} />
             <input type='submit' className='hidden' />
           </div>
-          {
-            this.state.results ?
-            <div className="form-row">
-              <h4>Results</h4>
-              {this.state.results}
-            </div>
-              : ''
-          }
+            {
+              this.state.results ?
+              <div className="card__content">
+                <h4>Results</h4>
+                {this.state.results}
+              </div> : ''
+            }
         </form>
         <Modal isOpen={this.state.modal === 'insufficientBalance'} contentLabel="Insufficient balance"
                onConfirmed={this.closeModal}>
@@ -231,25 +235,29 @@ var TransactionList = React.createClass({
     }
     return (
       <section className="card">
-        <h3>Transaction History</h3>
-        { this.state.transactionItems === null ? <BusyMessage message="Loading transactions" /> : '' }
-        { this.state.transactionItems && rows.length === 0 ? <div className="empty">You have no transactions.</div> : '' }
-        { this.state.transactionItems && rows.length > 0 ?
-          <table className="table-standard table-stretch">
-            <thead>
-              <tr>
-                <th>Amount</th>
-                <th>Date</th>
-                <th>Time</th>
-                <th>Transaction</th>
-              </tr>
-            </thead>
-            <tbody>
-              {rows}
-            </tbody>
-          </table>
+        <div className="card__title-primary">
+          <h3>Transaction History</h3>
+        </div>
+        <div className="card__content">
+          { this.state.transactionItems === null ? <BusyMessage message="Loading transactions" /> : '' }
+          { this.state.transactionItems && rows.length === 0 ? <div className="empty">You have no transactions.</div> : '' }
+          { this.state.transactionItems && rows.length > 0 ?
+            <table className="table-standard table-stretch">
+              <thead>
+                <tr>
+                  <th>Amount</th>
+                  <th>Date</th>
+                  <th>Time</th>
+                  <th>Transaction</th>
+                </tr>
+              </thead>
+              <tbody>
+                {rows}
+              </tbody>
+            </table>
             : ''
-        }
+          }
+        </div>
       </section>
     );
   }
@@ -290,9 +298,13 @@ var WalletPage = React.createClass({
     return (
       <main className="page">
         <section className="card">
-          <h3>Balance</h3>
-          { this.state.balance === null ? <BusyMessage message="Checking balance" /> : ''}
-          { this.state.balance !== null ? <CreditAmount amount={this.state.balance} precision={8} /> : '' }
+          <div className="card__title-primary">
+            <h3>Balance</h3>
+          </div>
+          <div className="card__content">
+            { this.state.balance === null ? <BusyMessage message="Checking balance" /> : ''}
+            { this.state.balance !== null ? <CreditAmount amount={this.state.balance} precision={8} /> : '' }
+          </div>
         </section>
         { this.props.viewingPage === 'wallet' ? <TransactionList /> : '' }
         { this.props.viewingPage === 'send' ? <SendToAddressSection /> : '' }

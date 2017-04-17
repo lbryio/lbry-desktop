@@ -55,7 +55,7 @@ var Drawer = React.createClass({
         <DrawerItem href='?discover' viewingPage={this.props.viewingPage} label="Discover" icon="icon-search"  />
         <DrawerItem href='?publish' viewingPage={this.props.viewingPage} label="Publish" icon="icon-upload" />
         <DrawerItem href='?downloaded' subPages={['published']} viewingPage={this.props.viewingPage}  label="My Files" icon='icon-cloud-download' />
-        <DrawerItem href="?wallet" subPages={['send', 'receive', 'claim', 'referral']} viewingPage={this.props.viewingPage}  label="My Wallet" badge={lbry.formatCredits(this.state.balance) } icon="icon-bank" />
+        <DrawerItem href="?wallet" subPages={['send', 'receive', 'rewards']} viewingPage={this.props.viewingPage}  label="My Wallet" badge={lbry.formatCredits(this.state.balance) } icon="icon-bank" />
         <DrawerItem href='?settings' viewingPage={this.props.viewingPage}  label="Settings" icon='icon-gear' />
         <DrawerItem href='?help' viewingPage={this.props.viewingPage}  label="Help" icon='icon-question-circle' />
       </nav>

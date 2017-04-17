@@ -7,13 +7,12 @@ import HelpPage from './page/help.js';
 import WatchPage from './page/watch.js';
 import ReportPage from './page/report.js';
 import StartPage from './page/start.js';
-import ClaimCodePage from './page/claim_code.js';
-import ReferralPage from './page/referral.js';
+import RewardsPage from './page/rewards.js';
+import RewardPage from './page/reward.js';
 import WalletPage from './page/wallet.js';
 import ShowPage from './page/show.js';
 import PublishPage from './page/publish.js';
 import DiscoverPage from './page/discover.js';
-import SplashScreen from './component/splash.js';
 import DeveloperPage from './page/developer.js';
 import {FileListDownloaded, FileListPublished} from './page/file-list.js';
 import Drawer from './component/drawer.js';
@@ -38,17 +37,11 @@ var App = React.createClass({
     message: 'Error message',
     data: 'Error data',
   },
+  _fullScreenPages: ['watch'],
 
   _upgradeDownloadItem: null,
   _isMounted: false,
   _version: null,
-
-  // Temporary workaround since electron-dl throws errors when you try to get the filename
-  getDefaultProps: function() {
-    return {
-      address: window.location.search
-    };
-  },
   getUpdateUrl: function() {
     switch (process.platform) {
       case 'darwin':
@@ -87,7 +80,7 @@ var App = React.createClass({
     var match, param, val, viewingPage, pageArgs,
         drawerOpenRaw = sessionStorage.getItem('drawerOpen');
 
-    return Object.assign(this.getViewingPageAndArgs(this.props.address), {
+    return Object.assign(this.getViewingPageAndArgs(window.location.search), {
       drawerOpen: drawerOpenRaw !== null ? JSON.parse(drawerOpenRaw) : true,
       errorInfo: null,
       modal: null,
@@ -112,6 +105,8 @@ var App = React.createClass({
         if (target.matches('a[href^="?"]')) {
           event.preventDefault();
           if (this._isMounted) {
+            history.pushState({}, document.title, target.getAttribute('href'));
+            this.registerHistoryPop();
             this.setState(this.getViewingPageAndArgs(target.getAttribute('href')));
           }
         }
@@ -152,6 +147,11 @@ var App = React.createClass({
   },
   componentWillUnmount: function() {
     this._isMounted = false;
+  },
+  registerHistoryPop: function() {
+    window.addEventListener("popstate", function() {
+      this.setState(this.getViewingPageAndArgs(location.pathname));
+    }.bind(this));
   },
   handleUpgradeClicked: function() {
     // Make a new directory within temp directory so the filename is guaranteed to be available
@@ -231,14 +231,12 @@ var App = React.createClass({
       case 'wallet':
       case 'send':
       case 'receive':
-      case 'claim':
-      case 'referral':
+      case 'rewards':
         return {
-          '?wallet' : 'Overview',
-          '?send' : 'Send',
-          '?receive' : 'Receive',
-          '?claim' : 'Claim Beta Code',
-          '?referral' : 'Check Referral Credit',
+          '?wallet': 'Overview',
+          '?send': 'Send',
+          '?receive': 'Receive',
+          '?rewards': 'Rewards',
         };
       case 'downloaded':
       case 'published':
@@ -258,8 +256,6 @@ var App = React.createClass({
         return <SettingsPage />;
       case 'help':
         return <HelpPage />;
-      case 'watch':
-        return <WatchPage uri={this.state.pageArgs} />;
       case 'report':
         return <ReportPage />;
       case 'downloaded':
@@ -268,10 +264,8 @@ var App = React.createClass({
         return <FileListPublished />;
       case 'start':
         return <StartPage />;
-      case 'claim':
-        return <ClaimCodePage />;
-      case 'referral':
-        return <ReferralPage />;
+      case 'rewards':
+        return <RewardsPage />;
       case 'wallet':
       case 'send':
       case 'receive':
@@ -284,16 +278,16 @@ var App = React.createClass({
         return <DeveloperPage />;
       case 'discover':
       default:
-        return <DiscoverPage {... this.state.pageArgs !== null ? {query: this.state.pageArgs} : {} } />;
+        return <DiscoverPage showWelcome={this.state.justRegistered} {... this.state.pageArgs !== null ? {query: this.state.pageArgs} : {} } />;
     }
   },
   render: function() {
     var mainContent = this.getMainContent(),
         headerLinks = this.getHeaderLinks(),
         searchQuery = this.state.viewingPage == 'discover' && this.state.pageArgs ? this.state.pageArgs : '';
-
+    
     return (
-      this.state.viewingPage == 'watch' ?
+      this._fullScreenPages.includes(this.state.viewingPage) ?
         mainContent :
         <div id="window" className={ this.state.drawerOpen ? 'drawer-open' : 'drawer-closed' }>
           <Drawer onCloseDrawer={this.closeDrawer} viewingPage={this.state.viewingPage} />

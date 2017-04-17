@@ -1,0 +1,81 @@
+@import "../global";
+
+.modal-overlay {
+  position: fixed;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  top: 0px;
+  left: 0px;
+  right: 0px;
+  bottom: 0px;
+  background-color: rgba(255, 255, 255, 0.74902);
+  z-index: 9999;
+}
+
+.modal-overlay--clear {
+  background-color: transparent;
+}
+
+.modal {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  border: 1px solid rgb(204, 204, 204);
+  background: rgb(255, 255, 255);
+  overflow: auto;
+  border-radius: 4px;
+  padding: $spacing-vertical;
+  box-shadow: $default-box-shadow;
+  max-width: 400px;
+}
+
+.modal__header {
+  margin-bottom: 5px;
+  text-align: center;
+}
+
+.modal__buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-top: 15px;
+}
+
+.modal__button {
+  margin: 0px 6px;
+}
+
+.error-modal-overlay {
+  background: rgba(#000, .88);
+}
+
+.error-modal__content {
+  display: flex;
+  padding: 0px 8px 10px 10px;
+}
+
+.error-modal__warning-symbol {
+  margin-top: 6px;
+  margin-right: 7px;
+}
+
+.download-started-modal__file-path {
+  word-break: break-all;
+}
+
+.error-modal {
+  max-width: none;
+  width: 400px;
+}
+.error-modal__error-list { /*shitty hack/temp fix for long errors making modals unusable*/
+  border: 1px solid #eee;
+  padding: 8px;
+  list-style: none;
+  max-height: 400px;
+  max-width: 400px;
+  overflow-y: hidden;
+}

@@ -2,8 +2,10 @@ import React from 'react';
 import lbry from '../lbry.js';
 import uri from '../uri.js';
 import {Link} from '../component/link.js';
-import FormField from '../component/form.js';
+import {FormField} from '../component/form.js';
 import {FileTileStream} from '../component/file-tile.js';
+import rewards from '../rewards.js';
+import lbryio from '../lbryio.js';
 import {BusyMessage, Thumbnail} from '../component/common.js';
 
 
@@ -31,6 +33,9 @@ export let FileListDownloaded = React.createClass({
         });
       });
     });
+  },
+  componentWillUnmount: function() {
+    this._isMounted = false;
   },
   render: function() {
     if (this.state.fileInfos === null) {
@@ -63,8 +68,22 @@ export let FileListPublished = React.createClass({
       fileInfos: null,
     };
   },
+  _requestPublishReward: function() {
+    lbryio.call('reward', 'list', {}).then(function(userRewards) {
+      //already rewarded
+      if (userRewards.filter(function (reward) {
+          return reward.RewardType == rewards.TYPE_FIRST_PUBLISH && reward.TransactionID;
+        }).length) {
+        return;
+      }
+      else {
+        rewards.claimReward(rewards.TYPE_FIRST_PUBLISH).catch(() => {})
+      }
+    });
+  },
   componentDidMount: function () {
     this._isMounted = true;
+    this._requestPublishReward();
     document.title = "Published Files";
 
     lbry.claim_list_mine().then((claimInfos) => {
@@ -79,6 +98,9 @@ export let FileListPublished = React.createClass({
         });
       });
     });
+  },
+  componentWillUnmount: function() {
+    this._isMounted = false;
   },
   render: function () {
     if (this.state.fileInfos === null) {
@@ -161,20 +183,28 @@ export let FileList = React.createClass({
         seenUris = {};
 
     const fileInfosSorted = this._sortFunctions[this.state.sortBy](this.props.fileInfos);
-    for (let {outpoint, name, channel_name, metadata: {stream: {metadata}}, mime_type, claim_id, has_signature, signature_is_valid} of fileInfosSorted) {
-      if (!metadata || seenUris[name]) {
+    for (let {outpoint, name, channel_name, metadata, mime_type, claim_id, has_signature, signature_is_valid} of fileInfosSorted) {
+      if (seenUris[name] || !claim_id) {
         continue;
       }
 
+      let streamMetadata;
+      if (metadata) {
+        streamMetadata = metadata.stream.metadata;
+      } else {
+        streamMetadata = null;
+      }
+
+
       let fileUri;
-      if (channel_name === undefined) {
+      if (!channel_name) {
         fileUri = uri.buildLbryUri({name});
       } else {
         fileUri = uri.buildLbryUri({name: channel_name, path: name});
       }
       seenUris[name] = true;
       content.push(<FileTileStream key={outpoint} outpoint={outpoint} uri={fileUri} hideOnRemove={true}
-                                   hidePrice={this.props.hidePrices} metadata={metadata} contentType={mime_type}
+                                   hidePrice={this.props.hidePrices} metadata={streamMetadata} contentType={mime_type}
                                    hasSignature={has_signature} signatureIsValid={signature_is_valid} />);
     }
 
