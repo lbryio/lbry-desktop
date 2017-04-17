@@ -63,23 +63,32 @@ export let CreditAmount = React.createClass({
     amount: React.PropTypes.number.isRequired,
     precision: React.PropTypes.number,
     label: React.PropTypes.bool,
+    showFree: React.PropTypes.bool,
     look: React.PropTypes.oneOf(['indicator', 'plain']),
   },
   getDefaultProps: function() {
     return {
       precision: 1,
       label: true,
+      showFree: false,
       look: 'indicator',
     }
   },
   render: function() {
-    var formattedAmount = lbry.formatCredits(this.props.amount, this.props.precision);
+    const formattedAmount = lbry.formatCredits(this.props.amount, this.props.precision);
+    let amountText;
+    if (this.props.showFree && parseFloat(formattedAmount) == 0) {
+      amountText = 'free';
+    } else if (this.props.label) {
+      amountText = formattedAmount + (parseFloat(formattedAmount) == 1 ? ' credit' : ' credits');
+    } else {
+      amountText = formattedAmount;
+    }
+
     return (
       <span className={`credit-amount credit-amount--${this.props.look}`}>
         <span>
-          {formattedAmount}
-          {this.props.label ?
-           (parseFloat(formattedAmount) == 1.0 ? ' credit' : ' credits') : '' }
+          {amountText}
         </span>
         { this.props.isEstimate ? <span className="credit-amount__estimate" title="This is an estimate and does not include data fees">*</span> : null }
       </span>
@@ -102,11 +111,11 @@ export let FilePrice = React.createClass({
     }
   },
 
-  getInitialState: function() {
-    return {
-      cost: null,
-      isEstimate: null,
-    }
+  componentWillMount: function() {
+    this.setState({
+      cost: this.props.metadata ? this.props.metadata.fee : null,
+      isEstimate: this.props.metadata ? true : null,
+    });
   },
 
   componentDidMount: function() {
@@ -128,22 +137,11 @@ export let FilePrice = React.createClass({
   },
 
   render: function() {
-    if (this.state.cost === null && this.props.metadata) {
-      if (!this.props.metadata.fee) {
-        return <span className={`credit-amount credit-amount--${this.props.look}`}>free*</span>;
-      } else {
-        if (this.props.metadata.fee.currency === "LBC") {
-          return <CreditAmount label={false} amount={this.props.metadata.fee.amount} isEstimate={true} />
-        } else if (this.props.metadata.fee.currency === "USD") {
-          return <span className={`credit-amount credit-amount--${this.props.look}`}>???</span>;
-        }
-      }
+    if (this.state.cost === null) {
+      return <span className={`credit-amount credit-amount--${this.props.look}`}>???</span>;
     }
-    return (
-      this.state.cost !== null ?
-      <CreditAmount amount={this.state.cost} label={false} isEstimate={!this.state.isEstimate} look={this.props.look} /> :
-      <span className={`credit-amount credit-amount--${this.props.look}`}>???</span>
-    );
+
+    return <CreditAmount label={false} amount={this.props.metadata.fee.amount} isEstimate={true} showFree={true} />
   }
 });
 

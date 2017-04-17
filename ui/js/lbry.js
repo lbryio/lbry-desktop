@@ -1,3 +1,4 @@
+import lbryio from './lbryio.js';
 import lighthouse from './lighthouse.js';
 import jsonrpc from './jsonrpc.js';
 import uri from './uri.js';
