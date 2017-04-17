@@ -62,6 +62,7 @@ export let CreditAmount = React.createClass({
   propTypes: {
     amount: React.PropTypes.number.isRequired,
     precision: React.PropTypes.number,
+    isEstimate: React.PropTypes.bool,
     label: React.PropTypes.bool,
     showFree: React.PropTypes.bool,
     look: React.PropTypes.oneOf(['indicator', 'plain']),
@@ -100,7 +101,6 @@ export let FilePrice = React.createClass({
   _isMounted: false,
 
   propTypes: {
-    metadata: React.PropTypes.object,
     uri: React.PropTypes.string.isRequired,
     look: React.PropTypes.oneOf(['indicator', 'plain']),
   },
@@ -113,8 +113,8 @@ export let FilePrice = React.createClass({
 
   componentWillMount: function() {
     this.setState({
-      cost: this.props.metadata ? this.props.metadata.fee : null,
-      isEstimate: this.props.metadata ? true : null,
+      cost: null,
+      isEstimate: null,
     });
   },
 
@@ -124,7 +124,7 @@ export let FilePrice = React.createClass({
       if (this._isMounted) {
         this.setState({
           cost: cost,
-          isEstimate: includesData,
+          isEstimate: !includesData,
         });
       }
     }, (err) => {
@@ -141,7 +141,7 @@ export let FilePrice = React.createClass({
       return <span className={`credit-amount credit-amount--${this.props.look}`}>???</span>;
     }
 
-    return <CreditAmount label={false} amount={this.props.metadata.fee.amount} isEstimate={true} showFree={true} />
+    return <CreditAmount label={false} amount={this.state.cost} isEstimate={this.state.isEstimate} showFree={true} />
   }
 });
 

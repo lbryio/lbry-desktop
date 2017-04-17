@@ -217,12 +217,18 @@ lbry.getPeersForBlobHash = function(blobHash, callback) {
 lbry.costPromiseCache = {}
 lbry.getCostInfo = function(lbryUri) {
   if (lbry.costPromiseCache[lbryUri] === undefined) {
-    const COST_INFO_CACHE_KEY = 'cost_info_cache';
     lbry.costPromiseCache[lbryUri] = new Promise((resolve, reject) => {
+      const COST_INFO_CACHE_KEY = 'cost_info_cache';
       let costInfoCache = getSession(COST_INFO_CACHE_KEY, {})
 
+      function cacheAndResolve(cost, includesData) {
+        costInfoCache[lbryUri] = {cost, includesData};
+        setSession(COST_INFO_CACHE_KEY, costInfoCache);
+        resolve({cost, includesData});
+      }
+
       if (!lbryUri) {
-        reject(new Error(`URI required.`));
+        return reject(new Error(`URI required.`));
       }
 
       if (costInfoCache[lbryUri] && costInfoCache[lbryUri].cost) {
@@ -231,27 +237,44 @@ lbry.getCostInfo = function(lbryUri) {
 
       function getCost(lbryUri, size) {
         lbry.stream_cost_estimate({uri: lbryUri, ... size !== null ? {size} : {}}).then((cost) => {
-          costInfoCache[lbryUri] = {
-            cost: cost,
-            includesData: size !== null,
-          };
-          setSession(COST_INFO_CACHE_KEY, costInfoCache);
-          resolve(costInfoCache[lbryUri]);
+          cacheAndResolve(cost, size !== null);
         }, reject);
+      }
+
+      function getCostGenerous(lbryUri) {
+        // If generous is on, the calculation is simple enough that we might as well do it here in the front end
+        lbry.resolve({uri: lbryUri}).then((resolutionInfo) => {
+          const fee = resolutionInfo.claim.value.stream.metadata.fee;
+          if (fee === undefined) {
+            cacheAndResolve(0, true);
+          } else if (fee.currency == 'LBC') {
+            cacheAndResolve(fee.amount, true);
+          } else {
+            lbryio.getExchangeRates().then(({lbc_usd}) => {
+              cacheAndResolve(fee.amount / lbc_usd, true);
+            });
+          }
+        });
       }
 
       const uriObj = uri.parseLbryUri(lbryUri);
       const name = uriObj.path || uriObj.name;
 
-      lighthouse.get_size_for_name(name).then((size) => {
-        if (size) {
-          getCost(name, size);
+      lbry.settings_get({allow_cached: true}).then(({is_generous_host}) => {
+        if (is_generous_host) {
+          return getCostGenerous(lbryUri);
         }
-        else {
+
+        lighthouse.get_size_for_name(name).then((size) => {
+          if (size) {
+            getCost(name, size);
+          }
+          else {
+            getCost(name, null);
+          }
+        }, () => {
           getCost(name, null);
-        }
-      }, () => {
-        getCost(name, null);
+        });
       });
     });
   }

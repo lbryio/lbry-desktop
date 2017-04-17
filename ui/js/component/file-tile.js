@@ -26,7 +26,6 @@ export let FileTileStream = React.createClass({
     return {
       showNsfwHelp: false,
       isHidden: false,
-      available: null,
     }
   },
   getDefaultProps: function() {
@@ -143,7 +142,6 @@ export let FileCardStream = React.createClass({
     return {
       showNsfwHelp: false,
       isHidden: false,
-      available: null,
     }
   },
   getDefaultProps: function() {
@@ -232,7 +230,6 @@ export let FileTile = React.createClass({
 
   propTypes: {
     uri: React.PropTypes.string.isRequired,
-    available: React.PropTypes.bool,
   },
 
   getInitialState: function() {

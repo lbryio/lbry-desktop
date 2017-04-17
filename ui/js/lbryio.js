@@ -44,7 +44,7 @@ lbryio.getExchangeRates = function() {
   });
 }
 
-lbryio.call = function(resource, action, params={}, method='get', evenIfDisabled=false) { // evenIfDisabled is for development, when we may have some calls working and some not
+lbryio.call = function(resource, action, params={}, method='get', evenIfDisabled=false) { // evenIfDisabled is just for development, when we may have some calls working and some not
   return new Promise((resolve, reject) => {
     if (!lbryio.enabled && !evenIfDisabled && (resource != 'discover' || action != 'list')) {
       reject(new Error("LBRY interal API is disabled"))
