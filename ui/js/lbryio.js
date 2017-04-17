@@ -7,7 +7,7 @@ const lbryio = {
   _accessToken: getLocal('accessToken'),
   _authenticationPromise: null,
   _user : null,
-  enabled: true
+  enabled: false
 };
 
 const CONNECTION_STRING = 'http://localhost:8080/';
