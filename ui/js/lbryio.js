@@ -7,10 +7,10 @@ const lbryio = {
   _accessToken: getLocal('accessToken'),
   _authenticationPromise: null,
   _user : null,
-  enabled: true
+  enabled: false
 };
 
-const CONNECTION_STRING = 'http://localhost:8080/';
+const CONNECTION_STRING = 'https://api.lbry.io/';
 const EXCHANGE_RATE_TIMEOUT = 20 * 60 * 1000;
 
 lbryio.getExchangeRates = function() {
