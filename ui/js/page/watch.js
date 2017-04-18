@@ -204,7 +204,7 @@ export let Video = React.createClass({
       <div className={"video " + this.props.className + (this.state.isPlaying && this.state.readyToPlay ? " video--active" : " video--hidden")}>{
         this.state.isPlaying ?
           !this.state.readyToPlay  ?
-            <span>this is the world's world loading screen and we shipped our software with it anyway... <br/><br/>{this.state.loadStatusMessage}</span> :
+            <span>this is the world's worst loading screen and we shipped our software with it anyway... <br/><br/>{this.state.loadStatusMessage}</span> :
             <video controls id="video" ref="video"></video> :
           <div className="video__cover" style={{backgroundImage: 'url("' + this.props.metadata.thumbnail + '")'}}>
             <WatchLink className="video__play-button" uri={this.props.uri} metadata={this.props.metadata} outpoint={this.props.outpoint} onGet={this.onGet} icon="icon-play"></WatchLink>
