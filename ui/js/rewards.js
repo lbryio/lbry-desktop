@@ -68,7 +68,6 @@ rewards.claimReward = function (type) {
             let claim = claims.find(function(claim) {
               return claim.name.length && claim.name[0] == '@' && claim.txid.length
             })
-            console.log(claim);
             if (claim) {
               params.transaction_id = claim.txid;
               requestReward(resolve, reject, params)

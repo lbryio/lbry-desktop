@@ -29,9 +29,12 @@ const SubmitEmailStage = React.createClass({
       submitting: true,
     });
     lbryio.call('user_email', 'new', {email: this.state.email}, 'post').then(() => {
-      this.props.onEmailSaved();
+      this.props.onEmailSaved(this.state.email);
     }, (error) => {
-      if (this._emailRow) {
+      if (error.xhr && error.xhr.status == 409) {
+        this.props.onEmailSaved(this.state.email);
+        return;
+      } else if (this._emailRow) {
         this._emailRow.showError(error.message)
       }
       this.setState({ submitting: false });
@@ -58,6 +61,7 @@ const ConfirmEmailStage = React.createClass({
     return {
       rewardType: null,
       code: '',
+      email: '',
       submitting: false,
       errorMessage: null,
     };
@@ -80,7 +84,7 @@ const ConfirmEmailStage = React.createClass({
       this.setState({ submitting: false });
     }.bind(this)
 
-    lbryio.call('user_email', 'confirm', {verification_token: this.state.code}, 'post').then((userEmail) => {
+    lbryio.call('user_email', 'confirm', {verification_token: this.state.code, email: this.state.email}, 'post').then((userEmail) => {
       if (userEmail.IsVerified) {
         this.props.onEmailConfirmed();
       } else {
@@ -115,7 +119,6 @@ const WelcomeStage = React.createClass({
     }
   },
   onRewardClaim: function(reward) {
-    console.log(reward);
     this.setState({
       hasReward: true,
       rewardAmount: reward.amount
@@ -184,7 +187,7 @@ export const AuthOverlay = React.createClass({
   },
   getInitialState: function() {
     return {
-      stage: null,
+      stage: "pending",
       stageProps: {}
     };
   },
@@ -199,11 +202,11 @@ export const AuthOverlay = React.createClass({
         this.setState({
           stage: "email",
           stageProps: {
-            onEmailSaved: function() {
+            onEmailSaved: function(email) {
               this.setState({
                 stage: "confirm",
                 stageProps: {
-                  onEmailConfirmed: function() { this.setState({ stage: "welcome"}) }.bind(this)
+                  onEmailConfirmed: function() { this.setState({ stage: "welcome", email: email }) }.bind(this)
                 }
               })
             }.bind(this)

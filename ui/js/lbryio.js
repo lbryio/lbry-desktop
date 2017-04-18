@@ -7,24 +7,11 @@ const lbryio = {
   _accessToken: getLocal('accessToken'),
   _authenticationPromise: null,
   _user : null,
-  enabled: false
+  enabled: true
 };
 
-const CONNECTION_STRING = 'https://api.lbry.io/';
+const CONNECTION_STRING = 'http://localhost:8080/';
 const EXCHANGE_RATE_TIMEOUT = 20 * 60 * 1000;
-
-const mocks = {
-  'reward_type.get': ({name}) => {
-    return {
-      name: 'link_github',
-      title: 'Link your GitHub account',
-      description: 'Link LBRY to your GitHub account',
-      value: 50,
-      claimed: false,
-    };
-  }
-};
-
 
 lbryio.getExchangeRates = function() {
   return new Promise((resolve, reject) => {
@@ -47,17 +34,9 @@ lbryio.getExchangeRates = function() {
 lbryio.call = function(resource, action, params={}, method='get', evenIfDisabled=false) { // evenIfDisabled is just for development, when we may have some calls working and some not
   return new Promise((resolve, reject) => {
     if (!lbryio.enabled && !evenIfDisabled && (resource != 'discover' || action != 'list')) {
-      reject(new Error("LBRY interal API is disabled"))
+      reject(new Error("LBRY internal API is disabled"))
       return
     }
-
-    /* temp code for mocks */
-    if (`${resource}.${action}` in mocks) {
-      resolve(mocks[`${resource}.${action}`](params));
-      return;
-    }
-
-    /* end temp */
 
     const xhr = new XMLHttpRequest;
 
@@ -75,7 +54,9 @@ lbryio.call = function(resource, action, params={}, method='get', evenIfDisabled
 
       if (!response.success) {
         if (reject) {
-          reject(new Error(response.error));
+          let error = new Error(response.error);
+          error.xhr = xhr;
+          reject(error);
         } else {
           document.dispatchEvent(new CustomEvent('unhandledError', {
             detail: {
@@ -97,7 +78,7 @@ lbryio.call = function(resource, action, params={}, method='get', evenIfDisabled
     //const fullParams = {...params, ... accessToken ? {access_token: accessToken} : {}};
 
     // Temp app ID based auth:
-    const fullParams = {app_id: lbryio._accessToken, ...params};
+    const fullParams = {app_id: lbryio.getAccessToken(), ...params};
 
     if (method == 'get') {
       xhr.open('get', CONNECTION_STRING + resource + '/' + action + '?' + querystring.stringify(fullParams), true);
@@ -110,9 +91,12 @@ lbryio.call = function(resource, action, params={}, method='get', evenIfDisabled
   });
 };
 
+lbryio.getAccessToken = () => {
+  return getLocal('accessToken');
+}
+
 lbryio.setAccessToken = (token) => {
   setLocal('accessToken', token)
-  lbryio._accessToken = token
 }
 
 lbryio.authenticate = function() {
@@ -145,7 +129,7 @@ lbryio.authenticate = function() {
           })
         }
 
-        if (!lbryio._accessToken) {
+        if (!lbryio.getAccessToken()) {
           lbryio.call('user', 'new', {
             language: 'en',
             app_id: installation_id,
@@ -156,7 +140,6 @@ lbryio.authenticate = function() {
             lbryio.setAccessToken(installation_id)
             setCurrentUser()
           }).catch(function(error) {
-
             /*
                until we have better error code format, assume all errors are duplicate application id
                if we're wrong, this will be caught by later attempts to make a valid call
