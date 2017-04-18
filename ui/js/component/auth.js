@@ -61,7 +61,6 @@ const ConfirmEmailStage = React.createClass({
     return {
       rewardType: null,
       code: '',
-      email: '',
       submitting: false,
       errorMessage: null,
     };
@@ -84,7 +83,7 @@ const ConfirmEmailStage = React.createClass({
       this.setState({ submitting: false });
     }.bind(this)
 
-    lbryio.call('user_email', 'confirm', {verification_token: this.state.code, email: this.state.email}, 'post').then((userEmail) => {
+    lbryio.call('user_email', 'confirm', {verification_token: this.state.code, email: this.props.email}, 'post').then((userEmail) => {
       if (userEmail.IsVerified) {
         this.props.onEmailConfirmed();
       } else {
@@ -206,7 +205,8 @@ export const AuthOverlay = React.createClass({
               this.setState({
                 stage: "confirm",
                 stageProps: {
-                  onEmailConfirmed: function() { this.setState({ stage: "welcome", email: email }) }.bind(this)
+                  email: email,
+                  onEmailConfirmed: function() { this.setState({ stage: "welcome"}) }.bind(this)
                 }
               })
             }.bind(this)
