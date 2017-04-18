@@ -1,7 +1,7 @@
 const CHANNEL_NAME_MIN_LEN = 4;
 const CLAIM_ID_MAX_LEN = 40;
 
-const uri = {};
+const lbryuri = {};
 
 /**
  * Parses a LBRY name into its component parts. Throws errors with user-friendly
@@ -16,7 +16,7 @@ const uri = {};
  *   - claimId (string, if present)
  *   - path (string, if persent)
  */
-uri.parseLbryUri = function(lbryUri, requireProto=false) {
+lbryuri.parse = function(uri, requireProto=false) {
   // Break into components. Empty sub-matches are converted to null
   const componentsRegex = new RegExp(
     '^((?:lbry:\/\/)?)' + // protocol
@@ -24,7 +24,7 @@ uri.parseLbryUri = function(lbryUri, requireProto=false) {
     '([:$#]?)([^/]*)' +   // modifier separator, modifier (stops at the first path separator or end)
     '(/?)(.*)'            // path separator, path
   );
-  const [proto, name, modSep, modVal, pathSep, path] = componentsRegex.exec(lbryUri).slice(1).map(match => match || null);
+  const [proto, name, modSep, modVal, pathSep, path] = componentsRegex.exec(uri).slice(1).map(match => match || null);
 
   // Validate protocol
   if (requireProto && !proto) {
@@ -105,7 +105,7 @@ uri.parseLbryUri = function(lbryUri, requireProto=false) {
   };
 }
 
-uri.buildLbryUri = function(uriObj, includeProto=true) {
+lbryuri.build = function(uriObj, includeProto=true) {
   const {name, claimId, claimSequence, bidPosition, path} = uriObj;
 
   return (includeProto ? 'lbry://' : '') + name +
@@ -117,8 +117,8 @@ uri.buildLbryUri = function(uriObj, includeProto=true) {
 
 /* Takes a parseable LBRY URI and converts it to standard, canonical format (currently this just
  * consists of making sure it has a lbry:// prefix) */
-uri.normalizeLbryUri = function(lbryUri) {
-  return uri.buildLbryUri(uri.parseLbryUri(lbryUri));
+lbryuri.normalize= function(uri) {
+  return lbryuri.build(lbryuri.parse(uri));
 }
 
-export default uri;
+export default lbryuri;

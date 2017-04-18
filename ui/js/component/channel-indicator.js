@@ -1,6 +1,6 @@
 import React from 'react';
 import lbry from '../lbry.js';
-import uri from '../uri.js';
+import lbryuri from '../lbryuri.js';
 import {Icon} from './common.js';
 
 const UriIndicator = React.createClass({
@@ -11,7 +11,7 @@ const UriIndicator = React.createClass({
   },
   render: function() {
 
-    const uriObj = uri.parseLbryUri(this.props.uri);
+    const uriObj = lbryuri.parse(this.props.uri);
 
     if (!this.props.hasSignature || !uriObj.isChannel) {
       return <span className="empty">Anonymous</span>;
@@ -19,7 +19,7 @@ const UriIndicator = React.createClass({
 
     const channelUriObj = Object.assign({}, uriObj);
     delete channelUriObj.path;
-    const channelUri = uri.buildLbryUri(channelUriObj, false);
+    const channelUri = lbryuri.build(channelUriObj, false);
 
     let icon, modifier;
     if (this.props.signatureIsValid) {
