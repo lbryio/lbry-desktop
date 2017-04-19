@@ -39,20 +39,13 @@ def get_version_from_tag(tag):
 
 
 def set_version(version):
-    package_file = os.path.join('app', 'package.json')
+    root_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+    package_file = os.path.join(root_dir, 'app', 'package.json')
     with open(package_file) as fp:
         package_data = json.load(fp)
     package_data['version'] = version
     with open(package_file, 'w') as fp:
         json.dump(package_data, fp, indent=2, separators=(',', ': '))
-    with open(os.path.join('lbry', 'lbrynet', '__init__.py'), 'w') as fp:
-        fp.write(LBRYNET_TEMPLATE.format(version=version))
-
-
-LBRYNET_TEMPLATE = """
-__version__ = "{version}"
-version = tuple(__version__.split('.'))
-"""
 
 
 if __name__ == '__main__':
