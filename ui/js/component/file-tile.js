@@ -90,7 +90,7 @@ export let FileTileStream = React.createClass({
                 : null}
               <div className="meta"><a href={'?show=' + this.props.uri}>{uri}</a></div>
               <h3>
-                <a href={'?show=' + uri}>
+                <a href={'?show=' + uri} title={title}>
                   <TruncatedText lines={1}>
                     {title}
                   </TruncatedText>
@@ -195,7 +195,7 @@ export let FileCardStream = React.createClass({
         <div className="card__inner">
           <a href={primaryUrl} className="card__link">
             <div className="card__title-identity">
-              <h5><TruncatedText lines={1}>{title}</TruncatedText></h5>
+              <h5 title={title}><TruncatedText lines={1}>{title}</TruncatedText></h5>
               <div className="card__subtitle">
                 { !this.props.hidePrice ? <span style={{float: "right"}}><FilePrice uri={this.props.uri} metadata={metadata} /></span>  : null}
                 <UriIndicator uri={uri} metadata={metadata} contentType={this.props.contentType}
