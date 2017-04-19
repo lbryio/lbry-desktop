@@ -1,6 +1,6 @@
 import React from 'react';
 import lbry from '../lbry.js';
-import uri from '../uri.js';
+import lbryuri from '../lbryuri.js';
 import {Link} from '../component/link.js';
 import {Icon, FilePrice} from '../component/common.js';
 import {Modal} from './modal.js';
@@ -156,8 +156,8 @@ let FileActionsRow = React.createClass({
       linkBlock = <Link label="Open" button="text" icon="icon-folder-open" onClick={this.onOpenClick} />;
     }
 
-    const lbryUri = uri.normalizeLbryUri(this.props.uri);
-    const title = this.props.metadata ? this.props.metadata.title : lbryUri;
+    const uri = lbryuri.normalize(this.props.uri);
+    const title = this.props.metadata ? this.props.metadata.title : uri;
     return (
       <div>
         {this.state.fileInfo !== null || this.state.fileInfo.isMine
@@ -170,7 +170,7 @@ let FileActionsRow = React.createClass({
           </DropDownMenu> : '' }
         <Modal type="confirm" isOpen={this.state.modal == 'affirmPurchase'}
                contentLabel="Confirm Purchase"  onConfirmed={this.onAffirmPurchase} onAborted={this.closeModal}>
-          Are you sure you'd like to buy <strong>{title}</strong> for <strong><FilePrice uri={lbryUri} metadata={this.props.metadata} label={false} look="plain" /></strong> credits?
+          Are you sure you'd like to buy <strong>{title}</strong> for <strong><FilePrice uri={uri} metadata={this.props.metadata} label={false} look="plain" /></strong> credits?
         </Modal>
         <Modal isOpen={this.state.modal == 'notEnoughCredits'} contentLabel="Not enough credits"
                onConfirmed={this.closeModal}>
@@ -178,7 +178,7 @@ let FileActionsRow = React.createClass({
         </Modal>
         <Modal isOpen={this.state.modal == 'timedOut'} contentLabel="Download failed"
                onConfirmed={this.closeModal}>
-          LBRY was unable to download the stream <strong>{lbryUri}</strong>.
+          LBRY was unable to download the stream <strong>{uri}</strong>.
         </Modal>
         <Modal isOpen={this.state.modal == 'confirmRemove'} contentLabel="Not enough credits"
                type="confirm" confirmButtonLabel="Remove" onConfirmed={this.handleRemoveConfirmed}

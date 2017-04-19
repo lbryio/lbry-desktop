@@ -1,7 +1,7 @@
 import lbryio from './lbryio.js';
 import lighthouse from './lighthouse.js';
 import jsonrpc from './jsonrpc.js';
-import uri from './uri.js';
+import lbryuri from './lbryuri.js';
 import {getLocal, getSession, setSession, setLocal} from './utils.js';
 
 const {remote} = require('electron');
@@ -12,19 +12,19 @@ const menu = remote.require('./menu/main-menu');
  * needed to make a dummy claim or file info object.
  */
 function savePendingPublish({name, channel_name}) {
-  let lbryUri;
+  let uri;
   if (channel_name) {
-    lbryUri = uri.buildLbryUri({name: channel_name, path: name}, false);
+    uri = lbryuri.build({name: channel_name, path: name}, false);
   } else {
-    lbryUri = uri.buildLbryUri({name: name}, false);
+    uri = lbryuri.build({name: name}, false);
   }
   const pendingPublishes = getLocal('pendingPublishes') || [];
   const newPendingPublish = {
     name, channel_name,
-    claim_id: 'pending_claim_' + lbryUri,
-    txid: 'pending_' + lbryUri,
+    claim_id: 'pending_claim_' + uri,
+    txid: 'pending_' + uri,
     nout: 0,
-    outpoint: 'pending_' + lbryUri + ':0',
+    outpoint: 'pending_' + uri + ':0',
     time: Date.now(),
   };
   setLocal('pendingPublishes', [...pendingPublishes, newPendingPublish]);
@@ -215,35 +215,35 @@ lbry.getPeersForBlobHash = function(blobHash, callback) {
  *     from Lighthouse is included.
  */
 lbry.costPromiseCache = {}
-lbry.getCostInfo = function(lbryUri) {
-  if (lbry.costPromiseCache[lbryUri] === undefined) {
-    lbry.costPromiseCache[lbryUri] = new Promise((resolve, reject) => {
+lbry.getCostInfo = function(uri) {
+  if (lbry.costPromiseCache[uri] === undefined) {
+    lbry.costPromiseCache[uri] = new Promise((resolve, reject) => {
       const COST_INFO_CACHE_KEY = 'cost_info_cache';
       let costInfoCache = getSession(COST_INFO_CACHE_KEY, {})
 
       function cacheAndResolve(cost, includesData) {
-        costInfoCache[lbryUri] = {cost, includesData};
+        costInfoCache[uri] = {cost, includesData};
         setSession(COST_INFO_CACHE_KEY, costInfoCache);
         resolve({cost, includesData});
       }
 
-      if (!lbryUri) {
+      if (!uri) {
         return reject(new Error(`URI required.`));
       }
 
-      if (costInfoCache[lbryUri] && costInfoCache[lbryUri].cost) {
-        return resolve(costInfoCache[lbryUri])
+      if (costInfoCache[uri] && costInfoCache[uri].cost) {
+        return resolve(costInfoCache[uri])
       }
 
-      function getCost(lbryUri, size) {
-        lbry.stream_cost_estimate({uri: lbryUri, ... size !== null ? {size} : {}}).then((cost) => {
+      function getCost(uri, size) {
+        lbry.stream_cost_estimate({uri, ... size !== null ? {size} : {}}).then((cost) => {
           cacheAndResolve(cost, size !== null);
         }, reject);
       }
 
-      function getCostGenerous(lbryUri) {
+      function getCostGenerous(uri) {
         // If generous is on, the calculation is simple enough that we might as well do it here in the front end
-        lbry.resolve({uri: lbryUri}).then((resolutionInfo) => {
+        lbry.resolve({uri: uri}).then((resolutionInfo) => {
           const fee = resolutionInfo.claim.value.stream.metadata.fee;
           if (fee === undefined) {
             cacheAndResolve(0, true);
@@ -257,12 +257,12 @@ lbry.getCostInfo = function(lbryUri) {
         });
       }
 
-      const uriObj = uri.parseLbryUri(lbryUri);
+      const uriObj = lbryuri.parse(uri);
       const name = uriObj.path || uriObj.name;
 
       lbry.settings_get({allow_cached: true}).then(({is_generous_host}) => {
         if (is_generous_host) {
-          return getCostGenerous(lbryUri);
+          return getCostGenerous(uri);
         }
 
         lighthouse.get_size_for_name(name).then((size) => {
@@ -278,7 +278,7 @@ lbry.getCostInfo = function(lbryUri) {
       });
     });
   }
-  return lbry.costPromiseCache[lbryUri];
+  return lbry.costPromiseCache[uri];
 }
 
 lbry.getMyClaims = function(callback) {

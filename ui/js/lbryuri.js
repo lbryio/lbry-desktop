@@ -1,22 +1,31 @@
 const CHANNEL_NAME_MIN_LEN = 4;
 const CLAIM_ID_MAX_LEN = 40;
 
-const uri = {};
+const lbryuri = {};
 
 /**
  * Parses a LBRY name into its component parts. Throws errors with user-friendly
  * messages for invalid names.
  *
+ * N.B. that "name" indicates the value in the name position of the URI. For
+ * claims for channel content, this will actually be the channel name, and
+ * the content name is in the path (e.g. lbry://@channel/content)
+ *
+ * In most situations, you'll want to use the contentName and channelName keys
+ * and ignore the name key.
+ *
  * Returns a dictionary with keys:
- *   - name (string)
- *   - properName (string; strips off @ for channels)
- *   - isChannel (boolean)
+ *   - name (string): The value in the "name" position in the URI. Note that this
+ *                    could be either content name or channel name; see above.
+ *   - path (string, if persent)
  *   - claimSequence (int, if present)
  *   - bidPosition (int, if present)
  *   - claimId (string, if present)
- *   - path (string, if persent)
+ *   - isChannel (boolean)
+ *   - contentName (string): For anon claims, the name; for channel claims, the path
+ *   - channelName (string, if present): Channel name without @
  */
-uri.parseLbryUri = function(lbryUri, requireProto=false) {
+lbryuri.parse = function(uri, requireProto=false) {
   // Break into components. Empty sub-matches are converted to null
   const componentsRegex = new RegExp(
     '^((?:lbry:\/\/)?)' + // protocol
@@ -24,7 +33,9 @@ uri.parseLbryUri = function(lbryUri, requireProto=false) {
     '([:$#]?)([^/]*)' +   // modifier separator, modifier (stops at the first path separator or end)
     '(/?)(.*)'            // path separator, path
   );
-  const [proto, name, modSep, modVal, pathSep, path] = componentsRegex.exec(lbryUri).slice(1).map(match => match || null);
+  const [proto, name, modSep, modVal, pathSep, path] = componentsRegex.exec(uri).slice(1).map(match => match || null);
+
+  let contentName;
 
   // Validate protocol
   if (requireProto && !proto) {
@@ -36,20 +47,22 @@ uri.parseLbryUri = function(lbryUri, requireProto=false) {
     throw new Error('URI does not include name.');
   }
 
-  const isChannel = name[0] == '@';
-  const properName = isChannel ? name.substr(1) : name;
+  const isChannel = name.startsWith('@');
+  const channelName = isChannel ? name.slice(1) : name;
 
   if (isChannel) {
-    if (!properName) {
+    if (!channelName) {
       throw new Error('No channel name after @.');
     }
 
-    if (properName.length < CHANNEL_NAME_MIN_LEN) {
+    if (channelName.length < CHANNEL_NAME_MIN_LEN) {
       throw new Error(`Channel names must be at least ${CHANNEL_NAME_MIN_LEN} characters.`);
     }
+
+    contentName = path;
   }
 
-  const nameBadChars = properName.match(/[^A-Za-z0-9-]/g);
+  const nameBadChars = (channelName || name).match(/[^A-Za-z0-9-]/g);
   if (nameBadChars) {
     throw new Error(`Invalid character${nameBadChars.length == 1 ? '' : 's'} in name: ${nameBadChars.join(', ')}.`);
   }
@@ -82,7 +95,7 @@ uri.parseLbryUri = function(lbryUri, requireProto=false) {
     throw new Error('Bid position must be a number.');
   }
 
-  // Validate path
+  // Validate and process path
   if (path) {
     if (!isChannel) {
       throw new Error('Only channel URIs may have a path.');
@@ -92,12 +105,16 @@ uri.parseLbryUri = function(lbryUri, requireProto=false) {
     if (pathBadChars) {
       throw new Error(`Invalid character${count == 1 ? '' : 's'} in path: ${nameBadChars.join(', ')}`);
     }
+
+    contentName = path;
   } else if (pathSep) {
     throw new Error('No path provided after /');
   }
 
   return {
-    name, properName, isChannel,
+    name, path, isChannel,
+    ... contentName ? {contentName} : {},
+    ... channelName ? {channelName} : {},
     ... claimSequence ? {claimSequence: parseInt(claimSequence)} : {},
     ... bidPosition ? {bidPosition: parseInt(bidPosition)} : {},
     ... claimId ? {claimId} : {},
@@ -105,20 +122,45 @@ uri.parseLbryUri = function(lbryUri, requireProto=false) {
   };
 }
 
-uri.buildLbryUri = function(uriObj, includeProto=true) {
-  const {name, claimId, claimSequence, bidPosition, path} = uriObj;
+/**
+ * Takes an object in the same format returned by lbryuri.parse() and builds a URI.
+ *
+ * The channelName key will accept names with or without the @ prefix.
+ */
+lbryuri.build = function(uriObj, includeProto=true, allowExtraProps=false) {
+  let {name, claimId, claimSequence, bidPosition, path, contentName, channelName} = uriObj;
+
+  if (channelName) {
+    const channelNameFormatted = channelName.startsWith('@') ? channelName : '@' + channelName;
+    if (!name) {
+      name = channelNameFormatted;
+    } else if (name !== channelNameFormatted) {
+      throw new Error('Received a channel content URI, but name and channelName do not match. "name" represents the value in the name position of the URI (lbry://name...), which for channel content will be the channel name. In most cases, to construct a channel URI you should just pass channelName and contentName.');
+    }
+  }
+
+  if (contentName) {
+    if (!path) {
+      path = contentName;
+    } else if (path !== contentName) {
+      throw new Error('path and contentName do not match. Only one is required; most likely you wanted contentName.');
+    }
+  }
 
   return (includeProto ? 'lbry://' : '') + name +
          (claimId ? `#${claimId}` : '') +
          (claimSequence ? `:${claimSequence}` : '') +
          (bidPosition ? `\$${bidPosition}` : '') +
          (path ? `/${path}` : '');
+
 }
 
 /* Takes a parseable LBRY URI and converts it to standard, canonical format (currently this just
- * consists of making sure it has a lbry:// prefix) */
-uri.normalizeLbryUri = function(lbryUri) {
-  return uri.buildLbryUri(uri.parseLbryUri(lbryUri));
+ * consists of adding the lbry:// prefix if needed) */
+lbryuri.normalize= function(uri) {
+  const {name, path, bidPosition, claimSequence, claimId} = lbryuri.parse(uri);
+  return lbryuri.build({name, path, claimSequence, bidPosition, claimId});
 }
 
-export default uri;
+window.lbryuri = lbryuri;
+export default lbryuri;

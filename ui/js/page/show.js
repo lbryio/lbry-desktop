@@ -1,7 +1,7 @@
 import React from 'react';
 import lbry from '../lbry.js';
 import lighthouse from '../lighthouse.js';
-import uri from '../uri.js';
+import lbryuri from '../lbryuri.js';
 import {Video} from '../page/watch.js'
 import {TruncatedText, Thumbnail, FilePrice, BusyMessage} from '../component/common.js';
 import {FileActions} from '../component/file-actions.js';
@@ -59,7 +59,7 @@ let ShowPage = React.createClass({
     };
   },
   componentWillMount: function() {
-    this._uri = uri.normalizeLbryUri(this.props.uri);
+    this._uri = lbryuri.normalize(this.props.uri);
     document.title = this._uri;
 
     lbry.resolve({uri: this._uri}).then(({ claim: {txid, nout, has_signature, signature_is_valid, value: {stream: {metadata, source: {contentType}}}}}) => {

@@ -1,6 +1,5 @@
 import React from 'react';
 import lbry from '../lbry.js';
-import uri from '../uri.js';
 import {FormField, FormRow} from '../component/form.js';
 import {Link} from '../component/link.js';
 import rewards from '../rewards.js';

@@ -1,6 +1,6 @@
 import React from 'react';
 import lbry from '../lbry.js';
-import uri from '../uri.js';
+import lbryuri from '../lbryuri.js';
 import {Link} from '../component/link.js';
 import {FileActions} from '../component/file-actions.js';
 import {Thumbnail, TruncatedText, FilePrice} from '../component/common.js';
@@ -72,25 +72,25 @@ export let FileTileStream = React.createClass({
       return null;
     }
 
-    const lbryUri = uri.normalizeLbryUri(this.props.uri);
+    const uri = lbryuri.normalize(this.props.uri);
     const metadata = this.props.metadata;
     const isConfirmed = !!metadata;
-    const title = isConfirmed ? metadata.title : lbryUri;
+    const title = isConfirmed ? metadata.title : uri;
     const obscureNsfw = this.props.obscureNsfw && isConfirmed && metadata.nsfw;
     return (
       <section className={ 'file-tile card ' + (obscureNsfw ? 'card--obscured ' : '') } onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
         <div className={"row-fluid card__inner file-tile__row"}>
           <div className="span3 file-tile__thumbnail-container">
-            <a href={'?show=' + lbryUri}><Thumbnail className="file-tile__thumbnail" {... metadata && metadata.thumbnail ? {src: metadata.thumbnail} : {}} alt={'Photo for ' + (title || this.props.uri)} /></a>
+            <a href={'?show=' + uri}><Thumbnail className="file-tile__thumbnail" {... metadata && metadata.thumbnail ? {src: metadata.thumbnail} : {}} alt={'Photo for ' + this.props.uri} /></a>
           </div>
           <div className="span9">
             <div className="card__title-primary">
               { !this.props.hidePrice
                 ? <FilePrice uri={this.props.uri} />
                 : null}
-              <div className="meta"><a href={'?show=' + this.props.uri}>{lbryUri}</a></div>
+              <div className="meta"><a href={'?show=' + this.props.uri}>{uri}</a></div>
               <h3>
-                <a href={'?show=' + this.props.uri}>
+                <a href={'?show=' + uri}>
                   <TruncatedText lines={1}>
                     {title}
                   </TruncatedText>
@@ -184,12 +184,12 @@ export let FileCardStream = React.createClass({
       return null;
     }
 
-    const lbryUri = uri.normalizeLbryUri(this.props.uri);
+    const uri = lbryuri.normalize(this.props.uri);
     const metadata = this.props.metadata;
     const isConfirmed = !!metadata;
-    const title = isConfirmed ? metadata.title : lbryUri;
+    const title = isConfirmed ? metadata.title : uri;
     const obscureNsfw = this.props.obscureNsfw && isConfirmed && metadata.nsfw;
-    const primaryUrl = '?show=' + lbryUri;
+    const primaryUrl = '?show=' + uri;
     return (
       <section className={ 'card card--small card--link ' + (obscureNsfw ? 'card--obscured ' : '') } onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
         <div className="card__inner">
@@ -198,7 +198,7 @@ export let FileCardStream = React.createClass({
               <h5><TruncatedText lines={1}>{title}</TruncatedText></h5>
               <div className="card__subtitle">
                 { !this.props.hidePrice ? <span style={{float: "right"}}><FilePrice uri={this.props.uri} metadata={metadata} /></span>  : null}
-                <UriIndicator uri={lbryUri} metadata={metadata} contentType={this.props.contentType}
+                <UriIndicator uri={uri} metadata={metadata} contentType={this.props.contentType}
                               hasSignature={this.props.hasSignature} signatureIsValid={this.props.signatureIsValid} />
               </div>
             </div>

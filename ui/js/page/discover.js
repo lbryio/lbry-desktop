@@ -1,7 +1,7 @@
 import React from 'react';
 import lbry from '../lbry.js';
 import lbryio from '../lbryio.js';
-import uri from '../uri.js';
+import lbryuri from '../lbryuri.js';
 import lighthouse from '../lighthouse.js';
 import {FileTile, FileTileStream} from '../component/file-tile.js';
 import {Link} from '../component/link.js';
@@ -47,22 +47,14 @@ var SearchResults = React.createClass({
     var rows = [],
         seenNames = {}; //fix this when the search API returns claim IDs
     for (let {name, claim, claim_id, channel_name, channel_id, txid, nout} of this.props.results) {
-      let lbryUri;
-      if (channel_name) {
-        lbryUri = uri.buildLbryUri({
-          name: channel_name,
-          path: name,
-          claimId: channel_id,
-        });
-      } else {
-        lbryUri = uri.buildLbryUri({
-          name: name,
-          claimId: claim_id,
-        })
-      }
+      const uri = lbryuri.build({
+        channelName: channel_name,
+        contentName: name,
+        claimId: channel_id || claim_id,
+      });
 
       rows.push(
-        <FileTileStream key={name} uri={lbryUri} outpoint={txid + ':' + nout} metadata={claim.stream.metadata} contentType={claim.stream.source.contentType} />
+        <FileTileStream key={name} uri={uri} outpoint={txid + ':' + nout} metadata={claim.stream.metadata} contentType={claim.stream.source.contentType} />
       );
     }
     return (
