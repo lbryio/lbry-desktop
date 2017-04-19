@@ -19,6 +19,7 @@ const UriIndicator = React.createClass({
 
     const channelUriObj = Object.assign({}, uriObj);
     delete channelUriObj.path;
+    delete channelUriObj.contentName;
     const channelUri = lbryuri.build(channelUriObj, false);
 
     let icon, modifier;

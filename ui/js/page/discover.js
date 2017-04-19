@@ -47,19 +47,11 @@ var SearchResults = React.createClass({
     var rows = [],
         seenNames = {}; //fix this when the search API returns claim IDs
     for (let {name, claim, claim_id, channel_name, channel_id, txid, nout} of this.props.results) {
-      let uri;
-      if (channel_name) {
-        uri = lbryuri.build({
-          name: channel_name,
-          path: name,
-          claimId: channel_id,
-        });
-      } else {
-        uri = lbryuri.build({
-          name: name,
-          claimId: claim_id,
-        })
-      }
+      const uri = lbryuri.build({
+        channelName: channel_name,
+        contentName: name,
+        claimId: channel_id || claim_id,
+      });
 
       rows.push(
         <FileTileStream key={name} uri={uri} outpoint={txid + ':' + nout} metadata={claim.stream.metadata} contentType={claim.stream.source.contentType} />
