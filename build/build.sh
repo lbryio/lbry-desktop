@@ -72,17 +72,15 @@ npm install
 #  daemon and cli  #
 ####################
 
-if [ "$FULL_BUILD" == "true" ]; then
-  if $OSX; then
-    OSNAME="macos"
-  else
-    OSNAME="linux"
-  fi
-  DAEMON_URL="$(cat "$BUILD_DIR/DAEMON_URL" | sed "s/OSNAME/${OSNAME}/")"
-  wget --quiet "$DAEMON_URL" -O "$BUILD_DIR/daemon.zip"
-  unzip "$BUILD_DIR/daemon.zip" -d "$ROOT/app/dist/"
-  rm "$BUILD_DIR/daemon.zip"
+if $OSX; then
+  OSNAME="macos"
+else
+  OSNAME="linux"
 fi
+DAEMON_URL="$(cat "$BUILD_DIR/DAEMON_URL" | sed "s/OSNAME/${OSNAME}/")"
+wget --quiet "$DAEMON_URL" -O "$BUILD_DIR/daemon.zip"
+unzip "$BUILD_DIR/daemon.zip" -d "$ROOT/app/dist/"
+rm "$BUILD_DIR/daemon.zip"
 
 ###################
 #  Build the app  #
