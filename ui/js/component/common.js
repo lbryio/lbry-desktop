@@ -149,12 +149,14 @@ var addressStyle = {
   fontFamily: '"Consolas", "Lucida Console", "Adobe Source Code Pro", monospace',
 };
 export let Address = React.createClass({
+  _inputElem: null,
   propTypes: {
     address: React.PropTypes.string,
   },
   render: function() {
     return (
-      <span style={addressStyle}>{this.props.address}</span>
+      <input className="input-copyable" type="text" ref={(input) => { this._inputElem = input; }}
+             onFocus={() => { this._inputElem.select(); }} style={addressStyle} readOnly="readonly" value={this.props.address}></input>
     );
   }
 });

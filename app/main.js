@@ -107,7 +107,6 @@ function launchDaemon() {
   daemonSubprocess.stdout.on('data', (buf) => {console.log(String(buf).trim());});
   daemonSubprocess.stderr.on('data', (buf) => {console.log(String(buf).trim());});
   daemonSubprocess.on('exit', handleDaemonSubprocessExited);
-  console.log('lbrynet daemon has launched')
 }
 
 /*

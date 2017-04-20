@@ -38,20 +38,6 @@
   text-align: center;
 }
 
-/*
-section
-{
-  margin-bottom: $spacing-vertical;
-  &:last-child
-  {
-    margin-bottom: 0;
-  }
-  &:only-child {
-    margin-bottom: $spacing-vertical;
-  }
-}
-*/
-
 h2 {
   font-size: 1.75em;
 }
@@ -146,4 +132,8 @@ p
   text-align: right;
   font-size: 0.85em;
   color: $color-help;
+}
+
+section.section-spaced {
+  margin-bottom: $spacing-vertical;
 }
