@@ -140,9 +140,12 @@ lbryuri.build = function(uriObj, includeProto=true, allowExtraProps=false) {
   }
 
   if (contentName) {
-    if (!path) {
+    if (!name) {
+      name = contentName;
+    } else if (!path) {
       path = contentName;
-    } else if (path !== contentName) {
+    }
+    if (path && path !== contentName) {
       throw new Error('path and contentName do not match. Only one is required; most likely you wanted contentName.');
     }
   }

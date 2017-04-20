@@ -46,6 +46,7 @@ var SearchResults = React.createClass({
   render: function() {
     var rows = [],
         seenNames = {}; //fix this when the search API returns claim IDs
+
     for (let {name, claim, claim_id, channel_name, channel_id, txid, nout} of this.props.results) {
       const uri = lbryuri.build({
         channelName: channel_name,

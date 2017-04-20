@@ -517,7 +517,7 @@ lbry._updateClaimOwnershipCache = function(claimId) {
   lbry.getMyClaims((claimInfos) => {
     lbry._claimIdOwnershipCache[claimId] = !!claimInfos.reduce(function(match, claimInfo) {
       return match || claimInfo.claim_id == claimId;
-    });
+    }, false);
   });
 
 };
