@@ -35,7 +35,7 @@ var init = function() {
 
   function onDaemonReady() {
     window.sessionStorage.setItem('loaded', 'y'); //once we've made it here once per session, we don't need to show splash again
-    ReactDOM.render(<Provider store={store}><div>{ lbryio.enabled ? <AuthOverlay/> : '' }<App /><SnackBar /></div></Provider>, canvas)
+      ReactDOM.render(<Provider store={store}><div>{ lbryio.enabled ? <AuthOverlay/> : '' }<App /><SnackBar /></div></Provider>, canvas)
   }
 
   if (window.sessionStorage.getItem('loaded') == 'y') {
