@@ -14,8 +14,7 @@ const Link = (props) => {
     hidden,
     disabled,
   } = props
-
-console.log(props);
+  
   const className = (props.className || '') +
     (!props.className && !props.button ? 'button-text' : '') + // Non-button links get the same look as text buttons
     (props.button ? ' button-block button-' + props.button + ' button-set-item' : '') +
