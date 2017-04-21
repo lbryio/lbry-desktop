@@ -517,7 +517,7 @@ lbry._updateClaimOwnershipCache = function(claimId) {
   lbry.getMyClaims((claimInfos) => {
     lbry._claimIdOwnershipCache[claimId] = !!claimInfos.reduce(function(match, claimInfo) {
       return match || claimInfo.claim_id == claimId;
-    }, false);
+    });
   });
 
 };
@@ -570,6 +570,7 @@ lbry.fileInfoUnsubscribe = function(outpoint, subscribeId) {
   delete lbry._fileInfoSubscribeCallbacks[outpoint][subscribeId];
 }
 
+lbry._balanceUpdateInterval = null;
 lbry._updateBalanceSubscribers = function() {
   lbry.get_balance().then(function(balance) {
     for (let callback of Object.values(lbry._balanceSubscribeCallbacks)) {
@@ -577,8 +578,8 @@ lbry._updateBalanceSubscribers = function() {
     }
   });
 
-  if (Object.keys(lbry._balanceSubscribeCallbacks).length) {
-    setTimeout(() => {
+  if (!lbry._balanceUpdateInterval && Object.keys(lbry._balanceSubscribeCallbacks).length) {
+    lbry._balanceUpdateInterval = setInterval(() => {
       lbry._updateBalanceSubscribers();
     }, lbry._balanceSubscribeInterval);
   }
@@ -593,6 +594,9 @@ lbry.balanceSubscribe = function(callback) {
 
 lbry.balanceUnsubscribe = function(subscribeId) {
   delete lbry._balanceSubscribeCallbacks[subscribeId];
+  if (lbry._balanceUpdateInterval && !Object.keys(lbry._balanceSubscribeCallbacks).length) {
+    clearInterval(lbry._balanceUpdateInterval)
+  }
 }
 
 lbry.showMenuIfNeeded = function() {
