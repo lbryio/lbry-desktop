@@ -6,6 +6,7 @@ import argparse
 import contextlib
 import os
 import re
+import requests
 import subprocess
 import sys
 
@@ -175,6 +176,40 @@ def run_sanity_checks(repo, branch):
             'pip install -U git+https://github.com/lbryio/bumpversion.git'
         )
         sys.exit(1)
+    if not check_daemon_urls():
+        sys.exit(1)
+
+
+def check_daemon_urls():
+    daemon_url_file = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'DAEMON_URL')
+    success = True
+    with open(daemon_url_file, 'r') as f:
+        daemon_url_template = f.read().strip()
+        if "OSNAME" not in daemon_url_template:
+            print "Daemon URL must include the string 'OSNAME'"
+            return False
+        for osname in ('linux', 'macos', 'windows'):
+            if not check_url(daemon_url_template.replace('OSNAME', osname)):
+                success = False
+                print "Daemon URL for " + osname + " does not work"
+    return success
+
+
+def check_url(url):
+    url = url.strip()
+    r = requests.head(url)
+    if r.status_code >= 400:
+        return False
+    elif r.status_code >= 300:
+        new_location = r.headers.get('Location').strip()
+        if new_location == url:
+            # self-loop
+            return False
+        if "github-cloud.s3.amazonaws.com/releases" in new_location:
+            # HEAD doesnt work on s3 links, so assume its good
+            return True
+        return check_url(new_location)
+    return True
 
 
 def is_custom_bumpversion_version():
