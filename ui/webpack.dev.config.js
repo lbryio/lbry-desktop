@@ -1,4 +1,5 @@
 const path = require('path');
+const appPath = path.resolve(__dirname, 'js');
 
 const PATHS = {
   app: path.join(__dirname, 'app'),
@@ -16,6 +17,10 @@ module.exports = {
   debug: true,
   cache: true,
   devtool: 'eval',
+  resolve: {
+    root: appPath,
+    extensions: ['', '.js', '.jsx', '.css'],
+  },
   module: {
     preLoaders: [
       {
@@ -28,9 +33,9 @@ module.exports = {
     loaders: [
       { test: /\.css$/, loader: "style!css" },
       {
-	test: /\.jsx?$/,
-	loader: 'babel',
-	query: {
+        test: /\.jsx?$/,
+        loader: 'babel',
+        query: {
           cacheDirectory: true,
           presets:[ 'es2015', 'react', 'stage-2' ]
         }

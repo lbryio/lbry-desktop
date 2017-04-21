@@ -1,6 +1,6 @@
 import React from 'react';
 import {Icon, Thumbnail, FilePrice} from '../component/common.js';
-import {Link} from '../component/link.js';
+import Link from '../component/link';
 import lbry from '../lbry.js';
 import Modal from '../component/modal.js';
 import lbryio from '../lbryio.js';

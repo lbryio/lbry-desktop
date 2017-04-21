@@ -4,7 +4,7 @@ import lbryio from '../lbryio.js';
 import lbryuri from '../lbryuri.js';
 import lighthouse from '../lighthouse.js';
 import {FileTile, FileTileStream} from '../component/file-tile.js';
-import {Link} from '../component/link.js';
+import Link from '../component/link';
 import {ToolTip} from '../component/tooltip.js';
 import {BusyMessage} from '../component/common.js';
 
@@ -194,6 +194,7 @@ var DiscoverPage = React.createClass({
   render: function() {
     return (
       <main>
+        <FeaturedContent />
         { this.state.searching ? <SearchActive /> : null }
         { !this.state.searching && this.props.query && this.state.results.length ? <SearchResults results={this.state.results} /> : null }
         { !this.state.searching && this.props.query && !this.state.results.length ? <SearchNoResults query={this.props.query} /> : null }

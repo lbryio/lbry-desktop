@@ -5,7 +5,7 @@ import lbryuri from '../lbryuri.js';
 import {Video} from '../page/watch.js'
 import {TruncatedText, Thumbnail, FilePrice, BusyMessage} from '../component/common.js';
 import {FileActions} from '../component/file-actions.js';
-import {Link} from '../component/link.js';
+import Link from '../component/link';
 import UriIndicator from '../component/channel-indicator.js';
 
 var FormatItem = React.createClass({

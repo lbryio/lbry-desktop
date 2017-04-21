@@ -1,6 +1,6 @@
 import React from 'react';
 import {Icon} from './common.js';
-import {Link} from '../component/link.js';
+import Link from 'component/link';
 
 export let DropDownMenuItem = React.createClass({
   propTypes: {

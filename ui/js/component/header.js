@@ -1,6 +1,6 @@
 import React from 'react';
-import {Link} from './link.js';
 import {Icon} from './common.js';
+import Link from 'component/link';
 
 var Header = React.createClass({
   getInitialState: function() {
