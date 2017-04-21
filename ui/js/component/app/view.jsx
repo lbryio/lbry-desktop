@@ -30,20 +30,16 @@ const App = React.createClass({
     } = this.props
     const searchQuery = (currentPage == 'discover' && searchTerm ? searchTerm : '')
 
-    return (
-      currentPage == 'watch' ?
-        <Router /> :
-        <div id="window" className={ drawerOpen ? 'drawer-open' : 'drawer-closed' }>
-          <Drawer onCloseDrawer={closeDrawer} viewingPage={currentPage} />
-          <div id="main-content" className={ headerLinks ? 'with-sub-nav' : 'no-sub-nav' }>
-            <Header onOpenDrawer={openDrawer} initialQuery={searchQuery} onSearch={search} links={headerLinks} />
-            <Router />
-          </div>
-          {modal == 'upgrade' && <UpgradeModal />}
-          {modal == 'downloading' && <DownloadingModal />}
-          {modal == 'error' && <ErrorModal />}
-        </div>
-    );
+    return <div id="window" className={ drawerOpen ? 'drawer-open' : 'drawer-closed' }>
+      <Drawer onCloseDrawer={closeDrawer} viewingPage={currentPage} />
+      <div id="main-content" className={ headerLinks ? 'with-sub-nav' : 'no-sub-nav' }>
+        <Header onOpenDrawer={openDrawer} initialQuery={searchQuery} onSearch={search} links={headerLinks} />
+        <Router />
+      </div>
+      {modal == 'upgrade' && <UpgradeModal />}
+      {modal == 'downloading' && <DownloadingModal />}
+      {modal == 'error' && <ErrorModal />}
+    </div>
   }
 });
 
