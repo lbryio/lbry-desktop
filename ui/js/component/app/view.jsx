@@ -2,8 +2,7 @@ import React from 'react'
 
 import lbry from 'lbry.js';
 import Router from 'component/router'
-import Drawer from 'component/drawer';
-import Header from 'component/header.js';
+import Header from 'component/header';
 import {Modal, ExpandableModal} from 'component/modal.js';
 import ErrorModal from 'component/errorModal'
 import DownloadingModal from 'component/downloadingModal'

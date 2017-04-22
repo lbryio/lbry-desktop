@@ -6,13 +6,8 @@ const defaultState = {
   currentPage: 'discover',
   platform: process.platform,
   drawerOpen: sessionStorage.getItem('drawerOpen') || true,
-  upgradeSkipped: sessionStorage.getItem('upgradeSkipped')
-}
-
-reducers[types.UPDATE_BALANCE] = function(state, action) {
-  return Object.assign({}, state, {
-    balance: action.data.balance
-  })
+  upgradeSkipped: sessionStorage.getItem('upgradeSkipped'),
+  daemonReady: false,
 }
 
 reducers[types.NAVIGATE] = function(state, action) {
@@ -95,6 +90,13 @@ reducers[types.CLOSE_DRAWER] = function(state, action) {
 reducers[types.UPGRADE_DOWNLOAD_PROGRESSED] = function(state, action) {
   return Object.assign({}, state, {
     downloadProgress: action.data.percent
+  })
+}
+
+reducers[types.DAEMON_READY] = function(state, action) {
+  // sessionStorage.setItem('loaded', 'y');
+  return Object.assign({}, state, {
+    daemonReady: true
   })
 }
 
