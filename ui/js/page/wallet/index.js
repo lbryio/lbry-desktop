@@ -7,6 +7,7 @@ import {
 } from 'actions/app'
 import {
   doGetNewAddress,
+  doCheckAddressIsMine,
 } from 'actions/wallet'
 import {
   selectCurrentPage,
@@ -34,6 +35,7 @@ const select = (state) => ({
 const perform = (dispatch) => ({
   closeModal: () => dispatch(doCloseModal()),
   getNewAddress: () => dispatch(doGetNewAddress()),
+  checkAddressIsMine: (address) => dispatch(doCheckAddressIsMine(address))
 })
 
 export default connect(select, perform)(WalletPage)
