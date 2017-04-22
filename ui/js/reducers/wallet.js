@@ -45,6 +45,18 @@ reducers[types.UPDATE_BALANCE] = function(state, action) {
   })
 }
 
+reducers[types.CHECK_ADDRESS_IS_MINE_STARTED] = function(state, action) {
+  return Object.assign({}, state, {
+    checkingAddressOwnership: true
+  })
+}
+
+reducers[types.CHECK_ADDRESS_IS_MINE_COMPLETED] = function(state, action) {
+  return Object.assign({}, state, {
+    checkingAddressOwnership: false
+  })
+}
+
 export default function reducer(state = defaultState, action) {
   const handler = reducers[action.type];
   if (handler) return handler(state, action);
