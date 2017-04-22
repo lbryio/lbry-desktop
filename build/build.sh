@@ -78,9 +78,9 @@ else
   OSNAME="linux"
 fi
 DAEMON_URL="$(cat "$BUILD_DIR/DAEMON_URL" | sed "s/OSNAME/${OSNAME}/")"
-wget --quiet "$DAEMON_URL" -O "$BUILD_DIR/daemon.zip"
+# wget --quiet "$DAEMON_URL" -O "$BUILD_DIR/daemon.zip"
 unzip "$BUILD_DIR/daemon.zip" -d "$ROOT/app/dist/"
-rm "$BUILD_DIR/daemon.zip"
+# rm "$BUILD_DIR/daemon.zip"
 
 ###################
 #  Build the app  #
