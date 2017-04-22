@@ -17,8 +17,20 @@ reducers[types.FETCH_TRANSACTIONS_STARTED] = function(state, action) {
 }
 
 reducers[types.FETCH_TRANSACTIONS_COMPLETED] = function(state, action) {
+  const oldTransactions = Object.assign({}, state.transactions)
+  const byId = Object.assign({}, oldTransactions.byId)
+  const { transactions } = action.data
+
+  transactions.forEach((transaction) => {
+    byId[transaction.txid] = transaction
+  })
+
+  const newTransactions = Object.assign({}, oldTransactions, {
+    byId: byId
+  })
+
   return Object.assign({}, state, {
-    transactions: action.data.transactions,
+    transactions: newTransactions,
     fetchingTransactions: false
   })
 }

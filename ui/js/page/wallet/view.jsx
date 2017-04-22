@@ -46,116 +46,159 @@ class AddressSection extends React.Component {
   }
 }
 
-var SendToAddressSection = React.createClass({
-  handleSubmit: function(event) {
-    if (typeof event !== 'undefined') {
-      event.preventDefault();
-    }
+const SendToAddressSection = (props) => {
+  const {
+    sendToAddress,
+    closeModal,
+    modal,
+    setAmount,
+    setAddress,
+    amount,
+    address,
+  } = props
 
-    if ((this.state.balance - this.state.amount) < 1)
-    {
-      this.setState({
-        modal: 'insufficientBalance',
-      });
-      return;
-    }
+  const results = null
 
-    this.setState({
-      results: "",
-    });
+  return (
+    <section className="card">
+      <form onSubmit={sendToAddress}>
+        <div className="card__title-primary">
+          <h3>Send Credits</h3>
+        </div>
+        <div className="card__content">
+          <FormRow label="Amount" postfix="LBC" step="0.01" type="number" placeholder="1.23" size="10" onChange={setAmount} />
+        </div>
+        <div className="card__content">
+          <FormRow label="Recipient Address" placeholder="bbFxRyXXXXXXXXXXXZD8nE7XTLUxYnddTs" type="text" size="60" onChange={setAddress} />
+        </div>
+        <div className="card__actions card__actions--form-submit">
+          <Link button="primary" label="Send" onClick={sendToAddress} disabled={!(parseFloat(amount) > 0.0) || !address} />
+          <input type='submit' className='hidden' />
+        </div>
+          {
+            results ?
+            <div className="card__content">
+              <h4>Results</h4>
+              {results}
+            </div> : ''
+          }
+      </form>
+      {modal == 'insufficientBalance' && <Modal isOpen={true} contentLabel="Insufficient balance" onConfirmed={closeModal}>
+        Insufficient balance: after this transaction you would have less than 1 LBC in your wallet.
+      </Modal>}
+    </section>
+  )
+}
 
-    lbry.sendToAddress(this.state.amount, this.state.address, (results) => {
-      if(results === true)
-      {
-        this.setState({
-          results: "Your transaction was successfully placed in the queue.",
-        });
-      }
-      else
-      {
-        this.setState({
-          results: "Something went wrong: " + results
-        });
-      }
-    }, (error) => {
-      this.setState({
-        results: "Something went wrong: " + error.message
-      })
-    });
-  },
-  closeModal: function() {
-    this.setState({
-      modal: null,
-    });
-  },
-  getInitialState: function() {
-    return {
-      address: "",
-      amount: 0.0,
-      balance: <BusyMessage message="Checking balance" />,
-      results: "",
-    }
-  },
-  componentWillMount: function() {
-    lbry.getBalance((results) => {
-      this.setState({
-        balance: results,
-      });
-    });
-  },
-  setAmount: function(event) {
-    this.setState({
-      amount: parseFloat(event.target.value),
-    })
-  },
-  setAddress: function(event) {
-    this.setState({
-      address: event.target.value,
-    })
-  },
-  render: function() {
-    return (
-      <section className="card">
-        <form onSubmit={this.handleSubmit}>
-          <div className="card__title-primary">
-            <h3>Send Credits</h3>
-          </div>
-          <div className="card__content">
-            <FormRow label="Amount" postfix="LBC" step="0.01" type="number" placeholder="1.23" size="10" onChange={this.setAmount} />
-          </div>
-          <div className="card__content">
-            <FormRow label="Recipient Address" placeholder="bbFxRyXXXXXXXXXXXZD8nE7XTLUxYnddTs" type="text" size="60" onChange={this.setAddress} />
-          </div>
-          <div className="card__actions card__actions--form-submit">
-            <Link button="primary" label="Send" onClick={this.handleSubmit} disabled={!(parseFloat(this.state.amount) > 0.0) || this.state.address == ""} />
-            <input type='submit' className='hidden' />
-          </div>
-            {
-              this.state.results ?
-              <div className="card__content">
-                <h4>Results</h4>
-                {this.state.results}
-              </div> : ''
-            }
-        </form>
-        <Modal isOpen={this.state.modal === 'insufficientBalance'} contentLabel="Insufficient balance"
-               onConfirmed={this.closeModal}>
-          Insufficient balance: after this transaction you would have less than 1 LBC in your wallet.
-        </Modal>
-      </section>
-    );
-  }
-});
+// var SendToAddressSection = React.createClass({
+//   handleSubmit: function(event) {
+//     if (typeof event !== 'undefined') {
+//       event.preventDefault();
+//     }
+
+//     if ((this.state.balance - this.state.amount) < 1)
+//     {
+//       this.setState({
+//         modal: 'insufficientBalance',
+//       });
+//       return;
+//     }
+
+//     this.setState({
+//       results: "",
+//     });
+
+//     lbry.sendToAddress(this.state.amount, this.state.address, (results) => {
+//       if(results === true)
+//       {
+//         this.setState({
+//           results: "Your transaction was successfully placed in the queue.",
+//         });
+//       }
+//       else
+//       {
+//         this.setState({
+//           results: "Something went wrong: " + results
+//         });
+//       }
+//     }, (error) => {
+//       this.setState({
+//         results: "Something went wrong: " + error.message
+//       })
+//     });
+//   },
+//   closeModal: function() {
+//     this.setState({
+//       modal: null,
+//     });
+//   },
+//   getInitialState: function() {
+//     return {
+//       address: "",
+//       amount: 0.0,
+//       balance: <BusyMessage message="Checking balance" />,
+//       results: "",
+//     }
+//   },
+//   componentWillMount: function() {
+//     lbry.getBalance((results) => {
+//       this.setState({
+//         balance: results,
+//       });
+//     });
+//   },
+//   setAmount: function(event) {
+//     this.setState({
+//       amount: parseFloat(event.target.value),
+//     })
+//   },
+//   setAddress: function(event) {
+//     this.setState({
+//       address: event.target.value,
+//     })
+//   },
+//   render: function() {
+//     return (
+//       <section className="card">
+//         <form onSubmit={this.handleSubmit}>
+//           <div className="card__title-primary">
+//             <h3>Send Credits</h3>
+//           </div>
+//           <div className="card__content">
+//             <FormRow label="Amount" postfix="LBC" step="0.01" type="number" placeholder="1.23" size="10" onChange={this.setAmount} />
+//           </div>
+//           <div className="card__content">
+//             <FormRow label="Recipient Address" placeholder="bbFxRyXXXXXXXXXXXZD8nE7XTLUxYnddTs" type="text" size="60" onChange={this.setAddress} />
+//           </div>
+//           <div className="card__actions card__actions--form-submit">
+//             <Link button="primary" label="Send" onClick={this.handleSubmit} disabled={!(parseFloat(this.state.amount) > 0.0) || this.state.address == ""} />
+//             <input type='submit' className='hidden' />
+//           </div>
+//             {
+//               this.state.results ?
+//               <div className="card__content">
+//                 <h4>Results</h4>
+//                 {this.state.results}
+//               </div> : ''
+//             }
+//         </form>
+//         <Modal isOpen={this.state.modal === 'insufficientBalance'} contentLabel="Insufficient balance"
+//                onConfirmed={this.closeModal}>
+//           Insufficient balance: after this transaction you would have less than 1 LBC in your wallet.
+//         </Modal>
+//       </section>
+//     );
+//   }
+// });
 
 const TransactionList = (props) => {
   const {
-    transactions,
     fetchingTransactions,
     transactionItems,
   } = props
 
   const rows = []
-  if (transactions.length > 0) {
+  if (transactionItems.length > 0) {
     transactionItems.forEach(function(item) {
       rows.push(
         <tr key={item.id}>

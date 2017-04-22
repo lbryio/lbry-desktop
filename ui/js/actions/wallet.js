@@ -58,3 +58,8 @@ export function doCheckAddressIsMine(address) {
     })
   }
 }
+
+export function doSendToAddress() {
+  return function(dispatch, getState) {
+  }
+}
