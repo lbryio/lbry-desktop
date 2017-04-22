@@ -3,7 +3,7 @@ import lbryuri from '../lbryuri.js';
 import {Icon, CreditAmount} from './common.js';
 import Link from 'component/link';
 
-var Header = React.createClass({
+let Header = React.createClass({
   _balanceSubscribeId: null,
   _isMounted: false,
 
@@ -189,25 +189,5 @@ class WunderBar extends React.PureComponent {
     );
   }
 }
-
-export let SubHeader =  React.createClass({
-  render: function() {
-    let links = [],
-        viewingUrl = '?' + this.props.viewingPage;
-
-    for (let link of Object.keys(this.props.links)) {
-      links.push(
-        <a href={link} key={link} className={ viewingUrl == link ? 'sub-header-selected' : 'sub-header-unselected' }>
-          {this.props.links[link]}
-        </a>
-      );
-    }
-    return (
-      <nav className={'sub-header' + (this.props.modifier ? ' sub-header--' + this.props.modifier : '')}>
-        {links}
-      </nav>
-    );
-  }
-});
 
 export default Header;

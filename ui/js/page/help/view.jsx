@@ -48,7 +48,7 @@ var HelpPage = React.createClass({
     }
 
     return (
-      <main className="page">
+      <main className="main--single-column">
         <section className="card">
           <h3>Read the FAQ</h3>
           <p>Our FAQ answers many common questions.</p>

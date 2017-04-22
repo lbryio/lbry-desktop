@@ -9,6 +9,7 @@ import SnackBar from './component/snack-bar.js';
 import {AuthOverlay} from './component/auth.js';
 import { Provider } from 'react-redux';
 import store from 'store.js';
+import { runTriggers } from 'triggers'
 
 const {remote} = require('electron');
 const contextMenu = remote.require('./menu/context-menu');
@@ -23,6 +24,8 @@ window.addEventListener('contextmenu', (event) => {
 });
 
 const initialState = app.store.getState();
+app.store.subscribe(runTriggers);
+runTriggers();
 
 var init = function() {
   window.lbry = lbry;
@@ -35,7 +38,7 @@ var init = function() {
 
   function onDaemonReady() {
     window.sessionStorage.setItem('loaded', 'y'); //once we've made it here once per session, we don't need to show splash again
-      ReactDOM.render(<Provider store={store}><div>{ lbryio.enabled ? <AuthOverlay/> : '' }<App /><SnackBar /></div></Provider>, canvas)
+    ReactDOM.render(<Provider store={store}><div>{ lbryio.enabled ? <AuthOverlay/> : '' }<App /><SnackBar /></div></Provider>, canvas)
   }
 
   if (window.sessionStorage.getItem('loaded') == 'y') {
