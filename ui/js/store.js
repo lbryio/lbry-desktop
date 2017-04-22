@@ -6,6 +6,7 @@ import {
   createLogger
 } from 'redux-logger'
 import appReducer from 'reducers/app';
+import walletReducer from 'reducers/wallet'
 
 function isFunction(object) {
   return typeof object === 'function';
@@ -17,6 +18,7 @@ function isNotFunction(object) {
 
 const reducers = redux.combineReducers({
   app: appReducer,
+  wallet: walletReducer,
 });
 
 var middleware = [thunk]

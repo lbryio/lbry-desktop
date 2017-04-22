@@ -16,13 +16,6 @@ export const selectCurrentPage = createSelector(
   }
 )
 
-export const selectBalance = createSelector(
-  _selectState,
-  (state) => {
-    return state.balance || 0
-  }
-)
-
 export const selectPlatform = createSelector(
   _selectState,
   (state) => {
@@ -101,17 +94,17 @@ export const selectHeaderLinks = createSelector(
       case 'claim':
       case 'referral':
         return {
-          '?wallet' : 'Overview',
-          '?send' : 'Send',
-          '?receive' : 'Receive',
-          '?claim' : 'Claim Beta Code',
-          '?referral' : 'Check Referral Credit',
+          'wallet' : 'Overview',
+          'send' : 'Send',
+          'receive' : 'Receive',
+          'claim' : 'Claim Beta Code',
+          'referral' : 'Check Referral Credit',
         };
       case 'downloaded':
       case 'published':
         return {
-          '?downloaded': 'Downloaded',
-          '?published': 'Published',
+          'downloaded': 'Downloaded',
+          'published': 'Published',
         };
       default:
         return null;
@@ -142,4 +135,9 @@ export const selectSearchTerm = createSelector(
 export const selectError = createSelector(
   _selectState,
   (state) => state.error
+)
+
+export const selectDaemonReady = createSelector(
+  _selectState,
+  (state) => state.daemonReady
 )

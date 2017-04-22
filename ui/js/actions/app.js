@@ -52,15 +52,6 @@ export function doCloseModal() {
   }
 }
 
-export function doUpdateBalance(balance) {
-  return {
-    type: types.UPDATE_BALANCE,
-    data: {
-      balance: balance
-    }
-  }
-}
-
 export function doUpdateDownloadProgress(percent) {
   return {
     type: types.UPGRADE_DOWNLOAD_PROGRESSED,
@@ -202,5 +193,11 @@ export function doSearch(term) {
         searchTerm: term
       }
     })
+  }
+}
+
+export function doDaemonReady() {
+  return {
+    type: types.DAEMON_READY
   }
 }

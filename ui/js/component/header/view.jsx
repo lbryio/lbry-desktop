@@ -1,5 +1,5 @@
 import React from 'react';
-import {Icon} from './common.js';
+import {Icon} from 'component/common.js';
 import Link from 'component/link';
 
 var Header = React.createClass({
@@ -60,7 +60,7 @@ var Header = React.createClass({
         </div>
         {
           this.props.links ?
-            <SubHeader links={this.props.links} viewingPage={this.props.viewingPage} /> :
+            <SubHeader {...this.props} /> :
             ''
         }
       </header>
@@ -68,24 +68,28 @@ var Header = React.createClass({
   }
 });
 
-var SubHeader =  React.createClass({
-  render: function() {
-    var links = [],
-        viewingUrl = '?' + this.props.viewingPage;
+const SubHeader = (props) => {
+  const {
+    subLinks,
+    currentPage,
+    navigate,
+  } = props
 
-    for (let link of Object.keys(this.props.links)) {
-      links.push(
-        <a href={link} key={link} className={ viewingUrl == link ? 'sub-header-selected' : 'sub-header-unselected' }>
-          {this.props.links[link]}
-        </a>
-      );
-    }
-    return (
-      <nav className="sub-header">
-        {links}
-      </nav>
-    );
+  const links = []
+
+  for(let link of Object.keys(subLinks)) {
+    links.push(
+      <a href="#" onClick={() => navigate(link)} key={link} className={link == currentPage ? 'sub-header-selected' : 'sub-header-unselected' }>
+        {subLinks[link]}
+      </a>
+    )
   }
-});
+
+  return (
+    <nav className="sub-header">
+      {links}
+    </nav>
+  )
+}
 
 export default Header;

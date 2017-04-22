@@ -3,7 +3,7 @@ import SettingsPage from 'page/settings.js';
 import HelpPage from 'page/help';
 import ReportPage from 'page/report.js';
 import StartPage from 'page/start.js';
-import WalletPage from 'page/wallet.js';
+import WalletPage from 'page/wallet';
 import DetailPage from 'page/show.js';
 import PublishPage from 'page/publish.js';
 import DiscoverPage from 'page/discover.js';
