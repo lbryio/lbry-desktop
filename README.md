@@ -45,4 +45,4 @@ to create distributable packages, which is run by calling:
 ### Development on Windows
 
 This project has currently only been worked on in Linux and macOS. If you are on Windows, you can
-checkout out the build steps in [appveyor.yml](https://github.com/lbryio/lbry-app/blob/master/appveyor.yml) and probably figure out something from there.
+checkout out the build steps in [appveyor.yml](https://github.com/lbryio/lbry-app/blob/master/.appveyor.yml) and probably figure out something from there.
