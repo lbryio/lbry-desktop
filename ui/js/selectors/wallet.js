@@ -8,44 +8,32 @@ export const _selectState = state => state.wallet || {}
 
 export const selectBalance = createSelector(
   _selectState,
-  (state) => {
-    return state.balance || 0
-  }
+  (state) => state.balance || 0
 )
 
 export const selectTransactions = createSelector(
   _selectState,
-  (state) => state.transactions
+  (state) => state.transactions || {}
+)
+
+export const selectTransactionsById = createSelector(
+  selectTransactions,
+  (transactions) => transactions.byId || {}
 )
 
 export const selectTransactionItems = createSelector(
-  selectTransactions,
-  (transactions) => {
-    if (transactions.length == 0) return transactions
-
+  selectTransactionsById,
+  (byId) => {
     const transactionItems = []
-    const condensedTransactions = {}
-
-    transactions.forEach(function(tx) {
-      const txid = tx["txid"];
-      if (!(txid in condensedTransactions)) {
-        condensedTransactions[txid] = 0;
-      }
-      condensedTransactions[txid] += parseFloat(tx["value"]);
-    });
-    transactions.reverse().forEach(function(tx) {
-      const txid = tx["txid"];
-      if (condensedTransactions[txid] && condensedTransactions[txid] != 0)
-      {
-        transactionItems.push({
-          id: txid,
-          date: tx["timestamp"] ? (new Date(parseInt(tx["timestamp"]) * 1000)) : null,
-          amount: condensedTransactions[txid]
-        });
-        delete condensedTransactions[txid];
-      }
-    });
-
+    const txids = Object.keys(byId)
+    txids.forEach((txid) => {
+      const tx = byId[txid]
+      transactionItems.push({
+        id: txid,
+        date: tx.timestamp ? (new Date(parseInt(tx.timestamp) * 1000)) : null,
+        amount: parseFloat(tx.value)
+      })
+    })
     return transactionItems
   }
 )
