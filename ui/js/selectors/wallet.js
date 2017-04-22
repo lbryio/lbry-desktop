@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect'
 import {
   selectCurrentPage,
+  selectDaemonReady,
 } from 'selectors/app'
 
 export const _selectState = state => state.wallet || {}
@@ -77,10 +78,6 @@ export const selectGettingNewAddress = createSelector(
   (state) => state.gettingNewAddress
 )
 
-export const selectDaemonReady = createSelector(
-  () => sessionStorage.getItem('loaded') == 'y'
-)
-
 export const shouldGetReceiveAddress = createSelector(
   selectReceiveAddress,
   selectGettingNewAddress,
@@ -88,7 +85,7 @@ export const shouldGetReceiveAddress = createSelector(
   (address, fetching, daemonReady) => {
     if (!daemonReady) return false
     if (fetching) return false
-    if (address !== undefined) return false
+    if (address) return false
 
     return true
   }

@@ -10,6 +10,9 @@ import {AuthOverlay} from './component/auth.js';
 import { Provider } from 'react-redux';
 import store from 'store.js';
 import { runTriggers } from 'triggers'
+import {
+  doDaemonReady
+} from 'actions/app'
 
 const {remote} = require('electron');
 const contextMenu = remote.require('./menu/context-menu');
@@ -37,7 +40,7 @@ var init = function() {
   })
 
   function onDaemonReady() {
-    window.sessionStorage.setItem('loaded', 'y'); //once we've made it here once per session, we don't need to show splash again
+    app.store.dispatch(doDaemonReady())
     ReactDOM.render(<Provider store={store}><div>{ lbryio.enabled ? <AuthOverlay/> : '' }<App /><SnackBar /></div></Provider>, canvas)
   }
 
