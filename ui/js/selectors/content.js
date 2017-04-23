@@ -40,3 +40,53 @@ export const selectResolvedUris = createSelector(
   _selectState,
   (state) => state.resolvedUris || {}
 )
+
+export const selectFetchingDownloadedContent = createSelector(
+  _selectState,
+  (state) => !!state.fetchingDownloadedContent
+)
+
+export const selectDownloadedContent = createSelector(
+  _selectState,
+  (state) => state.downloadedContent || {}
+)
+
+export const shouldFetchDownloadedContent = createSelector(
+  selectDaemonReady,
+  selectCurrentPage,
+  selectFetchingDownloadedContent,
+  selectDownloadedContent,
+  (daemonReady, page, fetching, content) => {
+    if (!daemonReady) return false
+    if (page != 'downloaded') return false
+    if (fetching) return false
+    if (Object.keys(content).length != 0) return false
+
+    return true
+  }
+)
+
+export const selectFetchingPublishedContent = createSelector(
+  _selectState,
+  (state) => !!state.fetchingPublishedContent
+)
+
+export const selectPublishedContent = createSelector(
+  _selectState,
+  (state) => state.publishedContent || {}
+)
+
+export const shouldFetchPublishedContent = createSelector(
+  selectDaemonReady,
+  selectCurrentPage,
+  selectFetchingPublishedContent,
+  selectPublishedContent,
+  (daemonReady, page, fetching, content) => {
+    if (!daemonReady) return false
+    if (page != 'published') return false
+    if (fetching) return false
+    if (Object.keys(content).length != 0) return false
+
+    return true
+  }
+)
