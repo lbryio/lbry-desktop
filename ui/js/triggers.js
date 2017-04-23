@@ -4,6 +4,8 @@ import {
 } from 'selectors/wallet'
 import {
   shouldFetchFeaturedContent,
+  shouldFetchDownloadedContent,
+  shouldFetchPublishedContent,
 } from 'selectors/content'
 import {
   doFetchTransactions,
@@ -11,6 +13,8 @@ import {
 } from 'actions/wallet'
 import {
   doFetchFeaturedContent,
+  doFetchDownloadedContent,
+  doFetchPublishedContent,
 } from 'actions/content'
 
 const triggers = []
@@ -29,6 +33,18 @@ triggers.push({
   selector: shouldFetchFeaturedContent,
   action: doFetchFeaturedContent,
 })
+
+triggers.push({
+  selector: shouldFetchDownloadedContent,
+  action: doFetchDownloadedContent,
+})
+
+triggers.push({
+  selector: shouldFetchPublishedContent,
+  action: doFetchPublishedContent,
+})
+
+console.log(triggers)
 
 const runTriggers = function() {
   triggers.forEach(function(trigger) {

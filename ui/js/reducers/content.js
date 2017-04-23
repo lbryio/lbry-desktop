@@ -66,6 +66,46 @@ reducers[types.RESOLVE_URI_COMPLETED] = function(state, action) {
   return Object.assign({}, state, newState)
 }
 
+reducers[types.FETCH_DOWNLOADED_CONTENT_STARTED] = function(state, action) {
+  return Object.assign({}, state, {
+    fetchingDownloadedContent: true,
+  })
+}
+
+reducers[types.FETCH_DOWNLOADED_CONTENT_COMPLETED] = function(state, action) {
+  const {
+    fileInfos
+  } = action.data
+  const newDownloadedContent = Object.assign({}, state.downloadedContent, {
+    fileInfos
+  })
+
+  return Object.assign({}, state, {
+    downloadedContent: newDownloadedContent,
+    fetchingDownloadedContent: false,
+  })
+}
+
+reducers[types.FETCH_PUBLISHED_CONTENT_STARTED] = function(state, action) {
+  return Object.assign({}, state, {
+    fetchingPublishedContent: true,
+  })
+}
+
+reducers[types.FETCH_PUBLISHED_CONTENT_COMPLETED] = function(state, action) {
+  const {
+    fileInfos
+  } = action.data
+  const newPublishedContent = Object.assign({}, state.publishedContent, {
+    fileInfos
+  })
+
+  return Object.assign({}, state, {
+    publishedContent: newPublishedContent,
+    fetchingPublishedContent: false,
+  })
+}
+
 export default function reducer(state = defaultState, action) {
   const handler = reducers[action.type];
   if (handler) return handler(state, action);
