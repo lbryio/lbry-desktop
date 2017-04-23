@@ -1,5 +1,13 @@
 import * as types from 'constants/action_types'
 import lbry from 'lbry'
+import {
+  selectDraftTransaction,
+  selectDraftTransactionAmount,
+  selectBalance,
+} from 'selectors/wallet'
+import {
+  doOpenModal,
+} from 'actions/app'
 
 export function doUpdateBalance(balance) {
   return {
@@ -59,7 +67,59 @@ export function doCheckAddressIsMine(address) {
   }
 }
 
-export function doSendToAddress() {
+export function doSendDraftTransaction() {
   return function(dispatch, getState) {
+    const state = getState()
+    const draftTx = selectDraftTransaction(state)
+    const balance = selectBalance(state)
+    const amount = selectDraftTransactionAmount(state)
+
+    if (balance - amount < 1) {
+      return dispatch(doOpenModal('insufficientBalance'))
+    }
+
+    dispatch({
+      type: types.SEND_TRANSACTION_STARTED,
+    })
+
+    const successCallback = (results) => {
+      if(results === true) {
+        dispatch({
+          type: types.SEND_TRANSACTION_COMPLETED,
+        })
+        dispatch(doOpenModal('transactionSuccessful'))
+      }
+      else {
+        dispatch({
+          type: types.SEND_TRANSACTION_FAILED,
+          data: { error: results }
+        })
+        dispatch(doOpenModal('transactionFailed'))
+      }
+    }
+
+    const errorCallback = (error) => {
+      dispatch({
+        type: types.SEND_TRANSACTION_FAILED,
+        data: { error: error.message }
+      })
+      dispatch(doOpenModal('transactionFailed'))
+    }
+
+    lbry.sendToAddress(draftTx.amount, draftTx.address, successCallback, errorCallback);
+  }
+}
+
+export function doSetDraftTransactionAmount(amount) {
+  return {
+    type: types.SET_DRAFT_TRANSACTION_AMOUNT,
+    data: { amount }
+  }
+}
+
+export function doSetDraftTransactionAddress(address) {
+  return {
+    type: types.SET_DRAFT_TRANSACTION_ADDRESS,
+    data: { address }
   }
 }

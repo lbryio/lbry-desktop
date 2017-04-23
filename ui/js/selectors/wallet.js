@@ -92,3 +92,18 @@ export const shouldCheckAddressIsMine = createSelector(
     return true
   }
 )
+
+export const selectDraftTransaction = createSelector(
+  _selectState,
+  (state) => state.draftTransaction || buildDraftTransaction()
+)
+
+export const selectDraftTransactionAmount = createSelector(
+  selectDraftTransaction,
+  (draft) => draft.amount
+)
+
+export const selectDraftTransactionAddress = createSelector(
+  selectDraftTransaction,
+  (draft) => draft.address
+)

@@ -8,7 +8,9 @@ import {
 import {
   doGetNewAddress,
   doCheckAddressIsMine,
-  doSendToAddress,
+  doSendDraftTransaction,
+  doSetDraftTransactionAmount,
+  doSetDraftTransactionAddress,
 } from 'actions/wallet'
 import {
   selectCurrentPage,
@@ -21,6 +23,8 @@ import {
   selectIsFetchingTransactions,
   selectReceiveAddress,
   selectGettingNewAddress,
+  selectDraftTransactionAmount,
+  selectDraftTransactionAddress,
 } from 'selectors/wallet'
 import WalletPage from './view'
 
@@ -33,17 +37,17 @@ const select = (state) => ({
   receiveAddress: selectReceiveAddress(state),
   gettingNewAddress: selectGettingNewAddress(state),
   modal: selectCurrentModal(state),
-  address: null,
-  amount: 0.0,
+  address: selectDraftTransactionAddress(state),
+  amount: selectDraftTransactionAmount(state),
 })
 
 const perform = (dispatch) => ({
   closeModal: () => dispatch(doCloseModal()),
   getNewAddress: () => dispatch(doGetNewAddress()),
   checkAddressIsMine: (address) => dispatch(doCheckAddressIsMine(address)),
-  sendToAddress: () => dispatch(doSendToAddress()),
-  setAmount: () => console.log('set amount'),
-  setAddress: () => console.log('set address'),
+  sendToAddress: () => dispatch(doSendDraftTransaction()),
+  setAmount: (event) => dispatch(doSetDraftTransactionAmount(event.target.value)),
+  setAddress: (event) => dispatch(doSetDraftTransactionAddress(event.target.value)),
 })
 
 export default connect(select, perform)(WalletPage)
