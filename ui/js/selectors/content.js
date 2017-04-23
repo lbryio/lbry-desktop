@@ -35,3 +35,8 @@ export const shouldFetchFeaturedContent = createSelector(
     return true
   }
 )
+
+export const selectResolvedUris = createSelector(
+  _selectState,
+  (state) => state.resolvedUris || {}
+)

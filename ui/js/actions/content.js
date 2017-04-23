@@ -2,6 +2,29 @@ import * as types from 'constants/action_types'
 import lbry from 'lbry'
 import lbryio from 'lbryio';
 
+export function doResolveUri(dispatch, uri) {
+  dispatch({
+    type: types.RESOLVE_URI_STARTED,
+    data: { uri }
+  })
+
+  lbry.resolve({uri: uri}).then((resolutionInfo) => {
+    const {
+      claim,
+      certificate,
+    } = resolutionInfo
+
+    dispatch({
+      type: types.RESOLVE_URI_COMPLETED,
+      data: {
+        uri,
+        claim,
+        certificate,
+      }
+    })
+  })
+}
+
 export function doFetchFeaturedContent() {
   return function(dispatch, getState) {
     const state = getState()
@@ -17,6 +40,10 @@ export function doFetchFeaturedContent() {
           categories: Categories,
           uris: Uris,
         }
+      })
+
+      Object.keys(Uris).forEach((category) => {
+        Uris[category].forEach((uri) => doResolveUri(dispatch, uri))
       })
     }
 
