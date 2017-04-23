@@ -1,10 +1,10 @@
 import React from 'react';
-import lbry from '../lbry.js';
-import lbryuri from '../lbryuri.js';
+import lbry from 'lbry.js';
+import lbryuri from 'lbryuri.js';
 import Link from 'component/link';
-import {FileActions} from '../component/file-actions.js';
-import {BusyMessage, TruncatedText, FilePrice} from '../component/common.js';
-import UriIndicator from '../component/channel-indicator.js';
+import {FileActions} from 'component/file-actions.js';
+import {Thumbnail, TruncatedText, FilePrice} from 'component/common.js';
+import UriIndicator from 'component/channel-indicator.js';
 
 /*should be merged into FileTile once FileTile is refactored to take a single id*/
 export let FileTileStream = React.createClass({
@@ -217,7 +217,7 @@ export let FileCardStream = React.createClass({
   }
 });
 
-export let FileTile = React.createClass({
+let FileTile = React.createClass({
   _isMounted: false,
   _isResolvePending: false,
 

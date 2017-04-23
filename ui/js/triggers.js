@@ -3,9 +3,15 @@ import {
   shouldGetReceiveAddress,
 } from 'selectors/wallet'
 import {
+  shouldFetchFeaturedContent,
+} from 'selectors/content'
+import {
   doFetchTransactions,
   doGetNewAddress,
 } from 'actions/wallet'
+import {
+  doFetchFeaturedContent,
+} from 'actions/content'
 
 const triggers = []
 
@@ -17,6 +23,11 @@ triggers.push({
 triggers.push({
   selector: shouldGetReceiveAddress,
   action: doGetNewAddress
+})
+
+triggers.push({
+  selector: shouldFetchFeaturedContent,
+  action: doFetchFeaturedContent,
 })
 
 const runTriggers = function() {

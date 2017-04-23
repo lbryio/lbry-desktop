@@ -1,13 +1,12 @@
 import React from 'react';
 import SettingsPage from 'page/settings.js';
 import HelpPage from 'page/help';
-import WatchPage from 'page/watch.js';
 import ReportPage from 'page/report.js';
 import StartPage from 'page/start.js';
 import WalletPage from 'page/wallet';
 import DetailPage from 'page/show.js';
 import PublishPage from 'page/publish.js';
-import DiscoverPage from 'page/discover.js';
+import DiscoverPage from 'page/discover';
 import SplashScreen from 'component/splash.js';
 import DeveloperPage from 'page/developer.js';
 import {
@@ -30,7 +29,6 @@ const Router = (props) => {
   return route(currentPage, {
     'settings': <SettingsPage {...props} />,
     'help': <HelpPage {...props} />,
-    'watch': <WatchPage {...props} />,
     'report': <ReportPage {...props} />,
     'downloaded': <FileListDownloaded {...props} />,
     'published': <FileListPublished {...props} />,

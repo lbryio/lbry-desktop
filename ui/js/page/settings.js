@@ -1,6 +1,6 @@
 import React from 'react';
 import {FormField, FormRow} from '../component/form.js';
-import {SubHeader} from '../component/header.js';
+import {SubHeader} from '../component/sub-header.js';
 import lbry from '../lbry.js';
 
 export let SettingsNav = React.createClass({

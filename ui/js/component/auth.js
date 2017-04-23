@@ -2,7 +2,7 @@ import React from "react";
 import lbryio from "../lbryio.js";
 import Modal from "./modal.js";
 import ModalPage from "./modal-page.js";
-import {Link, RewardLink} from "../component/link.js";
+import {Link, RewardLink} from "../component/link";
 import {FormRow} from "../component/form.js";
 import {CreditAmount, Address} from "../component/common.js";
 import {getLocal, getSession, setSession, setLocal} from '../utils.js';

@@ -2,7 +2,7 @@ import React from 'react';
 import lbry from '../lbry.js';
 import lighthouse from '../lighthouse.js';
 import lbryuri from '../lbryuri.js';
-import {Video} from '../page/watch.js'
+import Video from 'component/video'
 import {TruncatedText, Thumbnail, FilePrice, BusyMessage} from '../component/common.js';
 import {FileActions} from '../component/file-actions.js';
 import UriIndicator from '../component/channel-indicator.js';

@@ -1,6 +1,6 @@
 import React from 'react';
 import lbryio from '../lbryio.js';
-import {Link} from '../component/link.js';
+import {Link} from '../component/link';
 import Notice from '../component/notice.js';
 import {CreditAmount} from '../component/common.js';
 //

@@ -1,27 +1,26 @@
 import React from 'react';
-import lbry from '../lbry.js';
-import lighthouse from '../lighthouse.js';
-import {FileTile} from '../component/file-tile.js';
-import Link from 'component/link';
-import {ToolTip} from '../component/tooltip.js';
+import lbryio from 'lbryio.js';
+import FileTile from 'component/fileTile';
+import { FileTileStream } from 'component/fileTileStream'
+import {ToolTip} from 'component/tooltip.js';
 
 const communityCategoryToolTipText = ('Community Content is a public space where anyone can share content with the ' +
   'rest of the LBRY community. Bid on the names "one," "two," "three," "four" and ' +
 '"five" to put your content here!');
 
-let FeaturedCategory = React.createClass({
-  render: function() {
-    return (<div className="card-row card-row--small">
-        { this.props.category ?
-          <h3 className="card-row__header">{this.props.category}
-            { this.props.category.match(/^community/i) ?
-              <ToolTip label="What's this?" body={communityCategoryToolTipText} className="tooltip--header"/>
-              : '' }</h3>
-          : '' }
-        { this.props.names.map((name) => { return <FileTile key={name} displayStyle="card" uri={name} /> }) }
-    </div>)
-  }
-})
+const FeaturedCategory = (props) => {
+  const {
+    category,
+    names,
+  } = props
+
+  return <div className="card-row card-row--small">
+    <h3 className="card-row__header">{category}
+    {category && category.match(/^community/i) && <ToolTip label="What's this?" body={communityCategoryToolTipText} className="tooltip--header" />}
+    </h3>
+    {names.map(name => <FileTile key={name} displayStyle="card" uri={name} />)}
+  </div>
+}
 
 let DiscoverPage = React.createClass({
   getInitialState: function() {
