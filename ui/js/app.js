@@ -38,7 +38,7 @@ module.exports = app;
 // import {FileListDownloaded, FileListPublished} from './page/file-list.js';
 // import Header from './component/header.js';
 // import {Modal, ExpandableModal} from './component/modal.js';
-// import {Link} from './component/link.js';
+// import {Link} from './component/link';
 //
 //
 // const {remote, ipcRenderer, shell} = require('electron');

@@ -5,7 +5,7 @@ import {CreditAmount, Icon} from '../component/common.js';
 import rewards from '../rewards.js';
 import Modal from '../component/modal.js';
 import {WalletNav} from './wallet.js';
-import {RewardLink} from '../component/link.js';
+import {RewardLink} from '../component/link';
 
 const RewardTile = React.createClass({
   propTypes: {
