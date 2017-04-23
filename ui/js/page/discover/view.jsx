@@ -1,12 +1,15 @@
 import React from 'react';
-import lbry from '../lbry.js';
-import lbryio from '../lbryio.js';
-import lbryuri from '../lbryuri.js';
-import lighthouse from '../lighthouse.js';
-import {FileTile, FileTileStream} from '../component/file-tile.js';
-import Link from '../component/link';
-import {ToolTip} from '../component/tooltip.js';
-import {BusyMessage} from '../component/common.js';
+import lbry from 'lbry.js';
+import lbryio from 'lbryio.js';
+import lbryuri from 'lbryuri.js';
+import lighthouse from 'lighthouse.js';
+import FileTile from 'component/fileTile';
+import {
+  FileTileStream,
+} from 'component/fileTileStream'
+import Link from 'component/link';
+import {ToolTip} from 'component/tooltip.js';
+import {BusyMessage} from 'component/common.js';
 
 var fetchResultsStyle = {
     color: '#888',
@@ -68,58 +71,76 @@ const communityCategoryToolTipText = ('Community Content is a public space where
 'rest of the LBRY community. Bid on the names "one," "two," "three," "four" and ' +
 '"five" to put your content here!');
 
-var FeaturedCategory = React.createClass({
-  render: function() {
-    return (<div className="card-row card-row--small">
-        { this.props.category ?
-          <h3 className="card-row__header">{this.props.category}
-            { this.props.category == "community" ?
-              <ToolTip label="What's this?" body={communityCategoryToolTipText} className="tooltip--header"/>
-              : '' }</h3>
-          : '' }
-        { this.props.names.map((name) => { return <FileTile key={name} displayStyle="card" uri={name} /> }) }
-    </div>)
-  }
-})
+const FeaturedCategory = (props) => {
+  const {
+    category,
+    names,
+  } = props
 
-var FeaturedContent = React.createClass({
-  getInitialState: function() {
-    return {
-      featuredUris: {},
-      failed: false
-    };
-  },
-  componentWillMount: function() {
-    lbryio.call('discover', 'list', { version: "early-access" } ).then(({Categories, Uris}) => {
-      let featuredUris = {}
-      Categories.forEach((category) => {
-        if (Uris[category] && Uris[category].length) {
-          featuredUris[category] = Uris[category]
-        }
-      })
-      this.setState({ featuredUris: featuredUris });
-    }, () => {
-      this.setState({
-        failed: true
-      })
-    });
-  },
-  render: function() {
-    return (
-      this.state.failed ?
-        <div className="empty">Failed to load landing content.</div> :
-        <div>
-          {
-              Object.keys(this.state.featuredUris).map(function(category) {
-                return this.state.featuredUris[category].length ?
-                       <FeaturedCategory key={category} category={category} names={this.state.featuredUris[category]} /> :
-                       '';
-              }.bind(this))
-          }
-        </div>
-    );
-  }
-});
+  return (
+    <div className="card-row card-row--small">
+      <h3 className="card-row__header">{category}
+        {category &&
+          <ToolTip label="What's this?" body={communityCategoryToolTipText} className="tooltip--header" />}
+      </h3>
+      {names.map(name => <FileTile key={name} displayStyle="card" uri={name} />)}
+    </div>
+  )
+}
+
+const FeaturedContent = (props) => {
+  const {
+    featuredContentByCategory,
+  } = props
+
+  const categories = Object.keys(featuredContentByCategory)
+
+  return (
+    <div>
+      {categories.map(category =>
+        <FeaturedCategory category={category} names={featuredContentByCategory[category]} />
+      )}
+    </div>
+  )
+}
+// var FeaturedContent = React.createClass({
+//   getInitialState: function() {
+//     return {
+//       featuredUris: {},
+//       failed: false
+//     };
+//   },
+//   componentWillMount: function() {
+//     lbryio.call('discover', 'list', { version: "early-access" } ).then(({Categories, Uris}) => {
+//       let featuredUris = {}
+//       Categories.forEach((category) => {
+//         if (Uris[category] && Uris[category].length) {
+//           featuredUris[category] = Uris[category]
+//         }
+//       })
+//       this.setState({ featuredUris: featuredUris });
+//     }, () => {
+//       this.setState({
+//         failed: true
+//       })
+//     });
+//   },
+//   render: function() {
+//     return (
+//       this.state.failed ?
+//         <div className="empty">Failed to load landing content.</div> :
+//         <div>
+//           {
+//               Object.keys(this.state.featuredUris).map(function(category) {
+//                 return this.state.featuredUris[category].length ?
+//                        <FeaturedCategory key={category} category={category} names={this.state.featuredUris[category]} /> :
+//                        '';
+//               }.bind(this))
+//           }
+//         </div>
+//     );
+//   }
+// });
 
 var DiscoverPage = React.createClass({
   userTypingTimer: null,
@@ -194,11 +215,10 @@ var DiscoverPage = React.createClass({
   render: function() {
     return (
       <main>
-        <FeaturedContent />
+        <FeaturedContent {...this.props} />
         { this.state.searching ? <SearchActive /> : null }
         { !this.state.searching && this.props.query && this.state.results.length ? <SearchResults results={this.state.results} /> : null }
         { !this.state.searching && this.props.query && !this.state.results.length ? <SearchNoResults query={this.props.query} /> : null }
-        { !this.props.query && !this.state.searching ? <FeaturedContent /> : null }
       </main>
     );
   }

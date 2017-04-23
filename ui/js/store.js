@@ -6,6 +6,7 @@ import {
   createLogger
 } from 'redux-logger'
 import appReducer from 'reducers/app';
+import contentReducer from 'reducers/content';
 import walletReducer from 'reducers/wallet'
 
 function isFunction(object) {
@@ -18,6 +19,7 @@ function isNotFunction(object) {
 
 const reducers = redux.combineReducers({
   app: appReducer,
+  content: contentReducer,
   wallet: walletReducer,
 });
 

@@ -6,7 +6,7 @@ import StartPage from 'page/start.js';
 import WalletPage from 'page/wallet';
 import DetailPage from 'page/show.js';
 import PublishPage from 'page/publish.js';
-import DiscoverPage from 'page/discover.js';
+import DiscoverPage from 'page/discover';
 import SplashScreen from 'component/splash.js';
 import RewardsPage from 'page/rewards.js';
 import DeveloperPage from 'page/developer.js';
