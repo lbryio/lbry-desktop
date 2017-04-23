@@ -74,6 +74,7 @@ const communityCategoryToolTipText = ('Community Content is a public space where
 const FeaturedCategory = (props) => {
   const {
     category,
+    resolvedUris,
     names,
   } = props
 
@@ -83,7 +84,7 @@ const FeaturedCategory = (props) => {
         {category &&
           <ToolTip label="What's this?" body={communityCategoryToolTipText} className="tooltip--header" />}
       </h3>
-      {names.map(name => <FileTile key={name} displayStyle="card" uri={name} />)}
+      {names && names.map(name => <FileTile key={name} displayStyle="card" uri={name} />)}
     </div>
   )
 }
@@ -91,6 +92,7 @@ const FeaturedCategory = (props) => {
 const FeaturedContent = (props) => {
   const {
     featuredContentByCategory,
+    resolvedUris,
   } = props
 
   const categories = Object.keys(featuredContentByCategory)
@@ -98,7 +100,7 @@ const FeaturedContent = (props) => {
   return (
     <div>
       {categories.map(category =>
-        <FeaturedCategory category={category} names={featuredContentByCategory[category]} />
+        <FeaturedCategory category={category} names={featuredContentByCategory[category]} resolvedUris={resolvedUris} />
       )}
     </div>
   )
