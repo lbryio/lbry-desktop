@@ -11,6 +11,7 @@ const communityCategoryToolTipText = ('Community Content is a public space where
 const FeaturedCategory = (props) => {
   const {
     category,
+    resolvedUris,
     names,
   } = props
 
