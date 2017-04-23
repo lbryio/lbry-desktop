@@ -33,7 +33,7 @@ class AddressSection extends React.Component {
           <Address address={receiveAddress} />
         </div>
         <div className="card__actions">
-          <Link label="Get New Address" button="primary" icon='icon-refresh' onClick={getNewAddress} disabled={gettingNewAddress}/>
+          <Link label="Get New Address" button="primary" icon='icon-refresh' onClick={getNewAddress} disabled={gettingNewAddress} />
         </div>
         <div className="card__content">
           <div className="help">
@@ -57,8 +57,6 @@ const SendToAddressSection = (props) => {
     address,
   } = props
 
-  const results = null
-
   return (
     <section className="card">
       <form onSubmit={sendToAddress}>
@@ -66,25 +64,24 @@ const SendToAddressSection = (props) => {
           <h3>Send Credits</h3>
         </div>
         <div className="card__content">
-          <FormRow label="Amount" postfix="LBC" step="0.01" type="number" placeholder="1.23" size="10" onChange={setAmount} />
+          <FormRow label="Amount" postfix="LBC" step="0.01" type="number" placeholder="1.23" size="10" onChange={setAmount} value={amount} />
         </div>
         <div className="card__content">
-          <FormRow label="Recipient Address" placeholder="bbFxRyXXXXXXXXXXXZD8nE7XTLUxYnddTs" type="text" size="60" onChange={setAddress} />
+          <FormRow label="Recipient Address" placeholder="bbFxRyXXXXXXXXXXXZD8nE7XTLUxYnddTs" type="text" size="60" onChange={setAddress} value={address} />
         </div>
         <div className="card__actions card__actions--form-submit">
           <Link button="primary" label="Send" onClick={sendToAddress} disabled={!(parseFloat(amount) > 0.0) || !address} />
           <input type='submit' className='hidden' />
         </div>
-          {
-            results ?
-            <div className="card__content">
-              <h4>Results</h4>
-              {results}
-            </div> : ''
-          }
       </form>
       {modal == 'insufficientBalance' && <Modal isOpen={true} contentLabel="Insufficient balance" onConfirmed={closeModal}>
         Insufficient balance: after this transaction you would have less than 1 LBC in your wallet.
+      </Modal>}
+      {modal == 'transactionSuccessful' && <Modal isOpen={true} contentLabel="Transaction successful" onConfirmed={closeModal}>
+        Your transaction was successfully placed in the queue.
+      </Modal>}
+      {modal == 'transactionFailed' && <Modal isOpen={true} contentLabel="Transaction failed" onConfirmed={closeModal}>
+        Something went wrong:
       </Modal>}
     </section>
   )
