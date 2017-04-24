@@ -71,11 +71,11 @@ const FileCardStream = React.createClass({
     const isConfirmed = !!metadata;
     const title = isConfirmed ? metadata.title : uri;
     const obscureNsfw = this.props.obscureNsfw && isConfirmed && metadata.nsfw;
-    const primaryUrl = '?show=' + uri;
+    const primaryUrl = 'show=' + uri;
     return (
       <section className={ 'card card--small card--link ' + (obscureNsfw ? 'card--obscured ' : '') } onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
         <div className="card__inner">
-          <a href={primaryUrl} className="card__link">
+          <a href="#" onClick={() => this.props.navigate(primaryUrl)} className="card__link">
             <div className="card__title-identity">
               <h5 title={title}><TruncatedText lines={1}>{title}</TruncatedText></h5>
               <div className="card__subtitle">

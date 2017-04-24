@@ -2,6 +2,7 @@ import { createSelector } from 'reselect'
 import {
   selectDaemonReady,
   selectCurrentPage,
+  selectCurrentUri,
 } from 'selectors/app'
 
 export const _selectState = state => state.content || {}
@@ -39,6 +40,109 @@ export const shouldFetchFeaturedContent = createSelector(
 export const selectResolvedUris = createSelector(
   _selectState,
   (state) => state.resolvedUris || {}
+)
+
+export const selectCurrentResolvedUri = createSelector(
+  selectCurrentUri,
+  selectResolvedUris,
+  (uri, resolvedUris) => resolvedUris[uri] || {}
+)
+
+export const selectCurrentResolvedUriClaim = createSelector(
+  selectCurrentResolvedUri,
+  (uri) => uri.claim || {}
+)
+
+export const selectCurrentResolvedUriClaimOutpoint = createSelector(
+  selectCurrentResolvedUriClaim,
+  (claim) => `${claim.txid}:${claim.nout}`
+)
+
+export const selectFileInfos = createSelector(
+  _selectState,
+  (state) => state.fileInfos || {}
+)
+
+export const selectFileInfosByUri = createSelector(
+  selectFileInfos,
+  (fileInfos) => fileInfos.byUri || {}
+)
+
+export const selectCurrentUriFileInfo = createSelector(
+  selectCurrentUri,
+  selectFileInfosByUri,
+  (uri, byUri) => byUri[uri]
+)
+
+export const selectCurrentUriIsDownloaded = createSelector(
+  selectCurrentUriFileInfo,
+  (fileInfo) => fileInfo && fileInfo.length > 0
+)
+
+export const selectFetchingFileInfos = createSelector(
+  _selectState,
+  (state) => state.fetchingFileInfos || {}
+)
+
+export const selectIsFetchingCurrentUriFileInfo = createSelector(
+  selectFetchingFileInfos,
+  selectCurrentUri,
+  (fetching, uri) => !!fetching[uri]
+)
+
+export const selectCostInfos = createSelector(
+  _selectState,
+  (state) => state.costInfos || {}
+)
+
+export const selectCostInfosByUri = createSelector(
+  selectCostInfos,
+  (costInfos) => costInfos.byUri || {}
+)
+
+export const selectFetchingCostInfos = createSelector(
+  _selectState,
+  (state) => state.fetchingCostInfos || {}
+)
+
+export const selectIsFetchingCurrentUriCostInfo = createSelector(
+  selectFetchingCostInfos,
+  selectCurrentUri,
+  (fetching, uri) => !!fetching[uri]
+)
+
+export const selectCurrentUriCostInfo = createSelector(
+  selectCurrentUri,
+  selectCostInfosByUri,
+  (uri, byUri) => byUri[uri] || {}
+)
+
+export const shouldFetchCurrentUriCostInfo = createSelector(
+  selectCurrentPage,
+  selectCurrentUri,
+  selectIsFetchingCurrentUriCostInfo,
+  selectCurrentUriCostInfo,
+  (page, uri, fetching, costInfo) => {
+    if (page != 'show') return false
+    if (fetching) return false
+    if (Object.keys(costInfo).length != 0) return false
+
+    return true
+  }
+)
+
+export const shouldFetchCurrentUriFileInfo = createSelector(
+  selectCurrentPage,
+  selectCurrentUri,
+  selectIsFetchingCurrentUriFileInfo,
+  selectCurrentUriFileInfo,
+  (page, uri, fetching, fileInfo) => {
+    if (page != 'show') return false
+    if (fetching) return false
+    if (fileInfo != undefined) return false
+
+    return true
+  }
 )
 
 export const selectFetchingDownloadedContent = createSelector(

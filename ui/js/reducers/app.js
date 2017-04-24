@@ -3,7 +3,7 @@ import * as types from 'constants/action_types'
 const reducers = {}
 const defaultState = {
   isLoaded: false,
-  currentPage: 'discover',
+  currentPath: 'discover',
   platform: process.platform,
   drawerOpen: sessionStorage.getItem('drawerOpen') || true,
   upgradeSkipped: sessionStorage.getItem('upgradeSkipped'),
@@ -12,7 +12,7 @@ const defaultState = {
 
 reducers[types.NAVIGATE] = function(state, action) {
   return Object.assign({}, state, {
-    currentPage: action.data.path
+    currentPath: action.data.path,
   })
 }
 

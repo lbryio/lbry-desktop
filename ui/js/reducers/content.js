@@ -106,6 +106,78 @@ reducers[types.FETCH_PUBLISHED_CONTENT_COMPLETED] = function(state, action) {
   })
 }
 
+reducers[types.FETCH_FILE_INFO_STARTED] = function(state, action) {
+  const {
+    uri,
+    output,
+  } = action.data
+  const newFetchingFileInfos = Object.assign({}, state.fetchingFileInfos)
+
+  newFetchingFileInfos[uri] = true
+
+  return Object.assign({}, state, {
+    fetchingFileInfos: newFetchingFileInfos,
+  })
+}
+
+reducers[types.FETCH_FILE_INFO_COMPLETED] = function(state, action) {
+  const {
+    uri,
+    fileInfo,
+  } = action.data
+  const newFetchingFileInfos = Object.assign({}, state.fetchingFileInfos)
+  const fileInfos = Object.assign({}, state.fileInfos)
+  const byUri = Object.assign({}, fileInfos.byUri)
+
+  byUri[uri] = fileInfo
+  delete newFetchingFileInfos[uri]
+
+  const newFileInfos = Object.assign({}, fileInfos, {
+    byUri: byUri,
+  })
+
+  return Object.assign({}, state, {
+    fetchingFileInfos: newFetchingFileInfos,
+    fileInfos: newFileInfos,
+  })
+}
+
+reducers[types.FETCH_COST_INFO_STARTED] = function(state, action) {
+  const {
+    uri,
+  } = action.data
+  const fetchingCostInfos = Object.assign({}, state.fetchingCostInfos)
+
+  fetchingCostInfos[uri] = true
+
+  return Object.assign({}, state, {
+    fetchingCostInfos,
+  })
+}
+
+reducers[types.FETCH_COST_INFO_COMPLETED] = function(state, action) {
+  const {
+    uri,
+    costInfo,
+  } = action.data
+
+  const newFetchingCostInfos = Object.assign({}, state.fetchingCostInfos)
+  const costInfos = Object.assign({}, state.costInfos)
+  const byUri = Object.assign({}, costInfos.byUri)
+
+  byUri[uri] = costInfo
+  delete newFetchingCostInfos[uri]
+
+  const newCostInfos = Object.assign({}, costInfos, {
+    byUri: byUri,
+  })
+
+  return Object.assign({}, state, {
+    fetchingCostInfos: newFetchingCostInfos,
+    costInfos: newCostInfos,
+  })
+}
+
 export default function reducer(state = defaultState, action) {
   const handler = reducers[action.type];
   if (handler) return handler(state, action);
