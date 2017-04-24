@@ -9,6 +9,9 @@ import {
 import {
   doNavigate,
 } from 'actions/app'
+import {
+  doSearchContent,
+} from 'actions/search'
 import Header from './view'
 
 const select = (state) => ({
@@ -18,6 +21,7 @@ const select = (state) => ({
 
 const perform = (dispatch) => ({
   navigate: (path) => dispatch(doNavigate(path)),
+  search: (query) => dispatch(doSearchContent(query)),
 })
 
 export default connect(select, perform)(Header)

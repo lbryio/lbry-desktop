@@ -2,7 +2,7 @@ import React from 'react';
 import lbry from 'lbry.js';
 import lighthouse from 'lighthouse.js';
 import lbryuri from 'lbryuri.js';
-import {Video} from 'page/watch.js'
+import Video from 'page/video'
 import {
   TruncatedText,
   Thumbnail,
@@ -13,37 +13,44 @@ import {FileActions} from 'component/file-actions.js';
 import Link from 'component/link';
 import UriIndicator from 'component/channel-indicator.js';
 
-var FormatItem = React.createClass({
-  propTypes: {
-    metadata: React.PropTypes.object,
-    contentType: React.PropTypes.string,
-    uri: React.PropTypes.string,
-    outpoint: React.PropTypes.string,
-  },
-  render: function() {
-    const {thumbnail, author, title, description, language, license} = this.props.metadata;
-    const mediaType = lbry.getMediaType(this.props.contentType);
+const FormatItem = (props) => {
+  const {
+    contentType,
+    metadata,
+    cost,
+    uri,
+    outpoint,
+    costIncludesData,
+  } = props
+  const {
+    thumbnail,
+    author,
+    title,
+    description,
+    language,
+    license
+  } = metadata;
+  const mediaType = lbry.getMediaType(contentType);
 
-    return (
-      <table className="table-standard">
-        <tbody>
-          <tr>
-            <td>Content-Type</td><td>{this.props.contentType}</td>
-          </tr>
-          <tr>
-            <td>Author</td><td>{author}</td>
-          </tr>
-          <tr>
-            <td>Language</td><td>{language}</td>
-          </tr>
-          <tr>
-            <td>License</td><td>{license}</td>
-          </tr>
-        </tbody>
-      </table>
-    );
-  }
-});
+  return (
+    <table className="table-standard">
+      <tbody>
+        <tr>
+          <td>Content-Type</td><td>{contentType}</td>
+        </tr>
+        <tr>
+          <td>Author</td><td>{author}</td>
+        </tr>
+        <tr>
+          <td>Language</td><td>{language}</td>
+        </tr>
+        <tr>
+          <td>License</td><td>{license}</td>
+        </tr>
+      </tbody>
+    </table>
+  )
+}
 
 let ChannelPage = React.createClass({
   render: function() {

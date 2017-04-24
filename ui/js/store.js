@@ -8,6 +8,7 @@ import {
 import appReducer from 'reducers/app';
 import contentReducer from 'reducers/content';
 import rewardsReducer from 'reducers/rewards'
+import searchReducer from 'reducers/search'
 import walletReducer from 'reducers/wallet'
 
 function isFunction(object) {
@@ -22,6 +23,7 @@ const reducers = redux.combineReducers({
   app: appReducer,
   content: contentReducer,
   rewards: rewardsReducer,
+  search: searchReducer,
   wallet: walletReducer,
 });
 

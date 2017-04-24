@@ -14,7 +14,7 @@ const FeaturedCategory = (props) => {
     resolvedUris,
     names,
   } = props
-  
+
   return <div className="card-row card-row--small">
     <h3 className="card-row__header">{category}
     {category && category.match(/^community/i) && <ToolTip label="What's this?" body={communityCategoryToolTipText} className="tooltip--header" />}
@@ -60,6 +60,6 @@ let DiscoverPage = React.createClass({
         </div>
     }</main>;
   }
-});
+})
 
 export default DiscoverPage;
