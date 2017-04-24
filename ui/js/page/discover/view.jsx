@@ -11,39 +11,39 @@ import Link from 'component/link';
 import {ToolTip} from 'component/tooltip.js';
 import {BusyMessage} from 'component/common.js';
 
-var fetchResultsStyle = {
-    color: '#888',
-    textAlign: 'center',
-    fontSize: '1.2em'
-  };
+const fetchResultsStyle = {
+  color: '#888',
+  textAlign: 'center',
+  fontSize: '1.2em'
+};
 
-var SearchActive = React.createClass({
-  render: function() {
-    return (
-      <div style={fetchResultsStyle}>
-        <BusyMessage message="Looking up the Dewey Decimals" />
-      </div>
-    );
-  }
-});
+const SearchActive = (props) => {
+  return (
+    <div style={fetchResultsStyle}>
+      <BusyMessage message="Looking up the Dewey Decimals" />
+    </div>
+  )
+}
 
-var searchNoResultsStyle = {
+const searchNoResultsStyle = {
   textAlign: 'center'
 }, searchNoResultsMessageStyle = {
   fontStyle: 'italic',
   marginRight: '5px'
 };
 
-var SearchNoResults = React.createClass({
-  render: function() {
-    return (
-      <section style={searchNoResultsStyle}>
-        <span style={searchNoResultsMessageStyle}>No one has checked anything in for {this.props.query} yet.</span>
-        <Link label="Be the first" href="?publish" />
-      </section>
-    );
-  }
-});
+const SearchNoResults = (props) => {
+  const {
+    query,
+  } = props
+
+  return (
+    <section style={searchNoResultsStyle}>
+      <span style={searchNoResultsMessageStyle}>No one has checked anything in for {query} yet.</span>
+      <Link label="Be the first" href="?publish" />
+    </section>
+  )
+}
 
 var SearchResults = React.createClass({
   render: function() {
@@ -105,125 +105,104 @@ const FeaturedContent = (props) => {
     </div>
   )
 }
-// var FeaturedContent = React.createClass({
-//   getInitialState: function() {
-//     return {
-//       featuredUris: {},
-//       failed: false
-//     };
+
+const DiscoverPage = (props) => {
+  const {
+    searching,
+    query,
+    results,
+  } = props
+
+  return (
+    <main>
+      <FeaturedContent {...props} />
+      { searching ? <SearchActive /> : null }
+      { !searching && query && results.length ? <SearchResults results={results} /> : null }
+      { !searching && query && !results.length ? <SearchNoResults query={query} /> : null }
+    </main>
+  );
+}
+
+// var DiscoverPage = React.createClass({
+//   userTypingTimer: null,
+
+//   propTypes: {
+//     showWelcome: React.PropTypes.bool.isRequired,
 //   },
-//   componentWillMount: function() {
-//     lbryio.call('discover', 'list', { version: "early-access" } ).then(({Categories, Uris}) => {
-//       let featuredUris = {}
-//       Categories.forEach((category) => {
-//         if (Uris[category] && Uris[category].length) {
-//           featuredUris[category] = Uris[category]
-//         }
-//       })
-//       this.setState({ featuredUris: featuredUris });
-//     }, () => {
-//       this.setState({
-//         failed: true
-//       })
+
+//   componentDidUpdate: function() {
+//     if (this.props.query != this.state.query)
+//     {
+//       this.handleSearchChanged(this.props.query);
+//     }
+//   },
+
+//   getDefaultProps: function() {
+//     return {
+//       showWelcome: false,
+//     }
+//   },
+
+//   componentWillReceiveProps: function(nextProps, nextState) {
+//     if (nextProps.query != nextState.query)
+//     {
+//       this.handleSearchChanged(nextProps.query);
+//     }
+//   },
+
+//   handleSearchChanged: function(query) {
+//     this.setState({
+//       searching: true,
+//       query: query,
+//     });
+
+//     lighthouse.search(query).then(this.searchCallback);
+//   },
+
+//   handleWelcomeDone: function() {
+//     this.setState({
+//       welcomeComplete: true,
 //     });
 //   },
+
+//   componentWillMount: function() {
+//     document.title = "Discover";
+
+//     if (this.props.query) {
+//       // Rendering with a query already typed
+//       this.handleSearchChanged(this.props.query);
+//     }
+//   },
+
+//   getInitialState: function() {
+//     return {
+//       welcomeComplete: false,
+//       results: [],
+//       query: this.props.query,
+//       searching: ('query' in this.props) && (this.props.query.length > 0)
+//     };
+//   },
+
+//   searchCallback: function(results) {
+//     if (this.state.searching) //could have canceled while results were pending, in which case nothing to do
+//     {
+//       this.setState({
+//         results: results,
+//         searching: false //multiple searches can be out, we're only done if we receive one we actually care about
+//       });
+//     }
+//   },
+
 //   render: function() {
 //     return (
-//       this.state.failed ?
-//         <div className="empty">Failed to load landing content.</div> :
-//         <div>
-//           {
-//               Object.keys(this.state.featuredUris).map(function(category) {
-//                 return this.state.featuredUris[category].length ?
-//                        <FeaturedCategory key={category} category={category} names={this.state.featuredUris[category]} /> :
-//                        '';
-//               }.bind(this))
-//           }
-//         </div>
+//       <main>
+//         <FeaturedContent {...this.props} />
+//         { this.state.searching ? <SearchActive /> : null }
+//         { !this.state.searching && this.props.query && this.state.results.length ? <SearchResults results={this.state.results} /> : null }
+//         { !this.state.searching && this.props.query && !this.state.results.length ? <SearchNoResults query={this.props.query} /> : null }
+//       </main>
 //     );
 //   }
 // });
-
-var DiscoverPage = React.createClass({
-  userTypingTimer: null,
-
-  propTypes: {
-    showWelcome: React.PropTypes.bool.isRequired,
-  },
-
-  componentDidUpdate: function() {
-    if (this.props.query != this.state.query)
-    {
-      this.handleSearchChanged(this.props.query);
-    }
-  },
-
-  getDefaultProps: function() {
-    return {
-      showWelcome: false,
-    }
-  },
-
-  componentWillReceiveProps: function(nextProps, nextState) {
-    if (nextProps.query != nextState.query)
-    {
-      this.handleSearchChanged(nextProps.query);
-    }
-  },
-
-  handleSearchChanged: function(query) {
-    this.setState({
-      searching: true,
-      query: query,
-    });
-
-    lighthouse.search(query).then(this.searchCallback);
-  },
-
-  handleWelcomeDone: function() {
-    this.setState({
-      welcomeComplete: true,
-    });
-  },
-
-  componentWillMount: function() {
-    document.title = "Discover";
-
-    if (this.props.query) {
-      // Rendering with a query already typed
-      this.handleSearchChanged(this.props.query);
-    }
-  },
-
-  getInitialState: function() {
-    return {
-      welcomeComplete: false,
-      results: [],
-      query: this.props.query,
-      searching: ('query' in this.props) && (this.props.query.length > 0)
-    };
-  },
-
-  searchCallback: function(results) {
-    if (this.state.searching) //could have canceled while results were pending, in which case nothing to do
-    {
-      this.setState({
-        results: results,
-        searching: false //multiple searches can be out, we're only done if we receive one we actually care about
-      });
-    }
-  },
-
-  render: function() {
-    return (
-      <main>
-        <FeaturedContent {...this.props} />
-        { this.state.searching ? <SearchActive /> : null }
-        { !this.state.searching && this.props.query && this.state.results.length ? <SearchResults results={this.state.results} /> : null }
-        { !this.state.searching && this.props.query && !this.state.results.length ? <SearchNoResults query={this.props.query} /> : null }
-      </main>
-    );
-  }
-});
 
 export default DiscoverPage;

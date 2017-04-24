@@ -1,9 +1,12 @@
 import * as types from 'constants/action_types'
 import lbry from 'lbry'
-import lbryio from 'lbryio';
+import lbryio from 'lbryio'
 import {
   selectCurrentUri,
 } from 'selectors/app'
+import {
+  selectSearchTerm,
+} from 'selectors/content'
 import {
   selectCurrentResolvedUriClaimOutpoint,
 } from 'selectors/content'

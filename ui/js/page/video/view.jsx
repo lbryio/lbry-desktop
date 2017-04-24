@@ -1,16 +1,20 @@
 import React from 'react';
-import {Icon, Thumbnail, FilePrice} from '../component/common.js';
-import Link from '../component/link';
-import lbry from '../lbry.js';
-import Modal from '../component/modal.js';
-import lbryio from '../lbryio.js';
-import rewards from '../rewards.js';
-import LoadScreen from '../component/load_screen.js'
+import {
+  Icon,
+  Thumbnail,
+  FilePrice
+} from 'component/common';
+import Link from 'component/link';
+import lbry from 'lbry';
+import Modal from 'component/modal';
+import lbryio from 'lbryio';
+import rewards from 'rewards';
+import LoadScreen from 'component/load_screen'
 
 const fs = require('fs');
 const VideoStream = require('videostream');
 
-export let WatchLink = React.createClass({
+const WatchLink = React.createClass({
   propTypes: {
     uri: React.PropTypes.string,
     metadata: React.PropTypes.object,
@@ -98,7 +102,7 @@ export let WatchLink = React.createClass({
 });
 
 
-export let Video = React.createClass({
+const Video = React.createClass({
   _isMounted: false,
   _controlsHideDelay: 3000, // Note: this needs to be shorter than the built-in delay in Electron, or Electron will hide the controls before us
   _controlsHideTimeout: null,
@@ -213,3 +217,5 @@ export let Video = React.createClass({
     );
   }
 })
+
+export default Video

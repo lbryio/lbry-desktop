@@ -42,7 +42,7 @@ var Header = React.createClass({
     //@TODO: Switch to React.js timing
     var searchTerm = event.target.value;
     this.userTypingTimer = setTimeout(() => {
-      this.props.onSearch(searchTerm);
+      this.props.search(searchTerm);
     }, 800); // 800ms delay, tweak for faster/slower
 
   },
@@ -54,7 +54,7 @@ var Header = React.createClass({
           <h1>{ this.state.title }</h1>
           <div className="header-search">
             <Icon icon="icon-search" />
-            <input type="search" onChange={this.onQueryChange} defaultValue={this.props.initialQuery}
+            <input type="search" onChange={this.onQueryChange}
                  placeholder="Find movies, music, games, and more"/>
           </div>
         </div>
