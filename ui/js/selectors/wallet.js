@@ -95,7 +95,7 @@ export const shouldCheckAddressIsMine = createSelector(
 
 export const selectDraftTransaction = createSelector(
   _selectState,
-  (state) => state.draftTransaction || buildDraftTransaction()
+  (state) => state.draftTransaction || {}
 )
 
 export const selectDraftTransactionAmount = createSelector(

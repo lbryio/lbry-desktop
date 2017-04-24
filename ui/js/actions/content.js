@@ -1,6 +1,12 @@
 import * as types from 'constants/action_types'
 import lbry from 'lbry'
 import lbryio from 'lbryio';
+import {
+  selectCurrentUri,
+} from 'selectors/app'
+import {
+  selectCurrentResolvedUriClaimOutpoint,
+} from 'selectors/content'
 
 export function doResolveUri(dispatch, uri) {
   dispatch({
@@ -23,6 +29,34 @@ export function doResolveUri(dispatch, uri) {
       }
     })
   })
+}
+
+export function doFetchCurrentUriFileInfo() {
+  return function(dispatch, getState) {
+    const state = getState()
+    const uri = selectCurrentUri(state)
+    const outpoint = selectCurrentResolvedUriClaimOutpoint(state)
+
+    console.log(outpoint)
+
+    dispatch({
+      type: types.FETCH_FILE_INFO_STARTED,
+      data: {
+        uri,
+        outpoint,
+      }
+    })
+
+    lbry.file_list({ outpoint }).then(fileInfo => {
+      dispatch({
+        type: types.FETCH_FILE_INFO_COMPLETED,
+        data: {
+          uri,
+          fileInfo,
+        }
+      })
+    })
+  }
 }
 
 export function doFetchDownloadedContent() {
@@ -98,5 +132,29 @@ export function doFetchFeaturedContent() {
 
     lbryio.call('discover', 'list', { version: "early-access" } )
       .then(success, failure)
+  }
+}
+
+export function doFetchCurrentUriCostInfo() {
+  return function(dispatch, getState) {
+    const state = getState()
+    const uri = selectCurrentUri(state)
+
+    dispatch({
+      type: types.FETCH_COST_INFO_STARTED,
+      data: {
+        uri,
+      }
+    })
+
+    lbry.getCostInfo(uri).then(costInfo => {
+      dispatch({
+        type: types.FETCH_COST_INFO_COMPLETED,
+        data: {
+          uri,
+          costInfo,
+        }
+      })
+    })
   }
 }

@@ -6,6 +6,8 @@ import {
   shouldFetchFeaturedContent,
   shouldFetchDownloadedContent,
   shouldFetchPublishedContent,
+  shouldFetchCurrentUriFileInfo,
+  shouldFetchCurrentUriCostInfo,
 } from 'selectors/content'
 import {
   doFetchTransactions,
@@ -15,6 +17,8 @@ import {
   doFetchFeaturedContent,
   doFetchDownloadedContent,
   doFetchPublishedContent,
+  doFetchCurrentUriFileInfo,
+  doFetchCurrentUriCostInfo,
 } from 'actions/content'
 
 const triggers = []
@@ -44,7 +48,15 @@ triggers.push({
   action: doFetchPublishedContent,
 })
 
-console.log(triggers)
+triggers.push({
+  selector: shouldFetchCurrentUriFileInfo,
+  action: doFetchCurrentUriFileInfo,
+})
+
+triggers.push({
+  selector: shouldFetchCurrentUriCostInfo,
+  action: doFetchCurrentUriCostInfo,
+})
 
 const runTriggers = function() {
   triggers.forEach(function(trigger) {

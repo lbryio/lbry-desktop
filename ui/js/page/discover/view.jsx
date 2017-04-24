@@ -100,7 +100,7 @@ const FeaturedContent = (props) => {
   return (
     <div>
       {categories.map(category =>
-        <FeaturedCategory category={category} names={featuredContentByCategory[category]} resolvedUris={resolvedUris} />
+        <FeaturedCategory key={category} category={category} names={featuredContentByCategory[category]} resolvedUris={resolvedUris} />
       )}
     </div>
   )

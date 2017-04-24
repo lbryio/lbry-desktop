@@ -4,7 +4,7 @@ import HelpPage from 'page/help';
 import ReportPage from 'page/report.js';
 import StartPage from 'page/start.js';
 import WalletPage from 'page/wallet';
-import DetailPage from 'page/show.js';
+import ShowPage from 'page/showPage';
 import PublishPage from 'page/publish.js';
 import DiscoverPage from 'page/discover';
 import SplashScreen from 'component/splash.js';
@@ -36,7 +36,7 @@ const Router = (props) => {
     'wallet': <WalletPage {...props} />,
     'send': <WalletPage {...props} />,
     'receive': <WalletPage {...props} />,
-    'show': <DetailPage {...props} />,
+    'show': <ShowPage {...props} />,
     'publish': <PublishPage {...props} />,
     'developer': <DeveloperPage {...props} />,
     'discover': <DiscoverPage {...props} />,

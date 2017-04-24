@@ -7,6 +7,7 @@ import {
 } from 'redux-logger'
 import appReducer from 'reducers/app';
 import contentReducer from 'reducers/content';
+import rewardsReducer from 'reducers/rewards'
 import walletReducer from 'reducers/wallet'
 
 function isFunction(object) {
@@ -20,6 +21,7 @@ function isNotFunction(object) {
 const reducers = redux.combineReducers({
   app: appReducer,
   content: contentReducer,
+  rewards: rewardsReducer,
   wallet: walletReducer,
 });
 
@@ -32,10 +34,10 @@ if (env === 'development') {
   middleware.push(logger)
 }
 
-var createStoreWithMiddleware = redux.compose(
+const createStoreWithMiddleware = redux.compose(
   redux.applyMiddleware(...middleware)
 )(redux.createStore);
 
-var reduxStore = createStoreWithMiddleware(reducers);
+const reduxStore = createStoreWithMiddleware(reducers);
 
 export default reduxStore;

@@ -2,6 +2,16 @@ import React from 'react'
 import {
   connect
 } from 'react-redux'
+import {
+  doNavigate,
+} from 'actions/app'
 import FileCardStream from './view'
 
-export default connect()(FileCardStream)
+const select = (state) => ({
+})
+
+const perform = (dispatch) => ({
+  navigate: (path) => dispatch(doNavigate(path)),
+})
+
+export default connect(select, perform)(FileCardStream)
