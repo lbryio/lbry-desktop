@@ -1,12 +1,17 @@
 import React from 'react';
-import lbry from '../lbry.js';
-import lighthouse from '../lighthouse.js';
-import lbryuri from '../lbryuri.js';
-import Video from 'component/video'
-import {TruncatedText, Thumbnail, FilePrice, BusyMessage} from '../component/common.js';
-import {FileActions} from '../component/file-actions.js';
-import UriIndicator from '../component/channel-indicator.js';
+import lbry from 'lbry.js';
+import lighthouse from 'lighthouse.js';
+import lbryuri from 'lbryuri.js';
+import {Video} from 'page/watch.js'
+import {
+  TruncatedText,
+  Thumbnail,
+  FilePrice,
+  BusyMessage
+} from 'component/common.js';
+import {FileActions} from 'component/file-actions.js';
 import Link from 'component/link';
+import UriIndicator from 'component/channel-indicator.js';
 
 var FormatItem = React.createClass({
   propTypes: {
@@ -16,11 +21,8 @@ var FormatItem = React.createClass({
     outpoint: React.PropTypes.string,
   },
   render: function() {
-    const {author, language, license} = this.props.metadata;
-
-    if (!this.props.contentType && [author, language, license].filter((val) => {return !!val; }).length === 0) {
-      return null;
-    }
+    const {thumbnail, author, title, description, language, license} = this.props.metadata;
+    const mediaType = lbry.getMediaType(this.props.contentType);
 
     return (
       <table className="table-standard">
@@ -243,21 +245,21 @@ let ShowPage = React.createClass({
 
   render: function() {
     const metadata = this.state.metadata,
-          title = metadata ? this.state.metadata.title : this._uri;
+      title = metadata ? this.state.metadata.title : this._uri;
 
     let innerContent = "";
 
     if (!this.state.uriLookupComplete || this.state.isFailed) {
       innerContent = <section className="card">
-          <div className="card__inner">
-            <div className="card__title-identity"><h1>{title}</h1></div>
-          </div>
-          <div className="card__content">
-            { this.state.uriLookupComplete ?
-                <p>This location is not yet in use. { ' ' }<Link href="?publish" label="Put something here" />.</p> :
-                <BusyMessage message="Loading magic decentralized data..." />
-            }
-          </div>
+        <div className="card__inner">
+          <div className="card__title-identity"><h1>{title}</h1></div>
+        </div>
+        <div className="card__content">
+          { this.state.uriLookupComplete ?
+            <p>This location is not yet in use. { ' ' }<Link href="?publish" label="Put something here" />.</p> :
+            <BusyMessage message="Loading magic decentralized data..." />
+          }
+        </div>
       </section>;
     } else if (this.state.claimType == "channel") {
       innerContent = <ChannelPage title={this._uri} />
@@ -282,3 +284,87 @@ let ShowPage = React.createClass({
 });
 
 export default ShowPage;
+
+//
+// const ShowPage = (props) => {
+//   const {
+//     claim,
+//     uri,
+//     isDownloaded,
+//     fileInfo,
+//     costInfo,
+//   } = props
+//   const {
+//     txid,
+//     nout,
+//     has_signature,
+//     signature_is_valid,
+//     value,
+//   } = claim
+//   const {
+//     stream,
+//   } = value
+//   const {
+//     metadata,
+//     source,
+//   } = stream
+//   const {
+//     title,
+//   } = metadata
+//   const {
+//     contentType,
+//   } = source
+//   const {
+//     cost,
+//     includesData,
+//   } = costInfo
+//   const costIncludesData = includesData
+//
+//   const outpoint = txid + ':' + nout;
+//   const uriLookupComplete = !!claim
+//   const hasSignature = has_signature
+//   const signatureIsValid = signature_is_valid
+//
+//   return (
+//     <main className="main--single-column">
+//       <section className="show-page-media">
+//         { contentType && contentType.startsWith('video/') ?
+//             <Video className="video-embedded" uri={uri} metadata={metadata} outpoint={outpoint} /> :
+//             (metadata ? <Thumbnail src={metadata.thumbnail} /> : <Thumbnail />) }
+//       </section>
+//       <section className="card">
+//         <div className="card__inner">
+//           <div className="card__title-identity">
+//             {isDownloaded === false
+//               ? <span style={{float: "right"}}><FilePrice uri={uri} metadata={metadata} /></span>
+//               : null}
+//             <h1>{title}</h1>
+//             { uriLookupComplete ?
+//               <div>
+//                 <div className="card__subtitle">
+//                   <UriIndicator uri={uri} hasSignature={hasSignature} signatureIsValid={signatureIsValid} />
+//                 </div>
+//                 <div className="card__actions">
+//                   <FileActions uri={uri} outpoint={outpoint} metadata={metadata} contentType={contentType} />
+//                 </div>
+//               </div> : '' }
+//           </div>
+//           { uriLookupComplete ?
+//               <div>
+//                 <div className="card__content card__subtext card__subtext card__subtext--allow-newlines">
+//                   {metadata.description}
+//                 </div>
+//               </div>
+//             : <div className="card__content"><BusyMessage message="Loading magic decentralized data..." /></div> }
+//         </div>
+//         { metadata ?
+//             <div className="card__content">
+//               <FormatItem metadata={metadata} contentType={contentType} cost={cost} uri={uri} outpoint={outpoint} costIncludesData={costIncludesData}  />
+//             </div> : '' }
+//         <div className="card__content">
+//           <Link href="https://lbry.io/dmca" label="report" className="button-text-help" />
+//         </div>
+//       </section>
+//     </main>
+//   )
+// }

@@ -4,23 +4,27 @@ export const _selectState = state => state.app || {}
 
 export const selectIsLoaded = createSelector(
   _selectState,
-  (state) => {
-    return state.isLoaded
-  }
+  (state) => state.isLoaded
+)
+
+export const selectCurrentPath = createSelector(
+  _selectState,
+  (state) => state.currentPath
 )
 
 export const selectCurrentPage = createSelector(
-  _selectState,
-  (state) => {
-    return state.currentPage
-  }
+  selectCurrentPath,
+  (path) => path.split('=')[0]
+)
+
+export const selectCurrentUri = createSelector(
+  selectCurrentPath,
+  (path) => path.split('://')[1]
 )
 
 export const selectPlatform = createSelector(
   _selectState,
-  (state) => {
-    return state.platform
-  }
+  (state) => state.platform
 )
 
 export const selectUpdateUrl = createSelector(
