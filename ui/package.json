@@ -3,7 +3,8 @@
   "version": "0.10.0rc8",
   "description": "LBRY UI",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "webpack-dev-server --devtool eval --progress --colors --inline"
   },
   "keywords": [
     "lbry"
@@ -52,6 +53,7 @@
     "json-loader": "^0.5.4",
     "node-sass": "^3.13.0",
     "webpack": "^1.13.3",
+    "webpack-dev-server": "^2.4.4",
     "webpack-target-electron-renderer": "^0.4.0"
   }
 }
