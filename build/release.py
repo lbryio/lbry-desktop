@@ -16,6 +16,7 @@ import github
 import changelog
 
 ROOT = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
+DAEMON_URL_FILE = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'DAEMON_URL')
 
 
 def main():
@@ -37,6 +38,11 @@ def main():
 
     print 'Current version: {}'.format(repo.current_version)
     print 'New version: {}'.format(repo.new_version)
+    with open(DAEMON_URL_FILE, 'r') as f:
+        daemon_url_template = f.read().strip()
+        daemon_version = re.search('/(?P<version>v[^/]+)', daemon_url_template)
+        print 'Daemon version: {}  ({})'.format(
+            daemon_version.group('version'), daemon_url_template)
 
     if not args.confirm and not confirm():
         print "Aborting"
@@ -157,7 +163,10 @@ in the future"""
 
 
 def confirm():
-    return raw_input('Is this what you want? [y/N] ').strip().lower() == 'y'
+    try:
+        return raw_input('Is this what you want? [y/N] ').strip().lower() == 'y'
+    except KeyboardInterrupt:
+        return False
 
 
 def run_sanity_checks(repo, branch):
@@ -181,9 +190,8 @@ def run_sanity_checks(repo, branch):
 
 
 def check_daemon_urls():
-    daemon_url_file = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'DAEMON_URL')
     success = True
-    with open(daemon_url_file, 'r') as f:
+    with open(DAEMON_URL_FILE, 'r') as f:
         daemon_url_template = f.read().strip()
         if "OSNAME" not in daemon_url_template:
             print "Daemon URL must include the string 'OSNAME'"
