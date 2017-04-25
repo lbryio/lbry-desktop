@@ -17,19 +17,19 @@ const FormatItem = (props) => {
   const {
     contentType,
     metadata,
+    metadata: {
+      thumbnail,
+      author,
+      title,
+      description,
+      language,
+      license,
+    },
     cost,
     uri,
     outpoint,
     costIncludesData,
   } = props
-  const {
-    thumbnail,
-    author,
-    title,
-    description,
-    language,
-    license
-  } = metadata;
   const mediaType = lbry.getMediaType(contentType);
 
   return (
@@ -289,89 +289,3 @@ let ShowPage = React.createClass({
     return <main className="main--single-column">{innerContent}</main>;
   }
 });
-
-export default ShowPage;
-
-//
-// const ShowPage = (props) => {
-//   const {
-//     claim,
-//     uri,
-//     isDownloaded,
-//     fileInfo,
-//     costInfo,
-//   } = props
-//   const {
-//     txid,
-//     nout,
-//     has_signature,
-//     signature_is_valid,
-//     value,
-//   } = claim
-//   const {
-//     stream,
-//   } = value
-//   const {
-//     metadata,
-//     source,
-//   } = stream
-//   const {
-//     title,
-//   } = metadata
-//   const {
-//     contentType,
-//   } = source
-//   const {
-//     cost,
-//     includesData,
-//   } = costInfo
-//   const costIncludesData = includesData
-//
-//   const outpoint = txid + ':' + nout;
-//   const uriLookupComplete = !!claim
-//   const hasSignature = has_signature
-//   const signatureIsValid = signature_is_valid
-//
-//   return (
-//     <main className="main--single-column">
-//       <section className="show-page-media">
-//         { contentType && contentType.startsWith('video/') ?
-//             <Video className="video-embedded" uri={uri} metadata={metadata} outpoint={outpoint} /> :
-//             (metadata ? <Thumbnail src={metadata.thumbnail} /> : <Thumbnail />) }
-//       </section>
-//       <section className="card">
-//         <div className="card__inner">
-//           <div className="card__title-identity">
-//             {isDownloaded === false
-//               ? <span style={{float: "right"}}><FilePrice uri={uri} metadata={metadata} /></span>
-//               : null}
-//             <h1>{title}</h1>
-//             { uriLookupComplete ?
-//               <div>
-//                 <div className="card__subtitle">
-//                   <UriIndicator uri={uri} hasSignature={hasSignature} signatureIsValid={signatureIsValid} />
-//                 </div>
-//                 <div className="card__actions">
-//                   <FileActions uri={uri} outpoint={outpoint} metadata={metadata} contentType={contentType} />
-//                 </div>
-//               </div> : '' }
-//           </div>
-//           { uriLookupComplete ?
-//               <div>
-//                 <div className="card__content card__subtext card__subtext card__subtext--allow-newlines">
-//                   {metadata.description}
-//                 </div>
-//               </div>
-//             : <div className="card__content"><BusyMessage message="Loading magic decentralized data..." /></div> }
-//         </div>
-//         { metadata ?
-//             <div className="card__content">
-//               <FormatItem metadata={metadata} contentType={contentType} cost={cost} uri={uri} outpoint={outpoint} costIncludesData={costIncludesData}  />
-//             </div> : '' }
-//         <div className="card__content">
-//           <Link href="https://lbry.io/dmca" label="report" className="button-text-help" />
-//         </div>
-//       </section>
-//     </main>
-//   )
-// }
