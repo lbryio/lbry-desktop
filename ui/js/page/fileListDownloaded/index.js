@@ -3,12 +3,14 @@ import {
   connect
 } from 'react-redux'
 import {
-  selectDownloadedContent,
+  selectDownloadedContentFileInfos,
+  selectFetchingDownloadedContent,
 } from 'selectors/content'
 import FileListDownloaded from './view'
 
 const select = (state) => ({
-  downloadedContent: selectDownloadedContent(state),
+  downloadedContent: selectDownloadedContentFileInfos(state),
+  fetching: selectFetchingDownloadedContent(state),
 })
 
 const perform = (dispatch) => ({
