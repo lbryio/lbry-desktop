@@ -20,6 +20,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
   * Redesigned UI for Discover
   * Handle more of price calculations at the daemon layer to improve page load time
   * Add special support for building channel claims in lbryuri module
+  * Enable windows code signing of binary
 
 ### Changed
   * Update process now easier and more reliable

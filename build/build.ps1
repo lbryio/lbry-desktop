@@ -31,4 +31,10 @@ $binary_name = Get-ChildItem -Path dist -Filter '*.exe' -Name
 $new_name = $binary_name -replace '^LBRY Setup (.*)\.exe$', 'LBRY_$1.exe'
 Rename-Item -Path "dist\$binary_name" -NewName $new_name
 dir dist # verify that binary was built/named correctly
+
+# sign binary
+nuget install secure-file -ExcludeVersion
+secure-file\tools\secure-file -decrypt build\lbry2.pfx.enc -secret "$env:pfx_key"
+& ${env:SIGNTOOL_PATH} sign /f build\lbry2.pfx /p "$env:key_pass" /tr http://tsa.starfieldtech.com /td SHA256 /fd SHA256 dist\*.exe
+
 python build\release_on_tag.py
