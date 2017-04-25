@@ -19,13 +19,23 @@ reducers[types.SEARCH_COMPLETED] = function(state, action) {
   const {
     query,
   } = action.data
-  const newResults = Object.assign({}, state.results)
-  const newByQuery = Object.assign({}, newResults.byQuery)
+  const oldResults = Object.assign({}, state.results)
+  const newByQuery = Object.assign({}, oldResults.byQuery)
   newByQuery[query] = action.data.results
+  const newResults = Object.assign({}, oldResults, {
+    byQuery: newByQuery
+  })
 
   return Object.assign({}, state, {
     searching: false,
     results: newResults,
+  })
+}
+
+reducers[types.SEARCH_CANCELLED] = function(state, action) {
+  return Object.assign({}, state, {
+    searching: false,
+    query: undefined,
   })
 }
 

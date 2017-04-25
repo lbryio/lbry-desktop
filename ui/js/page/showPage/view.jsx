@@ -17,19 +17,19 @@ const FormatItem = (props) => {
   const {
     contentType,
     metadata,
+    metadata: {
+      thumbnail,
+      author,
+      title,
+      description,
+      language,
+      license,
+    },
     cost,
     uri,
     outpoint,
     costIncludesData,
   } = props
-  const {
-    thumbnail,
-    author,
-    title,
-    description,
-    language,
-    license
-  } = metadata;
   const mediaType = lbry.getMediaType(contentType);
 
   return (
@@ -55,41 +55,38 @@ const FormatItem = (props) => {
 const ShowPage = (props) => {
   const {
     claim,
+    claim: {
+      txid,
+      nout,
+      has_signature: hasSignature,
+      signature_is_valid: signatureIsValid,
+      value,
+      value: {
+        stream,
+        stream: {
+          metadata,
+          source,
+          metadata: {
+            title,
+          } = {},
+          source: {
+            contentType,
+          } = {},
+        } = {},
+      } = {},
+    },
     uri,
     isDownloaded,
     fileInfo,
     costInfo,
+    costInfo: {
+      cost,
+      includesData: costIncludesData,
+    } = {},
   } = props
-  const {
-    txid,
-    nout,
-    has_signature,
-    signature_is_valid,
-    value,
-  } = claim
-  const {
-    stream,
-  } = value
-  const {
-    metadata,
-    source,
-  } = stream
-  const {
-    title,
-  } = metadata
-  const {
-    contentType,
-  } = source
-  const {
-    cost,
-    includesData,
-  } = costInfo
-  const costIncludesData = includesData
 
   const outpoint = txid + ':' + nout;
-  const uriLookupComplete = !!claim
-  const hasSignature = has_signature
-  const signatureIsValid = signature_is_valid
+  const uriLookupComplete = !!claim && Object.keys(claim).length
 
   return (
     <main className="constrained-page">

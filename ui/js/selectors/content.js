@@ -155,6 +155,11 @@ export const selectDownloadedContent = createSelector(
   (state) => state.downloadedContent || {}
 )
 
+export const selectDownloadedContentFileInfos = createSelector(
+  selectDownloadedContent,
+  (downloadedContent) => downloadedContent.fileInfos || []
+)
+
 export const shouldFetchDownloadedContent = createSelector(
   selectDaemonReady,
   selectCurrentPage,

@@ -79,11 +79,12 @@ const FileTileStream = React.createClass({
     const isConfirmed = !!metadata;
     const title = isConfirmed ? metadata.title : uri;
     const obscureNsfw = this.props.obscureNsfw && isConfirmed && metadata.nsfw;
+    const { navigate } = this.props
     return (
       <section className={ 'file-tile card ' + (obscureNsfw ? 'card--obscured ' : '') } onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
         <div className={"row-fluid card__inner file-tile__row"}>
           <div className="span3 file-tile__thumbnail-container">
-            <a href={'?show=' + uri}><Thumbnail className="file-tile__thumbnail" {... metadata && metadata.thumbnail ? {src: metadata.thumbnail} : {}} alt={'Photo for ' + this.props.uri} /></a>
+            <a href="#" onClick={() => navigate(`show=${uri}`)}><Thumbnail className="file-tile__thumbnail" {... metadata && metadata.thumbnail ? {src: metadata.thumbnail} : {}} alt={'Photo for ' + this.props.uri} /></a>
           </div>
           <div className="span9">
             <div className="card__title-primary">
