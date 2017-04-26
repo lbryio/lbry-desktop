@@ -129,7 +129,7 @@ reducers[types.FETCH_FILE_INFO_COMPLETED] = function(state, action) {
   const fileInfos = Object.assign({}, state.fileInfos)
   const byUri = Object.assign({}, fileInfos.byUri)
 
-  byUri[uri] = fileInfo
+  byUri[uri] = Object.assign({}, fileInfo)
   delete newFetchingFileInfos[uri]
 
   const newFileInfos = Object.assign({}, fileInfos, {
@@ -175,6 +175,79 @@ reducers[types.FETCH_COST_INFO_COMPLETED] = function(state, action) {
   return Object.assign({}, state, {
     fetchingCostInfos: newFetchingCostInfos,
     costInfos: newCostInfos,
+  })
+}
+
+reducers[types.LOADING_VIDEO_STARTED] = function(state, action) {
+  const {
+    uri,
+  } = action.data
+  const newLoading = Object.assign({}, state.loading)
+  const newByUri = Object.assign({}, newLoading.byUri)
+
+  newByUri[uri] = true
+  newLoading.byUri = newByUri
+
+  return Object.assign({}, state, {
+    loading: newLoading,
+  })
+}
+
+reducers[types.LOADING_VIDEO_FAILED] = function(state, action) {
+  const {
+    uri,
+  } = action.data
+  const newLoading = Object.assign({}, state.loading)
+  const newByUri = Object.assign({}, newLoading.byUri)
+
+  delete newByUri[uri]
+  newLoading.byUri = newByUri
+
+  return Object.assign({}, state, {
+    loading: newLoading,
+  })
+}
+
+reducers[types.DOWNLOADING_STARTED] = function(state, action) {
+  const {
+    uri,
+  } = action.data
+  const newDownloading = Object.assign({}, state.downloading)
+  const newByUri = Object.assign({}, newDownloading.byUri)
+
+  newByUri[uri] = true
+  newDownloading.byUri = newByUri
+
+  return Object.assign({}, state, {
+    downloading: newDownloading,
+  })
+}
+
+reducers[types.DOWNLOADING_COMPLETED] =
+reducers[types.DOWNLOADING_PROGRESSED] = function(state, action) {
+  const {
+    uri,
+    fileInfo,
+  } = action.data
+  const fileInfos = Object.assign({}, state.fileInfos)
+  const byUri = Object.assign({}, fileInfos.byUri)
+
+  byUri[uri] = fileInfo
+  fileInfos.byUri = byUri
+
+  return Object.assign({}, state, {
+    fileInfos: fileInfos,
+  })
+}
+
+
+reducers[types.PLAY_VIDEO_STARTED] = function(state, action) {
+  const {
+    uri,
+  } = action.data
+
+  return Object.assign({}, state, {
+    nowPlaying: uri,
   })
 }
 

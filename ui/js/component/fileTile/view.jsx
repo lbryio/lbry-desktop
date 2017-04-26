@@ -10,11 +10,10 @@ import UriIndicator from 'component/channel-indicator.js';
 class FileTile extends React.Component {
   render() {
     const {
-      resolvedUris,
       displayStyle,
       uri,
     } = this.props
-    const resolvedUri = resolvedUris[uri] || {}
+    const resolvedUri = this.props.resolvedUris(uri) || {}
     const claimInfo = resolvedUri.claim
 
     if(!claimInfo) {
