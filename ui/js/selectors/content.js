@@ -84,10 +84,21 @@ export const selectFetchingFileInfos = createSelector(
   (state) => state.fetchingFileInfos || {}
 )
 
+export const selectCurrentUriFileReadyToPlay = createSelector(
+  selectCurrentUriFileInfo,
+  (fileInfo) => (fileInfo || {}).written_bytes > 0
+)
+
 export const selectIsFetchingCurrentUriFileInfo = createSelector(
   selectFetchingFileInfos,
   selectCurrentUri,
   (fetching, uri) => !!fetching[uri]
+)
+
+export const selectCurrentUriIsPlaying = createSelector(
+  _selectState,
+  selectCurrentUri,
+  (state, uri) => state.nowPlaying == uri
 )
 
 export const selectCostInfos = createSelector(
@@ -183,6 +194,22 @@ export const selectFetchingPublishedContent = createSelector(
 export const selectPublishedContent = createSelector(
   _selectState,
   (state) => state.publishedContent || {}
+)
+
+export const selectLoading = createSelector(
+  _selectState,
+  (state) => state.loading || {}
+)
+
+export const selectLoadingByUri = createSelector(
+  selectLoading,
+  (loading) => loading.byUri || {}
+)
+
+export const selectLoadingCurrentUri = createSelector(
+  selectLoadingByUri,
+  selectCurrentUri,
+  (byUri, uri) => byUri[uri]
 )
 
 export const shouldFetchPublishedContent = createSelector(

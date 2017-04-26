@@ -8,7 +8,7 @@ import {
 import FileTile from './view'
 
 const select = (state) => ({
-  resolvedUris: selectResolvedUris(state),
+  resolvedUris: (uri) => selectResolvedUris(state)[uri],
 })
 
 const perform = (dispatch) => ({
