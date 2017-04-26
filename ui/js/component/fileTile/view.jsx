@@ -13,7 +13,9 @@ class FileTile extends React.Component {
       uri,
       claim,
     } = this.props
-
+    const resolvedUri = this.props.resolvedUris(uri) || {}
+    const claimInfo = resolvedUri.claim
+    
     if(!claim) {
       if (displayStyle == 'card') {
         return <FileCardStream uri={uri} />
