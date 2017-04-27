@@ -23,6 +23,19 @@ $width-input-text: 330px;
   margin-right: 5px;
 }
 
+.header-search input[type="search"]:hover {
+    background: rgba(255, 255, 255, 0.5);
+}
+
+.header-search input[type="search"]:active {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.header-search input[type="search"]:focus {
+    background: #fff;
+    color: #155B4A!important;
+}
+
 input[type="text"].input-copyable {
   border: 1px solid $color-form-border;
   line-height: 1;
