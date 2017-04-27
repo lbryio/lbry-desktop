@@ -17,7 +17,7 @@ var SettingsPage = React.createClass({
   setClientSetting: function(name, value) {
     lbry.setClientSetting(name, value)
     this._onSettingSaveSuccess()
-  },
+    },
   onRunOnStartChange: function (event) {
     this.setDaemonSetting('run_on_startup', event.target.checked);
   },

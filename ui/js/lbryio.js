@@ -7,10 +7,11 @@ const lbryio = {
   _accessToken: getLocal('accessToken'),
   _authenticationPromise: null,
   _user : null,
-  enabled: true
+  enabled: false
 };
 
-const CONNECTION_STRING = process.env.LBRY_APP_API_URL ? process.env.LBRY_APP_API_URL : 'https://api.lbry.io/';
+// const CONNECTION_STRING = process.env.LBRY_APP_API_URL ? process.env.LBRY_APP_API_URL : 'https://api.lbry.io/';
+const CONNECTION_STRING = 'https://api.lbry.io/';
 const EXCHANGE_RATE_TIMEOUT = 20 * 60 * 1000;
 
 lbryio.getExchangeRates = function() {

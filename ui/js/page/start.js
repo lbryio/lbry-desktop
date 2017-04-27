@@ -5,9 +5,6 @@ var StartPage = React.createClass({
   componentWillMount: function() {
     lbry.stop();
   },
-  componentDidMount: function() {
-    document.title = "LBRY is Closed";
-  },
   render: function() {
     return (
       <main className="page">

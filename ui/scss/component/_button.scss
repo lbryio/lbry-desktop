@@ -34,6 +34,11 @@ $button-focus-shift: 12%;
   {
     padding-left: 5px;
   }
+  .icon:only-child
+  {
+    padding-left: 0;
+    padding-right: 0;
+  }
 }
 .button-block
 {
@@ -49,17 +54,17 @@ $button-focus-shift: 12%;
   $color-button-text: white;
   color: darken($color-button-text, $button-focus-shift * 0.5);
   background-color: $color-primary;
-  box-shadow: $default-box-shadow;
+  box-shadow: $box-shadow-layer;
   &:focus {
     color: $color-button-text;
-    //box-shadow: $focus-box-shadow;
+    //box-shadow: $box-shadow-focus;
     background-color: mix(black, $color-primary, $button-focus-shift)
   }
 }
 .button-alt
 {
   background-color: $color-bg-alt;
-  box-shadow: $default-box-shadow;
+  box-shadow: $box-shadow-layer;
 }
 
 .button-text
@@ -75,4 +80,8 @@ $button-focus-shift: 12%;
 {
   @include text-link(#aaa);
   font-size: 0.8em;
+}
+.button--flat
+{
+  box-shadow: none !important;
 }

@@ -10,7 +10,7 @@ $border-radius-menu: 2px;
   position: absolute;
   white-space: nowrap;
   background-color: white;
-  box-shadow: $default-box-shadow;
+  box-shadow: $box-shadow-layer;
   border-radius: $border-radius-menu;
   padding-top: ($spacing-vertical / 5) 0px;
   z-index: 1;

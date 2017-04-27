@@ -348,9 +348,6 @@ var PublishPage = React.createClass({
   componentWillMount: function() {
     this._updateChannelList();
   },
-  componentDidMount: function() {
-    document.title = "Publish";
-  },
   componentDidUpdate: function() {
   },
   onFileChange: function() {

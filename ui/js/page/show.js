@@ -60,7 +60,6 @@ let ShowPage = React.createClass({
   },
   componentWillMount: function() {
     this._uri = lbryuri.normalize(this.props.uri);
-    document.title = this._uri;
 
     lbry.resolve({uri: this._uri}).then(({ claim: {txid, nout, has_signature, signature_is_valid, value: {stream: {metadata, source: {contentType}}}}}) => {
       const outpoint = txid + ':' + nout;
@@ -70,6 +69,8 @@ let ShowPage = React.createClass({
           isDownloaded: fileInfo.length > 0,
         });
       });
+
+      document.title = metadata.title ? metadata.title : this._uri;
 
       this.setState({
         outpoint: outpoint,
@@ -91,6 +92,7 @@ let ShowPage = React.createClass({
   render: function() {
     const metadata = this.state.metadata;
     const title = metadata ? this.state.metadata.title : this._uri;
+
     return (
       <main className="constrained-page">
         <section className="show-page-media">

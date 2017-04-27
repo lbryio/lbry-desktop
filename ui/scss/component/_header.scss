@@ -1,0 +1,103 @@
+@import "../global";
+
+$color-header: #666;
+
+
+$header-icon-size: 1.5em;
+
+.open-drawer-link, .close-drawer-link
+{
+  display: inline-block;
+  font-size: $header-icon-size;
+  padding: 2px 6px 0 6px;
+  float: left;
+}
+
+#header
+{
+  color: $color-header;
+  background: #fff;
+  display: flex;
+  /*
+  &.header-no-subnav {
+    height: $height-header;
+  }
+  &.header-with-subnav {
+    height: $height-header * 2;
+  }*/
+  position: fixed;
+  box-shadow: $box-shadow-layer;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 2;
+  padding: $spacing-vertical / 2;
+  box-sizing: border-box;
+}
+.header__item {
+  flex: 0 0 content;
+  padding-left: $spacing-vertical / 4;
+  padding-right: $spacing-vertical / 4;
+}
+.header__item--wunderbar {
+  flex-grow: 1;
+}
+
+.wunderbar
+{
+  position: relative;
+  .icon {
+    position: absolute;
+    left: 10px;
+    top: $spacing-vertical / 2  - 4px; //hacked
+  }
+}
+.wunderbar__input {
+  background: rgba(255, 255, 255, 0.7);
+  width: 100%;
+  color: $color-header;
+  height: $spacing-vertical * 1.5;
+  line-height: $spacing-vertical * 1.5;
+  padding-left: 38px;
+  padding-right: 5px;
+  border: 1px solid $color-text-dark;
+  @include border-radius(2px);
+  border: 1px solid #ccc;
+  &:focus {
+    box-shadow: $box-shadow-focus;
+    border-color: $color-header;
+  }
+}
+
+nav.sub-header
+{
+  text-transform: uppercase;
+  padding: $spacing-vertical / 2;
+  > a
+  {
+    $sub-header-selected-underline-height: 2px;
+    display: inline-block;
+    margin: 0 15px;
+    padding: 0 5px;
+    line-height: $height-header - $spacing-vertical - $sub-header-selected-underline-height;
+    color: $color-header;
+    &:first-child
+    {
+      margin-left: 0;
+    }
+    &:last-child
+    {
+      margin-right: 0;
+    }
+    $color-selected-subheader: darken($color-header, 20%);
+    &.sub-header-selected
+    {
+      border-bottom: $sub-header-selected-underline-height solid $color-selected-subheader;
+      color: $color-selected-subheader;
+    }
+    &:hover
+    {
+      color: $color-selected-subheader;
+    }
+  }
+}

@@ -7,7 +7,7 @@ $padding-card-horizontal: $spacing-vertical * 2/3;
   margin-right: auto;
   max-width: $width-page-constrained;
   background: $color-bg;
-  box-shadow: $default-box-shadow;
+  box-shadow: $box-shadow-layer;
   border-radius: 2px;
   margin-bottom: $spacing-vertical * 2/3;
   overflow: auto;
@@ -86,7 +86,7 @@ $card-link-scaling: 1.1;
 .card--link:hover {
   position: relative;
   z-index: 1;
-  box-shadow: $focus-box-shadow;
+  box-shadow: $box-shadow-focus;
   transform: scale($card-link-scaling);
   transform-origin: 50% 50%;
   overflow-x: visible;

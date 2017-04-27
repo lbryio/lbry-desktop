@@ -11,44 +11,12 @@ body
   line-height: $font-line-height;
 }
 
-$drawer-width: 220px;
-
-#drawer
+#window
 {
-  width: $drawer-width;
-  position: fixed;
   min-height: 100vh;
-  left: 0;
-  top: 0;
-  background: $color-bg;
-  z-index: 3;
-  .drawer-item
-  {
-    display: block;
-    padding: $spacing-vertical / 2;
-    font-size: 1.2em;
-    height: $spacing-vertical * 1.5;
-    .icon
-    {
-      margin-right: 6px;
-    }
-    .link-label
-    {
-      line-height: $spacing-vertical * 1.5;
-    }
-    .badge
-    {
-      float: right;
-      margin-top: $spacing-vertical * 0.25 - 2;
-      background: $color-money;
-    }
-  }
-  .drawer-item-selected
-  {
-    background: $color-canvas;
-    color: $color-primary;
-  }
+  background: $color-canvas;
 }
+
 .badge
 {
   background: $color-money;
@@ -62,119 +30,9 @@ $drawer-width: 220px;
   font-weight: bold;
   color: $color-money;
 }
-#drawer-handle
-{
-  padding: $spacing-vertical / 2;
-  max-height: $height-header - $spacing-vertical;
-  text-align: center;
-}
-
-#window
-{
-  position: relative; /*window has it's own z-index inside of it*/
-  z-index: 1;
-}
-#window.drawer-closed
-{
-  #drawer { display: none }
-}
-#window.drawer-open
-{
-  #main-content { margin-left: $drawer-width; }
-  .open-drawer-link { display: none }
-  #header { padding-left: $drawer-width + $spacing-vertical / 2; }
-}
-
-#header
-{
-  background: $color-primary;
-  color: white;
-  &.header-no-subnav {
-    height: $height-header;
-  }
-  &.header-with-subnav {
-    height: $height-header * 2;
-  }
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 2;
-  box-sizing: border-box;
-  h1 { font-size: 1.8em; line-height: $height-header - $spacing-vertical; display: inline-block; float: left; }
-  &.header-scrolled
-  {
-    box-shadow: $default-box-shadow;
-  }
-}
-.header-top-bar
-{
-  padding: $spacing-vertical / 2;
-}
-.header-search
-{
-  margin-left: 60px;
-  $padding-adjust: 36px;
-  text-align: center;
-  .icon {
-    position: absolute;
-    top: $spacing-vertical * 1.5 / 2 + 2px; //hacked
-    margin-left: -$padding-adjust + 14px; //hacked
-  }
-  input[type="search"] {
-    position: relative;
-    left: -$padding-adjust;
-    background: rgba(255, 255, 255, 0.3);
-    color: white;
-    width: 400px;
-    height: $spacing-vertical * 1.5;
-    line-height: $spacing-vertical * 1.5;
-    padding-left: $padding-adjust + 3;
-    padding-right: 3px;
-    @include border-radius(2px);
-    @include placeholder-color(#e8e8e8);
-    &:focus {
-      box-shadow: $focus-box-shadow;
-    }
-  }
-}
-
-nav.sub-header
-{
-  background: $color-primary;
-  text-transform: uppercase;
-  padding: $spacing-vertical / 2;
-  > a
-  {
-    $sub-header-selected-underline-height: 2px;
-    display: inline-block;
-    margin: 0 15px;
-    padding: 0 5px;
-    line-height: $height-header - $spacing-vertical - $sub-header-selected-underline-height;
-    color: #e8e8e8;
-    &:first-child
-    {
-      margin-left: 0;
-    }
-    &:last-child
-    {
-      margin-right: 0;
-    }
-    &.sub-header-selected
-    {
-      border-bottom: $sub-header-selected-underline-height solid #fff;
-      color: #fff;
-    }
-    &:hover
-    {
-      color: #fff;
-    }
-  }
-}
 
 #main-content
 {
-  background: $color-canvas;
   &.no-sub-nav
   {
     min-height: calc(100vh - 60px); //should be -$height-header, but I'm dumb I guess? It wouldn't work
@@ -182,8 +40,7 @@ nav.sub-header
   }
   &.with-sub-nav
   {
-    min-height: calc(100vh - 120px); //should be -$height-header, but I'm dumb I guess? It wouldn't work
-    main { margin-top: $height-header * 2; }
+    min-height: calc(100vh - 60px); //should be -$height-header, but I'm dumb I guess? It wouldn't work
   }
   main
   {
@@ -195,26 +52,4 @@ nav.sub-header
       margin-right: auto;
     }
   }
-}
-
-$header-icon-size: 1.5em;
-
-.open-drawer-link, .close-drawer-link
-{
-  display: inline-block;
-  font-size: $header-icon-size;
-  padding: 2px 6px 0 6px;
-  float: left;
-}
-.close-lbry-link
-{
-  font-size: $header-icon-size;
-  float: right;
-  padding: 0 6px 0 18px;
-}
-
-.full-screen
-{
-  width: 100%;
-  height: 100%;
 }

@@ -270,9 +270,6 @@ var WalletPage = React.createClass({
   propTypes: {
     viewingPage: React.PropTypes.string,
   },
-  componentDidMount: function() {
-    document.title = "My Wallet";
-  },
   /*
    Below should be refactored so that balance is shared all of wallet page. Or even broader?
    What is the proper React pattern for sharing a global state like balance?

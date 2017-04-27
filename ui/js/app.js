@@ -244,51 +244,50 @@ var App = React.createClass({
         return null;
     }
   },
-  getMainContent: function()
+  getContentAndAddress: function()
   {
     switch(this.state.viewingPage)
     {
       case 'settings':
-        return <SettingsPage />;
+        return ["Settings", "icon-gear", <SettingsPage />];
       case 'help':
-        return <HelpPage />;
+        return ["Help", "icon-question", <HelpPage />];
       case 'report':
-        return <ReportPage />;
+        return ['Report', 'icon-file', <ReportPage />];
       case 'downloaded':
-        return <FileListDownloaded />;
+        return ["Downloads & Purchases", "icon-folder", <FileListDownloaded />];
       case 'published':
-        return <FileListPublished />;
+        return ["Publishes", "icon-folder", <FileListPublished />];
       case 'start':
-        return <StartPage />;
+        return ["Start", "icon-file", <StartPage />];
       case 'rewards':
-        return <RewardsPage />;
+        return ["Rewards", "icon-bank", <RewardsPage />];
       case 'wallet':
       case 'send':
       case 'receive':
-        return <WalletPage viewingPage={this.state.viewingPage} />;
+        return [this.state.viewingPage.charAt(0).toUpperCase() + this.state.viewingPage.slice(1), "icon-bank", <WalletPage viewingPage={this.state.viewingPage} />]
       case 'show':
-        return <ShowPage uri={this.state.pageArgs} />;
+        return [this.state.pageArgs, "icon-file", <ShowPage uri={this.state.pageArgs} />];
       case 'publish':
-        return <PublishPage />;
+        return ["Publish", "icon-upload", <PublishPage />];
       case 'developer':
-        return <DeveloperPage />;
+        return ["Developer", "icon-file", <DeveloperPage />];
       case 'discover':
       default:
-        return <DiscoverPage showWelcome={this.state.justRegistered} {... this.state.pageArgs !== null ? {query: this.state.pageArgs} : {} } />;
+        return ["Home", "icon-home", <DiscoverPage showWelcome={this.state.justRegistered} {... this.state.pageArgs !== null ? {query: this.state.pageArgs} : {} } />];
     }
   },
   render: function() {
-    var mainContent = this.getMainContent(),
-        headerLinks = this.getHeaderLinks(),
-        searchQuery = this.state.viewingPage == 'discover' && this.state.pageArgs ? this.state.pageArgs : '';
-    
+    let [address, wunderBarIcon, mainContent] = this.getContentAndAddress(),
+        headerLinks = this.getHeaderLinks();
+
     return (
       this._fullScreenPages.includes(this.state.viewingPage) ?
         mainContent :
-        <div id="window" className={ this.state.drawerOpen ? 'drawer-open' : 'drawer-closed' }>
-          <Drawer onCloseDrawer={this.closeDrawer} viewingPage={this.state.viewingPage} />
+        <div id="window">
+          <Header onOpenDrawer={this.openDrawer} address={address} wunderBarIcon={wunderBarIcon}
+                   onSearch={this.onSearch} links={headerLinks} viewingPage={this.state.viewingPage} />
           <div id="main-content" className={ headerLinks ? 'with-sub-nav' : 'no-sub-nav' }>
-            <Header onOpenDrawer={this.openDrawer} initialQuery={searchQuery} onSearch={this.onSearch} links={headerLinks} viewingPage={this.state.viewingPage} />
             {mainContent}
           </div>
           <Modal isOpen={this.state.modal == 'upgrade'} contentLabel="Update available"

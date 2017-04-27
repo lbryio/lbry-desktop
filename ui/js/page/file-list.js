@@ -19,7 +19,6 @@ export let FileListDownloaded = React.createClass({
   },
   componentDidMount: function() {
     this._isMounted = true;
-    document.title = "Downloaded Files";
 
     lbry.claim_list_mine().then((myClaimInfos) => {
       if (!this._isMounted) { return; }
