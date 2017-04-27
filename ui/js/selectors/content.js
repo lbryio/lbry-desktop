@@ -84,6 +84,8 @@ export const selectFetchingFileInfos = createSelector(
   (state) => state.fetchingFileInfos || {}
 )
 
+// TODO make this smarter so it doesn't start playing and immediately freeze
+// while downloading more.
 export const selectCurrentUriFileReadyToPlay = createSelector(
   selectCurrentUriFileInfo,
   (fileInfo) => (fileInfo || {}).written_bytes > 0
