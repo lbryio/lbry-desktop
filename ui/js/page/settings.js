@@ -22,7 +22,7 @@ var SettingsPage = React.createClass({
     this.setDaemonSetting('run_on_startup', event.target.checked);
   },
   onShareDataChange: function (event) {
-    this.setDaemonSetting('share_debug_info', event.target.checked);
+    this.setDaemonSetting('share_usage_stats', event.target.checked);
   },
   onDownloadDirChange: function(event) {
     this.setDaemonSetting('download_directory', event.target.value);
@@ -189,7 +189,7 @@ var SettingsPage = React.createClass({
           <div className="card__content">
             <FormRow type="checkbox"
                      onChange={this.onShareDataChange}
-                     defaultChecked={this.state.daemonSettings.share_debug_info}
+                     defaultChecked={this.state.daemonSettings.share_usage_stats}
                      label="Help make LBRY better by contributing diagnostic data about my usage" />
           </div>
         </section>
