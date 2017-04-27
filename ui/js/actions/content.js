@@ -223,11 +223,14 @@ export function doDownloadFile(uri, streamInfo) {
   return function(dispatch, getState) {
     const state = getState()
 
-    dispatch({
-      type: types.DOWNLOADING_STARTED,
-      data: {
-        uri,
-      }
+    lbry.file_list({ outpoint: streamInfo.outpoint, full_status: true }).then(([fileInfo]) => {
+      dispatch({
+        type: types.DOWNLOADING_STARTED,
+        data: {
+          uri,
+          fileInfo,
+        }
+      })
     })
 
     lbryio.call('file', 'view', {
@@ -281,11 +284,13 @@ export function doWatchVideo() {
       return Promise.resolve()
     }
 
+    if (cost <= 0.01 || fileInfo.download_directory) {
+      dispatch(doLoadVideo())
+      return Promise.resolve()
+    }
+
     if (cost > balance) {
       dispatch(doOpenModal('notEnoughCredits'))
-    }
-    else if (cost <= 0.01 || fileInfo.written_bytes > 0) {
-      dispatch(doLoadVideo())
     } else {
       dispatch(doOpenModal('affirmPurchase'))
     }
