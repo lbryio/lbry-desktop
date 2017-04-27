@@ -211,20 +211,26 @@ reducers[types.LOADING_VIDEO_FAILED] = function(state, action) {
 reducers[types.DOWNLOADING_STARTED] = function(state, action) {
   const {
     uri,
+    fileInfo,
   } = action.data
   const newDownloading = Object.assign({}, state.downloading)
   const newByUri = Object.assign({}, newDownloading.byUri)
   const newLoading = Object.assign({}, state.loading)
   const newLoadingByUri = Object.assign({}, newLoading.byUri)
+  const newFileInfos = Object.assign({}, state.fileInfos)
+  const newFileInfosByUri = Object.assign({}, newFileInfos.byUri)
 
   newByUri[uri] = true
   newDownloading.byUri = newByUri
   delete newLoadingByUri[uri]
   newLoading.byUri = newLoadingByUri
+  newFileInfosByUri[uri] = fileInfo
+  newFileInfos.byUri = newFileInfosByUri
 
   return Object.assign({}, state, {
     downloading: newDownloading,
     loading: newLoading,
+    fileInfos: newFileInfos,
   })
 }
 
