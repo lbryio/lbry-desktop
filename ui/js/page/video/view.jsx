@@ -63,6 +63,8 @@ class WatchLink extends React.Component {
 class Video extends React.Component {
   constructor(props) {
     super(props)
+
+    // TODO none of this mouse handling stuff seems to actually do anything?
     this._controlsHideDelay = 3000 // Note: this needs to be shorter than the built-in delay in Electron, or Electron will hide the controls before us
     this._controlsHideTimeout = null
     this.state = {}
