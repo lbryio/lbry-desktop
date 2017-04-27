@@ -16,7 +16,7 @@ var AddressSection = React.createClass({
       this.setState({
         address: address,
       });
-    });
+    }.bind(this));
   },
 
   _getNewAddress: function(event) {
@@ -24,12 +24,12 @@ var AddressSection = React.createClass({
       event.preventDefault();
     }
 
-    lbry.wallet_new_address().then(function(address) {
+    lbry.getNewAddress((address) => {
       window.localStorage.setItem('wallet_address', address);
       this.setState({
         address: address,
       });
-    }.bind(this))
+    }.bind(this));
   },
 
   getInitialState: function() {

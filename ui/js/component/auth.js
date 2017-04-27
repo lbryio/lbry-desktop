@@ -199,7 +199,7 @@ const CodeRequiredStage = React.createClass({
     })
 
     if (!this.state.address) {
-      lbry.call('wallet_new_address', {}, (address) => {
+      lbry.getUnusedAddress((address) => {
         setLocal('wallet_address', address);
         this.setState({ address: address });
       });
