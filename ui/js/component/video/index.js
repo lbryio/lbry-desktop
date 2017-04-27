@@ -26,12 +26,11 @@ const select = (state) => ({
   modal: selectCurrentModal(state),
   isLoading: selectLoadingCurrentUri(state),
   readyToPlay: selectCurrentUriFileReadyToPlay(state),
-  isDownloading: <selectDownloadingCurre></selectDownloadingCurre>ntUri(state),
+  isDownloading: selectDownloadingCurrentUri(state),
 })
 
 const perform = (dispatch) => ({
-  loadVideo: () => dispatch(doLoadVideo()),
-  play: () => dispatch(doPlayVideo()),
+  play: () => dispatch(doLoadVideo()),
   watchVideo: (elem) => dispatch(doWatchVideo()),
   closeModal: () => dispatch(doCloseModal()),
 })
