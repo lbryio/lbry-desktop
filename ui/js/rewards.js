@@ -56,7 +56,7 @@ rewards.claimReward = function (type) {
   }
 
   return new Promise((resolve, reject) => {
-    lbry.get_new_address().then((address) => {
+    lbry.wallet_new_address().then((address) => {
       const params = {
         reward_type: type,
         wallet_address: address,
