@@ -1,10 +1,10 @@
 import React from 'react';
 import lbry from '../lbry.js';
 import lbryuri from '../lbryuri.js';
-import {Link} from '../component/link.js';
 import {Icon, FilePrice} from '../component/common.js';
 import {Modal} from './modal.js';
 import {FormField} from './form.js';
+import Link from 'component/link';
 import {ToolTip} from '../component/tooltip.js';
 import {DropDownMenu, DropDownMenuItem} from './menu.js';
 

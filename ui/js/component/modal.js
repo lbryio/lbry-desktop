@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactModal from 'react-modal';
-import {Link} from './link.js';
+import Link from 'component/link';
 
 
 export const Modal = React.createClass({

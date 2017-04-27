@@ -1,7 +1,7 @@
 import React from 'react';
 import lbry from '../lbry.js';
 import {FormField, FormRow} from '../component/form.js';
-import {Link} from '../component/link.js';
+import Link from '../component/link';
 import rewards from '../rewards.js';
 import lbryio from '../lbryio.js';
 import Modal from '../component/modal.js';
