@@ -284,7 +284,7 @@ export function doWatchVideo() {
     if (cost > balance) {
       dispatch(doOpenModal('notEnoughCredits'))
     }
-    else if (cost <= 0.01) {
+    else if (cost <= 0.01 || fileInfo.written_bytes > 0) {
       dispatch(doLoadVideo())
     } else {
       dispatch(doOpenModal('affirmPurchase'))

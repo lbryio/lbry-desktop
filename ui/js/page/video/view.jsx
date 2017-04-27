@@ -131,6 +131,7 @@ class Video extends React.Component {
       metadata,
       isLoading,
       isDownloading,
+      fileInfo,
     } = this.props
     const {
       isPlaying = false,
@@ -149,7 +150,7 @@ class Video extends React.Component {
         isPlaying ?
           !readyToPlay  ?
             <span>this is the world's worst loading screen and we shipped our software with it anyway... <br /><br />{loadStatusMessage}</span> :
-            <VideoPlayer {...this.props} /> :
+            <VideoPlayer downloadPath={fileInfo.download_path} /> :
           <div className="video__cover" style={{backgroundImage: 'url("' + metadata.thumbnail + '")'}}>
             <WatchLink icon="icon-play" onWatchClick={this.onWatchClick.bind(this)} startPlaying={this.startPlaying.bind(this)} {...this.props}></WatchLink>
           </div>
@@ -162,11 +163,11 @@ class VideoPlayer extends React.PureComponent {
   componentDidMount() {
     const elem = this.refs.video
     const {
-      fileInfo,
+      downloadPath,
     } = this.props
     const mediaFile = {
       createReadStream: (opts) =>
-        fs.createReadStream(fileInfo.download_path, opts)
+        fs.createReadStream(downloadPath, opts)
     }
     const videostream = VideoStream(mediaFile, elem)
     elem.play()
