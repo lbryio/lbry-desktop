@@ -214,12 +214,17 @@ reducers[types.DOWNLOADING_STARTED] = function(state, action) {
   } = action.data
   const newDownloading = Object.assign({}, state.downloading)
   const newByUri = Object.assign({}, newDownloading.byUri)
+  const newLoading = Object.assign({}, state.loading)
+  const newLoadingByUri = Object.assign({}, newLoading.byUri)
 
   newByUri[uri] = true
   newDownloading.byUri = newByUri
+  delete newLoadingByUri[uri]
+  newLoading.byUri = newLoadingByUri
 
   return Object.assign({}, state, {
     downloading: newDownloading,
+    loading: newLoading,
   })
 }
 

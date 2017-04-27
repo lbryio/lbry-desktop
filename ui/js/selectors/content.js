@@ -209,7 +209,23 @@ export const selectLoadingByUri = createSelector(
 export const selectLoadingCurrentUri = createSelector(
   selectLoadingByUri,
   selectCurrentUri,
-  (byUri, uri) => byUri[uri]
+  (byUri, uri) => !!byUri[uri]
+)
+
+export const selectDownloading = createSelector(
+  _selectState,
+  (state) => state.downloading || {}
+)
+
+export const selectDownloadingByUri = createSelector(
+  selectDownloading,
+  (downloading) => downloading.byUri || {}
+)
+
+export const selectDownloadingCurrentUri = createSelector(
+  selectCurrentUri,
+  selectDownloadingByUri,
+  (uri, byUri) => byUri[uri]
 )
 
 export const shouldFetchPublishedContent = createSelector(
