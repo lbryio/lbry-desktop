@@ -115,17 +115,13 @@ var App = React.createClass({
     });
 
     if (!sessionStorage.getItem('upgradeSkipped')) {
-      lbry.checkNewVersionAvailable(({isAvailable}) => {
-        if (!isAvailable) {
-          return;
-        }
-
-        lbry.getVersionInfo((versionInfo) => {
-          this._version = versionInfo.lbrynet_version;
+      lbry.getVersionInfo().then(({remoteVersion, upgradeAvailable}) => {
+        if (upgradeAvailable) {
+          this._version = remoteVersion;
           this.setState({
             modal: 'upgrade',
           });
-        });
+        }
       });
     }
   },

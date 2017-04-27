@@ -42,5 +42,8 @@
   "devDependencies": {
     "electron": "^1.4.15",
     "electron-builder": "^11.7.0"
+  },
+  "dependencies": {
+    "semver": "^5.3.0"
   }
 }
