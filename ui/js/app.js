@@ -220,30 +220,6 @@ var App = React.createClass({
       errorInfo: <ul className="error-modal__error-list">{errorInfoList}</ul>,
     });
   },
-  getHeaderLinks: function()
-  {
-    switch(this.state.viewingPage)
-    {
-      case 'wallet':
-      case 'send':
-      case 'receive':
-      case 'rewards':
-        return {
-          '?wallet': 'Overview',
-          '?send': 'Send',
-          '?receive': 'Receive',
-          '?rewards': 'Rewards',
-        };
-      case 'downloaded':
-      case 'published':
-        return {
-          '?downloaded': 'Downloaded',
-          '?published': 'Published',
-        };
-      default:
-        return null;
-    }
-  },
   getContentAndAddress: function()
   {
     switch(this.state.viewingPage)
@@ -278,16 +254,15 @@ var App = React.createClass({
     }
   },
   render: function() {
-    let [address, wunderBarIcon, mainContent] = this.getContentAndAddress(),
-        headerLinks = this.getHeaderLinks();
+    let [address, wunderBarIcon, mainContent] = this.getContentAndAddress();
 
     return (
       this._fullScreenPages.includes(this.state.viewingPage) ?
         mainContent :
         <div id="window">
           <Header onOpenDrawer={this.openDrawer} address={address} wunderBarIcon={wunderBarIcon}
-                   onSearch={this.onSearch} links={headerLinks} viewingPage={this.state.viewingPage} />
-          <div id="main-content" className={ headerLinks ? 'with-sub-nav' : 'no-sub-nav' }>
+                   onSearch={this.onSearch} viewingPage={this.state.viewingPage} />
+          <div id="main-content">
             {mainContent}
           </div>
           <Modal isOpen={this.state.modal == 'upgrade'} contentLabel="Update available"

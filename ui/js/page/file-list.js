@@ -3,11 +3,21 @@ import lbry from '../lbry.js';
 import lbryuri from '../lbryuri.js';
 import {Link} from '../component/link.js';
 import {FormField} from '../component/form.js';
+import {SubHeader} from '../component/header.js';
 import {FileTileStream} from '../component/file-tile.js';
 import rewards from '../rewards.js';
 import lbryio from '../lbryio.js';
 import {BusyMessage, Thumbnail} from '../component/common.js';
 
+
+export let FileListNav = React.createClass({
+  render: function() {
+    return <SubHeader modifier="constrained" viewingPage={this.props.viewingPage} links={{
+      '?downloaded': 'Downloaded',
+      '?published': 'Published',
+    }} />;
+  }
+});
 
 export let FileListDownloaded = React.createClass({
   _isMounted: false,
@@ -37,25 +47,20 @@ export let FileListDownloaded = React.createClass({
     this._isMounted = false;
   },
   render: function() {
+    let content = "";
     if (this.state.fileInfos === null) {
-      return (
-        <main className="page">
-          <BusyMessage message="Loading" />
-        </main>
-      );
+      content = <BusyMessage message="Loading" />;
     } else if (!this.state.fileInfos.length) {
-      return (
-        <main className="page">
-          <span>You haven't downloaded anything from LBRY yet. Go <Link href="?discover" label="search for your first download" />!</span>
-        </main>
-      );
+      content = <span>You haven't downloaded anything from LBRY yet. Go <Link href="?discover" label="search for your first download" />!</span>;
     } else {
-      return (
-        <main className="page">
-          <FileList fileInfos={this.state.fileInfos} hidePrices={true} />
-        </main>
-      );
+      content = <FileList fileInfos={this.state.fileInfos} hidePrices={true} />;
     }
+    return (
+      <main className="constrained-page">
+        <FileListNav viewingPage="downloaded" />
+        {content}
+      </main>
+    );
   }
 });
 
@@ -102,27 +107,22 @@ export let FileListPublished = React.createClass({
     this._isMounted = false;
   },
   render: function () {
+    let content = null;
     if (this.state.fileInfos === null) {
-      return (
-        <main className="page">
-          <BusyMessage message="Loading" />
-        </main>
-      );
+      content = <BusyMessage message="Loading" />;
     }
     else if (!this.state.fileInfos.length) {
-      return (
-        <main className="page">
-          <span>You haven't published anything to LBRY yet.</span> Try <Link href="?publish" label="publishing" />!
-        </main>
-      );
+      content = <span>You haven't published anything to LBRY yet. Try <Link href="?publish" label="publishing" />!</span>;
     }
     else {
-      return (
-        <main className="page">
-          <FileList fileInfos={this.state.fileInfos} />
-        </main>
-      );
+      content = <FileList fileInfos={this.state.fileInfos} />;
     }
+    return (
+      <main className="constrained-page">
+        <FileListNav viewingPage="published" />
+        {content}
+      </main>
+    );
   }
 });
 

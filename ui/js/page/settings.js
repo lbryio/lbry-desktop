@@ -1,6 +1,16 @@
 import React from 'react';
 import {FormField, FormRow} from '../component/form.js';
+import {SubHeader} from '../component/header.js';
 import lbry from '../lbry.js';
+
+export let SettingsNav = React.createClass({
+  render: function() {
+    return <SubHeader modifier="constrained" viewingPage={this.props.viewingPage} links={{
+      '?settings': 'Settings',
+      '?help' : 'Help'
+    }} />;
+  }
+});
 
 var SettingsPage = React.createClass({
   _onSettingSaveSuccess: function() {
@@ -92,7 +102,8 @@ var SettingsPage = React.createClass({
  </section>
  */
     return (
-      <main>
+      <main className="constrained-page">
+        <SettingsNav viewingPage="settings" />
         <section className="card">
           <div className="card__content">
             <h3>Download Directory</h3>

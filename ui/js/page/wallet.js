@@ -2,6 +2,7 @@ import React from 'react';
 import lbry from '../lbry.js';
 import {Link} from '../component/link.js';
 import Modal from '../component/modal.js';
+import {SubHeader} from '../component/header.js';
 import {FormField, FormRow} from '../component/form.js';
 import {Address, BusyMessage, CreditAmount} from '../component/common.js';
 
@@ -263,6 +264,16 @@ var TransactionList = React.createClass({
   }
 });
 
+export let WalletNav = React.createClass({
+  render: function() {
+    return <SubHeader modifier="constrained" viewingPage={this.props.viewingPage} links={{
+      '?wallet': 'Overview',
+      '?send': 'Send',
+      '?receive': 'Receive',
+      '?rewards': 'Rewards'
+    }} />;
+  }
+});
 
 var WalletPage = React.createClass({
   _balanceSubscribeId: null,
@@ -294,6 +305,7 @@ var WalletPage = React.createClass({
   render: function() {
     return (
       <main className="page">
+        <WalletNav viewingPage={this.props.viewingPage} />
         <section className="card">
           <div className="card__title-primary">
             <h3>Balance</h3>

@@ -126,10 +126,11 @@ p
 
 .sort-section {
   display: block;
-  margin-bottom: 5px;
+  margin-bottom: $spacing-vertical * 2/3;
 
 
   text-align: right;
+  line-height: 1;
   font-size: 0.85em;
   color: $color-help;
 }

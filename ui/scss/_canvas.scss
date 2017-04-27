@@ -33,23 +33,12 @@ body
 
 #main-content
 {
-  &.no-sub-nav
+  padding: $spacing-vertical;
+  margin-top: $height-header;
+  main.constrained-page
   {
-    min-height: calc(100vh - 60px); //should be -$height-header, but I'm dumb I guess? It wouldn't work
-    main { margin-top: $height-header; }
-  }
-  &.with-sub-nav
-  {
-    min-height: calc(100vh - 60px); //should be -$height-header, but I'm dumb I guess? It wouldn't work
-  }
-  main
-  {
-    padding: $spacing-vertical;
-    &.constrained-page
-    {
-      max-width: $width-page-constrained;
-      margin-left: auto;
-      margin-right: auto;
-    }
+    max-width: $width-page-constrained;
+    margin-left: auto;
+    margin-right: auto;
   }
 }

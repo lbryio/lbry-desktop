@@ -1,7 +1,7 @@
 @import "../global";
 
 $color-header: #666;
-
+$color-header-active: darken($color-header, 20%);
 
 $header-icon-size: 1.5em;
 
@@ -52,6 +52,9 @@ $header-icon-size: 1.5em;
     top: $spacing-vertical / 2  - 4px; //hacked
   }
 }
+
+.wunderbar--active .icon-search { color: $color-primary; }
+
 .wunderbar__input {
   background: rgba(255, 255, 255, 0.7);
   width: 100%;
@@ -64,15 +67,21 @@ $header-icon-size: 1.5em;
   @include border-radius(2px);
   border: 1px solid #ccc;
   &:focus {
+    color: $color-header-active;
     box-shadow: $box-shadow-focus;
-    border-color: $color-header;
+    border-color: $color-primary;
   }
 }
 
 nav.sub-header
 {
   text-transform: uppercase;
-  padding: $spacing-vertical / 2;
+  padding: 0 0 $spacing-vertical;
+  &.sub-header--constrained {
+    max-width: $width-page-constrained;
+    margin-left: auto;
+    margin-right: auto;
+  }
   > a
   {
     $sub-header-selected-underline-height: 2px;
@@ -89,15 +98,14 @@ nav.sub-header
     {
       margin-right: 0;
     }
-    $color-selected-subheader: darken($color-header, 20%);
     &.sub-header-selected
     {
-      border-bottom: $sub-header-selected-underline-height solid $color-selected-subheader;
-      color: $color-selected-subheader;
+      border-bottom: $sub-header-selected-underline-height solid $color-header-active;
+      color: $color-header-active;
     }
     &:hover
     {
-      color: $color-selected-subheader;
+      color: $color-header-active;
     }
   }
 }

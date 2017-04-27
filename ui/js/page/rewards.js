@@ -4,6 +4,7 @@ import lbryio from '../lbryio.js';
 import {CreditAmount, Icon} from '../component/common.js';
 import rewards from '../rewards.js';
 import Modal from '../component/modal.js';
+import {WalletNav} from './wallet.js';
 import {RewardLink} from '../component/link.js';
 
 const RewardTile = React.createClass({
@@ -56,14 +57,15 @@ var RewardsPage = React.createClass({
   },
   render: function() {
     return (
-      <main>
-        <form onSubmit={this.handleSubmit}>
+      <main className="constrained-page">
+        <WalletNav viewingPage="rewards"/>
+        <div>
           {!this.state.userRewards
             ? (this.state.failed ? <div className="empty">Failed to load rewards.</div> : '')
             : this.state.userRewards.map(({RewardType, RewardTitle, RewardDescription, TransactionID, RewardAmount}) => {
               return <RewardTile key={RewardType} onRewardClaim={this.loadRewards} type={RewardType} title={RewardTitle} description={RewardDescription} claimed={!!TransactionID} value={RewardAmount} />;
             })}
-        </form>
+        </div>
       </main>
     );
   }
