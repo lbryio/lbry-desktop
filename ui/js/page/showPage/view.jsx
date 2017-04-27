@@ -2,7 +2,7 @@ import React from 'react';
 import lbry from 'lbry.js';
 import lighthouse from 'lighthouse.js';
 import lbryuri from 'lbryuri.js';
-import Video from 'page/video'
+import Video from 'component/video'
 import {
   TruncatedText,
   Thumbnail,

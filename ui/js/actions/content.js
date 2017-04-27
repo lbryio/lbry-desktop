@@ -59,7 +59,7 @@ export function doFetchCurrentUriFileInfo() {
       }
     })
 
-    lbry.file_list({ outpoint }).then(([fileInfo]) => {
+    lbry.file_list({ outpoint: outpoint, full_status: true }).then(([fileInfo]) => {
       dispatch({
         type: types.FETCH_FILE_INFO_COMPLETED,
         data: {
@@ -274,17 +274,22 @@ export function doWatchVideo() {
     const costInfo = selectCurrentUriCostInfo(state)
     const { cost } = costInfo
 
-    // TODO does > 0 mean the file is downloaded? We don't have the total_bytes
-    if (fileInfo.written_bytes > 0) {
-      dispatch(doPlayVideo(uri))
-    } else {
-      if (cost > balance) {
-        dispatch(doOpenModal('notEnoughCredits'))
-      } else if (cost <= 0.01) {
-        dispatch(doLoadVideo())
-      } else {
-        dispatch(doOpenModal('affirmPurchase'))
-      }
+    // NOTE: we have to check written bytes because a file may be "completed"
+    // but then deleted on the file system. In which case we are going to need
+    // to dispatch a load event again to redownload it
+    if (fileInfo.completed && fileInfo.written_bytes > 0) {
+      return Promise.resolve()
     }
+
+    if (cost > balance) {
+      dispatch(doOpenModal('notEnoughCredits'))
+    }
+    else if (cost <= 0.01) {
+      dispatch(doLoadVideo())
+    } else {
+      dispatch(doOpenModal('affirmPurchase'))
+    }
+
+    return Promise.resolve()
   }
 }
