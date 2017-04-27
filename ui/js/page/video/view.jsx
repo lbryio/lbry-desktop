@@ -15,6 +15,12 @@ const fs = require('fs');
 const VideoStream = require('videostream');
 
 class WatchLink extends React.Component {
+  confirmPurchaseClick() {
+    this.props.closeModal()
+    this.props.startPlaying()
+    this.props.loadVideo()
+  }
+
   render() {
     const {
       button,
@@ -28,7 +34,6 @@ class WatchLink extends React.Component {
       uri,
       modal,
       closeModal,
-      play,
       isLoading,
       costInfo,
       fileInfo,
@@ -49,7 +54,7 @@ class WatchLink extends React.Component {
         type="confirm"
         isOpen={modal == 'affirmPurchase'}
         contentLabel="Confirm Purchase"
-        onConfirmed={play}
+        onConfirmed={this.confirmPurchaseClick.bind(this)}
         onAborted={closeModal}>
         Are you sure you'd like to buy <strong>{this.props.metadata.title}</strong> for <strong><FilePrice uri={uri} metadata={metadata} label={false} look="plain" /></strong> credits?
       </Modal>
@@ -113,6 +118,12 @@ class Video extends React.Component {
     })
   }
 
+  startPlaying() {
+    this.setState({
+      isPlaying: true
+    })
+  }
+
   render() {
     const {
       readyToPlay = false,
@@ -140,7 +151,7 @@ class Video extends React.Component {
             <span>this is the world's worst loading screen and we shipped our software with it anyway... <br /><br />{loadStatusMessage}</span> :
             <VideoPlayer {...this.props} /> :
           <div className="video__cover" style={{backgroundImage: 'url("' + metadata.thumbnail + '")'}}>
-            <WatchLink icon="icon-play" onWatchClick={this.onWatchClick.bind(this)} {...this.props}></WatchLink>
+            <WatchLink icon="icon-play" onWatchClick={this.onWatchClick.bind(this)} startPlaying={this.startPlaying.bind(this)} {...this.props}></WatchLink>
           </div>
       }</div>
     );
