@@ -41,6 +41,7 @@ class WatchLink extends React.Component {
             className="video__play-button"
             icon="icon-play"
             onClick={onWatchClick} />
+      {modal}
       <Modal contentLabel="Not enough credits" isOpen={modal == 'notEnoughCredits'} onConfirmed={closeModal}>
         You don't have enough LBRY credits to pay for this stream.
       </Modal>
@@ -68,11 +69,6 @@ class Video extends React.Component {
     this._controlsHideDelay = 3000 // Note: this needs to be shorter than the built-in delay in Electron, or Electron will hide the controls before us
     this._controlsHideTimeout = null
     this.state = {}
-  }
-  componentDidMount() {
-    if (this.props.autoplay) {
-      this.start()
-    }
   }
   handleMouseMove() {
     if (this._controlsTimeout) {
@@ -108,10 +104,13 @@ class Video extends React.Component {
   }
 
   onWatchClick() {
-    this.setState({
-      isPlaying: true
+    this.props.watchVideo().then(() => {
+      if (!this.props.modal) {
+        this.setState({
+          isPlaying: true
+        })
+      }
     })
-    this.props.watchVideo()
   }
 
   render() {

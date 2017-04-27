@@ -10,7 +10,7 @@ import {
 } from 'selectors/app'
 import {
   doWatchVideo,
-  doPlayVideo,
+  doLoadVideo,
 } from 'actions/content'
 import {
   selectCurrentUriCostInfo,
@@ -32,7 +32,7 @@ const select = (state) => ({
 })
 
 const perform = (dispatch) => ({
-  play: () => dispatch(doPlayVideo()),
+  play: () => dispatch(doLoadVideo()),
   watchVideo: (elem) => dispatch(doWatchVideo()),
   closeModal: () => dispatch(doCloseModal()),
 })
