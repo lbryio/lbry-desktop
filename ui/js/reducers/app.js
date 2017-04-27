@@ -8,6 +8,7 @@ const defaultState = {
   drawerOpen: sessionStorage.getItem('drawerOpen') || true,
   upgradeSkipped: sessionStorage.getItem('upgradeSkipped'),
   daemonReady: false,
+  platform: window.navigator.platform,
 }
 
 reducers[types.NAVIGATE] = function(state, action) {

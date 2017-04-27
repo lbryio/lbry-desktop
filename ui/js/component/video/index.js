@@ -16,12 +16,8 @@ import {
   selectLoadingCurrentUri,
   selectCurrentUriFileReadyToPlay,
   selectCurrentUriIsPlaying,
-  selectCurrentUriFileInfo,
   selectDownloadingCurrentUri,
-} from 'selectors/file_info'
-import {
-  selectCurrentUriCostInfo,
-} from 'selectors/cost_info'
+} from 'selectors/content'
 import Video from './view'
 
 const select = (state) => ({
@@ -30,11 +26,12 @@ const select = (state) => ({
   modal: selectCurrentModal(state),
   isLoading: selectLoadingCurrentUri(state),
   readyToPlay: selectCurrentUriFileReadyToPlay(state),
-  isDownloading: selectDownloadingCurrentUri(state),
+  isDownloading: <selectDownloadingCurre></selectDownloadingCurre>ntUri(state),
 })
 
 const perform = (dispatch) => ({
   loadVideo: () => dispatch(doLoadVideo()),
+  play: () => dispatch(doPlayVideo()),
   watchVideo: (elem) => dispatch(doWatchVideo()),
   closeModal: () => dispatch(doCloseModal()),
 })
