@@ -275,11 +275,7 @@ export function doWatchVideo() {
     const { cost } = costInfo
 
     // TODO does > 0 mean the file is downloaded? We don't have the total_bytes
-    console.log(fileInfo)
-    console.log(fileInfo.written_bytes)
-    console.log('wtf')
     if (fileInfo.written_bytes > 0) {
-      console.debug('this file is already downloaded')
       dispatch(doPlayVideo(uri))
     } else {
       if (cost > balance) {
