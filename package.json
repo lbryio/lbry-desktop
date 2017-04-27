@@ -8,29 +8,7 @@
     "appId": "io.lbry.LBRY",
     "mac": {
       "category": "public.app-category.utilities",
-      "target": "dmg"
-    },
-    "dmg": {
-      "iconSize": 128,
-      "contents": [
-        {
-          "x": 115,
-          "y": 164
-        },
-        {
-          "x": 387,
-          "y": 164,
-          "type": "link",
-          "path": "/Applications"
-        }
-      ],
-      "window": {
-        "x": 200,
-        "y": 200,
-        "width": 500,
-        "height": 300
-      },
-      "backgroundColor": "155B4A"
+      "target": "pkg"
     },
     "linux": {
       "target": "deb"
