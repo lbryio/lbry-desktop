@@ -91,11 +91,12 @@ class Video extends React.Component {
     return (
       <div onMouseMove={this.handleMouseMove.bind(this)} onMouseLeave={this.handleMouseLeave.bind(this)} className={"video " + this.props.className + (isPlaying && readyToPlay ? " video--active" : " video--hidden")}>{
         isPlaying ?
-        !readyToPlay  ?
+        !readyToPlay ?
         <span>this is the world's worst loading screen and we shipped our software with it anyway... <br /><br />{loadStatusMessage}</span> :
         <VideoPlayer downloadPath={fileInfo.download_path} /> :
         <div className="video__cover" style={{backgroundImage: 'url("' + metadata.thumbnail + '")'}}>
-          <WatchLink icon="icon-play" onWatchClick={this.onWatchClick.bind(this)} startPlaying={this.startPlaying.bind(this)} {...this.props}></WatchLink>
+          <WatchLink icon="icon-play" onWatchClick={this.onWatchClick.bind(this)}
+                     startPlaying={this.startPlaying.bind(this)} {...this.props}></WatchLink>
         </div>
       }</div>
     );

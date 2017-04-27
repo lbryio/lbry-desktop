@@ -30,7 +30,7 @@ const select = (state) => ({
 })
 
 const perform = (dispatch) => ({
-  play: () => dispatch(doLoadVideo()),
+  loadVideo: () => dispatch(doLoadVideo()),
   watchVideo: (elem) => dispatch(doWatchVideo()),
   closeModal: () => dispatch(doCloseModal()),
 })
