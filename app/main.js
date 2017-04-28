@@ -1,11 +1,18 @@
 const {app, BrowserWindow, ipcMain} = require('electron');
+const url = require('url');
 const path = require('path');
 const jayson = require('jayson');
+const semver = require('semver');
+const https = require('https');
 // tree-kill has better cross-platform handling of
 // killing a process.  child-process.kill was unreliable
 const kill = require('tree-kill');
 const child_process = require('child_process');
 const assert = require('assert');
+const {version: localVersion} = require(app.getAppPath() + '/package.json');
+
+const VERSION_CHECK_INTERVAL = 30 * 60 * 1000;
+const LATEST_RELEASE_API_URL = 'https://api.github.com/repos/lbryio/lbry-app/releases/latest';
 
 
 let client = jayson.client.http('http://localhost:5279/lbryapi');
@@ -22,6 +29,46 @@ let daemonStopRequested = false;
 // When a quit is attempted, we cancel the quit, do some preparations, then
 // this is set to true and app.quit() is called again to quit for real.
 let readyToQuit = false;
+
+function checkForNewVersion(callback) {
+  function formatRc(ver) {
+    // Adds dash if needed to make RC suffix semver friendly
+    return ver.replace(/([^-])rc/, '$1-rc');
+  }
+
+  let result = '';
+  const opts = {
+    headers: {
+      'User-Agent': `LBRY/${localVersion}`,
+    }
+  };
+  const req = https.get(Object.assign(opts, url.parse(LATEST_RELEASE_API_URL)), (res) => {
+    res.on('data', (data) => {
+      result += data;
+    });
+    res.on('end', () => {
+      console.log('Local version:', localVersion);
+      const tagName = JSON.parse(result).tag_name;
+      const [_, remoteVersion] = tagName.match(/^v([\d.]+(?:-?rc\d+)?)$/);
+      if (!remoteVersion) {
+        console.log('Malformed remote version string:', tagName);
+        win.webContents.send('version-info-received', null);
+      } else {
+        console.log('Remote version:', remoteVersion);
+        const upgradeAvailable = semver.gt(formatRc(remoteVersion), formatRc(localVersion));
+        console.log(upgradeAvailable ? 'Upgrade available' : 'No upgrade available');
+        win.webContents.send('version-info-received', {remoteVersion, localVersion, upgradeAvailable});
+      }
+    })
+  });
+
+  req.on('error', (err) => {
+    console.log('Failed to get current version from GitHub. Error:', err);
+    win.webContents.send('version-info-received', null);
+  });
+}
+
+ipcMain.on('version-info-requested', checkForNewVersion);
 
 /*
  * Replacement for Electron's shell.openItem. The Electron version doesn't

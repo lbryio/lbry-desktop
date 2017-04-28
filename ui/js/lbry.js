@@ -4,7 +4,7 @@ import jsonrpc from './jsonrpc.js';
 import lbryuri from './lbryuri.js';
 import {getLocal, getSession, setSession, setLocal} from './utils.js';
 
-const {remote} = require('electron');
+const {remote, ipcRenderer} = require('electron');
 const menu = remote.require('./menu/main-menu');
 
 /**
@@ -361,44 +361,6 @@ lbry.publish = function(params, fileListedCallback, publishedCallback, errorCall
   //});
 }
 
-lbry.getVersionInfo = function(callback) {
-  lbry.call('version', {}, callback);
-};
-
-lbry.checkNewVersionAvailable = function(callback) {
-  lbry.call('version', {}, function(versionInfo) {
-    var ver = versionInfo.lbrynet_version.split('.');
-
-    var maj = parseInt(ver[0]),
-        min = parseInt(ver[1]),
-        patch = parseInt(ver[2]);
-
-    var remoteVer = versionInfo.remote_lbrynet.split('.');
-    var remoteMaj = parseInt(remoteVer[0]),
-        remoteMin = parseInt(remoteVer[1]),
-        remotePatch = parseInt(remoteVer[2]);
-
-    if (maj < remoteMaj) {
-      var newVersionAvailable = true;
-    } else if (maj == remoteMaj) {
-      if (min < remoteMin) {
-        var newVersionAvailable = true;
-      } else if (min == remoteMin) {
-        var newVersionAvailable = (patch < remotePatch);
-      } else {
-        var newVersionAvailable = false;
-      }
-    } else {
-      var newVersionAvailable = false;
-    }
-    callback(newVersionAvailable);
-  }, function(err) {
-    if (err.fault == 'NoSuchFunction') {
-      // Really old daemon that can't report a version
-      callback(true);
-    }
-  });
-}
 
 lbry.getClientSettings = function() {
   var outSettings = {};
@@ -607,6 +569,14 @@ lbry.showMenuIfNeeded = function() {
   }
   sessionStorage.setItem('menuShown', chosenMenu);
 };
+
+lbry.getVersionInfo = function() {
+  return new Promise((resolve, reject) => {
+    ipcRenderer.once('version-info-received', (event, versionInfo) => { resolve(versionInfo) });
+    ipcRenderer.send('version-info-requested');
+  });
+}
+
 
 /**
  * Wrappers for API methods to simulate missing or future behavior. Unlike the old-style stubs,
