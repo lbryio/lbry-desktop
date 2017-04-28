@@ -9,9 +9,13 @@ import {
 } from 'selectors/wallet'
 import {
   selectSearchTerm,
-  selectCurrentUriCostInfo,
-  selectCurrentUriFileInfo,
 } from 'selectors/content'
+import {
+  selectCurrentUriFileInfo,
+} from 'selectors/file_info'
+import {
+  selectCurrentUriCostInfo,
+} from 'selectors/cost_info'
 import {
   selectCurrentResolvedUriClaimOutpoint,
 } from 'selectors/content'
@@ -39,32 +43,6 @@ export function doResolveUri(uri) {
           uri,
           claim,
           certificate,
-        }
-      })
-    })
-  }
-}
-
-export function doFetchCurrentUriFileInfo() {
-  return function(dispatch, getState) {
-    const state = getState()
-    const uri = selectCurrentUri(state)
-    const outpoint = selectCurrentResolvedUriClaimOutpoint(state)
-
-    dispatch({
-      type: types.FETCH_FILE_INFO_STARTED,
-      data: {
-        uri,
-        outpoint,
-      }
-    })
-
-    lbry.file_list({ outpoint: outpoint, full_status: true }).then(([fileInfo]) => {
-      dispatch({
-        type: types.FETCH_FILE_INFO_COMPLETED,
-        data: {
-          uri,
-          fileInfo,
         }
       })
     })
@@ -144,30 +122,6 @@ export function doFetchFeaturedContent() {
 
     lbryio.call('discover', 'list', { version: "early-access" } )
       .then(success, failure)
-  }
-}
-
-export function doFetchCurrentUriCostInfo() {
-  return function(dispatch, getState) {
-    const state = getState()
-    const uri = selectCurrentUri(state)
-
-    dispatch({
-      type: types.FETCH_COST_INFO_STARTED,
-      data: {
-        uri,
-      }
-    })
-
-    lbry.getCostInfo(uri).then(costInfo => {
-      dispatch({
-        type: types.FETCH_COST_INFO_COMPLETED,
-        data: {
-          uri,
-          costInfo,
-        }
-      })
-    })
   }
 }
 
@@ -277,13 +231,12 @@ export function doWatchVideo() {
     const costInfo = selectCurrentUriCostInfo(state)
     const { cost } = costInfo
 
-    // NOTE: we have to check written bytes because a file may be "completed"
-    // but then deleted on the file system. In which case we are going to need
-    // to dispatch a load event again to redownload it
-    if (fileInfo.completed && fileInfo.written_bytes > 0) {
+    // we already fully downloaded the file
+    if (fileInfo && fileInfo.completed) {
       return Promise.resolve()
     }
 
+    // the file is free or we have partially downloaded it
     if (cost <= 0.01 || fileInfo.download_directory) {
       dispatch(doLoadVideo())
       return Promise.resolve()

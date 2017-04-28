@@ -6,9 +6,13 @@ import {
   shouldFetchFeaturedContent,
   shouldFetchDownloadedContent,
   shouldFetchPublishedContent,
-  shouldFetchCurrentUriFileInfo,
-  shouldFetchCurrentUriCostInfo,
 } from 'selectors/content'
+import {
+  shouldFetchCurrentUriFileInfo,
+} from 'selectors/file_info'
+import {
+  shouldFetchCurrentUriCostInfo,
+} from 'selectors/cost_info'
 import {
   doFetchTransactions,
   doGetNewAddress,
@@ -17,9 +21,13 @@ import {
   doFetchFeaturedContent,
   doFetchDownloadedContent,
   doFetchPublishedContent,
-  doFetchCurrentUriFileInfo,
-  doFetchCurrentUriCostInfo,
 } from 'actions/content'
+import {
+  doFetchCurrentUriFileInfo,
+} from 'actions/file_info'
+import {
+  doFetchCurrentUriCostInfo,
+} from 'actions/cost_info'
 
 const triggers = []
 
