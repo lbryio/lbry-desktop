@@ -6,15 +6,21 @@ import {
   selectCurrentUri,
 } from 'selectors/app'
 import {
-  selectCurrentResolvedUriClaim,
   selectCurrentUriIsDownloaded,
+} from 'selectors/file_info'
+import {
+  selectCurrentUriClaim,
+} from 'selectors/claims'
+import {
   selectCurrentUriFileInfo,
+} from 'selectors/file_info'
+import {
   selectCurrentUriCostInfo,
-} from 'selectors/content'
+} from 'selectors/cost_info'
 import ShowPage from './view'
 
 const select = (state) => ({
-  claim: selectCurrentResolvedUriClaim(state),
+  claim: selectCurrentUriClaim(state),
   uri: selectCurrentUri(state),
   isDownloaded: selectCurrentUriIsDownloaded(state),
   fileInfo: selectCurrentUriFileInfo(state),

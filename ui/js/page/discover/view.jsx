@@ -11,7 +11,6 @@ const communityCategoryToolTipText = ('Community Content is a public space where
 const FeaturedCategory = (props) => {
   const {
     category,
-    resolvedUris,
     names,
   } = props
 
@@ -19,7 +18,7 @@ const FeaturedCategory = (props) => {
     <h3 className="card-row__header">{category}
     {category && category.match(/^community/i) && <ToolTip label="What's this?" body={communityCategoryToolTipText} className="tooltip--header" />}
     </h3>
-    {names.map(name => <FileTile key={name} displayStyle="card" uri={name} />)}
+    {names && names.map(name => <FileTile key={name} displayStyle="card" uri={name} />)}
   </div>
 }
 

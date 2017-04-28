@@ -3,12 +3,12 @@ import {
   connect
 } from 'react-redux'
 import {
-  selectResolvedUris,
-} from 'selectors/content'
+  selectClaimsByUri,
+} from 'selectors/claims'
 import FileTile from './view'
 
 const select = (state) => ({
-  resolvedUris: (uri) => selectResolvedUris(state)[uri],
+  claims: (uri) => selectClaimsByUri(state)[uri],
 })
 
 const perform = (dispatch) => ({
