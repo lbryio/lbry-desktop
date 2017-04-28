@@ -13,13 +13,17 @@ import {
   doLoadVideo,
 } from 'actions/content'
 import {
-  selectCurrentUriCostInfo,
-  selectCurrentUriFileInfo,
   selectLoadingCurrentUri,
   selectCurrentUriFileReadyToPlay,
   selectCurrentUriIsPlaying,
-  selectDownloadingCurrentUri,
 } from 'selectors/content'
+import {
+  selectCurrentUriFileInfo,
+  selectDownloadingCurrentUri,
+} from 'selectors/file_info'
+import {
+  selectCurrentUriCostInfo,
+} from 'selectors/cost_info'
 import Video from './view'
 
 const select = (state) => ({

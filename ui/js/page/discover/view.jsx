@@ -75,7 +75,6 @@ const communityCategoryToolTipText = ('Community Content is a public space where
 const FeaturedCategory = (props) => {
   const {
     category,
-    resolvedUris,
     names,
   } = props
 
@@ -93,7 +92,6 @@ const FeaturedCategory = (props) => {
 const FeaturedContent = (props) => {
   const {
     featuredContentByCategory,
-    resolvedUris,
   } = props
 
   const categories = Object.keys(featuredContentByCategory)
@@ -101,7 +99,7 @@ const FeaturedContent = (props) => {
   return (
     <div>
       {categories.map(category =>
-        <FeaturedCategory key={category} category={category} names={featuredContentByCategory[category]} resolvedUris={resolvedUris} />
+        <FeaturedCategory key={category} category={category} names={featuredContentByCategory[category]} />
       )}
     </div>
   )
