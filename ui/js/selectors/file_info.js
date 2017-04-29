@@ -54,7 +54,11 @@ export const selectDownloadingCurrentUri = createSelector(
 export const selectCurrentUriIsDownloaded = createSelector(
   selectCurrentUriFileInfo,
   (fileInfo) => {
-    return fileInfo && (fileInfo.written_bytes > 0 || fileInfo.completed)
+    if (!fileInfo) return false
+    if (!fileInfo.completed) return false
+    if (!fileInfo.written_bytes > 0) return false
+
+    return true
   }
 )
 
@@ -80,5 +84,52 @@ export const makeSelectFileInfoForUri = () => {
   return createSelector(
     selectFileInfoForUri,
     (fileInfo) => fileInfo
+  )
+}
+
+const selectDownloadingForUri = (state, props) => {
+  const byUri = selectDownloadingByUri(state)
+  return byUri[props.uri]
+}
+
+export const makeSelectDownloadingForUri = () => {
+  return createSelector(
+    selectDownloadingForUri,
+    (downloadingForUri) => !!downloadingForUri
+  )
+}
+
+export const selectLoading = createSelector(
+  _selectState,
+  (state) => state.loading || {}
+)
+
+export const selectLoadingByUri = createSelector(
+  selectLoading,
+  (loading) => loading.byUri || {}
+)
+
+export const selectLoadingCurrentUri = createSelector(
+  selectLoadingByUri,
+  selectCurrentUri,
+  (byUri, uri) => !!byUri[uri]
+)
+
+// TODO make this smarter so it doesn't start playing and immediately freeze
+// while downloading more.
+export const selectCurrentUriFileReadyToPlay = createSelector(
+  selectCurrentUriFileInfo,
+  (fileInfo) => (fileInfo || {}).written_bytes > 0
+)
+
+const selectLoadingForUri = (state, props) => {
+  const byUri = selectLoadingByUri(state)
+  return byUri[props.uri]
+}
+
+export const makeSelectLoadingForUri = () => {
+  return createSelector(
+    selectLoadingForUri,
+    (loading) => !!loading
   )
 }

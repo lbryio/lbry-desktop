@@ -6,9 +6,9 @@ import Video from 'component/video'
 import {
   TruncatedText,
   Thumbnail,
-  FilePrice,
-  BusyMessage
-} from 'component/common.js';
+  BusyMessage,
+} from 'component/common';
+import FilePrice from 'component/filePrice'
 import FileActions from 'component/fileActions';
 import Link from 'component/link';
 import UriIndicator from 'component/channel-indicator.js';
@@ -121,7 +121,7 @@ let FilePage = React.createClass({
   render: function() {
     const metadata = this.props.metadata,
       title = metadata ? this.props.metadata.title : this.props.uri,
-      uriIndicator = <UriIndicator uri={this.props.uri} hasSignature={this.props.hasSignature} signatureIsValid={this.props.signatureIsValid} />;
+      uriIndicator = <UriIndicator uri={uri} hasSignature={hasSignature} signatureIsValid={signatureIsValid} />
 
     return (
       <main className="main--single-column">
@@ -134,14 +134,14 @@ let FilePage = React.createClass({
           <div className="card__inner">
             <div className="card__title-identity">
               {this.state.isDownloaded === false
-                ? <span style={{float: "right"}}><FilePrice uri={this.props.uri} metadata={metadata} /></span>
+                ? <span style={{float: "right"}}><FilePrice uri={lbryuri.normalize(uri)} metadata={metadata} /></span>
                 : null}
               <h1>{title}</h1>
               <div className="card__subtitle">
                 { this.props.channelUri ?
                   <Link href={"?show=" + this.props.channelUri }>{uriIndicator}</Link> :
                   uriIndicator}
-              </div>
+             </div>
               <div className="card__actions">
                 <FileActions uri={this.props.uri} outpoint={this.props.outpoint} metadata={metadata} contentType={this.props.contentType} />
               </div>
@@ -289,3 +289,5 @@ let ShowPage = React.createClass({
     return <main className="main--single-column">{innerContent}</main>;
   }
 });
+
+export default ShowPage;
