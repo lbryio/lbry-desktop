@@ -59,7 +59,7 @@ const SearchResults = (props) => {
     });
 
     rows.push(
-      <FileTileStream key={uri} uri={uri} outpoint={txid + ':' + nout} metadata={claim.stream.metadata} contentType={claim.stream.source.contentType} />
+      <FileTileStream key={uri} uri={uri} />
     );
   }
 

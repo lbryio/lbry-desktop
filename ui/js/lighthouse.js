@@ -5,6 +5,8 @@ const queryTimeout = 3000;
 const maxQueryTries = 2;
 const defaultServers = [
   'http://lighthouse7.lbry.io:50005',
+  'http://lighthouse8.lbry.io:50005',
+  'http://lighthouse9.lbry.io:50005',
 ];
 const path = '/';
 

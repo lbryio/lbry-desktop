@@ -1,16 +1,16 @@
 import React from 'react';
-import lbry from '../lbry.js';
-import lbryuri from '../lbryuri.js';
-import {Icon, FilePrice} from '../component/common.js';
-import {Modal} from './modal.js';
-import {FormField} from './form.js';
+import lbry from 'lbry';
+import lbryuri from 'lbryuri';
+import {Icon, FilePrice} from 'component/common';
+import {Modal} from 'component/modal';
+import {FormField} from 'component/form';
 import Link from 'component/link';
-import {ToolTip} from '../component/tooltip.js';
-import {DropDownMenu, DropDownMenuItem} from './menu.js';
+import {ToolTip} from 'component/tooltip';
+import {DropDownMenu, DropDownMenuItem} from 'component/menu';
 
 const {shell} = require('electron');
 
-let FileActionsRow = React.createClass({
+const FileActionsRow = React.createClass({
   _isMounted: false,
   _fileInfoSubscribeId: null,
 
@@ -192,7 +192,7 @@ let FileActionsRow = React.createClass({
   }
 });
 
-export let FileActions = React.createClass({
+const FileActions = React.createClass({
   _isMounted: false,
   _fileInfoSubscribeId: null,
 
@@ -268,3 +268,5 @@ export let FileActions = React.createClass({
     </section>);
   }
 });
+
+export default FileActions

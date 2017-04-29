@@ -1,6 +1,7 @@
 import * as types from 'constants/action_types'
 import lbry from 'lbry'
 import lbryio from 'lbryio'
+import lbryuri from 'lbryuri'
 import {
   selectCurrentUri,
 } from 'selectors/app'
@@ -113,7 +114,9 @@ export function doFetchFeaturedContent() {
       })
 
       Object.keys(Uris).forEach((category) => {
-        Uris[category].forEach((uri) => dispatch(doResolveUri(uri)))
+        Uris[category].forEach((uri) => {
+          dispatch(doResolveUri(lbryuri.normalize(uri)))
+        })
       })
     }
 
