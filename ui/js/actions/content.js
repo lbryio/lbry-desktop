@@ -23,6 +23,9 @@ import {
 import {
   doOpenModal,
 } from 'actions/app'
+import {
+  doFetchCostInfoForUri,
+} from 'actions/cost_info'
 import batchActions from 'util/batchActions'
 
 export function doResolveUri(uri) {
@@ -46,6 +49,8 @@ export function doResolveUri(uri) {
           certificate,
         }
       })
+
+      dispatch(doFetchCostInfoForUri(uri))
     })
   }
 }

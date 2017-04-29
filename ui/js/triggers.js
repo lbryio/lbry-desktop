@@ -14,6 +14,9 @@ import {
   shouldFetchCurrentUriCostInfo,
 } from 'selectors/cost_info'
 import {
+  shouldFetchCurrentUriAvailability,
+} from 'selectors/availability'
+import {
   doFetchTransactions,
   doGetNewAddress,
 } from 'actions/wallet'
@@ -28,6 +31,9 @@ import {
 import {
   doFetchCurrentUriCostInfo,
 } from 'actions/cost_info'
+import {
+  doFetchCurrentUriAvailability,
+} from 'actions/availability'
 
 const triggers = []
 
@@ -64,6 +70,11 @@ triggers.push({
 triggers.push({
   selector: shouldFetchCurrentUriCostInfo,
   action: doFetchCurrentUriCostInfo,
+})
+
+triggers.push({
+  selector: shouldFetchCurrentUriAvailability,
+  action: doFetchCurrentUriAvailability,
 })
 
 const runTriggers = function() {

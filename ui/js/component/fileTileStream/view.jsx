@@ -3,7 +3,8 @@ import lbry from 'lbry.js';
 import lbryuri from 'lbryuri.js';
 import Link from 'component/link';
 import FileActions from 'component/fileActions';
-import {Thumbnail, TruncatedText, FilePrice} from 'component/common.js';
+import {Thumbnail, TruncatedText,} from 'component/common.js';
+import FilePrice from 'component/filePrice'
 import UriIndicator from 'component/channel-indicator.js';
 
 /*should be merged into FileTile once FileTile is refactored to take a single id*/

@@ -4,14 +4,6 @@ import {
   selectCurrentPage,
   selectCurrentUri,
 } from 'selectors/app'
-import {
-  selectCurrentUriCostInfo,
-  selectFetchingCurrentUriCostInfo,
-} from 'selectors/cost_info'
-import {
-  selectCurrentUriFileInfo,
-  selectFetchingCurrentUriFileInfo,
-} from 'selectors/file_info'
 
 export const _selectState = state => state.content || {}
 
@@ -48,13 +40,6 @@ export const shouldFetchFeaturedContent = createSelector(
 export const selectFetchingFileInfos = createSelector(
   _selectState,
   (state) => state.fetchingFileInfos || {}
-)
-
-// TODO make this smarter so it doesn't start playing and immediately freeze
-// while downloading more.
-export const selectCurrentUriFileReadyToPlay = createSelector(
-  selectCurrentUriFileInfo,
-  (fileInfo) => (fileInfo || {}).written_bytes > 0
 )
 
 export const selectFetchingDownloadedContent = createSelector(
@@ -95,22 +80,6 @@ export const selectFetchingPublishedContent = createSelector(
 export const selectPublishedContent = createSelector(
   _selectState,
   (state) => state.publishedContent || {}
-)
-
-export const selectLoading = createSelector(
-  _selectState,
-  (state) => state.loading || {}
-)
-
-export const selectLoadingByUri = createSelector(
-  selectLoading,
-  (loading) => loading.byUri || {}
-)
-
-export const selectLoadingCurrentUri = createSelector(
-  selectLoadingByUri,
-  selectCurrentUri,
-  (byUri, uri) => !!byUri[uri]
 )
 
 export const shouldFetchPublishedContent = createSelector(
