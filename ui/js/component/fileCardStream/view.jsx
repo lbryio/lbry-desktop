@@ -2,68 +2,61 @@ import React from 'react';
 import lbry from 'lbry.js';
 import lbryuri from 'lbryuri.js';
 import Link from 'component/link';
-import {FileActions} from 'component/file-actions.js';
-import {Thumbnail, TruncatedText, FilePrice} from 'component/common.js';
-import UriIndicator from 'component/channel-indicator.js';
+import {Thumbnail, TruncatedText, FilePrice} from 'component/common';
+import UriIndicator from 'component/channel-indicator';
 
-const FileCardStream = React.createClass({
-  _fileInfoSubscribeId: null,
-  _isMounted: null,
-  _metadata: null,
-
-
-  propTypes: {
-    uri: React.PropTypes.string,
-    claimInfo: React.PropTypes.object,
-    outpoint: React.PropTypes.string,
-    hideOnRemove: React.PropTypes.bool,
-    hidePrice: React.PropTypes.bool,
-    obscureNsfw: React.PropTypes.bool
-  },
-  getInitialState: function() {
-    return {
+class FileCardStream extends React.Component {
+  constructor(props) {
+    super(props)
+    this._fileInfoSubscribeId = null
+    this._isMounted = null
+    this._metadata = null
+    this.state = {
       showNsfwHelp: false,
       isHidden: false,
     }
-  },
-  getDefaultProps: function() {
-    return {
-      obscureNsfw: !lbry.getClientSetting('showNsfw'),
-      hidePrice: false,
-      hasSignature: false,
-    }
-  },
-  componentDidMount: function() {
+  }
+
+  componentDidMount() {
     this._isMounted = true;
     if (this.props.hideOnRemove) {
       this._fileInfoSubscribeId = lbry.fileInfoSubscribe(this.props.outpoint, this.onFileInfoUpdate);
     }
-  },
-  componentWillUnmount: function() {
+  }
+
+  componentWillUnmount() {
     if (this._fileInfoSubscribeId) {
       lbry.fileInfoUnsubscribe(this.props.outpoint, this._fileInfoSubscribeId);
     }
-  },
-  onFileInfoUpdate: function(fileInfo) {
+  }
+
+  onFileInfoUpdate(fileInfo) {
     if (!fileInfo && this._isMounted && this.props.hideOnRemove) {
       this.setState({
         isHidden: true
       });
     }
-  },
-  handleMouseOver: function() {
+  }
+
+  handleMouseOver() {
     this.setState({
       hovered: true,
     });
-  },
-  handleMouseOut: function() {
+  }
+
+  handleMouseOut() {
     this.setState({
       hovered: false,
     });
-  },
-  render: function() {
+  }
+
+  render() {
     if (this.state.isHidden) {
       return null;
+    }
+
+    if (!this.props.metadata) {
+      return null
     }
 
     const uri = lbryuri.normalize(this.props.uri);
@@ -73,13 +66,13 @@ const FileCardStream = React.createClass({
     const obscureNsfw = this.props.obscureNsfw && isConfirmed && metadata.nsfw;
     const primaryUrl = 'show=' + uri;
     return (
-      <section className={ 'card card--small card--link ' + (obscureNsfw ? 'card--obscured ' : '') } onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
+      <section className={ 'card card--small card--link ' + (obscureNsfw ? 'card--obscured ' : '') } onMouseEnter={this.handleMouseOver.bind(this)} onMouseLeave={this.handleMouseOut.bind(this)}>
         <div className="card__inner">
           <a href="#" onClick={() => this.props.navigate(primaryUrl)} className="card__link">
             <div className="card__title-identity">
               <h5 title={title}><TruncatedText lines={1}>{title}</TruncatedText></h5>
               <div className="card__subtitle">
-                { !this.props.hidePrice ? <span style={{float: "right"}}><FilePrice uri={this.props.uri} metadata={metadata} /></span>  : null}
+                { !this.props.hidePrice ? <span style={{float: "right"}}><FilePrice uri={this.props.uri} /></span>  : null}
                 <UriIndicator uri={uri} metadata={metadata} contentType={this.props.contentType}
                               hasSignature={this.props.hasSignature} signatureIsValid={this.props.signatureIsValid} />
               </div>
@@ -105,6 +98,6 @@ const FileCardStream = React.createClass({
       </section>
     );
   }
-});
+}
 
 export default FileCardStream

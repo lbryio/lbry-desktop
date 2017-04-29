@@ -1,4 +1,5 @@
 import * as types from 'constants/action_types'
+import lbryuri from 'lbryuri'
 
 const reducers = {}
 const defaultState = {
@@ -18,10 +19,11 @@ reducers[types.SEARCH_STARTED] = function(state, action) {
 reducers[types.SEARCH_COMPLETED] = function(state, action) {
   const {
     query,
+    results,
   } = action.data
   const oldResults = Object.assign({}, state.results)
   const newByQuery = Object.assign({}, oldResults.byQuery)
-  newByQuery[query] = action.data.results
+  newByQuery[query] = results
   const newResults = Object.assign({}, oldResults, {
     byQuery: newByQuery
   })

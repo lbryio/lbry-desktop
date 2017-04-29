@@ -10,11 +10,11 @@ class FileTile extends React.Component {
   render() {
     const {
       displayStyle,
-      uri
+      uri,
+      claim,
     } = this.props
-    const claimInfo = this.props.claims(uri)
 
-    if(!claimInfo) {
+    if(!claim) {
       if (displayStyle == 'card') {
         return <FileCardStream uri={uri} />
       }
@@ -22,9 +22,9 @@ class FileTile extends React.Component {
     }
 
     return displayStyle == 'card' ?
-           <FileCardStream uri={uri} />
+      <FileCardStream uri={uri} />
       :
-           <FileTileStream uri={uri} key={uri} />
+      <FileTileStream uri={uri} key={uri} />  
   }
 }
 

@@ -9,7 +9,7 @@ import {
   FilePrice,
   BusyMessage
 } from 'component/common.js';
-import {FileActions} from 'component/file-actions.js';
+import FileActions from 'component/fileActions';
 import Link from 'component/link';
 import UriIndicator from 'component/channel-indicator.js';
 

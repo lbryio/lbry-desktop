@@ -32,7 +32,7 @@ export function doSearchContent(query) {
           contentName: result.name,
           claimId: result.channel_id || result.claim_id,
         })
-        dispatch(doResolveUri(uri.split('://')[1]))
+        dispatch(doResolveUri(uri))
       })
 
       dispatch({

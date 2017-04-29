@@ -72,3 +72,13 @@ export const shouldFetchCurrentUriFileInfo = createSelector(
   }
 )
 
+const selectFileInfoForUri = (state, props) => {
+  return selectAllFileInfoByUri(state)[props.uri]
+}
+
+export const makeSelectFileInfoForUri = () => {
+  return createSelector(
+    selectFileInfoForUri,
+    (fileInfo) => fileInfo
+  )
+}
