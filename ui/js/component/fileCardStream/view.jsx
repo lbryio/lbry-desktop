@@ -2,7 +2,8 @@ import React from 'react';
 import lbry from 'lbry.js';
 import lbryuri from 'lbryuri.js';
 import Link from 'component/link';
-import {Thumbnail, TruncatedText, FilePrice} from 'component/common';
+import {Thumbnail, TruncatedText,} from 'component/common';
+import FilePrice from 'component/filePrice'
 import UriIndicator from 'component/channel-indicator';
 
 class FileCardStream extends React.Component {
@@ -72,7 +73,7 @@ class FileCardStream extends React.Component {
             <div className="card__title-identity">
               <h5 title={title}><TruncatedText lines={1}>{title}</TruncatedText></h5>
               <div className="card__subtitle">
-                { !this.props.hidePrice ? <span style={{float: "right"}}><FilePrice uri={this.props.uri} /></span>  : null}
+                { !this.props.hidePrice ? <span style={{float: "right"}}><FilePrice uri={lbryuri.normalize(this.props.uri)} /></span>  : null}
                 <UriIndicator uri={uri} metadata={metadata} contentType={this.props.contentType}
                               hasSignature={this.props.hasSignature} signatureIsValid={this.props.signatureIsValid} />
               </div>

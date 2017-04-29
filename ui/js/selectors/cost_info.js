@@ -42,3 +42,13 @@ export const shouldFetchCurrentUriCostInfo = createSelector(
   }
 )
 
+const selectCostInfoForUri = (state, props) => {
+  return selectAllCostInfoByUri(state)[props.uri]
+}
+
+export const makeSelectCostInfoForUri = () => {
+  return createSelector(
+    selectCostInfoForUri,
+    (costInfo) => costInfo
+  )
+}

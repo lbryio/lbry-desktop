@@ -4,11 +4,8 @@ import {
 } from 'selectors/app'
 import lbry from 'lbry'
 
-export function doFetchCurrentUriCostInfo() {
+export function doFetchCostInfoForUri(uri) {
   return function(dispatch, getState) {
-    const state = getState()
-    const uri = selectCurrentUri(state)
-
     dispatch({
       type: types.FETCH_COST_INFO_STARTED,
       data: {
@@ -25,6 +22,15 @@ export function doFetchCurrentUriCostInfo() {
         }
       })
     })
+  }
+}
+
+export function doFetchCurrentUriCostInfo() {
+  return function(dispatch, getState) {
+    const state = getState()
+    const uri = selectCurrentUri(state)
+
+    dispatch(doFetchCostInfoForUri(uri))
   }
 }
 

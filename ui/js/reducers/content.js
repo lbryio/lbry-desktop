@@ -96,36 +96,6 @@ reducers[types.FETCH_PUBLISHED_CONTENT_COMPLETED] = function(state, action) {
   })
 }
 
-reducers[types.LOADING_VIDEO_STARTED] = function(state, action) {
-  const {
-    uri,
-  } = action.data
-  const newLoading = Object.assign({}, state.loading)
-  const newByUri = Object.assign({}, newLoading.byUri)
-
-  newByUri[uri] = true
-  newLoading.byUri = newByUri
-
-  return Object.assign({}, state, {
-    loading: newLoading,
-  })
-}
-
-reducers[types.LOADING_VIDEO_FAILED] = function(state, action) {
-  const {
-    uri,
-  } = action.data
-  const newLoading = Object.assign({}, state.loading)
-  const newByUri = Object.assign({}, newLoading.byUri)
-
-  delete newByUri[uri]
-  newLoading.byUri = newByUri
-
-  return Object.assign({}, state, {
-    loading: newLoading,
-  })
-}
-
 export default function reducer(state = defaultState, action) {
   const handler = reducers[action.type];
   if (handler) return handler(state, action);

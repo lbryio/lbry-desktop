@@ -16,8 +16,6 @@ import {
   selectLoadingCurrentUri,
   selectCurrentUriFileReadyToPlay,
   selectCurrentUriIsPlaying,
-} from 'selectors/content'
-import {
   selectCurrentUriFileInfo,
   selectDownloadingCurrentUri,
 } from 'selectors/file_info'

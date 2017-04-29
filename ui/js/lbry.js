@@ -287,7 +287,7 @@ lbry.getMyClaims = function(callback) {
 
 lbry.removeFile = function(outpoint, deleteTargetFile=true, callback) {
   this._removedFiles.push(outpoint);
-  this._updateFileInfoSubscribers(outpoint);
+  // this._updateFileInfoSubscribers(outpoint);
 
   lbry.file_delete({
     outpoint: outpoint,

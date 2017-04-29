@@ -97,54 +97,6 @@ export let CreditAmount = React.createClass({
   }
 });
 
-export let FilePrice = React.createClass({
-  _isMounted: false,
-
-  propTypes: {
-    uri: React.PropTypes.string.isRequired,
-    look: React.PropTypes.oneOf(['indicator', 'plain']),
-  },
-
-  getDefaultProps: function() {
-    return {
-      look: 'indicator',
-    }
-  },
-
-  componentWillMount: function() {
-    this.setState({
-      cost: null,
-      isEstimate: null,
-    });
-  },
-
-  componentDidMount: function() {
-    this._isMounted = true;
-    lbry.getCostInfo(this.props.uri).then(({cost, includesData}) => {
-      if (this._isMounted) {
-        this.setState({
-          cost: cost,
-          isEstimate: !includesData,
-        });
-      }
-    }, (err) => {
-      // If we get an error looking up cost information, do nothing
-    });
-  },
-
-  componentWillUnmount: function() {
-    this._isMounted = false;
-  },
-
-  render: function() {
-    if (this.state.cost === null) {
-      return <span className={`credit-amount credit-amount--${this.props.look}`}>???</span>;
-    }
-
-    return <CreditAmount label={false} amount={this.state.cost} isEstimate={this.state.isEstimate} showFree={true} />
-  }
-});
-
 var addressStyle = {
   fontFamily: '"Consolas", "Lucida Console", "Adobe Source Code Pro", monospace',
 };

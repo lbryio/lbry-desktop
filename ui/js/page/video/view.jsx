@@ -2,8 +2,8 @@ import React from 'react';
 import {
   Icon,
   Thumbnail,
-  FilePrice
 } from 'component/common';
+import FilePrice from 'component/filePrice'
 import Link from 'component/link';
 import lbry from 'lbry';
 import Modal from 'component/modal';
@@ -56,7 +56,7 @@ class WatchLink extends React.Component {
         contentLabel="Confirm Purchase"
         onConfirmed={this.confirmPurchaseClick.bind(this)}
         onAborted={closeModal}>
-        Are you sure you'd like to buy <strong>{this.props.metadata.title}</strong> for <strong><FilePrice uri={uri} metadata={metadata} label={false} look="plain" /></strong> credits?
+        Are you sure you'd like to buy <strong>{this.props.metadata.title}</strong> for <strong><FilePrice uri={uri} look="plain" /></strong> credits?
       </Modal>
       <Modal
         isOpen={modal == 'timedOut'} onConfirmed={closeModal} contentLabel="Timed Out">
