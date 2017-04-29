@@ -1,4 +1,5 @@
 import * as types from 'constants/action_types'
+import lbry from 'lbry'
 
 const reducers = {}
 const defaultState = {
@@ -9,6 +10,9 @@ const defaultState = {
   upgradeSkipped: sessionStorage.getItem('upgradeSkipped'),
   daemonReady: false,
   platform: window.navigator.platform,
+  obscureNsfw: !lbry.getClientSetting('showNsfw'),
+  hidePrice: false,
+  hasSignature: false,
 }
 
 reducers[types.NAVIGATE] = function(state, action) {

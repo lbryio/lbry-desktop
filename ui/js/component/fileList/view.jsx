@@ -79,9 +79,7 @@ const FileList = React.createClass({
 
       const uri = lbryuri.build({contentName: name, channelName: channel_name});
       seenUris[name] = true;
-      content.push(<FileTileStream key={outpoint} outpoint={outpoint} uri={uri} hideOnRemove={true}
-                                   hidePrice={this.props.hidePrices} metadata={streamMetadata} contentType={mime_type}
-                                   hasSignature={has_signature} signatureIsValid={signature_is_valid} />);
+      content.push(<FileTileStream key={outpoint} uri={uri} hideOnRemove={true} />)
     }
 
     return (

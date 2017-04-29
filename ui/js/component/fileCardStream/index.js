@@ -5,13 +5,40 @@ import {
 import {
   doNavigate,
 } from 'actions/app'
+import {
+  selectHidePrice,
+  selectObscureNsfw,
+} from 'selectors/app'
+import {
+  makeSelectClaimForUri,
+  makeSelectSourceForUri,
+  makeSelectMetadataForUri,
+} from 'selectors/claims'
+import {
+  makeSelectFileInfoForUri,
+} from 'selectors/file_info'
 import FileCardStream from './view'
 
-const select = (state) => ({
-})
+const makeSelect = () => {
+  const selectClaimForUri = makeSelectClaimForUri()
+  const selectFileInfoForUri = makeSelectFileInfoForUri()
+  const selectMetadataForUri = makeSelectMetadataForUri()
+  const selectSourceForUri = makeSelectSourceForUri()
+  const select = (state, props) => ({
+    claim: selectClaimForUri(state, props),
+    fileInfo: selectFileInfoForUri(state, props),
+    hidePrice: selectHidePrice(state),
+    obscureNsfw: selectObscureNsfw(state),
+    hasSignature: false,
+    metadata: selectMetadataForUri(state, props),
+    source: selectSourceForUri(state, props),
+  })
+
+  return select
+}
 
 const perform = (dispatch) => ({
   navigate: (path) => dispatch(doNavigate(path)),
 })
 
-export default connect(select, perform)(FileCardStream)
+export default connect(makeSelect, perform)(FileCardStream)

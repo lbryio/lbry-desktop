@@ -19,7 +19,13 @@ export const selectCurrentPage = createSelector(
 
 export const selectCurrentUri = createSelector(
   selectCurrentPath,
-  (path) => path.split('://')[1]
+  (path) => {
+    if (path.match(/=/)) {
+      return path.split('=')[1]
+    } else {
+      return undefined
+    }
+  }
 )
 
 export const selectPlatform = createSelector(
@@ -144,4 +150,19 @@ export const selectError = createSelector(
 export const selectDaemonReady = createSelector(
   _selectState,
   (state) => state.daemonReady
+)
+
+export const selectObscureNsfw = createSelector(
+  _selectState,
+  (state) => !!state.obscureNsfw
+)
+
+export const selectHidePrice = createSelector(
+  _selectState,
+  (state) => !!state.hidePrice
+)
+
+export const selectHasSignature = createSelector(
+  _selectState,
+  (state) => !!state.hasSignature
 )

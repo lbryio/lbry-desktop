@@ -2,86 +2,76 @@ import React from 'react';
 import lbry from 'lbry.js';
 import lbryuri from 'lbryuri.js';
 import Link from 'component/link';
-import {
-  FileActions
-} from 'component/file-actions.js';
+import FileActions from 'component/fileActions';
 import {Thumbnail, TruncatedText, FilePrice} from 'component/common.js';
 import UriIndicator from 'component/channel-indicator.js';
 
 /*should be merged into FileTile once FileTile is refactored to take a single id*/
-const FileTileStream = React.createClass({
-  _fileInfoSubscribeId: null,
-  _isMounted: null,
-
-  propTypes: {
-    uri: React.PropTypes.string,
-    metadata: React.PropTypes.object,
-    contentType: React.PropTypes.string.isRequired,
-    outpoint: React.PropTypes.string,
-    hasSignature: React.PropTypes.bool,
-    signatureIsValid: React.PropTypes.bool,
-    hideOnRemove: React.PropTypes.bool,
-    hidePrice: React.PropTypes.bool,
-    obscureNsfw: React.PropTypes.bool
-  },
-  getInitialState: function() {
-    return {
+class FileTileStream extends React.Component {
+  constructor(props) {
+    super(props)
+    this._fileInfoSubscribeId = null
+    this._isMounted = null
+    this.state = {
       showNsfwHelp: false,
       isHidden: false,
     }
-  },
-  getDefaultProps: function() {
-    return {
-      obscureNsfw: !lbry.getClientSetting('showNsfw'),
-      hidePrice: false,
-      hasSignature: false,
-    }
-  },
-  componentDidMount: function() {
+  }
+
+  componentDidMount() {
     this._isMounted = true;
     if (this.props.hideOnRemove) {
       this._fileInfoSubscribeId = lbry.fileInfoSubscribe(this.props.outpoint, this.onFileInfoUpdate);
     }
-  },
-  componentWillUnmount: function() {
+  }
+
+  componentWillUnmount() {
     if (this._fileInfoSubscribeId) {
       lbry.fileInfoUnsubscribe(this.props.outpoint, this._fileInfoSubscribeId);
     }
-  },
-  onFileInfoUpdate: function(fileInfo) {
+  }
+
+  onFileInfoUpdate(fileInfo) {
     if (!fileInfo && this._isMounted && this.props.hideOnRemove) {
       this.setState({
         isHidden: true
       });
     }
-  },
-  handleMouseOver: function() {
+  }
+
+  handleMouseOver() {
     if (this.props.obscureNsfw && this.props.metadata && this.props.metadata.nsfw) {
       this.setState({
         showNsfwHelp: true,
       });
     }
-  },
-  handleMouseOut: function() {
+  }
+
+  handleMouseOut() {
     if (this.state.showNsfwHelp) {
       this.setState({
         showNsfwHelp: false,
       });
     }
-  },
-  render: function() {
+  }
+
+  render() {
     if (this.state.isHidden) {
       return null;
     }
 
+    const {
+      metadata,
+      navigate,
+    } = this.props
+
     const uri = lbryuri.normalize(this.props.uri);
-    const metadata = this.props.metadata;
     const isConfirmed = !!metadata;
     const title = isConfirmed ? metadata.title : uri;
     const obscureNsfw = this.props.obscureNsfw && isConfirmed && metadata.nsfw;
-    const { navigate } = this.props
+
     return (
-      <section className={ 'file-tile card ' + (obscureNsfw ? 'card--obscured ' : '') } onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
+      <section className={ 'file-tile card ' + (obscureNsfw ? 'card--obscured ' : '') } onMouseEnter={this.handleMouseOver.bind(this)} onMouseLeave={this.handleMouseOut.bind(this)}>
         <div className={"row-fluid card__inner file-tile__row"}>
           <div className="span3 file-tile__thumbnail-container">
             <a href="#" onClick={() => navigate(`show=${uri}`)}><Thumbnail className="file-tile__thumbnail" {... metadata && metadata.thumbnail ? {src: metadata.thumbnail} : {}} alt={'Photo for ' + this.props.uri} /></a>
@@ -101,7 +91,6 @@ const FileTileStream = React.createClass({
               </h3>
             </div>
             <div className="card__actions">
-              <FileActions uri={this.props.uri} outpoint={this.props.outpoint} metadata={metadata} contentType={this.props.contentType} />
             </div>
             <div className="card__content">
               <p className="file-tile__description">
@@ -125,6 +114,6 @@ const FileTileStream = React.createClass({
       </section>
     );
   }
-});
+}
 
 export default FileTileStream
