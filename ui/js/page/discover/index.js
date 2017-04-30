@@ -12,6 +12,7 @@ import {
   selectIsSearching,
   selectSearchQuery,
   selectCurrentSearchResults,
+  selectSearchActivated,
 } from 'selectors/search'
 import DiscoverPage from './view'
 
@@ -20,6 +21,7 @@ const select = (state) => ({
   isSearching: selectIsSearching(state),
   query: selectSearchQuery(state),
   results: selectCurrentSearchResults(state),
+  searchActive: selectSearchActivated(state),
 })
 
 const perform = (dispatch) => ({

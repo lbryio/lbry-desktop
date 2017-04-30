@@ -35,7 +35,7 @@ const makeSelect = () => {
     fileInfo: selectFileInfoForUri(state, props),
     fetchingAvailability: selectFetchingAvailabilityForUri(state, props),
     selectAvailabilityForUri: selectAvailabilityForUri(state, props),
-    obscureNswf: selectObscureNsfw(state),
+    obscureNsfw: selectObscureNsfw(state),
     metadata: selectMetadataForUri(state, props),
     source: selectSourceForUri(state, props),
   })

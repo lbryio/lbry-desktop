@@ -27,3 +27,8 @@ export const selectCurrentSearchResults = createSelector(
   selectSearchResultsByQuery,
   (query, byQuery) => byQuery[query] || []
 )
+
+export const selectSearchActivated = createSelector(
+  _selectState,
+  (state) => !!state.activated
+)
