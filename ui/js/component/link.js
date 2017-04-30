@@ -70,11 +70,11 @@ export let RewardLink = React.createClass({
         return;
 
       case 'first_publish':
-        lbry.claim_list_mine().then(function(list) {
+        lbry.claim_list_mine().then((list) => {
           this.setState({
             claimable: list.length > 0
           })
-        }.bind(this));
+        });
         return;
     }
   },

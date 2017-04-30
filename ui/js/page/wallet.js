@@ -16,7 +16,7 @@ var AddressSection = React.createClass({
       this.setState({
         address: address,
       });
-    }.bind(this));
+    });
   },
 
   _getNewAddress: function(event) {
@@ -29,7 +29,7 @@ var AddressSection = React.createClass({
       this.setState({
         address: address,
       });
-    }.bind(this));
+    });
   },
 
   getInitialState: function() {

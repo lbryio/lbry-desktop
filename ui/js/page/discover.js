@@ -110,11 +110,11 @@ var FeaturedContent = React.createClass({
         <div className="empty">Failed to load landing content.</div> :
         <div>
           {
-              Object.keys(this.state.featuredUris).map(function(category) {
+              Object.keys(this.state.featuredUris).map((category) => {
                 return this.state.featuredUris[category].length ?
                        <FeaturedCategory key={category} category={category} names={this.state.featuredUris[category]} /> :
                        '';
-              }.bind(this))
+              })
           }
         </div>
     );

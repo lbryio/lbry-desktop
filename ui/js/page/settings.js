@@ -60,13 +60,13 @@ var SettingsPage = React.createClass({
     document.title = "Settings";
   },
   componentWillMount: function() {
-    lbry.getDaemonSettings(function(settings) {
+    lbry.getDaemonSettings((settings) => {
       this.setState({
         daemonSettings: settings,
         isMaxUpload: settings.max_upload != 0,
         isMaxDownload: settings.max_download != 0
       });
-    }.bind(this));
+    });
   },
   onShowNsfwChange: function(event) {
     lbry.setClientSetting('showNsfw', event.target.checked);
@@ -113,13 +113,13 @@ var SettingsPage = React.createClass({
             <div className="form-row__label-row"><div className="form-field__label">Max Upload</div></div>
             <FormRow type="radio"
                        name="max_upload_pref"
-                       onChange={this.onMaxUploadPrefChange.bind(this, false)}
+                       onChange={() => { this.onMaxUploadPrefChange(false) }}
                        defaultChecked={!this.state.isMaxUpload}
                        label="Unlimited" />
             <div className="form-row">
               <FormField type="radio"
                          name="max_upload_pref"
-                         onChange={this.onMaxUploadPrefChange.bind(this, true)}
+                         onChange={() => { this.onMaxUploadPrefChange(true) }}
                          defaultChecked={this.state.isMaxUpload}
                          label={ this.state.isMaxUpload ? 'Up to' : 'Choose limit...' } />
               { this.state.isMaxUpload ?
@@ -142,12 +142,12 @@ var SettingsPage = React.createClass({
             <FormRow label="Unlimited"
                        type="radio"
                        name="max_download_pref"
-                       onChange={this.onMaxDownloadPrefChange.bind(this, false)}
+                       onChange={() => { this.onMaxDownloadPrefChange(false) }}
                        defaultChecked={!this.state.isMaxDownload} />
             <div className="form-row">
               <FormField type="radio"
                          name="max_download_pref"
-                         onChange={this.onMaxDownloadPrefChange.bind(this, true)}
+                         onChange={() => { this.onMaxDownloadPrefChange(true) }}
                          defaultChecked={this.state.isMaxDownload}
                          label={ this.state.isMaxDownload ? 'Up to' : 'Choose limit...' } />
               { this.state.isMaxDownload ?

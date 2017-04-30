@@ -78,12 +78,12 @@ const ConfirmEmailStage = React.createClass({
       submitting: true,
     });
 
-    const onSubmitError = function(error) {
+    const onSubmitError = (error) => {
       if (this._codeRow) {
         this._codeRow.showError(error.message)
       }
       this.setState({ submitting: false });
-    }.bind(this)
+    };
 
     lbryio.call('user_email', 'confirm', {verification_token: this.state.code, email: this.props.email}, 'post').then((userEmail) => {
       if (userEmail.IsVerified) {

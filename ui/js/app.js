@@ -145,9 +145,9 @@ var App = React.createClass({
     this._isMounted = false;
   },
   registerHistoryPop: function() {
-    window.addEventListener("popstate", function() {
+    window.addEventListener("popstate", () => {
       this.setState(this.getViewingPageAndArgs(location.pathname));
-    }.bind(this));
+    });
   },
   handleUpgradeClicked: function() {
     // Make a new directory within temp directory so the filename is guaranteed to be available

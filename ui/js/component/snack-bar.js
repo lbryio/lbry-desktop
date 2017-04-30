@@ -36,12 +36,12 @@ export const SnackBar = React.createClass({
     let snack = this.state.snacks[0];
 
     if (this._hideTimeout === null) {
-      this._hideTimeout = setTimeout(function() {
+      this._hideTimeout = setTimeout(() => {
         this._hideTimeout = null;
         let snacks = this.state.snacks;
         snacks.shift();
         this.setState({ snacks: snacks });
-      }.bind(this), this._displayTime * 1000);
+      }, this._displayTime * 1000);
     }
 
     return (

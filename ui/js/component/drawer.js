@@ -34,11 +34,11 @@ var Drawer = React.createClass({
     };
   },
   componentDidMount: function() {
-    this._balanceSubscribeId = lbry.balanceSubscribe(function(balance) {
+    this._balanceSubscribeId = lbry.balanceSubscribe((balance) => {
       this.setState({
         balance: balance
       });
-    }.bind(this));
+    });
   },
   componentWillUnmount: function() {
     if (this._balanceSubscribeId) {
