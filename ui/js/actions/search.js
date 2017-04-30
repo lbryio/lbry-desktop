@@ -9,10 +9,18 @@ import {
 import {
   doResolveUri,
 } from 'actions/content'
+import {
+  doNavigate,
+} from 'actions/app'
+import {
+  selectCurrentPage,
+} from 'selectors/app'
 
 export function doSearchContent(query) {
   return function(dispatch, getState) {
     const state = getState()
+    const page = selectCurrentPage(state)
+
 
     if (!query) {
       return dispatch({
@@ -24,6 +32,8 @@ export function doSearchContent(query) {
       type: types.SEARCH_STARTED,
       data: { query }
     })
+
+    if(page != 'discover' && query != undefined) dispatch(doNavigate('discover'))
 
     lighthouse.search(query).then(results => {
       results.forEach(result => {
@@ -47,8 +57,16 @@ export function doSearchContent(query) {
 }
 
 export function doActivateSearch() {
-  return {
-    type: types.ACTIVATE_SEARCH,
+  return function(dispatch, getState) {
+    const state = getState()
+    const page = selectCurrentPage(state)
+    const query = selectSearchQuery(state)
+
+    if(page != 'discover' && query != undefined) dispatch(doNavigate('discover'))
+
+    dispatch({
+      type: types.ACTIVATE_SEARCH,
+    })
   }
 }
 
