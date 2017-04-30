@@ -61,4 +61,22 @@ let DiscoverPage = React.createClass({
   }
 })
 
+// const DiscoverPage = (props) => {
+//   const {
+//     isSearching,
+//     query,
+//     results,
+//     searchActive,
+//   } = props
+//
+//   return (
+//     <main>
+//       { (!searchActive || (!isSearching && !query)) && <FeaturedContent {...props} /> }
+//       { searchActive && isSearching ? <SearchActive /> : null }
+//       { searchActive && !isSearching && query && results.length ? <SearchResults results={results} /> : null }
+//       { searchActive && !isSearching && query && !results.length ? <SearchNoResults query={query} /> : null }
+//     </main>
+//   );
+// }
+
 export default DiscoverPage;

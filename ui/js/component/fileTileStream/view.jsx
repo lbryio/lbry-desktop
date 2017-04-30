@@ -75,7 +75,13 @@ class FileTileStream extends React.Component {
       <section className={ 'file-tile card ' + (obscureNsfw ? 'card--obscured ' : '') } onMouseEnter={this.handleMouseOver.bind(this)} onMouseLeave={this.handleMouseOut.bind(this)}>
         <div className={"row-fluid card__inner file-tile__row"}>
           <div className="span3 file-tile__thumbnail-container">
-            <a href="#" onClick={() => navigate(`show=${uri}`)}><Thumbnail className="file-tile__thumbnail" {... metadata && metadata.thumbnail ? {src: metadata.thumbnail} : {}} alt={'Photo for ' + this.props.uri} /></a>
+            <a href="#" onClick={() => navigate(`show=${uri}`)}>
+              {metadata && metadata.thumbnail ?
+              <Thumbnail key={this.props.uri} className="file-tile__thumbnail" src={metadata.thumbnail} alt={'Photo for ' + this.props.uri} />
+              :
+              <Thumbnail className="file-tile__thumbnail" alt={'Photo for ' + this.props.uri} />
+              }
+              </a>
           </div>
           <div className="span9">
             <div className="card__title-primary">

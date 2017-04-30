@@ -45,3 +45,15 @@ export function doSearchContent(query) {
     })
   }
 }
+
+export function doActivateSearch() {
+  return {
+    type: types.ACTIVATE_SEARCH,
+  }
+}
+
+export function doDeactivateSearch() {
+  return {
+    type: types.DEACTIVATE_SEARCH,
+  }
+}
