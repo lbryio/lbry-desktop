@@ -110,14 +110,15 @@ const DiscoverPage = (props) => {
     isSearching,
     query,
     results,
+    searchActive,
   } = props
 
   return (
     <main>
-      { !isSearching && !query && <FeaturedContent {...props} /> }
-      { isSearching ? <SearchActive /> : null }
-      { !isSearching && query && results.length ? <SearchResults results={results} /> : null }
-      { !isSearching && query && !results.length ? <SearchNoResults query={query} /> : null }
+      { (!searchActive || (!isSearching && !query)) && <FeaturedContent {...props} /> }
+      { searchActive && isSearching ? <SearchActive /> : null }
+      { searchActive && !isSearching && query && results.length ? <SearchResults results={results} /> : null }
+      { searchActive && !isSearching && query && !results.length ? <SearchNoResults query={query} /> : null }
     </main>
   );
 }

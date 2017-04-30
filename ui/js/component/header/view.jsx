@@ -55,7 +55,9 @@ var Header = React.createClass({
           <div className="header-search">
             <Icon icon="icon-search" />
             <input type="search" onChange={this.onQueryChange}
-                 placeholder="Find movies, music, games, and more"/>
+              onFocus={() => this.props.activateSearch()}
+              onBlur={() => this.props.deactivateSearch()}
+              placeholder="Find movies, music, games, and more" />
           </div>
         </div>
         {

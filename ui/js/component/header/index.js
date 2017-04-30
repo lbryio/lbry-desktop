@@ -11,6 +11,8 @@ import {
 } from 'actions/app'
 import {
   doSearchContent,
+  doActivateSearch,
+  doDeactivateSearch,
 } from 'actions/search'
 import Header from './view'
 
@@ -22,6 +24,8 @@ const select = (state) => ({
 const perform = (dispatch) => ({
   navigate: (path) => dispatch(doNavigate(path)),
   search: (query) => dispatch(doSearchContent(query)),
+  activateSearch: () => dispatch(doActivateSearch()),
+  deactivateSearch: () => setTimeout(() => { dispatch(doDeactivateSearch()) }, 10),
 })
 
 export default connect(select, perform)(Header)
