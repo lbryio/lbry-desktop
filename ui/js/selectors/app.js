@@ -28,6 +28,34 @@ export const selectCurrentUri = createSelector(
   }
 )
 
+export const selectPageTitle = createSelector(
+  selectCurrentPage,
+  selectCurrentUri,
+  (page, uri) => {
+    switch(page)
+    {
+      case 'discover':
+        return 'Discover'
+      case 'wallet':
+      case 'send':
+      case 'receive':
+      case 'claim':
+      case 'referral':
+        return 'Wallet'
+      case 'downloaded':
+        return 'My Files'
+      case 'published':
+        return 'My Files'
+      case 'publish':
+        return 'Publish'
+      case 'help':
+        return 'Help'
+      default:
+        return 'LBRY';
+    }
+  }
+)
+
 export const selectPlatform = createSelector(
   _selectState,
   (state) => state.platform

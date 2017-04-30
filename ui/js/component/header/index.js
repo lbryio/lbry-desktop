@@ -5,6 +5,7 @@ import {
 import {
   selectCurrentPage,
   selectHeaderLinks,
+  selectPageTitle,
 } from 'selectors/app'
 import {
   doNavigate,
@@ -19,6 +20,7 @@ import Header from './view'
 const select = (state) => ({
   currentPage: selectCurrentPage(state),
   subLinks: selectHeaderLinks(state),
+  pageTitle: selectPageTitle(state),
 })
 
 const perform = (dispatch) => ({

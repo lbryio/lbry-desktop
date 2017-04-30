@@ -21,6 +21,9 @@ import {
   selectCurrentResolvedUriClaimOutpoint,
 } from 'selectors/content'
 import {
+  selectClaimsByUri,
+} from 'selectors/claims'
+import {
   doOpenModal,
 } from 'actions/app'
 import {
@@ -66,6 +69,15 @@ export function doFetchDownloadedContent() {
     lbry.claim_list_mine().then((myClaimInfos) => {
       lbry.file_list().then((fileInfos) => {
         const myClaimOutpoints = myClaimInfos.map(({txid, nout}) => txid + ':' + nout);
+
+        fileInfos.forEach(fileInfo => {
+          const uri = lbryuri.build({
+            channelName: fileInfo.channel_name,
+            contentName: fileInfo.name,
+          })
+          const claim = selectClaimsByUri(state)[uri]
+          if (!claim) dispatch(doResolveUri(uri))
+        })
 
         dispatch({
           type: types.FETCH_DOWNLOADED_CONTENT_COMPLETED,

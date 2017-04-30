@@ -104,7 +104,7 @@ class WunderBar extends React.PureComponent {
       this.props.onSearch(searchTerm);
     }, 800); // 800ms delay, tweak for faster/slower
   }
-
+  
   componentWillReceiveProps(nextProps) {
     if (nextProps.viewingPage !== this.props.viewingPage || nextProps.address != this.props.address) {
       this.setState({ address: nextProps.address, icon: nextProps.icon });
