@@ -51,7 +51,7 @@ var Header = React.createClass({
       <header id="header" className={ (this.state.isScrolled ? 'header-scrolled' : 'header-unscrolled') + ' ' + (this.props.links ? 'header-with-subnav' : 'header-no-subnav') }>
         <div className="header-top-bar">
           <Link onClick={this.props.onOpenDrawer} icon="icon-bars" className="open-drawer-link" />
-          <h1>{ this.state.title }</h1>
+          <h1>{ this.props.pageTitle }</h1>
           <div className="header-search">
             <Icon icon="icon-search" />
             <input type="search" onChange={this.onQueryChange}

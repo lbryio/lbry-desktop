@@ -1,4 +1,5 @@
 import * as types from 'constants/action_types'
+import lbryuri from 'lbryuri'
 
 const reducers = {}
 const defaultState = {
@@ -154,6 +155,26 @@ reducers[types.LOADING_VIDEO_FAILED] = function(state, action) {
 
   return Object.assign({}, state, {
     loading: newLoading,
+  })
+}
+
+reducers[types.FETCH_DOWNLOADED_CONTENT_COMPLETED] = function(state, action) {
+  const {
+    fileInfos,
+  } = action.data
+  const newByUri = Object.assign({}, state.byUri)
+
+  fileInfos.forEach(fileInfo => {
+    const uri = lbryuri.build({
+      channelName: fileInfo.channel_name,
+      contentName: fileInfo.name,
+    })
+
+    newByUri[uri] = fileInfo
+  })
+
+  return Object.assign({}, state, {
+    byUri: newByUri
   })
 }
 

@@ -5,6 +5,7 @@ import {
   selectUpgradeDownloadDir,
   selectUpgradeDownloadItem,
   selectUpgradeFilename,
+  selectPageTitle,
 } from 'selectors/app'
 
 const {remote, ipcRenderer, shell} = require('electron');
@@ -14,11 +15,17 @@ const {download} = remote.require('electron-dl');
 const fs = remote.require('fs');
 
 export function doNavigate(path) {
-  return {
-    type: types.NAVIGATE,
-    data: {
-      path: path
-    }
+  return function(dispatch, getState) {
+    dispatch({
+      type: types.NAVIGATE,
+      data: {
+        path,
+      }
+    })
+
+    const state = getState()
+    const pageTitle = selectPageTitle(state)
+    window.document.title = pageTitle
   }
 }
 

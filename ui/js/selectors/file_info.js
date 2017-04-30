@@ -133,3 +133,19 @@ export const makeSelectLoadingForUri = () => {
     (loading) => !!loading
   )
 }
+
+export const selectDownloadedFileInfo = createSelector(
+  selectAllFileInfoByUri,
+  (byUri) => {
+    const fileInfoList = []
+    Object.keys(byUri).forEach(key => {
+      const fileInfo = byUri[key]
+
+      if (fileInfo.completed || fileInfo.written_bytes) {
+        fileInfoList.push(fileInfo)
+      }
+    })
+
+    return fileInfoList
+  }
+)

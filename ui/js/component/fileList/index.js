@@ -4,4 +4,10 @@ import {
 } from 'react-redux'
 import FileList from './view'
 
-export default connect()(FileList)
+const select = (state) => ({
+})
+
+const perform = (dispatch) => ({
+})
+
+export default connect(select, perform)(FileList)
