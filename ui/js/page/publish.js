@@ -119,7 +119,7 @@ var PublishPage = React.createClass({
       channels: null,
       rawName: '',
       name: '',
-      bid: 1,
+      bid: 10,
       hasFile: false,
       feeAmount: '',
       feeCurrency: 'USD',
