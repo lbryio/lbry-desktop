@@ -34,7 +34,7 @@ var Header = React.createClass({
           <Link href="?discover" button="alt button--flat" icon="icon-home" />
         </div>
         <div className="header__item header__item--wunderbar">
-          <WunderBar address={this.props.address} icon={this.props.wunderBarIcon} onSearch={this.props.onSearch} />
+          <WunderBar address={this.props.address} icon={this.props.wunderBarIcon} onSearch={this.props.onSearch} viewingPage={this.props.viewingPage} />
         </div>
         <div className="header__item">
           <Link href="?wallet" button="text" icon="icon-bank" label={lbry.formatCredits(this.state.balance, 1)} ></Link>
@@ -86,7 +86,7 @@ let WunderBar = React.createClass({
 
   },
   componentWillReceiveProps(nextProps) {
-    if (nextProps.address !== this.state.address || nextProps.icon !== this.state.icon) {
+    if (nextProps.viewingPage !== this.props.viewingPage) {
       this.setState({ address: nextProps.address, icon: nextProps.icon });
     }
   },
