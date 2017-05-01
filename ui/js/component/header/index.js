@@ -27,7 +27,7 @@ const perform = (dispatch) => ({
   navigate: (path) => dispatch(doNavigate(path)),
   search: (query) => dispatch(doSearchContent(query)),
   activateSearch: () => dispatch(doActivateSearch()),
-  deactivateSearch: () => setTimeout(() => { dispatch(doDeactivateSearch()) }, 10),
+  deactivateSearch: () => setTimeout(() => { dispatch(doDeactivateSearch()) }, 50),
 })
 
 export default connect(select, perform)(Header)
