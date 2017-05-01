@@ -97,9 +97,6 @@ export let FileTileStream = React.createClass({
                 </a>
               </h3>
             </div>
-            <div className="card__actions">
-              <FileActions uri={this.props.uri} outpoint={this.props.outpoint} metadata={metadata} contentType={this.props.contentType} />
-            </div>
             <div className="card__content">
               <p className="file-tile__description">
                 <TruncatedText lines={2}>
@@ -238,19 +235,26 @@ export let FileTile = React.createClass({
       claimInfo: null
     }
   },
-
-  componentDidMount: function() {
-    this._isMounted = true;
-
-    lbry.resolve({uri: this.props.uri}).then((resolutionInfo) => {
+  resolve: function(uri) {
+    lbry.resolve({uri: uri}).then((resolutionInfo) => {
       if (this._isMounted && resolutionInfo && resolutionInfo.claim && resolutionInfo.claim.value &&
-                    resolutionInfo.claim.value.stream && resolutionInfo.claim.value.stream.metadata) {
+        resolutionInfo.claim.value.stream && resolutionInfo.claim.value.stream.metadata) {
         // In case of a failed lookup, metadata will be null, in which case the component will never display
         this.setState({
           claimInfo: resolutionInfo.claim,
         });
       }
     });
+  },
+  componentWillReceiveProps: function(nextProps) {
+    if (nextProps.uri != this.props.uri) {
+      this.setState(this.getInitialState());
+      this.resolve(nextProps.uri);
+    }
+  },
+  componentDidMount: function() {
+    this._isMounted = true;
+    this.resolve(this.props.uri);
   },
   componentWillUnmount: function() {
     this._isMounted = false;
@@ -260,6 +264,10 @@ export let FileTile = React.createClass({
       if (this.props.displayStyle == 'card') {
         return <FileCardStream outpoint={null} metadata={{title: this.props.uri, description: "Loading..."}} contentType={null} hidePrice={true}
                                hasSignature={false} signatureIsValid={false} uri={this.props.uri} />
+      }
+      if (this.props.showEmpty)
+      {
+        return <div className="empty">Empty file tile for {this.props.uri}</div>
       }
       return null;
     }

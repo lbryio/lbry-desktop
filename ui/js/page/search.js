@@ -48,9 +48,22 @@ let SearchResults = React.createClass({
 
   _isMounted: false,
 
+  search: function(term) {
+    lighthouse.search(term).then(this.searchCallback);
+    if (!this.state.searching) {
+      this.setState({ searching: true })
+    }
+  },
+
   componentWillMount: function () {
     this._isMounted = true;
-    lighthouse.search(this.props.query).then(this.searchCallback);
+    this.search(this.props.query);
+  },
+
+  componentWillReceiveProps: function (nextProps) {
+    if (nextProps.query != this.props.query) {
+      this.search(nextProps.query);
+    }
   },
 
   componentWillUnmount: function () {
@@ -77,9 +90,9 @@ let SearchResults = React.createClass({
   render: function () {
     return this.state.searching ?
        <BusyMessage message="Looking up the Dewey Decimals" /> :
-       (this.state.results.length ?
+       (this.state.results && this.state.results.length ?
           <SearchResultList results={this.state.results} /> :
-          <SearchNoResults query={thisprops.query} />);
+          <SearchNoResults query={this.props.query} />);
   }
 });
 
@@ -123,14 +136,22 @@ let SearchPage = React.createClass({
 
   render: function() {
     return (
-      <main>
+      <main className="main--single-column">
         { this.isValidUri(this.props.query) ?
-          <div>
-            <h3>lbry://{this.props.query}</h3>
-            <div><BusyMessage message="Resolving the URL" /></div>
-          </div> : '' }
-        <h3>Search</h3>
-        <SearchResults query={this.props.query} />
+          <section className="section-spaced">
+            <h3 className="card-row__header">
+              Exact URL
+              <ToolTip label="?" body="This is the resolution of a LBRY URL and not controlled by LBRY Inc." className="tooltip--header"/>
+            </h3>
+            <FileTile uri={this.props.query} showEmpty={true} />
+          </section> : '' }
+        <section className="section-spaced">
+          <h3 className="card-row__header">
+            Search Results for {this.props.query}
+            <ToolTip label="?" body="These search results are provided by LBRY, Inc." className="tooltip--header"/>
+          </h3>
+          <SearchResults query={this.props.query} />
+        </section>
       </main>
     );
   }

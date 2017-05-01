@@ -145,11 +145,21 @@ var App = React.createClass({
   },
   onSearch: function(term) {
     this._storeHistoryOfNextRender = true;
+    const isShow = term.startsWith('lbry://');
     this.setState({
-      viewingPage: "search",
-      appUrl: "?search=" + encodeURIComponent(term),
+      viewingPage: isShow ? "show" : "search",
+      appUrl: (isShow ? "?show=" : "?search=") + encodeURIComponent(term),
       pageArgs: term
     });
+  },
+  onSubmit: function(uri) {
+    this._storeHistoryOfNextRender = true;
+    this.setState({
+      address: uri,
+      appUrl: "?show=" + encodeURIComponent(uri),
+      viewingPage: "show",
+      pageArgs: uri
+    })
   },
   handleUpgradeClicked: function() {
     // Make a new directory within temp directory so the filename is guaranteed to be available
@@ -265,7 +275,7 @@ var App = React.createClass({
       this._fullScreenPages.includes(this.state.viewingPage) ?
         mainContent :
         <div id="window">
-          <Header onSearch={this.onSearch} address={address} wunderBarIcon={wunderBarIcon} viewingPage={this.state.viewingPage} />
+          <Header onSearch={this.onSearch} onSubmit={this.onSubmit} address={address} wunderBarIcon={wunderBarIcon} viewingPage={this.state.viewingPage} />
           <div id="main-content">
             {mainContent}
           </div>

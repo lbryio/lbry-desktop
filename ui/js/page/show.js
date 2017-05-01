@@ -19,6 +19,10 @@ var FormatItem = React.createClass({
     const {thumbnail, author, title, description, language, license} = this.props.metadata;
     const mediaType = lbry.getMediaType(this.props.contentType);
 
+    if (!this.props.contentType && [author, language, license].filter().length === 0) {
+      return null;
+    }
+
     return (
       <table className="table-standard">
         <tbody>
@@ -42,12 +46,15 @@ var FormatItem = React.createClass({
 
 let ShowPage = React.createClass({
   _uri: null,
+  _isMounted: false,
 
   propTypes: {
     uri: React.PropTypes.string,
   },
+
   getInitialState: function() {
     return {
+      outpoint: null,
       metadata: null,
       contentType: null,
       hasSignature: false,
@@ -56,42 +63,90 @@ let ShowPage = React.createClass({
       costIncludesData: null,
       uriLookupComplete: null,
       isDownloaded: null,
+      isFailed: false,
     };
   },
+
+  componentWillUnmount: function() {
+    this._isMounted = false;
+  },
+
+  componentWillReceiveProps: function(nextProps) {
+    if (nextProps.uri != this.props.uri) {
+      this.loadUri(nextProps.uri);
+    }
+  },
+
   componentWillMount: function() {
-    this._uri = lbryuri.normalize(this.props.uri);
+    this.loadUri(this.props.uri);
+  },
 
-    lbry.resolve({uri: this._uri}).then(({ claim: {txid, nout, has_signature, signature_is_valid, value: {stream: {metadata, source: {contentType}}}}}) => {
-      const outpoint = txid + ':' + nout;
+  loadUri: function(uri) {
+    this._uri = lbryuri.normalize(uri);
 
-      lbry.file_list({outpoint}).then((fileInfo) => {
-        this.setState({
-          isDownloaded: fileInfo.length > 0,
+    lbry.resolve({uri: this._uri}).then((resolveData) => {
+      if (resolveData) {
+        let {claim: {txid, nout, has_signature, signature_is_valid, value: {stream: {metadata, source: {contentType}}}}} = resolveData;
+        const outpoint = txid + ':' + nout;
+
+        lbry.file_list({outpoint}).then((fileInfo) => {
+          this.setState({
+            isDownloaded: fileInfo.length > 0,
+          });
         });
-      });
 
-      lbry.setTitle(metadata.title ? metadata.title : this._uri)
+        lbry.setTitle(metadata.title ? metadata.title : this._uri)
 
-      this.setState({
-        outpoint: outpoint,
-        metadata: metadata,
-        hasSignature: has_signature,
-        signatureIsValid: signature_is_valid,
-        contentType: contentType,
-        uriLookupComplete: true,
-      });
-    });
+        if (this._isMounted) {
+          this.setState({
+            outpoint: outpoint,
+            metadata: metadata,
+            hasSignature: has_signature,
+            signatureIsValid: signature_is_valid,
+            contentType: contentType,
+            uriLookupComplete: true,
+          });
+        }
 
-    lbry.getCostInfo(this._uri).then(({cost, includesData}) => {
-      this.setState({
-        cost: cost,
-        costIncludesData: includesData,
-      });
+        lbry.getCostInfo(this._uri).then(({cost, includesData}) => {
+          if (this._isMounted) {
+            this.setState({
+              cost: cost,
+              costIncludesData: includesData,
+            });
+          }
+        });
+      } else {
+        if (this._isMounted) {
+          this.setState(Object.assign({}, this.getInitialState(), {
+            uriLookupComplete: true,
+            isFailed: true
+          }));
+        }
+      }
     });
   },
+
   render: function() {
     const metadata = this.state.metadata;
     const title = metadata ? this.state.metadata.title : this._uri;
+
+    if (this.state.isFailed) {
+      return <main className="main--single-column">
+        <section className="card">
+          <div className="card__inner">
+            <div className="card__title-identity"><h1>{this._uri}</h1></div>
+          </div>
+          <div className="card__content">
+            <p>
+              This location is not yet in use.
+              { ' ' }
+              <Link href="?publish" label="Put something here" />.
+            </p>
+          </div>
+        </section>
+      </main>
+    }
 
     return (
       <main className="main--single-column">
@@ -107,7 +162,7 @@ let ShowPage = React.createClass({
                 ? <span style={{float: "right"}}><FilePrice uri={this._uri} metadata={this.state.metadata} /></span>
                 : null}
               <h1>{title}</h1>
-              { this.state.uriLookupComplete ?
+              { this.state.uriLookupComplete && this.state.outpoint ?
                 <div>
                   <div className="card__subtitle">
                     <UriIndicator uri={this._uri} hasSignature={this.state.hasSignature} signatureIsValid={this.state.signatureIsValid} />

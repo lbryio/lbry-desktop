@@ -1,10 +1,16 @@
 import React from 'react';
+import lbryuri from '../lbryuri.js';
 import {Link} from './link.js';
 import {Icon, CreditAmount} from './common.js';
 
 var Header = React.createClass({
   _balanceSubscribeId: null,
   _isMounted: false,
+
+  propTypes: {
+    onSearch: React.PropTypes.func.isRequired,
+    onSubmit: React.PropTypes.func.isRequired
+  },
 
   getInitialState: function() {
     return {
@@ -35,7 +41,7 @@ var Header = React.createClass({
         </div>
         <div className="header__item header__item--wunderbar">
           <WunderBar address={this.props.address} icon={this.props.wunderBarIcon}
-                     onSearch={this.props.onSearch} viewingPage={this.props.viewingPage} />
+                     onSearch={this.props.onSearch} onSubmit={this.props.onSubmit} viewingPage={this.props.viewingPage} />
         </div>
         <div className="header__item">
           <Link href="?wallet" button="text" icon="icon-bank" label={lbry.formatCredits(this.state.balance, 1)} ></Link>
@@ -57,9 +63,11 @@ let WunderBar = React.createClass({
   _userTypingTimer: null,
   _input: null,
   _stateBeforeSearch: null,
+  _resetOnNextBlur: true,
 
   propTypes: {
-    onSearch: React.PropTypes.func.isRequired
+    onSearch: React.PropTypes.func.isRequired,
+    onSubmit: React.PropTypes.func.isRequired
   },
 
   getInitialState: function() {
@@ -85,11 +93,12 @@ let WunderBar = React.createClass({
     let searchTerm = event.target.value;
 
     this._userTypingTimer = setTimeout(() => {
+      this._resetOnNextBlur = false;
       this.props.onSearch(searchTerm);
     }, 800); // 800ms delay, tweak for faster/slower
   },
   componentWillReceiveProps(nextProps) {
-    if (nextProps.viewingPage !== this.props.viewingPage) {
+    if (nextProps.viewingPage !== this.props.viewingPage || nextProps.address != this.props.address) {
       this.setState({ address: nextProps.address, icon: nextProps.icon });
     }
   },
@@ -109,14 +118,27 @@ let WunderBar = React.createClass({
     this.setState(newState);
   },
   onBlur: function() {
-    this.setState(Object.assign({}, this._stateBeforeSearch, { isActive: false }));
-    this._input.value = this.state.address;
+    let commonState = {isActive: false};
+    if (this._resetOnNextBlur) {
+      this.setState(Object.assign({}, this._stateBeforeSearch, commonState));
+      this._input.value = this.state.address;
+    } else {
+      this._resetOnNextBlur = true;
+      this._stateBeforeSearch = this.state;
+      this.setState(commonState);
+    }
   },
   componentDidUpdate: function() {
     this._input.value = this.state.address;
     if (this._input && this._focusPending) {
       this._input.select();
       this._focusPending = false;
+    }
+  },
+  onKeyPress: function(event) {
+    if (event.charCode == 13 && this._input.value) {
+      clearTimeout(this._userTypingTimer);
+      this.props.onSubmit(lbryuri.normalize(this._input.value));
     }
   },
   onReceiveRef: function(ref) {
@@ -131,6 +153,7 @@ let WunderBar = React.createClass({
                onFocus={this.onFocus}
                onBlur={this.onBlur}
                onChange={this.onChange}
+               onKeyPress={this.onKeyPress}
                value={this.state.address}
                placeholder="Find movies, music, games, and more" />
       </div>
