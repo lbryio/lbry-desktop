@@ -178,6 +178,27 @@ reducers[types.FETCH_DOWNLOADED_CONTENT_COMPLETED] = function(state, action) {
   })
 }
 
+reducers[types.FETCH_PUBLISHED_CONTENT_COMPLETED] = function(state, action) {
+  const {
+    fileInfos
+  } = action.data
+  const newByUri = Object.assign({}, state.byUri)
+
+  fileInfos.forEach(fileInfo => {
+    const uri = lbryuri.build({
+      channelName: fileInfo.channel_name,
+      contentName: fileInfo.name,
+    })
+
+    newByUri[uri] = fileInfo
+  })
+
+  return Object.assign({}, state, {
+    byUri: newByUri
+  })
+}
+
+
 export default function reducer(state = defaultState, action) {
   const handler = reducers[action.type];
   if (handler) return handler(state, action);

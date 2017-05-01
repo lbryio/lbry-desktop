@@ -100,6 +100,12 @@ export function doFetchPublishedContent() {
     })
 
     lbry.claim_list_mine().then((claimInfos) => {
+      dispatch({
+        type: types.FETCH_MY_CLAIMS_COMPLETED,
+        data: {
+          claims: claimInfos,
+        }
+      })
       lbry.file_list().then((fileInfos) => {
         const myClaimOutpoints = claimInfos.map(({txid, nout}) => txid + ':' + nout)
 
