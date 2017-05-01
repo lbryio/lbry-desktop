@@ -137,8 +137,12 @@ let WunderBar = React.createClass({
   },
   onKeyPress: function(event) {
     if (event.charCode == 13 && this._input.value) {
+      let uri = lbryuri.normalize(this._input.value);
       clearTimeout(this._userTypingTimer);
-      this.props.onSubmit(lbryuri.normalize(this._input.value));
+      this.props.onSubmit(uri);
+      this.setState({ value: uri })
+      this._resetOnNextBlur = false;
+      this._input.blur();
     }
   },
   onReceiveRef: function(ref) {

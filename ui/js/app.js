@@ -72,8 +72,6 @@ var App = React.createClass({
   getViewingPageAndArgs: function(address) {
     // For now, routes are in format ?page or ?page=args
     let [isMatch, viewingPage, pageArgs] = address.match(/\??([^=]*)(?:=(.*))?/);
-    console.log(pageArgs);
-    console.log(decodeURIComponent(pageArgs));
     return {
       viewingPage: viewingPage,
       pageArgs: pageArgs === undefined ? null : decodeURIComponent(pageArgs)

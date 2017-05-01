@@ -44,6 +44,23 @@ var FormatItem = React.createClass({
   }
 });
 
+let ChannelPage = React.createClass({
+  render: function() {
+    return <main className="main--single-column">
+      <section className="card">
+        <div className="card__inner">
+          <div className="card__title-identity"><h1>{this.props.title}</h1></div>
+        </div>
+        <div className="card__content">
+          <p>
+            This channel page is a stub.
+          </p>
+        </div>
+      </section>
+    </main>
+  }
+})
+
 let ShowPage = React.createClass({
   _uri: null,
   _isMounted: false,
@@ -58,6 +75,7 @@ let ShowPage = React.createClass({
       metadata: null,
       contentType: null,
       hasSignature: false,
+      claimType: null,
       signatureIsValid: false,
       cost: null,
       costIncludesData: null,
@@ -78,6 +96,7 @@ let ShowPage = React.createClass({
   },
 
   componentWillMount: function() {
+    this._isMounted = true;
     this.loadUri(this.props.uri);
   },
 
@@ -85,51 +104,73 @@ let ShowPage = React.createClass({
     this._uri = lbryuri.normalize(uri);
 
     lbry.resolve({uri: this._uri}).then((resolveData) => {
+      const isChannel = resolveData && resolveData.claims_in_channel;
+      if (!this._isMounted) {
+        return;
+      }
       if (resolveData) {
-        let {claim: {txid, nout, has_signature, signature_is_valid, value: {stream: {metadata, source: {contentType}}}}} = resolveData;
-        const outpoint = txid + ':' + nout;
+        let newState = { uriLookupComplete: true }
+        if (!isChannel) {
+          let {claim: {txid: txid, nout: nout, has_signature: has_signature, signature_is_valid: signature_is_valid, value: {stream: {metadata: metadata, source: {contentType: contentType}}}}} = resolveData;
 
-        lbry.file_list({outpoint}).then((fileInfo) => {
-          this.setState({
-            isDownloaded: fileInfo.length > 0,
-          });
-        });
-
-        lbry.setTitle(metadata.title ? metadata.title : this._uri)
-
-        if (this._isMounted) {
-          this.setState({
-            outpoint: outpoint,
+          Object.assign(newState, {
+            claimType: "file",
             metadata: metadata,
+            outpoint: txid + ':' + nout,
             hasSignature: has_signature,
             signatureIsValid: signature_is_valid,
-            contentType: contentType,
-            uriLookupComplete: true,
+            contentType: contentType
+          });
+
+          lbry.file_list({outpoint: newState.outpoint}).then((fileInfo) => {
+            this.setState({
+              isDownloaded: fileInfo.length > 0,
+            });
+          });
+
+          lbry.setTitle(metadata.title ? metadata.title : this._uri)
+
+          lbry.getCostInfo(this._uri).then(({cost, includesData}) => {
+            if (this._isMounted) {
+              this.setState({
+                cost: cost,
+                costIncludesData: includesData,
+              });
+            }
+          });
+        } else {
+          console.log('channel');
+          let {certificate: {txid: txid, nout: nout, has_signature: has_signature}} = resolveData;
+          console.log(txid);
+          Object.assign(newState, {
+            claimType: "channel",
+            outpoint: txid + ':' + nout,
+            txid: txid,
+            metadata: {
+              title:resolveData.certificate.name
+            }
           });
         }
 
-        lbry.getCostInfo(this._uri).then(({cost, includesData}) => {
-          if (this._isMounted) {
-            this.setState({
-              cost: cost,
-              costIncludesData: includesData,
-            });
-          }
-        });
+        this.setState(newState);
+
       } else {
-        if (this._isMounted) {
-          this.setState(Object.assign({}, this.getInitialState(), {
-            uriLookupComplete: true,
-            isFailed: true
-          }));
-        }
+        this.setState(Object.assign({}, this.getInitialState(), {
+          uriLookupComplete: true,
+          isFailed: true
+        }));
       }
     });
   },
 
   render: function() {
-    const metadata = this.state.metadata;
-    const title = metadata ? this.state.metadata.title : this._uri;
+    const metadata = this.state.metadata,
+          title = metadata ? this.state.metadata.title : this._uri,
+          channelUriObj = lbryuri.parse(this._uri);
+
+    delete channelUriObj.path;
+    delete channelUriObj.contentName;
+    const channelUri = this.props.hasSignature && channelUriObj.isChannel ? lbryuri.build(channelUriObj, false) : null;
 
     if (this.state.isFailed) {
       return <main className="main--single-column">
@@ -148,6 +189,11 @@ let ShowPage = React.createClass({
       </main>
     }
 
+    if (this.state.claimType == "channel") {
+      return <ChannelPage title={this._uri} />
+    }
+
+    const uriIndicator = <UriIndicator uri={this._uri} hasSignature={this.state.hasSignature} signatureIsValid={this.state.signatureIsValid} />;
     return (
       <main className="main--single-column">
         <section className="show-page-media">
@@ -165,7 +211,9 @@ let ShowPage = React.createClass({
               { this.state.uriLookupComplete && this.state.outpoint ?
                 <div>
                   <div className="card__subtitle">
-                    <UriIndicator uri={this._uri} hasSignature={this.state.hasSignature} signatureIsValid={this.state.signatureIsValid} />
+                    { this.state.signatureIsValid ?
+                        <Link href={"?show=" + channelUri }>{uriIndicator}</Link> :
+                        uriIndicator}
                   </div>
                   <div className="card__actions">
                     <FileActions uri={this._uri} outpoint={this.state.outpoint} metadata={metadata} contentType={this.state.contentType} />
