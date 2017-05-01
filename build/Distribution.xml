@@ -20,5 +20,5 @@
     <choice id="choice1" title="base">
         <pkg-ref id="io.lbry.LBRY.pkg"/>
     </choice>
-    <pkg-ref id="io.lbry.LBRY.pkg" installKBytes="173006" version="0.10.0" auth="Root">#base.pkg</pkg-ref>
+    <pkg-ref id="io.lbry.LBRY.pkg" installKBytes="173006" version="0.10.0rc7" auth="Root">#base.pkg</pkg-ref>
 </installer-script>
