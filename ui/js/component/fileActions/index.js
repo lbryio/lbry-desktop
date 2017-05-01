@@ -30,6 +30,7 @@ import {
 } from 'actions/file_info'
 import {
   doWatchVideo,
+  doLoadVideo,
 } from 'actions/content'
 import FileActions from './view'
 
@@ -58,10 +59,10 @@ const perform = (dispatch) => ({
   closeModal: () => dispatch(doCloseModal()),
   openInFolder: (fileInfo) => dispatch(doOpenFileInFolder(fileInfo)),
   openInShell: (fileInfo) => dispatch(doOpenFileInShell(fileInfo)),
-  affirmPurchase: () => console.log('affirm purchase'),
   deleteFile: (fileInfo, deleteFromComputer) => dispatch(doDeleteFile(fileInfo, deleteFromComputer)),
   openModal: (modal) => dispatch(doOpenModal(modal)),
   downloadClick: () => dispatch(doWatchVideo()),
+  loadVideo: () => dispatch(doLoadVideo())
 })
 
 export default connect(makeSelect, perform)(FileActions)
