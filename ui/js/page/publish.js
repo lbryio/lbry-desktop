@@ -148,7 +148,7 @@ var PublishPage = React.createClass({
     });
   },
   handlePublishStartedConfirmed: function() {
-    window.location = "?published";
+    window.location.href = "?published";
   },
   handlePublishError: function(error) {
     this.setState({
@@ -384,7 +384,7 @@ var PublishPage = React.createClass({
     const lbcInputHelp = "This LBC remains yours and the deposit can be undone at any time."
 
     return (
-      <main ref="page">
+      <main className="main--single-column">
         <form onSubmit={this.handleSubmit}>
           <section className="card">
             <div className="card__title-primary">
@@ -548,7 +548,7 @@ var PublishPage = React.createClass({
 
           <div className="card-series-submit">
             <Link button="primary" label={!this.state.submitting ? 'Publish' : 'Publishing...'} onClick={this.handleSubmit} disabled={this.state.submitting} />
-            <Link button="cancel" onClick={window.history.back} label="Cancel" />
+            <Link button="cancel" onClick={lbry.back} label="Cancel" />
             <input type="submit" className="hidden" />
           </div>
         </form>

@@ -12,10 +12,10 @@ import RewardPage from './page/reward.js';
 import WalletPage from './page/wallet.js';
 import ShowPage from './page/show.js';
 import PublishPage from './page/publish.js';
+import SearchPage from './page/search.js';
 import DiscoverPage from './page/discover.js';
 import DeveloperPage from './page/developer.js';
 import {FileListDownloaded, FileListPublished} from './page/file-list.js';
-import Drawer from './component/drawer.js';
 import Header from './component/header.js';
 import {Modal, ExpandableModal} from './component/modal.js';
 import {Link} from './component/link.js';
@@ -38,6 +38,7 @@ var App = React.createClass({
     data: 'Error data',
   },
   _fullScreenPages: ['watch'],
+  _storeHistoryOfNextRender: false,
 
   _upgradeDownloadItem: null,
   _isMounted: false,
@@ -71,18 +72,17 @@ var App = React.createClass({
   getViewingPageAndArgs: function(address) {
     // For now, routes are in format ?page or ?page=args
     let [isMatch, viewingPage, pageArgs] = address.match(/\??([^=]*)(?:=(.*))?/);
+    console.log(pageArgs);
+    console.log(decodeURIComponent(pageArgs));
     return {
       viewingPage: viewingPage,
-      pageArgs: pageArgs === undefined ? null : pageArgs
+      pageArgs: pageArgs === undefined ? null : decodeURIComponent(pageArgs)
     };
   },
   getInitialState: function() {
-    var match, param, val, viewingPage, pageArgs,
-        drawerOpenRaw = sessionStorage.getItem('drawerOpen');
-
     return Object.assign(this.getViewingPageAndArgs(window.location.search), {
       viewingPage: 'discover',
-      drawerOpen: drawerOpenRaw !== null ? JSON.parse(drawerOpenRaw) : true,
+      appUrl: null,
       errorInfo: null,
       modal: null,
       downloadProgress: null,
@@ -90,6 +90,8 @@ var App = React.createClass({
     });
   },
   componentWillMount: function() {
+    window.addEventListener("popstate", this.onHistoryPop);
+
     document.addEventListener('unhandledError', (event) => {
       this.alertError(event.detail);
     });
@@ -106,9 +108,9 @@ var App = React.createClass({
         if (target.matches('a[href^="?"]')) {
           event.preventDefault();
           if (this._isMounted) {
-            history.pushState({}, document.title, target.getAttribute('href'));
-            this.registerHistoryPop();
-            this.setState(this.getViewingPageAndArgs(target.getAttribute('href')));
+            let appUrl = target.getAttribute('href');
+            this._storeHistoryOfNextRender = true;
+            this.setState(Object.assign({}, this.getViewingPageAndArgs(appUrl), { appUrl: appUrl }));
           }
         }
         target = target.parentNode;
@@ -126,14 +128,6 @@ var App = React.createClass({
       });
     }
   },
-  openDrawer: function() {
-    sessionStorage.setItem('drawerOpen', true);
-    this.setState({ drawerOpen: true });
-  },
-  closeDrawer: function() {
-    sessionStorage.setItem('drawerOpen', false);
-    this.setState({ drawerOpen: false });
-  },
   closeModal: function() {
     this.setState({
       modal: null,
@@ -144,10 +138,17 @@ var App = React.createClass({
   },
   componentWillUnmount: function() {
     this._isMounted = false;
+    window.removeEventListener("popstate", this.onHistoryPop);
   },
-  registerHistoryPop: function() {
-    window.addEventListener("popstate", () => {
-      this.setState(this.getViewingPageAndArgs(location.pathname));
+  onHistoryPop: function() {
+    this.setState(this.getViewingPageAndArgs(location.search));
+  },
+  onSearch: function(term) {
+    this._storeHistoryOfNextRender = true;
+    this.setState({
+      viewingPage: "search",
+      appUrl: "?search=" + encodeURIComponent(term),
+      pageArgs: term
     });
   },
   handleUpgradeClicked: function() {
@@ -202,12 +203,6 @@ var App = React.createClass({
       modal: null,
     });
   },
-  onSearch: function(term) {
-    this.setState({
-      viewingPage: 'discover',
-      pageArgs: term
-    });
-  },
   alertError: function(error) {
     var errorInfoList = [];
     for (let key of Object.keys(error)) {
@@ -225,12 +220,14 @@ var App = React.createClass({
   {
     switch(this.state.viewingPage)
     {
+      case 'search':
+        return [this.state.pageArgs ? this.state.pageArgs : "Search", 'icon-search', <SearchPage query={this.state.pageArgs} />];
       case 'settings':
         return ["Settings", "icon-gear", <SettingsPage />];
       case 'help':
         return ["Help", "icon-question", <HelpPage />];
       case 'report':
-        return ['Report', 'icon-file', <ReportPage />];
+        return ['Report an Issue', 'icon-file', <ReportPage />];
       case 'downloaded':
         return ["Downloads & Purchases", "icon-folder", <FileListDownloaded />];
       case 'published':
@@ -250,18 +247,25 @@ var App = React.createClass({
       case 'developer':
         return ["Developer", "icon-file", <DeveloperPage />];
       case 'discover':
-        return ["Home", "icon-home", <DiscoverPage showWelcome={this.state.justRegistered} {... this.state.pageArgs !== null ? {query: this.state.pageArgs} : {} } />];
+      default:
+        return ["Home", "icon-home", <DiscoverPage />];
     }
   },
   render: function() {
     let [address, wunderBarIcon, mainContent] = this.getContentAndAddress();
 
+    lbry.setTitle(address);
+
+    if (this._storeHistoryOfNextRender) {
+      this._storeHistoryOfNextRender = false;
+      history.pushState({}, document.title, this.state.appUrl);
+    }
+
     return (
       this._fullScreenPages.includes(this.state.viewingPage) ?
         mainContent :
         <div id="window">
-          <Header onOpenDrawer={this.openDrawer} address={address} wunderBarIcon={wunderBarIcon}
-                   onSearch={this.onSearch} viewingPage={this.state.viewingPage} />
+          <Header onSearch={this.onSearch} address={address} wunderBarIcon={wunderBarIcon} viewingPage={this.state.viewingPage} />
           <div id="main-content">
             {mainContent}
           </div>

@@ -28,13 +28,14 @@ var Header = React.createClass({
   render: function() {
     return <header id="header">
         <div className="header__item">
-          <Link onClick={() => { history.back() }} button="alt button--flat" icon="icon-arrow-left" />
+          <Link onClick={() => { lbry.back() }} button="alt button--flat" icon="icon-arrow-left" />
         </div>
         <div className="header__item">
           <Link href="?discover" button="alt button--flat" icon="icon-home" />
         </div>
         <div className="header__item header__item--wunderbar">
-          <WunderBar address={this.props.address} icon={this.props.wunderBarIcon} onSearch={this.props.onSearch} viewingPage={this.props.viewingPage} />
+          <WunderBar address={this.props.address} icon={this.props.wunderBarIcon}
+                     onSearch={this.props.onSearch} viewingPage={this.props.viewingPage} />
         </div>
         <div className="header__item">
           <Link href="?wallet" button="text" icon="icon-bank" label={lbry.formatCredits(this.state.balance, 1)} ></Link>
@@ -57,6 +58,10 @@ let WunderBar = React.createClass({
   _input: null,
   _stateBeforeSearch: null,
 
+  propTypes: {
+    onSearch: React.PropTypes.func.isRequired
+  },
+
   getInitialState: function() {
     return {
       address: this.props.address,
@@ -77,13 +82,11 @@ let WunderBar = React.createClass({
 
     this.setState({ address: event.target.value })
 
-    //@TODO: Switch to React.js timing
-    var searchTerm = event.target.value;
+    let searchTerm = event.target.value;
 
     this._userTypingTimer = setTimeout(() => {
       this.props.onSearch(searchTerm);
     }, 800); // 800ms delay, tweak for faster/slower
-
   },
   componentWillReceiveProps(nextProps) {
     if (nextProps.viewingPage !== this.props.viewingPage) {
@@ -98,7 +101,8 @@ let WunderBar = React.createClass({
     }
     // this._input.value = ""; //trigger placeholder
     this._focusPending = true;
-    if (!this.state.address.startsWith('lbry://')) //onFocus, if they are not on an exact URL, clear the bar
+    //below is hacking, improved when we have proper routing
+    if (!this.state.address.startsWith('lbry://') && this.state.icon !== "icon-search") //onFocus, if they are not on an exact URL or a search page, clear the bar
     {
       newState.address = '';
     }

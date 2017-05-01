@@ -80,7 +80,10 @@ p
 }
 
 .truncated-text {
-  display: inline-block;
+  //display: inline-block;
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
 }
 
 .busy-indicator

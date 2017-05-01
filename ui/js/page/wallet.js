@@ -304,7 +304,7 @@ var WalletPage = React.createClass({
   },
   render: function() {
     return (
-      <main className="page">
+      <main className="main--single-column">
         <WalletNav viewingPage={this.props.viewingPage} />
         <section className="card">
           <div className="card__title-primary">

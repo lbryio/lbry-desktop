@@ -9,9 +9,6 @@ var LoadScreen = React.createClass({
     details: React.PropTypes.string,
     isWarning: React.PropTypes.bool,
   },
-  handleCancelClick: function() {
-    history.back();
-  },
   getDefaultProps: function() {
     return {
       isWarning: false,
@@ -34,9 +31,6 @@ var LoadScreen = React.createClass({
             <BusyMessage message={this.props.message} />
           </h3>
           {this.props.isWarning ? <Icon icon="icon-warning" /> : null} <span className={'load-screen__details ' + (this.props.isWarning ? 'load-screen__details--warning' : '')}>{this.props.details}</span>
-          {window.history.length > 1
-            ? <div><Link label="Cancel" onClick={this.handleCancelClick} className='load-screen__cancel-link button-text' /></div>
-            : null}
         </div>
       </div>
     );

@@ -31,7 +31,6 @@ function savePendingPublish({name, channel_name}) {
   return newPendingPublish;
 }
 
-
 /**
  * If there is a pending publish with the given name or outpoint, remove it.
  * A channel name may also be provided along with name.
@@ -130,6 +129,24 @@ lbry.connect = function() {
   }
 
   return lbry._connectPromise;
+}
+
+
+//kill this but still better than document.title =, which this replaced
+lbry.setTitle = function(title) {
+  document.title = title + " - LBRY";
+}
+
+//kill this with proper routing
+lbry.back = function() {
+  console.log(window.history);
+  if (window.history.length > 1) {
+    console.log('history exists, go back');
+    window.history.back();
+  } else {
+    console.log('no history, reload');
+    window.location.href = "?discover";
+  }
 }
 
 lbry.isDaemonAcceptingConnections = function (callback) {

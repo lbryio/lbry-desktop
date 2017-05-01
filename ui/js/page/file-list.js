@@ -56,7 +56,7 @@ export let FileListDownloaded = React.createClass({
       content = <FileList fileInfos={this.state.fileInfos} hidePrices={true} />;
     }
     return (
-      <main className="constrained-page">
+      <main className="main--single-column">
         <FileListNav viewingPage="downloaded" />
         {content}
       </main>
@@ -83,12 +83,11 @@ export let FileListPublished = React.createClass({
       else {
         rewards.claimReward(rewards.TYPE_FIRST_PUBLISH).catch(() => {})
       }
-    });
+    }, () => {});
   },
   componentDidMount: function () {
     this._isMounted = true;
     this._requestPublishReward();
-    document.title = "Published Files";
 
     lbry.claim_list_mine().then((claimInfos) => {
       if (!this._isMounted) { return; }
@@ -118,7 +117,7 @@ export let FileListPublished = React.createClass({
       content = <FileList fileInfos={this.state.fileInfos} />;
     }
     return (
-      <main className="constrained-page">
+      <main className="main--single-column">
         <FileListNav viewingPage="published" />
         {content}
       </main>

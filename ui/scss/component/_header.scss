@@ -3,28 +3,11 @@
 $color-header: #666;
 $color-header-active: darken($color-header, 20%);
 
-$header-icon-size: 1.5em;
-
-.open-drawer-link, .close-drawer-link
-{
-  display: inline-block;
-  font-size: $header-icon-size;
-  padding: 2px 6px 0 6px;
-  float: left;
-}
-
 #header
 {
   color: $color-header;
   background: #fff;
   display: flex;
-  /*
-  &.header-no-subnav {
-    height: $height-header;
-  }
-  &.header-with-subnav {
-    height: $height-header * 2;
-  }*/
   position: fixed;
   box-shadow: $box-shadow-layer;
   top: 0;

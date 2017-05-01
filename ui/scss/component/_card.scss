@@ -139,8 +139,12 @@ $height-card-small: $spacing-vertical * 15;
   overflow-x: auto;
   overflow-y: hidden;
   white-space: nowrap;
+
+  /*hacky way to give space for hover */
   padding-left: 20px;
-  margin-left: -20px; /*hacky way to give space for hover */
+  margin-left: -20px;
+  padding-right: 20px;
+  margin-right: -20px;
 }
 .card-row__header {
   margin-bottom: $spacing-vertical / 3;

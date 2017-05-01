@@ -66,9 +66,6 @@ var SettingsPage = React.createClass({
       showUnavailable: lbry.getClientSetting('showUnavailable'),
     }
   },
-  componentDidMount: function() {
-    document.title = "Settings";
-  },
   componentWillMount: function() {
     lbry.getDaemonSettings((settings) => {
       this.setState({
@@ -102,7 +99,7 @@ var SettingsPage = React.createClass({
  </section>
  */
     return (
-      <main className="constrained-page">
+      <main className="main--single-column">
         <SettingsNav viewingPage="settings" />
         <section className="card">
           <div className="card__content">

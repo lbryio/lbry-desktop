@@ -25,9 +25,6 @@ var HelpPage = React.createClass({
       });
     });
   },
-  componentDidMount: function() {
-    document.title = "Help";
-  },
   render: function() {
     let ver, osName, platform, newVerLink;
     if (this.state.versionInfo) {
@@ -50,7 +47,7 @@ var HelpPage = React.createClass({
     }
 
     return (
-      <main className="constrained-page">
+      <main className="main--single-column">
         <SettingsNav viewingPage="help" />
         <section className="card">
           <div className="card__title-primary">

@@ -18,9 +18,6 @@ var ReportPage = React.createClass({
       this._messageArea.value = '';
     }
   },
-  componentDidMount: function() {
-    document.title = "Report an Issue";
-  },
   closeModal: function() {
     this.setState({
       modal: null,
@@ -34,7 +31,7 @@ var ReportPage = React.createClass({
   },
   render: function() {
     return (
-      <main className="page">
+      <main className="main--single-column">
         <section className="card">
           <h3>Report an Issue</h3>
           <p>Please describe the problem you experienced and any information you think might be useful to us. Links to screenshots are great!</p>

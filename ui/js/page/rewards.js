@@ -57,7 +57,7 @@ var RewardsPage = React.createClass({
   },
   render: function() {
     return (
-      <main className="constrained-page">
+      <main className="main--single-column">
         <WalletNav viewingPage="rewards"/>
         <div>
           {!this.state.userRewards

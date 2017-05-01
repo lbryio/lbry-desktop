@@ -70,7 +70,7 @@ let ShowPage = React.createClass({
         });
       });
 
-      document.title = metadata.title ? metadata.title : this._uri;
+      lbry.setTitle(metadata.title ? metadata.title : this._uri)
 
       this.setState({
         outpoint: outpoint,
@@ -94,7 +94,7 @@ let ShowPage = React.createClass({
     const title = metadata ? this.state.metadata.title : this._uri;
 
     return (
-      <main className="constrained-page">
+      <main className="main--single-column">
         <section className="show-page-media">
           { this.state.contentType && this.state.contentType.startsWith('video/') ?
               <Video className="video-embedded" uri={this._uri} metadata={metadata} outpoint={this.state.outpoint} /> :
