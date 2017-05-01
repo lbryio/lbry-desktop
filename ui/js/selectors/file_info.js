@@ -5,6 +5,9 @@ import {
   selectCurrentUri,
   selectCurrentPage,
 } from 'selectors/app'
+import {
+  selectMyClaimsOutpoints,
+} from 'selectors/claims'
 
 export const _selectState = state => state.fileInfo || {}
 
@@ -147,5 +150,23 @@ export const selectDownloadedFileInfo = createSelector(
     })
 
     return fileInfoList
+  }
+)
+
+export const selectPublishedFileInfo = createSelector(
+  selectAllFileInfoByUri,
+  selectMyClaimsOutpoints,
+  (byUri, outpoints) => {
+    const fileInfos = []
+    outpoints.forEach(outpoint => {
+      Object.keys(byUri).forEach(key => {
+        const fileInfo = byUri[key]
+        if (fileInfo.outpoint == outpoint) {
+          fileInfos.push(fileInfo)
+        }
+      })
+    })
+
+    return fileInfos
   }
 )
