@@ -1,19 +1,18 @@
 import React from 'react';
 import SettingsPage from 'page/settings.js';
 import HelpPage from 'page/help';
+
 import ReportPage from 'page/report.js';
 import StartPage from 'page/start.js';
-import WalletPage from 'page/wallet.js';
-import DetailPage from 'page/show.js';
+import WalletPage from 'page/wallet';
+import ShowPage from 'page/showPage';
 import PublishPage from 'page/publish.js';
-import DiscoverPage from 'page/discover.js';
+import DiscoverPage from 'page/discover';
 import SplashScreen from 'component/splash.js';
 import RewardsPage from 'page/rewards.js';
 import DeveloperPage from 'page/developer.js';
-import {
-  FileListDownloaded,
-  FileListPublished
-} from 'page/file-list.js';
+import FileListDownloaded from 'page/fileListDownloaded'
+import FileListPublished from 'page/fileListPublished'
 
 const route = (page, routesMap) => {
   const component = routesMap[page]
@@ -38,7 +37,7 @@ const Router = (props) => {
     'wallet': <WalletPage {...props} />,
     'send': <WalletPage {...props} />,
     'receive': <WalletPage {...props} />,
-    'show': <DetailPage {...props} />,
+    'show': <ShowPage {...props} />,
     'publish': <PublishPage {...props} />,
     'developer': <DeveloperPage {...props} />,
     'discover': <DiscoverPage {...props} />,

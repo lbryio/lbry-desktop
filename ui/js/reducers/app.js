@@ -1,23 +1,24 @@
 import * as types from 'constants/action_types'
 
+import lbry from 'lbry'
+
 const reducers = {}
 const defaultState = {
   isLoaded: false,
-  currentPage: 'discover',
+  currentPath: 'discover',
   platform: process.platform,
   drawerOpen: sessionStorage.getItem('drawerOpen') || true,
-  upgradeSkipped: sessionStorage.getItem('upgradeSkipped')
-}
-
-reducers[types.UPDATE_BALANCE] = function(state, action) {
-  return Object.assign({}, state, {
-    balance: action.data.balance
-  })
+  upgradeSkipped: sessionStorage.getItem('upgradeSkipped'),
+  daemonReady: false,
+  platform: window.navigator.platform,
+  obscureNsfw: !lbry.getClientSetting('showNsfw'),
+  hidePrice: false,
+  hasSignature: false,
 }
 
 reducers[types.NAVIGATE] = function(state, action) {
   return Object.assign({}, state, {
-    currentPage: action.data.path
+    currentPath: action.data.path,
   })
 }
 
