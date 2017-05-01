@@ -88,9 +88,9 @@ class FileTileStream extends React.Component {
               { !this.props.hidePrice
                 ? <FilePrice uri={this.props.uri} />
                 : null}
-              <div className="meta"><a href={'?show=' + this.props.uri}>{uri}</a></div>
+              <div className="meta"><a href="#" onClick={() => navigate(`show=${uri}`)}>{uri}</a></div>
               <h3>
-                <a href={'?show=' + uri} title={title}>
+                <a href="#" onClick={() => navigate(`show=${uri}`)} title={title}>
                   <TruncatedText lines={1}>
                     {title}
                   </TruncatedText>
@@ -114,7 +114,7 @@ class FileTileStream extends React.Component {
           ? <div className='card-overlay'>
            <p>
              This content is Not Safe For Work.
-             To view adult content, please change your <Link className="button-text" href="?settings" label="Settings" />.
+             To view adult content, please change your <Link className="button-text" href="#" onClick={() => navigate('settings')} label="Settings" />.
            </p>
          </div>
           : null}

@@ -23,6 +23,11 @@ class FileActionsRow extends React.Component {
     })
   }
 
+  onAffirmPurchase() {
+    this.props.closeModal()
+    this.props.loadVideo()
+  }
+
   render() {
     const {
       fileInfo,
@@ -85,7 +90,7 @@ class FileActionsRow extends React.Component {
             <DropDownMenuItem key={1} onClick={() => openModal('confirmRemove')} label="Remove..." />
           </DropDownMenu> : '' }
         <Modal type="confirm" isOpen={modal == 'affirmPurchase'}
-               contentLabel="Confirm Purchase" onConfirmed={affirmPurchase} onAborted={closeModal}>
+               contentLabel="Confirm Purchase" onConfirmed={this.onAffirmPurchase.bind(this)} onAborted={closeModal}>
           Are you sure you'd like to buy <strong>{title}</strong> for <strong><FilePrice uri={uri} look="plain" /></strong> credits?
         </Modal>
         <Modal isOpen={modal == 'notEnoughCredits'} contentLabel="Not enough credits"

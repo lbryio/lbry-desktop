@@ -13,6 +13,7 @@ import {
 } from 'selectors/content'
 import {
   selectCurrentUriFileInfo,
+  selectDownloadingByUri,
 } from 'selectors/file_info'
 import {
   selectCurrentUriCostInfo,
@@ -249,10 +250,17 @@ export function doWatchVideo() {
     const balance = selectBalance(state)
     const fileInfo = selectCurrentUriFileInfo(state)
     const costInfo = selectCurrentUriCostInfo(state)
+    const downloadingByUri = selectDownloadingByUri(state)
+    const alreadyDownloading = !!downloadingByUri[uri]
     const { cost } = costInfo
 
     // we already fully downloaded the file
     if (fileInfo && fileInfo.completed) {
+      return Promise.resolve()
+    }
+
+    // we are already downloading the file
+    if (alreadyDownloading) {
       return Promise.resolve()
     }
 
