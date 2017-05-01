@@ -81,6 +81,7 @@ var App = React.createClass({
         drawerOpenRaw = sessionStorage.getItem('drawerOpen');
 
     return Object.assign(this.getViewingPageAndArgs(window.location.search), {
+      viewingPage: 'discover',
       drawerOpen: drawerOpenRaw !== null ? JSON.parse(drawerOpenRaw) : true,
       errorInfo: null,
       modal: null,
@@ -249,7 +250,6 @@ var App = React.createClass({
       case 'developer':
         return ["Developer", "icon-file", <DeveloperPage />];
       case 'discover':
-      default:
         return ["Home", "icon-home", <DiscoverPage showWelcome={this.state.justRegistered} {... this.state.pageArgs !== null ? {query: this.state.pageArgs} : {} } />];
     }
   },
