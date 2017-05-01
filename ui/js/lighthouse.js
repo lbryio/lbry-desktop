@@ -1,12 +1,12 @@
 import lbry from './lbry.js';
 import jsonrpc from './jsonrpc.js';
 
-const queryTimeout = 5000;
-const maxQueryTries = 5;
+const queryTimeout = 3000;
+const maxQueryTries = 2;
 const defaultServers = [
-  'http://lighthouse4.lbry.io:50005',
-  'http://lighthouse5.lbry.io:50005',
-  'http://lighthouse6.lbry.io:50005',
+  'http://lighthouse7.lbry.io:50005',
+  'http://lighthouse8.lbry.io:50005',
+  'http://lighthouse9.lbry.io:50005',
 ];
 const path = '/';
 
@@ -20,12 +20,9 @@ function getServers() {
 }
 
 function call(method, params, callback, errorCallback) {
-  if (connectTryNum > maxQueryTries) {
-    if (connectFailedCallback) {
-      connectFailedCallback();
-    } else {
-      throw new Error(`Could not connect to Lighthouse server. Last server attempted: ${server}`);
-    }
+  if (connectTryNum >= maxQueryTries) {
+    errorCallback(new Error(`Could not connect to Lighthouse server. Last server attempted: ${server}`));
+    return;
   }
 
   /**
@@ -48,7 +45,7 @@ function call(method, params, callback, errorCallback) {
   }, () => {
     connectTryNum++;
     call(method, params, callback, errorCallback);
-  });
+  }, queryTimeout);
 }
 
 const lighthouse = new Proxy({}, {

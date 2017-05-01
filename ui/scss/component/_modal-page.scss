@@ -1,0 +1,54 @@
+@import "../global";
+
+.modal-page {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  border: 1px solid rgb(204, 204, 204);
+  background: rgb(255, 255, 255);
+  overflow: auto;
+}
+
+.modal-page--full {
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  .modal-page__content {
+    max-width: 500px;
+  }
+}
+
+/*
+.modal-page {
+  position: fixed;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  border: 1px solid rgb(204, 204, 204);
+  background: rgb(255, 255, 255);
+  overflow: auto;
+  border-radius: 4px;
+  outline: none;
+  padding: 36px;
+
+  top: 25px;
+  left: 25px;
+  right: 25px;
+  bottom: 25px;
+}
+*/
+
+.modal-page__content {
+  h1, h2 {
+    margin-bottom: $spacing-vertical / 2;
+  }
+  h3, h4 {
+    margin-bottom: $spacing-vertical / 4;
+  }
+}

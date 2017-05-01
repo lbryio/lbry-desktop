@@ -7,12 +7,16 @@ import {
   doNavigate,
   doCloseDrawer,
   doLogoClick,
-  doUpdateBalance,
 } from 'actions/app'
 import {
+  doUpdateBalance,
+} from 'actions/wallet'
+import {
   selectCurrentPage,
-  selectBalance,
 } from 'selectors/app'
+import {
+  selectBalance,
+} from 'selectors/wallet'
 
 const select = (state) => ({
   currentPage: selectCurrentPage(state),

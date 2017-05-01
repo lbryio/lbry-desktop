@@ -1,6 +1,8 @@
+import lbryio from './lbryio.js';
 import lighthouse from './lighthouse.js';
 import jsonrpc from './jsonrpc.js';
-import {getLocal, setLocal} from './utils.js';
+import lbryuri from './lbryuri.js';
+import {getLocal, getSession, setSession, setLocal} from './utils.js';
 
 const {remote} = require('electron');
 const menu = remote.require('./menu/main-menu');
@@ -9,24 +11,37 @@ const menu = remote.require('./menu/main-menu');
  * Records a publish attempt in local storage. Returns a dictionary with all the data needed to
  * needed to make a dummy claim or file info object.
  */
-function savePendingPublish(name) {
+function savePendingPublish({name, channel_name}) {
+  let uri;
+  if (channel_name) {
+    uri = lbryuri.build({name: channel_name, path: name}, false);
+  } else {
+    uri = lbryuri.build({name: name}, false);
+  }
   const pendingPublishes = getLocal('pendingPublishes') || [];
   const newPendingPublish = {
-    claim_id: 'pending_claim_' + name,
-    txid: 'pending_' + name,
+    name, channel_name,
+    claim_id: 'pending_claim_' + uri,
+    txid: 'pending_' + uri,
     nout: 0,
-    outpoint: 'pending_' + name + ':0',
-    name: name,
+    outpoint: 'pending_' + uri + ':0',
     time: Date.now(),
   };
   setLocal('pendingPublishes', [...pendingPublishes, newPendingPublish]);
   return newPendingPublish;
 }
 
-function removePendingPublish({name, outpoint}) {
-  setLocal('pendingPublishes', getPendingPublishes().filter(
-    (pub) => pub.name != name && pub.outpoint != outpoint
-  ));
+
+/**
+ * If there is a pending publish with the given name or outpoint, remove it.
+ * A channel name may also be provided along with name.
+ */
+function removePendingPublishIfNeeded({name, channel_name, outpoint}) {
+  function pubMatches(pub) {
+    return pub.outpoint === outpoint || (pub.name === name && (!channel_name || pub.channel_name === channel_name));
+  }
+
+  setLocal('pendingPublishes', getPendingPublishes().filter(pub => !pubMatches(pub)));
 }
 
 /**
@@ -35,61 +50,30 @@ function removePendingPublish({name, outpoint}) {
  */
 function getPendingPublishes() {
   const pendingPublishes = getLocal('pendingPublishes') || [];
-
-  const newPendingPublishes = [];
-  for (let pendingPublish of pendingPublishes) {
-    if (Date.now() - pendingPublish.time <= lbry.pendingPublishTimeout) {
-      newPendingPublishes.push(pendingPublish);
-    }
-  }
+  const newPendingPublishes = pendingPublishes.filter(pub => Date.now() - pub.time <= lbry.pendingPublishTimeout);
   setLocal('pendingPublishes', newPendingPublishes);
-  return newPendingPublishes
+  return newPendingPublishes;
 }
 
 /**
- * Gets a pending publish attempt by its name or (fake) outpoint. If none is found (or one is found
- * but it has timed out), returns null.
+ * Gets a pending publish attempt by its name or (fake) outpoint. A channel name can also be
+ * provided along withe the name. If no pending publish is found, returns null.
  */
-function getPendingPublish({name, outpoint}) {
+function getPendingPublish({name, channel_name, outpoint}) {
   const pendingPublishes = getPendingPublishes();
-  const pendingPublishIndex = pendingPublishes.findIndex(
-    ({name: itemName, outpoint: itemOutpoint}) => itemName == name || itemOutpoint == outpoint
-  );
-  const pendingPublish = pendingPublishes[pendingPublishIndex];
-
-  if (pendingPublishIndex == -1) {
-    return null;
-  } else if (Date.now() - pendingPublish.time > lbry.pendingPublishTimeout) {
-    // Pending publish timed out, so remove it from the stored list and don't match
-
-    const newPendingPublishes = pendingPublishes.slice();
-    newPendingPublishes.splice(pendingPublishIndex, 1);
-    setLocal('pendingPublishes', newPendingPublishes);
-    return null;
-  } else {
-    return pendingPublish;
-  }
+  return pendingPublishes.find(
+    pub => pub.outpoint === outpoint || (pub.name === name && (!channel_name || pub.channel_name === channel_name))
+  ) || null;
 }
 
-function pendingPublishToDummyClaim({name, outpoint, claim_id, txid, nout}) {
-  return {
-    name: name,
-    outpoint: outpoint,
-    claim_id: claim_id,
-    txid: txid,
-    nout: nout,
-  };
+function pendingPublishToDummyClaim({channel_name, name, outpoint, claim_id, txid, nout}) {
+  return {name, outpoint, claim_id, txid, nout, channel_name};
 }
 
 function pendingPublishToDummyFileInfo({name, outpoint, claim_id}) {
-  return {
-    name: name,
-    outpoint: outpoint,
-    claim_id: claim_id,
-    metadata: "Attempting publication",
-  };
+  return {name, outpoint, claim_id, metadata: null};
 }
-
+window.pptdfi = pendingPublishToDummyFileInfo;
 
 let lbry = {
   isConnected: false,
@@ -115,30 +99,37 @@ lbry.call = function (method, params, callback, errorCallback, connectFailedCall
   jsonrpc.call(lbry.daemonConnectionString, method, [params], callback, errorCallback, connectFailedCallback);
 }
 
-
 //core
-lbry.connect = function(callback)
-{
-  // Check every half second to see if the daemon is accepting connections
-  // Once this returns True, can call getDaemonStatus to see where
-  // we are in the startup process
-  function checkDaemonStarted(tryNum=0) {
-    lbry.isDaemonAcceptingConnections(function (runningStatus) {
-      if (runningStatus) {
-        lbry.isConnected = true;
-        callback(true);
-      } else {
-        if (tryNum <= 600) { // Move # of tries into constant or config option
-          setTimeout(function () {
-            checkDaemonStarted(tryNum + 1);
-          }, 500);
-        } else {
-          callback(false);
-        }
+lbry._connectPromise = null;
+lbry.connect = function() {
+  if (lbry._connectPromise === null) {
+
+    lbry._connectPromise = new Promise((resolve, reject) => {
+
+      // Check every half second to see if the daemon is accepting connections
+      function checkDaemonStarted(tryNum = 0) {
+        lbry.isDaemonAcceptingConnections(function (runningStatus) {
+          if (runningStatus) {
+            resolve(true);
+          }
+          else {
+            if (tryNum <= 600) { // Move # of tries into constant or config option
+              setTimeout(function () {
+                checkDaemonStarted(tryNum + 1);
+              }, tryNum < 100 ? 200 : 1000);
+            }
+            else {
+              reject(new Error("Unable to connect to LBRY"));
+            }
+          }
+        });
       }
+
+      checkDaemonStarted();
     });
   }
-  checkDaemonStarted();
+
+  return lbry._connectPromise;
 }
 
 lbry.isDaemonAcceptingConnections = function (callback) {
@@ -146,16 +137,16 @@ lbry.isDaemonAcceptingConnections = function (callback) {
   lbry.call('status', {}, () => callback(true), null, () => callback(false))
 };
 
-lbry.getDaemonStatus = function (callback) {
-  lbry.call('daemon_status', {}, callback);
-};
-
 lbry.checkFirstRun = function(callback) {
   lbry.call('is_first_run', {}, callback);
 }
 
 lbry.getNewAddress = function(callback) {
-  lbry.call('get_new_address', {}, callback);
+  lbry.call('wallet_new_address', {}, callback);
+}
+
+lbry.getUnusedAddress = function(callback) {
+  lbry.call('wallet_unused_address', {}, callback);
 }
 
 lbry.checkAddressIsMine = function(address, callback) {
@@ -177,28 +168,18 @@ lbry.setDaemonSetting = function(setting, value, callback) {
 }
 
 
-lbry.getBalance = function(callback)
-{
-  lbry.call("get_balance", {}, callback);
+lbry.getBalance = function(callback) {
+  lbry.call("wallet_balance", {}, callback);
 }
 
-lbry.sendToAddress = function(amount, address, callback, errorCallback)
-{
+lbry.sendToAddress = function(amount, address, callback, errorCallback) {
   lbry.call("send_amount_to_address", { "amount" : amount, "address": address }, callback, errorCallback);
 }
 
-lbry.resolveName = function(name, callback) {
-  lbry.call('resolve_name', { 'name': name }, callback, () => {
-    // For now, assume any error means the name was not resolved
-    callback(null);
-  });
-}
-
-lbry.getStream = function(name, callback) {
-  lbry.call('get', { 'name': name }, callback);
-};
-
 lbry.getClaimInfo = function(name, callback) {
+  if (!name) {
+    throw new Error(`Name required.`);
+  }
   lbry.call('get_claim_info', { name: name }, callback);
 }
 
@@ -206,17 +187,6 @@ lbry.getMyClaim = function(name, callback) {
   lbry.call('claim_list_mine', {}, (claims) => {
     callback(claims.find((claim) => claim.name == name) || null);
   });
-}
-
-lbry.getKeyFee = function(name, callback, errorCallback) {
-  lbry.call('stream_cost_estimate', { name: name }, callback, errorCallback);
-}
-
-lbry.getTotalCost = function(name, size, callback, errorCallback) {
-  lbry.call('stream_cost_estimate', {
-    name: name,
-    size: size,
-  }, callback, errorCallback);
 }
 
 lbry.getPeersForBlobHash = function(blobHash, callback) {
@@ -234,84 +204,90 @@ lbry.getPeersForBlobHash = function(blobHash, callback) {
   });
 }
 
-lbry.getStreamAvailability = function(name, callback, errorCallback) {
-  lbry.call('get_availability', {name: name}, callback, errorCallback);
-}
+/**
+ * Takes a LBRY URI; will first try and calculate a total cost using
+ * Lighthouse. If Lighthouse can't be reached, it just retrives the
+ * key fee.
+ *
+ * Returns an object with members:
+ *   - cost: Number; the calculated cost of the name
+ *   - includes_data: Boolean; indicates whether or not the data fee info
+ *     from Lighthouse is included.
+ */
+lbry.costPromiseCache = {}
+lbry.getCostInfo = function(uri) {
+  if (lbry.costPromiseCache[uri] === undefined) {
+    lbry.costPromiseCache[uri] = new Promise((resolve, reject) => {
+      const COST_INFO_CACHE_KEY = 'cost_info_cache';
+      let costInfoCache = getSession(COST_INFO_CACHE_KEY, {})
 
-lbry.getCostInfoForName = function(name, callback, errorCallback) {
-  /**
-   * Takes a LBRY name; will first try and calculate a total cost using
-   * Lighthouse. If Lighthouse can't be reached, it just retrives the
-   * key fee.
-   *
-   * Returns an object with members:
-   *   - cost: Number; the calculated cost of the name
-   *   - includes_data: Boolean; indicates whether or not the data fee info
-   *     from Lighthouse is included.
-   */
-  function getCostWithData(name, size, callback, errorCallback) {
-    lbry.getTotalCost(name, size, (cost) => {
-      callback({
-        cost: cost,
-        includesData: true,
-      });
-    }, errorCallback);
-  }
-
-  function getCostNoData(name, callback, errorCallback) {
-    lbry.getKeyFee(name, (cost) => {
-      callback({
-        cost: cost,
-        includesData: false,
-      });
-    }, errorCallback);
-  }
-
-  lighthouse.get_size_for_name(name).then((size) => {
-    getCostWithData(name, size, callback, errorCallback);
-  }, () => {
-    getCostNoData(name, callback, errorCallback);
-  });
-}
-
-lbry.getFeaturedDiscoverNames = function(callback) {
-  return new Promise(function(resolve, reject) {
-    var xhr = new XMLHttpRequest;
-    xhr.open('GET', 'https://api.lbry.io/discover/list', true);
-    xhr.onload = () => {
-      if (xhr.status === 200) {
-        var responseData = JSON.parse(xhr.responseText);
-        if (responseData.data) //new signature, once api.lbry.io is updated
-        {
-          resolve(responseData.data);
-        }
-        else
-        {
-          resolve(responseData);
-        }
-      } else {
-        reject(Error('Failed to fetch featured names.'));
+      function cacheAndResolve(cost, includesData) {
+        costInfoCache[uri] = {cost, includesData};
+        setSession(COST_INFO_CACHE_KEY, costInfoCache);
+        resolve({cost, includesData});
       }
-    };
-    xhr.send();
-  });
+
+      if (!uri) {
+        return reject(new Error(`URI required.`));
+      }
+
+      if (costInfoCache[uri] && costInfoCache[uri].cost) {
+        return resolve(costInfoCache[uri])
+      }
+
+      function getCost(uri, size) {
+        lbry.stream_cost_estimate({uri, ... size !== null ? {size} : {}}).then((cost) => {
+          cacheAndResolve(cost, size !== null);
+        }, reject);
+      }
+
+      function getCostGenerous(uri) {
+        // If generous is on, the calculation is simple enough that we might as well do it here in the front end
+        lbry.resolve({uri: uri}).then((resolutionInfo) => {
+          const fee = resolutionInfo.claim.value.stream.metadata.fee;
+          if (fee === undefined) {
+            cacheAndResolve(0, true);
+          } else if (fee.currency == 'LBC') {
+            cacheAndResolve(fee.amount, true);
+          } else {
+            lbryio.getExchangeRates().then(({lbc_usd}) => {
+              cacheAndResolve(fee.amount / lbc_usd, true);
+            });
+          }
+        });
+      }
+
+      const uriObj = lbryuri.parse(uri);
+      const name = uriObj.path || uriObj.name;
+
+      lbry.settings_get({allow_cached: true}).then(({is_generous_host}) => {
+        if (is_generous_host) {
+          return getCostGenerous(uri);
+        }
+
+        lighthouse.get_size_for_name(name).then((size) => {
+          if (size) {
+            getCost(name, size);
+          }
+          else {
+            getCost(name, null);
+          }
+        }, () => {
+          getCost(name, null);
+        });
+      });
+    });
+  }
+  return lbry.costPromiseCache[uri];
 }
 
 lbry.getMyClaims = function(callback) {
   lbry.call('get_name_claims', {}, callback);
 }
 
-lbry.startFile = function(name, callback) {
-  lbry.call('start_lbry_file', { name: name }, callback);
-}
-
-lbry.stopFile = function(name, callback) {
-  lbry.call('stop_lbry_file', { name: name }, callback);
-}
-
 lbry.removeFile = function(outpoint, deleteTargetFile=true, callback) {
   this._removedFiles.push(outpoint);
-  this._updateFileInfoSubscribers(outpoint);
+  // this._updateFileInfoSubscribers(outpoint);
 
   lbry.file_delete({
     outpoint: outpoint,
@@ -369,12 +345,13 @@ lbry.publish = function(params, fileListedCallback, publishedCallback, errorCall
     returnedPending = true;
 
     if (publishedCallback) {
-      savePendingPublish(params.name);
+      savePendingPublish({name: params.name, channel_name: params.channel_name});
       publishedCallback(true);
     }
 
     if (fileListedCallback) {
-      savePendingPublish(params.name);
+      const {name, channel_name} = params;
+      savePendingPublish({name: params.name, channel_name: params.channel_name});
       fileListedCallback(true);
     }
   }, 2000);
@@ -434,6 +411,10 @@ lbry.getClientSettings = function() {
 
 lbry.getClientSetting = function(setting) {
   var localStorageVal = localStorage.getItem('setting_' + setting);
+  if (setting == 'showDeveloperMenu')
+  {
+    return true;
+  }
   return (localStorageVal === null ? lbry.defaultClientSettings[setting] : JSON.parse(localStorageVal));
 }
 
@@ -526,7 +507,7 @@ lbry.stop = function(callback) {
 lbry.fileInfo = {};
 lbry._subscribeIdCount = 0;
 lbry._fileInfoSubscribeCallbacks = {};
-lbry._fileInfoSubscribeInterval = 5000;
+lbry._fileInfoSubscribeInterval = 500000;
 lbry._balanceSubscribeCallbacks = {};
 lbry._balanceSubscribeInterval = 5000;
 lbry._removedFiles = [];
@@ -538,6 +519,7 @@ lbry._updateClaimOwnershipCache = function(claimId) {
       return match || claimInfo.claim_id == claimId;
     });
   });
+
 };
 
 lbry._updateFileInfoSubscribers = function(outpoint) {
@@ -588,6 +570,7 @@ lbry.fileInfoUnsubscribe = function(outpoint, subscribeId) {
   delete lbry._fileInfoSubscribeCallbacks[outpoint][subscribeId];
 }
 
+lbry._balanceUpdateInterval = null;
 lbry._updateBalanceSubscribers = function() {
   lbry.get_balance().then(function(balance) {
     for (let callback of Object.values(lbry._balanceSubscribeCallbacks)) {
@@ -595,8 +578,8 @@ lbry._updateBalanceSubscribers = function() {
     }
   });
 
-  if (Object.keys(lbry._balanceSubscribeCallbacks).length) {
-    setTimeout(() => {
+  if (!lbry._balanceUpdateInterval && Object.keys(lbry._balanceSubscribeCallbacks).length) {
+    lbry._balanceUpdateInterval = setInterval(() => {
       lbry._updateBalanceSubscribers();
     }, lbry._balanceSubscribeInterval);
   }
@@ -611,6 +594,9 @@ lbry.balanceSubscribe = function(callback) {
 
 lbry.balanceUnsubscribe = function(subscribeId) {
   delete lbry._balanceSubscribeCallbacks[subscribeId];
+  if (lbry._balanceUpdateInterval && !Object.keys(lbry._balanceSubscribeCallbacks).length) {
+    clearInterval(lbry._balanceUpdateInterval)
+  }
 }
 
 lbry.showMenuIfNeeded = function() {
@@ -633,14 +619,14 @@ lbry.showMenuIfNeeded = function() {
  */
 lbry.file_list = function(params={}) {
   return new Promise((resolve, reject) => {
-    const {name, outpoint} = params;
+    const {name, channel_name, outpoint} = params;
 
     /**
      * If we're searching by outpoint, check first to see if there's a matching pending publish.
      * Pending publishes use their own faux outpoints that are always unique, so we don't need
      * to check if there's a real file.
      */
-    if (outpoint !== undefined) {
+    if (outpoint) {
       const pendingPublish = getPendingPublish({outpoint});
       if (pendingPublish) {
         resolve([pendingPublishToDummyFileInfo(pendingPublish)]);
@@ -649,14 +635,8 @@ lbry.file_list = function(params={}) {
     }
 
     lbry.call('file_list', params, (fileInfos) => {
-      // Remove any pending publications that are now listed in the file manager
+      removePendingPublishIfNeeded({name, channel_name, outpoint});
 
-      const pendingPublishes = getPendingPublishes();
-      for (let {name: itemName} of fileInfos) {
-        if (pendingPublishes.find(() => name == itemName)) {
-          removePendingPublish({name: name});
-        }
-      }
       const dummyFileInfos = getPendingPublishes().map(pendingPublishToDummyFileInfo);
       resolve([...fileInfos, ...dummyFileInfos]);
     }, reject, reject);
@@ -666,15 +646,59 @@ lbry.file_list = function(params={}) {
 lbry.claim_list_mine = function(params={}) {
   return new Promise((resolve, reject) => {
     lbry.call('claim_list_mine', params, (claims) => {
-      // Filter out pending publishes when the name is already in the file manager
-      const dummyClaims = getPendingPublishes().filter(
-        (pub) => !claims.find(({name}) => name == pub.name)
-      ).map(pendingPublishToDummyClaim);
+      for (let {name, channel_name, txid, nout} of claims) {
+        removePendingPublishIfNeeded({name, channel_name, outpoint: txid + ':' + nout});
+      }
 
+      const dummyClaims = getPendingPublishes().map(pendingPublishToDummyClaim);
       resolve([...claims, ...dummyClaims]);
-    }, reject, reject);
+    }, reject, reject)
   });
 }
+
+lbry.resolve = function(params={}) {
+  const claimCacheKey = 'resolve_claim_cache',
+        claimCache = getSession(claimCacheKey, {})
+  return new Promise((resolve, reject) => {
+    if (!params.uri) {
+      throw "Resolve has hacked cache on top of it that requires a URI"
+    }
+    if (params.uri && claimCache[params.uri]) {
+      resolve(claimCache[params.uri]);
+    } else {
+      lbry.call('resolve', params, function(data) {
+        claimCache[params.uri] = data;
+        setSession(claimCacheKey, claimCache)
+        resolve(data)
+      }, reject)
+    }
+  });
+}
+
+// Adds caching.
+lbry.settings_get = function(params={}) {
+  return new Promise((resolve, reject) => {
+    if (params.allow_cached) {
+      const cached = getSession('settings');
+      if (cached) {
+        return resolve(cached);
+      }
+    }
+
+    lbry.call('settings_get', {}, (settings) => {
+      setSession('settings', settings);
+      resolve(settings);
+    });
+  });
+}
+
+// lbry.get = function(params={}) {
+//   return function(params={}) {
+//     return new Promise((resolve, reject) => {
+//       jsonrpc.call(lbry.daemonConnectionString, "get", [params], resolve, reject, reject);
+//     });
+//   };
+// }
 
 lbry = new Proxy(lbry, {
   get: function(target, name) {

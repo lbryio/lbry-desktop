@@ -15,7 +15,6 @@ const Link = (props) => {
     disabled,
   } = props
 
-
   const className = (props.className || '') +
     (!props.className && !props.button ? 'button-text' : '') + // Non-button links get the same look as text buttons
     (props.button ? ' button-block button-' + props.button + ' button-set-item' : '') +
@@ -30,7 +29,7 @@ const Link = (props) => {
       <span {... 'button' in props ? {className: 'button__content'} : {}}>
         {'icon' in props ? <Icon icon={icon} fixed={true} /> : null}
         {<span className="link-label">{label}</span>}
-        {'badge' in props ? <span className="badge">{badge}</span> : null}
+        { badge ? <span className="badge">{badge}</span> : null}
       </span>
     )
   }

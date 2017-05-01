@@ -11,7 +11,7 @@ body
   line-height: $font-line-height;
 }
 
-$drawer-width: 240px;
+$drawer-width: 220px;
 
 #drawer
 {
@@ -39,12 +39,8 @@ $drawer-width: 240px;
     .badge
     {
       float: right;
-      background: $color-money;
-      display: inline-block;
-      padding: 2px;
-      color: white;
       margin-top: $spacing-vertical * 0.25 - 2;
-      border-radius: 2px;
+      background: $color-money;
     }
   }
   .drawer-item-selected
@@ -53,6 +49,19 @@ $drawer-width: 240px;
     color: $color-primary;
   }
 }
+.badge
+{
+  background: $color-money;
+  display: inline-block;
+  padding: 2px;
+  color: white;
+  border-radius: 2px;
+}
+.credit-amount--indicator
+{
+  font-weight: bold;
+  color: $color-money;
+}
 #drawer-handle
 {
   padding: $spacing-vertical / 2;
@@ -60,6 +69,11 @@ $drawer-width: 240px;
   text-align: center;
 }
 
+#window
+{
+  position: relative; /*window has it's own z-index inside of it*/
+  z-index: 1;
+}
 #window.drawer-closed
 {
   #drawer { display: none }
@@ -100,12 +114,28 @@ $drawer-width: 240px;
 .header-search
 {
   margin-left: 60px;
+  $padding-adjust: 36px;
   text-align: center;
+  .icon {
+    position: absolute;
+    top: $spacing-vertical * 1.5 / 2 + 2px; //hacked
+    margin-left: -$padding-adjust + 14px; //hacked
+  }
   input[type="search"] {
+    position: relative;
+    left: -$padding-adjust;
     background: rgba(255, 255, 255, 0.3);
     color: white;
     width: 400px;
+    height: $spacing-vertical * 1.5;
+    line-height: $spacing-vertical * 1.5;
+    padding-left: $padding-adjust + 3;
+    padding-right: 3px;
+    @include border-radius(2px);
     @include placeholder-color(#e8e8e8);
+    &:focus {
+      box-shadow: $focus-box-shadow;
+    }
   }
 }
 
@@ -158,25 +188,11 @@ nav.sub-header
   main
   {
     padding: $spacing-vertical;
-  }
-  h2
-  {
-    margin-bottom: $spacing-vertical;
-  }
-  h3, h4
-  {
-    margin-bottom: $spacing-vertical / 2;
-    margin-top: $spacing-vertical;
-    &:first-child
+    &.constrained-page
     {
-      margin-top: 0;
-    }
-  }
-  .meta
-  {
-    + h2, + h3, + h4
-    {
-      margin-top: 0;
+      max-width: $width-page-constrained;
+      margin-left: auto;
+      margin-right: auto;
     }
   }
 }
@@ -195,48 +211,6 @@ $header-icon-size: 1.5em;
   font-size: $header-icon-size;
   float: right;
   padding: 0 6px 0 18px;
-}
-
-.card {
-  margin-left: auto;
-  margin-right: auto;
-  max-width: 800px;
-  padding: $spacing-vertical;
-  background: $color-bg;
-  box-shadow: $default-box-shadow;
-  border-radius: 2px;
-}
-.card-obscured
-{
-  position: relative;
-}
-.card-obscured .card-content {
-  -webkit-filter: blur($blur-intensity);
-  -moz-filter: blur($blur-intensity);
-  -o-filter: blur($blur-intensity);
-  -ms-filter: blur($blur-intensity);
-  filter: blur($blur-intensity);
-}
-.card-overlay {
-  position: absolute;
-  left: 0px;
-  right: 0px;
-  top: 0px;
-  bottom: 0px;
-  padding: 20px;
-  background-color: rgba(128, 128, 128, 0.8);
-  color: #fff;
-  display: flex;
-  align-items: center;
-  font-weight: 600;
-}
-
-.card-series-submit
-{
-  margin-left: auto;
-  margin-right: auto;
-  max-width: 800px;
-  padding: $spacing-vertical / 2;
 }
 
 .full-screen

@@ -7,7 +7,18 @@ ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )"
 cd "$ROOT"
 BUILD_DIR="$ROOT/build"
 
+LINUX=false
+OSX=false
 if [ "$(uname)" == "Darwin" ]; then
+  OSX=true
+elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
+  LINUX=true
+else
+  echo "Platform detection failed"
+  exit 1
+fi
+
+if $OSX; then
     ICON="$BUILD_DIR/icon.icns"
 else
     ICON="$BUILD_DIR/icons/lbry48.png"
@@ -32,7 +43,6 @@ if [ "$FULL_BUILD" == "true" ]; then
   set -u
   pip install -r "$BUILD_DIR/requirements.txt"
   python "$BUILD_DIR/set_version.py"
-  python "$BUILD_DIR/set_build.py"
 fi
 
 [ -d "$ROOT/dist" ] && rm -rf "$ROOT/dist"
@@ -62,24 +72,15 @@ npm install
 #  daemon and cli  #
 ####################
 
-(
-  cd "$ROOT/daemon"
-
-  # copy requirements from lbry, but remove lbryum (we'll add it back in below)
-  grep -v lbryum "$ROOT/lbry/requirements.txt" > requirements.txt
-  # for electron, we install lbryum and lbry using submodules
-  echo "../lbryum" >> requirements.txt
-  echo "../lbry" >> requirements.txt
-  # also add pyinstaller
-  echo "PyInstaller==3.2.1" >> requirements.txt
-
-  pip install -r requirements.txt
-  pyinstaller -y daemon.onefile.spec
-  pyinstaller -y cli.onefile.spec
-  mv dist/lbrynet-daemon dist/lbrynet-cli "$ROOT/app/dist/"
-)
-python "$BUILD_DIR/zip_daemon.py"
-
+if $OSX; then
+  OSNAME="macos"
+else
+  OSNAME="linux"
+fi
+DAEMON_URL="$(cat "$BUILD_DIR/DAEMON_URL" | sed "s/OSNAME/${OSNAME}/")"
+wget --quiet "$DAEMON_URL" -O "$BUILD_DIR/daemon.zip"
+unzip "$BUILD_DIR/daemon.zip" -d "$ROOT/app/dist/"
+rm "$BUILD_DIR/daemon.zip"
 
 ###################
 #  Build the app  #
@@ -91,11 +92,17 @@ python "$BUILD_DIR/zip_daemon.py"
 )
 
 if [ "$FULL_BUILD" == "true" ]; then
-  if [ "$(uname)" == "Darwin" ]; then
+  if $OSX; then
     security unlock-keychain -p ${KEYCHAIN_PASSWORD} osx-build.keychain
   fi
 
   node_modules/.bin/build -p never
+
+  if $OSX; then
+    binary_name=$(find "$ROOT/dist" -iname "*dmg")
+    new_name=$(basename "$binary_name" | sed 's/-/_/')
+    mv "$binary_name" "$(dirname "$binary_name")/$new_name"
+  fi
 
   # electron-build has a publish feature, but I had a hard time getting
   # it to reliably work and it also seemed difficult to configure. Not proud of

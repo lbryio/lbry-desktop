@@ -1,0 +1,42 @@
+@import "../global";
+
+$padding-snack-horizontal: $spacing-vertical;
+
+.snack-bar {
+  $height-snack: $spacing-vertical * 2;
+  $padding-snack-vertical: $spacing-vertical / 4;
+
+  line-height: $height-snack - $padding-snack-vertical * 2;
+  padding: $padding-snack-vertical $padding-snack-horizontal;
+  position: fixed;
+  top: $spacing-vertical;
+  left: 0;
+  right: 0;
+  margin-left: auto;
+  margin-right: auto;
+  min-width: 300px;
+  max-width: 500px;
+  background: $color-black-transparent;
+  color: #f0f0f0;
+
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+
+  border-radius: 2px;
+
+  transition: all $transition-standard;
+
+  z-index: 10000; /*hack to get it over react modal */
+}
+
+.snack-bar__action {
+  display: inline-block;
+  text-transform: uppercase;
+  color: $color-primary-light;
+  margin: 0px 0px 0px $padding-snack-horizontal;
+  min-width: min-content;
+  &:hover {
+    text-decoration: underline;
+  }
+}

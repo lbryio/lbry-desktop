@@ -6,9 +6,13 @@ dist
 /app/node_modules
 /build/venv
 /lbry-app-venv
+/lbry-venv
 /daemon/build
 /daemon/venv
+/daemon/requirements.txt
 /.idea
 
 *.pyc
 .#*
+
+build/daemon.zip

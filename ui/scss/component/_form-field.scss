@@ -1,0 +1,158 @@
+@import "../global";
+
+$width-input-border: 2px;
+$width-input-text: 330px;
+
+.form-row-submit
+{
+  margin-top: $spacing-vertical;
+}
+.form-row-submit--with-footer
+{
+  margin-bottom: $spacing-vertical;
+}
+
+.form-row__label-row {
+  margin-top: $spacing-vertical * 5/6;
+  margin-bottom: $spacing-vertical * 1/6;
+  line-height: 1;
+  font-size: 0.9 * $font-size;
+}
+.form-row__label-row--prefix {
+  float: left;
+  margin-right: 5px;
+}
+
+input[type="text"].input-copyable {
+  border: 1px solid $color-form-border;
+  line-height: 1;
+  padding-top: $spacing-vertical * 1/3;
+  padding-bottom: $spacing-vertical * 1/3;
+  width: $width-input-text;
+  padding-left: 5px;
+  padding-right: 5px;
+  width: 100%;
+  &:focus { border-color: black; }
+}
+
+.form-field {
+  display: inline-block;
+
+  input[type="checkbox"],
+  input[type="radio"] {
+    cursor: pointer;
+  }
+
+  select {
+    transition: outline $transition-standard;
+    cursor: pointer;
+    box-sizing: border-box;
+    padding-left: 5px;
+    padding-right: 5px;
+    height: $spacing-vertical;
+    &:focus {
+      outline: $width-input-border solid $color-primary;
+    }
+  }
+
+  textarea,
+  input[type="text"],
+  input[type="password"],
+  input[type="email"],
+  input[type="number"],
+  input[type="search"],
+  input[type="date"] {
+    @include placeholder {
+      color: lighten($color-text-dark, 60%);
+    }
+    transition: all $transition-standard;
+    cursor: pointer;
+    padding-left: 1px;
+    padding-right: 1px;
+    box-sizing: border-box;
+    -webkit-appearance: none;
+    &[readonly] {
+      background-color: #bbb;
+    }
+  }
+
+  input[type="text"],
+  input[type="password"],
+  input[type="email"],
+  input[type="number"],
+  input[type="search"],
+  input[type="date"] {
+    border-bottom: $width-input-border solid $color-form-border;
+    line-height: 1;
+    padding-top: $spacing-vertical * 1/3;
+    padding-bottom: $spacing-vertical * 1/3;
+    &.form-field__input--error {
+      border-color: $color-error;
+    }
+    &.form-field__input--inline {
+      padding-top: 0;
+      padding-bottom: 0;
+      border-bottom-width: 1px;
+      margin-left: 8px;
+      margin-right: 8px;
+    }
+  }
+
+  textarea:focus,
+  input[type="text"]:focus,
+  input[type="password"]:focus,
+  input[type="email"]:focus,
+  input[type="number"]:focus,
+  input[type="search"]:focus,
+  input[type="date"]:focus {
+    border-color: $color-primary;
+  }
+
+  textarea {
+    border: $width-input-border solid $color-form-border;
+  }
+}
+
+.form-field__label {
+  &[for] {  cursor: pointer; }
+  > input[type="checkbox"], input[type="radio"] {
+    margin-right: 6px;
+  }
+}
+
+.form-field__label--error {
+  color: $color-error;
+}
+
+.form-field__input-text {
+  width: $width-input-text;
+}
+
+.form-field__prefix {
+  margin-right: 4px;
+}
+.form-field__postfix {
+  margin-left: 4px;
+}
+
+.form-field__input-number {
+  width: 70px;
+  text-align: right;
+}
+
+.form-field__input-textarea {
+  width: $width-input-text;
+}
+
+.form-field__error, .form-field__helper {
+  margin-top: $spacing-vertical * 1/3;
+  font-size: 0.8em;
+  transition: opacity $transition-standard;
+}
+
+.form-field__error {
+  color: $color-error;
+}
+.form-field__helper {
+  color: $color-help;
+}

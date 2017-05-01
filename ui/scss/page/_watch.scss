@@ -1,6 +1,3 @@
-.video {
-  background: #000;
-}
 
 .video__overlay {
   position: absolute;
@@ -23,7 +20,7 @@
 }
 
 .video__back-label {
-  opacity: 0;
+  opacity: 0.5;
   transition: opacity 100ms ease-in;
 }
 

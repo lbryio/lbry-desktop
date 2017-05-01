@@ -1,11 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import lbry from './lbry.js';
+import lbryio from './lbryio.js';
 import lighthouse from './lighthouse.js';
 import App from './component/app/index.js';
 import SplashScreen from './component/splash.js';
+import SnackBar from './component/snack-bar.js';
+import {AuthOverlay} from './component/auth.js';
 import { Provider } from 'react-redux';
 import store from 'store.js';
+import { runTriggers } from 'triggers'
+import {doDaemonReady} from 'actions/app'
 
 const {remote} = require('electron');
 const contextMenu = remote.require('./menu/context-menu');
@@ -20,42 +25,27 @@ window.addEventListener('contextmenu', (event) => {
 });
 
 const initialState = app.store.getState();
+app.store.subscribe(runTriggers);
+runTriggers();
 
 var init = function() {
   window.lbry = lbry;
   window.lighthouse = lighthouse;
+  let canvas = document.getElementById('canvas');
 
-  var canvas = document.getElementById('canvas');
+  lbry.connect().then(function(isConnected) {
+    lbryio.authenticate() //start auth process as soon as soon as we can get an install ID
+  })
+
+  function onDaemonReady() {
+    app.store.dispatch(doDaemonReady())
+    ReactDOM.render(<Provider store={store}><div>{ lbryio.enabled ? <AuthOverlay/> : '' }<App /><SnackBar /></div></Provider>, canvas)
+  }
+
   if (window.sessionStorage.getItem('loaded') == 'y') {
-    ReactDOM.render(
-      <Provider store={store}>
-        <App/>
-      </Provider>, canvas
-    )
+    onDaemonReady();
   } else {
-    ReactDOM.render(
-      <Provider store={store}>
-        <SplashScreen message="Connecting" onLoadDone={function() {
-          // Redirect to the claim code page if needed. Find somewhere better for this logic
-          if (!localStorage.getItem('claimCodeDone') && window.location.search == '' || window.location.search == '?' || window.location.search == 'discover') {
-                  lbry.getBalance((balance) => {
-                    if (balance <= 0) {
-          window.location.href = '?claim';
-                    } else {
-          ReactDOM.render(<App/>, canvas);
-                    }
-                  });
-          } else {
-            ReactDOM.render(
-              <Provider store={store}>
-                <App/>
-              </Provider>, canvas
-            );
-          }
-        }}/>
-      </Provider>,
-      canvas
-    );
+    ReactDOM.render(<SplashScreen message="Connecting" onLoadDone={onDaemonReady} />, canvas);
   }
 };
 

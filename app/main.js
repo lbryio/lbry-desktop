@@ -20,7 +20,7 @@ let daemonSubprocess;
 
 // This is set to true right before we try to shut the daemon subprocess --
 // if it dies when we didn't ask it to shut down, we want to alert the user.
-let daemonSubprocessKillRequested = false;
+let daemonStopRequested = false;
 
 // When a quit is attempted, we cancel the quit, do some preparations, then
 // this is set to true and app.quit() is called again to quit for real.
@@ -65,9 +65,9 @@ function getPidsForProcessName(name) {
 }
 
 function createWindow () {
-  win = new BrowserWindow({backgroundColor: '#155B4A'}) //$color-primary
+  win = new BrowserWindow({backgroundColor: '#155B4A', minWidth: 800, minHeight: 600 }) //$color-primary
   win.maximize()
-  //win.webContents.openDevTools()
+  // win.webContents.openDevTools();
   win.loadURL(`file://${__dirname}/dist/index.html`)
   win.on('closed', () => {
     win = null
@@ -77,8 +77,8 @@ function createWindow () {
 function handleDaemonSubprocessExited() {
   console.log('The daemon has exited.');
   daemonSubprocess = null;
-  if (!daemonSubprocessKillRequested) {
-    // We didn't stop the daemon subprocess on purpose, so display a
+  if (!daemonStopRequested) {
+    // We didn't request to stop the daemon, so display a
     // warning and schedule a quit.
     //
     // TODO: maybe it would be better to restart the daemon?
@@ -110,7 +110,6 @@ function launchDaemon() {
   daemonSubprocess.stdout.on('data', (buf) => {console.log(String(buf).trim());});
   daemonSubprocess.stderr.on('data', (buf) => {console.log(String(buf).trim());});
   daemonSubprocess.on('exit', handleDaemonSubprocessExited);
-  console.log('lbrynet daemon has launched')
 }
 
 /*
@@ -212,31 +211,27 @@ app.on('activate', () => {
 // When a quit is attempted, this is called. It attempts to shutdown the daemon,
 // then calls quitNow() to quit for real.
 function shutdownDaemonAndQuit(evenIfNotStartedByApp = false) {
-  if (daemonSubprocess) {
-    console.log('Killing lbrynet-daemon process');
-    daemonSubprocessKillRequested = true;
-    kill(daemonSubprocess.pid, undefined, (err) => {
-      console.log('Killed lbrynet-daemon process');
-      quitNow();
-    });
-  } else if (evenIfNotStartedByApp) {
-    console.log('Stopping lbrynet-daemon, even though app did not start it');
+  function doShutdown() {
+    console.log('Asking daemon to shut down down');
+    daemonStopRequested = true;
     client.request('daemon_stop', [], (err, res) => {
       if (err) {
-        // We could get an error because the daemon is already stopped (good)
-        // or because it's running but not responding properly (bad).
-        // So try to force kill any daemons that are still running.
-
-        console.log(`received error when stopping lbrynet-daemon. Error message: ${err.message}`);
-        forceKillAllDaemonsAndQuit();
+        console.log(`received error when stopping lbrynet-daemon. Error message: ${err.message}\n`);
+        console.log('You will need to manually kill the daemon.');
       } else {
         console.log('Successfully stopped daemon via RPC call.')
         quitNow();
       }
     });
-  } else {
+  }
+
+  if (daemonSubprocess) {
+    doShutdown();
+  } else if (!evenIfNotStartedByApp) {
     console.log('Not killing lbrynet-daemon because app did not start it');
     quitNow();
+  } else {
+    doShutdown();
   }
 
   // Is it safe to start the installer before the daemon finishes running?

@@ -4,30 +4,61 @@ export const _selectState = state => state.app || {}
 
 export const selectIsLoaded = createSelector(
   _selectState,
-  (state) => {
-    return state.isLoaded
-  }
+  (state) => state.isLoaded
+)
+
+export const selectCurrentPath = createSelector(
+  _selectState,
+  (state) => state.currentPath
 )
 
 export const selectCurrentPage = createSelector(
-  _selectState,
-  (state) => {
-    return state.currentPage
+  selectCurrentPath,
+  (path) => path.split('=')[0]
+)
+
+export const selectCurrentUri = createSelector(
+  selectCurrentPath,
+  (path) => {
+    if (path.match(/=/)) {
+      return path.split('=')[1]
+    } else {
+      return undefined
+    }
   }
 )
 
-export const selectBalance = createSelector(
-  _selectState,
-  (state) => {
-    return state.balance || 0
+export const selectPageTitle = createSelector(
+  selectCurrentPage,
+  selectCurrentUri,
+  (page, uri) => {
+    switch(page)
+    {
+      case 'discover':
+        return 'Discover'
+      case 'wallet':
+      case 'send':
+      case 'receive':
+      case 'claim':
+      case 'referral':
+        return 'Wallet'
+      case 'downloaded':
+        return 'My Files'
+      case 'published':
+        return 'My Files'
+      case 'publish':
+        return 'Publish'
+      case 'help':
+        return 'Help'
+      default:
+        return 'LBRY';
+    }
   }
 )
 
 export const selectPlatform = createSelector(
   _selectState,
-  (state) => {
-    return state.platform
-  }
+  (state) => state.platform
 )
 
 export const selectUpdateUrl = createSelector(
@@ -101,17 +132,17 @@ export const selectHeaderLinks = createSelector(
       case 'claim':
       case 'referral':
         return {
-          '?wallet' : 'Overview',
-          '?send' : 'Send',
-          '?receive' : 'Receive',
-          '?claim' : 'Claim Beta Code',
-          '?referral' : 'Check Referral Credit',
+          'wallet' : 'Overview',
+          'send' : 'Send',
+          'receive' : 'Receive',
+          'claim' : 'Claim Beta Code',
+          'referral' : 'Check Referral Credit',
         };
       case 'downloaded':
       case 'published':
         return {
-          '?downloaded': 'Downloaded',
-          '?published': 'Published',
+          'downloaded': 'Downloaded',
+          'published': 'Published',
         };
       default:
         return null;
@@ -142,4 +173,24 @@ export const selectSearchTerm = createSelector(
 export const selectError = createSelector(
   _selectState,
   (state) => state.error
+)
+
+export const selectDaemonReady = createSelector(
+  _selectState,
+  (state) => state.daemonReady
+)
+
+export const selectObscureNsfw = createSelector(
+  _selectState,
+  (state) => !!state.obscureNsfw
+)
+
+export const selectHidePrice = createSelector(
+  _selectState,
+  (state) => !!state.hidePrice
+)
+
+export const selectHasSignature = createSelector(
+  _selectState,
+  (state) => !!state.hasSignature
 )

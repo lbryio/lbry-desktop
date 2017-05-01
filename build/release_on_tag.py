@@ -1,6 +1,5 @@
 import glob
 import json
-import logging
 import os
 import platform
 import subprocess
@@ -10,15 +9,13 @@ import github
 import requests
 import uritemplate
 
-from lbrynet.core import log_support
-
 
 def main():
     try:
         current_tag = subprocess.check_output(
             ['git', 'describe', '--exact-match', 'HEAD']).strip()
     except subprocess.CalledProcessError:
-        log.info('Stopping as we are not currently on a tag')
+        print 'Stopping as we are not currently on a tag'
         return
 
     if 'GH_TOKEN' not in os.environ:
@@ -27,20 +24,15 @@ def main():
 
     gh_token = os.environ['GH_TOKEN']
     auth = github.Github(gh_token)
-    app_repo = auth.get_repo('lbryio/lbry-app')
-    daemon_repo = auth.get_repo('lbryio/lbry')
+    repo = auth.get_repo('lbryio/lbry-app')
 
-    if not check_repo_has_tag(app_repo, current_tag):
-        log.info('Tag %s is not in repo %s', current_tag, app_repo)
+    if not check_repo_has_tag(repo, current_tag):
+        print 'Tag {} is not in repo {}'.format(current_tag, repo)
         # TODO: maybe this should be an error
         return
 
-    daemon = get_daemon_artifact()
-    release = get_release(daemon_repo, current_tag)
-    upload_asset(release, daemon, gh_token)
-
     app = get_app_artifact()
-    release = get_release(app_repo, current_tag)
+    release = get_release(repo, current_tag)
     upload_asset(release, app, gh_token)
 
 
@@ -60,19 +52,16 @@ def get_release(current_repo, current_tag):
 
 
 def get_app_artifact():
+    this_dir = os.path.dirname(os.path.realpath(__file__))
     system = platform.system()
     if system == 'Darwin':
-        return glob.glob('dist/mac/LBRY*.dmg')[0]
+        return glob.glob(this_dir + '/../dist/mac/LBRY*.dmg')[0]
     elif system == 'Linux':
-        return glob.glob('dist/LBRY*.deb')[0]
+        return glob.glob(this_dir + '/../dist/LBRY*.deb')[0]
     elif system == 'Windows':
-        return glob.glob('dist/LBRY*.exe')[0]
+        return glob.glob(this_dir + '/../dist/LBRY*.exe')[0]
     else:
         raise Exception("I don't know about any artifact on {}".format(system))
-
-
-def get_daemon_artifact():
-    return glob.glob('dist/*.zip')[0]
 
 
 def upload_asset(release, asset_to_upload, token):
@@ -84,30 +73,26 @@ def upload_asset(release, asset_to_upload, token):
         try:
             return _upload_asset(release, asset_to_upload, token, _curl_uploader)
         except Exception:
-            log.exception('Failed to upload')
+            print 'Failed uploading on attempt {}'.format(count + 1)
             count += 1
 
 
 def _upload_asset(release, asset_to_upload, token, uploader):
     basename = os.path.basename(asset_to_upload)
-    upload_uri = uritemplate.expand(
-        release.upload_url,
-        {'name': basename}
-    )
+    upload_uri = uritemplate.expand(release.upload_url, {'name': basename})
     output = uploader(upload_uri, asset_to_upload, token)
     if 'errors' in output:
         raise Exception(output)
     else:
-        log.info('Successfully uploaded to %s', output['browser_download_url'])
+        print 'Successfully uploaded to {}'.format(output['browser_download_url'])
 
 
 # requests doesn't work on windows / linux / osx.
 def _requests_uploader(upload_uri, asset_to_upload, token):
-    log.info('Using requests to upload %s to %s', asset_to_upload, upload_uri)
+    print 'Using requests to upload {} to {}'.format(asset_to_upload, upload_uri)
     with open(asset_to_upload, 'rb') as f:
         response = requests.post(upload_uri, data=f, auth=('', token))
-    output = response.json()
-    return output
+    return response.json()
 
 
 # curl -H "Content-Type: application/json" -X POST -d '{"username":"xyz","password":"xyz"}' http://localhost:3000/api/login
@@ -118,7 +103,7 @@ def _curl_uploader(upload_uri, asset_to_upload, token):
     # half a day trying to debug before deciding to switch to curl.
     #
     # TODO: actually set the content type
-    log.info('Using curl to upload %s to %s', asset_to_upload, upload_uri)
+    print 'Using curl to upload {} to {}'.format(asset_to_upload, upload_uri)
     cmd = [
         'curl',
         '-sS',
@@ -141,21 +126,16 @@ def _curl_uploader(upload_uri, asset_to_upload, token):
         print stderr
     print 'stdout from curl:'
     print stdout
-    output = json.loads(stdout)
-    return output
+    return json.loads(stdout)
 
 
 def is_asset_already_uploaded(release, basename):
     for asset in release.raw_data['assets']:
         if asset['name'] == basename:
-            log.info('File %s has already been uploaded to %s', basename, release.tag_name)
+            print 'File {} has already been uploaded to {}'.format(basename, release.tag_name)
             return True
     return False
 
 
 if __name__ == '__main__':
-    log = logging.getLogger('release-on-tag')
-    log_support.configure_console(level='INFO')
     sys.exit(main())
-else:
-    log = logging.getLogger(__name__)
