@@ -2,6 +2,7 @@ import * as types from 'constants/action_types'
 import lbry from 'lbry'
 import lbryio from 'lbryio'
 import lbryuri from 'lbryuri'
+import rewards from 'rewards'
 import {
   selectCurrentUri,
 } from 'selectors/app'
@@ -164,6 +165,9 @@ export function doUpdateLoadStatus(uri, outpoint) {
         // download hasn't started yet
         setTimeout(() => { dispatch(doUpdateLoadStatus(uri, outpoint)) }, 250)
       } else if (fileInfo.completed) {
+        // TODO this isn't going to get called if they reload the client before
+        // the download finished
+        rewards.claimNextPurchaseReward()
         dispatch({
           type: types.DOWNLOADING_COMPLETED,
           data: {
