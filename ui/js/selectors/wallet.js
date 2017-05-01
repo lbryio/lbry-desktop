@@ -34,7 +34,7 @@ export const selectTransactionItems = createSelector(
         amount: parseFloat(tx.value)
       })
     })
-    return transactionItems
+    return transactionItems.reverse()
   }
 )
 
