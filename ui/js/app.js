@@ -15,6 +15,7 @@ import PublishPage from './page/publish.js';
 import SearchPage from './page/search.js';
 import DiscoverPage from './page/discover.js';
 import DeveloperPage from './page/developer.js';
+import lbryuri from './lbryuri.js';
 import {FileListDownloaded, FileListPublished} from './page/file-list.js';
 import Header from './component/header.js';
 import {Modal, ExpandableModal} from './component/modal.js';
@@ -250,7 +251,7 @@ var App = React.createClass({
       case 'receive':
         return [this.state.viewingPage.charAt(0).toUpperCase() + this.state.viewingPage.slice(1), "icon-bank", <WalletPage viewingPage={this.state.viewingPage} />]
       case 'show':
-        return [this.state.pageArgs, "icon-file", <ShowPage uri={this.state.pageArgs} />];
+        return [lbryuri.normalize(this.state.pageArgs), "icon-file", <ShowPage uri={this.state.pageArgs} />];
       case 'publish':
         return ["Publish", "icon-upload", <PublishPage />];
       case 'developer':

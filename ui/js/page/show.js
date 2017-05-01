@@ -266,7 +266,6 @@ let ShowPage = React.createClass({
       delete channelUriObj.path;
       delete channelUriObj.contentName;
       const channelUri = this.state.signatureIsValid && this.state.hasSignature && channelUriObj.isChannel ? lbryuri.build(channelUriObj, false) : null;
-      console.log(this.state);
       innerContent = <FilePage
         uri={this._uri}
         channelUri={channelUri}

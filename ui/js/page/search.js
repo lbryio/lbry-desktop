@@ -105,7 +105,12 @@ let SearchPage = React.createClass({
   },
 
   isValidUri: function(query) {
-    return true;
+    try {
+      lbryuri.parse(query);
+      return true;
+    } catch (e) {
+      return false;
+    }
   },
 
   componentWillMount: function() {
@@ -148,7 +153,7 @@ let SearchPage = React.createClass({
         <section className="section-spaced">
           <h3 className="card-row__header">
             Search Results for {this.props.query}
-            <ToolTip label="?" body="These search results are provided by LBRY, Inc." className="tooltip--header"/>
+            <ToolTip label="?" body="These search results are provided by LBRY Inc." className="tooltip--header"/>
           </h3>
           <SearchResults query={this.props.query} />
         </section>

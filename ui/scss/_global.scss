@@ -161,3 +161,34 @@ $blur-intensity: 8px;
   height:1px;
   overflow:hidden;
 }
+
+@mixin text-link($color: $color-primary, $hover-opacity: 0.70) {
+  .icon
+  {
+    &:first-child {
+      padding-right: 5px;
+    }
+    &:last-child:not(:only-child) {
+      padding-left: 5px;
+    }
+  }
+
+  &:not(.no-underline) {
+    text-decoration: underline;
+    .icon {
+      text-decoration: none;
+    }
+  }
+  &:hover
+  {
+    opacity: $hover-opacity;
+    transition: opacity $transition-standard;
+    text-decoration: underline;
+    .icon {
+      text-decoration: none;
+    }
+  }
+
+  color: $color;
+  cursor: pointer;
+}
