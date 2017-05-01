@@ -109,6 +109,7 @@ var App = React.createClass({
             let appUrl = target.getAttribute('href');
             this._storeHistoryOfNextRender = true;
             this.setState(Object.assign({}, this.getViewingPageAndArgs(appUrl), { appUrl: appUrl }));
+            document.body.scrollTop = 0;
           }
         }
         target = target.parentNode;
