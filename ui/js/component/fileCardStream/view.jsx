@@ -56,9 +56,9 @@ class FileCardStream extends React.Component {
       return null;
     }
 
-    if (!this.props.metadata) {
-      return null
-    }
+    // if (!this.props.metadata) {
+    //   return null
+    // }
 
     const uri = lbryuri.normalize(this.props.uri);
     const metadata = this.props.metadata;
@@ -78,7 +78,9 @@ class FileCardStream extends React.Component {
                               hasSignature={this.props.hasSignature} signatureIsValid={this.props.signatureIsValid} />
               </div>
             </div>
+            {metadata &&
             <div className="card__media" style={{ backgroundImage: "url('" + metadata.thumbnail + "')" }}></div>
+            }
             <div className="card__content card__subtext card__subtext--two-lines">
                 <TruncatedText lines={2}>
                   {isConfirmed

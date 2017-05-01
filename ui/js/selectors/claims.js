@@ -63,3 +63,27 @@ export const makeSelectSourceForUri = () => {
     (source) => source
   )
 }
+
+export const selectMyClaims = createSelector(
+  _selectState,
+  (state) => state.mine || {}
+)
+
+export const selectMyClaimsById = createSelector(
+  selectMyClaims,
+  (mine) => mine.byId || {}
+)
+
+export const selectMyClaimsOutpoints = createSelector(
+  selectMyClaimsById,
+  (byId) => {
+    const outpoints = []
+    Object.keys(byId).forEach(key => {
+      const claim = byId[key]
+      const outpoint = `${claim.txid}:${claim.nout}`
+      outpoints.push(outpoint)
+    })
+
+    return outpoints
+  }
+)

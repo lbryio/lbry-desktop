@@ -9,12 +9,53 @@ import lbryio from 'lbryio.js';
 import {BusyMessage, Thumbnail} from 'component/common.js';
 import FileList from 'component/fileList'
 
-const FileListPublished = (props) => {
-  return (
-    <div>published content</div>
-  )
-}
+class FileListPublished extends React.Component {
+  componentDidUpdate() {
+    if(this.props.publishedContent.length > 0) this._requestPublishReward()
+  }
 
+  _requestPublishReward() {
+    lbryio.call('reward', 'list', {}).then(function(userRewards) {
+      //already rewarded
+      if (userRewards.filter(function (reward) {
+          return reward.RewardType == rewards.TYPE_FIRST_PUBLISH && reward.TransactionID
+        }).length) {
+        return
+      }
+      else {
+        rewards.claimReward(rewards.TYPE_FIRST_PUBLISH).catch(() => {})
+      }
+    })
+  }
+
+  render() {
+    const {
+      publishedContent,
+      fetching,
+      navigate,
+    } = this.props
+
+    if (fetching) {
+      return (
+        <main className="page">
+          <BusyMessage message="Loading" />
+        </main>
+      );
+    } else if (!publishedContent.length) {
+      return (
+        <main className="page">
+          <span>You haven't downloaded anything from LBRY yet. Go <Link href="#" onClick={() => navigate('discover')} label="search for your first download" />!</span>
+        </main>
+      );
+    } else {
+      return (
+        <main className="page">
+          <FileList fileInfos={publishedContent} hidePrices={true} />
+        </main>
+      );
+    }
+  }
+}
 // const FileListPublished = React.createClass({
 //   _isMounted: false,
 
