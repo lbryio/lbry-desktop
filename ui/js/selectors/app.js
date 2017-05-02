@@ -39,8 +39,7 @@ export const selectPageTitle = createSelector(
       case 'wallet':
       case 'send':
       case 'receive':
-      case 'claim':
-      case 'referral':
+      case 'rewards':
         return 'Wallet'
       case 'downloaded':
         return 'My Files'
@@ -129,14 +128,12 @@ export const selectHeaderLinks = createSelector(
       case 'wallet':
       case 'send':
       case 'receive':
-      case 'claim':
-      case 'referral':
+      case 'rewards':
         return {
           'wallet' : 'Overview',
           'send' : 'Send',
           'receive' : 'Receive',
-          'claim' : 'Claim Beta Code',
-          'referral' : 'Check Referral Credit',
+          'rewards': 'Rewards',
         };
       case 'downloaded':
       case 'published':

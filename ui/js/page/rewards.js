@@ -1,11 +1,11 @@
 import React from 'react';
-import lbry from '../lbry.js';
-import lbryio from '../lbryio.js';
-import {CreditAmount, Icon} from '../component/common.js';
-import rewards from '../rewards.js';
-import Modal from '../component/modal.js';
-import {WalletNav} from './wallet.js';
-import {RewardLink} from '../component/link';
+import lbry from 'lbry';
+import lbryio from 'lbryio';
+import {CreditAmount, Icon} from 'component/common.js';
+import rewards from 'rewards';
+import Modal from 'component/modal';
+import {WalletNav} from 'component/wallet-nav ewar';
+import {RewardLink} from 'component/reward-link';
 
 const RewardTile = React.createClass({
   propTypes: {
