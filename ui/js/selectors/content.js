@@ -96,3 +96,19 @@ export const shouldFetchPublishedContent = createSelector(
     return true
   }
 )
+
+export const selectResolvingUris = createSelector(
+  _selectState,
+  (state) => state.resolvingUris || []
+)
+
+const selectResolvingUri = (state, props) => {
+  return selectResolvingUris(state).indexOf(props.uri) != -1
+}
+
+export const makeSelectResolvingUri = () => {
+  return createSelector(
+    selectResolvingUri,
+    (resolving) => resolving
+  )
+}
