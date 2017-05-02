@@ -17,6 +17,9 @@ import {
 import {
   makeSelectFileInfoForUri,
 } from 'selectors/file_info'
+import {
+  makeSelectResolvingUri,
+} from 'selectors/content'
 import FileCardStream from './view'
 
 const makeSelect = () => {
@@ -24,6 +27,8 @@ const makeSelect = () => {
   const selectFileInfoForUri = makeSelectFileInfoForUri()
   const selectMetadataForUri = makeSelectMetadataForUri()
   const selectSourceForUri = makeSelectSourceForUri()
+  const selectResolvingUri = makeSelectResolvingUri()
+
   const select = (state, props) => ({
     claim: selectClaimForUri(state, props),
     fileInfo: selectFileInfoForUri(state, props),
@@ -32,6 +37,7 @@ const makeSelect = () => {
     hasSignature: false,
     metadata: selectMetadataForUri(state, props),
     source: selectSourceForUri(state, props),
+    isResolvingUri: selectResolvingUri(state, props),
   })
 
   return select

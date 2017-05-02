@@ -84,7 +84,7 @@ const FeaturedCategory = (props) => {
         {category &&
           <ToolTip label="What's this?" body={communityCategoryToolTipText} className="tooltip--header" />}
       </h3>
-      {names && names.map(name => <FileTile key={name} displayStyle="card" uri={name} />)}
+      {names && names.map(name => <FileTile key={name} displayStyle="card" uri={lbryuri.normalize(name)} />)}
     </div>
   )
 }
