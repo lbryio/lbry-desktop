@@ -240,7 +240,11 @@ export function doLoadVideo() {
     })
 
     lbry.get({ uri }).then(streamInfo => {
-      if (streamInfo === null || typeof streamInfo !== 'object') {
+      const timeout = streamInfo === null ||
+        typeof streamInfo !== 'object' ||
+        streamInfo.error == 'Timeout'
+
+      if(timeout) {
         dispatch({
           type: types.LOADING_VIDEO_FAILED,
           data: { uri }
