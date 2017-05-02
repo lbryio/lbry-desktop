@@ -268,8 +268,15 @@ export function doWatchVideo() {
     const alreadyDownloading = !!downloadingByUri[uri]
     const { cost } = costInfo
 
+    // BUG if you delete a file from the file system system you're going to be
+    // asked to pay for it again. We need to check if the file is in the blobs
+    // here and then dispatch doLoadVideo() which will reconstruct it again from
+    // the blobs. Or perhaps there's another way to see if a file was already
+    // purchased?
+
     // we already fully downloaded the file
     if (fileInfo && fileInfo.completed) {
+      dispatch(doLoadVideo())
       return Promise.resolve()
     }
 
