@@ -5,7 +5,7 @@ import ReportPage from 'page/report.js';
 import StartPage from 'page/start.js';
 import WalletPage from 'page/wallet';
 import ShowPage from 'page/showPage';
-import PublishPage from 'page/publish.js';
+import PublishPage from 'page/publish';
 import DiscoverPage from 'page/discover';
 import SplashScreen from 'component/splash.js';
 import DeveloperPage from 'page/developer.js';
