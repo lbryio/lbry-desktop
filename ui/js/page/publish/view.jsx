@@ -1,9 +1,9 @@
 import React from 'react';
-import lbry from '../lbry.js';
-import FormField from '../component/form.js';
+import lbry from 'lbry';
+import {FormField, FormRow} from 'component/form.js';
 import Link from 'component/link';
-import rewards from '../rewards.js';
-import Modal from '../component/modal.js';
+import rewards from 'rewards';
+import Modal from 'component/modal';
 
 var PublishPage = React.createClass({
   _requiredFields: ['meta_title', 'name', 'bid', 'tos_agree'],
@@ -147,7 +147,7 @@ var PublishPage = React.createClass({
     });
   },
   handlePublishStartedConfirmed: function() {
-    window.location.href = "?published";
+    this.props.navigate('published')
   },
   handlePublishError: function(error) {
     this.setState({
