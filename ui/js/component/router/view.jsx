@@ -31,7 +31,6 @@ const Router = (props) => {
     'downloaded': <FileListDownloaded {...props} />,
     'published': <FileListPublished {...props} />,
     'start': <StartPage {...props} />,
-    'claim': <ClaimCodePage {...props} />,
     'wallet': <WalletPage {...props} />,
     'send': <WalletPage {...props} />,
     'receive': <WalletPage {...props} />,

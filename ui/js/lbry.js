@@ -174,7 +174,7 @@ lbry.getDaemonSettings = function(callback) {
 lbry.setDaemonSettings = function(settings, callback) {
   lbry.call('set_settings', settings, callback);
 }
-
+  
 lbry.setDaemonSetting = function(setting, value, callback) {
   var setSettingsArgs = {};
   setSettingsArgs[setting] = value;

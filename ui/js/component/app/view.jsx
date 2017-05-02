@@ -45,9 +45,8 @@ const App = React.createClass({
     const searchQuery = (currentPage == 'discover' && searchTerm ? searchTerm : '')
 
     return <div id="window" className={ drawerOpen ? 'drawer-open' : 'drawer-closed' }>
-      <Drawer onCloseDrawer={closeDrawer} viewingPage={currentPage} />
-      <div id="main-content" className={ headerLinks ? 'with-sub-nav' : 'no-sub-nav' }>
-        <Header onOpenDrawer={openDrawer} initialQuery={searchQuery} onSearch={search} links={headerLinks} />
+      <Header onOpenDrawer={openDrawer} initialQuery={searchQuery} onSearch={search} links={headerLinks} />
+      <div id="main-content">
         <Router />
       </div>
       {modal == 'upgrade' && <UpgradeModal />}
