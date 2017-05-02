@@ -11,7 +11,7 @@ import {
 import FilePrice from 'component/filePrice'
 import FileActions from 'component/fileActions';
 import Link from 'component/link';
-import UriIndicator from 'component/channel-indicator.js';
+import UriIndicator from 'component/uriIndicator';
 
 const FormatItem = (props) => {
   const {
@@ -105,7 +105,7 @@ const ShowPage = (props) => {
             { uriLookupComplete ?
               <div>
                 <div className="card__subtitle">
-                  <UriIndicator uri={uri} hasSignature={hasSignature} signatureIsValid={signatureIsValid} />
+                  <UriIndicator uri={uri} />
                 </div>
                 <div className="card__actions">
                   <FileActions uri={uri} outpoint={outpoint} metadata={metadata} contentType={contentType} />
