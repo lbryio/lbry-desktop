@@ -24,6 +24,7 @@
     "babel-preset-react": "^6.11.1",
     "mediaelement": "^2.23.4",
     "node-sass": "^3.8.0",
+    "plyr": "^2.0.12",
     "rc-progress": "^2.0.6",
     "react": "^15.4.0",
     "react-dom": "^15.4.0",
@@ -32,8 +33,7 @@
     "redux": "^3.6.0",
     "redux-logger": "^3.0.1",
     "redux-thunk": "^2.2.0",
-    "reselect": "^3.0.0",
-    "videostream": "^2.4.2"
+    "reselect": "^3.0.0"
   },
   "devDependencies": {
     "babel": "^6.5.2",
