@@ -1,7 +1,9 @@
 import React from 'react';
-import {Icon} from './common.js';
-import Modal from '../component/modal.js';
-import rewards from '../rewards.js';
+import lbry from 'lbry'
+import {Icon} from 'component/common';
+import Modal from 'component/modal';
+import rewards from 'rewards';
+import Link from 'component/link'
 
 export let RewardLink = React.createClass({
   propTypes: {
