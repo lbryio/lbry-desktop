@@ -11,8 +11,7 @@ import lbryio from 'lbryio';
 import rewards from 'rewards';
 import LoadScreen from 'component/load_screen'
 
-const fs = require('fs');
-const VideoStream = require('videostream');
+const plyr = require('plyr')
 
 class WatchLink extends React.Component {
   confirmPurchaseClick() {
@@ -164,18 +163,22 @@ class VideoPlayer extends React.PureComponent {
     const elem = this.refs.video
     const {
       downloadPath,
+      contentType,
     } = this.props
-    const mediaFile = {
-      createReadStream: (opts) =>
-        fs.createReadStream(downloadPath, opts)
-    }
-    const videostream = VideoStream(mediaFile, elem)
-    elem.play()
+    const players = plyr.setup(elem)
+    players[0].play()
   }
 
   render() {
+    const {
+      downloadPath,
+      contentType,
+    } = this.props
+
     return (
-      <video controls id="video" ref="video"></video>
+      <video controls id="video" ref="video">
+        <source src={downloadPath} type={contentType} />
+      </video>
     )
   }
 }
