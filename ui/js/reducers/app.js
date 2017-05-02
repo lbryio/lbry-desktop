@@ -15,6 +15,12 @@ const defaultState = {
   hasSignature: false,
 }
 
+reducers[types.DAEMON_READY] = function(state, action) {
+  return Object.assign({}, state, {
+    daemonReady: true,
+  })
+}
+
 reducers[types.NAVIGATE] = function(state, action) {
   return Object.assign({}, state, {
     currentPath: action.data.path,
