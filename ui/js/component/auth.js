@@ -139,11 +139,11 @@ const WelcomeStage = React.createClass({
             <p>Below, LBRY is controlled by users -- you -- via blockchain and decentralization.</p>
             <p>Thank you for making content freedom possible! Here's a nickel, kid.</p>
             <div style={{textAlign: "center", marginBottom: "12px"}}>
-              <RewardLink type="new_user" button="primary" onRewardClaim={this.onRewardClaim} onRewardFailure={this.props.endAuth} />
+              <RewardLink type="new_user" button="primary" onRewardClaim={this.onRewardClaim} onRewardFailure={() => this.props.setStage(null)} onConfirmed={() => { this.props.setStage(null) }} />
             </div>
           </section>
          </Modal> :
-         <Modal type="alert" overlayClassName="modal-overlay modal-overlay--clear" isOpen={true} contentLabel="Welcome to LBRY" {...this.props} onConfirmed={this.props.endAuth}>
+         <Modal type="alert" overlayClassName="modal-overlay modal-overlay--clear" isOpen={true} contentLabel="Welcome to LBRY" {...this.props} onConfirmed={() => { this.props.setStage(null) }}>
           <section>
             <h3 className="modal__header">About Your Reward</h3>
             <p>You earned a reward of <CreditAmount amount={this.state.rewardAmount} label={false} /> LBRY credits, or <em>LBC</em>.</p>
