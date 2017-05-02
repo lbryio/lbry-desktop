@@ -276,7 +276,6 @@ export function doWatchVideo() {
 
     // we already fully downloaded the file
     if (fileInfo && fileInfo.completed) {
-      dispatch(doLoadVideo())
       return Promise.resolve()
     }
 
