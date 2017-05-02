@@ -63,7 +63,9 @@ class FileTileStream extends React.Component {
 
     const {
       metadata,
+      isResolvingUri,
       navigate,
+      hidePrice,
     } = this.props
 
     const uri = lbryuri.normalize(this.props.uri);
@@ -71,7 +73,14 @@ class FileTileStream extends React.Component {
     const title = isConfirmed ? metadata.title : uri;
     const obscureNsfw = this.props.obscureNsfw && isConfirmed && metadata.nsfw;
 
-    console.debug(this.props)
+    let description = ""
+    if (isConfirmed) {
+      description = metadata.description
+    } else if (isResolvingUri) {
+      description = "Loading..."
+    } else {
+      description = <span className="empty">This file is pending confirmation</span>
+    }
 
     return (
       <section className={ 'file-tile card ' + (obscureNsfw ? 'card--obscured ' : '') } onMouseEnter={this.handleMouseOver.bind(this)} onMouseLeave={this.handleMouseOut.bind(this)}>
@@ -103,11 +112,7 @@ class FileTileStream extends React.Component {
             </div>
             <div className="card__content">
               <p className="file-tile__description">
-                <TruncatedText lines={2}>
-                  {isConfirmed
-                    ? metadata.description
-                    : <span className="empty">This file is pending confirmation.</span>}
-                </TruncatedText>
+                <TruncatedText lines={2}>{description}</TruncatedText>
               </p>
             </div>
           </div>

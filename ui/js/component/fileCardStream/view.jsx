@@ -61,7 +61,6 @@ class FileCardStream extends React.Component {
       isResolvingUri,
       navigate,
       hidePrice,
-      claim,
     } = this.props
 
     const uri = lbryuri.normalize(this.props.uri);
