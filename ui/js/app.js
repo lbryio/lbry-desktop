@@ -12,10 +12,11 @@ import RewardPage from './page/reward.js';
 import WalletPage from './page/wallet.js';
 import ShowPage from './page/show.js';
 import PublishPage from './page/publish.js';
+import SearchPage from './page/search.js';
 import DiscoverPage from './page/discover.js';
 import DeveloperPage from './page/developer.js';
+import lbryuri from './lbryuri.js';
 import {FileListDownloaded, FileListPublished} from './page/file-list.js';
-import Drawer from './component/drawer.js';
 import Header from './component/header.js';
 import {Modal, ExpandableModal} from './component/modal.js';
 import {Link} from './component/link.js';
@@ -38,6 +39,7 @@ var App = React.createClass({
     data: 'Error data',
   },
   _fullScreenPages: ['watch'],
+  _storeHistoryOfNextRender: false,
 
   _upgradeDownloadItem: null,
   _isMounted: false,
@@ -73,15 +75,13 @@ var App = React.createClass({
     let [isMatch, viewingPage, pageArgs] = address.match(/\??([^=]*)(?:=(.*))?/);
     return {
       viewingPage: viewingPage,
-      pageArgs: pageArgs === undefined ? null : pageArgs
+      pageArgs: pageArgs === undefined ? null : decodeURIComponent(pageArgs)
     };
   },
   getInitialState: function() {
-    var match, param, val, viewingPage, pageArgs,
-        drawerOpenRaw = sessionStorage.getItem('drawerOpen');
-
     return Object.assign(this.getViewingPageAndArgs(window.location.search), {
-      drawerOpen: drawerOpenRaw !== null ? JSON.parse(drawerOpenRaw) : true,
+      viewingPage: 'discover',
+      appUrl: null,
       errorInfo: null,
       modal: null,
       downloadProgress: null,
@@ -89,6 +89,8 @@ var App = React.createClass({
     });
   },
   componentWillMount: function() {
+    window.addEventListener("popstate", this.onHistoryPop);
+
     document.addEventListener('unhandledError', (event) => {
       this.alertError(event.detail);
     });
@@ -105,9 +107,10 @@ var App = React.createClass({
         if (target.matches('a[href^="?"]')) {
           event.preventDefault();
           if (this._isMounted) {
-            history.pushState({}, document.title, target.getAttribute('href'));
-            this.registerHistoryPop();
-            this.setState(this.getViewingPageAndArgs(target.getAttribute('href')));
+            let appUrl = target.getAttribute('href');
+            this._storeHistoryOfNextRender = true;
+            this.setState(Object.assign({}, this.getViewingPageAndArgs(appUrl), { appUrl: appUrl }));
+            document.body.scrollTop = 0;
           }
         }
         target = target.parentNode;
@@ -125,14 +128,6 @@ var App = React.createClass({
       });
     }
   },
-  openDrawer: function() {
-    sessionStorage.setItem('drawerOpen', true);
-    this.setState({ drawerOpen: true });
-  },
-  closeDrawer: function() {
-    sessionStorage.setItem('drawerOpen', false);
-    this.setState({ drawerOpen: false });
-  },
   closeModal: function() {
     this.setState({
       modal: null,
@@ -143,11 +138,28 @@ var App = React.createClass({
   },
   componentWillUnmount: function() {
     this._isMounted = false;
+    window.removeEventListener("popstate", this.onHistoryPop);
   },
-  registerHistoryPop: function() {
-    window.addEventListener("popstate", () => {
-      this.setState(this.getViewingPageAndArgs(location.pathname));
+  onHistoryPop: function() {
+    this.setState(this.getViewingPageAndArgs(location.search));
+  },
+  onSearch: function(term) {
+    this._storeHistoryOfNextRender = true;
+    const isShow = term.startsWith('lbry://');
+    this.setState({
+      viewingPage: isShow ? "show" : "search",
+      appUrl: (isShow ? "?show=" : "?search=") + encodeURIComponent(term),
+      pageArgs: term
     });
+  },
+  onSubmit: function(uri) {
+    this._storeHistoryOfNextRender = true;
+    this.setState({
+      address: uri,
+      appUrl: "?show=" + encodeURIComponent(uri),
+      viewingPage: "show",
+      pageArgs: uri
+    })
   },
   handleUpgradeClicked: function() {
     // Make a new directory within temp directory so the filename is guaranteed to be available
@@ -201,12 +213,6 @@ var App = React.createClass({
       modal: null,
     });
   },
-  onSearch: function(term) {
-    this.setState({
-      viewingPage: 'discover',
-      pageArgs: term
-    });
-  },
   alertError: function(error) {
     var errorInfoList = [];
     for (let key of Object.keys(error)) {
@@ -220,75 +226,57 @@ var App = React.createClass({
       errorInfo: <ul className="error-modal__error-list">{errorInfoList}</ul>,
     });
   },
-  getHeaderLinks: function()
+  getContentAndAddress: function()
   {
     switch(this.state.viewingPage)
     {
-      case 'wallet':
-      case 'send':
-      case 'receive':
-      case 'rewards':
-        return {
-          '?wallet': 'Overview',
-          '?send': 'Send',
-          '?receive': 'Receive',
-          '?rewards': 'Rewards',
-        };
-      case 'downloaded':
-      case 'published':
-        return {
-          '?downloaded': 'Downloaded',
-          '?published': 'Published',
-        };
-      default:
-        return null;
-    }
-  },
-  getMainContent: function()
-  {
-    switch(this.state.viewingPage)
-    {
+      case 'search':
+        return [this.state.pageArgs ? this.state.pageArgs : "Search", 'icon-search', <SearchPage query={this.state.pageArgs} />];
       case 'settings':
-        return <SettingsPage />;
+        return ["Settings", "icon-gear", <SettingsPage />];
       case 'help':
-        return <HelpPage />;
+        return ["Help", "icon-question", <HelpPage />];
       case 'report':
-        return <ReportPage />;
+        return ['Report an Issue', 'icon-file', <ReportPage />];
       case 'downloaded':
-        return <FileListDownloaded />;
+        return ["Downloads & Purchases", "icon-folder", <FileListDownloaded />];
       case 'published':
-        return <FileListPublished />;
+        return ["Publishes", "icon-folder", <FileListPublished />];
       case 'start':
-        return <StartPage />;
+        return ["Start", "icon-file", <StartPage />];
       case 'rewards':
-        return <RewardsPage />;
+        return ["Rewards", "icon-bank", <RewardsPage />];
       case 'wallet':
       case 'send':
       case 'receive':
-        return <WalletPage viewingPage={this.state.viewingPage} />;
+        return [this.state.viewingPage.charAt(0).toUpperCase() + this.state.viewingPage.slice(1), "icon-bank", <WalletPage viewingPage={this.state.viewingPage} />]
       case 'show':
-        return <ShowPage uri={this.state.pageArgs} />;
+        return [lbryuri.normalize(this.state.pageArgs), "icon-file", <ShowPage uri={this.state.pageArgs} />];
       case 'publish':
-        return <PublishPage />;
+        return ["Publish", "icon-upload", <PublishPage />];
       case 'developer':
-        return <DeveloperPage />;
+        return ["Developer", "icon-file", <DeveloperPage />];
       case 'discover':
       default:
-        return <DiscoverPage showWelcome={this.state.justRegistered} {... this.state.pageArgs !== null ? {query: this.state.pageArgs} : {} } />;
+        return ["Home", "icon-home", <DiscoverPage />];
     }
   },
   render: function() {
-    var mainContent = this.getMainContent(),
-        headerLinks = this.getHeaderLinks(),
-        searchQuery = this.state.viewingPage == 'discover' && this.state.pageArgs ? this.state.pageArgs : '';
-    
+    let [address, wunderBarIcon, mainContent] = this.getContentAndAddress();
+
+    lbry.setTitle(address);
+
+    if (this._storeHistoryOfNextRender) {
+      this._storeHistoryOfNextRender = false;
+      history.pushState({}, document.title, this.state.appUrl);
+    }
+
     return (
       this._fullScreenPages.includes(this.state.viewingPage) ?
         mainContent :
-        <div id="window" className={ this.state.drawerOpen ? 'drawer-open' : 'drawer-closed' }>
-          <Drawer onCloseDrawer={this.closeDrawer} viewingPage={this.state.viewingPage} />
-          <div id="main-content" className={ headerLinks ? 'with-sub-nav' : 'no-sub-nav' }>
-            <Header onOpenDrawer={this.openDrawer} initialQuery={searchQuery} onSearch={this.onSearch} links={headerLinks} viewingPage={this.state.viewingPage} />
+        <div id="window">
+          <Header onSearch={this.onSearch} onSubmit={this.onSubmit} address={address} wunderBarIcon={wunderBarIcon} viewingPage={this.state.viewingPage} />
+          <div id="main-content">
             {mainContent}
           </div>
           <Modal isOpen={this.state.modal == 'upgrade'} contentLabel="Update available"

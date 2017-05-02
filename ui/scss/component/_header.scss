@@ -1,0 +1,94 @@
+@import "../global";
+
+$color-header: #666;
+$color-header-active: darken($color-header, 20%);
+
+#header
+{
+  color: $color-header;
+  background: #fff;
+  display: flex;
+  position: fixed;
+  box-shadow: $box-shadow-layer;
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 2;
+  padding: $spacing-vertical / 2;
+  box-sizing: border-box;
+}
+.header__item {
+  flex: 0 0 content;
+  padding-left: $spacing-vertical / 4;
+  padding-right: $spacing-vertical / 4;
+}
+.header__item--wunderbar {
+  flex-grow: 1;
+}
+
+.wunderbar
+{
+  position: relative;
+  .icon {
+    position: absolute;
+    left: 10px;
+    top: $spacing-vertical / 2  - 4px; //hacked
+  }
+}
+
+.wunderbar--active .icon-search { color: $color-primary; }
+
+.wunderbar__input {
+  background: rgba(255, 255, 255, 0.7);
+  width: 100%;
+  color: $color-header;
+  height: $spacing-vertical * 1.5;
+  line-height: $spacing-vertical * 1.5;
+  padding-left: 38px;
+  padding-right: 5px;
+  border: 1px solid $color-text-dark;
+  @include border-radius(2px);
+  border: 1px solid #ccc;
+  &:focus {
+    color: $color-header-active;
+    box-shadow: $box-shadow-focus;
+    border-color: $color-primary;
+  }
+}
+
+nav.sub-header
+{
+  text-transform: uppercase;
+  padding: 0 0 $spacing-vertical;
+  &.sub-header--constrained {
+    max-width: $width-page-constrained;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  > a
+  {
+    $sub-header-selected-underline-height: 2px;
+    display: inline-block;
+    margin: 0 15px;
+    padding: 0 5px;
+    line-height: $height-header - $spacing-vertical - $sub-header-selected-underline-height;
+    color: $color-header;
+    &:first-child
+    {
+      margin-left: 0;
+    }
+    &:last-child
+    {
+      margin-right: 0;
+    }
+    &.sub-header-selected
+    {
+      border-bottom: $sub-header-selected-underline-height solid $color-header-active;
+      color: $color-header-active;
+    }
+    &:hover
+    {
+      color: $color-header-active;
+    }
+  }
+}

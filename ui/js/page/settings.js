@@ -1,6 +1,16 @@
 import React from 'react';
 import {FormField, FormRow} from '../component/form.js';
+import {SubHeader} from '../component/header.js';
 import lbry from '../lbry.js';
+
+export let SettingsNav = React.createClass({
+  render: function() {
+    return <SubHeader modifier="constrained" viewingPage={this.props.viewingPage} links={{
+      '?settings': 'Settings',
+      '?help' : 'Help'
+    }} />;
+  }
+});
 
 var SettingsPage = React.createClass({
   _onSettingSaveSuccess: function() {
@@ -17,7 +27,7 @@ var SettingsPage = React.createClass({
   setClientSetting: function(name, value) {
     lbry.setClientSetting(name, value)
     this._onSettingSaveSuccess()
-  },
+    },
   onRunOnStartChange: function (event) {
     this.setDaemonSetting('run_on_startup', event.target.checked);
   },
@@ -56,9 +66,6 @@ var SettingsPage = React.createClass({
       showUnavailable: lbry.getClientSetting('showUnavailable'),
     }
   },
-  componentDidMount: function() {
-    document.title = "Settings";
-  },
   componentWillMount: function() {
     lbry.getDaemonSettings((settings) => {
       this.setState({
@@ -92,7 +99,8 @@ var SettingsPage = React.createClass({
  </section>
  */
     return (
-      <main>
+      <main className="main--single-column">
+        <SettingsNav viewingPage="settings" />
         <section className="card">
           <div className="card__content">
             <h3>Download Directory</h3>

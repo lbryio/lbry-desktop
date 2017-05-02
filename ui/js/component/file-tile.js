@@ -3,7 +3,7 @@ import lbry from '../lbry.js';
 import lbryuri from '../lbryuri.js';
 import {Link} from '../component/link.js';
 import {FileActions} from '../component/file-actions.js';
-import {Thumbnail, TruncatedText, FilePrice} from '../component/common.js';
+import {BusyMessage, TruncatedText, FilePrice} from '../component/common.js';
 import UriIndicator from '../component/channel-indicator.js';
 
 /*should be merged into FileTile once FileTile is refactored to take a single id*/
@@ -77,40 +77,32 @@ export let FileTileStream = React.createClass({
     const isConfirmed = !!metadata;
     const title = isConfirmed ? metadata.title : uri;
     const obscureNsfw = this.props.obscureNsfw && isConfirmed && metadata.nsfw;
+    const primaryUrl = "?show=" + uri;
     return (
       <section className={ 'file-tile card ' + (obscureNsfw ? 'card--obscured ' : '') } onMouseEnter={this.handleMouseOver} onMouseLeave={this.handleMouseOut}>
-        <div className={"row-fluid card__inner file-tile__row"}>
-          <div className="span3 file-tile__thumbnail-container">
-            <a href={'?show=' + uri}><Thumbnail className="file-tile__thumbnail" {... metadata && metadata.thumbnail ? {src: metadata.thumbnail} : {}} alt={'Photo for ' + this.props.uri} /></a>
-          </div>
-          <div className="span9">
-            <div className="card__title-primary">
-              { !this.props.hidePrice
-                ? <FilePrice uri={this.props.uri} />
-                : null}
-              <div className="meta"><a href={'?show=' + this.props.uri}>{uri}</a></div>
-              <h3>
-                <a href={'?show=' + uri} title={title}>
-                  <TruncatedText lines={1}>
-                    {title}
-                  </TruncatedText>
-                </a>
-              </h3>
+        <a href={primaryUrl} className="card__link">
+          <div className={"card__inner file-tile__row"}>
+            <div className="card__media"
+                 style={{ backgroundImage: "url('" + (metadata && metadata.thumbnail ? metadata.thumbnail : lbry.imagePath('default-thumb.svg')) + "')" }}>
             </div>
-            <div className="card__actions">
-              <FileActions uri={this.props.uri} outpoint={this.props.outpoint} metadata={metadata} contentType={this.props.contentType} />
-            </div>
-            <div className="card__content">
-              <p className="file-tile__description">
-                <TruncatedText lines={2}>
+            <div className="file-tile__content">
+              <div className="card__title-primary">
+                { !this.props.hidePrice
+                  ? <FilePrice uri={this.props.uri} />
+                  : null}
+                <div className="meta">{uri}</div>
+                <h3><TruncatedText lines={1}>{title}</TruncatedText></h3>
+              </div>
+              <div className="card__content card__subtext">
+                <TruncatedText lines={3}>
                   {isConfirmed
                     ? metadata.description
                     : <span className="empty">This file is pending confirmation.</span>}
                 </TruncatedText>
-              </p>
+              </div>
             </div>
           </div>
-        </div>
+        </a>
         {this.state.showNsfwHelp
           ? <div className='card-overlay'>
            <p>
@@ -227,6 +219,7 @@ export let FileCardStream = React.createClass({
 
 export let FileTile = React.createClass({
   _isMounted: false,
+  _isResolvePending: false,
 
   propTypes: {
     uri: React.PropTypes.string.isRequired,
@@ -238,19 +231,28 @@ export let FileTile = React.createClass({
       claimInfo: null
     }
   },
-
-  componentDidMount: function() {
-    this._isMounted = true;
-
-    lbry.resolve({uri: this.props.uri}).then((resolutionInfo) => {
+  resolve: function(uri) {
+    this._isResolvePending = true;
+    lbry.resolve({uri: uri}).then((resolutionInfo) => {
+      this._isResolvePending = false;
       if (this._isMounted && resolutionInfo && resolutionInfo.claim && resolutionInfo.claim.value &&
-                    resolutionInfo.claim.value.stream && resolutionInfo.claim.value.stream.metadata) {
+        resolutionInfo.claim.value.stream && resolutionInfo.claim.value.stream.metadata) {
         // In case of a failed lookup, metadata will be null, in which case the component will never display
         this.setState({
           claimInfo: resolutionInfo.claim,
         });
       }
     });
+  },
+  componentWillReceiveProps: function(nextProps) {
+    if (nextProps.uri != this.props.uri) {
+      this.setState(this.getInitialState());
+      this.resolve(nextProps.uri);
+    }
+  },
+  componentDidMount: function() {
+    this._isMounted = true;
+    this.resolve(this.props.uri);
   },
   componentWillUnmount: function() {
     this._isMounted = false;
@@ -260,6 +262,12 @@ export let FileTile = React.createClass({
       if (this.props.displayStyle == 'card') {
         return <FileCardStream outpoint={null} metadata={{title: this.props.uri, description: "Loading..."}} contentType={null} hidePrice={true}
                                hasSignature={false} signatureIsValid={false} uri={this.props.uri} />
+      }
+      if (this.props.showEmpty)
+      {
+        return this._isResolvePending ?
+           <BusyMessage message="Loading magic decentralized data" /> :
+           <div className="empty">{lbryuri.normalize(this.props.uri)} is unclaimed. <Link label="Put something here" href="?publish" /></div>;
       }
       return null;
     }

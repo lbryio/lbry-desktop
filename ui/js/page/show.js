@@ -16,8 +16,11 @@ var FormatItem = React.createClass({
     outpoint: React.PropTypes.string,
   },
   render: function() {
-    const {thumbnail, author, title, description, language, license} = this.props.metadata;
-    const mediaType = lbry.getMediaType(this.props.contentType);
+    const {author, language, license} = this.props.metadata;
+
+    if (!this.props.contentType && [author, language, license].filter((val) => {return !!val; }).length === 0) {
+      return null;
+    }
 
     return (
       <table className="table-standard">
@@ -40,99 +43,241 @@ var FormatItem = React.createClass({
   }
 });
 
-let ShowPage = React.createClass({
-  _uri: null,
+let ChannelPage = React.createClass({
+  render: function() {
+    return <main className="main--single-column">
+      <section className="card">
+        <div className="card__inner">
+          <div className="card__title-identity"><h1>{this.props.title}</h1></div>
+        </div>
+        <div className="card__content">
+          <p>
+            This channel page is a stub.
+          </p>
+        </div>
+      </section>
+    </main>
+  }
+});
+
+let FilePage = React.createClass({
+  _isMounted: false,
 
   propTypes: {
     uri: React.PropTypes.string,
   },
+
   getInitialState: function() {
     return {
-      metadata: null,
-      contentType: null,
-      hasSignature: false,
-      signatureIsValid: false,
       cost: null,
       costIncludesData: null,
-      uriLookupComplete: null,
       isDownloaded: null,
     };
   },
+
+  componentWillUnmount: function() {
+    this._isMounted = false;
+  },
+
+  componentWillReceiveProps: function(nextProps) {
+    if (nextProps.outpoint != this.props.outpoint || nextProps.uri != this.props.uri) {
+      this.loadCostAndFileState(nextProps.uri, nextProps.outpoint);
+    }
+  },
+
   componentWillMount: function() {
-    this._uri = lbryuri.normalize(this.props.uri);
-    document.title = this._uri;
+    this._isMounted = true;
+    this.loadCostAndFileState(this.props.uri, this.props.outpoint);
+  },
 
-    lbry.resolve({uri: this._uri}).then(({ claim: {txid, nout, has_signature, signature_is_valid, value: {stream: {metadata, source: {contentType}}}}}) => {
-      const outpoint = txid + ':' + nout;
-
-      lbry.file_list({outpoint}).then((fileInfo) => {
+  loadCostAndFileState: function(uri, outpoint) {
+    lbry.file_list({outpoint: outpoint}).then((fileInfo) => {
+      if (this._isMounted) {
         this.setState({
           isDownloaded: fileInfo.length > 0,
         });
-      });
-
-      this.setState({
-        outpoint: outpoint,
-        metadata: metadata,
-        hasSignature: has_signature,
-        signatureIsValid: signature_is_valid,
-        contentType: contentType,
-        uriLookupComplete: true,
-      });
+      }
     });
 
-    lbry.getCostInfo(this._uri).then(({cost, includesData}) => {
-      this.setState({
-        cost: cost,
-        costIncludesData: includesData,
-      });
+    lbry.getCostInfo(uri).then(({cost, includesData}) => {
+      if (this._isMounted) {
+        this.setState({
+          cost: cost,
+          costIncludesData: includesData,
+        });
+      }
     });
   },
+
   render: function() {
-    const metadata = this.state.metadata;
-    const title = metadata ? this.state.metadata.title : this._uri;
+    const metadata = this.props.metadata,
+      title = metadata ? this.props.metadata.title : this.props.uri,
+      uriIndicator = <UriIndicator uri={this.props.uri} hasSignature={this.props.hasSignature} signatureIsValid={this.props.signatureIsValid} />;
+
     return (
-      <main className="constrained-page">
+      <main className="main--single-column">
         <section className="show-page-media">
-          { this.state.contentType && this.state.contentType.startsWith('video/') ?
-              <Video className="video-embedded" uri={this._uri} metadata={metadata} outpoint={this.state.outpoint} /> :
-              (metadata ? <Thumbnail src={metadata.thumbnail} /> : <Thumbnail />) }
+          { this.props.contentType && this.props.contentType.startsWith('video/') ?
+            <Video className="video-embedded" uri={this.props.uri} metadata={metadata} outpoint={this.props.outpoint} /> :
+            (metadata ? <Thumbnail src={metadata.thumbnail} /> : <Thumbnail />) }
         </section>
         <section className="card">
           <div className="card__inner">
             <div className="card__title-identity">
               {this.state.isDownloaded === false
-                ? <span style={{float: "right"}}><FilePrice uri={this._uri} metadata={this.state.metadata} /></span>
+                ? <span style={{float: "right"}}><FilePrice uri={this.props.uri} metadata={metadata} /></span>
                 : null}
               <h1>{title}</h1>
-              { this.state.uriLookupComplete ?
-                <div>
-                  <div className="card__subtitle">
-                    <UriIndicator uri={this._uri} hasSignature={this.state.hasSignature} signatureIsValid={this.state.signatureIsValid} />
-                  </div>
-                  <div className="card__actions">
-                    <FileActions uri={this._uri} outpoint={this.state.outpoint} metadata={metadata} contentType={this.state.contentType} />
-                  </div>
-                </div> : '' }
+              <div className="card__subtitle">
+                { this.props.channelUri ?
+                  <Link href={"?show=" + this.props.channelUri }>{uriIndicator}</Link> :
+                  uriIndicator}
+              </div>
+              <div className="card__actions">
+                <FileActions uri={this.props.uri} outpoint={this.props.outpoint} metadata={metadata} contentType={this.props.contentType} />
+              </div>
             </div>
-            { this.state.uriLookupComplete ?
-                <div>
-                  <div className="card__content card__subtext card__subtext card__subtext--allow-newlines">
-                    {metadata.description}
-                  </div>
-                </div>
-              : <div className="card__content"><BusyMessage message="Loading magic decentralized data..." /></div> }
+            <div className="card__content card__subtext card__subtext card__subtext--allow-newlines">
+              {metadata.description}
+            </div>
           </div>
           { metadata ?
-              <div className="card__content">
-                <FormatItem metadata={metadata} contentType={this.state.contentType} cost={this.state.cost} uri={this._uri} outpoint={this.state.outpoint} costIncludesData={this.state.costIncludesData}  />
-              </div> : '' }
+            <div className="card__content">
+              <FormatItem metadata={metadata} contentType={this.state.contentType} cost={this.state.cost} uri={this.props.uri} outpoint={this.props.outpoint} costIncludesData={this.state.costIncludesData}  />
+            </div> : '' }
           <div className="card__content">
             <Link href="https://lbry.io/dmca" label="report" className="button-text-help" />
           </div>
         </section>
       </main>
     );
+  }
+});
+
+let ShowPage = React.createClass({
+  _uri: null,
+  _isMounted: false,
+
+  propTypes: {
+    uri: React.PropTypes.string,
+  },
+
+  getInitialState: function() {
+    return {
+      outpoint: null,
+      metadata: null,
+      contentType: null,
+      hasSignature: false,
+      claimType: null,
+      signatureIsValid: false,
+      cost: null,
+      costIncludesData: null,
+      uriLookupComplete: null,
+      isFailed: false,
+    };
+  },
+
+  componentWillUnmount: function() {
+    this._isMounted = false;
+  },
+
+  componentWillReceiveProps: function(nextProps) {
+    if (nextProps.uri != this.props.uri) {
+      this.setState(this.getInitialState());
+      this.loadUri(nextProps.uri);
+    }
+  },
+
+  componentWillMount: function() {
+    this._isMounted = true;
+    this.loadUri(this.props.uri);
+  },
+
+  loadUri: function(uri) {
+    this._uri = lbryuri.normalize(uri);
+
+    lbry.resolve({uri: this._uri}).then((resolveData) => {
+      const isChannel = resolveData && resolveData.claims_in_channel;
+      if (!this._isMounted) {
+        return;
+      }
+      if (resolveData) {
+        let newState = { uriLookupComplete: true }
+        if (!isChannel) {
+          let {claim: {txid: txid, nout: nout, has_signature: has_signature, signature_is_valid: signature_is_valid, value: {stream: {metadata: metadata, source: {contentType: contentType}}}}} = resolveData;
+
+          Object.assign(newState, {
+            claimType: "file",
+            metadata: metadata,
+            outpoint: txid + ':' + nout,
+            hasSignature: has_signature,
+            signatureIsValid: signature_is_valid,
+            contentType: contentType
+          });
+
+
+          lbry.setTitle(metadata.title ? metadata.title : this._uri)
+
+        } else {
+          let {certificate: {txid: txid, nout: nout, has_signature: has_signature}} = resolveData;
+          Object.assign(newState, {
+            claimType: "channel",
+            outpoint: txid + ':' + nout,
+            txid: txid,
+            metadata: {
+              title:resolveData.certificate.name
+            }
+          });
+        }
+
+        this.setState(newState);
+
+      } else {
+        this.setState(Object.assign({}, this.getInitialState(), {
+          uriLookupComplete: true,
+          isFailed: true
+        }));
+      }
+    });
+  },
+
+  render: function() {
+    const metadata = this.state.metadata,
+          title = metadata ? this.state.metadata.title : this._uri;
+
+    let innerContent = "";
+
+    if (!this.state.uriLookupComplete || this.state.isFailed) {
+      innerContent = <section className="card">
+          <div className="card__inner">
+            <div className="card__title-identity"><h1>{title}</h1></div>
+          </div>
+          <div className="card__content">
+            { this.state.uriLookupComplete ?
+                <p>This location is not yet in use. { ' ' }<Link href="?publish" label="Put something here" />.</p> :
+                <BusyMessage message="Loading magic decentralized data..." />
+            }
+          </div>
+      </section>;
+    } else if (this.state.claimType == "channel") {
+      innerContent = <ChannelPage title={this._uri} />
+    } else {
+      let channelUriObj = lbryuri.parse(this._uri)
+      delete channelUriObj.path;
+      delete channelUriObj.contentName;
+      const channelUri = this.state.signatureIsValid && this.state.hasSignature && channelUriObj.isChannel ? lbryuri.build(channelUriObj, false) : null;
+      innerContent = <FilePage
+        uri={this._uri}
+        channelUri={channelUri}
+        outpoint={this.state.outpoint}
+        metadata={metadata}
+        contentType={this.state.contentType}
+        hasSignature={this.state.hasSignature}
+        signatureIsValid={this.state.signatureIsValid}
+      />;
+    }
+
+    return <main className="main--single-column">{innerContent}</main>;
   }
 });
 

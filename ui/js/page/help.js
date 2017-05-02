@@ -3,6 +3,7 @@
 import React from 'react';
 import lbry from '../lbry.js';
 import {Link} from '../component/link.js';
+import {SettingsNav} from './settings.js';
 import {version as uiVersion} from 'json!../../package.json';
 
 var HelpPage = React.createClass({
@@ -23,9 +24,6 @@ var HelpPage = React.createClass({
         lbryId: info.lbry_id,
       });
     });
-  },
-  componentDidMount: function() {
-    document.title = "Help";
   },
   render: function() {
     let ver, osName, platform, newVerLink;
@@ -49,7 +47,8 @@ var HelpPage = React.createClass({
     }
 
     return (
-      <main className="page">
+      <main className="main--single-column">
+        <SettingsNav viewingPage="help" />
         <section className="card">
           <div className="card__title-primary">
             <h3>Read the FAQ</h3>

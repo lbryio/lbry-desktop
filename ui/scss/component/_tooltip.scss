@@ -15,6 +15,7 @@
   z-index: 1;
   left: 50%;
   margin-left: $tooltip-body-width * -1 / 2;
+  white-space: normal;
 
   box-sizing: border-box;
   padding: $spacing-vertical / 2;
@@ -24,7 +25,7 @@
   background-color: $color-bg;
   font-size: $font-size * 7/8;
   line-height: $font-line-height;
-  box-shadow: $default-box-shadow;
+  box-shadow: $box-shadow-layer;
 }
 
 .tooltip--header .tooltip__link {

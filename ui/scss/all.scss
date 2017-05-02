@@ -1,8 +1,6 @@
 @import "_reset";
-@import "_grid";
 @import "_icons";
 @import "_mediaelement";
-@import "_canvas";
 @import "_gui";
 @import "component/_table";
 @import "component/_button.scss";
@@ -10,6 +8,7 @@
 @import "component/_file-actions.scss";
 @import "component/_file-tile.scss";
 @import "component/_form-field.scss";
+@import "component/_header.scss";
 @import "component/_menu.scss";
 @import "component/_tooltip.scss";
 @import "component/_load-screen.scss";

@@ -1,35 +1,51 @@
 @import "global";
 
-@mixin text-link($color: $color-primary, $hover-opacity: 0.70) {
+html
+{
+  height: 100%;
+  font-size: $font-size;
+}
+body
+{
+  font-family: 'Source Sans Pro', sans-serif;
+  line-height: $font-line-height;
+}
 
-  .icon
+#window
+{
+  min-height: 100vh;
+  background: $color-canvas;
+}
+
+.badge
+{
+  background: $color-money;
+  display: inline-block;
+  padding: 2px;
+  color: white;
+  border-radius: 2px;
+}
+.credit-amount--indicator
+{
+  font-weight: bold;
+  color: $color-money;
+}
+
+#main-content
+{
+  padding: $spacing-vertical;
+  margin-top: $height-header;
+  display: flex;
+  flex-direction: column;
+  main {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 100%;
+  }
+  main.main--single-column
   {
-    &:first-child {
-      padding-right: 5px;
-    }
-    &:last-child:not(:only-child) {
-      padding-left: 5px;
-    }
+    width: $width-page-constrained;
   }
-
-  &:not(.no-underline) {
-    text-decoration: underline;
-    .icon {
-      text-decoration: none;
-    }
-  }
-  &:hover
-  {
-    opacity: $hover-opacity;
-    transition: opacity $transition-standard;
-    text-decoration: underline;
-    .icon {
-      text-decoration: none;
-    }
-  }
-
-  color: $color;
-  cursor: pointer;
 }
 
 .icon-fixed-width {
@@ -80,7 +96,10 @@ p
 }
 
 .truncated-text {
-  display: inline-block;
+  //display: inline-block;
+  display: -webkit-box;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
 }
 
 .busy-indicator
@@ -126,10 +145,11 @@ p
 
 .sort-section {
   display: block;
-  margin-bottom: 5px;
+  margin-bottom: $spacing-vertical * 2/3;
 
 
   text-align: right;
+  line-height: 1;
   font-size: 0.85em;
   color: $color-help;
 }

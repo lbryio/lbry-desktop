@@ -2,9 +2,9 @@
  * Thin wrapper around localStorage.getItem(). Parses JSON and returns undefined if the value
  * is not set yet.
  */
-export function getLocal(key) {
+export function getLocal(key, fallback=undefined) {
   const itemRaw = localStorage.getItem(key);
-  return itemRaw === null ? undefined : JSON.parse(itemRaw);
+  return itemRaw === null ? fallback : JSON.parse(itemRaw);
 }
 
 /**

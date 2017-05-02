@@ -8,6 +8,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
 
 ## [Unreleased]
 ### Added
+  * The UI has been overhauled to use an omnibar and drop the sidebar.
   * The app is much more responsive switching pages. It no longer reloads the entire page and all assets on each page change.
   * lbry.js now offers a subscription model for wallet balance similar to file info.
   * Fixed file info subscribes not being unsubscribed in unmount.

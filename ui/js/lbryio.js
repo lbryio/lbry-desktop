@@ -7,7 +7,7 @@ const lbryio = {
   _accessToken: getLocal('accessToken'),
   _authenticationPromise: null,
   _user : null,
-  enabled: true
+  enabled: false
 };
 
 const CONNECTION_STRING = process.env.LBRY_APP_API_URL ? process.env.LBRY_APP_API_URL : 'https://api.lbry.io/';
@@ -150,20 +150,6 @@ lbryio.authenticate = function() {
         } else {
           setCurrentUser()
         }
-        // if (!lbryio._
-         //(data) => {
-          // resolve(data)
-          // localStorage.setItem('accessToken', ID);
-          // localStorage.setItem('appId', installation_id);
-          // this.setState({
-          //   registrationCheckComplete: true,
-          //   justRegistered: true,
-          // });
-        //});
-        // lbryio.call('user_install', 'exists', {app_id: installation_id}).then((userExists) => {
-        //   // TODO: deal with case where user exists already with the same app ID, but we have no access token.
-        //   // Possibly merge in to the existing user with the same app ID.
-        // })
       }).catch(reject);
     });
   }

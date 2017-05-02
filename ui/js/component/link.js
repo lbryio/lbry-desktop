@@ -41,7 +41,7 @@ export let Link = React.createClass({
       content = (
         <span {... 'button' in this.props ? {className: 'button__content'} : {}}>
           {'icon' in this.props ? <Icon icon={this.props.icon} fixed={true} /> : null}
-          {<span className="link-label">{this.props.label}</span>}
+          {this.props.label ? <span className="link-label">{this.props.label}</span> : null}
           {'badge' in this.props ? <span className="badge">{this.props.badge}</span> : null}
         </span>
       );
