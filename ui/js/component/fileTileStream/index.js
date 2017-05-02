@@ -20,6 +20,9 @@ import {
 import {
   selectObscureNsfw,
 } from 'selectors/app'
+import {
+  makeSelectResolvingUri,
+} from 'selectors/content'
 import FileTileStream from './view'
 
 const makeSelect = () => {
@@ -29,6 +32,7 @@ const makeSelect = () => {
   const selectAvailabilityForUri = makeSelectAvailabilityForUri()
   const selectMetadataForUri = makeSelectMetadataForUri()
   const selectSourceForUri = makeSelectSourceForUri()
+  const selectResolvingUri = makeSelectResolvingUri()
 
   const select = (state, props) => ({
     claim: selectClaimForUri(state, props),
@@ -38,6 +42,7 @@ const makeSelect = () => {
     obscureNsfw: selectObscureNsfw(state),
     metadata: selectMetadataForUri(state, props),
     source: selectSourceForUri(state, props),
+    resolvingUri: selectResolvingUri(state, props),
   })
 
   return select
