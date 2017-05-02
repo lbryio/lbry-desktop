@@ -70,10 +70,10 @@ const communityCategoryToolTipText = ('Community Content is a public space where
 
 var FeaturedCategory = React.createClass({
   render: function() {
-    return (<div className="card-row card-row--small">
+      return (<div className="card-row card-row--small">
         { this.props.category ?
           <h3 className="card-row__header">{this.props.category}
-            { this.props.category == "community" ?
+            { this.props.category == 'Community Top Five' ?
               <ToolTip label="What's this?" body={communityCategoryToolTipText} className="tooltip--header"/>
               : '' }</h3>
           : '' }
