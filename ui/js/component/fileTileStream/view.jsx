@@ -5,7 +5,7 @@ import Link from 'component/link';
 import FileActions from 'component/fileActions';
 import {Thumbnail, TruncatedText,} from 'component/common.js';
 import FilePrice from 'component/filePrice'
-import UriIndicator from 'component/channel-indicator.js';
+import UriIndicator from 'component/uriIndicator';
 
 /*should be merged into FileTile once FileTile is refactored to take a single id*/
 class FileTileStream extends React.Component {
@@ -70,6 +70,8 @@ class FileTileStream extends React.Component {
     const isConfirmed = !!metadata;
     const title = isConfirmed ? metadata.title : uri;
     const obscureNsfw = this.props.obscureNsfw && isConfirmed && metadata.nsfw;
+
+    console.debug(this.props)
 
     return (
       <section className={ 'file-tile card ' + (obscureNsfw ? 'card--obscured ' : '') } onMouseEnter={this.handleMouseOver.bind(this)} onMouseLeave={this.handleMouseOut.bind(this)}>

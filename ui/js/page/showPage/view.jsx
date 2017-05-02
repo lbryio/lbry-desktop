@@ -11,7 +11,7 @@ import {
 import FilePrice from 'component/filePrice'
 import FileActions from 'component/fileActions';
 import Link from 'component/link';
-import UriIndicator from 'component/channel-indicator.js';
+import UriIndicator from 'component/uriIndicator';
 
 const FormatItem = (props) => {
   const {
@@ -133,7 +133,7 @@ let FilePage = React.createClass({
         <section className="card">
           <div className="card__inner">
             <div className="card__title-identity">
-              {this.state.isDownloaded === false
+              {isDownloaded === false
                 ? <span style={{float: "right"}}><FilePrice uri={lbryuri.normalize(uri)} metadata={metadata} /></span>
                 : null}
               <h1>{title}</h1>
@@ -143,8 +143,7 @@ let FilePage = React.createClass({
                   uriIndicator}
              </div>
               <div className="card__actions">
-                <FileActions uri={this.props.uri} outpoint={this.props.outpoint} metadata={metadata} contentType={this.props.contentType} />
-              </div>
+                <FileActions uri={uri} outpoint={outpoint} metadata={metadata} contentType={contentType} /></div>
             </div>
             <div className="card__content card__subtext card__subtext card__subtext--allow-newlines">
               {metadata.description}
