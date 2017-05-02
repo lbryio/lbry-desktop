@@ -24,6 +24,9 @@ const baseTemplate = [
       {
         role: 'paste',
       },
+      {
+        role: 'selectall',
+      },
     ]
   },
   {
