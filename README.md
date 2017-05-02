@@ -44,7 +44,7 @@ to create distributable packages, which is run by calling:
 
 note, if you are building for macos on a linux machine you need to run
 
-'./macosbuild-linux.sh'
+`./pkgbuild.sh`
 
 ### Development on Windows
 
