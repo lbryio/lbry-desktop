@@ -42,7 +42,7 @@ const makeSelect = () => {
     obscureNsfw: selectObscureNsfw(state),
     metadata: selectMetadataForUri(state, props),
     source: selectSourceForUri(state, props),
-    resolvingUri: selectResolvingUri(state, props),
+    isResolvingUri: selectResolvingUri(state, props),
   })
 
   return select
