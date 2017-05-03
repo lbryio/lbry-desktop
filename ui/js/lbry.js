@@ -95,7 +95,7 @@ let lbry = {
 };
 
 lbry.call = function (method, params, callback, errorCallback, connectFailedCallback) {
-  jsonrpc.call(lbry.daemonConnectionString, method, [params], callback, errorCallback, connectFailedCallback);
+  jsonrpc.call(lbry.daemonConnectionString, method, params, callback, errorCallback, connectFailedCallback);
 }
 
 //core
@@ -679,7 +679,7 @@ lbry.settings_get = function(params={}) {
 // lbry.get = function(params={}) {
 //   return function(params={}) {
 //     return new Promise((resolve, reject) => {
-//       jsonrpc.call(lbry.daemonConnectionString, "get", [params], resolve, reject, reject);
+//       jsonrpc.call(lbry.daemonConnectionString, "get", params, resolve, reject, reject);
 //     });
 //   };
 // }
@@ -692,7 +692,7 @@ lbry = new Proxy(lbry, {
 
     return function(params={}) {
       return new Promise((resolve, reject) => {
-        jsonrpc.call(lbry.daemonConnectionString, name, [params], resolve, reject, reject);
+        jsonrpc.call(lbry.daemonConnectionString, name, params, resolve, reject, reject);
       });
     };
   }
