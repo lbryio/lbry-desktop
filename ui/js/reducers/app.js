@@ -6,7 +6,6 @@ const defaultState = {
   isLoaded: false,
   currentPath: 'discover',
   platform: process.platform,
-  drawerOpen: sessionStorage.getItem('drawerOpen') || true,
   upgradeSkipped: sessionStorage.getItem('upgradeSkipped'),
   daemonReady: false,
   platform: window.navigator.platform,
@@ -81,20 +80,6 @@ reducers[types.CLOSE_MODAL] = function(state, action) {
   return Object.assign({}, state, {
     modal: undefined,
     extraContent: undefined
-  })
-}
-
-reducers[types.OPEN_DRAWER] = function(state, action) {
-  sessionStorage.setItem('drawerOpen', false)
-  return Object.assign({}, state, {
-    drawerOpen: true
-  })
-}
-
-reducers[types.CLOSE_DRAWER] = function(state, action) {
-  sessionStorage.setItem('drawerOpen', false)
-  return Object.assign({}, state, {
-    drawerOpen: false
   })
 }
 

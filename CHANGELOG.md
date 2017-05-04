@@ -12,7 +12,6 @@ Web UI version numbers should always match the corresponding version of LBRY App
   * The app is much more responsive switching pages. It no longer reloads the entire page and all assets on each page change.
   * lbry.js now offers a subscription model for wallet balance similar to file info.
   * Fixed file info subscribes not being unsubscribed in unmount.
-  * Fixed drawer not highlighting selected page.
   * You can now make API calls directly on the lbry module, e.g. lbry.peer_list()
   * New-style API calls return promises instead of using callbacks
   * Wherever possible, use outpoints for unique IDs instead of names or SD hashes

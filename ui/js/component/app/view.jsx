@@ -1,26 +1,13 @@
 import React from 'react'
-
-import lbry from 'lbry.js';
 import Router from 'component/router'
 import Header from 'component/header';
-import {Modal, ExpandableModal} from 'component/modal.js';
 import ErrorModal from 'component/errorModal'
 import DownloadingModal from 'component/downloadingModal'
 import UpgradeModal from 'component/upgradeModal'
-import Link from 'component/link';
 import {Line} from 'rc-progress';
 
-const App = React.createClass({
-  // Temporary workaround since electron-dl throws errors when you try to get the filename
-  getViewingPageAndArgs: function(address) {
-    // For now, routes are in format ?page or ?page=args
-    let [isMatch, viewingPage, pageArgs] = address.match(/\??([^=]*)(?:=(.*))?/);
-    return {
-      viewingPage: viewingPage,
-      pageArgs: pageArgs === undefined ? null : pageArgs
-    };
-  },
-  componentWillMount: function() {
+class App extends React.Component {
+  componentWillMount() {
     document.addEventListener('unhandledError', (event) => {
       this.props.alertError(event.detail);
     });
@@ -28,24 +15,20 @@ const App = React.createClass({
     if (!this.props.upgradeSkipped) {
       this.props.checkUpgradeAvailable()
     }
-  },
-  render: function() {
+  }
+
+  render() {
     const {
       currentPage,
-      openDrawer,
-      closeDrawer,
-      openModal,
-      closeModal,
       modal,
-      drawerOpen,
       headerLinks,
-      search,
       searchTerm,
     } = this.props
     const searchQuery = (currentPage == 'discover' && searchTerm ? searchTerm : '')
 
-    return <div id="window" className={ drawerOpen ? 'drawer-open' : 'drawer-closed' }>
-      <Header onOpenDrawer={openDrawer} initialQuery={searchQuery} onSearch={search} links={headerLinks} />
+    return <div id="window">
+      <Header initialQuery={searchQuery} onSearch={() => { alert('header search'); }}
+              onSubmit={() => { alert('header submit'); }} links={headerLinks}   />
       <div id="main-content">
         <Router />
       </div>
@@ -54,6 +37,6 @@ const App = React.createClass({
       {modal == 'error' && <ErrorModal />}
     </div>
   }
-});
+}
 
 export default App

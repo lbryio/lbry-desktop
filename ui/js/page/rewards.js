@@ -1,10 +1,7 @@
 import React from 'react';
-import lbry from 'lbry';
 import lbryio from 'lbryio';
 import {CreditAmount, Icon} from 'component/common.js';
-import rewards from 'rewards';
-import Modal from 'component/modal';
-import {WalletNav} from 'component/wallet-nav ewar';
+import NavWallet from 'component/navWallet';
 import {RewardLink} from 'component/reward-link';
 
 const RewardTile = React.createClass({
@@ -36,7 +33,7 @@ const RewardTile = React.createClass({
   }
 });
 
-var RewardsPage = React.createClass({
+export let RewardsPage = React.createClass({
   componentWillMount: function() {
     this.loadRewards()
   },
@@ -58,7 +55,7 @@ var RewardsPage = React.createClass({
   render: function() {
     return (
       <main className="main--single-column">
-        <WalletNav viewingPage="rewards"/>
+        <NavWallet />
         <div>
           {!this.state.userRewards
             ? (this.state.failed ? <div className="empty">Failed to load rewards.</div> : '')

@@ -32,18 +32,6 @@ export function doNavigate(path) {
 export function doLogoClick() {
 }
 
-export function doOpenDrawer() {
-  return {
-    type: types.OPEN_DRAWER
-  }
-}
-
-export function doCloseDrawer() {
-  return {
-    type: types.CLOSE_DRAWER
-  }
-}
-
 export function doOpenModal(modal) {
   return {
     type: types.OPEN_MODAL,
@@ -56,6 +44,12 @@ export function doOpenModal(modal) {
 export function doCloseModal() {
   return {
     type: types.CLOSE_MODAL,
+  }
+}
+
+export function doHistoryBack() {
+  return {
+    type: types.HISTORY_BACK
   }
 }
 
@@ -153,12 +147,8 @@ export function doCheckUpgradeAvailable() {
   return function(dispatch, getState) {
     const state = getState()
 
-    lbry.checkNewVersionAvailable(({isAvailable}) => {
-      if (!isAvailable) {
-        return;
-      }
-
-      lbry.getVersionInfo((versionInfo) => {
+    lbry.getVersionInfo().then(({remoteVersion, upgradeAvailable}) => {
+      if (upgradeAvailable) {
         dispatch({
           type: types.UPDATE_VERSION,
           data: {
@@ -171,7 +161,7 @@ export function doCheckUpgradeAvailable() {
             modal: 'upgrade'
           }
         })
-      });
+      }
     });
   }
 }
