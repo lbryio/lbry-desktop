@@ -1,6 +1,6 @@
 {
   "name": "LBRY",
-  "version": "0.10.0rc9",
+  "version": "0.10.0",
   "main": "main.js",
   "description": "LBRY is a fully decentralized, open-source protocol facilitating the discovery, access, and (sometimes) purchase of data.",
   "author": {
