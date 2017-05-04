@@ -3,7 +3,7 @@ import {
   shouldGetReceiveAddress,
 } from 'selectors/wallet'
 import {
-  shouldFetchFeaturedContent,
+  shouldFetchFeaturedUris,
   shouldFetchDownloadedContent,
   shouldFetchPublishedContent,
 } from 'selectors/content'
@@ -21,7 +21,7 @@ import {
   doGetNewAddress,
 } from 'actions/wallet'
 import {
-  doFetchFeaturedContent,
+  doFetchFeaturedUris,
   doFetchDownloadedContent,
   doFetchPublishedContent,
 } from 'actions/content'
@@ -48,8 +48,8 @@ triggers.push({
 })
 
 triggers.push({
-  selector: shouldFetchFeaturedContent,
-  action: doFetchFeaturedContent,
+  selector: shouldFetchFeaturedUris,
+  action: doFetchFeaturedUris,
 })
 
 triggers.push({

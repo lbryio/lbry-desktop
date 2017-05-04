@@ -22,44 +22,65 @@ const FeaturedCategory = (props) => {
   </div>
 }
 
-let DiscoverPage = React.createClass({
-  getInitialState: function() {
-    return {
-      featuredUris: {},
-      failed: false
-    };
-  },
-  componentWillMount: function() {
-    lbryio.call('discover', 'list', { version: "early-access" } ).then(({Categories, Uris}) => {
-      let featuredUris = {}
-      Categories.forEach((category) => {
-        if (Uris[category] && Uris[category].length) {
-          featuredUris[category] = Uris[category]
-        }
-      })
-      this.setState({ featuredUris: featuredUris });
-    }, () => {
-      this.setState({
-        failed: true
-      })
-    });
-  },
-  render: function() {
-    return <main>{
-      this.state.failed ?
-        <div className="empty">Failed to load landing content.</div> :
-        <div>
-          {
-            Object.keys(this.state.featuredUris).map((category) => {
-              return this.state.featuredUris[category].length ?
-                     <FeaturedCategory key={category} category={category} names={this.state.featuredUris[category]} /> :
-                     '';
-            })
-          }
-        </div>
-    }</main>;
-  }
-})
+const DiscoverPage = (props) => {
+  const {
+    featuredUris
+  } = props
+
+  return  <main>{
+    Object.keys(featuredUris).length === 0 ?
+    <div className="empty">Failed to load landing content.</div> :
+    <div>
+      {
+        Object.keys(featuredUris).map((category) => {
+          return featuredUris[category].length ?
+                 <FeaturedCategory key={category} category={category} names={featuredUris[category]} /> :
+                 '';
+        })
+      }
+    </div>
+  }</main>
+}
+
+//
+// let DiscoverPage = React.createClass({
+//   getInitialState: function() {
+//     return {
+//       featuredUris: {},
+//       failed: false
+//     };
+//   },
+//   componentWillMount: function() {
+//     lbryio.call('discover', 'list', { version: "early-access" } ).then(({Categories, Uris}) => {
+//       let featuredUris = {}
+//       Categories.forEach((category) => {
+//         if (Uris[category] && Uris[category].length) {
+//           featuredUris[category] = Uris[category]
+//         }
+//       })
+//       this.setState({ featuredUris: featuredUris });
+//     }, () => {
+//       this.setState({
+//         failed: true
+//       })
+//     });
+//   },
+//   render: function() {
+//     return <main>{
+//       this.state.failed ?
+//         <div className="empty">Failed to load landing content.</div> :
+//         <div>
+//           {
+//             Object.keys(this.state.featuredUris).map((category) => {
+//               return this.state.featuredUris[category].length ?
+//                      <FeaturedCategory key={category} category={category} names={this.state.featuredUris[category]} /> :
+//                      '';
+//             })
+//           }
+//         </div>
+//     }</main>;
+//   }
+// })
 
 // const DiscoverPage = (props) => {
 //   const {

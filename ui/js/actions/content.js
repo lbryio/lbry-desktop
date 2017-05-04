@@ -121,7 +121,7 @@ export function doFetchPublishedContent() {
   }
 }
 
-export function doFetchFeaturedContent() {
+export function doFetchFeaturedUris() {
   return function(dispatch, getState) {
     const state = getState()
 
@@ -130,11 +130,20 @@ export function doFetchFeaturedContent() {
     })
 
     const success = ({ Categories, Uris }) => {
+
+      let featuredUris = {}
+
+      Categories.forEach((category) => {
+        if (Uris[category] && Uris[category].length) {
+          featuredUris[category] = Uris[category]
+        }
+      })
+
       dispatch({
         type: types.FETCH_FEATURED_CONTENT_COMPLETED,
         data: {
           categories: Categories,
-          uris: Uris,
+          uris: featuredUris,
         }
       })
 
@@ -146,6 +155,13 @@ export function doFetchFeaturedContent() {
     }
 
     const failure = () => {
+      dispatch({
+        type: types.FETCH_FEATURED_CONTENT_COMPLETED,
+        data: {
+          categories: [],
+          uris: {}
+        }
+      })
     }
 
     lbryio.call('discover', 'list', { version: "early-access" } )

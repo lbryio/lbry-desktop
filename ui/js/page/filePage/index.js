@@ -17,7 +17,7 @@ import {
 import {
   selectCurrentUriCostInfo,
 } from 'selectors/cost_info'
-import ShowPage from './view'
+import FilePage from './view'
 
 const select = (state) => ({
   claim: selectCurrentUriClaim(state),
@@ -30,4 +30,4 @@ const select = (state) => ({
 const perform = (dispatch) => ({
 })
 
-export default connect(select, perform)(ShowPage)
+export default connect(select, perform)(FilePage)

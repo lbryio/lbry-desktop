@@ -155,10 +155,6 @@ lbry.checkFirstRun = function(callback) {
   lbry.call('is_first_run', {}, callback);
 }
 
-lbry.getNewAddress = function(callback) {
-  lbry.call('wallet_new_address', {}, callback);
-}
-
 lbry.getUnusedAddress = function(callback) {
   lbry.call('wallet_unused_address', {}, callback);
 }
@@ -174,7 +170,7 @@ lbry.getDaemonSettings = function(callback) {
 lbry.setDaemonSettings = function(settings, callback) {
   lbry.call('set_settings', settings, callback);
 }
-  
+
 lbry.setDaemonSetting = function(setting, value, callback) {
   var setSettingsArgs = {};
   setSettingsArgs[setting] = value;
@@ -640,19 +636,19 @@ lbry.claim_list_mine = function(params={}) {
   });
 }
 
+const claimCacheKey = 'resolve_claim_cache';
+lbry._claimCache = getLocal(claimCacheKey, {});
 lbry.resolve = function(params={}) {
-  const claimCacheKey = 'resolve_claim_cache',
-        claimCache = getSession(claimCacheKey, {})
   return new Promise((resolve, reject) => {
     if (!params.uri) {
       throw "Resolve has hacked cache on top of it that requires a URI"
     }
-    if (params.uri && claimCache[params.uri] !== undefined) {
-      resolve(claimCache[params.uri]);
+    if (params.uri && lbry._claimCache[params.uri] !== undefined) {
+      resolve(lbry._claimCache[params.uri]);
     } else {
       lbry.call('resolve', params, function(data) {
-        claimCache[params.uri] = data;
-        setSession(claimCacheKey, claimCache)
+        lbry._claimCache[params.uri] = data;
+        setLocal(claimCacheKey, lbry._claimCache)
         resolve(data)
       }, reject)
     }
@@ -660,20 +656,18 @@ lbry.resolve = function(params={}) {
 }
 
 // Adds caching.
+lbry._settingsPromise = null;
 lbry.settings_get = function(params={}) {
-  return new Promise((resolve, reject) => {
-    if (params.allow_cached) {
-      const cached = getSession('settings');
-      if (cached) {
-        return resolve(cached);
-      }
-    }
-
+  if (params.allow_cached && lbry._settingsPromise) {
+    return lbry._settingsPromise;
+  }
+  lbry._settingsPromise = new Promise((resolve, reject) => {
     lbry.call('settings_get', {}, (settings) => {
       setSession('settings', settings);
       resolve(settings);
-    });
+    }, reject);
   });
+  return lbry._settingsPromise;
 }
 
 // lbry.get = function(params={}) {

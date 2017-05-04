@@ -41,6 +41,7 @@ export function doGetNewAddress() {
       type: types.GET_NEW_ADDRESS_STARTED
     })
 
+    console.log('do get new address');
     lbry.wallet_new_address().then(function(address) {
       localStorage.setItem('wallet_address', address);
       dispatch({

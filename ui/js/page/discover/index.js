@@ -3,7 +3,7 @@ import {
   connect
 } from 'react-redux'
 import {
-  selectFeaturedContentByCategory
+  selectFeaturedUris
 } from 'selectors/content'
 import {
   doSearchContent,
@@ -17,11 +17,7 @@ import {
 import DiscoverPage from './view'
 
 const select = (state) => ({
-  featuredContentByCategory: selectFeaturedContentByCategory(state),
-  isSearching: selectIsSearching(state),
-  query: selectSearchQuery(state),
-  results: selectCurrentSearchResults(state),
-  searchActive: selectSearchActivated(state),
+  featuredUris: selectFeaturedUris(state),
 })
 
 const perform = (dispatch) => ({

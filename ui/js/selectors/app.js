@@ -1,4 +1,4 @@
-import { createSelector } from 'reselect'
+import {createSelector} from 'reselect'
 
 export const _selectState = state => state.app || {}
 
@@ -22,35 +22,98 @@ export const selectCurrentUri = createSelector(
   (path) => {
     if (path.match(/=/)) {
       return path.split('=')[1]
-    } else {
+    }
+    else {
       return undefined
     }
   }
+)
+
+export const selectCurrentUriTitle = createSelector(
+  _selectState,
+  (state) => "fix me"
 )
 
 export const selectPageTitle = createSelector(
   selectCurrentPage,
   selectCurrentUri,
   (page, uri) => {
-    switch(page)
-    {
-      case 'discover':
-        return 'Discover'
+    switch (page) {
+      case 'search':
+        return 'Search'
+      case 'settings':
+        return 'Settings'
+      case 'help':
+        return 'Help'
+      case 'report':
+        return 'Report'
       case 'wallet':
       case 'send':
       case 'receive':
       case 'rewards':
-        return 'Wallet'
+        return page.charAt(0).toUpperCase() + page.slice(1)
+      case 'show':
+        return lbryuri.normalize(page)
       case 'downloaded':
-        return 'My Files'
+        return 'Downloads & Purchases'
       case 'published':
-        return 'My Files'
+        return 'Publishes'
+      case 'start':
+        return 'Start'
       case 'publish':
         return 'Publish'
       case 'help':
         return 'Help'
+      case 'developer':
+        return 'Developer'
+      case 'discover':
+        return 'Home'
       default:
-        return 'LBRY';
+        return '';
+    }
+  }
+)
+
+export const selectWunderBarAddress = createSelector(
+  selectPageTitle,
+  (title) => title
+)
+
+export const selectWunderBarIcon = createSelector(
+  selectCurrentPage,
+  selectCurrentUri,
+  (page, uri) => {
+    switch (page) {
+      case 'search':
+        return 'icon-search'
+      case 'settings':
+        return 'icon-gear'
+      case 'help':
+        return 'icon-question'
+      case 'report':
+        return 'icon-file'
+      case 'downloaded':
+        return 'icon-folder'
+      case 'published':
+        return 'icon-folder'
+      case 'start':
+        return 'icon-file'
+      case 'rewards':
+        return 'icon-bank'
+      case 'wallet':
+      case 'send':
+      case 'receive':
+        return 'icon-bank'
+      case 'show':
+        return 'icon-file'
+      case 'publish':
+        return 'icon-upload'
+      case 'developer':
+        return 'icon-file'
+      case 'developer':
+        return 'icon-code'
+      case 'discover':
+        return 'icon-home'
     }
   }
 )
@@ -115,24 +178,18 @@ export const selectDownloadComplete = createSelector(
   (state) => state.upgradeDownloadCompleted
 )
 
-export const selectDrawerOpen = createSelector(
-  _selectState,
-  (state) => state.drawerOpen
-)
-
 export const selectHeaderLinks = createSelector(
   selectCurrentPage,
   (page) => {
-    switch(page)
-    {
+    switch (page) {
       case 'wallet':
       case 'send':
       case 'receive':
       case 'rewards':
         return {
-          'wallet' : 'Overview',
-          'send' : 'Send',
-          'receive' : 'Receive',
+          'wallet': 'Overview',
+          'send': 'Send',
+          'receive': 'Receive',
           'rewards': 'Rewards',
         };
       case 'downloaded':

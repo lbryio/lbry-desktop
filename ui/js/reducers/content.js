@@ -12,15 +12,15 @@ reducers[types.FETCH_FEATURED_CONTENT_STARTED] = function(state, action) {
 
 reducers[types.FETCH_FEATURED_CONTENT_COMPLETED] = function(state, action) {
   const {
-    uris
+    uris,
+    success
   } = action.data
-  const newFeaturedContent = Object.assign({}, state.featuredContent, {
-    byCategory: uris,
-  })
+
 
   return Object.assign({}, state, {
     fetchingFeaturedContent: false,
-    featuredContent: newFeaturedContent
+    fetchingFeaturedContentFailed: !success,
+    featuredUris: uris
   })
 }
 

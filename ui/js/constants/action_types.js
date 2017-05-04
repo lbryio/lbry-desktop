@@ -1,9 +1,7 @@
 export const NAVIGATE = 'NAVIGATE'
 export const OPEN_MODAL = 'OPEN_MODAL'
 export const CLOSE_MODAL = 'CLOSE_MODAL'
-
-export const OPEN_DRAWER = 'OPEN_DRAWER'
-export const CLOSE_DRAWER = 'CLOSE_DRAWER'
+export const HISTORY_BACK = 'HISTORY_BACK'
 
 export const DAEMON_READY = 'DAEMON_READY'
 

@@ -7,26 +7,21 @@ import {
 
 export const _selectState = state => state.content || {}
 
-export const selectFeaturedContent = createSelector(
+export const selectFeaturedUris = createSelector(
   _selectState,
-  (state) => state.featuredContent || {}
+  (state) => state.featuredUris || {}
 )
 
-export const selectFeaturedContentByCategory = createSelector(
-  selectFeaturedContent,
-  (featuredContent) => featuredContent.byCategory || {}
-)
-
-export const selectFetchingFeaturedContent = createSelector(
+export const selectFetchingFeaturedUris = createSelector(
   _selectState,
   (state) => !!state.fetchingFeaturedContent
 )
 
-export const shouldFetchFeaturedContent = createSelector(
+export const shouldFetchFeaturedUris = createSelector(
   selectDaemonReady,
   selectCurrentPage,
-  selectFetchingFeaturedContent,
-  selectFeaturedContentByCategory,
+  selectFetchingFeaturedUris,
+  selectFeaturedUris,
   (daemonReady, page, fetching, byCategory) => {
     if (!daemonReady) return false
     if (page != 'discover') return false

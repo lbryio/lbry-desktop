@@ -3,31 +3,21 @@ import {
   connect
 } from 'react-redux'
 import {
-  selectCurrentPage,
-  selectHeaderLinks,
-  selectPageTitle,
-} from 'selectors/app'
+  selectBalance
+} from 'selectors/wallet'
 import {
   doNavigate,
+  doHistoryBack,
 } from 'actions/app'
-import {
-  doSearchContent,
-  doActivateSearch,
-  doDeactivateSearch,
-} from 'actions/search'
 import Header from './view'
 
 const select = (state) => ({
-  currentPage: selectCurrentPage(state),
-  subLinks: selectHeaderLinks(state),
-  pageTitle: selectPageTitle(state),
+  balance: lbry.formatCredits(selectBalance(state), 1)
 })
 
 const perform = (dispatch) => ({
   navigate: (path) => dispatch(doNavigate(path)),
-  search: (query) => dispatch(doSearchContent(query)),
-  activateSearch: () => dispatch(doActivateSearch()),
-  deactivateSearch: () => setTimeout(() => { dispatch(doDeactivateSearch()) }, 50),
+  back: () => dispatch(doHistoryBack()),
 })
 
 export default connect(select, perform)(Header)
