@@ -1,4 +1,6 @@
 const path = require('path');
+const WebpackNotifierPlugin = require('webpack-notifier')
+
 const appPath = path.resolve(__dirname, 'js');
 
 const PATHS = {
@@ -21,6 +23,9 @@ module.exports = {
     root: appPath,
     extensions: ['', '.js', '.jsx', '.css'],
   },
+  plugins: [
+    new WebpackNotifierPlugin(),
+  ],
   module: {
     preLoaders: [
       {
