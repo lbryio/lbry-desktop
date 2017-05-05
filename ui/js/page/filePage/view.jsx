@@ -45,98 +45,86 @@ const FormatItem = (props) => {
   )
 }
 
-let FilePage = React.createClass({
-  _isMounted: false,
+const FilePage = (props) => {
+  const {
+    claim,
+    navigate,
+    claim: {
+      txid,
+      nout,
+      has_signature: hasSignature,
+      signature_is_valid: signatureIsValid,
+      value,
+      value: {
+        stream,
+        stream: {
+          metadata,
+          source,
+          metadata: {
+            title,
+          } = {},
+          source: {
+            contentType,
+          } = {},
+        } = {},
+      } = {},
+    },
+    uri,
+    isDownloaded,
+    fileInfo,
+    costInfo,
+    costInfo: {
+      cost,
+      includesData: costIncludesData,
+    } = {},
+  } = props
 
-  propTypes: {
-    uri: React.PropTypes.string,
-  },
+  const outpoint = txid + ':' + nout;
+  const uriLookupComplete = !!claim && Object.keys(claim).length
 
-  getInitialState: function() {
-    return {
-      cost: null,
-      costIncludesData: null,
-      isDownloaded: null,
-    };
-  },
+  const channelUriObj = lbryuri.parse(uri)
+  delete channelUriObj.path;
+  delete channelUriObj.contentName;
+  const channelUri = signatureIsValid && hasSignature && channelUriObj.isChannel ? lbryuri.build(channelUriObj, false) : null;
+  const uriIndicator = <UriIndicator uri={uri} />
 
-  componentWillUnmount: function() {
-    this._isMounted = false;
-  },
-
-  componentWillReceiveProps: function(nextProps) {
-    if (nextProps.outpoint != this.props.outpoint || nextProps.uri != this.props.uri) {
-      this.loadCostAndFileState(nextProps.uri, nextProps.outpoint);
-    }
-  },
-
-  componentWillMount: function() {
-    this._isMounted = true;
-    this.loadCostAndFileState(this.props.uri, this.props.outpoint);
-  },
-
-  loadCostAndFileState: function(uri, outpoint) {
-    lbry.file_list({outpoint: outpoint}).then((fileInfo) => {
-      if (this._isMounted) {
-        this.setState({
-          isDownloaded: fileInfo.length > 0,
-        });
-      }
-    });
-
-    lbry.getCostInfo(uri).then(({cost, includesData}) => {
-      if (this._isMounted) {
-        this.setState({
-          cost: cost,
-          costIncludesData: includesData,
-        });
-      }
-    });
-  },
-
-  render: function() {
-    const metadata = this.props.metadata,
-      title = metadata ? this.props.metadata.title : this.props.uri,
-      uriIndicator = <UriIndicator uri={uri} hasSignature={hasSignature} signatureIsValid={signatureIsValid} />
-
-    return (
-      <main className="main--single-column">
-        <section className="show-page-media">
-          { this.props.contentType && this.props.contentType.startsWith('video/') ?
-            <Video className="video-embedded" uri={this.props.uri} metadata={metadata} outpoint={this.props.outpoint} /> :
-            (metadata ? <Thumbnail src={metadata.thumbnail} /> : <Thumbnail />) }
-        </section>
-        <section className="card">
-          <div className="card__inner">
-            <div className="card__title-identity">
-              {isDownloaded === false
-                ? <span style={{float: "right"}}><FilePrice uri={lbryuri.normalize(uri)} metadata={metadata} /></span>
-                : null}
-              <h1>{title}</h1>
-              <div className="card__subtitle">
-                { this.props.channelUri ?
-                  <Link href={"?show=" + this.props.channelUri }>{uriIndicator}</Link> :
-                  uriIndicator}
-             </div>
-              <div className="card__actions">
-                <FileActions uri={uri} outpoint={outpoint} metadata={metadata} contentType={contentType} /></div>
-            </div>
-            <div className="card__content card__subtext card__subtext card__subtext--allow-newlines">
-              {metadata.description}
-            </div>
+  return (
+    <main className="main--single-column">
+      <section className="show-page-media">
+        { contentType && contentType.startsWith('video/') ?
+          <Video className="video-embedded" uri={uri} metadata={metadata} outpoint={outpoint} /> :
+          (Object.keys(metadata).length > 0 ? <Thumbnail src={metadata.thumbnail} /> : <Thumbnail />) }
+      </section>
+      <section className="card">
+        <div className="card__inner">
+          <div className="card__title-identity">
+            {isDownloaded === false
+              ? <span style={{float: "right"}}><FilePrice uri={lbryuri.normalize(uri)} /></span>
+              : null}
+            <h1>{title}</h1>
+            <div className="card__subtitle">
+              { channelUri ?
+                <Link href={"?show=" + channelUri }>{uriIndicator}</Link> :
+                uriIndicator}
+           </div>
+            <div className="card__actions">
+              <FileActions uri={uri} /></div>
           </div>
-          { metadata ?
-            <div className="card__content">
-              <FormatItem metadata={metadata} contentType={this.state.contentType} cost={this.state.cost} uri={this.props.uri} outpoint={this.props.outpoint} costIncludesData={this.state.costIncludesData}  />
-            </div> : '' }
+          <div className="card__content card__subtext card__subtext card__subtext--allow-newlines">
+            {metadata.description}
+          </div>
+        </div>
+        { metadata ?
           <div className="card__content">
-            <Link href="https://lbry.io/dmca" label="report" className="button-text-help" />
-          </div>
-        </section>
-      </main>
-    );
-  }
-});
+            <FormatItem metadata={metadata} contentType={contentType} cost={cost} uri={uri} outpoint={outpoint} costIncludesData={costIncludesData}  />
+          </div> : '' }
+        <div className="card__content">
+          <Link href="https://lbry.io/dmca" label="report" className="button-text-help" />
+        </div>
+      </section>
+    </main>
+  )
+}
 
 let ShowPage = React.createClass({
   _uri: null,

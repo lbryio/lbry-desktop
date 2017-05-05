@@ -13,8 +13,9 @@ const Link = (props) => {
     button,
     hidden,
     disabled,
+    children,
   } = props
-  
+
   const className = (props.className || '') +
     (!props.className && !props.button ? 'button-text' : '') + // Non-button links get the same look as text buttons
     (props.button ? ' button-block button-' + props.button + ' button-set-item' : '') +
@@ -22,8 +23,8 @@ const Link = (props) => {
 
 
   let content;
-  if (props.children) {
-    content = this.props.children
+  if (children) {
+    content = children
   } else {
     content = (
       <span {... 'button' in props ? {className: 'button__content'} : {}}>
