@@ -13,6 +13,7 @@ import RewardsPage from 'page/rewards.js';
 import FileListDownloaded from 'page/fileListDownloaded'
 import FileListPublished from 'page/fileListPublished'
 import ChannelPage from 'page/channel'
+import SearchPage from 'page/search'
 
 const route = (page, routesMap) => {
   const component = routesMap[page]
@@ -42,6 +43,7 @@ const Router = (props) => {
     'developer': <DeveloperPage {...props} />,
     'discover': <DiscoverPage {...props} />,
     'rewards': <RewardsPage {...props} />,
+    'search': <SearchPage {...props} />,
   })
 }
 

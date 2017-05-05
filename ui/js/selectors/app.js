@@ -1,4 +1,8 @@
 import {createSelector} from 'reselect'
+import {
+  selectIsSearching,
+  selectSearchActivated,
+} from 'selectors/search'
 
 export const _selectState = state => state.app || {}
 
@@ -14,7 +18,12 @@ export const selectCurrentPath = createSelector(
 
 export const selectCurrentPage = createSelector(
   selectCurrentPath,
-  (path) => path.split('=')[0]
+  selectSearchActivated,
+  (path, searchActivated) => {
+    if (searchActivated) return 'search'
+
+    return path.split('=')[0]
+  }
 )
 
 export const selectCurrentUri = createSelector(

@@ -25,8 +25,8 @@ const perform = (dispatch) => ({
   // navigate: (path) => dispatch(doNavigate(path)),
   onSearch: (query) => dispatch(doSearchContent(query)),
   onSubmit: (query) => dispatch(doSearchContent(query)),
-  // activateSearch: () => dispatch(doActivateSearch()),
-  // deactivateSearch: () => setTimeout(() => { dispatch(doDeactivateSearch()) }, 50),
+  activateSearch: () => dispatch(doActivateSearch()),
+  deactivateSearch: () => setTimeout(() => { dispatch(doDeactivateSearch()) }, 50),
 })
 
 export default connect(select, perform)(Wunderbar)
