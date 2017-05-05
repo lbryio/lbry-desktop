@@ -6,6 +6,7 @@ import {
   selectUpgradeDownloadItem,
   selectUpgradeFilename,
   selectPageTitle,
+  selectCurrentPath,
 } from 'selectors/app'
 
 const {remote, ipcRenderer, shell} = require('electron');
@@ -16,6 +17,11 @@ const fs = remote.require('fs');
 
 export function doNavigate(path) {
   return function(dispatch, getState) {
+    const state = getState()
+    const previousPath = selectCurrentPath(state)
+    const previousTitle = selectPageTitle(state)
+    history.pushState(state, previousTitle, previousPath);
+
     dispatch({
       type: types.NAVIGATE,
       data: {
@@ -23,8 +29,8 @@ export function doNavigate(path) {
       }
     })
 
-    const state = getState()
     const pageTitle = selectPageTitle(state)
+
     window.document.title = pageTitle
   }
 }
@@ -48,8 +54,12 @@ export function doCloseModal() {
 }
 
 export function doHistoryBack() {
-  return {
-    type: types.HISTORY_BACK
+  return function(dispatch, getState) {
+    if (window.history.length > 1) {
+      window.history.back();
+    } else {
+      dispatch(doNavigate('discover'))
+    }
   }
 }
 
@@ -152,7 +162,7 @@ export function doCheckUpgradeAvailable() {
         dispatch({
           type: types.UPDATE_VERSION,
           data: {
-            version: versionInfo.lbrynet_version
+            version: remoteVersion,
           }
         })
         dispatch({

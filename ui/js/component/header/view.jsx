@@ -8,7 +8,7 @@ export const Header = (props) => {
     back,
     navigate
   } = props
-  
+
   return <header id="header">
     <div className="header__item">
       <Link onClick={back} button="alt button--flat" icon="icon-arrow-left" />

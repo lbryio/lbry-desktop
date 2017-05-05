@@ -8,7 +8,6 @@ const defaultState = {
   platform: process.platform,
   upgradeSkipped: sessionStorage.getItem('upgradeSkipped'),
   daemonReady: false,
-  platform: window.navigator.platform,
   obscureNsfw: !lbry.getClientSetting('showNsfw'),
   hidePrice: false,
   hasSignature: false,

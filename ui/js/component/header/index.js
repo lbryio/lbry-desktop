@@ -1,4 +1,5 @@
 import React from 'react'
+import lbry from 'lbry'
 import {
   connect
 } from 'react-redux'
