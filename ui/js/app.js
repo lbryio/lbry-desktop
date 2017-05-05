@@ -303,7 +303,7 @@ var App = React.createClass({
             </div>
           </Modal>
           <ExpandableModal isOpen={this.state.modal == 'error'} contentLabel="Error" className="error-modal"
-                           overlayClassName="error-modal-overlay" onConfirmed={this.closeModal}
+                           overlayClassName="modal-overlay error-modal-overlay" onConfirmed={this.closeModal}
                            extraContent={this.state.errorInfo}>
             <h3 className="modal__header">Error</h3>
 
