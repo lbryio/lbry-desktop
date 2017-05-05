@@ -303,3 +303,12 @@ function upgrade(event, installerPath) {
 }
 
 ipcMain.on('upgrade', upgrade);
+
+if (process.platform == 'darwin') {
+  app.on('open-url', (event, uri) => {
+    win.webContents.send('open-uri-requested', url);
+  });
+} else if (process.argv.length >= 3) {
+  // No open-url event on Win, but we can still handle URIs provided at launch time
+  win.webContents.send('open-uri-requested', process.argv[2]);
+}

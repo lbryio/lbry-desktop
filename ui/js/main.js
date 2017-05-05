@@ -8,7 +8,7 @@ import SplashScreen from './component/splash.js';
 import SnackBar from './component/snack-bar.js';
 import {AuthOverlay} from './component/auth.js';
 
-const {remote} = require('electron');
+const {remote, ipcRenderer} = require('electron');
 const contextMenu = remote.require('./menu/context-menu');
 
 lbry.showMenuIfNeeded();
@@ -17,6 +17,10 @@ window.addEventListener('contextmenu', (event) => {
   contextMenu.showContextMenu(remote.getCurrentWindow(), event.x, event.y,
                               lbry.getClientSetting('showDeveloperMenu'));
   event.preventDefault();
+});
+
+ipcRenderer.on('open-uri-requested', (event, uri) => {
+  window.location.href = `?show=${uri}`;
 });
 
 let init = function() {
