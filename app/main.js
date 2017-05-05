@@ -52,19 +52,25 @@ function checkForNewVersion(callback) {
       const [_, remoteVersion] = tagName.match(/^v([\d.]+(?:-?rc\d+)?)$/);
       if (!remoteVersion) {
         console.log('Malformed remote version string:', tagName);
-        win.webContents.send('version-info-received', null);
+        if (win) {
+          win.webContents.send('version-info-received', null);
+        }
       } else {
         console.log('Remote version:', remoteVersion);
         const upgradeAvailable = semver.gt(formatRc(remoteVersion), formatRc(localVersion));
         console.log(upgradeAvailable ? 'Upgrade available' : 'No upgrade available');
-        win.webContents.send('version-info-received', {remoteVersion, localVersion, upgradeAvailable});
+        if (win) {
+          win.webContents.send('version-info-received', {remoteVersion, localVersion, upgradeAvailable});          
+        }
       }
     })
   });
 
   req.on('error', (err) => {
     console.log('Failed to get current version from GitHub. Error:', err);
-    win.webContents.send('version-info-received', null);
+    if (win) {
+      win.webContents.send('version-info-received', null);      
+    }
   });
 }
 
