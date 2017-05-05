@@ -198,6 +198,12 @@ export const selectHeaderLinks = createSelector(
           'downloaded': 'Downloaded',
           'published': 'Published',
         };
+      case 'settings':
+      case 'help':
+        return {
+          'settings': 'Settings',
+          'help': 'Help',
+        }
       default:
         return null;
     }

@@ -2,7 +2,7 @@ import React from 'react';
 import lbry from 'lbry.js';
 import Link from 'component/link';
 import Modal from 'component/modal';
-import NavWallet from 'component/navWallet';
+import SubHeader from 'component/subHeader'
 import {
   FormField,
   FormRow
@@ -248,7 +248,7 @@ const WalletPage = (props) => {
 
   return (
     <main className="main--single-column">
-      <NavWallet />
+      <SubHeader />
       <section className="card">
         <div className="card__title-primary">
           <h3>Balance</h3>

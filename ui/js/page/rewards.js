@@ -1,7 +1,7 @@
 import React from 'react';
 import lbryio from 'lbryio';
 import {CreditAmount, Icon} from 'component/common.js';
-import NavWallet from 'component/navWallet';
+import SubHeader from 'component/subHeader'
 import {RewardLink} from 'component/reward-link';
 
 const RewardTile = React.createClass({
@@ -55,7 +55,7 @@ export let RewardsPage = React.createClass({
   render: function() {
     return (
       <main className="main--single-column">
-        <NavWallet />
+        <SubHeader />
         <div>
           {!this.state.userRewards
             ? (this.state.failed ? <div className="empty">Failed to load rewards.</div> : '')

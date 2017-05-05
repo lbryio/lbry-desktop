@@ -2,7 +2,7 @@
 import React from 'react';
 import lbry from 'lbry.js';
 import Link from 'component/link';
-import NavSettings from 'component/navSettings';
+import SubHeader from 'component/subHeader'
 import {version as uiVersion} from 'json!../../../package.json';
 
 var HelpPage = React.createClass({
@@ -50,7 +50,7 @@ var HelpPage = React.createClass({
 
     return (
       <main className="main--single-column">
-        <NavSettings />
+        <SubHeader />
         <section className="card">
           <div className="card__title-primary">
             <h3>Read the FAQ</h3>
