@@ -1,6 +1,6 @@
 import React from 'react';
 import {FormField, FormRow} from '../component/form.js';
-import NavSettings from 'component/navSettings';
+import SubHeader from 'component/subHeader'
 import lbry from '../lbry.js';
 
 var SettingsPage = React.createClass({
@@ -91,7 +91,7 @@ var SettingsPage = React.createClass({
  */
     return (
       <main className="main--single-column">
-        <NavSettings />
+        <SubHeader />
         <section className="card">
           <div className="card__content">
             <h3>Download Directory</h3>
