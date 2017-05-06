@@ -22,7 +22,7 @@ export const selectCurrentPage = createSelector(
   (path, searchActivated) => {
     if (searchActivated) return 'search'
 
-    return path.split('=')[0]
+    return path.replace(/^\//, '').split('=')[0]
   }
 )
 

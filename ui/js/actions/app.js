@@ -20,18 +20,22 @@ export function doNavigate(path) {
     const state = getState()
     const previousPath = selectCurrentPath(state)
     const previousTitle = selectPageTitle(state)
-    history.pushState(state, previousTitle, previousPath);
+    history.pushState({}, previousTitle, previousPath);
 
-    dispatch({
-      type: types.NAVIGATE,
-      data: {
-        path,
-      }
-    })
+    dispatch(doChangePath(path))
 
     const pageTitle = selectPageTitle(state)
 
     window.document.title = pageTitle
+  }
+}
+
+export function doChangePath(path) {
+  return {
+    type: types.CHANGE_PATH,
+    data: {
+      path,
+    }
   }
 }
 

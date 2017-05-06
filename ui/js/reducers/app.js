@@ -19,7 +19,7 @@ reducers[types.DAEMON_READY] = function(state, action) {
   })
 }
 
-reducers[types.NAVIGATE] = function(state, action) {
+reducers[types.CHANGE_PATH] = function(state, action) {
   return Object.assign({}, state, {
     currentPath: action.data.path,
   })

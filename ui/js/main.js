@@ -11,7 +11,8 @@ import { Provider } from 'react-redux';
 import store from 'store.js';
 import { runTriggers } from 'triggers'
 import {
-  doDaemonReady
+  doDaemonReady,
+  doChangePath,
 } from 'actions/app'
 
 const {remote} = require('electron');
@@ -25,6 +26,18 @@ window.addEventListener('contextmenu', (event) => {
                               lbry.getClientSetting('showDeveloperMenu'));
   event.preventDefault();
 });
+
+window.addEventListener('popstate', (event) => {
+  let pathname = document.location.pathname
+  if (pathname.match(/dist/))
+    pathname = '/discover'
+
+  app.store.dispatch(doChangePath(pathname))
+})
+
+if (window.location.hash != '') {
+  window.history.pushState({}, "Discover", location.hash.substring(2));
+}
 
 const initialState = app.store.getState();
 app.store.subscribe(runTriggers);

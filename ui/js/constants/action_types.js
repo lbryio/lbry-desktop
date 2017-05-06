@@ -1,4 +1,4 @@
-export const NAVIGATE = 'NAVIGATE'
+export const CHANGE_PATH = 'CHANGE_PATH'
 export const OPEN_MODAL = 'OPEN_MODAL'
 export const CLOSE_MODAL = 'CLOSE_MODAL'
 export const HISTORY_BACK = 'HISTORY_BACK'
