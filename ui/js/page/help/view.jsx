@@ -77,7 +77,7 @@ var HelpPage = React.createClass({
           <div className="card__title-primary"><h3>Report a Bug</h3></div>
           <div className="card__content">
             <p>Did you find something wrong?</p>
-            <p><Link href="?report" label="Submit a Bug Report" icon="icon-bug" button="alt" /></p>
+            <p><Link onClick={() => navigate('report')} label="Submit a Bug Report" icon="icon-bug" button="alt" /></p>
             <div className="meta">Thanks! LBRY is made by its users.</div>
           </div>
         </section>

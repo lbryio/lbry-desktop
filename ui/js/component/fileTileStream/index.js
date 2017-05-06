@@ -49,7 +49,7 @@ const makeSelect = () => {
 }
 
 const perform = (dispatch) => ({
-  navigate: (path) => dispatch(doNavigate(path))
+  navigate: (path, params) => dispatch(doNavigate(path, params))
 })
 
 export default connect(makeSelect, perform)(FileTileStream)

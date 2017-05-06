@@ -18,7 +18,7 @@ const SearchNoResults = (props) => {
   return <section>
     <span className="empty">
       No one has checked anything in for {query} yet.
-      <Link label="Be the first" href="#" onClick={() => navigate('publish')} />
+      <Link label="Be the first" onClick={() => navigate('/publish')} />
     </span>
   </section>;
 }

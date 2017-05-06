@@ -147,7 +147,7 @@ var PublishPage = React.createClass({
     });
   },
   handlePublishStartedConfirmed: function() {
-    this.props.navigate('published')
+    this.props.navigate('/published')
   },
   handlePublishError: function(error) {
     this.setState({

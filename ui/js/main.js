@@ -27,17 +27,28 @@ window.addEventListener('contextmenu', (event) => {
   event.preventDefault();
 });
 
-window.addEventListener('popstate', (event) => {
-  let pathname = document.location.pathname
-  if (pathname.match(/dist/))
-    pathname = '/discover'
+const parseQueryParams = (queryString) => {
+  if (queryString === '') return {};
+  const parts = queryString
+    .split('?')
+    .pop()
+    .split('&')
+    .map(function(p) { return p.split('=') })
 
-  app.store.dispatch(doChangePath(pathname))
-})
-
-if (window.location.hash != '') {
-  window.history.pushState({}, "Discover", location.hash.substring(2));
+  const params = {};
+  parts.forEach(function(arr) {
+    params[arr[0]] = arr[1];
+  })
+  return params;
 }
+
+window.addEventListener('popstate', (event) => {
+  const pathname = document.location.pathname
+  const queryString = document.location.search
+  if (pathname.match(/dist/)) return
+
+  app.store.dispatch(doChangePath(`${pathname}${queryString}`))
+})
 
 const initialState = app.store.getState();
 app.store.subscribe(runTriggers);
@@ -54,6 +65,7 @@ var init = function() {
 
   function onDaemonReady() {
     app.store.dispatch(doDaemonReady())
+    window.history.pushState({}, "Discover", '/discover');
     ReactDOM.render(<Provider store={store}><div>{ lbryio.enabled ? <AuthOverlay/> : '' }<App /><SnackBar /></div></Provider>, canvas)
   }
 
