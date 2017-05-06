@@ -1,4 +1,5 @@
 import {createSelector} from 'reselect'
+import lbryuri from 'lbryuri'
 import {
   selectIsSearching,
   selectSearchActivated,
@@ -62,7 +63,7 @@ export const selectPageTitle = createSelector(
       case 'rewards':
         return page.charAt(0).toUpperCase() + page.slice(1)
       case 'show':
-        return lbryuri.normalize(page)
+        return lbryuri.normalize(uri)
       case 'downloaded':
         return 'Downloads & Purchases'
       case 'published':

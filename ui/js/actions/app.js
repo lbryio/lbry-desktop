@@ -22,19 +22,18 @@ const queryStringFromParams = (params) => {
     .join('&')
 }
 
-export function doNavigate(path, params) {
+export function doNavigate(path, params = {}) {
   return function(dispatch, getState) {
-    const state = getState()
-    const pageTitle = selectPageTitle(state)
     let url = path
     if (params)
       url = `${url}?${queryStringFromParams(params)}`
 
-    history.pushState(params, pageTitle, url)
-
-    window.document.title = pageTitle
-
     dispatch(doChangePath(url))
+
+    const state = getState()
+    const pageTitle = selectPageTitle(state)
+    history.pushState(params, pageTitle, url)
+    window.document.title = pageTitle
   }
 }
 
@@ -46,6 +45,7 @@ export function doChangePath(path) {
         path,
       }
     })
+
   }
 }
 
