@@ -1,5 +1,6 @@
 import React from 'react';
 import lbryio from 'lbryio.js';
+import lbryuri from 'lbryuri'
 import FileTile from 'component/fileTile';
 import { FileTileStream } from 'component/fileTileStream'
 import {ToolTip} from 'component/tooltip.js';
@@ -24,80 +25,26 @@ const FeaturedCategory = (props) => {
 
 const DiscoverPage = (props) => {
   const {
-    featuredUris
+    featuredUris,
+    fetchingFeaturedUris,
   } = props
+  const failed = Object.keys(featuredUris).length === 0
 
-  return  <main>{
-    Object.keys(featuredUris).length === 0 ?
-    <div className="empty">Failed to load landing content.</div> :
-    <div>
-      {
-        Object.keys(featuredUris).map((category) => {
-          return featuredUris[category].length ?
-                 <FeaturedCategory key={category} category={category} names={featuredUris[category]} /> :
-                 '';
-        })
-      }
-    </div>
-  }</main>
+  let content
+
+  if (fetchingFeaturedUris) content = <div className="empty">Fetching landing content.</div>
+  if (!fetchingFeaturedUris && failed) content = <div className="empty">Failed to load landing content.</div>
+  if (!fetchingFeaturedUris && !failed) {
+    content = Object.keys(featuredUris).map(category => {
+      return featuredUris[category].length ?
+         <FeaturedCategory key={category} category={category} names={featuredUris[category]} /> :
+         '';
+    })
+  }
+
+  return (
+    <main>{content}</main>
+  )
 }
-
-//
-// let DiscoverPage = React.createClass({
-//   getInitialState: function() {
-//     return {
-//       featuredUris: {},
-//       failed: false
-//     };
-//   },
-//   componentWillMount: function() {
-//     lbryio.call('discover', 'list', { version: "early-access" } ).then(({Categories, Uris}) => {
-//       let featuredUris = {}
-//       Categories.forEach((category) => {
-//         if (Uris[category] && Uris[category].length) {
-//           featuredUris[category] = Uris[category]
-//         }
-//       })
-//       this.setState({ featuredUris: featuredUris });
-//     }, () => {
-//       this.setState({
-//         failed: true
-//       })
-//     });
-//   },
-//   render: function() {
-//     return <main>{
-//       this.state.failed ?
-//         <div className="empty">Failed to load landing content.</div> :
-//         <div>
-//           {
-//             Object.keys(this.state.featuredUris).map((category) => {
-//               return this.state.featuredUris[category].length ?
-//                      <FeaturedCategory key={category} category={category} names={this.state.featuredUris[category]} /> :
-//                      '';
-//             })
-//           }
-//         </div>
-//     }</main>;
-//   }
-// })
-
-// const DiscoverPage = (props) => {
-//   const {
-//     isSearching,
-//     query,
-//     results,
-//     searchActive,
-//   } = props
-//
-//   return (
-//     <main>
-//       { (!searchActive || (!isSearching && !query)) && <FeaturedContent {...props} /> }
-//       { searchActive && isSearching ? <SearchActive /> : null }
-//       { searchActive && !isSearching && query && results.length ? <SearchResults results={results} /> : null }
-//       { searchActive && !isSearching && query && !results.length ? <SearchNoResults query={query} /> : null }
-//     </main>
-//   );
-// }
 
 export default DiscoverPage;
