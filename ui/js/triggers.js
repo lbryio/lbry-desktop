@@ -34,6 +34,12 @@ import {
 import {
   doFetchCurrentUriAvailability,
 } from 'actions/availability'
+import {
+  shouldSearch,
+} from 'selectors/search'
+import {
+  doSearch,
+} from 'actions/search'
 
 const triggers = []
 
@@ -75,6 +81,11 @@ triggers.push({
 triggers.push({
   selector: shouldFetchCurrentUriAvailability,
   action: doFetchCurrentUriAvailability,
+})
+
+triggers.push({
+  selector: shouldSearch,
+  action: doSearch,
 })
 
 const runTriggers = function() {

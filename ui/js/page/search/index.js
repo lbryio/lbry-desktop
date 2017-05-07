@@ -7,10 +7,12 @@ import {
 } from 'actions/search'
 import {
   selectIsSearching,
-  selectSearchQuery,
   selectCurrentSearchResults,
   selectSearchActivated,
 } from 'selectors/search'
+import {
+  selectSearchQuery,
+} from 'selectors/app'
 import {
   doNavigate,
 } from 'actions/app'

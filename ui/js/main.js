@@ -14,6 +14,7 @@ import {
   doDaemonReady,
   doChangePath,
 } from 'actions/app'
+import parseQueryParams from 'util/query_params'
 
 const {remote} = require('electron');
 const contextMenu = remote.require('./menu/context-menu');
@@ -26,21 +27,6 @@ window.addEventListener('contextmenu', (event) => {
                               lbry.getClientSetting('showDeveloperMenu'));
   event.preventDefault();
 });
-
-const parseQueryParams = (queryString) => {
-  if (queryString === '') return {};
-  const parts = queryString
-    .split('?')
-    .pop()
-    .split('&')
-    .map(function(p) { return p.split('=') })
-
-  const params = {};
-  parts.forEach(function(arr) {
-    params[arr[0]] = arr[1];
-  })
-  return params;
-}
 
 window.addEventListener('popstate', (event) => {
   const pathname = document.location.pathname
