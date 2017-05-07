@@ -1,8 +1,6 @@
 import {createSelector} from 'reselect'
-import {
-  selectIsSearching,
-  selectSearchActivated,
-} from 'selectors/search'
+import parseQueryParams from 'util/query_params'
+import lbryuri from 'lbryuri'
 
 export const _selectState = state => state.app || {}
 
@@ -18,12 +16,24 @@ export const selectCurrentPath = createSelector(
 
 export const selectCurrentPage = createSelector(
   selectCurrentPath,
-  selectSearchActivated,
-  (path, searchActivated) => {
-    if (searchActivated) return 'search'
-
-    return path.split('=')[0]
+  (path) => {
+    return path.replace(/^\//, '').split('?')[0]
   }
+)
+
+export const selectCurrentParams = createSelector(
+  selectCurrentPath,
+  (path) => {
+    if (path === undefined) return {}
+    if (!path.match(/\?/)) return {}
+
+    return parseQueryParams(path.split('?')[1])
+  }
+)
+
+export const selectSearchQuery = createSelector(
+  selectCurrentParams,
+  (params) => params.query
 )
 
 export const selectCurrentUri = createSelector(
@@ -62,7 +72,7 @@ export const selectPageTitle = createSelector(
       case 'rewards':
         return page.charAt(0).toUpperCase() + page.slice(1)
       case 'show':
-        return lbryuri.normalize(page)
+        return lbryuri.normalize(uri)
       case 'downloaded':
         return 'Downloads & Purchases'
       case 'published':
@@ -85,7 +95,8 @@ export const selectPageTitle = createSelector(
 
 export const selectWunderBarAddress = createSelector(
   selectPageTitle,
-  (title) => title
+  selectSearchQuery,
+  (title, query) => query || title
 )
 
 export const selectWunderBarIcon = createSelector(

@@ -61,8 +61,6 @@ class WunderBar extends React.PureComponent {
       isActive: true
     }
 
-    this.props.activateSearch()
-
     this._focusPending = true;
     //below is hacking, improved when we have proper routing
     if (!this.state.address.startsWith('lbry://') && this.state.icon !== "icon-search") //onFocus, if they are not on an exact URL or a search page, clear the bar
@@ -73,7 +71,6 @@ class WunderBar extends React.PureComponent {
   }
 
   onBlur() {
-    this.props.deactivateSearch()
     let commonState = {isActive: false};
     if (this._resetOnNextBlur) {
       this.setState(Object.assign({}, this._stateBeforeSearch, commonState));
@@ -123,7 +120,7 @@ class WunderBar extends React.PureComponent {
     return (
       <div className={'wunderbar' + (this.state.isActive ? ' wunderbar--active' : '')}>
         {this.state.icon ? <Icon fixed icon={this.state.icon} /> : '' }
-        <input className="wunderbar__input" type="search" placeholder="Type a LBRY address or search term"
+        <input className="wunderbar__input" type="search"
                ref={this.onReceiveRef}
                onFocus={this.onFocus}
                onBlur={this.onBlur}

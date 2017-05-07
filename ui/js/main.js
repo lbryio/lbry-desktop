@@ -11,8 +11,10 @@ import { Provider } from 'react-redux';
 import store from 'store.js';
 import { runTriggers } from 'triggers'
 import {
-  doDaemonReady
+  doDaemonReady,
+  doChangePath,
 } from 'actions/app'
+import parseQueryParams from 'util/query_params'
 
 const {remote} = require('electron');
 const contextMenu = remote.require('./menu/context-menu');
@@ -25,6 +27,14 @@ window.addEventListener('contextmenu', (event) => {
                               lbry.getClientSetting('showDeveloperMenu'));
   event.preventDefault();
 });
+
+window.addEventListener('popstate', (event) => {
+  const pathname = document.location.pathname
+  const queryString = document.location.search
+  if (pathname.match(/dist/)) return
+
+  app.store.dispatch(doChangePath(`${pathname}${queryString}`))
+})
 
 const initialState = app.store.getState();
 app.store.subscribe(runTriggers);
@@ -41,6 +51,7 @@ var init = function() {
 
   function onDaemonReady() {
     app.store.dispatch(doDaemonReady())
+    window.history.pushState({}, "Discover", '/discover');
     ReactDOM.render(<Provider store={store}><div>{ lbryio.enabled ? <AuthOverlay/> : '' }<App /><SnackBar /></div></Provider>, canvas)
   }
 

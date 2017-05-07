@@ -1,4 +1,5 @@
 import React from 'react'
+import Link from 'component/link'
 
 const SubHeader = (props) => {
   const {
@@ -12,9 +13,9 @@ const SubHeader = (props) => {
 
   for(let link of Object.keys(subLinks)) {
     links.push(
-      <a href="#" onClick={() => navigate(link)} key={link} className={link == currentPage ? 'sub-header-selected' : 'sub-header-unselected' }>
+      <Link onClick={(event) => navigate(`/${link}`, event)} key={link} className={link == currentPage ? 'sub-header-selected' : 'sub-header-unselected' }>
         {subLinks[link]}
-      </a>
+      </Link>
     )
   }
 

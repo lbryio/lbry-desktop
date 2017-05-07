@@ -67,7 +67,7 @@ class FileCardStream extends React.Component {
     const isConfirmed = !!metadata;
     const title = isConfirmed ? metadata.title : uri;
     const obscureNsfw = this.props.obscureNsfw && isConfirmed && metadata.nsfw;
-    const primaryUrl = 'show=' + uri;
+    const primaryUrl = '/show?uri=' + uri;
     let description = ""
     if (isConfirmed) {
       description = metadata.description
@@ -80,7 +80,7 @@ class FileCardStream extends React.Component {
     return (
       <section className={ 'card card--small card--link ' + (obscureNsfw ? 'card--obscured ' : '') } onMouseEnter={this.handleMouseOver.bind(this)} onMouseLeave={this.handleMouseOut.bind(this)}>
         <div className="card__inner">
-          <a href="#" onClick={() => navigate(primaryUrl)} className="card__link">
+          <Link onClick={() => navigate('/show', { uri })} className="card__link">
             <div className="card__title-identity">
               <h5 title={title}><TruncatedText lines={1}>{title}</TruncatedText></h5>
               <div className="card__subtitle">
@@ -94,12 +94,12 @@ class FileCardStream extends React.Component {
             <div className="card__content card__subtext card__subtext--two-lines">
                 <TruncatedText lines={2}>{description}</TruncatedText>
             </div>
-          </a>
+          </Link>
           {this.state.showNsfwHelp && this.state.hovered
             ? <div className='card-overlay'>
              <p>
                This content is Not Safe For Work.
-               To view adult content, please change your <Link className="button-text" href="?settings" label="Settings" />.
+               To view adult content, please change your <Link className="button-text" onClick={() => navigate('settings')} label="Settings" />.
              </p>
            </div>
             : null}

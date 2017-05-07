@@ -3,21 +3,14 @@ import {
   connect
 } from 'react-redux'
 import {
-  selectFeaturedUris
+  selectFeaturedUris,
+  selectFetchingFeaturedUris,
 } from 'selectors/content'
-import {
-  doSearchContent,
-} from 'actions/search'
-import {
-  selectIsSearching,
-  selectSearchQuery,
-  selectCurrentSearchResults,
-  selectSearchActivated,
-} from 'selectors/search'
 import DiscoverPage from './view'
 
 const select = (state) => ({
   featuredUris: selectFeaturedUris(state),
+  fetchingFeaturedUris: selectFetchingFeaturedUris(state),
 })
 
 const perform = (dispatch) => ({

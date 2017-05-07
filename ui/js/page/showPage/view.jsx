@@ -53,7 +53,7 @@ const ShowPage = (props) => {
           </div>
           <div className="card__content">
             { uriLookupComplete ?
-              <p>This location is not yet in use. { ' ' }<Link href="#" onClick={() => navigate('publish')} label="Put something here" />.</p> :
+              <p>This location is not yet in use. { ' ' }<Link onClick={() => navigate('/publish')} label="Put something here" />.</p> :
                 <BusyMessage message="Loading magic decentralized data..." />
             }
           </div>

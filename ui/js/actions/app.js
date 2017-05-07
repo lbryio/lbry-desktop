@@ -15,23 +15,43 @@ const app = require('electron').remote.app;
 const {download} = remote.require('electron-dl');
 const fs = remote.require('fs');
 
-export function doNavigate(path) {
-  return function(dispatch, getState) {
-    const state = getState()
-    const previousPath = selectCurrentPath(state)
-    const previousTitle = selectPageTitle(state)
-    history.pushState(state, previousTitle, previousPath);
+const queryStringFromParams = (params) => {
+  return Object
+    .keys(params)
+    .map(key => `${key}=${params[key]}`)
+    .join('&')
+}
 
+export function doNavigate(path, params = {}) {
+  return function(dispatch, getState) {
+    let url = path
+    if (params)
+      url = `${url}?${queryStringFromParams(params)}`
+
+    dispatch(doChangePath(url))
+
+    const state = getState()
+    const pageTitle = selectPageTitle(state)
+    history.pushState(params, pageTitle, url)
+    window.document.title = pageTitle
+  }
+}
+
+export function doChangePath(path) {
+  return function(dispatch, getState) {
     dispatch({
-      type: types.NAVIGATE,
+      type: types.CHANGE_PATH,
       data: {
         path,
       }
     })
 
-    const pageTitle = selectPageTitle(state)
+  }
+}
 
-    window.document.title = pageTitle
+export function doHistoryBack() {
+  return function(dispatch, getState) {
+    history.back()
   }
 }
 
@@ -50,16 +70,6 @@ export function doOpenModal(modal) {
 export function doCloseModal() {
   return {
     type: types.CLOSE_MODAL,
-  }
-}
-
-export function doHistoryBack() {
-  return function(dispatch, getState) {
-    if (window.history.length > 1) {
-      window.history.back();
-    } else {
-      dispatch(doNavigate('discover'))
-    }
   }
 }
 

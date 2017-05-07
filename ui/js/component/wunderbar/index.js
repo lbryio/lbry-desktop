@@ -23,10 +23,12 @@ const select = (state) => ({
 
 const perform = (dispatch) => ({
   // navigate: (path) => dispatch(doNavigate(path)),
-  onSearch: (query) => dispatch(doSearchContent(query)),
-  onSubmit: (query) => dispatch(doSearchContent(query)),
-  activateSearch: () => dispatch(doActivateSearch()),
-  deactivateSearch: () => setTimeout(() => { dispatch(doDeactivateSearch()) }, 50),
+  // onSearch: (query) => dispatch(doSearchContent(query)),
+  // onSubmit: (query) => dispatch(doSearchContent(query)),
+  // activateSearch: () => dispatch(doActivateSearch()),
+  // deactivateSearch: () => setTimeout(() => { dispatch(doDeactivateSearch()) }, 50),
+  onSearch: (query) => dispatch(doNavigate('/search', { query })),
+  onSubmit: (query) => console.debug('you submitted'),
 })
 
 export default connect(select, perform)(Wunderbar)
