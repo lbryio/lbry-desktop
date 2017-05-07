@@ -1,7 +1,7 @@
 import * as types from 'constants/action_types'
 
 const reducers = {}
-const address = sessionStorage.getItem('receiveAddress')
+const address = localStorage.getItem('receiveAddress')
 const buildDraftTransaction = () => ({
   amount: undefined,
   address: undefined
@@ -50,7 +50,7 @@ reducers[types.GET_NEW_ADDRESS_STARTED] = function(state, action) {
 reducers[types.GET_NEW_ADDRESS_COMPLETED] = function(state, action) {
   const { address } = action.data
 
-  sessionStorage.setItem('receiveAddress', address)
+  localStorage.setItem('receiveAddress', address)
   return Object.assign({}, state, {
     gettingNewAddress: false,
     receiveAddress: address
