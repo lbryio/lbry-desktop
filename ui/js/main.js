@@ -19,10 +19,6 @@ window.addEventListener('contextmenu', (event) => {
   event.preventDefault();
 });
 
-ipcRenderer.on('open-uri-requested', (event, uri) => {
-  window.location.href = `?show=${uri}`;
-});
-
 let init = function() {
   window.lbry = lbry;
   window.lighthouse = lighthouse;

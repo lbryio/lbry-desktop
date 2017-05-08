@@ -95,6 +95,10 @@ var App = React.createClass({
       this.alertError(event.detail);
     });
 
+    ipcRenderer.on('open-uri-requested', (event, uri) => {
+      this.openUri(uri);
+    });
+
     //open links in external browser and skip full redraw on changing page
     document.addEventListener('click', (event) => {
       var target = event.target;
@@ -152,7 +156,7 @@ var App = React.createClass({
       pageArgs: term
     });
   },
-  onSubmit: function(uri) {
+  openUri: function(uri) {
     this._storeHistoryOfNextRender = true;
     this.setState({
       address: uri,
@@ -275,7 +279,7 @@ var App = React.createClass({
       this._fullScreenPages.includes(this.state.viewingPage) ?
         mainContent :
         <div id="window">
-          <Header onSearch={this.onSearch} onSubmit={this.onSubmit} address={address} wunderBarIcon={wunderBarIcon} viewingPage={this.state.viewingPage} />
+          <Header onSearch={this.onSearch} onSubmit={this.openUri} address={address} wunderBarIcon={wunderBarIcon} viewingPage={this.state.viewingPage} />
           <div id="main-content">
             {mainContent}
           </div>
