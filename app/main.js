@@ -30,6 +30,10 @@ let daemonStopRequested = false;
 // this is set to true and app.quit() is called again to quit for real.
 let readyToQuit = false;
 
+// If we receive a URI to open from an external app but there's no window to
+// send it to, it's cached in this variable.
+let openUri = null;
+
 function checkForNewVersion(callback) {
   function formatRc(ver) {
     // Adds dash if needed to make RC suffix semver friendly
@@ -116,9 +120,16 @@ function getPidsForProcessName(name) {
 
 function createWindow () {
   win = new BrowserWindow({backgroundColor: '#155B4A', minWidth: 800, minHeight: 600 }) //$color-primary
+
   win.maximize()
   // win.webContents.openDevTools();
   win.loadURL(`file://${__dirname}/dist/index.html`)
+  if (openUri) { // We stored and received a URI that an external app requested before we had a window object
+    win.webContents.on('did-finish-load', () => {
+      win.webContents.send('open-uri-requested', openUri);
+    });
+  }
+
   win.on('closed', () => {
     win = null
   })
@@ -309,3 +320,17 @@ function upgrade(event, installerPath) {
 }
 
 ipcMain.on('upgrade', upgrade);
+
+if (process.platform == 'darwin') {
+  app.on('open-url', (event, uri) => {
+    if (!win) {
+      // Window not created yet, so store up requested URI for when it is
+      openUri = uri;
+    } else {
+      win.webContents.send('open-uri-requested', uri);
+    }
+  });
+} else if (process.argv.length >= 3) {
+  // No open-url event on Win, but we can still handle URIs provided at launch time
+  win.webContents.send('open-uri-requested', process.argv[2]);
+}
