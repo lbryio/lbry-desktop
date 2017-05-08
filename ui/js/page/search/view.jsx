@@ -4,7 +4,6 @@ import lbryio from 'lbryio';
 import lbryuri from 'lbryuri';
 import lighthouse from 'lighthouse';
 import FileTile from 'component/fileTile'
-import FileTileStream from 'component/fileTileStream'
 import Link from 'component/link'
 import {ToolTip} from 'component/tooltip.js';
 import {BusyMessage} from 'component/common.js';
@@ -17,7 +16,7 @@ const SearchNoResults = (props) => {
 
   return <section>
     <span className="empty">
-      No one has checked anything in for {query} yet.
+      No one has checked anything in for {query} yet. { ' ' }
       <Link label="Be the first" onClick={() => navigate('/publish')} />
     </span>
   </section>;
@@ -39,7 +38,7 @@ const SearchResultList = (props) => {
     });
 
     rows.push(
-      <FileTileStream key={uri} uri={uri} />
+      <FileTile key={uri} uri={uri} />
     );
   }
   return (
@@ -49,13 +48,12 @@ const SearchResultList = (props) => {
 
 const SearchResults = (props) => {
   const {
-    searching,
-    results,
-    query,
+    isSearching,
+    results
   } = props
 
   return (
-    searching ?
+    isSearching ?
      <BusyMessage message="Looking up the Dewey Decimals" /> :
      (results && results.length) ?
         <SearchResultList {...props} /> :
@@ -68,7 +66,7 @@ const SearchPage = (props) => {
   const {
     query,
   } = props
-
+//        <SearchResults {...props} />
   return (
     <main className="main--single-column">
       { isValidUri(query) ?
@@ -84,7 +82,7 @@ const SearchPage = (props) => {
           Search Results for {query}
           <ToolTip label="?" body="These search results are provided by LBRY, Inc." className="tooltip--header" />
         </h3>
-        <SearchResults {...props} />
+
       </section>
     </main>
   )

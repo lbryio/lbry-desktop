@@ -6,7 +6,7 @@ import {Thumbnail, TruncatedText,} from 'component/common';
 import FilePrice from 'component/filePrice'
 import UriIndicator from 'component/uriIndicator';
 
-class FileCardStream extends React.Component {
+class FileCard extends React.Component {
   constructor(props) {
     super(props)
     this._fileInfoSubscribeId = null
@@ -67,7 +67,6 @@ class FileCardStream extends React.Component {
     const isConfirmed = !!metadata;
     const title = isConfirmed ? metadata.title : uri;
     const obscureNsfw = this.props.obscureNsfw && isConfirmed && metadata.nsfw;
-    const primaryUrl = '/show?uri=' + uri;
     let description = ""
     if (isConfirmed) {
       description = metadata.description
@@ -109,4 +108,4 @@ class FileCardStream extends React.Component {
   }
 }
 
-export default FileCardStream
+export default FileCard

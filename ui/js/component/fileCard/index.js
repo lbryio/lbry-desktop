@@ -20,7 +20,7 @@ import {
 import {
   makeSelectResolvingUri,
 } from 'selectors/content'
-import FileCardStream from './view'
+import FileCard from './view'
 
 const makeSelect = () => {
   const selectClaimForUri = makeSelectClaimForUri()
@@ -47,4 +47,4 @@ const perform = (dispatch) => ({
   navigate: (path, params) => dispatch(doNavigate(path, params)),
 })
 
-export default connect(makeSelect, perform)(FileCardStream)
+export default connect(makeSelect, perform)(FileCard)

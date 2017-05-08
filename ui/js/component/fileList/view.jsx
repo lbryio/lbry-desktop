@@ -3,7 +3,7 @@ import lbry from 'lbry.js';
 import lbryuri from 'lbryuri.js';
 import Link from 'component/link';
 import {FormField} from 'component/form.js';
-import FileTileStream from 'component/fileTileStream';
+import FileTile from 'component/fileTile';
 import rewards from 'rewards.js';
 import lbryio from 'lbryio.js';
 import {BusyMessage, Thumbnail} from 'component/common.js';
@@ -71,7 +71,7 @@ class FileList extends React.Component {
         contentName: fileInfo.name,
         channelName: fileInfo.channel_name,
       })
-      content.push(<FileTileStream key={uri} uri={uri} hidePrice={hidePrices} />)
+      content.push(<FileTile key={uri} uri={uri} hidePrice={hidePrices} />)
     })
     return (
       <section>
@@ -162,7 +162,7 @@ class FileList extends React.Component {
 
 //       const uri = lbryuri.build({contentName: name, channelName: channel_name});
 //       seenUris[name] = true;
-//       content.push(<FileTileStream key={outpoint} uri={uri} hideOnRemove={true} />)
+//       content.push(<FileTile key={outpoint} uri={uri} hideOnRemove={true} />)
 //     }
 
 //     return (

@@ -3,7 +3,7 @@ import lbry from 'lbry.js';
 import lbryuri from 'lbryuri.js';
 import Link from 'component/link';
 import {FormField} from 'component/form.js';
-import {FileTileStream} from 'component/fileTile';
+import {FileTile} from 'component/fileTile';
 import rewards from 'rewards.js';
 import lbryio from 'lbryio.js';
 import {BusyMessage, Thumbnail} from 'component/common.js';

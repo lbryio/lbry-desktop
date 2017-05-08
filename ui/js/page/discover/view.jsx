@@ -1,9 +1,8 @@
 import React from 'react';
 import lbryio from 'lbryio.js';
 import lbryuri from 'lbryuri'
-import FileTile from 'component/fileTile';
-import { FileTileStream } from 'component/fileTileStream'
-import {ToolTip} from 'component/tooltip.js';
+import FileCard from 'component/fileCard';
+import ToolTip from 'component/tooltip.js';
 
 const communityCategoryToolTipText = ('Community Content is a public space where anyone can share content with the ' +
   'rest of the LBRY community. Bid on the names "one," "two," "three," "four" and ' +
@@ -19,7 +18,7 @@ const FeaturedCategory = (props) => {
     <h3 className="card-row__header">{category}
     {category && category.match(/^community/i) && <ToolTip label="What's this?" body={communityCategoryToolTipText} className="tooltip--header" />}
     </h3>
-    {names && names.map(name => <FileTile key={name} displayStyle="card" uri={lbryuri.normalize(name)} />)}
+    {names && names.map(name => <FileCard key={name} displayStyle="card" uri={lbryuri.normalize(name)} />)}
   </div>
 }
 

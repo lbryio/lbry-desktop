@@ -34,3 +34,5 @@ export let ToolTip = React.createClass({
     );
   }
 });
+
+export default ToolTip
