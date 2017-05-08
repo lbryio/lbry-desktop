@@ -114,11 +114,12 @@ function getPidsForProcessName(name) {
 
 function createWindow () {
   win = new BrowserWindow({backgroundColor: '#155B4A', minWidth: 800, minHeight: 600 }) //$color-primary
+
   win.maximize()
   // win.webContents.openDevTools();
   win.loadURL(`file://${__dirname}/dist/index.html`)
   if (openUri) { // We stored and received a URI that an external app requested before we had a window object
-    win.on('did-finish-load', () => {
+    win.webContents.on('did-finish-load', () => {
       win.webContents.send('open-uri-requested', openUri);
     });
   }
