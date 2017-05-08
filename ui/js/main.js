@@ -19,6 +19,18 @@ window.addEventListener('contextmenu', (event) => {
   event.preventDefault();
 });
 
+let openUri = null;
+
+function onOpenUriRequested(event, uri) {
+  /**
+   * If an external app requests a URI while we're still on the splash screen, we store it to
+   * later pass into the App component.
+   */
+   openUri = uri;
+};
+ipcRenderer.on('open-uri-requested', onOpenUriRequested);
+
+
 let init = function() {
   window.lbry = lbry;
   window.lighthouse = lighthouse;
@@ -30,7 +42,8 @@ let init = function() {
 
   function onDaemonReady() {
     window.sessionStorage.setItem('loaded', 'y'); //once we've made it here once per session, we don't need to show splash again
-    ReactDOM.render(<div>{ lbryio.enabled ? <AuthOverlay/> : '' }<App /><SnackBar /></div>, canvas)
+    ipcRenderer.removeListener('open-uri-requested', onOpenUriRequested); // <App /> will handle listening for URI requests once it's loaded
+    ReactDOM.render(<div>{ lbryio.enabled ? <AuthOverlay/> : '' }<App {... openUri ? {openUri: openUri} : {}} /><SnackBar /></div>, canvas)
   }
 
   if (window.sessionStorage.getItem('loaded') == 'y') {

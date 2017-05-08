@@ -88,7 +88,12 @@ var App = React.createClass({
       downloadComplete: false,
     });
   },
+
   componentWillMount: function() {
+    if ('openUri' in this.props) { // A URI was requested by an external app
+      this.showUri(this.props.openUri);
+    }
+
     window.addEventListener("popstate", this.onHistoryPop);
 
     document.addEventListener('unhandledError', (event) => {
@@ -96,7 +101,7 @@ var App = React.createClass({
     });
 
     ipcRenderer.on('open-uri-requested', (event, uri) => {
-      this.openUri(uri);
+      this.showUri(uri);
     });
 
     //open links in external browser and skip full redraw on changing page
@@ -140,6 +145,11 @@ var App = React.createClass({
   componentDidMount: function() {
     this._isMounted = true;
   },
+  componentWillReceiveProps: function(nextProps) {
+    if ('openUri' in nextProps && (!('openUri' in this.props) || nextProps.openUri != this.props.openUri)) {
+      this.showUri(nextProps.openUri);
+    }
+  },
   componentWillUnmount: function() {
     this._isMounted = false;
     window.removeEventListener("popstate", this.onHistoryPop);
@@ -156,13 +166,13 @@ var App = React.createClass({
       pageArgs: term
     });
   },
-  openUri: function(uri) {
+  showUri: function(uri) {
     this._storeHistoryOfNextRender = true;
     this.setState({
       address: uri,
       appUrl: "?show=" + encodeURIComponent(uri),
       viewingPage: "show",
-      pageArgs: uri
+      pageArgs: uri,
     })
   },
   handleUpgradeClicked: function() {
@@ -279,7 +289,7 @@ var App = React.createClass({
       this._fullScreenPages.includes(this.state.viewingPage) ?
         mainContent :
         <div id="window">
-          <Header onSearch={this.onSearch} onSubmit={this.openUri} address={address} wunderBarIcon={wunderBarIcon} viewingPage={this.state.viewingPage} />
+          <Header onSearch={this.onSearch} onSubmit={this.showUri} address={address} wunderBarIcon={wunderBarIcon} viewingPage={this.state.viewingPage} />
           <div id="main-content">
             {mainContent}
           </div>
