@@ -28,7 +28,7 @@ export const Modal = React.createClass({
     return (
       <ReactModal onCloseRequested={this.props.onAborted || this.props.onConfirmed} {...this.props}
                   className={(this.props.className || '') + ' modal'}
-                  overlayClassName={[null, undefined, ""].indexOf(this.props.overlayClassName) === -1 ? this.props.overlayClassName : 'modal-overlay'}>
+                  overlayClassName={![null, undefined, ""].includes(this.props.overlayClassName) ? this.props.overlayClassName : 'modal-overlay'}>
         <div>
           {this.props.children}
         </div>

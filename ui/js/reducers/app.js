@@ -89,7 +89,6 @@ reducers[types.UPGRADE_DOWNLOAD_PROGRESSED] = function(state, action) {
 }
 
 reducers[types.DAEMON_READY] = function(state, action) {
-  window.sessionStorage.setItem('loaded', 'y')
   return Object.assign({}, state, {
     daemonReady: true
   })

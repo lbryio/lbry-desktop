@@ -16,7 +16,7 @@ import {
 } from 'actions/app'
 import parseQueryParams from 'util/query_params'
 
-const {remote} = require('electron');
+const {remote, ipcRenderer} = require('electron');
 const contextMenu = remote.require('./menu/context-menu');
 const app = require('./app')
 
@@ -36,21 +36,19 @@ window.addEventListener('popstate', (event) => {
   app.store.dispatch(doChangePath(`${pathname}${queryString}`))
 })
 
+ipcRenderer.on('open-uri-requested', (event, uri) => {
+  console.log('FIX ME do magic dispatch');
+});
+
 const initialState = app.store.getState();
 app.store.subscribe(runTriggers);
 runTriggers();
 
 var init = function() {
-  window.lbry = lbry;
-  window.lighthouse = lighthouse;
-  let canvas = document.getElementById('canvas');
-
-  lbry.connect().then(function(isConnected) {
-    lbryio.authenticate() //start auth process as soon as soon as we can get an install ID
-  })
 
   function onDaemonReady() {
     app.store.dispatch(doDaemonReady())
+    window.sessionStorage.setItem('loaded', 'y'); //once we've made it here once per session, we don't need to show splash again
     window.history.pushState({}, "Discover", '/discover');
     ReactDOM.render(<Provider store={store}><div>{ lbryio.enabled ? <AuthOverlay/> : '' }<App /><SnackBar /></div></Provider>, canvas)
   }

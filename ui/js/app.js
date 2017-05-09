@@ -13,5 +13,6 @@ const app = {
     logs.push(message);
   }
 }
+
 global.app = app;
 module.exports = app;
