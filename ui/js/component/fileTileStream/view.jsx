@@ -83,81 +83,39 @@ class FileTileStream extends React.Component {
     }
 
     return (
-      <section className={ 'card card--small card--link ' + (obscureNsfw ? 'card--obscured ' : '') } onMouseEnter={this.handleMouseOver.bind(this)} onMouseLeave={this.handleMouseOut.bind(this)}>
-        <div className="card__inner">
-          <Link onClick={() => navigate('/show', { uri })} className="card__link">
-            <div className="card__title-identity">
-              <h5 title={title}><TruncatedText lines={1}>{title}</TruncatedText></h5>
-              <div className="card__subtitle">
-                { !this.props.hidePrice ? <span style={{float: "right"}}><FilePrice uri={uri} /></span>  : null}
-                <UriIndicator uri={uri} />
-              </div>
+      <section className={ 'file-tile card ' + (obscureNsfw ? 'card--obscured ' : '') } onMouseEnter={this.handleMouseOver.bind(this)} onMouseLeave={this.handleMouseOut.bind(this)}>
+        <Link onClick={() => navigate('/show', { uri })} className="card__link" className="card__link">
+          <div className={"card__inner file-tile__row"}>
+            <div className="card__media"
+                 style={{ backgroundImage: "url('" + (metadata && metadata.thumbnail ? metadata.thumbnail : lbry.imagePath('default-thumb.svg')) + "')" }}>
             </div>
-            { metadata && metadata.thumbnail ?
-              <div className="card__media" style={{ backgroundImage: "url('" + metadata.thumbnail + "')" }}></div> :
-              <div className="card__media" style={{ backgroundImage: "url('" + lbry.imagePath('default-thumb.svg') + "')" }}></div>
-            }
-            <div className="card__content card__subtext card__subtext--two-lines">
-                <TruncatedText lines={2}>
+            <div className="file-tile__content">
+              <div className="card__title-primary">
+                { !this.props.hidePrice
+                  ? <FilePrice uri={this.props.uri} />
+                  : null}
+                <div className="meta">{uri}</div>
+                <h3><TruncatedText lines={1}>{title}</TruncatedText></h3>
+              </div>
+              <div className="card__content card__subtext">
+                <TruncatedText lines={3}>
                   {isConfirmed
                     ? metadata.description
                     : <span className="empty">This file is pending confirmation.</span>}
                 </TruncatedText>
+              </div>
             </div>
-          </Link>
-          {this.state.showNsfwHelp && this.state.hovered
-            ? <div className='card-overlay'>
-             <p>
-               This content is Not Safe For Work.
-               To view adult content, please change your <Link className="button-text" onClick={() => navigate('/settings')} label="Settings" />.
-             </p>
-           </div>
-            : null}
-        </div>
+          </div>
+        </Link>
+        {this.state.showNsfwHelp
+          ? <div className='card-overlay'>
+           <p>
+              This content is Not Safe For Work.
+              To view adult content, please change your <Link className="button-text" onClick={() => navigate('/settings')} label="Settings" />.
+           </p>
+         </div>
+          : null}
       </section>
-      // <section className={ 'file-tile card ' + (obscureNsfw ? 'card--obscured ' : '') } onMouseEnter={this.handleMouseOver.bind(this)} onMouseLeave={this.handleMouseOut.bind(this)}>
-      //   <div className={"row-fluid card__inner file-tile__row"}>
-      //     <div className="span3 file-tile__thumbnail-container">
-      //       <Link onClick={() => navigate('/show', { uri })}>
-      //         {metadata && metadata.thumbnail ?
-      //         <Thumbnail key={this.props.uri} className="file-tile__thumbnail" src={metadata.thumbnail} alt={'Photo for ' + this.props.uri} />
-      //         :
-      //         <Thumbnail className="file-tile__thumbnail" alt={'Photo for ' + this.props.uri} />
-      //         }
-      //       </Link>
-      //     </div>
-      //     <div className="span9">
-      //       <div className="card__title-primary">
-      //         { !this.props.hidePrice
-      //           ? <FilePrice uri={this.props.uri} />
-      //           : null}
-      //           <div className="meta"><Link onClick={() => navigate('/show', { uri })}>{uri}</Link></div>
-      //         <h3>
-      //           <Link onClick={() => navigate('/show', { uri })} title={title}>
-      //             <TruncatedText lines={1}>
-      //               {title}
-      //             </TruncatedText>
-      //           </Link>
-      //         </h3>
-      //       </div>
-      //       <div className="card__actions">
-      //       </div>
-      //       <div className="card__content">
-      //         <p className="file-tile__description">
-      //           <TruncatedText lines={2}>{description}</TruncatedText>
-      //         </p>
-      //       </div>
-      //     </div>
-      //   </div>
-      //   {this.state.showNsfwHelp
-      //     ? <div className='card-overlay'>
-      //      <p>
-      //        This content is Not Safe For Work.
-      //        To view adult content, please change your <Link className="button-text" onClick={() => navigate('/settings')} label="Settings" />.
-      //      </p>
-      //    </div>
-      //     : null}
-      // </section>
     );
   }
 }
