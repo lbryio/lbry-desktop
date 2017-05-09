@@ -7,24 +7,31 @@ import FileTileStream from 'component/fileTileStream'
 import FileActions from 'component/fileActions';
 
 class FileTile extends React.Component {
+  componentDidMount() {
+    const {
+      resolvingUri,
+      resolveUri,
+      claim,
+      uri,
+    } = this.props
+
+    if(!resolvingUri && !claim) {
+      resolveUri(uri)
+    }
+  }
+
   render() {
     const {
       displayStyle,
       uri,
       claim,
+      resolvingUri,
+      resolveUri,
     } = this.props
 
-    if(!claim) {
-      if (displayStyle == 'card') {
-        return <FileCardStream uri={uri} />
-      }
-      return null
-    }
+    if (displayStyle == 'card') return <FileCardStream uri={uri} />
 
-    return displayStyle == 'card' ?
-      <FileCardStream uri={uri} />
-      :
-      <FileTileStream uri={uri} key={uri} />  
+    return <FileTileStream uri={uri} />
   }
 }
 
