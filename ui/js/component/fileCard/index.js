@@ -6,6 +6,9 @@ import {
   doNavigate,
 } from 'actions/app'
 import {
+  doResolveUri,
+} from 'actions/content'
+import {
   selectHidePrice,
   selectObscureNsfw,
 } from 'selectors/app'
@@ -45,6 +48,7 @@ const makeSelect = () => {
 
 const perform = (dispatch) => ({
   navigate: (path, params) => dispatch(doNavigate(path, params)),
+  resolveUri: (uri) => dispatch(doResolveUri(uri)),
 })
 
 export default connect(makeSelect, perform)(FileCard)

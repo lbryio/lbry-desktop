@@ -9,33 +9,21 @@ import UriIndicator from 'component/uriIndicator';
 class FileCard extends React.Component {
   constructor(props) {
     super(props)
-    this._fileInfoSubscribeId = null
-    this._isMounted = null
-    this._metadata = null
     this.state = {
-      showNsfwHelp: false,
-      isHidden: false,
+      showNsfwHelp: false
     }
   }
 
   componentDidMount() {
-    this._isMounted = true;
-    if (this.props.hideOnRemove) {
-      this._fileInfoSubscribeId = lbry.fileInfoSubscribe(this.props.outpoint, this.onFileInfoUpdate);
-    }
-  }
+    const {
+      resolvingUri,
+      resolveUri,
+      claim,
+      uri,
+    } = this.props
 
-  componentWillUnmount() {
-    if (this._fileInfoSubscribeId) {
-      lbry.fileInfoUnsubscribe(this.props.outpoint, this._fileInfoSubscribeId);
-    }
-  }
-
-  onFileInfoUpdate(fileInfo) {
-    if (!fileInfo && this._isMounted && this.props.hideOnRemove) {
-      this.setState({
-        isHidden: true
-      });
+    if(!resolvingUri && !claim && uri) {
+      resolveUri(uri)
     }
   }
 
@@ -52,9 +40,6 @@ class FileCard extends React.Component {
   }
 
   render() {
-    if (this.state.isHidden) {
-      return null;
-    }
 
     const {
       metadata,
@@ -73,7 +58,7 @@ class FileCard extends React.Component {
     } else if (isResolvingUri) {
       description = "Loading..."
     } else {
-      description = <span className="empty">This file is pending confirmation</span>
+      description = <span className="empty">This file is pending confirmation.</span>
     }
 
     return (
@@ -94,7 +79,7 @@ class FileCard extends React.Component {
                 <TruncatedText lines={2}>{description}</TruncatedText>
             </div>
           </Link>
-          {this.state.showNsfwHelp && this.state.hovered
+          {obscureNsfw && this.state.hovered
             ? <div className='card-overlay'>
              <p>
                This content is Not Safe For Work.

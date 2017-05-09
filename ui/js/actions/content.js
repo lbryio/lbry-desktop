@@ -146,12 +146,6 @@ export function doFetchFeaturedUris() {
           uris: featuredUris,
         }
       })
-
-      Object.keys(Uris).forEach((category) => {
-        Uris[category].forEach((uri) => {
-          dispatch(doResolveUri(lbryuri.normalize(uri)))
-        })
-      })
     }
 
     const failure = () => {

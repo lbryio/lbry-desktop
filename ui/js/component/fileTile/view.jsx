@@ -79,40 +79,42 @@ class FileTile extends React.Component {
     } else if (isResolvingUri) {
       description = "Loading..."
     } else {
-      description = <span className="empty">This file is pending confirmation</span>
+      description = <span className="empty">This file is pending confirmation.</span>
     }
 
     return (
       <section className={ 'file-tile card ' + (obscureNsfw ? 'card--obscured ' : '') } onMouseEnter={this.handleMouseOver.bind(this)} onMouseLeave={this.handleMouseOut.bind(this)}>
-        <Link onClick={() => navigate('/show', { uri })} className="card__link">
-          <div className="card__inner file-tile__row">
+        <Link onClick={() => navigate('/show', { uri })} className="card__link" className="card__link">
+          <div className={"card__inner file-tile__row"}>
             <div className="card__media"
                  style={{ backgroundImage: "url('" + (metadata && metadata.thumbnail ? metadata.thumbnail : lbry.imagePath('default-thumb.svg')) + "')" }}>
             </div>
             <div className="file-tile__content">
-              <div className="card__title-identity">
-                { !hidePrice ? <span style={{float: "right"}}><FilePrice uri={uri} /></span>  : null}
-                <h5 title={title}><TruncatedText lines={1}>{title}</TruncatedText></h5>
-                <div className="card__subtitle">
-                  <UriIndicator uri={uri} />
-                </div>
+              <div className="card__title-primary">
+                { !this.props.hidePrice
+                  ? <FilePrice uri={this.props.uri} />
+                  : null}
+                <div className="meta">{uri}</div>
+                <h3><TruncatedText lines={1}>{title}</TruncatedText></h3>
               </div>
               <div className="card__content card__subtext">
                 <TruncatedText lines={3}>
-                  {description}
+                  {isConfirmed
+                    ? metadata.description
+                    : <span className="empty">This file is pending confirmation.</span>}
                 </TruncatedText>
               </div>
             </div>
-            {this.state.showNsfwHelp && this.state.hovered
-              ? <div className='card-overlay'>
-               <p>
-                 This content is Not Safe For Work.
-                 To view adult content, please change your <Link className="button-text" onClick={() => navigate('/settings')} label="Settings" />.
-               </p>
-             </div>
-              : null}
           </div>
         </Link>
+        {this.state.showNsfwHelp
+          ? <div className='card-overlay'>
+           <p>
+             This content is Not Safe For Work.
+             To view adult content, please change your <Link className="button-text" onClick={() => navigate('/settings')} label="Settings" />.
+           </p>
+         </div>
+          : null}
       </section>
     );
   }

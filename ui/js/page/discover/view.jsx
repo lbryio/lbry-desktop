@@ -2,6 +2,7 @@ import React from 'react';
 import lbryio from 'lbryio.js';
 import lbryuri from 'lbryuri'
 import FileCard from 'component/fileCard';
+import {BusyMessage} from 'component/common.js';
 import ToolTip from 'component/tooltip.js';
 
 const communityCategoryToolTipText = ('Community Content is a public space where anyone can share content with the ' +
@@ -31,7 +32,7 @@ const DiscoverPage = (props) => {
 
   let content
 
-  if (fetchingFeaturedUris) content = <div className="empty">Fetching landing content.</div>
+  if (fetchingFeaturedUris) content = <BusyMessage message="Fetching landing content" />
   if (!fetchingFeaturedUris && failed) content = <div className="empty">Failed to load landing content.</div>
   if (!fetchingFeaturedUris && !failed) {
     content = Object.keys(featuredUris).map(category => {
