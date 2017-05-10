@@ -28,6 +28,7 @@ export function doNavigate(path, params = {}) {
     if (params)
       url = `${url}?${queryStringFromParams(params)}`
 
+    console.log('Path: ' + url);
     dispatch(doChangePath(url))
 
     const state = getState()

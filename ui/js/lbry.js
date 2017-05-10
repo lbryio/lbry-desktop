@@ -254,6 +254,9 @@ lbry.getCostInfo = function(uri) {
       function getCostGenerous(uri) {
         // If generous is on, the calculation is simple enough that we might as well do it here in the front end
         lbry.resolve({uri: uri}).then((resolutionInfo) => {
+          if (!resolutionInfo) {
+            return reject(new Error("Unused URI"));
+          }
           const fee = resolutionInfo.claim.value.stream.metadata.fee;
           if (fee === undefined) {
             cacheAndResolve(0, true);

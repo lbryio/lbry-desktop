@@ -6,13 +6,19 @@ import {Icon} from 'component/common';
 const UriIndicator = (props) => {
   const {
     uri,
-    claim: {
-      has_signature: hasSignature,
-      signature_is_valid: signatureIsValid,
-    } = {},
+    claim
   } = props
 
   const uriObj = lbryuri.parse(uri);
+
+  if (!claim) {
+    return <span className="empty">Unused</span>
+  }
+
+  const {
+    has_signature: hasSignature,
+    signature_is_valid: signatureIsValid
+  } = claim
 
   if (!hasSignature || !uriObj.isChannel) {
     return <span className="empty">Anonymous</span>;

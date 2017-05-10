@@ -71,9 +71,16 @@ export const shouldFetchCurrentUriFileInfo = createSelector(
   selectFetchingCurrentUriFileInfo,
   selectCurrentUriFileInfo,
   (page, uri, fetching, fileInfo) => {
+    console.log('should fetch?');
+    console.log(page);
+    console.log(uri);
+    console.log(fetching);
+
     if (page != 'show') return false
     if (fetching) return false
     if (fileInfo != undefined) return false
+
+    console.log('fetch!');
 
     return true
   }

@@ -16,12 +16,14 @@ export const selectClaimsByUri = createSelector(
 export const selectCurrentUriClaim = createSelector(
   selectCurrentUri,
   selectClaimsByUri,
-  (uri, byUri) => byUri[uri] || {}
+  (uri, byUri) => byUri[uri]
 )
 
 export const selectCurrentUriClaimOutpoint = createSelector(
   selectCurrentUriClaim,
-  (claim) => `${claim.txid}:${claim.nout}`
+  (claim) => {
+    return claim ? `${claim.txid}:${claim.nout}` : null
+  }
 )
 
 const selectClaimForUri = (state, props) => {

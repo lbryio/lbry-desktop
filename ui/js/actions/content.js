@@ -44,7 +44,7 @@ export function doResolveUri(uri) {
       const {
         claim,
         certificate,
-      } = resolutionInfo
+      } = resolutionInfo ? resolutionInfo : { claim : null, certificate: null }
 
       dispatch({
         type: types.RESOLVE_URI_COMPLETED,

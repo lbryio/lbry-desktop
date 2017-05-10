@@ -3,6 +3,12 @@ import {
   connect
 } from 'react-redux'
 import {
+  doResolveUri,
+} from 'actions/content'
+import {
+  doNavigate,
+} from 'actions/app'
+import {
   selectCurrentUri,
 } from 'selectors/app'
 import {
@@ -17,19 +23,27 @@ import {
 import {
   selectCurrentUriCostInfo,
 } from 'selectors/cost_info'
+import {
+  makeSelectResolvingUri,
+} from 'selectors/content'
 import ShowPage from './view'
 
-const select = (state) => ({
-  claim: selectCurrentUriClaim(state),
-  uri: selectCurrentUri(state),
-  isDownloaded: selectCurrentUriIsDownloaded(state),
-  fileInfo: selectCurrentUriFileInfo(state),
-  costInfo: selectCurrentUriCostInfo(state),
-  isFailed: false,
-  claimType: 'file',
-})
+const makeSelect = () => {
+  const selectResolvingUri = makeSelectResolvingUri()
+
+  const select = (state, props) => ({
+    claim: selectCurrentUriClaim(state),
+    uri: selectCurrentUri(state),
+    isResolvingUri: selectResolvingUri(state, props),
+    claimType: 'file',
+  })
+
+  return select
+}
 
 const perform = (dispatch) => ({
+  navigate: (path, params) => dispatch(doNavigate(path, params)),
+  resolveUri: (uri) => dispatch(doResolveUri(uri)),
 })
 
-export default connect(select, perform)(ShowPage)
+export default connect(makeSelect, perform)(ShowPage)

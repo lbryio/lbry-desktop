@@ -21,7 +21,7 @@ export function doFetchCostInfoForUri(uri) {
           costInfo,
         }
       })
-    })
+    }).catch(() => {})
   }
 }
 
