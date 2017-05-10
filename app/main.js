@@ -177,6 +177,27 @@ function quitNow() {
   app.quit();
 }
 
+const isSecondaryInstance = app.makeSingleInstance((argv) => {
+  if (process.argv.length < 3) {
+    return;
+  }
+
+  if (!win) {
+    openUri = argv[2];
+  } else {
+    if (win.isMinimized()) {
+      win.restore();
+      win.focus();
+    }
+
+    win.webContents.send('open-uri-requested', argv[2]);
+  }
+});
+
+if (isSecondaryInstance) { // We're not in the original process, so quit
+  quitNow();
+  return;
+}
 
 app.on('ready', function(){
   launchDaemonIfNotRunning();
@@ -316,6 +337,7 @@ function upgrade(event, installerPath) {
 ipcMain.on('upgrade', upgrade);
 
 app.setAsDefaultProtocolClient('lbry');
+
 if (process.platform == 'darwin') {
   app.on('open-url', (event, uri) => {
     if (!win) {
