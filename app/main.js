@@ -315,6 +315,7 @@ function upgrade(event, installerPath) {
 
 ipcMain.on('upgrade', upgrade);
 
+app.setAsDefaultProtocolClient('lbry');
 if (process.platform == 'darwin') {
   app.on('open-url', (event, uri) => {
     if (!win) {
