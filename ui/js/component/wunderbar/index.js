@@ -2,6 +2,7 @@ import React from 'react'
 import {
   connect
 } from 'react-redux'
+import lbryuri from 'lbryuri.js'
 import {
   selectWunderBarAddress,
   selectWunderBarIcon
@@ -28,7 +29,7 @@ const perform = (dispatch) => ({
   // activateSearch: () => dispatch(doActivateSearch()),
   // deactivateSearch: () => setTimeout(() => { dispatch(doDeactivateSearch()) }, 50),
   onSearch: (query) => dispatch(doNavigate('/search', { query })),
-  onSubmit: (query) => console.debug('you submitted'),
+  onSubmit: (query) => dispatch(doNavigate('/show', { uri: lbryuri.normalize(query) } ))
 })
 
 export default connect(select, perform)(Wunderbar)

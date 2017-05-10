@@ -71,7 +71,7 @@ class FileList extends React.Component {
         contentName: fileInfo.name,
         channelName: fileInfo.channel_name,
       })
-      content.push(<FileTile key={uri} uri={uri} hidePrice={hidePrices} hideOnRemove={true} />)
+      content.push(<FileTile key={uri} uri={uri} hidePrice={hidePrices} hideOnRemove={true} showEmpty={""} />)
     })
     return (
       <section>

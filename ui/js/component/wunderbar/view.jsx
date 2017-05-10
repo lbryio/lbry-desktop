@@ -40,11 +40,14 @@ class WunderBar extends React.PureComponent {
 
     this.setState({ address: event.target.value })
 
-    let searchTerm = event.target.value;
+    let searchQuery = event.target.value;
 
     this._userTypingTimer = setTimeout(() => {
-      this._resetOnNextBlur = false;
-      this.props.onSearch(searchTerm);
+      const hasQuery = searchQuery.length === 0;
+      this._resetOnNextBlur = hasQuery;
+      if (searchQuery) {
+        this.props.onSearch(searchQuery);
+      }
     }, 800); // 800ms delay, tweak for faster/slower
   }
 

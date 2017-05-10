@@ -74,7 +74,7 @@ const SearchPage = (props) => {
             Exact URL
             <ToolTip label="?" body="This is the resolution of a LBRY URL and not controlled by LBRY Inc." className="tooltip--header" />
           </h3>
-          <FileTile uri={lbryuri.normalize(query)} showEmpty={true} />
+          <FileTile uri={lbryuri.normalize(query)} showEmpty={FileTile.SHOW_EMPTY_PUBLISH} />
         </section> : '' }
       <section className="section-spaced">
         <h3 className="card-row__header">

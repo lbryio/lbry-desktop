@@ -7,22 +7,15 @@ import FilePrice from 'component/filePrice'
 import UriIndicator from 'component/uriIndicator';
 
 class FileCard extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      showNsfwHelp: false
-    }
-  }
-
   componentDidMount() {
     const {
-      resolvingUri,
+      isResolvingUri,
       resolveUri,
       claim,
       uri,
     } = this.props
 
-    if(!resolvingUri && !claim && uri) {
+    if(!isResolvingUri && !claim && uri) {
       resolveUri(uri)
     }
   }
@@ -49,16 +42,14 @@ class FileCard extends React.Component {
     } = this.props
 
     const uri = lbryuri.normalize(this.props.uri);
-    const isConfirmed = !!metadata;
-    const title = isConfirmed ? metadata.title : uri;
-    const obscureNsfw = this.props.obscureNsfw && isConfirmed && metadata.nsfw;
+    const title = !isResolvingUri && metadata && metadata.title ? metadata.title : uri;
+    const obscureNsfw = this.props.obscureNsfw && metadata && metadata.nsfw;
+
     let description = ""
-    if (isConfirmed) {
-      description = metadata.description
-    } else if (isResolvingUri) {
+    if (isResolvingUri) {
       description = "Loading..."
-    } else {
-      description = <span className="empty">This file is pending confirmation.</span>
+    } else if (metadata && metadata.description) {
+      description = metadata.description
     }
 
     return (

@@ -32,7 +32,7 @@ const DiscoverPage = (props) => {
 
   let content
 
-  if (fetchingFeaturedUris) content = <BusyMessage message="Fetching landing content" />
+  if (fetchingFeaturedUris) content = <BusyMessage message="Fetching content" />
   if (!fetchingFeaturedUris && failed) content = <div className="empty">Failed to load landing content.</div>
   if (!fetchingFeaturedUris && !failed) {
     content = Object.keys(featuredUris).map(category => {
