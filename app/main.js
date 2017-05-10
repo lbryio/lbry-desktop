@@ -327,5 +327,9 @@ if (process.platform == 'darwin') {
   });
 } else if (process.argv.length >= 3) {
   // No open-url event on Win, but we can still handle URIs provided at launch time
-  win.webContents.send('open-uri-requested', process.argv[2]);
+  if (!win) {
+    openUri = process.argv[2];
+  } else {
+    win.webContents.send('open-uri-requested', process.argv[2]);
+  }
 }
