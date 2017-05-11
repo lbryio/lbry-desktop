@@ -12,7 +12,7 @@ var SearchNoResults = React.createClass({
   render: function() {
     return <section>
       <span className="empty">
-        No one has checked anything in for {this.props.query} yet.
+        No one has checked anything in for {this.props.query} yet.&nbsp;
         <Link label="Be the first" href="?publish" />
       </span>
     </section>;

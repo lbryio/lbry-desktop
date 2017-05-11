@@ -5,7 +5,8 @@ import ModalPage from "./modal-page.js";
 import {Link, RewardLink} from "../component/link.js";
 import {FormRow} from "../component/form.js";
 import {CreditAmount, Address} from "../component/common.js";
-import {getLocal, getSession, setSession, setLocal} from '../utils.js';
+import {getLocal, setLocal} from '../utils.js';
+import {TYPE_NEW_USER} from '../rewards'
 
 
 const SubmitEmailStage = React.createClass({
@@ -86,7 +87,7 @@ const ConfirmEmailStage = React.createClass({
     };
 
     lbryio.call('user_email', 'confirm', {verification_token: this.state.code, email: this.props.email}, 'post').then((userEmail) => {
-      if (userEmail.IsVerified) {
+      if (userEmail.is_verified) {
         this.props.setStage("welcome")
       } else {
         onSubmitError(new Error("Your email is still not verified.")) //shouldn't happen?
@@ -259,7 +260,7 @@ export const AuthOverlay = React.createClass({
   },
   componentWillMount: function() {
     lbryio.authenticate().then((user) => {
-      if (!user.HasVerifiedEmail) {
+      if (!user.has_verified_email) {
         if (getLocal('auth_bypassed')) {
           this.setStage(null)
         } else {
@@ -268,7 +269,7 @@ export const AuthOverlay = React.createClass({
       } else {
         lbryio.call('reward', 'list', {}).then((userRewards) => {
           userRewards.filter(function(reward) {
-            return reward.RewardType == "new_user" && reward.TransactionID;
+            return reward.reward_type == TYPE_NEW_USER && reward.transaction_id;
           }).length ?
              this.setStage(null) :
              this.setStage("welcome")

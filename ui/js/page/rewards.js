@@ -47,7 +47,7 @@ var RewardsPage = React.createClass({
     };
   },
   loadRewards: function() {
-    lbryio.call('reward', 'list', {}).then((userRewards) => {
+    lbryio.call('reward', 'list').then((userRewards) => {
       this.setState({
         userRewards: userRewards,
       });
@@ -62,8 +62,8 @@ var RewardsPage = React.createClass({
         <div>
           {!this.state.userRewards
             ? (this.state.failed ? <div className="empty">Failed to load rewards.</div> : '')
-            : this.state.userRewards.map(({RewardType, RewardTitle, RewardDescription, TransactionID, RewardAmount}) => {
-              return <RewardTile key={RewardType} onRewardClaim={this.loadRewards} type={RewardType} title={RewardTitle} description={RewardDescription} claimed={!!TransactionID} value={RewardAmount} />;
+            : this.state.userRewards.map(({reward_type, reward_title, reward_description, transaction_id, reward_amount}) => {
+              return <RewardTile key={reward_type} onRewardClaim={this.loadRewards} type={reward_type} title={reward_title} description={reward_description} claimed={!!transaction_id} value={reward_amount} />;
             })}
         </div>
       </main>
