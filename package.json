@@ -38,7 +38,11 @@
       "schemes": ["lbry"]
     }],
     "linux": {
-      "target": "deb"
+      "target": "deb",
+      "desktop": {
+        "MimeType": "x-scheme-handler/lbry",
+        "Exec": "/opt/LBRY/lbry %U"
+      }
     },
     "win": {
       "target": "nsis"
