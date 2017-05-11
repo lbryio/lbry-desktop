@@ -194,19 +194,17 @@ function quitNow() {
 }
 
 const isSecondaryInstance = app.makeSingleInstance((argv) => {
-  if (argv.length < 2) {
-    return;
-  }
-
-  if (!win) {
-    openUri = denormalizeUri(argv[1]);
-  } else {
+  if (win) {
     if (win.isMinimized()) {
       win.restore();
-      win.focus();
     }
+    win.focus();
 
-    win.webContents.send('open-uri-requested', denormalizeUri(argv[1]));
+    if (argv.length >= 2) {
+      win.webContents.send('open-uri-requested', denormalizeUri(argv[1]));
+    }
+  } else if (argv.length >= 2) {
+    openUri = denormalizeUri(argv[1]);
   }
 });
 
