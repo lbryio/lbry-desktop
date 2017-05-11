@@ -178,19 +178,19 @@ function quitNow() {
 }
 
 const isSecondaryInstance = app.makeSingleInstance((argv) => {
-  if (process.argv.length < 3) {
+  if (argv.length < 2) {
     return;
   }
 
   if (!win) {
-    openUri = argv[2];
+    openUri = argv[1];
   } else {
     if (win.isMinimized()) {
       win.restore();
       win.focus();
     }
 
-    win.webContents.send('open-uri-requested', argv[2]);
+    win.webContents.send('open-uri-requested', argv[1]);
   }
 });
 
@@ -347,11 +347,11 @@ if (process.platform == 'darwin') {
       win.webContents.send('open-uri-requested', uri);
     }
   });
-} else if (process.argv.length >= 3) {
+} else if (process.argv.length >= 2) {
   // No open-url event on Win, but we can still handle URIs provided at launch time
   if (!win) {
-    openUri = process.argv[2];
+    openUri = process.argv[1];
   } else {
-    win.webContents.send('open-uri-requested', process.argv[2]);
+    win.webContents.send('open-uri-requested', process.argv[1]);
   }
 }
