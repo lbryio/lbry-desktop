@@ -64,43 +64,7 @@ const plyr = require('plyr')
 class Video extends React.Component {
   constructor(props) {
     super(props)
-
-    // TODO none of this mouse handling stuff seems to actually do anything?
-    this._controlsHideDelay = 3000 // Note: this needs to be shorter than the built-in delay in Electron, or Electron will hide the controls before us
-    this._controlsHideTimeout = null
-    this.state = {}
-  }
-  handleMouseMove() {
-    if (this._controlsTimeout) {
-      clearTimeout(this._controlsTimeout);
-    }
-
-    if (!this.state.controlsShown) {
-      this.setState({
-        controlsShown: true,
-      });
-    }
-    this._controlsTimeout = setTimeout(() => {
-      if (!this.isMounted) {
-        return;
-      }
-
-      this.setState({
-        controlsShown: false,
-      });
-    }, this._controlsHideDelay);
-  }
-
-  handleMouseLeave() {
-    if (this._controlsTimeout) {
-      clearTimeout(this._controlsTimeout);
-    }
-
-    if (this.state.controlsShown) {
-      this.setState({
-        controlsShown: false,
-      });
-    }
+    this.state = { isPlaying: false }
   }
 
   onWatchClick() {
@@ -141,7 +105,7 @@ class Video extends React.Component {
     }
 
     return (
-      <div onMouseMove={this.handleMouseMove.bind(this)} onMouseLeave={this.handleMouseLeave.bind(this)} className={"video " + this.props.className + (isPlaying && readyToPlay ? " video--active" : " video--hidden")}>{
+      <div className={"video " + this.props.className + (isPlaying && readyToPlay ? " video--active" : " video--hidden")}>{
         isPlaying ?
         !readyToPlay ?
         <span>this is the world's worst loading screen and we shipped our software with it anyway... <br /><br />{loadStatusMessage}</span> :

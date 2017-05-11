@@ -8,9 +8,6 @@ import {BusyMessage} from 'component/common.js';
 
 class SearchPage extends React.Component{
   render() {
-    console.log('searhc page render');
-    console.log(this.props);
-
     const isValidUri = (query) => true //FIXME
     const {
       query,

@@ -10,18 +10,12 @@ import {
   selectBalance,
 } from 'selectors/wallet'
 import {
-  selectSearchTerm,
-} from 'selectors/content'
-import {
   selectCurrentUriFileInfo,
   selectDownloadingByUri,
 } from 'selectors/file_info'
 import {
   selectCurrentUriCostInfo,
 } from 'selectors/cost_info'
-import {
-  selectCurrentResolvedUriClaimOutpoint,
-} from 'selectors/content'
 import {
   selectClaimsByUri,
 } from 'selectors/claims'
@@ -31,7 +25,6 @@ import {
 import {
   doFetchCostInfoForUri,
 } from 'actions/cost_info'
-import batchActions from 'util/batchActions'
 
 export function doResolveUri(uri) {
   return function(dispatch, getState) {
@@ -40,7 +33,7 @@ export function doResolveUri(uri) {
       data: { uri }
     })
 
-    return lbry.resolve({ uri }).then((resolutionInfo) => {
+    lbry.resolve({ uri }).then((resolutionInfo) => {
       const {
         claim,
         certificate,

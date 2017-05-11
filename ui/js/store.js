@@ -62,12 +62,12 @@ const reducers = redux.combineReducers({
 const bulkThunk = createBulkThunkMiddleware()
 const middleware = [thunk, bulkThunk]
 
-// if (env === 'development') {
-//   const logger = createLogger({
-//     collapsed: true
-//   });
-//   middleware.push(logger)
-// }
+if (env === 'development') {
+  const logger = createLogger({
+    collapsed: true
+  });
+  middleware.push(logger)
+}
 
 const createStoreWithMiddleware = redux.compose(
   redux.applyMiddleware(...middleware)

@@ -88,6 +88,8 @@ const FilePage = (props) => {
   const channelUri = signatureIsValid && hasSignature && channelUriObj.isChannel ? lbryuri.build(channelUriObj, false) : null;
   const uriIndicator = <UriIndicator uri={uri} />
 
+  //            <p>This location is not yet in use. { ' ' }<Link onClick={() => navigate('/publish')} label="Put something here" />.</p>
+
   return (
     <main className="main--single-column">
       <section className="show-page-media">

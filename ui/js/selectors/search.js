@@ -1,7 +1,5 @@
 import { createSelector } from 'reselect'
 import {
-  selectCurrentParams,
-  selectDaemonReady,
   selectPageTitle,
   selectCurrentPage,
   selectCurrentUri
@@ -10,8 +8,8 @@ import {
 export const _selectState = state => state.search || {}
 
 export const selectSearchQuery = createSelector(
-  selectCurrentParams,
-  (params) => params.query
+  _selectState,
+  (state) => state.query
 )
 
 export const selectIsSearching = createSelector(
@@ -37,9 +35,10 @@ export const selectCurrentSearchResults = createSelector(
 
 
 export const selectWunderBarAddress = createSelector(
+  selectCurrentPage,
   selectPageTitle,
   selectSearchQuery,
-  (title, query) => query || title
+  (page, title, query) => page != "search" ? title : (query ? query : title)
 )
 
 export const selectWunderBarIcon = createSelector(

@@ -22,9 +22,21 @@ class FileTile extends React.Component {
   }
 
   componentDidMount() {
+    const {
+      isResolvingUri,
+      resolveUri,
+      claim,
+      uri,
+    } = this.props
+
     this._isMounted = true;
+
     if (this.props.hideOnRemove) {
       this._fileInfoSubscribeId = lbry.fileInfoSubscribe(this.props.outpoint, this.onFileInfoUpdate);
+    }
+
+    if(!isResolvingUri && !claim && uri) {
+      resolveUri(uri)
     }
   }
 
@@ -85,14 +97,14 @@ class FileTile extends React.Component {
       description = "Loading..."
     } else if (showEmpty === FileTile.SHOW_EMPTY_PUBLISH) {
       onClick = () => navigate('/publish')
-      description = <span className="empty">This location is unclaimed - <Link label="put something here" />!</span>
+      description = <span className="empty">This location is unclaimed - <span className="button-text">put something here</span>!</span>
     } else if (showEmpty === FileTile.SHOW_EMPTY_PENDING) {
       description = <span className="empty">This file is pending confirmation.</span>
     }
 
     return (
       <section className={ 'file-tile card ' + (obscureNsfw ? 'card--obscured ' : '') } onMouseEnter={this.handleMouseOver.bind(this)} onMouseLeave={this.handleMouseOut.bind(this)}>
-        <Link onClick={onClick} className="card__link" className="card__link">
+        <Link onClick={onClick} className="card__link">
           <div className={"card__inner file-tile__row"}>
             <div className="card__media"
                  style={{ backgroundImage: "url('" + (metadata && metadata.thumbnail ? metadata.thumbnail : lbry.imagePath('default-thumb.svg')) + "')" }}>

@@ -6,6 +6,9 @@ import {
   doNavigate,
 } from 'actions/app'
 import {
+  doResolveUri,
+} from 'actions/content'
+import {
   makeSelectClaimForUri,
   makeSelectSourceForUri,
   makeSelectMetadataForUri,
@@ -49,7 +52,8 @@ const makeSelect = () => {
 }
 
 const perform = (dispatch) => ({
-  navigate: (path, params) => dispatch(doNavigate(path, params))
+  navigate: (path, params) => dispatch(doNavigate(path, params)),
+  resolveUri: (uri) => dispatch(doResolveUri(uri)),
 })
 
 export default connect(makeSelect, perform)(FileTile)

@@ -3,6 +3,8 @@ import lbryuri from 'lbryuri.js';
 import {Icon} from 'component/common.js';
 
 class WunderBar extends React.PureComponent {
+  static TYPING_TIMEOUT = 800
+
   static propTypes = {
     onSearch: React.PropTypes.func.isRequired,
     onSubmit: React.PropTypes.func.isRequired
@@ -11,6 +13,7 @@ class WunderBar extends React.PureComponent {
   constructor(props) {
     super(props);
     this._userTypingTimer = null;
+    this._isSearchDispatchPending = false;
     this._input = null;
     this._stateBeforeSearch = null;
     this._resetOnNextBlur = true;
@@ -40,15 +43,18 @@ class WunderBar extends React.PureComponent {
 
     this.setState({ address: event.target.value })
 
+    this._isSearchDispatchPending = true;
+
     let searchQuery = event.target.value;
 
     this._userTypingTimer = setTimeout(() => {
       const hasQuery = searchQuery.length === 0;
       this._resetOnNextBlur = hasQuery;
+      this._isSearchDispatchPending = false;
       if (searchQuery) {
         this.props.onSearch(searchQuery);
       }
-    }, 800); // 800ms delay, tweak for faster/slower
+    }, WunderBar.TYPING_TIMEOUT); // 800ms delay, tweak for faster/slower
   }
 
   componentWillReceiveProps(nextProps) {
@@ -74,14 +80,21 @@ class WunderBar extends React.PureComponent {
   }
 
   onBlur() {
-    let commonState = {isActive: false};
-    if (this._resetOnNextBlur) {
-      this.setState(Object.assign({}, this._stateBeforeSearch, commonState));
-      this._input.value = this.state.address;
+    if (this._isSearchDispatchPending) {
+      setTimeout(() => {
+        this.onBlur();
+      }, WunderBar.TYPING_TIMEOUT + 1)
     } else {
-      this._resetOnNextBlur = true;
-      this._stateBeforeSearch = this.state;
-      this.setState(commonState);
+      let commonState = {isActive: false};
+      if (this._resetOnNextBlur) {
+        this.setState(Object.assign({}, this._stateBeforeSearch, commonState));
+        this._input.value = this.state.address;
+      }
+      else {
+        this._resetOnNextBlur = true;
+        this._stateBeforeSearch = this.state;
+        this.setState(commonState);
+      }
     }
   }
 

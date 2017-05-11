@@ -14,8 +14,7 @@ import SearchPage from './view'
 
 const select = (state) => ({
   isSearching: selectIsSearching(state),
-  query: selectSearchQuery(state),
-  results: selectCurrentSearchResults(state),
+  query: selectSearchQuery(state)
 })
 
 const perform = (dispatch) => ({

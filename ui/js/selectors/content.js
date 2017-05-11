@@ -53,6 +53,13 @@ export const selectResolvingUris = createSelector(
   (state) => state.resolvingUris || []
 )
 
+
+export const selectCurrentUriIsResolving = createSelector(
+  selectCurrentUri,
+  selectResolvingUris,
+  (uri, resolvingUris) => resolvingUris.indexOf(uri) != -1
+)
+
 const selectResolvingUri = (state, props) => {
   return selectResolvingUris(state).indexOf(props.uri) != -1
 }

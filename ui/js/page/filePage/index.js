@@ -6,14 +6,12 @@ import {
   selectCurrentUri,
 } from 'selectors/app'
 import {
+  selectCurrentUriFileInfo,
   selectCurrentUriIsDownloaded,
 } from 'selectors/file_info'
 import {
   selectCurrentUriClaim,
 } from 'selectors/claims'
-import {
-  selectCurrentUriFileInfo,
-} from 'selectors/file_info'
 import {
   selectCurrentUriCostInfo,
 } from 'selectors/cost_info'

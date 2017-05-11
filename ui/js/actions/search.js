@@ -1,6 +1,4 @@
 import * as types from 'constants/action_types'
-import lbry from 'lbry'
-import lbryio from 'lbryio'
 import lbryuri from 'lbryuri'
 import lighthouse from 'lighthouse'
 import {
@@ -12,9 +10,6 @@ import {
 import {
   selectCurrentPage,
 } from 'selectors/app'
-import {
-  selectSearchQuery,
-} from 'selectors/search'
 
 export function doSearch(query) {
   return function(dispatch, getState) {
@@ -27,15 +22,14 @@ export function doSearch(query) {
       })
     }
 
-    if(page != 'search' && query != undefined) {
-      return dispatch(doNavigate('search', { query: query }))
-    }
-
-
     dispatch({
       type: types.SEARCH_STARTED,
       data: { query }
     })
+
+    if(page != 'search') {
+      dispatch(doNavigate('search', { query: query }))
+    }
 
     lighthouse.search(query).then(results => {
       results.forEach(result => {

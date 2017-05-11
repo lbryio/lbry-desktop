@@ -21,7 +21,15 @@ export function doFetchCostInfoForUri(uri) {
           costInfo,
         }
       })
-    }).catch(() => {})
+    }).catch(() => {
+      dispatch({
+        type: types.FETCH_COST_INFO_COMPLETED,
+        data: {
+          uri,
+          costInfo: {}
+        }
+      })
+    })
   }
 }
 
