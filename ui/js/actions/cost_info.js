@@ -25,12 +25,3 @@ export function doFetchCostInfoForUri(uri) {
   }
 }
 
-export function doFetchCurrentUriCostInfo() {
-  return function(dispatch, getState) {
-    const state = getState()
-    const uri = selectCurrentUri(state)
-
-    dispatch(doFetchCostInfoForUri(uri))
-  }
-}
-

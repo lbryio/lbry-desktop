@@ -16,7 +16,6 @@ reducers[types.FETCH_FEATURED_CONTENT_COMPLETED] = function(state, action) {
     success
   } = action.data
 
-
   return Object.assign({}, state, {
     fetchingFeaturedContent: false,
     fetchingFeaturedContentFailed: !success,

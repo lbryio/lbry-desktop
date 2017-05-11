@@ -3,6 +3,9 @@ import {
   connect
 } from 'react-redux'
 import {
+  doFetchPublishedContent,
+} from 'actions/content'
+import {
   selectFetchingPublishedContent,
 } from 'selectors/content'
 import {
@@ -20,6 +23,7 @@ const select = (state) => ({
 
 const perform = (dispatch) => ({
   navigate: (path) => dispatch(doNavigate(path)),
+  fetchFileListPublished: () => dispatch(doFetchPublishedContent()),
 })
 
 export default connect(select, perform)(FileListPublished)

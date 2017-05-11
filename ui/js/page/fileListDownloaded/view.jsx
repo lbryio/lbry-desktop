@@ -11,6 +11,10 @@ import FileList from 'component/fileList'
 import SubHeader from 'component/subHeader'
 
 class FileListDownloaded extends React.Component {
+  componentWillMount() {
+    this.props.fetchFileListDownloaded()
+  }
+
   render() {
     const {
       downloadedContent,
@@ -28,7 +32,7 @@ class FileListDownloaded extends React.Component {
     }
 
     return (
-      <main className="page">
+      <main className="main--single-column">
         <SubHeader />
         {content}
       </main>

@@ -3,6 +3,9 @@ import {
   connect
 } from 'react-redux'
 import {
+  doFetchFeaturedUris,
+} from 'actions/content'
+import {
   selectFeaturedUris,
   selectFetchingFeaturedUris,
 } from 'selectors/content'
@@ -14,6 +17,7 @@ const select = (state) => ({
 })
 
 const perform = (dispatch) => ({
+  fetchFeaturedUris: () => dispatch(doFetchFeaturedUris())
 })
 
 export default connect(select, perform)(DiscoverPage)

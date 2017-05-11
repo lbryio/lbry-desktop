@@ -6,9 +6,6 @@ import {
   doResolveUri,
 } from 'actions/content'
 import {
-  doNavigate,
-} from 'actions/app'
-import {
   selectCurrentUri,
 } from 'selectors/app'
 import {
@@ -43,7 +40,7 @@ const makeSelect = () => {
 
 const perform = (dispatch) => ({
   navigate: (path, params) => dispatch(doNavigate(path, params)),
-  resolveUri: (uri) => dispatch(doResolveUri(uri)),
+  resolveUri: (uri) => dispatch(doResolveUri(uri))
 })
 
 export default connect(makeSelect, perform)(ShowPage)

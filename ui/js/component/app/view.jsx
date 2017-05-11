@@ -19,16 +19,12 @@ class App extends React.Component {
 
   render() {
     const {
-      currentPage,
       modal,
       headerLinks,
-      searchTerm,
     } = this.props
-    const searchQuery = (currentPage == 'discover' && searchTerm ? searchTerm : '')
 
     return <div id="window">
-      <Header initialQuery={searchQuery} onSearch={() => { alert('header search'); }}
-              onSubmit={() => { alert('header submit'); }} links={headerLinks}   />
+      <Header />
       <div id="main-content">
         <Router />
       </div>

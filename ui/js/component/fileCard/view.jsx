@@ -63,7 +63,7 @@ class FileCard extends React.Component {
                 <UriIndicator uri={uri} />
               </div>
             </div>
-            {metadata && metadata.thumbnail && 
+            {metadata && metadata.thumbnail &&
             <div className="card__media" style={{ backgroundImage: "url('" + metadata.thumbnail + "')" }}></div>
             }
             <div className="card__content card__subtext card__subtext--two-lines">

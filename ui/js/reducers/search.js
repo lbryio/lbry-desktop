@@ -41,18 +41,6 @@ reducers[types.SEARCH_CANCELLED] = function(state, action) {
   })
 }
 
-reducers[types.ACTIVATE_SEARCH] = function(state, action) {
-  return Object.assign({}, state, {
-    activated: true,
-  })
-}
-
-reducers[types.DEACTIVATE_SEARCH] = function(state, action) {
-  return Object.assign({}, state, {
-    activated: false,
-  })
-}
-
 export default function reducer(state = defaultState, action) {
   const handler = reducers[action.type];
   if (handler) return handler(state, action);

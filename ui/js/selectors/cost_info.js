@@ -28,20 +28,6 @@ export const selectFetchingCurrentUriCostInfo = createSelector(
   (uri, byUri) => !!byUri[uri]
 )
 
-export const shouldFetchCurrentUriCostInfo = createSelector(
-  selectCurrentPage,
-  selectCurrentUri,
-  selectFetchingCurrentUriCostInfo,
-  selectCurrentUriCostInfo,
-  (page, uri, fetching, costInfo) => {
-    if (page != 'show') return false
-    if (fetching) return false
-    if (Object.keys(costInfo).length != 0) return false
-
-    return true
-  }
-)
-
 const selectCostInfoForUri = (state, props) => {
   return selectAllCostInfoByUri(state)[props.uri]
 }

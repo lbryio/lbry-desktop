@@ -9,27 +9,12 @@ export const _selectState = state => state.content || {}
 
 export const selectFeaturedUris = createSelector(
   _selectState,
-  (state) => state.featuredUris || {}
+  (state) => state.featuredUris
 )
 
 export const selectFetchingFeaturedUris = createSelector(
   _selectState,
   (state) => !!state.fetchingFeaturedContent
-)
-
-export const shouldFetchFeaturedUris = createSelector(
-  selectDaemonReady,
-  selectCurrentPage,
-  selectFetchingFeaturedUris,
-  selectFeaturedUris,
-  (daemonReady, page, fetching, byCategory) => {
-    if (!daemonReady) return false
-    if (page != 'discover') return false
-    if (fetching) return false
-    if (Object.keys(byCategory).length != 0) return false
-
-    return true
-  }
 )
 
 export const selectFetchingFileInfos = createSelector(
@@ -52,21 +37,6 @@ export const selectDownloadedContentFileInfos = createSelector(
   (downloadedContent) => downloadedContent.fileInfos || []
 )
 
-export const shouldFetchDownloadedContent = createSelector(
-  selectDaemonReady,
-  selectCurrentPage,
-  selectFetchingDownloadedContent,
-  selectDownloadedContent,
-  (daemonReady, page, fetching, content) => {
-    if (!daemonReady) return false
-    if (page != 'downloaded') return false
-    if (fetching) return false
-    if (Object.keys(content).length != 0) return false
-
-    return true
-  }
-)
-
 export const selectFetchingPublishedContent = createSelector(
   _selectState,
   (state) => !!state.fetchingPublishedContent
@@ -77,20 +47,6 @@ export const selectPublishedContent = createSelector(
   (state) => state.publishedContent || {}
 )
 
-export const shouldFetchPublishedContent = createSelector(
-  selectDaemonReady,
-  selectCurrentPage,
-  selectFetchingPublishedContent,
-  selectPublishedContent,
-  (daemonReady, page, fetching, content) => {
-    if (!daemonReady) return false
-    if (page != 'published') return false
-    if (fetching) return false
-    if (Object.keys(content).length != 0) return false
-
-    return true
-  }
-)
 
 export const selectResolvingUris = createSelector(
   _selectState,

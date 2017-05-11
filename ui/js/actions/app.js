@@ -28,7 +28,6 @@ export function doNavigate(path, params = {}) {
     if (params)
       url = `${url}?${queryStringFromParams(params)}`
 
-    console.log('Path: ' + url);
     dispatch(doChangePath(url))
 
     const state = getState()
@@ -196,19 +195,6 @@ export function doAlertError(errorList) {
       data: {
         modal: 'error',
         error: errorList
-      }
-    })
-  }
-}
-
-export function doSearch(term) {
-  return function(dispatch, getState) {
-    const state = getState()
-
-    dispatch({
-      type: types.START_SEARCH,
-      data: {
-        searchTerm: term
       }
     })
   }

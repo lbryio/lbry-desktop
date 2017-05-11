@@ -2,10 +2,17 @@ import { createSelector } from 'reselect'
 import {
   selectCurrentParams,
   selectDaemonReady,
-  selectSearchQuery,
+  selectPageTitle,
+  selectCurrentPage,
+  selectCurrentUri
 } from 'selectors/app'
 
 export const _selectState = state => state.search || {}
+
+export const selectSearchQuery = createSelector(
+  selectCurrentParams,
+  (params) => params.query
+)
 
 export const selectIsSearching = createSelector(
   _selectState,
@@ -25,25 +32,51 @@ export const selectSearchResultsByQuery = createSelector(
 export const selectCurrentSearchResults = createSelector(
   selectSearchQuery,
   selectSearchResultsByQuery,
-  (query, byQuery) => byQuery[query] || []
+  (query, byQuery) => byQuery[query]
 )
 
-export const selectSearchActivated = createSelector(
-  _selectState,
-  (state) => !!state.activated
-)
 
-export const shouldSearch = createSelector(
-  selectDaemonReady,
+export const selectWunderBarAddress = createSelector(
+  selectPageTitle,
   selectSearchQuery,
-  selectIsSearching,
-  selectSearchResultsByQuery,
-  (daemonReady, query, isSearching, resultsByQuery) => {
-    if (!daemonReady) return false
-    if (!query) return false
-    if (isSearching) return false
-    if (Object.keys(resultsByQuery).indexOf(query) != -1) return false
+  (title, query) => query || title
+)
 
-    return true
+export const selectWunderBarIcon = createSelector(
+  selectCurrentPage,
+  selectCurrentUri,
+  (page, uri) => {
+    switch (page) {
+      case 'search':
+        return 'icon-search'
+      case 'settings':
+        return 'icon-gear'
+      case 'help':
+        return 'icon-question'
+      case 'report':
+        return 'icon-file'
+      case 'downloaded':
+        return 'icon-folder'
+      case 'published':
+        return 'icon-folder'
+      case 'start':
+        return 'icon-file'
+      case 'rewards':
+        return 'icon-bank'
+      case 'wallet':
+      case 'send':
+      case 'receive':
+        return 'icon-bank'
+      case 'show':
+        return 'icon-file'
+      case 'publish':
+        return 'icon-upload'
+      case 'developer':
+        return 'icon-file'
+      case 'developer':
+        return 'icon-code'
+      case 'discover':
+        return 'icon-home'
+    }
   }
 )

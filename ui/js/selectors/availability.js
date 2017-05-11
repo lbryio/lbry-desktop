@@ -57,18 +57,3 @@ export const selectAvailabilityForCurrentUri = createSelector(
   selectAvailabilityByUri,
   (uri, byUri) => byUri[uri]
 )
-
-export const shouldFetchCurrentUriAvailability = createSelector(
-  selectDaemonReady,
-  selectCurrentPage,
-  selectFetchingAvailabilityForCurrentUri,
-  selectAvailabilityForCurrentUri,
-  (daemonReady, page, fetching, availability) => {
-    if (!daemonReady) return false
-    if (page != 'show') return false
-    if (fetching) return false
-    if (availability) return false
-
-    return true
-  }
-)

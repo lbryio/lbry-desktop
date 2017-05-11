@@ -11,6 +11,10 @@ import FileList from 'component/fileList'
 import SubHeader from 'component/subHeader'
 
 class FileListPublished extends React.Component {
+  componentWillMount() {
+    this.props.fetchFileListPublished()
+  }
+
   componentDidUpdate() {
     if(this.props.publishedContent.length > 0) this._requestPublishReward()
   }
@@ -49,7 +53,7 @@ class FileListPublished extends React.Component {
     }
 
     return (
-      <main className="page">
+      <main className="main--single-column">
         <SubHeader />
         {content}
       </main>

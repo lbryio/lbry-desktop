@@ -3,23 +3,27 @@ import {
   connect,
 } from 'react-redux'
 import {
+  doSearch,
+} from 'actions/search'
+import {
   selectIsSearching,
-  selectSearchQuery,
   selectCurrentSearchResults,
+  selectSearchQuery,
 } from 'selectors/search'
 import {
   doNavigate,
 } from 'actions/app'
-import SearchPage from './view'
+import FileListSearch from './view'
 
 const select = (state) => ({
   isSearching: selectIsSearching(state),
   query: selectSearchQuery(state),
-  results: selectCurrentSearchResults(state),
+  results: selectCurrentSearchResults(state)
 })
 
 const perform = (dispatch) => ({
   navigate: (path) => dispatch(doNavigate(path)),
+  search: (search) => dispatch(doSearch(search))
 })
 
-export default connect(select, perform)(SearchPage)
+export default connect(select, perform)(FileListSearch)

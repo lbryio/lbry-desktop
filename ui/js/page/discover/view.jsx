@@ -23,28 +23,37 @@ const FeaturedCategory = (props) => {
   </div>
 }
 
-const DiscoverPage = (props) => {
-  const {
-    featuredUris,
-    fetchingFeaturedUris,
-  } = props
-  const failed = Object.keys(featuredUris).length === 0
-
-  let content
-
-  if (fetchingFeaturedUris) content = <BusyMessage message="Fetching content" />
-  if (!fetchingFeaturedUris && failed) content = <div className="empty">Failed to load landing content.</div>
-  if (!fetchingFeaturedUris && !failed) {
-    content = Object.keys(featuredUris).map(category => {
-      return featuredUris[category].length ?
-         <FeaturedCategory key={category} category={category} names={featuredUris[category]} /> :
-         '';
-    })
+class DiscoverPage extends React.Component{
+  componentWillMount() {
+    this.props.fetchFeaturedUris()
   }
 
-  return (
-    <main>{content}</main>
-  )
+  render() {
+    const {
+      featuredUris,
+      fetchingFeaturedUris,
+    } = this.props
+
+    let content
+
+    if (fetchingFeaturedUris) {
+      content = <BusyMessage message="Fetching content" />
+    } else {
+      if (typeof featuredUris === "object") {
+        content = Object.keys(featuredUris).map(category => {
+          return featuredUris[category].length ?
+                 <FeaturedCategory key={category} category={category} names={featuredUris[category]} /> :
+                 '';
+        })
+      } else if (featuredUris !== undefined) {
+        content = <div className="empty">Failed to load landing content.</div>
+      }
+    }
+
+    return (
+      <main>{content}</main>
+    )
+  }
 }
 
 export default DiscoverPage;

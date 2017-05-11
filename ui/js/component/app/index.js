@@ -12,7 +12,6 @@ import {
   doCheckUpgradeAvailable,
   doOpenModal,
   doCloseModal,
-  doSearch,
 } from 'actions/app'
 import App from './view'
 

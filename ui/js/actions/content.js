@@ -40,7 +40,7 @@ export function doResolveUri(uri) {
       data: { uri }
     })
 
-    lbry.resolve({ uri }).then((resolutionInfo) => {
+    return lbry.resolve({ uri }).then((resolutionInfo) => {
       const {
         claim,
         certificate,

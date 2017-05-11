@@ -9,7 +9,6 @@ import SnackBar from './component/snack-bar.js';
 import {AuthOverlay} from './component/auth.js';
 import { Provider } from 'react-redux';
 import store from 'store.js';
-import { runTriggers } from 'triggers'
 import {
   doDaemonReady,
   doChangePath,
@@ -41,8 +40,6 @@ ipcRenderer.on('open-uri-requested', (event, uri) => {
 });
 
 const initialState = app.store.getState();
-app.store.subscribe(runTriggers);
-runTriggers();
 
 var init = function() {
 

@@ -65,27 +65,6 @@ export const selectCurrentUriIsDownloaded = createSelector(
   }
 )
 
-export const shouldFetchCurrentUriFileInfo = createSelector(
-  selectCurrentPage,
-  selectCurrentUri,
-  selectFetchingCurrentUriFileInfo,
-  selectCurrentUriFileInfo,
-  (page, uri, fetching, fileInfo) => {
-    console.log('should fetch?');
-    console.log(page);
-    console.log(uri);
-    console.log(fetching);
-
-    if (page != 'show') return false
-    if (fetching) return false
-    if (fileInfo != undefined) return false
-
-    console.log('fetch!');
-
-    return true
-  }
-)
-
 const selectFileInfoForUri = (state, props) => {
   return selectAllFileInfoByUri(state)[props.uri]
 }
