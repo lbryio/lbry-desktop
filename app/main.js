@@ -34,6 +34,22 @@ let readyToQuit = false;
 // send it to, it's cached in this variable.
 let openUri = null;
 
+function denormalizeUri(uri) {
+  // Windows normalizes URIs when they're passed in from other apps. This tries
+  // to restore the original URI that was typed.
+  //   - If the URI has no path, Windows adds a trailing slash. LBRY URIs
+  //     can't have a slash with no path, so we just strip it off.
+  //   - In a URI with a claim ID, like lbry://channel#claimid, Windows
+  //     interprets the hash mark as an anchor and converts it to
+  //     lbry://channel/#claimid. We remove the slash here as well.
+
+  if (process.platform == 'win32') {
+    return uri.replace(/\/$/, '').replace('/#', '#');
+  } else {
+    return uri;
+  }
+}
+
 function checkForNewVersion(callback) {
   function formatRc(ver) {
     // Adds dash if needed to make RC suffix semver friendly
@@ -183,14 +199,14 @@ const isSecondaryInstance = app.makeSingleInstance((argv) => {
   }
 
   if (!win) {
-    openUri = argv[1];
+    openUri = denormalizeUri(argv[1]);
   } else {
     if (win.isMinimized()) {
       win.restore();
       win.focus();
     }
 
-    win.webContents.send('open-uri-requested', argv[1]);
+    win.webContents.send('open-uri-requested', denormalizeUri(argv[1]));
   }
 });
 
@@ -348,10 +364,9 @@ if (process.platform == 'darwin') {
     }
   });
 } else if (process.argv.length >= 2) {
-  // No open-url event on Win, but we can still handle URIs provided at launch time
   if (!win) {
-    openUri = process.argv[1];
+    openUri = denormalizeUri(process.argv[1]);
   } else {
-    win.webContents.send('open-uri-requested', process.argv[1]);
+    win.webContents.send('open-uri-requested', denormalizeUri(process.argv[1]));
   }
 }
