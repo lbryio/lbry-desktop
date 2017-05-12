@@ -23,8 +23,8 @@ Web UI version numbers should always match the corresponding version of LBRY App
   * Enable windows code signing of binary
 
 ### Changed
-  *
-  *
+  * Use directory selector instead of ugly text box on Settings page
+  * Use Electron's native file selector everywhere instead of WebKit file selector
 
 ### Fixed
   * Error modals now display full screen properly
