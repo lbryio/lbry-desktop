@@ -97,11 +97,11 @@ var SettingsPage = React.createClass({
             <h3>Download Directory</h3>
           </div>
           <div className="card__content">
-            <FormRow type="text"
-                   name="download_directory"
-                   defaultValue={this.state.daemonSettings.download_directory}
-                   helper="LBRY downloads will be saved here."
-                   onChange={this.onDownloadDirChange} />
+            <FormRow type="directory"
+                     name="download_directory"
+                     defaultValue={this.state.daemonSettings.download_directory}
+                     helper="LBRY downloads will be saved here."
+                     onChange={this.onDownloadDirChange} />
           </div>
         </section>
         <section className="card">
