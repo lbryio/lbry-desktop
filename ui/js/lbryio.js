@@ -14,8 +14,11 @@ const CONNECTION_STRING =  'https://api.lbry.io/';
 const EXCHANGE_RATE_TIMEOUT = 20 * 60 * 1000;
 
 lbryio.getExchangeRates = function() {
+  const cached = getSession('exchangeRateCache');
+  if (!cached || Date.now() - cached.time > EXCHANGE_RATE_TIMEOUT) {
+
+  }
   return new Promise((resolve, reject) => {
-    const cached = getSession('exchangeRateCache');
     if (!cached || Date.now() - cached.time > EXCHANGE_RATE_TIMEOUT) {
       lbryio.call('lbc', 'exchange_rate', {}, 'get', true).then(({lbc_usd, lbc_btc, btc_usd}) => {
         const rates = {lbc_usd, lbc_btc, btc_usd};

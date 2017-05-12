@@ -14,7 +14,7 @@ export const selectAllCostInfoByUri = createSelector(
 export const selectCurrentUriCostInfo = createSelector(
   selectCurrentUri,
   selectAllCostInfoByUri,
-  (uri, byUri) => byUri[uri] || {}
+  (uri, byUri) => byUri[uri]
 )
 
 export const selectFetchingCostInfo = createSelector(

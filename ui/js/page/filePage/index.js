@@ -3,6 +3,9 @@ import {
   connect
 } from 'react-redux'
 import {
+  doFetchCurrentUriFileInfo
+} from 'actions/file_info'
+import {
   selectCurrentUri,
 } from 'selectors/app'
 import {
@@ -26,6 +29,7 @@ const select = (state) => ({
 })
 
 const perform = (dispatch) => ({
+  fetchFileInfo: () => dispatch(doFetchCurrentUriFileInfo())
 })
 
 export default connect(select, perform)(FilePage)

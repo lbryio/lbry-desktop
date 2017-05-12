@@ -26,7 +26,7 @@ export function doFetchCostInfoForUri(uri) {
         type: types.FETCH_COST_INFO_COMPLETED,
         data: {
           uri,
-          costInfo: {}
+          costInfo: null
         }
       })
     })

@@ -3,6 +3,9 @@ import {
   connect,
 } from 'react-redux'
 import {
+  doFetchCostInfoForUri,
+} from 'actions/cost_info'
+import {
   makeSelectCostInfoForUri,
 } from 'selectors/cost_info'
 import FilePrice from './view'
@@ -17,6 +20,7 @@ const makeSelect = () => {
 }
 
 const perform = (dispatch) => ({
+  fetchCostInfo: (uri) => dispatch(doFetchCostInfoForUri(uri))
 })
 
 export default connect(makeSelect, perform)(FilePrice)

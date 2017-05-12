@@ -41,7 +41,7 @@ class ShowPage extends React.Component{
           <div className="card__title-identity"><h1>{uri}</h1></div>
         </div>
         <div className="card__content">
-          <BusyMessage message="Loading magic decentralized data..." /> :
+          <BusyMessage message="Loading magic decentralized data..." />
         </div>
       </section>;
     }

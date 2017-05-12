@@ -47,8 +47,6 @@ export function doResolveUri(uri) {
           certificate,
         }
       })
-
-      dispatch(doFetchCostInfoForUri(uri))
     })
   }
 }
