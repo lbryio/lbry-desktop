@@ -57,7 +57,6 @@ class FilePage extends React.Component{
 
   fetchFileInfo(props) {
     if (!props.fileInfo) {
-      console.log('fetch file info')
       props.fetchFileInfo()
     }
   }

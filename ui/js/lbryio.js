@@ -13,25 +13,19 @@ const lbryio = {
 const CONNECTION_STRING =  'https://api.lbry.io/';
 const EXCHANGE_RATE_TIMEOUT = 20 * 60 * 1000;
 
+lbryio._exchangePromise = null;
+lbryio._exchangeLastFetched = null;
 lbryio.getExchangeRates = function() {
-  const cached = getSession('exchangeRateCache');
-  if (!cached || Date.now() - cached.time > EXCHANGE_RATE_TIMEOUT) {
-
-  }
-  return new Promise((resolve, reject) => {
-    if (!cached || Date.now() - cached.time > EXCHANGE_RATE_TIMEOUT) {
+  if (!lbryio._exchangeLastFetched || Date.now() - lbryio._exchangeLastFetched > EXCHANGE_RATE_TIMEOUT) {
+    lbryio._exchangePromise = new Promise((resolve, reject) => {
       lbryio.call('lbc', 'exchange_rate', {}, 'get', true).then(({lbc_usd, lbc_btc, btc_usd}) => {
         const rates = {lbc_usd, lbc_btc, btc_usd};
-        setSession('exchangeRateCache', {
-          rates: rates,
-          time: Date.now(),
-        });
         resolve(rates);
-      });
-    } else {
-      resolve(cached.rates);
-    }
-  });
+      }).catch(reject);
+    });
+    lbryio._exchangeLastFetched = Date.now();
+  }
+  return lbryio._exchangePromise;
 }
 
 lbryio.call = function(resource, action, params={}, method='get', evenIfDisabled=false) { // evenIfDisabled is just for development, when we may have some calls working and some not

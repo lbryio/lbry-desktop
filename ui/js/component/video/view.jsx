@@ -32,9 +32,6 @@ class WatchLink extends React.Component {
       fileInfo,
     } = this.props
 
-    console.log('watch link render')
-    console.log(fileInfo)
-
     return (<div>
       <Link button={ button ? button : null }
             disabled={isLoading || !costInfo || costInfo.cost == undefined || fileInfo === undefined}

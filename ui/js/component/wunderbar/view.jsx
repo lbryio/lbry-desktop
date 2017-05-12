@@ -99,10 +99,18 @@ class WunderBar extends React.PureComponent {
   }
 
   componentDidUpdate() {
-    this._input.value = this.state.address;
-    if (this._input && this._focusPending) {
-      this._input.select();
-      this._focusPending = false;
+    if (this._input) {
+      const start = this._input.selectionStart,
+        end = this._input.selectionEnd;
+
+      this._input.value = this.state.address; //this causes cursor to go to end of input
+
+      this._input.setSelectionRange(start, end);
+
+      if (this._focusPending) {
+        this._input.select();
+        this._focusPending = false;
+      }
     }
   }
 

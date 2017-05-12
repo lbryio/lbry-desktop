@@ -92,7 +92,7 @@ class FileTile extends React.Component {
 
     let description = ""
     if (isClaimed) {
-      description = metadata.description
+      description = metadata && metadata.description
     } else if (isResolvingUri) {
       description = "Loading..."
     } else if (showEmpty === FileTile.SHOW_EMPTY_PUBLISH) {
