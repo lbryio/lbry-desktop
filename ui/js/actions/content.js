@@ -22,9 +22,6 @@ import {
 import {
   doOpenModal,
 } from 'actions/app'
-import {
-  doFetchCostInfoForUri,
-} from 'actions/cost_info'
 
 export function doResolveUri(uri) {
   return function(dispatch, getState) {
@@ -45,6 +42,15 @@ export function doResolveUri(uri) {
           uri,
           claim,
           certificate,
+        }
+      })
+    }).catch(() => {
+      dispatch({
+        type: types.RESOLVE_URI_COMPLETED,
+        data: {
+          uri,
+          claim: null,
+          certificate: null,
         }
       })
     })
@@ -114,6 +120,8 @@ export function doFetchPublishedContent() {
 
 export function doFetchFeaturedUris() {
   return function(dispatch, getState) {
+    return
+
     const state = getState()
 
     dispatch({
@@ -195,13 +203,6 @@ export function doUpdateLoadStatus(uri, outpoint) {
         setTimeout(() => { dispatch(doUpdateLoadStatus(uri, outpoint)) }, 250)
       }
     })
-  }
-}
-
-export function doPlayVideo(uri) {
-  return {
-    type: types.PLAY_VIDEO_STARTED,
-    data: { uri }
   }
 }
 
@@ -298,5 +299,36 @@ export function doWatchVideo() {
     }
 
     return Promise.resolve()
+  }
+}
+
+export function doFetchChannelClaims(uri) {
+  return function(dispatch, getState) {
+    dispatch({
+      type: types.FETCH_CHANNEL_CLAIMS_STARTED,
+      data: { uri }
+    })
+
+    lbry.resolve({ uri }).then((resolutionInfo) => {
+      const {
+        claims_in_channel,
+      } = resolutionInfo ? resolutionInfo : { claims_in_channel: [] }
+
+      dispatch({
+        type: types.FETCH_CHANNEL_CLAIMS_STARTED,
+        data: {
+          uri,
+          claims: claims_in_channel
+        }
+      })
+    }).catch(() => {
+      dispatch({
+        type: types.FETCH_CHANNEL_CLAIMS_COMPLETED,
+        data: {
+          uri,
+          claims: []
+        }
+      })
+    })
   }
 }

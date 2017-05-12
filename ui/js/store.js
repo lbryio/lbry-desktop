@@ -7,7 +7,6 @@ import {
 } from 'redux-logger'
 import appReducer from 'reducers/app';
 import availabilityReducer from 'reducers/availability'
-import certificatesReducer from 'reducers/certificates'
 import claimsReducer from 'reducers/claims'
 import contentReducer from 'reducers/content';
 import costInfoReducer from 'reducers/cost_info'
@@ -49,7 +48,6 @@ function enableBatching(reducer) {
 const reducers = redux.combineReducers({
   app: appReducer,
   availability: availabilityReducer,
-  certificates: certificatesReducer,
   claims: claimsReducer,
   fileInfo: fileInfoReducer,
   content: contentReducer,

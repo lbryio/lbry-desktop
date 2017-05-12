@@ -10,6 +10,7 @@ import {
 } from 'selectors/app'
 import {
   selectCurrentUriClaim,
+  selectCurrentUriChannelClaim,
 } from 'selectors/claims'
 import {
   selectCurrentUriIsResolving,
@@ -17,6 +18,7 @@ import {
 import ShowPage from './view'
 
 const select = (state, props) => ({
+  channelClaim: selectCurrentUriChannelClaim(state),
   claim: selectCurrentUriClaim(state),
   uri: selectCurrentUri(state),
   isResolvingUri: selectCurrentUriIsResolving(state)

@@ -8,13 +8,45 @@ const defaultState = {
 reducers[types.RESOLVE_URI_COMPLETED] = function(state, action) {
   const {
     uri,
+    certificate,
     claim,
   } = action.data
-  const newByUri = Object.assign({}, state.byUri)
 
-  newByUri[uri] = claim
+  const newClaims = Object.assign({}, state.claimsByUri)
+  const newChannelClaims = Object.assign({}, state.channelClaimsByUri)
+
+  if (claim !== undefined) {
+    newClaims[uri] = claim
+  }
+
+  //This needs a sanity boost...
+  if (certificate !== undefined) {
+    newChannelClaims[uri] = certificate
+    if (claim === undefined) {
+      newClaims[uri] = certificate
+    }
+  }
+
   return Object.assign({}, state, {
-    byUri: newByUri,
+    claimsByUri: newClaims,
+    channelClaimsByUri: newChannelClaims
+  })
+}
+
+reducers[types.FETCH_CHANNEL_CLAIMS_COMPLETED] = function(state, action) {
+  const {
+    uri,
+    claims
+  } = action.data
+
+  const newClaims = Object.assign({}, state.claimsByChannel)
+
+  if (claims !== undefined) {
+    newClaims[uri] = claims
+  }
+
+  return Object.assign({}, state, {
+    claimsByChannel: newClaims
   })
 }
 

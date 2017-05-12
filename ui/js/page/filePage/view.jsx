@@ -47,7 +47,7 @@ const FormatItem = (props) => {
 
 class FilePage extends React.Component{
 
-  componentWillMount() {
+  componentDidMount() {
     this.fetchFileInfo(this.props)
   }
 
@@ -56,7 +56,7 @@ class FilePage extends React.Component{
   }
 
   fetchFileInfo(props) {
-    if (!props.fileInfo) {
+    if (props.fileInfo === undefined) {
       props.fetchFileInfo()
     }
   }
@@ -104,14 +104,12 @@ class FilePage extends React.Component{
     const channelUri = signatureIsValid && hasSignature && channelUriObj.isChannel ? lbryuri.build(channelUriObj, false) : null;
     const uriIndicator = <UriIndicator uri={uri} />
 
-    //            <p>This location is not yet in use. { ' ' }<Link onClick={() => navigate('/publish')} label="Put something here" />.</p>
-
     return (
       <main className="main--single-column">
         <section className="show-page-media">
           { contentType && contentType.startsWith('video/') ?
             <Video className="video-embedded" uri={uri} metadata={metadata} outpoint={outpoint} /> :
-            (Object.keys(metadata).length > 0 ? <Thumbnail src={metadata.thumbnail} /> : <Thumbnail />) }
+            (metadata && metadata.thumbnail ? <Thumbnail src={metadata.thumbnail} /> : <Thumbnail />) }
         </section>
         <section className="card">
           <div className="card__inner">
@@ -128,7 +126,7 @@ class FilePage extends React.Component{
                 <FileActions uri={uri} /></div>
             </div>
             <div className="card__content card__subtext card__subtext card__subtext--allow-newlines">
-              {metadata.description}
+              {metadata && metadata.description}
             </div>
           </div>
           { metadata ?

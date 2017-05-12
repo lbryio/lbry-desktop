@@ -28,6 +28,7 @@ class ShowPage extends React.Component{
 
   render() {
     const {
+      channelClaim,
       claim,
       uri,
       isResolvingUri,
@@ -46,9 +47,8 @@ class ShowPage extends React.Component{
         </div>
       </section>
     }
-    else if (claim && claim.whatever) {
-      innerContent = "channel"
-      // innerContent = <ChannelPage title={uri} />
+    else if (channelClaim && claim && channelClaim.txid && channelClaim.txid === claim.txid) {
+      innerContent = <ChannelPage claim={claim} />
     }
     else if (claim) {
       innerContent = <FilePage />

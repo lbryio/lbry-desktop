@@ -640,8 +640,9 @@ lbry.claim_list_mine = function(params={}) {
 }
 
 const claimCacheKey = 'resolve_claim_cache';
-lbry._claimCache = getLocal(claimCacheKey, {});
+lbry._claimCache = getSession(claimCacheKey, {});
 lbry.resolve = function(params={}) {
+  console.log('resolve: ' + params.uri);
   return new Promise((resolve, reject) => {
     if (!params.uri) {
       throw "Resolve has hacked cache on top of it that requires a URI"
@@ -650,8 +651,10 @@ lbry.resolve = function(params={}) {
       resolve(lbry._claimCache[params.uri]);
     } else {
       lbry.call('resolve', params, function(data) {
-        lbry._claimCache[params.uri] = data;
-        setLocal(claimCacheKey, lbry._claimCache)
+        if (data !== undefined) {
+          lbry._claimCache[params.uri] = data;
+        }
+        setSession(claimCacheKey, lbry._claimCache)
         resolve(data)
       }, reject)
     }

@@ -10,7 +10,7 @@ export const _selectState = state => state.claims || {}
 
 export const selectClaimsByUri = createSelector(
   _selectState,
-  (state) => state.byUri || {}
+  (state) => state.claimsByUri || {}
 )
 
 export const selectCurrentUriClaim = createSelector(
@@ -19,11 +19,33 @@ export const selectCurrentUriClaim = createSelector(
   (uri, byUri) => byUri[uri]
 )
 
+export const selectChannelClaimsByUri = createSelector(
+  _selectState,
+  (state) => state.channelClaimsByUri || {}
+)
+
+export const selectCurrentUriChannelClaim = createSelector(
+  selectCurrentUri,
+  selectChannelClaimsByUri,
+  (uri, byUri) => byUri[uri]
+)
+
 export const selectCurrentUriClaimOutpoint = createSelector(
   selectCurrentUriClaim,
   (claim) => {
     return claim ? `${claim.txid}:${claim.nout}` : null
   }
+)
+
+export const selectClaimsByChannel = createSelector(
+  _selectState,
+  (state) => state.claimsByChannel || {}
+)
+
+export const selectCurrentUriClaims = createSelector(
+  selectCurrentUri,
+  selectClaimsByChannel,
+  (uri, byChannel) => byChannel[uri]
 )
 
 const selectClaimForUri = (state, props) => {

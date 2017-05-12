@@ -43,11 +43,6 @@ export const selectCurrentUri = createSelector(
   }
 )
 
-export const selectCurrentUriTitle = createSelector(
-  _selectState,
-  (state) => "fix me"
-)
-
 export const selectPageTitle = createSelector(
   selectCurrentPage,
   selectCurrentUri,
