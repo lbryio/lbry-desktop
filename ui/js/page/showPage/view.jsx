@@ -21,7 +21,7 @@ class ShowPage extends React.Component{
       uri,
     } = props
 
-    if(!isResolvingUri && !claim && uri) {
+    if(!isResolvingUri && claim === undefined && uri) {
       resolveUri(uri)
     }
   }
@@ -35,15 +35,16 @@ class ShowPage extends React.Component{
 
     let innerContent = "";
 
-    if (isResolvingUri) {
+    if (isResolvingUri || claim === null) {
       innerContent = <section className="card">
         <div className="card__inner">
           <div className="card__title-identity"><h1>{uri}</h1></div>
         </div>
         <div className="card__content">
-          <BusyMessage message="Loading magic decentralized data..." />
+          { isResolvingUri && <BusyMessage message="Loading magic decentralized data..." /> }
+          { claim === null && <span className="empty">There's nothing at this location.</span> }
         </div>
-      </section>;
+      </section>
     }
     else if (claim && claim.whatever) {
       innerContent = "channel"

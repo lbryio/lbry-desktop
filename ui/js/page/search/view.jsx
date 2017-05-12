@@ -8,14 +8,13 @@ import {BusyMessage} from 'component/common.js';
 
 class SearchPage extends React.Component{
   render() {
-    const isValidUri = (query) => true //FIXME
     const {
       query,
     } = this.props
 
     return (
       <main className="main--single-column">
-        { isValidUri(query) ?
+        { lbryuri.isValid(query) ?
           <section className="section-spaced">
             <h3 className="card-row__header">
               Exact URL <ToolTip label="?" body="This is the resolution of a LBRY URL and not controlled by LBRY Inc."

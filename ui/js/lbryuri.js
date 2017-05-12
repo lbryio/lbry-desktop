@@ -165,5 +165,25 @@ lbryuri.normalize= function(uri) {
   return lbryuri.build({name, path, claimSequence, bidPosition, claimId});
 }
 
+lbryuri.isValid = function(uri) {
+  let parts
+  try {
+    parts = lbryuri.parse(lbryuri.normalize(uri))
+  } catch (error) {
+    return false;
+  }
+  return parts && parts.name;
+}
+
+lbryuri.isClaimable = function(uri) {
+  let parts
+  try {
+    parts = lbryuri.parse(lbryuri.normalize(uri))
+  } catch (error) {
+    return false;
+  }
+  return parts && parts.name && !parts.claimId && !parts.bidPosition && !parts.claimSequence && !parts.isChannel && !parts.path;
+}
+
 window.lbryuri = lbryuri;
 export default lbryuri;

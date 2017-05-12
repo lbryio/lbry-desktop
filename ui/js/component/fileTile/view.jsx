@@ -86,6 +86,7 @@ class FileTile extends React.Component {
 
     const uri = lbryuri.normalize(this.props.uri);
     const isClaimed = !!claim;
+    const isClaimable = lbryuri.isClaimable(uri)
     const title = isClaimed && metadata && metadata.title ? metadata.title : uri;
     const obscureNsfw = this.props.obscureNsfw && metadata && metadata.nsfw;
     let onClick = () => navigate('/show', { uri })
@@ -97,7 +98,10 @@ class FileTile extends React.Component {
       description = "Loading..."
     } else if (showEmpty === FileTile.SHOW_EMPTY_PUBLISH) {
       onClick = () => navigate('/publish')
-      description = <span className="empty">This location is unclaimed - <span className="button-text">put something here</span>!</span>
+      description = <span className="empty">
+        This location is unused. { ' ' }
+        { isClaimable && <span className="button-text">Put something here!</span> }
+      </span>
     } else if (showEmpty === FileTile.SHOW_EMPTY_PENDING) {
       description = <span className="empty">This file is pending confirmation.</span>
     }
