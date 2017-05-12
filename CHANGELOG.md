@@ -44,6 +44,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
  * Handle more of price calculations at the daemon layer to improve page load time
  * Add special support for building channel claims in lbryuri module
  * Enable windows code signing of binary
+ * Support for opening LBRY URIs from links in other apps
 
 
 ### Changed
@@ -55,6 +56,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
 
 ### Fixed
  * Fix Watch page and progress bars for new API changes
+ * On Windows, prevent opening multiple LBRY instances (launching LBRY again just focuses the current instance)
 
 
 
