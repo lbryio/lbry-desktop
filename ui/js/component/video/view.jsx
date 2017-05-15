@@ -38,7 +38,7 @@ class VideoPlayButton extends React.Component {
 
     return (<div>
       <Link button={ button ? button : null }
-            disabled={isLoading || !costInfo || costInfo.cost === undefined || fileInfo === undefined}
+            disabled={isLoading || fileInfo === undefined || (fileInfo === null && (!costInfo || costInfo.cost === undefined))}
             label={label ? label : ""}
             className="video__play-button"
             icon="icon-play"
@@ -53,7 +53,7 @@ class VideoPlayButton extends React.Component {
         contentLabel="Confirm Purchase"
         onConfirmed={this.confirmPurchaseClick.bind(this)}
         onAborted={closeModal}>
-        Are you sure you'd like to buy <strong>{this.props.metadata.title}</strong> for <strong><FilePrice uri={uri} look="plain" /></strong> credits?
+        This will purchase <strong>{title}</strong> for <strong><FilePrice uri={uri} look="plain" /></strong> credits.
       </Modal>
       <Modal
         isOpen={modal == 'timedOut'} onConfirmed={closeModal} contentLabel="Timed Out">
@@ -98,6 +98,11 @@ class Video extends React.Component {
       isPlaying = false,
     } = this.state
 
+    const isReadyToPlay = fileInfo && fileInfo.written_bytes > 0
+
+    console.log('video render')
+    console.log(this.props)
+
     let loadStatusMessage = ''
 
     if (isLoading) {
@@ -107,9 +112,9 @@ class Video extends React.Component {
     }
 
     return (
-      <div className={"video " + this.props.className + (isPlaying && fileInfo.isReadyToPlay ? " video--active" : " video--hidden")}>{
+      <div className={"video " + this.props.className + (isPlaying && isReadyToPlay ? " video--active" : " video--hidden")}>{
         isPlaying ?
-          (!fileInfo.isReadyToPlay ?
+          (!isReadyToPlay ?
             <span>this is the world's worst loading screen and we shipped our software with it anyway... <br /><br />{loadStatusMessage}</span> :
             <VideoPlayer downloadPath={fileInfo.download_path} />) :
         <div className="video__cover" style={{backgroundImage: 'url("' + metadata.thumbnail + '")'}}>

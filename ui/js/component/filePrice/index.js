@@ -20,7 +20,8 @@ const makeSelect = () => {
 }
 
 const perform = (dispatch) => ({
-  fetchCostInfo: (uri) => dispatch(doFetchCostInfoForUri(uri))
+  fetchCostInfo: (uri) => dispatch(doFetchCostInfoForUri(uri)),
+  cancelFetchCostInfo: (uri) => dispatch(doCancelFetchCostInfoForUri(uri))
 })
 
 export default connect(makeSelect, perform)(FilePrice)

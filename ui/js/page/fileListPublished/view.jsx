@@ -44,12 +44,15 @@ class FileListPublished extends React.Component {
     } = this.props
 
     let content
-    if (fetching) {
-      content = <BusyMessage message="Loading" />
-    } else if (!publishedContent.length) {
-      content = <span>You haven't downloaded anything from LBRY yet. Go <Link onClick={() => navigate('/discover')} label="search for your first download" />!</span>
+
+    if (publishedContent && publishedContent.length > 0) {
+      content = <FileList fileInfos={publishedContent} fetching={fetching} hidePrices={true} />
     } else {
-      content = <FileList fileInfos={publishedContent} hidePrices={true} />
+      if (fetching) {
+        content = <BusyMessage message="Loading" />
+      } else {
+        content = <span>You haven't downloaded anything from LBRY yet. Go <Link onClick={() => navigate('/discover')} label="search for your first download" />!</span>
+      }
     }
 
     return (

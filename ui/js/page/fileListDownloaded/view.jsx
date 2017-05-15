@@ -23,12 +23,14 @@ class FileListDownloaded extends React.Component {
     } = this.props
 
     let content
-    if (fetching) {
-      content = <BusyMessage message="Loading" />
-    } else if (!downloadedContent.length) {
-      content = <span>You haven't downloaded anything from LBRY yet. Go <Link onClick={() => navigate('/discover')} label="search for your first download" />!</span>
+    if (downloadedContent && downloadedContent.length > 0) {
+      content = <FileList fileInfos={downloadedContent} fetching={fetching} hidePrices={true} />
     } else {
-      content = <FileList fileInfos={downloadedContent} hidePrices={true} />
+      if (fetching) {
+        content = <BusyMessage message="Loading" />
+      } else {
+        content = <span>You haven't downloaded anything from LBRY yet. Go <Link onClick={() => navigate('/discover')} label="search for your first download" />!</span>
+      }
     }
 
     return (

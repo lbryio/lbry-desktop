@@ -3,7 +3,6 @@ import {
   connect,
 } from 'react-redux'
 import {
-  selectHasSignature,
   selectPlatform,
 } from 'selectors/app'
 import {

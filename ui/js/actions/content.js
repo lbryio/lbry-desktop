@@ -11,6 +11,9 @@ import {
   selectDownloadingByUri,
 } from 'selectors/file_info'
 import {
+  selectResolvingUris
+} from 'selectors/content'
+import {
   selectCostInfoForUri,
 } from 'selectors/cost_info'
 import {
@@ -22,26 +25,38 @@ import {
 
 export function doResolveUri(uri) {
   return function(dispatch, getState) {
-    dispatch({
-      type: types.RESOLVE_URI_STARTED,
-      data: { uri }
-    })
 
-    lbry.resolve({ uri }).then((resolutionInfo) => {
-      const {
-        claim,
-        certificate,
-      } = resolutionInfo ? resolutionInfo : { claim : null, certificate: null }
+    const state = getState()
+    const alreadyResolving = selectResolvingUris(state).indexOf(uri) !== -1
 
+    if (!alreadyResolving) {
       dispatch({
-        type: types.RESOLVE_URI_COMPLETED,
-        data: {
-          uri,
+        type: types.RESOLVE_URI_STARTED,
+        data: { uri }
+      })
+
+      lbry.resolve({ uri }).then((resolutionInfo) => {
+        const {
           claim,
           certificate,
-        }
+        } = resolutionInfo ? resolutionInfo : { claim : null, certificate: null }
+
+        dispatch({
+          type: types.RESOLVE_URI_COMPLETED,
+          data: {
+            uri,
+            claim,
+            certificate,
+          }
+        })
       })
-    })
+    }
+  }
+}
+
+export function doCancelResolveUri(uri) {
+  return function(dispatch, getState) {
+    lbry.cancelResolve({ uri })
   }
 }
 

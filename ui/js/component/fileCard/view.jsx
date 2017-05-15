@@ -8,16 +8,28 @@ import UriIndicator from 'component/uriIndicator';
 
 class FileCard extends React.Component {
   componentDidMount() {
+    this.resolve(this.props)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.resolve(nextProps)
+  }
+
+  resolve(props) {
     const {
       isResolvingUri,
       resolveUri,
       claim,
       uri,
-    } = this.props
+    } = props
 
-    if(!isResolvingUri && !claim && uri) {
+    if(!isResolvingUri && claim === undefined && uri) {
       resolveUri(uri)
     }
+  }
+
+  componentWillUnmount() {
+    this.props.cancelResolveUri(this.props.uri)
   }
 
   handleMouseOver() {

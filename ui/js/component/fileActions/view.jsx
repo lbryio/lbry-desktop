@@ -72,11 +72,14 @@ class FileActions extends React.Component {
 
     let content
 
-    if (fileInfo === undefined || isAvailable === undefined) {
+    console.log('file actions render')
+    console.log(this.props)
+
+    if (!fileInfo && isAvailable === undefined) {
 
       content = <BusyMessage message="Checking availability" />
 
-    } else if (!isAvailable && !this.state.forceShowActions) {
+    } else if (!fileInfo && !isAvailable && !this.state.forceShowActions) {
 
       content = <div>
         <div className="button-set-item empty">Content unavailable.</div>
@@ -119,7 +122,7 @@ class FileActions extends React.Component {
           </DropDownMenu> : '' }
         <Modal type="confirm" isOpen={modal == 'affirmPurchase'}
                contentLabel="Confirm Purchase" onConfirmed={this.onAffirmPurchase.bind(this)} onAborted={closeModal}>
-          Are you sure you'd like to buy <strong>{title}</strong> for <strong><FilePrice uri={uri} look="plain" /></strong> credits?
+          This will purchase <strong>{title}</strong> for <strong><FilePrice uri={uri} look="plain" /></strong> credits.
         </Modal>
         <Modal isOpen={modal == 'notEnoughCredits'} contentLabel="Not enough credits"
                onConfirmed={closeModal}>

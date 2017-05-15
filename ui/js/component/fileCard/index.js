@@ -7,6 +7,7 @@ import {
 } from 'actions/app'
 import {
   doResolveUri,
+  doCancelResolveUri,
 } from 'actions/content'
 import {
   selectObscureNsfw,
@@ -44,6 +45,7 @@ const makeSelect = () => {
 const perform = (dispatch) => ({
   navigate: (path, params) => dispatch(doNavigate(path, params)),
   resolveUri: (uri) => dispatch(doResolveUri(uri)),
+  cancelResolveUri: (uri) => dispatch(doCancelResolveUri(uri))
 })
 
 export default connect(makeSelect, perform)(FileCard)

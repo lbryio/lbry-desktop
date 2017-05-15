@@ -192,8 +192,3 @@ export const selectObscureNsfw = createSelector(
   _selectState,
   (state) => !!state.obscureNsfw
 )
-
-export const selectHasSignature = createSelector(
-  _selectState,
-  (state) => !!state.hasSignature
-)

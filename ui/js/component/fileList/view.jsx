@@ -58,6 +58,7 @@ class FileList extends React.Component {
   render() {
     const {
       handleSortChanged,
+      fetching,
       fileInfos,
       hidePrices,
     } = this.props
@@ -74,7 +75,8 @@ class FileList extends React.Component {
       content.push(<FileTile key={uri} uri={uri} hidePrice={hidePrices} hideOnRemove={true} showEmpty={""} />)
     })
     return (
-      <section>
+      <section className="file-list__header">
+        { fetching && <span className="busy-indicator"/> }
         <span className='sort-section'>
           Sort by { ' ' }
           <FormField type="select" onChange={this.handleSortChanged.bind(this)}>

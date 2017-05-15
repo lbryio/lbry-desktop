@@ -21,13 +21,6 @@ export function doFetchFileInfo(uri) {
     const outpoint = claim ? `${claim.txid}:${claim.nout}` : null
     const alreadyFetching = !!selectLoadingByUri(state)[uri]
 
-    if (!outpoint) {
-      console.log(claim);
-      console.log(outpoint);
-      console.log(selectClaimsByUri(state))
-      throw new Error("Unable to get outpoint from claim for URI " + uri);
-    }
-
     if (!alreadyFetching) {
       dispatch({
         type: types.FETCH_FILE_INFO_STARTED,

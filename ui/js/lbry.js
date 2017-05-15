@@ -95,7 +95,7 @@ let lbry = {
 };
 
 lbry.call = function (method, params, callback, errorCallback, connectFailedCallback) {
-  jsonrpc.call(lbry.daemonConnectionString, method, params, callback, errorCallback, connectFailedCallback);
+  return jsonrpc.call(lbry.daemonConnectionString, method, params, callback, errorCallback, connectFailedCallback);
 }
 
 //core
@@ -175,11 +175,6 @@ lbry.setDaemonSetting = function(setting, value, callback) {
   var setSettingsArgs = {};
   setSettingsArgs[setting] = value;
   lbry.call('set_settings', setSettingsArgs, callback)
-}
-
-
-lbry.getBalance = function(callback) {
-  lbry.call("wallet_balance", {}, callback);
 }
 
 lbry.sendToAddress = function(amount, address, callback, errorCallback) {
@@ -641,6 +636,7 @@ lbry.claim_list_mine = function(params={}) {
 
 const claimCacheKey = 'resolve_claim_cache';
 lbry._claimCache = getSession(claimCacheKey, {});
+lbry._resolveXhrs = {}
 lbry.resolve = function(params={}) {
   return new Promise((resolve, reject) => {
     if (!params.uri) {
@@ -649,7 +645,7 @@ lbry.resolve = function(params={}) {
     if (params.uri && lbry._claimCache[params.uri] !== undefined) {
       resolve(lbry._claimCache[params.uri]);
     } else {
-      lbry.call('resolve', params, function(data) {
+      lbry._resolveXhrs[params.uri] = lbry.call('resolve', params, function(data) {
         if (data !== undefined) {
           lbry._claimCache[params.uri] = data;
         }
@@ -658,6 +654,13 @@ lbry.resolve = function(params={}) {
       }, reject)
     }
   });
+}
+
+lbry.cancelResolve = function(params={}) {
+  const xhr = lbry._resolveXhrs[params.uri]
+  if (xhr && xhr.readyState > 0 && xhr.readyState < 4) {
+    xhr.abort()
+  }
 }
 
 // Adds caching.

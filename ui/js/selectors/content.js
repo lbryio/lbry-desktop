@@ -42,7 +42,7 @@ export const selectPublishedContent = createSelector(
   (state) => state.publishedContent || {}
 )
 
-const selectResolvingUris = createSelector(
+export const selectResolvingUris = createSelector(
   _selectState,
   (state) => state.resolvingUris || []
 )
