@@ -2,7 +2,6 @@ import { createSelector } from 'reselect'
 import {
   selectDaemonReady,
   selectCurrentPage,
-  selectCurrentUri,
 } from 'selectors/app'
 
 export const _selectState = state => state.content || {}
@@ -17,10 +16,6 @@ export const selectFetchingFeaturedUris = createSelector(
   (state) => !!state.fetchingFeaturedContent
 )
 
-export const selectFetchingFileInfos = createSelector(
-  _selectState,
-  (state) => state.fetchingFileInfos || {}
-)
 
 export const selectFetchingDownloadedContent = createSelector(
   _selectState,
@@ -47,24 +42,16 @@ export const selectPublishedContent = createSelector(
   (state) => state.publishedContent || {}
 )
 
-
-export const selectResolvingUris = createSelector(
+const selectResolvingUris = createSelector(
   _selectState,
   (state) => state.resolvingUris || []
-)
-
-
-export const selectCurrentUriIsResolving = createSelector(
-  selectCurrentUri,
-  selectResolvingUris,
-  (uri, resolvingUris) => resolvingUris.indexOf(uri) != -1
 )
 
 const selectResolvingUri = (state, props) => {
   return selectResolvingUris(state).indexOf(props.uri) != -1
 }
 
-export const makeSelectResolvingUri = () => {
+export const makeSelectIsResolvingForUri = () => {
   return createSelector(
     selectResolvingUri,
     (resolving) => resolving

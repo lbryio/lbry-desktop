@@ -28,7 +28,6 @@ class ShowPage extends React.Component{
 
   render() {
     const {
-      channelClaim,
       claim,
       uri,
       isResolvingUri,
@@ -36,7 +35,7 @@ class ShowPage extends React.Component{
 
     let innerContent = "";
 
-    if (isResolvingUri || claim === null) {
+    if (isResolvingUri || !claim) {
       innerContent = <section className="card">
         <div className="card__inner">
           <div className="card__title-identity"><h1>{uri}</h1></div>
@@ -47,11 +46,12 @@ class ShowPage extends React.Component{
         </div>
       </section>
     }
-    else if (channelClaim && claim && channelClaim.txid && channelClaim.txid === claim.txid) {
-      innerContent = <ChannelPage claim={claim} />
+    else if (claim.name.length && claim.name[0] === '@') {
+      innerContent = "channel"
+      // innerContent = <ChannelPage claim={claim} />
     }
     else if (claim) {
-      innerContent = <FilePage />
+      innerContent = <FilePage uri={uri} />
     }
 
     return (

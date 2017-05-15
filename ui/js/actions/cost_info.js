@@ -1,7 +1,4 @@
 import * as types from 'constants/action_types'
-import {
-  selectCurrentUri,
-} from 'selectors/app'
 import lbry from 'lbry'
 
 export function doFetchCostInfoForUri(uri) {

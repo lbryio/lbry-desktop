@@ -20,7 +20,6 @@ class App extends React.Component {
   render() {
     const {
       modal,
-      headerLinks,
     } = this.props
 
     return <div id="window">

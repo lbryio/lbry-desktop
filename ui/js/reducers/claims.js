@@ -13,23 +13,22 @@ reducers[types.RESOLVE_URI_COMPLETED] = function(state, action) {
   } = action.data
 
   const newClaims = Object.assign({}, state.claimsByUri)
-  const newChannelClaims = Object.assign({}, state.channelClaimsByUri)
 
   if (claim !== undefined) {
     newClaims[uri] = claim
   }
 
   //This needs a sanity boost...
-  if (certificate !== undefined) {
-    newChannelClaims[uri] = certificate
+  if (certificate !== undefined && claim === undefined) {
+    const uriParts = lbryuri.parse(uri);
+    // newChannelClaims[uri] = certificate
     if (claim === undefined) {
       newClaims[uri] = certificate
     }
   }
 
   return Object.assign({}, state, {
-    claimsByUri: newClaims,
-    channelClaimsByUri: newChannelClaims
+    claimsByUri: newClaims
   })
 }
 

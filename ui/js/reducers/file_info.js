@@ -23,10 +23,17 @@ reducers[types.FETCH_FILE_INFO_COMPLETED] = function(state, action) {
     uri,
     fileInfo,
   } = action.data
+
   const newByUri = Object.assign({}, state.byUri)
   const newFetching = Object.assign({}, state.fetching)
 
-  newByUri[uri] = fileInfo || {}
+  if (fileInfo) {
+    fileInfo.isReadyToPlay = fileInfo.written_bytes > 0
+    fileInfo.isDownloaded = fileInfo.completed && fileInfo.written_bytes > 0;
+  }
+
+  newByUri[uri] = fileInfo || null
+
   delete newFetching[uri]
 
   return Object.assign({}, state, {

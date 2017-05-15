@@ -36,7 +36,9 @@ window.addEventListener('popstate', (event) => {
 })
 
 ipcRenderer.on('open-uri-requested', (event, uri) => {
-  console.log('FIX ME do magic dispatch');
+  if (uri) {
+    console.log('FIX ME do magic dispatch: ' + uri);
+  }
 });
 
 const initialState = app.store.getState();

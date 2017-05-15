@@ -2,10 +2,6 @@ import {
   createSelector,
 } from 'reselect'
 import {
-  selectCurrentUri,
-  selectCurrentPage,
-} from 'selectors/app'
-import {
   selectMyClaimsOutpoints,
 } from 'selectors/claims'
 
@@ -14,28 +10,6 @@ export const _selectState = state => state.fileInfo || {}
 export const selectAllFileInfoByUri = createSelector(
   _selectState,
   (state) => state.byUri || {}
-)
-
-export const selectCurrentUriRawFileInfo = createSelector(
-  selectCurrentUri,
-  selectAllFileInfoByUri,
-  (uri, byUri) => byUri[uri]
-)
-
-export const selectCurrentUriFileInfo = createSelector(
-  selectCurrentUriRawFileInfo,
-  (fileInfo) => fileInfo
-)
-
-export const selectFetchingFileInfo = createSelector(
-  _selectState,
-  (state) => state.fetching || {}
-)
-
-export const selectFetchingCurrentUriFileInfo = createSelector(
-  selectCurrentUri,
-  selectFetchingFileInfo,
-  (uri, byUri) => !!byUri[uri]
 )
 
 export const selectDownloading = createSelector(
@@ -48,24 +22,7 @@ export const selectDownloadingByUri = createSelector(
   (downloading) => downloading.byUri || {}
 )
 
-export const selectDownloadingCurrentUri = createSelector(
-  selectCurrentUri,
-  selectDownloadingByUri,
-  (uri, byUri) => !!byUri[uri]
-)
-
-export const selectCurrentUriIsDownloaded = createSelector(
-  selectCurrentUriFileInfo,
-  (fileInfo) => {
-    if (!fileInfo) return false
-    if (!fileInfo.completed) return false
-    if (!fileInfo.written_bytes > 0) return false
-
-    return true
-  }
-)
-
-const selectFileInfoForUri = (state, props) => {
+export const selectFileInfoForUri = (state, props) => {
   return selectAllFileInfoByUri(state)[props.uri]
 }
 
@@ -96,19 +53,6 @@ export const selectLoading = createSelector(
 export const selectLoadingByUri = createSelector(
   selectLoading,
   (loading) => loading.byUri || {}
-)
-
-export const selectLoadingCurrentUri = createSelector(
-  selectLoadingByUri,
-  selectCurrentUri,
-  (byUri, uri) => !!byUri[uri]
-)
-
-// TODO make this smarter so it doesn't start playing and immediately freeze
-// while downloading more.
-export const selectCurrentUriFileReadyToPlay = createSelector(
-  selectCurrentUriFileInfo,
-  (fileInfo) => (fileInfo || {}).written_bytes > 0
 )
 
 const selectLoadingForUri = (state, props) => {

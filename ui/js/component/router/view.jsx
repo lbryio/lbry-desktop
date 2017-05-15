@@ -25,25 +25,26 @@ const route = (page, routesMap) => {
 const Router = (props) => {
   const {
     currentPage,
+    params,
   } = props;
 
   return route(currentPage, {
-    'settings': <SettingsPage {...props} />,
-    'help': <HelpPage {...props} />,
-    'report': <ReportPage {...props} />,
-    'downloaded': <FileListDownloaded {...props} />,
-    'published': <FileListPublished {...props} />,
-    'start': <StartPage {...props} />,
-    'wallet': <WalletPage {...props} />,
-    'send': <WalletPage {...props} />,
-    'receive': <WalletPage {...props} />,
-    'show': <ShowPage {...props} />,
-    'channel': <ChannelPage {...props} />,
-    'publish': <PublishPage {...props} />,
-    'developer': <DeveloperPage {...props} />,
-    'discover': <DiscoverPage {...props} />,
-    'rewards': <RewardsPage {...props} />,
-    'search': <SearchPage {...props} />,
+    'settings': <SettingsPage {...params} />,
+    'help': <HelpPage {...params} />,
+    'report': <ReportPage {...params} />,
+    'downloaded': <FileListDownloaded {...params} />,
+    'published': <FileListPublished {...params} />,
+    'start': <StartPage {...params} />,
+    'wallet': <WalletPage {...params} />,
+    'send': <WalletPage {...params} />,
+    'receive': <WalletPage {...params} />,
+    'show': <ShowPage {...params} />,
+    'channel': <ChannelPage {...params} />,
+    'publish': <PublishPage {...params} />,
+    'developer': <DeveloperPage {...params} />,
+    'discover': <DiscoverPage {...params} />,
+    'rewards': <RewardsPage {...params} />,
+    'search': <SearchPage {...params} />,
   })
 }
 

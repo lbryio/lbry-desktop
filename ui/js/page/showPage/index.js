@@ -6,26 +6,27 @@ import {
   doResolveUri,
 } from 'actions/content'
 import {
-  selectCurrentUri,
-} from 'selectors/app'
-import {
-  selectCurrentUriClaim,
-  selectCurrentUriChannelClaim,
+  makeSelectClaimForUri,
 } from 'selectors/claims'
 import {
-  selectCurrentUriIsResolving,
+  makeSelectIsResolvingForUri,
 } from 'selectors/content'
 import ShowPage from './view'
 
-const select = (state, props) => ({
-  channelClaim: selectCurrentUriChannelClaim(state),
-  claim: selectCurrentUriClaim(state),
-  uri: selectCurrentUri(state),
-  isResolvingUri: selectCurrentUriIsResolving(state)
-})
+const makeSelect = () => {
+  const selectClaim = makeSelectClaimForUri(),
+        selectIsResolving = makeSelectIsResolvingForUri();
+
+  const select = (state, props) => ({
+    claim: selectClaim(state, props),
+    isResolvingUri: selectIsResolving(state, props)
+  })
+
+  return select
+}
 
 const perform = (dispatch) => ({
   resolveUri: (uri) => dispatch(doResolveUri(uri))
 })
 
-export default connect(select, perform)(ShowPage)
+export default connect(makeSelect, perform)(ShowPage)

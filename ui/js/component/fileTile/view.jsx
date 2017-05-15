@@ -97,7 +97,7 @@ class FileTile extends React.Component {
     } else if (isResolvingUri) {
       description = "Loading..."
     } else if (showEmpty === FileTile.SHOW_EMPTY_PUBLISH) {
-      onClick = () => navigate('/publish')
+      onClick = () => navigate('/publish', { })
       description = <span className="empty">
         This location is unused. { ' ' }
         { isClaimable && <span className="button-text">Put something here!</span> }

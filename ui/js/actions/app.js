@@ -6,7 +6,6 @@ import {
   selectUpgradeDownloadItem,
   selectUpgradeFilename,
   selectPageTitle,
-  selectCurrentPath,
 } from 'selectors/app'
 
 const {remote, ipcRenderer, shell} = require('electron');

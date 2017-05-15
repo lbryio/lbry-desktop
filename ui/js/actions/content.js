@@ -4,17 +4,14 @@ import lbryio from 'lbryio'
 import lbryuri from 'lbryuri'
 import rewards from 'rewards'
 import {
-  selectCurrentUri,
-} from 'selectors/app'
-import {
   selectBalance,
 } from 'selectors/wallet'
 import {
-  selectCurrentUriFileInfo,
+  selectFileInfoForUri,
   selectDownloadingByUri,
 } from 'selectors/file_info'
 import {
-  selectCurrentUriCostInfo,
+  selectCostInfoForUri,
 } from 'selectors/cost_info'
 import {
   selectClaimsByUri,
@@ -42,15 +39,6 @@ export function doResolveUri(uri) {
           uri,
           claim,
           certificate,
-        }
-      })
-    }).catch(() => {
-      dispatch({
-        type: types.RESOLVE_URI_COMPLETED,
-        data: {
-          uri,
-          claim: null,
-          certificate: null,
         }
       })
     })
@@ -120,8 +108,6 @@ export function doFetchPublishedContent() {
 
 export function doFetchFeaturedUris() {
   return function(dispatch, getState) {
-    return
-
     const state = getState()
 
     dispatch({
@@ -229,10 +215,9 @@ export function doDownloadFile(uri, streamInfo) {
   }
 }
 
-export function doLoadVideo() {
+export function doLoadVideo(uri) {
   return function(dispatch, getState) {
     const state = getState()
-    const uri = selectCurrentUri(state)
 
     dispatch({
       type: types.LOADING_VIDEO_STARTED,
@@ -259,13 +244,12 @@ export function doLoadVideo() {
   }
 }
 
-export function doWatchVideo() {
+export function doWatchVideo(uri) {
   return function(dispatch, getState) {
     const state = getState()
-    const uri = selectCurrentUri(state)
     const balance = selectBalance(state)
-    const fileInfo = selectCurrentUriFileInfo(state)
-    const costInfo = selectCurrentUriCostInfo(state)
+    const fileInfo = selectFileInfoForUri(state, { uri })
+    const costInfo = selectCostInfoForUri(state, { uri })
     const downloadingByUri = selectDownloadingByUri(state)
     const alreadyDownloading = !!downloadingByUri[uri]
     const { cost } = costInfo
@@ -287,8 +271,8 @@ export function doWatchVideo() {
     }
 
     // the file is free or we have partially downloaded it
-    if (cost <= 0.01 || fileInfo.download_directory) {
-      dispatch(doLoadVideo())
+    if (cost <= 0.01 || (fileInfo && fileInfo.download_directory)) {
+      dispatch(doLoadVideo(uri))
       return Promise.resolve()
     }
 
@@ -302,7 +286,7 @@ export function doWatchVideo() {
   }
 }
 
-export function doFetchChannelClaims(uri) {
+export function doFetchClaimsByChannel(uri) {
   return function(dispatch, getState) {
     dispatch({
       type: types.FETCH_CHANNEL_CLAIMS_STARTED,
@@ -323,7 +307,7 @@ export function doFetchChannelClaims(uri) {
       })
     }).catch(() => {
       dispatch({
-        type: types.FETCH_CHANNEL_CLAIMS_COMPLETED,
+        type: types.FETC,
         data: {
           uri,
           claims: []

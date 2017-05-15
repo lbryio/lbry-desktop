@@ -38,7 +38,6 @@ class FileCard extends React.Component {
       metadata,
       isResolvingUri,
       navigate,
-      hidePrice,
     } = this.props
 
     const uri = lbryuri.normalize(this.props.uri);
@@ -59,7 +58,7 @@ class FileCard extends React.Component {
             <div className="card__title-identity">
               <h5 title={title}><TruncatedText lines={1}>{title}</TruncatedText></h5>
               <div className="card__subtitle">
-                { !hidePrice ? <span style={{float: "right"}}><FilePrice uri={uri} /></span>  : null}
+                <span style={{float: "right"}}><FilePrice uri={uri} /></span>
                 <UriIndicator uri={uri} />
               </div>
             </div>

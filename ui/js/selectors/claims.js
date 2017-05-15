@@ -2,9 +2,6 @@ import {
   createSelector,
 } from 'reselect'
 import lbryuri from 'lbryuri'
-import {
-  selectCurrentUri,
-} from 'selectors/app'
 
 export const _selectState = state => state.claims || {}
 
@@ -13,40 +10,21 @@ export const selectClaimsByUri = createSelector(
   (state) => state.claimsByUri || {}
 )
 
-export const selectCurrentUriClaim = createSelector(
-  selectCurrentUri,
-  selectClaimsByUri,
-  (uri, byUri) => byUri[uri]
-)
-
-export const selectChannelClaimsByUri = createSelector(
-  _selectState,
-  (state) => state.channelClaimsByUri || {}
-)
-
-export const selectCurrentUriChannelClaim = createSelector(
-  selectCurrentUri,
-  selectChannelClaimsByUri,
-  (uri, byUri) => byUri[uri]
-)
-
-export const selectCurrentUriClaimOutpoint = createSelector(
-  selectCurrentUriClaim,
-  (claim) => {
-    return claim ? `${claim.txid}:${claim.nout}` : null
-  }
-)
-
-export const selectClaimsByChannel = createSelector(
+export const selectAllClaimsByChannel = createSelector(
   _selectState,
   (state) => state.claimsByChannel || {}
 )
 
-export const selectCurrentUriClaims = createSelector(
-  selectCurrentUri,
-  selectClaimsByChannel,
-  (uri, byChannel) => byChannel[uri]
-)
+export const selectClaimsForChannel = (state, props) => {
+  return selectAllClaimsByChannel(state)[props.uri]
+}
+
+export const makeSelectClaimsForChannel = () => {
+  return createSelector(
+    selectClaimsForChannel,
+    (claim) => claim
+  )
+}
 
 const selectClaimForUri = (state, props) => {
   const uri = lbryuri.normalize(props.uri)
@@ -64,7 +42,7 @@ const selectMetadataForUri = (state, props) => {
   const claim = selectClaimForUri(state, props)
   const metadata = claim && claim.value && claim.value.stream && claim.value.stream.metadata
 
-  return metadata ? metadata : undefined
+  return metadata ? metadata : (claim === undefined ? undefined : null)
 }
 
 export const makeSelectMetadataForUri = () => {
@@ -78,13 +56,20 @@ const selectSourceForUri = (state, props) => {
   const claim = selectClaimForUri(state, props)
   const source = claim && claim.value && claim.value.stream && claim.value.stream.source
 
-  return source ? source : undefined
+  return source ? source : (claim === undefined ? undefined : null)
 }
 
 export const makeSelectSourceForUri = () => {
   return createSelector(
     selectSourceForUri,
     (source) => source
+  )
+}
+
+export const makeSelectContentTypeForUri = () => {
+  return createSelector(
+    selectSourceForUri,
+    (source) => source ? source.contentType : source
   )
 }
 

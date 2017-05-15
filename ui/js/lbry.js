@@ -642,7 +642,6 @@ lbry.claim_list_mine = function(params={}) {
 const claimCacheKey = 'resolve_claim_cache';
 lbry._claimCache = getSession(claimCacheKey, {});
 lbry.resolve = function(params={}) {
-  console.log('resolve: ' + params.uri);
   return new Promise((resolve, reject) => {
     if (!params.uri) {
       throw "Resolve has hacked cache on top of it that requires a URI"

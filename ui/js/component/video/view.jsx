@@ -1,17 +1,13 @@
 import React from 'react';
-import {
-  Icon,
-  Thumbnail,
-} from 'component/common';
 import FilePrice from 'component/filePrice'
 import Link from 'component/link';
 import Modal from 'component/modal';
 
-class WatchLink extends React.Component {
+class VideoPlayButton extends React.Component {
   confirmPurchaseClick() {
     this.props.closeModal()
     this.props.startPlaying()
-    this.props.loadVideo()
+    this.props.loadVideo(this.props.uri)
   }
 
   render() {
@@ -32,9 +28,17 @@ class WatchLink extends React.Component {
       fileInfo,
     } = this.props
 
+    /*
+     title={
+     isLoading ? "Video is Loading" :
+     !costInfo ? "Waiting on cost info..." :
+     fileInfo === undefined ? "Waiting on file info..." : ""
+     }
+     */
+
     return (<div>
       <Link button={ button ? button : null }
-            disabled={isLoading || !costInfo || costInfo.cost == undefined || fileInfo === undefined}
+            disabled={isLoading || !costInfo || costInfo.cost === undefined || fileInfo === undefined}
             label={label ? label : ""}
             className="video__play-button"
             icon="icon-play"
@@ -68,7 +72,7 @@ class Video extends React.Component {
   }
 
   onWatchClick() {
-    this.props.watchVideo().then(() => {
+    this.props.watchVideo(this.props.uri).then(() => {
       if (!this.props.modal) {
         this.setState({
           isPlaying: true
@@ -85,8 +89,6 @@ class Video extends React.Component {
 
   render() {
     const {
-      readyToPlay = false,
-      thumbnail,
       metadata,
       isLoading,
       isDownloading,
@@ -105,14 +107,14 @@ class Video extends React.Component {
     }
 
     return (
-      <div className={"video " + this.props.className + (isPlaying && readyToPlay ? " video--active" : " video--hidden")}>{
+      <div className={"video " + this.props.className + (isPlaying && fileInfo.isReadyToPlay ? " video--active" : " video--hidden")}>{
         isPlaying ?
-        !readyToPlay ?
-        <span>this is the world's worst loading screen and we shipped our software with it anyway... <br /><br />{loadStatusMessage}</span> :
-        <VideoPlayer downloadPath={fileInfo.download_path} /> :
+          (!fileInfo.isReadyToPlay ?
+            <span>this is the world's worst loading screen and we shipped our software with it anyway... <br /><br />{loadStatusMessage}</span> :
+            <VideoPlayer downloadPath={fileInfo.download_path} />) :
         <div className="video__cover" style={{backgroundImage: 'url("' + metadata.thumbnail + '")'}}>
-          <WatchLink icon="icon-play" onWatchClick={this.onWatchClick.bind(this)}
-                     startPlaying={this.startPlaying.bind(this)} {...this.props}></WatchLink>
+          <VideoPlayButton onWatchClick={this.onWatchClick.bind(this)}
+                     startPlaying={this.startPlaying.bind(this)} {...this.props} />
         </div>
       }</div>
     );

@@ -13,30 +13,42 @@ import {
   doLoadVideo,
 } from 'actions/content'
 import {
-  selectLoadingCurrentUri,
-  selectCurrentUriFileReadyToPlay,
-  selectCurrentUriIsPlaying,
-  selectCurrentUriFileInfo,
-  selectDownloadingCurrentUri,
+  makeSelectMetadataForUri
+} from 'selectors/claims'
+import {
+  makeSelectFileInfoForUri,
+  makeSelectLoadingForUri,
+  makeSelectDownloadingForUri,
 } from 'selectors/file_info'
 import {
-  selectCurrentUriCostInfo,
+  makeSelectCostInfoForUri,
 } from 'selectors/cost_info'
 import Video from './view'
 
-const select = (state) => ({
-  costInfo: selectCurrentUriCostInfo(state),
-  fileInfo: selectCurrentUriFileInfo(state),
-  modal: selectCurrentModal(state),
-  isLoading: selectLoadingCurrentUri(state),
-  readyToPlay: selectCurrentUriFileReadyToPlay(state),
-  isDownloading: selectDownloadingCurrentUri(state),
-})
+
+const makeSelect = () => {
+  const selectCostInfo = makeSelectCostInfoForUri()
+  const selectFileInfo = makeSelectFileInfoForUri()
+  const selectIsLoading = makeSelectLoadingForUri()
+  const selectIsDownloading = makeSelectDownloadingForUri()
+  const selectMetadata = makeSelectMetadataForUri()
+
+  const select = (state, props) => ({
+    costInfo: selectCostInfo(state, props),
+    fileInfo: selectFileInfo(state, props),
+    metadata: selectMetadata(state, props),
+    modal: selectCurrentModal(state),
+    isLoading: selectIsLoading(state, props),
+    isDownloading: selectIsDownloading(state, props),
+  })
+
+  return select
+}
 
 const perform = (dispatch) => ({
-  loadVideo: () => dispatch(doLoadVideo()),
-  watchVideo: (elem) => dispatch(doWatchVideo()),
+  loadVideo: (uri) => dispatch(doLoadVideo(uri)),
+  watchVideo: (uri) => dispatch(doWatchVideo(uri)),
   closeModal: () => dispatch(doCloseModal()),
 })
 
-export default connect(select, perform)(Video)
+export default connect(makeSelect, perform)(Video)
