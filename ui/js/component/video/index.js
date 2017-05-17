@@ -9,7 +9,7 @@ import {
   selectCurrentModal,
 } from 'selectors/app'
 import {
-  doWatchVideo,
+  doPurchaseUri,
   doLoadVideo,
 } from 'actions/content'
 import {
@@ -47,7 +47,7 @@ const makeSelect = () => {
 
 const perform = (dispatch) => ({
   loadVideo: (uri) => dispatch(doLoadVideo(uri)),
-  watchVideo: (uri) => dispatch(doWatchVideo(uri)),
+  purchaseUri: (uri) => dispatch(doPurchaseUri(uri)),
   closeModal: () => dispatch(doCloseModal()),
 })
 

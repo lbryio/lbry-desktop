@@ -10,6 +10,15 @@ class VideoPlayButton extends React.Component {
     this.props.loadVideo(this.props.uri)
   }
 
+  onWatchClick() {
+    console.log(this.props)
+    this.props.purchaseUri(this.props.uri).then(() => {
+      if (!this.props.modal) {
+        this.props.startPlaying()
+      }
+    })
+  }
+
   render() {
     const {
       button,
@@ -42,7 +51,7 @@ class VideoPlayButton extends React.Component {
             label={label ? label : ""}
             className="video__play-button"
             icon="icon-play"
-            onClick={onWatchClick} />
+            onClick={this.onWatchClick} />
       {modal}
       <Modal contentLabel="Not enough credits" isOpen={modal == 'notEnoughCredits'} onConfirmed={closeModal}>
         You don't have enough LBRY credits to pay for this stream.
@@ -71,16 +80,6 @@ class Video extends React.Component {
     this.state = { isPlaying: false }
   }
 
-  onWatchClick() {
-    this.props.watchVideo(this.props.uri).then(() => {
-      if (!this.props.modal) {
-        this.setState({
-          isPlaying: true
-        })
-      }
-    })
-  }
-
   startPlaying() {
     this.setState({
       isPlaying: true
@@ -100,9 +99,6 @@ class Video extends React.Component {
 
     const isReadyToPlay = fileInfo && fileInfo.written_bytes > 0
 
-    console.log('video render')
-    console.log(this.props)
-
     let loadStatusMessage = ''
 
     if (isLoading) {
@@ -112,40 +108,45 @@ class Video extends React.Component {
     }
 
     return (
-      <div className={"video " + this.props.className + (isPlaying && isReadyToPlay ? " video--active" : " video--hidden")}>{
-        isPlaying ?
+      <div className={"video " + this.props.className + (isPlaying || isReadyToPlay ? " video--active" : " video--hidden")}>{
+        isPlaying || isReadyToPlay ?
           (!isReadyToPlay ?
             <span>this is the world's worst loading screen and we shipped our software with it anyway... <br /><br />{loadStatusMessage}</span> :
-            <VideoPlayer downloadPath={fileInfo.download_path} />) :
+            <VideoPlayer poster={metadata.thumbnail} autoplay={isPlaying} downloadPath={fileInfo.download_path} />) :
         <div className="video__cover" style={{backgroundImage: 'url("' + metadata.thumbnail + '")'}}>
-          <VideoPlayButton onWatchClick={this.onWatchClick.bind(this)}
-                     startPlaying={this.startPlaying.bind(this)} {...this.props} />
+          <VideoPlayButton startPlaying={this.startPlaying.bind(this)} {...this.props} />
         </div>
       }</div>
     );
   }
 }
 
-class VideoPlayer extends React.PureComponent {
+class VideoPlayer extends React.Component {
   componentDidMount() {
     const elem = this.refs.video
     const {
+      autoplay,
       downloadPath,
       contentType,
     } = this.props
     const players = plyr.setup(elem)
-    players[0].play()
+    if (autoplay) {
+      players[0].play()
+    }
   }
 
   render() {
     const {
       downloadPath,
       contentType,
+      poster,
     } = this.props
 
+    //<source src={downloadPath} type={contentType} />
+
     return (
-      <video controls id="video" ref="video">
-        <source src={downloadPath} type={contentType} />
+      <video controls id="video" ref="video" style={{backgroundImage: "url('" + poster + "')"}} >
+
       </video>
     )
   }

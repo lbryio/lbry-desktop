@@ -1,5 +1,5 @@
 import React from 'react';
-import SettingsPage from 'page/settings.js';
+import SettingsPage from 'page/settings';
 import HelpPage from 'page/help';
 import ReportPage from 'page/report.js';
 import StartPage from 'page/start.js';

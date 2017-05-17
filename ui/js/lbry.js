@@ -163,20 +163,6 @@ lbry.checkAddressIsMine = function(address, callback) {
   lbry.call('address_is_mine', {address: address}, callback);
 }
 
-lbry.getDaemonSettings = function(callback) {
-  lbry.call('get_settings', {}, callback);
-}
-
-lbry.setDaemonSettings = function(settings, callback) {
-  lbry.call('set_settings', settings, callback);
-}
-
-lbry.setDaemonSetting = function(setting, value, callback) {
-  var setSettingsArgs = {};
-  setSettingsArgs[setting] = value;
-  lbry.call('set_settings', setSettingsArgs, callback)
-}
-
 lbry.sendToAddress = function(amount, address, callback, errorCallback) {
   lbry.call("send_amount_to_address", { "amount" : amount, "address": address }, callback, errorCallback);
 }
@@ -208,7 +194,81 @@ lbry.getPeersForBlobHash = function(blobHash, callback) {
     }
   });
 }
-
+//
+// lbry.costPromiseCache = {}
+// lbry.getCostInfo = function(uri) {
+//   if (lbry.costPromiseCache[uri] === undefined) {
+//     lbry.costPromiseCache[uri] = new Promise((resolve, reject) => {
+//       const COST_INFO_CACHE_KEY = 'cost_info_cache';
+//       let costInfoCache = getSession(COST_INFO_CACHE_KEY, {})
+//
+//       function cacheAndResolve(cost, includesData) {
+//         console.log('getCostInfo cacheAndResolve ' + uri)
+//         console.log(cost)
+//         costInfoCache[uri] = {cost, includesData};
+//         setSession(COST_INFO_CACHE_KEY, costInfoCache);
+//         resolve({cost, includesData});
+//       }
+//
+//       if (!uri) {
+//         return reject(new Error(`URI required.`));
+//       }
+//
+//       if (costInfoCache[uri] && costInfoCache[uri].cost) {
+//         return resolve(costInfoCache[uri])
+//       }
+//
+//       function getCost(uri, size) {
+//         lbry.stream_cost_estimate({uri, ... size !== null ? {size} : {}}).then((cost) => {
+//           cacheAndResolve(cost, size !== null);
+//         }, reject);
+//       }
+//
+//       function getCostGenerous(uri) {
+//         console.log('get cost generous: ' + uri)
+//         // If generous is on, the calculation is simple enough that we might as well do it here in the front end
+//         lbry.resolve({uri: uri}).then((resolutionInfo) => {
+//           console.log('resolve inside getCostGenerous ' + uri)
+//           console.log(resolutionInfo)
+//           if (!resolutionInfo) {
+//             return reject(new Error("Unused URI"));
+//           }
+//           const fee = resolutionInfo.claim.value.stream.metadata.fee;
+//           if (fee === undefined) {
+//             cacheAndResolve(0, true);
+//           } else if (fee.currency == 'LBC') {
+//             cacheAndResolve(fee.amount, true);
+//           } else {
+//             lbryio.getExchangeRates().then(({lbc_usd}) => {
+//               cacheAndResolve(fee.amount / lbc_usd, true);
+//             });
+//           }
+//         });
+//       }
+//
+//       const uriObj = lbryuri.parse(uri);
+//       const name = uriObj.path || uriObj.name;
+//
+//       lbry.settings_get({allow_cached: true}).then(({is_generous_host}) => {
+//         if (is_generous_host) {
+//           return getCostGenerous(uri);
+//         }
+//
+//         lighthouse.get_size_for_name(name).then((size) => {
+//           if (size) {
+//             getCost(name, size);
+//           }
+//           else {
+//             getCost(name, null);
+//           }
+//         }, () => {
+//           getCost(name, null);
+//         });
+//       });
+//     });
+//   }
+//   return lbry.costPromiseCache[uri];
+// }
 /**
  * Takes a LBRY URI; will first try and calculate a total cost using
  * Lighthouse. If Lighthouse can't be reached, it just retrives the
@@ -227,6 +287,8 @@ lbry.getCostInfo = function(uri) {
       let costInfoCache = getSession(COST_INFO_CACHE_KEY, {})
 
       function cacheAndResolve(cost, includesData) {
+        console.log('getCostInfo cacheAndResolve ' + uri)
+        console.log(cost)
         costInfoCache[uri] = {cost, includesData};
         setSession(COST_INFO_CACHE_KEY, costInfoCache);
         resolve({cost, includesData});
@@ -246,44 +308,17 @@ lbry.getCostInfo = function(uri) {
         }, reject);
       }
 
-      function getCostGenerous(uri) {
-        // If generous is on, the calculation is simple enough that we might as well do it here in the front end
-        lbry.resolve({uri: uri}).then((resolutionInfo) => {
-          if (!resolutionInfo) {
-            return reject(new Error("Unused URI"));
-          }
-          const fee = resolutionInfo.claim.value.stream.metadata.fee;
-          if (fee === undefined) {
-            cacheAndResolve(0, true);
-          } else if (fee.currency == 'LBC') {
-            cacheAndResolve(fee.amount, true);
-          } else {
-            lbryio.getExchangeRates().then(({lbc_usd}) => {
-              cacheAndResolve(fee.amount / lbc_usd, true);
-            });
-          }
-        });
-      }
-
       const uriObj = lbryuri.parse(uri);
       const name = uriObj.path || uriObj.name;
 
-      lbry.settings_get({allow_cached: true}).then(({is_generous_host}) => {
-        if (is_generous_host) {
-          return getCostGenerous(uri);
+      lighthouse.get_size_for_name(name).then((size) => {
+        if (size) {
+          getCost(name, size);
         }
-
-        lighthouse.get_size_for_name(name).then((size) => {
-          if (size) {
-            getCost(name, size);
-          }
-          else {
-            getCost(name, null);
-          }
-        }, () => {
+        else {
           getCost(name, null);
-        });
-      });
+        }
+      })
     });
   }
   return lbry.costPromiseCache[uri];
@@ -661,21 +696,6 @@ lbry.cancelResolve = function(params={}) {
   if (xhr && xhr.readyState > 0 && xhr.readyState < 4) {
     xhr.abort()
   }
-}
-
-// Adds caching.
-lbry._settingsPromise = null;
-lbry.settings_get = function(params={}) {
-  if (params.allow_cached && lbry._settingsPromise) {
-    return lbry._settingsPromise;
-  }
-  lbry._settingsPromise = new Promise((resolve, reject) => {
-    lbry.call('settings_get', {}, (settings) => {
-      setSession('settings', settings);
-      resolve(settings);
-    }, reject);
-  });
-  return lbry._settingsPromise;
 }
 
 // lbry.get = function(params={}) {

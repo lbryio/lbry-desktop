@@ -10,9 +10,13 @@ import {AuthOverlay} from './component/auth.js';
 import { Provider } from 'react-redux';
 import store from 'store.js';
 import {
-  doDaemonReady,
   doChangePath,
+  doDaemonReady,
+  doHistoryPush
 } from 'actions/app'
+import {
+  doFetchDaemonSettings
+} from 'actions/settings'
 import parseQueryParams from 'util/query_params'
 
 const {remote, ipcRenderer} = require('electron');
@@ -28,11 +32,13 @@ window.addEventListener('contextmenu', (event) => {
 });
 
 window.addEventListener('popstate', (event) => {
-  const pathname = document.location.pathname
   const queryString = document.location.search
-  if (pathname.match(/dist/)) return
+  const pathParts = document.location.pathname.split('/')
+  const route = '/' + pathParts[pathParts.length - 1]
 
-  app.store.dispatch(doChangePath(`${pathname}${queryString}`))
+  if (route.match(/html$/)) return
+
+  app.store.dispatch(doChangePath(`${route}${queryString}`))
 })
 
 ipcRenderer.on('open-uri-requested', (event, uri) => {
@@ -48,7 +54,8 @@ var init = function() {
   function onDaemonReady() {
     app.store.dispatch(doDaemonReady())
     window.sessionStorage.setItem('loaded', 'y'); //once we've made it here once per session, we don't need to show splash again
-    window.history.pushState({}, "Discover", '/discover');
+    app.store.dispatch(doHistoryPush({}, "Discover", "/discover"))
+    app.store.dispatch(doFetchDaemonSettings())
     ReactDOM.render(<Provider store={store}><div>{ lbryio.enabled ? <AuthOverlay/> : '' }<App /><SnackBar /></div></Provider>, canvas)
   }
 

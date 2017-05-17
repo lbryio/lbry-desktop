@@ -259,7 +259,7 @@ export function doLoadVideo(uri) {
   }
 }
 
-export function doWatchVideo(uri) {
+export function doPurchaseUri(uri) {
   return function(dispatch, getState) {
     const state = getState()
     const balance = selectBalance(state)

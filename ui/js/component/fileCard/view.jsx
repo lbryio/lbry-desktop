@@ -70,7 +70,7 @@ class FileCard extends React.Component {
             <div className="card__title-identity">
               <h5 title={title}><TruncatedText lines={1}>{title}</TruncatedText></h5>
               <div className="card__subtitle">
-                <span style={{float: "right"}}><FilePrice uri={uri} /></span>
+                { !isResolvingUri && <span style={{float: "right"}}><FilePrice uri={uri} /></span> }
                 <UriIndicator uri={uri} />
               </div>
             </div>

@@ -6,6 +6,7 @@ import {
 } from 'actions/content'
 import {
   doNavigate,
+  doHistoryPush
 } from 'actions/app'
 import {
   selectCurrentPage,
@@ -29,6 +30,8 @@ export function doSearch(query) {
 
     if(page != 'search') {
       dispatch(doNavigate('search', { query: query }))
+    } else {
+      dispatch(doHistoryPush({ query }, "Search for " + query, '/search'))
     }
 
     lighthouse.search(query).then(results => {

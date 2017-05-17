@@ -29,7 +29,7 @@ import {
   doDeleteFile,
 } from 'actions/file_info'
 import {
-  doWatchVideo,
+  doPurchaseUri,
   doLoadVideo,
 } from 'actions/content'
 import FileActions from './view'
@@ -57,7 +57,7 @@ const perform = (dispatch) => ({
   openInShell: (fileInfo) => dispatch(doOpenFileInShell(fileInfo)),
   deleteFile: (fileInfo, deleteFromComputer) => dispatch(doDeleteFile(fileInfo, deleteFromComputer)),
   openModal: (modal) => dispatch(doOpenModal(modal)),
-  startDownload: (uri) => dispatch(doWatchVideo(uri)),
+  startDownload: (uri) => dispatch(doPurchaseUri(uri)),
   loadVideo: (uri) => dispatch(doLoadVideo(uri))
 })
 

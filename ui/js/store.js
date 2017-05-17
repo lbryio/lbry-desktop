@@ -13,6 +13,7 @@ import costInfoReducer from 'reducers/cost_info'
 import fileInfoReducer from 'reducers/file_info'
 import rewardsReducer from 'reducers/rewards'
 import searchReducer from 'reducers/search'
+import settingsReducer from 'reducers/settings'
 import walletReducer from 'reducers/wallet'
 
 function isFunction(object) {
@@ -54,6 +55,7 @@ const reducers = redux.combineReducers({
   costInfo: costInfoReducer,
   rewards: rewardsReducer,
   search: searchReducer,
+  settings: settingsReducer,
   wallet: walletReducer,
 });
 
