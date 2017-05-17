@@ -2,65 +2,69 @@ import React from 'react';
 import lbry from '../lbry.js';
 
 //component/icon.js
-export let Icon = React.createClass({
-  propTypes: {
+export class Icon extends React.Component {
+  static propTypes = {
     icon: React.PropTypes.string.isRequired,
     className: React.PropTypes.string,
     fixed: React.PropTypes.bool,
-  },
-  render: function() {
+  }
+
+  static defaultProps = {
+    lines: null
+  }
+
+  render() {
     const {fixed, className, ...other} = this.props;
     const spanClassName = ('icon ' + ('fixed' in this.props ? 'icon-fixed-width ' : '') +
                            this.props.icon + ' ' + (this.props.className || ''));
     return <span className={spanClassName} {... other}></span>
   }
-});
+}
 
-export let TruncatedText = React.createClass({
-  propTypes: {
-    lines: React.PropTypes.number
-  },
-  getDefaultProps: function() {
-    return {
-      lines: null,
-    }
-  },
-  render: function() {
+export class TruncatedText extends React.Component {
+  static propTypes = {
+    lines: React.PropTypes.number,
+  }
+
+  render() {
     return <span className="truncated-text" style={{ WebkitLineClamp: this.props.lines }}>{this.props.children}</span>;
   }
-});
+}
 
-export let BusyMessage = React.createClass({
-  propTypes: {
-    message: React.PropTypes.string
-  },
-  render: function() {
+export class BusyMessage extends React.Component {
+  static propTypes = {
+    message: React.PropTypes.string,
+  }
+
+  render() {
     return <span>{this.props.message} <span className="busy-indicator"></span></span>
   }
-});
+}
 
-export let CurrencySymbol = React.createClass({
-  render: function() { return <span>LBC</span>; }
-});
+export class CurrencySymbol extends React.Component {
+  render() {
+    return <span>LBC</span>;
+  }
+}
 
-export let CreditAmount = React.createClass({
-  propTypes: {
+export class CreditAmount extends React.Component {
+  static propTypes = {
     amount: React.PropTypes.number.isRequired,
     precision: React.PropTypes.number,
     isEstimate: React.PropTypes.bool,
     label: React.PropTypes.bool,
     showFree: React.PropTypes.bool,
     look: React.PropTypes.oneOf(['indicator', 'plain']),
-  },
-  getDefaultProps: function() {
-    return {
-      precision: 1,
-      label: true,
-      showFree: false,
-      look: 'indicator',
-    }
-  },
-  render: function() {
+  }
+
+  static defaultProps = {
+    precision: 1,
+    label: true,
+    showFree: false,
+    look: 'indicator',
+  }
+
+  render() {
     const formattedAmount = lbry.formatCredits(this.props.amount, this.props.precision);
     let amountText;
     if (this.props.showFree && parseFloat(formattedAmount) == 0) {
@@ -80,45 +84,56 @@ export let CreditAmount = React.createClass({
       </span>
     );
   }
-});
+}
 
-var addressStyle = {
+let addressStyle = {
   fontFamily: '"Consolas", "Lucida Console", "Adobe Source Code Pro", monospace',
 };
-export let Address = React.createClass({
-  _inputElem: null,
-  propTypes: {
+export class Address extends React.Component {
+  static propTypes = {
     address: React.PropTypes.string,
-  },
-  render: function() {
+  }
+
+  constructor(props) {
+    super(props);
+
+    this._inputElem = null;
+  }
+
+  render() {
     return (
       <input className="input-copyable" type="text" ref={(input) => { this._inputElem = input; }}
              onFocus={() => { this._inputElem.select(); }} style={addressStyle} readOnly="readonly" value={this.props.address}></input>
     );
   }
-});
+}
 
-export let Thumbnail = React.createClass({
-  _defaultImageUri: lbry.imagePath('default-thumb.svg'),
-  _maxLoadTime: 10000,
-  _isMounted: false,
-
-  propTypes: {
+export class Thumbnail extends React.Component {
+  static propTypes = {
     src: React.PropTypes.string,
-  },
-  handleError: function() {
+  }
+
+  handleError() {
     if (this.state.imageUrl != this._defaultImageUri) {
       this.setState({
         imageUri: this._defaultImageUri,
       });
     }
-  },
-  getInitialState: function() {
-    return {
+  }
+
+  constructor(props) {
+    super(props);
+
+    this._defaultImageUri = lbry.imagePath('default-thumb.svg')
+    this._maxLoadTime = 10000
+    this._isMounted = false
+
+    this.state = {
       imageUri: this.props.src || this._defaultImageUri,
     };
-  },
-  componentDidMount: function() {
+  }
+
+  componentDidMount() {
     this._isMounted = true;
     setTimeout(() => {
       if (this._isMounted && !this.refs.img.complete) {
@@ -127,14 +142,16 @@ export let Thumbnail = React.createClass({
         });
       }
     }, this._maxLoadTime);
-  },
-  componentWillUnmount: function() {
+  }
+
+  componentWillUnmount() {
     this._isMounted = false;
-  },
-  render: function() {
+  }
+
+  render() {
     const className = this.props.className ? this.props.className : '',
           otherProps = Object.assign({}, this.props)
     delete otherProps.className;
     return <img ref="img" onError={this.handleError} {...otherProps} className={className} src={this.state.imageUri} />
-  },
-});
+  }
+}

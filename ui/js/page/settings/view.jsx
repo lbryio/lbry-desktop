@@ -3,46 +3,10 @@ import {FormField, FormRow} from 'component/form.js';
 import SubHeader from 'component/subHeader'
 import lbry from 'lbry.js';
 
-var SettingsPage = React.createClass({
-  setDaemonSetting: function(name, value) {
-    this.props.setDaemonSetting(name, value)
-  },
-  setClientSetting: function(name, value) {
-    lbry.setClientSetting(name, value)
-    this._onSettingSaveSuccess()
-    },
-  onRunOnStartChange: function (event) {
-    this.setDaemonSetting('run_on_startup', event.target.checked);
-  },
-  onShareDataChange: function (event) {
-    this.setDaemonSetting('share_usage_data', event.target.checked);
-  },
-  onDownloadDirChange: function(event) {
-    this.setDaemonSetting('download_directory', event.target.value);
-  },
-  onMaxUploadPrefChange: function(isLimited) {
-    if (!isLimited) {
-      this.setDaemonSetting('max_upload', 0.0);
-    }
-    this.setState({
-      isMaxUpload: isLimited
-    });
-  },
-  onMaxUploadFieldChange: function(event) {
-    this.setDaemonSetting('max_upload', Number(event.target.value));
-  },
-  onMaxDownloadPrefChange: function(isLimited) {
-    if (!isLimited) {
-      this.setDaemonSetting('max_download', 0.0);
-    }
-    this.setState({
-      isMaxDownload: isLimited
-    });
-  },
-  onMaxDownloadFieldChange: function(event) {
-    this.setDaemonSetting('max_download', Number(event.target.value));
-  },
-  getInitialState: function() {
+class SettingsPage extends React.Component {
+  constructor(props) {
+    super(props);
+
     const daemonSettings = this.props.daemonSettings
 
     return {
@@ -51,14 +15,64 @@ var SettingsPage = React.createClass({
       showNsfw: lbry.getClientSetting('showNsfw'),
       showUnavailable: lbry.getClientSetting('showUnavailable'),
     }
-  },
-  onShowNsfwChange: function(event) {
-    lbry.setClientSetting('showNsfw', event.target.checked);
-  },
-  onShowUnavailableChange: function(event) {
+  }
 
-  },
-  render: function() {
+  setDaemonSetting(name, value) {
+    this.props.setDaemonSetting(name, value)
+  }
+
+  setClientSetting(name, value) {
+    lbry.setClientSetting(name, value)
+    this._onSettingSaveSuccess()
+  }
+
+  onRunOnStartChange(event) {
+    this.setDaemonSetting('run_on_startup', event.target.checked);
+  }
+
+  onShareDataChange(event) {
+    this.setDaemonSetting('share_usage_data', event.target.checked);
+  }
+
+  onDownloadDirChange(event) {
+    this.setDaemonSetting('download_directory', event.target.value);
+  }
+
+  onMaxUploadPrefChange(isLimited) {
+    if (!isLimited) {
+      this.setDaemonSetting('max_upload', 0.0);
+    }
+    this.setState({
+      isMaxUpload: isLimited
+    });
+  }
+
+  onMaxUploadFieldChange(event) {
+    this.setDaemonSetting('max_upload', Number(event.target.value));
+  }
+
+  onMaxDownloadPrefChange(isLimited) {
+    if (!isLimited) {
+      this.setDaemonSetting('max_download', 0.0);
+    }
+    this.setState({
+      isMaxDownload: isLimited
+    });
+  }
+
+  onMaxDownloadFieldChange(event) {
+    this.setDaemonSetting('max_download', Number(event.target.value));
+  }
+
+  onShowNsfwChange(event) {
+    lbry.setClientSetting('showNsfw', event.target.checked);
+  }
+
+  onShowUnavailableChange(event) {
+
+  }
+
+  render() {
     const {
       daemonSettings
     } = this.props
@@ -185,6 +199,6 @@ var SettingsPage = React.createClass({
        </main>
     );
   }
-});
+}
 
 export default SettingsPage;

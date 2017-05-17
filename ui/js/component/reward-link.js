@@ -5,14 +5,25 @@ import Modal from 'component/modal';
 import rewards from 'rewards';
 import Link from 'component/link'
 
-export let RewardLink = React.createClass({
-  propTypes: {
+export class RewardLink extends React.Component {
+  static propTypes = {
     type: React.PropTypes.string.isRequired,
     claimed: React.PropTypes.bool,
     onRewardClaim: React.PropTypes.func,
     onRewardFailure: React.PropTypes.func
-  },
-  refreshClaimable: function() {
+  }
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      claimable: true,
+      pending: false,
+      errorMessage: null
+    };
+  }
+
+  refreshClaimable() {
     switch(this.props.type) {
       case 'new_user':
         this.setState({ claimable: true });
@@ -26,18 +37,13 @@ export let RewardLink = React.createClass({
         }.bind(this));
         return;
     }
-  },
-  componentWillMount: function() {
+  }
+
+  componentWillMount() {
     this.refreshClaimable();
-  },
-  getInitialState: function() {
-    return {
-      claimable: true,
-      pending: false,
-      errorMessage: null
-    }
-  },
-  claimReward: function() {
+  }
+
+  claimReward() {
     this.setState({
       pending: true
     })
@@ -55,16 +61,18 @@ export let RewardLink = React.createClass({
         pending: false
       })
     })
-  },
-  clearError: function() {
+  }
+
+  clearError() {
     if (this.props.onRewardFailure) {
       this.props.onRewardFailure()
     }
     this.setState({
       errorMessage: null
     })
-  },
-  render: function() {
+  }
+
+  render() {
     return (
       <div className="reward-link">
         {this.props.claimed
@@ -79,4 +87,4 @@ export let RewardLink = React.createClass({
       </div>
     );
   }
-});
+}

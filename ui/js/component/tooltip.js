@@ -1,26 +1,32 @@
 import React from 'react';
 
-export let ToolTip = React.createClass({
-  propTypes: {
+export class ToolTip extends React.Component {
+  static propTypes = {
     body: React.PropTypes.string.isRequired,
     label: React.PropTypes.string.isRequired
-  },
-  getInitialState: function() {
-    return {
+  }
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
       showTooltip: false,
     };
-  },
-  handleClick: function() {
+  }
+
+  handleClick() {
     this.setState({
       showTooltip: !this.state.showTooltip,
     });
-  },
-  handleTooltipMouseOut: function() {
+  }
+
+  handleTooltipMouseOut() {
     this.setState({
       showTooltip: false,
     });
-  },
-  render: function() {
+  }
+
+  render() {
     return (
       <span className={'tooltip ' + (this.props.className || '')}>
         <a className="tooltip__link" onClick={this.handleClick}>
@@ -33,6 +39,6 @@ export let ToolTip = React.createClass({
       </span>
     );
   }
-});
+}
 
 export default ToolTip

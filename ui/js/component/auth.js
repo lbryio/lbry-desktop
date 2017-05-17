@@ -9,23 +9,28 @@ import {CreditAmount, Address} from "../component/common.js";
 import {getLocal, getSession, setSession, setLocal} from '../utils.js';
 
 
-const SubmitEmailStage = React.createClass({
-  getInitialState: function() {
-    return {
+class SubmitEmailStage extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
       rewardType: null,
       email: '',
       submitting: false
     };
-  },
-  handleEmailChanged: function(event) {
+  }
+
+  handleEmailChanged(event) {
     this.setState({
       email: event.target.value,
     });
-  },
-  onEmailSaved: function(email) {
+  }
+
+  onEmailSaved(email) {
     this.props.setStage("confirm", { email: email })
-  },
-  handleSubmit: function(event) {
+  }
+
+  handleSubmit(event) {
     event.preventDefault();
 
     this.setState({
@@ -42,8 +47,9 @@ const SubmitEmailStage = React.createClass({
       }
       this.setState({ submitting: false });
     });
-  },
-  render: function() {
+  }
+
+  render() {
     return (
       <section>
         <form onSubmit={this.handleSubmit}>
@@ -57,23 +63,27 @@ const SubmitEmailStage = React.createClass({
       </section>
     );
   }
-});
+}
 
-const ConfirmEmailStage = React.createClass({
-  getInitialState: function() {
-    return {
+class ConfirmEmailStage extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
       rewardType: null,
       code: '',
       submitting: false,
       errorMessage: null,
     };
-  },
-  handleCodeChanged: function(event) {
+  }
+
+  handleCodeChanged(event) {
     this.setState({
       code: event.target.value,
     });
-  },
-  handleSubmit: function(event) {
+  }
+
+  handleSubmit(event) {
     event.preventDefault();
     this.setState({
       submitting: true,
@@ -93,8 +103,9 @@ const ConfirmEmailStage = React.createClass({
         onSubmitError(new Error("Your email is still not verified.")) //shouldn't happen?
       }
     }, onSubmitError);
-  },
-  render: function() {
+  }
+
+  render() {
     return (
       <section>
         <form onSubmit={this.handleSubmit}>
@@ -111,25 +122,26 @@ const ConfirmEmailStage = React.createClass({
       </section>
     );
   }
-});
+}
 
-const WelcomeStage = React.createClass({
-  propTypes: {
-    endAuth: React.PropTypes.func,
-  },
-  getInitialState: function() {
-    return {
+class WelcomeStage extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
       hasReward: false,
       rewardAmount: null,
-    }
-  },
-  onRewardClaim: function(reward) {
+    };
+  }
+
+  onRewardClaim(reward) {
     this.setState({
       hasReward: true,
       rewardAmount: reward.amount
     })
-  },
-  render: function() {
+  }
+
+  render() {
     return (
       !this.state.hasReward ?
         <Modal type="custom" isOpen={true} contentLabel="Welcome to LBRY" {...this.props}>
@@ -156,11 +168,13 @@ const WelcomeStage = React.createClass({
       </Modal>
     );
   }
-});
+}
+WelcomeStage.propTypes = {
+  endAuth: React.PropTypes.func,
+};
 
-
-const ErrorStage = React.createClass({
-  render: function() {
+class ErrorStage extends React.Component {
+  render() {
     return (
       <section>
         <p>An error was encountered that we cannot continue from.</p>
@@ -170,29 +184,32 @@ const ErrorStage = React.createClass({
       </section>
     );
   }
-});
+}
 
-const PendingStage = React.createClass({
-  render: function() {
+class PendingStage extends React.Component {
+  render() {
     return (
       <section>
         <p>Preparing for first access <span className="busy-indicator"></span></p>
       </section>
     );
   }
-});
+}
 
 
-const CodeRequiredStage = React.createClass({
-  _balanceSubscribeId: null,
-  getInitialState: function() {
-    return {
+class CodeRequiredStage extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this._balanceSubscribeId = nullp
+
+    this.state = {
       balance: 0,
       address: getLocal('wallet_address')
-    }
-  },
+    };
+  }
 
-  componentWillMount: function() {
+  componentWillMount() {
     this._balanceSubscribeId = lbry.balanceSubscribe((balance) => {
       this.setState({
         balance: balance
@@ -205,13 +222,15 @@ const CodeRequiredStage = React.createClass({
         this.setState({ address: address });
       });
     }
-  },
-  componentWillUnmount: function() {
+  }
+
+  componentWillUnmount() {
     if (this._balanceSubscribeId) {
       lbry.balanceUnsubscribe(this._balanceSubscribeId)
     }
-  },
-  render: function() {
+  }
+
+  render() {
     const disabled = this.state.balance < 1;
     return (
       <div>
@@ -234,31 +253,36 @@ const CodeRequiredStage = React.createClass({
       </div>
     );
   }
-});
+}
 
 
-export const AuthOverlay = React.createClass({
-  _stages: {
-    pending: PendingStage,
-    error: ErrorStage,
-    nocode: CodeRequiredStage,
-    email: SubmitEmailStage,
-    confirm: ConfirmEmailStage,
-    welcome: WelcomeStage
-  },
-  getInitialState: function() {
-    return {
+export class AuthOverlay extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this._stages = {
+      pending: PendingStage,
+      error: ErrorStage,
+      nocode: CodeRequiredStage,
+      email: SubmitEmailStage,
+      confirm: ConfirmEmailStage,
+      welcome: WelcomeStage
+    }
+
+    this.state = {
       stage: "pending",
       stageProps: {}
     };
-  },
-  setStage: function(stage, stageProps = {}) {
+  }
+
+  setStage(stage, stageProps = {}) {
     this.setState({
       stage: stage,
       stageProps: stageProps
     })
-  },
-  componentWillMount: function() {
+  }
+
+  componentWillMount() {
     lbryio.authenticate().then((user) => {
       if (!user.HasVerifiedEmail) {
         if (getLocal('auth_bypassed')) {
@@ -284,8 +308,9 @@ export const AuthOverlay = React.createClass({
         }
       }));
     })
-  },
-  render: function() {
+  }
+
+  render() {
     if (!this.state.stage) {
         return null;
     }
@@ -299,4 +324,4 @@ export const AuthOverlay = React.createClass({
           <StageContent setStage={this.setStage} {...this.state.stageProps}  />
     );
   }
-});
+}

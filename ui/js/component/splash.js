@@ -2,21 +2,26 @@ import React from 'react';
 import lbry from '../lbry.js';
 import LoadScreen from './load_screen.js';
 
-var SplashScreen = React.createClass({
-  propTypes: {
+export class SplashScreen extends React.Component {
+  static propTypes = {
     message: React.PropTypes.string,
     onLoadDone: React.PropTypes.func,
-  },
-  getInitialState: function() {
-    return {
+  }
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
       details: 'Starting daemon',
       isLagging: false,
-    }
-  },
-  updateStatus: function() {
+    };
+  }
+
+  updateStatus() {
     lbry.status().then(this._updateStatusCallback);
-  },
-  _updateStatusCallback: function(status) {
+  }
+
+  _updateStatusCallback(status) {
     const startupStatus = status.startup_status
     if (startupStatus.code == 'started') {
       // Wait until we are able to resolve a name before declaring
@@ -40,8 +45,9 @@ var SplashScreen = React.createClass({
     setTimeout(() => {
       this.updateStatus();
     }, 500);
-  },
-  componentDidMount: function() {
+  }
+
+  componentDidMount() {
     lbry.connect().then((isConnected) => {
       if (isConnected) {
         this.updateStatus();
@@ -53,10 +59,11 @@ var SplashScreen = React.createClass({
         })
       }
     })
-  },
-  render: function() {
+  }
+
+  render() {
     return <LoadScreen message={this.props.message} details={this.state.details} isWarning={this.state.isLagging} />
   }
-});
+}
 
 export default SplashScreen;

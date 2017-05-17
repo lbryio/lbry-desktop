@@ -1,21 +1,21 @@
 import React from 'react';
 
-export const Notice = React.createClass({
-  propTypes: {
+export class Notice extends React.Component {
+  static propTypes = {
     isError: React.PropTypes.bool,
-  },
-  getDefaultProps: function() {
-    return {
-      isError: false,
-    };
-  },
-  render: function() {
+  }
+
+  static defaultProps = {
+    isError: false,
+  }
+
+  render() {
     return (
       <section className={'notice ' + (this.props.isError ? 'notice--error ' : '') + (this.props.className || '')}>
         {this.props.children}
       </section>
     );
-  },
-});
+  }
+}
 
 export default Notice;

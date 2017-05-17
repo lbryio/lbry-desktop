@@ -4,16 +4,17 @@ import {CreditAmount, Icon} from 'component/common.js';
 import SubHeader from 'component/subHeader'
 import {RewardLink} from 'component/reward-link';
 
-const RewardTile = React.createClass({
-  propTypes: {
+export class RewardTile extends React.Component {
+  static propTypes = {
     type: React.PropTypes.string.isRequired,
     title: React.PropTypes.string.isRequired,
     description: React.PropTypes.string.isRequired,
     claimed: React.PropTypes.bool.isRequired,
     value: React.PropTypes.number.isRequired,
     onRewardClaim: React.PropTypes.func
-  },
-  render: function() {
+  }
+
+  render() {
     return (
       <section className="card">
         <div className="card__inner">
@@ -31,19 +32,23 @@ const RewardTile = React.createClass({
       </section>
     );
   }
-});
+}
 
-export let RewardsPage = React.createClass({
-  componentWillMount: function() {
-    this.loadRewards()
-  },
-  getInitialState: function() {
-    return {
+export class RewardsPage extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
       userRewards: null,
-      failed: null
+      failed: null,
     };
-  },
-  loadRewards: function() {
+  }
+
+  componentWillMount() {
+    this.loadRewards()
+  }
+
+  loadRewards() {
     lbryio.call('reward', 'list', {}).then((userRewards) => {
       this.setState({
         userRewards: userRewards,
@@ -51,8 +56,9 @@ export let RewardsPage = React.createClass({
     }, () => {
       this.setState({failed: true })
     });
-  },
-  render: function() {
+  }
+
+  render() {
     return (
       <main className="main--single-column">
         <SubHeader />
@@ -66,6 +72,6 @@ export let RewardsPage = React.createClass({
       </main>
     );
   }
-});
+}
 
 export default RewardsPage;

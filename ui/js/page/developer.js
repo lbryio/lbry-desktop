@@ -6,34 +6,40 @@ import Link from '../component/link';
 const fs = require('fs');
 const {ipcRenderer} = require('electron');
 
-const DeveloperPage = React.createClass({
-  getInitialState: function() {
-    return {
+class DeveloperPage extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
       showDeveloperMenu: lbry.getClientSetting('showDeveloperMenu'),
       useCustomLighthouseServers: lbry.getClientSetting('useCustomLighthouseServers'),
       customLighthouseServers: lbry.getClientSetting('customLighthouseServers').join('\n'),
       upgradePath: '',
     };
-  },
-  handleShowDeveloperMenuChange: function(event) {
+  }
+
+  handleShowDeveloperMenuChange(event) {
     lbry.setClientSetting('showDeveloperMenu', event.target.checked);
     lbry.showMenuIfNeeded();
     this.setState({
       showDeveloperMenu: event.target.checked,
     });
-  },
-  handleUseCustomLighthouseServersChange: function(event) {
+  }
+
+  handleUseCustomLighthouseServersChange(event) {
     lbry.setClientSetting('useCustomLighthouseServers', event.target.checked);
     this.setState({
       useCustomLighthouseServers: event.target.checked,
     });
-  },
-  handleUpgradeFileChange: function(event) {
+  }
+
+  handleUpgradeFileChange(event) {
     this.setState({
       upgradePath: event.target.files[0].path,
     });
-  },
-  handleForceUpgradeClick: function() {
+  }
+
+  handleForceUpgradeClick() {
     let upgradeSent = false;
     if (!this.state.upgradePath) {
       alert('Please select a file to upgrade from');
@@ -51,8 +57,9 @@ const DeveloperPage = React.createClass({
         alert('Failed to start upgrade. Is "' + this.state.upgradePath + '" a valid path to the upgrade?');
       }
     }
-  },
-  render: function() {
+  }
+
+  render() {
     return (
       <main>
         <section className="card">
@@ -82,6 +89,6 @@ const DeveloperPage = React.createClass({
       </main>
     );
   }
-});
+}
 
 export default DeveloperPage;

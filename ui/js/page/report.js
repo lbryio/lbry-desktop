@@ -3,8 +3,17 @@ import Link from 'component/link';
 import Modal from '../component/modal.js';
 import lbry from '../lbry.js';
 
-var ReportPage = React.createClass({
-  submitMessage: function() {
+class ReportPage extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      submitting: false,
+      modal: null,
+    };
+  }
+
+  submitMessage() {
     if (this._messageArea.value) {
       this.setState({
         submitting: true
@@ -17,19 +26,15 @@ var ReportPage = React.createClass({
       });
       this._messageArea.value = '';
     }
-  },
-  closeModal: function() {
+  }
+
+  closeModal() {
     this.setState({
       modal: null,
     })
-  },
-  getInitialState: function() {
-    return {
-      submitting: false,
-      modal: null,
-    }
-  },
-  render: function() {
+  }
+
+  render() {
     return (
       <main className="main--single-column">
         <section className="card">
@@ -53,6 +58,6 @@ var ReportPage = React.createClass({
       </main>
     );
   }
-});
+}
 
 export default ReportPage;

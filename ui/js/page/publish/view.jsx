@@ -5,10 +5,41 @@ import Link from 'component/link';
 import rewards from 'rewards';
 import Modal from 'component/modal';
 
-var PublishPage = React.createClass({
-  _requiredFields: ['meta_title', 'name', 'bid', 'tos_agree'],
+class PublishPage extends React.Component {
+  constructor(props) {
+    super(props);
 
-  _updateChannelList: function(channel) {
+    this._requiredFields = ['meta_title', 'name', 'bid', 'tos_agree'];
+
+    this.state = {
+      channels: null,
+      rawName: '',
+      name: '',
+      bid: 10,
+      hasFile: false,
+      feeAmount: '',
+      feeCurrency: 'USD',
+      channel: 'anonymous',
+      newChannelName: '@',
+      newChannelBid: 10,
+      nameResolved: null,
+      myClaimExists: null,
+      topClaimValue: 0.0,
+      myClaimValue: 0.0,
+      myClaimMetadata: null,
+      copyrightNotice: '',
+      otherLicenseDescription: '',
+      otherLicenseUrl: '',
+      uploadProgress: 0.0,
+      uploaded: false,
+      errorMessage: null,
+      submitting: false,
+      creatingChannel: false,
+      modal: null,
+    };
+  }
+
+  _updateChannelList(channel) {
     // Calls API to update displayed list of channels. If a channel name is provided, will select
     // that channel at the same time (used immediately after creating a channel)
     lbry.channel_list_mine().then((channels) => {
@@ -18,8 +49,9 @@ var PublishPage = React.createClass({
         ... channel ? {channel} : {}
       });
     });
-  },
-  handleSubmit: function(event) {
+  }
+
+  handleSubmit(event) {
     if (typeof event !== 'undefined') {
       event.preventDefault();
     }
@@ -112,51 +144,27 @@ var PublishPage = React.createClass({
     } else {
       doPublish();
     }
-  },
-  getInitialState: function() {
-    return {
-      channels: null,
-      rawName: '',
-      name: '',
-      bid: 10,
-      hasFile: false,
-      feeAmount: '',
-      feeCurrency: 'USD',
-      channel: 'anonymous',
-      newChannelName: '@',
-      newChannelBid: 10,
-      nameResolved: null,
-      myClaimExists: null,
-      topClaimValue: 0.0,
-      myClaimValue: 0.0,
-      myClaimMetadata: null,
-      copyrightNotice: '',
-      otherLicenseDescription: '',
-      otherLicenseUrl: '',
-      uploadProgress: 0.0,
-      uploaded: false,
-      errorMessage: null,
-      submitting: false,
-      creatingChannel: false,
-      modal: null,
-    };
-  },
-  handlePublishStarted: function() {
+  }
+
+  handlePublishStarted() {
     this.setState({
       modal: 'publishStarted',
     });
-  },
-  handlePublishStartedConfirmed: function() {
+  }
+
+  handlePublishStartedConfirmed() {
     this.props.navigate('/published')
-  },
-  handlePublishError: function(error) {
+  }
+
+  handlePublishError(error) {
     this.setState({
       submitting: false,
       modal: 'error',
       errorMessage: error.message,
     });
-  },
-  handleNameChange: function(event) {
+  }
+
+  handleNameChange(event) {
     var rawName = event.target.value;
 
     if (!rawName) {
@@ -228,28 +236,33 @@ var PublishPage = React.createClass({
         });
       });
     });
-  },
-  handleBidChange: function(event) {
+  }
+
+  handleBidChange(event) {
     this.setState({
       bid: event.target.value,
     });
-  },
-  handleFeeAmountChange: function(event) {
+  }
+
+  handleFeeAmountChange(event) {
     this.setState({
       feeAmount: event.target.value,
     });
-  },
-  handleFeeCurrencyChange: function(event) {
+  }
+
+  handleFeeCurrencyChange(event) {
     this.setState({
       feeCurrency: event.target.value,
     });
-  },
-  handleFeePrefChange: function(feeEnabled) {
+  }
+
+  handleFeePrefChange(feeEnabled) {
     this.setState({
       isFee: feeEnabled
     });
-  },
-  handleLicenseChange: function(event) {
+  }
+
+  handleLicenseChange(event) {
     var licenseType = event.target.options[event.target.selectedIndex].getAttribute('data-license-type');
     var newState = {
       copyrightChosen: licenseType == 'copyright',
@@ -261,30 +274,35 @@ var PublishPage = React.createClass({
     }
 
     this.setState(newState);
-  },
-  handleCopyrightNoticeChange: function(event) {
+  }
+
+  handleCopyrightNoticeChange(event) {
     this.setState({
       copyrightNotice: event.target.value,
     });
-  },
-  handleOtherLicenseDescriptionChange: function(event) {
+  }
+
+  handleOtherLicenseDescriptionChange(event) {
     this.setState({
       otherLicenseDescription: event.target.value,
     });
-  },
-  handleOtherLicenseUrlChange: function(event) {
+  }
+
+  handleOtherLicenseUrlChange(event) {
     this.setState({
       otherLicenseUrl: event.target.value,
     });
-  },
-  handleChannelChange: function (event) {
+  }
+
+  handleChannelChange(event) {
     const channel = event.target.value;
 
     this.setState({
       channel: channel,
     });
-  },
-  handleNewChannelNameChange: function (event) {
+  }
+
+  handleNewChannelNameChange(event) {
     const newChannelName = (event.target.value.startsWith('@') ? event.target.value : '@' + event.target.value);
 
     if (newChannelName.length > 1 && !lbry.nameIsValid(newChannelName.substr(1), false)) {
@@ -297,18 +315,21 @@ var PublishPage = React.createClass({
     this.setState({
       newChannelName: newChannelName,
     });
-  },
-  handleNewChannelBidChange: function (event) {
+  }
+
+  handleNewChannelBidChange(event) {
     this.setState({
       newChannelBid: event.target.value,
     });
-  },
-  handleTOSChange: function(event) {
+  }
+
+  handleTOSChange(event) {
     this.setState({
       TOSAgreed: event.target.checked,
     });
-  },
-  handleCreateChannelClick: function (event) {
+  }
+
+  handleCreateChannelClick(event) {
     if (this.state.newChannelName.length < 5) {
       this.refs.newChannelName.showError('LBRY channel names must be at least 4 characters in length.');
       return;
@@ -334,8 +355,9 @@ var PublishPage = React.createClass({
         creatingChannel: false,
       });
     });
-  },
-  getLicenseUrl: function() {
+  }
+
+  getLicenseUrl() {
     if (!this.refs.meta_license) {
       return '';
     } else if (this.state.otherLicenseChosen) {
@@ -343,20 +365,21 @@ var PublishPage = React.createClass({
     } else {
       return this.refs.meta_license.getSelectedElement().getAttribute('data-url') || '' ;
     }
-  },
-  componentWillMount: function() {
+  }
+
+  componentWillMount() {
     this._updateChannelList();
-  },
-  componentDidUpdate: function() {
-  },
-  onFileChange: function() {
+  }
+
+  onFileChange() {
     if (this.refs.file.getValue()) {
       this.setState({ hasFile: true })
     } else {
       this.setState({ hasFile: false })
     }
-  },
-  getNameBidHelpText: function() {
+  }
+
+  getNameBidHelpText() {
     if (!this.state.name) {
       return "Select a URL for this publish.";
     } else if (this.state.nameResolved === false) {
@@ -369,13 +392,15 @@ var PublishPage = React.createClass({
     } else {
       return '';
     }
-  },
-  closeModal: function() {
+  }
+
+  closeModal() {
     this.setState({
       modal: null,
     });
-  },
-  render: function() {
+  }
+
+  render() {
     if (this.state.channels === null) {
       return null;
     }
@@ -564,6 +589,6 @@ var PublishPage = React.createClass({
       </main>
     );
   }
-});
+}
 
 export default PublishPage;

@@ -2,19 +2,19 @@ import React from 'react';
 import {Icon} from './common.js';
 import Link from 'component/link';
 
-export let DropDownMenuItem = React.createClass({
-  propTypes: {
+export class DropDownMenuItem extends React.Component {
+  static propTypes = {
     href: React.PropTypes.string,
     label: React.PropTypes.string,
     icon: React.PropTypes.string,
     onClick: React.PropTypes.func,
-  },
-  getDefaultProps: function() {
-    return {
-      iconPosition: 'left',
-    }
-  },
-  render: function() {
+  }
+
+  static defaultProps = {
+    iconPosition: 'left',
+  }
+
+  render() {
     var icon = (this.props.icon ? <Icon icon={this.props.icon} fixed /> : null);
 
     return (
@@ -26,23 +26,27 @@ export let DropDownMenuItem = React.createClass({
       </a>
     );
   }
-});
+}
 
-export let DropDownMenu = React.createClass({
-  _isWindowClickBound: false,
-  _menuDiv: null,
+export class DropDownMenu extends React.Component {
+  constructor(props) {
+    super(props);
 
-  getInitialState: function() {
-    return {
+    this._isWindowClickBound = false;
+    this._menuDiv = null;
+
+    this.state = {
       menuOpen: false,
     };
-  },
-  componentWillUnmount: function() {
+  }
+
+  componentWillUnmount() {
     if (this._isWindowClickBound) {
       window.removeEventListener('click', this.handleWindowClick, false);
     }
-  },
-  handleMenuIconClick: function(e) {
+  }
+
+  handleMenuIconClick(e) {
     this.setState({
       menuOpen: !this.state.menuOpen,
     });
@@ -52,22 +56,25 @@ export let DropDownMenu = React.createClass({
       e.stopPropagation();
     }
     return false;
-  },
-  handleMenuClick: function(e) {
+  }
+
+  handleMenuClick(e) {
     // Event bubbles up to the menu after a link is clicked
     this.setState({
       menuOpen: false,
     });
-  },
-  handleWindowClick: function(e) {
+  }
+
+  handleWindowClick(e) {
     if (this.state.menuOpen &&
           (!this._menuDiv || !this._menuDiv.contains(e.target))) {
       this.setState({
         menuOpen: false
       });
     }
-  },
-  render: function() {
+  }
+
+  render() {
     if (!this.state.menuOpen && this._isWindowClickBound) {
       this._isWindowClickBound = false;
       window.removeEventListener('click', this.handleWindowClick, false);
@@ -83,4 +90,4 @@ export let DropDownMenu = React.createClass({
       </div>
     );
   }
-});
+}

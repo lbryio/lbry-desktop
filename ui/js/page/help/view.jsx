@@ -5,14 +5,17 @@ import Link from 'component/link';
 import SubHeader from 'component/subHeader'
 import {version as uiVersion} from 'json!../../../package.json';
 
-var HelpPage = React.createClass({
-  getInitialState: function() {
-    return {
+class HelpPage extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
       versionInfo: null,
       lbryId: null,
     };
-  },
-  componentWillMount: function() {
+  }
+
+  componentWillMount() {
     lbry.getVersionInfo((info) => {
       this.setState({
         versionInfo: info,
@@ -23,11 +26,13 @@ var HelpPage = React.createClass({
         lbryId: info.lbry_id,
       });
     });
-  },
-  componentDidMount: function() {
+  }
+
+  componentDidMount() {
     document.title = "Help";
-  },
-  render: function() {
+  }
+
+  render() {
     let ver, osName, platform, newVerLink;
     if (this.state.versionInfo) {
       ver = this.state.versionInfo;
@@ -119,6 +124,6 @@ var HelpPage = React.createClass({
       </main>
     );
   }
-});
+}
 
 export default HelpPage;

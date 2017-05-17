@@ -1,18 +1,19 @@
 import React from 'react';
 import lbry from '../lbry.js';
 
-export const SnackBar = React.createClass({
+export class SnackBar extends React.Component {
+  constructor(props) {
+    super(props);
 
-  _displayTime: 5, // in seconds
+    this._displayTime = 5; // in seconds
+    this._hideTimeout = null;
 
-  _hideTimeout: null,
-
-  getInitialState: function() {
-    return {
+    this.state = {
       snacks: []
-    }
-  },
-  handleSnackReceived: function(event) {
+    };
+  }
+
+  handleSnackReceived(event) {
     // if (this._hideTimeout) {
     //   clearTimeout(this._hideTimeout);
     // }
@@ -20,14 +21,17 @@ export const SnackBar = React.createClass({
     let snacks = this.state.snacks;
     snacks.push(event.detail);
     this.setState({ snacks: snacks});
-  },
-  componentWillMount: function() {
+  }
+
+  componentWillMount() {
     document.addEventListener('globalNotice', this.handleSnackReceived);
-  },
-  componentWillUnmount: function() {
+  }
+
+  componentWillUnmount() {
     document.removeEventListener('globalNotice', this.handleSnackReceived);
-  },
-  render: function() {
+  }
+
+  render() {
     if (!this.state.snacks.length) {
       this._hideTimeout = null; //should be unmounting anyway, but be safe?
       return null;
@@ -51,7 +55,7 @@ export const SnackBar = React.createClass({
           <a className="snack-bar__action" href={snack.linkTarget}>{snack.linkText}</a> : ''}
       </div>
     );
-  },
-});
+  }
+}
 
 export default SnackBar;
