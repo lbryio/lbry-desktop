@@ -12,6 +12,7 @@ import FilePrice from './view'
 
 const makeSelect = () => {
   const selectCostInfoForUri = makeSelectCostInfoForUri()
+
   const select = (state, props) => ({
     costInfo: selectCostInfoForUri(state, props),
   })

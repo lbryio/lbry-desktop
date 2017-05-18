@@ -4,12 +4,10 @@ import {
 } from 'react-redux'
 import {
   doFetchDownloadedContent,
-} from 'actions/content'
-import {
-  selectFetchingDownloadedContent,
-} from 'selectors/content'
+} from 'actions/file_info'
 import {
   selectDownloadedFileInfo,
+  selectFetchingDownloadedContent,
 } from 'selectors/file_info'
 import {
   doNavigate,

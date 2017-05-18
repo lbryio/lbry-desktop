@@ -2,14 +2,20 @@ import {
   createSelector,
 } from 'reselect'
 import {
+  selectClaimsByUri,
   selectMyClaimsOutpoints,
 } from 'selectors/claims'
 
 export const _selectState = state => state.fileInfo || {}
 
-export const selectAllFileInfoByUri = createSelector(
+export const selectIsFileListPending = createSelector(
   _selectState,
-  (state) => state.byUri || {}
+  (state) => state.isFileListPending
+)
+
+export const selectAllFileInfos = createSelector(
+  _selectState,
+  (state) => state.fileInfos || {}
 )
 
 export const selectDownloading = createSelector(
@@ -22,8 +28,42 @@ export const selectDownloadingByUri = createSelector(
   (downloading) => downloading.byUri || {}
 )
 
+export const selectFetchingDownloadedContent = createSelector(
+  _selectState,
+  (state) => !!state.fetchingDownloadedContent
+)
+
+export const selectDownloadedContent = createSelector(
+  _selectState,
+  (state) => state.downloadedContent || {}
+)
+
+export const selectDownloadedContentFileInfos = createSelector(
+  selectDownloadedContent,
+  (downloadedContent) => downloadedContent.fileInfos || []
+)
+
+export const selectFetchingPublishedContent = createSelector(
+  _selectState,
+  (state) => !!state.fetchingPublishedContent
+)
+
+export const selectPublishedContent = createSelector(
+  _selectState,
+  (state) => state.publishedContent || {}
+)
+
 export const selectFileInfoForUri = (state, props) => {
-  return selectAllFileInfoByUri(state)[props.uri]
+  const claims = selectClaimsByUri(state),
+        claim = claims[props.uri],
+        outpoint = claim ? `${claim.txid}:${claim.nout}` : undefined
+
+  console.log('select file info')
+  console.log(claims)
+  console.log(claim)
+  console.log(outpoint)
+  console.log(selectAllFileInfos(state))
+  return outpoint ? selectAllFileInfos(state)[outpoint] : undefined
 }
 
 export const makeSelectFileInfoForUri = () => {
@@ -68,23 +108,21 @@ export const makeSelectLoadingForUri = () => {
 }
 
 export const selectDownloadedFileInfo = createSelector(
-  selectAllFileInfoByUri,
-  (byUri) => {
+  selectAllFileInfos,
+  (fileInfos) => {
     const fileInfoList = []
-    Object.keys(byUri).forEach(key => {
-      const fileInfo = byUri[key]
-
+    Object.keys(fileInfos).forEach(outpoint => {
+      const fileInfo = fileInfos[outpoint]
       if (fileInfo.completed || fileInfo.written_bytes) {
         fileInfoList.push(fileInfo)
       }
     })
-
     return fileInfoList
   }
 )
 
 export const selectPublishedFileInfo = createSelector(
-  selectAllFileInfoByUri,
+  selectAllFileInfos,
   selectMyClaimsOutpoints,
   (byUri, outpoints) => {
     const fileInfos = []

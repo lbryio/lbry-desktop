@@ -13,11 +13,8 @@ class FileTile extends React.Component {
 
   constructor(props) {
     super(props)
-    this._fileInfoSubscribeId = null
-    this._isMounted = null
     this.state = {
       showNsfwHelp: false,
-      isHidden: false,
     }
   }
 
@@ -29,28 +26,8 @@ class FileTile extends React.Component {
       uri,
     } = this.props
 
-    this._isMounted = true;
-
-    if (this.props.hideOnRemove) {
-      this._fileInfoSubscribeId = lbry.fileInfoSubscribe(this.props.outpoint, this.onFileInfoUpdate);
-    }
-
     if(!isResolvingUri && !claim && uri) {
       resolveUri(uri)
-    }
-  }
-
-  componentWillUnmount() {
-    if (this._fileInfoSubscribeId) {
-      lbry.fileInfoUnsubscribe(this.props.outpoint, this._fileInfoSubscribeId);
-    }
-  }
-
-  onFileInfoUpdate(fileInfo) {
-    if (!fileInfo && this._isMounted && this.props.hideOnRemove) {
-      this.setState({
-        isHidden: true
-      });
     }
   }
 
@@ -71,10 +48,6 @@ class FileTile extends React.Component {
   }
 
   render() {
-    if (this.state.isHidden) {
-      return null;
-    }
-
     const {
       claim,
       metadata,

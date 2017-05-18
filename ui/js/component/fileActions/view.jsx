@@ -72,9 +72,6 @@ class FileActions extends React.Component {
 
     let content
 
-    console.log('file actions render')
-    console.log(this.props)
-
     if (!fileInfo && isAvailable === undefined) {
 
       content = <BusyMessage message="Checking availability" />

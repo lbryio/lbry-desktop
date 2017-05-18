@@ -21,6 +21,8 @@ class ShowPage extends React.Component{
       uri,
     } = props
 
+    console.log('show page resolve ' + uri)
+    console.log('isResolving: ' + isResolvingUri)
     if(!isResolvingUri && claim === undefined && uri) {
       resolveUri(uri)
     }

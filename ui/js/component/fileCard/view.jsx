@@ -2,12 +2,12 @@ import React from 'react';
 import lbry from 'lbry.js';
 import lbryuri from 'lbryuri.js';
 import Link from 'component/link';
-import {Thumbnail, TruncatedText,} from 'component/common';
+import {Thumbnail, TruncatedText, Icon} from 'component/common';
 import FilePrice from 'component/filePrice'
 import UriIndicator from 'component/uriIndicator';
 
 class FileCard extends React.Component {
-  componentDidMount() {
+  componentWillMount() {
     this.resolve(this.props)
   }
 
@@ -29,7 +29,15 @@ class FileCard extends React.Component {
   }
 
   componentWillUnmount() {
-    this.props.cancelResolveUri(this.props.uri)
+    const {
+      isResolvingUri,
+      cancelResolveUri,
+      uri
+    } = this.props
+
+    if (isResolvingUri) {
+      cancelResolveUri(uri)
+    }
   }
 
   handleMouseOver() {
@@ -47,6 +55,8 @@ class FileCard extends React.Component {
   render() {
 
     const {
+      claim,
+      fileInfo,
       metadata,
       isResolvingUri,
       navigate,
@@ -61,6 +71,8 @@ class FileCard extends React.Component {
       description = "Loading..."
     } else if (metadata && metadata.description) {
       description = metadata.description
+    } else if (claim === null) {
+      description = 'This address contains no content.'
     }
 
     return (
@@ -70,7 +82,10 @@ class FileCard extends React.Component {
             <div className="card__title-identity">
               <h5 title={title}><TruncatedText lines={1}>{title}</TruncatedText></h5>
               <div className="card__subtitle">
-                { !isResolvingUri && <span style={{float: "right"}}><FilePrice uri={uri} /></span> }
+                <span style={{float: "right"}}>
+                  <FilePrice uri={uri} />
+                  { fileInfo ? <span>{' '}<Icon fixed icon="icon-folder" /></span> : '' }
+                </span>
                 <UriIndicator uri={uri} />
               </div>
             </div>

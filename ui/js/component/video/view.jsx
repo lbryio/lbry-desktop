@@ -11,7 +11,7 @@ class VideoPlayButton extends React.Component {
   }
 
   onWatchClick() {
-    console.log(this.props)
+    console.log(this)
     this.props.purchaseUri(this.props.uri).then(() => {
       if (!this.props.modal) {
         this.props.startPlaying()
@@ -24,7 +24,6 @@ class VideoPlayButton extends React.Component {
       button,
       label,
       className,
-      onWatchClick,
       metadata,
       metadata: {
         title,
@@ -51,7 +50,7 @@ class VideoPlayButton extends React.Component {
             label={label ? label : ""}
             className="video__play-button"
             icon="icon-play"
-            onClick={this.onWatchClick} />
+            onClick={this.onWatchClick.bind(this)} />
       {modal}
       <Modal contentLabel="Not enough credits" isOpen={modal == 'notEnoughCredits'} onConfirmed={closeModal}>
         You don't have enough LBRY credits to pay for this stream.
@@ -142,11 +141,9 @@ class VideoPlayer extends React.Component {
       poster,
     } = this.props
 
-    //<source src={downloadPath} type={contentType} />
-
     return (
       <video controls id="video" ref="video" style={{backgroundImage: "url('" + poster + "')"}} >
-
+        <source src={downloadPath} type={contentType} />
       </video>
     )
   }

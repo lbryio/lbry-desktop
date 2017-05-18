@@ -4,6 +4,8 @@ import {
   selectClaimsByUri,
 } from 'selectors/claims'
 import {
+  selectIsFileListPending,
+  selectAllFileInfos,
   selectLoadingByUri,
 } from 'selectors/file_info'
 import {
@@ -25,7 +27,6 @@ export function doFetchFileInfo(uri) {
       dispatch({
         type: types.FETCH_FILE_INFO_STARTED,
         data: {
-          uri,
           outpoint,
         }
       })
@@ -34,8 +35,30 @@ export function doFetchFileInfo(uri) {
         dispatch({
           type: types.FETCH_FILE_INFO_COMPLETED,
           data: {
-            uri,
+            outpoint,
             fileInfo,
+          }
+        })
+      })
+    }
+  }
+}
+
+export function doFileList(uri) {
+  return function(dispatch, getState) {
+    const state = getState()
+    const isPending = selectIsFileListPending(state)
+
+    if (!isPending) {
+      dispatch({
+        type: types.FILE_LIST_STARTED,
+      })
+
+      lbry.file_list().then((fileInfos) => {
+        dispatch({
+          type: types.FILE_LIST_COMPLETED,
+          data: {
+            fileInfos,
           }
         })
       })
@@ -80,26 +103,56 @@ export function doDeleteFile(uri, fileInfo, deleteFromComputer) {
   }
 }
 
+
 export function doFetchDownloadedContent() {
   return function(dispatch, getState) {
-    const state = getState()
+    const state = getState(),
+          fileInfos = selectAllFileInfos(state)
 
     dispatch({
       type: types.FETCH_DOWNLOADED_CONTENT_STARTED,
     })
 
     lbry.claim_list_mine().then((myClaimInfos) => {
-      lbry.file_list().then((fileInfos) => {
-        const myClaimOutpoints = myClaimInfos.map(({txid, nout}) => txid + ':' + nout);
 
-        dispatch({
-          type: types.FETCH_DOWNLOADED_CONTENT_COMPLETED,
-          data: {
-            fileInfos: fileInfos.filter(({outpoint}) => !myClaimOutpoints.includes(outpoint)),
-          }
-        })
-      });
+      const myClaimOutpoints = myClaimInfos.map(({txid, nout}) => txid + ':' + nout);
+
+      dispatch({
+        type: types.FETCH_DOWNLOADED_CONTENT_COMPLETED,
+        data: {
+          fileInfos: fileInfos.filter(({outpoint}) => !myClaimOutpoints.includes(outpoint)),
+        }
+      })
     });
+  }
+}
+
+export function doFetchPublishedContent() {
+  return function(dispatch, getState) {
+    const state = getState(),
+          fileInfos = selectAllFileInfos(state)
+
+    dispatch({
+      type: types.FETCH_PUBLISHED_CONTENT_STARTED,
+    })
+
+    lbry.claim_list_mine().then((claimInfos) => {
+      dispatch({
+        type: types.FETCH_MY_CLAIMS_COMPLETED,
+        data: {
+          claims: claimInfos,
+        }
+      })
+
+      const myClaimOutpoints = claimInfos.map(({txid, nout}) => txid + ':' + nout)
+
+      dispatch({
+        type: types.FETCH_PUBLISHED_CONTENT_COMPLETED,
+        data: {
+          fileInfos: fileInfos.filter(({outpoint}) => myClaimOutpoints.includes(outpoint)),
+        }
+      })
+    })
   }
 }
 

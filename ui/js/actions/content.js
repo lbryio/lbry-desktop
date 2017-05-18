@@ -57,66 +57,9 @@ export function doResolveUri(uri) {
 export function doCancelResolveUri(uri) {
   return function(dispatch, getState) {
     lbry.cancelResolve({ uri })
-  }
-}
-
-export function doFetchDownloadedContent() {
-  return function(dispatch, getState) {
-    const state = getState()
-
     dispatch({
-      type: types.FETCH_DOWNLOADED_CONTENT_STARTED,
-    })
-
-    lbry.claim_list_mine().then((myClaimInfos) => {
-      lbry.file_list().then((fileInfos) => {
-        const myClaimOutpoints = myClaimInfos.map(({txid, nout}) => txid + ':' + nout);
-
-        fileInfos.forEach(fileInfo => {
-          const uri = lbryuri.build({
-            channelName: fileInfo.channel_name,
-            contentName: fileInfo.name,
-          })
-          const claim = selectClaimsByUri(state)[uri]
-          if (!claim) dispatch(doResolveUri(uri))
-        })
-
-        dispatch({
-          type: types.FETCH_DOWNLOADED_CONTENT_COMPLETED,
-          data: {
-            fileInfos: fileInfos.filter(({outpoint}) => !myClaimOutpoints.includes(outpoint)),
-          }
-        })
-      });
-    });
-  }
-}
-
-export function doFetchPublishedContent() {
-  return function(dispatch, getState) {
-    const state = getState()
-
-    dispatch({
-      type: types.FETCH_PUBLISHED_CONTENT_STARTED,
-    })
-
-    lbry.claim_list_mine().then((claimInfos) => {
-      dispatch({
-        type: types.FETCH_MY_CLAIMS_COMPLETED,
-        data: {
-          claims: claimInfos,
-        }
-      })
-      lbry.file_list().then((fileInfos) => {
-        const myClaimOutpoints = claimInfos.map(({txid, nout}) => txid + ':' + nout)
-
-        dispatch({
-          type: types.FETCH_PUBLISHED_CONTENT_COMPLETED,
-          data: {
-            fileInfos: fileInfos.filter(({outpoint}) => myClaimOutpoints.includes(outpoint)),
-          }
-        })
-      })
+      type: types.RESOLVE_URI_CANCELED,
+      data: { uri }
     })
   }
 }
@@ -142,10 +85,18 @@ export function doFetchFeaturedUris() {
       dispatch({
         type: types.FETCH_FEATURED_CONTENT_COMPLETED,
         data: {
-          categories: Categories,
-          uris: featuredUris,
+          categories: ["FOO"],
+          uris: { FOO: ["lbry://gtasoc"]},
         }
       })
+
+      // dispatch({
+      //   type: types.FETCH_FEATURED_CONTENT_COMPLETED,
+      //   data: {
+      //     categories: Categories,
+      //     uris: featuredUris,
+      //   }
+      // })
     }
 
     const failure = () => {
@@ -182,6 +133,7 @@ export function doUpdateLoadStatus(uri, outpoint) {
           type: types.DOWNLOADING_COMPLETED,
           data: {
             uri,
+            outpoint,
             fileInfo,
           }
         })
@@ -197,6 +149,7 @@ export function doUpdateLoadStatus(uri, outpoint) {
           type: types.DOWNLOADING_PROGRESSED,
           data: {
             uri,
+            outpoint,
             fileInfo,
             progress,
           }
@@ -216,6 +169,7 @@ export function doDownloadFile(uri, streamInfo) {
         type: types.DOWNLOADING_STARTED,
         data: {
           uri,
+          outpoint: streamInfo.outpoint,
           fileInfo,
         }
       })
