@@ -66,7 +66,6 @@ export function doCancelResolveUri(uri) {
 
 export function doFetchFeaturedUris() {
   return function(dispatch, getState) {
-    return
     const state = getState()
 
     dispatch({
