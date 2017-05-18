@@ -52,12 +52,12 @@ class SubmitEmailStage extends React.Component {
   render() {
     return (
       <section>
-        <form onSubmit={this.handleSubmit}>
+        <form onSubmit={(event) => { this.handleSubmit(event) }}>
           <FormRow ref={(ref) => { this._emailRow = ref }} type="text" label="Email" placeholder="scrwvwls@lbry.io"
                      name="email" value={this.state.email}
-                     onChange={this.handleEmailChanged} />
+                     onChange={(event) => { this.handleEmailChanged(event) }} />
           <div className="form-row-submit">
-            <Link button="primary" label="Next" disabled={this.state.submitting} onClick={this.handleSubmit} />
+            <Link button="primary" label="Next" disabled={this.state.submitting} onClick={(event) => { this.handleSubmit(event) }} />
           </div>
         </form>
       </section>
@@ -108,12 +108,12 @@ class ConfirmEmailStage extends React.Component {
   render() {
     return (
       <section>
-        <form onSubmit={this.handleSubmit}>
+        <form onSubmit={(event) => { this.handleSubmit(event) }}>
           <FormRow label="Verification Code" ref={(ref) => { this._codeRow = ref }} type="text"
-                     name="code" placeholder="a94bXXXXXXXXXXXXXX" value={this.state.code} onChange={this.handleCodeChanged}
+                     name="code" placeholder="a94bXXXXXXXXXXXXXX" value={this.state.code} onChange={(event) => { this.handleCodeChanged(event) }}
                      helper="A verification code is required to access this version."/>
           <div className="form-row-submit form-row-submit--with-footer">
-            <Link button="primary" label="Verify" disabled={this.state.submitting} onClick={this.handleSubmit} />
+            <Link button="primary" label="Verify" disabled={this.state.submitting} onClick={(event) => { this.handleSubmit(event)}} />
           </div>
           <div className="form-field__helper">
             No code? <Link onClick={() => { this.props.setStage("nocode")}} label="Click here" />.
@@ -152,7 +152,7 @@ class WelcomeStage extends React.Component {
             <p>Below, LBRY is controlled by users -- you -- via blockchain and decentralization.</p>
             <p>Thank you for making content freedom possible! Here's a nickel, kid.</p>
             <div style={{textAlign: "center", marginBottom: "12px"}}>
-              <RewardLink type="new_user" button="primary" onRewardClaim={this.onRewardClaim} onRewardFailure={() => this.props.setStage(null)} onConfirmed={() => { this.props.setStage(null) }} />
+              <RewardLink type="new_user" button="primary" onRewardClaim={(event) => { this.onRewardClaim(event) }} onRewardFailure={() => this.props.setStage(null)} onConfirmed={() => { this.props.setStage(null) }} />
             </div>
           </section>
          </Modal> :
@@ -319,9 +319,9 @@ export class AuthOverlay extends React.Component {
       this.state.stage != "welcome" ?
           <ModalPage className="modal-page--full" isOpen={true} contentLabel="Authentication" {...this.props}>
             <h1>LBRY Early Access</h1>
-            <StageContent {...this.state.stageProps}  setStage={this.setStage} />
+            <StageContent {...this.state.stageProps}  setStage={(stage, stageProps) => { this.setStage(stage, stageProps) }} />
           </ModalPage> :
-          <StageContent setStage={this.setStage} {...this.state.stageProps}  />
+          <StageContent setStage={(stage, stageProps) => { this.setStage(stage, stageProps) }} {...this.state.stageProps}  />
     );
   }
 }

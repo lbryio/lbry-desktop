@@ -152,6 +152,6 @@ export class Thumbnail extends React.Component {
     const className = this.props.className ? this.props.className : '',
           otherProps = Object.assign({}, this.props)
     delete otherProps.className;
-    return <img ref="img" onError={this.handleError} {...otherProps} className={className} src={this.state.imageUri} />
+    return <img ref="img" onError={() => { this.handleError() }} {...otherProps} className={className} src={this.state.imageUri} />
   }
 }

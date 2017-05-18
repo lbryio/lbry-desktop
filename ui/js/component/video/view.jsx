@@ -51,9 +51,9 @@ class VideoPlayButton extends React.Component {
             label={label ? label : ""}
             className="video__play-button"
             icon="icon-play"
-            onClick={this.onWatchClick} />
+            onClick={() => { this.onWatchClick() }} />
       {modal}
-      <Modal contentLabel="Not enough credits" isOpen={modal == 'notEnoughCredits'} onConfirmed={closeModal}>
+      <Modal contentLabel="Not enough credits" isOpen={modal == 'notEnoughCredits'} onConfirmed={() => { this.closeModal() }}>
         You don't have enough LBRY credits to pay for this stream.
       </Modal>
       <Modal
@@ -65,7 +65,7 @@ class VideoPlayButton extends React.Component {
         This will purchase <strong>{title}</strong> for <strong><FilePrice uri={uri} look="plain" /></strong> credits.
       </Modal>
       <Modal
-        isOpen={modal == 'timedOut'} onConfirmed={closeModal} contentLabel="Timed Out">
+        isOpen={modal == 'timedOut'} onConfirmed={() => { this.closeModal() }} contentLabel="Timed Out">
         Sorry, your download timed out :(
       </Modal>
     </div>);

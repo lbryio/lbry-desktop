@@ -18,7 +18,7 @@ export class SplashScreen extends React.Component {
   }
 
   updateStatus() {
-    lbry.status().then(this._updateStatusCallback);
+    lbry.status().then((status) => { this._updateStatusCallback(status) });
   }
 
   _updateStatusCallback(status) {

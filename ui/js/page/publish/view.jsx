@@ -409,7 +409,7 @@ class PublishPage extends React.Component {
 
     return (
       <main className="main--single-column">
-        <form onSubmit={this.handleSubmit}>
+        <form onSubmit={(event) => { this.handleSubmit(event) }}>
           <section className="card">
             <div className="card__title-primary">
               <h4>Content</h4>
@@ -418,7 +418,7 @@ class PublishPage extends React.Component {
               </div>
             </div>
             <div className="card__content">
-              <FormRow name="file" label="File" ref="file" type="file" onChange={this.onFileChange}
+              <FormRow name="file" label="File" ref="file" type="file" onChange={(event) => { this.onFileChange(event) }}
                        helper={this.state.myClaimExists ? "If you don't choose a file, the file from your existing claim will be used." : null}/>
             </div>
             { !this.state.hasFile ? '' :
@@ -468,7 +468,7 @@ class PublishPage extends React.Component {
               <FormField type="radio" name="isFree" label={!this.state.isFee ? 'Choose price...' : 'Price ' }
                          onChange={ () => { this.handleFeePrefChange(true) } } defaultChecked={this.state.isFee} />
              <span className={!this.state.isFee ? 'hidden' : ''}>
-               <FormField type="number" className="form-field__input--inline" step="0.01" placeholder="1.00" onChange={this.handleFeeAmountChange} /> <FormField type="select" onChange={this.handleFeeCurrencyChange}>
+               <FormField type="number" className="form-field__input--inline" step="0.01" placeholder="1.00" onChange={(event) => this.handleFeeAmountChange(event)} /> <FormField type="select" onChange={(event) => { this.handleFeeCurrencyChange(event) }}>
                <option value="USD">US Dollars</option>
                <option value="LBC">LBRY credits</option>
              </FormField>
@@ -477,7 +477,7 @@ class PublishPage extends React.Component {
                   <div className="form-field__helper">
                     If you choose to price this content in dollars, the number of credits charged will be adjusted based on the value of LBRY credits at the time of purchase.
                   </div> : '' }
-              <FormRow label="License" type="select" ref="meta_license" name="license" onChange={this.handleLicenseChange}>
+              <FormRow label="License" type="select" ref="meta_license" name="license" onChange={(event) => { this.handleLicenseChange(event) }}>
                 <option></option>
                 <option>Public Domain</option>
                 <option data-url="https://creativecommons.org/licenses/by/4.0/legalcode">Creative Commons Attribution 4.0 International</option>
@@ -492,13 +492,13 @@ class PublishPage extends React.Component {
               <FormField type="hidden" ref="meta_license_url" name="license_url" value={this.getLicenseUrl()} />
               {this.state.copyrightChosen
                 ?  <FormRow label="Copyright notice" type="text" name="copyright-notice"
-                            value={this.state.copyrightNotice} onChange={this.handleCopyrightNoticeChange} />
+                            value={this.state.copyrightNotice} onChange={(event) => { this.handleCopyrightNoticeChange(event) }} />
                 : null}
               {this.state.otherLicenseChosen ?
-               <FormRow label="License description" type="text" name="other-license-description" onChange={this.handleOtherLicenseDescriptionChange} />
+               <FormRow label="License description" type="text" name="other-license-description" onChange={(event) => { this.handleOtherLicenseDescriptionChange() }} />
                 : null}
               {this.state.otherLicenseChosen ?
-               <FormRow label="License URL" type="text" name="other-license-url" onChange={this.handleOtherLicenseUrlChange} />
+               <FormRow label="License URL" type="text" name="other-license-url" onChange={(event) => { this.handleOtherLicenseUrlChange(event) }} />
                 : null}
             </div>
           </section>
@@ -511,7 +511,7 @@ class PublishPage extends React.Component {
               </div>
             </div>
             <div className="card__content">
-              <FormRow type="select" tabIndex="1" onChange={this.handleChannelChange} value={this.state.channel}>
+              <FormRow type="select" tabIndex="1" onChange={(event) => { this.handleChannelChange(event) }} value={this.state.channel}>
                 <option key="anonymous" value="anonymous">Anonymous</option>
                 {this.state.channels.map(({name}) => <option key={name} value={name}>{name}</option>)}
                 <option key="new" value="new">New identity...</option>
@@ -519,17 +519,17 @@ class PublishPage extends React.Component {
             </div>
             {this.state.channel == 'new' ?
                <div className="card__content">
-                 <FormRow label="Name" type="text" onChange={this.handleNewChannelNameChange} ref={newChannelName => { this.refs.newChannelName = newChannelName }}
+                 <FormRow label="Name" type="text" onChange={(event) => { this.handleNewChannelNameChange(event) }} ref={newChannelName => { this.refs.newChannelName = newChannelName }}
                           value={this.state.newChannelName} />
                  <FormRow label="Deposit"
                           postfix="LBC"
                           step="0.01"
                           type="number"
                           helper={lbcInputHelp}
-                          onChange={this.handleNewChannelBidChange}
+                          onChange={(event) => { this.handleNewChannelBidChange(event) }}
                           value={this.state.newChannelBid} />
                  <div className="form-row-submit">
-                    <Link button="primary" label={!this.state.creatingChannel ? 'Create identity' : 'Creating identity...'} onClick={this.handleCreateChannelClick} disabled={this.state.creatingChannel} />
+                    <Link button="primary" label={!this.state.creatingChannel ? 'Create identity' : 'Creating identity...'} onClick={(event) => { this.handleCreateChannelClick(event) }} disabled={this.state.creatingChannel} />
                  </div>
                 </div>
               : null}
@@ -542,7 +542,7 @@ class PublishPage extends React.Component {
               <div className="card__subtitle">Where should this content permanently reside? <Link label="Read more" href="https://lbry.io/faq/naming" />.</div>
             </div>
             <div className="card__content">
-              <FormRow prefix="lbry://" type="text" ref="name" placeholder="myname" value={this.state.rawName} onChange={this.handleNameChange}
+              <FormRow prefix="lbry://" type="text" ref="name" placeholder="myname" value={this.state.rawName} onChange={(event) => { this.handleNameChange(event) }}
                        helper={this.getNameBidHelpText()} />
             </div>
             { this.state.rawName ?
@@ -552,7 +552,7 @@ class PublishPage extends React.Component {
                              step="0.01"
                              label="Deposit"
                              postfix="LBC"
-                             onChange={this.handleBidChange}
+                             onChange={(event) => { this.handleBidChange(event) }}
                              value={this.state.bid}
                              placeholder={this.state.nameResolved ? this.state.topClaimValue + 10 : 100}
                              helper={lbcInputHelp} />
@@ -566,24 +566,24 @@ class PublishPage extends React.Component {
             <div className="card__content">
               <FormRow label={
                 <span>I agree to the <Link href="https://www.lbry.io/termsofservice" label="LBRY terms of service" checked={this.state.TOSAgreed} /></span>
-              } type="checkbox" name="tos_agree" ref={(field) => { this.refs.tos_agree = field }} onChange={this.handleTOSChange} />
+              } type="checkbox" name="tos_agree" ref={(field) => { this.refs.tos_agree = field }} onChange={(event) => { this.handleTOSChange(event)}} />
             </div>
           </section>
 
           <div className="card-series-submit">
-            <Link button="primary" label={!this.state.submitting ? 'Publish' : 'Publishing...'} onClick={this.handleSubmit} disabled={this.state.submitting} />
+            <Link button="primary" label={!this.state.submitting ? 'Publish' : 'Publishing...'} onClick={(event) => { this.handleSubmit(event) }} disabled={this.state.submitting} />
             <Link button="cancel" onClick={lbry.back} label="Cancel" />
             <input type="submit" className="hidden" />
           </div>
         </form>
 
         <Modal isOpen={this.state.modal == 'publishStarted'} contentLabel="File published"
-               onConfirmed={this.handlePublishStartedConfirmed}>
+               onConfirmed={(event) => { this.handlePublishStartedConfirmed(event) }}>
           <p>Your file has been published to LBRY at the address <code>lbry://{this.state.name}</code>!</p>
           <p>The file will take a few minutes to appear for other LBRY users. Until then it will be listed as "pending" under your published files.</p>
         </Modal>
         <Modal isOpen={this.state.modal == 'error'} contentLabel="Error publishing file"
-               onConfirmed={this.closeModal}>
+               onConfirmed={(event) => { this.closeModal(event) }}>
           The following error occurred when attempting to publish your file: {this.state.errorMessage}
         </Modal>
       </main>

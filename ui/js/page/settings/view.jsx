@@ -9,7 +9,7 @@ class SettingsPage extends React.Component {
 
     const daemonSettings = this.props.daemonSettings
 
-    return {
+    this.state = {
       isMaxUpload: daemonSettings && daemonSettings.max_upload != 0,
       isMaxDownload: daemonSettings && daemonSettings.max_download != 0,
       showNsfw: lbry.getClientSetting('showNsfw'),

@@ -81,7 +81,7 @@ export class ExpandableModal extends React.Component {
         <div className="modal__buttons">
           <Link button="primary" label={this.props.confirmButtonLabel} className="modal__button" onClick={this.props.onConfirmed} />
           <Link button="alt" label={!this.state.expanded ? this.props.expandButtonLabel : this.props.hideButtonLabel}
-                className="modal__button" onClick={this.toggleExpanded} />
+                className="modal__button" onClick={() => { this.toggleExpanded() }} />
         </div>
       </Modal>
     );

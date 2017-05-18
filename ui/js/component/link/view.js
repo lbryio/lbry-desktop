@@ -92,7 +92,7 @@ export default Link
 
 //     return (
 //       <a className={className} href={this.props.href || 'javascript:;'} title={this.props.title}
-//          onClick={this.handleClick} {... 'style' in this.props ? {style: this.props.style} : {}}>
+//          onClick={(event) => { this.handleClick() }} {... 'style' in this.props ? {style: this.props.style} : {}}>
 //         {content}
 //       </a>
 //     );

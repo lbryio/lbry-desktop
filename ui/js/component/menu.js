@@ -81,9 +81,9 @@ export class DropDownMenu extends React.Component {
     }
     return (
       <div className="menu-container">
-        <Link ref={(span) => this._menuButton = span} button="text" icon="icon-ellipsis-v" onClick={this.handleMenuIconClick} />
+        <Link ref={(span) => this._menuButton = span} button="text" icon="icon-ellipsis-v" onClick={(event) => { this.handleMenuIconClick(event) }} />
         {this.state.menuOpen
-          ? <div ref={(div) => this._menuDiv = div} className="menu" onClick={this.handleMenuClick}>
+          ? <div ref={(div) => this._menuDiv = div} className="menu" onClick={(event) => { this.handleMenuClick(event) }}>
               {this.props.children}
             </div>
           : null}

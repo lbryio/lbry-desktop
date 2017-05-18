@@ -44,7 +44,7 @@ class ReportPage extends React.Component {
             <textarea ref={(t) => this._messageArea = t} cols="80" rows="10" name="message" type="text"/>
           </div>
           <div className="form-row form-row-submit">
-            <button onClick={this.submitMessage} className={'button-block button-primary ' + (this.state.submitting ? 'disabled' : '')}>{this.state.submitting ? 'Submitting...' : 'Submit Report'}</button>
+            <button onClick={(event) => { this.submitMessage(event) }} className={'button-block button-primary ' + (this.state.submitting ? 'disabled' : '')}>{this.state.submitting ? 'Submitting...' : 'Submit Report'}</button>
           </div>
         </section>
         <section className="card">
@@ -52,7 +52,7 @@ class ReportPage extends React.Component {
           You can also <Link href="https://github.com/lbryio/lbry/issues" label="submit an issue on GitHub"/>.
         </section>
         <Modal isOpen={this.state.modal == 'submitted'} contentLabel="Bug report submitted"
-               onConfirmed={this.closeModal}>
+               onConfirmed={(event) => { this.closeModal(event) }}>
           Your bug report has been submitted! Thank you for your feedback.
         </Modal>
       </main>

@@ -29,11 +29,11 @@ export class ToolTip extends React.Component {
   render() {
     return (
       <span className={'tooltip ' + (this.props.className || '')}>
-        <a className="tooltip__link" onClick={this.handleClick}>
+        <a className="tooltip__link" onClick={() => { this.handleClick() }}>
           {this.props.label}
         </a>
         <div className={'tooltip__body ' + (this.state.showTooltip ? '' : ' hidden')}
-             onMouseOut={this.handleTooltipMouseOut}>
+             onMouseOut={() => { this.handleTooltipMouseOut() }}>
           {this.props.body}
         </div>
       </span>
