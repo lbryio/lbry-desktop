@@ -5,9 +5,13 @@ import {
 import {
   doNavigate,
 } from 'actions/app'
+import {
+  selectMyClaims
+} from 'selectors/claims'
 import PublishPage from './view'
 
 const select = (state) => ({
+  myClaims: selectMyClaims(state)
 })
 
 const perform = (dispatch) => ({

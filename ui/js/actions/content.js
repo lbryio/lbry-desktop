@@ -8,7 +8,7 @@ import {
 } from 'selectors/wallet'
 import {
   selectFileInfoForUri,
-  selectDownloadingByUri,
+  selectUrisDownloading,
 } from 'selectors/file_info'
 import {
   selectResolvingUris
@@ -66,6 +66,7 @@ export function doCancelResolveUri(uri) {
 
 export function doFetchFeaturedUris() {
   return function(dispatch, getState) {
+    return
     const state = getState()
 
     dispatch({
@@ -81,22 +82,22 @@ export function doFetchFeaturedUris() {
           featuredUris[category] = Uris[category]
         }
       })
+      //
+      // dispatch({
+      //   type: types.FETCH_FEATURED_CONTENT_COMPLETED,
+      //   data: {
+      //     categories: ["FOO"],
+      //     uris: { FOO: ["lbry://gtasoc"]},
+      //   }
+      // })
 
       dispatch({
         type: types.FETCH_FEATURED_CONTENT_COMPLETED,
         data: {
-          categories: ["FOO"],
-          uris: { FOO: ["lbry://gtasoc"]},
+          categories: Categories,
+          uris: featuredUris,
         }
       })
-
-      // dispatch({
-      //   type: types.FETCH_FEATURED_CONTENT_COMPLETED,
-      //   data: {
-      //     categories: Categories,
-      //     uris: featuredUris,
-      //   }
-      // })
     }
 
     const failure = () => {
@@ -219,7 +220,7 @@ export function doPurchaseUri(uri) {
     const balance = selectBalance(state)
     const fileInfo = selectFileInfoForUri(state, { uri })
     const costInfo = selectCostInfoForUri(state, { uri })
-    const downloadingByUri = selectDownloadingByUri(state)
+    const downloadingByUri = selectUrisDownloading(state)
     const alreadyDownloading = !!downloadingByUri[uri]
     const { cost } = costInfo
 
@@ -268,18 +269,28 @@ export function doFetchClaimsByChannel(uri) {
       } = resolutionInfo ? resolutionInfo : { claims_in_channel: [] }
 
       dispatch({
-        type: types.FETCH_CHANNEL_CLAIMS_STARTED,
+        type: types.FETCH_CHANNEL_CLAIMS_COMPLETED,
         data: {
           uri,
           claims: claims_in_channel
         }
       })
-    }).catch(() => {
+    })
+  }
+}
+
+export function doClaimListMine() {
+  return function(dispatch, getState) {
+    dispatch({
+      type: types.CLAIM_LIST_MINE_STARTED
+    })
+
+
+    lbry.claim_list_mine().then((claims) => {
       dispatch({
-        type: types.FETC,
+        type: types.CLAIM_LIST_MINE_COMPLETED,
         data: {
-          uri,
-          claims: []
+          claims
         }
       })
     })

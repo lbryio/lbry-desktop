@@ -7,6 +7,25 @@ import {getLocal, getSession, setSession, setLocal} from './utils.js';
 const {remote, ipcRenderer} = require('electron');
 const menu = remote.require('./menu/main-menu');
 
+let lbry = {
+  isConnected: false,
+  daemonConnectionString: 'http://localhost:5279/lbryapi',
+  webUiUri: 'http://localhost:5279',
+  peerListTimeout: 6000,
+  pendingPublishTimeout: 20 * 60 * 1000,
+  colors: {
+    primary: '#155B4A'
+  },
+  defaultClientSettings: {
+    showNsfw: false,
+    showUnavailable: true,
+    debug: false,
+    useCustomLighthouseServers: false,
+    customLighthouseServers: [],
+    showDeveloperMenu: false,
+  }
+};
+
 /**
  * Records a publish attempt in local storage. Returns a dictionary with all the data needed to
  * needed to make a dummy claim or file info object.
@@ -40,14 +59,14 @@ function removePendingPublishIfNeeded({name, channel_name, outpoint}) {
     return pub.outpoint === outpoint || (pub.name === name && (!channel_name || pub.channel_name === channel_name));
   }
 
-  setLocal('pendingPublishes', getPendingPublishes().filter(pub => !pubMatches(pub)));
+  setLocal('pendingPublishes', lbry.getPendingPublishes().filter(pub => !pubMatches(pub)));
 }
 
 /**
  * Gets the current list of pending publish attempts. Filters out any that have timed out and
  * removes them from the list.
  */
-function getPendingPublishes() {
+lbry.getPendingPublishes = function() {
   const pendingPublishes = getLocal('pendingPublishes') || [];
   const newPendingPublishes = pendingPublishes.filter(pub => Date.now() - pub.time <= lbry.pendingPublishTimeout);
   setLocal('pendingPublishes', newPendingPublishes);
@@ -59,7 +78,7 @@ function getPendingPublishes() {
  * provided along withe the name. If no pending publish is found, returns null.
  */
 function getPendingPublish({name, channel_name, outpoint}) {
-  const pendingPublishes = getPendingPublishes();
+  const pendingPublishes = lbry.getPendingPublishes();
   return pendingPublishes.find(
     pub => pub.outpoint === outpoint || (pub.name === name && (!channel_name || pub.channel_name === channel_name))
   ) || null;
@@ -73,26 +92,6 @@ function pendingPublishToDummyFileInfo({name, outpoint, claim_id}) {
   return {name, outpoint, claim_id, metadata: null};
 }
 window.pptdfi = pendingPublishToDummyFileInfo;
-
-let lbry = {
-  isConnected: false,
-  rootPath: '.',
-  daemonConnectionString: 'http://localhost:5279/lbryapi',
-  webUiUri: 'http://localhost:5279',
-  peerListTimeout: 6000,
-  pendingPublishTimeout: 20 * 60 * 1000,
-  colors: {
-    primary: '#155B4A'
-  },
-  defaultClientSettings: {
-    showNsfw: false,
-    showUnavailable: true,
-    debug: false,
-    useCustomLighthouseServers: false,
-    customLighthouseServers: [],
-    showDeveloperMenu: false,
-  }
-};
 
 lbry.call = function (method, params, callback, errorCallback, connectFailedCallback) {
   return jsonrpc.call(lbry.daemonConnectionString, method, params, callback, errorCallback, connectFailedCallback);
@@ -159,12 +158,6 @@ lbry.sendToAddress = function(amount, address, callback, errorCallback) {
   lbry.call("send_amount_to_address", { "amount" : amount, "address": address }, callback, errorCallback);
 }
 
-lbry.getMyClaim = function(name, callback) {
-  lbry.call('claim_list_mine', {}, (claims) => {
-    callback(claims.find((claim) => claim.name == name) || null);
-  });
-}
-
 /**
  * Takes a LBRY URI; will first try and calculate a total cost using
  * Lighthouse. If Lighthouse can't be reached, it just retrives the
@@ -218,40 +211,6 @@ lbry.getCostInfo = function(uri) {
   return lbry.costPromiseCache[uri];
 }
 
-lbry.getMyClaims = function(callback) {
-  lbry.call('get_name_claims', {}, callback);
-}
-
-lbry.removeFile = function(outpoint, deleteTargetFile=true, callback) {
-  this._removedFiles.push(outpoint);
-  // this._updateFileInfoSubscribers(outpoint);
-
-  lbry.file_delete({
-    outpoint: outpoint,
-    delete_target_file: deleteTargetFile,
-  }).then(callback);
-}
-
-lbry.getFileInfoWhenListed = function(name, callback, timeoutCallback, tryNum=0) {
-  function scheduleNextCheckOrTimeout() {
-    if (timeoutCallback && tryNum > 200) {
-      timeoutCallback();
-    } else {
-      setTimeout(() => lbry.getFileInfoWhenListed(name, callback, timeoutCallback, tryNum + 1), 250);
-    }
-  }
-
-  // Calls callback with file info when it appears in the lbrynet file manager.
-  // If timeoutCallback is provided, it will be called if the file fails to appear.
-  lbry.file_list({name: name}).then(([fileInfo]) => {
-    if (fileInfo) {
-      callback(fileInfo);
-    } else {
-      scheduleNextCheckOrTimeout();
-    }
-  }, () => scheduleNextCheckOrTimeout());
-}
-
 /**
  * Publishes a file. The optional fileListedCallback is called when the file becomes available in
  * lbry.file_list() during the publish process.
@@ -292,10 +251,6 @@ lbry.publish = function(params, fileListedCallback, publishedCallback, errorCall
       fileListedCallback(true);
     }
   }, 2000);
-
-  //lbry.getFileInfoWhenListed(params.name, function(fileInfo) {
-  //  fileListedCallback(fileInfo);
-  //});
 }
 
 
@@ -350,29 +305,10 @@ lbry.formatName = function(name) {
   return name;
 }
 
-lbry.nameIsValid = function(name, checkCase=true) {
-  const regexp = new RegExp('^[a-z0-9-]+$', checkCase ? '' : 'i');
-  return regexp.test(name);
-}
-
-lbry.loadJs = function(src, type, onload)
-{
-  var lbryScriptTag = document.getElementById('lbry'),
-      newScriptTag = document.createElement('script'),
-      type = type || 'text/javascript';
-
-  newScriptTag.src = src;
-  newScriptTag.type = type;
-  if (onload)
-  {
-    newScriptTag.onload = onload;
-  }
-  lbryScriptTag.parentNode.insertBefore(newScriptTag, lbryScriptTag);
-}
 
 lbry.imagePath = function(file)
 {
-  return lbry.rootPath + '/img/' + file;
+  return 'img/' + file;
 }
 
 lbry.getMediaType = function(contentType, fileName) {
@@ -406,17 +342,6 @@ lbry.stop = function(callback) {
 lbry._subscribeIdCount = 0;
 lbry._balanceSubscribeCallbacks = {};
 lbry._balanceSubscribeInterval = 5000;
-lbry._removedFiles = [];
-lbry._claimIdOwnershipCache = {};
-
-lbry._updateClaimOwnershipCache = function(claimId) {
-  lbry.getMyClaims((claimInfos) => {
-    lbry._claimIdOwnershipCache[claimId] = !!claimInfos.reduce(function(match, claimInfo) {
-      return match || claimInfo.claim_id == claimId;
-    }, false);
-  });
-
-};
 
 lbry._balanceUpdateInterval = null;
 lbry._updateBalanceSubscribers = function() {
@@ -493,7 +418,7 @@ lbry.file_list = function(params={}) {
     lbry.call('file_list', params, (fileInfos) => {
       removePendingPublishIfNeeded({name, channel_name, outpoint});
 
-      const dummyFileInfos = getPendingPublishes().map(pendingPublishToDummyFileInfo);
+      const dummyFileInfos = lbry.getPendingPublishes().map(pendingPublishToDummyFileInfo);
       resolve([...fileInfos, ...dummyFileInfos]);
     }, reject, reject);
   });
@@ -506,7 +431,7 @@ lbry.claim_list_mine = function(params={}) {
         removePendingPublishIfNeeded({name, channel_name, outpoint: txid + ':' + nout});
       }
 
-      const dummyClaims = getPendingPublishes().map(pendingPublishToDummyClaim);
+      const dummyClaims = lbry.getPendingPublishes().map(pendingPublishToDummyClaim);
       resolve([...claims, ...dummyClaims]);
     }, reject, reject)
   });

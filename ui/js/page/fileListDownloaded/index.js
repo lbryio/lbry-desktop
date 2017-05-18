@@ -3,11 +3,11 @@ import {
   connect
 } from 'react-redux'
 import {
-  doFetchDownloadedContent,
+  doFetchFileInfosAndPublishedClaims,
 } from 'actions/file_info'
 import {
-  selectDownloadedFileInfo,
-  selectFetchingDownloadedContent,
+  selectFileInfosDownloaded,
+  selectFileListDownloadedOrPublishedIsPending,
 } from 'selectors/file_info'
 import {
   doNavigate,
@@ -15,13 +15,13 @@ import {
 import FileListDownloaded from './view'
 
 const select = (state) => ({
-  downloadedContent: selectDownloadedFileInfo(state),
-  fetching: selectFetchingDownloadedContent(state),
+  fileInfos: selectFileInfosDownloaded(state),
+  isPending: selectFileListDownloadedOrPublishedIsPending(state),
 })
 
 const perform = (dispatch) => ({
   navigate: (path) => dispatch(doNavigate(path)),
-  fetchFileListDownloaded: () => dispatch(doFetchDownloadedContent()),
+  fetchFileInfosDownloaded: () => dispatch(doFetchFileInfosAndPublishedClaims()),
 })
 
 export default connect(select, perform)(FileListDownloaded)

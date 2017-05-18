@@ -4,14 +4,13 @@ import Link from 'component/link';
 import Modal from 'component/modal';
 
 class VideoPlayButton extends React.Component {
-  confirmPurchaseClick() {
+  onPurchaseConfirmed() {
     this.props.closeModal()
     this.props.startPlaying()
     this.props.loadVideo(this.props.uri)
   }
 
   onWatchClick() {
-    console.log(this)
     this.props.purchaseUri(this.props.uri).then(() => {
       if (!this.props.modal) {
         this.props.startPlaying()
@@ -59,7 +58,7 @@ class VideoPlayButton extends React.Component {
         type="confirm"
         isOpen={modal == 'affirmPurchase'}
         contentLabel="Confirm Purchase"
-        onConfirmed={this.confirmPurchaseClick.bind(this)}
+        onConfirmed={this.onPurchaseConfirmed.bind(this)}
         onAborted={closeModal}>
         This will purchase <strong>{title}</strong> for <strong><FilePrice uri={uri} look="plain" /></strong> credits.
       </Modal>
@@ -107,8 +106,8 @@ class Video extends React.Component {
     }
 
     return (
-      <div className={"video " + this.props.className + (isPlaying || isReadyToPlay ? " video--active" : " video--hidden")}>{
-        isPlaying || isReadyToPlay ?
+      <div className={"video " + this.props.className + (isPlaying ? " video--active" : " video--hidden")}>{
+        isPlaying || isLoading ?
           (!isReadyToPlay ?
             <span>this is the world's worst loading screen and we shipped our software with it anyway... <br /><br />{loadStatusMessage}</span> :
             <VideoPlayer poster={metadata.thumbnail} autoplay={isPlaying} downloadPath={fileInfo.download_path} />) :

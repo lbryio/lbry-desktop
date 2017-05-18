@@ -39,6 +39,24 @@ reducers[types.RESOLVE_URI_CANCELED] = function(state, action) {
   })
 }
 
+
+reducers[types.CLAIM_LIST_MINE_STARTED] = function(state, action) {
+  return Object.assign({}, state, {
+    isClaimListMinePending: true
+  })
+}
+
+reducers[types.CLAIM_LIST_MINE_COMPLETED] = function(state, action) {
+  const myClaims = Object.assign({}, state.myClaims)
+  action.data.claims.forEach((claim) => {
+    myClaims[claim.claim_id] = claim
+  })
+  return Object.assign({}, state, {
+    isClaimListMinePending: false,
+    myClaims: myClaims
+  })
+}
+
 reducers[types.FETCH_CHANNEL_CLAIMS_COMPLETED] = function(state, action) {
   const {
     uri,
@@ -53,23 +71,6 @@ reducers[types.FETCH_CHANNEL_CLAIMS_COMPLETED] = function(state, action) {
 
   return Object.assign({}, state, {
     claimsByChannel: newClaims
-  })
-}
-
-reducers[types.FETCH_MY_CLAIMS_COMPLETED] = function(state, action) {
-  const {
-    claims,
-  } = action.data
-  const newMine = Object.assign({}, state.mine)
-  const newById = Object.assign({}, newMine.byId)
-
-  claims.forEach(claim => {
-    newById[claim.claim_id] = claim
-  })
-  newMine.byId = newById
-
-  return Object.assign({}, state, {
-    mine: newMine,
   })
 }
 

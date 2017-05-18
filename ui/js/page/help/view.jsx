@@ -24,9 +24,6 @@ var HelpPage = React.createClass({
       });
     });
   },
-  componentDidMount: function() {
-    document.title = "Help";
-  },
   render: function() {
     let ver, osName, platform, newVerLink;
     if (this.state.versionInfo) {

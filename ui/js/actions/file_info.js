@@ -1,12 +1,16 @@
 import * as types from 'constants/action_types'
 import lbry from 'lbry'
 import {
+  doClaimListMine
+} from 'actions/content'
+import {
   selectClaimsByUri,
+  selectClaimListMineIsPending,
 } from 'selectors/claims'
 import {
-  selectIsFileListPending,
+  selectFileListIsPending,
   selectAllFileInfos,
-  selectLoadingByUri,
+  selectUrisLoading,
 } from 'selectors/file_info'
 import {
   doCloseModal,
@@ -21,7 +25,7 @@ export function doFetchFileInfo(uri) {
     const state = getState()
     const claim = selectClaimsByUri(state)[uri]
     const outpoint = claim ? `${claim.txid}:${claim.nout}` : null
-    const alreadyFetching = !!selectLoadingByUri(state)[uri]
+    const alreadyFetching = !!selectUrisLoading(state)[uri]
 
     if (!alreadyFetching) {
       dispatch({
@@ -31,12 +35,13 @@ export function doFetchFileInfo(uri) {
         }
       })
 
-      lbry.file_list({outpoint: outpoint, full_status: true}).then(([fileInfo]) => {
+      lbry.file_list({outpoint: outpoint, full_status: true}).then(fileInfos => {
+
         dispatch({
           type: types.FETCH_FILE_INFO_COMPLETED,
           data: {
             outpoint,
-            fileInfo,
+            fileInfo: fileInfos && fileInfos.length ? fileInfos[0] : null,
           }
         })
       })
@@ -44,10 +49,10 @@ export function doFetchFileInfo(uri) {
   }
 }
 
-export function doFileList(uri) {
+export function doFileList() {
   return function(dispatch, getState) {
     const state = getState()
-    const isPending = selectIsFileListPending(state)
+    const isPending = selectFileListIsPending(state)
 
     if (!isPending) {
       dispatch({
@@ -78,81 +83,39 @@ export function doOpenFileInFolder(fileInfo) {
   }
 }
 
-export function doDeleteFile(uri, fileInfo, deleteFromComputer) {
+export function doDeleteFile(outpoint, deleteFromComputer) {
   return function(dispatch, getState) {
+
     dispatch({
-      type: types.DELETE_FILE_STARTED,
+      type: types.FILE_DELETE,
       data: {
-        uri,
-        fileInfo,
-        deleteFromComputer,
+        outpoint
       }
     })
 
-    const successCallback = () => {
-      dispatch({
-        type: types.DELETE_FILE_COMPLETED,
-        data: {
-          uri,
-        }
-      })
-      dispatch(doCloseModal())
+    lbry.file_delete({
+      outpoint: outpoint,
+      delete_target_file: deleteFromComputer,
+    })
+
+    dispatch(doCloseModal())
+  }
+}
+
+
+export function doFetchFileInfosAndPublishedClaims() {
+  return function(dispatch, getState) {
+    const state = getState(),
+          isClaimListMinePending = selectClaimListMineIsPending(state),
+          isFileInfoListPending = selectFileListIsPending(state)
+
+    if (isClaimListMinePending === undefined) {
+      dispatch(doClaimListMine())
     }
 
-    lbry.removeFile(fileInfo.outpoint, deleteFromComputer, successCallback)
-  }
-}
-
-
-export function doFetchDownloadedContent() {
-  return function(dispatch, getState) {
-    const state = getState(),
-          fileInfos = selectAllFileInfos(state)
-
-    dispatch({
-      type: types.FETCH_DOWNLOADED_CONTENT_STARTED,
-    })
-
-    lbry.claim_list_mine().then((myClaimInfos) => {
-
-      const myClaimOutpoints = myClaimInfos.map(({txid, nout}) => txid + ':' + nout);
-
-      dispatch({
-        type: types.FETCH_DOWNLOADED_CONTENT_COMPLETED,
-        data: {
-          fileInfos: fileInfos.filter(({outpoint}) => !myClaimOutpoints.includes(outpoint)),
-        }
-      })
-    });
-  }
-}
-
-export function doFetchPublishedContent() {
-  return function(dispatch, getState) {
-    const state = getState(),
-          fileInfos = selectAllFileInfos(state)
-
-    dispatch({
-      type: types.FETCH_PUBLISHED_CONTENT_STARTED,
-    })
-
-    lbry.claim_list_mine().then((claimInfos) => {
-      dispatch({
-        type: types.FETCH_MY_CLAIMS_COMPLETED,
-        data: {
-          claims: claimInfos,
-        }
-      })
-
-      const myClaimOutpoints = claimInfos.map(({txid, nout}) => txid + ':' + nout)
-
-      dispatch({
-        type: types.FETCH_PUBLISHED_CONTENT_COMPLETED,
-        data: {
-          fileInfos: fileInfos.filter(({outpoint}) => myClaimOutpoints.includes(outpoint)),
-        }
-      })
-    })
+    if (isFileInfoListPending === undefined) {
+      dispatch(doFileList())
+    }
   }
 }
 

@@ -72,7 +72,19 @@ class FileActions extends React.Component {
 
     let content
 
-    if (!fileInfo && isAvailable === undefined) {
+    if (downloading) {
+
+      const
+        progress = (fileInfo && fileInfo.written_bytes) ? fileInfo.written_bytes / fileInfo.total_bytes * 100 : 0,
+        label = fileInfo ? progress.toFixed(0) + '% complete' : 'Connecting...',
+        labelWithIcon = <span className="button__content"><Icon icon="icon-download" /><span>{label}</span></span>;
+
+      content = <div className="faux-button-block file-actions__download-status-bar button-set-item">
+        <div className="faux-button-block file-actions__download-status-bar-overlay" style={{ width: progress + '%' }}>{labelWithIcon}</div>
+        {labelWithIcon}
+      </div>
+
+    } else if (!fileInfo && isAvailable === undefined) {
 
       content = <BusyMessage message="Checking availability" />
 
@@ -89,18 +101,6 @@ class FileActions extends React.Component {
     } else if (fileInfo === null && !downloading) {
 
       content = <Link button="text" label="Download" icon="icon-download" onClick={() => { startDownload(uri) } } />;
-
-    } else if (downloading) {
-
-      const
-        progress = (fileInfo && fileInfo.written_bytes) ? fileInfo.written_bytes / fileInfo.total_bytes * 100 : 0,
-        label = fileInfo ? progress.toFixed(0) + '% complete' : 'Connecting...',
-        labelWithIcon = <span className="button__content"><Icon icon="icon-download" /><span>{label}</span></span>;
-
-      content = <div className="faux-button-block file-actions__download-status-bar button-set-item">
-        <div className="faux-button-block file-actions__download-status-bar-overlay" style={{ width: progress + '%' }}>{labelWithIcon}</div>
-        {labelWithIcon}
-      </div>
 
     } else if (fileInfo && fileInfo.download_path) {
       content  = <Link label="Open" button="text" icon="icon-folder-open" onClick={() => openInShell(fileInfo)} />;
@@ -133,7 +133,7 @@ class FileActions extends React.Component {
                contentLabel="Not enough credits"
                type="confirm"
                confirmButtonLabel="Remove"
-               onConfirmed={() => deleteFile(uri, fileInfo, deleteChecked)}
+               onConfirmed={() => deleteFile(fileInfo.outpoint, deleteChecked)}
                onAborted={closeModal}>
           <p>Are you sure you'd like to remove <cite>{title}</cite> from LBRY?</p>
 

@@ -1,4 +1,5 @@
 import React from 'react';
+import lbryuri from 'lbryuri'
 
 class ChannelPage extends React.Component{
   componentDidMount() {
@@ -10,19 +11,19 @@ class ChannelPage extends React.Component{
   }
 
   fetchClaims(props) {
-    if (props.claims === undefined) {
+    if (props.claimsInChannel === undefined) {
       props.fetchClaims(props.uri)
     }
   }
 
   render() {
     const {
-      claims,
+      claimsInChannel,
       claim,
       uri
     } = this.props
 
-    console.log(claims);
+    console.log(claimsInChannel);
     return <main className="main--single-column">
       <section className="card">
         <div className="card__inner">
@@ -36,7 +37,9 @@ class ChannelPage extends React.Component{
       </section>
       <section className="card">
         <div className="card__content">
-          {claims}
+          {claimsInChannel ?
+            claimsInChannel.map((claim) => <FileTile uri={lbryuri.build({name: claim.name, claimId: claim.claim_id})} /> )
+            : ''}
         </div>
       </section>
     </main>

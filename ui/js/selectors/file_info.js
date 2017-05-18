@@ -1,69 +1,38 @@
+import lbry from 'lbry'
 import {
   createSelector,
 } from 'reselect'
 import {
   selectClaimsByUri,
+  selectClaimListMineIsPending,
   selectMyClaimsOutpoints,
 } from 'selectors/claims'
 
 export const _selectState = state => state.fileInfo || {}
-
-export const selectIsFileListPending = createSelector(
-  _selectState,
-  (state) => state.isFileListPending
-)
 
 export const selectAllFileInfos = createSelector(
   _selectState,
   (state) => state.fileInfos || {}
 )
 
-export const selectDownloading = createSelector(
+export const selectFileListIsPending = createSelector(
   _selectState,
-  (state) => state.downloading || {}
+  (state) => state.isFileListPending
 )
 
-export const selectDownloadingByUri = createSelector(
-  selectDownloading,
-  (downloading) => downloading.byUri || {}
-)
-
-export const selectFetchingDownloadedContent = createSelector(
-  _selectState,
-  (state) => !!state.fetchingDownloadedContent
-)
-
-export const selectDownloadedContent = createSelector(
-  _selectState,
-  (state) => state.downloadedContent || {}
-)
-
-export const selectDownloadedContentFileInfos = createSelector(
-  selectDownloadedContent,
-  (downloadedContent) => downloadedContent.fileInfos || []
-)
-
-export const selectFetchingPublishedContent = createSelector(
-  _selectState,
-  (state) => !!state.fetchingPublishedContent
-)
-
-export const selectPublishedContent = createSelector(
-  _selectState,
-  (state) => state.publishedContent || {}
+export const selectFileListDownloadedOrPublishedIsPending = createSelector(
+  selectFileListIsPending,
+  selectClaimListMineIsPending,
+  (isFileListPending, isClaimListMinePending) => isFileListPending || isClaimListMinePending
 )
 
 export const selectFileInfoForUri = (state, props) => {
   const claims = selectClaimsByUri(state),
         claim = claims[props.uri],
+        fileInfos = selectAllFileInfos(state),
         outpoint = claim ? `${claim.txid}:${claim.nout}` : undefined
 
-  console.log('select file info')
-  console.log(claims)
-  console.log(claim)
-  console.log(outpoint)
-  console.log(selectAllFileInfos(state))
-  return outpoint ? selectAllFileInfos(state)[outpoint] : undefined
+  return outpoint && fileInfos ? fileInfos[outpoint] : undefined
 }
 
 export const makeSelectFileInfoForUri = () => {
@@ -73,8 +42,13 @@ export const makeSelectFileInfoForUri = () => {
   )
 }
 
+export const selectUrisDownloading = createSelector(
+  _selectState,
+  (state) => state.urisDownloading || {}
+)
+
 const selectDownloadingForUri = (state, props) => {
-  const byUri = selectDownloadingByUri(state)
+  const byUri = selectUrisDownloading(state)
   return byUri[props.uri]
 }
 
@@ -85,18 +59,13 @@ export const makeSelectDownloadingForUri = () => {
   )
 }
 
-export const selectLoading = createSelector(
+export const selectUrisLoading = createSelector(
   _selectState,
-  (state) => state.loading || {}
-)
-
-export const selectLoadingByUri = createSelector(
-  selectLoading,
-  (loading) => loading.byUri || {}
+  (state) => state.urisLoading || {}
 )
 
 const selectLoadingForUri = (state, props) => {
-  const byUri = selectLoadingByUri(state)
+  const byUri = selectUrisLoading(state)
   return byUri[props.uri]
 }
 
@@ -107,13 +76,13 @@ export const makeSelectLoadingForUri = () => {
   )
 }
 
-export const selectDownloadedFileInfo = createSelector(
+export const selectFileInfosDownloaded = createSelector(
   selectAllFileInfos,
-  (fileInfos) => {
+  selectMyClaimsOutpoints,
+  (fileInfos, myClaimOutpoints) => {
     const fileInfoList = []
-    Object.keys(fileInfos).forEach(outpoint => {
-      const fileInfo = fileInfos[outpoint]
-      if (fileInfo.completed || fileInfo.written_bytes) {
+    Object.values(fileInfos).forEach(fileInfo => {
+      if (fileInfo && myClaimOutpoints.indexOf(fileInfo.outpoint) === -1 && (fileInfo.completed || fileInfo.written_bytes)) {
         fileInfoList.push(fileInfo)
       }
     })
@@ -121,20 +90,24 @@ export const selectDownloadedFileInfo = createSelector(
   }
 )
 
-export const selectPublishedFileInfo = createSelector(
+export const selectFileInfosPendingPublish = createSelector(
+  _selectState,
+  (state) => {
+    return lbry.getPendingPublishes()
+  }
+)
+
+export const selectFileInfosPublished = createSelector(
   selectAllFileInfos,
+  selectFileInfosPendingPublish,
   selectMyClaimsOutpoints,
-  (byUri, outpoints) => {
+  (allFileInfos, pendingFileInfos, outpoints) => {
     const fileInfos = []
     outpoints.forEach(outpoint => {
-      Object.keys(byUri).forEach(key => {
-        const fileInfo = byUri[key]
-        if (fileInfo.outpoint == outpoint) {
-          fileInfos.push(fileInfo)
-        }
-      })
+      if (allFileInfos[outpoint]) {
+        fileInfos.push(allFileInfos[outpoint])
+      }
     })
-
-    return fileInfos
+    return [...fileInfos, ...pendingFileInfos]
   }
 )

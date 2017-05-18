@@ -34,12 +34,14 @@ window.addEventListener('contextmenu', (event) => {
   event.preventDefault();
 });
 
-window.addEventListener('popstate', (event) => {
+window.addEventListener('popstate', (event, param) => {
   const queryString = document.location.search
   const pathParts = document.location.pathname.split('/')
   const route = '/' + pathParts[pathParts.length - 1]
 
   if (route.match(/html$/)) return
+
+  console.log('title should be set here, but it is not in popstate? TODO')
 
   app.store.dispatch(doChangePath(`${route}${queryString}`))
 })

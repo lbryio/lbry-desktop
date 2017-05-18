@@ -43,7 +43,6 @@ export function doChangePath(path) {
         path,
       }
     })
-
   }
 }
 
@@ -58,6 +57,7 @@ export function doHistoryPush(params, title, relativeUrl) {
     let pathParts = window.location.pathname.split('/')
     pathParts[pathParts.length - 1] = relativeUrl.replace(/^\//, '')
     const url = pathParts.join('/')
+    title += " - LBRY"
     history.pushState(params, title, url)
     window.document.title = title
   }
