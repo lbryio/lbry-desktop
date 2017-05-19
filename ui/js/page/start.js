@@ -1,11 +1,12 @@
 import React from 'react';
 import lbry from '../lbry.js';
 
-var StartPage = React.createClass({
-  componentWillMount: function() {
+class StartPage extends React.Component {
+  componentWillMount() {
     lbry.stop();
-  },
-  render: function() {
+  }
+
+  render() {
     return (
       <main className="main--single-column">
         <h3>LBRY is Closed</h3>
@@ -13,6 +14,6 @@ var StartPage = React.createClass({
       </main>
     );
   }
-});
+}
 
 export default StartPage;

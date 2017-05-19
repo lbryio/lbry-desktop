@@ -10,33 +10,29 @@ function formFieldId() {
   return "form-field-" + (++formFieldCounter);
 }
 
-export let FormField = React.createClass({
-  _fieldRequiredText: 'This field is required',
-  _type: null,
-  _element: null,
-
-  propTypes: {
+export class FormField extends React.Component {
+  static propTypes = {
     type: React.PropTypes.string.isRequired,
     prefix: React.PropTypes.string,
     postfix: React.PropTypes.string,
     hasError: React.PropTypes.bool
-  },
-  handleFileChosen: function(path) {
-    this.refs.field.value = path;
-    if (this.props.onChange) { // Updating inputs programmatically doesn't generate an event, so we have to make our own
-      const event = new Event('change', {bubbles: true})
-      this.refs.field.dispatchEvent(event); // This alone won't generate a React event, but we use it to attach the field as a target
-      this.props.onChange(event);
-    }
-  },
-  getInitialState: function() {
-    return {
+  }
+
+  constructor(props) {
+    super(props);
+
+    this._fieldRequiredText = 'This field is required';
+    this._type = null;
+    this._element = null;
+
+    this.state = {
       isError: null,
       errorMessage: null,
-    }
-  },
-  componentWillMount: function() {
-    if (['text', 'number', 'radio', 'checkbox'].includes(this.props.type)) {
+    };
+  }
+
+  componentWillMount() {
+    if (['text', 'number', 'radio', 'checkbox', 'file'].includes(this.props.type)) {
       this._element = 'input';
       this._type = this.props.type;
     } else if (this.props.type == 'text-number') {
@@ -49,8 +45,9 @@ export let FormField = React.createClass({
       // Non <input> field, e.g. <select>, <textarea>
       this._element = this.props.type;
     }
-  },
-  componentDidMount: function() {
+  }
+
+  componentDidMount() {
     /**
      * We have to add the webkitdirectory attribute here because React doesn't allow it in JSX
      * https://github.com/facebook/react/issues/3468
@@ -58,27 +55,41 @@ export let FormField = React.createClass({
     if (this.props.type == 'directory') {
       this.refs.field.webkitdirectory = true;
     }
-  },
-  showError: function(text) {
+  }
+
+  handleFileChosen(path) {
+    this.refs.field.value = path;
+    if (this.props.onChange) { // Updating inputs programmatically doesn't generate an event, so we have to make our own
+      const event = new Event('change', {bubbles: true})
+      this.refs.field.dispatchEvent(event); // This alone won't generate a React event, but we use it to attach the field as a target
+      this.props.onChange(event);
+    }
+  }
+
+  showError(text) {
     this.setState({
       isError: true,
       errorMessage: text,
     });
-  },
-  focus: function() {
+  }
+
+  focus() {
     this.refs.field.focus();
-  },
-  getValue: function() {
+  }
+
+  getValue() {
     if (this.props.type == 'checkbox') {
       return this.refs.field.checked;
     } else {
       return this.refs.field.value;
     }
-  },
-  getSelectedElement: function() {
+  }
+
+  getSelectedElement() {
     return this.refs.field.options[this.refs.field.selectedIndex];
-  },
-  render: function() {
+  }
+
+  render() {
     // Pass all unhandled props to the field element
     const otherProps = Object.assign({}, this.props),
           isError = this.state.isError !== null ? this.state.isError : this.props.hasError,
@@ -114,45 +125,56 @@ export let FormField = React.createClass({
       { isError && this.state.errorMessage ?  <div className="form-field__error">{this.state.errorMessage}</div> : '' }
     </div>
   }
-})
+}
 
-export let FormRow = React.createClass({
-  _fieldRequiredText: 'This field is required',
-  propTypes: {
-    label: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.element])
+export class FormRow extends React.Component {
+  static propTypes = {
+    label: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.element]),
     // helper: React.PropTypes.html,
-  },
-  getInitialState: function() {
-    return {
+  }
+
+  constructor(props) {
+    super(props);
+
+    this._fieldRequiredText = 'This field is required';
+
+    this.state = {
       isError: false,
       errorMessage: null,
-    }
-  },
-  showError: function(text) {
+    };
+  }
+
+  showError(text) {
     this.setState({
       isError: true,
       errorMessage: text,
     });
-  },
-  showRequiredError: function() {
+  }
+
+  showRequiredError() {
     this.showError(this._fieldRequiredText);
-  },
-  clearError: function(text) {
+  }
+
+  clearError(text) {
     this.setState({
       isError: false,
       errorMessage: ''
     });
-  },
-  getValue: function() {
+  }
+
+  getValue() {
     return this.refs.field.getValue();
-  },
-  getSelectedElement: function() {
+  }
+
+  getSelectedElement() {
     return this.refs.field.getSelectedElement();
-  },
-  focus: function() {
+  }
+
+  focus() {
     this.refs.field.focus();
-  },
-  render: function() {
+  }
+
+  render() {
     const fieldProps = Object.assign({}, this.props),
           elementId = formFieldId(),
           renderLabelInFormField = formFieldNestedLabelTypes.includes(this.props.type);
@@ -174,4 +196,4 @@ export let FormRow = React.createClass({
       { this.state.isError ?  <div className="form-field__error">{this.state.errorMessage}</div> : '' }
     </div>
   }
-})
+}

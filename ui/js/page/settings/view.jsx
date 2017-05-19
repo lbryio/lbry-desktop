@@ -3,62 +3,76 @@ import {FormField, FormRow} from 'component/form.js';
 import SubHeader from 'component/subHeader'
 import lbry from 'lbry.js';
 
-var SettingsPage = React.createClass({
-  setDaemonSetting: function(name, value) {
+class SettingsPage extends React.Component {
+  constructor(props) {
+    super(props);
+
+    const daemonSettings = this.props.daemonSettings
+
+    this.state = {
+      isMaxUpload: daemonSettings && daemonSettings.max_upload != 0,
+      isMaxDownload: daemonSettings && daemonSettings.max_download != 0,
+      showNsfw: lbry.getClientSetting('showNsfw'),
+      showUnavailable: lbry.getClientSetting('showUnavailable'),
+    }
+  }
+
+  setDaemonSetting(name, value) {
     this.props.setDaemonSetting(name, value)
-  },
-  setClientSetting: function(name, value) {
+  }
+
+  setClientSetting(name, value) {
     lbry.setClientSetting(name, value)
     this._onSettingSaveSuccess()
-    },
-  onRunOnStartChange: function (event) {
+  }
+
+  onRunOnStartChange(event) {
     this.setDaemonSetting('run_on_startup', event.target.checked);
-  },
-  onShareDataChange: function (event) {
+  }
+
+  onShareDataChange(event) {
     this.setDaemonSetting('share_usage_data', event.target.checked);
-  },
-  onDownloadDirChange: function(event) {
+  }
+
+  onDownloadDirChange(event) {
     this.setDaemonSetting('download_directory', event.target.value);
-  },
-  onMaxUploadPrefChange: function(isLimited) {
+  }
+
+  onMaxUploadPrefChange(isLimited) {
     if (!isLimited) {
       this.setDaemonSetting('max_upload', 0.0);
     }
     this.setState({
       isMaxUpload: isLimited
     });
-  },
-  onMaxUploadFieldChange: function(event) {
+  }
+
+  onMaxUploadFieldChange(event) {
     this.setDaemonSetting('max_upload', Number(event.target.value));
-  },
-  onMaxDownloadPrefChange: function(isLimited) {
+  }
+
+  onMaxDownloadPrefChange(isLimited) {
     if (!isLimited) {
       this.setDaemonSetting('max_download', 0.0);
     }
     this.setState({
       isMaxDownload: isLimited
     });
-  },
-  onMaxDownloadFieldChange: function(event) {
+  }
+
+  onMaxDownloadFieldChange(event) {
     this.setDaemonSetting('max_download', Number(event.target.value));
-  },
-  getInitialState: function() {
-    const daemonSettings = this.props.daemonSettings
+  }
 
-    return {
-      isMaxUpload: daemonSettings && daemonSettings.max_upload != 0,
-      isMaxDownload: daemonSettings && daemonSettings.max_download != 0,
-      showNsfw: lbry.getClientSetting('showNsfw'),
-      showUnavailable: lbry.getClientSetting('showUnavailable'),
-    }
-  },
-  onShowNsfwChange: function(event) {
+  onShowNsfwChange(event) {
     lbry.setClientSetting('showNsfw', event.target.checked);
-  },
-  onShowUnavailableChange: function(event) {
+  }
 
-  },
-  render: function() {
+  onShowUnavailableChange(event) {
+
+  }
+
+  render() {
     const {
       daemonSettings
     } = this.props
@@ -185,6 +199,6 @@ var SettingsPage = React.createClass({
        </main>
     );
   }
-});
+}
 
 export default SettingsPage;

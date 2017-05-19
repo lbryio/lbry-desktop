@@ -6,10 +6,41 @@ import Link from 'component/link';
 import rewards from 'rewards';
 import Modal from 'component/modal';
 
-var PublishPage = React.createClass({
-  _requiredFields: ['meta_title', 'name', 'bid', 'tos_agree'],
+class PublishPage extends React.Component {
+  constructor(props) {
+    super(props);
 
-  _updateChannelList: function(channel) {
+    this._requiredFields = ['meta_title', 'name', 'bid', 'tos_agree'];
+
+    this.state = {
+      channels: null,
+      rawName: '',
+      name: '',
+      bid: 10,
+      hasFile: false,
+      feeAmount: '',
+      feeCurrency: 'USD',
+      channel: 'anonymous',
+      newChannelName: '@',
+      newChannelBid: 10,
+      nameResolved: null,
+      myClaimExists: null,
+      topClaimValue: 0.0,
+      myClaimValue: 0.0,
+      myClaimMetadata: null,
+      copyrightNotice: '',
+      otherLicenseDescription: '',
+      otherLicenseUrl: '',
+      uploadProgress: 0.0,
+      uploaded: false,
+      errorMessage: null,
+      submitting: false,
+      creatingChannel: false,
+      modal: null,
+    };
+  }
+
+  _updateChannelList(channel) {
     // Calls API to update displayed list of channels. If a channel name is provided, will select
     // that channel at the same time (used immediately after creating a channel)
     lbry.channel_list_mine().then((channels) => {
@@ -19,8 +50,9 @@ var PublishPage = React.createClass({
         ... channel ? {channel} : {}
       });
     });
-  },
-  handleSubmit: function(event) {
+  }
+
+  handleSubmit(event) {
     if (typeof event !== 'undefined') {
       event.preventDefault();
     }
@@ -113,51 +145,27 @@ var PublishPage = React.createClass({
     } else {
       doPublish();
     }
-  },
-  getInitialState: function() {
-    return {
-      channels: null,
-      rawName: '',
-      name: '',
-      bid: 10,
-      hasFile: false,
-      feeAmount: '',
-      feeCurrency: 'USD',
-      channel: 'anonymous',
-      newChannelName: '@',
-      newChannelBid: 10,
-      nameResolved: null,
-      myClaimExists: null,
-      topClaimValue: 0.0,
-      myClaimValue: 0.0,
-      myClaimMetadata: null,
-      copyrightNotice: '',
-      otherLicenseDescription: '',
-      otherLicenseUrl: '',
-      uploadProgress: 0.0,
-      uploaded: false,
-      errorMessage: null,
-      submitting: false,
-      creatingChannel: false,
-      modal: null,
-    };
-  },
-  handlePublishStarted: function() {
+  }
+
+  handlePublishStarted() {
     this.setState({
       modal: 'publishStarted',
     });
-  },
-  handlePublishStartedConfirmed: function() {
+  }
+
+  handlePublishStartedConfirmed() {
     this.props.navigate('/published')
-  },
-  handlePublishError: function(error) {
+  }
+
+  handlePublishError(error) {
     this.setState({
       submitting: false,
       modal: 'error',
       errorMessage: error.message,
     });
-  },
-  handleNameChange: function(event) {
+  }
+
+  handleNameChange(event) {
     var rawName = event.target.value;
 
     if (!rawName) {
@@ -224,28 +232,33 @@ var PublishPage = React.createClass({
         myClaimExists: false,
       });
     });
-  },
-  handleBidChange: function(event) {
+  }
+
+  handleBidChange(event) {
     this.setState({
       bid: event.target.value,
     });
-  },
-  handleFeeAmountChange: function(event) {
+  }
+
+  handleFeeAmountChange(event) {
     this.setState({
       feeAmount: event.target.value,
     });
-  },
-  handleFeeCurrencyChange: function(event) {
+  }
+
+  handleFeeCurrencyChange(event) {
     this.setState({
       feeCurrency: event.target.value,
     });
-  },
-  handleFeePrefChange: function(feeEnabled) {
+  }
+
+  handleFeePrefChange(feeEnabled) {
     this.setState({
       isFee: feeEnabled
     });
-  },
-  handleLicenseChange: function(event) {
+  }
+
+  handleLicenseChange(event) {
     var licenseType = event.target.options[event.target.selectedIndex].getAttribute('data-license-type');
     var newState = {
       copyrightChosen: licenseType == 'copyright',
@@ -257,30 +270,35 @@ var PublishPage = React.createClass({
     }
 
     this.setState(newState);
-  },
-  handleCopyrightNoticeChange: function(event) {
+  }
+
+  handleCopyrightNoticeChange(event) {
     this.setState({
       copyrightNotice: event.target.value,
     });
-  },
-  handleOtherLicenseDescriptionChange: function(event) {
+  }
+
+  handleOtherLicenseDescriptionChange(event) {
     this.setState({
       otherLicenseDescription: event.target.value,
     });
-  },
-  handleOtherLicenseUrlChange: function(event) {
+  }
+
+  handleOtherLicenseUrlChange(event) {
     this.setState({
       otherLicenseUrl: event.target.value,
     });
-  },
-  handleChannelChange: function (event) {
+  }
+
+  handleChannelChange(event) {
     const channel = event.target.value;
 
     this.setState({
       channel: channel,
     });
-  },
-  handleNewChannelNameChange: function (event) {
+  }
+
+  handleNewChannelNameChange(event) {
     const newChannelName = (event.target.value.startsWith('@') ? event.target.value : '@' + event.target.value);
 
     if (newChannelName.length > 1 && !lbryuri.isValidName(newChannelName.substr(1), false)) {
@@ -293,18 +311,21 @@ var PublishPage = React.createClass({
     this.setState({
       newChannelName: newChannelName,
     });
-  },
-  handleNewChannelBidChange: function (event) {
+  }
+
+  handleNewChannelBidChange(event) {
     this.setState({
       newChannelBid: event.target.value,
     });
-  },
-  handleTOSChange: function(event) {
+  }
+
+  handleTOSChange(event) {
     this.setState({
       TOSAgreed: event.target.checked,
     });
-  },
-  handleCreateChannelClick: function (event) {
+  }
+
+  handleCreateChannelClick(event) {
     if (this.state.newChannelName.length < 5) {
       this.refs.newChannelName.showError('LBRY channel names must be at least 4 characters in length.');
       return;
@@ -330,8 +351,9 @@ var PublishPage = React.createClass({
         creatingChannel: false,
       });
     });
-  },
-  getLicenseUrl: function() {
+  }
+
+  getLicenseUrl() {
     if (!this.refs.meta_license) {
       return '';
     } else if (this.state.otherLicenseChosen) {
@@ -339,20 +361,21 @@ var PublishPage = React.createClass({
     } else {
       return this.refs.meta_license.getSelectedElement().getAttribute('data-url') || '' ;
     }
-  },
-  componentWillMount: function() {
+  }
+
+  componentWillMount() {
     this._updateChannelList();
-  },
-  componentDidUpdate: function() {
-  },
-  onFileChange: function() {
+  }
+
+  onFileChange() {
     if (this.refs.file.getValue()) {
       this.setState({ hasFile: true })
     } else {
       this.setState({ hasFile: false })
     }
-  },
-  getNameBidHelpText: function() {
+  }
+
+  getNameBidHelpText() {
     if (!this.state.name) {
       return "Select a URL for this publish.";
     } else if (this.state.nameResolved === false) {
@@ -365,13 +388,15 @@ var PublishPage = React.createClass({
     } else {
       return '';
     }
-  },
-  closeModal: function() {
+  }
+
+  closeModal() {
     this.setState({
       modal: null,
     });
-  },
-  render: function() {
+  }
+
+  render() {
     if (this.state.channels === null) {
       return null;
     }
@@ -380,7 +405,7 @@ var PublishPage = React.createClass({
 
     return (
       <main className="main--single-column">
-        <form onSubmit={this.handleSubmit}>
+        <form onSubmit={(event) => { this.handleSubmit(event) }}>
           <section className="card">
             <div className="card__title-primary">
               <h4>Content</h4>
@@ -389,7 +414,7 @@ var PublishPage = React.createClass({
               </div>
             </div>
             <div className="card__content">
-              <FormRow name="file" label="File" ref="file" type="file" onChange={this.onFileChange}
+              <FormRow name="file" label="File" ref="file" type="file" onChange={(event) => { this.onFileChange(event) }}
                        helper={this.state.myClaimExists ? "If you don't choose a file, the file from your existing claim will be used." : null}/>
             </div>
             { !this.state.hasFile ? '' :
@@ -439,7 +464,7 @@ var PublishPage = React.createClass({
               <FormField type="radio" name="isFree" label={!this.state.isFee ? 'Choose price...' : 'Price ' }
                          onChange={ () => { this.handleFeePrefChange(true) } } defaultChecked={this.state.isFee} />
              <span className={!this.state.isFee ? 'hidden' : ''}>
-               <FormField type="number" className="form-field__input--inline" step="0.01" placeholder="1.00" onChange={this.handleFeeAmountChange} /> <FormField type="select" onChange={this.handleFeeCurrencyChange}>
+               <FormField type="number" className="form-field__input--inline" step="0.01" placeholder="1.00" onChange={(event) => this.handleFeeAmountChange(event)} /> <FormField type="select" onChange={(event) => { this.handleFeeCurrencyChange(event) }}>
                <option value="USD">US Dollars</option>
                <option value="LBC">LBRY credits</option>
              </FormField>
@@ -448,7 +473,7 @@ var PublishPage = React.createClass({
                   <div className="form-field__helper">
                     If you choose to price this content in dollars, the number of credits charged will be adjusted based on the value of LBRY credits at the time of purchase.
                   </div> : '' }
-              <FormRow label="License" type="select" ref="meta_license" name="license" onChange={this.handleLicenseChange}>
+              <FormRow label="License" type="select" ref="meta_license" name="license" onChange={(event) => { this.handleLicenseChange(event) }}>
                 <option></option>
                 <option>Public Domain</option>
                 <option data-url="https://creativecommons.org/licenses/by/4.0/legalcode">Creative Commons Attribution 4.0 International</option>
@@ -463,13 +488,13 @@ var PublishPage = React.createClass({
               <FormField type="hidden" ref="meta_license_url" name="license_url" value={this.getLicenseUrl()} />
               {this.state.copyrightChosen
                 ?  <FormRow label="Copyright notice" type="text" name="copyright-notice"
-                            value={this.state.copyrightNotice} onChange={this.handleCopyrightNoticeChange} />
+                            value={this.state.copyrightNotice} onChange={(event) => { this.handleCopyrightNoticeChange(event) }} />
                 : null}
               {this.state.otherLicenseChosen ?
-               <FormRow label="License description" type="text" name="other-license-description" onChange={this.handleOtherLicenseDescriptionChange} />
+               <FormRow label="License description" type="text" name="other-license-description" onChange={(event) => { this.handleOtherLicenseDescriptionChange() }} />
                 : null}
               {this.state.otherLicenseChosen ?
-               <FormRow label="License URL" type="text" name="other-license-url" onChange={this.handleOtherLicenseUrlChange} />
+               <FormRow label="License URL" type="text" name="other-license-url" onChange={(event) => { this.handleOtherLicenseUrlChange(event) }} />
                 : null}
             </div>
           </section>
@@ -482,7 +507,7 @@ var PublishPage = React.createClass({
               </div>
             </div>
             <div className="card__content">
-              <FormRow type="select" tabIndex="1" onChange={this.handleChannelChange} value={this.state.channel}>
+              <FormRow type="select" tabIndex="1" onChange={(event) => { this.handleChannelChange(event) }} value={this.state.channel}>
                 <option key="anonymous" value="anonymous">Anonymous</option>
                 {this.state.channels.map(({name}) => <option key={name} value={name}>{name}</option>)}
                 <option key="new" value="new">New identity...</option>
@@ -490,17 +515,17 @@ var PublishPage = React.createClass({
             </div>
             {this.state.channel == 'new' ?
                <div className="card__content">
-                 <FormRow label="Name" type="text" onChange={this.handleNewChannelNameChange} ref={newChannelName => { this.refs.newChannelName = newChannelName }}
+                 <FormRow label="Name" type="text" onChange={(event) => { this.handleNewChannelNameChange(event) }} ref={newChannelName => { this.refs.newChannelName = newChannelName }}
                           value={this.state.newChannelName} />
                  <FormRow label="Deposit"
                           postfix="LBC"
                           step="0.01"
                           type="number"
                           helper={lbcInputHelp}
-                          onChange={this.handleNewChannelBidChange}
+                          onChange={(event) => { this.handleNewChannelBidChange(event) }}
                           value={this.state.newChannelBid} />
                  <div className="form-row-submit">
-                    <Link button="primary" label={!this.state.creatingChannel ? 'Create identity' : 'Creating identity...'} onClick={this.handleCreateChannelClick} disabled={this.state.creatingChannel} />
+                    <Link button="primary" label={!this.state.creatingChannel ? 'Create identity' : 'Creating identity...'} onClick={(event) => { this.handleCreateChannelClick(event) }} disabled={this.state.creatingChannel} />
                  </div>
                 </div>
               : null}
@@ -513,7 +538,7 @@ var PublishPage = React.createClass({
               <div className="card__subtitle">Where should this content permanently reside? <Link label="Read more" href="https://lbry.io/faq/naming" />.</div>
             </div>
             <div className="card__content">
-              <FormRow prefix="lbry://" type="text" ref="name" placeholder="myname" value={this.state.rawName} onChange={this.handleNameChange}
+              <FormRow prefix="lbry://" type="text" ref="name" placeholder="myname" value={this.state.rawName} onChange={(event) => { this.handleNameChange(event) }}
                        helper={this.getNameBidHelpText()} />
             </div>
             { this.state.rawName ?
@@ -523,7 +548,7 @@ var PublishPage = React.createClass({
                              step="0.01"
                              label="Deposit"
                              postfix="LBC"
-                             onChange={this.handleBidChange}
+                             onChange={(event) => { this.handleBidChange(event) }}
                              value={this.state.bid}
                              placeholder={this.state.nameResolved ? this.state.topClaimValue + 10 : 100}
                              helper={lbcInputHelp} />
@@ -537,29 +562,29 @@ var PublishPage = React.createClass({
             <div className="card__content">
               <FormRow label={
                 <span>I agree to the <Link href="https://www.lbry.io/termsofservice" label="LBRY terms of service" checked={this.state.TOSAgreed} /></span>
-              } type="checkbox" name="tos_agree" ref={(field) => { this.refs.tos_agree = field }} onChange={this.handleTOSChange} />
+              } type="checkbox" name="tos_agree" ref={(field) => { this.refs.tos_agree = field }} onChange={(event) => { this.handleTOSChange(event)}} />
             </div>
           </section>
 
           <div className="card-series-submit">
-            <Link button="primary" label={!this.state.submitting ? 'Publish' : 'Publishing...'} onClick={this.handleSubmit} disabled={this.state.submitting} />
+            <Link button="primary" label={!this.state.submitting ? 'Publish' : 'Publishing...'} onClick={(event) => { this.handleSubmit(event) }} disabled={this.state.submitting} />
             <Link button="cancel" onClick={lbry.back} label="Cancel" />
             <input type="submit" className="hidden" />
           </div>
         </form>
 
         <Modal isOpen={this.state.modal == 'publishStarted'} contentLabel="File published"
-               onConfirmed={this.handlePublishStartedConfirmed}>
+               onConfirmed={(event) => { this.handlePublishStartedConfirmed(event) }}>
           <p>Your file has been published to LBRY at the address <code>lbry://{this.state.name}</code>!</p>
           <p>The file will take a few minutes to appear for other LBRY users. Until then it will be listed as "pending" under your published files.</p>
         </Modal>
         <Modal isOpen={this.state.modal == 'error'} contentLabel="Error publishing file"
-               onConfirmed={this.closeModal}>
+               onConfirmed={(event) => { this.closeModal(event) }}>
           The following error occurred when attempting to publish your file: {this.state.errorMessage}
         </Modal>
       </main>
     );
   }
-});
+}
 
 export default PublishPage;

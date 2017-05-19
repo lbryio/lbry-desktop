@@ -3,25 +3,28 @@ import lbry from '../lbry.js';
 import {BusyMessage, Icon} from './common.js';
 import Link from 'component/link'
 
-var LoadScreen = React.createClass({
-  propTypes: {
+class LoadScreen extends React.Component {
+  static propTypes = {
     message: React.PropTypes.string.isRequired,
     details: React.PropTypes.string,
     isWarning: React.PropTypes.bool,
-  },
-  getDefaultProps: function() {
-    return {
-      isWarning: false,
-    }
-  },
-  getInitialState: function() {
-    return {
+  }
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
       message: null,
       details: null,
       isLagging: false,
-    }
-  },
-  render: function() {
+    };
+  }
+
+  static defaultProps = {
+    isWarning: false,
+  }
+
+  render() {
     const imgSrc = lbry.imagePath('lbry-white-485x160.png');
     return (
       <div className="load-screen">
@@ -35,7 +38,7 @@ var LoadScreen = React.createClass({
       </div>
     );
   }
-});
+}
 
 
 export default LoadScreen;
