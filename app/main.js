@@ -37,6 +37,22 @@ let readyToQuit = false;
 // send it to, it's cached in this variable.
 let openUri = null;
 
+function denormalizeUri(uri) {
+  // Windows normalizes URIs when they're passed in from other apps. This tries
+  // to restore the original URI that was typed.
+  //   - If the URI has no path, Windows adds a trailing slash. LBRY URIs
+  //     can't have a slash with no path, so we just strip it off.
+  //   - In a URI with a claim ID, like lbry://channel#claimid, Windows
+  //     interprets the hash mark as an anchor and converts it to
+  //     lbry://channel/#claimid. We remove the slash here as well.
+
+  if (process.platform == 'win32') {
+    return uri.replace(/\/$/, '').replace('/#', '#');
+  } else {
+    return uri;
+  }
+}
+
 function checkForNewVersion(callback) {
   function formatRc(ver) {
     // Adds dash if needed to make RC suffix semver friendly
@@ -186,6 +202,29 @@ function quitNow() {
   app.quit();
 }
 
+if (process.platform != 'linux') {
+  // On Linux, this is always returning true due to an Electron bug,
+  // so for now we just don't support single-instance apps on Linux.
+  const isSecondaryInstance = app.makeSingleInstance((argv) => {
+    if (win) {
+      if (win.isMinimized()) {
+        win.restore();
+      }
+      win.focus();
+
+      if (argv.length >= 2) {
+        win.webContents.send('open-uri-requested', denormalizeUri(argv[1]));
+      }
+    } else if (argv.length >= 2) {
+      openUri = denormalizeUri(argv[1]);
+    }
+  });
+
+  if (isSecondaryInstance) { // We're not in the original process, so quit
+    quitNow();
+    return;
+  }
+}
 
 app.on('ready', function(){
   launchDaemonIfNotRunning();
@@ -324,6 +363,8 @@ function upgrade(event, installerPath) {
 
 ipcMain.on('upgrade', upgrade);
 
+app.setAsDefaultProtocolClient('lbry');
+
 if (process.platform == 'darwin') {
   app.on('open-url', (event, uri) => {
     if (!win) {
@@ -333,7 +374,10 @@ if (process.platform == 'darwin') {
       win.webContents.send('open-uri-requested', uri);
     }
   });
-} else if (process.argv.length >= 3) {
-  // No open-url event on Win, but we can still handle URIs provided at launch time
-  win.webContents.send('open-uri-requested', process.argv[2]);
+} else if (process.argv.length >= 2) {
+  if (!win) {
+    openUri = denormalizeUri(process.argv[1]);
+  } else {
+    win.webContents.send('open-uri-requested', denormalizeUri(process.argv[1]));
+  }
 }

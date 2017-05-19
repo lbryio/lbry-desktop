@@ -2,7 +2,6 @@ import { createSelector } from 'reselect'
 import {
   selectPageTitle,
   selectCurrentPage,
-  selectCurrentUri
 } from 'selectors/app'
 
 export const _selectState = state => state.search || {}
@@ -43,8 +42,7 @@ export const selectWunderBarAddress = createSelector(
 
 export const selectWunderBarIcon = createSelector(
   selectCurrentPage,
-  selectCurrentUri,
-  (page, uri) => {
+  (page) => {
     switch (page) {
       case 'search':
         return 'icon-search'

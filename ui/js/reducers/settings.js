@@ -1,24 +1,13 @@
 import * as types from 'constants/action_types'
 
 const reducers = {}
-const defaultState = {
-}
+const defaultState = {}
 
-reducers[types.RESOLVE_URI_COMPLETED] = function(state, action) {
-  const {
-    uri,
-    certificate,
-  } = action.data
-  if (!certificate) return state
-
-  const newByUri = Object.assign({}, state.byUri)
-
-  newByUri[uri] = certificate
+reducers[types.DAEMON_SETTINGS_RECEIVED] = function(state, action) {
   return Object.assign({}, state, {
-    byUri: newByUri,
+    daemonSettings: action.data.settings
   })
 }
-
 
 export default function reducer(state = defaultState, action) {
   const handler = reducers[action.type];

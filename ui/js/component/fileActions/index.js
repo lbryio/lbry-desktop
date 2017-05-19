@@ -3,9 +3,6 @@ import {
   connect,
 } from 'react-redux'
 import {
-  selectObscureNsfw,
-  selectHidePrice,
-  selectHasSignature,
   selectPlatform,
 } from 'selectors/app'
 import {
@@ -14,7 +11,7 @@ import {
   makeSelectLoadingForUri,
 } from 'selectors/file_info'
 import {
-  makeSelectAvailabilityForUri,
+  makeSelectIsAvailableForUri,
 } from 'selectors/availability'
 import {
   selectCurrentModal,
@@ -22,47 +19,50 @@ import {
 import {
   doCloseModal,
   doOpenModal,
+  doHistoryBack,
 } from 'actions/app'
+import {
+  doFetchAvailability
+} from 'actions/availability'
 import {
   doOpenFileInShell,
   doOpenFileInFolder,
   doDeleteFile,
 } from 'actions/file_info'
 import {
-  doWatchVideo,
+  doPurchaseUri,
   doLoadVideo,
 } from 'actions/content'
 import FileActions from './view'
 
 const makeSelect = () => {
   const selectFileInfoForUri = makeSelectFileInfoForUri()
-  const selectAvailabilityForUri = makeSelectAvailabilityForUri()
+  const selectIsAvailableForUri = makeSelectIsAvailableForUri()
   const selectDownloadingForUri = makeSelectDownloadingForUri()
-  const selectLoadingForUri = makeSelectLoadingForUri()
 
   const select = (state, props) => ({
-    obscureNsfw: selectObscureNsfw(state),
-    hidePrice: selectHidePrice(state),
-    hasSignature: selectHasSignature(state),
     fileInfo: selectFileInfoForUri(state, props),
-    availability: selectAvailabilityForUri(state, props),
+    isAvailable: selectIsAvailableForUri(state, props),
     platform: selectPlatform(state),
     modal: selectCurrentModal(state),
     downloading: selectDownloadingForUri(state, props),
-    loading: selectLoadingForUri(state, props),
   })
 
   return select
 }
 
 const perform = (dispatch) => ({
+  checkAvailability: (uri) => dispatch(doFetchAvailability(uri)),
   closeModal: () => dispatch(doCloseModal()),
   openInFolder: (fileInfo) => dispatch(doOpenFileInFolder(fileInfo)),
   openInShell: (fileInfo) => dispatch(doOpenFileInShell(fileInfo)),
-  deleteFile: (fileInfo, deleteFromComputer) => dispatch(doDeleteFile(fileInfo, deleteFromComputer)),
+  deleteFile: (fileInfo, deleteFromComputer) => {
+    dispatch(doHistoryBack())
+    dispatch(doDeleteFile(fileInfo, deleteFromComputer))
+  },
   openModal: (modal) => dispatch(doOpenModal(modal)),
-  downloadClick: () => dispatch(doWatchVideo()),
-  loadVideo: () => dispatch(doLoadVideo())
+  startDownload: (uri) => dispatch(doPurchaseUri(uri)),
+  loadVideo: (uri) => dispatch(doLoadVideo(uri))
 })
 
 export default connect(makeSelect, perform)(FileActions)

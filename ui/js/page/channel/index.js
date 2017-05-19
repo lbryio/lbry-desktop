@@ -3,15 +3,31 @@ import {
   connect
 } from 'react-redux'
 import {
-  selectCurrentUriTitle,
-} from 'selectors/app'
+  doFetchClaimsByChannel
+} from 'actions/content'
+import {
+  makeSelectClaimForUri,
+  makeSelectClaimsInChannelForUri
+} from 'selectors/claims'
 import ChannelPage from './view'
 
-const select = (state) => ({
-  title: selectCurrentUriTitle(state)
-})
+import FilePage from './view'
+
+const makeSelect = () => {
+  const selectClaim = makeSelectClaimForUri(),
+        selectClaimsInChannel = makeSelectClaimsInChannelForUri()
+
+  const select = (state, props) => ({
+    claim: selectClaim(state, props),
+    claimsInChannel: selectClaimsInChannel(state, props)
+  })
+
+  return select
+}
 
 const perform = (dispatch) => ({
+  // fetchClaims: () => { console.log('fetch claims') }
+  fetchClaims: (uri) => dispatch(doFetchClaimsByChannel(uri))
 })
 
-export default connect(select, perform)(ChannelPage)
+export default connect(makeSelect, perform)(ChannelPage)

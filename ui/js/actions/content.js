@@ -4,17 +4,17 @@ import lbryio from 'lbryio'
 import lbryuri from 'lbryuri'
 import rewards from 'rewards'
 import {
-  selectCurrentUri,
-} from 'selectors/app'
-import {
   selectBalance,
 } from 'selectors/wallet'
 import {
-  selectCurrentUriFileInfo,
-  selectDownloadingByUri,
+  selectFileInfoForUri,
+  selectUrisDownloading,
 } from 'selectors/file_info'
 import {
-  selectCurrentUriCostInfo,
+  selectResolvingUris
+} from 'selectors/content'
+import {
+  selectCostInfoForUri,
 } from 'selectors/cost_info'
 import {
   selectClaimsByUri,
@@ -22,94 +22,44 @@ import {
 import {
   doOpenModal,
 } from 'actions/app'
-import {
-  doFetchCostInfoForUri,
-} from 'actions/cost_info'
 
 export function doResolveUri(uri) {
   return function(dispatch, getState) {
-    dispatch({
-      type: types.RESOLVE_URI_STARTED,
-      data: { uri }
-    })
 
-    lbry.resolve({ uri }).then((resolutionInfo) => {
-      const {
-        claim,
-        certificate,
-      } = resolutionInfo ? resolutionInfo : { claim : null, certificate: null }
+    const state = getState()
+    const alreadyResolving = selectResolvingUris(state).indexOf(uri) !== -1
 
+    if (!alreadyResolving) {
       dispatch({
-        type: types.RESOLVE_URI_COMPLETED,
-        data: {
-          uri,
+        type: types.RESOLVE_URI_STARTED,
+        data: { uri }
+      })
+
+      lbry.resolve({ uri }).then((resolutionInfo) => {
+        const {
           claim,
           certificate,
-        }
-      })
-
-      dispatch(doFetchCostInfoForUri(uri))
-    })
-  }
-}
-
-export function doFetchDownloadedContent() {
-  return function(dispatch, getState) {
-    const state = getState()
-
-    dispatch({
-      type: types.FETCH_DOWNLOADED_CONTENT_STARTED,
-    })
-
-    lbry.claim_list_mine().then((myClaimInfos) => {
-      lbry.file_list().then((fileInfos) => {
-        const myClaimOutpoints = myClaimInfos.map(({txid, nout}) => txid + ':' + nout);
-
-        fileInfos.forEach(fileInfo => {
-          const uri = lbryuri.build({
-            channelName: fileInfo.channel_name,
-            contentName: fileInfo.name,
-          })
-          const claim = selectClaimsByUri(state)[uri]
-          if (!claim) dispatch(doResolveUri(uri))
-        })
+        } = resolutionInfo ? resolutionInfo : { claim : null, certificate: null }
 
         dispatch({
-          type: types.FETCH_DOWNLOADED_CONTENT_COMPLETED,
+          type: types.RESOLVE_URI_COMPLETED,
           data: {
-            fileInfos: fileInfos.filter(({outpoint}) => !myClaimOutpoints.includes(outpoint)),
-          }
-        })
-      });
-    });
-  }
-}
-
-export function doFetchPublishedContent() {
-  return function(dispatch, getState) {
-    const state = getState()
-
-    dispatch({
-      type: types.FETCH_PUBLISHED_CONTENT_STARTED,
-    })
-
-    lbry.claim_list_mine().then((claimInfos) => {
-      dispatch({
-        type: types.FETCH_MY_CLAIMS_COMPLETED,
-        data: {
-          claims: claimInfos,
-        }
-      })
-      lbry.file_list().then((fileInfos) => {
-        const myClaimOutpoints = claimInfos.map(({txid, nout}) => txid + ':' + nout)
-
-        dispatch({
-          type: types.FETCH_PUBLISHED_CONTENT_COMPLETED,
-          data: {
-            fileInfos: fileInfos.filter(({outpoint}) => myClaimOutpoints.includes(outpoint)),
+            uri,
+            claim,
+            certificate,
           }
         })
       })
+    }
+  }
+}
+
+export function doCancelResolveUri(uri) {
+  return function(dispatch, getState) {
+    lbry.cancelResolve({ uri })
+    dispatch({
+      type: types.RESOLVE_URI_CANCELED,
+      data: { uri }
     })
   }
 }
@@ -131,6 +81,14 @@ export function doFetchFeaturedUris() {
           featuredUris[category] = Uris[category]
         }
       })
+      //
+      // dispatch({
+      //   type: types.FETCH_FEATURED_CONTENT_COMPLETED,
+      //   data: {
+      //     categories: ["FOO"],
+      //     uris: { FOO: ["lbry://gtasoc"]},
+      //   }
+      // })
 
       dispatch({
         type: types.FETCH_FEATURED_CONTENT_COMPLETED,
@@ -175,6 +133,7 @@ export function doUpdateLoadStatus(uri, outpoint) {
           type: types.DOWNLOADING_COMPLETED,
           data: {
             uri,
+            outpoint,
             fileInfo,
           }
         })
@@ -190,6 +149,7 @@ export function doUpdateLoadStatus(uri, outpoint) {
           type: types.DOWNLOADING_PROGRESSED,
           data: {
             uri,
+            outpoint,
             fileInfo,
             progress,
           }
@@ -197,13 +157,6 @@ export function doUpdateLoadStatus(uri, outpoint) {
         setTimeout(() => { dispatch(doUpdateLoadStatus(uri, outpoint)) }, 250)
       }
     })
-  }
-}
-
-export function doPlayVideo(uri) {
-  return {
-    type: types.PLAY_VIDEO_STARTED,
-    data: { uri }
   }
 }
 
@@ -216,6 +169,7 @@ export function doDownloadFile(uri, streamInfo) {
         type: types.DOWNLOADING_STARTED,
         data: {
           uri,
+          outpoint: streamInfo.outpoint,
           fileInfo,
         }
       })
@@ -230,10 +184,9 @@ export function doDownloadFile(uri, streamInfo) {
   }
 }
 
-export function doLoadVideo() {
+export function doLoadVideo(uri) {
   return function(dispatch, getState) {
     const state = getState()
-    const uri = selectCurrentUri(state)
 
     dispatch({
       type: types.LOADING_VIDEO_STARTED,
@@ -260,14 +213,13 @@ export function doLoadVideo() {
   }
 }
 
-export function doWatchVideo() {
+export function doPurchaseUri(uri) {
   return function(dispatch, getState) {
     const state = getState()
-    const uri = selectCurrentUri(state)
     const balance = selectBalance(state)
-    const fileInfo = selectCurrentUriFileInfo(state)
-    const costInfo = selectCurrentUriCostInfo(state)
-    const downloadingByUri = selectDownloadingByUri(state)
+    const fileInfo = selectFileInfoForUri(state, { uri })
+    const costInfo = selectCostInfoForUri(state, { uri })
+    const downloadingByUri = selectUrisDownloading(state)
     const alreadyDownloading = !!downloadingByUri[uri]
     const { cost } = costInfo
 
@@ -288,8 +240,8 @@ export function doWatchVideo() {
     }
 
     // the file is free or we have partially downloaded it
-    if (cost <= 0.01 || fileInfo.download_directory) {
-      dispatch(doLoadVideo())
+    if (cost <= 0.01 || (fileInfo && fileInfo.download_directory)) {
+      dispatch(doLoadVideo(uri))
       return Promise.resolve()
     }
 
@@ -300,5 +252,46 @@ export function doWatchVideo() {
     }
 
     return Promise.resolve()
+  }
+}
+
+export function doFetchClaimsByChannel(uri) {
+  return function(dispatch, getState) {
+    dispatch({
+      type: types.FETCH_CHANNEL_CLAIMS_STARTED,
+      data: { uri }
+    })
+
+    lbry.resolve({ uri }).then((resolutionInfo) => {
+      const {
+        claims_in_channel,
+      } = resolutionInfo ? resolutionInfo : { claims_in_channel: [] }
+
+      dispatch({
+        type: types.FETCH_CHANNEL_CLAIMS_COMPLETED,
+        data: {
+          uri,
+          claims: claims_in_channel
+        }
+      })
+    })
+  }
+}
+
+export function doClaimListMine() {
+  return function(dispatch, getState) {
+    dispatch({
+      type: types.CLAIM_LIST_MINE_STARTED
+    })
+
+
+    lbry.claim_list_mine().then((claims) => {
+      dispatch({
+        type: types.CLAIM_LIST_MINE_COMPLETED,
+        data: {
+          claims
+        }
+      })
+    })
   }
 }

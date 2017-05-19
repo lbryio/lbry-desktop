@@ -1,19 +1,11 @@
 import React from 'react';
-import {FormField, FormRow} from '../component/form.js';
+import {FormField, FormRow} from 'component/form.js';
 import SubHeader from 'component/subHeader'
-import lbry from '../lbry.js';
+import lbry from 'lbry.js';
 
 var SettingsPage = React.createClass({
-  _onSettingSaveSuccess: function() {
-    // This is bad.
-    // document.dispatchEvent(new CustomEvent('globalNotice', {
-    //   detail: {
-    //     message: "Settings saved",
-    //   },
-    // }))
-  },
   setDaemonSetting: function(name, value) {
-    lbry.setDaemonSetting(name, value, this._onSettingSaveSuccess)
+    this.props.setDaemonSetting(name, value)
   },
   setClientSetting: function(name, value) {
     lbry.setClientSetting(name, value)
@@ -51,20 +43,14 @@ var SettingsPage = React.createClass({
     this.setDaemonSetting('max_download', Number(event.target.value));
   },
   getInitialState: function() {
+    const daemonSettings = this.props.daemonSettings
+
     return {
-      settings: null,
+      isMaxUpload: daemonSettings && daemonSettings.max_upload != 0,
+      isMaxDownload: daemonSettings && daemonSettings.max_download != 0,
       showNsfw: lbry.getClientSetting('showNsfw'),
       showUnavailable: lbry.getClientSetting('showUnavailable'),
     }
-  },
-  componentWillMount: function() {
-    lbry.getDaemonSettings((settings) => {
-      this.setState({
-        daemonSettings: settings,
-        isMaxUpload: settings.max_upload != 0,
-        isMaxDownload: settings.max_download != 0
-      });
-    });
   },
   onShowNsfwChange: function(event) {
     lbry.setClientSetting('showNsfw', event.target.checked);
@@ -73,8 +59,12 @@ var SettingsPage = React.createClass({
 
   },
   render: function() {
-    if (!this.state.daemonSettings) {
-      return null;
+    const {
+      daemonSettings
+    } = this.props
+
+    if (!daemonSettings) {
+      return <main className="main--single-column"><span className="empty">Failed to load settings.</span></main>;
     }
 /*
  <section className="card">
@@ -84,7 +74,7 @@ var SettingsPage = React.createClass({
  <div className="card__content">
  <FormRow type="checkbox"
  onChange={this.onRunOnStartChange}
- defaultChecked={this.state.daemonSettings.run_on_startup}
+ defaultChecked={daemonSettings.run_on_startup}
  label="Run LBRY automatically when I start my computer" />
  </div>
  </section>
@@ -99,7 +89,7 @@ var SettingsPage = React.createClass({
           <div className="card__content">
             <FormRow type="directory"
                      name="download_directory"
-                     defaultValue={this.state.daemonSettings.download_directory}
+                     defaultValue={daemonSettings.download_directory}
                      helper="LBRY downloads will be saved here."
                      onChange={this.onDownloadDirChange} />
           </div>
@@ -125,7 +115,7 @@ var SettingsPage = React.createClass({
                   <FormField type="number"
                              min="0"
                              step=".5"
-                             defaultValue={this.state.daemonSettings.max_upload}
+                             defaultValue={daemonSettings.max_upload}
                              placeholder="10"
                              className="form-field__input--inline"
                              onChange={this.onMaxUploadFieldChange}
@@ -153,7 +143,7 @@ var SettingsPage = React.createClass({
                 <FormField type="number"
                            min="0"
                            step=".5"
-                           defaultValue={this.state.daemonSettings.max_download}
+                           defaultValue={daemonSettings.max_download}
                            placeholder="10"
                            className="form-field__input--inline"
                            onChange={this.onMaxDownloadFieldChange}
@@ -188,7 +178,7 @@ var SettingsPage = React.createClass({
           <div className="card__content">
             <FormRow type="checkbox"
                      onChange={this.onShareDataChange}
-                     defaultChecked={this.state.daemonSettings.share_usage_data}
+                     defaultChecked={daemonSettings.share_usage_data}
                      label="Help make LBRY better by contributing diagnostic data about my usage" />
           </div>
         </section>

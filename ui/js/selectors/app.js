@@ -31,27 +31,10 @@ export const selectCurrentParams = createSelector(
   }
 )
 
-export const selectCurrentUri = createSelector(
-  selectCurrentPath,
-  (path) => {
-    if (path.match(/=/)) {
-      return path.split('=')[1]
-    }
-    else {
-      return undefined
-    }
-  }
-)
-
-export const selectCurrentUriTitle = createSelector(
-  _selectState,
-  (state) => "fix me"
-)
-
 export const selectPageTitle = createSelector(
   selectCurrentPage,
-  selectCurrentUri,
-  (page, uri) => {
+  selectCurrentParams,
+  (page, params) => {
     switch (page) {
       case 'search':
         return 'Search'
@@ -67,7 +50,7 @@ export const selectPageTitle = createSelector(
       case 'rewards':
         return page.charAt(0).toUpperCase() + page.slice(1)
       case 'show':
-        return lbryuri.normalize(uri)
+        return lbryuri.normalize(params.uri)
       case 'downloaded':
         return 'Downloads & Purchases'
       case 'published':
@@ -195,11 +178,6 @@ export const selectUpgradeDownloadItem = createSelector(
   (state) => state.downloadItem
 )
 
-export const selectSearchTerm = createSelector(
-  _selectState,
-  (state) => state.searchTerm
-)
-
 export const selectError = createSelector(
   _selectState,
   (state) => state.error
@@ -213,14 +191,4 @@ export const selectDaemonReady = createSelector(
 export const selectObscureNsfw = createSelector(
   _selectState,
   (state) => !!state.obscureNsfw
-)
-
-export const selectHidePrice = createSelector(
-  _selectState,
-  (state) => !!state.hidePrice
-)
-
-export const selectHasSignature = createSelector(
-  _selectState,
-  (state) => !!state.hasSignature
 )

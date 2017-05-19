@@ -9,10 +9,8 @@ reducers[types.FETCH_AVAILABILITY_STARTED] = function(state, action) {
     uri,
   } = action.data
   const newFetching = Object.assign({}, state.fetching)
-  const newByUri = Object.assign({}, newFetching.byUri)
 
-  newByUri[uri] = true
-  newFetching.byUri = newByUri
+  newFetching[uri] = true
 
   return Object.assign({}, state, {
     fetching: newFetching,
@@ -24,12 +22,11 @@ reducers[types.FETCH_AVAILABILITY_COMPLETED] = function(state, action) {
     uri,
     availability,
   } = action.data
+
   const newFetching = Object.assign({}, state.fetching)
-  const newFetchingByUri = Object.assign({}, newFetching.byUri)
   const newAvailabilityByUri = Object.assign({}, state.byUri)
 
-  delete newFetchingByUri[uri]
-  newFetching.byUri = newFetchingByUri
+  delete newFetching[uri]
   newAvailabilityByUri[uri] = availability
 
   return Object.assign({}, state, {

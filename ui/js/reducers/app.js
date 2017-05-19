@@ -9,7 +9,6 @@ const defaultState = {
   upgradeSkipped: sessionStorage.getItem('upgradeSkipped'),
   daemonReady: false,
   obscureNsfw: !lbry.getClientSetting('showNsfw'),
-  hidePrice: false,
   hasSignature: false,
 }
 

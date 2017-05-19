@@ -10,9 +10,16 @@ import {AuthOverlay} from './component/auth.js';
 import { Provider } from 'react-redux';
 import store from 'store.js';
 import {
-  doDaemonReady,
   doChangePath,
+  doDaemonReady,
+  doHistoryPush
 } from 'actions/app'
+import {
+  doFetchDaemonSettings
+} from 'actions/settings'
+import {
+  doFileList
+} from 'actions/file_info'
 import parseQueryParams from 'util/query_params'
 
 const {remote, ipcRenderer} = require('electron');
@@ -27,16 +34,22 @@ window.addEventListener('contextmenu', (event) => {
   event.preventDefault();
 });
 
-window.addEventListener('popstate', (event) => {
-  const pathname = document.location.pathname
+window.addEventListener('popstate', (event, param) => {
   const queryString = document.location.search
-  if (pathname.match(/dist/)) return
+  const pathParts = document.location.pathname.split('/')
+  const route = '/' + pathParts[pathParts.length - 1]
 
-  app.store.dispatch(doChangePath(`${pathname}${queryString}`))
+  if (route.match(/html$/)) return
+
+  console.log('title should be set here, but it is not in popstate? TODO')
+
+  app.store.dispatch(doChangePath(`${route}${queryString}`))
 })
 
 ipcRenderer.on('open-uri-requested', (event, uri) => {
-  console.log('FIX ME do magic dispatch');
+  if (uri) {
+    console.log('FIX ME do magic dispatch: ' + uri);
+  }
 });
 
 const initialState = app.store.getState();
@@ -46,7 +59,9 @@ var init = function() {
   function onDaemonReady() {
     app.store.dispatch(doDaemonReady())
     window.sessionStorage.setItem('loaded', 'y'); //once we've made it here once per session, we don't need to show splash again
-    window.history.pushState({}, "Discover", '/discover');
+    app.store.dispatch(doHistoryPush({}, "Discover", "/discover"))
+    app.store.dispatch(doFetchDaemonSettings())
+    app.store.dispatch(doFileList())
     ReactDOM.render(<Provider store={store}><div>{ lbryio.enabled ? <AuthOverlay/> : '' }<App /><SnackBar /></div></Provider>, canvas)
   }
 

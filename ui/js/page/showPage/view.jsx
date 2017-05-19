@@ -1,7 +1,9 @@
 import React from 'react';
+import lbryuri from 'lbryuri'
 import {
   BusyMessage,
 } from 'component/common';
+import ChannelPage from 'page/channel'
 import FilePage from 'page/filePage'
 
 class ShowPage extends React.Component{
@@ -21,7 +23,7 @@ class ShowPage extends React.Component{
       uri,
     } = props
 
-    if(!isResolvingUri && !claim && uri) {
+    if(!isResolvingUri && claim === undefined && uri) {
       resolveUri(uri)
     }
   }
@@ -35,22 +37,22 @@ class ShowPage extends React.Component{
 
     let innerContent = "";
 
-    if (isResolvingUri) {
+    if (isResolvingUri || !claim) {
       innerContent = <section className="card">
         <div className="card__inner">
           <div className="card__title-identity"><h1>{uri}</h1></div>
         </div>
         <div className="card__content">
-          <BusyMessage message="Loading magic decentralized data..." /> :
+          { isResolvingUri && <BusyMessage message="Loading magic decentralized data..." /> }
+          { claim === null && <span className="empty">There's nothing at this location.</span> }
         </div>
-      </section>;
+      </section>
     }
-    else if (claim && claim.whatever) {
-      innerContent = "channel"
-      // innerContent = <ChannelPage title={uri} />
+    else if (claim.name.length && claim.name[0] === '@') {
+      innerContent = <ChannelPage uri={lbryuri.build({ name: claim.name, claimId: claim.claim_id })} />
     }
     else if (claim) {
-      innerContent = <FilePage />
+      innerContent = <FilePage uri={uri} />
     }
 
     return (

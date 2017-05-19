@@ -1,11 +1,17 @@
 import * as types from 'constants/action_types'
 import lbry from 'lbry'
 import {
-  selectCurrentUri,
-} from 'selectors/app'
+  doClaimListMine
+} from 'actions/content'
 import {
-  selectCurrentUriClaimOutpoint,
+  selectClaimsByUri,
+  selectClaimListMineIsPending,
 } from 'selectors/claims'
+import {
+  selectFileListIsPending,
+  selectAllFileInfos,
+  selectUrisLoading,
+} from 'selectors/file_info'
 import {
   doCloseModal,
 } from 'actions/app'
@@ -14,29 +20,54 @@ const {
   shell,
 } = require('electron')
 
-export function doFetchCurrentUriFileInfo() {
+export function doFetchFileInfo(uri) {
   return function(dispatch, getState) {
     const state = getState()
-    const uri = selectCurrentUri(state)
-    const outpoint = selectCurrentUriClaimOutpoint(state)
+    const claim = selectClaimsByUri(state)[uri]
+    const outpoint = claim ? `${claim.txid}:${claim.nout}` : null
+    const alreadyFetching = !!selectUrisLoading(state)[uri]
 
-    dispatch({
-      type: types.FETCH_FILE_INFO_STARTED,
-      data: {
-        uri,
-        outpoint,
-      }
-    })
-
-    lbry.file_list({ outpoint: outpoint, full_status: true }).then(([fileInfo]) => {
+    if (!alreadyFetching) {
       dispatch({
-        type: types.FETCH_FILE_INFO_COMPLETED,
+        type: types.FETCH_FILE_INFO_STARTED,
         data: {
-          uri,
-          fileInfo,
+          outpoint,
         }
       })
-    })
+
+      lbry.file_list({outpoint: outpoint, full_status: true}).then(fileInfos => {
+
+        dispatch({
+          type: types.FETCH_FILE_INFO_COMPLETED,
+          data: {
+            outpoint,
+            fileInfo: fileInfos && fileInfos.length ? fileInfos[0] : null,
+          }
+        })
+      })
+    }
+  }
+}
+
+export function doFileList() {
+  return function(dispatch, getState) {
+    const state = getState()
+    const isPending = selectFileListIsPending(state)
+
+    if (!isPending) {
+      dispatch({
+        type: types.FILE_LIST_STARTED,
+      })
+
+      lbry.file_list().then((fileInfos) => {
+        dispatch({
+          type: types.FILE_LIST_COMPLETED,
+          data: {
+            fileInfos,
+          }
+        })
+      })
+    }
   }
 }
 
@@ -52,51 +83,39 @@ export function doOpenFileInFolder(fileInfo) {
   }
 }
 
-export function doDeleteFile(uri, fileInfo, deleteFromComputer) {
+export function doDeleteFile(outpoint, deleteFromComputer) {
   return function(dispatch, getState) {
+
     dispatch({
-      type: types.DELETE_FILE_STARTED,
+      type: types.FILE_DELETE,
       data: {
-        uri,
-        fileInfo,
-        deleteFromComputer,
+        outpoint
       }
     })
 
-    const successCallback = () => {
-      dispatch({
-        type: types.DELETE_FILE_COMPLETED,
-        data: {
-          uri,
-        }
-      })
-      dispatch(doCloseModal())
-    }
+    lbry.file_delete({
+      outpoint: outpoint,
+      delete_target_file: deleteFromComputer,
+    })
 
-    lbry.removeFile(fileInfo.outpoint, deleteFromComputer, successCallback)
+    dispatch(doCloseModal())
   }
 }
 
-export function doFetchDownloadedContent() {
+
+export function doFetchFileInfosAndPublishedClaims() {
   return function(dispatch, getState) {
-    const state = getState()
+    const state = getState(),
+          isClaimListMinePending = selectClaimListMineIsPending(state),
+          isFileInfoListPending = selectFileListIsPending(state)
 
-    dispatch({
-      type: types.FETCH_DOWNLOADED_CONTENT_STARTED,
-    })
+    if (isClaimListMinePending === undefined) {
+      dispatch(doClaimListMine())
+    }
 
-    lbry.claim_list_mine().then((myClaimInfos) => {
-      lbry.file_list().then((fileInfos) => {
-        const myClaimOutpoints = myClaimInfos.map(({txid, nout}) => txid + ':' + nout);
-
-        dispatch({
-          type: types.FETCH_DOWNLOADED_CONTENT_COMPLETED,
-          data: {
-            fileInfos: fileInfos.filter(({outpoint}) => !myClaimOutpoints.includes(outpoint)),
-          }
-        })
-      });
-    });
+    if (isFileInfoListPending === undefined) {
+      dispatch(doFileList())
+    }
   }
 }
 

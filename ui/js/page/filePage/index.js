@@ -3,29 +3,41 @@ import {
   connect
 } from 'react-redux'
 import {
-  selectCurrentUri,
-} from 'selectors/app'
+  doFetchFileInfo,
+} from 'actions/file_info'
 import {
-  selectCurrentUriFileInfo,
-  selectCurrentUriIsDownloaded,
+  makeSelectFileInfoForUri,
 } from 'selectors/file_info'
 import {
-  selectCurrentUriClaim,
+  makeSelectClaimForUri,
+  makeSelectContentTypeForUri,
+  makeSelectMetadataForUri,
 } from 'selectors/claims'
 import {
-  selectCurrentUriCostInfo,
+  makeSelectCostInfoForUri,
 } from 'selectors/cost_info'
 import FilePage from './view'
 
-const select = (state) => ({
-  claim: selectCurrentUriClaim(state),
-  uri: selectCurrentUri(state),
-  isDownloaded: selectCurrentUriIsDownloaded(state),
-  fileInfo: selectCurrentUriFileInfo(state),
-  costInfo: selectCurrentUriCostInfo(state),
-})
+const makeSelect = () => {
+  const selectClaim = makeSelectClaimForUri(),
+        selectContentType = makeSelectContentTypeForUri(),
+        selectFileInfo = makeSelectFileInfoForUri(),
+        selectCostInfo = makeSelectCostInfoForUri(),
+        selectMetadata = makeSelectMetadataForUri()
+
+  const select = (state, props) => ({
+    claim: selectClaim(state, props),
+    contentType: selectContentType(state, props),
+    costInfo: selectCostInfo(state, props),
+    metadata: selectMetadata(state, props),
+    fileInfo: selectFileInfo(state, props)
+  })
+
+  return select
+}
 
 const perform = (dispatch) => ({
+  fetchFileInfo: (uri) => dispatch(doFetchFileInfo(uri))
 })
 
-export default connect(select, perform)(FilePage)
+export default connect(makeSelect, perform)(FilePage)

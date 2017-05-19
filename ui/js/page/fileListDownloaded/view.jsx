@@ -12,23 +12,25 @@ import SubHeader from 'component/subHeader'
 
 class FileListDownloaded extends React.Component {
   componentWillMount() {
-    this.props.fetchFileListDownloaded()
+    this.props.fetchFileInfosDownloaded()
   }
 
   render() {
     const {
-      downloadedContent,
-      fetching,
+      fileInfos,
+      isPending,
       navigate,
     } = this.props
 
     let content
-    if (fetching) {
-      content = <BusyMessage message="Loading" />
-    } else if (!downloadedContent.length) {
-      content = <span>You haven't downloaded anything from LBRY yet. Go <Link onClick={() => navigate('/discover')} label="search for your first download" />!</span>
+    if (fileInfos && fileInfos.length > 0) {
+      content = <FileList fileInfos={fileInfos} fetching={isPending} />
     } else {
-      content = <FileList fileInfos={downloadedContent} hidePrices={true} />
+      if (isPending) {
+        content = <BusyMessage message="Loading" />
+      } else {
+        content = <span>You haven't downloaded anything from LBRY yet. Go <Link onClick={() => navigate('/discover')} label="search for your first download" />!</span>
+      }
     }
 
     return (

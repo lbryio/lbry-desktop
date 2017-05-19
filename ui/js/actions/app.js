@@ -6,7 +6,6 @@ import {
   selectUpgradeDownloadItem,
   selectUpgradeFilename,
   selectPageTitle,
-  selectCurrentPath,
 } from 'selectors/app'
 
 const {remote, ipcRenderer, shell} = require('electron');
@@ -32,8 +31,7 @@ export function doNavigate(path, params = {}) {
 
     const state = getState()
     const pageTitle = selectPageTitle(state)
-    history.pushState(params, pageTitle, url)
-    window.document.title = pageTitle
+    dispatch(doHistoryPush(params, pageTitle, url))
   }
 }
 
@@ -45,7 +43,6 @@ export function doChangePath(path) {
         path,
       }
     })
-
   }
 }
 
@@ -55,7 +52,15 @@ export function doHistoryBack() {
   }
 }
 
-export function doLogoClick() {
+export function doHistoryPush(params, title, relativeUrl) {
+  return function(dispatch, getState) {
+    let pathParts = window.location.pathname.split('/')
+    pathParts[pathParts.length - 1] = relativeUrl.replace(/^\//, '')
+    const url = pathParts.join('/')
+    title += " - LBRY"
+    history.pushState(params, title, url)
+    window.document.title = title
+  }
 }
 
 export function doOpenModal(modal) {

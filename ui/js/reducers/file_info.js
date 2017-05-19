@@ -5,13 +5,35 @@ const reducers = {}
 const defaultState = {
 }
 
+reducers[types.FILE_LIST_STARTED] = function(state, action) {
+  return Object.assign({}, state, {
+    isFileListPending: true,
+  })
+}
+
+reducers[types.FILE_LIST_COMPLETED] = function(state, action) {
+  const {
+    fileInfos,
+  } = action.data
+
+  const newFileInfos = Object.assign({}, state.fileInfos)
+  fileInfos.forEach((fileInfo) => {
+    newFileInfos[fileInfo.outpoint] = fileInfo
+  })
+
+  return Object.assign({}, state, {
+    isFileListPending: false,
+    fileInfos: newFileInfos
+  })
+}
+
 reducers[types.FETCH_FILE_INFO_STARTED] = function(state, action) {
   const {
-    uri,
+    outpoint
   } = action.data
   const newFetching = Object.assign({}, state.fetching)
 
-  newFetching[uri] = true
+  newFetching[outpoint] = true
 
   return Object.assign({}, state, {
     fetching: newFetching,
@@ -20,17 +42,18 @@ reducers[types.FETCH_FILE_INFO_STARTED] = function(state, action) {
 
 reducers[types.FETCH_FILE_INFO_COMPLETED] = function(state, action) {
   const {
-    uri,
     fileInfo,
+    outpoint,
   } = action.data
-  const newByUri = Object.assign({}, state.byUri)
+
+  const newFileInfos = Object.assign({}, state.fileInfos)
   const newFetching = Object.assign({}, state.fetching)
 
-  newByUri[uri] = fileInfo || {}
-  delete newFetching[uri]
+  newFileInfos[outpoint] = fileInfo
+  delete newFetching[outpoint]
 
   return Object.assign({}, state, {
-    byUri: newByUri,
+    fileInfos: newFileInfos,
     fetching: newFetching,
   })
 }
@@ -38,93 +61,74 @@ reducers[types.FETCH_FILE_INFO_COMPLETED] = function(state, action) {
 reducers[types.DOWNLOADING_STARTED] = function(state, action) {
   const {
     uri,
+    outpoint,
     fileInfo,
   } = action.data
-  const newByUri = Object.assign({}, state.byUri)
-  const newDownloading = Object.assign({}, state.downloading)
-  const newDownloadingByUri = Object.assign({}, newDownloading.byUri)
-  const newLoading = Object.assign({}, state.loading)
-  const newLoadingByUri = Object.assign({}, newLoading)
 
-  newDownloadingByUri[uri] = true
-  newDownloading.byUri = newDownloadingByUri
-  newByUri[uri] = fileInfo
-  delete newLoadingByUri[uri]
-  newLoading.byUri = newLoadingByUri
+  const newFileInfos = Object.assign({}, state.fileInfos)
+  const newDownloading = Object.assign({}, state.urisDownloading)
+  const newLoading = Object.assign({}, state.urisLoading)
+
+  newDownloading[uri] = true
+  newFileInfos[outpoint] = fileInfo
+  delete newLoading[uri]
 
   return Object.assign({}, state, {
-    downloading: newDownloading,
-    byUri: newByUri,
-    loading: newLoading,
+    urisDownloading: newDownloading,
+    urisLoading: newLoading,
+    fileInfos: newFileInfos,
   })
 }
 
 reducers[types.DOWNLOADING_PROGRESSED] = function(state, action) {
   const {
     uri,
+    outpoint,
     fileInfo,
   } = action.data
-  const newByUri = Object.assign({}, state.byUri)
-  const newDownloading = Object.assign({}, state.downloading)
 
-  newByUri[uri] = fileInfo
+  const newFileInfos = Object.assign({}, state.fileInfos)
+  const newDownloading = Object.assign({}, state.urisDownloading)
+
+  newFileInfos[outpoint] = fileInfo
   newDownloading[uri] = true
 
   return Object.assign({}, state, {
-    byUri: newByUri,
-    downloading: newDownloading
+    fileInfos: newFileInfos,
+    urisDownloading: newDownloading
   })
 }
 
 reducers[types.DOWNLOADING_COMPLETED] = function(state, action) {
   const {
     uri,
+    outpoint,
     fileInfo,
   } = action.data
-  const newByUri = Object.assign({}, state.byUri)
-  const newDownloading = Object.assign({}, state.downloading)
-  const newDownloadingByUri = Object.assign({}, newDownloading.byUri)
 
-  newByUri[uri] = fileInfo
-  delete newDownloadingByUri[uri]
-  newDownloading.byUri = newDownloadingByUri
+  const newFileInfos = Object.assign({}, state.fileInfos)
+  const newDownloading = Object.assign({}, state.urisDownloading)
+
+  newFileInfos[outpoint] = fileInfo
+  delete newDownloading[uri]
 
   return Object.assign({}, state, {
-    byUri: newByUri,
-    downloading: newDownloading,
+    fileInfos: newFileInfos,
+    urisDownloading: newDownloading,
   })
 }
 
-reducers[types.DELETE_FILE_STARTED] = function(state, action) {
+reducers[types.FILE_DELETE] = function(state, action) {
   const {
-    uri,
+    outpoint,
   } = action.data
-  const newDeleting = Object.assign({}, state.deleting)
-  const newByUri = Object.assign({}, newDeleting.byUri)
 
-  newByUri[uri] = true
-  newDeleting.byUri = newByUri
+  const newFileInfos = Object.assign({}, state.fileInfos)
+
+  delete newFileInfos[outpoint]
 
   return Object.assign({}, state, {
-    deleting: newDeleting,
-  })
-}
-
-reducers[types.DELETE_FILE_COMPLETED] = function(state, action) {
-  const {
-    uri,
-  } = action.data
-  const newDeleting = Object.assign({}, state.deleting)
-  const newDeletingByUri = Object.assign({}, newDeleting.byUri)
-  const newByUri = Object.assign({}, state.byUri)
-
-  delete newDeletingByUri[uri]
-  newDeleting.byUri = newDeletingByUri
-  delete newByUri[uri]
-
-  return Object.assign({}, state, {
-    deleting: newDeleting,
-    byUri: newByUri,
+    fileInfos: newFileInfos,
   })
 }
 
@@ -132,14 +136,13 @@ reducers[types.LOADING_VIDEO_STARTED] = function(state, action) {
   const {
     uri,
   } = action.data
-  const newLoading = Object.assign({}, state.loading)
-  const newByUri = Object.assign({}, newLoading.byUri)
 
-  newByUri[uri] = true
-  newLoading.byUri = newByUri
+  const newLoading = Object.assign({}, state.urisLoading)
+
+  newLoading[uri] = true
 
   return Object.assign({}, state, {
-    loading: newLoading,
+    urisLoading: newLoading,
   })
 }
 
@@ -147,54 +150,13 @@ reducers[types.LOADING_VIDEO_FAILED] = function(state, action) {
   const {
     uri,
   } = action.data
-  const newLoading = Object.assign({}, state.loading)
-  const newByUri = Object.assign({}, newLoading.byUri)
 
-  delete newByUri[uri]
-  newLoading.byUri = newByUri
+  const newLoading = Object.assign({}, state.urisLoading)
 
-  return Object.assign({}, state, {
-    loading: newLoading,
-  })
-}
-
-reducers[types.FETCH_DOWNLOADED_CONTENT_COMPLETED] = function(state, action) {
-  const {
-    fileInfos,
-  } = action.data
-  const newByUri = Object.assign({}, state.byUri)
-
-  fileInfos.forEach(fileInfo => {
-    const uri = lbryuri.build({
-      channelName: fileInfo.channel_name,
-      contentName: fileInfo.name,
-    })
-
-    newByUri[uri] = fileInfo
-  })
+  delete newLoading[uri]
 
   return Object.assign({}, state, {
-    byUri: newByUri
-  })
-}
-
-reducers[types.FETCH_PUBLISHED_CONTENT_COMPLETED] = function(state, action) {
-  const {
-    fileInfos
-  } = action.data
-  const newByUri = Object.assign({}, state.byUri)
-
-  fileInfos.forEach(fileInfo => {
-    const uri = lbryuri.build({
-      channelName: fileInfo.channel_name,
-      contentName: fileInfo.name,
-    })
-
-    newByUri[uri] = fileInfo
-  })
-
-  return Object.assign({}, state, {
-    byUri: newByUri
+    urisLoading: newLoading,
   })
 }
 

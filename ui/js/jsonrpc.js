@@ -68,6 +68,8 @@ jsonrpc.call = function (connectionString, method, params, callback, errorCallba
   }));
 
   sessionStorage.setItem('JSONRPCCounter', counter + 1);
+
+  return xhr
 };
 
 export default jsonrpc;

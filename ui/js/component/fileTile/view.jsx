@@ -13,11 +13,8 @@ class FileTile extends React.Component {
 
   constructor(props) {
     super(props)
-    this._fileInfoSubscribeId = null
-    this._isMounted = null
     this.state = {
       showNsfwHelp: false,
-      isHidden: false,
     }
   }
 
@@ -29,28 +26,8 @@ class FileTile extends React.Component {
       uri,
     } = this.props
 
-    this._isMounted = true;
-
-    if (this.props.hideOnRemove) {
-      this._fileInfoSubscribeId = lbry.fileInfoSubscribe(this.props.outpoint, this.onFileInfoUpdate);
-    }
-
     if(!isResolvingUri && !claim && uri) {
       resolveUri(uri)
-    }
-  }
-
-  componentWillUnmount() {
-    if (this._fileInfoSubscribeId) {
-      lbry.fileInfoUnsubscribe(this.props.outpoint, this._fileInfoSubscribeId);
-    }
-  }
-
-  onFileInfoUpdate(fileInfo) {
-    if (!fileInfo && this._isMounted && this.props.hideOnRemove) {
-      this.setState({
-        isHidden: true
-      });
     }
   }
 
@@ -71,10 +48,6 @@ class FileTile extends React.Component {
   }
 
   render() {
-    if (this.state.isHidden) {
-      return null;
-    }
-
     const {
       claim,
       metadata,
@@ -86,18 +59,22 @@ class FileTile extends React.Component {
 
     const uri = lbryuri.normalize(this.props.uri);
     const isClaimed = !!claim;
+    const isClaimable = lbryuri.isClaimable(uri)
     const title = isClaimed && metadata && metadata.title ? metadata.title : uri;
     const obscureNsfw = this.props.obscureNsfw && metadata && metadata.nsfw;
     let onClick = () => navigate('/show', { uri })
 
     let description = ""
     if (isClaimed) {
-      description = metadata.description
+      description = metadata && metadata.description
     } else if (isResolvingUri) {
       description = "Loading..."
     } else if (showEmpty === FileTile.SHOW_EMPTY_PUBLISH) {
-      onClick = () => navigate('/publish')
-      description = <span className="empty">This location is unclaimed - <span className="button-text">put something here</span>!</span>
+      onClick = () => navigate('/publish', { })
+      description = <span className="empty">
+        This location is unused. { ' ' }
+        { isClaimable && <span className="button-text">Put something here!</span> }
+      </span>
     } else if (showEmpty === FileTile.SHOW_EMPTY_PENDING) {
       description = <span className="empty">This file is pending confirmation.</span>
     }

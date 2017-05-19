@@ -143,6 +143,14 @@ p
   font-style: italic;
 }
 
+/*should be redone/moved*/
+.file-list__header {
+  .busy-indicator {
+    float: left;
+    margin-top: 12px;
+  }
+}
+
 .sort-section {
   display: block;
   margin-bottom: $spacing-vertical * 2/3;

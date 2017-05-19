@@ -2,28 +2,17 @@ import {
   createSelector,
 } from 'reselect'
 import lbryuri from 'lbryuri'
-import {
-  selectCurrentUri,
-} from 'selectors/app'
 
 export const _selectState = state => state.claims || {}
 
 export const selectClaimsByUri = createSelector(
   _selectState,
-  (state) => state.byUri || {}
+  (state) => state.claimsByUri || {}
 )
 
-export const selectCurrentUriClaim = createSelector(
-  selectCurrentUri,
-  selectClaimsByUri,
-  (uri, byUri) => byUri[uri]
-)
-
-export const selectCurrentUriClaimOutpoint = createSelector(
-  selectCurrentUriClaim,
-  (claim) => {
-    return claim ? `${claim.txid}:${claim.nout}` : null
-  }
+export const selectAllClaimsByChannel = createSelector(
+  _selectState,
+  (state) => state.claimsByChannel || {}
 )
 
 const selectClaimForUri = (state, props) => {
@@ -38,11 +27,22 @@ export const makeSelectClaimForUri = () => {
   )
 }
 
+export const selectClaimsInChannelForUri = (state, props) => {
+  return selectAllClaimsByChannel(state)[props.uri]
+}
+
+export const makeSelectClaimsInChannelForUri = () => {
+  return createSelector(
+    selectClaimsInChannelForUri,
+    (claims) => claims
+  )
+}
+
 const selectMetadataForUri = (state, props) => {
   const claim = selectClaimForUri(state, props)
   const metadata = claim && claim.value && claim.value.stream && claim.value.stream.metadata
 
-  return metadata ? metadata : undefined
+  return metadata ? metadata : (claim === undefined ? undefined : null)
 }
 
 export const makeSelectMetadataForUri = () => {
@@ -56,7 +56,7 @@ const selectSourceForUri = (state, props) => {
   const claim = selectClaimForUri(state, props)
   const source = claim && claim.value && claim.value.stream && claim.value.stream.source
 
-  return source ? source : undefined
+  return source ? source : (claim === undefined ? undefined : null)
 }
 
 export const makeSelectSourceForUri = () => {
@@ -66,26 +66,32 @@ export const makeSelectSourceForUri = () => {
   )
 }
 
-export const selectMyClaims = createSelector(
+export const makeSelectContentTypeForUri = () => {
+  return createSelector(
+    selectSourceForUri,
+    (source) => source ? source.contentType : source
+  )
+}
+
+export const selectClaimListMineIsPending = createSelector(
   _selectState,
-  (state) => state.mine || {}
+  (state) => state.isClaimListMinePending
 )
 
-export const selectMyClaimsById = createSelector(
-  selectMyClaims,
-  (mine) => mine.byId || {}
+export const selectMyClaims = createSelector(
+  _selectState,
+  (state) => state.myClaims || {}
 )
 
 export const selectMyClaimsOutpoints = createSelector(
-  selectMyClaimsById,
-  (byId) => {
-    const outpoints = []
-    Object.keys(byId).forEach(key => {
-      const claim = byId[key]
-      const outpoint = `${claim.txid}:${claim.nout}`
-      outpoints.push(outpoint)
-    })
+  selectMyClaims,
+  (claims) => {
+    if (!claims) {
+      return []
+    }
 
-    return outpoints
+    return Object.values(claims).map((claim) => {
+      return `${claim.txid}:${claim.nout}`
+    })
   }
 )

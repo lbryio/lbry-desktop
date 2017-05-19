@@ -2,21 +2,41 @@ import React from 'react';
 import lbry from 'lbry.js';
 import lbryuri from 'lbryuri.js';
 import Link from 'component/link';
-import {Thumbnail, TruncatedText,} from 'component/common';
+import {Thumbnail, TruncatedText, Icon} from 'component/common';
 import FilePrice from 'component/filePrice'
 import UriIndicator from 'component/uriIndicator';
 
 class FileCard extends React.Component {
-  componentDidMount() {
+  componentWillMount() {
+    this.resolve(this.props)
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.resolve(nextProps)
+  }
+
+  resolve(props) {
     const {
       isResolvingUri,
       resolveUri,
       claim,
       uri,
+    } = props
+
+    if(!isResolvingUri && claim === undefined && uri) {
+      resolveUri(uri)
+    }
+  }
+
+  componentWillUnmount() {
+    const {
+      isResolvingUri,
+      cancelResolveUri,
+      uri
     } = this.props
 
-    if(!isResolvingUri && !claim && uri) {
-      resolveUri(uri)
+    if (isResolvingUri) {
+      cancelResolveUri(uri)
     }
   }
 
@@ -35,10 +55,11 @@ class FileCard extends React.Component {
   render() {
 
     const {
+      claim,
+      fileInfo,
       metadata,
       isResolvingUri,
       navigate,
-      hidePrice,
     } = this.props
 
     const uri = lbryuri.normalize(this.props.uri);
@@ -50,6 +71,8 @@ class FileCard extends React.Component {
       description = "Loading..."
     } else if (metadata && metadata.description) {
       description = metadata.description
+    } else if (claim === null) {
+      description = 'This address contains no content.'
     }
 
     return (
@@ -59,7 +82,10 @@ class FileCard extends React.Component {
             <div className="card__title-identity">
               <h5 title={title}><TruncatedText lines={1}>{title}</TruncatedText></h5>
               <div className="card__subtitle">
-                { !hidePrice ? <span style={{float: "right"}}><FilePrice uri={uri} /></span>  : null}
+                <span style={{float: "right"}}>
+                  <FilePrice uri={uri} />
+                  { fileInfo ? <span>{' '}<Icon fixed icon="icon-folder" /></span> : '' }
+                </span>
                 <UriIndicator uri={uri} />
               </div>
             </div>

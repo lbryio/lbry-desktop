@@ -1,5 +1,6 @@
 import React from 'react';
 import lbry from 'lbry';
+import lbryuri from 'lbryuri'
 import {FormField, FormRow} from 'component/form.js';
 import Link from 'component/link';
 import rewards from 'rewards';
@@ -100,7 +101,7 @@ var PublishPage = React.createClass({
     };
 
     if (this.state.isFee) {
-      lbry.getUnusedAddress((address) => {
+      lbry.wallet_unused_address().then((address) => {
         metadata.fee = {};
         metadata.fee[this.state.feeCurrency] = {
           amount: parseFloat(this.state.feeAmount),
@@ -169,7 +170,7 @@ var PublishPage = React.createClass({
       return;
     }
 
-    if (!lbry.nameIsValid(rawName, false)) {
+    if (!lbryuri.isValidName(rawName, false)) {
       this.refs.name.showError('LBRY names must contain only letters, numbers and dashes.');
       return;
     }
@@ -182,50 +183,45 @@ var PublishPage = React.createClass({
       myClaimExists: null,
     });
 
-    lbry.getMyClaim(name, (myClaimInfo) => {
+    const myClaimInfo = Object.values(this.props.myClaims).find(claim => claim.name === name)
+
+    this.setState({
+      myClaimExists: !!myClaimInfo,
+    });
+    lbry.resolve({uri: name}).then((claimInfo) => {
       if (name != this.state.name) {
-        // A new name has been typed already, so bail
         return;
       }
 
-      this.setState({
-        myClaimExists: !!myClaimInfo,
-      });
-      lbry.resolve({uri: name}).then((claimInfo) => {
-        if (name != this.state.name) {
-          return;
-        }
-
-        if (!claimInfo) {
-          this.setState({
-            nameResolved: false,
-          });
-        } else {
-          const topClaimIsMine = (myClaimInfo && myClaimInfo.claim.amount >= claimInfo.claim.amount);
-          const newState = {
-            nameResolved: true,
-            topClaimValue: parseFloat(claimInfo.claim.amount),
-            myClaimExists: !!myClaimInfo,
-            myClaimValue: myClaimInfo ? parseFloat(myClaimInfo.claim.amount) : null,
-            myClaimMetadata: myClaimInfo ? myClaimInfo.value : null,
-            topClaimIsMine: topClaimIsMine,
-          };
-
-          if (topClaimIsMine) {
-            newState.bid = myClaimInfo.claim.amount;
-          } else if (this.state.myClaimMetadata) {
-            // Just changed away from a name we have a claim on, so clear pre-fill
-            newState.bid = '';
-          }
-
-          this.setState(newState);
-        }
-      }, () => { // Assume an error means the name is available
+      if (!claimInfo) {
         this.setState({
-          name: name,
           nameResolved: false,
-          myClaimExists: false,
         });
+      } else {
+        const topClaimIsMine = (myClaimInfo && myClaimInfo.claim.amount >= claimInfo.claim.amount);
+        const newState = {
+          nameResolved: true,
+          topClaimValue: parseFloat(claimInfo.claim.amount),
+          myClaimExists: !!myClaimInfo,
+          myClaimValue: myClaimInfo ? parseFloat(myClaimInfo.claim.amount) : null,
+          myClaimMetadata: myClaimInfo ? myClaimInfo.value : null,
+          topClaimIsMine: topClaimIsMine,
+        };
+
+        if (topClaimIsMine) {
+          newState.bid = myClaimInfo.claim.amount;
+        } else if (this.state.myClaimMetadata) {
+          // Just changed away from a name we have a claim on, so clear pre-fill
+          newState.bid = '';
+        }
+
+        this.setState(newState);
+      }
+    }, () => { // Assume an error means the name is available
+      this.setState({
+        name: name,
+        nameResolved: false,
+        myClaimExists: false,
       });
     });
   },
@@ -287,7 +283,7 @@ var PublishPage = React.createClass({
   handleNewChannelNameChange: function (event) {
     const newChannelName = (event.target.value.startsWith('@') ? event.target.value : '@' + event.target.value);
 
-    if (newChannelName.length > 1 && !lbry.nameIsValid(newChannelName.substr(1), false)) {
+    if (newChannelName.length > 1 && !lbryuri.isValidName(newChannelName.substr(1), false)) {
       this.refs.newChannelName.showError('LBRY channel names must contain only letters, numbers and dashes.');
       return;
     } else {
