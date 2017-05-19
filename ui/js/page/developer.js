@@ -30,7 +30,7 @@ const DeveloperPage = React.createClass({
   },
   handleUpgradeFileChange: function(event) {
     this.setState({
-      upgradePath: event.target.files[0].path,
+      upgradePath: event.target.value,
     });
   },
   handleForceUpgradeClick: function() {
