@@ -47,6 +47,7 @@ export class RewardLink extends React.Component {
     this.setState({
       pending: true
     })
+
     rewards.claimReward(this.props.type).then((reward) => {
       this.setState({
         pending: false,

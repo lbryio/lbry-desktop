@@ -125,6 +125,10 @@ class ConfirmEmailStage extends React.Component {
 }
 
 class WelcomeStage extends React.Component {
+  static propTypes = {
+    endAuth: React.PropTypes.func,
+  }
+
   constructor(props) {
     super(props);
 
@@ -169,31 +173,20 @@ class WelcomeStage extends React.Component {
     );
   }
 }
-WelcomeStage.propTypes = {
-  endAuth: React.PropTypes.func,
-};
 
-class ErrorStage extends React.Component {
-  render() {
-    return (
-      <section>
-        <p>An error was encountered that we cannot continue from.</p>
-        <p>At least we're earning the name beta.</p>
-        { this.props.errorText ? <p>Message: {this.props.errorText}</p> : '' }
-        <Link button="alt" label="Try Reload" onClick={() => { window.location.reload() } } />
-      </section>
-    );
-  }
+const ErrorStage = (props) => {
+  return <section>
+    <p>An error was encountered that we cannot continue from.</p>
+    <p>At least we're earning the name beta.</p>
+    { this.props.errorText ? <p>Message: {props.errorText}</p> : '' }
+    <Link button="alt" label="Try Reload" onClick={() => { window.location.reload() } } />
+  </section>
 }
 
-class PendingStage extends React.Component {
-  render() {
-    return (
-      <section>
-        <p>Preparing for first access <span className="busy-indicator"></span></p>
-      </section>
-    );
-  }
+const PendingStage = (props) => {
+  return <section>
+    <p>Preparing for first access <span className="busy-indicator"></span></p>
+  </section>
 }
 
 
@@ -315,9 +308,14 @@ export class AuthOverlay extends React.Component {
         return null;
     }
     const StageContent = this._stages[this.state.stage];
+
+    if (!StageContent) {
+      return <span className="empty">Unknown authentication step.</span>
+    }
+
     return (
       this.state.stage != "welcome" ?
-          <ModalPage className="modal-page--full" isOpen={true} contentLabel="Authentication" {...this.props}>
+          <ModalPage className="modal-page--full" isOpen={true} contentLabel="Authentication">
             <h1>LBRY Early Access</h1>
             <StageContent {...this.state.stageProps}  setStage={(stage, stageProps) => { this.setStage(stage, stageProps) }} />
           </ModalPage> :

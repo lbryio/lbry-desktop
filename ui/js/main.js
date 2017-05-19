@@ -3,10 +3,10 @@ import ReactDOM from 'react-dom';
 import lbry from './lbry.js';
 import lbryio from './lbryio.js';
 import lighthouse from './lighthouse.js';
-import App from './component/app/index.js';
-import SplashScreen from './component/splash.js';
-import SnackBar from './component/snack-bar.js';
-import {AuthOverlay} from './component/auth.js';
+import App from 'component/app/index.js';
+import SplashScreen from 'component/splash.js';
+import SnackBar from 'component/snack-bar.js';
+import {AuthOverlay} from 'component/auth.js';
 import { Provider } from 'react-redux';
 import store from 'store.js';
 import {

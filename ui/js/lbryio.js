@@ -7,7 +7,7 @@ const lbryio = {
   _accessToken: getLocal('accessToken'),
   _authenticationPromise: null,
   _user : null,
-  enabled: false
+  enabled: true
 };
 
 const CONNECTION_STRING =  'https://api.lbry.io/';

@@ -9,21 +9,21 @@ export class Icon extends React.Component {
     fixed: React.PropTypes.bool,
   }
 
-  static defaultProps = {
-    lines: null
-  }
-
   render() {
-    const {fixed, className, ...other} = this.props;
+    const {fixed, className} = this.props;
     const spanClassName = ('icon ' + ('fixed' in this.props ? 'icon-fixed-width ' : '') +
                            this.props.icon + ' ' + (this.props.className || ''));
-    return <span className={spanClassName} {... other}></span>
+    return <span className={spanClassName}></span>
   }
 }
 
 export class TruncatedText extends React.Component {
   static propTypes = {
     lines: React.PropTypes.number,
+  }
+
+  static defaultProps = {
+    lines: null
   }
 
   render() {
