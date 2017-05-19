@@ -217,7 +217,7 @@ class CodeRequiredStage extends React.Component {
     })
 
     if (!this.state.address) {
-      lbry.getUnusedAddress((address) => {
+      lbry.wallet_unused_address().then((address) => {
         setLocal('wallet_address', address);
         this.setState({ address: address });
       });

@@ -3,7 +3,7 @@ import lbry from 'lbry.js';
 import lbryuri from 'lbryuri.js';
 import Link from 'component/link';
 import {FormField} from 'component/form.js';
-import {FileTile} from 'component/fileTile';
+import FileTile from 'component/fileTile';
 import rewards from 'rewards.js';
 import lbryio from 'lbryio.js';
 import {BusyMessage, Thumbnail} from 'component/common.js';
@@ -16,7 +16,7 @@ class FileListPublished extends React.Component {
   }
 
   componentDidUpdate() {
-    if(this.props.publishedContent.length > 0) this._requestPublishReward()
+    if(this.props.fileInfos.length > 0) this._requestPublishReward()
   }
 
   _requestPublishReward() {
@@ -38,17 +38,17 @@ class FileListPublished extends React.Component {
 
   render() {
     const {
-      publishedContent,
-      fetching,
+      fileInfos,
+      isPending,
       navigate,
     } = this.props
 
     let content
 
-    if (publishedContent && publishedContent.length > 0) {
-      content = <FileList fileInfos={publishedContent} fetching={fetching} hidePrices={true} />
+    if (fileInfos && fileInfos.length > 0) {
+      content = <FileList fileInfos={fileInfos} fetching={isPending} fileTileShowEmpty={FileTile.SHOW_EMPTY_PENDING} />
     } else {
-      if (fetching) {
+      if (isPending) {
         content = <BusyMessage message="Loading" />
       } else {
         content = <span>You haven't downloaded anything from LBRY yet. Go <Link onClick={() => navigate('/discover')} label="search for your first download" />!</span>

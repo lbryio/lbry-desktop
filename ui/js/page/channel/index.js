@@ -6,18 +6,28 @@ import {
   doFetchClaimsByChannel
 } from 'actions/content'
 import {
-  makeSelectClaimsForChannel
+  makeSelectClaimForUri,
+  makeSelectClaimsInChannelForUri
 } from 'selectors/claims'
 import ChannelPage from './view'
-//
-// const select = (state) => ({
-//   uri: selectCurrentUri(state),
-//   claim: selectCurrentUriClaim(state),
-//   claims: selectCurrentUriClaims(state)
-// })
+
+import FilePage from './view'
+
+const makeSelect = () => {
+  const selectClaim = makeSelectClaimForUri(),
+        selectClaimsInChannel = makeSelectClaimsInChannelForUri()
+
+  const select = (state, props) => ({
+    claim: selectClaim(state, props),
+    claimsInChannel: selectClaimsInChannel(state, props)
+  })
+
+  return select
+}
 
 const perform = (dispatch) => ({
+  // fetchClaims: () => { console.log('fetch claims') }
   fetchClaims: (uri) => dispatch(doFetchClaimsByChannel(uri))
 })
 
-export default connect(null, perform)(ChannelPage)
+export default connect(makeSelect, perform)(ChannelPage)

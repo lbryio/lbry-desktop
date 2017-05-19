@@ -60,7 +60,6 @@ class FileList extends React.Component {
       handleSortChanged,
       fetching,
       fileInfos,
-      hidePrices,
     } = this.props
     const {
       sortBy,
@@ -72,7 +71,7 @@ class FileList extends React.Component {
         contentName: fileInfo.name,
         channelName: fileInfo.channel_name,
       })
-      content.push(<FileTile key={uri} uri={uri} hidePrice={hidePrices} hideOnRemove={true} showEmpty={""} />)
+      content.push(<FileTile key={uri} uri={uri} hidePrice={true} showEmpty={this.props.fileTileShowEmpty} />)
     })
     return (
       <section className="file-list__header">

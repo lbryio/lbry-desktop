@@ -2,6 +2,12 @@ import * as types from 'constants/action_types'
 import lbry from 'lbry'
 import lbryio from 'lbryio'
 import {
+  doResolveUri
+} from 'actions/content'
+import {
+  selectResolvingUris,
+} from 'selectors/content'
+import {
   selectClaimsByUri
 } from 'selectors/claims'
 import {
@@ -12,21 +18,23 @@ export function doFetchCostInfoForUri(uri) {
   return function(dispatch, getState) {
     const state = getState(),
           claim = selectClaimsByUri(state)[uri],
+          isResolving = selectResolvingUris(state).indexOf(uri) !== -1,
           isGenerous = selectSettingsIsGenerous(state)
 
-    //
-    // function getCostGenerous(uri) {
-    //   console.log('get cost generous: ' + uri)
-    //   // If generous is on, the calculation is simple enough that we might as well do it here in the front end
-    //   lbry.resolve({uri: uri}).then((resolutionInfo) => {
-    //     console.log('resolve inside getCostGenerous ' + uri)
-    //     console.log(resolutionInfo)
-    //     if (!resolutionInfo) {
-    //       return reject(new Error("Unused URI"));
-    //     }
+    if (claim === null) { //claim doesn't exist, nothing to fetch a cost for
+      return
+    }
 
-    //   });
-    // }
+    if (!claim) {
+      setTimeout(() => {
+        dispatch(doFetchCostInfoForUri(uri))
+      }, 1000)
+      if (!isResolving) {
+        dispatch(doResolveUri(uri))
+      }
+      return
+    }
+
 
     function begin() {
       dispatch({

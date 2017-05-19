@@ -16,32 +16,6 @@ export const selectFetchingFeaturedUris = createSelector(
   (state) => !!state.fetchingFeaturedContent
 )
 
-
-export const selectFetchingDownloadedContent = createSelector(
-  _selectState,
-  (state) => !!state.fetchingDownloadedContent
-)
-
-export const selectDownloadedContent = createSelector(
-  _selectState,
-  (state) => state.downloadedContent || {}
-)
-
-export const selectDownloadedContentFileInfos = createSelector(
-  selectDownloadedContent,
-  (downloadedContent) => downloadedContent.fileInfos || []
-)
-
-export const selectFetchingPublishedContent = createSelector(
-  _selectState,
-  (state) => !!state.fetchingPublishedContent
-)
-
-export const selectPublishedContent = createSelector(
-  _selectState,
-  (state) => state.publishedContent || {}
-)
-
 export const selectResolvingUris = createSelector(
   _selectState,
   (state) => state.resolvingUris || []

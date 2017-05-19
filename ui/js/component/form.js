@@ -1,7 +1,9 @@
 import React from 'react';
+import FileSelector from './file-selector.js';
 import {Icon} from './common.js';
 
 var formFieldCounter = 0,
+    formFieldFileSelectorTypes = ['file', 'directory'],
     formFieldNestedLabelTypes = ['radio', 'checkbox'];
 
 function formFieldId() {
@@ -36,9 +38,31 @@ export class FormField extends React.Component {
     } else if (this.props.type == 'text-number') {
       this._element = 'input';
       this._type = 'text';
+    } else if (formFieldFileSelectorTypes.includes(this.props.type)) {
+      this._element = 'input';
+      this._type = 'hidden';
     } else {
       // Non <input> field, e.g. <select>, <textarea>
       this._element = this.props.type;
+    }
+  }
+
+  componentDidMount() {
+    /**
+     * We have to add the webkitdirectory attribute here because React doesn't allow it in JSX
+     * https://github.com/facebook/react/issues/3468
+     */
+    if (this.props.type == 'directory') {
+      this.refs.field.webkitdirectory = true;
+    }
+  }
+
+  handleFileChosen(path) {
+    this.refs.field.value = path;
+    if (this.props.onChange) { // Updating inputs programmatically doesn't generate an event, so we have to make our own
+      const event = new Event('change', {bubbles: true})
+      this.refs.field.dispatchEvent(event); // This alone won't generate a React event, but we use it to attach the field as a target
+      this.props.onChange(event);
     }
   }
 
@@ -56,9 +80,6 @@ export class FormField extends React.Component {
   getValue() {
     if (this.props.type == 'checkbox') {
       return this.refs.field.checked;
-    } else if (this.props.type == 'file') {
-      return this.refs.field.files.length && this.refs.field.files[0].path ?
-                this.refs.field.files[0].path : null;
     } else {
       return this.refs.field.value;
     }
@@ -96,6 +117,10 @@ export class FormField extends React.Component {
             {this.props.label}
           </label> :
         element }
+      { formFieldFileSelectorTypes.includes(this.props.type) ?
+          <FileSelector type={this.props.type} onFileChosen={this.handleFileChosen}
+                        {... this.props.defaultValue ? {initPath: this.props.defaultValue} : {}} /> :
+          null }
       { this.props.postfix ? <span className="form-field__postfix">{this.props.postfix}</span> : '' }
       { isError && this.state.errorMessage ?  <div className="form-field__error">{this.state.errorMessage}</div> : '' }
     </div>

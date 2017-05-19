@@ -4,7 +4,7 @@ import {
 } from 'component/common'
 
 class FilePrice extends React.Component{
-  componentDidMount() {
+  componentWillMount() {
     this.fetchCost(this.props)
   }
 

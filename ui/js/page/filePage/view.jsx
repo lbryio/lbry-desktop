@@ -61,10 +61,10 @@ class FilePage extends React.Component{
   render() {
     const {
       claim,
+      fileInfo,
       metadata,
       contentType,
       uri,
-      fileInfo,
     } = this.props
 
     if (!claim || !metadata) {

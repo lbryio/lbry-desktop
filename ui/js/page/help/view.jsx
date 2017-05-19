@@ -28,10 +28,6 @@ class HelpPage extends React.Component {
     });
   }
 
-  componentDidMount() {
-    document.title = "Help";
-  }
-
   render() {
     let ver, osName, platform, newVerLink;
     if (this.state.versionInfo) {

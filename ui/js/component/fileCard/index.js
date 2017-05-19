@@ -34,7 +34,6 @@ const makeSelect = () => {
     claim: selectClaimForUri(state, props),
     fileInfo: selectFileInfoForUri(state, props),
     obscureNsfw: selectObscureNsfw(state),
-    hasSignature: false,
     metadata: selectMetadataForUri(state, props),
     isResolvingUri: selectResolvingUri(state, props),
   })

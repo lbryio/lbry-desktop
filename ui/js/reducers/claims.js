@@ -14,9 +14,7 @@ reducers[types.RESOLVE_URI_COMPLETED] = function(state, action) {
 
   const newClaims = Object.assign({}, state.claimsByUri)
 
-  if (claim !== undefined) {
-    newClaims[uri] = claim
-  }
+  newClaims[uri] = claim
 
   //This needs a sanity boost...
   if (certificate !== undefined && claim === undefined) {
@@ -29,6 +27,33 @@ reducers[types.RESOLVE_URI_COMPLETED] = function(state, action) {
 
   return Object.assign({}, state, {
     claimsByUri: newClaims
+  })
+}
+
+reducers[types.RESOLVE_URI_CANCELED] = function(state, action) {
+  const uri = action.data.uri
+  const newClaims = Object.assign({}, state.claimsByUri)
+  delete newClaims[uri]
+  return Object.assign({}, state, {
+    claimsByUri: newClaims
+  })
+}
+
+
+reducers[types.CLAIM_LIST_MINE_STARTED] = function(state, action) {
+  return Object.assign({}, state, {
+    isClaimListMinePending: true
+  })
+}
+
+reducers[types.CLAIM_LIST_MINE_COMPLETED] = function(state, action) {
+  const myClaims = Object.assign({}, state.myClaims)
+  action.data.claims.forEach((claim) => {
+    myClaims[claim.claim_id] = claim
+  })
+  return Object.assign({}, state, {
+    isClaimListMinePending: false,
+    myClaims: myClaims
   })
 }
 
@@ -46,23 +71,6 @@ reducers[types.FETCH_CHANNEL_CLAIMS_COMPLETED] = function(state, action) {
 
   return Object.assign({}, state, {
     claimsByChannel: newClaims
-  })
-}
-
-reducers[types.FETCH_MY_CLAIMS_COMPLETED] = function(state, action) {
-  const {
-    claims,
-  } = action.data
-  const newMine = Object.assign({}, state.mine)
-  const newById = Object.assign({}, newMine.byId)
-
-  claims.forEach(claim => {
-    newById[claim.claim_id] = claim
-  })
-  newMine.byId = newById
-
-  return Object.assign({}, state, {
-    mine: newMine,
   })
 }
 

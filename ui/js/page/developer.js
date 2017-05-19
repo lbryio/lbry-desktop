@@ -35,7 +35,7 @@ class DeveloperPage extends React.Component {
 
   handleUpgradeFileChange(event) {
     this.setState({
-      upgradePath: event.target.files[0].path,
+      upgradePath: event.target.value,
     });
   }
 

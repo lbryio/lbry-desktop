@@ -19,6 +19,7 @@ import {
 import {
   doCloseModal,
   doOpenModal,
+  doHistoryBack,
 } from 'actions/app'
 import {
   doFetchAvailability
@@ -55,7 +56,10 @@ const perform = (dispatch) => ({
   closeModal: () => dispatch(doCloseModal()),
   openInFolder: (fileInfo) => dispatch(doOpenFileInFolder(fileInfo)),
   openInShell: (fileInfo) => dispatch(doOpenFileInShell(fileInfo)),
-  deleteFile: (fileInfo, deleteFromComputer) => dispatch(doDeleteFile(fileInfo, deleteFromComputer)),
+  deleteFile: (fileInfo, deleteFromComputer) => {
+    dispatch(doHistoryBack())
+    dispatch(doDeleteFile(fileInfo, deleteFromComputer))
+  },
   openModal: (modal) => dispatch(doOpenModal(modal)),
   startDownload: (uri) => dispatch(doPurchaseUri(uri)),
   loadVideo: (uri) => dispatch(doLoadVideo(uri))

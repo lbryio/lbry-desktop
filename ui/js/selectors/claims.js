@@ -15,17 +15,6 @@ export const selectAllClaimsByChannel = createSelector(
   (state) => state.claimsByChannel || {}
 )
 
-export const selectClaimsForChannel = (state, props) => {
-  return selectAllClaimsByChannel(state)[props.uri]
-}
-
-export const makeSelectClaimsForChannel = () => {
-  return createSelector(
-    selectClaimsForChannel,
-    (claim) => claim
-  )
-}
-
 const selectClaimForUri = (state, props) => {
   const uri = lbryuri.normalize(props.uri)
   return selectClaimsByUri(state)[uri]
@@ -35,6 +24,17 @@ export const makeSelectClaimForUri = () => {
   return createSelector(
     selectClaimForUri,
     (claim) => claim
+  )
+}
+
+export const selectClaimsInChannelForUri = (state, props) => {
+  return selectAllClaimsByChannel(state)[props.uri]
+}
+
+export const makeSelectClaimsInChannelForUri = () => {
+  return createSelector(
+    selectClaimsInChannelForUri,
+    (claims) => claims
   )
 }
 
@@ -73,26 +73,25 @@ export const makeSelectContentTypeForUri = () => {
   )
 }
 
-export const selectMyClaims = createSelector(
+export const selectClaimListMineIsPending = createSelector(
   _selectState,
-  (state) => state.mine || {}
+  (state) => state.isClaimListMinePending
 )
 
-export const selectMyClaimsById = createSelector(
-  selectMyClaims,
-  (mine) => mine.byId || {}
+export const selectMyClaims = createSelector(
+  _selectState,
+  (state) => state.myClaims || {}
 )
 
 export const selectMyClaimsOutpoints = createSelector(
-  selectMyClaimsById,
-  (byId) => {
-    const outpoints = []
-    Object.keys(byId).forEach(key => {
-      const claim = byId[key]
-      const outpoint = `${claim.txid}:${claim.nout}`
-      outpoints.push(outpoint)
-    })
+  selectMyClaims,
+  (claims) => {
+    if (!claims) {
+      return []
+    }
 
-    return outpoints
+    return Object.values(claims).map((claim) => {
+      return `${claim.txid}:${claim.nout}`
+    })
   }
 )

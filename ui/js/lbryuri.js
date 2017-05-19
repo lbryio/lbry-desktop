@@ -175,6 +175,11 @@ lbryuri.isValid = function(uri) {
   return parts && parts.name;
 }
 
+lbryuri.isValidName = function(name, checkCase=true) {
+  const regexp = new RegExp('^[a-z0-9-]+$', checkCase ? '' : 'i');
+  return regexp.test(name);
+}
+
 lbryuri.isClaimable = function(uri) {
   let parts
   try {
