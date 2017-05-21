@@ -30,6 +30,11 @@ class HelpPage extends React.Component {
 
   render() {
     let ver, osName, platform, newVerLink;
+
+    const {
+      navigate
+    } = this.props
+
     if (this.state.versionInfo) {
       ver = this.state.versionInfo;
 

@@ -1,7 +1,14 @@
 import React from 'react'
 import {
+  doNavigate
+} from 'actions/app'
+import {
   connect
 } from 'react-redux'
 import HelpPage from './view'
 
-export default connect(null, null)(HelpPage)
+const perform = (dispatch) => ({
+  navigate: (path, params) => dispatch(doNavigate(path, params)),
+})
+
+export default connect(null, perform)(HelpPage)

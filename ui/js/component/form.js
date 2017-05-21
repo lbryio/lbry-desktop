@@ -109,7 +109,7 @@ export class FormField extends React.Component {
       {this.props.children}
     </this._element>;
 
-    return <div className="form-field">
+    return <div className={"form-field form-field--" + this.props.type}>
       { this.props.prefix ? <span className="form-field__prefix">{this.props.prefix}</span> : '' }
       { renderElementInsideLabel ?
           <label htmlFor={elementId} className={"form-field__label " + (isError ? 'form-field__label--error' : '')}>

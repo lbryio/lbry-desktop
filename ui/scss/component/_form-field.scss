@@ -109,6 +109,7 @@ input[type="text"].input-copyable {
   }
 
   textarea {
+    padding: 2px;
     border: $width-input-border solid $color-form-border;
   }
 }
@@ -140,8 +141,11 @@ input[type="text"].input-copyable {
   text-align: right;
 }
 
+.form-field--textarea {
+  width: 100%;
+}
 .form-field__input-textarea {
-  width: $width-input-text;
+  width: 100%;
 }
 
 .form-field__error, .form-field__helper {
