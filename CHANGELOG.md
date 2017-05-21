@@ -8,27 +8,19 @@ Web UI version numbers should always match the corresponding version of LBRY App
 
 ## [Unreleased]
 ### Added
-  * The UI has been overhauled to use an omnibar and drop the sidebar.
-  * The app is much more responsive switching pages. It no longer reloads the entire page and all assets on each page change.
-  * lbry.js now offers a subscription model for wallet balance similar to file info.
-  * Fixed file info subscribes not being unsubscribed in unmount.
-  * You can now make API calls directly on the lbry module, e.g. lbry.peer_list()
-  * New-style API calls return promises instead of using callbacks
-  * Wherever possible, use outpoints for unique IDs instead of names or SD hashes
-  * New publishes now display immediately in My Files, even before they hit the lbrynet file manager.
-  * New welcome flow for new users
-  * Redesigned UI for Discover
-  * Handle more of price calculations at the daemon layer to improve page load time
-  * Add special support for building channel claims in lbryuri module
-  * Enable windows code signing of binary
+  * Entire app re-written to use Redux as state store. Far saner and faster. Will also increase productivity moving forward.
+  * Channel page shows content published in channel.
+  * URI handling. Clicking lbry:// links should open the app and appropriate URI on all OSes.
+  * File cards have an icon indicating you posses that file.
+  * Download directory setting now uses a proper dialog.
+  * Movie player automatically shows if the file has already been downloaded.
 
 ### Changed
-  * Use directory selector instead of ugly text box on Settings page
-  * Use Electron's native file selector everywhere instead of WebKit file selector
+  * Plyr replaces mediaelement as the movie player.
 
 ### Fixed
-  * Error modals now display full screen properly
-  *
+  * Publisher indicator on show pages and file cards/tiles will now always show the proper channel name.
+  * Performance improvements related to avoiding duplicate fetches.
 
 ### Deprecated
   *
