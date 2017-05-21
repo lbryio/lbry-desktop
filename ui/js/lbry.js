@@ -10,12 +10,7 @@ const menu = remote.require('./menu/main-menu');
 let lbry = {
   isConnected: false,
   daemonConnectionString: 'http://localhost:5279/lbryapi',
-  webUiUri: 'http://localhost:5279',
-  peerListTimeout: 6000,
   pendingPublishTimeout: 20 * 60 * 1000,
-  colors: {
-    primary: '#155B4A'
-  },
   defaultClientSettings: {
     showNsfw: false,
     showUnavailable: true,
@@ -91,7 +86,6 @@ function pendingPublishToDummyClaim({channel_name, name, outpoint, claim_id, txi
 function pendingPublishToDummyFileInfo({name, outpoint, claim_id}) {
   return {name, outpoint, claim_id, metadata: null};
 }
-window.pptdfi = pendingPublishToDummyFileInfo;
 
 lbry.call = function (method, params, callback, errorCallback, connectFailedCallback) {
   return jsonrpc.call(lbry.daemonConnectionString, method, params, callback, errorCallback, connectFailedCallback);
@@ -128,21 +122,6 @@ lbry.connect = function() {
   }
 
   return lbry._connectPromise;
-}
-
-
-//kill this but still better than document.title =, which this replaced
-lbry.setTitle = function(title) {
-  document.title = title + " - LBRY";
-}
-
-//kill this with proper routing
-lbry.back = function() {
-  if (window.history.length > 1) {
-    window.history.back();
-  } else {
-    window.location.href = "?discover";
-  }
 }
 
 lbry.isDaemonAcceptingConnections = function (callback) {
@@ -465,14 +444,6 @@ lbry.cancelResolve = function(params={}) {
     xhr.abort()
   }
 }
-
-// lbry.get = function(params={}) {
-//   return function(params={}) {
-//     return new Promise((resolve, reject) => {
-//       jsonrpc.call(lbry.daemonConnectionString, "get", params, resolve, reject, reject);
-//     });
-//   };
-// }
 
 lbry = new Proxy(lbry, {
   get: function(target, name) {

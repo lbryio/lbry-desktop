@@ -1,5 +1,4 @@
 import React from 'react';
-import lbry from '../lbry.js';
 
 export class SnackBar extends React.Component {
   constructor(props) {

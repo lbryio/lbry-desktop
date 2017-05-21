@@ -4,6 +4,7 @@ import {
 } from 'react-redux'
 import {
   doNavigate,
+  doHistoryBack,
 } from 'actions/app'
 import {
   selectMyClaims
@@ -15,6 +16,7 @@ const select = (state) => ({
 })
 
 const perform = (dispatch) => ({
+  back: () => dispatch(doHistoryBack()),
   navigate: (path) => dispatch(doNavigate(path)),
 })
 

@@ -22,7 +22,7 @@ import {
 } from 'actions/file_info'
 import parseQueryParams from 'util/query_params'
 
-const {remote, ipcRenderer} = require('electron');
+const {remote, ipcRenderer, shell} = require('electron');
 const contextMenu = remote.require('./menu/context-menu');
 const app = require('./app')
 
@@ -47,8 +47,23 @@ window.addEventListener('popstate', (event, param) => {
 })
 
 ipcRenderer.on('open-uri-requested', (event, uri) => {
+  console.log('open uri')
+  console.log(event)
+  console.log(uri)
   if (uri) {
     console.log('FIX ME do magic dispatch: ' + uri);
+  }
+});
+
+document.addEventListener('click', (event) => {
+  var target = event.target;
+  while (target && target !== document) {
+    if (target.matches('a[href^="http"]')) {
+      event.preventDefault();
+      shell.openExternal(target.href);
+      return;
+    }
+    target = target.parentNode;
   }
 });
 
@@ -59,7 +74,8 @@ var init = function() {
   function onDaemonReady() {
     app.store.dispatch(doDaemonReady())
     window.sessionStorage.setItem('loaded', 'y'); //once we've made it here once per session, we don't need to show splash again
-    app.store.dispatch(doHistoryPush({}, "Discover", "/discover"))
+    app.store.dispatch(doHistoryPush({}, "" +
+      "Discover", "/discover"))
     app.store.dispatch(doFetchDaemonSettings())
     app.store.dispatch(doFileList())
     ReactDOM.render(<Provider store={store}><div>{ lbryio.enabled ? <AuthOverlay/> : '' }<App /><SnackBar /></div></Provider>, canvas)

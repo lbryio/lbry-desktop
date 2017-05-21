@@ -568,7 +568,7 @@ class PublishPage extends React.Component {
 
           <div className="card-series-submit">
             <Link button="primary" label={!this.state.submitting ? 'Publish' : 'Publishing...'} onClick={(event) => { this.handleSubmit(event) }} disabled={this.state.submitting} />
-            <Link button="cancel" onClick={lbry.back} label="Cancel" />
+            <Link button="cancel" onClick={this.props.back} label="Cancel" />
             <input type="submit" className="hidden" />
           </div>
         </form>

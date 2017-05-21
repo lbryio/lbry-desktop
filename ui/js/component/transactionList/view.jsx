@@ -25,7 +25,7 @@ class TransactionList extends React.Component{
             <td>{ item.date ? item.date.toLocaleDateString() : <span className="empty">(Transaction pending)</span> }</td>
             <td>{ item.date ? item.date.toLocaleTimeString() : <span className="empty">(Transaction pending)</span> }</td>
             <td>
-              <a className="button-text" href={"https://explorer.lbry.io/tx/"+item.id} target="_blank">{item.id.substr(0, 7)}</a>
+              <a className="button-text" href={"https://explorer.lbry.io/#!/transaction?id="+item.id}>{item.id.substr(0, 7)}</a>
             </td>
           </tr>
         );

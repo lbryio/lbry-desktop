@@ -44,7 +44,7 @@ rewards.claimReward = function (type) {
         detail: {
           message: message,
           linkText: "Show All",
-          linkTarget: "?rewards",
+          linkTarget: "/rewards",
           isError: false,
         },
       }));

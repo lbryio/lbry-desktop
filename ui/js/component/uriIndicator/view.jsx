@@ -44,10 +44,6 @@ class UriIndicator extends React.Component{
       signature_is_valid: signatureIsValid,
     } = claim
 
-    console.log('uri indicator render')
-    console.log(uri)
-    console.log(claim)
-
     if (!hasSignature || !channelName) {
       return <span className="empty">Anonymous</span>;
     }
