@@ -48,7 +48,10 @@ window.addEventListener('popstate', (event, param) => {
 })
 
 ipcRenderer.on('open-uri-requested', (event, uri) => {
+  console.log(event)
+  console.log(uri)
   if (uri && uri.startsWith('lbry://')) {
+    console.log(uri)
     doNavigate('/show', { uri })
   }
 });
