@@ -49,7 +49,7 @@ class ShowPage extends React.Component{
       </section>
     }
     else if (claim.name.length && claim.name[0] === '@') {
-      innerContent = <ChannelPage uri={lbryuri.build({ name: claim.name, claimId: claim.claim_id })} />
+      innerContent = <ChannelPage uri={uri} />
     }
     else if (claim) {
       innerContent = <FilePage uri={uri} />

@@ -11,8 +11,6 @@ import {
 } from 'selectors/claims'
 import ChannelPage from './view'
 
-import FilePage from './view'
-
 const makeSelect = () => {
   const selectClaim = makeSelectClaimForUri(),
         selectClaimsInChannel = makeSelectClaimsInChannelForUri()
@@ -26,7 +24,6 @@ const makeSelect = () => {
 }
 
 const perform = (dispatch) => ({
-  // fetchClaims: () => { console.log('fetch claims') }
   fetchClaims: (uri) => dispatch(doFetchClaimsByChannel(uri))
 })
 

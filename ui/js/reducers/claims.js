@@ -57,6 +57,22 @@ reducers[types.CLAIM_LIST_MINE_COMPLETED] = function(state, action) {
   })
 }
 
+// reducers[types.FETCH_CHANNEL_CLAIMS_STARTED] = function(state, action) {
+//   const {
+//     uri,
+//   } = action.data
+//
+//   const newClaims = Object.assign({}, state.claimsByChannel)
+//
+//   if (claims !== undefined) {
+//     newClaims[uri] = claims
+//   }
+//
+//   return Object.assign({}, state, {
+//     claimsByChannel: newClaims
+//   })
+// }
+
 reducers[types.FETCH_CHANNEL_CLAIMS_COMPLETED] = function(state, action) {
   const {
     uri,

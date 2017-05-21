@@ -105,7 +105,7 @@ class SettingsPage extends React.Component {
                      name="download_directory"
                      defaultValue={daemonSettings.download_directory}
                      helper="LBRY downloads will be saved here."
-                     onChange={this.onDownloadDirChange} />
+                     onChange={this.onDownloadDirChange.bind(this)} />
           </div>
         </section>
         <section className="card">
@@ -132,7 +132,7 @@ class SettingsPage extends React.Component {
                              defaultValue={daemonSettings.max_upload}
                              placeholder="10"
                              className="form-field__input--inline"
-                             onChange={this.onMaxUploadFieldChange}
+                             onChange={this.onMaxUploadFieldChange.bind(this)}
                   />
                   : ''
 
@@ -160,7 +160,7 @@ class SettingsPage extends React.Component {
                            defaultValue={daemonSettings.max_download}
                            placeholder="10"
                            className="form-field__input--inline"
-                           onChange={this.onMaxDownloadFieldChange}
+                           onChange={this.onMaxDownloadFieldChange.bind(this)}
                 />
                 : ''
 
@@ -175,13 +175,13 @@ class SettingsPage extends React.Component {
           </div>
           <div className="card__content">
             <FormRow type="checkbox"
-                     onChange={this.onShowUnavailableChange}
+                     onChange={this.onShowUnavailableChange.bind(this)}
                      defaultChecked={this.state.showUnavailable}
                      label="Show unavailable content in search results"  />
           </div>
           <div className="card__content">
             <FormRow label="Show NSFW content" type="checkbox"
-                     onChange={this.onShowNsfwChange}  defaultChecked={this.state.showNsfw}
+                     onChange={this.onShowNsfwChange.bind(this)}  defaultChecked={this.state.showNsfw}
                      helper="NSFW content may include nudity, intense sexuality, profanity, or other adult content. By displaying NSFW content, you are affirming you are of legal age to view mature content in your country or jurisdiction.  " />
           </div>
         </section>
@@ -191,7 +191,7 @@ class SettingsPage extends React.Component {
           </div>
           <div className="card__content">
             <FormRow type="checkbox"
-                     onChange={this.onShareDataChange}
+                     onChange={this.onShareDataChange.bind(this)}
                      defaultChecked={daemonSettings.share_usage_data}
                      label="Help make LBRY better by contributing diagnostic data about my usage" />
           </div>

@@ -1,4 +1,4 @@
-import * as types from 'constants/action_types'
+  import * as types from 'constants/action_types'
 import lbry from 'lbry'
 import lbryio from 'lbryio'
 import {

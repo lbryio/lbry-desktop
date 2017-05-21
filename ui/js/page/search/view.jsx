@@ -8,8 +8,6 @@ import {BusyMessage} from 'component/common.js';
 
 class SearchPage extends React.Component{
   render() {
-    console.log('render search page')
-
     const {
       query,
     } = this.props

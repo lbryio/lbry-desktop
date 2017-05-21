@@ -1,50 +1,74 @@
 import React from 'react';
-import lbry from 'lbry';
-import lbryuri from 'lbryuri';
 import {Icon} from 'component/common';
 
-const UriIndicator = (props) => {
-  const {
-    uri,
-    claim
-  } = props
-
-  const uriObj = lbryuri.parse(uri);
-
-  if (!claim) {
-    return <span className="empty">Unused</span>
+class UriIndicator extends React.Component{
+  componentWillMount() {
+    this.resolve(this.props)
   }
 
-  const {
-    has_signature: hasSignature,
-    signature_is_valid: signatureIsValid
-  } = claim
-
-  if (!hasSignature || !uriObj.isChannel) {
-    return <span className="empty">Anonymous</span>;
+  componentWillReceiveProps(nextProps) {
+    this.resolve(nextProps)
   }
 
-  const channelUriObj = Object.assign({}, uriObj);
-  delete channelUriObj.path;
-  delete channelUriObj.contentName;
-  const channelUri = lbryuri.build(channelUriObj, false);
+  resolve(props) {
+    const {
+      isResolvingUri,
+      resolveUri,
+      claim,
+      uri,
+    } = props
 
-  let icon, modifier;
-  if (signatureIsValid) {
-    modifier = 'valid';
-  } else {
-    icon = 'icon-times-circle';
-    modifier = 'invalid';
+    if(!isResolvingUri && claim === undefined && uri) {
+      resolveUri(uri)
+    }
   }
 
-  return (
-    <span>
-      {channelUri} {' '}
-      { !signatureIsValid ?
-        <Icon icon={icon} className={`channel-indicator__icon channel-indicator__icon--${modifier}`} /> :
-        '' }
-    </span>
-  )
+  render() {
+    const {
+      claim,
+      uri,
+      isResolvingUri
+    } = this.props
+
+    if (isResolvingUri) {
+      return <span className="empty">Validating...</span>
+    }
+
+    if (!claim) {
+      return <span className="empty">Unused</span>
+    }
+
+    const {
+      channel_name: channelName,
+      has_signature: hasSignature,
+      signature_is_valid: signatureIsValid,
+    } = claim
+
+    console.log('uri indicator render')
+    console.log(uri)
+    console.log(claim)
+
+    if (!hasSignature || !channelName) {
+      return <span className="empty">Anonymous</span>;
+    }
+
+    let icon, modifier;
+    if (signatureIsValid) {
+      modifier = 'valid';
+    } else {
+      icon = 'icon-times-circle';
+      modifier = 'invalid';
+    }
+
+    return (
+      <span>
+        {channelName} {' '}
+        { !signatureIsValid ?
+             <Icon icon={icon} className={`channel-indicator__icon channel-indicator__icon--${modifier}`} /> :
+             '' }
+      </span>
+    )
+  }
 }
 
 export default UriIndicator;

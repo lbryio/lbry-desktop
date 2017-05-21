@@ -74,6 +74,7 @@ class FilePage extends React.Component{
     const {
       txid,
       nout,
+      channel_name: channelName,
       has_signature: hasSignature,
       signature_is_valid: signatureIsValid,
       value
@@ -81,10 +82,8 @@ class FilePage extends React.Component{
 
     const outpoint = txid + ':' + nout
     const title = metadata.title
-    const channelUriObj = lbryuri.parse(uri)
-    delete channelUriObj.path;
-    delete channelUriObj.contentName;
-    const channelUri = signatureIsValid && hasSignature && channelUriObj.isChannel ? lbryuri.build(channelUriObj, false) : null
+    const channelClaimId = claim.value && claim.value.publisherSignature ? claim.value.publisherSignature.certificateId : null;
+    const channelUri = signatureIsValid && hasSignature && channelName ? lbryuri.build({channelName, claimId: channelClaimId}, false) : null
     const uriIndicator = <UriIndicator uri={uri} />
 
     return (
@@ -102,7 +101,7 @@ class FilePage extends React.Component{
                 : null}<h1>{title}</h1>
               <div className="card__subtitle">
                 { channelUri ?
-                  <Link href={"?show=" + channelUri }>{uriIndicator}</Link> :
+                  <Link onClick={() => this.props.navigate('/show', { uri: channelUri })}>{uriIndicator}</Link> :
                   uriIndicator}
               </div>
               <div className="card__actions">

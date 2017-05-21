@@ -32,7 +32,7 @@ export class FormField extends React.Component {
   }
 
   componentWillMount() {
-    if (['text', 'number', 'radio', 'checkbox', 'file'].includes(this.props.type)) {
+    if (['text', 'number', 'radio', 'checkbox'].includes(this.props.type)) {
       this._element = 'input';
       this._type = this.props.type;
     } else if (this.props.type == 'text-number') {
@@ -118,7 +118,7 @@ export class FormField extends React.Component {
           </label> :
         element }
       { formFieldFileSelectorTypes.includes(this.props.type) ?
-          <FileSelector type={this.props.type} onFileChosen={this.handleFileChosen}
+          <FileSelector type={this.props.type} onFileChosen={this.handleFileChosen.bind(this)}
                         {... this.props.defaultValue ? {initPath: this.props.defaultValue} : {}} /> :
           null }
       { this.props.postfix ? <span className="form-field__postfix">{this.props.postfix}</span> : '' }

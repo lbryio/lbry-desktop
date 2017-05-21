@@ -1,5 +1,7 @@
 import React from 'react';
 import lbryuri from 'lbryuri'
+import {BusyMessage} from 'component/common'
+import FileTile from 'component/fileTile'
 
 class ChannelPage extends React.Component{
   componentDidMount() {
@@ -23,7 +25,15 @@ class ChannelPage extends React.Component{
       uri
     } = this.props
 
-    console.log(claimsInChannel);
+    let contentList
+    if (claimsInChannel === undefined) {
+      contentList = <BusyMessage message="Fetching content" />
+    } else if (claimsInChannel) {
+      contentList = claimsInChannel.length ?
+        claimsInChannel.map((claim) => <FileTile key={claim.claim_id} uri={lbryuri.build({name: claim.name, claimId: claim.claim_id})} />) :
+        <span className="empty">No content found.</span>
+    }
+
     return <main className="main--single-column">
       <section className="card">
         <div className="card__inner">
@@ -35,13 +45,8 @@ class ChannelPage extends React.Component{
           </p>
         </div>
       </section>
-      <section className="card">
-        <div className="card__content">
-          {claimsInChannel ?
-            claimsInChannel.map((claim) => <FileTile uri={lbryuri.build({name: claim.name, claimId: claim.claim_id})} /> )
-            : ''}
-        </div>
-      </section>
+      <h3 className="card-row__header">Published Content</h3>
+      {contentList}
     </main>
   }
 }

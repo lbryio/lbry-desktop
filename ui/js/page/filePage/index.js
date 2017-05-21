@@ -3,6 +3,9 @@ import {
   connect
 } from 'react-redux'
 import {
+  doNavigate,
+} from 'actions/app'
+import {
   doFetchFileInfo,
 } from 'actions/file_info'
 import {
@@ -37,6 +40,7 @@ const makeSelect = () => {
 }
 
 const perform = (dispatch) => ({
+  navigate: (path, params) => dispatch(doNavigate(path, params)),
   fetchFileInfo: (uri) => dispatch(doFetchFileInfo(uri))
 })
 

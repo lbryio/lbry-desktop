@@ -26,6 +26,8 @@ import {
 export function doResolveUri(uri) {
   return function(dispatch, getState) {
 
+    uri = lbryuri.normalize(uri)
+
     const state = getState()
     const alreadyResolving = selectResolvingUris(state).indexOf(uri) !== -1
 
@@ -81,14 +83,6 @@ export function doFetchFeaturedUris() {
           featuredUris[category] = Uris[category]
         }
       })
-      //
-      // dispatch({
-      //   type: types.FETCH_FEATURED_CONTENT_COMPLETED,
-      //   data: {
-      //     categories: ["FOO"],
-      //     uris: { FOO: ["lbry://gtasoc"]},
-      //   }
-      // })
 
       dispatch({
         type: types.FETCH_FEATURED_CONTENT_COMPLETED,
