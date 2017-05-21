@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactModal from 'react-modal';
-import {Link} from './link.js';
+import Link from 'component/link';
 
 
-export const Modal = React.createClass({
-  propTypes: {
+export class Modal extends React.Component {
+  static propTypes = {
     type: React.PropTypes.oneOf(['alert', 'confirm', 'custom']),
     overlay: React.PropTypes.bool,
     onConfirmed: React.PropTypes.func,
@@ -13,18 +13,18 @@ export const Modal = React.createClass({
     abortButtonLabel: React.PropTypes.string,
     confirmButtonDisabled: React.PropTypes.bool,
     abortButtonDisabled: React.PropTypes.bool,
-  },
-  getDefaultProps: function() {
-    return {
-      type: 'alert',
-      overlay: true,
-      confirmButtonLabel: 'OK',
-      abortButtonLabel: 'Cancel',
-      confirmButtonDisabled: false,
-      abortButtonDisabled: false,
-    };
-  },
-  render: function() {
+  }
+
+  static defaultProps = {
+    type: 'alert',
+    overlay: true,
+    confirmButtonLabel: 'OK',
+    abortButtonLabel: 'Cancel',
+    confirmButtonDisabled: false,
+    abortButtonDisabled: false,
+  }
+
+  render() {
     return (
       <ReactModal onCloseRequested={this.props.onAborted || this.props.onConfirmed} {...this.props}
                   className={(this.props.className || '') + ' modal'}
@@ -43,31 +43,35 @@ export const Modal = React.createClass({
       </ReactModal>
     );
   }
-});
+}
 
-export const ExpandableModal = React.createClass({
-  propTypes: {
+export class ExpandableModal extends React.Component {
+  static propTypes = {
     expandButtonLabel: React.PropTypes.string,
     extraContent: React.PropTypes.element,
-  },
-  getDefaultProps: function() {
-    return {
-      confirmButtonLabel: 'OK',
-      expandButtonLabel: 'Show More...',
-      hideButtonLabel: 'Show Less',
-    }
-  },
-  getInitialState: function() {
-    return {
+  }
+
+  static defaultProps = {
+    confirmButtonLabel: 'OK',
+    expandButtonLabel: 'Show More...',
+    hideButtonLabel: 'Show Less',
+  }
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
       expanded: false,
     }
-  },
-  toggleExpanded: function() {
+  }
+
+  toggleExpanded() {
     this.setState({
       expanded: !this.state.expanded,
     });
-  },
-  render: function() {
+  }
+
+  render() {
     return (
       <Modal type="custom" {... this.props}>
         {this.props.children}
@@ -77,11 +81,11 @@ export const ExpandableModal = React.createClass({
         <div className="modal__buttons">
           <Link button="primary" label={this.props.confirmButtonLabel} className="modal__button" onClick={this.props.onConfirmed} />
           <Link button="alt" label={!this.state.expanded ? this.props.expandButtonLabel : this.props.hideButtonLabel}
-                className="modal__button" onClick={this.toggleExpanded} />
+                className="modal__button" onClick={() => { this.toggleExpanded() }} />
         </div>
       </Modal>
     );
   }
-});
+}
 
 export default Modal;

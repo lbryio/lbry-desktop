@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactModal from 'react-modal';
 
-export const ModalPage = React.createClass({
-  render: function() {
+export class ModalPage extends React.Component {
+  render() {
     return (
       <ReactModal onCloseRequested={this.props.onAborted || this.props.onConfirmed} {...this.props}
                   className={(this.props.className || '') + ' modal-page'}
@@ -13,6 +13,6 @@ export const ModalPage = React.createClass({
       </ReactModal>
     );
   }
-});
+}
 
-export default ModalPage;
+export default ModalPage

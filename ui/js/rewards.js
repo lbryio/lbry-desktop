@@ -44,7 +44,7 @@ rewards.claimReward = function (type) {
         detail: {
           message: message,
           linkText: "Show All",
-          linkTarget: "?rewards",
+          linkTarget: "/rewards",
           isError: false,
         },
       }));
@@ -56,7 +56,7 @@ rewards.claimReward = function (type) {
   }
 
   return new Promise((resolve, reject) => {
-    lbry.wallet_new_address().then((address) => {
+    lbry.wallet_unused_address().then((address) => {
       const params = {
         reward_type: type,
         wallet_address: address,

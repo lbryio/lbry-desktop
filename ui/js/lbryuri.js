@@ -165,5 +165,30 @@ lbryuri.normalize= function(uri) {
   return lbryuri.build({name, path, claimSequence, bidPosition, claimId});
 }
 
+lbryuri.isValid = function(uri) {
+  let parts
+  try {
+    parts = lbryuri.parse(lbryuri.normalize(uri))
+  } catch (error) {
+    return false;
+  }
+  return parts && parts.name;
+}
+
+lbryuri.isValidName = function(name, checkCase=true) {
+  const regexp = new RegExp('^[a-z0-9-]+$', checkCase ? '' : 'i');
+  return regexp.test(name);
+}
+
+lbryuri.isClaimable = function(uri) {
+  let parts
+  try {
+    parts = lbryuri.parse(lbryuri.normalize(uri))
+  } catch (error) {
+    return false;
+  }
+  return parts && parts.name && !parts.claimId && !parts.bidPosition && !parts.claimSequence && !parts.isChannel && !parts.path;
+}
+
 window.lbryuri = lbryuri;
 export default lbryuri;
