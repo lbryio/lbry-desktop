@@ -40,11 +40,14 @@ window.addEventListener('popstate', (event, param) => {
   const pathParts = document.location.pathname.split('/')
   const route = '/' + pathParts[pathParts.length - 1]
 
-  if (route.match(/html$/)) return
+  let action
+  if (route.match(/html$/)) {
+    action = doChangePath('/discover')
+  } else {
+    action = doChangePath(`${route}${queryString}`)
+  }
 
-  console.log('title should be set here, but it is not in popstate? TODO')
-
-  app.store.dispatch(doChangePath(`${route}${queryString}`))
+  app.store.dispatch(action)
 })
 
 ipcRenderer.on('open-uri-requested', (event, uri) => {
