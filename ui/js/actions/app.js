@@ -43,6 +43,10 @@ export function doChangePath(path) {
         path,
       }
     })
+
+    const state = getState()
+    const pageTitle = selectPageTitle(state)
+    window.document.title = pageTitle
   }
 }
 
