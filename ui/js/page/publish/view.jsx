@@ -179,7 +179,7 @@ class PublishPage extends React.Component {
     }
 
     if (!lbryuri.isValidName(rawName, false)) {
-      this.refs.name.showError('LBRY names must contain only letters, numbers and dashes.');
+      this.refs.name.showError(__("LBRY names must contain only letters, numbers and dashes."));
       return;
     }
 
@@ -266,7 +266,7 @@ class PublishPage extends React.Component {
     };
 
     if (licenseType == 'copyright') {
-      newState.copyrightNotice = 'All rights reserved.'
+      newState.copyrightNotice = __("All rights reserved.")
     }
 
     this.setState(newState);
@@ -302,7 +302,7 @@ class PublishPage extends React.Component {
     const newChannelName = (event.target.value.startsWith('@') ? event.target.value : '@' + event.target.value);
 
     if (newChannelName.length > 1 && !lbryuri.isValidName(newChannelName.substr(1), false)) {
-      this.refs.newChannelName.showError('LBRY channel names must contain only letters, numbers and dashes.');
+      this.refs.newChannelName.showError(__("LBRY channel names must contain only letters, numbers and dashes."));
       return;
     } else {
       this.refs.newChannelName.clearError()
@@ -327,7 +327,7 @@ class PublishPage extends React.Component {
 
   handleCreateChannelClick(event) {
     if (this.state.newChannelName.length < 5) {
-      this.refs.newChannelName.showError('LBRY channel names must be at least 4 characters in length.');
+      this.refs.newChannelName.showError(__("LBRY channel names must be at least 4 characters in length."));
       return;
     }
 
@@ -346,7 +346,7 @@ class PublishPage extends React.Component {
       }, 5000);
     }, (error) => {
       // TODO: better error handling
-      this.refs.newChannelName.showError('Unable to create channel due to an internal error.');
+      this.refs.newChannelName.showError(__("Unable to create channel due to an internal error."));
       this.setState({
         creatingChannel: false,
       });
@@ -377,14 +377,17 @@ class PublishPage extends React.Component {
 
   getNameBidHelpText() {
     if (!this.state.name) {
-      return "Select a URL for this publish.";
+      return __("Select a URL for this publish.");
     } else if (this.state.nameResolved === false) {
-      return "This URL is unused.";
+      return __("This URL is unused.");
     } else if (this.state.myClaimExists) {
-      return "You have already used this URL. Publishing to it again will update your previous publish."
+      return __("You have already used this URL. Publishing to it again will update your previous publish.")
     } else if (this.state.topClaimValue) {
-      return <span>A deposit of at least <strong>{this.state.topClaimValue}</strong> {this.state.topClaimValue == 1 ? 'credit ' : 'credits '}
-                  is required to win <strong>{this.state.name}</strong>. However, you can still get a permanent URL for any amount.</span>
+      return <span>{__n("A deposit of at least \"%s\" credit is required to win \"%s\". However, you can still get a permanent URL for any amount."
+                , "A deposit of at least \"%s\" credits is required to win \"%s\". However, you can still get a permanent URL for any amount."
+                , this.state.topClaimValue /*pluralization param*/
+                , this.state.topClaimValue, this.state.name /*regular params*/
+              )}</span>
     } else {
       return '';
     }
@@ -401,49 +404,49 @@ class PublishPage extends React.Component {
       return null;
     }
 
-    const lbcInputHelp = "This LBC remains yours and the deposit can be undone at any time."
+    const lbcInputHelp = __("This LBC remains yours and the deposit can be undone at any time.");
 
     return (
       <main className="main--single-column">
         <form onSubmit={(event) => { this.handleSubmit(event) }}>
           <section className="card">
             <div className="card__title-primary">
-              <h4>Content</h4>
+              <h4>{__("Content")}</h4>
               <div className="card__subtitle">
-                What are you publishing?
+                {__("What are you publishing?")}
               </div>
             </div>
             <div className="card__content">
               <FormRow name="file" label="File" ref="file" type="file" onChange={(event) => { this.onFileChange(event) }}
-                       helper={this.state.myClaimExists ? "If you don't choose a file, the file from your existing claim will be used." : null}/>
+                       helper={this.state.myClaimExists ? __("If you don't choose a file, the file from your existing claim will be used.") : null}/>
             </div>
             { !this.state.hasFile ? '' :
                 <div>
                 <div className="card__content">
-                  <FormRow label="Title" type="text" ref="meta_title" name="title" placeholder="Titular Title" />
+                  <FormRow label={__("Title")} type="text" ref="meta_title" name="title" placeholder={__("Title")} />
                 </div>
                 <div className="card__content">
-                  <FormRow type="text" label="Thumbnail URL" ref="meta_thumbnail" name="thumbnail" placeholder="http://spee.ch/mylogo" />
+                  <FormRow type="text" label={__("Thumbnail URL")} ref="meta_thumbnail" name="thumbnail" placeholder="http://spee.ch/mylogo" />
                 </div>
                 <div className="card__content">
-                  <FormRow label="Description" type="textarea" ref="meta_description" name="description" placeholder="Description of your content" />
+                  <FormRow label={__("Description")} type="textarea" ref="meta_description" name="description" placeholder={__("Description of your content")} />
                 </div>
                 <div className="card__content">
-                  <FormRow label="Language" type="select" defaultValue="en" ref="meta_language" name="language">
-                    <option value="en">English</option>
-                    <option value="zh">Chinese</option>
-                    <option value="fr">French</option>
-                    <option value="de">German</option>
-                    <option value="jp">Japanese</option>
-                    <option value="ru">Russian</option>
-                    <option value="es">Spanish</option>
+                  <FormRow label={__("Language")} type="select" defaultValue="en" ref="meta_language" name="language">
+                    <option value="en">{__("English")}</option>
+                    <option value="zh">{__("Chinese")}</option>
+                    <option value="fr">{__("French")}</option>
+                    <option value="de">{__("German")}</option>
+                    <option value="jp">{__("Japanese")}</option>
+                    <option value="ru">{__("Russian")}</option>
+                    <option value="es">{__("Spanish")}</option>
                   </FormRow>
                 </div>
                 <div className="card__content">
-                  <FormRow type="select" label="Maturity" defaultValue="en" ref="meta_nsfw" name="nsfw">
+                  <FormRow type="select" label={__("Maturity")} defaultValue="en" ref="meta_nsfw" name="nsfw">
                     {/* <option value=""></option> */}
-                    <option value="0">All Ages</option>
-                    <option value="1">Adults Only</option>
+                    <option value="0">{__("All Ages")}</option>
+                    <option value="1">{__("Adults Only")}</option>
                   </FormRow>
                 </div>
               </div>}
@@ -451,73 +454,73 @@ class PublishPage extends React.Component {
 
           <section className="card">
             <div className="card__title-primary">
-              <h4>Access</h4>
+              <h4>{__("Access")}</h4>
               <div className="card__subtitle">
-                How much does this content cost?
+                {__("How much does this content cost?")}
               </div>
             </div>
             <div className="card__content">
               <div className="form-row__label-row">
-                <label className="form-row__label">Price</label>
+                <label className="form-row__label">{__("Price")}</label>
               </div>
-              <FormRow label="Free" type="radio" name="isFree" value="1" onChange={ () => { this.handleFeePrefChange(false) } } defaultChecked={!this.state.isFee} />
-              <FormField type="radio" name="isFree" label={!this.state.isFee ? 'Choose price...' : 'Price ' }
+              <FormRow label={__("Free")} type="radio" name="isFree" value="1" onChange={ () => { this.handleFeePrefChange(false) } } defaultChecked={!this.state.isFee} />
+              <FormField type="radio" name="isFree" label={!this.state.isFee ? __('Choose price...') : __('Price ') }
                          onChange={ () => { this.handleFeePrefChange(true) } } defaultChecked={this.state.isFee} />
              <span className={!this.state.isFee ? 'hidden' : ''}>
                <FormField type="number" className="form-field__input--inline" step="0.01" placeholder="1.00" onChange={(event) => this.handleFeeAmountChange(event)} /> <FormField type="select" onChange={(event) => { this.handleFeeCurrencyChange(event) }}>
-               <option value="USD">US Dollars</option>
-               <option value="LBC">LBRY credits</option>
+               <option value="USD">{__("US Dollars")}</option>
+               <option value="LBC">{__("LBRY credits")}</option>
              </FormField>
                </span>
               { this.state.isFee ?
                   <div className="form-field__helper">
-                    If you choose to price this content in dollars, the number of credits charged will be adjusted based on the value of LBRY credits at the time of purchase.
+                    {__("If you choose to price this content in dollars, the number of credits charged will be adjusted based on the value of LBRY credits at the time of purchase.")}
                   </div> : '' }
               <FormRow label="License" type="select" ref="meta_license" name="license" onChange={(event) => { this.handleLicenseChange(event) }}>
                 <option></option>
-                <option>Public Domain</option>
-                <option data-url="https://creativecommons.org/licenses/by/4.0/legalcode">Creative Commons Attribution 4.0 International</option>
-                <option data-url="https://creativecommons.org/licenses/by-sa/4.0/legalcode">Creative Commons Attribution-ShareAlike 4.0 International</option>
-                <option data-url="https://creativecommons.org/licenses/by-nd/4.0/legalcode">Creative Commons Attribution-NoDerivatives 4.0 International</option>
-                <option data-url="https://creativecommons.org/licenses/by-nc/4.0/legalcode">Creative Commons Attribution-NonCommercial 4.0 International</option>
-                <option data-url="https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode">Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International</option>
-                <option data-url="https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode">Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International</option>
-                <option data-license-type="copyright" {... this.state.copyrightChosen ? {value: this.state.copyrightNotice} : {}}>Copyrighted...</option>
-                <option data-license-type="other" {... this.state.otherLicenseChosen ? {value: this.state.otherLicenseDescription} : {}}>Other...</option>
+                <option>{__("Public Domain")}</option>
+                <option data-url="https://creativecommons.org/licenses/by/4.0/legalcode">{__("Creative Commons Attribution 4.0 International")}</option>
+                <option data-url="https://creativecommons.org/licenses/by-sa/4.0/legalcode">{__("Creative Commons Attribution-ShareAlike 4.0 International")}</option>
+                <option data-url="https://creativecommons.org/licenses/by-nd/4.0/legalcode">{__("Creative Commons Attribution-NoDerivatives 4.0 International")}</option>
+                <option data-url="https://creativecommons.org/licenses/by-nc/4.0/legalcode">{__("Creative Commons Attribution-NonCommercial 4.0 International")}</option>
+                <option data-url="https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode">{__("Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International")}</option>
+                <option data-url="https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode">{__("Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International")}</option>
+                <option data-license-type="copyright" {... this.state.copyrightChosen ? {value: this.state.copyrightNotice} : {}}>{__("Copyrighted...")}</option>
+                <option data-license-type="other" {... this.state.otherLicenseChosen ? {value: this.state.otherLicenseDescription} : {}}>{__("Other...")}</option>
               </FormRow>
               <FormField type="hidden" ref="meta_license_url" name="license_url" value={this.getLicenseUrl()} />
               {this.state.copyrightChosen
-                ?  <FormRow label="Copyright notice" type="text" name="copyright-notice"
+                ?  <FormRow label={__("Copyright notice")} type="text" name="copyright-notice"
                             value={this.state.copyrightNotice} onChange={(event) => { this.handleCopyrightNoticeChange(event) }} />
                 : null}
               {this.state.otherLicenseChosen ?
-               <FormRow label="License description" type="text" name="other-license-description" onChange={(event) => { this.handleOtherLicenseDescriptionChange() }} />
+               <FormRow label={__("License description")} type="text" name="other-license-description" onChange={(event) => { this.handleOtherLicenseDescriptionChange() }} />
                 : null}
               {this.state.otherLicenseChosen ?
-               <FormRow label="License URL" type="text" name="other-license-url" onChange={(event) => { this.handleOtherLicenseUrlChange(event) }} />
+               <FormRow label={__("License URL")} type="text" name="other-license-url" onChange={(event) => { this.handleOtherLicenseUrlChange(event) }} />
                 : null}
             </div>
           </section>
 
           <section className="card">
             <div className="card__title-primary">
-              <h4>Identity</h4>
+              <h4>{__("Identity")}</h4>
               <div className="card__subtitle">
-                Who created this content?
+                {__("Who created this content?")}
               </div>
             </div>
             <div className="card__content">
               <FormRow type="select" tabIndex="1" onChange={(event) => { this.handleChannelChange(event) }} value={this.state.channel}>
-                <option key="anonymous" value="anonymous">Anonymous</option>
+                <option key="anonymous" value="anonymous">{__("Anonymous")}</option>
                 {this.state.channels.map(({name}) => <option key={name} value={name}>{name}</option>)}
-                <option key="new" value="new">New identity...</option>
+                <option key="new" value="new">{__("New identity...")}</option>
               </FormRow>
             </div>
             {this.state.channel == 'new' ?
                <div className="card__content">
-                 <FormRow label="Name" type="text" onChange={(event) => { this.handleNewChannelNameChange(event) }} ref={newChannelName => { this.refs.newChannelName = newChannelName }}
+                 <FormRow label={__("Name")} type="text" onChange={(event) => { this.handleNewChannelNameChange(event) }} ref={newChannelName => { this.refs.newChannelName = newChannelName }}
                           value={this.state.newChannelName} />
-                 <FormRow label="Deposit"
+                 <FormRow label={__("Deposit")}
                           postfix="LBC"
                           step="0.01"
                           type="number"
@@ -525,7 +528,7 @@ class PublishPage extends React.Component {
                           onChange={(event) => { this.handleNewChannelBidChange(event) }}
                           value={this.state.newChannelBid} />
                  <div className="form-row-submit">
-                    <Link button="primary" label={!this.state.creatingChannel ? 'Create identity' : 'Creating identity...'} onClick={(event) => { this.handleCreateChannelClick(event) }} disabled={this.state.creatingChannel} />
+                    <Link button="primary" label={!this.state.creatingChannel ? __("Create identity") : __("Creating identity...")} onClick={(event) => { this.handleCreateChannelClick(event) }} disabled={this.state.creatingChannel} />
                  </div>
                 </div>
               : null}
@@ -534,8 +537,8 @@ class PublishPage extends React.Component {
 
           <section className="card">
             <div className="card__title-primary">
-              <h4>Address</h4>
-              <div className="card__subtitle">Where should this content permanently reside? <Link label="Read more" href="https://lbry.io/faq/naming" />.</div>
+              <h4>{__("Address")}</h4>
+              <div className="card__subtitle">{__("Where should this content permanently reside?")} <Link label={__("Read more")} href="https://lbry.io/faq/naming" />.</div>
             </div>
             <div className="card__content">
               <FormRow prefix="lbry://" type="text" ref="name" placeholder="myname" value={this.state.rawName} onChange={(event) => { this.handleNameChange(event) }}
@@ -546,7 +549,7 @@ class PublishPage extends React.Component {
                   <FormRow ref="bid"
                              type="number"
                              step="0.01"
-                             label="Deposit"
+                             label={__("Deposit")}
                              postfix="LBC"
                              onChange={(event) => { this.handleBidChange(event) }}
                              value={this.state.bid}
@@ -557,30 +560,30 @@ class PublishPage extends React.Component {
 
           <section className="card">
             <div className="card__title-primary">
-              <h4>Terms of Service</h4>
+              <h4>{__("Terms of Service")}</h4>
             </div>
             <div className="card__content">
               <FormRow label={
-                <span>I agree to the <Link href="https://www.lbry.io/termsofservice" label="LBRY terms of service" checked={this.state.TOSAgreed} /></span>
+                <span>{__("I agree to the")} <Link href="https://www.lbry.io/termsofservice" label={__("LBRY terms of service")} checked={this.state.TOSAgreed} /></span>
               } type="checkbox" name="tos_agree" ref={(field) => { this.refs.tos_agree = field }} onChange={(event) => { this.handleTOSChange(event)}} />
             </div>
           </section>
 
           <div className="card-series-submit">
-            <Link button="primary" label={!this.state.submitting ? 'Publish' : 'Publishing...'} onClick={(event) => { this.handleSubmit(event) }} disabled={this.state.submitting} />
-            <Link button="cancel" onClick={this.props.back} label="Cancel" />
+            <Link button="primary" label={!this.state.submitting ? __("Publish") : __("Publishing...")} onClick={(event) => { this.handleSubmit(event) }} disabled={this.state.submitting} />
+            <Link button="cancel" onClick={this.props.back} label={__("Cancel")} />
             <input type="submit" className="hidden" />
           </div>
         </form>
 
-        <Modal isOpen={this.state.modal == 'publishStarted'} contentLabel="File published"
+        <Modal isOpen={this.state.modal == 'publishStarted'} contentLabel={__("File published")}
                onConfirmed={(event) => { this.handlePublishStartedConfirmed(event) }}>
-          <p>Your file has been published to LBRY at the address <code>lbry://{this.state.name}</code>!</p>
-          <p>The file will take a few minutes to appear for other LBRY users. Until then it will be listed as "pending" under your published files.</p>
+          <p>{__("Your file has been published to LBRY at the address")} <code>lbry://{this.state.name}</code>!</p>
+          <p>{__('The file will take a few minutes to appear for other LBRY users. Until then it will be listed as "pending" under your published files.')}</p>
         </Modal>
-        <Modal isOpen={this.state.modal == 'error'} contentLabel="Error publishing file"
+        <Modal isOpen={this.state.modal == 'error'} contentLabel={__("Error publishing file")}
                onConfirmed={(event) => { this.closeModal(event) }}>
-          The following error occurred when attempting to publish your file: {this.state.errorMessage}
+          {__("The following error occurred when attempting to publish your file")}: {this.state.errorMessage}
         </Modal>
       </main>
     );
