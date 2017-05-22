@@ -34,24 +34,23 @@ class DiscoverPage extends React.Component{
       fetchingFeaturedUris,
     } = this.props
 
-    let content
-
-    if (fetchingFeaturedUris) {
-      content = <BusyMessage message="Fetching content" />
-    } else {
-      if (typeof featuredUris === "object") {
-        content = Object.keys(featuredUris).map(category => {
-          return featuredUris[category].length ?
-                 <FeaturedCategory key={category} category={category} names={featuredUris[category]} /> :
-                 '';
-        })
-      } else if (featuredUris !== undefined) {
-        content = <div className="empty">Failed to load landing content.</div>
-      }
-    }
-
     return (
-      <main>{content}</main>
+      <main>
+        {
+          fetchingFeaturedUris &&
+          <BusyMessage message="Fetching content" />
+        }
+        {
+          typeof featuredUris === "object" &&
+          Object.keys(featuredUris).map(category => (
+            featuredUris[category].length ? <FeaturedCategory key={category} category={category} names={featuredUris[category]} /> : ''
+          ))
+        }
+        {
+          typeof featuredUris !== undefined &&
+          <div className="empty">Failed to load landing content.</div>
+        }
+      </main>
     )
   }
 }
