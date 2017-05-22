@@ -63,7 +63,6 @@ export function doHistoryPush(params, title, relativeUrl) {
     const url = pathParts.join('/')
     title += " - LBRY"
     history.pushState(params, title, url)
-    window.document.title = title
   }
 }
 
