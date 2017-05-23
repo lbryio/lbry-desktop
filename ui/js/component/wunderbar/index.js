@@ -8,9 +8,6 @@ import {
   selectWunderBarIcon
 } from 'selectors/search'
 import {
-  doSearch,
-} from 'actions/search'
-import {
   doNavigate,
 } from 'actions/app'
 import Wunderbar from './view'
@@ -21,7 +18,7 @@ const select = (state) => ({
 })
 
 const perform = (dispatch) => ({
-  onSearch: (query) => dispatch(doSearch(query)),
+  onSearch: (query) => dispatch(doNavigate('/search', { query, })),
   onSubmit: (query) => dispatch(doNavigate('/show', { uri: lbryuri.normalize(query) } ))
 })
 

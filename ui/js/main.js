@@ -5,9 +5,10 @@ import lbryio from './lbryio.js';
 import lighthouse from './lighthouse.js';
 import App from 'component/app/index.js';
 import SplashScreen from 'component/splash.js';
-import SnackBar from 'component/snack-bar.js';
+import SnackBar from 'component/snackBar';
 import {AuthOverlay} from 'component/auth.js';
 import { Provider } from 'react-redux';
+import batchActions from 'util/batchActions'
 import store from 'store.js';
 import {
   doChangePath,
@@ -21,7 +22,9 @@ import {
 import {
   doFileList
 } from 'actions/file_info'
-import parseQueryParams from 'util/query_params'
+import {
+  toQueryString,
+} from 'util/query_params'
 
 const {remote, ipcRenderer, shell} = require('electron');
 const contextMenu = remote.require('./menu/context-menu');
@@ -36,15 +39,19 @@ window.addEventListener('contextmenu', (event) => {
 });
 
 window.addEventListener('popstate', (event, param) => {
-  const queryString = document.location.search
+  const params = event.state
   const pathParts = document.location.pathname.split('/')
   const route = '/' + pathParts[pathParts.length - 1]
+  const queryString = toQueryString(params)
 
-  if (route.match(/html$/)) return
+  let action
+  if (route.match(/html$/)) {
+    action = doChangePath('/discover')
+  } else {
+    action = doChangePath(`${route}?${queryString}`)
+  }
 
-  console.log('title should be set here, but it is not in popstate? TODO')
-
-  app.store.dispatch(doChangePath(`${route}${queryString}`))
+  app.store.dispatch(action)
 })
 
 ipcRenderer.on('open-uri-requested', (event, uri) => {
@@ -73,12 +80,16 @@ const initialState = app.store.getState();
 var init = function() {
 
   function onDaemonReady() {
-    app.store.dispatch(doDaemonReady())
     window.sessionStorage.setItem('loaded', 'y'); //once we've made it here once per session, we don't need to show splash again
-    app.store.dispatch(doHistoryPush({}, "" +
-      "Discover", "/discover"))
-    app.store.dispatch(doFetchDaemonSettings())
-    app.store.dispatch(doFileList())
+    const actions = []
+
+    actions.push(doDaemonReady())
+    actions.push(doChangePath('/discover'))
+    actions.push(doFetchDaemonSettings())
+    actions.push(doFileList())
+
+    app.store.dispatch(batchActions(actions))
+
     ReactDOM.render(<Provider store={store}><div>{ lbryio.enabled ? <AuthOverlay/> : '' }<App /><SnackBar /></div></Provider>, canvas)
   }
 

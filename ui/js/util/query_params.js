@@ -1,4 +1,4 @@
-function parseQueryParams(queryString) {
+export function parseQueryParams(queryString) {
   if (queryString === '') return {};
   const parts = queryString
     .split('?')
@@ -13,4 +13,14 @@ function parseQueryParams(queryString) {
   return params;
 }
 
-export default parseQueryParams
+export function toQueryString(params) {
+  if (!params) return ""
+
+  const parts = []
+  for (const key in params) {
+    if (params.hasOwnProperty(key) && params[key]) {
+      parts.push(key + "=" + params[key])
+    }
+  }
+  return parts.join("&")
+}

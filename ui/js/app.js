@@ -1,6 +1,6 @@
 import store from 'store.js';
 
-const env = process.env.NODE_ENV || 'production';
+const env = ENV;
 const config = require(`./config/${env}`);
 const logs = [];
 const app = {

@@ -1,5 +1,8 @@
-import lbry from './lbry.js';
-import lbryio from './lbryio.js';
+import lbry from 'lbry';
+import lbryio from 'lbryio';
+import {
+  doShowSnackBar,
+} from 'actions/app'
 
 function rewardMessage(type, amount) {
   return {
@@ -40,14 +43,13 @@ rewards.claimReward = function (type) {
         };
 
       // Display global notice
-      document.dispatchEvent(new CustomEvent('globalNotice', {
-        detail: {
-          message: message,
-          linkText: "Show All",
-          linkTarget: "/rewards",
-          isError: false,
-        },
-      }));
+      const action = doShowSnackBar({
+        message,
+        linkText: "Show All",
+        linkTarget: "/rewards",
+        isError: false,
+      })
+      window.app.store.dispatch(action)
 
       // Add more events here to display other places
 

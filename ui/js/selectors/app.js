@@ -1,5 +1,7 @@
 import {createSelector} from 'reselect'
-import parseQueryParams from 'util/query_params'
+import {
+  parseQueryParams,
+} from 'util/query_params'
 import lbryuri from 'lbryuri'
 
 export const _selectState = state => state.app || {}
@@ -37,7 +39,7 @@ export const selectPageTitle = createSelector(
   (page, params) => {
     switch (page) {
       case 'search':
-        return 'Search'
+        return params.query ? `Search results for ${params.query}` : 'Search'
       case 'settings':
         return 'Settings'
       case 'help':
@@ -191,4 +193,14 @@ export const selectDaemonReady = createSelector(
 export const selectObscureNsfw = createSelector(
   _selectState,
   (state) => !!state.obscureNsfw
+)
+
+export const selectSnackBar = createSelector(
+  _selectState,
+  (state) => state.snackBar || {}
+)
+
+export const selectSnackBarSnacks = createSelector(
+  selectSnackBar,
+  (snackBar) => snackBar.snacks || []
 )

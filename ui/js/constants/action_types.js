@@ -2,6 +2,8 @@ export const CHANGE_PATH = 'CHANGE_PATH'
 export const OPEN_MODAL = 'OPEN_MODAL'
 export const CLOSE_MODAL = 'CLOSE_MODAL'
 export const HISTORY_BACK = 'HISTORY_BACK'
+export const SHOW_SNACKBAR = 'SHOW_SNACKBAR'
+export const REMOVE_SNACKBAR_SNACK = 'REMOVE_SNACKBAR_SNACK'
 
 export const DAEMON_READY = 'DAEMON_READY'
 

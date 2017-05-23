@@ -93,6 +93,44 @@ reducers[types.DAEMON_READY] = function(state, action) {
   })
 }
 
+reducers[types.SHOW_SNACKBAR] = function(state, action) {
+  const {
+    message,
+    linkText,
+    linkTarget,
+    isError,
+  } = action.data
+  const snackBar = Object.assign({}, state.snackBar)
+  const snacks = Object.assign([], snackBar.snacks)
+  snacks.push({
+    message,
+    linkText,
+    linkTarget,
+    isError,
+  })
+  const newSnackBar = Object.assign({}, snackBar, {
+    snacks,
+  })
+
+  return Object.assign({}, state, {
+    snackBar: newSnackBar,
+  })
+}
+
+reducers[types.REMOVE_SNACKBAR_SNACK] = function(state, action) {
+  const snackBar = Object.assign({}, state.snackBar)
+  const snacks = Object.assign([], snackBar.snacks)
+  snacks.shift()
+
+  const newSnackBar = Object.assign({}, snackBar, {
+    snacks,
+  })
+
+  return Object.assign({}, state, {
+    snackBar: newSnackBar,
+  })
+}
+
 export default function reducer(state = defaultState, action) {
   const handler = reducers[action.type];
   if (handler) return handler(state, action);

@@ -6,7 +6,12 @@ import {
   selectUpgradeDownloadItem,
   selectUpgradeFilename,
   selectPageTitle,
+  selectCurrentPage,
+  selectCurrentParams,
 } from 'selectors/app'
+import {
+  doSearch,
+} from 'actions/search'
 
 const {remote, ipcRenderer, shell} = require('electron');
 const path = require('path');
@@ -43,6 +48,16 @@ export function doChangePath(path) {
         path,
       }
     })
+
+    const state = getState()
+    const pageTitle = selectPageTitle(state)
+    window.document.title = pageTitle
+
+    const currentPage = selectCurrentPage(state)
+    if (currentPage === 'search') {
+      const params = selectCurrentParams(state)
+      dispatch(doSearch(params.query))
+    }
   }
 }
 
@@ -59,7 +74,6 @@ export function doHistoryPush(params, title, relativeUrl) {
     const url = pathParts.join('/')
     title += " - LBRY"
     history.pushState(params, title, url)
-    window.document.title = title
   }
 }
 
@@ -208,5 +222,18 @@ export function doAlertError(errorList) {
 export function doDaemonReady() {
   return {
     type: types.DAEMON_READY
+  }
+}
+
+export function doShowSnackBar(data) {
+  return {
+    type: types.SHOW_SNACKBAR,
+    data,
+  }
+}
+
+export function doRemoveSnackBarSnack() {
+  return {
+    type: types.REMOVE_SNACKBAR_SNACK,
   }
 }

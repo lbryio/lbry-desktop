@@ -1,6 +1,6 @@
 const redux = require('redux');
 const thunk = require("redux-thunk").default;
-const env = process.env.NODE_ENV || 'production';
+const env = ENV;
 
 import {
   createLogger

@@ -31,26 +31,24 @@ export function doSearch(query) {
     if(page != 'search') {
       dispatch(doNavigate('search', { query: query }))
     } else {
-      dispatch(doHistoryPush({ query }, "Search for " + query, '/search'))
-    }
-
-    lighthouse.search(query).then(results => {
-      results.forEach(result => {
-        const uri = lbryuri.build({
-          channelName: result.channel_name,
-          contentName: result.name,
-          claimId: result.channel_id || result.claim_id,
+      lighthouse.search(query).then(results => {
+        results.forEach(result => {
+          const uri = lbryuri.build({
+            channelName: result.channel_name,
+            contentName: result.name,
+            claimId: result.channel_id || result.claim_id,
+          })
+          dispatch(doResolveUri(uri))
         })
-        dispatch(doResolveUri(uri))
-      })
 
-      dispatch({
-        type: types.SEARCH_COMPLETED,
-        data: {
-          query,
-          results,
-        }
+        dispatch({
+          type: types.SEARCH_COMPLETED,
+          data: {
+            query,
+            results,
+          }
+        })
       })
-    })
+    }
   }
 }
