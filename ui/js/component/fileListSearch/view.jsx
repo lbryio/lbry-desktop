@@ -58,11 +58,17 @@ class FileListSearch extends React.Component{
     } = this.props
 
     return (
-      isSearching ?
-        <BusyMessage message="Looking up the Dewey Decimals" /> :
-        (results && results.length) ?
+      <div>
+        {isSearching && !results &&
+          <BusyMessage message="Looking up the Dewey Decimals" />}
+
+        {isSearching && results &&
+          <BusyMessage message="Refreshing the Dewey Decimals" />}
+
+        {(results && !!results.length) ?
           <FileListSearchResults {...this.props} /> :
-          <SearchNoResults {...this.props} />
+          <SearchNoResults {...this.props} />}
+      </div>
     )
   }
 }
