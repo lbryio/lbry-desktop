@@ -6,7 +6,12 @@ import {
   selectUpgradeDownloadItem,
   selectUpgradeFilename,
   selectPageTitle,
+  selectCurrentPage,
+  selectCurrentParams,
 } from 'selectors/app'
+import {
+  doSearch,
+} from 'actions/search'
 
 const {remote, ipcRenderer, shell} = require('electron');
 const path = require('path');
@@ -47,6 +52,12 @@ export function doChangePath(path) {
     const state = getState()
     const pageTitle = selectPageTitle(state)
     window.document.title = pageTitle
+
+    const currentPage = selectCurrentPage(state)
+    if (currentPage === 'search') {
+      const params = selectCurrentParams(state)
+      dispatch(doSearch(params.query))
+    }
   }
 }
 

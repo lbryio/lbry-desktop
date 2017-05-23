@@ -22,7 +22,9 @@ import {
 import {
   doFileList
 } from 'actions/file_info'
-import parseQueryParams from 'util/query_params'
+import {
+  toQueryString,
+} from 'util/query_params'
 
 const {remote, ipcRenderer, shell} = require('electron');
 const contextMenu = remote.require('./menu/context-menu');
@@ -37,15 +39,16 @@ window.addEventListener('contextmenu', (event) => {
 });
 
 window.addEventListener('popstate', (event, param) => {
-  const queryString = document.location.search
+  const params = event.state
   const pathParts = document.location.pathname.split('/')
   const route = '/' + pathParts[pathParts.length - 1]
+  const queryString = toQueryString(params)
 
   let action
   if (route.match(/html$/)) {
     action = doChangePath('/discover')
   } else {
-    action = doChangePath(`${route}${queryString}`)
+    action = doChangePath(`${route}?${queryString}`)
   }
 
   app.store.dispatch(action)
