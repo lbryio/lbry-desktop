@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack')
 const appPath = path.resolve(__dirname, 'js');
 
 const PATHS = {
@@ -18,6 +19,11 @@ module.exports = {
     root: appPath,
     extensions: ['', '.js', '.jsx', '.css'],
   },
+  plugins: [
+    new webpack.DefinePlugin({
+      ENV: JSON.stringify("development"),
+    }),
+  ],
   module: {
     preLoaders: [
       {

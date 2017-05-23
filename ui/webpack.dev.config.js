@@ -1,4 +1,5 @@
 const path = require('path');
+const webpack = require('webpack')
 const WebpackNotifierPlugin = require('webpack-notifier')
 
 const appPath = path.resolve(__dirname, 'js');
@@ -25,6 +26,9 @@ module.exports = {
   },
   plugins: [
     new WebpackNotifierPlugin(),
+    new webpack.DefinePlugin({
+      ENV: JSON.stringify("development"),
+    }),
   ],
   module: {
     preLoaders: [
