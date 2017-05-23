@@ -73,7 +73,6 @@ function checkForNewVersion(callback) {
       result += data;
     });
     res.on('end', () => {
-      console.log('Local version:', localVersion);
       const tagName = JSON.parse(result).tag_name;
       const [_, remoteVersion] = tagName.match(/^v([\d.]+(?:-?rc\d+)?)$/);
       if (!remoteVersion) {
@@ -82,9 +81,7 @@ function checkForNewVersion(callback) {
           win.webContents.send('version-info-received', null);
         }
       } else {
-        console.log('Remote version:', remoteVersion);
         const upgradeAvailable = semver.gt(formatRc(remoteVersion), formatRc(localVersion));
-        console.log(upgradeAvailable ? 'Upgrade available' : 'No upgrade available');
         if (win) {
           win.webContents.send('version-info-received', {remoteVersion, localVersion, upgradeAvailable});
         }
