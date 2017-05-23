@@ -19,7 +19,7 @@ export function toQueryString(params) {
   const parts = []
   for (const key in params) {
     if (params.hasOwnProperty(key) && params[key]) {
-      parts.push(encodeURIComponent(key) + "=" + encodeURIComponent(params[key]))
+      parts.push(key + "=" + params[key])
     }
   }
   return parts.join("&")
