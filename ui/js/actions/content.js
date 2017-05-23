@@ -223,8 +223,11 @@ export function doPurchaseUri(uri) {
     // the blobs. Or perhaps there's another way to see if a file was already
     // purchased?
 
-    // we already fully downloaded the file
-    if (fileInfo && fileInfo.completed) {
+    // we already fully downloaded the file. If completed is true but
+    // writtenBytes is false then we downloaded it before but deleted it again,
+    // which means it needs to be reconstructed from the blobs by dispatching
+    // doLoadVideo.
+    if (fileInfo && fileInfo.completed && !!fileInfo.writtenBytes) {
       return Promise.resolve()
     }
 
