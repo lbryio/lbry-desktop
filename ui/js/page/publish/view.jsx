@@ -106,7 +106,7 @@ class PublishPage extends React.Component {
       }
     }
 
-    metadata.nsfw = Boolean(parseInt(!!this.refs.meta_nsfw.getValue()));
+    metadata.nsfw = parseInt(this.refs.meta_nsfw.getValue()) === 1;
 
     const licenseUrl = this.refs.meta_license_url.getValue();
     if (licenseUrl) {
