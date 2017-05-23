@@ -213,3 +213,16 @@ export function doDaemonReady() {
     type: types.DAEMON_READY
   }
 }
+
+export function doShowSnackBar(data) {
+  return {
+    type: types.SHOW_SNACKBAR,
+    data,
+  }
+}
+
+export function doRemoveSnackBarSnack() {
+  return {
+    type: types.REMOVE_SNACKBAR_SNACK,
+  }
+}

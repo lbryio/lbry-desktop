@@ -192,3 +192,13 @@ export const selectObscureNsfw = createSelector(
   _selectState,
   (state) => !!state.obscureNsfw
 )
+
+export const selectSnackBar = createSelector(
+  _selectState,
+  (state) => state.snackBar || {}
+)
+
+export const selectSnackBarSnacks = createSelector(
+  selectSnackBar,
+  (snackBar) => snackBar.snacks || []
+)
