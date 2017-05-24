@@ -1,4 +1,5 @@
 import React from "react";
+import lbry from "../lbry.js";
 import lbryio from "../lbryio.js";
 import Modal from "./modal.js";
 import ModalPage from "./modal-page.js";
@@ -194,7 +195,7 @@ class CodeRequiredStage extends React.Component {
   constructor(props) {
     super(props);
 
-    this._balanceSubscribeId = nullp
+    this._balanceSubscribeId = null
 
     this.state = {
       balance: 0,
