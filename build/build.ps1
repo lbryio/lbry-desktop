@@ -37,4 +37,4 @@ nuget install secure-file -ExcludeVersion
 secure-file\tools\secure-file -decrypt build\lbry2.pfx.enc -secret "$env:pfx_key"
 & ${env:SIGNTOOL_PATH} sign /f build\lbry2.pfx /p "$env:key_pass" /tr http://tsa.starfieldtech.com /td SHA256 /fd SHA256 dist\*.exe
 
-python build\release_on_tag.py
+python build\upload_assets.py

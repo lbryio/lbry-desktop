@@ -9,6 +9,10 @@ environment:
     secure: 1mwqyRy7hDqDjDK+TIAoaXyXzpNgwruFNA6TPkinUcVM7A+NLD33RQLnfnwVy+R5ovD2pUfhQ6+N0Fqebv6tZh436LIEsock+6IOdpgFwrg=
   # find with: Get-Childitem –Path "C:\Program Files (x86)\Microsoft SDKs\Windows\" -Include *signtool* -File -Recurse -ErrorAction SilentlyContinue
   SIGNTOOL_PATH: C:\Program Files (x86)\Microsoft SDKs\Windows\v7.1A\Bin\signtool.exe
+  AWS_ACCESS_KEY_ID:
+    secure: iVGwoJ7ogspjSmuqr+haVPLglSgQsp6tUZx6mIlKH7Q=
+  AWS_SECRET_ACCESS_KEY:
+    secure: zKaqdZGPl0exDL5YhJkb33prSemC9Rzg9S7Lw2wFy1WnJ6ffgl6mQH7jqJDUTqsY
 
 skip_branch_with_pr: true
 
