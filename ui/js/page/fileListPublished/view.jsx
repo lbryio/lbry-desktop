@@ -51,7 +51,7 @@ class FileListPublished extends React.Component {
       if (isPending) {
         content = <BusyMessage message="Loading" />
       } else {
-        content = <span>You haven't downloaded anything from LBRY yet. Go <Link onClick={() => navigate('/discover')} label="search for your first download" />!</span>
+        content = <span>It looks like you haven't published anything to LBRY yet. Go <Link onClick={() => navigate('/publish')} label="share your beautiful cats with the world" />!</span>
       }
     }
 

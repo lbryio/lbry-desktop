@@ -21,6 +21,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
 ### Fixed
   * Publisher indicator on show pages and file cards/tiles will now always show the proper channel name.
   * Performance improvements related to avoiding duplicate fetches.
+  * Fix incorrect prompt on empty published page
 
 ### Deprecated
   *
