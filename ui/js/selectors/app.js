@@ -180,9 +180,9 @@ export const selectUpgradeDownloadItem = createSelector(
   (state) => state.downloadItem
 )
 
-export const selectError = createSelector(
+export const selectModalExtraContent = createSelector(
   _selectState,
-  (state) => state.error
+  (state) => state.modalExtraContent
 )
 
 export const selectDaemonReady = createSelector(

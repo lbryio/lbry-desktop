@@ -4,7 +4,7 @@ import {
 } from 'react-redux'
 import {
   selectCurrentModal,
-  selectError,
+  selectModalExtraContent,
 } from 'selectors/app'
 import {
   doCloseModal,
@@ -13,7 +13,7 @@ import ErrorModal from './view'
 
 const select = (state) => ({
   modal: selectCurrentModal(state),
-  error: selectError(state),
+  error: selectModalExtraContent(state),
 })
 
 const perform = (dispatch) => ({

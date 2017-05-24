@@ -6,6 +6,7 @@ import {
 } from 'selectors/app'
 import {
   doCheckUpgradeAvailable,
+  doAlertError,
 } from 'actions/app'
 import {
   doUpdateBalance,
@@ -17,6 +18,7 @@ const select = (state) => ({
 })
 
 const perform = (dispatch) => ({
+  alertError: (errorList) => dispatch(doAlertError(errorList)),
   checkUpgradeAvailable: () => dispatch(doCheckUpgradeAvailable()),
   updateBalance: (balance) => dispatch(doUpdateBalance(balance))
 })

@@ -178,7 +178,7 @@ const ErrorStage = (props) => {
   return <section>
     <p>An error was encountered that we cannot continue from.</p>
     <p>At least we're earning the name beta.</p>
-    { this.props.errorText ? <p>Message: {props.errorText}</p> : '' }
+    { props.errorText ? <p>Message: {props.errorText}</p> : '' }
     <Link button="alt" label="Try Reload" onClick={() => { window.location.reload() } } />
   </section>
 }

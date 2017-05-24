@@ -9,10 +9,12 @@ class ErrorModal extends React.Component {
     const {
       modal,
       closeModal,
-      error,
+      error
     } = this.props
 
-    const _error_key_labels = {
+    const errorObj = typeof error === "string" ? { error: error } : error
+
+    const error_key_labels = {
       connectionString: 'API connection string',
       method: 'Method',
       params: 'Parameters',
@@ -20,13 +22,15 @@ class ErrorModal extends React.Component {
       message: 'Error message',
       data: 'Error data',
     }
-    const errorInfo = <ul className="error-modal__error-list"></ul>
+
+
     const errorInfoList = []
     for (let key of Object.keys(error)) {
       let val = typeof error[key] == 'string' ? error[key] : JSON.stringify(error[key]);
-      let label = this._error_key_labels[key];
+      let label = error_key_labels[key];
       errorInfoList.push(<li key={key}><strong>{label}</strong>: <code>{val}</code></li>);
     }
+    const errorInfo = <ul className="error-modal__error-list">{errorInfoList}</ul>
 
     return(
       <ExpandableModal

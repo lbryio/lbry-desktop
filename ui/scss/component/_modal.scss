@@ -1,6 +1,6 @@
 @import "../global";
 
-.modal-overlay {
+.modal-overlay, .error-modal-overlay {
   position: fixed;
   display: flex;
   justify-content: center;

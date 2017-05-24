@@ -70,14 +70,14 @@ reducers[types.UPDATE_VERSION] = function(state, action) {
 reducers[types.OPEN_MODAL] = function(state, action) {
   return Object.assign({}, state, {
     modal: action.data.modal,
-    extraContent: action.data.errorList
+    modalExtraContent: action.data.extraContent
   })
 }
 
 reducers[types.CLOSE_MODAL] = function(state, action) {
   return Object.assign({}, state, {
     modal: undefined,
-    extraContent: undefined
+    modalExtraContent: undefined
   })
 }
 

@@ -208,12 +208,13 @@ export function doCheckUpgradeAvailable() {
 export function doAlertError(errorList) {
   return function(dispatch, getState) {
     const state = getState()
-
+    console.log('do alert error')
+    console.log(errorList)
     dispatch({
       type: types.OPEN_MODAL,
       data: {
         modal: 'error',
-        error: errorList
+        extraContent: errorList
       }
     })
   }
