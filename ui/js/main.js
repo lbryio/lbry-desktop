@@ -30,6 +30,10 @@ const {remote, ipcRenderer, shell} = require('electron');
 const contextMenu = remote.require('./menu/context-menu');
 const app = require('./app')
 
+const i18n = require('y18n')({directory: 'app/locales'});
+window.__ = i18n.__;
+window.__n = i18n.__n;
+
 lbry.showMenuIfNeeded();
 
 window.addEventListener('contextmenu', (event) => {
@@ -93,7 +97,7 @@ var init = function() {
   if (window.sessionStorage.getItem('loaded') == 'y') {
     onDaemonReady();
   } else {
-    ReactDOM.render(<SplashScreen message="Connecting" onLoadDone={onDaemonReady} />, canvas);
+    ReactDOM.render(<SplashScreen message={__("Connecting")} onLoadDone={onDaemonReady} />, canvas);
   }
 };
 
