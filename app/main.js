@@ -317,7 +317,7 @@ app.on('activate', () => {
 // then calls quitNow() to quit for real.
 function shutdownDaemonAndQuit(evenIfNotStartedByApp = false) {
   function doShutdown() {
-    console.log('Asking daemon to shut down down');
+    console.log('Shutting down daemon');
     daemonStopRequested = true;
     client.request('daemon_stop', [], (err, res) => {
       if (err) {

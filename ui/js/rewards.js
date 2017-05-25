@@ -70,12 +70,12 @@ function isInitialClaim(claim) {
 const rewards = {};
 
 rewards.TYPE_NEW_DEVELOPER = "new_developer",
-  rewards.TYPE_NEW_USER = "new_user",
-  rewards.TYPE_CONFIRM_EMAIL = "confirm_email",
-  rewards.TYPE_FIRST_CHANNEL = "new_channel",
-  rewards.TYPE_FIRST_STREAM = "first_stream",
-  rewards.TYPE_MANY_DOWNLOADS = "many_downloads",
-  rewards.TYPE_FIRST_PUBLISH = "first_publish";
+rewards.TYPE_NEW_USER = "new_user",
+rewards.TYPE_CONFIRM_EMAIL = "confirm_email",
+rewards.TYPE_FIRST_CHANNEL = "new_channel",
+rewards.TYPE_FIRST_STREAM = "first_stream",
+rewards.TYPE_MANY_DOWNLOADS = "many_downloads",
+rewards.TYPE_FIRST_PUBLISH = "first_publish";
 
 rewards.claimReward = function (type) {
 
@@ -84,12 +84,12 @@ rewards.claimReward = function (type) {
       reject(new Error("Rewards are not enabled."))
       return;
     }
-    lbryio.call('reward', 'new', params, 'post').then(({RewardAmount}) => {
+    lbryio.call('reward', 'new', params, 'post').then(({reward_amount}) => {
       const
-        message = rewardMessage(type, RewardAmount),
+        message = rewardMessage(type, reward_amount),
         result = {
           type: type,
-          amount: RewardAmount,
+          amount: reward_amount,
           message: message
         };
 
@@ -161,8 +161,8 @@ rewards.claimNextPurchaseReward = function() {
   types[rewards.TYPE_MANY_DOWNLOADS] = false
   lbryio.call('reward', 'list', {}).then((userRewards) => {
     userRewards.forEach((reward) => {
-      if (types[reward.RewardType] === false && reward.TransactionID) {
-        types[reward.RewardType] = true
+      if (types[reward.reward_type] === false && reward.transaction_id) {
+        types[reward.reward_type] = true
       }
     })
     let unclaimedType = Object.keys(types).find((type) => {
