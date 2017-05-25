@@ -22,9 +22,9 @@
     "babel-cli": "^6.11.4",
     "babel-preset-es2015": "^6.13.2",
     "babel-preset-react": "^6.11.1",
+    "from2": "^2.3.0",
     "jshashes": "^1.0.6",
     "node-sass": "^3.8.0",
-    "plyr": "^2.0.12",
     "rc-progress": "^2.0.6",
     "react": "^15.4.0",
     "react-dom": "^15.4.0",
@@ -33,6 +33,7 @@
     "redux": "^3.6.0",
     "redux-logger": "^3.0.1",
     "redux-thunk": "^2.2.0",
+    "render-media": "^2.10.0",
     "reselect": "^3.0.0"
   },
   "devDependencies": {

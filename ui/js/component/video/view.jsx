@@ -52,13 +52,12 @@ class VideoPlayButton extends React.Component {
             className="video__play-button"
             icon="icon-play"
             onClick={this.onWatchClick.bind(this)} />
-      {modal}
       <Modal contentLabel="Not enough credits" isOpen={modal == 'notEnoughCredits'} onConfirmed={() => { this.closeModal() }}>
         You don't have enough LBRY credits to pay for this stream.
       </Modal>
       <Modal
         type="confirm"
-        isOpen={modal == 'affirmPurchase'}
+        isOpen={modal == 'affirmPurchaseAndPlay'}
         contentLabel="Confirm Purchase"
         onConfirmed={this.onPurchaseConfirmed.bind(this)}
         onAborted={closeModal}>
@@ -71,8 +70,6 @@ class VideoPlayButton extends React.Component {
     </div>);
   }
 }
-
-const plyr = require('plyr')
 
 class Video extends React.Component {
   constructor(props) {
@@ -114,7 +111,7 @@ class Video extends React.Component {
         isPlaying || isLoading ?
           (!isReadyToPlay ?
             <span>this is the world's worst loading screen and we shipped our software with it anyway... <br /><br />{loadStatusMessage}</span> :
-            <VideoPlayer poster={metadata.thumbnail} autoplay={isPlaying} downloadPath={fileInfo.download_path} />) :
+            <VideoPlayer filename={fileInfo.file_name} poster={metadata.thumbnail} downloadPath={fileInfo.download_path} />) :
         <div className="video__cover" style={{backgroundImage: 'url("' + metadata.thumbnail + '")'}}>
           <VideoPlayButton startPlaying={this.startPlaying.bind(this)} {...this.props} />
         </div>
@@ -123,18 +120,28 @@ class Video extends React.Component {
   }
 }
 
+const from = require('from2')
+const player = require('render-media')
+const fs = require('fs')
+
 class VideoPlayer extends React.Component {
   componentDidMount() {
     const elem = this.refs.video
     const {
-      autoplay,
       downloadPath,
       contentType,
+      filename,
     } = this.props
-    const players = plyr.setup(elem)
-    if (autoplay) {
-      players[0].play()
+    const file = {
+      name: filename,
+      createReadStream: (opts) => {
+        return fs.createReadStream(downloadPath, opts)
+      }
     }
+    player.render(file, elem, {
+      autoplay: true,
+      controls: true,
+    })
   }
 
   render() {
@@ -145,7 +152,7 @@ class VideoPlayer extends React.Component {
     } = this.props
 
     return (
-      <video controls id="video" ref="video" style={{backgroundImage: "url('" + poster + "')"}} >
+      <video controls ref="video" style={{backgroundImage: "url('" + poster + "')"}} >
         <source src={downloadPath} type={contentType} />
       </video>
     )
