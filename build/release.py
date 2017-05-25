@@ -213,7 +213,7 @@ def check_url(url):
         if new_location == url:
             # self-loop
             return False
-        if "github-cloud.s3.amazonaws.com/releases" in new_location:
+        if "amazonaws.com" in new_location:
             # HEAD doesnt work on s3 links, so assume its good
             return True
         return check_url(new_location)
