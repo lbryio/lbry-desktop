@@ -3,6 +3,7 @@ import React from 'react';
 import lbry from 'lbry.js';
 import Link from 'component/link';
 import SubHeader from 'component/subHeader'
+import {BusyMessage} from 'component/common'
 import {version as uiVersion} from 'json!../../../package.json';
 
 class HelpPage extends React.Component {
@@ -16,11 +17,16 @@ class HelpPage extends React.Component {
   }
 
   componentWillMount() {
-    lbry.getVersionInfo((info) => {
+    lbry.getAppVersionInfo().then((info) => {
       this.setState({
-        versionInfo: info,
+        appVersionInfo: info,
       });
     });
+    lbry.call('version', {}, (info) => {
+      this.setState({
+        versionInfo: info
+      })
+    })
     lbry.getSessionInfo((info) => {
       this.setState({
         lbryId: info.lbry_id,
@@ -37,7 +43,7 @@ class HelpPage extends React.Component {
 
     if (this.state.versionInfo) {
       ver = this.state.versionInfo;
-
+      console.log(ver)
       if (ver.os_system == 'Darwin') {
         osName = (parseInt(ver.os_release.match(/^\d+/)) < 16 ? 'Mac OS X' : 'Mac OS');
 
@@ -87,14 +93,14 @@ class HelpPage extends React.Component {
             <div className="meta">Thanks! LBRY is made by its users.</div>
           </div>
         </section>
-        {!ver ? null :
-         <section className="card">
-           <div className="card__title-primary"><h3>About</h3></div>
-           <div className="card__content">
-             {ver.lbrynet_update_available || ver.lbryum_update_available ?
-              <p>A newer version of LBRY is available. <Link href={newVerLink} label={`Download LBRY ${ver.remote_lbrynet} now!`} /></p>
-               : <p>Your copy of LBRY is up to date.</p>
-             }
+        <section className="card">
+         <div className="card__title-primary"><h3>About</h3></div>
+         <div className="card__content">
+           {this.state.appVersionInfo ?
+            (ver.lbrynet_update_available || ver.lbryum_update_available ?
+               <p>A newer version of LBRY is available. <Link href={newVerLink} label={`Download LBRY ${ver.remote_lbrynet} now!`} /></p>
+               : <p>Your copy of LBRY is up to date.</p>) : null}
+           { ver ?
              <table className="table-standard">
                <tbody>
                  <tr>
@@ -118,10 +124,11 @@ class HelpPage extends React.Component {
                    <td>{this.state.lbryId}</td>
                  </tr>
                </tbody>
-             </table>
-           </div>
-         </section>
-        }
+             </table> :
+             <BusyMessage message="Looking up version info" />
+            }
+         </div>
+        </section>
       </main>
     );
   }

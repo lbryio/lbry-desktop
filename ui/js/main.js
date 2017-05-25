@@ -13,8 +13,7 @@ import store from 'store.js';
 import {
   doChangePath,
   doNavigate,
-  doDaemonReady,
-  doHistoryPush
+  doDaemonReady
 } from 'actions/app'
 import {
   doFetchDaemonSettings
