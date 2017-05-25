@@ -169,7 +169,7 @@ class WelcomeStage extends React.Component {
             <p>This reward will show in your Wallet momentarily, probably while you are reading this message.</p>
             <p>LBC is used to compensate creators, to publish, and to have say in how the network works.</p>
             <p>No need to understand it all just yet! Try watching or downloading something next.</p>
-            <p>Finally, know that LBRY is a beta and that it earns the name.</p>
+            <p>Finally, know that LBRY is an early beta and that it earns the name.</p>
           </section>
       </Modal>
     );
