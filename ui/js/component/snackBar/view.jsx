@@ -39,7 +39,7 @@ class SnackBar extends React.Component {
       <div className="snack-bar">
         {message}
         {linkText && linkTarget &&
-          <Link onClick={() => navigate(linkTarget)} label={linkText} />
+          <Link onClick={() => navigate(linkTarget)} className="snack-bar__action" label={linkText} />
         }
       </div>
     );
