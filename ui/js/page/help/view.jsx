@@ -99,7 +99,7 @@ class HelpPage extends React.Component {
            {this.state.appVersionInfo ?
             (ver.lbrynet_update_available || ver.lbryum_update_available ?
               <p>{__("A newer version of LBRY is available.")} <Link href={newVerLink} label={__("Download LBRY %s now!"), ver.remote_lbrynet} /></p>
-               : <p>{__("Your copy of LBRY is up to date.")}</p>
+               : <p>{__("Your copy of LBRY is up to date.")}</p>) : null}
            { ver ?
              <table className="table-standard">
                <tbody>
