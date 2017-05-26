@@ -68,11 +68,11 @@ class FileCard extends React.Component {
 
     let description = ""
     if (isResolvingUri) {
-      description = "Loading..."
+      description = __("Loading...")
     } else if (metadata && metadata.description) {
       description = metadata.description
     } else if (claim === null) {
-      description = 'This address contains no content.'
+      description = __("This address contains no content.")
     }
 
     return (
@@ -99,8 +99,7 @@ class FileCard extends React.Component {
           {obscureNsfw && this.state.hovered
             ? <div className='card-overlay'>
              <p>
-               This content is Not Safe For Work.
-               To view adult content, please change your <Link className="button-text" onClick={() => navigate('settings')} label="Settings" />.
+               {__("This content is Not Safe For Work. To view adult content, please change your")} <Link className="button-text" onClick={() => navigate('settings')} label={__("Settings")} />.
              </p>
            </div>
             : null}
