@@ -163,5 +163,9 @@
   "wallet (lbryum)": "wallet (lbryum)",
   "interface": "interface",
   "Platform": "Platform",
-  "Installation ID": "Installation ID"
+  "Installation ID": "Installation ID",
+  "Search Results for": "Search Results for",
+  "These search results are provided by LBRY, Inc.": "These search results are provided by LBRY, Inc.",
+  "Exact URL": "Exact URL",
+  "This is the resolution of a LBRY URL and not controlled by LBRY Inc.": "This is the resolution of a LBRY URL and not controlled by LBRY Inc."
 }
