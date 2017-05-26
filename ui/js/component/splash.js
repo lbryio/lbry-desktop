@@ -12,7 +12,7 @@ export class SplashScreen extends React.Component {
     super(props);
 
     this.state = {
-      details: 'Starting daemon',
+      details: __('Starting daemon'),
       isLagging: false,
     };
   }
@@ -29,7 +29,7 @@ export class SplashScreen extends React.Component {
       // TODO: This is a hack, and the logic should live in the daemon
       // to give us a better sense of when we are actually started
       this.setState({
-        details: 'Waiting for name resolution',
+        details: __('Waiting for name resolution'),
         isLagging: false
       });
 
@@ -54,8 +54,8 @@ export class SplashScreen extends React.Component {
       } else {
         this.setState({
           isLagging: true,
-          message: "Failed to connect to LBRY",
-          details: "LBRY was unable to start and connect properly."
+          message: __("Failed to connect to LBRY"),
+          details: __("LBRY was unable to start and connect properly.")
         })
       }
     })

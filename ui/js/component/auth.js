@@ -55,11 +55,11 @@ class SubmitEmailStage extends React.Component {
     return (
       <section>
         <form onSubmit={(event) => { this.handleSubmit(event) }}>
-          <FormRow ref={(ref) => { this._emailRow = ref }} type="text" label="Email" placeholder="scrwvwls@lbry.io"
+          <FormRow ref={(ref) => { this._emailRow = ref }} type="text" label={__("Email")} placeholder="scrwvwls@lbry.io"
                      name="email" value={this.state.email}
                      onChange={(event) => { this.handleEmailChanged(event) }} />
           <div className="form-row-submit">
-            <Link button="primary" label="Next" disabled={this.state.submitting} onClick={(event) => { this.handleSubmit(event) }} />
+            <Link button="primary" label={__("Next")} disabled={this.state.submitting} onClick={(event) => { this.handleSubmit(event) }} />
           </div>
         </form>
       </section>
@@ -102,7 +102,7 @@ class ConfirmEmailStage extends React.Component {
       if (userEmail.is_verified) {
         this.props.setStage("welcome")
       } else {
-        onSubmitError(new Error("Your email is still not verified.")) //shouldn't happen?
+        onSubmitError(new Error(__("Your email is still not verified."))) //shouldn't happen?
       }
     }, onSubmitError);
   }
@@ -111,14 +111,14 @@ class ConfirmEmailStage extends React.Component {
     return (
       <section>
         <form onSubmit={(event) => { this.handleSubmit(event) }}>
-          <FormRow label="Verification Code" ref={(ref) => { this._codeRow = ref }} type="text"
+          <FormRow label={__("Verification Code")} ref={(ref) => { this._codeRow = ref }} type="text"
                      name="code" placeholder="a94bXXXXXXXXXXXXXX" value={this.state.code} onChange={(event) => { this.handleCodeChanged(event) }}
-                     helper="A verification code is required to access this version."/>
+                     helper={__("A verification code is required to access this version.")}/>
           <div className="form-row-submit form-row-submit--with-footer">
-            <Link button="primary" label="Verify" disabled={this.state.submitting} onClick={(event) => { this.handleSubmit(event)}} />
+            <Link button="primary" label={__("Verify")} disabled={this.state.submitting} onClick={(event) => { this.handleSubmit(event)}} />
           </div>
           <div className="form-field__helper">
-            No code? <Link onClick={() => { this.props.setStage("nocode")}} label="Click here" />.
+            {__("No code?")} <Link onClick={() => { this.props.setStage("nocode")}} label={__("Click here")} />.
           </div>
         </form>
       </section>
@@ -150,26 +150,26 @@ class WelcomeStage extends React.Component {
   render() {
     return (
       !this.state.hasReward ?
-        <Modal type="custom" isOpen={true} contentLabel="Welcome to LBRY" {...this.props}>
+        <Modal type="custom" isOpen={true} contentLabel={__("Welcome to LBRY")} {...this.props}>
           <section>
-            <h3 className="modal__header">Welcome to LBRY.</h3>
-            <p>Using LBRY is like dating a centaur. Totally normal up top, and <em>way different</em> underneath.</p>
-            <p>Up top, LBRY is similar to popular media sites.</p>
-            <p>Below, LBRY is controlled by users -- you -- via blockchain and decentralization.</p>
-            <p>Thank you for making content freedom possible! Here's a nickel, kid.</p>
+            <h3 className="modal__header">{__("Welcome to LBRY.")}</h3>
+            <p>{__("Using LBRY is like dating a centaur. Totally normal up top, and way different underneath.")}</p>
+            <p>{__("Up top, LBRY is similar to popular media sites.")}</p>
+            <p>{__("Below, LBRY is controlled by users -- you -- via blockchain and decentralization.")}</p>
+            <p>{__("Thank you for making content freedom possible! Here's a nickel, kid.")}</p>
             <div style={{textAlign: "center", marginBottom: "12px"}}>
               <RewardLink type="new_user" button="primary" onRewardClaim={(event) => { this.onRewardClaim(event) }} onRewardFailure={() => this.props.setStage(null)} onConfirmed={() => { this.props.setStage(null) }} />
             </div>
           </section>
          </Modal> :
-         <Modal type="alert" overlayClassName="modal-overlay modal-overlay--clear" isOpen={true} contentLabel="Welcome to LBRY" {...this.props} onConfirmed={() => { this.props.setStage(null) }}>
+         <Modal type="alert" overlayClassName="modal-overlay modal-overlay--clear" isOpen={true} contentLabel={__("Welcome to LBRY")} {...this.props} onConfirmed={() => { this.props.setStage(null) }}>
           <section>
-            <h3 className="modal__header">About Your Reward</h3>
-            <p>You earned a reward of <CreditAmount amount={this.state.rewardAmount} label={false} /> LBRY credits, or <em>LBC</em>.</p>
-            <p>This reward will show in your Wallet momentarily, probably while you are reading this message.</p>
-            <p>LBC is used to compensate creators, to publish, and to have say in how the network works.</p>
-            <p>No need to understand it all just yet! Try watching or downloading something next.</p>
-            <p>Finally, know that LBRY is an early beta and that it earns the name.</p>
+            <h3 className="modal__header">{__("About Your Reward")}</h3>
+            <p>{__("You earned a reward of ")} <CreditAmount amount={this.state.rewardAmount} label={false} /> {__("LBRY credits, or \"LBC\".")}</p>
+            <p>{__("This reward will show in your Wallet momentarily, probably while you are reading this message.")}</p>
+            <p>{__("LBC is used to compensate creators, to publish, and to have say in how the network works.")}</p>
+            <p>{__("No need to understand it all just yet! Try watching or downloading something next.")}</p>
+            <p>{__("Finally, know that LBRY is an early beta and that it earns the name.")}</p>
           </section>
       </Modal>
     );
@@ -178,16 +178,16 @@ class WelcomeStage extends React.Component {
 
 const ErrorStage = (props) => {
   return <section>
-    <p>An error was encountered that we cannot continue from.</p>
-    <p>At least we're earning the name beta.</p>
-    { props.errorText ? <p>Message: {props.errorText}</p> : '' }
-    <Link button="alt" label="Try Reload" onClick={() => { window.location.reload() } } />
+    <p>{__("An error was encountered that we cannot continue from.")}</p>
+    <p>{__("At least we're earning the name beta.")}</p>
+    { props.errorText ? <p>{__("Message:")} {props.errorText}</p> : '' }
+    <Link button="alt" label={__("Try Reload")} onClick={() => { window.location.reload() } } />
   </section>
 }
 
 const PendingStage = (props) => {
   return <section>
-    <p>Preparing for first access <span className="busy-indicator"></span></p>
+    <p>{__("Preparing for first access")} <span className="busy-indicator"></span></p>
   </section>
 }
 
@@ -230,20 +230,20 @@ class CodeRequiredStage extends React.Component {
     return (
       <div>
         <section className="section-spaced">
-          <p>Access to LBRY is restricted as we build and scale the network.</p>
-          <p>There are two ways in:</p>
-          <h3>Own LBRY Credits</h3>
-          <p>If you own at least 1 LBC, you can get in right now.</p>
+          <p>{__("Access to LBRY is restricted as we build and scale the network.")}</p>
+          <p>{__("There are two ways in:")}</p>
+          <h3>{__("Own LBRY Credits")}</h3>
+          <p>{__("If you own at least 1 LBC, you can get in right now.")}</p>
           <p style={{ textAlign: "center"}}><Link onClick={() => { setLocal('auth_bypassed', true); this.props.setStage(null); }}
-                                                  disabled={disabled} label="Let Me In" button={ disabled ? "alt" : "primary" } /></p>
-          <p>Your balance is <CreditAmount amount={this.state.balance} />. To increase your balance, send credits to this address:</p>
-          <p><Address address={ this.state.address ? this.state.address : "Generating Address..." } /></p>
-          <p>If you don't understand how to send credits, then...</p>
+                                                  disabled={disabled} label={__("Let Me In")} button={ disabled ? "alt" : "primary" } /></p>
+          <p>{__("Your balance is ")}<CreditAmount amount={this.state.balance} />. {__("To increase your balance, send credits to this address:")}</p>
+          <p><Address address={ this.state.address ? this.state.address : __("Generating Address...") } /></p>
+          <p>{__("If you don't understand how to send credits, then...")}</p>
         </section>
         <section>
-          <h3>Wait For A Code</h3>
-          <p>If you provide your email, you'll automatically receive a notification when the system is open.</p>
-          <p><Link onClick={() => { this.props.setStage("email"); }}  label="Return" /></p>
+          <h3>{__("Wait For A Code")}</h3>
+          <p>{__("If you provide your email, you'll automatically receive a notification when the system is open.")}</p>
+          <p><Link onClick={() => { this.props.setStage("email"); }}  label={__("Return")} /></p>
         </section>
       </div>
     );
@@ -312,13 +312,13 @@ export class AuthOverlay extends React.Component {
     const StageContent = this._stages[this.state.stage];
 
     if (!StageContent) {
-      return <span className="empty">Unknown authentication step.</span>
+      return <span className="empty">{__("Unknown authentication step.")}</span>
     }
 
     return (
       this.state.stage != "welcome" ?
-          <ModalPage className="modal-page--full" isOpen={true} contentLabel="Authentication">
-            <h1>LBRY Early Access</h1>
+          <ModalPage className="modal-page--full" isOpen={true} contentLabel={__("Authentication")}>
+            <h1>{__("LBRY Early Access")}</h1>
             <StageContent {...this.state.stageProps}  setStage={(stage, stageProps) => { this.setStage(stage, stageProps) }} />
           </ModalPage> :
           <StageContent setStage={(stage, stageProps) => { this.setStage(stage, stageProps) }} {...this.state.stageProps}  />

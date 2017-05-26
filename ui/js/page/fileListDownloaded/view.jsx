@@ -27,9 +27,9 @@ class FileListDownloaded extends React.Component {
       content = <FileList fileInfos={fileInfos} fetching={isPending} />
     } else {
       if (isPending) {
-        content = <BusyMessage message="Loading" />
+        content = <BusyMessage message={__("Loading")} />
       } else {
-        content = <span>You haven't downloaded anything from LBRY yet. Go <Link onClick={() => navigate('/discover')} label="search for your first download" />!</span>
+        content = <span>{__("You haven't downloaded anything from LBRY yet. Go")} <Link onClick={() => navigate('/discover')} label={__("search for your first download")} />!</span>
       }
     }
 

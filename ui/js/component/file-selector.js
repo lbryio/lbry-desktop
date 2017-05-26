@@ -41,14 +41,14 @@ class FileSelector extends React.Component {
       <div className="file-selector">
         <button type="button" className="file-selector__choose-button" onClick={() => this.handleButtonClick()}>
           {this.props.type == 'file' ?
-              'Choose File' :
-              'Choose Directory'}
+              __('Choose File') :
+              __('Choose Directory')}
         </button>
         {' '}
         <span className="file-selector__path">
           {this.state.path ?
              this.state.path :
-             'No File Chosen'}
+             __('No File Chosen')}
         </span>
       </div>
     );

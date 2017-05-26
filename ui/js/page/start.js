@@ -9,8 +9,8 @@ class StartPage extends React.Component {
   render() {
     return (
       <main className="main--single-column">
-        <h3>__("LBRY is Closed")</h3>
-        <Link href="lbry://lbry" label="Click here to start LBRY" />
+        <h3>{__("LBRY is Closed")}</h3>
+        <Link href="lbry://lbry" label={__("Click here to start LBRY")} />
       </main>
     );
   }

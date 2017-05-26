@@ -68,9 +68,9 @@ export class CreditAmount extends React.Component {
     const formattedAmount = lbry.formatCredits(this.props.amount, this.props.precision);
     let amountText;
     if (this.props.showFree && parseFloat(formattedAmount) == 0) {
-      amountText = 'free';
+      amountText = __('free');
     } else if (this.props.label) {
-      amountText = formattedAmount + (parseFloat(formattedAmount) == 1 ? ' credit' : ' credits');
+      amountText = formattedAmount + (parseFloat(formattedAmount) == 1 ? __(' credit') : __(' credits'));
     } else {
       amountText = formattedAmount;
     }
@@ -80,7 +80,7 @@ export class CreditAmount extends React.Component {
         <span>
           {amountText}
         </span>
-        { this.props.isEstimate ? <span className="credit-amount__estimate" title="This is an estimate and does not include data fees">*</span> : null }
+        { this.props.isEstimate ? <span className="credit-amount__estimate" title={__("This is an estimate and does not include data fees")}>*</span> : null }
       </span>
     );
   }

@@ -21,7 +21,7 @@ export class FormField extends React.Component {
   constructor(props) {
     super(props);
 
-    this._fieldRequiredText = 'This field is required';
+    this._fieldRequiredText = __('This field is required');
     this._type = null;
     this._element = null;
 
@@ -136,7 +136,7 @@ export class FormRow extends React.Component {
   constructor(props) {
     super(props);
 
-    this._fieldRequiredText = 'This field is required';
+    this._fieldRequiredText = __('This field is required');
 
     this.state = {
       isError: false,

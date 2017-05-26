@@ -63,17 +63,17 @@ class DeveloperPage extends React.Component {
     return (
       <main>
         <section className="card">
-          <h3>Developer Settings</h3>
+          <h3>{__("Developer Settings")}</h3>
           <div className="form-row">
-            <label><FormField type="checkbox" onChange={(event) => { this.handleShowDeveloperMenuChange() }} checked={this.state.showDeveloperMenu} /> Show developer menu</label>
+            <label><FormField type="checkbox" onChange={(event) => { this.handleShowDeveloperMenuChange() }} checked={this.state.showDeveloperMenu} /> {__("Show developer menu")}</label>
           </div>
           <div className="form-row">
-            <label><FormField type="checkbox" onChange={(event) => { this.handleUseCustomLighthouseServersChange() }} checked={this.state.useCustomLighthouseServers} /> Use custom search servers</label>
+            <label><FormField type="checkbox" onChange={(event) => { this.handleUseCustomLighthouseServersChange() }} checked={this.state.useCustomLighthouseServers} /> {__("Use custom search servers")}</label>
           </div>
           {this.state.useCustomLighthouseServers
             ? <div className="form-row">
                 <label>
-                  Custom search servers (one per line)
+                  {__("Custom search servers (one per line)")}
                   <div><FormField type="textarea" className="developer-page__custom-lighthouse-servers" value={this.state.customLighthouseServers} onChange={(event) => { this.handleCustomLighthouseServersChange() }} checked={this.state.debugMode} /></div>
                 </label>
               </div>
@@ -83,7 +83,7 @@ class DeveloperPage extends React.Component {
           <div className="form-row">
             <FormField name="file" ref="file" type="file" onChange={(event) => { this.handleUpgradeFileChange() }}/>
             &nbsp;
-            <Link label="Force Upgrade" button="alt" onClick={(event) => { this.handleForceUpgradeClick() }} />
+            <Link label={__("Force Upgrade")} button="alt" onClick={(event) => { this.handleForceUpgradeClick() }} />
           </div>
         </section>
       </main>
