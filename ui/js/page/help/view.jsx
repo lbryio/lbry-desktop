@@ -65,70 +65,72 @@ class HelpPage extends React.Component {
         <SubHeader />
         <section className="card">
           <div className="card__title-primary">
-            <h3>Read the FAQ</h3>
+            <h3>{__("Read the FAQ")}</h3>
           </div>
           <div className="card__content">
-            <p>Our FAQ answers many common questions.</p>
-            <p><Link href="https://lbry.io/faq" label="Read the FAQ" icon="icon-question" button="alt"/></p>
+            <p>{__("Our FAQ answers many common questions.")}</p>
+            <p><Link href="https://lbry.io/faq" label={__("Read the FAQ")} icon="icon-question" button="alt"/></p>
           </div>
         </section>
         <section className="card">
           <div className="card__title-primary">
-            <h3>Get Live Help</h3>
+            <h3>{__("Get Live Help")}</h3>
           </div>
           <div className="card__content">
             <p>
-              Live help is available most hours in the <strong>#help</strong> channel of our Slack chat room.
+              {__("Live help is available most hours in the")} <strong>#help</strong> {__("channel of our Slack chat room.")}
             </p>
             <p>
-              <Link button="alt" label="Join Our Slack" icon="icon-slack" href="https://slack.lbry.io" />
+              <Link button="alt" label={__("Join Our Slack")} icon="icon-slack" href="https://slack.lbry.io" />
             </p>
           </div>
         </section>
         <section className="card">
-          <div className="card__title-primary"><h3>Report a Bug</h3></div>
+          <div className="card__title-primary"><h3>{__("Report a Bug")}</h3></div>
           <div className="card__content">
-            <p>Did you find something wrong?</p>
-            <p><Link onClick={() => navigate('report')} label="Submit a Bug Report" icon="icon-bug" button="alt" /></p>
-            <div className="meta">Thanks! LBRY is made by its users.</div>
+            <p>{__("Did you find something wrong?")}</p>
+            <p><Link onClick={() => navigate('report')} label={__("Submit a Bug Report")} icon="icon-bug" button="alt" /></p>
+            <div className="meta">{__("Thanks! LBRY is made by its users.")}</div>
           </div>
         </section>
-        <section className="card">
-         <div className="card__title-primary"><h3>About</h3></div>
-         <div className="card__content">
+        {!ver ? null :
+         <section className="card">
+           <div className="card__title-primary"><h3>{__("About")}</h3></div>
+           <div className="card__content">
            {this.state.appVersionInfo ?
-            (ver.lbrynet_update_available || ver.lbryum_update_available ?
-               <p>A newer version of LBRY is available. <Link href={newVerLink} label={`Download LBRY ${ver.remote_lbrynet} now!`} /></p>
-               : <p>Your copy of LBRY is up to date.</p>) : null}
-           { ver ?
+             (ver.lbrynet_update_available || ver.lbryum_update_available ?
+              <p>{__("A newer version of LBRY is available.")} <Link href={newVerLink} label={__("Download LBRY %s now!"), ver.remote_lbrynet} /></p>
+               : <p>{__("Your copy of LBRY is up to date.")}</p>) : null}
+             { ver ?
              <table className="table-standard">
                <tbody>
                  <tr>
-                   <th>daemon (lbrynet)</th>
+                   <th>{__("daemon (lbrynet)")}</th>
                    <td>{ver.lbrynet_version}</td>
                  </tr>
                  <tr>
-                   <th>wallet (lbryum)</th>
+                   <th>{__("wallet (lbryum)")}</th>
                    <td>{ver.lbryum_version}</td>
                  </tr>
                  <tr>
-                   <th>interface</th>
+                   <th>{__("interface")}</th>
                    <td>{uiVersion}</td>
                  </tr>
                  <tr>
-                   <th>Platform</th>
+                   <th>{__("Platform")}</th>
                    <td>{platform}</td>
                  </tr>
                  <tr>
-                   <th>Installation ID</th>
+                   <th>{__("Installation ID")}</th>
                    <td>{this.state.lbryId}</td>
                  </tr>
                </tbody>
              </table> :
-             <BusyMessage message="Looking up version info" />
+             <BusyMessage message={__("Looking up version info")} />
             }
          </div>
         </section>
+      }
       </main>
     );
   }
