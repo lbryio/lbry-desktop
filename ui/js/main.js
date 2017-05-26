@@ -2,14 +2,19 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import lbry from './lbry.js';
 import lbryio from './lbryio.js';
+
+const i18n = require('y18n')({directory: 'app/locales'});
+window.__ = i18n.__;
+window.__n = i18n.__n;
+
 import lighthouse from './lighthouse.js';
 import App from 'component/app/index.js';
-import SplashScreen from 'component/splash.js';
 import SnackBar from 'component/snackBar';
-import {AuthOverlay} from 'component/auth.js';
 import { Provider } from 'react-redux';
 import batchActions from 'util/batchActions'
 import store from 'store.js';
+import SplashScreen from 'component/splash.js';
+import {AuthOverlay} from 'component/auth.js';
 import {
   doChangePath,
   doNavigate,
@@ -29,9 +34,6 @@ const {remote, ipcRenderer, shell} = require('electron');
 const contextMenu = remote.require('./menu/context-menu');
 const app = require('./app')
 
-const i18n = require('y18n')({directory: 'app/locales'});
-window.__ = i18n.__;
-window.__n = i18n.__n;
 
 lbry.showMenuIfNeeded();
 

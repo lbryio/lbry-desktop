@@ -38,7 +38,7 @@ class DiscoverPage extends React.Component{
       <main>
         {
           fetchingFeaturedUris &&
-          <BusyMessage message="Fetching content" />
+          <BusyMessage message={__("Fetching content")} />
         }
         {
           typeof featuredUris === "object" &&
@@ -48,7 +48,7 @@ class DiscoverPage extends React.Component{
         }
         {
           typeof featuredUris !== undefined &&
-          <div className="empty">Failed to load landing content.</div>
+          <div className="empty">{__("Failed to load landing content.")}</div>
         }
       </main>
     )

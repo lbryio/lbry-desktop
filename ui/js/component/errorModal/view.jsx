@@ -15,12 +15,12 @@ class ErrorModal extends React.Component {
     const errorObj = typeof error === "string" ? { error: error } : error
 
     const error_key_labels = {
-      connectionString: 'API connection string',
-      method: 'Method',
-      params: 'Parameters',
-      code: 'Error code',
-      message: 'Error message',
-      data: 'Error data',
+      connectionString: __('API connection string'),
+      method: __('Method'),
+      params: __('Parameters'),
+      code: __('Error code'),
+      message: __('Error message'),
+      data: __('Error data'),
     }
 
 
@@ -35,16 +35,16 @@ class ErrorModal extends React.Component {
     return(
       <ExpandableModal
         isOpen={modal == 'error'}
-        contentLabel="Error" className="error-modal"
+        contentLabel={__("Error")} className="error-modal"
         overlayClassName="error-modal-overlay"
         onConfirmed={closeModal}
         extraContent={errorInfo}
       >
-        <h3 className="modal__header">Error</h3>
+        <h3 className="modal__header">{__("Error")}</h3>
 
         <div className="error-modal__content">
           <div><img className="error-modal__warning-symbol" src={lbry.imagePath('warning.png')} /></div>
-          <p>We're sorry that LBRY has encountered an error. This has been reported and we will investigate the problem.</p>
+          <p>{__("We're sorry that LBRY has encountered an error. This has been reported and we will investigate the problem.")}</p>
         </div>
       </ExpandableModal>
     )

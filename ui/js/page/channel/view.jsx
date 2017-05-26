@@ -27,11 +27,11 @@ class ChannelPage extends React.Component{
 
     let contentList
     if (claimsInChannel === undefined) {
-      contentList = <BusyMessage message="Fetching content" />
+      contentList = <BusyMessage message={__("Fetching content")} />
     } else if (claimsInChannel) {
       contentList = claimsInChannel.length ?
         claimsInChannel.map((claim) => <FileTile key={claim.claim_id} uri={lbryuri.build({name: claim.name, claimId: claim.claim_id})} />) :
-        <span className="empty">No content found.</span>
+        <span className="empty">{__("No content found.")}</span>
     }
 
     return <main className="main--single-column">
@@ -41,11 +41,11 @@ class ChannelPage extends React.Component{
         </div>
         <div className="card__content">
           <p>
-            This channel page is a stub.
+            {__("This channel page is a stub.")}
           </p>
         </div>
       </section>
-      <h3 className="card-row__header">Published Content</h3>
+      <h3 className="card-row__header">{__("Published Content")}</h3>
       {contentList}
     </main>
   }
