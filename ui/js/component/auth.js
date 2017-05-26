@@ -8,7 +8,7 @@ import {RewardLink} from 'component/reward-link';
 import {FormRow} from "../component/form.js";
 import {CreditAmount, Address} from "../component/common.js";
 import {getLocal, setLocal} from '../utils.js';
-import {TYPE_NEW_USER} from '../rewards'
+import rewards from '../rewards'
 
 
 class SubmitEmailStage extends React.Component {
@@ -288,7 +288,7 @@ export class AuthOverlay extends React.Component {
       } else {
         lbryio.call('reward', 'list', {}).then((userRewards) => {
           userRewards.filter(function(reward) {
-            return reward.reward_type == TYPE_NEW_USER && reward.transaction_id;
+            return reward.reward_type == rewards.TYPE_NEW_USER && reward.transaction_id;
           }).length ?
              this.setStage(null) :
              this.setStage("welcome")

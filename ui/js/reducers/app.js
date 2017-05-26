@@ -27,7 +27,7 @@ reducers[types.CHANGE_PATH] = function(state, action) {
 reducers[types.UPGRADE_CANCELLED] = function(state, action) {
   return Object.assign({}, state, {
     downloadProgress: null,
-    downloadComplete: false,
+    upgradeDownloadComplete: false,
     modal: null,
   })
 }
@@ -35,20 +35,14 @@ reducers[types.UPGRADE_CANCELLED] = function(state, action) {
 reducers[types.UPGRADE_DOWNLOAD_COMPLETED] = function(state, action) {
   return Object.assign({}, state, {
     downloadDir: action.data.dir,
-    downloadComplete: true,
+    upgradeDownloading: false,
+    upgradeDownloadCompleted: true
   })
 }
 
 reducers[types.UPGRADE_DOWNLOAD_STARTED] = function(state, action) {
   return Object.assign({}, state, {
     upgradeDownloading: true
-  })
-}
-
-reducers[types.UPGRADE_DOWNLOAD_COMPLETED] = function(state, action) {
-  return Object.assign({}, state, {
-    upgradeDownloading: false,
-    upgradeDownloadCompleted: true
   })
 }
 

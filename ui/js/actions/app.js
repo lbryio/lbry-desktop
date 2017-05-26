@@ -186,7 +186,7 @@ export function doCheckUpgradeAvailable() {
   return function(dispatch, getState) {
     const state = getState()
 
-    lbry.getVersionInfo().then(({remoteVersion, upgradeAvailable}) => {
+    lbry.getAppVersionInfo().then(({remoteVersion, upgradeAvailable}) => {
       if (upgradeAvailable) {
         dispatch({
           type: types.UPDATE_VERSION,

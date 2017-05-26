@@ -68,6 +68,7 @@ function checkForNewVersion(callback) {
       'User-Agent': `LBRY/${localVersion}`,
     }
   };
+
   const req = https.get(Object.assign(opts, url.parse(LATEST_RELEASE_API_URL)), (res) => {
     res.on('data', (data) => {
       result += data;
@@ -76,7 +77,6 @@ function checkForNewVersion(callback) {
       const tagName = JSON.parse(result).tag_name;
       const [_, remoteVersion] = tagName.match(/^v([\d.]+(?:-?rc\d+)?)$/);
       if (!remoteVersion) {
-        console.log('Malformed remote version string:', tagName);
         if (win) {
           win.webContents.send('version-info-received', null);
         }

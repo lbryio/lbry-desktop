@@ -206,18 +206,18 @@ class PublishPage extends React.Component {
           nameResolved: false,
         });
       } else {
-        const topClaimIsMine = (myClaimInfo && myClaimInfo.claim.amount >= claimInfo.claim.amount);
+        const topClaimIsMine = myClaimInfo && myClaimInfo.amount >= claimInfo.amount;
         const newState = {
           nameResolved: true,
-          topClaimValue: parseFloat(claimInfo.claim.amount),
+          topClaimValue: parseFloat(claimInfo.amount),
           myClaimExists: !!myClaimInfo,
-          myClaimValue: myClaimInfo ? parseFloat(myClaimInfo.claim.amount) : null,
+          myClaimValue: myClaimInfo ? parseFloat(myClaimInfo.amount) : null,
           myClaimMetadata: myClaimInfo ? myClaimInfo.value : null,
           topClaimIsMine: topClaimIsMine,
         };
 
         if (topClaimIsMine) {
-          newState.bid = myClaimInfo.claim.amount;
+          newState.bid = myClaimInfo.amount;
         } else if (this.state.myClaimMetadata) {
           // Just changed away from a name we have a claim on, so clear pre-fill
           newState.bid = '';

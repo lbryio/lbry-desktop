@@ -360,7 +360,7 @@ lbry.showMenuIfNeeded = function() {
   sessionStorage.setItem('menuShown', chosenMenu);
 };
 
-lbry.getVersionInfo = function() {
+lbry.getAppVersionInfo = function() {
   return new Promise((resolve, reject) => {
     ipcRenderer.once('version-info-received', (event, versionInfo) => { resolve(versionInfo) });
     ipcRenderer.send('version-info-requested');

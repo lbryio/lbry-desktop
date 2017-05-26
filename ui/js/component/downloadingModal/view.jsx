@@ -17,7 +17,7 @@ class DownloadingModal extends React.Component {
     return (
       <Modal isOpen={true} contentLabel={__("Downloading Update")} type="custom">
         {__("Downloading Update")}{downloadProgress ? `: ${downloadProgress}%` : null}
-        <Line percent={downloadProgress} strokeWidth="4"/>
+        <Line percent={downloadProgress ? downloadProgress : 0} strokeWidth="4"/>
         {downloadComplete ? (
            <div>
              <br />
