@@ -34,20 +34,20 @@ lbryio.getExchangeRates = function() {
 lbryio.call = function(resource, action, params={}, method='get', evenIfDisabled=false) { // evenIfDisabled is just for development, when we may have some calls working and some not
   return new Promise((resolve, reject) => {
     if (!lbryio.enabled && !evenIfDisabled && (resource != 'discover' || action != 'list')) {
-      console.log("Internal API disabled");
-      reject(new Error("LBRY internal API is disabled"))
+      console.log(__("Internal API disabled"));
+      reject(new Error(__("LBRY internal API is disabled")))
       return
     }
 
     const xhr = new XMLHttpRequest;
 
     xhr.addEventListener('error', function (event) {
-      reject(new Error("Something went wrong making an internal API call."));
+      reject(new Error(__("Something went wrong making an internal API call.")));
     });
 
 
     xhr.addEventListener('timeout', function() {
-      reject(new Error('XMLHttpRequest connection timed out'));
+      reject(new Error(__('XMLHttpRequest connection timed out')));
     });
 
     xhr.addEventListener('load', function() {
@@ -89,7 +89,7 @@ lbryio.call = function(resource, action, params={}, method='get', evenIfDisabled
       xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
       xhr.send(querystring.stringify(fullParams));
     } else {
-      reject(new Error("Invalid method"));
+      reject(new Error(__("Invalid method")));
     }
   });
 };
@@ -138,7 +138,7 @@ lbryio.authenticate = function() {
             app_id: installation_id,
           }, 'post').then(function(responseData) {
             if (!responseData.id) {
-              reject(new Error("Received invalid authentication response."));
+              reject(new Error(__("Received invalid authentication response.")));
             }
             lbryio.setAccessToken(installation_id)
             setCurrentUser()
