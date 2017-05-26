@@ -17,13 +17,13 @@ class UpgradeModal extends React.Component {
     return (
       <Modal
         isOpen={true}
-        contentLabel="Update available"
+        contentLabel={__("Update available")}
         type="confirm"
-        confirmButtonLabel="Upgrade"
-        abortButtonLabel="Skip"
+        confirmButtonLabel={__("Upgrade")}
+        abortButtonLabel={__("Skip")}
         onConfirmed={downloadUpgrade}
         onAborted={skipUpgrade}>
-        Your version of LBRY is out of date and may be unreliable or insecure.
+        {__("Your version of LBRY is out of date and may be unreliable or insecure.")}
       </Modal>
     )
   }

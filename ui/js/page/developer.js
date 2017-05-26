@@ -42,7 +42,7 @@ class DeveloperPage extends React.Component {
   handleForceUpgradeClick() {
     let upgradeSent = false;
     if (!this.state.upgradePath) {
-      alert('Please select a file to upgrade from');
+      alert(__('Please select a file to upgrade from'));
     } else {
       try {
         const stats = fs.lstatSync(this.state.upgradePath);

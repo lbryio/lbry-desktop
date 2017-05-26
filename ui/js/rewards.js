@@ -7,13 +7,13 @@ import {
 
 function rewardMessage(type, amount) {
   return {
-    new_developer: `You earned ${amount} for registering as a new developer.`,
-    new_user: `You earned ${amount} LBC new user reward.`,
-    confirm_email: `You earned ${amount} LBC for verifying your email address.`,
-    new_channel: `You earned ${amount} LBC for creating a publisher identity.`,
-    first_stream: `You earned ${amount} LBC for streaming your first video.`,
-    many_downloads: `You earned ${amount} LBC for downloading some of the things.`,
-    first_publish: `You earned ${amount} LBC for making your first publication.`,
+    new_developer: __(`You earned %s for registering as a new developer.`, amount),
+    new_user: __(`You earned %s LBC new user reward.`, amount),
+    confirm_email: __(`You earned %s LBC for verifying your email address.`, amount),
+    new_channel: __(`You earned %s LBC for creating a publisher identity.`, amount),
+    first_stream: __(`You earned %s LBC for streaming your first video.`, amount),
+    many_downloads: __(`You earned %s LBC for downloading some of the things.`, amount),
+    first_publish: __(`You earned %s LBC for making your first publication.`, amount),
   }[type];
 }
 
@@ -82,7 +82,7 @@ rewards.claimReward = function (type) {
 
   function requestReward(resolve, reject, params) {
     if (!lbryio.enabled) {
-      reject(new Error("Rewards are not enabled."))
+      reject(new Error(__("Rewards are not enabled.")))
       return;
     }
     lbryio.call('reward', 'new', params, 'post').then(({reward_amount}) => {
@@ -97,7 +97,7 @@ rewards.claimReward = function (type) {
       // Display global notice
       const action = doShowSnackBar({
         message,
-        linkText: "Show All",
+        linkText: __("Show All"),
         linkTarget: "/rewards",
         isError: false,
       })
@@ -126,7 +126,7 @@ rewards.claimReward = function (type) {
               params.transaction_id = claim.txid;
               requestReward(resolve, reject, params)
             } else {
-              reject(new Error("Please create a channel identity first."))
+              reject(new Error(__("Please create a channel identity first.")))
             }
           }).catch(reject)
           break;
@@ -141,8 +141,8 @@ rewards.claimReward = function (type) {
               requestReward(resolve, reject, params)
             } else {
               reject(claims.length ?
-                     new Error("Please publish something and wait for confirmation by the network to claim this reward.") :
-                     new Error("Please publish something to claim this reward."))
+                     new Error(__("Please publish something and wait for confirmation by the network to claim this reward.")) :
+                     new Error(__("Please publish something to claim this reward.")))
             }
           }).catch(reject)
           break;

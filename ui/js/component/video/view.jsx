@@ -53,20 +53,20 @@ class VideoPlayButton extends React.Component {
             icon="icon-play"
             onClick={this.onWatchClick.bind(this)} />
       {modal}
-      <Modal contentLabel="Not enough credits" isOpen={modal == 'notEnoughCredits'} onConfirmed={() => { this.closeModal() }}>
-        You don't have enough LBRY credits to pay for this stream.
+      <Modal contentLabel={__("Not enough credits")} isOpen={modal == 'notEnoughCredits'} onConfirmed={() => { this.closeModal() }}>
+        {__("You don't have enough LBRY credits to pay for this stream.")}
       </Modal>
       <Modal
         type="confirm"
         isOpen={modal == 'affirmPurchase'}
-        contentLabel="Confirm Purchase"
+        contentLabel={__("Confirm Purchase")}
         onConfirmed={this.onPurchaseConfirmed.bind(this)}
         onAborted={closeModal}>
-        This will purchase <strong>{title}</strong> for <strong><FilePrice uri={uri} look="plain" /></strong> credits.
+        {__("This will purchase")} <strong>{title}</strong> {__("for")} <strong><FilePrice uri={uri} look="plain" /></strong> {__("credits")}.
       </Modal>
       <Modal
         isOpen={modal == 'timedOut'} onConfirmed={() => { this.closeModal() }} contentLabel="Timed Out">
-        Sorry, your download timed out :(
+        {__("Sorry, your download timed out :(")}
       </Modal>
     </div>);
   }
@@ -102,16 +102,16 @@ class Video extends React.Component {
     let loadStatusMessage = ''
 
     if (isLoading) {
-      loadStatusMessage = "Requesting stream... it may sit here for like 15-20 seconds in a really awkward way... we're working on it"
+      loadStatusMessage = __("Requesting stream... it may sit here for like 15-20 seconds in a really awkward way... we're working on it")
     } else if (isDownloading) {
-      loadStatusMessage = "Downloading stream... not long left now!"
+      loadStatusMessage = __("Downloading stream... not long left now!")
     }
 
     return (
       <div className={"video " + this.props.className + (isPlaying ? " video--active" : " video--hidden")}>{
         isPlaying || isLoading ?
           (!isReadyToPlay ?
-            <span>this is the world's worst loading screen and we shipped our software with it anyway... <br /><br />{loadStatusMessage}</span> :
+            <span>{__("this is the world's worst loading screen and we shipped our software with it anyway...")} <br /><br />{loadStatusMessage}</span> :
             <VideoPlayer poster={metadata.thumbnail} autoplay={isPlaying} downloadPath={fileInfo.download_path} />) :
         <div className="video__cover" style={{backgroundImage: 'url("' + metadata.thumbnail + '")'}}>
           <VideoPlayButton startPlaying={this.startPlaying.bind(this)} {...this.props} />

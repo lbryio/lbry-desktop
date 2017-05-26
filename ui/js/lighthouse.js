@@ -21,7 +21,7 @@ function getServers() {
 
 function call(method, params, callback, errorCallback) {
   if (connectTryNum >= maxQueryTries) {
-    errorCallback(new Error(`Could not connect to Lighthouse server. Last server attempted: ${server}`));
+    errorCallback(new Error(__(`Could not connect to Lighthouse server. Last server attempted: %s`, server)));
     return;
   }
 
