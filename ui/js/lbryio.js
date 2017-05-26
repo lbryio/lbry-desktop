@@ -7,33 +7,34 @@ const lbryio = {
   _accessToken: getLocal('accessToken'),
   _authenticationPromise: null,
   _user : null,
-  enabled: false
+  enabled: true
 };
 
-const CONNECTION_STRING = process.env.LBRY_APP_API_URL ? process.env.LBRY_APP_API_URL : 'https://api.lbry.io/';
+
+const CONNECTION_STRING = process.env.LBRY_APP_API_URL ?
+                            process.env.LBRY_APP_API_URL.replace(/\/*$/,'/') : // exactly one slash at the end
+                            'https://api.lbry.io/'
 const EXCHANGE_RATE_TIMEOUT = 20 * 60 * 1000;
 
+lbryio._exchangePromise = null;
+lbryio._exchangeLastFetched = null;
 lbryio.getExchangeRates = function() {
-  return new Promise((resolve, reject) => {
-    const cached = getSession('exchangeRateCache');
-    if (!cached || Date.now() - cached.time > EXCHANGE_RATE_TIMEOUT) {
+  if (!lbryio._exchangeLastFetched || Date.now() - lbryio._exchangeLastFetched > EXCHANGE_RATE_TIMEOUT) {
+    lbryio._exchangePromise = new Promise((resolve, reject) => {
       lbryio.call('lbc', 'exchange_rate', {}, 'get', true).then(({lbc_usd, lbc_btc, btc_usd}) => {
         const rates = {lbc_usd, lbc_btc, btc_usd};
-        setSession('exchangeRateCache', {
-          rates: rates,
-          time: Date.now(),
-        });
         resolve(rates);
-      });
-    } else {
-      resolve(cached.rates);
-    }
-  });
+      }).catch(reject);
+    });
+    lbryio._exchangeLastFetched = Date.now();
+  }
+  return lbryio._exchangePromise;
 }
 
 lbryio.call = function(resource, action, params={}, method='get', evenIfDisabled=false) { // evenIfDisabled is just for development, when we may have some calls working and some not
   return new Promise((resolve, reject) => {
     if (!lbryio.enabled && !evenIfDisabled && (resource != 'discover' || action != 'list')) {
+      console.log("Internal API disabled");
       reject(new Error("LBRY internal API is disabled"))
       return
     }
@@ -87,6 +88,8 @@ lbryio.call = function(resource, action, params={}, method='get', evenIfDisabled
       xhr.open('post', CONNECTION_STRING + resource + '/' + action, true);
       xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
       xhr.send(querystring.stringify(fullParams));
+    } else {
+      reject(new Error("Invalid method"));
     }
   });
 };
@@ -103,8 +106,8 @@ lbryio.authenticate = function() {
   if (!lbryio.enabled) {
     return new Promise((resolve, reject) => {
       resolve({
-        ID: 1,
-        HasVerifiedEmail: true
+        id: 1,
+        has_verified_email: true
       })
     })
   }
@@ -134,7 +137,7 @@ lbryio.authenticate = function() {
             language: 'en',
             app_id: installation_id,
           }, 'post').then(function(responseData) {
-            if (!responseData.ID) {
+            if (!responseData.id) {
               reject(new Error("Received invalid authentication response."));
             }
             lbryio.setAccessToken(installation_id)

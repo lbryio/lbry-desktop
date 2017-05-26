@@ -1,5 +1,11 @@
 const {app, BrowserWindow, ipcMain} = require('electron');
 const url = require('url');
+const isDebug = process.env.NODE_ENV === 'development'
+
+if (isDebug) {
+  require('electron-debug')({showDevTools: true});
+}
+
 const path = require('path');
 const jayson = require('jayson');
 const semver = require('semver');
@@ -62,25 +68,22 @@ function checkForNewVersion(callback) {
       'User-Agent': `LBRY/${localVersion}`,
     }
   };
+
   const req = https.get(Object.assign(opts, url.parse(LATEST_RELEASE_API_URL)), (res) => {
     res.on('data', (data) => {
       result += data;
     });
     res.on('end', () => {
-      console.log('Local version:', localVersion);
       const tagName = JSON.parse(result).tag_name;
       const [_, remoteVersion] = tagName.match(/^v([\d.]+(?:-?rc\d+)?)$/);
       if (!remoteVersion) {
-        console.log('Malformed remote version string:', tagName);
         if (win) {
           win.webContents.send('version-info-received', null);
         }
       } else {
-        console.log('Remote version:', remoteVersion);
         const upgradeAvailable = semver.gt(formatRc(remoteVersion), formatRc(localVersion));
-        console.log(upgradeAvailable ? 'Upgrade available' : 'No upgrade available');
         if (win) {
-          win.webContents.send('version-info-received', {remoteVersion, localVersion, upgradeAvailable});          
+          win.webContents.send('version-info-received', {remoteVersion, localVersion, upgradeAvailable});
         }
       }
     })
@@ -89,7 +92,7 @@ function checkForNewVersion(callback) {
   req.on('error', (err) => {
     console.log('Failed to get current version from GitHub. Error:', err);
     if (win) {
-      win.webContents.send('version-info-received', null);      
+      win.webContents.send('version-info-received', null);
     }
   });
 }
@@ -138,7 +141,9 @@ function createWindow () {
   win = new BrowserWindow({backgroundColor: '#155B4A', minWidth: 800, minHeight: 600 }) //$color-primary
 
   win.maximize()
-  // win.webContents.openDevTools();
+  if (isDebug) {
+    win.webContents.openDevTools();
+  }
   win.loadURL(`file://${__dirname}/dist/index.html`)
   if (openUri) { // We stored and received a URI that an external app requested before we had a window object
     win.webContents.on('did-finish-load', () => {
@@ -312,7 +317,7 @@ app.on('activate', () => {
 // then calls quitNow() to quit for real.
 function shutdownDaemonAndQuit(evenIfNotStartedByApp = false) {
   function doShutdown() {
-    console.log('Asking daemon to shut down down');
+    console.log('Shutting down daemon');
     daemonStopRequested = true;
     client.request('daemon_stop', [], (err, res) => {
       if (err) {

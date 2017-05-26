@@ -1,4 +1,6 @@
 const path = require('path');
+const webpack = require('webpack')
+const appPath = path.resolve(__dirname, 'js');
 
 const PATHS = {
   app: path.join(__dirname, 'app'),
@@ -13,6 +15,15 @@ module.exports = {
     filename: "bundle.js"
   },
   devtool: 'source-map',
+  resolve: {
+    root: appPath,
+    extensions: ['', '.js', '.jsx', '.css'],
+  },
+  plugins: [
+    new webpack.DefinePlugin({
+      ENV: JSON.stringify("production"),
+    }),
+  ],
   module: {
     preLoaders: [
       {
@@ -25,8 +36,8 @@ module.exports = {
     loaders: [
       { test: /\.css$/, loader: "style!css" },
       {
-	test: /\.jsx?$/,
-	loader: 'babel',
+        test: /\.jsx?$/,
+        loader: 'babel',
         query: {
           cacheDirectory: true,
           presets:[ 'es2015', 'react', 'stage-2' ]

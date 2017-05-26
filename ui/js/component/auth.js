@@ -1,30 +1,38 @@
 import React from "react";
+import lbry from "../lbry.js";
 import lbryio from "../lbryio.js";
 import Modal from "./modal.js";
 import ModalPage from "./modal-page.js";
-import {Link, RewardLink} from "../component/link.js";
+import Link from "component/link"
+import {RewardLink} from 'component/reward-link';
 import {FormRow} from "../component/form.js";
 import {CreditAmount, Address} from "../component/common.js";
-import {getLocal, getSession, setSession, setLocal} from '../utils.js';
+import {getLocal, setLocal} from '../utils.js';
+import rewards from '../rewards'
 
 
-const SubmitEmailStage = React.createClass({
-  getInitialState: function() {
-    return {
+class SubmitEmailStage extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
       rewardType: null,
       email: '',
       submitting: false
     };
-  },
-  handleEmailChanged: function(event) {
+  }
+
+  handleEmailChanged(event) {
     this.setState({
       email: event.target.value,
     });
-  },
-  onEmailSaved: function(email) {
+  }
+
+  onEmailSaved(email) {
     this.props.setStage("confirm", { email: email })
-  },
-  handleSubmit: function(event) {
+  }
+
+  handleSubmit(event) {
     event.preventDefault();
 
     this.setState({
@@ -41,38 +49,43 @@ const SubmitEmailStage = React.createClass({
       }
       this.setState({ submitting: false });
     });
-  },
-  render: function() {
+  }
+
+  render() {
     return (
       <section>
-        <form onSubmit={this.handleSubmit}>
+        <form onSubmit={(event) => { this.handleSubmit(event) }}>
           <FormRow ref={(ref) => { this._emailRow = ref }} type="text" label="Email" placeholder="scrwvwls@lbry.io"
                      name="email" value={this.state.email}
-                     onChange={this.handleEmailChanged} />
+                     onChange={(event) => { this.handleEmailChanged(event) }} />
           <div className="form-row-submit">
-            <Link button="primary" label="Next" disabled={this.state.submitting} onClick={this.handleSubmit} />
+            <Link button="primary" label="Next" disabled={this.state.submitting} onClick={(event) => { this.handleSubmit(event) }} />
           </div>
         </form>
       </section>
     );
   }
-});
+}
 
-const ConfirmEmailStage = React.createClass({
-  getInitialState: function() {
-    return {
+class ConfirmEmailStage extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
       rewardType: null,
       code: '',
       submitting: false,
       errorMessage: null,
     };
-  },
-  handleCodeChanged: function(event) {
+  }
+
+  handleCodeChanged(event) {
     this.setState({
       code: event.target.value,
     });
-  },
-  handleSubmit: function(event) {
+  }
+
+  handleSubmit(event) {
     event.preventDefault();
     this.setState({
       submitting: true,
@@ -86,22 +99,23 @@ const ConfirmEmailStage = React.createClass({
     };
 
     lbryio.call('user_email', 'confirm', {verification_token: this.state.code, email: this.props.email}, 'post').then((userEmail) => {
-      if (userEmail.IsVerified) {
+      if (userEmail.is_verified) {
         this.props.setStage("welcome")
       } else {
         onSubmitError(new Error("Your email is still not verified.")) //shouldn't happen?
       }
     }, onSubmitError);
-  },
-  render: function() {
+  }
+
+  render() {
     return (
       <section>
-        <form onSubmit={this.handleSubmit}>
+        <form onSubmit={(event) => { this.handleSubmit(event) }}>
           <FormRow label="Verification Code" ref={(ref) => { this._codeRow = ref }} type="text"
-                     name="code" placeholder="a94bXXXXXXXXXXXXXX" value={this.state.code} onChange={this.handleCodeChanged}
+                     name="code" placeholder="a94bXXXXXXXXXXXXXX" value={this.state.code} onChange={(event) => { this.handleCodeChanged(event) }}
                      helper="A verification code is required to access this version."/>
           <div className="form-row-submit form-row-submit--with-footer">
-            <Link button="primary" label="Verify" disabled={this.state.submitting} onClick={this.handleSubmit} />
+            <Link button="primary" label="Verify" disabled={this.state.submitting} onClick={(event) => { this.handleSubmit(event)}} />
           </div>
           <div className="form-field__helper">
             No code? <Link onClick={() => { this.props.setStage("nocode")}} label="Click here" />.
@@ -110,25 +124,30 @@ const ConfirmEmailStage = React.createClass({
       </section>
     );
   }
-});
+}
 
-const WelcomeStage = React.createClass({
-  propTypes: {
+class WelcomeStage extends React.Component {
+  static propTypes = {
     endAuth: React.PropTypes.func,
-  },
-  getInitialState: function() {
-    return {
+  }
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
       hasReward: false,
       rewardAmount: null,
-    }
-  },
-  onRewardClaim: function(reward) {
+    };
+  }
+
+  onRewardClaim(reward) {
     this.setState({
       hasReward: true,
       rewardAmount: reward.amount
     })
-  },
-  render: function() {
+  }
+
+  render() {
     return (
       !this.state.hasReward ?
         <Modal type="custom" isOpen={true} contentLabel="Welcome to LBRY" {...this.props}>
@@ -139,7 +158,7 @@ const WelcomeStage = React.createClass({
             <p>Below, LBRY is controlled by users -- you -- via blockchain and decentralization.</p>
             <p>Thank you for making content freedom possible! Here's a nickel, kid.</p>
             <div style={{textAlign: "center", marginBottom: "12px"}}>
-              <RewardLink type="new_user" button="primary" onRewardClaim={this.onRewardClaim} onRewardFailure={() => this.props.setStage(null)} onConfirmed={() => { this.props.setStage(null) }} />
+              <RewardLink type="new_user" button="primary" onRewardClaim={(event) => { this.onRewardClaim(event) }} onRewardFailure={() => this.props.setStage(null)} onConfirmed={() => { this.props.setStage(null) }} />
             </div>
           </section>
          </Modal> :
@@ -150,48 +169,42 @@ const WelcomeStage = React.createClass({
             <p>This reward will show in your Wallet momentarily, probably while you are reading this message.</p>
             <p>LBC is used to compensate creators, to publish, and to have say in how the network works.</p>
             <p>No need to understand it all just yet! Try watching or downloading something next.</p>
-            <p>Finally, know that LBRY is a beta and that it earns the name.</p>
+            <p>Finally, know that LBRY is an early beta and that it earns the name.</p>
           </section>
       </Modal>
     );
   }
-});
+}
+
+const ErrorStage = (props) => {
+  return <section>
+    <p>An error was encountered that we cannot continue from.</p>
+    <p>At least we're earning the name beta.</p>
+    { props.errorText ? <p>Message: {props.errorText}</p> : '' }
+    <Link button="alt" label="Try Reload" onClick={() => { window.location.reload() } } />
+  </section>
+}
+
+const PendingStage = (props) => {
+  return <section>
+    <p>Preparing for first access <span className="busy-indicator"></span></p>
+  </section>
+}
 
 
-const ErrorStage = React.createClass({
-  render: function() {
-    return (
-      <section>
-        <p>An error was encountered that we cannot continue from.</p>
-        <p>At least we're earning the name beta.</p>
-        { this.props.errorText ? <p>Message: {this.props.errorText}</p> : '' }
-        <Link button="alt" label="Try Reload" onClick={() => { window.location.reload() } } />
-      </section>
-    );
-  }
-});
+class CodeRequiredStage extends React.Component {
+  constructor(props) {
+    super(props);
 
-const PendingStage = React.createClass({
-  render: function() {
-    return (
-      <section>
-        <p>Preparing for first access <span className="busy-indicator"></span></p>
-      </section>
-    );
-  }
-});
+    this._balanceSubscribeId = null
 
-
-const CodeRequiredStage = React.createClass({
-  _balanceSubscribeId: null,
-  getInitialState: function() {
-    return {
+    this.state = {
       balance: 0,
       address: getLocal('wallet_address')
-    }
-  },
+    };
+  }
 
-  componentWillMount: function() {
+  componentWillMount() {
     this._balanceSubscribeId = lbry.balanceSubscribe((balance) => {
       this.setState({
         balance: balance
@@ -199,18 +212,20 @@ const CodeRequiredStage = React.createClass({
     })
 
     if (!this.state.address) {
-      lbry.getUnusedAddress((address) => {
+      lbry.wallet_unused_address().then((address) => {
         setLocal('wallet_address', address);
         this.setState({ address: address });
       });
     }
-  },
-  componentWillUnmount: function() {
+  }
+
+  componentWillUnmount() {
     if (this._balanceSubscribeId) {
       lbry.balanceUnsubscribe(this._balanceSubscribeId)
     }
-  },
-  render: function() {
+  }
+
+  render() {
     const disabled = this.state.balance < 1;
     return (
       <div>
@@ -233,33 +248,38 @@ const CodeRequiredStage = React.createClass({
       </div>
     );
   }
-});
+}
 
 
-export const AuthOverlay = React.createClass({
-  _stages: {
-    pending: PendingStage,
-    error: ErrorStage,
-    nocode: CodeRequiredStage,
-    email: SubmitEmailStage,
-    confirm: ConfirmEmailStage,
-    welcome: WelcomeStage
-  },
-  getInitialState: function() {
-    return {
+export class AuthOverlay extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this._stages = {
+      pending: PendingStage,
+      error: ErrorStage,
+      nocode: CodeRequiredStage,
+      email: SubmitEmailStage,
+      confirm: ConfirmEmailStage,
+      welcome: WelcomeStage
+    }
+
+    this.state = {
       stage: "pending",
       stageProps: {}
     };
-  },
-  setStage: function(stage, stageProps = {}) {
+  }
+
+  setStage(stage, stageProps = {}) {
     this.setState({
       stage: stage,
       stageProps: stageProps
     })
-  },
-  componentWillMount: function() {
+  }
+
+  componentWillMount() {
     lbryio.authenticate().then((user) => {
-      if (!user.HasVerifiedEmail) {
+      if (!user.has_verified_email) {
         if (getLocal('auth_bypassed')) {
           this.setStage(null)
         } else {
@@ -268,7 +288,7 @@ export const AuthOverlay = React.createClass({
       } else {
         lbryio.call('reward', 'list', {}).then((userRewards) => {
           userRewards.filter(function(reward) {
-            return reward.RewardType == "new_user" && reward.TransactionID;
+            return reward.reward_type == rewards.TYPE_NEW_USER && reward.transaction_id;
           }).length ?
              this.setStage(null) :
              this.setStage("welcome")
@@ -283,19 +303,25 @@ export const AuthOverlay = React.createClass({
         }
       }));
     })
-  },
-  render: function() {
+  }
+
+  render() {
     if (!this.state.stage) {
         return null;
     }
     const StageContent = this._stages[this.state.stage];
+
+    if (!StageContent) {
+      return <span className="empty">Unknown authentication step.</span>
+    }
+
     return (
       this.state.stage != "welcome" ?
-          <ModalPage className="modal-page--full" isOpen={true} contentLabel="Authentication" {...this.props}>
+          <ModalPage className="modal-page--full" isOpen={true} contentLabel="Authentication">
             <h1>LBRY Early Access</h1>
-            <StageContent {...this.state.stageProps}  setStage={this.setStage} />
+            <StageContent {...this.state.stageProps}  setStage={(stage, stageProps) => { this.setStage(stage, stageProps) }} />
           </ModalPage> :
-          <StageContent setStage={this.setStage} {...this.state.stageProps}  />
+          <StageContent setStage={(stage, stageProps) => { this.setStage(stage, stageProps) }} {...this.state.stageProps}  />
     );
   }
-});
+}

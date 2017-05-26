@@ -16,7 +16,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
   *
 
 ### Fixed
-  * Error modals now display full screen properly
+  *
   *
 
 ### Deprecated
@@ -26,6 +26,38 @@ Web UI version numbers should always match the corresponding version of LBRY App
 ### Removed
   *
   *
+
+## [0.11.3] - 2017-05-26
+
+### Fixed
+ * Fixed always showing welcome message on run
+ * "Fixed" upgrade process
+ * Version info now shows properly on Help page
+ * Claim info is properly accessed on Publish page
+
+
+
+## [0.11.0] - 2017-05-25
+
+### Added
+ * Entire app re-written to use Redux as state store. Far saner and faster. Will also increase productivity moving forward.
+ * Channel page shows content published in channel.
+ * URI handling. Clicking lbry:// links should open the app and appropriate URI on all OSes.
+ * File cards have an icon indicating you posses that file.
+ * Download directory setting now uses a proper dialog.
+ * Movie player automatically shows if the file has already been downloaded.
+
+
+### Changed
+ * Plyr replaces mediaelement as the movie player.
+
+
+### Fixed
+ * Publisher indicator on show pages and file cards/tiles will now always show the proper channel name.
+ * Performance improvements related to avoiding duplicate fetches.
+ * Fix incorrect prompt on empty published page
+
+
 
 ## [0.10.0] - 2017-05-04
 
