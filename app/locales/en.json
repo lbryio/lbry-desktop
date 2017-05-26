@@ -218,5 +218,8 @@
   "Loading...": "Loading...",
   "Empty claim or metadata info.": "Empty claim or metadata info.",
   "This content is Not Safe For Work. To view adult content, please change your": "This content is Not Safe For Work. To view adult content, please change your",
-  "This address contains no content.": "This address contains no content."
+  "This address contains no content.": "This address contains no content.",
+  "Sort by": "Sort by",
+  "Date": "Date",
+  "File name": "File name"
 }
