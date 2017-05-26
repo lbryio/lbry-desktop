@@ -68,15 +68,15 @@ class FileTile extends React.Component {
     if (isClaimed) {
       description = metadata && metadata.description
     } else if (isResolvingUri) {
-      description = "Loading..."
+      description = __("Loading...")
     } else if (showEmpty === FileTile.SHOW_EMPTY_PUBLISH) {
       onClick = () => navigate('/publish', { })
       description = <span className="empty">
-        This location is unused. { ' ' }
-        { isClaimable && <span className="button-text">Put something here!</span> }
+        {__("This location is unused.")} { ' ' }
+        { isClaimable && <span className="button-text">{__("Put something here!")}</span> }
       </span>
     } else if (showEmpty === FileTile.SHOW_EMPTY_PENDING) {
-      description = <span className="empty">This file is pending confirmation.</span>
+      description = <span className="empty">{__("This file is pending confirmation.")}</span>
     }
 
     return (
@@ -103,8 +103,7 @@ class FileTile extends React.Component {
         {this.state.showNsfwHelp
           ? <div className='card-overlay'>
            <p>
-             This content is Not Safe For Work.
-             To view adult content, please change your <Link className="button-text" onClick={() => navigate('/settings')} label="Settings" />.
+             {__("This content is Not Safe For Work. To view adult content, please change your")} <Link className="button-text" onClick={() => navigate('/settings')} label={__("Settings")} />.
            </p>
          </div>
           : null}
