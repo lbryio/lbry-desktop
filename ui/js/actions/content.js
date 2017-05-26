@@ -122,7 +122,6 @@ export function doUpdateLoadStatus(uri, outpoint) {
       } else if (fileInfo.completed) {
         // TODO this isn't going to get called if they reload the client before
         // the download finished
-        rewards.claimEligiblePurchaseRewards()
         dispatch({
           type: types.DOWNLOADING_COMPLETED,
           data: {
@@ -174,6 +173,9 @@ export function doDownloadFile(uri, streamInfo) {
       outpoint: streamInfo.outpoint,
       claimId: streamInfo.claim_id,
     }).catch(() => {})
+
+    rewards.claimEligiblePurchaseRewards()
+    
     dispatch(doUpdateLoadStatus(uri, streamInfo.outpoint))
   }
 }
