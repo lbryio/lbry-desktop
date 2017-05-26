@@ -122,7 +122,7 @@ export function doUpdateLoadStatus(uri, outpoint) {
       } else if (fileInfo.completed) {
         // TODO this isn't going to get called if they reload the client before
         // the download finished
-        rewards.claimNextPurchaseReward()
+        rewards.claimEligiblePurchaseRewards()
         dispatch({
           type: types.DOWNLOADING_COMPLETED,
           data: {
