@@ -16,8 +16,10 @@ Web UI version numbers should always match the corresponding version of LBRY App
   *
 
 ### Fixed
-  *
-  *
+  * Fixed always showing welcome message on run
+  * "Fixed" upgrade process
+  * Version info now shows properly on Help page
+  * Claim info is properly accessed on Publish page
 
 ### Deprecated
   *
