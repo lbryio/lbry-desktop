@@ -76,6 +76,7 @@ rewards.TYPE_FIRST_CHANNEL = "new_channel",
 rewards.TYPE_FIRST_STREAM = "first_stream",
 rewards.TYPE_MANY_DOWNLOADS = "many_downloads",
 rewards.TYPE_FIRST_PUBLISH = "first_publish";
+rewards.TYPE_FEATURED_DOWNLOAD = "featured_download";
 
 rewards.claimReward = function (type) {
 
@@ -155,9 +156,10 @@ rewards.claimReward = function (type) {
   });
 }
 
-rewards.claimNextPurchaseReward = function() {
+rewards.claimEligiblePurchaseRewards = function() {
   let types = {}
   types[rewards.TYPE_FIRST_STREAM] = false
+  types[rewards.TYPE_FEATURED_DOWNLOAD] = false
   types[rewards.TYPE_MANY_DOWNLOADS] = false
   lbryio.call('reward', 'list', {}).then((userRewards) => {
     userRewards.forEach((reward) => {
@@ -166,10 +168,13 @@ rewards.claimNextPurchaseReward = function() {
       }
     })
     let unclaimedType = Object.keys(types).find((type) => {
-      return types[type] === false;
+      return types[type] === false && type !== rewards.TYPE_FEATURED_DOWNLOAD; //handled below
     })
     if (unclaimedType) {
       rewards.claimReward(unclaimedType);
+    }
+    if (types[rewards.TYPE_FEATURED_DOWNLOAD] === false) {
+      rewards.claimReward(rewards.TYPE_FEATURED_DOWNLOAD)
     }
   }, () => { });
 }
