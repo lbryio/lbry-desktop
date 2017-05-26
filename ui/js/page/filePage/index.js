@@ -12,6 +12,9 @@ import {
   makeSelectFileInfoForUri,
 } from 'selectors/file_info'
 import {
+  doFetchCostInfoForUri,
+} from 'actions/cost_info'
+import {
   makeSelectClaimForUri,
   makeSelectContentTypeForUri,
   makeSelectMetadataForUri,
@@ -41,7 +44,8 @@ const makeSelect = () => {
 
 const perform = (dispatch) => ({
   navigate: (path, params) => dispatch(doNavigate(path, params)),
-  fetchFileInfo: (uri) => dispatch(doFetchFileInfo(uri))
+  fetchFileInfo: (uri) => dispatch(doFetchFileInfo(uri)),
+  fetchCostInfo: (uri) => dispatch(doFetchCostInfoForUri(uri)),
 })
 
 export default connect(makeSelect, perform)(FilePage)
