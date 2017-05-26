@@ -43,9 +43,11 @@ class VideoPlayButton extends React.Component {
      }
      */
 
+    const disabled = isLoading || fileInfo === undefined || (fileInfo === null && (!costInfo || costInfo.cost === undefined))
+
     return (<div>
       <Link button={ button ? button : null }
-            disabled={isLoading || fileInfo === undefined || (fileInfo === null && (!costInfo || costInfo.cost === undefined))}
+            disabled={disabled}
             label={label ? label : ""}
             className="video__play-button"
             icon="icon-play"
