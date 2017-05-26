@@ -8,7 +8,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
 
 ## [Unreleased]
 ### Added
-  *
+  * New reward for watching weekly featured content
   *
 
 ### Changed
@@ -16,8 +16,8 @@ Web UI version numbers should always match the corresponding version of LBRY App
   *
 
 ### Fixed
-  *
-  *
+  * Video playback will always properly fetch cost info (this was a big playback bug)
+  * Fixed view rewards
 
 ### Deprecated
   *
