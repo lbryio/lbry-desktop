@@ -8,7 +8,6 @@ import { RewardLink } from "component/reward-link";
 import { FormRow } from "../component/form.js";
 import { CreditAmount, Address } from "../component/common.js";
 import { getLocal, setLocal } from "../utils.js";
-import rewards from "../rewards";
 
 class SubmitEmailStage extends React.Component {
   constructor(props) {
@@ -197,7 +196,7 @@ class WelcomeStage extends React.Component {
     super(props);
 
     this.state = {
-      hasReward: false,
+      hasReward: true,
       rewardAmount: null,
     };
   }
@@ -210,7 +209,18 @@ class WelcomeStage extends React.Component {
   }
 
   render() {
-    return !this.state.hasReward
+    const {
+      claimedRewardsByType,
+      fetchingRewards,
+      newUserReward,
+    } = this.props
+
+    const hasReward = claimedRewardsByType.length > 0
+
+    if (fetchingRewards) return null
+    if (!newUserReward) return null
+
+    return !hasReward
       ? <Modal
           type="custom"
           isOpen={true}
@@ -451,18 +461,11 @@ export class AuthOverlay extends React.Component {
             this.setStage("email", {});
           }
         } else {
-          lbryio.call("reward", "list", {}).then(userRewards => {
-            userRewards.filter(function(reward) {
-              return (
-                reward.reward_type == rewards.TYPE_NEW_USER &&
-                reward.transaction_id
-              );
-            }).length
-              ? this.setStage(null)
-              : this.setStage("welcome");
-          });
-        }
-      })
+        const {
+          claimedRewardsByType,
+        } = this.props
+        claimedRewardsByType[rewards.TYPE_NEW_USER] ? this.setStage(null) : this.setStage("welcome")
+      }})
       .catch(err => {
         this.setStage("error", { errorText: err.message });
         document.dispatchEvent(
@@ -510,3 +513,5 @@ export class AuthOverlay extends React.Component {
         />;
   }
 }
+
+export default AuthOverlay

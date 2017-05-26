@@ -20,16 +20,26 @@ export function doFetchRewards() {
   };
 }
 
-export function doClaimReward(rewardType) {
+export function doClaimReward(reward) {
   return function(dispatch, getState) {
+    dispatch({
+      type: types.CLAIM_REWARD_STARTED,
+      data: { reward }
+    })
     try {
-      rewards.claimReward(rewards[rewardType]);
-      dispatch({
-        type: types.REWARD_CLAIMED,
-        data: {
-          reward: rewards[rewardType],
-        },
-      });
-    } catch (err) {}
-  };
+      const success = (a) => {
+        console.log(a)
+        dispatch({
+          type: types.CLAIM_REWARD_COMPLETED,
+          data: {
+            a
+          }
+        })
+      }
+      const failure = (a) => console.error(a)
+      rewards.claimReward(reward.reward_type).then(success, failure)
+    } catch(err) {
+      console.error(err)
+    }
+  }
 }
