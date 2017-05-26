@@ -43,8 +43,8 @@ class ShowPage extends React.Component{
           <div className="card__title-identity"><h1>{uri}</h1></div>
         </div>
         <div className="card__content">
-          { isResolvingUri && <BusyMessage message="Loading magic decentralized data..." /> }
-          { claim === null && <span className="empty">There's nothing at this location.</span> }
+          { isResolvingUri && <BusyMessage message={__("Loading magic decentralized data...")} /> }
+          { claim === null && <span className="empty">{__("There's nothing at this location.")}</span> }
         </div>
       </section>
     }
