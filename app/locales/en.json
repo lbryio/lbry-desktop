@@ -227,5 +227,11 @@
   "Be the first": "Be the first",
   "Refreshing the Dewey Decimals": "Refreshing the Dewey Decimals",
   "This location is unused.": "This location is unused.",
-  "Put something here!": "Put something here!"
+  "Put something here!": "Put something here!",
+  "Transaction History": "Transaction History",
+  "You have no transactions.": "You have no transactions.",
+  "Loading transactions": "Loading transactions",
+  "Amount": "Amount",
+  "Time": "Time",
+  "Transaction": "Transaction"
 }
