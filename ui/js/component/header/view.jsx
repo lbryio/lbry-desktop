@@ -23,7 +23,7 @@ export const Header = (props) => {
       <Link onClick={() => navigate('/wallet')}  button="text" icon="icon-bank" label={balance} ></Link>
     </div>
     <div className="header__item">
-      <Link onClick={() => navigate('/publish')} button="primary button--flat" icon="icon-upload" label="Publish" />
+      <Link onClick={() => navigate('/publish')} button="primary button--flat" icon="icon-upload" label={__("Publish")} />
     </div>
     <div className="header__item">
       <Link onClick={() => navigate('/downloaded')} button="alt button--flat" icon="icon-folder" />
