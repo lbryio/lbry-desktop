@@ -46,6 +46,7 @@ class FilePage extends React.Component{
 
   componentDidMount() {
     this.fetchFileInfo(this.props)
+    this.fetchCostInfo(this.props)
   }
 
   componentWillReceiveProps(nextProps) {
@@ -55,6 +56,12 @@ class FilePage extends React.Component{
   fetchFileInfo(props) {
     if (props.fileInfo === undefined) {
       props.fetchFileInfo(props.uri)
+    }
+  }
+
+  fetchCostInfo(props) {
+    if (props.costInfo === undefined) {
+      props.fetchCostInfo(props.uri)
     }
   }
 
