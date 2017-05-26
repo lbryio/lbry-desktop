@@ -171,11 +171,11 @@ export function doDownloadFile(uri, streamInfo) {
     lbryio.call('file', 'view', {
       uri: uri,
       outpoint: streamInfo.outpoint,
-      claimId: streamInfo.claim_id,
+      claim_id: streamInfo.claim_id,
     }).catch(() => {})
 
     rewards.claimEligiblePurchaseRewards()
-    
+
     dispatch(doUpdateLoadStatus(uri, streamInfo.outpoint))
   }
 }
