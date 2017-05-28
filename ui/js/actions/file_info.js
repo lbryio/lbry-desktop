@@ -1,7 +1,7 @@
 import * as types from 'constants/action_types'
 import lbry from 'lbry'
 import {
-  doClaimListMine
+  doFetchClaimListMine
 } from 'actions/content'
 import {
   selectClaimsByUri,
@@ -110,7 +110,7 @@ export function doFetchFileInfosAndPublishedClaims() {
           isFileInfoListPending = selectFileListIsPending(state)
 
     if (isClaimListMinePending === undefined) {
-      dispatch(doClaimListMine())
+      dispatch(doFetchClaimListMine())
     }
 
     if (isFileInfoListPending === undefined) {
