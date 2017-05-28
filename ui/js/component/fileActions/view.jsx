@@ -62,6 +62,7 @@ class FileActions extends React.Component {
       openModal,
       closeModal,
       startDownload,
+      costInfo,
     } = this.props
 
     const deleteChecked = this.state.deleteChecked,
@@ -99,8 +100,11 @@ class FileActions extends React.Component {
       </div>
 
     } else if (fileInfo === null && !downloading) {
-
-      content = <Link button="text" label="Download" icon="icon-download" onClick={() => { startDownload(uri) } } />;
+      if (!costInfo) {
+        content = <BusyMessage message="Fetching cost info" />
+      } else {
+        content = <Link button="text" label="Download" icon="icon-download" onClick={() => { startDownload(uri) } } />;
+      }
 
     } else if (fileInfo && fileInfo.download_path) {
       content  = <Link label="Open" button="text" icon="icon-folder-open" onClick={() => openInShell(fileInfo)} />;

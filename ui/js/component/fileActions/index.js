@@ -17,6 +17,9 @@ import {
   selectCurrentModal,
 } from 'selectors/app'
 import {
+  makeSelectCostInfoForUri,
+} from 'selectors/cost_info'
+import {
   doCloseModal,
   doOpenModal,
   doHistoryBack,
@@ -39,6 +42,7 @@ const makeSelect = () => {
   const selectFileInfoForUri = makeSelectFileInfoForUri()
   const selectIsAvailableForUri = makeSelectIsAvailableForUri()
   const selectDownloadingForUri = makeSelectDownloadingForUri()
+  const selectCostInfoForUri = makeSelectCostInfoForUri()
 
   const select = (state, props) => ({
     fileInfo: selectFileInfoForUri(state, props),
@@ -46,6 +50,7 @@ const makeSelect = () => {
     platform: selectPlatform(state),
     modal: selectCurrentModal(state),
     downloading: selectDownloadingForUri(state, props),
+    costInfo: selectCostInfoForUri(state, props),
   })
 
   return select
@@ -62,7 +67,7 @@ const perform = (dispatch) => ({
   },
   openModal: (modal) => dispatch(doOpenModal(modal)),
   startDownload: (uri) => dispatch(doPurchaseUri(uri)),
-  loadVideo: (uri) => dispatch(doLoadVideo(uri))
+  loadVideo: (uri) => dispatch(doLoadVideo(uri)),
 })
 
 export default connect(makeSelect, perform)(FileActions)
