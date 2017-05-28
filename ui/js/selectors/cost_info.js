@@ -17,3 +17,19 @@ export const makeSelectCostInfoForUri = () => {
     (costInfo) => costInfo
   )
 }
+
+export const selectFetchingCostInfo = createSelector(
+  _selectState,
+  (state) => state.fetching || {}
+)
+
+const selectFetchingCostInfoForUri = (state, props) => {
+  return selectFetchingCostInfo(state)[props.uri]
+}
+
+export const makeSelectFetchingCostInfoForUri = () => {
+  return createSelector(
+    selectFetchingCostInfoForUri,
+    (fetching) => !!fetching
+  )
+}

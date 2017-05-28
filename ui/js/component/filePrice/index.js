@@ -7,14 +7,17 @@ import {
 } from 'actions/cost_info'
 import {
   makeSelectCostInfoForUri,
+  makeSelectFetchingCostInfoForUri,
 } from 'selectors/cost_info'
 import FilePrice from './view'
 
 const makeSelect = () => {
   const selectCostInfoForUri = makeSelectCostInfoForUri()
+  const selectFetchingCostInfoForUri = makeSelectFetchingCostInfoForUri()
 
   const select = (state, props) => ({
     costInfo: selectCostInfoForUri(state, props),
+    fetching: selectFetchingCostInfoForUri(state, props),
   })
 
   return select
