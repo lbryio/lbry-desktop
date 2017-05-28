@@ -307,5 +307,7 @@
   "Something went wrong": "Something went wrong",
   "Find movies, music, games, and more": "Find movies, music, games, and more",
   "Wallet": "Wallet",
-  "Looking up version info": "Looking up version info"
+  "Looking up version info": "Looking up version info",
+  "It looks like you deleted or moved this file. We're rebuilding it now. It will only take a few seconds.": "It looks like you deleted or moved this file. We're rebuilding it now. It will only take a few seconds.",
+  "Fetching cost info": "Fetching cost info"
 }

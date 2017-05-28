@@ -101,9 +101,9 @@ class FileActions extends React.Component {
 
     } else if (fileInfo === null && !downloading) {
       if (!costInfo) {
-        content = <BusyMessage message="Fetching cost info" />
+        content = <BusyMessage message={__("Fetching cost info")} />
       } else {
-        content = <Link button="text" label="Download" icon="icon-download" onClick={() => { startDownload(uri) } } />;
+        content = <Link button="text" label={__("Download")} icon="icon-download" onClick={() => { startDownload(uri) } } />;
       }
 
     } else if (fileInfo && fileInfo.download_path) {
