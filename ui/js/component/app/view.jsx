@@ -20,7 +20,7 @@ class App extends React.Component {
     lbry.balanceSubscribe((balance) => {
       this.props.updateBalance(balance)
     })
-  }
+  }y
 
   render() {
     const {

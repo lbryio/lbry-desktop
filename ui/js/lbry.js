@@ -18,6 +18,7 @@ let lbry = {
     useCustomLighthouseServers: false,
     customLighthouseServers: [],
     showDeveloperMenu: false,
+    language: 'en',
   }
 };
 

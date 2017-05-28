@@ -47,10 +47,13 @@ export const selectPageTitle = createSelector(
       case 'report':
         return __('Report')
       case 'wallet':
+        return __("Wallet")
       case 'send':
+        return __("Send")
       case 'receive':
+        return __("Receive")
       case 'rewards':
-        return page.charAt(0).toUpperCase() + page.slice(1)
+        return __("Rewards")
       case 'show':
         return lbryuri.normalize(params.uri)
       case 'downloaded':
