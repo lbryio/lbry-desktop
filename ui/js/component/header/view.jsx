@@ -18,7 +18,7 @@ export const Header = (props) => {
       <Link onClick={() => navigate('/discover')} button="alt button--flat" icon="icon-home" />
     </div>
     <div className="header__item header__item--wunderbar">
-      <WunderBar/>
+      <WunderBar />
     </div>
     <div className="header__item">
       <Link onClick={() => navigate('/wallet')}  button="text" icon="icon-bank" label={balance} ></Link>
