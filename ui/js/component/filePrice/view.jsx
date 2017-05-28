@@ -1,5 +1,6 @@
 import React from 'react'
 import {
+  BusyMessage,
   CreditAmount,
 } from 'component/common'
 
@@ -34,7 +35,7 @@ class FilePrice extends React.Component{
     const isEstimate = costInfo ? !costInfo.includesData : null
 
     if (!costInfo) {
-      return <span className={`credit-amount credit-amount--${look}`}>???</span>;
+      return <BusyMessage className={`credit-amount credit-amount--${look}`} message="Looking up price" />
     }
 
     return <CreditAmount label={false} amount={costInfo.cost} isEstimate={isEstimate} showFree={true} />
