@@ -16,8 +16,10 @@ Web UI version numbers should always match the corresponding version of LBRY App
   *
 
 ### Fixed
-  *
-  *
+  * Eliminated instance of costs being double fetched
+  * Fixed issue preventing file re-download
+  * Fixed race condition that could prevent file playbac
+  * Fixed issue with batch actions and thunk
 
 ### Deprecated
   *
