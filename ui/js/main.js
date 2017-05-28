@@ -12,7 +12,6 @@ import lighthouse from './lighthouse.js';
 import App from 'component/app/index.js';
 import SnackBar from 'component/snackBar';
 import { Provider } from 'react-redux';
-import batchActions from 'util/batchActions'
 import store from 'store.js';
 import SplashScreen from 'component/splash.js';
 import {AuthOverlay} from 'component/auth.js';
@@ -86,12 +85,10 @@ var init = function() {
     window.sessionStorage.setItem('loaded', 'y'); //once we've made it here once per session, we don't need to show splash again
     const actions = []
 
-    actions.push(doDaemonReady())
-    actions.push(doChangePath('/discover'))
-    actions.push(doFetchDaemonSettings())
-    actions.push(doFileList())
-
-    app.store.dispatch(batchActions(actions))
+    app.store.dispatch(doDaemonReady())
+    app.store.dispatch(doChangePath('/discover'))
+    app.store.dispatch(doFetchDaemonSettings())
+    app.store.dispatch(doFileList())
 
     ReactDOM.render(<Provider store={store}><div>{ lbryio.enabled ? <AuthOverlay/> : '' }<App /><SnackBar /></div></Provider>, canvas)
   }

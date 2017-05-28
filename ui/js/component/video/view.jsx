@@ -101,7 +101,9 @@ class Video extends React.Component {
 
     let loadStatusMessage = ''
 
-    if (isLoading) {
+    if(fileInfo && fileInfo.completed && !fileInfo.written_bytes) {
+      loadStatusMessage = "It looks like you deleted or moved this file. We're rebuilding it now. It will only take a few seconds."
+    } else if (isLoading) {
       loadStatusMessage = __("Requesting stream... it may sit here for like 15-20 seconds in a really awkward way... we're working on it")
     } else if (isDownloading) {
       loadStatusMessage = __("Downloading stream... not long left now!")
