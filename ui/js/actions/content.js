@@ -214,22 +214,16 @@ export function doPurchaseUri(uri) {
     const state = getState()
     const balance = selectBalance(state)
     const fileInfo = selectFileInfoForUri(state, { uri })
-    const costInfo = selectCostInfoForUri(state, { uri })
     const downloadingByUri = selectUrisDownloading(state)
     const alreadyDownloading = !!downloadingByUri[uri]
-    const { cost } = costInfo
 
-    // BUG if you delete a file from the file system system you're going to be
-    // asked to pay for it again. We need to check if the file is in the blobs
-    // here and then dispatch doLoadVideo() which will reconstruct it again from
-    // the blobs. Or perhaps there's another way to see if a file was already
-    // purchased?
+    // we already fully downloaded the file.
+    if (fileInfo && fileInfo.completed) {
+      // If written_bytes is false that means the user has deleted/moved the
+      // file manually on their file system, so we need to dispatch a
+      // doLoadVideo action to reconstruct the file from the blobs
+      if (!fileInfo.written_bytes) dispatch(doLoadVideo(uri))
 
-    // we already fully downloaded the file. If completed is true but
-    // writtenBytes is false then we downloaded it before but deleted it again,
-    // which means it needs to be reconstructed from the blobs by dispatching
-    // doLoadVideo.
-    if (fileInfo && fileInfo.completed && !!fileInfo.writtenBytes) {
       return Promise.resolve()
     }
 
@@ -237,6 +231,9 @@ export function doPurchaseUri(uri) {
     if (alreadyDownloading) {
       return Promise.resolve()
     }
+
+    const costInfo = selectCostInfoForUri(state, { uri })
+    const { cost } = costInfo
 
     // the file is free or we have partially downloaded it
     if (cost <= 0.01 || (fileInfo && fileInfo.download_directory)) {
