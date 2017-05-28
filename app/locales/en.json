@@ -305,5 +305,7 @@
   "Your transaction was successfully placed in the queue.": "Your transaction was successfully placed in the queue.",
   "Transaction failed": "Transaction failed",
   "Something went wrong": "Something went wrong",
-  "Find movies, music, games, and more": "Find movies, music, games, and more"
+  "Find movies, music, games, and more": "Find movies, music, games, and more",
+  "Wallet": "Wallet",
+  "Looking up version info": "Looking up version info"
 }

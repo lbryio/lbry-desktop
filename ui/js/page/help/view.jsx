@@ -93,14 +93,15 @@ class HelpPage extends React.Component {
             <div className="meta">{__("Thanks! LBRY is made by its users.")}</div>
           </div>
         </section>
-        <section className="card">
+        {!ver ? null :
+         <section className="card">
            <div className="card__title-primary"><h3>{__("About")}</h3></div>
-         <div className="card__content">
+           <div className="card__content">
            {this.state.appVersionInfo ?
-            (ver.lbrynet_update_available || ver.lbryum_update_available ?
+             (ver.lbrynet_update_available || ver.lbryum_update_available ?
               <p>{__("A newer version of LBRY is available.")} <Link href={newVerLink} label={__("Download LBRY %s now!"), ver.remote_lbrynet} /></p>
                : <p>{__("Your copy of LBRY is up to date.")}</p>) : null}
-           { ver ?
+             { ver ?
              <table className="table-standard">
                <tbody>
                  <tr>
@@ -125,10 +126,11 @@ class HelpPage extends React.Component {
                  </tr>
                </tbody>
              </table> :
-             <BusyMessage message="Looking up version info" />
+             <BusyMessage message={__("Looking up version info")} />
             }
          </div>
         </section>
+      }
       </main>
     );
   }

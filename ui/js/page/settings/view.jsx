@@ -3,10 +3,11 @@ import {FormField, FormRow} from 'component/form.js';
 import SubHeader from 'component/subHeader'
 import lbry from 'lbry.js';
 
+
 class SettingsPage extends React.Component {
   constructor(props) {
     super(props);
-
+    
     const daemonSettings = this.props.daemonSettings
 
     this.state = {
@@ -14,6 +15,7 @@ class SettingsPage extends React.Component {
       isMaxDownload: daemonSettings && daemonSettings.max_download != 0,
       showNsfw: lbry.getClientSetting('showNsfw'),
       showUnavailable: lbry.getClientSetting('showUnavailable'),
+      language: lbry.getClientSetting('language'),
     }
   }
 
@@ -66,6 +68,12 @@ class SettingsPage extends React.Component {
 
   onShowNsfwChange(event) {
     lbry.setClientSetting('showNsfw', event.target.checked);
+  }
+
+  onLanguageChange(language) {
+    lbry.setClientSetting('language', language);
+    i18n.setLocale(language);
+    this.setState({language: language})
   }
 
   onShowUnavailableChange(event) {
@@ -185,6 +193,30 @@ class SettingsPage extends React.Component {
                      helper={__("NSFW content may include nudity, intense sexuality, profanity, or other adult content. By displaying NSFW content, you are affirming you are of legal age to view mature content in your country or jurisdiction.  ")} />
           </div>
         </section>
+
+
+        <section className="card">
+          <div className="card__content">
+            <h3>{__("Language")}</h3>
+          </div>
+          <div className="card__content">
+            <div className="form-row">
+              <FormField type="radio"
+                         name="language"
+                         label={__("English")}
+                         onChange={() => { this.onLanguageChange('en') }}
+                         defaultChecked={this.state.language=='en'} />
+            </div>
+            <div className="form-row">
+              <FormField type="radio"
+                         name="language"
+                         label="Serbian"
+                         onChange={() => { this.onLanguageChange('rs') }}
+                         defaultChecked={this.state.language=='rs'} />
+            </div>
+          </div>
+        </section>
+
         <section className="card">
           <div className="card__content">
             <h3>{__("Share Diagnostic Data")}</h3>
