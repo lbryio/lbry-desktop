@@ -12,12 +12,12 @@ Web UI version numbers should always match the corresponding version of LBRY App
   *
 
 ### Changed
-  *
+  * Do not use a separate claim cache for publishes
   *
 
 ### Fixed
-  *
-  *
+  * Upgrade process should now works on Windows
+  * Crudely handle failed publishes missing outpoints
 
 ### Deprecated
   *
