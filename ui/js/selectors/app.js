@@ -54,9 +54,9 @@ export const selectPageTitle = createSelector(
       case 'show':
         return lbryuri.normalize(params.uri)
       case 'downloaded':
-        return 'Downloads & Purchases'
+        return 'Downloaded & Purchased'
       case 'published':
-        return 'Publishes'
+        return 'Published'
       case 'start':
         return 'Start'
       case 'publish':
