@@ -274,16 +274,16 @@ export function doFetchClaimsByChannel(uri) {
   }
 }
 
-export function doClaimListMine() {
+export function doFetchClaimListMine() {
   return function(dispatch, getState) {
     dispatch({
-      type: types.CLAIM_LIST_MINE_STARTED
+      type: types.FETCH_CLAIM_LIST_MINE_STARTED
     })
 
 
     lbry.claim_list_mine().then((claims) => {
       dispatch({
-        type: types.CLAIM_LIST_MINE_COMPLETED,
+        type: types.FETCH_CLAIM_LIST_MINE_COMPLETED,
         data: {
           claims
         }
