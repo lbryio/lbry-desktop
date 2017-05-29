@@ -56,7 +56,7 @@ export const selectPageTitle = createSelector(
       case 'downloaded':
         return 'Downloads & Purchases'
       case 'published':
-        return 'Publishes'
+        return 'Published'
       case 'start':
         return 'Start'
       case 'publish':
