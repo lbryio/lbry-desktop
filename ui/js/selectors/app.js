@@ -110,7 +110,7 @@ export const selectUpgradeFilename = createSelector(
         return `LBRY-${version}.dmg`;
       case 'linux':
         return `LBRY_${version}_amd64.deb`;
-      case 'windows':
+      case 'win32':
         return `LBRY.Setup.${version}.exe`;
       default:
         throw 'Unknown platform';
