@@ -2,6 +2,7 @@ import React from 'react';
 import lbry from 'lbry.js';
 import lbryuri from 'lbryuri.js';
 import Video from 'component/video'
+import Audio from 'component/audio'
 import {
   Thumbnail,
 } from 'component/common';
@@ -92,13 +93,25 @@ class FilePage extends React.Component{
     const channelClaimId = claim.value && claim.value.publisherSignature ? claim.value.publisherSignature.certificateId : null;
     const channelUri = signatureIsValid && hasSignature && channelName ? lbryuri.build({channelName, claimId: channelClaimId}, false) : null
     const uriIndicator = <UriIndicator uri={uri} />
+    const playableContent = contentType && (contentType.startsWith('video/') || contentType.startsWith('audio/'))
 
     return (
       <main className="main--single-column">
         <section className="show-page-media">
-          { contentType && contentType.startsWith('video/') ?
-            <Video className="video-embedded" uri={uri} /> :
-            (metadata && metadata.thumbnail ? <Thumbnail src={metadata.thumbnail} /> : <Thumbnail />) }
+          {contentType && contentType.startsWith('video/') &&
+            <Video className="video-embedded" uri={uri} />
+          }
+
+          {contentType && contentType.startsWith('audio/') &&
+            <Audio className="audio-embedded" uri={uri} />
+          }
+
+          {!playableContent && metadata && metadata.thumbnail &&
+            <Thumbnail src={metadata.thumbnail} />}
+
+          {!playableContent && (!metadata || (metadata && !metadata.thumbnail)) &&
+          <Thumbnail />}
+
         </section>
         <section className="card">
           <div className="card__inner">
