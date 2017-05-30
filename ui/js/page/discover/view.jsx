@@ -33,6 +33,10 @@ class DiscoverPage extends React.Component{
       featuredUris,
       fetchingFeaturedUris,
     } = this.props
+    const failedToLoad = !fetchingFeaturedUris && (
+      featuredUris === undefined ||
+      (featuredUris !== undefined && Object.keys(featuredUris).length === 0)
+    )
 
     return (
       <main>
@@ -47,7 +51,7 @@ class DiscoverPage extends React.Component{
           ))
         }
         {
-          typeof featuredUris !== undefined &&
+        failedToLoad &&
           <div className="empty">Failed to load landing content.</div>
         }
       </main>
