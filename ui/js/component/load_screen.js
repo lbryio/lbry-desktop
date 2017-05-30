@@ -31,9 +31,11 @@ class LoadScreen extends React.Component {
         <img src={imgSrc} alt="LBRY"/>
         <div className="load-screen__message">
           <h3>
-            <BusyMessage message={this.props.message} />
+            {!this.props.isWarning ?
+              <BusyMessage message={this.props.message} /> :
+              <span><Icon icon="icon-warning" />{' ' + this.props.message}</span> }
           </h3>
-          {this.props.isWarning ? <Icon icon="icon-warning" /> : null} <span className={'load-screen__details ' + (this.props.isWarning ? 'load-screen__details--warning' : '')}>{this.props.details}</span>
+          <span className={'load-screen__details ' + (this.props.isWarning ? 'load-screen__details--warning' : '')}>{this.props.details}</span>
         </div>
       </div>
     );

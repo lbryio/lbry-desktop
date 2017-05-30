@@ -8,14 +8,17 @@ Web UI version numbers should always match the corresponding version of LBRY App
 
 ## [Unreleased]
 ### Added
-  *
+  * 
   *
 
 ### Changed
-  *
+  * Video player switched from plyr to render-media
   *
 
 ### Fixed
+  * Video player should behave better on streaming
+  * Daemon times out more quickly when it cannot start
+  * Connection should fail more cleanly, rather than get stuck entirely
   * Closing modal dialogs was broken on some download and stream errors
   * Discover landing page improperly showed loading error when it was loading correctly
 
