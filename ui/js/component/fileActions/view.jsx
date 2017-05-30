@@ -122,7 +122,7 @@ class FileActions extends React.Component {
             <DropDownMenuItem key={1} onClick={() => openModal('confirmRemove')} label="Remove..." />
           </DropDownMenu> : '' }
         <Modal type="confirm" isOpen={modal == 'affirmPurchase'}
-               contentLabel="Confirm Purchase" onConfirmed={this.onAffirmPurchase.bind(this)} onAborted={this.props.closeModal}>
+               contentLabel="Confirm Purchase" onConfirmed={this.onAffirmPurchase.bind(this)} onAborted={closeModal}>
           This will purchase <strong>{title}</strong> for <strong><FilePrice uri={uri} look="plain" /></strong> credits.
         </Modal>
         <Modal isOpen={modal == 'notEnoughCredits'} contentLabel="Not enough credits"
