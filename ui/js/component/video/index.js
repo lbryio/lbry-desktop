@@ -47,7 +47,7 @@ const makeSelect = () => {
 
 const perform = (dispatch) => ({
   loadVideo: (uri) => dispatch(doLoadVideo(uri)),
-  purchaseUri: (uri) => dispatch(doPurchaseUri(uri)),
+  purchaseUri: (uri) => dispatch(doPurchaseUri(uri, 'affirmPurchaseAndPlay')),
   closeModal: () => dispatch(doCloseModal()),
 })
 

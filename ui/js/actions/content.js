@@ -209,7 +209,7 @@ export function doLoadVideo(uri) {
   }
 }
 
-export function doPurchaseUri(uri) {
+export function doPurchaseUri(uri, purchaseModalName) {
   return function(dispatch, getState) {
     const state = getState()
     const balance = selectBalance(state)
@@ -244,7 +244,7 @@ export function doPurchaseUri(uri) {
     if (cost > balance) {
       dispatch(doOpenModal('notEnoughCredits'))
     } else {
-      dispatch(doOpenModal('affirmPurchase'))
+      dispatch(doOpenModal(purchaseModalName))
     }
 
     return Promise.resolve()
