@@ -16,8 +16,9 @@ class SubmitEmailStage extends React.Component {
 
     this.state = {
       rewardType: null,
-      email: "",
-      submitting: false,
+      email: '',
+      showNoEmailConfirm: false,
+      submitting: false
     };
   }
 
@@ -29,6 +30,15 @@ class SubmitEmailStage extends React.Component {
 
   onEmailSaved(email) {
     this.props.setStage("confirm", { email: email });
+  }
+
+  onEmailSkipClick() {
+    this.setState({ showNoEmailConfirm: true })
+  }
+
+  onEmailSkipConfirm() {
+    setLocal('auth_bypassed', true);
+    this.props.setStage(null)
   }
 
   handleSubmit(event) {
@@ -60,34 +70,21 @@ class SubmitEmailStage extends React.Component {
   render() {
     return (
       <section>
-        <form
-          onSubmit={event => {
-            this.handleSubmit(event);
-          }}
-        >
-          <FormRow
-            ref={ref => {
-              this._emailRow = ref;
-            }}
-            type="text"
-            label={__("Email")}
-            placeholder="scrwvwls@lbry.io"
-            name="email"
-            value={this.state.email}
-            onChange={event => {
-              this.handleEmailChanged(event);
-            }}
-          />
-          <div className="form-row-submit">
-            <Link
-              button="primary"
-              label={__("Next")}
-              disabled={this.state.submitting}
-              onClick={event => {
-                this.handleSubmit(event);
-              }}
-            />
+        <form onSubmit={(event) => { this.handleSubmit(event) }}>
+          <FormRow ref={(ref) => { this._emailRow = ref }} type="text" label={__("Email")} placeholder="scrwvwls@lbry.io"
+                     name="email" value={this.state.email}
+                     onChange={(event) => { this.handleEmailChanged(event) }} />
+          <div className="form-row-submit form-row-submit--with-footer">
+            <Link button="primary" label={__("Next")} disabled={this.state.submitting} onClick={(event) => { this.handleSubmit(event) }} />
           </div>
+          { this.state.showNoEmailConfirm ?
+            <div>
+              <p className="help form-input-width">If you continue without an email, you will be ineligible to earn free LBC rewards, as well as unable to receive security related communications.</p>
+              <Link className="button-text-help" onClick={ () => { this.onEmailSkipConfirm() }} label="Continue without email" />
+            </div>
+            :
+            <Link className="button-text-help" onClick={ () => { this.onEmailSkipClick() }} label="Do I have to?" />
+          }
         </form>
       </section>
     );
@@ -363,7 +360,7 @@ class CodeRequiredStage extends React.Component {
         <section className="section-spaced">
           <p>
             {__(
-              "Access to LBRY is restricted as we build and scale the network."
+              "Early access to LBRY is restricted as we build and scale the network."
             )}
           </p>
           <p>{__("There are two ways in:")}</p>

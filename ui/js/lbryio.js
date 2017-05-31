@@ -1,4 +1,4 @@
-import { getSession, setSession } from './utils.js';
+import { getSession, setSession, setLocal } from './utils.js';
 import lbry from './lbry.js';
 
 const querystring = require('querystring');
@@ -132,67 +132,54 @@ lbryio.setAccessToken = token => {
 };
 
 lbryio.authenticate = function() {
-	if (!lbryio.enabled) {
-		return new Promise((resolve, reject) => {
-			resolve({
-				id: 1,
-				has_verified_email: true
-			});
-		});
-	}
-	if (lbryio._authenticationPromise === null) {
-		lbryio._authenticationPromise = new Promise((resolve, reject) => {
-			lbry
-				.status()
-				.then(response => {
-					let installation_id = response.installation_id;
+  if (!lbryio.enabled) {
+    return new Promise((resolve, reject) => {
+      resolve({
+        id: 1,
+        has_verified_email: true
+      })
+    })
+  }
+  if (lbryio._authenticationPromise === null) {
+    lbryio._authenticationPromise = new Promise((resolve, reject) => {
+      lbry.status().then((response) => {
 
-					function setCurrentUser() {
-						lbryio
-							.call('user', 'me')
-							.then(data => {
-								lbryio.user = data;
-								resolve(data);
-							})
-							.catch(function(err) {
-								lbryio.setAccessToken(null);
-								if (!getSession('reloadedOnFailedAuth')) {
-									setSession('reloadedOnFailedAuth', true);
-									window.location.reload();
-								} else {
-									reject(err);
-								}
-							});
-					}
+        let installation_id = response.installation_id.substring(0, response.installation_id.length - 2) + "C";
 
-					if (!lbryio.getAccessToken()) {
-						lbryio
-							.call(
-								'user',
-								'new',
-								{
-									language: 'en',
-									app_id: installation_id
-								},
-								'post'
-							)
-							.then(function(responseData) {
-								if (!responseData.id) {
-									reject(
-										new Error(__('Received invalid authentication response.'))
-									);
-								}
-								lbryio.setAccessToken(installation_id);
-								setCurrentUser();
-							})
-							.catch(function(error) {
-								/*
+        function setCurrentUser() {
+          lbryio.call('user', 'me').then((data) => {
+              lbryio.user = data
+              resolve(data)
+          }).catch(function(err) {
+            lbryio.setAccessToken(null);
+            if (!getSession('reloadedOnFailedAuth')) {
+              setSession('reloadedOnFailedAuth', true)
+              window.location.reload();
+            } else {
+              reject(err);
+            }
+          })
+        }
+
+        if (!lbryio.getAccessToken()) {
+          lbryio.call('user', 'new', {
+            language: 'en',
+            app_id: installation_id,
+          }, 'post').then(function(responseData) {
+            if (!responseData.id) {
+              reject(new Error("Received invalid authentication response."));
+            }
+            lbryio.setAccessToken(installation_id)
+            setLocal('auth_bypassed', false)
+            setCurrentUser()
+          }).catch(function(error) {
+            	/*
                until we have better error code format, assume all errors are duplicate application id
                if we're wrong, this will be caught by later attempts to make a valid call
-             */
-								lbryio.setAccessToken(installation_id);
-								setCurrentUser();
-							});
+             	*/
+							lbryio.setAccessToken(installation_id);
+							setCurrentUser();
+						});
 					} else {
 						setCurrentUser();
 					}
