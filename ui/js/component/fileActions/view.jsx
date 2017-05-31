@@ -110,7 +110,6 @@ class FileActions extends React.Component {
       content  = <Link label="Open" button="text" icon="icon-folder-open" onClick={() => openInShell(fileInfo)} />;
     } else {
       console.log('handle this case of file action props?');
-      console.log(this.props)
     }
 
     return (
