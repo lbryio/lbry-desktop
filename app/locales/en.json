@@ -309,5 +309,10 @@
   "Wallet": "Wallet",
   "Looking up version info": "Looking up version info",
   "It looks like you deleted or moved this file. We're rebuilding it now. It will only take a few seconds.": "It looks like you deleted or moved this file. We're rebuilding it now. It will only take a few seconds.",
-  "Fetching cost info": "Fetching cost info"
+  "Fetching cost info": "Fetching cost info",
+  "Testing network": "Testing network",
+  "Connection Failure": "Connection Failure",
+  "Try closing all LBRY processes and starting again. If this still happpens, your anti-virus software or firewall may be preventing LBRY from connecting. Contact hello@lbry.io if you think this is a software bug.": "Try closing all LBRY processes and starting again. If this still happpens, your anti-virus software or firewall may be preventing LBRY from connecting. Contact hello@lbry.io if you think this is a software bug.",
+  "Timed Out": "Timed Out",
+  "Testing Network": "Testing Network"
 }

@@ -52,7 +52,7 @@ class VideoPlayButton extends React.Component {
             className="video__play-button"
             icon="icon-play"
             onClick={this.onWatchClick.bind(this)} />
-      <Modal contentLabel="Not enough credits" isOpen={modal == 'notEnoughCredits'} onConfirmed={closeModal}>
+      <Modal contentLabel={__("Not enough credits")} isOpen={modal == 'notEnoughCredits'} onConfirmed={closeModal}>
         {__("You don't have enough LBRY credits to pay for this stream.")}
       </Modal>
       <Modal
@@ -64,7 +64,7 @@ class VideoPlayButton extends React.Component {
         {__("This will purchase")} <strong>{title}</strong> {__("for")} <strong><FilePrice uri={uri} look="plain" /></strong> {__("credits")}.
       </Modal>
       <Modal
-        isOpen={modal == 'timedOut'} onConfirmed={closeModal} contentLabel="Timed Out">
+        isOpen={modal == 'timedOut'} onConfirmed={closeModal} contentLabel={__("Timed Out")}>
         {__("Sorry, your download timed out :(")}
       </Modal>
     </div>);
