@@ -2,6 +2,10 @@ import React from 'react';
 import FilePrice from 'component/filePrice'
 import Link from 'component/link';
 import Modal from 'component/modal';
+import lbry from 'lbry'
+import {
+  Thumbnail,
+} from 'component/common'
 
 class VideoPlayButton extends React.Component {
   onPurchaseConfirmed() {
@@ -33,6 +37,7 @@ class VideoPlayButton extends React.Component {
       isLoading,
       costInfo,
       fileInfo,
+      mediaType,
     } = this.props
 
     /*
@@ -44,13 +49,14 @@ class VideoPlayButton extends React.Component {
      */
 
     const disabled = isLoading || fileInfo === undefined || (fileInfo === null && (!costInfo || costInfo.cost === undefined))
+    const icon = mediaType == "image" ? "icon-folder-o" : "icon-play"
 
     return (<div>
       <Link button={ button ? button : null }
             disabled={disabled}
             label={label ? label : ""}
             className="video__play-button"
-            icon="icon-play"
+            icon={icon}
             onClick={this.onWatchClick.bind(this)} />
       <Modal contentLabel="Not enough credits" isOpen={modal == 'notEnoughCredits'} onConfirmed={closeModal}>
         You don't have enough LBRY credits to pay for this stream.
@@ -89,12 +95,14 @@ class Video extends React.Component {
       isLoading,
       isDownloading,
       fileInfo,
+      contentType,
     } = this.props
     const {
       isPlaying = false,
     } = this.state
 
     const isReadyToPlay = fileInfo && fileInfo.written_bytes > 0
+    const mediaType = lbry.getMediaType(contentType, fileInfo && fileInfo.file_name)
 
     let loadStatusMessage = ''
 
@@ -106,14 +114,24 @@ class Video extends React.Component {
       loadStatusMessage = "Downloading stream... not long left now!"
     }
 
+    let klassName = ""
+    if (isLoading || isDownloading) klassName += "video-embedded video"
+    if (mediaType === "video") {
+      klassName += "video-embedded video"
+      klassName += isPlaying ? " video--active" : " video--hidden"
+    } else {
+      if (!isPlaying) klassName += "video-embedded"
+    }
+    const poster = metadata.thumbnail
+
     return (
-      <div className={"video " + this.props.className + (isPlaying ? " video--active" : " video--hidden")}>{
+      <div className={klassName}>{
         isPlaying || isLoading ?
           (!isReadyToPlay ?
             <span>this is the world's worst loading screen and we shipped our software with it anyway... <br /><br />{loadStatusMessage}</span> :
-            <VideoPlayer filename={fileInfo.file_name} poster={metadata.thumbnail} downloadPath={fileInfo.download_path} />) :
+            <VideoPlayer filename={fileInfo.file_name} poster={poster} downloadPath={fileInfo.download_path} mediaType={mediaType} poster={poster} />) :
         <div className="video__cover" style={{backgroundImage: 'url("' + metadata.thumbnail + '")'}}>
-          <VideoPlayButton startPlaying={this.startPlaying.bind(this)} {...this.props} />
+          <VideoPlayButton startPlaying={this.startPlaying.bind(this)} {...this.props} mediaType={mediaType} />
         </div>
       }</div>
     );
@@ -126,10 +144,9 @@ const fs = require('fs')
 
 class VideoPlayer extends React.Component {
   componentDidMount() {
-    const elem = this.refs.video
+    const elem = this.refs.media
     const {
       downloadPath,
-      contentType,
       filename,
     } = this.props
     const file = {
@@ -138,7 +155,7 @@ class VideoPlayer extends React.Component {
         return fs.createReadStream(downloadPath, opts)
       }
     }
-    player.render(file, elem, {
+    player.append(file, elem, {
       autoplay: true,
       controls: true,
     })
@@ -147,14 +164,15 @@ class VideoPlayer extends React.Component {
   render() {
     const {
       downloadPath,
-      contentType,
+      mediaType,
       poster,
     } = this.props
 
     return (
-      <video controls ref="video" style={{backgroundImage: "url('" + poster + "')"}} >
-        <source src={downloadPath} type={contentType} />
-      </video>
+      <div>
+        {mediaType === "audio" && <Thumbnail src={poster} className="video-embedded" />}
+        <div ref="media" />
+      </div>
     )
   }
 }

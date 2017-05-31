@@ -73,6 +73,8 @@ class FileActions extends React.Component {
 
     let content
 
+    console.log(fileInfo)
+
     if (downloading) {
 
       const
