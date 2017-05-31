@@ -16,8 +16,8 @@ Web UI version numbers should always match the corresponding version of LBRY App
   *
 
 ### Fixed
-  * Verified access from two different installation ids
-  * Version upgrade check on help page
+  *
+  *
 
 ### Deprecated
   *
@@ -26,6 +26,14 @@ Web UI version numbers should always match the corresponding version of LBRY App
 ### Removed
   *
   *
+
+## [0.11.8] - 2017-05-31
+
+### Fixed
+ * Verified access from two different installation ids
+ * Version upgrade check on help page
+
+
 
 ## [0.11.7] - 2017-05-30
 
