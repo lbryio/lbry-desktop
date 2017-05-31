@@ -12,7 +12,8 @@ export class SplashScreen extends React.Component {
     super(props);
 
     this.state = {
-      details: __('Starting daemon'),
+      details: 'Starting daemon',
+      message: "Connecting",
       isLagging: false,
     };
   }
@@ -29,11 +30,12 @@ export class SplashScreen extends React.Component {
       // TODO: This is a hack, and the logic should live in the daemon
       // to give us a better sense of when we are actually started
       this.setState({
-        details: __('Waiting for name resolution'),
+        message: "Testing Network",
+        details: "Waiting for name resolution",
         isLagging: false
       });
 
-      lbry.resolve({uri: 'lbry://one'}).then(() => {
+      lbry.resolve({uri: "lbry://one"}).then(() => {
         this.props.onLoadDone();
       });
       return;
@@ -48,21 +50,19 @@ export class SplashScreen extends React.Component {
   }
 
   componentDidMount() {
-    lbry.connect().then((isConnected) => {
-      if (isConnected) {
-        this.updateStatus();
-      } else {
+    lbry.connect()
+      .then(() => { this.updateStatus() })
+      .catch(() => {
         this.setState({
           isLagging: true,
-          message: __("Failed to connect to LBRY"),
-          details: __("LBRY was unable to start and connect properly.")
+          message: "Connection Failure",
+          details: "Try closing all LBRY processes and starting again. If this still happpens, your anti-virus software or firewall may be preventing LBRY from connecting. Contact hello@lbry.io if you think this is a software bug."
         })
-      }
-    })
+      })
   }
 
   render() {
-    return <LoadScreen message={this.props.message} details={this.state.details} isWarning={this.state.isLagging} />
+    return <LoadScreen message={this.state.message} details={this.state.details} isWarning={this.state.isLagging} />
   }
 }
 

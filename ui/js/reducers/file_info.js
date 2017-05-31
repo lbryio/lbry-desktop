@@ -18,7 +18,9 @@ reducers[types.FILE_LIST_COMPLETED] = function(state, action) {
 
   const newFileInfos = Object.assign({}, state.fileInfos)
   fileInfos.forEach((fileInfo) => {
-    newFileInfos[fileInfo.outpoint] = fileInfo
+    const { outpoint } = fileInfo
+
+    if (outpoint) newFileInfos[fileInfo.outpoint] = fileInfo
   })
 
   return Object.assign({}, state, {

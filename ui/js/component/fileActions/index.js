@@ -66,7 +66,7 @@ const perform = (dispatch) => ({
     dispatch(doDeleteFile(fileInfo, deleteFromComputer))
   },
   openModal: (modal) => dispatch(doOpenModal(modal)),
-  startDownload: (uri) => dispatch(doPurchaseUri(uri)),
+  startDownload: (uri) => dispatch(doPurchaseUri(uri, 'affirmPurchase')),
   loadVideo: (uri) => dispatch(doLoadVideo(uri)),
 })
 

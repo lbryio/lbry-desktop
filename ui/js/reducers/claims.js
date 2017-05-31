@@ -40,20 +40,33 @@ reducers[types.RESOLVE_URI_CANCELED] = function(state, action) {
 }
 
 
-reducers[types.CLAIM_LIST_MINE_STARTED] = function(state, action) {
+reducers[types.FETCH_CLAIM_LIST_MINE_STARTED] = function(state, action) {
   return Object.assign({}, state, {
     isClaimListMinePending: true
   })
 }
 
-reducers[types.CLAIM_LIST_MINE_COMPLETED] = function(state, action) {
-  const myClaims = Object.assign({}, state.myClaims)
-  action.data.claims.forEach((claim) => {
-    myClaims[claim.claim_id] = claim
+reducers[types.FETCH_CLAIM_LIST_MINE_COMPLETED] = function(state, action) {
+  const {
+    claims,
+  } = action.data
+  const myClaims = new Set(state.myClaims)
+  const byUri = Object.assign({}, state.claimsByUri)
+
+  claims.forEach(claim => {
+    const uri = lbryuri.build({
+      contentName: claim.name,
+      claimId: claim.claim_id,
+      claimSequence: claim.nout,
+    })
+    myClaims.add(uri)
+    byUri[uri] = claim
   })
+
   return Object.assign({}, state, {
     isClaimListMinePending: false,
-    myClaims: myClaims
+    myClaims: myClaims,
+    claimsByUri: byUri,
   })
 }
 
