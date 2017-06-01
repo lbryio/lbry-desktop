@@ -1,4 +1,5 @@
 import store from 'store.js';
+import lbry from './lbry.js';
 
 const env = ENV;
 const config = require(`./config/${env}`);
@@ -13,6 +14,12 @@ const app = {
     logs.push(message);
   }
 }
+
+const language = lbry.getClientSetting('language') ? lbry.getClientSetting('language') : 'en';
+const i18n = require('y18n')({directory: 'app/locales', locale: language});
+window.__ = i18n.__;
+window.__n = i18n.__n;
+window.i18n = i18n;
 
 global.app = app;
 module.exports = app;

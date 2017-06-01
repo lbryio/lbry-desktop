@@ -70,7 +70,7 @@ export class CreditAmount extends React.Component {
     if (this.props.showFree && parseFloat(formattedAmount) == 0) {
       amountText = __('free');
     } else if (this.props.label) {
-      amountText = formattedAmount + (parseFloat(formattedAmount) == 1 ? __(' credit') : __(' credits'));
+      amountText = formattedAmount + ' ' + (parseFloat(formattedAmount) == 1 ? __('credit') : __('credits'));
     } else {
       amountText = formattedAmount;
     }
