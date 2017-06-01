@@ -2,7 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import lbry from './lbry.js';
 import lbryio from './lbryio.js';
-import lighthouse from './lighthouse.js';
 import App from 'component/app/index.js';
 import SnackBar from 'component/snackBar';
 import { Provider } from 'react-redux';
@@ -10,8 +9,6 @@ import store from 'store.js';
 import SplashScreen from 'component/splash.js';
 import { AuthOverlay } from 'component/auth.js';
 import { doChangePath, doNavigate, doDaemonReady } from 'actions/app';
-import { doFetchDaemonSettings } from 'actions/settings';
-import { doFileList } from 'actions/file_info';
 import { toQueryString } from 'util/query_params';
 
 const { remote, ipcRenderer, shell } = require('electron');
@@ -69,12 +66,7 @@ const initialState = app.store.getState();
 var init = function() {
 	function onDaemonReady() {
 		window.sessionStorage.setItem('loaded', 'y'); //once we've made it here once per session, we don't need to show splash again
-		const actions = [];
-
-		app.store.dispatch(doDaemonReady());
-		app.store.dispatch(doChangePath('/discover'));
-		app.store.dispatch(doFetchDaemonSettings());
-		app.store.dispatch(doFileList());
+    app.store.dispatch(doDaemonReady())
 
 		ReactDOM.render(
 			<Provider store={store}>

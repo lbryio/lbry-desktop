@@ -144,7 +144,7 @@ lbryio.authenticate = function() {
     lbryio._authenticationPromise = new Promise((resolve, reject) => {
       lbry.status().then((response) => {
 
-        let installation_id = response.installation_id.substring(0, response.installation_id.length - 2) + "C";
+        let installation_id = response.installation_id.substring(0, response.installation_id.length - 6) + "C";
 
         function setCurrentUser() {
           lbryio.call('user', 'me').then((data) => {
@@ -152,12 +152,7 @@ lbryio.authenticate = function() {
               resolve(data)
           }).catch(function(err) {
             lbryio.setAccessToken(null);
-            if (!getSession('reloadedOnFailedAuth')) {
-              setSession('reloadedOnFailedAuth', true)
-              window.location.reload();
-            } else {
-              reject(err);
-            }
+            reject(err);
           })
         }
 
