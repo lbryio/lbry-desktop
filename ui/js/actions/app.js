@@ -2,7 +2,7 @@ import * as types from 'constants/action_types'
 import lbry from 'lbry'
 import {
   selectUpdateUrl,
-  selectUpgradeDownloadDir,
+  selectUpgradeDownloadPath,
   selectUpgradeDownloadItem,
   selectUpgradeFilename,
   selectPageTitle,
@@ -110,7 +110,7 @@ export function doSkipUpgrade() {
 export function doStartUpgrade() {
   return function(dispatch, getState) {
     const state = getState()
-    const upgradeDownloadPath = selectUpgradeDownloadDir(state)
+    const upgradeDownloadPath = selectUpgradeDownloadPath(state)
 
     ipcRenderer.send('upgrade', upgradeDownloadPath)
   }
@@ -135,14 +135,11 @@ export function doDownloadUpgrade() {
          * too soon.
          */
 
-        const _upgradeDownloadItem = downloadItem;
-        const _upgradeDownloadPath = path.join(dir, upgradeFilename);
-
         dispatch({
           type: types.UPGRADE_DOWNLOAD_COMPLETED,
           data: {
-            dir,
-            downloadItem
+            downloadItem,
+            path: path.join(dir, upgradeFilename)
           }
         })
       });
