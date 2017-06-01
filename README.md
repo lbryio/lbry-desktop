@@ -18,26 +18,24 @@ To install from source or make changes to the application, continue reading belo
 
 ## Development
 
-This repo uses submodules, so clone it using `--recursive`.
+### One-time Setup
 
-### Setup
+1. Install node and npm.
+2. Check out this repo.
+3. Set up a Python virtual environment, or live on the wild side.
+4. Run `./build.sh`. This builds the UI assets and puts them into `app/dist`. It also downloads [lbry daemon](https://github.com/lbryio/lbry/releases).
 
-The
-[lbry daemon](https://github.com/lbryio/lbry/blob/master/INSTALL.md) needs
-to be installed along with pyinstaller. You also need to be
-able to build the lbry-web-ui, so have node, webpack, etc installed.
+### Running
 
-### Build
+Run `./node_modules/.bin/electron app`
 
-run `./build.sh`
+### Ongoing Development
+1. `cd ui`
+2. `./watch.sh`
 
-This builds the UI assets and puts them into `app/dist`. It also builds `app/dist/lbrynet-daemon`.
+This will set up a monitor that will automatically monitor and compile any changes to JS or CSS folders inside of the `ui` folder. This allows you to make changes and see them immediately by reloading the app.
 
-### Run
-
-`./node_modules/.bin/electron app`
-
-### Package
+### Packaging
 
 We use [electron-builder](https://github.com/electron-userland/electron-builder)
 to create distributable packages, which is run by calling:
