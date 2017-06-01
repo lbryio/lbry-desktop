@@ -101,7 +101,6 @@ lbry.connect = function() {
       let tryNum = 0
 
       function checkDaemonStartedFailed() {
-        console.log('status error try num ' + tryNum)
         if (tryNum <= 100) { // Move # of tries into constant or config option
           setTimeout(() => {
             tryNum++
@@ -115,7 +114,6 @@ lbry.connect = function() {
 
       // Check every half second to see if the daemon is accepting connections
       function checkDaemonStarted() {
-        console.log('check daemon started try ' + tryNum)
         lbry.call('status', {}, resolve, checkDaemonStartedFailed, checkDaemonStartedFailed)
       }
 

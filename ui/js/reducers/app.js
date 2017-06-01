@@ -34,7 +34,7 @@ reducers[types.UPGRADE_CANCELLED] = function(state, action) {
 
 reducers[types.UPGRADE_DOWNLOAD_COMPLETED] = function(state, action) {
   return Object.assign({}, state, {
-    downloadDir: action.data.dir,
+    downloadPath: action.data.path,
     upgradeDownloading: false,
     upgradeDownloadCompleted: true
   })
