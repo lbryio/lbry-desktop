@@ -7,13 +7,13 @@ import {
 
 function rewardMessage(type, amount) {
   return {
-    new_developer: __(`You earned %s for registering as a new developer.`, amount),
-    new_user: __(`You earned %s LBC new user reward.`, amount),
-    confirm_email: __(`You earned %s LBC for verifying your email address.`, amount),
-    new_channel: __(`You earned %s LBC for creating a publisher identity.`, amount),
-    first_stream: __(`You earned %s LBC for streaming your first video.`, amount),
-    many_downloads: __(`You earned %s LBC for downloading some of the things.`, amount),
-    first_publish: __(`You earned %s LBC for making your first publication.`, amount),
+    new_developer: __("You earned %s for registering as a new developer.", amount),
+    new_user: __("You earned %s LBC new user reward.", amount),
+    confirm_email: __("You earned %s LBC for verifying your email address.", amount),
+    new_channel: __("You earned %s LBC for creating a publisher identity.", amount),
+    first_stream: __("You earned %s LBC for streaming your first video.", amount),
+    many_downloads: __("You earned %s LBC for downloading some of the things.", amount),
+    first_publish: __("You earned %s LBC for making your first publication.", amount),
   }[type];
 }
 

@@ -42,7 +42,8 @@ const selectMetadataForUri = (state, props) => {
   const claim = selectClaimForUri(state, props)
   const metadata = claim && claim.value && claim.value.stream && claim.value.stream.metadata
 
-  return metadata ? metadata : (claim === undefined ? undefined : null)
+  const value = metadata ? metadata : (claim === undefined ? undefined : null)
+  return value
 }
 
 export const makeSelectMetadataForUri = () => {
@@ -80,18 +81,20 @@ export const selectClaimListMineIsPending = createSelector(
 
 export const selectMyClaims = createSelector(
   _selectState,
-  (state) => state.myClaims || {}
+  (state) => state.myClaims || new Set()
 )
 
 export const selectMyClaimsOutpoints = createSelector(
   selectMyClaims,
-  (claims) => {
-    if (!claims) {
-      return []
-    }
+  selectClaimsByUri,
+  (claimIds, byUri) => {
+    const outpoints = []
 
-    return Object.values(claims).map((claim) => {
-      return `${claim.txid}:${claim.nout}`
+    claimIds.forEach(claimId => {
+      const claim = byUri[claimId]
+      if (claim) outpoints.push(`${claim.txid}:${claim.nout}`)
     })
+
+    return outpoints
   }
 )

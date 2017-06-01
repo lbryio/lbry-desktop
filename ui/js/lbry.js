@@ -96,26 +96,27 @@ lbry.call = function (method, params, callback, errorCallback, connectFailedCall
 lbry._connectPromise = null;
 lbry.connect = function() {
   if (lbry._connectPromise === null) {
-
     lbry._connectPromise = new Promise((resolve, reject) => {
 
+      let tryNum = 0
+
+      function checkDaemonStartedFailed() {
+        console.log('status error try num ' + tryNum)
+        if (tryNum <= 100) { // Move # of tries into constant or config option
+          setTimeout(() => {
+            tryNum++
+            checkDaemonStarted();
+          }, tryNum < 50 ? 400 : 1000);
+        }
+        else {
+          reject(new Error("Unable to connect to LBRY"));
+        }
+      }
+
       // Check every half second to see if the daemon is accepting connections
-      function checkDaemonStarted(tryNum = 0) {
-        lbry.isDaemonAcceptingConnections(function (runningStatus) {
-          if (runningStatus) {
-            resolve(true);
-          }
-          else {
-            if (tryNum <= 600) { // Move # of tries into constant or config option
-              setTimeout(function () {
-                checkDaemonStarted(tryNum + 1);
-              }, tryNum < 100 ? 200 : 1000);
-            }
-            else {
-              reject(new Error(__("Unable to connect to LBRY")));
-            }
-          }
-        });
+      function checkDaemonStarted() {
+        console.log('check daemon started try ' + tryNum)
+        lbry.call('status', {}, resolve, checkDaemonStartedFailed, checkDaemonStartedFailed)
       }
 
       checkDaemonStarted();
@@ -124,11 +125,6 @@ lbry.connect = function() {
 
   return lbry._connectPromise;
 }
-
-lbry.isDaemonAcceptingConnections = function (callback) {
-  // Returns true/false whether the daemon is at a point it will start returning status
-  lbry.call('status', {}, () => callback(true), null, () => callback(false))
-};
 
 lbry.checkAddressIsMine = function(address, callback) {
   lbry.call('address_is_mine', {address: address}, callback);

@@ -90,7 +90,7 @@ var init = function() {
   if (window.sessionStorage.getItem('loaded') == 'y') {
     onDaemonReady();
   } else {
-    ReactDOM.render(<SplashScreen message={__("Connecting")} onLoadDone={onDaemonReady} />, canvas);
+    ReactDOM.render(<SplashScreen onLoadDone={onDaemonReady} />, canvas);
   }
 };
 
