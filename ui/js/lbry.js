@@ -318,7 +318,7 @@ lbry._balanceSubscribeInterval = 5000;
 
 lbry._balanceUpdateInterval = null;
 lbry._updateBalanceSubscribers = function() {
-  lbry.get_balance().then(function(balance) {
+  lbry.wallet_balance().then(function(balance) {
     for (let callback of Object.values(lbry._balanceSubscribeCallbacks)) {
       callback(balance);
     }
