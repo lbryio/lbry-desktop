@@ -116,7 +116,7 @@ function openItem(fullPath) {
     } else if (process.platform == 'linux') {
       child = child_process.spawn('xdg-open', [fullPath], subprocOptions);
     } else if (process.platform == 'win32') {
-      child = child_process.spawn(fullPath, [], subprocOptions);
+      child = child_process.spawn(fullPath, Object.assign({}, subprocOptions, {shell: true}));
     }
 
     // Causes child process reference to be garbage collected, allowing main process to exit

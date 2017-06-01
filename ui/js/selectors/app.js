@@ -107,11 +107,11 @@ export const selectUpgradeFilename = createSelector(
   (platform, version) => {
     switch (platform) {
       case 'darwin':
-        return `LBRY-${version}.dmg`;
+        return `LBRY_${version}.dmg`;
       case 'linux':
         return `LBRY_${version}_amd64.deb`;
       case 'win32':
-        return `LBRY.Setup.${version}.exe`;
+        return `LBRY_${version}.exe`;
       default:
         throw 'Unknown platform';
     }
@@ -170,9 +170,9 @@ export const selectUpgradeSkipped = createSelector(
   (state) => state.upgradeSkipped
 )
 
-export const selectUpgradeDownloadDir = createSelector(
+export const selectUpgradeDownloadPath = createSelector(
   _selectState,
-  (state) => state.downloadDir
+  (state) => state.downloadPath
 )
 
 export const selectUpgradeDownloadItem = createSelector(
