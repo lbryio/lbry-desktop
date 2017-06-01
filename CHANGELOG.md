@@ -16,8 +16,8 @@ Web UI version numbers should always match the corresponding version of LBRY App
   *
 
 ### Fixed
-  *
-  *
+  * Windows upgrade process fixed
+  * Upgrade process on Mac and Linux will open the file rather than the folder
 
 ### Deprecated
   *
