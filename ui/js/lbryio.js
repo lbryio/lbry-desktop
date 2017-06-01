@@ -1,10 +1,10 @@
-import {getLocal, getSession, setSession, setLocal} from './utils.js';
+import {getSession, setSession} from './utils.js';
 import lbry from './lbry.js';
 
 const querystring = require('querystring');
 
 const lbryio = {
-  _accessToken: getLocal('accessToken'),
+  _accessToken: getSession('accessToken'),
   _authenticationPromise: null,
   _user : null,
   enabled: true
@@ -95,11 +95,11 @@ lbryio.call = function(resource, action, params={}, method='get', evenIfDisabled
 };
 
 lbryio.getAccessToken = () => {
-  return getLocal('accessToken');
+  return getSession('accessToken');
 }
 
 lbryio.setAccessToken = (token) => {
-  setLocal('accessToken', token)
+  setSession('accessToken', token)
 }
 
 lbryio.authenticate = function() {

@@ -4,7 +4,6 @@ import lbry from 'lbry.js';
 import Link from 'component/link';
 import SubHeader from 'component/subHeader'
 import {BusyMessage} from 'component/common'
-import {version as uiVersion} from 'json!../../../package.json';
 
 class HelpPage extends React.Component {
   constructor(props) {
@@ -13,13 +12,16 @@ class HelpPage extends React.Component {
     this.state = {
       versionInfo: null,
       lbryId: null,
+      uiVersion: null,
+      upgradeAvailable: null
     };
   }
 
   componentWillMount() {
-    lbry.getAppVersionInfo().then((info) => {
+    lbry.getAppVersionInfo().then(({remoteVersion, upgradeAvailable}) => {
       this.setState({
-        appVersionInfo: info,
+        uiVersion: remoteVersion,
+        upgradeAvailable: upgradeAvailable
       });
     });
     lbry.call('version', {}, (info) => {
@@ -43,7 +45,6 @@ class HelpPage extends React.Component {
 
     if (this.state.versionInfo) {
       ver = this.state.versionInfo;
-      console.log(ver)
       if (ver.os_system == 'Darwin') {
         osName = (parseInt(ver.os_release.match(/^\d+/)) < 16 ? 'Mac OS X' : 'Mac OS');
 
@@ -96,11 +97,11 @@ class HelpPage extends React.Component {
         <section className="card">
          <div className="card__title-primary"><h3>About</h3></div>
          <div className="card__content">
-           {this.state.appVersionInfo ?
-            (ver.lbrynet_update_available || ver.lbryum_update_available ?
-               <p>A newer version of LBRY is available. <Link href={newVerLink} label={`Download LBRY ${ver.remote_lbrynet} now!`} /></p>
-               : <p>Your copy of LBRY is up to date.</p>) : null}
-           { ver ?
+           { this.state.upgradeAvailable === null ? '' :
+            ( this.state.upgradeAvailable ?
+               <p>A newer version of LBRY is available. <Link href={newVerLink} label={`Download now!`} /></p>
+               : <p>Your copy of LBRY is up to date.</p>)}
+           { this.state.uiVersion && ver ?
              <table className="table-standard">
                <tbody>
                  <tr>
@@ -113,7 +114,7 @@ class HelpPage extends React.Component {
                  </tr>
                  <tr>
                    <th>interface</th>
-                   <td>{uiVersion}</td>
+                   <td>{this.state.uiVersion}</td>
                  </tr>
                  <tr>
                    <th>Platform</th>
