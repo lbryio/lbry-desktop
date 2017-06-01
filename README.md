@@ -2,6 +2,8 @@
 
 This is a graphical browser for the decentralized content marketplace provided by the [LBRY](https://lbry.io) protocol. It is essentially the [lbry daemon](https://github.com/lbryio/lbry) bundled with a UI using [Electron](http://electron.atom.io/).
 
+![App Screenshot](https://lbry.io/img/lbry-ui.png)
+
 ## Installing
 
 We provide installers for Windows, macOS, and Debian-based Linux.
