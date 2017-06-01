@@ -38,36 +38,26 @@ export const selectPageTitle = createSelector(
   selectCurrentParams,
   (page, params) => {
     switch (page) {
+      case 'settings':
+      case 'help':
+      case 'report':
+      case 'wallet':
+      case 'send':
+      case 'receive':
+      case 'rewards':
+      case 'start':
+      case 'publish':
+      case 'help':
+      case 'developer':
+        return __(page.charAt(0).toUpperCase() + page.slice(1))
       case 'search':
         return params.query ? __("Search results for %s", params.query) : __('Search')
-      case 'settings':
-        return __('Settings')
-      case 'help':
-        return __('Help')
-      case 'report':
-        return __('Report')
-      case 'wallet':
-        return __("Wallet")
-      case 'send':
-        return __("Send")
-      case 'receive':
-        return __("Receive")
-      case 'rewards':
-        return __("Rewards")
       case 'show':
         return lbryuri.normalize(params.uri)
       case 'downloaded':
         return __('Downloads & Purchases')
       case 'published':
         return __('Publishes')
-      case 'start':
-        return __('Start')
-      case 'publish':
-        return __('Publish')
-      case 'help':
-        return __('Help')
-      case 'developer':
-        return __('Developer')
       case 'discover':
         return __('Home')
       default:

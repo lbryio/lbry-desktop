@@ -2,12 +2,6 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import lbry from './lbry.js';
 import lbryio from './lbryio.js';
-
-const i18n = require('y18n')({directory: 'app/locales'/*, locale: lbry.getClientSetting('language')*/});
-window.__ = i18n.__;
-window.__n = i18n.__n;
-window.i18n = i18n;
-
 import lighthouse from './lighthouse.js';
 import App from 'component/app/index.js';
 import SnackBar from 'component/snackBar';
