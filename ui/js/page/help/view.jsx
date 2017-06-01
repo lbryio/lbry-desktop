@@ -99,8 +99,8 @@ class HelpPage extends React.Component {
            <div className="card__content">
            { this.state.upgradeAvailable === null ? '' :
             ( this.state.upgradeAvailable ?
-               <p>A newer version of LBRY is available. <Link href={newVerLink} label={`Download now!`} /></p>
-               : <p>Your copy of LBRY is up to date.</p>)}
+               <p>{__("A newer version of LBRY is available.")} <Link href={newVerLink} label={__("Download now!")} /></p>
+               : <p>{__("Your copy of LBRY is up to date.")}</p>)}
            { this.state.uiVersion && ver ?
              <table className="table-standard">
                <tbody>

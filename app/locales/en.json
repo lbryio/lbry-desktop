@@ -314,5 +314,7 @@
   "Connection Failure": "Connection Failure",
   "Try closing all LBRY processes and starting again. If this still happpens, your anti-virus software or firewall may be preventing LBRY from connecting. Contact hello@lbry.io if you think this is a software bug.": "Try closing all LBRY processes and starting again. If this still happpens, your anti-virus software or firewall may be preventing LBRY from connecting. Contact hello@lbry.io if you think this is a software bug.",
   "Timed Out": "Timed Out",
-  "Testing Network": "Testing Network"
+  "Testing Network": "Testing Network",
+  "This email is already in use": "This email is already in use",
+  "Download now!": "Download now!"
 }

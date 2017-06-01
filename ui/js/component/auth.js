@@ -41,7 +41,7 @@ class SubmitEmailStage extends React.Component {
     lbryio.call('user_email', 'new', {email: this.state.email}, 'post').then(() => {
       this.onEmailSaved(this.state.email);
     }, (error) => {
-      if (error.xhr && (error.xhr.status == 409 || error.message == "This email is already in use")) {
+      if (error.xhr && (error.xhr.status == 409 || error.message == __("This email is already in use"))) {
         this.onEmailSaved(this.state.email);
         return;
       } else if (this._emailRow) {
