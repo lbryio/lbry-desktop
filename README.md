@@ -33,7 +33,7 @@ Run `./node_modules/.bin/electron app`
 1. `cd ui`
 2. `./watch.sh`
 
-This will set up a monitor that will automatically monitor and compile any changes to JS or CSS folders inside of the `ui` folder. This allows you to make changes and see them immediately by reloading the app.
+This will set up a monitor that will automatically compile any changes to JS or CSS folders inside of the `ui` folder. This allows you to make changes and see them immediately by reloading the app.
 
 ### Packaging
 
