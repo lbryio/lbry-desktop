@@ -5,8 +5,12 @@ import {
 import {
   makeSelectHasClaimedReward,
   makeSelectClaimRewardError,
-  makeSelectIsRewardClaimPending
+  makeSelectIsRewardClaimPending,
+  selectIsRewardEligible,
 } from 'selectors/rewards'
+import {
+  doNavigate
+} from 'actions/app'
 import {
   doClaimReward,
   doClaimRewardClearError
@@ -20,6 +24,7 @@ const makeSelect = () => {
 
   const select = (state, props) => ({
     isClaimed: selectHasClaimedReward(state, props),
+    isEligible: selectIsRewardEligible(state),
     errorMessage: selectError(state, props),
     isPending: selectIsPending(state, props)
   })
@@ -29,7 +34,8 @@ const makeSelect = () => {
 
 const perform = (dispatch) => ({
   claimReward: (reward) => dispatch(doClaimReward(reward)),
-  clearError: (reward) => dispatch(doClaimRewardClearError(reward))
+  clearError: (reward) => dispatch(doClaimRewardClearError(reward)),
+  navigate: (path) => dispatch(doNavigate(path)),
 })
 
 export default connect(makeSelect, perform)(RewardLink)

@@ -70,7 +70,6 @@ export const selectClaimErrorsByType = createSelector(
 )
 
 const selectClaimRewardError = (state, props) => {
-  console.log(selectClaimErrorsByType(state, props));
   return selectClaimErrorsByType(state, props)[props.reward.reward_type]
 }
 

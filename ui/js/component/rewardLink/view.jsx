@@ -11,9 +11,10 @@ const RewardLink = (props) => {
     clearError,
     errorMessage,
     isClaimed,
+    isEligible,
     isPending
   } = props
-  console.log(props)
+
   return (
     <div className="reward-link">
       {isClaimed

@@ -33,8 +33,16 @@ reducers[types.FETCH_REWARDS_COMPLETED] = function(state, action) {
 function setClaimRewardState(state, reward, isClaiming, errorMessage="") {
   const newClaimPendingByType = Object.assign({}, state.claimPendingByType)
   const newClaimErrorsByType = Object.assign({}, state.claimErrorsByType)
-  newClaimPendingByType[reward.reward_type] = isClaiming
-  newClaimErrorsByType[reward.reward_type] = errorMessage
+  if (isClaiming) {
+    newClaimPendingByType[reward.reward_type] = isClaiming
+  } else {
+    delete newClaimPendingByType[reward.reward_type]
+  }
+  if (errorMessage) {
+    newClaimErrorsByType[reward.reward_type] = errorMessage
+  } else {
+    delete newClaimErrorsByType[reward.reward_type]
+  }
 
   return Object.assign({}, state, {
     claimPendingByType: newClaimPendingByType,
