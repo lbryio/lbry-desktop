@@ -16,7 +16,7 @@ const RewardTile = (props) => {
       <div className="card__inner">
         <div className="card__title-primary">
           <CreditAmount amount={reward.reward_amount} />
-          <h3>{reward.title}</h3>
+          <h3>{reward.reward_title}</h3>
         </div>
         <div className="card__actions">
           {claimed

@@ -5,33 +5,19 @@ import Modal from "component/modal.js";
 import ModalPage from "component/modal-page.js";
 import Link from "component/link"
 import {BusyMessage} from "component/common"
-import {RewardLink} from 'component/reward-link';
+import {RewardLink} from 'component/rewardLink';
+import UserEmailNew from 'component/userEmailNew';
 import {FormRow} from "component/form.js";
 import {CreditAmount, Address} from "component/common.js";
 import {getLocal, setLocal} from 'utils.js';
-import rewards from 'rewards'
 
-
-class SubmitEmailStage extends React.Component {
+class EmailStage extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      rewardType: null,
-      email: '',
       showNoEmailConfirm: false,
-      submitting: false
     };
-  }
-
-  handleEmailChanged(event) {
-    this.setState({
-      email: event.target.value,
-    });
-  }
-
-  onEmailSaved(email) {
-    this.props.setStage("confirm", { email: email })
   }
 
   onEmailSkipClick() {
@@ -39,39 +25,14 @@ class SubmitEmailStage extends React.Component {
   }
 
   onEmailSkipConfirm() {
-    setLocal('auth_bypassed', true);
-    this.props.setStage(null)
-  }
-
-  handleSubmit(event) {
-    event.preventDefault();
-
-    this.setState({
-      submitting: true,
-    });
-    lbryio.call('user_email', 'new', {email: this.state.email}, 'post').then(() => {
-      this.onEmailSaved(this.state.email);
-    }, (error) => {
-      if (error.xhr && (error.xhr.status == 409 || error.message == "This email is already in use")) {
-        this.onEmailSaved(this.state.email);
-        return;
-      } else if (this._emailRow) {
-        this._emailRow.showError(error.message)
-      }
-      this.setState({ submitting: false });
-    });
+    this.props.userEmailDecline()
   }
 
   render() {
     return (
       <section>
-        <form onSubmit={(event) => { this.handleSubmit(event) }}>
-          <FormRow ref={(ref) => { this._emailRow = ref }} type="text" label="Email" placeholder="scrwvwls@lbry.io"
-                     name="email" value={this.state.email}
-                     onChange={(event) => { this.handleEmailChanged(event) }} />
-          <div className="form-row-submit form-row-submit--with-footer">
-            <Link button="primary" label="Next" disabled={this.state.submitting} onClick={(event) => { this.handleSubmit(event) }} />
-          </div>
+        <UserEmailNew />
+        <div className="form-row-submit">
           { this.state.showNoEmailConfirm ?
             <div>
               <p className="help form-input-width">If you continue without an email, you will be ineligible to earn free LBC rewards, as well as unable to receive security related communications.</p>
@@ -80,7 +41,7 @@ class SubmitEmailStage extends React.Component {
             :
             <Link className="button-text-help" onClick={ () => { this.onEmailSkipClick() }} label="Do I have to?" />
           }
-        </form>
+        </div>
       </section>
     );
   }
@@ -91,7 +52,6 @@ class ConfirmEmailStage extends React.Component {
     super(props);
 
     this.state = {
-      rewardType: null,
       code: '',
       submitting: false,
       errorMessage: null,
@@ -275,10 +235,8 @@ export class AuthOverlay extends React.Component {
     super(props);
 
     this._stages = {
-      pending: PendingStage,
       error: ErrorStage,
       nocode: CodeRequiredStage,
-      email: SubmitEmailStage,
       confirm: ConfirmEmailStage,
       welcome: WelcomeStage
     }
@@ -320,21 +278,35 @@ export class AuthOverlay extends React.Component {
   }
 
   render() {
-    let StageContent
+    let stageContent
+
     const {
       isPending,
+      isEmailDeclined,
+      user,
+      userEmailDecline
     } = this.props
 
-    if (isPending) {
-      StageContent = PendingStage;
-    } else {
+    console.log('auth overlay render')
+    console.log(user)
+
+    if (isEmailDeclined) {
       return null
-      StageContent = this._stages[this.state.stage];
+    } else if (isPending) {
+      stageContent = <PendingStage />;
+    } else if (!user.has_email) {
+      stageContent = <EmailStage userEmailDecline={userEmailDecline} />;
+    }
+    else {
+      return null
+      //StageContent = this._stages[this.state.stage];
     }
 
-    if (!StageContent) {
-      return <span className="empty">Unknown authentication step.</span>
-    }
+    return <ModalPage className="modal-page--full" isOpen={true} contentLabel="Authentication">
+      <h1>LBRY Early Access</h1>
+      {stageContent}
+    </ModalPage>;
+
 //setStage={(stage, stageProps) => { this.setStage(stage, stageProps) }} {...this.state.stageProps}
     return (
       true || this.state.stage != "welcome" ?

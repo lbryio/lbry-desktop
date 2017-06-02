@@ -4,6 +4,7 @@ import {
 } from 'react-redux'
 import {
   selectFetchingRewards,
+  selectIsRewardEligible,
   selectRewards,
 } from 'selectors/rewards'
 import RewardsPage from './view'

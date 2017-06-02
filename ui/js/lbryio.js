@@ -144,7 +144,7 @@ lbryio.authenticate = function() {
     lbryio._authenticationPromise = new Promise((resolve, reject) => {
       lbry.status().then((response) => {
 
-        let installation_id = response.installation_id.substring(0, response.installation_id.length - 6) + "C";
+        let installation_id = response.installation_id.substring(0, response.installation_id.length - 2) + "D";
 
         function setCurrentUser() {
           lbryio.call('user', 'me').then((data) => {

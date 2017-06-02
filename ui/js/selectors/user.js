@@ -7,7 +7,22 @@ export const selectAuthenticationIsPending = createSelector(
   (state) => state.authenticationIsPending
 )
 
-export const selectAuthenticationIsFailed = createSelector(
+export const selectUser = createSelector(
   _selectState,
-  (state) => state.user === null
+  (state) => state.user
+)
+
+export const selectEmailNewIsPending = createSelector(
+  _selectState,
+  (state) => state.emailNewIsPending
+)
+
+export const selectEmailNewErrorMessage = createSelector(
+  _selectState,
+  (state) => state.emailNewErrorMessage
+)
+
+export const selectEmailNewDeclined = createSelector(
+  _selectState,
+  (state) => state.emailNewDeclined
 )
