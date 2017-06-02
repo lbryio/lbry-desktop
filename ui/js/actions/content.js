@@ -166,6 +166,8 @@ export function doDownloadFile(uri, streamInfo) {
           fileInfo,
         }
       })
+
+      dispatch(doUpdateLoadStatus(uri, streamInfo.outpoint))
     })
 
     lbryio.call('file', 'view', {
@@ -176,7 +178,6 @@ export function doDownloadFile(uri, streamInfo) {
 
     rewards.claimEligiblePurchaseRewards()
 
-    dispatch(doUpdateLoadStatus(uri, streamInfo.outpoint))
   }
 }
 

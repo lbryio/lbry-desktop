@@ -92,11 +92,12 @@ class FilePage extends React.Component{
     const channelClaimId = claim.value && claim.value.publisherSignature ? claim.value.publisherSignature.certificateId : null;
     const channelUri = signatureIsValid && hasSignature && channelName ? lbryuri.build({channelName, claimId: channelClaimId}, false) : null
     const uriIndicator = <UriIndicator uri={uri} />
+    const mediaType = lbry.getMediaType(contentType)
 
     return (
       <main className="main--single-column">
         <section className="show-page-media">
-          { contentType && contentType.startsWith('video/') ?
+          { ["video", "audio", "image"].indexOf(mediaType) !== -1 ?
             <Video className="video-embedded" uri={uri} /> :
             (metadata && metadata.thumbnail ? <Thumbnail src={metadata.thumbnail} /> : <Thumbnail />) }
         </section>

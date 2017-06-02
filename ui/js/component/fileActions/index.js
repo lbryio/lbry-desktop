@@ -43,6 +43,7 @@ const makeSelect = () => {
   const selectIsAvailableForUri = makeSelectIsAvailableForUri()
   const selectDownloadingForUri = makeSelectDownloadingForUri()
   const selectCostInfoForUri = makeSelectCostInfoForUri()
+  const selectLoadingForUri = makeSelectLoadingForUri()
 
   const select = (state, props) => ({
     fileInfo: selectFileInfoForUri(state, props),
@@ -51,6 +52,7 @@ const makeSelect = () => {
     modal: selectCurrentModal(state),
     downloading: selectDownloadingForUri(state, props),
     costInfo: selectCostInfoForUri(state, props),
+    loading: selectLoadingForUri(state, props),
   })
 
   return select
