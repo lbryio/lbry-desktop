@@ -63,6 +63,7 @@ class FileActions extends React.Component {
       closeModal,
       startDownload,
       costInfo,
+      loading,
     } = this.props
 
     const deleteChecked = this.state.deleteChecked,
@@ -73,7 +74,7 @@ class FileActions extends React.Component {
 
     let content
 
-    if (downloading) {
+    if (loading || downloading) {
 
       const
         progress = (fileInfo && fileInfo.written_bytes) ? fileInfo.written_bytes / fileInfo.total_bytes * 100 : 0,
@@ -110,7 +111,6 @@ class FileActions extends React.Component {
       content  = <Link label={__("Open")} button="text" icon="icon-folder-open" onClick={() => openInShell(fileInfo)} />;
     } else {
       console.log('handle this case of file action props?');
-      console.log(this.props)
     }
 
     return (

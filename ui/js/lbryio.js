@@ -95,11 +95,12 @@ lbryio.call = function(resource, action, params={}, method='get', evenIfDisabled
 };
 
 lbryio.getAccessToken = () => {
-  return getSession('accessToken');
+  const token = getSession('accessToken');
+  return token ? token.toString().trim() : token;
 }
 
 lbryio.setAccessToken = (token) => {
-  setSession('accessToken', token)
+  setSession('accessToken', token ? token.toString().trim() : token)
 }
 
 lbryio.authenticate = function() {

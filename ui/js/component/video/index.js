@@ -13,7 +13,8 @@ import {
   doLoadVideo,
 } from 'actions/content'
 import {
-  makeSelectMetadataForUri
+  makeSelectMetadataForUri,
+  makeSelectContentTypeForUri,
 } from 'selectors/claims'
 import {
   makeSelectFileInfoForUri,
@@ -32,6 +33,7 @@ const makeSelect = () => {
   const selectIsLoading = makeSelectLoadingForUri()
   const selectIsDownloading = makeSelectDownloadingForUri()
   const selectMetadata = makeSelectMetadataForUri()
+  const selectContentType = makeSelectContentTypeForUri()
 
   const select = (state, props) => ({
     costInfo: selectCostInfo(state, props),
@@ -40,6 +42,7 @@ const makeSelect = () => {
     modal: selectCurrentModal(state),
     isLoading: selectIsLoading(state, props),
     isDownloading: selectIsDownloading(state, props),
+    contentType: selectContentType(state, props),
   })
 
   return select

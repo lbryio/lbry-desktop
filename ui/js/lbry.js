@@ -287,7 +287,7 @@ lbry.imagePath = function(file)
 
 lbry.getMediaType = function(contentType, fileName) {
   if (contentType) {
-    return /^[^/]+/.exec(contentType);
+    return /^[^/]+/.exec(contentType)[0];
   } else if (fileName) {
     var dotIndex = fileName.lastIndexOf('.');
     if (dotIndex == -1) {
@@ -319,7 +319,7 @@ lbry._balanceSubscribeInterval = 5000;
 
 lbry._balanceUpdateInterval = null;
 lbry._updateBalanceSubscribers = function() {
-  lbry.get_balance().then(function(balance) {
+  lbry.wallet_balance().then(function(balance) {
     for (let callback of Object.values(lbry._balanceSubscribeCallbacks)) {
       callback(balance);
     }
