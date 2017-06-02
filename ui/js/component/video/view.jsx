@@ -49,7 +49,7 @@ class VideoPlayButton extends React.Component {
      */
 
     const disabled = isLoading || fileInfo === undefined || (fileInfo === null && (!costInfo || costInfo.cost === undefined))
-    const icon = mediaType == "image" ? "icon-folder-o" : "icon-play"
+    const icon = ["audio", "video"].indexOf(mediaType) !== -1 ? "icon-play" : "icon-folder-o"
 
     return (<div>
       <Link button={ button ? button : null }
@@ -119,6 +119,8 @@ class Video extends React.Component {
     if (mediaType === "video") {
       klassName += "video-embedded video"
       klassName += isPlaying ? " video--active" : " video--hidden"
+    } else if (mediaType === "application") {
+      klassName += "video-embedded"
     } else {
       if (!isPlaying) klassName += "video-embedded"
     }
@@ -170,7 +172,7 @@ class VideoPlayer extends React.Component {
 
     return (
       <div>
-        {mediaType === "audio" && <Thumbnail src={poster} className="video-embedded" />}
+        {["audio", "application"].indexOf(mediaType) !== -1 && <Thumbnail src={poster} className="video-embedded" />}
         <div ref="media" />
       </div>
     )
