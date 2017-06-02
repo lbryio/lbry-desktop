@@ -8,15 +8,18 @@ import {
 import {
   selectAuthenticationIsPending,
   selectEmailNewDeclined,
-  selectEmailNewExistingEmail,
   selectUser,
 } from 'selectors/user'
-import Auth from './view'
+import AuthPage from './view'
 
 const select = (state) => ({
   isPending: selectAuthenticationIsPending(state),
-  existingEmail: selectEmailNewExistingEmail(state),
+  isEmailDeclined: selectEmailNewDeclined(state),
   user: selectUser(state),
 })
 
-export default connect(select, null)(Auth)
+const perform = (dispatch) => ({
+  userEmailDecline: () => dispatch(doUserEmailDecline())
+})
+
+export default connect(select, perform)(AuthPage)

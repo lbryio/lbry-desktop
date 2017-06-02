@@ -1,4 +1,5 @@
 import React from "react";
+import AuthPage from 'page/auth';
 import SettingsPage from "page/settings";
 import HelpPage from "page/help";
 import ReportPage from "page/report.js";
@@ -41,6 +42,7 @@ const Router = props => {
     discover: <DiscoverPage {...params} />,
     rewards: <RewardsPage {...params} />,
     search: <SearchPage {...params} />,
+    "account-verification": <AuthPage {...params} />
   });
 };
 

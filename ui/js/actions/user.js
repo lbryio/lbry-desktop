@@ -4,7 +4,7 @@ import {
   setLocal
 } from 'utils'
 import {
-  doFetchRewards
+  doRewardList
 } from 'actions/rewards'
 
 export function doAuthenticate() {
@@ -17,7 +17,12 @@ export function doAuthenticate() {
         type: types.AUTHENTICATION_SUCCESS,
         data: { user }
       })
+
+      dispatch(doRewardList()) //FIXME - where should this happen?
+
     }).catch((error) => {
+      console.log('auth error')
+      console.log(error)
       dispatch({
         type: types.AUTHENTICATION_FAILURE,
         data: { error }
@@ -30,6 +35,7 @@ export function doUserEmailNew(email) {
   return function(dispatch, getState) {
     dispatch({
       type: types.USER_EMAIL_NEW_STARTED,
+      email: email
     })
     lbryio.call('user_email', 'new', { email }, 'post').then(() => {
       dispatch({
@@ -58,5 +64,32 @@ export function doUserEmailDecline() {
     dispatch({
       type: types.USER_EMAIL_DECLINE,
     })
+  }
+}
+
+export function doUserEmailVerify(email, verificationToken) {
+  return function(dispatch, getState) {
+    dispatch({
+      type: types.USER_EMAIL_VERIFY_STARTED,
+      code: code
+    })
+
+    const failure = (error) => {
+      dispatch({
+        type: types.USER_EMAIL_VERIFY_FAILURE,
+        data: { error: error.message }
+      })
+    }
+
+    lbryio.call('user_email', 'confirm', {verification_token: verificationToken, email: email }, 'post').then((userEmail) => {
+      if (userEmail.is_verified) {
+        dispatch({
+          type: types.USER_EMAIL_VERIFY_SUCCESS,
+          data: { email }
+        })
+      } else {
+        failure(new Error("Your email is still not verified.")) //shouldn't happen?
+      }
+    }, failure);
   }
 }

@@ -1,7 +1,8 @@
 import React from 'react';
 import lbryio from 'lbryio';
-import {CreditAmount, Icon} from 'component/common';
+import {BusyMessage, CreditAmount, Icon} from 'component/common';
 import SubHeader from 'component/subHeader'
+import Link from 'component/link'
 import RewardLink from 'component/rewardLink';
 
 const RewardTile = (props) => {
@@ -32,15 +33,24 @@ const RewardTile = (props) => {
 const RewardsPage = (props) => {
   const {
     fetching,
+    isEligible,
+    navigateToAuth,
     rewards,
   } = props
 
   let content
 
-  if (fetching) content = <div className="empty">Fetching rewards</div>
-  if (!fetching && rewards.length == 0) content = <div className="empty">Failed to load rewards.</div>
-  if (!fetching && rewards.length > 0) {
+  if (!isEligible) {
+    content = <div className="empty">
+      You are not eligible to claim rewards. { ' ' }
+      <Link onClick={navigateToAuth} label="Become eligible" />.
+    </div>
+  } else if (fetching) {
+    content = <BusyMessage message="Fetching rewards" />
+  } else if (rewards.length > 0) {
     content = rewards.map(reward => <RewardTile key={reward.reward_type} reward={reward} />)
+  } else {
+    content = <div className="empty">Failed to load rewards.</div>
   }
 
   return (

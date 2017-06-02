@@ -19,6 +19,9 @@ import {
   doAuthenticate
 } from 'actions/user'
 import {
+  doRewardList
+} from 'actions/rewards'
+import {
   doFileList
 } from 'actions/file_info'
 

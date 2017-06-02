@@ -54,6 +54,7 @@ reducers[types.USER_EMAIL_NEW_SUCCESS] = function(state, action) {
 
 reducers[types.USER_EMAIL_NEW_EXISTS] = function(state, action) {
   return Object.assign({}, state, {
+    emailNewExistingEmail: action.data.email,
     emailNewIsPending: false,
   })
 }
@@ -65,6 +66,25 @@ reducers[types.USER_EMAIL_NEW_FAILURE] = function(state, action) {
   })
 }
 
+reducers[types.USER_EMAIL_VERIFY_STARTED] = function(state, action) {
+  return Object.assign({}, state, {
+    emailVerifyIsPending: true,
+    emailVerifyErrorMessage: ''
+  })
+}
+
+reducers[types.USER_EMAIL_VERIFY_SUCCESS] = function(state, action) {
+  return Object.assign({}, state, {
+    emailVerifyIsPending: false,
+  })
+}
+
+reducers[types.USER_EMAIL_VERIFY_FAILURE] = function(state, action) {
+  return Object.assign({}, state, {
+    emailVerifyIsPending: false,
+    emailVerifyErrorMessage: action.data.error
+  })
+}
 
 
 export default function reducer(state = defaultState, action) {
