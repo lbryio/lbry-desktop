@@ -126,7 +126,7 @@ class Video extends React.Component {
 
     return (
       <div className={klassName}>{
-        isPlaying || isLoading ?
+        isPlaying ?
           (!isReadyToPlay ?
             <span>this is the world's worst loading screen and we shipped our software with it anyway... <br /><br />{loadStatusMessage}</span> :
             <VideoPlayer filename={fileInfo.file_name} poster={poster} downloadPath={fileInfo.download_path} mediaType={mediaType} poster={poster} />) :

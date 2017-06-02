@@ -63,6 +63,7 @@ class FileActions extends React.Component {
       closeModal,
       startDownload,
       costInfo,
+      loading,
     } = this.props
 
     const deleteChecked = this.state.deleteChecked,
@@ -73,9 +74,7 @@ class FileActions extends React.Component {
 
     let content
 
-    console.log(fileInfo)
-
-    if (downloading) {
+    if (loading || downloading) {
 
       const
         progress = (fileInfo && fileInfo.written_bytes) ? fileInfo.written_bytes / fileInfo.total_bytes * 100 : 0,
