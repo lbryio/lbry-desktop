@@ -49,9 +49,9 @@ class FileListPublished extends React.Component {
       content = <FileList fileInfos={fileInfos} fetching={isPending} fileTileShowEmpty={FileTile.SHOW_EMPTY_PENDING} />
     } else {
       if (isPending) {
-        content = <BusyMessage message="Loading" />
+        content = <BusyMessage message={__("Loading")} />
       } else {
-        content = <span>It looks like you haven't published anything to LBRY yet. Go <Link onClick={() => navigate('/publish')} label="share your beautiful cats with the world" />!</span>
+        content = <span>{__("It looks like you haven't published anything to LBRY yet. Go")} <Link onClick={() => navigate('/publish')} label={__("share your beautiful cats with the world")} />!</span>
       }
     }
 

@@ -2,6 +2,9 @@ import React from 'react';
 import ReactModal from 'react-modal';
 import Link from 'component/link';
 
+const i18n = require('y18n')({directory: 'app/locales'});
+
+
 
 export class Modal extends React.Component {
   static propTypes = {
@@ -18,8 +21,8 @@ export class Modal extends React.Component {
   static defaultProps = {
     type: 'alert',
     overlay: true,
-    confirmButtonLabel: 'OK',
-    abortButtonLabel: 'Cancel',
+    confirmButtonLabel: i18n.__('OK'),
+    abortButtonLabel: i18n.__('Cancel'),
     confirmButtonDisabled: false,
     abortButtonDisabled: false,
   }
@@ -52,9 +55,9 @@ export class ExpandableModal extends React.Component {
   }
 
   static defaultProps = {
-    confirmButtonLabel: 'OK',
-    expandButtonLabel: 'Show More...',
-    hideButtonLabel: 'Show Less',
+    confirmButtonLabel: i18n.__('OK'),
+    expandButtonLabel: i18n.__('Show More...'),
+    hideButtonLabel: i18n.__('Show Less'),
   }
 
   constructor(props) {

@@ -11,7 +11,7 @@ jsonrpc.call = function (connectionString, method, params, callback, errorCallba
       connectFailedCallback(e);
     });
     xhr.addEventListener('timeout', function() {
-      connectFailedCallback(new Error('XMLHttpRequest connection timed out'));
+      connectFailedCallback(new Error(__('XMLHttpRequest connection timed out')));
     })
   }
   xhr.addEventListener('load', function() {
@@ -50,7 +50,7 @@ jsonrpc.call = function (connectionString, method, params, callback, errorCallba
           method: method,
           params: params,
           code: xhr.status,
-          message: 'Connection to API server failed'
+          message: __('Connection to API server failed')
         }
       });
       document.dispatchEvent(errorEvent);

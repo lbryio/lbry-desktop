@@ -24,7 +24,7 @@ export class RewardTile extends React.Component {
           </div>
           <div className="card__actions">
             {this.props.claimed
-              ? <span><Icon icon="icon-check" /> Reward claimed.</span>
+              ? <span><Icon icon="icon-check" /> {__("Reward claimed.")}</span>
               : <RewardLink {...this.props} />}
           </div>
           <div className="card__content">{this.props.description}</div>
@@ -64,9 +64,9 @@ export class RewardsPage extends React.Component {
         <SubHeader />
         <div>
           {!this.state.userRewards
-            ? (this.state.failed ? <div className="empty">Failed to load rewards.</div> : '')
+            ? (this.state.failed ? <div className="empty">{__("Failed to load rewards.")}</div> : '')
             : this.state.userRewards.map(({reward_type, reward_title, reward_description, transaction_id, reward_amount}) => {
-              return <RewardTile key={reward_type} onRewardClaim={this.loadRewards} type={reward_type} title={reward_title} description={reward_description} claimed={!!transaction_id} value={reward_amount} />;
+              return <RewardTile key={reward_type} onRewardClaim={this.loadRewards} type={reward_type} title={__(reward_title)} description={__(reward_description)} claimed={!!transaction_id} value={reward_amount} />;
             })}
         </div>
       </main>

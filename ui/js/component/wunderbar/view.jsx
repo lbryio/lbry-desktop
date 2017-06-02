@@ -151,7 +151,7 @@ class WunderBar extends React.PureComponent {
                onChange={this.onChange}
                onKeyPress={this.onKeyPress}
                value={this.state.address}
-               placeholder="Find movies, music, games, and more" />
+               placeholder={__("Find movies, music, games, and more")} />
       </div>
     );
   }

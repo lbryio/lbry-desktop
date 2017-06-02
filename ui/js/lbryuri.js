@@ -39,12 +39,12 @@ lbryuri.parse = function(uri, requireProto=false) {
 
   // Validate protocol
   if (requireProto && !proto) {
-    throw new Error('LBRY URIs must include a protocol prefix (lbry://).');
+    throw new Error(__('LBRY URIs must include a protocol prefix (lbry://).'));
   }
 
   // Validate and process name
   if (!name) {
-    throw new Error('URI does not include name.');
+    throw new Error(__('URI does not include name.'));
   }
 
   const isChannel = name.startsWith('@');
@@ -52,11 +52,11 @@ lbryuri.parse = function(uri, requireProto=false) {
 
   if (isChannel) {
     if (!channelName) {
-      throw new Error('No channel name after @.');
+      throw new Error(__('No channel name after @.'));
     }
 
     if (channelName.length < CHANNEL_NAME_MIN_LEN) {
-      throw new Error(`Channel names must be at least ${CHANNEL_NAME_MIN_LEN} characters.`);
+      throw new Error(__(`Channel names must be at least %s characters.`, CHANNEL_NAME_MIN_LEN));
     }
 
     contentName = path;
@@ -64,14 +64,14 @@ lbryuri.parse = function(uri, requireProto=false) {
 
   const nameBadChars = (channelName || name).match(/[^A-Za-z0-9-]/g);
   if (nameBadChars) {
-    throw new Error(`Invalid character${nameBadChars.length == 1 ? '' : 's'} in name: ${nameBadChars.join(', ')}.`);
+    throw new Error(__(`Invalid character %s in name: %s.`, nameBadChars.length == 1 ? '' : 's', nameBadChars.join(', ') ));
   }
 
   // Validate and process modifier (claim ID, bid position or claim sequence)
   let claimId, claimSequence, bidPosition;
   if (modSep) {
     if (!modVal) {
-      throw new Error(`No modifier provided after separator ${modSep}.`);
+      throw new Error(__(`No modifier provided after separator %s.`, modSep));
     }
 
     if (modSep == '#') {
@@ -84,31 +84,31 @@ lbryuri.parse = function(uri, requireProto=false) {
   }
 
   if (claimId && (claimId.length > CLAIM_ID_MAX_LEN || !claimId.match(/^[0-9a-f]+$/))) {
-    throw new Error(`Invalid claim ID ${claimId}.`);
+    throw new Error(__(`Invalid claim ID %s.`, claimId));
   }
 
   if (claimSequence && !claimSequence.match(/^-?[1-9][0-9]*$/)) {
-    throw new Error('Claim sequence must be a number.');
+    throw new Error(__('Claim sequence must be a number.'));
   }
 
   if (bidPosition && !bidPosition.match(/^-?[1-9][0-9]*$/)) {
-    throw new Error('Bid position must be a number.');
+    throw new Error(__('Bid position must be a number.'));
   }
 
   // Validate and process path
   if (path) {
     if (!isChannel) {
-      throw new Error('Only channel URIs may have a path.');
+      throw new Error(__('Only channel URIs may have a path.'));
     }
 
     const pathBadChars = path.match(/[^A-Za-z0-9-]/g);
     if (pathBadChars) {
-      throw new Error(`Invalid character${count == 1 ? '' : 's'} in path: ${nameBadChars.join(', ')}`);
+      throw new Error(__(`Invalid character %s in path: %s`,count == 1 ? '' : 's',nameBadChars.join(', ')));
     }
 
     contentName = path;
   } else if (pathSep) {
-    throw new Error('No path provided after /');
+    throw new Error(__('No path provided after /'));
   }
 
   return {
@@ -135,7 +135,7 @@ lbryuri.build = function(uriObj, includeProto=true, allowExtraProps=false) {
     if (!name) {
       name = channelNameFormatted;
     } else if (name !== channelNameFormatted) {
-      throw new Error('Received a channel content URI, but name and channelName do not match. "name" represents the value in the name position of the URI (lbry://name...), which for channel content will be the channel name. In most cases, to construct a channel URI you should just pass channelName and contentName.');
+      throw new Error(__('Received a channel content URI, but name and channelName do not match. \"name\" represents the value in the name position of the URI (lbry://name...), which for channel content will be the channel name. In most cases, to construct a channel URI you should just pass channelName and contentName.'));
     }
   }
 
@@ -146,7 +146,7 @@ lbryuri.build = function(uriObj, includeProto=true, allowExtraProps=false) {
       path = contentName;
     }
     if (path && path !== contentName) {
-      throw new Error('path and contentName do not match. Only one is required; most likely you wanted contentName.');
+      throw new Error(__('Path and contentName do not match. Only one is required; most likely you wanted contentName.'));
     }
   }
 

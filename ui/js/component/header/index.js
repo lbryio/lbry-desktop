@@ -13,7 +13,8 @@ import {
 import Header from './view'
 
 const select = (state) => ({
-  balance: lbry.formatCredits(selectBalance(state), 1)
+  balance: lbry.formatCredits(selectBalance(state), 1),
+  publish: __("Publish"),
 })
 
 const perform = (dispatch) => ({

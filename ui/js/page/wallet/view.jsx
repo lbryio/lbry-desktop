@@ -19,7 +19,7 @@ const WalletPage = (props) => {
       <SubHeader />
       <section className="card">
         <div className="card__title-primary">
-          <h3>Balance</h3>
+          <h3>{__("Balance")}</h3>
         </div>
         <div className="card__content">
           <CreditAmount amount={balance} precision={8} />

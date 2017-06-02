@@ -18,6 +18,7 @@ let lbry = {
     useCustomLighthouseServers: false,
     customLighthouseServers: [],
     showDeveloperMenu: false,
+    language: 'en',
   }
 };
 
@@ -416,7 +417,7 @@ lbry._resolveXhrs = {}
 lbry.resolve = function(params={}) {
   return new Promise((resolve, reject) => {
     if (!params.uri) {
-      throw "Resolve has hacked cache on top of it that requires a URI"
+      throw __("Resolve has hacked cache on top of it that requires a URI")
     }
     if (params.uri && lbry._claimCache[params.uri] !== undefined) {
       resolve(lbry._claimCache[params.uri]);

@@ -3,10 +3,11 @@ import {FormField, FormRow} from 'component/form.js';
 import SubHeader from 'component/subHeader'
 import lbry from 'lbry.js';
 
+
 class SettingsPage extends React.Component {
   constructor(props) {
     super(props);
-
+    
     const daemonSettings = this.props.daemonSettings
 
     this.state = {
@@ -14,6 +15,7 @@ class SettingsPage extends React.Component {
       isMaxDownload: daemonSettings && daemonSettings.max_download != 0,
       showNsfw: lbry.getClientSetting('showNsfw'),
       showUnavailable: lbry.getClientSetting('showUnavailable'),
+      language: lbry.getClientSetting('language'),
     }
   }
 
@@ -68,6 +70,12 @@ class SettingsPage extends React.Component {
     lbry.setClientSetting('showNsfw', event.target.checked);
   }
 
+  onLanguageChange(language) {
+    lbry.setClientSetting('language', language);
+    i18n.setLocale(language);
+    this.setState({language: language})
+  }
+
   onShowUnavailableChange(event) {
 
   }
@@ -78,7 +86,7 @@ class SettingsPage extends React.Component {
     } = this.props
 
     if (!daemonSettings) {
-      return <main className="main--single-column"><span className="empty">Failed to load settings.</span></main>;
+      return <main className="main--single-column"><span className="empty">{__("Failed to load settings.")}</span></main>;
     }
 /*
  <section className="card">
@@ -98,33 +106,33 @@ class SettingsPage extends React.Component {
         <SubHeader />
         <section className="card">
           <div className="card__content">
-            <h3>Download Directory</h3>
+            <h3>{__("Download Directory")}</h3>
           </div>
           <div className="card__content">
             <FormRow type="directory"
                      name="download_directory"
                      defaultValue={daemonSettings.download_directory}
-                     helper="LBRY downloads will be saved here."
+                     helper={__("LBRY downloads will be saved here.")}
                      onChange={this.onDownloadDirChange.bind(this)} />
           </div>
         </section>
         <section className="card">
           <div className="card__content">
-           <h3>Bandwidth Limits</h3>
+           <h3>{__("Bandwidth Limits")}</h3>
           </div>
           <div className="card__content">
-            <div className="form-row__label-row"><div className="form-field__label">Max Upload</div></div>
+            <div className="form-row__label-row"><div className="form-field__label">{__("Max Upload")}</div></div>
             <FormRow type="radio"
                        name="max_upload_pref"
                        onChange={() => { this.onMaxUploadPrefChange(false) }}
                        defaultChecked={!this.state.isMaxUpload}
-                       label="Unlimited" />
+                       label={__("Unlimited")} />
             <div className="form-row">
               <FormField type="radio"
                          name="max_upload_pref"
                          onChange={() => { this.onMaxUploadPrefChange(true) }}
                          defaultChecked={this.state.isMaxUpload}
-                         label={ this.state.isMaxUpload ? 'Up to' : 'Choose limit...' } />
+                         label={ this.state.isMaxUpload ? __("Up to") : __("Choose limit...") } />
               { this.state.isMaxUpload ?
                   <FormField type="number"
                              min="0"
@@ -141,8 +149,8 @@ class SettingsPage extends React.Component {
             </div>
           </div>
           <div className="card__content">
-            <div className="form-row__label-row"><div className="form-field__label">Max Download</div></div>
-            <FormRow label="Unlimited"
+            <div className="form-row__label-row"><div className="form-field__label">{__("Max Download")}</div></div>
+            <FormRow label={__("Unlimited")}
                        type="radio"
                        name="max_download_pref"
                        onChange={() => { this.onMaxDownloadPrefChange(false) }}
@@ -152,7 +160,7 @@ class SettingsPage extends React.Component {
                          name="max_download_pref"
                          onChange={() => { this.onMaxDownloadPrefChange(true) }}
                          defaultChecked={this.state.isMaxDownload}
-                         label={ this.state.isMaxDownload ? 'Up to' : 'Choose limit...' } />
+                         label={ this.state.isMaxDownload ? __("Up to") : __("Choose limit...") } />
               { this.state.isMaxDownload ?
                 <FormField type="number"
                            min="0"
@@ -171,29 +179,53 @@ class SettingsPage extends React.Component {
         </section>
         <section className="card">
           <div className="card__content">
-            <h3>Content</h3>
+            <h3>{__("Content")}</h3>
           </div>
           <div className="card__content">
             <FormRow type="checkbox"
                      onChange={this.onShowUnavailableChange.bind(this)}
                      defaultChecked={this.state.showUnavailable}
-                     label="Show unavailable content in search results"  />
+                     label={__("Show unavailable content in search results")}  />
           </div>
           <div className="card__content">
-            <FormRow label="Show NSFW content" type="checkbox"
+            <FormRow label={__("Show NSFW content")} type="checkbox"
                      onChange={this.onShowNsfwChange.bind(this)}  defaultChecked={this.state.showNsfw}
-                     helper="NSFW content may include nudity, intense sexuality, profanity, or other adult content. By displaying NSFW content, you are affirming you are of legal age to view mature content in your country or jurisdiction.  " />
+                     helper={__("NSFW content may include nudity, intense sexuality, profanity, or other adult content. By displaying NSFW content, you are affirming you are of legal age to view mature content in your country or jurisdiction.  ")} />
           </div>
         </section>
+
+
         <section className="card">
           <div className="card__content">
-            <h3>Share Diagnostic Data</h3>
+            <h3>{__("Language")}</h3>
+          </div>
+          <div className="card__content">
+            <div className="form-row">
+              <FormField type="radio"
+                         name="language"
+                         label={__("English")}
+                         onChange={() => { this.onLanguageChange('en') }}
+                         defaultChecked={this.state.language=='en'} />
+            </div>
+            <div className="form-row">
+              <FormField type="radio"
+                         name="language"
+                         label="Serbian"
+                         onChange={() => { this.onLanguageChange('rs') }}
+                         defaultChecked={this.state.language=='rs'} />
+            </div>
+          </div>
+        </section>
+
+        <section className="card">
+          <div className="card__content">
+            <h3>{__("Share Diagnostic Data")}</h3>
           </div>
           <div className="card__content">
             <FormRow type="checkbox"
                      onChange={this.onShareDataChange.bind(this)}
                      defaultChecked={daemonSettings.share_usage_data}
-                     label="Help make LBRY better by contributing diagnostic data about my usage" />
+                     label={__("Help make LBRY better by contributing diagnostic data about my usage")} />
           </div>
         </section>
        </main>

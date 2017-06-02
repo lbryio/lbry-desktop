@@ -12,8 +12,8 @@ export class SplashScreen extends React.Component {
     super(props);
 
     this.state = {
-      details: 'Starting daemon',
-      message: "Connecting",
+      details: __('Starting daemon'),
+      message: __("Connecting"),
       isLagging: false,
     };
   }
@@ -30,8 +30,8 @@ export class SplashScreen extends React.Component {
       // TODO: This is a hack, and the logic should live in the daemon
       // to give us a better sense of when we are actually started
       this.setState({
-        message: "Testing Network",
-        details: "Waiting for name resolution",
+        message: __("Testing Network"),
+        details: __("Waiting for name resolution"),
         isLagging: false
       });
 
@@ -55,8 +55,8 @@ export class SplashScreen extends React.Component {
       .catch(() => {
         this.setState({
           isLagging: true,
-          message: "Connection Failure",
-          details: "Try closing all LBRY processes and starting again. If this still happpens, your anti-virus software or firewall may be preventing LBRY from connecting. Contact hello@lbry.io if you think this is a software bug."
+          message: __("Connection Failure"),
+          details: __("Try closing all LBRY processes and starting again. If this still happpens, your anti-virus software or firewall may be preventing LBRY from connecting. Contact hello@lbry.io if you think this is a software bug.")
         })
       })
   }

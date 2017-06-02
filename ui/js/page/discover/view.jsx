@@ -17,7 +17,7 @@ const FeaturedCategory = (props) => {
 
   return <div className="card-row card-row--small">
     <h3 className="card-row__header">{category}
-    {category && category.match(/^community/i) && <ToolTip label="What's this?" body={communityCategoryToolTipText} className="tooltip--header" />}
+    {category && category.match(/^community/i) && <ToolTip label={__("What's this?")} body={__(communityCategoryToolTipText)} className="tooltip--header" />}
     </h3>
     {names && names.map(name => <FileCard key={name} displayStyle="card" uri={lbryuri.normalize(name)} />)}
   </div>
@@ -42,7 +42,7 @@ class DiscoverPage extends React.Component{
       <main>
         {
           fetchingFeaturedUris &&
-          <BusyMessage message="Fetching content" />
+          <BusyMessage message={__("Fetching content")} />
         }
         {
           typeof featuredUris === "object" &&
@@ -52,7 +52,7 @@ class DiscoverPage extends React.Component{
         }
         {
         failedToLoad &&
-          <div className="empty">Failed to load landing content.</div>
+          <div className="empty">{__("Failed to load landing content.")}</div>
         }
       </main>
     )

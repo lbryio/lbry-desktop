@@ -58,20 +58,20 @@ class VideoPlayButton extends React.Component {
             className="video__play-button"
             icon={icon}
             onClick={this.onWatchClick.bind(this)} />
-      <Modal contentLabel="Not enough credits" isOpen={modal == 'notEnoughCredits'} onConfirmed={closeModal}>
-        You don't have enough LBRY credits to pay for this stream.
+      <Modal contentLabel={__("Not enough credits")} isOpen={modal == 'notEnoughCredits'} onConfirmed={closeModal}>
+        {__("You don't have enough LBRY credits to pay for this stream.")}
       </Modal>
       <Modal
         type="confirm"
         isOpen={modal == 'affirmPurchaseAndPlay'}
-        contentLabel="Confirm Purchase"
+        contentLabel={__("Confirm Purchase")}
         onConfirmed={this.onPurchaseConfirmed.bind(this)}
         onAborted={closeModal}>
-        This will purchase <strong>{title}</strong> for <strong><FilePrice uri={uri} look="plain" /></strong> credits.
+        {__("This will purchase")} <strong>{title}</strong> {__("for")} <strong><FilePrice uri={uri} look="plain" /></strong> {__("credits")}.
       </Modal>
       <Modal
-        isOpen={modal == 'timedOut'} onConfirmed={closeModal} contentLabel="Timed Out">
-        Sorry, your download timed out :(
+        isOpen={modal == 'timedOut'} onConfirmed={closeModal} contentLabel={__("Timed Out")}>
+        {__("Sorry, your download timed out :(")}
       </Modal>
     </div>);
   }
@@ -107,11 +107,11 @@ class Video extends React.Component {
     let loadStatusMessage = ''
 
     if(fileInfo && fileInfo.completed && !fileInfo.written_bytes) {
-      loadStatusMessage = "It looks like you deleted or moved this file. We're rebuilding it now. It will only take a few seconds."
+      loadStatusMessage = __("It looks like you deleted or moved this file. We're rebuilding it now. It will only take a few seconds.")
     } else if (isLoading) {
-      loadStatusMessage = "Requesting stream... it may sit here for like 15-20 seconds in a really awkward way... we're working on it"
+      loadStatusMessage = __("Requesting stream... it may sit here for like 15-20 seconds in a really awkward way... we're working on it")
     } else if (isDownloading) {
-      loadStatusMessage = "Downloading stream... not long left now!"
+      loadStatusMessage = __("Downloading stream... not long left now!")
     }
 
     let klassName = ""
@@ -128,8 +128,8 @@ class Video extends React.Component {
       <div className={klassName}>{
         isPlaying ?
           (!isReadyToPlay ?
-            <span>this is the world's worst loading screen and we shipped our software with it anyway... <br /><br />{loadStatusMessage}</span> :
-            <VideoPlayer filename={fileInfo.file_name} poster={poster} downloadPath={fileInfo.download_path} mediaType={mediaType} poster={poster} />) :
+            <span>{__("this is the world's worst loading screen and we shipped our software with it anyway...")} <br /><br />{loadStatusMessage}</span> :
+            <VideoPlayer filename={fileInfo.file_name} downloadPath={fileInfo.download_path} mediaType={mediaType} poster={poster} />) :
         <div className="video__cover" style={{backgroundImage: 'url("' + metadata.thumbnail + '")'}}>
           <VideoPlayButton startPlaying={this.startPlaying.bind(this)} {...this.props} mediaType={mediaType} />
         </div>
