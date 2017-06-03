@@ -3,7 +3,7 @@ import lbry from 'lbry'
 
 export function doFetchDaemonSettings() {
   return function(dispatch, getState) {
-    lbry.get_settings().then((settings) => {
+    lbry.settings_get().then((settings) => {
       dispatch({
         type: types.DAEMON_SETTINGS_RECEIVED,
         data: {
