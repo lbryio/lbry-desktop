@@ -34,7 +34,8 @@
     "redux-logger": "^3.0.1",
     "redux-thunk": "^2.2.0",
     "render-media": "^2.10.0",
-    "reselect": "^3.0.0"
+    "reselect": "^3.0.0",
+    "y18n": "^3.2.1"
   },
   "devDependencies": {
     "babel": "^6.5.2",
