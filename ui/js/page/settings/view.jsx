@@ -194,7 +194,7 @@ class SettingsPage extends React.Component {
           </div>
         </section>
         
-        /*
+        {/*} 
         <section className="card">
           <div className="card__content">
             <h3>{__("Language")}</h3>
@@ -215,7 +215,7 @@ class SettingsPage extends React.Component {
                          defaultChecked={this.state.language=='rs'} />
             </div>
           </div>
-        </section>*/
+        </section>*/}
 
         <section className="card">
           <div className="card__content">
