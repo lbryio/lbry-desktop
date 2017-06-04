@@ -1,12 +1,30 @@
 import { createSelector } from "reselect";
 import lbryuri from "lbryuri";
 
-export const _selectState = state => state.claims || {};
+const _selectState = state => state.claims || {};
+
+export const selectClaimsById = createSelector(
+  _selectState,
+  (state) => state.byId || {}
+);
 
 export const selectClaimsByUri = createSelector(
   _selectState,
-  state => state.claimsByUri || {}
-);
+  selectClaimsById,
+  (state, byId) => {
+    const byUri = state.claimsByUri || {};
+    const claims = {};
+
+    Object.keys(byUri).forEach(uri => {
+      const claimId = byUri[uri];
+      const claim = byId[claimId];
+
+      claims[uri] = claim;
+    })
+
+    return claims;
+  }
+)
 
 export const selectAllClaimsByChannel = createSelector(
   _selectState,
@@ -74,14 +92,14 @@ export const selectMyClaims = createSelector(
 
 export const selectMyClaimsOutpoints = createSelector(
   selectMyClaims,
-  selectClaimsByUri,
-  (claimIds, byUri) => {
+  selectClaimsById,
+  (claimIds, byId) => {
     const outpoints = [];
 
     claimIds.forEach(claimId => {
-      const claim = byUri[claimId];
+      const claim = byId[claimId];
       if (claim) outpoints.push(`${claim.txid}:${claim.nout}`);
-    });
+    })
 
     return outpoints;
   }

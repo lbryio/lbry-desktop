@@ -7,23 +7,19 @@ const defaultState = {};
 reducers[types.RESOLVE_URI_COMPLETED] = function(state, action) {
   const { uri, certificate, claim } = action.data;
 
-  const newClaims = Object.assign({}, state.claimsByUri);
+  const byUri = Object.assign({}, state.claimsByUri);
+  const byId = Object.assign({}, state.byId);
 
-  newClaims[uri] = claim;
-
-  //This needs a sanity boost...
-  if (certificate !== undefined && claim === undefined) {
-    const uriParts = lbryuri.parse(uri);
-    // newChannelClaims[uri] = certificate
-    if (claim === undefined) {
-      newClaims[uri] = certificate;
-    }
+  if (claim) {
+    byId[claim.claim_id] = claim;
+    byUri[uri] = claim.claim_id;
   }
 
   return Object.assign({}, state, {
-    claimsByUri: newClaims,
+    byId,
+    claimsByUri: byUri
   });
-};
+}
 
 reducers[types.RESOLVE_URI_CANCELED] = function(state, action) {
   const uri = action.data.uri;
@@ -41,26 +37,24 @@ reducers[types.FETCH_CLAIM_LIST_MINE_STARTED] = function(state, action) {
 };
 
 reducers[types.FETCH_CLAIM_LIST_MINE_COMPLETED] = function(state, action) {
-  const { claims } = action.data;
+  const {
+    claims,
+  } = action.data;
   const myClaims = new Set(state.myClaims);
   const byUri = Object.assign({}, state.claimsByUri);
+  const byId = Object.assign({}, state.byId);
 
   claims.forEach(claim => {
-    const uri = lbryuri.build({
-      contentName: claim.name,
-      claimId: claim.claim_id,
-      claimSequence: claim.nout,
-    });
-    myClaims.add(uri);
-    byUri[uri] = claim;
-  });
+    myClaims.add(claim.claim_id);
+    byId[claim.claim_id] = claim;
+  })
 
   return Object.assign({}, state, {
     isClaimListMinePending: false,
     myClaims: myClaims,
-    claimsByUri: byUri,
+    byId,
   });
-};
+}
 
 // reducers[types.FETCH_CHANNEL_CLAIMS_STARTED] = function(state, action) {
 //   const {
