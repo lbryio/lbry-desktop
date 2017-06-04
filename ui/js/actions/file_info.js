@@ -102,12 +102,7 @@ export function doFetchFileInfosAndPublishedClaims() {
       isClaimListMinePending = selectClaimListMineIsPending(state),
       isFileInfoListPending = selectFileListIsPending(state);
 
-    if (isClaimListMinePending === undefined) {
-      dispatch(doFetchClaimListMine());
-    }
-
-    if (isFileInfoListPending === undefined) {
-      dispatch(doFileList());
-    }
+    dispatch(doFetchClaimListMine());
+    dispatch(doFileList());
   };
 }

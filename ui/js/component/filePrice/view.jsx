@@ -11,13 +11,7 @@ class FilePrice extends React.Component {
   }
 
   fetchCost(props) {
-    const {
-      costInfo,
-      fetchCostInfo,
-      uri,
-      fetching,
-      claim,
-    } = props;
+    const { costInfo, fetchCostInfo, uri, fetching, claim } = props;
 
     if (costInfo === undefined && !fetching && claim) {
       fetchCostInfo(uri);

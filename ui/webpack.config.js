@@ -33,6 +33,7 @@ module.exports = {
         include: PATHS.app
       }
     ],
+    noParse: /node_modules\/localforage\/dist\/localforage.js/,
     loaders: [
       { test: /\.css$/, loader: "style!css" },
       {

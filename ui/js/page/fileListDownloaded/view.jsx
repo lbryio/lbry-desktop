@@ -12,7 +12,7 @@ import SubHeader from "component/subHeader";
 
 class FileListDownloaded extends React.Component {
   componentWillMount() {
-    this.props.fetchFileInfosDownloaded();
+    if (!this.props.isPending) this.props.fetchFileInfosDownloaded();
   }
 
   render() {

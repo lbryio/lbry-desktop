@@ -12,7 +12,7 @@ import SubHeader from "component/subHeader";
 
 class FileListPublished extends React.Component {
   componentWillMount() {
-    this.props.fetchFileListPublished();
+    if (!this.props.isPending) this.props.fetchFileListPublished();
   }
 
   componentDidUpdate() {
