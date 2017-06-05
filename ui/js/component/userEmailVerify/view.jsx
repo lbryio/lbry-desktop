@@ -21,10 +21,6 @@ class UserEmailVerify extends React.Component {
     event.preventDefault();
     this.props.verifyUserEmail(this.state.code)
   }
-//
-// <div className="form-field__helper">
-// No code? <Link onClick={() => { this.props.setStage("nocode")}} label="Click here" />.
-// </div>
 
   render() {
     const {
@@ -36,7 +32,7 @@ class UserEmailVerify extends React.Component {
       <FormRow type="text" label="Verification Code" placeholder="a94bXXXXXXXXXXXXXX"
                name="code" value={this.state.code} onChange={(event) => { this.handleCodeChanged(event) }}
                errorMessage={errorMessage}
-               helper="A verification code is required to access this version."/>
+               helper="A verification code is required to participate in early access rewards."/>
       <div className="form-row-submit form-row-submit--with-footer">
         <Link button="primary" label="Verify" disabled={this.state.submitting} onClick={(event) => { this.handleSubmit(event)}} />
       </div>
