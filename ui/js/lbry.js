@@ -124,7 +124,7 @@ lbry.connect = function() {
 }
 
 lbry.checkAddressIsMine = function(address, callback) {
-  lbry.call('address_is_mine', {address: address}, callback);
+  lbry.call('wallet_is_address_mine', {address: address}, callback);
 }
 
 lbry.sendToAddress = function(amount, address, callback, errorCallback) {
@@ -256,7 +256,7 @@ lbry.setClientSetting = function(setting, value) {
 }
 
 lbry.getSessionInfo = function(callback) {
-  lbry.call('get_lbry_session_info', {}, callback);
+  lbry.call('status', {session_status: true}, callback);
 }
 
 lbry.reportBug = function(message, callback) {

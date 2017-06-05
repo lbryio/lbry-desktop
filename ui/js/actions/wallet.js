@@ -24,7 +24,7 @@ export function doFetchTransactions() {
       type: types.FETCH_TRANSACTIONS_STARTED
     })
 
-    lbry.call('get_transaction_history', {}, (results) => {
+    lbry.call('transaction_list', {}, (results) => {
       dispatch({
         type: types.FETCH_TRANSACTIONS_COMPLETED,
         data: {

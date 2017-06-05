@@ -19,7 +19,7 @@ export function doSetDaemonSetting(key, value) {
     let settings = {};
     settings[key] = value;
     lbry.settings_set(settings).then(settings)
-    lbry.get_settings().then((settings) => {
+    lbry.settings_get().then((settings) => {
       dispatch({
         type: types.DAEMON_SETTINGS_RECEIVED,
         data: {
