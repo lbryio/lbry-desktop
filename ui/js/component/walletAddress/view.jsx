@@ -19,18 +19,18 @@ class WalletAddress extends React.Component {
     return (
       <section className="card">
         <div className="card__title-primary">
-          <h3>Wallet Address</h3>
+          <h3>{__("Wallet Address")}</h3>
         </div>
         <div className="card__content">
           <Address address={receiveAddress} />
         </div>
         <div className="card__actions">
-          <Link label="Get New Address" button="primary" icon='icon-refresh' onClick={getNewAddress} disabled={gettingNewAddress} />
+          <Link label={__("Get New Address")} button="primary" icon='icon-refresh' onClick={getNewAddress} disabled={gettingNewAddress} />
         </div>
         <div className="card__content">
           <div className="help">
-            <p>Other LBRY users may send credits to you by entering this address on the "Send" page.</p>
-            <p>You can generate a new address at any time, and any previous addresses will continue to work. Using multiple addresses can be helpful for keeping track of incoming payments from multiple sources.</p>
+            <p>{__("Other LBRY users may send credits to you by entering this address on the \"Send\" page.")}</p>
+            <p>{__("You can generate a new address at any time, and any previous addresses will continue to work. Using multiple addresses can be helpful for keeping track of incoming payments from multiple sources.")}</p>
           </div>
         </div>
       </section>

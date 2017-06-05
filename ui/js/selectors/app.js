@@ -38,35 +38,28 @@ export const selectPageTitle = createSelector(
   selectCurrentParams,
   (page, params) => {
     switch (page) {
-      case 'search':
-        return params.query ? `Search results for ${params.query}` : 'Search'
       case 'settings':
-        return 'Settings'
       case 'help':
-        return 'Help'
       case 'report':
-        return 'Report'
       case 'wallet':
       case 'send':
       case 'receive':
       case 'rewards':
-        return page.charAt(0).toUpperCase() + page.slice(1)
+      case 'start':
+      case 'publish':
+      case 'help':
+      case 'developer':
+        return __(page.charAt(0).toUpperCase() + page.slice(1))
+      case 'search':
+        return params.query ? __("Search results for %s", params.query) : __('Search')
       case 'show':
         return lbryuri.normalize(params.uri)
       case 'downloaded':
-        return 'Downloads & Purchases'
+        return __('Downloads & Purchases')
       case 'published':
-        return 'Publishes'
-      case 'start':
-        return 'Start'
-      case 'publish':
-        return 'Publish'
-      case 'help':
-        return 'Help'
-      case 'developer':
-        return 'Developer'
+        return __('Publishes')
       case 'discover':
-        return 'Home'
+        return __('Home')
       default:
         return '';
     }
@@ -142,22 +135,22 @@ export const selectHeaderLinks = createSelector(
       case 'receive':
       case 'rewards':
         return {
-          'wallet': 'Overview',
-          'send': 'Send',
-          'receive': 'Receive',
-          'rewards': 'Rewards',
+          'wallet': __('Overview'),
+          'send': __('Send'),
+          'receive': __('Receive'),
+          'rewards': __('Rewards'),
         };
       case 'downloaded':
       case 'published':
         return {
-          'downloaded': 'Downloaded',
-          'published': 'Published',
+          'downloaded': __('Downloaded'),
+          'published': __('Published'),
         };
       case 'settings':
       case 'help':
         return {
-          'settings': 'Settings',
-          'help': 'Help',
+          'settings': __('Settings'),
+          'help': __('Help'),
         }
       default:
         return null;

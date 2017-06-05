@@ -6,7 +6,8 @@ export const Header = (props) => {
   const {
     balance,
     back,
-    navigate
+    navigate,
+    publish,
   } = props
 
   return <header id="header">
@@ -17,13 +18,13 @@ export const Header = (props) => {
       <Link onClick={() => navigate('/discover')} button="alt button--flat" icon="icon-home" />
     </div>
     <div className="header__item header__item--wunderbar">
-      <WunderBar/>
+      <WunderBar />
     </div>
     <div className="header__item">
       <Link onClick={() => navigate('/wallet')}  button="text" icon="icon-bank" label={balance} ></Link>
     </div>
     <div className="header__item">
-      <Link onClick={() => navigate('/publish')} button="primary button--flat" icon="icon-upload" label="Publish" />
+      <Link onClick={() => navigate('/publish')} button="primary button--flat" icon="icon-upload" label={publish} />
     </div>
     <div className="header__item">
       <Link onClick={() => navigate('/downloaded')} button="alt button--flat" icon="icon-folder" />

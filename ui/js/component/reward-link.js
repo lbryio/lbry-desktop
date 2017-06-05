@@ -77,11 +77,11 @@ export class RewardLink extends React.Component {
     return (
       <div className="reward-link">
         {this.props.claimed
-          ? <span><Icon icon="icon-check" /> Reward claimed.</span>
+          ? <span><Icon icon="icon-check" /> {__("Reward claimed.")}</span>
           : <Link button={this.props.button ? this.props.button : 'alt'} disabled={this.state.pending || !this.state.claimable }
-                  label={ this.state.pending ? "Claiming..." : "Claim Reward"} onClick={() => { this.claimReward() }} />}
+                  label={ this.state.pending ? __("Claiming...") : __("Claim Reward")} onClick={() => { this.claimReward() }} />}
         {this.state.errorMessage ?
-         <Modal isOpen={true} contentLabel="Reward Claim Error" className="error-modal" onConfirmed={() => { this.clearError() }}>
+         <Modal isOpen={true} contentLabel={__("Reward Claim Error")} className="error-modal" onConfirmed={() => { this.clearError() }}>
            {this.state.errorMessage}
          </Modal>
           : ''}

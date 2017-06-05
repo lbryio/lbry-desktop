@@ -16,8 +16,8 @@ const SearchNoResults = (props) => {
 
   return <section>
     <span className="empty">
-      No one has checked anything in for {query} yet. { ' ' }
-      <Link label="Be the first" onClick={() => navigate('/publish')} />
+      {__("No one has checked anything in for %s yet."), query} { ' ' }
+      <Link label={__("Be the first")} onClick={() => navigate('/publish')} />
     </span>
   </section>;
 }
@@ -60,10 +60,10 @@ class FileListSearch extends React.Component{
     return (
       <div>
         {isSearching && !results &&
-          <BusyMessage message="Looking up the Dewey Decimals" />}
+          <BusyMessage message={__("Looking up the Dewey Decimals")} />}
 
         {isSearching && results &&
-          <BusyMessage message="Refreshing the Dewey Decimals" />}
+          <BusyMessage message={__("Refreshing the Dewey Decimals")} />}
 
         {(results && !!results.length) ?
           <FileListSearchResults {...this.props} /> :

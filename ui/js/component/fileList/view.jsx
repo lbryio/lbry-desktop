@@ -77,11 +77,11 @@ class FileList extends React.Component {
       <section className="file-list__header">
         { fetching && <span className="busy-indicator"/> }
         <span className='sort-section'>
-          Sort by { ' ' }
+          {__("Sort by")} { ' ' }
           <FormField type="select" onChange={this.handleSortChanged.bind(this)}>
-            <option value="date">Date</option>
-            <option value="title">Title</option>
-            <option value="filename">File name</option>
+            <option value="date">{__("Date")}</option>
+            <option value="title">{__("Title")}</option>
+            <option value="filename">{__("File name")}</option>
           </FormField>
         </span>
         {content}

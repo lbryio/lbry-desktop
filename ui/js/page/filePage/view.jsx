@@ -26,16 +26,16 @@ const FormatItem = (props) => {
     <table className="table-standard">
       <tbody>
         <tr>
-          <td>Content-Type</td><td>{mediaType}</td>
+          <td>{__("Content-Type")}</td><td>{mediaType}</td>
         </tr>
         <tr>
-          <td>Author</td><td>{author}</td>
+          <td>{__("Author")}</td><td>{author}</td>
         </tr>
         <tr>
-          <td>Language</td><td>{language}</td>
+          <td>{__("Language")}</td><td>{language}</td>
         </tr>
         <tr>
-          <td>License</td><td>{license}</td>
+          <td>{__("License")}</td><td>{license}</td>
         </tr>
       </tbody>
     </table>
@@ -75,7 +75,7 @@ class FilePage extends React.Component{
     } = this.props
 
     if (!claim || !metadata) {
-      return <span className="empty">Empty claim or metadata info.</span>
+      return <span className="empty">{__("Empty claim or metadata info.")}</span>
     }
 
     const {
@@ -125,7 +125,7 @@ class FilePage extends React.Component{
               <FormatItem metadata={metadata} contentType={contentType} />
             </div> : '' }
           <div className="card__content">
-            <Link href="https://lbry.io/dmca" label="report" className="button-text-help" />
+            <Link href="https://lbry.io/dmca" label={__("report")} className="button-text-help" />
           </div>
         </section>
       </main>
