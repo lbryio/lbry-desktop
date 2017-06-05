@@ -130,7 +130,6 @@ class HelpPage extends React.Component {
             }
          </div>
         </section>
-      }
       </main>
     );
   }
