@@ -17,9 +17,17 @@ export const selectClaimsByUri = createSelector(
 
     Object.keys(byUri).forEach(uri => {
       const claimId = byUri[uri];
-      const claim = byId[claimId];
 
-      claims[uri] = claim;
+      // NOTE returning a null claim allows us to differentiate between an
+      // undefined (never fetched claim) and one which just doesn't exist. Not
+      // the cleanest solution but couldn't think of anything better right now
+      if (claimId === null) {
+        claims[uri] = null;
+      } else {
+        const claim = byId[claimId];
+
+        claims[uri] = claim;
+      }
     })
 
     return claims;
