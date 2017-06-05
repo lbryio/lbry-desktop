@@ -33,20 +33,20 @@ export function doUserFetch() {
     dispatch({
       type: types.USER_FETCH_STARTED,
     });
-    lbryio.setCurrentUser(
-      user => {
+    lbryio
+      .getCurrentUser()
+      .then(user => {
         dispatch({
           type: types.USER_FETCH_SUCCESS,
           data: { user },
         });
-      },
-      error => {
+      })
+      .catch(error => {
         dispatch({
           type: types.USER_FETCH_FAILURE,
           data: { error },
         });
-      }
-    );
+      });
   };
 }
 
@@ -56,32 +56,27 @@ export function doUserEmailNew(email) {
       type: types.USER_EMAIL_NEW_STARTED,
       email: email,
     });
-    lbryio.call("user_email", "new", { email }, "post").then(
-      () => {
+    lbryio
+      .call("user_email", "new", { email: email, send_verification_email: true }, "post")
+      .catch(error => {
+        if (error.xhr && error.xhr.status == 409) {
+          return lbryio.call("user_email", "resend_token", { email: email, only_if_expired: true }, "post");
+        }
+        throw error
+      })
+      .then(() => {
         dispatch({
           type: types.USER_EMAIL_NEW_SUCCESS,
           data: { email },
         });
         dispatch(doUserFetch());
-      },
-      error => {
-        if (
-          error.xhr &&
-          (error.xhr.status == 409 ||
-            error.message == "This email is already in use")
-        ) {
-          dispatch({
-            type: types.USER_EMAIL_NEW_EXISTS,
-            data: { email },
-          });
-        } else {
-          dispatch({
-            type: types.USER_EMAIL_NEW_FAILURE,
-            data: { error: error.message },
-          });
-        }
-      }
-    );
+      })
+      .catch(error => {
+        dispatch({
+          type: types.USER_EMAIL_NEW_FAILURE,
+          data: { error: error.message },
+        });
+      });
   };
 }
 
@@ -111,12 +106,7 @@ export function doUserEmailVerify(verificationToken) {
     };
 
     lbryio
-      .call(
-        "user_email",
-        "confirm",
-        { verification_token: verificationToken, email: email },
-        "post"
-      )
+      .call("user_email", "confirm", { verification_token: verificationToken, email: email }, "post")
       .then(userEmail => {
         if (userEmail.is_verified) {
           dispatch({

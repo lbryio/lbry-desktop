@@ -13,6 +13,10 @@ cd ..
 # build ui
 cd ui
 npm install
+
+# necessary to ensure native Node modules (e.g. keytar) are built against the correct version of Node)
+node_modules\.bin\electron-rebuild
+
 node extractLocals.js
 node_modules\.bin\node-sass --output dist\css --sourcemap=none scss\
 node_modules\.bin\webpack

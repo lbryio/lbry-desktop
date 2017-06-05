@@ -42,6 +42,10 @@ module.exports = {
         include: PATHS.app
       },
       {
+        test: /\.node$/,
+        use: ["node-loader"]
+      },
+      {
         test: /\.css$/,
         use: ["style-loader", "css-loader"]
       },

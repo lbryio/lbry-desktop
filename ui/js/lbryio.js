@@ -1,26 +1,23 @@
-import { getSession, setSession, setLocal } from "./utils.js";
 import lbry from "./lbry.js";
 
 const querystring = require("querystring");
+const keytar = require("keytar");
 
 const lbryio = {
-  _accessToken: getSession("accessToken"),
-  _authenticationPromise: null,
   enabled: true,
+  _authenticationPromise: null,
+  _exchangePromise: null,
+  _exchangeLastFetched: null,
 };
 
 const CONNECTION_STRING = process.env.LBRY_APP_API_URL
   ? process.env.LBRY_APP_API_URL.replace(/\/*$/, "/") // exactly one slash at the end
   : "https://api.lbry.io/";
+
 const EXCHANGE_RATE_TIMEOUT = 20 * 60 * 1000;
 
-lbryio._exchangePromise = null;
-lbryio._exchangeLastFetched = null;
 lbryio.getExchangeRates = function() {
-  if (
-    !lbryio._exchangeLastFetched ||
-    Date.now() - lbryio._exchangeLastFetched > EXCHANGE_RATE_TIMEOUT
-  ) {
+  if (!lbryio._exchangeLastFetched || Date.now() - lbryio._exchangeLastFetched > EXCHANGE_RATE_TIMEOUT) {
     lbryio._exchangePromise = new Promise((resolve, reject) => {
       lbryio
         .call("lbc", "exchange_rate", {}, "get", true)
@@ -46,9 +43,7 @@ lbryio.call = function(resource, action, params = {}, method = "get") {
     const xhr = new XMLHttpRequest();
 
     xhr.addEventListener("error", function(event) {
-      reject(
-        new Error(__("Something went wrong making an internal API call."))
-      );
+      reject(new Error(__("Something went wrong making an internal API call.")));
     });
 
     xhr.addEventListener("timeout", function() {
@@ -60,7 +55,7 @@ lbryio.call = function(resource, action, params = {}, method = "get") {
 
       if (!response.success) {
         if (reject) {
-          let error = new Error(response.error);
+          const error = new Error(response.error);
           error.xhr = xhr;
           reject(error);
         } else {
@@ -81,54 +76,38 @@ lbryio.call = function(resource, action, params = {}, method = "get") {
       }
     });
 
-    // For social media auth:
-    //const accessToken = localStorage.getItem('accessToken');
-    //const fullParams = {...params, ... accessToken ? {access_token: accessToken} : {}};
+    lbryio
+      .getAuthToken()
+      .then(token => {
+        const fullParams = { auth_token: token, ...params };
 
-    // Temp app ID based auth:
-    const fullParams = { app_id: lbryio.getAccessToken(), ...params };
-
-    if (method == "get") {
-      xhr.open(
-        "get",
-        CONNECTION_STRING +
-          resource +
-          "/" +
-          action +
-          "?" +
-          querystring.stringify(fullParams),
-        true
-      );
-      xhr.send();
-    } else if (method == "post") {
-      xhr.open("post", CONNECTION_STRING + resource + "/" + action, true);
-      xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-      xhr.send(querystring.stringify(fullParams));
-    } else {
-      reject(new Error(__("Invalid method")));
-    }
+        if (method == "get") {
+          xhr.open("get", CONNECTION_STRING + resource + "/" + action + "?" + querystring.stringify(fullParams), true);
+          xhr.send();
+        } else if (method == "post") {
+          xhr.open("post", CONNECTION_STRING + resource + "/" + action, true);
+          xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+          xhr.send(querystring.stringify(fullParams));
+        } else {
+          reject(new Error(__("Invalid method")));
+        }
+      })
+      .catch(reject);
   });
 };
 
-lbryio.getAccessToken = () => {
-  const token = getSession("accessToken");
-  return token ? token.toString().trim() : token;
+lbryio.getAuthToken = () => {
+  return keytar.getPassword("LBRY", "auth_token").then(token => {
+    return token ? token.toString().trim() : null;
+  });
 };
 
-lbryio.setAccessToken = token => {
-  setSession("accessToken", token ? token.toString().trim() : token);
+lbryio.setAuthToken = token => {
+  return keytar.setPassword("LBRY", "auth_token", token ? token.toString().trim() : null);
 };
 
-lbryio.setCurrentUser = (resolve, reject) => {
-  lbryio
-    .call("user", "me")
-    .then(data => {
-      resolve(data);
-    })
-    .catch(function(err) {
-      lbryio.setAccessToken(null);
-      reject(err);
-    });
+lbryio.getCurrentUser = () => {
+  return lbryio.call("user", "me");
 };
 
 lbryio.authenticate = function() {
@@ -144,48 +123,56 @@ lbryio.authenticate = function() {
       });
     });
   }
+
   if (lbryio._authenticationPromise === null) {
     lbryio._authenticationPromise = new Promise((resolve, reject) => {
-      lbry
-        .status()
-        .then(response => {
-          let installation_id = response.installation_id;
-
-          if (!lbryio.getAccessToken()) {
-            lbryio
-              .call(
-                "user",
-                "new",
-                {
-                  language: "en",
-                  app_id: installation_id,
-                },
-                "post"
-              )
-              .then(function(responseData) {
-                if (!responseData.id) {
-                  reject(
-                    new Error("Received invalid authentication response.")
-                  );
-                }
-                lbryio.setAccessToken(installation_id);
-                lbryio.setCurrentUser(resolve, reject);
-              })
-              .catch(function(error) {
-                /*
-						 until we have better error code format, assume all errors are duplicate application id
-						 if we're wrong, this will be caught by later attempts to make a valid call
-						*/
-                lbryio.setAccessToken(installation_id);
-                lbryio.setCurrentUser(resolve, reject);
-              });
-          } else {
-            lbryio.setCurrentUser(resolve, reject);
+      lbryio
+        .getAuthToken()
+        .then(token => {
+          if (!token || token.length > 60)
+          {
+            return false;
           }
+
+          // check that token works
+          return lbryio
+            .getCurrentUser()
+            .then(() => { return true; })
+            .catch(() => { return false; });
         })
-        .catch(reject);
+        .then((isTokenValid) => {
+          if (isTokenValid) {
+            return;
+          }
+
+          let app_id;
+
+          return lbry
+            .status()
+            .then(status => {
+              // first try swapping
+              app_id = status.installation_id;
+              return lbryio.call("user", "token_swap", {auth_token: "", app_id: app_id}, "post");
+            })
+            .catch((err) => {
+              if (err.xhr.status == 403) {
+                // cannot swap. either app_id doesn't exist, or app_id already swapped. pretend its the former and create a new user. if we get another error, then its the latter
+                return lbryio.call("user", "new", {auth_token: "", language: "en", app_id: app_id}, "post");
+              }
+              throw err;
+            })
+            .then(response => {
+              if (!response.auth_token) {
+                throw new Error(__("auth_token is missing from response"));
+              }
+              return lbryio.setAuthToken(response.auth_token);
+            });
+        })
+        .then(lbryio.getCurrentUser())
+        .then(resolve, reject);
     });
   }
+
   return lbryio._authenticationPromise;
 };
 

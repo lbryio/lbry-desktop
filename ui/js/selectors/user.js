@@ -69,7 +69,7 @@ export const selectUserIsVerificationCandidate = createSelector(
   selectEmailToVerify,
   selectUser,
   (isEligible, isApproved, emailToVerify, user) =>
-    (isEligible && !isApproved) || (emailToVerify && user && !user.has_email)
+    emailToVerify && user
 );
 
 export const selectUserIsAuthRequested = createSelector(
