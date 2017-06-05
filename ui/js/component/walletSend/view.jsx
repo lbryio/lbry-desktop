@@ -29,7 +29,7 @@ const WalletSend = (props) => {
           <FormRow label={__("Recipient Address")} placeholder="bbFxRyXXXXXXXXXXXZD8nE7XTLUxYnddTs" type="text" size="60" onChange={setAddress} value={address} />
         </div>
         <div className="card__actions card__actions--form-submit">
-          <Link button="primary" label={_("Send")} onClick={sendToAddress} disabled={!(parseFloat(amount) > 0.0) || !address} />
+          <Link button="primary" label={__("Send")} onClick={sendToAddress} disabled={!(parseFloat(amount) > 0.0) || !address} />
           <input type='submit' className='hidden' />
         </div>
       </form>
