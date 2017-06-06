@@ -32,11 +32,15 @@
       },
       "backgroundColor": "155B4A"
     },
-    "protocols": [{
-      "name": "lbry",
-      "role": "Viewer",
-      "schemes": ["lbry"]
-    }],
+    "protocols": [
+      {
+        "name": "lbry",
+        "role": "Viewer",
+        "schemes": [
+          "lbry"
+        ]
+      }
+    ],
     "linux": {
       "target": "deb",
       "desktop": {
