@@ -134,8 +134,8 @@ class PublishPage extends React.Component {
 
     if (this.state.isFee) {
       lbry.wallet_unused_address().then((address) => {
-        metadata.fee = {};
-        metadata.fee[this.state.feeCurrency] = {
+        metadata.fee = {
+          currency: this.state.feeCurrency,
           amount: parseFloat(this.state.feeAmount),
           address: address,
         };
