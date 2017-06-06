@@ -1,94 +1,93 @@
 import React from 'react';
-import {FormField, FormRow} from 'component/form.js';
-import SubHeader from 'component/subHeader'
+import { FormField, FormRow } from 'component/form.js';
+import SubHeader from 'component/subHeader';
 import lbry from 'lbry.js';
 
-
 class SettingsPage extends React.Component {
-  constructor(props) {
-    super(props);
+	constructor(props) {
+		super(props);
 
-    const daemonSettings = this.props.daemonSettings
+		const daemonSettings = this.props.daemonSettings;
 
-    this.state = {
-      isMaxUpload: daemonSettings && daemonSettings.max_upload != 0,
-      isMaxDownload: daemonSettings && daemonSettings.max_download != 0,
-      showNsfw: lbry.getClientSetting('showNsfw'),
-      showUnavailable: lbry.getClientSetting('showUnavailable'),
-      language: lbry.getClientSetting('language'),
-    }
-  }
+		this.state = {
+			isMaxUpload: daemonSettings && daemonSettings.max_upload != 0,
+			isMaxDownload: daemonSettings && daemonSettings.max_download != 0,
+			showNsfw: lbry.getClientSetting('showNsfw'),
+			showUnavailable: lbry.getClientSetting('showUnavailable'),
+			language: lbry.getClientSetting('language')
+		};
+	}
 
-  setDaemonSetting(name, value) {
-    this.props.setDaemonSetting(name, value)
-  }
+	setDaemonSetting(name, value) {
+		this.props.setDaemonSetting(name, value);
+	}
 
-  setClientSetting(name, value) {
-    lbry.setClientSetting(name, value)
-    this._onSettingSaveSuccess()
-  }
+	setClientSetting(name, value) {
+		lbry.setClientSetting(name, value);
+		this._onSettingSaveSuccess();
+	}
 
-  onRunOnStartChange(event) {
-    this.setDaemonSetting('run_on_startup', event.target.checked);
-  }
+	onRunOnStartChange(event) {
+		this.setDaemonSetting('run_on_startup', event.target.checked);
+	}
 
-  onShareDataChange(event) {
-    this.setDaemonSetting('share_usage_data', event.target.checked);
-  }
+	onShareDataChange(event) {
+		this.setDaemonSetting('share_usage_data', event.target.checked);
+	}
 
-  onDownloadDirChange(event) {
-    this.setDaemonSetting('download_directory', event.target.value);
-  }
+	onDownloadDirChange(event) {
+		this.setDaemonSetting('download_directory', event.target.value);
+	}
 
-  onMaxUploadPrefChange(isLimited) {
-    if (!isLimited) {
-      this.setDaemonSetting('max_upload', 0.0);
-    }
-    this.setState({
-      isMaxUpload: isLimited
-    });
-  }
+	onMaxUploadPrefChange(isLimited) {
+		if (!isLimited) {
+			this.setDaemonSetting('max_upload', 0.0);
+		}
+		this.setState({
+			isMaxUpload: isLimited
+		});
+	}
 
-  onMaxUploadFieldChange(event) {
-    this.setDaemonSetting('max_upload', Number(event.target.value));
-  }
+	onMaxUploadFieldChange(event) {
+		this.setDaemonSetting('max_upload', Number(event.target.value));
+	}
 
-  onMaxDownloadPrefChange(isLimited) {
-    if (!isLimited) {
-      this.setDaemonSetting('max_download', 0.0);
-    }
-    this.setState({
-      isMaxDownload: isLimited
-    });
-  }
+	onMaxDownloadPrefChange(isLimited) {
+		if (!isLimited) {
+			this.setDaemonSetting('max_download', 0.0);
+		}
+		this.setState({
+			isMaxDownload: isLimited
+		});
+	}
 
-  onMaxDownloadFieldChange(event) {
-    this.setDaemonSetting('max_download', Number(event.target.value));
-  }
+	onMaxDownloadFieldChange(event) {
+		this.setDaemonSetting('max_download', Number(event.target.value));
+	}
 
-  onShowNsfwChange(event) {
-    lbry.setClientSetting('showNsfw', event.target.checked);
-  }
+	onShowNsfwChange(event) {
+		lbry.setClientSetting('showNsfw', event.target.checked);
+	}
 
-  // onLanguageChange(language) {
-  //   lbry.setClientSetting('language', language);
-  //   i18n.setLocale(language);
-  //   this.setState({language: language})
-  // }
+	// onLanguageChange(language) {
+	//   lbry.setClientSetting('language', language);
+	//   i18n.setLocale(language);
+	//   this.setState({language: language})
+	// }
 
-  onShowUnavailableChange(event) {
+	onShowUnavailableChange(event) {}
 
-  }
+	render() {
+		const { daemonSettings } = this.props;
 
-  render() {
-    const {
-      daemonSettings
-    } = this.props
-
-    if (!daemonSettings) {
-      return <main className="main--single-column"><span className="empty">{__("Failed to load settings.")}</span></main>;
-    }
-/*
+		if (!daemonSettings) {
+			return (
+				<main className="main--single-column">
+					<span className="empty">{__('Failed to load settings.')}</span>
+				</main>
+			);
+		}
+		/*
  <section className="card">
  <div className="card__content">
  <h3>Run on Startup</h3>
@@ -101,100 +100,136 @@ class SettingsPage extends React.Component {
  </div>
  </section>
  */
-    return (
-      <main className="main--single-column">
-        <SubHeader />
-        <section className="card">
-          <div className="card__content">
-            <h3>{__("Download Directory")}</h3>
-          </div>
-          <div className="card__content">
-            <FormRow type="directory"
-                     name="download_directory"
-                     defaultValue={daemonSettings.download_directory}
-                     helper={__("LBRY downloads will be saved here.")}
-                     onChange={this.onDownloadDirChange.bind(this)} />
-          </div>
-        </section>
-        <section className="card">
-          <div className="card__content">
-           <h3>{__("Bandwidth Limits")}</h3>
-          </div>
-          <div className="card__content">
-            <div className="form-row__label-row"><div className="form-field__label">{__("Max Upload")}</div></div>
-            <FormRow type="radio"
-                       name="max_upload_pref"
-                       onChange={() => { this.onMaxUploadPrefChange(false) }}
-                       defaultChecked={!this.state.isMaxUpload}
-                       label={__("Unlimited")} />
-            <div className="form-row">
-              <FormField type="radio"
-                         name="max_upload_pref"
-                         onChange={() => { this.onMaxUploadPrefChange(true) }}
-                         defaultChecked={this.state.isMaxUpload}
-                         label={ this.state.isMaxUpload ? __("Up to") : __("Choose limit...") } />
-              { this.state.isMaxUpload ?
-                  <FormField type="number"
-                             min="0"
-                             step=".5"
-                             defaultValue={daemonSettings.max_upload}
-                             placeholder="10"
-                             className="form-field__input--inline"
-                             onChange={this.onMaxUploadFieldChange.bind(this)}
-                  />
-                  : ''
+		return (
+			<main className="main--single-column">
+				<SubHeader />
+				<section className="card">
+					<div className="card__content">
+						<h3>{__('Download Directory')}</h3>
+					</div>
+					<div className="card__content">
+						<FormRow
+							type="directory"
+							name="download_directory"
+							defaultValue={daemonSettings.download_directory}
+							helper={__('LBRY downloads will be saved here.')}
+							onChange={this.onDownloadDirChange.bind(this)}
+						/>
+					</div>
+				</section>
+				<section className="card">
+					<div className="card__content">
+						<h3>{__('Bandwidth Limits')}</h3>
+					</div>
+					<div className="card__content">
+						<div className="form-row__label-row">
+							<div className="form-field__label">{__('Max Upload')}</div>
+						</div>
+						<FormRow
+							type="radio"
+							name="max_upload_pref"
+							onChange={() => {
+								this.onMaxUploadPrefChange(false);
+							}}
+							defaultChecked={!this.state.isMaxUpload}
+							label={__('Unlimited')}
+						/>
+						<div className="form-row">
+							<FormField
+								type="radio"
+								name="max_upload_pref"
+								onChange={() => {
+									this.onMaxUploadPrefChange(true);
+								}}
+								defaultChecked={this.state.isMaxUpload}
+								label={
+									this.state.isMaxUpload ? __('Up to') : __('Choose limit...')
+								}
+							/>
+							{this.state.isMaxUpload
+								? <FormField
+										type="number"
+										min="0"
+										step=".5"
+										defaultValue={daemonSettings.max_upload}
+										placeholder="10"
+										className="form-field__input--inline"
+										onChange={this.onMaxUploadFieldChange.bind(this)}
+									/>
+								: ''}
+							{this.state.isMaxUpload
+								? <span className="form-field__label">MB/s</span>
+								: ''}
+						</div>
+					</div>
+					<div className="card__content">
+						<div className="form-row__label-row">
+							<div className="form-field__label">{__('Max Download')}</div>
+						</div>
+						<FormRow
+							label={__('Unlimited')}
+							type="radio"
+							name="max_download_pref"
+							onChange={() => {
+								this.onMaxDownloadPrefChange(false);
+							}}
+							defaultChecked={!this.state.isMaxDownload}
+						/>
+						<div className="form-row">
+							<FormField
+								type="radio"
+								name="max_download_pref"
+								onChange={() => {
+									this.onMaxDownloadPrefChange(true);
+								}}
+								defaultChecked={this.state.isMaxDownload}
+								label={
+									this.state.isMaxDownload ? __('Up to') : __('Choose limit...')
+								}
+							/>
+							{this.state.isMaxDownload
+								? <FormField
+										type="number"
+										min="0"
+										step=".5"
+										defaultValue={daemonSettings.max_download}
+										placeholder="10"
+										className="form-field__input--inline"
+										onChange={this.onMaxDownloadFieldChange.bind(this)}
+									/>
+								: ''}
+							{this.state.isMaxDownload
+								? <span className="form-field__label">MB/s</span>
+								: ''}
+						</div>
+					</div>
+				</section>
+				<section className="card">
+					<div className="card__content">
+						<h3>{__('Content')}</h3>
+					</div>
+					<div className="card__content">
+						<FormRow
+							type="checkbox"
+							onChange={this.onShowUnavailableChange.bind(this)}
+							defaultChecked={this.state.showUnavailable}
+							label={__('Show unavailable content in search results')}
+						/>
+					</div>
+					<div className="card__content">
+						<FormRow
+							label={__('Show NSFW content')}
+							type="checkbox"
+							onChange={this.onShowNsfwChange.bind(this)}
+							defaultChecked={this.state.showNsfw}
+							helper={__(
+								'NSFW content may include nudity, intense sexuality, profanity, or other adult content. By displaying NSFW content, you are affirming you are of legal age to view mature content in your country or jurisdiction.  '
+							)}
+						/>
+					</div>
+				</section>
 
-              }
-              { this.state.isMaxUpload ?  <span className="form-field__label">MB/s</span> : '' }
-            </div>
-          </div>
-          <div className="card__content">
-            <div className="form-row__label-row"><div className="form-field__label">{__("Max Download")}</div></div>
-            <FormRow label={__("Unlimited")}
-                       type="radio"
-                       name="max_download_pref"
-                       onChange={() => { this.onMaxDownloadPrefChange(false) }}
-                       defaultChecked={!this.state.isMaxDownload} />
-            <div className="form-row">
-              <FormField type="radio"
-                         name="max_download_pref"
-                         onChange={() => { this.onMaxDownloadPrefChange(true) }}
-                         defaultChecked={this.state.isMaxDownload}
-                         label={ this.state.isMaxDownload ? __("Up to") : __("Choose limit...") } />
-              { this.state.isMaxDownload ?
-                <FormField type="number"
-                           min="0"
-                           step=".5"
-                           defaultValue={daemonSettings.max_download}
-                           placeholder="10"
-                           className="form-field__input--inline"
-                           onChange={this.onMaxDownloadFieldChange.bind(this)}
-                />
-                : ''
-
-              }
-              { this.state.isMaxDownload ?  <span className="form-field__label">MB/s</span> : '' }
-            </div>
-          </div>
-        </section>
-        <section className="card">
-          <div className="card__content">
-            <h3>{__("Content")}</h3>
-          </div>
-          <div className="card__content">
-            <FormRow type="checkbox"
-                     onChange={this.onShowUnavailableChange.bind(this)}
-                     defaultChecked={this.state.showUnavailable}
-                     label={__("Show unavailable content in search results")}  />
-          </div>
-          <div className="card__content">
-            <FormRow label={__("Show NSFW content")} type="checkbox"
-                     onChange={this.onShowNsfwChange.bind(this)}  defaultChecked={this.state.showNsfw}
-                     helper={__("NSFW content may include nudity, intense sexuality, profanity, or other adult content. By displaying NSFW content, you are affirming you are of legal age to view mature content in your country or jurisdiction.  ")} />
-          </div>
-        </section>
-        
-        {/*} 
+				{/*} 
         <section className="card">
           <div className="card__content">
             <h3>{__("Language")}</h3>
@@ -217,20 +252,24 @@ class SettingsPage extends React.Component {
           </div>
         </section>*/}
 
-        <section className="card">
-          <div className="card__content">
-            <h3>{__("Share Diagnostic Data")}</h3>
-          </div>
-          <div className="card__content">
-            <FormRow type="checkbox"
-                     onChange={this.onShareDataChange.bind(this)}
-                     defaultChecked={daemonSettings.share_usage_data}
-                     label={__("Help make LBRY better by contributing diagnostic data about my usage")} />
-          </div>
-        </section>
-       </main>
-    );
-  }
+				<section className="card">
+					<div className="card__content">
+						<h3>{__('Share Diagnostic Data')}</h3>
+					</div>
+					<div className="card__content">
+						<FormRow
+							type="checkbox"
+							onChange={this.onShareDataChange.bind(this)}
+							defaultChecked={daemonSettings.share_usage_data}
+							label={__(
+								'Help make LBRY better by contributing diagnostic data about my usage'
+							)}
+						/>
+					</div>
+				</section>
+			</main>
+		);
+	}
 }
 
 export default SettingsPage;

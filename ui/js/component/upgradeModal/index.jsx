@@ -1,19 +1,13 @@
-import React from 'react'
-import {
-  connect
-} from 'react-redux'
-import {
-  doDownloadUpgrade,
-  doSkipUpgrade,
-} from 'actions/app'
-import UpgradeModal from './view'
+import React from 'react';
+import { connect } from 'react-redux';
+import { doDownloadUpgrade, doSkipUpgrade } from 'actions/app';
+import UpgradeModal from './view';
 
-const select = (state) => ({
-})
+const select = state => ({});
 
-const perform = (dispatch) => ({
-  downloadUpgrade: () => dispatch(doDownloadUpgrade()),
-  skipUpgrade: () => dispatch(doSkipUpgrade()),
-})
+const perform = dispatch => ({
+	downloadUpgrade: () => dispatch(doDownloadUpgrade()),
+	skipUpgrade: () => dispatch(doSkipUpgrade())
+});
 
-export default connect(select, perform)(UpgradeModal)
+export default connect(select, perform)(UpgradeModal);
