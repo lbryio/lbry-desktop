@@ -13,6 +13,9 @@ reducers[types.RESOLVE_URI_COMPLETED] = function(state, action) {
   if (claim) {
     byId[claim.claim_id] = claim;
     byUri[uri] = claim.claim_id;
+  } else if (claim === undefined && certificate !== undefined) {
+    byId[certificate.claim_id] = certificate;
+    byUri[uri] = certificate.claim_id;
   } else {
     byUri[uri] = null;
   }
