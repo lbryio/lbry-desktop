@@ -5,7 +5,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "webpack-dev-server --devtool eval --progress --colors --inline",
-    "precommit": "lint-staged"
+    "precommit": "lint-staged",
+    "prettier": "prettier --use-tabs --single-quote --write js/*/*.{js,jsx}"
   },
   "keywords": [
     "lbry"
