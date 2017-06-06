@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<installer-script minSpecVersion="1.000000" authoringTool="com.apple.PackageMaker" authoringToolVersion="3.0.3" authoringToolBuild="174">
+    <title>LBRY 0.10.0</title>
+    <options customize="never" allow-external-scripts="no"/>
+    <domains enable_anywhere="true"/>
+    <installation-check script="pm_install_check();"/>
+    <script>function pm_install_check() {
+  if(!(system.compareVersions(system.version.ProductVersion,'10.5') >= 0)) {
+    my.result.title = 'Failure';
+    my.result.message = 'You need at least Mac OS X 10.5 to install LBRY.';
+    my.result.type = 'Fatal';
+    return false;
+  }
+  return true;
+}
+</script>
+    <choices-outline>
+        <line choice="choice1"/>
+    </choices-outline>
+    <choice id="choice1" title="base">
+        <pkg-ref id="io.lbry.LBRY.pkg"/>
+    </choice>
+    <pkg-ref id="io.lbry.LBRY.pkg" installKBytes="173006" version="0.10.0rc7" auth="Root">#base.pkg</pkg-ref>
+</installer-script>

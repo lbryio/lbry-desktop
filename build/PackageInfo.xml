@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<pkg-info format-version="2" identifier="io.lbry.LBRY.pkg" version="0.10.0rc7" install-location="/" auth="root">
+  <payload installKBytes="129568" numberOfFiles="3608"/>
+  <bundle-version>
+    <bundle id="io.lbry.LBRY" CFBundleIdentifier="io.lbry.LBRY" path="./Applications/LBRY.app" CFBundleVersion="0.10.0rc7"/>
+  </bundle-version>
+</pkg-info>

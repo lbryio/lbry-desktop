@@ -44,6 +44,10 @@ to create distributable packages, which is run by calling:
 
 `node_modules/.bin/build -p never`
 
+note, if you are building for macos on a linux machine you need to run
+
+`./pkgbuild.sh`
+
 ### Development on Windows
 
 This project has currently only been worked on in Linux and macOS. If you are on Windows, you can
