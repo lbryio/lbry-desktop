@@ -1,39 +1,27 @@
-import React from 'react'
-import {
-  connect,
-} from 'react-redux'
-import {
-  doCloseModal,
-} from 'actions/app'
-import {
-  selectCurrentModal,
-} from 'selectors/app'
-import {
-  doPurchaseUri,
-  doLoadVideo,
-} from 'actions/content'
+import React from "react";
+import { connect } from "react-redux";
+import { doCloseModal } from "actions/app";
+import { selectCurrentModal } from "selectors/app";
+import { doPurchaseUri, doLoadVideo } from "actions/content";
 import {
   makeSelectMetadataForUri,
   makeSelectContentTypeForUri,
-} from 'selectors/claims'
+} from "selectors/claims";
 import {
   makeSelectFileInfoForUri,
   makeSelectLoadingForUri,
   makeSelectDownloadingForUri,
-} from 'selectors/file_info'
-import {
-  makeSelectCostInfoForUri,
-} from 'selectors/cost_info'
-import Video from './view'
-
+} from "selectors/file_info";
+import { makeSelectCostInfoForUri } from "selectors/cost_info";
+import Video from "./view";
 
 const makeSelect = () => {
-  const selectCostInfo = makeSelectCostInfoForUri()
-  const selectFileInfo = makeSelectFileInfoForUri()
-  const selectIsLoading = makeSelectLoadingForUri()
-  const selectIsDownloading = makeSelectDownloadingForUri()
-  const selectMetadata = makeSelectMetadataForUri()
-  const selectContentType = makeSelectContentTypeForUri()
+  const selectCostInfo = makeSelectCostInfoForUri();
+  const selectFileInfo = makeSelectFileInfoForUri();
+  const selectIsLoading = makeSelectLoadingForUri();
+  const selectIsDownloading = makeSelectDownloadingForUri();
+  const selectMetadata = makeSelectMetadataForUri();
+  const selectContentType = makeSelectContentTypeForUri();
 
   const select = (state, props) => ({
     costInfo: selectCostInfo(state, props),
@@ -43,15 +31,15 @@ const makeSelect = () => {
     isLoading: selectIsLoading(state, props),
     isDownloading: selectIsDownloading(state, props),
     contentType: selectContentType(state, props),
-  })
+  });
 
-  return select
-}
+  return select;
+};
 
-const perform = (dispatch) => ({
-  loadVideo: (uri) => dispatch(doLoadVideo(uri)),
-  purchaseUri: (uri) => dispatch(doPurchaseUri(uri, 'affirmPurchaseAndPlay')),
+const perform = dispatch => ({
+  loadVideo: uri => dispatch(doLoadVideo(uri)),
+  purchaseUri: uri => dispatch(doPurchaseUri(uri, "affirmPurchaseAndPlay")),
   closeModal: () => dispatch(doCloseModal()),
-})
+});
 
-export default connect(makeSelect, perform)(Video)
+export default connect(makeSelect, perform)(Video);

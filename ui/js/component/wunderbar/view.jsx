@@ -1,14 +1,14 @@
-import React from 'react';
-import lbryuri from 'lbryuri.js';
-import {Icon} from 'component/common.js';
+import React from "react";
+import lbryuri from "lbryuri.js";
+import { Icon } from "component/common.js";
 
 class WunderBar extends React.PureComponent {
-  static TYPING_TIMEOUT = 800
+  static TYPING_TIMEOUT = 800;
 
   static propTypes = {
     onSearch: React.PropTypes.func.isRequired,
-    onSubmit: React.PropTypes.func.isRequired
-  }
+    onSubmit: React.PropTypes.func.isRequired,
+  };
 
   constructor(props) {
     super(props);
@@ -24,7 +24,7 @@ class WunderBar extends React.PureComponent {
     this.onReceiveRef = this.onReceiveRef.bind(this);
     this.state = {
       address: this.props.address,
-      icon: this.props.icon
+      icon: this.props.icon,
     };
   }
 
@@ -35,13 +35,11 @@ class WunderBar extends React.PureComponent {
   }
 
   onChange(event) {
-
-    if (this._userTypingTimer)
-    {
+    if (this._userTypingTimer) {
       clearTimeout(this._userTypingTimer);
     }
 
-    this.setState({ address: event.target.value })
+    this.setState({ address: event.target.value });
 
     this._isSearchDispatchPending = true;
 
@@ -58,7 +56,10 @@ class WunderBar extends React.PureComponent {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.viewingPage !== this.props.viewingPage || nextProps.address != this.props.address) {
+    if (
+      nextProps.viewingPage !== this.props.viewingPage ||
+      nextProps.address != this.props.address
+    ) {
       this.setState({ address: nextProps.address, icon: nextProps.icon });
     }
   }
@@ -67,14 +68,17 @@ class WunderBar extends React.PureComponent {
     this._stateBeforeSearch = this.state;
     let newState = {
       icon: "icon-search",
-      isActive: true
-    }
+      isActive: true,
+    };
 
     this._focusPending = true;
     //below is hacking, improved when we have proper routing
-    if (!this.state.address.startsWith('lbry://') && this.state.icon !== "icon-search") //onFocus, if they are not on an exact URL or a search page, clear the bar
-    {
-      newState.address = '';
+    if (
+      !this.state.address.startsWith("lbry://") &&
+      this.state.icon !== "icon-search"
+    ) {
+      //onFocus, if they are not on an exact URL or a search page, clear the bar
+      newState.address = "";
     }
     this.setState(newState);
   }
@@ -83,14 +87,13 @@ class WunderBar extends React.PureComponent {
     if (this._isSearchDispatchPending) {
       setTimeout(() => {
         this.onBlur();
-      }, WunderBar.TYPING_TIMEOUT + 1)
+      }, WunderBar.TYPING_TIMEOUT + 1);
     } else {
-      let commonState = {isActive: false};
+      let commonState = { isActive: false };
       if (this._resetOnNextBlur) {
         this.setState(Object.assign({}, this._stateBeforeSearch, commonState));
         this._input.value = this.state.address;
-      }
-      else {
+      } else {
         this._resetOnNextBlur = true;
         this._stateBeforeSearch = this.state;
         this.setState(commonState);
@@ -116,9 +119,8 @@ class WunderBar extends React.PureComponent {
 
   onKeyPress(event) {
     if (event.charCode == 13 && this._input.value) {
-
       let uri = null,
-          method = "onSubmit";
+        method = "onSubmit";
 
       this._resetOnNextBlur = false;
       clearTimeout(this._userTypingTimer);
@@ -126,7 +128,8 @@ class WunderBar extends React.PureComponent {
       try {
         uri = lbryuri.normalize(this._input.value);
         this.setState({ value: uri });
-      } catch (error) { //then it's not a valid URL, so let's search
+      } catch (error) {
+        //then it's not a valid URL, so let's search
         uri = this._input.value;
         method = "onSearch";
       }
@@ -142,16 +145,23 @@ class WunderBar extends React.PureComponent {
 
   render() {
     return (
-      <div className={'wunderbar' + (this.state.isActive ? ' wunderbar--active' : '')}>
-        {this.state.icon ? <Icon fixed icon={this.state.icon} /> : '' }
-        <input className="wunderbar__input" type="search"
-               ref={this.onReceiveRef}
-               onFocus={this.onFocus}
-               onBlur={this.onBlur}
-               onChange={this.onChange}
-               onKeyPress={this.onKeyPress}
-               value={this.state.address}
-               placeholder={__("Find movies, music, games, and more")} />
+      <div
+        className={
+          "wunderbar" + (this.state.isActive ? " wunderbar--active" : "")
+        }
+      >
+        {this.state.icon ? <Icon fixed icon={this.state.icon} /> : ""}
+        <input
+          className="wunderbar__input"
+          type="search"
+          ref={this.onReceiveRef}
+          onFocus={this.onFocus}
+          onBlur={this.onBlur}
+          onChange={this.onChange}
+          onKeyPress={this.onKeyPress}
+          value={this.state.address}
+          placeholder={__("Find movies, music, games, and more")}
+        />
       </div>
     );
   }

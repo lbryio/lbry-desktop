@@ -1,9 +1,9 @@
 //@TODO: Customize advice based on OS
-import React from 'react';
-import lbry from 'lbry.js';
-import Link from 'component/link';
-import SubHeader from 'component/subHeader'
-import {BusyMessage} from 'component/common'
+import React from "react";
+import lbry from "lbry.js";
+import Link from "component/link";
+import SubHeader from "component/subHeader";
+import { BusyMessage } from "component/common";
 
 class HelpPage extends React.Component {
   constructor(props) {
@@ -13,23 +13,23 @@ class HelpPage extends React.Component {
       versionInfo: null,
       lbryId: null,
       uiVersion: null,
-      upgradeAvailable: null
+      upgradeAvailable: null,
     };
   }
 
   componentWillMount() {
-    lbry.getAppVersionInfo().then(({remoteVersion, upgradeAvailable}) => {
+    lbry.getAppVersionInfo().then(({ remoteVersion, upgradeAvailable }) => {
       this.setState({
         uiVersion: remoteVersion,
-        upgradeAvailable: upgradeAvailable
+        upgradeAvailable: upgradeAvailable,
       });
     });
-    lbry.call('version', {}, (info) => {
+    lbry.call("version", {}, info => {
       this.setState({
-        versionInfo: info
-      })
-    })
-    lbry.getSessionInfo((info) => {
+        versionInfo: info,
+      });
+    });
+    lbry.getSessionInfo(info => {
       this.setState({
         lbryId: info.lbry_id,
       });
@@ -39,23 +39,23 @@ class HelpPage extends React.Component {
   render() {
     let ver, osName, platform, newVerLink;
 
-    const {
-      navigate
-    } = this.props
+    const { navigate } = this.props;
 
     if (this.state.versionInfo) {
       ver = this.state.versionInfo;
-      if (ver.os_system == 'Darwin') {
-        osName = (parseInt(ver.os_release.match(/^\d+/)) < 16 ? 'Mac OS X' : 'Mac OS');
+      if (ver.os_system == "Darwin") {
+        osName = parseInt(ver.os_release.match(/^\d+/)) < 16
+          ? "Mac OS X"
+          : "Mac OS";
 
-        platform = `${osName} ${ver.os_release}`
-        newVerLink = 'https://lbry.io/get/lbry.dmg';
-      } else if (ver.os_system == 'Linux') {
+        platform = `${osName} ${ver.os_release}`;
+        newVerLink = "https://lbry.io/get/lbry.dmg";
+      } else if (ver.os_system == "Linux") {
         platform = `Linux (${ver.platform})`;
-        newVerLink = 'https://lbry.io/get/lbry.deb';
+        newVerLink = "https://lbry.io/get/lbry.deb";
       } else {
         platform = `Windows (${ver.platform})`;
-        newVerLink = 'https://lbry.io/get/lbry.msi';
+        newVerLink = "https://lbry.io/get/lbry.msi";
       }
     } else {
       ver = null;
@@ -70,7 +70,14 @@ class HelpPage extends React.Component {
           </div>
           <div className="card__content">
             <p>{__("Our FAQ answers many common questions.")}</p>
-            <p><Link href="https://lbry.io/faq" label={__("Read the FAQ")} icon="icon-question" button="alt"/></p>
+            <p>
+              <Link
+                href="https://lbry.io/faq"
+                label={__("Read the FAQ")}
+                icon="icon-question"
+                button="alt"
+              />
+            </p>
           </div>
         </section>
         <section className="card">
@@ -79,56 +86,77 @@ class HelpPage extends React.Component {
           </div>
           <div className="card__content">
             <p>
-              {__("Live help is available most hours in the")} <strong>#help</strong> {__("channel of our Slack chat room.")}
+              {__("Live help is available most hours in the")}
+              {" "}<strong>#help</strong>
+              {" "}{__("channel of our Slack chat room.")}
             </p>
             <p>
-              <Link button="alt" label={__("Join Our Slack")} icon="icon-slack" href="https://slack.lbry.io" />
+              <Link
+                button="alt"
+                label={__("Join Our Slack")}
+                icon="icon-slack"
+                href="https://slack.lbry.io"
+              />
             </p>
           </div>
         </section>
         <section className="card">
-          <div className="card__title-primary"><h3>{__("Report a Bug")}</h3></div>
+          <div className="card__title-primary">
+            <h3>{__("Report a Bug")}</h3>
+          </div>
           <div className="card__content">
             <p>{__("Did you find something wrong?")}</p>
-            <p><Link onClick={() => navigate('report')} label={__("Submit a Bug Report")} icon="icon-bug" button="alt" /></p>
-            <div className="meta">{__("Thanks! LBRY is made by its users.")}</div>
+            <p>
+              <Link
+                onClick={() => navigate("report")}
+                label={__("Submit a Bug Report")}
+                icon="icon-bug"
+                button="alt"
+              />
+            </p>
+            <div className="meta">
+              {__("Thanks! LBRY is made by its users.")}
+            </div>
           </div>
         </section>
         <section className="card">
-           <div className="card__title-primary"><h3>{__("About")}</h3></div>
-           <div className="card__content">
-           { this.state.upgradeAvailable === null ? '' :
-            ( this.state.upgradeAvailable ?
-               <p>{__("A newer version of LBRY is available.")} <Link href={newVerLink} label={__("Download now!")} /></p>
-               : <p>{__("Your copy of LBRY is up to date.")}</p>)}
-           { this.state.uiVersion && ver ?
-             <table className="table-standard">
-               <tbody>
-                 <tr>
-                   <th>{__("daemon (lbrynet)")}</th>
-                   <td>{ver.lbrynet_version}</td>
-                 </tr>
-                 <tr>
-                   <th>{__("wallet (lbryum)")}</th>
-                   <td>{ver.lbryum_version}</td>
-                 </tr>
-                 <tr>
-                   <th>{__("interface")}</th>
-                   <td>{this.state.uiVersion}</td>
-                 </tr>
-                 <tr>
-                   <th>{__("Platform")}</th>
-                   <td>{platform}</td>
-                 </tr>
-                 <tr>
-                   <th>{__("Installation ID")}</th>
-                   <td>{this.state.lbryId}</td>
-                 </tr>
-               </tbody>
-             </table> :
-             <BusyMessage message={__("Looking up version info")} />
-            }
-         </div>
+          <div className="card__title-primary"><h3>{__("About")}</h3></div>
+          <div className="card__content">
+            {this.state.upgradeAvailable === null
+              ? ""
+              : this.state.upgradeAvailable
+                ? <p>
+                    {__("A newer version of LBRY is available.")}
+                    {" "}<Link href={newVerLink} label={__("Download now!")} />
+                  </p>
+                : <p>{__("Your copy of LBRY is up to date.")}</p>}
+            {this.state.uiVersion && ver
+              ? <table className="table-standard">
+                  <tbody>
+                    <tr>
+                      <th>{__("daemon (lbrynet)")}</th>
+                      <td>{ver.lbrynet_version}</td>
+                    </tr>
+                    <tr>
+                      <th>{__("wallet (lbryum)")}</th>
+                      <td>{ver.lbryum_version}</td>
+                    </tr>
+                    <tr>
+                      <th>{__("interface")}</th>
+                      <td>{this.state.uiVersion}</td>
+                    </tr>
+                    <tr>
+                      <th>{__("Platform")}</th>
+                      <td>{platform}</td>
+                    </tr>
+                    <tr>
+                      <th>{__("Installation ID")}</th>
+                      <td>{this.state.lbryId}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              : <BusyMessage message={__("Looking up version info")} />}
+          </div>
         </section>
       </main>
     );

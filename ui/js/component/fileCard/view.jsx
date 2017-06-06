@@ -1,42 +1,33 @@
-import React from 'react';
-import lbry from 'lbry.js';
-import lbryuri from 'lbryuri.js';
-import Link from 'component/link';
-import {Thumbnail, TruncatedText, Icon} from 'component/common';
-import FilePrice from 'component/filePrice'
-import UriIndicator from 'component/uriIndicator';
+import React from "react";
+import lbry from "lbry.js";
+import lbryuri from "lbryuri.js";
+import Link from "component/link";
+import { Thumbnail, TruncatedText, Icon } from "component/common";
+import FilePrice from "component/filePrice";
+import UriIndicator from "component/uriIndicator";
 
 class FileCard extends React.Component {
   componentWillMount() {
-    this.resolve(this.props)
+    this.resolve(this.props);
   }
 
   componentWillReceiveProps(nextProps) {
-    this.resolve(nextProps)
+    this.resolve(nextProps);
   }
 
   resolve(props) {
-    const {
-      isResolvingUri,
-      resolveUri,
-      claim,
-      uri,
-    } = props
+    const { isResolvingUri, resolveUri, claim, uri } = props;
 
-    if(!isResolvingUri && claim === undefined && uri) {
-      resolveUri(uri)
+    if (!isResolvingUri && claim === undefined && uri) {
+      resolveUri(uri);
     }
   }
 
   componentWillUnmount() {
-    const {
-      isResolvingUri,
-      cancelResolveUri,
-      uri
-    } = this.props
+    const { isResolvingUri, cancelResolveUri, uri } = this.props;
 
     if (isResolvingUri) {
-      cancelResolveUri(uri)
+      cancelResolveUri(uri);
     }
   }
 
@@ -53,55 +44,75 @@ class FileCard extends React.Component {
   }
 
   render() {
-
-    const {
-      claim,
-      fileInfo,
-      metadata,
-      isResolvingUri,
-      navigate,
-    } = this.props
+    const { claim, fileInfo, metadata, isResolvingUri, navigate } = this.props;
 
     const uri = lbryuri.normalize(this.props.uri);
-    const title = !isResolvingUri && metadata && metadata.title ? metadata.title : uri;
+    const title = !isResolvingUri && metadata && metadata.title
+      ? metadata.title
+      : uri;
     const obscureNsfw = this.props.obscureNsfw && metadata && metadata.nsfw;
 
-    let description = ""
+    let description = "";
     if (isResolvingUri) {
-      description = __("Loading...")
+      description = __("Loading...");
     } else if (metadata && metadata.description) {
-      description = metadata.description
+      description = metadata.description;
     } else if (claim === null) {
-      description = __("This address contains no content.")
+      description = __("This address contains no content.");
     }
 
     return (
-      <section className={ 'card card--small card--link ' + (obscureNsfw ? 'card--obscured ' : '') } onMouseEnter={this.handleMouseOver.bind(this)} onMouseLeave={this.handleMouseOut.bind(this)}>
+      <section
+        className={
+          "card card--small card--link " +
+          (obscureNsfw ? "card--obscured " : "")
+        }
+        onMouseEnter={this.handleMouseOver.bind(this)}
+        onMouseLeave={this.handleMouseOut.bind(this)}
+      >
         <div className="card__inner">
-          <Link onClick={() => navigate('/show', { uri })} className="card__link">
+          <Link
+            onClick={() => navigate("/show", { uri })}
+            className="card__link"
+          >
             <div className="card__title-identity">
-              <h5 title={title}><TruncatedText lines={1}>{title}</TruncatedText></h5>
+              <h5 title={title}>
+                <TruncatedText lines={1}>{title}</TruncatedText>
+              </h5>
               <div className="card__subtitle">
-                <span style={{float: "right"}}>
+                <span style={{ float: "right" }}>
                   <FilePrice uri={uri} />
-                  { fileInfo ? <span>{' '}<Icon fixed icon="icon-folder" /></span> : '' }
+                  {fileInfo
+                    ? <span>{" "}<Icon fixed icon="icon-folder" /></span>
+                    : ""}
                 </span>
                 <UriIndicator uri={uri} />
               </div>
             </div>
-            {metadata && metadata.thumbnail &&
-            <div className="card__media" style={{ backgroundImage: "url('" + metadata.thumbnail + "')" }}></div>
-            }
+            {metadata &&
+              metadata.thumbnail &&
+              <div
+                className="card__media"
+                style={{ backgroundImage: "url('" + metadata.thumbnail + "')" }}
+              />}
             <div className="card__content card__subtext card__subtext--two-lines">
-                <TruncatedText lines={2}>{description}</TruncatedText>
+              <TruncatedText lines={2}>{description}</TruncatedText>
             </div>
           </Link>
           {obscureNsfw && this.state.hovered
-            ? <div className='card-overlay'>
-             <p>
-               {__("This content is Not Safe For Work. To view adult content, please change your")} <Link className="button-text" onClick={() => navigate('settings')} label={__("Settings")} />.
-             </p>
-           </div>
+            ? <div className="card-overlay">
+                <p>
+                  {__(
+                    "This content is Not Safe For Work. To view adult content, please change your"
+                  )}
+                  {" "}
+                  <Link
+                    className="button-text"
+                    onClick={() => navigate("settings")}
+                    label={__("Settings")}
+                  />.
+                </p>
+              </div>
             : null}
         </div>
       </section>
@@ -109,4 +120,4 @@ class FileCard extends React.Component {
   }
 }
 
-export default FileCard
+export default FileCard;
