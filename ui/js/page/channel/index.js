@@ -1,30 +1,26 @@
-import React from 'react'
-import {
-  connect
-} from 'react-redux'
-import {
-  doFetchClaimsByChannel
-} from 'actions/content'
+import React from "react";
+import { connect } from "react-redux";
+import { doFetchClaimsByChannel } from "actions/content";
 import {
   makeSelectClaimForUri,
-  makeSelectClaimsInChannelForUri
-} from 'selectors/claims'
-import ChannelPage from './view'
+  makeSelectClaimsInChannelForUri,
+} from "selectors/claims";
+import ChannelPage from "./view";
 
 const makeSelect = () => {
   const selectClaim = makeSelectClaimForUri(),
-        selectClaimsInChannel = makeSelectClaimsInChannelForUri()
+    selectClaimsInChannel = makeSelectClaimsInChannelForUri();
 
   const select = (state, props) => ({
     claim: selectClaim(state, props),
-    claimsInChannel: selectClaimsInChannel(state, props)
-  })
+    claimsInChannel: selectClaimsInChannel(state, props),
+  });
 
-  return select
-}
+  return select;
+};
 
-const perform = (dispatch) => ({
-  fetchClaims: (uri) => dispatch(doFetchClaimsByChannel(uri))
-})
+const perform = dispatch => ({
+  fetchClaims: uri => dispatch(doFetchClaimsByChannel(uri)),
+});
 
-export default connect(makeSelect, perform)(ChannelPage)
+export default connect(makeSelect, perform)(ChannelPage);

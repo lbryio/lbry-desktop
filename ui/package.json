@@ -4,7 +4,9 @@
   "description": "LBRY UI",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "webpack-dev-server --devtool eval --progress --colors --inline"
+    "dev": "webpack-dev-server --devtool eval --progress --colors --inline",
+    "precommit": "lint-staged",
+    "prettier": "prettier --trailing-comma es5 --write js/**/*.{js,jsx}"
   },
   "keywords": [
     "lbry"
@@ -52,11 +54,21 @@
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^2.2.3",
     "eslint-plugin-react": "^6.7.1",
+    "husky": "^0.13.4",
     "json-loader": "^0.5.4",
+    "lint-staged": "^3.6.0",
     "node-sass": "^3.13.0",
+    "prettier": "^1.4.2",
     "webpack": "^1.13.3",
     "webpack-dev-server": "^2.4.4",
     "webpack-notifier": "^1.5.0",
     "webpack-target-electron-renderer": "^0.4.0"
+  },
+  "lint-staged": {
+    "gitDir": "../",
+    "js/**/*.{jsx,js}": [
+      "prettier --trailing-comma es5 --write",
+      "git add"
+    ]
   }
 }

@@ -1,31 +1,27 @@
-import React from 'react'
-import {
-  connect,
-} from 'react-redux'
-import {
-  doFetchCostInfoForUri,
-} from 'actions/cost_info'
+import React from "react";
+import { connect } from "react-redux";
+import { doFetchCostInfoForUri } from "actions/cost_info";
 import {
   makeSelectCostInfoForUri,
   makeSelectFetchingCostInfoForUri,
-} from 'selectors/cost_info'
-import FilePrice from './view'
+} from "selectors/cost_info";
+import FilePrice from "./view";
 
 const makeSelect = () => {
-  const selectCostInfoForUri = makeSelectCostInfoForUri()
-  const selectFetchingCostInfoForUri = makeSelectFetchingCostInfoForUri()
+  const selectCostInfoForUri = makeSelectCostInfoForUri();
+  const selectFetchingCostInfoForUri = makeSelectFetchingCostInfoForUri();
 
   const select = (state, props) => ({
     costInfo: selectCostInfoForUri(state, props),
     fetching: selectFetchingCostInfoForUri(state, props),
-  })
+  });
 
-  return select
-}
+  return select;
+};
 
-const perform = (dispatch) => ({
-  fetchCostInfo: (uri) => dispatch(doFetchCostInfoForUri(uri)),
+const perform = dispatch => ({
+  fetchCostInfo: uri => dispatch(doFetchCostInfoForUri(uri)),
   // cancelFetchCostInfo: (uri) => dispatch(doCancelFetchCostInfoForUri(uri))
-})
+});
 
-export default connect(makeSelect, perform)(FilePrice)
+export default connect(makeSelect, perform)(FilePrice);

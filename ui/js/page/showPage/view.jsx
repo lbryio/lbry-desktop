@@ -1,64 +1,57 @@
-import React from 'react';
-import lbryuri from 'lbryuri'
-import {
-  BusyMessage,
-} from 'component/common';
-import ChannelPage from 'page/channel'
-import FilePage from 'page/filePage'
+import React from "react";
+import lbryuri from "lbryuri";
+import { BusyMessage } from "component/common";
+import ChannelPage from "page/channel";
+import FilePage from "page/filePage";
 
-class ShowPage extends React.Component{
+class ShowPage extends React.Component {
   componentWillMount() {
-    this.resolve(this.props)
+    this.resolve(this.props);
   }
 
   componentWillReceiveProps(nextProps) {
-    this.resolve(nextProps)
+    this.resolve(nextProps);
   }
 
   resolve(props) {
-    const {
-      isResolvingUri,
-      resolveUri,
-      claim,
-      uri,
-    } = props
+    const { isResolvingUri, resolveUri, claim, uri } = props;
 
-    if(!isResolvingUri && claim === undefined && uri) {
-      resolveUri(uri)
+    if (!isResolvingUri && claim === undefined && uri) {
+      resolveUri(uri);
     }
   }
 
   render() {
-    const {
-      claim,
-      uri,
-      isResolvingUri,
-    } = this.props
+    const { claim, uri, isResolvingUri } = this.props;
 
     let innerContent = "";
 
     if (isResolvingUri || !claim) {
-      innerContent = <section className="card">
-        <div className="card__inner">
-          <div className="card__title-identity"><h1>{uri}</h1></div>
-        </div>
-        <div className="card__content">
-          { isResolvingUri && <BusyMessage message={__("Loading magic decentralized data...")} /> }
-          { claim === null && <span className="empty">{__("There's nothing at this location.")}</span> }
-        </div>
-      </section>
-    }
-    else if (claim.name.length && claim.name[0] === '@') {
-      innerContent = <ChannelPage uri={uri} />
-    }
-    else if (claim) {
-      innerContent = <FilePage uri={uri} />
+      innerContent = (
+        <section className="card">
+          <div className="card__inner">
+            <div className="card__title-identity"><h1>{uri}</h1></div>
+          </div>
+          <div className="card__content">
+            {isResolvingUri &&
+              <BusyMessage
+                message={__("Loading magic decentralized data...")}
+              />}
+            {claim === null &&
+              <span className="empty">
+                {__("There's nothing at this location.")}
+              </span>}
+          </div>
+        </section>
+      );
+    } else if (claim.name.length && claim.name[0] === "@") {
+      innerContent = <ChannelPage uri={uri} />;
+    } else if (claim) {
+      innerContent = <FilePage uri={uri} />;
     }
 
-    return (
-      <main className="main--single-column">{innerContent}</main>
-    )
+    return <main className="main--single-column">{innerContent}</main>;
   }
 }
 
-export default ShowPage
+export default ShowPage;

@@ -1,41 +1,41 @@
-import React from 'react'
-import lbry from 'lbry'
-import {
-  ExpandableModal
-} from 'component/modal'
+import React from "react";
+import lbry from "lbry";
+import { ExpandableModal } from "component/modal";
 
 class ErrorModal extends React.Component {
   render() {
-    const {
-      modal,
-      closeModal,
-      error
-    } = this.props
+    const { modal, closeModal, error } = this.props;
 
-    const errorObj = typeof error === "string" ? { error: error } : error
+    const errorObj = typeof error === "string" ? { error: error } : error;
 
     const error_key_labels = {
-      connectionString: __('API connection string'),
-      method: __('Method'),
-      params: __('Parameters'),
-      code: __('Error code'),
-      message: __('Error message'),
-      data: __('Error data'),
-    }
+      connectionString: __("API connection string"),
+      method: __("Method"),
+      params: __("Parameters"),
+      code: __("Error code"),
+      message: __("Error message"),
+      data: __("Error data"),
+    };
 
-
-    const errorInfoList = []
+    const errorInfoList = [];
     for (let key of Object.keys(error)) {
-      let val = typeof error[key] == 'string' ? error[key] : JSON.stringify(error[key]);
+      let val = typeof error[key] == "string"
+        ? error[key]
+        : JSON.stringify(error[key]);
       let label = error_key_labels[key];
-      errorInfoList.push(<li key={key}><strong>{label}</strong>: <code>{val}</code></li>);
+      errorInfoList.push(
+        <li key={key}><strong>{label}</strong>: <code>{val}</code></li>
+      );
     }
-    const errorInfo = <ul className="error-modal__error-list">{errorInfoList}</ul>
+    const errorInfo = (
+      <ul className="error-modal__error-list">{errorInfoList}</ul>
+    );
 
-    return(
+    return (
       <ExpandableModal
-        isOpen={modal == 'error'}
-        contentLabel={__("Error")} className="error-modal"
+        isOpen={modal == "error"}
+        contentLabel={__("Error")}
+        className="error-modal"
         overlayClassName="error-modal-overlay"
         onConfirmed={closeModal}
         extraContent={errorInfo}
@@ -43,12 +43,21 @@ class ErrorModal extends React.Component {
         <h3 className="modal__header">{__("Error")}</h3>
 
         <div className="error-modal__content">
-          <div><img className="error-modal__warning-symbol" src={lbry.imagePath('warning.png')} /></div>
-          <p>{__("We're sorry that LBRY has encountered an error. This has been reported and we will investigate the problem.")}</p>
+          <div>
+            <img
+              className="error-modal__warning-symbol"
+              src={lbry.imagePath("warning.png")}
+            />
+          </div>
+          <p>
+            {__(
+              "We're sorry that LBRY has encountered an error. This has been reported and we will investigate the problem."
+            )}
+          </p>
         </div>
       </ExpandableModal>
-    )
+    );
   }
 }
 
-export default ErrorModal
+export default ErrorModal;

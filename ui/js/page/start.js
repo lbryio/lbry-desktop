@@ -1,5 +1,5 @@
-import React from 'react';
-import lbry from '../lbry.js';
+import React from "react";
+import lbry from "../lbry.js";
 
 class StartPage extends React.Component {
   componentWillMount() {

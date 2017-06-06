@@ -1,18 +1,13 @@
-import React from 'react';
-import SubHeader from 'component/subHeader'
-import TransactionList from 'component/transactionList'
-import WalletAddress from 'component/walletAddress'
-import WalletSend from 'component/walletSend'
+import React from "react";
+import SubHeader from "component/subHeader";
+import TransactionList from "component/transactionList";
+import WalletAddress from "component/walletAddress";
+import WalletSend from "component/walletSend";
 
-import {
-  CreditAmount
-} from 'component/common';
+import { CreditAmount } from "component/common";
 
-const WalletPage = (props) => {
-  const {
-    balance,
-    currentPage
-  } = props
+const WalletPage = props => {
+  const { balance, currentPage } = props;
 
   return (
     <main className="main--single-column">
@@ -25,11 +20,11 @@ const WalletPage = (props) => {
           <CreditAmount amount={balance} precision={8} />
         </div>
       </section>
-      { currentPage === 'wallet' ? <TransactionList {...props} /> : '' }
-      { currentPage === 'send' ? <WalletSend {...props} /> : '' }
-      { currentPage === 'receive' ? <WalletAddress /> : '' }
+      {currentPage === "wallet" ? <TransactionList {...props} /> : ""}
+      {currentPage === "send" ? <WalletSend {...props} /> : ""}
+      {currentPage === "receive" ? <WalletAddress /> : ""}
     </main>
-  )
-}
+  );
+};
 
 export default WalletPage;
