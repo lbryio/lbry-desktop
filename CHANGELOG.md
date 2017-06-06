@@ -13,7 +13,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
 
 ### Changed
   * All UI strings are now rendered according to gettext standard, in prep for i18n
-  *
+  * Switched to new fee metadata format
 
 ### Fixed
   * If a daemon is running but unresponsive, startup is no longer blocked indefinitely
