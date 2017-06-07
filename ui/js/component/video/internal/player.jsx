@@ -2,7 +2,6 @@ import React from "react";
 import { Thumbnail } from "component/common";
 import player from "render-media";
 import fs from "fs";
-// const from = require("from2");
 
 class VideoPlayer extends React.Component {
   componentDidMount() {
