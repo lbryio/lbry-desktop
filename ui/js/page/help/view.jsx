@@ -18,12 +18,14 @@ class HelpPage extends React.Component {
   }
 
   componentWillMount() {
-    lbry.getAppVersionInfo().then(({ remoteVersion, upgradeAvailable }) => {
-      this.setState({
-        uiVersion: remoteVersion,
-        upgradeAvailable: upgradeAvailable,
+    lbry
+      .getAppVersionInfo()
+      .then(({ remoteVersion, localVersion, upgradeAvailable }) => {
+        this.setState({
+          uiVersion: localVersion,
+          upgradeAvailable: upgradeAvailable,
+        });
       });
-    });
     lbry.call("version", {}, info => {
       this.setState({
         versionInfo: info,
