@@ -1,11 +1,11 @@
 import React from "react";
 
-const LoadingScreen = ({ statusMessage }) =>
+const LoadingScreen = ({ status }) =>
   <div className="video--loading--screen">
     <div className="loading--spinner" />
 
     <div className="video--loading--status">
-      {statusMessage}
+      {status}
     </div>
   </div>;
 
