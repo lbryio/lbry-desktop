@@ -13,7 +13,6 @@ video {
   color: white;
 }
 
-
 .video-embedded {
   max-width: $width-page-constrained;
   max-height: $height-video-embedded;
@@ -28,6 +27,26 @@ video {
   &.video--active {
     /*background: none;*/
   }
+
+  .video--loading--screen {
+    .loading--spinner {
+      width: 100px;
+      height: 100px;
+      background-color: white;
+      margin: auto;
+
+      animation-name: spin;
+      animation-duration: 1s;
+      animation-iteration-count: infinite;
+      animation-timing-function: linear;
+
+      @keyframes spin {
+        from { transform: rotate(0deg) }
+        to { transform: rotate(-360deg) }
+      }
+    }
+  }
+
   .plyr {
     top: 50%;
     transform: translateY(-50%);

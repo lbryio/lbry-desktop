@@ -4,6 +4,7 @@ import Link from "component/link";
 import Modal from "component/modal";
 import lbry from "lbry";
 import { Thumbnail } from "component/common";
+import LoadingScreen from "./internal/loading-screen";
 
 class VideoPlayButton extends React.Component {
   onPurchaseConfirmed() {
@@ -148,31 +149,27 @@ class Video extends React.Component {
 
     return (
       <div className={klassName}>
-        {isPlaying
-          ? !isReadyToPlay
-            ? <span>
-                {__(
-                  "this is the world's worst loading screen and we shipped our software with it anyway..."
-                )}
-                {" "}<br /><br />{loadStatusMessage}
-              </span>
+        {isPlaying &&
+          (!isReadyToPlay
+            ? <LoadingScreen status={loadStatusMessage} />
             : <VideoPlayer
                 filename={fileInfo.file_name}
                 poster={poster}
                 downloadPath={fileInfo.download_path}
                 mediaType={mediaType}
                 poster={poster}
-              />
-          : <div
-              className="video__cover"
-              style={{ backgroundImage: 'url("' + metadata.thumbnail + '")' }}
-            >
-              <VideoPlayButton
-                startPlaying={this.startPlaying.bind(this)}
-                {...this.props}
-                mediaType={mediaType}
-              />
-            </div>}
+              />)}
+        {!isPlaying &&
+          <div
+            className="video__cover"
+            style={{ backgroundImage: 'url("' + metadata.thumbnail + '")' }}
+          >
+            <VideoPlayButton
+              startPlaying={this.startPlaying.bind(this)}
+              {...this.props}
+              mediaType={mediaType}
+            />
+          </div>}
       </div>
     );
   }
