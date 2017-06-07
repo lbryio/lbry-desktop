@@ -29,25 +29,64 @@ video {
   }
 
   .video--loading--screen {
-    .loading--spinner {
-      width: 100px;
-      height: 100px;
-      background-color: white;
-      margin: auto;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-      animation-name: spin;
-      animation-duration: 1s;
-      animation-iteration-count: infinite;
-      animation-timing-function: linear;
+    .loading--screen--content {
+      .loading--spinner {
+        position: relative;
+        width: 11em;
+        height: 11em;
+        margin: 20px auto;
+        font-size: 3px;
+        border-radius: 50%;
 
-      @keyframes spin {
-        from { transform: rotate(0deg) }
-        to { transform: rotate(-360deg) }
+        background: linear-gradient(to right, #ffffff 10%, rgba(255, 255, 255, 0) 50%);
+        animation: spin 1.4s infinite linear;
+        transform: translateZ(0);
+
+        @keyframes spin {
+          from {
+            transform: rotate(0deg);
+          }
+          to {
+            transform: rotate(360deg);
+          }
+        }
+
+        &:before,
+        &:after {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+        }
+
+        &:before {
+          width: 50%;
+          height: 50%;
+          background: #ffffff;
+          border-radius: 100% 0 0 0;
+        }
+
+        &:after {
+          height: 75%;
+          width: 75%;
+          margin: auto;
+          bottom: 0;
+          right: 0;
+          background: black;
+          border-radius: 50%;
+        }
       }
-    }
-    
-    .video--loading--status {
-      color: white;
+
+
+      .video--loading--status {
+        padding-top: 20px;
+        color: white;
+      }
     }
   }
 
