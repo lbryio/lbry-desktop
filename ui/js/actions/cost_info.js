@@ -10,23 +10,9 @@ export function doFetchCostInfoForUri(uri) {
   return function(dispatch, getState) {
     const state = getState(),
       claim = selectClaimsByUri(state)[uri],
-      isResolving = selectResolvingUris(state).indexOf(uri) !== -1,
       isGenerous = selectSettingsIsGenerous(state);
 
-    if (claim === null) {
-      //claim doesn't exist, nothing to fetch a cost for
-      return;
-    }
-
-    if (!claim) {
-      setTimeout(() => {
-        dispatch(doFetchCostInfoForUri(uri));
-      }, 1000);
-      if (!isResolving) {
-        dispatch(doResolveUri(uri));
-      }
-      return;
-    }
+    if (!claim) return null
 
     function begin() {
       dispatch({
