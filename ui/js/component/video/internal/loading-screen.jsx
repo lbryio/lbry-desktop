@@ -4,7 +4,7 @@ const LoadingScreen = ({ statusMessage }) =>
   <div className="video--loading--screen">
     <div className="loading--spinner" />
 
-    <div>
+    <div className="video--loading--status">
       {statusMessage}
     </div>
   </div>;

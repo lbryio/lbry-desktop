@@ -45,6 +45,10 @@ video {
         to { transform: rotate(-360deg) }
       }
     }
+    
+    .video--loading--status {
+      color: white;
+    }
   }
 
   .plyr {
