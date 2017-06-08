@@ -6,15 +6,13 @@ import FilePage from "page/filePage";
 
 class ShowPage extends React.Component {
   componentWillMount() {
-    this.resolve(this.props);
+    const { isResolvingUri, resolveUri, uri } = this.props;
+
+    if (!isResolvingUri) resolveUri(uri);
   }
 
   componentWillReceiveProps(nextProps) {
-    this.resolve(nextProps);
-  }
-
-  resolve(props) {
-    const { isResolvingUri, resolveUri, claim, uri } = props;
+    const { isResolvingUri, resolveUri, claim, uri } = this.props;
 
     if (!isResolvingUri && claim === undefined && uri) {
       resolveUri(uri);
@@ -26,7 +24,7 @@ class ShowPage extends React.Component {
 
     let innerContent = "";
 
-    if (isResolvingUri || !claim) {
+    if (isResolvingUri && !claim) {
       innerContent = (
         <section className="card">
           <div className="card__inner">
@@ -44,7 +42,7 @@ class ShowPage extends React.Component {
           </div>
         </section>
       );
-    } else if (claim.name.length && claim.name[0] === "@") {
+    } else if (claim && claim.name.length && claim.name[0] === "@") {
       innerContent = <ChannelPage uri={uri} />;
     } else if (claim) {
       innerContent = <FilePage uri={uri} />;
