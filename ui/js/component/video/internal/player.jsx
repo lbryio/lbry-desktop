@@ -3,7 +3,7 @@ import { Thumbnail } from "component/common";
 import player from "render-media";
 import fs from "fs";
 
-class VideoPlayer extends React.Component {
+class VideoPlayer extends React.PureComponent {
   componentDidMount() {
     const elem = this.refs.media;
     const { downloadPath, filename } = this.props;

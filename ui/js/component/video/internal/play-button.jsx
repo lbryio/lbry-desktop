@@ -3,7 +3,7 @@ import FilePrice from "component/filePrice";
 import Link from "component/link";
 import Modal from "component/modal";
 
-class VideoPlayButton extends React.Component {
+class VideoPlayButton extends React.PureComponent {
   onPurchaseConfirmed() {
     this.props.closeModal();
     this.props.startPlaying();
