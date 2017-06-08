@@ -5,7 +5,7 @@ import FileListSearch from "component/fileListSearch";
 import { ToolTip } from "component/tooltip.js";
 import { BusyMessage } from "component/common.js";
 
-class SearchPage extends React.Component {
+class SearchPage extends React.PureComponent {
   render() {
     const { query } = this.props;
 

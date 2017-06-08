@@ -6,7 +6,7 @@ import { Thumbnail, TruncatedText, Icon } from "component/common";
 import FilePrice from "component/filePrice";
 import UriIndicator from "component/uriIndicator";
 
-class FileCard extends React.Component {
+class FileCard extends React.PureComponent {
   componentWillMount() {
     this.resolve(this.props);
   }

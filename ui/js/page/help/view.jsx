@@ -5,7 +5,7 @@ import Link from "component/link";
 import SubHeader from "component/subHeader";
 import { BusyMessage } from "component/common";
 
-class HelpPage extends React.Component {
+class HelpPage extends React.PureComponent {
   constructor(props) {
     super(props);
 

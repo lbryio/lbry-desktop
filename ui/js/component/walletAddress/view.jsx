@@ -2,7 +2,7 @@ import React from "react";
 import Link from "component/link";
 import { Address } from "component/common";
 
-class WalletAddress extends React.Component {
+class WalletAddress extends React.PureComponent {
   componentWillMount() {
     this.props.checkAddressIsMine(this.props.receiveAddress);
   }

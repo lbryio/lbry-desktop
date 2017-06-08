@@ -2,7 +2,7 @@ import React from "react";
 import lbry from "../lbry.js";
 import LoadScreen from "./load_screen.js";
 
-export class SplashScreen extends React.Component {
+export class SplashScreen extends React.PureComponent {
   static propTypes = {
     message: React.PropTypes.string,
     onLoadDone: React.PropTypes.func,

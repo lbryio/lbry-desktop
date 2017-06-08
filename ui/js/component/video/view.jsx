@@ -4,7 +4,7 @@ import VideoPlayer from "./internal/player";
 import VideoPlayButton from "./internal/play-button";
 import LoadingScreen from "./internal/loading-screen";
 
-class Video extends React.Component {
+class Video extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = { isPlaying: false };

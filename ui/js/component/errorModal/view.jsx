@@ -2,7 +2,7 @@ import React from "react";
 import lbry from "lbry";
 import { ExpandableModal } from "component/modal";
 
-class ErrorModal extends React.Component {
+class ErrorModal extends React.PureComponent {
   render() {
     const { modal, closeModal, error } = this.props;
 

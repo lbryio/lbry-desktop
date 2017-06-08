@@ -10,7 +10,7 @@ import { CreditAmount, Address } from "../component/common.js";
 import { getLocal, setLocal } from "../utils.js";
 import rewards from "../rewards";
 
-class SubmitEmailStage extends React.Component {
+class SubmitEmailStage extends React.PureComponent {
   constructor(props) {
     super(props);
 
@@ -94,7 +94,7 @@ class SubmitEmailStage extends React.Component {
   }
 }
 
-class ConfirmEmailStage extends React.Component {
+class ConfirmEmailStage extends React.PureComponent {
   constructor(props) {
     super(props);
 
@@ -191,7 +191,7 @@ class ConfirmEmailStage extends React.Component {
   }
 }
 
-class WelcomeStage extends React.Component {
+class WelcomeStage extends React.PureComponent {
   static propTypes = {
     endAuth: React.PropTypes.func,
   };
@@ -323,7 +323,7 @@ const PendingStage = props => {
   );
 };
 
-class CodeRequiredStage extends React.Component {
+class CodeRequiredStage extends React.PureComponent {
   constructor(props) {
     super(props);
 
@@ -417,7 +417,7 @@ class CodeRequiredStage extends React.Component {
   }
 }
 
-export class AuthOverlay extends React.Component {
+export class AuthOverlay extends React.PureComponent {
   constructor(props) {
     super(props);
 

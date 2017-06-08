@@ -1,7 +1,7 @@
 import React from "react";
 import { Address, BusyMessage, CreditAmount } from "component/common";
 
-class TransactionList extends React.Component {
+class TransactionList extends React.PureComponent {
   componentWillMount() {
     this.props.fetchTransactions();
   }

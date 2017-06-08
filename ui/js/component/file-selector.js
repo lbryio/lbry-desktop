@@ -1,7 +1,7 @@
 import React from "react";
 
 const { remote } = require("electron");
-class FileSelector extends React.Component {
+class FileSelector extends React.PureComponent {
   static propTypes = {
     type: React.PropTypes.oneOf(["file", "directory"]),
     initPath: React.PropTypes.string,

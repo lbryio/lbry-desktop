@@ -2,7 +2,7 @@ import React from "react";
 import lbry from "../lbry.js";
 
 //component/icon.js
-export class Icon extends React.Component {
+export class Icon extends React.PureComponent {
   static propTypes = {
     icon: React.PropTypes.string.isRequired,
     className: React.PropTypes.string,
@@ -21,7 +21,7 @@ export class Icon extends React.Component {
   }
 }
 
-export class TruncatedText extends React.Component {
+export class TruncatedText extends React.PureComponent {
   static propTypes = {
     lines: React.PropTypes.number,
   };
@@ -42,7 +42,7 @@ export class TruncatedText extends React.Component {
   }
 }
 
-export class BusyMessage extends React.Component {
+export class BusyMessage extends React.PureComponent {
   static propTypes = {
     message: React.PropTypes.string,
   };
@@ -54,13 +54,13 @@ export class BusyMessage extends React.Component {
   }
 }
 
-export class CurrencySymbol extends React.Component {
+export class CurrencySymbol extends React.PureComponent {
   render() {
     return <span>LBC</span>;
   }
 }
 
-export class CreditAmount extends React.Component {
+export class CreditAmount extends React.PureComponent {
   static propTypes = {
     amount: React.PropTypes.number.isRequired,
     precision: React.PropTypes.number,
@@ -116,7 +116,7 @@ let addressStyle = {
   fontFamily:
     '"Consolas", "Lucida Console", "Adobe Source Code Pro", monospace',
 };
-export class Address extends React.Component {
+export class Address extends React.PureComponent {
   static propTypes = {
     address: React.PropTypes.string,
   };
@@ -146,7 +146,7 @@ export class Address extends React.Component {
   }
 }
 
-export class Thumbnail extends React.Component {
+export class Thumbnail extends React.PureComponent {
   static propTypes = {
     src: React.PropTypes.string,
   };

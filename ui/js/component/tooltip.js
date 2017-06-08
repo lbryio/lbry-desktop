@@ -1,6 +1,6 @@
 import React from "react";
 
-export class ToolTip extends React.Component {
+export class ToolTip extends React.PureComponent {
   static propTypes = {
     body: React.PropTypes.string.isRequired,
     label: React.PropTypes.string.isRequired,
