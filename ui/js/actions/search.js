@@ -4,6 +4,7 @@ import lighthouse from "lighthouse";
 import { doResolveUri } from "actions/content";
 import { doNavigate, doHistoryPush } from "actions/app";
 import { selectCurrentPage } from "selectors/app";
+import batchActions from "util/batchActions";
 
 export function doSearch(query) {
   return function(dispatch, getState) {
@@ -25,22 +26,26 @@ export function doSearch(query) {
       dispatch(doNavigate("search", { query: query }));
     } else {
       lighthouse.search(query).then(results => {
+        const actions = [];
+
         results.forEach(result => {
           const uri = lbryuri.build({
             channelName: result.channel_name,
             contentName: result.name,
             claimId: result.channel_id || result.claim_id,
           });
-          dispatch(doResolveUri(uri));
+          actions.push(doResolveUri(uri));
         });
 
-        dispatch({
+        actions.push({
           type: types.SEARCH_COMPLETED,
           data: {
             query,
             results,
           },
         });
+
+        dispatch(batchActions(...actions));
       });
     }
   };
