@@ -1,6 +1,6 @@
 const {app, BrowserWindow, ipcMain} = require('electron');
 const url = require('url');
-const isDebug = process.env.NODE_ENV === 'development' || true
+const isDebug = process.env.NODE_ENV === 'development'
 
 if (isDebug) {
   require('electron-debug')({showDevTools: true});
