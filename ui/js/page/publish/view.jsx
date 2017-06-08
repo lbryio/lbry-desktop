@@ -373,7 +373,7 @@ class PublishPage extends React.PureComponent {
     lbry
       .channel_new({
         channel_name: newChannelName,
-        amount: parseInt(this.state.newChannelBid),
+        amount: parseFloat(this.state.newChannelBid),
       })
       .then(
         () => {
@@ -594,6 +594,7 @@ class PublishPage extends React.PureComponent {
                   className="form-field__input--inline"
                   step="0.01"
                   placeholder="1.00"
+                  min="0.01"
                   onChange={event => this.handleFeeAmountChange(event)}
                 />
                 {" "}
@@ -752,6 +753,7 @@ class PublishPage extends React.PureComponent {
                     label={__("Deposit")}
                     postfix="LBC"
                     step="0.01"
+                    min="0"
                     type="number"
                     helper={lbcInputHelp}
                     onChange={event => {
