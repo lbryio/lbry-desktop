@@ -16,24 +16,7 @@ class FileListPublished extends React.Component {
   }
 
   componentDidUpdate() {
-    if (this.props.fileInfos.length > 0) this._requestPublishReward();
-  }
-
-  _requestPublishReward() {
-    // TODO this is throwing an error now
-    // Error: LBRY internal API is disabled
-    //
-    // lbryio.call('reward', 'list', {}).then(function(userRewards) {
-    //   //already rewarded
-    //   if (userRewards.filter(function (reward) {
-    //       return reward.reward_type == rewards.TYPE_FIRST_PUBLISH && reward.transaction_id
-    //     }).length) {
-    //     return
-    //   }
-    //   else {
-    //     rewards.claimReward(rewards.TYPE_FIRST_PUBLISH).catch(() => {})
-    //   }
-    // })
+    if (this.props.fileInfos.length > 0) this.props.claimFirstPublishReward();
   }
 
   render() {

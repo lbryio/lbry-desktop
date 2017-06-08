@@ -1,17 +1,23 @@
 import React from "react";
+import rewards from "rewards";
 import { connect } from "react-redux";
 import { doCloseModal } from "actions/app";
 import { selectUserIsRewardApproved } from "selectors/user";
-import { makeSelectHasClaimedReward } from "selectors/rewards";
+import {
+  makeSelectHasClaimedReward,
+  makeSelectClaimRewardError,
+  makeSelectRewardByType,
+} from "selectors/rewards";
 import WelcomeModal from "./view";
 
 const select = (state, props) => {
-  const selectHasReward = makeSelectHasClaimedReward();
+  const selectHasClaimed = makeSelectHasClaimedReward(),
+    selectReward = makeSelectRewardByType();
 
   return {
-    hasReward: selectHasReward(state, { reward_type: "new_user" }),
+    hasClaimed: selectHasClaimed(state, { reward_type: rewards.TYPE_NEW_USER }),
     isRewardApproved: selectUserIsRewardApproved(state),
-    rewardAmount: 5,
+    reward: selectReward(state, { reward_type: rewards.TYPE_NEW_USER }),
   };
 };
 

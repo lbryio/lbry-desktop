@@ -6,14 +6,12 @@ import RewardLink from "component/rewardLink";
 
 class WelcomeModal extends React.Component {
   render() {
-    const {
-      closeModal,
-      hasReward,
-      isRewardApproved,
-      rewardAmount,
-    } = this.props;
+    const { closeModal, hasClaimed, isRewardApproved, reward } = this.props;
 
-    return !hasReward
+    console.log("welcome");
+    console.log(this.props);
+
+    return !hasClaimed
       ? <Modal type="custom" isOpen={true} contentLabel="Welcome to LBRY">
           <section>
             <h3 className="modal__header">Welcome to LBRY.</h3>
@@ -30,7 +28,7 @@ class WelcomeModal extends React.Component {
               Thank you for making content freedom possible!
               {" "}{isRewardApproved ? __("Here's a nickel, kid.") : ""}
             </p>
-            <div style={{ textAlign: "center", marginBottom: "12px" }}>
+            <div className="text-center">
               {isRewardApproved
                 ? <RewardLink reward_type="new_user" button="primary" />
                 : <Link
@@ -52,7 +50,8 @@ class WelcomeModal extends React.Component {
             <h3 className="modal__header">About Your Reward</h3>
             <p>
               You earned a reward of
-              {" "}<CreditAmount amount={rewardAmount} label={false} /> LBRY
+              {" "}<CreditAmount amount={reward.reward_amount} label={false} />
+              {" "}LBRY
               credits, or <em>LBC</em>.
             </p>
             <p>

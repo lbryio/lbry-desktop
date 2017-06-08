@@ -10,7 +10,7 @@ import UserEmailVerify from "./view";
 
 const select = state => ({
   isPending: selectEmailVerifyIsPending(state),
-  email: selectEmailToVerify,
+  email: selectEmailToVerify(state),
   errorMessage: selectEmailVerifyErrorMessage(state),
 });
 

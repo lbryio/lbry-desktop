@@ -6,7 +6,6 @@ const querystring = require("querystring");
 const lbryio = {
   _accessToken: getSession("accessToken"),
   _authenticationPromise: null,
-  _user: null,
   enabled: true,
 };
 
@@ -36,20 +35,9 @@ lbryio.getExchangeRates = function() {
   return lbryio._exchangePromise;
 };
 
-lbryio.call = function(
-  resource,
-  action,
-  params = {},
-  method = "get",
-  evenIfDisabled = false
-) {
-  // evenIfDisabled is just for development, when we may have some calls working and some not
+lbryio.call = function(resource, action, params = {}, method = "get") {
   return new Promise((resolve, reject) => {
-    if (
-      !lbryio.enabled &&
-      !evenIfDisabled &&
-      (resource != "discover" || action != "list")
-    ) {
+    if (!lbryio.enabled && (resource != "discover" || action != "list")) {
       console.log(__("Internal API disabled"));
       reject(new Error(__("LBRY internal API is disabled")));
       return;
@@ -135,7 +123,6 @@ lbryio.setCurrentUser = (resolve, reject) => {
   lbryio
     .call("user", "me")
     .then(data => {
-      lbryio.user = data;
       resolve(data);
     })
     .catch(function(err) {

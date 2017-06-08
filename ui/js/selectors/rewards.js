@@ -5,7 +5,7 @@ const _selectState = state => state.rewards || {};
 
 export const selectRewardsByType = createSelector(
   _selectState,
-  state => state.byRewardType || {}
+  state => state.rewardsByType || {}
 );
 
 export const selectRewards = createSelector(
@@ -18,26 +18,14 @@ export const selectIsRewardEligible = createSelector(
   user => user.can_claim_rewards
 );
 
-export const selectClaimedRewards = createSelector(selectRewards, rewards =>
-  rewards.filter(reward => reward.transaction_id !== "")
-);
-
-export const selectClaimedRewardsByType = createSelector(
-  selectClaimedRewards,
-  claimedRewards => {
-    const byType = {};
-    claimedRewards.forEach(reward => (byType[reward.reward_type] = reward));
-    return byType;
-  }
-);
-
 export const selectFetchingRewards = createSelector(
   _selectState,
   state => !!state.fetching
 );
 
 export const selectHasClaimedReward = (state, props) => {
-  return !!selectClaimedRewardsByType[props.reward_type];
+  const reward = selectRewardsByType(state)[props.reward_type];
+  return reward && reward.transaction_id !== "";
 };
 
 export const makeSelectHasClaimedReward = () => {

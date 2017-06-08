@@ -1,15 +1,10 @@
 import React from "react";
 import { connect } from "react-redux";
 import { doNavigate } from "actions/app";
-import {
-  selectFetchingRewards,
-  selectIsRewardEligible,
-  selectRewards,
-} from "selectors/rewards";
+import { selectFetchingRewards, selectRewards } from "selectors/rewards";
 import {
   selectUserIsRewardEligible,
   selectUserHasEmail,
-  selectUserIsRewardApproved,
   selectUserIsVerificationCandidate,
 } from "selectors/user";
 import RewardsPage from "./view";

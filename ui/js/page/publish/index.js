@@ -1,7 +1,9 @@
 import React from "react";
 import { connect } from "react-redux";
 import { doNavigate, doHistoryBack } from "actions/app";
+import { doClaimRewardType } from "actions/rewards";
 import { selectMyClaims } from "selectors/claims";
+import rewards from "rewards";
 import PublishPage from "./view";
 
 const select = state => ({
@@ -11,6 +13,8 @@ const select = state => ({
 const perform = dispatch => ({
   back: () => dispatch(doHistoryBack()),
   navigate: path => dispatch(doNavigate(path)),
+  claimFirstChannelReward: () =>
+    dispatch(doClaimRewardType(rewards.TYPE_FIRST_CHANNEL)),
 });
 
 export default connect(select, perform)(PublishPage);

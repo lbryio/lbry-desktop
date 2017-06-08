@@ -44,7 +44,7 @@ class PublishPage extends React.Component {
     // Calls API to update displayed list of channels. If a channel name is provided, will select
     // that channel at the same time (used immediately after creating a channel)
     lbry.channel_list_mine().then(channels => {
-      rewards.claimReward(rewards.TYPE_FIRST_CHANNEL).then(() => {}, () => {});
+      this.props.claimFirstChannelReward();
       this.setState({
         channels: channels,
         ...(channel ? { channel } : {}),
@@ -373,7 +373,7 @@ class PublishPage extends React.Component {
     lbry
       .channel_new({
         channel_name: newChannelName,
-        amount: parseInt(this.state.newChannelBid),
+        amount: parseFloat(this.state.newChannelBid),
       })
       .then(
         () => {

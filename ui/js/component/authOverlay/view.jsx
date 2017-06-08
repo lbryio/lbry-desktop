@@ -32,7 +32,7 @@ export class AuthOverlay extends React.Component {
       return null;
     }
 
-    const { isPending, isShowing } = this.props;
+    const { isPending, isShowing, hasEmail } = this.props;
 
     if (isShowing) {
       return (
@@ -46,15 +46,14 @@ export class AuthOverlay extends React.Component {
           {isPending
             ? ""
             : <div className="form-row-submit">
-                {this.state.showNoEmailConfirm
-                  ? <div>
-                      <p className="help form-input-width">
+                {!hasEmail && this.state.showNoEmailConfirm
+                  ? <div className="help form-input-width">
+                      <p>
                         {__(
                           "If you continue without an email, you will be ineligible to earn free LBC rewards, as well as unable to receive security related communications."
                         )}
                       </p>
                       <Link
-                        className="button-text-help"
                         onClick={() => {
                           this.onEmailSkipConfirm();
                         }}
@@ -62,11 +61,15 @@ export class AuthOverlay extends React.Component {
                       />
                     </div>
                   : <Link
-                      className="button-text-help"
+                      className={"button-text-help"}
                       onClick={() => {
-                        this.onEmailSkipClick();
+                        hasEmail
+                          ? this.onEmailSkipConfirm()
+                          : this.onEmailSkipClick();
                       }}
-                      label={__("Do I have to?")}
+                      label={
+                        hasEmail ? __("Skip for now") : __("Do I have to?")
+                      }
                     />}
               </div>}
         </ModalPage>

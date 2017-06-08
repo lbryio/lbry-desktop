@@ -20,13 +20,33 @@ export function doAuthenticate() {
         dispatch(doRewardList()); //FIXME - where should this happen?
       })
       .catch(error => {
-        console.log("auth error");
-        console.log(error);
         dispatch({
           type: types.AUTHENTICATION_FAILURE,
           data: { error },
         });
       });
+  };
+}
+
+export function doUserFetch() {
+  return function(dispatch, getState) {
+    dispatch({
+      type: types.USER_FETCH_STARTED,
+    });
+    lbryio.setCurrentUser(
+      user => {
+        dispatch({
+          type: types.USER_FETCH_SUCCESS,
+          data: { user },
+        });
+      },
+      error => {
+        dispatch({
+          type: types.USER_FETCH_FAILURE,
+          data: { error },
+        });
+      }
+    );
   };
 }
 
@@ -42,6 +62,7 @@ export function doUserEmailNew(email) {
           type: types.USER_EMAIL_NEW_SUCCESS,
           data: { email },
         });
+        dispatch(doUserFetch());
       },
       error => {
         if (
@@ -102,6 +123,7 @@ export function doUserEmailVerify(verificationToken) {
             type: types.USER_EMAIL_VERIFY_SUCCESS,
             data: { email },
           });
+          dispatch(doUserFetch());
         } else {
           failure(new Error("Your email is still not verified.")); //shouldn't happen?
         }

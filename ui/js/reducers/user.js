@@ -5,6 +5,7 @@ const reducers = {};
 
 const defaultState = {
   authenticationIsPending: false,
+  userIsPending: false,
   emailNewIsPending: false,
   emailNewErrorMessage: "",
   emailNewDeclined: getLocal("user_email_declined", false),
@@ -15,12 +16,15 @@ const defaultState = {
 reducers[types.AUTHENTICATION_STARTED] = function(state, action) {
   return Object.assign({}, state, {
     authenticationIsPending: true,
+    userIsPending: true,
+    user: defaultState.user,
   });
 };
 
 reducers[types.AUTHENTICATION_SUCCESS] = function(state, action) {
   return Object.assign({}, state, {
     authenticationIsPending: false,
+    userIsPending: false,
     user: action.data.user,
   });
 };
@@ -28,6 +32,28 @@ reducers[types.AUTHENTICATION_SUCCESS] = function(state, action) {
 reducers[types.AUTHENTICATION_FAILURE] = function(state, action) {
   return Object.assign({}, state, {
     authenticationIsPending: false,
+    userIsPending: false,
+    user: null,
+  });
+};
+
+reducers[types.USER_FETCH_STARTED] = function(state, action) {
+  return Object.assign({}, state, {
+    userIsPending: true,
+    user: defaultState.user,
+  });
+};
+
+reducers[types.USER_FETCH_SUCCESS] = function(state, action) {
+  return Object.assign({}, state, {
+    userIsPending: false,
+    user: action.data.user,
+  });
+};
+
+reducers[types.USER_FETCH_FAILURE] = function(state, action) {
+  return Object.assign({}, state, {
+    userIsPending: true,
     user: null,
   });
 };

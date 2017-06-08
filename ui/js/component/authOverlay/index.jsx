@@ -5,11 +5,13 @@ import { doUserEmailDecline } from "actions/user";
 import { doOpenModal } from "actions/app";
 import {
   selectAuthenticationIsPending,
+  selectUserHasEmail,
   selectUserIsAuthRequested,
 } from "selectors/user";
 import AuthOverlay from "./view";
 
 const select = state => ({
+  hasEmail: selectUserHasEmail(state),
   isPending: selectAuthenticationIsPending(state),
   isShowing: selectUserIsAuthRequested(state),
 });

@@ -178,9 +178,19 @@ export class FormRow extends React.Component {
 
     this._fieldRequiredText = __("This field is required");
 
-    this.state = {
+    this.state = this.getStateFromProps(props);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState(this.getStateFromProps(nextProps));
+  }
+
+  getStateFromProps(props) {
+    return {
       isError: !!props.errorMessage,
-      errorMessage: typeof props.errorMessage === "string" ? props.errorMessage : '',
+      errorMessage: typeof props.errorMessage === "string"
+        ? props.errorMessage
+        : "",
     };
   }
 

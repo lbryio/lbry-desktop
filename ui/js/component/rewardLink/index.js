@@ -20,14 +20,14 @@ const makeSelect = () => {
     isClaimed: selectHasClaimedReward(state, props),
     errorMessage: selectError(state, props),
     isPending: selectIsPending(state, props),
-    reward: select,
+    reward: selectReward(state, props),
   });
 
   return select;
 };
 
 const perform = dispatch => ({
-  claimReward: reward => dispatch(doClaimReward(reward)),
+  claimReward: reward => dispatch(doClaimReward(reward, true)),
   clearError: reward => dispatch(doClaimRewardClearError(reward)),
   navigate: path => dispatch(doNavigate(path)),
 });

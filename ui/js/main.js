@@ -51,7 +51,10 @@ ipcRenderer.on("open-uri-requested", (event, uri) => {
 document.addEventListener("click", event => {
   var target = event.target;
   while (target && target !== document) {
-    if (target.matches('a[href^="http"]')) {
+    if (
+      target.matches('a[href^="http"]') ||
+      target.matches('a[href^="mailto"]')
+    ) {
       event.preventDefault();
       shell.openExternal(target.href);
       return;

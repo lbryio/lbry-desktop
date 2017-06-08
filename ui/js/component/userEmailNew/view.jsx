@@ -1,13 +1,13 @@
-import React from 'react';
-import Link from 'component/link';
-import {FormRow} from 'component/form.js';
+import React from "react";
+import Link from "component/link";
+import { FormRow } from "component/form.js";
 
 class UserEmailNew extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
-      email: ''
+      email: "",
     };
   }
 
@@ -19,25 +19,43 @@ class UserEmailNew extends React.Component {
 
   handleSubmit(event) {
     event.preventDefault();
-    this.props.addUserEmail(this.state.email)
+    this.props.addUserEmail(this.state.email);
   }
 
   render() {
-    const {
-      errorMessage,
-      isPending
-    } = this.props
+    const { errorMessage, isPending } = this.props;
 
-    return <form onSubmit={(event) => { this.handleSubmit(event) }}>
-      <FormRow type="text" label="Email" placeholder="scrwvwls@lbry.io"
-               name="email" value={this.state.email}
-               errorMessage={errorMessage}
-               onChange={(event) => { this.handleEmailChanged(event) }} />
-      <div className="form-row-submit">
-        <Link button="primary" label="Next" disabled={isPending} onClick={(event) => { this.handleSubmit(event) }} />
-      </div>
-    </form>
+    return (
+      <form
+        className="form-input-width"
+        onSubmit={event => {
+          this.handleSubmit(event);
+        }}
+      >
+        <FormRow
+          type="text"
+          label="Email"
+          placeholder="scrwvwls@lbry.io"
+          name="email"
+          value={this.state.email}
+          errorMessage={errorMessage}
+          onChange={event => {
+            this.handleEmailChanged(event);
+          }}
+        />
+        <div className="form-row-submit">
+          <Link
+            button="primary"
+            label="Next"
+            disabled={isPending}
+            onClick={event => {
+              this.handleSubmit(event);
+            }}
+          />
+        </div>
+      </form>
+    );
   }
 }
 
-export default UserEmailNew
+export default UserEmailNew;

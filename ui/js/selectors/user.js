@@ -7,6 +7,11 @@ export const selectAuthenticationIsPending = createSelector(
   state => state.authenticationIsPending
 );
 
+export const selectUserIsPending = createSelector(
+  _selectState,
+  state => state.userIsPending
+);
+
 export const selectUser = createSelector(
   _selectState,
   state => state.user || {}
@@ -20,17 +25,17 @@ export const selectEmailToVerify = createSelector(
 export const selectUserHasEmail = createSelector(
   selectUser,
   selectEmailToVerify,
-  (user, email) => user.has_email || email
+  (user, email) => (user && user.has_email) || email
 );
 
 export const selectUserIsRewardEligible = createSelector(
   selectUser,
-  user => user.is_reward_eligible
+  user => user && user.is_reward_eligible
 );
 
 export const selectUserIsRewardApproved = createSelector(
   selectUser,
-  user => user.is_reward_approved
+  user => user && user.is_reward_approved
 );
 
 export const selectEmailNewIsPending = createSelector(
@@ -64,7 +69,7 @@ export const selectUserIsVerificationCandidate = createSelector(
   selectEmailToVerify,
   selectUser,
   (isEligible, isApproved, emailToVerify, user) =>
-    (isEligible && !isApproved) || (emailToVerify && !user.has_email)
+    (isEligible && !isApproved) || (emailToVerify && user && !user.has_email)
 );
 
 export const selectUserIsAuthRequested = createSelector(

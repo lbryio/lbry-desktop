@@ -2,7 +2,6 @@ import * as types from "constants/action_types";
 import lbry from "lbry";
 import lbryio from "lbryio";
 import lbryuri from "lbryuri";
-import rewards from "rewards";
 import { selectBalance } from "selectors/wallet";
 import {
   selectFileInfoForUri,
@@ -10,8 +9,8 @@ import {
 } from "selectors/file_info";
 import { selectResolvingUris } from "selectors/content";
 import { selectCostInfoForUri } from "selectors/cost_info";
-import { selectClaimsByUri } from "selectors/claims";
 import { doOpenModal } from "actions/app";
+import { doClaimEligiblePurchaseRewards } from "actions/rewards";
 
 export function doResolveUri(uri) {
   return function(dispatch, getState) {
@@ -171,7 +170,7 @@ export function doDownloadFile(uri, streamInfo) {
       })
       .catch(() => {});
 
-    rewards.claimEligiblePurchaseRewards();
+    dispatch(doClaimEligiblePurchaseRewards());
   };
 }
 
