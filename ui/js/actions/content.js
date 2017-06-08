@@ -83,6 +83,7 @@ export function doFetchFeaturedUris() {
         data: {
           categories: Categories,
           uris: featuredUris,
+          success: true,
         },
       });
 
