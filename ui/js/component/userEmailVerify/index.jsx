@@ -1,25 +1,21 @@
-import React from 'react'
-import {
-  connect
-} from 'react-redux'
-import {
-  doUserEmailVerify
-} from 'actions/user'
+import React from "react";
+import { connect } from "react-redux";
+import { doUserEmailVerify } from "actions/user";
 import {
   selectEmailVerifyIsPending,
-  selectEmailNewExistingEmail,
+  selectEmailToVerify,
   selectEmailVerifyErrorMessage,
-} from 'selectors/user'
-import UserEmailVerify from './view'
+} from "selectors/user";
+import UserEmailVerify from "./view";
 
-const select = (state) => ({
+const select = state => ({
   isPending: selectEmailVerifyIsPending(state),
-  email: selectEmailNewExistingEmail,
+  email: selectEmailToVerify,
   errorMessage: selectEmailVerifyErrorMessage(state),
-})
+});
 
-const perform = (dispatch) => ({
-  verifyUserEmail: (email, code) => dispatch(doUserEmailVerify(email, code))
-})
+const perform = dispatch => ({
+  verifyUserEmail: code => dispatch(doUserEmailVerify(code)),
+});
 
-export default connect(select, perform)(UserEmailVerify)
+export default connect(select, perform)(UserEmailVerify);

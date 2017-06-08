@@ -54,8 +54,6 @@ export const selectPageTitle = createSelector(
         return __("Publishes");
       case "discover":
         return __("Home");
-      case 'account-verification':
-        return __('Early Access Verification')
       default:
         return "";
     }

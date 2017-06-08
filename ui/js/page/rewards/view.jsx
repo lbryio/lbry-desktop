@@ -1,16 +1,15 @@
-import React from 'react';
-import lbryio from 'lbryio';
-import {BusyMessage, CreditAmount, Icon} from 'component/common';
-import SubHeader from 'component/subHeader'
-import Link from 'component/link'
-import RewardLink from 'component/rewardLink';
+import React from "react";
+import lbryio from "lbryio";
+import { BusyMessage, CreditAmount, Icon } from "component/common";
+import SubHeader from "component/subHeader";
+import Auth from "component/auth";
+import Link from "component/link";
+import RewardLink from "component/rewardLink";
 
-const RewardTile = (props) => {
-  const {
-    reward,
-  } = props
+const RewardTile = props => {
+  const { reward } = props;
 
-  const claimed = !!reward.transaction_id
+  const claimed = !!reward.transaction_id;
 
   return (
     <section className="card">
@@ -22,43 +21,74 @@ const RewardTile = (props) => {
         <div className="card__actions">
           {claimed
             ? <span><Icon icon="icon-check" /> Reward claimed.</span>
-            : <RewardLink reward={reward} />}
+            : <RewardLink reward_type={reward.reward_type} />}
         </div>
         <div className="card__content">{reward.reward_description}</div>
       </div>
     </section>
-  )
-}
+  );
+};
 
-const RewardsPage = (props) => {
+const RewardsPage = props => {
   const {
     fetching,
     isEligible,
-    navigateToAuth,
+    isVerificationCandidate,
+    hasEmail,
     rewards,
-  } = props
+  } = props;
 
-  let content
+  console.log(props);
 
-  if (!isEligible) {
-    content = <div className="empty">
-      You are not eligible to claim rewards. { ' ' }
-      <Link onClick={navigateToAuth} label="Become eligible" />.
-    </div>
+  let content,
+    isCard = false;
+
+  if (!hasEmail || isVerificationCandidate) {
+    content = (
+      <div>
+        <p>
+          {__(
+            "Additional information is required to be eligible for the rewards program."
+          )}
+        </p>
+        <Auth />
+      </div>
+    );
+    isCard = true;
+  } else if (!isEligible) {
+    isCard = true;
+    content = (
+      <div className="empty">
+        <p>{__("You are not eligible to claim rewards.")}</p>
+        <p>
+          To become eligible, email
+          {" "}<Link href="mailto:help@lbry.io" label="help@lbry.io" /> with a
+          link to a public social media profile.
+        </p>
+      </div>
+    );
   } else if (fetching) {
-    content = <BusyMessage message="Fetching rewards" />
+    content = <BusyMessage message="Fetching rewards" />;
   } else if (rewards.length > 0) {
-    content = rewards.map(reward => <RewardTile key={reward.reward_type} reward={reward} />)
+    content = rewards.map(reward =>
+      <RewardTile key={reward.reward_type} reward={reward} />
+    );
   } else {
-    content = <div className="empty">Failed to load rewards.</div>
+    content = <div className="empty">{__("Failed to load rewards.")}</div>;
   }
 
   return (
     <main className="main--single-column">
       <SubHeader />
-      {content}
+      {isCard
+        ? <section className="card">
+            <div className="card__content">
+              {content}
+            </div>
+          </section>
+        : content}
     </main>
-  )
-}
+  );
+};
 
 export default RewardsPage;

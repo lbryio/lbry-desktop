@@ -1,29 +1,22 @@
-import React from 'react'
-import {BusyMessage} from 'component/common'
-import UserEmailNew from 'component/userEmailNew'
-import UserEmailVerify from 'component/userEmailVerify'
+import React from "react";
+import { BusyMessage } from "component/common";
+import UserEmailNew from "component/userEmailNew";
+import UserEmailVerify from "component/userEmailVerify";
 
 export class Auth extends React.Component {
   render() {
-    const {
-      isPending,
-      existingEmail,
-      user,
-    } = this.props
-
-    console.log('auth render')
-    console.log(this.props)
+    const { isPending, email, isVerificationCandidate } = this.props;
 
     if (isPending) {
-      return <BusyMessage message="Authenticating" />
-    } else if (!existingEmail && !user.has_email) {
-      return <UserEmailNew />
-    } else if (!user.has_verified_email) {
-      return <UserEmailVerify />
+      return <BusyMessage message={__("Authenticating")} />;
+    } else if (!email) {
+      return <UserEmailNew />;
+    } else if (isVerificationCandidate) {
+      return <UserEmailVerify />;
     } else {
-      return <span className="empty">Auth is done fix this yo</span>
+      return <span className="empty">{__("No further steps.")}</span>;
     }
   }
 }
 
-export default Auth
+export default Auth;

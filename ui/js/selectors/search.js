@@ -68,7 +68,5 @@ export const selectWunderBarIcon = createSelector(selectCurrentPage, page => {
       return "icon-code";
     case "discover":
       return "icon-home";
-    case 'account-verification':
-      return 'icon-lock'
   }
 });

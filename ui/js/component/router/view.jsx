@@ -1,5 +1,4 @@
 import React from "react";
-import AuthPage from 'page/auth';
 import SettingsPage from "page/settings";
 import HelpPage from "page/help";
 import ReportPage from "page/report.js";
@@ -8,9 +7,8 @@ import WalletPage from "page/wallet";
 import ShowPage from "page/showPage";
 import PublishPage from "page/publish";
 import DiscoverPage from "page/discover";
-import SplashScreen from "component/splash.js";
 import DeveloperPage from "page/developer.js";
-import RewardsPage from "page/rewards.js";
+import RewardsPage from "page/rewards";
 import FileListDownloaded from "page/fileListDownloaded";
 import FileListPublished from "page/fileListPublished";
 import ChannelPage from "page/channel";
@@ -42,7 +40,6 @@ const Router = props => {
     discover: <DiscoverPage {...params} />,
     rewards: <RewardsPage {...params} />,
     search: <SearchPage {...params} />,
-    "account-verification": <AuthPage {...params} />
   });
 };
 
