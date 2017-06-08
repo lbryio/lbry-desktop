@@ -35,14 +35,14 @@ video {
 }
 
 
-.video--loading-screen {
+.video__loading-screen {
   height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.video--loading-spinner {
+.video__loading-spinner {
   position: relative;
   width: 11em;
   height: 11em;
@@ -89,7 +89,7 @@ video {
   }
 }
 
-.video--loading-status {
+.video__loading-status {
   padding-top: 20px;
   color: white;
 }
@@ -104,6 +104,7 @@ video {
   position: relative;
   .video__play-button { @include absolute-center(); }
 }
+
 .video__play-button {
   position: absolute;
   width: 100%;

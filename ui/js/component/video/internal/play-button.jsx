@@ -22,7 +22,6 @@ class VideoPlayButton extends React.Component {
     const {
       button,
       label,
-      className,
       metadata,
       metadata: { title },
       uri,

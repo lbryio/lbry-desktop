@@ -68,7 +68,6 @@ class Video extends React.Component {
                 poster={poster}
                 downloadPath={fileInfo.download_path}
                 mediaType={mediaType}
-                poster={poster}
               />)}
         {!isPlaying &&
           <div

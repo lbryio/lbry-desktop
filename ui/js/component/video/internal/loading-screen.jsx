@@ -1,11 +1,11 @@
 import React from "react";
 
 const LoadingScreen = ({ status }) =>
-  <div className="video--loading-screen">
-    <div className="video--loading-screen-content">
-      <div className="video--loading-spinner" />
+  <div className="video__loading-screen">
+    <div>
+      <div className="video__loading-spinner" />
 
-      <div className="video--loading-status">
+      <div className="video__loading-status">
         {status}
       </div>
     </div>
