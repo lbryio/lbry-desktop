@@ -6,7 +6,7 @@ import Link from "component/link";
 import rewards from "rewards";
 import Modal from "component/modal";
 
-class PublishPage extends React.Component {
+class PublishPage extends React.PureComponent {
   constructor(props) {
     super(props);
 

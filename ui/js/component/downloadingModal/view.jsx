@@ -3,7 +3,7 @@ import { Modal } from "component/modal";
 import { Line } from "rc-progress";
 import Link from "component/link";
 
-class DownloadingModal extends React.Component {
+class DownloadingModal extends React.PureComponent {
   render() {
     const {
       downloadProgress,

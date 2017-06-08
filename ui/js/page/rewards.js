@@ -4,7 +4,7 @@ import { CreditAmount, Icon } from "component/common.js";
 import SubHeader from "component/subHeader";
 import { RewardLink } from "component/reward-link";
 
-export class RewardTile extends React.Component {
+export class RewardTile extends React.PureComponent {
   static propTypes = {
     type: React.PropTypes.string.isRequired,
     title: React.PropTypes.string.isRequired,
@@ -34,7 +34,7 @@ export class RewardTile extends React.Component {
   }
 }
 
-export class RewardsPage extends React.Component {
+export class RewardsPage extends React.PureComponent {
   constructor(props) {
     super(props);
 

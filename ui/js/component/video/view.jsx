@@ -5,7 +5,7 @@ import Modal from "component/modal";
 import lbry from "lbry";
 import { Thumbnail } from "component/common";
 
-class VideoPlayButton extends React.Component {
+class VideoPlayButton extends React.PureComponent {
   onPurchaseConfirmed() {
     this.props.closeModal();
     this.props.startPlaying();
@@ -92,7 +92,7 @@ class VideoPlayButton extends React.Component {
   }
 }
 
-class Video extends React.Component {
+class Video extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = { isPlaying: false };
@@ -182,7 +182,7 @@ const from = require("from2");
 const player = require("render-media");
 const fs = require("fs");
 
-class VideoPlayer extends React.Component {
+class VideoPlayer extends React.PureComponent {
   componentDidMount() {
     const elem = this.refs.media;
     const { downloadPath, filename } = this.props;

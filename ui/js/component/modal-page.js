@@ -1,7 +1,7 @@
 import React from "react";
 import ReactModal from "react-modal";
 
-export class ModalPage extends React.Component {
+export class ModalPage extends React.PureComponent {
   render() {
     return (
       <ReactModal

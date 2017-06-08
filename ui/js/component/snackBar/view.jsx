@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "component/link";
 
-class SnackBar extends React.Component {
+class SnackBar extends React.PureComponent {
   constructor(props) {
     super(props);
 

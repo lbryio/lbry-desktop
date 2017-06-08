@@ -33,7 +33,7 @@ const FormatItem = props => {
   );
 };
 
-class FilePage extends React.Component {
+class FilePage extends React.PureComponent {
   componentDidMount() {
     this.fetchFileInfo(this.props);
     this.fetchCostInfo(this.props);

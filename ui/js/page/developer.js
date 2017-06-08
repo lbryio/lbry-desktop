@@ -6,7 +6,7 @@ import Link from "../component/link";
 const fs = require("fs");
 const { ipcRenderer } = require("electron");
 
-class DeveloperPage extends React.Component {
+class DeveloperPage extends React.PureComponent {
   constructor(props) {
     super(props);
 

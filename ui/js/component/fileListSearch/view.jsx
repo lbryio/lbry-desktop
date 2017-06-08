@@ -47,7 +47,7 @@ const FileListSearchResults = props => {
   return <div>{rows}</div>;
 };
 
-class FileListSearch extends React.Component {
+class FileListSearch extends React.PureComponent {
   componentWillMount() {
     this.props.search(this.props.query);
   }

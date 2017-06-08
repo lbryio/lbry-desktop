@@ -2,7 +2,7 @@ import React from "react";
 import { Icon } from "./common.js";
 import Link from "component/link";
 
-export class DropDownMenuItem extends React.Component {
+export class DropDownMenuItem extends React.PureComponent {
   static propTypes = {
     href: React.PropTypes.string,
     label: React.PropTypes.string,
@@ -32,7 +32,7 @@ export class DropDownMenuItem extends React.Component {
   }
 }
 
-export class DropDownMenu extends React.Component {
+export class DropDownMenu extends React.PureComponent {
   constructor(props) {
     super(props);
 

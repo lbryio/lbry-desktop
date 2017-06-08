@@ -3,7 +3,7 @@ import lbryuri from "lbryuri";
 import { BusyMessage } from "component/common";
 import FileTile from "component/fileTile";
 
-class ChannelPage extends React.Component {
+class ChannelPage extends React.PureComponent {
   componentDidMount() {
     this.fetchClaims(this.props);
   }

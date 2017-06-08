@@ -5,7 +5,7 @@ import Modal from "component/modal";
 import rewards from "rewards";
 import Link from "component/link";
 
-export class RewardLink extends React.Component {
+export class RewardLink extends React.PureComponent {
   static propTypes = {
     type: React.PropTypes.string.isRequired,
     claimed: React.PropTypes.bool,

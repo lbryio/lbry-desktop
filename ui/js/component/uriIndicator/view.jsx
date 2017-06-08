@@ -1,7 +1,7 @@
 import React from "react";
 import { Icon } from "component/common";
 
-class UriIndicator extends React.Component {
+class UriIndicator extends React.PureComponent {
   componentWillMount() {
     this.resolve(this.props);
   }

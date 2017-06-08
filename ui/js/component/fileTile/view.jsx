@@ -7,7 +7,7 @@ import { Thumbnail, TruncatedText } from "component/common.js";
 import FilePrice from "component/filePrice";
 import UriIndicator from "component/uriIndicator";
 
-class FileTile extends React.Component {
+class FileTile extends React.PureComponent {
   static SHOW_EMPTY_PUBLISH = "publish";
   static SHOW_EMPTY_PENDING = "pending";
 
