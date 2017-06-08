@@ -9,7 +9,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
 ## [Unreleased]
 ### Added
   * More file types, like audio and documents, can be streamed and/or served from the app
-  *
+  * Videos now have a classy loading spinner
 
 ### Changed
   * All UI strings are now rendered according to gettext standard, in prep for i18n
