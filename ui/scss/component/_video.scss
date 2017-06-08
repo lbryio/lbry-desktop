@@ -13,7 +13,6 @@ video {
   color: white;
 }
 
-
 .video-embedded {
   max-width: $width-page-constrained;
   max-height: $height-video-embedded;
@@ -28,10 +27,71 @@ video {
   &.video--active {
     /*background: none;*/
   }
+
   .plyr {
     top: 50%;
     transform: translateY(-50%);
   }
+}
+
+
+.video--loading-screen {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.video--loading-spinner {
+  position: relative;
+  width: 11em;
+  height: 11em;
+  margin: 20px auto;
+  font-size: 3px;
+  border-radius: 50%;
+
+  background: linear-gradient(to right, #ffffff 10%, rgba(255, 255, 255, 0) 50%);
+  animation: spin 1.4s infinite linear;
+  transform: translateZ(0);
+
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  &:before,
+  &:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  &:before {
+    width: 50%;
+    height: 50%;
+    background: #ffffff;
+    border-radius: 100% 0 0 0;
+  }
+
+  &:after {
+    height: 75%;
+    width: 75%;
+    margin: auto;
+    bottom: 0;
+    right: 0;
+    background: black;
+    border-radius: 50%;
+  }
+}
+
+.video--loading-status {
+  padding-top: 20px;
+  color: white;
 }
 
 .video__cover {
