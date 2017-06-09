@@ -2,7 +2,7 @@ import React from "react";
 import Link from "component/link";
 import { FormRow } from "component/form.js";
 
-class UserEmailNew extends React.Component {
+class UserEmailNew extends React.PureComponent {
   constructor(props) {
     super(props);
 

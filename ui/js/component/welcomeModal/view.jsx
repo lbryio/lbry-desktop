@@ -4,12 +4,9 @@ import { CreditAmount } from "component/common";
 import Link from "component/link";
 import RewardLink from "component/rewardLink";
 
-class WelcomeModal extends React.Component {
+class WelcomeModal extends React.PureComponent {
   render() {
     const { closeModal, hasClaimed, isRewardApproved, reward } = this.props;
-
-    console.log("welcome");
-    console.log(this.props);
 
     return !hasClaimed
       ? <Modal type="custom" isOpen={true} contentLabel="Welcome to LBRY">

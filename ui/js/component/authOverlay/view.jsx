@@ -4,7 +4,7 @@ import ModalPage from "component/modal-page.js";
 import Auth from "component/auth";
 import Link from "component/link";
 
-export class AuthOverlay extends React.Component {
+export class AuthOverlay extends React.PureComponent {
   constructor(props) {
     super(props);
 

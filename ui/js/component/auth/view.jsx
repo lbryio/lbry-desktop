@@ -3,7 +3,7 @@ import { BusyMessage } from "component/common";
 import UserEmailNew from "component/userEmailNew";
 import UserEmailVerify from "component/userEmailVerify";
 
-export class Auth extends React.Component {
+export class Auth extends React.PureComponent {
   render() {
     const { isPending, email, isVerificationCandidate } = this.props;
 

@@ -38,8 +38,6 @@ const RewardsPage = props => {
     rewards,
   } = props;
 
-  console.log(props);
-
   let content,
     isCard = false;
 
