@@ -178,9 +178,19 @@ export class FormRow extends React.PureComponent {
 
     this._fieldRequiredText = __("This field is required");
 
-    this.state = {
-      isError: false,
-      errorMessage: null,
+    this.state = this.getStateFromProps(props);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.setState(this.getStateFromProps(nextProps));
+  }
+
+  getStateFromProps(props) {
+    return {
+      isError: !!props.errorMessage,
+      errorMessage: typeof props.errorMessage === "string"
+        ? props.errorMessage
+        : "",
     };
   }
 
@@ -225,6 +235,7 @@ export class FormRow extends React.PureComponent {
       delete fieldProps.label;
     }
     delete fieldProps.helper;
+    delete fieldProps.errorMessage;
 
     return (
       <div className="form-row">

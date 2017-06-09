@@ -81,12 +81,6 @@ reducers[types.UPGRADE_DOWNLOAD_PROGRESSED] = function(state, action) {
   });
 };
 
-reducers[types.DAEMON_READY] = function(state, action) {
-  return Object.assign({}, state, {
-    daemonReady: true,
-  });
-};
-
 reducers[types.SHOW_SNACKBAR] = function(state, action) {
   const { message, linkText, linkTarget, isError } = action.data;
   const snackBar = Object.assign({}, state.snackBar);

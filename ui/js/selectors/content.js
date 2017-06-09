@@ -1,5 +1,4 @@
 import { createSelector } from "reselect";
-import { selectDaemonReady, selectCurrentPage } from "selectors/app";
 
 export const _selectState = state => state.content || {};
 

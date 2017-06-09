@@ -50,20 +50,6 @@ export const selectGettingNewAddress = createSelector(
   state => state.gettingNewAddress
 );
 
-export const shouldCheckAddressIsMine = createSelector(
-  _selectState,
-  selectCurrentPage,
-  selectReceiveAddress,
-  selectDaemonReady,
-  (state, page, address, daemonReady) => {
-    if (!daemonReady) return false;
-    if (address === undefined) return false;
-    if (state.addressOwnershipChecked) return false;
-
-    return true;
-  }
-);
-
 export const selectDraftTransaction = createSelector(
   _selectState,
   state => state.draftTransaction || {}
