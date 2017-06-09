@@ -411,6 +411,7 @@ class PublishPage extends React.PureComponent {
   }
 
   componentWillMount() {
+    this.props.fetchClaimListMine();
     this._updateChannelList();
   }
 
