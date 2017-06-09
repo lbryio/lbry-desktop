@@ -6,7 +6,7 @@ import Link from "component/link";
 import rewards from "rewards";
 import Modal from "component/modal";
 
-class PublishPage extends React.Component {
+class PublishPage extends React.PureComponent {
   constructor(props) {
     super(props);
 
@@ -594,6 +594,7 @@ class PublishPage extends React.Component {
                   className="form-field__input--inline"
                   step="0.01"
                   placeholder="1.00"
+                  min="0.01"
                   onChange={event => this.handleFeeAmountChange(event)}
                 />
                 {" "}
@@ -752,6 +753,7 @@ class PublishPage extends React.Component {
                     label={__("Deposit")}
                     postfix="LBC"
                     step="0.01"
+                    min="0"
                     type="number"
                     helper={lbcInputHelp}
                     onChange={event => {

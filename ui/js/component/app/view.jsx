@@ -8,7 +8,7 @@ import WelcomeModal from "component/welcomeModal";
 import lbry from "lbry";
 import { Line } from "rc-progress";
 
-class App extends React.Component {
+class App extends React.PureComponent {
   componentWillMount() {
     document.addEventListener("unhandledError", event => {
       this.props.alertError(event.detail);

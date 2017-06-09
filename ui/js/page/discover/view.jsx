@@ -37,7 +37,7 @@ const FeaturedCategory = props => {
   );
 };
 
-class DiscoverPage extends React.Component {
+class DiscoverPage extends React.PureComponent {
   componentWillMount() {
     this.props.fetchFeaturedUris();
   }

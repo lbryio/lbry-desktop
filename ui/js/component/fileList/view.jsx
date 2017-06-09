@@ -8,7 +8,7 @@ import rewards from "rewards.js";
 import lbryio from "lbryio.js";
 import { BusyMessage, Thumbnail } from "component/common.js";
 
-class FileList extends React.Component {
+class FileList extends React.PureComponent {
   constructor(props) {
     super(props);
 

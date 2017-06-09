@@ -10,6 +10,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
 ### Added
   * More file types, like audio and documents, can be streamed and/or served from the app
   * App is no longer gated. Reward authorization re-written. Added basic flows for new users.
+  * Videos now have a classy loading spinner
 
 ### Changed
   * All UI strings are now rendered according to gettext standard, in prep for i18n

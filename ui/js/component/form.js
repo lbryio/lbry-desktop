@@ -10,7 +10,7 @@ function formFieldId() {
   return "form-field-" + ++formFieldCounter;
 }
 
-export class FormField extends React.Component {
+export class FormField extends React.PureComponent {
   static propTypes = {
     type: React.PropTypes.string.isRequired,
     prefix: React.PropTypes.string,
@@ -164,7 +164,7 @@ export class FormField extends React.Component {
   }
 }
 
-export class FormRow extends React.Component {
+export class FormRow extends React.PureComponent {
   static propTypes = {
     label: React.PropTypes.oneOfType([
       React.PropTypes.string,

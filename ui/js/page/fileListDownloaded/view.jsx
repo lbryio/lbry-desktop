@@ -10,7 +10,7 @@ import { BusyMessage, Thumbnail } from "component/common.js";
 import FileList from "component/fileList";
 import SubHeader from "component/subHeader";
 
-class FileListDownloaded extends React.Component {
+class FileListDownloaded extends React.PureComponent {
   componentWillMount() {
     this.props.fetchFileInfosDownloaded();
   }

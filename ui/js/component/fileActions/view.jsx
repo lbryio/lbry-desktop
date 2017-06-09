@@ -7,7 +7,7 @@ import Link from "component/link";
 import { ToolTip } from "component/tooltip";
 import { DropDownMenu, DropDownMenuItem } from "component/menu";
 
-class FileActions extends React.Component {
+class FileActions extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {

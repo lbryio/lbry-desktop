@@ -3,7 +3,7 @@ import ReactModal from "react-modal";
 import Link from "component/link";
 import app from "../app.js";
 
-export class Modal extends React.Component {
+export class Modal extends React.PureComponent {
   static propTypes = {
     type: React.PropTypes.oneOf(["alert", "confirm", "custom"]),
     overlay: React.PropTypes.bool,
@@ -64,7 +64,7 @@ export class Modal extends React.Component {
   }
 }
 
-export class ExpandableModal extends React.Component {
+export class ExpandableModal extends React.PureComponent {
   static propTypes = {
     expandButtonLabel: React.PropTypes.string,
     extraContent: React.PropTypes.element,

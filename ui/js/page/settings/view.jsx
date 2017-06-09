@@ -3,7 +3,7 @@ import { FormField, FormRow } from "component/form.js";
 import SubHeader from "component/subHeader";
 import lbry from "lbry.js";
 
-class SettingsPage extends React.Component {
+class SettingsPage extends React.PureComponent {
   constructor(props) {
     super(props);
 

@@ -10,6 +10,7 @@ import AuthOverlay from "component/authOverlay";
 import { doChangePath, doNavigate, doDaemonReady } from "actions/app";
 import { toQueryString } from "util/query_params";
 
+const env = ENV;
 const { remote, ipcRenderer, shell } = require("electron");
 const contextMenu = remote.require("./menu/context-menu");
 const app = require("./app");
@@ -64,6 +65,19 @@ document.addEventListener("click", event => {
 });
 
 const initialState = app.store.getState();
+
+// import whyDidYouUpdate from "why-did-you-update";
+// if (env === "development") {
+//   /*
+// 		https://github.com/garbles/why-did-you-update
+// 		"A function that monkey patches React and notifies you in the console when
+// 		potentially unnecessary re-renders occur."
+//
+// 		Just checks if props change between updates. Can be fixed by manually
+// 		adding a check in shouldComponentUpdate or using React.PureComponent
+// 	*/
+//   whyDidYouUpdate(React);
+// }
 
 var init = function() {
   function onDaemonReady() {

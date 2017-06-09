@@ -1,7 +1,7 @@
 import React from "react";
 import lbry from "../lbry.js";
 
-class StartPage extends React.Component {
+class StartPage extends React.PureComponent {
   componentWillMount() {
     lbry.stop();
   }

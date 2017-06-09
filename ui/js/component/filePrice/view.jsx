@@ -1,7 +1,7 @@
 import React from "react";
 import { CreditAmount } from "component/common";
 
-class FilePrice extends React.Component {
+class FilePrice extends React.PureComponent {
   componentWillMount() {
     this.fetchCost(this.props);
   }
@@ -11,13 +11,7 @@ class FilePrice extends React.Component {
   }
 
   fetchCost(props) {
-    const {
-      costInfo,
-      fetchCostInfo,
-      uri,
-      fetching,
-      claim,
-    } = props;
+    const { costInfo, fetchCostInfo, uri, fetching, claim } = props;
 
     if (costInfo === undefined && !fetching && claim) {
       fetchCostInfo(uri);

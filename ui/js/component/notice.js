@@ -1,6 +1,6 @@
 import React from "react";
 
-export class Notice extends React.Component {
+export class Notice extends React.PureComponent {
   static propTypes = {
     isError: React.PropTypes.bool,
   };

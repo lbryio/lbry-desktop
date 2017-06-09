@@ -4,7 +4,7 @@ import { FormRow } from "component/form";
 import Modal from "../component/modal.js";
 import lbry from "../lbry.js";
 
-class ReportPage extends React.Component {
+class ReportPage extends React.PureComponent {
   constructor(props) {
     super(props);
 

@@ -4,7 +4,7 @@ import { BusyMessage } from "component/common";
 import ChannelPage from "page/channel";
 import FilePage from "page/filePage";
 
-class ShowPage extends React.Component {
+class ShowPage extends React.PureComponent {
   componentWillMount() {
     this.resolve(this.props);
   }
