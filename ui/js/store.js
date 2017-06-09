@@ -13,6 +13,7 @@ import rewardsReducer from 'reducers/rewards';
 import searchReducer from 'reducers/search';
 import settingsReducer from 'reducers/settings';
 import walletReducer from 'reducers/wallet';
+import userReducer from 'reducers/user';
 
 function isFunction(object) {
 	return typeof object === 'function';
@@ -47,16 +48,17 @@ function enableBatching(reducer) {
 }
 
 const reducers = redux.combineReducers({
-	app: appReducer,
-	availability: availabilityReducer,
-	claims: claimsReducer,
-	fileInfo: fileInfoReducer,
-	content: contentReducer,
-	costInfo: costInfoReducer,
-	rewards: rewardsReducer,
-	search: searchReducer,
-	settings: settingsReducer,
-	wallet: walletReducer
+  app: appReducer,
+  availability: availabilityReducer,
+  claims: claimsReducer,
+  fileInfo: fileInfoReducer,
+  content: contentReducer,
+  costInfo: costInfoReducer,
+  rewards: rewardsReducer,
+  search: searchReducer,
+  settings: settingsReducer,
+  wallet: walletReducer,
+  user: userReducer,
 });
 
 const bulkThunk = createBulkThunkMiddleware();

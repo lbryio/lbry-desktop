@@ -4,6 +4,7 @@ import Header from "component/header";
 import ErrorModal from "component/errorModal";
 import DownloadingModal from "component/downloadingModal";
 import UpgradeModal from "component/upgradeModal";
+import WelcomeModal from "component/welcomeModal";
 import lbry from "lbry";
 import { Line } from "rc-progress";
 
@@ -34,6 +35,7 @@ class App extends React.PureComponent {
         {modal == "upgrade" && <UpgradeModal />}
         {modal == "downloading" && <DownloadingModal />}
         {modal == "error" && <ErrorModal />}
+        {modal == "welcome" && <WelcomeModal />}
       </div>
     );
   }

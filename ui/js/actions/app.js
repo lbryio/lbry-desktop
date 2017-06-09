@@ -10,6 +10,10 @@ import {
   selectCurrentParams,
 } from "selectors/app";
 import { doSearch } from "actions/search";
+import { doFetchDaemonSettings } from "actions/settings";
+import { doAuthenticate } from "actions/user";
+import { doRewardList } from "actions/rewards";
+import { doFileList } from "actions/file_info";
 
 const { remote, ipcRenderer, shell } = require("electron");
 const path = require("path");
@@ -216,8 +220,14 @@ export function doAlertError(errorList) {
 }
 
 export function doDaemonReady() {
-  return {
-    type: types.DAEMON_READY,
+  return function(dispatch, getState) {
+    dispatch(doAuthenticate());
+    dispatch({
+      type: types.DAEMON_READY,
+    });
+    dispatch(doChangePath("/discover"));
+    dispatch(doFetchDaemonSettings());
+    dispatch(doFileList());
   };
 }
 
