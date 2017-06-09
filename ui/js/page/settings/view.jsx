@@ -257,7 +257,7 @@ class SettingsPage extends React.PureComponent {
               />
             </div>
           </div>
-        </section>*/}
+        </section>
 
         <section className="card">
           <div className="card__content">
