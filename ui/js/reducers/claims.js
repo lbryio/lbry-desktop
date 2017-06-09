@@ -22,9 +22,9 @@ reducers[types.RESOLVE_URI_COMPLETED] = function(state, action) {
 
   return Object.assign({}, state, {
     byId,
-    claimsByUri: byUri
+    claimsByUri: byUri,
   });
-}
+};
 
 reducers[types.RESOLVE_URI_CANCELED] = function(state, action) {
   const uri = action.data.uri;
@@ -42,9 +42,7 @@ reducers[types.FETCH_CLAIM_LIST_MINE_STARTED] = function(state, action) {
 };
 
 reducers[types.FETCH_CLAIM_LIST_MINE_COMPLETED] = function(state, action) {
-  const {
-    claims,
-  } = action.data;
+  const { claims } = action.data;
   const myClaims = new Set(state.myClaims);
   const byUri = Object.assign({}, state.claimsByUri);
   const byId = Object.assign({}, state.byId);
@@ -52,14 +50,14 @@ reducers[types.FETCH_CLAIM_LIST_MINE_COMPLETED] = function(state, action) {
   claims.forEach(claim => {
     myClaims.add(claim.claim_id);
     byId[claim.claim_id] = claim;
-  })
+  });
 
   return Object.assign({}, state, {
     isClaimListMinePending: false,
     myClaims: myClaims,
     byId,
   });
-}
+};
 
 // reducers[types.FETCH_CHANNEL_CLAIMS_STARTED] = function(state, action) {
 //   const {

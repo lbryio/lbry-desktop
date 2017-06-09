@@ -5,7 +5,7 @@ const _selectState = state => state.claims || {};
 
 export const selectClaimsById = createSelector(
   _selectState,
-  (state) => state.byId || {}
+  state => state.byId || {}
 );
 
 export const selectClaimsByUri = createSelector(
@@ -28,11 +28,11 @@ export const selectClaimsByUri = createSelector(
 
         claims[uri] = claim;
       }
-    })
+    });
 
     return claims;
   }
-)
+);
 
 export const selectAllClaimsByChannel = createSelector(
   _selectState,
@@ -107,7 +107,7 @@ export const selectMyClaimsOutpoints = createSelector(
     claimIds.forEach(claimId => {
       const claim = byId[claimId];
       if (claim) outpoints.push(`${claim.txid}:${claim.nout}`);
-    })
+    });
 
     return outpoints;
   }
