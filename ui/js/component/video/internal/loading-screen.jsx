@@ -1,9 +1,9 @@
 import React from "react";
 
-const LoadingScreen = ({ status }) =>
+const LoadingScreen = ({ status, spinner = true }) =>
   <div className="video__loading-screen">
     <div>
-      <div className="video__loading-spinner" />
+      {spinner && <div className="video__loading-spinner" />}
 
       <div className="video__loading-status">
         {status}
