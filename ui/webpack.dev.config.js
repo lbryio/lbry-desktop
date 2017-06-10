@@ -17,42 +17,45 @@ module.exports = {
     filename: "bundle.js",
     pathinfo: true
   },
-  debug: true,
   cache: true,
   devtool: 'eval',
   resolve: {
-    root: appPath,
-    extensions: ['', '.js', '.jsx', '.css'],
+    modules: [appPath, "node_modules"],
+    extensions: ['.js', '.jsx', '.css']
   },
   plugins: [
     new WebpackNotifierPlugin(),
     new webpack.DefinePlugin({
       ENV: JSON.stringify("development"),
     }),
+    new webpack.LoaderOptionsPlugin({
+      debug: true
+    })
   ],
   module: {
-    preLoaders: [
+    rules: [
       {
         test: /\.jsx?$/,
+        enforce: "pre",
         loaders: ['eslint'],
         // define an include so we check just the files we need
         include: PATHS.app
-      }
-    ],
-    loaders: [
-      { test: /\.css$/, loader: "style!css" },
+      },
+      {
+        test: /\.css$/,
+        use: ["style-loader", "css-loader"]
+      },
       {
         test: /\.jsx?$/,
-        loader: 'babel',
-        query: {
-          cacheDirectory: true,
-          presets:[ 'es2015', 'react', 'stage-2' ]
+        exclude: /node_modules/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            cacheDirectory: true,
+            presets: [ 'es2015', 'react', 'stage-2' ]
+          }
         }
-      },
-      {
-        test: /mime\.json$/,
-        loader: 'json',
-      },
+      }
     ]
   },
   target: 'electron-main',
