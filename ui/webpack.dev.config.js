@@ -1,27 +1,27 @@
-const path = require('path');
-const webpack = require('webpack')
-const WebpackNotifierPlugin = require('webpack-notifier')
+const path = require("path");
+const webpack = require("webpack")
+const WebpackNotifierPlugin = require("webpack-notifier")
 
-const appPath = path.resolve(__dirname, 'js');
+const appPath = path.resolve(__dirname, "js");
 
 const PATHS = {
-  app: path.join(__dirname, 'app'),
-  dist: path.join(__dirname, '..', 'app', 'dist')
+  app: path.join(__dirname, "app"),
+  dist: path.join(__dirname, "..", "app", "dist")
 };
 
 module.exports = {
-  entry: ['babel-polyfill', './js/main.js'],
+  entry: ["babel-polyfill", "./js/main.js"],
   output: {
-    path: path.join(PATHS.dist, 'js'),
-    publicPath: '/js/',
+    path: path.join(PATHS.dist, "js"),
+    publicPath: "/js/",
     filename: "bundle.js",
     pathinfo: true
   },
   cache: true,
-  devtool: 'eval',
+  devtool: "eval",
   resolve: {
     modules: [appPath, "node_modules"],
-    extensions: ['.js', '.jsx', '.css']
+    extensions: [".js", ".jsx", ".css"]
   },
   plugins: [
     new WebpackNotifierPlugin(),
@@ -37,7 +37,7 @@ module.exports = {
       {
         test: /\.jsx?$/,
         enforce: "pre",
-        loaders: ['eslint'],
+        loaders: ["eslint"],
         // define an include so we check just the files we need
         include: PATHS.app
       },
@@ -49,14 +49,14 @@ module.exports = {
         test: /\.jsx?$/,
         exclude: /node_modules/,
         use: {
-          loader: 'babel-loader',
+          loader: "babel-loader",
           options: {
             cacheDirectory: true,
-            presets: [ 'es2015', 'react', 'stage-2' ]
+            presets: [ "es2015", "react", "stage-2" ]
           }
         }
       }
     ]
   },
-  target: 'electron-main',
+  target: "electron-main",
 };
