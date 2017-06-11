@@ -50,21 +50,26 @@ reducers[types.FETCH_CLAIM_LIST_MINE_COMPLETED] = function(state, action) {
   });
 };
 
-// reducers[types.FETCH_CHANNEL_CLAIMS_STARTED] = function(state, action) {
-//   const {
-//     uri,
-//   } = action.data
-//
-//   const newClaims = Object.assign({}, state.claimsByChannel)
-//
-//   if (claims !== undefined) {
-//     newClaims[uri] = claims
-//   }
-//
-//   return Object.assign({}, state, {
-//     claimsByChannel: newClaims
-//   })
-// }
+reducers[types.FETCH_CHANNEL_LIST_MINE_STARTED] = function(state, action) {
+  return Object.assign({}, state, { fetchingMyChannels: true });
+};
+
+reducers[types.FETCH_CHANNEL_LIST_MINE_COMPLETED] = function(state, action) {
+  const { claims } = action.data;
+  const myChannelClaims = new Set(state.myChannelClaims);
+  const byId = Object.assign({}, state.byId);
+
+  claims.forEach(claim => {
+    myChannelClaims.add(claim.claim_id);
+    byId[claims.claim_id] = claim;
+  });
+
+  return Object.assign({}, state, {
+    byId,
+    fetchingMyChannels: false,
+    myChannelClaims,
+  });
+};
 
 reducers[types.FETCH_CHANNEL_CLAIMS_COMPLETED] = function(state, action) {
   const { uri, claims } = action.data;

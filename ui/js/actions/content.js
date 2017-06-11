@@ -339,3 +339,20 @@ export function doFetchClaimListMine() {
     });
   };
 }
+
+export function doFetchChannelListMine() {
+  return function(dispatch, getState) {
+    dispatch({
+      type: types.FETCH_CHANNEL_LIST_MINE_STARTED,
+    });
+
+    const callback = channels => {
+      dispatch({
+        type: types.FETCH_CHANNEL_LIST_MINE_COMPLETED,
+        data: { claims: channels },
+      });
+    };
+
+    lbry.channel_list_mine().then(callback);
+  };
+}
