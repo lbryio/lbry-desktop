@@ -12,7 +12,7 @@ export function doFetchCostInfoForUri(uri) {
       claim = selectClaimsByUri(state)[uri],
       isGenerous = selectSettingsIsGenerous(state);
 
-    if (!claim) return null
+    if (!claim) return null;
 
     function begin() {
       dispatch({
