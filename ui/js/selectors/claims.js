@@ -112,3 +112,21 @@ export const selectMyClaimsOutpoints = createSelector(
     return outpoints;
   }
 );
+
+export const selectFetchingMyChannels = createSelector(
+  _selectState,
+  state => !!state.fetchingMyChannels
+);
+
+export const selectMyChannelClaims = createSelector(
+  _selectState,
+  selectClaimsById,
+  (state, byId) => {
+    const ids = state.myChannelClaims || [];
+    const claims = [];
+
+    ids.forEach(id => claims.push(byId[id]));
+
+    return claims;
+  }
+);
