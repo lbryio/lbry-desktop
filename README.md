@@ -48,3 +48,7 @@ to create distributable packages, which is run by calling:
 
 This project has currently only been worked on in Linux and macOS. If you are on Windows, you can
 checkout out the build steps in [appveyor.yml](https://github.com/lbryio/lbry-app/blob/master/.appveyor.yml) and probably figure out something from there.
+
+## Internationalization
+
+If you want to help translating the lbry-app, you can copy the en.json file in /app/locales and modify the values while leaving the keys as their original English strings. An example for this would be: `"Skip": "Überspringen",` Translations should automatically show up in options.

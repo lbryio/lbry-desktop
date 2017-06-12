@@ -1,32 +1,27 @@
-import React from 'react'
-import {
-  Modal
-} from 'component/modal'
-import {
-  downloadUpgrade,
-  skipUpgrade
-} from 'actions/app'
+import React from "react";
+import { Modal } from "component/modal";
+import { downloadUpgrade, skipUpgrade } from "actions/app";
 
-class UpgradeModal extends React.Component {
+class UpgradeModal extends React.PureComponent {
   render() {
-    const {
-      downloadUpgrade,
-      skipUpgrade
-    } = this.props
+    const { downloadUpgrade, skipUpgrade } = this.props;
 
     return (
       <Modal
         isOpen={true}
-        contentLabel="Update available"
+        contentLabel={__("Update available")}
         type="confirm"
-        confirmButtonLabel="Upgrade"
-        abortButtonLabel="Skip"
+        confirmButtonLabel={__("Upgrade")}
+        abortButtonLabel={__("Skip")}
         onConfirmed={downloadUpgrade}
-        onAborted={skipUpgrade}>
-        Your version of LBRY is out of date and may be unreliable or insecure.
+        onAborted={skipUpgrade}
+      >
+        {__(
+          "Your version of LBRY is out of date and may be unreliable or insecure."
+        )}
       </Modal>
-    )
+    );
   }
 }
 
-export default UpgradeModal
+export default UpgradeModal;

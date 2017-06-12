@@ -1,25 +1,17 @@
-import React from 'react'
-import {
-  connect
-} from 'react-redux'
-import {
-  doStartUpgrade,
-  doCancelUpgrade,
-} from 'actions/app'
-import {
-  selectDownloadProgress,
-  selectDownloadComplete,
-} from 'selectors/app'
-import DownloadingModal from './view'
+import React from "react";
+import { connect } from "react-redux";
+import { doStartUpgrade, doCancelUpgrade } from "actions/app";
+import { selectDownloadProgress, selectDownloadComplete } from "selectors/app";
+import DownloadingModal from "./view";
 
-const select = (state) => ({
+const select = state => ({
   downloadProgress: selectDownloadProgress(state),
   downloadComplete: selectDownloadComplete(state),
-})
+});
 
-const perform = (dispatch) => ({
+const perform = dispatch => ({
   startUpgrade: () => dispatch(doStartUpgrade()),
-  cancelUpgrade: () => dispatch(doCancelUpgrade())
-})
+  cancelUpgrade: () => dispatch(doCancelUpgrade()),
+});
 
-export default connect(select, perform)(DownloadingModal)
+export default connect(select, perform)(DownloadingModal);

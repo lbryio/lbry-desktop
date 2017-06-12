@@ -1,34 +1,38 @@
-import React from 'react';
-import {Icon} from './common.js';
-import Link from 'component/link';
+import React from "react";
+import { Icon } from "./common.js";
+import Link from "component/link";
 
-export class DropDownMenuItem extends React.Component {
+export class DropDownMenuItem extends React.PureComponent {
   static propTypes = {
     href: React.PropTypes.string,
     label: React.PropTypes.string,
     icon: React.PropTypes.string,
     onClick: React.PropTypes.func,
-  }
+  };
 
   static defaultProps = {
-    iconPosition: 'left',
-  }
+    iconPosition: "left",
+  };
 
   render() {
-    var icon = (this.props.icon ? <Icon icon={this.props.icon} fixed /> : null);
+    var icon = this.props.icon ? <Icon icon={this.props.icon} fixed /> : null;
 
     return (
-      <a className="menu__menu-item" onClick={this.props.onClick}
-         href={this.props.href || 'javascript:'} label={this.props.label}>
-        {this.props.iconPosition == 'left' ? icon : null}
+      <a
+        className="menu__menu-item"
+        onClick={this.props.onClick}
+        href={this.props.href || "javascript:"}
+        label={this.props.label}
+      >
+        {this.props.iconPosition == "left" ? icon : null}
         {this.props.label}
-        {this.props.iconPosition == 'left' ? null : icon}
+        {this.props.iconPosition == "left" ? null : icon}
       </a>
     );
   }
 }
 
-export class DropDownMenu extends React.Component {
+export class DropDownMenu extends React.PureComponent {
   constructor(props) {
     super(props);
 
@@ -42,7 +46,7 @@ export class DropDownMenu extends React.Component {
 
   componentWillUnmount() {
     if (this._isWindowClickBound) {
-      window.removeEventListener('click', this.handleWindowClick, false);
+      window.removeEventListener("click", this.handleWindowClick, false);
     }
   }
 
@@ -52,7 +56,7 @@ export class DropDownMenu extends React.Component {
     });
     if (!this.state.menuOpen && !this._isWindowClickBound) {
       this._isWindowClickBound = true;
-      window.addEventListener('click', this.handleWindowClick, false);
+      window.addEventListener("click", this.handleWindowClick, false);
       e.stopPropagation();
     }
     return false;
@@ -66,10 +70,12 @@ export class DropDownMenu extends React.Component {
   }
 
   handleWindowClick(e) {
-    if (this.state.menuOpen &&
-          (!this._menuDiv || !this._menuDiv.contains(e.target))) {
+    if (
+      this.state.menuOpen &&
+      (!this._menuDiv || !this._menuDiv.contains(e.target))
+    ) {
       this.setState({
-        menuOpen: false
+        menuOpen: false,
       });
     }
   }
@@ -77,13 +83,26 @@ export class DropDownMenu extends React.Component {
   render() {
     if (!this.state.menuOpen && this._isWindowClickBound) {
       this._isWindowClickBound = false;
-      window.removeEventListener('click', this.handleWindowClick, false);
+      window.removeEventListener("click", this.handleWindowClick, false);
     }
     return (
       <div className="menu-container">
-        <Link ref={(span) => this._menuButton = span} button="text" icon="icon-ellipsis-v" onClick={(event) => { this.handleMenuIconClick(event) }} />
+        <Link
+          ref={span => (this._menuButton = span)}
+          button="text"
+          icon="icon-ellipsis-v"
+          onClick={event => {
+            this.handleMenuIconClick(event);
+          }}
+        />
         {this.state.menuOpen
-          ? <div ref={(div) => this._menuDiv = div} className="menu" onClick={(event) => { this.handleMenuClick(event) }}>
+          ? <div
+              ref={div => (this._menuDiv = div)}
+              className="menu"
+              onClick={event => {
+                this.handleMenuClick(event);
+              }}
+            >
               {this.props.children}
             </div>
           : null}

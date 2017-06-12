@@ -1,206 +1,184 @@
-import {createSelector} from 'reselect'
-import {
-  parseQueryParams,
-} from 'util/query_params'
-import lbryuri from 'lbryuri'
+import { createSelector } from "reselect";
+import { parseQueryParams } from "util/query_params";
+import lbryuri from "lbryuri";
 
-export const _selectState = state => state.app || {}
+export const _selectState = state => state.app || {};
 
 export const selectIsLoaded = createSelector(
   _selectState,
-  (state) => state.isLoaded
-)
+  state => state.isLoaded
+);
 
 export const selectCurrentPath = createSelector(
   _selectState,
-  (state) => state.currentPath
-)
+  state => state.currentPath
+);
 
-export const selectCurrentPage = createSelector(
-  selectCurrentPath,
-  (path) => {
-    return path.replace(/^\//, '').split('?')[0]
-  }
-)
+export const selectCurrentPage = createSelector(selectCurrentPath, path => {
+  return path.replace(/^\//, "").split("?")[0];
+});
 
-export const selectCurrentParams = createSelector(
-  selectCurrentPath,
-  (path) => {
-    if (path === undefined) return {}
-    if (!path.match(/\?/)) return {}
+export const selectCurrentParams = createSelector(selectCurrentPath, path => {
+  if (path === undefined) return {};
+  if (!path.match(/\?/)) return {};
 
-    return parseQueryParams(path.split('?')[1])
-  }
-)
+  return parseQueryParams(path.split("?")[1]);
+});
 
 export const selectPageTitle = createSelector(
   selectCurrentPage,
   selectCurrentParams,
   (page, params) => {
     switch (page) {
-      case 'search':
-        return params.query ? `Search results for ${params.query}` : 'Search'
-      case 'settings':
-        return 'Settings'
-      case 'help':
-        return 'Help'
-      case 'report':
-        return 'Report'
-      case 'wallet':
-      case 'send':
-      case 'receive':
-      case 'rewards':
-        return page.charAt(0).toUpperCase() + page.slice(1)
-      case 'show':
-        return lbryuri.normalize(params.uri)
-      case 'downloaded':
-        return 'Downloads & Purchases'
-      case 'published':
-        return 'Publishes'
-      case 'start':
-        return 'Start'
-      case 'publish':
-        return 'Publish'
-      case 'help':
-        return 'Help'
-      case 'developer':
-        return 'Developer'
-      case 'discover':
-        return 'Home'
+      case "settings":
+      case "help":
+      case "report":
+      case "wallet":
+      case "send":
+      case "receive":
+      case "rewards":
+      case "start":
+      case "publish":
+      case "help":
+      case "developer":
+        return __(page.charAt(0).toUpperCase() + page.slice(1));
+      case "search":
+        return params.query
+          ? __("Search results for %s", params.query)
+          : __("Search");
+      case "show":
+        return lbryuri.normalize(params.uri);
+      case "downloaded":
+        return __("Downloads & Purchases");
+      case "published":
+        return __("Publishes");
+      case "discover":
+        return __("Home");
       default:
-        return '';
+        return "";
     }
   }
-)
+);
 
 export const selectPlatform = createSelector(
   _selectState,
-  (state) => state.platform
-)
+  state => state.platform
+);
 
-export const selectUpdateUrl = createSelector(
-  selectPlatform,
-  (platform) => {
-    switch (platform) {
-      case 'darwin':
-        return 'https://lbry.io/get/lbry.dmg';
-      case 'linux':
-        return 'https://lbry.io/get/lbry.deb';
-      case 'win32':
-        return 'https://lbry.io/get/lbry.exe';
-      default:
-        throw 'Unknown platform';
-    }
+export const selectUpdateUrl = createSelector(selectPlatform, platform => {
+  switch (platform) {
+    case "darwin":
+      return "https://lbry.io/get/lbry.dmg";
+    case "linux":
+      return "https://lbry.io/get/lbry.deb";
+    case "win32":
+      return "https://lbry.io/get/lbry.exe";
+    default:
+      throw "Unknown platform";
   }
-)
+});
 
-export const selectVersion = createSelector(
-  _selectState,
-  (state) => {
-    return state.version
-  }
-)
+export const selectVersion = createSelector(_selectState, state => {
+  return state.version;
+});
 
 export const selectUpgradeFilename = createSelector(
   selectPlatform,
   selectVersion,
   (platform, version) => {
     switch (platform) {
-      case 'darwin':
+      case "darwin":
         return `LBRY_${version}.dmg`;
-      case 'linux':
+      case "linux":
         return `LBRY_${version}_amd64.deb`;
-      case 'win32':
+      case "win32":
         return `LBRY_${version}.exe`;
       default:
-        throw 'Unknown platform';
+        throw "Unknown platform";
     }
   }
-)
+);
 
 export const selectCurrentModal = createSelector(
   _selectState,
-  (state) => state.modal
-)
+  state => state.modal
+);
 
 export const selectDownloadProgress = createSelector(
   _selectState,
-  (state) => state.downloadProgress
-)
+  state => state.downloadProgress
+);
 
 export const selectDownloadComplete = createSelector(
   _selectState,
-  (state) => state.upgradeDownloadCompleted
-)
+  state => state.upgradeDownloadCompleted
+);
 
-export const selectHeaderLinks = createSelector(
-  selectCurrentPage,
-  (page) => {
-    switch (page) {
-      case 'wallet':
-      case 'send':
-      case 'receive':
-      case 'rewards':
-        return {
-          'wallet': 'Overview',
-          'send': 'Send',
-          'receive': 'Receive',
-          'rewards': 'Rewards',
-        };
-      case 'downloaded':
-      case 'published':
-        return {
-          'downloaded': 'Downloaded',
-          'published': 'Published',
-        };
-      case 'settings':
-      case 'help':
-        return {
-          'settings': 'Settings',
-          'help': 'Help',
-        }
-      default:
-        return null;
-    }
+export const selectHeaderLinks = createSelector(selectCurrentPage, page => {
+  switch (page) {
+    case "wallet":
+    case "send":
+    case "receive":
+    case "rewards":
+      return {
+        wallet: __("Overview"),
+        send: __("Send"),
+        receive: __("Receive"),
+        rewards: __("Rewards"),
+      };
+    case "downloaded":
+    case "published":
+      return {
+        downloaded: __("Downloaded"),
+        published: __("Published"),
+      };
+    case "settings":
+    case "help":
+      return {
+        settings: __("Settings"),
+        help: __("Help"),
+      };
+    default:
+      return null;
   }
-)
+});
 
 export const selectUpgradeSkipped = createSelector(
   _selectState,
-  (state) => state.upgradeSkipped
-)
+  state => state.upgradeSkipped
+);
 
 export const selectUpgradeDownloadPath = createSelector(
   _selectState,
-  (state) => state.downloadPath
-)
+  state => state.downloadPath
+);
 
 export const selectUpgradeDownloadItem = createSelector(
   _selectState,
-  (state) => state.downloadItem
-)
+  state => state.downloadItem
+);
 
 export const selectModalExtraContent = createSelector(
   _selectState,
-  (state) => state.modalExtraContent
-)
+  state => state.modalExtraContent
+);
 
 export const selectDaemonReady = createSelector(
   _selectState,
-  (state) => state.daemonReady
-)
+  state => state.daemonReady
+);
 
 export const selectObscureNsfw = createSelector(
   _selectState,
-  (state) => !!state.obscureNsfw
-)
+  state => !!state.obscureNsfw
+);
 
 export const selectSnackBar = createSelector(
   _selectState,
-  (state) => state.snackBar || {}
-)
+  state => state.snackBar || {}
+);
 
 export const selectSnackBarSnacks = createSelector(
   selectSnackBar,
-  (snackBar) => snackBar.snacks || []
-)
+  snackBar => snackBar.snacks || []
+);

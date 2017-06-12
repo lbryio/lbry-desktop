@@ -16,3 +16,4 @@ dist
 .#*
 
 build/daemon.zip
+.vimrc

@@ -1,10 +1,12 @@
 {
   "name": "lbry-web-ui",
-  "version": "0.11.9",
+  "version": "0.12.0",
   "description": "LBRY UI",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "webpack-dev-server --devtool eval --progress --colors --inline"
+    "dev": "webpack-dev-server --devtool eval --progress --colors --inline",
+    "precommit": "lint-staged",
+    "prettier": "prettier --trailing-comma es5 --write js/**/*.{js,jsx}"
   },
   "keywords": [
     "lbry"
@@ -34,7 +36,8 @@
     "redux-logger": "^3.0.1",
     "redux-thunk": "^2.2.0",
     "render-media": "^2.10.0",
-    "reselect": "^3.0.0"
+    "reselect": "^3.0.0",
+    "y18n": "^3.2.1"
   },
   "devDependencies": {
     "babel": "^6.5.2",
@@ -51,11 +54,22 @@
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^2.2.3",
     "eslint-plugin-react": "^6.7.1",
+    "husky": "^0.13.4",
     "json-loader": "^0.5.4",
+    "lint-staged": "^3.6.0",
     "node-sass": "^3.13.0",
+    "prettier": "^1.4.2",
     "webpack": "^1.13.3",
     "webpack-dev-server": "^2.4.4",
     "webpack-notifier": "^1.5.0",
-    "webpack-target-electron-renderer": "^0.4.0"
+    "webpack-target-electron-renderer": "^0.4.0",
+    "why-did-you-update": "0.0.8"
+  },
+  "lint-staged": {
+    "gitDir": "../",
+    "ui/js/**/*.{jsx,js}": [
+      "prettier --trailing-comma es5 --write",
+      "git add"
+    ]
   }
 }

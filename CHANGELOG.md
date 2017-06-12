@@ -27,6 +27,28 @@ Web UI version numbers should always match the corresponding version of LBRY App
   *
   *
 
+## [0.12.0] - 2017-06-09
+
+### Added
+ * More file types, like audio and documents, can be streamed and/or served from the app
+ * App is no longer gated. Reward authorization re-written. Added basic flows for new users.
+ * Videos now have a classy loading spinner
+
+
+### Changed
+ * All UI strings are now rendered according to gettext standard, in prep for i18n
+ * Switched to new fee metadata format
+
+
+### Fixed
+ * If a daemon is running but unresponsive, startup is no longer blocked indefinitely
+ * Updated deprecated LBRY API call signatures
+ * App scrolls to the top of the page on navigation
+ * Download progress works properly for purchased but deleted files
+ * Publish channels for less than 1 LBC
+
+
+
 ## [0.11.9] - 2017-06-01
 
 ### Fixed

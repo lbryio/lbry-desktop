@@ -1,10 +1,10 @@
-import React from 'react';
+import React from "react";
 
-export class ToolTip extends React.Component {
+export class ToolTip extends React.PureComponent {
   static propTypes = {
     body: React.PropTypes.string.isRequired,
-    label: React.PropTypes.string.isRequired
-  }
+    label: React.PropTypes.string.isRequired,
+  };
 
   constructor(props) {
     super(props);
@@ -28,12 +28,23 @@ export class ToolTip extends React.Component {
 
   render() {
     return (
-      <span className={'tooltip ' + (this.props.className || '')}>
-        <a className="tooltip__link" onClick={() => { this.handleClick() }}>
+      <span className={"tooltip " + (this.props.className || "")}>
+        <a
+          className="tooltip__link"
+          onClick={() => {
+            this.handleClick();
+          }}
+        >
           {this.props.label}
         </a>
-        <div className={'tooltip__body ' + (this.state.showTooltip ? '' : ' hidden')}
-             onMouseOut={() => { this.handleTooltipMouseOut() }}>
+        <div
+          className={
+            "tooltip__body " + (this.state.showTooltip ? "" : " hidden")
+          }
+          onMouseOut={() => {
+            this.handleTooltipMouseOut();
+          }}
+        >
           {this.props.body}
         </div>
       </span>
@@ -41,4 +52,4 @@ export class ToolTip extends React.Component {
   }
 }
 
-export default ToolTip
+export default ToolTip;

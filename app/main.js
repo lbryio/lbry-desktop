@@ -21,7 +21,13 @@ const VERSION_CHECK_INTERVAL = 30 * 60 * 1000;
 const LATEST_RELEASE_API_URL = 'https://api.github.com/repos/lbryio/lbry-app/releases/latest';
 
 
-let client = jayson.client.http('http://localhost:5279/lbryapi');
+let client = jayson.client.http({
+  host: 'localhost',
+  port: 5279,
+  path: '/lbryapi',
+  timeout: 1000
+});
+
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win;
