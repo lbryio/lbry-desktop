@@ -93,21 +93,33 @@ export const selectClaimListMineIsPending = createSelector(
   state => state.isClaimListMinePending
 );
 
-export const selectMyClaims = createSelector(
+export const selectMyClaimsRaw = createSelector(
   _selectState,
   state => state.myClaims || new Set()
 );
 
+export const selectMyClaims = createSelector(
+  selectMyClaimsRaw,
+  selectClaimsById,
+  (myClaimIds, byId) => {
+    const claims = [];
+
+    myClaimIds.forEach(id => {
+      const claim = byId[id];
+
+      if (claim) claims.push(claim);
+    });
+
+    return claims;
+  }
+);
+
 export const selectMyClaimsOutpoints = createSelector(
   selectMyClaims,
-  selectClaimsById,
-  (claimIds, byId) => {
+  myClaims => {
     const outpoints = [];
 
-    claimIds.forEach(claimId => {
-      const claim = byId[claimId];
-      if (claim) outpoints.push(`${claim.txid}:${claim.nout}`);
-    });
+    myClaims.forEach(claim => outpoints.push(`${claim.txid}:${claim.nout}`));
 
     return outpoints;
   }
