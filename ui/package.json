@@ -6,7 +6,8 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "webpack-dev-server --devtool eval --progress --colors --inline",
     "precommit": "lint-staged",
-    "prettier": "prettier --trailing-comma es5 --write js/**/*.{js,jsx}"
+    "prettier": "prettier --trailing-comma es5 --write js/**/*.{js,jsx}",
+    "extract-langs": "node extractLocals.js"
   },
   "keywords": [
     "lbry"
@@ -55,6 +56,7 @@
     "eslint-plugin-jsx-a11y": "^2.2.3",
     "eslint-plugin-react": "^6.7.1",
     "husky": "^0.13.4",
+    "i18n-extract": "^0.4.4",
     "json-loader": "^0.5.4",
     "lint-staged": "^3.6.0",
     "node-sass": "^3.13.0",
