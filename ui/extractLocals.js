@@ -1,38 +1,15 @@
-var fs = require('fs');
-var path = require('path');
 var extract = require('i18n-extract');
-var enLocale = require('../app/dist/locales/en.json');
+const fs = require('fs');
 
-var walk = function(dir, done) {
-  var results = [];
-  fs.readdir(dir, function(err, list) {
-    if (err) return done(err);
-    var pending = list.length;
-    if (!pending) return done(null, results);
-    list.forEach(function(file) {
-      file = path.resolve(dir, file);
-      fs.stat(file, function(err, stat) {
-        if (stat && stat.isDirectory()) {
-          results.push(file + "/*.js");
-          results.push(file + "/*.jsx");
-          walk(file, function(err, res) {
-            results = results.concat(res);
-            if (!--pending) done(null, results);
-          });
-        } else {
-         // results.push(file);
-          if (!--pending) done(null, results);
-        }
-      });
-    });
-  });
-};
+var path = '../app/dist/locales/en.json';
 
-walk('js/', function(err, results) {
-  if (err) throw err;
-  results.push('js/*.js')
-  results.push('js/*.jsx')
-  const keys = extract.extractFromFiles(results, {
+fs.writeFile(path, '{}', 'utf8', function(err) {
+    if(err) {
+        return console.log(err);
+    }
+    var enLocale = require(path);
+
+    const keys = extract.extractFromFiles(['js/**/*.{js,jsx}'], {
     marker: '__',
     });
 
@@ -42,7 +19,7 @@ walk('js/', function(err, results) {
     reports = reports.concat(extract.findDuplicated(enLocale, keys));
 
     if (reports.length > 0) {
-        fs.readFile('../app/dist/locales/en.json', 'utf8', function readFileCallback(err, data){
+        fs.readFile(path, 'utf8', function readFileCallback(err, data){
             if (err){
                 console.log(err);
             } else {
@@ -64,14 +41,17 @@ walk('js/', function(err, results) {
                 }
 
                 var json = JSON.stringify(localeObj, null, '\t'); //convert it back to json
-                fs.writeFile('../app/dist/locales/en.json', json, 'utf8', function callback(err) {
+                fs.writeFile(path, json, 'utf8', function callback(err) {
                     if (err) throw err;
                     console.log('It\'s saved!');
                 });
             }
         });
     }
-});
+}); 
+
+
+
 
 
 
