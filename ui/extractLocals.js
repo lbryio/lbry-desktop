@@ -15,8 +15,6 @@ fs.writeFile(path, '{}', 'utf8', function(err) {
 
     let reports = [];
     reports = reports.concat(extract.findMissing(enLocale, keys));
-    reports = reports.concat(extract.findUnused(enLocale, keys));
-    reports = reports.concat(extract.findDuplicated(enLocale, keys));
 
     if (reports.length > 0) {
         fs.readFile(path, 'utf8', function readFileCallback(err, data){
@@ -26,24 +24,16 @@ fs.writeFile(path, '{}', 'utf8', function(err) {
                 localeObj = JSON.parse(data);
 
                 for (var i = 0; i < reports.length; i++) {
+                    // no need to care for other types than MISSING because starting file will always be empty
                     if (reports[i].type === 'MISSING') {
                         localeObj[reports[i].key] = reports[i].key;
-                    } else if (reports[i].type === 'UNUSED') {
-                        console.log("Found unused String in en.json, but beware: This may be a String from api.lbry.io, do not blindly delete!")
-                        console.log(reports[i]);
-                    } else if (reports[i].type == "DUPLICATED") {
-                        console.log("Found duplicated String in en.json!")
-                        console.log(reports[i]);
-                    } else {
-                        console.log("Found unknown type of String in en.json!")
-                        console.log(reports[i]);
-                    }
+                    } 
                 }
 
-                var json = JSON.stringify(localeObj, null, '\t'); //convert it back to json
+                var json = JSON.stringify(localeObj, null, '\t'); //convert it back to json-string
                 fs.writeFile(path, json, 'utf8', function callback(err) {
                     if (err) throw err;
-                    console.log('It\'s saved!');
+                    console.log('Extracted all strings!');
                 });
             }
         });
