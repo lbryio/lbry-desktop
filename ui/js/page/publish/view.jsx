@@ -23,9 +23,6 @@ class PublishPage extends React.PureComponent {
       channel: "anonymous",
       newChannelName: "@",
       newChannelBid: 10,
-      nameResolved: null,
-      myClaimExists: null,
-      topClaimValue: 0.0,
       myClaimValue: 0.0,
       myClaimMetadata: null,
       copyrightNotice: "",
@@ -44,15 +41,6 @@ class PublishPage extends React.PureComponent {
     const { fetchingChannels, fetchChannelListMine } = this.props;
 
     if (!fetchingChannels) fetchChannelListMine();
-    // Calls API to update displayed list of channels. If a channel name is provided, will select
-    // that channel at the same time (used immediately after creating a channel)
-    // lbry.channel_list_mine().then(channels => {
-    //   this.props.claimFirstChannelReward();
-    //   this.setState({
-    //     channels: channels,
-    //     ...(channel ? { channel } : {}),
-    //   });
-    // });
   }
 
   handleSubmit(event) {
@@ -65,7 +53,7 @@ class PublishPage extends React.PureComponent {
     });
 
     let checkFields = this._requiredFields;
-    if (!this.state.myClaimExists) {
+    if (!this.myClaimExists()) {
       checkFields.unshift("file");
     }
 
@@ -182,6 +170,49 @@ class PublishPage extends React.PureComponent {
     });
   }
 
+  claim() {
+    const { claimsByUri } = this.props;
+    const { uri } = this.state;
+
+    return claimsByUri[uri];
+  }
+
+  topClaimValue() {
+    if (!this.claim()) return null;
+
+    return parseFloat(this.claim().amount);
+  }
+
+  myClaimExists() {
+    const { myClaims } = this.props;
+    const { name } = this.state;
+
+    if (!name) return false;
+
+    return !!myClaims.find(claim => claim.name === name);
+  }
+
+  topClaimIsMine() {
+    const myClaimInfo = this.myClaimInfo();
+    const { claimsByUri } = this.props;
+    const { uri } = this.state;
+
+    if (!uri) return null;
+
+    const claim = claimsByUri[uri];
+
+    if (!claim) return true;
+    if (!myClaimInfo) return false;
+
+    return myClaimInfo.amount >= claimInfo.amount;
+  }
+
+  myClaimInfo() {
+    return Object.values(this.props.myClaims).find(
+      claim => claim.name === name
+    );
+  }
+
   handleNameChange(event) {
     var rawName = event.target.value;
 
@@ -189,7 +220,7 @@ class PublishPage extends React.PureComponent {
       this.setState({
         rawName: "",
         name: "",
-        nameResolved: false,
+        uri: "",
       });
 
       return;
@@ -203,61 +234,14 @@ class PublishPage extends React.PureComponent {
     }
 
     const name = rawName.toLowerCase();
+    const uri = lbryuri.normalize(name);
     this.setState({
       rawName: rawName,
       name: name,
-      nameResolved: null,
-      myClaimExists: null,
+      uri,
     });
 
-    const myClaimInfo = Object.values(this.props.myClaims).find(
-      claim => claim.name === name
-    );
-
-    this.setState({
-      myClaimExists: !!myClaimInfo,
-    });
-    lbry.resolve({ uri: name }).then(
-      claimInfo => {
-        if (name != this.state.name) {
-          return;
-        }
-
-        if (!claimInfo) {
-          this.setState({
-            nameResolved: false,
-          });
-        } else {
-          const topClaimIsMine =
-            myClaimInfo && myClaimInfo.amount >= claimInfo.amount;
-          const newState = {
-            nameResolved: true,
-            topClaimValue: parseFloat(claimInfo.amount),
-            myClaimExists: !!myClaimInfo,
-            myClaimValue: myClaimInfo ? parseFloat(myClaimInfo.amount) : null,
-            myClaimMetadata: myClaimInfo ? myClaimInfo.value : null,
-            topClaimIsMine: topClaimIsMine,
-          };
-
-          if (topClaimIsMine) {
-            newState.bid = myClaimInfo.amount;
-          } else if (this.state.myClaimMetadata) {
-            // Just changed away from a name we have a claim on, so clear pre-fill
-            newState.bid = "";
-          }
-
-          this.setState(newState);
-        }
-      },
-      () => {
-        // Assume an error means the name is available
-        this.setState({
-          name: name,
-          nameResolved: false,
-          myClaimExists: false,
-        });
-      }
-    );
+    this.props.resolveUri(uri);
   }
 
   handleBidChange(event) {
@@ -427,11 +411,16 @@ class PublishPage extends React.PureComponent {
   }
 
   getNameBidHelpText() {
-    if (!this.state.name) {
+    if (
+      this.state.uri &&
+      this.props.resolvingUris.indexOf(this.state.uri) !== -1
+    ) {
+      return <BusyMessage />;
+    } else if (!this.state.name) {
       return __("Select a URL for this publish.");
-    } else if (this.state.nameResolved === false) {
+    } else if (!this.claim()) {
       return __("This URL is unused.");
-    } else if (this.state.myClaimExists) {
+    } else if (this.myClaimExists()) {
       return __(
         "You have already used this URL. Publishing to it again will update your previous publish."
       );
@@ -496,7 +485,7 @@ class PublishPage extends React.PureComponent {
                   this.onFileChange(event);
                 }}
                 helper={
-                  this.state.myClaimExists
+                  this.myClaimExists()
                     ? __(
                         "If you don't choose a file, the file from your existing claim will be used."
                       )
@@ -829,11 +818,7 @@ class PublishPage extends React.PureComponent {
                       this.handleBidChange(event);
                     }}
                     value={this.state.bid}
-                    placeholder={
-                      this.state.nameResolved
-                        ? this.state.topClaimValue + 10
-                        : 100
-                    }
+                    placeholder={this.claim() ? this.topClaimValue() + 10 : 100}
                     helper={lbcInputHelp}
                   />
                 </div>
@@ -898,7 +883,7 @@ class PublishPage extends React.PureComponent {
         >
           <p>
             {__("Your file has been published to LBRY at the address")}
-            {" "}<code>lbry://{this.state.name}</code>!
+            {" "}<code>{this.state.uri}</code>!
           </p>
           <p>
             {__(
