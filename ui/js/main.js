@@ -49,6 +49,12 @@ ipcRenderer.on("open-uri-requested", (event, uri) => {
   }
 });
 
+ipcRenderer.on("open-menu", (event, uri) => {
+  if (uri && uri.startsWith("/help")) {
+    app.store.dispatch(doNavigate("/help"));
+  }
+});
+
 document.addEventListener("click", event => {
   var target = event.target;
   while (target && target !== document) {

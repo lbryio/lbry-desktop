@@ -36,7 +36,7 @@ const baseTemplate = [
         label: 'Help',
         click(item, focusedWindow) {
           if (focusedWindow) {
-            focusedWindow.loadURL(`file://${__dirname}/../dist/index.html?help`);
+            focusedWindow.webContents.send('open-menu', '/help');
           }
         }
       }
