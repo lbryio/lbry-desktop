@@ -5,6 +5,7 @@ import { FormField, FormRow } from "component/form.js";
 import Link from "component/link";
 import rewards from "rewards";
 import Modal from "component/modal";
+import Notice from "component/notice";
 import { BusyMessage } from "component/common";
 
 class PublishPage extends React.PureComponent {
@@ -37,6 +38,7 @@ class PublishPage extends React.PureComponent {
       copyrightNotice: "",
       otherLicenseDescription: "",
       otherLicenseUrl: "",
+      prefillDone: false,
       uploadProgress: 0.0,
       uploaded: false,
       errorMessage: null,
@@ -204,6 +206,8 @@ class PublishPage extends React.PureComponent {
   }
 
   myClaimInfo() {
+    const { name } = this.state;
+
     return Object.values(this.props.myClaims).find(
       claim => claim.name === name
     );
@@ -241,6 +245,7 @@ class PublishPage extends React.PureComponent {
     this.setState({
       rawName: rawName,
       name: name,
+      prefillDone: false,
       uri,
     });
 
@@ -252,6 +257,23 @@ class PublishPage extends React.PureComponent {
 
     this.resolveUriTimeout = setTimeout(resolve.bind(this), 500, {
       once: true,
+    });
+  }
+
+  handlePrefillClicked() {
+    const myClaimInfoMetadata = this.myClaimInfo().value.stream.metadata;
+
+    let newMetadata = Object.assign({}, this.state.metadata);
+    newMetadata.license_description = myClaimInfoMetadata.license;
+    newMetadata.license_url = myClaimInfoMetadata.licenseUrl;
+
+    this.setState({
+      prefillDone: true,
+      metadata: newMetadata,
+      otherLicenseChosen: true,
+      otherLicenseDescription: myClaimInfoMetadata.license,
+      otherLicenseUrl: myClaimInfoMetadata.license_url,
+      copyrightChosen: false,
     });
   }
 
@@ -762,6 +784,15 @@ class PublishPage extends React.PureComponent {
                 }}
                 helper={this.getNameBidHelpText()}
               />
+              {this.myClaimExists() && !this.state.prefillDone
+                ? <Notice>
+                    {__("You already have a claim with this name.")}{" "}
+                    <Link
+                      label={__("Use data from my existing claim")}
+                      onClick={() => this.handlePrefillClicked()}
+                    />
+                  </Notice>
+                : null}
             </div>
             {this.state.rawName
               ? <div className="card__content">
