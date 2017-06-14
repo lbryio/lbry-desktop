@@ -524,7 +524,7 @@ lbry.resolve = function(params = {}) {
             lbry._claimCache[params.uri] = data;
           }
           setSession(claimCacheKey, lbry._claimCache);
-          resolve(data);
+          resolve(data && data[params.uri] ? data[params.uri] : {});
         },
         reject
       );
