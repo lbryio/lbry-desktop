@@ -89,7 +89,7 @@ export function doDeleteFile(outpoint, deleteFromComputer) {
 
     lbry.file_delete({
       outpoint: outpoint,
-      delete_target_file: deleteFromComputer,
+      delete_from_download_dir: deleteFromComputer,
     });
 
     dispatch(doCloseModal());
