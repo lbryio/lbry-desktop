@@ -117,6 +117,9 @@ input[type="text"].input-copyable {
     border: $width-input-border solid $color-form-border;
   }
 }
+.form-field--SimpleMDE {
+  display: block;
+}
 
 .form-field__label {
   &[for] {  cursor: pointer; }
@@ -163,4 +166,8 @@ input[type="text"].input-copyable {
 }
 .form-field__helper {
   color: $color-help;
+}
+
+.form-field__input.form-field__input-SimpleMDE .CodeMirror-scroll {
+  height: auto;
 }

@@ -5,13 +5,16 @@ import { FormField, FormRow } from "component/form.js";
 import Link from "component/link";
 import rewards from "rewards";
 import Modal from "component/modal";
+import Notice from "component/notice";
 import { BusyMessage } from "component/common";
 
 class PublishPage extends React.PureComponent {
   constructor(props) {
     super(props);
 
-    this._requiredFields = ["meta_title", "name", "bid", "tos_agree"];
+    this._requiredFields = ["name", "bid", "meta_title", "tosAgree"];
+
+    this._defaultCopyrightNotice = "All rights reserved.";
 
     this.state = {
       rawName: "",
@@ -23,11 +26,17 @@ class PublishPage extends React.PureComponent {
       channel: "anonymous",
       newChannelName: "@",
       newChannelBid: 10,
-      myClaimValue: 0.0,
-      myClaimMetadata: null,
-      copyrightNotice: "",
+      meta_title: "",
+      meta_thumbnail: "",
+      meta_description: "",
+      meta_language: "en",
+      meta_nsfw: "0",
+      licenseType: "",
+      copyrightNotice: this._defaultCopyrightNotice,
       otherLicenseDescription: "",
       otherLicenseUrl: "",
+      tosAgree: false,
+      prefillDone: false,
       uploadProgress: 0.0,
       uploaded: false,
       errorMessage: null,
@@ -80,36 +89,18 @@ class PublishPage extends React.PureComponent {
       return;
     }
 
-    if (this.state.nameIsMine) {
-      // Pre-populate with existing metadata
-      var metadata = Object.assign({}, this.state.myClaimMetadata);
-      if (this.refs.file.getValue() !== "") {
-        delete metadata.sources;
-      }
-    } else {
-      var metadata = {};
-    }
+    let metadata = {};
 
-    for (let metaField of [
-      "title",
-      "description",
-      "thumbnail",
-      "license",
-      "license_url",
-      "language",
-    ]) {
-      var value = this.refs["meta_" + metaField].getValue();
-      if (value !== "") {
+    for (let metaField of ["title", "description", "thumbnail", "language"]) {
+      const value = this.state["meta_" + metaField];
+      if (value) {
         metadata[metaField] = value;
       }
     }
 
-    metadata.nsfw = parseInt(this.refs.meta_nsfw.getValue()) === 1;
-
-    const licenseUrl = this.refs.meta_license_url.getValue();
-    if (licenseUrl) {
-      metadata.license_url = licenseUrl;
-    }
+    metadata.license = this.getLicense();
+    metadata.licenseUrl = this.getLicenseUrl();
+    metadata.nsfw = !!parseInt(this.state.meta_nsfw);
 
     var doPublish = () => {
       var publishArgs = {
@@ -203,6 +194,8 @@ class PublishPage extends React.PureComponent {
   }
 
   myClaimInfo() {
+    const { name } = this.state;
+
     return Object.values(this.props.myClaims).find(
       claim => claim.name === name
     );
@@ -240,6 +233,7 @@ class PublishPage extends React.PureComponent {
     this.setState({
       rawName: rawName,
       name: name,
+      prefillDone: false,
       uri,
     });
 
@@ -252,6 +246,43 @@ class PublishPage extends React.PureComponent {
     this.resolveUriTimeout = setTimeout(resolve.bind(this), 500, {
       once: true,
     });
+  }
+
+  handlePrefillClicked() {
+    const {license, licenseUrl, title, thumbnail, description,
+           language, nsfw} = this.myClaimInfo().value.stream.metadata;
+
+    let newState = {
+      meta_title: title,
+      meta_thumbnail: thumbnail,
+      meta_description: description,
+      meta_language: language,
+      meta_nsfw: nsfw,
+    };
+
+    if (license == this._defaultCopyrightNotice) {
+      newState.licenseType = "copyright";
+      newState.copyrightNotice = this._defaultCopyrightNotice;
+    } else {
+      // If the license URL or description matches one of the drop-down options, use that
+      let licenseType = "other"; // Will be overridden if we find a match
+      for (let option of this._meta_license.getOptions()) {
+        if (
+          option.getAttribute("data-url") === licenseUrl ||
+          option.text === license
+        ) {
+          licenseType = option.value;
+        }
+      }
+
+      if (licenseType == "other") {
+        newState.otherLicenseDescription = license;
+        newState.otherLicenseUrl = licenseUrl;
+      }
+      newState.licenseType = licenseType;
+    }
+
+    this.setState(newState);
   }
 
   handleBidChange(event) {
@@ -278,20 +309,21 @@ class PublishPage extends React.PureComponent {
     });
   }
 
-  handleLicenseChange(event) {
-    var licenseType = event.target.options[
-      event.target.selectedIndex
-    ].getAttribute("data-license-type");
-    var newState = {
-      copyrightChosen: licenseType == "copyright",
-      otherLicenseChosen: licenseType == "other",
-    };
+  handleMetadataChange(event) {
+    /**
+     * This function is used for all metadata inputs that store the final value directly into state.
+     * The only exceptions are inputs related to license description and license URL, which require
+     * more complex logic and the final value is determined at submit time.
+     */
+    this.setState({
+      ["meta_" + event.target.name]: event.target.value,
+    });
+  }
 
-    if (licenseType == "copyright") {
-      newState.copyrightNotice = __("All rights reserved.");
-    }
-
-    this.setState(newState);
+  handleLicenseTypeChange(event) {
+    this.setState({
+      licenseType: event.target.value,
+    });
   }
 
   handleCopyrightNoticeChange(event) {
@@ -322,7 +354,7 @@ class PublishPage extends React.PureComponent {
 
   handleTOSChange(event) {
     this.setState({
-      TOSAgreed: event.target.checked,
+      tosAgree: event.target.checked,
     });
   }
 
@@ -366,16 +398,25 @@ class PublishPage extends React.PureComponent {
       );
   }
 
+  getLicense() {
+    switch (this.state.licenseType) {
+      case "copyright":
+        return this.state.copyrightNotice;
+      case "other":
+        return this.state.otherLicenseDescription;
+      default:
+        return this._meta_license.getSelectedElement().text;
+    }
+  }
+
   getLicenseUrl() {
-    if (!this.refs.meta_license) {
-      return "";
-    } else if (this.state.otherLicenseChosen) {
-      return this.state.otherLicenseUrl;
-    } else {
-      return (
-        this.refs.meta_license.getSelectedElement().getAttribute("data-url") ||
-        ""
-      );
+    switch (this.state.licenseType) {
+      case "copyright":
+        return "";
+      case "other":
+        return this.state.otherLicenseUrl;
+      default:
+        return this._meta_license.getSelectedElement().getAttribute("data-url");
     }
   }
 
@@ -398,7 +439,7 @@ class PublishPage extends React.PureComponent {
       this.props.resolvingUris.indexOf(this.state.uri) !== -1 &&
       this.claim() === undefined
     ) {
-      return <BusyMessage />;
+      return __("Checking...");
     } else if (!this.state.name) {
       return __("Select a URL for this publish.");
     } else if (!this.claim()) {
@@ -482,43 +523,55 @@ class PublishPage extends React.PureComponent {
                 }
               />
             </div>
-            {!this.state.hasFile
-              ? ""
+            {!this.state.hasFile && !this.myClaimExists()
+              ? null
               : <div>
                   <div className="card__content">
                     <FormRow
                       label={__("Title")}
                       type="text"
-                      ref="meta_title"
                       name="title"
-                      placeholder={__("Title")}
+                      value={this.state.meta_title}
+                      placeholder="Titular Title"
+                      onChange={event => {
+                        this.handleMetadataChange(event);
+                      }}
                     />
                   </div>
                   <div className="card__content">
                     <FormRow
                       type="text"
                       label={__("Thumbnail URL")}
-                      ref="meta_thumbnail"
                       name="thumbnail"
+                      value={this.state.meta_thumbnail}
                       placeholder="http://spee.ch/mylogo"
+                      onChange={event => {
+                        this.handleMetadataChange(event);
+                      }}
                     />
                   </div>
                   <div className="card__content">
                     <FormRow
                       label={__("Description")}
-                      type="textarea"
+                      type="SimpleMDE"
                       ref="meta_description"
                       name="description"
+                      value={this.state.meta_description}
                       placeholder={__("Description of your content")}
+                      onChange={event => {
+                        this.handleMetadataChange(event);
+                      }}
                     />
                   </div>
                   <div className="card__content">
                     <FormRow
                       label={__("Language")}
                       type="select"
-                      defaultValue="en"
-                      ref="meta_language"
+                      value={this.state.meta_language}
                       name="language"
+                      onChange={event => {
+                        this.handleMetadataChange(event);
+                      }}
                     >
                       <option value="en">{__("English")}</option>
                       <option value="zh">{__("Chinese")}</option>
@@ -533,9 +586,11 @@ class PublishPage extends React.PureComponent {
                     <FormRow
                       type="select"
                       label={__("Maturity")}
-                      defaultValue="en"
-                      ref="meta_nsfw"
+                      value={this.state.meta_nsfw}
                       name="nsfw"
+                      onChange={event => {
+                        this.handleMetadataChange(event);
+                      }}
                     >
                       {/* <option value=""></option> */}
                       <option value="0">{__("All Ages")}</option>
@@ -583,8 +638,7 @@ class PublishPage extends React.PureComponent {
                   placeholder="1.00"
                   min="0.01"
                   onChange={event => this.handleFeeAmountChange(event)}
-                />
-                {" "}
+                />{" "}
                 <FormField
                   type="select"
                   onChange={event => {
@@ -605,66 +659,71 @@ class PublishPage extends React.PureComponent {
               <FormRow
                 label="License"
                 type="select"
-                ref="meta_license"
-                name="license"
+                value={this.state.licenseType}
+                ref={row => {
+                  this._meta_license = row;
+                }}
                 onChange={event => {
-                  this.handleLicenseChange(event);
+                  this.handleLicenseTypeChange(event);
                 }}
               >
                 <option />
-                <option>{__("Public Domain")}</option>
-                <option data-url="https://creativecommons.org/licenses/by/4.0/legalcode">
+                <option value="publicDomain">{__("Public Domain")}</option>
+                <option
+                  value="cc-by"
+                  data-url="https://creativecommons.org/licenses/by/4.0/legalcode"
+                >
                   {__("Creative Commons Attribution 4.0 International")}
                 </option>
-                <option data-url="https://creativecommons.org/licenses/by-sa/4.0/legalcode">
+                <option
+                  value="cc-by-sa"
+                  data-url="https://creativecommons.org/licenses/by-sa/4.0/legalcode"
+                >
                   {__(
                     "Creative Commons Attribution-ShareAlike 4.0 International"
                   )}
                 </option>
-                <option data-url="https://creativecommons.org/licenses/by-nd/4.0/legalcode">
+                <option
+                  value="cc-by-nd"
+                  data-url="https://creativecommons.org/licenses/by-nd/4.0/legalcode"
+                >
                   {__(
                     "Creative Commons Attribution-NoDerivatives 4.0 International"
                   )}
                 </option>
-                <option data-url="https://creativecommons.org/licenses/by-nc/4.0/legalcode">
+                <option
+                  value="cc-by-nc"
+                  data-url="https://creativecommons.org/licenses/by-nc/4.0/legalcode"
+                >
                   {__(
                     "Creative Commons Attribution-NonCommercial 4.0 International"
                   )}
                 </option>
-                <option data-url="https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode">
+                <option
+                  value="cc-by-nc-sa"
+                  data-url="https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode"
+                >
                   {__(
                     "Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International"
                   )}
                 </option>
-                <option data-url="https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode">
+                <option
+                  value="cc-by-nc-nd"
+                  data-url="https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode"
+                >
                   {__(
                     "Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International"
                   )}
                 </option>
-                <option
-                  data-license-type="copyright"
-                  {...(this.state.copyrightChosen
-                    ? { value: this.state.copyrightNotice }
-                    : {})}
-                >
+                <option value="copyright">
                   {__("Copyrighted...")}
                 </option>
-                <option
-                  data-license-type="other"
-                  {...(this.state.otherLicenseChosen
-                    ? { value: this.state.otherLicenseDescription }
-                    : {})}
-                >
+                <option value="other">
                   {__("Other...")}
                 </option>
               </FormRow>
-              <FormField
-                type="hidden"
-                ref="meta_license_url"
-                name="license_url"
-                value={this.getLicenseUrl()}
-              />
-              {this.state.copyrightChosen
+
+              {this.state.licenseType == "copyright"
                 ? <FormRow
                     label={__("Copyright notice")}
                     type="text"
@@ -675,21 +734,25 @@ class PublishPage extends React.PureComponent {
                     }}
                   />
                 : null}
-              {this.state.otherLicenseChosen
+
+              {this.state.licenseType == "other"
                 ? <FormRow
                     label={__("License description")}
                     type="text"
                     name="other-license-description"
+                    value={this.state.otherLicenseDescription}
                     onChange={event => {
-                      this.handleOtherLicenseDescriptionChange();
+                      this.handleOtherLicenseDescriptionChange(event);
                     }}
                   />
                 : null}
-              {this.state.otherLicenseChosen
+
+              {this.state.licenseType == "other"
                 ? <FormRow
                     label={__("License URL")}
                     type="text"
                     name="other-license-url"
+                    value={this.state.otherLicenseUrl}
                     onChange={event => {
                       this.handleOtherLicenseUrlChange(event);
                     }}
@@ -730,6 +793,15 @@ class PublishPage extends React.PureComponent {
                 }}
                 helper={this.getNameBidHelpText()}
               />
+              {this.myClaimExists() && !this.state.prefillDone
+                ? <Notice>
+                    {__("You already have a claim with this name.")}{" "}
+                    <Link
+                      label={__("Use data from my existing claim")}
+                      onClick={() => this.handlePrefillClicked()}
+                    />
+                  </Notice>
+                : null}
             </div>
             {this.state.rawName
               ? <div className="card__content">
@@ -763,15 +835,11 @@ class PublishPage extends React.PureComponent {
                     <Link
                       href="https://www.lbry.io/termsofservice"
                       label={__("LBRY terms of service")}
-                      checked={this.state.TOSAgreed}
                     />
                   </span>
                 }
                 type="checkbox"
-                name="tos_agree"
-                ref={field => {
-                  this.refs.tos_agree = field;
-                }}
+                checked={this.state.tosAgree}
                 onChange={event => {
                   this.handleTOSChange(event);
                 }}
