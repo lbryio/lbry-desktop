@@ -11,6 +11,7 @@ import { selectResolvingUris } from "selectors/content";
 import { selectCostInfoForUri } from "selectors/cost_info";
 import { doOpenModal } from "actions/app";
 import { doClaimEligiblePurchaseRewards } from "actions/rewards";
+import batchActions from "util/batchActions";
 
 export function doResolveUri(uri) {
   return function(dispatch, getState) {
@@ -63,20 +64,29 @@ export function doFetchFeaturedUris() {
 
     const success = ({ Categories, Uris }) => {
       let featuredUris = {};
+      const actions = [];
 
       Categories.forEach(category => {
         if (Uris[category] && Uris[category].length) {
-          featuredUris[category] = Uris[category];
+          const uris = Uris[category];
+
+          featuredUris[category] = uris;
+          uris.forEach(uri => {
+            actions.push(doResolveUri(uri));
+          });
         }
       });
 
-      dispatch({
+      actions.push({
         type: types.FETCH_FEATURED_CONTENT_COMPLETED,
         data: {
           categories: Categories,
           uris: featuredUris,
+          success: true,
         },
       });
+
+      dispatch(batchActions(...actions));
     };
 
     const failure = () => {
