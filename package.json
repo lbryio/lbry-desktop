@@ -59,5 +59,9 @@
     "electron": "^1.4.15",
     "electron-builder": "^11.7.0",
     "electron-debug": "^1.1.0"
+  },
+  "dependencies": {
+    "react-simplemde-editor": "^3.6.11",
+    "style-loader": "^0.18.2"
   }
 }

@@ -520,7 +520,7 @@ class PublishPage extends React.PureComponent {
                   <div className="card__content">
                     <FormRow
                       label={__("Description")}
-                      type="textarea"
+                      type="SimpleMDE"
                       ref="meta_description"
                       name="description"
                       placeholder={__("Description of your content")}

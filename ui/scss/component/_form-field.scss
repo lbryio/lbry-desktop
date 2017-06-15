@@ -164,3 +164,7 @@ input[type="text"].input-copyable {
 .form-field__helper {
   color: $color-help;
 }
+
+.CodeMirror-scroll {
+  height: auto !important;
+}

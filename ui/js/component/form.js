@@ -1,6 +1,8 @@
 import React from "react";
 import FileSelector from "./file-selector.js";
 import { Icon } from "./common.js";
+import SimpleMDE from "react-simplemde-editor";
+import style from "react-simplemde-editor/dist/simplemde.min.css";
 
 var formFieldCounter = 0,
   formFieldFileSelectorTypes = ["file", "directory"],
@@ -38,6 +40,9 @@ export class FormField extends React.PureComponent {
     } else if (this.props.type == "text-number") {
       this._element = "input";
       this._type = "text";
+    } else if (this.props.type == "SimpleMDE") {
+      this._element = "SimpleMDE";
+      this._type = "textarea";
     } else if (formFieldFileSelectorTypes.includes(this.props.type)) {
       this._element = "input";
       this._type = "hidden";
@@ -106,26 +111,42 @@ export class FormField extends React.PureComponent {
     delete otherProps.className;
     delete otherProps.postfix;
     delete otherProps.prefix;
-
-    const element = (
-      <this._element
-        id={elementId}
-        type={this._type}
-        name={this.props.name}
-        ref="field"
-        placeholder={this.props.placeholder}
-        className={
-          "form-field__input form-field__input-" +
-          this.props.type +
-          " " +
-          (this.props.className || "") +
-          (isError ? "form-field__input--error" : "")
-        }
-        {...otherProps}
-      >
-        {this.props.children}
-      </this._element>
-    );
+    const element = this._element === "SimpleMDE"
+      ? <SimpleMDE
+          id={elementId}
+          type={this._type}
+          name={this.props.name}
+          ref="field"
+          placeholder={this.props.placeholder}
+          className={
+            "form-field__input form-field__input-" +
+            this.props.type +
+            " " +
+            (this.props.className || "") +
+            (isError ? "form-field__input--error" : "")
+          }
+          name={this.props.name}
+          {...otherProps}
+        >
+          {this.props.children}
+        </SimpleMDE>
+      : <this._element // can't be applied to SimpleMDE idk why
+          id={elementId}
+          type={this._type}
+          name={this.props.name}
+          ref="field"
+          placeholder={this.props.placeholder}
+          className={
+            "form-field__input form-field__input-" +
+            this.props.type +
+            " " +
+            (this.props.className || "") +
+            (isError ? "form-field__input--error" : "")
+          }
+          {...otherProps}
+        >
+          {this.props.children}
+        </this._element>;
 
     return (
       <div className={"form-field form-field--" + this.props.type}>
