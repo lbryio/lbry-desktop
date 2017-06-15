@@ -19,7 +19,7 @@ class ReportPage extends React.PureComponent {
       this.setState({
         submitting: true,
       });
-      lbry.reportBug(this._messageArea.value, () => {
+      lbry.report_bug({ message: this._messageArea.value }).then(() => {
         this.setState({
           submitting: false,
           modal: "submitted",

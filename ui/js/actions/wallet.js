@@ -22,7 +22,7 @@ export function doFetchTransactions() {
       type: types.FETCH_TRANSACTIONS_STARTED,
     });
 
-    lbry.call("transaction_list", {}, results => {
+    lbry.transaction_list().then(results => {
       dispatch({
         type: types.FETCH_TRANSACTIONS_COMPLETED,
         data: {
@@ -55,7 +55,7 @@ export function doCheckAddressIsMine(address) {
       type: types.CHECK_ADDRESS_IS_MINE_STARTED,
     });
 
-    lbry.checkAddressIsMine(address, isMine => {
+    lbry.wallet_is_address_mine({ address }).then(isMine => {
       if (!isMine) dispatch(doGetNewAddress());
 
       dispatch({
@@ -103,12 +103,12 @@ export function doSendDraftTransaction() {
       dispatch(doOpenModal("transactionFailed"));
     };
 
-    lbry.sendToAddress(
-      draftTx.amount,
-      draftTx.address,
-      successCallback,
-      errorCallback
-    );
+    lbry
+      .send_amount_to_address({
+        amount: draftTx.amount,
+        address: draftTx.address,
+      })
+      .then(successCallback, errorCallback);
   };
 }
 

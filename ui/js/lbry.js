@@ -22,6 +22,17 @@ let lbry = {
   },
 };
 
+function apiCall(method, params, resolve, reject) {
+  return jsonrpc.call(
+    lbry.daemonConnectionString,
+    method,
+    params,
+    resolve,
+    reject,
+    reject
+  );
+}
+
 /**
  * Records a publish attempt in local storage. Returns a dictionary with all the data needed to
  * needed to make a dummy claim or file info object.
@@ -110,23 +121,6 @@ function pendingPublishToDummyFileInfo({ name, outpoint, claim_id }) {
   return { name, outpoint, claim_id, metadata: null };
 }
 
-lbry.call = function(
-  method,
-  params,
-  callback,
-  errorCallback,
-  connectFailedCallback
-) {
-  return jsonrpc.call(
-    lbry.daemonConnectionString,
-    method,
-    params,
-    callback,
-    errorCallback,
-    connectFailedCallback
-  );
-};
-
 //core
 lbry._connectPromise = null;
 lbry.connect = function() {
@@ -148,13 +142,7 @@ lbry.connect = function() {
 
       // Check every half second to see if the daemon is accepting connections
       function checkDaemonStarted() {
-        lbry.call(
-          "status",
-          {},
-          resolve,
-          checkDaemonStartedFailed,
-          checkDaemonStartedFailed
-        );
+        lbry.status().then(resolve).catch(checkDaemonStartedFailed);
       }
 
       checkDaemonStarted();
@@ -162,19 +150,6 @@ lbry.connect = function() {
   }
 
   return lbry._connectPromise;
-};
-
-lbry.checkAddressIsMine = function(address, callback) {
-  lbry.call("wallet_is_address_mine", { address: address }, callback);
-};
-
-lbry.sendToAddress = function(amount, address, callback, errorCallback) {
-  lbry.call(
-    "send_amount_to_address",
-    { amount: amount, address: address },
-    callback,
-    errorCallback
-  );
 };
 
 /**
@@ -238,15 +213,13 @@ lbry.getCostInfo = function(uri) {
  * This currently includes a work-around to cache the file in local storage so that the pending
  * publish can appear in the UI immediately.
  */
-lbry.publish = function(
+lbry.publishDeprecated = function(
   params,
   fileListedCallback,
   publishedCallback,
   errorCallback
 ) {
-  lbry.call(
-    "publish",
-    params,
+  lbry.publish(params).then(
     result => {
       if (returnedPending) {
         return;
@@ -320,20 +293,6 @@ lbry.setClientSetting = function(setting, value) {
   return localStorage.setItem("setting_" + setting, JSON.stringify(value));
 };
 
-lbry.getSessionInfo = function(callback) {
-  lbry.call("status", { session_status: true }, callback);
-};
-
-lbry.reportBug = function(message, callback) {
-  lbry.call(
-    "report_bug",
-    {
-      message: message,
-    },
-    callback
-  );
-};
-
 //utilities
 lbry.formatCredits = function(amount, precision) {
   return amount.toFixed(precision || 1).replace(/\.?0+$/, "");
@@ -372,10 +331,6 @@ lbry.getMediaType = function(contentType, fileName) {
   } else {
     return "unknown";
   }
-};
-
-lbry.stop = function(callback) {
-  lbry.call("stop", {}, callback);
 };
 
 lbry._subscribeIdCount = 0;
@@ -463,7 +418,7 @@ lbry.file_list = function(params = {}) {
       }
     }
 
-    lbry.call(
+    apiCall(
       "file_list",
       params,
       fileInfos => {
@@ -474,7 +429,6 @@ lbry.file_list = function(params = {}) {
           .map(pendingPublishToDummyFileInfo);
         resolve([...fileInfos, ...dummyFileInfos]);
       },
-      reject,
       reject
     );
   });
@@ -482,7 +436,7 @@ lbry.file_list = function(params = {}) {
 
 lbry.claim_list_mine = function(params = {}) {
   return new Promise((resolve, reject) => {
-    lbry.call(
+    apiCall(
       "claim_list_mine",
       params,
       claims => {
@@ -499,7 +453,6 @@ lbry.claim_list_mine = function(params = {}) {
           .map(pendingPublishToDummyClaim);
         resolve([...claims, ...dummyClaims]);
       },
-      reject,
       reject
     );
   });
@@ -516,10 +469,10 @@ lbry.resolve = function(params = {}) {
     if (params.uri && lbry._claimCache[params.uri] !== undefined) {
       resolve(lbry._claimCache[params.uri]);
     } else {
-      lbry._resolveXhrs[params.uri] = lbry.call(
+      lbry._resolveXhrs[params.uri] = apiCall(
         "resolve",
         params,
-        function(data) {
+        data => {
           if (data !== undefined) {
             lbry._claimCache[params.uri] = data;
           }
@@ -547,14 +500,7 @@ lbry = new Proxy(lbry, {
 
     return function(params = {}) {
       return new Promise((resolve, reject) => {
-        jsonrpc.call(
-          lbry.daemonConnectionString,
-          name,
-          params,
-          resolve,
-          reject,
-          reject
-        );
+        apiCall(name, params, resolve, reject);
       });
     };
   },
