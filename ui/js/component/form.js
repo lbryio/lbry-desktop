@@ -126,6 +126,9 @@ export class FormField extends React.PureComponent {
             (isError ? "form-field__input--error" : "")
           }
           name={this.props.name}
+          options={{
+            hideIcons: ["heading"],
+          }}
           {...otherProps}
         >
           {this.props.children}
