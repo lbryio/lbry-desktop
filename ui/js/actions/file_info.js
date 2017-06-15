@@ -98,16 +98,9 @@ export function doDeleteFile(outpoint, deleteFromComputer) {
 
 export function doFetchFileInfosAndPublishedClaims() {
   return function(dispatch, getState) {
-    const state = getState(),
-      isClaimListMinePending = selectClaimListMineIsPending(state),
-      isFileInfoListPending = selectFileListIsPending(state);
+    const state = getState();
 
-    if (isClaimListMinePending === undefined) {
-      dispatch(doFetchClaimListMine());
-    }
-
-    if (isFileInfoListPending === undefined) {
-      dispatch(doFileList());
-    }
+    dispatch(doFetchClaimListMine());
+    dispatch(doFileList());
   };
 }

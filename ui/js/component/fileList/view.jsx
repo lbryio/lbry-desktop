@@ -82,7 +82,7 @@ class FileList extends React.PureComponent {
     });
     return (
       <section className="file-list__header">
-        {fetching && <span className="busy-indicator" />}
+        {fetching && <BusyMessage />}
         <span className="sort-section">
           {__("Sort by")} {" "}
           <FormField type="select" onChange={this.handleSortChanged.bind(this)}>

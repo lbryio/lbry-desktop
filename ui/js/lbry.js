@@ -417,7 +417,7 @@ lbry.file_list = function(params = {}) {
         return;
       }
     }
-
+    
     apiCall(
       "file_list",
       params,
@@ -458,30 +458,21 @@ lbry.claim_list_mine = function(params = {}) {
   });
 };
 
-const claimCacheKey = "resolve_claim_cache";
-lbry._claimCache = getSession(claimCacheKey, {});
+
 lbry._resolveXhrs = {};
 lbry.resolve = function(params = {}) {
   return new Promise((resolve, reject) => {
     if (!params.uri) {
       throw __("Resolve has hacked cache on top of it that requires a URI");
     }
-    if (params.uri && lbry._claimCache[params.uri] !== undefined) {
-      resolve(lbry._claimCache[params.uri]);
-    } else {
-      lbry._resolveXhrs[params.uri] = apiCall(
-        "resolve",
-        params,
-        data => {
-          if (data !== undefined) {
-            lbry._claimCache[params.uri] = data;
-          }
-          setSession(claimCacheKey, lbry._claimCache);
-          resolve(data && data[params.uri] ? data[params.uri] : {});
-        },
-        reject
-      );
-    }
+    lbry._resolveXhrs[params.uri] = apiCall(
+      "resolve",
+      params,
+      function(data) {
+        resolve(data && data[params.uri] ? data[params.uri] : {});
+      },
+      reject
+    );
   });
 };
 
