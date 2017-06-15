@@ -12,8 +12,8 @@ Web UI version numbers should always match the corresponding version of LBRY App
   *
 
 ### Changed
-  *
-  *
+  * Upgraded to lbry daemon 0.13, including updating API signatures
+  * Channels resolve much faster
 
 ### Fixed
   * Fix help menu force reloading whole app

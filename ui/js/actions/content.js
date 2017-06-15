@@ -256,23 +256,22 @@ export function doPurchaseUri(uri, purchaseModalName) {
   };
 }
 
-export function doFetchClaimsByChannel(uri) {
+export function doFetchClaimsByChannel(uri, page = 1) {
   return function(dispatch, getState) {
     dispatch({
       type: types.FETCH_CHANNEL_CLAIMS_STARTED,
       data: { uri },
     });
 
-    lbry.resolve({ uri }).then(resolutionInfo => {
-      const { claims_in_channel } = resolutionInfo
-        ? resolutionInfo
-        : { claims_in_channel: [] };
+    lbry.claim_list_by_channel({ uri, page }).then(result => {
+      const claimResult = result[uri],
+        claims = claimResult ? claimResult.claims_in_channel : [];
 
       dispatch({
         type: types.FETCH_CHANNEL_CLAIMS_COMPLETED,
         data: {
           uri,
-          claims: claims_in_channel,
+          claims: claims,
         },
       });
     });
