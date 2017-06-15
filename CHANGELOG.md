@@ -10,14 +10,17 @@ Web UI version numbers should always match the corresponding version of LBRY App
 ### Added
   * Added option to release claim when deleting a file
   * Added transition to card hovers to smooth animation
+  * Support markdown makeup in claim description
+  *
 
 ### Changed
-  *
+  * Publishes now uses claims rather than files
   *
 
 ### Fixed
   * Fixed bug with download notice when switching window focus
-  *
+  * Fixed newly published files appearing twice
+  * Fixed unconfirmed published files missing channel name
 
 ### Deprecated
   *

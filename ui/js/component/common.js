@@ -1,5 +1,7 @@
 import React from "react";
+import ReactDOMServer from "react-dom/server";
 import lbry from "../lbry.js";
+import ReactMarkdown from "react-markdown";
 
 //component/icon.js
 export class Icon extends React.PureComponent {
