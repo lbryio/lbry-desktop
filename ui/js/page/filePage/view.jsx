@@ -1,4 +1,5 @@
 import React from "react";
+import ReactMarkdown from "react-markdown";
 import lbry from "lbry.js";
 import lbryuri from "lbryuri.js";
 import Video from "component/video";
@@ -121,7 +122,9 @@ class FilePage extends React.PureComponent {
               </div>
             </div>
             <div className="card__content card__subtext card__subtext card__subtext--allow-newlines">
-              {metadata && metadata.description}
+              <ReactMarkdown
+                source={(metadata && metadata.description) || ""}
+              />
             </div>
           </div>
           {metadata
