@@ -1,37 +1,45 @@
 import React from "react";
 import Link from "component/link";
 import { FormRow } from "component/form";
-import Modal from "../component/modal.js";
+import { doShowSnackBar } from "actions/app";
 import lbry from "../lbry.js";
 
-class ReportPage extends React.PureComponent {
+class ReportPage extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
       submitting: false,
-      modal: null,
+      message: "",
     };
   }
 
   submitMessage() {
-    if (this._messageArea.value) {
+    const message = this.state.message;
+    if (message) {
       this.setState({
         submitting: true,
       });
-      lbry.report_bug({ message: this._messageArea.value }).then(() => {
+      lbry.report_bug({ message }).then(() => {
         this.setState({
           submitting: false,
-          modal: "submitted",
         });
+
+        // Display global notice
+        const action = doShowSnackBar({
+          message: __("Message received! Thanks for helping."),
+          isError: false,
+        });
+        window.app.store.dispatch(action);
       });
-      this._messageArea.value = "";
+
+      this.setState({ message: "" });
     }
   }
 
-  closeModal() {
+  onMessageChange(event) {
     this.setState({
-      modal: null,
+      message: event.target.value,
     });
   }
 
@@ -49,9 +57,12 @@ class ReportPage extends React.PureComponent {
             <div className="form-row">
               <FormRow
                 type="textarea"
-                ref={t => (this._messageArea = t)}
                 rows="10"
                 name="message"
+                value={this.state.message}
+                onChange={event => {
+                  this.onMessageChange(event);
+                }}
                 placeholder={__("Description of your issue")}
               />
             </div>
@@ -83,17 +94,6 @@ class ReportPage extends React.PureComponent {
             />.
           </div>
         </section>
-        <Modal
-          isOpen={this.state.modal == "submitted"}
-          contentLabel={__("Bug report submitted")}
-          onConfirmed={event => {
-            this.closeModal(event);
-          }}
-        >
-          {__(
-            "Your bug report has been submitted! Thank you for your feedback."
-          )}
-        </Modal>
       </main>
     );
   }
