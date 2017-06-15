@@ -124,6 +124,8 @@ class FilePage extends React.PureComponent {
             <div className="card__content card__subtext card__subtext card__subtext--allow-newlines">
               <ReactMarkdown
                 source={(metadata && metadata.description) || ""}
+                escapeHtml={true}
+                disallowedTypes={["Heading", "HtmlInline", "HtmlBlock"]}
               />
             </div>
           </div>
