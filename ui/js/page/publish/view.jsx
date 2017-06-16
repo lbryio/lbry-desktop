@@ -24,8 +24,6 @@ class PublishPage extends React.PureComponent {
       channel: "anonymous",
       newChannelName: "@",
       newChannelBid: 10,
-      myClaimValue: 0.0,
-      myClaimMetadata: null,
       meta_title: "",
       meta_thumbnail: "",
       meta_description: "",
