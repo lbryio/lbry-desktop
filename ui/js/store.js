@@ -90,6 +90,7 @@ const saveClaimsFilter = createFilter("claims", [
   "byId",
   "claimsByUri",
   "myClaims",
+  "myChannelClaims",
 ]);
 
 const persistOptions = {
