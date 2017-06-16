@@ -86,6 +86,8 @@ export class FormField extends React.PureComponent {
   getValue() {
     if (this.props.type == "checkbox") {
       return this.refs.field.checked;
+    } else if (this.props.type == "SimpleMDE") {
+      return this.refs.field.simplemde.value();
     } else {
       return this.refs.field.value;
     }
