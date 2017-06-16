@@ -47,13 +47,11 @@ class FileCard extends React.PureComponent {
     const { claim, fileInfo, metadata, isResolvingUri, navigate } = this.props;
 
     const uri = lbryuri.normalize(this.props.uri);
-    const title = !isResolvingUri && metadata && metadata.title
-      ? metadata.title
-      : uri;
+    const title = metadata && metadata.title ? metadata.title : uri;
     const obscureNsfw = this.props.obscureNsfw && metadata && metadata.nsfw;
 
     let description = "";
-    if (isResolvingUri) {
+    if (isResolvingUri && !claim) {
       description = __("Loading...");
     } else if (metadata && metadata.description) {
       description = metadata.description;
