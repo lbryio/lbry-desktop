@@ -26,15 +26,11 @@ class PublishPage extends React.PureComponent {
       newChannelBid: 10,
       myClaimValue: 0.0,
       myClaimMetadata: null,
-      metadata: {
-        title: "",
-        thumbnail: "",
-        description: "",
-        language: "en",
-        nsfw: "0",
-        license: "",
-        license_url: "",
-      },
+      meta_title: "",
+      meta_thumbnail: "",
+      meta_description: "",
+      meta_language: "en",
+      meta_nsfw: "0",
       copyrightNotice: "",
       otherLicenseDescription: "",
       otherLicenseUrl: "",
@@ -102,13 +98,13 @@ class PublishPage extends React.PureComponent {
       "license_url",
       "language",
     ]) {
-      const value = this.state.metadata[metaField];
+      const value = this.state["meta_" + metaField];
       if (value) {
         metadata[metaField] = value;
       }
     }
 
-    metadata.nsfw = !!parseInt(this.state.metadata.nsfw);
+    metadata.nsfw = !!parseInt(this.state.meta_nsfw);
 
     var doPublish = () => {
       var publishArgs = {
@@ -304,10 +300,7 @@ class PublishPage extends React.PureComponent {
 
   handleMetadataChange(event) {
     this.setState({
-      metadata: {
-        ...this.state.metadata,
-        ...{ [event.target.name]: event.target.value },
-      },
+      ["meta_" + event.target.name]: event.target.value,
     });
   }
 
@@ -519,7 +512,7 @@ class PublishPage extends React.PureComponent {
                       label={__("Title")}
                       type="text"
                       name="title"
-                      value={this.state.metadata.title}
+                      value={this.state.meta_title}
                       placeholder="Titular Title"
                       onChange={event => {
                         this.handleMetadataChange(event);
@@ -531,7 +524,7 @@ class PublishPage extends React.PureComponent {
                       type="text"
                       label={__("Thumbnail URL")}
                       name="thumbnail"
-                      value={this.state.metadata.thumbnail}
+                      value={this.state.meta_thumbnail}
                       placeholder="http://spee.ch/mylogo"
                       onChange={event => {
                         this.handleMetadataChange(event);
@@ -543,7 +536,7 @@ class PublishPage extends React.PureComponent {
                       label={__("Description")}
                       type="textarea"
                       name="description"
-                      value={this.state.metadata.description}
+                      value={this.state.meta_description}
                       placeholder={__("Description of your content")}
                       onChange={event => {
                         this.handleMetadataChange(event);
@@ -554,7 +547,7 @@ class PublishPage extends React.PureComponent {
                     <FormRow
                       label={__("Language")}
                       type="select"
-                      value={this.state.metadata.language}
+                      value={this.state.meta_language}
                       name="language"
                       onChange={event => {
                         this.handleMetadataChange(event);
@@ -573,6 +566,7 @@ class PublishPage extends React.PureComponent {
                     <FormRow
                       type="select"
                       label={__("Maturity")}
+                      value={this.state.meta_nsfw}
                       name="nsfw"
                       onChange={event => {
                         this.handleMetadataChange(event);
