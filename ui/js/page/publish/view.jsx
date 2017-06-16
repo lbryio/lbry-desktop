@@ -12,7 +12,7 @@ class PublishPage extends React.PureComponent {
   constructor(props) {
     super(props);
 
-    this._requiredFields = ["meta_title", "name", "bid", "tos_agree"];
+    this._requiredFields = ["name", "bid", "meta_title", "tosAgree"];
 
     this.state = {
       rawName: "",
@@ -38,6 +38,7 @@ class PublishPage extends React.PureComponent {
       copyrightNotice: "",
       otherLicenseDescription: "",
       otherLicenseUrl: "",
+      tosAgree: false,
       prefillDone: false,
       uploadProgress: 0.0,
       uploaded: false,
@@ -354,7 +355,7 @@ class PublishPage extends React.PureComponent {
 
   handleTOSChange(event) {
     this.setState({
-      TOSAgreed: event.target.checked,
+      tosAgree: event.target.checked,
     });
   }
 
@@ -826,15 +827,11 @@ class PublishPage extends React.PureComponent {
                     <Link
                       href="https://www.lbry.io/termsofservice"
                       label={__("LBRY terms of service")}
-                      checked={this.state.TOSAgreed}
                     />
                   </span>
                 }
                 type="checkbox"
-                name="tos_agree"
-                ref={field => {
-                  this.refs.tos_agree = field;
-                }}
+                checked={this.state.tosAgree}
                 onChange={event => {
                   this.handleTOSChange(event);
                 }}
