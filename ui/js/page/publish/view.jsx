@@ -513,8 +513,8 @@ class PublishPage extends React.PureComponent {
                 }
               />
             </div>
-            {!this.state.hasFile
-              ? ""
+            {!this.state.hasFile && !this.myClaimExists()
+              ? null
               : <div>
                   <div className="card__content">
                     <FormRow
