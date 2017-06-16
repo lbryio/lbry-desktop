@@ -14,6 +14,8 @@ class PublishPage extends React.PureComponent {
 
     this._requiredFields = ["name", "bid", "meta_title", "tosAgree"];
 
+    this._defaultCopyrightNotice = "All rights reserved.";
+
     this.state = {
       rawName: "",
       name: "",
@@ -29,8 +31,8 @@ class PublishPage extends React.PureComponent {
       meta_description: "",
       meta_language: "en",
       meta_nsfw: "0",
-      copyrightNotice: "",
       licenseType: "",
+      copyrightNotice: this._defaultCopyrightNotice,
       otherLicenseDescription: "",
       otherLicenseUrl: "",
       tosAgree: false,
@@ -252,20 +254,40 @@ class PublishPage extends React.PureComponent {
   }
 
   handlePrefillClicked() {
-    const myClaimInfoMetadata = this.myClaimInfo().value.stream.metadata;
+    const {license, licenseUrl, title, thumbnail, description,
+           language, nsfw} = this.myClaimInfo().value.stream.metadata;
 
-    let newMetadata = Object.assign({}, this.state.metadata);
-    newMetadata.license = myClaimInfoMetadata.license;
-    newMetadata.licenseUrl = myClaimInfoMetadata.licenseUrl;
+    let newState = {
+      meta_title: title,
+      meta_thumbnail: thumbnail,
+      meta_description: description,
+      meta_language: language,
+      meta_nsfw: nsfw,
+    };
 
-    this.setState({
-      prefillDone: true,
-      metadata: newMetadata,
-      otherLicenseChosen: true,
-      otherLicenseDescription: myClaimInfoMetadata.license,
-      otherLicenseUrl: myClaimInfoMetadata.license_url,
-      copyrightChosen: false,
-    });
+    if (license == this._defaultCopyrightNotice) {
+      newState.licenseType = "copyright";
+      newState.copyrightNotice = this._defaultCopyrightNotice;
+    } else {
+      // If the license URL or description matches one of the drop-down options, use that
+      let licenseType = "other"; // Will be overridden if we find a match
+      for (let option of this._meta_license.getOptions()) {
+        if (
+          option.getAttribute("data-url") === licenseUrl ||
+          option.text === license
+        ) {
+          licenseType = option.value;
+        }
+      }
+
+      if (licenseType == "other") {
+        newState.otherLicenseDescription = license;
+        newState.otherLicenseUrl = licenseUrl;
+      }
+      newState.licenseType = licenseType;
+    }
+
+    this.setState(newState);
   }
 
   handleBidChange(event) {
