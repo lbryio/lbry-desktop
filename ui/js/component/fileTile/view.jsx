@@ -3,7 +3,11 @@ import lbry from "lbry.js";
 import lbryuri from "lbryuri.js";
 import Link from "component/link";
 import FileActions from "component/fileActions";
-import { Thumbnail, TruncatedText } from "component/common.js";
+import {
+  Thumbnail,
+  TruncatedText,
+  TruncatedMarkdown,
+} from "component/common.js";
 import FilePrice from "component/filePrice";
 import UriIndicator from "component/uriIndicator";
 
@@ -117,9 +121,9 @@ class FileTile extends React.PureComponent {
                 <h3><TruncatedText lines={1}>{title}</TruncatedText></h3>
               </div>
               <div className="card__content card__subtext">
-                <TruncatedText lines={3}>
+                <TruncatedMarkdown lines={3}>
                   {description}
-                </TruncatedText>
+                </TruncatedMarkdown>
               </div>
             </div>
           </div>
