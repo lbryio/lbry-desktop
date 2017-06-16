@@ -44,16 +44,6 @@ export function doResolveUri(uri) {
   };
 }
 
-export function doCancelResolveUri(uri) {
-  return function(dispatch, getState) {
-    lbry.cancelResolve({ uri });
-    dispatch({
-      type: types.RESOLVE_URI_CANCELED,
-      data: { uri },
-    });
-  };
-}
-
 export function doFetchFeaturedUris() {
   return function(dispatch, getState) {
     const state = getState();
