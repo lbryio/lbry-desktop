@@ -243,3 +243,11 @@ export function doRemoveSnackBarSnack() {
     type: types.REMOVE_SNACKBAR_SNACK,
   };
 }
+
+export function doClearCache() {
+  return function(dispatch, getState) {
+    window.cacheStore.purge();
+
+    return Promise.resolve();
+  };
+}
