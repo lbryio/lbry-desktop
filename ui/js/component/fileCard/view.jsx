@@ -23,14 +23,6 @@ class FileCard extends React.PureComponent {
     }
   }
 
-  componentWillUnmount() {
-    const { isResolvingUri, cancelResolveUri, uri } = this.props;
-
-    if (isResolvingUri) {
-      cancelResolveUri(uri);
-    }
-  }
-
   handleMouseOver() {
     this.setState({
       hovered: true,

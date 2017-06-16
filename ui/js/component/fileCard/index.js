@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { doNavigate } from "actions/app";
-import { doResolveUri, doCancelResolveUri } from "actions/content";
+import { doResolveUri } from "actions/content";
 import { selectObscureNsfw } from "selectors/app";
 import {
   makeSelectClaimForUri,
@@ -31,7 +31,6 @@ const makeSelect = () => {
 const perform = dispatch => ({
   navigate: (path, params) => dispatch(doNavigate(path, params)),
   resolveUri: uri => dispatch(doResolveUri(uri)),
-  cancelResolveUri: uri => dispatch(doCancelResolveUri(uri)),
 });
 
 export default connect(makeSelect, perform)(FileCard);
