@@ -15,6 +15,7 @@ import { selectBadgeNumber } from "selectors/app";
 import { selectTotalDownloadProgress } from "selectors/file_info";
 import setBadge from "util/setBadge";
 import setProgressBar from "util/setProgressBar";
+import { doFileList } from "actions/file_info";
 import batchActions from "util/batchActions";
 
 const { ipcRenderer } = require("electron");
@@ -354,5 +355,94 @@ export function doFetchChannelListMine() {
     };
 
     lbry.channel_list_mine().then(callback);
+  };
+}
+
+export function doCreateChannel(name, amount) {
+  return function(dispatch, getState) {
+    dispatch({
+      type: types.CREATE_CHANNEL_STARTED,
+    });
+
+    return new Promise((resolve, reject) => {
+      lbry
+        .channel_new({
+          channel_name: name,
+          amount: parseFloat(amount),
+        })
+        .then(
+          channelClaim => {
+            channelClaim.name = name;
+            dispatch({
+              type: types.CREATE_CHANNEL_COMPLETED,
+              data: { channelClaim },
+            });
+            resolve(channelClaim);
+          },
+          err => {
+            resolve(err);
+          }
+        );
+    });
+  };
+}
+
+export function doPublish(params) {
+  return function(dispatch, getState) {
+    let uri;
+    const { name, channel_name } = params;
+    if (channel_name) {
+      uri = lbryuri.build({ name: channel_name, path: name }, false);
+    } else {
+      uri = lbryuri.build({ name: name }, false);
+    }
+    const pendingPublish = {
+      name,
+      channel_name,
+      claim_id: "pending_claim_" + uri,
+      txid: "pending_" + uri,
+      nout: 0,
+      outpoint: "pending_" + uri + ":0",
+      time: Date.now(),
+    };
+
+    dispatch({
+      type: types.PUBLISH_STARTED,
+      data: {
+        params,
+        pendingPublish,
+      },
+    });
+
+    return new Promise((resolve, reject) => {
+      const success = claim => {
+        claim.name = params.name;
+        claim.channel_name = params.channel_name;
+        dispatch({
+          type: types.PUBLISH_COMPLETED,
+          data: {
+            claim,
+            uri,
+            pendingPublish,
+          },
+        });
+        dispatch(doFileList());
+        resolve(claim);
+      };
+      const failure = error => {
+        dispatch({
+          type: types.PUBLISH_FAILED,
+          data: {
+            error,
+            params,
+            uri,
+            pendingPublish,
+          },
+        });
+        reject(error);
+      };
+
+      lbry.publish(params).then(success, failure);
+    });
   };
 }

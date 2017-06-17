@@ -125,16 +125,11 @@ class PublishPage extends React.PureComponent {
         publishArgs.file_path = this.refs.file.getValue();
       }
 
-      lbry.publishDeprecated(
-        publishArgs,
-        message => {
-          this.handlePublishStarted();
-        },
-        null,
-        error => {
-          this.handlePublishError(error);
-        }
-      );
+      const success = claim => {};
+      const failure = error => this.handlePublishError(error);
+
+      this.handlePublishStarted();
+      this.props.publish(publishArgs).then(success, failure);
     };
 
     if (this.state.isFee) {
@@ -216,6 +211,10 @@ class PublishPage extends React.PureComponent {
   handleNameChange(event) {
     var rawName = event.target.value;
 
+    this.nameChanged(rawName);
+  }
+
+  nameChanged(rawName) {
     if (!rawName) {
       this.setState({
         rawName: "",
@@ -233,15 +232,26 @@ class PublishPage extends React.PureComponent {
       return;
     }
 
+    let channel = "";
+    if (this.state.channel !== "anonymous") channel = this.state.channel;
+
     const name = rawName.toLowerCase();
-    const uri = lbryuri.normalize(name);
+    const uri = lbryuri.build({ contentName: name, channelName: channel });
     this.setState({
       rawName: rawName,
       name: name,
       uri,
     });
 
-    this.props.resolveUri(uri);
+    if (this.resolveUriTimeout) {
+      clearTimeout(this.resolveUriTimeout);
+      this.resolveUriTimeout = undefined;
+    }
+    const resolve = () => this.props.resolveUri(uri);
+
+    this.resolveUriTimeout = setTimeout(resolve.bind(this), 500, {
+      once: true,
+    });
   }
 
   handleBidChange(event) {
@@ -302,40 +312,12 @@ class PublishPage extends React.PureComponent {
     });
   }
 
-  handleChannelChange(event) {
-    const channel = event.target.value;
-
+  handleChannelChange(channelName) {
     this.setState({
-      channel: channel,
+      channel: channelName,
     });
-  }
-
-  handleNewChannelNameChange(event) {
-    const newChannelName = event.target.value.startsWith("@")
-      ? event.target.value
-      : "@" + event.target.value;
-
-    if (
-      newChannelName.length > 1 &&
-      !lbryuri.isValidName(newChannelName.substr(1), false)
-    ) {
-      this.refs.newChannelName.showError(
-        __("LBRY channel names must contain only letters, numbers and dashes.")
-      );
-      return;
-    } else {
-      this.refs.newChannelName.clearError();
-    }
-
-    this.setState({
-      newChannelName: newChannelName,
-    });
-  }
-
-  handleNewChannelBidChange(event) {
-    this.setState({
-      newChannelBid: event.target.value,
-    });
+    const nameChanged = () => this.nameChanged(this.state.rawName);
+    setTimeout(nameChanged.bind(this), 500, { once: true });
   }
 
   handleTOSChange(event) {
@@ -413,19 +395,26 @@ class PublishPage extends React.PureComponent {
   getNameBidHelpText() {
     if (
       this.state.uri &&
-      this.props.resolvingUris.indexOf(this.state.uri) !== -1
+      this.props.resolvingUris.indexOf(this.state.uri) !== -1 &&
+      this.claim() === undefined
     ) {
       return <BusyMessage />;
     } else if (!this.state.name) {
       return __("Select a URL for this publish.");
     } else if (!this.claim()) {
       return __("This URL is unused.");
-    } else if (this.myClaimExists()) {
-      return __(
-        "You have already used this URL. Publishing to it again will update your previous publish."
+    } else if (this.myClaimExists() && !this.state.prefillDone) {
+      return (
+        <Notice>
+          {__("You already have a claim with this name.")}{" "}
+          <Link
+            label={__("Use data from my existing claim")}
+            onClick={() => this.handlePrefillClicked()}
+          />
+        </Notice>
       );
-    } else if (this.state.topClaimValue) {
-      if (this.state.topClaimValue === 1) {
+    } else if (this.claim()) {
+      if (this.topClaimValue() === 1) {
         return (
           <span>
             {__(
@@ -439,7 +428,7 @@ class PublishPage extends React.PureComponent {
           <span>
             {__(
               'A deposit of at least "%s" credits is required to win "%s". However, you can still get a permanent URL for any amount.',
-              this.state.topClaimValue,
+              this.topClaimValue(),
               this.state.name
             )}
           </span>
@@ -709,77 +698,11 @@ class PublishPage extends React.PureComponent {
             </div>
           </section>
 
-          <section className="card">
-            <div className="card__title-primary">
-              <h4>{__("Identity")}</h4>
-              <div className="card__subtitle">
-                {__("Who created this content?")}
-              </div>
-            </div>
-            <div className="card__content">
-              {this.props.fetchingChannels
-                ? <BusyMessage message="Fetching identities" />
-                : <FormRow
-                    type="select"
-                    tabIndex="1"
-                    onChange={event => {
-                      this.handleChannelChange(event);
-                    }}
-                    value={this.state.channel}
-                  >
-                    <option key="anonymous" value="anonymous">
-                      {__("Anonymous")}
-                    </option>
-                    {this.props.channels.map(({ name }) =>
-                      <option key={name} value={name}>{name}</option>
-                    )}
-                    <option key="new" value="new">
-                      {__("New identity...")}
-                    </option>
-                  </FormRow>}
-            </div>
-            {this.state.channel == "new"
-              ? <div className="card__content">
-                  <FormRow
-                    label={__("Name")}
-                    type="text"
-                    onChange={event => {
-                      this.handleNewChannelNameChange(event);
-                    }}
-                    ref={newChannelName => {
-                      this.refs.newChannelName = newChannelName;
-                    }}
-                    value={this.state.newChannelName}
-                  />
-                  <FormRow
-                    label={__("Deposit")}
-                    postfix={__("LBC")}
-                    step="0.01"
-                    min="0"
-                    type="number"
-                    helper={lbcInputHelp}
-                    onChange={event => {
-                      this.handleNewChannelBidChange(event);
-                    }}
-                    value={this.state.newChannelBid}
-                  />
-                  <div className="form-row-submit">
-                    <Link
-                      button="primary"
-                      label={
-                        !this.state.creatingChannel
-                          ? __("Create identity")
-                          : __("Creating identity...")
-                      }
-                      onClick={event => {
-                        this.handleCreateChannelClick(event);
-                      }}
-                      disabled={this.state.creatingChannel}
-                    />
-                  </div>
-                </div>
-              : null}
-          </section>
+          <ChannelSection
+            {...this.props}
+            handleChannelChange={this.handleChannelChange.bind(this)}
+            channel={this.state.channel}
+          />
 
           <section className="card">
             <div className="card__title-primary">
@@ -795,7 +718,9 @@ class PublishPage extends React.PureComponent {
             </div>
             <div className="card__content">
               <FormRow
-                prefix="lbry://"
+                prefix={`lbry://${this.state.channel === "anonymous"
+                  ? ""
+                  : `${this.state.channel}/`}`}
                 type="text"
                 ref="name"
                 placeholder="myname"
@@ -903,6 +828,179 @@ class PublishPage extends React.PureComponent {
           )}: {this.state.errorMessage}
         </Modal>
       </main>
+    );
+  }
+}
+
+class ChannelSection extends React.PureComponent {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      newChannelName: "@",
+      newChannelBid: 10,
+      addingChannel: false,
+    };
+  }
+
+  handleChannelChange(event) {
+    const channel = event.target.value;
+    if (channel === "new") this.setState({ addingChannel: true });
+    else {
+      this.setState({ addingChannel: false });
+      this.props.handleChannelChange(event.target.value);
+    }
+  }
+
+  handleNewChannelNameChange(event) {
+    const newChannelName = event.target.value.startsWith("@")
+      ? event.target.value
+      : "@" + event.target.value;
+
+    if (
+      newChannelName.length > 1 &&
+      !lbryuri.isValidName(newChannelName.substr(1), false)
+    ) {
+      this.refs.newChannelName.showError(
+        __("LBRY channel names must contain only letters, numbers and dashes.")
+      );
+      return;
+    } else {
+      this.refs.newChannelName.clearError();
+    }
+
+    this.setState({
+      newChannelName,
+    });
+  }
+
+  handleNewChannelBidChange(event) {
+    this.setState({
+      newChannelBid: event.target.value,
+    });
+  }
+
+  handleCreateChannelClick(event) {
+    if (this.state.newChannelName.length < 5) {
+      this.refs.newChannelName.showError(
+        __("LBRY channel names must be at least 4 characters in length.")
+      );
+      return;
+    }
+
+    this.setState({
+      creatingChannel: true,
+    });
+
+    const newChannelName = this.state.newChannelName;
+    const amount = parseFloat(this.state.newChannelBid);
+    this.setState({
+      creatingChannel: true,
+    });
+    const success = (() => {
+      this.setState({
+        creatingChannel: false,
+        addingChannel: false,
+        channel: newChannelName,
+      });
+      this.props.handleChannelChange(newChannelName);
+    }).bind(this);
+    const failure = (err => {
+      this.setState({
+        creatingChannel: false,
+      });
+      this.refs.newChannelName.showError(
+        __("Unable to create channel due to an internal error.")
+      );
+    }).bind(this);
+    this.props.createChannel(newChannelName, amount).then(success, failure);
+  }
+
+  render() {
+    const lbcInputHelp = __(
+      "This LBC remains yours and the deposit can be undone at any time."
+    );
+
+    const { fetchingChannels, channels } = this.props;
+
+    let channelContent = [];
+    if (channels.length > 0) {
+      channelContent.push(
+        <FormRow
+          key="channel"
+          type="select"
+          tabIndex="1"
+          onChange={this.handleChannelChange.bind(this)}
+          value={this.props.channel}
+        >
+          <option key="anonymous" value="anonymous">
+            {__("Anonymous")}
+          </option>
+          {this.props.channels.map(({ name }) =>
+            <option key={name} value={name}>{name}</option>
+          )}
+          <option key="new" value="new">
+            {__("New identity...")}
+          </option>
+        </FormRow>
+      );
+      if (fetchingChannels) {
+        channelContent.push(
+          <BusyMessage message="Updating channels" key="loading" />
+        );
+      }
+    } else if (fetchingChannels) {
+      channelContent.push(
+        <BusyMessage message="Loading channels" key="loading" />
+      );
+    }
+
+    return (
+      <section className="card">
+        <div className="card__title-primary">
+          <h4>{__("Identity")}</h4>
+          <div className="card__subtitle">
+            {__("Who created this content?")}
+          </div>
+        </div>
+        <div className="card__content">
+          {channelContent}
+        </div>
+        {this.state.addingChannel &&
+          <div className="card__content">
+            <FormRow
+              label={__("Name")}
+              type="text"
+              onChange={event => {
+                this.handleNewChannelNameChange(event);
+              }}
+              value={this.state.newChannelName}
+            />
+            <FormRow
+              label={__("Deposit")}
+              postfix="LBC"
+              step="0.1"
+              min="0"
+              type="number"
+              helper={lbcInputHelp}
+              ref="newChannelName"
+              onChange={this.handleNewChannelBidChange.bind(this)}
+              value={this.state.newChannelBid}
+            />
+            <div className="form-row-submit">
+              <Link
+                button="primary"
+                label={
+                  !this.state.creatingChannel
+                    ? __("Create identity")
+                    : __("Creating identity...")
+                }
+                onClick={this.handleCreateChannelClick.bind(this)}
+                disabled={this.state.creatingChannel}
+              />
+            </div>
+          </div>}
+      </section>
     );
   }
 }

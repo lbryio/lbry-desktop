@@ -69,6 +69,11 @@ export const makeSelectLoadingForUri = () => {
   return createSelector(selectLoadingForUri, loading => !!loading);
 };
 
+export const selectFileInfosPendingPublish = createSelector(
+  _selectState,
+  state => Object.values(state.pendingByOutpoint || {})
+);
+
 export const selectFileInfosDownloaded = createSelector(
   selectFileInfosByOutpoint,
   selectMyClaimsOutpoints,
@@ -87,24 +92,17 @@ export const selectFileInfosDownloaded = createSelector(
   }
 );
 
-export const selectFileInfosPendingPublish = createSelector(
-  _selectState,
-  state => {
-    return lbry.getPendingPublishes();
-  }
-);
-
 export const selectFileInfosPublished = createSelector(
   selectFileInfosByOutpoint,
-  selectFileInfosPendingPublish,
   selectMyClaimsOutpoints,
-  (byOutpoint, pendingFileInfos, outpoints) => {
+  selectFileInfosPendingPublish,
+  (byOutpoint, outpoints, pendingPublish) => {
     const fileInfos = [];
     outpoints.forEach(outpoint => {
       const fileInfo = byOutpoint[outpoint];
       if (fileInfo) fileInfos.push(fileInfo);
     });
-    return [...fileInfos, ...pendingFileInfos];
+    return fileInfos;
   }
 );
 
@@ -133,7 +131,6 @@ export const selectFileInfosByUri = createSelector(
         if (fileInfo) fileInfos[uri] = fileInfo;
       }
     });
-
     return fileInfos;
   }
 );
