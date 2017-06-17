@@ -91,7 +91,7 @@ class FileCard extends React.PureComponent {
                 style={{ backgroundImage: "url('" + metadata.thumbnail + "')" }}
               />}
             <div className="card__content card__subtext card__subtext--two-lines">
-              <TruncatedMarkdown lines={3}>{description}</TruncatedMarkdown>
+              <TruncatedMarkdown lines={2}>{description}</TruncatedMarkdown>
             </div>
           </Link>
           {obscureNsfw && this.state.hovered

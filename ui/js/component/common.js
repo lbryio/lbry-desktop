@@ -1,5 +1,7 @@
 import React from "react";
+import ReactDOMServer from "react-dom/server";
 import lbry from "../lbry.js";
+import ReactMarkdown from "react-markdown";
 
 //component/icon.js
 export class Icon extends React.PureComponent {
@@ -51,45 +53,27 @@ export class TruncatedMarkdown extends React.PureComponent {
     lines: null,
   };
 
-  truncateMarkdown(text) {
-    let output;
-    try {
-      output = text
-        // Remove HTML tags
-        .replace(/<(.*?)>/g, "$1")
-        // Remove setext-style headers
-        .replace(/^[=\-]{2,}\s*$/g, "")
-        // Remove footnotes?
-        .replace(/\[\^.+?\](\: .*?$)?/g, "")
-        .replace(/\s{0,2}\[.*?\]: .*?$/g, "")
-        // Remove images
-        .replace(/\!\[.*?\][\[\(].*?[\]\)]/g, "")
-        // Remove inline links
-        .replace(/\[(.*?)\][\[\(].*?[\]\)]/g, "$1")
-        // Remove Blockquotes
-        .replace(/>/g, "")
-        // Remove reference-style links?
-        .replace(/^\s{1,2}\[(.*?)\]: (\S+)( ".*?")?\s*$/g, "")
-        // Remove atx-style headers
-        .replace(/^\#{1,6}\s*([^#]*)\s*(\#{1,6})?/gm, "$1")
-        .replace(/([\*_]{1,3})(\S.*?\S)\1/g, "$2")
-        .replace(/(`{3,})(.*?)\1/gm, "$2")
-        .replace(/^-{3,}\s*$/g, "")
-        .replace(/`(.+?)`/g, "$1")
-        .replace(/\n{2,}/g, "\n\n");
-    } catch (e) {
-      return text;
-    }
-    return output;
+  transformMarkdown(text) {
+    // render markdown to html string then trim html tag
+    let htmlString = ReactDOMServer.renderToStaticMarkup(
+      <ReactMarkdown source={this.props.children} />
+    );
+    var txt = document.createElement("textarea");
+    txt.innerHTML = htmlString;
+    return txt.value.replace(/<(?:.|\n)*?>/gm, "");
   }
 
   render() {
+    let content = this.props.children && typeof this.props.children === "string"
+      ? this.transformMarkdown(this.props.children)
+      : this.props.children;
+    console.log(content);
     return (
       <span
         className="truncated-text"
         style={{ WebkitLineClamp: this.props.lines }}
       >
-        {this.truncateMarkdown(this.props.children)}
+        {content}
       </span>
     );
   }

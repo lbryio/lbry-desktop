@@ -165,6 +165,6 @@ input[type="text"].input-copyable {
   color: $color-help;
 }
 
-.CodeMirror-scroll {
-  height: auto !important;
+.form-field__input.form-field__input-SimpleMDE .CodeMirror-scroll {
+  height: auto;
 }

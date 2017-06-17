@@ -41,7 +41,7 @@ export class FormField extends React.PureComponent {
       this._element = "input";
       this._type = "text";
     } else if (this.props.type == "SimpleMDE") {
-      this._element = "SimpleMDE";
+      this._element = SimpleMDE;
       this._type = "textarea";
     } else if (formFieldFileSelectorTypes.includes(this.props.type)) {
       this._element = "input";
@@ -113,45 +113,25 @@ export class FormField extends React.PureComponent {
     delete otherProps.className;
     delete otherProps.postfix;
     delete otherProps.prefix;
-    const element = this._element === "SimpleMDE"
-      ? <SimpleMDE
-          id={elementId}
-          type={this._type}
-          name={this.props.name}
-          ref="field"
-          placeholder={this.props.placeholder}
-          className={
-            "form-field__input form-field__input-" +
-            this.props.type +
-            " " +
-            (this.props.className || "") +
-            (isError ? "form-field__input--error" : "")
-          }
-          name={this.props.name}
-          options={{
-            hideIcons: ["heading"],
-          }}
-          {...otherProps}
-        >
-          {this.props.children}
-        </SimpleMDE>
-      : <this._element // can't be applied to SimpleMDE idk why
-          id={elementId}
-          type={this._type}
-          name={this.props.name}
-          ref="field"
-          placeholder={this.props.placeholder}
-          className={
-            "form-field__input form-field__input-" +
-            this.props.type +
-            " " +
-            (this.props.className || "") +
-            (isError ? "form-field__input--error" : "")
-          }
-          {...otherProps}
-        >
-          {this.props.children}
-        </this._element>;
+    const element = (
+      <this._element
+        id={elementId}
+        type={this._type}
+        name={this.props.name}
+        ref="field"
+        placeholder={this.props.placeholder}
+        className={
+          "form-field__input form-field__input-" +
+          this.props.type +
+          " " +
+          (this.props.className || "") +
+          (isError ? "form-field__input--error" : "")
+        }
+        {...otherProps}
+      >
+        {this.props.children}
+      </this._element>
+    );
 
     return (
       <div className={"form-field form-field--" + this.props.type}>
