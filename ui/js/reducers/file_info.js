@@ -12,8 +12,9 @@ reducers[types.FILE_LIST_STARTED] = function(state, action) {
 
 reducers[types.FILE_LIST_COMPLETED] = function(state, action) {
   const { fileInfos } = action.data;
-
   const newByOutpoint = Object.assign({}, state.byOutpoint);
+  const pendingByOutpoint = Object.assign({}, state.pendingByOutpoint);
+
   fileInfos.forEach(fileInfo => {
     const { outpoint } = fileInfo;
 
@@ -23,6 +24,7 @@ reducers[types.FILE_LIST_COMPLETED] = function(state, action) {
   return Object.assign({}, state, {
     isFileListPending: false,
     byOutpoint: newByOutpoint,
+    pendingByOutpoint,
   });
 };
 
@@ -135,6 +137,61 @@ reducers[types.LOADING_VIDEO_FAILED] = function(state, action) {
     urisLoading: newLoading,
   });
 };
+
+reducers[types.PUBLISH_STARTED] = function(state, action) {
+  const { pendingPublish } = action.data;
+  const pendingByOutpoint = Object.assign({}, state.pendingByOutpoint);
+
+  pendingByOutpoint[pendingPublish.outpoint] = pendingPublish;
+
+  return Object.assign({}, state, {
+    pendingByOutpoint,
+  });
+};
+
+reducers[types.PUBLISH_COMPLETED] = function(state, action) {
+  const { pendingPublish } = action.data;
+  const pendingByOutpoint = Object.assign({}, state.pendingByOutpoint);
+
+  delete pendingByOutpoint[pendingPublish.outpoint];
+
+  return Object.assign({}, state, {
+    pendingByOutpoint,
+  });
+};
+
+reducers[types.PUBLISH_FAILED] = function(state, action) {
+  const { pendingPublish } = action.data;
+  const pendingByOutpoint = Object.assign({}, state.pendingByOutpoint);
+
+  delete pendingByOutpoint[pendingPublish.outpoint];
+
+  return Object.assign({}, state, {
+    pendingByOutpoint,
+  });
+};
+
+// reducers[types.PUBLISH_COMPLETED] = function(state, action) {
+//   const { claim } = action.data;
+//   const uri = lbryuri.build({
+//     txid: claim.txId
+//   })
+//   const newPendingPublish = {
+//     name,
+//     channel_name,
+//     claim_id: "pending_claim_" + uri,
+//     txid: "pending_" + uri,
+//     nout: 0,
+//     outpoint: "pending_" + uri + ":0",
+//     time: Date.now(),
+//   };
+//   const fileInfos = Object.assign({}, state.fileInfos)
+//   fileInfos[newPendingPublish.outpoint] = newPendingPublish
+
+//   return Object.assign({}, state, {
+//     fileInfos,
+//   })
+// }
 
 export default function reducer(state = defaultState, action) {
   const handler = reducers[action.type];

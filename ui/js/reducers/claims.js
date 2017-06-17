@@ -15,7 +15,13 @@ reducers[types.RESOLVE_URI_COMPLETED] = function(state, action) {
     byUri[uri] = claim.claim_id;
   } else if (claim === undefined && certificate !== undefined) {
     byId[certificate.claim_id] = certificate;
-    byUri[uri] = certificate.claim_id;
+    // Don't point URI at the channel certificate unless it actually is
+    // a channel URI. This is brittle.
+    if (!uri.split(certificate.name)[1].match(/\//)) {
+      byUri[uri] = certificate.claim_id;
+    } else {
+      byUri[uri] = null;
+    }
   } else {
     byUri[uri] = null;
   }
@@ -105,6 +111,34 @@ reducers[types.ABANDON_CLAIM_COMPLETED] = function(state, action) {
     myClaims,
     byId,
     claimsByUri,
+  });
+};
+
+reducers[types.CREATE_CHANNEL_COMPLETED] = function(state, action) {
+  const { channelClaim } = action.data;
+  const byId = Object.assign({}, state.byId);
+  const myChannelClaims = new Set(state.myChannelClaims);
+
+  byId[channelClaim.claim_id] = channelClaim;
+  myChannelClaims.add(channelClaim.claim_id);
+
+  return Object.assign({}, state, {
+    byId,
+    myChannelClaims,
+  });
+};
+
+reducers[types.PUBLISH_COMPLETED] = function(state, action) {
+  const { claim } = action.data;
+  const byId = Object.assign({}, state.byId);
+  const myClaims = new Set(state.myClaims);
+
+  byId[claim.claim_id] = claim;
+  myClaims.add(claim.claim_id);
+
+  return Object.assign({}, state, {
+    byId,
+    myClaims,
   });
 };
 
