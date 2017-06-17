@@ -301,3 +301,32 @@ export function doFetchChannelListMine() {
     lbry.channel_list_mine().then(callback);
   };
 }
+
+export function doCreateChannel(name, amount) {
+  return function(dispatch, getState) {
+    dispatch({
+      type: types.CREATE_CHANNEL_STARTED,
+    });
+
+    return new Promise((resolve, reject) => {
+      lbry
+        .channel_new({
+          channel_name: name,
+          amount: parseFloat(amount),
+        })
+        .then(
+          channelClaim => {
+            channelClaim.name = name;
+            dispatch({
+              type: types.CREATE_CHANNEL_COMPLETED,
+              data: { channelClaim },
+            });
+            resolve(channelClaim);
+          },
+          err => {
+            resolve(err);
+          }
+        );
+    });
+  };
+}

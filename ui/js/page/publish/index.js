@@ -13,6 +13,7 @@ import {
   doFetchClaimListMine,
   doFetchChannelListMine,
   doResolveUri,
+  doCreateChannel,
 } from "actions/content";
 import rewards from "rewards";
 import PublishPage from "./view";
@@ -33,6 +34,7 @@ const perform = dispatch => ({
     dispatch(doClaimRewardType(rewards.TYPE_FIRST_CHANNEL)),
   fetchChannelListMine: () => dispatch(doFetchChannelListMine()),
   resolveUri: uri => dispatch(doResolveUri(uri)),
+  createChannel: (name, amount) => dispatch(doCreateChannel(name, amount)),
 });
 
 export default connect(select, perform)(PublishPage);
