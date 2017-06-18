@@ -26,15 +26,6 @@ reducers[types.RESOLVE_URI_COMPLETED] = function(state, action) {
   });
 };
 
-reducers[types.RESOLVE_URI_CANCELED] = function(state, action) {
-  const uri = action.data.uri;
-  const newClaims = Object.assign({}, state.claimsByUri);
-  delete newClaims[uri];
-  return Object.assign({}, state, {
-    claimsByUri: newClaims,
-  });
-};
-
 reducers[types.FETCH_CLAIM_LIST_MINE_STARTED] = function(state, action) {
   return Object.assign({}, state, {
     isClaimListMinePending: true,

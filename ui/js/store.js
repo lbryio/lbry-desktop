@@ -100,6 +100,6 @@ const persistOptions = {
   debounce: 1000,
   storage: localForage,
 };
-persistStore(reduxStore, persistOptions);
+window.cacheStore = persistStore(reduxStore, persistOptions);
 
 export default reduxStore;
