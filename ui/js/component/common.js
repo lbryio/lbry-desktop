@@ -67,7 +67,6 @@ export class TruncatedMarkdown extends React.PureComponent {
     let content = this.props.children && typeof this.props.children === "string"
       ? this.transformMarkdown(this.props.children)
       : this.props.children;
-    console.log(content);
     return (
       <span
         className="truncated-text"
