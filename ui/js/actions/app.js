@@ -225,7 +225,6 @@ export function doDaemonReady() {
     dispatch({
       type: types.DAEMON_READY,
     });
-    dispatch(doChangePath("/discover"));
     dispatch(doFetchDaemonSettings());
     dispatch(doFileList());
   };
