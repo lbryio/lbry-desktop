@@ -9,7 +9,7 @@ import Link from "component/link";
 import UriIndicator from "component/uriIndicator";
 
 const FormatItem = props => {
-  const { contentType, metadata: { author, language, license } } = props;
+  const { contentType, metadata: { language, license } } = props;
 
   const mediaType = lbry.getMediaType(contentType);
 
@@ -18,9 +18,6 @@ const FormatItem = props => {
       <tbody>
         <tr>
           <td>{__("Content-Type")}</td><td>{mediaType}</td>
-        </tr>
-        <tr>
-          <td>{__("Author")}</td><td>{author}</td>
         </tr>
         <tr>
           <td>{__("Language")}</td><td>{language}</td>

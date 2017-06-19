@@ -21,7 +21,9 @@ class FileSelector extends React.PureComponent {
   handleButtonClick() {
     remote.dialog.showOpenDialog(
       {
-        properties: [this.props.type == "file" ? "openFile" : "openDirectory"],
+        properties: this.props.type == "file"
+          ? ["openFile"]
+          : ["openDirectory", "createDirectory"],
       },
       paths => {
         if (!paths) {

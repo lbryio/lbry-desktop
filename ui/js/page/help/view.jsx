@@ -26,12 +26,12 @@ class HelpPage extends React.PureComponent {
           upgradeAvailable: upgradeAvailable,
         });
       });
-    lbry.call("version", {}, info => {
+    lbry.version().then(info => {
       this.setState({
         versionInfo: info,
       });
     });
-    lbry.getSessionInfo(info => {
+    lbry.status({ session_status: true }).then(info => {
       this.setState({
         lbryId: info.lbry_id,
       });

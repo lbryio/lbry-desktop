@@ -11,6 +11,7 @@ import { selectResolvingUris } from "selectors/content";
 import { selectCostInfoForUri } from "selectors/cost_info";
 import { doOpenModal } from "actions/app";
 import { doClaimEligiblePurchaseRewards } from "actions/rewards";
+import batchActions from "util/batchActions";
 
 export function doResolveUri(uri) {
   return function(dispatch, getState) {
@@ -43,16 +44,6 @@ export function doResolveUri(uri) {
   };
 }
 
-export function doCancelResolveUri(uri) {
-  return function(dispatch, getState) {
-    lbry.cancelResolve({ uri });
-    dispatch({
-      type: types.RESOLVE_URI_CANCELED,
-      data: { uri },
-    });
-  };
-}
-
 export function doFetchFeaturedUris() {
   return function(dispatch, getState) {
     const state = getState();
@@ -63,20 +54,29 @@ export function doFetchFeaturedUris() {
 
     const success = ({ Categories, Uris }) => {
       let featuredUris = {};
+      const actions = [];
 
       Categories.forEach(category => {
         if (Uris[category] && Uris[category].length) {
-          featuredUris[category] = Uris[category];
+          const uris = Uris[category];
+
+          featuredUris[category] = uris;
+          uris.forEach(uri => {
+            actions.push(doResolveUri(uri));
+          });
         }
       });
 
-      dispatch({
+      actions.push({
         type: types.FETCH_FEATURED_CONTENT_COMPLETED,
         data: {
           categories: Categories,
           uris: featuredUris,
+          success: true,
         },
       });
+
+      dispatch(batchActions(...actions));
     };
 
     const failure = () => {
@@ -246,23 +246,22 @@ export function doPurchaseUri(uri, purchaseModalName) {
   };
 }
 
-export function doFetchClaimsByChannel(uri) {
+export function doFetchClaimsByChannel(uri, page = 1) {
   return function(dispatch, getState) {
     dispatch({
       type: types.FETCH_CHANNEL_CLAIMS_STARTED,
       data: { uri },
     });
 
-    lbry.resolve({ uri }).then(resolutionInfo => {
-      const { claims_in_channel } = resolutionInfo
-        ? resolutionInfo
-        : { claims_in_channel: [] };
+    lbry.claim_list_by_channel({ uri, page }).then(result => {
+      const claimResult = result[uri],
+        claims = claimResult ? claimResult.claims_in_channel : [];
 
       dispatch({
         type: types.FETCH_CHANNEL_CLAIMS_COMPLETED,
         data: {
           uri,
-          claims: claims_in_channel,
+          claims: claims,
         },
       });
     });

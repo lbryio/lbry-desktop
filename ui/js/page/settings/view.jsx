@@ -2,6 +2,9 @@ import React from "react";
 import { FormField, FormRow } from "component/form.js";
 import SubHeader from "component/subHeader";
 import lbry from "lbry.js";
+import Link from "component/link";
+
+const { remote } = require("electron");
 
 class SettingsPage extends React.PureComponent {
   constructor(props) {
@@ -15,7 +18,21 @@ class SettingsPage extends React.PureComponent {
       showNsfw: lbry.getClientSetting("showNsfw"),
       showUnavailable: lbry.getClientSetting("showUnavailable"),
       language: lbry.getClientSetting("language"),
+      clearingCache: false,
     };
+  }
+
+  clearCache() {
+    this.setState({
+      clearingCache: true,
+    });
+    const success = () => {
+      this.setState({ clearingCache: false });
+      window.location.href = `${remote.app.getAppPath()}/dist/index.html`;
+    };
+    const clear = () => this.props.clearCache().then(success.bind(this));
+
+    setTimeout(clear, 1000, { once: true });
   }
 
   setDaemonSetting(name, value) {
@@ -272,6 +289,27 @@ class SettingsPage extends React.PureComponent {
                 "Help make LBRY better by contributing diagnostic data about my usage"
               )}
             />
+          </div>
+        </section>
+
+        <section className="card">
+          <div className="card__content">
+            <h3>{__("Application Cache")}</h3>
+          </div>
+          <div className="card__content">
+            <p>
+              <Link
+                label={
+                  this.state.clearingCache
+                    ? __("Clearing")
+                    : __("Clear the cache")
+                }
+                icon="icon-trash"
+                button="alt"
+                onClick={this.clearCache.bind(this)}
+                disabled={this.state.clearingCache}
+              />
+            </p>
           </div>
         </section>
       </main>

@@ -89,7 +89,7 @@ export function doDeleteFile(outpoint, deleteFromComputer) {
 
     lbry.file_delete({
       outpoint: outpoint,
-      delete_target_file: deleteFromComputer,
+      delete_from_download_dir: deleteFromComputer,
     });
 
     dispatch(doCloseModal());
@@ -102,12 +102,7 @@ export function doFetchFileInfosAndPublishedClaims() {
       isClaimListMinePending = selectClaimListMineIsPending(state),
       isFileInfoListPending = selectFileListIsPending(state);
 
-    if (isClaimListMinePending === undefined) {
-      dispatch(doFetchClaimListMine());
-    }
-
-    if (isFileInfoListPending === undefined) {
-      dispatch(doFileList());
-    }
+    dispatch(doFetchClaimListMine());
+    dispatch(doFileList());
   };
 }

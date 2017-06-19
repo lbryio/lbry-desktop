@@ -21,7 +21,7 @@ class UriIndicator extends React.PureComponent {
   render() {
     const { claim, uri, isResolvingUri } = this.props;
 
-    if (isResolvingUri) {
+    if (isResolvingUri && !claim) {
       return <span className="empty">Validating...</span>;
     }
 
