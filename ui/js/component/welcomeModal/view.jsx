@@ -11,18 +11,17 @@ class WelcomeModal extends React.PureComponent {
     return !hasClaimed
       ? <Modal type="custom" isOpen={true} contentLabel="Welcome to LBRY">
           <section>
-            <h3 className="modal__header">Welcome to LBRY.</h3>
+            <h3 className="modal__header">{__("Welcome to LBRY.")}</h3>
             <p>
-              Using LBRY is like dating a centaur. Totally normal up top, and
-              {" "}<em>way different</em> underneath.
+              {__("Using LBRY is like dating a centaur. Totally normal up top, and")}
+              {" "}<em>{__"way different")}</em> {__("underneath.")}
             </p>
-            <p>Up top, LBRY is similar to popular media sites.</p>
+            <p>{__("Up top, LBRY is similar to popular media sites.")}</p>
             <p>
-              Below, LBRY is controlled by users -- you -- via blockchain and
-              decentralization.
+              {__("Below, LBRY is controlled by users -- you -- via blockchain and decentralization.")}
             </p>
             <p>
-              Thank you for making content freedom possible!
+              {__("Thank you for making content freedom possible!")}
               {" "}{isRewardApproved ? __("Here's a nickel, kid.") : ""}
             </p>
             <div className="text-center">
@@ -31,7 +30,7 @@ class WelcomeModal extends React.PureComponent {
                 : <Link
                     button="primary"
                     onClick={closeModal}
-                    label="Continue"
+                    label={__("Continue")}
                   />}
             </div>
           </section>
@@ -40,32 +39,28 @@ class WelcomeModal extends React.PureComponent {
           type="alert"
           overlayClassName="modal-overlay modal-overlay--clear"
           isOpen={true}
-          contentLabel="Welcome to LBRY"
+          contentLabel={__("Welcome to LBRY")}
           onConfirmed={closeModal}
         >
           <section>
-            <h3 className="modal__header">About Your Reward</h3>
+            <h3 className="modal__header">{__("About Your Reward")}</h3>
             <p>
-              You earned a reward of
+              {__("You earned a reward of")}
               {" "}<CreditAmount amount={reward.reward_amount} label={false} />
-              {" "}LBRY
-              credits, or <em>LBC</em>.
+              {" "}{__("LBRY")}
+              {__("credits, or")} <em>{__("LBC")}</em>.
             </p>
             <p>
-              This reward will show in your Wallet momentarily, probably while
-              you are reading this message.
+              {__("This reward will show in your Wallet momentarily, probably while you are reading this message.")}
             </p>
             <p>
-              LBC is used to compensate creators, to publish, and to have say in
-              how the network works.
+              {__("LBC is used to compensate creators, to publish, and to have say in how the network works.")}
             </p>
             <p>
-              No need to understand it all just yet! Try watching or downloading
-              something next.
+              {__("No need to understand it all just yet! Try watching or downloading something next.")}
             </p>
             <p>
-              Finally, know that LBRY is an early beta and that it earns the
-              name.
+              {__("Finally, know that LBRY is an early beta and that it earns the name.")}
             </p>
           </section>
         </Modal>;
