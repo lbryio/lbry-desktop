@@ -1,23 +1,23 @@
-const path = require('path');
-const webpack = require('webpack')
-const appPath = path.resolve(__dirname, 'js');
+const path = require("path");
+const webpack = require("webpack")
+const appPath = path.resolve(__dirname, "js");
 
 const PATHS = {
-  app: path.join(__dirname, 'app'),
-  dist: path.join(__dirname, 'dist')
+  app: path.join(__dirname, "app"),
+  dist: path.join(__dirname, "dist")
 };
 
 module.exports = {
-  entry: ['babel-polyfill', './js/main.js'],
+  entry: ["babel-polyfill", "./js/main.js"],
   output: {
-    path: path.join(PATHS.dist, 'js'),
-    publicPath: '/js/',
+    path: path.join(PATHS.dist, "js"),
+    publicPath: "/js/",
     filename: "bundle.js"
   },
-  devtool: 'source-map',
+  devtool: "source-map",
   resolve: {
-    root: appPath,
-    extensions: ['', '.js', '.jsx', '.css'],
+    modules: [appPath, "node_modules"],
+    extensions: [".js", ".jsx", ".css"]
   },
   plugins: [
     new webpack.DefinePlugin({
@@ -25,29 +25,30 @@ module.exports = {
     }),
   ],
   module: {
-    preLoaders: [
+    rules: [
       {
         test: /\.jsx?$/,
-        loaders: ['eslint'],
+        enforce: "pre",
+        loaders: ["eslint"],
         // define an include so we check just the files we need
         include: PATHS.app
-      }
-    ],
-    loaders: [
-      { test: /\.css$/, loader: "style!css" },
+      },
+      {
+        test: /\.css$/,
+        use: ["style-loader", "css-loader"]
+      },
       {
         test: /\.jsx?$/,
-        loader: 'babel',
-        query: {
-          cacheDirectory: true,
-          presets:[ 'es2015', 'react', 'stage-2' ]
+        exclude: /node_modules/,
+        use: {
+          loader: "babel-loader",
+          options: {
+            cacheDirectory: true,
+            presets: [ "es2015", "react", "stage-2" ]
+          }
         }
-      },
-      {
-        test: /mime\.json$/,
-        loader: 'json',
-      },
+      }
     ]
   },
-  target: 'electron-main',
+  target: "electron-main",
 };

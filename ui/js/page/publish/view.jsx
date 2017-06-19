@@ -134,7 +134,7 @@ class PublishPage extends React.PureComponent {
         publishArgs.file_path = this.refs.file.getValue();
       }
 
-      lbry.publish(
+      lbry.publishDeprecated(
         publishArgs,
         message => {
           this.handlePublishStarted();
