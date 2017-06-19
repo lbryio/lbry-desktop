@@ -47,8 +47,7 @@ class WelcomeModal extends React.PureComponent {
             <p>
               {__("You earned a reward of")}
               {" "}<CreditAmount amount={reward.reward_amount} label={false} />
-              {" "}{__("LBRY")}
-              {__("credits, or")} <em>{__("LBC")}</em>.
+              {" "}{__("LBRY credits, or")} <em>{__("LBC")}</em>.
             </p>
             <p>
               {__("This reward will show in your Wallet momentarily, probably while you are reading this message.")}
