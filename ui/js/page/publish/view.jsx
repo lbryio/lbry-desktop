@@ -433,17 +433,23 @@ class PublishPage extends React.PureComponent {
         "You have already used this URL. Publishing to it again will update your previous publish."
       );
     } else if (this.state.topClaimValue) {
-      return (
-        <span>
-          {__n(
-            'A deposit of at least "%s" credit is required to win "%s". However, you can still get a permanent URL for any amount.',
-            'A deposit of at least "%s" credits is required to win "%s". However, you can still get a permanent URL for any amount.',
-            this.state.topClaimValue /*pluralization param*/,
-            this.state.topClaimValue,
-            this.state.name /*regular params*/
-          )}
-        </span>
-      );
+      if (this.state.topClaimValue === 1) {
+        return (
+          <span>
+            {__(
+              'A deposit of at least one credit is required to win "%s". However, you can still get a permanent URL for any amount.', this.state.name
+            )}
+          </span>
+        );
+      } else {
+        return (
+          <span>
+            {__(
+              'A deposit of at least "%s" credits is required to win "%s". However, you can still get a permanent URL for any amount.', this.state.topClaimValue, this.state.name
+            )}
+          </span>
+        );
+      }
     } else {
       return "";
     }
@@ -752,7 +758,7 @@ class PublishPage extends React.PureComponent {
                   />
                   <FormRow
                     label={__("Deposit")}
-                    postfix="LBC"
+                    postfix={__("LBC")}
                     step="0.01"
                     min="0"
                     type="number"
