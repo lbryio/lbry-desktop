@@ -319,11 +319,11 @@ lbry.getMediaType = function(contentType, fileName) {
     }
 
     var ext = fileName.substr(dotIndex + 1);
-    if (/^mp4|mov|m4v|flv|f4v$/i.test(ext)) {
+    if (/^mp4|m4v|mov|webm|flv|f4v|ogv$/i.test(ext)) {
       return "video";
-    } else if (/^mp3|m4a|aac|wav|flac|ogg$/i.test(ext)) {
+  } else if (/^mp3|m4a|aac|wav|flac|ogg|opus$/i.test(ext)) {
       return "audio";
-    } else if (/^html|htm|pdf|odf|doc|docx|md|markdown|txt$/i.test(ext)) {
+    } else if (/^html|htm|xml|pdf|odf|doc|docx|md|markdown|txt|org$/i.test(ext)) {
       return "document";
     } else {
       return "unknown";
