@@ -13,12 +13,16 @@ class WelcomeModal extends React.PureComponent {
           <section>
             <h3 className="modal__header">{__("Welcome to LBRY.")}</h3>
             <p>
-              {__("Using LBRY is like dating a centaur. Totally normal up top, and")}
+              {__(
+                "Using LBRY is like dating a centaur. Totally normal up top, and"
+              )}
               {" "}<em>{__("way different")}</em> {__("underneath.")}
             </p>
             <p>{__("Up top, LBRY is similar to popular media sites.")}</p>
             <p>
-              {__("Below, LBRY is controlled by users -- you -- via blockchain and decentralization.")}
+              {__(
+                "Below, LBRY is controlled by users -- you -- via blockchain and decentralization."
+              )}
             </p>
             <p>
               {__("Thank you for making content freedom possible!")}
@@ -50,16 +54,24 @@ class WelcomeModal extends React.PureComponent {
               {" "}{__("LBRY credits, or")} <em>{__("LBC")}</em>.
             </p>
             <p>
-              {__("This reward will show in your Wallet momentarily, probably while you are reading this message.")}
+              {__(
+                "This reward will show in your Wallet momentarily, probably while you are reading this message."
+              )}
             </p>
             <p>
-              {__("LBC is used to compensate creators, to publish, and to have say in how the network works.")}
+              {__(
+                "LBC is used to compensate creators, to publish, and to have say in how the network works."
+              )}
             </p>
             <p>
-              {__("No need to understand it all just yet! Try watching or downloading something next.")}
+              {__(
+                "No need to understand it all just yet! Try watching or downloading something next."
+              )}
             </p>
             <p>
-              {__("Finally, know that LBRY is an early beta and that it earns the name.")}
+              {__(
+                "Finally, know that LBRY is an early beta and that it earns the name."
+              )}
             </p>
           </section>
         </Modal>;

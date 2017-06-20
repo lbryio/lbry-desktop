@@ -60,7 +60,8 @@ const RewardsPage = props => {
         <p>{__("You are not eligible to claim rewards.")}</p>
         <p>
           {__("To become eligible, email")}
-          {" "}<Link href="mailto:help@lbry.io" label="help@lbry.io" /> {__("with a link to a public social media profile.")}
+          {" "}<Link href="mailto:help@lbry.io" label="help@lbry.io" />{" "}
+          {__("with a link to a public social media profile.")}
         </p>
       </div>
     );

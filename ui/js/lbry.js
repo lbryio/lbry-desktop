@@ -417,7 +417,7 @@ lbry.file_list = function(params = {}) {
         return;
       }
     }
-    
+
     apiCall(
       "file_list",
       params,
@@ -457,7 +457,6 @@ lbry.claim_list_mine = function(params = {}) {
     );
   });
 };
-
 
 lbry._resolveXhrs = {};
 lbry.resolve = function(params = {}) {

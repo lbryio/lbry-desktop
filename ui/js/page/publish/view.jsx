@@ -437,7 +437,8 @@ class PublishPage extends React.PureComponent {
         return (
           <span>
             {__(
-              'A deposit of at least one credit is required to win "%s". However, you can still get a permanent URL for any amount.', this.state.name
+              'A deposit of at least one credit is required to win "%s". However, you can still get a permanent URL for any amount.',
+              this.state.name
             )}
           </span>
         );
@@ -445,7 +446,9 @@ class PublishPage extends React.PureComponent {
         return (
           <span>
             {__(
-              'A deposit of at least "%s" credits is required to win "%s". However, you can still get a permanent URL for any amount.', this.state.topClaimValue, this.state.name
+              'A deposit of at least "%s" credits is required to win "%s". However, you can still get a permanent URL for any amount.',
+              this.state.topClaimValue,
+              this.state.name
             )}
           </span>
         );

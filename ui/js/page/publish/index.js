@@ -15,7 +15,8 @@ const perform = dispatch => ({
   back: () => dispatch(doHistoryBack()),
   navigate: path => dispatch(doNavigate(path)),
   fetchClaimListMine: () => dispatch(doFetchClaimListMine()),
-  claimFirstChannelReward: () => dispatch(doClaimRewardType(rewards.TYPE_FIRST_CHANNEL)),
+  claimFirstChannelReward: () =>
+    dispatch(doClaimRewardType(rewards.TYPE_FIRST_CHANNEL)),
 });
 
 export default connect(select, perform)(PublishPage);
