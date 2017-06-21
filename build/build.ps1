@@ -13,6 +13,7 @@ cd ..
 # build ui
 cd ui
 npm install
+node extractLocals.js
 node_modules\.bin\node-sass --output dist\css --sourcemap=none scss\
 node_modules\.bin\webpack
 Copy-Item dist ..\app\ -recurse
