@@ -7,9 +7,9 @@ env:
 os: linux
 dist: xenial
 
-branches:
-  only:
-  - "/^v\\d+\\.\\d+\\.\\d+$/"
+#branches:
+#  only:
+#  - "/^v\\d+\\.\\d+\\.\\d+$/"
 
 install:
 - rvm install 2.3.1
