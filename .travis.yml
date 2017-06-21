@@ -1,22 +1,7 @@
-matrix:
-    include:
-        - os: osx
-          # Use generic language for osx
-          # python 2.7 is broken on osx on travis, so follow we have to specify the installation ourselves
-          # https://github.com/travis-ci/travis-ci/issues/2312#issuecomment-195620855
-          language: generic
-          osx_image: xcode7.3
-
+os: linux
+dist: xenial
 
 install:
   - rvm install 2.3.1
   - rvm use 2.3.1 && gem install danger --version '~> 4.0' && danger
-  - wget https://www.python.org/ftp/python/2.7.13/python-2.7.13-macosx10.6.pkg
-  - sudo installer -pkg python-2.7.13-macosx10.6.pkg -target /
-  - pip install -U pip
-  - pip install pyinstaller
-  - wget https://nodejs.org/dist/v6.9.4/node-v6.9.4.pkg
-  - sudo installer -pkg node-v6.9.4.pkg -target /
-  - sudo npm install electron-packager -g
-  - ./build.sh
-  - electron-packager --electron-version=1.4.14 --overwrite electron LBRY
+#  - FULL_BUILD=true ./build.sh
