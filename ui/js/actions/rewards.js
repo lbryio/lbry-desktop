@@ -77,7 +77,7 @@ export function doClaimReward(reward, saveError = false) {
 
 export function doClaimEligiblePurchaseRewards() {
   return function(dispatch, getState) {
-    if (!lbryio.enabled || !lbryio.getAccessToken()) {
+    if (!lbryio.enabled) {
       return;
     }
 
