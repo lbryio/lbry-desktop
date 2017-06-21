@@ -70,7 +70,11 @@ npm install
   npm install
 
   # necessary to ensure native Node modules (e.g. keytar) are built against the correct version of Node)
+  # yes, it needs to be run twice. it fails the first time, not sure why
+  set +e
   # DEBUG=electron-rebuild node_modules/.bin/electron-rebuild .
+  node_modules/.bin/electron-rebuild "$ROOT/ui"
+  set -e
   node_modules/.bin/electron-rebuild "$ROOT/ui"
 
   node extractLocals.js
