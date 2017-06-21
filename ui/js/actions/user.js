@@ -57,12 +57,22 @@ export function doUserEmailNew(email) {
       email: email,
     });
     lbryio
-      .call("user_email", "new", { email: email, send_verification_email: true }, "post")
+      .call(
+        "user_email",
+        "new",
+        { email: email, send_verification_email: true },
+        "post"
+      )
       .catch(error => {
         if (error.xhr && error.xhr.status == 409) {
-          return lbryio.call("user_email", "resend_token", { email: email, only_if_expired: true }, "post");
+          return lbryio.call(
+            "user_email",
+            "resend_token",
+            { email: email, only_if_expired: true },
+            "post"
+          );
         }
-        throw error
+        throw error;
       })
       .then(() => {
         dispatch({
@@ -106,7 +116,12 @@ export function doUserEmailVerify(verificationToken) {
     };
 
     lbryio
-      .call("user_email", "confirm", { verification_token: verificationToken, email: email }, "post")
+      .call(
+        "user_email",
+        "confirm",
+        { verification_token: verificationToken, email: email },
+        "post"
+      )
       .then(userEmail => {
         if (userEmail.is_verified) {
           dispatch({

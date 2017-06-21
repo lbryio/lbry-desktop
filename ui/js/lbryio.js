@@ -17,7 +17,10 @@ const CONNECTION_STRING = process.env.LBRY_APP_API_URL
 const EXCHANGE_RATE_TIMEOUT = 20 * 60 * 1000;
 
 lbryio.getExchangeRates = function() {
-  if (!lbryio._exchangeLastFetched || Date.now() - lbryio._exchangeLastFetched > EXCHANGE_RATE_TIMEOUT) {
+  if (
+    !lbryio._exchangeLastFetched ||
+    Date.now() - lbryio._exchangeLastFetched > EXCHANGE_RATE_TIMEOUT
+  ) {
     lbryio._exchangePromise = new Promise((resolve, reject) => {
       lbryio
         .call("lbc", "exchange_rate", {}, "get", true)
@@ -43,7 +46,9 @@ lbryio.call = function(resource, action, params = {}, method = "get") {
     const xhr = new XMLHttpRequest();
 
     xhr.addEventListener("error", function(event) {
-      reject(new Error(__("Something went wrong making an internal API call.")));
+      reject(
+        new Error(__("Something went wrong making an internal API call."))
+      );
     });
 
     xhr.addEventListener("timeout", function() {
@@ -82,11 +87,23 @@ lbryio.call = function(resource, action, params = {}, method = "get") {
         const fullParams = { auth_token: token, ...params };
 
         if (method == "get") {
-          xhr.open("get", CONNECTION_STRING + resource + "/" + action + "?" + querystring.stringify(fullParams), true);
+          xhr.open(
+            "get",
+            CONNECTION_STRING +
+              resource +
+              "/" +
+              action +
+              "?" +
+              querystring.stringify(fullParams),
+            true
+          );
           xhr.send();
         } else if (method == "post") {
           xhr.open("post", CONNECTION_STRING + resource + "/" + action, true);
-          xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+          xhr.setRequestHeader(
+            "Content-type",
+            "application/x-www-form-urlencoded"
+          );
           xhr.send(querystring.stringify(fullParams));
         } else {
           reject(new Error(__("Invalid method")));
@@ -103,7 +120,11 @@ lbryio.getAuthToken = () => {
 };
 
 lbryio.setAuthToken = token => {
-  return keytar.setPassword("LBRY", "auth_token", token ? token.toString().trim() : null);
+  return keytar.setPassword(
+    "LBRY",
+    "auth_token",
+    token ? token.toString().trim() : null
+  );
 };
 
 lbryio.getCurrentUser = () => {
@@ -129,18 +150,21 @@ lbryio.authenticate = function() {
       lbryio
         .getAuthToken()
         .then(token => {
-          if (!token || token.length > 60)
-          {
+          if (!token || token.length > 60) {
             return false;
           }
 
           // check that token works
           return lbryio
             .getCurrentUser()
-            .then(() => { return true; })
-            .catch(() => { return false; });
+            .then(() => {
+              return true;
+            })
+            .catch(() => {
+              return false;
+            });
         })
-        .then((isTokenValid) => {
+        .then(isTokenValid => {
           if (isTokenValid) {
             return;
           }
@@ -152,12 +176,22 @@ lbryio.authenticate = function() {
             .then(status => {
               // first try swapping
               app_id = status.installation_id;
-              return lbryio.call("user", "token_swap", {auth_token: "", app_id: app_id}, "post");
+              return lbryio.call(
+                "user",
+                "token_swap",
+                { auth_token: "", app_id: app_id },
+                "post"
+              );
             })
-            .catch((err) => {
+            .catch(err => {
               if (err.xhr.status == 403) {
                 // cannot swap. either app_id doesn't exist, or app_id already swapped. pretend its the former and create a new user. if we get another error, then its the latter
-                return lbryio.call("user", "new", {auth_token: "", language: "en", app_id: app_id}, "post");
+                return lbryio.call(
+                  "user",
+                  "new",
+                  { auth_token: "", language: "en", app_id: app_id },
+                  "post"
+                );
               }
               throw err;
             })
