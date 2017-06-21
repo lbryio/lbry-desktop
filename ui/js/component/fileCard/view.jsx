@@ -2,7 +2,12 @@ import React from "react";
 import lbry from "lbry.js";
 import lbryuri from "lbryuri.js";
 import Link from "component/link";
-import { Thumbnail, TruncatedText, Icon } from "component/common";
+import {
+  Thumbnail,
+  TruncatedText,
+  Icon,
+  TruncatedMarkdown,
+} from "component/common";
 import FilePrice from "component/filePrice";
 import UriIndicator from "component/uriIndicator";
 
@@ -86,7 +91,7 @@ class FileCard extends React.PureComponent {
                 style={{ backgroundImage: "url('" + metadata.thumbnail + "')" }}
               />}
             <div className="card__content card__subtext card__subtext--two-lines">
-              <TruncatedText lines={2}>{description}</TruncatedText>
+              <TruncatedMarkdown lines={2}>{description}</TruncatedMarkdown>
             </div>
           </Link>
           {obscureNsfw && this.state.hovered

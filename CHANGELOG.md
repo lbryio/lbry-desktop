@@ -8,7 +8,10 @@ Web UI version numbers should always match the corresponding version of LBRY App
 
 ## [Unreleased]
 ### Added
+  * Support markdown makeup in claim description
   * State is persisted through app close and re-open, resulting in faster opens
+  *
+
 
 ### Changed
   * Upgraded to lbry daemon 0.13, including updating API signatures

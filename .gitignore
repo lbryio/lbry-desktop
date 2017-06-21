@@ -17,3 +17,5 @@ dist
 
 build/daemon.zip
 .vimrc
+
+ui/yarn.lock

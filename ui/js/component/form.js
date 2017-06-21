@@ -1,6 +1,8 @@
 import React from "react";
 import FileSelector from "./file-selector.js";
 import { Icon } from "./common.js";
+import SimpleMDE from "react-simplemde-editor";
+import style from "react-simplemde-editor/dist/simplemde.min.css";
 
 var formFieldCounter = 0,
   formFieldFileSelectorTypes = ["file", "directory"],
@@ -38,6 +40,9 @@ export class FormField extends React.PureComponent {
     } else if (this.props.type == "text-number") {
       this._element = "input";
       this._type = "text";
+    } else if (this.props.type == "SimpleMDE") {
+      this._element = SimpleMDE;
+      this._type = "textarea";
     } else if (formFieldFileSelectorTypes.includes(this.props.type)) {
       this._element = "input";
       this._type = "hidden";
@@ -81,6 +86,8 @@ export class FormField extends React.PureComponent {
   getValue() {
     if (this.props.type == "checkbox") {
       return this.refs.field.checked;
+    } else if (this.props.type == "SimpleMDE") {
+      return this.refs.field.simplemde.value();
     } else {
       return this.refs.field.value;
     }
@@ -106,7 +113,6 @@ export class FormField extends React.PureComponent {
     delete otherProps.className;
     delete otherProps.postfix;
     delete otherProps.prefix;
-
     const element = (
       <this._element
         id={elementId}
