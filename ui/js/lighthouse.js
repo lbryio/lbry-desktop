@@ -1,84 +1,84 @@
-import lbry from './lbry.js';
-import jsonrpc from './jsonrpc.js';
+import lbry from "./lbry.js";
+import jsonrpc from "./jsonrpc.js";
 
 const queryTimeout = 3000;
 const maxQueryTries = 2;
 const defaultServers = [
-	'http://lighthouse7.lbry.io:50005',
-	'http://lighthouse8.lbry.io:50005',
-	'http://lighthouse9.lbry.io:50005'
+  "http://lighthouse7.lbry.io:50005",
+  "http://lighthouse8.lbry.io:50005",
+  "http://lighthouse9.lbry.io:50005",
 ];
-const path = '/';
+const path = "/";
 
 let server = null;
 let connectTryNum = 0;
 
 function getServers() {
-	return lbry.getClientSetting('useCustomLighthouseServers')
-		? lbry.getClientSetting('customLighthouseServers')
-		: defaultServers;
+  return lbry.getClientSetting("useCustomLighthouseServers")
+    ? lbry.getClientSetting("customLighthouseServers")
+    : defaultServers;
 }
 
 function call(method, params, callback, errorCallback) {
-	if (connectTryNum >= maxQueryTries) {
-		errorCallback(
-			new Error(
-				__(
-					`Could not connect to Lighthouse server. Last server attempted: %s`,
-					server
-				)
-			)
-		);
-		return;
-	}
+  if (connectTryNum >= maxQueryTries) {
+    errorCallback(
+      new Error(
+        __(
+          `Could not connect to Lighthouse server. Last server attempted: %s`,
+          server
+        )
+      )
+    );
+    return;
+  }
 
-	/**
+  /**
    * Set the Lighthouse server if it hasn't been set yet, if the current server is not in current
    * set of servers (most likely because of a settings change), or we're re-trying after a failed
    * query.
    */
-	if (!server || !getServers().includes(server) || connectTryNum > 0) {
-		// If there's a current server, filter it out so we get a new one
-		const newServerChoices = server
-			? getServers().filter(s => s != server)
-			: getServers();
-		server =
-			newServerChoices[
-				Math.round(Math.random() * (newServerChoices.length - 1))
-			];
-	}
+  if (!server || !getServers().includes(server) || connectTryNum > 0) {
+    // If there's a current server, filter it out so we get a new one
+    const newServerChoices = server
+      ? getServers().filter(s => s != server)
+      : getServers();
+    server =
+      newServerChoices[
+        Math.round(Math.random() * (newServerChoices.length - 1))
+      ];
+  }
 
-	jsonrpc.call(
-		server + path,
-		method,
-		params,
-		response => {
-			connectTryNum = 0;
-			callback(response);
-		},
-		error => {
-			connectTryNum = 0;
-			errorCallback(error);
-		},
-		() => {
-			connectTryNum++;
-			call(method, params, callback, errorCallback);
-		},
-		queryTimeout
-	);
+  jsonrpc.call(
+    server + path,
+    method,
+    params,
+    response => {
+      connectTryNum = 0;
+      callback(response);
+    },
+    error => {
+      connectTryNum = 0;
+      errorCallback(error);
+    },
+    () => {
+      connectTryNum++;
+      call(method, params, callback, errorCallback);
+    },
+    queryTimeout
+  );
 }
 
 const lighthouse = new Proxy(
-	{},
-	{
-		get: function(target, name) {
-			return function(...params) {
-				return new Promise((resolve, reject) => {
-					call(name, params, resolve, reject);
-				});
-			};
-		}
-	}
+  {},
+  {
+    get: function(target, name) {
+      return function(...params) {
+        return new Promise((resolve, reject) => {
+          call(name, params, resolve, reject);
+        });
+      };
+    },
+  }
 );
 
 export default lighthouse;

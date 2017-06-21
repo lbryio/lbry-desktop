@@ -23,7 +23,7 @@ const WalletSend = props => {
         <div className="card__content">
           <FormRow
             label={__("Amount")}
-            postfix="LBC"
+            postfix={__("LBC")}
             step="0.01"
             type="number"
             placeholder="1.23"

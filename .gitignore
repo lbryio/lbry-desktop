@@ -1,6 +1,13 @@
-node_modules
-LBRY-darwin-x64
-dist
+/node_modules
+/LBRY-darwin-x64
+/dist
+
+/ui/dist/css/*
+/ui/dist/js/*
+!/ui/dist/js/mediaelement
+/ui/node_modules
+/ui/.sass-cache
+
 
 /app/dist
 /app/node_modules

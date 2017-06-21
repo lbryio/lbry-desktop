@@ -20,7 +20,7 @@ const RewardTile = props => {
         </div>
         <div className="card__actions">
           {claimed
-            ? <span><Icon icon="icon-check" /> Reward claimed.</span>
+            ? <span><Icon icon="icon-check" /> {__("Reward claimed.")}</span>
             : <RewardLink reward_type={reward.reward_type} />}
         </div>
         <div className="card__content">{reward.reward_description}</div>
@@ -59,14 +59,14 @@ const RewardsPage = props => {
       <div className="empty">
         <p>{__("You are not eligible to claim rewards.")}</p>
         <p>
-          To become eligible, email
-          {" "}<Link href="mailto:help@lbry.io" label="help@lbry.io" /> with a
-          link to a public social media profile.
+          {__("To become eligible, email")}
+          {" "}<Link href="mailto:help@lbry.io" label="help@lbry.io" />{" "}
+          {__("with a link to a public social media profile.")}
         </p>
       </div>
     );
   } else if (fetching) {
-    content = <BusyMessage message="Fetching rewards" />;
+    content = <BusyMessage message={__("Fetching rewards")} />;
   } else if (rewards.length > 0) {
     content = rewards.map(reward =>
       <RewardTile key={reward.reward_type} reward={reward} />

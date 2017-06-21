@@ -5,11 +5,6 @@ import FileCard from "component/fileCard";
 import { BusyMessage } from "component/common.js";
 import ToolTip from "component/tooltip.js";
 
-const communityCategoryToolTipText =
-  "Community Content is a public space where anyone can share content with the " +
-  'rest of the LBRY community. Bid on the names "one," "two," "three," "four" and ' +
-  '"five" to put your content here!';
-
 const FeaturedCategory = props => {
   const { category, names } = props;
 
@@ -21,7 +16,9 @@ const FeaturedCategory = props => {
           category.match(/^community/i) &&
           <ToolTip
             label={__("What's this?")}
-            body={__(communityCategoryToolTipText)}
+            body={__(
+              'Community Content is a public space where anyone can share content with the rest of the LBRY community. Bid on the names "one," "two," "three," "four" and "five" to put your content here!'
+            )}
             className="tooltip--header"
           />}
       </h3>
