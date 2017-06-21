@@ -46,9 +46,9 @@ if [ "$FULL_BUILD" == "true" ]; then
 fi
 
 libsecret="libsecret-1-dev"
-if [ $LINUX -a -z "$(dpkg-query --show --showformat='${Status}\n' "$libsecret" 2>/dev/null | grep "install ok installed")" ]; then
+if $LINUX && [ -z "$(dpkg-query --show --showformat='${Status}\n' "$libsecret" 2>/dev/null | grep "install ok installed")" ]; then
   # this is needed for keytar, which does secure password/token management
-  sudo apt-get install "$libsecret"
+  sudo apt-get install --no-install-recommends -y "$libsecret"
 fi
 
 
