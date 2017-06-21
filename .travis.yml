@@ -1,7 +1,13 @@
 os: linux
 dist: xenial
+#language: python
+#python: 2.7
 
-install:
+#before_install:
+#  - virtualenv venv
+#  - source venv/bin/activate
+
+script:
   - rvm install 2.3.1
   - rvm use 2.3.1 && gem install danger --version '~> 4.0' && danger
 #  - FULL_BUILD=true ./build.sh
