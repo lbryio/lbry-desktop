@@ -9,6 +9,8 @@ matrix:
 
 
 install:
+  - rvm install 2.3.1
+  - rvm use 2.3.1 && gem install danger --version '~> 4.0' && danger
   - wget https://www.python.org/ftp/python/2.7.13/python-2.7.13-macosx10.6.pkg
   - sudo installer -pkg python-2.7.13-macosx10.6.pkg -target /
   - pip install -U pip
