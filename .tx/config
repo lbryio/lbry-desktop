@@ -6,4 +6,3 @@ file_filter = app/dist/locales/<lang>.json
 source_file = app/dist/locales/en.json
 source_lang = en
 type = KEYVALUEJSON
-
