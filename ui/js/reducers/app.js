@@ -1,10 +1,16 @@
 import * as types from "constants/action_types";
 import lbry from "lbry";
 
+const currentPath = () => {
+  const hash = document.location.hash;
+  if (hash !== "") return hash.split("#")[1];
+  else return "/discover";
+};
+
 const reducers = {};
 const defaultState = {
   isLoaded: false,
-  currentPath: "discover",
+  currentPath: currentPath(),
   platform: process.platform,
   upgradeSkipped: sessionStorage.getItem("upgradeSkipped"),
   daemonReady: false,

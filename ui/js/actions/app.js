@@ -67,11 +67,8 @@ export function doHistoryBack() {
 
 export function doHistoryPush(params, title, relativeUrl) {
   return function(dispatch, getState) {
-    let pathParts = window.location.pathname.split("/");
-    pathParts[pathParts.length - 1] = relativeUrl.replace(/^\//, "");
-    const url = pathParts.join("/");
     title += " - LBRY";
-    history.pushState(params, title, url);
+    history.pushState(params, title, `#${relativeUrl}`);
   };
 }
 
