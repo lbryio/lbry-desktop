@@ -25,7 +25,7 @@ export const selectEmailToVerify = createSelector(
 export const selectUserHasEmail = createSelector(
   selectUser,
   selectEmailToVerify,
-  (user, email) => (user && user.has_email) || email
+  (user, email) => (user && user.has_email) || !!email
 );
 
 export const selectUserIsRewardEligible = createSelector(
@@ -64,11 +64,8 @@ export const selectEmailVerifyErrorMessage = createSelector(
 );
 
 export const selectUserIsVerificationCandidate = createSelector(
-  selectUserIsRewardEligible,
-  selectUserIsRewardApproved,
-  selectEmailToVerify,
   selectUser,
-  (isEligible, isApproved, emailToVerify, user) => emailToVerify && user
+  user => user && !user.has_verified_email
 );
 
 export const selectUserIsAuthRequested = createSelector(

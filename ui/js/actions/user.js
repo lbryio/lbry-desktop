@@ -16,8 +16,6 @@ export function doAuthenticate() {
           type: types.AUTHENTICATION_SUCCESS,
           data: { user },
         });
-
-        dispatch(doRewardList()); //FIXME - where should this happen?
       })
       .catch(error => {
         dispatch({
@@ -36,6 +34,8 @@ export function doUserFetch() {
     lbryio
       .getCurrentUser()
       .then(user => {
+        dispatch(doRewardList());
+
         dispatch({
           type: types.USER_FETCH_SUCCESS,
           data: { user },

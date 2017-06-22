@@ -202,7 +202,7 @@ lbryio.authenticate = function() {
               return lbryio.setAuthToken(response.auth_token);
             });
         })
-        .then(lbryio.getCurrentUser())
+        .then(lbryio.getCurrentUser)
         .then(resolve, reject);
     });
   }

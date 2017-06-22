@@ -77,7 +77,7 @@ if (env === "development") {
   middleware.push(logger);
 }
 
-middleware.push(createActionBuffer(REHYDRATE));
+// middleware.push(createActionBuffer(REHYDRATE)); // was causing issues with authentication reducers not firing
 
 const createStoreWithMiddleware = redux.compose(
   autoRehydrate(),

@@ -12,7 +12,6 @@ import {
 import { doSearch } from "actions/search";
 import { doFetchDaemonSettings } from "actions/settings";
 import { doAuthenticate } from "actions/user";
-import { doRewardList } from "actions/rewards";
 import { doFileList } from "actions/file_info";
 
 const { remote, ipcRenderer, shell } = require("electron");

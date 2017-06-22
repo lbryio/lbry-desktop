@@ -1,7 +1,28 @@
+env:
+  global:
+  - TRANSIFEX_USER: api
+  - secure: u6gwnZlPGJLnvpoPPCpUZ+jBPajQuIW1+aq6UGW57z54AUjTAECxaYpqcGTGtDBjYark/yeiso887wP/EmJva7hMHeNMf6uLqwzP3YFsIv/Iv+9c1f4MXbJNgOrEKN834o/BdkD4ifi9CCiH9uPPVYGPx1bvfaxGpcHmQXdW4F4S0uj+jePB257mt+afGiNlz9wET6kWJKNNZf/4BNmefldVNq7h6oTSLsyO1TBhDcvSjatpKIwmXUNQfSUTFWvrtpWUB/m/IzitGuUtrt82vU2fPl7tuH6BHNrNp58MINjFzXXJLC+mMybb2UBDIAuc3+k7vj4J0U2rkcTloxDNCKNmYa1jBogOKBRgGp98Ct7E0V2vuLGAPniUbvBcCGK1wwed7uwDjsz3YNCGxUEcyyWc3OVDgN/up4+gXHxkh9FTpZy8Q3rSZx4Lwj700impBUQIVh/5p7Vgv+bSUdOeVRAMlcP9yT83jX50w9LkJMfICFPNv1tOZ3/SOnnB+JdW/ahpplFI4Z68/fBLttZTeaNcU4f28oJvPer8Wll+Elx5kxwLqLbwVUFNlxTxY1LYnPB7SPjGxrFNy3mVTRq5Pxp1hMiTZF4TlapkfHgR+gEzk2wpcJGmub70tW2baZaJF0jDBWIh7GXV+EGve53BKDhpX2Z6jTK0gkhrSUW1MT8=
+  - secure: h1r9Qzv2xHRQl7nDHcscB4qDv7KlF/ncgHko1YuoY4oLZipBV8mzQXDmn3nlMKwaKOe1/Tty/bjoZexkWict4cwKBzU7/1HtJeMa6nxRICuS6DiVhLUNGZEddK6jQLxeEZFxkFPSCZyjybPWtasF8f8jd0lqqLIL4/FcIVV56aRCKAsUwCbedxi8Vnc19l74xjaQIK82xBFYOQPK078OBovk9DDOnicTjMulUo3/pKEZD1njSdcEhfSRv+MFE+31B/a6lpoLo7twPlyzLMfpo30NlEzIN0TeMAk44e4PV6DYg0wntC2GJ21p4BqMnDGocwnZwm7gpjflzUZdW6hF0esGLcqOdbyJLUb3rNX9AzQmn0p9KwDC3S80peZFxSiuLJGL8eivceVDUK/jwWinu3OHDJ/eO5iMDm9odm2ALemPtrDTSlRNT8HzNCY9PQTU9Dhdm4Q/dGDsRPWibFJSJ/qGKhVgadk2CUEAPua0hB1zZ556PkTGx4R1JDscgFDAkgemzgKl4Z/4qK3xGDoEtz1HmBlvQtn+B/PuhA2essADj0iTDiItxb7AYTA7EzsHEcRMmrbYarZ3Eh2onWy2GOpAGRN5Xl9cBIDbibcSC6BLI1m2PcLABpP7DhUX4bJbsVNSiGesHEU7o9Dgn8Ig09eHW/8F9i0VVoGUZXxKMJ8=
+
 os: linux
 dist: xenial
 
+#branches:
+#  only:
+#  - "/^v\\d+\\.\\d+\\.\\d+$/"
+
 install:
-  - rvm install 2.3.1
-  - rvm use 2.3.1 && gem install danger --version '~> 4.0' && danger
-#  - FULL_BUILD=true ./build.sh
+- rvm install 2.3.1
+
+script:
+- rvm use 2.3.1 && gem install danger --version '~> 4.0' && danger
+- FULL_BUILD=true ./build.sh
+
+sudo: required
+after_success:
+- pip install virtualenv
+- virtualenv ~/env
+- source ~/env/bin/activate
+- pip install transifex-client
+- sudo echo $'[https://www.transifex.com]\nhostname = https://www.transifex.com\nusername= '"$TRANSIFEX_USER"$'\npassword = '"$TRANSIFEX_PASSWORD"$'\ntoken = '"$TRANSIFEX_API_TOKEN"$'\n' > ~/.transifexrc
+- tx push -s
