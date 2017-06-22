@@ -7,6 +7,14 @@ import FilePrice from "component/filePrice";
 import UriIndicator from "component/uriIndicator";
 
 class FileCard extends React.PureComponent {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      hovered: false,
+    };
+  }
+
   componentWillMount() {
     this.resolve(this.props);
   }
