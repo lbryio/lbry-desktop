@@ -24,3 +24,5 @@
 
 build/daemon.zip
 .vimrc
+
+package-lock.json
