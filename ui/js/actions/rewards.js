@@ -1,8 +1,7 @@
 import * as types from "constants/action_types";
-import lbry from "lbry";
 import lbryio from "lbryio";
 import rewards from "rewards";
-import { selectRewards, selectRewardsByType } from "selectors/rewards";
+import { selectRewardsByType } from "selectors/rewards";
 
 export function doRewardList() {
   return function(dispatch, getState) {

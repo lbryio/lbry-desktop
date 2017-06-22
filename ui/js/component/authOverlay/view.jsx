@@ -3,6 +3,7 @@ import lbryio from "lbryio.js";
 import ModalPage from "component/modal-page.js";
 import Auth from "component/auth";
 import Link from "component/link";
+import { getLocal, setLocal } from "utils";
 
 export class AuthOverlay extends React.PureComponent {
   constructor(props) {
@@ -14,7 +15,12 @@ export class AuthOverlay extends React.PureComponent {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.isShowing && !this.props.isPending && !nextProps.isShowing) {
+    if (
+      this.props.isShowing &&
+      !this.props.isPending &&
+      !nextProps.isShowing /* && !getLocal("welcome_screen_shown")*/
+    ) {
+      setLocal("welcome_screen_shown", true);
       setTimeout(() => this.props.openWelcomeModal(), 1);
     }
   }
