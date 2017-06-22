@@ -7,6 +7,14 @@ import FilePrice from "component/filePrice";
 import UriIndicator from "component/uriIndicator";
 
 class FileCard extends React.PureComponent {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      hovered: false,
+    };
+  }
+
   componentWillMount() {
     this.resolve(this.props);
   }
@@ -89,21 +97,21 @@ class FileCard extends React.PureComponent {
               <TruncatedText lines={2}>{description}</TruncatedText>
             </div>
           </Link>
-          {obscureNsfw && this.state.hovered
-            ? <div className="card-overlay">
-                <p>
-                  {__(
-                    "This content is Not Safe For Work. To view adult content, please change your"
-                  )}
-                  {" "}
-                  <Link
-                    className="button-text"
-                    onClick={() => navigate("settings")}
-                    label={__("Settings")}
-                  />.
-                </p>
-              </div>
-            : null}
+          {obscureNsfw &&
+            this.state.hovered &&
+            <div className="card-overlay">
+              <p>
+                {__(
+                  "This content is Not Safe For Work. To view adult content, please change your"
+                )}
+                {" "}
+                <Link
+                  className="button-text"
+                  onClick={() => navigate("settings")}
+                  label={__("Settings")}
+                />.
+              </p>
+            </div>}
         </div>
       </section>
     );

@@ -124,21 +124,20 @@ class FileTile extends React.PureComponent {
             </div>
           </div>
         </Link>
-        {this.state.showNsfwHelp
-          ? <div className="card-overlay">
-              <p>
-                {__(
-                  "This content is Not Safe For Work. To view adult content, please change your"
-                )}
-                {" "}
-                <Link
-                  className="button-text"
-                  onClick={() => navigate("/settings")}
-                  label={__("Settings")}
-                />.
-              </p>
-            </div>
-          : null}
+        {this.state.showNsfwHelp &&
+          <div className="card-overlay">
+            <p>
+              {__(
+                "This content is Not Safe For Work. To view adult content, please change your"
+              )}
+              {" "}
+              <Link
+                className="button-text"
+                onClick={() => navigate("/settings")}
+                label={__("Settings")}
+              />.
+            </p>
+          </div>}
       </section>
     );
   }
