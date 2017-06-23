@@ -62,7 +62,7 @@ export class SplashScreen extends React.PureComponent {
           isLagging: true,
           message: __("Connection Failure"),
           details: __(
-            "Try closing all LBRY processes and starting again. If this still happpens, your anti-virus software or firewall may be preventing LBRY from connecting. Contact hello@lbry.io if you think this is a software bug."
+            "Try closing all LBRY processes and starting again. If this still happens, your anti-virus software or firewall may be preventing LBRY from connecting. Contact hello@lbry.io if you think this is a software bug."
           ),
         });
       });
