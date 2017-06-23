@@ -70,7 +70,9 @@ class FileList extends React.PureComponent {
       const uri = lbryuri.build({
         contentName: fileInfo.name,
         channelName: fileInfo.channel_name,
+        claimId: fileInfo.claim_id,
       });
+
       content.push(
         <FileTile
           key={uri}
