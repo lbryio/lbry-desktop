@@ -3,16 +3,17 @@ python build\set_version.py
 
 # Get the latest stable version of Node.js or io.js
 Install-Product node $env:nodejs_version
+npm install -g yarn
 
 # install node modules
-npm install
+yarn install
 cd app
-npm install
+yarn install
 cd ..
 
 # build ui
 cd ui
-npm install
+yarn install
 
 # necessary to ensure native Node modules (e.g. keytar) are built against the correct version of Node)
 # yes, it needs to be run twice. it fails the first time, not sure why

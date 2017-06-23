@@ -41,7 +41,7 @@ set -eu
 
 if $LINUX; then
   INSTALL="$SUDO apt-get install --no-install-recommends -y"
-  $INSTALL build-essential libssl-dev libffi-dev libgmp3-dev python2.7-dev
+  $INSTALL build-essential libssl-dev libffi-dev libgmp3-dev python2.7-dev libsecret-1-dev
 elif $OSX && ! cmd_exists brew ; then
   /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 fi
@@ -85,6 +85,17 @@ if ! cmd_exists node; then
     $INSTALL nodejs
   elif $OSX; then
     brew install node
+  fi
+fi
+
+if ! cmd_exists yarn; then
+  if $LINUX; then
+    curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | $SUDO apt-key add -
+    echo "deb https://dl.yarnpkg.com/debian/ stable main" | $SUDO tee /etc/apt/sources.list.d/yarn.list
+    $SUDO apt-get update
+    $SUDO apt-get install yarn
+  elif $OSX; then
+    brew install yarn
   fi
 fi
 

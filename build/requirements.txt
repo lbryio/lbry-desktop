@@ -1,7 +1,5 @@
-GitPython==2.1.1
 PyGithub==1.32
 requests[security]==2.13.0
-PyInstaller==3.2.1
 uritemplate==3.0.0
 git+https://github.com/lbryio/bumpversion.git
 boto3==1.4.4
