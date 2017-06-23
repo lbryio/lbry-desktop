@@ -28,19 +28,20 @@ window.addEventListener("contextmenu", event => {
 });
 
 window.addEventListener("popstate", (event, param) => {
-  const params = event.state;
-  const pathParts = document.location.pathname.split("/");
-  const route = "/" + pathParts[pathParts.length - 1];
-  const queryString = toQueryString(params);
+  event.preventDefault();
 
+  const hash = document.location.hash;
   let action;
-  if (route.match(/html$/)) {
-    action = doChangePath("/discover");
-  } else {
-    action = doChangePath(`${route}?${queryString}`);
-  }
 
-  app.store.dispatch(action);
+  if (hash !== "") {
+    const url = hash.split("#")[1];
+    const params = event.state;
+    const queryString = toQueryString(params);
+
+    app.store.dispatch(doChangePath(`${url}?${queryString}`));
+  } else {
+    app.store.dispatch(doChangePath("/discover"));
+  }
 });
 
 ipcRenderer.on("open-uri-requested", (event, uri) => {
