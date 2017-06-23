@@ -7,6 +7,7 @@ import {
   selectUserHasEmail,
   selectUserIsVerificationCandidate,
 } from "selectors/user";
+import { doRewardList } from "actions/rewards";
 import RewardsPage from "./view";
 
 const select = state => ({
@@ -17,4 +18,8 @@ const select = state => ({
   isVerificationCandidate: selectUserIsVerificationCandidate(state),
 });
 
-export default connect(select, null)(RewardsPage);
+const perform = dispatch => ({
+  fetchRewards: () => dispatch(doRewardList()),
+});
+
+export default connect(select, perform)(RewardsPage);

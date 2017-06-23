@@ -29,64 +29,80 @@ const RewardTile = props => {
   );
 };
 
-const RewardsPage = props => {
-  const {
-    fetching,
-    isEligible,
-    isVerificationCandidate,
-    hasEmail,
-    rewards,
-  } = props;
-
-  let content,
-    isCard = false;
-
-  if (!hasEmail || isVerificationCandidate) {
-    content = (
-      <div>
-        <p>
-          {__(
-            "Additional information is required to be eligible for the rewards program."
-          )}
-        </p>
-        <Auth />
-      </div>
-    );
-    isCard = true;
-  } else if (!isEligible) {
-    isCard = true;
-    content = (
-      <div className="empty">
-        <p>{__("You are not eligible to claim rewards.")}</p>
-        <p>
-          {__("To become eligible, email")}
-          {" "}<Link href="mailto:help@lbry.io" label="help@lbry.io" />{" "}
-          {__("with a link to a public social media profile.")}
-        </p>
-      </div>
-    );
-  } else if (fetching) {
-    content = <BusyMessage message={__("Fetching rewards")} />;
-  } else if (rewards.length > 0) {
-    content = rewards.map(reward =>
-      <RewardTile key={reward.reward_type} reward={reward} />
-    );
-  } else {
-    content = <div className="empty">{__("Failed to load rewards.")}</div>;
+class RewardsPage extends React.PureComponent {
+  componentDidMount() {
+    this.fetchRewards(this.props);
   }
 
-  return (
-    <main className="main--single-column">
-      <SubHeader />
-      {isCard
-        ? <section className="card">
-            <div className="card__content">
-              {content}
-            </div>
-          </section>
-        : content}
-    </main>
-  );
-};
+  componentWillReceiveProps(nextProps) {
+    this.fetchRewards(nextProps);
+  }
+
+  fetchRewards(props) {
+    const { fetching, rewards, fetchRewards } = props;
+
+    if (!fetching && Object.keys(rewards).length < 1) fetchRewards();
+  }
+
+  render() {
+    const {
+      fetching,
+      isEligible,
+      isVerificationCandidate,
+      hasEmail,
+      rewards,
+    } = this.props;
+
+    let content,
+      isCard = false;
+
+    if (!hasEmail || isVerificationCandidate) {
+      content = (
+        <div>
+          <p>
+            {__(
+              "Additional information is required to be eligible for the rewards program."
+            )}
+          </p>
+          <Auth />
+        </div>
+      );
+      isCard = true;
+    } else if (!isEligible) {
+      isCard = true;
+      content = (
+        <div className="empty">
+          <p>{__("You are not eligible to claim rewards.")}</p>
+          <p>
+            {__("To become eligible, email")}
+            {" "}<Link href="mailto:help@lbry.io" label="help@lbry.io" />{" "}
+            {__("with a link to a public social media profile.")}
+          </p>
+        </div>
+      );
+    } else if (fetching) {
+      content = <BusyMessage message={__("Fetching rewards")} />;
+    } else if (rewards.length > 0) {
+      content = rewards.map(reward =>
+        <RewardTile key={reward.reward_type} reward={reward} />
+      );
+    } else {
+      content = <div className="empty">{__("Failed to load rewards.")}</div>;
+    }
+
+    return (
+      <main className="main--single-column">
+        <SubHeader />
+        {isCard
+          ? <section className="card">
+              <div className="card__content">
+                {content}
+              </div>
+            </section>
+          : content}
+      </main>
+    );
+  }
+}
 
 export default RewardsPage;
