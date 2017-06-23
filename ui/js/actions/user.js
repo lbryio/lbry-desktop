@@ -16,6 +16,7 @@ export function doAuthenticate() {
           type: types.AUTHENTICATION_SUCCESS,
           data: { user },
         });
+        dispatch(doRewardList());
       })
       .catch(error => {
         dispatch({
