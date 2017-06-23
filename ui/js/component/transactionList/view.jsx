@@ -28,7 +28,7 @@ class TransactionList extends React.PureComponent {
             <td>
               <a
                 className="button-text"
-                href={"https://explorer.lbry.io/#!/transaction?id=" + item.id}
+                href={"https://explorer.lbry.io/#!/transaction/" + item.id}
               >
                 {item.id.substr(0, 7)}
               </a>
