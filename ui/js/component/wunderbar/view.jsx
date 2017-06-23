@@ -50,7 +50,7 @@ class WunderBar extends React.PureComponent {
       this._resetOnNextBlur = hasQuery;
       this._isSearchDispatchPending = false;
       if (searchQuery) {
-        this.props.onSearch(searchQuery);
+        this.props.onSearch(searchQuery.trim());
       }
     }, WunderBar.TYPING_TIMEOUT); // 800ms delay, tweak for faster/slower
   }
@@ -125,12 +125,14 @@ class WunderBar extends React.PureComponent {
       this._resetOnNextBlur = false;
       clearTimeout(this._userTypingTimer);
 
+      const value = this._input.value.trim();
+
       try {
-        uri = lbryuri.normalize(this._input.value);
+        uri = lbryuri.normalize(value);
         this.setState({ value: uri });
       } catch (error) {
         //then it's not a valid URL, so let's search
-        uri = this._input.value;
+        uri = value;
         method = "onSearch";
       }
 
