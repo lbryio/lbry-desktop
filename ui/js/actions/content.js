@@ -17,6 +17,8 @@ import setBadge from "util/setBadge";
 import setProgressBar from "util/setProgressBar";
 import batchActions from "util/batchActions";
 
+const { ipcRenderer } = require("electron");
+
 export function doResolveUri(uri) {
   return function(dispatch, getState) {
     uri = lbryuri.normalize(uri);
@@ -128,8 +130,17 @@ export function doUpdateLoadStatus(uri, outpoint) {
 
           const badgeNumber = selectBadgeNumber(getState());
           setBadge(badgeNumber === 0 ? "" : `${badgeNumber}`);
+
           const totalProgress = selectTotalDownloadProgress(getState());
           setProgressBar(totalProgress);
+
+          const notif = new window.Notification("Download Complete", {
+            body: fileInfo.metadata.stream.metadata.title,
+            silent: false,
+          });
+          notif.onclick = () => {
+            ipcRenderer.send("focusWindow", "main");
+          };
         } else {
           // ready to play
           const { total_bytes, written_bytes } = fileInfo;
