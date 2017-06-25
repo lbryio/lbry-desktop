@@ -8,9 +8,9 @@ import {
 
 export const _selectState = state => state.fileInfo || {};
 
-export const selectAllFileInfos = createSelector(
+export const selectFileInfosByOutpoint = createSelector(
   _selectState,
-  state => state.fileInfos || {}
+  state => state.byOutpoint || {}
 );
 
 export const selectFileListIsPending = createSelector(
@@ -28,10 +28,10 @@ export const selectFileListDownloadedOrPublishedIsPending = createSelector(
 export const selectFileInfoForUri = (state, props) => {
   const claims = selectClaimsByUri(state),
     claim = claims[props.uri],
-    fileInfos = selectAllFileInfos(state),
+    byOutpoint = selectFileInfosByOutpoint(state),
     outpoint = claim ? `${claim.txid}:${claim.nout}` : undefined;
 
-  return outpoint && fileInfos ? fileInfos[outpoint] : undefined;
+  return outpoint ? byOutpoint[outpoint] : undefined;
 };
 
 export const makeSelectFileInfoForUri = () => {
@@ -70,11 +70,11 @@ export const makeSelectLoadingForUri = () => {
 };
 
 export const selectFileInfosDownloaded = createSelector(
-  selectAllFileInfos,
+  selectFileInfosByOutpoint,
   selectMyClaimsOutpoints,
-  (fileInfos, myClaimOutpoints) => {
+  (byOutpoint, myClaimOutpoints) => {
     const fileInfoList = [];
-    Object.values(fileInfos).forEach(fileInfo => {
+    Object.values(byOutpoint).forEach(fileInfo => {
       if (
         fileInfo &&
         myClaimOutpoints.indexOf(fileInfo.outpoint) === -1 &&
@@ -95,15 +95,14 @@ export const selectFileInfosPendingPublish = createSelector(
 );
 
 export const selectFileInfosPublished = createSelector(
-  selectAllFileInfos,
+  selectFileInfosByOutpoint,
   selectFileInfosPendingPublish,
   selectMyClaimsOutpoints,
-  (allFileInfos, pendingFileInfos, outpoints) => {
+  (byOutpoint, pendingFileInfos, outpoints) => {
     const fileInfos = [];
     outpoints.forEach(outpoint => {
-      if (allFileInfos[outpoint]) {
-        fileInfos.push(allFileInfos[outpoint]);
-      }
+      const fileInfo = byOutpoint[outpoint];
+      if (fileInfo) fileInfos.push(fileInfo);
     });
     return [...fileInfos, ...pendingFileInfos];
   }
