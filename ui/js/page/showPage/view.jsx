@@ -12,7 +12,7 @@ class ShowPage extends React.PureComponent {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { isResolvingUri, resolveUri, claim, uri } = this.props;
+    const { isResolvingUri, resolveUri, claim, uri } = nextProps;
 
     if (!isResolvingUri && claim === undefined && uri) {
       resolveUri(uri);
