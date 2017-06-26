@@ -134,7 +134,7 @@ export function doUpdateLoadStatus(uri, outpoint) {
           const totalProgress = selectTotalDownloadProgress(getState());
           setProgressBar(totalProgress);
 
-          const notif = new window.Notification("Download Complete", {
+          const notif = new window.Notification("LBRY Download Complete", {
             body: fileInfo.metadata.stream.metadata.title,
             silent: false,
           });
