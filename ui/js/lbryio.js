@@ -1,7 +1,7 @@
 import lbry from "./lbry.js";
 
 const querystring = require("querystring");
-const keytar = require("keytar");
+const { ipcRenderer } = require("electron");
 
 const lbryio = {
   enabled: true,
@@ -114,17 +114,16 @@ lbryio.call = function(resource, action, params = {}, method = "get") {
 };
 
 lbryio.getAuthToken = () => {
-  return keytar.getPassword("LBRY", "auth_token").then(token => {
-    return token ? token.toString().trim() : null;
+  return new Promise((resolve, reject) => {
+    ipcRenderer.once("auth-token-response", (event, token) => {
+      return resolve(token);
+    });
+    ipcRenderer.send("get-auth-token");
   });
 };
 
 lbryio.setAuthToken = token => {
-  return keytar.setPassword(
-    "LBRY",
-    "auth_token",
-    token ? token.toString().trim() : null
-  );
+  ipcRenderer.send("set-auth-token", token);
 };
 
 lbryio.getCurrentUser = () => {

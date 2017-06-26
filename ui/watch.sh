@@ -14,7 +14,7 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
   if [ ! -d "$DIR/node_modules" ]; then
     echo "Installing NPM modules"
-    npm install
+    yarn install
   fi
 
   # run sass once without --watch to force update. then run with --watch to keep watching
