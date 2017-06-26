@@ -17,11 +17,7 @@ $padding-card-horizontal: $spacing-vertical * 2/3;
   position: relative;
 }
 .card--obscured .card__inner {
-  -webkit-filter: blur($blur-intensity);
-  -moz-filter: blur($blur-intensity);
-  -o-filter: blur($blur-intensity);
-  -ms-filter: blur($blur-intensity);
-  filter: blur($blur-intensity);
+  filter: blur($blur-intensity-nsfw);
 }
 .card__title-primary {
   padding: 0 $padding-card-horizontal;

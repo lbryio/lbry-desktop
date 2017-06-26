@@ -1,10 +1,10 @@
 import React from "react";
-import lbry from "lbry.js";
 import lbryuri from "lbryuri.js";
 import Link from "component/link";
-import { Thumbnail, TruncatedText, Icon } from "component/common";
+import { TruncatedText, Icon } from "component/common";
 import FilePrice from "component/filePrice";
 import UriIndicator from "component/uriIndicator";
+import NsfwOverlay from "component/nsfwOverlay";
 
 class FileCard extends React.PureComponent {
   constructor(props) {
@@ -97,22 +97,8 @@ class FileCard extends React.PureComponent {
               <TruncatedText lines={2}>{description}</TruncatedText>
             </div>
           </Link>
-          {obscureNsfw &&
-            this.state.hovered &&
-            <div className="card-overlay">
-              <p>
-                {__(
-                  "This content is Not Safe For Work. To view adult content, please change your"
-                )}
-                {" "}
-                <Link
-                  className="button-text"
-                  onClick={() => navigate("settings")}
-                  label={__("Settings")}
-                />.
-              </p>
-            </div>}
         </div>
+        {obscureNsfw && this.state.hovered && <NsfwOverlay />}
       </section>
     );
   }

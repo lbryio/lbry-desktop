@@ -2,10 +2,9 @@ import React from "react";
 import lbry from "lbry.js";
 import lbryuri from "lbryuri.js";
 import Link from "component/link";
-import FileActions from "component/fileActions";
-import { Thumbnail, TruncatedText } from "component/common.js";
+import { TruncatedText } from "component/common.js";
 import FilePrice from "component/filePrice";
-import UriIndicator from "component/uriIndicator";
+import NsfwOverlay from "component/nsfwOverlay";
 
 class FileTile extends React.PureComponent {
   static SHOW_EMPTY_PUBLISH = "publish";
@@ -124,20 +123,7 @@ class FileTile extends React.PureComponent {
             </div>
           </div>
         </Link>
-        {this.state.showNsfwHelp &&
-          <div className="card-overlay">
-            <p>
-              {__(
-                "This content is Not Safe For Work. To view adult content, please change your"
-              )}
-              {" "}
-              <Link
-                className="button-text"
-                onClick={() => navigate("/settings")}
-                label={__("Settings")}
-              />.
-            </p>
-          </div>}
+        {this.state.showNsfwHelp && <NsfwOverlay />}
       </section>
     );
   }

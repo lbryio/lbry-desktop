@@ -3,17 +3,41 @@ import lbry from "lbry";
 import VideoPlayer from "./internal/player";
 import VideoPlayButton from "./internal/play-button";
 import LoadingScreen from "./internal/loading-screen";
+import NsfwOverlay from "component/nsfwOverlay";
 
 class Video extends React.PureComponent {
   constructor(props) {
     super(props);
-    this.state = { isPlaying: false };
+    this.state = {
+      isPlaying: false,
+      showNsfwHelp: false,
+    };
   }
 
   startPlaying() {
     this.setState({
       isPlaying: true,
     });
+  }
+
+  handleMouseOver() {
+    if (
+      this.props.obscureNsfw &&
+      this.props.metadata &&
+      this.props.metadata.nsfw
+    ) {
+      this.setState({
+        showNsfwHelp: true,
+      });
+    }
+  }
+
+  handleMouseOut() {
+    if (this.state.showNsfwHelp) {
+      this.setState({
+        showNsfwHelp: false,
+      });
+    }
   }
 
   render() {
@@ -27,6 +51,7 @@ class Video extends React.PureComponent {
     const { isPlaying = false } = this.state;
 
     const isReadyToPlay = fileInfo && fileInfo.written_bytes > 0;
+    const obscureNsfw = this.props.obscureNsfw && metadata && metadata.nsfw;
     const mediaType = lbry.getMediaType(
       contentType,
       fileInfo && fileInfo.file_name
@@ -47,6 +72,7 @@ class Video extends React.PureComponent {
     }
 
     let klasses = [];
+    klasses.push(obscureNsfw ? "video--obscured " : "");
     if (isLoading || isDownloading) klasses.push("video-embedded", "video");
     if (mediaType === "video") {
       klasses.push("video-embedded", "video");
@@ -59,7 +85,11 @@ class Video extends React.PureComponent {
     const poster = metadata.thumbnail;
 
     return (
-      <div className={klasses.join(" ")}>
+      <div
+        className={klasses.join(" ")}
+        onMouseEnter={this.handleMouseOver.bind(this)}
+        onMouseLeave={this.handleMouseOut.bind(this)}
+      >
         {isPlaying &&
           (!isReadyToPlay
             ? <LoadingScreen status={loadStatusMessage} />
@@ -81,6 +111,7 @@ class Video extends React.PureComponent {
               mediaType={mediaType}
             />
           </div>}
+        {this.state.showNsfwHelp && <NsfwOverlay />}
       </div>
     );
   }

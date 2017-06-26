@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { doCloseModal } from "actions/app";
+import { doNavigate } from "actions/app";
 import { selectCurrentModal } from "selectors/app";
 import { doPurchaseUri, doLoadVideo } from "actions/content";
 import {
@@ -13,6 +14,7 @@ import {
   makeSelectDownloadingForUri,
 } from "selectors/file_info";
 import { makeSelectCostInfoForUri } from "selectors/cost_info";
+import { selectObscureNsfw } from "selectors/app";
 import Video from "./view";
 
 const makeSelect = () => {
@@ -27,6 +29,7 @@ const makeSelect = () => {
     costInfo: selectCostInfo(state, props),
     fileInfo: selectFileInfo(state, props),
     metadata: selectMetadata(state, props),
+    obscureNsfw: selectObscureNsfw(state),
     modal: selectCurrentModal(state),
     isLoading: selectIsLoading(state, props),
     isDownloading: selectIsDownloading(state, props),

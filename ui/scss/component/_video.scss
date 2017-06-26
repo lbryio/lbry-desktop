@@ -33,6 +33,11 @@ video {
     transform: translateY(-50%);
   }
 }
+.video--obscured .video__cover
+{
+  position: relative;
+  filter: blur($blur-intensity-nsfw);
+}
 
 
 .video__loading-screen {
