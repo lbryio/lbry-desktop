@@ -3,13 +3,21 @@ const url = require('url');
 const isDebug = process.env.NODE_ENV === 'development'
 
 if (isDebug) {
-  require('electron-debug')({showDevTools: true});
+  try
+  {
+    require('electron-debug')({showDevTools: true});
+  }
+  catch (err) // electron-debug is in devDependencies, but some
+  {
+    console.error(err)
+  }
 }
 
 const path = require('path');
 const jayson = require('jayson');
 const semver = require('semver');
 const https = require('https');
+const keytar = require('keytar');
 // tree-kill has better cross-platform handling of
 // killing a process.  child-process.kill was unreliable
 const kill = require('tree-kill');
@@ -389,3 +397,13 @@ if (process.platform == 'darwin') {
     win.webContents.send('open-uri-requested', denormalizeUri(process.argv[1]));
   }
 }
+
+ipcMain.on('get-auth-token', (event) => {
+  keytar.getPassword("LBRY", "auth_token").then(token => {
+    event.sender.send('auth-token-response', token ? token.toString().trim() : null)
+  });
+});
+
+ipcMain.on('set-auth-token', (event, token) => {
+  keytar.setPassword("LBRY", "auth_token", token ? token.toString().trim() : null);
+});

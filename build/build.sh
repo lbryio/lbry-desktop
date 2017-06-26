@@ -45,19 +45,12 @@ if [ "$FULL_BUILD" == "true" ]; then
   python "$BUILD_DIR/set_version.py"
 fi
 
-libsecret="libsecret-1-dev"
-if $LINUX && [ -z "$(dpkg-query --show --showformat='${Status}\n' "$libsecret" 2>/dev/null | grep "install ok installed")" ]; then
-  # this is needed for keytar, which does secure password/token management
-  sudo apt-get install --no-install-recommends -y "$libsecret"
-fi
-
-
 [ -d "$ROOT/dist" ] && rm -rf "$ROOT/dist"
 mkdir -p "$ROOT/dist"
 [ -d "$ROOT/app/dist" ] && rm -rf "$ROOT/app/dist"
 mkdir -p "$ROOT/app/dist"
 
-npm install
+yarn install
 
 
 
@@ -67,16 +60,8 @@ npm install
 
 (
   cd "$ROOT/ui"
-  npm install
-
-  # necessary to ensure native Node modules (e.g. keytar) are built against the correct version of Node)
-  # yes, it needs to be run twice. it fails the first time, not sure why
-  set +e
-  # DEBUG=electron-rebuild node_modules/.bin/electron-rebuild .
-  node_modules/.bin/electron-rebuild "$ROOT/ui"
-  set -e
-  node_modules/.bin/electron-rebuild "$ROOT/ui"
-
+  yarn install
+  npm rebuild node-sass
   node extractLocals.js
   node_modules/.bin/node-sass --output dist/css --sourcemap=none scss/
   node_modules/.bin/webpack
@@ -105,7 +90,15 @@ rm "$BUILD_DIR/daemon.zip"
 
 (
   cd "$ROOT/app"
-  npm install
+  yarn install
+
+  # necessary to ensure native Node modules (e.g. keytar) are built against the correct version of Node)
+  # yes, it needs to be run twice. it fails the first time, not sure why
+  set +e
+  # DEBUG=electron-rebuild node_modules/.bin/electron-rebuild .
+  node_modules/.bin/electron-rebuild "$ROOT/app"
+  set -e
+  node_modules/.bin/electron-rebuild "$ROOT/app"
 )
 
 if [ "$FULL_BUILD" == "true" ]; then

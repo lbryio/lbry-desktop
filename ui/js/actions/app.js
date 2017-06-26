@@ -61,6 +61,8 @@ export function doChangePath(path) {
 
 export function doHistoryBack() {
   return function(dispatch, getState) {
+    if (!history.state) return;
+
     history.back();
   };
 }
