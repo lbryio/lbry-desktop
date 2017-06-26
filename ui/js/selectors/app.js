@@ -190,3 +190,8 @@ export const selectSnackBarSnacks = createSelector(
   selectSnackBar,
   snackBar => snackBar.snacks || []
 );
+
+export const selectBadgeNumber = createSelector(
+  _selectState,
+  state => state.badgeNumber
+);

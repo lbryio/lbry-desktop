@@ -11,7 +11,13 @@ import { selectResolvingUris } from "selectors/content";
 import { selectCostInfoForUri } from "selectors/cost_info";
 import { doOpenModal } from "actions/app";
 import { doClaimEligiblePurchaseRewards } from "actions/rewards";
+import { selectBadgeNumber } from "selectors/app";
+import { selectTotalDownloadProgress } from "selectors/file_info";
+import setBadge from "util/setBadge";
+import setProgressBar from "util/setProgressBar";
 import batchActions from "util/batchActions";
+
+const { ipcRenderer } = require("electron");
 
 export function doResolveUri(uri) {
   return function(dispatch, getState) {
@@ -121,6 +127,20 @@ export function doUpdateLoadStatus(uri, outpoint) {
               fileInfo,
             },
           });
+
+          const badgeNumber = selectBadgeNumber(getState());
+          setBadge(badgeNumber === 0 ? "" : `${badgeNumber}`);
+
+          const totalProgress = selectTotalDownloadProgress(getState());
+          setProgressBar(totalProgress);
+
+          const notif = new window.Notification("LBRY Download Complete", {
+            body: fileInfo.metadata.stream.metadata.title,
+            silent: false,
+          });
+          notif.onclick = () => {
+            ipcRenderer.send("focusWindow", "main");
+          };
         } else {
           // ready to play
           const { total_bytes, written_bytes } = fileInfo;
@@ -135,6 +155,10 @@ export function doUpdateLoadStatus(uri, outpoint) {
               progress,
             },
           });
+
+          const totalProgress = selectTotalDownloadProgress(getState());
+          setProgressBar(totalProgress);
+
           setTimeout(() => {
             dispatch(doUpdateLoadStatus(uri, outpoint));
           }, 250);
