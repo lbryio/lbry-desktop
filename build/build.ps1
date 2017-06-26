@@ -22,7 +22,6 @@ cd ..
 cd ui
 yarn install
 npm rebuild node-sass
-node extractLocals.js
 node_modules\.bin\node-sass --output dist\css --sourcemap=none scss\
 node_modules\.bin\webpack
 Copy-Item dist ..\app\ -recurse
