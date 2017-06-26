@@ -85,7 +85,7 @@ export function doUserEmailNew(email) {
       .catch(error => {
         dispatch({
           type: types.USER_EMAIL_NEW_FAILURE,
-          data: { error: error.message },
+          data: { error },
         });
       });
   };
@@ -103,18 +103,12 @@ export function doUserEmailDecline() {
 export function doUserEmailVerify(verificationToken) {
   return function(dispatch, getState) {
     const email = selectEmailToVerify(getState());
+    verificationToken = verificationToken.toString().trim();
 
     dispatch({
       type: types.USER_EMAIL_VERIFY_STARTED,
       code: verificationToken,
     });
-
-    const failure = error => {
-      dispatch({
-        type: types.USER_EMAIL_VERIFY_FAILURE,
-        data: { error: error.message },
-      });
-    };
 
     lbryio
       .call(
@@ -131,8 +125,14 @@ export function doUserEmailVerify(verificationToken) {
           });
           dispatch(doUserFetch());
         } else {
-          failure(new Error("Your email is still not verified.")); //shouldn't happen?
+          throw new Error("Your email is still not verified."); //shouldn't happen
         }
-      }, failure);
+      })
+      .catch(error => {
+        dispatch({
+          type: types.USER_EMAIL_VERIFY_FAILURE,
+          data: { error },
+        });
+      });
   };
 }

@@ -46,20 +46,20 @@ class Video extends React.PureComponent {
       loadStatusMessage = __("Downloading stream... not long left now!");
     }
 
-    let klassName = "";
-    if (isLoading || isDownloading) klassName += "video-embedded video";
+    let klasses = [];
+    if (isLoading || isDownloading) klasses.push("video-embedded", "video");
     if (mediaType === "video") {
-      klassName += "video-embedded video";
-      klassName += isPlaying ? " video--active" : " video--hidden";
+      klasses.push("video-embedded", "video");
+      klasses.push(isPlaying ? "video--active" : "video--hidden");
     } else if (mediaType === "application") {
-      klassName += "video-embedded";
+      klasses.push("video-embedded");
     } else {
-      if (!isPlaying) klassName += "video-embedded";
+      if (!isPlaying) klasses.push("video-embedded");
     }
     const poster = metadata.thumbnail;
 
     return (
-      <div className={klassName}>
+      <div className={klasses.join(" ")}>
         {isPlaying &&
           (!isReadyToPlay
             ? <LoadingScreen status={loadStatusMessage} />
