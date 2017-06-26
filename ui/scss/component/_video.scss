@@ -33,6 +33,15 @@ video {
     transform: translateY(-50%);
   }
 }
+.video--obscured .video__cover
+{
+  position: relative;
+  -webkit-filter: blur($blur-intensity-video);
+  -moz-filter: blur($blur-intensity-video);
+  -o-filter: blur($blur-intensity-video);
+  -ms-filter: blur($blur-intensity-video);
+  filter: blur($blur-intensity-video);
+}
 
 
 .video__loading-screen {
