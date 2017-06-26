@@ -62,15 +62,6 @@ yarn install
   cd "$ROOT/ui"
   yarn install
   npm rebuild node-sass
-
-  # necessary to ensure native Node modules (e.g. keytar) are built against the correct version of Node)
-  # yes, it needs to be run twice. it fails the first time, not sure why
-  set +e
-  # DEBUG=electron-rebuild node_modules/.bin/electron-rebuild .
-  node_modules/.bin/electron-rebuild "$ROOT/ui"
-  set -e
-  node_modules/.bin/electron-rebuild "$ROOT/ui"
-
   node extractLocals.js
   node_modules/.bin/node-sass --output dist/css --sourcemap=none scss/
   node_modules/.bin/webpack
@@ -100,6 +91,14 @@ rm "$BUILD_DIR/daemon.zip"
 (
   cd "$ROOT/app"
   yarn install
+
+  # necessary to ensure native Node modules (e.g. keytar) are built against the correct version of Node)
+  # yes, it needs to be run twice. it fails the first time, not sure why
+  set +e
+  # DEBUG=electron-rebuild node_modules/.bin/electron-rebuild .
+  node_modules/.bin/electron-rebuild "$ROOT/app"
+  set -e
+  node_modules/.bin/electron-rebuild "$ROOT/app"
 )
 
 if [ "$FULL_BUILD" == "true" ]; then
