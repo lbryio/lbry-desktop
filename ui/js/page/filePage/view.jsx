@@ -128,7 +128,7 @@ class FilePage extends React.PureComponent {
             : ""}
           <div className="card__content">
             <Link
-              href="https://lbry.io/dmca"
+              href={`https://lbry.io/dmca?claim_id=${claim.claim_id}`}
               label={__("report")}
               className="button-text-help"
             />
