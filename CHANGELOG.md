@@ -9,19 +9,26 @@ Web UI version numbers should always match the corresponding version of LBRY App
 ## [Unreleased]
 ### Added
   * State is persisted through app close and re-open, resulting in faster opens
+  * Desktop notifications on downloads finishing
   * Support webm, ogg, m4v, and a few others 
   * Translations added to build process
+  * Claim IDs are shown in your published files
 
 ### Changed
   * Upgraded to lbry daemon 0.13, including updating API signatures
   * Channels resolve much faster
   * Resolve is no longer cancelled on navigate
   * Updated API and authentication used by rewards process
+  * Improved security of reward credential storage
+  * Additional information submitted in DMCA reports
+  * Switched packaging to yarn
 
 ### Fixed
   * Fix help menu force reloading whole app
   * Show page updates correctly when navigating from show page to another show page
+  * NSFW setting respected on show page
   * URI handling navigates to correct page if app is closed
+  * Changing the NSFW setting refreshes properly (previously required app restart)
 
 ### Deprecated
   *
