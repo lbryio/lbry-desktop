@@ -10,6 +10,7 @@ import {
   makeSelectMetadataForUri,
 } from "selectors/claims";
 import { makeSelectCostInfoForUri } from "selectors/cost_info";
+import { selectObscureNsfw } from "selectors/app";
 import FilePage from "./view";
 
 const makeSelect = () => {
@@ -24,6 +25,7 @@ const makeSelect = () => {
     contentType: selectContentType(state, props),
     costInfo: selectCostInfo(state, props),
     metadata: selectMetadata(state, props),
+    obscureNsfw: selectObscureNsfw(state),
     fileInfo: selectFileInfo(state, props),
   });
 

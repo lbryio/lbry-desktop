@@ -81,6 +81,7 @@ class FilePage extends React.PureComponent {
     const uriIndicator = <UriIndicator uri={uri} />;
     const mediaType = lbry.getMediaType(contentType);
     const player = require("render-media");
+    const obscureNsfw = this.props.obscureNsfw && metadata && metadata.nsfw;
     const isPlayable =
       Object.values(player.mime).indexOf(contentType) !== -1 ||
       mediaType === "audio";
@@ -94,7 +95,7 @@ class FilePage extends React.PureComponent {
               ? <Thumbnail src={metadata.thumbnail} />
               : <Thumbnail />}
         </section>
-        <section className="card">
+        <section className={"card " + (obscureNsfw ? "card--obscured " : "")}>
           <div className="card__inner">
             <div className="card__title-identity">
               {!fileInfo || fileInfo.written_bytes <= 0

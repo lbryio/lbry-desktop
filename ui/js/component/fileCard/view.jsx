@@ -97,22 +97,22 @@ class FileCard extends React.PureComponent {
               <TruncatedText lines={2}>{description}</TruncatedText>
             </div>
           </Link>
-          {obscureNsfw &&
-            this.state.hovered &&
-            <div className="card-overlay">
-              <p>
-                {__(
-                  "This content is Not Safe For Work. To view adult content, please change your"
-                )}
-                {" "}
-                <Link
-                  className="button-text"
-                  onClick={() => navigate("settings")}
-                  label={__("Settings")}
-                />.
-              </p>
-            </div>}
         </div>
+        {obscureNsfw &&
+          this.state.hovered &&
+          <div className="card-overlay">
+            <p>
+              {__(
+                "This content is Not Safe For Work. To view adult content, please change your"
+              )}
+              {" "}
+              <Link
+                className="button-text"
+                onClick={() => navigate("settings")}
+                label={__("Settings")}
+              />.
+            </p>
+          </div>}
       </section>
     );
   }
