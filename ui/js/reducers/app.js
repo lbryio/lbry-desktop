@@ -18,7 +18,6 @@ const defaultState = {
   platform: process.platform,
   upgradeSkipped: sessionStorage.getItem("upgradeSkipped"),
   daemonReady: false,
-  obscureNsfw: !lbry.getClientSetting("showNsfw"),
   hasSignature: false,
   badgeNumber: 0,
 };
