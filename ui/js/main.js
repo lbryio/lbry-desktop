@@ -75,7 +75,10 @@ document.addEventListener("click", event => {
 
 const application = remote.app;
 const dock = application.dock;
-const win = remote.BrowserWindow.getFocusedWindow();
+const win = remote.getCurrentWindow();
+
+// Tear down previous event listeners when reload
+win.removeAllListeners();
 
 // Clear the badge when the window is focused
 win.on("focus", () => {
