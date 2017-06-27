@@ -76,7 +76,7 @@ reducers[types.DOWNLOADING_PROGRESSED] = function(state, action) {
   const newByOutpoint = Object.assign({}, state.byOutpoint);
   const newDownloading = Object.assign({}, state.urisDownloading);
 
-  byOutpoint[outpoint] = fileInfo;
+  newByOutpoint[outpoint] = fileInfo;
   newDownloading[uri] = true;
 
   return Object.assign({}, state, {

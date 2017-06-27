@@ -119,7 +119,7 @@ export const selectFileInfosPublished = createSelector(
 
 export const selectFileInfosByUri = createSelector(
   selectClaimsByUri,
-  selectAllFileInfos,
+  selectFileInfosByOutpoint,
   (claimsByUri, byOutpoint) => {
     const fileInfos = {};
     const uris = Object.keys(claimsByUri);
