@@ -1,6 +1,7 @@
 import React from "react";
 import lbry from "lbry.js";
 import lbryuri from "lbryuri.js";
+import CardMedia from "component/cardMedia";
 import Link from "component/link";
 import FileActions from "component/fileActions";
 import { Thumbnail, TruncatedText } from "component/common.js";
@@ -66,6 +67,9 @@ class FileTile extends React.PureComponent {
     const title = isClaimed && metadata && metadata.title
       ? metadata.title
       : uri;
+    const thumbnail = metadata && metadata.thumbnail
+      ? metadata.thumbnail
+      : null;
     const obscureNsfw = this.props.obscureNsfw && metadata && metadata.nsfw;
     let onClick = () => navigate("/show", { uri });
 
@@ -99,17 +103,7 @@ class FileTile extends React.PureComponent {
       >
         <Link onClick={onClick} className="card__link">
           <div className={"card__inner file-tile__row"}>
-            <div
-              className="card__media"
-              style={{
-                backgroundImage:
-                  "url('" +
-                    (metadata && metadata.thumbnail
-                      ? metadata.thumbnail
-                      : lbry.imagePath("default-thumb.svg")) +
-                    "')",
-              }}
-            />
+            <CardMedia title={title} thumbnail={thumbnail} />
             <div className="file-tile__content">
               <div className="card__title-primary">
                 {!hidePrice ? <FilePrice uri={this.props.uri} /> : null}

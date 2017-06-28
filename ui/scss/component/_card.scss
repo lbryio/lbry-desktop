@@ -1,6 +1,8 @@
 @import "../global";
 
 $padding-card-horizontal: $spacing-vertical * 2/3;
+$width-card-small: $spacing-vertical * 10;
+$height-card-small: $spacing-vertical * 15;
 
 .card {
   margin-left: auto;
@@ -32,7 +34,7 @@ $padding-card-horizontal: $spacing-vertical * 2/3;
   padding: 0 $padding-card-horizontal;
   margin-top: $spacing-vertical * 1/3;
   margin-bottom: $spacing-vertical * 1/3;
-  font-size: 80%
+  font-size: 0.95em
 }
 .card__actions {
   padding: 0 $padding-card-horizontal;
@@ -64,16 +66,18 @@ $padding-card-horizontal: $spacing-vertical * 2/3;
 .card__subtext--allow-newlines {
   white-space: pre-wrap;
 }
+
+$padding-description: 6px;
 .card__subtext--two-lines {
-  height: ($font-size * 0.9 * $font-line-height + 6) * 2;
-  padding: 6px 12px;
+  height: (($font-size * $font-line-height) * 2) + $padding-description;
+  padding: $padding-description $padding-description*2;
   box-sizing: border-box;
   position: absolute;
-  bottom: $padding-card-horizontal * 2;
+  top: ($width-card-small * 9 / 16) - ((($font-size * $font-line-height) + ($spacing-vertical * 1/3)) * 2 + $padding-description);
   background: rgba(0, 0, 0, 0.8);
   color: #ffffff;
-  font-size: 80%;
   width: 100%;
+  font-size: 0.825em;
   display: none
 }
 .card:hover .card__subtext--two-lines {
@@ -151,16 +155,13 @@ $card-link-scaling: 1.1;
 }
 
 .card__media--autothumb .card__autothumb__text {
-  font-size: 200%;
+  font-size: 2.0em;
   width: 100%;
   color: #ffffff;
   text-align: center;
   position: absolute;
-  top: 40%
+  top: 36%
 }
-
-$width-card-small: $spacing-vertical * 10;
-$height-card-small: $spacing-vertical * 15;
 
 .card--small {
   width: $width-card-small;
@@ -169,7 +170,6 @@ $height-card-small: $spacing-vertical * 15;
 }
 .card--small .card__media {
   height: $width-card-small * 9 / 16;
-  min-height: $width-card-small * 9 / 16
 }
 
 .card__subtitle {

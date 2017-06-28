@@ -1,6 +1,7 @@
 import React from "react";
 import lbry from "lbry.js";
 import lbryuri from "lbryuri.js";
+import CardMedia from "component/cardMedia";
 import Link from "component/link";
 import { Thumbnail, TruncatedText, Icon } from "component/common";
 import FilePrice from "component/filePrice";
@@ -8,23 +9,6 @@ import UriIndicator from "component/uriIndicator";
 
 class FileCard extends React.PureComponent {
   componentWillMount() {
-    const autoThumbClasses = [
-      "purple",
-      "red",
-      "pink",
-      "indigo",
-      "blue",
-      "light-blue",
-      "cyan",
-      "teal",
-      "green",
-      "yellow",
-      "orange",
-    ];
-    this.setState({
-      autoThumbClass:
-        autoThumbClasses[Math.floor(Math.random() * autoThumbClasses.length)],
-    });
     this.resolve(this.props);
   }
 
@@ -57,8 +41,10 @@ class FileCard extends React.PureComponent {
 
     const uri = lbryuri.normalize(this.props.uri);
     const title = metadata && metadata.title ? metadata.title : uri;
+    const thumbnail = metadata && metadata.thumbnail
+      ? metadata.thumbnail
+      : null;
     const obscureNsfw = this.props.obscureNsfw && metadata && metadata.nsfw;
-    const atClass = this.state.autoThumbClass;
 
     let description = "";
     if (isResolvingUri && !claim) {
@@ -83,23 +69,7 @@ class FileCard extends React.PureComponent {
             onClick={() => navigate("/show", { uri })}
             className="card__link"
           >
-            {metadata &&
-              metadata.thumbnail &&
-              <div
-                className="card__media"
-                style={{ backgroundImage: "url('" + metadata.thumbnail + "')" }}
-              />}
-
-            {metadata &&
-              !metadata.thumbnail &&
-              <div className={`card__media card__media--autothumb ${atClass}`}>
-                <div className="card__autothumb__text">
-                  {title
-                    .replace(" ", "")
-                    .substring(0, Math.min(title.replace(" ", "").length, 5))
-                    .toUpperCase()}
-                </div>
-              </div>}
+            <CardMedia title={title} thumbnail={thumbnail} />
             <div className="card__title-identity">
               <h5 title={title}>
                 <TruncatedText lines={1}>{title}</TruncatedText>
