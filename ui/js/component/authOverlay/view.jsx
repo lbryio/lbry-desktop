@@ -18,6 +18,7 @@ export class AuthOverlay extends React.PureComponent {
     if (
       this.props.isShowing &&
       !this.props.isPending &&
+      !nextProps.hasNewUserReward &&
       !nextProps.isShowing /* && !getLocal("welcome_screen_shown")*/
     ) {
       setLocal("welcome_screen_shown", true);

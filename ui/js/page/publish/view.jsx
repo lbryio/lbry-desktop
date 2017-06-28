@@ -383,7 +383,7 @@ class PublishPage extends React.PureComponent {
             });
 
             this._updateChannelList(newChannelName);
-          }, 5000);
+          }, 10000);
         },
         error => {
           // TODO: better error handling

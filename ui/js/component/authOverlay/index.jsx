@@ -1,5 +1,6 @@
 import React from "react";
 import * as modal from "constants/modal_types";
+import rewards from "rewards.js";
 import { connect } from "react-redux";
 import { doUserEmailDecline } from "actions/user";
 import { doOpenModal } from "actions/app";
@@ -8,13 +9,21 @@ import {
   selectUserHasEmail,
   selectUserIsAuthRequested,
 } from "selectors/user";
+import { makeSelectHasClaimedReward } from "selectors/rewards";
 import AuthOverlay from "./view";
 
-const select = state => ({
-  hasEmail: selectUserHasEmail(state),
-  isPending: selectAuthenticationIsPending(state),
-  isShowing: selectUserIsAuthRequested(state),
-});
+const select = (state, props) => {
+  const selectHasClaimed = makeSelectHasClaimedReward();
+
+  return {
+    hasEmail: selectUserHasEmail(state),
+    isPending: selectAuthenticationIsPending(state),
+    isShowing: selectUserIsAuthRequested(state),
+    hasNewUserReward: selectHasClaimed(state, {
+      reward_type: rewards.TYPE_NEW_USER,
+    }),
+  };
+};
 
 const perform = dispatch => ({
   userEmailDecline: () => dispatch(doUserEmailDecline()),
