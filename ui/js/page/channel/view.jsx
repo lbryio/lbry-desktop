@@ -42,8 +42,10 @@ class ChannelPage extends React.PureComponent {
             <div className="card__title-identity"><h1>{uri}</h1></div>
           </div>
           <div className="card__content">
-            <p>
-              {__("This channel page is a stub.")}
+            <p className="empty">
+              {__(
+                "Channel pages are empty for all publishers currently, but will be coming in a future update."
+              )}
             </p>
           </div>
         </section>
