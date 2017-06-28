@@ -54,14 +54,15 @@ let readyToQuit = false;
 // send it to, it's cached in this variable.
 let openUri = null;
 
-function denormalizeUri(uri) {
-  // Windows normalizes URIs when they're passed in from other apps. This tries
-  // to restore the original URI that was typed.
+function processRequestedUri(uri) {
+  // Windows normalizes URIs when they're passed in from other apps. On Windows,
+  // this function tries to restore the original URI that was typed.
   //   - If the URI has no path, Windows adds a trailing slash. LBRY URIs
   //     can't have a slash with no path, so we just strip it off.
   //   - In a URI with a claim ID, like lbry://channel#claimid, Windows
   //     interprets the hash mark as an anchor and converts it to
   //     lbry://channel/#claimid. We remove the slash here as well.
+  // On Linux and Mac, we just return the URI as given.
 
   if (process.platform == 'win32') {
     return uri.replace(/\/$/, '').replace('/#', '#');
@@ -170,6 +171,19 @@ function createWindow () {
   })
 };
 
+function handleOpenUriRequested(uri) {
+  if (!win) {
+    // Window not created yet, so store up requested URI for when it is
+    openUri = uri;
+  } else {
+    if (win.isMinimized()) {
+      win.restore();
+    }
+    win.focus();
+    win.webContents.send('open-uri-requested', processRequestedUri(uri));
+  }
+}
+
 function handleDaemonSubprocessExited() {
   console.log('The daemon has exited.');
   daemonSubprocess = null;
@@ -222,17 +236,13 @@ if (process.platform != 'linux') {
   // On Linux, this is always returning true due to an Electron bug,
   // so for now we just don't support single-instance apps on Linux.
   const isSecondaryInstance = app.makeSingleInstance((argv) => {
-    if (win) {
+    if (argv.length >= 2) {
+      handleOpenUriRequested(argv[1]); // This will handle restoring and focusing the window
+    } else if (win) {
       if (win.isMinimized()) {
         win.restore();
       }
       win.focus();
-
-      if (argv.length >= 2) {
-        win.webContents.send('open-uri-requested', denormalizeUri(argv[1]));
-      }
-    } else if (argv.length >= 2) {
-      openUri = denormalizeUri(argv[1]);
     }
   });
 
@@ -383,19 +393,10 @@ app.setAsDefaultProtocolClient('lbry');
 
 if (process.platform == 'darwin') {
   app.on('open-url', (event, uri) => {
-    if (!win) {
-      // Window not created yet, so store up requested URI for when it is
-      openUri = uri;
-    } else {
-      win.webContents.send('open-uri-requested', uri);
-    }
+    handleOpenUriRequested(uri);
   });
 } else if (process.argv.length >= 2) {
-  if (!win) {
-    openUri = denormalizeUri(process.argv[1]);
-  } else {
-    win.webContents.send('open-uri-requested', denormalizeUri(process.argv[1]));
-  }
+  handleOpenUriRequested(process.argv[1]);
 }
 
 ipcMain.on('get-auth-token', (event) => {
