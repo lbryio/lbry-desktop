@@ -99,7 +99,8 @@ lbryuri.parse = function(uri, requireProto = false) {
 
   if (
     claimId &&
-    (claimId.length > CLAIM_ID_MAX_LEN || !claimId.match(/^[0-9a-f]+$/))
+    (claimId.length > CLAIM_ID_MAX_LEN || !claimId.match(/^[0-9a-f]+$/)) &&
+    !claimId.match(/^pending_/) //ought to be dropped when savePendingPublish drops hack
   ) {
     throw new Error(__(`Invalid claim ID %s.`, claimId));
   }
