@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { doNavigate } from "actions/app";
 import { doResolveUri } from "actions/content";
-import { selectObscureNsfw } from "selectors/app";
+import { selectShowNsfw } from "selectors/settings";
 import {
   makeSelectClaimForUri,
   makeSelectMetadataForUri,
@@ -20,7 +20,7 @@ const makeSelect = () => {
   const select = (state, props) => ({
     claim: selectClaimForUri(state, props),
     fileInfo: selectFileInfoForUri(state, props),
-    obscureNsfw: selectObscureNsfw(state),
+    obscureNsfw: !selectShowNsfw(state),
     metadata: selectMetadataForUri(state, props),
     isResolvingUri: selectResolvingUri(state, props),
   });

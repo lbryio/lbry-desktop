@@ -10,12 +10,11 @@ class SettingsPage extends React.PureComponent {
   constructor(props) {
     super(props);
 
-    const daemonSettings = this.props.daemonSettings;
+    const { daemonSettings } = this.props;
 
     this.state = {
       isMaxUpload: daemonSettings && daemonSettings.max_upload != 0,
       isMaxDownload: daemonSettings && daemonSettings.max_download != 0,
-      showNsfw: lbry.getClientSetting("showNsfw"),
       showUnavailable: lbry.getClientSetting("showUnavailable"),
       language: lbry.getClientSetting("language"),
       clearingCache: false,
@@ -83,7 +82,7 @@ class SettingsPage extends React.PureComponent {
   }
 
   onShowNsfwChange(event) {
-    lbry.setClientSetting("showNsfw", event.target.checked);
+    this.props.setClientSetting("showNsfw", event.target.checked);
   }
 
   // onLanguageChange(language) {
@@ -238,7 +237,7 @@ class SettingsPage extends React.PureComponent {
               label={__("Show NSFW content")}
               type="checkbox"
               onChange={this.onShowNsfwChange.bind(this)}
-              defaultChecked={this.state.showNsfw}
+              defaultChecked={this.props.showNsfw}
               helper={__(
                 "NSFW content may include nudity, intense sexuality, profanity, or other adult content. By displaying NSFW content, you are affirming you are of legal age to view mature content in your country or jurisdiction.  "
               )}

@@ -177,14 +177,6 @@ export const selectDaemonReady = createSelector(
   state => state.daemonReady
 );
 
-/**
- * Calls to lbry.getClientSetting shouldn't be happening in selector logic, but settings have not
- * properly been reworked into redux framework. This added as a bug fix to NSFW settings not refreshing.
- */
-export const selectObscureNsfw = () => {
-  return !lbry.getClientSetting("showNsfw");
-};
-
 export const selectSnackBar = createSelector(
   _selectState,
   state => state.snackBar || {}

@@ -7,7 +7,7 @@ import {
   makeSelectMetadataForUri,
 } from "selectors/claims";
 import { makeSelectFileInfoForUri } from "selectors/file_info";
-import { selectObscureNsfw } from "selectors/app";
+import { selectShowNsfw } from "selectors/settings";
 import { makeSelectIsResolvingForUri } from "selectors/content";
 import FileTile from "./view";
 
@@ -20,7 +20,7 @@ const makeSelect = () => {
   const select = (state, props) => ({
     claim: selectClaimForUri(state, props),
     fileInfo: selectFileInfoForUri(state, props),
-    obscureNsfw: selectObscureNsfw(state),
+    obscureNsfw: !selectShowNsfw(state),
     metadata: selectMetadataForUri(state, props),
     isResolvingUri: selectResolvingUri(state, props),
   });
