@@ -28,6 +28,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
   * Show page updates correctly when navigating from show page to another show page
   * NSFW setting respected on show page
   * URI handling navigates to correct page if app is closed
+  * URI handling issues specific to Windows (maybe)
   * Changing the NSFW setting refreshes properly (previously required app restart)
 
 ### Deprecated

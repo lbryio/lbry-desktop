@@ -1,3 +1,4 @@
+GitPython==2.1.1
 PyGithub==1.32
 requests[security]==2.13.0
 uritemplate==3.0.0
