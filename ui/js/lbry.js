@@ -37,6 +37,7 @@ function apiCall(method, params, resolve, reject) {
  * Records a publish attempt in local storage. Returns a dictionary with all the data needed to
  * needed to make a dummy claim or file info object.
  */
+let pendingId = 0;
 function savePendingPublish({ name, channel_name }) {
   let uri;
   if (channel_name) {
@@ -44,14 +45,15 @@ function savePendingPublish({ name, channel_name }) {
   } else {
     uri = lbryuri.build({ name: name }, false);
   }
+  ++pendingId;
   const pendingPublishes = getLocal("pendingPublishes") || [];
   const newPendingPublish = {
     name,
     channel_name,
-    claim_id: "pending-" + uri,
-    txid: "pending_" + uri,
+    claim_id: "pending-" + pendingId,
+    txid: "pending-" + pendingId,
     nout: 0,
-    outpoint: "pending-" + uri + ":0",
+    outpoint: "pending-" + pendingId + ":0",
     time: Date.now(),
   };
   setLocal("pendingPublishes", [...pendingPublishes, newPendingPublish]);

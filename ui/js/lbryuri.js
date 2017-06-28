@@ -122,7 +122,7 @@ lbryuri.parse = function(uri, requireProto = false) {
     const pathBadChars = path.match(/[^A-Za-z0-9-]/g);
     if (pathBadChars) {
       throw new Error(
-        __(`Invalid character in path: %s`, nameBadChars.join(", "))
+        __(`Invalid character in path: %s`, pathBadChars.join(", "))
       );
     }
 

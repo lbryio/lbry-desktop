@@ -67,11 +67,15 @@ class FileList extends React.PureComponent {
     const content = [];
 
     this._sortFunctions[sortBy](fileInfos).forEach(fileInfo => {
-      const uri = lbryuri.build({
-        contentName: fileInfo.name,
-        channelName: fileInfo.channel_name,
-        claimId: fileInfo.claim_id,
-      });
+      let uriParams = {};
+      if (fileInfo.channel_name) {
+        uriParams.channelName = fileInfo.channel_name;
+        uriParams.contentName = fileInfo.name;
+      } else {
+        uriParams.claimId = fileInfo.claim_id;
+        uriParams.name = fileInfo.name;
+      }
+      const uri = lbryuri.build(uriParams);
 
       content.push(
         <FileTile
