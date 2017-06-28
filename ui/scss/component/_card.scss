@@ -11,6 +11,20 @@ $padding-card-horizontal: $spacing-vertical * 2/3;
   border-radius: 2px;
   margin-bottom: $spacing-vertical * 2/3;
   overflow: visible;
+  z-index: 0;
+}
+
+.card-row {
+    .card-row__left-scroll, .card-row__right-scroll {
+      z-index: 1;
+      display: none;
+    }
+
+    &:hover {
+      .card-row__right-scroll, .card-row__left-scroll {
+        display: block;
+      }
+    }
 }
 
 .card-row__right-scroll, .card-row__left-scroll {
