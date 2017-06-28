@@ -64,6 +64,28 @@ class SettingsPage extends React.PureComponent {
     });
   }
 
+  onKeyFeeChange(event) {
+    var oldSettings = this.daemonSettings.max_key_fee;
+    var newSettings = {
+      amount: oldSettings.amount,
+      currency: oldSettings.currency,
+    };
+    newSettings.amount = Number(event.target.value);
+
+    this.setDaemonSetting("max_key_fee", JSON.stringify(newSettings));
+  }
+
+  onFeeCurrencyChange(event) {
+    var oldSettings = this.daemonSettings.max_key_fee;
+    var newSettings = {
+      amount: oldSettings.amount,
+      currency: oldSettings.currency,
+    };
+    newSettings.currency = event.target.value;
+
+    this.setDaemonSetting("max_key_fee", JSON.stringify(newSettings));
+  }
+
   onMaxUploadFieldChange(event) {
     this.setDaemonSetting("max_upload", Number(event.target.value));
   }
@@ -220,6 +242,38 @@ class SettingsPage extends React.PureComponent {
             </div>
           </div>
         </section>
+
+        <section className="card">
+          <div className="card__content">
+            <h3>{__("Key Fee")}</h3>
+          </div>
+          <div className="card__content">
+            <FormField
+              ref="max_key_fee"
+              type="number"
+              step="0.01"
+              prefix={__("Max Key Fee")}
+              onChange={this.onKeyFeeChange.bind(this)}
+              value={daemonSettings.max_key_fee.amount}
+              placeholder={"25"}
+            />
+            {" "}
+            <FormField
+              type="select"
+              defaultValue={daemonSettings.max_key_fee.currency}
+              onChange={this.onFeeCurrencyChange.bind(this)}
+            >
+              <option value="USD">{__("US Dollars")}</option>
+              <option value="LBC">{__("LBRY credits")}</option>
+            </FormField>
+            <div className="form-field__helper">
+              {__(
+                "This value prevents you from downloading anything over this fee. (Default: 25 USD)"
+              )}
+            </div>
+          </div>
+        </section>
+
         <section className="card">
           <div className="card__content">
             <h3>{__("Content")}</h3>
