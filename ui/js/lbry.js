@@ -48,10 +48,10 @@ function savePendingPublish({ name, channel_name }) {
   const newPendingPublish = {
     name,
     channel_name,
-    claim_id: "pending_claim_" + uri,
+    claim_id: "pending-" + uri,
     txid: "pending_" + uri,
     nout: 0,
-    outpoint: "pending_" + uri + ":0",
+    outpoint: "pending-" + uri + ":0",
     time: Date.now(),
   };
   setLocal("pendingPublishes", [...pendingPublishes, newPendingPublish]);
