@@ -29,3 +29,15 @@ export function doSetDaemonSetting(key, value) {
     });
   };
 }
+
+export function doSetClientSetting(key, value) {
+  lbry.setClientSetting(key, value);
+
+  return {
+    type: types.CLIENT_SETTING_CHANGED,
+    data: {
+      key,
+      value,
+    },
+  };
+}
