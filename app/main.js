@@ -174,7 +174,7 @@ function createWindow () {
 function handleOpenUriRequested(uri) {
   if (!win) {
     // Window not created yet, so store up requested URI for when it is
-    openUri = uri;
+    openUri = processRequestedUri(uri);
   } else {
     if (win.isMinimized()) {
       win.restore();
