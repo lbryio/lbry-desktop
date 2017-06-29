@@ -48,6 +48,18 @@ export const makeSelectClaimForUri = () => {
   return createSelector(selectClaimForUri, claim => claim);
 };
 
+const selectClaimForUriIsMine = (state, props) => {
+  const uri = lbryuri.normalize(props.uri);
+  const claim = selectClaimsByUri(state)[uri];
+  const myClaims = selectMyClaims(state);
+
+  return myClaims.has(claim.claim_id);
+};
+
+export const makeSelectClaimForUriIsMine = () => {
+  return createSelector(selectClaimForUriIsMine, isMine => isMine);
+};
+
 export const selectClaimsInChannelForUri = (state, props) => {
   return selectAllClaimsByChannel(state)[props.uri];
 };
@@ -95,7 +107,7 @@ export const selectClaimListMineIsPending = createSelector(
 
 export const selectMyClaims = createSelector(
   _selectState,
-  state => state.myClaims || new Set()
+  state => new Set(state.myClaims)
 );
 
 export const selectMyClaimsOutpoints = createSelector(

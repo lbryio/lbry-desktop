@@ -4,10 +4,11 @@ import { doFetchClaimListMine } from "actions/content";
 import {
   selectClaimsByUri,
   selectClaimListMineIsPending,
+  selectMyClaimsOutpoints,
 } from "selectors/claims";
 import {
   selectFileListIsPending,
-  selectAllFileInfos,
+  selectFileInfosByOutpoint,
   selectUrisLoading,
 } from "selectors/file_info";
 import { doCloseModal } from "actions/app";
@@ -78,18 +79,46 @@ export function doOpenFileInFolder(fileInfo) {
   };
 }
 
-export function doDeleteFile(outpoint, deleteFromComputer) {
+export function doDeleteFile(outpoint, deleteFromComputer, abandonClaim) {
   return function(dispatch, getState) {
+    const state = getState();
+
+    lbry.file_delete({
+      outpoint: outpoint,
+      delete_from_download_dir: deleteFromComputer,
+    });
+
+    // If the file is for a claim we published then also abandom the claim
+    const myClaimsOutpoints = selectMyClaimsOutpoints(state);
+    if (abandonClaim && myClaimsOutpoints.indexOf(outpoint) !== -1) {
+      const byOutpoint = selectFileInfosByOutpoint(state);
+      const fileInfo = byOutpoint[outpoint];
+
+      if (fileInfo) {
+        dispatch({
+          type: types.ABANDON_CLAIM_STARTED,
+          data: {
+            claimId: fileInfo.claim_id,
+          },
+        });
+
+        const success = () => {
+          dispatch({
+            type: types.ABANDON_CLAIM_COMPLETED,
+            data: {
+              claimId: fileInfo.claim_id,
+            },
+          });
+        };
+        lbry.claim_abandon({ claim_id: fileInfo.claim_id }).then(success);
+      }
+    }
+
     dispatch({
       type: types.FILE_DELETE,
       data: {
         outpoint,
       },
-    });
-
-    lbry.file_delete({
-      outpoint: outpoint,
-      delete_from_download_dir: deleteFromComputer,
     });
 
     dispatch(doCloseModal());

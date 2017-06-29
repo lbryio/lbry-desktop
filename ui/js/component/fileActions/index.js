@@ -16,6 +16,7 @@ import {
   doOpenFileInFolder,
   doDeleteFile,
 } from "actions/file_info";
+import { makeSelectClaimForUriIsMine } from "selectors/claims";
 import { doPurchaseUri, doLoadVideo } from "actions/content";
 import FileActions from "./view";
 
@@ -25,6 +26,7 @@ const makeSelect = () => {
   const selectDownloadingForUri = makeSelectDownloadingForUri();
   const selectCostInfoForUri = makeSelectCostInfoForUri();
   const selectLoadingForUri = makeSelectLoadingForUri();
+  const selectClaimForUriIsMine = makeSelectClaimForUriIsMine();
 
   const select = (state, props) => ({
     fileInfo: selectFileInfoForUri(state, props),
@@ -35,6 +37,7 @@ const makeSelect = () => {
     downloading: selectDownloadingForUri(state, props),
     costInfo: selectCostInfoForUri(state, props),
     loading: selectLoadingForUri(state, props),
+    claimIsMine: selectClaimForUriIsMine(state, props),
   });
 
   return select;
@@ -45,9 +48,9 @@ const perform = dispatch => ({
   closeModal: () => dispatch(doCloseModal()),
   openInFolder: fileInfo => dispatch(doOpenFileInFolder(fileInfo)),
   openInShell: fileInfo => dispatch(doOpenFileInShell(fileInfo)),
-  deleteFile: (fileInfo, deleteFromComputer) => {
+  deleteFile: (fileInfo, deleteFromComputer, abandonClaim) => {
     dispatch(doHistoryBack());
-    dispatch(doDeleteFile(fileInfo, deleteFromComputer));
+    dispatch(doDeleteFile(fileInfo, deleteFromComputer, abandonClaim));
   },
   openModal: modal => dispatch(doOpenModal(modal)),
   startDownload: uri => dispatch(doPurchaseUri(uri, "affirmPurchase")),

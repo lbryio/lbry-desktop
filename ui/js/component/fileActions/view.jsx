@@ -13,6 +13,7 @@ class FileActions extends React.PureComponent {
     this.state = {
       forceShowActions: false,
       deleteChecked: false,
+      abandonClaimChecked: false,
     };
   }
 
@@ -43,6 +44,12 @@ class FileActions extends React.PureComponent {
     });
   }
 
+  handleAbandonClaimCheckboxClicked(event) {
+    this.setState({
+      abandonClaimChecked: event.target.checked,
+    });
+  }
+
   onAffirmPurchase() {
     this.props.closeModal();
     this.props.loadVideo(this.props.uri);
@@ -64,9 +71,11 @@ class FileActions extends React.PureComponent {
       startDownload,
       costInfo,
       loading,
+      claimIsMine,
     } = this.props;
 
     const deleteChecked = this.state.deleteChecked,
+      abandonClaimChecked = this.state.abandonClaimChecked,
       metadata = fileInfo ? fileInfo.metadata : null,
       openInFolderMessage = platform.startsWith("Mac")
         ? __("Open in Finder")
@@ -77,15 +86,19 @@ class FileActions extends React.PureComponent {
     let content;
 
     if (loading || downloading) {
-      const progress = fileInfo && fileInfo.written_bytes
-        ? fileInfo.written_bytes / fileInfo.total_bytes * 100
-        : 0,
+      const progress =
+          fileInfo && fileInfo.written_bytes
+            ? fileInfo.written_bytes / fileInfo.total_bytes * 100
+            : 0,
         label = fileInfo
           ? progress.toFixed(0) + __("% complete")
           : __("Connecting..."),
         labelWithIcon = (
           <span className="button__content">
-            <Icon icon="icon-download" /><span>{label}</span>
+            <Icon icon="icon-download" />
+            <span>
+              {label}
+            </span>
           </span>
         );
 
@@ -174,9 +187,11 @@ class FileActions extends React.PureComponent {
           onConfirmed={this.onAffirmPurchase.bind(this)}
           onAborted={closeModal}
         >
-          {__("This will purchase")} <strong>{title}</strong> {__("for")}
-          {" "}<strong><FilePrice uri={uri} look="plain" /></strong>
-          {" "}{__("credits")}.
+          {__("This will purchase")} <strong>{title}</strong> {__("for")}{" "}
+          <strong>
+            <FilePrice uri={uri} look="plain" />
+          </strong>{" "}
+          {__("credits")}.
         </Modal>
         <Modal
           isOpen={modal == "notEnoughCredits"}
@@ -197,22 +212,36 @@ class FileActions extends React.PureComponent {
           contentLabel={__("Not enough credits")}
           type="confirm"
           confirmButtonLabel={__("Remove")}
-          onConfirmed={() => deleteFile(fileInfo.outpoint, deleteChecked)}
+          onConfirmed={() =>
+            deleteFile(fileInfo.outpoint, deleteChecked, abandonClaimChecked)}
           onAborted={closeModal}
         >
           <p>
-            {__("Are you sure you'd like to remove")} <cite>{title}</cite>
-            {" "}{__("from LBRY?")}
+            {__("Are you sure you'd like to remove")} <cite>{title}</cite>{" "}
+            {__("from LBRY?")}
           </p>
 
-          <label>
-            <FormField
-              type="checkbox"
-              checked={deleteChecked}
-              onClick={this.handleDeleteCheckboxClicked.bind(this)}
-            />
-            {" "}{__("Delete this file from my computer")}
-          </label>
+          <section>
+            <label>
+              <FormField
+                type="checkbox"
+                checked={deleteChecked}
+                onClick={this.handleDeleteCheckboxClicked.bind(this)}
+              />{" "}
+              {__("Delete this file from my computer")}
+            </label>
+          </section>
+          {claimIsMine &&
+            <section>
+              <label>
+                <FormField
+                  type="checkbox"
+                  checked={abandonClaimChecked}
+                  onClick={this.handleAbandonClaimCheckboxClicked.bind(this)}
+                />{" "}
+                {__("Abandon the claim for this URI")}
+              </label>
+            </section>}
         </Modal>
       </section>
     );
