@@ -8,6 +8,7 @@ import {
 } from "selectors/file_info";
 import { doClaimRewardType } from "actions/rewards";
 import { doNavigate } from "actions/app";
+import { doCancelAllResolvingUris } from "actions/content";
 import FileListPublished from "./view";
 
 const select = state => ({
@@ -20,6 +21,7 @@ const perform = dispatch => ({
   fetchFileListPublished: () => dispatch(doFetchFileInfosAndPublishedClaims()),
   claimFirstPublishReward: () =>
     dispatch(doClaimRewardType(rewards.TYPE_FIRST_PUBLISH)),
+  cancelResolvingUris: () => dispatch(doCancelAllResolvingUris()),
 });
 
 export default connect(select, perform)(FileListPublished);

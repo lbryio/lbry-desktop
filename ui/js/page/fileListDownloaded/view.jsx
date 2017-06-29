@@ -15,6 +15,10 @@ class FileListDownloaded extends React.PureComponent {
     if (!this.props.isPending) this.props.fetchFileInfosDownloaded();
   }
 
+  componentWillUnmount() {
+    this.props.cancelResolvingUris();
+  }
+
   render() {
     const { fileInfos, isPending, navigate } = this.props;
 
@@ -27,8 +31,7 @@ class FileListDownloaded extends React.PureComponent {
       } else {
         content = (
           <span>
-            {__("You haven't downloaded anything from LBRY yet. Go")}
-            {" "}
+            {__("You haven't downloaded anything from LBRY yet. Go")}{" "}
             <Link
               onClick={() => navigate("/discover")}
               label={__("search for your first download")}

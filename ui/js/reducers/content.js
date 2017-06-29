@@ -31,7 +31,9 @@ reducers[types.RESOLVE_URI_STARTED] = function(state, action) {
   });
 };
 
-reducers[types.RESOLVE_URI_COMPLETED] = function(state, action) {
+reducers[types.RESOLVE_URI_CANCELED] = reducers[
+  types.RESOLVE_URI_COMPLETED
+] = function(state, action) {
   const { uri } = action.data;
   const resolvingUris = state.resolvingUris;
   const index = state.resolvingUris.indexOf(uri);
@@ -43,10 +45,6 @@ reducers[types.RESOLVE_URI_COMPLETED] = function(state, action) {
   return Object.assign({}, state, {
     resolvingUris: newResolvingUris,
   });
-};
-
-reducers[types.RESOLVE_URI_CANCELED] = function(state, action) {
-  return reducers[types.RESOLVE_URI_COMPLETED](state, action);
 };
 
 export default function reducer(state = defaultState, action) {
