@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { doFetchFeaturedUris } from "actions/content";
+import { doFetchFeaturedUris, doCancelAllResolvingUris } from "actions/content";
 import {
   selectFeaturedUris,
   selectFetchingFeaturedUris,
@@ -14,6 +14,7 @@ const select = state => ({
 
 const perform = dispatch => ({
   fetchFeaturedUris: () => dispatch(doFetchFeaturedUris()),
+  cancelResolvingUris: () => dispatch(doCancelAllResolvingUris()),
 });
 
 export default connect(select, perform)(DiscoverPage);

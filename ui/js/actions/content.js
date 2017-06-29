@@ -50,6 +50,37 @@ export function doResolveUri(uri) {
   };
 }
 
+export function doCancelResolveUri(uri) {
+  return function(dispatch, getState) {
+    uri = lbryuri.normalize(uri);
+
+    const state = getState();
+    const alreadyResolving = selectResolvingUris(state).indexOf(uri) !== -1;
+
+    if (alreadyResolving) {
+      lbry.cancelResolve({ uri });
+      dispatch({
+        type: types.RESOLVE_URI_CANCELED,
+        data: {
+          uri,
+        },
+      });
+    }
+  };
+}
+
+export function doCancelAllResolvingUris() {
+  return function(dispatch, getState) {
+    const state = getState();
+    const resolvingUris = selectResolvingUris(state);
+    const actions = [];
+
+    resolvingUris.forEach(uri => actions.push(doCancelResolveUri(uri)));
+
+    dispatch(batchActions(...actions));
+  };
+}
+
 export function doFetchFeaturedUris() {
   return function(dispatch, getState) {
     const state = getState();

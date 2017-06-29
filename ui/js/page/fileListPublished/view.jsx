@@ -19,6 +19,10 @@ class FileListPublished extends React.PureComponent {
     if (this.props.fileInfos.length > 0) this.props.claimFirstPublishReward();
   }
 
+  componentWillUnmount() {
+    this.props.cancelResolvingUris();
+  }
+
   render() {
     const { fileInfos, isPending, navigate } = this.props;
 
@@ -38,8 +42,9 @@ class FileListPublished extends React.PureComponent {
       } else {
         content = (
           <span>
-            {__("It looks like you haven't published anything to LBRY yet. Go")}
-            {" "}
+            {__(
+              "It looks like you haven't published anything to LBRY yet. Go"
+            )}{" "}
             <Link
               onClick={() => navigate("/publish")}
               label={__("share your beautiful cats with the world")}

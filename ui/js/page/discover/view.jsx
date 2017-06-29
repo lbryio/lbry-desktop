@@ -39,6 +39,10 @@ class DiscoverPage extends React.PureComponent {
     this.props.fetchFeaturedUris();
   }
 
+  componentWillUnmount() {
+    this.props.cancelResolvingUris();
+  }
+
   render() {
     const { featuredUris, fetchingFeaturedUris } = this.props;
     const failedToLoad =
@@ -62,7 +66,9 @@ class DiscoverPage extends React.PureComponent {
                 : ""
           )}
         {failedToLoad &&
-          <div className="empty">{__("Failed to load landing content.")}</div>}
+          <div className="empty">
+            {__("Failed to load landing content.")}
+          </div>}
       </main>
     );
   }

@@ -6,6 +6,7 @@ import {
   selectFileListDownloadedOrPublishedIsPending,
 } from "selectors/file_info";
 import { doNavigate } from "actions/app";
+import { doCancelAllResolvingUris } from "actions/content";
 import FileListDownloaded from "./view";
 
 const select = state => ({
@@ -17,6 +18,7 @@ const perform = dispatch => ({
   navigate: path => dispatch(doNavigate(path)),
   fetchFileInfosDownloaded: () =>
     dispatch(doFetchFileInfosAndPublishedClaims()),
+  cancelResolvingUris: () => dispatch(doCancelAllResolvingUris()),
 });
 
 export default connect(select, perform)(FileListDownloaded);
