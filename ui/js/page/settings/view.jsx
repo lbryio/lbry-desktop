@@ -116,6 +116,38 @@ class SettingsPage extends React.PureComponent {
  </div>
  </section>
  */
+    /*
+
+     <section className="card">
+     <div className="card__content">
+     <h3>{__("Language")}</h3>
+     </div>
+     <div className="card__content">
+     <div className="form-row">
+     <FormField
+     type="radio"
+     name="language"
+     label={__("English")}
+     onChange={() => {
+     this.onLanguageChange("en");
+     }}
+     defaultChecked={this.state.language == "en"}
+     />
+     </div>
+     <div className="form-row">
+     <FormField
+     type="radio"
+     name="language"
+     label="Serbian"
+     onChange={() => {
+     this.onLanguageChange("rs");
+     }}
+     defaultChecked={this.state.language == "rs"}
+     />
+     </div>
+     </div>
+     </section>
+     */
     return (
       <main className="main--single-column">
         <SubHeader />
@@ -242,36 +274,6 @@ class SettingsPage extends React.PureComponent {
                 "NSFW content may include nudity, intense sexuality, profanity, or other adult content. By displaying NSFW content, you are affirming you are of legal age to view mature content in your country or jurisdiction.  "
               )}
             />
-          </div>
-        </section>
-
-        <section className="card">
-          <div className="card__content">
-            <h3>{__("Language")}</h3>
-          </div>
-          <div className="card__content">
-            <div className="form-row">
-              <FormField
-                type="radio"
-                name="language"
-                label={__("English")}
-                onChange={() => {
-                  this.onLanguageChange("en");
-                }}
-                defaultChecked={this.state.language == "en"}
-              />
-            </div>
-            <div className="form-row">
-              <FormField
-                type="radio"
-                name="language"
-                label="Serbian"
-                onChange={() => {
-                  this.onLanguageChange("rs");
-                }}
-                defaultChecked={this.state.language == "rs"}
-              />
-            </div>
           </div>
         </section>
 
