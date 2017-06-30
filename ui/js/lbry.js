@@ -321,7 +321,7 @@ lbry.getMediaType = function(contentType, fileName) {
     }
 
     var ext = fileName.substr(dotIndex + 1);
-    if (/^mp4|m4v|mov|webm|flv|f4v|ogv$/i.test(ext)) {
+    if (/^mp4|m4v|webm|flv|f4v|ogv$/i.test(ext)) {
       return "video";
     } else if (/^mp3|m4a|aac|wav|flac|ogg|opus$/i.test(ext)) {
       return "audio";
