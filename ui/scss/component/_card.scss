@@ -11,26 +11,34 @@ $padding-card-horizontal: $spacing-vertical * 2/3;
   border-radius: 2px;
   margin-bottom: $spacing-vertical * 2/3;
   overflow: visible;
-  z-index: 0;
 }
 
 .card-row {
-    .card-row__left-scroll, .card-row__right-scroll {
-      z-index: 1;
-      display: none;
-    }
+  overflow: visible;
+  z-index: -100;
 
-    &:hover {
-      .card-row__right-scroll, .card-row__left-scroll {
-        display: block;
+  .card-row__left-scroll, .card-row__right-scroll {
+    z-index: 100;
+    display: none;
+  }
+
+  &:hover {
+    .card-row__right-scroll, .card-row__left-scroll {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      button {
+        height: 150px;
       }
     }
+  }
 }
 
 .card-row__right-scroll, .card-row__left-scroll {
   position: absolute;
   height: 95%;
-  width: 100px;
+  width: 75px;
   background-color: rgba(0, 0, 0, 0.72);
   top: 0;
 }
