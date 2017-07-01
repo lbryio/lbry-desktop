@@ -29,7 +29,7 @@ class VideoPlayer extends React.PureComponent {
     player.append(
       this.file(),
       container,
-      { autoplay: false, controls: true },
+      { autoplay: false, controls: true, enableKeyboard: true },
       renderMediaCallback.bind(this)
     );
 

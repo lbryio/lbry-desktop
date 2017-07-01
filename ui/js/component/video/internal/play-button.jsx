@@ -4,10 +4,21 @@ import Link from "component/link";
 import Modal from "component/modal";
 
 class VideoPlayButton extends React.PureComponent {
+  componentDidMount() {
+    document.addEventListener("keydown", this.onKeyDown.bind(this));
+  }
+
   onPurchaseConfirmed() {
     this.props.closeModal();
     this.props.startPlaying();
     this.props.loadVideo(this.props.uri);
+  }
+
+  onKeyDown(event) {
+    if (event.keyCode === 32) {
+      event.preventDefault();
+      this.onWatchClick();
+    }
   }
 
   onWatchClick() {
@@ -45,9 +56,10 @@ class VideoPlayButton extends React.PureComponent {
       isLoading ||
       fileInfo === undefined ||
       (fileInfo === null && (!costInfo || costInfo.cost === undefined));
-    const icon = ["audio", "video"].indexOf(mediaType) !== -1
-      ? "icon-play"
-      : "icon-folder-o";
+    const icon =
+      ["audio", "video"].indexOf(mediaType) !== -1
+        ? "icon-play"
+        : "icon-folder-o";
 
     return (
       <div>
@@ -73,9 +85,11 @@ class VideoPlayButton extends React.PureComponent {
           onConfirmed={this.onPurchaseConfirmed.bind(this)}
           onAborted={closeModal}
         >
-          {__("This will purchase")} <strong>{title}</strong> {__("for")}
-          {" "}<strong><FilePrice uri={uri} look="plain" /></strong>
-          {" "}{__("credits")}.
+          {__("This will purchase")} <strong>{title}</strong> {__("for")}{" "}
+          <strong>
+            <FilePrice uri={uri} look="plain" />
+          </strong>{" "}
+          {__("credits")}.
         </Modal>
         <Modal
           isOpen={modal == "timedOut"}
