@@ -26,3 +26,5 @@ build/daemon.zip
 .vimrc
 
 package-lock.json
+
+app/yarn-error.log
