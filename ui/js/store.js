@@ -102,7 +102,7 @@ const persistOptions = {
   // Order is important. Needs to be compressed last or other transforms can't
   // read the data
   transforms: [saveClaimsFilter, saveFileInfosFilter, compressor],
-  debounce: 1000,
+  debounce: 10000,
   storage: localForage,
 };
 window.cacheStore = persistStore(reduxStore, persistOptions);
