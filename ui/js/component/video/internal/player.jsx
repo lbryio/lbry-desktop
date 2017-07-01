@@ -52,11 +52,21 @@ class VideoPlayer extends React.PureComponent {
           once: true,
         }
       );
+
       mediaElement.addEventListener(
         "webkitfullscreenchange",
         win32FullScreenChange.bind(this)
       );
+      mediaElement.addEventListener("volumechange", () => {
+        localStorage.setItem("prefs_volume", mediaElement.volume);
+      });
+      mediaElement.volume = this.getPreferredVolume();
     }
+  }
+
+  getPreferredVolume() {
+    const volumePreference = parseFloat(localStorage.getItem("prefs_volume"));
+    return isNaN(volumePreference) ? 1 : volumePreference;
   }
 
   componentDidUpdate() {
