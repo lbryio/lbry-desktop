@@ -5,7 +5,12 @@ import Modal from "component/modal";
 
 class VideoPlayButton extends React.PureComponent {
   componentDidMount() {
-    document.addEventListener("keydown", this.onKeyDown.bind(this));
+    this.keyDownListener = this.onKeyDown.bind(this);
+    document.addEventListener("keydown", this.keyDownListener);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener("keydown", this.keyDownListener);
   }
 
   onPurchaseConfirmed() {
@@ -15,7 +20,7 @@ class VideoPlayButton extends React.PureComponent {
   }
 
   onKeyDown(event) {
-    if (event.keyCode === 32) {
+    if ("Space" === event.code) {
       event.preventDefault();
       this.onWatchClick();
     }
@@ -56,10 +61,9 @@ class VideoPlayButton extends React.PureComponent {
       isLoading ||
       fileInfo === undefined ||
       (fileInfo === null && (!costInfo || costInfo.cost === undefined));
-    const icon =
-      ["audio", "video"].indexOf(mediaType) !== -1
-        ? "icon-play"
-        : "icon-folder-o";
+    const icon = ["audio", "video"].indexOf(mediaType) !== -1
+      ? "icon-play"
+      : "icon-folder-o";
 
     return (
       <div>

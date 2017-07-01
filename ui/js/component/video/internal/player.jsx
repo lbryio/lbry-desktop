@@ -13,6 +13,8 @@ class VideoPlayer extends React.PureComponent {
       startedPlaying: false,
       unplayable: false,
     };
+
+    this.togglePlayListener = this.togglePlay.bind(this);
   }
 
   componentDidMount() {
@@ -33,7 +35,7 @@ class VideoPlayer extends React.PureComponent {
       renderMediaCallback.bind(this)
     );
 
-    document.addEventListener("keydown", this.togglePlay.bind(this));
+    document.addEventListener("keydown", this.togglePlayListener);
     const mediaElement = this.refs.media.children[0];
     if (mediaElement) {
       mediaElement.addEventListener(
@@ -43,13 +45,21 @@ class VideoPlayer extends React.PureComponent {
           once: true,
         }
       );
-      mediaElement.addEventListener("click", this.togglePlay.bind(this));
+      mediaElement.addEventListener("click", this.togglePlayListener);
+    }
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener("keydown", this.togglePlayListener);
+    const mediaElement = this.refs.media.children[0];
+    if (mediaElement) {
+      mediaElement.removeEventListener("click", this.togglePlayListener);
     }
   }
 
   togglePlay(event) {
     // ignore all events except click and spacebar keydown
-    if ("keydown" === event.type && event.keyCode !== 32) {
+    if ("keydown" === event.type && "Space" !== event.code) {
       return;
     }
     event.preventDefault();
