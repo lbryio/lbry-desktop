@@ -20,7 +20,10 @@ class VideoPlayButton extends React.PureComponent {
   }
 
   onKeyDown(event) {
-    if ("Space" === event.code) {
+    if (
+      "input" !== event.target.tagName.toLowerCase() &&
+      "Space" === event.code
+    ) {
       event.preventDefault();
       this.onWatchClick();
     }

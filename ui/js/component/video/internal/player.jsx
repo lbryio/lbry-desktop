@@ -1,7 +1,9 @@
+const { remote } = require("electron");
 import React from "react";
 import { Thumbnail } from "component/common";
 import player from "render-media";
 import fs from "fs";
+import { setSession, getSession } from "utils";
 import LoadingScreen from "./loading-screen";
 
 class VideoPlayer extends React.PureComponent {
@@ -27,6 +29,15 @@ class VideoPlayer extends React.PureComponent {
     const renderMediaCallback = err => {
       if (err) this.setState({ unplayable: true });
     };
+    // Handle fullscreen change for the Windows platform
+    const win32FullScreenChange = e => {
+      const win = remote.BrowserWindow.getFocusedWindow();
+      if ("win32" === process.platform) {
+        win.setMenu(
+          document.webkitIsFullScreen ? null : remote.Menu.getApplicationMenu()
+        );
+      }
+    };
 
     player.append(
       this.file(),
@@ -38,6 +49,7 @@ class VideoPlayer extends React.PureComponent {
     document.addEventListener("keydown", this.togglePlayListener);
     const mediaElement = this.refs.media.children[0];
     if (mediaElement) {
+      mediaElement.addEventListener("click", this.togglePlayListener);
       mediaElement.addEventListener(
         "loadedmetadata",
         loadedMetadata.bind(this),
@@ -45,7 +57,14 @@ class VideoPlayer extends React.PureComponent {
           once: true,
         }
       );
-      mediaElement.addEventListener("click", this.togglePlayListener);
+      mediaElement.addEventListener(
+        "webkitfullscreenchange",
+        win32FullScreenChange.bind(this)
+      );
+      mediaElement.addEventListener("volumechange", () => {
+        setSession("prefs_volume", mediaElement.volume);
+      });
+      mediaElement.volume = this.getPreferredVolume();
     }
   }
 
@@ -58,8 +77,11 @@ class VideoPlayer extends React.PureComponent {
   }
 
   togglePlay(event) {
-    // ignore all events except click and spacebar keydown
-    if ("keydown" === event.type && "Space" !== event.code) {
+    // ignore all events except click and spacebar keydown, or input events in a form control
+    if (
+      "keydown" === event.type &&
+      ("Space" !== event.code || "input" === event.target.tagName.toLowerCase())
+    ) {
       return;
     }
     event.preventDefault();
@@ -71,6 +93,11 @@ class VideoPlayer extends React.PureComponent {
         mediaElement.play();
       }
     }
+  }
+
+  getPreferredVolume() {
+    const volumePreference = parseFloat(getSession("prefs_volume"));
+    return isNaN(volumePreference) ? 1 : volumePreference;
   }
 
   componentDidUpdate() {
