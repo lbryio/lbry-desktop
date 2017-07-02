@@ -11,11 +11,14 @@ import { doChangePath, doNavigate, doDaemonReady } from "actions/app";
 import { toQueryString } from "util/query_params";
 import { selectBadgeNumber } from "selectors/app";
 import * as types from "constants/action_types";
+import fs from "fs";
+import http from "http";
 
 const env = ENV;
 const { remote, ipcRenderer, shell } = require("electron");
 const contextMenu = remote.require("./menu/context-menu");
 const app = require("./app");
+app.i18n.resLang = require("./langs").default;
 
 lbry.showMenuIfNeeded();
 
@@ -130,4 +133,40 @@ var init = function() {
   }
 };
 
+const download = (url, dest, lang, cb) => {
+  const file = fs.createWriteStream(dest);
+  const request = http.get(url, response => {
+    response.pipe(file);
+    file.on('finish', () => {
+      file.close(cb);  // close() is async, call cb after close completes.
+      app.i18n.localLanguages.push(lang.replace(".json", "")); // push to our local list
+    });
+  }).on('error', err => { // Handle errors
+    fs.unlink(dest); // Delete the file async. (But we don't check the result)
+    if (cb) cb(err.message);
+  });
+};
+
+const downloadLanguages = () => {
+  if (!fs.existsSync("app/locales")){
+    fs.mkdirSync("app/locales");
+  }
+  http.request({ host: 'i18n.lbry.io', path: '/' }, response => {
+    let str = '';
+
+    response.on('data', chunk => {
+      str += chunk;
+    });
+
+    response.on('end', () => {
+      const files = JSON.parse(str);JSON.parse(str);
+      app.i18n.localLanguages = [];
+      for (let i = 0; i < files.length; i++) {
+        download(`http://i18n.lbry.io/langs/${files[i]}`, `app/locales/${files[i]}`, files[i], () => {});
+      }
+    });
+  }).end();
+};
+
+downloadLanguages();
 init();
