@@ -1,3 +1,4 @@
+const { remote } = require("electron");
 import React from "react";
 import { Thumbnail } from "component/common";
 import player from "render-media";
@@ -25,6 +26,15 @@ class VideoPlayer extends React.PureComponent {
     const renderMediaCallback = err => {
       if (err) this.setState({ unplayable: true });
     };
+    // Handle fullscreen change for the Windows platform
+    const win32FullScreenChange = e => {
+      const win = remote.BrowserWindow.getFocusedWindow();
+      if ("win32" === process.platform) {
+        win.setMenu(
+          document.webkitIsFullScreen ? null : remote.Menu.getApplicationMenu()
+        );
+      }
+    };
 
     player.append(
       this.file(),
@@ -41,6 +51,10 @@ class VideoPlayer extends React.PureComponent {
         {
           once: true,
         }
+      );
+      mediaElement.addEventListener(
+        "webkitfullscreenchange",
+        win32FullScreenChange.bind(this)
       );
     }
   }
