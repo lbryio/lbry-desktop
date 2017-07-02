@@ -64,6 +64,32 @@ class SettingsPage extends React.PureComponent {
     });
   }
 
+  onKeyFeeChange(event) {
+    var oldSettings = this.props.daemonSettings.max_key_fee;
+    var newSettings = {
+      amount: oldSettings.amount,
+      currency: oldSettings.currency,
+    };
+    newSettings.amount = Number(event.target.value);
+
+    this.setDaemonSetting("max_key_fee", newSettings);
+  }
+
+  onFeeCurrencyChange(event) {
+    var oldSettings = this.props.daemonSettings.max_key_fee;
+    var newSettings = {
+      amount: oldSettings.amount,
+      currency: oldSettings.currency,
+    };
+    newSettings.currency = event.target.value;
+
+    this.setDaemonSetting("max_key_fee", newSettings);
+  }
+
+  onKeyFeeDisableChange(isDisabled) {
+    this.setDaemonSetting("disable_max_key_fee", isDisabled);
+  }
+
   onMaxUploadFieldChange(event) {
     this.setDaemonSetting("max_upload", Number(event.target.value));
   }
@@ -165,6 +191,7 @@ class SettingsPage extends React.PureComponent {
             />
           </div>
         </section>
+
         <section className="card">
           <div className="card__content">
             <h3>{__("Bandwidth Limits")}</h3>
@@ -252,6 +279,69 @@ class SettingsPage extends React.PureComponent {
             </div>
           </div>
         </section>
+
+        <section className="card">
+          <div className="card__content">
+            <h3>{__("Key Fee")}</h3>
+          </div>
+          <div className="card__content">
+            <div className="form-row__label-row">
+              <div className="form-field__label">{__("Max Key Fee")}</div>
+            </div>
+            <FormRow
+              type="radio"
+              name="max_key_fee"
+              onClick={() => {
+                this.onKeyFeeDisableChange(true);
+              }}
+              defaultChecked={daemonSettings.disable_max_key_fee}
+              label={__("No Limit")}
+            />
+            <div className="form-row">
+              <FormField
+                type="radio"
+                name="max_key_fee"
+                onClick={() => {
+                  this.onKeyFeeDisableChange(false);
+                }}
+                defaultChecked={!daemonSettings.disable_max_key_fee}
+                label={
+                  daemonSettings.disable_max_key_fee
+                    ? __("Choose limit")
+                    : __("Limit to")
+                }
+              />
+              {!daemonSettings.disable_max_key_fee
+                ? <FormField
+                    type="number"
+                    min="0"
+                    placeholder="50"
+                    step="1"
+                    onChange={this.onKeyFeeChange.bind(this)}
+                    defaultValue={daemonSettings.max_key_fee.amount}
+                    className="form-field__input--inline"
+                  />
+                : ""}
+              {!daemonSettings.disable_max_key_fee
+                ? <FormField
+                    type="select"
+                    onChange={this.onFeeCurrencyChange.bind(this)}
+                    defaultValue={daemonSettings.max_key_fee.currency}
+                    className="form-field__input--inline"
+                  >
+                    <option value="USD">{__("US Dollars")}</option>
+                    <option value="LBC">{__("LBRY credits")}</option>
+                  </FormField>
+                : ""}
+            </div>
+            <div className="form-field__helper">
+              {__(
+                "This will prevent you from purchasing anything over this fee, as a safety measure. (Default: 50 USD)"
+              )}
+            </div>
+          </div>
+        </section>
+
         <section className="card">
           <div className="card__content">
             <h3>{__("Content")}</h3>
