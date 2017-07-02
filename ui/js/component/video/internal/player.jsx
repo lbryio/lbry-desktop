@@ -3,6 +3,7 @@ import React from "react";
 import { Thumbnail } from "component/common";
 import player from "render-media";
 import fs from "fs";
+import { setSession, getSession } from "utils";
 import LoadingScreen from "./loading-screen";
 
 class VideoPlayer extends React.PureComponent {
@@ -58,14 +59,14 @@ class VideoPlayer extends React.PureComponent {
         win32FullScreenChange.bind(this)
       );
       mediaElement.addEventListener("volumechange", () => {
-        localStorage.setItem("prefs_volume", mediaElement.volume);
+        setSession("prefs_volume", mediaElement.volume);
       });
       mediaElement.volume = this.getPreferredVolume();
     }
   }
 
   getPreferredVolume() {
-    const volumePreference = parseFloat(localStorage.getItem("prefs_volume"));
+    const volumePreference = parseFloat(getSession("prefs_volume"));
     return isNaN(volumePreference) ? 1 : volumePreference;
   }
 
