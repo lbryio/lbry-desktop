@@ -115,7 +115,7 @@ class FilePage extends React.PureComponent {
                   : uriIndicator}
               </div>
               <div className="card__actions">
-                <FileActions uri={uri} />
+                <FileActions mediaTitle={title} uri={uri} />
               </div>
             </div>
             <div className="card__content card__subtext card__subtext card__subtext--allow-newlines">
