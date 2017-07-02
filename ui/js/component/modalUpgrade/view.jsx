@@ -2,7 +2,7 @@ import React from "react";
 import { Modal } from "component/modal";
 import { downloadUpgrade, skipUpgrade } from "actions/app";
 
-class UpgradeModal extends React.PureComponent {
+class ModalUpgrade extends React.PureComponent {
   render() {
     const { downloadUpgrade, skipUpgrade } = this.props;
 
@@ -24,4 +24,4 @@ class UpgradeModal extends React.PureComponent {
   }
 }
 
-export default UpgradeModal;
+export default ModalUpgrade;

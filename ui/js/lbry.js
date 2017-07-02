@@ -268,9 +268,10 @@ lbry.getClientSettings = function() {
   var outSettings = {};
   for (let setting of Object.keys(lbry.defaultClientSettings)) {
     var localStorageVal = localStorage.getItem("setting_" + setting);
-    outSettings[setting] = localStorageVal === null
-      ? lbry.defaultClientSettings[setting]
-      : JSON.parse(localStorageVal);
+    outSettings[setting] =
+      localStorageVal === null
+        ? lbry.defaultClientSettings[setting]
+        : JSON.parse(localStorageVal);
   }
   return outSettings;
 };
@@ -459,6 +460,12 @@ lbry.claim_list_mine = function(params = {}) {
       },
       reject
     );
+  });
+};
+
+lbry.claim_abandon = function(params = {}) {
+  return new Promise((resolve, reject) => {
+    apiCall("claim_abandon", params, resolve, reject);
   });
 };
 
