@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { doStartUpgrade, doCancelUpgrade } from "actions/app";
 import { selectDownloadProgress, selectDownloadComplete } from "selectors/app";
-import DownloadingModal from "./view";
+import ModalDownloading from "./view";
 
 const select = state => ({
   downloadProgress: selectDownloadProgress(state),
@@ -14,4 +14,4 @@ const perform = dispatch => ({
   cancelUpgrade: () => dispatch(doCancelUpgrade()),
 });
 
-export default connect(select, perform)(DownloadingModal);
+export default connect(select, perform)(ModalDownloading);

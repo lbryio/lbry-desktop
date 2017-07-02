@@ -9,13 +9,9 @@ import {
 import { makeSelectIsAvailableForUri } from "selectors/availability";
 import { selectCurrentModal } from "selectors/app";
 import { makeSelectCostInfoForUri } from "selectors/cost_info";
-import { doCloseModal, doOpenModal, doHistoryBack } from "actions/app";
+import { doCloseModal, doOpenModal } from "actions/app";
 import { doFetchAvailability } from "actions/availability";
-import {
-  doOpenFileInShell,
-  doOpenFileInFolder,
-  doDeleteFile,
-} from "actions/file_info";
+import { doOpenFileInShell, doOpenFileInFolder } from "actions/file_info";
 import { makeSelectClaimForUriIsMine } from "selectors/claims";
 import { doPurchaseUri, doLoadVideo } from "actions/content";
 import FileActions from "./view";
@@ -48,10 +44,6 @@ const perform = dispatch => ({
   closeModal: () => dispatch(doCloseModal()),
   openInFolder: fileInfo => dispatch(doOpenFileInFolder(fileInfo)),
   openInShell: fileInfo => dispatch(doOpenFileInShell(fileInfo)),
-  deleteFile: (fileInfo, deleteFromComputer, abandonClaim) => {
-    dispatch(doHistoryBack());
-    dispatch(doDeleteFile(fileInfo, deleteFromComputer, abandonClaim));
-  },
   openModal: modal => dispatch(doOpenModal(modal)),
   startDownload: uri => dispatch(doPurchaseUri(uri, "affirmPurchase")),
   loadVideo: uri => dispatch(doLoadVideo(uri)),

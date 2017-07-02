@@ -2,18 +2,17 @@ import React from "react";
 import { Icon, BusyMessage } from "component/common";
 import FilePrice from "component/filePrice";
 import { Modal } from "component/modal";
-import { FormField } from "component/form";
 import Link from "component/link";
 import { ToolTip } from "component/tooltip";
 import { DropDownMenu, DropDownMenuItem } from "component/menu";
+import ModalRemoveFile from "component/modalRemoveFile";
+import * as modals from "constants/modal_types";
 
 class FileActions extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
       forceShowActions: false,
-      deleteChecked: false,
-      abandonClaimChecked: false,
     };
   }
 
@@ -38,18 +37,6 @@ class FileActions extends React.PureComponent {
     });
   }
 
-  handleDeleteCheckboxClicked(event) {
-    this.setState({
-      deleteChecked: event.target.checked,
-    });
-  }
-
-  handleAbandonClaimCheckboxClicked(event) {
-    this.setState({
-      abandonClaimChecked: event.target.checked,
-    });
-  }
-
   onAffirmPurchase() {
     this.props.closeModal();
     this.props.loadVideo(this.props.uri);
@@ -62,7 +49,6 @@ class FileActions extends React.PureComponent {
       platform,
       downloading,
       uri,
-      deleteFile,
       openInFolder,
       openInShell,
       modal,
@@ -74,9 +60,7 @@ class FileActions extends React.PureComponent {
       claimIsMine,
     } = this.props;
 
-    const deleteChecked = this.state.deleteChecked,
-      abandonClaimChecked = this.state.abandonClaimChecked,
-      metadata = fileInfo ? fileInfo.metadata : null,
+    const metadata = fileInfo ? fileInfo.metadata : null,
       openInFolderMessage = platform.startsWith("Mac")
         ? __("Open in Finder")
         : __("Open in Folder"),
@@ -86,10 +70,9 @@ class FileActions extends React.PureComponent {
     let content;
 
     if (loading || downloading) {
-      const progress =
-          fileInfo && fileInfo.written_bytes
-            ? fileInfo.written_bytes / fileInfo.total_bytes * 100
-            : 0,
+      const progress = fileInfo && fileInfo.written_bytes
+        ? fileInfo.written_bytes / fileInfo.total_bytes * 100
+        : 0,
         label = fileInfo
           ? progress.toFixed(0) + __("% complete")
           : __("Connecting..."),
@@ -175,7 +158,7 @@ class FileActions extends React.PureComponent {
               />
               <DropDownMenuItem
                 key={1}
-                onClick={() => openModal("confirmRemove")}
+                onClick={() => openModal(modals.CONFIRM_FILE_REMOVE)}
                 label={__("Remove...")}
               />
             </DropDownMenu>
@@ -207,42 +190,12 @@ class FileActions extends React.PureComponent {
         >
           {__("LBRY was unable to download the stream")} <strong>{uri}</strong>.
         </Modal>
-        <Modal
-          isOpen={modal == "confirmRemove"}
-          contentLabel={__("Not enough credits")}
-          type="confirm"
-          confirmButtonLabel={__("Remove")}
-          onConfirmed={() =>
-            deleteFile(fileInfo.outpoint, deleteChecked, abandonClaimChecked)}
-          onAborted={closeModal}
-        >
-          <p>
-            {__("Are you sure you'd like to remove")} <cite>{title}</cite>{" "}
-            {__("from LBRY?")}
-          </p>
-
-          <section>
-            <label>
-              <FormField
-                type="checkbox"
-                checked={deleteChecked}
-                onClick={this.handleDeleteCheckboxClicked.bind(this)}
-              />{" "}
-              {__("Delete this file from my computer")}
-            </label>
-          </section>
-          {claimIsMine &&
-            <section>
-              <label>
-                <FormField
-                  type="checkbox"
-                  checked={abandonClaimChecked}
-                  onClick={this.handleAbandonClaimCheckboxClicked.bind(this)}
-                />{" "}
-                {__("Abandon the claim for this URI")}
-              </label>
-            </section>}
-        </Modal>
+        {modal == modals.CONFIRM_FILE_REMOVE &&
+          <ModalRemoveFile
+            uri={uri}
+            outpoint={fileInfo.outpoint}
+            title={title}
+          />}
       </section>
     );
   }
