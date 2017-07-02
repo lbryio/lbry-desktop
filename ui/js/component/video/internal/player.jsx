@@ -16,11 +16,31 @@ class VideoPlayer extends React.PureComponent {
   }
 
   componentDidMount() {
+    const component = this;
     const container = this.refs.media;
-    const { mediaType } = this.props;
+    const { downloadPath, mediaType } = this.props;
     const loadedMetadata = e => {
-      this.setState({ hasMetadata: true, startedPlaying: true });
-      this.refs.media.children[0].play();
+      const media = this.refs.media.children[0];
+      if ("audio" === media.tagName.toLowerCase()) {
+        // Load the entire audio file so that the length is available before playing
+        let xhr = new XMLHttpRequest();
+        const xhrLoaded = () => {
+          if (xhr.status === 200) {
+            media.src = URL.createObjectURL(xhr.response);
+
+            this.setState({ hasMetadata: true, startedPlaying: true });
+            media.play();
+          }
+        };
+
+        xhr.open("GET", downloadPath, true);
+        xhr.onload = xhrLoaded.bind(this);
+        xhr.responseType = "blob";
+        xhr.send();
+      } else {
+        this.setState({ hasMetadata: true, startedPlaying: true });
+        media.play();
+      }
     };
     const renderMediaCallback = err => {
       if (err) this.setState({ unplayable: true });
@@ -66,8 +86,7 @@ class VideoPlayer extends React.PureComponent {
       },
     };
   }
-
-  playableType() {
+  *playableType() {
     const { mediaType } = this.props;
 
     return ["audio", "video"].indexOf(mediaType) !== -1;
