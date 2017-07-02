@@ -17,20 +17,18 @@ video {
   max-width: $width-page-constrained;
   max-height: $height-video-embedded;
   height: $height-video-embedded;
-  position: relative; /*for .plyr below*/
+  position: relative;
   video {
     height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
   }
   &.video--hidden {
     height: $height-video-embedded;
   }
   &.video--active {
     /*background: none;*/
-  }
-
-  .plyr {
-    top: 50%;
-    transform: translateY(-50%);
   }
 }
 .video--obscured .video__cover
