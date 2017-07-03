@@ -51,7 +51,7 @@ export const makeSelectClaimForUri = () => {
 const selectClaimForUriIsMine = (state, props) => {
   const uri = lbryuri.normalize(props.uri);
   const claim = selectClaimsByUri(state)[uri];
-  const myClaims = selectMyClaims(state);
+  const myClaims = selectMyClaimsRaw(state);
 
   return myClaims.has(claim.claim_id);
 };
