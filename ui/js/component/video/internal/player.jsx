@@ -15,6 +15,8 @@ class VideoPlayer extends React.PureComponent {
       startedPlaying: false,
       unplayable: false,
     };
+
+    this.togglePlayListener = this.togglePlay.bind(this);
   }
 
   componentDidMount() {
@@ -40,12 +42,14 @@ class VideoPlayer extends React.PureComponent {
     player.append(
       this.file(),
       container,
-      { autoplay: false, controls: true },
+      { autoplay: false, controls: true, enableKeyboard: true },
       renderMediaCallback.bind(this)
     );
 
+    document.addEventListener("keydown", this.togglePlayListener);
     const mediaElement = this.refs.media.children[0];
     if (mediaElement) {
+      mediaElement.addEventListener("click", this.togglePlayListener);
       mediaElement.addEventListener(
         "loadedmetadata",
         loadedMetadata.bind(this),
@@ -53,7 +57,6 @@ class VideoPlayer extends React.PureComponent {
           once: true,
         }
       );
-
       mediaElement.addEventListener(
         "webkitfullscreenchange",
         win32FullScreenChange.bind(this)
@@ -62,6 +65,33 @@ class VideoPlayer extends React.PureComponent {
         setSession("prefs_volume", mediaElement.volume);
       });
       mediaElement.volume = this.getPreferredVolume();
+    }
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener("keydown", this.togglePlayListener);
+    const mediaElement = this.refs.media.children[0];
+    if (mediaElement) {
+      mediaElement.removeEventListener("click", this.togglePlayListener);
+    }
+  }
+
+  togglePlay(event) {
+    // ignore all events except click and spacebar keydown, or input events in a form control
+    if (
+      "keydown" === event.type &&
+      ("Space" !== event.code || "input" === event.target.tagName.toLowerCase())
+    ) {
+      return;
+    }
+    event.preventDefault();
+    const mediaElement = this.refs.media.children[0];
+    if (mediaElement) {
+      if (!mediaElement.paused) {
+        mediaElement.pause();
+      } else {
+        mediaElement.play();
+      }
     }
   }
 
