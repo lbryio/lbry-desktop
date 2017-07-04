@@ -102,7 +102,7 @@ export const selectFileInfosPublished = createSelector(
       const fileInfo = byOutpoint[outpoint];
       if (fileInfo) fileInfos.push(fileInfo);
     });
-    return fileInfos;
+    return [...fileInfos, ...pendingPublish];
   }
 );
 
