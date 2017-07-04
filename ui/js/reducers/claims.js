@@ -34,7 +34,7 @@ reducers[types.RESOLVE_URI_COMPLETED] = function(state, action) {
 
 reducers[types.FETCH_CLAIM_LIST_MINE_STARTED] = function(state, action) {
   return Object.assign({}, state, {
-    isClaimListMinePending: true,
+    isFetchingClaimListMine: true,
   });
 };
 
@@ -50,7 +50,7 @@ reducers[types.FETCH_CLAIM_LIST_MINE_COMPLETED] = function(state, action) {
   });
 
   return Object.assign({}, state, {
-    isClaimListMinePending: false,
+    isFetchingClaimListMine: false,
     myClaims: myClaims,
     byId,
   });
