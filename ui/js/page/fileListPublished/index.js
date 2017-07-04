@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import { doFetchFileInfosAndPublishedClaims } from "actions/file_info";
 import {
   selectFileInfosPublished,
-  selectFileListDownloadedOrPublishedIsPending,
+  selectIsFetchingFileListDownloadedOrPublished,
 } from "selectors/file_info";
 import { doClaimRewardType } from "actions/rewards";
 import { doNavigate } from "actions/app";
@@ -13,7 +13,7 @@ import FileListPublished from "./view";
 
 const select = state => ({
   fileInfos: selectFileInfosPublished(state),
-  isPending: selectFileListDownloadedOrPublishedIsPending(state),
+  isFetching: selectIsFetchingFileListDownloadedOrPublished(state),
 });
 
 const perform = dispatch => ({

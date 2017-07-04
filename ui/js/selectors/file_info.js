@@ -2,7 +2,7 @@ import lbry from "lbry";
 import { createSelector } from "reselect";
 import {
   selectClaimsByUri,
-  selectClaimListMineIsPending,
+  selectIsFetchingClaimListMine,
   selectMyClaimsOutpoints,
 } from "selectors/claims";
 
@@ -13,16 +13,16 @@ export const selectFileInfosByOutpoint = createSelector(
   state => state.byOutpoint || {}
 );
 
-export const selectFileListIsPending = createSelector(
+export const selectIsFetchingFileList = createSelector(
   _selectState,
-  state => state.isFileListPending
+  state => !!state.isFetchingFileList
 );
 
-export const selectFileListDownloadedOrPublishedIsPending = createSelector(
-  selectFileListIsPending,
-  selectClaimListMineIsPending,
-  (isFileListPending, isClaimListMinePending) =>
-    isFileListPending || isClaimListMinePending
+export const selectIsFetchingFileListDownloadedOrPublished = createSelector(
+  selectIsFetchingFileList,
+  selectIsFetchingClaimListMine,
+  (isFetchingFileList, isFetchingClaimListMine) =>
+    isFetchingFileList || isFetchingClaimListMine
 );
 
 export const selectFileInfoForUri = (state, props) => {

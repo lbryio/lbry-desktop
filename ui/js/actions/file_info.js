@@ -3,11 +3,11 @@ import lbry from "lbry";
 import { doFetchClaimListMine } from "actions/content";
 import {
   selectClaimsByUri,
-  selectClaimListMineIsPending,
+  selectIsFetchingClaimListMine,
   selectMyClaimsOutpoints,
 } from "selectors/claims";
 import {
-  selectFileListIsPending,
+  selectIsFetchingFileList,
   selectFileInfosByOutpoint,
   selectUrisLoading,
 } from "selectors/file_info";
@@ -48,9 +48,9 @@ export function doFetchFileInfo(uri) {
 export function doFileList() {
   return function(dispatch, getState) {
     const state = getState();
-    const isPending = selectFileListIsPending(state);
+    const isFetching = selectIsFetchingFileList(state);
 
-    if (!isPending) {
+    if (!isFetching) {
       dispatch({
         type: types.FILE_LIST_STARTED,
       });
@@ -128,10 +128,10 @@ export function doDeleteFile(outpoint, deleteFromComputer, abandonClaim) {
 export function doFetchFileInfosAndPublishedClaims() {
   return function(dispatch, getState) {
     const state = getState(),
-      isClaimListMinePending = selectClaimListMineIsPending(state),
-      isFileInfoListPending = selectFileListIsPending(state);
+      isFetchingClaimListMine = selectIsFetchingClaimListMine(state),
+      isFetchingFileInfo = selectIsFetchingFileList(state);
 
-    dispatch(doFetchClaimListMine());
-    dispatch(doFileList());
+    if (!isFetchingClaimListMine) dispatch(doFetchClaimListMine());
+    if (!isFetchingFileInfo) dispatch(doFileList());
   };
 }

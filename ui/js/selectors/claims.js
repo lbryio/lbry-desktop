@@ -100,9 +100,9 @@ export const makeSelectContentTypeForUri = () => {
   );
 };
 
-export const selectClaimListMineIsPending = createSelector(
+export const selectIsFetchingClaimListMine = createSelector(
   _selectState,
-  state => state.isClaimListMinePending
+  state => !!state.isFetchingClaimListMine
 );
 
 export const selectMyClaimsRaw = createSelector(

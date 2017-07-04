@@ -6,7 +6,7 @@ const defaultState = {};
 
 reducers[types.FILE_LIST_STARTED] = function(state, action) {
   return Object.assign({}, state, {
-    isFileListPending: true,
+    isFetchingFileList: true,
   });
 };
 
@@ -22,7 +22,7 @@ reducers[types.FILE_LIST_COMPLETED] = function(state, action) {
   });
 
   return Object.assign({}, state, {
-    isFileListPending: false,
+    isFetchingFileList: false,
     byOutpoint: newByOutpoint,
     pendingByOutpoint,
   });
@@ -170,28 +170,6 @@ reducers[types.PUBLISH_FAILED] = function(state, action) {
     pendingByOutpoint,
   });
 };
-
-// reducers[types.PUBLISH_COMPLETED] = function(state, action) {
-//   const { claim } = action.data;
-//   const uri = lbryuri.build({
-//     txid: claim.txId
-//   })
-//   const newPendingPublish = {
-//     name,
-//     channel_name,
-//     claim_id: "pending_claim_" + uri,
-//     txid: "pending_" + uri,
-//     nout: 0,
-//     outpoint: "pending_" + uri + ":0",
-//     time: Date.now(),
-//   };
-//   const fileInfos = Object.assign({}, state.fileInfos)
-//   fileInfos[newPendingPublish.outpoint] = newPendingPublish
-
-//   return Object.assign({}, state, {
-//     fileInfos,
-//   })
-// }
 
 export default function reducer(state = defaultState, action) {
   const handler = reducers[action.type];
