@@ -44,6 +44,7 @@ class FileActions extends React.PureComponent {
 
   render() {
     const {
+      mediaTitle,
       fileInfo,
       isAvailable,
       platform,
@@ -65,7 +66,7 @@ class FileActions extends React.PureComponent {
         ? __("Open in Finder")
         : __("Open in Folder"),
       showMenu = fileInfo && Object.keys(fileInfo).length > 0,
-      title = metadata ? metadata.title : uri;
+      title = mediaTitle ? mediaTitle : metadata ? metadata.title : uri;
 
     let content;
 
