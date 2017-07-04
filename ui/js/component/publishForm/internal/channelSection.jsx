@@ -2,6 +2,7 @@ import React from "react";
 import lbryuri from "lbryuri";
 import { FormField, FormRow } from "component/form.js";
 import { BusyMessage } from "component/common";
+import Link from "component/link";
 
 class ChannelSection extends React.PureComponent {
   constructor(props) {
@@ -92,37 +93,31 @@ class ChannelSection extends React.PureComponent {
       "This LBC remains yours and the deposit can be undone at any time."
     );
 
-    const { fetchingChannels, channels } = this.props;
+    const { fetchingChannels, channels = [] } = this.props;
 
     let channelContent = [];
-    if (channels.length > 0) {
+    channelContent.push(
+      <FormRow
+        key="channel"
+        type="select"
+        tabIndex="1"
+        onChange={this.handleChannelChange.bind(this)}
+        value={this.props.channel}
+      >
+        <option key="anonymous" value="anonymous">
+          {__("Anonymous")}
+        </option>
+        {this.props.channels.map(({ name }) =>
+          <option key={name} value={name}>{name}</option>
+        )}
+        <option key="new" value="new">
+          {__("New identity...")}
+        </option>
+      </FormRow>
+    );
+    if (fetchingChannels) {
       channelContent.push(
-        <FormRow
-          key="channel"
-          type="select"
-          tabIndex="1"
-          onChange={this.handleChannelChange.bind(this)}
-          value={this.props.channel}
-        >
-          <option key="anonymous" value="anonymous">
-            {__("Anonymous")}
-          </option>
-          {this.props.channels.map(({ name }) =>
-            <option key={name} value={name}>{name}</option>
-          )}
-          <option key="new" value="new">
-            {__("New identity...")}
-          </option>
-        </FormRow>
-      );
-      if (fetchingChannels) {
-        channelContent.push(
-          <BusyMessage message="Updating channels" key="loading" />
-        );
-      }
-    } else if (fetchingChannels) {
-      channelContent.push(
-        <BusyMessage message="Loading channels" key="loading" />
+        <BusyMessage message="Updating channels" key="loading" />
       );
     }
 
