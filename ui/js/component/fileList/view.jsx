@@ -67,7 +67,9 @@ class FileList extends React.PureComponent {
     const content = [];
 
     this._sortFunctions[sortBy](fileInfos).forEach(fileInfo => {
-      let uriParams = {};
+      let uriParams = {
+        claimId: fileInfo.claim_id,
+      };
       if (fileInfo.channel_name) {
         uriParams.channelName = fileInfo.channel_name;
         uriParams.contentName = fileInfo.name;
