@@ -69,7 +69,7 @@ class DiscoverPage extends React.PureComponent {
         (featuredUris !== undefined && Object.keys(featuredUris).length === 0));
 
     return (
-      <main ref="main">
+      <main>
         {fetchingFeaturedUris &&
           <BusyMessage message={__("Fetching content")} />}
         {typeof featuredUris === "object" &&
