@@ -5,6 +5,8 @@ import fs from "fs";
 import LoadingScreen from "./loading-screen";
 
 class VideoPlayer extends React.PureComponent {
+  static MP3_CONTENT_TYPES = ["audio/mpeg3", "audio/mpeg"];
+
   constructor(props) {
     super(props);
 
@@ -18,40 +20,26 @@ class VideoPlayer extends React.PureComponent {
   componentDidMount() {
     const component = this;
     const container = this.refs.media;
-    const { downloadPath, mediaType } = this.props;
+    const { contentType, downloadPath, mediaType } = this.props;
     const loadedMetadata = e => {
-      const media = this.refs.media.children[0];
-      if ("audio" === media.tagName.toLowerCase()) {
-        // Load the entire audio file so that the length is available before playing
-        let xhr = new XMLHttpRequest();
-        const xhrLoaded = () => {
-          if (xhr.status === 200) {
-            media.src = URL.createObjectURL(xhr.response);
-
-            this.setState({ hasMetadata: true, startedPlaying: true });
-            media.play();
-          }
-        };
-
-        xhr.open("GET", downloadPath, true);
-        xhr.onload = xhrLoaded.bind(this);
-        xhr.responseType = "blob";
-        xhr.send();
-      } else {
-        this.setState({ hasMetadata: true, startedPlaying: true });
-        media.play();
-      }
+      this.setState({ hasMetadata: true, startedPlaying: true });
+      this.refs.media.children[0].play();
     };
     const renderMediaCallback = err => {
       if (err) this.setState({ unplayable: true });
     };
 
-    player.append(
-      this.file(),
-      container,
-      { autoplay: false, controls: true },
-      renderMediaCallback.bind(this)
-    );
+    // use renderAudio override for mp3
+    if (VideoPlayer.MP3_CONTENT_TYPES.indexOf(contentType) > -1) {
+      this.renderAudio(container, false);
+    } else {
+      player.append(
+        this.file(),
+        container,
+        { autoplay: false, controls: true },
+        renderMediaCallback.bind(this)
+      );
+    }
 
     const mediaElement = this.refs.media.children[0];
     if (mediaElement) {
@@ -65,25 +53,42 @@ class VideoPlayer extends React.PureComponent {
     }
   }
 
+  renderAudio(container, autoplay) {
+    const { downloadPath } = this.props;
+    const audio = document.createElement("audio");
+    audio.autoplay = autoplay;
+    audio.controls = true;
+    audio.src = downloadPath;
+    container.appendChild(audio);
+  }
+
   componentDidUpdate() {
-    const { mediaType, downloadCompleted } = this.props;
+    const { contentType, downloadCompleted } = this.props;
     const { startedPlaying } = this.state;
 
     if (this.playableType() && !startedPlaying && downloadCompleted) {
       const container = this.refs.media.children[0];
 
-      player.render(this.file(), container, { autoplay: true, controls: true });
+      if (VideoPlayer.MP3_CONTENT_TYPES.indexOf(contentType) > -1) {
+        this.renderAudio(container, true);
+      } else {
+        player.render(this.file(), container, {
+          autoplay: true,
+          controls: true,
+        });
+      }
     }
   }
 
   file() {
     const { downloadPath, filename } = this.props;
-
+    const stat = fs.statSync(downloadPath);
     return {
       name: filename,
       createReadStream: opts => {
         return fs.createReadStream(downloadPath, opts);
       },
+      length: stat.size,
     };
   }
   *playableType() {

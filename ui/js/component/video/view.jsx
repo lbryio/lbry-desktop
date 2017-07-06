@@ -98,6 +98,7 @@ class Video extends React.PureComponent {
                 poster={poster}
                 downloadPath={fileInfo.download_path}
                 mediaType={mediaType}
+                contentType={contentType}
                 downloadCompleted={fileInfo.completed}
               />)}
         {!isPlaying &&
