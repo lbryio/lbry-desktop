@@ -137,6 +137,7 @@ class VideoPlayer extends React.PureComponent {
 
   file() {
     const { downloadPath, filename } = this.props;
+
     return {
       name: filename,
       createReadStream: opts => {
@@ -144,7 +145,8 @@ class VideoPlayer extends React.PureComponent {
       },
     };
   }
-  *playableType() {
+
+  playableType() {
     const { mediaType } = this.props;
 
     return ["audio", "video"].indexOf(mediaType) !== -1;
