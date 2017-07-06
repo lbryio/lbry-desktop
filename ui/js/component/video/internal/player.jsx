@@ -22,7 +22,6 @@ class VideoPlayer extends React.PureComponent {
   }
 
   componentDidMount() {
-    const component = this;
     const container = this.refs.media;
     const { contentType, downloadPath, mediaType } = this.props;
     const loadedMetadata = e => {
@@ -44,7 +43,7 @@ class VideoPlayer extends React.PureComponent {
 
     // use renderAudio override for mp3
     if (VideoPlayer.MP3_CONTENT_TYPES.indexOf(contentType) > -1) {
-      this.renderAudio(container, false);
+      this.renderAudio(container, null, false);
     } else {
       player.append(
         this.file(),
@@ -85,6 +84,11 @@ class VideoPlayer extends React.PureComponent {
   }
 
   renderAudio(container, autoplay) {
+    if (container.firstChild) {
+      container.firstChild.remove();
+    }
+
+    // clear the container
     const { downloadPath } = this.props;
     const audio = document.createElement("audio");
     audio.autoplay = autoplay;
@@ -125,7 +129,7 @@ class VideoPlayer extends React.PureComponent {
       const container = this.refs.media.children[0];
 
       if (VideoPlayer.MP3_CONTENT_TYPES.indexOf(contentType) > -1) {
-        this.renderAudio(container, true);
+        this.renderAudio(this.refs.media, true);
       } else {
         player.render(this.file(), container, {
           autoplay: true,
