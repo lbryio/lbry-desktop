@@ -137,13 +137,11 @@ class VideoPlayer extends React.PureComponent {
 
   file() {
     const { downloadPath, filename } = this.props;
-    const stat = fs.statSync(downloadPath);
     return {
       name: filename,
       createReadStream: opts => {
         return fs.createReadStream(downloadPath, opts);
       },
-      length: stat.size,
     };
   }
   *playableType() {
