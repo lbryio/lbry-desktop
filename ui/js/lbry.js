@@ -462,6 +462,12 @@ lbry.claim_list_mine = function(params = {}) {
   });
 };
 
+lbry.claim_abandon = function(params = {}) {
+  return new Promise((resolve, reject) => {
+    apiCall("claim_abandon", params, resolve, reject);
+  });
+};
+
 lbry._resolveXhrs = {};
 lbry.resolve = function(params = {}) {
   return new Promise((resolve, reject) => {

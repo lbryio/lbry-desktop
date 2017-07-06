@@ -3,7 +3,7 @@ import { Modal } from "component/modal";
 import { Line } from "rc-progress";
 import Link from "component/link";
 
-class DownloadingModal extends React.PureComponent {
+class ModalDownloading extends React.PureComponent {
   render() {
     const {
       downloadProgress,
@@ -59,4 +59,4 @@ class DownloadingModal extends React.PureComponent {
   }
 }
 
-export default DownloadingModal;
+export default ModalDownloading;

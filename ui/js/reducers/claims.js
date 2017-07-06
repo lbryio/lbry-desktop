@@ -80,6 +80,29 @@ reducers[types.FETCH_CHANNEL_CLAIMS_COMPLETED] = function(state, action) {
   });
 };
 
+reducers[types.ABANDON_CLAIM_COMPLETED] = function(state, action) {
+  const { claimId } = action.data;
+  const myClaims = new Set(state.myClaims);
+  const byId = Object.assign({}, state.byId);
+  const claimsByUri = Object.assign({}, state.claimsByUri);
+  const uris = [];
+
+  Object.keys(claimsByUri).forEach(uri => {
+    if (claimsByUri[uri] === claimId) {
+      delete claimsByUri[uri];
+    }
+  });
+
+  delete byId[claimId];
+  myClaims.delete(claimId);
+
+  return Object.assign({}, state, {
+    myClaims,
+    byId,
+    claimsByUri,
+  });
+};
+
 export default function reducer(state = defaultState, action) {
   const handler = reducers[action.type];
   if (handler) return handler(state, action);

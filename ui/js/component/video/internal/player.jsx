@@ -1,7 +1,9 @@
+const { remote } = require("electron");
 import React from "react";
 import { Thumbnail } from "component/common";
 import player from "render-media";
 import fs from "fs";
+import { setSession, getSession } from "utils";
 import LoadingScreen from "./loading-screen";
 
 class VideoPlayer extends React.PureComponent {
@@ -15,6 +17,8 @@ class VideoPlayer extends React.PureComponent {
       startedPlaying: false,
       unplayable: false,
     };
+
+    this.togglePlayListener = this.togglePlay.bind(this);
   }
 
   componentDidMount() {
@@ -27,6 +31,15 @@ class VideoPlayer extends React.PureComponent {
     };
     const renderMediaCallback = err => {
       if (err) this.setState({ unplayable: true });
+    };
+    // Handle fullscreen change for the Windows platform
+    const win32FullScreenChange = e => {
+      const win = remote.BrowserWindow.getFocusedWindow();
+      if ("win32" === process.platform) {
+        win.setMenu(
+          document.webkitIsFullScreen ? null : remote.Menu.getApplicationMenu()
+        );
+      }
     };
 
     // use renderAudio override for mp3
@@ -41,8 +54,10 @@ class VideoPlayer extends React.PureComponent {
       );
     }
 
+    document.addEventListener("keydown", this.togglePlayListener);
     const mediaElement = this.refs.media.children[0];
     if (mediaElement) {
+      mediaElement.addEventListener("click", this.togglePlayListener);
       mediaElement.addEventListener(
         "loadedmetadata",
         loadedMetadata.bind(this),
@@ -50,6 +65,22 @@ class VideoPlayer extends React.PureComponent {
           once: true,
         }
       );
+      mediaElement.addEventListener(
+        "webkitfullscreenchange",
+        win32FullScreenChange.bind(this)
+      );
+      mediaElement.addEventListener("volumechange", () => {
+        setSession("prefs_volume", mediaElement.volume);
+      });
+      mediaElement.volume = this.getPreferredVolume();
+    }
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener("keydown", this.togglePlayListener);
+    const mediaElement = this.refs.media.children[0];
+    if (mediaElement) {
+      mediaElement.removeEventListener("click", this.togglePlayListener);
     }
   }
 
@@ -60,6 +91,30 @@ class VideoPlayer extends React.PureComponent {
     audio.controls = true;
     audio.src = downloadPath;
     container.appendChild(audio);
+  }
+
+  togglePlay(event) {
+    // ignore all events except click and spacebar keydown, or input events in a form control
+    if (
+      "keydown" === event.type &&
+      ("Space" !== event.code || "input" === event.target.tagName.toLowerCase())
+    ) {
+      return;
+    }
+    event.preventDefault();
+    const mediaElement = this.refs.media.children[0];
+    if (mediaElement) {
+      if (!mediaElement.paused) {
+        mediaElement.pause();
+      } else {
+        mediaElement.play();
+      }
+    }
+  }
+
+  getPreferredVolume() {
+    const volumePreference = parseFloat(getSession("prefs_volume"));
+    return isNaN(volumePreference) ? 1 : volumePreference;
   }
 
   componentDidUpdate() {
