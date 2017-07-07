@@ -86,6 +86,7 @@ class SettingsPage extends React.PureComponent {
   }
 
   onLanguageChange(e) {
+    console.log(e);
     this.props.changeLanguage(e.target.value);
   }
 
@@ -165,9 +166,7 @@ class SettingsPage extends React.PureComponent {
                 type="radio"
                 name="language"
                 label={__("English")}
-                onChange={() => {
-                  this.onLanguageChange.bind(this);
-                }}
+                onChange={this.onLanguageChange.bind(this)}
                 defaultChecked={this.state.language == "en"}
               />
             </div>
@@ -178,9 +177,7 @@ class SettingsPage extends React.PureComponent {
                   name="language"
                   key={dLang}
                   label={window.app.i18n.resLang(dLang)}
-                  onChange={() => {
-                    this.onLanguageChange.bind(this);
-                  }}
+                  onChange={this.onLanguageChange.bind(this)}
                   defaultChecked={this.state.language == dLang}
                 />
               </div>
