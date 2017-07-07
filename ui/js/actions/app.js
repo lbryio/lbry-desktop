@@ -253,6 +253,6 @@ export function doChangeLanguage(newLanguage) {
   app.i18n.setLocale(newLanguage);
   return {
     type: types.CHANGE_LANGUAGE,
-    data: { newLanguage: newLanguage }
-  }
+    data: { newLanguage: newLanguage },
+  };
 }

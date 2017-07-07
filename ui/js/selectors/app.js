@@ -194,5 +194,5 @@ export const selectBadgeNumber = createSelector(
 
 export const selectCurrentLanguage = createSelector(
   _selectState,
-  (state) => state.currentLanguage || "en"
-)
+  state => state.currentLanguage || "en"
+);

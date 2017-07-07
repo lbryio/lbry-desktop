@@ -86,7 +86,7 @@ class SettingsPage extends React.PureComponent {
   }
 
   onLanguageChange(e) {
-    this.props.changeLanguage(e.target.value)
+    this.props.changeLanguage(e.target.value);
   }
 
   // onLanguageChange(language) {
@@ -166,27 +166,27 @@ class SettingsPage extends React.PureComponent {
                 name="language"
                 label={__("English")}
                 onChange={() => {
-                this.onLanguageChange.bind(this);
+                  this.onLanguageChange.bind(this);
                 }}
                 defaultChecked={this.state.language == "en"}
               />
             </div>
-          {window.app.i18n.localLanguages.map((dLang) => (
-          <div key={dLang} className="form-row">
-            <FormField
-              type="radio"
-              name="language"
-              key={dLang}
-              label={window.app.i18n.resLang(dLang)}
-              onChange={() => {
-              this.onLanguageChange.bind(this);
-              }}
-              defaultChecked={this.state.language == dLang}
-            />
+            {window.app.i18n.localLanguages.map(dLang =>
+              <div key={dLang} className="form-row">
+                <FormField
+                  type="radio"
+                  name="language"
+                  key={dLang}
+                  label={window.app.i18n.resLang(dLang)}
+                  onChange={() => {
+                    this.onLanguageChange.bind(this);
+                  }}
+                  defaultChecked={this.state.language == dLang}
+                />
+              </div>
+            )}
           </div>
-          ))}
-      </div>
-     </section>
+        </section>
         <section className="card">
           <div className="card__content">
             <h3>{__("Download Directory")}</h3>
