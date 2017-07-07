@@ -1,5 +1,6 @@
 import * as types from "constants/action_types";
 import lbry from "lbry";
+import getIncludedDaemonVersionInfo from "utils";
 import {
   selectUpdateUrl,
   selectUpgradeDownloadPath,
@@ -222,6 +223,30 @@ export function doCheckUpgradeAvailable() {
   };
 }
 
+export function doCheckDaemonVersion() {
+  return function(dispatch, getState) {
+    lbry.version().then(({ lbrynet_version }) => {
+      if (
+        utils.getIncludedDaemonVersionInfo()["lbrynet_version"] ==
+        lbrynet_version
+      ) {
+        dispatch({
+          type: types.OPEN_MODAL,
+          data: {
+            modal: "incompatibleDaemon",
+          },
+        });
+      }
+    });
+  };
+}
+
+export function doSkipWrongDaemonNotice() {
+  return {
+    type: types.SKIP_WRONG_DAEMON_NOTICE,
+  };
+}
+
 export function doAlertError(errorList) {
   return function(dispatch, getState) {
     const state = getState();
@@ -267,5 +292,11 @@ export function doClearCache() {
     window.cacheStore.purge();
 
     return Promise.resolve();
+  };
+}
+
+export function doQuit() {
+  return function(dispatch, getState) {
+    app.quit();
   };
 }
