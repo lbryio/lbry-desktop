@@ -1,17 +1,9 @@
 import React from "react";
 import { connect } from "react-redux";
 import { doClearCache, doChangeLanguage } from "actions/app";
-import {
-  doSetDaemonSetting,
-  doSetClientSetting,
-} from "actions/settings";
-import {
-  selectDaemonSettings,
-  selectShowNsfw,
-} from "selectors/settings";
-import {
-  selectCurrentLanguage,
-} from "selectors/app"
+import { doSetDaemonSetting, doSetClientSetting } from "actions/settings";
+import { selectDaemonSettings, selectShowNsfw } from "selectors/settings";
+import { selectCurrentLanguage } from "selectors/app";
 import SettingsPage from "./view";
 
 const select = state => ({
