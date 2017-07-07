@@ -5,6 +5,7 @@ const reducers = {};
 const defaultState = {
   clientSettings: {
     showNsfw: lbry.getClientSetting("showNsfw"),
+    language: lbry.getClientSetting("language"),
   },
 };
 

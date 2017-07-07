@@ -85,10 +85,8 @@ class SettingsPage extends React.PureComponent {
     this.props.setClientSetting("showNsfw", event.target.checked);
   }
 
-  onLanguageChange(language) {
-    lbry.setClientSetting('language', language);
-    window.app.i18n.setLocale(language);
-    this.setState({language: language})
+  onLanguageChange(e) {
+    this.props.changeLanguage(e.target.value)
   }
 
   // onLanguageChange(language) {
@@ -168,7 +166,7 @@ class SettingsPage extends React.PureComponent {
                 name="language"
                 label={__("English")}
                 onChange={() => {
-                this.onLanguageChange("en");
+                this.onLanguageChange.bind(this);
                 }}
                 defaultChecked={this.state.language == "en"}
               />
@@ -181,7 +179,7 @@ class SettingsPage extends React.PureComponent {
               key={dLang}
               label={window.app.i18n.resLang(dLang)}
               onChange={() => {
-              this.onLanguageChange(dLang);
+              this.onLanguageChange.bind(this);
               }}
               defaultChecked={this.state.language == dLang}
             />
