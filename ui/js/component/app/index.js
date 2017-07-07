@@ -6,6 +6,7 @@ import {
   doCheckUpgradeAvailable,
   doAlertError,
   doRecordScroll,
+  doCheckDaemonVersion,
 } from "actions/app";
 import { doUpdateBalance } from "actions/wallet";
 import App from "./view";
@@ -17,6 +18,7 @@ const select = state => ({
 const perform = dispatch => ({
   alertError: errorList => dispatch(doAlertError(errorList)),
   checkUpgradeAvailable: () => dispatch(doCheckUpgradeAvailable()),
+  checkDaemonVersion: () => dispatch(doCheckDaemonVersion()),
   updateBalance: balance => dispatch(doUpdateBalance(balance)),
   recordScroll: scrollPosition => dispatch(doRecordScroll(scrollPosition)),
 });

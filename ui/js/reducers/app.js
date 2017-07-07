@@ -17,6 +17,7 @@ const defaultState = {
   currentPath: currentPath(),
   platform: process.platform,
   upgradeSkipped: sessionStorage.getItem("upgradeSkipped"),
+  wrongDaemonNoticeSkipped: false,
   daemonReady: false,
   hasSignature: false,
   badgeNumber: 0,
@@ -68,6 +69,13 @@ reducers[types.SKIP_UPGRADE] = function(state, action) {
 reducers[types.UPDATE_VERSION] = function(state, action) {
   return Object.assign({}, state, {
     version: action.data.version,
+  });
+};
+
+reducers[types.SKIP_WRONG_DAEMON_NOTICE] = function(state, action) {
+  return Object.assign({}, state, {
+    skipWrongDaemonNotice: true,
+    modal: null,
   });
 };
 
