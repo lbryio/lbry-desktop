@@ -3,7 +3,7 @@ import rewards from "rewards";
 import { connect } from "react-redux";
 import { doFetchClaimListMine } from "actions/content";
 import {
-  selectMyClaims,
+  selectMyClaimsWithoutChannels,
   selectIsFetchingClaimListMine,
 } from "selectors/claims";
 import { doClaimRewardType } from "actions/rewards";
@@ -12,7 +12,7 @@ import { doCancelAllResolvingUris } from "actions/content";
 import FileListPublished from "./view";
 
 const select = state => ({
-  claims: selectMyClaims(state),
+  claims: selectMyClaimsWithoutChannels(state),
   isFetching: selectIsFetchingClaimListMine(state),
 });
 

@@ -110,20 +110,35 @@ export const selectMyClaimsRaw = createSelector(
   state => new Set(state.myClaims)
 );
 
+export const selectAbandoningIds = createSelector(_selectState, state =>
+  Object.keys(state.abandoningById || {})
+);
+
+export const selectPendingClaims = createSelector(_selectState, state =>
+  Object.values(state.pendingById || {})
+);
+
 export const selectMyClaims = createSelector(
   selectMyClaimsRaw,
   selectClaimsById,
-  (myClaimIds, byId) => {
+  selectAbandoningIds,
+  selectPendingClaims,
+  (myClaimIds, byId, abandoningIds, pendingClaims) => {
     const claims = [];
 
     myClaimIds.forEach(id => {
       const claim = byId[id];
 
-      if (claim) claims.push(claim);
+      if (claim && abandoningIds.indexOf(id) == -1) claims.push(claim);
     });
 
-    return claims;
+    return [...claims, ...pendingClaims];
   }
+);
+
+export const selectMyClaimsWithoutChannels = createSelector(
+  selectMyClaims,
+  myClaims => myClaims.filter(claim => !claim.name.match(/^@/))
 );
 
 export const selectMyClaimsOutpoints = createSelector(

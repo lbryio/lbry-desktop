@@ -873,7 +873,11 @@ class PublishForm extends React.PureComponent {
               onClick={event => {
                 this.handleSubmit(event);
               }}
-              disabled={this.state.submitting}
+              disabled={
+                this.state.submitting ||
+                (this.state.uri &&
+                  this.props.resolvingUris.indexOf(this.state.uri) !== -1)
+              }
             />
             <Link
               button="cancel"

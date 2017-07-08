@@ -96,7 +96,6 @@ class FileList extends React.PureComponent {
           <FormField type="select" onChange={this.handleSortChanged.bind(this)}>
             <option value="date">{__("Date")}</option>
             <option value="title">{__("Title")}</option>
-            <option value="filename">{__("File name")}</option>
           </FormField>
         </span>
         {content}

@@ -396,14 +396,16 @@ export function doPublish(params) {
     } else {
       uri = lbryuri.build({ name: name }, false);
     }
+    const fakeId = "pending";
     const pendingPublish = {
       name,
       channel_name,
-      claim_id: "pending_claim_" + uri,
+      claim_id: fakeId,
       txid: "pending_" + uri,
       nout: 0,
-      outpoint: "pending_" + uri + ":0",
+      outpoint: fakeId + ":0",
       time: Date.now(),
+      pending: true,
     };
 
     dispatch({
