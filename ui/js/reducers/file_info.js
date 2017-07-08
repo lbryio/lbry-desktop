@@ -138,39 +138,6 @@ reducers[types.LOADING_VIDEO_FAILED] = function(state, action) {
   });
 };
 
-reducers[types.PUBLISH_STARTED] = function(state, action) {
-  const { pendingPublish } = action.data;
-  const pendingByOutpoint = Object.assign({}, state.pendingByOutpoint);
-
-  pendingByOutpoint[pendingPublish.outpoint] = pendingPublish;
-
-  return Object.assign({}, state, {
-    pendingByOutpoint,
-  });
-};
-
-reducers[types.PUBLISH_COMPLETED] = function(state, action) {
-  const { pendingPublish } = action.data;
-  const pendingByOutpoint = Object.assign({}, state.pendingByOutpoint);
-
-  delete pendingByOutpoint[pendingPublish.outpoint];
-
-  return Object.assign({}, state, {
-    pendingByOutpoint,
-  });
-};
-
-reducers[types.PUBLISH_FAILED] = function(state, action) {
-  const { pendingPublish } = action.data;
-  const pendingByOutpoint = Object.assign({}, state.pendingByOutpoint);
-
-  delete pendingByOutpoint[pendingPublish.outpoint];
-
-  return Object.assign({}, state, {
-    pendingByOutpoint,
-  });
-};
-
 export default function reducer(state = defaultState, action) {
   const handler = reducers[action.type];
   if (handler) return handler(state, action);

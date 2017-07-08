@@ -40,19 +40,39 @@ reducers[types.FETCH_CLAIM_LIST_MINE_STARTED] = function(state, action) {
 
 reducers[types.FETCH_CLAIM_LIST_MINE_COMPLETED] = function(state, action) {
   const { claims } = action.data;
-  const myClaims = new Set(state.myClaims);
   const byUri = Object.assign({}, state.claimsByUri);
   const byId = Object.assign({}, state.byId);
+  const pendingById = Object.assign({}, state.pendingById);
+
+  const myClaims = new Set(claims.map(claim => claim.claim_id));
 
   claims.forEach(claim => {
-    myClaims.add(claim.claim_id);
     byId[claim.claim_id] = claim;
+
+    const pending = Object.values(pendingById).find(pendingClaim => {
+      return (
+        pendingClaim.name == claim.name &&
+        pendingClaim.channel_name == claim.channel_name
+      );
+    });
+
+    if (pending) {
+      delete pendingById[pending.claim_id];
+    }
   });
+
+  // Remove old timed out pending publishes
+  const old = Object.values(pendingById)
+    .filter(pendingClaim => Date.now() - pendingClaim.time >= 20 * 60 * 1000)
+    .forEach(pendingClaim => {
+      delete pendingById[pendingClaim.claim_id];
+    });
 
   return Object.assign({}, state, {
     isFetchingClaimListMine: false,
     myClaims: myClaims,
     byId,
+    pendingById,
   });
 };
 
@@ -88,6 +108,17 @@ reducers[types.FETCH_CHANNEL_CLAIMS_COMPLETED] = function(state, action) {
 
   return Object.assign({}, state, {
     claimsByChannel: newClaims,
+  });
+};
+
+reducers[types.ABANDON_CLAIM_STARTED] = function(state, action) {
+  const { claimId } = action.data;
+  const abandoningById = Object.assign({}, state.abandoningById);
+
+  abandoningById[claimId] = true;
+
+  return Object.assign({}, state, {
+    abandoningById,
   });
 };
 
@@ -128,17 +159,42 @@ reducers[types.CREATE_CHANNEL_COMPLETED] = function(state, action) {
   });
 };
 
+reducers[types.PUBLISH_STARTED] = function(state, action) {
+  const { pendingPublish } = action.data;
+  const pendingById = Object.assign({}, state.pendingById);
+
+  pendingById[pendingPublish.claim_id] = pendingPublish;
+
+  return Object.assign({}, state, {
+    pendingById,
+  });
+};
+
 reducers[types.PUBLISH_COMPLETED] = function(state, action) {
-  const { claim } = action.data;
+  const { claim, pendingPublish } = action.data;
   const byId = Object.assign({}, state.byId);
   const myClaims = new Set(state.myClaims);
+  const pendingById = Object.assign({}, state.pendingById);
 
   byId[claim.claim_id] = claim;
   myClaims.add(claim.claim_id);
+  delete pendingById[pendingPublish.claim_id];
 
   return Object.assign({}, state, {
     byId,
     myClaims,
+    pendingById,
+  });
+};
+
+reducers[types.PUBLISH_FAILED] = function(state, action) {
+  const { pendingPublish } = action.data;
+  const pendingById = Object.assign({}, state.pendingById);
+
+  delete pendingById[pendingPublish.claim_id];
+
+  return Object.assign({}, state, {
+    pendingById,
   });
 };
 
