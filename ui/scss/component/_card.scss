@@ -126,6 +126,7 @@ $height-card-small: $spacing-vertical * 15;
     vertical-align: top;
     display: inline-block;
     margin-right: $spacing-vertical / 3;
+    transition: all .1s ease-in-out;
   }
   + .card-row {
     margin-top: $spacing-vertical * 1/3;
