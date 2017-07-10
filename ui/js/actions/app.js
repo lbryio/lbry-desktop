@@ -1,6 +1,5 @@
 import * as types from "constants/action_types";
 import lbry from "lbry";
-import { getIncludedDaemonVersionInfo } from "utils";
 import {
   selectUpdateUrl,
   selectUpgradeDownloadPath,
@@ -17,9 +16,9 @@ import { doFileList } from "actions/file_info";
 
 const { remote, ipcRenderer, shell } = require("electron");
 const path = require("path");
-const app = require("electron").remote.app;
 const { download } = remote.require("electron-dl");
 const fs = remote.require("fs");
+const { config } = require("../app");
 
 const queryStringFromParams = params => {
   return Object.keys(params).map(key => `${key}=${params[key]}`).join("&");
@@ -138,7 +137,7 @@ export function doDownloadUpgrade() {
   return function(dispatch, getState) {
     const state = getState();
     // Make a new directory within temp directory so the filename is guaranteed to be available
-    const dir = fs.mkdtempSync(app.getPath("temp") + require("path").sep);
+    const dir = fs.mkdtempSync(remote.app.getPath("temp") + require("path").sep);
     const upgradeFilename = selectUpgradeFilename(state);
 
     let options = {
@@ -226,9 +225,7 @@ export function doCheckUpgradeAvailable() {
 export function doCheckDaemonVersion() {
   return function(dispatch, getState) {
     lbry.version().then(({ lbrynet_version }) => {
-      if (
-        getIncludedDaemonVersionInfo()["lbrynet_version"] != lbrynet_version
-      ) {
+      if (config.appConfig.daemonVersion != lbrynet_version) {
         dispatch({
           type: types.OPEN_MODAL,
           data: {
@@ -296,6 +293,6 @@ export function doClearCache() {
 
 export function doQuit() {
   return function(dispatch, getState) {
-    app.quit();
+    remote.app.quit();
   };
 }
