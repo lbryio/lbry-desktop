@@ -4,7 +4,7 @@ import { CreditAmount } from "component/common";
 import Link from "component/link";
 import RewardLink from "component/rewardLink";
 
-class WelcomeModal extends React.PureComponent {
+class ModalWelcome extends React.PureComponent {
   render() {
     const { closeModal, hasClaimed, isRewardApproved, reward } = this.props;
 
@@ -78,4 +78,4 @@ class WelcomeModal extends React.PureComponent {
   }
 }
 
-export default WelcomeModal;
+export default ModalWelcome;

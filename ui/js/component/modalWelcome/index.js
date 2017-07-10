@@ -8,7 +8,7 @@ import {
   makeSelectClaimRewardError,
   makeSelectRewardByType,
 } from "selectors/rewards";
-import WelcomeModal from "./view";
+import ModalWelcome from "./view";
 
 const select = (state, props) => {
   const selectHasClaimed = makeSelectHasClaimedReward(),
@@ -25,4 +25,4 @@ const perform = dispatch => ({
   closeModal: () => dispatch(doCloseModal()),
 });
 
-export default connect(select, perform)(WelcomeModal);
+export default connect(select, perform)(ModalWelcome);

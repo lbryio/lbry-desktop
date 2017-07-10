@@ -3,8 +3,8 @@ import Router from "component/router";
 import Header from "component/header";
 import ModalError from "component/modalError";
 import ModalDownloading from "component/modalDownloading";
-import UpgradeModal from "component/modalUpgrade";
-import WelcomeModal from "component/modalWelcome";
+import ModalUpgrade from "component/modalUpgrade";
+import ModalWelcome from "component/modalWelcome";
 import lbry from "lbry";
 import { Line } from "rc-progress";
 
@@ -32,10 +32,10 @@ class App extends React.PureComponent {
         <div id="main-content">
           <Router />
         </div>
-        {modal == "upgrade" && <UpgradeModal />}
+        {modal == "upgrade" && <ModalUpgrade />}
         {modal == "downloading" && <ModalDownloading />}
         {modal == "error" && <ModalError />}
-        {modal == "welcome" && <WelcomeModal />}
+        {modal == "welcome" && <ModalWelcome />}
       </div>
     );
   }
