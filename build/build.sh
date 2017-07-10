@@ -85,6 +85,17 @@ wget --quiet "$DAEMON_URL" -O "$BUILD_DIR/daemon.zip"
 unzip "$BUILD_DIR/daemon.zip" -d "$ROOT/app/dist/"
 rm "$BUILD_DIR/daemon.zip"
 
+
+###################
+#   Config file   #
+###################
+
+cat << EOF > "$ROOT/app/config.json"
+{
+  "daemonVersion": "$DAEMON_VER"
+}
+EOF
+
 ###################
 #  Build the app  #
 ###################
