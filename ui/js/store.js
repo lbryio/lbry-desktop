@@ -90,6 +90,8 @@ const saveClaimsFilter = createFilter("claims", [
   "byId",
   "claimsByUri",
   "myClaims",
+  "myChannelClaims",
+  "pendingById",
 ]);
 
 const persistOptions = {
@@ -97,7 +99,7 @@ const persistOptions = {
   // Order is important. Needs to be compressed last or other transforms can't
   // read the data
   transforms: [saveClaimsFilter, compressor],
-  debounce: 1000,
+  debounce: 10000,
   storage: localForage,
 };
 window.cacheStore = persistStore(reduxStore, persistOptions);

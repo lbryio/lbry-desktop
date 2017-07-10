@@ -3,11 +3,11 @@ import lbry from "lbry";
 import { doFetchClaimListMine } from "actions/content";
 import {
   selectClaimsByUri,
-  selectClaimListMineIsPending,
+  selectIsFetchingClaimListMine,
   selectMyClaimsOutpoints,
 } from "selectors/claims";
 import {
-  selectFileListIsPending,
+  selectIsFetchingFileList,
   selectFileInfosByOutpoint,
   selectUrisLoading,
 } from "selectors/file_info";
@@ -48,9 +48,9 @@ export function doFetchFileInfo(uri) {
 export function doFileList() {
   return function(dispatch, getState) {
     const state = getState();
-    const isPending = selectFileListIsPending(state);
+    const isFetching = selectIsFetchingFileList(state);
 
-    if (!isPending) {
+    if (!isFetching) {
       dispatch({
         type: types.FILE_LIST_STARTED,
       });
@@ -102,14 +102,20 @@ export function doDeleteFile(outpoint, deleteFromComputer, abandonClaim) {
           },
         });
 
-        const success = () => {
-          dispatch({
-            type: types.ABANDON_CLAIM_COMPLETED,
-            data: {
-              claimId: fileInfo.claim_id,
-            },
-          });
-        };
+        // We need to run this after a few seconds or the claim gets added back
+        // to the store again by an already running fetch claims query.
+        const success = setTimeout(
+          () => {
+            dispatch({
+              type: types.ABANDON_CLAIM_COMPLETED,
+              data: {
+                claimId: fileInfo.claim_id,
+              },
+            });
+          },
+          10000,
+          { once: true }
+        );
         lbry.claim_abandon({ claim_id: fileInfo.claim_id }).then(success);
       }
     }
@@ -128,10 +134,10 @@ export function doDeleteFile(outpoint, deleteFromComputer, abandonClaim) {
 export function doFetchFileInfosAndPublishedClaims() {
   return function(dispatch, getState) {
     const state = getState(),
-      isClaimListMinePending = selectClaimListMineIsPending(state),
-      isFileInfoListPending = selectFileListIsPending(state);
+      isFetchingClaimListMine = selectIsFetchingClaimListMine(state),
+      isFetchingFileInfo = selectIsFetchingFileList(state);
 
-    dispatch(doFetchClaimListMine());
-    dispatch(doFileList());
+    if (!isFetchingClaimListMine) dispatch(doFetchClaimListMine());
+    if (!isFetchingFileInfo) dispatch(doFileList());
   };
 }

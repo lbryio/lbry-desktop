@@ -1,24 +1,24 @@
 import React from "react";
 import rewards from "rewards";
 import { connect } from "react-redux";
-import { doFetchFileInfosAndPublishedClaims } from "actions/file_info";
+import { doFetchClaimListMine } from "actions/content";
 import {
-  selectFileInfosPublished,
-  selectFileListDownloadedOrPublishedIsPending,
-} from "selectors/file_info";
+  selectMyClaimsWithoutChannels,
+  selectIsFetchingClaimListMine,
+} from "selectors/claims";
 import { doClaimRewardType } from "actions/rewards";
 import { doNavigate } from "actions/app";
 import { doCancelAllResolvingUris } from "actions/content";
 import FileListPublished from "./view";
 
 const select = state => ({
-  fileInfos: selectFileInfosPublished(state),
-  isPending: selectFileListDownloadedOrPublishedIsPending(state),
+  claims: selectMyClaimsWithoutChannels(state),
+  isFetching: selectIsFetchingClaimListMine(state),
 });
 
 const perform = dispatch => ({
   navigate: path => dispatch(doNavigate(path)),
-  fetchFileListPublished: () => dispatch(doFetchFileInfosAndPublishedClaims()),
+  fetchClaims: () => dispatch(doFetchClaimListMine()),
   claimFirstPublishReward: () =>
     dispatch(doClaimRewardType(rewards.TYPE_FIRST_PUBLISH)),
   cancelResolvingUris: () => dispatch(doCancelAllResolvingUris()),

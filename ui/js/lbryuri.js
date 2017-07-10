@@ -203,6 +203,8 @@ lbryuri.build = function(uriObj, includeProto = true, allowExtraProps = false) {
 /* Takes a parseable LBRY URI and converts it to standard, canonical format (currently this just
  * consists of adding the lbry:// prefix if needed) */
 lbryuri.normalize = function(uri) {
+  if (uri.match(/pending_claim/)) return uri;
+
   const { name, path, bidPosition, claimSequence, claimId } = lbryuri.parse(
     uri
   );
