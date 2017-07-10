@@ -5,6 +5,7 @@ import { FormField, FormRow } from "component/form.js";
 import Link from "component/link";
 import rewards from "rewards";
 import Modal from "component/modal";
+import { BusyMessage } from "component/common";
 
 class PublishPage extends React.PureComponent {
   constructor(props) {
@@ -13,7 +14,6 @@ class PublishPage extends React.PureComponent {
     this._requiredFields = ["meta_title", "name", "bid", "tos_agree"];
 
     this.state = {
-      channels: null,
       rawName: "",
       name: "",
       bid: 10,
@@ -41,15 +41,18 @@ class PublishPage extends React.PureComponent {
   }
 
   _updateChannelList(channel) {
+    const { fetchingChannels, fetchChannelListMine } = this.props;
+
+    if (!fetchingChannels) fetchChannelListMine();
     // Calls API to update displayed list of channels. If a channel name is provided, will select
     // that channel at the same time (used immediately after creating a channel)
-    lbry.channel_list_mine().then(channels => {
-      this.props.claimFirstChannelReward();
-      this.setState({
-        channels: channels,
-        ...(channel ? { channel } : {}),
-      });
-    });
+    // lbry.channel_list_mine().then(channels => {
+    //   this.props.claimFirstChannelReward();
+    //   this.setState({
+    //     channels: channels,
+    //     ...(channel ? { channel } : {}),
+    //   });
+    // });
   }
 
   handleSubmit(event) {
@@ -465,10 +468,6 @@ class PublishPage extends React.PureComponent {
   }
 
   render() {
-    if (this.state.channels === null) {
-      return null;
-    }
-
     const lbcInputHelp = __(
       "This LBC remains yours and the deposit can be undone at any time."
     );
@@ -729,22 +728,26 @@ class PublishPage extends React.PureComponent {
               </div>
             </div>
             <div className="card__content">
-              <FormRow
-                type="select"
-                tabIndex="1"
-                onChange={event => {
-                  this.handleChannelChange(event);
-                }}
-                value={this.state.channel}
-              >
-                <option key="anonymous" value="anonymous">
-                  {__("Anonymous")}
-                </option>
-                {this.state.channels.map(({ name }) =>
-                  <option key={name} value={name}>{name}</option>
-                )}
-                <option key="new" value="new">{__("New identity...")}</option>
-              </FormRow>
+              {this.props.fetchingChannels
+                ? <BusyMessage message="Fetching identities" />
+                : <FormRow
+                    type="select"
+                    tabIndex="1"
+                    onChange={event => {
+                      this.handleChannelChange(event);
+                    }}
+                    value={this.state.channel}
+                  >
+                    <option key="anonymous" value="anonymous">
+                      {__("Anonymous")}
+                    </option>
+                    {this.props.channels.map(({ name }) =>
+                      <option key={name} value={name}>{name}</option>
+                    )}
+                    <option key="new" value="new">
+                      {__("New identity...")}
+                    </option>
+                  </FormRow>}
             </div>
             {this.state.channel == "new"
               ? <div className="card__content">
