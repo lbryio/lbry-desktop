@@ -79,7 +79,8 @@ if $OSX; then
 else
   OSNAME="linux"
 fi
-DAEMON_URL="$(cat "$BUILD_DIR/DAEMON_URL" | sed "s/OSNAME/${OSNAME}/")"
+DAEMON_VER=$(cat "$BUILD_DIR/DAEMON_VER")
+DAEMON_URL="https://github.com/lbryio/lbry/releases/download/v${DAEMON_VER}/lbrynet-daemon-v${DAEMON_VER}-${OSNAME}.zip"
 wget --quiet "$DAEMON_URL" -O "$BUILD_DIR/daemon.zip"
 unzip "$BUILD_DIR/daemon.zip" -d "$ROOT/app/dist/"
 rm "$BUILD_DIR/daemon.zip"
