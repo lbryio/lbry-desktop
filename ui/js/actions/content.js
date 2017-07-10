@@ -389,62 +389,19 @@ export function doCreateChannel(name, amount) {
 
 export function doPublish(params) {
   return function(dispatch, getState) {
-    let uri;
-    const { name, channel_name } = params;
-    if (channel_name) {
-      uri = lbryuri.build({ name: channel_name, path: name }, false);
-    } else {
-      uri = lbryuri.build({ name: name }, false);
-    }
-    const fakeId = "pending";
-    const pendingPublish = {
-      name,
-      channel_name,
-      claim_id: fakeId,
-      txid: "pending_" + uri,
-      nout: 0,
-      outpoint: fakeId + ":0",
-      time: Date.now(),
-      pending: true,
-    };
-
-    dispatch({
-      type: types.PUBLISH_STARTED,
-      data: {
-        params,
-        pendingPublish,
-      },
-    });
-
     return new Promise((resolve, reject) => {
       const success = claim => {
-        claim.name = params.name;
-        claim.channel_name = params.channel_name;
-        dispatch({
-          type: types.PUBLISH_COMPLETED,
-          data: {
-            claim,
-            uri,
-            pendingPublish,
-          },
-        });
-        dispatch(doFileList());
         resolve(claim);
-      };
-      const failure = error => {
-        dispatch({
-          type: types.PUBLISH_FAILED,
-          data: {
-            error,
-            params,
-            uri,
-            pendingPublish,
-          },
-        });
-        reject(error);
-      };
 
-      lbry.publish(params).then(success, failure);
+        if (claim === true) dispatch(doFetchClaimListMine());
+        else
+          setTimeout(() => dispatch(doFetchClaimListMine()), 20000, {
+            once: true,
+          });
+      };
+      const failure = err => reject(err);
+
+      lbry.publishDeprecated(params, null, success, failure);
     });
   };
 }

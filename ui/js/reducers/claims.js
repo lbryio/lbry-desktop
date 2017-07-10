@@ -159,45 +159,6 @@ reducers[types.CREATE_CHANNEL_COMPLETED] = function(state, action) {
   });
 };
 
-reducers[types.PUBLISH_STARTED] = function(state, action) {
-  const { pendingPublish } = action.data;
-  const pendingById = Object.assign({}, state.pendingById);
-
-  pendingById[pendingPublish.claim_id] = pendingPublish;
-
-  return Object.assign({}, state, {
-    pendingById,
-  });
-};
-
-reducers[types.PUBLISH_COMPLETED] = function(state, action) {
-  const { claim, pendingPublish } = action.data;
-  const byId = Object.assign({}, state.byId);
-  const myClaims = new Set(state.myClaims);
-  const pendingById = Object.assign({}, state.pendingById);
-
-  byId[claim.claim_id] = claim;
-  myClaims.add(claim.claim_id);
-  delete pendingById[pendingPublish.claim_id];
-
-  return Object.assign({}, state, {
-    byId,
-    myClaims,
-    pendingById,
-  });
-};
-
-reducers[types.PUBLISH_FAILED] = function(state, action) {
-  const { pendingPublish } = action.data;
-  const pendingById = Object.assign({}, state.pendingById);
-
-  delete pendingById[pendingPublish.claim_id];
-
-  return Object.assign({}, state, {
-    pendingById,
-  });
-};
-
 export default function reducer(state = defaultState, action) {
   const handler = reducers[action.type];
   if (handler) return handler(state, action);

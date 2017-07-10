@@ -86,13 +86,7 @@ const createStoreWithMiddleware = redux.compose(
 
 const reduxStore = createStoreWithMiddleware(enableBatching(reducers));
 const compressor = createCompressor();
-const saveClaimsFilter = createFilter("claims", [
-  "byId",
-  "claimsByUri",
-  "myClaims",
-  "myChannelClaims",
-  "pendingById",
-]);
+const saveClaimsFilter = createFilter("claims", ["byId", "claimsByUri"]);
 
 const persistOptions = {
   whitelist: ["claims"],

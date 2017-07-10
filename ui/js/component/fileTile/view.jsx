@@ -66,14 +66,7 @@ class FileTile extends React.PureComponent {
       ? metadata.title
       : lbryuri.parse(uri).contentName;
     const obscureNsfw = this.props.obscureNsfw && metadata && metadata.nsfw;
-    let onClick;
-    if (isClaimed) {
-      onClick = () => navigate("/show", { uri });
-    } else {
-      onClick = () => {
-        return false;
-      };
-    }
+    let onClick = () => navigate("/show", { uri });
 
     let description = "";
     if (isClaimed) {
