@@ -79,6 +79,9 @@ $card-link-scaling: 1.1;
 .card__link {
   display: block;
 }
+.card--link {
+  transition: transform 120ms ease-in-out;
+}
 .card--link:hover {
   position: relative;
   z-index: 1;

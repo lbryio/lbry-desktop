@@ -9,7 +9,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
 ## [Unreleased]
 ### Added
   * Added option to release claim when deleting a file
-  *
+  * Added transition to card hovers to smooth animation
 
 ### Changed
   *
