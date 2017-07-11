@@ -1,15 +1,11 @@
 import React from "react";
 import lbryuri from "lbryuri.js";
 import Link from "component/link";
-import {
-  Thumbnail,
-  TruncatedText,
-  Icon,
-  TruncatedMarkdown,
-} from "component/common";
+import { Thumbnail, TruncatedText, Icon } from "component/common";
 import FilePrice from "component/filePrice";
 import UriIndicator from "component/uriIndicator";
 import NsfwOverlay from "component/nsfwOverlay";
+import TruncatedMarkdown from "component/truncatedMarkdown";
 
 class FileCard extends React.PureComponent {
   constructor(props) {
