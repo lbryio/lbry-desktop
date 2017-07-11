@@ -380,7 +380,7 @@ export function doCreateChannel(name, amount) {
             resolve(channelClaim);
           },
           err => {
-            resolve(err);
+            reject(err);
           }
         );
     });
