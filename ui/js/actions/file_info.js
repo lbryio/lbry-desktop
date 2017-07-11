@@ -57,7 +57,7 @@ export function doFileList() {
 
       lbry.file_list().then(fileInfos => {
         dispatch({
-          type: types.FILE_LIST_COMPLETED,
+          type: types.FILE_LIST_SUCCEEDED,
           data: {
             fileInfos,
           },
@@ -107,7 +107,7 @@ export function doDeleteFile(outpoint, deleteFromComputer, abandonClaim) {
         const success = setTimeout(
           () => {
             dispatch({
-              type: types.ABANDON_CLAIM_COMPLETED,
+              type: types.ABANDON_CLAIM_SUCCEEDED,
               data: {
                 claimId: fileInfo.claim_id,
               },

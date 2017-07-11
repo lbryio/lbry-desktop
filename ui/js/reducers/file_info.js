@@ -10,7 +10,7 @@ reducers[types.FILE_LIST_STARTED] = function(state, action) {
   });
 };
 
-reducers[types.FILE_LIST_COMPLETED] = function(state, action) {
+reducers[types.FILE_LIST_SUCCEEDED] = function(state, action) {
   const { fileInfos } = action.data;
   const newByOutpoint = Object.assign({}, state.byOutpoint);
   const pendingByOutpoint = Object.assign({}, state.pendingByOutpoint);

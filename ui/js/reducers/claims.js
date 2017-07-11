@@ -122,7 +122,7 @@ reducers[types.ABANDON_CLAIM_STARTED] = function(state, action) {
   });
 };
 
-reducers[types.ABANDON_CLAIM_COMPLETED] = function(state, action) {
+reducers[types.ABANDON_CLAIM_SUCCEEDED] = function(state, action) {
   const { claimId } = action.data;
   const myClaims = new Set(state.myClaims);
   const byId = Object.assign({}, state.byId);
