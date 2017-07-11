@@ -102,20 +102,12 @@ export function doDeleteFile(outpoint, deleteFromComputer, abandonClaim) {
           },
         });
 
-        // We need to run this after a few seconds or the claim gets added back
-        // to the store again by an already running fetch claims query.
-        const success = setTimeout(
-          () => {
-            dispatch({
-              type: types.ABANDON_CLAIM_SUCCEEDED,
-              data: {
-                claimId: fileInfo.claim_id,
-              },
-            });
+        const success = dispatch({
+          type: types.ABANDON_CLAIM_SUCCEEDED,
+          data: {
+            claimId: fileInfo.claim_id,
           },
-          10000,
-          { once: true }
-        );
+        });
         lbry.claim_abandon({ claim_id: fileInfo.claim_id }).then(success);
       }
     }

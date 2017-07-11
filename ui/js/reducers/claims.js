@@ -43,8 +43,12 @@ reducers[types.FETCH_CLAIM_LIST_MINE_COMPLETED] = function(state, action) {
   const byUri = Object.assign({}, state.claimsByUri);
   const byId = Object.assign({}, state.byId);
   const pendingById = Object.assign({}, state.pendingById);
-
-  const myClaims = new Set(claims.map(claim => claim.claim_id));
+  const abandoningById = Object.assign({}, state.abandoningById);
+  const myClaims = new Set(
+    claims
+      .map(claim => claim.claim_id)
+      .filter(claimId => Object.keys(abandoningById).indexOf(claimId) === -1)
+  );
 
   claims.forEach(claim => {
     byId[claim.claim_id] = claim;
