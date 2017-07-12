@@ -876,7 +876,10 @@ class PublishForm extends React.PureComponent {
               disabled={
                 this.state.submitting ||
                 (this.state.uri &&
-                  this.props.resolvingUris.indexOf(this.state.uri) !== -1)
+                  this.props.resolvingUris.indexOf(this.state.uri) !== -1) ||
+                (this.claim() &&
+                  !this.topClaimIsMine() &&
+                  this.state.bid <= this.topClaimValue())
               }
             />
             <Link
