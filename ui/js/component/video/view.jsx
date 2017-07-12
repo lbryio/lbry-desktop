@@ -14,6 +14,13 @@ class Video extends React.PureComponent {
     };
   }
 
+  componentWillReceiveProps(nextProps) {
+    // reset playing state upon change path action
+    if (this.state.isPlaying) {
+      this.state.isPlaying = false;
+    }
+  }
+
   startPlaying() {
     this.setState({
       isPlaying: true,
