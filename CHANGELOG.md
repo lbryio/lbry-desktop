@@ -21,6 +21,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
   * Fixed bug with download notice when switching window focus
   * Fixed newly published files appearing twice
   * Fixed unconfirmed published files missing channel name
+  * Fixed old files from updated published claims appearing in downloaded list
 
 ### Deprecated
   *

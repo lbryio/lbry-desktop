@@ -3,6 +3,7 @@ import { createSelector } from "reselect";
 import {
   selectClaimsByUri,
   selectIsFetchingClaimListMine,
+  selectMyClaims,
   selectMyClaimsOutpoints,
 } from "selectors/claims";
 
@@ -76,19 +77,17 @@ export const selectFileInfosPendingPublish = createSelector(
 
 export const selectFileInfosDownloaded = createSelector(
   selectFileInfosByOutpoint,
-  selectMyClaimsOutpoints,
-  (byOutpoint, myClaimOutpoints) => {
-    const fileInfoList = [];
-    Object.values(byOutpoint).forEach(fileInfo => {
-      if (
+  selectMyClaims,
+  (byOutpoint, myClaims) => {
+    return Object.values(byOutpoint).filter(fileInfo => {
+      const myClaimIds = myClaims.map(claim => claim.claim_id);
+
+      return (
         fileInfo &&
-        myClaimOutpoints.indexOf(fileInfo.outpoint) === -1 &&
+        myClaimIds.indexOf(fileInfo.claim_id) === -1 &&
         (fileInfo.completed || fileInfo.written_bytes)
-      ) {
-        fileInfoList.push(fileInfo);
-      }
+      );
     });
-    return fileInfoList;
   }
 );
 

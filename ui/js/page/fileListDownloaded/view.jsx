@@ -12,6 +12,7 @@ import SubHeader from "component/subHeader";
 
 class FileListDownloaded extends React.PureComponent {
   componentWillMount() {
+    if (!this.props.isFetchingClaims) this.props.fetchClaims();
     if (!this.props.isFetching) this.props.fetchFileInfosDownloaded();
   }
 

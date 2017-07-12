@@ -81,7 +81,7 @@ class FileList extends React.PureComponent {
 
       content.push(
         <FileTile
-          key={uri}
+          key={fileInfo.outpoint || fileInfo.claim_id}
           uri={uri}
           hidePrice={true}
           showEmpty={this.props.fileTileShowEmpty}
