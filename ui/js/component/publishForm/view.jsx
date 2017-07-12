@@ -4,7 +4,6 @@ import lbryuri from "lbryuri";
 import { FormField, FormRow } from "component/form.js";
 import Link from "component/link";
 import Modal from "component/modal";
-import Notice from "component/notice";
 import { BusyMessage } from "component/common";
 import ChannelSection from "./internal/ChannelSection";
 
@@ -190,7 +189,7 @@ class PublishForm extends React.PureComponent {
     if (!claim) return true;
     if (!myClaimInfo) return false;
 
-    return myClaimInfo.amount >= claimInfo.amount;
+    return myClaimInfo.amount >= claim.amount;
   }
 
   myClaimInfo() {
@@ -453,11 +452,7 @@ class PublishForm extends React.PureComponent {
 
   getNameBidHelpText() {
     if (this.state.prefillDone) {
-      return (
-        <Notice>
-          {__("Existing claim data was prefilled")}
-        </Notice>
-      );
+      return __("Existing claim data was prefilled");
     }
 
     if (
@@ -472,13 +467,13 @@ class PublishForm extends React.PureComponent {
       return __("This URL is unused.");
     } else if (this.myClaimExists() && !this.state.prefillDone) {
       return (
-        <Notice>
+        <span>
           {__("You already have a claim with this name.")}{" "}
           <Link
             label={__("Use data from my existing claim")}
             onClick={() => this.handlePrefillClicked()}
           />
-        </Notice>
+        </span>
       );
     } else if (this.claim()) {
       if (this.topClaimValue() === 1) {
