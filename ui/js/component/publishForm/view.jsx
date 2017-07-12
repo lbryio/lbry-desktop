@@ -292,7 +292,6 @@ class PublishForm extends React.PureComponent {
       newState.licenseType = licenseType;
     }
 
-    console.log(newState);
     this.setState(newState);
   }
 
