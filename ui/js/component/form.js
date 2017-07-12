@@ -44,7 +44,7 @@ export class FormField extends React.PureComponent {
       this._element = SimpleMDE;
       this._type = "textarea";
       this._extraElementProps.options = {
-        hideIcons: ["guide", "heading", "image", "fullscreen"],
+        hideIcons: ["guide", "heading", "image", "fullscreen", "side-by-side"],
       };
     } else if (formFieldFileSelectorTypes.includes(this.props.type)) {
       this._element = "input";
