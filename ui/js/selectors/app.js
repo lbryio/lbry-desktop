@@ -191,3 +191,8 @@ export const selectBadgeNumber = createSelector(
   _selectState,
   state => state.badgeNumber
 );
+
+export const selectNavigatingBack = createSelector(
+  _selectState,
+  state => state.navigatingBack
+);

@@ -1,9 +1,9 @@
 import React from "react";
+import lbry from "lbry.js";
 import lbryio from "lbryio.js";
 import lbryuri from "lbryuri";
 import FileCard from "component/fileCard";
 import { BusyMessage } from "component/common.js";
-import { setSession, getSession } from "utils";
 import ToolTip from "component/tooltip.js";
 
 const FeaturedCategory = props => {
@@ -42,18 +42,22 @@ class DiscoverPage extends React.PureComponent {
   }
 
   componentDidMount() {
-    const scrollY = parseInt(getSession("prefs_scrolly"));
-    if (!isNaN(scrollY)) {
-      const restoreScrollPosition = () => {
-        window.scrollTo(0, scrollY);
-      };
-      setTimeout(restoreScrollPosition, 100);
+    if (this.props.isNavigatingBack) {
+      const scrollY = parseInt(lbry.getClientSetting("prefs_scrolly"));
+      if (!isNaN(scrollY)) {
+        const restoreScrollPosition = () => {
+          window.scrollTo(0, scrollY);
+        };
+        setTimeout(restoreScrollPosition, 100);
+      }
+
+      this.props.finishedNavigatingBack();
     }
     window.addEventListener("scroll", this.scrollListener);
   }
 
   handleScroll() {
-    setSession("prefs_scrolly", window.scrollY);
+    lbry.setClientSetting("prefs_scrolly", window.scrollY);
   }
 
   componentWillUnmount() {
