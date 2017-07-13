@@ -6,14 +6,15 @@ const defaultState = {};
 
 reducers[types.FILE_LIST_STARTED] = function(state, action) {
   return Object.assign({}, state, {
-    isFileListPending: true,
+    isFetchingFileList: true,
   });
 };
 
-reducers[types.FILE_LIST_COMPLETED] = function(state, action) {
+reducers[types.FILE_LIST_SUCCEEDED] = function(state, action) {
   const { fileInfos } = action.data;
-
   const newByOutpoint = Object.assign({}, state.byOutpoint);
+  const pendingByOutpoint = Object.assign({}, state.pendingByOutpoint);
+
   fileInfos.forEach(fileInfo => {
     const { outpoint } = fileInfo;
 
@@ -21,8 +22,9 @@ reducers[types.FILE_LIST_COMPLETED] = function(state, action) {
   });
 
   return Object.assign({}, state, {
-    isFileListPending: false,
+    isFetchingFileList: false,
     byOutpoint: newByOutpoint,
+    pendingByOutpoint,
   });
 };
 

@@ -223,45 +223,38 @@ lbry.publishDeprecated = function(
 ) {
   lbry.publish(params).then(
     result => {
-      if (returnedPending) {
-        return;
-      }
-
-      clearTimeout(returnPendingTimeout);
+      if (returnPendingTimeout) clearTimeout(returnPendingTimeout);
       publishedCallback(result);
     },
     err => {
-      if (returnedPending) {
-        return;
-      }
-
-      clearTimeout(returnPendingTimeout);
+      if (returnPendingTimeout) clearTimeout(returnPendingTimeout);
       errorCallback(err);
     }
   );
 
-  let returnedPending = false;
   // Give a short grace period in case publish() returns right away or (more likely) gives an error
-  const returnPendingTimeout = setTimeout(() => {
-    returnedPending = true;
+  const returnPendingTimeout = setTimeout(
+    () => {
+      if (publishedCallback) {
+        savePendingPublish({
+          name: params.name,
+          channel_name: params.channel_name,
+        });
+        publishedCallback(true);
+      }
 
-    if (publishedCallback) {
-      savePendingPublish({
-        name: params.name,
-        channel_name: params.channel_name,
-      });
-      publishedCallback(true);
-    }
-
-    if (fileListedCallback) {
-      const { name, channel_name } = params;
-      savePendingPublish({
-        name: params.name,
-        channel_name: params.channel_name,
-      });
-      fileListedCallback(true);
-    }
-  }, 2000);
+      if (fileListedCallback) {
+        const { name, channel_name } = params;
+        savePendingPublish({
+          name: params.name,
+          channel_name: params.channel_name,
+        });
+        fileListedCallback(true);
+      }
+    },
+    2000,
+    { once: true }
+  );
 };
 
 lbry.getClientSettings = function() {

@@ -12,7 +12,8 @@ import SubHeader from "component/subHeader";
 
 class FileListDownloaded extends React.PureComponent {
   componentWillMount() {
-    if (!this.props.isPending) this.props.fetchFileInfosDownloaded();
+    if (!this.props.isFetchingClaims) this.props.fetchClaims();
+    if (!this.props.isFetching) this.props.fetchFileInfosDownloaded();
   }
 
   componentWillUnmount() {
@@ -20,13 +21,13 @@ class FileListDownloaded extends React.PureComponent {
   }
 
   render() {
-    const { fileInfos, isPending, navigate } = this.props;
+    const { fileInfos, isFetching, navigate } = this.props;
 
     let content;
     if (fileInfos && fileInfos.length > 0) {
-      content = <FileList fileInfos={fileInfos} fetching={isPending} />;
+      content = <FileList fileInfos={fileInfos} fetching={isFetching} />;
     } else {
-      if (isPending) {
+      if (isFetching) {
         content = <BusyMessage message={__("Loading")} />;
       } else {
         content = (

@@ -24,7 +24,7 @@ class ShowPage extends React.PureComponent {
 
     let innerContent = "";
 
-    if (isResolvingUri && !claim) {
+    if ((isResolvingUri && !claim) || !claim) {
       innerContent = (
         <section className="card">
           <div className="card__inner">

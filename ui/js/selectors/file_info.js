@@ -2,7 +2,8 @@ import lbry from "lbry";
 import { createSelector } from "reselect";
 import {
   selectClaimsByUri,
-  selectClaimListMineIsPending,
+  selectIsFetchingClaimListMine,
+  selectMyClaims,
   selectMyClaimsOutpoints,
 } from "selectors/claims";
 
@@ -13,16 +14,16 @@ export const selectFileInfosByOutpoint = createSelector(
   state => state.byOutpoint || {}
 );
 
-export const selectFileListIsPending = createSelector(
+export const selectIsFetchingFileList = createSelector(
   _selectState,
-  state => state.isFileListPending
+  state => !!state.isFetchingFileList
 );
 
-export const selectFileListDownloadedOrPublishedIsPending = createSelector(
-  selectFileListIsPending,
-  selectClaimListMineIsPending,
-  (isFileListPending, isClaimListMinePending) =>
-    isFileListPending || isClaimListMinePending
+export const selectIsFetchingFileListDownloadedOrPublished = createSelector(
+  selectIsFetchingFileList,
+  selectIsFetchingClaimListMine,
+  (isFetchingFileList, isFetchingClaimListMine) =>
+    isFetchingFileList || isFetchingClaimListMine
 );
 
 export const selectFileInfoForUri = (state, props) => {
@@ -69,42 +70,38 @@ export const makeSelectLoadingForUri = () => {
   return createSelector(selectLoadingForUri, loading => !!loading);
 };
 
-export const selectFileInfosDownloaded = createSelector(
-  selectFileInfosByOutpoint,
-  selectMyClaimsOutpoints,
-  (byOutpoint, myClaimOutpoints) => {
-    const fileInfoList = [];
-    Object.values(byOutpoint).forEach(fileInfo => {
-      if (
-        fileInfo &&
-        myClaimOutpoints.indexOf(fileInfo.outpoint) === -1 &&
-        (fileInfo.completed || fileInfo.written_bytes)
-      ) {
-        fileInfoList.push(fileInfo);
-      }
-    });
-    return fileInfoList;
-  }
-);
-
 export const selectFileInfosPendingPublish = createSelector(
   _selectState,
-  state => {
-    return lbry.getPendingPublishes();
+  state => Object.values(state.pendingByOutpoint || {})
+);
+
+export const selectFileInfosDownloaded = createSelector(
+  selectFileInfosByOutpoint,
+  selectMyClaims,
+  (byOutpoint, myClaims) => {
+    return Object.values(byOutpoint).filter(fileInfo => {
+      const myClaimIds = myClaims.map(claim => claim.claim_id);
+
+      return (
+        fileInfo &&
+        myClaimIds.indexOf(fileInfo.claim_id) === -1 &&
+        (fileInfo.completed || fileInfo.written_bytes)
+      );
+    });
   }
 );
 
 export const selectFileInfosPublished = createSelector(
   selectFileInfosByOutpoint,
-  selectFileInfosPendingPublish,
   selectMyClaimsOutpoints,
-  (byOutpoint, pendingFileInfos, outpoints) => {
+  selectFileInfosPendingPublish,
+  (byOutpoint, outpoints, pendingPublish) => {
     const fileInfos = [];
     outpoints.forEach(outpoint => {
       const fileInfo = byOutpoint[outpoint];
       if (fileInfo) fileInfos.push(fileInfo);
     });
-    return [...fileInfos, ...pendingFileInfos];
+    return [...fileInfos, ...pendingPublish];
   }
 );
 
@@ -133,7 +130,6 @@ export const selectFileInfosByUri = createSelector(
         if (fileInfo) fileInfos[uri] = fileInfo;
       }
     });
-
     return fileInfos;
   }
 );

@@ -15,6 +15,7 @@ import { selectBadgeNumber } from "selectors/app";
 import { selectTotalDownloadProgress } from "selectors/file_info";
 import setBadge from "util/setBadge";
 import setProgressBar from "util/setProgressBar";
+import { doFileList } from "actions/file_info";
 import batchActions from "util/batchActions";
 
 const { ipcRenderer } = require("electron");
@@ -336,6 +337,71 @@ export function doFetchClaimListMine() {
           claims,
         },
       });
+    });
+  };
+}
+
+export function doFetchChannelListMine() {
+  return function(dispatch, getState) {
+    dispatch({
+      type: types.FETCH_CHANNEL_LIST_MINE_STARTED,
+    });
+
+    const callback = channels => {
+      dispatch({
+        type: types.FETCH_CHANNEL_LIST_MINE_COMPLETED,
+        data: { claims: channels },
+      });
+    };
+
+    lbry.channel_list_mine().then(callback);
+  };
+}
+
+export function doCreateChannel(name, amount) {
+  return function(dispatch, getState) {
+    dispatch({
+      type: types.CREATE_CHANNEL_STARTED,
+    });
+
+    return new Promise((resolve, reject) => {
+      lbry
+        .channel_new({
+          channel_name: name,
+          amount: parseFloat(amount),
+        })
+        .then(
+          channelClaim => {
+            channelClaim.name = name;
+            dispatch({
+              type: types.CREATE_CHANNEL_COMPLETED,
+              data: { channelClaim },
+            });
+            resolve(channelClaim);
+          },
+          err => {
+            reject(err);
+          }
+        );
+    });
+  };
+}
+
+export function doPublish(params) {
+  return function(dispatch, getState) {
+    return new Promise((resolve, reject) => {
+      const success = claim => {
+        resolve(claim);
+
+        if (claim === true) dispatch(doFetchClaimListMine());
+        else
+          setTimeout(() => dispatch(doFetchClaimListMine()), 20000, {
+            once: true,
+          });
+      };
+      const failure = err => reject(err);
+
+      lbry.publishDeprecated(params, null, success, failure);
     });
   };
 }
