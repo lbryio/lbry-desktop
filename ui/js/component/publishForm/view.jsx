@@ -5,7 +5,7 @@ import { FormField, FormRow } from "component/form.js";
 import Link from "component/link";
 import Modal from "component/modal";
 import { BusyMessage } from "component/common";
-import ChannelSection from "./internal/ChannelSection";
+import ChannelSection from "./internal/channelSection";
 
 class PublishForm extends React.PureComponent {
   constructor(props) {
