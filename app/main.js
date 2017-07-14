@@ -29,8 +29,6 @@ const VERSION_CHECK_INTERVAL = 30 * 60 * 1000;
 const LATEST_RELEASE_API_URL = 'https://api.github.com/repos/lbryio/lbry-app/releases/latest';
 const DAEMON_PATH = process.env.LBRY_DAEMON || path.join(__dirname, 'dist', 'lbrynet-daemon');
 
-global.daemonPath = DAEMON_PATH; // For easy access from render process
-
 let client = jayson.client.http({
   host: 'localhost',
   port: 5279,
@@ -209,8 +207,8 @@ function handleDaemonSubprocessExited() {
 function launchDaemon() {
   assert(!daemonSubprocess, 'Tried to launch daemon twice');
 
-  console.log('Launching daemon:', daemonPath)
-  daemonSubprocess = child_process.spawn(daemonPath)
+  console.log('Launching daemon:', DAEMON_PATH)
+  daemonSubprocess = child_process.spawn(DAEMON_PATH)
   // Need to handle the data event instead of attaching to
   // process.stdout because the latter doesn't work. I believe on
   // windows it buffers stdout and we don't get any meaningful output
