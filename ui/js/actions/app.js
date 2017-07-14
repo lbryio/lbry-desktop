@@ -18,7 +18,7 @@ const { remote, ipcRenderer, shell } = require("electron");
 const path = require("path");
 const { download } = remote.require("electron-dl");
 const fs = remote.require("fs");
-const { config } = require("../app");
+const { lbrySettings: config } = require("../../../app/package.json");
 
 const queryStringFromParams = params => {
   return Object.keys(params).map(key => `${key}=${params[key]}`).join("&");
@@ -138,7 +138,6 @@ export function doDownloadUpgrade() {
     const state = getState();
     // Make a new directory within temp directory so the filename is guaranteed to be available
     const dir = fs.mkdtempSync(remote.app.getPath("temp") + require("path").sep);
-    const upgradeFilename = selectUpgradeFilename(state);
 
     let options = {
       onProgress: p => dispatch(doUpdateDownloadProgress(Math.round(p * 100))),
@@ -225,7 +224,7 @@ export function doCheckUpgradeAvailable() {
 export function doCheckDaemonVersion() {
   return function(dispatch, getState) {
     lbry.version().then(({ lbrynet_version }) => {
-      if (config.appConfig.daemonVersion != lbrynet_version) {
+      if (config.lbrynetDaemonVersion != lbrynet_version) {
         dispatch({
           type: types.OPEN_MODAL,
           data: {

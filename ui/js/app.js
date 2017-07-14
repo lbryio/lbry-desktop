@@ -4,7 +4,6 @@ import lbry from "./lbry.js";
 const env = ENV;
 const config = {
   ...require(`./config/${env}`),
-  appConfig: require("../../app/config.json"),
 };
 const language = lbry.getClientSetting("language")
   ? lbry.getClientSetting("language")
