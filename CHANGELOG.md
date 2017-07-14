@@ -11,17 +11,19 @@ Web UI version numbers should always match the corresponding version of LBRY App
   * Added option to release claim when deleting a file
   * Added transition to card hovers to smooth animation
   * Support markdown makeup in claim description
-  *
+  * Replaced free speech flag (used when image is missing) with labeled color tiles
 
 ### Changed
   * Publishes now uses claims rather than files
-  *
+  * Publishing revamped. Editing claims is much easier.
 
 ### Fixed
   * Fixed bug with download notice when switching window focus
   * Fixed newly published files appearing twice
   * Fixed unconfirmed published files missing channel name
   * Fixed old files from updated published claims appearing in downloaded list
+  * Fixed inappropriate text showing on searches
+  * Restored feedback on claim amounts
 
 ### Deprecated
   *
