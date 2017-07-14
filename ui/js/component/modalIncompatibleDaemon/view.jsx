@@ -1,7 +1,7 @@
 import React from "react";
 import { Modal } from "component/modal";
 
-class IncompatibleDaemonModal extends React.PureComponent {
+class ModalIncompatibleDaemon extends React.PureComponent {
   render() {
     const { quit, skipWrongDaemonNotice } = this.props;
 
@@ -23,4 +23,4 @@ class IncompatibleDaemonModal extends React.PureComponent {
   }
 }
 
-export default IncompatibleDaemonModal;
+export default ModalIncompatibleDaemon;

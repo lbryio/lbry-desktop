@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { doQuit, doSkipWrongDaemonNotice } from "actions/app";
-import IncompatibleDemonModal from "./view";
+import ModalIncompatibleDaemon from "./view";
 
 const select = state => ({});
 
@@ -10,4 +10,4 @@ const perform = dispatch => ({
   skipWrongDaemonNotice: () => dispatch(doSkipWrongDaemonNotice()),
 });
 
-export default connect(select, perform)(IncompatibleDemonModal);
+export default connect(select, perform)(ModalIncompatibleDaemon);

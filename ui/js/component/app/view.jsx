@@ -4,7 +4,7 @@ import Header from "component/header";
 import ModalError from "component/modalError";
 import ModalDownloading from "component/modalDownloading";
 import ModalUpgrade from "component/modalUpgrade";
-import IncompatibleDaemonModal from "component/incompatibleDaemonModal";
+import ModalIncompatibleDaemon from "component/modalIncompatibleDaemon";
 import ModalWelcome from "component/modalWelcome";
 import lbry from "lbry";
 import { Line } from "rc-progress";
@@ -43,7 +43,7 @@ class App extends React.PureComponent {
         <div id="main-content">
           <Router />
         </div>
-        {modal == "incompatibleDaemon" && <IncompatibleDaemonModal />}
+        {modal == "incompatibleDaemon" && <ModalIncompatibleDaemon />}
         {modal == "upgrade" && <ModalUpgrade />}
         {modal == "downloading" && <ModalDownloading />}
         {modal == "error" && <ModalError />}
