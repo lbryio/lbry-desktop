@@ -8,11 +8,13 @@ import {
   selectPageTitle,
   selectCurrentPage,
   selectCurrentParams,
+  selectWelcomeModalAcknowledged,
 } from "selectors/app";
 import { doSearch } from "actions/search";
 import { doFetchDaemonSettings } from "actions/settings";
 import { doAuthenticate } from "actions/user";
 import { doFileList } from "actions/file_info";
+import * as modals from "constants/modal_types";
 
 const { remote, ipcRenderer, shell } = require("electron");
 const path = require("path");
@@ -219,12 +221,16 @@ export function doAlertError(errorList) {
 
 export function doDaemonReady() {
   return function(dispatch, getState) {
+    const showWelcome = !selectWelcomeModalAcknowledged(getState());
     dispatch(doAuthenticate());
     dispatch({
       type: types.DAEMON_READY,
     });
     dispatch(doFetchDaemonSettings());
     dispatch(doFileList());
+    if (showWelcome) {
+      dispatch(doOpenModal(modals.WELCOME));
+    }
   };
 }
 

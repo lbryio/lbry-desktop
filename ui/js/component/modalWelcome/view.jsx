@@ -6,7 +6,13 @@ import RewardLink from "component/rewardLink";
 
 class ModalWelcome extends React.PureComponent {
   render() {
-    const { closeModal, hasClaimed, isRewardApproved, reward } = this.props;
+    const {
+      closeModal,
+      hasClaimed,
+      isRewardApproved,
+      reward,
+      verifyAccount,
+    } = this.props;
 
     return !hasClaimed
       ? <Modal type="custom" isOpen={true} contentLabel="Welcome to LBRY">
@@ -29,13 +35,20 @@ class ModalWelcome extends React.PureComponent {
               {" "}{isRewardApproved ? __("Here's a nickel, kid.") : ""}
             </p>
             <div className="text-center">
-              {isRewardApproved
-                ? <RewardLink reward_type="new_user" button="primary" />
-                : <Link
-                    button="primary"
-                    onClick={closeModal}
-                    label={__("Continue")}
-                  />}
+              {isRewardApproved &&
+                <RewardLink reward_type="new_user" button="primary" />}
+              {!isRewardApproved &&
+                <Link
+                  button="primary"
+                  onClick={closeModal}
+                  label={__("Continue")}
+                />}
+              {!isRewardApproved &&
+                <Link
+                  button="alt"
+                  onClick={verifyAccount}
+                  label={__("Do Account Thing")}
+                />}
             </div>
           </section>
         </Modal>

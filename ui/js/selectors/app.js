@@ -187,6 +187,11 @@ export const selectSnackBarSnacks = createSelector(
   snackBar => snackBar.snacks || []
 );
 
+export const selectWelcomeModalAcknowledged = createSelector(
+  _selectState,
+  state => lbry.getClientSetting("welcome_acknowledged")
+);
+
 export const selectBadgeNumber = createSelector(
   _selectState,
   state => state.badgeNumber

@@ -72,8 +72,7 @@
     "webpack": "^2.6.1",
     "webpack-dev-server": "^2.4.4",
     "webpack-notifier": "^1.5.0",
-    "webpack-target-electron-renderer": "^0.4.0",
-    "why-did-you-update": "0.0.8"
+    "webpack-target-electron-renderer": "^0.4.0"
   },
   "lint-staged": {
     "gitDir": "../",

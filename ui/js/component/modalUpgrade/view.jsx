@@ -1,6 +1,5 @@
 import React from "react";
 import { Modal } from "component/modal";
-import { downloadUpgrade, skipUpgrade } from "actions/app";
 
 class ModalUpgrade extends React.PureComponent {
   render() {

@@ -177,13 +177,6 @@ class FileActions extends React.PureComponent {
           {__("credits")}.
         </Modal>
         <Modal
-          isOpen={modal == "notEnoughCredits"}
-          contentLabel={__("Not enough credits")}
-          onConfirmed={closeModal}
-        >
-          {__("You don't have enough LBRY credits to pay for this stream.")}
-        </Modal>
-        <Modal
           isOpen={modal == "timedOut"}
           contentLabel={__("Download failed")}
           onConfirmed={closeModal}

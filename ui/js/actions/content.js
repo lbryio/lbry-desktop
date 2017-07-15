@@ -15,8 +15,8 @@ import { selectBadgeNumber } from "selectors/app";
 import { selectTotalDownloadProgress } from "selectors/file_info";
 import setBadge from "util/setBadge";
 import setProgressBar from "util/setProgressBar";
-import { doFileList } from "actions/file_info";
 import batchActions from "util/batchActions";
+import * as modals from "constants/modal_types";
 
 const { ipcRenderer } = require("electron");
 
@@ -293,7 +293,7 @@ export function doPurchaseUri(uri, purchaseModalName) {
     }
 
     if (cost > balance) {
-      dispatch(doOpenModal("notEnoughCredits"));
+      dispatch(doOpenModal(modals.INSUFFICIENT_CREDITS));
     } else {
       dispatch(doOpenModal(purchaseModalName));
     }

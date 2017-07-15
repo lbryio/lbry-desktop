@@ -3,10 +3,11 @@ import Router from "component/router";
 import Header from "component/header";
 import ModalError from "component/modalError";
 import ModalDownloading from "component/modalDownloading";
+import ModalInsufficientCredits from "component/modalInsufficientCredits";
 import ModalUpgrade from "component/modalUpgrade";
 import ModalWelcome from "component/modalWelcome";
 import lbry from "lbry";
-import { Line } from "rc-progress";
+import * as modals from "constants/modal_types";
 
 class App extends React.PureComponent {
   componentWillMount() {
@@ -32,10 +33,11 @@ class App extends React.PureComponent {
         <div id="main-content">
           <Router />
         </div>
-        {modal == "upgrade" && <ModalUpgrade />}
-        {modal == "downloading" && <ModalDownloading />}
-        {modal == "error" && <ModalError />}
-        {modal == "welcome" && <ModalWelcome />}
+        {modal == modals.UPGRADE && <ModalUpgrade />}
+        {modal == modals.DOWNLOADING && <ModalDownloading />}
+        {modal == modals.ERROR && <ModalError />}
+        {modal == modals.INSUFFICIENT_CREDITS && <ModalInsufficientCredits />}
+        {modal == modals.WELCOME && <ModalWelcome />}
       </div>
     );
   }
