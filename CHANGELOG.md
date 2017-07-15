@@ -23,6 +23,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
   * Fixed unconfirmed published files missing channel name
   * Fixed old files from updated published claims appearing in downloaded list
   * Fixed inappropriate text showing on searches
+  * Stop discover page from pushing jumping vertically while loading
   * Restored feedback on claim amounts
 
 ### Deprecated
