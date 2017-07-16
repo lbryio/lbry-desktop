@@ -31,8 +31,11 @@ class ModalWelcome extends React.PureComponent {
               )}
             </p>
             <p>
-              {__("Thank you for making content freedom possible!")}
-              {" "}{isRewardApproved ? __("Here's a nickel, kid.") : ""}
+              {__("Please have")} {" "}
+              {reward &&
+                <CreditAmount amount={parseFloat(reward.reward_amount)} />}
+              {!reward && <span className="credit-amount">{__("??")}</span>}
+              {" "} {__("as a thank you for building content freedom.")}
             </p>
             <div className="text-center">
               {isRewardApproved &&
@@ -40,15 +43,11 @@ class ModalWelcome extends React.PureComponent {
               {!isRewardApproved &&
                 <Link
                   button="primary"
-                  onClick={closeModal}
-                  label={__("Continue")}
+                  onClick={verifyAccount}
+                  label={__("Get Welcome Credits")}
                 />}
               {!isRewardApproved &&
-                <Link
-                  button="alt"
-                  onClick={verifyAccount}
-                  label={__("Do Account Thing")}
-                />}
+                <Link button="alt" onClick={closeModal} label={__("Skip")} />}
             </div>
           </section>
         </Modal>

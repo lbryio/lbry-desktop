@@ -4,12 +4,14 @@ import {
   selectAuthenticationIsPending,
   selectEmailToVerify,
   selectUserIsVerificationCandidate,
+  selectUser,
 } from "selectors/user";
 import Auth from "./view";
 
 const select = state => ({
   isPending: selectAuthenticationIsPending(state),
   email: selectEmailToVerify(state),
+  user: selectUser(state),
   isVerificationCandidate: selectUserIsVerificationCandidate(state),
 });
 

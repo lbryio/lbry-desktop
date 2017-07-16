@@ -11,17 +11,43 @@ import * as modals from "constants/modal_types";
 
 class App extends React.PureComponent {
   componentWillMount() {
+    const { alertError, checkUpgradeAvailable, updateBalance } = this.props;
+
     document.addEventListener("unhandledError", event => {
-      this.props.alertError(event.detail);
+      alertError(event.detail);
     });
 
     if (!this.props.upgradeSkipped) {
-      this.props.checkUpgradeAvailable();
+      checkUpgradeAvailable();
     }
 
     lbry.balanceSubscribe(balance => {
-      this.props.updateBalance(balance);
+      updateBalance(balance);
     });
+
+    this.showWelcome(this.props);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.showWelcome(nextProps);
+  }
+
+  showWelcome(props) {
+    const {
+      isFetchingRewards,
+      isWelcomeAcknowledged,
+      isWelcomeRewardClaimed,
+      openWelcomeModal,
+      user,
+    } = props;
+
+    if (
+      !isWelcomeAcknowledged &&
+      user &&
+      (!isFetchingRewards || !isWelcomeRewardClaimed)
+    ) {
+      openWelcomeModal();
+    }
   }
 
   render() {

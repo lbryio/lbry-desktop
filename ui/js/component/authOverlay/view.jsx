@@ -54,7 +54,7 @@ export class AuthOverlay extends React.PureComponent {
             ? ""
             : <div className="form-row-submit">
                 {!hasEmail && this.state.showNoEmailConfirm
-                  ? <div className="help form-input-width">
+                  ? <div>
                       <p>
                         {__(
                           "If you continue without an email, you will be ineligible to earn free LBC rewards, as well as unable to receive security related communications."

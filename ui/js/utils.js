@@ -29,3 +29,7 @@ export function getSession(key, fallback = undefined) {
 export function setSession(key, value) {
   sessionStorage.setItem(key, JSON.stringify(value));
 }
+
+export function formatCredits(amount, precision) {
+  return amount.toFixed(precision || 1).replace(/\.?0+$/, "");
+}

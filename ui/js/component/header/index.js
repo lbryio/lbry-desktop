@@ -1,12 +1,12 @@
 import React from "react";
-import lbry from "lbry";
+import { formatCredits } from "utils";
 import { connect } from "react-redux";
 import { selectBalance } from "selectors/wallet";
 import { doNavigate, doHistoryBack } from "actions/app";
 import Header from "./view";
 
 const select = state => ({
-  balance: lbry.formatCredits(selectBalance(state), 1),
+  balance: formatCredits(selectBalance(state), 1),
   publish: __("Publish"),
 });
 

@@ -1,4 +1,5 @@
 import React from "react";
+import { formatCredits } from "utils";
 import lbry from "../lbry.js";
 
 //component/icon.js
@@ -78,7 +79,7 @@ export class CreditAmount extends React.PureComponent {
   };
 
   render() {
-    const formattedAmount = lbry.formatCredits(
+    const formattedAmount = formatCredits(
       this.props.amount,
       this.props.precision
     );
@@ -140,7 +141,7 @@ export class Address extends React.PureComponent {
         }}
         style={addressStyle}
         readOnly="readonly"
-        value={this.props.address}
+        value={this.props.address || ""}
       />
     );
   }

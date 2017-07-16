@@ -2,7 +2,7 @@ import React from "react";
 import Link from "component/link";
 import { FormRow } from "component/form.js";
 
-class UserEmailVerify extends React.PureComponent {
+class UserVerify extends React.PureComponent {
   constructor(props) {
     super(props);
 
@@ -24,13 +24,14 @@ class UserEmailVerify extends React.PureComponent {
 
   render() {
     const { errorMessage, isPending } = this.props;
-
+    return <p>VERIFY</p>;
     return (
       <form
         onSubmit={event => {
           this.handleSubmit(event);
         }}
       >
+        zzzzzzzzzzzzzzzzzzzzzzzzzzzzz
         <FormRow
           type="text"
           label={__("Verification Code")}
@@ -65,4 +66,4 @@ class UserEmailVerify extends React.PureComponent {
   }
 }
 
-export default UserEmailVerify;
+export default UserVerify;

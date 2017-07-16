@@ -12,10 +12,7 @@ export const selectUserIsPending = createSelector(
   state => state.userIsPending
 );
 
-export const selectUser = createSelector(
-  _selectState,
-  state => state.user || {}
-);
+export const selectUser = createSelector(_selectState, state => state.user);
 
 export const selectEmailToVerify = createSelector(
   _selectState,
@@ -65,7 +62,7 @@ export const selectEmailVerifyErrorMessage = createSelector(
 
 export const selectUserIsVerificationCandidate = createSelector(
   selectUser,
-  user => user && !user.has_verified_email
+  user => user && (!user.has_verified_email || !user.is_identity_verified)
 );
 
 export const selectUserIsAuthRequested = createSelector(

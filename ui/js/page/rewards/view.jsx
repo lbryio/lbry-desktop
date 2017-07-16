@@ -1,9 +1,7 @@
 import React from "react";
-import lbryio from "lbryio";
 import { BusyMessage, CreditAmount, Icon } from "component/common";
 import SubHeader from "component/subHeader";
 import Auth from "component/auth";
-import Link from "component/link";
 import RewardLink from "component/rewardLink";
 
 const RewardTile = props => {
@@ -41,7 +39,9 @@ class RewardsPage extends React.PureComponent {
   fetchRewards(props) {
     const { fetching, rewards, fetchRewards } = props;
 
-    if (!fetching && Object.keys(rewards).length < 1) fetchRewards();
+    if (!fetching && (!rewards || !rewards.length)) {
+      fetchRewards();
+    }
   }
 
   render() {
@@ -51,6 +51,7 @@ class RewardsPage extends React.PureComponent {
       isVerificationCandidate,
       hasEmail,
       rewards,
+      newUserReward,
     } = this.props;
 
     let content,
@@ -59,42 +60,55 @@ class RewardsPage extends React.PureComponent {
     if (!hasEmail || isVerificationCandidate) {
       content = (
         <div>
-          <p>
-            {__(
-              "Additional information is required to be eligible for the rewards program."
-            )}
-          </p>
-          <Auth />
+          <div className="card__title-primary">
+            {newUserReward &&
+              <CreditAmount amount={newUserReward.reward_amount} />}
+            <h3>Welcome to LBRY</h3>
+          </div>
+          <div className="card__content">
+            <p>
+              {" "}{__(
+                "Claim your welcome credits to be able to publish content, pay creators, and have a say over the LBRY network."
+              )}
+            </p>
+          </div>
+          <div className="card__content"><Auth /></div>
         </div>
       );
       isCard = true;
     } else if (!isEligible) {
       isCard = true;
       content = (
-        <div className="empty">
+        <div className="card__content empty">
           <p>{__("You are not eligible to claim rewards.")}</p>
         </div>
       );
     } else if (fetching) {
-      content = <BusyMessage message={__("Fetching rewards")} />;
+      content = (
+        <div className="card__content">
+          <BusyMessage message={__("Fetching rewards")} />
+        </div>
+      );
     } else if (rewards.length > 0) {
-      content = rewards.map(reward =>
-        <RewardTile key={reward.reward_type} reward={reward} />
+      content = (
+        <div>
+          {rewards.map(reward =>
+            <RewardTile key={reward.reward_type} reward={reward} />
+          )}
+        </div>
       );
     } else {
-      content = <div className="empty">{__("Failed to load rewards.")}</div>;
+      content = (
+        <div className="card__content empty">
+          {__("Failed to load rewards.")}
+        </div>
+      );
     }
 
     return (
       <main className="main--single-column">
         <SubHeader />
-        {isCard
-          ? <section className="card">
-              <div className="card__content">
-                {content}
-              </div>
-            </section>
-          : content}
+        {isCard ? <section className="card">{content}</section> : content}
       </main>
     );
   }
