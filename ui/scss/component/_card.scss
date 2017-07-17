@@ -28,6 +28,9 @@ $padding-card-horizontal: $spacing-vertical * 2/3;
   margin-top: $spacing-vertical * 1/3;
   margin-bottom: $spacing-vertical * 1/3;
 }
+.card__title-identity .card__title {
+  font-size: 0.95em
+}
 .card__actions {
   padding: 0 $padding-card-horizontal;
 }
@@ -51,8 +54,8 @@ $padding-card-horizontal: $spacing-vertical * 2/3;
   color: #444;
   margin-top: 12px;
   font-size: 0.9em;
-  margin-top: $spacing-vertical * 2/3;
-  margin-bottom: $spacing-vertical * 2/3;
+  margin-top: $spacing-vertical * 1/3;
+  margin-bottom: $spacing-vertical * 1/3;
   padding: 0 $padding-card-horizontal;
 }
 .card__subtext--allow-newlines {
@@ -60,6 +63,8 @@ $padding-card-horizontal: $spacing-vertical * 2/3;
 }
 .card__subtext--two-lines {
   height: $font-size * 0.9 * $font-line-height * 2;
+  font-size: 0.82em;
+  color: #515151
 }
 .card-overlay {
   position: absolute;
@@ -144,7 +149,7 @@ $card-link-scaling: 1.1;
   top: 36%
 }
 
-$width-card-small: $spacing-vertical * 12;
+$width-card-small: $spacing-vertical * 10;
 $height-card-small: $spacing-vertical * 15;
 
 .card--small {

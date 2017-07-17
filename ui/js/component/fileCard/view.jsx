@@ -78,8 +78,9 @@ class FileCard extends React.PureComponent {
             onClick={() => navigate("/show", { uri })}
             className="card__link"
           >
+            <CardMedia title={title} thumbnail={thumbnail} />
             <div className="card__title-identity">
-              <h5 title={title}>
+              <h5 className="card__title" title={title}>
                 <TruncatedText lines={1}>{title}</TruncatedText>
               </h5>
               <div className="card__subtitle">
@@ -92,7 +93,6 @@ class FileCard extends React.PureComponent {
                 <UriIndicator uri={uri} />
               </div>
             </div>
-            <CardMedia title={title} thumbnail={thumbnail} />
             <div className="card__content card__subtext card__subtext--two-lines">
               <TruncatedMarkdown lines={2}>{description}</TruncatedMarkdown>
             </div>
