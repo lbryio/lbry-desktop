@@ -47,6 +47,17 @@ reducers[types.RESOLVE_URI_CANCELED] = reducers[
   });
 };
 
+reducers[types.FETCH_CHANNEL_CLAIMS_COMPLETED] = function(state, action) {
+  const channelPages = Object.assign({}, state.channelPages);
+  const { uri, totalPages } = action.data;
+
+  channelPages[uri] = totalPages;
+
+  return Object.assign({}, state, {
+    channelPages,
+  });
+};
+
 export default function reducer(state = defaultState, action) {
   const handler = reducers[action.type];
   if (handler) return handler(state, action);

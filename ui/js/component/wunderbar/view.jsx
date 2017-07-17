@@ -1,6 +1,7 @@
 import React from "react";
 import lbryuri from "lbryuri.js";
 import { Icon } from "component/common.js";
+import { parseQueryParams } from "util/query_params";
 
 class WunderBar extends React.PureComponent {
   static TYPING_TIMEOUT = 800;
@@ -120,12 +121,15 @@ class WunderBar extends React.PureComponent {
   onKeyPress(event) {
     if (event.charCode == 13 && this._input.value) {
       let uri = null,
-        method = "onSubmit";
+        method = "onSubmit",
+        extraParams = {};
 
       this._resetOnNextBlur = false;
       clearTimeout(this._userTypingTimer);
 
-      const value = this._input.value.trim();
+      const parts = this._input.value.trim().split("?");
+      const value = parts.shift();
+      if (parts.length > 0) extraParams = parseQueryParams(parts.join(""));
 
       try {
         uri = lbryuri.normalize(value);
@@ -136,7 +140,7 @@ class WunderBar extends React.PureComponent {
         method = "onSearch";
       }
 
-      this.props[method](uri);
+      this.props[method](uri, extraParams);
       this._input.blur();
     }
   }

@@ -22,7 +22,7 @@ const { download } = remote.require("electron-dl");
 const fs = remote.require("fs");
 const { lbrySettings: config } = require("../../../app/package.json");
 
-export function doNavigate(path, params = {}) {
+export function doNavigate(path, params = {}, options = {}) {
   return function(dispatch, getState) {
     let url = path;
     if (params) url = `${url}?${toQueryString(params)}`;

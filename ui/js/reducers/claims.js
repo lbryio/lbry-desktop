@@ -101,17 +101,44 @@ reducers[types.FETCH_CHANNEL_LIST_MINE_COMPLETED] = function(state, action) {
   });
 };
 
-reducers[types.FETCH_CHANNEL_CLAIMS_COMPLETED] = function(state, action) {
-  const { uri, claims } = action.data;
+reducers[types.FETCH_CHANNEL_CLAIMS_STARTED] = function(state, action) {
+  const { uri, page } = action.data;
+  const fetchingChannelClaims = Object.assign({}, state.fetchingChannelClaims);
 
-  const newClaims = Object.assign({}, state.claimsByChannel);
-
-  if (claims !== undefined) {
-    newClaims[uri] = claims;
-  }
+  fetchingChannelClaims[uri] = page;
 
   return Object.assign({}, state, {
-    claimsByChannel: newClaims,
+    fetchingChannelClaims,
+  });
+};
+
+reducers[types.FETCH_CHANNEL_CLAIMS_COMPLETED] = function(state, action) {
+  const { uri, claims, page } = action.data;
+
+  const claimsByChannel = Object.assign({}, state.claimsByChannel);
+  const byChannel = Object.assign({}, claimsByChannel[uri]);
+  const allClaimIds = new Set(byChannel["all"]);
+  const currentPageClaimIds = [];
+  const byId = Object.assign({}, state.byId);
+  const fetchingChannelClaims = Object.assign({}, state.fetchingChannelClaims);
+
+  if (claims !== undefined) {
+    claims.forEach(claim => {
+      allClaimIds.add(claim.claim_id);
+      currentPageClaimIds.push(claim.claim_id);
+      byId[claim.claim_id] = claim;
+    });
+  }
+
+  byChannel["all"] = allClaimIds;
+  byChannel[page] = currentPageClaimIds;
+  claimsByChannel[uri] = byChannel;
+  delete fetchingChannelClaims[uri];
+
+  return Object.assign({}, state, {
+    claimsByChannel,
+    byId,
+    fetchingChannelClaims,
   });
 };
 
