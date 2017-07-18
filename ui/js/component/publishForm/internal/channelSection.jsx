@@ -93,6 +93,7 @@ class ChannelSection extends React.PureComponent {
       "This LBC remains yours and the deposit can be undone at any time."
     );
 
+    const channel = this.state.addingChannel ? "new" : this.props.channel;
     const { fetchingChannels, channels = [] } = this.props;
 
     let channelContent = [];
@@ -102,7 +103,7 @@ class ChannelSection extends React.PureComponent {
         type="select"
         tabIndex="1"
         onChange={this.handleChannelChange.bind(this)}
-        value={this.props.channel}
+        value={channel}
       >
         <option key="anonymous" value="anonymous">
           {__("Anonymous")}
@@ -137,9 +138,7 @@ class ChannelSection extends React.PureComponent {
             <FormRow
               label={__("Name")}
               type="text"
-              onChange={event => {
-                this.handleNewChannelNameChange(event);
-              }}
+              onChange={this.handleNewChannelNameChange.bind(this)}
               value={this.state.newChannelName}
             />
             <FormRow
