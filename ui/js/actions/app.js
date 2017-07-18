@@ -137,7 +137,9 @@ export function doDownloadUpgrade() {
   return function(dispatch, getState) {
     const state = getState();
     // Make a new directory within temp directory so the filename is guaranteed to be available
-    const dir = fs.mkdtempSync(remote.app.getPath("temp") + require("path").sep);
+    const dir = fs.mkdtempSync(
+      remote.app.getPath("temp") + require("path").sep
+    );
 
     let options = {
       onProgress: p => dispatch(doUpdateDownloadProgress(Math.round(p * 100))),
@@ -236,12 +238,6 @@ export function doCheckDaemonVersion() {
   };
 }
 
-export function doSkipWrongDaemonNotice() {
-  return {
-    type: types.SKIP_WRONG_DAEMON_NOTICE,
-  };
-}
-
 export function doAlertError(errorList) {
   return function(dispatch, getState) {
     const state = getState();
@@ -290,8 +286,9 @@ export function doClearCache() {
   };
 }
 
-export function doQuit() {
+export function doQuitAndLaunchDaemonHelp() {
   return function(dispatch, getState) {
+    shell.openExternal("https://lbry.io/faq/incompatible-protocol-version");
     remote.app.quit();
   };
 }
