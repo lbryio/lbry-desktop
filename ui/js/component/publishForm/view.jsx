@@ -42,6 +42,7 @@ class PublishForm extends React.PureComponent {
       submitting: false,
       creatingChannel: false,
       modal: null,
+      isFee: false,
     };
   }
 
@@ -635,11 +636,8 @@ class PublishForm extends React.PureComponent {
                 label={__("Free")}
                 type="radio"
                 name="isFree"
-                value="1"
-                onChange={() => {
-                  this.handleFeePrefChange(false);
-                }}
-                defaultChecked={!this.state.isFee}
+                onChange={() => this.handleFeePrefChange(false)}
+                checked={!this.state.isFee}
               />
               <FormField
                 type="radio"
@@ -648,7 +646,7 @@ class PublishForm extends React.PureComponent {
                 onChange={() => {
                   this.handleFeePrefChange(true);
                 }}
-                defaultChecked={this.state.isFee}
+                checked={this.state.isFee}
               />
               <span className={!this.state.isFee ? "hidden" : ""}>
                 <FormField
