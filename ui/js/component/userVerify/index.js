@@ -1,21 +1,26 @@
 import React from "react";
 import { connect } from "react-redux";
-import { doUserEmailVerify } from "actions/user";
+import { doUserIdentityVerify } from "actions/user";
+import rewards from "rewards";
+import { makeSelectRewardByType } from "selectors/rewards";
 import {
-  selectEmailVerifyIsPending,
-  selectEmailToVerify,
-  selectEmailVerifyErrorMessage,
+  selectIdentityVerifyIsPending,
+  selectIdentityVerifyErrorMessage,
 } from "selectors/user";
 import UserVerify from "./view";
 
-const select = state => ({
-  isPending: selectEmailVerifyIsPending(state),
-  email: selectEmailToVerify(state),
-  errorMessage: selectEmailVerifyErrorMessage(state),
-});
+const select = (state, props) => {
+  const selectReward = makeSelectRewardByType();
+
+  return {
+    isPending: selectIdentityVerifyIsPending(state),
+    errorMessage: selectIdentityVerifyErrorMessage(state),
+    reward: selectReward(state, { reward_type: rewards.TYPE_NEW_USER }),
+  };
+};
 
 const perform = dispatch => ({
-  verifyUserEmail: code => dispatch(doUserEmailVerify(code)),
+  verifyUserIdentity: token => dispatch(doUserIdentityVerify(token)),
 });
 
 export default connect(select, perform)(UserVerify);

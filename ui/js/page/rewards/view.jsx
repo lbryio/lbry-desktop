@@ -1,7 +1,7 @@
 import React from "react";
 import { BusyMessage, CreditAmount, Icon } from "component/common";
 import SubHeader from "component/subHeader";
-import Auth from "component/auth";
+import Link from "component/link";
 import RewardLink from "component/rewardLink";
 
 const RewardTile = props => {
@@ -46,6 +46,7 @@ class RewardsPage extends React.PureComponent {
 
   render() {
     const {
+      doAuth,
       fetching,
       isEligible,
       isVerificationCandidate,
@@ -60,19 +61,12 @@ class RewardsPage extends React.PureComponent {
     if (!hasEmail || isVerificationCandidate) {
       content = (
         <div>
-          <div className="card__title-primary">
-            {newUserReward &&
-              <CreditAmount amount={newUserReward.reward_amount} />}
-            <h3>Welcome to LBRY</h3>
+          <div className="card__content empty">
+            <p>{__("Only verified accounts are eligible to earn rewards.")}</p>
           </div>
           <div className="card__content">
-            <p>
-              {" "}{__(
-                "Claim your welcome credits to be able to publish content, pay creators, and have a say over the LBRY network."
-              )}
-            </p>
+            <Link onClick={doAuth} button="primary" label="Become Verified" />
           </div>
-          <div className="card__content"><Auth /></div>
         </div>
       );
       isCard = true;

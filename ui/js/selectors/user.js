@@ -19,6 +19,11 @@ export const selectEmailToVerify = createSelector(
   state => state.emailToVerify
 );
 
+export const selectUserEmail = createSelector(
+  selectUser,
+  user => (user && user.email ? user.email : "fake@lbry.io")
+);
+
 export const selectUserHasEmail = createSelector(
   selectUser,
   selectEmailToVerify,
@@ -58,6 +63,16 @@ export const selectEmailVerifyIsPending = createSelector(
 export const selectEmailVerifyErrorMessage = createSelector(
   _selectState,
   state => state.emailVerifyErrorMessage
+);
+
+export const selectIdentityVerifyIsPending = createSelector(
+  _selectState,
+  state => state.identityVerifyIsPending
+);
+
+export const selectIdentityVerifyErrorMessage = createSelector(
+  _selectState,
+  state => state.identityVerifyErrorMessage
 );
 
 export const selectUserIsVerificationCandidate = createSelector(

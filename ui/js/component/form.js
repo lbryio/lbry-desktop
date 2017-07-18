@@ -184,6 +184,10 @@ export class FormRow extends React.PureComponent {
       React.PropTypes.string,
       React.PropTypes.element,
     ]),
+    errorMessage: React.PropTypes.oneOfType([
+      React.PropTypes.string,
+      React.PropTypes.object,
+    ]),
     // helper: React.PropTypes.html,
   };
 
@@ -204,7 +208,9 @@ export class FormRow extends React.PureComponent {
       isError: !!props.errorMessage,
       errorMessage: typeof props.errorMessage === "string"
         ? props.errorMessage
-        : "",
+        : props.errorMessage instanceof Error
+          ? props.errorMessage.toString()
+          : "",
     };
   }
 

@@ -30,7 +30,7 @@ const perform = dispatch => () => {
   return {
     verifyAccount: () => {
       closeModal();
-      dispatch(doNavigate("/rewards"));
+      dispatch(doNavigate("/auth"));
     },
     closeModal: closeModal,
   };

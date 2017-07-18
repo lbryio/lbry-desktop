@@ -1,6 +1,6 @@
 import React from "react";
-import Link from "component/link";
-import { FormRow } from "component/form.js";
+import { CreditAmount } from "component/common";
+import CardVerify from "component/cardVerify";
 
 class UserVerify extends React.PureComponent {
   constructor(props) {
@@ -17,51 +17,32 @@ class UserVerify extends React.PureComponent {
     });
   }
 
-  handleSubmit(event) {
-    event.preventDefault();
-    this.props.verifyUserEmail(this.state.code);
+  onToken(data) {
+    this.props.verifyUserIdentity(data.id);
   }
 
   render() {
-    const { errorMessage, isPending } = this.props;
-    return <p>VERIFY</p>;
+    const { errorMessage, isPending, reward } = this.props;
     return (
-      <form
-        onSubmit={event => {
-          this.handleSubmit(event);
-        }}
-      >
-        zzzzzzzzzzzzzzzzzzzzzzzzzzzzz
-        <FormRow
-          type="text"
-          label={__("Verification Code")}
-          placeholder="a94bXXXXXXXXXXXXXX"
-          name="code"
-          value={this.state.code}
-          onChange={event => {
-            this.handleCodeChanged(event);
-          }}
-          errorMessage={errorMessage}
+      <div>
+        <p>
+          <span>
+            Please link a credit card to confirm your identity and receive{" "}
+          </span>
+          {reward
+            ? <CreditAmount amount={parseFloat(reward.reward_amount)} />
+            : <span>your reward</span>}
+          {"."}
+        </p>
+        <p>{__("This is to prevent abuse. You will not be charged.")}</p>
+        {errorMessage && <p className="form-field__error">{errorMessage}</p>}
+        <CardVerify
+          label={__("Link Card and Finish")}
+          disabled={isPending}
+          token={this.onToken.bind(this)}
+          stripeKey="pk_test_NoL1JWL7i1ipfhVId5KfDZgo"
         />
-        {/* render help separately so it always shows */}
-        <div className="form-field__helper">
-          <p>
-            {__("Email")}{" "}
-            <Link href="mailto:help@lbry.io" label="help@lbry.io" />{" "}
-            {__("if you did not receive or are having trouble with your code.")}
-          </p>
-        </div>
-        <div className="form-row-submit form-row-submit--with-footer">
-          <Link
-            button="primary"
-            label={__("Verify")}
-            disabled={this.state.submitting}
-            onClick={event => {
-              this.handleSubmit(event);
-            }}
-          />
-        </div>
-      </form>
+      </div>
     );
   }
 }

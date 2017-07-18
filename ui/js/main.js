@@ -6,7 +6,6 @@ import SnackBar from "component/snackBar";
 import { Provider } from "react-redux";
 import store from "store.js";
 import SplashScreen from "component/splash.js";
-import AuthOverlay from "component/authOverlay";
 import { doChangePath, doNavigate, doDaemonReady } from "actions/app";
 import { toQueryString } from "util/query_params";
 import * as types from "constants/action_types";

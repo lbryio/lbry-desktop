@@ -13,7 +13,7 @@ class UserEmailVerify extends React.PureComponent {
 
   handleCodeChanged(event) {
     this.setState({
-      code: event.target.value,
+      code: String(event.target.value).trim(),
     });
   }
 
@@ -24,13 +24,15 @@ class UserEmailVerify extends React.PureComponent {
 
   render() {
     const { errorMessage, isPending } = this.props;
-
+    console.log("user email verify render");
+    console.log(this.props);
     return (
       <form
         onSubmit={event => {
           this.handleSubmit(event);
         }}
       >
+        <p>{__("Please enter the verification code emailed to you.")}</p>
         <FormRow
           type="text"
           label={__("Verification Code")}
