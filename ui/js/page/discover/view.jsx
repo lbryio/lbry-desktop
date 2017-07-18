@@ -1,4 +1,5 @@
 import React from "react";
+import lbry from "lbry.js";
 import lbryio from "lbryio.js";
 import lbryuri from "lbryuri";
 import FileCard from "component/fileCard";
@@ -37,10 +38,31 @@ const FeaturedCategory = props => {
 class DiscoverPage extends React.PureComponent {
   componentWillMount() {
     this.props.fetchFeaturedUris();
+    this.scrollListener = this.handleScroll.bind(this);
+  }
+
+  componentDidMount() {
+    if (this.props.isNavigatingBack) {
+      const scrollY = parseInt(lbry.getClientSetting("prefs_scrolly"));
+      if (!isNaN(scrollY)) {
+        const restoreScrollPosition = () => {
+          window.scrollTo(0, scrollY);
+        };
+        setTimeout(restoreScrollPosition, 100);
+      }
+
+      this.props.finishedNavigatingBack();
+    }
+    window.addEventListener("scroll", this.scrollListener);
+  }
+
+  handleScroll() {
+    lbry.setClientSetting("prefs_scrolly", window.scrollY);
   }
 
   componentWillUnmount() {
     this.props.cancelResolvingUris();
+    window.removeEventListener("scroll", this.scrollListener);
   }
 
   render() {

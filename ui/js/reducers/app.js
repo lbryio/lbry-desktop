@@ -141,6 +141,18 @@ reducers[types.WINDOW_FOCUSED] = function(state, action) {
   });
 };
 
+reducers[types.HISTORY_BACK] = function(state, action) {
+  return Object.assign({}, state, {
+    navigatingBack: true,
+  });
+};
+
+reducers[types.HISTORY_BACK_COMPLETED] = function(state, action) {
+  return Object.assign({}, state, {
+    navigatingBack: false,
+  });
+};
+
 export default function reducer(state = defaultState, action) {
   const handler = reducers[action.type];
   if (handler) return handler(state, action);
