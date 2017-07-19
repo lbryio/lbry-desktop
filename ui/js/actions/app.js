@@ -64,17 +64,6 @@ export function doHistoryBack() {
     if (!history.state) return;
 
     history.back();
-    dispatch({
-      type: types.HISTORY_BACK,
-    });
-  };
-}
-
-export function doHistoryBackCompleted() {
-  return function(dispatch, getState) {
-    dispatch({
-      type: types.HISTORY_BACK_COMPLETED,
-    });
   };
 }
 
