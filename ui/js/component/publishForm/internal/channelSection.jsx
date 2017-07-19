@@ -112,7 +112,7 @@ class ChannelSection extends React.PureComponent {
           <option key={name} value={name}>{name}</option>
         )}
         <option key="new" value="new">
-          {__("New identity...")}
+          {__("New channel...")}
         </option>
       </FormRow>
     );
@@ -125,9 +125,10 @@ class ChannelSection extends React.PureComponent {
     return (
       <section className="card">
         <div className="card__title-primary">
-          <h4>{__("Identity")}</h4>
+          <h4>{__("Channel Name")}</h4>
           <div className="card__subtitle">
-            {__("Who created this content?")}
+            {__("This is the channel that broadcasts your content.")}
+            {__("Ex. @Marvel, @TheBeatles, @BooksByJoe")}
           </div>
         </div>
         <div className="card__content">
@@ -157,8 +158,8 @@ class ChannelSection extends React.PureComponent {
                 button="primary"
                 label={
                   !this.state.creatingChannel
-                    ? __("Create identity")
-                    : __("Creating identity...")
+                    ? __("Create channel")
+                    : __("Creating channel...")
                 }
                 onClick={this.handleCreateChannelClick.bind(this)}
                 disabled={this.state.creatingChannel}
