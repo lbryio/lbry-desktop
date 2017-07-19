@@ -787,12 +787,14 @@ class PublishForm extends React.PureComponent {
 
           <section className="card">
             <div className="card__title-primary">
-              <h4>{__("Address")}</h4>
+              <h4>{__("Content URL")}</h4>
               <div className="card__subtitle">
-                {__("Where should this content permanently reside?")}
+                {__(
+                  "This is the exact address where people find your content (ex. lbry://myvideo)."
+                )}
                 {" "}
                 <Link
-                  label={__("Read more")}
+                  label={__("Learn more")}
                   href="https://lbry.io/faq/naming"
                 />.
               </div>
