@@ -80,9 +80,9 @@ class FileCard extends React.PureComponent {
           >
             <CardMedia title={title} thumbnail={thumbnail} />
             <div className="card__title-identity">
-              <h5 className="card__title" title={title}>
+              <div className="card__title" title={title}>
                 <TruncatedText lines={1}>{title}</TruncatedText>
-              </h5>
+              </div>
               <div className="card__subtitle">
                 <span style={{ float: "right" }}>
                   <FilePrice uri={uri} />

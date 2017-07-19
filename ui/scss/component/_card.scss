@@ -19,20 +19,28 @@ $padding-card-horizontal: $spacing-vertical * 2/3;
 .card--obscured .card__inner {
   filter: blur($blur-intensity-nsfw);
 }
-.card__title-primary {
+.card__title-primary,
+.card__title-identity,
+.card__actions,
+.card__content,
+.card__subtext {
   padding: 0 $padding-card-horizontal;
+}
+.card--small {
+  .card__title-primary,
+  .card__title-identity,
+  .card__actions,
+  .card__content,
+  .card__subtext {
+    padding: 0 $padding-card-horizontal / 2;
+  }
+}
+.card__title-primary {
   margin-top: $spacing-vertical * 2/3;
 }
 .card__title-identity {
-  padding: 0 $padding-card-horizontal;
   margin-top: $spacing-vertical * 1/3;
   margin-bottom: $spacing-vertical * 1/3;
-}
-.card__title-identity .card__title {
-  font-size: 0.95em
-}
-.card__actions {
-  padding: 0 $padding-card-horizontal;
 }
 .card__actions {
   margin-top: $spacing-vertical * 2/3;
@@ -48,23 +56,18 @@ $padding-card-horizontal: $spacing-vertical * 2/3;
 .card__content {
   margin-top: $spacing-vertical * 2/3;
   margin-bottom: $spacing-vertical * 2/3;
-  padding: 0 $padding-card-horizontal;
 }
 .card__subtext {
-  color: #444;
-  margin-top: 12px;
-  font-size: 0.9em;
+  color: $color-meta-light;
+  font-size: 0.82em;
   margin-top: $spacing-vertical * 1/3;
   margin-bottom: $spacing-vertical * 1/3;
-  padding: 0 $padding-card-horizontal;
 }
 .card__subtext--allow-newlines {
   white-space: pre-wrap;
 }
 .card__subtext--two-lines {
-  height: $font-size * 0.9 * $font-line-height * 2;
-  font-size: 0.82em;
-  color: #515151
+  height: $font-size * 0.82 * $font-line-height * 2; /*this is so one line text still has the proper height*/
 }
 .card-overlay {
   position: absolute;
