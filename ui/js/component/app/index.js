@@ -6,6 +6,7 @@ import {
   doCheckUpgradeAvailable,
   doAlertError,
   doRecordScroll,
+  doCheckDaemonVersion,
 } from "actions/app";
 import { doUpdateBalance } from "actions/wallet";
 import App from "./view";

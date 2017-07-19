@@ -5,7 +5,7 @@ import App from "component/app/index.js";
 import SnackBar from "component/snackBar";
 import { Provider } from "react-redux";
 import store from "store.js";
-import SplashScreen from "component/splash.js";
+import SplashScreen from "component/splash";
 import AuthOverlay from "component/authOverlay";
 import { doChangePath, doNavigate, doDaemonReady } from "actions/app";
 import { toQueryString } from "util/query_params";
@@ -126,7 +126,12 @@ var init = function() {
   if (window.sessionStorage.getItem("loaded") == "y") {
     onDaemonReady();
   } else {
-    ReactDOM.render(<SplashScreen onLoadDone={onDaemonReady} />, canvas);
+    ReactDOM.render(
+      <Provider store={store}>
+        <SplashScreen onReadyToLaunch={onDaemonReady} />
+      </Provider>,
+      canvas
+    );
   }
 };
 

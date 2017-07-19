@@ -1,3 +1,5 @@
+const { remote } = require("electron");
+
 /**
  * Thin wrapper around localStorage.getItem(). Parses JSON and returns undefined if the value
  * is not set yet.

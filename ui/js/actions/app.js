@@ -16,9 +16,9 @@ import { doFileList } from "actions/file_info";
 
 const { remote, ipcRenderer, shell } = require("electron");
 const path = require("path");
-const app = require("electron").remote.app;
 const { download } = remote.require("electron-dl");
 const fs = remote.require("fs");
+const { lbrySettings: config } = require("../../../app/package.json");
 
 const queryStringFromParams = params => {
   return Object.keys(params).map(key => `${key}=${params[key]}`).join("&");
@@ -137,8 +137,9 @@ export function doDownloadUpgrade() {
   return function(dispatch, getState) {
     const state = getState();
     // Make a new directory within temp directory so the filename is guaranteed to be available
-    const dir = fs.mkdtempSync(app.getPath("temp") + require("path").sep);
-    const upgradeFilename = selectUpgradeFilename(state);
+    const dir = fs.mkdtempSync(
+      remote.app.getPath("temp") + require("path").sep
+    );
 
     let options = {
       onProgress: p => dispatch(doUpdateDownloadProgress(Math.round(p * 100))),
@@ -222,6 +223,18 @@ export function doCheckUpgradeAvailable() {
   };
 }
 
+export function doCheckDaemonVersion() {
+  return function(dispatch, getState) {
+    lbry.version().then(({ lbrynet_version }) => {
+      dispatch({
+        type: config.lbrynetDaemonVersion == lbrynet_version
+          ? types.DAEMON_VERSION_MATCH
+          : types.DAEMON_VERSION_MISMATCH,
+      });
+    });
+  };
+}
+
 export function doAlertError(errorList) {
   return function(dispatch, getState) {
     const state = getState();
@@ -267,5 +280,12 @@ export function doClearCache() {
     window.cacheStore.purge();
 
     return Promise.resolve();
+  };
+}
+
+export function doQuitAndLaunchDaemonHelp() {
+  return function(dispatch, getState) {
+    shell.openExternal("https://lbry.io/faq/incompatible-protocol-version");
+    remote.app.quit();
   };
 }
