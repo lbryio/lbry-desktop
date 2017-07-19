@@ -1,6 +1,7 @@
 import React from "react";
 import { doNavigate } from "actions/app";
 import { connect } from "react-redux";
+import { selectPathAfterAuth } from "selectors/app";
 import {
   selectAuthenticationIsPending,
   selectUserHasEmail,
@@ -19,12 +20,13 @@ const select = state => ({
       selectIdentityVerifyIsPending(state),
   email: selectEmailToVerify(state),
   hasEmail: selectUserHasEmail(state),
+  pathAfterAuth: selectPathAfterAuth(state),
   user: selectUser(state),
   isVerificationCandidate: selectUserIsVerificationCandidate(state),
 });
 
 const perform = dispatch => ({
-  onAuthComplete: () => dispatch(doNavigate("/discover")),
+  navigate: path => dispatch(doNavigate(path)),
 });
 
 export default connect(select, perform)(AuthPage);

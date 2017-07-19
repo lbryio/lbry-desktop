@@ -37,6 +37,20 @@ export function doNavigate(path, params = {}) {
   };
 }
 
+export function doAuthNavigate(pathAfterAuth = null, params = {}) {
+  return function(dispatch, getState) {
+    if (pathAfterAuth) {
+      dispatch({
+        type: types.CHANGE_AFTER_AUTH_PATH,
+        data: {
+          path: `${pathAfterAuth}?${queryStringFromParams(params)}`,
+        },
+      });
+    }
+    dispatch(doNavigate("/auth"));
+  };
+}
+
 export function doChangePath(path) {
   return function(dispatch, getState) {
     dispatch({

@@ -196,3 +196,8 @@ export const selectBadgeNumber = createSelector(
   _selectState,
   state => state.badgeNumber
 );
+
+export const selectPathAfterAuth = createSelector(
+  _selectState,
+  state => state.pathAfterAuth
+);

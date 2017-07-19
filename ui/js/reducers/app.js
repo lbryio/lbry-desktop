@@ -15,6 +15,7 @@ const reducers = {};
 const defaultState = {
   isLoaded: false,
   currentPath: currentPath(),
+  pathAfterAuth: "/discover",
   platform: process.platform,
   upgradeSkipped: sessionStorage.getItem("upgradeSkipped"),
   daemonReady: false,
@@ -31,6 +32,12 @@ reducers[types.DAEMON_READY] = function(state, action) {
 reducers[types.CHANGE_PATH] = function(state, action) {
   return Object.assign({}, state, {
     currentPath: action.data.path,
+  });
+};
+
+reducers[types.CHANGE_AFTER_AUTH_PATH] = function(state, action) {
+  return Object.assign({}, state, {
+    pathAfterAuth: action.data.path,
   });
 };
 

@@ -10,7 +10,7 @@ import {
   selectUserHasEmail,
   selectUserIsVerificationCandidate,
 } from "selectors/user";
-import { doNavigate } from "actions/app";
+import { doAuthNavigate } from "actions/app";
 import { doRewardList } from "actions/rewards";
 import rewards from "rewards";
 import RewardsPage from "./view";
@@ -30,7 +30,9 @@ const select = (state, props) => {
 
 const perform = dispatch => ({
   fetchRewards: () => dispatch(doRewardList()),
-  doAuth: () => dispatch(doNavigate("/auth")),
+  doAuth: () => {
+    dispatch(doAuthNavigate("/rewards"));
+  },
 });
 
 export default connect(select, perform)(RewardsPage);

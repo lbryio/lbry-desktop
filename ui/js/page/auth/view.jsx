@@ -5,41 +5,23 @@ import UserEmailVerify from "component/userEmailVerify";
 import UserVerify from "component/userVerify";
 
 export class AuthPage extends React.PureComponent {
-  /*
-   <div className="card__title-primary">
-   {newUserReward &&
-   <CreditAmount amount={newUserReward.reward_amount} />}
-   <h3>Welcome to LBRY</h3>
-   </div>
-   <div className="card__content">
-   <p>
-   {" "}{__(
-   "Claim your welcome credits to be able to publish content, pay creators, and have a say over the LBRY network."
-   )}
-   </p>
-   </div>
-   <div className="card__content"><Auth /></div>
-   */
   componentWillMount() {
-    console.log("will mount");
     this.navigateIfAuthenticated(this.props);
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log("will receive");
     this.navigateIfAuthenticated(nextProps);
   }
 
   navigateIfAuthenticated(props) {
     const { isPending, user } = props;
-    console.log(props);
     if (
       !isPending &&
       user &&
       user.has_verified_email &&
       user.is_identity_verified
     ) {
-      props.onAuthComplete();
+      props.navigate(props.pathAfterAuth);
     }
   }
 
