@@ -21,6 +21,14 @@ class App extends React.PureComponent {
     lbry.balanceSubscribe(balance => {
       this.props.updateBalance(balance);
     });
+
+    this.scrollListener = () => this.props.recordScroll(window.scrollY);
+
+    window.addEventListener("scroll", this.scrollListener);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("scroll", this.scrollListener);
   }
 
   render() {

@@ -33,11 +33,11 @@ export function doNavigate(path, params = {}) {
 
     const state = getState();
     const pageTitle = selectPageTitle(state);
-    dispatch(doHistoryPush(params, pageTitle, url));
+    dispatch(doHistoryPush({ params }, pageTitle, url));
   };
 }
 
-export function doChangePath(path) {
+export function doChangePath(path, options = {}) {
   return function(dispatch, getState) {
     dispatch({
       type: types.CHANGE_PATH,
@@ -48,8 +48,12 @@ export function doChangePath(path) {
 
     const state = getState();
     const pageTitle = selectPageTitle(state);
+    const scrollY = options.scrollY;
+
     window.document.title = pageTitle;
-    window.scrollTo(0, 0);
+
+    if (scrollY) window.scrollTo(0, scrollY);
+    else window.scrollTo(0, 0);
 
     const currentPage = selectCurrentPage(state);
     if (currentPage === "search") {
@@ -67,10 +71,26 @@ export function doHistoryBack() {
   };
 }
 
-export function doHistoryPush(params, title, relativeUrl) {
+export function doHistoryPush(currentState, title, relativeUrl) {
   return function(dispatch, getState) {
     title += " - LBRY";
-    history.pushState(params, title, `#${relativeUrl}`);
+    history.pushState(currentState, title, `#${relativeUrl}`);
+  };
+}
+
+export function doRecordScroll(scroll) {
+  return function(dispatch, getState) {
+    const state = getState();
+    const historyState = history.state;
+
+    if (!historyState) return;
+
+    historyState.scrollY = scroll;
+    history.replaceState(
+      historyState,
+      document.title,
+      `#${state.app.currentPath}`
+    );
   };
 }
 
@@ -219,6 +239,7 @@ export function doAlertError(errorList) {
 
 export function doDaemonReady() {
   return function(dispatch, getState) {
+    history.replaceState({}, document.title, `#/discover`);
     dispatch(doAuthenticate());
     dispatch({
       type: types.DAEMON_READY,
