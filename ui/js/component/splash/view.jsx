@@ -1,6 +1,9 @@
 import React from "react";
-import lbry from "../lbry.js";
-import LoadScreen from "./load_screen.js";
+import lbry from "../../lbry.js";
+import LoadScreen from "../load_screen.js";
+import ModalIncompatibleDaemon from "../modalIncompatibleDaemon";
+import ModalUpgrade from "component/modalUpgrade";
+import ModalDownloading from "component/modalDownloading";
 
 export class SplashScreen extends React.PureComponent {
   static propTypes = {
@@ -14,6 +17,7 @@ export class SplashScreen extends React.PureComponent {
     this.state = {
       details: __("Starting daemon"),
       message: __("Connecting"),
+      isRunning: false,
       isLagging: false,
     };
   }
@@ -35,10 +39,16 @@ export class SplashScreen extends React.PureComponent {
         message: __("Testing Network"),
         details: __("Waiting for name resolution"),
         isLagging: false,
+        isRunning: true,
       });
 
       lbry.resolve({ uri: "lbry://one" }).then(() => {
-        this.props.onLoadDone();
+        // Only leave the load screen if the daemon version matched;
+        // otherwise we'll notify the user at the end of the load screen.
+
+        if (this.props.daemonVersionMatched) {
+          this.props.onReadyToLaunch();
+        }
       });
       return;
     }
@@ -52,8 +62,13 @@ export class SplashScreen extends React.PureComponent {
   }
 
   componentDidMount() {
+    if (!this.props.upgradeSkipped) {
+      this.props.checkUpgradeAvailable();
+    }
+
     lbry
       .connect()
+      .then(this.props.checkDaemonVersion)
       .then(() => {
         this.updateStatus();
       })
@@ -69,12 +84,24 @@ export class SplashScreen extends React.PureComponent {
   }
 
   render() {
+    const { modal } = this.props;
+
     return (
-      <LoadScreen
-        message={this.state.message}
-        details={this.state.details}
-        isWarning={this.state.isLagging}
-      />
+      <div>
+        <LoadScreen
+          message={this.state.message}
+          details={this.state.details}
+          isWarning={this.state.isLagging}
+        />
+        {/* Temp hack: don't show any modals on splash screen daemon is running;
+            daemon doesn't let you quit during startup, so the "Quit" buttons
+            in the modals won't work. */}
+        {modal == "incompatibleDaemon" &&
+          this.state.isRunning &&
+          <ModalIncompatibleDaemon />}
+        {modal == "upgrade" && this.state.isRunning && <ModalUpgrade />}
+        {modal == "downloading" && this.state.isRunning && <ModalDownloading />}
+      </div>
     );
   }
 }

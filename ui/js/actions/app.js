@@ -226,14 +226,11 @@ export function doCheckUpgradeAvailable() {
 export function doCheckDaemonVersion() {
   return function(dispatch, getState) {
     lbry.version().then(({ lbrynet_version }) => {
-      if (config.lbrynetDaemonVersion != lbrynet_version) {
-        dispatch({
-          type: types.OPEN_MODAL,
-          data: {
-            modal: "incompatibleDaemon",
-          },
-        });
-      }
+      dispatch({
+        type: config.lbrynetDaemonVersion == lbrynet_version
+          ? types.DAEMON_VERSION_MATCH
+          : types.DAEMON_VERSION_MISMATCH,
+      });
     });
   };
 }
