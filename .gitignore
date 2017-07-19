@@ -10,6 +10,7 @@
 
 
 /app/dist
+/app/locales
 /app/node_modules
 /build/venv
 /lbry-app-venv

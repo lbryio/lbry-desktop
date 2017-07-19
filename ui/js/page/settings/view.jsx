@@ -85,6 +85,11 @@ class SettingsPage extends React.PureComponent {
     this.props.setClientSetting("showNsfw", event.target.checked);
   }
 
+  onLanguageChange(e) {
+    console.log(e);
+    this.props.changeLanguage(e.target.value);
+  }
+
   // onLanguageChange(language) {
   //   lbry.setClientSetting('language', language);
   //   i18n.setLocale(language);
@@ -151,6 +156,34 @@ class SettingsPage extends React.PureComponent {
     return (
       <main className="main--single-column">
         <SubHeader />
+        <section className="card">
+          <div className="card__content">
+            <h3>{__("Language")}</h3>
+          </div>
+          <div className="card__content">
+            <div className="form-row">
+              <FormField
+                type="radio"
+                name="language"
+                label={__("English")}
+                onChange={this.onLanguageChange.bind(this)}
+                defaultChecked={this.state.language == "en"}
+              />
+            </div>
+            {window.app.i18n.localLanguages.map(dLang =>
+              <div key={dLang} className="form-row">
+                <FormField
+                  type="radio"
+                  name="language"
+                  key={dLang}
+                  label={window.app.i18n.resLang(dLang)}
+                  onChange={this.onLanguageChange.bind(this)}
+                  defaultChecked={this.state.language == dLang}
+                />
+              </div>
+            )}
+          </div>
+        </section>
         <section className="card">
           <div className="card__content">
             <h3>{__("Download Directory")}</h3>
