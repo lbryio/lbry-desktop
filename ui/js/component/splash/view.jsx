@@ -62,10 +62,6 @@ export class SplashScreen extends React.PureComponent {
   }
 
   componentDidMount() {
-    if (!this.props.upgradeSkipped) {
-      this.props.checkUpgradeAvailable();
-    }
-
     lbry
       .connect()
       .then(this.props.checkDaemonVersion)

@@ -5,8 +5,6 @@ import { selectCurrentModal, selectDaemonVersionMatched } from "selectors/app";
 import { doCheckDaemonVersion } from "actions/app";
 import SplashScreen from "./view";
 
-console.log("doCheckDaemonVersion:", doCheckDaemonVersion);
-
 const select = state => {
   return {
     modal: selectCurrentModal(state),
