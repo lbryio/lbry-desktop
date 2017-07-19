@@ -8,7 +8,6 @@ import {
   doRecordScroll,
   doCheckDaemonVersion,
 } from "actions/app";
-import { doCheckUpgradeAvailable, doAlertError } from "actions/app";
 import { doUpdateBalance } from "actions/wallet";
 import App from "./view";
 
