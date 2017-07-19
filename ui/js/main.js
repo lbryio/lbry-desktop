@@ -37,10 +37,10 @@ window.addEventListener("popstate", (event, param) => {
 
   if (hash !== "") {
     const url = hash.split("#")[1];
-    const params = event.state;
+    const { params, scrollY } = event.state || {};
     const queryString = toQueryString(params);
 
-    app.store.dispatch(doChangePath(`${url}?${queryString}`));
+    app.store.dispatch(doChangePath(`${url}?${queryString}`, { scrollY }));
   } else {
     app.store.dispatch(doChangePath("/discover"));
   }
