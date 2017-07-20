@@ -4,7 +4,6 @@ import {
   selectUpdateUrl,
   selectUpgradeDownloadPath,
   selectUpgradeDownloadItem,
-  selectUpgradeFilename,
   selectPageTitle,
   selectCurrentPage,
   selectCurrentParams,

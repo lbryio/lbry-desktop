@@ -99,9 +99,7 @@ export function doClaimEligiblePurchaseRewards() {
     if (unclaimedType) {
       dispatch(doClaimRewardType(unclaimedType));
     }
-    if (types[rewards.TYPE_FEATURED_DOWNLOAD] === false) {
-      dispatch(doClaimRewardType(rewards.TYPE_FEATURED_DOWNLOAD));
-    }
+    dispatch(doClaimRewardType(rewards.TYPE_FEATURED_DOWNLOAD));
   };
 }
 
