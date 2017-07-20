@@ -5,11 +5,7 @@ import {
   selectFetchingRewards,
   selectRewards,
 } from "selectors/rewards";
-import {
-  selectUser,
-  selectUserHasEmail,
-  selectUserIsVerificationCandidate,
-} from "selectors/user";
+import { selectUser } from "selectors/user";
 import { doAuthNavigate, doNavigate } from "actions/app";
 import { doRewardList } from "actions/rewards";
 import rewards from "rewards";

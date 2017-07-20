@@ -73,7 +73,7 @@ reducers[types.USER_EMAIL_NEW_STARTED] = function(state, action) {
 
 reducers[types.USER_EMAIL_NEW_SUCCESS] = function(state, action) {
   let user = Object.assign({}, state.user);
-  user.has_email = true;
+  user.primary_email = action.data.email;
   return Object.assign({}, state, {
     emailToVerify: action.data.email,
     emailNewIsPending: false,
@@ -105,7 +105,7 @@ reducers[types.USER_EMAIL_VERIFY_STARTED] = function(state, action) {
 
 reducers[types.USER_EMAIL_VERIFY_SUCCESS] = function(state, action) {
   let user = Object.assign({}, state.user);
-  user.has_email = true;
+  user.primary_email = action.data.email;
   return Object.assign({}, state, {
     emailToVerify: "",
     emailVerifyIsPending: false,

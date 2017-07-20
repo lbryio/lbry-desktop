@@ -4,7 +4,6 @@ import { connect } from "react-redux";
 import { selectPathAfterAuth } from "selectors/app";
 import {
   selectAuthenticationIsPending,
-  selectUserHasEmail,
   selectEmailToVerify,
   selectUserIsVerificationCandidate,
   selectUser,
@@ -19,7 +18,6 @@ const select = state => ({
       selectUserIsPending(state) ||
       selectIdentityVerifyIsPending(state),
   email: selectEmailToVerify(state),
-  hasEmail: selectUserHasEmail(state),
   pathAfterAuth: selectPathAfterAuth(state),
   user: selectUser(state),
   isVerificationCandidate: selectUserIsVerificationCandidate(state),

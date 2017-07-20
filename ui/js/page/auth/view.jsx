@@ -56,7 +56,7 @@ export class AuthPage extends React.PureComponent {
   }
 
   render() {
-    const { email, hasEmail, isPending } = this.props;
+    const { email, user, isPending } = this.props;
 
     return (
       <main className="">
@@ -67,7 +67,7 @@ export class AuthPage extends React.PureComponent {
           <div className="card__content">
             {!isPending &&
               !email &&
-              !hasEmail &&
+              !user.has_verified_email &&
               <p>
                 {__("Create a verified identity and receive LBC rewards.")}
               </p>}

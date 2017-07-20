@@ -73,7 +73,7 @@ class RewardsPage extends React.PureComponent {
 
     if (
       user &&
-      (!user.has_email ||
+      (!user.primary_email ||
         !user.has_verified_email ||
         !user.is_identity_verified)
     ) {

@@ -21,13 +21,7 @@ export const selectEmailToVerify = createSelector(
 
 export const selectUserEmail = createSelector(
   selectUser,
-  user => (user && user.email ? user.email : "fake@lbry.io")
-);
-
-export const selectUserHasEmail = createSelector(
-  selectUser,
-  selectEmailToVerify,
-  (user, email) => (user && user.has_email) || !!email
+  user => (user ? user.primary_email : null)
 );
 
 export const selectUserIsRewardApproved = createSelector(
@@ -73,13 +67,4 @@ export const selectIdentityVerifyErrorMessage = createSelector(
 export const selectUserIsVerificationCandidate = createSelector(
   selectUser,
   user => user && (!user.has_verified_email || !user.is_identity_verified)
-);
-
-export const selectUserIsAuthRequested = createSelector(
-  selectEmailNewDeclined,
-  selectAuthenticationIsPending,
-  selectUserIsVerificationCandidate,
-  selectUserHasEmail,
-  (isEmailDeclined, isPending, isVerificationCandidate, hasEmail) =>
-    !isEmailDeclined && (isPending || !hasEmail || isVerificationCandidate)
 );

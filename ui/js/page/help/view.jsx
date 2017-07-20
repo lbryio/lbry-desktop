@@ -41,7 +41,7 @@ class HelpPage extends React.PureComponent {
   render() {
     let ver, osName, platform, newVerLink;
 
-    const { navigate } = this.props;
+    const { navigate, user } = this.props;
 
     if (this.state.versionInfo) {
       ver = this.state.versionInfo;
@@ -136,16 +136,24 @@ class HelpPage extends React.PureComponent {
               ? <table className="table-standard">
                   <tbody>
                     <tr>
-                      <th>{__("daemon (lbrynet)")}</th>
+                      <th>{__("App")}</th>
+                      <td>{this.state.uiVersion}</td>
+                    </tr>
+                    <tr>
+                      <th>{__("Daemon (lbrynet)")}</th>
                       <td>{ver.lbrynet_version}</td>
                     </tr>
                     <tr>
-                      <th>{__("wallet (lbryum)")}</th>
+                      <th>{__("Wallet (lbryum)")}</th>
                       <td>{ver.lbryum_version}</td>
                     </tr>
                     <tr>
-                      <th>{__("interface")}</th>
-                      <td>{this.state.uiVersion}</td>
+                      <th>{__("Connected Email")}</th>
+                      <td>
+                        {user && user.primary_email
+                          ? user.primary_email
+                          : <span className="empty">{__("none")}</span>}
+                      </td>
                     </tr>
                     <tr>
                       <th>{__("Platform")}</th>
