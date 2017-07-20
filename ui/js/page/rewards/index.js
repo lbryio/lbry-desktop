@@ -6,11 +6,11 @@ import {
   selectRewards,
 } from "selectors/rewards";
 import {
-  selectUserIsRewardEligible,
+  selectUser,
   selectUserHasEmail,
   selectUserIsVerificationCandidate,
 } from "selectors/user";
-import { doAuthNavigate } from "actions/app";
+import { doAuthNavigate, doNavigate } from "actions/app";
 import { doRewardList } from "actions/rewards";
 import rewards from "rewards";
 import RewardsPage from "./view";
@@ -21,15 +21,14 @@ const select = (state, props) => {
   return {
     fetching: selectFetchingRewards(state),
     rewards: selectRewards(state),
-    hasEmail: selectUserHasEmail(state),
-    isEligible: selectUserIsRewardEligible(state),
-    isVerificationCandidate: selectUserIsVerificationCandidate(state),
     newUserReward: selectReward(state, { reward_type: rewards.TYPE_NEW_USER }),
+    user: selectUser(state),
   };
 };
 
 const perform = dispatch => ({
   fetchRewards: () => dispatch(doRewardList()),
+  navigate: path => dispatch(doNavigate(path)),
   doAuth: () => {
     dispatch(doAuthNavigate("/rewards"));
   },

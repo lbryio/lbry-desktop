@@ -1,4 +1,5 @@
 import * as types from "constants/action_types";
+import * as modalTypes from "constants/modal_types";
 import lbry from "lbry";
 
 const currentPath = () => {
@@ -18,6 +19,7 @@ const defaultState = {
   pathAfterAuth: "/discover",
   platform: process.platform,
   upgradeSkipped: sessionStorage.getItem("upgradeSkipped"),
+  daemonVersionMatched: null,
   daemonReady: false,
   hasSignature: false,
   badgeNumber: 0,
@@ -26,6 +28,19 @@ const defaultState = {
 reducers[types.DAEMON_READY] = function(state, action) {
   return Object.assign({}, state, {
     daemonReady: true,
+  });
+};
+
+reducers[types.DAEMON_VERSION_MATCH] = function(state, action) {
+  return Object.assign({}, state, {
+    daemonVersionMatched: true,
+  });
+};
+
+reducers[types.DAEMON_VERSION_MISMATCH] = function(state, action) {
+  return Object.assign({}, state, {
+    daemonVersionMatched: false,
+    modal: modalTypes.INCOMPATIBLE_DAEMON,
   });
 };
 

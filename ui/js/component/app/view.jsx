@@ -26,6 +26,10 @@ class App extends React.PureComponent {
     });
 
     this.showWelcome(this.props);
+
+    this.scrollListener = () => this.props.recordScroll(window.scrollY);
+
+    window.addEventListener("scroll", this.scrollListener);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -48,6 +52,10 @@ class App extends React.PureComponent {
     ) {
       openWelcomeModal();
     }
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("scroll", this.scrollListener);
   }
 
   render() {

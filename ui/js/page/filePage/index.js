@@ -25,7 +25,7 @@ const makeSelect = () => {
     contentType: selectContentType(state, props),
     costInfo: selectCostInfo(state, props),
     metadata: selectMetadata(state, props),
-    showNsfw: !selectShowNsfw(state),
+    obscureNsfw: !selectShowNsfw(state),
     fileInfo: selectFileInfo(state, props),
   });
 

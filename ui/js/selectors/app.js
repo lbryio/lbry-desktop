@@ -177,6 +177,11 @@ export const selectDaemonReady = createSelector(
   state => state.daemonReady
 );
 
+export const selectDaemonVersionMatched = createSelector(
+  _selectState,
+  state => state.daemonVersionMatched
+);
+
 export const selectSnackBar = createSelector(
   _selectState,
   state => state.snackBar || {}

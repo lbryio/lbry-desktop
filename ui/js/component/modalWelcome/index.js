@@ -1,7 +1,7 @@
 import React from "react";
 import rewards from "rewards";
 import { connect } from "react-redux";
-import { doCloseModal, doNavigate } from "actions/app";
+import { doCloseModal, doAuthNavigate } from "actions/app";
 import { doSetClientSetting } from "actions/settings";
 import { selectUserIsRewardApproved } from "selectors/user";
 import {
@@ -30,7 +30,7 @@ const perform = dispatch => () => {
   return {
     verifyAccount: () => {
       closeModal();
-      dispatch(doNavigate("/auth"));
+      dispatch(doAuthNavigate("/rewards"));
     },
     closeModal: closeModal,
   };

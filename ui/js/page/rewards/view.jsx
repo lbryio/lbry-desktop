@@ -45,39 +45,11 @@ class RewardsPage extends React.PureComponent {
   }
 
   render() {
-    const {
-      doAuth,
-      fetching,
-      isEligible,
-      isVerificationCandidate,
-      hasEmail,
-      rewards,
-      newUserReward,
-    } = this.props;
+    const { doAuth, fetching, navigate, rewards, user } = this.props;
 
-    let content,
-      isCard = false;
+    let content, cardHeader;
 
-    if (!hasEmail || isVerificationCandidate) {
-      content = (
-        <div>
-          <div className="card__content empty">
-            <p>{__("Only verified accounts are eligible to earn rewards.")}</p>
-          </div>
-          <div className="card__content">
-            <Link onClick={doAuth} button="primary" label="Become Verified" />
-          </div>
-        </div>
-      );
-      isCard = true;
-    } else if (!isEligible) {
-      isCard = true;
-      content = (
-        <div className="card__content empty">
-          <p>{__("You are not eligible to claim rewards.")}</p>
-        </div>
-      );
-    } else if (fetching) {
+    if (fetching) {
       content = (
         <div className="card__content">
           <BusyMessage message={__("Fetching rewards")} />
@@ -99,10 +71,54 @@ class RewardsPage extends React.PureComponent {
       );
     }
 
+    if (
+      user &&
+      (!user.has_email ||
+        !user.has_verified_email ||
+        !user.is_identity_verified)
+    ) {
+      cardHeader = (
+        <div>
+          <div className="card__content empty">
+            <p>{__("Only verified accounts are eligible to earn rewards.")}</p>
+          </div>
+          <div className="card__content">
+            <Link onClick={doAuth} button="primary" label="Become Verified" />
+          </div>
+        </div>
+      );
+    } else if (user && !user.is_reward_approved) {
+      cardHeader = (
+        <div className="card__content">
+          <p>
+            {__(
+              "This account must undergo review before you can participate in the rewards program."
+            )}
+            {" "}
+            {__("This can take anywhere from several minutes to several days.")}
+          </p>
+          <p>
+            {__("You will receive an email when this process is complete.")}
+          </p>
+          <p>
+            {__("Please enjoy free content in the meantime!")}
+          </p>
+          <p>
+            <Link
+              onClick={() => navigate("/discover")}
+              button="primary"
+              label="Return Home"
+            />
+          </p>
+        </div>
+      );
+    }
+
     return (
       <main className="main--single-column">
         <SubHeader />
-        {isCard ? <section className="card">{content}</section> : content}
+        {cardHeader && <section className="card">{cardHeader}</section>}
+        {content}
       </main>
     );
   }

@@ -25,15 +25,13 @@ class UserVerify extends React.PureComponent {
     const { errorMessage, isPending, reward } = this.props;
     return (
       <div>
-        <p>
-          <span>
+        {(!reward || !reward.transaction_id) &&
+          <p>
             Please link a credit card to confirm your identity and receive{" "}
-          </span>
-          {reward
-            ? <CreditAmount amount={parseFloat(reward.reward_amount)} />
-            : <span>your reward</span>}
-          {"."}
-        </p>
+            {reward
+              ? <CreditAmount amount={parseFloat(reward.reward_amount)} />
+              : <span>your reward</span>}
+          </p>}
         <p>{__("This is to prevent abuse. You will not be charged.")}</p>
         {errorMessage && <p className="form-field__error">{errorMessage}</p>}
         <CardVerify

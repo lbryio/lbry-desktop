@@ -138,6 +138,7 @@ lbryio.authenticate = function() {
         language: "en",
         has_email: true,
         has_verified_email: true,
+        is_identity_verified: true,
         is_reward_approved: false,
         is_reward_eligible: false,
       });

@@ -30,11 +30,6 @@ export const selectUserHasEmail = createSelector(
   (user, email) => (user && user.has_email) || !!email
 );
 
-export const selectUserIsRewardEligible = createSelector(
-  selectUser,
-  user => user && user.is_reward_eligible
-);
-
 export const selectUserIsRewardApproved = createSelector(
   selectUser,
   user => user && user.is_reward_approved

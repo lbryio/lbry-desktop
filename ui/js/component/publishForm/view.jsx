@@ -42,6 +42,7 @@ class PublishForm extends React.PureComponent {
       submitting: false,
       creatingChannel: false,
       modal: null,
+      isFee: false,
     };
   }
 
@@ -635,11 +636,8 @@ class PublishForm extends React.PureComponent {
                 label={__("Free")}
                 type="radio"
                 name="isFree"
-                value="1"
-                onChange={() => {
-                  this.handleFeePrefChange(false);
-                }}
-                defaultChecked={!this.state.isFee}
+                onChange={() => this.handleFeePrefChange(false)}
+                checked={!this.state.isFee}
               />
               <FormField
                 type="radio"
@@ -648,7 +646,7 @@ class PublishForm extends React.PureComponent {
                 onChange={() => {
                   this.handleFeePrefChange(true);
                 }}
-                defaultChecked={this.state.isFee}
+                checked={this.state.isFee}
               />
               <span className={!this.state.isFee ? "hidden" : ""}>
                 <FormField
@@ -789,12 +787,14 @@ class PublishForm extends React.PureComponent {
 
           <section className="card">
             <div className="card__title-primary">
-              <h4>{__("Address")}</h4>
+              <h4>{__("Content URL")}</h4>
               <div className="card__subtitle">
-                {__("Where should this content permanently reside?")}
+                {__(
+                  "This is the exact address where people find your content (ex. lbry://myvideo)."
+                )}
                 {" "}
                 <Link
-                  label={__("Read more")}
+                  label={__("Learn more")}
                   href="https://lbry.io/faq/naming"
                 />.
               </div>

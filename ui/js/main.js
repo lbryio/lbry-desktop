@@ -5,7 +5,7 @@ import App from "component/app/index.js";
 import SnackBar from "component/snackBar";
 import { Provider } from "react-redux";
 import store from "store.js";
-import SplashScreen from "component/splash.js";
+import SplashScreen from "component/splash";
 import { doChangePath, doNavigate, doDaemonReady } from "actions/app";
 import { toQueryString } from "util/query_params";
 import * as types from "constants/action_types";
@@ -35,10 +35,10 @@ window.addEventListener("popstate", (event, param) => {
 
   if (hash !== "") {
     const url = hash.split("#")[1];
-    const params = event.state;
+    const { params, scrollY } = event.state || {};
     const queryString = toQueryString(params);
 
-    app.store.dispatch(doChangePath(`${url}?${queryString}`));
+    app.store.dispatch(doChangePath(`${url}?${queryString}`, { scrollY }));
   } else {
     app.store.dispatch(doChangePath("/discover"));
   }
@@ -111,7 +111,12 @@ var init = function() {
   if (window.sessionStorage.getItem("loaded") == "y") {
     onDaemonReady();
   } else {
-    ReactDOM.render(<SplashScreen onLoadDone={onDaemonReady} />, canvas);
+    ReactDOM.render(
+      <Provider store={store}>
+        <SplashScreen onReadyToLaunch={onDaemonReady} />
+      </Provider>,
+      canvas
+    );
   }
 };
 

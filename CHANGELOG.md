@@ -25,6 +25,8 @@ Web UI version numbers should always match the corresponding version of LBRY App
   * Fixed inappropriate text showing on searches
   * Stop discover page from pushing jumping vertically while loading
   * Restored feedback on claim amounts
+  * Fixed hiding price input when Free is checked on publish form
+  * Fixed hiding new identity fields on publish form
 
 ### Deprecated
   *

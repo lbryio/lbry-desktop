@@ -16,9 +16,9 @@ import { doFileList } from "actions/file_info";
 
 const { remote, ipcRenderer, shell } = require("electron");
 const path = require("path");
-const app = require("electron").remote.app;
 const { download } = remote.require("electron-dl");
 const fs = remote.require("fs");
+const { lbrySettings: config } = require("../../../app/package.json");
 
 const queryStringFromParams = params => {
   return Object.keys(params).map(key => `${key}=${params[key]}`).join("&");
@@ -33,7 +33,7 @@ export function doNavigate(path, params = {}) {
 
     const state = getState();
     const pageTitle = selectPageTitle(state);
-    dispatch(doHistoryPush(params, pageTitle, url));
+    dispatch(doHistoryPush({ params }, pageTitle, url));
   };
 }
 
@@ -51,7 +51,7 @@ export function doAuthNavigate(pathAfterAuth = null, params = {}) {
   };
 }
 
-export function doChangePath(path) {
+export function doChangePath(path, options = {}) {
   return function(dispatch, getState) {
     dispatch({
       type: types.CHANGE_PATH,
@@ -62,8 +62,12 @@ export function doChangePath(path) {
 
     const state = getState();
     const pageTitle = selectPageTitle(state);
+    const scrollY = options.scrollY;
+
     window.document.title = pageTitle;
-    window.scrollTo(0, 0);
+
+    if (scrollY) window.scrollTo(0, scrollY);
+    else window.scrollTo(0, 0);
 
     const currentPage = selectCurrentPage(state);
     if (currentPage === "search") {
@@ -81,10 +85,26 @@ export function doHistoryBack() {
   };
 }
 
-export function doHistoryPush(params, title, relativeUrl) {
+export function doHistoryPush(currentState, title, relativeUrl) {
   return function(dispatch, getState) {
     title += " - LBRY";
-    history.pushState(params, title, `#${relativeUrl}`);
+    history.pushState(currentState, title, `#${relativeUrl}`);
+  };
+}
+
+export function doRecordScroll(scroll) {
+  return function(dispatch, getState) {
+    const state = getState();
+    const historyState = history.state;
+
+    if (!historyState) return;
+
+    historyState.scrollY = scroll;
+    history.replaceState(
+      historyState,
+      document.title,
+      `#${state.app.currentPath}`
+    );
   };
 }
 
@@ -131,8 +151,9 @@ export function doDownloadUpgrade() {
   return function(dispatch, getState) {
     const state = getState();
     // Make a new directory within temp directory so the filename is guaranteed to be available
-    const dir = fs.mkdtempSync(app.getPath("temp") + require("path").sep);
-    const upgradeFilename = selectUpgradeFilename(state);
+    const dir = fs.mkdtempSync(
+      remote.app.getPath("temp") + require("path").sep
+    );
 
     let options = {
       onProgress: p => dispatch(doUpdateDownloadProgress(Math.round(p * 100))),
@@ -216,6 +237,18 @@ export function doCheckUpgradeAvailable() {
   };
 }
 
+export function doCheckDaemonVersion() {
+  return function(dispatch, getState) {
+    lbry.version().then(({ lbrynet_version }) => {
+      dispatch({
+        type: config.lbrynetDaemonVersion == lbrynet_version
+          ? types.DAEMON_VERSION_MATCH
+          : types.DAEMON_VERSION_MISMATCH,
+      });
+    });
+  };
+}
+
 export function doAlertError(errorList) {
   return function(dispatch, getState) {
     const state = getState();
@@ -232,7 +265,8 @@ export function doAlertError(errorList) {
 }
 
 export function doDaemonReady() {
-  return function(dispatch) {
+  return function(dispatch, getState) {
+    history.replaceState({}, document.title, `#/discover`);
     dispatch(doAuthenticate());
     dispatch({
       type: types.DAEMON_READY,
@@ -260,5 +294,12 @@ export function doClearCache() {
     window.cacheStore.purge();
 
     return Promise.resolve();
+  };
+}
+
+export function doQuitAndLaunchDaemonHelp() {
+  return function(dispatch, getState) {
+    shell.openExternal("https://lbry.io/faq/incompatible-protocol-version");
+    remote.app.quit();
   };
 }

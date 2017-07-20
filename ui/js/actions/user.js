@@ -159,22 +159,22 @@ export function doUserIdentityVerify(stripeToken) {
         }
       })
       .catch(error => {
-        let user = selectUser(getState());
-        user.is_identity_verified = true;
-        if (user.is_identity_verified) {
-          dispatch({
-            type: types.USER_IDENTITY_VERIFY_SUCCESS,
-            data: { user },
-          });
-        } else {
-          throw new Error(
-            "Your identity is still not verified. This should not happen."
-          ); //shouldn't happen
-        }
-        // dispatch({
-        //   type: types.USER_IDENTITY_VERIFY_FAILURE,
-        //   data: { error: error.toString() },
-        // });
+        // let user = selectUser(getState());
+        // user.is_identity_verified = true;
+        // if (user.is_identity_verified) {
+        //   dispatch({
+        //     type: types.USER_IDENTITY_VERIFY_SUCCESS,
+        //     data: { user },
+        //   });
+        // } else {
+        //   throw new Error(
+        //     "Your identity is still not verified. This should not happen."
+        //   ); //shouldn't happen
+        // }
+        dispatch({
+          type: types.USER_IDENTITY_VERIFY_FAILURE,
+          data: { error: error.toString() },
+        });
       });
   };
 }
