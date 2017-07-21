@@ -38,7 +38,7 @@ class UserVerify extends React.PureComponent {
           label={__("Link Card and Finish")}
           disabled={isPending}
           token={this.onToken.bind(this)}
-          stripeKey="pk_test_NoL1JWL7i1ipfhVId5KfDZgo"
+          stripeKey="pk_live_e8M4dRNnCCbmpZzduEUZBgJO"
         />
       </div>
     );
