@@ -48,7 +48,7 @@ class App extends React.PureComponent {
     if (
       !isWelcomeAcknowledged &&
       user &&
-      (!isFetchingRewards || !isWelcomeRewardClaimed)
+      (isFetchingRewards === false && isWelcomeRewardClaimed === false)
     ) {
       openWelcomeModal();
     }

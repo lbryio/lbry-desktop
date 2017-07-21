@@ -39,7 +39,7 @@ export function doAuthNavigate(pathAfterAuth = null, params = {}) {
       dispatch({
         type: types.CHANGE_AFTER_AUTH_PATH,
         data: {
-          path: `${pathAfterAuth}?${queryStringFromParams(params)}`,
+          path: `${pathAfterAuth}?${toQueryString(params)}`,
         },
       });
     }
@@ -248,8 +248,6 @@ export function doCheckDaemonVersion() {
 export function doAlertError(errorList) {
   return function(dispatch, getState) {
     const state = getState();
-    console.log("do alert error");
-    console.log(errorList);
     dispatch({
       type: types.OPEN_MODAL,
       data: {

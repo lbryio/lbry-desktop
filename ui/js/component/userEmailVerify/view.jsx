@@ -24,8 +24,6 @@ class UserEmailVerify extends React.PureComponent {
 
   render() {
     const { errorMessage, isPending } = this.props;
-    console.log("user email verify render");
-    console.log(this.props);
     return (
       <form
         onSubmit={event => {
