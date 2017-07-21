@@ -76,3 +76,8 @@ export const selectUserIsAuthRequested = createSelector(
   (isEmailDeclined, isPending, isVerificationCandidate, hasEmail) =>
     !isEmailDeclined && (isPending || !hasEmail || isVerificationCandidate)
 );
+
+export const selectAccessToken = createSelector(
+  _selectState,
+  state => state.accessToken
+);
