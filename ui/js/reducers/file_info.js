@@ -58,15 +58,15 @@ reducers[types.DOWNLOADING_STARTED] = function(state, action) {
   const { uri, outpoint, fileInfo } = action.data;
 
   const newByOutpoint = Object.assign({}, state.byOutpoint);
-  const newDownloading = Object.assign({}, state.urisDownloading);
+  const newDownloading = Object.assign({}, state.downloadingByOutpoin);
   const newLoading = Object.assign({}, state.urisLoading);
 
-  newDownloading[uri] = true;
+  newDownloading[outpoint] = true;
   newByOutpoint[outpoint] = fileInfo;
   delete newLoading[uri];
 
   return Object.assign({}, state, {
-    urisDownloading: newDownloading,
+    downloadingByOutpoint: newDownloading,
     urisLoading: newLoading,
     byOutpoint: newByOutpoint,
   });
@@ -76,14 +76,14 @@ reducers[types.DOWNLOADING_PROGRESSED] = function(state, action) {
   const { uri, outpoint, fileInfo } = action.data;
 
   const newByOutpoint = Object.assign({}, state.byOutpoint);
-  const newDownloading = Object.assign({}, state.urisDownloading);
+  const newDownloading = Object.assign({}, state.downloadingByOutpoint);
 
   newByOutpoint[outpoint] = fileInfo;
-  newDownloading[uri] = true;
+  newDownloading[outpoint] = true;
 
   return Object.assign({}, state, {
     byOutpoint: newByOutpoint,
-    urisDownloading: newDownloading,
+    downloadingByOutpoint: newDownloading,
   });
 };
 
@@ -91,14 +91,14 @@ reducers[types.DOWNLOADING_COMPLETED] = function(state, action) {
   const { uri, outpoint, fileInfo } = action.data;
 
   const newByOutpoint = Object.assign({}, state.byOutpoint);
-  const newDownloading = Object.assign({}, state.urisDownloading);
+  const newDownloading = Object.assign({}, state.downloadingByOutpoint);
 
   newByOutpoint[outpoint] = fileInfo;
-  delete newDownloading[uri];
+  delete newDownloading[outpoint];
 
   return Object.assign({}, state, {
     byOutpoint: newByOutpoint,
-    urisDownloading: newDownloading,
+    downloadingByOutpoint: newDownloading,
   });
 };
 
