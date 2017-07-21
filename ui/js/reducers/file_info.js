@@ -106,11 +106,14 @@ reducers[types.FILE_DELETE] = function(state, action) {
   const { outpoint } = action.data;
 
   const newByOutpoint = Object.assign({}, state.byOutpoint);
+  const downloadingByOutpoint = Object.assign({}, state.downloadingByOutpoint);
 
   delete newByOutpoint[outpoint];
+  delete downloadingByOutpoint[outpoint];
 
   return Object.assign({}, state, {
     byOutpoint: newByOutpoint,
+    downloadingByOutpoint,
   });
 };
 

@@ -10,8 +10,11 @@ import {
   selectIsFetchingFileList,
   selectFileInfosByOutpoint,
   selectUrisLoading,
+  selectTotalDownloadProgress,
 } from "selectors/file_info";
-import { doCloseModal } from "actions/app";
+import { doCloseModal, doHistoryBack } from "actions/app";
+import setProgressBar from "util/setProgressBar";
+import batchActions from "util/batchActions";
 
 const { shell } = require("electron");
 
@@ -119,7 +122,22 @@ export function doDeleteFile(outpoint, deleteFromComputer, abandonClaim) {
       },
     });
 
-    dispatch(doCloseModal());
+    const totalProgress = selectTotalDownloadProgress(getState());
+    setProgressBar(totalProgress);
+  };
+}
+
+export function doDeleteFileAndGoBack(
+  fileInfo,
+  deleteFromComputer,
+  abandonClaim
+) {
+  return function(dispatch, getState) {
+    const actions = [];
+    actions.push(doCloseModal());
+    actions.push(doHistoryBack());
+    actions.push(doDeleteFile(fileInfo, deleteFromComputer, abandonClaim));
+    dispatch(batchActions(...actions));
   };
 }
 
