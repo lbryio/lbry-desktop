@@ -142,6 +142,14 @@ reducers[types.USER_IDENTITY_VERIFY_FAILURE] = function(state, action) {
   });
 };
 
+reducers[types.FETCH_ACCESS_TOKEN_SUCCESS] = function(state, action) {
+  const { token } = action.data;
+
+  return Object.assign({}, state, {
+    accessToken: token,
+  });
+};
+
 export default function reducer(state = defaultState, action) {
   const handler = reducers[action.type];
   if (handler) return handler(state, action);

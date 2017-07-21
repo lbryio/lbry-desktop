@@ -68,3 +68,8 @@ export const selectUserIsVerificationCandidate = createSelector(
   selectUser,
   user => user && (!user.has_verified_email || !user.is_identity_verified)
 );
+
+export const selectAccessToken = createSelector(
+  _selectState,
+  state => state.accessToken
+);

@@ -142,6 +142,8 @@ class FileActions extends React.PureComponent {
           onClick={() => openInShell(fileInfo)}
         />
       );
+    } else if (!fileInfo) {
+      content = <BusyMessage message={__("Fetching file info")} />;
     } else {
       console.log("handle this case of file action props?");
     }

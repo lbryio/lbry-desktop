@@ -14,6 +14,7 @@ class HelpPage extends React.PureComponent {
       lbryId: null,
       uiVersion: null,
       upgradeAvailable: null,
+      accessTokenHidden: true,
     };
   }
 
@@ -35,6 +36,14 @@ class HelpPage extends React.PureComponent {
       this.setState({
         lbryId: info.lbry_id,
       });
+    });
+
+    if (!this.props.accessToken) this.props.fetchAccessToken();
+  }
+
+  showAccessToken() {
+    this.setState({
+      accessTokenHidden: false,
     });
   }
 
@@ -121,6 +130,7 @@ class HelpPage extends React.PureComponent {
             </div>
           </div>
         </section>
+
         <section className="card">
           <div className="card__title-primary"><h3>{__("About")}</h3></div>
           <div className="card__content">
@@ -162,6 +172,18 @@ class HelpPage extends React.PureComponent {
                     <tr>
                       <th>{__("Installation ID")}</th>
                       <td>{this.state.lbryId}</td>
+                    </tr>
+                    <tr>
+                      <th>{__("Access Token")}</th>
+                      <td>
+                        {this.state.accessTokenHidden &&
+                          <Link
+                            label={__("show")}
+                            onClick={this.showAccessToken.bind(this)}
+                          />}
+                        {!this.state.accessTokenHidden &&
+                          this.props.accessToken}
+                      </td>
                     </tr>
                   </tbody>
                 </table>

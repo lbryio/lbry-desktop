@@ -178,3 +178,14 @@ export function doUserIdentityVerify(stripeToken) {
       });
   };
 }
+
+export function doFetchAccessToken() {
+  return function(dispatch, getState) {
+    const success = token =>
+      dispatch({
+        type: types.FETCH_ACCESS_TOKEN_SUCCESS,
+        data: { token },
+      });
+    lbryio.getAuthToken().then(success);
+  };
+}

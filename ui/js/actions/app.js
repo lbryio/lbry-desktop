@@ -12,6 +12,7 @@ import { doSearch } from "actions/search";
 import { doFetchDaemonSettings } from "actions/settings";
 import { doAuthenticate } from "actions/user";
 import { doFileList } from "actions/file_info";
+import { toQueryString } from "util/query_params";
 
 const { remote, ipcRenderer, shell } = require("electron");
 const path = require("path");
@@ -19,14 +20,10 @@ const { download } = remote.require("electron-dl");
 const fs = remote.require("fs");
 const { lbrySettings: config } = require("../../../app/package.json");
 
-const queryStringFromParams = params => {
-  return Object.keys(params).map(key => `${key}=${params[key]}`).join("&");
-};
-
 export function doNavigate(path, params = {}) {
   return function(dispatch, getState) {
     let url = path;
-    if (params) url = `${url}?${queryStringFromParams(params)}`;
+    if (params) url = `${url}?${toQueryString(params)}`;
 
     dispatch(doChangePath(url));
 
