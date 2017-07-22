@@ -13,6 +13,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
   * Support markdown makeup in claim description
   * Replaced free speech flag (used when image is missing) with labeled color tiles
   * Added a loading message to file actions
+  * URL is auto suggested in Publish Page
 
 ### Changed
   * Publishes now uses claims rather than files
