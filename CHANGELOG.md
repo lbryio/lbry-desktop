@@ -28,6 +28,9 @@ Web UI version numbers should always match the corresponding version of LBRY App
   * Restored feedback on claim amounts
   * Fixed hiding price input when Free is checked on publish form
   * Fixed hiding new identity fields on publish form
+  * Fixed files on downloaded tab not showing download progress
+  * Fixed downloading files that are deleted not being removed from the downloading list
+  * Fixed download progress bar not being cleared when a downloading file is deleted
 
 ### Deprecated
   *
