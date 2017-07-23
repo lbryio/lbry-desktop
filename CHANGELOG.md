@@ -31,6 +31,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
   * Fixed files on downloaded tab not showing download progress
   * Fixed downloading files that are deleted not being removed from the downloading list
   * Fixed download progress bar not being cleared when a downloading file is deleted
+  * Fixed refresh regression after adding scroll position to history state
 
 ### Deprecated
   *
