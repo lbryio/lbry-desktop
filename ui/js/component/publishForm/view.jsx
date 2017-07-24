@@ -43,6 +43,7 @@ class PublishForm extends React.PureComponent {
       creatingChannel: false,
       modal: null,
       isFee: false,
+      customUrl: false,
     };
   }
 
@@ -203,6 +204,9 @@ class PublishForm extends React.PureComponent {
 
   handleNameChange(event) {
     var rawName = event.target.value;
+    this.setState({
+      customUrl: true,
+    });
 
     this.nameChanged(rawName);
   }
@@ -445,9 +449,22 @@ class PublishForm extends React.PureComponent {
   onFileChange() {
     if (this.refs.file.getValue()) {
       this.setState({ hasFile: true });
+      if (!this.state.customUrl) {
+        let fileName = this._getFileName(this.refs.file.getValue());
+        this.nameChanged(fileName);
+      }
     } else {
       this.setState({ hasFile: false });
     }
+  }
+
+  _getFileName(fileName) {
+    const path = require("path");
+    const extension = path.extname(fileName);
+
+    fileName = path.basename(fileName, extension);
+    fileName = fileName.replace(/[^A-Za-z0-9-]/g, "");
+    return fileName;
   }
 
   getNameBidHelpText() {
