@@ -34,7 +34,6 @@ class UserEmailVerify extends React.PureComponent {
         <FormRow
           type="text"
           label={__("Verification Code")}
-          placeholder="a94bXXXXXXXXXXXXXX"
           name="code"
           value={this.state.code}
           onChange={event => {
@@ -45,7 +44,7 @@ class UserEmailVerify extends React.PureComponent {
         {/* render help separately so it always shows */}
         <div className="form-field__helper">
           <p>
-            {__("Email")}{" "}
+            {__("Check your email for a verification code. Email")}{" "}
             <Link href="mailto:help@lbry.io" label="help@lbry.io" />{" "}
             {__("if you did not receive or are having trouble with your code.")}
           </p>

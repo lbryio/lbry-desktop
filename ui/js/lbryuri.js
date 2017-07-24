@@ -3,6 +3,8 @@ const CLAIM_ID_MAX_LEN = 40;
 
 const lbryuri = {};
 
+lbryuri.REGEXP_INVALID_URI = /[^A-Za-z0-9-]/g;
+
 /**
  * Parses a LBRY name into its component parts. Throws errors with user-friendly
  * messages for invalid names.
@@ -70,7 +72,7 @@ lbryuri.parse = function(uri, requireProto = false) {
     contentName = path;
   }
 
-  const nameBadChars = (channelName || name).match(/[^A-Za-z0-9-]/g);
+  const nameBadChars = (channelName || name).match(lbryuri.REGEXP_INVALID_URI);
   if (nameBadChars) {
     throw new Error(
       __(
@@ -119,7 +121,7 @@ lbryuri.parse = function(uri, requireProto = false) {
       throw new Error(__("Only channel URIs may have a path."));
     }
 
-    const pathBadChars = path.match(/[^A-Za-z0-9-]/g);
+    const pathBadChars = path.match(lbryuri.REGEXP_INVALID_URI);
     if (pathBadChars) {
       throw new Error(
         __(`Invalid character in path: %s`, pathBadChars.join(", "))

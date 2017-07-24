@@ -5,7 +5,7 @@ import lbryuri from "lbryuri";
 import { selectBalance } from "selectors/wallet";
 import {
   selectFileInfoForUri,
-  selectUrisDownloading,
+  selectDownloadingByOutpoint,
 } from "selectors/file_info";
 import { selectResolvingUris } from "selectors/content";
 import { selectCostInfoForUri } from "selectors/cost_info";
@@ -265,8 +265,9 @@ export function doPurchaseUri(uri, purchaseModalName) {
     const state = getState();
     const balance = selectBalance(state);
     const fileInfo = selectFileInfoForUri(state, { uri });
-    const downloadingByUri = selectUrisDownloading(state);
-    const alreadyDownloading = !!downloadingByUri[uri];
+    const downloadingByOutpoint = selectDownloadingByOutpoint(state);
+    const alreadyDownloading =
+      fileInfo && !!downloadingByOutpoint[fileInfo.outpoint];
 
     // we already fully downloaded the file.
     if (fileInfo && fileInfo.completed) {

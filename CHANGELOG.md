@@ -13,6 +13,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
   * Support markdown makeup in claim description
   * Replaced free speech flag (used when image is missing) with labeled color tiles
   * Added a loading message to file actions
+  * URL is auto suggested in Publish Page
 
 ### Changed
   * Publishes now uses claims rather than files
@@ -28,6 +29,11 @@ Web UI version numbers should always match the corresponding version of LBRY App
   * Restored feedback on claim amounts
   * Fixed hiding price input when Free is checked on publish form
   * Fixed hiding new identity fields on publish form
+  * Fixed files on downloaded tab not showing download progress
+  * Fixed downloading files that are deleted not being removed from the downloading list
+  * Fixed download progress bar not being cleared when a downloading file is deleted
+  * Fixed refresh regression after adding scroll position to history state
+  * Fixed app thinking downloads with 0 progress were downloaded after restart
 
 ### Deprecated
   *

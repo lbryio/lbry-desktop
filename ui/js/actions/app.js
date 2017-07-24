@@ -13,6 +13,7 @@ import { doFetchDaemonSettings } from "actions/settings";
 import { doAuthenticate } from "actions/user";
 import { doFileList } from "actions/file_info";
 import { toQueryString } from "util/query_params";
+import { parseQueryParams } from "util/query_params";
 
 const { remote, ipcRenderer, shell } = require("electron");
 const path = require("path");
@@ -76,6 +77,7 @@ export function doChangePath(path, options = {}) {
 export function doHistoryBack() {
   return function(dispatch, getState) {
     if (!history.state) return;
+    if (history.state.index === 0) return;
 
     history.back();
   };
@@ -260,7 +262,9 @@ export function doAlertError(errorList) {
 
 export function doDaemonReady() {
   return function(dispatch, getState) {
-    history.replaceState({}, document.title, `#/discover`);
+    const path = window.location.hash || "#/discover";
+    const params = parseQueryParams(path.split("?")[1] || "");
+    history.replaceState({ params, index: 0 }, document.title, `${path}`);
     dispatch(doAuthenticate());
     dispatch({
       type: types.DAEMON_READY,
