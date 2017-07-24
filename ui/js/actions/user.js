@@ -1,8 +1,9 @@
 import * as types from "constants/action_types";
 import lbryio from "lbryio";
 import { setLocal } from "utils";
-import { doRewardList } from "actions/rewards";
+import { doRewardList, doClaimRewardType } from "actions/rewards";
 import { selectEmailToVerify, selectUser } from "selectors/user";
+import rewards from "rewards";
 
 export function doAuthenticate() {
   return function(dispatch, getState) {
@@ -152,6 +153,7 @@ export function doUserIdentityVerify(stripeToken) {
             type: types.USER_IDENTITY_VERIFY_SUCCESS,
             data: { user },
           });
+          dispatch(doClaimRewardType(rewards.TYPE_NEW_USER));
         } else {
           throw new Error(
             "Your identity is still not verified. This should not happen."
@@ -159,18 +161,6 @@ export function doUserIdentityVerify(stripeToken) {
         }
       })
       .catch(error => {
-        // let user = selectUser(getState());
-        // user.is_identity_verified = true;
-        // if (user.is_identity_verified) {
-        //   dispatch({
-        //     type: types.USER_IDENTITY_VERIFY_SUCCESS,
-        //     data: { user },
-        //   });
-        // } else {
-        //   throw new Error(
-        //     "Your identity is still not verified. This should not happen."
-        //   ); //shouldn't happen
-        // }
         dispatch({
           type: types.USER_IDENTITY_VERIFY_FAILURE,
           data: { error: error.toString() },

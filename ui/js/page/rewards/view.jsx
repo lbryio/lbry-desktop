@@ -97,11 +97,16 @@ class RewardsPage extends React.PureComponent {
             {" "}
             {__("This can take anywhere from several minutes to several days.")}
           </p>
+
           <p>
-            {__("You will receive an email when this process is complete.")}
+            {__(
+              "We apologize for this inconvenience, but have added this additional step to prevent fraud."
+            )}
           </p>
           <p>
-            {__("Please enjoy free content in the meantime!")}
+            {__("You will receive an email when this process is complete.") +
+              " " +
+              __("Please enjoy free content in the meantime!")}
           </p>
           <p>
             <Link

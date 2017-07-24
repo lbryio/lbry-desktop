@@ -1,4 +1,5 @@
 import * as types from "constants/action_types";
+import * as modals from "constants/modal_types";
 import lbryio from "lbryio";
 import rewards from "rewards";
 import { selectRewardsByType } from "selectors/rewards";
@@ -58,6 +59,12 @@ export function doClaimReward(reward, saveError = false) {
           reward,
         },
       });
+      if (reward.reward_type == rewards.TYPE_NEW_USER) {
+        dispatch({
+          type: types.OPEN_MODAL,
+          data: { modal: modals.FIRST_REWARD },
+        });
+      }
     };
 
     const failure = error => {

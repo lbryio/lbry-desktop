@@ -15,7 +15,6 @@ const select = (state, props) => {
     selectReward = makeSelectRewardByType();
 
   return {
-    hasClaimed: selectHasClaimed(state, { reward_type: rewards.TYPE_NEW_USER }),
     isRewardApproved: selectUserIsRewardApproved(state),
     reward: selectReward(state, { reward_type: rewards.TYPE_NEW_USER }),
   };

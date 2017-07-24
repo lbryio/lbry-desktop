@@ -6,6 +6,7 @@ import ModalDownloading from "component/modalDownloading";
 import ModalInsufficientCredits from "component/modalInsufficientCredits";
 import ModalUpgrade from "component/modalUpgrade";
 import ModalWelcome from "component/modalWelcome";
+import ModalFirstReward from "component/modalFirstReward";
 import lbry from "lbry";
 import * as modals from "constants/modal_types";
 
@@ -72,6 +73,7 @@ class App extends React.PureComponent {
         {modal == modals.ERROR && <ModalError />}
         {modal == modals.INSUFFICIENT_CREDITS && <ModalInsufficientCredits />}
         {modal == modals.WELCOME && <ModalWelcome />}
+        {modal == modals.FIRST_REWARD && <ModalFirstReward />}
       </div>
     );
   }
