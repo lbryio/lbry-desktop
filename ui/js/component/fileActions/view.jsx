@@ -118,7 +118,10 @@ class FileActions extends React.PureComponent {
           />
         </div>
       );
-    } else if (fileInfo === null && !downloading) {
+    } else if (
+      (fileInfo === null || (fileInfo && fileInfo.written_bytes === 0)) &&
+      !downloading
+    ) {
       if (!costInfo) {
         content = <BusyMessage message={__("Fetching cost info")} />;
       } else {
