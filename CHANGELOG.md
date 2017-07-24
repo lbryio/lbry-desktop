@@ -40,8 +40,8 @@ Web UI version numbers should always match the corresponding version of LBRY App
   *
 
 ### Removed
-  *
-  *
+  * Removed bandwidth caps from settings, because the daemon was not respecting them anyway.
+  * 
 
 ## [0.13.0] - 2017-06-30
 
