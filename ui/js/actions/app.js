@@ -4,7 +4,6 @@ import {
   selectUpdateUrl,
   selectUpgradeDownloadPath,
   selectUpgradeDownloadItem,
-  selectUpgradeFilename,
   selectPageTitle,
   selectCurrentPage,
   selectCurrentParams,
@@ -32,6 +31,20 @@ export function doNavigate(path, params = {}) {
     const state = getState();
     const pageTitle = selectPageTitle(state);
     dispatch(doHistoryPush({ params }, pageTitle, url));
+  };
+}
+
+export function doAuthNavigate(pathAfterAuth = null, params = {}) {
+  return function(dispatch, getState) {
+    if (pathAfterAuth) {
+      dispatch({
+        type: types.CHANGE_AFTER_AUTH_PATH,
+        data: {
+          path: `${pathAfterAuth}?${toQueryString(params)}`,
+        },
+      });
+    }
+    dispatch(doNavigate("/auth"));
   };
 }
 
@@ -237,8 +250,6 @@ export function doCheckDaemonVersion() {
 export function doAlertError(errorList) {
   return function(dispatch, getState) {
     const state = getState();
-    console.log("do alert error");
-    console.log(errorList);
     dispatch({
       type: types.OPEN_MODAL,
       data: {

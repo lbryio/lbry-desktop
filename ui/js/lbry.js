@@ -288,11 +288,6 @@ lbry.setClientSetting = function(setting, value) {
   return localStorage.setItem("setting_" + setting, JSON.stringify(value));
 };
 
-//utilities
-lbry.formatCredits = function(amount, precision) {
-  return amount.toFixed(precision || 1).replace(/\.?0+$/, "");
-};
-
 lbry.formatName = function(name) {
   // Converts LBRY name to standard format (all lower case, no special characters, spaces replaced by dashes)
   name = name.replace("/s+/g", "-");

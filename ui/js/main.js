@@ -6,10 +6,8 @@ import SnackBar from "component/snackBar";
 import { Provider } from "react-redux";
 import store from "store.js";
 import SplashScreen from "component/splash";
-import AuthOverlay from "component/authOverlay";
 import { doChangePath, doNavigate, doDaemonReady } from "actions/app";
 import { toQueryString } from "util/query_params";
-import { selectBadgeNumber } from "selectors/app";
 import * as types from "constants/action_types";
 
 const env = ENV;
@@ -97,19 +95,6 @@ const updateProgress = () => {
 
 const initialState = app.store.getState();
 
-// import whyDidYouUpdate from "why-did-you-update";
-// if (env === "development") {
-//   /*
-// 		https://github.com/garbles/why-did-you-update
-// 		"A function that monkey patches React and notifies you in the console when
-// 		potentially unnecessary re-renders occur."
-//
-// 		Just checks if props change between updates. Can be fixed by manually
-// 		adding a check in shouldComponentUpdate or using React.PureComponent
-// 	*/
-//   whyDidYouUpdate(React);
-// }
-
 var init = function() {
   function onDaemonReady() {
     window.sessionStorage.setItem("loaded", "y"); //once we've made it here once per session, we don't need to show splash again
@@ -117,7 +102,7 @@ var init = function() {
 
     ReactDOM.render(
       <Provider store={store}>
-        <div><AuthOverlay /><App /><SnackBar /></div>
+        <div><App /><SnackBar /></div>
       </Provider>,
       canvas
     );

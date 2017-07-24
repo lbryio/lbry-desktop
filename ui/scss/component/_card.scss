@@ -164,6 +164,10 @@ $height-card-small: $spacing-vertical * 15;
   height: $width-card-small * 9 / 16;
 }
 
+.card--form {
+  width: $width-input-text + $padding-card-horizontal * 2;
+}
+
 .card__subtitle {
   color: $color-help;
   font-size: 0.85em;

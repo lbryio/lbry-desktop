@@ -2,10 +2,11 @@ import React from "react";
 import { doNavigate } from "actions/app";
 import { connect } from "react-redux";
 import { doFetchAccessToken } from "actions/user";
-import { selectAccessToken } from "selectors/user";
+import { selectAccessToken, selectUser } from "selectors/user";
 import HelpPage from "./view";
 
 const select = state => ({
+  user: selectUser(state),
   accessToken: selectAccessToken(state),
 });
 

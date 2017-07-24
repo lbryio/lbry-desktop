@@ -1,8 +1,6 @@
 import React from "react";
-import lbryio from "lbryio";
 import { BusyMessage, CreditAmount, Icon } from "component/common";
 import SubHeader from "component/subHeader";
-import Auth from "component/auth";
 import Link from "component/link";
 import RewardLink from "component/rewardLink";
 
@@ -41,60 +39,91 @@ class RewardsPage extends React.PureComponent {
   fetchRewards(props) {
     const { fetching, rewards, fetchRewards } = props;
 
-    if (!fetching && Object.keys(rewards).length < 1) fetchRewards();
+    if (!fetching && (!rewards || !rewards.length)) {
+      fetchRewards();
+    }
   }
 
   render() {
-    const {
-      fetching,
-      isEligible,
-      isVerificationCandidate,
-      hasEmail,
-      rewards,
-    } = this.props;
+    const { doAuth, fetching, navigate, rewards, user } = this.props;
 
-    let content,
-      isCard = false;
+    let content, cardHeader;
 
-    if (!hasEmail || isVerificationCandidate) {
+    if (fetching) {
+      content = (
+        <div className="card__content">
+          <BusyMessage message={__("Fetching rewards")} />
+        </div>
+      );
+    } else if (rewards.length > 0) {
       content = (
         <div>
-          <p>
-            {__(
-              "Additional information is required to be eligible for the rewards program."
-            )}
-          </p>
-          <Auth />
+          {rewards.map(reward =>
+            <RewardTile key={reward.reward_type} reward={reward} />
+          )}
         </div>
-      );
-      isCard = true;
-    } else if (!isEligible) {
-      isCard = true;
-      content = (
-        <div className="empty">
-          <p>{__("You are not eligible to claim rewards.")}</p>
-        </div>
-      );
-    } else if (fetching) {
-      content = <BusyMessage message={__("Fetching rewards")} />;
-    } else if (rewards.length > 0) {
-      content = rewards.map(reward =>
-        <RewardTile key={reward.reward_type} reward={reward} />
       );
     } else {
-      content = <div className="empty">{__("Failed to load rewards.")}</div>;
+      content = (
+        <div className="card__content empty">
+          {__("Failed to load rewards.")}
+        </div>
+      );
+    }
+
+    if (
+      user &&
+      (!user.primary_email ||
+        !user.has_verified_email ||
+        !user.is_identity_verified)
+    ) {
+      cardHeader = (
+        <div>
+          <div className="card__content empty">
+            <p>{__("Only verified accounts are eligible to earn rewards.")}</p>
+          </div>
+          <div className="card__content">
+            <Link onClick={doAuth} button="primary" label="Become Verified" />
+          </div>
+        </div>
+      );
+    } else if (user && !user.is_reward_approved) {
+      cardHeader = (
+        <div className="card__content">
+          <p>
+            {__(
+              "This account must undergo review before you can participate in the rewards program."
+            )}
+            {" "}
+            {__("This can take anywhere from several minutes to several days.")}
+          </p>
+
+          <p>
+            {__(
+              "We apologize for this inconvenience, but have added this additional step to prevent fraud."
+            )}
+          </p>
+          <p>
+            {__("You will receive an email when this process is complete.") +
+              " " +
+              __("Please enjoy free content in the meantime!")}
+          </p>
+          <p>
+            <Link
+              onClick={() => navigate("/discover")}
+              button="primary"
+              label="Return Home"
+            />
+          </p>
+        </div>
+      );
     }
 
     return (
       <main className="main--single-column">
         <SubHeader />
-        {isCard
-          ? <section className="card">
-              <div className="card__content">
-                {content}
-              </div>
-            </section>
-          : content}
+        {cardHeader && <section className="card">{cardHeader}</section>}
+        {content}
       </main>
     );
   }

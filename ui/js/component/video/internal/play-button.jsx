@@ -79,13 +79,6 @@ class VideoPlayButton extends React.PureComponent {
           onClick={this.onWatchClick.bind(this)}
         />
         <Modal
-          contentLabel={__("Not enough credits")}
-          isOpen={modal == "notEnoughCredits"}
-          onConfirmed={closeModal}
-        >
-          {__("You don't have enough LBRY credits to pay for this stream.")}
-        </Modal>
-        <Modal
           type="confirm"
           isOpen={modal == "affirmPurchaseAndPlay"}
           contentLabel={__("Confirm Purchase")}

@@ -30,6 +30,10 @@ function rewardMessage(type, amount) {
       "You earned %s LBC for making your first publication.",
       amount
     ),
+    featured_download: __(
+      "You earned %s LBC for watching a featured download.",
+      amount
+    ),
   }[type];
 }
 

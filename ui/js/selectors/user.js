@@ -12,25 +12,16 @@ export const selectUserIsPending = createSelector(
   state => state.userIsPending
 );
 
-export const selectUser = createSelector(
-  _selectState,
-  state => state.user || {}
-);
+export const selectUser = createSelector(_selectState, state => state.user);
 
 export const selectEmailToVerify = createSelector(
   _selectState,
   state => state.emailToVerify
 );
 
-export const selectUserHasEmail = createSelector(
+export const selectUserEmail = createSelector(
   selectUser,
-  selectEmailToVerify,
-  (user, email) => (user && user.has_email) || !!email
-);
-
-export const selectUserIsRewardEligible = createSelector(
-  selectUser,
-  user => user && user.is_reward_eligible
+  user => (user ? user.primary_email : null)
 );
 
 export const selectUserIsRewardApproved = createSelector(
@@ -63,18 +54,19 @@ export const selectEmailVerifyErrorMessage = createSelector(
   state => state.emailVerifyErrorMessage
 );
 
-export const selectUserIsVerificationCandidate = createSelector(
-  selectUser,
-  user => user && !user.has_verified_email
+export const selectIdentityVerifyIsPending = createSelector(
+  _selectState,
+  state => state.identityVerifyIsPending
 );
 
-export const selectUserIsAuthRequested = createSelector(
-  selectEmailNewDeclined,
-  selectAuthenticationIsPending,
-  selectUserIsVerificationCandidate,
-  selectUserHasEmail,
-  (isEmailDeclined, isPending, isVerificationCandidate, hasEmail) =>
-    !isEmailDeclined && (isPending || !hasEmail || isVerificationCandidate)
+export const selectIdentityVerifyErrorMessage = createSelector(
+  _selectState,
+  state => state.identityVerifyErrorMessage
+);
+
+export const selectUserIsVerificationCandidate = createSelector(
+  selectUser,
+  user => user && (!user.has_verified_email || !user.is_identity_verified)
 );
 
 export const selectAccessToken = createSelector(
