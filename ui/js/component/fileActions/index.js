@@ -6,6 +6,11 @@ import {
   makeSelectDownloadingForUri,
   makeSelectLoadingForUri,
 } from "selectors/file_info";
+import {
+  doSendDraftTransaction,
+  doSetDraftTransactionAmount,
+  doSetDraftTransactionAddress,
+} from "actions/wallet";
 import { makeSelectIsAvailableForUri } from "selectors/availability";
 import { selectCurrentModal } from "selectors/app";
 import { makeSelectCostInfoForUri } from "selectors/cost_info";
@@ -48,6 +53,9 @@ const perform = dispatch => ({
   startDownload: uri => dispatch(doPurchaseUri(uri, "affirmPurchase")),
   loadVideo: uri => dispatch(doLoadVideo(uri)),
   restartDownload: (uri, outpoint) => dispatch(doStartDownload(uri, outpoint)),
+  sendToAddress: () => dispatch(doSendDraftTransaction()),
+  setAmount: amount => dispatch(doSetDraftTransactionAmount(amount)),
+  setAddress: address => dispatch(doSetDraftTransactionAddress(address)),
 });
 
 export default connect(makeSelect, perform)(FileActions);

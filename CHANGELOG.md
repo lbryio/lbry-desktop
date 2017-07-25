@@ -9,6 +9,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
 ## [Unreleased]
 ### Added
   * Added a new component, `FormFieldPrice` which is now used in Publish and Settings
+  * Added a tipping button to send LBRY Credits to the publisher
   *
 
 ### Changed
