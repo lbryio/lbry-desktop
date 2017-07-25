@@ -12,11 +12,11 @@ import SubHeader from "component/subHeader";
 
 class FileListPublished extends React.PureComponent {
   componentWillMount() {
-    if (!this.props.isPending) this.props.fetchFileListPublished();
+    if (!this.props.isFetching) this.props.fetchClaims();
   }
 
   componentDidUpdate() {
-    if (this.props.fileInfos.length > 0) this.props.claimFirstPublishReward();
+    // if (this.props.claims.length > 0) this.props.fetchClaims();
   }
 
   componentWillUnmount() {
@@ -24,20 +24,20 @@ class FileListPublished extends React.PureComponent {
   }
 
   render() {
-    const { fileInfos, isPending, navigate } = this.props;
+    const { claims, isFetching, navigate } = this.props;
 
     let content;
 
-    if (fileInfos && fileInfos.length > 0) {
+    if (claims && claims.length > 0) {
       content = (
         <FileList
-          fileInfos={fileInfos}
-          fetching={isPending}
+          fileInfos={claims}
+          fetching={isFetching}
           fileTileShowEmpty={FileTile.SHOW_EMPTY_PENDING}
         />
       );
     } else {
-      if (isPending) {
+      if (isFetching) {
         content = <BusyMessage message={__("Loading")} />;
       } else {
         content = (

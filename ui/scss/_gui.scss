@@ -47,6 +47,19 @@ body
     width: $width-page-constrained;
   }
 }
+main.main--refreshing {
+  &:before {
+    $width: 30px;
+    position: absolute;
+    background: url('../img/busy.gif') no-repeat center center;
+    width: $width;
+    height: $spacing-vertical;
+    content: "";
+    left: 50%;
+    margin-left: -1 / 2 * $width;
+    display: inline-block;
+  }
+}
 
 .icon-fixed-width {
   /* This borrowed is from a component of Font Awesome we're not using, maybe add it? */

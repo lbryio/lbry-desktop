@@ -8,24 +8,40 @@ Web UI version numbers should always match the corresponding version of LBRY App
 
 ## [Unreleased]
 ### Added
-  *
-  *
+  * Added option to release claim when deleting a file
+  * Added transition to card hovers to smooth animation
+  * Support markdown makeup in claim description
+  * Replaced free speech flag (used when image is missing) with labeled color tiles
+  * Added a loading message to file actions
+  * URL is auto suggested in Publish Page
 
 ### Changed
-  *
-  *
+  * Publishes now uses claims rather than files
+  * Publishing revamped. Editing claims is much easier.
 
 ### Fixed
-  *
-  *
+  * Fixed bug with download notice when switching window focus
+  * Fixed newly published files appearing twice
+  * Fixed unconfirmed published files missing channel name
+  * Fixed old files from updated published claims appearing in downloaded list
+  * Fixed inappropriate text showing on searches
+  * Stop discover page from pushing jumping vertically while loading
+  * Restored feedback on claim amounts
+  * Fixed hiding price input when Free is checked on publish form
+  * Fixed hiding new identity fields on publish form
+  * Fixed files on downloaded tab not showing download progress
+  * Fixed downloading files that are deleted not being removed from the downloading list
+  * Fixed download progress bar not being cleared when a downloading file is deleted
+  * Fixed refresh regression after adding scroll position to history state
+  * Fixed app thinking downloads with 0 progress were downloaded after restart
 
 ### Deprecated
   *
   *
 
 ### Removed
-  *
-  *
+  * Removed bandwidth caps from settings, because the daemon was not respecting them anyway.
+  * 
 
 ## [0.13.0] - 2017-06-30
 

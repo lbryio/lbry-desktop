@@ -7,6 +7,8 @@ import { setSession, getSession } from "utils";
 import LoadingScreen from "./loading-screen";
 
 class VideoPlayer extends React.PureComponent {
+  static MP3_CONTENT_TYPES = ["audio/mpeg3", "audio/mpeg"];
+
   constructor(props) {
     super(props);
 
@@ -15,11 +17,13 @@ class VideoPlayer extends React.PureComponent {
       startedPlaying: false,
       unplayable: false,
     };
+
+    this.togglePlayListener = this.togglePlay.bind(this);
   }
 
   componentDidMount() {
     const container = this.refs.media;
-    const { mediaType } = this.props;
+    const { contentType, downloadPath, mediaType } = this.props;
     const loadedMetadata = e => {
       this.setState({ hasMetadata: true, startedPlaying: true });
       this.refs.media.children[0].play();
@@ -37,15 +41,22 @@ class VideoPlayer extends React.PureComponent {
       }
     };
 
-    player.append(
-      this.file(),
-      container,
-      { autoplay: false, controls: true },
-      renderMediaCallback.bind(this)
-    );
+    // use renderAudio override for mp3
+    if (VideoPlayer.MP3_CONTENT_TYPES.indexOf(contentType) > -1) {
+      this.renderAudio(container, null, false);
+    } else {
+      player.append(
+        this.file(),
+        container,
+        { autoplay: false, controls: true },
+        renderMediaCallback.bind(this)
+      );
+    }
 
+    document.addEventListener("keydown", this.togglePlayListener);
     const mediaElement = this.refs.media.children[0];
     if (mediaElement) {
+      mediaElement.addEventListener("click", this.togglePlayListener);
       mediaElement.addEventListener(
         "loadedmetadata",
         loadedMetadata.bind(this),
@@ -53,7 +64,6 @@ class VideoPlayer extends React.PureComponent {
           once: true,
         }
       );
-
       mediaElement.addEventListener(
         "webkitfullscreenchange",
         win32FullScreenChange.bind(this)
@@ -65,19 +75,67 @@ class VideoPlayer extends React.PureComponent {
     }
   }
 
+  componentWillUnmount() {
+    document.removeEventListener("keydown", this.togglePlayListener);
+    const mediaElement = this.refs.media.children[0];
+    if (mediaElement) {
+      mediaElement.removeEventListener("click", this.togglePlayListener);
+    }
+  }
+
+  renderAudio(container, autoplay) {
+    if (container.firstChild) {
+      container.firstChild.remove();
+    }
+
+    // clear the container
+    const { downloadPath } = this.props;
+    const audio = document.createElement("audio");
+    audio.autoplay = autoplay;
+    audio.controls = true;
+    audio.src = downloadPath;
+    container.appendChild(audio);
+  }
+
+  togglePlay(event) {
+    // ignore all events except click and spacebar keydown, or input events in a form control
+    if (
+      "keydown" === event.type &&
+      ("Space" !== event.code || "input" === event.target.tagName.toLowerCase())
+    ) {
+      return;
+    }
+    event.preventDefault();
+    const mediaElement = this.refs.media.children[0];
+    if (mediaElement) {
+      if (!mediaElement.paused) {
+        mediaElement.pause();
+      } else {
+        mediaElement.play();
+      }
+    }
+  }
+
   getPreferredVolume() {
     const volumePreference = parseFloat(getSession("prefs_volume"));
     return isNaN(volumePreference) ? 1 : volumePreference;
   }
 
   componentDidUpdate() {
-    const { mediaType, downloadCompleted } = this.props;
+    const { contentType, downloadCompleted } = this.props;
     const { startedPlaying } = this.state;
 
     if (this.playableType() && !startedPlaying && downloadCompleted) {
       const container = this.refs.media.children[0];
 
-      player.render(this.file(), container, { autoplay: true, controls: true });
+      if (VideoPlayer.MP3_CONTENT_TYPES.indexOf(contentType) > -1) {
+        this.renderAudio(this.refs.media, true);
+      } else {
+        player.render(this.file(), container, {
+          autoplay: true,
+          controls: true,
+        });
+      }
     }
   }
 

@@ -1,10 +1,12 @@
 import React from "react";
 import lbryuri from "lbryuri.js";
+import CardMedia from "component/cardMedia";
 import Link from "component/link";
-import { TruncatedText, Icon } from "component/common";
+import { Thumbnail, TruncatedText, Icon } from "component/common";
 import FilePrice from "component/filePrice";
 import UriIndicator from "component/uriIndicator";
 import NsfwOverlay from "component/nsfwOverlay";
+import TruncatedMarkdown from "component/truncatedMarkdown";
 
 class FileCard extends React.PureComponent {
   constructor(props) {
@@ -48,6 +50,9 @@ class FileCard extends React.PureComponent {
 
     const uri = lbryuri.normalize(this.props.uri);
     const title = metadata && metadata.title ? metadata.title : uri;
+    const thumbnail = metadata && metadata.thumbnail
+      ? metadata.thumbnail
+      : null;
     const obscureNsfw = this.props.obscureNsfw && metadata && metadata.nsfw;
 
     let description = "";
@@ -73,10 +78,11 @@ class FileCard extends React.PureComponent {
             onClick={() => navigate("/show", { uri })}
             className="card__link"
           >
+            <CardMedia title={title} thumbnail={thumbnail} />
             <div className="card__title-identity">
-              <h5 title={title}>
+              <div className="card__title" title={title}>
                 <TruncatedText lines={1}>{title}</TruncatedText>
-              </h5>
+              </div>
               <div className="card__subtitle">
                 <span style={{ float: "right" }}>
                   <FilePrice uri={uri} />
@@ -87,14 +93,8 @@ class FileCard extends React.PureComponent {
                 <UriIndicator uri={uri} />
               </div>
             </div>
-            {metadata &&
-              metadata.thumbnail &&
-              <div
-                className="card__media"
-                style={{ backgroundImage: "url('" + metadata.thumbnail + "')" }}
-              />}
             <div className="card__content card__subtext card__subtext--two-lines">
-              <TruncatedText lines={2}>{description}</TruncatedText>
+              <TruncatedMarkdown lines={2}>{description}</TruncatedMarkdown>
             </div>
           </Link>
         </div>

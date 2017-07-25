@@ -18,5 +18,8 @@
   },
   "devDependencies": {
     "electron-rebuild": "^1.5.11"
+  },
+  "lbrySettings": {
+    "lbrynetDaemonVersion": "0.14.1"
   }
 }

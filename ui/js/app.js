@@ -2,7 +2,9 @@ import store from "store.js";
 import lbry from "./lbry.js";
 
 const env = ENV;
-const config = require(`./config/${env}`);
+const config = {
+  ...require(`./config/${env}`),
+};
 const language = lbry.getClientSetting("language")
   ? lbry.getClientSetting("language")
   : "en";

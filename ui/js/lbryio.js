@@ -136,8 +136,9 @@ lbryio.authenticate = function() {
       resolve({
         id: 1,
         language: "en",
-        has_email: true,
+        primary_email: "disabled@lbry.io",
         has_verified_email: true,
+        is_identity_verified: true,
         is_reward_approved: false,
         is_reward_eligible: false,
       });

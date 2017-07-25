@@ -223,55 +223,47 @@ lbry.publishDeprecated = function(
 ) {
   lbry.publish(params).then(
     result => {
-      if (returnedPending) {
-        return;
-      }
-
-      clearTimeout(returnPendingTimeout);
+      if (returnPendingTimeout) clearTimeout(returnPendingTimeout);
       publishedCallback(result);
     },
     err => {
-      if (returnedPending) {
-        return;
-      }
-
-      clearTimeout(returnPendingTimeout);
+      if (returnPendingTimeout) clearTimeout(returnPendingTimeout);
       errorCallback(err);
     }
   );
 
-  let returnedPending = false;
   // Give a short grace period in case publish() returns right away or (more likely) gives an error
-  const returnPendingTimeout = setTimeout(() => {
-    returnedPending = true;
+  const returnPendingTimeout = setTimeout(
+    () => {
+      if (publishedCallback) {
+        savePendingPublish({
+          name: params.name,
+          channel_name: params.channel_name,
+        });
+        publishedCallback(true);
+      }
 
-    if (publishedCallback) {
-      savePendingPublish({
-        name: params.name,
-        channel_name: params.channel_name,
-      });
-      publishedCallback(true);
-    }
-
-    if (fileListedCallback) {
-      const { name, channel_name } = params;
-      savePendingPublish({
-        name: params.name,
-        channel_name: params.channel_name,
-      });
-      fileListedCallback(true);
-    }
-  }, 2000);
+      if (fileListedCallback) {
+        const { name, channel_name } = params;
+        savePendingPublish({
+          name: params.name,
+          channel_name: params.channel_name,
+        });
+        fileListedCallback(true);
+      }
+    },
+    2000,
+    { once: true }
+  );
 };
 
 lbry.getClientSettings = function() {
   var outSettings = {};
   for (let setting of Object.keys(lbry.defaultClientSettings)) {
     var localStorageVal = localStorage.getItem("setting_" + setting);
-    outSettings[setting] =
-      localStorageVal === null
-        ? lbry.defaultClientSettings[setting]
-        : JSON.parse(localStorageVal);
+    outSettings[setting] = localStorageVal === null
+      ? lbry.defaultClientSettings[setting]
+      : JSON.parse(localStorageVal);
   }
   return outSettings;
 };
@@ -296,15 +288,10 @@ lbry.setClientSetting = function(setting, value) {
   return localStorage.setItem("setting_" + setting, JSON.stringify(value));
 };
 
-//utilities
-lbry.formatCredits = function(amount, precision) {
-  return amount.toFixed(precision || 1).replace(/\.?0+$/, "");
-};
-
 lbry.formatName = function(name) {
   // Converts LBRY name to standard format (all lower case, no special characters, spaces replaced by dashes)
   name = name.replace("/s+/g", "-");
-  name = name.toLowerCase().replace(/[^a-z0-9\-]/g, "");
+  name = name.toLowerCase().replace(lbryuri.REGEXP_INVALID_URI, "");
   return name;
 };
 

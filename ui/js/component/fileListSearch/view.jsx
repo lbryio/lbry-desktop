@@ -67,7 +67,7 @@ class FileListSearch extends React.PureComponent {
 
         {results && !!results.length
           ? <FileListSearchResults {...this.props} />
-          : <SearchNoResults {...this.props} />}
+          : !isSearching && <SearchNoResults {...this.props} />}
       </div>
     );
   }

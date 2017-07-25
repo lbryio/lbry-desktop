@@ -45,16 +45,20 @@ class DiscoverPage extends React.PureComponent {
 
   render() {
     const { featuredUris, fetchingFeaturedUris } = this.props;
-    const failedToLoad =
-      !fetchingFeaturedUris &&
-      (featuredUris === undefined ||
-        (featuredUris !== undefined && Object.keys(featuredUris).length === 0));
+    const hasContent =
+      typeof featuredUris === "object" && Object.keys(featuredUris).length,
+      failedToLoad = !fetchingFeaturedUris && !hasContent;
 
     return (
-      <main>
-        {fetchingFeaturedUris &&
+      <main
+        className={
+          hasContent && fetchingFeaturedUris ? "main--refreshing" : null
+        }
+      >
+        {!hasContent &&
+          fetchingFeaturedUris &&
           <BusyMessage message={__("Fetching content")} />}
-        {typeof featuredUris === "object" &&
+        {hasContent &&
           Object.keys(featuredUris).map(
             category =>
               featuredUris[category].length

@@ -177,6 +177,11 @@ export const selectDaemonReady = createSelector(
   state => state.daemonReady
 );
 
+export const selectDaemonVersionMatched = createSelector(
+  _selectState,
+  state => state.daemonVersionMatched
+);
+
 export const selectSnackBar = createSelector(
   _selectState,
   state => state.snackBar || {}
@@ -187,7 +192,17 @@ export const selectSnackBarSnacks = createSelector(
   snackBar => snackBar.snacks || []
 );
 
+export const selectWelcomeModalAcknowledged = createSelector(
+  _selectState,
+  state => lbry.getClientSetting("welcome_acknowledged")
+);
+
 export const selectBadgeNumber = createSelector(
   _selectState,
   state => state.badgeNumber
+);
+
+export const selectPathAfterAuth = createSelector(
+  _selectState,
+  state => state.pathAfterAuth
 );

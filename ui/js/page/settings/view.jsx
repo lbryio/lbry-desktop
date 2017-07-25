@@ -13,8 +13,8 @@ class SettingsPage extends React.PureComponent {
     const { daemonSettings } = this.props;
 
     this.state = {
-      isMaxUpload: daemonSettings && daemonSettings.max_upload != 0,
-      isMaxDownload: daemonSettings && daemonSettings.max_download != 0,
+      // isMaxUpload: daemonSettings && daemonSettings.max_upload != 0,
+      // isMaxDownload: daemonSettings && daemonSettings.max_download != 0,
       showUnavailable: lbry.getClientSetting("showUnavailable"),
       language: lbry.getClientSetting("language"),
       clearingCache: false,
@@ -55,15 +55,6 @@ class SettingsPage extends React.PureComponent {
     this.setDaemonSetting("download_directory", event.target.value);
   }
 
-  onMaxUploadPrefChange(isLimited) {
-    if (!isLimited) {
-      this.setDaemonSetting("max_upload", 0.0);
-    }
-    this.setState({
-      isMaxUpload: isLimited,
-    });
-  }
-
   onKeyFeeChange(event) {
     var oldSettings = this.props.daemonSettings.max_key_fee;
     var newSettings = {
@@ -89,23 +80,32 @@ class SettingsPage extends React.PureComponent {
   onKeyFeeDisableChange(isDisabled) {
     this.setDaemonSetting("disable_max_key_fee", isDisabled);
   }
-
-  onMaxUploadFieldChange(event) {
-    this.setDaemonSetting("max_upload", Number(event.target.value));
-  }
-
-  onMaxDownloadPrefChange(isLimited) {
-    if (!isLimited) {
-      this.setDaemonSetting("max_download", 0.0);
-    }
-    this.setState({
-      isMaxDownload: isLimited,
-    });
-  }
-
-  onMaxDownloadFieldChange(event) {
-    this.setDaemonSetting("max_download", Number(event.target.value));
-  }
+  
+  // onMaxUploadPrefChange(isLimited) {
+  //   if (!isLimited) {
+  //     this.setDaemonSetting("max_upload", 0.0);
+  //   }
+  //   this.setState({
+  //     isMaxUpload: isLimited,
+  //   });
+  // }
+  //
+  // onMaxUploadFieldChange(event) {
+  //   this.setDaemonSetting("max_upload", Number(event.target.value));
+  // }
+  //
+  // onMaxDownloadPrefChange(isLimited) {
+  //   if (!isLimited) {
+  //     this.setDaemonSetting("max_download", 0.0);
+  //   }
+  //   this.setState({
+  //     isMaxDownload: isLimited,
+  //   });
+  // }
+  //
+  // onMaxDownloadFieldChange(event) {
+  //   this.setDaemonSetting("max_download", Number(event.target.value));
+  // }
 
   onShowNsfwChange(event) {
     this.props.setClientSetting("showNsfw", event.target.checked);
@@ -174,6 +174,96 @@ class SettingsPage extends React.PureComponent {
      </div>
      </section>
      */
+
+    /*
+     <section className="card">
+     <div className="card__content">
+     <h3>{__("Bandwidth Limits")}</h3>
+     </div>
+     <div className="card__content">
+     <div className="form-row__label-row">
+     <div className="form-field__label">{__("Max Upload")}</div>
+     </div>
+     <FormRow
+     type="radio"
+     name="max_upload_pref"
+     onChange={() => {
+     this.onMaxUploadPrefChange(false);
+     }}
+     defaultChecked={!this.state.isMaxUpload}
+     label={__("Unlimited")}
+     />
+     <div className="form-row">
+     <FormField
+     type="radio"
+     name="max_upload_pref"
+     onChange={() => {
+     this.onMaxUploadPrefChange(true);
+     }}
+     defaultChecked={this.state.isMaxUpload}
+     label={
+     this.state.isMaxUpload ? __("Up to") : __("Choose limit...")
+     }
+     />
+     {this.state.isMaxUpload
+     ? <FormField
+     type="number"
+     min="0"
+     step=".5"
+     defaultValue={daemonSettings.max_upload}
+     placeholder="10"
+     className="form-field__input--inline"
+     onChange={this.onMaxUploadFieldChange.bind(this)}
+     />
+     : ""}
+     {this.state.isMaxUpload
+     ? <span className="form-field__label">MB/s</span>
+     : ""}
+     </div>
+     </div>
+     <div className="card__content">
+     <div className="form-row__label-row">
+     <div className="form-field__label">{__("Max Download")}</div>
+     </div>
+     <FormRow
+     label={__("Unlimited")}
+     type="radio"
+     name="max_download_pref"
+     onChange={() => {
+     this.onMaxDownloadPrefChange(false);
+     }}
+     defaultChecked={!this.state.isMaxDownload}
+     />
+     <div className="form-row">
+     <FormField
+     type="radio"
+     name="max_download_pref"
+     onChange={() => {
+     this.onMaxDownloadPrefChange(true);
+     }}
+     defaultChecked={this.state.isMaxDownload}
+     label={
+     this.state.isMaxDownload ? __("Up to") : __("Choose limit...")
+     }
+     />
+     {this.state.isMaxDownload
+     ? <FormField
+     type="number"
+     min="0"
+     step=".5"
+     defaultValue={daemonSettings.max_download}
+     placeholder="10"
+     className="form-field__input--inline"
+     onChange={this.onMaxDownloadFieldChange.bind(this)}
+     />
+     : ""}
+     {this.state.isMaxDownload
+     ? <span className="form-field__label">MB/s</span>
+     : ""}
+     </div>
+     </div>
+     </section>
+     */
     return (
       <main className="main--single-column">
         <SubHeader />
@@ -191,98 +281,9 @@ class SettingsPage extends React.PureComponent {
             />
           </div>
         </section>
-
         <section className="card">
           <div className="card__content">
-            <h3>{__("Bandwidth Limits")}</h3>
-          </div>
-          <div className="card__content">
-            <div className="form-row__label-row">
-              <div className="form-field__label">{__("Max Upload")}</div>
-            </div>
-            <FormRow
-              type="radio"
-              name="max_upload_pref"
-              onChange={() => {
-                this.onMaxUploadPrefChange(false);
-              }}
-              defaultChecked={!this.state.isMaxUpload}
-              label={__("Unlimited")}
-            />
-            <div className="form-row">
-              <FormField
-                type="radio"
-                name="max_upload_pref"
-                onChange={() => {
-                  this.onMaxUploadPrefChange(true);
-                }}
-                defaultChecked={this.state.isMaxUpload}
-                label={
-                  this.state.isMaxUpload ? __("Up to") : __("Choose limit...")
-                }
-              />
-              {this.state.isMaxUpload
-                ? <FormField
-                    type="number"
-                    min="0"
-                    step=".5"
-                    defaultValue={daemonSettings.max_upload}
-                    placeholder="10"
-                    className="form-field__input--inline"
-                    onChange={this.onMaxUploadFieldChange.bind(this)}
-                  />
-                : ""}
-              {this.state.isMaxUpload
-                ? <span className="form-field__label">MB/s</span>
-                : ""}
-            </div>
-          </div>
-          <div className="card__content">
-            <div className="form-row__label-row">
-              <div className="form-field__label">{__("Max Download")}</div>
-            </div>
-            <FormRow
-              label={__("Unlimited")}
-              type="radio"
-              name="max_download_pref"
-              onChange={() => {
-                this.onMaxDownloadPrefChange(false);
-              }}
-              defaultChecked={!this.state.isMaxDownload}
-            />
-            <div className="form-row">
-              <FormField
-                type="radio"
-                name="max_download_pref"
-                onChange={() => {
-                  this.onMaxDownloadPrefChange(true);
-                }}
-                defaultChecked={this.state.isMaxDownload}
-                label={
-                  this.state.isMaxDownload ? __("Up to") : __("Choose limit...")
-                }
-              />
-              {this.state.isMaxDownload
-                ? <FormField
-                    type="number"
-                    min="0"
-                    step=".5"
-                    defaultValue={daemonSettings.max_download}
-                    placeholder="10"
-                    className="form-field__input--inline"
-                    onChange={this.onMaxDownloadFieldChange.bind(this)}
-                  />
-                : ""}
-              {this.state.isMaxDownload
-                ? <span className="form-field__label">MB/s</span>
-                : ""}
-            </div>
-          </div>
-        </section>
-
-        <section className="card">
-          <div className="card__content">
-            <h3>{__("Key Fee")}</h3>
+            <h3>{__("Max Purchase Price")}</h3>
           </div>
           <div className="card__content">
             <div className="form-row__label-row">

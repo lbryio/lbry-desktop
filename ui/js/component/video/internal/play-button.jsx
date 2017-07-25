@@ -4,10 +4,29 @@ import Link from "component/link";
 import Modal from "component/modal";
 
 class VideoPlayButton extends React.PureComponent {
+  componentDidMount() {
+    this.keyDownListener = this.onKeyDown.bind(this);
+    document.addEventListener("keydown", this.keyDownListener);
+  }
+
+  componentWillUnmount() {
+    document.removeEventListener("keydown", this.keyDownListener);
+  }
+
   onPurchaseConfirmed() {
     this.props.closeModal();
     this.props.startPlaying();
     this.props.loadVideo(this.props.uri);
+  }
+
+  onKeyDown(event) {
+    if (
+      "input" !== event.target.tagName.toLowerCase() &&
+      "Space" === event.code
+    ) {
+      event.preventDefault();
+      this.onWatchClick();
+    }
   }
 
   onWatchClick() {
@@ -60,22 +79,17 @@ class VideoPlayButton extends React.PureComponent {
           onClick={this.onWatchClick.bind(this)}
         />
         <Modal
-          contentLabel={__("Not enough credits")}
-          isOpen={modal == "notEnoughCredits"}
-          onConfirmed={closeModal}
-        >
-          {__("You don't have enough LBRY credits to pay for this stream.")}
-        </Modal>
-        <Modal
           type="confirm"
           isOpen={modal == "affirmPurchaseAndPlay"}
           contentLabel={__("Confirm Purchase")}
           onConfirmed={this.onPurchaseConfirmed.bind(this)}
           onAborted={closeModal}
         >
-          {__("This will purchase")} <strong>{title}</strong> {__("for")}
-          {" "}<strong><FilePrice uri={uri} look="plain" /></strong>
-          {" "}{__("credits")}.
+          {__("This will purchase")} <strong>{title}</strong> {__("for")}{" "}
+          <strong>
+            <FilePrice uri={uri} look="plain" />
+          </strong>{" "}
+          {__("credits")}.
         </Modal>
         <Modal
           isOpen={modal == "timedOut"}
