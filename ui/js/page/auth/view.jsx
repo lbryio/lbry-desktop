@@ -19,7 +19,7 @@ export class AuthPage extends React.PureComponent {
       !isPending &&
       user &&
       user.has_verified_email &&
-      user.is_identity_verified
+      (user.is_reward_approved || user.is_identity_verified)
     ) {
       props.navigate(props.pathAfterAuth);
     }
@@ -32,7 +32,7 @@ export class AuthPage extends React.PureComponent {
       return __("Welcome to LBRY");
     } else if (user && !user.has_verified_email) {
       return __("Confirm Email");
-    } else if (user && !user.is_identity_verified) {
+    } else if (user && !user.is_identity_verified && !user.is_reward_approved) {
       return __("Confirm Identity");
     } else {
       return __("Welcome to LBRY");

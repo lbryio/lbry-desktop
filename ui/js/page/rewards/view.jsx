@@ -71,52 +71,57 @@ class RewardsPage extends React.PureComponent {
       );
     }
 
-    if (
-      user &&
-      (!user.primary_email ||
+    if (user && !user.is_reward_approved) {
+      if (
+        !user.primary_email ||
         !user.has_verified_email ||
-        !user.is_identity_verified)
-    ) {
-      cardHeader = (
-        <div>
-          <div className="card__content empty">
-            <p>{__("Only verified accounts are eligible to earn rewards.")}</p>
+        !user.is_identity_verified
+      ) {
+        cardHeader = (
+          <div>
+            <div className="card__content empty">
+              <p>
+                {__("Only verified accounts are eligible to earn rewards.")}
+              </p>
+            </div>
+            <div className="card__content">
+              <Link onClick={doAuth} button="primary" label="Become Verified" />
+            </div>
           </div>
+        );
+      } else {
+        cardHeader = (
           <div className="card__content">
-            <Link onClick={doAuth} button="primary" label="Become Verified" />
-          </div>
-        </div>
-      );
-    } else if (user && !user.is_reward_approved) {
-      cardHeader = (
-        <div className="card__content">
-          <p>
-            {__(
-              "This account must undergo review before you can participate in the rewards program."
-            )}
-            {" "}
-            {__("This can take anywhere from several minutes to several days.")}
-          </p>
+            <p>
+              {__(
+                "This account must undergo review before you can participate in the rewards program."
+              )}
+              {" "}
+              {__(
+                "This can take anywhere from several minutes to several days."
+              )}
+            </p>
 
-          <p>
-            {__(
-              "We apologize for this inconvenience, but have added this additional step to prevent fraud."
-            )}
-          </p>
-          <p>
-            {__("You will receive an email when this process is complete.") +
-              " " +
-              __("Please enjoy free content in the meantime!")}
-          </p>
-          <p>
-            <Link
-              onClick={() => navigate("/discover")}
-              button="primary"
-              label="Return Home"
-            />
-          </p>
-        </div>
-      );
+            <p>
+              {__(
+                "We apologize for this inconvenience, but have added this additional step to prevent fraud."
+              )}
+            </p>
+            <p>
+              {__("You will receive an email when this process is complete.") +
+                " " +
+                __("Please enjoy free content in the meantime!")}
+            </p>
+            <p>
+              <Link
+                onClick={() => navigate("/discover")}
+                button="primary"
+                label="Return Home"
+              />
+            </p>
+          </div>
+        );
+      }
     }
 
     return (
