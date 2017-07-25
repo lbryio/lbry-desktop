@@ -33,7 +33,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
   * Fixed downloading files that are deleted not being removed from the downloading list
   * Fixed download progress bar not being cleared when a downloading file is deleted
   * Fixed refresh regression after adding scroll position to history state
-  * Fixed app thinking downloads with 0 progress were downloaded after restart
+  * Fixed app not monitoring download progress on files in progress between restarts
 
 ### Deprecated
   *
@@ -41,7 +41,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
 
 ### Removed
   * Removed bandwidth caps from settings, because the daemon was not respecting them anyway.
-  * 
+  *
 
 ## [0.13.0] - 2017-06-30
 

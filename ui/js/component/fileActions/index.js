@@ -13,7 +13,7 @@ import { doCloseModal, doOpenModal } from "actions/app";
 import { doFetchAvailability } from "actions/availability";
 import { doOpenFileInShell, doOpenFileInFolder } from "actions/file_info";
 import { makeSelectClaimForUriIsMine } from "selectors/claims";
-import { doPurchaseUri, doLoadVideo } from "actions/content";
+import { doPurchaseUri, doLoadVideo, doStartDownload } from "actions/content";
 import FileActions from "./view";
 
 const makeSelect = () => {
@@ -47,6 +47,7 @@ const perform = dispatch => ({
   openModal: modal => dispatch(doOpenModal(modal)),
   startDownload: uri => dispatch(doPurchaseUri(uri, "affirmPurchase")),
   loadVideo: uri => dispatch(doLoadVideo(uri)),
+  restartDownload: (uri, outpoint) => dispatch(doStartDownload(uri, outpoint)),
 });
 
 export default connect(makeSelect, perform)(FileActions);

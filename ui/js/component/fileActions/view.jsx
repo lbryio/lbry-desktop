@@ -22,6 +22,20 @@ class FileActions extends React.PureComponent {
 
   componentWillReceiveProps(nextProps) {
     this.checkAvailability(nextProps.uri);
+    this.restartDownload(nextProps);
+  }
+
+  restartDownload(props) {
+    const { downloading, fileInfo, uri, restartDownload } = props;
+
+    if (
+      !downloading &&
+      fileInfo &&
+      !fileInfo.written_bytes &&
+      fileInfo.written_bytes < fileInfo.total_bytes
+    ) {
+      restartDownload(uri, fileInfo.outpoint);
+    }
   }
 
   checkAvailability(uri) {
@@ -118,10 +132,7 @@ class FileActions extends React.PureComponent {
           />
         </div>
       );
-    } else if (
-      (fileInfo === null || (fileInfo && fileInfo.written_bytes === 0)) &&
-      !downloading
-    ) {
+    } else if (fileInfo === null && !downloading) {
       if (!costInfo) {
         content = <BusyMessage message={__("Fetching cost info")} />;
       } else {
