@@ -46,7 +46,14 @@ class FileCard extends React.PureComponent {
   }
 
   render() {
-    const { claim, fileInfo, metadata, isResolvingUri, navigate } = this.props;
+    const {
+      claim,
+      fileInfo,
+      metadata,
+      isResolvingUri,
+      navigate,
+      hotRightNowClaimIds,
+    } = this.props;
 
     const uri = lbryuri.normalize(this.props.uri);
     const title = metadata && metadata.title ? metadata.title : uri;
@@ -54,6 +61,7 @@ class FileCard extends React.PureComponent {
       ? metadata.thumbnail
       : null;
     const obscureNsfw = this.props.obscureNsfw && metadata && metadata.nsfw;
+    const isHotRightNow = claim && hotRightNowClaimIds.includes(claim.claim_id);
 
     let description = "";
     if (isResolvingUri && !claim) {
@@ -83,6 +91,7 @@ class FileCard extends React.PureComponent {
               <div className="card__title" title={title}>
                 <TruncatedText lines={1}>{title}</TruncatedText>
               </div>
+              {isHotRightNow && <span>&#128293; Hot Right Now</span>}
               <div className="card__subtitle">
                 <span style={{ float: "right" }}>
                   <FilePrice uri={uri} />
