@@ -199,24 +199,34 @@ export function doUpdateLoadStatus(uri, outpoint) {
   };
 }
 
+export function doStartDownload(uri, outpoint) {
+  return function(dispatch, getState) {
+    const state = getState();
+
+    const { downloadingByOutpoint = {} } = state.fileInfo;
+
+    if (downloadingByOutpoint[outpoint]) return;
+
+    lbry.file_list({ outpoint, full_status: true }).then(([fileInfo]) => {
+      dispatch({
+        type: types.DOWNLOADING_STARTED,
+        data: {
+          uri,
+          outpoint,
+          fileInfo,
+        },
+      });
+
+      dispatch(doUpdateLoadStatus(uri, outpoint));
+    });
+  };
+}
+
 export function doDownloadFile(uri, streamInfo) {
   return function(dispatch, getState) {
     const state = getState();
 
-    lbry
-      .file_list({ outpoint: streamInfo.outpoint, full_status: true })
-      .then(([fileInfo]) => {
-        dispatch({
-          type: types.DOWNLOADING_STARTED,
-          data: {
-            uri,
-            outpoint: streamInfo.outpoint,
-            fileInfo,
-          },
-        });
-
-        dispatch(doUpdateLoadStatus(uri, streamInfo.outpoint));
-      });
+    dispatch(doStartDownload(uri, streamInfo.outpoint));
 
     lbryio
       .call("file", "view", {
