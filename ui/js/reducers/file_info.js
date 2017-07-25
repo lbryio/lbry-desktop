@@ -58,7 +58,7 @@ reducers[types.DOWNLOADING_STARTED] = function(state, action) {
   const { uri, outpoint, fileInfo } = action.data;
 
   const newByOutpoint = Object.assign({}, state.byOutpoint);
-  const newDownloading = Object.assign({}, state.downloadingByOutpoin);
+  const newDownloading = Object.assign({}, state.downloadingByOutpoint);
   const newLoading = Object.assign({}, state.urisLoading);
 
   newDownloading[outpoint] = true;
