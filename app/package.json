@@ -20,6 +20,6 @@
     "electron-rebuild": "^1.5.11"
   },
   "lbrySettings": {
-    "lbrynetDaemonVersion": "0.14.1"
+    "lbrynetDaemonVersion": "0.14.2"
   }
 }
