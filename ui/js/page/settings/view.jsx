@@ -286,7 +286,7 @@ class SettingsPage extends React.PureComponent {
           </div>
           <div className="card__content">
             <div className="form-row__label-row">
-              <div className="form-field__label">{__("Max Key Fee")}</div>
+              <div className="form-field__label">{__("Max Purchase Price")}</div>
             </div>
             <FormRow
               type="radio"
@@ -336,7 +336,7 @@ class SettingsPage extends React.PureComponent {
             </div>
             <div className="form-field__helper">
               {__(
-                "This will prevent you from purchasing anything over this fee, as a safety measure. (Default: 50 USD)"
+                "This will prevent you from purchasing any content over this cost, as a safety measure."
               )}
             </div>
           </div>
