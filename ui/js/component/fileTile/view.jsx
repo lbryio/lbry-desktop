@@ -58,6 +58,7 @@ class FileTile extends React.PureComponent {
       showEmpty,
       navigate,
       hidePrice,
+      hotRightNowClaimIds,
     } = this.props;
 
     const uri = lbryuri.normalize(this.props.uri);
@@ -70,6 +71,8 @@ class FileTile extends React.PureComponent {
       ? metadata.thumbnail
       : null;
     const obscureNsfw = this.props.obscureNsfw && metadata && metadata.nsfw;
+    const isHotRightNow = claim && hotRightNowClaimIds.includes(claim.claim_id);
+
     let onClick = () => navigate("/show", { uri });
 
     let description = "";
@@ -108,6 +111,7 @@ class FileTile extends React.PureComponent {
                 {!hidePrice ? <FilePrice uri={this.props.uri} /> : null}
                 <div className="meta">{uri}</div>
                 <h3><TruncatedText lines={1}>{title}</TruncatedText></h3>
+                {isHotRightNow && <span>&#128293; Hot Right Now</span>}
               </div>
               <div className="card__content card__subtext">
                 <TruncatedText lines={3}>
