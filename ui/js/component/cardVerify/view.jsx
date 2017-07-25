@@ -314,25 +314,6 @@ class CardVerify extends React.Component {
     this.setState({ open: false });
   };
 
-  getConfig = () =>
-    ["token", "name", "description"].reduce(
-      (config, key) =>
-        Object.assign(
-          {},
-          config,
-          this.props.hasOwnProperty(key) && {
-            [key]: this.props[key],
-          }
-        ),
-      {
-        allowRememberMe: false,
-        closed: this.onClosed,
-        description: __("Confirm Identity"),
-        email: this.props.email,
-        panelLabel: "Verify",
-      }
-    );
-
   updateStripeHandler() {
     if (!CardVerify.stripeHandler) {
       CardVerify.stripeHandler = StripeCheckout.configure({
@@ -343,7 +324,14 @@ class CardVerify extends React.Component {
 
   showStripeDialog() {
     this.setState({ open: true });
-    CardVerify.stripeHandler.open(this.getConfig());
+    CardVerify.stripeHandler.open({
+      allowRememberMe: false,
+      closed: this.onClosed,
+      description: __("Confirm Identity"),
+      email: this.props.email,
+      panelLabel: "Verify",
+      token: this.props.token,
+    });
   }
 
   onClick = () => {
