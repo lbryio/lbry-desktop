@@ -10,7 +10,7 @@ class SettingsPage extends React.PureComponent {
   constructor(props) {
     super(props);
 
-    const { daemonSettings } = this.props;
+    const { daemonSettings } = this.props || {};
 
     this.state = {
       // isMaxUpload: daemonSettings && daemonSettings.max_upload != 0,
@@ -80,7 +80,7 @@ class SettingsPage extends React.PureComponent {
   onKeyFeeDisableChange(isDisabled) {
     this.setDaemonSetting("disable_max_key_fee", isDisabled);
   }
-  
+
   // onMaxUploadPrefChange(isLimited) {
   //   if (!isLimited) {
   //     this.setDaemonSetting("max_upload", 0.0);
@@ -122,148 +122,13 @@ class SettingsPage extends React.PureComponent {
   render() {
     const { daemonSettings } = this.props;
 
-    if (!daemonSettings) {
+    if (!daemonSettings || Object.keys(daemonSettings).length === 0) {
       return (
         <main className="main--single-column">
           <span className="empty">{__("Failed to load settings.")}</span>
         </main>
       );
     }
-    /*
- <section className="card">
- <div className="card__content">
- <h3>Run on Startup</h3>
- </div>
- <div className="card__content">
- <FormRow type="checkbox"
- onChange={this.onRunOnStartChange}
- defaultChecked={daemonSettings.run_on_startup}
- label="Run LBRY automatically when I start my computer" />
- </div>
- </section>
- */
-    /*
-
-     <section className="card">
-     <div className="card__content">
-     <h3>{__("Language")}</h3>
-     </div>
-     <div className="card__content">
-     <div className="form-row">
-     <FormField
-     type="radio"
-     name="language"
-     label={__("English")}
-     onChange={() => {
-     this.onLanguageChange("en");
-     }}
-     defaultChecked={this.state.language == "en"}
-     />
-     </div>
-     <div className="form-row">
-     <FormField
-     type="radio"
-     name="language"
-     label="Serbian"
-     onChange={() => {
-     this.onLanguageChange("rs");
-     }}
-     defaultChecked={this.state.language == "rs"}
-     />
-     </div>
-     </div>
-     </section>
-     */
-
-    /*
-     <section className="card">
-     <div className="card__content">
-     <h3>{__("Bandwidth Limits")}</h3>
-     </div>
-     <div className="card__content">
-     <div className="form-row__label-row">
-     <div className="form-field__label">{__("Max Upload")}</div>
-     </div>
-     <FormRow
-     type="radio"
-     name="max_upload_pref"
-     onChange={() => {
-     this.onMaxUploadPrefChange(false);
-     }}
-     defaultChecked={!this.state.isMaxUpload}
-     label={__("Unlimited")}
-     />
-     <div className="form-row">
-     <FormField
-     type="radio"
-     name="max_upload_pref"
-     onChange={() => {
-     this.onMaxUploadPrefChange(true);
-     }}
-     defaultChecked={this.state.isMaxUpload}
-     label={
-     this.state.isMaxUpload ? __("Up to") : __("Choose limit...")
-     }
-     />
-     {this.state.isMaxUpload
-     ? <FormField
-     type="number"
-     min="0"
-     step=".5"
-     defaultValue={daemonSettings.max_upload}
-     placeholder="10"
-     className="form-field__input--inline"
-     onChange={this.onMaxUploadFieldChange.bind(this)}
-     />
-     : ""}
-     {this.state.isMaxUpload
-     ? <span className="form-field__label">MB/s</span>
-     : ""}
-     </div>
-     </div>
-     <div className="card__content">
-     <div className="form-row__label-row">
-     <div className="form-field__label">{__("Max Download")}</div>
-     </div>
-     <FormRow
-     label={__("Unlimited")}
-     type="radio"
-     name="max_download_pref"
-     onChange={() => {
-     this.onMaxDownloadPrefChange(false);
-     }}
-     defaultChecked={!this.state.isMaxDownload}
-     />
-     <div className="form-row">
-     <FormField
-     type="radio"
-     name="max_download_pref"
-     onChange={() => {
-     this.onMaxDownloadPrefChange(true);
-     }}
-     defaultChecked={this.state.isMaxDownload}
-     label={
-     this.state.isMaxDownload ? __("Up to") : __("Choose limit...")
-     }
-     />
-     {this.state.isMaxDownload
-     ? <FormField
-     type="number"
-     min="0"
-     step=".5"
-     defaultValue={daemonSettings.max_download}
-     placeholder="10"
-     className="form-field__input--inline"
-     onChange={this.onMaxDownloadFieldChange.bind(this)}
-     />
-     : ""}
-     {this.state.isMaxDownload
-     ? <span className="form-field__label">MB/s</span>
-     : ""}
-     </div>
-     </div>
-     </section>
-     */
     return (
       <main className="main--single-column">
         <SubHeader />
@@ -287,7 +152,9 @@ class SettingsPage extends React.PureComponent {
           </div>
           <div className="card__content">
             <div className="form-row__label-row">
-              <div className="form-field__label">{__("Max Purchase Price")}</div>
+              <div className="form-field__label">
+                {__("Max Purchase Price")}
+              </div>
             </div>
             <FormRow
               type="radio"
