@@ -31,7 +31,8 @@ class FileActions extends React.PureComponent {
     if (
       !downloading &&
       fileInfo &&
-      !fileInfo.written_bytes &&
+      !fileInfo.completed &&
+      fileInfo.written_bytes !== false &&
       fileInfo.written_bytes < fileInfo.total_bytes
     ) {
       restartDownload(uri, fileInfo.outpoint);
