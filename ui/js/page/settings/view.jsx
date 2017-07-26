@@ -122,7 +122,7 @@ class SettingsPage extends React.PureComponent {
   render() {
     const { daemonSettings } = this.props;
 
-    if (!daemonSettings) {
+    if (!daemonSettings || Object.keys(daemonSettings).length === 0) {
       return (
         <main className="main--single-column">
           <span className="empty">{__("Failed to load settings.")}</span>
