@@ -9,17 +9,17 @@ Web UI version numbers should always match the corresponding version of LBRY App
 ## [Unreleased]
 ### Added
   * Identity verification for new reward participants
-  * Added option to release claim when deleting a file
+  * Support rich markup in publishing descriptions and show pages.
+  * Release past publishing claims (and recover LBC) via the UI
   * Added transition to card hovers to smooth animation
-  * Support markdown makeup in claim description
   * Use randomly colored tiles when image is missing from metadata
   * Added a loading message to file actions
   * URL is auto suggested in Publish Page
 
 ### Changed
-  * Publishes now uses claims rather than files
   * Publishing revamped. Editing claims is much easier.
-  * Daemon updated to [v0.14.2](https://github.com/lbryio/lbry/releases/tag/v0.14.2)
+  * Daemon updated from v0.13.1 to [v0.14.2](https://github.com/lbryio/lbry/releases/tag/v0.14.2)
+  * Publish page now use `claim_list` rather than `file_list`
 
 ### Fixed
   * Fixed bug with download notice when switching window focus
