@@ -93,7 +93,7 @@ $card-link-scaling: 1.1;
 }
 .card--link:hover {
   position: relative;
-  z-index: 2;
+  z-index: 1;
   box-shadow: $box-shadow-focus;
   transform: scale($card-link-scaling) translate3d($translate-card-hover, 0, 0);
   transform-origin: 50% 50%;
@@ -227,7 +227,6 @@ $height-card-small: $spacing-vertical * 15;
   position: absolute;
   padding: 0 $spacing-vertical / 1.5;
   top: ($font-size * 1.4 * $font-line-height) + ($spacing-vertical / 3);
-  z-index: 1;
   height: ($width-card-small * 9 / 16) + ($font-size * 0.82 * $font-line-height * 4) + ($spacing-vertical * 4/3)
 }
 .card-row__nav .icon {
@@ -238,7 +237,8 @@ $height-card-small: $spacing-vertical * 15;
   position: absolute;
   cursor: pointer;
   left: 0;
-  top: 36%
+  top: 36%;
+  z-index: 2;
 }
 .card-row__nav.left-nav {
   left: 0;
