@@ -4,7 +4,7 @@ import lbry from "lbry";
 
 const currentPath = () => {
   const hash = document.location.hash;
-  if (hash !== "") return hash.split("#")[1];
+  if (hash !== "") return hash.replace(/^#/, "");
   else return "/discover";
 };
 
