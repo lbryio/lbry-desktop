@@ -41,11 +41,18 @@ class FeaturedCategory extends React.PureComponent {
 
       const numDisplayed = this.numDisplayedCards(cardRow);
       const scrollToIdx = firstVisibleIdx - numDisplayed;
-      cardRow.scrollLeft = scrollToIdx < 0 ? 0 : cards[scrollToIdx].offsetLeft;
-      this.setState({
-        canScrollPrevious: cardRow.scrollLeft !== 0,
-        canScrollNext: true,
-      });
+      const animationCallback = () => {
+        this.setState({
+          canScrollPrevious: cardRow.scrollLeft !== 0,
+          canScrollNext: true,
+        });
+      };
+      this.scrollCardItemsLeftAnimated(
+        cardRow,
+        scrollToIdx < 0 ? 0 : cards[scrollToIdx].offsetLeft,
+        100,
+        animationCallback
+      );
     }
   }
 
@@ -65,23 +72,63 @@ class FeaturedCategory extends React.PureComponent {
 
     if (lastVisibleCard) {
       const numDisplayed = this.numDisplayedCards(cardRow);
-      cardRow.scrollLeft = Math.min(
-        lastVisibleCard.offsetLeft,
-        cardRow.scrollWidth - cardRow.clientWidth
+      const animationCallback = () => {
+        // update last visible index after scroll
+        for (var i = 0; i < cards.length; i++) {
+          if (this.isCardVisible(cards[i], cardRow, true)) {
+            lastVisibleIdx = i;
+          }
+        }
+
+        if (lastVisibleIdx > cards.length - 1) {
+          lastVisibleIdx = cards.length - 1;
+        }
+
+        this.setState({ canScrollPrevious: true });
+        if (lastVisibleIdx === cards.length - 1) {
+          this.setState({ canScrollNext: false });
+        }
+      };
+
+      this.scrollCardItemsLeftAnimated(
+        cardRow,
+        Math.min(
+          lastVisibleCard.offsetLeft,
+          cardRow.scrollWidth - cardRow.clientWidth
+        ),
+        100,
+        animationCallback
       );
+    }
+  }
 
-      // update last visible index after scroll
-      lastVisibleIdx += numDisplayed;
-      if (lastVisibleIdx > cards.length - 1) {
-        lastVisibleIdx = cards.length - 1;
+  scrollCardItemsLeftAnimated(cardRow, target, duration, callback) {
+    if (!duration || duration <= diff) {
+      cardRow.scrollLeft = target;
+      if (callback) {
+        callback();
       }
-
-      this.setState({ canScrollPrevious: true });
+      return;
     }
 
-    if (lastVisibleIdx === cards.length - 1) {
-      this.setState({ canScrollNext: false });
-    }
+    const component = this;
+    var diff = target - cardRow.scrollLeft;
+    var tick = diff / duration * 10;
+    setTimeout(() => {
+      cardRow.scrollLeft = cardRow.scrollLeft + tick;
+      if (cardRow.scrollLeft === target) {
+        if (callback) {
+          callback();
+        }
+        return;
+      }
+      component.scrollCardItemsLeftAnimated(
+        cardRow,
+        target,
+        duration - 10,
+        callback
+      );
+    }, 10);
   }
 
   isCardVisible(section, cardRow, partialVisibility) {
