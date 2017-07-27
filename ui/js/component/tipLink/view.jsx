@@ -1,5 +1,4 @@
 import React from "react";
-import { Modal } from "component/modal";
 import Link from "component/link";
 import { FormField } from "component/form";
 
@@ -45,7 +44,6 @@ class TipLink extends React.PureComponent {
   }
 
   render() {
-    const { modal, closeModal } = this.props;
     const { showTipBox } = this.state;
 
     let tipLink = (
@@ -86,36 +84,6 @@ class TipLink extends React.PureComponent {
     return (
       <div className="menu-container">
         {showTipBox ? tipBox : tipLink}
-        {modal == "insufficientBalance" &&
-          <Modal
-            isOpen={true}
-            contentLabel={__("Insufficient balance")}
-            onConfirmed={closeModal}
-          >
-            {__(
-              "Insufficient balance: after this transaction you would have less than 1 LBC in your wallet."
-            )}
-          </Modal>}
-        {modal == "transactionSuccessful" &&
-          <Modal
-            isOpen={true}
-            contentLabel={__("Transaction successful")}
-            onConfirmed={closeModal}
-          >
-            {__(
-              "The publisher of the content was successfully tipped " +
-                this.state.feeAmount +
-                " LBC. Mahalo!"
-            )}
-          </Modal>}
-        {modal == "transactionFailed" &&
-          <Modal
-            isOpen={true}
-            contentLabel={__("Transaction failed")}
-            onConfirmed={closeModal}
-          >
-            {__("Something went wrong")}:
-          </Modal>}
       </div>
     );
   }
