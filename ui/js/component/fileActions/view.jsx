@@ -14,6 +14,7 @@ class FileActions extends React.PureComponent {
     super(props);
     this.state = {
       forceShowActions: false,
+      showTipBox: false,
     };
   }
 
@@ -58,6 +59,18 @@ class FileActions extends React.PureComponent {
     this.props.loadVideo(this.props.uri);
   }
 
+  handleTipShow() {
+    this.setState({
+      showTipBox: true,
+    });
+  }
+
+  handleTipHide() {
+    this.setState({
+      showTipBox: false,
+    });
+  }
+
   render() {
     const {
       fileInfo,
@@ -75,6 +88,8 @@ class FileActions extends React.PureComponent {
       loading,
       claimIsMine,
     } = this.props;
+
+    const { showTipBox } = this.state;
 
     const metadata = fileInfo ? fileInfo.metadata : null,
       openInFolderMessage = platform.startsWith("Mac")
@@ -166,8 +181,14 @@ class FileActions extends React.PureComponent {
 
     return (
       <section className="file-actions">
-        {content}
-        {showMenu
+        {showTipBox ? "" : content}
+        <TipLink
+          onTipShow={this.handleTipShow.bind(this)}
+          onTipHide={this.handleTipHide.bind(this)}
+          showTipBox={showTipBox}
+          claim={this.props.claim}
+        />
+        {showMenu && !showTipBox
           ? <DropDownMenu>
               <DropDownMenuItem
                 key={0}
@@ -181,7 +202,6 @@ class FileActions extends React.PureComponent {
               />
             </DropDownMenu>
           : ""}
-        <TipLink claim={this.props.claim} />
         <Modal
           type="confirm"
           isOpen={modal == "affirmPurchase"}

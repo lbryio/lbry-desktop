@@ -1,21 +1,20 @@
 import React from "react";
 import Link from "component/link";
 import { FormField } from "component/form";
+import PriceForm from "component/priceForm";
 
 class TipLink extends React.PureComponent {
   constructor(props) {
     super(props);
 
     this.state = {
-      showTipBox: false,
       feeAmount: "1.00",
+      currency: "LBC",
     };
   }
 
   handleTipPublisherButtonClicked() {
-    this.setState({
-      showTipBox: true,
-    });
+    this.props.onTipShow();
   }
 
   handleTipButtonClicked() {
@@ -26,15 +25,11 @@ class TipLink extends React.PureComponent {
     this.props.setAmount(amount);
     this.props.sendToAddress();
 
-    this.setState({
-      showTipBox: false,
-    });
+    this.props.onTipHide();
   }
 
   handleTipCancelButtonClicked() {
-    this.setState({
-      showTipBox: false,
-    });
+    this.props.onTipHide();
   }
 
   handleFeeAmountChange(event) {
@@ -43,12 +38,18 @@ class TipLink extends React.PureComponent {
     });
   }
 
+  handleCurrencyChange(event) {
+    this.setState({
+      currency: event.target.value,
+    });
+  }
+
   render() {
-    const { showTipBox } = this.state;
+    const { showTipBox } = this.props;
 
     let tipLink = (
       <Link
-        label={__("Tip Publisher")}
+        label={__("Tip")}
         button="text"
         icon="icon-gift"
         onClick={this.handleTipPublisherButtonClicked.bind(this)}
@@ -57,15 +58,14 @@ class TipLink extends React.PureComponent {
 
     let tipBox = (
       <span>
-        <FormField
-          type="number"
-          className="form-field__input--inline"
-          step="0.1"
-          placeholder="1.00"
-          defaultValue="1.00"
+        <PriceForm
           min="0.01"
-          postfix={__("LBC")}
-          onChange={event => this.handleFeeAmountChange(event)}
+          placeholder="1.00"
+          step="0.1"
+          onFeeChange={event => this.handleFeeAmountChange(event)}
+          defaultFeeValue="1.00"
+          onCurrencyChange={event => this.handleCurrencyChange(event)}
+          defaultCurrencyValue="LBC"
         />
         {__("  ")}
         <Link
