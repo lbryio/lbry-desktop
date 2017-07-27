@@ -7,15 +7,9 @@ let scriptLoaded = false;
 let scriptDidError = false;
 
 class CardVerify extends React.Component {
-  static defaultProps = {
-    label: "Verify",
-    locale: "auto",
-  };
-
   static propTypes = {
-    // If included, will render the default blue button with label text.
-    // (Requires including stripe-checkout.css or adding the .styl file
-    // to your pipeline)
+    disabled: PropTypes.bool,
+
     label: PropTypes.string,
 
     // =====================================================
@@ -34,188 +28,6 @@ class CardVerify extends React.Component {
     //     token.id can be used to create a charge or customer.
     //     token.email contains the email address entered by the user.
     token: PropTypes.func.isRequired,
-
-    // ==========================
-    // Highly Recommended Options
-    // ==========================
-
-    // Name of the company or website.
-    name: PropTypes.string,
-
-    // A description of the product or service being purchased.
-    description: PropTypes.string,
-
-    // Specify auto to display Checkout in the user's preferred language, if
-    // available. English will be used by default.
-    //
-    // https://stripe.com/docs/checkout#supported-languages
-    // for more info.
-    locale: PropTypes.oneOf([
-      "auto", // (Default) Automatically chosen by checkout
-      "zh", // Simplified Chinese
-      "da", // Danish
-      "nl", // Dutch
-      "en", // English
-      "fr", // French
-      "de", // German
-      "it", // Italian
-      "ja", // Japanease
-      "no", // Norwegian
-      "es", // Spanish
-      "sv", // Swedish
-    ]),
-
-    // ==============
-    // Optional Props
-    // ==============
-
-    // The currency of the amount (3-letter ISO code). The default is USD.
-    currency: PropTypes.oneOf([
-      "AED",
-      "AFN",
-      "ALL",
-      "AMD",
-      "ANG",
-      "AOA",
-      "ARS",
-      "AUD",
-      "AWG",
-      "AZN",
-      "BAM",
-      "BBD",
-      "BDT",
-      "BGN",
-      "BIF",
-      "BMD",
-      "BND",
-      "BOB",
-      "BRL",
-      "BSD",
-      "BWP",
-      "BZD",
-      "CAD",
-      "CDF",
-      "CHF",
-      "CLP",
-      "CNY",
-      "COP",
-      "CRC",
-      "CVE",
-      "CZK",
-      "DJF",
-      "DKK",
-      "DOP",
-      "DZD",
-      "EEK",
-      "EGP",
-      "ETB",
-      "EUR",
-      "FJD",
-      "FKP",
-      "GBP",
-      "GEL",
-      "GIP",
-      "GMD",
-      "GNF",
-      "GTQ",
-      "GYD",
-      "HKD",
-      "HNL",
-      "HRK",
-      "HTG",
-      "HUF",
-      "IDR",
-      "ILS",
-      "INR",
-      "ISK",
-      "JMD",
-      "JPY",
-      "KES",
-      "KGS",
-      "KHR",
-      "KMF",
-      "KRW",
-      "KYD",
-      "KZT",
-      "LAK",
-      "LBP",
-      "LKR",
-      "LRD",
-      "LSL",
-      "LTL",
-      "LVL",
-      "MAD",
-      "MDL",
-      "MGA",
-      "MKD",
-      "MNT",
-      "MOP",
-      "MRO",
-      "MUR",
-      "MVR",
-      "MWK",
-      "MXN",
-      "MYR",
-      "MZN",
-      "NAD",
-      "NGN",
-      "NIO",
-      "NOK",
-      "NPR",
-      "NZD",
-      "PAB",
-      "PEN",
-      "PGK",
-      "PHP",
-      "PKR",
-      "PLN",
-      "PYG",
-      "QAR",
-      "RON",
-      "RSD",
-      "RUB",
-      "RWF",
-      "SAR",
-      "SBD",
-      "SCR",
-      "SEK",
-      "SGD",
-      "SHP",
-      "SLL",
-      "SOS",
-      "SRD",
-      "STD",
-      "SVC",
-      "SZL",
-      "THB",
-      "TJS",
-      "TOP",
-      "TRY",
-      "TTD",
-      "TWD",
-      "TZS",
-      "UAH",
-      "UGX",
-      "USD",
-      "UYU",
-      "UZS",
-      "VND",
-      "VUV",
-      "WST",
-      "XAF",
-      "XCD",
-      "XOF",
-      "XPF",
-      "YER",
-      "ZAR",
-      "ZMW",
-    ]),
-
-    // The label of the payment button in the Checkout form (e.g. “Subscribe”,
-    // “Pay {{amount}}”, etc.). If you include {{amount}}, it will be replaced
-    // by the provided amount. Otherwise, the amount will be appended to the
-    // end of your label.
-    panelLabel: PropTypes.string,
   };
 
   constructor(props) {
@@ -329,8 +141,10 @@ class CardVerify extends React.Component {
       closed: this.onClosed,
       description: __("Confirm Identity"),
       email: this.props.email,
+      locale: "auto",
       panelLabel: "Verify",
       token: this.props.token,
+      zipCode: true,
     });
   }
 
