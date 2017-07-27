@@ -1,7 +1,7 @@
 import React from "react";
 import { Icon, BusyMessage } from "component/common";
 import FilePrice from "component/filePrice";
-import { FormField } from "component/form";
+import { TipLink } from "component/tipLink";
 import { Modal } from "component/modal";
 import Link from "component/link";
 import { ToolTip } from "component/tooltip";
@@ -14,8 +14,6 @@ class FileActions extends React.PureComponent {
     super(props);
     this.state = {
       forceShowActions: false,
-      showTipBox: false,
-      feeAmount: "1.00",
     };
   }
 
@@ -60,37 +58,6 @@ class FileActions extends React.PureComponent {
     this.props.loadVideo(this.props.uri);
   }
 
-  handleTipPublisherButtonClicked() {
-    this.setState({
-      showTipBox: true,
-    });
-  }
-
-  handleTipButtonClicked() {
-    let address = this.props.claim.address;
-    let amount = this.state.feeAmount;
-
-    this.props.setAddress(address);
-    this.props.setAmount(amount);
-    this.props.sendToAddress();
-
-    this.setState({
-      showTipBox: false,
-    });
-  }
-
-  handleTipCancelButtonClicked() {
-    this.setState({
-      showTipBox: false,
-    });
-  }
-
-  handleFeeAmountChange(event) {
-    this.setState({
-      feeAmount: event.target.value,
-    });
-  }
-
   render() {
     const {
       fileInfo,
@@ -109,8 +76,6 @@ class FileActions extends React.PureComponent {
       claimIsMine,
     } = this.props;
 
-    const { showTipBox } = this.state;
-
     const metadata = fileInfo ? fileInfo.metadata : null,
       openInFolderMessage = platform.startsWith("Mac")
         ? __("Open in Finder")
@@ -119,40 +84,6 @@ class FileActions extends React.PureComponent {
       title = metadata ? metadata.title : uri;
 
     let content;
-    let tipLink = (
-      <Link
-        label={__("Tip Publisher")}
-        button="text"
-        icon="icon-gift"
-        onClick={this.handleTipPublisherButtonClicked.bind(this)}
-      />
-    );
-
-    let tipBox = (
-      <span>
-        <FormField
-          type="number"
-          className="form-field__input--inline"
-          step="0.1"
-          placeholder="1.00"
-          defaultValue="1.00"
-          min="0.01"
-          postfix={__("LBC")}
-          onChange={event => this.handleFeeAmountChange(event)}
-        />
-        {__("  ")}
-        <Link
-          label={__("Tip")}
-          button="primary"
-          onClick={this.handleTipButtonClicked.bind(this)}
-        />
-        <Link
-          label={__("Cancel")}
-          button="alt"
-          onClick={this.handleTipCancelButtonClicked.bind(this)}
-        />
-      </span>
-    );
 
     if (loading || downloading) {
       const progress = fileInfo && fileInfo.written_bytes
@@ -250,7 +181,7 @@ class FileActions extends React.PureComponent {
               />
             </DropDownMenu>
           : ""}
-        {showTipBox ? tipBox : tipLink}
+        <TipLink claim={this.props.claim} />
         <Modal
           type="confirm"
           isOpen={modal == "affirmPurchase"}
@@ -277,36 +208,6 @@ class FileActions extends React.PureComponent {
             outpoint={fileInfo.outpoint}
             title={title}
           />}
-        {modal == "insufficientBalance" &&
-          <Modal
-            isOpen={true}
-            contentLabel={__("Insufficient balance")}
-            onConfirmed={closeModal}
-          >
-            {__(
-              "Insufficient balance: after this transaction you would have less than 1 LBC in your wallet."
-            )}
-          </Modal>}
-        {modal == "transactionSuccessful" &&
-          <Modal
-            isOpen={true}
-            contentLabel={__("Transaction successful")}
-            onConfirmed={closeModal}
-          >
-            {__(
-              "The publisher of the content was successfully tipped " +
-                this.state.feeAmount +
-                " LBC. Mahalo!"
-            )}
-          </Modal>}
-        {modal == "transactionFailed" &&
-          <Modal
-            isOpen={true}
-            contentLabel={__("Transaction failed")}
-            onConfirmed={closeModal}
-          >
-            {__("Something went wrong")}:
-          </Modal>}
       </section>
     );
   }
