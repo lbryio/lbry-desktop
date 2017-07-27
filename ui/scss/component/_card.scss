@@ -1,6 +1,7 @@
 @import "../global";
 
 $padding-card-horizontal: $spacing-vertical * 2/3;
+$translate-card-hover: 10px;
 
 .card {
   margin-left: auto;
@@ -94,10 +95,13 @@ $card-link-scaling: 1.1;
   position: relative;
   z-index: 2;
   box-shadow: $box-shadow-focus;
-  transform: scale($card-link-scaling);
+  transform: scale($card-link-scaling) translate3d($translate-card-hover, 0, 0);
   transform-origin: 50% 50%;
   overflow-x: visible;
-  overflow-y: visible;
+  overflow-y: visible
+}
+.card--link:hover ~ .card--link {
+  transform: translate3d($translate-card-hover * 2, 0, 0);
 }
 
 .card__media {
@@ -201,14 +205,13 @@ $height-card-small: $spacing-vertical * 15;
   overflow: hidden;
   white-space: nowrap;
   position: relative;
-
   /*hacky way to give space for hover */
-  padding-left: 20px;
-  margin-left: -20px
+  padding-right: 20px;
+  margin-right: -20px;
 }
 .card-row__items {
   width: 100%;
-  overflow-x: hidden;
+  overflow: hidden;
   /*hacky way to give space for hover */
   padding-top: 20px;
   margin-top: -20px;
@@ -238,7 +241,7 @@ $height-card-small: $spacing-vertical * 15;
   top: 36%
 }
 .card-row__nav.left-nav {
-  left: 20px; /** using 20px left padding **/
+  left: 0;
 }
 .card-row__nav.right-nav {
   right: 0;

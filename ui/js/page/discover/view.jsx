@@ -27,8 +27,25 @@ class FeaturedCategory extends React.PureComponent {
   handleScrollPrevious() {
     const cardRow = ReactDOM.findDOMNode(this.refs.rowitems);
     if (cardRow.scrollLeft > 0) {
-      cardRow.scrollLeft = 0;
-      this.setState({ canScrollPrevious: false, canScrollNext: true });
+      // check the visible cards
+      const cards = cardRow.getElementsByTagName("section");
+      var firstVisibleCard = null;
+      var firstVisibleIdx = -1;
+      for (var i = 0; i < cards.length; i++) {
+        if (this.isCardVisible(cards[i], cardRow, false)) {
+          firstVisibleCard = cards[i];
+          firstVisibleIdx = i;
+          break;
+        }
+      }
+
+      const numDisplayed = this.numDisplayedCards(cardRow);
+      const scrollToIdx = firstVisibleIdx - numDisplayed;
+      cardRow.scrollLeft = scrollToIdx < 0 ? 0 : cards[scrollToIdx].offsetLeft;
+      this.setState({
+        canScrollPrevious: cardRow.scrollLeft !== 0,
+        canScrollNext: true,
+      });
     }
   }
 
@@ -40,31 +57,61 @@ class FeaturedCategory extends React.PureComponent {
     var lastVisibleCard = null;
     var lastVisibleIdx = -1;
     for (var i = 0; i < cards.length; i++) {
-      if (this.isCardVisible(cards[i], cardRow)) {
+      if (this.isCardVisible(cards[i], cardRow, true)) {
         lastVisibleCard = cards[i];
         lastVisibleIdx = i;
       }
     }
 
     if (lastVisibleCard) {
+      const numDisplayed = this.numDisplayedCards(cardRow);
       cardRow.scrollLeft = Math.min(
-        lastVisibleCard.offsetLeft + 16,
+        lastVisibleCard.offsetLeft,
         cardRow.scrollWidth - cardRow.clientWidth
       );
+
+      // update last visible index after scroll
+      lastVisibleIdx += numDisplayed;
+      if (lastVisibleIdx > cards.length - 1) {
+        lastVisibleIdx = cards.length - 1;
+      }
+
       this.setState({ canScrollPrevious: true });
     }
+
     if (lastVisibleIdx === cards.length - 1) {
       this.setState({ canScrollNext: false });
     }
   }
 
-  isCardVisible(section, cardRow) {
-    var cardRowLeft = cardRow.scrollLeft;
-    var cardRowEnd = cardRow.offsetWidth;
-    var sectionLeft = section.offsetLeft;
-    var sectionEnd = sectionLeft + section.offsetWidth;
+  isCardVisible(section, cardRow, partialVisibility) {
+    // check if a card is fully or partialy visible in its parent
+    const cardRowWidth = cardRow.offsetWidth;
+    const cardRowLeft = cardRow.scrollLeft;
+    const cardRowEnd = cardRowLeft + cardRow.offsetWidth;
+    const sectionLeft = section.offsetLeft - cardRowLeft;
+    const sectionEnd = sectionLeft + section.offsetWidth;
 
-    return sectionEnd <= cardRowEnd && sectionLeft >= cardRowLeft;
+    return (
+      (sectionLeft >= 0 && sectionEnd <= cardRowWidth) ||
+      (((sectionLeft < 0 && sectionEnd > 0) ||
+        (sectionLeft > 0 && sectionLeft <= cardRowWidth)) &&
+        partialVisibility)
+    );
+  }
+
+  numDisplayedCards(cardRow) {
+    const cards = cardRow.getElementsByTagName("section");
+    const cardRowWidth = cardRow.offsetWidth;
+    // get the width of the first card and then calculate
+    const cardWidth = cards.length > 0 ? cards[0].offsetWidth : 0;
+
+    if (cardWidth > 0) {
+      return Math.ceil(cardRowWidth / cardWidth);
+    }
+
+    // return a default value of 1 card displayed if the card width couldn't be determined
+    return 1;
   }
 
   componentWillUnmount() {
