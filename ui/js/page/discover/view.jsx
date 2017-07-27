@@ -80,10 +80,6 @@ class FeaturedCategory extends React.PureComponent {
           }
         }
 
-        if (lastVisibleIdx > cards.length - 1) {
-          lastVisibleIdx = cards.length - 1;
-        }
-
         this.setState({ canScrollPrevious: true });
         if (lastVisibleIdx === cards.length - 1) {
           this.setState({ canScrollNext: false });
