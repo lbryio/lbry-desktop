@@ -1,7 +1,7 @@
 import React from "react";
 import { Icon, BusyMessage } from "component/common";
 import FilePrice from "component/filePrice";
-import { TipLink } from "component/tipLink";
+import TipLink from "component/tipLink";
 import { Modal } from "component/modal";
 import Link from "component/link";
 import { ToolTip } from "component/tooltip";

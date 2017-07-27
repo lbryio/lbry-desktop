@@ -45,6 +45,7 @@ class TipLink extends React.PureComponent {
   }
 
   render() {
+    const { modal, closeModal } = this.props;
     const { showTipBox } = this.state;
 
     let tipLink = (
@@ -83,7 +84,7 @@ class TipLink extends React.PureComponent {
     );
 
     return (
-      <section className="file-actions">
+      <div className="menu-container">
         {showTipBox ? tipBox : tipLink}
         {modal == "insufficientBalance" &&
           <Modal
@@ -115,7 +116,7 @@ class TipLink extends React.PureComponent {
           >
             {__("Something went wrong")}:
           </Modal>}
-      </section>
+      </div>
     );
   }
 }
