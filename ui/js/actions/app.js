@@ -4,6 +4,7 @@ import {
   selectUpdateUrl,
   selectUpgradeDownloadPath,
   selectUpgradeDownloadItem,
+  selectUpgradeFilename,
   selectPageTitle,
   selectCurrentPage,
   selectCurrentParams,
@@ -151,7 +152,8 @@ export function doDownloadUpgrade() {
     // Make a new directory within temp directory so the filename is guaranteed to be available
     const dir = fs.mkdtempSync(
       remote.app.getPath("temp") + require("path").sep
-    );
+    ),
+      upgradeFilename = selectUpgradeFilename(state);
 
     let options = {
       onProgress: p => dispatch(doUpdateDownloadProgress(Math.round(p * 100))),

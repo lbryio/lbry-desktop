@@ -16,7 +16,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
   *
 
 ### Fixed
-  *
+  * Fixed upgrade file path missing file name
   *
 
 ### Deprecated
