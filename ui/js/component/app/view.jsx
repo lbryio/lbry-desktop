@@ -38,18 +38,13 @@ class App extends React.PureComponent {
   }
 
   showWelcome(props) {
-    const {
-      isFetchingRewards,
-      isWelcomeAcknowledged,
-      isWelcomeRewardClaimed,
-      openWelcomeModal,
-      user,
-    } = props;
+    const { isWelcomeAcknowledged, openWelcomeModal, user } = props;
 
     if (
       !isWelcomeAcknowledged &&
       user &&
-      (isFetchingRewards === false && isWelcomeRewardClaimed === false)
+      !user.is_reward_approved &&
+      !user.is_identity_verified
     ) {
       openWelcomeModal();
     }

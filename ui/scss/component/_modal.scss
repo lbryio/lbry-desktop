@@ -34,7 +34,7 @@
 }
 
 .modal__header {
-  margin-bottom: 5px;
+  margin-bottom: $spacing-vertical * 2/3;
   text-align: center;
 }
 
@@ -42,7 +42,7 @@
   display: flex;
   flex-direction: row;
   justify-content: center;
-  margin-top: 15px;
+  margin-top: $spacing-vertical * 2/3;
 }
 
 .modal__button {

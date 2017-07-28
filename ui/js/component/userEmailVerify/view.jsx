@@ -44,9 +44,9 @@ class UserEmailVerify extends React.PureComponent {
         {/* render help separately so it always shows */}
         <div className="form-field__helper">
           <p>
-            {__("Check your email for a verification code. Email")}{" "}
+            {__("Email")}{" "}
             <Link href="mailto:help@lbry.io" label="help@lbry.io" />{" "}
-            {__("if you did not receive or are having trouble with your code.")}
+            {__("if you encounter any trouble with your code.")}
           </p>
         </div>
         <div className="form-row-submit form-row-submit--with-footer">

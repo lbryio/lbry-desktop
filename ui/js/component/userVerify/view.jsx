@@ -25,14 +25,16 @@ class UserVerify extends React.PureComponent {
     const { errorMessage, isPending, reward } = this.props;
     return (
       <div>
-        {(!reward || !reward.transaction_id) &&
-          <p>
-            Please link a credit card to confirm your identity and receive{" "}
-            {reward
-              ? <CreditAmount amount={parseFloat(reward.reward_amount)} />
-              : <span>your reward</span>}
-          </p>}
-        <p>{__("This is to prevent abuse. You will not be charged.")}</p>
+        <p>
+          {__(
+            "To ensure you are a real and unique person, you must link a valid credit or debit card."
+          )}
+        </p>
+        <p>
+          {__(
+            "A small authorization, but no actual charge, will be run on this card."
+          )}
+        </p>
         {errorMessage && <p className="form-field__error">{errorMessage}</p>}
         <CardVerify
           label={__("Link Card and Finish")}

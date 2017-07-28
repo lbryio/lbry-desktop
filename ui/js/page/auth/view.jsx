@@ -76,7 +76,7 @@ export class AuthPage extends React.PureComponent {
           <div className="card__content">
             <div className="help">
               {__(
-                "This information is disclosed only to LBRY, Inc. and not to the LBRY network. It is optional and only collected to provide communication and prevent abuse. You may use LBRY without providing this information."
+                "This information is disclosed only to LBRY, Inc. and not to the LBRY network. It is only required to earn LBRY rewards."
               )}
             </div>
           </div>

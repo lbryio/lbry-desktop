@@ -7,6 +7,7 @@ import { selectUserIsRewardApproved } from "selectors/user";
 import {
   makeSelectHasClaimedReward,
   makeSelectRewardByType,
+  selectTotalRewardValue,
 } from "selectors/rewards";
 import ModalWelcome from "./view";
 
@@ -17,6 +18,7 @@ const select = (state, props) => {
   return {
     isRewardApproved: selectUserIsRewardApproved(state),
     reward: selectReward(state, { reward_type: rewards.TYPE_NEW_USER }),
+    totalRewardValue: selectTotalRewardValue(state),
   };
 };
 
@@ -29,7 +31,7 @@ const perform = dispatch => () => {
   return {
     verifyAccount: () => {
       closeModal();
-      dispatch(doAuthNavigate("/rewards"));
+      dispatch(doAuthNavigate("/discover"));
     },
     closeModal: closeModal,
   };

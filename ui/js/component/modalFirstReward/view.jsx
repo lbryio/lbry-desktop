@@ -15,20 +15,19 @@ class ModalFirstReward extends React.PureComponent {
         onConfirmed={closeModal}
       >
         <section>
-          <h3 className="modal__header">{__("About Your Reward")}</h3>
+          <h3 className="modal__header">{__("Your First Reward")}</h3>
           <p>
-            {__("You earned a reward of")}
-            {" "}<CreditAmount amount={reward.reward_amount} label={false} />
-            {" "}{__("LBRY credits, or")} <em>{__("LBC")}</em>.
+            {__("You just earned your first reward of")}
+            {" "}<CreditAmount amount={reward.reward_amount} />.
           </p>
           <p>
             {__(
-              "This reward will show in your Wallet momentarily, shown in the top right, probably while you are reading this message."
+              "This reward will show in your Wallet in the top right momentarily (if it hasn't already)."
             )}
           </p>
           <p>
             {__(
-              "LBC is used to compensate creators, to publish, and to have say in how the network works."
+              "These credits are used to compensate creators, to publish your own content, and to have say in how the network works."
             )}
           </p>
           <p>
@@ -38,7 +37,7 @@ class ModalFirstReward extends React.PureComponent {
           </p>
           <p>
             {__(
-              "Finally, pleaseh know that LBRY is an early beta and that it earns the name."
+              "Finally, please know that LBRY is an early beta and that it earns the name."
             )}
           </p>
         </section>

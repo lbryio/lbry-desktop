@@ -167,6 +167,7 @@ class CardVerify extends React.Component {
       <Link
         button="primary"
         label={this.props.label}
+        icon="icon-lock"
         disabled={
           this.props.disabled || this.state.open || this.hasPendingClick
         }
