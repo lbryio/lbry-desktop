@@ -15,22 +15,13 @@ class FeaturedCategory extends React.PureComponent {
     });
   }
 
-  componentDidMount() {
-    const prevIcon = ReactDOM.findDOMNode(this.refs.scrollPrevious);
-    const nextIcon = ReactDOM.findDOMNode(this.refs.scrollNext);
-    this.scrollPreviousHandler = this.handleScrollPrevious.bind(this);
-    this.scrollNextHandler = this.handleScrollNext.bind(this);
-    prevIcon.addEventListener("click", this.scrollPreviousHandler);
-    nextIcon.addEventListener("click", this.scrollNextHandler);
-  }
-
   handleScrollPrevious() {
     const cardRow = ReactDOM.findDOMNode(this.refs.rowitems);
     if (cardRow.scrollLeft > 0) {
       // check the visible cards
       const cards = cardRow.getElementsByTagName("section");
-      var firstVisibleCard = null;
-      var firstVisibleIdx = -1;
+      let firstVisibleCard = null;
+      let firstVisibleIdx = -1;
       for (var i = 0; i < cards.length; i++) {
         if (this.isCardVisible(cards[i], cardRow, false)) {
           firstVisibleCard = cards[i];
@@ -61,8 +52,8 @@ class FeaturedCategory extends React.PureComponent {
 
     // check the visible cards
     const cards = cardRow.getElementsByTagName("section");
-    var lastVisibleCard = null;
-    var lastVisibleIdx = -1;
+    let lastVisibleCard = null;
+    let lastVisibleIdx = -1;
     for (var i = 0; i < cards.length; i++) {
       if (this.isCardVisible(cards[i], cardRow, true)) {
         lastVisibleCard = cards[i];
@@ -108,8 +99,8 @@ class FeaturedCategory extends React.PureComponent {
     }
 
     const component = this;
-    var diff = target - cardRow.scrollLeft;
-    var tick = diff / duration * 10;
+    const diff = target - cardRow.scrollLeft;
+    const tick = diff / duration * 10;
     setTimeout(() => {
       cardRow.scrollLeft = cardRow.scrollLeft + tick;
       if (cardRow.scrollLeft === target) {
@@ -157,13 +148,6 @@ class FeaturedCategory extends React.PureComponent {
     return 1;
   }
 
-  componentWillUnmount() {
-    const prevIcon = ReactDOM.findDOMNode(this.refs.scrollPrevious);
-    const nextIcon = ReactDOM.findDOMNode(this.refs.scrollNext);
-    prevIcon.removeEventListener("click", this.scrollPreviousHandler);
-    nextIcon.removeEventListener("click", this.scrollNextHandler);
-  }
-
   render() {
     const { category, names } = this.props;
     const leftNavClassName =
@@ -176,10 +160,20 @@ class FeaturedCategory extends React.PureComponent {
     return (
       <div className="card-row card-row--small">
         <div className={leftNavClassName}>
-          <Icon ref="scrollPrevious" icon="icon-chevron-left" />
+          <a
+            className="card-row__scroll-button"
+            onClick={this.handleScrollPrevious.bind(this)}
+          >
+            <Icon icon="icon-chevron-left" />
+          </a>
         </div>
         <div className={rightNavClassName}>
-          <Icon ref="scrollNext" icon="icon-chevron-right" />
+          <a
+            className="card-row__scroll-button"
+            onClick={this.handleScrollNext.bind(this)}
+          >
+            <Icon icon="icon-chevron-right" />
+          </a>
         </div>
         <h3 className="card-row__header">
           {category}

@@ -205,18 +205,19 @@ $height-card-small: $spacing-vertical * 15;
   overflow: hidden;
   white-space: nowrap;
   position: relative;
+
   /*hacky way to give space for hover */
-  padding-right: 20px;
-  margin-right: -20px;
+  padding-right: 30px;
 }
 .card-row__items {
   width: 100%;
   overflow: hidden;
+
   /*hacky way to give space for hover */
   padding-top: 20px;
   margin-top: -20px;
-  padding-right: 20px;
-  margin-right: -20px;
+  padding-right: 30px;
+  margin-right: -30px;
 }
 .card-row__header {
   margin-bottom: $spacing-vertical / 3;
@@ -229,7 +230,7 @@ $height-card-small: $spacing-vertical * 15;
   top: ($font-size * 1.4 * $font-line-height) + ($spacing-vertical / 3);
   height: ($width-card-small * 9 / 16) + ($font-size * 0.82 * $font-line-height * 4) + ($spacing-vertical * 4/3)
 }
-.card-row__nav .icon {
+.card-row__nav .card-row__scroll-button {
   background: $color-bg;
   color: $color-help;
   box-shadow: $box-shadow-layer;
@@ -239,6 +240,13 @@ $height-card-small: $spacing-vertical * 15;
   left: 0;
   top: 36%;
   z-index: 2;
+  opacity: 0.5;
+  transition: transform 60ms ease-in-out;
+
+  &:hover {
+    opacity: 1.0;
+    transform: scale($card-link-scaling * 1.1)
+  }
 }
 .card-row__nav.left-nav {
   left: 0;
