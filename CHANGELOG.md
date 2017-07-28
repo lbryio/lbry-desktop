@@ -8,42 +8,64 @@ Web UI version numbers should always match the corresponding version of LBRY App
 
 ## [Unreleased]
 ### Added
-  * Identity verification for new reward participants
-  * Support rich markup in publishing descriptions and show pages.
-  * Release past publishing claims (and recover LBC) via the UI
-  * Added transition to card hovers to smooth animation
-  * Use randomly colored tiles when image is missing from metadata
-  * Added a loading message to file actions
-  * URL is auto suggested in Publish Page
+  *
+  *
 
 ### Changed
-  * Publishing revamped. Editing claims is much easier.
-  * Daemon updated from v0.13.1 to [v0.14.2](https://github.com/lbryio/lbry/releases/tag/v0.14.2)
-  * Publish page now use `claim_list` rather than `file_list`
+  *
+  *
 
 ### Fixed
-  * Fixed bug with download notice when switching window focus
-  * Fixed newly published files appearing twice
-  * Fixed unconfirmed published files missing channel name
-  * Fixed old files from updated published claims appearing in downloaded list
-  * Fixed inappropriate text showing on searches
-  * Stop discover page from pushing jumping vertically while loading
-  * Restored feedback on claim amounts
-  * Fixed hiding price input when Free is checked on publish form
-  * Fixed hiding new identity fields on publish form
-  * Fixed files on downloaded tab not showing download progress
-  * Fixed downloading files that are deleted not being removed from the downloading list
-  * Fixed download progress bar not being cleared when a downloading file is deleted
-  * Fixed refresh regression after adding scroll position to history state
-  * Fixed app not monitoring download progress on files in progress between restarts
+  *
+  *
 
 ### Deprecated
   *
   *
 
 ### Removed
-  * Removed bandwidth caps from settings, because the daemon was not respecting them anyway.
   *
+  *
+
+## [0.14.0] - 2017-07-28
+
+### Added
+ * Identity verification for new reward participants
+ * Support rich markup in publishing descriptions and show pages.
+ * Release past publishing claims (and recover LBC) via the UI
+ * Added transition to card hovers to smooth animation
+ * Use randomly colored tiles when image is missing from metadata
+ * Added a loading message to file actions
+ * URL is auto suggested in Publish Page
+
+
+### Changed
+ * Publishing revamped. Editing claims is much easier.
+ * Daemon updated from v0.13.1 to [v0.14.2](https://github.com/lbryio/lbry/releases/tag/v0.14.2)
+ * Publish page now use `claim_list` rather than `file_list`
+
+
+### Removed
+ * Removed bandwidth caps from settings, because the daemon was not respecting them anyway.
+
+
+### Fixed
+ * Fixed bug with download notice when switching window focus
+ * Fixed newly published files appearing twice
+ * Fixed unconfirmed published files missing channel name
+ * Fixed old files from updated published claims appearing in downloaded list
+ * Fixed inappropriate text showing on searches
+ * Stop discover page from pushing jumping vertically while loading
+ * Restored feedback on claim amounts
+ * Fixed hiding price input when Free is checked on publish form
+ * Fixed hiding new identity fields on publish form
+ * Fixed files on downloaded tab not showing download progress
+ * Fixed downloading files that are deleted not being removed from the downloading list
+ * Fixed download progress bar not being cleared when a downloading file is deleted
+ * Fixed refresh regression after adding scroll position to history state
+ * Fixed app not monitoring download progress on files in progress between restarts
+
+
 
 ## [0.13.0] - 2017-06-30
 
