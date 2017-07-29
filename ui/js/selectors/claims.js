@@ -1,4 +1,5 @@
 import { createSelector } from "reselect";
+import { selectCurrentParams } from "selectors/app";
 import lbryuri from "lbryuri";
 
 const _selectState = state => state.claims || {};
@@ -60,12 +61,57 @@ export const makeSelectClaimForUriIsMine = () => {
   return createSelector(selectClaimForUriIsMine, isMine => isMine);
 };
 
+export const selectAllFetchingChannelClaims = createSelector(
+  _selectState,
+  state => state.fetchingChannelClaims || {}
+);
+
+const selectFetchingChannelClaims = (state, props) => {
+  const allFetchingChannelClaims = selectAllFetchingChannelClaims(state);
+
+  return allFetchingChannelClaims[props.uri];
+};
+
+export const makeSelectFetchingChannelClaims = (state, props) => {
+  return createSelector(selectFetchingChannelClaims, fetching => fetching);
+};
+
 export const selectClaimsInChannelForUri = (state, props) => {
-  return selectAllClaimsByChannel(state)[props.uri];
+  const byId = selectClaimsById(state);
+  const byChannel = selectAllClaimsByChannel(state)[props.uri] || {};
+  const claimIds = byChannel["all"];
+
+  if (!claimIds) return claimIds;
+
+  const claims = [];
+
+  claimIds.forEach(claimId => claims.push(byId[claimId]));
+
+  return claims;
 };
 
 export const makeSelectClaimsInChannelForUri = () => {
   return createSelector(selectClaimsInChannelForUri, claims => claims);
+};
+
+export const selectClaimsInChannelForCurrentPage = (state, props) => {
+  const byId = selectClaimsById(state);
+  const byChannel = selectAllClaimsByChannel(state)[props.uri] || {};
+  const params = selectCurrentParams(state);
+  const page = params && params.page ? params.page : 1;
+  const claimIds = byChannel[page];
+
+  if (!claimIds) return claimIds;
+
+  const claims = [];
+
+  claimIds.forEach(claimId => claims.push(byId[claimId]));
+
+  return claims;
+};
+
+export const makeSelectClaimsInChannelForCurrentPage = () => {
+  return createSelector(selectClaimsInChannelForCurrentPage, claims => claims);
 };
 
 const selectMetadataForUri = (state, props) => {

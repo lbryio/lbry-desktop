@@ -10,8 +10,8 @@ const makeSelect = () => {
     selectIsResolving = makeSelectIsResolvingForUri();
 
   const select = (state, props) => ({
-    claim: selectClaim(state, props),
-    isResolvingUri: selectIsResolving(state, props),
+    claim: selectClaim(state, props.params),
+    isResolvingUri: selectIsResolving(state, props.params),
   });
 
   return select;

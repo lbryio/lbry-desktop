@@ -8,12 +8,20 @@ Web UI version numbers should always match the corresponding version of LBRY App
 
 ## [Unreleased]
 ### Added
-  *
-  *
+  * Identity verification for new reward participants
+  * Support rich markup in publishing descriptions and show pages.
+  * Release past publishing claims (and recover LBC) via the UI
+  * Added transition to card hovers to smooth animation
+  * Use randomly colored tiles when image is missing from metadata
+  * Added a loading message to file actions
+  * URL is auto suggested in Publish Page
+  * Added infinite scroll to channel pages
 
 ### Changed
-  *
-  *
+  * Publishing revamped. Editing claims is much easier.
+  * Publish page now use `claim_list` rather than `file_list`
+  * Daemon updated to [v0.14.2](https://github.com/lbryio/lbry/releases/tag/v0.14.2)
+  * Made channel claim storage more efficient
 
 ### Fixed
   *

@@ -24,3 +24,16 @@ const selectResolvingUri = (state, props) => {
 export const makeSelectIsResolvingForUri = () => {
   return createSelector(selectResolvingUri, resolving => resolving);
 };
+
+export const selectChannelPages = createSelector(
+  _selectState,
+  state => state.channelPages || {}
+);
+
+const selectTotalPagesForChannel = (state, props) => {
+  return selectChannelPages(state)[props.uri];
+};
+
+export const makeSelectTotalPagesForChannel = () => {
+  return createSelector(selectTotalPagesForChannel, totalPages => totalPages);
+};
