@@ -193,6 +193,7 @@ $card-link-scaling: 1.1;
   }
 }
 $padding-top-card-hover-hack: 20px;
+$padding-right-card-hover-hack: 30px;
 .card-row__items {
   width: 100%;
   overflow: hidden;
@@ -200,8 +201,8 @@ $padding-top-card-hover-hack: 20px;
   /*hacky way to give space for hover */
   padding-top: $padding-top-card-hover-hack;
   margin-top: -1 * $padding-top-card-hover-hack;
-  padding-right: 30px;
-  margin-right: -30px;
+  padding-right: $padding-right-card-hover-hack;
+  margin-right: -1 * $padding-right-card-hover-hack;
   > .card {
     vertical-align: top;
     display: inline-block;
@@ -210,9 +211,12 @@ $padding-top-card-hover-hack: 20px;
     margin-left: $spacing-vertical / 3;
   }
 }
+
 .card-row--small {
   overflow: hidden;
   white-space: nowrap;
+  /*hacky way to give space for hover */
+  padding-right: $padding-right-card-hover-hack;
 }
 .card-row__header {
   margin-bottom: $spacing-vertical / 3;
@@ -250,5 +254,5 @@ $padding-top-card-hover-hack: 20px;
   left: 0;
 }
 .card-row__nav--right {
-  right: 0;
+  right: -1 * $padding-right-card-hover-hack;
 }
