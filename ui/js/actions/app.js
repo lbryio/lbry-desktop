@@ -297,7 +297,13 @@ export function doClearCache() {
   };
 }
 
-export function doQuitAndLaunchDaemonHelp() {
+export function doQuit() {
+  return function(dispatch, getState) {
+    remote.app.quit();
+  };
+}
+
+export function doLaunchDaemonHelp() {
   return function(dispatch, getState) {
     shell.openExternal("https://lbry.io/faq/incompatible-protocol-version");
     remote.app.quit();
