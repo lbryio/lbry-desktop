@@ -86,6 +86,9 @@ class TipLink extends React.PureComponent {
           button="alt"
           onClick={this.handleTipCancelButtonClicked.bind(this)}
         />
+        <div className="form-field__helper">
+          {__("This sends the entered amount of LBCs to the publisher.")}
+        </div>
       </span>
     );
 
