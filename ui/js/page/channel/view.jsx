@@ -77,6 +77,12 @@ class ChannelPage extends React.PureComponent {
           <ReactPaginate
             pageCount={totalPages}
             pageRangeDisplayed={2}
+            previousLabel="‹"
+            nextLabel="›"
+            activeClassName="pagination__item--selected"
+            pageClassName="pagination__item"
+            previousClassName="pagination__item pagination__item--previous"
+            nextClassName="pagination__item pagination__item--next"
             marginPagesDisplayed={2}
             onPageChange={e => this.changePage(e.selected + 1)}
             initialPage={parseInt(page - 1)}
