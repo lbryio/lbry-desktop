@@ -87,6 +87,7 @@ class FileActions extends React.PureComponent {
       costInfo,
       loading,
       claimIsMine,
+      claimInfo,
     } = this.props;
 
     const { showTipBox } = this.state;
@@ -186,7 +187,7 @@ class FileActions extends React.PureComponent {
           onTipShow={this.handleTipShow.bind(this)}
           onTipHide={this.handleTipHide.bind(this)}
           showTipBox={showTipBox}
-          claim={this.props.claim}
+          address={claimInfo.address}
         />
         {showMenu && !showTipBox
           ? <DropDownMenu>

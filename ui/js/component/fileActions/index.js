@@ -12,7 +12,10 @@ import { makeSelectCostInfoForUri } from "selectors/cost_info";
 import { doCloseModal, doOpenModal } from "actions/app";
 import { doFetchAvailability } from "actions/availability";
 import { doOpenFileInShell, doOpenFileInFolder } from "actions/file_info";
-import { makeSelectClaimForUriIsMine } from "selectors/claims";
+import {
+  makeSelectClaimForUriIsMine,
+  makeSelectClaimForUri,
+} from "selectors/claims";
 import { doPurchaseUri, doLoadVideo, doStartDownload } from "actions/content";
 import FileActions from "./view";
 
@@ -23,6 +26,7 @@ const makeSelect = () => {
   const selectCostInfoForUri = makeSelectCostInfoForUri();
   const selectLoadingForUri = makeSelectLoadingForUri();
   const selectClaimForUriIsMine = makeSelectClaimForUriIsMine();
+  const selectClaimForUri = makeSelectClaimForUri();
 
   const select = (state, props) => ({
     fileInfo: selectFileInfoForUri(state, props),
@@ -34,6 +38,7 @@ const makeSelect = () => {
     costInfo: selectCostInfoForUri(state, props),
     loading: selectLoadingForUri(state, props),
     claimIsMine: selectClaimForUriIsMine(state, props),
+    claimInfo: selectClaimForUri(state, props),
   });
 
   return select;

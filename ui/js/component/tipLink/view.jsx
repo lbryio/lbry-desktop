@@ -19,7 +19,7 @@ class TipLink extends React.PureComponent {
   }
 
   handleTipButtonClicked() {
-    let address = this.props.claim.address;
+    let address = this.props.address;
     let amount = this.state.feeAmount;
 
     this.props.setAddress(address);
