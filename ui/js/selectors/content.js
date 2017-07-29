@@ -24,3 +24,8 @@ const selectResolvingUri = (state, props) => {
 export const makeSelectIsResolvingForUri = () => {
   return createSelector(selectResolvingUri, resolving => resolving);
 };
+
+export const selectHotRightNowClaimIds = createSelector(
+  _selectState,
+  state => state.hotRightNowClaimIds
+);
