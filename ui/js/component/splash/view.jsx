@@ -30,6 +30,7 @@ export class SplashScreen extends React.PureComponent {
 
   _updateStatusCallback(status) {
     const startupStatus = status.startup_status;
+    console.log(status);
     if (startupStatus.code == "started") {
       // Wait until we are able to resolve a name before declaring
       // that we are done.
@@ -52,10 +53,19 @@ export class SplashScreen extends React.PureComponent {
       });
       return;
     }
-    this.setState({
-      details: startupStatus.message + (startupStatus.is_lagging ? "" : "..."),
-      isLagging: startupStatus.is_lagging,
-    });
+    if (status.blockchain_status && status.blockchain_status.blocks_behind > 0) {
+      this.setState({
+        message: __("Blockchain Sync"),
+        details: __("%s blocks behind", status.blockchain_status.blocks_behind),
+        isLagging: startupStatus.is_lagging,
+      });
+    } else {
+      this.setState({
+        message: __("Network Loading"),
+        details: startupStatus.message + (startupStatus.is_lagging ? "" : "..."),
+        isLagging: startupStatus.is_lagging,
+      });
+    }
     setTimeout(() => {
       this.updateStatus();
     }, 500);
