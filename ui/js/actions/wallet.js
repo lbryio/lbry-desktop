@@ -5,7 +5,7 @@ import {
   selectDraftTransactionAmount,
   selectBalance,
 } from "selectors/wallet";
-import { doOpenModal } from "actions/app";
+import { doOpenModal, doShowSnackBar } from "actions/app";
 import * as modals from "constants/modal_types";
 
 export function doUpdateBalance(balance) {
@@ -86,7 +86,13 @@ export function doSendDraftTransaction() {
         dispatch({
           type: types.SEND_TRANSACTION_COMPLETED,
         });
-        dispatch(doOpenModal(modals.TRANSACTION_SUCCESSFUL));
+        dispatch(
+          doShowSnackBar({
+            message: __(`You sent ${amount} LBC`),
+            linkText: __("History"),
+            linkTarget: __("/wallet"),
+          })
+        );
       } else {
         dispatch({
           type: types.SEND_TRANSACTION_FAILED,

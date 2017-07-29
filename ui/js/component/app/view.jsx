@@ -8,7 +8,6 @@ import ModalInsufficientCredits from "component/modalInsufficientCredits";
 import ModalUpgrade from "component/modalUpgrade";
 import ModalWelcome from "component/modalWelcome";
 import ModalFirstReward from "component/modalFirstReward";
-import ModalTransactionSuccessful from "component/modalTransactionSuccessful";
 import ModalTransactionFailed from "component/modalTransactionFailed";
 import ModalInsufficientBalance from "component/modalInsufficientBalance";
 import lbry from "lbry";
@@ -81,8 +80,6 @@ class App extends React.PureComponent {
         {modal == modals.WELCOME && <ModalWelcome />}
         {modal == modals.FIRST_REWARD && <ModalFirstReward />}
         {modal == modals.AUTHENTICATION_FAILURE && <ModalAuthFailure />}
-        {modal == modals.TRANSACTION_SUCCESSFUL &&
-          <ModalTransactionSuccessful />}
         {modal == modals.TRANSACTION_FAILED && <ModalTransactionFailed />}
         {modal == modals.INSUFFICIENT_BALANCE && <ModalInsufficientBalance />}
       </div>

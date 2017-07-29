@@ -10,10 +10,11 @@ const PriceForm = props => {
     placeholder,
     min,
     step,
+    isTip,
   } = props;
 
   return (
-    <span>
+    <span className={"form-field " + (isTip ? "form-field--tip " : " ")}>
       <FormField
         type="number"
         min={min}

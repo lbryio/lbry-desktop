@@ -14,6 +14,7 @@ class TipLink extends React.PureComponent {
   }
 
   handleTipPublisherButtonClicked() {
+    this.resetDefaults();
     this.props.onTipShow();
   }
 
@@ -44,6 +45,13 @@ class TipLink extends React.PureComponent {
     });
   }
 
+  resetDefaults() {
+    this.setState({
+      feeAmount: "1.00",
+      currency: "LBC",
+    });
+  }
+
   render() {
     const { showTipBox } = this.props;
 
@@ -59,15 +67,15 @@ class TipLink extends React.PureComponent {
     let tipBox = (
       <span>
         <PriceForm
+          isTip={true}
           min="0.01"
           placeholder="1.00"
           step="0.1"
           onFeeChange={event => this.handleFeeAmountChange(event)}
-          defaultFeeValue="1.00"
+          defaultFeeValue={this.state.feeAmount}
           onCurrencyChange={event => this.handleCurrencyChange(event)}
           defaultCurrencyValue="LBC"
         />
-        {__("  ")}
         <Link
           label={__("Tip")}
           button="primary"
