@@ -10,7 +10,7 @@ import {
 import { makeSelectFileInfoForUri } from "selectors/file_info";
 import {
   makeSelectIsResolvingForUri,
-  selectHotRightNowClaimIds,
+  selectRewardContentClaimIds,
 } from "selectors/content";
 import FileCard from "./view";
 
@@ -25,7 +25,7 @@ const makeSelect = () => {
     fileInfo: selectFileInfoForUri(state, props),
     obscureNsfw: !selectShowNsfw(state),
     metadata: selectMetadataForUri(state, props),
-    hotRightNowClaimIds: selectHotRightNowClaimIds(state, props),
+    rewardedContentClaimIds: selectRewardContentClaimIds(state, props),
     isResolvingUri: selectResolvingUri(state, props),
   });
 

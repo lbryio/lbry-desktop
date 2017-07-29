@@ -133,13 +133,13 @@ export function doFetchFeaturedUris() {
   };
 }
 
-export function doFetchHotRightNowContent() {
+export function doFetchRewardedContent() {
   return function(dispatch, getState) {
     const state = getState();
 
     const success = nameToClaimId => {
       dispatch({
-        type: types.FETCH_HOT_RIGHT_NOW_CONTENT_COMPLETED,
+        type: types.FETCH_REWARD_CONTENT_COMPLETED,
         data: {
           claimIds: Object.values(nameToClaimId),
           success: true,
@@ -149,7 +149,7 @@ export function doFetchHotRightNowContent() {
 
     const failure = () => {
       dispatch({
-        type: types.FETCH_HOT_RIGHT_NOW_CONTENT_COMPLETED,
+        type: types.FETCH_REWARD_CONTENT_COMPLETED,
         data: {
           claimIds: [],
           success: false,

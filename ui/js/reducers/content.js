@@ -2,7 +2,7 @@ import * as types from "constants/action_types";
 
 const reducers = {};
 const defaultState = {
-  hotRightNowClaimIds: [],
+  rewardedContentClaimIds: [],
 };
 
 reducers[types.FETCH_FEATURED_CONTENT_STARTED] = function(state, action) {
@@ -21,15 +21,14 @@ reducers[types.FETCH_FEATURED_CONTENT_COMPLETED] = function(state, action) {
   });
 };
 
-reducers[types.FETCH_HOT_RIGHT_NOW_CONTENT_COMPLETED] = function(
+reducers[types.FETCH_REWARD_CONTENT_COMPLETED] = function(
   state,
   action
 ) {
   const { claimIds, success } = action.data;
 
   return Object.assign({}, state, {
-    hotRightNowClaimIds: claimIds,
-    fetchingHotRightNowContentFailed: !success,
+    rewardedContentClaimIds: claimIds,
   });
 };
 

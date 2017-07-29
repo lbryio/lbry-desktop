@@ -38,7 +38,7 @@ export const makeSelectTotalPagesForChannel = () => {
   return createSelector(selectTotalPagesForChannel, totalPages => totalPages);
 };
 
-export const selectHotRightNowClaimIds = createSelector(
+export const selectRewardContentClaimIds = createSelector(
   _selectState,
-  state => state.hotRightNowClaimIds
+  state => state.rewardedContentClaimIds
 );

@@ -1,11 +1,11 @@
 import React from "react";
-import lbry from "lbry.js";
 import lbryuri from "lbryuri.js";
 import CardMedia from "component/cardMedia";
 import Link from "component/link";
 import { TruncatedText } from "component/common.js";
 import FilePrice from "component/filePrice";
 import NsfwOverlay from "component/nsfwOverlay";
+import IconFeatured from "component/iconFeatured";
 
 class FileTile extends React.PureComponent {
   static SHOW_EMPTY_PUBLISH = "publish";
@@ -58,7 +58,7 @@ class FileTile extends React.PureComponent {
       showEmpty,
       navigate,
       hidePrice,
-      hotRightNowClaimIds,
+      rewardedContentClaimIds,
     } = this.props;
 
     const uri = lbryuri.normalize(this.props.uri);
@@ -71,7 +71,7 @@ class FileTile extends React.PureComponent {
       ? metadata.thumbnail
       : null;
     const obscureNsfw = this.props.obscureNsfw && metadata && metadata.nsfw;
-    const isHotRightNow = claim && hotRightNowClaimIds.includes(claim.claim_id);
+    const isRewardContent = claim && rewardedContentClaimIds.includes(claim.claim_id);
 
     let onClick = () => navigate("/show", { uri });
 
@@ -109,9 +109,11 @@ class FileTile extends React.PureComponent {
             <div className="file-tile__content">
               <div className="card__title-primary">
                 {!hidePrice ? <FilePrice uri={this.props.uri} /> : null}
+                {isRewardContent && <IconFeatured /> }
                 <div className="meta">{uri}</div>
-                <h3><TruncatedText lines={1}>{title}</TruncatedText></h3>
-                {isHotRightNow && <span>&#128293; Hot Right Now</span>}
+                <h3>
+                  <TruncatedText lines={1}>{title}</TruncatedText>
+                </h3>
               </div>
               <div className="card__content card__subtext">
                 <TruncatedText lines={3}>

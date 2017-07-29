@@ -16,7 +16,7 @@ class App extends React.PureComponent {
       alertError,
       checkUpgradeAvailable,
       updateBalance,
-      fetchHotRightNowContent,
+      fetchRewardedContent,
     } = this.props;
 
     document.addEventListener("unhandledError", event => {
@@ -31,7 +31,7 @@ class App extends React.PureComponent {
       updateBalance(balance);
     });
 
-    fetchHotRightNowContent();
+    fetchRewardedContent();
 
     this.showWelcome(this.props);
 

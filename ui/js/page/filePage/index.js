@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { doNavigate } from "actions/app";
 import { doFetchFileInfo } from "actions/file_info";
 import { makeSelectFileInfoForUri } from "selectors/file_info";
-import { selectHotRightNowClaimIds } from "selectors/content";
+import { selectRewardContentClaimIds } from "selectors/content";
 import { doFetchCostInfoForUri } from "actions/cost_info";
 import {
   makeSelectClaimForUri,
@@ -28,7 +28,7 @@ const makeSelect = () => {
     metadata: selectMetadata(state, props),
     obscureNsfw: !selectShowNsfw(state),
     fileInfo: selectFileInfo(state, props),
-    hotRightNowClaimIds: selectHotRightNowClaimIds(state, props),
+    rewardedContentClaimIds: selectRewardContentClaimIds(state, props),
   });
 
   return select;
