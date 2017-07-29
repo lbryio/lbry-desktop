@@ -1,5 +1,6 @@
 import React from "react";
 import { BusyMessage } from "component/common";
+import Link from "component/link";
 import UserEmailNew from "component/userEmailNew";
 import UserEmailVerify from "component/userEmailVerify";
 import UserVerify from "component/userVerify";
@@ -56,7 +57,7 @@ export class AuthPage extends React.PureComponent {
   }
 
   render() {
-    const { email, user, isPending } = this.props;
+    const { email, user, isPending, navigate } = this.props;
 
     return (
       <main className="">
@@ -77,7 +78,11 @@ export class AuthPage extends React.PureComponent {
             <div className="help">
               {__(
                 "This information is disclosed only to LBRY, Inc. and not to the LBRY network. It is only required to earn LBRY rewards."
-              )}
+              ) + " "}
+              <Link
+                onClick={() => navigate("/discover")}
+                label={__("Return home")}
+              />.
             </div>
           </div>
         </section>
