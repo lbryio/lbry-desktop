@@ -7,6 +7,8 @@ import {
   doAlertError,
   doRecordScroll,
 } from "actions/app";
+import { doFetchRewardedContent } from "actions/content";
+
 import { doUpdateBalance } from "actions/wallet";
 import { selectWelcomeModalAcknowledged } from "selectors/app";
 import { selectUser } from "selectors/user";
@@ -24,6 +26,7 @@ const perform = dispatch => ({
   checkUpgradeAvailable: () => dispatch(doCheckUpgradeAvailable()),
   openWelcomeModal: () => dispatch(doOpenModal(modals.WELCOME)),
   updateBalance: balance => dispatch(doUpdateBalance(balance)),
+  fetchRewardedContent: () => dispatch(doFetchRewardedContent()),
   recordScroll: scrollPosition => dispatch(doRecordScroll(scrollPosition)),
 });
 

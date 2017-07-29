@@ -2,7 +2,8 @@ import React from "react";
 import lbryuri from "lbryuri.js";
 import CardMedia from "component/cardMedia";
 import Link from "component/link";
-import { Thumbnail, TruncatedText, Icon } from "component/common";
+import { TruncatedText, Icon } from "component/common";
+import IconFeatured from "component/iconFeatured";
 import FilePrice from "component/filePrice";
 import UriIndicator from "component/uriIndicator";
 import NsfwOverlay from "component/nsfwOverlay";
@@ -46,7 +47,14 @@ class FileCard extends React.PureComponent {
   }
 
   render() {
-    const { claim, fileInfo, metadata, isResolvingUri, navigate } = this.props;
+    const {
+      claim,
+      fileInfo,
+      metadata,
+      isResolvingUri,
+      navigate,
+      rewardedContentClaimIds,
+    } = this.props;
 
     const uri = lbryuri.normalize(this.props.uri);
     const title = metadata && metadata.title ? metadata.title : uri;
@@ -54,6 +62,7 @@ class FileCard extends React.PureComponent {
       ? metadata.thumbnail
       : null;
     const obscureNsfw = this.props.obscureNsfw && metadata && metadata.nsfw;
+    const isRewardContent = claim && rewardedContentClaimIds.includes(claim.claim_id);
 
     let description = "";
     if (isResolvingUri && !claim) {
@@ -86,9 +95,8 @@ class FileCard extends React.PureComponent {
               <div className="card__subtitle">
                 <span style={{ float: "right" }}>
                   <FilePrice uri={uri} />
-                  {fileInfo
-                    ? <span>{" "}<Icon fixed icon="icon-folder" /></span>
-                    : ""}
+                  {isRewardContent && <span>{" "}<IconFeatured /></span> }
+                  {fileInfo && <span>{" "}<Icon fixed icon="icon-folder" /></span> }
                 </span>
                 <UriIndicator uri={uri} />
               </div>

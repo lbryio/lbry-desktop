@@ -133,6 +133,34 @@ export function doFetchFeaturedUris() {
   };
 }
 
+export function doFetchRewardedContent() {
+  return function(dispatch, getState) {
+    const state = getState();
+
+    const success = nameToClaimId => {
+      dispatch({
+        type: types.FETCH_REWARD_CONTENT_COMPLETED,
+        data: {
+          claimIds: Object.values(nameToClaimId),
+          success: true,
+        },
+      });
+    };
+
+    const failure = () => {
+      dispatch({
+        type: types.FETCH_REWARD_CONTENT_COMPLETED,
+        data: {
+          claimIds: [],
+          success: false,
+        },
+      });
+    };
+
+    lbryio.call("reward", "list_featured").then(success, failure);
+  };
+}
+
 export function doUpdateLoadStatus(uri, outpoint) {
   return function(dispatch, getState) {
     const state = getState();

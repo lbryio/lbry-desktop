@@ -134,9 +134,13 @@ p
   }
 }
 
+/*should this be here or work this way? had to hack additional rule below*/
 .icon:only-child {
   position: relative;
   top: 0.16em;
+}
+.icon-featured > .icon {
+  top: 0;
 }
 
 .help {

@@ -12,7 +12,12 @@ import * as modals from "constants/modal_types";
 
 class App extends React.PureComponent {
   componentWillMount() {
-    const { alertError, checkUpgradeAvailable, updateBalance } = this.props;
+    const {
+      alertError,
+      checkUpgradeAvailable,
+      updateBalance,
+      fetchRewardedContent,
+    } = this.props;
 
     document.addEventListener("unhandledError", event => {
       alertError(event.detail);
@@ -25,6 +30,8 @@ class App extends React.PureComponent {
     lbry.balanceSubscribe(balance => {
       updateBalance(balance);
     });
+
+    fetchRewardedContent();
 
     this.showWelcome(this.props);
 

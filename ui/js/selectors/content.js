@@ -37,3 +37,8 @@ const selectTotalPagesForChannel = (state, props) => {
 export const makeSelectTotalPagesForChannel = () => {
   return createSelector(selectTotalPagesForChannel, totalPages => totalPages);
 };
+
+export const selectRewardContentClaimIds = createSelector(
+  _selectState,
+  state => state.rewardedContentClaimIds
+);
