@@ -2,6 +2,7 @@
 
 $padding-card-horizontal: $spacing-vertical * 2/3;
 $translate-card-hover: 10px;
+$width-card-small: $spacing-vertical * 10;
 
 .card {
   margin-left: auto;
@@ -58,9 +59,10 @@ $translate-card-hover: 10px;
   margin-top: $spacing-vertical * 2/3;
   margin-bottom: $spacing-vertical * 2/3;
 }
+$font-size-subtext-multiple: 0.82;
 .card__subtext {
   color: $color-meta-light;
-  font-size: 0.82em;
+  font-size: $font-size-subtext-multiple * 1.0em;
   margin-top: $spacing-vertical * 1/3;
   margin-bottom: $spacing-vertical * 1/3;
 }
@@ -68,7 +70,7 @@ $translate-card-hover: 10px;
   white-space: pre-wrap;
 }
 .card__subtext--two-lines {
-  height: $font-size * 0.82 * $font-line-height * 2; /*this is so one line text still has the proper height*/
+  height: $font-size * $font-size-subtext-multiple * $font-line-height * 2; /*this is so one line text still has the proper height*/
 }
 .card-overlay {
   position: absolute;
@@ -156,8 +158,7 @@ $card-link-scaling: 1.1;
   top: 36%
 }
 
-$width-card-small: $spacing-vertical * 10;
-$height-card-small: $spacing-vertical * 15;
+
 
 .card--small {
   width: $width-card-small;
@@ -191,44 +192,41 @@ $height-card-small: $spacing-vertical * 15;
     margin-top: $spacing-vertical * 1/3;
   }
 }
-.card-row__items {
-  > .card {
-    vertical-align: top;
-    display: inline-block;
-    margin-right: $spacing-vertical / 3;
-  }
-  > .card:last-child {
-    margin-right: 0
-  }
-}
-.card-row--small {
-  overflow: hidden;
-  white-space: nowrap;
-  position: relative;
-
-  /*hacky way to give space for hover */
-  padding-right: 30px;
-}
+$padding-top-card-hover-hack: 20px;
 .card-row__items {
   width: 100%;
   overflow: hidden;
 
   /*hacky way to give space for hover */
-  padding-top: 20px;
-  margin-top: -20px;
+  padding-top: $padding-top-card-hover-hack;
+  margin-top: -1 * $padding-top-card-hover-hack;
   padding-right: 30px;
   margin-right: -30px;
+  > .card {
+    vertical-align: top;
+    display: inline-block;
+  }
+  > .card + .card {
+    margin-left: $spacing-vertical / 3;
+  }
+}
+.card-row--small {
+  overflow: hidden;
+  white-space: nowrap;
 }
 .card-row__header {
   margin-bottom: $spacing-vertical / 3;
 }
 
+.card-row__scrollhouse {
+  position: relative;
+}
+
 .card-row__nav {
-  display: none;
   position: absolute;
-  padding: 0 $spacing-vertical / 1.5;
-  top: ($font-size * 1.4 * $font-line-height) + ($spacing-vertical / 3);
-  height: ($width-card-small * 9 / 16) + ($font-size * 0.82 * $font-line-height * 4) + ($spacing-vertical * 4/3)
+  padding: 0 $spacing-vertical * 2 / 3;
+  height: 100%;
+  top: $padding-top-card-hover-hack - $spacing-vertical * 2 / 3;
 }
 .card-row__nav .card-row__scroll-button {
   background: $color-bg;
@@ -240,7 +238,7 @@ $height-card-small: $spacing-vertical * 15;
   left: 0;
   top: 36%;
   z-index: 2;
-  opacity: 0.5;
+  opacity: 0.8;
   transition: transform 60ms ease-in-out;
 
   &:hover {
@@ -248,12 +246,9 @@ $height-card-small: $spacing-vertical * 15;
     transform: scale($card-link-scaling * 1.1)
   }
 }
-.card-row__nav.left-nav {
+.card-row__nav--left {
   left: 0;
 }
-.card-row__nav.right-nav {
+.card-row__nav--right {
   right: 0;
-}
-.card-row__nav.can-scroll {
-  display: block
 }

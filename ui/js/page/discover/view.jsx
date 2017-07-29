@@ -1,6 +1,5 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import lbryio from "lbryio.js";
 import lbryuri from "lbryuri";
 import FileCard from "component/fileCard";
 import { Icon, BusyMessage } from "component/common.js";
@@ -150,31 +149,9 @@ class FeaturedCategory extends React.PureComponent {
 
   render() {
     const { category, names } = this.props;
-    const leftNavClassName =
-      "card-row__nav left-nav" +
-      (this.state.canScrollPrevious ? " can-scroll" : "");
-    const rightNavClassName =
-      "card-row__nav right-nav" +
-      (this.state.canScrollNext ? " can-scroll" : "");
 
     return (
       <div className="card-row card-row--small">
-        <div className={leftNavClassName}>
-          <a
-            className="card-row__scroll-button"
-            onClick={this.handleScrollPrevious.bind(this)}
-          >
-            <Icon icon="icon-chevron-left" />
-          </a>
-        </div>
-        <div className={rightNavClassName}>
-          <a
-            className="card-row__scroll-button"
-            onClick={this.handleScrollNext.bind(this)}
-          >
-            <Icon icon="icon-chevron-right" />
-          </a>
-        </div>
         <h3 className="card-row__header">
           {category}
           {category &&
@@ -187,15 +164,35 @@ class FeaturedCategory extends React.PureComponent {
               className="tooltip--header"
             />}
         </h3>
-        <div ref="rowitems" className="card-row__items">
-          {names &&
-            names.map(name =>
-              <FileCard
-                key={name}
-                displayStyle="card"
-                uri={lbryuri.normalize(name)}
-              />
-            )}
+        <div className="card-row__scrollhouse">
+          {this.state.canScrollPrevious &&
+            <div className="card-row__nav card-row__nav--left">
+              <a
+                className="card-row__scroll-button"
+                onClick={this.handleScrollPrevious.bind(this)}
+              >
+                <Icon icon="icon-chevron-left" />
+              </a>
+            </div>}
+          {this.state.canScrollNext &&
+            <div className="card-row__nav card-row__nav--right">
+              <a
+                className="card-row__scroll-button"
+                onClick={this.handleScrollNext.bind(this)}
+              >
+                <Icon icon="icon-chevron-right" />
+              </a>
+            </div>}
+          <div ref="rowitems" className="card-row__items">
+            {names &&
+              names.map(name =>
+                <FileCard
+                  key={name}
+                  displayStyle="card"
+                  uri={lbryuri.normalize(name)}
+                />
+              )}
+          </div>
         </div>
       </div>
     );
