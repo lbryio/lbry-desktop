@@ -27,7 +27,7 @@ jsonrpc.call = function(
   xhr.addEventListener("load", function() {
     var response = JSON.parse(xhr.responseText);
 
-    let error = response.error || response.result && response.result.error
+    let error = response.error || response.result && response.result.error;
     if (error) {
       if (errorCallback) {
         errorCallback(error);

@@ -9,7 +9,7 @@ import {
 } from "selectors/file_info";
 import { selectResolvingUris } from "selectors/content";
 import { selectCostInfoForUri } from "selectors/cost_info";
-import { doOpenModal } from "actions/app";
+import { doAlertError, doOpenModal } from "actions/app";
 import { doClaimEligiblePurchaseRewards } from "actions/rewards";
 import { selectBadgeNumber } from "selectors/app";
 import { selectTotalDownloadProgress } from "selectors/file_info";
@@ -238,6 +238,7 @@ export function doStartDownload(uri, outpoint) {
     if (downloadingByOutpoint[outpoint]) return;
 
     lbry.file_list({ outpoint, full_status: true }).then(([fileInfo]) => {
+
       dispatch({
         type: types.DOWNLOADING_STARTED,
         data: {
@@ -297,6 +298,8 @@ export function doLoadVideo(uri) {
       } else {
         dispatch(doDownloadFile(uri, streamInfo));
       }
+    }).catch(error => {
+      dispatch(doAlertError(error));
     });
   };
 }
