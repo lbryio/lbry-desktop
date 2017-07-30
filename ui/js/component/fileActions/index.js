@@ -21,8 +21,8 @@ import {
   doClaimNewSupport,
   doSetClaimSupportAmount,
   doSetClaimSupportClaim,
-} from "actions/file_actions";
-import { selectClaimSupportAmount } from "selectors/file_actions";
+} from "actions/claims";
+import { selectClaimSupportAmount } from "selectors/claims";
 
 const makeSelect = () => {
   const selectClaim = makeSelectClaimForUri();

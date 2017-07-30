@@ -1,9 +1,6 @@
 import * as types from "constants/action_types";
 import lbry from "lbry";
-import {
-  selectClaimSupport,
-  selectClaimSupportAmount,
-} from "selectors/file_actions";
+import { selectClaimSupport, selectClaimSupportAmount } from "selectors/claims";
 import { selectBalance } from "selectors/wallet";
 import { doOpenModal } from "actions/app";
 
