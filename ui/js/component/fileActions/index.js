@@ -6,6 +6,7 @@ import {
   makeSelectDownloadingForUri,
   makeSelectLoadingForUri,
 } from "selectors/file_info";
+
 import { makeSelectIsAvailableForUri } from "selectors/availability";
 import { selectCurrentModal } from "selectors/app";
 import { makeSelectCostInfoForUri } from "selectors/cost_info";
@@ -15,8 +16,16 @@ import { doOpenFileInShell, doOpenFileInFolder } from "actions/file_info";
 import { makeSelectClaimForUriIsMine } from "selectors/claims";
 import { doPurchaseUri, doLoadVideo, doStartDownload } from "actions/content";
 import FileActions from "./view";
+import { makeSelectClaimForUri } from "selectors/claims";
+import {
+  doClaimNewSupport,
+  doSetClaimSupportAmount,
+  doSetClaimSupportClaim,
+} from "actions/file_actions";
+import { selectClaimSupportAmount } from "selectors/file_actions";
 
 const makeSelect = () => {
+  const selectClaim = makeSelectClaimForUri();
   const selectFileInfoForUri = makeSelectFileInfoForUri();
   const selectIsAvailableForUri = makeSelectIsAvailableForUri();
   const selectDownloadingForUri = makeSelectDownloadingForUri();
@@ -25,6 +34,7 @@ const makeSelect = () => {
   const selectClaimForUriIsMine = makeSelectClaimForUriIsMine();
 
   const select = (state, props) => ({
+    claim: selectClaim(state, props),
     fileInfo: selectFileInfoForUri(state, props),
     /*availability check is disabled due to poor performance, TBD if it dies forever or requires daemon fix*/
     isAvailable: true, //selectIsAvailableForUri(state, props),
@@ -34,6 +44,7 @@ const makeSelect = () => {
     costInfo: selectCostInfoForUri(state, props),
     loading: selectLoadingForUri(state, props),
     claimIsMine: selectClaimForUriIsMine(state, props),
+    amount: selectClaimSupportAmount(state),
   });
 
   return select;
@@ -48,6 +59,10 @@ const perform = dispatch => ({
   startDownload: uri => dispatch(doPurchaseUri(uri, "affirmPurchase")),
   loadVideo: uri => dispatch(doLoadVideo(uri)),
   restartDownload: (uri, outpoint) => dispatch(doStartDownload(uri, outpoint)),
+  claimNewSupport: () => dispatch(doClaimNewSupport()),
+  setAmount: event => dispatch(doSetClaimSupportAmount(event.target.value)),
+  setClaimSupport: (claim_id, name) =>
+    dispatch(doSetClaimSupportClaim(claim_id, name)),
 });
 
 export default connect(makeSelect, perform)(FileActions);

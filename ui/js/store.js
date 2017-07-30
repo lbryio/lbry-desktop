@@ -10,6 +10,7 @@ import searchReducer from "reducers/search";
 import settingsReducer from "reducers/settings";
 import userReducer from "reducers/user";
 import walletReducer from "reducers/wallet";
+import fileActionsReducer from "reducers/file_actions";
 import { persistStore, autoRehydrate } from "redux-persist";
 import createCompressor from "redux-persist-transform-compress";
 import createFilter from "redux-persist-transform-filter";
@@ -65,6 +66,7 @@ const reducers = redux.combineReducers({
   settings: settingsReducer,
   wallet: walletReducer,
   user: userReducer,
+  fileActions: fileActionsReducer,
 });
 
 const bulkThunk = createBulkThunkMiddleware();
