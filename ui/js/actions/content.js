@@ -299,6 +299,10 @@ export function doLoadVideo(uri) {
         dispatch(doDownloadFile(uri, streamInfo));
       }
     }).catch(error => {
+      dispatch({
+        type: types.LOADING_VIDEO_FAILED,
+        data: { uri },
+      });
       dispatch(doAlertError(error));
     });
   };
