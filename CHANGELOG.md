@@ -8,16 +8,16 @@ Web UI version numbers should always match the corresponding version of LBRY App
 
 ## [Unreleased]
 ### Added
-  * Replaced horizontal scrollbars with scroll arrows
-  * Featured weekly reward content shows with an orange star
-  * Added pagination to channel pages
+  *
+  *
 
 ### Changed
+  *
+  *
 
 ### Fixed
-  * Fixed requirement to double click play button on many videos
-  * Fixed errors from calls to `get` not bubbling correctly
-  * Fixed some corner-case flows that could break file pages
+  *
+  *
 
 ### Deprecated
   *
@@ -26,6 +26,21 @@ Web UI version numbers should always match the corresponding version of LBRY App
 ### Removed
   *
   *
+
+## [0.14.2] - 2017-07-30
+
+### Added
+ * Replaced horizontal scrollbars with scroll arrows
+ * Featured weekly reward content shows with an orange star
+ * Added pagination to channel pages
+
+
+### Fixed
+ * Fixed requirement to double click play button on many videos
+ * Fixed errors from calls to `get` not bubbling correctly
+ * Fixed some corner-case flows that could break file pages
+
+
 
 ## [0.14.1] - 2017-07-28
 
