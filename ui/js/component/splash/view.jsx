@@ -53,16 +53,23 @@ export class SplashScreen extends React.PureComponent {
       });
       return;
     }
-    if (status.blockchain_status && status.blockchain_status.blocks_behind > 0) {
+    if (
+      status.blockchain_status &&
+      status.blockchain_status.blocks_behind > 0
+    ) {
+      const format = status.blockchain_status.blocks_behind == 1
+        ? "%s block behind"
+        : "%s blocks behind";
       this.setState({
         message: __("Blockchain Sync"),
-        details: __("%s blocks behind", status.blockchain_status.blocks_behind),
+        details: __(format, status.blockchain_status.blocks_behind),
         isLagging: startupStatus.is_lagging,
       });
     } else {
       this.setState({
         message: __("Network Loading"),
-        details: startupStatus.message + (startupStatus.is_lagging ? "" : "..."),
+        details:
+          startupStatus.message + (startupStatus.is_lagging ? "" : "..."),
         isLagging: startupStatus.is_lagging,
       });
     }
