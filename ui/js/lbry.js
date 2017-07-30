@@ -416,10 +416,16 @@ lbry.file_list = function(params = {}) {
       fileInfos => {
         removePendingPublishIfNeeded({ name, channel_name, outpoint });
 
-        const dummyFileInfos = lbry
-          .getPendingPublishes()
-          .map(pendingPublishToDummyFileInfo);
-        resolve([...fileInfos, ...dummyFileInfos]);
+        //if a naked file_list call, append the pending file infos
+        if (!name && !channel_name && !outpoint) {
+          const dummyFileInfos = lbry
+            .getPendingPublishes()
+            .map(pendingPublishToDummyFileInfo);
+
+          resolve([...fileInfos, ...dummyFileInfos]);
+        } else {
+          resolve(fileInfos);
+        }
       },
       reject
     );

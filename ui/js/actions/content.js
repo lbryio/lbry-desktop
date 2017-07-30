@@ -231,6 +231,8 @@ export function doStartDownload(uri, outpoint) {
   return function(dispatch, getState) {
     const state = getState();
 
+    if (!outpoint) { throw new Error("outpoint is required to begin a download"); }
+
     const { downloadingByOutpoint = {} } = state.fileInfo;
 
     if (downloadingByOutpoint[outpoint]) return;

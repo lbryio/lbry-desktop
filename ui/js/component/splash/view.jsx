@@ -30,7 +30,6 @@ export class SplashScreen extends React.PureComponent {
 
   _updateStatusCallback(status) {
     const startupStatus = status.startup_status;
-    console.log(status);
     if (startupStatus.code == "started") {
       // Wait until we are able to resolve a name before declaring
       // that we are done.
