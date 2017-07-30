@@ -16,7 +16,7 @@ class Video extends React.PureComponent {
 
   componentWillReceiveProps(nextProps) {
     // reset playing state upon change path action
-    if (!this.isMediaSame(nextProps) && this.state.isPlaying) {
+    if (!this.isMediaSame(nextProps) && this.props.fileInfo && this.state.isPlaying) {
       this.state.isPlaying = false;
     }
   }
