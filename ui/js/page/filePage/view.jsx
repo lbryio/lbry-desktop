@@ -36,6 +36,9 @@ class FilePage extends React.PureComponent {
   componentDidMount() {
     this.fetchFileInfo(this.props);
     this.fetchCostInfo(this.props);
+    document.title = this.props.metadata
+      ? this.props.metadata.title
+      : document.title;
   }
 
   componentWillReceiveProps(nextProps) {
@@ -111,7 +114,7 @@ class FilePage extends React.PureComponent {
               {!fileInfo || fileInfo.written_bytes <= 0
                 ? <span style={{ float: "right" }}>
                     <FilePrice uri={lbryuri.normalize(uri)} />
-                    {isRewardContent && <span>{" "}<IconFeatured /></span> }
+                    {isRewardContent && <span>{" "}<IconFeatured /></span>}
                   </span>
                 : null}
               <h1>{title}</h1>
