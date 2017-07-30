@@ -16,6 +16,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
   * Added a loading message to file actions
   * URL is auto suggested in Publish Page
   * Added infinite scroll to channel pages
+  * Added claim support button and inline form to file page.
 
 ### Changed
   * Publishing revamped. Editing claims is much easier.
