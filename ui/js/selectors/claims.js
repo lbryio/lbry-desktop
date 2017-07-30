@@ -215,3 +215,13 @@ export const selectMyChannelClaims = createSelector(
     return claims;
   }
 );
+
+export const selectClaimSupport = createSelector(
+  _selectState,
+  state => state.claimSupport || {}
+);
+
+export const selectClaimSupportAmount = createSelector(
+  selectClaimSupport,
+  claimSupport => claimSupport.amount
+);

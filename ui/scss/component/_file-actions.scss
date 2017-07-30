@@ -30,3 +30,12 @@ $color-download: #444;
   top: 0px;
   left: 0px;
 }
+.file-actions__support_claim {
+  position: relative;
+  display: block;
+  width: 50%;
+}
+.file-actions__inline-buttons {
+  display: inline-block;
+  margin-left: $spacing-vertical
+}
