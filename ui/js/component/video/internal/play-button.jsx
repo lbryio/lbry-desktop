@@ -47,7 +47,6 @@ class VideoPlayButton extends React.PureComponent {
       modal,
       closeModal,
       isLoading,
-      costInfo,
       fileInfo,
       mediaType,
     } = this.props;
@@ -60,10 +59,7 @@ class VideoPlayButton extends React.PureComponent {
      }
      */
 
-    const disabled =
-      isLoading ||
-      fileInfo === undefined ||
-      (fileInfo === null && (!costInfo || costInfo.cost === undefined));
+    const disabled = isLoading || fileInfo === undefined;
     const icon = ["audio", "video"].indexOf(mediaType) !== -1
       ? "icon-play"
       : "icon-folder-o";
