@@ -241,7 +241,7 @@ export function doCheckDaemonVersion() {
   return function(dispatch, getState) {
     lbry.version().then(({ lbrynet_version }) => {
       dispatch({
-        type: config.lbrynetDaemonVersion == lbrynet_version
+        type: lbrynet_version.localeCompare(config.lbrynetDaemonVersion) >= 0
           ? types.DAEMON_VERSION_MATCH
           : types.DAEMON_VERSION_MISMATCH,
       });
@@ -297,7 +297,13 @@ export function doClearCache() {
   };
 }
 
-export function doQuitAndLaunchDaemonHelp() {
+export function doQuit() {
+  return function(dispatch, getState) {
+    remote.app.quit();
+  };
+}
+
+export function doLaunchDaemonHelp() {
   return function(dispatch, getState) {
     shell.openExternal("https://lbry.io/faq/incompatible-protocol-version");
     remote.app.quit();
