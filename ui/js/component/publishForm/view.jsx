@@ -536,6 +536,12 @@ class PublishForm extends React.PureComponent {
             this.handleSubmit(event);
           }}
         >
+          <ChannelSection
+            {...this.props}
+            handleChannelChange={this.handleChannelChange.bind(this)}
+            channel={this.state.channel}
+          />
+          
           <section className="card">
             <div className="card__title-primary">
               <h4>{__("Content")}</h4>
@@ -795,13 +801,7 @@ class PublishForm extends React.PureComponent {
                 : null}
             </div>
           </section>
-
-          <ChannelSection
-            {...this.props}
-            handleChannelChange={this.handleChannelChange.bind(this)}
-            channel={this.state.channel}
-          />
-
+          
           <section className="card">
             <div className="card__title-primary">
               <h4>{__("Content URL")}</h4>
