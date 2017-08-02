@@ -1,5 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
+import { doNavigate } from "actions/app";
 import { doUserIdentityVerify } from "actions/user";
 import rewards from "rewards";
 import { makeSelectRewardByType } from "selectors/rewards";
@@ -20,6 +21,7 @@ const select = (state, props) => {
 };
 
 const perform = dispatch => ({
+  navigate: (uri) => dispatch(doNavigate(uri)),
   verifyUserIdentity: token => dispatch(doUserIdentityVerify(token)),
 });
 

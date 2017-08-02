@@ -1,5 +1,6 @@
 import React from "react";
 import { CreditAmount } from "component/common";
+import Link from "component/link";
 import CardVerify from "component/cardVerify";
 
 class UserVerify extends React.PureComponent {
@@ -22,26 +23,26 @@ class UserVerify extends React.PureComponent {
   }
 
   render() {
-    const { errorMessage, isPending, reward } = this.props;
+    const { errorMessage, isPending, navigate } = this.props;
     return (
       <div>
         <p>
           {__(
-            "To ensure you are a real and unique person, you must link a valid credit or debit card."
-          )}
-        </p>
-        <p>
-          {__(
-            "A small authorization, but no actual charge, will be run on this card."
-          )}
+            "To ensure you are a real person, we require a valid credit or debit card."
+          ) + " " + __("There is no charge at all, now or in the future.") + " " }
+          <Link href="https://lbry.io/faq/identity-requirements" label={__("Read More")} />
         </p>
         {errorMessage && <p className="form-field__error">{errorMessage}</p>}
-        <CardVerify
+        <p><CardVerify
           label={__("Link Card and Finish")}
           disabled={isPending}
           token={this.onToken.bind(this)}
           stripeKey="pk_live_e8M4dRNnCCbmpZzduEUZBgJO"
-        />
+        /></p>
+        <p>
+          {__("You can continue without this step, but you will not be eligible to earn rewards.")}
+        </p>
+        <Link onClick={() => navigate("/discover")} button="alt" label={__("Skip Rewards")} />
       </div>
     );
   }
