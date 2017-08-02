@@ -12,7 +12,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
   *
 
 ### Changed
-  *
+  * Reward-eligible content icon is now a rocket ship :D
   *
 
 ### Fixed
