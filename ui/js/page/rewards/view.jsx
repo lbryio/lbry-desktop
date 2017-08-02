@@ -122,6 +122,16 @@ class RewardsPage extends React.PureComponent {
           </div>
         );
       }
+    } else if (user === null) {
+      cardHeader = (
+        <div>
+          <div className="card__content empty">
+            <p>
+              {__("This application is unable to earn rewards due to an authentication failure.")}
+            </p>
+          </div>
+        </div>
+      );
     }
 
     return (

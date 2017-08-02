@@ -2,6 +2,7 @@ import React from "react";
 import Router from "component/router";
 import Header from "component/header";
 import ModalError from "component/modalError";
+import ModalAuthFailure from "component/modalAuthFailure";
 import ModalDownloading from "component/modalDownloading";
 import ModalInsufficientCredits from "component/modalInsufficientCredits";
 import ModalUpgrade from "component/modalUpgrade";
@@ -76,6 +77,7 @@ class App extends React.PureComponent {
         {modal == modals.INSUFFICIENT_CREDITS && <ModalInsufficientCredits />}
         {modal == modals.WELCOME && <ModalWelcome />}
         {modal == modals.FIRST_REWARD && <ModalFirstReward />}
+        {modal == modals.AUTHENTICATION_FAILURE && <ModalAuthFailure />}
       </div>
     );
   }

@@ -1,6 +1,8 @@
 import * as types from "constants/action_types";
+import * as modals from "constants/modal_types";
 import lbryio from "lbryio";
 import { setLocal } from "utils";
+import { doOpenModal } from "actions/app";
 import { doRewardList, doClaimRewardType } from "actions/rewards";
 import { selectEmailToVerify, selectUser } from "selectors/user";
 import rewards from "rewards";
@@ -20,6 +22,7 @@ export function doAuthenticate() {
         dispatch(doRewardList());
       })
       .catch(error => {
+        dispatch(doOpenModal(modals.AUTHENTICATION_FAILURE));
         dispatch({
           type: types.AUTHENTICATION_FAILURE,
           data: { error },

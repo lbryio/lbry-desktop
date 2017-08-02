@@ -9,7 +9,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
 ## [Unreleased]
 ### Added
   * Add tooltips to controls in header
-  *
+  * New flow for rewards authentication failure
 
 ### Changed
   * Reward-eligible content icon is now a rocket ship :D
