@@ -1,6 +1,6 @@
 {
   "name": "LBRY",
-  "version": "0.14.2",
+  "version": "0.14.3rc1",
   "main": "main.js",
   "description": "LBRY is a fully decentralized, open-source protocol facilitating the discovery, access, and (sometimes) purchase of data.",
   "author": {
@@ -20,6 +20,6 @@
     "electron-rebuild": "^1.5.11"
   },
   "lbrySettings": {
-    "lbrynetDaemonVersion": "0.14.2"
+    "lbrynetDaemonVersion": "0.14.3rc1"
   }
 }
