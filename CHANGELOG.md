@@ -14,6 +14,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
 ### Changed
   * Make it clearer how to skip identity verification and add link to FAQ
   * Reward-eligible content icon is now a rocket ship :D :D :D
+  * Change install description shown by operating systems
   * Improved flow for when app is run with incompatible daemon
   *
 
