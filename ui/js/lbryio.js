@@ -113,16 +113,24 @@ lbryio.call = function(resource, action, params = {}, method = "get") {
   });
 };
 
+lbryio._authToken = null;
+
 lbryio.getAuthToken = () => {
   return new Promise((resolve, reject) => {
-    ipcRenderer.once("auth-token-response", (event, token) => {
-      return resolve(token);
-    });
-    ipcRenderer.send("get-auth-token");
+    if (lbryio._authToken) {
+      resolve(lbryio._authToken);
+    } else {
+      ipcRenderer.once("auth-token-response", (event, token) => {
+        lbryio._authToken = token;
+        return resolve(token);
+      });
+      ipcRenderer.send("get-auth-token");
+    }
   });
 };
 
 lbryio.setAuthToken = token => {
+  lbryio._authToken = token ? token.toString().trim() : null;
   ipcRenderer.send("set-auth-token", token);
 };
 
