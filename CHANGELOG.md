@@ -8,18 +8,15 @@ Web UI version numbers should always match the corresponding version of LBRY App
 
 ## [Unreleased]
 ### Added
-  * Add tooltips to controls in header
-  * New flow for rewards authentication failure
+  *
+  *
 
 ### Changed
-  * Make it clearer how to skip identity verification and add link to FAQ
-  * Reward-eligible content icon is now a rocket ship :D :D :D
-  * Change install description shown by operating systems
-  * Improved flow for when app is run with incompatible daemon
+  *
   *
 
 ### Fixed
-  * Corrected improper pluralization on loading screen
+  *
   *
 
 ### Deprecated
@@ -29,6 +26,25 @@ Web UI version numbers should always match the corresponding version of LBRY App
 ### Removed
   *
   *
+
+## [0.14.3] - 2017-08-03
+
+### Added
+ * Add tooltips to controls in header
+ * New flow for rewards authentication failure
+
+
+### Changed
+ * Make it clearer how to skip identity verification and add link to FAQ
+ * Reward-eligible content icon is now a rocket ship :D :D :D
+ * Change install description shown by operating systems
+ * Improved flow for when app is run with incompatible daemon
+
+
+### Fixed
+ * Corrected improper pluralization on loading screen
+
+
 
 ## [0.14.2] - 2017-07-30
 
