@@ -8,7 +8,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
 
 ## [Unreleased]
 ### Added
-  *
+  * Added a new component, "PriceForm" which is now used in Publish and Settings
   *
 
 ### Changed
@@ -16,7 +16,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
   *
 
 ### Fixed
-  *
+  * Erraneous handling of placeholder value in Publish Form
   *
 
 ### Deprecated
@@ -24,7 +24,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
   *
 
 ### Removed
-  *
+  * Removed one instance of string "Max Purchase Price" from settings page, it's redudant.
   *
 
 ## [0.14.3] - 2017-08-03
