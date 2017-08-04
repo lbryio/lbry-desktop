@@ -8,7 +8,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
 
 ## [Unreleased]
 ### Added
-  *
+  * Added a new component, "PriceForm" which is now used in Publish and Settings
   *
 
 ### Changed
@@ -16,7 +16,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
   *
 
 ### Fixed
-  * Tiles will no longer be blurry on hover (Windows only bug) 
+  * Tiles will no longer be blurry on hover (Windows only bug)
   *
 
 ### Deprecated
@@ -24,7 +24,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
   *
 
 ### Removed
-  *
+  * Removed one instance of string "Max Purchase Price" from settings page, it's redudant.
   *
 
 ## [0.14.3] - 2017-08-03
