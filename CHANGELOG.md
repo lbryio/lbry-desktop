@@ -16,7 +16,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
   *
 
 ### Fixed
-  *
+  * Fixed the alignment of video, if it is 4:3 or vertical
   *
 
 ### Deprecated
