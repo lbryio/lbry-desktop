@@ -3,6 +3,7 @@ import { FormField, FormRow } from "component/form.js";
 import SubHeader from "component/subHeader";
 import lbry from "lbry.js";
 import Link from "component/link";
+import FormFieldPrice from "component/priceForm";
 
 const { remote } = require("electron");
 
@@ -61,18 +62,14 @@ class SettingsPage extends React.PureComponent {
       amount: oldSettings.amount,
       currency: oldSettings.currency,
     };
-    newSettings.amount = Number(event.target.value);
+    name = event.target.name;
+    let targetValue = { [name]: event.target.value };
 
-    this.setDaemonSetting("max_key_fee", newSettings);
-  }
-
-  onFeeCurrencyChange(event) {
-    var oldSettings = this.props.daemonSettings.max_key_fee;
-    var newSettings = {
-      amount: oldSettings.amount,
-      currency: oldSettings.currency,
-    };
-    newSettings.currency = event.target.value;
+    if ([name] == "amount") {
+      newSettings.amount = Number(targetValue.amount);
+    } else {
+      newSettings.currency = targetValue.currency;
+    }
 
     this.setDaemonSetting("max_key_fee", newSettings);
   }
@@ -151,11 +148,6 @@ class SettingsPage extends React.PureComponent {
             <h3>{__("Max Purchase Price")}</h3>
           </div>
           <div className="card__content">
-            <div className="form-row__label-row">
-              <div className="form-field__label">
-                {__("Max Purchase Price")}
-              </div>
-            </div>
             <FormRow
               type="radio"
               name="max_key_fee"
@@ -180,26 +172,14 @@ class SettingsPage extends React.PureComponent {
                 }
               />
               {!daemonSettings.disable_max_key_fee
-                ? <FormField
-                    type="number"
+                ? <FormFieldPrice
                     min="0"
-                    placeholder="50"
+                    placeholder="50.0"
                     step="1"
                     onChange={this.onKeyFeeChange.bind(this)}
-                    defaultValue={daemonSettings.max_key_fee.amount}
-                    className="form-field__input--inline"
+                    defaultFeeValue={daemonSettings.max_key_fee.amount}
+                    defaultCurrencyValue={daemonSettings.max_key_fee.currency}
                   />
-                : ""}
-              {!daemonSettings.disable_max_key_fee
-                ? <FormField
-                    type="select"
-                    onChange={this.onFeeCurrencyChange.bind(this)}
-                    defaultValue={daemonSettings.max_key_fee.currency}
-                    className="form-field__input--inline"
-                  >
-                    <option value="USD">{__("US Dollars")}</option>
-                    <option value="LBC">{__("LBRY credits")}</option>
-                  </FormField>
                 : ""}
             </div>
             <div className="form-field__helper">

@@ -3,6 +3,7 @@ import lbry from "lbry";
 import lbryuri from "lbryuri";
 import { FormField, FormRow } from "component/form.js";
 import Link from "component/link";
+import FormFieldPrice from "component/priceForm";
 import Modal from "component/modal";
 import { BusyMessage } from "component/common";
 import ChannelSection from "./internal/channelSection";
@@ -21,7 +22,7 @@ class PublishForm extends React.PureComponent {
       bid: 10,
       hasFile: false,
       feeAmount: "",
-      feeCurrency: "USD",
+      feeCurrency: "LBC",
       channel: "anonymous",
       newChannelName: "@",
       newChannelBid: 10,
@@ -306,21 +307,21 @@ class PublishForm extends React.PureComponent {
     });
   }
 
-  handleFeeAmountChange(event) {
-    this.setState({
-      feeAmount: event.target.value,
-    });
-  }
+  handleFeeAmtAndCurrChange(event) {
+    name = event.target.name;
+    let targetValue = { [name]: event.target.value };
 
-  handleFeeCurrencyChange(event) {
-    this.setState({
-      feeCurrency: event.target.value,
-    });
+    if ([name] == "amount") {
+      this.setState({ feeAmount: targetValue.amount });
+    } else {
+      this.setState({ feeCurrency: targetValue.currency });
+    }
   }
 
   handleFeePrefChange(feeEnabled) {
     this.setState({
       isFee: feeEnabled,
+      feeAmount: this.state.feeAmount == "" ? "5.00" : this.state.feeAmount,
     });
   }
 
@@ -666,23 +667,14 @@ class PublishForm extends React.PureComponent {
                 checked={this.state.isFee}
               />
               <span className={!this.state.isFee ? "hidden" : ""}>
-                <FormField
-                  type="number"
-                  className="form-field__input--inline"
-                  step="0.01"
-                  placeholder="1.00"
+                <FormFieldPrice
                   min="0.01"
-                  onChange={event => this.handleFeeAmountChange(event)}
-                />{" "}
-                <FormField
-                  type="select"
-                  onChange={event => {
-                    this.handleFeeCurrencyChange(event);
-                  }}
-                >
-                  <option value="USD">{__("US Dollars")}</option>
-                  <option value="LBC">{__("LBRY credits")}</option>
-                </FormField>
+                  placeholder="5.00"
+                  step="0.1"
+                  onChange={event => this.handleFeeAmtAndCurrChange(event)}
+                  defaultFeeValue="5.00"
+                  defaultCurrencyValue="LBC"
+                />
               </span>
               {this.state.isFee
                 ? <div className="form-field__helper">
