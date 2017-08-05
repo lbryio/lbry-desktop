@@ -4,10 +4,9 @@ import SubHeader from "component/subHeader";
 import lbry from "lbry.js";
 import Link from "component/link";
 import getThemes from "util/getThemes";
-const { remote } = require("electron");
 
+const { remote } = require("electron");
 const themes = getThemes();
-console.log(themes);
 
 class SettingsPage extends React.PureComponent {
   constructor(props) {
