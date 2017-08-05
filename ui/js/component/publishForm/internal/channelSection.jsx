@@ -59,6 +59,13 @@ class ChannelSection extends React.PureComponent {
       );
       return;
     }
+    
+    else if (this.state.newChannelBid <  0.000097) {
+        this.refs.newChannelName.showError(
+          __("LBRY channel bid must be at least 0.000097 credits.")
+        );
+        return;
+    }
 
     this.setState({
       creatingChannel: true,
