@@ -3,8 +3,11 @@ import { FormField, FormRow } from "component/form.js";
 import SubHeader from "component/subHeader";
 import lbry from "lbry.js";
 import Link from "component/link";
-
+import getThemes from "util/getThemes";
 const { remote } = require("electron");
+
+const themes = getThemes();
+console.log(themes);
 
 class SettingsPage extends React.PureComponent {
   constructor(props) {
@@ -18,6 +21,7 @@ class SettingsPage extends React.PureComponent {
       showUnavailable: lbry.getClientSetting("showUnavailable"),
       language: lbry.getClientSetting("language"),
       clearingCache: false,
+      theme: lbry.getClientSetting("theme"),
     };
   }
 
@@ -79,6 +83,13 @@ class SettingsPage extends React.PureComponent {
 
   onKeyFeeDisableChange(isDisabled) {
     this.setDaemonSetting("disable_max_key_fee", isDisabled);
+  }
+
+  onThemeChange(event) {
+    const value = event.target.value;
+    const link = document.getElementById("theme");
+    link.href = `./themes/${value}.css`;
+    this.props.setClientSetting("theme", value);
   }
 
   // onMaxUploadPrefChange(isLimited) {
@@ -248,6 +259,25 @@ class SettingsPage extends React.PureComponent {
                 "Help make LBRY better by contributing diagnostic data about my usage"
               )}
             />
+          </div>
+        </section>
+
+        <section className="card">
+          <div className="card__content">
+            <h3>{__("Theme")}</h3>
+          </div>
+          <div className="card__content">
+            <FormField
+              type="select"
+              onChange={this.onThemeChange.bind(this)}
+              defaultValue={"Light"}
+              className="form-field__input--inline"
+            >
+              {themes.map((i, k) =>
+                <option key={k} value={i}>{__(`${i} theme`)}</option>
+              )}
+            </FormField>
+
           </div>
         </section>
 
