@@ -269,7 +269,7 @@ class SettingsPage extends React.PureComponent {
             <FormField
               type="select"
               onChange={this.onThemeChange.bind(this)}
-              defaultValue={"Light"}
+              defaultValue={lbry.getClientSetting("theme")}
               className="form-field__input--inline"
             >
               {themes.map((i, k) =>
