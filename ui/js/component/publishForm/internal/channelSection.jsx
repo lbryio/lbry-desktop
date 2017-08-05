@@ -4,8 +4,6 @@ import { FormField, FormRow } from "component/form.js";
 import { BusyMessage } from "component/common";
 import Link from "component/link";
 
-const minimum_bid = 0.000178;
-
 class ChannelSection extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -60,9 +58,9 @@ class ChannelSection extends React.PureComponent {
         __("LBRY channel names must be at least 4 characters in length.")
       );
       return;
-    } else if (this.state.newChannelBid < minimum_bid) {
+    } else if (this.state.newChannelBid < this.minChannelBid()) {
       this.refs.newChannelName.showError(
-        __(`LBRY channel bid must be at least ${minimum_bid} credits.`)
+        __(`LBRY channel bid must be at least ${this.minChannelBid()} credits.`)
       );
       return;
     }
@@ -93,6 +91,10 @@ class ChannelSection extends React.PureComponent {
       );
     };
     this.props.createChannel(newChannelName, amount).then(success, failure);
+  }
+
+  minChannelBid() {
+    return 0.000178;
   }
 
   render() {

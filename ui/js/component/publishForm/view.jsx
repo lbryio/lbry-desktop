@@ -179,6 +179,11 @@ class PublishForm extends React.PureComponent {
     return !!myClaims.find(claim => claim.name === name);
   }
 
+  minClaimBid() {
+    //Get or calculate minimum deposit to prevent: cannot be abandoned
+    return 0.000097;
+  }
+
   topClaimIsMine() {
     const myClaimInfo = this.myClaimInfo();
     const { claimsByUri } = this.props;
@@ -301,8 +306,17 @@ class PublishForm extends React.PureComponent {
   }
 
   handleBidChange(event) {
+    const value = event.target.value;
+
+    if (value < this.minClaimBid()) {
+      this.refs.bid.showError(
+        __(`The minimum deposit claim is ${this.minClaimBid()} credits.`)
+      );
+      return;
+    }
+
     this.setState({
-      bid: event.target.value,
+      bid: value,
     });
   }
 
@@ -797,6 +811,7 @@ class PublishForm extends React.PureComponent {
                     ref="bid"
                     type="number"
                     step="0.01"
+                    min="0"
                     label={__("Deposit")}
                     postfix="LBC"
                     onChange={event => {
