@@ -92,7 +92,6 @@ $card-link-scaling: 1.1;
 }
 .card--link {
   transition: transform 120ms ease-in-out;
-  backface-visibility: visible
 }
 .card--link:hover {
   position: relative;
