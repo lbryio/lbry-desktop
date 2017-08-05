@@ -181,6 +181,10 @@ class PublishForm extends React.PureComponent {
     return !!myClaims.find(claim => claim.name === name);
   }
 
+  minClaimBid() {
+    return 0.000097;
+  }
+
   topClaimIsMine() {
     const myClaimInfo = this.myClaimInfo();
     const { claimsByUri } = this.props;
@@ -303,8 +307,16 @@ class PublishForm extends React.PureComponent {
   }
 
   handleBidChange(event) {
+    const value = event.target.value;
+    const min = this.minClaimBid();
+
+    if (value < min) {
+      this.refs.bid.showError(__(`The minimum amount is ${min} credits.`));
+      return;
+    }
+
     this.setState({
-      bid: event.target.value,
+      bid: value,
     });
   }
 
@@ -375,46 +387,6 @@ class PublishForm extends React.PureComponent {
     this.setState({
       tosAgree: event.target.checked,
     });
-  }
-
-  handleCreateChannelClick(event) {
-    if (this.state.newChannelName.length < 5) {
-      this.refs.newChannelName.showError(
-        __("LBRY channel names must be at least 4 characters in length.")
-      );
-      return;
-    }
-
-    this.setState({
-      creatingChannel: true,
-    });
-
-    const newChannelName = this.state.newChannelName;
-    lbry
-      .channel_new({
-        channel_name: newChannelName,
-        amount: parseFloat(this.state.newChannelBid),
-      })
-      .then(
-        () => {
-          setTimeout(() => {
-            this.setState({
-              creatingChannel: false,
-            });
-
-            this._updateChannelList(newChannelName);
-          }, 10000);
-        },
-        error => {
-          // TODO: better error handling
-          this.refs.newChannelName.showError(
-            __("Unable to create channel due to an internal error.")
-          );
-          this.setState({
-            creatingChannel: false,
-          });
-        }
-      );
   }
 
   getLicense() {
@@ -826,6 +798,7 @@ class PublishForm extends React.PureComponent {
                     ref="bid"
                     type="number"
                     step="0.01"
+                    min="0"
                     label={__("Deposit")}
                     postfix="LBC"
                     onChange={event => {
