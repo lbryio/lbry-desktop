@@ -92,6 +92,7 @@ $card-link-scaling: 1.1;
 }
 .card--link {
   transition: transform 120ms ease-in-out;
+  backface-visibility: visible
 }
 .card--link:hover {
   position: relative;
@@ -103,7 +104,7 @@ $card-link-scaling: 1.1;
   overflow-y: visible
 }
 .card--link:hover ~ .card--link {
-  transform: translate3d($translate-card-hover * 2, 0, 0);
+  transform: translateX($translate-card-hover * 2);
 }
 
 .card__media {
