@@ -180,7 +180,6 @@ class PublishForm extends React.PureComponent {
   }
 
   minClaimBid() {
-    //Get or calculate minimum deposit to prevent: cannot be abandoned
     return 0.000097;
   }
 
@@ -307,11 +306,10 @@ class PublishForm extends React.PureComponent {
 
   handleBidChange(event) {
     const value = event.target.value;
+    const min = this.minClaimBid();
 
-    if (value < this.minClaimBid()) {
-      this.refs.bid.showError(
-        __(`The minimum deposit claim is ${this.minClaimBid()} credits.`)
-      );
+    if (value < min) {
+      this.refs.bid.showError(__(`The minimum amount is ${min} credits.`));
       return;
     }
 

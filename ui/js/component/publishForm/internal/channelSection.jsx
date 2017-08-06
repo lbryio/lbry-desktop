@@ -53,14 +53,16 @@ class ChannelSection extends React.PureComponent {
   }
 
   handleCreateChannelClick(event) {
+    const min = this.minChannelBid();
+
     if (this.state.newChannelName.length < 5) {
       this.refs.newChannelName.showError(
         __("LBRY channel names must be at least 4 characters in length.")
       );
       return;
-    } else if (this.state.newChannelBid < this.minChannelBid()) {
+    } else if (this.state.newChannelBid < min) {
       this.refs.newChannelName.showError(
-        __(`LBRY channel bid must be at least ${this.minChannelBid()} credits.`)
+        __(`The minimum amount is ${min} credits.`)
       );
       return;
     }
