@@ -16,7 +16,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
   *
 
 ### Fixed
-  *
+  * Tiles will no longer be blurry on hover (Windows only bug) 
   *
 
 ### Deprecated
