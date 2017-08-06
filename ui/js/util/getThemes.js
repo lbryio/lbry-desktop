@@ -1,3 +1,4 @@
+// Todo: Add  a better way to do this
 const { readdirSync } = require("fs");
 const { extname } = require("path");
 const { remote } = require("electron");

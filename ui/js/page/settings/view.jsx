@@ -85,6 +85,7 @@ class SettingsPage extends React.PureComponent {
   }
 
   onThemeChange(event) {
+    // Todo: Add better way to handle this
     const value = event.target.value;
     const link = document.getElementById("theme");
     link.href = `./themes/${value}.css`;
@@ -272,8 +273,8 @@ class SettingsPage extends React.PureComponent {
               defaultValue={lbry.getClientSetting("theme")}
               className="form-field__input--inline"
             >
-              {themes.map((i, k) =>
-                <option key={k} value={i}>{__(`${i} theme`)}</option>
+              {themes.map((name, index) =>
+                <option key={index} value={name}>{__(`${name} theme`)}</option>
               )}
             </FormField>
 
