@@ -56,19 +56,19 @@ class SettingsPage extends React.PureComponent {
     this.setDaemonSetting("download_directory", event.target.value);
   }
 
-  onKeyFeeChange(event) {
+  onKeyFeeChange(name, price) {
     var oldSettings = this.props.daemonSettings.max_key_fee;
     var newSettings = {
       amount: oldSettings.amount,
       currency: oldSettings.currency,
     };
-    name = event.target.name;
-    let targetValue = { [name]: event.target.value };
 
-    if ([name] == "amount") {
-      newSettings.amount = Number(targetValue.amount);
+    if (name == "amount") {
+      newSettings.amount = Number(price.feeAmount);
+      console.log(newSettings.amount, price.feeAmount);
     } else {
-      newSettings.currency = targetValue.currency;
+      newSettings.currency = price.feeCurrency;
+      console.log(newSettings.amount, price.feeAmount);
     }
 
     this.setDaemonSetting("max_key_fee", newSettings);
