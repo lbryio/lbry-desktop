@@ -8,15 +8,16 @@ Web UI version numbers should always match the corresponding version of LBRY App
 
 ## [Unreleased]
 ### Added
-  * Added a new component, "PriceForm" which is now used in Publish and Settings
+  * Added a new component, `FormFieldPrice` which is now used in Publish and Settings
   *
 
 ### Changed
-  *
+  * Some form field refactoring as we progress towards form sanity.
   *
 
 ### Fixed
   * Tiles will no longer be blurry on hover (Windows only bug)
+  * Removed placeholder values from price selection form fields, which was causing confusion that these were real values (#426)
   *
 
 ### Deprecated
@@ -24,7 +25,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
   *
 
 ### Removed
-  * Removed one instance of string "Max Purchase Price" from settings page, it's redudant.
+  * Removed the label "Max Purchase Price" from settings page. It was redundant.
   *
 
 ## [0.14.3] - 2017-08-03

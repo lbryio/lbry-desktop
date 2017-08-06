@@ -1,6 +1,6 @@
 import React from "react";
 import lbryuri from "lbryuri";
-import { FormField, FormRow } from "component/form.js";
+import { FormRow } from "component/form.js";
 import { BusyMessage } from "component/common";
 import Link from "component/link";
 
@@ -127,7 +127,10 @@ class ChannelSection extends React.PureComponent {
         <div className="card__title-primary">
           <h4>{__("Channel Name")}</h4>
           <div className="card__subtitle">
-            {__("This is the channel that broadcasts your content.")}
+            {__(
+              "This is a username or handle that your content can be found under."
+            )}
+            {" "}
             {__("Ex. @Marvel, @TheBeatles, @BooksByJoe")}
           </div>
         </div>

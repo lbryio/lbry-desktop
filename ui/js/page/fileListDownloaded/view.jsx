@@ -1,11 +1,6 @@
 import React from "react";
-import lbry from "lbry.js";
-import lbryuri from "lbryuri.js";
 import Link from "component/link";
-import { FormField } from "component/form.js";
 import { FileTile } from "component/fileTile";
-import rewards from "rewards.js";
-import lbryio from "lbryio.js";
 import { BusyMessage, Thumbnail } from "component/common.js";
 import FileList from "component/fileList";
 import SubHeader from "component/subHeader";

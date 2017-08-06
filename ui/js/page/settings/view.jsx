@@ -1,9 +1,10 @@
 import React from "react";
-import { FormField, FormRow } from "component/form.js";
+import FormField from "component/formField";
+import { FormRow } from "component/form.js";
 import SubHeader from "component/subHeader";
 import lbry from "lbry.js";
 import Link from "component/link";
-import FormFieldPrice from "component/priceForm";
+import FormFieldPrice from "component/formFieldPrice";
 
 const { remote } = require("electron");
 
@@ -56,22 +57,8 @@ class SettingsPage extends React.PureComponent {
     this.setDaemonSetting("download_directory", event.target.value);
   }
 
-  onKeyFeeChange(name, price) {
-    var oldSettings = this.props.daemonSettings.max_key_fee;
-    var newSettings = {
-      amount: oldSettings.amount,
-      currency: oldSettings.currency,
-    };
-
-    if (name == "amount") {
-      newSettings.amount = Number(price.feeAmount);
-      console.log(newSettings.amount, price.feeAmount);
-    } else {
-      newSettings.currency = price.feeCurrency;
-      console.log(newSettings.amount, price.feeAmount);
-    }
-
-    this.setDaemonSetting("max_key_fee", newSettings);
+  onKeyFeeChange(newValue) {
+    this.setDaemonSetting("max_key_fee", newValue);
   }
 
   onKeyFeeDisableChange(isDisabled) {
@@ -171,16 +158,17 @@ class SettingsPage extends React.PureComponent {
                     : __("Limit to")
                 }
               />
-              {!daemonSettings.disable_max_key_fee
-                ? <FormFieldPrice
-                    min="0"
-                    placeholder="50.0"
-                    step="1"
-                    onChange={this.onKeyFeeChange.bind(this)}
-                    defaultFeeValue={daemonSettings.max_key_fee.amount}
-                    defaultCurrencyValue={daemonSettings.max_key_fee.currency}
-                  />
-                : ""}
+              {!daemonSettings.disable_max_key_fee &&
+                <FormFieldPrice
+                  min="0"
+                  step="1"
+                  onChange={this.onKeyFeeChange.bind(this)}
+                  defaultValue={
+                    daemonSettings.max_key_fee
+                      ? daemonSettings.max_key_fee
+                      : { currency: "USD", amount: 50 }
+                  }
+                />}
             </div>
             <div className="form-field__helper">
               {__(

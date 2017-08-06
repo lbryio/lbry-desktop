@@ -1,5 +1,5 @@
 import React from "react";
-import { FormField } from "component/form";
+import FormField from "component/formField";
 
 class FormFieldPrice extends React.PureComponent {
   constructor(props) {
@@ -20,7 +20,6 @@ class FormFieldPrice extends React.PureComponent {
       },
     });
     this.props.onChange(event.target.name, this.state.price);
-    console.log(this.state.price);
   }
 
   handleFeeCurrencyChange(event) {
@@ -31,13 +30,12 @@ class FormFieldPrice extends React.PureComponent {
       },
     });
     this.props.onChange(event.target.name, this.state.price);
-    console.log(this.state.price);
   }
 
   render() {
     const {
-      defaultFeeValue,
-      defaultCurrencyValue,
+      defaultAmount,
+      defaultCurrency,
       placeholder,
       min,
       step,
@@ -52,14 +50,14 @@ class FormFieldPrice extends React.PureComponent {
           placeholder={placeholder || null}
           step={step}
           onChange={event => this.handleFeeAmountChange(event)}
-          defaultValue={defaultFeeValue}
+          defaultValue={defaultAmount}
           className="form-field__input--inline"
         />
         <FormField
           type="select"
           name="currency"
           onChange={event => this.handleFeeCurrencyChange(event)}
-          defaultValue={defaultCurrencyValue}
+          defaultValue={defaultCurrency}
           className="form-field__input--inline"
         >
           <option value="LBC">{__("LBRY credits")}</option>
