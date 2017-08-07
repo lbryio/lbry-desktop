@@ -2050,13 +2050,13 @@ table.table-stretch {
   position: relative;
   z-index: 1;
   box-shadow: 2px 4px 4px 0 rgba(0, 0, 0, 0.14), 2px 5px 3px -2px rgba(0, 0, 0, 0.2), 2px 3px 7px 0 rgba(0, 0, 0, 0.12);
-  transform: scale(1.1) translate3d(10px, 0, 0);
+  transform: scale(1.1) translateX(10px);
   transform-origin: 50% 50%;
   overflow-x: visible;
   overflow-y: visible; }
 
 .card--link:hover ~ .card--link {
-  transform: translate3d(20px, 0, 0); }
+  transform: translateX(20px); }
 
 .card__media {
   background-size: cover;

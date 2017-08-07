@@ -63,7 +63,7 @@ yarn install
   yarn install
   npm rebuild node-sass
   node extractLocals.js
-  node_modules/.bin/node-sass --output dist/css --sourcemap=none scss/
+  node_modules/.bin/node-sass --sourcemap=none scss/all.scss dist/themes/light.css
   node_modules/.bin/webpack
   cp -r dist/* "$ROOT/app/dist/"
 )
