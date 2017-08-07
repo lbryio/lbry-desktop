@@ -3,10 +3,7 @@ import { FormField, FormRow } from "component/form.js";
 import SubHeader from "component/subHeader";
 import lbry from "lbry.js";
 import Link from "component/link";
-import getThemes from "util/getThemes";
-
-const { remote } = require("electron");
-const themes = getThemes();
+import { remote } from "electron";
 
 class SettingsPage extends React.PureComponent {
   constructor(props) {
@@ -35,6 +32,10 @@ class SettingsPage extends React.PureComponent {
     const clear = () => this.props.clearCache().then(success.bind(this));
 
     setTimeout(clear, 1000, { once: true });
+  }
+
+  getThemes() {
+    return this.props.getThemes().data.themes;
   }
 
   setDaemonSetting(name, value) {
@@ -273,7 +274,7 @@ class SettingsPage extends React.PureComponent {
               defaultValue={lbry.getClientSetting("theme")}
               className="form-field__input--inline"
             >
-              {themes.map((name, index) =>
+              {this.getThemes().map((name, index) =>
                 <option key={index} value={name}>{__(`${name} theme`)}</option>
               )}
             </FormField>
