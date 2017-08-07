@@ -34,7 +34,7 @@ window.addEventListener("popstate", (event, param) => {
   let action;
 
   if (hash !== "") {
-    const url = hash.split("#")[1];
+    const url = hash.replace(/^#/, "");
     const { params, scrollY } = event.state || {};
     const queryString = toQueryString(params);
 
