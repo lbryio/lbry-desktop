@@ -309,8 +309,10 @@ class PublishForm extends React.PureComponent {
   }
 
   handleFeeChange(newValue) {
-    this.state.feeAmount = newValue.amount;
-    this.state.feeCurrency = newValue.currency;
+    this.setState({
+      feeAmount: newValue.amount,
+      feeCurrency: newValue.currency,
+    });
   }
 
   handleFeePrefChange(feeEnabled) {
@@ -670,12 +672,7 @@ class PublishForm extends React.PureComponent {
                   onChange={val => this.handleFeeChange(val)}
                 />
               </span>
-              {/*
-                 && this.state.feeCurrency.toUpperCase() != "LBC"
-               for some reason, react does not trigger a re-render on currency change (despite trigger a state change), so
-               the above logic cannot be added to the below check
-               */}
-              {this.state.isFee
+              {this.state.isFee && this.state.feeCurrency.toUpperCase() != "LBC"
                 ? <div className="form-field__helper">
                     {__(
                       "All content fees are charged in LBC. For non-LBC payment methods, the number of credits charged will be adjusted based on the value of LBRY credits at the time of purchase."
