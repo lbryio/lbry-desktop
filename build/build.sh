@@ -65,7 +65,20 @@ yarn install
   node extractLocals.js
   node_modules/.bin/node-sass --sourcemap=none scss/all.scss dist/themes/light.css
   node_modules/.bin/webpack
-  cp -r dist/* "$ROOT/app/dist/"
+  cp -r ./dist/ "$ROOT/app"
+)
+
+
+
+####################
+#    DARK-THEME    #
+###################
+
+(
+  cd "$ROOT/app/"
+  yarn add https://github.com/btzr-io/lbry-dark-theme --production
+  cd "./node_modules/lbry-dark-theme/dist/"
+  cp -r dark.css "$ROOT/app/dist/themes"
 )
 
 
