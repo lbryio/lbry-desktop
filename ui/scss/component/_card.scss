@@ -97,13 +97,13 @@ $card-link-scaling: 1.1;
   position: relative;
   z-index: 1;
   box-shadow: $box-shadow-focus;
-  transform: scale($card-link-scaling) translate3d($translate-card-hover, 0, 0);
+  transform: scale($card-link-scaling) translateX($translate-card-hover);
   transform-origin: 50% 50%;
   overflow-x: visible;
   overflow-y: visible
 }
 .card--link:hover ~ .card--link {
-  transform: translate3d($translate-card-hover * 2, 0, 0);
+  transform: translateX($translate-card-hover * 2);
 }
 
 .card__media {

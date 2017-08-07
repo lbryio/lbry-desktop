@@ -1,8 +1,10 @@
 import React from "react";
 import lbry from "lbry";
 import lbryuri from "lbryuri";
-import { FormField, FormRow } from "component/form.js";
+import FormField from "component/formField";
+import { FormRow } from "component/form.js";
 import Link from "component/link";
+import FormFieldPrice from "component/formFieldPrice";
 import Modal from "component/modal";
 import { BusyMessage } from "component/common";
 import ChannelSection from "./internal/channelSection";
@@ -21,7 +23,7 @@ class PublishForm extends React.PureComponent {
       bid: 10,
       hasFile: false,
       feeAmount: "",
-      feeCurrency: "USD",
+      feeCurrency: "LBC",
       channel: "anonymous",
       newChannelName: "@",
       newChannelBid: 10,
@@ -124,7 +126,7 @@ class PublishForm extends React.PureComponent {
       this.props.publish(publishArgs).then(success, failure);
     };
 
-    if (this.state.isFee) {
+    if (this.state.isFee && parseFloat(this.state.feeAmount) > 0) {
       lbry.wallet_unused_address().then(address => {
         metadata.fee = {
           currency: this.state.feeCurrency,
@@ -306,21 +308,15 @@ class PublishForm extends React.PureComponent {
     });
   }
 
-  handleFeeAmountChange(event) {
-    this.setState({
-      feeAmount: event.target.value,
-    });
-  }
-
-  handleFeeCurrencyChange(event) {
-    this.setState({
-      feeCurrency: event.target.value,
-    });
+  handleFeeChange(newValue) {
+    this.state.feeAmount = newValue.amount;
+    this.state.feeCurrency = newValue.currency;
   }
 
   handleFeePrefChange(feeEnabled) {
     this.setState({
       isFee: feeEnabled,
+      feeAmount: this.state.feeAmount == "" ? "5.00" : this.state.feeAmount,
     });
   }
 
@@ -666,31 +662,26 @@ class PublishForm extends React.PureComponent {
                 checked={this.state.isFee}
               />
               <span className={!this.state.isFee ? "hidden" : ""}>
-                <FormField
-                  type="number"
-                  className="form-field__input--inline"
-                  step="0.01"
-                  placeholder="1.00"
-                  min="0.01"
-                  onChange={event => this.handleFeeAmountChange(event)}
-                />{" "}
-                <FormField
-                  type="select"
-                  onChange={event => {
-                    this.handleFeeCurrencyChange(event);
-                  }}
-                >
-                  <option value="USD">{__("US Dollars")}</option>
-                  <option value="LBC">{__("LBRY credits")}</option>
-                </FormField>
+                {/*min=0.01 caused weird interactions with step (e.g. down from 5 equals 4.91 rather than 4.9) */}
+                <FormFieldPrice
+                  min="0"
+                  step="0.1"
+                  defaultValue={{ amount: 5.0, currency: "LBC" }}
+                  onChange={val => this.handleFeeChange(val)}
+                />
               </span>
+              {/*
+                 && this.state.feeCurrency.toUpperCase() != "LBC"
+               for some reason, react does not trigger a re-render on currency change (despite trigger a state change), so
+               the above logic cannot be added to the below check
+               */}
               {this.state.isFee
                 ? <div className="form-field__helper">
                     {__(
-                      "If you choose to price this content in dollars, the number of credits charged will be adjusted based on the value of LBRY credits at the time of purchase."
+                      "All content fees are charged in LBC. For non-LBC payment methods, the number of credits charged will be adjusted based on the value of LBRY credits at the time of purchase."
                     )}
                   </div>
-                : ""}
+                : null}
               <FormRow
                 label="License"
                 type="select"

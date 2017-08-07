@@ -72,7 +72,10 @@ export function doFileList() {
 
 export function doOpenFileInShell(fileInfo) {
   return function(dispatch, getState) {
-    shell.openItem(fileInfo.download_path);
+    const success = shell.openItem(fileInfo.download_path);
+    if (!success) {
+      dispatch(doOpenFileInFolder(fileInfo));
+    }
   };
 }
 

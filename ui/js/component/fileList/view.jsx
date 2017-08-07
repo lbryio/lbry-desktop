@@ -2,7 +2,7 @@ import React from "react";
 import lbry from "lbry.js";
 import lbryuri from "lbryuri.js";
 import Link from "component/link";
-import { FormField } from "component/form.js";
+import FormField from "component/formField";
 import FileTile from "component/fileTile";
 import rewards from "rewards.js";
 import lbryio from "lbryio.js";

@@ -4,7 +4,7 @@ const _selectState = state => state.settings || {};
 
 export const selectDaemonSettings = createSelector(
   _selectState,
-  state => state.daemonSettings || {}
+  state => state.daemonSettings
 );
 
 export const selectClientSettings = createSelector(
