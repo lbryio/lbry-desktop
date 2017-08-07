@@ -2,7 +2,14 @@ import * as types from "constants/action_types";
 import lbryuri from "lbryuri";
 
 const reducers = {};
-const defaultState = {};
+const buildSupportTransaction = () => ({
+  claim_id: undefined,
+  amount: undefined,
+});
+
+const defaultState = {
+  supportTransaction: buildSupportTransaction(),
+};
 
 reducers[types.RESOLVE_URI_COMPLETED] = function(state, action) {
   const { uri, certificate, claim } = action.data;
@@ -187,6 +194,55 @@ reducers[types.CREATE_CHANNEL_COMPLETED] = function(state, action) {
   return Object.assign({}, state, {
     byId,
     myChannelClaims,
+  });
+};
+
+reducers[types.SET_SUPPORT_AMOUNT] = function(state, action) {
+  const oldDraft = state.supportTransaction;
+  const newDraft = Object.assign({}, oldDraft, {
+    amount: parseFloat(action.data.amount),
+  });
+
+  return Object.assign({}, state, {
+    supportTransaction: newDraft,
+  });
+};
+
+reducers[types.SET_SUPPORT_CLAIMID] = function(state, action) {
+  const oldDraft = state.supportTransaction;
+  const newDraft = Object.assign({}, oldDraft, {
+    claim_id: action.data.claim_id,
+  });
+
+  return Object.assign({}, state, {
+    supportTransaction: newDraft,
+  });
+};
+
+reducers[types.SUPPORT_TRANSACTION_STARTED] = function(state, action) {
+  const newSupportTransaction = Object.assign({}, state.supportTransaction, {
+    sendingSupport: true,
+  });
+
+  return Object.assign({}, state, {
+    supportTransaction: newSupportTransaction,
+  });
+};
+
+reducers[types.SUPPORT_TRANSACTION_COMPLETED] = function(state, action) {
+  return Object.assign({}, state, {
+    supportTransaction: buildSupportTransaction(),
+  });
+};
+
+reducers[types.SUPPORT_TRANSACTION_FAILED] = function(state, action) {
+  const newSupportTransaction = Object.assign({}, state.supportTransaction, {
+    sendingSupport: false,
+    error: action.data.error,
+  });
+
+  return Object.assign({}, state, {
+    supportTransaction: newSupportTransaction,
   });
 };
 

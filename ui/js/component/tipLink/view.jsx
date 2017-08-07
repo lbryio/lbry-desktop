@@ -1,7 +1,6 @@
 import React from "react";
 import Link from "component/link";
-import { FormField } from "component/form";
-import PriceForm from "component/priceForm";
+import FormFieldPrice from "component/formFieldPrice";
 
 class TipLink extends React.PureComponent {
   constructor(props) {
@@ -13,35 +12,30 @@ class TipLink extends React.PureComponent {
     };
   }
 
-  handleTipPublisherButtonClicked() {
+  handleSupportButtonClicked() {
     this.resetDefaults();
     this.props.onTipShow();
   }
 
-  handleTipButtonClicked() {
-    let address = this.props.address;
+  handleSendButtonClicked() {
+    let claim_id = this.props.claim_id;
     let amount = this.state.feeAmount;
 
-    this.props.setAddress(address);
+    this.props.setClaimID(claim_id);
     this.props.setAmount(amount);
-    this.props.sendToAddress();
+    this.props.sendSupport();
 
     this.props.onTipHide();
   }
 
-  handleTipCancelButtonClicked() {
+  handleSupportCancelButtonClicked() {
     this.props.onTipHide();
   }
 
-  handleFeeAmountChange(event) {
+  handleSupportPriceChange(newValue) {
     this.setState({
-      feeAmount: event.target.value,
-    });
-  }
-
-  handleCurrencyChange(event) {
-    this.setState({
-      currency: event.target.value,
+      feeAmount: newValue.amount,
+      feeCurrency: newValue.currency,
     });
   }
 
@@ -54,37 +48,35 @@ class TipLink extends React.PureComponent {
 
   render() {
     const { showTipBox } = this.props;
+    const { feeAmount, currency } = this.state;
 
     let tipLink = (
       <Link
-        label={__("Tip")}
+        label={__("Support")}
         button="text"
         icon="icon-gift"
-        onClick={this.handleTipPublisherButtonClicked.bind(this)}
+        onClick={this.handleSupportButtonClicked.bind(this)}
       />
     );
 
     let tipBox = (
       <span>
-        <PriceForm
-          isTip={true}
-          min="0.01"
+        <FormFieldPrice
+          min="0"
           placeholder="1.00"
           step="0.1"
-          onFeeChange={event => this.handleFeeAmountChange(event)}
-          defaultFeeValue={this.state.feeAmount}
-          onCurrencyChange={event => this.handleCurrencyChange(event)}
-          defaultCurrencyValue="LBC"
+          onChange={value => this.handleSupportPriceChange(value)}
+          defaultValue={{ amount: feeAmount, currency: currency }}
         />
         <Link
-          label={__("Tip")}
+          label={__("Send")}
           button="primary"
-          onClick={this.handleTipButtonClicked.bind(this)}
+          onClick={this.handleSendButtonClicked.bind(this)}
         />
         <Link
           label={__("Cancel")}
           button="alt"
-          onClick={this.handleTipCancelButtonClicked.bind(this)}
+          onClick={this.handleSupportCancelButtonClicked.bind(this)}
         />
         <div className="form-field__helper">
           {__("This sends the entered amount of LBCs to the publisher.")}

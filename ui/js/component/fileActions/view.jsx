@@ -187,7 +187,7 @@ class FileActions extends React.PureComponent {
           onTipShow={this.handleTipShow.bind(this)}
           onTipHide={this.handleTipHide.bind(this)}
           showTipBox={showTipBox}
-          address={claimInfo.address}
+          claim_id={claimInfo.claim_id}
         />
         {showMenu && !showTipBox
           ? <DropDownMenu>
