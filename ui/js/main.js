@@ -17,7 +17,6 @@ const env = ENV;
 const { remote, ipcRenderer, shell } = require("electron");
 const contextMenu = remote.require("./menu/context-menu");
 const app = require("./app");
-app.i18n.resLang = require("./utils").resLang;
 
 lbry.showMenuIfNeeded();
 
