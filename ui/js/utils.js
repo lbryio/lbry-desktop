@@ -1,3 +1,5 @@
+const { remote } = require("electron");
+
 /**
  * Thin wrapper around localStorage.getItem(). Parses JSON and returns undefined if the value
  * is not set yet.
@@ -222,4 +224,8 @@ export function resLang(uLang) {
   };
   this.lang = uLang.substring(0, 2);
   return `${this.langs[this.lang][0]} (${this.langs[this.lang][1]})`;
+}
+
+export function formatCredits(amount, precision) {
+  return amount.toFixed(precision || 1).replace(/\.?0+$/, "");
 }

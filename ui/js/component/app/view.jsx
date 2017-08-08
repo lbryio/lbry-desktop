@@ -2,25 +2,64 @@ import React from "react";
 import Router from "component/router";
 import Header from "component/header";
 import ModalError from "component/modalError";
+import ModalAuthFailure from "component/modalAuthFailure";
 import ModalDownloading from "component/modalDownloading";
-import UpgradeModal from "component/modalUpgrade";
-import WelcomeModal from "component/modalWelcome";
+import ModalInsufficientCredits from "component/modalInsufficientCredits";
+import ModalUpgrade from "component/modalUpgrade";
+import ModalWelcome from "component/modalWelcome";
+import ModalFirstReward from "component/modalFirstReward";
 import lbry from "lbry";
-import { Line } from "rc-progress";
+import * as modals from "constants/modal_types";
 
 class App extends React.PureComponent {
   componentWillMount() {
+    const {
+      alertError,
+      checkUpgradeAvailable,
+      updateBalance,
+      fetchRewardedContent,
+    } = this.props;
+
     document.addEventListener("unhandledError", event => {
-      this.props.alertError(event.detail);
+      alertError(event.detail);
     });
 
     if (!this.props.upgradeSkipped) {
-      this.props.checkUpgradeAvailable();
+      checkUpgradeAvailable();
     }
 
     lbry.balanceSubscribe(balance => {
-      this.props.updateBalance(balance);
+      updateBalance(balance);
     });
+
+    fetchRewardedContent();
+
+    this.showWelcome(this.props);
+
+    this.scrollListener = () => this.props.recordScroll(window.scrollY);
+
+    window.addEventListener("scroll", this.scrollListener);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.showWelcome(nextProps);
+  }
+
+  showWelcome(props) {
+    const { isWelcomeAcknowledged, openWelcomeModal, user } = props;
+
+    if (
+      !isWelcomeAcknowledged &&
+      user &&
+      !user.is_reward_approved &&
+      !user.is_identity_verified
+    ) {
+      openWelcomeModal();
+    }
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("scroll", this.scrollListener);
   }
 
   render() {
@@ -32,10 +71,13 @@ class App extends React.PureComponent {
         <div id="main-content">
           <Router />
         </div>
-        {modal == "upgrade" && <UpgradeModal />}
-        {modal == "downloading" && <ModalDownloading />}
-        {modal == "error" && <ModalError />}
-        {modal == "welcome" && <WelcomeModal />}
+        {modal == modals.UPGRADE && <ModalUpgrade />}
+        {modal == modals.DOWNLOADING && <ModalDownloading />}
+        {modal == modals.ERROR && <ModalError />}
+        {modal == modals.INSUFFICIENT_CREDITS && <ModalInsufficientCredits />}
+        {modal == modals.WELCOME && <ModalWelcome />}
+        {modal == modals.FIRST_REWARD && <ModalFirstReward />}
+        {modal == modals.AUTHENTICATION_FAILURE && <ModalAuthFailure />}
       </div>
     );
   }

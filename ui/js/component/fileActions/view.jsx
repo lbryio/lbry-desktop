@@ -22,6 +22,21 @@ class FileActions extends React.PureComponent {
 
   componentWillReceiveProps(nextProps) {
     this.checkAvailability(nextProps.uri);
+    this.restartDownload(nextProps);
+  }
+
+  restartDownload(props) {
+    const { downloading, fileInfo, uri, restartDownload } = props;
+
+    if (
+      !downloading &&
+      fileInfo &&
+      !fileInfo.completed &&
+      fileInfo.written_bytes !== false &&
+      fileInfo.written_bytes < fileInfo.total_bytes
+    ) {
+      restartDownload(uri, fileInfo.outpoint);
+    }
   }
 
   checkAvailability(uri) {
@@ -142,6 +157,8 @@ class FileActions extends React.PureComponent {
           onClick={() => openInShell(fileInfo)}
         />
       );
+    } else if (!fileInfo) {
+      content = <BusyMessage message={__("Fetching file info")} />;
     } else {
       console.log("handle this case of file action props?");
     }
@@ -175,13 +192,6 @@ class FileActions extends React.PureComponent {
             <FilePrice uri={uri} look="plain" />
           </strong>{" "}
           {__("credits")}.
-        </Modal>
-        <Modal
-          isOpen={modal == "notEnoughCredits"}
-          contentLabel={__("Not enough credits")}
-          onConfirmed={closeModal}
-        >
-          {__("You don't have enough LBRY credits to pay for this stream.")}
         </Modal>
         <Modal
           isOpen={modal == "timedOut"}

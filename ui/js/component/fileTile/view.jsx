@@ -1,10 +1,11 @@
 import React from "react";
-import lbry from "lbry.js";
 import lbryuri from "lbryuri.js";
+import CardMedia from "component/cardMedia";
 import Link from "component/link";
 import { TruncatedText } from "component/common.js";
 import FilePrice from "component/filePrice";
 import NsfwOverlay from "component/nsfwOverlay";
+import IconFeatured from "component/iconFeatured";
 
 class FileTile extends React.PureComponent {
   static SHOW_EMPTY_PUBLISH = "publish";
@@ -57,6 +58,7 @@ class FileTile extends React.PureComponent {
       showEmpty,
       navigate,
       hidePrice,
+      rewardedContentClaimIds,
     } = this.props;
 
     const uri = lbryuri.normalize(this.props.uri);
@@ -64,8 +66,14 @@ class FileTile extends React.PureComponent {
     const isClaimable = lbryuri.isClaimable(uri);
     const title = isClaimed && metadata && metadata.title
       ? metadata.title
-      : uri;
+      : lbryuri.parse(uri).contentName;
+    const thumbnail = metadata && metadata.thumbnail
+      ? metadata.thumbnail
+      : null;
     const obscureNsfw = this.props.obscureNsfw && metadata && metadata.nsfw;
+    const isRewardContent =
+      claim && rewardedContentClaimIds.includes(claim.claim_id);
+
     let onClick = () => navigate("/show", { uri });
 
     let description = "";
@@ -98,22 +106,15 @@ class FileTile extends React.PureComponent {
       >
         <Link onClick={onClick} className="card__link">
           <div className={"card__inner file-tile__row"}>
-            <div
-              className="card__media"
-              style={{
-                backgroundImage:
-                  "url('" +
-                    (metadata && metadata.thumbnail
-                      ? metadata.thumbnail
-                      : lbry.imagePath("default-thumb.svg")) +
-                    "')",
-              }}
-            />
+            <CardMedia title={title} thumbnail={thumbnail} />
             <div className="file-tile__content">
               <div className="card__title-primary">
                 {!hidePrice ? <FilePrice uri={this.props.uri} /> : null}
+                {isRewardContent && <IconFeatured />}
                 <div className="meta">{uri}</div>
-                <h3><TruncatedText lines={1}>{title}</TruncatedText></h3>
+                <h3>
+                  <TruncatedText lines={1}>{title}</TruncatedText>
+                </h3>
               </div>
               <div className="card__content card__subtext">
                 <TruncatedText lines={3}>

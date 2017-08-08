@@ -11,7 +11,6 @@ const Link = props => {
     icon,
     badge,
     button,
-    hidden,
     disabled,
     children,
   } = props;

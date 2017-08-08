@@ -27,7 +27,6 @@ class UserEmailNew extends React.PureComponent {
 
     return (
       <form
-        className="form-input-width"
         onSubmit={event => {
           this.handleSubmit(event);
         }}

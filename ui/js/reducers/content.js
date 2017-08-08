@@ -1,7 +1,9 @@
 import * as types from "constants/action_types";
 
 const reducers = {};
-const defaultState = {};
+const defaultState = {
+  rewardedContentClaimIds: [],
+};
 
 reducers[types.FETCH_FEATURED_CONTENT_STARTED] = function(state, action) {
   return Object.assign({}, state, {
@@ -16,6 +18,14 @@ reducers[types.FETCH_FEATURED_CONTENT_COMPLETED] = function(state, action) {
     fetchingFeaturedContent: false,
     fetchingFeaturedContentFailed: !success,
     featuredUris: uris,
+  });
+};
+
+reducers[types.FETCH_REWARD_CONTENT_COMPLETED] = function(state, action) {
+  const { claimIds, success } = action.data;
+
+  return Object.assign({}, state, {
+    rewardedContentClaimIds: claimIds,
   });
 };
 
@@ -44,6 +54,17 @@ reducers[types.RESOLVE_URI_CANCELED] = reducers[
 
   return Object.assign({}, state, {
     resolvingUris: newResolvingUris,
+  });
+};
+
+reducers[types.FETCH_CHANNEL_CLAIMS_COMPLETED] = function(state, action) {
+  const channelPages = Object.assign({}, state.channelPages);
+  const { uri, totalPages } = action.data;
+
+  channelPages[uri] = totalPages;
+
+  return Object.assign({}, state, {
+    channelPages,
   });
 };
 

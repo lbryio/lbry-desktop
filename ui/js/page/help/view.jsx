@@ -14,6 +14,7 @@ class HelpPage extends React.PureComponent {
       lbryId: null,
       uiVersion: null,
       upgradeAvailable: null,
+      accessTokenHidden: true,
     };
   }
 
@@ -36,12 +37,20 @@ class HelpPage extends React.PureComponent {
         lbryId: info.lbry_id,
       });
     });
+
+    if (!this.props.accessToken) this.props.fetchAccessToken();
+  }
+
+  showAccessToken() {
+    this.setState({
+      accessTokenHidden: false,
+    });
   }
 
   render() {
     let ver, osName, platform, newVerLink;
 
-    const { navigate } = this.props;
+    const { navigate, user } = this.props;
 
     if (this.state.versionInfo) {
       ver = this.state.versionInfo;
@@ -121,6 +130,7 @@ class HelpPage extends React.PureComponent {
             </div>
           </div>
         </section>
+
         <section className="card">
           <div className="card__title-primary"><h3>{__("About")}</h3></div>
           <div className="card__content">
@@ -136,16 +146,24 @@ class HelpPage extends React.PureComponent {
               ? <table className="table-standard">
                   <tbody>
                     <tr>
-                      <th>{__("daemon (lbrynet)")}</th>
+                      <th>{__("App")}</th>
+                      <td>{this.state.uiVersion}</td>
+                    </tr>
+                    <tr>
+                      <th>{__("Daemon (lbrynet)")}</th>
                       <td>{ver.lbrynet_version}</td>
                     </tr>
                     <tr>
-                      <th>{__("wallet (lbryum)")}</th>
+                      <th>{__("Wallet (lbryum)")}</th>
                       <td>{ver.lbryum_version}</td>
                     </tr>
                     <tr>
-                      <th>{__("interface")}</th>
-                      <td>{this.state.uiVersion}</td>
+                      <th>{__("Connected Email")}</th>
+                      <td>
+                        {user && user.primary_email
+                          ? user.primary_email
+                          : <span className="empty">{__("none")}</span>}
+                      </td>
                     </tr>
                     <tr>
                       <th>{__("Platform")}</th>
@@ -154,6 +172,18 @@ class HelpPage extends React.PureComponent {
                     <tr>
                       <th>{__("Installation ID")}</th>
                       <td>{this.state.lbryId}</td>
+                    </tr>
+                    <tr>
+                      <th>{__("Access Token")}</th>
+                      <td>
+                        {this.state.accessTokenHidden &&
+                          <Link
+                            label={__("show")}
+                            onClick={this.showAccessToken.bind(this)}
+                          />}
+                        {!this.state.accessTokenHidden &&
+                          this.props.accessToken}
+                      </td>
                     </tr>
                   </tbody>
                 </table>

@@ -5,17 +5,18 @@ import lbryuri from "lbryuri";
 import { selectBalance } from "selectors/wallet";
 import {
   selectFileInfoForUri,
-  selectUrisDownloading,
+  selectDownloadingByOutpoint,
 } from "selectors/file_info";
 import { selectResolvingUris } from "selectors/content";
 import { selectCostInfoForUri } from "selectors/cost_info";
-import { doOpenModal } from "actions/app";
+import { doAlertError, doOpenModal } from "actions/app";
 import { doClaimEligiblePurchaseRewards } from "actions/rewards";
 import { selectBadgeNumber } from "selectors/app";
 import { selectTotalDownloadProgress } from "selectors/file_info";
 import setBadge from "util/setBadge";
 import setProgressBar from "util/setProgressBar";
 import batchActions from "util/batchActions";
+import * as modals from "constants/modal_types";
 
 const { ipcRenderer } = require("electron");
 
@@ -132,6 +133,34 @@ export function doFetchFeaturedUris() {
   };
 }
 
+export function doFetchRewardedContent() {
+  return function(dispatch, getState) {
+    const state = getState();
+
+    const success = nameToClaimId => {
+      dispatch({
+        type: types.FETCH_REWARD_CONTENT_COMPLETED,
+        data: {
+          claimIds: Object.values(nameToClaimId),
+          success: true,
+        },
+      });
+    };
+
+    const failure = () => {
+      dispatch({
+        type: types.FETCH_REWARD_CONTENT_COMPLETED,
+        data: {
+          claimIds: [],
+          success: false,
+        },
+      });
+    };
+
+    lbryio.call("reward", "list_featured").then(success, failure);
+  };
+}
+
 export function doUpdateLoadStatus(uri, outpoint) {
   return function(dispatch, getState) {
     const state = getState();
@@ -198,24 +227,38 @@ export function doUpdateLoadStatus(uri, outpoint) {
   };
 }
 
+export function doStartDownload(uri, outpoint) {
+  return function(dispatch, getState) {
+    const state = getState();
+
+    if (!outpoint) {
+      throw new Error("outpoint is required to begin a download");
+    }
+
+    const { downloadingByOutpoint = {} } = state.fileInfo;
+
+    if (downloadingByOutpoint[outpoint]) return;
+
+    lbry.file_list({ outpoint, full_status: true }).then(([fileInfo]) => {
+      dispatch({
+        type: types.DOWNLOADING_STARTED,
+        data: {
+          uri,
+          outpoint,
+          fileInfo,
+        },
+      });
+
+      dispatch(doUpdateLoadStatus(uri, outpoint));
+    });
+  };
+}
+
 export function doDownloadFile(uri, streamInfo) {
   return function(dispatch, getState) {
     const state = getState();
 
-    lbry
-      .file_list({ outpoint: streamInfo.outpoint, full_status: true })
-      .then(([fileInfo]) => {
-        dispatch({
-          type: types.DOWNLOADING_STARTED,
-          data: {
-            uri,
-            outpoint: streamInfo.outpoint,
-            fileInfo,
-          },
-        });
-
-        dispatch(doUpdateLoadStatus(uri, streamInfo.outpoint));
-      });
+    dispatch(doStartDownload(uri, streamInfo.outpoint));
 
     lbryio
       .call("file", "view", {
@@ -240,22 +283,32 @@ export function doLoadVideo(uri) {
       },
     });
 
-    lbry.get({ uri }).then(streamInfo => {
-      const timeout =
-        streamInfo === null ||
-        typeof streamInfo !== "object" ||
-        streamInfo.error == "Timeout";
+    lbry
+      .get({ uri })
+      .then(streamInfo => {
+        const timeout =
+          streamInfo === null ||
+          typeof streamInfo !== "object" ||
+          streamInfo.error == "Timeout";
 
-      if (timeout) {
+        if (timeout) {
+          dispatch({
+            type: types.LOADING_VIDEO_FAILED,
+            data: { uri },
+          });
+
+          dispatch(doOpenModal("timedOut"));
+        } else {
+          dispatch(doDownloadFile(uri, streamInfo));
+        }
+      })
+      .catch(error => {
         dispatch({
           type: types.LOADING_VIDEO_FAILED,
           data: { uri },
         });
-        dispatch(doOpenModal("timedOut"));
-      } else {
-        dispatch(doDownloadFile(uri, streamInfo));
-      }
-    });
+        dispatch(doAlertError(error));
+      });
   };
 }
 
@@ -264,8 +317,9 @@ export function doPurchaseUri(uri, purchaseModalName) {
     const state = getState();
     const balance = selectBalance(state);
     const fileInfo = selectFileInfoForUri(state, { uri });
-    const downloadingByUri = selectUrisDownloading(state);
-    const alreadyDownloading = !!downloadingByUri[uri];
+    const downloadingByOutpoint = selectDownloadingByOutpoint(state);
+    const alreadyDownloading =
+      fileInfo && !!downloadingByOutpoint[fileInfo.outpoint];
 
     // we already fully downloaded the file.
     if (fileInfo && fileInfo.completed) {
@@ -292,7 +346,7 @@ export function doPurchaseUri(uri, purchaseModalName) {
     }
 
     if (cost > balance) {
-      dispatch(doOpenModal("notEnoughCredits"));
+      dispatch(doOpenModal(modals.INSUFFICIENT_CREDITS));
     } else {
       dispatch(doOpenModal(purchaseModalName));
     }
@@ -301,22 +355,28 @@ export function doPurchaseUri(uri, purchaseModalName) {
   };
 }
 
-export function doFetchClaimsByChannel(uri, page = 1) {
+export function doFetchClaimsByChannel(uri, page) {
   return function(dispatch, getState) {
     dispatch({
       type: types.FETCH_CHANNEL_CLAIMS_STARTED,
-      data: { uri },
+      data: { uri, page },
     });
 
     lbry.claim_list_by_channel({ uri, page }).then(result => {
       const claimResult = result[uri],
-        claims = claimResult ? claimResult.claims_in_channel : [];
+        claims = claimResult ? claimResult.claims_in_channel : [],
+        totalPages = claimResult
+          ? claimResult.claims_in_channel_pages
+          : undefined,
+        currentPage = claimResult ? claimResult.returned_page : undefined;
 
       dispatch({
         type: types.FETCH_CHANNEL_CLAIMS_COMPLETED,
         data: {
           uri,
-          claims: claims,
+          claims,
+          totalPages,
+          page: currentPage,
         },
       });
     });
@@ -336,6 +396,71 @@ export function doFetchClaimListMine() {
           claims,
         },
       });
+    });
+  };
+}
+
+export function doFetchChannelListMine() {
+  return function(dispatch, getState) {
+    dispatch({
+      type: types.FETCH_CHANNEL_LIST_MINE_STARTED,
+    });
+
+    const callback = channels => {
+      dispatch({
+        type: types.FETCH_CHANNEL_LIST_MINE_COMPLETED,
+        data: { claims: channels },
+      });
+    };
+
+    lbry.channel_list_mine().then(callback);
+  };
+}
+
+export function doCreateChannel(name, amount) {
+  return function(dispatch, getState) {
+    dispatch({
+      type: types.CREATE_CHANNEL_STARTED,
+    });
+
+    return new Promise((resolve, reject) => {
+      lbry
+        .channel_new({
+          channel_name: name,
+          amount: parseFloat(amount),
+        })
+        .then(
+          channelClaim => {
+            channelClaim.name = name;
+            dispatch({
+              type: types.CREATE_CHANNEL_COMPLETED,
+              data: { channelClaim },
+            });
+            resolve(channelClaim);
+          },
+          err => {
+            reject(err);
+          }
+        );
+    });
+  };
+}
+
+export function doPublish(params) {
+  return function(dispatch, getState) {
+    return new Promise((resolve, reject) => {
+      const success = claim => {
+        resolve(claim);
+
+        if (claim === true) dispatch(doFetchClaimListMine());
+        else
+          setTimeout(() => dispatch(doFetchClaimListMine()), 20000, {
+            once: true,
+          });
+      };
+      const failure = err => reject(err);
+
+      lbry.publishDeprecated(params, null, success, failure);
     });
   };
 }

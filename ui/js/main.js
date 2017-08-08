@@ -5,11 +5,10 @@ import App from "component/app/index.js";
 import SnackBar from "component/snackBar";
 import { Provider } from "react-redux";
 import store from "store.js";
-import SplashScreen from "component/splash.js";
-import AuthOverlay from "component/authOverlay";
+import SplashScreen from "component/splash";
 import { doChangePath, doNavigate, doDaemonReady } from "actions/app";
+import { doDownloadLanguages } from "actions/settings";
 import { toQueryString } from "util/query_params";
-import { selectBadgeNumber } from "selectors/app";
 import * as types from "constants/action_types";
 import fs from "fs";
 import http from "http";
@@ -39,11 +38,11 @@ window.addEventListener("popstate", (event, param) => {
   let action;
 
   if (hash !== "") {
-    const url = hash.split("#")[1];
-    const params = event.state;
+    const url = hash.replace(/^#/, "");
+    const { params, scrollY } = event.state || {};
     const queryString = toQueryString(params);
 
-    app.store.dispatch(doChangePath(`${url}?${queryString}`));
+    app.store.dispatch(doChangePath(`${url}?${queryString}`, { scrollY }));
   } else {
     app.store.dispatch(doChangePath("/discover"));
   }
@@ -100,27 +99,16 @@ const updateProgress = () => {
 
 const initialState = app.store.getState();
 
-// import whyDidYouUpdate from "why-did-you-update";
-// if (env === "development") {
-//   /*
-// 		https://github.com/garbles/why-did-you-update
-// 		"A function that monkey patches React and notifies you in the console when
-// 		potentially unnecessary re-renders occur."
-//
-// 		Just checks if props change between updates. Can be fixed by manually
-// 		adding a check in shouldComponentUpdate or using React.PureComponent
-// 	*/
-//   whyDidYouUpdate(React);
-// }
-
 var init = function() {
+  app.store.dispatch(doDownloadLanguages());
+
   function onDaemonReady() {
     window.sessionStorage.setItem("loaded", "y"); //once we've made it here once per session, we don't need to show splash again
     app.store.dispatch(doDaemonReady());
 
     ReactDOM.render(
       <Provider store={store}>
-        <div><AuthOverlay /><App /><SnackBar /></div>
+        <div><App /><SnackBar /></div>
       </Provider>,
       canvas
     );
@@ -129,44 +117,13 @@ var init = function() {
   if (window.sessionStorage.getItem("loaded") == "y") {
     onDaemonReady();
   } else {
-    ReactDOM.render(<SplashScreen onLoadDone={onDaemonReady} />, canvas);
+    ReactDOM.render(
+      <Provider store={store}>
+        <SplashScreen onReadyToLaunch={onDaemonReady} />
+      </Provider>,
+      canvas
+    );
   }
 };
 
-const download = (url, dest, lang, cb) => {
-  const file = fs.createWriteStream(dest);
-  const request = http.get(url, response => {
-    response.pipe(file);
-    file.on('finish', () => {
-      file.close(cb);  // close() is async, call cb after close completes.
-      app.i18n.localLanguages.push(lang.replace(".json", "")); // push to our local list
-    });
-  }).on('error', err => { // Handle errors
-    fs.unlink(dest); // Delete the file async. (But we don't check the result)
-    if (cb) cb(err.message);
-  });
-};
-
-const downloadLanguages = () => {
-  if (!fs.existsSync("app/locales")){
-    fs.mkdirSync("app/locales");
-  }
-  http.request({ host: 'i18n.lbry.io', path: '/' }, response => {
-    let str = '';
-
-    response.on('data', chunk => {
-      str += chunk;
-    });
-
-    response.on('end', () => {
-      const files = JSON.parse(str);JSON.parse(str);
-      app.i18n.localLanguages = [];
-      for (let i = 0; i < files.length; i++) {
-        download(`http://i18n.lbry.io/langs/${files[i]}`, `app/locales/${files[i]}`, files[i], () => {});
-      }
-    });
-  }).end();
-};
-
-downloadLanguages();
 init();

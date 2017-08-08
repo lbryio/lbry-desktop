@@ -1,28 +1,40 @@
 import React from "react";
 import rewards from "rewards";
 import { connect } from "react-redux";
-import { doCloseModal } from "actions/app";
+import { doCloseModal, doAuthNavigate } from "actions/app";
+import { doSetClientSetting } from "actions/settings";
 import { selectUserIsRewardApproved } from "selectors/user";
 import {
   makeSelectHasClaimedReward,
-  makeSelectClaimRewardError,
   makeSelectRewardByType,
+  selectTotalRewardValue,
 } from "selectors/rewards";
-import WelcomeModal from "./view";
+import ModalWelcome from "./view";
 
 const select = (state, props) => {
   const selectHasClaimed = makeSelectHasClaimedReward(),
     selectReward = makeSelectRewardByType();
 
   return {
-    hasClaimed: selectHasClaimed(state, { reward_type: rewards.TYPE_NEW_USER }),
     isRewardApproved: selectUserIsRewardApproved(state),
     reward: selectReward(state, { reward_type: rewards.TYPE_NEW_USER }),
+    totalRewardValue: selectTotalRewardValue(state),
   };
 };
 
-const perform = dispatch => ({
-  closeModal: () => dispatch(doCloseModal()),
-});
+const perform = dispatch => () => {
+  const closeModal = () => {
+    dispatch(doSetClientSetting("welcome_acknowledged", true));
+    dispatch(doCloseModal());
+  };
 
-export default connect(select, perform)(WelcomeModal);
+  return {
+    verifyAccount: () => {
+      closeModal();
+      dispatch(doAuthNavigate("/discover"));
+    },
+    closeModal: closeModal,
+  };
+};
+
+export default connect(select, perform)(ModalWelcome);

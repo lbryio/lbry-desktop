@@ -1,10 +1,13 @@
 import React from "react";
 import lbryuri from "lbryuri.js";
+import CardMedia from "component/cardMedia";
 import Link from "component/link";
 import { TruncatedText, Icon } from "component/common";
+import IconFeatured from "component/iconFeatured";
 import FilePrice from "component/filePrice";
 import UriIndicator from "component/uriIndicator";
 import NsfwOverlay from "component/nsfwOverlay";
+import TruncatedMarkdown from "component/truncatedMarkdown";
 
 class FileCard extends React.PureComponent {
   constructor(props) {
@@ -44,11 +47,23 @@ class FileCard extends React.PureComponent {
   }
 
   render() {
-    const { claim, fileInfo, metadata, isResolvingUri, navigate } = this.props;
+    const {
+      claim,
+      fileInfo,
+      metadata,
+      isResolvingUri,
+      navigate,
+      rewardedContentClaimIds,
+    } = this.props;
 
     const uri = lbryuri.normalize(this.props.uri);
     const title = metadata && metadata.title ? metadata.title : uri;
+    const thumbnail = metadata && metadata.thumbnail
+      ? metadata.thumbnail
+      : null;
     const obscureNsfw = this.props.obscureNsfw && metadata && metadata.nsfw;
+    const isRewardContent =
+      claim && rewardedContentClaimIds.includes(claim.claim_id);
 
     let description = "";
     if (isResolvingUri && !claim) {
@@ -73,28 +88,23 @@ class FileCard extends React.PureComponent {
             onClick={() => navigate("/show", { uri })}
             className="card__link"
           >
+            <CardMedia title={title} thumbnail={thumbnail} />
             <div className="card__title-identity">
-              <h5 title={title}>
+              <div className="card__title" title={title}>
                 <TruncatedText lines={1}>{title}</TruncatedText>
-              </h5>
+              </div>
               <div className="card__subtitle">
                 <span style={{ float: "right" }}>
                   <FilePrice uri={uri} />
-                  {fileInfo
-                    ? <span>{" "}<Icon fixed icon="icon-folder" /></span>
-                    : ""}
+                  {isRewardContent && <span>{" "}<IconFeatured /></span>}
+                  {fileInfo &&
+                    <span>{" "}<Icon fixed icon="icon-folder" /></span>}
                 </span>
                 <UriIndicator uri={uri} />
               </div>
             </div>
-            {metadata &&
-              metadata.thumbnail &&
-              <div
-                className="card__media"
-                style={{ backgroundImage: "url('" + metadata.thumbnail + "')" }}
-              />}
             <div className="card__content card__subtext card__subtext--two-lines">
-              <TruncatedText lines={2}>{description}</TruncatedText>
+              <TruncatedMarkdown lines={2}>{description}</TruncatedMarkdown>
             </div>
           </Link>
         </div>

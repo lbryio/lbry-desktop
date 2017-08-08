@@ -113,16 +113,24 @@ lbryio.call = function(resource, action, params = {}, method = "get") {
   });
 };
 
+lbryio._authToken = null;
+
 lbryio.getAuthToken = () => {
   return new Promise((resolve, reject) => {
-    ipcRenderer.once("auth-token-response", (event, token) => {
-      return resolve(token);
-    });
-    ipcRenderer.send("get-auth-token");
+    if (lbryio._authToken) {
+      resolve(lbryio._authToken);
+    } else {
+      ipcRenderer.once("auth-token-response", (event, token) => {
+        lbryio._authToken = token;
+        return resolve(token);
+      });
+      ipcRenderer.send("get-auth-token");
+    }
   });
 };
 
 lbryio.setAuthToken = token => {
+  lbryio._authToken = token ? token.toString().trim() : null;
   ipcRenderer.send("set-auth-token", token);
 };
 
@@ -136,8 +144,9 @@ lbryio.authenticate = function() {
       resolve({
         id: 1,
         language: "en",
-        has_email: true,
+        primary_email: "disabled@lbry.io",
         has_verified_email: true,
+        is_identity_verified: true,
         is_reward_approved: false,
         is_reward_eligible: false,
       });

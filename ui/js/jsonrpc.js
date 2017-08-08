@@ -27,18 +27,19 @@ jsonrpc.call = function(
   xhr.addEventListener("load", function() {
     var response = JSON.parse(xhr.responseText);
 
-    if (response.error) {
+    let error = response.error || (response.result && response.result.error);
+    if (error) {
       if (errorCallback) {
-        errorCallback(response.error);
+        errorCallback(error);
       } else {
         var errorEvent = new CustomEvent("unhandledError", {
           detail: {
             connectionString: connectionString,
             method: method,
             params: params,
-            code: response.error.code,
-            message: response.error.message,
-            data: response.error.data,
+            code: error.code,
+            message: error.message || error,
+            data: error.data,
           },
         });
         document.dispatchEvent(errorEvent);

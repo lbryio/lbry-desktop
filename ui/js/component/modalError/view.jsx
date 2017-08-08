@@ -6,7 +6,7 @@ class ModalError extends React.PureComponent {
   render() {
     const { modal, closeModal, error } = this.props;
 
-    const errorObj = typeof error === "string" ? { error: error } : error;
+    const errorObj = typeof error === "string" ? { message: error } : error;
 
     const error_key_labels = {
       connectionString: __("API connection string"),
@@ -18,10 +18,10 @@ class ModalError extends React.PureComponent {
     };
 
     const errorInfoList = [];
-    for (let key of Object.keys(error)) {
-      let val = typeof error[key] == "string"
-        ? error[key]
-        : JSON.stringify(error[key]);
+    for (let key of Object.keys(errorObj)) {
+      let val = typeof errorObj[key] == "string"
+        ? errorObj[key]
+        : JSON.stringify(errorObj[key]);
       let label = error_key_labels[key];
       errorInfoList.push(
         <li key={key}><strong>{label}</strong>: <code>{val}</code></li>

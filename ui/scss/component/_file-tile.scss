@@ -7,6 +7,9 @@ $height-file-tile: $spacing-vertical * 6;
   .credit-amount {
     float: right;
   }
+  .icon-featured {
+    float: right;
+  }
   //also a hack
   .card__media {
     height: $height-file-tile;

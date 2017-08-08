@@ -4,7 +4,7 @@ const _selectState = state => state.settings || {};
 
 export const selectDaemonSettings = createSelector(
   _selectState,
-  state => state.daemonSettings || {}
+  state => state.daemonSettings
 );
 
 export const selectClientSettings = createSelector(
@@ -20,4 +20,14 @@ export const selectSettingsIsGenerous = createSelector(
 export const selectShowNsfw = createSelector(
   selectClientSettings,
   clientSettings => !!clientSettings.showNsfw
+);
+
+export const selectLocalLanguages = createSelector(
+  _selectState,
+  state => state.localLanguages || []
+);
+
+export const selectResolvedLanguages = createSelector(
+  _selectState,
+  state => state.resolvedLanguages || {}
 );

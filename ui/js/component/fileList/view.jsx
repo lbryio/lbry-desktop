@@ -2,7 +2,7 @@ import React from "react";
 import lbry from "lbry.js";
 import lbryuri from "lbryuri.js";
 import Link from "component/link";
-import { FormField } from "component/form.js";
+import FormField from "component/formField";
 import FileTile from "component/fileTile";
 import rewards from "rewards.js";
 import lbryio from "lbryio.js";
@@ -67,7 +67,9 @@ class FileList extends React.PureComponent {
     const content = [];
 
     this._sortFunctions[sortBy](fileInfos).forEach(fileInfo => {
-      let uriParams = {};
+      let uriParams = {
+        claimId: fileInfo.claim_id,
+      };
       if (fileInfo.channel_name) {
         uriParams.channelName = fileInfo.channel_name;
         uriParams.contentName = fileInfo.name;
@@ -79,7 +81,7 @@ class FileList extends React.PureComponent {
 
       content.push(
         <FileTile
-          key={uri}
+          key={fileInfo.outpoint || fileInfo.claim_id}
           uri={uri}
           hidePrice={true}
           showEmpty={this.props.fileTileShowEmpty}
@@ -94,7 +96,6 @@ class FileList extends React.PureComponent {
           <FormField type="select" onChange={this.handleSortChanged.bind(this)}>
             <option value="date">{__("Date")}</option>
             <option value="title">{__("Title")}</option>
-            <option value="filename">{__("File name")}</option>
           </FormField>
         </span>
         {content}

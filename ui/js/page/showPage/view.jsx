@@ -6,13 +6,15 @@ import FilePage from "page/filePage";
 
 class ShowPage extends React.PureComponent {
   componentWillMount() {
-    const { isResolvingUri, resolveUri, uri } = this.props;
+    const { isResolvingUri, resolveUri, params } = this.props;
+    const { uri } = params;
 
     if (!isResolvingUri) resolveUri(uri);
   }
 
   componentWillReceiveProps(nextProps) {
-    const { isResolvingUri, resolveUri, claim, uri } = nextProps;
+    const { isResolvingUri, resolveUri, claim, params } = nextProps;
+    const { uri } = params;
 
     if (!isResolvingUri && claim === undefined && uri) {
       resolveUri(uri);
@@ -20,11 +22,12 @@ class ShowPage extends React.PureComponent {
   }
 
   render() {
-    const { claim, uri, isResolvingUri } = this.props;
+    const { claim, params, isResolvingUri } = this.props;
+    const { uri } = params;
 
     let innerContent = "";
 
-    if (isResolvingUri && !claim) {
+    if ((isResolvingUri && !claim) || !claim) {
       innerContent = (
         <section className="card">
           <div className="card__inner">

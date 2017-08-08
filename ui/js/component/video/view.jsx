@@ -14,6 +14,25 @@ class Video extends React.PureComponent {
     };
   }
 
+  componentWillReceiveProps(nextProps) {
+    // reset playing state upon change path action
+    if (
+      !this.isMediaSame(nextProps) &&
+      this.props.fileInfo &&
+      this.state.isPlaying
+    ) {
+      this.state.isPlaying = false;
+    }
+  }
+
+  isMediaSame(nextProps) {
+    return (
+      this.props.fileInfo &&
+      nextProps.fileInfo &&
+      this.props.fileInfo.outpoint === nextProps.fileInfo.outpoint
+    );
+  }
+
   startPlaying() {
     this.setState({
       isPlaying: true,
@@ -98,6 +117,7 @@ class Video extends React.PureComponent {
                 poster={poster}
                 downloadPath={fileInfo.download_path}
                 mediaType={mediaType}
+                contentType={contentType}
                 downloadCompleted={fileInfo.completed}
               />)}
         {!isPlaying &&

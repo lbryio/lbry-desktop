@@ -4,14 +4,24 @@ import { CreditAmount } from "component/common";
 import Link from "component/link";
 import RewardLink from "component/rewardLink";
 
-class WelcomeModal extends React.PureComponent {
-  render() {
-    const { closeModal, hasClaimed, isRewardApproved, reward } = this.props;
+class ModalWelcome extends React.PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = {
+      isFirstScreen: true,
+    };
+  }
 
-    return !hasClaimed
-      ? <Modal type="custom" isOpen={true} contentLabel="Welcome to LBRY">
+  render() {
+    const { closeModal, totalRewardValue, verifyAccount } = this.props;
+
+    const totalRewardRounded = Math.round(totalRewardValue / 10) * 10;
+
+    return (
+      <Modal type="custom" isOpen={true} contentLabel="Welcome to LBRY">
+        {this.state.isFirstScreen &&
           <section>
-            <h3 className="modal__header">{__("Welcome to LBRY.")}</h3>
+            <h3 className="modal__header">{__("Welcome to LBRY")}</h3>
             <p>
               {__(
                 "Using LBRY is like dating a centaur. Totally normal up top, and"
@@ -24,58 +34,51 @@ class WelcomeModal extends React.PureComponent {
                 "Below, LBRY is controlled by users -- you -- via blockchain and decentralization."
               )}
             </p>
-            <p>
-              {__("Thank you for making content freedom possible!")}
-              {" "}{isRewardApproved ? __("Here's a nickel, kid.") : ""}
-            </p>
-            <div className="text-center">
-              {isRewardApproved
-                ? <RewardLink reward_type="new_user" button="primary" />
-                : <Link
-                    button="primary"
-                    onClick={closeModal}
-                    label={__("Continue")}
-                  />}
+            <div className="modal__buttons">
+              <Link
+                button="primary"
+                onClick={() => {
+                  this.setState({ isFirstScreen: false });
+                }}
+                label={__("Continue")}
+              />
             </div>
-          </section>
-        </Modal>
-      : <Modal
-          type="alert"
-          overlayClassName="modal-overlay modal-overlay--clear"
-          isOpen={true}
-          contentLabel={__("Welcome to LBRY")}
-          onConfirmed={closeModal}
-        >
+          </section>}
+        {!this.state.isFirstScreen &&
           <section>
-            <h3 className="modal__header">{__("About Your Reward")}</h3>
+            <h3 className="modal__header">{__("Claim Your Credits")}</h3>
             <p>
-              {__("You earned a reward of")}
-              {" "}<CreditAmount amount={reward.reward_amount} label={false} />
-              {" "}{__("LBRY credits, or")} <em>{__("LBC")}</em>.
+              The LBRY network is controlled and powered by credits called{" "}
+              <em>LBC</em>, a blockchain asset.
+            </p>
+            <p>
+              {__("New patrons receive ")} {" "}
+              {totalRewardValue
+                ? <CreditAmount amount={totalRewardRounded} />
+                : <span className="credit-amount">{__("credits")}</span>}
+              {" "} {__("in rewards for usage and influence of the network.")}
             </p>
             <p>
               {__(
-                "This reward will show in your Wallet momentarily, probably while you are reading this message."
+                "You'll also earn weekly bonuses for checking out the greatest new stuff."
               )}
             </p>
-            <p>
-              {__(
-                "LBC is used to compensate creators, to publish, and to have say in how the network works."
-              )}
-            </p>
-            <p>
-              {__(
-                "No need to understand it all just yet! Try watching or downloading something next."
-              )}
-            </p>
-            <p>
-              {__(
-                "Finally, know that LBRY is an early beta and that it earns the name."
-              )}
-            </p>
-          </section>
-        </Modal>;
+            <div className="modal__buttons">
+              <Link
+                button="primary"
+                onClick={verifyAccount}
+                label={__("You Had Me At Free LBC")}
+              />
+              <Link
+                button="alt"
+                onClick={closeModal}
+                label={__("I Burn Money")}
+              />
+            </div>
+          </section>}
+      </Modal>
+    );
   }
 }
 
-export default WelcomeModal;
+export default ModalWelcome;

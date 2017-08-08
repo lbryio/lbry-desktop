@@ -1,8 +1,8 @@
 {
   "name": "LBRY",
-  "version": "0.13.0",
+  "version": "0.14.3",
   "main": "main.js",
-  "description": "LBRY is a fully decentralized, open-source protocol facilitating the discovery, access, and (sometimes) purchase of data.",
+  "description": "A browser for the LBRY network, a digital marketplace controlled by its users.",
   "author": {
     "name": "LBRY Inc.",
     "email": "hello@lbry.io"
@@ -18,5 +18,8 @@
   },
   "devDependencies": {
     "electron-rebuild": "^1.5.11"
+  },
+  "lbrySettings": {
+    "lbrynetDaemonVersion": "0.14.2"
   }
 }

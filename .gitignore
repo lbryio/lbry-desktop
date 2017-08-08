@@ -14,6 +14,7 @@
 /app/node_modules
 /build/venv
 /lbry-app-venv
+/lbry-app
 /lbry-venv
 /daemon/build
 /daemon/venv
@@ -27,3 +28,4 @@ build/daemon.zip
 .vimrc
 
 package-lock.json
+ui/yarn.lock

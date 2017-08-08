@@ -13,6 +13,7 @@ import FileListDownloaded from "page/fileListDownloaded";
 import FileListPublished from "page/fileListPublished";
 import ChannelPage from "page/channel";
 import SearchPage from "page/search";
+import AuthPage from "page/auth";
 
 const route = (page, routesMap) => {
   const component = routesMap[page];
@@ -24,22 +25,23 @@ const Router = props => {
   const { currentPage, params } = props;
 
   return route(currentPage, {
-    settings: <SettingsPage {...params} />,
-    help: <HelpPage {...params} />,
-    report: <ReportPage {...params} />,
-    downloaded: <FileListDownloaded {...params} />,
-    published: <FileListPublished {...params} />,
-    start: <StartPage {...params} />,
-    wallet: <WalletPage {...params} />,
-    send: <WalletPage {...params} />,
-    receive: <WalletPage {...params} />,
-    show: <ShowPage {...params} />,
-    channel: <ChannelPage {...params} />,
-    publish: <PublishPage {...params} />,
-    developer: <DeveloperPage {...params} />,
-    discover: <DiscoverPage {...params} />,
-    rewards: <RewardsPage {...params} />,
-    search: <SearchPage {...params} />,
+    auth: <AuthPage params={params} />,
+    channel: <ChannelPage params={params} />,
+    developer: <DeveloperPage params={params} />,
+    discover: <DiscoverPage params={params} />,
+    downloaded: <FileListDownloaded params={params} />,
+    help: <HelpPage params={params} />,
+    publish: <PublishPage params={params} />,
+    published: <FileListPublished params={params} />,
+    receive: <WalletPage params={params} />,
+    report: <ReportPage params={params} />,
+    rewards: <RewardsPage params={params} />,
+    search: <SearchPage params={params} />,
+    send: <WalletPage params={params} />,
+    settings: <SettingsPage params={params} />,
+    show: <ShowPage params={params} />,
+    start: <StartPage params={params} />,
+    wallet: <WalletPage params={params} />,
   });
 };
 

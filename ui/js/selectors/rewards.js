@@ -23,6 +23,12 @@ export const selectFetchingRewards = createSelector(
   state => !!state.fetching
 );
 
+export const selectTotalRewardValue = createSelector(selectRewards, rewards =>
+  rewards.reduce((sum, reward) => {
+    return sum + reward.reward_amount;
+  }, 0)
+);
+
 export const selectHasClaimedReward = (state, props) => {
   const reward = selectRewardsByType(state)[props.reward_type];
   return reward && reward.transaction_id !== "";

@@ -1,22 +1,17 @@
 import React from "react";
-import lbry from "lbry.js";
-import lbryuri from "lbryuri.js";
 import Link from "component/link";
-import { FormField } from "component/form.js";
 import FileTile from "component/fileTile";
-import rewards from "rewards.js";
-import lbryio from "lbryio.js";
 import { BusyMessage, Thumbnail } from "component/common.js";
 import FileList from "component/fileList";
 import SubHeader from "component/subHeader";
 
 class FileListPublished extends React.PureComponent {
   componentWillMount() {
-    if (!this.props.isPending) this.props.fetchFileListPublished();
+    if (!this.props.isFetching) this.props.fetchClaims();
   }
 
   componentDidUpdate() {
-    if (this.props.fileInfos.length > 0) this.props.claimFirstPublishReward();
+    // if (this.props.claims.length > 0) this.props.fetchClaims();
   }
 
   componentWillUnmount() {
@@ -24,20 +19,20 @@ class FileListPublished extends React.PureComponent {
   }
 
   render() {
-    const { fileInfos, isPending, navigate } = this.props;
+    const { claims, isFetching, navigate } = this.props;
 
     let content;
 
-    if (fileInfos && fileInfos.length > 0) {
+    if (claims && claims.length > 0) {
       content = (
         <FileList
-          fileInfos={fileInfos}
-          fetching={isPending}
+          fileInfos={claims}
+          fetching={isFetching}
           fileTileShowEmpty={FileTile.SHOW_EMPTY_PENDING}
         />
       );
     } else {
-      if (isPending) {
+      if (isFetching) {
         content = <BusyMessage message={__("Loading")} />;
       } else {
         content = (

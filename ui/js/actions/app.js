@@ -13,31 +13,43 @@ import { doSearch } from "actions/search";
 import { doFetchDaemonSettings } from "actions/settings";
 import { doAuthenticate } from "actions/user";
 import { doFileList } from "actions/file_info";
+import { toQueryString } from "util/query_params";
+import { parseQueryParams } from "util/query_params";
 
 const { remote, ipcRenderer, shell } = require("electron");
 const path = require("path");
-const app = require("electron").remote.app;
 const { download } = remote.require("electron-dl");
 const fs = remote.require("fs");
+const { lbrySettings: config } = require("../../../app/package.json");
 
-const queryStringFromParams = params => {
-  return Object.keys(params).map(key => `${key}=${params[key]}`).join("&");
-};
-
-export function doNavigate(path, params = {}) {
+export function doNavigate(path, params = {}, options = {}) {
   return function(dispatch, getState) {
     let url = path;
-    if (params) url = `${url}?${queryStringFromParams(params)}`;
+    if (params) url = `${url}?${toQueryString(params)}`;
 
     dispatch(doChangePath(url));
 
     const state = getState();
     const pageTitle = selectPageTitle(state);
-    dispatch(doHistoryPush(params, pageTitle, url));
+    dispatch(doHistoryPush({ params }, pageTitle, url));
   };
 }
 
-export function doChangePath(path) {
+export function doAuthNavigate(pathAfterAuth = null, params = {}) {
+  return function(dispatch, getState) {
+    if (pathAfterAuth) {
+      dispatch({
+        type: types.CHANGE_AFTER_AUTH_PATH,
+        data: {
+          path: `${pathAfterAuth}?${toQueryString(params)}`,
+        },
+      });
+    }
+    dispatch(doNavigate("/auth"));
+  };
+}
+
+export function doChangePath(path, options = {}) {
   return function(dispatch, getState) {
     dispatch({
       type: types.CHANGE_PATH,
@@ -48,8 +60,12 @@ export function doChangePath(path) {
 
     const state = getState();
     const pageTitle = selectPageTitle(state);
+    const scrollY = options.scrollY;
+
     window.document.title = pageTitle;
-    window.scrollTo(0, 0);
+
+    if (scrollY) window.scrollTo(0, scrollY);
+    else window.scrollTo(0, 0);
 
     const currentPage = selectCurrentPage(state);
     if (currentPage === "search") {
@@ -62,15 +78,32 @@ export function doChangePath(path) {
 export function doHistoryBack() {
   return function(dispatch, getState) {
     if (!history.state) return;
+    if (history.state.index === 0) return;
 
     history.back();
   };
 }
 
-export function doHistoryPush(params, title, relativeUrl) {
+export function doHistoryPush(currentState, title, relativeUrl) {
   return function(dispatch, getState) {
     title += " - LBRY";
-    history.pushState(params, title, `#${relativeUrl}`);
+    history.pushState(currentState, title, `#${relativeUrl}`);
+  };
+}
+
+export function doRecordScroll(scroll) {
+  return function(dispatch, getState) {
+    const state = getState();
+    const historyState = history.state;
+
+    if (!historyState) return;
+
+    historyState.scrollY = scroll;
+    history.replaceState(
+      historyState,
+      document.title,
+      `#${state.app.currentPath}`
+    );
   };
 }
 
@@ -117,8 +150,10 @@ export function doDownloadUpgrade() {
   return function(dispatch, getState) {
     const state = getState();
     // Make a new directory within temp directory so the filename is guaranteed to be available
-    const dir = fs.mkdtempSync(app.getPath("temp") + require("path").sep);
-    const upgradeFilename = selectUpgradeFilename(state);
+    const dir = fs.mkdtempSync(
+      remote.app.getPath("temp") + require("path").sep
+    ),
+      upgradeFilename = selectUpgradeFilename(state);
 
     let options = {
       onProgress: p => dispatch(doUpdateDownloadProgress(Math.round(p * 100))),
@@ -202,11 +237,21 @@ export function doCheckUpgradeAvailable() {
   };
 }
 
+export function doCheckDaemonVersion() {
+  return function(dispatch, getState) {
+    lbry.version().then(({ lbrynet_version }) => {
+      dispatch({
+        type: config.lbrynetDaemonVersion == lbrynet_version
+          ? types.DAEMON_VERSION_MATCH
+          : types.DAEMON_VERSION_MISMATCH,
+      });
+    });
+  };
+}
+
 export function doAlertError(errorList) {
   return function(dispatch, getState) {
     const state = getState();
-    console.log("do alert error");
-    console.log(errorList);
     dispatch({
       type: types.OPEN_MODAL,
       data: {
@@ -219,6 +264,9 @@ export function doAlertError(errorList) {
 
 export function doDaemonReady() {
   return function(dispatch, getState) {
+    const path = window.location.hash || "#/discover";
+    const params = parseQueryParams(path.split("?")[1] || "");
+    history.replaceState({ params, index: 0 }, document.title, `${path}`);
     dispatch(doAuthenticate());
     dispatch({
       type: types.DAEMON_READY,
@@ -254,5 +302,11 @@ export function doChangeLanguage(newLanguage) {
   return {
     type: types.CHANGE_LANGUAGE,
     data: { newLanguage: newLanguage },
+  };
+}
+
+export function doQuit() {
+  return function(dispatch, getState) {
+    remote.app.quit();
   };
 }

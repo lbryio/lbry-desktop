@@ -1,5 +1,5 @@
 import { createSelector } from "reselect";
-import { parseQueryParams } from "util/query_params";
+import { parseQueryParams, toQueryString } from "util/query_params";
 import lbry from "lbry";
 import lbryuri from "lbryuri";
 
@@ -55,8 +55,14 @@ export const selectPageTitle = createSelector(
         return params.query
           ? __("Search results for %s", params.query)
           : __("Search");
-      case "show":
-        return lbryuri.normalize(params.uri);
+      case "show": {
+        const parts = [lbryuri.normalize(params.uri)];
+        // If the params has any keys other than "uri"
+        if (Object.keys(params).length > 1) {
+          parts.push(toQueryString(Object.assign({}, params, { uri: null })));
+        }
+        return parts.join("?");
+      }
       case "downloaded":
         return __("Downloads & Purchases");
       case "published":
@@ -177,6 +183,11 @@ export const selectDaemonReady = createSelector(
   state => state.daemonReady
 );
 
+export const selectDaemonVersionMatched = createSelector(
+  _selectState,
+  state => state.daemonVersionMatched
+);
+
 export const selectSnackBar = createSelector(
   _selectState,
   state => state.snackBar || {}
@@ -187,6 +198,11 @@ export const selectSnackBarSnacks = createSelector(
   snackBar => snackBar.snacks || []
 );
 
+export const selectWelcomeModalAcknowledged = createSelector(
+  _selectState,
+  state => lbry.getClientSetting("welcome_acknowledged")
+);
+
 export const selectBadgeNumber = createSelector(
   _selectState,
   state => state.badgeNumber
@@ -194,5 +210,10 @@ export const selectBadgeNumber = createSelector(
 
 export const selectCurrentLanguage = createSelector(
   _selectState,
-  state => state.currentLanguage || "en"
+  () => lbry.getClientSetting("language") || "en"
+);
+
+export const selectPathAfterAuth = createSelector(
+  _selectState,
+  state => state.pathAfterAuth
 );

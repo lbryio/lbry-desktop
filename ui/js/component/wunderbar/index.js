@@ -12,8 +12,10 @@ const select = state => ({
 
 const perform = dispatch => ({
   onSearch: query => dispatch(doNavigate("/search", { query })),
-  onSubmit: query =>
-    dispatch(doNavigate("/show", { uri: lbryuri.normalize(query) })),
+  onSubmit: (query, extraParams) =>
+    dispatch(
+      doNavigate("/show", { uri: lbryuri.normalize(query), ...extraParams })
+    ),
 });
 
 export default connect(select, perform)(Wunderbar);

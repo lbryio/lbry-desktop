@@ -1,4 +1,5 @@
 import React from "react";
+import ReactMarkdown from "react-markdown";
 import lbry from "lbry.js";
 import lbryuri from "lbryuri.js";
 import Video from "component/video";
@@ -7,6 +8,7 @@ import FilePrice from "component/filePrice";
 import FileActions from "component/fileActions";
 import Link from "component/link";
 import UriIndicator from "component/uriIndicator";
+import IconFeatured from "component/iconFeatured";
 
 const FormatItem = props => {
   const { contentType, metadata: { language, license } } = props;
@@ -53,7 +55,14 @@ class FilePage extends React.PureComponent {
   }
 
   render() {
-    const { claim, fileInfo, metadata, contentType, uri } = this.props;
+    const {
+      claim,
+      fileInfo,
+      metadata,
+      contentType,
+      uri,
+      rewardedContentClaimIds,
+    } = this.props;
 
     if (!claim || !metadata) {
       return (
@@ -79,6 +88,7 @@ class FilePage extends React.PureComponent {
       ? lbryuri.build({ channelName, claimId: channelClaimId }, false)
       : null;
     const uriIndicator = <UriIndicator uri={uri} />;
+    const isRewardContent = rewardedContentClaimIds.includes(claim.claim_id);
     const mediaType = lbry.getMediaType(contentType);
     const player = require("render-media");
     const obscureNsfw = this.props.obscureNsfw && metadata && metadata.nsfw;
@@ -101,6 +111,7 @@ class FilePage extends React.PureComponent {
               {!fileInfo || fileInfo.written_bytes <= 0
                 ? <span style={{ float: "right" }}>
                     <FilePrice uri={lbryuri.normalize(uri)} />
+                    {isRewardContent && <span>{" "}<IconFeatured /></span>}
                   </span>
                 : null}
               <h1>{title}</h1>
@@ -119,7 +130,11 @@ class FilePage extends React.PureComponent {
               </div>
             </div>
             <div className="card__content card__subtext card__subtext card__subtext--allow-newlines">
-              {metadata && metadata.description}
+              <ReactMarkdown
+                source={(metadata && metadata.description) || ""}
+                escapeHtml={true}
+                disallowedTypes={["Heading", "HtmlInline", "HtmlBlock"]}
+              />
             </div>
           </div>
           {metadata

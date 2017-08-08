@@ -1,8 +1,11 @@
 import * as types from "constants/action_types";
+import * as modals from "constants/modal_types";
 import lbryio from "lbryio";
 import { setLocal } from "utils";
-import { doRewardList } from "actions/rewards";
-import { selectEmailToVerify } from "selectors/user";
+import { doOpenModal } from "actions/app";
+import { doRewardList, doClaimRewardType } from "actions/rewards";
+import { selectEmailToVerify, selectUser } from "selectors/user";
+import rewards from "rewards";
 
 export function doAuthenticate() {
   return function(dispatch, getState) {
@@ -19,6 +22,7 @@ export function doAuthenticate() {
         dispatch(doRewardList());
       })
       .catch(error => {
+        dispatch(doOpenModal(modals.AUTHENTICATION_FAILURE));
         dispatch({
           type: types.AUTHENTICATION_FAILURE,
           data: { error },
@@ -134,5 +138,47 @@ export function doUserEmailVerify(verificationToken) {
           data: { error },
         });
       });
+  };
+}
+
+export function doUserIdentityVerify(stripeToken) {
+  return function(dispatch, getState) {
+    dispatch({
+      type: types.USER_IDENTITY_VERIFY_STARTED,
+      token: stripeToken,
+    });
+
+    lbryio
+      .call("user", "verify_identity", { stripe_token: stripeToken }, "post")
+      .then(user => {
+        if (user.is_identity_verified) {
+          dispatch({
+            type: types.USER_IDENTITY_VERIFY_SUCCESS,
+            data: { user },
+          });
+          dispatch(doClaimRewardType(rewards.TYPE_NEW_USER));
+        } else {
+          throw new Error(
+            "Your identity is still not verified. This should not happen."
+          ); //shouldn't happen
+        }
+      })
+      .catch(error => {
+        dispatch({
+          type: types.USER_IDENTITY_VERIFY_FAILURE,
+          data: { error: error.toString() },
+        });
+      });
+  };
+}
+
+export function doFetchAccessToken() {
+  return function(dispatch, getState) {
+    const success = token =>
+      dispatch({
+        type: types.FETCH_ACCESS_TOKEN_SUCCESS,
+        data: { token },
+      });
+    lbryio.getAuthToken().then(success);
   };
 }

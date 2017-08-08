@@ -1,9 +1,10 @@
 import * as types from "constants/action_types";
+import * as modalTypes from "constants/modal_types";
 import lbry from "lbry";
 
 const currentPath = () => {
   const hash = document.location.hash;
-  if (hash !== "") return hash.split("#")[1];
+  if (hash !== "") return hash.replace(/^#/, "");
   else return "/discover";
 };
 
@@ -15,8 +16,10 @@ const reducers = {};
 const defaultState = {
   isLoaded: false,
   currentPath: currentPath(),
+  pathAfterAuth: "/discover",
   platform: process.platform,
   upgradeSkipped: sessionStorage.getItem("upgradeSkipped"),
+  daemonVersionMatched: null,
   daemonReady: false,
   hasSignature: false,
   badgeNumber: 0,
@@ -28,9 +31,28 @@ reducers[types.DAEMON_READY] = function(state, action) {
   });
 };
 
+reducers[types.DAEMON_VERSION_MATCH] = function(state, action) {
+  return Object.assign({}, state, {
+    daemonVersionMatched: true,
+  });
+};
+
+reducers[types.DAEMON_VERSION_MISMATCH] = function(state, action) {
+  return Object.assign({}, state, {
+    daemonVersionMatched: false,
+    modal: modalTypes.INCOMPATIBLE_DAEMON,
+  });
+};
+
 reducers[types.CHANGE_PATH] = function(state, action) {
   return Object.assign({}, state, {
     currentPath: action.data.path,
+  });
+};
+
+reducers[types.CHANGE_AFTER_AUTH_PATH] = function(state, action) {
+  return Object.assign({}, state, {
+    pathAfterAuth: action.data.path,
   });
 };
 
