@@ -833,6 +833,7 @@ class PublishForm extends React.PureComponent {
                     value={this.state.bid}
                     placeholder={this.claim() ? this.topClaimValue() + 10 : 100}
                     helper={lbcInputHelp}
+                    min=0
                   />
                 </div>
               : ""}
