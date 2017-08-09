@@ -41,6 +41,8 @@ export const selectPageTitle = createSelector(
         return __("Send");
       case "receive":
         return __("Receive");
+      case "backup":
+        return __("Backup");
       case "rewards":
         return __("Rewards");
       case "start":
@@ -130,16 +132,19 @@ export const selectDownloadComplete = createSelector(
 );
 
 export const selectHeaderLinks = createSelector(selectCurrentPage, page => {
+  // This contains intentional fall throughs
   switch (page) {
     case "wallet":
     case "send":
     case "receive":
     case "rewards":
+    case "backup":
       return {
         wallet: __("Overview"),
         send: __("Send"),
         receive: __("Receive"),
         rewards: __("Rewards"),
+        backup: __("Backup"),
       };
     case "downloaded":
     case "published":
