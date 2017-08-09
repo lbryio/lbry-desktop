@@ -20,9 +20,7 @@ video {
   position: relative;
   video {
     height: 100%;
-    position: absolute;
-    left: 0;
-    top: 0;
+    width: 100%;
   }
   &.video--hidden {
     height: $height-video-embedded;
