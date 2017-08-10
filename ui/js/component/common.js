@@ -84,7 +84,7 @@ export class CreditAmount extends React.PureComponent {
       this.props.precision
     );
     let amountText;
-    if (this.props.showFree && parseFloat(formattedAmount) == 0) {
+    if (this.props.showFree && parseFloat(formattedAmount) === 0) {
       amountText = __("free");
     } else if (this.props.label) {
       amountText =
