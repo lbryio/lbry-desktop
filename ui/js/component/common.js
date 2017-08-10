@@ -72,22 +72,17 @@ export class CreditAmount extends React.PureComponent {
   };
 
   static defaultProps = {
-    precision: 1,
+    precision: 3,
     label: true,
     showFree: false,
     look: "indicator",
   };
 
   render() {
-    /*
-    Prices shouldn't be formated
     const formattedAmount = formatCredits(
       this.props.amount,
       this.props.precision
     );
-    */
-
-    const formattedAmount = this.props.amount;
 
     let amountText;
     if (this.props.showFree && parseFloat(formattedAmount) === 0) {
