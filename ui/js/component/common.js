@@ -72,7 +72,7 @@ export class CreditAmount extends React.PureComponent {
   };
 
   static defaultProps = {
-    precision: 1,
+    precision: 3,
     label: true,
     showFree: false,
     look: "indicator",
@@ -83,8 +83,9 @@ export class CreditAmount extends React.PureComponent {
       this.props.amount,
       this.props.precision
     );
+
     let amountText;
-    if (this.props.showFree && parseFloat(formattedAmount) == 0) {
+    if (this.props.showFree && parseFloat(formattedAmount) === 0) {
       amountText = __("free");
     } else if (this.props.label) {
       amountText =
