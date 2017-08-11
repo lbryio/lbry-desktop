@@ -21,8 +21,9 @@ Web UI version numbers should always match the corresponding version of LBRY App
   * Removed placeholder values from price selection form fields, which was causing confusion that these were real values (#426)
   * Fixed showing "other currency" help tip in publish form, which was caused due to not "setting" state for price
   * Now using setState in formFieldPrice
-  * Fixed a bug which enabled the user to publish without filling/checking required fields
-  *
+  * Public page now properly checks for all required fields are filled
+  * Fixed pagination styling for pages > 5 (#416)
+  * Fixed sizing on squat videos (#419)
 
 ### Deprecated
   *

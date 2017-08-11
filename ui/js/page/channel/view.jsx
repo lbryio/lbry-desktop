@@ -83,6 +83,7 @@ class ChannelPage extends React.PureComponent {
             pageClassName="pagination__item"
             previousClassName="pagination__item pagination__item--previous"
             nextClassName="pagination__item pagination__item--next"
+            breakClassName="pagination__item pagination__item--break"
             marginPagesDisplayed={2}
             onPageChange={e => this.changePage(e.selected + 1)}
             initialPage={parseInt(page - 1)}
