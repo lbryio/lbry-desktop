@@ -564,6 +564,7 @@ class PublishForm extends React.PureComponent {
               : <div>
                   <div className="card__content">
                     <FormRow
+                      ref="meta_title"
                       label={__("Title")}
                       type="text"
                       name="title"
@@ -844,6 +845,7 @@ class PublishForm extends React.PureComponent {
             </div>
             <div className="card__content">
               <FormRow
+                ref="tosAgree"
                 label={
                   <span>
                     {__("I agree to the")}
