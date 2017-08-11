@@ -72,26 +72,28 @@ export class CreditAmount extends React.PureComponent {
   };
 
   static defaultProps = {
-    precision: 3,
+    precision: 2,
     label: true,
     showFree: false,
     look: "indicator",
   };
 
   render() {
-    const formattedAmount = formatCredits(
-      this.props.amount,
-      this.props.precision
-    );
+    const minimumRenderableAmount = Math.pow(10, -1 * this.props.precision);
+    const { amount, precision } = this.props;
+
+    let formattedAmount = amount > 0 && amount < minimumRenderableAmount
+      ? "<" + minimumRenderableAmount
+      : formatCredits(amount, precision);
 
     let amountText;
-    if (this.props.showFree && parseFloat(formattedAmount) === 0) {
+    if (this.props.showFree && parseFloat(this.props.amount) === 0) {
       amountText = __("free");
     } else if (this.props.label) {
       amountText =
         formattedAmount +
         " " +
-        (parseFloat(formattedAmount) == 1 ? __("credit") : __("credits"));
+        (parseFloat(amount) == 1 ? __("credit") : __("credits"));
     } else {
       amountText = formattedAmount;
     }
