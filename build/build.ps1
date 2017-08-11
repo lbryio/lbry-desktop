@@ -29,7 +29,10 @@ cd ..
 
 
 # get daemon and cli executable
-$daemon_url = (Get-Content build\DAEMON_URL -Raw).replace("OSNAME", "windows")
+$package_settings = (Get-Content app\package.json -Raw | ConvertFrom-Json).lbrySettings
+$daemon_ver = $package_settings.lbrynetDaemonVersion
+$daemon_url_template = $package_settings.lbrynetDaemonUrlTemplate
+$daemon_url = $daemon_url_template.Replace('OSNAME', 'windows').Replace('DAEMONVER', $daemon_ver)
 Invoke-WebRequest -Uri $daemon_url -OutFile daemon.zip
 Expand-Archive daemon.zip -DestinationPath app\dist\
 dir app\dist\ # verify that daemon binary is there
