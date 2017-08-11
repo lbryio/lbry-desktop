@@ -9,6 +9,8 @@ Web UI version numbers should always match the corresponding version of LBRY App
 ## [Unreleased]
 ### Added
   * Added a new component, `FormFieldPrice` which is now used in Publish and Settings
+  * Added a theme system to select different themes in Settings.
+  * New Dark theme.
   *
 
 ### Changed
