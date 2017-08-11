@@ -72,6 +72,7 @@ export class CreditAmount extends React.PureComponent {
   };
 
   static defaultProps = {
+    precision: 3,
     precision: 2,
     label: true,
     showFree: false,
