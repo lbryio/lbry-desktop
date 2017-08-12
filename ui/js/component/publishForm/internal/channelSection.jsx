@@ -53,16 +53,9 @@ class ChannelSection extends React.PureComponent {
   }
 
   handleCreateChannelClick(event) {
-    const min = this.minChannelBid();
-
     if (this.state.newChannelName.length < 5) {
       this.refs.newChannelName.showError(
-        __("LBRY channel names must be at least 4 characters in length.")
-      );
-      return;
-    } else if (this.state.newChannelBid < min) {
-      this.refs.newChannelName.showError(
-        __(`The minimum amount is ${min} credits.`)
+        __("LBRY channel names must be at least 5 characters in length.")
       );
       return;
     }
@@ -93,10 +86,6 @@ class ChannelSection extends React.PureComponent {
       );
     };
     this.props.createChannel(newChannelName, amount).then(success, failure);
-  }
-
-  minChannelBid() {
-    return 0.000178;
   }
 
   render() {
