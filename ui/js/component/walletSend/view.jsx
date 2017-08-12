@@ -25,6 +25,7 @@ const WalletSend = props => {
             label={__("Amount")}
             postfix={__("LBC")}
             step="0.01"
+            min="0"
             type="number"
             placeholder="1.23"
             size="10"
