@@ -6,6 +6,7 @@ import lbry from "lbry.js";
 import Link from "component/link";
 import FormFieldPrice from "component/formFieldPrice";
 import { remote } from "electron";
+import setTheme from "util/setTheme";
 
 class SettingsPage extends React.PureComponent {
   constructor(props) {
@@ -38,7 +39,7 @@ class SettingsPage extends React.PureComponent {
   }
 
   getThemes() {
-    const themes = this.props.getThemes().data.themes;
+    const { themes } = this.props.getThemes().data;
     this.setState({ themes });
   }
 
@@ -49,6 +50,11 @@ class SettingsPage extends React.PureComponent {
   setClientSetting(name, value) {
     lbry.setClientSetting(name, value);
     this._onSettingSaveSuccess();
+  }
+
+  setTheme(value) {
+    setTheme(value);
+    this.props.setClientSetting("theme", value);
   }
 
   onRunOnStartChange(event) {
@@ -72,11 +78,8 @@ class SettingsPage extends React.PureComponent {
   }
 
   onThemeChange(event) {
-    // Todo: Add better way to handle this
-    const value = event.target.value;
-    const link = document.getElementById("theme");
-    link.href = `./themes/${value}.css`;
-    this.props.setClientSetting("theme", value);
+    const { value } = event.target;
+    this.setTheme(value);
   }
 
   // onMaxUploadPrefChange(isLimited) {
