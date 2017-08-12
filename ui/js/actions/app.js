@@ -86,8 +86,7 @@ export function doHistoryBack() {
 
 export function doHistoryForward() {
   return function(dispatch, getState) {
-    //if (!history.state) return;
-    //if (history.state.index === 0) return;
+    if (!history.state) return;
 
     history.forward();
   };
