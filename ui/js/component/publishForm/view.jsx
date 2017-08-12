@@ -181,6 +181,10 @@ class PublishForm extends React.PureComponent {
     return !!myClaims.find(claim => claim.name === name);
   }
 
+  minClaimBid() {
+    return 0.000097;
+  }
+
   topClaimIsMine() {
     const myClaimInfo = this.myClaimInfo();
     const { claimsByUri } = this.props;
@@ -303,8 +307,16 @@ class PublishForm extends React.PureComponent {
   }
 
   handleBidChange(event) {
+    const value = event.target.value;
+    const min = this.minClaimBid();
+
+    if (value < min) {
+      this.refs.bid.showError(__(`The minimum amount is ${min} credits.`));
+      return;
+    }
+
     this.setState({
-      bid: event.target.value,
+      bid: value,
     });
   }
 
