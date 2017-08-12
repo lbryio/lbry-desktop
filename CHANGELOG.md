@@ -9,8 +9,9 @@ Web UI version numbers should always match the corresponding version of LBRY App
 ## [Unreleased]
 ### Added
   * Added a new component, `FormFieldPrice` which is now used in Publish and Settings
+  * Added feature: forward history
   *
-
+  
 ### Changed
   * Some form field refactoring as we progress towards form sanity.
   * When an "Open" button is clicked on a show page, if the file fails to open, the app will try to open the file's folder.
