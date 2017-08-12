@@ -11,6 +11,7 @@ function setTheme(name) {
     link.href = `./themes/${file}`;
     lbry.setClientSetting("theme", name);
   } else {
+    link.href = `./themes/light.css`;
     lbry.setClientSetting("theme", "light");
   }
 }
