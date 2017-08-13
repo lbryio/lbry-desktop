@@ -63,22 +63,9 @@ yarn install
   yarn install
   npm rebuild node-sass
   node extractLocals.js
-  node_modules/.bin/node-sass --sourcemap=none scss/all.scss dist/themes/light.css
+  node_modules/.bin/node-sass --output dist/css --sourcemap=none scss/
   node_modules/.bin/webpack
-  cp -r ./dist/ "$ROOT/app"
-)
-
-
-
-####################
-#    DARK-THEME    #
-###################
-
-(
-  cd "$ROOT/app/"
-  yarn add https://github.com/btzr-io/lbry-dark-theme --production
-  cd "./node_modules/lbry-dark-theme/dist/"
-  cp -r dark.css "$ROOT/app/dist/themes"
+  cp -r dist/* "$ROOT/app/dist/"
 )
 
 
@@ -93,7 +80,8 @@ else
   OSNAME="linux"
 fi
 DAEMON_VER=$(node -e "console.log(require(\"$ROOT/app/package.json\").lbrySettings.lbrynetDaemonVersion)")
-DAEMON_URL="https://github.com/lbryio/lbry/releases/download/v${DAEMON_VER}/lbrynet-daemon-v${DAEMON_VER}-${OSNAME}.zip"
+DAEMON_URL_TEMPLATE=$(node -e "console.log(require(\"$ROOT/app/package.json\").lbrySettings.lbrynetDaemonUrlTemplate)")
+DAEMON_URL=$(echo ${DAEMON_URL_TEMPLATE//DAEMONVER/$DAEMON_VER} | sed "s/OSNAME/$OSNAME/g")
 wget --quiet "$DAEMON_URL" -O "$BUILD_DIR/daemon.zip"
 unzip "$BUILD_DIR/daemon.zip" -d "$ROOT/app/dist/"
 rm "$BUILD_DIR/daemon.zip"
