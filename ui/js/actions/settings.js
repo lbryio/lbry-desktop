@@ -291,8 +291,8 @@ export function doDownloadLanguage(lang, destinationPath) {
 
 export function doDownloadLanguages() {
   return function(dispatch, getState) {
-    if (!fs.existsSync("app/locales")) {
-      fs.mkdirSync("app/locales");
+    if (!fs.existsSync(app.i18n.directory)) {
+      fs.mkdirSync(app.i18n.directory);
     }
 
     dispatch({
