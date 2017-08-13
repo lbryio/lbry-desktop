@@ -18,8 +18,8 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
   fi
 
   # run sass once without --watch to force update. then run with --watch to keep watching
-  node_modules/.bin/node-sass --sourcemap=none $DIR/scss/all.scss $DIR/../app/dist/themes/light.css
-  node_modules/.bin/node-sass --sourcemap=none --watch $DIR/scss/all.scss $DIR/../app/dist/themes/light.css  &
+  node_modules/.bin/node-sass --output $DIR/../app/dist/css --sourcemap=none $DIR/scss/
+  node_modules/.bin/node-sass --output $DIR/../app/dist/css --sourcemap=none --watch $DIR/scss/ &
 
   node_modules/.bin/webpack --config webpack.dev.config.js --progress --colors --watch
 )
