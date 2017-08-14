@@ -21,9 +21,7 @@ class TipLink extends React.PureComponent {
     let claim_id = this.props.claim_id;
     let amount = this.state.feeAmount;
 
-    this.props.setClaimID(claim_id);
-    this.props.setAmount(amount);
-    this.props.sendSupport();
+    this.props.sendSupport(amount, claim_id);
 
     this.props.onTipHide();
   }
