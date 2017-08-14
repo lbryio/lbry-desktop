@@ -24,6 +24,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
   * Public page now properly checks for all required fields are filled
   * Fixed pagination styling for pages > 5 (#416)
   * Fixed sizing on squat videos (#419)
+  * Support claims no longer show up on Published page (#384)
 
 ### Deprecated
   *
