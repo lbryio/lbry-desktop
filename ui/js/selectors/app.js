@@ -144,7 +144,6 @@ export const selectHeaderLinks = createSelector(selectCurrentPage, page => {
         send: __("Send"),
         receive: __("Receive"),
         rewards: __("Rewards"),
-        backup: __("Backup"),
       };
     case "downloaded":
     case "published":
