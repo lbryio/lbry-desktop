@@ -14,6 +14,7 @@ import FileListPublished from "page/fileListPublished";
 import ChannelPage from "page/channel";
 import SearchPage from "page/search";
 import AuthPage from "page/auth";
+import BackupPage from "page/backup";
 
 const route = (page, routesMap) => {
   const component = routesMap[page];
@@ -26,6 +27,7 @@ const Router = props => {
 
   return route(currentPage, {
     auth: <AuthPage params={params} />,
+    backup: <BackupPage params={params} />,
     channel: <ChannelPage params={params} />,
     developer: <DeveloperPage params={params} />,
     discover: <DiscoverPage params={params} />,
