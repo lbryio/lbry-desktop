@@ -31,7 +31,7 @@ Tell us what happens instead
      You can include a screenshot instead of typing it out --> 
 
 <!-- For the daemon, run:
-     curl 'http://localhost:5279/lbryapi' --data '{"method":"version"}'
+     curl 'http://localhost:5279' --data '{"method":"version"}'
      and include the full output -->
 
 - LBRY Daemon version:
