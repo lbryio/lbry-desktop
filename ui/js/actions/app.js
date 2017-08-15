@@ -1,6 +1,8 @@
 import * as types from "constants/action_types";
 import lbry from "lbry";
 import {
+  selectIsBackDisabled,
+  selectIsForwardDisabled,
   selectUpdateUrl,
   selectUpgradeDownloadPath,
   selectUpgradeDownloadItem,
@@ -31,7 +33,7 @@ export function doNavigate(path, params = {}, options = {}) {
 
     const state = getState();
     const pageTitle = selectPageTitle(state);
-    dispatch(doHistoryPush({ params }, pageTitle, url));
+    dispatch(doHistoryPush({ params, is_last_page: true }, pageTitle, url));
   };
 }
 
@@ -77,18 +79,19 @@ export function doChangePath(path, options = {}) {
 
 export function doHistoryBack() {
   return function(dispatch, getState) {
-    if (!history.state) return;
-    if (history.state.index === 0) return;
-
-    history.back();
+    if (!selectIsBackDisabled(getState())) {
+      history.back();
+      dispatch({ type: types.HISTORY_NAVIGATE });
+    }
   };
 }
 
 export function doHistoryForward() {
   return function(dispatch, getState) {
-    if (!history.state) return;
-
-    history.forward();
+    if (!selectIsForwardDisabled(getState())) {
+      history.forward();
+      dispatch({ type: types.HISTORY_NAVIGATE });
+    }
   };
 }
 
@@ -96,6 +99,7 @@ export function doHistoryPush(currentState, title, relativeUrl) {
   return function(dispatch, getState) {
     title += " - LBRY";
     history.pushState(currentState, title, `#${relativeUrl}`);
+    dispatch({ type: types.HISTORY_NAVIGATE });
   };
 }
 
@@ -274,7 +278,11 @@ export function doDaemonReady() {
   return function(dispatch, getState) {
     const path = window.location.hash || "#/discover";
     const params = parseQueryParams(path.split("?")[1] || "");
-    history.replaceState({ params, index: 0 }, document.title, `${path}`);
+    history.replaceState(
+      { params, is_first_page: true },
+      document.title,
+      `${path}`
+    );
     dispatch(doAuthenticate());
     dispatch({
       type: types.DAEMON_READY,
