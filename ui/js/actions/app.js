@@ -298,10 +298,8 @@ export function doClearCache() {
 }
 
 export function doChangeLanguage(newLanguage) {
-  app.i18n.setLocale(newLanguage);
-  return {
-    type: types.CHANGE_LANGUAGE,
-    data: { newLanguage: newLanguage },
+  return function(dispatch, getState) {
+    app.i18n.setLocale(newLanguage);
   };
 }
 
