@@ -1,6 +1,5 @@
 import * as types from "constants/action_types";
 import * as modalTypes from "constants/modal_types";
-import lbry from "lbry";
 
 const currentPath = () => {
   const hash = document.location.hash;
@@ -15,6 +14,8 @@ const win = remote.BrowserWindow.getFocusedWindow();
 const reducers = {};
 const defaultState = {
   isLoaded: false,
+  isBackDisabled: true,
+  isForwardDisabled: true,
   currentPath: currentPath(),
   pathAfterAuth: "/discover",
   platform: process.platform,
@@ -47,6 +48,7 @@ reducers[types.DAEMON_VERSION_MISMATCH] = function(state, action) {
 reducers[types.CHANGE_PATH] = function(state, action) {
   return Object.assign({}, state, {
     currentPath: action.data.path,
+    isForwardDisabled: !action.data.isBack,
   });
 };
 
@@ -160,6 +162,13 @@ reducers[types.DOWNLOADING_COMPLETED] = function(state, action) {
 reducers[types.WINDOW_FOCUSED] = function(state, action) {
   return Object.assign({}, state, {
     badgeNumber: 0,
+  });
+};
+
+reducers[types.HISTORY_NAVIGATE] = (state, action) => {
+  return Object.assign({}, state, {
+    isBackDisabled: !history.state || history.state.is_first_page === true,
+    isForwardDisabled: !history.state,
   });
 };
 

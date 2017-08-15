@@ -14,7 +14,6 @@ Web UI version numbers should always match the corresponding version of LBRY App
   *
   
 ### Changed
-  * Updated to daemon [0.15](https://github.com/lbryio/lbry/releases). Most relevant changes for app are improved announcing of content and a fix for the daemon getting stuck running.
   * Some form field refactoring as we progress towards form sanity.
   * When an "Open" button is clicked on a show page, if the file fails to open, the app will try to open the file's folder.
   * Removed confusing placeholder text from email input

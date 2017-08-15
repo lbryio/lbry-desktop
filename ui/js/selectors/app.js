@@ -216,3 +216,13 @@ export const selectPathAfterAuth = createSelector(
   _selectState,
   state => state.pathAfterAuth
 );
+
+export const selectIsBackDisabled = createSelector(
+  _selectState,
+  state => state.isBackDisabled
+);
+
+export const selectIsForwardDisabled = createSelector(
+  _selectState,
+  state => state.isForwardDisabled
+);
