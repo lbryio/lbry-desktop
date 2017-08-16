@@ -33,7 +33,7 @@ export function doNavigate(path, params = {}, options = {}) {
 
     const state = getState();
     const pageTitle = selectPageTitle(state);
-    dispatch(doHistoryPush({ params, is_last_page: true }, pageTitle, url));
+    dispatch(doHistoryPush({ params, page: history.length }, pageTitle, url));
   };
 }
 
@@ -279,7 +279,7 @@ export function doDaemonReady() {
     const path = window.location.hash || "#/discover";
     const params = parseQueryParams(path.split("?")[1] || "");
     history.replaceState(
-      { params, is_first_page: true },
+      { params, page: 1 },
       document.title,
       `${path}`
     );
