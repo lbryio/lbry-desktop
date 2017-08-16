@@ -84,6 +84,14 @@ export function doHistoryBack() {
   };
 }
 
+export function doHistoryForward() {
+  return function(dispatch, getState) {
+    if (!history.state) return;
+
+    history.forward();
+  };
+}
+
 export function doHistoryPush(currentState, title, relativeUrl) {
   return function(dispatch, getState) {
     title += " - LBRY";

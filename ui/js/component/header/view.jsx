@@ -3,12 +3,25 @@ import Link from "component/link";
 import WunderBar from "component/wunderbar";
 
 export const Header = props => {
-  const { balance, back, navigate, publish } = props;
+  const { balance, back, forward, navigate, publish } = props;
 
   return (
     <header id="header">
       <div className="header__item">
-        <Link onClick={back} button="alt button--flat" icon="icon-arrow-left" title={__("Back")} />
+        <Link
+          onClick={back}
+          button="alt button--flat"
+          icon="icon-arrow-left"
+          title={__("Back")}
+        />
+      </div>
+      <div className="header__item">
+        <Link
+          onClick={forward}
+          button="alt button--flat"
+          icon="icon-arrow-right"
+          title={__("Forward")}
+        />
       </div>
       <div className="header__item">
         <Link
