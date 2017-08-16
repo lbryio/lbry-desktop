@@ -24,11 +24,17 @@ const defaultState = {
   daemonReady: false,
   hasSignature: false,
   badgeNumber: 0,
+  history: { index: 0, stack: [] },
 };
 
 reducers[types.DAEMON_READY] = function(state, action) {
+  const { history } = state;
+  const { page } = action.data;
+  history.stack.push(page);
+
   return Object.assign({}, state, {
     daemonReady: true,
+    history,
   });
 };
 
@@ -165,12 +171,51 @@ reducers[types.WINDOW_FOCUSED] = function(state, action) {
 };
 
 reducers[types.HISTORY_NAVIGATE] = (state, action) => {
-  console.log(history.state);
-  console.log(history.length);
-  console.log(history.state.page === history.length);
+  let page = false;
+  let location = false;
+
+  // Get history from state
+  const { history } = state;
+
+  if (action.data.page) {
+    // Get page
+    page = action.data.page;
+  } else if (action.data.location) {
+    // Get new location
+    location = action.data.location;
+  }
+
+  // Add new location to stack
+  if (location) {
+    const lastItem = history.stack.length - 1;
+
+    // Check for duplicated
+    let is_duplicate = lastItem > -1
+      ? history.stack[lastItem].location === location
+      : false;
+
+    if (!is_duplicate) {
+      // Create new page
+      page = {
+        index: history.stack.length,
+        location,
+      };
+
+      // Update index
+      history.index = history.stack.length;
+
+      // Add to stack
+      history.stack.push(page);
+    }
+  } else if (page) {
+    // Update index
+    history.index = page.index;
+  }
+
   return Object.assign({}, state, {
-    isBackDisabled: history.state.page === 1,
-    isForwardDisabled: history.state.page > history.length,
+    history,
+    isBackDisabled: history.index === 0, // First page
+    isForwardDisabled: history.index === history.stack.length - 1, // Last page
   });
 };
 

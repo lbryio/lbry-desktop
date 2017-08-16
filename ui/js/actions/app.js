@@ -1,8 +1,6 @@
 import * as types from "constants/action_types";
 import lbry from "lbry";
 import {
-  selectIsBackDisabled,
-  selectIsForwardDisabled,
   selectUpdateUrl,
   selectUpgradeDownloadPath,
   selectUpgradeDownloadItem,
@@ -10,6 +8,8 @@ import {
   selectPageTitle,
   selectCurrentPage,
   selectCurrentParams,
+  selectHistoryBack,
+  selectHistoryForward,
 } from "selectors/app";
 import { doSearch } from "actions/search";
 import { doFetchDaemonSettings } from "actions/settings";
@@ -34,6 +34,7 @@ export function doNavigate(path, params = {}, options = {}) {
     const state = getState();
     const pageTitle = selectPageTitle(state);
     const historyState = history.state;
+
     dispatch(
       doHistoryPush({ params, page: historyState.page + 1 }, pageTitle, url)
     );
@@ -82,19 +83,35 @@ export function doChangePath(path, options = {}) {
 
 export function doHistoryBack() {
   return function(dispatch, getState) {
-    if (!selectIsBackDisabled(getState())) {
-      history.back();
-      dispatch({ type: types.HISTORY_NAVIGATE });
+    // Get back history from stack
+    const back = selectHistoryBack(getState());
+
+    if (back) {
+      // Set location
+      dispatch(doChangePath(back.location));
+
+      dispatch({
+        type: types.HISTORY_NAVIGATE,
+        data: { page: back },
+      });
     }
   };
 }
 
 export function doHistoryForward() {
   return function(dispatch, getState) {
-    // if (!selectIsForwardDisabled(getState())) {
-    history.forward();
-    dispatch({ type: types.HISTORY_NAVIGATE });
-    // }
+    // Get forward history from stack
+    const forward = selectHistoryForward(getState());
+
+    if (forward) {
+      // Set location
+      dispatch(doChangePath(forward.location));
+
+      dispatch({
+        type: types.HISTORY_NAVIGATE,
+        data: { page: forward },
+      });
+    }
   };
 }
 
@@ -102,7 +119,12 @@ export function doHistoryPush(currentState, title, relativeUrl) {
   return function(dispatch, getState) {
     title += " - LBRY";
     history.pushState(currentState, title, `#${relativeUrl}`);
-    dispatch({ type: types.HISTORY_NAVIGATE });
+    dispatch({
+      type: types.HISTORY_NAVIGATE,
+      data: {
+        location: relativeUrl,
+      },
+    });
   };
 }
 
@@ -281,6 +303,13 @@ export function doDaemonReady() {
   return function(dispatch, getState) {
     const path = window.location.hash || "#/discover";
     const params = parseQueryParams(path.split("?")[1] || "");
+
+    // Get first page
+    const page = {
+      index: 0,
+      location: path.replace(/^#/, ""),
+    };
+
     history.replaceState(
       { params, is_first_page: true, page: 1 },
       document.title,
@@ -289,6 +318,7 @@ export function doDaemonReady() {
     dispatch(doAuthenticate());
     dispatch({
       type: types.DAEMON_READY,
+      data: { page },
     });
     dispatch(doFetchDaemonSettings());
     dispatch(doFileList());
