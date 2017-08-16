@@ -17,6 +17,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
   * Some form field refactoring as we progress towards form sanity.
   * When an "Open" button is clicked on a show page, if the file fails to open, the app will try to open the file's folder.
   * Removed confusing placeholder text from email input
+  * Updated several packages and fixed warnings in build process (all but the [fsevents warning](https://github.com/yarnpkg/yarn/issues/3738), which is rather dramatic)
 
 ### Fixed
   * Tiles will no longer be blurry on hover (Windows only bug)
