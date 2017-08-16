@@ -33,7 +33,10 @@ export function doNavigate(path, params = {}, options = {}) {
 
     const state = getState();
     const pageTitle = selectPageTitle(state);
-    dispatch(doHistoryPush({ params, is_last_page: true }, pageTitle, url));
+    const historyState = history.state;
+    dispatch(
+      doHistoryPush({ params, page: historyState.page + 1 }, pageTitle, url)
+    );
   };
 }
 
@@ -88,10 +91,10 @@ export function doHistoryBack() {
 
 export function doHistoryForward() {
   return function(dispatch, getState) {
-    if (!selectIsForwardDisabled(getState())) {
-      history.forward();
-      dispatch({ type: types.HISTORY_NAVIGATE });
-    }
+    // if (!selectIsForwardDisabled(getState())) {
+    history.forward();
+    dispatch({ type: types.HISTORY_NAVIGATE });
+    // }
   };
 }
 
@@ -279,7 +282,7 @@ export function doDaemonReady() {
     const path = window.location.hash || "#/discover";
     const params = parseQueryParams(path.split("?")[1] || "");
     history.replaceState(
-      { params, is_first_page: true },
+      { params, is_first_page: true, page: 1 },
       document.title,
       `${path}`
     );

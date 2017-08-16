@@ -48,7 +48,6 @@ reducers[types.DAEMON_VERSION_MISMATCH] = function(state, action) {
 reducers[types.CHANGE_PATH] = function(state, action) {
   return Object.assign({}, state, {
     currentPath: action.data.path,
-    isForwardDisabled: !action.data.isBack,
   });
 };
 
@@ -166,9 +165,12 @@ reducers[types.WINDOW_FOCUSED] = function(state, action) {
 };
 
 reducers[types.HISTORY_NAVIGATE] = (state, action) => {
+  console.log(history.state);
+  console.log(history.length);
+  console.log(history.state.page === history.length);
   return Object.assign({}, state, {
-    isBackDisabled: !history.state || history.state.is_first_page === true,
-    isForwardDisabled: !history.state,
+    isBackDisabled: history.state.page === 1,
+    isForwardDisabled: history.state.page > history.length,
   });
 };
 

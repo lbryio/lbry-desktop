@@ -12,7 +12,6 @@ export const Header = props => {
     navigate,
     publish,
   } = props;
-  console.log(props);
   return (
     <header id="header">
       <div className="header__item">
