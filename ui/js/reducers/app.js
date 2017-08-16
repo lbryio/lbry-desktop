@@ -167,7 +167,7 @@ reducers[types.WINDOW_FOCUSED] = function(state, action) {
 
 reducers[types.HISTORY_NAVIGATE] = (state, action) => {
   return Object.assign({}, state, {
-    isBackDisabled: !history.state || history.state.is_first_page === true,
+    isBackDisabled: !history.state || history.state.page === 1, // Check first page
     isForwardDisabled: !history.state,
   });
 };

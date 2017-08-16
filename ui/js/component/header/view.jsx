@@ -18,7 +18,7 @@ export const Header = props => {
       <div className="header__item">
         <Link
           onClick={back}
-          disabled={isBackDisabled}
+          disabled={isBackDisabled || history.state.page === 1}
           button="alt button--flat"
           icon="icon-arrow-left"
           title={__("Back")}
