@@ -377,46 +377,6 @@ class PublishForm extends React.PureComponent {
     });
   }
 
-  handleCreateChannelClick(event) {
-    if (this.state.newChannelName.length < 5) {
-      this.refs.newChannelName.showError(
-        __("LBRY channel names must be at least 4 characters in length.")
-      );
-      return;
-    }
-
-    this.setState({
-      creatingChannel: true,
-    });
-
-    const newChannelName = this.state.newChannelName;
-    lbry
-      .channel_new({
-        channel_name: newChannelName,
-        amount: parseFloat(this.state.newChannelBid),
-      })
-      .then(
-        () => {
-          setTimeout(() => {
-            this.setState({
-              creatingChannel: false,
-            });
-
-            this._updateChannelList(newChannelName);
-          }, 10000);
-        },
-        error => {
-          // TODO: better error handling
-          this.refs.newChannelName.showError(
-            __("Unable to create channel due to an internal error.")
-          );
-          this.setState({
-            creatingChannel: false,
-          });
-        }
-      );
-  }
-
   getLicense() {
     switch (this.state.licenseType) {
       case "copyright":
@@ -564,6 +524,7 @@ class PublishForm extends React.PureComponent {
               : <div>
                   <div className="card__content">
                     <FormRow
+                      ref="meta_title"
                       label={__("Title")}
                       type="text"
                       name="title"
@@ -825,6 +786,7 @@ class PublishForm extends React.PureComponent {
                     ref="bid"
                     type="number"
                     step="0.01"
+                    min="0"
                     label={__("Deposit")}
                     postfix="LBC"
                     onChange={event => {
@@ -833,6 +795,7 @@ class PublishForm extends React.PureComponent {
                     value={this.state.bid}
                     placeholder={this.claim() ? this.topClaimValue() + 10 : 100}
                     helper={lbcInputHelp}
+                    min="0"
                   />
                 </div>
               : ""}
@@ -844,6 +807,7 @@ class PublishForm extends React.PureComponent {
             </div>
             <div className="card__content">
               <FormRow
+                ref="tosAgree"
                 label={
                   <span>
                     {__("I agree to the")}

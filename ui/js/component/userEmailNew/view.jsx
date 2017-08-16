@@ -34,7 +34,7 @@ class UserEmailNew extends React.PureComponent {
         <FormRow
           type="text"
           label="Email"
-          placeholder="scrwvwls@lbry.io"
+          placeholder="youremail@example.org"
           name="email"
           value={this.state.email}
           errorMessage={errorMessage}
