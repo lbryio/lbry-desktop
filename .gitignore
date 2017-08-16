@@ -12,6 +12,7 @@
 /app/dist
 /app/node_modules
 /build/venv
+/build/daemon.ver
 /lbry-app-venv
 /lbry-app
 /lbry-venv
