@@ -24,6 +24,9 @@ const { download } = remote.require("electron-dl");
 const fs = remote.require("fs");
 const { lbrySettings: config } = require("../../../app/package.json");
 
+// history
+let historyStack = [];
+
 export function doNavigate(path, params = {}, options = {}) {
   return function(dispatch, getState) {
     let url = path;
@@ -34,8 +37,21 @@ export function doNavigate(path, params = {}, options = {}) {
     const state = getState();
     const pageTitle = selectPageTitle(state);
     const historyState = history.state;
+    const historyLength = historyStack.length;
+
+    const page = {
+      index: historyLength + 1,
+      location: window.location.hash,
+    };
+
+    const is_duplicate = historyStack.some(
+      stack => stack["location"] === page.location
+    );
+
+    if (!is_duplicate) historyStack.push(page);
+
     dispatch(
-      doHistoryPush({ params, page: historyState.page + 1 }, pageTitle, url)
+      doHistoryPush({ params, page, stack: historyStack }, pageTitle, url)
     );
   };
 }
@@ -281,8 +297,12 @@ export function doDaemonReady() {
   return function(dispatch, getState) {
     const path = window.location.hash || "#/discover";
     const params = parseQueryParams(path.split("?")[1] || "");
+
+    // Add first page
+    historyStack[0] = { loacation: path, index: 1 };
+
     history.replaceState(
-      { params, is_first_page: true, page: 1 },
+      { params, is_first_page: true, page: historyStack[0] },
       document.title,
       `${path}`
     );
