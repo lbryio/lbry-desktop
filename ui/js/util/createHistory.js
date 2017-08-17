@@ -8,7 +8,7 @@ class BrowserHistory {
     // Get page
     const page = {
       index: this.stack.length,
-      location,
+      location: location.replace(/^#/, ""),
     };
 
     const lastItem = this.stack.length - 1;
