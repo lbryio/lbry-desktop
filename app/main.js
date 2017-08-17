@@ -51,7 +51,7 @@ let daemonStopRequested = false;
 let readyToQuit = false;
 
 // If we receive a URI to open from an external app but there's no window to
-// send it to, it's cached in this variable.
+// sendCredits it to, it's cached in this variable.
 let openUri = null;
 
 function processRequestedUri(uri) {

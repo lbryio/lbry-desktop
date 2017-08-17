@@ -1,16 +1,16 @@
 import React from "react";
 import SubHeader from "component/subHeader";
 import WalletBalance from "component/walletBalance";
-import TransactionList from "component/transactionList";
+import WalletAddress from "component/walletAddress";
 
-const WalletPage = props => {
+const ReceiveCreditsPage = props => {
   return (
     <main className="main--single-column">
       <SubHeader />
       <WalletBalance />
-      <TransactionList />
+      <WalletAddress />
     </main>
   );
 };
 
-export default WalletPage;
+export default ReceiveCreditsPage;
