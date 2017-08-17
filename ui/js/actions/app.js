@@ -34,7 +34,9 @@ export function doNavigate(path, params = {}, options = {}) {
     const state = getState();
     const pageTitle = selectPageTitle(state);
 
-    dispatch(doHistoryPush({ params, page: 1 }, pageTitle, url));
+    dispatch(
+      doHistoryPush({ params, page: history.length + 1 }, pageTitle, url)
+    );
   };
 }
 
@@ -80,8 +82,9 @@ export function doChangePath(path, options = {}) {
 
 export function doHistoryBack() {
   return function(dispatch, getState) {
-    if (!selectIsBackDisabled(getState())) {
-      _history.back();
+    const back = _history.getBack();
+    if (!selectIsBackDisabled(getState()) && back) {
+      dispatch(doChangePath(back));
       dispatch({ type: types.HISTORY_NAVIGATE });
     }
   };
@@ -89,17 +92,19 @@ export function doHistoryBack() {
 
 export function doHistoryForward() {
   return function(dispatch, getState) {
-    // if (!selectIsForwardDisabled(getState())) {
-    _history.forward();
-    dispatch({ type: types.HISTORY_NAVIGATE });
-    // }
+    const forward = _history.getForward();
+    if (forward) {
+      dispatch(doChangePath(forward));
+      dispatch({ type: types.HISTORY_NAVIGATE });
+    }
   };
 }
 
 export function doHistoryPush(currentState, title, relativeUrl) {
   return function(dispatch, getState) {
     title += " - LBRY";
-    _history.push(window.location);
+    console.log(relativeUrl);
+    _history.push(relativeUrl);
     history.pushState(currentState, title, `#${relativeUrl}`);
     dispatch({ type: types.HISTORY_NAVIGATE });
   };
@@ -281,7 +286,7 @@ export function doDaemonReady() {
     const path = window.location.hash || "#/discover";
     const params = parseQueryParams(path.split("?")[1] || "");
 
-    _history.push(window.location);
+    _history.push(path);
     _history.index = 0;
 
     history.replaceState(

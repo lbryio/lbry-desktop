@@ -5,13 +5,10 @@ class BrowserHistory {
   }
 
   push(location) {
-    // Extract location
-    const { href, hash } = location;
-
     // Get page
     const page = {
       index: this.stack.length,
-      location: { href, hash },
+      location,
     };
 
     const lastItem = this.stack.length - 1;
@@ -23,21 +20,19 @@ class BrowserHistory {
     );
     */
 
-    let is_duplicate = false;
-
-    if (lastItem > -1)
-      is_duplicate = this.stack[lastItem].location.href === page.location.href;
+    let is_duplicate = lastItem > -1
+      ? this.stack[lastItem].location === page.location
+      : false;
 
     // Push to stack
     if (!is_duplicate) {
       this.stack.push(page);
-
       // Update index
       this.index = page.index;
     }
   }
 
-  back() {
+  getBack() {
     // Get new index
     const index = this.index - 1;
 
@@ -46,15 +41,15 @@ class BrowserHistory {
       // Get page
       const destination = this.stack[index];
 
-      // Set new location
-      window.location.href = destination.location.href;
-
-      // Update curren index
+      // Update index
       this.index = index;
+
+      // Return location
+      return destination.location;
     }
   }
 
-  forward() {
+  getForward() {
     // Get new index
     const index = this.index + 1;
 
@@ -66,11 +61,11 @@ class BrowserHistory {
       // Get page
       const destination = this.stack[index];
 
-      // Set new location
-      window.location.href = destination.location.href;
-
       // Update index
       this.index = index;
+
+      // Return location
+      return destination.location;
     }
 
     console.log("Cant' do forward:", false);
