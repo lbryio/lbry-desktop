@@ -1,5 +1,6 @@
 import store from "store.js";
 import lbry from "./lbry.js";
+import BrowserHistory from "util/createHistory";
 
 const env = ENV;
 const config = {
@@ -28,6 +29,7 @@ const app = {
 
 window.__ = i18n.__;
 window.__n = i18n.__n;
+window._history = new BrowserHistory();
 
 global.app = app;
 module.exports = app;

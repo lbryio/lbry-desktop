@@ -24,9 +24,6 @@ const { download } = remote.require("electron-dl");
 const fs = remote.require("fs");
 const { lbrySettings: config } = require("../../../app/package.json");
 
-// history
-let historyStack = [];
-
 export function doNavigate(path, params = {}, options = {}) {
   return function(dispatch, getState) {
     let url = path;
@@ -36,23 +33,8 @@ export function doNavigate(path, params = {}, options = {}) {
 
     const state = getState();
     const pageTitle = selectPageTitle(state);
-    const historyState = history.state;
-    const historyLength = historyStack.length;
 
-    const page = {
-      index: historyLength + 1,
-      location: window.location.hash,
-    };
-
-    const is_duplicate = historyStack.some(
-      stack => stack["location"] === page.location
-    );
-
-    if (!is_duplicate) historyStack.push(page);
-
-    dispatch(
-      doHistoryPush({ params, page, stack: historyStack }, pageTitle, url)
-    );
+    dispatch(doHistoryPush({ params, page: 1 }, pageTitle, url));
   };
 }
 
@@ -99,7 +81,7 @@ export function doChangePath(path, options = {}) {
 export function doHistoryBack() {
   return function(dispatch, getState) {
     if (!selectIsBackDisabled(getState())) {
-      history.back();
+      _history.back();
       dispatch({ type: types.HISTORY_NAVIGATE });
     }
   };
@@ -108,7 +90,7 @@ export function doHistoryBack() {
 export function doHistoryForward() {
   return function(dispatch, getState) {
     // if (!selectIsForwardDisabled(getState())) {
-    history.forward();
+    _history.forward();
     dispatch({ type: types.HISTORY_NAVIGATE });
     // }
   };
@@ -117,6 +99,7 @@ export function doHistoryForward() {
 export function doHistoryPush(currentState, title, relativeUrl) {
   return function(dispatch, getState) {
     title += " - LBRY";
+    _history.push(window.location);
     history.pushState(currentState, title, `#${relativeUrl}`);
     dispatch({ type: types.HISTORY_NAVIGATE });
   };
@@ -298,11 +281,11 @@ export function doDaemonReady() {
     const path = window.location.hash || "#/discover";
     const params = parseQueryParams(path.split("?")[1] || "");
 
-    // Add first page
-    historyStack[0] = { loacation: path, index: 1 };
+    _history.push(window.location);
+    _history.index = 0;
 
     history.replaceState(
-      { params, is_first_page: true, page: historyStack[0] },
+      { params, is_first_page: true, page: 1 },
       document.title,
       `${path}`
     );

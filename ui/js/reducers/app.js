@@ -165,12 +165,9 @@ reducers[types.WINDOW_FOCUSED] = function(state, action) {
 };
 
 reducers[types.HISTORY_NAVIGATE] = (state, action) => {
-  console.log(history.state);
-  console.log(history.length);
-  console.log(history.state.page === history.length);
   return Object.assign({}, state, {
-    isBackDisabled: history.state.page === 1,
-    isForwardDisabled: history.state.page > history.length,
+    isBackDisabled: _history.index === 0, // First page
+    isForwardDisabled: _history.index === _history.stack.length - 1, // Last page
   });
 };
 
