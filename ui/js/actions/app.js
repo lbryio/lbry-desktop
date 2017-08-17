@@ -33,9 +33,10 @@ export function doNavigate(path, params = {}, options = {}) {
 
     const state = getState();
     const pageTitle = selectPageTitle(state);
+    const historyState = history.state;
 
     dispatch(
-      doHistoryPush({ params, page: history.length + 1 }, pageTitle, url)
+      doHistoryPush({ params, page: historyState.page + 1 }, pageTitle, url)
     );
   };
 }
