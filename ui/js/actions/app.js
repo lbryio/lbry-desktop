@@ -83,9 +83,16 @@ export function doChangePath(path, options = {}) {
 
 export function doHistoryBack() {
   return function(dispatch, getState) {
+    // Get back page from stack
     const back = _history.getBack();
+
     if (!selectIsBackDisabled(getState()) && back) {
-      dispatch(doChangePath(back));
+      // Set location
+      dispatch(doChangePath(back.location));
+
+      // Update index
+      _history.index = back.index;
+
       dispatch({ type: types.HISTORY_NAVIGATE });
     }
   };
@@ -93,9 +100,16 @@ export function doHistoryBack() {
 
 export function doHistoryForward() {
   return function(dispatch, getState) {
+    // Get forward page from stack
     const forward = _history.getForward();
+
     if (forward) {
-      dispatch(doChangePath(forward));
+      // Set location
+      dispatch(doChangePath(forward.location));
+
+      // Update index
+      _history.index = forward.index;
+
       dispatch({ type: types.HISTORY_NAVIGATE });
     }
   };

@@ -14,19 +14,14 @@ class BrowserHistory {
     const lastItem = this.stack.length - 1;
 
     // Check duplicated
-    /*
-    const is_duplicate = this.stack.some(
-      stack => stack.location.href === page.location.href
-    );
-    */
-
     let is_duplicate = lastItem > -1
       ? this.stack[lastItem].location === page.location
       : false;
 
-    // Push to stack
     if (!is_duplicate) {
+      // Push to stack
       this.stack.push(page);
+
       // Update index
       this.index = page.index;
     }
@@ -41,11 +36,8 @@ class BrowserHistory {
       // Get page
       const destination = this.stack[index];
 
-      // Update index
-      this.index = index;
-
       // Return location
-      return destination.location;
+      return destination;
     }
   }
 
@@ -61,14 +53,9 @@ class BrowserHistory {
       // Get page
       const destination = this.stack[index];
 
-      // Update index
-      this.index = index;
-
       // Return location
-      return destination.location;
+      return destination;
     }
-
-    console.log("Cant' do forward:", false);
   }
 }
 
