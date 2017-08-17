@@ -84,7 +84,7 @@ export function doHistoryBack() {
   return function(dispatch, getState) {
     const back = _history.getBack();
     if (!selectIsBackDisabled(getState()) && back) {
-      dispatch(doNavigate(back));
+      dispatch(doChangePath(back));
       dispatch({ type: types.HISTORY_NAVIGATE });
     }
   };
@@ -94,8 +94,7 @@ export function doHistoryForward() {
   return function(dispatch, getState) {
     const forward = _history.getForward();
     if (forward) {
-      console.log(forward);
-      dispatch(doNavigate(forward));
+      dispatch(doChangePath(forward));
       dispatch({ type: types.HISTORY_NAVIGATE });
     }
   };
