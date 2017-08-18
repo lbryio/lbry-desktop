@@ -1,5 +1,5 @@
 import React from "react";
-import { Modal } from "component/modal";
+import { Modal } from "modal/modal";
 
 class ModalUpgrade extends React.PureComponent {
   render() {

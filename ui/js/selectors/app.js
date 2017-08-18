@@ -1,5 +1,6 @@
 import { createSelector } from "reselect";
 import { parseQueryParams, toQueryString } from "util/query_params";
+import * as settings from "constants/settings.js";
 import lbry from "lbry";
 import lbryuri from "lbryuri";
 
@@ -202,9 +203,14 @@ export const selectSnackBarSnacks = createSelector(
   snackBar => snackBar.snacks || []
 );
 
+export const selectCreditsIntroAcknowledged = createSelector(
+  _selectState,
+  state => lbry.getClientSetting(settings.CREDIT_INTRO_ACKNOWLEDGED)
+);
+
 export const selectWelcomeModalAcknowledged = createSelector(
   _selectState,
-  state => lbry.getClientSetting("welcome_acknowledged")
+  state => lbry.getClientSetting(settings.FIRST_RUN_ACKNOWLEDGED)
 );
 
 export const selectBadgeNumber = createSelector(

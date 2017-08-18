@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "component/link";
-import Modal from "component/modal";
+import Modal from "modal/modal";
 import { FormRow } from "component/form";
 
 const WalletSend = props => {

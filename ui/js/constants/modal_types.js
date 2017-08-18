@@ -7,3 +7,4 @@ export const UPGRADE = "upgrade";
 export const WELCOME = "welcome";
 export const FIRST_REWARD = "first_reward";
 export const AUTHENTICATION_FAILURE = "auth_failure";
+export const CREDIT_INTRO = "credit_intro";
