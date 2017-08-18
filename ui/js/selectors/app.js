@@ -138,12 +138,14 @@ export const selectHeaderLinks = createSelector(selectCurrentPage, page => {
     case "wallet":
     case "send":
     case "receive":
+    case "invite":
     case "rewards":
     case "backup":
       return {
         wallet: __("Overview"),
         send: __("Send"),
         receive: __("Receive"),
+        invite: __("Invites"),
         rewards: __("Rewards"),
       };
     case "downloaded":

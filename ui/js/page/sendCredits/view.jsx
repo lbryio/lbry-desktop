@@ -7,7 +7,6 @@ const SendCreditsPage = props => {
   return (
     <main className="main--single-column">
       <SubHeader />
-      <WalletBalance />
       <WalletSend />
     </main>
   );

@@ -16,6 +16,7 @@ import FileListPublished from "page/fileListPublished";
 import ChannelPage from "page/channel";
 import SearchPage from "page/search";
 import AuthPage from "page/auth";
+import InvitePage from "page/invite";
 import BackupPage from "page/backup";
 
 const route = (page, routesMap) => {
@@ -35,6 +36,7 @@ const Router = props => {
     discover: <DiscoverPage params={params} />,
     downloaded: <FileListDownloaded params={params} />,
     help: <HelpPage params={params} />,
+    invite: <InvitePage params={params} />,
     publish: <PublishPage params={params} />,
     published: <FileListPublished params={params} />,
     receive: <ReceiveCreditsPage params={params} />,

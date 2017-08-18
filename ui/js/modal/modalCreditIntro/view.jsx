@@ -1,6 +1,6 @@
 import React from "react";
 import { Modal } from "modal/modal";
-import { CreditAmount } from "component/common";
+import { CreditAmount, CurrencySymbol } from "component/common";
 import Link from "component/link/index";
 
 const ModalCreditIntro = props => {
@@ -14,7 +14,7 @@ const ModalCreditIntro = props => {
         <h3 className="modal__header">{__("Claim Your Credits")}</h3>
         <p>
           The LBRY network is controlled and powered by credits called{" "}
-          <em>LBC</em>, a blockchain asset.
+          <em><CurrencySymbol /></em>, a blockchain asset.
         </p>
         <p>
           {__("New patrons receive ")} {" "}

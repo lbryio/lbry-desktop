@@ -7,7 +7,6 @@ const ReceiveCreditsPage = props => {
   return (
     <main className="main--single-column">
       <SubHeader />
-      <WalletBalance />
       <WalletAddress />
     </main>
   );
