@@ -231,27 +231,18 @@ export const selectHistoryBack = createSelector(_selectState, state => {
   const { history } = state;
   const index = history.index - 1;
 
-  // Check if page exist
+  // Check if page exist and get backward
   if (index > -1) {
-    // Get page
-    const destination = history.stack[index];
-
-    // Return location
-    return destination;
+    return history.stack[index];
   }
 });
 
 export const selectHistoryForward = createSelector(_selectState, state => {
   const { history } = state;
   const index = history.index + 1;
-  const length = history.stack.length;
 
-  // Check if page exist
-  if (index <= length) {
-    // Get page
-    const destination = history.stack[index];
-
-    // Return location
-    return destination;
+  // Check if page exist get forward
+  if (index <= history.stack.length) {
+    return history.stack[index];
   }
 });

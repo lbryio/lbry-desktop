@@ -1,8 +1,6 @@
 import * as types from "constants/action_types";
 import lbry from "lbry";
 import {
-  selectIsBackDisabled,
-  selectIsForwardDisabled,
   selectUpdateUrl,
   selectUpgradeDownloadPath,
   selectUpgradeDownloadItem,
@@ -85,10 +83,8 @@ export function doChangePath(path, options = {}) {
 
 export function doHistoryBack() {
   return function(dispatch, getState) {
-    const state = getState();
-
     // Get back page from stack
-    const back = selectHistoryBack(state);
+    const back = selectHistoryBack(getState());
 
     if (back) {
       // Set location

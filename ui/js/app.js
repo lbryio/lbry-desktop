@@ -1,6 +1,5 @@
 import store from "store.js";
 import lbry from "./lbry.js";
-import BrowserHistory from "util/createHistory";
 
 const env = ENV;
 const config = {
