@@ -29,7 +29,6 @@ const app = {
 
 window.__ = i18n.__;
 window.__n = i18n.__n;
-window._history = new BrowserHistory();
 
 global.app = app;
 module.exports = app;

@@ -122,7 +122,6 @@ export function doHistoryForward() {
 export function doHistoryPush(currentState, title, relativeUrl) {
   return function(dispatch, getState) {
     title += " - LBRY";
-    //_history.push(relativeUrl);
     history.pushState(currentState, title, `#${relativeUrl}`);
     dispatch({
       type: types.HISTORY_NAVIGATE,
