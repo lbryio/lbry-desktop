@@ -3,11 +3,11 @@ import SubHeader from "component/subHeader";
 import TransactionList from "component/transactionList";
 import WalletAddress from "component/walletAddress";
 import WalletSend from "component/walletSend";
-
+import Link from "component/link";
 import { CreditAmount } from "component/common";
 
 const WalletPage = props => {
-  const { balance, currentPage } = props;
+  const { balance, currentPage, navigate } = props;
 
   return (
     <main className="main--single-column">
@@ -18,6 +18,14 @@ const WalletPage = props => {
         </div>
         <div className="card__content">
           <CreditAmount amount={balance} precision={8} />
+        </div>
+        <div className="card__content">
+          <div className="help">
+            <Link
+              onClick={() => navigate("/backup")}
+              label={__("Backup Your Wallet")}
+            />
+          </div>
         </div>
       </section>
       {currentPage === "wallet" ? <TransactionList {...props} /> : ""}

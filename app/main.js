@@ -32,7 +32,7 @@ const DAEMON_PATH = process.env.LBRY_DAEMON || path.join(__dirname, 'dist', 'lbr
 let client = jayson.client.http({
   host: 'localhost',
   port: 5279,
-  path: '/lbryapi',
+  path: '/',
   timeout: 1000
 });
 

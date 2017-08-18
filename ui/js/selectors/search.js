@@ -57,6 +57,7 @@ export const selectWunderBarIcon = createSelector(selectCurrentPage, page => {
     case "wallet":
     case "send":
     case "receive":
+    case "backup":
       return "icon-bank";
     case "show":
       return "icon-file";

@@ -14,21 +14,23 @@ class FormFieldPrice extends React.PureComponent {
     };
   }
 
-  dispatchChange() {
+  handleChange(newValues) {
+    const newState = Object.assign({}, this.state, newValues);
+    this.setState(newState);
     this.props.onChange({
-      amount: this.state.amount,
-      currency: this.state.currency,
+      amount: newState.amount,
+      currency: newState.currency,
     });
   }
 
   handleFeeAmountChange(event) {
-    this.state.amount = event.target.value ? Number(event.target.value) : null;
-    this.dispatchChange();
+    this.handleChange({
+      amount: event.target.value ? Number(event.target.value) : null,
+    });
   }
 
   handleFeeCurrencyChange(event) {
-    this.state.currency = event.target.value;
-    this.dispatchChange();
+    this.handleChange({ currency: event.target.value });
   }
 
   render() {
