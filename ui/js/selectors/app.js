@@ -226,3 +226,32 @@ export const selectIsForwardDisabled = createSelector(
   _selectState,
   state => state.isForwardDisabled
 );
+
+export const selectHistoryBack = createSelector(_selectState, state => {
+  const { history } = state;
+  const index = history.index - 1;
+
+  // Check if page exist
+  if (index > -1) {
+    // Get page
+    const destination = history.stack[index];
+
+    // Return location
+    return destination;
+  }
+});
+
+export const selectHistoryForward = createSelector(_selectState, state => {
+  const { history } = state;
+  const index = history.index + 1;
+  const length = history.stack.length;
+
+  // Check if page exist
+  if (index <= length) {
+    // Get page
+    const destination = history.stack[index];
+
+    // Return location
+    return destination;
+  }
+});

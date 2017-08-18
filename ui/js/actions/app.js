@@ -10,6 +10,8 @@ import {
   selectPageTitle,
   selectCurrentPage,
   selectCurrentParams,
+  selectHistoryBack,
+  selectHistoryForward,
 } from "selectors/app";
 import { doSearch } from "actions/search";
 import { doFetchDaemonSettings } from "actions/settings";
@@ -83,17 +85,19 @@ export function doChangePath(path, options = {}) {
 
 export function doHistoryBack() {
   return function(dispatch, getState) {
-    // Get back page from stack
-    const back = _history.getBack();
+    const state = getState();
 
-    if (!selectIsBackDisabled(getState()) && back) {
+    // Get back page from stack
+    const back = selectHistoryBack(state);
+
+    if (back) {
       // Set location
       dispatch(doChangePath(back.location));
 
-      // Update index
-      _history.index = back.index;
-
-      dispatch({ type: types.HISTORY_NAVIGATE });
+      dispatch({
+        type: types.HISTORY_NAVIGATE,
+        data: { page: back },
+      });
     }
   };
 }
@@ -101,16 +105,16 @@ export function doHistoryBack() {
 export function doHistoryForward() {
   return function(dispatch, getState) {
     // Get forward page from stack
-    const forward = _history.getForward();
+    const forward = selectHistoryForward(getState());
 
     if (forward) {
       // Set location
       dispatch(doChangePath(forward.location));
 
-      // Update index
-      _history.index = forward.index;
-
-      dispatch({ type: types.HISTORY_NAVIGATE });
+      dispatch({
+        type: types.HISTORY_NAVIGATE,
+        data: { page: forward },
+      });
     }
   };
 }
@@ -118,10 +122,14 @@ export function doHistoryForward() {
 export function doHistoryPush(currentState, title, relativeUrl) {
   return function(dispatch, getState) {
     title += " - LBRY";
-    console.log(relativeUrl);
-    _history.push(relativeUrl);
+    //_history.push(relativeUrl);
     history.pushState(currentState, title, `#${relativeUrl}`);
-    dispatch({ type: types.HISTORY_NAVIGATE });
+    dispatch({
+      type: types.HISTORY_NAVIGATE,
+      data: {
+        location: relativeUrl,
+      },
+    });
   };
 }
 
@@ -301,8 +309,10 @@ export function doDaemonReady() {
     const path = window.location.hash || "#/discover";
     const params = parseQueryParams(path.split("?")[1] || "");
 
-    _history.push(path);
-    _history.index = 0;
+    const page = {
+      index: 0,
+      location: path.replace(/^#/, ""),
+    };
 
     history.replaceState(
       { params, is_first_page: true, page: 1 },
@@ -312,6 +322,7 @@ export function doDaemonReady() {
     dispatch(doAuthenticate());
     dispatch({
       type: types.DAEMON_READY,
+      data: { page },
     });
     dispatch(doFetchDaemonSettings());
     dispatch(doFileList());
