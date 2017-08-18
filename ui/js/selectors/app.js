@@ -231,8 +231,9 @@ export const selectHistoryBack = createSelector(_selectState, state => {
   const { history } = state;
   const index = history.index - 1;
 
-  // Check if page exist and get backward
+  // Check if page exists
   if (index > -1) {
+    // Get back history
     return history.stack[index];
   }
 });
@@ -241,8 +242,9 @@ export const selectHistoryForward = createSelector(_selectState, state => {
   const { history } = state;
   const index = history.index + 1;
 
-  // Check if page exist get forward
+  // Check if page exists
   if (index <= history.stack.length) {
+    // Get forward history
     return history.stack[index];
   }
 });

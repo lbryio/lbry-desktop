@@ -177,38 +177,37 @@ reducers[types.HISTORY_NAVIGATE] = (state, action) => {
   // Get history from state
   const { history } = state;
 
-  // Get page
   if (action.data.page) {
+    // Get page
     page = action.data.page;
   } else if (action.data.location) {
-    // Get location
+    // Get new location
     location = action.data.location;
   }
 
-  // Add location to stack ( new location )
+  // Add new location to stack
   if (location) {
     const lastItem = history.stack.length - 1;
 
-    // Check duplicated
+    // Check for duplicated
     let is_duplicate = lastItem > -1
       ? history.stack[lastItem].location === location
       : false;
 
     if (!is_duplicate) {
-      // Create page
+      // Create new page
       page = {
-        location,
         index: history.stack.length,
+        location,
       };
 
-      // Update Index
+      // Update index
       history.index = history.stack.length;
 
-      //  Add to stack
+      // Add to stack
       history.stack.push(page);
     }
   } else if (page) {
-    // History forwad / back
     // Update index
     history.index = page.index;
   }

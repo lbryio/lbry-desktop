@@ -83,7 +83,7 @@ export function doChangePath(path, options = {}) {
 
 export function doHistoryBack() {
   return function(dispatch, getState) {
-    // Get back page from stack
+    // Get back history from stack
     const back = selectHistoryBack(getState());
 
     if (back) {
@@ -100,7 +100,7 @@ export function doHistoryBack() {
 
 export function doHistoryForward() {
   return function(dispatch, getState) {
-    // Get forward page from stack
+    // Get forward history from stack
     const forward = selectHistoryForward(getState());
 
     if (forward) {
@@ -304,6 +304,7 @@ export function doDaemonReady() {
     const path = window.location.hash || "#/discover";
     const params = parseQueryParams(path.split("?")[1] || "");
 
+    // Get first page
     const page = {
       index: 0,
       location: path.replace(/^#/, ""),
