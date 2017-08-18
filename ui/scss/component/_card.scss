@@ -75,7 +75,7 @@ $font-size-subtext-multiple: 0.82;
   top: 0px;
   bottom: 0px;
   padding: 20px;
-  background-color: rgba(128, 128, 128, 0.8);
+  background-color: var(--color-dark-overlay);
   color: #fff;
   display: flex;
   align-items: center;
@@ -98,7 +98,7 @@ $font-size-subtext-multiple: 0.82;
   overflow-y: visible
 }
 .card--link:hover ~ .card--link {
-  transform: translateX(calc(var(--translate-card-hover) * 2));
+  transform: translateX(calc(var(--card-hover-translate) * 2));
 }
 
 .card__media {
@@ -162,7 +162,7 @@ $font-size-subtext-multiple: 0.82;
 }
 
 .card--form {
-  width: calc( var(--input-width) + var(--card-padding * 2);
+  width: calc( var(--input-width) + var(--card-padding) * 2);
 }
 
 .card__subtitle {
