@@ -216,3 +216,35 @@ export const selectPathAfterAuth = createSelector(
   _selectState,
   state => state.pathAfterAuth
 );
+
+export const selectIsBackDisabled = createSelector(
+  _selectState,
+  state => state.isBackDisabled
+);
+
+export const selectIsForwardDisabled = createSelector(
+  _selectState,
+  state => state.isForwardDisabled
+);
+
+export const selectHistoryBack = createSelector(_selectState, state => {
+  const { history } = state;
+  const index = history.index - 1;
+
+  // Check if page exists
+  if (index > -1) {
+    // Get back history
+    return history.stack[index];
+  }
+});
+
+export const selectHistoryForward = createSelector(_selectState, state => {
+  const { history } = state;
+  const index = history.index + 1;
+
+  // Check if page exists
+  if (index <= history.stack.length) {
+    // Get forward history
+    return history.stack[index];
+  }
+});
