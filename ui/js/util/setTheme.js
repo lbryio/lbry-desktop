@@ -3,6 +3,7 @@ import { existsSync } from "fs";
 import { remote } from "electron";
 
 function setTheme(name) {
+  /*
   const link = document.getElementById("theme");
   const file = `${name}.css`;
   const path = `${remote.app.getAppPath()}/dist/themes/${file}`;
@@ -14,6 +15,7 @@ function setTheme(name) {
     link.href = `./themes/light.css`;
     lbry.setClientSetting("theme", "light");
   }
+  */
 }
 
 export default setTheme;
