@@ -1,6 +1,6 @@
 import React from "react";
-import { Modal } from "component/modal";
-import FormField from "component/formField";
+import { Modal } from "modal/modal";
+import FormField from "component/formField/index";
 
 class ModalRemoveFile extends React.PureComponent {
   constructor(props) {

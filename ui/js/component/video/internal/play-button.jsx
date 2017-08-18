@@ -1,7 +1,7 @@
 import React from "react";
 import FilePrice from "component/filePrice";
 import Link from "component/link";
-import Modal from "component/modal";
+import Modal from "modal/modal";
 
 class VideoPlayButton extends React.PureComponent {
   componentDidMount() {

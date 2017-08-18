@@ -1,12 +1,13 @@
 import store from "store.js";
 import lbry from "./lbry.js";
+import * as settings from "constants/settings";
 
 const env = ENV;
 const config = {
   ...require(`./config/${env}`),
 };
-const language = lbry.getClientSetting("language")
-  ? lbry.getClientSetting("language")
+const language = lbry.getClientSetting(settings.LANGUAGE)
+  ? lbry.getClientSetting(settings.LANGUAGE)
   : "en";
 const i18n = require("y18n")({
   directory: "app/locales",

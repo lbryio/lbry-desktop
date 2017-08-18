@@ -1,5 +1,6 @@
 import { createSelector } from "reselect";
 import { parseQueryParams, toQueryString } from "util/query_params";
+import * as settings from "constants/settings.js";
 import lbry from "lbry";
 import lbryuri from "lbryuri";
 
@@ -202,9 +203,14 @@ export const selectSnackBarSnacks = createSelector(
   snackBar => snackBar.snacks || []
 );
 
+export const selectCreditsIntroAcknowledged = createSelector(
+  _selectState,
+  state => lbry.getClientSetting(settings.CREDIT_INTRO_ACKNOWLEDGED)
+);
+
 export const selectWelcomeModalAcknowledged = createSelector(
   _selectState,
-  state => lbry.getClientSetting("welcome_acknowledged")
+  state => lbry.getClientSetting(settings.FIRST_RUN_ACKNOWLEDGED)
 );
 
 export const selectBadgeNumber = createSelector(
@@ -216,3 +222,35 @@ export const selectPathAfterAuth = createSelector(
   _selectState,
   state => state.pathAfterAuth
 );
+
+export const selectIsBackDisabled = createSelector(
+  _selectState,
+  state => state.isBackDisabled
+);
+
+export const selectIsForwardDisabled = createSelector(
+  _selectState,
+  state => state.isForwardDisabled
+);
+
+export const selectHistoryBack = createSelector(_selectState, state => {
+  const { history } = state;
+  const index = history.index - 1;
+
+  // Check if page exists
+  if (index > -1) {
+    // Get back history
+    return history.stack[index];
+  }
+});
+
+export const selectHistoryForward = createSelector(_selectState, state => {
+  const { history } = state;
+  const index = history.index + 1;
+
+  // Check if page exists
+  if (index <= history.stack.length) {
+    // Get forward history
+    return history.stack[index];
+  }
+});

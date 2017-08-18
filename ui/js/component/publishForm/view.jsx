@@ -5,7 +5,7 @@ import FormField from "component/formField";
 import { FormRow } from "component/form.js";
 import Link from "component/link";
 import FormFieldPrice from "component/formFieldPrice";
-import Modal from "component/modal";
+import Modal from "modal/modal";
 import { BusyMessage } from "component/common";
 import ChannelSection from "./internal/channelSection";
 

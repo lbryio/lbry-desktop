@@ -1,6 +1,6 @@
 import React from "react";
 import lbry from "lbry";
-import { ExpandableModal } from "component/modal";
+import { ExpandableModal } from "modal/modal";
 
 class ModalError extends React.PureComponent {
   render() {

@@ -1,5 +1,5 @@
 import React from "react";
-import { Modal } from "component/modal";
+import { Modal } from "modal/modal";
 
 class ModalInsufficientCredits extends React.PureComponent {
   render() {

@@ -9,7 +9,8 @@ import {
   makeSelectRewardByType,
   selectTotalRewardValue,
 } from "selectors/rewards";
-import ModalWelcome from "./view";
+import * as settings from "constants/settings";
+import ModalCreditIntro from "./view";
 
 const select = (state, props) => {
   const selectHasClaimed = makeSelectHasClaimedReward(),
@@ -24,7 +25,7 @@ const select = (state, props) => {
 
 const perform = dispatch => () => {
   const closeModal = () => {
-    dispatch(doSetClientSetting("welcome_acknowledged", true));
+    dispatch(doSetClientSetting(settings.CREDIT_INTRO_ACKNOWLEDGED, true));
     dispatch(doCloseModal());
   };
 
@@ -37,4 +38,4 @@ const perform = dispatch => () => {
   };
 };
 
-export default connect(select, perform)(ModalWelcome);
+export default connect(select, perform)(ModalCreditIntro);

@@ -1,7 +1,7 @@
 import React from "react";
 import ReactModal from "react-modal";
-import Link from "component/link";
-import app from "../app.js";
+import Link from "component/link/index";
+import app from "app.js";
 
 export class Modal extends React.PureComponent {
   static propTypes = {

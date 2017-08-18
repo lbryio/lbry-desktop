@@ -1,7 +1,7 @@
 import React from "react";
-import { Modal } from "component/modal";
+import { Modal } from "modal/modal";
 import { Line } from "rc-progress";
-import Link from "component/link";
+import Link from "component/link/index";
 
 class ModalDownloading extends React.PureComponent {
   render() {

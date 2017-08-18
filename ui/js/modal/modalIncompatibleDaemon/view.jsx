@@ -1,6 +1,6 @@
 import React from "react";
-import { Modal } from "component/modal";
-import Link from "component/link";
+import { Modal } from "modal/modal";
+import Link from "component/link/index";
 
 class ModalIncompatibleDaemon extends React.PureComponent {
   render() {
