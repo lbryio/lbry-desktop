@@ -1,6 +1,7 @@
 @import "../global";
 
 $width-input-border: 2px;
+$color-form-border: #000;
 
 .form-row-submit
 {
@@ -15,7 +16,7 @@ $width-input-border: 2px;
   margin-top: $spacing-vertical * 5/6;
   margin-bottom: $spacing-vertical * 1/6;
   line-height: 1;
-  font-size: 0.9 * $font-size;
+  font-size:calc( 0.9 * var(--font-size));
 }
 .form-row__label-row--prefix {
   float: left;
@@ -23,11 +24,11 @@ $width-input-border: 2px;
 }
 
 input[type="text"].input-copyable {
-  border: 1px solid $color-form-border;
+  border: 1px solid var(--color-form-border);
   line-height: 1;
   padding-top: $spacing-vertical * 1/3;
   padding-bottom: $spacing-vertical * 1/3;
-  width: $width-input-text;
+  width: var(--input-width);
   padding-left: 5px;
   padding-right: 5px;
   width: 100%;
@@ -43,14 +44,14 @@ input[type="text"].input-copyable {
   }
 
   select {
-    transition: outline $transition-standard;
+    transition: outline var(--standar-transition);
     cursor: pointer;
     box-sizing: border-box;
     padding-left: 5px;
     padding-right: 5px;
     height: $spacing-vertical;
     &:focus {
-      outline: $width-input-border solid $color-primary;
+      outline: $width-input-border solid var(--color-primary);
     }
   }
 
@@ -62,9 +63,9 @@ input[type="text"].input-copyable {
   input[type="search"],
   input[type="date"] {
     @include placeholder {
-      color: lighten($color-text-dark, 60%);
+      //color: lighten($color-text-dark, 60%);
     }
-    transition: all $transition-standard;
+    transition: all var(--standar-transition);
     cursor: pointer;
     padding-left: 1px;
     padding-right: 1px;
@@ -86,7 +87,7 @@ input[type="text"].input-copyable {
     padding-top: $spacing-vertical * 1/3;
     padding-bottom: $spacing-vertical * 1/3;
     &.form-field__input--error {
-      border-color: $color-error;
+      border-color: var(--color-error);
     }
     &.form-field__input--inline {
       padding-top: 0;
@@ -104,7 +105,7 @@ input[type="text"].input-copyable {
   input[type="number"]:focus,
   input[type="search"]:focus,
   input[type="date"]:focus {
-    border-color: $color-primary;
+    border-color: var(--color-primary);
   }
 
   textarea {
@@ -124,11 +125,11 @@ input[type="text"].input-copyable {
 }
 
 .form-field__label--error {
-  color: $color-error;
+  color: var(--color-error);
 }
 
 .form-field__input-text {
-  width: $width-input-text;
+  width: var(--input-width);
 }
 
 .form-field__prefix {
@@ -153,14 +154,14 @@ input[type="text"].input-copyable {
 .form-field__error, .form-field__helper {
   margin-top: $spacing-vertical * 1/3;
   font-size: 0.8em;
-  transition: opacity $transition-standard;
+  transition: opacity var(--standar-transition);
 }
 
 .form-field__error {
-  color: $color-error;
+  color: var(--color-error);
 }
 .form-field__helper {
-  color: $color-help;
+  color:var(--color-help);
 }
 
 .form-field__input.form-field__input-SimpleMDE .CodeMirror-scroll {

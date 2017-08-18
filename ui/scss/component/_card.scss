@@ -1,17 +1,13 @@
 @import "../global";
 
-$padding-card-horizontal: $spacing-vertical * 2/3;
-$translate-card-hover: 10px;
-$width-card-small: $spacing-vertical * 10;
-
 .card {
   margin-left: auto;
   margin-right: auto;
-  max-width: $width-page-constrained;
-  background: $color-bg;
-  box-shadow: $box-shadow-layer;
-  border-radius: 2px;
-  margin-bottom: $spacing-vertical * 2/3;
+  max-width: var(--card-max-width);
+  background: var(--card-bg);
+  box-shadow: var(--card-shadow);
+  border-radius: var(--card-radius);
+  margin-bottom: var(--card-margin);
   overflow: auto;
 }
 .card--obscured
@@ -19,14 +15,14 @@ $width-card-small: $spacing-vertical * 10;
   position: relative;
 }
 .card--obscured .card__inner {
-  filter: blur($blur-intensity-nsfw);
+  filter: blur( var(--nsfw-blur-intensity) );
 }
 .card__title-primary,
 .card__title-identity,
 .card__actions,
 .card__content,
 .card__subtext {
-  padding: 0 $padding-card-horizontal;
+  padding: 0 var(--card-padding);
 }
 .card--small {
   .card__title-primary,
@@ -34,18 +30,18 @@ $width-card-small: $spacing-vertical * 10;
   .card__actions,
   .card__content,
   .card__subtext {
-    padding: 0 $padding-card-horizontal / 2;
+    padding: 0 cacl(var(--card-padding) / 2);
   }
 }
 .card__title-primary {
-  margin-top: $spacing-vertical * 2/3;
+  margin-top: var(--card-margin);
 }
 .card__title-identity {
   margin-top: $spacing-vertical * 1/3;
   margin-bottom: $spacing-vertical * 1/3;
 }
 .card__actions {
-  margin-top: $spacing-vertical * 2/3;
+  margin-top: var(--card-margin);
 }
 .card__actions--bottom {
   margin-top: $spacing-vertical * 1/3;
@@ -53,16 +49,16 @@ $width-card-small: $spacing-vertical * 10;
 }
 .card__actions--form-submit {
   margin-top: $spacing-vertical;
-  margin-bottom: $spacing-vertical * 2/3;
+  margin-bottom: var(--card-margin);
 }
 .card__content {
-  margin-top: $spacing-vertical * 2/3;
-  margin-bottom: $spacing-vertical * 2/3;
+  margin-top: var(--card-margin);
+  margin-bottom: var(--card-margin);
 }
 $font-size-subtext-multiple: 0.82;
 .card__subtext {
-  color: $color-meta-light;
-  font-size: $font-size-subtext-multiple * 1.0em;
+  color: var(--color-meta-light);
+  font-size: calc( var(--font-size-subtext-multiple) * 1.0em );
   margin-top: $spacing-vertical * 1/3;
   margin-bottom: $spacing-vertical * 1/3;
 }
@@ -70,7 +66,7 @@ $font-size-subtext-multiple: 0.82;
   white-space: pre-wrap;
 }
 .card__subtext--two-lines {
-  height: $font-size * $font-size-subtext-multiple * $font-line-height * 2; /*this is so one line text still has the proper height*/
+  height: calc( var(--font-size) * var(--font-size-subtext-multiple) * var(--font-line-height) * 2); /*this is so one line text still has the proper height*/
 }
 .card-overlay {
   position: absolute;
@@ -86,7 +82,6 @@ $font-size-subtext-multiple: 0.82;
   font-weight: 600;
 }
 
-$card-link-scaling: 1.1;
 .card__link {
   display: block;
 }
@@ -96,14 +91,14 @@ $card-link-scaling: 1.1;
 .card--link:hover {
   position: relative;
   z-index: 1;
-  box-shadow: $box-shadow-focus;
-  transform: scale($card-link-scaling) translateX($translate-card-hover);
+  box-shadow: var(--box-shadow-focus);
+  transform: scale(var(--card-link-scaling)) translateX(var(--card-hover-translate));
   transform-origin: 50% 50%;
   overflow-x: visible;
   overflow-y: visible
 }
 .card--link:hover ~ .card--link {
-  transform: translateX($translate-card-hover * 2);
+  transform: translateX(calc(var(--translate-card-hover) * 2));
 }
 
 .card__media {
@@ -157,43 +152,42 @@ $card-link-scaling: 1.1;
   position: absolute;
   top: 36%
 }
-
-
-
 .card--small {
-  width: $width-card-small;
+  width: var(--card-small-width);
   overflow-x: hidden;
   white-space: normal;
 }
 .card--small .card__media {
-  height: $width-card-small * 9 / 16;
+  height: calc( var(--card-small-width) * 9 / 16);
 }
 
 .card--form {
-  width: $width-input-text + $padding-card-horizontal * 2;
+  width: calc( var(--input-width) + var(--card-padding * 2);
 }
 
 .card__subtitle {
-  color: $color-help;
+  color: var(--color-help);
   font-size: 0.85em;
-  line-height: $font-line-height * 1 / 0.85;
+  line-height: calc( var(--font-line-height) * 1 / 0.85);
 }
 
 .card-series-submit
 {
   margin-left: auto;
   margin-right: auto;
-  max-width: $width-page-constrained;
-  padding: $spacing-vertical / 2;
+  max-width: var(--card-max-width);
+  padding: calc(var(--vertical-spacing) / 2);
 }
 
 .card-row {
   + .card-row {
-    margin-top: $spacing-vertical * 1/3;
+    margin-top: calc(var(--vertical-spacing) * 1/3);
   }
 }
+
 $padding-top-card-hover-hack: 20px;
 $padding-right-card-hover-hack: 30px;
+
 .card-row__items {
   width: 100%;
   overflow: hidden;
@@ -219,7 +213,7 @@ $padding-right-card-hover-hack: 30px;
   padding-right: $padding-right-card-hover-hack;
 }
 .card-row__header {
-  margin-bottom: $spacing-vertical / 3;
+  margin-bottom: $spacing-vertical;
 }
 
 .card-row__scrollhouse {
@@ -228,14 +222,14 @@ $padding-right-card-hover-hack: 30px;
 
 .card-row__nav {
   position: absolute;
-  padding: 0 $spacing-vertical * 2 / 3;
+  padding: 0 var(--card-margin);
   height: 100%;
-  top: $padding-top-card-hover-hack - $spacing-vertical * 2 / 3;
+  top: calc( $padding-top-card-hover-hack - var(--card-margin) );
 }
 .card-row__nav .card-row__scroll-button {
-  background: $color-bg;
-  color: $color-help;
-  box-shadow: $box-shadow-layer;
+  background: var(--card-bg);
+  color: var(--color-help);
+  box-shadow: var(--box-shadow-layer);
   padding: $spacing-vertical $spacing-vertical / 2;
   position: absolute;
   cursor: pointer;
@@ -247,7 +241,7 @@ $padding-right-card-hover-hack: 30px;
 
   &:hover {
     opacity: 1.0;
-    transform: scale($card-link-scaling * 1.1)
+    transform: scale(calc( var(--card-link-scaling) * 1.1));
   }
 }
 .card-row__nav--left {

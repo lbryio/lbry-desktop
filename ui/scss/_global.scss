@@ -1,5 +1,8 @@
 @charset "UTF-8";
 
+$spacing-vertical: 24px;
+$width-page-constrained: 800px;
+
 @mixin clearfix()
 {
     &:before, &:after

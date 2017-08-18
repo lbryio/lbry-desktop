@@ -4,13 +4,13 @@ $color-download: #444;
 
 .file-actions
 {
-  line-height: $height-button;
-  min-height: $height-button;
+  line-height: var(--button-height);
+  min-height: var(--button-height);
 }
 
 .file-actions__download-status-bar, .file-actions__download-status-bar-overlay {
    .button__content {
-     margin: 0 $padding-text-link;
+     margin: 0 var(--text-link-padding);
    }
 }
 

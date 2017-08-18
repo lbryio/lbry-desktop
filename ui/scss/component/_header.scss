@@ -9,7 +9,7 @@ $color-header-active: darken($color-header, 20%);
   background: #fff;
   display: flex;
   position: fixed;
-  box-shadow: $box-shadow-layer;
+  box-shadow: var(--header-shadow);
   top: 0;
   left: 0;
   width: 100%;
@@ -36,7 +36,7 @@ $color-header-active: darken($color-header, 20%);
   }
 }
 
-.wunderbar--active .icon-search { color: $color-primary; }
+.wunderbar--active .icon-search { color: var(--color-primary); }
 
 .wunderbar__input {
   background: rgba(255, 255, 255, 0.7);
@@ -46,13 +46,13 @@ $color-header-active: darken($color-header, 20%);
   line-height: $spacing-vertical * 1.5;
   padding-left: 38px;
   padding-right: 5px;
-  border: 1px solid $color-text-dark;
+  border: 1px solid var(--text-color);
   @include border-radius(2px);
   border: 1px solid #ccc;
   &:focus {
-    color: $color-header-active;
-    box-shadow: $box-shadow-focus;
-    border-color: $color-primary;
+    color: var(--color-header-active);
+    box-shadow: var(--box-shadow-focus);
+    border-color: var(--color-primary);
   }
 }
 
@@ -69,8 +69,8 @@ nav.sub-header
     display: inline-block;
     margin: 0 15px;
     padding: 0 5px;
-    line-height: $height-header - $spacing-vertical - $sub-header-selected-underline-height;
-    color: $color-header;
+    line-height:calc(var(--header-height) - $spacing-vertical - $sub-header-selected-underline-height);
+    color: var(--header-color);
     &:first-child
     {
       margin-left: 0;
@@ -81,12 +81,12 @@ nav.sub-header
     }
     &.sub-header-selected
     {
-      border-bottom: $sub-header-selected-underline-height solid $color-header-active;
+      border-bottom: $sub-header-selected-underline-height solid var(--color-header-active);
       color: $color-header-active;
     }
     &:hover
     {
-      color: $color-header-active;
+      color:  var(--color-header-active);
     }
   }
 }

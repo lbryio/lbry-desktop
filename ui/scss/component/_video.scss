@@ -1,3 +1,4 @@
+$height-video-embedded: $width-page-constrained * 9 / 16;
 video {
   object-fit: contain;
   box-sizing: border-box;
@@ -35,7 +36,7 @@ video {
 .video--obscured .video__cover
 {
   position: relative;
-  filter: blur($blur-intensity-nsfw);
+  filter: blur(var(--nsfw-blur-intensity));
 }
 
 
@@ -118,12 +119,12 @@ video {
   font-size: $spacing-vertical * 3;
   color: white;
   z-index: 1;
-  background: $color-black-transparent;
+  background: var(--color-black-transparent);
   opacity: 0.6;
   left: 0;
   top: 0;
   &:hover {
     opacity: 1;
-    transition: opacity $transition-standard;
+    transition: opacity var(--standar-transition);
   }
 }

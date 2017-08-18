@@ -1,46 +1,70 @@
-:root {
+@import "global";
 
-  --spacing-vertical: 24px;
-  --padding-button: 12px;
-  --padding-text-link: 4px;
+:root {
 
   /* Colors */
   --color-primary: #155B4A;
-  --color-primary-light: #155B4A;
-  --color-light-alt: #155B4A;
-  --color-text-dark: #000;
   --color-black-transparent: rgba(32,32,32,0.9);
   --color-help: rgba(0,0,0,.6);
   --color-notice: #8a6d3b;
   --color-error: #a94442;
   --color-load-screen-text: #c3c3c3;
-  --color-canvas: #f5f5f5;
-  --color-bg: #ffffff;
-  --color-bg-alt: #D9D9D9;
   --color-money: #216C2A;
   --color-meta-light: #505050;
-  --color-form-border: rgba(160,160,160,.5);
 
   /* Font */
   --font-size: 16px;
   --font-line-height: 1.3333;
+  --font-size-subtext-multiple: 0.82;
 
-  --mobile-width-threshold: 801px;
-  --max-content-width: 1000px;
-  --max-text-width: 660px;
-
-  --width-page-constrained: 800px;
-  --width-input-text: 330px;
-
-  --height-button: --spacing-vertical * 1.5;
-  --height-header: --spacing-vertical * 2.5;
-  --height-video-embedded: --width-page-constrained * 9 / 16;
-
+  /* Shadows */
   --box-shadow-layer: 0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12);
   --box-shadow-focus: 2px 4px 4px 0 rgba(0,0,0,.14),2px 5px 3px -2px rgba(0,0,0,.2),2px 3px 7px 0 rgba(0,0,0,.12);
 
-  --transition-standard: .225s ease;
+  /* Misc */
+  --page-constrained-width: 800px;
+  --mobile-width-threshold: 801px;
+  --content-max-width: 1000px;
+  --standard-transition: .225s ease;
+  --nsfw-blur-intensity: 20px;
+  --height-video-embedded: $width-page-constrained * 9 / 16 ;
 
-  --blur-intensity-nsfw: 20px;
+  /* Text */
+  --text-color: #000;
+  --text-max-width: 660px;
+  --text-link-padding: 4px;
 
+  /* Input */
+  --input-width: 330px;
+
+  /* Button */
+  --button-primary-bg: var(--color-primary);
+  --button-primary-color: #FFF;
+  --button-padding: 12px;
+  --button-height: $spacing-vertical * 1.5;
+
+  /* Header */
+  --header-bg: #FFF;
+  --header-color: #666;
+  --header-height: $spacing-vertical * 2.5;
+
+  /* Window */
+  --window-bg: #f5f5f5;
+
+  /* Card */
+  --card-bg: #FFF;
+  --card-hover-translate: 10px;
+  --card-margin: $spacing-vertical * 2/3;
+  --card-max-width: $width-page-constrained;
+  --card-padding: var(--card-margin);
+  --card-radius: 2px;
+  --card-link-scaling: 1.1;
+  --card-shadow: var(--box-shadow-layer);
+  --card-small-width: $spacing-vertical * 10;
+
+  /* Tooltip */
+  --tooltip-body-width: 300px;
+  --tooltip-bg: #FFF;
+  --tooltip-color: var(--text-color);
+  --tooltip-shadow: var(--box-shadow-layer);
 }

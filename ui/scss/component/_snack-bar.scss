@@ -16,7 +16,7 @@ $padding-snack-horizontal: $spacing-vertical;
   margin-right: auto;
   min-width: 300px;
   max-width: 500px;
-  background: $color-black-transparent;
+  background: var(--color-black-transparent);
   color: #f0f0f0;
 
   display: flex;
@@ -25,7 +25,7 @@ $padding-snack-horizontal: $spacing-vertical;
 
   border-radius: 2px;
 
-  transition: all $transition-standard;
+  transition: all var(--standard-transition);
 
   z-index: 10000; /*hack to get it over react modal */
 }
@@ -33,7 +33,7 @@ $padding-snack-horizontal: $spacing-vertical;
 .snack-bar__action {
   display: inline-block;
   text-transform: uppercase;
-  color: $color-primary-light;
+  color: var(--color-primary-light);
   margin: 0px 0px 0px $padding-snack-horizontal;
   min-width: min-content;
   &:hover {

@@ -29,7 +29,7 @@
   overflow: auto;
   border-radius: 4px;
   padding: $spacing-vertical;
-  box-shadow: $box-shadow-layer;
+  box-shadow: var(--modal-shadow);
   max-width: 400px;
 
   word-break: break-word;
@@ -52,7 +52,7 @@
 }
 
 .error-modal-overlay {
-  background: rgba(#000, .88);
+  background: var(--color-dark-transparent);
 }
 
 .error-modal__content {

@@ -3,23 +3,23 @@
 html
 {
   height: 100%;
-  font-size: $font-size;
+  font-size: var(--font-size);
 }
 body
 {
   font-family: 'Source Sans Pro', sans-serif;
-  line-height: $font-line-height;
+  line-height: var(--font-line-height);
 }
 
 #window
 {
   min-height: 100vh;
-  background: $color-canvas;
+  background: var(--window-bg);
 }
 
 .badge
 {
-  background: $color-money;
+  background: var(--color-money);
   display: inline-block;
   padding: 2px;
   color: white;
@@ -28,13 +28,13 @@ body
 .credit-amount--indicator
 {
   font-weight: bold;
-  color: $color-money;
+  color: var(--color-money);
 }
 
 #main-content
 {
   padding: $spacing-vertical;
-  margin-top: $height-header;
+  margin-top: var(--header-height);
   display: flex;
   flex-direction: column;
   main {
@@ -145,18 +145,18 @@ p
 
 .help {
   font-size: .85em;
-  color: $color-help;
+  color: var(--color-help);
 }
 
 .meta
 {
   font-size: 0.9em;
-  color: $color-meta-light;
+  color: var(--color-meta-light);
 }
 
 .empty
 {
-  color: $color-meta-light;
+  color:var(--color-meta-light);
   font-style: italic;
 }
 
@@ -176,7 +176,7 @@ p
   text-align: right;
   line-height: 1;
   font-size: 0.85em;
-  color: $color-help;
+  color: var(--color-help);
 }
 
 section.section-spaced {
