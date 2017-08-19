@@ -45,16 +45,18 @@ export function doSetClientSetting(key, value) {
   };
 }
 
-export function doSetTheme(name) {
+export function doSetTheme(themeName) {
+  const name = themeName || "light";
   const link = document.getElementById("theme");
 
   return function(dispatch, getState) {
     const { themes } = getState().settings.clientSettings;
     const theme = themes.find(theme => theme.name === name);
 
-    link.href = theme.path;
-
-    dispatch(doSetClientSetting("theme", theme));
+    if (theme) {
+      link.href = theme.path;
+      dispatch(doSetClientSetting("theme", theme));
+    }
   };
 }
 
@@ -64,14 +66,13 @@ export function doGetThemes() {
   // Get all .css files
   const files = readdirSync(path).filter(file => extname(file) === ".css");
 
-  // Get theme name
-  const themes = files.map(file => ({
-    name: file.replace(".css", ""),
-    path: `./themes/${file}`,
-    fullPath: `${path}/${file}`,
-  }));
-
   return function(dispatch, getState) {
+    // Find themes
+    const themes = files.map(file => ({
+      name: file.replace(".css", ""),
+      path: `./themes/${file}`,
+    }));
+
     dispatch(doSetClientSetting("themes", themes));
   };
 }

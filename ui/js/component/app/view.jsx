@@ -11,6 +11,7 @@ class App extends React.PureComponent {
       checkUpgradeAvailable,
       updateBalance,
       fetchRewardedContent,
+      setTheme,
     } = this.props;
 
     document.addEventListener("unhandledError", event => {
@@ -30,6 +31,8 @@ class App extends React.PureComponent {
     this.scrollListener = () => this.props.recordScroll(window.scrollY);
 
     window.addEventListener("scroll", this.scrollListener);
+
+    setTheme();
   }
 
   componentWillUnmount() {
