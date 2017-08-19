@@ -11,6 +11,7 @@ class App extends React.PureComponent {
       checkUpgradeAvailable,
       updateBalance,
       fetchRewardedContent,
+      getThemes,
       setTheme,
     } = this.props;
 
@@ -32,6 +33,10 @@ class App extends React.PureComponent {
 
     window.addEventListener("scroll", this.scrollListener);
 
+    // Load themes
+    getThemes();
+
+    // Select theme
     setTheme();
   }
 

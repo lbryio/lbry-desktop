@@ -1,11 +1,13 @@
 import * as types from "constants/action_types";
+import * as settings from "constants/settings";
 import lbry from "lbry";
 
 const reducers = {};
 const defaultState = {
   clientSettings: {
     showNsfw: lbry.getClientSetting("showNsfw"),
-    themes: [],
+    theme: lbry.getClientSetting(settings.THEME),
+    themes: lbry.getClientSetting(settings.THEMES),
   },
 };
 
@@ -23,12 +25,6 @@ reducers[types.CLIENT_SETTING_CHANGED] = function(state, action) {
 
   return Object.assign({}, state, {
     clientSettings,
-  });
-};
-
-reducers[types.GET_THEMES] = function(state, action) {
-  return Object.assign({}, state, {
-    themes: action.data.themes,
   });
 };
 

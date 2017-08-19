@@ -6,6 +6,7 @@ import {
   doOpenModal,
   doAlertError,
   doRecordScroll,
+  doGetThemes,
 } from "actions/app";
 
 import { doFetchRewardedContent } from "actions/content";
@@ -29,6 +30,7 @@ const perform = dispatch => ({
   updateBalance: balance => dispatch(doUpdateBalance(balance)),
   fetchRewardedContent: () => dispatch(doFetchRewardedContent()),
   recordScroll: scrollPosition => dispatch(doRecordScroll(scrollPosition)),
+  getThemes: () => dispatch(doGetThemes()),
   setTheme: name => dispatch(doSetTheme(name)),
 });
 

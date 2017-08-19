@@ -38,10 +38,6 @@ class SettingsPage extends React.PureComponent {
     setTimeout(clear, 1000, { once: true });
   }
 
-  getThemes() {
-    this.props.getThemes();
-  }
-
   setDaemonSetting(name, value) {
     this.props.setDaemonSetting(name, value);
   }
@@ -118,9 +114,7 @@ class SettingsPage extends React.PureComponent {
 
   onShowUnavailableChange(event) {}
 
-  componentDidMount() {
-    this.getThemes();
-  }
+  componentDidMount() {}
 
   render() {
     const { daemonSettings } = this.props;

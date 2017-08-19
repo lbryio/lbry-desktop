@@ -19,7 +19,7 @@ let lbry = {
     customLighthouseServers: [],
     showDeveloperMenu: false,
     language: "en",
-    theme: { name: "light", path: "" },
+    theme: "light",
     themes: [],
   },
 };

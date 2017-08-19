@@ -1,8 +1,6 @@
 import * as types from "constants/action_types";
+import * as settings from "constants/settings";
 import lbry from "lbry";
-import { readdirSync } from "fs";
-import { extname } from "path";
-import { remote } from "electron";
 
 export function doFetchDaemonSettings() {
   return function(dispatch, getState) {
@@ -45,34 +43,23 @@ export function doSetClientSetting(key, value) {
   };
 }
 
-export function doSetTheme(themeName) {
-  const name = themeName || "light";
-  const link = document.getElementById("theme");
-
+export function doSetTheme(name) {
   return function(dispatch, getState) {
-    const { themes } = getState().settings.clientSettings;
-    const theme = themes.find(theme => theme.name === name);
+    const last = lbry.getClientSetting(settings.THEME);
+    const find = name => themes.find(theme => theme.name === name);
 
-    if (theme) {
+    // Get themes
+    const themes = lbry.getClientSetting(settings.THEMES);
+
+    // Find theme
+    const theme = find(name) || find(last) || find("light");
+
+    if (theme.path) {
+      // update theme
+      const link = document.getElementById("theme");
       link.href = theme.path;
-      dispatch(doSetClientSetting("theme", theme));
+
+      dispatch(doSetClientSetting(settings.THEME, theme.name));
     }
-  };
-}
-
-export function doGetThemes() {
-  const path = `${remote.app.getAppPath()}/dist/themes`;
-
-  // Get all .css files
-  const files = readdirSync(path).filter(file => extname(file) === ".css");
-
-  return function(dispatch, getState) {
-    // Find themes
-    const themes = files.map(file => ({
-      name: file.replace(".css", ""),
-      path: `./themes/${file}`,
-    }));
-
-    dispatch(doSetClientSetting("themes", themes));
   };
 }

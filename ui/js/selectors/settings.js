@@ -21,13 +21,3 @@ export const selectShowNsfw = createSelector(
   selectClientSettings,
   clientSettings => !!clientSettings.showNsfw
 );
-
-export const selectThemes = createSelector(
-  selectClientSettings,
-  clientSettings => clientSettings.themes
-);
-
-export const selectTheme = createSelector(
-  selectClientSettings,
-  clientSettings => clientSettings.theme
-);
