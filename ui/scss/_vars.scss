@@ -3,6 +3,7 @@
 :root {
 
   /* Colors */
+  --color-brand: #155B4A;
   --color-primary: #155B4A;
   --color-primary-light: saturate(lighten(#155B4A, 50%), 20%);
   --color-light-alt: hsl(hue(#155B4A), 15, 85);
