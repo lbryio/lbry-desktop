@@ -55,10 +55,12 @@ $button-focus-shift: 12%;
   color: var(--button-primary-color);
   background-color: var(--button-primary-bg);
   box-shadow: var(--box-shadow-layer);
+  opacity: 0.9;
   &:focus {
     color: var(--button-primary-color);
     //box-shadow: $box-shadow-focus;
     //background-color: mix(black, $color-primary, $button-focus-shift)
+    opacity: 1;
   }
 }
 .button-alt
