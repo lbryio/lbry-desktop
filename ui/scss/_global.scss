@@ -144,7 +144,7 @@ $width-page-constrained: 800px;
   &:hover
   {
     opacity: $hover-opacity;
-    transition: opacity var(--transition-standard);
+    transition: opacity  var(--transition-duration) var(--transition-type);
     text-decoration: underline;
     .icon {
       text-decoration: none;

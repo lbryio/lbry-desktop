@@ -125,6 +125,6 @@ video {
   top: 0;
   &:hover {
     opacity: 1;
-    transition: opacity var(--standar-transition);
+    transition: opacity var(--transition-duration) var(--transition-type);
   }
 }

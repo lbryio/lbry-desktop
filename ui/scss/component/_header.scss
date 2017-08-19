@@ -50,7 +50,7 @@ $color-header-active: darken($color-header, 20%);
   @include border-radius(2px);
   border: 1px solid #ccc;
   &:focus {
-    color: var(--color-header-active);
+    color: $color-header-active;
     box-shadow: var(--box-shadow-focus);
     border-color: var(--color-primary);
   }
@@ -81,12 +81,12 @@ nav.sub-header
     }
     &.sub-header-selected
     {
-      border-bottom: $sub-header-selected-underline-height solid var(--color-header-active);
+      border-bottom: $sub-header-selected-underline-height solid $color-header-active;
       color: $color-header-active;
     }
     &:hover
     {
-      color:  var(--color-header-active);
+      color: $color-header-active;
     }
   }
 }

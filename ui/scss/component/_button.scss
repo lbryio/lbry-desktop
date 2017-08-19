@@ -52,7 +52,7 @@ $button-focus-shift: 12%;
 .button-primary
 {
 
-  color: inherit;
+  color: var(--button-primary-color);
   background-color: var(--button-primary-bg);
   box-shadow: var(--box-shadow-layer);
   &:focus {

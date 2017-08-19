@@ -28,9 +28,12 @@
 
   /* Misc */
   --content-max-width: 1000px;
-  --standard-transition: .225s ease;
   --nsfw-blur-intensity: 20px;
   --height-video-embedded: $width-page-constrained * 9 / 16 ;
+
+  /* Transitions */
+  --transition-duration: .225s;
+  --transition-type: ease;
 
   /* Text */
   --text-color: #000;
@@ -47,9 +50,10 @@
   --button-height: $spacing-vertical * 1.5;
 
   /* Header */
-  --header-bg: #FFF;
+  --header-bg: var(--color-bg);
   --header-color: #666;
   --header-height: $spacing-vertical * 2.5;
+  --header-shadow: var(--box-shadow-layer);
 
   /* Window */
   --window-bg: var(--color-canvas);
