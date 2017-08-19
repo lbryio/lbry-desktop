@@ -13,6 +13,7 @@ import DeveloperPage from "page/developer.js";
 import RewardsPage from "page/rewards";
 import FileListDownloaded from "page/fileListDownloaded";
 import FileListPublished from "page/fileListPublished";
+import TransactionHistoryPage from "page/transactionHistory";
 import ChannelPage from "page/channel";
 import SearchPage from "page/search";
 import AuthPage from "page/auth";
@@ -36,6 +37,7 @@ const Router = props => {
     discover: <DiscoverPage params={params} />,
     downloaded: <FileListDownloaded params={params} />,
     help: <HelpPage params={params} />,
+    history: <TransactionHistoryPage params={params} />,
     invite: <InvitePage params={params} />,
     publish: <PublishPage params={params} />,
     published: <FileListPublished params={params} />,

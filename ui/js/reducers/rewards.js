@@ -3,7 +3,8 @@ import * as types from "constants/action_types";
 const reducers = {};
 const defaultState = {
   fetching: false,
-  rewardsByType: {},
+  claimedRewardsById: {}, //id => reward
+  unclaimedRewardsByType: {},
   claimPendingByType: {},
   claimErrorsByType: {},
 };
@@ -17,11 +18,19 @@ reducers[types.FETCH_REWARDS_STARTED] = function(state, action) {
 reducers[types.FETCH_REWARDS_COMPLETED] = function(state, action) {
   const { userRewards } = action.data;
 
-  const rewardsByType = {};
-  userRewards.forEach(reward => (rewardsByType[reward.reward_type] = reward));
+  let unclaimedRewards = {},
+    claimedRewards = {};
+  userRewards.forEach(reward => {
+    if (reward.transaction_id) {
+      claimedRewards[reward.id] = reward;
+    } else {
+      unclaimedRewards[reward.reward_type] = reward;
+    }
+  });
 
   return Object.assign({}, state, {
-    rewardsByType: rewardsByType,
+    claimedRewardsById: claimedRewards,
+    unclaimedRewardsByType: unclaimedRewards,
     fetching: false,
   });
 };
@@ -55,16 +64,22 @@ reducers[types.CLAIM_REWARD_STARTED] = function(state, action) {
 reducers[types.CLAIM_REWARD_SUCCESS] = function(state, action) {
   const { reward } = action.data;
 
-  const existingReward = state.rewardsByType[reward.reward_type];
+  let unclaimedRewardsByType = Object.assign({}, state.unclaimedRewardsByType);
+  const existingReward = unclaimedRewardsByType[reward.reward_type];
+  delete state.unclaimedRewardsByType[reward.reward_type];
+
   const newReward = Object.assign({}, reward, {
     reward_title: existingReward.reward_title,
     reward_description: existingReward.reward_description,
   });
-  const rewardsByType = Object.assign({}, state.rewardsByType);
 
-  rewardsByType[reward.reward_type] = newReward;
+  let claimedRewardsById = Object.assign({}, state.claimedRewardsById);
+  claimedRewardsById[reward.id] = newReward;
 
-  const newState = Object.assign({}, state, { rewardsByType });
+  const newState = Object.assign({}, state, {
+    unclaimedRewardsByType,
+    claimedRewardsById,
+  });
 
   return setClaimRewardState(newState, newReward, false, "");
 };

@@ -136,6 +136,7 @@ export const selectHeaderLinks = createSelector(selectCurrentPage, page => {
   // This contains intentional fall throughs
   switch (page) {
     case "wallet":
+    case "history":
     case "send":
     case "receive":
     case "invite":
@@ -143,6 +144,7 @@ export const selectHeaderLinks = createSelector(selectCurrentPage, page => {
     case "backup":
       return {
         wallet: __("Overview"),
+        history: __("History"),
         send: __("Send"),
         receive: __("Receive"),
         invite: __("Invites"),

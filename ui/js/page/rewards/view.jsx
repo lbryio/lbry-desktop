@@ -1,31 +1,9 @@
 import React from "react";
-import { BusyMessage, CreditAmount, Icon } from "component/common";
+import { BusyMessage } from "component/common";
+import RewardListClaimed from "component/rewardListClaimed";
+import RewardTile from "component/rewardTile";
 import SubHeader from "component/subHeader";
 import Link from "component/link";
-import RewardLink from "component/rewardLink";
-
-const RewardTile = props => {
-  const { reward } = props;
-
-  const claimed = !!reward.transaction_id;
-
-  return (
-    <section className="card">
-      <div className="card__inner">
-        <div className="card__title-primary">
-          <CreditAmount amount={reward.reward_amount} />
-          <h3>{reward.reward_title}</h3>
-        </div>
-        <div className="card__actions">
-          {claimed
-            ? <span><Icon icon="icon-check" /> {__("Reward claimed.")}</span>
-            : <RewardLink reward_type={reward.reward_type} />}
-        </div>
-        <div className="card__content">{reward.reward_description}</div>
-      </div>
-    </section>
-  );
-};
 
 class RewardsPage extends React.PureComponent {
   componentDidMount() {
@@ -44,32 +22,8 @@ class RewardsPage extends React.PureComponent {
     }
   }
 
-  render() {
-    const { doAuth, fetching, navigate, rewards, user } = this.props;
-
-    let content, cardHeader;
-
-    if (fetching) {
-      content = (
-        <div className="card__content">
-          <BusyMessage message={__("Fetching rewards")} />
-        </div>
-      );
-    } else if (rewards.length > 0) {
-      content = (
-        <div>
-          {rewards.map(reward =>
-            <RewardTile key={reward.reward_type} reward={reward} />
-          )}
-        </div>
-      );
-    } else {
-      content = (
-        <div className="card__content empty">
-          {__("Failed to load rewards.")}
-        </div>
-      );
-    }
+  renderPageHeader() {
+    const { doAuth, navigate, user } = this.props;
 
     if (user && !user.is_reward_approved) {
       if (
@@ -77,7 +31,7 @@ class RewardsPage extends React.PureComponent {
         !user.has_verified_email ||
         !user.is_identity_verified
       ) {
-        cardHeader = (
+        return (
           <div>
             <div className="card__content empty">
               <p>
@@ -90,7 +44,7 @@ class RewardsPage extends React.PureComponent {
           </div>
         );
       } else {
-        cardHeader = (
+        return (
           <div className="card__content">
             <p>
               {__(
@@ -122,25 +76,49 @@ class RewardsPage extends React.PureComponent {
           </div>
         );
       }
-    } else if (user === null) {
-      cardHeader = (
-        <div>
-          <div className="card__content empty">
-            <p>
-              {__(
-                "This application is unable to earn rewards due to an authentication failure."
-              )}
-            </p>
-          </div>
+    }
+  }
+
+  renderUnclaimedRewards() {
+    const { fetching, rewards, user } = this.props;
+
+    if (fetching) {
+      return (
+        <div className="card__content">
+          <BusyMessage message={__("Fetching rewards")} />
         </div>
       );
-    }
+    } else if (user === null) {
 
+      return (
+        <div className="card__content empty">
+          <p>
+            {__(
+                "This application is unable to earn rewards due to an authentication failure."
+            )}
+          </p>
+        </div>
+      );
+    } else if (!rewards || rewards.length <= 0) {
+      return (
+        <div className="card__content empty">
+          {__("Failed to load rewards.")}
+        </div>
+      );
+    } else {
+      return rewards.map(reward =>
+        <RewardTile key={reward.reward_type} reward={reward} />
+      );
+    }
+  }
+
+  render() {
     return (
       <main className="main--single-column">
         <SubHeader />
-        {cardHeader && <section className="card">{cardHeader}</section>}
-        {content}
+        {this.renderPageHeader()}
+        {this.renderUnclaimedRewards()}
+        {<RewardListClaimed />}
       </main>
     );
   }

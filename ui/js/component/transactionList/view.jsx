@@ -1,5 +1,6 @@
 import React from "react";
-import { Address, BusyMessage, CreditAmount } from "component/common";
+import { BusyMessage } from "component/common";
+import LinkTransaction from "component/linkTransaction";
 
 class TransactionList extends React.PureComponent {
   componentWillMount() {
@@ -26,12 +27,7 @@ class TransactionList extends React.PureComponent {
                 : <span className="empty">{__("(Transaction pending)")}</span>}
             </td>
             <td>
-              <a
-                className="button-text"
-                href={"https://explorer.lbry.io/#!/transaction/" + item.id}
-              >
-                {item.id.substr(0, 7)}
-              </a>
+              <LinkTransaction id={item.id} />
             </td>
           </tr>
         );

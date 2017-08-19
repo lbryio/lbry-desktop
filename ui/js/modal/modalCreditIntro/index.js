@@ -7,7 +7,7 @@ import { selectUserIsRewardApproved } from "selectors/user";
 import {
   makeSelectHasClaimedReward,
   makeSelectRewardByType,
-  selectTotalRewardValue,
+  selectUnclaimedRewardValue,
 } from "selectors/rewards";
 import * as settings from "constants/settings";
 import ModalCreditIntro from "./view";
@@ -19,7 +19,7 @@ const select = (state, props) => {
   return {
     isRewardApproved: selectUserIsRewardApproved(state),
     reward: selectReward(state, { reward_type: rewards.TYPE_NEW_USER }),
-    totalRewardValue: selectTotalRewardValue(state),
+    totalRewardValue: selectUnclaimedRewardValue(state),
   };
 };
 

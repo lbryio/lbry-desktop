@@ -3,13 +3,23 @@ import { selectUser } from "selectors/user";
 
 const _selectState = state => state.rewards || {};
 
-export const selectRewardsByType = createSelector(
+export const selectUnclaimedRewardsByType = createSelector(
   _selectState,
-  state => state.rewardsByType || {}
+  state => state.unclaimedRewardsByType
 );
 
-export const selectRewards = createSelector(
-  selectRewardsByType,
+export const selectClaimedRewardsById = createSelector(
+  _selectState,
+  state => state.claimedRewardsById
+);
+
+export const selectClaimedRewards = createSelector(
+  selectClaimedRewardsById,
+  byId => Object.values(byId) || []
+);
+
+export const selectUnclaimedRewards = createSelector(
+  selectUnclaimedRewardsByType,
   byType => Object.values(byType) || []
 );
 
@@ -23,10 +33,12 @@ export const selectFetchingRewards = createSelector(
   state => !!state.fetching
 );
 
-export const selectTotalRewardValue = createSelector(selectRewards, rewards =>
-  rewards.reduce((sum, reward) => {
-    return sum + reward.reward_amount;
-  }, 0)
+export const selectUnclaimedRewardValue = createSelector(
+  selectUnclaimedRewards,
+  rewards =>
+    rewards.reduce((sum, reward) => {
+      return sum + reward.reward_amount;
+    }, 0)
 );
 
 export const selectHasClaimedReward = (state, props) => {
@@ -65,7 +77,7 @@ export const makeSelectClaimRewardError = () => {
 };
 
 const selectRewardByType = (state, props) => {
-  return selectRewardsByType(state)[props.reward_type];
+  return selectUnclaimedRewardsByType(state)[props.reward_type];
 };
 
 export const makeSelectRewardByType = () => {
