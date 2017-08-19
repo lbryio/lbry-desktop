@@ -64,7 +64,7 @@
   --card-hover-translate: 10px;
   --card-margin: $spacing-vertical * 2/3;
   --card-max-width: $width-page-constrained;
-  --card-padding: var(--card-margin);
+  --card-padding: $spacing-vertical * 2/3;
   --card-radius: 2px;
   --card-link-scaling: 1.1;
   --card-shadow: var(--box-shadow-layer);
