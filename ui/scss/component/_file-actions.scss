@@ -1,7 +1,5 @@
 @import "../global";
 
-$color-download: #444;
-
 .file-actions
 {
   line-height: var(--button-height);
@@ -17,11 +15,11 @@ $color-download: #444;
 .file-actions__download-status-bar
 {
   position: relative;
-  color: $color-download;
+  color: var(--color-download);
 }
 .file-actions__download-status-bar-overlay
 {
-  background: $color-download;
+  background: var(--color-download);
   color: white;
   position: absolute;
   white-space: nowrap;

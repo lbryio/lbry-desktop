@@ -9,9 +9,9 @@ $border-radius-menu: 2px;
 .menu {
   position: absolute;
   white-space: nowrap;
-  background-color: white;
+  background-color: var(--menu-bg);
   box-shadow: var(--box-shadow-layer);
-  border-radius: $border-radius-menu;
+  border-radius: var(--menu-radius);
   padding-top: ($spacing-vertical / 5) 0px;
   z-index: 1;
 }
@@ -20,6 +20,6 @@ $border-radius-menu: 2px;
   display: block;
   padding: ($spacing-vertical / 4) ($spacing-vertical / 2);
   &:hover {
-    background: var(--color-bg-alt);
+    background: var(--menu-item-hover-bg);
   }
 }

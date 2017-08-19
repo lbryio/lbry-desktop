@@ -11,6 +11,12 @@ body
   line-height: var(--font-line-height);
 }
 
+/* Custom text selection */
+*::selection {
+  background: var(--text-selection-bg);
+  color: var(--text-selection-color);
+}
+
 #window
 {
   min-height: 100vh;

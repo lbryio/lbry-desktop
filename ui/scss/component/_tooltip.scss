@@ -17,12 +17,12 @@
   box-sizing: border-box;
   padding: $spacing-vertical / 2;
   width: var(--tooltip-width);
-  border: 1px solid #aaa;
+  border: var(--tooltip-border);
   color: var(--tooltip-color);
   background-color: var(--tooltip-bg);
   font-size: calc(var(--font-size) * 7/8);
   line-height: var(--font-line-height);
-  box-shadow: var(--tooltip-shadow);
+  box-shadow: var(--box-shadow-layer);
 }
 
 .tooltip--header .tooltip__link {

@@ -10,7 +10,7 @@
   left: 0px;
   right: 0px;
   bottom: 0px;
-  background-color: rgba(255, 255, 255, 0.74902);
+  background-color: var(--modal-overlay-bg);
   z-index: 9999;
 }
 
@@ -24,12 +24,12 @@
   justify-content: center;
   align-items: center;
 
-  border: 1px solid rgb(204, 204, 204);
-  background: rgb(255, 255, 255);
+  border: var(--modal-border);
+  background: var(--modal-bg);
   overflow: auto;
   border-radius: 4px;
   padding: $spacing-vertical;
-  box-shadow: var(--modal-shadow);
+  box-shadow: var(--box-shadow-layer);
   max-width: 400px;
 
   word-break: break-word;
@@ -52,7 +52,7 @@
 }
 
 .error-modal-overlay {
-  background: var(--color-dark-overlay);
+  background: var(--modal-overlay-bg);
 }
 
 .error-modal__content {

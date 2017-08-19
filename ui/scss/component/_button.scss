@@ -64,7 +64,7 @@ $button-focus-shift: 12%;
 }
 .button-alt
 {
-  background-color: var(--color-bg-alt);
+  background-color: var(--button-bg);
   box-shadow: var(--box-shadow-layer);
 }
 
@@ -79,7 +79,7 @@ $button-focus-shift: 12%;
 }
 .button-text-help
 {
-  @include text-link(#aaa);
+  @include text-link(var(--text-help-color));
   font-size: 0.8em;
 }
 .button--flat
