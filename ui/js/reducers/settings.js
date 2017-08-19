@@ -5,6 +5,7 @@ const reducers = {};
 const defaultState = {
   clientSettings: {
     showNsfw: lbry.getClientSetting("showNsfw"),
+    themes: [],
   },
 };
 
@@ -22,6 +23,12 @@ reducers[types.CLIENT_SETTING_CHANGED] = function(state, action) {
 
   return Object.assign({}, state, {
     clientSettings,
+  });
+};
+
+reducers[types.GET_THEMES] = function(state, action) {
+  return Object.assign({}, state, {
+    themes: action.data.themes,
   });
 };
 

@@ -21,7 +21,7 @@ class SettingsPage extends React.PureComponent {
       language: lbry.getClientSetting(settings.LANGUAGE),
       clearingCache: false,
       theme: lbry.getClientSetting(settings.THEME),
-      themes: [],
+      themes: lbry.getClientSetting(settings.THEMES),
     };
   }
 
@@ -39,8 +39,7 @@ class SettingsPage extends React.PureComponent {
   }
 
   getThemes() {
-    //const { themes } = this.props.getThemes().data;
-    //this.setState({ themes });
+    this.props.getThemes();
   }
 
   setDaemonSetting(name, value) {
@@ -53,8 +52,7 @@ class SettingsPage extends React.PureComponent {
   }
 
   setTheme(value) {
-    //setTheme(value);
-    //this.props.setClientSetting("theme", value);
+    this.props.setTheme(value);
   }
 
   onRunOnStartChange(event) {
@@ -121,7 +119,6 @@ class SettingsPage extends React.PureComponent {
   onShowUnavailableChange(event) {}
 
   componentDidMount() {
-    const { themes } = this.state;
     this.getThemes();
   }
 
@@ -252,8 +249,10 @@ class SettingsPage extends React.PureComponent {
               defaultValue={lbry.getClientSetting("theme")}
               className="form-field__input--inline"
             >
-              {this.state.themes.map((name, index) =>
-                <option key={index} value={name}>{__(`${name} theme`)}</option>
+              {this.state.themes.map((theme, index) =>
+                <option key={index} value={theme.name}>
+                  {__(`${theme.name} theme`)}
+                </option>
               )}
             </FormField>
 

@@ -45,24 +45,33 @@ export function doSetClientSetting(key, value) {
   };
 }
 
-export function getThemes() {
-  /*
-  // Themes path
-  const themesPath = `${remote.app.getAppPath()}/dist/themes`;
+export function doSetTheme(name) {
+  const link = document.getElementById("theme");
+
+  return function(dispatch, getState) {
+    const { themes } = getState().settings.clientSettings;
+    const theme = themes.find(theme => theme.name === name);
+
+    link.href = theme.path;
+
+    dispatch(doSetClientSetting("theme", theme));
+  };
+}
+
+export function doGetThemes() {
+  const path = `${remote.app.getAppPath()}/dist/themes`;
 
   // Get all .css files
-  const files = readdirSync(themesPath).filter(function(file) {
-    return extname(file) === ".css";
-  });
+  const files = readdirSync(path).filter(file => extname(file) === ".css");
 
   // Get theme name
-  const themes = files.map(function(file) {
-    return file.replace(".css", "");
-  });
+  const themes = files.map(file => ({
+    name: file.replace(".css", ""),
+    path: `./themes/${file}`,
+    fullPath: `${path}/${file}`,
+  }));
 
-  return {
-    type: types.GET_THEMES,
-    data: { themes },
+  return function(dispatch, getState) {
+    dispatch(doSetClientSetting("themes", themes));
   };
-  */
 }
