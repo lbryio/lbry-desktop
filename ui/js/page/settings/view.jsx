@@ -7,7 +7,6 @@ import lbry from "lbry.js";
 import Link from "component/link";
 import FormFieldPrice from "component/formFieldPrice";
 import { remote } from "electron";
-import setTheme from "util/setTheme";
 
 class SettingsPage extends React.PureComponent {
   constructor(props) {
@@ -21,7 +20,7 @@ class SettingsPage extends React.PureComponent {
       showUnavailable: lbry.getClientSetting(settings.SHOW_UNAVAILABLE),
       language: lbry.getClientSetting(settings.LANGUAGE),
       clearingCache: false,
-      theme: lbry.getClientSetting("theme"),
+      theme: lbry.getClientSetting(settings.THEME),
       themes: [],
     };
   }
@@ -40,8 +39,8 @@ class SettingsPage extends React.PureComponent {
   }
 
   getThemes() {
-    const { themes } = this.props.getThemes().data;
-    this.setState({ themes });
+    //const { themes } = this.props.getThemes().data;
+    //this.setState({ themes });
   }
 
   setDaemonSetting(name, value) {
@@ -54,8 +53,8 @@ class SettingsPage extends React.PureComponent {
   }
 
   setTheme(value) {
-    setTheme(value);
-    this.props.setClientSetting("theme", value);
+    //setTheme(value);
+    //this.props.setClientSetting("theme", value);
   }
 
   onRunOnStartChange(event) {

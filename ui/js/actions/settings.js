@@ -46,6 +46,7 @@ export function doSetClientSetting(key, value) {
 }
 
 export function getThemes() {
+  /*
   // Themes path
   const themesPath = `${remote.app.getAppPath()}/dist/themes`;
 
@@ -63,4 +64,5 @@ export function getThemes() {
     type: types.GET_THEMES,
     data: { themes },
   };
+  */
 }

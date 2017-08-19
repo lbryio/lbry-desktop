@@ -8,7 +8,6 @@ import store from "store.js";
 import SplashScreen from "component/splash";
 import { doChangePath, doNavigate, doDaemonReady } from "actions/app";
 import { toQueryString } from "util/query_params";
-import setTheme from "util/setTheme";
 import * as types from "constants/action_types";
 
 const env = ENV;
@@ -71,9 +70,6 @@ document.addEventListener("click", event => {
     target = target.parentNode;
   }
 });
-
-// Load initial theme
-setTheme(lbry.getClientSetting("theme"));
 
 const application = remote.app;
 const dock = application.dock;

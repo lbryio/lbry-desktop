@@ -38,7 +38,7 @@ table.table-standard {
         background-color: var(--table-item-odd);
       }
       &:nth-child(odd):not(.even) {
-        background-color: var(--table-item-ever);
+        background-color: var(--table-item-even);
       }
       &.thead {
         background: none;
