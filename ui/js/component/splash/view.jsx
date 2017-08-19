@@ -1,9 +1,9 @@
 import React from "react";
-import lbry from "../../lbry.js";
+import lbry from "lbry.js";
 import LoadScreen from "../load_screen.js";
-import ModalIncompatibleDaemon from "../modalIncompatibleDaemon";
-import ModalUpgrade from "component/modalUpgrade";
-import ModalDownloading from "component/modalDownloading";
+import ModalIncompatibleDaemon from "modal/modalIncompatibleDaemon";
+import ModalUpgrade from "modal/modalUpgrade";
+import ModalDownloading from "modal/modalDownloading";
 
 export class SplashScreen extends React.PureComponent {
   static propTypes = {

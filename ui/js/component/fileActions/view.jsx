@@ -1,11 +1,11 @@
 import React from "react";
 import { Icon, BusyMessage } from "component/common";
 import FilePrice from "component/filePrice";
-import { Modal } from "component/modal";
+import { Modal } from "modal/modal";
 import Link from "component/link";
 import { ToolTip } from "component/tooltip";
 import { DropDownMenu, DropDownMenuItem } from "component/menu";
-import ModalRemoveFile from "component/modalRemoveFile";
+import ModalRemoveFile from "modal/modalRemoveFile";
 import * as modals from "constants/modal_types";
 
 class FileActions extends React.PureComponent {

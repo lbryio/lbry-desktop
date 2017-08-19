@@ -3,16 +3,33 @@ import Link from "component/link";
 import WunderBar from "component/wunderbar";
 
 export const Header = props => {
-  const { balance, back, navigate, publish } = props;
-
+  const {
+    balance,
+    back,
+    forward,
+    isBackDisabled,
+    isForwardDisabled,
+    navigate,
+    publish,
+  } = props;
   return (
     <header id="header">
       <div className="header__item">
         <Link
           onClick={back}
+          disabled={isBackDisabled}
           button="alt button--flat"
           icon="icon-arrow-left"
           title={__("Back")}
+        />
+      </div>
+      <div className="header__item">
+        <Link
+          onClick={forward}
+          disabled={isForwardDisabled}
+          button="alt button--flat"
+          icon="icon-arrow-right"
+          title={__("Forward")}
         />
       </div>
       <div className="header__item">

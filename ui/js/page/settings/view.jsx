@@ -2,6 +2,7 @@ import React from "react";
 import FormField from "component/formField";
 import { FormRow } from "component/form.js";
 import SubHeader from "component/subHeader";
+import * as settings from "constants/settings";
 import lbry from "lbry.js";
 import Link from "component/link";
 import FormFieldPrice from "component/formFieldPrice";
@@ -17,8 +18,8 @@ class SettingsPage extends React.PureComponent {
     this.state = {
       // isMaxUpload: daemonSettings && daemonSettings.max_upload != 0,
       // isMaxDownload: daemonSettings && daemonSettings.max_download != 0,
-      showUnavailable: lbry.getClientSetting("showUnavailable"),
-      language: lbry.getClientSetting("language"),
+      showUnavailable: lbry.getClientSetting(settings.SHOW_UNAVAILABLE),
+      language: lbry.getClientSetting(settings.LANGUAGE),
       clearingCache: false,
     };
   }
@@ -99,7 +100,7 @@ class SettingsPage extends React.PureComponent {
   // }
 
   onShowNsfwChange(event) {
-    this.props.setClientSetting("showNsfw", event.target.checked);
+    this.props.setClientSetting(settings.SHOW_NSFW, event.target.checked);
   }
 
   onLanguageChange(e) {

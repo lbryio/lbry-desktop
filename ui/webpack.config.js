@@ -2,6 +2,8 @@ const path = require("path");
 const webpack = require("webpack")
 const appPath = path.resolve(__dirname, "js");
 
+process.traceDeprecation = true;
+
 const PATHS = {
   app: path.join(__dirname, "app"),
   dist: path.join(__dirname, "dist")
