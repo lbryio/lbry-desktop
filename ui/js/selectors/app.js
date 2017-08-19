@@ -220,7 +220,7 @@ export const selectBadgeNumber = createSelector(
 
 export const selectCurrentLanguage = createSelector(
   _selectState,
-  () => lbry.getClientSetting("language") || "en"
+  () => app.i18n.getLocale() || "en"
 );
 
 export const selectPathAfterAuth = createSelector(

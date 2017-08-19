@@ -10,8 +10,6 @@ import { doChangePath, doNavigate, doDaemonReady } from "actions/app";
 import { doDownloadLanguages } from "actions/settings";
 import { toQueryString } from "util/query_params";
 import * as types from "constants/action_types";
-import fs from "fs";
-import http from "http";
 
 const env = ENV;
 const { remote, ipcRenderer, shell } = require("electron");

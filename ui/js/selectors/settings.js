@@ -22,12 +22,7 @@ export const selectShowNsfw = createSelector(
   clientSettings => !!clientSettings.showNsfw
 );
 
-export const selectLocalLanguages = createSelector(
+export const selectLanguages = createSelector(
   _selectState,
-  state => state.localLanguages || []
-);
-
-export const selectResolvedLanguages = createSelector(
-  _selectState,
-  state => state.resolvedLanguages || {}
+  state => state.languages || {}
 );

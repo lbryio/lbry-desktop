@@ -1,4 +1,5 @@
 import * as types from "constants/action_types";
+import LANGUAGES from "constants/languages";
 import lbry from "lbry";
 
 const reducers = {};
@@ -7,6 +8,7 @@ const defaultState = {
     showNsfw: lbry.getClientSetting("showNsfw"),
     language: lbry.getClientSetting("language"),
   },
+  languages: {},
 };
 
 reducers[types.DAEMON_SETTINGS_RECEIVED] = function(state, action) {
@@ -27,28 +29,25 @@ reducers[types.CLIENT_SETTING_CHANGED] = function(state, action) {
 };
 
 reducers[types.DOWNLOAD_LANGUAGE_SUCCEEDED] = function(state, action) {
-  const localLanguages = [].concat(
-    state.localLanguages ? state.localLanguages : []
-  );
-  const language = action.data;
-  if (localLanguages.indexOf(language) === -1) {
-    localLanguages.push(language);
+  const languages = Object.assign({}, state.languages);
+  const language = action.data.language;
+
+  const langCode = language.substring(0, 2);
+
+  if (LANGUAGES[langCode]) {
+    languages[langCode] =
+      LANGUAGES[langCode][0] + " (" + LANGUAGES[langCode][1] + ")";
+  } else {
+    languages[langCode] = langCode;
   }
 
-  return Object.assign({}, state, {
-    localLanguages,
-  });
+  return Object.assign({}, state, { languages });
 };
 
-reducers[types.LANGUAGE_RESOLVED] = function(state, action) {
-  const { key, value } = action.data;
-  const resolvedLanguages = Object.assign({}, state.resolvedLanguages);
-
-  resolvedLanguages[key] = value;
-
-  return Object.assign({}, state, {
-    resolvedLanguages,
-  });
+reducers[types.DOWNLOAD_LANGUAGE_FAILED] = function(state, action) {
+  const languages = Object.assign({}, state.languages);
+  delete languages[action.data.language];
+  return Object.assign({}, state, { languages });
 };
 
 export default function reducer(state = defaultState, action) {

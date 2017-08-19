@@ -346,12 +346,6 @@ export function doClearCache() {
   };
 }
 
-export function doChangeLanguage(newLanguage) {
-  return function(dispatch, getState) {
-    app.i18n.setLocale(newLanguage);
-  };
-}
-
 export function doQuit() {
   return function(dispatch, getState) {
     remote.app.quit();

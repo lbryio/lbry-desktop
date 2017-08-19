@@ -24,13 +24,6 @@ class SettingsPage extends React.PureComponent {
     };
   }
 
-  componentWillMount() {
-    const { localLanguages, resolveLanguage } = this.props;
-    localLanguages.forEach(lang => {
-      resolveLanguage(lang);
-    });
-  }
-
   clearCache() {
     this.setState({
       clearingCache: true,
@@ -107,21 +100,10 @@ class SettingsPage extends React.PureComponent {
     this.props.changeLanguage(e.target.value);
   }
 
-  // onLanguageChange(language) {
-  //   lbry.setClientSetting('language', language);
-  //   i18n.setLocale(language);
-  //   this.setState({language: language})
-  // }
-
   onShowUnavailableChange(event) {}
 
   render() {
-    const {
-      daemonSettings,
-      language,
-      localLanguages,
-      resolvedLanguages,
-    } = this.props;
+    const { daemonSettings, language, languages } = this.props;
 
     if (!daemonSettings || Object.keys(daemonSettings).length === 0) {
       return (
@@ -140,25 +122,22 @@ class SettingsPage extends React.PureComponent {
           <div className="card__content">
             <div className="form-row">
               <FormField
-                type="radio"
+                type="select"
                 name="language"
-                label={__("English")}
                 onChange={this.onLanguageChange.bind(this)}
-                defaultChecked={language == "en"}
-              />
+              >
+                <option value="en">{__("English")}</option>
+                {Object.keys(languages).map(dLang =>
+                  <option
+                    key={dLang}
+                    selected={dLang == language ? "selected" : null}
+                    value={language}
+                  >
+                    {languages[dLang]}
+                  </option>
+                )}
+              </FormField>
             </div>
-            {localLanguages.map(dLang =>
-              <div key={dLang} className="form-row">
-                <FormField
-                  type="radio"
-                  name="language"
-                  key={dLang}
-                  label={resolvedLanguages[dLang]}
-                  onChange={this.onLanguageChange.bind(this)}
-                  defaultChecked={language == dLang}
-                />
-              </div>
-            )}
           </div>
         </section>
         <section className="card">
