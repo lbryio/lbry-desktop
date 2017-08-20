@@ -68,6 +68,7 @@ nav.sub-header
     padding: 0 5px;
     line-height:calc(var(--header-height) - $spacing-vertical - var(--tab-border-size));
     color: var(--tab-color);
+
     &:first-child
     {
       margin-left: 0;

@@ -16,18 +16,26 @@
 
     /* Input */
     --input-bg: transparent;
-    --input-active-bg: rgba(0,0,0, 0.65);
+    --input-active-bg: rgba(0,0,0, 0.5);
     --input-border-color: rgba(255,255,255, 0.25);
 
     /* Search */
     --search-bg: rgba(0,0,0, 0.45);
+    --search-color: #757575;
     --search-active-bg: rgba(0,0,0, 0.75);
-    --search-border: 1px solid rgba(0,0,0, 0.5);
+    --search-border: 1px solid rgba(0,0,0, 0.25);
 
     /* Select */
     --select-bg: var(--color-bg-alt);
+    --tab-color: #757575;
+    --tab-active-color: #CCC;
 
     /* Header */
     --header-color: #EEE;
     --header-active-color: #FFF;
+
+    /* Table */
+    --table-border: 0;
+    --table-item-even: var(--color-bg-alt);
+    --table-item-odd: transparent;
 }
