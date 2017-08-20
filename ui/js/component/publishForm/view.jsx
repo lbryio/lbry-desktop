@@ -318,7 +318,7 @@ class PublishForm extends React.PureComponent {
   handleFeePrefChange(feeEnabled) {
     this.setState({
       isFee: feeEnabled,
-      feeAmount: this.state.feeAmount == "" ? "5.00" : this.state.feeAmount,
+      feeAmount: this.state.feeAmount == "" ? "0.01" : this.state.feeAmount,
     });
   }
 
@@ -786,7 +786,6 @@ class PublishForm extends React.PureComponent {
                     ref="bid"
                     type="number"
                     step="0.01"
-                    min="0"
                     label={__("Deposit")}
                     postfix="LBC"
                     onChange={event => {

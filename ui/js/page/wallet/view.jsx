@@ -1,14 +1,18 @@
 import React from "react";
 import SubHeader from "component/subHeader";
 import WalletBalance from "component/walletBalance";
-import TransactionList from "component/transactionList";
+import RewardSummary from "component/rewardSummary";
+import InviteSummary from "component/inviteSummary";
+import TransactionListRecent from "component/transactionListRecent";
 
 const WalletPage = props => {
   return (
     <main className="main--single-column">
       <SubHeader />
       <WalletBalance />
-      <TransactionList />
+      <RewardSummary />
+      <InviteSummary />
+      <TransactionListRecent />
     </main>
   );
 };

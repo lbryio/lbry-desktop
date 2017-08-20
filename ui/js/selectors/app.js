@@ -39,13 +39,15 @@ export const selectPageTitle = createSelector(
       case "wallet":
         return __("Wallet");
       case "send":
-        return __("Send");
+        return __("Send Credits");
       case "receive":
-        return __("Receive");
+        return __("Receive Credits");
       case "backup":
-        return __("Backup");
+        return __("Backup Your Wallet");
       case "rewards":
         return __("Rewards");
+      case "invite":
+        return __("Invites");
       case "start":
         return __("Start");
       case "publish":
@@ -72,8 +74,12 @@ export const selectPageTitle = createSelector(
         return __("Publishes");
       case "discover":
         return __("Home");
-      default:
+      case false:
+      case null:
+      case "":
         return "";
+      default:
+        return page[0].toUpperCase() + (page.length > 0 ? page.substr(1) : "");
     }
   }
 );
@@ -144,11 +150,11 @@ export const selectHeaderLinks = createSelector(selectCurrentPage, page => {
     case "backup":
       return {
         wallet: __("Overview"),
+        rewards: __("Rewards"),
+        invite: __("Invites"),
         history: __("History"),
         send: __("Send"),
         receive: __("Receive"),
-        invite: __("Invites"),
-        rewards: __("Rewards"),
       };
     case "downloaded":
     case "published":

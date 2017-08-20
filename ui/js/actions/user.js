@@ -20,6 +20,7 @@ export function doAuthenticate() {
           data: { user },
         });
         dispatch(doRewardList());
+        dispatch(doFetchInviteStatus());
       })
       .catch(error => {
         dispatch(doOpenModal(modals.AUTHENTICATION_FAILURE));

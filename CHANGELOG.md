@@ -8,19 +8,24 @@ Web UI version numbers should always match the corresponding version of LBRY App
 
 ## [Unreleased]
 ### Added
+  * Added an Invites area inside of the Wallet. This allows users to invite others and shows the status of all past invites (including all invite data from the past year).
   * Added a forward button and improved history behavior. Back/forward disable when unusable.
-  * Added a new component, `FormFieldPrice` which is now used in Publish and Settings.
+  * Added new summary components for rewards and invites to the Wallet landing page.
+  * Added past history of rewards to the rewards page.
   * Added wallet backup guide reference.
+  * Added a new widget for setting prices (`FormFieldPrice`), used in Publish and Settings.
   
 ### Changed
   * Updated to daemon [0.15](https://github.com/lbryio/lbry/releases). Most relevant changes for app are improved announcing of content and a fix for the daemon getting stuck running.
   * Continued to refine first-run process, process for new users, and introducing people to LBRY and LBRY credits.
-  * Changed the default price settings.
+  * Changed Wallet landing page to summarize status of other areas. Refactored wallet and transaction logic.
+  * Added icons to missing page, improved icon and title logic.
+  * Changed the default price settings for priced publishes.
   * When an "Open" button is clicked on a show page, if the file fails to open, the app will try to open the file's folder.
+  * Updated several packages and fixed warnings in build process (all but the [fsevents warning](https://github.com/yarnpkg/yarn/issues/3738), which is a rather dramatic debate)
   * Some form field refactoring as we take baby steps towards form sanity.
   * Replaced confusing placeholder text from email input.
   * Refactored modal and settings logic.
-  * Updated several packages and fixed warnings in build process (all but the [fsevents warning](https://github.com/yarnpkg/yarn/issues/3738), which is a rather dramatic debate)
 
 ### Fixed
   * Tiles will no longer be blurry on hover (Windows only bug)
