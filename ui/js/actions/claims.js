@@ -47,7 +47,7 @@ export function doSendSupport(amount, claim_id) {
     };
 
     lbry
-      .claim_send_tip({
+      .wallet_send({
         claim_id: claim_id,
         amount: amount,
       })

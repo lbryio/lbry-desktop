@@ -1,5 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
+import { doNavigate } from "actions/app";
 import { doFetchTransactions } from "actions/wallet";
 import {
   selectBalance,
@@ -15,6 +16,7 @@ const select = state => ({
 });
 
 const perform = dispatch => ({
+  navigate: (path, params) => dispatch(doNavigate(path, params)),
   fetchTransactions: () => dispatch(doFetchTransactions()),
 });
 

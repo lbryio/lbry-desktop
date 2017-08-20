@@ -7,13 +7,38 @@ class TransactionList extends React.PureComponent {
   }
 
   render() {
-    const { fetchingTransactions, transactionItems } = this.props;
+    const { fetchingTransactions, transactionItems, navigate } = this.props;
+
+    function findTypeOfTx(type, is_tip) {
+      if (is_tip && type === "support") return "tip";
+      else return type;
+    }
+
+    function getClaimLink(claim_name, claim_id) {
+      if (claim_id !== "----" && claim_name !== "----") {
+        let uri = `lbry://${claim_name}#${claim_id}`;
+
+        return (
+          <td>
+            <a
+              className="button-text"
+              onClick={() => navigate("/show", { uri })}
+            >
+              {claim_name}
+            </a>
+          </td>
+        );
+      }
+
+      return <td>{__("N/A")}</td>;
+    }
 
     const rows = [];
     if (transactionItems.length > 0) {
       transactionItems.forEach(function(item) {
         rows.push(
           <tr key={item.id}>
+            <td>{findTypeOfTx(item.type, item.is_tip)}</td>
             <td>{(item.amount > 0 ? "+" : "") + item.amount}</td>
             <td>
               {item.date
@@ -25,6 +50,7 @@ class TransactionList extends React.PureComponent {
                 ? item.date.toLocaleTimeString()
                 : <span className="empty">{__("(Transaction pending)")}</span>}
             </td>
+            {getClaimLink(item.claim_name, item.claim_id)}
             <td>
               <a
                 className="button-text"
@@ -53,9 +79,11 @@ class TransactionList extends React.PureComponent {
             ? <table className="table-standard table-stretch">
                 <thead>
                   <tr>
+                    <th>{__("Type")}</th>
                     <th>{__("Amount")}</th>
                     <th>{__("Date")}</th>
                     <th>{__("Time")}</th>
+                    <th>{__("Claim")}</th>
                     <th>{__("Transaction")}</th>
                   </tr>
                 </thead>
