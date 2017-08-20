@@ -19,6 +19,10 @@ class App extends React.PureComponent {
       alertError(event.detail);
     });
 
+    getThemes();
+
+    setTheme();
+
     if (!this.props.upgradeSkipped) {
       checkUpgradeAvailable();
     }
@@ -32,12 +36,6 @@ class App extends React.PureComponent {
     this.scrollListener = () => this.props.recordScroll(window.scrollY);
 
     window.addEventListener("scroll", this.scrollListener);
-
-    // Load themes
-    getThemes();
-
-    // Select theme
-    setTheme();
   }
 
   componentWillUnmount() {

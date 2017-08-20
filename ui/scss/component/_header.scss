@@ -45,8 +45,9 @@
   padding-right: 5px;
   @include border-radius(2px);
   border: var(--search-border);
-  transition: all var(--transition-duration) var(--transition-type);
+  transition: box-shadow var(--transition-duration) var(--transition-type);
   &:focus {
+    background: var(--search-active-bg);
     color: var(--search-active-color);
     box-shadow: var(--box-shadow-focus);
     border-color: var(--color-primary);
