@@ -11,23 +11,50 @@ import ModalCreditIntro from "modal/modalCreditIntro";
 
 class ModalRouter extends React.PureComponent {
   componentWillMount() {
-    this.showWelcome(this.props);
+    this.showTransitionModals(this.props);
   }
 
   componentWillReceiveProps(nextProps) {
-    this.showWelcome(nextProps);
+    this.showTransitionModals(nextProps);
   }
 
-  showWelcome(props) {
-    const { isWelcomeAcknowledged, openWelcomeModal, user } = props;
+  showTransitionModals(props) {
+    const { modal } = props;
 
+    if (modal) {
+      return;
+    }
+
+    [
+      this.checkShowWelcome.bind(this),
+      this.checkShowCreditIntro.bind(this),
+    ].find(func => func(props));
+  }
+
+  checkShowWelcome(props) {
+    const { isWelcomeAcknowledged, openModal, user } = props;
     if (
       !isWelcomeAcknowledged &&
       user &&
       !user.is_reward_approved &&
       !user.is_identity_verified
     ) {
-      openWelcomeModal();
+      openModal(modals.WELCOME);
+      return true;
+    }
+  }
+
+  checkShowCreditIntro(props) {
+    const { page, isCreditIntroAcknowledged, openModal, user } = props;
+
+    if (
+      !isCreditIntroAcknowledged &&
+      user &&
+      !user.is_reward_approved &&
+      !user.is_identity_verified
+    ) {
+      openModal(modals.CREDIT_INTRO);
+      return true;
     }
   }
 

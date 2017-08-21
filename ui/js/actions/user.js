@@ -184,7 +184,6 @@ export function doFetchInviteStatus() {
     lbryio
       .call("user", "invite_status")
       .then(status => {
-        console.log(status);
         dispatch({
           type: types.USER_INVITE_STATUS_FETCH_SUCCESS,
           data: {
