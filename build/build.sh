@@ -84,7 +84,7 @@ DAEMON_URL_TEMPLATE=$(node -e "console.log(require(\"$ROOT/app/package.json\").l
 DAEMON_URL=$(echo ${DAEMON_URL_TEMPLATE//DAEMONVER/$DAEMON_VER} | sed "s/OSNAME/$OSNAME/g")
 DAEMON_VER_PATH="$BUILD_DIR/daemon.ver"
 echo "$DAEMON_VER_PATH"
-if [[ ! -f $DAEMON_VER_PATH || ! -f $ROOT/app/dist/lbrynet-daemon ||  $(< $DAEMON_VER_PATH) != $DAEMON_VER ]]; then
+if [[ ! -f $DAEMON_VER_PATH || ! -f $ROOT/app/dist/lbrynet-daemon || "$(< "$DAEMON_VER_PATH")" != "$DAEMON_VER" ]]; then
     wget --quiet "$DAEMON_URL" -O "$BUILD_DIR/daemon.zip"
     unzip "$BUILD_DIR/daemon.zip" -d "$ROOT/app/dist/"
     rm "$BUILD_DIR/daemon.zip"
