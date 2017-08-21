@@ -8,7 +8,6 @@ import ModalWelcome from "./view";
 
 const perform = dispatch => () => ({
   closeModal: () => {
-    console.log("Make 'em welcome");
     dispatch(doSetClientSetting(settings.NEW_USER_ACKNOWLEDGED, true));
     dispatch(doCloseModal());
   },

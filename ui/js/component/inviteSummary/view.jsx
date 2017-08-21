@@ -5,7 +5,6 @@ import { CreditAmount, BusyMessage } from "component/common";
 const InviteSummary = props => {
   const { isPending, invitesRemaining } = props;
 
-  console.log(invitesRemaining);
   return (
     <section className="card">
       <div className="card__title-primary">

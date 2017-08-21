@@ -22,7 +22,11 @@ const ModalWelcome = props => {
           )}
         </p>
         <div className="modal__buttons">
-          <Link button="primary" onClick={closeModal} label={__("Continue")} />
+          <Link
+            button="primary"
+            onClick={closeModal}
+            label={__("Blockchain Centaurs? I'm In")}
+          />
         </div>
       </section>
     </Modal>

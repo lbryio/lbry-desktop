@@ -51,7 +51,8 @@ class ModalRouter extends React.PureComponent {
       !isCreditIntroAcknowledged &&
       user &&
       !user.is_reward_approved &&
-      !user.is_identity_verified
+      !user.is_identity_verified &&
+      ["rewards", "send", "receive", "show", "publish", "wallet"].includes(page)
     ) {
       openModal(modals.CREDIT_INTRO);
       return true;

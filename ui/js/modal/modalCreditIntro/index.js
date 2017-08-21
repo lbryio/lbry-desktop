@@ -1,9 +1,9 @@
 import React from "react";
-import rewards from "rewards";
 import { connect } from "react-redux";
 import { doCloseModal, doAuthNavigate } from "actions/app";
 import { doSetClientSetting } from "actions/settings";
 import { selectUserIsRewardApproved } from "selectors/user";
+import { selectBalance } from "selectors/wallet";
 import {
   makeSelectHasClaimedReward,
   makeSelectRewardByType,
@@ -17,8 +17,8 @@ const select = (state, props) => {
     selectReward = makeSelectRewardByType();
 
   return {
+    currentBalance: selectBalance(state),
     isRewardApproved: selectUserIsRewardApproved(state),
-    reward: selectReward(state, { reward_type: rewards.TYPE_NEW_USER }),
     totalRewardValue: selectUnclaimedRewardValue(state),
   };
 };

@@ -10,7 +10,7 @@ class TransactionListRecent extends React.PureComponent {
 
   render() {
     const { fetchingTransactions, hasTransactions, transactions } = this.props;
-    console.log(transactions);
+
     return (
       <section className="card">
         <div className="card__title-primary">

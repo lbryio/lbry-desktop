@@ -32,7 +32,7 @@ class RewardsPage extends React.PureComponent {
         !user.is_identity_verified
       ) {
         return (
-          <div>
+          <section className="card">
             <div className="card__content empty">
               <p>
                 {__("Only verified accounts are eligible to earn rewards.")}
@@ -41,7 +41,7 @@ class RewardsPage extends React.PureComponent {
             <div className="card__content">
               <Link onClick={doAuth} button="primary" label="Become Verified" />
             </div>
-          </div>
+          </section>
         );
       } else {
         return (
