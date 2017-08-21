@@ -104,29 +104,30 @@ export function doDownloadLanguages() {
       fs.mkdirSync(app.i18n.directory);
     }
 
-    const req = http.request({ host: "i18n.lbry.io", path: "/" }, response => {
-      let str = "";
+    const xhr = new XMLHttpRequest();
+    xhr.onreadystatechange = () => {
+      if (xhr.readyState === XMLHttpRequest.DONE) {
+        if (xhr.status === 200) {
+          try {
+            const files = JSON.parse(xhr.responseText);
+            const actions = [];
+            files.forEach(file => {
+              actions.push(doDownloadLanguage(file));
+            });
 
-      response.on("data", chunk => {
-        str += chunk;
-      });
-
-      response.on("end", () => {
-        const files = JSON.parse(str);
-        const actions = [];
-        files.forEach(file => {
-          actions.push(doDownloadLanguage(file));
-        });
-
-        dispatch(batchActions(...actions));
-      });
-    });
-
-    req.on("error", err => {
-      throw err; //this ought to be cleanly handled
-    });
-
-    req.end();
+            dispatch(batchActions(...actions));
+          } catch (err) {
+            throw err;
+          }
+        } else {
+          throw new Error(
+            __("The list of available languages could not be retrieved.")
+          );
+        }
+      }
+    };
+    xhr.open("get", "http://i18n.lbry.io");
+    xhr.send();
   };
 }
 
