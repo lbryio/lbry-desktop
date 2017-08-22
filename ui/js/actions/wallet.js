@@ -2,6 +2,7 @@ import * as types from "constants/action_types";
 import lbry from "lbry";
 import {
   selectDraftTransaction,
+  selectDraftTransactionAddress,
   selectDraftTransactionAmount,
   selectBalance,
 } from "selectors/wallet";
@@ -69,6 +70,7 @@ export function doSendDraftTransaction() {
   return function(dispatch, getState) {
     const state = getState();
     const draftTx = selectDraftTransaction(state);
+    const address = selectDraftTransactionAddress(state);
     const balance = selectBalance(state);
     const amount = selectDraftTransactionAmount(state);
 
@@ -76,39 +78,49 @@ export function doSendDraftTransaction() {
       return dispatch(doOpenModal("insufficientBalance"));
     }
 
-    dispatch({
-      type: types.SEND_TRANSACTION_STARTED,
-    });
-
-    const successCallback = results => {
-      if (results === true) {
-        dispatch({
-          type: types.SEND_TRANSACTION_COMPLETED,
-        });
-        dispatch(doOpenModal("transactionSuccessful"));
-      } else {
-        dispatch({
-          type: types.SEND_TRANSACTION_FAILED,
-          data: { error: results },
-        });
-        dispatch(doOpenModal("transactionFailed"));
-      }
-    };
-
-    const errorCallback = error => {
-      dispatch({
-        type: types.SEND_TRANSACTION_FAILED,
-        data: { error: error.message },
-      });
-      dispatch(doOpenModal("transactionFailed"));
-    };
-
     lbry
-      .wallet_send({
-        amount: draftTx.amount,
-        address: draftTx.address,
+      .is_address({ address })
+      .then(addressIsValid => {
+        if (!addressIsValid) {
+          dispatch(doOpenModal("invalidAddress"));
+          reject();
+        }
       })
-      .then(successCallback, errorCallback);
+      .then(() => {
+        dispatch({
+          type: types.SEND_TRANSACTION_STARTED,
+        });
+
+        const successCallback = results => {
+          if (results === true) {
+            dispatch({
+              type: types.SEND_TRANSACTION_COMPLETED,
+            });
+            dispatch(doOpenModal("transactionSuccessful"));
+          } else {
+            dispatch({
+              type: types.SEND_TRANSACTION_FAILED,
+              data: { error: results },
+            });
+            dispatch(doOpenModal("transactionFailed"));
+          }
+        };
+
+        const errorCallback = error => {
+          dispatch({
+            type: types.SEND_TRANSACTION_FAILED,
+            data: { error: error.message },
+          });
+          dispatch(doOpenModal("transactionFailed"));
+        };
+
+        lbry
+          .wallet_send({
+            amount: draftTx.amount,
+            address: draftTx.address,
+          })
+          .then(successCallback, errorCallback);
+      });
   };
 }
 
