@@ -53,6 +53,14 @@ const WalletSend = props => {
           <input type="submit" className="hidden" />
         </div>
       </form>
+      {modal == "invalidAddress" &&
+        <Modal
+          isOpen={true}
+          contentLabel={__("Invalid address")}
+          onConfirmed={closeModal}
+        >
+          {__("You have entered an invalid LBRY address.")}
+        </Modal>}
       {modal == "insufficientBalance" &&
         <Modal
           isOpen={true}
