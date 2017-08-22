@@ -9,7 +9,7 @@
     --color-load-screen-text: #FFF;
     --color-money: var(--color-primary);
     --color-meta-light: #757575;
-    --color-dark-overlay: rgb(15, 21, 23, 0.85);
+    --color-dark-overlay: rgba(15, 21, 23, 0.85);
 
     /* Text */
     --text-color: #FFF;
@@ -32,9 +32,14 @@
     /* Header */
     --header-color: #EEE;
     --header-active-color: #FFF;
+    --header-button-bg: transparent;
 
     /* Table */
     --table-border: 0;
     --table-item-even: var(--color-bg-alt);
     --table-item-odd: transparent;
+
+    /* Modla */
+    --modal-overlay-bg: var(--color-dark-overlay);
+    --modal-border: 1px solid rgba(0, 0, 0, 0.25);
 }

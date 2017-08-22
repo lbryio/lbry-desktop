@@ -18,7 +18,11 @@
   flex: 0 0 content;
   padding-left: $spacing-vertical / 4;
   padding-right: $spacing-vertical / 4;
+  .button-alt {
+      background: var(--header-button-bg) !important;
+  }
 }
+
 .header__item--wunderbar {
   flex-grow: 1;
 }

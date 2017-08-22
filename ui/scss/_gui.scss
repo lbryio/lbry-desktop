@@ -94,7 +94,7 @@ sub { top: 0.4em; }
 
 code {
   font: 0.8em Consolas, 'Lucida Console', 'Source Sans', monospace;
-  background-color: #eee;
+  background-color: var(--color-bg-alt);
 }
 
 p

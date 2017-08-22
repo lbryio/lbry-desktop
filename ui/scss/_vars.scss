@@ -72,6 +72,7 @@
   --header-color: #666;
   --header-active-color: rgba(0,0,0, 0.85);
   --header-height: $spacing-vertical * 2.5;
+  --header-button-bg: var(--button-bg);
 
   /* Header -> search */
   --search-bg: rgba(255, 255, 255, 0.7);

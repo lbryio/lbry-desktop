@@ -74,7 +74,7 @@
   width: 400px;
 }
 .error-modal__error-list { /*shitty hack/temp fix for long errors making modal unusable*/
-  border: 1px solid #eee;
+  border: 1px solid var(--input-border-color);
   padding: 8px;
   list-style: none;
   max-height: 400px;
