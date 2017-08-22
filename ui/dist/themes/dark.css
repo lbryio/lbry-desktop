@@ -13,6 +13,7 @@
 
     /* Text */
     --text-color: #FFF;
+    --text-selection-bg: rgba(0,150,136, 0.95);
 
     /* Input */
     --input-bg: transparent;
