@@ -35,7 +35,7 @@ reducers[types.DOWNLOAD_LANGUAGE_SUCCEEDED] = function(state, action) {
   const langCode = language.substring(0, 2);
 
   if (LANGUAGES[langCode]) {
-    languages[langCode] =
+    languages[language] =
       LANGUAGES[langCode][0] + " (" + LANGUAGES[langCode][1] + ")";
   } else {
     languages[langCode] = langCode;

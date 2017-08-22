@@ -98,6 +98,7 @@ class SettingsPage extends React.PureComponent {
 
   onLanguageChange(e) {
     this.props.changeLanguage(e.target.value);
+    this.forceUpdate();
   }
 
   onShowUnavailableChange(event) {}
@@ -131,7 +132,7 @@ class SettingsPage extends React.PureComponent {
                   <option
                     key={dLang}
                     selected={dLang == language ? "selected" : null}
-                    value={language}
+                    value={dLang}
                   >
                     {languages[dLang]}
                   </option>
