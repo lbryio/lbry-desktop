@@ -11,11 +11,11 @@ class ModalInsufficientCredits extends React.PureComponent {
         type="confirm"
         contentLabel={__("Not enough credits")}
         confirmButtonLabel={__("Get Credits")}
-        abortButtonLabel={__("Cancel")}
+        abortButtonLabel={__("Not Now")}
         onAborted={closeModal}
         onConfirmed={addFunds}
       >
-        {__("More LBRY credits are required to purchase this.")}
+        <p>{__("More LBRY credits are required to take this action.")}</p>
       </Modal>
     );
   }
