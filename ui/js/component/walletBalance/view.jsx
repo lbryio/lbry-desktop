@@ -18,11 +18,12 @@ const WalletBalance = props => {
         <h3>{__("Balance")}</h3>
       </div>
       <div className="card__content">
-        {balance && <CreditAmount amount={balance} precision={8} />}
+        {(balance || balance === 0) &&
+          <CreditAmount amount={balance} precision={8} />}
       </div>
       <div className="card__content">
         <Link button="text" navigate="/send" label={__("Send")} />
-        <Link button="text" navigate="/receive" label={__("Receive")} />
+        <Link button="text" navigate="/address" label={__("Address")} />
         <Link
           button="text"
           navigate="/backup"

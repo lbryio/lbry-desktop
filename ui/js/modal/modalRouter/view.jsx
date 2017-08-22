@@ -45,14 +45,23 @@ class ModalRouter extends React.PureComponent {
   }
 
   checkShowCreditIntro(props) {
-    const { page, isCreditIntroAcknowledged, openModal, user } = props;
+    const {
+      page,
+      isCreditIntroAcknowledged,
+      openModal,
+      user,
+      showPageCost,
+    } = props;
 
     if (
       !isCreditIntroAcknowledged &&
       user &&
       !user.is_reward_approved &&
       !user.is_identity_verified &&
-      ["rewards", "send", "receive", "show", "publish", "wallet"].includes(page)
+      ["rewards", "send", "address", "show", "publish", "wallet"].includes(
+        page
+      ) &&
+      (page != "show" || showPageCost > 0)
     ) {
       openModal(modals.CREDIT_INTRO);
       return true;

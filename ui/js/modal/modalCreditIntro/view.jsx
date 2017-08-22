@@ -22,7 +22,7 @@ const ModalCreditIntro = props => {
           )}
         </p>
         <p>
-          {__("New verified users automatically receive more than ")} {" "}
+          {__("New verified users can receive more than ")} {" "}
           {totalRewardValue
             ? <CreditAmount amount={totalRewardRounded} />
             : <span className="credit-amount">{__("credits")}</span>}

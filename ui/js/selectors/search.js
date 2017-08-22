@@ -60,7 +60,8 @@ export const selectWunderBarIcon = createSelector(selectCurrentPage, page => {
       return "icon-rocket";
     case "invite":
       return "icon-envelope-open";
-    case "receive":
+    case "address":
+      return "icon-address-book";
     case "wallet":
     case "backup":
       return "icon-bank";
