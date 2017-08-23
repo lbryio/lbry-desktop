@@ -340,7 +340,7 @@ export function doPurchaseUri(uri, purchaseModalName) {
     const { cost } = costInfo;
 
     // the file is free or we have partially downloaded it
-    if (cost <= 0.01 || (fileInfo && fileInfo.download_directory)) {
+    if (cost === 0 || (fileInfo && fileInfo.download_directory)) {
       dispatch(doLoadVideo(uri));
       return Promise.resolve();
     }
