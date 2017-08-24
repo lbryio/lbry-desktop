@@ -11,17 +11,11 @@ class App extends React.PureComponent {
       checkUpgradeAvailable,
       updateBalance,
       fetchRewardedContent,
-      getThemes,
-      setTheme,
     } = this.props;
 
     document.addEventListener("unhandledError", event => {
       alertError(event.detail);
     });
-
-    getThemes();
-
-    setTheme();
 
     if (!this.props.upgradeSkipped) {
       checkUpgradeAvailable();

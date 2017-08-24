@@ -12,7 +12,7 @@ import {
   selectHistoryForward,
 } from "selectors/app";
 import { doSearch } from "actions/search";
-import { doFetchDaemonSettings, doSetClientSetting } from "actions/settings";
+import { doFetchDaemonSettings, doSetTheme } from "actions/settings";
 import { doAuthenticate } from "actions/user";
 import { doFileList } from "actions/file_info";
 import { toQueryString } from "util/query_params";
@@ -320,6 +320,7 @@ export function doDaemonReady() {
       type: types.DAEMON_READY,
       data: { page },
     });
+    dispatch(doSetTheme());
     dispatch(doFetchDaemonSettings());
     dispatch(doFileList());
   };
@@ -349,24 +350,5 @@ export function doClearCache() {
 export function doQuit() {
   return function(dispatch, getState) {
     remote.app.quit();
-  };
-}
-
-export function doGetThemes() {
-  const dir = `${remote.app.getAppPath()}/dist/themes`;
-
-  // Get all .css files
-  const files = fs
-    .readdirSync(dir)
-    .filter(file => path.extname(file) === ".css");
-
-  return function(dispatch, getState) {
-    // Find themes
-    const themes = files.map(file => ({
-      name: file.replace(".css", ""),
-      path: `./themes/${file}`,
-    }));
-
-    dispatch(doSetClientSetting("themes", themes));
   };
 }

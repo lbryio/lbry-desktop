@@ -2,6 +2,11 @@ import * as types from "constants/action_types";
 import * as settings from "constants/settings";
 import lbry from "lbry";
 
+const { remote } = require("electron");
+const { extname } = require("path");
+const { download } = remote.require("electron-dl");
+const { readdirSync } = remote.require("fs");
+
 export function doFetchDaemonSettings() {
   return function(dispatch, getState) {
     lbry.settings_get().then(settings => {
@@ -40,6 +45,23 @@ export function doSetClientSetting(key, value) {
       key,
       value,
     },
+  };
+}
+
+export function doGetThemes() {
+  const dir = `${remote.app.getAppPath()}/dist/themes`;
+
+  // Get all .css files
+  const files = readdirSync(dir).filter(file => extname(file) === ".css");
+
+  return function(dispatch, getState) {
+    // Find themes
+    const themes = files.map(file => ({
+      name: file.replace(".css", ""),
+      path: `./themes/${file}`,
+    }));
+
+    dispatch(doSetClientSetting("themes", themes));
   };
 }
 

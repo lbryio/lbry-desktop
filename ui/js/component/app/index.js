@@ -6,12 +6,10 @@ import {
   doOpenModal,
   doAlertError,
   doRecordScroll,
-  doGetThemes,
 } from "actions/app";
 
 import { doFetchRewardedContent } from "actions/content";
 import { doUpdateBalance } from "actions/wallet";
-import { doSetTheme } from "actions/settings";
 import { selectWelcomeModalAcknowledged } from "selectors/app";
 import { selectUser } from "selectors/user";
 import App from "./view";
@@ -30,8 +28,6 @@ const perform = dispatch => ({
   updateBalance: balance => dispatch(doUpdateBalance(balance)),
   fetchRewardedContent: () => dispatch(doFetchRewardedContent()),
   recordScroll: scrollPosition => dispatch(doRecordScroll(scrollPosition)),
-  getThemes: () => dispatch(doGetThemes()),
-  setTheme: name => dispatch(doSetTheme(name)),
 });
 
 export default connect(select, perform)(App);
