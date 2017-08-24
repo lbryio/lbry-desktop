@@ -85,10 +85,9 @@ export class CreditAmount extends React.PureComponent {
     const { amount, precision, showFullPrice } = this.props;
 
     let formattedAmount;
-    let fullPrice = formatCredits(amount, 5);
 
     if (showFullPrice) {
-      formattedAmount = fullPrice;
+      formattedAmount = amount;
     } else {
       formattedAmount = amount > 0 && amount < minimumRenderableAmount
         ? "<" + minimumRenderableAmount
@@ -110,7 +109,7 @@ export class CreditAmount extends React.PureComponent {
     return (
       <span
         className={`credit-amount credit-amount--${this.props.look}`}
-        title={fullPrice}
+        title={amount}
       >
         <span>
           {amountText}
