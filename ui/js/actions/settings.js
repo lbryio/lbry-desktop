@@ -61,7 +61,7 @@ export function doGetThemes() {
       path: `./themes/${file}`,
     }));
 
-    dispatch(doSetClientSetting("themes", themes));
+    dispatch(doSetClientSetting(settings.THEMES, themes));
   };
 }
 
