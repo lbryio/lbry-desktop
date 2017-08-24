@@ -51,6 +51,10 @@ class SettingsPage extends React.PureComponent {
     this.props.setTheme(value);
   }
 
+  getThemes() {
+    this.props.getThemes();
+  }
+
   onRunOnStartChange(event) {
     this.setDaemonSetting("run_on_startup", event.target.checked);
   }
@@ -113,6 +117,10 @@ class SettingsPage extends React.PureComponent {
   // }
 
   onShowUnavailableChange(event) {}
+
+  componentWillMount() {
+    this.getThemes();
+  }
 
   componentDidMount() {}
 

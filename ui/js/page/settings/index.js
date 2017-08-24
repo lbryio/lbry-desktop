@@ -4,6 +4,7 @@ import { doClearCache } from "actions/app";
 import {
   doSetDaemonSetting,
   doSetClientSetting,
+  doGetThemes,
   doSetTheme,
 } from "actions/settings";
 import { selectDaemonSettings, selectShowNsfw } from "selectors/settings";
@@ -19,6 +20,7 @@ const perform = dispatch => ({
   clearCache: () => dispatch(doClearCache()),
   setClientSetting: (key, value) => dispatch(doSetClientSetting(key, value)),
   setTheme: name => dispatch(doSetTheme(name)),
+  getThemes: () => dispatch(doGetThemes),
 });
 
 export default connect(select, perform)(SettingsPage);
