@@ -7,17 +7,22 @@ import ReactPaginate from "react-paginate";
 
 class ChannelPage extends React.PureComponent {
   componentDidMount() {
-    const { uri, params, fetchClaims } = this.props;
+    const { uri, params, fetchClaims, fetchClaimCount } = this.props;
 
     fetchClaims(uri, params.page || 1);
+    fetchClaimCount(uri);
   }
 
   componentWillReceiveProps(nextProps) {
-    const { params, fetching, fetchClaims } = this.props;
+    const { params, fetching, fetchClaims, fetchClaimCount } = this.props;
     const nextParams = nextProps.params;
 
-    if (fetching !== nextParams.page && params.page !== nextParams.page)
+    if (fetching !== nextParams.page && params.page !== nextParams.page) {
       fetchClaims(nextProps.uri, nextParams.page);
+    }
+    if (nextProps.uri != this.props.uri) {
+      fetchClaimCount(uri);
+    }
   }
 
   changePage(pageNumber) {

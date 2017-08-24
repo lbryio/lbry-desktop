@@ -365,9 +365,6 @@ export function doFetchClaimsByChannel(uri, page) {
     lbry.claim_list_by_channel({ uri, page }).then(result => {
       const claimResult = result[uri],
         claims = claimResult ? claimResult.claims_in_channel : [],
-        totalPages = claimResult
-          ? claimResult.claims_in_channel_pages
-          : undefined,
         currentPage = claimResult ? claimResult.returned_page : undefined;
 
       dispatch({
@@ -375,8 +372,29 @@ export function doFetchClaimsByChannel(uri, page) {
         data: {
           uri,
           claims,
-          totalPages,
           page: currentPage,
+        },
+      });
+    });
+  };
+}
+
+export function doFetchClaimCountByChannel(uri) {
+  return function(dispatch, getState) {
+    dispatch({
+      type: types.FETCH_CHANNEL_CLAIM_COUNT_STARTED,
+      data: { uri },
+    });
+
+    lbry.claim_list_by_channel({ uri }).then(result => {
+      const claimResult = result[uri],
+        totalClaims = claimResult ? claimResult.claims_in_channel : 0;
+
+      dispatch({
+        type: types.FETCH_CHANNEL_CLAIM_COUNT_COMPLETED,
+        data: {
+          uri,
+          totalClaims,
         },
       });
     });

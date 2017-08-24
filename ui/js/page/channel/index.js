@@ -1,6 +1,9 @@
 import React from "react";
 import { connect } from "react-redux";
-import { doFetchClaimsByChannel } from "actions/content";
+import {
+  doFetchClaimsByChannel,
+  doFetchClaimCountByChannel,
+} from "actions/content";
 import {
   makeSelectClaimForUri,
   makeSelectClaimsInChannelForCurrentPage,
@@ -30,6 +33,7 @@ const makeSelect = () => {
 
 const perform = dispatch => ({
   fetchClaims: (uri, page) => dispatch(doFetchClaimsByChannel(uri, page)),
+  fetchClaimCount: uri => dispatch(doFetchClaimCountByChannel(uri)),
   navigate: (path, params) => dispatch(doNavigate(path, params)),
 });
 

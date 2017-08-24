@@ -3,6 +3,7 @@ import * as types from "constants/action_types";
 const reducers = {};
 const defaultState = {
   rewardedContentClaimIds: [],
+  channelPages: {},
 };
 
 reducers[types.FETCH_FEATURED_CONTENT_STARTED] = function(state, action) {
@@ -57,11 +58,22 @@ reducers[types.RESOLVE_URI_CANCELED] = reducers[
   });
 };
 
-reducers[types.FETCH_CHANNEL_CLAIMS_COMPLETED] = function(state, action) {
-  const channelPages = Object.assign({}, state.channelPages);
-  const { uri, totalPages } = action.data;
+// reducers[types.FETCH_CHANNEL_CLAIMS_COMPLETED] = function(state, action) {
+//   const channelPages = Object.assign({}, state.channelPages);
+//   const { uri, claims } = action.data;
+//
+//   channelPages[uri] = totalPages;
+//
+//   return Object.assign({}, state, {
+//     channelPages,
+//   });
+// };
 
-  channelPages[uri] = totalPages;
+reducers[types.FETCH_CHANNEL_CLAIM_COUNT_COMPLETED] = function(state, action) {
+  const channelPages = Object.assign({}, state.channelPages);
+  const { uri, totalClaims } = action.data;
+
+  channelPages[uri] = totalClaims / 10;
 
   return Object.assign({}, state, {
     channelPages,
