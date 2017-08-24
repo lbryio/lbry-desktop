@@ -67,20 +67,21 @@ export function doGetThemes() {
 
 export function doSetTheme(name) {
   return function(dispatch, getState) {
-    const last = lbry.getClientSetting(settings.THEME);
-    const find = name => themes.find(theme => theme.name === name);
+    // Find a theme from themes list
+    const find = themeName => themes.find(theme => theme.name === themeName);
 
     // Get themes
     const themes = lbry.getClientSetting(settings.THEMES);
 
-    // Find theme
-    const theme = find(name) || find(last) || find("light");
+    // Find theme and set fallback
+    const theme = find(name) || find("light");
 
     if (theme.path) {
-      // update theme
+      // load css
       const link = document.getElementById("theme");
       link.href = theme.path;
 
+      // update theme
       dispatch(doSetClientSetting(settings.THEME, theme.name));
     }
   };

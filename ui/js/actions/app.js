@@ -1,4 +1,5 @@
 import * as types from "constants/action_types";
+import * as settings from "constants/settings";
 import lbry from "lbry";
 import {
   selectUpdateUrl,
@@ -320,7 +321,8 @@ export function doDaemonReady() {
       type: types.DAEMON_READY,
       data: { page },
     });
-    dispatch(doSetTheme());
+    // Load last theme selected
+    dispatch(doSetTheme(lbry.getClientSetting(settings.THEME)));
     dispatch(doFetchDaemonSettings());
     dispatch(doFileList());
   };
