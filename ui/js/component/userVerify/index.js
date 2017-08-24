@@ -21,7 +21,7 @@ const select = (state, props) => {
 };
 
 const perform = dispatch => ({
-  navigate: (uri) => dispatch(doNavigate(uri)),
+  navigate: uri => dispatch(doNavigate(uri)),
   verifyUserIdentity: token => dispatch(doUserIdentityVerify(token)),
 });
 

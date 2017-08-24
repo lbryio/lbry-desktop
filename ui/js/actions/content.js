@@ -231,14 +231,15 @@ export function doStartDownload(uri, outpoint) {
   return function(dispatch, getState) {
     const state = getState();
 
-    if (!outpoint) { throw new Error("outpoint is required to begin a download"); }
+    if (!outpoint) {
+      throw new Error("outpoint is required to begin a download");
+    }
 
     const { downloadingByOutpoint = {} } = state.fileInfo;
 
     if (downloadingByOutpoint[outpoint]) return;
 
     lbry.file_list({ outpoint, full_status: true }).then(([fileInfo]) => {
-
       dispatch({
         type: types.DOWNLOADING_STARTED,
         data: {
@@ -282,29 +283,32 @@ export function doLoadVideo(uri) {
       },
     });
 
-    lbry.get({ uri }).then(streamInfo => {
-      const timeout =
-        streamInfo === null ||
-        typeof streamInfo !== "object" ||
-        streamInfo.error == "Timeout";
+    lbry
+      .get({ uri })
+      .then(streamInfo => {
+        const timeout =
+          streamInfo === null ||
+          typeof streamInfo !== "object" ||
+          streamInfo.error == "Timeout";
 
-      if (timeout) {
+        if (timeout) {
+          dispatch({
+            type: types.LOADING_VIDEO_FAILED,
+            data: { uri },
+          });
+
+          dispatch(doOpenModal("timedOut"));
+        } else {
+          dispatch(doDownloadFile(uri, streamInfo));
+        }
+      })
+      .catch(error => {
         dispatch({
           type: types.LOADING_VIDEO_FAILED,
           data: { uri },
         });
-
-        dispatch(doOpenModal("timedOut"));
-      } else {
-        dispatch(doDownloadFile(uri, streamInfo));
-      }
-    }).catch(error => {
-      dispatch({
-        type: types.LOADING_VIDEO_FAILED,
-        data: { uri },
+        dispatch(doAlertError(error));
       });
-      dispatch(doAlertError(error));
-    });
   };
 }
 

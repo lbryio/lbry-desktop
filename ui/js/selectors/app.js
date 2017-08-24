@@ -218,6 +218,11 @@ export const selectBadgeNumber = createSelector(
   state => state.badgeNumber
 );
 
+export const selectCurrentLanguage = createSelector(
+  _selectState,
+  () => app.i18n.getLocale() || "en"
+);
+
 export const selectPathAfterAuth = createSelector(
   _selectState,
   state => state.pathAfterAuth

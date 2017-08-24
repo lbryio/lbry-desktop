@@ -111,7 +111,7 @@ class FilePage extends React.PureComponent {
               {!fileInfo || fileInfo.written_bytes <= 0
                 ? <span style={{ float: "right" }}>
                     <FilePrice uri={lbryuri.normalize(uri)} />
-                    {isRewardContent && <span>{" "}<IconFeatured /></span> }
+                    {isRewardContent && <span>{" "}<IconFeatured /></span>}
                   </span>
                 : null}
               <h1>{title}</h1>

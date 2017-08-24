@@ -127,7 +127,9 @@ class RewardsPage extends React.PureComponent {
         <div>
           <div className="card__content empty">
             <p>
-              {__("This application is unable to earn rewards due to an authentication failure.")}
+              {__(
+                "This application is unable to earn rewards due to an authentication failure."
+              )}
             </p>
           </div>
         </div>

@@ -6,13 +6,21 @@ import {
   doSetClientSetting,
   doGetThemes,
   doSetTheme,
+  doChangeLanguage,
 } from "actions/settings";
-import { selectDaemonSettings, selectShowNsfw } from "selectors/settings";
+import {
+  selectDaemonSettings,
+  selectShowNsfw,
+  selectLanguages,
+} from "selectors/settings";
+import { selectCurrentLanguage } from "selectors/app";
 import SettingsPage from "./view";
 
 const select = state => ({
   daemonSettings: selectDaemonSettings(state),
   showNsfw: selectShowNsfw(state),
+  language: selectCurrentLanguage(state),
+  languages: selectLanguages(state),
 });
 
 const perform = dispatch => ({
@@ -21,6 +29,7 @@ const perform = dispatch => ({
   setClientSetting: (key, value) => dispatch(doSetClientSetting(key, value)),
   setTheme: name => dispatch(doSetTheme(name)),
   getThemes: () => dispatch(doGetThemes),
+  changeLanguage: newLanguage => dispatch(doChangeLanguage(newLanguage)),
 });
 
 export default connect(select, perform)(SettingsPage);

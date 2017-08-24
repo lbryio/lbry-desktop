@@ -110,11 +110,10 @@ class SettingsPage extends React.PureComponent {
     this.props.setClientSetting(settings.SHOW_NSFW, event.target.checked);
   }
 
-  // onLanguageChange(language) {
-  //   lbry.setClientSetting('language', language);
-  //   i18n.setLocale(language);
-  //   this.setState({language: language})
-  // }
+  onLanguageChange(e) {
+    this.props.changeLanguage(e.target.value);
+    this.forceUpdate();
+  }
 
   onShowUnavailableChange(event) {}
 
@@ -125,7 +124,7 @@ class SettingsPage extends React.PureComponent {
   componentDidMount() {}
 
   render() {
-    const { daemonSettings } = this.props;
+    const { daemonSettings, language, languages } = this.props;
 
     if (!daemonSettings || Object.keys(daemonSettings).length === 0) {
       return (
@@ -137,6 +136,28 @@ class SettingsPage extends React.PureComponent {
     return (
       <main className="main--single-column">
         <SubHeader />
+        <section className="card">
+          <div className="card__content">
+            <h3>{__("Language")}</h3>
+          </div>
+          <div className="card__content">
+            <div className="form-row">
+              <FormField
+                type="select"
+                name="language"
+                defaultValue={language}
+                onChange={this.onLanguageChange.bind(this)}
+              >
+                <option value="en">{__("English")}</option>
+                {Object.keys(languages).map(dLang =>
+                  <option key={dLang} value={dLang}>
+                    {languages[dLang]}
+                  </option>
+                )}
+              </FormField>
+            </div>
+          </div>
+        </section>
         <section className="card">
           <div className="card__content">
             <h3>{__("Download Directory")}</h3>
