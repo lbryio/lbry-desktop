@@ -1,4 +1,5 @@
 import * as types from "constants/action_types";
+import * as settings from "constants/settings";
 import batchActions from "util/batchActions";
 import lbry from "lbry";
 import fs from "fs";
@@ -133,6 +134,7 @@ export function doDownloadLanguages() {
 
 export function doChangeLanguage(language) {
   return function(dispatch, getState) {
+    lbry.setClientSetting(settings.LANGUAGE, language);
     app.i18n.setLocale(language);
   };
 }

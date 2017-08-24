@@ -125,15 +125,12 @@ class SettingsPage extends React.PureComponent {
               <FormField
                 type="select"
                 name="language"
+                defaultValue={language}
                 onChange={this.onLanguageChange.bind(this)}
               >
                 <option value="en">{__("English")}</option>
                 {Object.keys(languages).map(dLang =>
-                  <option
-                    key={dLang}
-                    selected={dLang == language ? "selected" : null}
-                    value={dLang}
-                  >
+                  <option key={dLang} value={dLang}>
                     {languages[dLang]}
                   </option>
                 )}
