@@ -189,7 +189,7 @@ class FileActions extends React.PureComponent {
         >
           {__("This will purchase")} <strong>{title}</strong> {__("for")}{" "}
           <strong>
-            <FilePrice uri={uri} look="plain" />
+            <FilePrice uri={uri} showFullPrice={true} look="plain" />
           </strong>{" "}
           {__("credits")}.
         </Modal>
@@ -198,7 +198,8 @@ class FileActions extends React.PureComponent {
           contentLabel={__("Download failed")}
           onConfirmed={closeModal}
         >
-          {__("LBRY was unable to download the stream")} <strong>{uri}</strong>.
+          {__("LBRY was unable to download the stream")}{" "}{" "}
+          <strong>{title}</strong>.
         </Modal>
         {modal == modals.CONFIRM_FILE_REMOVE &&
           <ModalRemoveFile

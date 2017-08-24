@@ -68,23 +68,32 @@ export class CreditAmount extends React.PureComponent {
     isEstimate: React.PropTypes.bool,
     label: React.PropTypes.bool,
     showFree: React.PropTypes.bool,
+    showFullPrice: React.PropTypes.bool,
     look: React.PropTypes.oneOf(["indicator", "plain"]),
   };
 
   static defaultProps = {
     precision: 2,
     label: true,
-    showFree: false,
     look: "indicator",
+    showFree: false,
+    showFullPrice: false,
   };
 
   render() {
     const minimumRenderableAmount = Math.pow(10, -1 * this.props.precision);
-    const { amount, precision } = this.props;
+    const { amount, precision, showFullPrice } = this.props;
 
-    let formattedAmount = amount > 0 && amount < minimumRenderableAmount
-      ? "<" + minimumRenderableAmount
-      : formatCredits(amount, precision);
+    let formattedAmount;
+    let fullPrice = formatCredits(amount, 5);
+
+    if (showFullPrice) {
+      formattedAmount = fullPrice;
+    } else {
+      formattedAmount = amount > 0 && amount < minimumRenderableAmount
+        ? "<" + minimumRenderableAmount
+        : formatCredits(amount, precision);
+    }
 
     let amountText;
     if (this.props.showFree && parseFloat(this.props.amount) === 0) {
@@ -99,7 +108,10 @@ export class CreditAmount extends React.PureComponent {
     }
 
     return (
-      <span className={`credit-amount credit-amount--${this.props.look}`}>
+      <span
+        className={`credit-amount credit-amount--${this.props.look}`}
+        title={fullPrice}
+      >
         <span>
           {amountText}
         </span>
