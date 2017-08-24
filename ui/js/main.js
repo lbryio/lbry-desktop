@@ -7,6 +7,7 @@ import { Provider } from "react-redux";
 import store from "store.js";
 import SplashScreen from "component/splash";
 import { doChangePath, doNavigate, doDaemonReady } from "actions/app";
+import { doDownloadLanguages } from "actions/settings";
 import { toQueryString } from "util/query_params";
 import * as types from "constants/action_types";
 
@@ -96,6 +97,8 @@ const updateProgress = () => {
 const initialState = app.store.getState();
 
 var init = function() {
+  app.store.dispatch(doDownloadLanguages());
+
   function onDaemonReady() {
     window.sessionStorage.setItem("loaded", "y"); //once we've made it here once per session, we don't need to show splash again
     app.store.dispatch(doDaemonReady());

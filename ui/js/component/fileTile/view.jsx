@@ -71,7 +71,8 @@ class FileTile extends React.PureComponent {
       ? metadata.thumbnail
       : null;
     const obscureNsfw = this.props.obscureNsfw && metadata && metadata.nsfw;
-    const isRewardContent = claim && rewardedContentClaimIds.includes(claim.claim_id);
+    const isRewardContent =
+      claim && rewardedContentClaimIds.includes(claim.claim_id);
 
     let onClick = () => navigate("/show", { uri });
 
@@ -109,7 +110,7 @@ class FileTile extends React.PureComponent {
             <div className="file-tile__content">
               <div className="card__title-primary">
                 {!hidePrice ? <FilePrice uri={this.props.uri} /> : null}
-                {isRewardContent && <IconFeatured /> }
+                {isRewardContent && <IconFeatured />}
                 <div className="meta">{uri}</div>
                 <h3>
                   <TruncatedText lines={1}>{title}</TruncatedText>

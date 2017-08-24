@@ -62,7 +62,8 @@ class FileCard extends React.PureComponent {
       ? metadata.thumbnail
       : null;
     const obscureNsfw = this.props.obscureNsfw && metadata && metadata.nsfw;
-    const isRewardContent = claim && rewardedContentClaimIds.includes(claim.claim_id);
+    const isRewardContent =
+      claim && rewardedContentClaimIds.includes(claim.claim_id);
 
     let description = "";
     if (isResolvingUri && !claim) {
@@ -95,8 +96,9 @@ class FileCard extends React.PureComponent {
               <div className="card__subtitle">
                 <span style={{ float: "right" }}>
                   <FilePrice uri={uri} />
-                  {isRewardContent && <span>{" "}<IconFeatured /></span> }
-                  {fileInfo && <span>{" "}<Icon fixed icon="icon-folder" /></span> }
+                  {isRewardContent && <span>{" "}<IconFeatured /></span>}
+                  {fileInfo &&
+                    <span>{" "}<Icon fixed icon="icon-folder" /></span>}
                 </span>
                 <UriIndicator uri={uri} />
               </div>

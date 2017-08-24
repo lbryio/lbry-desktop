@@ -29,20 +29,34 @@ class UserVerify extends React.PureComponent {
         <p>
           {__(
             "To ensure you are a real person, we require a valid credit or debit card."
-          ) + " " + __("There is no charge at all, now or in the future.") + " " }
-          <Link href="https://lbry.io/faq/identity-requirements" label={__("Read More")} />
+          ) +
+            " " +
+            __("There is no charge at all, now or in the future.") +
+            " "}
+          <Link
+            href="https://lbry.io/faq/identity-requirements"
+            label={__("Read More")}
+          />
         </p>
         {errorMessage && <p className="form-field__error">{errorMessage}</p>}
-        <p><CardVerify
-          label={__("Link Card and Finish")}
-          disabled={isPending}
-          token={this.onToken.bind(this)}
-          stripeKey="pk_live_e8M4dRNnCCbmpZzduEUZBgJO"
-        /></p>
         <p>
-          {__("You can continue without this step, but you will not be eligible to earn rewards.")}
+          <CardVerify
+            label={__("Link Card and Finish")}
+            disabled={isPending}
+            token={this.onToken.bind(this)}
+            stripeKey="pk_live_e8M4dRNnCCbmpZzduEUZBgJO"
+          />
         </p>
-        <Link onClick={() => navigate("/discover")} button="alt" label={__("Skip Rewards")} />
+        <p>
+          {__(
+            "You can continue without this step, but you will not be eligible to earn rewards."
+          )}
+        </p>
+        <Link
+          onClick={() => navigate("/discover")}
+          button="alt"
+          label={__("Skip Rewards")}
+        />
       </div>
     );
   }

@@ -21,10 +21,7 @@ reducers[types.FETCH_FEATURED_CONTENT_COMPLETED] = function(state, action) {
   });
 };
 
-reducers[types.FETCH_REWARD_CONTENT_COMPLETED] = function(
-  state,
-  action
-) {
+reducers[types.FETCH_REWARD_CONTENT_COMPLETED] = function(state, action) {
   const { claimIds, success } = action.data;
 
   return Object.assign({}, state, {
