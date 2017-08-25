@@ -95,6 +95,7 @@ rewards.TYPE_FIRST_STREAM = "first_stream";
 rewards.TYPE_MANY_DOWNLOADS = "many_downloads";
 rewards.TYPE_FIRST_PUBLISH = "first_publish";
 rewards.TYPE_FEATURED_DOWNLOAD = "featured_download";
+rewards.TYPE_REFERRAL = "referral";
 
 rewards.claimReward = function(type) {
   function requestReward(resolve, reject, params) {

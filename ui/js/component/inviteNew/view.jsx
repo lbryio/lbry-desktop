@@ -73,25 +73,20 @@ class InviteNew extends React.PureComponent {
             )}
           </h3>
         </div>
+        {/*
         <div className="card__content">
           {invitesRemaining > 0 &&
             <p>{__("You have %s invites remaining.", invitesRemaining)}</p>}
           {invitesRemaining <= 0 &&
-            <p>
-              <span className="empty">
-                {__("You have no invites.", invitesRemaining)}
-              </span>
-            </p>}
+            <p className="empty">{__("You have no invites.")}</p>}
+        </div> */}
+        <div className="card__content">
+          <FormInviteNew
+            errorMessage={errorMessage}
+            inviteNew={inviteNew}
+            isPending={isPending}
+          />
         </div>
-        {!inviteStatusIsPending &&
-          invitesRemaining > 0 &&
-          <div className="card__content">
-            <FormInviteNew
-              errorMessage={errorMessage}
-              inviteNew={inviteNew}
-              isPending={isPending}
-            />
-          </div>}
       </section>
     );
   }

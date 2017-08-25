@@ -61,6 +61,7 @@ export const selectWunderBarIcon = createSelector(selectCurrentPage, page => {
     case "invite":
       return "icon-envelope-open";
     case "address":
+    case "receive":
       return "icon-address-book";
     case "wallet":
     case "backup":
