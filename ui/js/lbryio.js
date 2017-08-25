@@ -205,4 +205,10 @@ lbryio.authenticate = function() {
   return lbryio._authenticationPromise;
 };
 
+lbryio.getStripeToken = () => {
+  return CONNECTION_STRING.startsWith("http://localhost:")
+    ? "pk_test_NoL1JWL7i1ipfhVId5KfDZgo"
+    : "pk_live_e8M4dRNnCCbmpZzduEUZBgJO";
+};
+
 export default lbryio;

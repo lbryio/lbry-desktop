@@ -1,12 +1,8 @@
 import React from "react";
-import lbry from "lbry.js";
 import lbryuri from "lbryuri.js";
-import Link from "component/link";
 import FormField from "component/formField";
 import FileTile from "component/fileTile";
-import rewards from "rewards.js";
-import lbryio from "lbryio.js";
-import { BusyMessage, Thumbnail } from "component/common.js";
+import { BusyMessage } from "component/common.js";
 
 class FileList extends React.PureComponent {
   constructor(props) {

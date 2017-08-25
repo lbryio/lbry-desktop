@@ -1,7 +1,7 @@
 import React from "react";
-import { CreditAmount } from "component/common";
 import Link from "component/link";
 import CardVerify from "component/cardVerify";
+import lbryio from "lbryio.js";
 
 class UserVerify extends React.PureComponent {
   constructor(props) {
@@ -44,7 +44,7 @@ class UserVerify extends React.PureComponent {
             label={__("Link Card and Finish")}
             disabled={isPending}
             token={this.onToken.bind(this)}
-            stripeKey="pk_live_e8M4dRNnCCbmpZzduEUZBgJO"
+            stripeKey={lbryio.getStripeToken()}
           />
         </p>
         <p>
