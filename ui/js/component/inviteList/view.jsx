@@ -1,5 +1,7 @@
 import React from "react";
 import { Icon } from "component/common";
+import RewardLink from "component/rewardLink";
+import rewards from "rewards.js";
 
 class InviteList extends React.PureComponent {
   render() {
@@ -38,11 +40,18 @@ class InviteList extends React.PureComponent {
                     <tr key={index}>
                       <td>{invitee.email}</td>
                       <td className="text-center">
-                        {invitee.invite_accepted && <Icon icon="icon-check" />}
+                        {invitee.invite_accepted
+                          ? <Icon icon="icon-check" />
+                          : <span className="empty">{__("unused")}</span>}
                       </td>
                       <td className="text-center">
-                        {invitee.invite_reward_claimed &&
-                          <Icon icon="icon-check" />}
+                        {invitee.invite_reward_claimed
+                          ? <Icon icon="icon-check" />
+                          : <RewardLink
+                              label={__("Claim")}
+                              button="text"
+                              reward_type={rewards.TYPE_FIRST_PUBLISH}
+                            />}
                       </td>
                     </tr>
                   );

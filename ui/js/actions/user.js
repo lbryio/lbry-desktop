@@ -187,7 +187,9 @@ export function doFetchInviteStatus() {
         dispatch({
           type: types.USER_INVITE_STATUS_FETCH_SUCCESS,
           data: {
-            invitesRemaining: status.invites_remaining,
+            invitesRemaining: status.invites_remaining
+              ? status.invites_remaining
+              : 0,
             invitees: status.invitees,
           },
         });
