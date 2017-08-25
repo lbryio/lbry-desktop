@@ -1,5 +1,5 @@
 import React from "react";
-import { formatCredits } from "utils";
+import { formatCredits } from "util/formatCredits";
 import { connect } from "react-redux";
 import { selectIsBackDisabled, selectIsForwardDisabled } from "selectors/app";
 import { selectBalance } from "selectors/wallet";

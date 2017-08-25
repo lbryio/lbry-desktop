@@ -1,5 +1,5 @@
 import React from "react";
-import { formatCredits, formatFullPrice } from "utils";
+import { formatCredits, formatFullPrice } from "util/formatCredits";
 import lbry from "../lbry.js";
 
 //component/icon.js

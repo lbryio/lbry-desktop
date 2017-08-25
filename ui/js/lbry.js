@@ -1,8 +1,28 @@
-import lbryio from "./lbryio.js";
 import lighthouse from "./lighthouse.js";
 import jsonrpc from "./jsonrpc.js";
 import lbryuri from "./lbryuri.js";
-import { getLocal, getSession, setSession, setLocal } from "./utils.js";
+
+/**
+ * The 4 get/set functions below used to be in a utils.js library when used more widely.
+ * They've been reduced to just this file and probably ought to be eliminated entirely.
+ */
+function getLocal(key, fallback = undefined) {
+  const itemRaw = localStorage.getItem(key);
+  return itemRaw === null ? fallback : JSON.parse(itemRaw);
+}
+
+function setLocal(key, value) {
+  localStorage.setItem(key, JSON.stringify(value));
+}
+
+function getSession(key, fallback = undefined) {
+  const itemRaw = sessionStorage.getItem(key);
+  return itemRaw === null ? fallback : JSON.parse(itemRaw);
+}
+
+function setSession(key, value) {
+  sessionStorage.setItem(key, JSON.stringify(value));
+}
 
 const { remote, ipcRenderer } = require("electron");
 const menu = remote.require("./menu/main-menu");
