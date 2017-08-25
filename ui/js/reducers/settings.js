@@ -1,5 +1,6 @@
 import * as types from "constants/action_types";
 import * as settings from "constants/settings";
+import LANGUAGES from "constants/languages";
 import lbry from "lbry";
 
 const reducers = {};
@@ -10,7 +11,7 @@ const defaultState = {
     credit_intro_acknowledged: lbry.getClientSetting(
       settings.CREDIT_INTRO_ACKNOWLEDGED
     ),
-    language: lbry.getClientSetting(settings.LANGUAGE)
+    language: lbry.getClientSetting(settings.LANGUAGE),
   },
   languages: {},
 };
