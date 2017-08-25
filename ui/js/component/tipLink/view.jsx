@@ -7,7 +7,7 @@ class TipLink extends React.PureComponent {
     super(props);
 
     this.state = {
-      tipAmount: "1.00",
+      tipAmount: 1.0,
     };
   }
 
@@ -24,7 +24,7 @@ class TipLink extends React.PureComponent {
 
   handleSupportPriceChange(event) {
     this.setState({
-      tipAmount: event.target.value,
+      tipAmount: Number(event.target.value),
     });
   }
 

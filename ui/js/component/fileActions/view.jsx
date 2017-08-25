@@ -170,14 +170,14 @@ class FileActions extends React.PureComponent {
 
     return (
       <section className="file-actions">
-        {showTipBox ? "" : content}
+        {content}
         <Link
           label={__("Support")}
           button="text"
           icon="icon-gift"
           onClick={this.handleSupportButtonClicked.bind(this)}
         />
-        {showMenu && !showTipBox
+        {showMenu
           ? <DropDownMenu>
               <DropDownMenuItem
                 key={0}
