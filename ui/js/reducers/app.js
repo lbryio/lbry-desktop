@@ -25,6 +25,7 @@ const defaultState = {
   hasSignature: false,
   badgeNumber: 0,
   history: { index: 0, stack: [] },
+  volume: sessionStorage.getItem("volume") || 1,
 };
 
 reducers[types.DAEMON_READY] = function(state, action) {
@@ -216,6 +217,12 @@ reducers[types.HISTORY_NAVIGATE] = (state, action) => {
     history,
     isBackDisabled: history.index === 0, // First page
     isForwardDisabled: history.index === history.stack.length - 1, // Last page
+  });
+};
+
+reducers[types.VOLUME_CHANGED] = function(state, action) {
+  return Object.assign({}, state, {
+    volume: action.data.volume,
   });
 };
 

@@ -259,3 +259,5 @@ export const selectHistoryForward = createSelector(_selectState, state => {
     return history.stack[index];
   }
 });
+
+export const selectVolume = createSelector(_selectState, state => state.volume);
