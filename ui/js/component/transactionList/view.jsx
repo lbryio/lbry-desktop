@@ -10,12 +10,12 @@ class TransactionList extends React.PureComponent {
     const { fetchingTransactions, transactionItems, navigate } = this.props;
 
     function findTypeOfTx(type, is_tip) {
-      if (is_tip && type === "support") return "tip";
+      if (is_tip && type === "Support") return "Tip";
       else return type;
     }
 
     function getClaimLink(claim_name, claim_id) {
-      if (claim_id !== "----" && claim_name !== "----") {
+      if (claim_id !== "" && claim_name !== "") {
         let uri = `lbry://${claim_name}#${claim_id}`;
 
         return (
@@ -40,6 +40,7 @@ class TransactionList extends React.PureComponent {
           <tr key={item.id}>
             <td>{findTypeOfTx(item.type, item.is_tip)}</td>
             <td>{(item.amount > 0 ? "+" : "") + item.amount}</td>
+            <td>{item.fee}</td>
             <td>
               {item.date
                 ? item.date.toLocaleDateString()
@@ -81,6 +82,7 @@ class TransactionList extends React.PureComponent {
                   <tr>
                     <th>{__("Type")}</th>
                     <th>{__("Amount")}</th>
+                    <th>{__("Fee")}</th>
                     <th>{__("Date")}</th>
                     <th>{__("Time")}</th>
                     <th>{__("Claim")}</th>

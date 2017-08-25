@@ -30,6 +30,7 @@ export const selectTransactionItems = createSelector(
         date: tx.timestamp ? new Date(parseInt(tx.timestamp) * 1000) : null,
         amount: parseFloat(tx.value),
         type: tx.type,
+        fee: tx.fee,
         claim_id: tx.claim_id,
         claim_name: tx.claim_name,
         is_tip: tx.is_tip,
