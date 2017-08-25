@@ -1,7 +1,6 @@
 import * as types from "constants/action_types";
 import * as modals from "constants/modal_types";
 import lbryio from "lbryio";
-import { doOpenModal } from "actions/app";
 import { doOpenModal, doShowSnackBar } from "actions/app";
 import { doRewardList, doClaimRewardType } from "actions/rewards";
 import { selectEmailToVerify, selectUser } from "selectors/user";
