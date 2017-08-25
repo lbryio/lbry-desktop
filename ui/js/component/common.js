@@ -1,5 +1,5 @@
 import React from "react";
-import { formatCredits } from "utils";
+import { formatCredits, formatFullPrice } from "utils";
 import lbry from "../lbry.js";
 
 //component/icon.js
@@ -85,9 +85,10 @@ export class CreditAmount extends React.PureComponent {
     const { amount, precision, showFullPrice } = this.props;
 
     let formattedAmount;
+    let fullPrice = formatFullPrice(amount, 2);
 
     if (showFullPrice) {
-      formattedAmount = amount;
+      formattedAmount = fullPrice;
     } else {
       formattedAmount = amount > 0 && amount < minimumRenderableAmount
         ? "<" + minimumRenderableAmount
@@ -109,7 +110,7 @@ export class CreditAmount extends React.PureComponent {
     return (
       <span
         className={`credit-amount credit-amount--${this.props.look}`}
-        title={amount}
+        title={fullPrice}
       >
         <span>
           {amountText}
