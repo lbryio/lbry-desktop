@@ -30,6 +30,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
   * Fixed pagination styling for pages > 5 (#416)
   * Fixed sizing on squat videos (#419)
   * Support claims no longer show up on Published page (#384)
+  * Fixed rendering of small prices (#461)
 
 ### Deprecated
   *
