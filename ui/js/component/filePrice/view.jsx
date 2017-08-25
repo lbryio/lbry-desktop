@@ -19,7 +19,7 @@ class FilePrice extends React.PureComponent {
   }
 
   render() {
-    const { costInfo, look = "indicator" } = this.props;
+    const { costInfo, look = "indicator", showFullPrice = false } = this.props;
 
     const isEstimate = costInfo ? !costInfo.includesData : null;
 
@@ -35,6 +35,7 @@ class FilePrice extends React.PureComponent {
         amount={costInfo.cost}
         isEstimate={isEstimate}
         showFree={true}
+        showFullPrice={showFullPrice}
       />
     );
   }

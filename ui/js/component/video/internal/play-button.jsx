@@ -83,7 +83,7 @@ class VideoPlayButton extends React.PureComponent {
         >
           {__("This will purchase")} <strong>{title}</strong> {__("for")}{" "}
           <strong>
-            <FilePrice uri={uri} look="plain" />
+            <FilePrice uri={uri} showFullPrice={true} look="plain" />
           </strong>{" "}
           {__("credits")}.
         </Modal>
