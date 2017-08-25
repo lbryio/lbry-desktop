@@ -351,3 +351,14 @@ export function doQuit() {
     remote.app.quit();
   };
 }
+
+export function doChangeVolume(volume) {
+  return function(dispatch, getState) {
+    dispatch({
+      type: types.VOLUME_CHANGED,
+      data: {
+        volume,
+      },
+    });
+  };
+}

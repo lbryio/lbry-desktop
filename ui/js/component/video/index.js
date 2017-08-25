@@ -1,8 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
 import { doCloseModal } from "actions/app";
-import { doNavigate } from "actions/app";
-import { selectCurrentModal } from "selectors/app";
+import { doNavigate, doChangeVolume } from "actions/app";
+import { selectCurrentModal, selectVolume } from "selectors/app";
 import { doPurchaseUri, doLoadVideo } from "actions/content";
 import {
   makeSelectMetadataForUri,
@@ -34,6 +34,7 @@ const makeSelect = () => {
     isLoading: selectIsLoading(state, props),
     isDownloading: selectIsDownloading(state, props),
     contentType: selectContentType(state, props),
+    volume: selectVolume(state, props),
   });
 
   return select;
@@ -43,6 +44,7 @@ const perform = dispatch => ({
   loadVideo: uri => dispatch(doLoadVideo(uri)),
   purchaseUri: uri => dispatch(doPurchaseUri(uri, "affirmPurchaseAndPlay")),
   closeModal: () => dispatch(doCloseModal()),
+  changeVolume: volume => dispatch(doChangeVolume(volume)),
 });
 
 export default connect(makeSelect, perform)(Video);

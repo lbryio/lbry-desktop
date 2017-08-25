@@ -66,6 +66,8 @@ class Video extends React.PureComponent {
       isDownloading,
       fileInfo,
       contentType,
+      changeVolume,
+      volume,
     } = this.props;
     const { isPlaying = false } = this.state;
 
@@ -119,6 +121,8 @@ class Video extends React.PureComponent {
                 mediaType={mediaType}
                 contentType={contentType}
                 downloadCompleted={fileInfo.completed}
+                changeVolume={changeVolume}
+                volume={volume}
               />)}
         {!isPlaying &&
           <div
