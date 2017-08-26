@@ -181,6 +181,14 @@ class PublishForm extends React.PureComponent {
     return !!myClaims.find(claim => claim.name === name);
   }
 
+  handleEditClaim() {
+    const isMine = this.myClaimExists();
+
+    if (isMine) {
+      this.handlePrefillClicked();
+    }
+  }
+
   topClaimIsMine() {
     const myClaimInfo = this.myClaimInfo();
     const { claimsByUri } = this.props;
@@ -400,8 +408,16 @@ class PublishForm extends React.PureComponent {
   }
 
   componentWillMount() {
+    const { name } = this.props.params;
+
     this.props.fetchClaimListMine();
     this._updateChannelList();
+
+    if (name) this.setState({ name });
+  }
+
+  componentDidMount() {
+    this.handleEditClaim();
   }
 
   onFileChange() {

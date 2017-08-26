@@ -73,6 +73,7 @@ class FileActions extends React.PureComponent {
       costInfo,
       loading,
       claimIsMine,
+      navigate,
     } = this.props;
 
     const metadata = fileInfo ? fileInfo.metadata : null,
@@ -173,8 +174,14 @@ class FileActions extends React.PureComponent {
                 onClick={() => openInFolder(fileInfo)}
                 label={openInFolderMessage}
               />
+              {claimIsMine &&
+                <DropDownMenuItem
+                  key={1}
+                  onClick={() => navigate("/publish", { name: fileInfo.name })}
+                  label={__("Edit claim")}
+                />}
               <DropDownMenuItem
-                key={1}
+                key={2}
                 onClick={() => openModal(modals.CONFIRM_FILE_REMOVE)}
                 label={__("Remove...")}
               />
