@@ -46,6 +46,7 @@ class PublishForm extends React.PureComponent {
       modal: null,
       isFee: false,
       customUrl: false,
+      path: "",
     };
   }
 
@@ -408,13 +409,13 @@ class PublishForm extends React.PureComponent {
   }
 
   componentWillMount() {
-    const { name, channel } = this.props.params;
+    const { name, channel, path } = this.props.params;
 
     this.props.fetchClaimListMine();
     this._updateChannelList();
 
-    if (name && channel) {
-      this.setState({ name, rawName: name, channel });
+    if (name && channel && path) {
+      this.setState({ name, rawName: name, channel, path });
     }
   }
 
@@ -525,6 +526,7 @@ class PublishForm extends React.PureComponent {
                 label="File"
                 ref="file"
                 type="file"
+                defaultValue={this.state.path}
                 onChange={event => {
                   this.onFileChange(event);
                 }}
