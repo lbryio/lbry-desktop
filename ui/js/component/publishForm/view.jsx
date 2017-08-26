@@ -461,7 +461,7 @@ class PublishForm extends React.PureComponent {
         <span>
           {__("You already have a claim with this name.")}{" "}
           <Link
-            label={__("Use data from my existing claim")}
+            label={__("Edit existing claim")}
             onClick={() => this.handlePrefillClicked()}
           />
         </span>
