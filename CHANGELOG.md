@@ -11,6 +11,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
   * Added a forward button and improved history behavior. Back/forward disable when unusable.
   * Added a new component, `FormFieldPrice` which is now used in Publish and Settings.
   * Added wallet backup guide reference.
+  * Added an edit button inside the menu of fileActions component.
   
 ### Changed
   * Updated to daemon [0.15](https://github.com/lbryio/lbry/releases). Most relevant changes for app are improved announcing of content and a fix for the daemon getting stuck running.
@@ -21,6 +22,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
   * Replaced confusing placeholder text from email input.
   * Refactored modal and settings logic.
   * Updated several packages and fixed warnings in build process (all but the [fsevents warning](https://github.com/yarnpkg/yarn/issues/3738), which is a rather dramatic debate)
+  * Improved UX for editing claims.
 
 ### Fixed
   * Tiles will no longer be blurry on hover (Windows only bug)
