@@ -81,6 +81,9 @@ class FileActions extends React.PureComponent {
       navigate,
     } = this.props;
 
+    const name = fileInfo ? fileInfo.name : null;
+    const channel = fileInfo ? fileInfo.channel_name : null;
+
     const metadata = fileInfo ? fileInfo.metadata : null,
       openInFolderMessage = platform.startsWith("Mac")
         ? __("Open in Finder")
@@ -189,7 +192,7 @@ class FileActions extends React.PureComponent {
                 {claimIsMine &&
                 <DropDownMenuItem
                   key={1}
-                  onClick={() => navigate("/publish", { name: fileInfo.name })}
+                  onClick={() => navigate("/publish", { name, channel })}
                   label={__("Edit claim")}
                 />}
                 <DropDownMenuItem

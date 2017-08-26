@@ -418,12 +418,14 @@ class PublishForm extends React.PureComponent {
   }
 
   componentWillMount() {
-    const { name } = this.props.params;
+    const { name, channel } = this.props.params;
 
     this.props.fetchClaimListMine();
     this._updateChannelList();
 
-    if (name) this.setState({ name });
+    if (name && channel) {
+      this.setState({ name, rawName: name, channel });
+    }
   }
 
   componentDidMount() {
