@@ -16,7 +16,7 @@ const RewardLink = props => {
   return (
     <div className="reward-link">
       <Link
-        button={button ? button : "alt"}
+        button={button}
         disabled={isPending}
         label={
           isPending ? __("Claiming...") : label ? label : __("Claim Reward")

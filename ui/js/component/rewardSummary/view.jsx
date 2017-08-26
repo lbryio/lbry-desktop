@@ -18,12 +18,9 @@ const RewardSummary = props => {
             unclaimed rewards.
           </p>}
       </div>
-      <div className="card__content">
-        <Link
-          button={unclaimedRewardAmount > 0 ? "primary" : "text"}
-          navigate="/rewards"
-          label={__("Go To Rewards")}
-        />
+      <div className="card__actions card__actions--bottom">
+        <Link button="text" navigate="/rewards" label={__("Rewards")} />
+        <Link button="text" navigate="/invite" label={__("Invites")} />
       </div>
     </section>
   );

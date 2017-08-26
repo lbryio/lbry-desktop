@@ -1,5 +1,5 @@
 import React from "react";
-import { BusyMessage } from "component/common";
+import { BusyMessage, CreditAmount } from "component/common";
 import Link from "component/link";
 import { FormRow } from "component/form.js";
 
@@ -62,15 +62,15 @@ class InviteNew extends React.PureComponent {
       inviteNew,
       inviteStatusIsPending,
       isPending,
+      rewardAmount,
     } = this.props;
 
     return (
       <section className="card">
         <div className="card__title-primary">
+          <CreditAmount amount={rewardAmount} />
           <h3>
-            {__(
-              "Invite a Friend (or Enemy) (or Someone You Are Somewhat Ambivalent About)"
-            )}
+            {__("Invite a Friend")}
           </h3>
         </div>
         {/*
@@ -81,6 +81,11 @@ class InviteNew extends React.PureComponent {
             <p className="empty">{__("You have no invites.")}</p>}
         </div> */}
         <div className="card__content">
+          <p>
+            {__(
+              "Or an enemy. Or your cousin Jerry, who you're kind of unsure about."
+            )}
+          </p>
           <FormInviteNew
             errorMessage={errorMessage}
             inviteNew={inviteNew}

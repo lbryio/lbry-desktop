@@ -6,9 +6,11 @@ import { makeSelectClientSetting } from "selectors/settings";
 import { selectUser } from "selectors/user";
 import { selectCostForCurrentPageUri } from "selectors/cost_info";
 import * as settings from "constants/settings";
+import { selectBalance } from "selectors/wallet";
 import ModalRouter from "./view";
 
 const select = (state, props) => ({
+  balance: selectBalance(state),
   showPageCost: selectCostForCurrentPageUri(state),
   modal: selectCurrentModal(state),
   page: selectCurrentPage(state),

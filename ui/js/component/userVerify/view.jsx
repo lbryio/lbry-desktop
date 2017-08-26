@@ -26,37 +26,121 @@ class UserVerify extends React.PureComponent {
     const { errorMessage, isPending, navigate } = this.props;
     return (
       <div>
-        <p>
-          {__(
-            "To ensure you are a real person, we require a valid credit or debit card."
-          ) +
-            " " +
-            __("There is no charge at all, now or in the future.") +
-            " "}
-          <Link
-            href="https://lbry.io/faq/identity-requirements"
-            label={__("Read More")}
-          />
-        </p>
-        {errorMessage && <p className="form-field__error">{errorMessage}</p>}
-        <p>
-          <CardVerify
-            label={__("Link Card and Finish")}
-            disabled={isPending}
-            token={this.onToken.bind(this)}
-            stripeKey={lbryio.getStripeToken()}
-          />
-        </p>
-        <p>
-          {__(
-            "You can continue without this step, but you will not be eligible to earn rewards."
-          )}
-        </p>
-        <Link
-          onClick={() => navigate("/discover")}
-          button="alt"
-          label={__("Skip Rewards")}
-        />
+        <section className="card card--form">
+          <div className="card__title-primary">
+            <h1>{__("Final Human Proof")}</h1>
+          </div>
+          <div className="card__content">
+            <p>
+              Finally, please complete <strong>one and only one</strong> of the
+              options below.
+            </p>
+          </div>
+        </section>
+        <section className="card card--form">
+          <div className="card__title-primary">
+            <h3>{__("1) Proof via Credit")}</h3>
+          </div>
+          <div className="card__content">
+            <p>
+              {__(
+                "If you have a valid credit or debit card, you can instantly prove your humanity."
+              ) +
+                " " +
+                __(
+                  "There is no charge at all for this, now or in the future."
+                ) +
+                " "}
+              <Link
+                href="https://lbry.io/faq/identity-requirements"
+                label={__("Read More")}
+              />
+            </p>
+            {errorMessage &&
+              <p className="form-field__error">{errorMessage}</p>}
+            <p>
+              <CardVerify
+                label={__("Perform Card Verification")}
+                disabled={isPending}
+                token={this.onToken.bind(this)}
+                stripeKey={lbryio.getStripeToken()}
+              />
+            </p>
+          </div>
+        </section>
+        <section className="card card--form">
+          <div className="card__title-primary">
+            <h3>{__("2) Proof via YouTube")}</h3>
+          </div>
+          <div className="card__content">
+            <p>
+              {__(
+                "If you have a YouTube account with published videos that you want to make available on LBRY, syncing your account will grant instant authorization."
+              )}
+            </p>
+          </div>
+          <div className="card__actions">
+            <Link
+              href="https://api.lbry.io/yt/sync"
+              button="alt"
+              icon="icon-youtube"
+              label={__("YouTube Account Sync")}
+            />
+          </div>
+          <div className="card__content">
+            <div className="meta">
+              This will not automatically refresh after approval. Once you have
+              synced your account, just navigate away or click
+              {" "} <Link navigate="/rewards" label="here" />.
+            </div>
+          </div>
+        </section>
+        <section className="card card--form">
+          <div className="card__title-primary">
+            <h3>{__("3) Proof via Chat")}</h3>
+          </div>
+          <div className="card__content">
+            <p>
+              {__(
+                "A moderator capable of approving you is typically available in the #verification channel of our chat room."
+              )}
+            </p>
+            <p>
+              {__(
+                "This process will likely involve providing proof of a stable and established online identity of some kind."
+              )}
+            </p>
+          </div>
+          <div className="card__actions">
+            <Link
+              href="https://slack.lbry.io"
+              button="alt"
+              icon="icon-slack"
+              label={__("Join LBRY Chat")}
+            />
+          </div>
+        </section>
+        <section className="card card--form">
+          <div className="card__title-primary">
+            <h5>{__("Or, Skip It Entirely")}</h5>
+          </div>
+          <div className="card__content">
+
+            <p className="meta">
+              {__(
+                "You can continue without this step, but you will not be eligible to earn rewards."
+              )}
+            </p>
+
+          </div>
+          <div className="card__actions">
+            <Link
+              onClick={() => navigate("/discover")}
+              button="alt"
+              label={__("Skip Rewards")}
+            />
+          </div>
+        </section>
       </div>
     );
   }

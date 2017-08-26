@@ -3,6 +3,7 @@ import * as modals from "constants/modal_types";
 import lbryio from "lbryio";
 import rewards from "rewards";
 import { selectUnclaimedRewardsByType } from "selectors/rewards";
+import { selectUserIsRewardApproved } from "selectors/user";
 
 export function doRewardList() {
   return function(dispatch, getState) {
@@ -31,12 +32,21 @@ export function doRewardList() {
 
 export function doClaimRewardType(rewardType) {
   return function(dispatch, getState) {
-    const rewardsByType = selectUnclaimedRewardsByType(getState()),
-      reward = rewardsByType[rewardType];
+    const state = getState(),
+      rewardsByType = selectUnclaimedRewardsByType(state),
+      reward = rewardsByType[rewardType],
+      userIsRewardApproved = selectUserIsRewardApproved(state);
 
     if (reward.transaction_id) {
       //already claimed, do nothing
       return;
+    }
+
+    if (!userIsRewardApproved) {
+      return dispatch({
+        type: types.OPEN_MODAL,
+        data: { modal: modals.REWARD_APPROVAL_REQUIRED },
+      });
     }
 
     dispatch({

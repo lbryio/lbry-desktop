@@ -30,7 +30,6 @@ const Router = props => {
   const { currentPage, params } = props;
 
   return route(currentPage, {
-    address: <ReceiveCreditsPage params={params} />,
     auth: <AuthPage params={params} />,
     backup: <BackupPage params={params} />,
     channel: <ChannelPage params={params} />,
@@ -42,6 +41,7 @@ const Router = props => {
     invite: <InvitePage params={params} />,
     publish: <PublishPage params={params} />,
     published: <FileListPublished params={params} />,
+    receive: <ReceiveCreditsPage params={params} />,
     report: <ReportPage params={params} />,
     rewards: <RewardsPage params={params} />,
     search: <SearchPage params={params} />,

@@ -7,7 +7,7 @@ const select = state => ({});
 
 const perform = dispatch => ({
   addFunds: () => {
-    dispatch(doNavigate("/rewards"));
+    dispatch(doNavigate("/wallet"));
     dispatch(doCloseModal());
   },
   closeModal: () => dispatch(doCloseModal()),

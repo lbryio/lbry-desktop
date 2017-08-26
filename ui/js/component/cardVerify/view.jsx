@@ -165,7 +165,7 @@ class CardVerify extends React.Component {
   render() {
     return (
       <Link
-        button="primary"
+        button="alt"
         label={this.props.label}
         icon="icon-lock"
         disabled={

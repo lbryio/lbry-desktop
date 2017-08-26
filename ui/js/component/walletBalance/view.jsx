@@ -21,13 +21,19 @@ const WalletBalance = props => {
         {(balance || balance === 0) &&
           <CreditAmount amount={balance} precision={8} />}
       </div>
-      <div className="card__content">
-        <Link button="text" navigate="/send" label={__("Send")} />
-        <Link button="text" navigate="/address" label={__("Address")} />
+      <div className="card__actions card__actions--bottom">
         <Link
           button="text"
+          navigate="/send"
+          disabled={balance === 0}
+          label={__("Send")}
+        />
+        <Link button="text" navigate="/receive" label={__("Receive")} />
+        <Link
+          button="text"
+          disabled={balance === 0}
           navigate="/backup"
-          label={__("Backup Your Wallet")}
+          label={__("Backup")}
         />
       </div>
     </section>

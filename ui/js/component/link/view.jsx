@@ -22,11 +22,11 @@ const Link = props => {
     (button ? " button-block button-" + button + " button-set-item" : "") +
     (disabled ? " disabled" : "");
 
-  const onClick = props.onClick
-    ? props.onClick
-    : () => {
+  const onClick = !props.onClick && navigate
+    ? () => {
         doNavigate(navigate);
-      };
+      }
+    : props.onClick;
 
   let content;
   if (children) {

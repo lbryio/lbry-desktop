@@ -26,6 +26,10 @@ const { lbrySettings: config } = require("../../../app/package.json");
 
 export function doNavigate(path, params = {}, options = {}) {
   return function(dispatch, getState) {
+    if (!path) {
+      return;
+    }
+
     let url = path;
     if (params) url = `${url}?${toQueryString(params)}`;
 

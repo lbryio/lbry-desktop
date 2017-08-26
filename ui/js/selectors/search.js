@@ -38,6 +38,8 @@ export const selectWunderBarAddress = createSelector(
 
 export const selectWunderBarIcon = createSelector(selectCurrentPage, page => {
   switch (page) {
+    case "auth":
+      return "icon-user";
     case "search":
       return "icon-search";
     case "settings":
