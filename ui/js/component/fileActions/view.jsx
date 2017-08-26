@@ -82,6 +82,7 @@ class FileActions extends React.PureComponent {
     } = this.props;
 
     const name = fileInfo ? fileInfo.name : null;
+    const path = fileInfo ? fileInfo.download_path : null;
     const channel = fileInfo ? fileInfo.channel_name : null;
 
     const metadata = fileInfo ? fileInfo.metadata : null,
@@ -192,7 +193,7 @@ class FileActions extends React.PureComponent {
                 {claimIsMine &&
                 <DropDownMenuItem
                   key={1}
-                  onClick={() => navigate("/publish", { name, channel })}
+                  onClick={() => navigate("/publish", { name, channel, path })}
                   label={__("Edit claim")}
                 />}
                 <DropDownMenuItem
