@@ -88,8 +88,9 @@ export function doSetTheme(name) {
       // update theme
       dispatch(doSetClientSetting(settings.THEME, theme.name));
     }
+  };
 }
-  
+
 export function doDownloadLanguage(langFile) {
   return function(dispatch, getState) {
     const destinationPath = `app/locales/${langFile}`;
