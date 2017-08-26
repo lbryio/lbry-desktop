@@ -66,13 +66,6 @@ export class AuthPage extends React.PureComponent {
             <h1>{this.getTitle()}</h1>
           </div>
           <div className="card__content">
-            {!isPending &&
-              !email &&
-              user &&
-              !user.has_verified_email &&
-              <p>
-                {__("Create a verified identity and receive LBC rewards.")}
-              </p>}
             {this.renderMain()}
           </div>
           <div className="card__content">

@@ -1,5 +1,6 @@
 import { createSelector } from "reselect";
 import { selectUser } from "selectors/user";
+import rewards from "rewards";
 
 const _selectState = state => state.rewards || {};
 
@@ -20,7 +21,13 @@ export const selectClaimedRewards = createSelector(
 
 export const selectUnclaimedRewards = createSelector(
   selectUnclaimedRewardsByType,
-  byType => Object.values(byType) || []
+  byType =>
+    Object.values(byType).sort(function(a, b) {
+      return rewards.SORT_ORDER.indexOf(a.reward_type) <
+        rewards.SORT_ORDER.indexOf(b.reward_type)
+        ? -1
+        : 1;
+    }) || []
 );
 
 export const selectIsRewardEligible = createSelector(
@@ -82,4 +89,11 @@ const selectRewardByType = (state, props) => {
 
 export const makeSelectRewardByType = () => {
   return createSelector(selectRewardByType, reward => reward);
+};
+
+export const makeSelectRewardAmountByType = () => {
+  return createSelector(
+    selectRewardByType,
+    reward => (reward ? reward.reward_amount : 0)
+  );
 };

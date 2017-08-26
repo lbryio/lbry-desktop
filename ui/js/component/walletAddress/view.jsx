@@ -18,7 +18,7 @@ class WalletAddress extends React.PureComponent {
         <div className="card__content">
           <p>
             {__(
-              'Other LBRY users may send credits to you by entering this address on the "Send" page.'
+              "Use this address to receive credits send by another user (or yourself)."
             )}
           </p>
           <Address address={receiveAddress} />

@@ -33,13 +33,20 @@ class RewardsPage extends React.PureComponent {
       ) {
         return (
           <section className="card">
+            <div className="card__title-primary">
+              <h3>{__("Humanity Required")}</h3>
+            </div>
             <div className="card__content empty">
               <p>
-                {__("Only verified accounts are eligible to earn rewards.")}
+                {__("Rewards are for human beings only.")}
+                {" "}
+                {__(
+                  "You'll have to prove you're one of us before you can claim any rewards."
+                )}
               </p>
             </div>
             <div className="card__content">
-              <Link onClick={doAuth} button="primary" label="Become Verified" />
+              <Link onClick={doAuth} button="primary" label="Prove Humanity" />
             </div>
           </section>
         );
@@ -89,12 +96,11 @@ class RewardsPage extends React.PureComponent {
         </div>
       );
     } else if (user === null) {
-
       return (
         <div className="card__content empty">
           <p>
             {__(
-                "This application is unable to earn rewards due to an authentication failure."
+              "This application is unable to earn rewards due to an authentication failure."
             )}
           </p>
         </div>
@@ -106,8 +112,12 @@ class RewardsPage extends React.PureComponent {
         </div>
       );
     } else {
-      return rewards.map(reward =>
-        <RewardTile key={reward.reward_type} reward={reward} />
+      return (
+        <div className="card-grid">
+          {rewards.map(reward =>
+            <RewardTile key={reward.reward_type} reward={reward} />
+          )}
+        </div>
       );
     }
   }

@@ -402,6 +402,9 @@ class PublishForm extends React.PureComponent {
   componentWillMount() {
     this.props.fetchClaimListMine();
     this._updateChannelList();
+    if (this.props.balance === 0) {
+      this.props.openInsufficientCreditsModal();
+    }
   }
 
   onFileChange() {

@@ -12,17 +12,17 @@ const ModalCreditIntro = props => {
   return (
     <Modal type="custom" isOpen={true} contentLabel="Welcome to LBRY">
       <section>
-        <h3 className="modal__header">{__("Quick Credit Intro")}</h3>
+        <h3 className="modal__header">{__("Blockchain 101")}</h3>
         <p>
-          The LBRY network is controlled and powered by credits called{" "}
-          <em><CurrencySymbol /></em>, a blockchain asset. {" "}
+          LBRY is controlled and powered by blockchain asset called {" "}
+          <em><CurrencySymbol /></em>. {" "}
           <CurrencySymbol />{" "}
           {__(
             "is used to publish content, to have a say in the network rules, and to access paid content."
           )}
         </p>
         <p>
-          {__("New verified users can receive more than ")} {" "}
+          {__("New users are eligible to receive more than ")} {" "}
           {totalRewardValue
             ? <CreditAmount amount={totalRewardRounded} />
             : <span className="credit-amount">{__("credits")}</span>}

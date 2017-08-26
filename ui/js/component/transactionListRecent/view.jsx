@@ -26,7 +26,7 @@ class TransactionListRecent extends React.PureComponent {
             />}
         </div>
         {hasTransactions &&
-          <div className="card__content">
+          <div className="card__actions card__actions--bottom">
             <Link
               navigate="/history"
               label={__("See Full History")}

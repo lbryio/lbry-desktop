@@ -1,6 +1,5 @@
 import React from "react";
 import SubHeader from "component/subHeader";
-import WalletBalance from "component/walletBalance";
 import WalletSend from "component/walletSend";
 
 const SendCreditsPage = props => {

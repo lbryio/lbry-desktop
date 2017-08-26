@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { doNavigate, doHistoryBack } from "actions/app";
+import { doNavigate, doHistoryBack, doOpenModal } from "actions/app";
 import { doClaimRewardType } from "actions/rewards";
 import {
   selectMyClaims,
@@ -16,10 +16,13 @@ import {
   doCreateChannel,
   doPublish,
 } from "actions/content";
+import { selectBalance } from "selectors/wallet";
 import rewards from "rewards";
 import PublishPage from "./view";
+import * as modals from "constants/modal_types";
 
 const select = state => ({
+  balance: selectBalance(state),
   myClaims: selectMyClaims(state),
   fetchingChannels: selectFetchingMyChannels(state),
   channels: selectMyChannelClaims(state),
@@ -37,6 +40,8 @@ const perform = dispatch => ({
   resolveUri: uri => dispatch(doResolveUri(uri)),
   createChannel: (name, amount) => dispatch(doCreateChannel(name, amount)),
   publish: params => dispatch(doPublish(params)),
+  openInsufficientCreditsModal: () =>
+    dispatch(doOpenModal(modals.INSUFFICIENT_CREDITS)),
 });
 
 export default connect(select, perform)(PublishPage);

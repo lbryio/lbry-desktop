@@ -1,5 +1,6 @@
 import React from "react";
 import { Modal } from "modal/modal";
+import { CurrencySymbol } from "component/common";
 
 class ModalInsufficientCredits extends React.PureComponent {
   render() {
@@ -15,7 +16,8 @@ class ModalInsufficientCredits extends React.PureComponent {
         onAborted={closeModal}
         onConfirmed={addFunds}
       >
-        <p>{__("More LBRY credits are required to take this action.")}</p>
+        <h3 className="modal__header">{__("More Credits Required")}</h3>
+        <p>You'll need more <CurrencySymbol /> to do this.</p>
       </Modal>
     );
   }

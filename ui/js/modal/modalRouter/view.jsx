@@ -6,6 +6,7 @@ import ModalInsufficientCredits from "modal/modalInsufficientCredits";
 import ModalUpgrade from "modal/modalUpgrade";
 import ModalWelcome from "modal/modalWelcome";
 import ModalFirstReward from "modal/modalFirstReward";
+import ModalRewardApprovalRequired from "modal/modalRewardApprovalRequired";
 import * as modals from "constants/modal_types";
 import ModalCreditIntro from "modal/modalCreditIntro";
 
@@ -58,7 +59,7 @@ class ModalRouter extends React.PureComponent {
       user &&
       !user.is_reward_approved &&
       !user.is_identity_verified &&
-      ["rewards", "send", "address", "show", "publish", "wallet"].includes(
+      ["rewards", "send", "receive", "show", "publish", "wallet"].includes(
         page
       ) &&
       (page != "show" || showPageCost > 0)
@@ -88,6 +89,8 @@ class ModalRouter extends React.PureComponent {
         return <ModalAuthFailure />;
       case modals.CREDIT_INTRO:
         return <ModalCreditIntro />;
+      case modals.REWARD_APPROVAL_REQUIRED:
+        return <ModalRewardApprovalRequired />;
       default:
         return null;
     }
