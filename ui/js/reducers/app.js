@@ -172,27 +172,19 @@ reducers[types.WINDOW_FOCUSED] = function(state, action) {
 };
 
 reducers[types.HISTORY_NAVIGATE] = (state, action) => {
-  let page = false;
-  let location = false;
-
   // Get history from state
   const { history } = state;
 
-  if (action.data.page) {
-    // Get page
-    page = action.data.page;
-  } else if (action.data.location) {
-    // Get new location
-    location = action.data.location;
-  }
+  let { location, page } = action.data;
 
   // Add new location to stack
   if (location) {
-    const lastItem = history.stack.length - 1;
+    const lastIndex = history.stack.length - 1;
+    const lastPage = history.stack[lastIndex].location;
 
     // Check for duplicated
-    let is_duplicate = lastItem > -1
-      ? history.stack[lastItem].location === location
+    let is_duplicate = lastIndex > -1
+      ? lastPage.replace(/[?]$/, "") === location.replace(/[?]$/, "")
       : false;
 
     if (!is_duplicate) {
