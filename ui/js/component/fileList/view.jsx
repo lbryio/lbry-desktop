@@ -51,6 +51,14 @@ class FileList extends React.PureComponent {
     };
   }
 
+  getChannelSignature(fileInfo) {
+    if (fileInfo.value) {
+      return fileInfo.value.publisherSignature.certificateId;
+    } else {
+      return fileInfo.metadata.publisherSignature.certificateId;
+    }
+  }
+
   handleSortChanged(event) {
     this.setState({
       sortBy: event.target.value,
@@ -69,7 +77,7 @@ class FileList extends React.PureComponent {
         uriParams.channelName = fileInfo.channel_name;
         uriParams.contentName = fileInfo.name;
         // The following can be done as certificateID of a claim is nothing but the claimID of the channel.
-        uriParams.claimId = fileInfo.value.publisherSignature.certificateId;
+        uriParams.claimId = this.getChannelSignature(fileInfo);
       } else {
         uriParams.claimId = fileInfo.claim_id;
         uriParams.name = fileInfo.name;

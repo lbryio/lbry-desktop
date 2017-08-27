@@ -58,6 +58,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
 
 ### Fixed
  * Corrected improper pluralization on loading screen
+ * Regression in #501
 
 
 
