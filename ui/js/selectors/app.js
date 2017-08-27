@@ -239,25 +239,13 @@ export const selectIsForwardDisabled = createSelector(
 );
 
 export const selectHistoryBack = createSelector(_selectState, state => {
-  const { history } = state;
-  const index = history.index - 1;
-
-  // Check if page exists
-  if (index > -1) {
-    // Get back history
-    return history.stack[index];
-  }
+  const { stack } = state.history;
+  return stack.backward.pop();
 });
 
 export const selectHistoryForward = createSelector(_selectState, state => {
-  const { history } = state;
-  const index = history.index + 1;
-
-  // Check if page exists
-  if (index <= history.stack.length) {
-    // Get forward history
-    return history.stack[index];
-  }
+  const { stack } = state.history;
+  return stack.forward.pop();
 });
 
 export const selectVolume = createSelector(_selectState, state => state.volume);

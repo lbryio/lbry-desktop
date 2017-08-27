@@ -29,8 +29,6 @@ export function doNavigate(path, params = {}, options = {}) {
     let url = path;
     if (params) url = `${url}?${toQueryString(params)}`;
 
-    dispatch(doChangePath(url));
-
     const state = getState();
     const pageTitle = selectPageTitle(state);
     const historyState = history.state;
@@ -38,6 +36,8 @@ export function doNavigate(path, params = {}, options = {}) {
     dispatch(
       doHistoryPush({ params, page: historyState.page + 1 }, pageTitle, url)
     );
+
+    dispatch(doChangePath(url));
   };
 }
 
@@ -83,17 +83,17 @@ export function doChangePath(path, options = {}) {
 
 export function doHistoryBack() {
   return function(dispatch, getState) {
-    // Get back history from stack
+    // Get backward history from stack
     const back = selectHistoryBack(getState());
 
     if (back) {
-      // Set location
-      dispatch(doChangePath(back.location));
-
       dispatch({
-        type: types.HISTORY_NAVIGATE,
-        data: { page: back },
+        type: types.HISTORY_BACKWARD,
+        data: { location: back },
       });
+
+      // Set location
+      dispatch(doChangePath(back));
     }
   };
 }
@@ -104,13 +104,13 @@ export function doHistoryForward() {
     const forward = selectHistoryForward(getState());
 
     if (forward) {
-      // Set location
-      dispatch(doChangePath(forward.location));
-
       dispatch({
-        type: types.HISTORY_NAVIGATE,
-        data: { page: forward },
+        type: types.HISTORY_FORWARD,
+        data: { location: forward },
       });
+
+      // Set location
+      dispatch(doChangePath(forward));
     }
   };
 }
@@ -303,23 +303,16 @@ export function doDaemonReady() {
   return function(dispatch, getState) {
     const path = window.location.hash || "#/discover";
     const params = parseQueryParams(path.split("?")[1] || "");
-
-    // Get first page
-    const page = {
-      index: 0,
-      location: path.replace(/^#/, ""),
-    };
+    const location = path.replace(/^#/, "");
 
     history.replaceState(
       { params, is_first_page: true, page: 1 },
       document.title,
       `${path}`
     );
+
     dispatch(doAuthenticate());
-    dispatch({
-      type: types.DAEMON_READY,
-      data: { page },
-    });
+    dispatch({ type: types.DAEMON_READY, data: { location } });
     dispatch(doFetchDaemonSettings());
     dispatch(doFileList());
   };
