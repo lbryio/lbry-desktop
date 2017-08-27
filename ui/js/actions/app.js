@@ -60,7 +60,7 @@ export function doChangePath(path, options = {}) {
     dispatch({
       type: types.CHANGE_PATH,
       data: {
-        path,
+        path: path.replace(/^#/, ""),
       },
     });
 
