@@ -48,7 +48,7 @@ class ChannelPage extends React.PureComponent {
       contentList = <BusyMessage message={__("Fetching content")} />;
     } else if (claimsInChannel) {
       contentList = claimsInChannel.length
-        ? claimsInChannel.map(claim =>
+        ? claimsInChannel.reverse().map(claim =>
             <FileTile
               key={claim.claim_id}
               uri={lbryuri.build({
