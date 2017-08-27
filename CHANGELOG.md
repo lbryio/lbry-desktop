@@ -23,6 +23,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
   * Updated several packages and fixed warnings in build process (all but the [fsevents warning](https://github.com/yarnpkg/yarn/issues/3738), which is a rather dramatic debate)
 
 ### Fixed
+  * Show most recent content first on channel pages (#479)
   * Tiles will no longer be blurry on hover (Windows only bug)
   * Removed placeholder values from price selection form fields, which was causing confusion that these were real values (#426)
   * Fixed showing "other currency" help tip in publish form, which was caused due to not "setting" state for price
