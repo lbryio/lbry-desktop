@@ -68,7 +68,7 @@ class FileList extends React.PureComponent {
       if (fileInfo.channel_name) {
         uriParams.channelName = fileInfo.channel_name;
         uriParams.contentName = fileInfo.name;
-        if (fileInfo.value && fileInfo.publisherSignature) {
+        if (fileInfo.value && fileInfo.value.publisherSignature) {
           // The following can be done as certificateID of a claim is nothing but the claimID of the channel.
           uriParams.claimId = fileInfo.value.publisherSignature.certificateId;
         }
