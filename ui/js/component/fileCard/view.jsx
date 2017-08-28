@@ -4,6 +4,7 @@ import CardMedia from "component/cardMedia";
 import Link from "component/link";
 import { TruncatedText, Icon } from "component/common";
 import IconFeatured from "component/iconFeatured";
+import IconDownloaded from "component/iconDownloaded";
 import FilePrice from "component/filePrice";
 import UriIndicator from "component/uriIndicator";
 import NsfwOverlay from "component/nsfwOverlay";
@@ -97,8 +98,7 @@ class FileCard extends React.PureComponent {
                 <span style={{ float: "right" }}>
                   <FilePrice uri={uri} />
                   {isRewardContent && <span>{" "}<IconFeatured /></span>}
-                  {fileInfo &&
-                    <span>{" "}<Icon fixed icon="icon-folder" /></span>}
+                  {fileInfo && <span>{" "}<IconDownloaded /></span>}
                 </span>
                 <UriIndicator uri={uri} />
               </div>
