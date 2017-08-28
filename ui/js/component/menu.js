@@ -69,7 +69,8 @@ export class DropDownMenu extends React.PureComponent {
     });
   }
 
-  handleWindowClick(e) {
+  /*this will force "this" to always be the class, even when passed to an event listener*/
+  handleWindowClick = e => {
     if (
       this.state.menuOpen &&
       (!this._menuDiv || !this._menuDiv.contains(e.target))
@@ -78,7 +79,7 @@ export class DropDownMenu extends React.PureComponent {
         menuOpen: false,
       });
     }
-  }
+  };
 
   render() {
     if (!this.state.menuOpen && this._isWindowClickBound) {
