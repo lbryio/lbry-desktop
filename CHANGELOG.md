@@ -32,6 +32,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
   * Support claims no longer show up on Published page (#384)
   * Fixed rendering of small prices (#461)
   * Fixed incorrect URI in Downloads/Published page (#460)
+  * Fixed backward / forward logic of history (#499)
 
 ### Deprecated
   *
