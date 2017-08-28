@@ -39,6 +39,8 @@ let lbry = {
     customLighthouseServers: [],
     showDeveloperMenu: false,
     language: "en",
+    theme: "light",
+    themes: [],
   },
 };
 

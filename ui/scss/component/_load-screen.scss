@@ -2,7 +2,7 @@
 
 .load-screen {
   color: white;
-  background: $color-primary;
+  background: var(--color-brand);
   background-size: cover;
   min-height: 100vh;
   min-width: 100vw;
@@ -19,7 +19,7 @@
 }
 
 .load-screen__details {
-  color: $color-load-screen-text;
+  color: var(--color-load-screen-text);
 }
 
 .load-screen__details--warning {

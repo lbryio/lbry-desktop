@@ -8,8 +8,10 @@ Web UI version numbers should always match the corresponding version of LBRY App
 
 ## [Unreleased]
 ### Added
-  * Added a forward button and improved history behavior. Back/forward disable when unusable.
   * Added a new component, `FormFieldPrice` which is now used in Publish and Settings.
+  * Added a new theme system to select different themes in Settings.
+  * Added a new dark theme.
+  * Added a forward button and improved history behavior. Back/forward disable when unusable.
   * Added wallet backup guide reference.
   
 ### Changed

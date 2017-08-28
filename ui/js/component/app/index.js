@@ -7,8 +7,8 @@ import {
   doAlertError,
   doRecordScroll,
 } from "actions/app";
-import { doFetchRewardedContent } from "actions/content";
 
+import { doFetchRewardedContent } from "actions/content";
 import { doUpdateBalance } from "actions/wallet";
 import { selectWelcomeModalAcknowledged } from "selectors/app";
 import { selectUser } from "selectors/user";

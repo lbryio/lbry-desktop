@@ -3,3 +3,5 @@ export const FIRST_RUN_ACKNOWLEDGED = "welcome_acknowledged";
 export const LANGUAGE = "language";
 export const SHOW_NSFW = "showNsfw";
 export const SHOW_UNAVAILABLE = "showUnavailable";
+export const THEME = "theme";
+export const THEMES = "themes";

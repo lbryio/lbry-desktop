@@ -1,4 +1,5 @@
 import * as types from "constants/action_types";
+import * as settings from "constants/settings";
 import LANGUAGES from "constants/languages";
 import lbry from "lbry";
 
@@ -6,6 +7,8 @@ const reducers = {};
 const defaultState = {
   clientSettings: {
     showNsfw: lbry.getClientSetting("showNsfw"),
+    theme: lbry.getClientSetting(settings.THEME),
+    themes: lbry.getClientSetting(settings.THEMES),
     language: lbry.getClientSetting("language"),
   },
   languages: {},

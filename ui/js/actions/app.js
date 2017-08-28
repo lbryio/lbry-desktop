@@ -1,4 +1,5 @@
 import * as types from "constants/action_types";
+import * as settings from "constants/settings";
 import lbry from "lbry";
 import {
   selectUpdateUrl,
@@ -12,7 +13,7 @@ import {
   selectHistoryForward,
 } from "selectors/app";
 import { doSearch } from "actions/search";
-import { doFetchDaemonSettings } from "actions/settings";
+import { doFetchDaemonSettings, doSetTheme } from "actions/settings";
 import { doAuthenticate } from "actions/user";
 import { doFileList } from "actions/file_info";
 import { toQueryString } from "util/query_params";
@@ -320,6 +321,8 @@ export function doDaemonReady() {
       type: types.DAEMON_READY,
       data: { page },
     });
+    // Load last theme selected
+    dispatch(doSetTheme(lbry.getClientSetting(settings.THEME)));
     dispatch(doFetchDaemonSettings());
     dispatch(doFileList());
   };

@@ -1,4 +1,5 @@
 @import "_reset";
+@import "_vars";
 @import "_icons";
 @import "_gui";
 @import "component/_table";
@@ -18,6 +19,7 @@
 @import "component/_snack-bar.scss";
 @import "component/_video.scss";
 @import "component/_pagination.scss";
+@import "component/_markdown-editor.scss";
 @import "page/_developer.scss";
 @import "page/_reward.scss";
 @import "page/_show.scss";

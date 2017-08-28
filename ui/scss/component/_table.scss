@@ -20,13 +20,13 @@ table.table-standard {
     font-size: 0.9em;
     padding: $spacing-vertical/4+1 8px $spacing-vertical/4-2;
     text-align: left;
-    border-bottom: 1px solid #e2e2e2;
+    border-bottom: var(--table-border);
     img {
       vertical-align: text-bottom;
     }
   }
   tr.thead:not(:first-child) th {
-    border-top: 1px solid #e2e2e2;
+    border-top: var(--table-border);
   }
   tfoot td {
     padding: $spacing-vertical / 2 8px;
@@ -35,10 +35,10 @@ table.table-standard {
   tbody {
     tr {
       &:nth-child(even):not(.odd) {
-        background-color: #f4f4f4;
+        background-color: var(--table-item-odd);
       }
       &:nth-child(odd):not(.even) {
-        background-color: white;
+        background-color: var(--table-item-even);
       }
       &.thead {
         background: none;

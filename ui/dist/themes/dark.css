@@ -1,0 +1,46 @@
+:root {
+    /* Colors */
+    --color-primary:  #009688;
+    --color-canvas: #0f1517;
+    --color-bg: #1a2327;
+    --color-bg-alt: #314048;
+    --color-help: #AAA;
+    --color-error: #a94442;
+    --color-load-screen-text: #FFF;
+    --color-money: var(--color-primary);
+    --color-meta-light: #757575;
+    --color-dark-overlay: rgba(15, 21, 23, 0.85);
+
+    /* Text */
+    --text-color: #FFF;
+    --text-selection-bg: rgba(0,150,136, 0.95);
+
+    /* Input */
+    --input-bg: transparent;
+    --input-active-bg: rgba(0,0,0, 0.5);
+    --input-border-color: rgba(255,255,255, 0.25);
+
+    /* Search */
+    --search-bg: rgba(0,0,0, 0.45);
+    --search-color: #757575;
+    --search-active-bg: rgba(0,0,0, 0.75);
+    --search-border: 1px solid rgba(0,0,0, 0.25);
+
+    /* Tab */
+    --tab-color: #757575;
+    --tab-active-color: #CCC;
+
+    /* Header */
+    --header-color: #CCC;
+    --header-active-color: #FFF;
+    --header-button-bg: transparent;
+
+    /* Table */
+    --table-border: 0;
+    --table-item-even: var(--color-bg-alt);
+    --table-item-odd: transparent;
+
+    /* Modla */
+    --modal-overlay-bg: var(--color-dark-overlay);
+    --modal-border: 1px solid rgba(0, 0, 0, 0.25);
+}
