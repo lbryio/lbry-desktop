@@ -18,7 +18,7 @@ class WalletAddress extends React.PureComponent {
         <div className="card__content">
           <p>
             {__(
-              "Use this address to receive credits send by another user (or yourself)."
+              "Use this address to receive credits sent by another user (or yourself)."
             )}
           </p>
           <Address address={receiveAddress} />
