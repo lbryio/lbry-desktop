@@ -85,11 +85,13 @@ export function doClaimRewardType(rewardType) {
 
 export function doClaimEligiblePurchaseRewards() {
   return function(dispatch, getState) {
-    if (!lbryio.enabled) {
+    const state = getState(),
+      rewardsByType = selectUnclaimedRewardsByType(state),
+      userIsRewardApproved = selectUserIsRewardApproved(state);
+
+    if (!userIsRewardApproved || !lbryio.enabled) {
       return;
     }
-
-    const rewardsByType = selectUnclaimedRewardsByType(getState());
 
     if (rewardsByType[rewards.TYPE_FIRST_STREAM]) {
       dispatch(doClaimRewardType(rewards.TYPE_FIRST_STREAM));
