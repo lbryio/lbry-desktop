@@ -283,7 +283,7 @@ class PublishForm extends React.PureComponent {
     } = claimInfo.value.stream.metadata;
 
     const { source } = claimInfo.value.stream;
-    console.log(claimInfo);
+
     let newState = {
       meta_title: title,
       meta_thumbnail: thumbnail,
