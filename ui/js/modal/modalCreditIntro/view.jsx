@@ -14,7 +14,7 @@ const ModalCreditIntro = props => {
       <section>
         <h3 className="modal__header">{__("Blockchain 101")}</h3>
         <p>
-          LBRY is controlled and powered by blockchain asset called {" "}
+          LBRY is controlled and powered by blockchain assets called {" "}
           <em><CurrencySymbol /></em>. {" "}
           <CurrencySymbol />{" "}
           {__(
