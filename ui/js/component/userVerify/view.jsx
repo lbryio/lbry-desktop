@@ -42,30 +42,34 @@ class UserVerify extends React.PureComponent {
             <h3>{__("1) Proof via Credit")}</h3>
           </div>
           <div className="card__content">
-            <p>
-              {__(
-                "If you have a valid credit or debit card, you can instantly prove your humanity."
-              ) +
-                " " +
-                __(
-                  "There is no charge at all for this, now or in the future."
-                ) +
-                " "}
-              <Link
-                href="https://lbry.io/faq/identity-requirements"
-                label={__("Read More")}
-              />
-            </p>
+            {__(
+              "If you have a valid credit or debit card, you can use it to instantly prove your humanity."
+            ) +
+              " " +
+              __("There is no charge at all for this, now or in the future.") +
+              " "}
+          </div>
+          <div className="card__actions">
             {errorMessage &&
               <p className="form-field__error">{errorMessage}</p>}
-            <p>
-              <CardVerify
-                label={__("Perform Card Verification")}
-                disabled={isPending}
-                token={this.onToken.bind(this)}
-                stripeKey={lbryio.getStripeToken()}
+            <CardVerify
+              label={__("Perform Card Verification")}
+              disabled={isPending}
+              token={this.onToken.bind(this)}
+              stripeKey={lbryio.getStripeToken()}
+            />
+          </div>
+          <div className="card__content">
+            <div className="meta">
+              {__(
+                "A $1 authorization may temporarily appear with your provider."
+              )}{" "}
+              {" "}
+              <Link
+                href="https://lbry.io/faq/identity-requirements"
+                label={__("Read more about why we do this.")}
               />
-            </p>
+            </div>
           </div>
         </section>
         <section className="card card--form">
@@ -75,7 +79,7 @@ class UserVerify extends React.PureComponent {
           <div className="card__content">
             <p>
               {__(
-                "If you have a YouTube account with published videos that you want to make available on LBRY, syncing your account will grant instant authorization."
+                "If you have a YouTube account with published videos, you can sync your account to be granted instant verification."
               )}
             </p>
           </div>
@@ -107,7 +111,7 @@ class UserVerify extends React.PureComponent {
             </p>
             <p>
               {__(
-                "This process will likely involve providing proof of a stable and established online identity of some kind."
+                "This process will likely involve providing proof of a stable and established online or real-life identity."
               )}
             </p>
           </div>
