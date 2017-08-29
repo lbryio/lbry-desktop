@@ -1,12 +1,8 @@
 import React from "react";
-import lbry from "lbry.js";
 import lbryuri from "lbryuri.js";
-import Link from "component/link";
 import FormField from "component/formField";
 import FileTile from "component/fileTile";
-import rewards from "rewards.js";
-import lbryio from "lbryio.js";
-import { BusyMessage, Thumbnail } from "component/common.js";
+import { BusyMessage } from "component/common.js";
 
 class FileList extends React.PureComponent {
   constructor(props) {
@@ -55,6 +51,14 @@ class FileList extends React.PureComponent {
     };
   }
 
+  getChannelSignature(fileInfo) {
+    if (fileInfo.value) {
+      return fileInfo.value.publisherSignature.certificateId;
+    } else {
+      return fileInfo.metadata.publisherSignature.certificateId;
+    }
+  }
+
   handleSortChanged(event) {
     this.setState({
       sortBy: event.target.value,
@@ -67,12 +71,12 @@ class FileList extends React.PureComponent {
     const content = [];
 
     this._sortFunctions[sortBy](fileInfos).forEach(fileInfo => {
-      let uriParams = {
-        claimId: fileInfo.claim_id,
-      };
+      let uriParams = {};
+
       if (fileInfo.channel_name) {
         uriParams.channelName = fileInfo.channel_name;
         uriParams.contentName = fileInfo.name;
+        uriParams.claimId = this.getChannelSignature(fileInfo);
       } else {
         uriParams.claimId = fileInfo.claim_id;
         uriParams.name = fileInfo.name;

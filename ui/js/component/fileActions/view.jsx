@@ -1,11 +1,11 @@
 import React from "react";
 import { Icon, BusyMessage } from "component/common";
 import FilePrice from "component/filePrice";
-import { Modal } from "component/modal";
+import { Modal } from "modal/modal";
 import Link from "component/link";
 import { ToolTip } from "component/tooltip";
 import { DropDownMenu, DropDownMenuItem } from "component/menu";
-import ModalRemoveFile from "component/modalRemoveFile";
+import ModalRemoveFile from "modal/modalRemoveFile";
 import * as modals from "constants/modal_types";
 
 class FileActions extends React.PureComponent {
@@ -200,7 +200,7 @@ class FileActions extends React.PureComponent {
         >
           {__("This will purchase")} <strong>{title}</strong> {__("for")}{" "}
           <strong>
-            <FilePrice uri={uri} look="plain" />
+            <FilePrice uri={uri} showFullPrice={true} look="plain" />
           </strong>{" "}
           {__("credits")}.
         </Modal>
@@ -209,7 +209,8 @@ class FileActions extends React.PureComponent {
           contentLabel={__("Download failed")}
           onConfirmed={closeModal}
         >
-          {__("LBRY was unable to download the stream")} <strong>{uri}</strong>.
+          {__("LBRY was unable to download the stream")}{" "}{" "}
+          <strong>{title}</strong>.
         </Modal>
         {modal == modals.CONFIRM_FILE_REMOVE &&
           <ModalRemoveFile

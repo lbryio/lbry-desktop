@@ -5,6 +5,7 @@ This script should be run locally, not on a build server.
 import argparse
 import contextlib
 import os
+import json
 import re
 import requests
 import subprocess
@@ -16,7 +17,7 @@ import github
 import changelog
 
 ROOT = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
-DAEMON_URL_FILE = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'DAEMON_URL')
+APP_PACKAGE_JSON_FILE = os.path.join(ROOT, 'app', 'package.json')
 
 
 def main():
@@ -38,11 +39,11 @@ def main():
 
     print 'Current version: {}'.format(repo.current_version)
     print 'New version: {}'.format(repo.new_version)
-    with open(DAEMON_URL_FILE, 'r') as f:
-        daemon_url_template = f.read().strip()
-        daemon_version = re.search('/(?P<version>v[^/]+)', daemon_url_template)
-        print 'Daemon version: {}  ({})'.format(
-            daemon_version.group('version'), daemon_url_template)
+    with open(APP_PACKAGE_JSON_FILE, 'r') as f:
+        package_settings = json.load(f)['lbrySettings']
+        daemon_url_template = package_settings['lbrynetDaemonUrlTemplate']
+        daemon_version = package_settings['lbrynetDaemonVersion']
+        print 'Daemon version: {}  ({})'.format(daemon_version, daemon_url_template.replace('DAEMONVER', daemon_version))
 
     if not args.confirm and not confirm():
         print "Aborting"
@@ -190,18 +191,25 @@ def run_sanity_checks(repo, branch):
 
 
 def check_daemon_urls():
-    success = True
-    with open(DAEMON_URL_FILE, 'r') as f:
-        daemon_url_template = f.read().strip()
-        if "OSNAME" not in daemon_url_template:
-            print "Daemon URL must include the string 'OSNAME'"
-            return False
-        for osname in ('linux', 'macos', 'windows'):
-            if not check_url(daemon_url_template.replace('OSNAME', osname)):
-                success = False
-                print "Daemon URL for " + osname + " does not work"
-    return success
+    with open(APP_PACKAGE_JSON_FILE, 'r') as f:
+        package_settings = json.load(f)['lbrySettings']
 
+        daemon_url_template = package_settings['lbrynetDaemonUrlTemplate']
+        daemon_version = package_settings['lbrynetDaemonVersion']
+
+        if "OSNAME" not in daemon_url_template:
+            print "Daemon URL must include the string \"OSNAME\""
+            return False
+        elif "DAEMONVER" not in daemon_url_template:
+            print "Daemon URL must include the string \"DAEMONVER\""
+            return False
+
+        for osname in ('linux', 'macos', 'windows'):
+            if not check_url(daemon_url_template.replace('DAEMONVER', daemon_version).replace('OSNAME', osname)):
+                print "Daemon URL for", osname, " does not work"
+                return False
+
+    return True
 
 def check_url(url):
     url = url.strip()

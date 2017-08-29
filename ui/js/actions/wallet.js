@@ -111,7 +111,7 @@ export function doSendDraftTransaction() {
     };
 
     lbry
-      .send_amount_to_address({
+      .wallet_send({
         amount: draftTx.amount,
         address: draftTx.address,
       })

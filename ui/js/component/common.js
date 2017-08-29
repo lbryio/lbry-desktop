@@ -1,5 +1,5 @@
 import React from "react";
-import { formatCredits } from "utils";
+import { formatCredits, formatFullPrice } from "util/formatCredits";
 import lbry from "../lbry.js";
 
 //component/icon.js
@@ -68,35 +68,50 @@ export class CreditAmount extends React.PureComponent {
     isEstimate: React.PropTypes.bool,
     label: React.PropTypes.bool,
     showFree: React.PropTypes.bool,
+    showFullPrice: React.PropTypes.bool,
     look: React.PropTypes.oneOf(["indicator", "plain"]),
   };
 
   static defaultProps = {
-    precision: 1,
+    precision: 2,
     label: true,
-    showFree: false,
     look: "indicator",
+    showFree: false,
+    showFullPrice: false,
   };
 
   render() {
-    const formattedAmount = formatCredits(
-      this.props.amount,
-      this.props.precision
-    );
+    const minimumRenderableAmount = Math.pow(10, -1 * this.props.precision);
+    const { amount, precision, showFullPrice } = this.props;
+
+    let formattedAmount;
+    let fullPrice = formatFullPrice(amount, 2);
+
+    if (showFullPrice) {
+      formattedAmount = fullPrice;
+    } else {
+      formattedAmount = amount > 0 && amount < minimumRenderableAmount
+        ? "<" + minimumRenderableAmount
+        : formatCredits(amount, precision);
+    }
+
     let amountText;
-    if (this.props.showFree && parseFloat(formattedAmount) == 0) {
+    if (this.props.showFree && parseFloat(this.props.amount) === 0) {
       amountText = __("free");
     } else if (this.props.label) {
       amountText =
         formattedAmount +
         " " +
-        (parseFloat(formattedAmount) == 1 ? __("credit") : __("credits"));
+        (parseFloat(amount) == 1 ? __("credit") : __("credits"));
     } else {
       amountText = formattedAmount;
     }
 
     return (
-      <span className={`credit-amount credit-amount--${this.props.look}`}>
+      <span
+        className={`credit-amount credit-amount--${this.props.look}`}
+        title={fullPrice}
+      >
         <span>
           {amountText}
         </span>

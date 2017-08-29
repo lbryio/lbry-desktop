@@ -22,10 +22,12 @@ To install from source or make changes to the application, continue reading belo
 
 ### One-time Setup
 
-1. Install node and npm.
-2. Check out this repo.
-3. Set up a Python virtual environment, or live on the wild side.
-4. Run `./build.sh`. This builds the UI assets and puts them into `app/dist`. It also downloads [lbry daemon](https://github.com/lbryio/lbry/releases).
+1. Install npm and node (v6 and above required, use [nvm](https://github.com/creationix/nvm/blob/master/README.md) if having trouble)
+2. Install keytar and libsecret (see [keytar repository](https://github.com/atom/node-keytar) )
+3. Install yarn by running: npm install -g yarn (may require elevated permissions)
+4. Check out this repo.
+5. Set up a Python virtual environment, or live on the wild side.
+6. Run `./build.sh`. This builds the UI assets and puts them into `app/dist`. It also downloads [lbry daemon](https://github.com/lbryio/lbry/releases).
 
 ### Running
 

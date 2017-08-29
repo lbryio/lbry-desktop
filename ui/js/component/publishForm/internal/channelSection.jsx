@@ -55,7 +55,7 @@ class ChannelSection extends React.PureComponent {
   handleCreateChannelClick(event) {
     if (this.state.newChannelName.length < 5) {
       this.refs.newChannelName.showError(
-        __("LBRY channel names must be at least 4 characters in length.")
+        __("LBRY channel names must be at least 5 characters in length.")
       );
       return;
     }

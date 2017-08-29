@@ -21,3 +21,8 @@ export const selectShowNsfw = createSelector(
   selectClientSettings,
   clientSettings => !!clientSettings.showNsfw
 );
+
+export const selectLanguages = createSelector(
+  _selectState,
+  state => state.languages || {}
+);

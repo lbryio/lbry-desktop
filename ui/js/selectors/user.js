@@ -39,11 +39,6 @@ export const selectEmailNewErrorMessage = createSelector(
   state => state.emailNewErrorMessage
 );
 
-export const selectEmailNewDeclined = createSelector(
-  _selectState,
-  state => state.emailNewDeclined
-);
-
 export const selectEmailVerifyIsPending = createSelector(
   _selectState,
   state => state.emailVerifyIsPending

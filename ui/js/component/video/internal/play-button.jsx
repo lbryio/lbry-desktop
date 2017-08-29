@@ -1,7 +1,7 @@
 import React from "react";
 import FilePrice from "component/filePrice";
 import Link from "component/link";
-import Modal from "component/modal";
+import Modal from "modal/modal";
 
 class VideoPlayButton extends React.PureComponent {
   componentDidMount() {
@@ -83,7 +83,7 @@ class VideoPlayButton extends React.PureComponent {
         >
           {__("This will purchase")} <strong>{title}</strong> {__("for")}{" "}
           <strong>
-            <FilePrice uri={uri} look="plain" />
+            <FilePrice uri={uri} showFullPrice={true} look="plain" />
           </strong>{" "}
           {__("credits")}.
         </Modal>

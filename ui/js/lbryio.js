@@ -148,7 +148,6 @@ lbryio.authenticate = function() {
         has_verified_email: true,
         is_identity_verified: true,
         is_reward_approved: false,
-        is_reward_eligible: false,
       });
     });
   }
@@ -177,31 +176,19 @@ lbryio.authenticate = function() {
             return;
           }
 
-          let app_id;
-
           return lbry
             .status()
             .then(status => {
-              // first try swapping
-              app_id = status.installation_id;
               return lbryio.call(
                 "user",
-                "token_swap",
-                { auth_token: "", app_id: app_id },
+                "new",
+                {
+                  auth_token: "",
+                  language: "en",
+                  app_id: status.installation_id,
+                },
                 "post"
               );
-            })
-            .catch(err => {
-              if (err.xhr.status == 403) {
-                // cannot swap. either app_id doesn't exist, or app_id already swapped. pretend its the former and create a new user. if we get another error, then its the latter
-                return lbryio.call(
-                  "user",
-                  "new",
-                  { auth_token: "", language: "en", app_id: app_id },
-                  "post"
-                );
-              }
-              throw err;
             })
             .then(response => {
               if (!response.auth_token) {
@@ -216,6 +203,12 @@ lbryio.authenticate = function() {
   }
 
   return lbryio._authenticationPromise;
+};
+
+lbryio.getStripeToken = () => {
+  return CONNECTION_STRING.startsWith("http://localhost:")
+    ? "pk_test_NoL1JWL7i1ipfhVId5KfDZgo"
+    : "pk_live_e8M4dRNnCCbmpZzduEUZBgJO";
 };
 
 export default lbryio;

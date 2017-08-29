@@ -1,5 +1,4 @@
 import * as types from "constants/action_types";
-import { getLocal } from "utils";
 
 const reducers = {};
 
@@ -8,7 +7,6 @@ const defaultState = {
   userIsPending: false,
   emailNewIsPending: false,
   emailNewErrorMessage: "",
-  emailNewDeclined: getLocal("user_email_declined", false),
   emailToVerify: "",
   user: undefined,
 };
@@ -55,12 +53,6 @@ reducers[types.USER_FETCH_FAILURE] = function(state, action) {
   return Object.assign({}, state, {
     userIsPending: true,
     user: null,
-  });
-};
-
-reducers[types.USER_EMAIL_DECLINE] = function(state, action) {
-  return Object.assign({}, state, {
-    emailNewDeclined: true,
   });
 };
 

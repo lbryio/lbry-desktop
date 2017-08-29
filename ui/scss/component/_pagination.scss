@@ -26,6 +26,10 @@
   font-size: 1.2em;
 }
 
+.pagination__item--break {
+    padding: 0 $spacing-vertical * 2 / 3;
+}
+
 .pagination__item--selected {
   color: white;
   background: $color-primary;

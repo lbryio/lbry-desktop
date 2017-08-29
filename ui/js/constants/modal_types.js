@@ -9,3 +9,4 @@ export const FIRST_REWARD = "first_reward";
 export const AUTHENTICATION_FAILURE = "auth_failure";
 export const TRANSACTION_FAILED = "transaction_failed";
 export const INSUFFICIENT_BALANCE = "insufficient_balance";
+export const CREDIT_INTRO = "credit_intro";

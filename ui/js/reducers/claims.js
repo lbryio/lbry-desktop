@@ -50,7 +50,7 @@ reducers[types.FETCH_CLAIM_LIST_MINE_COMPLETED] = function(state, action) {
       .filter(claimId => Object.keys(abandoningById).indexOf(claimId) === -1)
   );
 
-  claims.forEach(claim => {
+  claims.filter(claim => claim.category.match(/claim/)).forEach(claim => {
     byId[claim.claim_id] = claim;
 
     const pending = Object.values(pendingById).find(pendingClaim => {

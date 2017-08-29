@@ -1,5 +1,5 @@
 import React from "react";
-import Modal from "component/modal";
+import Modal from "modal/modal";
 import Link from "component/link";
 
 const RewardLink = props => {

@@ -8,20 +8,32 @@ Web UI version numbers should always match the corresponding version of LBRY App
 
 ## [Unreleased]
 ### Added
-  * Added a new component, `FormFieldPrice` which is now used in Publish and Settings
   * Added a tipping button to send LBRY Credits to the publisher
-  *
-
+  * Added a forward button and improved history behavior. Back/forward disable when unusable.
+  * Added a new component, `FormFieldPrice` which is now used in Publish and Settings.
+  * Added wallet backup guide reference.
+  
 ### Changed
-  * Some form field refactoring as we progress towards form sanity.
+  * Updated to daemon [0.15](https://github.com/lbryio/lbry/releases). Most relevant changes for app are improved announcing of content and a fix for the daemon getting stuck running.
+  * Continued to refine first-run process, process for new users, and introducing people to LBRY and LBRY credits.
+  * Changed the default price settings.
   * When an "Open" button is clicked on a show page, if the file fails to open, the app will try to open the file's folder.
-  *
+  * Some form field refactoring as we take baby steps towards form sanity.
+  * Replaced confusing placeholder text from email input.
+  * Refactored modal and settings logic.
+  * Updated several packages and fixed warnings in build process (all but the [fsevents warning](https://github.com/yarnpkg/yarn/issues/3738), which is a rather dramatic debate)
 
 ### Fixed
   * Tiles will no longer be blurry on hover (Windows only bug)
   * Removed placeholder values from price selection form fields, which was causing confusion that these were real values (#426)
   * Fixed showing "other currency" help tip in publish form, which was caused due to not "setting" state for price
-  *
+  * Public page now properly checks for all required fields are filled
+  * Fixed pagination styling for pages > 5 (#416)
+  * Fixed sizing on squat videos (#419)
+  * Support claims no longer show up on Published page (#384)
+  * Fixed rendering of small prices (#461)
+  * Fixed incorrect URI in Downloads/Published page (#460)
+  * Fixed menu bug (#503)
 
 ### Deprecated
   *

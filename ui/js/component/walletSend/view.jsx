@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "component/link";
+import Modal from "modal/modal";
 import { FormRow } from "component/form";
 
 const WalletSend = props => {
@@ -16,6 +17,7 @@ const WalletSend = props => {
             label={__("Amount")}
             postfix={__("LBC")}
             step="0.01"
+            min="0"
             type="number"
             placeholder="1.23"
             size="10"

@@ -8,6 +8,8 @@ import {
   selectPageTitle,
   selectCurrentPage,
   selectCurrentParams,
+  selectHistoryBack,
+  selectHistoryForward,
 } from "selectors/app";
 import { doSearch } from "actions/search";
 import { doFetchDaemonSettings } from "actions/settings";
@@ -31,7 +33,11 @@ export function doNavigate(path, params = {}, options = {}) {
 
     const state = getState();
     const pageTitle = selectPageTitle(state);
-    dispatch(doHistoryPush({ params }, pageTitle, url));
+    const historyState = history.state;
+
+    dispatch(
+      doHistoryPush({ params, page: historyState.page + 1 }, pageTitle, url)
+    );
   };
 }
 
@@ -77,10 +83,35 @@ export function doChangePath(path, options = {}) {
 
 export function doHistoryBack() {
   return function(dispatch, getState) {
-    if (!history.state) return;
-    if (history.state.index === 0) return;
+    // Get back history from stack
+    const back = selectHistoryBack(getState());
 
-    history.back();
+    if (back) {
+      // Set location
+      dispatch(doChangePath(back.location));
+
+      dispatch({
+        type: types.HISTORY_NAVIGATE,
+        data: { page: back },
+      });
+    }
+  };
+}
+
+export function doHistoryForward() {
+  return function(dispatch, getState) {
+    // Get forward history from stack
+    const forward = selectHistoryForward(getState());
+
+    if (forward) {
+      // Set location
+      dispatch(doChangePath(forward.location));
+
+      dispatch({
+        type: types.HISTORY_NAVIGATE,
+        data: { page: forward },
+      });
+    }
   };
 }
 
@@ -88,6 +119,12 @@ export function doHistoryPush(currentState, title, relativeUrl) {
   return function(dispatch, getState) {
     title += " - LBRY";
     history.pushState(currentState, title, `#${relativeUrl}`);
+    dispatch({
+      type: types.HISTORY_NAVIGATE,
+      data: {
+        location: relativeUrl,
+      },
+    });
   };
 }
 
@@ -266,10 +303,22 @@ export function doDaemonReady() {
   return function(dispatch, getState) {
     const path = window.location.hash || "#/discover";
     const params = parseQueryParams(path.split("?")[1] || "");
-    history.replaceState({ params, index: 0 }, document.title, `${path}`);
+
+    // Get first page
+    const page = {
+      index: 0,
+      location: path.replace(/^#/, ""),
+    };
+
+    history.replaceState(
+      { params, is_first_page: true, page: 1 },
+      document.title,
+      `${path}`
+    );
     dispatch(doAuthenticate());
     dispatch({
       type: types.DAEMON_READY,
+      data: { page },
     });
     dispatch(doFetchDaemonSettings());
     dispatch(doFileList());
@@ -300,5 +349,16 @@ export function doClearCache() {
 export function doQuit() {
   return function(dispatch, getState) {
     remote.app.quit();
+  };
+}
+
+export function doChangeVolume(volume) {
+  return function(dispatch, getState) {
+    dispatch({
+      type: types.VOLUME_CHANGED,
+      data: {
+        volume,
+      },
+    });
   };
 }

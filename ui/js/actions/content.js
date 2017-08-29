@@ -231,14 +231,15 @@ export function doStartDownload(uri, outpoint) {
   return function(dispatch, getState) {
     const state = getState();
 
-    if (!outpoint) { throw new Error("outpoint is required to begin a download"); }
+    if (!outpoint) {
+      throw new Error("outpoint is required to begin a download");
+    }
 
     const { downloadingByOutpoint = {} } = state.fileInfo;
 
     if (downloadingByOutpoint[outpoint]) return;
 
     lbry.file_list({ outpoint, full_status: true }).then(([fileInfo]) => {
-
       dispatch({
         type: types.DOWNLOADING_STARTED,
         data: {
@@ -282,29 +283,32 @@ export function doLoadVideo(uri) {
       },
     });
 
-    lbry.get({ uri }).then(streamInfo => {
-      const timeout =
-        streamInfo === null ||
-        typeof streamInfo !== "object" ||
-        streamInfo.error == "Timeout";
+    lbry
+      .get({ uri })
+      .then(streamInfo => {
+        const timeout =
+          streamInfo === null ||
+          typeof streamInfo !== "object" ||
+          streamInfo.error == "Timeout";
 
-      if (timeout) {
+        if (timeout) {
+          dispatch({
+            type: types.LOADING_VIDEO_FAILED,
+            data: { uri },
+          });
+
+          dispatch(doOpenModal("timedOut"));
+        } else {
+          dispatch(doDownloadFile(uri, streamInfo));
+        }
+      })
+      .catch(error => {
         dispatch({
           type: types.LOADING_VIDEO_FAILED,
           data: { uri },
         });
-
-        dispatch(doOpenModal("timedOut"));
-      } else {
-        dispatch(doDownloadFile(uri, streamInfo));
-      }
-    }).catch(error => {
-      dispatch({
-        type: types.LOADING_VIDEO_FAILED,
-        data: { uri },
+        dispatch(doAlertError(error));
       });
-      dispatch(doAlertError(error));
-    });
   };
 }
 
@@ -336,7 +340,7 @@ export function doPurchaseUri(uri, purchaseModalName) {
     const { cost } = costInfo;
 
     // the file is free or we have partially downloaded it
-    if (cost <= 0.01 || (fileInfo && fileInfo.download_directory)) {
+    if (cost === 0 || (fileInfo && fileInfo.download_directory)) {
       dispatch(doLoadVideo(uri));
       return Promise.resolve();
     }
@@ -361,9 +365,6 @@ export function doFetchClaimsByChannel(uri, page) {
     lbry.claim_list_by_channel({ uri, page }).then(result => {
       const claimResult = result[uri],
         claims = claimResult ? claimResult.claims_in_channel : [],
-        totalPages = claimResult
-          ? claimResult.claims_in_channel_pages
-          : undefined,
         currentPage = claimResult ? claimResult.returned_page : undefined;
 
       dispatch({
@@ -371,8 +372,29 @@ export function doFetchClaimsByChannel(uri, page) {
         data: {
           uri,
           claims,
-          totalPages,
           page: currentPage,
+        },
+      });
+    });
+  };
+}
+
+export function doFetchClaimCountByChannel(uri) {
+  return function(dispatch, getState) {
+    dispatch({
+      type: types.FETCH_CHANNEL_CLAIM_COUNT_STARTED,
+      data: { uri },
+    });
+
+    lbry.claim_list_by_channel({ uri }).then(result => {
+      const claimResult = result[uri],
+        totalClaims = claimResult ? claimResult.claims_in_channel : 0;
+
+      dispatch({
+        type: types.FETCH_CHANNEL_CLAIM_COUNT_COMPLETED,
+        data: {
+          uri,
+          totalClaims,
         },
       });
     });

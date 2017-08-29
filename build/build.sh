@@ -80,10 +80,19 @@ else
   OSNAME="linux"
 fi
 DAEMON_VER=$(node -e "console.log(require(\"$ROOT/app/package.json\").lbrySettings.lbrynetDaemonVersion)")
-DAEMON_URL="https://github.com/lbryio/lbry/releases/download/v${DAEMON_VER}/lbrynet-daemon-v${DAEMON_VER}-${OSNAME}.zip"
-wget --quiet "$DAEMON_URL" -O "$BUILD_DIR/daemon.zip"
-unzip "$BUILD_DIR/daemon.zip" -d "$ROOT/app/dist/"
-rm "$BUILD_DIR/daemon.zip"
+DAEMON_URL_TEMPLATE=$(node -e "console.log(require(\"$ROOT/app/package.json\").lbrySettings.lbrynetDaemonUrlTemplate)")
+DAEMON_URL=$(echo ${DAEMON_URL_TEMPLATE//DAEMONVER/$DAEMON_VER} | sed "s/OSNAME/$OSNAME/g")
+DAEMON_VER_PATH="$BUILD_DIR/daemon.ver"
+echo "$DAEMON_VER_PATH"
+if [[ ! -f $DAEMON_VER_PATH || ! -f $ROOT/app/dist/lbrynet-daemon || "$(< "$DAEMON_VER_PATH")" != "$DAEMON_VER" ]]; then
+    wget --quiet "$DAEMON_URL" -O "$BUILD_DIR/daemon.zip"
+    unzip "$BUILD_DIR/daemon.zip" -d "$ROOT/app/dist/"
+    rm "$BUILD_DIR/daemon.zip"
+    echo "$DAEMON_VER" > "$DAEMON_VER_PATH"
+else
+    echo "Already have daemon version $DAEMON_VER, skipping download"
+fi
+
 
 
 

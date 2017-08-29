@@ -7,17 +7,22 @@ import ReactPaginate from "react-paginate";
 
 class ChannelPage extends React.PureComponent {
   componentDidMount() {
-    const { uri, params, fetchClaims } = this.props;
+    const { uri, params, fetchClaims, fetchClaimCount } = this.props;
 
     fetchClaims(uri, params.page || 1);
+    fetchClaimCount(uri);
   }
 
   componentWillReceiveProps(nextProps) {
-    const { params, fetching, fetchClaims } = this.props;
+    const { params, fetching, fetchClaims, fetchClaimCount } = this.props;
     const nextParams = nextProps.params;
 
-    if (fetching !== nextParams.page && params.page !== nextParams.page)
+    if (fetching !== nextParams.page && params.page !== nextParams.page) {
       fetchClaims(nextProps.uri, nextParams.page);
+    }
+    if (nextProps.uri != this.props.uri) {
+      fetchClaimCount(uri);
+    }
   }
 
   changePage(pageNumber) {
@@ -83,6 +88,7 @@ class ChannelPage extends React.PureComponent {
             pageClassName="pagination__item"
             previousClassName="pagination__item pagination__item--previous"
             nextClassName="pagination__item pagination__item--next"
+            breakClassName="pagination__item pagination__item--break"
             marginPagesDisplayed={2}
             onPageChange={e => this.changePage(e.selected + 1)}
             initialPage={parseInt(page - 1)}

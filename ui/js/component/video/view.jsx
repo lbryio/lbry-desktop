@@ -16,7 +16,11 @@ class Video extends React.PureComponent {
 
   componentWillReceiveProps(nextProps) {
     // reset playing state upon change path action
-    if (!this.isMediaSame(nextProps) && this.props.fileInfo && this.state.isPlaying) {
+    if (
+      !this.isMediaSame(nextProps) &&
+      this.props.fileInfo &&
+      this.state.isPlaying
+    ) {
       this.state.isPlaying = false;
     }
   }
@@ -62,6 +66,8 @@ class Video extends React.PureComponent {
       isDownloading,
       fileInfo,
       contentType,
+      changeVolume,
+      volume,
     } = this.props;
     const { isPlaying = false } = this.state;
 
@@ -115,6 +121,8 @@ class Video extends React.PureComponent {
                 mediaType={mediaType}
                 contentType={contentType}
                 downloadCompleted={fileInfo.completed}
+                changeVolume={changeVolume}
+                volume={volume}
               />)}
         {!isPlaying &&
           <div

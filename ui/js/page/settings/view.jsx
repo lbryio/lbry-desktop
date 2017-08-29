@@ -2,6 +2,7 @@ import React from "react";
 import FormField from "component/formField";
 import { FormRow } from "component/form.js";
 import SubHeader from "component/subHeader";
+import * as settings from "constants/settings";
 import lbry from "lbry.js";
 import Link from "component/link";
 import FormFieldPrice from "component/formFieldPrice";
@@ -17,8 +18,8 @@ class SettingsPage extends React.PureComponent {
     this.state = {
       // isMaxUpload: daemonSettings && daemonSettings.max_upload != 0,
       // isMaxDownload: daemonSettings && daemonSettings.max_download != 0,
-      showUnavailable: lbry.getClientSetting("showUnavailable"),
-      language: lbry.getClientSetting("language"),
+      showUnavailable: lbry.getClientSetting(settings.SHOW_UNAVAILABLE),
+      language: lbry.getClientSetting(settings.LANGUAGE),
       clearingCache: false,
     };
   }
@@ -92,19 +93,18 @@ class SettingsPage extends React.PureComponent {
   // }
 
   onShowNsfwChange(event) {
-    this.props.setClientSetting("showNsfw", event.target.checked);
+    this.props.setClientSetting(settings.SHOW_NSFW, event.target.checked);
   }
 
-  // onLanguageChange(language) {
-  //   lbry.setClientSetting('language', language);
-  //   i18n.setLocale(language);
-  //   this.setState({language: language})
-  // }
+  onLanguageChange(e) {
+    this.props.changeLanguage(e.target.value);
+    this.forceUpdate();
+  }
 
   onShowUnavailableChange(event) {}
 
   render() {
-    const { daemonSettings } = this.props;
+    const { daemonSettings, language, languages } = this.props;
 
     if (!daemonSettings || Object.keys(daemonSettings).length === 0) {
       return (
@@ -116,6 +116,28 @@ class SettingsPage extends React.PureComponent {
     return (
       <main className="main--single-column">
         <SubHeader />
+        <section className="card">
+          <div className="card__content">
+            <h3>{__("Language")}</h3>
+          </div>
+          <div className="card__content">
+            <div className="form-row">
+              <FormField
+                type="select"
+                name="language"
+                defaultValue={language}
+                onChange={this.onLanguageChange.bind(this)}
+              >
+                <option value="en">{__("English")}</option>
+                {Object.keys(languages).map(dLang =>
+                  <option key={dLang} value={dLang}>
+                    {languages[dLang]}
+                  </option>
+                )}
+              </FormField>
+            </div>
+          </div>
+        </section>
         <section className="card">
           <div className="card__content">
             <h3>{__("Download Directory")}</h3>
