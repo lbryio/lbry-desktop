@@ -48,7 +48,11 @@ class UserVerify extends React.PureComponent {
               ) +
                 " " +
                 __(
-                  "There is no charge at all for this, now or in the future."
+                  "There is no charge at all for this, now or in the future. But some users may see a $1 charge on there bank statement."
+                ) +
+                " " +
+                __(
+                  "Be aware that this will be immediatly reversed by Stripe, depending on the bank it can take anywhere from a few minutes to a few weeks to be removed from the statement so please dont panic!"
                 ) +
                 " "}
               <Link
