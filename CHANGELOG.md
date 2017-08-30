@@ -31,7 +31,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
   * Tiles will no longer be blurry on hover (Windows only bug)
   * Removed placeholder values from price selection form fields, which was causing confusion that these were real values (#426)
   * Fixed showing "other currency" help tip in publish form, which was caused due to not "setting" state for price
-  * Public page now properly checks for all required fields are filled
+  * Publish page now properly checks for all required fields are filled
   * Fixed pagination styling for pages > 5 (#416)
   * Fixed sizing on squat videos (#419)
   * Support claims no longer show up on Published page (#384)
