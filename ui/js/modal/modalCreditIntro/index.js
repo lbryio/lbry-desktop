@@ -1,13 +1,13 @@
 import React from "react";
-import rewards from "rewards";
 import { connect } from "react-redux";
 import { doCloseModal, doAuthNavigate } from "actions/app";
 import { doSetClientSetting } from "actions/settings";
 import { selectUserIsRewardApproved } from "selectors/user";
+import { selectBalance } from "selectors/wallet";
 import {
   makeSelectHasClaimedReward,
   makeSelectRewardByType,
-  selectTotalRewardValue,
+  selectUnclaimedRewardValue,
 } from "selectors/rewards";
 import * as settings from "constants/settings";
 import ModalCreditIntro from "./view";
@@ -17,9 +17,9 @@ const select = (state, props) => {
     selectReward = makeSelectRewardByType();
 
   return {
+    currentBalance: selectBalance(state),
     isRewardApproved: selectUserIsRewardApproved(state),
-    reward: selectReward(state, { reward_type: rewards.TYPE_NEW_USER }),
-    totalRewardValue: selectTotalRewardValue(state),
+    totalRewardValue: selectUnclaimedRewardValue(state),
   };
 };
 

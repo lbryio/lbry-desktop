@@ -2,7 +2,8 @@ import * as types from "constants/action_types";
 import * as modals from "constants/modal_types";
 import lbryio from "lbryio";
 import rewards from "rewards";
-import { selectRewardsByType } from "selectors/rewards";
+import { selectUnclaimedRewardsByType } from "selectors/rewards";
+import { selectUserIsRewardApproved } from "selectors/user";
 
 export function doRewardList() {
   return function(dispatch, getState) {
@@ -13,7 +14,7 @@ export function doRewardList() {
     });
 
     lbryio
-      .call("reward", "list", {})
+      .call("reward", "list", { multiple_rewards_per_type: true })
       .then(userRewards => {
         dispatch({
           type: types.FETCH_REWARDS_COMPLETED,
@@ -31,20 +32,21 @@ export function doRewardList() {
 
 export function doClaimRewardType(rewardType) {
   return function(dispatch, getState) {
-    const rewardsByType = selectRewardsByType(getState()),
-      reward = rewardsByType[rewardType];
+    const state = getState(),
+      rewardsByType = selectUnclaimedRewardsByType(state),
+      reward = rewardsByType[rewardType],
+      userIsRewardApproved = selectUserIsRewardApproved(state);
 
-    if (reward) {
-      dispatch(doClaimReward(reward));
-    }
-  };
-}
-
-export function doClaimReward(reward, saveError = false) {
-  return function(dispatch, getState) {
     if (reward.transaction_id) {
       //already claimed, do nothing
       return;
+    }
+
+    if (!userIsRewardApproved) {
+      return dispatch({
+        type: types.OPEN_MODAL,
+        data: { modal: modals.REWARD_APPROVAL_REQUIRED },
+      });
     }
 
     dispatch({
@@ -70,10 +72,7 @@ export function doClaimReward(reward, saveError = false) {
     const failure = error => {
       dispatch({
         type: types.CLAIM_REWARD_FAILURE,
-        data: {
-          reward,
-          error: saveError ? error : null,
-        },
+        data: { reward, error },
       });
     };
 
@@ -83,30 +82,24 @@ export function doClaimReward(reward, saveError = false) {
 
 export function doClaimEligiblePurchaseRewards() {
   return function(dispatch, getState) {
-    if (!lbryio.enabled) {
+    const state = getState(),
+      rewardsByType = selectUnclaimedRewardsByType(state),
+      userIsRewardApproved = selectUserIsRewardApproved(state);
+
+    if (!userIsRewardApproved || !lbryio.enabled) {
       return;
     }
 
-    const rewardsByType = selectRewardsByType(getState());
-
-    let types = {};
-
-    types[rewards.TYPE_FIRST_STREAM] = false;
-    types[rewards.TYPE_FEATURED_DOWNLOAD] = false;
-    types[rewards.TYPE_MANY_DOWNLOADS] = false;
-    Object.values(rewardsByType).forEach(reward => {
-      if (types[reward.reward_type] === false && reward.transaction_id) {
-        types[reward.reward_type] = true;
-      }
-    });
-
-    let unclaimedType = Object.keys(types).find(type => {
-      return types[type] === false && type !== rewards.TYPE_FEATURED_DOWNLOAD; //handled below
-    });
-    if (unclaimedType) {
-      dispatch(doClaimRewardType(unclaimedType));
+    if (rewardsByType[rewards.TYPE_FIRST_STREAM]) {
+      dispatch(doClaimRewardType(rewards.TYPE_FIRST_STREAM));
+    } else {
+      [
+        rewards.TYPE_MANY_DOWNLOADS,
+        rewards.TYPE_FEATURED_DOWNLOAD,
+      ].forEach(type => {
+        dispatch(doClaimRewardType(type));
+      });
     }
-    dispatch(doClaimRewardType(rewards.TYPE_FEATURED_DOWNLOAD));
   };
 }
 

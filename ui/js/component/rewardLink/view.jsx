@@ -9,15 +9,18 @@ const RewardLink = props => {
     claimReward,
     clearError,
     errorMessage,
+    label,
     isPending,
   } = props;
 
   return (
     <div className="reward-link">
       <Link
-        button={button ? button : "alt"}
+        button={button}
         disabled={isPending}
-        label={isPending ? __("Claiming...") : __("Claim Reward")}
+        label={
+          isPending ? __("Claiming...") : label ? label : __("Claim Reward")
+        }
         onClick={() => {
           claimReward(reward);
         }}

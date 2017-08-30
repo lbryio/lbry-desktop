@@ -1,16 +1,33 @@
 import { createSelector } from "reselect";
 import { selectUser } from "selectors/user";
+import rewards from "rewards";
 
 const _selectState = state => state.rewards || {};
 
-export const selectRewardsByType = createSelector(
+export const selectUnclaimedRewardsByType = createSelector(
   _selectState,
-  state => state.rewardsByType || {}
+  state => state.unclaimedRewardsByType
 );
 
-export const selectRewards = createSelector(
-  selectRewardsByType,
-  byType => Object.values(byType) || []
+export const selectClaimedRewardsById = createSelector(
+  _selectState,
+  state => state.claimedRewardsById
+);
+
+export const selectClaimedRewards = createSelector(
+  selectClaimedRewardsById,
+  byId => Object.values(byId) || []
+);
+
+export const selectUnclaimedRewards = createSelector(
+  selectUnclaimedRewardsByType,
+  byType =>
+    Object.values(byType).sort(function(a, b) {
+      return rewards.SORT_ORDER.indexOf(a.reward_type) <
+        rewards.SORT_ORDER.indexOf(b.reward_type)
+        ? -1
+        : 1;
+    }) || []
 );
 
 export const selectIsRewardEligible = createSelector(
@@ -23,10 +40,12 @@ export const selectFetchingRewards = createSelector(
   state => !!state.fetching
 );
 
-export const selectTotalRewardValue = createSelector(selectRewards, rewards =>
-  rewards.reduce((sum, reward) => {
-    return sum + reward.reward_amount;
-  }, 0)
+export const selectUnclaimedRewardValue = createSelector(
+  selectUnclaimedRewards,
+  rewards =>
+    rewards.reduce((sum, reward) => {
+      return sum + reward.reward_amount;
+    }, 0)
 );
 
 export const selectHasClaimedReward = (state, props) => {
@@ -65,9 +84,16 @@ export const makeSelectClaimRewardError = () => {
 };
 
 const selectRewardByType = (state, props) => {
-  return selectRewardsByType(state)[props.reward_type];
+  return selectUnclaimedRewardsByType(state)[props.reward_type];
 };
 
 export const makeSelectRewardByType = () => {
   return createSelector(selectRewardByType, reward => reward);
+};
+
+export const makeSelectRewardAmountByType = () => {
+  return createSelector(
+    selectRewardByType,
+    reward => (reward ? reward.reward_amount : 0)
+  );
 };

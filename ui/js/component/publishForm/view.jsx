@@ -16,6 +16,7 @@ class PublishForm extends React.PureComponent {
     this._requiredFields = ["name", "bid", "meta_title", "tosAgree"];
 
     this._defaultCopyrightNotice = "All rights reserved.";
+    this._defaultPaidPrice = 0.01;
 
     this.state = {
       rawName: "",
@@ -318,7 +319,9 @@ class PublishForm extends React.PureComponent {
   handleFeePrefChange(feeEnabled) {
     this.setState({
       isFee: feeEnabled,
-      feeAmount: this.state.feeAmount == "" ? "5.00" : this.state.feeAmount,
+      feeAmount: this.state.feeAmount == ""
+        ? this._defaultPaidPrice
+        : this.state.feeAmount,
     });
   }
 
@@ -786,7 +789,6 @@ class PublishForm extends React.PureComponent {
                     ref="bid"
                     type="number"
                     step="0.01"
-                    min="0"
                     label={__("Deposit")}
                     postfix="LBC"
                     onChange={event => {

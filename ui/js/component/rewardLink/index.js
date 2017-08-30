@@ -6,7 +6,7 @@ import {
   makeSelectIsRewardClaimPending,
 } from "selectors/rewards";
 import { doNavigate } from "actions/app";
-import { doClaimReward, doClaimRewardClearError } from "actions/rewards";
+import { doClaimRewardType, doClaimRewardClearError } from "actions/rewards";
 import RewardLink from "./view";
 
 const makeSelect = () => {
@@ -24,7 +24,7 @@ const makeSelect = () => {
 };
 
 const perform = dispatch => ({
-  claimReward: reward => dispatch(doClaimReward(reward, true)),
+  claimReward: reward => dispatch(doClaimRewardType(reward.reward_type, true)),
   clearError: reward => dispatch(doClaimRewardClearError(reward)),
   navigate: path => dispatch(doNavigate(path)),
 });

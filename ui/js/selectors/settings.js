@@ -12,6 +12,13 @@ export const selectClientSettings = createSelector(
   state => state.clientSettings || {}
 );
 
+export const makeSelectClientSetting = setting => {
+  return createSelector(
+    selectClientSettings,
+    settings => (settings ? settings[setting] : undefined)
+  );
+};
+
 export const selectSettingsIsGenerous = createSelector(
   selectDaemonSettings,
   settings => settings && settings.is_generous_host

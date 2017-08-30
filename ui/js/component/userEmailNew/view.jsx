@@ -31,6 +31,16 @@ class UserEmailNew extends React.PureComponent {
           this.handleSubmit(event);
         }}
       >
+        <p>
+          {__(
+            "This process is required to prevent abuse of the rewards program."
+          )}
+        </p>
+        <p>
+          {__(
+            "We will also contact you about updates and new content, but you can unsubscribe at any time."
+          )}
+        </p>
         <FormRow
           type="text"
           label="Email"
