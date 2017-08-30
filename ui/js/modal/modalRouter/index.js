@@ -1,11 +1,12 @@
 import React from "react";
 import { connect } from "react-redux";
-import { selectCurrentModal, selectCurrentPage } from "selectors/app";
 import { doOpenModal } from "actions/app";
+import * as settings from "constants/settings";
+import { selectCurrentModal } from "selectors/app";
+import { selectCurrentPage } from "selectors/navigation";
+import { selectCostForCurrentPageUri } from "selectors/cost_info";
 import { makeSelectClientSetting } from "selectors/settings";
 import { selectUser } from "selectors/user";
-import { selectCostForCurrentPageUri } from "selectors/cost_info";
-import * as settings from "constants/settings";
 import { selectBalance } from "selectors/wallet";
 import ModalRouter from "./view";
 

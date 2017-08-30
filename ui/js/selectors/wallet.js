@@ -1,5 +1,4 @@
 import { createSelector } from "reselect";
-import { selectCurrentPage, selectDaemonReady } from "selectors/app";
 
 export const _selectState = state => state.wallet || {};
 

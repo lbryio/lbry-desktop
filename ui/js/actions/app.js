@@ -5,148 +5,16 @@ import {
   selectUpgradeDownloadPath,
   selectUpgradeDownloadItem,
   selectUpgradeFilename,
-  selectPageTitle,
-  selectCurrentPage,
-  selectCurrentParams,
-  selectHistoryBack,
-  selectHistoryForward,
 } from "selectors/app";
-import { doSearch } from "actions/search";
 import { doFetchDaemonSettings } from "actions/settings";
 import { doAuthenticate } from "actions/user";
 import { doFileList } from "actions/file_info";
-import { toQueryString } from "util/query_params";
-import { parseQueryParams } from "util/query_params";
 
 const { remote, ipcRenderer, shell } = require("electron");
 const path = require("path");
 const { download } = remote.require("electron-dl");
 const fs = remote.require("fs");
 const { lbrySettings: config } = require("../../../app/package.json");
-
-export function doNavigate(path, params = {}, options = {}) {
-  return function(dispatch, getState) {
-    if (!path) {
-      return;
-    }
-
-    let url = path;
-    if (params) url = `${url}?${toQueryString(params)}`;
-
-    dispatch(doChangePath(url));
-
-    const state = getState();
-    const pageTitle = selectPageTitle(state);
-    const historyState = history.state;
-
-    dispatch(
-      doHistoryPush({ params, page: historyState.page + 1 }, pageTitle, url)
-    );
-  };
-}
-
-export function doAuthNavigate(pathAfterAuth = null, params = {}) {
-  return function(dispatch, getState) {
-    if (pathAfterAuth) {
-      dispatch({
-        type: types.CHANGE_AFTER_AUTH_PATH,
-        data: {
-          path: `${pathAfterAuth}?${toQueryString(params)}`,
-        },
-      });
-    }
-    dispatch(doNavigate("/auth"));
-  };
-}
-
-export function doChangePath(path, options = {}) {
-  return function(dispatch, getState) {
-    dispatch({
-      type: types.CHANGE_PATH,
-      data: {
-        path,
-      },
-    });
-
-    const state = getState();
-    const pageTitle = selectPageTitle(state);
-    const scrollY = options.scrollY;
-
-    window.document.title = pageTitle;
-
-    if (scrollY) window.scrollTo(0, scrollY);
-    else window.scrollTo(0, 0);
-
-    const currentPage = selectCurrentPage(state);
-    if (currentPage === "search") {
-      const params = selectCurrentParams(state);
-      dispatch(doSearch(params.query));
-    }
-  };
-}
-
-export function doHistoryBack() {
-  return function(dispatch, getState) {
-    // Get back history from stack
-    const back = selectHistoryBack(getState());
-
-    if (back) {
-      // Set location
-      dispatch(doChangePath(back.location));
-
-      dispatch({
-        type: types.HISTORY_NAVIGATE,
-        data: { page: back },
-      });
-    }
-  };
-}
-
-export function doHistoryForward() {
-  return function(dispatch, getState) {
-    // Get forward history from stack
-    const forward = selectHistoryForward(getState());
-
-    if (forward) {
-      // Set location
-      dispatch(doChangePath(forward.location));
-
-      dispatch({
-        type: types.HISTORY_NAVIGATE,
-        data: { page: forward },
-      });
-    }
-  };
-}
-
-export function doHistoryPush(currentState, title, relativeUrl) {
-  return function(dispatch, getState) {
-    title += " - LBRY";
-    history.pushState(currentState, title, `#${relativeUrl}`);
-    dispatch({
-      type: types.HISTORY_NAVIGATE,
-      data: {
-        location: relativeUrl,
-      },
-    });
-  };
-}
-
-export function doRecordScroll(scroll) {
-  return function(dispatch, getState) {
-    const state = getState();
-    const historyState = history.state;
-
-    if (!historyState) return;
-
-    historyState.scrollY = scroll;
-    history.replaceState(
-      historyState,
-      document.title,
-      `#${state.app.currentPath}`
-    );
-  };
-}
 
 export function doOpenModal(modal) {
   return {
@@ -305,25 +173,8 @@ export function doAlertError(errorList) {
 
 export function doDaemonReady() {
   return function(dispatch, getState) {
-    const path = window.location.hash || "#/discover";
-    const params = parseQueryParams(path.split("?")[1] || "");
-
-    // Get first page
-    const page = {
-      index: 0,
-      location: path.replace(/^#/, ""),
-    };
-
-    history.replaceState(
-      { params, is_first_page: true, page: 1 },
-      document.title,
-      `${path}`
-    );
     dispatch(doAuthenticate());
-    dispatch({
-      type: types.DAEMON_READY,
-      data: { page },
-    });
+    dispatch({ type: types.DAEMON_READY });
     dispatch(doFetchDaemonSettings());
     dispatch(doFileList());
   };

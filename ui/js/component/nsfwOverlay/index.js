@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { doNavigate } from "actions/app";
+import { doNavigate } from "actions/navigation";
 import NsfwOverlay from "./view";
 
 const perform = dispatch => ({

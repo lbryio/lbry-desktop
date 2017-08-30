@@ -7,7 +7,7 @@ import {
   selectIsFetchingClaimListMine,
 } from "selectors/claims";
 import { doClaimRewardType } from "actions/rewards";
-import { doNavigate } from "actions/app";
+import { doNavigate } from "actions/navigation";
 import { doCancelAllResolvingUris } from "actions/content";
 import FileListPublished from "./view";
 

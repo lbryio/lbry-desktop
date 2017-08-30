@@ -5,7 +5,7 @@ import {
   selectUnclaimedRewards,
 } from "selectors/rewards";
 import { selectUser } from "selectors/user";
-import { doAuthNavigate, doNavigate } from "actions/app";
+import { doAuthNavigate, doNavigate } from "actions/navigation";
 import { doRewardList } from "actions/rewards";
 import RewardsPage from "./view";
 

@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { doCloseModal } from "actions/app";
-import { doNavigate, doChangeVolume } from "actions/app";
+import { doChangeVolume } from "actions/app";
 import { selectCurrentModal, selectVolume } from "selectors/app";
 import { doPurchaseUri, doLoadVideo } from "actions/content";
 import {

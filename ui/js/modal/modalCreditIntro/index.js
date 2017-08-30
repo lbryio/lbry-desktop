@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
-import { doCloseModal, doAuthNavigate } from "actions/app";
+import { doCloseModal } from "actions/app";
+import { doAuthNavigate } from "actions/navigation";
 import { doSetClientSetting } from "actions/settings";
 import { selectUserIsRewardApproved } from "selectors/user";
 import { selectBalance } from "selectors/wallet";

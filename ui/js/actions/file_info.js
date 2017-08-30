@@ -12,7 +12,8 @@ import {
   selectUrisLoading,
   selectTotalDownloadProgress,
 } from "selectors/file_info";
-import { doCloseModal, doHistoryBack } from "actions/app";
+import { doCloseModal } from "actions/app";
+import { doHistoryBack } from "actions/navigation";
 import setProgressBar from "util/setProgressBar";
 import batchActions from "util/batchActions";
 

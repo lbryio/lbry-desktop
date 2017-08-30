@@ -9,8 +9,8 @@ import {
   makeSelectClaimsInChannelForCurrentPage,
   makeSelectFetchingChannelClaims,
 } from "selectors/claims";
-import { selectCurrentParams } from "selectors/app";
-import { doNavigate } from "actions/app";
+import { selectCurrentParams } from "selectors/navigation";
+import { doNavigate } from "actions/navigation";
 import { makeSelectTotalPagesForChannel } from "selectors/content";
 import ChannelPage from "./view";
 

@@ -30,10 +30,20 @@ class App extends React.PureComponent {
     this.scrollListener = () => this.props.recordScroll(window.scrollY);
 
     window.addEventListener("scroll", this.scrollListener);
+
+    this.setTitleFromProps(this.props);
   }
 
   componentWillUnmount() {
     window.removeEventListener("scroll", this.scrollListener);
+  }
+
+  componentWillReceiveProps(props) {
+    this.setTitleFromProps(props);
+  }
+
+  setTitleFromProps(props) {
+    window.document.title = props.pageTitle;
   }
 
   render() {
