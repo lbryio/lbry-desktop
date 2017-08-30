@@ -101,6 +101,9 @@ export function doDownloadLanguage(langFile) {
 
 export function doDownloadLanguages() {
   return function(dispatch, getState) {
+    //temporarily disable i18n so I can get a working build out -- Jeremy
+    return;
+
     if (!fs.existsSync(app.i18n.directory)) {
       fs.mkdirSync(app.i18n.directory);
     }
