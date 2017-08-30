@@ -6,7 +6,7 @@ import {
   selectCurrentSearchResults,
   selectSearchQuery,
 } from "selectors/search";
-import { doNavigate } from "actions/app";
+import { doNavigate } from "actions/navigation";
 import FileListSearch from "./view";
 
 const select = state => ({

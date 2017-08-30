@@ -10,7 +10,7 @@ class SnackBar extends React.PureComponent {
   }
 
   render() {
-    const { navigate, snacks, removeSnack } = this.props;
+    const { snacks, removeSnack } = this.props;
 
     if (!snacks.length) {
       this._hideTimeout = null; //should be unmounting anyway, but be safe?
@@ -33,7 +33,7 @@ class SnackBar extends React.PureComponent {
         {linkText &&
           linkTarget &&
           <Link
-            onClick={() => navigate(linkTarget)}
+            navigate={linkTarget}
             className="snack-bar__action"
             label={linkText}
           />}

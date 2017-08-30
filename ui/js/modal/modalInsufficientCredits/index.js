@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
-import { doCloseModal, doNavigate } from "actions/app";
+import { doCloseModal } from "actions/app";
+import { doNavigate } from "actions/navigation";
 import ModalInsufficientCredits from "./view";
 
 const select = state => ({});

@@ -1,5 +1,5 @@
 import { createSelector } from "reselect";
-import { selectCurrentParams } from "./app";
+import { selectCurrentParams } from "selectors/navigation";
 
 export const _selectState = state => state.costInfo || {};
 

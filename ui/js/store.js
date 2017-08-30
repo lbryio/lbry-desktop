@@ -5,6 +5,7 @@ import claimsReducer from "reducers/claims";
 import contentReducer from "reducers/content";
 import costInfoReducer from "reducers/cost_info";
 import fileInfoReducer from "reducers/file_info";
+import navigationReducer from "reducers/navigation";
 import rewardsReducer from "reducers/rewards";
 import searchReducer from "reducers/search";
 import settingsReducer from "reducers/settings";
@@ -13,8 +14,8 @@ import walletReducer from "reducers/wallet";
 import { persistStore, autoRehydrate } from "redux-persist";
 import createCompressor from "redux-persist-transform-compress";
 import createFilter from "redux-persist-transform-filter";
-import { REHYDRATE } from "redux-persist/constants";
-import createActionBuffer from "redux-action-buffer";
+//import { REHYDRATE } from "redux-persist/constants";
+//import createActionBuffer from "redux-action-buffer";
 
 const localForage = require("localforage");
 const redux = require("redux");
@@ -55,6 +56,7 @@ function enableBatching(reducer) {
 
 const reducers = redux.combineReducers({
   app: appReducer,
+  navigation: navigationReducer,
   availability: availabilityReducer,
   claims: claimsReducer,
   fileInfo: fileInfoReducer,

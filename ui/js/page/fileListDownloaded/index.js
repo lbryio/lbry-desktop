@@ -10,7 +10,7 @@ import {
   selectIsFetchingClaimListMine,
 } from "selectors/claims";
 import { doFetchClaimListMine } from "actions/content";
-import { doNavigate } from "actions/app";
+import { doNavigate } from "actions/navigation";
 import { doCancelAllResolvingUris } from "actions/content";
 import FileListDownloaded from "./view";
 

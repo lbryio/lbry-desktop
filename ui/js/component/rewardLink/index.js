@@ -5,7 +5,7 @@ import {
   makeSelectRewardByType,
   makeSelectIsRewardClaimPending,
 } from "selectors/rewards";
-import { doNavigate } from "actions/app";
+import { doNavigate } from "actions/navigation";
 import { doClaimRewardType, doClaimRewardClearError } from "actions/rewards";
 import RewardLink from "./view";
 

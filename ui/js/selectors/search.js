@@ -1,5 +1,5 @@
 import { createSelector } from "reselect";
-import { selectPageTitle, selectCurrentPage } from "selectors/app";
+import { selectPageTitle, selectCurrentPage } from "selectors/navigation";
 
 export const _selectState = state => state.search || {};
 

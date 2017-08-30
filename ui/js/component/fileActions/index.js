@@ -1,13 +1,12 @@
 import React from "react";
 import { connect } from "react-redux";
-import { selectPlatform } from "selectors/app";
+import { selectPlatform, selectCurrentModal } from "selectors/app";
 import {
   makeSelectFileInfoForUri,
   makeSelectDownloadingForUri,
   makeSelectLoadingForUri,
 } from "selectors/file_info";
 import { makeSelectIsAvailableForUri } from "selectors/availability";
-import { selectCurrentModal } from "selectors/app";
 import { makeSelectCostInfoForUri } from "selectors/cost_info";
 import { doCloseModal, doOpenModal } from "actions/app";
 import { doFetchAvailability } from "actions/availability";

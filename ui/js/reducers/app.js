@@ -1,12 +1,6 @@
 import * as types from "constants/action_types";
 import * as modalTypes from "constants/modal_types";
 
-const currentPath = () => {
-  const hash = document.location.hash;
-  if (hash !== "") return hash.replace(/^#/, "");
-  else return "/discover";
-};
-
 const { remote } = require("electron");
 const application = remote.app;
 const win = remote.BrowserWindow.getFocusedWindow();
@@ -14,28 +8,18 @@ const win = remote.BrowserWindow.getFocusedWindow();
 const reducers = {};
 const defaultState = {
   isLoaded: false,
-  isBackDisabled: true,
-  isForwardDisabled: true,
-  currentPath: currentPath(),
-  pathAfterAuth: "/discover",
   platform: process.platform,
   upgradeSkipped: sessionStorage.getItem("upgradeSkipped"),
   daemonVersionMatched: null,
   daemonReady: false,
   hasSignature: false,
   badgeNumber: 0,
-  history: { index: 0, stack: [] },
   volume: sessionStorage.getItem("volume") || 1,
 };
 
 reducers[types.DAEMON_READY] = function(state, action) {
-  const { history } = state;
-  const { page } = action.data;
-  history.stack.push(page);
-
   return Object.assign({}, state, {
     daemonReady: true,
-    history,
   });
 };
 
@@ -49,18 +33,6 @@ reducers[types.DAEMON_VERSION_MISMATCH] = function(state, action) {
   return Object.assign({}, state, {
     daemonVersionMatched: false,
     modal: modalTypes.INCOMPATIBLE_DAEMON,
-  });
-};
-
-reducers[types.CHANGE_PATH] = function(state, action) {
-  return Object.assign({}, state, {
-    currentPath: action.data.path,
-  });
-};
-
-reducers[types.CHANGE_AFTER_AUTH_PATH] = function(state, action) {
-  return Object.assign({}, state, {
-    pathAfterAuth: action.data.path,
   });
 };
 
@@ -168,55 +140,6 @@ reducers[types.DOWNLOADING_COMPLETED] = function(state, action) {
 reducers[types.WINDOW_FOCUSED] = function(state, action) {
   return Object.assign({}, state, {
     badgeNumber: 0,
-  });
-};
-
-reducers[types.HISTORY_NAVIGATE] = (state, action) => {
-  let page = false;
-  let location = false;
-
-  // Get history from state
-  const { history } = state;
-
-  if (action.data.page) {
-    // Get page
-    page = action.data.page;
-  } else if (action.data.location) {
-    // Get new location
-    location = action.data.location;
-  }
-
-  // Add new location to stack
-  if (location) {
-    const lastItem = history.stack.length - 1;
-
-    // Check for duplicated
-    let is_duplicate = lastItem > -1
-      ? history.stack[lastItem].location === location
-      : false;
-
-    if (!is_duplicate) {
-      // Create new page
-      page = {
-        index: history.stack.length,
-        location,
-      };
-
-      // Update index
-      history.index = history.stack.length;
-
-      // Add to stack
-      history.stack.push(page);
-    }
-  } else if (page) {
-    // Update index
-    history.index = page.index;
-  }
-
-  return Object.assign({}, state, {
-    history,
-    isBackDisabled: history.index === 0, // First page
-    isForwardDisabled: history.index === history.stack.length - 1, // Last page
   });
 };
 
