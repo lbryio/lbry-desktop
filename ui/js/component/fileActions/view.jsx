@@ -171,7 +171,7 @@ class FileActions extends React.PureComponent {
       <section className="file-actions">
         {content}
         {showMenu
-          ? <DropDownMenu>
+          ? <DropDownMenu className="button-set-item">
               <DropDownMenuItem
                 key={0}
                 onClick={() => openInFolder(fileInfo)}

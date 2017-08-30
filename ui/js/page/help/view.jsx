@@ -3,7 +3,7 @@ import React from "react";
 import lbry from "lbry.js";
 import Link from "component/link";
 import SubHeader from "component/subHeader";
-import { BusyMessage } from "component/common";
+import { BusyMessage, Icon } from "component/common";
 
 class HelpPage extends React.PureComponent {
   constructor(props) {
@@ -50,7 +50,7 @@ class HelpPage extends React.PureComponent {
   render() {
     let ver, osName, platform, newVerLink;
 
-    const { navigate, user } = this.props;
+    const { doAuth, user } = this.props;
 
     if (this.state.versionInfo) {
       ver = this.state.versionInfo;
@@ -119,7 +119,7 @@ class HelpPage extends React.PureComponent {
             <p>{__("Did you find something wrong?")}</p>
             <p>
               <Link
-                onClick={() => navigate("report")}
+                navigate="/report"
                 label={__("Submit a Bug Report")}
                 icon="icon-bug"
                 button="alt"
@@ -143,7 +143,7 @@ class HelpPage extends React.PureComponent {
                   </p>
                 : <p>{__("Your copy of LBRY is up to date.")}</p>}
             {this.state.uiVersion && ver
-              ? <table className="table-standard">
+              ? <table className="table-standard table-stretch table-standard--definition-list">
                   <tbody>
                     <tr>
                       <th>{__("App")}</th>
@@ -162,7 +162,21 @@ class HelpPage extends React.PureComponent {
                       <td>
                         {user && user.primary_email
                           ? user.primary_email
-                          : <span className="empty">{__("none")}</span>}
+                          : <span>
+                              <span className="empty">{__("none")} </span>
+                              (<Link
+                                onClick={() => doAuth()}
+                                label={__("set email")}
+                              />)
+                            </span>}
+                      </td>
+                    </tr>
+                    <tr>
+                      <th>{__("Reward Eligible")}</th>
+                      <td>
+                        {user && user.is_reward_approved
+                          ? <Icon icon="icon-check" />
+                          : <Icon icon="icon-ban" />}
                       </td>
                     </tr>
                     <tr>

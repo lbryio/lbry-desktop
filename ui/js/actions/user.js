@@ -1,7 +1,7 @@
 import * as types from "constants/action_types";
 import * as modals from "constants/modal_types";
 import lbryio from "lbryio";
-import { doOpenModal } from "actions/app";
+import { doOpenModal, doShowSnackBar } from "actions/app";
 import { doRewardList, doClaimRewardType } from "actions/rewards";
 import { selectEmailToVerify, selectUser } from "selectors/user";
 import rewards from "rewards";
@@ -19,6 +19,7 @@ export function doAuthenticate() {
           data: { user },
         });
         dispatch(doRewardList());
+        dispatch(doFetchInviteStatus());
       })
       .catch(error => {
         dispatch(doOpenModal(modals.AUTHENTICATION_FAILURE));
@@ -170,5 +171,64 @@ export function doFetchAccessToken() {
         data: { token },
       });
     lbryio.getAuthToken().then(success);
+  };
+}
+
+export function doFetchInviteStatus() {
+  return function(dispatch, getState) {
+    dispatch({
+      type: types.USER_INVITE_STATUS_FETCH_STARTED,
+    });
+
+    lbryio
+      .call("user", "invite_status")
+      .then(status => {
+        dispatch({
+          type: types.USER_INVITE_STATUS_FETCH_SUCCESS,
+          data: {
+            invitesRemaining: status.invites_remaining
+              ? status.invites_remaining
+              : 0,
+            invitees: status.invitees,
+          },
+        });
+      })
+      .catch(error => {
+        dispatch({
+          type: types.USER_INVITE_STATUS_FETCH_FAILURE,
+          data: { error },
+        });
+      });
+  };
+}
+
+export function doUserInviteNew(email) {
+  return function(dispatch, getState) {
+    dispatch({
+      type: types.USER_INVITE_NEW_STARTED,
+    });
+
+    lbryio
+      .call("user", "invite", { email: email }, "post")
+      .then(invite => {
+        dispatch({
+          type: types.USER_INVITE_NEW_SUCCESS,
+          data: { email },
+        });
+
+        dispatch(
+          doShowSnackBar({
+            message: __("Invite sent to %s", email),
+          })
+        );
+
+        dispatch(doFetchInviteStatus());
+      })
+      .catch(error => {
+        dispatch({
+          type: types.USER_INVITE_NEW_FAILURE,
+          data: { error },
+        });
+      });
   };
 }

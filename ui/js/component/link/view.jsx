@@ -5,7 +5,6 @@ const Link = props => {
   const {
     href,
     title,
-    onClick,
     style,
     label,
     icon,
@@ -13,6 +12,8 @@ const Link = props => {
     button,
     disabled,
     children,
+    navigate,
+    doNavigate,
   } = props;
 
   const className =
@@ -20,6 +21,12 @@ const Link = props => {
     (!props.className && !button ? "button-text" : "") + // Non-button links get the same look as text buttons
     (button ? " button-block button-" + button + " button-set-item" : "") +
     (disabled ? " disabled" : "");
+
+  const onClick = !props.onClick && navigate
+    ? () => {
+        doNavigate(navigate);
+      }
+    : props.onClick;
 
   let content;
   if (children) {

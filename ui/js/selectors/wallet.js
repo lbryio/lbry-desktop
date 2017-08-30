@@ -35,6 +35,24 @@ export const selectTransactionItems = createSelector(
   }
 );
 
+export const selectRecentTransactions = createSelector(
+  selectTransactionItems,
+  transactions => {
+    let threshold = new Date();
+    threshold.setDate(threshold.getDate() - 7);
+    return transactions.filter(transaction => {
+      return transaction.date > threshold;
+    });
+  }
+);
+
+export const selectHasTransactions = createSelector(
+  selectTransactionItems,
+  transactions => {
+    return transactions && transactions.length > 0;
+  }
+);
+
 export const selectIsFetchingTransactions = createSelector(
   _selectState,
   state => state.fetchingTransactions
