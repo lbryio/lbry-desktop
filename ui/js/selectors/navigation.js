@@ -25,15 +25,19 @@ export const selectHeaderLinks = createSelector(selectCurrentPage, page => {
   // This contains intentional fall throughs
   switch (page) {
     case "wallet":
+    case "history":
     case "send":
     case "receive":
+    case "invite":
     case "rewards":
     case "backup":
       return {
         wallet: __("Overview"),
+        history: __("History"),
         send: __("Send"),
         receive: __("Receive"),
         rewards: __("Rewards"),
+        invite: __("Invites"),
       };
     case "downloaded":
     case "published":
@@ -64,13 +68,17 @@ export const selectPageTitle = createSelector(
       case "wallet":
         return __("Wallet");
       case "send":
-        return __("Send");
+        return __("Send Credits");
       case "receive":
-        return __("Receive");
+        return __("Wallet Address");
       case "backup":
-        return __("Backup");
+        return __("Backup Your Wallet");
       case "rewards":
         return __("Rewards");
+      case "invite":
+        return __("Invites");
+      case "start":
+        return __("Start");
       case "publish":
         return __("Publish");
       case "help":
@@ -95,8 +103,12 @@ export const selectPageTitle = createSelector(
         return __("Publishes");
       case "discover":
         return __("Home");
-      default:
+      case false:
+      case null:
+      case "":
         return "";
+      default:
+        return page[0].toUpperCase() + (page.length > 0 ? page.substr(1) : "");
     }
   }
 );
