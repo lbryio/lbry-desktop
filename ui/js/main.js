@@ -70,13 +70,6 @@ win.on("focus", () => {
   dock.setBadge("");
 });
 
-const updateProgress = () => {
-  const state = app.store.getState();
-  const progress = selectTotalDownloadProgress(state);
-
-  win.setProgressBar(progress || -1);
-};
-
 const initialState = app.store.getState();
 
 var init = function() {

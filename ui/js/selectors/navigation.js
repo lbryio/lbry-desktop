@@ -71,8 +71,6 @@ export const selectPageTitle = createSelector(
         return __("Backup");
       case "rewards":
         return __("Rewards");
-      case "start":
-        return __("Start");
       case "publish":
         return __("Publish");
       case "help":

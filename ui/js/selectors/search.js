@@ -52,8 +52,6 @@ export const selectWunderBarIcon = createSelector(selectCurrentPage, page => {
       return "icon-folder";
     case "published":
       return "icon-folder";
-    case "start":
-      return "icon-file";
     case "history":
       return "icon-history";
     case "send":

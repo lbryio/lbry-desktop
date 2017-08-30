@@ -2,7 +2,6 @@ import React from "react";
 import SettingsPage from "page/settings";
 import HelpPage from "page/help";
 import ReportPage from "page/report.js";
-import StartPage from "page/start.js";
 import WalletPage from "page/wallet";
 import ReceiveCreditsPage from "page/receiveCredits";
 import SendCreditsPage from "page/sendCredits";
@@ -48,7 +47,6 @@ const Router = props => {
     send: <SendCreditsPage params={params} />,
     settings: <SettingsPage params={params} />,
     show: <ShowPage params={params} />,
-    start: <StartPage params={params} />,
     wallet: <WalletPage params={params} />,
   });
 };
