@@ -24,19 +24,17 @@ const defaultState = {
   daemonReady: false,
   hasSignature: false,
   badgeNumber: 0,
-  history: { index: 0, stack: [] },
+  history: {
+    stack: { backward: [], forward: [] },
+    currentPage: "/discover",
+  },
   volume: sessionStorage.getItem("volume") || 1,
 };
 
 reducers[types.DAEMON_READY] = function(state, action) {
   const { history } = state;
-  const { page } = action.data;
-  history.stack.push(page);
-
-  return Object.assign({}, state, {
-    daemonReady: true,
-    history,
-  });
+  history.currentPage = action.data.location.replace(/[?]$/, "");
+  return Object.assign({}, state, { daemonReady: true, history });
 };
 
 reducers[types.DAEMON_VERSION_MATCH] = function(state, action) {
@@ -172,51 +170,63 @@ reducers[types.WINDOW_FOCUSED] = function(state, action) {
 };
 
 reducers[types.HISTORY_NAVIGATE] = (state, action) => {
-  let page = false;
-  let location = false;
-
   // Get history from state
   const { history } = state;
+  const { currentPage } = history;
 
-  if (action.data.page) {
-    // Get page
-    page = action.data.page;
-  } else if (action.data.location) {
-    // Get new location
-    location = action.data.location;
-  }
+  const location = action.data.location.replace(/[?]$/, "");
 
-  // Add new location to stack
-  if (location) {
-    const lastItem = history.stack.length - 1;
+  // Check for duplicated
+  let is_duplicate = currentPage === location;
 
-    // Check for duplicated
-    let is_duplicate = lastItem > -1
-      ? history.stack[lastItem].location === location
-      : false;
-
-    if (!is_duplicate) {
-      // Create new page
-      page = {
-        index: history.stack.length,
-        location,
-      };
-
-      // Update index
-      history.index = history.stack.length;
-
-      // Add to stack
-      history.stack.push(page);
-    }
-  } else if (page) {
-    // Update index
-    history.index = page.index;
+  if (!is_duplicate) {
+    history.stack.backward.push(currentPage);
+    history.stack.forward = [];
+    history.currentPage = location;
   }
 
   return Object.assign({}, state, {
     history,
-    isBackDisabled: history.index === 0, // First page
-    isForwardDisabled: history.index === history.stack.length - 1, // Last page
+    isBackDisabled: history.stack.backward.length === 0, // First page
+    isForwardDisabled: history.stack.forward.length === 0, // Last page });
+  });
+};
+
+reducers[types.HISTORY_BACKWARD] = (state, action) => {
+  // Get history from state
+  const { history } = state;
+  const { currentPage } = history;
+
+  let { location } = action.data;
+
+  // Update history
+  history.stack.forward.push(currentPage);
+  //history.stack.backward.pop();
+  history.currentPage = location;
+
+  return Object.assign({}, state, {
+    history,
+    isBackDisabled: history.stack.backward.length === 0, // First page
+    isForwardDisabled: history.stack.forward.length === 0, // Last page });
+  });
+};
+
+reducers[types.HISTORY_FORWARD] = (state, action) => {
+  // Get history from state
+  const { history } = state;
+  const { currentPage } = history;
+
+  let { location } = action.data;
+
+  // Update history
+  history.stack.backward.push(currentPage);
+  // history.stack.forward.pop();
+  history.currentPage = location;
+
+  return Object.assign({}, state, {
+    history,
+    isBackDisabled: history.stack.backward.length === 0, // First page
+    isForwardDisabled: history.stack.forward.length === 0, // Last page });
   });
 };
 
