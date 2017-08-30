@@ -35,7 +35,11 @@ export function doFetchCostInfoForUri(uri) {
 
     if (isGenerous && claim) {
       let cost;
-      const fee = claim.value.stream.metadata.fee;
+      const fee = claim.value &&
+        claim.value.stream &&
+        claim.value.stream.metadata
+        ? claim.value.stream.metadata.fee
+        : undefined;
       if (fee === undefined) {
         resolve({ cost: 0, includesData: true });
       } else if (fee.currency == "LBC") {
