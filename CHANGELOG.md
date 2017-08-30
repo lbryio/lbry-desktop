@@ -8,16 +8,16 @@ Web UI version numbers should always match the corresponding version of LBRY App
 
 ## [Unreleased]
 ### Added
-  * Added an Invites area inside of the Wallet. This allows users to invite others and shows the status of all past invites (including all invite data from the past year).
-  * Added a forward button and improved history behavior. Back/forward disable when unusable.
+  * Added an Invites area inside of the Wallet. This allows users to invite others and shows the status of all past invites (including all invite data from the past year). Up to one referral reward can now be claimed, but only if both users have passed the humanity test.
   * Added new summary components for rewards and invites to the Wallet landing page.
+  * Added a forward button and improved history behavior. Back/forward disable when unusable.
   * Added past history of rewards to the rewards page.
   * Added wallet backup guide reference.
   * Added a new widget for setting prices (`FormFieldPrice`), used in Publish and Settings.
   
 ### Changed
   * Updated to daemon [0.15](https://github.com/lbryio/lbry/releases). Most relevant changes for app are improved announcing of content and a fix for the daemon getting stuck running.
-  * Continued to refine first-run process, process for new users, and introducing people to LBRY and LBRY credits.
+  * Significant refinements to first-run process, process for new users, and introducing people to LBRY and LBRY credits.
   * Changed Wallet landing page to summarize status of other areas. Refactored wallet and transaction logic.
   * Added icons to missing page, improved icon and title logic.
   * Changed the default price settings for priced publishes.
@@ -26,6 +26,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
   * Some form field refactoring as we take baby steps towards form sanity.
   * Replaced confusing placeholder text from email input.
   * Refactored modal and settings logic.
+  * Refactored history and navigation logic.
 
 ### Fixed
   * Tiles will no longer be blurry on hover (Windows only bug)
@@ -38,6 +39,11 @@ Web UI version numbers should always match the corresponding version of LBRY App
   * Fixed rendering of small prices (#461)
   * Fixed incorrect URI in Downloads/Published page (#460)
   * Fixed menu bug (#503)
+  * Fixed incorrect URLs on some channel content (#505)
+  * Fixed video sizing for squat videos (#492)
+  * Fixed issues with small prices (#461)
+  * Fixed issues with negative values not being stopped by app on entry (#441)
+
 
 ### Deprecated
   *
