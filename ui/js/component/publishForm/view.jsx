@@ -47,6 +47,7 @@ class PublishForm extends React.PureComponent {
       modal: null,
       isFee: false,
       customUrl: false,
+      source: null,
     };
   }
 
@@ -116,8 +117,12 @@ class PublishForm extends React.PureComponent {
           : {}),
       };
 
+      const { source } = this.state;
+
       if (this.refs.file.getValue() !== "") {
         publishArgs.file_path = this.refs.file.getValue();
+      } else if (source) {
+        publishArgs.sources = source;
       }
 
       const success = claim => {};
@@ -180,6 +185,14 @@ class PublishForm extends React.PureComponent {
     if (!name) return false;
 
     return !!myClaims.find(claim => claim.name === name);
+  }
+
+  handleEditClaim() {
+    const isMine = this.myClaimExists();
+
+    if (isMine) {
+      this.handlePrefillClicked();
+    }
   }
 
   topClaimIsMine() {
@@ -268,6 +281,8 @@ class PublishForm extends React.PureComponent {
       nsfw,
     } = claimInfo.value.stream.metadata;
 
+    const { source } = claimInfo.value.stream;
+
     let newState = {
       meta_title: title,
       meta_thumbnail: thumbnail,
@@ -276,6 +291,7 @@ class PublishForm extends React.PureComponent {
       meta_nsfw: nsfw,
       prefillDone: true,
       bid: claimInfo.amount,
+      source,
     };
 
     if (license == this._defaultCopyrightNotice) {
@@ -403,8 +419,19 @@ class PublishForm extends React.PureComponent {
   }
 
   componentWillMount() {
+    const { name, channel } = this.props.params;
+    const rawName = name;
+
     this.props.fetchClaimListMine();
     this._updateChannelList();
+
+    if (name && channel) {
+      this.setState({ name, rawName, channel });
+    }
+  }
+
+  componentDidMount() {
+    this.handleEditClaim();
   }
 
   onFileChange() {
@@ -448,7 +475,7 @@ class PublishForm extends React.PureComponent {
         <span>
           {__("You already have a claim with this name.")}{" "}
           <Link
-            label={__("Use data from my existing claim")}
+            label={__("Edit existing claim")}
             onClick={() => this.handlePrefillClicked()}
           />
         </span>

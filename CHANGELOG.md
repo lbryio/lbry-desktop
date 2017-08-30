@@ -13,6 +13,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
   * Added new summary components for rewards and invites to the Wallet landing page.
   * Added past history of rewards to the rewards page.
   * Added wallet backup guide reference.
+  * Added an edit button inside the menu of fileActions component.
   * Added a new widget for setting prices (`FormFieldPrice`), used in Publish and Settings.
   
 ### Changed
@@ -26,6 +27,8 @@ Web UI version numbers should always match the corresponding version of LBRY App
   * Some form field refactoring as we take baby steps towards form sanity.
   * Replaced confusing placeholder text from email input.
   * Refactored modal and settings logic.
+  * Improved UX for editing claims.
+
 
 ### Fixed
   * Tiles will no longer be blurry on hover (Windows only bug)
