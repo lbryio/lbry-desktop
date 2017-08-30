@@ -72,10 +72,7 @@ export function doClaimRewardType(rewardType) {
     const failure = error => {
       dispatch({
         type: types.CLAIM_REWARD_FAILURE,
-        data: {
-          reward,
-          error: error ? error : null,
-        },
+        data: { reward, error },
       });
     };
 

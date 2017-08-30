@@ -13,7 +13,7 @@ class ModalRewardApprovalRequired extends React.PureComponent {
         onAborted={closeModal}
         type="confirm"
         confirmButtonLabel={__("I'm Totally Real")}
-        abortButtonLabel={__("Nevermind")}
+        abortButtonLabel={__("Never Mind")}
       >
         <section>
           <h3 className="modal__header">

@@ -5,7 +5,7 @@ export const _selectState = state => state.wallet || {};
 
 export const selectBalance = createSelector(
   _selectState,
-  state => 0 //state.balance || 0
+  state => state.balance || 0
 );
 
 export const selectTransactions = createSelector(
