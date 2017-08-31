@@ -8,52 +8,73 @@ Web UI version numbers should always match the corresponding version of LBRY App
 
 ## [Unreleased]
 ### Added
-  * Added an Invites area inside of the Wallet. This allows users to invite others and shows the status of all past invites (including all invite data from the past year). Up to one referral reward can now be claimed, but only if both users have passed the humanity test.
-  * Added new summary components for rewards and invites to the Wallet landing page.
-  * Added a forward button and improved history behavior. Back/forward disable when unusable.
-  * Added past history of rewards to the rewards page.
-  * Added wallet backup guide reference.
-  * Added a new widget for setting prices (`FormFieldPrice`), used in Publish and Settings.
-  
+  *
+  *
+
 ### Changed
-  * Updated to daemon [0.15](https://github.com/lbryio/lbry/releases). Most relevant changes for app are improved announcing of content and a fix for the daemon getting stuck running.
-  * Significant refinements to first-run process, process for new users, and introducing people to LBRY and LBRY credits.
-  * Changed Wallet landing page to summarize status of other areas. Refactored wallet and transaction logic.
-  * Added icons to missing page, improved icon and title logic.
-  * Changed the default price settings for priced publishes.
-  * When an "Open" button is clicked on a show page, if the file fails to open, the app will try to open the file's folder.
-  * Updated several packages and fixed warnings in build process (all but the [fsevents warning](https://github.com/yarnpkg/yarn/issues/3738), which is a rather dramatic debate)
-  * Some form field refactoring as we take baby steps towards form sanity.
-  * Replaced confusing placeholder text from email input.
-  * Refactored modal and settings logic.
-  * Refactored history and navigation logic.
+  *
+  *
 
 ### Fixed
-  * Tiles will no longer be blurry on hover (Windows only bug)
-  * Removed placeholder values from price selection form fields, which was causing confusion that these were real values (#426)
-  * Fixed showing "other currency" help tip in publish form, which was caused due to not "setting" state for price
-  * Publish page now properly checks for all required fields are filled
-  * Fixed pagination styling for pages > 5 (#416)
-  * Fixed sizing on squat videos (#419)
-  * Support claims no longer show up on Published page (#384)
-  * Fixed rendering of small prices (#461)
-  * Fixed incorrect URI in Downloads/Published page (#460)
-  * Fixed menu bug (#503)
-  * Fixed incorrect URLs on some channel content (#505)
-  * Fixed video sizing for squat videos (#492)
-  * Fixed issues with small prices (#461)
-  * Fixed issues with negative values not being stopped by app on entry (#441)
-  * Fixed source file error when editing existing claim (#467)
-
+  *
+  *
 
 ### Deprecated
   *
   *
 
 ### Removed
-  * Removed the label "Max Purchase Price" from settings page. It was redundant.
-  * Unused old files from previous commit(9c3d633)
   *
+  *
+
+## [0.15.0] - 2017-08-31
+
+### Added
+ * Added an Invites area inside of the Wallet. This allows users to invite others and shows the status of all past invites (including all invite data from the past year). Up to one referral reward can now be claimed, but only if both users have passed the humanity test.
+ * Added new summary components for rewards and invites to the Wallet landing page.
+ * Added a forward button and improved history behavior. Back/forward disable when unusable.
+ * Added past history of rewards to the rewards page.
+ * Added wallet backup guide reference.
+ * Added a new widget for setting prices (`FormFieldPrice`), used in Publish and Settings.
+
+
+### Changed
+ * Updated to daemon [0.15](https://github.com/lbryio/lbry/releases). Most relevant changes for app are improved announcing of content and a fix for the daemon getting stuck running.
+ * Significant refinements to first-run process, process for new users, and introducing people to LBRY and LBRY credits.
+ * Changed Wallet landing page to summarize status of other areas. Refactored wallet and transaction logic.
+ * Added icons to missing page, improved icon and title logic.
+ * Changed the default price settings for priced publishes.
+ * When an "Open" button is clicked on a show page, if the file fails to open, the app will try to open the file's folder.
+ * Updated several packages and fixed warnings in build process (all but the [fsevents warning](https://github.com/yarnpkg/yarn/issues/3738), which is a rather dramatic debate)
+ * Some form field refactoring as we take baby steps towards form sanity.
+ * Replaced confusing placeholder text from email input.
+ * Refactored modal and settings logic.
+ * Refactored history and navigation logic.
+
+
+### Removed
+ * Removed the label "Max Purchase Price" from settings page. It was redundant.
+ * Unused old files from previous commit(9c3d633)
+
+
+### Fixed
+ * Tiles will no longer be blurry on hover (Windows only bug)
+ * Removed placeholder values from price selection form fields, which was causing confusion that these were real values (#426)
+ * Fixed showing "other currency" help tip in publish form, which was caused due to not "setting" state for price
+ * Publish page now properly checks for all required fields are filled
+ * Fixed pagination styling for pages > 5 (#416)
+ * Fixed sizing on squat videos (#419)
+ * Support claims no longer show up on Published page (#384)
+ * Fixed rendering of small prices (#461)
+ * Fixed incorrect URI in Downloads/Published page (#460)
+ * Fixed menu bug (#503)
+ * Fixed incorrect URLs on some channel content (#505)
+ * Fixed video sizing for squat videos (#492)
+ * Fixed issues with small prices (#461)
+ * Fixed issues with negative values not being stopped by app on entry (#441)
+ * Fixed source file error when editing existing claim (#467)
+
+
 
 ## [0.14.3] - 2017-08-03
 
