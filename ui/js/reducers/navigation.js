@@ -41,17 +41,12 @@ reducers[types.HISTORY_NAVIGATE] = (state, action) => {
 
   let newState = {};
 
-  const path = action.data.url,
-    previousIndex = index - 1;
+  const path = action.data.url;
 
   // Check for duplicated
   if (action.data.index >= 0) {
     newState.index = action.data.index;
-  } else if (
-    previousIndex === -1 ||
-    !stack[previousIndex] ||
-    stack[previousIndex].path !== path
-  ) {
+  } else if (!stack[index] || stack[index].path !== path) {
     newState.stack = [...stack.slice(0, index + 1), { path, scrollY: 0 }];
     newState.index = newState.stack.length - 1;
   }
