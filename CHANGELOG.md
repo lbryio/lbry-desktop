@@ -43,6 +43,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
   * Fixed video sizing for squat videos (#492)
   * Fixed issues with small prices (#461)
   * Fixed issues with negative values not being stopped by app on entry (#441)
+  * Fixed source file error when editing existing claim (#467)
 
 
 ### Deprecated
