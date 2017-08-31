@@ -85,7 +85,7 @@ class UserVerify extends React.PureComponent {
           </div>
           <div className="card__actions">
             <Link
-              href="https://api.lbry.io/yt/sync"
+              href="https://api.lbry.io/yt/connect"
               button="alt"
               icon="icon-youtube"
               label={__("YouTube Account Sync")}
