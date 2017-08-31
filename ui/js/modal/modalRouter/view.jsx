@@ -6,8 +6,10 @@ import ModalInsufficientCredits from "modal/modalInsufficientCredits";
 import ModalUpgrade from "modal/modalUpgrade";
 import ModalWelcome from "modal/modalWelcome";
 import ModalFirstReward from "modal/modalFirstReward";
-import * as modals from "constants/modal_types";
 import ModalCreditIntro from "modal/modalCreditIntro";
+import ModalTransactionFailed from "modal/modalTransactionFailed";
+import ModalInsufficientBalance from "modal/modalInsufficientBalance";
+import * as modals from "constants/modal_types";
 
 class ModalRouter extends React.PureComponent {
   componentWillMount() {
@@ -51,6 +53,10 @@ class ModalRouter extends React.PureComponent {
         return <ModalAuthFailure />;
       case modals.CREDIT_INTRO:
         return <ModalCreditIntro />;
+      case modals.TRANSACTION_FAILED:
+        return <ModalTransactionFailed />;
+      case modals.INSUFFICIENT_BALANCE:
+        return <ModalInsufficientBalance />;
       default:
         return null;
     }
