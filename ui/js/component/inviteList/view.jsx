@@ -50,7 +50,7 @@ class InviteList extends React.PureComponent {
                           : invitee.invite_accepted
                             ? <RewardLink
                                 label={__("Claim")}
-                                reward_type={rewards.TYPE_FIRST_PUBLISH}
+                                reward_type={rewards.TYPE_REFERRAL}
                               />
                             : <span className="empty">
                                 {__("unclaimable")}

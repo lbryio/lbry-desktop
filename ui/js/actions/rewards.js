@@ -76,7 +76,7 @@ export function doClaimRewardType(rewardType) {
       });
     };
 
-    rewards.claimReward(reward.reward_type).then(success, failure);
+    rewards.claimReward(rewardType).then(success, failure);
   };
 }
 
