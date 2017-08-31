@@ -62,6 +62,13 @@ class InviteList extends React.PureComponent {
               </tbody>
             </table>}
         </div>
+        <div className="card__content">
+          <div className="help">
+            {__(
+              "The maximum number of invite rewards is currently limited. Invite reward can only be claimed if the invitee passes the humanness test."
+            )}
+          </div>
+        </div>
       </section>
     );
   }
