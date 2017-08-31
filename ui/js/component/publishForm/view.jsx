@@ -47,6 +47,7 @@ class PublishForm extends React.PureComponent {
       modal: null,
       isFee: false,
       customUrl: false,
+      source: null,
     };
   }
 
@@ -115,9 +116,13 @@ class PublishForm extends React.PureComponent {
           ? { channel_name: this.state.channel }
           : {}),
       };
+      
+      const { source } = this.state;
 
       if (this.refs.file.getValue() !== "") {
         publishArgs.file_path = this.refs.file.getValue();
+      } else if (source) {
+        publishArgs.sources = source;
       }
 
       const success = claim => {};
@@ -257,7 +262,8 @@ class PublishForm extends React.PureComponent {
   }
 
   handlePrefillClicked() {
-    const claimInfo = this.myClaimInfo();
+    const claimInfo = this.myClaimInfo();  
+    const { source } = claimInfo.value.stream;
     const {
       license,
       licenseUrl,
@@ -276,6 +282,7 @@ class PublishForm extends React.PureComponent {
       meta_nsfw: nsfw,
       prefillDone: true,
       bid: claimInfo.amount,
+      source,
     };
 
     if (license == this._defaultCopyrightNotice) {
