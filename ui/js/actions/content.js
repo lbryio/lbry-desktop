@@ -305,6 +305,7 @@ export function doLoadVideo(uri) {
         }
       })
       .catch(error => {
+        console.log(error);
         dispatch({
           type: types.LOADING_VIDEO_FAILED,
           data: { uri },
