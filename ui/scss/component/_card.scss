@@ -268,7 +268,7 @@ if we keep doing things like this, we should add a real grid system, but I'm goi
     width: $width-page-constrained / 2 - $margin-card-grid / 2;
     flex-grow:1;
   }
-  > .card:nth-of-type(2n - 1) {
+  > .card:nth-of-type(2n - 1):not(:last-child) {
     margin-right: $margin-card-grid;
   }
 }
