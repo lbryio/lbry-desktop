@@ -12,6 +12,10 @@ class FormField extends React.PureComponent {
     prefix: React.PropTypes.string,
     postfix: React.PropTypes.string,
     hasError: React.PropTypes.bool,
+    regexp: React.PropTypes.oneOfType([
+      React.PropTypes.instanceOf(RegExp),
+      React.PropTypes.string,
+    ]),
   };
 
   constructor(props) {
@@ -20,6 +24,7 @@ class FormField extends React.PureComponent {
     this._fieldRequiredText = __("This field is required");
     this._type = null;
     this._element = null;
+    this._validateCallback = null;
     this._extraElementProps = {};
 
     this.state = {
@@ -51,12 +56,29 @@ class FormField extends React.PureComponent {
   }
 
   componentDidMount() {
+    if (this.props.regexp) {
+      this._validateCallback = () => this.validate();
+    }
+
+    this.refs.field.addEventListener("blur", this._validateCallback);
+    this.refs.field.form.addEventListener("submit", this._validateCallback);
+
     /**
      * We have to add the webkitdirectory attribute here because React doesn't allow it in JSX
      * https://github.com/facebook/react/issues/3468
      */
     if (this.props.type == "directory") {
       this.refs.field.webkitdirectory = true;
+    }
+  }
+
+  componentWillUnmount() {
+    if (this._validateCallback !== null) {
+      this.refs.field.removeEventListener("blur", this._validateCallback);
+      this.refs.field.form.removeEventListener(
+        "submit",
+        this._validateCallback
+      );
     }
   }
 
@@ -99,6 +121,16 @@ class FormField extends React.PureComponent {
     return this.refs.field.options;
   }
 
+  validate() {
+    if ("regexp" in this.props) {
+      if (!this.getValue().match(this.props.regexp)) {
+        // Handle invalid input here
+      }
+    } else {
+      return true;
+    }
+  }
+
   render() {
     // Pass all unhandled props to the field element
     const otherProps = Object.assign({}, this.props),
@@ -116,6 +148,7 @@ class FormField extends React.PureComponent {
     delete otherProps.postfix;
     delete otherProps.prefix;
     delete otherProps.dispatch;
+    delete otherProps.regexp;
 
     const element = (
       <this._element
