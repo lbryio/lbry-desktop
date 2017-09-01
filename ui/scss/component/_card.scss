@@ -212,7 +212,7 @@ $padding-right-card-hover-hack: 30px;
   white-space: nowrap;
   width: 100%;
   min-width: $width-card-small;
-  margin-right: $spacing-vertical
+  margin-right: $spacing-vertical;
 }
 .card-row__header {
   margin-bottom: $spacing-vertical / 3;
@@ -221,7 +221,7 @@ $padding-right-card-hover-hack: 30px;
 .card-row__scrollhouse {
   position: relative;
   /*hacky way to give space for hover */
-  padding-right: $padding-right-card-hover-hack
+  padding-right: $padding-right-card-hover-hack;
 }
 
 .card-row__nav {
