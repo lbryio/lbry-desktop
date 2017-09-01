@@ -8,6 +8,11 @@ const defaultState = {
   emailNewIsPending: false,
   emailNewErrorMessage: "",
   emailToVerify: "",
+  inviteNewErrorMessage: "",
+  inviteNewIsPending: false,
+  inviteStatusIsPending: false,
+  invitesRemaining: undefined,
+  invitees: undefined,
   user: undefined,
 };
 
@@ -139,6 +144,49 @@ reducers[types.FETCH_ACCESS_TOKEN_SUCCESS] = function(state, action) {
 
   return Object.assign({}, state, {
     accessToken: token,
+  });
+};
+
+reducers[types.USER_INVITE_STATUS_FETCH_STARTED] = function(state, action) {
+  return Object.assign({}, state, {
+    inviteStatusIsPending: true,
+  });
+};
+
+reducers[types.USER_INVITE_STATUS_FETCH_SUCCESS] = function(state, action) {
+  return Object.assign({}, state, {
+    inviteStatusIsPending: false,
+    invitesRemaining: action.data.invitesRemaining,
+    invitees: action.data.invitees,
+  });
+};
+
+reducers[types.USER_INVITE_NEW_STARTED] = function(state, action) {
+  return Object.assign({}, state, {
+    inviteNewIsPending: true,
+    inviteNewErrorMessage: "",
+  });
+};
+
+reducers[types.USER_INVITE_NEW_SUCCESS] = function(state, action) {
+  return Object.assign({}, state, {
+    inviteNewIsPending: false,
+    inviteNewErrorMessage: "",
+  });
+};
+
+reducers[types.USER_INVITE_NEW_FAILURE] = function(state, action) {
+  return Object.assign({}, state, {
+    inviteNewIsPending: false,
+    inviteNewErrorMessage: action.data.error.message,
+  });
+};
+
+reducers[types.USER_INVITE_STATUS_FETCH_FAILURE] = function(state, action) {
+  return Object.assign({}, state, {
+    inviteStatusIsPending: false,
+    invitesRemaining: null,
+    invitees: null,
   });
 };
 

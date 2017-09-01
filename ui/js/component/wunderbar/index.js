@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import lbryuri from "lbryuri.js";
 import { selectWunderBarAddress, selectWunderBarIcon } from "selectors/search";
-import { doNavigate } from "actions/app";
+import { doNavigate } from "actions/navigation";
 import Wunderbar from "./view";
 
 const select = state => ({

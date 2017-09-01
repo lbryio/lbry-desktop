@@ -68,3 +68,33 @@ export const selectAccessToken = createSelector(
   _selectState,
   state => state.accessToken
 );
+
+export const selectUserInviteStatusIsPending = createSelector(
+  _selectState,
+  state => state.inviteStatusIsPending
+);
+
+export const selectUserInvitesRemaining = createSelector(
+  _selectState,
+  state => state.invitesRemaining
+);
+
+export const selectUserInvitees = createSelector(
+  _selectState,
+  state => state.invitees
+);
+
+export const selectUserInviteStatusFailed = createSelector(
+  selectUserInvitesRemaining,
+  inviteStatus => selectUserInvitesRemaining === null
+);
+
+export const selectUserInviteNewIsPending = createSelector(
+  _selectState,
+  state => state.inviteNewIsPending
+);
+
+export const selectUserInviteNewErrorMessage = createSelector(
+  _selectState,
+  state => state.inviteNewErrorMessage
+);

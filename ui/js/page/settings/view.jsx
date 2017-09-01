@@ -116,6 +116,7 @@ class SettingsPage extends React.PureComponent {
     return (
       <main className="main--single-column">
         <SubHeader />
+        {/*
         <section className="card">
           <div className="card__content">
             <h3>{__("Language")}</h3>
@@ -137,7 +138,7 @@ class SettingsPage extends React.PureComponent {
               </FormField>
             </div>
           </div>
-        </section>
+        </section> */}
         <section className="card">
           <div className="card__content">
             <h3>{__("Download Directory")}</h3>

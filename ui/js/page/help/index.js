@@ -1,5 +1,5 @@
 import React from "react";
-import { doNavigate } from "actions/app";
+import { doAuthNavigate } from "actions/navigation";
 import { connect } from "react-redux";
 import { doFetchAccessToken } from "actions/user";
 import { selectAccessToken, selectUser } from "selectors/user";
@@ -11,7 +11,7 @@ const select = state => ({
 });
 
 const perform = dispatch => ({
-  navigate: (path, params) => dispatch(doNavigate(path, params)),
+  doAuth: () => dispatch(doAuthNavigate("/help")),
   fetchAccessToken: () => dispatch(doFetchAccessToken()),
 });
 

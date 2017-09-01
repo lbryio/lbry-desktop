@@ -1,5 +1,5 @@
 import { createSelector } from "reselect";
-import { selectPageTitle, selectCurrentPage } from "selectors/app";
+import { selectPageTitle, selectCurrentPage } from "selectors/navigation";
 
 export const _selectState = state => state.search || {};
 
@@ -38,6 +38,8 @@ export const selectWunderBarAddress = createSelector(
 
 export const selectWunderBarIcon = createSelector(selectCurrentPage, page => {
   switch (page) {
+    case "auth":
+      return "icon-user";
     case "search":
       return "icon-search";
     case "settings":
@@ -50,13 +52,18 @@ export const selectWunderBarIcon = createSelector(selectCurrentPage, page => {
       return "icon-folder";
     case "published":
       return "icon-folder";
-    case "start":
-      return "icon-file";
-    case "rewards":
-      return "icon-bank";
-    case "wallet":
+    case "history":
+      return "icon-history";
     case "send":
+      return "icon-send";
+    case "rewards":
+      return "icon-rocket";
+    case "invite":
+      return "icon-envelope-open";
+    case "address":
     case "receive":
+      return "icon-address-book";
+    case "wallet":
     case "backup":
       return "icon-bank";
     case "show":
@@ -64,10 +71,10 @@ export const selectWunderBarIcon = createSelector(selectCurrentPage, page => {
     case "publish":
       return "icon-upload";
     case "developer":
-      return "icon-file";
-    case "developer":
       return "icon-code";
     case "discover":
       return "icon-home";
+    default:
+      return "icon-file";
   }
 });

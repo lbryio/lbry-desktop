@@ -24,6 +24,9 @@ table.table-standard {
     img {
       vertical-align: text-bottom;
     }
+    &.text-center {
+      text-align: center;
+    }
   }
   tr.thead:not(:first-child) th {
     border-top: 1px solid #e2e2e2;
@@ -47,6 +50,11 @@ table.table-standard {
         border: 0 none;
       }
     }
+  }
+}
+.table-standard--definition-list {
+  th {
+    text-align: right;
   }
 }
 

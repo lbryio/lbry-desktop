@@ -8,9 +8,8 @@ import ModalWelcome from "./view";
 
 const perform = dispatch => () => ({
   closeModal: () => {
-    dispatch(doSetClientSetting(settings.FIRST_RUN_ACKNOWLEDGED, true));
+    dispatch(doSetClientSetting(settings.NEW_USER_ACKNOWLEDGED, true));
     dispatch(doCloseModal());
-    dispatch(doOpenModal(modals.CREDIT_INTRO));
   },
 });
 

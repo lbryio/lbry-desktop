@@ -16,6 +16,7 @@ class PublishForm extends React.PureComponent {
     this._requiredFields = ["name", "bid", "meta_title", "tosAgree"];
 
     this._defaultCopyrightNotice = "All rights reserved.";
+    this._defaultPaidPrice = 0.01;
 
     this.state = {
       rawName: "",
@@ -46,6 +47,7 @@ class PublishForm extends React.PureComponent {
       modal: null,
       isFee: false,
       customUrl: false,
+      source: null,
     };
   }
 
@@ -115,8 +117,12 @@ class PublishForm extends React.PureComponent {
           : {}),
       };
 
+      const { source } = this.state;
+
       if (this.refs.file.getValue() !== "") {
         publishArgs.file_path = this.refs.file.getValue();
+      } else if (source) {
+        publishArgs.sources = source;
       }
 
       const success = claim => {};
@@ -257,6 +263,7 @@ class PublishForm extends React.PureComponent {
 
   handlePrefillClicked() {
     const claimInfo = this.myClaimInfo();
+    const { source } = claimInfo.value.stream;
     const {
       license,
       licenseUrl,
@@ -275,6 +282,7 @@ class PublishForm extends React.PureComponent {
       meta_nsfw: nsfw,
       prefillDone: true,
       bid: claimInfo.amount,
+      source,
     };
 
     if (license == this._defaultCopyrightNotice) {
@@ -318,7 +326,9 @@ class PublishForm extends React.PureComponent {
   handleFeePrefChange(feeEnabled) {
     this.setState({
       isFee: feeEnabled,
-      feeAmount: this.state.feeAmount == "" ? "5.00" : this.state.feeAmount,
+      feeAmount: this.state.feeAmount == ""
+        ? this._defaultPaidPrice
+        : this.state.feeAmount,
     });
   }
 
@@ -786,7 +796,6 @@ class PublishForm extends React.PureComponent {
                     ref="bid"
                     type="number"
                     step="0.01"
-                    min="0"
                     label={__("Deposit")}
                     postfix="LBC"
                     onChange={event => {

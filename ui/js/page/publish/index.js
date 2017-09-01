@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { doNavigate, doHistoryBack } from "actions/app";
+import { doNavigate, doHistoryBack } from "actions/navigation";
 import { doClaimRewardType } from "actions/rewards";
 import {
   selectMyClaims,
@@ -16,10 +16,12 @@ import {
   doCreateChannel,
   doPublish,
 } from "actions/content";
+import { selectBalance } from "selectors/wallet";
 import rewards from "rewards";
 import PublishPage from "./view";
 
 const select = state => ({
+  balance: selectBalance(state),
   myClaims: selectMyClaims(state),
   fetchingChannels: selectFetchingMyChannels(state),
   channels: selectMyChannelClaims(state),

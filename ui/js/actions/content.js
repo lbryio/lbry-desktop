@@ -20,6 +20,8 @@ import * as modals from "constants/modal_types";
 
 const { ipcRenderer } = require("electron");
 
+const DOWNLOAD_POLL_INTERVAL = 250;
+
 export function doResolveUri(uri) {
   return function(dispatch, getState) {
     uri = lbryuri.normalize(uri);
@@ -175,7 +177,7 @@ export function doUpdateLoadStatus(uri, outpoint) {
           // download hasn't started yet
           setTimeout(() => {
             dispatch(doUpdateLoadStatus(uri, outpoint));
-          }, 250);
+          }, DOWNLOAD_POLL_INTERVAL);
         } else if (fileInfo.completed) {
           // TODO this isn't going to get called if they reload the client before
           // the download finished
@@ -221,7 +223,7 @@ export function doUpdateLoadStatus(uri, outpoint) {
 
           setTimeout(() => {
             dispatch(doUpdateLoadStatus(uri, outpoint));
-          }, 250);
+          }, DOWNLOAD_POLL_INTERVAL);
         }
       });
   };
@@ -303,6 +305,7 @@ export function doLoadVideo(uri) {
         }
       })
       .catch(error => {
+        console.log(error);
         dispatch({
           type: types.LOADING_VIDEO_FAILED,
           data: { uri },

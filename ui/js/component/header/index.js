@@ -1,9 +1,16 @@
 import React from "react";
 import { formatCredits } from "util/formatCredits";
 import { connect } from "react-redux";
-import { selectIsBackDisabled, selectIsForwardDisabled } from "selectors/app";
+import {
+  selectIsBackDisabled,
+  selectIsForwardDisabled,
+} from "selectors/navigation";
 import { selectBalance } from "selectors/wallet";
-import { doNavigate, doHistoryBack, doHistoryForward } from "actions/app";
+import {
+  doNavigate,
+  doHistoryBack,
+  doHistoryForward,
+} from "actions/navigation";
 import Header from "./view";
 
 const select = state => ({

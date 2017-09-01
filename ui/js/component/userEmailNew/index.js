@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { doUserEmailNew } from "actions/user";
+import { doUserEmailNew, doUserInviteNew } from "actions/user";
 import {
   selectEmailNewIsPending,
   selectEmailNewErrorMessage,

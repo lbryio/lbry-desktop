@@ -23,10 +23,11 @@ $width-card-small: $spacing-vertical * 10;
 }
 .card__title-primary,
 .card__title-identity,
-.card__actions,
 .card__content,
-.card__subtext {
-  padding: 0 $padding-card-horizontal;
+.card__subtext,
+.card__actions {
+  padding-left: $padding-card-horizontal;
+  padding-right: $padding-card-horizontal;
 }
 .card--small {
   .card__title-primary,
@@ -39,6 +40,7 @@ $width-card-small: $spacing-vertical * 10;
 }
 .card__title-primary {
   margin-top: $spacing-vertical * 2/3;
+  margin-bottom: $spacing-vertical * 2/3;
 }
 .card__title-identity {
   margin-top: $spacing-vertical * 1/3;
@@ -46,13 +48,6 @@ $width-card-small: $spacing-vertical * 10;
 }
 .card__actions {
   margin-top: $spacing-vertical * 2/3;
-}
-.card__actions--bottom {
-  margin-top: $spacing-vertical * 1/3;
-  margin-bottom: $spacing-vertical * 1/3;
-}
-.card__actions--form-submit {
-  margin-top: $spacing-vertical;
   margin-bottom: $spacing-vertical * 2/3;
 }
 .card__content {
@@ -259,4 +254,21 @@ $padding-right-card-hover-hack: 30px;
 
 .card__icon-featured-content {
   color: orangered;
+}
+
+
+/*
+if we keep doing things like this, we should add a real grid system, but I'm going to be a selective dick about it - Jeremy
+ */
+.card-grid {
+  $margin-card-grid: $spacing-vertical * 2/3;
+  display:flex;
+  flex-wrap: wrap;
+  > .card {
+    width: $width-page-constrained / 2 - $margin-card-grid / 2;
+    flex-grow:1;
+  }
+  > .card:nth-of-type(2n - 1):not(:last-child) {
+    margin-right: $margin-card-grid;
+  }
 }

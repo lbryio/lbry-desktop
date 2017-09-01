@@ -2,8 +2,8 @@
 
 $spacing-vertical: 24px;
 
-$padding-button: 12px;
-$padding-text-link: 4px;
+$padding-button: $spacing-vertical * 2/3;
+$padding-text-link: 0px;
 
 $color-primary: #155B4A;
 $color-primary-light: saturate(lighten($color-primary, 50%), 20%);

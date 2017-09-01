@@ -2,8 +2,8 @@ import * as types from "constants/action_types";
 import lbryuri from "lbryuri";
 import lighthouse from "lighthouse";
 import { doResolveUri } from "actions/content";
-import { doNavigate, doHistoryPush } from "actions/app";
-import { selectCurrentPage } from "selectors/app";
+import { doNavigate } from "actions/navigation";
+import { selectCurrentPage } from "selectors/navigation";
 import batchActions from "util/batchActions";
 
 export function doSearch(query) {

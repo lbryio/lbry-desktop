@@ -6,9 +6,9 @@ import SnackBar from "component/snackBar";
 import { Provider } from "react-redux";
 import store from "store.js";
 import SplashScreen from "component/splash";
-import { doChangePath, doNavigate, doDaemonReady } from "actions/app";
+import { doDaemonReady } from "actions/app";
+import { doNavigate } from "actions/navigation";
 import { doDownloadLanguages } from "actions/settings";
-import { toQueryString } from "util/query_params";
 import * as types from "constants/action_types";
 
 const env = ENV;
@@ -26,23 +26,6 @@ window.addEventListener("contextmenu", event => {
     lbry.getClientSetting("showDeveloperMenu")
   );
   event.preventDefault();
-});
-
-window.addEventListener("popstate", (event, param) => {
-  event.preventDefault();
-
-  const hash = document.location.hash;
-  let action;
-
-  if (hash !== "") {
-    const url = hash.replace(/^#/, "");
-    const { params, scrollY } = event.state || {};
-    const queryString = toQueryString(params);
-
-    app.store.dispatch(doChangePath(`${url}?${queryString}`, { scrollY }));
-  } else {
-    app.store.dispatch(doChangePath("/discover"));
-  }
 });
 
 ipcRenderer.on("open-uri-requested", (event, uri) => {
@@ -86,13 +69,6 @@ win.on("focus", () => {
   app.store.dispatch({ type: types.WINDOW_FOCUSED });
   dock.setBadge("");
 });
-
-const updateProgress = () => {
-  const state = app.store.getState();
-  const progress = selectTotalDownloadProgress(state);
-
-  win.setProgressBar(progress || -1);
-};
 
 const initialState = app.store.getState();
 

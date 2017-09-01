@@ -16,6 +16,11 @@ class WalletAddress extends React.PureComponent {
           <h3>{__("Wallet Address")}</h3>
         </div>
         <div className="card__content">
+          <p>
+            {__(
+              "Use this address to receive credits sent by another user (or yourself)."
+            )}
+          </p>
           <Address address={receiveAddress} />
         </div>
         <div className="card__actions">
@@ -29,11 +34,6 @@ class WalletAddress extends React.PureComponent {
         </div>
         <div className="card__content">
           <div className="help">
-            <p>
-              {__(
-                'Other LBRY users may send credits to you by entering this address on the "Send" page.'
-              )}
-            </p>
             <p>
               {__(
                 "You can generate a new address at any time, and any previous addresses will continue to work. Using multiple addresses can be helpful for keeping track of incoming payments from multiple sources."

@@ -1,5 +1,5 @@
 import { createSelector } from "reselect";
-import { selectCurrentParams } from "selectors/app";
+import { selectCurrentParams } from "selectors/navigation";
 import lbryuri from "lbryuri";
 
 const _selectState = state => state.claims || {};

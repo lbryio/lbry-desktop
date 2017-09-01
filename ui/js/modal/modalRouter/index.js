@@ -1,20 +1,31 @@
 import React from "react";
 import { connect } from "react-redux";
-import { selectCurrentModal } from "selectors/app";
 import { doOpenModal } from "actions/app";
-import { selectWelcomeModalAcknowledged } from "selectors/app";
+import * as settings from "constants/settings";
+import { selectCurrentModal } from "selectors/app";
+import { selectCurrentPage } from "selectors/navigation";
+import { selectCostForCurrentPageUri } from "selectors/cost_info";
+import { makeSelectClientSetting } from "selectors/settings";
 import { selectUser } from "selectors/user";
+import { selectBalance } from "selectors/wallet";
 import ModalRouter from "./view";
-import * as modals from "constants/modal_types";
 
 const select = (state, props) => ({
+  balance: selectBalance(state),
+  showPageCost: selectCostForCurrentPageUri(state),
   modal: selectCurrentModal(state),
-  isWelcomeAcknowledged: selectWelcomeModalAcknowledged(state),
+  page: selectCurrentPage(state),
+  isWelcomeAcknowledged: makeSelectClientSetting(
+    settings.NEW_USER_ACKNOWLEDGED
+  )(state),
+  isCreditIntroAcknowledged: makeSelectClientSetting(
+    settings.CREDIT_INTRO_ACKNOWLEDGED
+  )(state),
   user: selectUser(state),
 });
 
 const perform = dispatch => ({
-  openWelcomeModal: () => dispatch(doOpenModal(modals.WELCOME)),
+  openModal: modal => dispatch(doOpenModal(modal)),
 });
 
 export default connect(select, perform)(ModalRouter);

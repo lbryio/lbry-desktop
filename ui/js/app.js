@@ -22,7 +22,6 @@ const app = {
   i18n: i18n,
   logs: logs,
   log: function(message) {
-    console.log(message);
     logs.push(message);
   },
 };

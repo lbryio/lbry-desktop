@@ -178,18 +178,20 @@ class FileActions extends React.PureComponent {
           onClick={this.handleSupportButtonClicked.bind(this)}
         />
         {showMenu
-          ? <DropDownMenu>
-              <DropDownMenuItem
-                key={0}
-                onClick={() => openInFolder(fileInfo)}
-                label={openInFolderMessage}
-              />
-              <DropDownMenuItem
-                key={1}
-                onClick={() => openModal(modals.CONFIRM_FILE_REMOVE)}
-                label={__("Remove...")}
-              />
-            </DropDownMenu>
+          ? <div className="button-set-item">
+              <DropDownMenu>
+                <DropDownMenuItem
+                  key={0}
+                  onClick={() => openInFolder(fileInfo)}
+                  label={openInFolderMessage}
+                />
+                <DropDownMenuItem
+                  key={1}
+                  onClick={() => openModal(modals.CONFIRM_FILE_REMOVE)}
+                  label={__("Remove...")}
+                />
+              </DropDownMenu>
+            </div>
           : ""}
         <Modal
           type="confirm"

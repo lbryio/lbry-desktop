@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
-import { selectCurrentPage, selectHeaderLinks } from "selectors/app";
-import { doNavigate } from "actions/app";
+import { selectCurrentPage, selectHeaderLinks } from "selectors/navigation";
+import { doNavigate } from "actions/navigation";
 import SubHeader from "./view";
 
 const select = (state, props) => ({

@@ -1,7 +1,7 @@
 import React from "react";
-import { doNavigate } from "actions/app";
+import { doNavigate } from "actions/navigation";
 import { connect } from "react-redux";
-import { selectPathAfterAuth } from "selectors/app";
+import { selectPathAfterAuth } from "selectors/navigation";
 import {
   selectAuthenticationIsPending,
   selectEmailToVerify,

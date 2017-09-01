@@ -1,5 +1,4 @@
 import { createSelector } from "reselect";
-import { selectCurrentPage, selectDaemonReady } from "selectors/app";
 
 export const _selectState = state => state.wallet || {};
 
@@ -37,6 +36,24 @@ export const selectTransactionItems = createSelector(
       });
     });
     return transactionItems.reverse();
+  }
+);
+
+export const selectRecentTransactions = createSelector(
+  selectTransactionItems,
+  transactions => {
+    let threshold = new Date();
+    threshold.setDate(threshold.getDate() - 7);
+    return transactions.filter(transaction => {
+      return transaction.date > threshold;
+    });
+  }
+);
+
+export const selectHasTransactions = createSelector(
+  selectTransactionItems,
+  transactions => {
+    return transactions && transactions.length > 0;
   }
 );
 
