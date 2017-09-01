@@ -5,6 +5,8 @@ const lbryuri = {};
 
 lbryuri.REGEXP_INVALID_URI = /[^A-Za-z0-9-]/g;
 
+lbryuri.REGEXP_ADDRESS = /^b[HJK][1-9A-HJ-Za-km-z]{32}/;
+
 /**
  * Parses a LBRY name into its component parts. Throws errors with user-friendly
  * messages for invalid names.

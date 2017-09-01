@@ -2,6 +2,7 @@ import React from "react";
 import Link from "component/link";
 import Modal from "modal/modal";
 import { FormRow } from "component/form";
+import lbryuri from "lbryuri";
 
 const WalletSend = props => {
   const {
@@ -41,6 +42,7 @@ const WalletSend = props => {
             size="60"
             onChange={setAddress}
             value={address}
+            regexp={lbryuri.REGEXP_ADDRESS}
           />
           <div className="form-row-submit">
             <Link
