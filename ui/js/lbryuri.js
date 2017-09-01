@@ -4,6 +4,7 @@ const CLAIM_ID_MAX_LEN = 40;
 const lbryuri = {};
 
 lbryuri.REGEXP_INVALID_URI = /[^A-Za-z0-9-]/g;
+lbryuri.REGEXP_ADDRESS = /^b(?=[^0OIl]{32,33})[0-9A-Za-z]{32,33}$/;
 
 /**
  * Parses a LBRY name into its component parts. Throws errors with user-friendly

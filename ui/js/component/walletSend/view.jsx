@@ -2,6 +2,7 @@ import React from "react";
 import Link from "component/link";
 import Modal from "modal/modal";
 import { FormRow } from "component/form";
+import lbryuri from "lbryuri";
 
 const WalletSend = props => {
   const {
@@ -12,6 +13,7 @@ const WalletSend = props => {
     setAddress,
     amount,
     address,
+    error,
   } = props;
 
   return (
@@ -41,6 +43,8 @@ const WalletSend = props => {
             size="60"
             onChange={setAddress}
             value={address}
+            regexp={lbryuri.REGEXP_ADDRESS}
+            trim={true}
           />
           <div className="form-row-submit">
             <Link
@@ -77,7 +81,7 @@ const WalletSend = props => {
           contentLabel={__("Transaction failed")}
           onConfirmed={closeModal}
         >
-          {__("Something went wrong")}:
+          {error}
         </Modal>}
     </section>
   );
