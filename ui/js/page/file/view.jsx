@@ -171,7 +171,7 @@ class FilePage extends React.PureComponent {
             ? <TipLink
                 onTipShow={this.handleTipShow.bind(this)}
                 onTipHide={this.handleTipHide.bind(this)}
-                claim_id={fileInfo.claim_id}
+                claim_id={claim.claim_id}
               />
             : ""}
           <div className="card__content">
