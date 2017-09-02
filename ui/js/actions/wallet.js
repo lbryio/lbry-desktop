@@ -73,7 +73,7 @@ export function doSendDraftTransaction() {
     const balance = selectBalance(state);
     const amount = selectDraftTransactionAmount(state);
 
-    if (balance - amount < 1) {
+    if (balance - amount <= 0) {
       return dispatch(doOpenModal(modals.INSUFFICIENT_BALANCE));
     }
 

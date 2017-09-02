@@ -16,7 +16,7 @@ class ModalInsufficientBalance extends React.PureComponent {
         onConfirmed={addBalance}
       >
         {__(
-          "Insufficient balance: after this transaction you would have less than 1 LBC in your wallet."
+          "Insufficient balance: after this transaction you would have less than 0 LBCs in your wallet."
         )}
       </Modal>
     );
