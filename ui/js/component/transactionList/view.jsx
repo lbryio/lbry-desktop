@@ -39,9 +39,10 @@ class TransactionList extends React.PureComponent {
             onChange={this.handleFilterChanged.bind(this)}
           >
             <option value="unfiltered">{__("Unfiltered")}</option>
-            <option value="claim">{__("Claim")}</option>
-            <option value="support">{__("Support")}</option>
-            <option value="update">{__("Update")}</option>
+            <option value="claim">{__("Claims")}</option>
+            <option value="support">{__("Supports")}</option>
+            <option value="tipSupport">{__("Tips")}</option>
+            <option value="update">{__("Updates")}</option>
           </FormField>
         </span>
         <table className="table-standard table-stretch">

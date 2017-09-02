@@ -1,5 +1,10 @@
 import React from "react";
 import { connect } from "react-redux";
+import { doNavigate } from "actions/navigation";
 import TransactionTableBody from "./view";
 
-export default connect(null, null)(TransactionTableBody);
+const perform = dispatch => ({
+  navigate: (path, params) => dispatch(doNavigate(path, params)),
+});
+
+export default connect(null, perform)(TransactionTableBody);
