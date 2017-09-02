@@ -11,13 +11,16 @@ import UriIndicator from "component/uriIndicator";
 import IconFeatured from "component/iconFeatured";
 
 const FormatItem = props => {
-  const { contentType, metadata: { language, license } } = props;
+  const { publishedDate, contentType, metadata: { language, license } } = props;
 
   const mediaType = lbry.getMediaType(contentType);
 
   return (
     <table className="table-standard">
       <tbody>
+        <tr>
+          <td>{__("Published on")}</td><td>{publishedDate}</td>
+        </tr>
         <tr>
           <td>{__("Content-Type")}</td><td>{mediaType}</td>
         </tr>
@@ -36,6 +39,7 @@ class FilePage extends React.PureComponent {
   componentDidMount() {
     this.fetchFileInfo(this.props);
     this.fetchCostInfo(this.props);
+    this.fetchPublishedDate(this.props);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -54,6 +58,11 @@ class FilePage extends React.PureComponent {
     }
   }
 
+  fetchPublishedDate(props) {
+    const { claim } = props;
+    if(claim) props.fetchPublishedDate(claim.height)
+  }
+
   render() {
     const {
       claim,
@@ -62,6 +71,7 @@ class FilePage extends React.PureComponent {
       contentType,
       uri,
       rewardedContentClaimIds,
+      publishedDate,
     } = this.props;
 
     if (!claim || !metadata) {
@@ -139,7 +149,7 @@ class FilePage extends React.PureComponent {
           </div>
           {metadata
             ? <div className="card__content">
-                <FormatItem metadata={metadata} contentType={contentType} />
+                <FormatItem metadata={metadata} contentType={contentType} publishedDate={publishedDate} />
               </div>
             : ""}
           <div className="card__content">

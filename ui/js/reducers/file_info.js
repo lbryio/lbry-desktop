@@ -141,6 +141,15 @@ reducers[types.LOADING_VIDEO_FAILED] = function(state, action) {
   });
 };
 
+reducers[types.FETCH_DATE] = function(state, action) {
+    const { time } = action.data;
+    if(time) {
+        return Object.assign({}, state, {
+            publishedDate: time,
+        });
+    }
+}
+
 export default function reducer(state = defaultState, action) {
   const handler = reducers[action.type];
   if (handler) return handler(state, action);

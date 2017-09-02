@@ -170,3 +170,8 @@ export const selectTotalDownloadProgress = createSelector(
     else return -1;
   }
 );
+
+export const selectPublishedDate = createSelector(
+  _selectState,
+  state => state.publishedDate || null
+);
