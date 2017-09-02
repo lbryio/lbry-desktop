@@ -2,10 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { selectPageTitle } from "selectors/navigation";
 import { selectUser } from "selectors/user";
-import {
-  doCheckUpgradeAvailable,
-  doAlertError,
-} from "actions/app";
+import { doCheckUpgradeAvailable, doAlertError } from "actions/app";
 import { doRecordScroll } from "actions/navigation";
 import { doFetchRewardedContent } from "actions/content";
 import { doUpdateBalance } from "actions/wallet";

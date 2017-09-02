@@ -116,7 +116,7 @@ class PublishForm extends React.PureComponent {
           ? { channel_name: this.state.channel }
           : {}),
       };
-      
+
       const { source } = this.state;
 
       if (this.refs.file.getValue() !== "") {
@@ -262,7 +262,7 @@ class PublishForm extends React.PureComponent {
   }
 
   handlePrefillClicked() {
-    const claimInfo = this.myClaimInfo();  
+    const claimInfo = this.myClaimInfo();
     const { source } = claimInfo.value.stream;
     const {
       license,

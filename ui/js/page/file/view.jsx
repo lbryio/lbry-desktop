@@ -3,6 +3,7 @@ import ReactMarkdown from "react-markdown";
 import lbry from "lbry.js";
 import lbryuri from "lbryuri.js";
 import Video from "component/video";
+import TipLink from "component/tipLink";
 import { Thumbnail } from "component/common";
 import FilePrice from "component/filePrice";
 import FileActions from "component/fileActions";
@@ -33,6 +34,13 @@ const FormatItem = props => {
 };
 
 class FilePage extends React.PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showTipBox: false,
+    };
+  }
+
   componentDidMount() {
     this.fetchFileInfo(this.props);
     this.fetchCostInfo(this.props);
@@ -54,6 +62,18 @@ class FilePage extends React.PureComponent {
     }
   }
 
+  handleTipShow() {
+    this.setState({
+      showTipBox: true,
+    });
+  }
+
+  handleTipHide() {
+    this.setState({
+      showTipBox: false,
+    });
+  }
+
   render() {
     const {
       claim,
@@ -63,6 +83,8 @@ class FilePage extends React.PureComponent {
       uri,
       rewardedContentClaimIds,
     } = this.props;
+
+    const { showTipBox } = this.state;
 
     if (!claim || !metadata) {
       return (
@@ -126,7 +148,10 @@ class FilePage extends React.PureComponent {
                   : uriIndicator}
               </div>
               <div className="card__actions">
-                <FileActions uri={uri} />
+                <FileActions
+                  uri={uri}
+                  onTipShow={this.handleTipShow.bind(this)}
+                />
               </div>
             </div>
             <div className="card__content card__subtext card__subtext card__subtext--allow-newlines">
@@ -137,10 +162,17 @@ class FilePage extends React.PureComponent {
               />
             </div>
           </div>
-          {metadata
+          {metadata && !showTipBox
             ? <div className="card__content">
                 <FormatItem metadata={metadata} contentType={contentType} />
               </div>
+            : ""}
+          {showTipBox
+            ? <TipLink
+                onTipShow={this.handleTipShow.bind(this)}
+                onTipHide={this.handleTipHide.bind(this)}
+                claim_id={claim.claim_id}
+              />
             : ""}
           <div className="card__content">
             <Link

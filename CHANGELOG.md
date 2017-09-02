@@ -8,8 +8,8 @@ Web UI version numbers should always match the corresponding version of LBRY App
 
 ## [Unreleased]
 ### Added
-  *
-  *
+  * Added a tipping button to send LBRY Credits to the publisher
+  * 
 
 ### Changed
   *
