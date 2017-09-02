@@ -210,8 +210,9 @@ $padding-right-card-hover-hack: 30px;
 .card-row--small {
   overflow: hidden;
   white-space: nowrap;
-  /*hacky way to give space for hover */
-  padding-right: $padding-right-card-hover-hack;
+  width: 100%;
+  min-width: $width-card-small;
+  margin-right: $spacing-vertical;
 }
 .card-row__header {
   margin-bottom: $spacing-vertical / 3;
@@ -219,6 +220,8 @@ $padding-right-card-hover-hack: 30px;
 
 .card-row__scrollhouse {
   position: relative;
+  /*hacky way to give space for hover */
+  padding-right: $padding-right-card-hover-hack;
 }
 
 .card-row__nav {
@@ -249,7 +252,7 @@ $padding-right-card-hover-hack: 30px;
   left: 0;
 }
 .card-row__nav--right {
-  right: -1 * $padding-right-card-hover-hack;
+  right: 0;
 }
 
 .card__icon-featured-content {
