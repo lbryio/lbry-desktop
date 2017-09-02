@@ -23,7 +23,7 @@ export function doFetchTransactions() {
       type: types.FETCH_TRANSACTIONS_STARTED,
     });
 
-    lbry.transaction_list().then(results => {
+    lbry.transaction_list({ include_tip_info: true }).then(results => {
       dispatch({
         type: types.FETCH_TRANSACTIONS_COMPLETED,
         data: {
