@@ -207,6 +207,10 @@ class HelpPage extends React.PureComponent {
                           </div>}
                       </td>
                     </tr>
+                    <tr>
+                      <th>{__("NOTE:")}</th>
+                      <td>{__("Access Token Should Be Treated As A Password, Do Not Give It Out!!!")}</td>
+                    </tr>
                   </tbody>
                 </table>
               : <BusyMessage message={__("Looking up version info")} />}
