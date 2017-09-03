@@ -9,7 +9,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
 ## [Unreleased]
 ### Added
   *
-  *
+  * The "auth token" displayable on Help offers security warning
 
 ### Changed
   *

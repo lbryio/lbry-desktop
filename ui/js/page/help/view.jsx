@@ -50,7 +50,7 @@ class HelpPage extends React.PureComponent {
   render() {
     let ver, osName, platform, newVerLink;
 
-    const { doAuth, user } = this.props;
+    const { accessToken, doAuth, user } = this.props;
 
     if (this.state.versionInfo) {
       ver = this.state.versionInfo;
@@ -196,7 +196,15 @@ class HelpPage extends React.PureComponent {
                             onClick={this.showAccessToken.bind(this)}
                           />}
                         {!this.state.accessTokenHidden &&
-                          this.props.accessToken}
+                          accessToken &&
+                          <div>
+                            <p>{accessToken}</p>
+                            <div className="help">
+                              {__(
+                                "This is equivalent to a password. Do not post or share this."
+                              )}
+                            </div>
+                          </div>}
                       </td>
                     </tr>
                   </tbody>
