@@ -119,8 +119,6 @@ class PublishForm extends React.PureComponent {
 
       const { source } = this.state;
 
-      const { source } = this.state;
-
       if (this.refs.file.getValue() !== "") {
         publishArgs.file_path = this.refs.file.getValue();
       } else if (source) {
@@ -283,8 +281,6 @@ class PublishForm extends React.PureComponent {
       language,
       nsfw,
     } = claimInfo.value.stream.metadata;
-
-    const { source } = claimInfo.value.stream;
 
     let newState = {
       meta_title: title,
