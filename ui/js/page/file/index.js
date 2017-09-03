@@ -1,8 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
 import { doNavigate } from "actions/navigation";
-import { doFetchFileInfo, doFetchPublishedDate } from "actions/file_info";
-import { makeSelectFileInfoForUri, selectPublishedDate } from "selectors/file_info";
+import { doFetchFileInfo } from "actions/file_info";
+import { makeSelectFileInfoForUri } from "selectors/file_info";
 import { selectRewardContentClaimIds } from "selectors/content";
 import { doFetchCostInfoForUri } from "actions/cost_info";
 import {
@@ -29,7 +29,6 @@ const makeSelect = () => {
     obscureNsfw: !selectShowNsfw(state),
     fileInfo: selectFileInfo(state, props),
     rewardedContentClaimIds: selectRewardContentClaimIds(state, props),
-    publishedDate: selectPublishedDate(state, props),
   });
 
   return select;
@@ -39,7 +38,6 @@ const perform = dispatch => ({
   navigate: (path, params) => dispatch(doNavigate(path, params)),
   fetchFileInfo: uri => dispatch(doFetchFileInfo(uri)),
   fetchCostInfo: uri => dispatch(doFetchCostInfoForUri(uri)),
-  fetchPublishedDate: height => dispatch(doFetchPublishedDate(height)),
 });
 
 export default connect(makeSelect, perform)(FilePage);

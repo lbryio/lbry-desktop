@@ -33,6 +33,17 @@ export function doFetchTransactions() {
   };
 }
 
+export function doFetchBlock(height) {
+  return function(dispatch, getState) {
+    lbry.block_show({ height }).then(block => {
+      dispatch({
+        type: types.FETCH_BLOCK_SUCCESS,
+        data: { block },
+      });
+    });
+  };
+}
+
 export function doGetNewAddress() {
   return function(dispatch, getState) {
     dispatch({

@@ -155,17 +155,3 @@ export function doFetchFileInfosAndPublishedClaims() {
     if (!isFetchingFileInfo) dispatch(doFileList());
   };
 }
-
-export function doFetchPublishedDate(height) {
-  return function(dispatch, getState) {
-
-    lbry.block_show({ height }).then(block => {
-        const relativeTime =  new Date(block.time * 1000).toLocaleString();
-        dispatch({
-            type: types.FETCH_DATE,
-            data: { time: relativeTime },
-        });
-    });
-
-  }
-}

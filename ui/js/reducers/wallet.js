@@ -9,6 +9,7 @@ const buildDraftTransaction = () => ({
 
 const defaultState = {
   balance: 0,
+  blocks: {},
   transactions: [],
   fetchingTransactions: false,
   receiveAddress: address,
@@ -122,6 +123,15 @@ reducers[types.SEND_TRANSACTION_FAILED] = function(state, action) {
   return Object.assign({}, state, {
     draftTransaction: newDraftTransaction,
   });
+};
+
+reducers[types.FETCH_BLOCK_SUCCESS] = (state, action) => {
+  const { block, block: { height } } = action.data,
+    blocks = Object.assign({}, state.blocks);
+
+  blocks[height] = block;
+
+  return Object.assign({}, state, { blocks });
 };
 
 export default function reducer(state = defaultState, action) {

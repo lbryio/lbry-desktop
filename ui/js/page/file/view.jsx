@@ -9,9 +9,15 @@ import FileActions from "component/fileActions";
 import Link from "component/link";
 import UriIndicator from "component/uriIndicator";
 import IconFeatured from "component/iconFeatured";
+import DateTime from "component/dateTime";
 
 const FormatItem = props => {
-  const { publishedDate, contentType, metadata: { language, license } } = props;
+  const {
+    publishedDate,
+    contentType,
+    claim: { height },
+    metadata: { language, license },
+  } = props;
 
   const mediaType = lbry.getMediaType(contentType);
 
@@ -19,7 +25,7 @@ const FormatItem = props => {
     <table className="table-standard">
       <tbody>
         <tr>
-          <td>{__("Published on")}</td><td>{publishedDate}</td>
+          <td>{__("Published on")}</td><td><DateTime block={height} /></td>
         </tr>
         <tr>
           <td>{__("Content-Type")}</td><td>{mediaType}</td>
@@ -39,7 +45,6 @@ class FilePage extends React.PureComponent {
   componentDidMount() {
     this.fetchFileInfo(this.props);
     this.fetchCostInfo(this.props);
-    this.fetchPublishedDate(this.props);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -58,11 +63,6 @@ class FilePage extends React.PureComponent {
     }
   }
 
-  fetchPublishedDate(props) {
-    const { claim } = props;
-    if(claim) props.fetchPublishedDate(claim.height)
-  }
-
   render() {
     const {
       claim,
@@ -71,7 +71,6 @@ class FilePage extends React.PureComponent {
       contentType,
       uri,
       rewardedContentClaimIds,
-      publishedDate,
     } = this.props;
 
     if (!claim || !metadata) {
@@ -147,9 +146,13 @@ class FilePage extends React.PureComponent {
               />
             </div>
           </div>
-          {metadata
+          {metadata && claim
             ? <div className="card__content">
-                <FormatItem metadata={metadata} contentType={contentType} publishedDate={publishedDate} />
+                <FormatItem
+                  metadata={metadata}
+                  contentType={contentType}
+                  claim={claim}
+                />
               </div>
             : ""}
           <div className="card__content">
