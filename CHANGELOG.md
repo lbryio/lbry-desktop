@@ -14,8 +14,9 @@ Web UI version numbers should always match the corresponding version of LBRY App
 
 
 ### Changed
+  * Improved UX for editing claims.
   *
-  *
+
 
 ### Fixed
   * Some CSS changes to prevent the card row from clipping the scroll arrows after the window width is reduced below a certain point

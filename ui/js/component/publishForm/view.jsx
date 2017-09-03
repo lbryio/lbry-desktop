@@ -116,7 +116,9 @@ class PublishForm extends React.PureComponent {
           ? { channel_name: this.state.channel }
           : {}),
       };
-      
+
+      const { source } = this.state;
+
       const { source } = this.state;
 
       if (this.refs.file.getValue() !== "") {
@@ -185,6 +187,14 @@ class PublishForm extends React.PureComponent {
     if (!name) return false;
 
     return !!myClaims.find(claim => claim.name === name);
+  }
+
+  handleEditClaim() {
+    const isMine = this.myClaimExists();
+
+    if (isMine) {
+      this.handlePrefillClicked();
+    }
   }
 
   topClaimIsMine() {
@@ -262,7 +272,7 @@ class PublishForm extends React.PureComponent {
   }
 
   handlePrefillClicked() {
-    const claimInfo = this.myClaimInfo();  
+    const claimInfo = this.myClaimInfo();
     const { source } = claimInfo.value.stream;
     const {
       license,
@@ -273,6 +283,8 @@ class PublishForm extends React.PureComponent {
       language,
       nsfw,
     } = claimInfo.value.stream.metadata;
+
+    const { source } = claimInfo.value.stream;
 
     let newState = {
       meta_title: title,
@@ -410,8 +422,19 @@ class PublishForm extends React.PureComponent {
   }
 
   componentWillMount() {
+    const { name, channel } = this.props.params;
+    const rawName = name;
+
     this.props.fetchClaimListMine();
     this._updateChannelList();
+
+    if (name && channel) {
+      this.setState({ name, rawName, channel });
+    }
+  }
+
+  componentDidMount() {
+    this.handleEditClaim();
   }
 
   onFileChange() {
@@ -455,7 +478,7 @@ class PublishForm extends React.PureComponent {
         <span>
           {__("You already have a claim with this name.")}{" "}
           <Link
-            label={__("Use data from my existing claim")}
+            label={__("Edit existing claim")}
             onClick={() => this.handlePrefillClicked()}
           />
         </span>
