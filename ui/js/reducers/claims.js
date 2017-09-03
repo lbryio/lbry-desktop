@@ -1,5 +1,4 @@
 import * as types from "constants/action_types";
-import lbryuri from "lbryuri";
 
 const reducers = {};
 const defaultState = {};

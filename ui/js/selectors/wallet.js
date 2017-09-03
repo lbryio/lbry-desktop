@@ -81,3 +81,13 @@ export const selectDraftTransactionAddress = createSelector(
   selectDraftTransaction,
   draft => draft.address
 );
+
+export const selectBlocks = createSelector(_selectState, state => state.blocks);
+
+export const makeSelectBlockDate = block => {
+  return createSelector(
+    selectBlocks,
+    blocks =>
+      blocks && blocks[block] ? new Date(blocks[block].time * 1000) : undefined
+  );
+};

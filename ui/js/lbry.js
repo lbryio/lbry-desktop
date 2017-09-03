@@ -482,6 +482,19 @@ lbry.claim_abandon = function(params = {}) {
   });
 };
 
+lbry.block_show = function(params = {}) {
+  return new Promise((resolve, reject) => {
+    apiCall(
+      "block_show",
+      params,
+      block => {
+        resolve(block);
+      },
+      reject
+    );
+  });
+};
+
 lbry._resolveXhrs = {};
 lbry.resolve = function(params = {}) {
   return new Promise((resolve, reject) => {

@@ -9,15 +9,24 @@ import FileActions from "component/fileActions";
 import Link from "component/link";
 import UriIndicator from "component/uriIndicator";
 import IconFeatured from "component/iconFeatured";
+import DateTime from "component/dateTime";
 
 const FormatItem = props => {
-  const { contentType, metadata: { language, license } } = props;
+  const {
+    publishedDate,
+    contentType,
+    claim: { height },
+    metadata: { language, license },
+  } = props;
 
   const mediaType = lbry.getMediaType(contentType);
 
   return (
     <table className="table-standard">
       <tbody>
+        <tr>
+          <td>{__("Published on")}</td><td><DateTime block={height} /></td>
+        </tr>
         <tr>
           <td>{__("Content-Type")}</td><td>{mediaType}</td>
         </tr>
@@ -137,9 +146,13 @@ class FilePage extends React.PureComponent {
               />
             </div>
           </div>
-          {metadata
+          {metadata && claim
             ? <div className="card__content">
-                <FormatItem metadata={metadata} contentType={contentType} />
+                <FormatItem
+                  metadata={metadata}
+                  contentType={contentType}
+                  claim={claim}
+                />
               </div>
             : ""}
           <div className="card__content">
