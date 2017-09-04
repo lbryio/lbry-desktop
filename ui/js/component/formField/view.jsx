@@ -12,10 +12,15 @@ class FormField extends React.PureComponent {
     prefix: React.PropTypes.string,
     postfix: React.PropTypes.string,
     hasError: React.PropTypes.bool,
+    trim: React.PropTypes.bool,
     regexp: React.PropTypes.oneOfType([
       React.PropTypes.instanceOf(RegExp),
       React.PropTypes.string,
     ]),
+  };
+
+  static defaultProps = {
+    trim: false,
   };
 
   constructor(props) {
@@ -109,7 +114,9 @@ class FormField extends React.PureComponent {
     } else if (this.props.type == "SimpleMDE") {
       return this.refs.field.simplemde.value();
     } else {
-      return this.refs.field.value;
+      return this.props.trim
+        ? this.refs.field.value.trim()
+        : this.refs.field.value;
     }
   }
 
@@ -149,6 +156,7 @@ class FormField extends React.PureComponent {
     delete otherProps.prefix;
     delete otherProps.dispatch;
     delete otherProps.regexp;
+    delete otherProps.trim;
 
     const element = (
       <this._element

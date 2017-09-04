@@ -43,6 +43,7 @@ const WalletSend = props => {
             onChange={setAddress}
             value={address}
             regexp={lbryuri.REGEXP_ADDRESS}
+            trim={true}
           />
           <div className="form-row-submit">
             <Link
