@@ -90,7 +90,7 @@ class ChannelSection extends React.PureComponent {
 
   render() {
     const lbcInputHelp = __(
-      "This LBC remains yours and is a depsoit to reserve this name and can be undone at any time."
+      "This LBC remains yours and is a deposit to reserve this name and can be undone at any time."
     );
 
     const channel = this.state.addingChannel ? "new" : this.props.channel;
