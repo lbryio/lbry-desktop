@@ -9,6 +9,11 @@ const RewardSummary = props => {
     <section className="card">
       <div className="card__title-primary">
         <h3>{__("Rewards")}</h3>
+        <p>{__("Eligible")}
+        {user && user.is_reward_approved
+          ? <Icon icon="icon-check" />
+          : <Icon icon="icon-ban" />}
+        </p>
       </div>
       <div className="card__content">
         {unclaimedRewardAmount > 0 &&
