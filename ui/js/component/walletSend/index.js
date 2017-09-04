@@ -10,6 +10,7 @@ import { selectCurrentModal } from "selectors/app";
 import {
   selectDraftTransactionAmount,
   selectDraftTransactionAddress,
+  selectDraftTransactionError,
 } from "selectors/wallet";
 
 import WalletSend from "./view";
@@ -18,6 +19,7 @@ const select = state => ({
   modal: selectCurrentModal(state),
   address: selectDraftTransactionAddress(state),
   amount: selectDraftTransactionAmount(state),
+  error: selectDraftTransactionError(state),
 });
 
 const perform = dispatch => ({

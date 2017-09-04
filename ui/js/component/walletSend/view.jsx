@@ -13,6 +13,7 @@ const WalletSend = props => {
     setAddress,
     amount,
     address,
+    error,
   } = props;
 
   return (
@@ -80,7 +81,7 @@ const WalletSend = props => {
           contentLabel={__("Transaction failed")}
           onConfirmed={closeModal}
         >
-          {__("Something went wrong")}:
+          {__(error)}
         </Modal>}
     </section>
   );
