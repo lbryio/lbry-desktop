@@ -32,7 +32,13 @@ class TipLink extends React.PureComponent {
     return (
       <div className="card__content">
         <div className="card__title-primary">
-          <h4>{__("Support Claim")}</h4>
+          <h4>{__("Support")}</h4>
+        </div>
+        <div className="card__content">
+          {__(
+            "Support the creator and the success of their content by sending a tip. "
+          )}
+          <Link label={__("Learn more")} href="https://lbry.io/faq/tipping" />
         </div>
         <div className="card__content">
           <FormRow

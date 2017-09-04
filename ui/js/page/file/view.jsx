@@ -154,13 +154,14 @@ class FilePage extends React.PureComponent {
                 />
               </div>
             </div>
-            <div className="card__content card__subtext card__subtext card__subtext--allow-newlines">
-              <ReactMarkdown
-                source={(metadata && metadata.description) || ""}
-                escapeHtml={true}
-                disallowedTypes={["Heading", "HtmlInline", "HtmlBlock"]}
-              />
-            </div>
+            {!showTipBox &&
+              <div className="card__content card__subtext card__subtext card__subtext--allow-newlines">
+                <ReactMarkdown
+                  source={(metadata && metadata.description) || ""}
+                  escapeHtml={true}
+                  disallowedTypes={["Heading", "HtmlInline", "HtmlBlock"]}
+                />
+              </div>}
           </div>
           {metadata && !showTipBox
             ? <div className="card__content">
@@ -174,13 +175,14 @@ class FilePage extends React.PureComponent {
                 claim_id={claim.claim_id}
               />
             : ""}
-          <div className="card__content">
-            <Link
-              href={`https://lbry.io/dmca?claim_id=${claim.claim_id}`}
-              label={__("report")}
-              className="button-text-help"
-            />
-          </div>
+          {!showTipBox &&
+            <div className="card__content">
+              <Link
+                href={`https://lbry.io/dmca?claim_id=${claim.claim_id}`}
+                label={__("report")}
+                className="button-text-help"
+              />
+            </div>}
         </section>
       </main>
     );

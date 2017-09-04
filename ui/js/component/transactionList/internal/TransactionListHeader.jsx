@@ -7,8 +7,7 @@ class TransactionTableHeader extends React.PureComponent {
       <thead>
         <tr>
           <th>{__("Date")}</th>
-          <th>{__("Amount")}</th>
-          <th>{__("Fee")}</th>
+          <th>{__("Amount(Fee)")}</th>
           {filter != "unfiltered" && <th> {__("Claim Name")} </th>}
           <th>{__("Transaction")}</th>
         </tr>

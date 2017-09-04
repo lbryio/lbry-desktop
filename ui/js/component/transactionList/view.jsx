@@ -1,6 +1,6 @@
 import React from "react";
-import TransactionTableHeader from "component/headerTransactionList";
-import TransactionTableBody from "component/bodyTransactionList";
+import TransactionTableHeader from "./internal/TransactionListHeader";
+import TransactionTableBody from "./internal/TransactionListBody";
 import FormField from "component/formField";
 
 class TransactionList extends React.PureComponent {
@@ -16,6 +16,10 @@ class TransactionList extends React.PureComponent {
     this.setState({
       filter: event.target.value,
     });
+  }
+
+  handleClaimNameClicked(uri) {
+    this.props.navigate("/show", { uri });
   }
 
   render() {
@@ -38,8 +42,8 @@ class TransactionList extends React.PureComponent {
             type="select"
             onChange={this.handleFilterChanged.bind(this)}
           >
-            <option value="unfiltered">{__("Unfiltered")}</option>
-            <option value="claim">{__("Claims")}</option>
+            <option value="unfiltered">{__("All")}</option>
+            <option value="claim">{__("Publishes")}</option>
             <option value="support">{__("Supports")}</option>
             <option value="tipSupport">{__("Tips")}</option>
             <option value="update">{__("Updates")}</option>
@@ -47,7 +51,11 @@ class TransactionList extends React.PureComponent {
         </span>
         <table className="table-standard table-stretch">
           <TransactionTableHeader filter={filter} />
-          <TransactionTableBody transactions={transactions} filter={filter} />
+          <TransactionTableBody
+            transactions={transactions}
+            filter={filter}
+            navigate={this.handleClaimNameClicked.bind(this)}
+          />
         </table>
       </div>
     );

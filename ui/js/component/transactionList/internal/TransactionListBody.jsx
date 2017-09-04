@@ -11,10 +11,7 @@ class TransactionTableBody extends React.PureComponent {
     let uri = `lbry://${claim_name}#${claim_id}`;
 
     return (
-      <a
-        className="button-text"
-        onClick={() => this.props.navigate("/show", { uri })}
-      >
+      <a className="button-text" onClick={() => this.props.navigate(uri)}>
         {claim_name}
       </a>
     );
@@ -37,6 +34,15 @@ class TransactionTableBody extends React.PureComponent {
     const date = transaction.date;
     const fee = transaction.fee;
     const filter = this.props.filter;
+    const options = {
+      weekday: "short",
+      year: "2-digit",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
+      second: "2-digit",
+    };
 
     if (filter == "tipSupport")
       transaction["tipSupport_info"] = transaction["support_info"].filter(
@@ -49,7 +55,7 @@ class TransactionTableBody extends React.PureComponent {
             <tr key={`${txid}:${item.nout}`}>
               <td>
                 {date
-                  ? date.toLocaleDateString() + " " + date.toLocaleTimeString()
+                  ? date.toLocaleDateString("en-US", options)
                   : <span className="empty">
                       {__("(Transaction pending)")}
                     </span>}
@@ -58,12 +64,18 @@ class TransactionTableBody extends React.PureComponent {
                 <CreditAmount
                   amount={item.amount}
                   look="plain"
+                  label={false}
                   showPlus={true}
                   precision={8}
-                />{" "}
-              </td>
-              <td>
-                <CreditAmount amount={fee} look="plain" precision={8} />{" "}
+                />
+                <br />
+                <CreditAmount
+                  amount={fee}
+                  look="plain"
+                  fee={true}
+                  label={false}
+                  precision={8}
+                />
               </td>
               <td>
                 {this.getClaimLink(item.claim_name, item.claim_id)}
@@ -77,7 +89,7 @@ class TransactionTableBody extends React.PureComponent {
       : <tr key={txid}>
           <td>
             {date
-              ? date.toLocaleDateString() + " " + date.toLocaleTimeString()
+              ? date.toLocaleDateString("en-US", options)
               : <span className="empty">
                   {__("(Transaction pending)")}
                 </span>}
@@ -86,12 +98,18 @@ class TransactionTableBody extends React.PureComponent {
             <CreditAmount
               amount={transaction.amount}
               look="plain"
+              label={false}
               showPlus={true}
               precision={8}
-            />{" "}
-          </td>
-          <td>
-            <CreditAmount amount={fee} look="plain" precision={8} />{" "}
+            />
+            <br />
+            <CreditAmount
+              amount={fee}
+              look="plain"
+              fee={true}
+              label={false}
+              precision={8}
+            />
           </td>
           <td>
             <LinkTransaction id={txid} />
