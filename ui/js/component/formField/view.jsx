@@ -29,7 +29,6 @@ class FormField extends React.PureComponent {
     this._fieldRequiredText = __("This field is required");
     this._type = null;
     this._element = null;
-    this._validateCallback = null;
     this._extraElementProps = {};
 
     this.state = {
@@ -61,29 +60,12 @@ class FormField extends React.PureComponent {
   }
 
   componentDidMount() {
-    if (this.props.regexp) {
-      this._validateCallback = () => this.validate();
-    }
-
-    this.refs.field.addEventListener("blur", this._validateCallback);
-    this.refs.field.form.addEventListener("submit", this._validateCallback);
-
     /**
      * We have to add the webkitdirectory attribute here because React doesn't allow it in JSX
      * https://github.com/facebook/react/issues/3468
      */
     if (this.props.type == "directory") {
       this.refs.field.webkitdirectory = true;
-    }
-  }
-
-  componentWillUnmount() {
-    if (this._validateCallback !== null) {
-      this.refs.field.removeEventListener("blur", this._validateCallback);
-      this.refs.field.form.removeEventListener(
-        "submit",
-        this._validateCallback
-      );
     }
   }
 
@@ -101,6 +83,13 @@ class FormField extends React.PureComponent {
     this.setState({
       isError: true,
       errorMessage: text,
+    });
+  }
+
+  clearError() {
+    this.setState({
+      isError: false,
+      errorMessage: "",
     });
   }
 
@@ -131,10 +120,10 @@ class FormField extends React.PureComponent {
   validate() {
     if ("regexp" in this.props) {
       if (!this.getValue().match(this.props.regexp)) {
-        // Handle invalid input here
+        this.showError("Invalid address.");
+      } else {
+        this.clearError();
       }
-    } else {
-      return true;
     }
   }
 
@@ -165,6 +154,7 @@ class FormField extends React.PureComponent {
         name={this.props.name}
         ref="field"
         placeholder={this.props.placeholder}
+        onBlur={() => this.validate()}
         className={
           "form-field__input form-field__input-" +
           this.props.type +
