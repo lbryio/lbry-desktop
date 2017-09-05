@@ -235,6 +235,7 @@ class PublishForm extends React.PureComponent {
         name: "",
         uri: "",
         prefillDone: false,
+        mode: "publish",
       });
 
       return;
@@ -256,6 +257,7 @@ class PublishForm extends React.PureComponent {
       rawName: rawName,
       name: name,
       prefillDone: false,
+      mode: "publish",
       uri,
     });
 
@@ -385,6 +387,7 @@ class PublishForm extends React.PureComponent {
 
   handleChannelChange(channelName) {
     this.setState({
+      mode: "publish",
       channel: channelName,
     });
     const nameChanged = () => this.nameChanged(this.state.rawName);
