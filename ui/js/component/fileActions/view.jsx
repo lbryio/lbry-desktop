@@ -79,6 +79,7 @@ class FileActions extends React.PureComponent {
       claimIsMine,
       claimInfo,
       navigate,
+      editClaim,
     } = this.props;
 
     const name = fileInfo ? fileInfo.name : null;
@@ -192,7 +193,7 @@ class FileActions extends React.PureComponent {
                 {claimIsMine &&
                 <DropDownMenuItem
                   key={1}
-                  onClick={() => navigate("/publish", { name, channel })}
+                  onClick={() => editClaim({ name, channel })}
                   label={__("Edit claim")}
                 />}
                 <DropDownMenuItem
