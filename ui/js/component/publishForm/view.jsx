@@ -48,6 +48,7 @@ class PublishForm extends React.PureComponent {
       isFee: false,
       customUrl: false,
       source: null,
+      mode: "publish",
     };
   }
 
@@ -283,6 +284,7 @@ class PublishForm extends React.PureComponent {
     } = claimInfo.value.stream.metadata;
 
     let newState = {
+      mode: "edit",
       meta_title: title,
       meta_thumbnail: thumbnail,
       meta_description: description,
@@ -513,9 +515,17 @@ class PublishForm extends React.PureComponent {
   }
 
   render() {
+    const { mode, submitting } = this.state;
+
     const lbcInputHelp = __(
       "This LBC remains yours and the deposit can be undone at any time."
     );
+
+    let submitLabel = !submitting ? __("Publish") : __("Publishing...");
+
+    if (mode === "edit") {
+      submitLabel = !submitting ? __("Update") : __("Updating...");
+    }
 
     return (
       <main className="main--single-column">
@@ -859,9 +869,7 @@ class PublishForm extends React.PureComponent {
           <div className="card-series-submit">
             <Link
               button="primary"
-              label={
-                !this.state.submitting ? __("Publish") : __("Publishing...")
-              }
+              label={submitLabel}
               onClick={event => {
                 this.handleSubmit(event);
               }}
