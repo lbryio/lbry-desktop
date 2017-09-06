@@ -73,7 +73,11 @@ class FileActions extends React.PureComponent {
       costInfo,
       loading,
       claimIsMine,
+      editClaim,
     } = this.props;
+
+    const name = fileInfo ? fileInfo.name : null;
+    const channel = fileInfo ? fileInfo.channel_name : null;
 
     const metadata = fileInfo ? fileInfo.metadata : null,
       openInFolderMessage = platform.startsWith("Mac")
@@ -167,20 +171,24 @@ class FileActions extends React.PureComponent {
       <section className="file-actions">
         {content}
         {showMenu
-          ? <div className="button-set-item">
-              <DropDownMenu>
-                <DropDownMenuItem
-                  key={0}
-                  onClick={() => openInFolder(fileInfo)}
-                  label={openInFolderMessage}
-                />
+          ? <DropDownMenu className="button-set-item">
+              <DropDownMenuItem
+                key={0}
+                onClick={() => openInFolder(fileInfo)}
+                label={openInFolderMessage}
+              />
+              {claimIsMine &&
                 <DropDownMenuItem
                   key={1}
-                  onClick={() => openModal(modals.CONFIRM_FILE_REMOVE)}
-                  label={__("Remove...")}
-                />
-              </DropDownMenu>
-            </div>
+                  onClick={() => editClaim({ name, channel })}
+                  label={__("Edit claim")}
+                />}
+              <DropDownMenuItem
+                key={2}
+                onClick={() => openModal(modals.CONFIRM_FILE_REMOVE)}
+                label={__("Remove...")}
+              />
+            </DropDownMenu>
           : ""}
         <Modal
           type="confirm"

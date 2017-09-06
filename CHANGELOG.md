@@ -14,8 +14,9 @@ Web UI version numbers should always match the corresponding version of LBRY App
 
 
 ### Changed
+  * Improved UX for editing claims.
   *
-  *
+
 
 ### Fixed
   * Potential fix for blank error popup when streaming (#536)
