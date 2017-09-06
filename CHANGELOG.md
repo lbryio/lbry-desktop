@@ -18,8 +18,9 @@ Web UI version numbers should always match the corresponding version of LBRY App
   *
 
 ### Fixed
+  * Fixed some popups showing improperly while balance was loading (#534)
   * Some CSS changes to prevent the card row from clipping the scroll arrows after the window width is reduced below a certain point
-  * Clearly notify user when they try to send credits to an invalid address
+  * Clearly notify user when they try to send credits to an invalid address (#445)
 
 ### Deprecated
   *
