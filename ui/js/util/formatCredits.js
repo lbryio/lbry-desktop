@@ -1,4 +1,5 @@
 export function formatCredits(amount, precision) {
+  if (amount == undefined) return 0;
   return amount.toFixed(precision || 1).replace(/\.?0+$/, "");
 }
 
