@@ -12,6 +12,15 @@ class FormField extends React.PureComponent {
     prefix: React.PropTypes.string,
     postfix: React.PropTypes.string,
     hasError: React.PropTypes.bool,
+    trim: React.PropTypes.bool,
+    regexp: React.PropTypes.oneOfType([
+      React.PropTypes.instanceOf(RegExp),
+      React.PropTypes.string,
+    ]),
+  };
+
+  static defaultProps = {
+    trim: false,
   };
 
   constructor(props) {
@@ -77,6 +86,13 @@ class FormField extends React.PureComponent {
     });
   }
 
+  clearError() {
+    this.setState({
+      isError: false,
+      errorMessage: "",
+    });
+  }
+
   focus() {
     this.refs.field.focus();
   }
@@ -87,7 +103,9 @@ class FormField extends React.PureComponent {
     } else if (this.props.type == "SimpleMDE") {
       return this.refs.field.simplemde.value();
     } else {
-      return this.refs.field.value;
+      return this.props.trim
+        ? this.refs.field.value.trim()
+        : this.refs.field.value;
     }
   }
 
@@ -97,6 +115,16 @@ class FormField extends React.PureComponent {
 
   getOptions() {
     return this.refs.field.options;
+  }
+
+  validate() {
+    if ("regexp" in this.props) {
+      if (!this.getValue().match(this.props.regexp)) {
+        this.showError(__("Invalid format."));
+      } else {
+        this.clearError();
+      }
+    }
   }
 
   render() {
@@ -116,6 +144,8 @@ class FormField extends React.PureComponent {
     delete otherProps.postfix;
     delete otherProps.prefix;
     delete otherProps.dispatch;
+    delete otherProps.regexp;
+    delete otherProps.trim;
 
     const element = (
       <this._element
@@ -124,6 +154,7 @@ class FormField extends React.PureComponent {
         name={this.props.name}
         ref="field"
         placeholder={this.props.placeholder}
+        onBlur={() => this.validate()}
         className={
           "form-field__input form-field__input-" +
           this.props.type +
