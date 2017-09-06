@@ -2,7 +2,6 @@ import React from "react";
 import { Modal } from "modal/modal";
 import { CreditAmount, CurrencySymbol } from "component/common";
 import Link from "component/link/index";
-import { formatCredits } from "util/formatCredits";
 
 const ModalCreditIntro = props => {
   const { closeModal, currentBalance, totalRewardValue, verifyAccount } = props;

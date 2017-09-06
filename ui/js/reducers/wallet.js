@@ -8,7 +8,7 @@ const buildDraftTransaction = () => ({
 });
 
 const defaultState = {
-  balance: 0,
+  balance: undefined,
   blocks: {},
   transactions: [],
   fetchingTransactions: false,

@@ -16,7 +16,7 @@ import Header from "./view";
 const select = state => ({
   isBackDisabled: selectIsBackDisabled(state),
   isForwardDisabled: selectIsForwardDisabled(state),
-  balance: formatCredits(selectBalance(state), 1),
+  balance: formatCredits(selectBalance(state) || 0, 1),
   publish: __("Publish"),
 });
 
