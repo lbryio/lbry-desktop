@@ -37,8 +37,8 @@ export function doClaimRewardType(rewardType) {
       reward = rewardsByType[rewardType],
       userIsRewardApproved = selectUserIsRewardApproved(state);
 
-    if (reward.transaction_id) {
-      //already claimed, do nothing
+    if (!reward || reward.transaction_id) {
+      //already claimed or doesn't exist, do nothing
       return;
     }
 
