@@ -1,128 +1,11 @@
 @charset "UTF-8";
 
 $spacing-vertical: 24px;
-
-$padding-button: $spacing-vertical * 2/3;
-$padding-text-link: 0px;
-
-$color-primary: #155B4A;
-$color-primary-light: saturate(lighten($color-primary, 50%), 20%);
-$color-light-alt: hsl(hue($color-primary), 15, 85);
-$color-text-dark: #000;
-$color-black-transparent: rgba(32,32,32,0.9);
-$color-help: rgba(0,0,0,.6);
-$color-notice: #8a6d3b;
-$color-error: #a94442;
-$color-load-screen-text: #c3c3c3;
-$color-canvas: #f5f5f5;
-$color-bg: #ffffff;
-$color-bg-alt: #D9D9D9;
-$color-money: #216C2A;
-$color-meta-light: #505050;
-$color-form-border: rgba(160,160,160,.5);
-
-$font-size: 16px;
-$font-line-height: 1.3333;
-
-$mobile-width-threshold: 801px;
-$max-content-width: 1000px;
-$max-text-width: 660px;
-
 $width-page-constrained: 800px;
-$width-input-text: 330px;
-
-$height-button: $spacing-vertical * 1.5;
-$height-header: $spacing-vertical * 2.5;
-$height-video-embedded: $width-page-constrained * 9 / 16;
-
-$box-shadow-layer: 0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12);
-$box-shadow-focus: 2px 4px 4px 0 rgba(0,0,0,.14),2px 5px 3px -2px rgba(0,0,0,.2),2px 3px 7px 0 rgba(0,0,0,.12);
-
-$transition-standard: .225s ease;
-
-$blur-intensity-nsfw: 20px;
-
-@mixin clearfix()
-{
-    &:before, &:after
-    {
-      content: " ";
-      display: table;
-    }
-    &:after
-    {
-        clear: both;
-    }
-}
-
-@mixin border-radius($radius)
-{
-  -webkit-border-radius: $radius;
-     -moz-border-radius: $radius;
-      -ms-border-radius: $radius;
-          border-radius: $radius;
-}
-
-@mixin placeholder-color($color) {
-  /*do not group these it breaks because CSS*/
-  &:-moz-placeholder {
-    color: $color;
-  }
-  &::-moz-placeholder {
-    color: $color;
-  }
-  &:-ms-input-placeholder {
-    color: $color;
-  }
-  &::-webkit-input-placeholder {
-    color: $color;
-  }
-}
-
-@mixin display-flex()
-{
-  display: -webkit-box;
-  display: -moz-box;
-  display: -ms-flexbox;
-  display: -webkit-flex;
-  display: flex;
-}
-
-@mixin flex($columns)
-{
-  -webkit-flex: $columns;
-     -moz-flex: $columns;
-      -ms-flex: $columns;
-          flex: $columns;
-}
-
-@mixin flex-flow($flow) {
-  -webkit-flex-flow: $flow;
-     -moz-flex-flow: $flow;
-      -ms-flex-flow: $flow;
-          flex-flow: $flow;
-}
-
-@mixin flex-direction($direction) {
-  -webkit-flex-direction: $direction;
-     -moz-flex-direction: $direction;
-      -ms-flex-direction: $direction;
-          flex-direction: $direction;
-}
 
 @mixin absolute-center()
 {
-  @include display-flex();
-  -webkit-box-align: center;
-     -moz-box-align: center;
-     -ms-flex-align: center;
-  -webkit-align-items: center;
-          align-items: center;
-  -webkit-box-pack: center;
-     -moz-box-pack: center;
-     -ms-flex-pack: center;
-  -webkit-justify-content: center;
-          justify-content: center;
+
 }
 
 @mixin linear-gradient($from-color, $to-color) {
@@ -133,37 +16,13 @@ $blur-intensity-nsfw: 20px;
   background-image:         linear-gradient(top, $from-color, $to-color);
 }
 
-@mixin box-sizing( $type: border-box ) {
-    -webkit-box-sizing: $type;
-       -moz-box-sizing: $type;
-         -o-box-sizing: $type;
-        -ms-box-sizing: $type;
-            box-sizing: $type;
-}
-
-@mixin background-size ($size) {
-    -webkit-background-size: $size;
-    -moz-background-size: $size;
-    -o-background-size: $size;
-    background-size: $size;
-}
-
 @mixin placeholder {
   &::-webkit-input-placeholder {@content}
   &:-moz-placeholder {@content}
   &:-ms-input-placeholder {@content}
 }
 
-@mixin offscreen() {
-  position: absolute;
-  left: -9999px;
-  top:auto;
-  width:1px;
-  height:1px;
-  overflow:hidden;
-}
-
-@mixin text-link($color: $color-primary, $hover-opacity: 0.70) {
+@mixin text-link($color: var(--color-primary), $hover-opacity: 0.70) {
   .icon
   {
     &:first-child {
@@ -183,7 +42,7 @@ $blur-intensity-nsfw: 20px;
   &:hover
   {
     opacity: $hover-opacity;
-    transition: opacity $transition-standard;
+    transition: opacity  var(--transition-duration) var(--transition-type);
     text-decoration: underline;
     .icon {
       text-decoration: none;

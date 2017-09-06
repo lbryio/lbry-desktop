@@ -1,4 +1,5 @@
 import * as types from "constants/action_types";
+import * as settings from "constants/settings";
 import lbry from "lbry";
 import {
   selectUpdateUrl,
@@ -175,6 +176,7 @@ export function doDaemonReady() {
   return function(dispatch, getState) {
     dispatch(doAuthenticate());
     dispatch({ type: types.DAEMON_READY });
+    //dispatch(doSetTheme(lbry.getClientSetting(settings.THEME)));
     dispatch(doFetchDaemonSettings());
     dispatch(doFileList());
   };

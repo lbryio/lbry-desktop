@@ -9,28 +9,25 @@
 }
 
 .tooltip__body {
-  $tooltip-body-width: 300px;
-
   position: absolute;
   z-index: 1;
   left: 50%;
-  margin-left: $tooltip-body-width * -1 / 2;
+  margin-left: calc(var(--tooltip-width) * -1 / 2);
   white-space: normal;
-
   box-sizing: border-box;
   padding: $spacing-vertical / 2;
-  width: $tooltip-body-width;
-  border: 1px solid #aaa;
-  color: $color-text-dark;
-  background-color: $color-bg;
-  font-size: $font-size * 7/8;
-  line-height: $font-line-height;
-  box-shadow: $box-shadow-layer;
+  width: var(--tooltip-width);
+  border: var(--tooltip-border);
+  color: var(--tooltip-color);
+  background-color: var(--tooltip-bg);
+  font-size: calc(var(--font-size) * 7/8);
+  line-height: var(--font-line-height);
+  box-shadow: var(--box-shadow-layer);
 }
 
 .tooltip--header .tooltip__link {
   @include text-link(#aaa);
-  font-size: $font-size * 3/4;
-  margin-left: $padding-button;
+  font-size: calc( var(--font-size) * 3/4 );
+  margin-left: var(--button-padding);
   vertical-align: middle;
 }

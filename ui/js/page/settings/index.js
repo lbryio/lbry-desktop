@@ -4,6 +4,8 @@ import { doClearCache } from "actions/app";
 import {
   doSetDaemonSetting,
   doSetClientSetting,
+  doGetThemes,
+  doSetTheme,
   doChangeLanguage,
 } from "actions/settings";
 import {
@@ -25,6 +27,8 @@ const perform = dispatch => ({
   setDaemonSetting: (key, value) => dispatch(doSetDaemonSetting(key, value)),
   clearCache: () => dispatch(doClearCache()),
   setClientSetting: (key, value) => dispatch(doSetClientSetting(key, value)),
+  setTheme: name => dispatch(doSetTheme(name)),
+  getThemes: () => dispatch(doGetThemes),
   changeLanguage: newLanguage => dispatch(doChangeLanguage(newLanguage)),
 });
 

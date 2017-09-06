@@ -1,15 +1,12 @@
 @import "../global";
 
-$color-header: #666;
-$color-header-active: darken($color-header, 20%);
-
 #header
 {
-  color: $color-header;
-  background: #fff;
+  color: var(--header-color);
+  background: var(--header-bg);
   display: flex;
   position: fixed;
-  box-shadow: $box-shadow-layer;
+  box-shadow: var(--box-shadow-layer);
   top: 0;
   left: 0;
   width: 100%;
@@ -21,7 +18,11 @@ $color-header-active: darken($color-header, 20%);
   flex: 0 0 content;
   padding-left: $spacing-vertical / 4;
   padding-right: $spacing-vertical / 4;
+  .button-alt {
+      background: var(--header-button-bg) !important;
+  }
 }
+
 .header__item--wunderbar {
   flex-grow: 1;
 }
@@ -36,23 +37,24 @@ $color-header-active: darken($color-header, 20%);
   }
 }
 
-.wunderbar--active .icon-search { color: $color-primary; }
+.wunderbar--active .icon-search { color: var(--color-primary); }
 
 .wunderbar__input {
-  background: rgba(255, 255, 255, 0.7);
+  background: var(--search-bg);
   width: 100%;
-  color: $color-header;
+  color: var(--search-color);
   height: $spacing-vertical * 1.5;
   line-height: $spacing-vertical * 1.5;
   padding-left: 38px;
   padding-right: 5px;
-  border: 1px solid $color-text-dark;
-  @include border-radius(2px);
-  border: 1px solid #ccc;
+  border-radius: 2px;
+  border: var(--search-border);
+  transition: box-shadow var(--transition-duration) var(--transition-type);
   &:focus {
-    color: $color-header-active;
-    box-shadow: $box-shadow-focus;
-    border-color: $color-primary;
+    background: var(--search-active-bg);
+    color: var(--search-active-color);
+    box-shadow: var(--box-shadow-focus);
+    border-color: var(--color-primary);
   }
 }
 
@@ -65,12 +67,12 @@ nav.sub-header
   margin-right: auto;
   > a
   {
-    $sub-header-selected-underline-height: 2px;
     display: inline-block;
     margin: 0 15px;
     padding: 0 5px;
-    line-height: $height-header - $spacing-vertical - $sub-header-selected-underline-height;
-    color: $color-header;
+    line-height:calc(var(--header-height) - $spacing-vertical - var(--tab-border-size));
+    color: var(--tab-color);
+
     &:first-child
     {
       margin-left: 0;
@@ -81,12 +83,12 @@ nav.sub-header
     }
     &.sub-header-selected
     {
-      border-bottom: $sub-header-selected-underline-height solid $color-header-active;
-      color: $color-header-active;
+      border-bottom: var(--tab-border);
+      color: var(--tab-active-color);
     }
     &:hover
     {
-      color: $color-header-active;
+      color: var(--tab-active-color);
     }
   }
 }
