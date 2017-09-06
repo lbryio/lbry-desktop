@@ -1,4 +1,9 @@
-@import "global";
+/*
+Both of these should probably die and become variables as well
+ */
+$spacing-vertical: 24px;
+$width-page-constrained: 800px;
+$text-color: #000;
 
 :root {
 
@@ -39,7 +44,7 @@
   --transition-type: ease;
 
   /* Text */
-  --text-color: #000;
+  --text-color: $text-color;
   --text-help-color: #EEE;
   --text-max-width: 660px;
   --text-link-padding: 4px;

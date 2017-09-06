@@ -1,4 +1,9 @@
-@import "../global";
+
+@mixin placeholder {
+  &::-webkit-input-placeholder {@content}
+  &:-moz-placeholder {@content}
+  &:-ms-input-placeholder {@content}
+}
 
 .form-row-submit
 {
@@ -63,7 +68,7 @@ input[type="text"].input-copyable {
   input[type="search"],
   input[type="date"] {
     @include placeholder {
-      //color: lighten($color-text-dark, 60%);
+      color: lighten($text-color, 60%);
     }
     transition: all  var(--transition-duration) var(--transition-type);
     cursor: pointer;

@@ -55,6 +55,10 @@ export function doSetClientSetting(key, value) {
 export function doGetThemes() {
   const dir = `${remote.app.getAppPath()}/dist/themes`;
 
+  if (!fs.existsSync(dir)) {
+    return;
+  }
+
   // Get all .css files
   const files = readdirSync(dir).filter(file => extname(file) === ".css");
 

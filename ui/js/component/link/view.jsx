@@ -8,7 +8,6 @@ const Link = props => {
     style,
     label,
     icon,
-    badge,
     button,
     disabled,
     children,
@@ -36,7 +35,6 @@ const Link = props => {
       <span {...("button" in props ? { className: "button__content" } : {})}>
         {"icon" in props ? <Icon icon={icon} fixed={true} /> : null}
         {label ? <span className="link-label">{label}</span> : null}
-        {"badge" in props ? <span className="badge">{badge}</span> : null}
       </span>
     );
   }
