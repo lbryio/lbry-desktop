@@ -259,7 +259,6 @@ class SettingsPage extends React.PureComponent {
             <h3>{__("Theme")}</h3>
           </div>
           <div className="card__content">
-            {console.log(theme)}
             <FormField
               type="select"
               onChange={this.onThemeChange.bind(this)}

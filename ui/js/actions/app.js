@@ -9,7 +9,7 @@ import {
 } from "selectors/app";
 import { doFetchDaemonSettings } from "actions/settings";
 import { doAuthenticate } from "actions/user";
-import { doFileList } from "actions/file_info";
+import { doFetchFileInfosAndPublishedClaims } from "actions/file_info";
 
 const { remote, ipcRenderer, shell } = require("electron");
 const path = require("path");
@@ -177,7 +177,7 @@ export function doDaemonReady() {
     dispatch(doAuthenticate());
     dispatch({ type: types.DAEMON_READY });
     dispatch(doFetchDaemonSettings());
-    dispatch(doFileList());
+    dispatch(doFetchFileInfosAndPublishedClaims());
   };
 }
 

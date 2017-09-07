@@ -155,9 +155,3 @@ export function doFetchFileInfosAndPublishedClaims() {
     if (!isFetchingFileInfo) dispatch(doFileList());
   };
 }
-
-export function doEditClaim(fileInfo) {
-  return function(dispatch, getState) {
-    dispatch(doNavigate("/publish", fileInfo));
-  };
-}

@@ -134,7 +134,8 @@ input[type="text"].input-copyable {
   }
 }
 
-.form-field__label--error {
+.form-row__label-row .form-field__label--error {
+  /*the row restriction is to prevent coloring checkboxes and radio labels*/
   color: var(--color-error);
 }
 

@@ -10,9 +10,13 @@ import { makeSelectIsAvailableForUri } from "selectors/availability";
 import { makeSelectCostInfoForUri } from "selectors/cost_info";
 import { doCloseModal, doOpenModal } from "actions/app";
 import { doFetchAvailability } from "actions/availability";
-import { doOpenFileInShell, doOpenFileInFolder,   doEditClaim, } from "actions/file_info";
-import { makeSelectClaimForUri,makeSelectClaimForUriIsMine } from "selectors/claims";
+import { doOpenFileInShell, doOpenFileInFolder } from "actions/file_info";
+import {
+  makeSelectClaimForUri,
+  makeSelectClaimForUriIsMine,
+} from "selectors/claims";
 import { doPurchaseUri, doLoadVideo, doStartDownload } from "actions/content";
+import { doNavigate } from "actions/navigation";
 import FileActions from "./view";
 
 const makeSelect = () => {
@@ -49,7 +53,7 @@ const perform = dispatch => ({
   startDownload: uri => dispatch(doPurchaseUri(uri, "affirmPurchase")),
   loadVideo: uri => dispatch(doLoadVideo(uri)),
   restartDownload: (uri, outpoint) => dispatch(doStartDownload(uri, outpoint)),
-  editClaim: fileInfo => dispatch(doEditClaim(fileInfo)),
+  editClaim: fileInfo => dispatch(doNavigate("/publish", fileInfo)),
 });
 
 export default connect(makeSelect, perform)(FileActions);

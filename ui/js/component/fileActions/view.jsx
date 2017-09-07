@@ -191,13 +191,13 @@ class FileActions extends React.PureComponent {
                   label={openInFolderMessage}
                 />
                 {claimIsMine &&
+                  <DropDownMenuItem
+                    key={1}
+                    onClick={() => editClaim({ name, channel })}
+                    label={__("Edit claim")}
+                  />}
                 <DropDownMenuItem
-                  key={1}
-                  onClick={() => editClaim({ name, channel })}
-                  label={__("Edit claim")}
-                />}
-                <DropDownMenuItem
-                  key={1}
+                  key={2}
                   onClick={() => openModal(modals.CONFIRM_FILE_REMOVE)}
                   label={__("Remove...")}
                 />
