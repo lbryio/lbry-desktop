@@ -164,7 +164,7 @@ export function doDownloadLanguages() {
 
 export function doChangeLanguage(language) {
   return function(dispatch, getState) {
-    lbry.setClientSetting(settings.LANGUAGE, language);
+    dispatch(doSetClientSetting(settings.LANGUAGE, language));
     app.i18n.setLocale(language);
   };
 }

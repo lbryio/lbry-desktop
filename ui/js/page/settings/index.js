@@ -12,7 +12,6 @@ import {
 import {
   makeSelectClientSetting,
   selectDaemonSettings,
-  selectShowNsfw,
   selectLanguages,
 } from "selectors/settings";
 import { selectCurrentLanguage } from "selectors/app";
@@ -20,10 +19,12 @@ import SettingsPage from "./view";
 
 const select = state => ({
   daemonSettings: selectDaemonSettings(state),
-  showNsfw: selectShowNsfw(state),
+  showNsfw: makeSelectClientSetting(settings.SHOW_NSFW)(state),
+  showUnavailable: makeSelectClientSetting(settings.SHOW_UNAVAILABLE)(state),
+  theme: makeSelectClientSetting(settings.THEME)(state),
+  themes: makeSelectClientSetting(settings.THEMES)(state),
   language: selectCurrentLanguage(state),
   languages: selectLanguages(state),
-  theme: makeSelectClientSetting(settings.THEME)(state),
 });
 
 const perform = dispatch => ({

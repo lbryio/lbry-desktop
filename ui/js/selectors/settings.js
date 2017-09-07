@@ -25,10 +25,8 @@ export const selectSettingsIsGenerous = createSelector(
   settings => settings && settings.is_generous_host
 );
 
-export const selectShowNsfw = createSelector(
-  selectClientSettings,
-  clientSettings => !!clientSettings.showNsfw
-);
+//refactor me
+export const selectShowNsfw = makeSelectClientSetting(settings.SHOW_NSFW);
 
 export const selectLanguages = createSelector(
   _selectState,

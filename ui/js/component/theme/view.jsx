@@ -9,7 +9,6 @@ const Theme = props => {
 
   return (
     <link
-      id="theme"
       href={themePath}
       rel="stylesheet"
       type="text/css"

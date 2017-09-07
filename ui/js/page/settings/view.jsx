@@ -12,16 +12,8 @@ class SettingsPage extends React.PureComponent {
   constructor(props) {
     super(props);
 
-    const { daemonSettings } = this.props || {};
-
     this.state = {
-      // isMaxUpload: daemonSettings && daemonSettings.max_upload != 0,
-      // isMaxDownload: daemonSettings && daemonSettings.max_download != 0,
-      showUnavailable: lbry.getClientSetting(settings.SHOW_UNAVAILABLE),
-      language: lbry.getClientSetting(settings.LANGUAGE),
       clearingCache: false,
-      theme: lbry.getClientSetting(settings.THEME),
-      themes: lbry.getClientSetting(settings.THEMES),
     };
   }
 
@@ -102,7 +94,12 @@ class SettingsPage extends React.PureComponent {
     this.forceUpdate();
   }
 
-  onShowUnavailableChange(event) {}
+  onShowUnavailableChange(event) {
+    this.props.setClientSetting(
+      settings.SHOW_UNAVAILABLE,
+      event.target.checked
+    );
+  }
 
   componentWillMount() {
     this.props.getThemes();
@@ -111,7 +108,15 @@ class SettingsPage extends React.PureComponent {
   componentDidMount() {}
 
   render() {
-    const { daemonSettings, language, languages, theme } = this.props;
+    const {
+      daemonSettings,
+      language,
+      languages,
+      showNsfw,
+      showUnavailable,
+      theme,
+      themes,
+    } = this.props;
 
     if (!daemonSettings || Object.keys(daemonSettings).length === 0) {
       return (
@@ -216,7 +221,7 @@ class SettingsPage extends React.PureComponent {
             <FormRow
               type="checkbox"
               onChange={this.onShowUnavailableChange.bind(this)}
-              defaultChecked={this.state.showUnavailable}
+              defaultChecked={showUnavailable}
               label={__("Show unavailable content in search results")}
             />
           </div>
@@ -225,7 +230,7 @@ class SettingsPage extends React.PureComponent {
               label={__("Show NSFW content")}
               type="checkbox"
               onChange={this.onShowNsfwChange.bind(this)}
-              defaultChecked={this.props.showNsfw}
+              defaultChecked={showNsfw}
               helper={__(
                 "NSFW content may include nudity, intense sexuality, profanity, or other adult content. By displaying NSFW content, you are affirming you are of legal age to view mature content in your country or jurisdiction.  "
               )}
@@ -254,13 +259,14 @@ class SettingsPage extends React.PureComponent {
             <h3>{__("Theme")}</h3>
           </div>
           <div className="card__content">
+            {console.log(theme)}
             <FormField
               type="select"
               onChange={this.onThemeChange.bind(this)}
-              value={theme}
+              defaultValue={theme}
               className="form-field__input--inline"
             >
-              {this.state.themes.map((theme, index) =>
+              {themes.map((theme, index) =>
                 <option key={theme} value={theme}>
                   {theme}
                 </option>
