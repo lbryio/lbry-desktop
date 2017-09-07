@@ -12,6 +12,8 @@ const defaultState = {
       settings.CREDIT_INTRO_ACKNOWLEDGED
     ),
     language: lbry.getClientSetting(settings.LANGUAGE),
+    theme: lbry.getClientSetting(settings.THEME),
+    themes: lbry.getClientSetting(settings.THEMES),
   },
   languages: {},
 };

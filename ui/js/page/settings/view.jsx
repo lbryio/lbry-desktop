@@ -6,8 +6,7 @@ import * as settings from "constants/settings";
 import lbry from "lbry.js";
 import Link from "component/link";
 import FormFieldPrice from "component/formFieldPrice";
-
-const { remote } = require("electron");
+import { remote } from "electron";
 
 class SettingsPage extends React.PureComponent {
   constructor(props) {
@@ -21,6 +20,8 @@ class SettingsPage extends React.PureComponent {
       showUnavailable: lbry.getClientSetting(settings.SHOW_UNAVAILABLE),
       language: lbry.getClientSetting(settings.LANGUAGE),
       clearingCache: false,
+      theme: lbry.getClientSetting(settings.THEME),
+      themes: lbry.getClientSetting(settings.THEMES),
     };
   }
 
@@ -41,11 +42,6 @@ class SettingsPage extends React.PureComponent {
     this.props.setDaemonSetting(name, value);
   }
 
-  setClientSetting(name, value) {
-    lbry.setClientSetting(name, value);
-    this._onSettingSaveSuccess();
-  }
-
   onRunOnStartChange(event) {
     this.setDaemonSetting("run_on_startup", event.target.checked);
   }
@@ -64,6 +60,11 @@ class SettingsPage extends React.PureComponent {
 
   onKeyFeeDisableChange(isDisabled) {
     this.setDaemonSetting("disable_max_key_fee", isDisabled);
+  }
+
+  onThemeChange(event) {
+    const { value } = event.target;
+    this.props.setClientSetting(settings.THEME, value);
   }
 
   // onMaxUploadPrefChange(isLimited) {
@@ -103,8 +104,14 @@ class SettingsPage extends React.PureComponent {
 
   onShowUnavailableChange(event) {}
 
+  componentWillMount() {
+    this.props.getThemes();
+  }
+
+  componentDidMount() {}
+
   render() {
-    const { daemonSettings, language, languages } = this.props;
+    const { daemonSettings, language, languages, theme } = this.props;
 
     if (!daemonSettings || Object.keys(daemonSettings).length === 0) {
       return (
@@ -239,6 +246,27 @@ class SettingsPage extends React.PureComponent {
                 "Help make LBRY better by contributing diagnostic data about my usage"
               )}
             />
+          </div>
+        </section>
+
+        <section className="card">
+          <div className="card__content">
+            <h3>{__("Theme")}</h3>
+          </div>
+          <div className="card__content">
+            <FormField
+              type="select"
+              onChange={this.onThemeChange.bind(this)}
+              value={theme}
+              className="form-field__input--inline"
+            >
+              {this.state.themes.map((theme, index) =>
+                <option key={theme} value={theme}>
+                  {theme}
+                </option>
+              )}
+            </FormField>
+
           </div>
         </section>
 

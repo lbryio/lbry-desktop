@@ -1,27 +1,24 @@
-@import "../global";
-
-$color-download: #444;
 
 .file-actions
 {
-  line-height: $height-button;
-  min-height: $height-button;
+  line-height: var(--button-height);
+  min-height: var(--button-height);
 }
 
 .file-actions__download-status-bar, .file-actions__download-status-bar-overlay {
    .button__content {
-     margin: 0 $padding-text-link;
+     margin: 0 var(--text-link-padding);
    }
 }
 
 .file-actions__download-status-bar
 {
   position: relative;
-  color: $color-download;
+  color: var(--color-download);
 }
 .file-actions__download-status-bar-overlay
 {
-  background: $color-download;
+  background: var(--color-download);
   color: white;
   position: absolute;
   white-space: nowrap;
