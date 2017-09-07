@@ -189,6 +189,31 @@ reducers[types.CREATE_CHANNEL_COMPLETED] = function(state, action) {
   });
 };
 
+reducers[types.SUPPORT_TRANSACTION_STARTED] = function(state, action) {
+  const newSupportTransaction = Object.assign({}, state.supportTransaction, {
+    sendingSupport: true,
+  });
+
+  return Object.assign({}, state, {
+    supportTransaction: newSupportTransaction,
+  });
+};
+
+reducers[types.SUPPORT_TRANSACTION_COMPLETED] = function(state, action) {
+  return Object.assign({}, state);
+};
+
+reducers[types.SUPPORT_TRANSACTION_FAILED] = function(state, action) {
+  const newSupportTransaction = Object.assign({}, state.supportTransaction, {
+    sendingSupport: false,
+    error: action.data.error,
+  });
+
+  return Object.assign({}, state, {
+    supportTransaction: newSupportTransaction,
+  });
+};
+
 export default function reducer(state = defaultState, action) {
   const handler = reducers[action.type];
   if (handler) return handler(state, action);

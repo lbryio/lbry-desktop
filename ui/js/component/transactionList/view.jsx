@@ -1,57 +1,65 @@
 import React from "react";
-import LinkTransaction from "component/linkTransaction";
-import { CreditAmount } from "component/common";
+import TransactionTableHeader from "./internal/TransactionListHeader";
+import TransactionTableBody from "./internal/TransactionListBody";
+import FormField from "component/formField";
 
-const TransactionList = props => {
-  const { emptyMessage, transactions } = props;
+class TransactionList extends React.PureComponent {
+  constructor(props) {
+    super(props);
 
-  if (!transactions || !transactions.length) {
+    this.state = {
+      filter: "unfiltered",
+    };
+  }
+
+  handleFilterChanged(event) {
+    this.setState({
+      filter: event.target.value,
+    });
+  }
+
+  handleClaimNameClicked(uri) {
+    this.props.navigate("/show", { uri });
+  }
+
+  render() {
+    const { emptyMessage, transactions } = this.props;
+    const { filter } = this.state;
+
+    if (!transactions || !transactions.length) {
+      return (
+        <div className="empty">
+          {emptyMessage || __("No transactions to list.")}
+        </div>
+      );
+    }
+
     return (
-      <div className="empty">
-        {emptyMessage || __("No transactions to list.")}
+      <div>
+        <span className="sort-section">
+          {__("Filter")} {" "}
+          <FormField
+            type="select"
+            onChange={this.handleFilterChanged.bind(this)}
+          >
+            <option value="unfiltered">{__("All")}</option>
+            <option value="claim">{__("Publishes")}</option>
+            <option value="support">{__("Supports")}</option>
+            <option value="tipSupport">{__("Tips")}</option>
+            <option value="update">{__("Updates")}</option>
+          </FormField>
+        </span>
+        <table className="table-standard table-stretch">
+          <TransactionTableHeader filter={filter} />
+          <TransactionTableBody
+            transactions={transactions}
+            filter={filter}
+            navigate={this.handleClaimNameClicked.bind(this)}
+          />
+        </table>
       </div>
     );
   }
-
-  return (
-    <table className="table-standard table-stretch">
-      <thead>
-        <tr>
-          <th>{__("Date")}</th>
-          <th>{__("Amount")}</th>
-          <th>{__("Transaction")}</th>
-        </tr>
-      </thead>
-      <tbody>
-        {transactions.map(item => {
-          return (
-            <tr key={item.id}>
-              <td>
-                {item.date
-                  ? item.date.toLocaleDateString() +
-                      " " +
-                      item.date.toLocaleTimeString()
-                  : <span className="empty">
-                      {__("(Transaction pending)")}
-                    </span>}
-              </td>
-              <td>
-                <CreditAmount
-                  amount={item.amount}
-                  look="plain"
-                  showPlus={true}
-                  precision={8}
-                />{" "}
-              </td>
-              <td>
-                <LinkTransaction id={item.id} />
-              </td>
-            </tr>
-          );
-        })}
-      </tbody>
-    </table>
-  );
-};
+}
 
 export default TransactionList;

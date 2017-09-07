@@ -8,10 +8,10 @@ Web UI version numbers should always match the corresponding version of LBRY App
 
 ## [Unreleased]
 ### Added
+  * Added a tipping button to send LBRY Credits to the publisher
   * File pages now show the time of a publish.
   * The "auth token" displayable on Help offers security warning
   * Added a new component for rendering dates and times. This component can render the date and time of a block height, as well.
-
 
 ### Changed
   *
