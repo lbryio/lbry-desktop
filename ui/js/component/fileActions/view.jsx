@@ -57,6 +57,10 @@ class FileActions extends React.PureComponent {
     this.props.loadVideo(this.props.uri);
   }
 
+  handleSupportButtonClicked() {
+    this.props.onTipShow();
+  }
+
   render() {
     const {
       fileInfo,
@@ -73,6 +77,7 @@ class FileActions extends React.PureComponent {
       costInfo,
       loading,
       claimIsMine,
+      claimInfo,
     } = this.props;
 
     const metadata = fileInfo ? fileInfo.metadata : null,
@@ -166,6 +171,12 @@ class FileActions extends React.PureComponent {
     return (
       <section className="file-actions">
         {content}
+        <Link
+          label={__("Support")}
+          button="text"
+          icon="icon-gift"
+          onClick={this.handleSupportButtonClicked.bind(this)}
+        />
         {showMenu
           ? <div className="button-set-item">
               <DropDownMenu>
