@@ -10,6 +10,8 @@ import ModalRewardApprovalRequired from "modal/modalRewardApprovalRequired";
 import ModalCreditIntro from "modal/modalCreditIntro";
 import ModalTransactionFailed from "modal/modalTransactionFailed";
 import ModalInsufficientBalance from "modal/modalInsufficientBalance";
+import ModalFileTimeout from "modal/modalFileTimeout";
+import ModalAffirmPurchase from "modal/modalAffirmPurchase";
 import * as modals from "constants/modal_types";
 
 class ModalRouter extends React.PureComponent {
@@ -107,6 +109,8 @@ class ModalRouter extends React.PureComponent {
         return <ModalDownloading />;
       case modals.ERROR:
         return <ModalError />;
+      case modals.FILE_TIMEOUT:
+        return <ModalFileTimeout />;
       case modals.INSUFFICIENT_CREDITS:
         return <ModalInsufficientCredits />;
       case modals.WELCOME:
@@ -123,6 +127,10 @@ class ModalRouter extends React.PureComponent {
         return <ModalInsufficientBalance />;
       case modals.REWARD_APPROVAL_REQUIRED:
         return <ModalRewardApprovalRequired />;
+      case modals.CONFIRM_FILE_REMOVE:
+        return <ModalRemoveFile />;
+      case modals.AFFIRM_PURCHASE:
+        return <ModalAffirmPurchase />;
       default:
         return null;
     }

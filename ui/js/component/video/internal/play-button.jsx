@@ -87,13 +87,6 @@ class VideoPlayButton extends React.PureComponent {
           </strong>{" "}
           {__("credits")}.
         </Modal>
-        <Modal
-          isOpen={modal == "timedOut"}
-          onConfirmed={closeModal}
-          contentLabel={__("Timed Out")}
-        >
-          {__("Sorry, your download timed out :(")}
-        </Modal>
       </div>
     );
   }

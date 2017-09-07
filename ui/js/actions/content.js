@@ -299,7 +299,7 @@ export function doLoadVideo(uri) {
             data: { uri },
           });
 
-          dispatch(doOpenModal("timedOut"));
+          dispatch(doOpenModal(modals.FILE_TIMEOUT));
         } else {
           dispatch(doDownloadFile(uri, streamInfo));
         }
