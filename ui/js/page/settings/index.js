@@ -1,5 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
+import * as settings from "constants/settings";
 import { doClearCache } from "actions/app";
 import {
   doSetDaemonSetting,
@@ -9,6 +10,7 @@ import {
   doChangeLanguage,
 } from "actions/settings";
 import {
+  makeSelectClientSetting,
   selectDaemonSettings,
   selectShowNsfw,
   selectLanguages,
@@ -21,14 +23,14 @@ const select = state => ({
   showNsfw: selectShowNsfw(state),
   language: selectCurrentLanguage(state),
   languages: selectLanguages(state),
+  theme: makeSelectClientSetting(settings.THEME)(state),
 });
 
 const perform = dispatch => ({
   setDaemonSetting: (key, value) => dispatch(doSetDaemonSetting(key, value)),
   clearCache: () => dispatch(doClearCache()),
   setClientSetting: (key, value) => dispatch(doSetClientSetting(key, value)),
-  setTheme: name => dispatch(doSetTheme(name)),
-  getThemes: () => dispatch(doGetThemes),
+  getThemes: () => dispatch(doGetThemes()),
   changeLanguage: newLanguage => dispatch(doChangeLanguage(newLanguage)),
 });
 

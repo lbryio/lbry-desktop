@@ -42,19 +42,6 @@ class SettingsPage extends React.PureComponent {
     this.props.setDaemonSetting(name, value);
   }
 
-  setClientSetting(name, value) {
-    lbry.setClientSetting(name, value);
-    this._onSettingSaveSuccess();
-  }
-
-  setTheme(value) {
-    this.props.setTheme(value);
-  }
-
-  getThemes() {
-    this.props.getThemes();
-  }
-
   onRunOnStartChange(event) {
     this.setDaemonSetting("run_on_startup", event.target.checked);
   }
@@ -77,7 +64,7 @@ class SettingsPage extends React.PureComponent {
 
   onThemeChange(event) {
     const { value } = event.target;
-    this.setTheme(value);
+    this.props.setClientSetting(settings.THEME, value);
   }
 
   // onMaxUploadPrefChange(isLimited) {
@@ -118,13 +105,13 @@ class SettingsPage extends React.PureComponent {
   onShowUnavailableChange(event) {}
 
   componentWillMount() {
-    this.getThemes();
+    this.props.getThemes();
   }
 
   componentDidMount() {}
 
   render() {
-    const { daemonSettings, language, languages } = this.props;
+    const { daemonSettings, language, languages, theme } = this.props;
 
     if (!daemonSettings || Object.keys(daemonSettings).length === 0) {
       return (
@@ -270,12 +257,12 @@ class SettingsPage extends React.PureComponent {
             <FormField
               type="select"
               onChange={this.onThemeChange.bind(this)}
-              defaultValue={lbry.getClientSetting("theme")}
+              value={theme}
               className="form-field__input--inline"
             >
               {this.state.themes.map((theme, index) =>
-                <option key={index} value={theme.name}>
-                  {__(`${theme.name} theme`)}
+                <option key={theme} value={theme}>
+                  {theme}
                 </option>
               )}
             </FormField>

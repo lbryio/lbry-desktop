@@ -176,7 +176,6 @@ export function doDaemonReady() {
   return function(dispatch, getState) {
     dispatch(doAuthenticate());
     dispatch({ type: types.DAEMON_READY });
-    //dispatch(doSetTheme(lbry.getClientSetting(settings.THEME)));
     dispatch(doFetchDaemonSettings());
     dispatch(doFileList());
   };

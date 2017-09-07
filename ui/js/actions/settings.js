@@ -1,5 +1,6 @@
 import * as types from "constants/action_types";
 import * as settings from "constants/settings";
+import { doAlertError } from "actions/app";
 import batchActions from "util/batchActions";
 
 import lbry from "lbry";
@@ -8,8 +9,7 @@ import http from "http";
 
 const { remote } = require("electron");
 const { extname } = require("path");
-const { download } = remote.require("electron-dl");
-const { readdirSync } = remote.require("fs");
+const { readdir } = remote.require("fs");
 
 export function doFetchDaemonSettings() {
   return function(dispatch, getState) {
@@ -53,45 +53,23 @@ export function doSetClientSetting(key, value) {
 }
 
 export function doGetThemes() {
-  const dir = `${remote.app.getAppPath()}/dist/themes`;
-
-  if (!fs.existsSync(dir)) {
-    return;
-  }
-
-  // Get all .css files
-  const files = readdirSync(dir).filter(file => extname(file) === ".css");
-
   return function(dispatch, getState) {
-    // Find themes
-    const themes = files.map(file => ({
-      name: file.replace(".css", ""),
-      path: `./themes/${file}`,
-    }));
+    const dir = `${remote.app.getAppPath()}/dist/themes`;
 
-    dispatch(doSetClientSetting(settings.THEMES, themes));
-  };
-}
-
-export function doSetTheme(name) {
-  return function(dispatch, getState) {
-    // Find a theme from themes list
-    const find = themeName => themes.find(theme => theme.name === themeName);
-
-    // Get themes
-    const themes = lbry.getClientSetting(settings.THEMES);
-
-    // Find theme and set fallback
-    const theme = find(name) || find("light");
-
-    if (theme.path) {
-      // load css
-      const link = document.getElementById("theme");
-      link.href = theme.path;
-
-      // update theme
-      dispatch(doSetClientSetting(settings.THEME, theme.name));
-    }
+    readdir(dir, (error, files) => {
+      if (!error) {
+        dispatch(
+          doSetClientSetting(
+            settings.THEMES,
+            files
+              .filter(file => extname(file) === ".css")
+              .map(file => file.replace(".css", ""))
+          )
+        );
+      } else {
+        dispatch(doAlertError(error));
+      }
+    });
   };
 }
 
