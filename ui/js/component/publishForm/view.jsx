@@ -48,6 +48,7 @@ class PublishForm extends React.PureComponent {
       isFee: false,
       customUrl: false,
       source: null,
+      mode: "publish",
     };
   }
 
@@ -187,6 +188,14 @@ class PublishForm extends React.PureComponent {
     return !!myClaims.find(claim => claim.name === name);
   }
 
+  handleEditClaim() {
+    const isMine = this.myClaimExists();
+
+    if (isMine) {
+      this.handlePrefillClicked();
+    }
+  }
+
   topClaimIsMine() {
     const myClaimInfo = this.myClaimInfo();
     const { claimsByUri } = this.props;
@@ -226,6 +235,7 @@ class PublishForm extends React.PureComponent {
         name: "",
         uri: "",
         prefillDone: false,
+        mode: "publish",
       });
 
       return;
@@ -247,6 +257,7 @@ class PublishForm extends React.PureComponent {
       rawName: rawName,
       name: name,
       prefillDone: false,
+      mode: "publish",
       uri,
     });
 
@@ -275,6 +286,7 @@ class PublishForm extends React.PureComponent {
     } = claimInfo.value.stream.metadata;
 
     let newState = {
+      mode: "edit",
       meta_title: title,
       meta_thumbnail: thumbnail,
       meta_description: description,
@@ -375,6 +387,7 @@ class PublishForm extends React.PureComponent {
 
   handleChannelChange(channelName) {
     this.setState({
+      mode: "publish",
       channel: channelName,
     });
     const nameChanged = () => this.nameChanged(this.state.rawName);
@@ -410,8 +423,20 @@ class PublishForm extends React.PureComponent {
   }
 
   componentWillMount() {
+    let { name, channel } = this.props.params;
+
+    channel = channel || this.state.channel;
+
     this.props.fetchClaimListMine();
     this._updateChannelList();
+
+    if (name) {
+      this.setState({ name, rawName: name, channel });
+    }
+  }
+
+  componentDidMount() {
+    this.handleEditClaim();
   }
 
   onFileChange() {
@@ -455,7 +480,7 @@ class PublishForm extends React.PureComponent {
         <span>
           {__("You already have a claim with this name.")}{" "}
           <Link
-            label={__("Use data from my existing claim")}
+            label={__("Edit existing claim")}
             onClick={() => this.handlePrefillClicked()}
           />
         </span>
@@ -493,9 +518,17 @@ class PublishForm extends React.PureComponent {
   }
 
   render() {
+    const { mode, submitting } = this.state;
+
     const lbcInputHelp = __(
       "This LBC remains yours and the deposit can be undone at any time."
     );
+
+    let submitLabel = !submitting ? __("Publish") : __("Publishing...");
+
+    if (mode === "edit") {
+      submitLabel = !submitting ? __("Update") : __("Updating...");
+    }
 
     return (
       <main className="main--single-column">
@@ -839,9 +872,7 @@ class PublishForm extends React.PureComponent {
           <div className="card-series-submit">
             <Link
               button="primary"
-              label={
-                !this.state.submitting ? __("Publish") : __("Publishing...")
-              }
+              label={submitLabel}
               onClick={event => {
                 this.handleSubmit(event);
               }}
