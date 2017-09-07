@@ -8,18 +8,17 @@ Web UI version numbers should always match the corresponding version of LBRY App
 
 ## [Unreleased]
 ### Added
-  * File pages now show the time of a publish.
-  * The "auth token" displayable on Help offers security warning
-  * Added a new component for rendering dates and times. This component can render the date and time of a block height, as well.
+  * File pages now show the time of a publish. This includes a new component for rendering dates and times that can render the date and time of a block height, as well.
 
 
 ### Changed
-  *
+  * Updated to daemon [0.15.2](https://github.com/lbryio/lbry/releases/tag/v0.15.2) to prevent a bug in USD purchases.
   *
 
 ### Fixed
   * Potential fix for blank error popup when streaming (#536)
   * Fixed some popups showing improperly while balance was loading (#534)
+  * Show a security warning when the auth token is displayed on Help.
   * Some CSS changes to prevent the card row from clipping the scroll arrows after the window width is reduced below a certain point
   * Clearly notify user when they try to send credits to an invalid address (#445)
 
