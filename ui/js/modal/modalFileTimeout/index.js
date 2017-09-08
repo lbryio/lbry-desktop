@@ -5,7 +5,7 @@ import { makeSelectMetadataForUri } from "selectors/claims";
 import ModalFileTimeout from "./view";
 
 const select = state => ({
-  metadata: makeSelectMetadataForUri()(state),
+  metadata: makeSelectMetadataForUri(props.uri)(state),
 });
 
 const perform = dispatch => ({

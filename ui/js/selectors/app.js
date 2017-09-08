@@ -71,9 +71,9 @@ export const selectUpgradeDownloadItem = createSelector(
   state => state.downloadItem
 );
 
-export const selectModalExtraContent = createSelector(
+export const selectModalProps = createSelector(
   _selectState,
-  state => state.modalExtraContent
+  state => state.modalProps
 );
 
 export const selectDaemonReady = createSelector(

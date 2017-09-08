@@ -7,20 +7,19 @@ import ReactPaginate from "react-paginate";
 
 class ChannelPage extends React.PureComponent {
   componentDidMount() {
-    const { uri, params, fetchClaims, fetchClaimCount } = this.props;
+    const { uri, page, fetchClaims, fetchClaimCount } = this.props;
 
-    fetchClaims(uri, params.page || 1);
+    fetchClaims(uri, page || 1);
     fetchClaimCount(uri);
   }
 
   componentWillReceiveProps(nextProps) {
-    const { params, fetching, fetchClaims, fetchClaimCount } = this.props;
-    const nextParams = nextProps.params;
+    const { page, uri, fetching, fetchClaims, fetchClaimCount } = this.props;
 
-    if (fetching !== nextParams.page && params.page !== nextParams.page) {
-      fetchClaims(nextProps.uri, nextParams.page);
+    if (fetching !== nextProps.page && page !== nextProps.page) {
+      fetchClaims(nextProps.uri, nextProps.page);
     }
-    if (nextProps.uri != this.props.uri) {
+    if (nextProps.uri != uri) {
       fetchClaimCount(uri);
     }
   }
@@ -38,10 +37,9 @@ class ChannelPage extends React.PureComponent {
       claimsInChannel,
       claim,
       uri,
-      params,
+      page,
       totalPages,
     } = this.props;
-    const { page } = params;
 
     let contentList;
     if (claimsInChannel === undefined) {

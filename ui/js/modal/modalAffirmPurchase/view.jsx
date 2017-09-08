@@ -3,13 +3,18 @@ import FilePrice from "component/filePrice";
 import { Modal } from "modal/modal";
 
 class ModalAffirmPurchase extends React.PureComponent {
+  onAffirmPurchase() {
+    this.props.closeModal();
+    this.props.loadVideo(this.props.uri);
+  }
+
   render() {
-    const { metadata: { title } } = this.props;
+    const { closeModal, metadata: { title }, uri } = this.props;
 
     return (
       <Modal
         type="confirm"
-        isOpen={modal == "affirmPurchase"}
+        isOpen={true}
         contentLabel={__("Confirm Purchase")}
         onConfirmed={this.onAffirmPurchase.bind(this)}
         onAborted={closeModal}

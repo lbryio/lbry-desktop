@@ -1,7 +1,5 @@
 import React from "react";
-import FilePrice from "component/filePrice";
 import Link from "component/link";
-import Modal from "modal/modal";
 
 class VideoPlayButton extends React.PureComponent {
   componentDidMount() {
@@ -11,12 +9,6 @@ class VideoPlayButton extends React.PureComponent {
 
   componentWillUnmount() {
     document.removeEventListener("keydown", this.keyDownListener);
-  }
-
-  onPurchaseConfirmed() {
-    this.props.closeModal();
-    this.props.startPlaying();
-    this.props.loadVideo(this.props.uri);
   }
 
   onKeyDown(event) {
@@ -33,23 +25,14 @@ class VideoPlayButton extends React.PureComponent {
     this.props.purchaseUri(this.props.uri).then(() => {
       if (!this.props.modal) {
         this.props.startPlaying();
+      } else {
+        alert("fix me set pending play");
       }
     });
   }
 
   render() {
-    const {
-      button,
-      label,
-      metadata,
-      metadata: { title },
-      uri,
-      modal,
-      closeModal,
-      isLoading,
-      fileInfo,
-      mediaType,
-    } = this.props;
+    const { button, label, isLoading, fileInfo, mediaType } = this.props;
 
     /*
      title={
@@ -64,31 +47,15 @@ class VideoPlayButton extends React.PureComponent {
       ? "icon-play"
       : "icon-folder-o";
 
-    return (
-      <div>
-        <Link
-          button={button ? button : null}
-          disabled={disabled}
-          label={label ? label : ""}
-          className="video__play-button"
-          icon={icon}
-          onClick={this.onWatchClick.bind(this)}
-        />
-        <Modal
-          type="confirm"
-          isOpen={modal == "affirmPurchaseAndPlay"}
-          contentLabel={__("Confirm Purchase")}
-          onConfirmed={this.onPurchaseConfirmed.bind(this)}
-          onAborted={closeModal}
-        >
-          {__("This will purchase")} <strong>{title}</strong> {__("for")}{" "}
-          <strong>
-            <FilePrice uri={uri} showFullPrice={true} look="plain" />
-          </strong>{" "}
-          {__("credits")}.
-        </Modal>
-      </div>
-    );
+    return;
+    <Link
+      button={button ? button : null}
+      disabled={disabled}
+      label={label ? label : ""}
+      className="video__play-button"
+      icon={icon}
+      onClick={this.onWatchClick.bind(this)}
+    />;
   }
 }
 
