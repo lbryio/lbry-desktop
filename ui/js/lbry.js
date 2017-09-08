@@ -41,6 +41,9 @@ let lbry = {
     language: "en",
     theme: "light",
     themes: [],
+    instantPurchaseMax: null,
+    instantPurchaseEnabled: false,
+    instantPurchaseMax: { currency: "LBC", amount: 0.1 },
   },
 };
 

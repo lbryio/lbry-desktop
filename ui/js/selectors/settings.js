@@ -28,6 +28,14 @@ export const selectSettingsIsGenerous = createSelector(
 //refactor me
 export const selectShowNsfw = makeSelectClientSetting(settings.SHOW_NSFW);
 
+export const selectInstantPurchaseEnabled = makeSelectClientSetting(
+  settings.INSTANT_PURCHASE_ENABLED
+);
+
+export const selectInstantPurchaseMax = makeSelectClientSetting(
+  settings.INSTANT_PURCHASE_MAX
+);
+
 export const selectLanguages = createSelector(
   _selectState,
   state => state.languages || {}

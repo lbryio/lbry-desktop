@@ -21,6 +21,13 @@ const select = state => ({
   daemonSettings: selectDaemonSettings(state),
   showNsfw: makeSelectClientSetting(settings.SHOW_NSFW)(state),
   showUnavailable: makeSelectClientSetting(settings.SHOW_UNAVAILABLE)(state),
+  instantPurchaseEnabled: makeSelectClientSetting(
+    settings.INSTANT_PURCHASE_ENABLED
+  )(state),
+  instantPurchaseMax: makeSelectClientSetting(settings.INSTANT_PURCHASE_MAX)(
+    state
+  ),
+  showUnavailable: makeSelectClientSetting(settings.SHOW_UNAVAILABLE)(state),
   theme: makeSelectClientSetting(settings.THEME)(state),
   themes: makeSelectClientSetting(settings.THEMES)(state),
   language: selectCurrentLanguage(state),
