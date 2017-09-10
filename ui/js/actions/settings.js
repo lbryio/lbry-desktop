@@ -4,6 +4,7 @@ import batchActions from "util/batchActions";
 import lbry from "lbry";
 import fs from "fs";
 import http from "http";
+import { remote } from "electron";
 
 export function doFetchDaemonSettings() {
   return function(dispatch, getState) {
@@ -48,7 +49,7 @@ export function doSetClientSetting(key, value) {
 
 export function doDownloadLanguage(langFile) {
   return function(dispatch, getState) {
-    const destinationPath = `app/locales/${langFile}`;
+    const destinationPath = app.i18n.directory + "/" + langFile;
     const language = langFile.replace(".json", "");
     const req = http.get(
       {
