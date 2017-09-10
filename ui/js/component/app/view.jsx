@@ -17,6 +17,16 @@ class App extends React.PureComponent {
       alertError(event.detail);
     });
 
+    document.addEventListener("drop", event => {
+      event.preventDefault();
+      event.stopPropagation();
+    });
+
+    document.addEventListener("dragover", event => {
+      event.preventDefault();
+      event.stopPropagation();
+    });
+
     if (!this.props.upgradeSkipped) {
       checkUpgradeAvailable();
     }

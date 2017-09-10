@@ -8,6 +8,7 @@ import FormFieldPrice from "component/formFieldPrice";
 import Modal from "modal/modal";
 import { BusyMessage } from "component/common";
 import ChannelSection from "./internal/channelSection";
+import DropZone from "./internal/dropzone";
 
 class PublishForm extends React.PureComponent {
   constructor(props) {
@@ -51,6 +52,8 @@ class PublishForm extends React.PureComponent {
       customUrl: false,
       source: null,
       mode: "publish",
+      showDropzone: false,
+      enterTarget: null,
     };
   }
 
@@ -516,6 +519,57 @@ class PublishForm extends React.PureComponent {
     });
   }
 
+  handleFileSelect(event) {
+    event.stopPropagation();
+    event.preventDefault();
+
+    // FileList object.
+    var file = event.dataTransfer.files;
+
+    // file is a FileList of File objects.
+    let f = file[0];
+
+    this.setState({
+      source: f.path,
+      hasFile: true,
+      showDropzone: false,
+      enterTarget: null,
+    });
+
+    // This doesn't work, but we need to be able to do this, or something else to display it in the UI.
+    this.refs.file.value = f.path;
+    console.log(this.refs.file.getValue());
+    let fileName = this._getFileName(f.path);
+    this.nameChanged(fileName);
+  }
+
+  handleDragOver(event) {
+    event.stopPropagation();
+    event.preventDefault();
+    // Explicitly show this is a copy.
+    event.dataTransfer.dropEffect = "copy";
+  }
+
+  handleDragEnter(event) {
+    // This includes the fix for component redrawing on mouse move
+    // https://stackoverflow.com/questions/7110353/html5-dragleave-fired-when-hovering-a-child-element
+    event.preventDefault();
+    this.setState({
+      showDropzone: true,
+      enterTarget: event.target,
+    });
+  }
+
+  handleDragLeave(event) {
+    event.preventDefault();
+    if (this.state.enterTarget == event.target) {
+      this.setState({
+        showDropzone: false,
+        enterTarget: null,
+      });
+    }
+  }
+
   render() {
     const { mode, submitting } = this.state;
 
@@ -531,7 +585,14 @@ class PublishForm extends React.PureComponent {
 
     return (
       <main className="main--single-column">
-        <Form onSubmit={this.handleSubmit.bind(this)}>
+        <Form
+          onSubmit={this.handleSubmit.bind(this)}
+          onDrop={this.handleFileSelect.bind(this)}
+          onDragOver={this.handleDragOver.bind(this)}
+          onDragEnter={this.handleDragEnter.bind(this)}
+          onDragLeave={this.handleDragLeave.bind(this)}
+        >
+          {this.state.showDropzone && <DropZone />}
           <section className="card">
             <div className="card__title-primary">
               <h4>{__("Content")}</h4>
