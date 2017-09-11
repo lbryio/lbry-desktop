@@ -86,3 +86,9 @@ $button-focus-shift: 12%;
 {
   box-shadow: none !important;
 }
+
+.button--submit {
+    font-family: inherit;
+    font-size: inherit;
+    line-height: 0;
+}

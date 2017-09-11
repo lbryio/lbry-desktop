@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "component/link";
-import { FormRow } from "component/form.js";
+import { Form, FormRow, Submit } from "component/form.js";
 
 class UserEmailVerify extends React.PureComponent {
   constructor(props) {
@@ -17,19 +17,15 @@ class UserEmailVerify extends React.PureComponent {
     });
   }
 
-  handleSubmit(event) {
-    event.preventDefault();
-    this.props.verifyUserEmail(this.state.code);
+  handleSubmit() {
+    const { code } = this.state;
+    this.props.verifyUserEmail(code);
   }
 
   render() {
     const { errorMessage, isPending } = this.props;
     return (
-      <form
-        onSubmit={event => {
-          this.handleSubmit(event);
-        }}
-      >
+      <Form onSubmit={this.handleSubmit.bind(this)}>
         <p>{__("Please enter the verification code emailed to you.")}</p>
         <FormRow
           type="text"
@@ -50,16 +46,9 @@ class UserEmailVerify extends React.PureComponent {
           </p>
         </div>
         <div className="form-row-submit form-row-submit--with-footer">
-          <Link
-            button="primary"
-            label={__("Verify")}
-            disabled={this.state.submitting}
-            onClick={event => {
-              this.handleSubmit(event);
-            }}
-          />
+          <Submit label={__("Verify")} disabled={this.state.submitting} />
         </div>
-      </form>
+      </Form>
     );
   }
 }
