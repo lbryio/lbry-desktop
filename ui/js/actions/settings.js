@@ -4,7 +4,6 @@ import batchActions from "util/batchActions";
 import lbry from "lbry";
 import fs from "fs";
 import http from "http";
-import { remote } from "electron";
 
 export function doFetchDaemonSettings() {
   return function(dispatch, getState) {
