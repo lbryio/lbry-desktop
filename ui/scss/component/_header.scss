@@ -19,7 +19,6 @@ $color-header-active: darken($color-header, 20%);
 }
 .header__item {
   flex: 0 0 content;
-  padding-left: $spacing-vertical / 4;
   padding-right: $spacing-vertical / 4;
 }
 .header__item--wunderbar {
