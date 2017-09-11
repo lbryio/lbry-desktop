@@ -48,7 +48,7 @@ export function doSetClientSetting(key, value) {
 
 export function doDownloadLanguage(langFile) {
   return function(dispatch, getState) {
-    const destinationPath = `app/locales/${langFile}`;
+    const destinationPath = app.i18n.directory + "/" + langFile;
     const language = langFile.replace(".json", "");
     const req = http.get(
       {
