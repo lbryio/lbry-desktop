@@ -14,7 +14,7 @@ if [ "$(uname)" == "Darwin" ]; then
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
   LINUX=true
 else
-  echo "Platform detection failed"
+  echo -e "\033[1;31mPlatform detection failed\x1b[m"
   exit 1
 fi
 
@@ -90,7 +90,7 @@ if [[ ! -f $DAEMON_VER_PATH || ! -f $ROOT/app/dist/lbrynet-daemon || "$(< "$DAEM
     rm "$BUILD_DIR/daemon.zip"
     echo "$DAEMON_VER" > "$DAEMON_VER_PATH"
 else
-    echo "Already have daemon version $DAEMON_VER, skipping download"
+    echo -e "\033[4;31mAlready have daemon version $DAEMON_VER, skipping download\x1b[m"
 fi
 
 
@@ -133,7 +133,7 @@ if [ "$FULL_BUILD" == "true" ]; then
 
   deactivate
 
-  echo 'Build and packaging complete.'
+  echo -e '\033[0;32mBuild and packaging complete.\x1b[m'
 else
-  echo 'Build complete. Run `./node_modules/.bin/electron app` to launch the app'
+  echo -e 'Build complete. Run \033[1;31m./node_modules/.bin/electron app\x1b[m to launch the app'
 fi
