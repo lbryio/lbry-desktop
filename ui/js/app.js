@@ -1,11 +1,12 @@
 import store from "store.js";
+import { remote } from "electron";
 
 const env = ENV;
 const config = {
   ...require(`./config/${env}`),
 };
 const i18n = require("y18n")({
-  directory: "app/locales",
+  directory: remote.app.getAppPath() + "/locales",
   updateFiles: false,
   locale: "en",
 });
