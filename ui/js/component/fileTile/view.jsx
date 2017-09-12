@@ -7,6 +7,7 @@ import { TruncatedText } from "component/common.js";
 import FilePrice from "component/filePrice";
 import NsfwOverlay from "component/nsfwOverlay";
 import IconFeatured from "component/iconFeatured";
+import { IconSet, Icon } from "component/common";
 
 class FileTile extends React.PureComponent {
   static SHOW_EMPTY_PUBLISH = "publish";
@@ -61,6 +62,7 @@ class FileTile extends React.PureComponent {
       navigate,
       hidePrice,
       rewardedContentClaimIds,
+      fileInfo,
     } = this.props;
 
     const uri = lbryuri.normalize(this.props.uri);
@@ -111,8 +113,10 @@ class FileTile extends React.PureComponent {
             <CardMedia title={title} thumbnail={thumbnail} />
             <div className="file-tile__content">
               <div className="card__title-primary">
-                {!hidePrice ? <FilePrice uri={this.props.uri} /> : null}
-                {isRewardContent && <IconFeatured />}
+                <IconSet>
+                  {!hidePrice ? <FilePrice uri={this.props.uri} /> : null}
+                  {isRewardContent && <IconFeatured />}
+                </IconSet>
                 <div className="meta">{uri}</div>
                 <h3>
                   <TruncatedText lines={1}>{title}</TruncatedText>
