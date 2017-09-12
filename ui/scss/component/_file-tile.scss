@@ -3,12 +3,6 @@ $height-file-tile: $spacing-vertical * 6;
 .file-tile__row {
   overflow: hidden;
   height: $height-file-tile;
-  .credit-amount {
-    float: right;
-  }
-  .icon-featured {
-    float: right;
-  }
   //also a hack
   .card__media {
     height: $height-file-tile;

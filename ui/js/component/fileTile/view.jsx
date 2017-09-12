@@ -7,11 +7,17 @@ import { TruncatedText } from "component/common.js";
 import FilePrice from "component/filePrice";
 import NsfwOverlay from "component/nsfwOverlay";
 import IconFeatured from "component/iconFeatured";
+import IconLocal from "component/iconLocal";
 import { IconSet, Icon } from "component/common";
 
 class FileTile extends React.PureComponent {
   static SHOW_EMPTY_PUBLISH = "publish";
   static SHOW_EMPTY_PENDING = "pending";
+
+  static defaultProps = {
+    showPrice: true,
+    showLocal: true,
+  };
 
   constructor(props) {
     super(props);
@@ -60,7 +66,8 @@ class FileTile extends React.PureComponent {
       isResolvingUri,
       showEmpty,
       navigate,
-      hidePrice,
+      showPrice,
+      showLocal,
       rewardedContentClaimIds,
       fileInfo,
     } = this.props;
@@ -114,8 +121,9 @@ class FileTile extends React.PureComponent {
             <div className="file-tile__content">
               <div className="card__title-primary">
                 <IconSet>
-                  {!hidePrice ? <FilePrice uri={this.props.uri} /> : null}
+                  {showPrice && <FilePrice uri={this.props.uri} />}
                   {isRewardContent && <IconFeatured />}
+                  {showLocal && fileInfo && <IconLocal />}
                 </IconSet>
                 <div className="meta">{uri}</div>
                 <h3>
