@@ -22,6 +22,16 @@ export class Icon extends React.PureComponent {
   }
 }
 
+export class IconSet extends React.PureComponent {
+  render() {
+    return (
+      <span className="icon_set">
+        {this.props.children}
+      </span>
+    );
+  }
+}
+
 export class TruncatedText extends React.PureComponent {
   static propTypes = {
     lines: React.PropTypes.number,
