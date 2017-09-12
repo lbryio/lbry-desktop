@@ -167,6 +167,14 @@ $font-size-subtext-multiple: 0.82;
   position: absolute;
   top: 36%
 }
+
+.card__icon-featured-content {
+  font-size: 0.95em;
+  margin-left: .025em;
+  margin-right: .025em;
+  margin-top: -0.5em;
+}
+
 .card--small {
   width: var(--card-small-width);
   overflow-x: hidden;
