@@ -1,7 +1,6 @@
 #!/bin/bash
 
 set -euo pipefail
-set -x
 
 ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )"
 cd "$ROOT"
@@ -10,9 +9,13 @@ BUILD_DIR="$ROOT/build"
 LINUX=false
 OSX=false
 if [ "$(uname)" == "Darwin" ]; then
+set -x
   OSX=true
+set +x
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
+set -x
   LINUX=true
+set +x
 else
   echo -e "\033[1;31mPlatform detection failed\x1b[m"
   exit 1
@@ -23,14 +26,16 @@ if $OSX; then
 else
     ICON="$BUILD_DIR/icons/lbry48.png"
 fi
-
+set -x
 FULL_BUILD="${FULL_BUILD:-false}"
+set +x
 if [ -n "${TEAMCITY_VERSION:-}" -o -n "${APPVEYOR:-}" ]; then
   FULL_BUILD="true"
 fi
 
 if [ "$FULL_BUILD" == "true" ]; then
   # install dependencies
+  echo -e "\033[0;32mInstalling Dependencies\x1b[m"
   $BUILD_DIR/prebuild.sh
 
   VENV="$BUILD_DIR/venv"
@@ -57,7 +62,7 @@ yarn install
 ############
 #    UI    #
 ############
-
+echo -e "\033[0;32mCompiling UI\x1b[m"
 (
   cd "$ROOT/ui"
   yarn install
@@ -73,7 +78,7 @@ yarn install
 ####################
 #  daemon and cli  #
 ####################
-
+echo -e "\033[0;32mGrabbing Daemon and CLI\x1b[m"
 if $OSX; then
   OSNAME="macos"
 else
@@ -99,7 +104,7 @@ fi
 ###################
 #  Build the app  #
 ###################
-
+echo -e '\033[0;32mBuilding Lbry-app\x1b[m'
 (
   cd "$ROOT/app"
   yarn install
