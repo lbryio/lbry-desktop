@@ -10,6 +10,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
 ### Added
   * Added new window menu options for reloading and help.
   * Rewards are now marked in transaction history (#660)
+  * Minimize LBRY app to tray (issue #374)
   *
 
 ### Changed

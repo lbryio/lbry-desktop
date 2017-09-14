@@ -1,6 +1,18 @@
 const { app, shell, Menu } = require('electron');
+const { safeQuit } = require('../main.js')
+
 
 const baseTemplate = [
+  {
+    label: 'File',
+    submenu: [
+      {
+        label: 'Quit',
+        accelerator: "CommandOrControl+Q",
+        click: () => safeQuit(),
+      },
+    ]
+  },
   {
     label: 'Edit',
     submenu: [

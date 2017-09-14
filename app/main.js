@@ -1,4 +1,5 @@
-const {app, BrowserWindow, ipcMain} = require('electron');
+module.exports = { safeQuit }
+const {app, BrowserWindow, ipcMain, Menu, Tray, globalShortcut} = require('electron');
 const url = require('url');
 const isDebug = process.env.NODE_ENV === 'development';
 const setMenu = require('./menu/main-menu.js');
@@ -54,6 +55,13 @@ let readyToQuit = false;
 // If we receive a URI to open from an external app but there's no window to
 // sendCredits it to, it's cached in this variable.
 let openUri = null;
+
+// Set this to true to minimize on clicking close
+// false for normal action
+let minimize = true;
+
+// Keep the tray also, it is getting GC'd if put in createTray()
+let tray = null;
 
 function processRequestedUri(uri) {
   // Windows normalizes URIs when they're passed in from other apps. On Windows,
@@ -167,9 +175,46 @@ function createWindow () {
     });
   }
 
+  win.removeAllListeners();
+
+  win.on('close', function(event) {
+    if (minimize) {
+      event.preventDefault();
+      win.hide();
+    }
+  })
+
   win.on('closed', () => {
     win = null
   })
+
+  win.on("hide", () => {
+    // Checks what to show in the tray icon menu
+    if (minimize) updateTray();
+  });
+
+  win.on("show", () => {
+    // Checks what to show in the tray icon menu
+    if (minimize) updateTray();
+  });
+
+  win.on("blur", () => {
+    // Checks what to show in the tray icon menu
+    if (minimize) updateTray();
+
+    // Unregisters Alt+F4 shortcut
+    globalShortcut.unregister('Alt+F4');
+  });
+
+  win.on("focus", () => {
+    // Checks what to show in the tray icon menu
+    if (minimize) updateTray();
+
+    // Registers shortcut for closing(quitting) the app
+    globalShortcut.register('Alt+F4', () => safeQuit());
+
+    win.webContents.send('window-is-focussed', null);
+  });
 
   // Menu bar
   win.setAutoHideMenuBar(true);
@@ -178,14 +223,61 @@ function createWindow () {
 
 };
 
+function createTray () {
+  // Minimize to tray logic follows:
+  // Set the tray icon
+  const iconPath = path.join(app.getAppPath(), "/dist/img/fav/32x32.png");
+  tray = new Tray(iconPath);
+  tray.setToolTip("LBRY App");
+  tray.setTitle("LBRY");
+  tray.on('double-click', () => {
+    win.show()
+  })
+}
+
+// This needs to be done as for linux the context menu doesn't update automatically(docs)
+function updateTray() {
+  let contextMenu = Menu.buildFromTemplate(getMenuTemplate());
+  tray.setContextMenu(contextMenu);
+}
+
+function getMenuTemplate () {
+  return [
+    getToggleItem(),
+    {
+      label: "Quit",
+      click: () => safeQuit(),
+    },
+  ]
+
+  function getToggleItem () {
+    if (win.isVisible() && win.isFocused()) {
+      return {
+        label: 'Hide LBRY App',
+        click: () => win.hide()
+
+      }
+    } else {
+      return {
+        label: 'Show LBRY App',
+        click: () => win.show()
+      }
+    }
+  }
+}
+
 function handleOpenUriRequested(uri) {
   if (!win) {
     // Window not created yet, so store up requested URI for when it is
     openUri = processRequestedUri(uri);
   } else {
+    
     if (win.isMinimized()) {
-      win.restore();
+      win.restore()
+    } else if (!win.isVisible()) {
+      win.show()
     }
+
     win.focus();
     win.webContents.send('open-uri-requested', processRequestedUri(uri));
   }
@@ -224,6 +316,15 @@ function launchDaemon() {
   daemonSubprocess.on('exit', handleDaemonSubprocessExited);
 }
 
+
+/*
+ * Quits by first killing the daemon, the calling quitting for real.
+ */
+function safeQuit() {
+  minimize = false;
+  app.quit();
+}
+
 /*
  * Quits without any preparation. When a quit is requested (either through the
  * interface or through app.quit()), we abort the quit, try to shut down the daemon,
@@ -231,7 +332,7 @@ function launchDaemon() {
  */
 function quitNow() {
   readyToQuit = true;
-  app.quit();
+  safeQuit();
 }
 
 const isSecondaryInstance = app.makeSingleInstance((argv) => {
@@ -240,6 +341,8 @@ const isSecondaryInstance = app.makeSingleInstance((argv) => {
   } else if (win) {
     if (win.isMinimized()) {
       win.restore();
+    } else if (!win.isVisible()) {
+      win.show();
     }
     win.focus();
   }
@@ -252,6 +355,14 @@ if (isSecondaryInstance) { // We're not in the original process, so quit
 
 app.on('ready', function(){
   launchDaemonIfNotRunning();
+  if (process.platform === "linux") {
+    checkLinuxTraySupport( err => {
+      if (!err) createTray();
+      else minimize = false;
+    })
+  } else {
+    createTray();
+  }
   createWindow();
 });
 
@@ -383,6 +494,22 @@ function upgrade(event, installerPath) {
   console.log('Update downloaded to', installerPath);
   console.log('The app will close, and you will be prompted to install the latest version of LBRY.');
   console.log('After the install is complete, please reopen the app.');
+}
+
+// Taken from webtorrent-desktop
+function checkLinuxTraySupport (cb) {
+  // Check that we're on Ubuntu (or another debian system) and that we have
+  // libappindicator1.
+  child_process.exec('dpkg --get-selections libappindicator1', function (err, stdout) {
+    if (err) return cb(err)
+    // Unfortunately there's no cleaner way, as far as I can tell, to check
+    // whether a debian package is installed:
+    if (stdout.endsWith('\tinstall\n')) {
+      cb(null)
+    } else {
+      cb(new Error('debian package not installed'))
+    }
+  })
 }
 
 ipcMain.on('upgrade', upgrade);
