@@ -23,6 +23,14 @@
   transform: translate(0, 0);
 }
 
+/* Adjustments for icon size and alignment */
+.icon-rocket {
+  font-size: 0.95em;
+  margin-left: .025em;
+  margin-right: .025em;
+  margin-top: -0.5em;
+}
+
 /* Font Awesome uses the Unicode Private Use Area (PUA) to ensure screen
    readers do not read off random characters that represent icons */
 .icon-glass:before {
