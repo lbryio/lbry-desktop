@@ -51,6 +51,9 @@
   margin-top: $spacing-vertical;
   margin-bottom: var(--card-margin);
 }
+.card__action--right {
+  float: right;
+}
 .card__content {
   margin-top: var(--card-margin);
   margin-bottom: var(--card-margin);
@@ -84,6 +87,7 @@ $font-size-subtext-multiple: 0.82;
 
 .card__link {
   display: block;
+  cursor: pointer;
 }
 .card--link {
   transition: transform 120ms ease-in-out;

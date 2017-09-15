@@ -23,7 +23,7 @@ const FormatItem = props => {
   const mediaType = lbry.getMediaType(contentType);
 
   return (
-    <table className="table-standard">
+    <table className="table-standard table-stretch">
       <tbody>
         <tr>
           <td>{__("Published on")}</td><td><DateTime block={height} /></td>
@@ -156,12 +156,10 @@ class FilePage extends React.PureComponent {
                     </Link>
                   : uriIndicator}
               </div>
-              <div className="card__actions">
-                <FileActions
-                  uri={uri}
-                  onTipShow={this.handleTipShow.bind(this)}
-                />
-              </div>
+              <FileActions
+                uri={uri}
+                onTipShow={this.handleTipShow.bind(this)}
+              />
             </div>
             {!showTipBox &&
               <div className="card__content card__subtext card__subtext card__subtext--allow-newlines">

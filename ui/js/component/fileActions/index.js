@@ -14,14 +14,12 @@ import FileActions from "./view";
 const select = (state, props) => ({
   fileInfo: makeSelectFileInfoForUri(props.uri)(state),
   /*availability check is disabled due to poor performance, TBD if it dies forever or requires daemon fix*/
-  platform: selectPlatform(state),
   costInfo: makeSelectCostInfoForUri(props.uri)(state),
   claimIsMine: makeSelectClaimIsMine(props.uri)(state),
 });
 
 const perform = dispatch => ({
   checkAvailability: uri => dispatch(doFetchAvailability(uri)),
-  openInFolder: fileInfo => dispatch(doOpenFileInFolder(fileInfo)),
   openInShell: fileInfo => dispatch(doOpenFileInShell(fileInfo)),
   openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
   startDownload: uri => dispatch(doPurchaseUri(uri)),

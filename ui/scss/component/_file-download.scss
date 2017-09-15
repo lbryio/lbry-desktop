@@ -1,22 +1,15 @@
-
-.file-actions
-{
-  line-height: var(--button-height);
-  min-height: var(--button-height);
-}
-
-.file-actions__download-status-bar, .file-actions__download-status-bar-overlay {
+.file-download, .file-download__overlay {
    .button__content {
      margin: 0 var(--text-link-padding);
    }
 }
 
-.file-actions__download-status-bar
+.file-download
 {
   position: relative;
   color: var(--color-download);
 }
-.file-actions__download-status-bar-overlay
+.file-download__overlay
 {
   background: var(--color-download);
   color: white;
@@ -27,3 +20,13 @@
   top: 0px;
   left: 0px;
 }
+
+/*
+
+.file-actions
+{
+  line-height: var(--button-height);
+  min-height: var(--button-height);
+}
+
+ */

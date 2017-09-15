@@ -47,15 +47,16 @@ class VideoPlayButton extends React.PureComponent {
       ? "icon-play"
       : "icon-folder-o";
 
-    return;
-    <Link
-      button={button ? button : null}
-      disabled={disabled}
-      label={label ? label : ""}
-      className="video__play-button"
-      icon={icon}
-      onClick={this.onWatchClick.bind(this)}
-    />;
+    return (
+      <Link
+        button={button ? button : null}
+        disabled={disabled}
+        label={label ? label : ""}
+        className="video__play-button"
+        icon={icon}
+        onClick={this.onWatchClick.bind(this)}
+      />
+    );
   }
 }
 

@@ -61,9 +61,9 @@ class FileDownloadLink extends React.PureComponent {
         );
 
       return (
-        <div className="faux-button-block file-actions__download-status-bar button-set-item">
+        <div className="faux-button-block file-download button-set-item">
           <div
-            className="faux-button-block file-actions__download-status-bar-overlay"
+            className="faux-button-block file-download__overlay"
             style={{ width: progress + "%" }}
           >
             {labelWithIcon}
