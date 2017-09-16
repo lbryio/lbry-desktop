@@ -1,7 +1,14 @@
 import * as types from "constants/action_types";
 
 const reducers = {};
-const defaultState = {};
+
+const buildSupportTransaction = () => ({
+  tipBoxShown: false,
+});
+
+const defaultState = {
+  supportTransaction: buildSupportTransaction(),
+};
 
 reducers[types.RESOLVE_URI_COMPLETED] = function(state, action) {
   const { uri, certificate, claim } = action.data;
@@ -189,6 +196,22 @@ reducers[types.CREATE_CHANNEL_COMPLETED] = function(state, action) {
   });
 };
 
+reducers[types.HIDE_TIP_BOX] = function(state, action) {
+  return Object.assign({}, state, {
+    supportTransaction: buildSupportTransaction(),
+  });
+};
+
+reducers[types.SHOW_TIP_BOX] = function(state, action) {
+  const newSupportTransaction = Object.assign({}, state.supportTransaction, {
+    tipBoxShown: true,
+  });
+
+  return Object.assign({}, state, {
+    supportTransaction: newSupportTransaction,
+  });
+};
+
 reducers[types.SUPPORT_TRANSACTION_STARTED] = function(state, action) {
   const newSupportTransaction = Object.assign({}, state.supportTransaction, {
     sendingSupport: true,
@@ -200,13 +223,16 @@ reducers[types.SUPPORT_TRANSACTION_STARTED] = function(state, action) {
 };
 
 reducers[types.SUPPORT_TRANSACTION_COMPLETED] = function(state, action) {
-  return Object.assign({}, state);
+  return Object.assign({}, state, {
+    supportTransaction: buildSupportTransaction(),
+  });
 };
 
 reducers[types.SUPPORT_TRANSACTION_FAILED] = function(state, action) {
   const newSupportTransaction = Object.assign({}, state.supportTransaction, {
     sendingSupport: false,
     error: action.data.error,
+    tipBoxShown: true,
   });
 
   return Object.assign({}, state, {

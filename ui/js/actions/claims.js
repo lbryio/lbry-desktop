@@ -4,6 +4,14 @@ import { doOpenModal, doShowSnackBar } from "actions/app";
 import * as types from "constants/action_types";
 import * as modals from "constants/modal_types";
 
+export function doShowTipBox() {
+  return { type: types.SHOW_TIP_BOX };
+}
+
+export function doHideTipBox() {
+  return { type: types.HIDE_TIP_BOX };
+}
+
 export function doSendSupport(amount, claim_id) {
   return function(dispatch, getState) {
     const state = getState();
@@ -22,6 +30,7 @@ export function doSendSupport(amount, claim_id) {
         dispatch({
           type: types.SUPPORT_TRANSACTION_COMPLETED,
         });
+        dispatch(doHideTipBox);
         dispatch(
           doShowSnackBar({
             message: __(`You sent ${amount} LBC as support, Mahalo!`),
@@ -32,7 +41,7 @@ export function doSendSupport(amount, claim_id) {
       } else {
         dispatch({
           type: types.SUPPORT_TRANSACTION_FAILED,
-          data: { error: results },
+          data: { error: results.code },
         });
         dispatch(doOpenModal(modals.TRANSACTION_FAILED));
       }
@@ -41,7 +50,7 @@ export function doSendSupport(amount, claim_id) {
     const errorCallback = error => {
       dispatch({
         type: types.SUPPORT_TRANSACTION_FAILED,
-        data: { error: error.message },
+        data: { error: error.code },
       });
       dispatch(doOpenModal(modals.TRANSACTION_FAILED));
     };

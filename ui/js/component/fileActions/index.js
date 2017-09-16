@@ -9,6 +9,7 @@ import { doOpenFileInShell, doOpenFileInFolder } from "actions/file_info";
 import { makeSelectClaimIsMine } from "selectors/claims";
 import { doPurchaseUri, doLoadVideo, doStartDownload } from "actions/content";
 import { doNavigate } from "actions/navigation";
+import { doShowTipBox } from "actions/claims";
 import FileActions from "./view";
 
 const select = (state, props) => ({
@@ -25,6 +26,7 @@ const perform = dispatch => ({
   startDownload: uri => dispatch(doPurchaseUri(uri)),
   restartDownload: (uri, outpoint) => dispatch(doStartDownload(uri, outpoint)),
   editClaim: fileInfo => dispatch(doNavigate("/publish", fileInfo)),
+  showTipBox: () => dispatch(doShowTipBox()),
 });
 
 export default connect(select, perform)(FileActions);
