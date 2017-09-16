@@ -9,6 +9,7 @@ import {
   makeSelectClaimForUri,
   makeSelectContentTypeForUri,
   makeSelectMetadataForUri,
+  selectShowTipBox,
 } from "selectors/claims";
 import { makeSelectCostInfoForUri } from "selectors/cost_info";
 import { selectShowNsfw } from "selectors/settings";
@@ -20,6 +21,7 @@ const select = (state, props) => ({
   costInfo: makeSelectCostInfoForUri(props.uri)(state),
   metadata: makeSelectMetadataForUri(props.uri)(state),
   obscureNsfw: !selectShowNsfw(state),
+  showTipBox: selectShowTipBox(state),
   fileInfo: makeSelectFileInfoForUri(props.uri)(state),
   rewardedContentClaimIds: selectRewardContentClaimIds(state, props),
 });

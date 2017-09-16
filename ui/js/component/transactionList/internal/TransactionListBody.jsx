@@ -125,13 +125,26 @@ class TransactionTableBody extends React.PureComponent {
 
   render() {
     const { transactions, filter } = this.props;
+    let transactionList = transactions
+      .filter(this.filterList, this)
+      .filter(this.removeFeeTx, this)
+      .map(this.renderBody, this);
+
+    if (transactionList.length == 0) {
+      return (
+        <tbody>
+          <tr>
+            <td className="empty" colSpan="3">
+              {__("There are no transactions of this type.")}
+            </td>
+          </tr>
+        </tbody>
+      );
+    }
 
     return (
       <tbody>
-        {transactions
-          .filter(this.filterList, this)
-          .filter(this.removeFeeTx, this)
-          .map(this.renderBody, this)}
+        {transactionList}
       </tbody>
     );
   }
