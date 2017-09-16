@@ -91,9 +91,8 @@ class FilePage extends React.PureComponent {
       contentType,
       uri,
       rewardedContentClaimIds,
+      showTipBox,
     } = this.props;
-
-    const { showTipBox } = this.state;
 
     if (!claim || !metadata) {
       return (

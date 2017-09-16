@@ -10,6 +10,7 @@ import { makeSelectClaimIsMine } from "selectors/claims";
 import { doPurchaseUri, doLoadVideo, doStartDownload } from "actions/content";
 import { doNavigate } from "actions/navigation";
 import FileActions from "./view";
+import * as types from "constants/action_types";
 
 const select = (state, props) => ({
   fileInfo: makeSelectFileInfoForUri(props.uri)(state),
@@ -25,6 +26,7 @@ const perform = dispatch => ({
   startDownload: uri => dispatch(doPurchaseUri(uri)),
   restartDownload: (uri, outpoint) => dispatch(doStartDownload(uri, outpoint)),
   editClaim: fileInfo => dispatch(doNavigate("/publish", fileInfo)),
+  showTipBox: () => dispatch({ type: types.SHOW_TIP_BOX }),
 });
 
 export default connect(select, perform)(FileActions);

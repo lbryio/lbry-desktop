@@ -22,6 +22,9 @@ export function doSendSupport(amount, claim_id) {
         dispatch({
           type: types.SUPPORT_TRANSACTION_COMPLETED,
         });
+        dispatch({
+          type: types.HIDE_TIP_BOX,
+        });
         dispatch(
           doShowSnackBar({
             message: __(`You sent ${amount} LBC as support, Mahalo!`),
@@ -32,7 +35,7 @@ export function doSendSupport(amount, claim_id) {
       } else {
         dispatch({
           type: types.SUPPORT_TRANSACTION_FAILED,
-          data: { error: results },
+          data: { error: results.code },
         });
         dispatch(doOpenModal(modals.TRANSACTION_FAILED));
       }
@@ -41,7 +44,7 @@ export function doSendSupport(amount, claim_id) {
     const errorCallback = error => {
       dispatch({
         type: types.SUPPORT_TRANSACTION_FAILED,
-        data: { error: error.message },
+        data: { error: error.code },
       });
       dispatch(doOpenModal(modals.TRANSACTION_FAILED));
     };

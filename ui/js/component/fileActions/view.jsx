@@ -32,7 +32,7 @@ class FileActions extends React.PureComponent {
           button="text"
           icon="icon-gift"
           label={__("Support")}
-          onClick={this.handleSupportButtonClicked.bind(this)}
+          onClick={this.props.showTipBox}
         />
         <Link
           button="text"
