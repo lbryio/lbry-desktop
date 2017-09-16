@@ -168,6 +168,10 @@ $font-size-subtext-multiple: 0.82;
   top: 36%
 }
 
+.card__indicators {
+  float: right;
+}
+
 .card--small {
   width: var(--card-small-width);
   overflow-x: hidden;

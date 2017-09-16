@@ -8,7 +8,7 @@ import FilePrice from "component/filePrice";
 import NsfwOverlay from "component/nsfwOverlay";
 import IconFeatured from "component/iconFeatured";
 import IconLocal from "component/iconLocal";
-import { IconSet, Icon } from "component/common";
+import { Icon } from "component/common";
 
 class FileTile extends React.PureComponent {
   static SHOW_EMPTY_PUBLISH = "publish";
@@ -120,11 +120,11 @@ class FileTile extends React.PureComponent {
             <CardMedia title={title} thumbnail={thumbnail} />
             <div className="file-tile__content">
               <div className="card__title-primary">
-                <IconSet>
+                <span className="card__indicators">
                   {showPrice && <FilePrice uri={this.props.uri} />}
                   {isRewardContent && <IconFeatured />}
                   {showLocal && fileInfo && <IconLocal />}
-                </IconSet>
+                </span>
                 <div className="meta">{uri}</div>
                 <h3>
                   <TruncatedText lines={1}>{title}</TruncatedText>

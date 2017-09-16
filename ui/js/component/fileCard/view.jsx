@@ -2,7 +2,7 @@ import React from "react";
 import lbryuri from "lbryuri.js";
 import CardMedia from "component/cardMedia";
 import Link from "component/link";
-import { TruncatedText, IconSet } from "component/common";
+import { TruncatedText } from "component/common";
 import IconFeatured from "component/iconFeatured";
 import IconLocal from "component/iconLocal";
 import FilePrice from "component/filePrice";
@@ -95,11 +95,11 @@ class FileCard extends React.PureComponent {
                 <TruncatedText lines={1}>{title}</TruncatedText>
               </div>
               <div className="card__subtitle">
-                <IconSet>
+                <span className="card__indicators">
                   <FilePrice uri={uri} />
-                  {isRewardContent && <span>{" "}<IconFeatured /></span>}
+                  {isRewardContent && <IconFeatured />}
                   {fileInfo && <IconLocal />}
-                </IconSet>
+                </span>
                 <UriIndicator uri={uri} />
               </div>
             </div>
