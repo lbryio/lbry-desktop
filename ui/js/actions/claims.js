@@ -4,6 +4,14 @@ import { doOpenModal, doShowSnackBar } from "actions/app";
 import * as types from "constants/action_types";
 import * as modals from "constants/modal_types";
 
+export function doShowTipBox() {
+  return { type: types.SHOW_TIP_BOX };
+}
+
+export function doHideTipBox() {
+  return { type: types.HIDE_TIP_BOX };
+}
+
 export function doSendSupport(amount, claim_id) {
   return function(dispatch, getState) {
     const state = getState();
@@ -22,9 +30,7 @@ export function doSendSupport(amount, claim_id) {
         dispatch({
           type: types.SUPPORT_TRANSACTION_COMPLETED,
         });
-        dispatch({
-          type: types.HIDE_TIP_BOX,
-        });
+        dispatch(doHideTipBox);
         dispatch(
           doShowSnackBar({
             message: __(`You sent ${amount} LBC as support, Mahalo!`),

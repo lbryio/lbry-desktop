@@ -71,18 +71,6 @@ class FilePage extends React.PureComponent {
     }
   }
 
-  handleTipShow() {
-    this.setState({
-      showTipBox: true,
-    });
-  }
-
-  handleTipHide() {
-    this.setState({
-      showTipBox: false,
-    });
-  }
-
   render() {
     const {
       claim,
@@ -155,10 +143,7 @@ class FilePage extends React.PureComponent {
                     </Link>
                   : uriIndicator}
               </div>
-              <FileActions
-                uri={uri}
-                onTipShow={this.handleTipShow.bind(this)}
-              />
+              <FileActions uri={uri} />
             </div>
             {!showTipBox &&
               <div className="card__content card__subtext card__subtext card__subtext--allow-newlines">
@@ -178,13 +163,7 @@ class FilePage extends React.PureComponent {
                 />
               </div>
             : ""}
-          {showTipBox
-            ? <TipLink
-                onTipShow={this.handleTipShow.bind(this)}
-                onTipHide={this.handleTipHide.bind(this)}
-                claim_id={claim.claim_id}
-              />
-            : ""}
+          {showTipBox ? <TipLink claim_id={claim.claim_id} /> : ""}
           {!showTipBox &&
             <div className="card__content">
               <Link

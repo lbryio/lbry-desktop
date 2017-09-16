@@ -4,10 +4,6 @@ import FileDownloadLink from "component/fileDownloadLink";
 import * as modals from "constants/modal_types";
 
 class FileActions extends React.PureComponent {
-  handleSupportButtonClicked() {
-    this.props.onTipShow();
-  }
-
   render() {
     const { fileInfo, uri, openModal, claimIsMine, editClaim } = this.props;
 
