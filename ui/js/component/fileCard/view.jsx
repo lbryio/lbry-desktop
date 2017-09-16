@@ -97,6 +97,7 @@ class FileCard extends React.PureComponent {
               <div className="card__subtitle">
                 <span className="card__indicators">
                   <FilePrice uri={uri} />
+                  {" "}
                   {isRewardContent && <IconFeatured />}
                   {fileInfo && <IconLocal />}
                 </span>

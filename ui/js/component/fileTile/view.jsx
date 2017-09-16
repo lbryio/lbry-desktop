@@ -122,6 +122,7 @@ class FileTile extends React.PureComponent {
               <div className="card__title-primary">
                 <span className="card__indicators">
                   {showPrice && <FilePrice uri={this.props.uri} />}
+                  {" "}
                   {isRewardContent && <IconFeatured />}
                   {showLocal && fileInfo && <IconLocal />}
                 </span>
