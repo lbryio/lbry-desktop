@@ -19,6 +19,7 @@ class PublishForm extends React.PureComponent {
     this._defaultPaidPrice = 0.01;
 
     this.state = {
+      id: null,
       rawName: "",
       name: "",
       bid: 10,
@@ -189,10 +190,10 @@ class PublishForm extends React.PureComponent {
   }
 
   handleEditClaim() {
-    const isMine = this.myClaimExists();
+    const claimInfo = this.claim() || this.myClaimInfo();
 
-    if (isMine) {
-      this.handlePrefillClicked();
+    if (claimInfo) {
+      this.handlePrefillClaim(claimInfo);
     }
   }
 
@@ -212,10 +213,10 @@ class PublishForm extends React.PureComponent {
   }
 
   myClaimInfo() {
-    const { name } = this.state;
+    const { id } = this.state;
 
     return Object.values(this.props.myClaims).find(
-      claim => claim.name === name
+      claim => claim.claim_id === id
     );
   }
 
@@ -272,9 +273,10 @@ class PublishForm extends React.PureComponent {
     });
   }
 
-  handlePrefillClicked() {
-    const claimInfo = this.myClaimInfo();
-    const { source } = claimInfo.value.stream;
+  handlePrefillClaim(claimInfo) {
+    const { claim_id, name, channel_name, amount } = claimInfo;
+    const { source, metadata } = claimInfo.value.stream;
+
     const {
       license,
       licenseUrl,
@@ -283,17 +285,21 @@ class PublishForm extends React.PureComponent {
       description,
       language,
       nsfw,
-    } = claimInfo.value.stream.metadata;
+    } = metadata;
 
     let newState = {
-      mode: "edit",
+      id: claim_id,
+      channel: channel_name || "anonymous",
+      bid: amount,
       meta_title: title,
       meta_thumbnail: thumbnail,
       meta_description: description,
       meta_language: language,
       meta_nsfw: nsfw,
+      mode: "edit",
       prefillDone: true,
-      bid: claimInfo.amount,
+      rawName: name,
+      name,
       source,
     };
 
@@ -423,16 +429,11 @@ class PublishForm extends React.PureComponent {
   }
 
   componentWillMount() {
-    let { name, channel } = this.props.params;
-
-    channel = channel || this.state.channel;
-
     this.props.fetchClaimListMine();
     this._updateChannelList();
 
-    if (name) {
-      this.setState({ name, rawName: name, channel });
-    }
+    const { id } = this.props.params;
+    this.setState({ id });
   }
 
   componentDidMount() {
@@ -461,37 +462,38 @@ class PublishForm extends React.PureComponent {
   }
 
   getNameBidHelpText() {
-    if (this.state.prefillDone) {
+    const { prefillDone, name, uri } = this.state;
+    const { resolvingUris } = this.props;
+    const claim = this.claim();
+
+    if (prefillDone) {
       return __("Existing claim data was prefilled");
     }
 
-    if (
-      this.state.uri &&
-      this.props.resolvingUris.indexOf(this.state.uri) !== -1 &&
-      this.claim() === undefined
-    ) {
+    if (uri && resolvingUris.indexOf(uri) !== -1 && claim === undefined) {
       return __("Checking...");
-    } else if (!this.state.name) {
+    } else if (!name) {
       return __("Select a URL for this publish.");
-    } else if (!this.claim()) {
+    } else if (!claim) {
       return __("This URL is unused.");
-    } else if (this.myClaimExists() && !this.state.prefillDone) {
+    } else if (this.myClaimExists() && !prefillDone) {
       return (
         <span>
           {__("You already have a claim with this name.")}{" "}
           <Link
             label={__("Edit existing claim")}
-            onClick={() => this.handlePrefillClicked()}
+            onClick={() => this.handleEditClaim()}
           />
         </span>
       );
-    } else if (this.claim()) {
-      if (this.topClaimValue() === 1) {
+    } else if (claim) {
+      const topClaimValue = this.topClaimValue();
+      if (topClaimValue === 1) {
         return (
           <span>
             {__(
               'A deposit of at least one credit is required to win "%s". However, you can still get a permanent URL for any amount.',
-              this.state.name
+              name
             )}
           </span>
         );
@@ -500,8 +502,8 @@ class PublishForm extends React.PureComponent {
           <span>
             {__(
               'A deposit of at least "%s" credits is required to win "%s". However, you can still get a permanent URL for any amount.',
-              this.topClaimValue(),
-              this.state.name
+              topClaimValue,
+              name
             )}
           </span>
         );
