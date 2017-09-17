@@ -9,12 +9,17 @@ class FileActions extends React.PureComponent {
   }
 
   render() {
-    const { fileInfo, uri, openModal, claimIsMine, editClaim } = this.props;
+    const {
+      fileInfo,
+      uri,
+      openModal,
+      claimIsMine,
+      editClaim,
+      checkAvailability,
+    } = this.props;
 
-    const name = fileInfo ? fileInfo.name : null;
-    const channel = fileInfo ? fileInfo.channel_name : null;
-
-    const metadata = fileInfo ? fileInfo.metadata : null,
+    const claimId = fileInfo ? fileInfo.claim_id : null,
+      metadata = fileInfo ? fileInfo.metadata : null,
       showMenu = fileInfo && Object.keys(fileInfo).length > 0,
       title = metadata ? metadata.title : uri;
 
@@ -25,7 +30,7 @@ class FileActions extends React.PureComponent {
             button="text"
             icon="icon-edit"
             label={__("Edit")}
-            onClick={() => editClaim({ name, channel })}
+            onClick={() => editClaim(claimId)}
           />}
         <FileDownloadLink uri={uri} />
         <Link

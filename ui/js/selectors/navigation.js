@@ -87,7 +87,7 @@ export const selectPageTitle = createSelector(
       case "start":
         return __("Start");
       case "publish":
-        return __("Publish");
+        return params.id ? __("Edit") : __("Publish");
       case "help":
         return __("Help");
       case "developer":
