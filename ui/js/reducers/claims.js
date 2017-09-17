@@ -1,6 +1,7 @@
 import * as types from "constants/action_types";
 
 const reducers = {};
+
 const defaultState = {};
 
 reducers[types.RESOLVE_URI_COMPLETED] = function(state, action) {
@@ -186,31 +187,6 @@ reducers[types.CREATE_CHANNEL_COMPLETED] = function(state, action) {
   return Object.assign({}, state, {
     byId,
     myChannelClaims,
-  });
-};
-
-reducers[types.SUPPORT_TRANSACTION_STARTED] = function(state, action) {
-  const newSupportTransaction = Object.assign({}, state.supportTransaction, {
-    sendingSupport: true,
-  });
-
-  return Object.assign({}, state, {
-    supportTransaction: newSupportTransaction,
-  });
-};
-
-reducers[types.SUPPORT_TRANSACTION_COMPLETED] = function(state, action) {
-  return Object.assign({}, state);
-};
-
-reducers[types.SUPPORT_TRANSACTION_FAILED] = function(state, action) {
-  const newSupportTransaction = Object.assign({}, state.supportTransaction, {
-    sendingSupport: false,
-    error: action.data.error,
-  });
-
-  return Object.assign({}, state, {
-    supportTransaction: newSupportTransaction,
   });
 };
 

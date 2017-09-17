@@ -6,6 +6,7 @@ import {
   selectBalance,
 } from "selectors/wallet";
 import { doOpenModal, doShowSnackBar } from "actions/app";
+import { doNavigate } from "actions/navigation";
 import * as modals from "constants/modal_types";
 
 export function doUpdateBalance(balance) {
@@ -141,5 +142,57 @@ export function doSetDraftTransactionAddress(address) {
   return {
     type: types.SET_DRAFT_TRANSACTION_ADDRESS,
     data: { address },
+  };
+}
+
+export function doSendSupport(amount, claim_id, uri) {
+  return function(dispatch, getState) {
+    const state = getState();
+    const balance = selectBalance(state);
+
+    if (balance - amount <= 0) {
+      return dispatch(doOpenModal(modals.INSUFFICIENT_BALANCE));
+    }
+
+    dispatch({
+      type: types.SUPPORT_TRANSACTION_STARTED,
+    });
+
+    const successCallback = results => {
+      if (results.txid) {
+        dispatch({
+          type: types.SUPPORT_TRANSACTION_COMPLETED,
+        });
+        dispatch(
+          doShowSnackBar({
+            message: __(`You sent ${amount} LBC as support, Mahalo!`),
+            linkText: __("History"),
+            linkTarget: __("/wallet"),
+          })
+        );
+        dispatch(doNavigate("/show", { uri }));
+      } else {
+        dispatch({
+          type: types.SUPPORT_TRANSACTION_FAILED,
+          data: { error: results.code },
+        });
+        dispatch(doOpenModal(modals.TRANSACTION_FAILED));
+      }
+    };
+
+    const errorCallback = error => {
+      dispatch({
+        type: types.SUPPORT_TRANSACTION_FAILED,
+        data: { error: error.code },
+      });
+      dispatch(doOpenModal(modals.TRANSACTION_FAILED));
+    };
+
+    lbry
+      .wallet_send({
+        claim_id: claim_id,
+        amount: amount,
+      })
+      .then(successCallback, errorCallback);
   };
 }

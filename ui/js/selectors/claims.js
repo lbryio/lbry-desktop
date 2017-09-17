@@ -66,7 +66,7 @@ export const selectAllFetchingChannelClaims = createSelector(
 );
 
 export const makeSelectFetchingChannelClaims = uri => {
-  createSelector(
+  return createSelector(
     selectAllFetchingChannelClaims,
     fetching => fetching && fetching[uri]
   );
@@ -95,6 +95,13 @@ export const makeSelectMetadataForUri = uri => {
     const value = metadata ? metadata : claim === undefined ? undefined : null;
     return value;
   });
+};
+
+export const makeSelectTitleForUri = uri => {
+  return createSelector(
+    makeSelectMetadataForUri(uri),
+    metadata => metadata && metadata.title
+  );
 };
 
 export const makeSelectContentTypeForUri = uri => {

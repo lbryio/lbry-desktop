@@ -49,7 +49,17 @@ const FileListSearchResults = props => {
 
 class FileListSearch extends React.PureComponent {
   componentWillMount() {
-    this.props.search(this.props.query);
+    this.doSearch(this.props);
+  }
+
+  componentWillReceiveProps(props) {
+    if (props.query != this.props.query) {
+      this.doSearch(props);
+    }
+  }
+
+  doSearch(props) {
+    this.props.search(props.query);
   }
 
   render() {

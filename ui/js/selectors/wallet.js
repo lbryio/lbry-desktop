@@ -61,6 +61,11 @@ export const selectIsFetchingTransactions = createSelector(
   state => state.fetchingTransactions
 );
 
+export const selectIsSendingSupport = createSelector(
+  _selectState,
+  state => state.sendingSupport
+);
+
 export const selectReceiveAddress = createSelector(
   _selectState,
   state => state.receiveAddress
