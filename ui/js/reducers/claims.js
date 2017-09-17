@@ -2,12 +2,8 @@ import * as types from "constants/action_types";
 
 const reducers = {};
 
-const buildSupportTransaction = () => ({
-  tipBoxShown: false,
-});
-
 const defaultState = {
-  supportTransaction: buildSupportTransaction(),
+  supportTransaction: {},
 };
 
 reducers[types.RESOLVE_URI_COMPLETED] = function(state, action) {
@@ -232,7 +228,6 @@ reducers[types.SUPPORT_TRANSACTION_FAILED] = function(state, action) {
   const newSupportTransaction = Object.assign({}, state.supportTransaction, {
     sendingSupport: false,
     error: action.data.error,
-    tipBoxShown: true,
   });
 
   return Object.assign({}, state, {

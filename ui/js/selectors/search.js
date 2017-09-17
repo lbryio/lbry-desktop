@@ -8,8 +8,9 @@ import {
 export const _selectState = state => state.search || {};
 
 export const selectSearchQuery = createSelector(
-  _selectState,
-  state => state.query
+  selectCurrentPage,
+  selectCurrentParams,
+  (page, params) => (page === "search" ? params && params.query : null)
 );
 
 export const selectIsSearching = createSelector(

@@ -66,7 +66,7 @@ export const selectAllFetchingChannelClaims = createSelector(
 );
 
 export const makeSelectFetchingChannelClaims = uri => {
-  createSelector(
+  return createSelector(
     selectAllFetchingChannelClaims,
     fetching => fetching && fetching[uri]
   );

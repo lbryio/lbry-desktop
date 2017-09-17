@@ -12,6 +12,7 @@ const Link = props => {
     disabled,
     children,
     navigate,
+    navigateParams,
     doNavigate,
   } = props;
 
@@ -23,7 +24,7 @@ const Link = props => {
 
   const onClick = !props.onClick && navigate
     ? () => {
-        doNavigate(navigate);
+        doNavigate(navigate, navigateParams || {});
       }
     : props.onClick;
 

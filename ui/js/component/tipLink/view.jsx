@@ -17,10 +17,6 @@ class TipLink extends React.PureComponent {
     this.props.sendSupport(amount, claim_id);
   }
 
-  handleSupportCancelButtonClicked() {
-    this.props.hideTipBox();
-  }
-
   handleSupportPriceChange(event) {
     this.setState({
       tipAmount: Number(event.target.value),
@@ -28,6 +24,8 @@ class TipLink extends React.PureComponent {
   }
 
   render() {
+    const { uri } = this.props;
+
     return (
       <div className="card__content">
         <div className="card__title-primary">
@@ -59,7 +57,8 @@ class TipLink extends React.PureComponent {
           <Link
             label={__("Cancel")}
             button="alt"
-            onClick={this.handleSupportCancelButtonClicked.bind(this)}
+            navigate="/show"
+            navigateParams={{ uri }}
           />
         </div>
       </div>

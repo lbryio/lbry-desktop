@@ -14,7 +14,6 @@ import DateTime from "component/dateTime";
 
 const FormatItem = props => {
   const {
-    publishedDate,
     contentType,
     claim: { height },
     metadata: { language, license },
@@ -43,13 +42,6 @@ const FormatItem = props => {
 };
 
 class FilePage extends React.PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      showTipBox: false,
-    };
-  }
-
   componentDidMount() {
     this.fetchFileInfo(this.props);
     this.fetchCostInfo(this.props);
@@ -77,10 +69,12 @@ class FilePage extends React.PureComponent {
       fileInfo,
       metadata,
       contentType,
+      tab,
       uri,
       rewardedContentClaimIds,
-      showTipBox,
     } = this.props;
+
+    const showTipBox = tab == "tip";
 
     if (!claim || !metadata) {
       return (
@@ -163,7 +157,7 @@ class FilePage extends React.PureComponent {
                 />
               </div>
             : ""}
-          {showTipBox ? <TipLink claim_id={claim.claim_id} /> : ""}
+          {showTipBox ? <TipLink claim_id={claim.claim_id} uri={uri} /> : ""}
           {!showTipBox &&
             <div className="card__content">
               <Link
