@@ -39,6 +39,7 @@ const perform = dispatch => ({
   resolveUri: uri => dispatch(doResolveUri(uri)),
   createChannel: (name, amount) => dispatch(doCreateChannel(name, amount)),
   publish: params => dispatch(doPublish(params)),
+  editClaim: claim_id => dispatch(doNavigate("/publish", { id: claim_id })),
 });
 
 export default connect(select, perform)(PublishPage);

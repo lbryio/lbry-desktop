@@ -24,7 +24,7 @@ const perform = dispatch => ({
   openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
   startDownload: uri => dispatch(doPurchaseUri(uri)),
   restartDownload: (uri, outpoint) => dispatch(doStartDownload(uri, outpoint)),
-  editClaim: id => dispatch(doNavigate("/publish", { id })),
+  editClaim: claimId => dispatch(doNavigate("/publish", { id: claimId })),
 });
 
 export default connect(select, perform)(FileActions);

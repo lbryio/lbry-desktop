@@ -190,11 +190,10 @@ class PublishForm extends React.PureComponent {
   }
 
   handleEditClaim() {
-    const claimIsMine = this.myClaimInfo();
-    console.log(claimIsMine);
+    const claimInfo = this.claim() || this.myClaimInfo();
 
-    if (claimIsMine) {
-      this.handlePrefillClicked();
+    if (claimInfo) {
+      this.handlePrefillClaim(claimInfo);
     }
   }
 
@@ -214,10 +213,10 @@ class PublishForm extends React.PureComponent {
   }
 
   myClaimInfo() {
-    const { name, id } = this.state;
+    const { id } = this.state;
 
     return Object.values(this.props.myClaims).find(
-      claim => claim.name === name || claim.claim_id === id
+      claim => claim.claim_id === id
     );
   }
 
@@ -274,8 +273,7 @@ class PublishForm extends React.PureComponent {
     });
   }
 
-  handlePrefillClicked() {
-    const claimInfo = this.myClaimInfo();
+  handlePrefillClaim(claimInfo) {
     const { claim_id, name, channel_name, amount } = claimInfo;
     const { source, metadata } = claimInfo.value.stream;
 
@@ -464,37 +462,37 @@ class PublishForm extends React.PureComponent {
   }
 
   getNameBidHelpText() {
-    if (this.state.prefillDone) {
+    const { prefillDone, name, uri } = this.state;
+    const { resolvingUris, editClaim } = this.props;
+    const claim = this.claim();
+
+    if (prefillDone) {
       return __("Existing claim data was prefilled");
     }
 
-    if (
-      this.state.uri &&
-      this.props.resolvingUris.indexOf(this.state.uri) !== -1 &&
-      this.claim() === undefined
-    ) {
+    if (uri && resolvingUris.indexOf(uri) !== -1 && claim === undefined) {
       return __("Checking...");
-    } else if (!this.state.name) {
+    } else if (!name) {
       return __("Select a URL for this publish.");
-    } else if (!this.claim()) {
+    } else if (!claim) {
       return __("This URL is unused.");
-    } else if (this.myClaimExists() && !this.state.prefillDone) {
+    } else if (this.myClaimExists() && !prefillDone) {
       return (
         <span>
           {__("You already have a claim with this name.")}{" "}
           <Link
             label={__("Edit existing claim")}
-            onClick={() => this.handlePrefillClicked()}
+            onClick={() => this.handleEditClaim()}
           />
         </span>
       );
-    } else if (this.claim()) {
+    } else if (claim) {
       if (this.topClaimValue() === 1) {
         return (
           <span>
             {__(
               'A deposit of at least one credit is required to win "%s". However, you can still get a permanent URL for any amount.',
-              this.state.name
+              name
             )}
           </span>
         );
@@ -504,7 +502,7 @@ class PublishForm extends React.PureComponent {
             {__(
               'A deposit of at least "%s" credits is required to win "%s". However, you can still get a permanent URL for any amount.',
               this.topClaimValue(),
-              this.state.name
+              name
             )}
           </span>
         );

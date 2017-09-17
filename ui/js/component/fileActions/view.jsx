@@ -9,7 +9,14 @@ class FileActions extends React.PureComponent {
   }
 
   render() {
-    const { fileInfo, uri, openModal, claimIsMine, editClaim } = this.props;
+    const {
+      fileInfo,
+      uri,
+      openModal,
+      claimIsMine,
+      editClaim,
+      checkAvailability,
+    } = this.props;
 
     const claimId = fileInfo ? fileInfo.claim_id : null,
       metadata = fileInfo ? fileInfo.metadata : null,
