@@ -19,7 +19,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
   *
 
 ### Fixed
-  *
+  * URLs on cards no longer wrap and show an ellipsis if longer than one line
   *
 
 ### Deprecated
