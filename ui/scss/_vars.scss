@@ -125,4 +125,11 @@ $text-color: #000;
   --tooltip-bg: var(--color-bg);
   --tooltip-color: var(--text-color);
   --tooltip-border: 1px solid #aaa;
+
+  /* Scrollbar */
+  --scrollbar-radius: 10px;
+  --scrollbar-thumb-bg: rgba(0, 0, 0, 0.20);
+  --scrollbar-thumb-hover-bg: rgba(0, 0, 0, 0.35);
+  --scrollbar-thumb-active-bg: var(--color-primary);
+  --scrollbar-track-bg: transparent;
 }
