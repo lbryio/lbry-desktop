@@ -30,7 +30,7 @@ class ModalRemoveFile extends React.PureComponent {
       closeModal,
       deleteFile,
       fileInfo: { outpoint },
-      metadata: { title },
+      title,
     } = this.props;
     const { deleteChecked, abandonClaimChecked } = this.state;
 

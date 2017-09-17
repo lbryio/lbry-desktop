@@ -7,6 +7,9 @@
   border-radius: var(--card-radius);
   margin-bottom: var(--card-margin);
   overflow: auto;
+
+  //below added to prevent scrollbar on long titles when show page loads, would prefer a cleaner CSS solution
+  overflow-x: hidden;
 }
 .card--obscured
 {
@@ -62,6 +65,9 @@
 .card__content {
   margin-top: var(--card-margin);
   margin-bottom: var(--card-margin);
+  table:not(:last-child) {
+    margin-bottom: var(--card-margin);
+  }
 }
 $font-size-subtext-multiple: 0.82;
 .card__subtext {

@@ -97,6 +97,13 @@ export const makeSelectMetadataForUri = uri => {
   });
 };
 
+export const makeSelectTitleForUri = uri => {
+  return createSelector(
+    makeSelectMetadataForUri(uri),
+    metadata => metadata && metadata.title
+  );
+};
+
 export const makeSelectContentTypeForUri = uri => {
   return createSelector(makeSelectClaimForUri(uri), claim => {
     const source =
@@ -173,9 +180,4 @@ export const selectMyChannelClaims = createSelector(
 
     return claims;
   }
-);
-
-export const selectShowTipBox = createSelector(
-  _selectState,
-  state => state.supportTransaction.tipBoxShown
 );
