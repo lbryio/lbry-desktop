@@ -463,7 +463,7 @@ class PublishForm extends React.PureComponent {
 
   getNameBidHelpText() {
     const { prefillDone, name, uri } = this.state;
-    const { resolvingUris, editClaim } = this.props;
+    const { resolvingUris } = this.props;
     const claim = this.claim();
 
     if (prefillDone) {
@@ -487,7 +487,8 @@ class PublishForm extends React.PureComponent {
         </span>
       );
     } else if (claim) {
-      if (this.topClaimValue() === 1) {
+      const topClaimValue = this.topClaimValue();
+      if (topClaimValue === 1) {
         return (
           <span>
             {__(
@@ -501,7 +502,7 @@ class PublishForm extends React.PureComponent {
           <span>
             {__(
               'A deposit of at least "%s" credits is required to win "%s". However, you can still get a permanent URL for any amount.',
-              this.topClaimValue(),
+              topClaimValue,
               name
             )}
           </span>
