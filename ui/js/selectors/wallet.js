@@ -28,6 +28,10 @@ export const selectTransactionItems = createSelector(
         id: txid,
         date: tx.timestamp ? new Date(parseInt(tx.timestamp) * 1000) : null,
         amount: parseFloat(tx.value),
+        claim_info: tx.claim_info,
+        support_info: tx.support_info,
+        update_info: tx.update_info,
+        fee: tx.fee,
       });
     });
     return transactionItems.reverse();

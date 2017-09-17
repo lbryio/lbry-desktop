@@ -5,7 +5,8 @@ import {
   selectDraftTransactionAmount,
   selectBalance,
 } from "selectors/wallet";
-import { doOpenModal } from "actions/app";
+import { doOpenModal, doShowSnackBar } from "actions/app";
+import * as modals from "constants/modal_types";
 
 export function doUpdateBalance(balance) {
   return {
@@ -22,7 +23,7 @@ export function doFetchTransactions() {
       type: types.FETCH_TRANSACTIONS_STARTED,
     });
 
-    lbry.transaction_list().then(results => {
+    lbry.transaction_list({ include_tip_info: true }).then(results => {
       dispatch({
         type: types.FETCH_TRANSACTIONS_COMPLETED,
         data: {
@@ -83,8 +84,8 @@ export function doSendDraftTransaction() {
     const balance = selectBalance(state);
     const amount = selectDraftTransactionAmount(state);
 
-    if (balance - amount < 1) {
-      return dispatch(doOpenModal("insufficientBalance"));
+    if (balance - amount <= 0) {
+      return dispatch(doOpenModal(modals.INSUFFICIENT_BALANCE));
     }
 
     dispatch({
@@ -96,13 +97,19 @@ export function doSendDraftTransaction() {
         dispatch({
           type: types.SEND_TRANSACTION_COMPLETED,
         });
-        dispatch(doOpenModal("transactionSuccessful"));
+        dispatch(
+          doShowSnackBar({
+            message: __(`You sent ${amount} LBC`),
+            linkText: __("History"),
+            linkTarget: __("/wallet"),
+          })
+        );
       } else {
         dispatch({
           type: types.SEND_TRANSACTION_FAILED,
           data: { error: results },
         });
-        dispatch(doOpenModal("transactionFailed"));
+        dispatch(doOpenModal(modals.TRANSACTION_FAILED));
       }
     };
 
@@ -111,7 +118,7 @@ export function doSendDraftTransaction() {
         type: types.SEND_TRANSACTION_FAILED,
         data: { error: error.message },
       });
-      dispatch(doOpenModal("transactionFailed"));
+      dispatch(doOpenModal(modals.TRANSACTION_FAILED));
     };
 
     lbry

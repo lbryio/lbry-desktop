@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { doOpenModal } from "actions/app";
 import * as settings from "constants/settings";
-import { selectCurrentModal } from "selectors/app";
+import { selectCurrentModal, selectModalProps } from "selectors/app";
 import { selectCurrentPage } from "selectors/navigation";
 import { selectCostForCurrentPageUri } from "selectors/cost_info";
 import { makeSelectClientSetting } from "selectors/settings";
@@ -14,6 +14,7 @@ const select = (state, props) => ({
   balance: selectBalance(state),
   showPageCost: selectCostForCurrentPageUri(state),
   modal: selectCurrentModal(state),
+  modalProps: selectModalProps(state),
   page: selectCurrentPage(state),
   isWelcomeAcknowledged: makeSelectClientSetting(
     settings.NEW_USER_ACKNOWLEDGED

@@ -40,25 +40,24 @@ export const selectAllClaimsByChannel = createSelector(
   state => state.claimsByChannel || {}
 );
 
-const selectClaimForUri = (state, props) => {
-  const uri = lbryuri.normalize(props.uri);
-  return selectClaimsByUri(state)[uri];
+export const makeSelectClaimForUri = uri => {
+  return createSelector(
+    selectClaimsByUri,
+    claims => claims && claims[lbryuri.normalize(uri)]
+  );
 };
 
-export const makeSelectClaimForUri = () => {
-  return createSelector(selectClaimForUri, claim => claim);
-};
-
-const selectClaimForUriIsMine = (state, props) => {
-  const uri = lbryuri.normalize(props.uri);
-  const claim = selectClaimsByUri(state)[uri];
-  const myClaims = selectMyClaimsRaw(state);
-
-  return myClaims.has(claim.claim_id);
-};
-
-export const makeSelectClaimForUriIsMine = () => {
-  return createSelector(selectClaimForUriIsMine, isMine => isMine);
+export const makeSelectClaimIsMine = rawUri => {
+  const uri = lbryuri.normalize(rawUri);
+  return createSelector(
+    selectClaimsByUri,
+    selectMyClaimsRaw,
+    (claims, myClaims) =>
+      claims &&
+      claims[uri] &&
+      claims[uri].claim_id &&
+      myClaims.has(claims[uri].claim_id)
+  );
 };
 
 export const selectAllFetchingChannelClaims = createSelector(
@@ -66,84 +65,44 @@ export const selectAllFetchingChannelClaims = createSelector(
   state => state.fetchingChannelClaims || {}
 );
 
-const selectFetchingChannelClaims = (state, props) => {
-  const allFetchingChannelClaims = selectAllFetchingChannelClaims(state);
-
-  return allFetchingChannelClaims[props.uri];
-};
-
-export const makeSelectFetchingChannelClaims = (state, props) => {
-  return createSelector(selectFetchingChannelClaims, fetching => fetching);
-};
-
-export const selectClaimsInChannelForUri = (state, props) => {
-  const byId = selectClaimsById(state);
-  const byChannel = selectAllClaimsByChannel(state)[props.uri] || {};
-  const claimIds = byChannel["all"];
-
-  if (!claimIds) return claimIds;
-
-  const claims = [];
-
-  claimIds.forEach(claimId => claims.push(byId[claimId]));
-
-  return claims;
-};
-
-export const makeSelectClaimsInChannelForUri = () => {
-  return createSelector(selectClaimsInChannelForUri, claims => claims);
-};
-
-export const selectClaimsInChannelForCurrentPage = (state, props) => {
-  const byId = selectClaimsById(state);
-  const byChannel = selectAllClaimsByChannel(state)[props.uri] || {};
-  const params = selectCurrentParams(state);
-  const page = params && params.page ? params.page : 1;
-  const claimIds = byChannel[page];
-
-  if (!claimIds) return claimIds;
-
-  const claims = [];
-
-  claimIds.forEach(claimId => claims.push(byId[claimId]));
-
-  return claims;
-};
-
-export const makeSelectClaimsInChannelForCurrentPage = () => {
-  return createSelector(selectClaimsInChannelForCurrentPage, claims => claims);
-};
-
-const selectMetadataForUri = (state, props) => {
-  const claim = selectClaimForUri(state, props);
-  const metadata =
-    claim && claim.value && claim.value.stream && claim.value.stream.metadata;
-
-  const value = metadata ? metadata : claim === undefined ? undefined : null;
-  return value;
-};
-
-export const makeSelectMetadataForUri = () => {
-  return createSelector(selectMetadataForUri, metadata => metadata);
-};
-
-const selectSourceForUri = (state, props) => {
-  const claim = selectClaimForUri(state, props);
-  const source =
-    claim && claim.value && claim.value.stream && claim.value.stream.source;
-
-  return source ? source : claim === undefined ? undefined : null;
-};
-
-export const makeSelectSourceForUri = () => {
-  return createSelector(selectSourceForUri, source => source);
-};
-
-export const makeSelectContentTypeForUri = () => {
-  return createSelector(
-    selectSourceForUri,
-    source => (source ? source.contentType : source)
+export const makeSelectFetchingChannelClaims = uri => {
+  createSelector(
+    selectAllFetchingChannelClaims,
+    fetching => fetching && fetching[uri]
   );
+};
+
+export const makeSelectClaimsInChannelForCurrentPage = (uri, page = 1) => {
+  return createSelector(
+    selectClaimsById,
+    selectAllClaimsByChannel,
+    (byId, allClaims) => {
+      const byChannel = allClaims[uri] || {};
+      const claimIds = byChannel[page];
+
+      if (!claimIds) return claimIds;
+
+      return claimIds.map(claimId => byId[claimId]);
+    }
+  );
+};
+
+export const makeSelectMetadataForUri = uri => {
+  return createSelector(makeSelectClaimForUri(uri), claim => {
+    const metadata =
+      claim && claim.value && claim.value.stream && claim.value.stream.metadata;
+
+    const value = metadata ? metadata : claim === undefined ? undefined : null;
+    return value;
+  });
+};
+
+export const makeSelectContentTypeForUri = uri => {
+  return createSelector(makeSelectClaimForUri(uri), claim => {
+    const source =
+      claim && claim.value && claim.value.stream && claim.value.stream.source;
+    return source ? source.contentType : undefined;
+  });
 };
 
 export const selectIsFetchingClaimListMine = createSelector(

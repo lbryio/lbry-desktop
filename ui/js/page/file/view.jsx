@@ -3,6 +3,7 @@ import ReactMarkdown from "react-markdown";
 import lbry from "lbry.js";
 import lbryuri from "lbryuri.js";
 import Video from "component/video";
+import TipLink from "component/tipLink";
 import { Thumbnail } from "component/common";
 import FilePrice from "component/filePrice";
 import FileActions from "component/fileActions";
@@ -22,7 +23,7 @@ const FormatItem = props => {
   const mediaType = lbry.getMediaType(contentType);
 
   return (
-    <table className="table-standard">
+    <table className="table-standard table-stretch">
       <tbody>
         <tr>
           <td>{__("Published on")}</td><td><DateTime block={height} /></td>
@@ -42,6 +43,13 @@ const FormatItem = props => {
 };
 
 class FilePage extends React.PureComponent {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showTipBox: false,
+    };
+  }
+
   componentDidMount() {
     this.fetchFileInfo(this.props);
     this.fetchCostInfo(this.props);
@@ -63,6 +71,18 @@ class FilePage extends React.PureComponent {
     }
   }
 
+  handleTipShow() {
+    this.setState({
+      showTipBox: true,
+    });
+  }
+
+  handleTipHide() {
+    this.setState({
+      showTipBox: false,
+    });
+  }
+
   render() {
     const {
       claim,
@@ -72,6 +92,8 @@ class FilePage extends React.PureComponent {
       uri,
       rewardedContentClaimIds,
     } = this.props;
+
+    const { showTipBox } = this.state;
 
     if (!claim || !metadata) {
       return (
@@ -134,19 +156,21 @@ class FilePage extends React.PureComponent {
                     </Link>
                   : uriIndicator}
               </div>
-              <div className="card__actions">
-                <FileActions uri={uri} />
-              </div>
-            </div>
-            <div className="card__content card__subtext card__subtext card__subtext--allow-newlines">
-              <ReactMarkdown
-                source={(metadata && metadata.description) || ""}
-                escapeHtml={true}
-                disallowedTypes={["Heading", "HtmlInline", "HtmlBlock"]}
+              <FileActions
+                uri={uri}
+                onTipShow={this.handleTipShow.bind(this)}
               />
             </div>
+            {!showTipBox &&
+              <div className="card__content card__subtext card__subtext card__subtext--allow-newlines">
+                <ReactMarkdown
+                  source={(metadata && metadata.description) || ""}
+                  escapeHtml={true}
+                  disallowedTypes={["Heading", "HtmlInline", "HtmlBlock"]}
+                />
+              </div>}
           </div>
-          {metadata && claim
+          {metadata && claim && !showTipBox
             ? <div className="card__content">
                 <FormatItem
                   metadata={metadata}
@@ -155,13 +179,21 @@ class FilePage extends React.PureComponent {
                 />
               </div>
             : ""}
-          <div className="card__content">
-            <Link
-              href={`https://lbry.io/dmca?claim_id=${claim.claim_id}`}
-              label={__("report")}
-              className="button-text-help"
-            />
-          </div>
+          {showTipBox
+            ? <TipLink
+                onTipShow={this.handleTipShow.bind(this)}
+                onTipHide={this.handleTipHide.bind(this)}
+                claim_id={claim.claim_id}
+              />
+            : ""}
+          {!showTipBox &&
+            <div className="card__content">
+              <Link
+                href={`https://lbry.io/dmca?claim_id=${claim.claim_id}`}
+                label={__("report")}
+                className="button-text-help"
+              />
+            </div>}
         </section>
       </main>
     );

@@ -88,6 +88,7 @@ class FileList extends React.PureComponent {
           key={fileInfo.outpoint || fileInfo.claim_id}
           uri={uri}
           hidePrice={true}
+          showActions={true}
           showEmpty={this.props.fileTileShowEmpty}
         />
       );

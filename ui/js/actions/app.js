@@ -1,4 +1,5 @@
 import * as types from "constants/action_types";
+import * as settings from "constants/settings";
 import lbry from "lbry";
 import {
   selectUpdateUrl,
@@ -8,7 +9,7 @@ import {
 } from "selectors/app";
 import { doFetchDaemonSettings } from "actions/settings";
 import { doAuthenticate } from "actions/user";
-import { doFileList } from "actions/file_info";
+import { doFetchFileInfosAndPublishedClaims } from "actions/file_info";
 
 const { remote, ipcRenderer, shell } = require("electron");
 const path = require("path");
@@ -16,11 +17,12 @@ const { download } = remote.require("electron-dl");
 const fs = remote.require("fs");
 const { lbrySettings: config } = require("../../../app/package.json");
 
-export function doOpenModal(modal) {
+export function doOpenModal(modal, modalProps = {}) {
   return {
     type: types.OPEN_MODAL,
     data: {
       modal,
+      modalProps,
     },
   };
 }
@@ -165,7 +167,7 @@ export function doAlertError(errorList) {
       type: types.OPEN_MODAL,
       data: {
         modal: "error",
-        extraContent: errorList,
+        modalProps: { error: errorList },
       },
     });
   };
@@ -176,7 +178,7 @@ export function doDaemonReady() {
     dispatch(doAuthenticate());
     dispatch({ type: types.DAEMON_READY });
     dispatch(doFetchDaemonSettings());
-    dispatch(doFileList());
+    dispatch(doFetchFileInfosAndPublishedClaims());
   };
 }
 

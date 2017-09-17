@@ -14,22 +14,16 @@ import { doNavigate } from "actions/navigation";
 import { makeSelectTotalPagesForChannel } from "selectors/content";
 import ChannelPage from "./view";
 
-const makeSelect = () => {
-  const selectClaim = makeSelectClaimForUri(),
-    selectClaimsInChannel = makeSelectClaimsInChannelForCurrentPage(),
-    selectFetchingChannelClaims = makeSelectFetchingChannelClaims(),
-    selectTotalPagesForChannel = makeSelectTotalPagesForChannel();
-
-  const select = (state, props) => ({
-    claim: selectClaim(state, props),
-    claimsInChannel: selectClaimsInChannel(state, props),
-    fetching: selectFetchingChannelClaims(state, props),
-    totalPages: selectTotalPagesForChannel(state, props),
-    params: selectCurrentParams(state),
-  });
-
-  return select;
-};
+const select = (state, props) => ({
+  claim: makeSelectClaimForUri(props.uri)(state),
+  claimsInChannel: makeSelectClaimsInChannelForCurrentPage(
+    props.uri,
+    props.page
+  )(state),
+  fetching: makeSelectFetchingChannelClaims(props.uri)(state),
+  params: selectCurrentParams(state),
+  totalPages: makeSelectTotalPagesForChannel(props.uri)(state),
+});
 
 const perform = dispatch => ({
   fetchClaims: (uri, page) => dispatch(doFetchClaimsByChannel(uri, page)),
@@ -37,4 +31,4 @@ const perform = dispatch => ({
   navigate: (path, params) => dispatch(doNavigate(path, params)),
 });
 
-export default connect(makeSelect, perform)(ChannelPage);
+export default connect(select, perform)(ChannelPage);

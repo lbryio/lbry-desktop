@@ -21,6 +21,13 @@ export const selectCurrentParams = createSelector(selectCurrentPath, path => {
   return parseQueryParams(path.split("?")[1]);
 });
 
+export const makeSelectCurrentParam = param => {
+  return createSelector(
+    selectCurrentParams,
+    params => (params ? params[param] : undefined)
+  );
+};
+
 export const selectHeaderLinks = createSelector(selectCurrentPage, page => {
   // This contains intentional fall throughs
   switch (page) {

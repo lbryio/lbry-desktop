@@ -1,19 +1,14 @@
 import store from "store.js";
-import lbry from "./lbry.js";
 import { remote } from "electron";
-import * as settings from "constants/settings";
 
 const env = ENV;
 const config = {
   ...require(`./config/${env}`),
 };
-const language = lbry.getClientSetting(settings.LANGUAGE)
-  ? lbry.getClientSetting(settings.LANGUAGE)
-  : "en";
 const i18n = require("y18n")({
   directory: remote.app.getAppPath() + "/locales",
   updateFiles: false,
-  locale: language,
+  locale: "en",
 });
 const logs = [];
 const app = {
