@@ -19,6 +19,7 @@ class PublishForm extends React.PureComponent {
     this._defaultPaidPrice = 0.01;
 
     this.state = {
+      id: null,
       rawName: "",
       name: "",
       bid: 10,
@@ -189,9 +190,10 @@ class PublishForm extends React.PureComponent {
   }
 
   handleEditClaim() {
-    const isMine = this.myClaimExists();
+    const claimIsMine = this.myClaimInfo();
+    console.log(claimIsMine);
 
-    if (isMine) {
+    if (claimIsMine) {
       this.handlePrefillClicked();
     }
   }
@@ -212,10 +214,10 @@ class PublishForm extends React.PureComponent {
   }
 
   myClaimInfo() {
-    const { name } = this.state;
+    const { name, id } = this.state;
 
     return Object.values(this.props.myClaims).find(
-      claim => claim.name === name
+      claim => claim.name === name || claim.claim_id === id
     );
   }
 
@@ -274,7 +276,9 @@ class PublishForm extends React.PureComponent {
 
   handlePrefillClicked() {
     const claimInfo = this.myClaimInfo();
-    const { source } = claimInfo.value.stream;
+    const { claim_id, name, channel_name, amount } = claimInfo;
+    const { source, metadata } = claimInfo.value.stream;
+
     const {
       license,
       licenseUrl,
@@ -283,17 +287,21 @@ class PublishForm extends React.PureComponent {
       description,
       language,
       nsfw,
-    } = claimInfo.value.stream.metadata;
+    } = metadata;
 
     let newState = {
-      mode: "edit",
+      id: claim_id,
+      channel: channel_name || "anonymous",
+      bid: amount,
       meta_title: title,
       meta_thumbnail: thumbnail,
       meta_description: description,
       meta_language: language,
       meta_nsfw: nsfw,
+      mode: "edit",
       prefillDone: true,
-      bid: claimInfo.amount,
+      rawName: name,
+      name,
       source,
     };
 
@@ -423,16 +431,11 @@ class PublishForm extends React.PureComponent {
   }
 
   componentWillMount() {
-    let { name, channel } = this.props.params;
-
-    channel = channel || this.state.channel;
-
     this.props.fetchClaimListMine();
     this._updateChannelList();
 
-    if (name) {
-      this.setState({ name, rawName: name, channel });
-    }
+    const { id } = this.props.params;
+    this.setState({ id });
   }
 
   componentDidMount() {
