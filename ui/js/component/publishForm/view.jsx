@@ -19,6 +19,7 @@ class PublishForm extends React.PureComponent {
     this._defaultPaidPrice = 0.01;
 
     this.state = {
+      id: null,
       rawName: "",
       name: "",
       bid: 10,
@@ -48,6 +49,7 @@ class PublishForm extends React.PureComponent {
       isFee: false,
       customUrl: false,
       source: null,
+      mode: "publish",
     };
   }
 
@@ -116,7 +118,7 @@ class PublishForm extends React.PureComponent {
           ? { channel_name: this.state.channel }
           : {}),
       };
-      
+
       const { source } = this.state;
 
       if (this.refs.file.getValue() !== "") {
@@ -187,6 +189,14 @@ class PublishForm extends React.PureComponent {
     return !!myClaims.find(claim => claim.name === name);
   }
 
+  handleEditClaim() {
+    const claimInfo = this.claim() || this.myClaimInfo();
+
+    if (claimInfo) {
+      this.handlePrefillClaim(claimInfo);
+    }
+  }
+
   topClaimIsMine() {
     const myClaimInfo = this.myClaimInfo();
     const { claimsByUri } = this.props;
@@ -203,10 +213,10 @@ class PublishForm extends React.PureComponent {
   }
 
   myClaimInfo() {
-    const { name } = this.state;
+    const { id } = this.state;
 
     return Object.values(this.props.myClaims).find(
-      claim => claim.name === name
+      claim => claim.claim_id === id
     );
   }
 
@@ -226,6 +236,7 @@ class PublishForm extends React.PureComponent {
         name: "",
         uri: "",
         prefillDone: false,
+        mode: "publish",
       });
 
       return;
@@ -247,6 +258,7 @@ class PublishForm extends React.PureComponent {
       rawName: rawName,
       name: name,
       prefillDone: false,
+      mode: "publish",
       uri,
     });
 
@@ -261,9 +273,10 @@ class PublishForm extends React.PureComponent {
     });
   }
 
-  handlePrefillClicked() {
-    const claimInfo = this.myClaimInfo();  
-    const { source } = claimInfo.value.stream;
+  handlePrefillClaim(claimInfo) {
+    const { claim_id, name, channel_name, amount } = claimInfo;
+    const { source, metadata } = claimInfo.value.stream;
+
     const {
       license,
       licenseUrl,
@@ -272,16 +285,21 @@ class PublishForm extends React.PureComponent {
       description,
       language,
       nsfw,
-    } = claimInfo.value.stream.metadata;
+    } = metadata;
 
     let newState = {
+      id: claim_id,
+      channel: channel_name || "anonymous",
+      bid: amount,
       meta_title: title,
       meta_thumbnail: thumbnail,
       meta_description: description,
       meta_language: language,
       meta_nsfw: nsfw,
+      mode: "edit",
       prefillDone: true,
-      bid: claimInfo.amount,
+      rawName: name,
+      name,
       source,
     };
 
@@ -375,6 +393,7 @@ class PublishForm extends React.PureComponent {
 
   handleChannelChange(channelName) {
     this.setState({
+      mode: "publish",
       channel: channelName,
     });
     const nameChanged = () => this.nameChanged(this.state.rawName);
@@ -412,6 +431,13 @@ class PublishForm extends React.PureComponent {
   componentWillMount() {
     this.props.fetchClaimListMine();
     this._updateChannelList();
+
+    const { id } = this.props.params;
+    this.setState({ id });
+  }
+
+  componentDidMount() {
+    this.handleEditClaim();
   }
 
   onFileChange() {
@@ -436,37 +462,38 @@ class PublishForm extends React.PureComponent {
   }
 
   getNameBidHelpText() {
-    if (this.state.prefillDone) {
+    const { prefillDone, name, uri } = this.state;
+    const { resolvingUris } = this.props;
+    const claim = this.claim();
+
+    if (prefillDone) {
       return __("Existing claim data was prefilled");
     }
 
-    if (
-      this.state.uri &&
-      this.props.resolvingUris.indexOf(this.state.uri) !== -1 &&
-      this.claim() === undefined
-    ) {
+    if (uri && resolvingUris.indexOf(uri) !== -1 && claim === undefined) {
       return __("Checking...");
-    } else if (!this.state.name) {
+    } else if (!name) {
       return __("Select a URL for this publish.");
-    } else if (!this.claim()) {
+    } else if (!claim) {
       return __("This URL is unused.");
-    } else if (this.myClaimExists() && !this.state.prefillDone) {
+    } else if (this.myClaimExists() && !prefillDone) {
       return (
         <span>
           {__("You already have a claim with this name.")}{" "}
           <Link
-            label={__("Use data from my existing claim")}
-            onClick={() => this.handlePrefillClicked()}
+            label={__("Edit existing claim")}
+            onClick={() => this.handleEditClaim()}
           />
         </span>
       );
-    } else if (this.claim()) {
-      if (this.topClaimValue() === 1) {
+    } else if (claim) {
+      const topClaimValue = this.topClaimValue();
+      if (topClaimValue === 1) {
         return (
           <span>
             {__(
               'A deposit of at least one credit is required to win "%s". However, you can still get a permanent URL for any amount.',
-              this.state.name
+              name
             )}
           </span>
         );
@@ -475,8 +502,8 @@ class PublishForm extends React.PureComponent {
           <span>
             {__(
               'A deposit of at least "%s" credits is required to win "%s". However, you can still get a permanent URL for any amount.',
-              this.topClaimValue(),
-              this.state.name
+              topClaimValue,
+              name
             )}
           </span>
         );
@@ -493,9 +520,17 @@ class PublishForm extends React.PureComponent {
   }
 
   render() {
+    const { mode, submitting } = this.state;
+
     const lbcInputHelp = __(
       "This LBC remains yours and the deposit can be undone at any time."
     );
+
+    let submitLabel = !submitting ? __("Publish") : __("Publishing...");
+
+    if (mode === "edit") {
+      submitLabel = !submitting ? __("Update") : __("Updating...");
+    }
 
     return (
       <main className="main--single-column">
@@ -839,9 +874,7 @@ class PublishForm extends React.PureComponent {
           <div className="card-series-submit">
             <Link
               button="primary"
-              label={
-                !this.state.submitting ? __("Publish") : __("Publishing...")
-              }
+              label={submitLabel}
               onClick={event => {
                 this.handleSubmit(event);
               }}

@@ -70,7 +70,7 @@ export class CreditAmount extends React.PureComponent {
     showFree: React.PropTypes.bool,
     showFullPrice: React.PropTypes.bool,
     showPlus: React.PropTypes.bool,
-    look: React.PropTypes.oneOf(["indicator", "plain"]),
+    look: React.PropTypes.oneOf(["indicator", "plain", "fee"]),
   };
 
   static defaultProps = {
@@ -78,7 +78,6 @@ export class CreditAmount extends React.PureComponent {
     label: true,
     showFree: false,
     look: "indicator",
-    showFree: false,
     showFullPrice: false,
     showPlus: false,
   };

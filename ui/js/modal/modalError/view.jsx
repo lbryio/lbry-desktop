@@ -4,7 +4,7 @@ import { ExpandableModal } from "modal/modal";
 
 class ModalError extends React.PureComponent {
   render() {
-    const { modal, closeModal, error } = this.props;
+    const { closeModal, error } = this.props;
 
     const errorObj = typeof error === "string" ? { message: error } : error;
 
@@ -33,7 +33,7 @@ class ModalError extends React.PureComponent {
 
     return (
       <ExpandableModal
-        isOpen={modal == "error"}
+        isOpen={true}
         contentLabel={__("Error")}
         className="error-modal"
         overlayClassName="error-modal-overlay"

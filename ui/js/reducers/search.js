@@ -1,5 +1,4 @@
 import * as types from "constants/action_types";
-import lbryuri from "lbryuri";
 
 const reducers = {};
 const defaultState = {};
@@ -9,7 +8,6 @@ reducers[types.SEARCH_STARTED] = function(state, action) {
 
   return Object.assign({}, state, {
     searching: true,
-    query: query,
   });
 };
 
@@ -31,7 +29,6 @@ reducers[types.SEARCH_COMPLETED] = function(state, action) {
 reducers[types.SEARCH_CANCELLED] = function(state, action) {
   return Object.assign({}, state, {
     searching: false,
-    query: undefined,
   });
 };
 

@@ -2,6 +2,7 @@ import * as types from "constants/action_types";
 
 const reducers = {};
 const defaultState = {
+  playingUri: null,
   rewardedContentClaimIds: [],
   channelPages: {},
 };
@@ -55,6 +56,12 @@ reducers[types.RESOLVE_URI_CANCELED] = reducers[
 
   return Object.assign({}, state, {
     resolvingUris: newResolvingUris,
+  });
+};
+
+reducers[types.SET_PLAYING_URI] = (state, action) => {
+  return Object.assign({}, state, {
+    playingUri: action.data.uri,
   });
 };
 

@@ -21,7 +21,7 @@ fi
 if $OSX; then
     ICON="$BUILD_DIR/icon.icns"
 else
-    ICON="$BUILD_DIR/icons/lbry48.png"
+    ICON="$BUILD_DIR/icons/48x48.png"
 fi
 
 FULL_BUILD="${FULL_BUILD:-false}"

@@ -1,9 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
-import { doCloseModal } from "actions/app";
 import { doChangeVolume } from "actions/app";
-import { selectCurrentModal, selectVolume } from "selectors/app";
-import { doPurchaseUri, doLoadVideo } from "actions/content";
+import { selectVolume } from "selectors/app";
+import { doPlayUri, doSetPlayingUri } from "actions/content";
 import {
   makeSelectMetadataForUri,
   makeSelectContentTypeForUri,
@@ -16,35 +15,24 @@ import {
 import { makeSelectCostInfoForUri } from "selectors/cost_info";
 import { selectShowNsfw } from "selectors/settings";
 import Video from "./view";
+import { selectPlayingUri } from "selectors/content";
 
-const makeSelect = () => {
-  const selectCostInfo = makeSelectCostInfoForUri();
-  const selectFileInfo = makeSelectFileInfoForUri();
-  const selectIsLoading = makeSelectLoadingForUri();
-  const selectIsDownloading = makeSelectDownloadingForUri();
-  const selectMetadata = makeSelectMetadataForUri();
-  const selectContentType = makeSelectContentTypeForUri();
-
-  const select = (state, props) => ({
-    costInfo: selectCostInfo(state, props),
-    fileInfo: selectFileInfo(state, props),
-    metadata: selectMetadata(state, props),
-    obscureNsfw: !selectShowNsfw(state),
-    modal: selectCurrentModal(state),
-    isLoading: selectIsLoading(state, props),
-    isDownloading: selectIsDownloading(state, props),
-    contentType: selectContentType(state, props),
-    volume: selectVolume(state, props),
-  });
-
-  return select;
-};
+const select = (state, props) => ({
+  costInfo: makeSelectCostInfoForUri(props.uri)(state),
+  fileInfo: makeSelectFileInfoForUri(props.uri)(state),
+  metadata: makeSelectMetadataForUri(props.uri)(state),
+  obscureNsfw: !selectShowNsfw(state),
+  isLoading: makeSelectLoadingForUri(props.uri)(state),
+  isDownloading: makeSelectDownloadingForUri(props.uri)(state),
+  playingUri: selectPlayingUri(state),
+  contentType: makeSelectContentTypeForUri(props.uri)(state),
+  volume: selectVolume(state),
+});
 
 const perform = dispatch => ({
-  loadVideo: uri => dispatch(doLoadVideo(uri)),
-  purchaseUri: uri => dispatch(doPurchaseUri(uri, "affirmPurchaseAndPlay")),
-  closeModal: () => dispatch(doCloseModal()),
+  play: uri => dispatch(doPlayUri(uri)),
+  cancelPlay: () => dispatch(doSetPlayingUri(null)),
   changeVolume: volume => dispatch(doChangeVolume(volume)),
 });
 
-export default connect(makeSelect, perform)(Video);
+export default connect(select, perform)(Video);

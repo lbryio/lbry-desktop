@@ -13,7 +13,7 @@ import {
   selectTotalDownloadProgress,
 } from "selectors/file_info";
 import { doCloseModal } from "actions/app";
-import { doHistoryBack } from "actions/navigation";
+import { doNavigate, doHistoryBack } from "actions/navigation";
 import setProgressBar from "util/setProgressBar";
 import batchActions from "util/batchActions";
 

@@ -9,32 +9,23 @@ import {
 } from "selectors/claims";
 import { makeSelectFileInfoForUri } from "selectors/file_info";
 import {
-  makeSelectIsResolvingForUri,
+  makeSelectIsUriResolving,
   selectRewardContentClaimIds,
 } from "selectors/content";
 import FileCard from "./view";
 
-const makeSelect = () => {
-  const selectClaimForUri = makeSelectClaimForUri();
-  const selectFileInfoForUri = makeSelectFileInfoForUri();
-  const selectMetadataForUri = makeSelectMetadataForUri();
-  const selectResolvingUri = makeSelectIsResolvingForUri();
-
-  const select = (state, props) => ({
-    claim: selectClaimForUri(state, props),
-    fileInfo: selectFileInfoForUri(state, props),
-    obscureNsfw: !selectShowNsfw(state),
-    metadata: selectMetadataForUri(state, props),
-    rewardedContentClaimIds: selectRewardContentClaimIds(state, props),
-    isResolvingUri: selectResolvingUri(state, props),
-  });
-
-  return select;
-};
+const select = (state, props) => ({
+  claim: makeSelectClaimForUri(props.uri)(state),
+  fileInfo: makeSelectFileInfoForUri(props.uri)(state),
+  obscureNsfw: !selectShowNsfw(state),
+  metadata: makeSelectMetadataForUri(props.uri)(state),
+  rewardedContentClaimIds: selectRewardContentClaimIds(state, props),
+  isResolvingUri: makeSelectIsUriResolving(props.uri)(state),
+});
 
 const perform = dispatch => ({
   navigate: (path, params) => dispatch(doNavigate(path, params)),
   resolveUri: uri => dispatch(doResolveUri(uri)),
 });
 
-export default connect(makeSelect, perform)(FileCard);
+export default connect(select, perform)(FileCard);

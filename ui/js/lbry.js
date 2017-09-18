@@ -39,6 +39,8 @@ let lbry = {
     customLighthouseServers: [],
     showDeveloperMenu: false,
     language: "en",
+    theme: "light",
+    themes: [],
   },
 };
 
@@ -277,17 +279,6 @@ lbry.publishDeprecated = function(
   );
 };
 
-lbry.getClientSettings = function() {
-  var outSettings = {};
-  for (let setting of Object.keys(lbry.defaultClientSettings)) {
-    var localStorageVal = localStorage.getItem("setting_" + setting);
-    outSettings[setting] = localStorageVal === null
-      ? lbry.defaultClientSettings[setting]
-      : JSON.parse(localStorageVal);
-  }
-  return outSettings;
-};
-
 lbry.getClientSetting = function(setting) {
   var localStorageVal = localStorage.getItem("setting_" + setting);
   if (setting == "showDeveloperMenu") {
@@ -296,12 +287,6 @@ lbry.getClientSetting = function(setting) {
   return localStorageVal === null
     ? lbry.defaultClientSettings[setting]
     : JSON.parse(localStorageVal);
-};
-
-lbry.setClientSettings = function(settings) {
-  for (let setting of Object.keys(settings)) {
-    lbry.setClientSetting(setting, settings[setting]);
-  }
 };
 
 lbry.setClientSetting = function(setting, value) {

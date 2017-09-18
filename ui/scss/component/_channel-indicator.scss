@@ -1,5 +1,4 @@
-@import "../global";
 
 .channel-indicator__icon--invalid {
-  color: $color-error;
+  color: var(--color-error);
 }

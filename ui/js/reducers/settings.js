@@ -6,12 +6,15 @@ import lbry from "lbry";
 const reducers = {};
 const defaultState = {
   clientSettings: {
-    showNsfw: lbry.getClientSetting("showNsfw"),
+    showNsfw: lbry.getClientSetting(settings.SHOW_NSFW),
+    showUnavailable: lbry.getClientSetting(settings.SHOW_UNAVAILABLE),
     welcome_acknowledged: lbry.getClientSetting(settings.NEW_USER_ACKNOWLEDGED),
     credit_intro_acknowledged: lbry.getClientSetting(
       settings.CREDIT_INTRO_ACKNOWLEDGED
     ),
     language: lbry.getClientSetting(settings.LANGUAGE),
+    theme: lbry.getClientSetting(settings.THEME),
+    themes: lbry.getClientSetting(settings.THEMES),
   },
   languages: {},
 };

@@ -74,11 +74,6 @@ export class FormRow extends React.PureComponent {
   }
 
   getOptions() {
-    if (!this._field || !this._field.getOptions) {
-      console.log(this);
-      console.log(this._field);
-      console.log(this._field.getOptions);
-    }
     return this._field.getOptions();
   }
 

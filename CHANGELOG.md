@@ -8,15 +8,19 @@ Web UI version numbers should always match the corresponding version of LBRY App
 
 ## [Unreleased]
 ### Added
-  *
-  *
+  * Added a tipping button to send LBRY Credits to a creator.
+  * Added an edit button on published content. Significantly improved UX for editing claims.
+  * Added theme settings option and new Dark theme.
+  * Significantly more detail is shown about past transactions and new filtering options for transactions.
+  * File pages now show the time of a publish.
+  * The "auth token" displayable on Help offers security warning
+  * Added a new component for rendering dates and times. This component can render the date and time of a block height, as well.
 
 ### Changed
-  *
-  *
+  * CSS significantly refactored to support CSS vars (and consequently easy theming).
 
 ### Fixed
-  *
+  * URLs on cards no longer wrap and show an ellipsis if longer than one line
   *
 
 ### Deprecated

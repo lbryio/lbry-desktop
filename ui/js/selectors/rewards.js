@@ -19,6 +19,15 @@ export const selectClaimedRewards = createSelector(
   byId => Object.values(byId) || []
 );
 
+export const selectClaimedRewardsByTransactionId = createSelector(
+  selectClaimedRewards,
+  rewards =>
+    rewards.reduce((map, reward) => {
+      map[reward.transaction_id] = reward;
+      return map;
+    }, {})
+);
+
 export const selectUnclaimedRewards = createSelector(
   selectUnclaimedRewardsByType,
   byType =>

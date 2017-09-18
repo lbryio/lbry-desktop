@@ -1,4 +1,4 @@
-@import "../global";
+@import "../mixin/link.scss";
 
 $button-focus-shift: 12%;
 
@@ -8,15 +8,15 @@ $button-focus-shift: 12%;
 
   + .button-set-item
   {
-    margin-left: $spacing-vertical;
+    margin-left: var(--button-intra-margin);
   }
 }
 
 .button-block, .faux-button-block
 {
   display: inline-block;
-  height: $height-button;
-  line-height: $height-button;
+  height: var(--button-height);
+  line-height: var(--button-height);
   text-decoration: none;
   border: 0 none;
   text-align: center;
@@ -46,25 +46,26 @@ $button-focus-shift: 12%;
 }
 
 .button__content {
-  margin: 0 $padding-button;
+  margin: 0 var(--button-padding);
 }
 
 .button-primary
 {
-  $color-button-text: white;
-  color: darken($color-button-text, $button-focus-shift * 0.5);
-  background-color: $color-primary;
-  box-shadow: $box-shadow-layer;
+
+  color: var(--button-primary-color);
+  background-color: var(--button-primary-bg);
+  box-shadow: var(--box-shadow-layer);
+
   &:focus {
-    color: $color-button-text;
+    //color: var(--button-primary-active-color);
+    //background-color:color: var(--button-primary-active-bg);
     //box-shadow: $box-shadow-focus;
-    background-color: mix(black, $color-primary, $button-focus-shift)
   }
 }
 .button-alt
 {
-  background-color: $color-bg-alt;
-  box-shadow: $box-shadow-layer;
+  background-color: var(--button-bg);
+  box-shadow: var(--box-shadow-layer);
 }
 
 .button-text
@@ -73,12 +74,12 @@ $button-focus-shift: 12%;
   display: inline-block;
 
   .button__content {
-    margin: 0 $padding-text-link;
+    margin: 0 var(--text-link-padding);
   }
 }
 .button-text-help
 {
-  @include text-link(#aaa);
+  @include text-link(var(--text-help-color));
   font-size: 0.8em;
 }
 .button--flat

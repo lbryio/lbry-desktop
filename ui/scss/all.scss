@@ -1,10 +1,12 @@
+@charset "UTF-8";
 @import "_reset";
+@import "_vars";
 @import "_icons";
 @import "_gui";
 @import "component/_table";
 @import "component/_button.scss";
 @import "component/_card.scss";
-@import "component/_file-actions.scss";
+@import "component/_file-download.scss";
 @import "component/_file-selector.scss";
 @import "component/_file-tile.scss";
 @import "component/_form-field.scss";
@@ -18,6 +20,6 @@
 @import "component/_snack-bar.scss";
 @import "component/_video.scss";
 @import "component/_pagination.scss";
+@import "component/_markdown-editor.scss";
 @import "page/_developer.scss";
-@import "page/_reward.scss";
 @import "page/_show.scss";

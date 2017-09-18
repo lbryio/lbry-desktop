@@ -215,11 +215,7 @@ class DiscoverPage extends React.PureComponent {
       failedToLoad = !fetchingFeaturedUris && !hasContent;
 
     return (
-      <main
-        className={
-          hasContent && fetchingFeaturedUris ? "main--refreshing" : null
-        }
-      >
+      <main className={hasContent && fetchingFeaturedUris ? "reloading" : null}>
         {!hasContent &&
           fetchingFeaturedUris &&
           <BusyMessage message={__("Fetching content")} />}

@@ -8,6 +8,8 @@ const win = remote.BrowserWindow.getFocusedWindow();
 const reducers = {};
 const defaultState = {
   isLoaded: false,
+  modal: null,
+  modalProps: {},
   platform: process.platform,
   upgradeSkipped: sessionStorage.getItem("upgradeSkipped"),
   daemonVersionMatched: null,
@@ -76,14 +78,14 @@ reducers[types.UPDATE_VERSION] = function(state, action) {
 reducers[types.OPEN_MODAL] = function(state, action) {
   return Object.assign({}, state, {
     modal: action.data.modal,
-    modalExtraContent: action.data.extraContent,
+    modalProps: action.data.modalProps || {},
   });
 };
 
 reducers[types.CLOSE_MODAL] = function(state, action) {
   return Object.assign({}, state, {
     modal: undefined,
-    modalExtraContent: undefined,
+    modalProps: {},
   });
 };
 

@@ -7,14 +7,10 @@ export const selectAvailabilityByUri = createSelector(
   state => state.byUri || {}
 );
 
-const selectAvailabilityForUri = (state, props) => {
-  return selectAvailabilityByUri(state)[props.uri];
-};
-
-export const makeSelectIsAvailableForUri = () => {
+export const makeSelectIsAvailableForUri = uri => {
   return createSelector(
-    selectAvailabilityForUri,
-    availability => (availability === undefined ? undefined : availability > 0)
+    selectAvailabilityByUri,
+    byUri => (!byUri || byUri[uri] === undefined ? undefined : byUri[uri] > 0)
   );
 };
 
@@ -23,10 +19,9 @@ export const selectFetchingAvailability = createSelector(
   state => state.fetching || {}
 );
 
-const selectFetchingAvailabilityForUri = (state, props) => {
-  return selectFetchingAvailability(state)[props.uri];
-};
-
-export const makeSelectFetchingAvailabilityForUri = () => {
-  return createSelector(selectFetchingAvailabilityForUri, fetching => fetching);
+export const makeSelectFetchingAvailabilityForUri = uri => {
+  return createSelector(
+    selectFetchingAvailability,
+    byUri => byUri && byUri[uri]
+  );
 };

@@ -1,6 +1,7 @@
 import React from "react";
 import lbryuri from "lbryuri.js";
 import CardMedia from "component/cardMedia";
+import FileActions from "component/fileActions";
 import Link from "component/link";
 import { TruncatedText } from "component/common.js";
 import FilePrice from "component/filePrice";
@@ -53,6 +54,7 @@ class FileTile extends React.PureComponent {
   render() {
     const {
       claim,
+      showActions,
       metadata,
       isResolvingUri,
       showEmpty,
@@ -104,7 +106,7 @@ class FileTile extends React.PureComponent {
         onMouseEnter={this.handleMouseOver.bind(this)}
         onMouseLeave={this.handleMouseOut.bind(this)}
       >
-        <Link onClick={onClick} className="card__link">
+        <div onClick={onClick} className="card__link">
           <div className={"card__inner file-tile__row"}>
             <CardMedia title={title} thumbnail={thumbnail} />
             <div className="file-tile__content">
@@ -116,14 +118,15 @@ class FileTile extends React.PureComponent {
                   <TruncatedText lines={1}>{title}</TruncatedText>
                 </h3>
               </div>
-              <div className="card__content card__subtext">
-                <TruncatedText lines={3}>
-                  {description}
-                </TruncatedText>
-              </div>
+              {description &&
+                <div className="card__content card__subtext">
+                  <TruncatedText lines={!showActions ? 4 : 2}>
+                    {description}
+                  </TruncatedText>
+                </div>}
             </div>
           </div>
-        </Link>
+        </div>
         {this.state.showNsfwHelp && <NsfwOverlay />}
       </section>
     );

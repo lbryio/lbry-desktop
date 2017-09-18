@@ -10,11 +10,12 @@ const buildDraftTransaction = () => ({
 const defaultState = {
   balance: undefined,
   blocks: {},
-  transactions: [],
+  transactions: {},
   fetchingTransactions: false,
   receiveAddress: address,
   gettingNewAddress: false,
   draftTransaction: buildDraftTransaction(),
+  sendingSupport: false,
 };
 
 reducers[types.FETCH_TRANSACTIONS_STARTED] = function(state, action) {
@@ -24,20 +25,16 @@ reducers[types.FETCH_TRANSACTIONS_STARTED] = function(state, action) {
 };
 
 reducers[types.FETCH_TRANSACTIONS_COMPLETED] = function(state, action) {
-  const oldTransactions = Object.assign({}, state.transactions);
-  const byId = Object.assign({}, oldTransactions.byId);
+  let byId = Object.assign({}, state.transactions);
+
   const { transactions } = action.data;
 
   transactions.forEach(transaction => {
     byId[transaction.txid] = transaction;
   });
 
-  const newTransactions = Object.assign({}, oldTransactions, {
-    byId: byId,
-  });
-
   return Object.assign({}, state, {
-    transactions: newTransactions,
+    transactions: byId,
     fetchingTransactions: false,
   });
 };
@@ -122,6 +119,25 @@ reducers[types.SEND_TRANSACTION_FAILED] = function(state, action) {
 
   return Object.assign({}, state, {
     draftTransaction: newDraftTransaction,
+  });
+};
+
+reducers[types.SUPPORT_TRANSACTION_STARTED] = function(state, action) {
+  return Object.assign({}, state, {
+    sendingSupport: true,
+  });
+};
+
+reducers[types.SUPPORT_TRANSACTION_COMPLETED] = function(state, action) {
+  return Object.assign({}, state, {
+    sendingSupport: false,
+  });
+};
+
+reducers[types.SUPPORT_TRANSACTION_FAILED] = function(state, action) {
+  return Object.assign({}, state, {
+    error: action.data.error,
+    sendingSupport: false,
   });
 };
 

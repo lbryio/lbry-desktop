@@ -1,0 +1,32 @@
+.file-download, .file-download__overlay {
+   .button__content {
+     margin: 0 var(--text-link-padding);
+   }
+}
+
+.file-download
+{
+  position: relative;
+  color: var(--color-download);
+}
+.file-download__overlay
+{
+  background: var(--color-download);
+  color: white;
+  position: absolute;
+  white-space: nowrap;
+  overflow: hidden;
+  z-index: 1;
+  top: 0px;
+  left: 0px;
+}
+
+/*
+
+.file-actions
+{
+  line-height: var(--button-height);
+  min-height: var(--button-height);
+}
+
+ */
