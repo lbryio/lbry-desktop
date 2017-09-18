@@ -11,6 +11,10 @@ export function formFieldId() {
 }
 
 export class Form extends React.PureComponent {
+  static propTypes = {
+    onSubmit: React.PropTypes.func.isRequired,
+  };
+
   constructor(props) {
     super(props);
   }
