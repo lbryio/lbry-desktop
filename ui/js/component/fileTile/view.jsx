@@ -1,4 +1,5 @@
 import React from "react";
+import * as icons from "constants/icons";
 import lbryuri from "lbryuri.js";
 import CardMedia from "component/cardMedia";
 import FileActions from "component/fileActions";
@@ -6,9 +7,7 @@ import Link from "component/link";
 import { TruncatedText } from "component/common.js";
 import FilePrice from "component/filePrice";
 import NsfwOverlay from "component/nsfwOverlay";
-import IconFeatured from "component/iconFeatured";
-import IconLocal from "component/iconLocal";
-import { Icon } from "component/common";
+import Icon from "component/icon";
 
 class FileTile extends React.PureComponent {
   static SHOW_EMPTY_PUBLISH = "publish";
@@ -123,8 +122,8 @@ class FileTile extends React.PureComponent {
                 <span className="card__indicators">
                   {showPrice && <FilePrice uri={this.props.uri} />}
                   {" "}
-                  {isRewardContent && <IconFeatured />}
-                  {showLocal && fileInfo && <IconLocal />}
+                  {isRewardContent && <Icon icon={icons.FEATURED} />}
+                  {showLocal && fileInfo && <Icon icon={icons.LOCAL} />}
                 </span>
                 <div className="meta">{uri}</div>
                 <h3>
