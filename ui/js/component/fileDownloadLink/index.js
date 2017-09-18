@@ -23,8 +23,7 @@ const select = (state, props) => ({
 const perform = dispatch => ({
   checkAvailability: uri => dispatch(doFetchAvailability(uri)),
   openInShell: fileInfo => dispatch(doOpenFileInShell(fileInfo)),
-  startDownload: uri =>
-    dispatch(doPurchaseUri(uri, modals.CONFIRM_FILE_PURCHASE)),
+  purchaseUri: uri => dispatch(doPurchaseUri(uri)),
   restartDownload: (uri, outpoint) => dispatch(doStartDownload(uri, outpoint)),
 });
 

@@ -9,20 +9,8 @@ class Video extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      isPlaying: false,
       showNsfwHelp: false,
     };
-  }
-
-  componentWillReceiveProps(nextProps) {
-    // reset playing state upon change path action
-    if (
-      !this.isMediaSame(nextProps) &&
-      this.props.fileInfo &&
-      this.state.isPlaying
-    ) {
-      this.state.isPlaying = false;
-    }
   }
 
   isMediaSame(nextProps) {
@@ -31,12 +19,6 @@ class Video extends React.PureComponent {
       nextProps.fileInfo &&
       this.props.fileInfo.outpoint === nextProps.fileInfo.outpoint
     );
-  }
-
-  startPlaying() {
-    this.setState({
-      isPlaying: true,
-    });
   }
 
   handleMouseOver() {
@@ -64,13 +46,15 @@ class Video extends React.PureComponent {
       metadata,
       isLoading,
       isDownloading,
+      playingUri,
       fileInfo,
       contentType,
       changeVolume,
       volume,
+      uri,
     } = this.props;
-    const { isPlaying = false } = this.state;
 
+    const isPlaying = playingUri === uri;
     const isReadyToPlay = fileInfo && fileInfo.written_bytes > 0;
     const obscureNsfw = this.props.obscureNsfw && metadata && metadata.nsfw;
     const mediaType = lbry.getMediaType(
@@ -129,11 +113,7 @@ class Video extends React.PureComponent {
             className="video__cover"
             style={{ backgroundImage: 'url("' + metadata.thumbnail + '")' }}
           >
-            <VideoPlayButton
-              startPlaying={this.startPlaying.bind(this)}
-              {...this.props}
-              mediaType={mediaType}
-            />
+            <VideoPlayButton {...this.props} mediaType={mediaType} />
           </div>}
         {this.state.showNsfwHelp && <NsfwOverlay />}
       </div>

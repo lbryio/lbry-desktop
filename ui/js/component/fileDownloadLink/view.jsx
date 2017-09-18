@@ -39,7 +39,7 @@ class FileDownloadLink extends React.PureComponent {
       downloading,
       uri,
       openInShell,
-      startDownload,
+      purchaseUri,
       costInfo,
       loading,
     } = this.props;
@@ -81,7 +81,7 @@ class FileDownloadLink extends React.PureComponent {
             label={__("Download")}
             icon="icon-download"
             onClick={() => {
-              startDownload(uri);
+              purchaseUri(uri);
             }}
           />
         );

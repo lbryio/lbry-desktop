@@ -17,18 +17,12 @@ class VideoPlayButton extends React.PureComponent {
       "Space" === event.code
     ) {
       event.preventDefault();
-      this.onWatchClick();
+      this.watch();
     }
   }
 
-  onWatchClick() {
-    this.props.purchaseUri(this.props.uri).then(() => {
-      if (!this.props.modal) {
-        this.props.startPlaying();
-      } else {
-        alert("fix me set pending play");
-      }
-    });
+  watch() {
+    this.props.play(this.props.uri);
   }
 
   render() {
@@ -54,7 +48,7 @@ class VideoPlayButton extends React.PureComponent {
         label={label ? label : ""}
         className="video__play-button"
         icon={icon}
-        onClick={this.onWatchClick.bind(this)}
+        onClick={() => this.watch()}
       />
     );
   }

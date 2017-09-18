@@ -9,7 +9,7 @@ class ModalAffirmPurchase extends React.PureComponent {
   }
 
   render() {
-    const { closeModal, metadata: { title }, uri } = this.props;
+    const { cancelPurchase, metadata: { title }, uri } = this.props;
 
     return (
       <Modal
@@ -17,7 +17,7 @@ class ModalAffirmPurchase extends React.PureComponent {
         isOpen={true}
         contentLabel={__("Confirm Purchase")}
         onConfirmed={this.onAffirmPurchase.bind(this)}
-        onAborted={closeModal}
+        onAborted={cancelPurchase}
       >
         {__("This will purchase")} <strong>{title}</strong> {__("for")}{" "}
         <strong>
