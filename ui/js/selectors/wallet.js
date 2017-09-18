@@ -7,34 +7,70 @@ export const selectBalance = createSelector(
   state => state.balance
 );
 
-export const selectTransactions = createSelector(
-  _selectState,
-  state => state.transactions || {}
-);
-
 export const selectTransactionsById = createSelector(
-  selectTransactions,
-  transactions => transactions.byId || {}
+  _selectState,
+  state => state.transactions
 );
 
 export const selectTransactionItems = createSelector(
   selectTransactionsById,
   byId => {
-    const transactionItems = [];
-    const txids = Object.keys(byId);
-    txids.forEach(txid => {
+    const items = [];
+
+    Object.keys(byId).forEach(txid => {
       const tx = byId[txid];
-      transactionItems.push({
-        id: txid,
-        date: tx.timestamp ? new Date(parseInt(tx.timestamp) * 1000) : null,
-        amount: parseFloat(tx.value),
-        claim_info: tx.claim_info,
-        support_info: tx.support_info,
-        update_info: tx.update_info,
-        fee: tx.fee,
-      });
+
+      //ignore dust/fees
+      if (Math.abs(tx.amount) === Math.abs(tx.fee)) {
+        return;
+      }
+
+      let append = [];
+
+      append.push(
+        ...tx.claim_info.map(item =>
+          Object.assign({}, item, {
+            type: item.claim_name[0] === "@" ? "channel" : "publish",
+          })
+        )
+      );
+      append.push(
+        ...tx.support_info.map(item =>
+          Object.assign({}, item, { type: !item.is_tip ? "support" : "tip" })
+        )
+      );
+      append.push(
+        ...tx.update_info.map(item =>
+          Object.assign({}, item, { type: "update" })
+        )
+      );
+
+      if (!append.length) {
+        append.push(
+          Object.assign({}, tx, {
+            type: tx.value < 0 ? "spend" : "receive",
+          })
+        );
+      }
+
+      items.push(
+        ...append.map(item => {
+          const amount = parseFloat(item.value || -1 * item.amount); //it's value on a transaction, amount on an outpoint (which has the sign the opposite way)
+
+          return {
+            txid: txid,
+            date: tx.timestamp ? new Date(parseInt(tx.timestamp) * 1000) : null,
+            amount: amount,
+            fee: amount < 0 ? -1 * tx.fee / append.length : 0,
+            claim_id: item.claim_id,
+            claim_name: item.claim_name,
+            type: item.type || "send",
+            nout: item.nout,
+          };
+        })
+      );
     });
-    return transactionItems.reverse();
+    return items.reverse();
   }
 );
 

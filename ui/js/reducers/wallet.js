@@ -10,7 +10,7 @@ const buildDraftTransaction = () => ({
 const defaultState = {
   balance: undefined,
   blocks: {},
-  transactions: [],
+  transactions: {},
   fetchingTransactions: false,
   receiveAddress: address,
   gettingNewAddress: false,
@@ -25,20 +25,16 @@ reducers[types.FETCH_TRANSACTIONS_STARTED] = function(state, action) {
 };
 
 reducers[types.FETCH_TRANSACTIONS_COMPLETED] = function(state, action) {
-  const oldTransactions = Object.assign({}, state.transactions);
-  const byId = Object.assign({}, oldTransactions.byId);
+  let byId = Object.assign({}, state.transactions);
+
   const { transactions } = action.data;
 
   transactions.forEach(transaction => {
     byId[transaction.txid] = transaction;
   });
 
-  const newTransactions = Object.assign({}, oldTransactions, {
-    byId: byId,
-  });
-
   return Object.assign({}, state, {
-    transactions: newTransactions,
+    transactions: byId,
     fetchingTransactions: false,
   });
 };

@@ -1,5 +1,5 @@
 import React from "react";
 import { connect } from "react-redux";
-import Link from "./view";
+import LinkTransaction from "./view";
 
-export default connect(null, null)(Link);
+export default connect(null, null)(LinkTransaction);
