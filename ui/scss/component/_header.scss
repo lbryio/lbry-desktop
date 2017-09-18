@@ -57,20 +57,27 @@
   }
 }
 
+/* Tabs */
+
 nav.sub-header
 {
   text-transform: uppercase;
-  padding: 0 0 $spacing-vertical;
   max-width: $width-page-constrained;
-  margin-left: auto;
-  margin-right: auto;
+  margin-bottom: 40px;
+  border-bottom: var(--divider);
   > a
   {
+    height: 38px;
+    line-height: 38px;
+    text-align: center;
+    font-weight: 600;
+    text-transform: uppercase;
     display: inline-block;
-    margin: 0 15px;
-    padding: 0 5px;
-    line-height:calc(var(--header-height) - $spacing-vertical - var(--tab-border-size));
+    vertical-align: baseline;
+    margin: 0 8px;
+    padding: 0 8px;
     color: var(--tab-color);
+    position: relative;
 
     &:first-child
     {
@@ -82,12 +89,28 @@ nav.sub-header
     }
     &.sub-header-selected
     {
-      border-bottom: var(--tab-border);
       color: var(--tab-active-color);
+      &:before {
+        width: 100%;
+        height: var(--tab-border-size);
+        background: var(--tab-active-color);
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        content: '';
+        animation-name: activeTab;
+        animation-duration: 0.3s;
+        animation-timing-function: cubic-bezier(.55,0,.1,1);
+      }
     }
     &:hover
     {
       color: var(--tab-active-color);
     }
   }
+}
+
+@keyframes activeTab {
+    from {width: 0;}
+    to {width: 100%;}
 }
