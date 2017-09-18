@@ -13,6 +13,10 @@ class Video extends React.PureComponent {
     };
   }
 
+  componentWillUnmount() {
+    this.props.cancelPlay();
+  }
+
   isMediaSame(nextProps) {
     return (
       this.props.fileInfo &&

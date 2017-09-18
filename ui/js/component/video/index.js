@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { doChangeVolume } from "actions/app";
 import { selectVolume } from "selectors/app";
-import { doPlayUri } from "actions/content";
+import { doPlayUri, doSetPlayingUri } from "actions/content";
 import {
   makeSelectMetadataForUri,
   makeSelectContentTypeForUri,
@@ -31,6 +31,7 @@ const select = (state, props) => ({
 
 const perform = dispatch => ({
   play: uri => dispatch(doPlayUri(uri)),
+  cancelPlay: () => dispatch(doSetPlayingUri(null)),
   changeVolume: volume => dispatch(doChangeVolume(volume)),
 });
 
