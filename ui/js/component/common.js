@@ -70,8 +70,7 @@ export class CreditAmount extends React.PureComponent {
     showFree: React.PropTypes.bool,
     showFullPrice: React.PropTypes.bool,
     showPlus: React.PropTypes.bool,
-    look: React.PropTypes.oneOf(["indicator", "plain"]),
-    fee: React.PropTypes.bool,
+    look: React.PropTypes.oneOf(["indicator", "plain", "fee"]),
   };
 
   static defaultProps = {
@@ -79,10 +78,8 @@ export class CreditAmount extends React.PureComponent {
     label: true,
     showFree: false,
     look: "indicator",
-    showFree: false,
     showFullPrice: false,
     showPlus: false,
-    fee: false,
   };
 
   render() {
@@ -119,10 +116,7 @@ export class CreditAmount extends React.PureComponent {
 
     return (
       <span
-        className={`credit-amount credit-amount--${this.props.look} ${this.props
-          .fee
-          ? " meta"
-          : ""}`}
+        className={`credit-amount credit-amount--${this.props.look}`}
         title={fullPrice}
       >
         <span>
