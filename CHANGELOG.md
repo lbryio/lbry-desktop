@@ -14,9 +14,12 @@ Web UI version numbers should always match the corresponding version of LBRY App
   * File pages now show the time of a publish.
   * The "auth token" displayable on Help offers security warning
   * Added a new component for rendering dates and times. This component can render the date and time of a block height, as well.
-
+  * Added a new theme system to select different themes in Settings.
+  * Added a new dark theme which works as a night mode.
+  
 ### Changed
-  *
+  * Refactor of scss vars to CSS vars and the consequent support for easy theming.
+  * 
 
 ### Fixed
   * URLs on cards no longer wrap and show an ellipsis if longer than one line
