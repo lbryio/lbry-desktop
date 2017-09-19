@@ -26,9 +26,10 @@
 /* Adjustments for icon size and alignment */
 .icon-rocket {
   font-size: 0.95em;
-  margin-left: .025em;
-  margin-right: .025em;
-  margin-top: -0.5em;
+  position: relative;
+  top: -0.04em;
+  margin-left: 0.025em;
+  margin-right: 0.025em;
 }
 
 /* Font Awesome uses the Unicode Private Use Area (PUA) to ensure screen
