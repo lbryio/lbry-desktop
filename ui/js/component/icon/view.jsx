@@ -5,7 +5,6 @@ export default class Icon extends React.PureComponent {
   static propTypes = {
     icon: React.PropTypes.string.isRequired,
     fixed: React.PropTypes.bool,
-    className: React.PropTypes.string,
   };
 
   static defaultProps = {
@@ -39,9 +38,9 @@ export default class Icon extends React.PureComponent {
 
     const spanClassName =
       "icon " +
+      ("lbry-icon-" + this.props.icon + " ") +
       className +
-      (this.props.fixed ? " icon-fixed-width " : "") +
-      (this.props.className || "");
+      (this.props.fixed ? " icon-fixed-width " : "");
 
     return <span className={spanClassName} title={title} />;
   }
