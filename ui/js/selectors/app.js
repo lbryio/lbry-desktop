@@ -106,4 +106,14 @@ export const selectCurrentLanguage = createSelector(
   () => app.i18n.getLocale() || "en"
 );
 
+export const selectKeepMedia = createSelector(
+  _selectState,
+  state => state.keepMedia
+);
+
+export const selectMediaUri = createSelector(
+  _selectState,
+  state => state.mediaUri
+);
+
 export const selectVolume = createSelector(_selectState, state => state.volume);

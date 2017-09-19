@@ -151,6 +151,21 @@ reducers[types.VOLUME_CHANGED] = function(state, action) {
   });
 };
 
+reducers[types.OPEN_OVERLAY_MEDIA] = function(state, action) {
+  const { mediaUri } = actionl;
+  return Object.assign({}, state, {
+    keepMedia: true,
+    mediaUri,
+  });
+};
+
+reducers[types.CLOSE_OVERLAY_MEDIA] = function(state, action) {
+  return Object.assign({}, state, {
+    keepMedia: false,
+    mediaUri: null,
+  });
+};
+
 export default function reducer(state = defaultState, action) {
   const handler = reducers[action.type];
   if (handler) return handler(state, action);

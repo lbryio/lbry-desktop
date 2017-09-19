@@ -2,6 +2,7 @@ import React from "react";
 import Router from "component/router/index";
 import Header from "component/header";
 import Theme from "component/theme";
+import OverlayMedia from "component/overlayMedia";
 import ModalRouter from "modal/modalRouter";
 import lbry from "lbry";
 
@@ -48,11 +49,13 @@ class App extends React.PureComponent {
   }
 
   render() {
+    const { keepMedia } = this.props;
     return (
       <div id="window">
         <Theme />
         <Header />
         <div id="main-content">
+          {keepMedia && <OverlayMedia />}
           <Router />
         </div>
         <ModalRouter />

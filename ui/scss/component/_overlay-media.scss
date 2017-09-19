@@ -1,0 +1,56 @@
+.floating {
+
+  background: var(--card-bg);
+  box-shadow: var(--box-shadow-focus);
+  margin: auto;
+  width: 320px;
+  height: 240px;
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  overflow: auto;
+  animation-name: open;
+  animation-duration: 0.3s;
+  animation-timing-function: cubic-bezier(.55,0,.1,1);
+  z-index: 99;
+
+  &.hide {
+    opacity: 0
+    transform: translateY(344px);
+    transition: all 0.3s cubic-bezier(.55,0,.1,1);
+  }
+
+
+  & .video-embedded{
+    height: 100%;
+    pointer-events: none;
+  }
+
+  & .button-close {
+    opacity: 0.5;
+    background: rgba(0, 0, 0, 0.25);
+    border-radius: 24px;
+    position: absolute;
+    height: 22px;
+    width: 22px;
+    top: 8px;
+    right: 8px;
+    z-index: 99;
+    color: #FFF;
+    text-align: center;
+    cursor: pointer;
+  }
+
+}
+
+
+@keyframes open{
+  from {
+    transform: translateY(344px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+   }
+}

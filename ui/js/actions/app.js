@@ -219,3 +219,16 @@ export function doChangeVolume(volume) {
     });
   };
 }
+
+export function doOpenOverlayMedia(mediaUri) {
+  return {
+    type: types.OPEN_OVERLAY_MEDIA,
+    data: { mediaUri },
+  };
+}
+
+export function doCloseOverlayMedia(mediaUri) {
+  return {
+    type: types.CLOSE_OVERLAY_MEDIA,
+  };
+}
