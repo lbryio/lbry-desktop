@@ -56,7 +56,10 @@ class Video extends React.PureComponent {
       changeVolume,
       volume,
       uri,
+      controls,
     } = this.props;
+
+    const hasControls = controls || false;
 
     const isPlaying = playingUri === uri;
     const isReadyToPlay = fileInfo && fileInfo.written_bytes > 0;
@@ -111,6 +114,7 @@ class Video extends React.PureComponent {
                 downloadCompleted={fileInfo.completed}
                 changeVolume={changeVolume}
                 volume={volume}
+                controls={hasControls}
               />)}
         {!isPlaying &&
           <div
