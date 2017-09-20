@@ -29,19 +29,21 @@ export const selectTransactionItems = createSelector(
 
       append.push(
         ...tx.claim_info.map(item =>
-          Object.assign({}, item, {
+          Object.assign({}, tx, item, {
             type: item.claim_name[0] === "@" ? "channel" : "publish",
           })
         )
       );
       append.push(
         ...tx.support_info.map(item =>
-          Object.assign({}, item, { type: !item.is_tip ? "support" : "tip" })
+          Object.assign({}, tx, item, {
+            type: !item.is_tip ? "support" : "tip",
+          })
         )
       );
       append.push(
         ...tx.update_info.map(item =>
-          Object.assign({}, item, { type: "update" })
+          Object.assign({}, tx, item, { type: "update" })
         )
       );
 
@@ -58,7 +60,7 @@ export const selectTransactionItems = createSelector(
           //value on transaction, amount on outpoint
           //amount is always positive, but should match sign of value
           const amount = parseFloat(
-            item.value || (item.value < 0 ? -1 : 1) * item.amount
+            item.amount ? (item.value < 0 ? -1 : 1) * item.amount : item.value
           );
 
           return {
