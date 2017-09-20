@@ -55,7 +55,11 @@ export const selectTransactionItems = createSelector(
 
       items.push(
         ...append.map(item => {
-          const amount = parseFloat(item.value || -1 * item.amount); //it's value on a transaction, amount on an outpoint (which has the sign the opposite way)
+          //value on transaction, amount on outpoint
+          //amount is always positive, but should match sign of value
+          const amount = parseFloat(
+            item.value || (item.value < 0 ? -1 : 1) * item.amount
+          );
 
           return {
             txid: txid,
