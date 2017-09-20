@@ -193,7 +193,8 @@ lbry.getCostInfo = function(uri) {
       const COST_INFO_CACHE_KEY = "cost_info_cache";
       let costInfoCache = getSession(COST_INFO_CACHE_KEY, {});
 
-      function cacheAndResolve(cost, includesData) {
+      function cacheAndResolve(cost) {
+        const includesData = false;
         costInfoCache[uri] = { cost, includesData };
         setSession(COST_INFO_CACHE_KEY, costInfoCache);
         resolve({ cost, includesData });
@@ -211,7 +212,7 @@ lbry.getCostInfo = function(uri) {
       const name = uriObj.path || uriObj.name;
 
       lbry.stream_cost_estimate({ uri }).then(cost => {
-        cacheAndResolve(cost, size !== null);
+        cacheAndResolve(cost);
       }, reject);
     });
   }
