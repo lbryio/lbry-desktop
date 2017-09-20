@@ -207,24 +207,12 @@ lbry.getCostInfo = function(uri) {
         return resolve(costInfoCache[uri]);
       }
 
-      function getCost(uri, size) {
-        lbry
-          .stream_cost_estimate({ uri, ...(size !== null ? { size } : {}) })
-          .then(cost => {
-            cacheAndResolve(cost, size !== null);
-          }, reject);
-      }
-
       const uriObj = lbryuri.parse(uri);
       const name = uriObj.path || uriObj.name;
 
-      lighthouse.get_size_for_name(name).then(size => {
-        if (size) {
-          getCost(name, size);
-        } else {
-          getCost(name, null);
-        }
-      });
+      lbry.stream_cost_estimate({ uri }).then(cost => {
+        cacheAndResolve(cost, size !== null);
+      }, reject);
     });
   }
   return lbry.costPromiseCache[uri];

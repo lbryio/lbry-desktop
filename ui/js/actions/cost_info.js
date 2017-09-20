@@ -45,7 +45,7 @@ export function doFetchCostInfoForUri(uri) {
       } else if (fee.currency == "LBC") {
         resolve({ cost: fee.amount, includesData: true });
       } else {
-        begin();
+        // begin();
         lbryio.getExchangeRates().then(({ lbc_usd }) => {
           resolve({ cost: fee.amount / lbc_usd, includesData: true });
         });
