@@ -1,6 +1,7 @@
 import { createSelector } from "reselect";
 import { selectCurrentParams } from "selectors/navigation";
 import lbryuri from "lbryuri";
+import { makeSelectCurrentParam } from "./navigation";
 
 const _selectState = state => state.claims || {};
 
@@ -72,11 +73,14 @@ export const makeSelectFetchingChannelClaims = uri => {
   );
 };
 
-export const makeSelectClaimsInChannelForCurrentPage = (uri, page = 1) => {
+export const makeSelectClaimsInChannelForCurrentPage = uri => {
+  const pageSelector = makeSelectCurrentParam("page");
+
   return createSelector(
     selectClaimsById,
     selectAllClaimsByChannel,
-    (byId, allClaims) => {
+    pageSelector,
+    (byId, allClaims, page) => {
       const byChannel = allClaims[uri] || {};
       const claimIds = byChannel[page];
 

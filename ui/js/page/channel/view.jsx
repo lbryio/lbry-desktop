@@ -25,7 +25,7 @@ class ChannelPage extends React.PureComponent {
   }
 
   changePage(pageNumber) {
-    const { params, currentPage } = this.props;
+    const { params } = this.props;
     const newParams = Object.assign({}, params, { page: pageNumber });
 
     this.props.navigate("/show", newParams);
