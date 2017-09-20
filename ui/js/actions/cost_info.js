@@ -33,26 +33,53 @@ export function doFetchCostInfoForUri(uri) {
       });
     }
 
-    if (isGenerous && claim) {
-      let cost;
-      const fee = claim.value &&
-        claim.value.stream &&
-        claim.value.stream.metadata
-        ? claim.value.stream.metadata.fee
-        : undefined;
-      if (fee === undefined) {
-        resolve({ cost: 0, includesData: true });
-      } else if (fee.currency == "LBC") {
-        resolve({ cost: fee.amount, includesData: true });
-      } else {
-        // begin();
-        lbryio.getExchangeRates().then(({ lbc_usd }) => {
-          resolve({ cost: fee.amount / lbc_usd, includesData: true });
-        });
-      }
+    /**
+     * "Generous" check below is disabled. We're no longer attempting to include or estimate data fees regardless of settings.
+     *
+     * This should be modified when lbry.stream_cost_estimate is reliable and performant.
+     */
+
+    /*
+      lbry.stream_cost_estimate({ uri }).then(cost => {
+        cacheAndResolve(cost);
+      }, reject);
+     */
+
+    const fee = claim.value && claim.value.stream && claim.value.stream.metadata
+      ? claim.value.stream.metadata.fee
+      : undefined;
+
+    if (fee === undefined) {
+      resolve({ cost: 0, includesData: true });
+    } else if (fee.currency == "LBC") {
+      resolve({ cost: fee.amount, includesData: true });
     } else {
-      begin();
-      lbry.getCostInfo(uri).then(resolve);
+      // begin();
+      lbryio.getExchangeRates().then(({ lbc_usd }) => {
+        resolve({ cost: fee.amount / lbc_usd, includesData: true });
+      });
     }
+
+    // if (isGenerous && claim) {
+    //   let cost;
+    //   const fee = claim.value &&
+    //     claim.value.stream &&
+    //     claim.value.stream.metadata
+    //     ? claim.value.stream.metadata.fee
+    //     : undefined;
+    //   if (fee === undefined) {
+    //     resolve({ cost: 0, includesData: true });
+    //   } else if (fee.currency == "LBC") {
+    //     resolve({ cost: fee.amount, includesData: true });
+    //   } else {
+    //     // begin();
+    //     lbryio.getExchangeRates().then(({ lbc_usd }) => {
+    //       resolve({ cost: fee.amount / lbc_usd, includesData: true });
+    //     });
+    //   }
+    // } else {
+    //   begin();
+    //   lbry.getCostInfo(uri).then(resolve);
+    // }
   };
 }
