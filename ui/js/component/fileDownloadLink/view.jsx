@@ -92,7 +92,7 @@ class FileDownloadLink extends React.PureComponent {
           label={__("Open")}
           button="text"
           icon="icon-external-link-square"
-          onClick={() => openInShell(fileInfo)}
+          onClick={() => openInShell(fileInfo.download_path)}
         />
       );
     }

@@ -5,9 +5,18 @@ import FileActions from "component/fileActions";
 import Link from "component/link";
 import DateTime from "component/dateTime";
 
+const path = require("path");
+
 class FileDetails extends React.PureComponent {
   render() {
-    const { claim, contentType, metadata, uri } = this.props;
+    const {
+      claim,
+      contentType,
+      fileInfo,
+      metadata,
+      openFolder,
+      uri,
+    } = this.props;
 
     if (!claim || !metadata) {
       return (
@@ -20,6 +29,9 @@ class FileDetails extends React.PureComponent {
     const { description, language, license } = metadata;
     const { height } = claim;
     const mediaType = lbry.getMediaType(contentType);
+    const directory = fileInfo && fileInfo.download_path
+      ? path.dirname(fileInfo.download_path)
+      : null;
 
     return (
       <div>
@@ -47,6 +59,15 @@ class FileDetails extends React.PureComponent {
               <tr>
                 <td>{__("License")}</td><td>{license}</td>
               </tr>
+              {directory &&
+                <tr>
+                  <td>{__("Downloaded to")}</td>
+                  <td>
+                    <Link onClick={() => openFolder(directory)}>
+                      {directory}
+                    </Link>
+                  </td>
+                </tr>}
             </tbody>
           </table>
           <p>
