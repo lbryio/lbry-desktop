@@ -13,7 +13,7 @@ import {
 import { makeSelectCostInfoForUri } from "selectors/cost_info";
 import { selectShowNsfw } from "selectors/settings";
 import FilePage from "./view";
-import { makeSelectCurrentParam } from "../../selectors/navigation";
+import { makeSelectCurrentParam } from "selectors/navigation";
 
 const select = (state, props) => ({
   claim: makeSelectClaimForUri(props.uri)(state),

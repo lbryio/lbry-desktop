@@ -9,18 +9,19 @@ import {
   makeSelectClaimsInChannelForCurrentPage,
   makeSelectFetchingChannelClaims,
 } from "selectors/claims";
-import { selectCurrentParams } from "selectors/navigation";
+import {
+  makeSelectCurrentParam,
+  selectCurrentParams,
+} from "selectors/navigation";
 import { doNavigate } from "actions/navigation";
 import { makeSelectTotalPagesForChannel } from "selectors/content";
 import ChannelPage from "./view";
 
 const select = (state, props) => ({
   claim: makeSelectClaimForUri(props.uri)(state),
-  claimsInChannel: makeSelectClaimsInChannelForCurrentPage(
-    props.uri,
-    props.page
-  )(state),
+  claimsInChannel: makeSelectClaimsInChannelForCurrentPage(props.uri)(state),
   fetching: makeSelectFetchingChannelClaims(props.uri)(state),
+  page: makeSelectCurrentParam("page")(state),
   params: selectCurrentParams(state),
   totalPages: makeSelectTotalPagesForChannel(props.uri)(state),
 });

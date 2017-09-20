@@ -2,7 +2,6 @@ import React from "react";
 import lbryuri from "lbryuri";
 import { BusyMessage } from "component/common";
 import FileTile from "component/fileTile";
-import Link from "component/link";
 import ReactPaginate from "react-paginate";
 
 class ChannelPage extends React.PureComponent {
@@ -16,7 +15,7 @@ class ChannelPage extends React.PureComponent {
   componentWillReceiveProps(nextProps) {
     const { page, uri, fetching, fetchClaims, fetchClaimCount } = this.props;
 
-    if (fetching !== nextProps.page && page !== nextProps.page) {
+    if (nextProps.page && page !== nextProps.page) {
       fetchClaims(nextProps.uri, nextProps.page);
     }
     if (nextProps.uri != uri) {
@@ -42,10 +41,10 @@ class ChannelPage extends React.PureComponent {
     } = this.props;
 
     let contentList;
-    if (claimsInChannel === undefined) {
+    if (fetching) {
       contentList = <BusyMessage message={__("Fetching content")} />;
-    } else if (claimsInChannel) {
-      contentList = claimsInChannel.length
+    } else {
+      contentList = claimsInChannel && claimsInChannel.length
         ? claimsInChannel.map(claim =>
             <FileTile
               key={claim.claim_id}

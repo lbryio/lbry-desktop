@@ -80,7 +80,7 @@ reducers[types.FETCH_CHANNEL_CLAIM_COUNT_COMPLETED] = function(state, action) {
   const channelPages = Object.assign({}, state.channelPages);
   const { uri, totalClaims } = action.data;
 
-  channelPages[uri] = totalClaims / 10;
+  channelPages[uri] = Math.ceil(totalClaims / 10);
 
   return Object.assign({}, state, {
     channelPages,

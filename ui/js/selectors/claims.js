@@ -82,7 +82,7 @@ export const makeSelectClaimsInChannelForCurrentPage = uri => {
     pageSelector,
     (byId, allClaims, page) => {
       const byChannel = allClaims[uri] || {};
-      const claimIds = byChannel[page];
+      const claimIds = byChannel[page || 1];
 
       if (!claimIds) return claimIds;
 

@@ -355,7 +355,7 @@ export function doFetchClaimsByChannel(uri, page) {
       data: { uri, page },
     });
 
-    lbry.claim_list_by_channel({ uri, page }).then(result => {
+    lbry.claim_list_by_channel({ uri, page: page || 1 }).then(result => {
       const claimResult = result[uri],
         claims = claimResult ? claimResult.claims_in_channel : [],
         currentPage = claimResult ? claimResult.returned_page : undefined;
