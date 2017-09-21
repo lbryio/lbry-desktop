@@ -10,7 +10,6 @@ import { doFetchAvailability } from "actions/availability";
 import { doOpenFileInShell } from "actions/file_info";
 import { doPurchaseUri, doStartDownload } from "actions/content";
 import FileDownloadLink from "./view";
-import * as modals from "constants/modal_types";
 
 const select = (state, props) => ({
   fileInfo: makeSelectFileInfoForUri(props.uri)(state),
@@ -22,9 +21,8 @@ const select = (state, props) => ({
 
 const perform = dispatch => ({
   checkAvailability: uri => dispatch(doFetchAvailability(uri)),
-  openInShell: fileInfo => dispatch(doOpenFileInShell(fileInfo)),
-  startDownload: uri =>
-    dispatch(doPurchaseUri(uri, modals.CONFIRM_FILE_PURCHASE)),
+  openInShell: path => dispatch(doOpenFileInShell(path)),
+  purchaseUri: uri => dispatch(doPurchaseUri(uri)),
   restartDownload: (uri, outpoint) => dispatch(doStartDownload(uri, outpoint)),
 });
 

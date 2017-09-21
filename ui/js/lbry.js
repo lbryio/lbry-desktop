@@ -177,60 +177,6 @@ lbry.connect = function() {
 };
 
 /**
- * Takes a LBRY URI; will first try and calculate a total cost using
- * Lighthouse. If Lighthouse can't be reached, it just retrives the
- * key fee.
- *
- * Returns an object with members:
- *   - cost: Number; the calculated cost of the name
- *   - includes_data: Boolean; indicates whether or not the data fee info
- *     from Lighthouse is included.
- */
-lbry.costPromiseCache = {};
-lbry.getCostInfo = function(uri) {
-  if (lbry.costPromiseCache[uri] === undefined) {
-    lbry.costPromiseCache[uri] = new Promise((resolve, reject) => {
-      const COST_INFO_CACHE_KEY = "cost_info_cache";
-      let costInfoCache = getSession(COST_INFO_CACHE_KEY, {});
-
-      function cacheAndResolve(cost, includesData) {
-        costInfoCache[uri] = { cost, includesData };
-        setSession(COST_INFO_CACHE_KEY, costInfoCache);
-        resolve({ cost, includesData });
-      }
-
-      if (!uri) {
-        return reject(new Error(`URI required.`));
-      }
-
-      if (costInfoCache[uri] && costInfoCache[uri].cost) {
-        return resolve(costInfoCache[uri]);
-      }
-
-      function getCost(uri, size) {
-        lbry
-          .stream_cost_estimate({ uri, ...(size !== null ? { size } : {}) })
-          .then(cost => {
-            cacheAndResolve(cost, size !== null);
-          }, reject);
-      }
-
-      const uriObj = lbryuri.parse(uri);
-      const name = uriObj.path || uriObj.name;
-
-      lighthouse.get_size_for_name(name).then(size => {
-        if (size) {
-          getCost(name, size);
-        } else {
-          getCost(name, null);
-        }
-      });
-    });
-  }
-  return lbry.costPromiseCache[uri];
-};
-
-/**
  * Publishes a file. The optional fileListedCallback is called when the file becomes available in
  * lbry.file_list() during the publish process.
  *

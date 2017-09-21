@@ -10,18 +10,26 @@ class TransactionHistoryPage extends React.PureComponent {
 
   render() {
     const { fetchingTransactions, transactions } = this.props;
+
     return (
       <main className="main--single-column">
         <SubHeader />
         <section className="card">
-          <div className="card__title-primary">
+          <div
+            className={
+              "card__title-primary " +
+              (fetchingTransactions && transactions.length ? "reloading" : "")
+            }
+          >
             <h3>{__("Transaction History")}</h3>
           </div>
           <div className="card__content">
-            {fetchingTransactions &&
-              <BusyMessage message={__("Loading transactions")} />}
-            {!fetchingTransactions &&
-              <TransactionList transactions={transactions} />}
+            {fetchingTransactions && !transactions.length
+              ? <BusyMessage message={__("Loading transactions")} />
+              : ""}
+            {transactions && transactions.length
+              ? <TransactionList transactions={transactions} />
+              : ""}
           </div>
         </section>
       </main>

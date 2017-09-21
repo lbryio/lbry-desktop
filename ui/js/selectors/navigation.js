@@ -10,8 +10,11 @@ export const selectCurrentPath = createSelector(
   state => state.currentPath
 );
 
+export const computePageFromPath = path =>
+  path.replace(/^\//, "").split("?")[0];
+
 export const selectCurrentPage = createSelector(selectCurrentPath, path => {
-  return path.replace(/^\//, "").split("?")[0];
+  return computePageFromPath(path);
 });
 
 export const selectCurrentParams = createSelector(selectCurrentPath, path => {
@@ -87,7 +90,7 @@ export const selectPageTitle = createSelector(
       case "start":
         return __("Start");
       case "publish":
-        return __("Publish");
+        return params.id ? __("Edit") : __("Publish");
       case "help":
         return __("Help");
       case "developer":

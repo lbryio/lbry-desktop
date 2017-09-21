@@ -1,0 +1,85 @@
+import React from "react";
+import ReactMarkdown from "react-markdown";
+import lbry from "lbry.js";
+import FileActions from "component/fileActions";
+import Link from "component/link";
+import DateTime from "component/dateTime";
+
+const path = require("path");
+
+class FileDetails extends React.PureComponent {
+  render() {
+    const {
+      claim,
+      contentType,
+      fileInfo,
+      metadata,
+      openFolder,
+      uri,
+    } = this.props;
+
+    if (!claim || !metadata) {
+      return (
+        <div className="card__content">
+          <span className="empty">{__("Empty claim or metadata info.")}</span>
+        </div>
+      );
+    }
+
+    const { description, language, license } = metadata;
+    const { height } = claim;
+    const mediaType = lbry.getMediaType(contentType);
+    const directory = fileInfo && fileInfo.download_path
+      ? path.dirname(fileInfo.download_path)
+      : null;
+
+    return (
+      <div>
+        <FileActions uri={uri} />
+        <div className="card__content card__subtext card__subtext--allow-newlines">
+          <ReactMarkdown
+            source={description || ""}
+            escapeHtml={true}
+            disallowedTypes={["Heading", "HtmlInline", "HtmlBlock"]}
+          />
+        </div>
+        <div className="card__content">
+          <table className="table-standard table-stretch">
+            <tbody>
+              <tr>
+                <td>{__("Published on")}</td>
+                <td><DateTime block={height} /></td>
+              </tr>
+              <tr>
+                <td>{__("Content-Type")}</td><td>{mediaType}</td>
+              </tr>
+              <tr>
+                <td>{__("Language")}</td><td>{language}</td>
+              </tr>
+              <tr>
+                <td>{__("License")}</td><td>{license}</td>
+              </tr>
+              {directory &&
+                <tr>
+                  <td>{__("Downloaded to")}</td>
+                  <td>
+                    <Link onClick={() => openFolder(directory)}>
+                      {directory}
+                    </Link>
+                  </td>
+                </tr>}
+            </tbody>
+          </table>
+          <p>
+            <Link
+              href={`https://lbry.io/dmca?claim_id=${claim.claim_id}`}
+              label={__("report")}
+            />
+          </p>
+        </div>
+      </div>
+    );
+  }
+}
+
+export default FileDetails;

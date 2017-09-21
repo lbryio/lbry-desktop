@@ -1,6 +1,7 @@
 import { createSelector } from "reselect";
 import { selectCurrentParams } from "selectors/navigation";
 import lbryuri from "lbryuri";
+import { makeSelectCurrentParam } from "./navigation";
 
 const _selectState = state => state.claims || {};
 
@@ -66,19 +67,22 @@ export const selectAllFetchingChannelClaims = createSelector(
 );
 
 export const makeSelectFetchingChannelClaims = uri => {
-  createSelector(
+  return createSelector(
     selectAllFetchingChannelClaims,
     fetching => fetching && fetching[uri]
   );
 };
 
-export const makeSelectClaimsInChannelForCurrentPage = (uri, page = 1) => {
+export const makeSelectClaimsInChannelForCurrentPage = uri => {
+  const pageSelector = makeSelectCurrentParam("page");
+
   return createSelector(
     selectClaimsById,
     selectAllClaimsByChannel,
-    (byId, allClaims) => {
+    pageSelector,
+    (byId, allClaims, page) => {
       const byChannel = allClaims[uri] || {};
-      const claimIds = byChannel[page];
+      const claimIds = byChannel[page || 1];
 
       if (!claimIds) return claimIds;
 
@@ -95,6 +99,13 @@ export const makeSelectMetadataForUri = uri => {
     const value = metadata ? metadata : claim === undefined ? undefined : null;
     return value;
   });
+};
+
+export const makeSelectTitleForUri = uri => {
+  return createSelector(
+    makeSelectMetadataForUri(uri),
+    metadata => metadata && metadata.title
+  );
 };
 
 export const makeSelectContentTypeForUri = uri => {

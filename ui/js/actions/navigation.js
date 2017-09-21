@@ -1,5 +1,6 @@
 import * as types from "constants/action_types";
 import {
+  computePageFromPath,
   selectPageTitle,
   selectCurrentPage,
   selectCurrentParams,
@@ -20,9 +21,17 @@ export function doNavigate(path, params = {}, options = {}) {
       url += "?" + toQueryString(params);
     }
 
-    dispatch(doChangePath(url, options));
+    const state = getState(),
+      currentPage = selectCurrentPage(state),
+      nextPage = computePageFromPath(path),
+      scrollY = options.scrollY;
 
-    const pageTitle = selectPageTitle(getState()) + " - LBRY";
+    if (currentPage != nextPage) {
+      //I wasn't seeing it scroll to the proper position without this -- possibly because the page isn't fully rendered? Not sure - Jeremy
+      setTimeout(() => {
+        window.scrollTo(0, scrollY ? scrollY : 0);
+      }, 100);
+    }
 
     dispatch({
       type: types.HISTORY_NAVIGATE,
@@ -42,31 +51,6 @@ export function doAuthNavigate(pathAfterAuth = null, params = {}) {
       });
     }
     dispatch(doNavigate("/auth"));
-  };
-}
-
-export function doChangePath(path, options = {}) {
-  return function(dispatch, getState) {
-    dispatch({
-      type: types.CHANGE_PATH,
-      data: {
-        path,
-      },
-    });
-
-    const state = getState();
-    const scrollY = options.scrollY;
-
-    //I wasn't seeing it scroll to the proper position without this -- possibly because the page isn't fully rendered? Not sure - Jeremy
-    setTimeout(() => {
-      window.scrollTo(0, scrollY ? scrollY : 0);
-    }, 100);
-
-    const currentPage = selectCurrentPage(state);
-    if (currentPage === "search") {
-      const params = selectCurrentParams(state);
-      dispatch(doSearch(params.query));
-    }
   };
 }
 

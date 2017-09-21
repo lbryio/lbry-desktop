@@ -36,6 +36,7 @@ class ShowPage extends React.PureComponent {
                 message={__("Loading magic decentralized data...")}
               />}
             {claim === null &&
+              !isResolvingUri &&
               <span className="empty">
                 {__("There's nothing at this location.")}
               </span>}

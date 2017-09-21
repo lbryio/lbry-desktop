@@ -1,5 +1,7 @@
 import React from "react";
 import { Icon } from "component/common";
+import Link from "component/link";
+import lbryuri from "lbryuri.js";
 
 class UriIndicator extends React.PureComponent {
   componentWillMount() {
@@ -19,7 +21,7 @@ class UriIndicator extends React.PureComponent {
   }
 
   render() {
-    const { claim, uri, isResolvingUri } = this.props;
+    const { claim, link, uri, isResolvingUri } = this.props;
 
     if (isResolvingUri && !claim) {
       return <span className="empty">Validating...</span>;
@@ -33,21 +35,30 @@ class UriIndicator extends React.PureComponent {
       channel_name: channelName,
       has_signature: hasSignature,
       signature_is_valid: signatureIsValid,
+      value,
     } = claim;
+    const channelClaimId =
+      value &&
+      value.publisherSignature &&
+      value.publisherSignature.certificateId;
 
     if (!hasSignature || !channelName) {
       return <span className="empty">Anonymous</span>;
     }
 
-    let icon, modifier;
+    let icon, channelLink, modifier;
+
     if (signatureIsValid) {
       modifier = "valid";
+      channelLink = link
+        ? lbryuri.build({ channelName, claimId: channelClaimId }, false)
+        : false;
     } else {
       icon = "icon-times-circle";
       modifier = "invalid";
     }
 
-    return (
+    const inner = (
       <span>
         {channelName} {" "}
         {!signatureIsValid
@@ -57,6 +68,16 @@ class UriIndicator extends React.PureComponent {
             />
           : ""}
       </span>
+    );
+
+    if (!channelLink) {
+      return inner;
+    }
+
+    return (
+      <Link navigate="/show" navigateParams={{ uri: channelLink }}>
+        {inner}
+      </Link>
     );
   }
 }

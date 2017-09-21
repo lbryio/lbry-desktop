@@ -322,38 +322,29 @@ export function doPurchaseUri(uri) {
     const downloadingByOutpoint = selectDownloadingByOutpoint(state);
     const alreadyDownloading =
       fileInfo && !!downloadingByOutpoint[fileInfo.outpoint];
-
-    // we already fully downloaded the file.
-    if (fileInfo && fileInfo.completed) {
-      // If written_bytes is false that means the user has deleted/moved the
-      // file manually on their file system, so we need to dispatch a
-      // doLoadVideo action to reconstruct the file from the blobs
-      if (!fileInfo.written_bytes) dispatch(doLoadVideo(uri));
-
-      return Promise.resolve();
-    }
-
-    // we are already downloading the file
-    if (alreadyDownloading) {
-      return Promise.resolve();
-    }
-
     const costInfo = makeSelectCostInfoForUri(uri)(state);
     const { cost } = costInfo;
 
-    // the file is free or we have partially downloaded it
-    if (cost === 0 || (fileInfo && fileInfo.download_directory)) {
-      dispatch(doLoadVideo(uri));
-      return Promise.resolve();
+    if (
+      alreadyDownloading ||
+      (fileInfo && fileInfo.completed && fileInfo.written_bytes > 0)
+    ) {
+      return;
+    }
+
+    // we already fully downloaded the file.
+    if (
+      cost === 0 ||
+      (fileInfo && (fileInfo.completed || fileInfo.download_directory))
+    ) {
+      return dispatch(doLoadVideo(uri));
     }
 
     if (cost > balance) {
-      dispatch(doOpenModal(modals.INSUFFICIENT_CREDITS));
-    } else {
-      dispatch(doOpenModal(modals.AFFIRM_PURCHASE, { uri }));
+      return dispatch(doOpenModal(modals.INSUFFICIENT_CREDITS));
     }
 
-    return Promise.resolve();
+    return dispatch(doOpenModal(modals.AFFIRM_PURCHASE, { uri }));
   };
 }
 
@@ -364,7 +355,7 @@ export function doFetchClaimsByChannel(uri, page) {
       data: { uri, page },
     });
 
-    lbry.claim_list_by_channel({ uri, page }).then(result => {
+    lbry.claim_list_by_channel({ uri, page: page || 1 }).then(result => {
       const claimResult = result[uri],
         claims = claimResult ? claimResult.claims_in_channel : [],
         currentPage = claimResult ? claimResult.returned_page : undefined;
@@ -416,6 +407,22 @@ export function doFetchClaimListMine() {
           claims,
         },
       });
+    });
+  };
+}
+
+export function doPlayUri(uri) {
+  return function(dispatch, getState) {
+    dispatch(doSetPlayingUri(uri));
+    dispatch(doPurchaseUri(uri));
+  };
+}
+
+export function doSetPlayingUri(uri) {
+  return function(dispatch, getState) {
+    dispatch({
+      type: types.SET_PLAYING_URI,
+      data: { uri },
     });
   };
 }

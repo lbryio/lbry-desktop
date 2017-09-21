@@ -2,6 +2,7 @@ import * as types from "constants/action_types";
 
 const reducers = {};
 const defaultState = {
+  playingUri: null,
   rewardedContentClaimIds: [],
   channelPages: {},
 };
@@ -58,6 +59,12 @@ reducers[types.RESOLVE_URI_CANCELED] = reducers[
   });
 };
 
+reducers[types.SET_PLAYING_URI] = (state, action) => {
+  return Object.assign({}, state, {
+    playingUri: action.data.uri,
+  });
+};
+
 // reducers[types.FETCH_CHANNEL_CLAIMS_COMPLETED] = function(state, action) {
 //   const channelPages = Object.assign({}, state.channelPages);
 //   const { uri, claims } = action.data;
@@ -73,7 +80,7 @@ reducers[types.FETCH_CHANNEL_CLAIM_COUNT_COMPLETED] = function(state, action) {
   const channelPages = Object.assign({}, state.channelPages);
   const { uri, totalClaims } = action.data;
 
-  channelPages[uri] = totalClaims / 10;
+  channelPages[uri] = Math.ceil(totalClaims / 10);
 
   return Object.assign({}, state, {
     channelPages,

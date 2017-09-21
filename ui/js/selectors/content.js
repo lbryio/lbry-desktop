@@ -17,6 +17,11 @@ export const selectResolvingUris = createSelector(
   state => state.resolvingUris || []
 );
 
+export const selectPlayingUri = createSelector(
+  _selectState,
+  state => state.playingUri
+);
+
 export const makeSelectIsUriResolving = uri => {
   return createSelector(
     selectResolvingUris,

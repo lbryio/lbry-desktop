@@ -1,6 +1,6 @@
 {
   "name": "LBRY",
-  "version": "0.15.1",
+  "version": "0.16.0",
   "main": "main.js",
   "description": "A browser for the LBRY network, a digital marketplace controlled by its users.",
   "author": {
@@ -20,7 +20,7 @@
     "electron-rebuild": "^1.5.11"
   },
   "lbrySettings": {
-    "lbrynetDaemonVersion": "0.16.0rc8",
+    "lbrynetDaemonVersion": "0.16.1",
     "lbrynetDaemonUrlTemplate": "https://github.com/lbryio/lbry/releases/download/vDAEMONVER/lbrynet-daemon-vDAEMONVER-OSNAME.zip"
   },
   "license": "MIT"

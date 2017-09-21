@@ -1,9 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
-import { doCloseModal } from "actions/app";
 import { doChangeVolume } from "actions/app";
-import { selectCurrentModal, selectVolume } from "selectors/app";
-import { doPurchaseUri, doLoadVideo } from "actions/content";
+import { selectVolume } from "selectors/app";
+import { doPlayUri, doSetPlayingUri } from "actions/content";
 import {
   makeSelectMetadataForUri,
   makeSelectContentTypeForUri,
@@ -16,6 +15,7 @@ import {
 import { makeSelectCostInfoForUri } from "selectors/cost_info";
 import { selectShowNsfw } from "selectors/settings";
 import Video from "./view";
+import { selectPlayingUri } from "selectors/content";
 
 const select = (state, props) => ({
   costInfo: makeSelectCostInfoForUri(props.uri)(state),
@@ -24,13 +24,14 @@ const select = (state, props) => ({
   obscureNsfw: !selectShowNsfw(state),
   isLoading: makeSelectLoadingForUri(props.uri)(state),
   isDownloading: makeSelectDownloadingForUri(props.uri)(state),
+  playingUri: selectPlayingUri(state),
   contentType: makeSelectContentTypeForUri(props.uri)(state),
   volume: selectVolume(state),
 });
 
 const perform = dispatch => ({
-  loadVideo: uri => dispatch(doLoadVideo(uri)),
-  purchaseUri: uri => dispatch(doPurchaseUri(uri)),
+  play: uri => dispatch(doPlayUri(uri)),
+  cancelPlay: () => dispatch(doSetPlayingUri(null)),
   changeVolume: volume => dispatch(doChangeVolume(volume)),
 });
 

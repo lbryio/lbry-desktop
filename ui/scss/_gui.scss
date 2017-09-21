@@ -3,6 +3,7 @@ html
   height: 100%;
   font-size: var(--font-size);
 }
+
 body
 {
   color: var(--text-color);
@@ -27,6 +28,11 @@ body
   font-weight: bold;
   color: var(--color-money);
 }
+.credit-amount--fee
+{
+  font-size: 0.9em;
+  color: var(--color-meta-light);
+}
 
 #main-content
 {
@@ -50,7 +56,8 @@ body
     width: $width-page-constrained;
   }
 }
-main.main--refreshing {
+
+.reloading {
   &:before {
     $width: 30px;
     position: absolute;

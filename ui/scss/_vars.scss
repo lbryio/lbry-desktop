@@ -90,8 +90,8 @@ $text-color: #000;
 
   /* Tabs */
   --tab-bg: transparent;
-  --tab-color: #666;
-  --tab-active-color: var(--header-active-color);
+  --tab-color: rgba(0, 0, 0, 0.5);
+  --tab-active-color: var(--color-primary);
   --tab-border-size: 2px;
   --tab-border: var(--tab-border-size) solid var(--tab-active-color);
 
@@ -132,4 +132,7 @@ $text-color: #000;
   --scrollbar-thumb-hover-bg: rgba(0, 0, 0, 0.35);
   --scrollbar-thumb-active-bg: var(--color-primary);
   --scrollbar-track-bg: transparent;
+
+  /* Divider */
+  --divider: 1px solid rgba(0, 0, 0, 0.12);
 }
