@@ -9,13 +9,11 @@ BUILD_DIR="$ROOT/build"
 LINUX=false
 OSX=false
 if [ "$(uname)" == "Darwin" ]; then
-set -x
+  echo -e "\033[0;32mBuilding for OSX\x1b[m"
   OSX=true
-set +x
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
-set -x
+  echo -e "\033[0;32mBuilding for Linux\x1b[m"
   LINUX=true
-set +x
 else
   echo -e "\033[1;31mPlatform detection failed\x1b[m"
   exit 1
@@ -26,11 +24,13 @@ if $OSX; then
 else
     ICON="$BUILD_DIR/icons/48x48.png"
 fi
-set -x
+
 FULL_BUILD="${FULL_BUILD:-false}"
-set +x
 if [ -n "${TEAMCITY_VERSION:-}" -o -n "${APPVEYOR:-}" ]; then
   FULL_BUILD="true"
+fi
+if [ "$FULL_BUILD" != "true" ]; then
+  echo -e "\033[1;36mDependencies will NOT be installed. Run with 'FULL_BUILD=true' to install dependencies.\x1b[m"
 fi
 
 if [ "$FULL_BUILD" == "true" ]; then
