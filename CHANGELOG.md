@@ -8,7 +8,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
 
 ## [Unreleased]
 ### Added
-  *
+  * Add setting to automatically purchase low-cost content without a confirmation dialog
   *
 
 ### Changed

@@ -13,6 +13,8 @@ class SettingsPage extends React.PureComponent {
     super(props);
 
     this.state = {
+      instantPurchaseEnabled: props.instantPurchaseEnabled,
+      instantPurchaseMax: props.instantPurchaseMax,
       clearingCache: false,
     };
   }
@@ -57,6 +59,22 @@ class SettingsPage extends React.PureComponent {
   onThemeChange(event) {
     const { value } = event.target;
     this.props.setClientSetting(settings.THEME, value);
+  }
+
+  oninstantPurchaseEnabledChange(enabled) {
+    this.props.setClientSetting(settings.INSTANT_PURCHASE_ENABLED, enabled);
+
+    this.setState({
+      instantPurchaseEnabled: enabled,
+    });
+  }
+
+  onInstantPurchaseMaxChange(newValue) {
+    this.props.setClientSetting(settings.INSTANT_PURCHASE_MAX, newValue);
+
+    this.setState({
+      instantPurchaseMax: newValue,
+    });
   }
 
   // onMaxUploadPrefChange(isLimited) {
@@ -113,6 +131,8 @@ class SettingsPage extends React.PureComponent {
       language,
       languages,
       showNsfw,
+      instantPurchaseEnabled,
+      instantPurchaseMax,
       showUnavailable,
       theme,
       themes,
@@ -167,9 +187,14 @@ class SettingsPage extends React.PureComponent {
         </section>
         <section className="card">
           <div className="card__content">
-            <h3>{__("Max Purchase Price")}</h3>
+            <h3>{__("Purchase Settings")}</h3>
           </div>
           <div className="card__content">
+            <div className="form-row__label-row">
+              <label className="form-row__label">
+                {__("Max Purchase Price")}
+              </label>
+            </div>
             <FormRow
               type="radio"
               name="max_key_fee"
@@ -209,6 +234,47 @@ class SettingsPage extends React.PureComponent {
               {__(
                 "This will prevent you from purchasing any content over this cost, as a safety measure."
               )}
+            </div>
+          </div>
+          <div className="card__content">
+            <div className="form-row__label-row">
+              <label className="form-row__label">
+                {__("Purchase Confirmations")}
+              </label>
+            </div>
+            <FormRow
+              type="radio"
+              name="instant_purchase_max"
+              checked={!this.state.instantPurchaseEnabled}
+              label={__("Ask for confirmation of all purchases")}
+              onClick={e => {
+                this.oninstantPurchaseEnabledChange(false);
+              }}
+            />
+            <div className="form-row">
+              <FormField
+                type="radio"
+                name="instant_purchase_max"
+                checked={this.state.instantPurchaseEnabled}
+                label={
+                  "Single-click purchasing of content less than" +
+                  (this.state.instantPurchaseEnabled ? "" : "...")
+                }
+                onClick={e => {
+                  this.oninstantPurchaseEnabledChange(true);
+                }}
+              />
+              {this.state.instantPurchaseEnabled &&
+                <FormFieldPrice
+                  min="0.1"
+                  step="0.1"
+                  onChange={val => this.onInstantPurchaseMaxChange(val)}
+                  defaultValue={this.state.instantPurchaseMax}
+                />}
+            </div>
+            <div className="form-field__helper">
+              When this option is chosen, LBRY won't ask you to confirm
+              downloads below the given price.
             </div>
           </div>
         </section>
