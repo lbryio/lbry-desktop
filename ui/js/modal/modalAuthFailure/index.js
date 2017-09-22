@@ -9,4 +9,4 @@ const perform = dispatch => ({
   close: () => dispatch(doCloseModal()),
 });
 
-export default connect(select, perform)(ModalAuthFailure);
+export default connect(null, null)(ModalAuthFailure);

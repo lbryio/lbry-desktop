@@ -13,26 +13,18 @@ import {
 import { makeSelectCostInfoForUri } from "selectors/cost_info";
 import { selectShowNsfw } from "selectors/settings";
 import FilePage from "./view";
+import { makeSelectCurrentParam } from "selectors/navigation";
 
-const makeSelect = () => {
-  const selectClaim = makeSelectClaimForUri(),
-    selectContentType = makeSelectContentTypeForUri(),
-    selectFileInfo = makeSelectFileInfoForUri(),
-    selectCostInfo = makeSelectCostInfoForUri(),
-    selectMetadata = makeSelectMetadataForUri();
-
-  const select = (state, props) => ({
-    claim: selectClaim(state, props),
-    contentType: selectContentType(state, props),
-    costInfo: selectCostInfo(state, props),
-    metadata: selectMetadata(state, props),
-    obscureNsfw: !selectShowNsfw(state),
-    fileInfo: selectFileInfo(state, props),
-    rewardedContentClaimIds: selectRewardContentClaimIds(state, props),
-  });
-
-  return select;
-};
+const select = (state, props) => ({
+  claim: makeSelectClaimForUri(props.uri)(state),
+  contentType: makeSelectContentTypeForUri(props.uri)(state),
+  costInfo: makeSelectCostInfoForUri(props.uri)(state),
+  metadata: makeSelectMetadataForUri(props.uri)(state),
+  obscureNsfw: !selectShowNsfw(state),
+  tab: makeSelectCurrentParam("tab")(state),
+  fileInfo: makeSelectFileInfoForUri(props.uri)(state),
+  rewardedContentClaimIds: selectRewardContentClaimIds(state, props),
+});
 
 const perform = dispatch => ({
   navigate: (path, params) => dispatch(doNavigate(path, params)),
@@ -40,4 +32,4 @@ const perform = dispatch => ({
   fetchCostInfo: uri => dispatch(doFetchCostInfoForUri(uri)),
 });
 
-export default connect(makeSelect, perform)(FilePage);
+export default connect(select, perform)(FilePage);

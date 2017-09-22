@@ -1,7 +1,6 @@
 #!/bin/bash
 
 set -euo pipefail
-set -x
 
 ROOT="$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )"
 cd "$ROOT"
@@ -10,27 +9,33 @@ BUILD_DIR="$ROOT/build"
 LINUX=false
 OSX=false
 if [ "$(uname)" == "Darwin" ]; then
+  echo -e "\033[0;32mBuilding for OSX\x1b[m"
   OSX=true
 elif [ "$(expr substr $(uname -s) 1 5)" == "Linux" ]; then
+  echo -e "\033[0;32mBuilding for Linux\x1b[m"
   LINUX=true
 else
-  echo "Platform detection failed"
+  echo -e "\033[1;31mPlatform detection failed\x1b[m"
   exit 1
 fi
 
 if $OSX; then
     ICON="$BUILD_DIR/icon.icns"
 else
-    ICON="$BUILD_DIR/icons/lbry48.png"
+    ICON="$BUILD_DIR/icons/48x48.png"
 fi
 
 FULL_BUILD="${FULL_BUILD:-false}"
 if [ -n "${TEAMCITY_VERSION:-}" -o -n "${APPVEYOR:-}" ]; then
   FULL_BUILD="true"
 fi
+if [ "$FULL_BUILD" != "true" ]; then
+  echo -e "\033[1;36mDependencies will NOT be installed. Run with 'FULL_BUILD=true' to install dependencies.\x1b[m"
+fi
 
 if [ "$FULL_BUILD" == "true" ]; then
   # install dependencies
+  echo -e "\033[0;32mInstalling Dependencies\x1b[m"
   $BUILD_DIR/prebuild.sh
 
   VENV="$BUILD_DIR/venv"
@@ -57,7 +62,7 @@ yarn install
 ############
 #    UI    #
 ############
-
+echo -e "\033[0;32mCompiling UI\x1b[m"
 (
   cd "$ROOT/ui"
   yarn install
@@ -73,7 +78,7 @@ yarn install
 ####################
 #  daemon and cli  #
 ####################
-
+echo -e "\033[0;32mGrabbing Daemon and CLI\x1b[m"
 if $OSX; then
   OSNAME="macos"
 else
@@ -90,7 +95,7 @@ if [[ ! -f $DAEMON_VER_PATH || ! -f $ROOT/app/dist/lbrynet-daemon || "$(< "$DAEM
     rm "$BUILD_DIR/daemon.zip"
     echo "$DAEMON_VER" > "$DAEMON_VER_PATH"
 else
-    echo "Already have daemon version $DAEMON_VER, skipping download"
+    echo -e "\033[4;31mAlready have daemon version $DAEMON_VER, skipping download\x1b[m"
 fi
 
 
@@ -99,7 +104,7 @@ fi
 ###################
 #  Build the app  #
 ###################
-
+echo -e '\033[0;32mBuilding Lbry-app\x1b[m'
 (
   cd "$ROOT/app"
   yarn install
@@ -133,7 +138,7 @@ if [ "$FULL_BUILD" == "true" ]; then
 
   deactivate
 
-  echo 'Build and packaging complete.'
+  echo -e '\033[0;32mBuild and packaging complete.\x1b[m'
 else
-  echo 'Build complete. Run `./node_modules/.bin/electron app` to launch the app'
+  echo -e 'Build complete. Run \033[1;31m./node_modules/.bin/electron app\x1b[m to launch the app'
 fi

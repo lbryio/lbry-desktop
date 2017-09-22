@@ -6,21 +6,27 @@ import SubHeader from "component/subHeader";
 import Link from "component/link";
 
 class RewardsPage extends React.PureComponent {
-  componentDidMount() {
-    this.fetchRewards(this.props);
-  }
+  /*
+    Below is broken for users who have claimed all rewards.
 
-  componentWillReceiveProps(nextProps) {
-    this.fetchRewards(nextProps);
-  }
+    It can safely be disabled since we fetch all rewards after authentication, but should be re-enabled once fixed.
 
-  fetchRewards(props) {
-    const { fetching, rewards, fetchRewards } = props;
-
-    if (!fetching && (!rewards || !rewards.length)) {
-      fetchRewards();
-    }
-  }
+   */
+  // componentDidMount() {
+  //   this.fetchRewards(this.props);
+  // }
+  //
+  // componentWillReceiveProps(nextProps) {
+  //   this.fetchRewards(nextProps);
+  // }
+  //
+  // fetchRewards(props) {
+  //   const { fetching, rewards, fetchRewards } = props;
+  //
+  //   if (!fetching && (!rewards || !rewards.length)) {
+  //     fetchRewards();
+  //   }
+  // }
 
   renderPageHeader() {
     const { doAuth, navigate, user } = this.props;

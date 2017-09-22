@@ -7,8 +7,13 @@ import ModalUpgrade from "modal/modalUpgrade";
 import ModalWelcome from "modal/modalWelcome";
 import ModalFirstReward from "modal/modalFirstReward";
 import ModalRewardApprovalRequired from "modal/modalRewardApprovalRequired";
-import * as modals from "constants/modal_types";
 import ModalCreditIntro from "modal/modalCreditIntro";
+import ModalRemoveFile from "modal/modalRemoveFile";
+import ModalTransactionFailed from "modal/modalTransactionFailed";
+import ModalInsufficientBalance from "modal/modalInsufficientBalance";
+import ModalFileTimeout from "modal/modalFileTimeout";
+import ModalAffirmPurchase from "modal/modalAffirmPurchase";
+import * as modals from "constants/modal_types";
 
 class ModalRouter extends React.PureComponent {
   constructor(props) {
@@ -29,7 +34,7 @@ class ModalRouter extends React.PureComponent {
   }
 
   showTransitionModals(props) {
-    const { modal, openModal, page } = props;
+    const { modal, modalProps, openModal, page } = props;
 
     if (modal) {
       return;
@@ -96,27 +101,37 @@ class ModalRouter extends React.PureComponent {
   }
 
   render() {
-    const { modal } = this.props;
+    const { modal, modalProps } = this.props;
 
     switch (modal) {
       case modals.UPGRADE:
-        return <ModalUpgrade />;
+        return <ModalUpgrade {...modalProps} />;
       case modals.DOWNLOADING:
-        return <ModalDownloading />;
+        return <ModalDownloading {...modalProps} />;
       case modals.ERROR:
-        return <ModalError />;
+        return <ModalError {...modalProps} />;
+      case modals.FILE_TIMEOUT:
+        return <ModalFileTimeout {...modalProps} />;
       case modals.INSUFFICIENT_CREDITS:
-        return <ModalInsufficientCredits />;
+        return <ModalInsufficientCredits {...modalProps} />;
       case modals.WELCOME:
-        return <ModalWelcome />;
+        return <ModalWelcome {...modalProps} />;
       case modals.FIRST_REWARD:
-        return <ModalFirstReward />;
+        return <ModalFirstReward {...modalProps} />;
       case modals.AUTHENTICATION_FAILURE:
-        return <ModalAuthFailure />;
+        return <ModalAuthFailure {...modalProps} />;
       case modals.CREDIT_INTRO:
-        return <ModalCreditIntro />;
+        return <ModalCreditIntro {...modalProps} />;
+      case modals.TRANSACTION_FAILED:
+        return <ModalTransactionFailed {...modalProps} />;
+      case modals.INSUFFICIENT_BALANCE:
+        return <ModalInsufficientBalance {...modalProps} />;
       case modals.REWARD_APPROVAL_REQUIRED:
-        return <ModalRewardApprovalRequired />;
+        return <ModalRewardApprovalRequired {...modalProps} />;
+      case modals.CONFIRM_FILE_REMOVE:
+        return <ModalRemoveFile {...modalProps} />;
+      case modals.AFFIRM_PURCHASE:
+        return <ModalAffirmPurchase {...modalProps} />;
       default:
         return null;
     }

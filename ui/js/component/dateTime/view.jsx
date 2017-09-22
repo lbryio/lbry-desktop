@@ -1,6 +1,10 @@
 import React from "react";
 
 class DateTime extends React.PureComponent {
+  static SHOW_DATE = "date";
+  static SHOW_TIME = "time";
+  static SHOW_BOTH = "both";
+
   componentWillMount() {
     this.refreshDate(this.props);
   }
@@ -17,9 +21,20 @@ class DateTime extends React.PureComponent {
   }
 
   render() {
-    const { date } = this.props;
+    const { date, formatOptions } = this.props;
+    const show = this.props.show || DateTime.SHOW_BOTH;
 
-    return <span>{date && date.toLocaleString()}</span>;
+    return (
+      <span>
+        {date &&
+          (show == DateTime.SHOW_BOTH || show === DateTime.SHOW_DATE) &&
+          date.toLocaleDateString()}
+        {show == DateTime.SHOW_BOTH && " "}
+        {date &&
+          (show == DateTime.SHOW_BOTH || show === DateTime.SHOW_TIME) &&
+          date.toLocaleTimeString()}
+      </span>
+    );
   }
 }
 

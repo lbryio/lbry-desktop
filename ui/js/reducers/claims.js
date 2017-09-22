@@ -1,6 +1,7 @@
 import * as types from "constants/action_types";
 
 const reducers = {};
+
 const defaultState = {};
 
 reducers[types.RESOLVE_URI_COMPLETED] = function(state, action) {
@@ -49,20 +50,22 @@ reducers[types.FETCH_CLAIM_LIST_MINE_COMPLETED] = function(state, action) {
       .filter(claimId => Object.keys(abandoningById).indexOf(claimId) === -1)
   );
 
-  claims.filter(claim => claim.category.match(/claim/)).forEach(claim => {
-    byId[claim.claim_id] = claim;
+  claims
+    .filter(claim => claim.category && claim.category.match(/claim/))
+    .forEach(claim => {
+      byId[claim.claim_id] = claim;
 
-    const pending = Object.values(pendingById).find(pendingClaim => {
-      return (
-        pendingClaim.name == claim.name &&
-        pendingClaim.channel_name == claim.channel_name
-      );
+      const pending = Object.values(pendingById).find(pendingClaim => {
+        return (
+          pendingClaim.name == claim.name &&
+          pendingClaim.channel_name == claim.channel_name
+        );
+      });
+
+      if (pending) {
+        delete pendingById[pending.claim_id];
+      }
     });
-
-    if (pending) {
-      delete pendingById[pending.claim_id];
-    }
-  });
 
   // Remove old timed out pending publishes
   const old = Object.values(pendingById)

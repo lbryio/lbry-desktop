@@ -2,31 +2,29 @@ import React from "react";
 import lbryuri from "lbryuri";
 import { BusyMessage } from "component/common";
 import FileTile from "component/fileTile";
-import Link from "component/link";
 import ReactPaginate from "react-paginate";
 
 class ChannelPage extends React.PureComponent {
   componentDidMount() {
-    const { uri, params, fetchClaims, fetchClaimCount } = this.props;
+    const { uri, page, fetchClaims, fetchClaimCount } = this.props;
 
-    fetchClaims(uri, params.page || 1);
+    fetchClaims(uri, page || 1);
     fetchClaimCount(uri);
   }
 
   componentWillReceiveProps(nextProps) {
-    const { params, fetching, fetchClaims, fetchClaimCount } = this.props;
-    const nextParams = nextProps.params;
+    const { page, uri, fetching, fetchClaims, fetchClaimCount } = this.props;
 
-    if (fetching !== nextParams.page && params.page !== nextParams.page) {
-      fetchClaims(nextProps.uri, nextParams.page);
+    if (nextProps.page && page !== nextProps.page) {
+      fetchClaims(nextProps.uri, nextProps.page);
     }
-    if (nextProps.uri != this.props.uri) {
+    if (nextProps.uri != uri) {
       fetchClaimCount(uri);
     }
   }
 
   changePage(pageNumber) {
-    const { params, currentPage } = this.props;
+    const { params } = this.props;
     const newParams = Object.assign({}, params, { page: pageNumber });
 
     this.props.navigate("/show", newParams);
@@ -38,16 +36,15 @@ class ChannelPage extends React.PureComponent {
       claimsInChannel,
       claim,
       uri,
-      params,
+      page,
       totalPages,
     } = this.props;
-    const { page } = params;
 
     let contentList;
-    if (claimsInChannel === undefined) {
+    if (fetching) {
       contentList = <BusyMessage message={__("Fetching content")} />;
-    } else if (claimsInChannel) {
-      contentList = claimsInChannel.length
+    } else {
+      contentList = claimsInChannel && claimsInChannel.length
         ? claimsInChannel.map(claim =>
             <FileTile
               key={claim.claim_id}

@@ -1,5 +1,3 @@
-@import "global";
-
 @font-face {
   font-family: 'FontAwesome';
   src: url('../font/fontawesome-webfont.eot?v=4.7.0');
@@ -1657,4 +1655,10 @@
 }
 .icon-medium:before {
   content: "\f23a";
+}
+.icon-address-book:before {
+  content: "\f2b9";
+}
+.icon-envelope-open:before {
+  content: "\f2b6";
 }

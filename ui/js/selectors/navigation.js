@@ -10,8 +10,11 @@ export const selectCurrentPath = createSelector(
   state => state.currentPath
 );
 
+export const computePageFromPath = path =>
+  path.replace(/^\//, "").split("?")[0];
+
 export const selectCurrentPage = createSelector(selectCurrentPath, path => {
-  return path.replace(/^\//, "").split("?")[0];
+  return computePageFromPath(path);
 });
 
 export const selectCurrentParams = createSelector(selectCurrentPath, path => {
@@ -20,6 +23,13 @@ export const selectCurrentParams = createSelector(selectCurrentPath, path => {
 
   return parseQueryParams(path.split("?")[1]);
 });
+
+export const makeSelectCurrentParam = param => {
+  return createSelector(
+    selectCurrentParams,
+    params => (params ? params[param] : undefined)
+  );
+};
 
 export const selectHeaderLinks = createSelector(selectCurrentPage, page => {
   // This contains intentional fall throughs
@@ -80,7 +90,7 @@ export const selectPageTitle = createSelector(
       case "start":
         return __("Start");
       case "publish":
-        return __("Publish");
+        return params.id ? __("Edit") : __("Publish");
       case "help":
         return __("Help");
       case "developer":

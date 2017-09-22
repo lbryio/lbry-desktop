@@ -6,20 +6,13 @@ import * as settings from "constants/settings";
 import lbry from "lbry.js";
 import Link from "component/link";
 import FormFieldPrice from "component/formFieldPrice";
-
-const { remote } = require("electron");
+import { remote } from "electron";
 
 class SettingsPage extends React.PureComponent {
   constructor(props) {
     super(props);
 
-    const { daemonSettings } = this.props || {};
-
     this.state = {
-      // isMaxUpload: daemonSettings && daemonSettings.max_upload != 0,
-      // isMaxDownload: daemonSettings && daemonSettings.max_download != 0,
-      showUnavailable: lbry.getClientSetting(settings.SHOW_UNAVAILABLE),
-      language: lbry.getClientSetting(settings.LANGUAGE),
       clearingCache: false,
     };
   }
@@ -41,11 +34,6 @@ class SettingsPage extends React.PureComponent {
     this.props.setDaemonSetting(name, value);
   }
 
-  setClientSetting(name, value) {
-    lbry.setClientSetting(name, value);
-    this._onSettingSaveSuccess();
-  }
-
   onRunOnStartChange(event) {
     this.setDaemonSetting("run_on_startup", event.target.checked);
   }
@@ -64,6 +52,11 @@ class SettingsPage extends React.PureComponent {
 
   onKeyFeeDisableChange(isDisabled) {
     this.setDaemonSetting("disable_max_key_fee", isDisabled);
+  }
+
+  onThemeChange(event) {
+    const { value } = event.target;
+    this.props.setClientSetting(settings.THEME, value);
   }
 
   // onMaxUploadPrefChange(isLimited) {
@@ -101,10 +94,29 @@ class SettingsPage extends React.PureComponent {
     this.forceUpdate();
   }
 
-  onShowUnavailableChange(event) {}
+  onShowUnavailableChange(event) {
+    this.props.setClientSetting(
+      settings.SHOW_UNAVAILABLE,
+      event.target.checked
+    );
+  }
+
+  componentWillMount() {
+    this.props.getThemes();
+  }
+
+  componentDidMount() {}
 
   render() {
-    const { daemonSettings, language, languages } = this.props;
+    const {
+      daemonSettings,
+      language,
+      languages,
+      showNsfw,
+      showUnavailable,
+      theme,
+      themes,
+    } = this.props;
 
     if (!daemonSettings || Object.keys(daemonSettings).length === 0) {
       return (
@@ -209,7 +221,7 @@ class SettingsPage extends React.PureComponent {
             <FormRow
               type="checkbox"
               onChange={this.onShowUnavailableChange.bind(this)}
-              defaultChecked={this.state.showUnavailable}
+              defaultChecked={showUnavailable}
               label={__("Show unavailable content in search results")}
             />
           </div>
@@ -218,7 +230,7 @@ class SettingsPage extends React.PureComponent {
               label={__("Show NSFW content")}
               type="checkbox"
               onChange={this.onShowNsfwChange.bind(this)}
-              defaultChecked={this.props.showNsfw}
+              defaultChecked={showNsfw}
               helper={__(
                 "NSFW content may include nudity, intense sexuality, profanity, or other adult content. By displaying NSFW content, you are affirming you are of legal age to view mature content in your country or jurisdiction.  "
               )}
@@ -239,6 +251,27 @@ class SettingsPage extends React.PureComponent {
                 "Help make LBRY better by contributing diagnostic data about my usage"
               )}
             />
+          </div>
+        </section>
+
+        <section className="card">
+          <div className="card__content">
+            <h3>{__("Theme")}</h3>
+          </div>
+          <div className="card__content">
+            <FormField
+              type="select"
+              onChange={this.onThemeChange.bind(this)}
+              defaultValue={theme}
+              className="form-field__input--inline"
+            >
+              {themes.map((theme, index) =>
+                <option key={theme} value={theme}>
+                  {theme}
+                </option>
+              )}
+            </FormField>
+
           </div>
         </section>
 

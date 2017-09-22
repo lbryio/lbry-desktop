@@ -24,12 +24,6 @@ reducers[types.DAEMON_READY] = function(state, action) {
   });
 };
 
-reducers[types.CHANGE_PATH] = function(state, action) {
-  return Object.assign({}, state, {
-    currentPath: action.data.path,
-  });
-};
-
 reducers[types.CHANGE_AFTER_AUTH_PATH] = function(state, action) {
   return Object.assign({}, state, {
     pathAfterAuth: action.data.path,
@@ -38,15 +32,16 @@ reducers[types.CHANGE_AFTER_AUTH_PATH] = function(state, action) {
 
 reducers[types.HISTORY_NAVIGATE] = (state, action) => {
   const { stack, index } = state;
-
-  let newState = {};
-
   const path = action.data.url;
 
-  // Check for duplicated
+  let newState = {
+    currentPath: path,
+  };
+
   if (action.data.index >= 0) {
     newState.index = action.data.index;
   } else if (!stack[index] || stack[index].path !== path) {
+    // ^ Check for duplicated
     newState.stack = [...stack.slice(0, index + 1), { path, scrollY: 0 }];
     newState.index = newState.stack.length - 1;
   }

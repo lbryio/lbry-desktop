@@ -1,5 +1,6 @@
 import React from "react";
 import FormField from "component/formField";
+import { Icon } from "component/common.js";
 
 let formFieldCounter = 0;
 
@@ -7,6 +8,29 @@ export const formFieldNestedLabelTypes = ["radio", "checkbox"];
 
 export function formFieldId() {
   return "form-field-" + ++formFieldCounter;
+}
+
+export class Form extends React.PureComponent {
+  static propTypes = {
+    onSubmit: React.PropTypes.func.isRequired,
+  };
+
+  constructor(props) {
+    super(props);
+  }
+
+  handleSubmit(event) {
+    event.preventDefault();
+    this.props.onSubmit();
+  }
+
+  render() {
+    return (
+      <form onSubmit={event => this.handleSubmit(event)}>
+        {this.props.children}
+      </form>
+    );
+  }
 }
 
 export class FormRow extends React.PureComponent {
@@ -74,11 +98,6 @@ export class FormRow extends React.PureComponent {
   }
 
   getOptions() {
-    if (!this._field || !this._field.getOptions) {
-      console.log(this);
-      console.log(this._field);
-      console.log(this._field.getOptions);
-    }
     return this._field.getOptions();
   }
 
@@ -136,3 +155,27 @@ export class FormRow extends React.PureComponent {
     );
   }
 }
+
+export const Submit = props => {
+  const { title, label, icon, disabled } = props;
+
+  const className =
+    "button-block" +
+    " button-primary" +
+    " button-set-item" +
+    " button--submit" +
+    (disabled ? " disabled" : "");
+
+  const content = (
+    <span className="button__content">
+      {"icon" in props ? <Icon icon={icon} fixed={true} /> : null}
+      {label ? <span className="button-label">{label}</span> : null}
+    </span>
+  );
+
+  return (
+    <button type="submit" className={className} title={title}>
+      {content}
+    </button>
+  );
+};

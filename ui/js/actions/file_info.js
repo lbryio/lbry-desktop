@@ -13,7 +13,7 @@ import {
   selectTotalDownloadProgress,
 } from "selectors/file_info";
 import { doCloseModal } from "actions/app";
-import { doHistoryBack } from "actions/navigation";
+import { doNavigate, doHistoryBack } from "actions/navigation";
 import setProgressBar from "util/setProgressBar";
 import batchActions from "util/batchActions";
 
@@ -71,18 +71,18 @@ export function doFileList() {
   };
 }
 
-export function doOpenFileInShell(fileInfo) {
+export function doOpenFileInShell(path) {
   return function(dispatch, getState) {
-    const success = shell.openItem(fileInfo.download_path);
+    const success = shell.openItem(path);
     if (!success) {
-      dispatch(doOpenFileInFolder(fileInfo));
+      dispatch(doOpenFileInFolder(path));
     }
   };
 }
 
-export function doOpenFileInFolder(fileInfo) {
+export function doOpenFileInFolder(path) {
   return function(dispatch, getState) {
-    shell.showItemInFolder(fileInfo.download_path);
+    shell.showItemInFolder(path);
   };
 }
 

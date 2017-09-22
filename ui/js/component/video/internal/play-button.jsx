@@ -1,7 +1,5 @@
 import React from "react";
-import FilePrice from "component/filePrice";
 import Link from "component/link";
-import Modal from "modal/modal";
 
 class VideoPlayButton extends React.PureComponent {
   componentDidMount() {
@@ -13,43 +11,22 @@ class VideoPlayButton extends React.PureComponent {
     document.removeEventListener("keydown", this.keyDownListener);
   }
 
-  onPurchaseConfirmed() {
-    this.props.closeModal();
-    this.props.startPlaying();
-    this.props.loadVideo(this.props.uri);
-  }
-
   onKeyDown(event) {
     if (
       "input" !== event.target.tagName.toLowerCase() &&
       "Space" === event.code
     ) {
       event.preventDefault();
-      this.onWatchClick();
+      this.watch();
     }
   }
 
-  onWatchClick() {
-    this.props.purchaseUri(this.props.uri).then(() => {
-      if (!this.props.modal) {
-        this.props.startPlaying();
-      }
-    });
+  watch() {
+    this.props.play(this.props.uri);
   }
 
   render() {
-    const {
-      button,
-      label,
-      metadata,
-      metadata: { title },
-      uri,
-      modal,
-      closeModal,
-      isLoading,
-      fileInfo,
-      mediaType,
-    } = this.props;
+    const { button, label, isLoading, fileInfo, mediaType } = this.props;
 
     /*
      title={
@@ -65,36 +42,14 @@ class VideoPlayButton extends React.PureComponent {
       : "icon-folder-o";
 
     return (
-      <div>
-        <Link
-          button={button ? button : null}
-          disabled={disabled}
-          label={label ? label : ""}
-          className="video__play-button"
-          icon={icon}
-          onClick={this.onWatchClick.bind(this)}
-        />
-        <Modal
-          type="confirm"
-          isOpen={modal == "affirmPurchaseAndPlay"}
-          contentLabel={__("Confirm Purchase")}
-          onConfirmed={this.onPurchaseConfirmed.bind(this)}
-          onAborted={closeModal}
-        >
-          {__("This will purchase")} <strong>{title}</strong> {__("for")}{" "}
-          <strong>
-            <FilePrice uri={uri} showFullPrice={true} look="plain" />
-          </strong>{" "}
-          {__("credits")}.
-        </Modal>
-        <Modal
-          isOpen={modal == "timedOut"}
-          onConfirmed={closeModal}
-          contentLabel={__("Timed Out")}
-        >
-          {__("Sorry, your download timed out :(")}
-        </Modal>
-      </div>
+      <Link
+        button={button ? button : null}
+        disabled={disabled}
+        label={label ? label : ""}
+        className="video__play-button"
+        icon={icon}
+        onClick={() => this.watch()}
+      />
     );
   }
 }

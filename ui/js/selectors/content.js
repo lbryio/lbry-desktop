@@ -17,12 +17,16 @@ export const selectResolvingUris = createSelector(
   state => state.resolvingUris || []
 );
 
-const selectResolvingUri = (state, props) => {
-  return selectResolvingUris(state).indexOf(props.uri) != -1;
-};
+export const selectPlayingUri = createSelector(
+  _selectState,
+  state => state.playingUri
+);
 
-export const makeSelectIsResolvingForUri = () => {
-  return createSelector(selectResolvingUri, resolving => resolving);
+export const makeSelectIsUriResolving = uri => {
+  return createSelector(
+    selectResolvingUris,
+    resolvingUris => resolvingUris && resolvingUris.indexOf(uri) != -1
+  );
 };
 
 export const selectChannelPages = createSelector(
@@ -30,12 +34,8 @@ export const selectChannelPages = createSelector(
   state => state.channelPages || {}
 );
 
-const selectTotalPagesForChannel = (state, props) => {
-  return selectChannelPages(state)[props.uri];
-};
-
-export const makeSelectTotalPagesForChannel = () => {
-  return createSelector(selectTotalPagesForChannel, totalPages => totalPages);
+export const makeSelectTotalPagesForChannel = uri => {
+  return createSelector(selectChannelPages, byUri => byUri && byUri[uri]);
 };
 
 export const selectRewardContentClaimIds = createSelector(

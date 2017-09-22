@@ -26,17 +26,17 @@ export const selectIsFetchingFileListDownloadedOrPublished = createSelector(
     isFetchingFileList || isFetchingClaimListMine
 );
 
-export const selectFileInfoForUri = (state, props) => {
-  const claims = selectClaimsByUri(state),
-    claim = claims[props.uri],
-    byOutpoint = selectFileInfosByOutpoint(state),
-    outpoint = claim ? `${claim.txid}:${claim.nout}` : undefined;
+export const makeSelectFileInfoForUri = uri => {
+  return createSelector(
+    selectClaimsByUri,
+    selectFileInfosByOutpoint,
+    (claims, byOutpoint) => {
+      const claim = claims[uri],
+        outpoint = claim ? `${claim.txid}:${claim.nout}` : undefined;
 
-  return outpoint ? byOutpoint[outpoint] : undefined;
-};
-
-export const makeSelectFileInfoForUri = () => {
-  return createSelector(selectFileInfoForUri, fileInfo => fileInfo);
+      return outpoint ? byOutpoint[outpoint] : undefined;
+    }
+  );
 };
 
 export const selectDownloadingByOutpoint = createSelector(
@@ -44,19 +44,14 @@ export const selectDownloadingByOutpoint = createSelector(
   state => state.downloadingByOutpoint || {}
 );
 
-const selectDownloadingForUri = (state, props) => {
-  const byOutpoint = selectDownloadingByOutpoint(state);
-  const fileInfo = selectFileInfoForUri(state, props);
-
-  if (!fileInfo) return false;
-
-  return byOutpoint[fileInfo.outpoint];
-};
-
-export const makeSelectDownloadingForUri = () => {
+export const makeSelectDownloadingForUri = uri => {
   return createSelector(
-    selectDownloadingForUri,
-    downloadingForUri => !!downloadingForUri
+    selectDownloadingByOutpoint,
+    makeSelectFileInfoForUri(uri),
+    (byOutpoint, fileInfo) => {
+      if (!fileInfo) return false;
+      return byOutpoint[fileInfo.outpoint];
+    }
   );
 };
 
@@ -65,13 +60,8 @@ export const selectUrisLoading = createSelector(
   state => state.urisLoading || {}
 );
 
-const selectLoadingForUri = (state, props) => {
-  const byUri = selectUrisLoading(state);
-  return byUri[props.uri];
-};
-
-export const makeSelectLoadingForUri = () => {
-  return createSelector(selectLoadingForUri, loading => !!loading);
+export const makeSelectLoadingForUri = uri => {
+  return createSelector(selectUrisLoading, byUri => byUri && byUri[uri]);
 };
 
 export const selectFileInfosPendingPublish = createSelector(

@@ -4,6 +4,11 @@ import { selectFetchingAvailability } from "selectors/availability";
 
 export function doFetchAvailability(uri) {
   return function(dispatch, getState) {
+    /*
+    this is disabled atm - Jeremy
+     */
+    return;
+
     const state = getState();
     const alreadyFetching = !!selectFetchingAvailability(state)[uri];
 
