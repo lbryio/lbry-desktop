@@ -52,6 +52,7 @@ class ChannelPage extends React.PureComponent {
                 name: claim.name,
                 claimId: claim.claim_id,
               })}
+              showLocal={true}
             />
           )
         : <span className="empty">{__("No content found.")}</span>;
