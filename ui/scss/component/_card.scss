@@ -167,6 +167,11 @@ $font-size-subtext-multiple: 0.82;
   position: absolute;
   top: 36%
 }
+
+.card__indicators {
+  float: right;
+}
+
 .card--small {
   width: var(--card-small-width);
   overflow-x: hidden;
@@ -267,10 +272,6 @@ $padding-right-card-hover-hack: 30px;
 }
 .card-row__nav--right {
   right: 0;
-}
-
-.card__icon-featured-content {
-  color: orangered;
 }
 
 /*

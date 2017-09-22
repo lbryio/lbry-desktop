@@ -16,7 +16,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
   *
 
 ### Fixed
-  *
+  * Improve layout (and implementation) of the icon panel in file tiles and cards
   *
 
 ### Deprecated
