@@ -1,2 +1,2 @@
-export const FEATURED = "featured";
-export const LOCAL = "local";
+export const FEATURED = "rocket";
+export const LOCAL = "folder";

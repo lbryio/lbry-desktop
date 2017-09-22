@@ -11,36 +11,29 @@ export default class Icon extends React.PureComponent {
     fixed: false,
   };
 
-  getIconInfo() {
-    if (this.props.icon.startsWith("icon-")) {
-      // Old style where FA icon class is passed in directly
-      return { className: this.props.icon, title: "" };
-    }
+  getIconClass() {
+    const { icon } = this.props;
 
+    return icon.startsWith("icon-") ? icon : "icon-" + icon;
+  }
+
+  getIconTitle() {
     switch (this.props.icon) {
       case icons.FEATURED:
-        return {
-          className: "icon-rocket",
-          title: "Watch content with this icon to earn weekly rewards.",
-        };
+        return __("Watch this and earn rewards.");
       case icons.LOCAL:
-        return {
-          className: "icon-folder",
-          title: "You have a copy of this file.",
-        };
+        return __("You have a copy of this file.");
       default:
-        throw new Error(`Unknown icon type "${this.props.icon}"`);
+        return "";
     }
   }
 
   render() {
-    const { className, title } = this.getIconInfo();
+    const className = this.getIconClass(),
+      title = this.getIconTitle();
 
     const spanClassName =
-      "icon " +
-      ("lbry-icon-" + this.props.icon + " ") +
-      className +
-      (this.props.fixed ? " icon-fixed-width " : "");
+      "icon " + className + (this.props.fixed ? " icon-fixed-width " : "");
 
     return <span className={spanClassName} title={title} />;
   }

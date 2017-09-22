@@ -23,14 +23,10 @@
   transform: translate(0, 0);
 }
 
-/* Custom styles for LBRY icons */
-
-.lbry-icon-featured {
-  color: orangered;
-}
 
 /* Adjustments for icon size and alignment */
 .icon-rocket {
+  color: orangered;
   font-size: 0.95em;
   position: relative;
   top: -0.04em;
