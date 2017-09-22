@@ -279,45 +279,6 @@ lbry.getMediaType = function(contentType, fileName) {
   }
 };
 
-lbry._subscribeIdCount = 0;
-lbry._balanceSubscribeCallbacks = {};
-lbry._balanceSubscribeInterval = 5000;
-
-lbry._balanceUpdateInterval = null;
-lbry._updateBalanceSubscribers = function() {
-  lbry.wallet_balance().then(function(balance) {
-    for (let callback of Object.values(lbry._balanceSubscribeCallbacks)) {
-      callback(balance);
-    }
-  });
-
-  if (
-    !lbry._balanceUpdateInterval &&
-    Object.keys(lbry._balanceSubscribeCallbacks).length
-  ) {
-    lbry._balanceUpdateInterval = setInterval(() => {
-      lbry._updateBalanceSubscribers();
-    }, lbry._balanceSubscribeInterval);
-  }
-};
-
-lbry.balanceSubscribe = function(callback) {
-  const subscribeId = ++lbry._subscribeIdCount;
-  lbry._balanceSubscribeCallbacks[subscribeId] = callback;
-  lbry._updateBalanceSubscribers();
-  return subscribeId;
-};
-
-lbry.balanceUnsubscribe = function(subscribeId) {
-  delete lbry._balanceSubscribeCallbacks[subscribeId];
-  if (
-    lbry._balanceUpdateInterval &&
-    !Object.keys(lbry._balanceSubscribeCallbacks).length
-  ) {
-    clearInterval(lbry._balanceUpdateInterval);
-  }
-};
-
 lbry.showMenuIfNeeded = function() {
   const showingMenu = sessionStorage.getItem("menuShown") || null;
   const chosenMenu = lbry.getClientSetting("showDeveloperMenu")

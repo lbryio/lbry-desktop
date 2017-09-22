@@ -1,5 +1,4 @@
 import * as types from "constants/action_types";
-import * as settings from "constants/settings";
 import lbry from "lbry";
 import {
   selectUpdateUrl,
@@ -8,6 +7,7 @@ import {
   selectUpgradeFilename,
 } from "selectors/app";
 import { doFetchDaemonSettings } from "actions/settings";
+import { doBalanceSubscribe } from "actions/wallet";
 import { doAuthenticate } from "actions/user";
 import { doFetchFileInfosAndPublishedClaims } from "actions/file_info";
 
@@ -178,6 +178,7 @@ export function doDaemonReady() {
     dispatch(doAuthenticate());
     dispatch({ type: types.DAEMON_READY });
     dispatch(doFetchDaemonSettings());
+    dispatch(doBalanceSubscribe());
     dispatch(doFetchFileInfosAndPublishedClaims());
   };
 }

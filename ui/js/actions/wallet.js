@@ -9,12 +9,23 @@ import { doOpenModal, doShowSnackBar } from "actions/app";
 import { doNavigate } from "actions/navigation";
 import * as modals from "constants/modal_types";
 
-export function doUpdateBalance(balance) {
-  return {
-    type: types.UPDATE_BALANCE,
-    data: {
-      balance: balance,
-    },
+export function doUpdateBalance() {
+  return function(dispatch, getState) {
+    lbry.wallet_balance().then(balance => {
+      return dispatch({
+        type: types.UPDATE_BALANCE,
+        data: {
+          balance: balance,
+        },
+      });
+    });
+  };
+}
+
+export function doBalanceSubscribe() {
+  return function(dispatch, getState) {
+    dispatch(doUpdateBalance());
+    setInterval(() => dispatch(doUpdateBalance()), 5000);
   };
 }
 
