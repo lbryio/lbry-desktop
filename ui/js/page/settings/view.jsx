@@ -190,6 +190,11 @@ class SettingsPage extends React.PureComponent {
             <h3>{__("Purchase Settings")}</h3>
           </div>
           <div className="card__content">
+            <div className="form-row__label-row">
+              <label className="form-row__label">
+                {__("Max Purchase Price")}
+              </label>
+            </div>
             <FormRow
               type="radio"
               name="max_key_fee"
@@ -232,7 +237,12 @@ class SettingsPage extends React.PureComponent {
             </div>
           </div>
           <div className="card__content">
-            <FormField
+            <div className="form-row__label-row">
+              <label className="form-row__label">
+                {__("Purchase Confirmations")}
+              </label>
+            </div>
+            <FormRow
               type="radio"
               name="instant_purchase_max"
               checked={!this.state.instantPurchaseEnabled}
