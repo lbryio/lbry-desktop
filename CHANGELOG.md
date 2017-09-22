@@ -17,6 +17,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
 
 ### Fixed
   * Improve layout (and implementation) of the icon panel in file tiles and cards
+  * The folder icon representing a local download now shows up properly on Channel pages (#587)
   *
 
 ### Deprecated
