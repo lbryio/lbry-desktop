@@ -16,14 +16,12 @@ const { remote, ipcRenderer, shell } = require("electron");
 const contextMenu = remote.require("./menu/context-menu");
 const app = require("./app");
 
-lbry.showMenuIfNeeded();
-
 window.addEventListener("contextmenu", event => {
   contextMenu.showContextMenu(
     remote.getCurrentWindow(),
     event.x,
     event.y,
-    lbry.getClientSetting("showDeveloperMenu")
+    env === "development"
   );
   event.preventDefault();
 });

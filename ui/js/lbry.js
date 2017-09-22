@@ -37,7 +37,6 @@ let lbry = {
     debug: false,
     useCustomLighthouseServers: false,
     customLighthouseServers: [],
-    showDeveloperMenu: false,
     language: "en",
     theme: "light",
     themes: [],
@@ -230,9 +229,6 @@ lbry.publishDeprecated = function(
 
 lbry.getClientSetting = function(setting) {
   var localStorageVal = localStorage.getItem("setting_" + setting);
-  if (setting == "showDeveloperMenu") {
-    return true;
-  }
   return localStorageVal === null
     ? lbry.defaultClientSettings[setting]
     : JSON.parse(localStorageVal);
@@ -240,13 +236,6 @@ lbry.getClientSetting = function(setting) {
 
 lbry.setClientSetting = function(setting, value) {
   return localStorage.setItem("setting_" + setting, JSON.stringify(value));
-};
-
-lbry.formatName = function(name) {
-  // Converts LBRY name to standard format (all lower case, no special characters, spaces replaced by dashes)
-  name = name.replace("/s+/g", "-");
-  name = name.toLowerCase().replace(lbryuri.REGEXP_INVALID_URI, "");
-  return name;
 };
 
 lbry.imagePath = function(file) {
@@ -277,17 +266,6 @@ lbry.getMediaType = function(contentType, fileName) {
   } else {
     return "unknown";
   }
-};
-
-lbry.showMenuIfNeeded = function() {
-  const showingMenu = sessionStorage.getItem("menuShown") || null;
-  const chosenMenu = lbry.getClientSetting("showDeveloperMenu")
-    ? "developer"
-    : "normal";
-  if (chosenMenu != showingMenu) {
-    menu.showMenubar(chosenMenu == "developer");
-  }
-  sessionStorage.setItem("menuShown", chosenMenu);
 };
 
 lbry.getAppVersionInfo = function() {
