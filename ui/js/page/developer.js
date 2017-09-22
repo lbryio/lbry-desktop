@@ -11,21 +11,8 @@ class DeveloperPage extends React.PureComponent {
     super(props);
 
     this.state = {
-      useCustomLighthouseServers: lbry.getClientSetting(
-        "useCustomLighthouseServers"
-      ),
-      customLighthouseServers: lbry
-        .getClientSetting("customLighthouseServers")
-        .join("\n"),
       upgradePath: "",
     };
-  }
-
-  handleUseCustomLighthouseServersChange(event) {
-    lbry.setClientSetting("useCustomLighthouseServers", event.target.checked);
-    this.setState({
-      useCustomLighthouseServers: event.target.checked,
-    });
   }
 
   handleUpgradeFileChange(event) {
@@ -60,40 +47,6 @@ class DeveloperPage extends React.PureComponent {
   render() {
     return (
       <main>
-        <section className="card">
-          <h3>{__("Developer Settings")}</h3>
-          <div className="form-row">
-            <label>
-              <FormField
-                type="checkbox"
-                onChange={event => {
-                  this.handleUseCustomLighthouseServersChange();
-                }}
-                checked={this.state.useCustomLighthouseServers}
-              />
-              {" "}
-              {__("Use custom search servers")}
-            </label>
-          </div>
-          {this.state.useCustomLighthouseServers
-            ? <div className="form-row">
-                <label>
-                  {__("Custom search servers (one per line)")}
-                  <div>
-                    <FormField
-                      type="textarea"
-                      className="developer-page__custom-lighthouse-servers"
-                      value={this.state.customLighthouseServers}
-                      onChange={event => {
-                        this.handleCustomLighthouseServersChange();
-                      }}
-                      checked={this.state.debugMode}
-                    />
-                  </div>
-                </label>
-              </div>
-            : null}
-        </section>
         <section className="card">
           <div className="form-row">
             <FormField
