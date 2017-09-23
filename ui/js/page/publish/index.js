@@ -20,7 +20,7 @@ import { selectBalance } from "selectors/wallet";
 import rewards from "rewards";
 import PublishPage from "./view";
 
-const select = (state, props) => ({
+const select = state => ({
   balance: selectBalance(state),
   myClaims: selectMyClaims(state),
   fetchingChannels: selectFetchingMyChannels(state),
