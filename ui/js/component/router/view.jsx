@@ -46,7 +46,7 @@ const Router = props => {
     search: <SearchPage params={params} />,
     send: <SendCreditsPage params={params} />,
     settings: <SettingsPage params={params} />,
-    show: <ShowPage {...params} />,
+    show: null,
     wallet: <WalletPage params={params} />,
   });
 };

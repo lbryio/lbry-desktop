@@ -17,6 +17,8 @@ const defaultState = {
   hasSignature: false,
   badgeNumber: 0,
   volume: sessionStorage.getItem("volume") || 1,
+  mediaExpand: true,
+  keepPlaying: true,
 };
 
 reducers[types.DAEMON_READY] = function(state, action) {
@@ -151,18 +153,21 @@ reducers[types.VOLUME_CHANGED] = function(state, action) {
   });
 };
 
-reducers[types.OPEN_OVERLAY_MEDIA] = function(state, action) {
-  const { mediaUri } = actionl;
+reducers[types.CLOSE_OVERLAY_MEDIA] = function(state, action) {
   return Object.assign({}, state, {
-    keepMedia: true,
-    mediaUri,
+    keepPlaying: false,
   });
 };
 
-reducers[types.CLOSE_OVERLAY_MEDIA] = function(state, action) {
+reducers[types.EXPAND_OVERLAY_MEDIA] = function(state, action) {
   return Object.assign({}, state, {
-    keepMedia: false,
-    mediaUri: null,
+    mediaExpand: true,
+  });
+};
+
+reducers[types.MINIMIZE_OVERLAY_MEDIA] = function(state, action) {
+  return Object.assign({}, state, {
+    mediaExpand: false,
   });
 };
 

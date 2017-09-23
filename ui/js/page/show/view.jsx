@@ -20,9 +20,20 @@ class ShowPage extends React.PureComponent {
   }
 
   render() {
-    const { claim, isResolvingUri, uri } = this.props;
+    const {
+      claim,
+      isResolvingUri,
+      uri,
+      expanded,
+      expand,
+      minimize,
+    } = this.props;
 
     let innerContent = "";
+    const styles =
+      "overlay-media " +
+      (expanded ? "" : "minimized ") +
+      " main--single-column";
 
     if ((isResolvingUri && !claim) || !claim) {
       innerContent = (
@@ -45,10 +56,17 @@ class ShowPage extends React.PureComponent {
     } else if (claim && claim.name.length && claim.name[0] === "@") {
       innerContent = <ChannelPage uri={uri} />;
     } else if (claim) {
-      innerContent = <FilePage uri={uri} />;
+      innerContent = (
+        <FilePage
+          uri={uri}
+          minimize={minimize}
+          expand={expand}
+          expanded={expanded}
+        />
+      );
     }
 
-    return <main className="main--single-column">{innerContent}</main>;
+    return <main className={styles}>{innerContent}</main>;
   }
 }
 

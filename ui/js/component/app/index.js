@@ -12,8 +12,6 @@ import App from "./view";
 const select = (state, props) => ({
   pageTitle: selectPageTitle(state),
   user: selectUser(state),
-  keepMedia: false,
-  mediaUri: null,
 });
 
 const perform = dispatch => ({

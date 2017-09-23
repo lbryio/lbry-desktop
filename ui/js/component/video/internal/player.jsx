@@ -28,6 +28,7 @@ class VideoPlayer extends React.PureComponent {
       mediaType,
       changeVolume,
       volume,
+      controls,
     } = this.props;
     const loadedMetadata = e => {
       this.setState({ hasMetadata: true, startedPlaying: true });
@@ -53,7 +54,7 @@ class VideoPlayer extends React.PureComponent {
       player.append(
         this.file(),
         container,
-        { autoplay: false, controls: true },
+        { autoplay: false, controls },
         renderMediaCallback.bind(this)
       );
     }

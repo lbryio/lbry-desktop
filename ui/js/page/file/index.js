@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { doNavigate } from "actions/navigation";
+import { doCloseOverlayMedia } from "actions/app";
 import { doFetchFileInfo } from "actions/file_info";
 import { makeSelectFileInfoForUri } from "selectors/file_info";
 import { selectRewardContentClaimIds } from "selectors/content";
@@ -30,6 +31,7 @@ const perform = dispatch => ({
   navigate: (path, params) => dispatch(doNavigate(path, params)),
   fetchFileInfo: uri => dispatch(doFetchFileInfo(uri)),
   fetchCostInfo: uri => dispatch(doFetchCostInfoForUri(uri)),
+  closeOverlayMedia: () => dispatch(doCloseOverlayMedia()),
 });
 
 export default connect(select, perform)(FilePage);

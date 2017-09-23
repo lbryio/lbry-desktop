@@ -2,7 +2,7 @@ import React from "react";
 import lbry from "lbry.js";
 import lbryuri from "lbryuri.js";
 import Video from "component/video";
-import { Thumbnail } from "component/common";
+import { Thumbnail, Icon } from "component/common";
 import FilePrice from "component/filePrice";
 import FileDetails from "component/fileDetails";
 import UriIndicator from "component/uriIndicator";
@@ -40,6 +40,10 @@ class FilePage extends React.PureComponent {
       tab,
       uri,
       rewardedContentClaimIds,
+      expanded,
+      minimize,
+      navigate,
+      closeOverlayMedia,
     } = this.props;
 
     const showTipBox = tab == "tip";
@@ -59,16 +63,33 @@ class FilePage extends React.PureComponent {
       Object.values(player.mime).indexOf(contentType) !== -1 ||
       mediaType === "audio";
 
+    const CloseButton = (
+      <div className="button-close" onClick={() => closeOverlayMedia()}>
+        <Icon icon="icon-times" />
+      </div>
+    );
+
+    const ShowThumbnail = metadata && metadata.thumbnail
+      ? <Thumbnail src={metadata.thumbnail} />
+      : <Thumbnail />;
+
+    const ShowPlayer = (
+      <div className="player" onClick={() => navigate("show", { uri })}>
+        <Video className="video-embedded" uri={uri} controls={expanded} />
+      </div>
+    );
+
     return (
       <div>
         <section className="show-page-media">
-          {isPlayable
-            ? <Video className="video-embedded" uri={uri} />
-            : metadata && metadata.thumbnail
-              ? <Thumbnail src={metadata.thumbnail} />
-              : <Thumbnail />}
+          {isPlayable ? ShowPlayer : ShowThumbnail}
+          {CloseButton}
         </section>
-        <section className={"card " + (obscureNsfw ? "card--obscured " : "")}>
+        <section
+          className={
+            "show-page-info card " + (obscureNsfw ? "card--obscured " : "")
+          }
+        >
           <div className="card__inner">
             {(!tab || tab === "details") &&
               <div>

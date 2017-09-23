@@ -9,6 +9,9 @@ body
   color: var(--text-color);
   font-family: 'Source Sans Pro', sans-serif;
   line-height: var(--font-line-height);
+  /* temp fix */
+  overflow-x: hidden;
+  overflow-Y: auto;
 }
 
 /* Custom text selection */
