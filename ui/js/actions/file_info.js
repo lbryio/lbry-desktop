@@ -82,6 +82,7 @@ export function doOpenFileInShell(path) {
 
 export function doOpenFileInFolder(path) {
   return function(dispatch, getState) {
+    console.log(path);
     shell.showItemInFolder(path);
   };
 }
