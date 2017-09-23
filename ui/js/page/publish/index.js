@@ -9,6 +9,7 @@ import {
   selectClaimsByUri,
 } from "selectors/claims";
 import { selectResolvingUris } from "selectors/content";
+import { makeSelectCostInfoForUri } from "selectors/cost_info";
 import {
   doFetchClaimListMine,
   doFetchChannelListMine,
@@ -20,13 +21,14 @@ import { selectBalance } from "selectors/wallet";
 import rewards from "rewards";
 import PublishPage from "./view";
 
-const select = state => ({
+const select = (state, props) => ({
   balance: selectBalance(state),
   myClaims: selectMyClaims(state),
   fetchingChannels: selectFetchingMyChannels(state),
   channels: selectMyChannelClaims(state),
   claimsByUri: selectClaimsByUri(state),
   resolvingUris: selectResolvingUris(state),
+  costInfo: makeSelectCostInfoForUri(props.params.uri || state.uri)(state),
 });
 
 const perform = dispatch => ({

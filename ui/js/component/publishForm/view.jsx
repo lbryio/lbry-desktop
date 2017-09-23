@@ -20,6 +20,7 @@ class PublishForm extends React.PureComponent {
 
     this.state = {
       id: null,
+      uri: null,
       rawName: "",
       name: "",
       bid: 10,
@@ -166,7 +167,6 @@ class PublishForm extends React.PureComponent {
   claim() {
     const { claimsByUri } = this.props;
     const { uri } = this.state;
-
     return claimsByUri[uri];
   }
 
@@ -272,6 +272,8 @@ class PublishForm extends React.PureComponent {
   handlePrefillClaim(claimInfo) {
     const { claim_id, name, channel_name, amount } = claimInfo;
     const { source, metadata } = claimInfo.value.stream;
+    const { cost } = this.props.costInfo;
+    const isFee = cost > 0;
 
     const {
       license,
@@ -285,6 +287,7 @@ class PublishForm extends React.PureComponent {
 
     let newState = {
       id: claim_id,
+      uri: "",
       channel: channel_name || "anonymous",
       bid: amount,
       meta_title: title,
@@ -295,6 +298,8 @@ class PublishForm extends React.PureComponent {
       mode: "edit",
       prefillDone: true,
       rawName: name,
+      feeAmount: cost || null,
+      isFee,
       name,
       source,
     };
@@ -428,8 +433,8 @@ class PublishForm extends React.PureComponent {
     this.props.fetchClaimListMine();
     this._updateChannelList();
 
-    const { id } = this.props.params;
-    this.setState({ id });
+    const { id, uri } = this.props.params;
+    this.setState({ id, uri });
   }
 
   componentDidMount() {
