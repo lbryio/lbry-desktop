@@ -30,7 +30,9 @@ class FileDetails extends React.PureComponent {
     const { height } = claim;
     const mediaType = lbry.getMediaType(contentType);
 
-    const downloadPath = fileInfo ? fileInfo.download_path : null;
+    const downloadPath = fileInfo
+      ? path.normalize(fileInfo.download_path)
+      : null;
 
     const directory = downloadPath ? path.dirname(downloadPath) : null;
 

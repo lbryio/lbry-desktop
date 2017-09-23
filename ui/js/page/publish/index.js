@@ -9,7 +9,6 @@ import {
   selectClaimsByUri,
 } from "selectors/claims";
 import { selectResolvingUris } from "selectors/content";
-import { makeSelectCostInfoForUri } from "selectors/cost_info";
 import {
   doFetchClaimListMine,
   doFetchChannelListMine,

@@ -285,7 +285,6 @@ class PublishForm extends React.PureComponent {
 
     let newState = {
       id: claim_id,
-      uri: "",
       channel: channel_name || "anonymous",
       bid: amount,
       meta_title: title,
