@@ -28,7 +28,6 @@ const select = (state, props) => ({
   channels: selectMyChannelClaims(state),
   claimsByUri: selectClaimsByUri(state),
   resolvingUris: selectResolvingUris(state),
-  costInfo: makeSelectCostInfoForUri(props.params.uri || state.uri)(state),
 });
 
 const perform = dispatch => ({

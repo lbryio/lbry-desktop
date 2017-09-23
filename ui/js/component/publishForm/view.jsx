@@ -272,8 +272,6 @@ class PublishForm extends React.PureComponent {
   handlePrefillClaim(claimInfo) {
     const { claim_id, name, channel_name, amount } = claimInfo;
     const { source, metadata } = claimInfo.value.stream;
-    const { cost } = this.props.costInfo;
-    const isFee = cost > 0;
 
     const {
       license,
@@ -298,8 +296,6 @@ class PublishForm extends React.PureComponent {
       mode: "edit",
       prefillDone: true,
       rawName: name,
-      feeAmount: cost || null,
-      isFee,
       name,
       source,
     };
@@ -433,8 +429,8 @@ class PublishForm extends React.PureComponent {
     this.props.fetchClaimListMine();
     this._updateChannelList();
 
-    const { id, uri } = this.props.params;
-    this.setState({ id, uri });
+    const { id } = this.props.params;
+    this.setState({ id });
   }
 
   componentDidMount() {
