@@ -11,36 +11,6 @@ import WalletSendTip from "component/walletSendTip";
 import DateTime from "component/dateTime";
 import * as icons from "constants/icons";
 
-const FormatItem = props => {
-  const {
-    publishedDate,
-    contentType,
-    claim: { height },
-    metadata: { language, license },
-  } = props;
-
-  const mediaType = lbry.getMediaType(contentType);
-
-  return (
-    <table className="table-standard">
-      <tbody>
-        <tr>
-          <td>{__("Published on")}</td><td><DateTime block={height} /></td>
-        </tr>
-        <tr>
-          <td>{__("Content-Type")}</td><td>{mediaType}</td>
-        </tr>
-        <tr>
-          <td>{__("Language")}</td><td>{language}</td>
-        </tr>
-        <tr>
-          <td>{__("License")}</td><td>{license}</td>
-        </tr>
-      </tbody>
-    </table>
-  );
-};
-
 class FilePage extends React.PureComponent {
   componentDidMount() {
     this.fetchFileInfo(this.props);
@@ -109,7 +79,8 @@ class FilePage extends React.PureComponent {
                   {!fileInfo || fileInfo.written_bytes <= 0
                     ? <span style={{ float: "right" }}>
                         <FilePrice uri={lbryuri.normalize(uri)} />
-                        {isRewardContent && <span>{" "}<Icon icon={icons.FEATURED} /></span>}
+                        {isRewardContent &&
+                          <span>{" "}<Icon icon={icons.FEATURED} /></span>}
                       </span>
                     : null}
                   <h1>{title}</h1>
