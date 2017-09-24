@@ -20,6 +20,7 @@ class PublishForm extends React.PureComponent {
 
     this.state = {
       id: null,
+      uri: null,
       rawName: "",
       name: "",
       bid: 10,
@@ -166,7 +167,6 @@ class PublishForm extends React.PureComponent {
   claim() {
     const { claimsByUri } = this.props;
     const { uri } = this.state;
-
     return claimsByUri[uri];
   }
 
@@ -437,9 +437,10 @@ class PublishForm extends React.PureComponent {
   }
 
   onFileChange() {
+    const { mode } = this.state;
     if (this.refs.file.getValue()) {
       this.setState({ hasFile: true });
-      if (!this.state.customUrl) {
+      if (!this.state.customUrl && mode !== "edit") {
         let fileName = this._getFileName(this.refs.file.getValue());
         this.nameChanged(fileName);
       }
