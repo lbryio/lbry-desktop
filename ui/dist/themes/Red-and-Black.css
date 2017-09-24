@@ -96,6 +96,6 @@ code {
     color: #ffffff;
 }
 .file-download__overlay {
-    color: var(--light-green);
+    color: #ffffff;
     background: #b52929;
 }
