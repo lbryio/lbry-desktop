@@ -17,7 +17,6 @@ const defaultState = {
   hasSignature: false,
   badgeNumber: 0,
   volume: sessionStorage.getItem("volume") || 1,
-  mediaExpand: true,
   keepPlaying: true,
 };
 

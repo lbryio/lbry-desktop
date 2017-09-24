@@ -49,7 +49,6 @@ class App extends React.PureComponent {
   }
 
   render() {
-    const { keepMedia } = this.props;
     return (
       <div id="window">
         <Theme />

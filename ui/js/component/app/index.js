@@ -1,6 +1,5 @@
 import React from "react";
 import { connect } from "react-redux";
-import { selectKeepMedia } from "selectors/app";
 import { selectPageTitle } from "selectors/navigation";
 import { selectUser } from "selectors/user";
 import { doCheckUpgradeAvailable, doAlertError } from "actions/app";

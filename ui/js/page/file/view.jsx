@@ -82,7 +82,7 @@ class FilePage extends React.PureComponent {
       <div>
         <section className="show-page-media">
           {isPlayable ? ShowPlayer : ShowThumbnail}
-          {CloseButton}
+          {!expanded && CloseButton}
         </section>
         <section
           className={

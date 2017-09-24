@@ -20,14 +20,7 @@ class ShowPage extends React.PureComponent {
   }
 
   render() {
-    const {
-      claim,
-      isResolvingUri,
-      uri,
-      expanded,
-      expand,
-      minimize,
-    } = this.props;
+    const { claim, isResolvingUri, uri, expanded } = this.props;
 
     let innerContent = "";
     const styles =
@@ -56,14 +49,7 @@ class ShowPage extends React.PureComponent {
     } else if (claim && claim.name.length && claim.name[0] === "@") {
       innerContent = <ChannelPage uri={uri} />;
     } else if (claim) {
-      innerContent = (
-        <FilePage
-          uri={uri}
-          minimize={minimize}
-          expand={expand}
-          expanded={expanded}
-        />
-      );
+      innerContent = <FilePage uri={uri} expanded={expanded} />;
     }
 
     return <main className={styles}>{innerContent}</main>;

@@ -111,11 +111,6 @@ export const selectKeepPlaying = createSelector(
   state => state.keepPlaying
 );
 
-export const selectMediaExpand = createSelector(
-  _selectState,
-  state => state.mediaExpand
-);
-
 export const selectMediaUri = createSelector(
   _selectState,
   state => state.mediaUri
