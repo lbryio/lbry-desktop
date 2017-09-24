@@ -1,0 +1,98 @@
+:root {
+	
+    --light-green:  #e35b00;
+	
+	
+    /* Colors */
+    --color-primary: var(--light-green);
+    --color-canvas: #2d2d2d;
+    --color-bg:  #000000;
+    --color-bg-alt: var(--light-green);
+    --color-help: var(--light-green);
+    --color-error: var(--light-green);
+    --color-load-screen-text: var(--light-green);
+    --color-money: var(--light-green);
+    --color-meta-light: var(--light-green);
+    --color-dark-overlay: rgba(15, 21, 23, 0.85);
+    --select-color: #000000;
+    /* Text */
+    --text-color: var(--light-green);
+    --text-selection-bg: rgba(0, 0, 0, 0.95);
+
+    /* Input */
+    --input-bg: transparent;
+    --input-active-bg: rgba(0, 0, 0, 0.5);
+    --input-border-color: rgba(255,255,255, 0.25);
+    --input-color: var(--light-green);
+    /* Search */
+    --search-bg: #2d2d2d;
+    --search-color: var(--light-green);
+    --search-active-bg: var(--light-green);
+    --search-border: 1px solid rgba(0,0,0, 0.25);
+
+    /* Tab */
+    --tab-color: var(--light-green);
+    --tab-active-color: var(--light-green);
+
+    /* Header */
+    --header-color: #000000;
+    --header-active-color: #000000;
+    --header-button-bg: transparent;
+
+    /* Table */
+    --table-border: 0;
+    --table-item-even: transparent;
+    --table-item-odd: transparent;
+
+    /* Modla */
+    --modal-overlay-bg: var(--color-dark-overlay);
+    --modal-border: 1px solid rgba(0, 0, 0, 0.25);
+}
+
+.card__icon-featured-content {
+    color: var(--light-green);
+}
+.video__play-button {
+    color: var(--light-green);
+}
+.button-primary {
+    color: #000000;
+}
+.video__loading-status {
+    color: var(--light-green);
+}
+.wunderbar .icon {
+    color: var(--light-green);
+}
+p {
+    color: var(--light-green);
+}
+.card-row__header {
+    color: var(--light-green);
+}
+.file-download {
+    color: var(--light-green);
+}
+a {
+    color: #000000;
+}
+.header__item .button-alt {
+    background: var(--light-green) !important;
+    color: #000000;
+}
+.truncated-text {
+    color: var(--light-green);
+}
+.sort-section {
+    color: var(--light-green);
+}
+code {
+    background-color: transparent;
+}
+.file-download {
+    color: var(--light-green);
+}
+.file-download__overlay {
+    color: var(--light-green);
+    background: #005000;
+}

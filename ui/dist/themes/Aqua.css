@@ -1,0 +1,87 @@
+:root {
+    /* Colors */
+    --color-primary:  #89e0fd;
+    --color-canvas: #89e0fd;
+    --color-bg: #236b7b;
+    --color-bg-alt: #89e0fd;
+    --color-help: #89e0fd;
+    --color-error: #ceff08;
+    --color-load-screen-text: #fff;
+    --color-money: var(--color-primary);
+    --color-meta-light: #89e0fd;
+    --color-dark-overlay: rgba(15, 21, 23, 0.85);
+    --select-color: #236b7b;
+    /* Text */
+    --text-color: #89e0fd;
+    --text-selection-bg: rgba(51, 202, 188, 0.95);
+
+    /* Input */
+    --input-bg: transparent;
+    --input-active-bg: rgba(0, 0, 0, 0.5);
+    --input-border-color: rgba(255,255,255, 0.25);
+    --input-color: #89e0fd;
+    /* Search */
+    --search-bg: #89e0fd;
+    --search-color: #000000;
+    --search-active-bg: #89e0fd;
+    --search-border: 1px solid rgba(0,0,0, 0.25);
+
+    /* Tab */
+    --tab-color: #000000;
+    --tab-active-color: #000;
+
+    /* Header */
+    --header-color: #89e0fd;
+    --header-active-color: #89e0fd;
+    --header-button-bg: transparent;
+
+    /* Table */
+    --table-border: 0;
+    --table-item-even: transparent;
+    --table-item-odd: transparent;
+
+    /* Modla */
+    --modal-overlay-bg: var(--color-dark-overlay);
+    --modal-border: 1px solid rgba(0, 0, 0, 0.25);
+}
+
+.card__icon-featured-content {
+    color: #89e0fd;
+}
+.video__play-button {
+    color: #89e0fd;
+}
+.button-primary {
+    color: #236b7b;
+}
+.video__loading-status {
+    color: #89e0fd;
+}
+.wunderbar .icon {
+    color: #236b7b;
+}
+p {
+    color: #89e0fd;
+}
+.card-row__header {
+    color: black;
+}
+.file-download {
+    color: #89e0fd;
+}
+a {
+    color: #000000;
+}
+.header__item .button-alt {
+    background: #89e0fd !important;
+    color: #236b7b;
+}
+.truncated-text {
+    color: #89e0fd;
+}
+.sort-section {
+    color: #89e0fd;
+}
+code {
+    background-color: transparent;
+}

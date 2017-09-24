@@ -1,0 +1,101 @@
+:root {
+	
+    --light-green:  rgba(0, 162, 255, 0.47);
+	
+	
+    /* Colors */
+    --color-primary: var(--light-green);
+    --color-canvas: #abe4ff;
+    --color-bg:  rgb(0, 200, 234);
+    --color-bg-alt: var(--light-green);
+    --color-help: #ffffff;
+    --color-error: #ffffff;
+    --color-load-screen-text: #ffffff;
+    --color-money: #ffffff;
+    --color-meta-light: #ffffff;
+    --color-dark-overlay: rgba(15, 21, 23, 0.85);
+    --select-color: #000000;
+    /* Text */
+    --text-color: #ffffff;
+    --text-selection-bg: rgba(0, 0, 0, 0.95);
+
+    /* Input */
+    --input-bg: transparent;
+    --input-active-bg: rgba(0, 0, 0, 0.5);
+    --input-border-color: rgba(255,255,255, 0.25);
+    --input-color: var(--light-green);
+    /* Search */
+    --search-bg: #ffffff;
+    --search-color: var(--light-green);
+    --search-active-bg: var(--light-green);
+    --search-border: 1px solid rgba(0,0,0, 0.25);
+
+    /* Tab */
+    --tab-color: #ffffff;
+    --tab-active-color: #ffffff;
+
+    /* Header */
+    --header-color: #ffffff;
+    --header-active-color: #ffffff;
+    --header-button-bg: transparent;
+
+    /* Table */
+    --table-border: 0;
+    --table-item-even: transparent;
+    --table-item-odd: transparent;
+
+    /* Modla */
+    --modal-overlay-bg: var(--color-dark-overlay);
+    --modal-border: 1px solid rgba(0, 0, 0, 0.25);
+}
+
+.card__icon-featured-content {
+    color: #ffffff;
+}
+.video__play-button {
+    color: var(--light-green);
+}
+.button-primary {
+    color: #ffffff;
+}
+.button-text {
+	color:#ffffff;
+}
+.video__loading-status {
+    color: #ffffff;
+}
+.wunderbar .icon {
+    color: var(--light-green);
+}
+p {
+    color: #ffffff;
+}
+.card-row__header {
+    color: #ffffff;
+}
+.file-download {
+    color: #ffffff;
+}
+a {
+    color: #ffffff;
+}
+.header__item .button-alt {
+    background: var(--light-green) !important;
+    color: #ffffff;
+}
+.truncated-text {
+    color: #ffffff;
+}
+.sort-section {
+    color: #ffffff;
+}
+code {
+    background-color: transparent;
+}
+.file-download {
+    color: #ffffff;
+}
+.file-download__overlay {
+    color: var(--light-green);
+    background: #ffffff;
+}
