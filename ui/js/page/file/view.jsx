@@ -41,7 +41,6 @@ class FilePage extends React.PureComponent {
       uri,
       rewardedContentClaimIds,
       expanded,
-      minimize,
       navigate,
       closeOverlayMedia,
     } = this.props;
@@ -74,8 +73,8 @@ class FilePage extends React.PureComponent {
       : <Thumbnail />;
 
     const ShowPlayer = (
-      <div className="player" onClick={() => navigate("show", { uri })}>
-        <Video className="video-embedded" uri={uri} controls={expanded} />
+      <div className="player" onClick={() => navigate("/show", { uri })}>
+        <Video className="video-embedded" uri={uri} />
       </div>
     );
 

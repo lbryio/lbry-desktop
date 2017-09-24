@@ -6,39 +6,14 @@ class OverlayRouter extends React.PureComponent {
     super(props);
   }
 
-  componentWillMount() {
-    const { currentPage } = this.props;
-
-    const isPage = currentPage === "show";
-
-    if (isPage) {
-    }
-  }
-
   render() {
-    const {
-      currentPage,
-      params,
-      mediaExpand,
-      minimizeMedia,
-      expandMedia,
-      playingUri,
-      keepPlaying,
-    } = this.props;
+    const { currentPage, params, playingUri, keepPlaying } = this.props;
 
-    const pageUri = params.uri;
-
+    const uri = params.uri || playingUri;
     const isPage = currentPage === "show";
 
-    const uri = pageUri || playingUri;
-
-    const page = uri && (keepPlaying || isPage || playingUri)
-      ? <ShowPage
-          expanded={playingUri && !isPage ? false : mediaExpand}
-          uri={uri}
-          expand={expandMedia}
-          minimize={minimizeMedia}
-        />
+    const page = uri && (keepPlaying || isPage)
+      ? <ShowPage expanded={isPage} uri={uri} />
       : null;
 
     return page;

@@ -6,9 +6,9 @@ import FilePage from "page/file";
 
 class ShowPage extends React.PureComponent {
   componentWillMount() {
-    const { isResolvingUri, resolveUri, uri } = this.props;
-
+    const { isResolvingUri, resolveUri, uri, openMedia } = this.props;
     if (!isResolvingUri) resolveUri(uri);
+    openMedia();
   }
 
   componentWillReceiveProps(nextProps) {

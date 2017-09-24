@@ -220,20 +220,14 @@ export function doChangeVolume(volume) {
   };
 }
 
+export function doOpenOverlayMedia() {
+  return {
+    type: types.OPEN_OVERLAY_MEDIA,
+  };
+}
+
 export function doCloseOverlayMedia() {
   return {
     type: types.CLOSE_OVERLAY_MEDIA,
-  };
-}
-
-export function doExpandOverlayMedia() {
-  return {
-    type: types.EXPAND_OVERLAY_MEDIA,
-  };
-}
-
-export function doMinimizeOverlayMedia() {
-  return {
-    type: types.MINIMIZE_OVERLAY_MEDIA,
   };
 }

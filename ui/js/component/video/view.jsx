@@ -114,7 +114,6 @@ class Video extends React.PureComponent {
                 downloadCompleted={fileInfo.completed}
                 changeVolume={changeVolume}
                 volume={volume}
-                controls={hasControls}
               />)}
         {!isPlaying &&
           <div

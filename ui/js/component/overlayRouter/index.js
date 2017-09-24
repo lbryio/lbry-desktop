@@ -1,6 +1,5 @@
 import React from "react";
 import { connect } from "react-redux";
-import { doExpandOverlayMedia, doMinimizeOverlayMedia } from "actions/app.js";
 import { selectMediaExpand, selectKeepPlaying } from "selectors/app.js";
 import { selectPlayingUri } from "selectors/content";
 import {
@@ -17,9 +16,6 @@ const select = state => ({
   keepPlaying: selectKeepPlaying(state),
 });
 
-const perform = dispatch => ({
-  expandMedia: () => dispatch(doExpandOverlayMedia()),
-  minimizeMedia: () => dispatch(doMinimizeOverlayMedia()),
-});
+//const perform = dispatch => ({});
 
-export default connect(select, perform)(OverlayRouter);
+export default connect(select, null)(OverlayRouter);

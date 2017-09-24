@@ -153,21 +153,15 @@ reducers[types.VOLUME_CHANGED] = function(state, action) {
   });
 };
 
+reducers[types.OPEN_OVERLAY_MEDIA] = function(state, action) {
+  return Object.assign({}, state, {
+    keepPlaying: true,
+  });
+};
+
 reducers[types.CLOSE_OVERLAY_MEDIA] = function(state, action) {
   return Object.assign({}, state, {
     keepPlaying: false,
-  });
-};
-
-reducers[types.EXPAND_OVERLAY_MEDIA] = function(state, action) {
-  return Object.assign({}, state, {
-    mediaExpand: true,
-  });
-};
-
-reducers[types.MINIMIZE_OVERLAY_MEDIA] = function(state, action) {
-  return Object.assign({}, state, {
-    mediaExpand: false,
   });
 };
 
