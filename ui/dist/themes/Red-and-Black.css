@@ -6,17 +6,17 @@
     /* Colors */
     --color-primary: var(--light-green);
     --color-canvas: #b52929;
-    --color-bg:  rgb(0, 0, 0);
+    --color-bg:  #000000;
     --color-bg-alt: var(--light-green);
-    --color-help: #ffffff;
-    --color-error: #ffffff;
-    --color-load-screen-text: #ffffff;
-    --color-money: #ffffff;
-    --color-meta-light: #ffffff;
+    --color-help: #b52929;
+    --color-error: #b52929;
+    --color-load-screen-text: #b52929;
+    --color-money: #b52929;
+    --color-meta-light: #b52929;
     --color-dark-overlay: rgba(15, 21, 23, 0.85);
     --select-color: #000000;
     /* Text */
-    --text-color: #ffffff;
+    --text-color: #b52929;
     --text-selection-bg: rgba(0, 0, 0, 0.95);
 
     /* Input */
@@ -25,18 +25,18 @@
     --input-border-color: rgba(255,255,255, 0.25);
     --input-color: var(--light-green);
     /* Search */
-    --search-bg: #ffffff;
+    --search-bg: #484848;
     --search-color: var(--light-green);
-    --search-active-bg: var(--light-green);
+    --search-active-bg: #000000;
     --search-border: 1px solid rgba(0,0,0, 0.25);
 
     /* Tab */
-    --tab-color: #ffffff;
-    --tab-active-color: #ffffff;
+    --tab-color: #000000;
+    --tab-active-color: #000000;
 
     /* Header */
-    --header-color: #ffffff;
-    --header-active-color: #ffffff;
+    --header-color: #000000;
+    --header-active-color: #000000;
     --header-button-bg: transparent;
 
     /* Table */
@@ -50,52 +50,52 @@
 }
 
 .card__icon-featured-content {
-    color: #ffffff;
+    color: #b52929;
 }
 .video__play-button {
     color: var(--light-green);
 }
 .button-primary {
-    color: #ffffff;
+    color: #000000;
 }
 .button-text {
-	color:#ffffff;
+	color:#b52929;
 }
 .video__loading-status {
-    color: #ffffff;
+    color: #b52929;
 }
 .wunderbar .icon {
-    color: var(--light-green);
+    color: #b52929;
 }
 p {
-    color: #ffffff;
+    color: #b52929;
 }
 .card-row__header {
-    color: #ffffff;
+    color: #000000;
 }
 .file-download {
-    color: #ffffff;
+    color: #b52929;
 }
 a {
-    color: #ffffff;
+    color: #000000;
 }
 .header__item .button-alt {
     background: var(--light-green) !important;
-    color: #ffffff;
+    color: #000000;
 }
 .truncated-text {
-    color: #ffffff;
+    color: #b52929;
 }
 .sort-section {
-    color: #ffffff;
+    color: #b52929;
 }
 code {
     background-color: transparent;
 }
 .file-download {
-    color: #ffffff;
+    color: #b52929;
 }
 .file-download__overlay {
-    color: #ffffff;
+    color: #000000;
     background: #b52929;
 }
