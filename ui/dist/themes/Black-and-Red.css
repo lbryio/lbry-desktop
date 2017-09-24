@@ -1,0 +1,101 @@
+:root {
+	
+    --light-green:  #b52929;
+	
+	
+    /* Colors */
+    --color-primary: var(--light-green);
+    --color-canvas: #b52929;
+    --color-bg:  #000000;
+    --color-bg-alt: var(--light-green);
+    --color-help: #b52929;
+    --color-error: #b52929;
+    --color-load-screen-text: #b52929;
+    --color-money: #b52929;
+    --color-meta-light: #b52929;
+    --color-dark-overlay: rgba(15, 21, 23, 0.85);
+    --select-color: #000000;
+    /* Text */
+    --text-color: #b52929;
+    --text-selection-bg: rgba(0, 0, 0, 0.95);
+
+    /* Input */
+    --input-bg: transparent;
+    --input-active-bg: rgba(0, 0, 0, 0.5);
+    --input-border-color: rgba(255,255,255, 0.25);
+    --input-color: var(--light-green);
+    /* Search */
+    --search-bg: #484848;
+    --search-color: var(--light-green);
+    --search-active-bg: #000000;
+    --search-border: 1px solid rgba(0,0,0, 0.25);
+
+    /* Tab */
+    --tab-color: #000000;
+    --tab-active-color: #000000;
+
+    /* Header */
+    --header-color: #000000;
+    --header-active-color: #000000;
+    --header-button-bg: transparent;
+
+    /* Table */
+    --table-border: 0;
+    --table-item-even: transparent;
+    --table-item-odd: transparent;
+
+    /* Modla */
+    --modal-overlay-bg: var(--color-dark-overlay);
+    --modal-border: 1px solid rgba(0, 0, 0, 0.25);
+}
+
+.card__icon-featured-content {
+    color: #b52929;
+}
+.video__play-button {
+    color: var(--light-green);
+}
+.button-primary {
+    color: #000000;
+}
+.button-text {
+	color:#b52929;
+}
+.video__loading-status {
+    color: #b52929;
+}
+.wunderbar .icon {
+    color: #b52929;
+}
+p {
+    color: #b52929;
+}
+.card-row__header {
+    color: #000000;
+}
+.file-download {
+    color: #b52929;
+}
+a {
+    color: #000000;
+}
+.header__item .button-alt {
+    background: var(--light-green) !important;
+    color: #000000;
+}
+.truncated-text {
+    color: #b52929;
+}
+.sort-section {
+    color: #b52929;
+}
+code {
+    background-color: transparent;
+}
+.file-download {
+    color: #b52929;
+}
+.file-download__overlay {
+    color: #000000;
+    background: #b52929;
+}
