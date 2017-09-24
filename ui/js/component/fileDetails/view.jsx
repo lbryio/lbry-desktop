@@ -34,8 +34,6 @@ class FileDetails extends React.PureComponent {
       ? path.normalize(fileInfo.download_path)
       : null;
 
-    const directory = downloadPath ? path.dirname(downloadPath) : null;
-
     return (
       <div>
         <FileActions uri={uri} />
@@ -62,12 +60,12 @@ class FileDetails extends React.PureComponent {
               <tr>
                 <td>{__("License")}</td><td>{license}</td>
               </tr>
-              {directory &&
+              {downloadPath &&
                 <tr>
                   <td>{__("Downloaded to")}</td>
                   <td>
                     <Link onClick={() => openFolder(downloadPath)}>
-                      {directory}
+                      {downloadPath}
                     </Link>
                   </td>
                 </tr>}
