@@ -823,7 +823,7 @@ class PublishForm extends React.PureComponent {
                   <FormRow
                     ref="bid"
                     type="number"
-                    step="0.01"
+                    step="0.1"
                     label={__("Deposit")}
                     postfix="LBC"
                     onChange={event => {

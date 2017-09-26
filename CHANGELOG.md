@@ -19,6 +19,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
   * The folder icon representing a local download now shows up properly on Channel pages (#587)
   * While editing a publish, the URL will no longer change if you select a new file. (#601)
   * Fixed issues with opening the folder for a file (#606)
+  * Be consistent with the step property on credit inputs (#604)
 
 ### Deprecated
   *
