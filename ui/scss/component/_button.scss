@@ -47,6 +47,7 @@ $button-focus-shift: 12%;
 
 .button__content {
   margin: 0 var(--button-padding);
+  display: flex;
 }
 
 .button-primary
