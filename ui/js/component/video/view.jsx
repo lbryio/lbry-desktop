@@ -80,7 +80,7 @@ class Video extends React.PureComponent {
       loadStatusMessage = __("Downloading stream... not long left now!");
     }
 
-    let klasses = [];
+    let klasses = ["card"];
     klasses.push(obscureNsfw ? "video--obscured " : "");
     if (isLoading || isDownloading) klasses.push("video-embedded", "video");
     if (mediaType === "video") {

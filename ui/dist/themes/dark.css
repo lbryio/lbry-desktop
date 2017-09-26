@@ -48,6 +48,9 @@
     --scrollbar-thumb-bg: rgba(255, 255, 255, 0.20);
     --scrollbar-thumb-hover-bg: rgba(255, 255, 255, 0.35);
 
+    /* Media */
+    --media-bg: #CCC;
+
     /* Divider */
     --divider: 1px solid rgba(255,255,255, 0.12);
 }
