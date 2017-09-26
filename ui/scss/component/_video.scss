@@ -21,6 +21,7 @@ video {
   max-height: $height-video-embedded;
   height: $height-video-embedded;
   position: relative;
+  background: #000;
   video {
     height: 100%;
     width: 100%;
