@@ -31,9 +31,6 @@ video {
   &.video--hidden {
     height: $height-video-embedded;
   }
-  &.video--active {
-    /*background: none;*/
-  }
 }
 .video--obscured .video__cover
 {
