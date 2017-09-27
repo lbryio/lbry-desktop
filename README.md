@@ -49,43 +49,49 @@ to create distributable packages, which is run by calling:
 ## Development on Windows
 
 ### Windows Dependency
-
-1. Download and install `npm` and `node` from <a href="https://nodejs.org/en/download/current/">nodejs.org<a>
-2. Download and install `python 2.7` from <a href="https://www.python.org/downloads/windows/">python.org</a>
-3. Download and Install `Microsoft Visual C++ Compiler for Python 2.7` from <a href="https://www.microsoft.com/en-us/download/confirmation.aspx?id=44266">Microsoft<a>
-4. Download and install `.NET Framework 2.0 Software Development Kit (SDK) (x64)` from <a href="https://www.microsoft.com/en-gb/download/details.aspx?id=15354">Microsoft<a>
+1. Download and install `git` from <a href="https://git-for-windows.github.io/">github.io<a> (configure to use command prompt integration)
+2. Download and install `npm` and `node` from <a href="https://nodejs.org/en/download/current/">nodejs.org<a>
+3. Download and install `python 2.7` from <a href="https://www.python.org/downloads/windows/">python.org</a>
+4. Download and Install `Microsoft Visual C++ Compiler for Python 2.7` from <a href="https://www.microsoft.com/en-us/download/confirmation.aspx?id=44266">Microsoft<a>
+5. Download and install `.NET Framework 2.0 Software Development Kit (SDK) (x64)` from <a href="https://www.microsoft.com/en-gb/download/details.aspx?id=15354">Microsoft<a> (may need to extract setup.exe and install manually by running install.exe as Administrator)
 
 ### One-time Setup
-1. Open command prompt in the root of the project and run the following;
+1. Open command prompt as adminstrator and run the following:
+```
+npm install --global --production windows-build-tools
+exit
+```
+
+2. Open command prompt in the root of the project and run the following:
 ```
 python -m pip install -r build\requirements.txt
 python build\set_version.py
 npm install -g yarn
 yarn install
 ```
-2. Change directory to `app` and run the following;
+3. Change directory to `app` and run the following;
 ```
 yarn install
 node_modules\.bin\electron-rebuild
 node_modules\.bin\electron-rebuild
 cd ..
 ```
-3. Change directory to `ui` and run the following
+4. Change directory to `ui` and run the following:
 ```
 yarn install
 npm rebuild node-sass
 node node_modules\node-sass\bin\node-sass --output dist\css --sourcemap=none scss\
 node_modules\.bin\webpack --config webpack.dev.config.js
-xcopy dist ..\app\dist
+xcopy /E dist ..\app\dist
 cd ..
 ```
-4. Download the lbry daemon and cli binaries and place them in `app\dist\`
+4. Download the lbry daemon and cli [binaries](https://github.com/lbryio/lbry/releases) and place them in `app\dist\`
 
 ### Building lbry-app
 1. run `node_modules\.bin\build -p never` from the root of the project.
 
 ### Running the electron app
-1. Run `./node_modules/.bin/electron app`
+1. Run `node_modules\.bin\electron app`
 
 ### Ongoing Development
 1. `cd ui`
