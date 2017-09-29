@@ -21,6 +21,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
   * While editing a publish, the URL will no longer change if you select a new file. (#601)
   * Fixed issues with opening the folder for a file (#606)
   * Be consistent with the step property on credit inputs (#604)
+  * Fixed channel fetching without claims (#634)
 
 ### Deprecated
   *
