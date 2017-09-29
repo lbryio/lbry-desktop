@@ -13,8 +13,6 @@ class SettingsPage extends React.PureComponent {
     super(props);
 
     this.state = {
-      instantPurchaseEnabled: props.instantPurchaseEnabled,
-      instantPurchaseMax: props.instantPurchaseMax,
       clearingCache: false,
     };
   }
@@ -49,7 +47,14 @@ class SettingsPage extends React.PureComponent {
   }
 
   onKeyFeeChange(newValue) {
-    this.setDaemonSetting("max_key_fee", newValue);
+    let setting = newValue;
+
+    //this is stupid and should be fixed... somewhere
+    if (setting && (setting.amount === undefined || setting.amount === null)) {
+      setting.amount = 0;
+    }
+
+    this.setDaemonSetting("max_key_fee", setting);
   }
 
   onKeyFeeDisableChange(isDisabled) {
@@ -61,20 +66,12 @@ class SettingsPage extends React.PureComponent {
     this.props.setClientSetting(settings.THEME, value);
   }
 
-  oninstantPurchaseEnabledChange(enabled) {
+  onInstantPurchaseEnabledChange(enabled) {
     this.props.setClientSetting(settings.INSTANT_PURCHASE_ENABLED, enabled);
-
-    this.setState({
-      instantPurchaseEnabled: enabled,
-    });
   }
 
   onInstantPurchaseMaxChange(newValue) {
     this.props.setClientSetting(settings.INSTANT_PURCHASE_MAX, newValue);
-
-    this.setState({
-      instantPurchaseMax: newValue,
-    });
   }
 
   // onMaxUploadPrefChange(isLimited) {
@@ -245,31 +242,31 @@ class SettingsPage extends React.PureComponent {
             <FormRow
               type="radio"
               name="instant_purchase_max"
-              checked={!this.state.instantPurchaseEnabled}
+              checked={!instantPurchaseEnabled}
               label={__("Ask for confirmation of all purchases")}
               onClick={e => {
-                this.oninstantPurchaseEnabledChange(false);
+                this.onInstantPurchaseEnabledChange(false);
               }}
             />
             <div className="form-row">
               <FormField
                 type="radio"
                 name="instant_purchase_max"
-                checked={this.state.instantPurchaseEnabled}
+                checked={instantPurchaseEnabled}
                 label={
                   "Single-click purchasing of content less than" +
-                  (this.state.instantPurchaseEnabled ? "" : "...")
+                  (instantPurchaseEnabled ? "" : "...")
                 }
                 onClick={e => {
-                  this.oninstantPurchaseEnabledChange(true);
+                  this.onInstantPurchaseEnabledChange(true);
                 }}
               />
-              {this.state.instantPurchaseEnabled &&
+              {instantPurchaseEnabled &&
                 <FormFieldPrice
                   min="0.1"
                   step="0.1"
                   onChange={val => this.onInstantPurchaseMaxChange(val)}
-                  defaultValue={this.state.instantPurchaseMax}
+                  defaultValue={instantPurchaseMax}
                 />}
             </div>
             <div className="form-field__helper">
