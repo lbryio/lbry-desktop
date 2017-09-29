@@ -663,10 +663,8 @@ class PublishForm extends React.PureComponent {
                 checked={this.state.isFee}
               />
               <span className={!this.state.isFee ? "hidden" : ""}>
-                {/*min=0.01 caused weird interactions with step (e.g. down from 5 equals 4.91 rather than 4.9) */}
                 <FormFieldPrice
                   min="0"
-                  step="0.1"
                   defaultValue={{ amount: 5.0, currency: "LBC" }}
                   onChange={val => this.handleFeeChange(val)}
                 />
@@ -823,7 +821,7 @@ class PublishForm extends React.PureComponent {
                   <FormRow
                     ref="bid"
                     type="number"
-                    step="0.1"
+                    step="any"
                     label={__("Deposit")}
                     postfix="LBC"
                     onChange={event => {

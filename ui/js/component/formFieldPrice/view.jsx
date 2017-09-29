@@ -34,7 +34,7 @@ class FormFieldPrice extends React.PureComponent {
   }
 
   render() {
-    const { defaultValue, placeholder, min, step } = this.props;
+    const { defaultValue, placeholder, min } = this.props;
 
     return (
       <span className="form-field">
@@ -43,7 +43,7 @@ class FormFieldPrice extends React.PureComponent {
           name="amount"
           min={min}
           placeholder={placeholder || null}
-          step={step}
+          step="any" //Unfortunately, you cannot set a step without triggering validation that enforces a multiple of the step
           onChange={event => this.handleFeeAmountChange(event)}
           defaultValue={
             defaultValue && defaultValue.amount ? defaultValue.amount : ""

@@ -148,7 +148,7 @@ class ChannelSection extends React.PureComponent {
             <FormRow
               label={__("Deposit")}
               postfix="LBC"
-              step="0.1"
+              step="any"
               min="0"
               type="number"
               helper={lbcInputHelp}
