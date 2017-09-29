@@ -10,7 +10,6 @@ class App extends React.PureComponent {
     const {
       alertError,
       checkUpgradeAvailable,
-      updateBalance,
       fetchRewardedContent,
     } = this.props;
 
@@ -21,10 +20,6 @@ class App extends React.PureComponent {
     if (!this.props.upgradeSkipped) {
       checkUpgradeAvailable();
     }
-
-    lbry.balanceSubscribe(balance => {
-      updateBalance(balance);
-    });
 
     fetchRewardedContent();
 

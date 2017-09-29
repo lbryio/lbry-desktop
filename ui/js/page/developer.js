@@ -11,7 +11,6 @@ class DeveloperPage extends React.PureComponent {
     super(props);
 
     this.state = {
-      showDeveloperMenu: lbry.getClientSetting("showDeveloperMenu"),
       useCustomLighthouseServers: lbry.getClientSetting(
         "useCustomLighthouseServers"
       ),
@@ -20,14 +19,6 @@ class DeveloperPage extends React.PureComponent {
         .join("\n"),
       upgradePath: "",
     };
-  }
-
-  handleShowDeveloperMenuChange(event) {
-    lbry.setClientSetting("showDeveloperMenu", event.target.checked);
-    lbry.showMenuIfNeeded();
-    this.setState({
-      showDeveloperMenu: event.target.checked,
-    });
   }
 
   handleUseCustomLighthouseServersChange(event) {
@@ -71,19 +62,6 @@ class DeveloperPage extends React.PureComponent {
       <main>
         <section className="card">
           <h3>{__("Developer Settings")}</h3>
-          <div className="form-row">
-            <label>
-              <FormField
-                type="checkbox"
-                onChange={event => {
-                  this.handleShowDeveloperMenuChange();
-                }}
-                checked={this.state.showDeveloperMenu}
-              />
-              {" "}
-              {__("Show developer menu")}
-            </label>
-          </div>
           <div className="form-row">
             <label>
               <FormField

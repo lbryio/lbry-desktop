@@ -33,7 +33,7 @@ class WalletSend extends React.PureComponent {
             <FormRow
               label={__("Amount")}
               postfix={__("LBC")}
-              step="0.01"
+              step="0.1"
               min="0"
               type="number"
               placeholder="1.23"

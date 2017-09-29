@@ -180,7 +180,12 @@ export const selectMyChannelClaims = createSelector(
     const ids = state.myChannelClaims || [];
     const claims = [];
 
-    ids.forEach(id => claims.push(byId[id]));
+    ids.forEach(id => {
+      if (byId[id]) {
+        //I'm not sure why this check is necessary, but it ought to be a quick fix for https://github.com/lbryio/lbry-app/issues/544
+        claims.push(byId[id]);
+      }
+    });
 
     return claims;
   }

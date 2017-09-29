@@ -6,8 +6,10 @@ import { Thumbnail } from "component/common";
 import FilePrice from "component/filePrice";
 import FileDetails from "component/fileDetails";
 import UriIndicator from "component/uriIndicator";
-import IconFeatured from "component/iconFeatured";
+import Icon from "component/icon";
 import WalletSendTip from "component/walletSendTip";
+import DateTime from "component/dateTime";
+import * as icons from "constants/icons";
 
 class FilePage extends React.PureComponent {
   componentDidMount() {
@@ -77,7 +79,8 @@ class FilePage extends React.PureComponent {
                   {!fileInfo || fileInfo.written_bytes <= 0
                     ? <span style={{ float: "right" }}>
                         <FilePrice uri={lbryuri.normalize(uri)} />
-                        {isRewardContent && <span>{" "}<IconFeatured /></span>}
+                        {isRewardContent &&
+                          <span>{" "}<Icon icon={icons.FEATURED} /></span>}
                       </span>
                     : null}
                   <h1>{title}</h1>

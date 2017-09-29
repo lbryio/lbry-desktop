@@ -1,4 +1,5 @@
 import React from "react";
+import * as icons from "constants/icons";
 import lbryuri from "lbryuri.js";
 import CardMedia from "component/cardMedia";
 import FileActions from "component/fileActions";
@@ -6,11 +7,16 @@ import Link from "component/link";
 import { TruncatedText } from "component/common.js";
 import FilePrice from "component/filePrice";
 import NsfwOverlay from "component/nsfwOverlay";
-import IconFeatured from "component/iconFeatured";
+import Icon from "component/icon";
 
 class FileTile extends React.PureComponent {
   static SHOW_EMPTY_PUBLISH = "publish";
   static SHOW_EMPTY_PENDING = "pending";
+
+  static defaultProps = {
+    showPrice: true,
+    showLocal: true,
+  };
 
   constructor(props) {
     super(props);
@@ -59,8 +65,10 @@ class FileTile extends React.PureComponent {
       isResolvingUri,
       showEmpty,
       navigate,
-      hidePrice,
+      showPrice,
+      showLocal,
       rewardedContentClaimIds,
+      fileInfo,
     } = this.props;
 
     const uri = lbryuri.normalize(this.props.uri);
@@ -111,8 +119,13 @@ class FileTile extends React.PureComponent {
             <CardMedia title={title} thumbnail={thumbnail} />
             <div className="file-tile__content">
               <div className="card__title-primary">
-                {!hidePrice ? <FilePrice uri={this.props.uri} /> : null}
-                {isRewardContent && <IconFeatured />}
+                <span className="card__indicators">
+                  {showPrice && <FilePrice uri={this.props.uri} />}
+                  {" "}
+                  {isRewardContent && <Icon icon={icons.FEATURED} />}
+                  {" "}
+                  {showLocal && fileInfo && <Icon icon={icons.LOCAL} />}
+                </span>
                 <div className="meta">{uri}</div>
                 <h3>
                   <TruncatedText lines={1}>{title}</TruncatedText>

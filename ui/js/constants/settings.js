@@ -6,5 +6,7 @@ export const NEW_USER_ACKNOWLEDGED = "welcome_acknowledged";
 export const LANGUAGE = "language";
 export const SHOW_NSFW = "showNsfw";
 export const SHOW_UNAVAILABLE = "showUnavailable";
+export const INSTANT_PURCHASE_ENABLED = "instantPurchaseEnabled";
+export const INSTANT_PURCHASE_MAX = "instantPurchaseMax";
 export const THEME = "theme";
 export const THEMES = "themes";

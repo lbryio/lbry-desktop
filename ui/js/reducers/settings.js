@@ -6,6 +6,10 @@ import lbry from "lbry";
 const reducers = {};
 const defaultState = {
   clientSettings: {
+    instantPurchaseEnabled: lbry.getClientSetting(
+      settings.INSTANT_PURCHASE_ENABLED
+    ),
+    instantPurchaseMax: lbry.getClientSetting(settings.INSTANT_PURCHASE_MAX),
     showNsfw: lbry.getClientSetting(settings.SHOW_NSFW),
     showUnavailable: lbry.getClientSetting(settings.SHOW_UNAVAILABLE),
     welcome_acknowledged: lbry.getClientSetting(settings.NEW_USER_ACKNOWLEDGED),

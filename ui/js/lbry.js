@@ -37,10 +37,12 @@ let lbry = {
     debug: false,
     useCustomLighthouseServers: false,
     customLighthouseServers: [],
-    showDeveloperMenu: false,
     language: "en",
     theme: "light",
     themes: [],
+    instantPurchaseMax: null,
+    instantPurchaseEnabled: false,
+    instantPurchaseMax: { currency: "LBC", amount: 0.1 },
   },
 };
 
@@ -227,9 +229,6 @@ lbry.publishDeprecated = function(
 
 lbry.getClientSetting = function(setting) {
   var localStorageVal = localStorage.getItem("setting_" + setting);
-  if (setting == "showDeveloperMenu") {
-    return true;
-  }
   return localStorageVal === null
     ? lbry.defaultClientSettings[setting]
     : JSON.parse(localStorageVal);
@@ -237,13 +236,6 @@ lbry.getClientSetting = function(setting) {
 
 lbry.setClientSetting = function(setting, value) {
   return localStorage.setItem("setting_" + setting, JSON.stringify(value));
-};
-
-lbry.formatName = function(name) {
-  // Converts LBRY name to standard format (all lower case, no special characters, spaces replaced by dashes)
-  name = name.replace("/s+/g", "-");
-  name = name.toLowerCase().replace(lbryuri.REGEXP_INVALID_URI, "");
-  return name;
 };
 
 lbry.imagePath = function(file) {
@@ -274,56 +266,6 @@ lbry.getMediaType = function(contentType, fileName) {
   } else {
     return "unknown";
   }
-};
-
-lbry._subscribeIdCount = 0;
-lbry._balanceSubscribeCallbacks = {};
-lbry._balanceSubscribeInterval = 5000;
-
-lbry._balanceUpdateInterval = null;
-lbry._updateBalanceSubscribers = function() {
-  lbry.wallet_balance().then(function(balance) {
-    for (let callback of Object.values(lbry._balanceSubscribeCallbacks)) {
-      callback(balance);
-    }
-  });
-
-  if (
-    !lbry._balanceUpdateInterval &&
-    Object.keys(lbry._balanceSubscribeCallbacks).length
-  ) {
-    lbry._balanceUpdateInterval = setInterval(() => {
-      lbry._updateBalanceSubscribers();
-    }, lbry._balanceSubscribeInterval);
-  }
-};
-
-lbry.balanceSubscribe = function(callback) {
-  const subscribeId = ++lbry._subscribeIdCount;
-  lbry._balanceSubscribeCallbacks[subscribeId] = callback;
-  lbry._updateBalanceSubscribers();
-  return subscribeId;
-};
-
-lbry.balanceUnsubscribe = function(subscribeId) {
-  delete lbry._balanceSubscribeCallbacks[subscribeId];
-  if (
-    lbry._balanceUpdateInterval &&
-    !Object.keys(lbry._balanceSubscribeCallbacks).length
-  ) {
-    clearInterval(lbry._balanceUpdateInterval);
-  }
-};
-
-lbry.showMenuIfNeeded = function() {
-  const showingMenu = sessionStorage.getItem("menuShown") || null;
-  const chosenMenu = lbry.getClientSetting("showDeveloperMenu")
-    ? "developer"
-    : "normal";
-  if (chosenMenu != showingMenu) {
-    menu.showMenubar(chosenMenu == "developer");
-  }
-  sessionStorage.setItem("menuShown", chosenMenu);
 };
 
 lbry.getAppVersionInfo = function() {
@@ -401,25 +343,6 @@ lbry.claim_list_mine = function(params = {}) {
           .getPendingPublishes()
           .map(pendingPublishToDummyClaim);
         resolve([...claims, ...dummyClaims]);
-      },
-      reject
-    );
-  });
-};
-
-lbry.claim_abandon = function(params = {}) {
-  return new Promise((resolve, reject) => {
-    apiCall("claim_abandon", params, resolve, reject);
-  });
-};
-
-lbry.block_show = function(params = {}) {
-  return new Promise((resolve, reject) => {
-    apiCall(
-      "block_show",
-      params,
-      block => {
-        resolve(block);
       },
       reject
     );

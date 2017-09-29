@@ -1,4 +1,5 @@
 import * as types from "constants/action_types";
+import * as settings from "constants/settings";
 import lbry from "lbry";
 import lbryio from "lbryio";
 import lbryuri from "lbryuri";
@@ -322,29 +323,56 @@ export function doPurchaseUri(uri) {
     const downloadingByOutpoint = selectDownloadingByOutpoint(state);
     const alreadyDownloading =
       fileInfo && !!downloadingByOutpoint[fileInfo.outpoint];
-    const costInfo = makeSelectCostInfoForUri(uri)(state);
-    const { cost } = costInfo;
 
-    if (
-      alreadyDownloading ||
-      (fileInfo && fileInfo.completed && fileInfo.written_bytes > 0)
-    ) {
-      return;
+    function attemptPlay(cost, instantPurchaseMax = null) {
+      if (cost > 0 && (!instantPurchaseMax || cost > instantPurchaseMax)) {
+        dispatch(doOpenModal(modals.AFFIRM_PURCHASE, { uri }));
+      } else {
+        dispatch(doLoadVideo(uri));
+      }
     }
 
     // we already fully downloaded the file.
-    if (
-      cost === 0 ||
-      (fileInfo && (fileInfo.completed || fileInfo.download_directory))
-    ) {
-      return dispatch(doLoadVideo(uri));
+    if (fileInfo && fileInfo.completed) {
+      // If written_bytes is false that means the user has deleted/moved the
+      // file manually on their file system, so we need to dispatch a
+      // doLoadVideo action to reconstruct the file from the blobs
+      if (!fileInfo.written_bytes) dispatch(doLoadVideo(uri));
+
+      return Promise.resolve();
     }
+
+    // we are already downloading the file
+    if (alreadyDownloading) {
+      return Promise.resolve();
+    }
+
+    const costInfo = makeSelectCostInfoForUri(uri)(state);
+    const { cost } = costInfo;
 
     if (cost > balance) {
-      return dispatch(doOpenModal(modals.INSUFFICIENT_CREDITS));
+      dispatch(doOpenModal(modals.INSUFFICIENT_CREDITS));
+      return Promise.resolve();
     }
 
-    return dispatch(doOpenModal(modals.AFFIRM_PURCHASE, { uri }));
+    if (
+      cost == 0 ||
+      !lbry.getClientSetting(settings.INSTANT_PURCHASE_ENABLED)
+    ) {
+      attemptPlay(cost);
+    } else {
+      const instantPurchaseMax = lbry.getClientSetting(
+        settings.INSTANT_PURCHASE_MAX
+      );
+      if (instantPurchaseMax.currency == "LBC") {
+        attemptPlay(cost, instantPurchaseMax.amount);
+      } else {
+        // Need to convert currency of instant purchase maximum before trying to play
+        lbryio.getExchangeRates().then(({ lbc_usd }) => {
+          attemptPlay(cost, instantPurchaseMax.amount / lbc_usd);
+        });
+      }
+    }
   };
 }
 
