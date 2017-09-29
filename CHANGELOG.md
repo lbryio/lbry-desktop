@@ -8,17 +8,16 @@ Web UI version numbers should always match the corresponding version of LBRY App
 
 ## [Unreleased]
 ### Added
-  * 
+  * New custom styled scrollbar [#574](https://github.com/lbryio/lbry-app/pull/574)
   *
 
 ### Changed
-  * Improved scrollbar design (UI/UX) [#574](https://github.com/lbryio/lbry-app/pull/574)
-  * Added a better tabs styles with nice animation. [#547](https://github.com/lbryio/lbry-app/pull/576)
+  * Improved tabs styles with a nice animation. [#547](https://github.com/lbryio/lbry-app/pull/576)
   * Display search bar on discover page instead of title and remove duplicated icon.
   * Minor update for themes.
 
 ### Fixed
-  * Unresponsive header [#613](https://github.com/lbryio/lbry-app/issues/613)
+  * Fixed unresponsive header [#613](https://github.com/lbryio/lbry-app/issues/613)
   * Fixed dark theme issues with text content.
   * Minor css fixes.
   *
