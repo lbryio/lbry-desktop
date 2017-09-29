@@ -325,7 +325,7 @@ export function doPurchaseUri(uri) {
       fileInfo && !!downloadingByOutpoint[fileInfo.outpoint];
 
     function attemptPlay(cost, instantPurchaseMax = null) {
-      if (!instantPurchaseMax || cost > instantPurchaseMax) {
+      if (cost > 0 && (!instantPurchaseMax || cost > instantPurchaseMax)) {
         dispatch(doOpenModal(modals.AFFIRM_PURCHASE, { uri }));
       } else {
         dispatch(doLoadVideo(uri));
@@ -373,8 +373,6 @@ export function doPurchaseUri(uri) {
         });
       }
     }
-
-    return dispatch(doOpenModal(modals.AFFIRM_PURCHASE, { uri }));
   };
 }
 

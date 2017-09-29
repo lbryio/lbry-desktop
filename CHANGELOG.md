@@ -12,6 +12,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
   *
 
 ### Changed
+  * Updated the daemon from 0.16.1 to [0.16.3](https://github.com/lbryio/lbry/releases/tag/v0.16.3) to improve download performance and download issue detection.
   * Changed the File page to make it clearer how to to open the folder for a file
 
 ### Fixed
