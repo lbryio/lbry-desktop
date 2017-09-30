@@ -71,8 +71,8 @@
     "node-loader": "^0.6.0",
     "prettier": "^1.4.2",
     "style-loader": "^0.18.2",
-    "webpack": "^3.2.0",
-    "webpack-dev-server": "^2.4.4",
+    "webpack": "^3.6.0",
+    "webpack-dev-server": "^2.9.1",
     "webpack-notifier": "^1.5.0",
     "webpack-target-electron-renderer": "^0.4.0"
   },
