@@ -17,6 +17,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
   * Changed the File page to make it clearer how to to open the folder for a file.
   * Improved tabs styles with a nice animation. [#547](https://github.com/lbryio/lbry-app/pull/576)
   * Display search bar on discover page instead of title and remove duplicated icon.
+  * Updated webpack build and dependencies to support css modules.
   * Minor update for themes.
   *
 
@@ -36,7 +37,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
   *
 
 ### Removed
-  * 
+  *
   *
 
 ## [0.16.0] - 2017-09-21
