@@ -43,21 +43,7 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        exclude: /node_modules/,
-        use: ExtractTextPlugin.extract({
-          fallback: "style-loader",
-          use: {
-            loader: "css-loader",
-            query: {
-              modules: true,
-              importLoaders: 1,
-              localIdentName: "name]__[local]___[hash:base64:5]"
-            }
-          }
-        })
-      },
-      {
-        test: /\.css$/,
+        exclude: /\.module\.css$/,
         use: ExtractTextPlugin.extract({
           fallback: "style-loader",
           use: {
@@ -65,6 +51,19 @@ module.exports = {
             query: {
               modules: true,
               localIdentName: "[local]"
+            }
+          }
+        })
+      },
+      {
+        test: /\.module\.css$/,
+        use: ExtractTextPlugin.extract({
+          fallback: "style-loader",
+          use: {
+            loader: "css-loader",
+            query: {
+              modules: true,
+              localIdentName: "[name]__[local]___[hash:base64:5]"
             }
           }
         })

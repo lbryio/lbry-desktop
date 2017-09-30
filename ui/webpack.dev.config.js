@@ -47,27 +47,26 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        exclude: /node_modules/,
+        exclude: /\.module\.css$/,
         use: [
-          "style-loader",
+          { loader: 'style-loader' },
           {
             loader: "css-loader",
             query: {
               modules: true,
-              importLoaders: 1,
-              localIdentName: "name]__[local]___[hash:base64:5]"
+              localIdentName: '[local]'
             }
           }]
       },
       {
-        test: /\.css$/,
+        test: /\.module\.css$/,
         use: [
-          "style-loader",
+          { loader: 'style-loader' },
           {
             loader: "css-loader",
             query: {
               modules: true,
-              localIdentName: "[local]"
+              localIdentName: '[name]__[local]___[hash:base64:5]'
             }
           }]
       },
