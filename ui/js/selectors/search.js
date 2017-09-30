@@ -48,8 +48,6 @@ export const selectWunderBarIcon = createSelector(
     switch (page) {
       case "auth":
         return "icon-user";
-      case "search":
-        return "icon-search";
       case "settings":
         return "icon-gear";
       case "help":
@@ -81,7 +79,8 @@ export const selectWunderBarIcon = createSelector(
       case "developer":
         return "icon-code";
       case "discover":
-        return "icon-home";
+      case "search":
+        return "icon-search";
       default:
         return "icon-file";
     }
