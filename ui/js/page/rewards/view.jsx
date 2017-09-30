@@ -114,7 +114,7 @@ class RewardsPage extends React.PureComponent {
     } else if (!rewards || rewards.length <= 0) {
       return (
         <div className="card__content empty">
-          {__("Failed to load rewards.")}
+          {__("There are no rewards available at this time, please check back later.")}
         </div>
       );
     } else {
