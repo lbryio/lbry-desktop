@@ -56,38 +56,3 @@
     border-color: var(--color-primary);
   }
 }
-
-nav.sub-header
-{
-  text-transform: uppercase;
-  padding: 0 0 $spacing-vertical;
-  max-width: $width-page-constrained;
-  margin-left: auto;
-  margin-right: auto;
-  > a
-  {
-    display: inline-block;
-    margin: 0 15px;
-    padding: 0 5px;
-    line-height:calc(var(--header-height) - $spacing-vertical - var(--tab-border-size));
-    color: var(--tab-color);
-
-    &:first-child
-    {
-      margin-left: 0;
-    }
-    &:last-child
-    {
-      margin-right: 0;
-    }
-    &.sub-header-selected
-    {
-      border-bottom: var(--tab-border);
-      color: var(--tab-active-color);
-    }
-    &:hover
-    {
-      color: var(--tab-active-color);
-    }
-  }
-}

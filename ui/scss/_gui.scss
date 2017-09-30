@@ -36,10 +36,16 @@ body
 
 #main-content
 {
-  padding: $spacing-vertical;
-  margin-top: var(--header-height);
+  margin: auto;
   display: flex;
   flex-direction: column;
+  overflow: overlay;
+  padding: $spacing-vertical;
+  position: absolute;
+  top: var(--header-height);
+  bottom: 0;
+  left: 5px;
+  right: 5px;
   main {
     margin-left: auto;
     margin-right: auto;
