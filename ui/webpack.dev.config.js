@@ -49,24 +49,24 @@ module.exports = {
         test: /\.css$/,
         exclude: /\.module\.css$/,
         use: [
-          { loader: 'style-loader' },
+          { loader: "style-loader" },
           {
             loader: "css-loader",
             query: {
               modules: true,
-              localIdentName: '[local]'
+              localIdentName: "[local]"
             }
           }]
       },
       {
         test: /\.module\.css$/,
         use: [
-          { loader: 'style-loader' },
+          { loader: "style-loader" },
           {
             loader: "css-loader",
             query: {
               modules: true,
-              localIdentName: '[name]__[local]___[hash:base64:5]'
+              localIdentName: "[name]__[local]___[hash:base64:5]"
             }
           }]
       },
