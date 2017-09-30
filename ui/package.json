@@ -63,6 +63,7 @@
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^2.2.3",
     "eslint-plugin-react": "^6.7.1",
+    "extract-text-webpack-plugin": "^3.0.0",
     "husky": "^0.13.4",
     "i18n-extract": "^0.4.4",
     "json-loader": "^0.5.4",
@@ -70,8 +71,8 @@
     "node-loader": "^0.6.0",
     "prettier": "^1.4.2",
     "style-loader": "^0.18.2",
-    "webpack": "^2.6.1",
-    "webpack-dev-server": "^2.4.4",
+    "webpack": "^3.6.0",
+    "webpack-dev-server": "^2.9.1",
     "webpack-notifier": "^1.5.0",
     "webpack-target-electron-renderer": "^0.4.0"
   },

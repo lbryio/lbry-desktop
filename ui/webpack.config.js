@@ -1,5 +1,6 @@
 const path = require("path");
 const webpack = require("webpack")
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const appPath = path.resolve(__dirname, "js");
 
 process.traceDeprecation = true;
@@ -25,6 +26,7 @@ module.exports = {
     new webpack.DefinePlugin({
       ENV: JSON.stringify("production"),
     }),
+   new ExtractTextPlugin(path.join("../css/bundle.css"), { allChunks: true }),
   ],
   module: {
     rules: [
@@ -41,7 +43,30 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: ["style-loader", "css-loader"]
+        exclude: /\.module\.css$/,
+        use: ExtractTextPlugin.extract({
+          fallback: "style-loader",
+          use: {
+            loader: "css-loader",
+            query: {
+              modules: true,
+              localIdentName: "[local]"
+            }
+          }
+        })
+      },
+      {
+        test: /\.module\.css$/,
+        use: ExtractTextPlugin.extract({
+          fallback: "style-loader",
+          use: {
+            loader: "css-loader",
+            query: {
+              modules: true,
+              localIdentName: "[name]__[local]___[hash:base64:5]"
+            }
+          }
+        })
       },
       {
         test: /\.jsx?$/,
