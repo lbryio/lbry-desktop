@@ -23,6 +23,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
   * Be consistent with the step property on credit inputs (#604)
   * Fixed issue when file fails to download (#642)
   * Fixed issue after accessing a video without enough credits (#605)
+  * Fixed channel fetching without claims (#634)
 
 ### Deprecated
   *
