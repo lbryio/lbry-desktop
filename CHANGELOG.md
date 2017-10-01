@@ -21,6 +21,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
   * While editing a publish, the URL will no longer change if you select a new file. (#601)
   * Fixed issues with opening the folder for a file (#606)
   * Be consistent with the step property on credit inputs (#604)
+  * Fixed issue when file fails to download (#642)
   * Fixed issue after accessing a video without enough credits (#605)
 
 ### Deprecated
