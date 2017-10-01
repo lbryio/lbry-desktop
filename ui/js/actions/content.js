@@ -351,6 +351,7 @@ export function doPurchaseUri(uri) {
     const { cost } = costInfo;
 
     if (cost > balance) {
+      dispatch(doSetPlayingUri(null));
       dispatch(doOpenModal(modals.INSUFFICIENT_CREDITS));
       return Promise.resolve();
     }
