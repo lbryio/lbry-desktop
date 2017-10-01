@@ -295,6 +295,7 @@ export function doLoadVideo(uri) {
           streamInfo.error == "Timeout";
 
         if (timeout) {
+          dispatch(doSetPlayingUri(null));
           dispatch({
             type: types.LOADING_VIDEO_FAILED,
             data: { uri },
@@ -306,6 +307,7 @@ export function doLoadVideo(uri) {
         }
       })
       .catch(error => {
+        dispatch(doSetPlayingUri(null));
         dispatch({
           type: types.LOADING_VIDEO_FAILED,
           data: { uri },
@@ -351,6 +353,7 @@ export function doPurchaseUri(uri) {
     const { cost } = costInfo;
 
     if (cost > balance) {
+      dispatch(doSetPlayingUri(null));
       dispatch(doOpenModal(modals.INSUFFICIENT_CREDITS));
       return Promise.resolve();
     }
