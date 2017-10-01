@@ -4,6 +4,7 @@ import { FormRow } from "component/form.js";
 import SubHeader from "component/subHeader";
 import * as settings from "constants/settings";
 import lbry from "lbry.js";
+import Button from "component/button";
 import Link from "component/link";
 import FormFieldPrice from "component/formFieldPrice";
 import { remote } from "electron";
@@ -215,7 +216,7 @@ class SettingsPage extends React.PureComponent {
                     : __("Limit to")
                 }
               />
-              {!daemonSettings.disable_max_key_fee &&
+              {!daemonSettings.disable_max_key_fee && (
                 <FormFieldPrice
                   min="0"
                   onChange={this.onKeyFeeChange.bind(this)}
@@ -224,7 +225,8 @@ class SettingsPage extends React.PureComponent {
                       ? daemonSettings.max_key_fee
                       : { currency: "USD", amount: 50 }
                   }
-                />}
+                />
+              )}
             </div>
             <div className="form-field__helper">
               {__(
@@ -260,12 +262,13 @@ class SettingsPage extends React.PureComponent {
                   this.onInstantPurchaseEnabledChange(true);
                 }}
               />
-              {instantPurchaseEnabled &&
+              {instantPurchaseEnabled && (
                 <FormFieldPrice
                   min="0.1"
                   onChange={val => this.onInstantPurchaseMaxChange(val)}
                   defaultValue={instantPurchaseMax}
-                />}
+                />
+              )}
             </div>
             <div className="form-field__helper">
               When this option is chosen, LBRY won't ask you to confirm
@@ -326,13 +329,12 @@ class SettingsPage extends React.PureComponent {
               defaultValue={theme}
               className="form-field__input--inline"
             >
-              {themes.map((theme, index) =>
+              {themes.map((theme, index) => (
                 <option key={theme} value={theme}>
                   {theme}
                 </option>
-              )}
+              ))}
             </FormField>
-
           </div>
         </section>
 
@@ -354,6 +356,15 @@ class SettingsPage extends React.PureComponent {
                 disabled={this.state.clearingCache}
               />
             </p>
+          </div>
+        </section>
+        <section className="card">
+          <div className="card__content">
+            <Button type="primary" label={__("play")} icon={"icon-play"} />
+            <Button type="primary" label={__("primary")} />
+            <Button label={__("default")} />
+            <Button label={__("disabled")} disabled={true} />
+            <Button type="text" label={__("text")} />
           </div>
         </section>
       </main>

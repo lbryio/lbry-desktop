@@ -1,0 +1,43 @@
+/* Button component */
+
+.button {
+  background-color: var(--button-bg);
+  border-radius: 3px;
+  border: 0;
+  color: inherit;
+  cursor: pointer;
+  display: inline-block;
+  font-family: inherit;
+  font-size: inherit;
+  height: var(--button-height);
+  text-align: center;
+  text-transform: uppercase;
+  vertical-align: middle;
+}
+
+.button + .button {
+    margin-left: var(--button-intra-margin);
+}
+
+.content {
+  display: flex;
+  margin: 0 var(--button-padding);
+}
+
+/* JUNK: External changes required to remove this */
+.content span[class*=icon]:first-child {
+  padding-right: 5px;
+}
+
+/* Button types */
+
+.primary {
+  composes: button;
+  color: var(--button-primary-color);
+  background-color: var(--button-primary-bg);
+}
+
+.text {
+  composes: button;
+  background-color: transparent;
+}

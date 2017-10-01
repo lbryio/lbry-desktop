@@ -17,6 +17,11 @@ body
   color: var(--text-selection-color);
 }
 
+/* disabled */
+*:disabled {
+  opacity: 0.5;
+}
+
 #window
 {
   min-height: 100vh;
