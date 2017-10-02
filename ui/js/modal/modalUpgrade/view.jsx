@@ -18,6 +18,10 @@ class ModalUpgrade extends React.PureComponent {
         {__(
           "Your version of LBRY is out of date and may be unreliable or insecure."
         )}
+        <Link
+          label={__("Learn more")}
+          href="https://github.com/lbryio/lbry-app/releases"
+        />
       </Modal>
     );
   }
