@@ -9,16 +9,17 @@ Web UI version numbers should always match the corresponding version of LBRY App
 ## [Unreleased]
 ### Added
   * Add setting to automatically purchase low-cost content without a confirmation dialog
-  * New custom styled scrollbar [#574](https://github.com/lbryio/lbry-app/pull/574)
+  * New custom styled scrollbar (#574)
   *
 
 ### Changed
   * Updated the daemon from 0.16.1 to [0.16.3](https://github.com/lbryio/lbry/releases/tag/v0.16.3) to improve download performance and download issue detection.
   * Changed the File page to make it clearer how to to open the folder for a file.
-  * Improved tabs styles with a nice animation. [#547](https://github.com/lbryio/lbry-app/pull/576)
+  * Improved tabs styles with a nice animation. (#547)
   * Display search bar on discover page instead of title and remove duplicated icon.
   * Minor update for themes.
-  *
+  * There is no longer a minimum channel length (#645)
+  * Changed the File page to make it clearer how to to open the folder for a file
 
 ### Fixed
   * Improve layout (and implementation) of the icon panel in file tiles and cards
@@ -26,10 +27,12 @@ Web UI version numbers should always match the corresponding version of LBRY App
   * While editing a publish, the URL will no longer change if you select a new file. (#601)
   * Fixed issues with opening the folder for a file (#606)
   * Be consistent with the step property on credit inputs (#604)
-  * Fixed unresponsive header [#613](https://github.com/lbryio/lbry-app/issues/613)
+  * Fixed unresponsive header (#613)
   * Fixed dark theme issues with text content.
   * Minor css fixes.
-  *
+  * Fixed issue when file fails to download (#642)
+  * Fixed issue after accessing a video without enough credits (#605)
+  * Fixed channel fetching without claims (#634)
 
 ### Deprecated
   *

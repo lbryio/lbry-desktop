@@ -37,7 +37,7 @@ class WalletSendTip extends React.PureComponent {
             label={__("Amount")}
             postfix={__("LBC")}
             min="0"
-            step="0.1"
+            step="any"
             type="number"
             errorMessage={errorMessage}
             helper={
