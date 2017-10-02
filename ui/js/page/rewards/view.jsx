@@ -75,7 +75,7 @@ class RewardsPage extends React.PureComponent {
               )}
             </p>
             <p>
-              {__("You will receive an email when this process is complete.") +
+              {__("If you continue to see this message, send us an email to help@lbry.io.") +
                 " " +
                 __("Please enjoy free content in the meantime!")}
             </p>
