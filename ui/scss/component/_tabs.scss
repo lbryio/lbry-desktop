@@ -40,8 +40,8 @@ nav.sub-header
         left: 0;
         content: '';
         animation-name: activeTab;
-        animation-duration: 0.3s;
-        animation-timing-function: cubic-bezier(.55,0,.1,1);
+        animation-duration: var(--animation-duration);
+        animation-timing-function: var(--animation-style);
       }
     }
     &:hover

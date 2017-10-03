@@ -43,6 +43,7 @@ $button-focus-shift: 12%;
 .button-block
 {
   cursor: pointer;
+  transition: background var(--animation-duration) var(--animation-style);
 }
 
 .button__content {

@@ -138,4 +138,9 @@ $text-color: #000;
 
   /* Divider */
   --divider: 1px solid rgba(0, 0, 0, 0.12);
+
+  /* Animation :) */
+  --animation-duration: 0.3s;
+  --animation-style: cubic-bezier(.55,0,.1,1);
+
 }
