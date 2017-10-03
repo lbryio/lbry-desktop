@@ -103,7 +103,7 @@ class ModalRouter extends React.PureComponent {
   render() {
     const { modal, modalProps } = this.props;
 
-    switch ("upgrade") {
+    switch (modal) {
       case modals.UPGRADE:
         return <ModalUpgrade {...modalProps} />;
       case modals.DOWNLOADING:
