@@ -19,6 +19,10 @@
   padding-right: $spacing-vertical / 4;
   .button-alt {
       background: var(--header-button-bg) !important;
+      font-size: 18px;
+  }
+  .button-alt:hover {
+      background: var(--header-button-hover-bg) !important;
   }
 }
 
