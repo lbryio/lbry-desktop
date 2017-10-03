@@ -20,7 +20,7 @@ $button-focus-shift: 12%;
   text-decoration: none;
   border: 0 none;
   text-align: center;
-  border-radius: 2px;
+  border-radius: var(--button-radius);
   text-transform: uppercase;
   .icon
   {
