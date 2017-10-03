@@ -132,7 +132,7 @@ class FileTile extends React.PureComponent {
               </div>
               {description &&
                 <div className="card__content card__subtext">
-                  <TruncatedText lines={!showActions ? 4 : 2}>
+                  <TruncatedText lines={2}>
                     {description}
                   </TruncatedText>
                 </div>}
@@ -142,7 +142,6 @@ class FileTile extends React.PureComponent {
                   <span className="meta-uri">{uri}</span>
                 </span>
               </div>
-
             </div>
           </div>
         </div>

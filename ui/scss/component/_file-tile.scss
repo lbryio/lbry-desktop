@@ -20,17 +20,19 @@ $height-file-tile: $spacing-vertical * 6;
     margin-top: 0;
   }
   .meta {
+    font-size: 0.9em;
+    color: var(--color-primary);
     background: var(--color-canvas);
     border: 1px solid rgba(0, 0, 0, 0.15);
     border-radius: 3px;
     display: inline-block;
-    padding: 8px;
-    max-width: 80%;
+    padding: 4px 8px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    max-width: 80%;
     .meta-uri {
-      margin: 0 8px;
+      margin-left: 8px;
     }
   }
 }
