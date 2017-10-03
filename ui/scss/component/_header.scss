@@ -56,7 +56,7 @@
   &:focus {
     background: var(--search-active-bg);
     color: var(--search-active-color);
-    box-shadow: var(--box-shadow-focus);
+    box-shadow: var(--search-active-shadow);
     border-color: var(--color-primary);
   }
 }

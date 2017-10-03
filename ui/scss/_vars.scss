@@ -80,13 +80,14 @@ $text-color: #000;
   --header-active-color: rgba(0,0,0, 0.85);
   --header-height: $spacing-vertical * 2.5;
   --header-button-bg: transparent; //var(--button-bg);
-  --header-button-hover-bg: var(--button-bg);
+  --header-button-hover-bg: rgba(100, 100, 100, 0.15);
 
   /* Header -> search */
   --search-bg: rgba(255, 255, 255, 0.7);
   --search-border:1px solid #ccc;
   --search-color: #666;
   --search-active-color: var(--header-active-color);
+  --search-active-shadow: 0 0 3px 0px var(--text-selection-bg);
 
   /* Tabs */
   --tab-bg: transparent;
