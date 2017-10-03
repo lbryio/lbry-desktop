@@ -1,5 +1,11 @@
+.file-selector {
+  display: flex;
+}
+
 .file-selector__choose-button {
-  font-size: 13px;
+  font-family: inherit;
+  margin-right: 16px;
+  padding: 0 16px;
 }
 
 .file-selector__path {

@@ -12,6 +12,11 @@ class FileSelector extends React.PureComponent {
     type: "file",
   };
 
+  constructor(props) {
+    super(props);
+    this._inputElem = null;
+  }
+
   componentWillMount() {
     this.setState({
       path: this.props.initPath || null,
@@ -47,7 +52,7 @@ class FileSelector extends React.PureComponent {
       <div className="file-selector">
         <button
           type="button"
-          className="file-selector__choose-button"
+          className="button-block button-alt file-selector__choose-button"
           onClick={() => this.handleButtonClick()}
         >
           {this.props.type == "file"
@@ -56,7 +61,18 @@ class FileSelector extends React.PureComponent {
         </button>
         {" "}
         <span className="file-selector__path">
-          {this.state.path ? this.state.path : __("No File Chosen")}
+          <input
+            className="input-copyable"
+            type="text"
+            ref={input => {
+              this._inputElem = input;
+            }}
+            onFocus={() => {
+              this._inputElem.select();
+            }}
+            readOnly="readonly"
+            value={this.state.path || __("No File Chosen")}
+          />
         </span>
       </div>
     );
