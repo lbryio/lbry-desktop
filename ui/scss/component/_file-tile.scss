@@ -19,4 +19,18 @@ $height-file-tile: $spacing-vertical * 6;
   .card__title-primary {
     margin-top: 0;
   }
+  .meta {
+    background: var(--color-canvas);
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    border-radius: 3px;
+    display: inline-block;
+    padding: 8px;
+    max-width: 80%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    .meta-uri {
+      margin: 0 8px;
+    }
+  }
 }
