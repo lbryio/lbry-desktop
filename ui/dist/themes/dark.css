@@ -33,7 +33,7 @@
     /* Header */
     --header-color: #CCC;
     --header-active-color: #FFF;
-    --header-button-hover-bg: rgba(255, 255, 255, 0.15);
+    --header-button-hover-bg: var(--color-bg-alt);
 
     /* Table */
     --table-border: 0;
@@ -49,7 +49,7 @@
     --scrollbar-thumb-hover-bg: rgba(255, 255, 255, 0.35);
 
     /* Media */
-    --media-bg: #CCC;
+    --media-bg: #90A4AE;
 
     /* Divider */
     --divider: 1px solid rgba(255, 225, 225, 0.12);
