@@ -55,9 +55,13 @@ class FileSelector extends React.PureComponent {
           className="button-block button-alt file-selector__choose-button"
           onClick={() => this.handleButtonClick()}
         >
-          {this.props.type == "file"
-            ? __("Choose File")
-            : __("Choose Directory")}
+          <span className="button__content">
+            <span className="button-label">
+              {this.props.type == "file"
+                ? __("Choose File")
+                : __("Choose Directory")}
+            </span>
+          </span>
         </button>
         {" "}
         <span className="file-selector__path">

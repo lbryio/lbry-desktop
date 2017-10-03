@@ -43,6 +43,8 @@ $button-focus-shift: 12%;
 .button-block
 {
   cursor: pointer;
+  font-weight: 500;
+  font-size: 14px;
   transition: background var(--animation-duration) var(--animation-style);
 }
 
@@ -94,6 +96,5 @@ $button-focus-shift: 12%;
 
 .button--submit {
     font-family: inherit;
-    font-size: inherit;
     line-height: 0;
 }

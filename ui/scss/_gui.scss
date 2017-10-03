@@ -7,7 +7,7 @@ html
 body
 {
   color: var(--text-color);
-  font-family: 'Source Sans Pro', sans-serif;
+  font-family: 'Roboto', sans-serif;
   line-height: var(--font-line-height);
 }
 
@@ -25,7 +25,7 @@ body
 
 .credit-amount--indicator
 {
-  font-weight: bold;
+  font-weight: 500;
   color: var(--color-money);
 }
 .credit-amount--fee

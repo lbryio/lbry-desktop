@@ -4,8 +4,9 @@
 
 .file-selector__choose-button {
   font-family: inherit;
+  line-height: 0;
+  color: inherit;
   margin-right: 16px;
-  padding: 0 16px;
 }
 
 .file-selector__path {
