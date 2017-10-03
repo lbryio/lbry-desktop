@@ -12,7 +12,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
   *
 
 ### Changed
-  * Bumped daemon version to improve error logging
+  *
   *
 
 ### Fixed
@@ -26,6 +26,13 @@ Web UI version numbers should always match the corresponding version of LBRY App
 ### Removed
   *
   *
+
+## [0.16.1] - 2017-10-02
+
+### Changed
+ * Bumped daemon version to improve error logging
+
+
 
 ## [0.16.0] - 2017-09-21
 
