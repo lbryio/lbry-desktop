@@ -15,6 +15,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
   * Updated the daemon from 0.16.1 to [0.16.3](https://github.com/lbryio/lbry/releases/tag/v0.16.3) to improve download performance and download issue detection.
   * There is no longer a minimum channel length (#645)
   * Changed the File page to make it clearer how to to open the folder for a file
+  * The upgrade message is now friendlier and includes a link to the release notes.
 
 ### Fixed
   * Improve layout (and implementation) of the icon panel in file tiles and cards
