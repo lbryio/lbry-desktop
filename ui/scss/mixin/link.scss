@@ -9,8 +9,8 @@
     }
   }
 
-  &:not(.no-underline) {
-    text-decoration: underline;
+  &:not(.underline) {
+    text-decoration: none;
     .icon {
       text-decoration: none;
     }

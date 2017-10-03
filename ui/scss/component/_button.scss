@@ -49,6 +49,9 @@ $button-focus-shift: 12%;
 .button__content {
   margin: 0 var(--button-padding);
   display: flex;
+  .link-label {
+    text-decoration: none !important;
+  }
 }
 
 .button-primary
