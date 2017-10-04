@@ -11,7 +11,6 @@ class FileActions extends React.PureComponent {
       showDelete = fileInfo && Object.keys(fileInfo).length > 0;
 
     const canEdit = fileInfo && claimIsMine;
-    console.log(fileInfo);
 
     return (
       <section className="card__actions">

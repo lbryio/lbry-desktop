@@ -187,7 +187,7 @@ class PublishForm extends React.PureComponent {
   }
 
   handleEditClaim() {
-    const claimInfo = this.claim() || this.myClaimInfo();
+    const claimInfo = this.myClaimInfo() || this.claim();
 
     if (claimInfo) {
       this.handlePrefillClaim(claimInfo);
@@ -869,10 +869,10 @@ class PublishForm extends React.PureComponent {
                 !this.state.submitting ? __("Publish") : __("Publishing...")
               }
               disabled={
-                this.state.submitting ||
+                submitting ||
                 (this.state.uri &&
                   this.props.resolvingUris.indexOf(this.state.uri) !== -1) ||
-                (this.claim() &&
+                ((this.myClaimInfo() || this.claim()) &&
                   !this.topClaimIsMine() &&
                   this.state.bid <= this.topClaimValue())
               }
