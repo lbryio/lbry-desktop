@@ -18,7 +18,7 @@ class FileActions extends React.PureComponent {
             icon="icon-edit"
             label={__("Edit")}
             navigate="/publish"
-            navigateParams={{ id: claimId }}
+            navigateParams={{ id: claimId, uri }}
           />}
         <FileDownloadLink uri={uri} />
         <Link

@@ -51,6 +51,7 @@ class PublishForm extends React.PureComponent {
       customUrl: false,
       source: null,
       mode: "publish",
+      publishedUri: null,
     };
   }
 
@@ -166,8 +167,8 @@ class PublishForm extends React.PureComponent {
 
   claim() {
     const { claimsByUri } = this.props;
-    const { uri } = this.state;
-    return claimsByUri[uri];
+    const { uri, publishedUri } = this.state;
+    return claimsByUri[uri] || claimsByUri[publishedUri];
   }
 
   topClaimValue() {
@@ -428,8 +429,8 @@ class PublishForm extends React.PureComponent {
     this.props.fetchClaimListMine();
     this._updateChannelList();
 
-    const { id } = this.props.params;
-    this.setState({ id });
+    const { uri, id } = this.props.params;
+    this.setState({ publishedUri: uri, id });
   }
 
   componentDidMount() {
