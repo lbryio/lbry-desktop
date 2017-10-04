@@ -872,7 +872,7 @@ class PublishForm extends React.PureComponent {
                 submitting ||
                 (this.state.uri &&
                   this.props.resolvingUris.indexOf(this.state.uri) !== -1) ||
-                ((this.myClaimInfo() || this.claim()) &&
+                (this.claim() &&
                   !this.topClaimIsMine() &&
                   this.state.bid <= this.topClaimValue())
               }
