@@ -71,12 +71,6 @@ class FileDetails extends React.PureComponent {
                 </tr>}
             </tbody>
           </table>
-          <p>
-            <Link
-              href={`https://lbry.io/dmca?claim_id=${claim.claim_id}`}
-              label={__("report")}
-            />
-          </p>
         </div>
       </div>
     );
