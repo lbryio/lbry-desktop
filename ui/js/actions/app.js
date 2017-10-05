@@ -10,6 +10,7 @@ import { doFetchDaemonSettings } from "actions/settings";
 import { doBalanceSubscribe } from "actions/wallet";
 import { doAuthenticate } from "actions/user";
 import { doFetchFileInfosAndPublishedClaims } from "actions/file_info";
+import * as modals from "constants/modal_types";
 
 const { remote, ipcRenderer, shell } = require("electron");
 const path = require("path");
@@ -96,7 +97,7 @@ export function doDownloadUpgrade() {
     dispatch({
       type: types.OPEN_MODAL,
       data: {
-        modal: "downloading",
+        modal: modals.DOWNLOADING,
       },
     });
   };
@@ -140,7 +141,7 @@ export function doCheckUpgradeAvailable() {
         dispatch({
           type: types.OPEN_MODAL,
           data: {
-            modal: "upgrade",
+            modal: modals.UPGRADE,
           },
         });
       }
@@ -166,7 +167,7 @@ export function doAlertError(errorList) {
     dispatch({
       type: types.OPEN_MODAL,
       data: {
-        modal: "error",
+        modal: modals.ERROR,
         modalProps: { error: errorList },
       },
     });
