@@ -47,6 +47,7 @@ export const Header = props => {
         <Link
           onClick={() => navigate("/wallet")}
           button="text"
+          className="no-underline"
           icon="icon-bank"
           label={balance}
           title={__("Wallet")}
