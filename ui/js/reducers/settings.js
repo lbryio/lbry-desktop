@@ -46,6 +46,7 @@ reducers[types.CLIENT_SETTING_CHANGED] = function(state, action) {
 
   clientSettings[key] = value;
 
+  //this technically probably shouldn't happen here, and should be fixed when we're no longer using localStorage at all for persistent app state
   localStorage.setItem("setting_" + key, JSON.stringify(value));
 
   return Object.assign({}, state, {
