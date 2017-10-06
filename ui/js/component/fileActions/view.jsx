@@ -10,15 +10,18 @@ class FileActions extends React.PureComponent {
     const claimId = fileInfo ? fileInfo.claim_id : null,
       showDelete = fileInfo && Object.keys(fileInfo).length > 0;
 
+    const canEdit = fileInfo && claimIsMine;
+
     return (
       <section className="card__actions">
         {claimIsMine &&
           <Link
             button="text"
             icon="icon-edit"
-            label={__("Edit")}
+            label={canEdit ? __("Edit") : __("Updating...")}
+            disabled={!canEdit}
             navigate="/publish"
-            navigateParams={{ id: claimId }}
+            navigateParams={{ id: claimId, uri }}
           />}
         <FileDownloadLink uri={uri} />
         <Link

@@ -51,6 +51,7 @@ class PublishForm extends React.PureComponent {
       customUrl: false,
       source: null,
       mode: "publish",
+      publishedUri: null,
     };
   }
 
@@ -166,8 +167,8 @@ class PublishForm extends React.PureComponent {
 
   claim() {
     const { claimsByUri } = this.props;
-    const { uri } = this.state;
-    return claimsByUri[uri];
+    const { uri, publishedUri } = this.state;
+    return claimsByUri[uri] || claimsByUri[publishedUri];
   }
 
   topClaimValue() {
@@ -186,7 +187,7 @@ class PublishForm extends React.PureComponent {
   }
 
   handleEditClaim() {
-    const claimInfo = this.claim() || this.myClaimInfo();
+    const claimInfo = this.myClaimInfo() || this.claim();
 
     if (claimInfo) {
       this.handlePrefillClaim(claimInfo);
@@ -428,8 +429,8 @@ class PublishForm extends React.PureComponent {
     this.props.fetchClaimListMine();
     this._updateChannelList();
 
-    const { id } = this.props.params;
-    this.setState({ id });
+    const { uri, id } = this.props.params;
+    this.setState({ publishedUri: uri, id });
   }
 
   componentDidMount() {
@@ -868,7 +869,7 @@ class PublishForm extends React.PureComponent {
                 !this.state.submitting ? __("Publish") : __("Publishing...")
               }
               disabled={
-                this.state.submitting ||
+                submitting ||
                 (this.state.uri &&
                   this.props.resolvingUris.indexOf(this.state.uri) !== -1) ||
                 (this.claim() &&
