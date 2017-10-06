@@ -27,8 +27,8 @@
     --search-border: 1px solid rgba(0,0,0, 0.25);
 
     /* Tab */
-    --tab-color: #757575;
-    --tab-active-color: #CCC;
+    --tab-color: rgba(255,255,255, 0.5) ;
+    --tab-active-color: rgba(255,255,255, 0.75);
 
     /* Header */
     --header-color: #CCC;
@@ -40,7 +40,14 @@
     --table-item-even: var(--color-bg-alt);
     --table-item-odd: transparent;
 
-    /* Modla */
+    /* Modal */
     --modal-overlay-bg: var(--color-dark-overlay);
     --modal-border: 1px solid rgba(0, 0, 0, 0.25);
+
+    /* Scrollbar */
+    --scrollbar-thumb-bg: rgba(255, 255, 255, 0.20);
+    --scrollbar-thumb-hover-bg: rgba(255, 255, 255, 0.35);
+
+    /* Divider */
+    --divider: 1px solid rgba(255,255,255, 0.12);
 }
