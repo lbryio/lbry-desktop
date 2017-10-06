@@ -8,7 +8,6 @@ import SendCreditsPage from "page/sendCredits";
 import ShowPage from "page/show";
 import PublishPage from "page/publish";
 import DiscoverPage from "page/discover";
-import DeveloperPage from "page/developer.js";
 import RewardsPage from "page/rewards";
 import FileListDownloaded from "page/fileListDownloaded";
 import FileListPublished from "page/fileListPublished";
@@ -32,7 +31,6 @@ const Router = props => {
     auth: <AuthPage params={params} />,
     backup: <BackupPage params={params} />,
     channel: <ChannelPage params={params} />,
-    developer: <DeveloperPage params={params} />,
     discover: <DiscoverPage params={params} />,
     downloaded: <FileListDownloaded params={params} />,
     help: <HelpPage params={params} />,

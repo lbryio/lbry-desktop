@@ -1,24 +1,35 @@
 import * as types from "constants/action_types";
 import * as settings from "constants/settings";
 import LANGUAGES from "constants/languages";
-import lbry from "lbry";
+
+function getLocalStorageSetting(setting, fallback) {
+  var localStorageVal = localStorage.getItem("setting_" + setting);
+  return localStorageVal === null ? fallback : JSON.parse(localStorageVal);
+}
 
 const reducers = {};
 const defaultState = {
   clientSettings: {
-    instantPurchaseEnabled: lbry.getClientSetting(
-      settings.INSTANT_PURCHASE_ENABLED
+    instantPurchaseEnabled: getLocalStorageSetting(
+      settings.INSTANT_PURCHASE_ENABLED,
+      false
     ),
-    instantPurchaseMax: lbry.getClientSetting(settings.INSTANT_PURCHASE_MAX),
-    showNsfw: lbry.getClientSetting(settings.SHOW_NSFW),
-    showUnavailable: lbry.getClientSetting(settings.SHOW_UNAVAILABLE),
-    welcome_acknowledged: lbry.getClientSetting(settings.NEW_USER_ACKNOWLEDGED),
-    credit_intro_acknowledged: lbry.getClientSetting(
+    instantPurchaseMax: getLocalStorageSetting(settings.INSTANT_PURCHASE_MAX, {
+      currency: "LBC",
+      amount: 0.1,
+    }),
+    showNsfw: getLocalStorageSetting(settings.SHOW_NSFW, false),
+    showUnavailable: getLocalStorageSetting(settings.SHOW_UNAVAILABLE, true),
+    welcome_acknowledged: getLocalStorageSetting(
+      settings.NEW_USER_ACKNOWLEDGED,
+      false
+    ),
+    credit_intro_acknowledged: getLocalStorageSetting(
       settings.CREDIT_INTRO_ACKNOWLEDGED
     ),
-    language: lbry.getClientSetting(settings.LANGUAGE),
-    theme: lbry.getClientSetting(settings.THEME),
-    themes: lbry.getClientSetting(settings.THEMES),
+    language: getLocalStorageSetting(settings.LANGUAGE, "en"),
+    theme: getLocalStorageSetting(settings.THEME, "light"),
+    themes: getLocalStorageSetting(settings.THEMES, []),
   },
   languages: {},
 };
@@ -34,6 +45,9 @@ reducers[types.CLIENT_SETTING_CHANGED] = function(state, action) {
   const clientSettings = Object.assign({}, state.clientSettings);
 
   clientSettings[key] = value;
+
+  //this technically probably shouldn't happen here, and should be fixed when we're no longer using localStorage at all for persistent app state
+  localStorage.setItem("setting_" + key, JSON.stringify(value));
 
   return Object.assign({}, state, {
     clientSettings,

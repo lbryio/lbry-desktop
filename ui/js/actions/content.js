@@ -3,6 +3,7 @@ import * as settings from "constants/settings";
 import lbry from "lbry";
 import lbryio from "lbryio";
 import lbryuri from "lbryuri";
+import { makeSelectClientSetting } from "selectors/settings";
 import { selectBalance } from "selectors/wallet";
 import {
   makeSelectFileInfoForUri,
@@ -360,13 +361,13 @@ export function doPurchaseUri(uri) {
 
     if (
       cost == 0 ||
-      !lbry.getClientSetting(settings.INSTANT_PURCHASE_ENABLED)
+      !makeSelectClientSetting(settings.INSTANT_PURCHASE_ENABLED)(state)
     ) {
       attemptPlay(cost);
     } else {
-      const instantPurchaseMax = lbry.getClientSetting(
+      const instantPurchaseMax = makeSelectClientSetting(
         settings.INSTANT_PURCHASE_MAX
-      );
+      )(state);
       if (instantPurchaseMax.currency == "LBC") {
         attemptPlay(cost, instantPurchaseMax.amount);
       } else {

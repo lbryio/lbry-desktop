@@ -14,9 +14,7 @@ let server = null;
 let connectTryNum = 0;
 
 function getServers() {
-  return lbry.getClientSetting("useCustomLighthouseServers")
-    ? lbry.getClientSetting("customLighthouseServers")
-    : defaultServers;
+  return defaultServers;
 }
 
 function call(method, params, callback, errorCallback) {
