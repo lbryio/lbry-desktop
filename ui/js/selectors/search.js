@@ -18,21 +18,14 @@ export const selectIsSearching = createSelector(
   state => !!state.searching
 );
 
-export const selectSearchResults = createSelector(
+export const selectSearchUrisByQuery = createSelector(
   _selectState,
-  state => state.results || {}
+  state => state.urisByQuery
 );
 
-export const selectSearchResultsByQuery = createSelector(
-  selectSearchResults,
-  results => results.byQuery || {}
-);
-
-export const selectCurrentSearchResults = createSelector(
-  selectSearchQuery,
-  selectSearchResultsByQuery,
-  (query, byQuery) => byQuery[query]
-);
+export const makeSelectSearchUris = query => {
+  return createSelector(selectSearchUrisByQuery, byQuery => byQuery[query]);
+};
 
 export const selectWunderBarAddress = createSelector(
   selectCurrentPage,

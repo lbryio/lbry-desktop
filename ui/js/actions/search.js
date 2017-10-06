@@ -1,6 +1,5 @@
 import * as types from "constants/action_types";
 import lbryuri from "lbryuri";
-import lighthouse from "lighthouse";
 import { doResolveUri } from "actions/content";
 import { doNavigate } from "actions/navigation";
 import { selectCurrentPage } from "selectors/navigation";
@@ -25,28 +24,41 @@ export function doSearch(query) {
     if (page != "search") {
       dispatch(doNavigate("search", { query: query }));
     } else {
-      lighthouse.search(query).then(results => {
-        const actions = [];
+      fetch("https://lighthouse.lbry.io/search?s=" + query)
+        .then(response => {
+          return response.status === 200
+            ? Promise.resolve(response.json())
+            : Promise.reject(new Error(response.statusText));
+        })
+        .then(data => {
+          console.log(data);
+          let uris = [];
+          let actions = [];
 
-        results.forEach(result => {
-          const uri = lbryuri.build({
-            channelName: result.channel_name,
-            contentName: result.name,
-            claimId: result.channel_id || result.claim_id,
+          data.forEach(result => {
+            const uri = lbryuri.build({
+              name: result.name,
+              claimId: result.claimId,
+            });
+            actions.push(doResolveUri(uri));
+            uris.push(uri);
           });
-          actions.push(doResolveUri(uri));
-        });
 
-        actions.push({
-          type: types.SEARCH_COMPLETED,
-          data: {
-            query,
-            results,
-          },
+          actions.push({
+            type: types.SEARCH_COMPLETED,
+            data: {
+              query,
+              uris,
+            },
+          });
+          dispatch(batchActions(...actions));
+        })
+        .catch(err => {
+          console.log(err);
+          dispatch({
+            type: types.SEARCH_CANCELLED,
+          });
         });
-
-        dispatch(batchActions(...actions));
-      });
     }
   };
 }

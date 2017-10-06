@@ -2,8 +2,6 @@ import React from "react";
 import * as icons from "constants/icons";
 import lbryuri from "lbryuri.js";
 import CardMedia from "component/cardMedia";
-import FileActions from "component/fileActions";
-import Link from "component/link";
 import { TruncatedText } from "component/common.js";
 import FilePrice from "component/filePrice";
 import NsfwOverlay from "component/nsfwOverlay";

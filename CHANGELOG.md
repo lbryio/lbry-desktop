@@ -16,6 +16,8 @@ Web UI version numbers should always match the corresponding version of LBRY App
   * There is no longer a minimum channel length (#645)
   * Changed the File page to make it clearer how to to open the folder for a file
   * The upgrade message is now friendlier and includes a link to the release notes.
+  * Local settings refactored and no longer intermixed with LBRY API library.
+  *
 
 ### Fixed
   * Improve layout (and implementation) of the icon panel in file tiles and cards

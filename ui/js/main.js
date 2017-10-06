@@ -1,6 +1,5 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import lbry from "./lbry.js";
 import App from "component/app/index.js";
 import SnackBar from "component/snackBar";
 import { Provider } from "react-redux";
