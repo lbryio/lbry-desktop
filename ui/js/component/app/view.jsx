@@ -2,6 +2,7 @@ import React from "react";
 import Router from "component/router/index";
 import Header from "component/header";
 import Theme from "component/theme";
+import OverlayRouter from "component/overlayRouter";
 import ModalRouter from "modal/modalRouter";
 import lbry from "lbry";
 
@@ -48,6 +49,7 @@ class App extends React.PureComponent {
         <Theme />
         <Header />
         <div id="main-content">
+          <OverlayRouter />
           <Router />
         </div>
         <ModalRouter />

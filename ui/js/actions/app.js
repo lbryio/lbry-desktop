@@ -221,3 +221,15 @@ export function doChangeVolume(volume) {
     });
   };
 }
+
+export function doOpenOverlayMedia() {
+  return {
+    type: types.OPEN_OVERLAY_MEDIA,
+  };
+}
+
+export function doCloseOverlayMedia() {
+  return {
+    type: types.CLOSE_OVERLAY_MEDIA,
+  };
+}
