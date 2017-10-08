@@ -102,7 +102,7 @@ $font-size-subtext-multiple: 0.82;
   cursor: pointer;
 }
 .card--link {
-  transition: transform 120ms ease-in-out;
+  transition: transform 0.2s  var(--animation-style);
 }
 .card--link:hover {
   position: relative;
@@ -261,7 +261,7 @@ $padding-right-card-hover-hack: 30px;
   top: 36%;
   z-index: 2;
   opacity: 0.8;
-  transition: transform 60ms ease-in-out;
+  transition: transform 0.2s var(--animation-style);
 
   &:hover {
     opacity: 1.0;
