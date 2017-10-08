@@ -116,6 +116,14 @@ export const makeSelectContentTypeForUri = uri => {
   });
 };
 
+export const makeSelectContentDurationForUri = uri => {
+  return createSelector(makeSelectClaimForUri(uri), claim => {
+    const source =
+      claim && claim.value && claim.value.stream && claim.value.stream.source;
+    return source ? source.contentDuration : undefined;
+  });
+};
+
 export const selectIsFetchingClaimListMine = createSelector(
   _selectState,
   state => !!state.isFetchingClaimListMine

@@ -6,6 +6,7 @@ import { doPlayUri, doSetPlayingUri } from "actions/content";
 import {
   makeSelectMetadataForUri,
   makeSelectContentTypeForUri,
+  makeSelectContentDurationForUri,
 } from "selectors/claims";
 import {
   makeSelectFileInfoForUri,
@@ -26,6 +27,7 @@ const select = (state, props) => ({
   isDownloading: makeSelectDownloadingForUri(props.uri)(state),
   playingUri: selectPlayingUri(state),
   contentType: makeSelectContentTypeForUri(props.uri)(state),
+  contentDuration: makeSelectContentDurationForUri(props.uri)(state),
   volume: selectVolume(state),
 });
 

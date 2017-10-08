@@ -8,6 +8,7 @@ import { doFetchCostInfoForUri } from "actions/cost_info";
 import {
   makeSelectClaimForUri,
   makeSelectContentTypeForUri,
+  makeSelectContentDurationForUri,
   makeSelectMetadataForUri,
 } from "selectors/claims";
 import { makeSelectCostInfoForUri } from "selectors/cost_info";
@@ -18,6 +19,7 @@ import { makeSelectCurrentParam } from "selectors/navigation";
 const select = (state, props) => ({
   claim: makeSelectClaimForUri(props.uri)(state),
   contentType: makeSelectContentTypeForUri(props.uri)(state),
+  contentDuration: makeSelectContentDurationForUri(props.uri)(state),
   costInfo: makeSelectCostInfoForUri(props.uri)(state),
   metadata: makeSelectMetadataForUri(props.uri)(state),
   obscureNsfw: !selectShowNsfw(state),

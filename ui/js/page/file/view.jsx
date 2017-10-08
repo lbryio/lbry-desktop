@@ -39,6 +39,7 @@ class FilePage extends React.PureComponent {
       fileInfo,
       metadata,
       contentType,
+      contentDuration,
       tab,
       uri,
       rewardedContentClaimIds,
@@ -55,6 +56,7 @@ class FilePage extends React.PureComponent {
     const title = metadata.title;
     const isRewardContent = rewardedContentClaimIds.includes(claim.claim_id);
     const mediaType = lbry.getMediaType(contentType);
+    const mediaDUration = contentDuration;
     const player = require("render-media");
     const obscureNsfw = this.props.obscureNsfw && metadata && metadata.nsfw;
     const isPlayable =

@@ -12,6 +12,7 @@ class FileDetails extends React.PureComponent {
     const {
       claim,
       contentType,
+      contentDuration,
       fileInfo,
       metadata,
       openFolder,
@@ -29,6 +30,7 @@ class FileDetails extends React.PureComponent {
     const { description, language, license, length } = metadata;
     const { height } = claim;
     const mediaType = lbry.getMediaType(contentType);
+    const mediaDuration = contentDuration;
 
     const downloadPath = fileInfo
       ? path.normalize(fileInfo.download_path)
@@ -61,7 +63,7 @@ class FileDetails extends React.PureComponent {
                 <td>{__("License")}</td><td>{license}</td>
               </tr>
               <tr>
-                <td>{__("Length")}</td><td>{length}</td>
+                <td>{__("Duration")}</td><td>{mediaDuration}</td>
               </tr>
               {downloadPath &&
                 <tr>
