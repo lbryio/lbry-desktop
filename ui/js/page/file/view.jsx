@@ -52,6 +52,7 @@ class FilePage extends React.PureComponent {
       );
     }
 
+    const { height } = claim;
     const title = metadata.title;
     const isRewardContent = rewardedContentClaimIds.includes(claim.claim_id);
     const mediaType = lbry.getMediaType(contentType);
@@ -86,6 +87,10 @@ class FilePage extends React.PureComponent {
                   <h1>{title}</h1>
                   <div className="card__subtitle">
                     <UriIndicator uri={uri} link={true} />
+                    <span class="meta" style={{ margin: "10px" }}>&#9899;</span>
+                    <span class="meta">
+                      Published on <DateTime block={height} />
+                    </span>
                   </div>
                 </div>
                 <FileDetails uri={uri} />

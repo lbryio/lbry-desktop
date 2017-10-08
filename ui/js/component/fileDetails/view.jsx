@@ -48,10 +48,6 @@ class FileDetails extends React.PureComponent {
           <table className="table-standard table-stretch">
             <tbody>
               <tr>
-                <td>{__("Published on")}</td>
-                <td><DateTime block={height} /></td>
-              </tr>
-              <tr>
                 <td>{__("Content-Type")}</td><td>{mediaType}</td>
               </tr>
               <tr>
