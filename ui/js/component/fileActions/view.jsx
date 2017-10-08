@@ -32,22 +32,21 @@ class FileActions extends React.PureComponent {
             className="no-underline"
             navigateParams={{ uri, tab: "tip" }}
           />}
-        <Link
-          button="text"
-          icon="icon-flag"
-          href={`https://lbry.io/dmca?claim_id=${claimId}`}
-          className="card__action--right no-underline"
-          label={__("report")}
-        />
         {showDelete &&
           <Link
             button="text"
             icon="icon-trash"
             label={__("Remove")}
-            className="card__action--right no-underline"
+            className="no-underline"
             onClick={() => openModal(modals.CONFIRM_FILE_REMOVE, { uri })}
           />}
-
+        <Link
+          button="text"
+          icon="icon-flag"
+          href={`https://lbry.io/dmca?claim_id=${claimId}`}
+          className="no-underline"
+          label={__("report")}
+        />
       </section>
     );
   }
