@@ -8,7 +8,8 @@ class FileActions extends React.PureComponent {
     const { fileInfo, uri, openModal, claimIsMine } = this.props;
 
     const claimId = fileInfo ? fileInfo.claim_id : null,
-      showDelete = fileInfo && Object.keys(fileInfo).length > 0;
+      showDelete = fileInfo && Object.keys(fileInfo).length > 0,
+      showSupport = !claimIsMine;
 
     return (
       <section className="card__actions">
@@ -22,14 +23,15 @@ class FileActions extends React.PureComponent {
             navigateParams={{ id: claimId }}
           />}
         <FileDownloadLink uri={uri} />
-        <Link
-          button="text"
-          icon="icon-gift"
-          label={__("Support")}
-          navigate="/show"
-          className="no-underline"
-          navigateParams={{ uri, tab: "tip" }}
-        />
+        {showSupport &&
+          <Link
+            button="text"
+            icon="icon-gift"
+            label={__("Support")}
+            navigate="/show"
+            className="no-underline"
+            navigateParams={{ uri, tab: "tip" }}
+          />}
         <Link
           button="text"
           icon="icon-flag"
