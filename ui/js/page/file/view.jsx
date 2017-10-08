@@ -87,9 +87,9 @@ class FilePage extends React.PureComponent {
                   <h1>{title}</h1>
                   <div className="card__subtitle">
                     <UriIndicator uri={uri} link={true} />
-                    <span class="meta" style={{ margin: "10px" }}>&#9899;</span>
-                    <span class="meta">
-                      Published on <DateTime block={height} />
+                    <span style={{ margin: "10px" }}>&#9899;</span>
+                    <span>
+                      Published on <DateTime block={height} show="date" />
                     </span>
                   </div>
                 </div>

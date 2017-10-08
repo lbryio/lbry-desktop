@@ -5,6 +5,14 @@ class DateTime extends React.PureComponent {
   static SHOW_TIME = "time";
   static SHOW_BOTH = "both";
 
+  static defaultProps = {
+    formatOptions: {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+    },
+  };
+
   componentWillMount() {
     this.refreshDate(this.props);
   }
@@ -23,16 +31,18 @@ class DateTime extends React.PureComponent {
   render() {
     const { date, formatOptions } = this.props;
     const show = this.props.show || DateTime.SHOW_BOTH;
+    const locale = app.i18n.getLocale();
 
     return (
       <span>
         {date &&
           (show == DateTime.SHOW_BOTH || show === DateTime.SHOW_DATE) &&
-          date.toLocaleDateString()}
+          date.toLocaleDateString([locale, "en-US"], formatOptions)}
         {show == DateTime.SHOW_BOTH && " "}
         {date &&
           (show == DateTime.SHOW_BOTH || show === DateTime.SHOW_TIME) &&
           date.toLocaleTimeString()}
+        {!date && "..."}
       </span>
     );
   }
