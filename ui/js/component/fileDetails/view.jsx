@@ -27,7 +27,6 @@ class FileDetails extends React.PureComponent {
     }
 
     const { description, language, license } = metadata;
-    const { height } = claim;
     const mediaType = lbry.getMediaType(contentType);
 
     const downloadPath = fileInfo

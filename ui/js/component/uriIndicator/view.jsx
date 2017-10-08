@@ -75,7 +75,11 @@ class UriIndicator extends React.PureComponent {
     }
 
     return (
-      <Link navigate="/show" navigateParams={{ uri: channelLink }}>
+      <Link
+        navigate="/show"
+        navigateParams={{ uri: channelLink }}
+        className="no-underline"
+      >
         {inner}
       </Link>
     );
