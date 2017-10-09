@@ -1,7 +1,9 @@
 import React from "react";
 import FileTile from "component/fileTile";
+import ChannelTile from "component/channelTile";
 import Link from "component/link";
 import { BusyMessage } from "component/common.js";
+import lbryuri from "lbryuri";
 
 const SearchNoResults = props => {
   const { query } = props;
@@ -45,7 +47,12 @@ class FileListSearch extends React.PureComponent {
           <BusyMessage message={__("Refreshing the Dewey Decimals")} />}
 
         {uris && uris.length
-          ? uris.map(uri => <FileTile key={uri} uri={uri} />)
+          ? uris.map(
+              uri =>
+                lbryuri.parse(uri).name[0] === "@"
+                  ? <ChannelTile key={uri} uri={uri} />
+                  : <FileTile key={uri} uri={uri} />
+            )
           : !isSearching && <SearchNoResults query={query} />}
       </div>
     );

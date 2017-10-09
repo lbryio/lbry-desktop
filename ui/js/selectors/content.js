@@ -34,6 +34,13 @@ export const selectChannelPages = createSelector(
   state => state.channelPages || {}
 );
 
+export const makeSelectTotalItemsForChannel = uri => {
+  return createSelector(
+    selectChannelPages,
+    byUri => (byUri && byUri[uri]) * 10
+  );
+};
+
 export const makeSelectTotalPagesForChannel = uri => {
   return createSelector(selectChannelPages, byUri => byUri && byUri[uri]);
 };
