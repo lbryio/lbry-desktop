@@ -85,7 +85,6 @@ class FileCard extends React.PureComponent {
         onMouseLeave={this.handleMouseOut.bind(this)}
       >
         <div className="card__inner">
-          <h1>IT WORK$!!!!!!</h1>
           <Link
             onClick={() => navigate("/show", { uri })}
             className="card__link"
