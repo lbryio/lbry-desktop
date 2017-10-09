@@ -14,10 +14,6 @@ class FileListPublished extends React.PureComponent {
     // if (this.props.claims.length > 0) this.props.fetchClaims();
   }
 
-  componentWillUnmount() {
-    this.props.cancelResolvingUris();
-  }
-
   render() {
     const { claims, isFetching, navigate } = this.props;
 

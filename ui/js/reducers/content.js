@@ -31,31 +31,20 @@ reducers[types.FETCH_REWARD_CONTENT_COMPLETED] = function(state, action) {
   });
 };
 
-reducers[types.RESOLVE_URI_STARTED] = function(state, action) {
-  const { uri } = action.data;
+reducers[types.RESOLVE_URIS_STARTED] = function(state, action) {
+  let { uris } = action.data;
 
   const oldResolving = state.resolvingUris || [];
   const newResolving = Object.assign([], oldResolving);
-  if (newResolving.indexOf(uri) === -1) newResolving.push(uri);
+
+  for (let uri of uris) {
+    if (!newResolving.includes(uri)) {
+      newResolving.push(uri);
+    }
+  }
 
   return Object.assign({}, state, {
     resolvingUris: newResolving,
-  });
-};
-
-reducers[types.RESOLVE_URI_CANCELED] = reducers[
-  types.RESOLVE_URI_COMPLETED
-] = function(state, action) {
-  const { uri } = action.data;
-  const resolvingUris = state.resolvingUris;
-  const index = state.resolvingUris.indexOf(uri);
-  const newResolvingUris = [
-    ...resolvingUris.slice(0, index),
-    ...resolvingUris.slice(index + 1),
-  ];
-
-  return Object.assign({}, state, {
-    resolvingUris: newResolvingUris,
   });
 };
 

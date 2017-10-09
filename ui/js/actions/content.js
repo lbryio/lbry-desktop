@@ -24,66 +24,44 @@ const { ipcRenderer } = require("electron");
 
 const DOWNLOAD_POLL_INTERVAL = 250;
 
-export function doResolveUri(uri) {
+export function doResolveUris(uris) {
   return function(dispatch, getState) {
-    uri = lbryuri.normalize(uri);
-
+    uris = uris.map(lbryuri.normalize);
     const state = getState();
-    const alreadyResolving = selectResolvingUris(state).indexOf(uri) !== -1;
 
-    if (!alreadyResolving) {
-      dispatch({
-        type: types.RESOLVE_URI_STARTED,
-        data: { uri },
-      });
-
-      lbry.resolve({ uri }).then(resolutionInfo => {
-        const { claim, certificate } = resolutionInfo
-          ? resolutionInfo
-          : { claim: null, certificate: null };
-
-        dispatch({
-          type: types.RESOLVE_URI_COMPLETED,
-          data: {
-            uri,
-            claim,
-            certificate,
-          },
-        });
-      });
-    }
-  };
-}
-
-export function doCancelResolveUri(uri) {
-  return function(dispatch, getState) {
-    uri = lbryuri.normalize(uri);
-
-    const state = getState();
-    const alreadyResolving = selectResolvingUris(state).indexOf(uri) !== -1;
-
-    if (alreadyResolving) {
-      lbry.cancelResolve({ uri });
-      dispatch({
-        type: types.RESOLVE_URI_CANCELED,
-        data: {
-          uri,
-        },
-      });
-    }
-  };
-}
-
-export function doCancelAllResolvingUris() {
-  return function(dispatch, getState) {
-    const state = getState();
+    // Filter out URIs that are already resolving
     const resolvingUris = selectResolvingUris(state);
-    const actions = [];
+    const urisToResolve = uris.filter(uri => !resolvingUris.includes(uri));
 
-    resolvingUris.forEach(uri => actions.push(doCancelResolveUri(uri)));
+    if (urisToResolve.length === 0) {
+      return;
+    }
 
-    dispatch(batchActions(...actions));
+    dispatch({
+      type: types.RESOLVE_URIS_STARTED,
+      data: { uris },
+    });
+
+    let resolveInfo = {};
+    lbry.resolve({ uris: urisToResolve }).then(result => {
+      for (let [uri, uriResolveInfo] of Object.entries(result)) {
+        const { claim, certificate } = uriResolveInfo || {
+          claim: null,
+          certificate: null,
+        };
+        resolveInfo[uri] = { claim, certificate };
+      }
+
+      dispatch({
+        type: types.RESOLVE_URIS_COMPLETED,
+        data: { resolveInfo },
+      });
+    });
   };
+}
+
+export function doResolveUri(uri) {
+  return doResolveUris([uri]);
 }
 
 export function doFetchFeaturedUris() {
@@ -96,28 +74,27 @@ export function doFetchFeaturedUris() {
 
     const success = ({ Categories, Uris }) => {
       let featuredUris = {};
-      const actions = [];
-
+      let urisToResolve = [];
       Categories.forEach(category => {
         if (Uris[category] && Uris[category].length) {
           const uris = Uris[category];
 
           featuredUris[category] = uris;
-          uris.forEach(uri => {
-            actions.push(doResolveUri(uri));
-          });
+          urisToResolve = [...urisToResolve, ...uris];
         }
       });
 
-      actions.push({
-        type: types.FETCH_FEATURED_CONTENT_COMPLETED,
-        data: {
-          categories: Categories,
-          uris: featuredUris,
-          success: true,
+      const actions = [
+        doResolveUris(urisToResolve),
+        {
+          type: types.FETCH_FEATURED_CONTENT_COMPLETED,
+          data: {
+            categories: Categories,
+            uris: featuredUris,
+            success: true,
+          },
         },
-      });
-
+      ];
       dispatch(batchActions(...actions));
     };
 
