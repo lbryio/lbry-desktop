@@ -222,7 +222,7 @@ $padding-right-card-hover-hack: 30px;
     display: inline-block;
   }
   > .card + .card {
-    margin-left: $spacing-vertical / 3;
+    margin-left: 16px;
   }
 }
 
