@@ -202,14 +202,20 @@ class FeaturedCategory extends React.PureComponent {
 class DiscoverPage extends React.PureComponent {
   componentWillMount() {
     this.props.fetchFeaturedUris();
+    this.props.fetchSubscriptions();
   }
 
   componentWillUnmount() {
     this.props.cancelResolvingUris();
   }
 
+  subscriberUriList(featuredUris, subscriptions) {
+    featuredUris.Subscriptions = subscriptions;
+    return featuredUris;
+  }
+
   render() {
-    const { featuredUris, fetchingFeaturedUris } = this.props;
+    const { featuredUris, fetchingFeaturedUris, subscriptions } = this.props;
     const hasContent =
       typeof featuredUris === "object" && Object.keys(featuredUris).length,
       failedToLoad = !fetchingFeaturedUris && !hasContent;
@@ -220,7 +226,7 @@ class DiscoverPage extends React.PureComponent {
           fetchingFeaturedUris &&
           <BusyMessage message={__("Fetching content")} />}
         {hasContent &&
-          Object.keys(featuredUris).map(
+          Object.keys(this.subscriberUriList(featuredUris, subscriptions)).map(
             category =>
               featuredUris[category].length
                 ? <FeaturedCategory

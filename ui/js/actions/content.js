@@ -73,6 +73,42 @@ export function doCancelResolveUri(uri) {
   };
 }
 
+export function doResolveSubscription(uri) {
+  return function(dispatch, getState) {
+    dispatch({
+      type: types.RESOLVE_SUBSCRIPTION_STARTED,
+      data: { uri },
+    });
+
+    lbry.claim_list_by_channel({ uri, page: 1 }).then(result => {
+      const claimResult = result[uri] || {};
+      const { claims_in_channel, returned_page } = claimResult;
+
+      console.log("uri", uri);
+      console.log("claims", claims_in_channel);
+
+      dispatch({
+        type: types.RESOLVE_SUBSCRIPTION_COMPLETED,
+        data: {
+          uri,
+          claims: claims_in_channel || [],
+        },
+      });
+    });
+  };
+}
+
+export function doFetchSubscriptions() {
+  return function(dispatch, getState) {
+    const actions = [];
+    getState().user.subscriptions.forEach(uri =>
+      actions.push(doResolveSubscription(uri))
+    );
+
+    dispatch(batchActions(...actions));
+  };
+}
+
 export function doCancelAllResolvingUris() {
   return function(dispatch, getState) {
     const state = getState();

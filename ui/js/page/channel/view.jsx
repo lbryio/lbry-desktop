@@ -3,6 +3,7 @@ import lbryuri from "lbryuri";
 import { BusyMessage } from "component/common";
 import FileTile from "component/fileTile";
 import ReactPaginate from "react-paginate";
+import Link from "component/link";
 
 class ChannelPage extends React.PureComponent {
   componentDidMount() {
@@ -71,6 +72,13 @@ class ChannelPage extends React.PureComponent {
               )}
             </p>
           </div>
+          <Link
+            button="text"
+            icon="icon-bell"
+            label={__("Subscribe")}
+            navigate="/show"
+            navigateParams={{ uri, tab: "tip" }}
+          />
         </section>
         <h3 className="card-row__header">{__("Published Content")}</h3>
         {contentList}

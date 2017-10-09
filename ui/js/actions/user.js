@@ -232,3 +232,12 @@ export function doUserInviteNew(email) {
       });
   };
 }
+
+export function doSubscribe(account) {
+  return function(dispatch, getState) {
+    dispatch({
+      type: types.USER_SUBSCRIBE,
+      data: { account },
+    });
+  };
+}
