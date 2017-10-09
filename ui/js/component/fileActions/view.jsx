@@ -23,15 +23,6 @@ class FileActions extends React.PureComponent {
             navigateParams={{ id: claimId }}
           />}
         <FileDownloadLink uri={uri} />
-        {showSupport &&
-          <Link
-            button="text"
-            icon="icon-gift"
-            label={__("Support")}
-            navigate="/show"
-            className="no-underline"
-            navigateParams={{ uri, tab: "tip" }}
-          />}
         {showDelete &&
           <Link
             button="text"
@@ -47,6 +38,15 @@ class FileActions extends React.PureComponent {
           className="no-underline"
           label={__("report")}
         />
+        {showSupport &&
+          <Link
+            button="primary"
+            icon="icon-gift"
+            label={__("Support")}
+            navigate="/show"
+            className="card__action--right no-underline"
+            navigateParams={{ uri, tab: "tip" }}
+          />}
       </section>
     );
   }
