@@ -5,6 +5,18 @@ const defaultState = {
   playingUri: null,
   rewardedContentClaimIds: [],
   channelPages: {},
+  subscriptionContent: {},
+};
+
+reducers[types.RESOLVE_SUBSCRIPTION_COMPLETED] = function(state, action) {
+  const subscriptionContent = Object.assign({}, state.subscriptionContent);
+  const { uri, claims } = action.data;
+
+  subscriptionContent[uri] = claims;
+
+  return Object.assign({}, state, {
+    subscriptionContent,
+  });
 };
 
 reducers[types.FETCH_FEATURED_CONTENT_STARTED] = function(state, action) {

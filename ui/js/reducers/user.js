@@ -14,6 +14,7 @@ const defaultState = {
   invitesRemaining: undefined,
   invitees: undefined,
   user: undefined,
+  subscriptions: [],
 };
 
 reducers[types.AUTHENTICATION_STARTED] = function(state, action) {
@@ -187,6 +188,12 @@ reducers[types.USER_INVITE_STATUS_FETCH_FAILURE] = function(state, action) {
     inviteStatusIsPending: false,
     invitesRemaining: null,
     invitees: null,
+  });
+};
+
+reducers[types.USER_SUBSCRIBE] = function(state, action) {
+  return Object.assign({}, state, {
+    subscriptions: state.subscriptions.concat([action.data.account]),
   });
 };
 
