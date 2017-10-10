@@ -11,7 +11,6 @@ import {
 } from "selectors/claims";
 import { doFetchClaimListMine } from "actions/content";
 import { doNavigate } from "actions/navigation";
-import { doCancelAllResolvingUris } from "actions/content";
 import FileListDownloaded from "./view";
 
 const select = state => ({
@@ -25,7 +24,6 @@ const perform = dispatch => ({
   navigate: path => dispatch(doNavigate(path)),
   fetchFileInfosDownloaded: () =>
     dispatch(doFetchFileInfosAndPublishedClaims()),
-  cancelResolvingUris: () => dispatch(doCancelAllResolvingUris()),
   fetchClaims: () => dispatch(doFetchClaimListMine()),
 });
 

@@ -311,28 +311,22 @@ lbry.claim_list_mine = function(params = {}) {
   });
 };
 
-lbry._resolveXhrs = {};
 lbry.resolve = function(params = {}) {
   return new Promise((resolve, reject) => {
-    if (!params.uri) {
-      throw __("Resolve has hacked cache on top of it that requires a URI");
-    }
-    lbry._resolveXhrs[params.uri] = apiCall(
+    apiCall(
       "resolve",
       params,
       function(data) {
-        resolve(data && data[params.uri] ? data[params.uri] : {});
+        if ("uri" in params) {
+          // If only a single URI was requested, don't nest the results in an object
+          resolve(data && data[params.uri] ? data[params.uri] : {});
+        } else {
+          resolve(data || {});
+        }
       },
       reject
     );
   });
-};
-
-lbry.cancelResolve = function(params = {}) {
-  const xhr = lbry._resolveXhrs[params.uri];
-  if (xhr && xhr.readyState > 0 && xhr.readyState < 4) {
-    xhr.abort();
-  }
 };
 
 lbry = new Proxy(lbry, {

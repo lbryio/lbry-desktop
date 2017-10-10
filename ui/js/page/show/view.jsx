@@ -6,17 +6,15 @@ import FilePage from "page/file";
 
 class ShowPage extends React.PureComponent {
   componentWillMount() {
-    const { isResolvingUri, resolveUri, uri } = this.props;
+    const { resolveUri, uri } = this.props;
 
-    if (!isResolvingUri) resolveUri(uri);
+    resolveUri(uri);
   }
 
   componentWillReceiveProps(nextProps) {
-    const { isResolvingUri, resolveUri, claim, uri } = nextProps;
+    const { resolveUri, uri } = nextProps;
 
-    if (!isResolvingUri && claim === undefined && uri) {
-      resolveUri(uri);
-    }
+    resolveUri(uri);
   }
 
   render() {
