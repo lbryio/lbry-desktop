@@ -8,6 +8,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
 
 ## [Unreleased]
 ### Added
+  * Publishing now supports drag-and-drop file selection.
   * Add setting to automatically purchase low-cost content without a confirmation dialog
   * New custom styled scrollbar (#574)
   *

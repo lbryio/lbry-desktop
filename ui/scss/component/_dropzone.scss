@@ -1,0 +1,23 @@
+@import "../global";
+
+.dropzone {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(200, 200, 200, 0.5);
+  transition: visibility 175ms, opacity 175ms;
+  display: table;
+  text-shadow: 2px 1px 5px #000;
+  color: #fff;
+  -webkit-text-stroke-width: 1px;
+  -webkit-text-stroke-color: #000;
+  font: bold 42px Oswald, DejaVu Sans, Tahoma, sans-serif;
+}
+.textnode {
+  display: table-cell;
+  text-align: center;
+  vertical-align: middle;
+}
