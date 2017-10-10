@@ -80,6 +80,7 @@ class FileDownloadLink extends React.PureComponent {
             button="text"
             label={__("Download")}
             icon="icon-download"
+            className="no-underline"
             onClick={() => {
               purchaseUri(uri);
             }}
@@ -92,6 +93,7 @@ class FileDownloadLink extends React.PureComponent {
           label={__("Open")}
           button="text"
           icon="icon-external-link-square"
+          className="no-underline"
           onClick={() => openInShell(fileInfo.download_path)}
         />
       );

@@ -24,7 +24,6 @@ $text-color: #000;
   --color-bg: #ffffff;
   --color-bg-alt: #D9D9D9;
 
-
   /* Misc */
   --content-max-width: 1000px;
   --nsfw-blur-intensity: 20px;
@@ -36,7 +35,7 @@ $text-color: #000;
   --font-size-subtext-multiple: 0.82;
 
   /* Shadows */
-  --box-shadow-layer: 0 2px 2px 0 rgba(0,0,0,.14),0 3px 1px -2px rgba(0,0,0,.2),0 1px 5px 0 rgba(0,0,0,.12);
+  --box-shadow-layer: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
   --box-shadow-focus: 2px 4px 4px 0 rgba(0,0,0,.14),2px 5px 3px -2px rgba(0,0,0,.2),2px 3px 7px 0 rgba(0,0,0,.12);
 
   /* Transition */
@@ -74,24 +73,27 @@ $text-color: #000;
   --button-padding: $spacing-vertical * 2/3;
   --button-height: $spacing-vertical * 1.5;
   --button-intra-margin: $spacing-vertical;
+  --button-radius: 3px;
 
   /* Header */
   --header-bg: var(--color-bg);
   --header-color: #666;
   --header-active-color: rgba(0,0,0, 0.85);
   --header-height: $spacing-vertical * 2.5;
-  --header-button-bg: var(--button-bg);
+  --header-button-bg: transparent; //var(--button-bg);
+  --header-button-hover-bg: rgba(100, 100, 100, 0.15);
 
   /* Header -> search */
   --search-bg: rgba(255, 255, 255, 0.7);
   --search-border:1px solid #ccc;
   --search-color: #666;
   --search-active-color: var(--header-active-color);
+  --search-active-shadow: 0 0 3px 0px var(--text-selection-bg);
 
   /* Tabs */
   --tab-bg: transparent;
-  --tab-color: #666;
-  --tab-active-color: var(--header-active-color);
+  --tab-color: rgba(0, 0, 0, 0.5);
+  --tab-active-color: var(--color-primary);
   --tab-border-size: 2px;
   --tab-border: var(--tab-border-size) solid var(--tab-active-color);
 
@@ -125,4 +127,22 @@ $text-color: #000;
   --tooltip-bg: var(--color-bg);
   --tooltip-color: var(--text-color);
   --tooltip-border: 1px solid #aaa;
+
+  /* Scrollbar */
+  --scrollbar-radius: 10px;
+  --scrollbar-thumb-bg: rgba(0, 0, 0, 0.20);
+  --scrollbar-thumb-hover-bg: rgba(0, 0, 0, 0.35);
+  --scrollbar-thumb-active-bg: var(--color-primary);
+  --scrollbar-track-bg: transparent;
+
+  /* Media */
+  --media-bg: #FFF;
+
+  /* Divider */
+  --divider: 1px solid rgba(0, 0, 0, 0.12);
+
+  /* Animation :) */
+  --animation-duration: 0.3s;
+  --animation-style: cubic-bezier(.55,0,.1,1);
+
 }

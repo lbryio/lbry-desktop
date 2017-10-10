@@ -20,7 +20,7 @@ $button-focus-shift: 12%;
   text-decoration: none;
   border: 0 none;
   text-align: center;
-  border-radius: 2px;
+  border-radius: var(--button-radius);
   text-transform: uppercase;
   .icon
   {
@@ -43,10 +43,17 @@ $button-focus-shift: 12%;
 .button-block
 {
   cursor: pointer;
+  font-weight: 500;
+  font-size: 14px;
+  transition: background var(--animation-duration) var(--animation-style);
 }
 
 .button__content {
   margin: 0 var(--button-padding);
+  display: flex;
+  .link-label {
+    text-decoration: none !important;
+  }
 }
 
 .button-primary
@@ -89,6 +96,5 @@ $button-focus-shift: 12%;
 
 .button--submit {
     font-family: inherit;
-    font-size: inherit;
     line-height: 0;
 }

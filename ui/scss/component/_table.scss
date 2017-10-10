@@ -7,7 +7,7 @@ table.table-standard {
     padding: $spacing-vertical/2 8px;
   }
   th {
-    font-weight: bold;
+    font-weight: 500;
     font-size: 0.9em;
   }
   td {
@@ -15,7 +15,7 @@ table.table-standard {
   }
   thead th, > tr:first-child th {
     vertical-align: bottom;
-    font-weight: bold;
+    font-weight: 500;
     font-size: 0.9em;
     padding: $spacing-vertical/4+1 8px $spacing-vertical/4-2;
     text-align: left;

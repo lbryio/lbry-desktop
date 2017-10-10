@@ -126,14 +126,14 @@ class FileTile extends React.PureComponent {
                   {" "}
                   {showLocal && fileInfo && <Icon icon={icons.LOCAL} />}
                 </span>
-                <div className="meta">{uri}</div>
                 <h3>
                   <TruncatedText lines={1}>{title}</TruncatedText>
                 </h3>
+                <span className="file-tile__uri">{uri}</span>
               </div>
               {description &&
                 <div className="card__content card__subtext">
-                  <TruncatedText lines={!showActions ? 4 : 2}>
+                  <TruncatedText lines={!showActions ? 3 : 2}>
                     {description}
                   </TruncatedText>
                 </div>}

@@ -27,7 +27,6 @@ class FileDetails extends React.PureComponent {
     }
 
     const { description, language, license } = metadata;
-    const { height } = claim;
     const mediaType = lbry.getMediaType(contentType);
 
     const downloadPath = fileInfo
@@ -36,7 +35,9 @@ class FileDetails extends React.PureComponent {
 
     return (
       <div>
+        <div className="divider__horizontal" />
         <FileActions uri={uri} />
+        <div className="divider__horizontal" />
         <div className="card__content card__subtext card__subtext--allow-newlines">
           <ReactMarkdown
             source={description || ""}
@@ -47,10 +48,6 @@ class FileDetails extends React.PureComponent {
         <div className="card__content">
           <table className="table-standard table-stretch">
             <tbody>
-              <tr>
-                <td>{__("Published on")}</td>
-                <td><DateTime block={height} /></td>
-              </tr>
               <tr>
                 <td>{__("Content-Type")}</td><td>{mediaType}</td>
               </tr>
@@ -71,12 +68,6 @@ class FileDetails extends React.PureComponent {
                 </tr>}
             </tbody>
           </table>
-          <p>
-            <Link
-              href={`https://lbry.io/dmca?claim_id=${claim.claim_id}`}
-              label={__("report")}
-            />
-          </p>
         </div>
       </div>
     );

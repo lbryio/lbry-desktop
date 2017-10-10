@@ -44,8 +44,7 @@
   text-overflow: ellipsis;
 }
 .card__title-identity {
-  margin-top: $spacing-vertical * 1/3;
-  margin-bottom: $spacing-vertical * 1/3;
+  margin: 16px 0;
 }
 .card__actions {
   margin-top: var(--card-margin);
@@ -54,6 +53,7 @@
 .card__actions--bottom {
   margin-top: $spacing-vertical * 1/3;
   margin-bottom: $spacing-vertical * 1/3;
+  border-top: var(--divider);
 }
 .card__actions--form-submit {
   margin-top: $spacing-vertical;
@@ -101,7 +101,7 @@ $font-size-subtext-multiple: 0.82;
   cursor: pointer;
 }
 .card--link {
-  transition: transform 120ms ease-in-out;
+  transition: transform 0.2s  var(--animation-style);
 }
 .card--link:hover {
   position: relative;
@@ -222,7 +222,7 @@ $padding-right-card-hover-hack: 30px;
     display: inline-block;
   }
   > .card + .card {
-    margin-left: $spacing-vertical / 3;
+    margin-left: 16px;
   }
 }
 
@@ -234,7 +234,7 @@ $padding-right-card-hover-hack: 30px;
   margin-right: $spacing-vertical;
 }
 .card-row__header {
-  margin-bottom: $spacing-vertical / 3;
+  margin-bottom: 16px;
 }
 
 .card-row__scrollhouse {
@@ -260,7 +260,7 @@ $padding-right-card-hover-hack: 30px;
   top: 36%;
   z-index: 2;
   opacity: 0.8;
-  transition: transform 60ms ease-in-out;
+  transition: transform 0.2s var(--animation-style);
 
   &:hover {
     opacity: 1.0;
