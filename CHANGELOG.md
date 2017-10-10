@@ -22,6 +22,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
   * Changed the File page to make it clearer how to to open the folder for a file
   * The upgrade message is now friendlier and includes a link to the release notes.
   * Improved Discover page load time by batching all URIs into one API call
+  * Local settings refactored and no longer intermixed with LBRY API library.
 
 ### Fixed
   * Improve layout (and implementation) of the icon panel in file tiles and cards

@@ -3,7 +3,6 @@ import lbryuri from "lbryuri";
 import FileTile from "component/fileTile";
 import FileListSearch from "component/fileListSearch";
 import { ToolTip } from "component/tooltip.js";
-import { BusyMessage } from "component/common.js";
 
 class SearchPage extends React.PureComponent {
   render() {
