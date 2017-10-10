@@ -12,15 +12,6 @@ class FileActions extends React.PureComponent {
 
     return (
       <section className="card__actions">
-        {claimIsMine &&
-          <Link
-            button="text"
-            icon="icon-edit"
-            label={__("Edit")}
-            navigate="/publish"
-            className="no-underline"
-            navigateParams={{ id: claimId }}
-          />}
         <FileDownloadLink uri={uri} />
         {showDelete &&
           <Link
@@ -43,9 +34,18 @@ class FileActions extends React.PureComponent {
           icon="icon-gift"
           label={__("Support")}
           navigate="/show"
-          className="card__action--right no-underline"
+          className="card__action--right"
           navigateParams={{ uri, tab: "tip" }}
         />
+        {claimIsMine &&
+          <Link
+            button="alt"
+            icon="icon-edit"
+            label={__("Edit")}
+            navigate="/publish"
+            className="card__action--right"
+            navigateParams={{ id: claimId }}
+          />}
       </section>
     );
   }
