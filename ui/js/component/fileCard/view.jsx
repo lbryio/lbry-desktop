@@ -20,13 +20,19 @@ class FileCard extends React.PureComponent {
   }
 
   componentWillMount() {
-    const { uri, resolveUri } = this.props;
-    resolveUri(uri);
+    this.resolve(this.props);
   }
 
   componentWillReceiveProps(nextProps) {
-    const { uri, resolveUri } = nextProps;
-    resolveUri(uri);
+    this.resolve(nextProps);
+  }
+
+  resolve(props) {
+    const { isResolvingUri, resolveUri, claim, uri } = props;
+
+    if (!isResolvingUri && claim === undefined && uri) {
+      resolveUri(uri);
+    }
   }
 
   handleMouseOver() {

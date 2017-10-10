@@ -26,15 +26,15 @@ class FileTile extends React.PureComponent {
   }
 
   componentDidMount() {
-    const { uri, resolveUri } = this.props;
+    const { isResolvingUri, claim, uri, resolveUri } = this.props;
 
-    resolveUri(uri);
+    if (!isResolvingUri && !claim && uri) resolveUri(uri);
   }
 
   componentWillReceiveProps(nextProps) {
-    const { uri, resolveUri } = this.props;
+    const { isResolvingUri, claim, uri, resolveUri } = this.props;
 
-    resolveUri(uri);
+    if (!isResolvingUri && claim === undefined && uri) resolveUri(uri);
   }
 
   handleMouseOver() {
