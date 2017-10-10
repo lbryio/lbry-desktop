@@ -20,7 +20,7 @@
     "electron-rebuild": "^1.5.11"
   },
   "lbrySettings": {
-    "lbrynetDaemonVersion": "0.16.3",
+    "lbrynetDaemonVersion": "0.17.0rc13",
     "lbrynetDaemonUrlTemplate": "https://github.com/lbryio/lbry/releases/download/vDAEMONVER/lbrynet-daemon-vDAEMONVER-OSNAME.zip"
   },
   "license": "MIT"

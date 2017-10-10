@@ -8,20 +8,21 @@ Web UI version numbers should always match the corresponding version of LBRY App
 
 ## [Unreleased]
 ### Added
-  * Add setting to automatically purchase low-cost content without a confirmation dialog
+  * Added a new search service. Significantly improved search results.
+  * Channels now appear in search results. Channel cards to be improved soon?.
+  * Add setting to automatically purchase low-cost content without a confirmation dialog.
   * New custom styled scrollbar (#574)
-  *
+  * New tabs (#547).
 
 ### Changed
+  * LBRY protocol upgraded from v0.16.1 to [v0.17](https://github.com/lbryio/lbry/releases/tag/v0.17.0). Significant improvements to download performance anticipated.
+  * Improved Discover page load time by batching all URIs into one API call.
   * Changed the File page to make it clearer how to to open the folder for a file.
-  * Improved tabs styles with a nice animation. (#547)
   * Display search bar on discover page instead of title and remove duplicated icon.
   * Minor update for themes.
-  * Updated the daemon from 0.16.1 to [0.16.4](https://github.com/lbryio/lbry/releases/tag/v0.16.4) to improve download performance and download issue detection.
   * There is no longer a minimum channel length (#645)
   * Changed the File page to make it clearer how to to open the folder for a file
   * The upgrade message is now friendlier and includes a link to the release notes.
-  * Improved Discover page load time by batching all URIs into one API call
   * Local settings refactored and no longer intermixed with LBRY API library.
 
 ### Fixed
