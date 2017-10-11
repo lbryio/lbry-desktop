@@ -67,7 +67,7 @@ class Video extends React.PureComponent {
       fileInfo && fileInfo.file_name
     );
 
-    const mediaDuration = contentDuration;
+    const mediaDuration = lbry.getMediaDuration(contentDuration);
 
     let loadStatusMessage = "";
 
