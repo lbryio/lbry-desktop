@@ -39,7 +39,7 @@ class App extends React.PureComponent {
   }
 
   setTitleFromProps(props) {
-    window.document.title = props.pageTitle;
+    window.document.title = props.pageTitle || "LBRY";
   }
 
   render() {
