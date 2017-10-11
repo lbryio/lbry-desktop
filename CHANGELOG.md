@@ -8,11 +8,22 @@ Web UI version numbers should always match the corresponding version of LBRY App
 
 ## [Unreleased]
 ### Added
-  * Add setting to automatically purchase low-cost content without a confirmation dialog
-  *
+  * Added a new search service. Significantly improved search results.
+  * Channels now appear in search results. Channel cards to be improved soon?.
+  * Add setting to automatically purchase low-cost content without a confirmation dialog.
+  * New custom styled scrollbar (#574)
+  * New tabs (#547).
 
 ### Changed
+  * LBRY protocol upgraded from v0.16.1 to [v0.17](https://github.com/lbryio/lbry/releases/tag/v0.17.0). Significant improvements to download performance anticipated.
+  * Improved Discover page load time by batching all URIs into one API call.
+  * Changed the File page to make it clearer how to to open the folder for a file.
+  * Display search bar on discover page instead of title and remove duplicated icon.
+  * Minor update for themes.
+  * There is no longer a minimum channel length (#645)
   * Changed the File page to make it clearer how to to open the folder for a file
+  * The upgrade message is now friendlier and includes a link to the release notes.
+  * Local settings refactored and no longer intermixed with LBRY API library.
 
 ### Fixed
   * Improve layout (and implementation) of the icon panel in file tiles and cards
@@ -20,13 +31,19 @@ Web UI version numbers should always match the corresponding version of LBRY App
   * While editing a publish, the URL will no longer change if you select a new file. (#601)
   * Fixed issues with opening the folder for a file (#606)
   * Be consistent with the step property on credit inputs (#604)
+  * Fixed unresponsive header (#613)
+  * Fixed dark theme issues with text content.
+  * Minor css fixes.
+  * Fixed issue when file fails to download (#642)
+  * Fixed issue after accessing a video without enough credits (#605)
+  * Fixed channel fetching without claims (#634)
 
 ### Deprecated
   *
   *
 
 ### Removed
-  *
+  * 
   *
 
 ## [0.16.0] - 2017-09-21

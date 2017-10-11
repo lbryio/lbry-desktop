@@ -11,10 +11,6 @@ class FileListDownloaded extends React.PureComponent {
     if (!this.props.isFetching) this.props.fetchFileInfosDownloaded();
   }
 
-  componentWillUnmount() {
-    this.props.cancelResolvingUris();
-  }
-
   render() {
     const { fileInfos, isFetching, navigate } = this.props;
 

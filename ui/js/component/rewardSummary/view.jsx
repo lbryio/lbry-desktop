@@ -18,9 +18,8 @@ const RewardSummary = props => {
             unclaimed rewards.
           </p>}
       </div>
-      <div className="card__actions card__actions--bottom">
-        <Link button="text" navigate="/rewards" label={__("Rewards")} />
-        <Link button="text" navigate="/invite" label={__("Invites")} />
+      <div className="card__actions">
+        <Link button="alt" navigate="/rewards" label={__("Learn more")} />
       </div>
     </section>
   );

@@ -17,7 +17,7 @@ const RewardTile = props => {
           <h3>{reward.reward_title}</h3>
         </div>
         <div className="card__content">{reward.reward_description}</div>
-        <div className="card__actions card__actions--bottom ">
+        <div className="card__actions  ">
           {reward.reward_type == rewards.TYPE_REFERRAL &&
             <Link
               button="alt"

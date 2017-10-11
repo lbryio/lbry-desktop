@@ -95,10 +95,6 @@ export const selectPageTitle = createSelector(
         return __("Help");
       case "developer":
         return __("Developer");
-      case "search":
-        return params.query
-          ? __("Search results for %s", params.query)
-          : __("Search");
       case "show": {
         const parts = [lbryuri.normalize(params.uri)];
         // If the params has any keys other than "uri"
@@ -111,8 +107,11 @@ export const selectPageTitle = createSelector(
         return __("Downloads & Purchases");
       case "published":
         return __("Publishes");
-      case "discover":
-        return __("Home");
+      case "search":
+        return params.query
+          ? __("Search results for %s", params.query)
+          : __("Search");
+      case "discover":  
       case false:
       case null:
       case "":

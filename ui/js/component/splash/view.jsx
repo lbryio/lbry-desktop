@@ -4,6 +4,7 @@ import LoadScreen from "../load_screen.js";
 import ModalIncompatibleDaemon from "modal/modalIncompatibleDaemon";
 import ModalUpgrade from "modal/modalUpgrade";
 import ModalDownloading from "modal/modalDownloading";
+import * as modals from "constants/modal_types";
 
 export class SplashScreen extends React.PureComponent {
   static propTypes = {
@@ -111,8 +112,10 @@ export class SplashScreen extends React.PureComponent {
         {modal == "incompatibleDaemon" &&
           this.state.isRunning &&
           <ModalIncompatibleDaemon />}
-        {modal == "upgrade" && this.state.isRunning && <ModalUpgrade />}
-        {modal == "downloading" && this.state.isRunning && <ModalDownloading />}
+        {modal == modals.UPGRADE && this.state.isRunning && <ModalUpgrade />}
+        {modal == modals.DOWNLOADING &&
+          this.state.isRunning &&
+          <ModalDownloading />}
       </div>
     );
   }

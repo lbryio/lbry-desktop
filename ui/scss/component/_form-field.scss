@@ -36,7 +36,10 @@ input[type="text"].input-copyable {
   padding-left: 5px;
   padding-right: 5px;
   width: 100%;
-  &:focus { border-color: var(--color-primary); }
+  &:focus {
+    border-color: var(--color-primary);
+    background: none !important;
+  }
 }
 
 .form-field {

@@ -105,9 +105,11 @@ class FileCard extends React.PureComponent {
                 <UriIndicator uri={uri} />
               </div>
             </div>
+            {/* Test for nizuka's design: should we remove description?
             <div className="card__content card__subtext card__subtext--two-lines">
               <TruncatedMarkdown lines={2}>{description}</TruncatedMarkdown>
             </div>
+            */}
           </Link>
         </div>
         {obscureNsfw && this.state.hovered && <NsfwOverlay />}

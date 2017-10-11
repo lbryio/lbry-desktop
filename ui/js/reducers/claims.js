@@ -4,26 +4,27 @@ const reducers = {};
 
 const defaultState = {};
 
-reducers[types.RESOLVE_URI_COMPLETED] = function(state, action) {
-  const { uri, certificate, claim } = action.data;
-
+reducers[types.RESOLVE_URIS_COMPLETED] = function(state, action) {
+  const { resolveInfo } = action.data;
   const byUri = Object.assign({}, state.claimsByUri);
   const byId = Object.assign({}, state.byId);
 
-  if (claim) {
-    byId[claim.claim_id] = claim;
-    byUri[uri] = claim.claim_id;
-  } else if (claim === undefined && certificate !== undefined) {
-    byId[certificate.claim_id] = certificate;
-    // Don't point URI at the channel certificate unless it actually is
-    // a channel URI. This is brittle.
-    if (!uri.split(certificate.name)[1].match(/\//)) {
-      byUri[uri] = certificate.claim_id;
+  for (let [uri, { certificate, claim }] of Object.entries(resolveInfo)) {
+    if (claim) {
+      byId[claim.claim_id] = claim;
+      byUri[uri] = claim.claim_id;
+    } else if (claim === undefined && certificate !== undefined) {
+      byId[certificate.claim_id] = certificate;
+      // Don't point URI at the channel certificate unless it actually is
+      // a channel URI. This is brittle.
+      if (!uri.split(certificate.name)[1].match(/\//)) {
+        byUri[uri] = certificate.claim_id;
+      } else {
+        byUri[uri] = null;
+      }
     } else {
       byUri[uri] = null;
     }
-  } else {
-    byUri[uri] = null;
   }
 
   return Object.assign({}, state, {

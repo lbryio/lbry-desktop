@@ -204,10 +204,6 @@ class DiscoverPage extends React.PureComponent {
     this.props.fetchFeaturedUris();
   }
 
-  componentWillUnmount() {
-    this.props.cancelResolvingUris();
-  }
-
   render() {
     const { featuredUris, fetchingFeaturedUris } = this.props;
     const hasContent =

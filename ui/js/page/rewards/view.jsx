@@ -75,7 +75,7 @@ class RewardsPage extends React.PureComponent {
               )}
             </p>
             <p>
-              {__("You will receive an email when this process is complete.") +
+              {__("If you continue to see this message, send us an email to help@lbry.io.") +
                 " " +
                 __("Please enjoy free content in the meantime!")}
             </p>
@@ -114,7 +114,7 @@ class RewardsPage extends React.PureComponent {
     } else if (!rewards || rewards.length <= 0) {
       return (
         <div className="card__content empty">
-          {__("Failed to load rewards.")}
+          {__("There are no rewards available at this time, please check back later.")}
         </div>
       );
     } else {

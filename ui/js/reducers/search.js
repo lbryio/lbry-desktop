@@ -1,7 +1,10 @@
 import * as types from "constants/action_types";
 
 const reducers = {};
-const defaultState = {};
+const defaultState = {
+  urisByQuery: {},
+  searching: false,
+};
 
 reducers[types.SEARCH_STARTED] = function(state, action) {
   const { query } = action.data;
@@ -12,17 +15,11 @@ reducers[types.SEARCH_STARTED] = function(state, action) {
 };
 
 reducers[types.SEARCH_COMPLETED] = function(state, action) {
-  const { query, results } = action.data;
-  const oldResults = Object.assign({}, state.results);
-  const newByQuery = Object.assign({}, oldResults.byQuery);
-  newByQuery[query] = results;
-  const newResults = Object.assign({}, oldResults, {
-    byQuery: newByQuery,
-  });
+  const { query, uris } = action.data;
 
   return Object.assign({}, state, {
     searching: false,
-    results: newResults,
+    urisByQuery: Object.assign({}, state.urisByQuery, { [query]: uris }),
   });
 };
 

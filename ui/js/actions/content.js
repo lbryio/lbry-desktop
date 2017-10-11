@@ -3,6 +3,7 @@ import * as settings from "constants/settings";
 import lbry from "lbry";
 import lbryio from "lbryio";
 import lbryuri from "lbryuri";
+import { makeSelectClientSetting } from "selectors/settings";
 import { selectBalance } from "selectors/wallet";
 import {
   makeSelectFileInfoForUri,
@@ -23,66 +24,44 @@ const { ipcRenderer } = require("electron");
 
 const DOWNLOAD_POLL_INTERVAL = 250;
 
-export function doResolveUri(uri) {
+export function doResolveUris(uris) {
   return function(dispatch, getState) {
-    uri = lbryuri.normalize(uri);
-
+    uris = uris.map(lbryuri.normalize);
     const state = getState();
-    const alreadyResolving = selectResolvingUris(state).indexOf(uri) !== -1;
 
-    if (!alreadyResolving) {
-      dispatch({
-        type: types.RESOLVE_URI_STARTED,
-        data: { uri },
-      });
-
-      lbry.resolve({ uri }).then(resolutionInfo => {
-        const { claim, certificate } = resolutionInfo
-          ? resolutionInfo
-          : { claim: null, certificate: null };
-
-        dispatch({
-          type: types.RESOLVE_URI_COMPLETED,
-          data: {
-            uri,
-            claim,
-            certificate,
-          },
-        });
-      });
-    }
-  };
-}
-
-export function doCancelResolveUri(uri) {
-  return function(dispatch, getState) {
-    uri = lbryuri.normalize(uri);
-
-    const state = getState();
-    const alreadyResolving = selectResolvingUris(state).indexOf(uri) !== -1;
-
-    if (alreadyResolving) {
-      lbry.cancelResolve({ uri });
-      dispatch({
-        type: types.RESOLVE_URI_CANCELED,
-        data: {
-          uri,
-        },
-      });
-    }
-  };
-}
-
-export function doCancelAllResolvingUris() {
-  return function(dispatch, getState) {
-    const state = getState();
+    // Filter out URIs that are already resolving
     const resolvingUris = selectResolvingUris(state);
-    const actions = [];
+    const urisToResolve = uris.filter(uri => !resolvingUris.includes(uri));
 
-    resolvingUris.forEach(uri => actions.push(doCancelResolveUri(uri)));
+    if (urisToResolve.length === 0) {
+      return;
+    }
 
-    dispatch(batchActions(...actions));
+    dispatch({
+      type: types.RESOLVE_URIS_STARTED,
+      data: { uris },
+    });
+
+    let resolveInfo = {};
+    lbry.resolve({ uris: urisToResolve }).then(result => {
+      for (let [uri, uriResolveInfo] of Object.entries(result)) {
+        const { claim, certificate } = uriResolveInfo || {
+          claim: null,
+          certificate: null,
+        };
+        resolveInfo[uri] = { claim, certificate };
+      }
+
+      dispatch({
+        type: types.RESOLVE_URIS_COMPLETED,
+        data: { resolveInfo },
+      });
+    });
   };
+}
+
+export function doResolveUri(uri) {
+  return doResolveUris([uri]);
 }
 
 export function doFetchFeaturedUris() {
@@ -95,28 +74,27 @@ export function doFetchFeaturedUris() {
 
     const success = ({ Categories, Uris }) => {
       let featuredUris = {};
-      const actions = [];
-
+      let urisToResolve = [];
       Categories.forEach(category => {
         if (Uris[category] && Uris[category].length) {
           const uris = Uris[category];
 
           featuredUris[category] = uris;
-          uris.forEach(uri => {
-            actions.push(doResolveUri(uri));
-          });
+          urisToResolve = [...urisToResolve, ...uris];
         }
       });
 
-      actions.push({
-        type: types.FETCH_FEATURED_CONTENT_COMPLETED,
-        data: {
-          categories: Categories,
-          uris: featuredUris,
-          success: true,
+      const actions = [
+        doResolveUris(urisToResolve),
+        {
+          type: types.FETCH_FEATURED_CONTENT_COMPLETED,
+          data: {
+            categories: Categories,
+            uris: featuredUris,
+            success: true,
+          },
         },
-      });
-
+      ];
       dispatch(batchActions(...actions));
     };
 
@@ -295,6 +273,7 @@ export function doLoadVideo(uri) {
           streamInfo.error == "Timeout";
 
         if (timeout) {
+          dispatch(doSetPlayingUri(null));
           dispatch({
             type: types.LOADING_VIDEO_FAILED,
             data: { uri },
@@ -306,6 +285,7 @@ export function doLoadVideo(uri) {
         }
       })
       .catch(error => {
+        dispatch(doSetPlayingUri(null));
         dispatch({
           type: types.LOADING_VIDEO_FAILED,
           data: { uri },
@@ -325,7 +305,7 @@ export function doPurchaseUri(uri) {
       fileInfo && !!downloadingByOutpoint[fileInfo.outpoint];
 
     function attemptPlay(cost, instantPurchaseMax = null) {
-      if (!instantPurchaseMax || cost > instantPurchaseMax) {
+      if (cost > 0 && (!instantPurchaseMax || cost > instantPurchaseMax)) {
         dispatch(doOpenModal(modals.AFFIRM_PURCHASE, { uri }));
       } else {
         dispatch(doLoadVideo(uri));
@@ -351,19 +331,20 @@ export function doPurchaseUri(uri) {
     const { cost } = costInfo;
 
     if (cost > balance) {
+      dispatch(doSetPlayingUri(null));
       dispatch(doOpenModal(modals.INSUFFICIENT_CREDITS));
       return Promise.resolve();
     }
 
     if (
       cost == 0 ||
-      !lbry.getClientSetting(settings.INSTANT_PURCHASE_ENABLED)
+      !makeSelectClientSetting(settings.INSTANT_PURCHASE_ENABLED)(state)
     ) {
       attemptPlay(cost);
     } else {
-      const instantPurchaseMax = lbry.getClientSetting(
+      const instantPurchaseMax = makeSelectClientSetting(
         settings.INSTANT_PURCHASE_MAX
-      );
+      )(state);
       if (instantPurchaseMax.currency == "LBC") {
         attemptPlay(cost, instantPurchaseMax.amount);
       } else {
@@ -373,8 +354,6 @@ export function doPurchaseUri(uri) {
         });
       }
     }
-
-    return dispatch(doOpenModal(modals.AFFIRM_PURCHASE, { uri }));
   };
 }
 
@@ -386,16 +365,15 @@ export function doFetchClaimsByChannel(uri, page) {
     });
 
     lbry.claim_list_by_channel({ uri, page: page || 1 }).then(result => {
-      const claimResult = result[uri],
-        claims = claimResult ? claimResult.claims_in_channel : [],
-        currentPage = claimResult ? claimResult.returned_page : undefined;
+      const claimResult = result[uri] || {};
+      const { claims_in_channel, returned_page } = claimResult;
 
       dispatch({
         type: types.FETCH_CHANNEL_CLAIMS_COMPLETED,
         data: {
           uri,
-          claims,
-          page: currentPage,
+          claims: claims_in_channel || [],
+          page: returned_page || undefined,
         },
       });
     });

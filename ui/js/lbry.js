@@ -1,11 +1,6 @@
-import lighthouse from "./lighthouse.js";
 import jsonrpc from "./jsonrpc.js";
 import lbryuri from "./lbryuri.js";
 
-/**
- * The 4 get/set functions below used to be in a utils.js library when used more widely.
- * They've been reduced to just this file and probably ought to be eliminated entirely.
- */
 function getLocal(key, fallback = undefined) {
   const itemRaw = localStorage.getItem(key);
   return itemRaw === null ? fallback : JSON.parse(itemRaw);
@@ -15,15 +10,6 @@ function setLocal(key, value) {
   localStorage.setItem(key, JSON.stringify(value));
 }
 
-function getSession(key, fallback = undefined) {
-  const itemRaw = sessionStorage.getItem(key);
-  return itemRaw === null ? fallback : JSON.parse(itemRaw);
-}
-
-function setSession(key, value) {
-  sessionStorage.setItem(key, JSON.stringify(value));
-}
-
 const { remote, ipcRenderer } = require("electron");
 const menu = remote.require("./menu/main-menu");
 
@@ -31,19 +17,6 @@ let lbry = {
   isConnected: false,
   daemonConnectionString: "http://localhost:5279",
   pendingPublishTimeout: 20 * 60 * 1000,
-  defaultClientSettings: {
-    showNsfw: false,
-    showUnavailable: true,
-    debug: false,
-    useCustomLighthouseServers: false,
-    customLighthouseServers: [],
-    language: "en",
-    theme: "light",
-    themes: [],
-    instantPurchaseMax: null,
-    instantPurchaseEnabled: false,
-    instantPurchaseMax: { currency: "LBC", amount: 0.1 },
-  },
 };
 
 function apiCall(method, params, resolve, reject) {
@@ -227,17 +200,6 @@ lbry.publishDeprecated = function(
   );
 };
 
-lbry.getClientSetting = function(setting) {
-  var localStorageVal = localStorage.getItem("setting_" + setting);
-  return localStorageVal === null
-    ? lbry.defaultClientSettings[setting]
-    : JSON.parse(localStorageVal);
-};
-
-lbry.setClientSetting = function(setting, value) {
-  return localStorage.setItem("setting_" + setting, JSON.stringify(value));
-};
-
 lbry.imagePath = function(file) {
   return "img/" + file;
 };
@@ -367,28 +329,22 @@ lbry.claim_list_mine = function(params = {}) {
   });
 };
 
-lbry._resolveXhrs = {};
 lbry.resolve = function(params = {}) {
   return new Promise((resolve, reject) => {
-    if (!params.uri) {
-      throw __("Resolve has hacked cache on top of it that requires a URI");
-    }
-    lbry._resolveXhrs[params.uri] = apiCall(
+    apiCall(
       "resolve",
       params,
       function(data) {
-        resolve(data && data[params.uri] ? data[params.uri] : {});
+        if ("uri" in params) {
+          // If only a single URI was requested, don't nest the results in an object
+          resolve(data && data[params.uri] ? data[params.uri] : {});
+        } else {
+          resolve(data || {});
+        }
       },
       reject
     );
   });
-};
-
-lbry.cancelResolve = function(params = {}) {
-  const xhr = lbry._resolveXhrs[params.uri];
-  if (xhr && xhr.readyState > 0 && xhr.readyState < 4) {
-    xhr.abort();
-  }
 };
 
 lbry = new Proxy(lbry, {

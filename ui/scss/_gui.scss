@@ -7,7 +7,7 @@ html
 body
 {
   color: var(--text-color);
-  font-family: 'Source Sans Pro', sans-serif;
+  font-family: 'Roboto', sans-serif;
   line-height: var(--font-line-height);
 }
 
@@ -25,7 +25,7 @@ body
 
 .credit-amount--indicator
 {
-  font-weight: bold;
+  font-weight: 500;
   color: var(--color-money);
 }
 .credit-amount--fee
@@ -36,10 +36,16 @@ body
 
 #main-content
 {
-  padding: $spacing-vertical;
-  margin-top: var(--header-height);
+  margin: auto;
   display: flex;
   flex-direction: column;
+  overflow: overlay;
+  padding: $spacing-vertical;
+  position: absolute;
+  top: var(--header-height);
+  bottom: 0;
+  left: 4px;
+  right: 4px;
   main {
     margin-left: auto;
     margin-right: auto;

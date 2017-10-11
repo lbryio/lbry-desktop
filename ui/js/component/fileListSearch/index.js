@@ -1,22 +1,15 @@
 import React from "react";
 import { connect } from "react-redux";
 import { doSearch } from "actions/search";
-import {
-  selectIsSearching,
-  selectCurrentSearchResults,
-  selectSearchQuery,
-} from "selectors/search";
-import { doNavigate } from "actions/navigation";
+import { selectIsSearching, makeSelectSearchUris } from "selectors/search";
 import FileListSearch from "./view";
 
-const select = state => ({
+const select = (state, props) => ({
   isSearching: selectIsSearching(state),
-  query: selectSearchQuery(state),
-  results: selectCurrentSearchResults(state),
+  uris: makeSelectSearchUris(props.query)(state),
 });
 
 const perform = dispatch => ({
-  navigate: path => dispatch(doNavigate(path)),
   search: search => dispatch(doSearch(search)),
 });
 

@@ -18,12 +18,22 @@ class TransactionListItem extends React.PureComponent {
       type,
     } = transaction;
 
+    const dateFormat = {
+      month: "short",
+      day: "numeric",
+      year: "numeric",
+    };
+
     return (
       <tr>
         <td>
           {date
             ? <div>
-                <DateTime date={date} show={DateTime.SHOW_DATE} />
+                <DateTime
+                  date={date}
+                  show={DateTime.SHOW_DATE}
+                  formatOptions={dateFormat}
+                />
                 <div className="meta">
                   <DateTime date={date} show={DateTime.SHOW_TIME} />
                 </div>

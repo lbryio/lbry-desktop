@@ -1,6 +1,7 @@
 .show-page-media {
   text-align: center;
-  margin-bottom: $spacing-vertical;
+  margin-bottom: 16px;
+  overflow: auto;
   img {
     max-width: 100%;
   }

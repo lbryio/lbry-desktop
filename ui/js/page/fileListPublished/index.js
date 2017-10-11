@@ -8,7 +8,6 @@ import {
 } from "selectors/claims";
 import { doClaimRewardType } from "actions/rewards";
 import { doNavigate } from "actions/navigation";
-import { doCancelAllResolvingUris } from "actions/content";
 import FileListPublished from "./view";
 
 const select = state => ({
@@ -21,7 +20,6 @@ const perform = dispatch => ({
   fetchClaims: () => dispatch(doFetchClaimListMine()),
   claimFirstPublishReward: () =>
     dispatch(doClaimRewardType(rewards.TYPE_FIRST_PUBLISH)),
-  cancelResolvingUris: () => dispatch(doCancelAllResolvingUris()),
 });
 
 export default connect(select, perform)(FileListPublished);

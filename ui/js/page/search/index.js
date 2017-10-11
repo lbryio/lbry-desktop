@@ -1,10 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import {
-  selectIsSearching,
-  selectSearchQuery,
-  selectCurrentSearchResults,
-} from "selectors/search";
+import { selectIsSearching, selectSearchQuery } from "selectors/search";
 import { doNavigate } from "actions/navigation";
 import SearchPage from "./view";
 

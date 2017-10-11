@@ -18,21 +18,14 @@ export const selectIsSearching = createSelector(
   state => !!state.searching
 );
 
-export const selectSearchResults = createSelector(
+export const selectSearchUrisByQuery = createSelector(
   _selectState,
-  state => state.results || {}
+  state => state.urisByQuery
 );
 
-export const selectSearchResultsByQuery = createSelector(
-  selectSearchResults,
-  results => results.byQuery || {}
-);
-
-export const selectCurrentSearchResults = createSelector(
-  selectSearchQuery,
-  selectSearchResultsByQuery,
-  (query, byQuery) => byQuery[query]
-);
+export const makeSelectSearchUris = query => {
+  return createSelector(selectSearchUrisByQuery, byQuery => byQuery[query]);
+};
 
 export const selectWunderBarAddress = createSelector(
   selectCurrentPage,
@@ -48,8 +41,6 @@ export const selectWunderBarIcon = createSelector(
     switch (page) {
       case "auth":
         return "icon-user";
-      case "search":
-        return "icon-search";
       case "settings":
         return "icon-gear";
       case "help":
@@ -81,7 +72,8 @@ export const selectWunderBarIcon = createSelector(
       case "developer":
         return "icon-code";
       case "discover":
-        return "icon-home";
+      case "search":
+        return "icon-search";
       default:
         return "icon-file";
     }
