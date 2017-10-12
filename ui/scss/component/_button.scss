@@ -45,6 +45,7 @@ $button-focus-shift: 12%;
   cursor: pointer;
   font-weight: 500;
   font-size: 14px;
+  user-select: none;
   transition: background var(--animation-duration) var(--animation-style);
 }
 
