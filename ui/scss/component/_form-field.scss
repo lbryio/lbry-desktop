@@ -27,19 +27,22 @@
 
 input[type="text"].input-copyable {
   background: var(--input-bg);
-  border-bottom: var(--input-border-size) solid var(--input-border-color);
   color: var(--input-color);
   line-height: 1;
   padding-top: $spacing-vertical * 1/3;
   padding-bottom: $spacing-vertical * 1/3;
-  width: var(--input-width);
   padding-left: 5px;
   padding-right: 5px;
   width: 100%;
-  &:focus {
-    border-color: var(--color-primary);
-    background: none !important;
-  }
+}
+
+input[readonly] {
+    border-bottom: 1px dashed var(--input-border-color) !important;
+}
+
+input[readonly]:focus {
+    background: var(--input-bg) !important;
+    border-bottom: 1px dashed var(--input-border-color !important);
 }
 
 .form-field {
@@ -81,9 +84,6 @@ input[type="text"].input-copyable {
     -webkit-appearance: none;
     background: var(--input-bg);
     color: var(--input-color);
-    &[readonly] {
-      background-color: var(--input-bg);
-    }
   }
 
   input[type="text"],

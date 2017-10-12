@@ -542,7 +542,6 @@ class PublishForm extends React.PureComponent {
             <div className="card__content">
               <FormRow
                 name="file"
-                label="File"
                 ref="file"
                 type="file"
                 onChange={event => {
