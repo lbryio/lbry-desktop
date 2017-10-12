@@ -45,11 +45,16 @@ export function doResolveUris(uris) {
     let resolveInfo = {};
     lbry.resolve({ uris: urisToResolve }).then(result => {
       for (let [uri, uriResolveInfo] of Object.entries(result)) {
-        const { claim, certificate, claims_in_channel } = uriResolveInfo || {
-          claim: undefined,
-          claims_in_channel: undefined,
-          certificate: undefined,
+        const fallbackResolveInfo = {
+          claim: null,
+          claims_in_channel: null,
+          certificate: null,
         };
+
+        const { claim, certificate, claims_in_channel } = uriResolveInfo &&
+          !uriResolveInfo.error
+          ? uriResolveInfo
+          : fallbackResolveInfo;
         resolveInfo[uri] = { claim, certificate, claims_in_channel };
       }
 
