@@ -34,7 +34,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
  * Channels now appear in search results. Channel cards to be improved soon?.
  * Add setting to automatically purchase low-cost content without a confirmation dialog.
  * New custom styled scrollbar (#574)
- * New tabs (#547).
+ * New tabs (#576).
 
 
 ### Changed
