@@ -49,7 +49,15 @@
       }
     },
     "deb": {
-      "depends": ["gconf2", "gconf-service", "libnotify4", "libappindicator1", "libxtst6", "libnss3", "libsecret-1-0"]
+      "depends": [
+        "gconf2",
+        "gconf-service",
+        "libnotify4",
+        "libappindicator1",
+        "libxtst6",
+        "libnss3",
+        "libsecret-1-0"
+      ]
     },
     "win": {
       "target": "nsis"
@@ -60,7 +68,7 @@
   },
   "devDependencies": {
     "devtron": "^1.4.0",
-    "electron": "^1.7.5",
+    "electron": "^1.7.9",
     "electron-builder": "^11.7.0",
     "electron-debug": "^1.4.0"
   },
