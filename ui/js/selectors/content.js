@@ -29,20 +29,20 @@ export const makeSelectIsUriResolving = uri => {
   );
 };
 
-export const selectChannelPages = createSelector(
+export const selectChannelClaimCounts = createSelector(
   _selectState,
-  state => state.channelPages || {}
+  state => state.channelClaimCounts || {}
 );
 
 export const makeSelectTotalItemsForChannel = uri => {
-  return createSelector(
-    selectChannelPages,
-    byUri => (byUri && byUri[uri]) * 10
-  );
+  return createSelector(selectChannelClaimCounts, byUri => byUri && byUri[uri]);
 };
 
 export const makeSelectTotalPagesForChannel = uri => {
-  return createSelector(selectChannelPages, byUri => byUri && byUri[uri]);
+  return createSelector(
+    selectChannelClaimCounts,
+    byUri => byUri && byUri[uri] && Math.ceil(byUri[uri] / 10)
+  );
 };
 
 export const selectRewardContentClaimIds = createSelector(
