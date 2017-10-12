@@ -227,24 +227,20 @@ function quitNow() {
   app.quit();
 }
 
-if (process.platform != 'linux') {
-  // On Linux, this is always returning true due to an Electron bug,
-  // so for now we just don't support single-instance apps on Linux.
-  const isSecondaryInstance = app.makeSingleInstance((argv) => {
-    if (argv.length >= 2) {
-      handleOpenUriRequested(argv[1]); // This will handle restoring and focusing the window
-    } else if (win) {
-      if (win.isMinimized()) {
-        win.restore();
-      }
-      win.focus();
+const isSecondaryInstance = app.makeSingleInstance((argv) => {
+  if (argv.length >= 2) {
+    handleOpenUriRequested(argv[1]); // This will handle restoring and focusing the window
+  } else if (win) {
+    if (win.isMinimized()) {
+      win.restore();
     }
-  });
-
-  if (isSecondaryInstance) { // We're not in the original process, so quit
-    quitNow();
-    return;
+    win.focus();
   }
+});
+
+if (isSecondaryInstance) { // We're not in the original process, so quit
+  quitNow();
+  return;
 }
 
 app.on('ready', function(){
