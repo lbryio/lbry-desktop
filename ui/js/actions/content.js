@@ -115,7 +115,7 @@ export function doFetchFeaturedUris() {
     };
 
     lbryio
-      .call("discover", "list", { version: "early-access" })
+      .call("file", "list_homepage", { version: "early-access" })
       .then(success, failure);
   };
 }
