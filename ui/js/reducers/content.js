@@ -4,7 +4,7 @@ const reducers = {};
 const defaultState = {
   playingUri: null,
   rewardedContentClaimIds: [],
-  channelPages: {},
+  channelClaimCounts: {},
 };
 
 reducers[types.FETCH_FEATURED_CONTENT_STARTED] = function(state, action) {
@@ -48,31 +48,38 @@ reducers[types.RESOLVE_URIS_STARTED] = function(state, action) {
   });
 };
 
+reducers[types.RESOLVE_URIS_COMPLETED] = function(state, action) {
+  const { resolveInfo } = action.data;
+  const channelClaimCounts = Object.assign({}, state.channelClaimCounts);
+
+  for (let [uri, { certificate, claims_in_channel }] of Object.entries(
+    resolveInfo
+  )) {
+    if (certificate && !isNaN(claims_in_channel)) {
+      channelClaimCounts[uri] = claims_in_channel;
+    }
+  }
+
+  return Object.assign({}, state, {
+    channelClaimCounts,
+    resolvingUris: (state.resolvingUris || []).filter(uri => !resolveInfo[uri]),
+  });
+};
+
 reducers[types.SET_PLAYING_URI] = (state, action) => {
   return Object.assign({}, state, {
     playingUri: action.data.uri,
   });
 };
 
-// reducers[types.FETCH_CHANNEL_CLAIMS_COMPLETED] = function(state, action) {
-//   const channelPages = Object.assign({}, state.channelPages);
-//   const { uri, claims } = action.data;
-//
-//   channelPages[uri] = totalPages;
-//
-//   return Object.assign({}, state, {
-//     channelPages,
-//   });
-// };
-
 reducers[types.FETCH_CHANNEL_CLAIM_COUNT_COMPLETED] = function(state, action) {
-  const channelPages = Object.assign({}, state.channelPages);
+  const channelClaimCounts = Object.assign({}, state.channelClaimCounts);
   const { uri, totalClaims } = action.data;
 
-  channelPages[uri] = Math.ceil(totalClaims / 10);
+  channelClaimCounts[uri] = totalClaims;
 
   return Object.assign({}, state, {
-    channelPages,
+    channelClaimCounts,
   });
 };
 

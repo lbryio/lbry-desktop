@@ -173,7 +173,7 @@ class PublishForm extends React.PureComponent {
   topClaimValue() {
     if (!this.claim()) return null;
 
-    return parseFloat(this.claim().amount);
+    return parseFloat(this.claim().effective_amount);
   }
 
   myClaimExists() {

@@ -5,10 +5,12 @@ import { doNavigate } from "actions/navigation";
 import { selectCurrentPage } from "selectors/navigation";
 import batchActions from "util/batchActions";
 
-export function doSearch(query) {
+export function doSearch(rawQuery) {
   return function(dispatch, getState) {
     const state = getState();
     const page = selectCurrentPage(state);
+
+    const query = rawQuery.replace(/^lbry:\/\//, "");
 
     if (!query) {
       return dispatch({
