@@ -18,12 +18,8 @@ class FileList extends React.PureComponent {
       },
       title: function(fileInfos) {
         return fileInfos.slice().sort(function(fileInfo1, fileInfo2) {
-          const title1 = fileInfo1.metadata
-            ? fileInfo1.metadata.stream.metadata.title.toLowerCase()
-            : fileInfo1.name;
-          const title2 = fileInfo2.metadata
-            ? fileInfo2.metadata.stream.metadata.title.toLowerCase()
-            : fileInfo2.name;
+          const title1 = fileInfo1.name.toLowerCase();
+          const title2 = fileInfo2.name.toLowerCase();
           if (title1 < title2) {
             return -1;
           } else if (title1 > title2) {
@@ -79,7 +75,7 @@ class FileList extends React.PureComponent {
         uriParams.claimId = this.getChannelSignature(fileInfo);
       } else {
         uriParams.claimId = fileInfo.claim_id;
-        uriParams.name = fileInfo.name;
+        uriParams.contentName = fileInfo.name;
       }
       const uri = lbryuri.build(uriParams);
 
