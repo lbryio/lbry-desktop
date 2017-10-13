@@ -19,6 +19,7 @@ class ChannelTile extends React.PureComponent {
 
   render() {
     const { claim, navigate, isResolvingUri, totalItems, uri } = this.props;
+    const { name, claim_id } = claim;
 
     let onClick = () => navigate("/show", { uri });
 
