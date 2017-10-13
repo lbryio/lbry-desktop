@@ -19,7 +19,12 @@ class ChannelTile extends React.PureComponent {
 
   render() {
     const { claim, navigate, isResolvingUri, totalItems, uri } = this.props;
-    const { name, claim_id } = claim;
+    let channelName, channelId;
+
+    if (claim) {
+      channelName = claim.name;
+      channelId = claim.claim_id;
+    }
 
     let onClick = () => navigate("/show", { uri });
 
@@ -27,11 +32,11 @@ class ChannelTile extends React.PureComponent {
       <section className="file-tile card">
         <div onClick={onClick} className="card__link">
           <div className={"card__inner file-tile__row"}>
-            <CardMedia title={name} thumbnail={null} />
+            {channelName && <CardMedia title={channelName} thumbnail={null} />}
             <div className="file-tile__content">
               <div className="card__title-primary">
                 <h3>
-                  <TruncatedText lines={1}>{claim.name}</TruncatedText>
+                  <TruncatedText lines={1}>{channelName || uri}</TruncatedText>
                 </h3>
               </div>
               <div className="card__content card__subtext">
