@@ -10,7 +10,7 @@ export function doSearch(rawQuery) {
     const state = getState();
     const page = selectCurrentPage(state);
 
-    const query = rawQuery.replace(/^lbry:\/\//, "");
+    const query = rawQuery.replace(/^lbry:\/\//i, "");
 
     if (!query) {
       return dispatch({
