@@ -132,7 +132,7 @@ reducers[types.DOWNLOADING_COMPLETED] = function(state, action) {
   const badgeNumber = state.badgeNumber;
 
   // Don't update the badge number if the window is focused
-  if (win.isFocused()) return Object.assign({}, state);
+  if (win && win.isFocused()) return Object.assign({}, state);
 
   return Object.assign({}, state, {
     badgeNumber: badgeNumber + 1,
