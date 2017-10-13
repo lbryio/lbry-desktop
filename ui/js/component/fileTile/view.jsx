@@ -84,6 +84,11 @@ class FileTile extends React.PureComponent {
 
     let onClick = () => navigate("/show", { uri });
 
+    let name = "";
+    if (claim) {
+      name = claim.name;
+    }
+
     let description = "";
     if (isClaimed) {
       description = metadata && metadata.description;
@@ -114,7 +119,7 @@ class FileTile extends React.PureComponent {
       >
         <div onClick={onClick} className="card__link">
           <div className={"card__inner file-tile__row"}>
-            <CardMedia title={title} thumbnail={thumbnail} />
+            <CardMedia title={title || name} thumbnail={thumbnail} />
             <div className="file-tile__content">
               <div className="card__title-primary">
                 <span className="card__indicators">
@@ -125,7 +130,7 @@ class FileTile extends React.PureComponent {
                   {showLocal && fileInfo && <Icon icon={icons.LOCAL} />}
                 </span>
                 <h3>
-                  <TruncatedText lines={1}>{title}</TruncatedText>
+                  <TruncatedText lines={1}>{title || name}</TruncatedText>
                 </h3>
               </div>
               {description &&
