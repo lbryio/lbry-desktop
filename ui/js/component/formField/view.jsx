@@ -134,6 +134,8 @@ class FormField extends React.PureComponent {
       renderElementInsideLabel =
         this.props.label && formFieldNestedLabelTypes.includes(this.props.type);
 
+    const isCheck = this.refs.field && this.refs.field.checked ? true : false;
+
     delete otherProps.type;
     delete otherProps.label;
     delete otherProps.hasError;
@@ -177,7 +179,8 @@ class FormField extends React.PureComponent {
               htmlFor={elementId}
               className={
                 "form-field__label " +
-                (isError ? "form-field__label--error" : "")
+                (isError ? "form-field__label--error" : "") +
+                (isCheck ? " checked" : "")
               }
             >
               {element}

@@ -106,12 +106,10 @@ export class FormRow extends React.PureComponent {
   }
 
   onFocus() {
-    //this._field.focus();
     this.setState({ isFocus: true });
   }
 
   onBlur() {
-    //this._field.focus();
     this.setState({ isFocus: false });
   }
 

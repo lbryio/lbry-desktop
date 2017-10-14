@@ -155,6 +155,12 @@ input[readonly]:focus {
     color: var(--color-primary) !important;
   }
 
+  &.checked {
+    color: var(--text-color) !important;
+  }
+
+
+
 }
 
 .form-row__label-row .form-field__label--error {
