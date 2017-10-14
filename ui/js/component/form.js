@@ -46,6 +46,10 @@ export class FormRow extends React.PureComponent {
     // helper: React.PropTypes.html,
   };
 
+  static defaultProps = {
+    isFocus: false,
+  };
+
   constructor(props) {
     super(props);
 
@@ -101,8 +105,14 @@ export class FormRow extends React.PureComponent {
     return this._field.getOptions();
   }
 
-  focus() {
-    this._field.focus();
+  onFocus() {
+    //this._field.focus();
+    this.setState({ isFocus: true });
+  }
+
+  onBlur() {
+    //this._field.focus();
+    this.setState({ isFocus: false });
   }
 
   render() {
@@ -117,6 +127,7 @@ export class FormRow extends React.PureComponent {
     }
     delete fieldProps.helper;
     delete fieldProps.errorMessage;
+    delete fieldProps.isFocus;
 
     return (
       <div className="form-row">
@@ -124,14 +135,16 @@ export class FormRow extends React.PureComponent {
           ? <div
               className={
                 "form-row__label-row " +
-                (this.props.labelPrefix ? "form-row__label-row--prefix" : "")
+                (this.props.labelPrefix ? "form-row__label-row--prefix" : "") +
+                (this.state.isFocus ? "focus " : "")
               }
             >
               <label
                 htmlFor={elementId}
                 className={
                   "form-field__label " +
-                  (this.state.isError ? "form-field__label--error" : "")
+                  (this.state.isError ? "form-field__label--error" : " ") +
+                  (this.state.isFocus ? "focus" : " ")
                 }
               >
                 {this.props.label}
@@ -143,6 +156,8 @@ export class FormRow extends React.PureComponent {
             this._field = ref ? ref.getWrappedInstance() : null;
           }}
           hasError={this.state.isError}
+          onFocus={this.onFocus.bind(this)}
+          onBlur={this.onBlur.bind(this)}
           {...fieldProps}
         />
         {!this.state.isError && this.props.helper

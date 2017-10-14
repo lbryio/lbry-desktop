@@ -103,21 +103,35 @@ input[readonly]:focus {
     &.form-field__input--inline {
       padding-top: 0;
       padding-bottom: 0;
-      border-bottom-width: 1px;
+      border-bottom-width:  var(--input-border-size);
       margin-left: 8px;
       margin-right: 8px;
     }
   }
 
-  textarea:focus,
-  input[type="text"]:focus,
-  input[type="password"]:focus,
-  input[type="email"]:focus,
-  input[type="number"]:focus,
-  input[type="search"]:focus,
-  input[type="date"]:focus {
-    border-color: var(--color-primary);
-    background: var(--input-active-bg);
+  textarea,
+  input[type="text"],
+  input[type="password"],
+  input[type="email"],
+  input[type="number"],
+  input[type="search"],
+  input[type="date"]{
+
+    & ::-webkit-input-placeholder { /* WebKit browsers */
+    color: var(--input-color);
+     opacity: 0.54 !important;
+   }
+
+    caret-color:  var(--color-primary);
+
+    &:focus {
+      border-color: var(--color-primary) !important;
+      background: var(--input-active-bg);
+    }
+    &:hover {
+      border-color: var(--input-hover-border-color);
+    }
+
   }
 
   textarea {
@@ -129,12 +143,18 @@ input[readonly]:focus {
   display: block;
 }
 
+
 .form-field__label, .form-row__label {
-  color: var(--color-label);
+  color: var(--form-label-color);
   &[for] {  cursor: pointer; }
   > input[type="checkbox"], input[type="radio"] {
     margin-right: 6px;
   }
+
+  &.focus {
+    color: var(--color-primary) !important;
+  }
+
 }
 
 .form-row__label-row .form-field__label--error {
