@@ -174,19 +174,18 @@ class FormField extends React.PureComponent {
         {this.props.prefix
           ? <span className="form-field__prefix">{this.props.prefix}</span>
           : ""}
-        {renderElementInsideLabel
-          ? <label
-              htmlFor={elementId}
-              className={
-                "form-field__label " +
-                (isError ? "form-field__label--error" : "") +
-                (isCheck ? " checked" : "")
-              }
-            >
-              {element}
-              {this.props.label}
-            </label>
-          : element}
+        {element}
+        {renderElementInsideLabel &&
+          <label
+            htmlFor={elementId}
+            className={
+              "form-field__label " +
+              (isError ? "form-field__label--error" : "") +
+              (isCheck ? " checked" : "")
+            }
+          >
+            {this.props.label}
+          </label>}
         {formFieldFileSelectorTypes.includes(this.props.type)
           ? <FileSelector
               type={this.props.type}
