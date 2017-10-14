@@ -130,7 +130,7 @@ input[readonly]:focus {
 }
 
 .form-field__label, .form-row__label {
-  color: var(--color-help);
+  color: var(--color-label);
   &[for] {  cursor: pointer; }
   > input[type="checkbox"], input[type="radio"] {
     margin-right: 6px;
