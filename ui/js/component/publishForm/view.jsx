@@ -677,9 +677,6 @@ class PublishForm extends React.PureComponent {
           <section className="card">
             <div className="card__title-primary">
               <h4>{__("License")}</h4>
-              <div className="card__subtitle">
-                {__("Rights and permissions")}
-              </div>
             </div>
             <div className="card__content">
               <FormRow
