@@ -105,6 +105,10 @@ export class FormRow extends React.PureComponent {
     return this._field.getOptions();
   }
 
+  focus() {
+    this._field.focus();
+  }
+
   onFocus() {
     this.setState({ isFocus: true });
   }
