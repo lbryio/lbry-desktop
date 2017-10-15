@@ -89,8 +89,7 @@ class ChannelSection extends React.PureComponent {
     const channel = this.state.addingChannel ? "new" : this.props.channel;
     const { fetchingChannels, channels = [] } = this.props;
 
-    let channelContent = [];
-    channelContent.push(
+    const channelSelector = (
       <FormRow
         key="channel"
         type="select"
@@ -101,7 +100,7 @@ class ChannelSection extends React.PureComponent {
         <option key="anonymous" value="anonymous">
           {__("Anonymous")}
         </option>
-        {this.props.channels.map(({ name }) =>
+        {channels.map(({ name }) =>
           <option key={name} value={name}>{name}</option>
         )}
         <option key="new" value="new">
@@ -109,11 +108,6 @@ class ChannelSection extends React.PureComponent {
         </option>
       </FormRow>
     );
-    if (fetchingChannels) {
-      channelContent = (
-        <BusyMessage message="Updating channels" key="loading" />
-      );
-    }
 
     return (
       <section className="card">
@@ -128,7 +122,9 @@ class ChannelSection extends React.PureComponent {
           </div>
         </div>
         <div className="card__content">
-          {channelContent}
+          {fetchingChannels
+            ? <BusyMessage message="Updating channels" key="loading" />
+            : channelSelector}
         </div>
         {this.state.addingChannel &&
           <div className="card__content">
