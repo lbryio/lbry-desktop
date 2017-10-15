@@ -1,6 +1,6 @@
 .CodeMirror {
-    background: var(--color-bg-alt) !important;
-    border: 0 !important;
+    background: var(--color-canvas) !important;
+    border: 0px !important;
     border-radius: 0px !important;
     color: var(--text-color) !important;
     box-shadow: var(--box-shadow-layer);
@@ -11,7 +11,6 @@
     border: 0 !important;
     background: var(--color-bg-alt);
     border-radius: 0 !important;
-    border-bottom: var(--divider) !important;
     box-shadow: var(--box-shadow-layer);
 }
 
@@ -25,7 +24,7 @@
 }
 
 div.editor-toolbar a {
-    opacity: 0.75;
+    opacity: 0.64;
     color:  var(--text-color) !important;
 }
 
@@ -47,6 +46,7 @@ div.editor-toolbar a {
 
 .editor-preview {
     background: var(--card-bg) !important;
+    border: 0 !important;
 }
 
 .editor-preview-side {
@@ -84,7 +84,7 @@ div.editor-toolbar a {
 }
 
 .CodeMirror .CodeMirror-cursor{
-    border-color: var(--text-color) !important;
+    border-color: var(--color-primary) !important;
 }
 
 .CodeMirror .CodeMirror-code .cm-comment {
