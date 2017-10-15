@@ -124,6 +124,10 @@ class FormField extends React.PureComponent {
     this.props.onBlur && this.props.onBlur();
   }
 
+  focus() {
+    this.refs.field.focus();
+  }
+
   render() {
     // Pass all unhandled props to the field element
     const otherProps = Object.assign({}, this.props),
