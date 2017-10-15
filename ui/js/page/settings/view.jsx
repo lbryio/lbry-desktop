@@ -148,7 +148,7 @@ class SettingsPage extends React.PureComponent {
         {/*
         <section className="card">
           <div className="card__content">
-            <h3>{__("Language")}</h3>
+            <h4>{__("Language")}</h4>
           </div>
           <div className="card__content">
             <div className="form-row">
@@ -170,7 +170,7 @@ class SettingsPage extends React.PureComponent {
         </section> */}
         <section className="card">
           <div className="card__content">
-            <h3>{__("Download Directory")}</h3>
+            <h4>{__("Download Directory")}</h4>
           </div>
           <div className="card__content">
             <FormRow
@@ -184,7 +184,7 @@ class SettingsPage extends React.PureComponent {
         </section>
         <section className="card">
           <div className="card__content">
-            <h3>{__("Max Purchase Price")}</h3>
+            <h4>{__("Max Purchase Price")}</h4>
           </div>
           <div className="card__content">
             <FormRow
@@ -231,7 +231,7 @@ class SettingsPage extends React.PureComponent {
 
         <section className="card">
           <div className="card__content">
-            <h3>{__("Purchase Confirmations")}</h3>
+            <h4>{__("Purchase Confirmations")}</h4>
           </div>
           <div className="card__content">
             <FormRow
@@ -272,7 +272,7 @@ class SettingsPage extends React.PureComponent {
 
         <section className="card">
           <div className="card__content">
-            <h3>{__("Content")}</h3>
+            <h4>{__("Content")}</h4>
           </div>
           <div className="card__content">
             <FormRow
@@ -295,7 +295,7 @@ class SettingsPage extends React.PureComponent {
 
         <section className="card">
           <div className="card__content">
-            <h3>{__("Share Diagnostic Data")}</h3>
+            <h4>{__("Share Diagnostic Data")}</h4>
           </div>
           <div className="card__content">
             <FormRow
@@ -311,7 +311,7 @@ class SettingsPage extends React.PureComponent {
 
         <section className="card">
           <div className="card__content">
-            <h3>{__("Theme")}</h3>
+            <h4>{__("Theme")}</h4>
           </div>
           <div className="card__content">
             <FormField
@@ -332,7 +332,7 @@ class SettingsPage extends React.PureComponent {
 
         <section className="card">
           <div className="card__content">
-            <h3>{__("Application Cache")}</h3>
+            <h4>{__("Application Cache")}</h4>
           </div>
           <div className="card__content">
             <p>
