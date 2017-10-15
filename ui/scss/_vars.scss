@@ -13,7 +13,7 @@ $text-color: #000;
   --color-primary-light: saturate(lighten(#155B4A, 50%), 20%);
   --color-light-alt: hsl(hue(#155B4A), 15, 85);
   --color-dark-overlay: rgba(32,32,32,0.9);
-  --color-help: rgba(0,0,0,.6);
+  --color-help: rgba(0, 0, 0, 0.54);
   --color-notice: #8a6d3b;
   --color-error: #a94442;
   --color-load-screen-text: #c3c3c3;
@@ -62,8 +62,10 @@ $text-color: #000;
   --input-width: 330px;
   --input-color: var(--text-color);
   --input-border-size: 2px;
-  --input-border-color: rgba(0, 0, 0, 0.34);
-  --input-hover-border-color: rgba(0, 0, 0, 0.75);
+  --input-border-color: rgba(0, 0, 0, 0.42);
+  --input-hover-border-color: rgba(0, 0, 0, 0.87);
+  --input-placeholder-color: var(--text-color);
+  --input-placeholder-opacity: 0.42;
 
   /* Select */
   --select-bg: var(--color-bg-alt);
