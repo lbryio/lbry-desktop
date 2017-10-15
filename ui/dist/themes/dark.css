@@ -24,7 +24,13 @@
     --input-bg: transparent;
     --input-border-color: rgba(255,255,255, 0.70);
     --input-hover-border-color: rgba(255, 255, 255, 1);
-    --input-placeholder-opacity: 0.5;
+
+    /* input:placeholder */
+    --input-placeholder-color: rgba(255,255,255, 0.5);
+
+    /* input:disabled */
+    --input-disabled-color: rgba(255, 255, 255, 0.50);
+    --input-disabled-border-color: rgba(255, 255, 255, 0.70);
 
     /* Search */
     --search-bg: rgba(0,0,0, 0.45);

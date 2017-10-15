@@ -58,14 +58,22 @@ $text-color: #000;
 
   /* Input */
   --input-bg: transparent;
-  --input-active-bg: transparent;
   --input-width: 330px;
   --input-color: var(--text-color);
   --input-border-size: 2px;
   --input-border-color: rgba(0, 0, 0, 0.42);
+  /* input:active */
+  --input-active-bg: transparent;
+
+  /* input:disabled */
+  --input-disabled-border-color: rgba(0, 0, 0, 0.42);
+  --input-disabled-color: rgba(0, 0, 0, 0.54);
+
+  /* input:hover */
   --input-hover-border-color: rgba(0, 0, 0, 0.87);
+ /* input:placeholder */
   --input-placeholder-color: var(--text-color);
-  --input-placeholder-opacity: 0.42;
+  --input-placeholder-opacity: 1;
 
   /* Select */
   --select-bg: var(--color-bg-alt);
@@ -80,7 +88,7 @@ $text-color: #000;
   --button-height: $spacing-vertical * 1.5;
   --button-intra-margin: $spacing-vertical;
   --button-radius: 3px;
-
+  
   /* Header */
   --header-bg: var(--color-bg);
   --header-color: #666;
