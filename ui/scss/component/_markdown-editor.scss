@@ -1,20 +1,23 @@
 .CodeMirror {
-    background: var(--input-active-bg) !important;
-    border: 1px solid var(--input-border-color) !important;
+    background: var(--color-bg-alt) !important;
+    border: 0 !important;
+    border-radius: 0px !important;
     color: var(--text-color) !important;
-}
-
-.CodeMirror-fullscreen {
-    background: var(--input-bg);
+    box-shadow: var(--box-shadow-layer);
 }
 
 .editor-toolbar {
-    border: 1px solid var(--input-border-color) !important;
-    border-bottom: 0 !important;
+    opacity: 1 !important;
+    border: 0 !important;
+    background: var(--color-bg-alt);
+    border-radius: 0 !important;
+    border-bottom: var(--divider) !important;
+    box-shadow: var(--box-shadow-layer);
 }
 
 .editor-toolbar i.separator {
-    border-color:  var(--input-border-color) !important;
+  border: 0 !important;
+  border-right: var(--divider) !important;
 }
 
 .editor-toolbar.fullscreen {
@@ -22,22 +25,24 @@
 }
 
 div.editor-toolbar a {
+    opacity: 0.75;
     color:  var(--text-color) !important;
 }
 
 .editor-toolbar a.active,
 .editor-toolbar a:hover {
+    opacity: 1;
     background: var(--button-bg) !important;
     border-color: transparent !important;
 }
 
 .editor-toolbar.disabled-for-preview a:not(.no-disable) {
-    background: transparent !important;
+    background:  var(--color-bg-alt) !important;
     border-color: transparent !important;
 }
 
 .editor-statusbar {
-    color: #959694;
+    color: var(--form-label-color) !important;
 }
 
 .editor-preview {

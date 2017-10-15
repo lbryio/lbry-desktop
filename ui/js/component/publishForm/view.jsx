@@ -585,8 +585,10 @@ class PublishForm extends React.PureComponent {
                     />
                   </div>
                   <div className="card__content">
+                    <h4>{__("Description")}</h4>
+                  </div>
+                  <div className="card__content">
                     <FormRow
-                      label={__("Description")}
                       type="SimpleMDE"
                       ref="meta_description"
                       name="description"

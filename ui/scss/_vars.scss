@@ -72,7 +72,7 @@ $text-color: #000;
   /* input:hover */
   --input-hover-border-color: rgba(0, 0, 0, 0.87);
  /* input:placeholder */
-  --input-placeholder-color: var(--text-color);
+  --input-placeholder-color: rgba(0, 0, 0, 0.42);
   --input-placeholder-opacity: 1;
 
   /* Select */
@@ -88,7 +88,7 @@ $text-color: #000;
   --button-height: $spacing-vertical * 1.5;
   --button-intra-margin: $spacing-vertical;
   --button-radius: 3px;
-  
+
   /* Header */
   --header-bg: var(--color-bg);
   --header-color: #666;
