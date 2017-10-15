@@ -285,8 +285,6 @@ class SettingsPage extends React.PureComponent {
               defaultChecked={showUnavailable}
               label={__("Show unavailable content in search results")}
             />
-          </div>
-          <div className="card__content">
             <FormRow
               label={__("Show NSFW content")}
               type="checkbox"

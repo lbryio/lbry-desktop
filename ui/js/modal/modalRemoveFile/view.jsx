@@ -57,7 +57,6 @@ class ModalRemoveFile extends React.PureComponent {
             label={__("Delete this file from my computer")}
           />
         </section>
-        <br />
         {claimIsMine &&
           <section>
             <FormField

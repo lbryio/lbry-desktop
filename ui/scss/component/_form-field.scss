@@ -47,6 +47,7 @@ input[readonly]:focus {
 
 .form-field {
   display: inline-block;
+  margin: 8px 0;
 
   input[type="checkbox"],
   input[type="radio"] {
@@ -158,8 +159,6 @@ input[readonly]:focus {
   &.checked {
     color: var(--text-color) !important;
   }
-
-
 
 }
 
