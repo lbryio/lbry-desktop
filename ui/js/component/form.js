@@ -128,21 +128,21 @@ export class FormRow extends React.PureComponent {
     delete fieldProps.isFocus;
 
     return (
-      <div className="form-row">
+      <div
+        className={"form-row" + (this.state.isFocus ? " form-row--focus" : "")}
+      >
         {this.props.label && !renderLabelInFormField
           ? <div
               className={
                 "form-row__label-row " +
-                (this.props.labelPrefix ? "form-row__label-row--prefix" : "") +
-                (this.state.isFocus ? "focus " : "")
+                (this.props.labelPrefix ? "form-row__label-row--prefix" : "")
               }
             >
               <label
                 htmlFor={elementId}
                 className={
                   "form-field__label " +
-                  (this.state.isError ? "form-field__label--error" : " ") +
-                  (this.state.isFocus ? "focus" : " ")
+                  (this.state.isError ? "form-field__label--error" : " ")
                 }
               >
                 {this.props.label}

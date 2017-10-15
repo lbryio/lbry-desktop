@@ -18,14 +18,15 @@
   margin-right: 5px;
 }
 
+.form-row--focus {
+  .form-field__label, .form-field__prefix {
+    color: var(--color-primary) !important;
+  }
+}
+
 .form-field {
   display: inline-block;
   margin: 8px 0;
-
-  input[type="checkbox"],
-  input[type="radio"] {
-    cursor: pointer;
-  }
 
   select {
     transition: outline var(--transition-duration) var(--transition-type);
@@ -37,6 +38,12 @@
     color: var(--select-color);
     &:focus {
       outline:  var(--input-border-size) solid var(--color-primary);
+    }
+  }
+
+  input[type="radio"], input[type="checkbox"], {
+    &:checked + .form-field__label,  {
+      color: var(--text-color);
     }
   }
 
@@ -116,22 +123,11 @@
   display: block;
 }
 
-
 .form-field__label, .form-row__label {
   color: var(--form-label-color);
-  &[for] {  cursor: pointer; }
-  > input[type="checkbox"], input[type="radio"] {
-    margin-right: 6px;
+  &[for] {
+    cursor: pointer;
   }
-
-  &.focus {
-    color: var(--color-primary) !important;
-  }
-
-  &.checked {
-    color: var(--text-color) !important;
-  }
-
 }
 
 .form-row__label-row .form-field__label--error {
