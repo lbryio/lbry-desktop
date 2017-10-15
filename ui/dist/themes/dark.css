@@ -10,6 +10,7 @@
     --color-money: var(--color-primary);
     --color-meta-light: #757575;
     --color-dark-overlay: rgba(15, 21, 23, 0.85);
+    --color-download: rgba(255, 255, 255, 0.75);
 
     /* Text */
     --text-color: #FFF;
