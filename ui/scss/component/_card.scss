@@ -7,6 +7,7 @@
   border-radius: var(--card-radius);
   margin-bottom: var(--card-margin);
   overflow: auto;
+  user-select: text;
 
   //below added to prevent scrollbar on long titles when show page loads, would prefer a cleaner CSS solution
   overflow-x: hidden;
@@ -49,6 +50,8 @@
 .card__actions {
   margin-top: var(--card-margin);
   margin-bottom: var(--card-margin);
+  user-select: none; 
+
 }
 .card__actions--bottom {
   margin-top: $spacing-vertical * 1/3;

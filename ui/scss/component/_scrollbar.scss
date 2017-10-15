@@ -1,12 +1,12 @@
 ::-webkit-scrollbar {
-    width: 7px;
+    width: 8px;
     overflow: auto;
 }
 
 ::-webkit-scrollbar-track {
     background: var(--scrollbar-track-bg);
     border-radius: var(--scrollbar-radius);
-    margin: 4px 0;
+    margin: 4px;
 }
 
 ::-webkit-scrollbar-thumb {

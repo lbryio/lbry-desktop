@@ -93,10 +93,6 @@ class FormField extends React.PureComponent {
     });
   }
 
-  focus() {
-    this.refs.field.focus();
-  }
-
   getValue() {
     if (this.props.type == "checkbox") {
       return this.refs.field.checked;
@@ -125,6 +121,7 @@ class FormField extends React.PureComponent {
         this.clearError();
       }
     }
+    this.props.onBlur && this.props.onBlur();
   }
 
   render() {
@@ -136,6 +133,8 @@ class FormField extends React.PureComponent {
       elementId = this.props.elementId ? this.props.elementId : formFieldId(),
       renderElementInsideLabel =
         this.props.label && formFieldNestedLabelTypes.includes(this.props.type);
+
+    const isCheck = this.refs.field && this.refs.field.checked ? true : false;
 
     delete otherProps.type;
     delete otherProps.label;
@@ -155,6 +154,7 @@ class FormField extends React.PureComponent {
         ref="field"
         placeholder={this.props.placeholder}
         onBlur={() => this.validate()}
+        onFocus={() => this.props.onFocus && this.props.onFocus()}
         className={
           "form-field__input form-field__input-" +
           this.props.type +
@@ -174,18 +174,18 @@ class FormField extends React.PureComponent {
         {this.props.prefix
           ? <span className="form-field__prefix">{this.props.prefix}</span>
           : ""}
-        {renderElementInsideLabel
-          ? <label
-              htmlFor={elementId}
-              className={
-                "form-field__label " +
-                (isError ? "form-field__label--error" : "")
-              }
-            >
-              {element}
-              {this.props.label}
-            </label>
-          : element}
+        {element}
+        {renderElementInsideLabel &&
+          <label
+            htmlFor={elementId}
+            className={
+              "form-field__label " +
+              (isError ? "form-field__label--error" : "") +
+              (isCheck ? " checked" : "")
+            }
+          >
+            {this.props.label}
+          </label>}
         {formFieldFileSelectorTypes.includes(this.props.type)
           ? <FileSelector
               type={this.props.type}

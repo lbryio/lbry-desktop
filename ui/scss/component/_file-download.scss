@@ -12,7 +12,7 @@
 .file-download__overlay
 {
   background: var(--color-download);
-  color: white;
+  color: var(--color-bg);
   position: absolute;
   white-space: nowrap;
   overflow: hidden;

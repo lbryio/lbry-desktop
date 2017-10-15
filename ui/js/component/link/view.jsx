@@ -1,5 +1,5 @@
 import React from "react";
-import { Icon } from "component/common.js";
+import Icon from "component/icon";
 
 const Link = props => {
   const {

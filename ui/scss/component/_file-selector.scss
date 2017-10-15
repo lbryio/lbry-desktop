@@ -1,3 +1,8 @@
+.form-field--file,
+.form-field--directory {
+  width: 100%;
+}
+
 .file-selector {
   display: flex;
 }
@@ -11,4 +16,8 @@
 
 .file-selector__path {
   font-size: 14px;
+  flex-grow: 2;
+  .input-copyable {
+    width: 100%;
+  }
 }

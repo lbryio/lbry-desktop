@@ -542,7 +542,6 @@ class PublishForm extends React.PureComponent {
             <div className="card__content">
               <FormRow
                 name="file"
-                label="File"
                 ref="file"
                 type="file"
                 onChange={event => {
@@ -586,8 +585,10 @@ class PublishForm extends React.PureComponent {
                     />
                   </div>
                   <div className="card__content">
+                    <h4>{__("Description")}</h4>
+                  </div>
+                  <div className="card__content">
                     <FormRow
-                      label={__("Description")}
                       type="SimpleMDE"
                       ref="meta_description"
                       name="description"
@@ -637,15 +638,12 @@ class PublishForm extends React.PureComponent {
 
           <section className="card">
             <div className="card__title-primary">
-              <h4>{__("Access")}</h4>
+              <h4>{__("Price")}</h4>
               <div className="card__subtitle">
                 {__("How much does this content cost?")}
               </div>
             </div>
             <div className="card__content">
-              <div className="form-row__label-row">
-                <label className="form-row__label">{__("Price")}</label>
-              </div>
               <FormRow
                 label={__("Free")}
                 type="radio"
@@ -676,8 +674,14 @@ class PublishForm extends React.PureComponent {
                     )}
                   </div>
                 : null}
+            </div>
+          </section>
+          <section className="card">
+            <div className="card__title-primary">
+              <h4>{__("License")}</h4>
+            </div>
+            <div className="card__content">
               <FormRow
-                label="License"
                 type="select"
                 value={this.state.licenseType}
                 ref={row => {
@@ -687,7 +691,7 @@ class PublishForm extends React.PureComponent {
                   this.handleLicenseTypeChange(event);
                 }}
               >
-                <option />
+                <option>{__("None")}</option>
                 <option value="publicDomain">{__("Public Domain")}</option>
                 <option
                   value="cc-by"

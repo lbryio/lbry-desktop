@@ -110,7 +110,7 @@ class ChannelSection extends React.PureComponent {
       </FormRow>
     );
     if (fetchingChannels) {
-      channelContent.push(
+      channelContent = (
         <BusyMessage message="Updating channels" key="loading" />
       );
     }

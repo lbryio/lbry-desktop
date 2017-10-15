@@ -2,6 +2,7 @@ import React from "react";
 import { BusyMessage } from "component/common";
 import Link from "component/link";
 import TransactionList from "component/transactionList";
+import * as icons from "constants/icons";
 
 class TransactionListRecent extends React.PureComponent {
   componentWillMount() {
@@ -29,7 +30,9 @@ class TransactionListRecent extends React.PureComponent {
           <div className="card__actions card__actions--bottom">
             <Link
               navigate="/history"
-              label={__("See Full History")}
+              label={__("Full History")}
+              icon={icons.HISTORY}
+              className="no-underline"
               button="text"
             />
           </div>}

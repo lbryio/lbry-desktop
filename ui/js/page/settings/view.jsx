@@ -148,7 +148,7 @@ class SettingsPage extends React.PureComponent {
         {/*
         <section className="card">
           <div className="card__content">
-            <h3>{__("Language")}</h3>
+            <h4>{__("Language")}</h4>
           </div>
           <div className="card__content">
             <div className="form-row">
@@ -170,7 +170,7 @@ class SettingsPage extends React.PureComponent {
         </section> */}
         <section className="card">
           <div className="card__content">
-            <h3>{__("Download Directory")}</h3>
+            <h4>{__("Download Directory")}</h4>
           </div>
           <div className="card__content">
             <FormRow
@@ -184,14 +184,9 @@ class SettingsPage extends React.PureComponent {
         </section>
         <section className="card">
           <div className="card__content">
-            <h3>{__("Purchase Settings")}</h3>
+            <h4>{__("Max Purchase Price")}</h4>
           </div>
           <div className="card__content">
-            <div className="form-row__label-row">
-              <label className="form-row__label">
-                {__("Max Purchase Price")}
-              </label>
-            </div>
             <FormRow
               type="radio"
               name="max_key_fee"
@@ -232,12 +227,13 @@ class SettingsPage extends React.PureComponent {
               )}
             </div>
           </div>
+        </section>
+
+        <section className="card">
           <div className="card__content">
-            <div className="form-row__label-row">
-              <label className="form-row__label">
-                {__("Purchase Confirmations")}
-              </label>
-            </div>
+            <h4>{__("Purchase Confirmations")}</h4>
+          </div>
+          <div className="card__content">
             <FormRow
               type="radio"
               name="instant_purchase_max"
@@ -276,7 +272,7 @@ class SettingsPage extends React.PureComponent {
 
         <section className="card">
           <div className="card__content">
-            <h3>{__("Content")}</h3>
+            <h4>{__("Content")}</h4>
           </div>
           <div className="card__content">
             <FormRow
@@ -285,8 +281,6 @@ class SettingsPage extends React.PureComponent {
               defaultChecked={showUnavailable}
               label={__("Show unavailable content in search results")}
             />
-          </div>
-          <div className="card__content">
             <FormRow
               label={__("Show NSFW content")}
               type="checkbox"
@@ -301,7 +295,7 @@ class SettingsPage extends React.PureComponent {
 
         <section className="card">
           <div className="card__content">
-            <h3>{__("Share Diagnostic Data")}</h3>
+            <h4>{__("Share Diagnostic Data")}</h4>
           </div>
           <div className="card__content">
             <FormRow
@@ -317,7 +311,7 @@ class SettingsPage extends React.PureComponent {
 
         <section className="card">
           <div className="card__content">
-            <h3>{__("Theme")}</h3>
+            <h4>{__("Theme")}</h4>
           </div>
           <div className="card__content">
             <FormField
@@ -338,7 +332,7 @@ class SettingsPage extends React.PureComponent {
 
         <section className="card">
           <div className="card__content">
-            <h3>{__("Application Cache")}</h3>
+            <h4>{__("Application Cache")}</h4>
           </div>
           <div className="card__content">
             <p>

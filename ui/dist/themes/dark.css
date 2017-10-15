@@ -10,15 +10,27 @@
     --color-money: var(--color-primary);
     --color-meta-light: #757575;
     --color-dark-overlay: rgba(15, 21, 23, 0.85);
+    --color-download: rgba(255, 255, 255, 0.75);
+
 
     /* Text */
     --text-color: #FFF;
     --text-selection-bg: rgba(0,150,136, 0.95);
 
+    /* Form */
+    --form-label-color: rgba(255, 255, 255, 0.70);
+
     /* Input */
     --input-bg: transparent;
-    --input-active-bg: rgba(0,0,0, 0.5);
-    --input-border-color: rgba(255,255,255, 0.25);
+    --input-border-color: rgba(255,255,255, 0.70);
+    --input-hover-border-color: rgba(255, 255, 255, 1);
+
+    /* input:placeholder */
+    --input-placeholder-color: rgba(255,255,255, 0.5);
+
+    /* input:disabled */
+    --input-disabled-color: rgba(255, 255, 255, 0.50);
+    --input-disabled-border-color: rgba(255, 255, 255, 0.70);
 
     /* Search */
     --search-bg: rgba(0,0,0, 0.45);

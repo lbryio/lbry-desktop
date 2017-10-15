@@ -50,25 +50,21 @@ class ModalRemoveFile extends React.PureComponent {
         </p>
 
         <section>
-          <label>
-            <FormField
-              type="checkbox"
-              checked={deleteChecked}
-              onClick={this.handleDeleteCheckboxClicked.bind(this)}
-            />{" "}
-            {__("Delete this file from my computer")}
-          </label>
+          <FormField
+            type="checkbox"
+            checked={deleteChecked}
+            onClick={this.handleDeleteCheckboxClicked.bind(this)}
+            label={__("Delete this file from my computer")}
+          />
         </section>
         {claimIsMine &&
           <section>
-            <label>
-              <FormField
-                type="checkbox"
-                checked={abandonClaimChecked}
-                onClick={this.handleAbandonClaimCheckboxClicked.bind(this)}
-              />{" "}
-              {__("Abandon the claim for this URI")}
-            </label>
+            <FormField
+              type="checkbox"
+              checked={abandonClaimChecked}
+              onClick={this.handleAbandonClaimCheckboxClicked.bind(this)}
+              label={__("Abandon the claim for this URI")}
+            />
           </section>}
       </Modal>
     );
