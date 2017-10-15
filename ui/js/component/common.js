@@ -152,19 +152,21 @@ export class Address extends React.PureComponent {
 
   render() {
     return (
-      <input
-        className="input-copyable"
-        type="text"
-        ref={input => {
-          this._inputElem = input;
-        }}
-        onFocus={() => {
-          this._inputElem.select();
-        }}
-        style={addressStyle}
-        readOnly="readonly"
-        value={this.props.address || ""}
-      />
+      <div className="form-field form-field--address">
+        <input
+          className="input-copyable"
+          type="text"
+          ref={input => {
+            this._inputElem = input;
+          }}
+          onFocus={() => {
+            this._inputElem.select();
+          }}
+          style={addressStyle}
+          readOnly="readonly"
+          value={this.props.address || ""}
+        />
+      </div>
     );
   }
 }

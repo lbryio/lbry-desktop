@@ -119,6 +119,10 @@
     border: var(--input-border-size) solid var(--input-border-color);
   }
 }
+.form-field--address {
+  width: 100%;
+}
+
 .form-field--SimpleMDE {
   display: block;
 }
