@@ -584,7 +584,6 @@ class PublishForm extends React.PureComponent {
                       }}
                     />
                   </div>
-                  <div className="card__content" />
                   <div className="card__content">
                     <FormRow
                       type="SimpleMDE"
