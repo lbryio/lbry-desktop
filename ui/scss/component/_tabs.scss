@@ -6,6 +6,7 @@ nav.sub-header
   max-width: $width-page-constrained;
   margin-bottom: 40px;
   border-bottom: var(--divider);
+  user-select: none;
   > a
   {
     height: 38px;
