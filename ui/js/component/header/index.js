@@ -6,6 +6,7 @@ import {
   selectIsForwardDisabled,
 } from "selectors/navigation";
 import { selectBalance } from "selectors/wallet";
+import { doReloadCurrentPage } from "actions/app";
 import {
   doNavigate,
   doHistoryBack,
@@ -24,6 +25,7 @@ const perform = dispatch => ({
   navigate: path => dispatch(doNavigate(path)),
   back: () => dispatch(doHistoryBack()),
   forward: () => dispatch(doHistoryForward()),
+  reload: () => dispatch(doReloadCurrentPage()),
 });
 
 export default connect(select, perform)(Header);
