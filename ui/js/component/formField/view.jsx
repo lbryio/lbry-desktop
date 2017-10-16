@@ -49,7 +49,7 @@ class FormField extends React.PureComponent {
       this._type = "textarea";
       this._extraElementProps.options = {
         placeholder: this.props.placeholder,
-        hideIcons: ["guide", "heading", "image", "fullscreen", "side-by-side"],
+        hideIcons: ["heading", "image", "fullscreen", "side-by-side"],
       };
     } else if (formFieldFileSelectorTypes.includes(this.props.type)) {
       this._element = "input";
