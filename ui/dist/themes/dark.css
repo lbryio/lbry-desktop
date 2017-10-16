@@ -4,7 +4,7 @@
     --color-canvas: #0f1517;
     --color-bg: #1a2327;
     --color-bg-alt: #314048;
-    --color-help: #AAA;
+    --color-help: rgba(255,255,255, 0.5);
     --color-error: #a94442;
     --color-load-screen-text: #FFF;
     --color-money: var(--color-primary);
