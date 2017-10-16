@@ -205,6 +205,13 @@ export function doClearCache() {
   };
 }
 
+export function doReloadCurrentPage() {
+  return function(dispatch, getState) {
+    const currentPage = remote.webContents.getAllWebContents()[0];
+    currentPage && currentPage.reload();
+  };
+}
+
 export function doQuit() {
   return function(dispatch, getState) {
     remote.app.quit();
