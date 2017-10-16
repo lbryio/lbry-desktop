@@ -62,7 +62,7 @@ $text-color: #000;
   --input-color: var(--text-color);
   --input-border-size: 2px;
   --input-border-color: rgba(0, 0, 0, 0.54);
-  
+
   /* input:active */
   --input-active-bg: transparent;
 
@@ -149,9 +149,6 @@ $text-color: #000;
   --scrollbar-thumb-hover-bg: rgba(0, 0, 0, 0.35);
   --scrollbar-thumb-active-bg: var(--color-primary);
   --scrollbar-track-bg: transparent;
-
-  /* Media */
-  --media-bg: #FFF;
 
   /* Divider */
   --divider: 1px solid rgba(0, 0, 0, 0.12);

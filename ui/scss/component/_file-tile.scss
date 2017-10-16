@@ -20,14 +20,4 @@ $height-file-tile: $spacing-vertical * 6;
     margin-top: 0;
   }
 
-  .file-tile__uri {
-    color: var(--color-primary);
-    font-size: 0.82em;
-    display: inline-block;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 85%;
-  }
-
 }
