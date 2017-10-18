@@ -17,7 +17,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
 
 ### Fixed
   * Fixed handling of empty search results.
-  *
+  * Some console errors about "checked propType" when navigating to settings page.
 
 ### Deprecated
   *
