@@ -237,7 +237,7 @@ class SettingsPage extends React.PureComponent {
             <FormRow
               type="radio"
               name="instant_purchase_max"
-              checked={!instantPurchaseEnabled}
+              defaultChecked={!instantPurchaseEnabled}
               label={__("Ask for confirmation of all purchases")}
               onClick={e => {
                 this.onInstantPurchaseEnabledChange(false);
@@ -247,7 +247,7 @@ class SettingsPage extends React.PureComponent {
               <FormField
                 type="radio"
                 name="instant_purchase_max"
-                checked={instantPurchaseEnabled}
+                defaultChecked={instantPurchaseEnabled}
                 label={
                   "Single-click purchasing of content less than" +
                   (instantPurchaseEnabled ? "" : "...")
