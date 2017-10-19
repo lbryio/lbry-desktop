@@ -207,10 +207,10 @@ export function doClearCache() {
 
 export function doReloadCurrentPage() {
   return function(dispatch, getState) {
-    const currentPage = remote.webContents.getAllWebContents()[0];
+    const currentPage = remote.getCurrentWindow();
     if (currentPage) {
       dispatch(doClearCache()).then(() => {
-        currentPage.reload(true);
+        currentPage.reload();
       });
     }
   };
