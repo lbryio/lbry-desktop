@@ -1,6 +1,4 @@
-const {Menu} = require('electron');
-const electron = require('electron');
-const app = electron.app;
+const { app, shell, Menu } = require('electron');
 
 const baseTemplate = [
   {
@@ -30,16 +28,71 @@ const baseTemplate = [
     ]
   },
   {
-    label: 'Help',
+    label: 'View',
     submenu: [
       {
-        label: 'Help',
+        role: 'reload'
+      },
+      {
+        label: 'Developer',
+        submenu: [
+          {
+            role: 'forcereload'
+          },
+          {
+            role: 'toggledevtools'
+          },
+        ]
+      },
+      {
+        type: 'separator'
+      },
+      {
+        role: 'togglefullscreen'
+      }
+    ]
+  },
+  {
+    role: 'help',
+    submenu: [
+      {
+        label: 'Learn More',
         click(item, focusedWindow) {
           if (focusedWindow) {
             focusedWindow.webContents.send('open-menu', '/help');
           }
         }
+      },
+      {
+        label: 'Frequently Asked Questions',
+        click(item, focusedWindow){
+         shell.openExternal('https://lbry.io/faq')
       }
+      },
+      {
+        type: 'separator'
+      },
+      {
+        label: 'Report Issue',
+        click(item, focusedWindow){
+          shell.openExternal('https://lbry.io/faq/contributing#report-a-bug');
+        }
+      },
+      {
+        label: 'Search Issues',
+        click(item, focusedWindow){
+          shell.openExternal('https://github.com/lbryio/lbry-app/issues')
+        }
+      },
+      {
+        type: 'separator'
+      },
+      {
+        label: 'Quickstart Guide',
+        click(item, focusedWindow){
+          shell.openExternal('https://lbry.io/quickstart')
+        }
+      },
     ]
   }
 ];
@@ -71,40 +124,8 @@ const macOSAppMenuTemplate = {
   ]
 };
 
-const developerMenuTemplate = {
-  label: 'Developer',
-  submenu: [
-    {
-      label: 'Reload',
-      accelerator: 'CmdOrCtrl+R',
-      click(item, focusedWindow) {
-        if (focusedWindow) {
-          focusedWindow.reload();
-        }
-      }
-    },
-    {
-      label: 'Toggle Developer Tools',
-      accelerator: process.platform == 'darwin' ? 'Alt+Command+I' : 'Ctrl+Shift+I',
-      click(item, focusedWindow) {
-        if (focusedWindow) {
-          focusedWindow.webContents.toggleDevTools();
-        }
-      }
-    },
-  ]
-};
-
-module.exports = {
-  showMenubar(showDeveloperMenu) {
+module.exports = () => {
     let template = baseTemplate.slice();
-    if (process.platform === 'darwin') {
-      template.unshift(macOSAppMenuTemplate);
-    }
-    if (showDeveloperMenu) {
-      template.push(developerMenuTemplate);
-    }
-
+    (process.platform === 'darwin') && template.unshift(macOSAppMenuTemplate);
     Menu.setApplicationMenu(Menu.buildFromTemplate(template));
-  },
 };
