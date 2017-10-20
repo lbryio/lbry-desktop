@@ -1,4 +1,4 @@
-const CHANNEL_NAME_MIN_LEN = 4;
+const CHANNEL_NAME_MIN_LEN = 1;
 const CLAIM_ID_MAX_LEN = 40;
 
 const lbryuri = {};
