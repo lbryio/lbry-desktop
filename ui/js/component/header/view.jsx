@@ -11,7 +11,6 @@ export const Header = props => {
     isForwardDisabled,
     navigate,
     publish,
-    reload,
   } = props;
   return (
     <header id="header">
@@ -31,14 +30,6 @@ export const Header = props => {
           button="alt button--flat"
           icon="icon-arrow-right"
           title={__("Forward")}
-        />
-      </div>
-      <div className="header__item">
-        <Link
-          onClick={() => reload()}
-          button="alt button--flat"
-          icon="icon-refresh"
-          title={__("Reload Current Page")}
         />
       </div>
       <div className="header__item">
