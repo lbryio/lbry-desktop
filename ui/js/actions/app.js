@@ -200,7 +200,6 @@ export function doRemoveSnackBarSnack() {
 export function doClearCache() {
   return function(dispatch, getState) {
     window.cacheStore.purge();
-
     return Promise.resolve();
   };
 }
