@@ -12,4 +12,4 @@ const perform = dispatch => ({
   navigate: (path, params) => dispatch(doNavigate(path, params)),
 });
 
-export default connect(null, perform)(TransactionList);
+export default connect(select, perform)(TransactionList);

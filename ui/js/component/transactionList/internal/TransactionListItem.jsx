@@ -6,6 +6,10 @@ import Link from "component/link";
 import lbryuri from "lbryuri";
 
 class TransactionListItem extends React.PureComponent {
+  capitalize(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
   render() {
     const { reward, transaction } = this.props;
     const {
@@ -60,7 +64,7 @@ class TransactionListItem extends React.PureComponent {
             />}
         </td>
         <td>
-          {type}
+          {this.capitalize(type)}
         </td>
         <td>
           {reward &&
