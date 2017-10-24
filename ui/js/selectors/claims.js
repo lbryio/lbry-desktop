@@ -157,6 +157,11 @@ export const selectMyClaimsWithoutChannels = createSelector(
   myClaims => myClaims.filter(claim => !claim.name.match(/^@/))
 );
 
+export const selectAllMyClaimsByTxidNout = createSelector(
+  _selectState,
+  state => state.allMyClaimsByTxidNout || {}
+);
+
 export const selectMyClaimsOutpoints = createSelector(
   selectMyClaims,
   myClaims => {

@@ -6,8 +6,12 @@ import Link from "component/link";
 import lbryuri from "lbryuri";
 
 class TransactionListItem extends React.PureComponent {
+  abandonClaim(abandonData) {
+    this.props.revokeClaim(abandonData);
+  }
+
   render() {
-    const { reward, transaction } = this.props;
+    const { reward, transaction, isRevokeable } = this.props;
     const {
       amount,
       claim_id: claimId,
@@ -16,7 +20,15 @@ class TransactionListItem extends React.PureComponent {
       fee,
       txid,
       type,
+      nout,
     } = transaction;
+
+    const abandonData = {
+      name: name,
+      claimId: claimId,
+      txid: txid,
+      nout: nout,
+    };
 
     const dateFormat = {
       month: "short",
@@ -79,6 +91,12 @@ class TransactionListItem extends React.PureComponent {
         </td>
         <td>
           <LinkTransaction id={txid} />
+        </td>
+        <td>
+          {isRevokeable &&
+            <Link onClick={() => this.abandonClaim(abandonData)}>
+              {__("Revoke")}
+            </Link>}
         </td>
       </tr>
     );

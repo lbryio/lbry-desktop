@@ -102,10 +102,15 @@ export function doDeleteFile(outpoint, deleteFromComputer, abandonClaim) {
       const fileInfo = byOutpoint[outpoint];
 
       if (fileInfo) {
+        txid = fileInfo.outpoint.slice(0, -2);
+        nout = fileInfo.outpoint.slice(-1);
+
         dispatch({
           type: types.ABANDON_CLAIM_STARTED,
           data: {
             claimId: fileInfo.claim_id,
+            txid: txid,
+            nout: nout,
           },
         });
 
@@ -113,9 +118,16 @@ export function doDeleteFile(outpoint, deleteFromComputer, abandonClaim) {
           type: types.ABANDON_CLAIM_SUCCEEDED,
           data: {
             claimId: fileInfo.claim_id,
+            txid: txid,
+            nout: nout,
           },
         });
-        lbry.claim_abandon({ claim_id: fileInfo.claim_id }).then(success);
+        lbry
+          .claim_abandon({
+            txid: txid,
+            nout: nout,
+          })
+          .then(success);
       }
     }
 

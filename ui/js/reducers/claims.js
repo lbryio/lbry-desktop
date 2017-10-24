@@ -45,6 +45,9 @@ reducers[types.FETCH_CLAIM_LIST_MINE_COMPLETED] = function(state, action) {
   const byId = Object.assign({}, state.byId);
   const pendingById = Object.assign({}, state.pendingById);
   const abandoningById = Object.assign({}, state.abandoningById);
+  const allMyClaimsByTxidNout = new Set(
+    claims.map(claim => `${claim.txid}:${claim.nout}`)
+  );
   const myClaims = new Set(
     claims
       .map(claim => claim.claim_id)
@@ -78,6 +81,7 @@ reducers[types.FETCH_CLAIM_LIST_MINE_COMPLETED] = function(state, action) {
   return Object.assign({}, state, {
     isFetchingClaimListMine: false,
     myClaims: myClaims,
+    allMyClaimsByTxidNout: allMyClaimsByTxidNout,
     byId,
     pendingById,
   });
@@ -157,21 +161,35 @@ reducers[types.ABANDON_CLAIM_STARTED] = function(state, action) {
 };
 
 reducers[types.ABANDON_CLAIM_SUCCEEDED] = function(state, action) {
-  const { claimId } = action.data;
+  const { claimId, txid, nout } = action.data;
   const myClaims = new Set(state.myClaims);
   const byId = Object.assign({}, state.byId);
   const claimsByUri = Object.assign({}, state.claimsByUri);
+  const supports = byId[claimId].supports;
   const uris = [];
 
-  Object.keys(claimsByUri).forEach(uri => {
-    if (claimsByUri[uri] === claimId) {
-      delete claimsByUri[uri];
-    }
-  });
+  // This logic is needed when a claim has supports
+  // and it is the support that is being abandoned
+  // so we need to remove the support from the state
+  // but this is not working, even after calling resolve on the uri.
+  if (supports && supports.length > 0) {
+    indexToDelete = supports.findIndex(support => {
+      return support.txid === txid && support.nout === nout;
+    });
 
-  delete byId[claimId];
-  myClaims.delete(claimId);
+    supports.splice[(indexToDelete, 1)];
+  }
 
+  if (!supports || supports.length == 0) {
+    Object.keys(claimsByUri).forEach(uri => {
+      if (claimsByUri[uri] === claimId) {
+        delete claimsByUri[uri];
+      }
+    });
+
+    delete byId[claimId];
+    myClaims.delete(claimId);
+  }
   return Object.assign({}, state, {
     myClaims,
     byId,

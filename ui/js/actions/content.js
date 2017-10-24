@@ -505,3 +505,34 @@ export function doPublish(params) {
     });
   };
 }
+
+export function doAbandonClaim(claimId, txid, nout) {
+  return function(dispatch, getState) {
+    const state = getState();
+
+    dispatch({
+      type: types.ABANDON_CLAIM_STARTED,
+      data: {
+        claimId: claimId,
+        txid: txid,
+        nout: nout,
+      },
+    });
+
+    const success = dispatch({
+      type: types.ABANDON_CLAIM_SUCCEEDED,
+      data: {
+        claimId: claimId,
+        txid: txid,
+        nout: nout,
+      },
+    });
+
+    lbry
+      .claim_abandon({
+        txid: txid,
+        nout: nout,
+      })
+      .then(success);
+  };
+}

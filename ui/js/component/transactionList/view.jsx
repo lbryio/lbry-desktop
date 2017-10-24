@@ -1,6 +1,7 @@
 import React from "react";
 import TransactionListItem from "./internal/TransactionListItem";
 import FormField from "component/formField";
+import lbryuri from "lbryuri";
 
 class TransactionList extends React.PureComponent {
   constructor(props) {
@@ -21,6 +22,27 @@ class TransactionList extends React.PureComponent {
     const { filter } = this.state;
 
     return !filter || filter == transaction.type;
+  }
+
+  isRevokeable(txid, nout) {
+    // a claim/support/update is revokable if it
+    // is in my claim list(claim_list_mine)
+    return this.props.myClaims.has(`${txid}:${nout}`);
+  }
+
+  revokeClaim(abandonData) {
+    const {
+      name: name,
+      claimId: claimId,
+      txid: txid,
+      nout: nout,
+    } = abandonData;
+
+    const uri = lbryuri.build({ name, claimId });
+    this.props.resolveUri(uri);
+    if (!this.props.resolvingUris.includes(uri)) {
+      this.props.abandonClaim(claimId, txid, nout);
+    }
   }
 
   render() {
@@ -62,6 +84,7 @@ class TransactionList extends React.PureComponent {
                 <th>{__("Type")} </th>
                 <th>{__("Details")} </th>
                 <th>{__("Transaction")}</th>
+                <th>{__("Action")}</th>
               </tr>
             </thead>
             <tbody>
@@ -70,6 +93,8 @@ class TransactionList extends React.PureComponent {
                   key={`${t.txid}:${t.nout}`}
                   transaction={t}
                   reward={rewards && rewards[t.txid]}
+                  isRevokeable={this.isRevokeable(t.txid, t.nout)}
+                  revokeClaim={this.revokeClaim.bind(this)}
                 />
               )}
             </tbody>
