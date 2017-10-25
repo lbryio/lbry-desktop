@@ -12,14 +12,12 @@ Web UI version numbers should always match the corresponding version of LBRY App
   *
 
 ### Changed
-  * Updated daemon to 0.17.1. 0.17.1 contains several more download fixes that are backwards incompatible, making this a near mandatory upgrade.
-  * Continuing to standardize and improve design. File selectors, checkboxes, radios, and a number of other elements got substantial improvements.
-  * [Electron](https://github.com/electron/electron) version upgraded. Most relevantly, this fixes URI handling in Linux.
-  * Chat links and text updated to remove references to Slack.
+  *
+  *
 
 ### Fixed
-  * Fixed handling of empty search results.
-  * Fixed minimum channel length name(#689).
+  *
+  *
 
 ### Deprecated
   *
@@ -28,6 +26,21 @@ Web UI version numbers should always match the corresponding version of LBRY App
 ### Removed
   *
   *
+
+## [0.17.1] - 2017-10-25
+
+### Changed
+ * Updated daemon to 0.17.1. 0.17.1 contains several more download fixes that are backwards incompatible, making this a near mandatory upgrade.
+ * Continuing to standardize and improve design. File selectors, checkboxes, radios, and a number of other elements got substantial improvements.
+ * [Electron](https://github.com/electron/electron) version upgraded. Most relevantly, this fixes URI handling in Linux.
+ * Chat links and text updated to remove references to Slack.
+
+
+### Fixed
+ * Fixed handling of empty search results.
+ * Fixed minimum channel length name(#689).
+
+
 
 ## [0.17.0] - 2017-10-12
 
