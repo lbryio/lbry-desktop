@@ -14,6 +14,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
 ### Changed
   * Continuing to standardize and improve design. File selectors, checkboxes, radios, and a number of other elements got substantial improvements.
   * [Electron](https://github.com/electron/electron) version upgraded. Most relevantly, this fixes URI handling in Linux.
+  * Chat links and text updated to remove references to Slack.
 
 ### Fixed
   * Fixed handling of empty search results.

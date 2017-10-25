@@ -99,14 +99,14 @@ class HelpPage extends React.PureComponent {
             <p>
               {__("Live help is available most hours in the")}
               {" "}<strong>#help</strong>
-              {" "}{__("channel of our Slack chat room.")}
+              {" "}{__("channel of our Discord chat room.")}
             </p>
             <p>
               <Link
                 button="alt"
-                label={__("Join Our Slack")}
-                icon="icon-slack"
-                href="https://slack.lbry.io"
+                label={__("Join Our Chat")}
+                icon="icon-comments"
+                href="https://chat.lbry.io"
               />
             </p>
           </div>

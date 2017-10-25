@@ -117,9 +117,9 @@ class UserVerify extends React.PureComponent {
           </div>
           <div className="card__actions">
             <Link
-              href="https://slack.lbry.io"
+              href="https://chat.lbry.io"
               button="alt"
-              icon="icon-slack"
+              icon="icon-comments"
               label={__("Join LBRY Chat")}
             />
           </div>
