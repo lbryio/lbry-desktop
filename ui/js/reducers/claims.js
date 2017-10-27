@@ -173,11 +173,11 @@ reducers[types.ABANDON_CLAIM_SUCCEEDED] = function(state, action) {
   // so we need to remove the support from the state
   // but this is not working, even after calling resolve on the uri.
   if (supports && supports.length > 0) {
-    indexToDelete = supports.findIndex(support => {
+    const indexToDelete = supports.findIndex(support => {
       return support.txid === txid && support.nout === nout;
     });
 
-    supports.splice[(indexToDelete, 1)];
+    supports.splice(indexToDelete, 1);
   }
 
   if (!supports || supports.length == 0) {

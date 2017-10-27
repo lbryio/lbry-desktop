@@ -2,6 +2,7 @@ import React from "react";
 import TransactionListItem from "./internal/TransactionListItem";
 import FormField from "component/formField";
 import lbryuri from "lbryuri";
+import * as modals from "constants/modal_types";
 
 class TransactionList extends React.PureComponent {
   constructor(props) {
@@ -40,9 +41,7 @@ class TransactionList extends React.PureComponent {
 
     const uri = lbryuri.build({ name, claimId });
     this.props.resolveUri(uri);
-    if (!this.props.resolvingUris.includes(uri)) {
-      this.props.abandonClaim(claimId, txid, nout);
-    }
+    this.props.openModal(modals.CONFIRM_CLAIM_REVOKE, { claimId, txid, nout });
   }
 
   render() {

@@ -11,7 +11,7 @@ import {
 } from "selectors/file_info";
 import { selectResolvingUris } from "selectors/content";
 import { makeSelectCostInfoForUri } from "selectors/cost_info";
-import { doAlertError, doOpenModal } from "actions/app";
+import { doAlertError, doOpenModal, doCloseModal } from "actions/app";
 import { doClaimEligiblePurchaseRewards } from "actions/rewards";
 import { selectBadgeNumber } from "selectors/app";
 import { selectTotalDownloadProgress } from "selectors/file_info";
@@ -509,6 +509,8 @@ export function doPublish(params) {
 export function doAbandonClaim(claimId, txid, nout) {
   return function(dispatch, getState) {
     const state = getState();
+
+    dispatch(doCloseModal());
 
     dispatch({
       type: types.ABANDON_CLAIM_STARTED,
