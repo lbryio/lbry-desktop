@@ -53,6 +53,7 @@ class Video extends React.PureComponent {
       playingUri,
       fileInfo,
       contentType,
+      contentDuration,
       changeVolume,
       volume,
       uri,
@@ -65,6 +66,8 @@ class Video extends React.PureComponent {
       contentType,
       fileInfo && fileInfo.file_name
     );
+
+    const mediaDuration = lbry.getMediaDuration(contentDuration);
 
     let loadStatusMessage = "";
 

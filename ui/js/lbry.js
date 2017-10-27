@@ -230,6 +230,24 @@ lbry.getMediaType = function(contentType, fileName) {
   }
 };
 
+lbry.getMediaDuration = function(contentDuration) {
+  contentDuration =
+    contentDuration / 1000; /* converting from miliseconds to seconds*/
+  var hours = Math.floor(contentDuration / 3600);
+  contentDuration = contentDuration - 3600 * hours;
+  var minutes = Math.floor(contentDuration / 60);
+  contentDuration = contentDuration - 60 * minutes;
+  var seconds = contentDuration;
+  var sHours = "";
+  var sMinutes = "";
+  var sSeconds = "";
+
+  if (hours != 0) sHours = hours.toString() + ":";
+  if (minutes != 0) sMinutes = minutes.toString() + ":";
+  if (seconds != 0) sSeconds = seconds.toString() + "s";
+  return sHours + sMinutes + sSeconds;
+};
+
 lbry.getAppVersionInfo = function() {
   return new Promise((resolve, reject) => {
     ipcRenderer.once("version-info-received", (event, versionInfo) => {
