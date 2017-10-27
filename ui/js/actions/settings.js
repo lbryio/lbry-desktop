@@ -133,30 +133,27 @@ export function doDownloadLanguages() {
       fs.mkdirSync(app.i18n.directory);
     }
 
-    const xhr = new XMLHttpRequest();
-    xhr.onreadystatechange = () => {
-      if (xhr.readyState === XMLHttpRequest.DONE) {
-        if (xhr.status === 200) {
-          try {
-            const files = JSON.parse(xhr.responseText);
-            const actions = [];
-            files.forEach(file => {
-              actions.push(doDownloadLanguage(file));
-            });
-
-            dispatch(batchActions(...actions));
-          } catch (err) {
-            throw err;
-          }
-        } else {
-          throw new Error(
-            __("The list of available languages could not be retrieved.")
-          );
-        }
+    function checkStatus(response) {
+      if (response.status >= 200 && response.status < 300) {
+        return response;
+      } else {
+        throw new Error(
+          __("The list of available languages could not be retrieved.")
+        );
       }
-    };
-    xhr.open("get", "http://i18n.lbry.io");
-    xhr.send();
+    }
+
+    function parseJSON(response) {
+      return response.json();
+    }
+
+    return fetch("http://i18n.lbry.io")
+      .then(checkStatus)
+      .then(parseJSON)
+      .then(files => {
+        const actions = files.map(doDownloadLanguage);
+        dispatch(batchActions(...actions));
+      });
   };
 }
 
