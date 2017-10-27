@@ -8,16 +8,16 @@ Web UI version numbers should always match the corresponding version of LBRY App
 
 ## [Unreleased]
 ### Added
-  *
+  * Added new window menu options for reloading and help.
   *
 
 ### Changed
   *
+  * Replaced all instances of `XMLHttpRequest` with native `Fetch` API.
   *
 
 ### Fixed
-  *
-  *
+  * Fixed console errors on settings page related to improper React input properties.
 
 ### Deprecated
   *
