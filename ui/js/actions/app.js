@@ -200,8 +200,19 @@ export function doRemoveSnackBarSnack() {
 export function doClearCache() {
   return function(dispatch, getState) {
     window.cacheStore.purge();
-
+    dispatch(doFetchFileInfosAndPublishedClaims());
     return Promise.resolve();
+  };
+}
+
+export function doReloadCurrentPage() {
+  return function(dispatch, getState) {
+    const currentPage = remote.getCurrentWindow();
+    if (currentPage) {
+      dispatch(doClearCache()).then(() => {
+        currentPage.reload();
+      });
+    }
   };
 }
 
