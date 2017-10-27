@@ -18,7 +18,7 @@ fi
 
 
 SUDO=''
-if $LINUX && (( $EUID != 0 )); then
+if (( $EUID != 0 )); then
     SUDO='sudo'
 fi
 
@@ -41,7 +41,7 @@ set -eu
 
 if $LINUX; then
   INSTALL="$SUDO apt-get install --no-install-recommends -y"
-  $INSTALL build-essential libssl-dev libffi-dev libgmp3-dev python2.7-dev libsecret-1-dev wget
+  $INSTALL build-essential libssl-dev libffi-dev libgmp3-dev python2.7-dev libsecret-1-dev curl
 elif $OSX && ! cmd_exists brew ; then
   /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 fi
@@ -64,11 +64,10 @@ fi
 if ! cmd_exists pip; then
   if $LINUX; then
     $INSTALL python-pip
-    $SUDO pip install --upgrade pip
-  else
-    echo "Pip required"
-    exit 1
+  elif $OSX; then
+    $SUDO easy_install pip
   fi
+  $SUDO pip install --upgrade pip
 fi
 
 if $LINUX && [ "$(pip list --format=columns | grep setuptools | wc -l)" -ge 1 ]; then
