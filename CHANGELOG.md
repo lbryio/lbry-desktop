@@ -9,10 +9,10 @@ Web UI version numbers should always match the corresponding version of LBRY App
 ## [Unreleased]
 ### Added
   * Added new window menu options for reloading and help.
+  * Rewards are now marked in transaction history (#660)
   *
 
 ### Changed
-  *
   * Replaced all instances of `XMLHttpRequest` with native `Fetch` API.
   *
 
