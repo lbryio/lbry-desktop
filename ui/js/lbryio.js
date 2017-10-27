@@ -36,7 +36,7 @@ lbryio.getExchangeRates = function() {
 };
 
 lbryio.call = function(resource, action, params = {}, method = "get") {
-  if (!lbryio.enabled && (resource != "discover" || action != "list")) {
+  if (!lbryio.enabled) {
     console.log(__("Internal API disabled"));
     return Promise.reject(new Error(__("LBRY internal API is disabled")));
   }
