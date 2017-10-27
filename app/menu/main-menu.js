@@ -79,16 +79,10 @@ const baseTemplate = [
         }
       },
       {
-        label: 'Search Issues',
-        click(item, focusedWindow){
-          shell.openExternal('https://github.com/lbryio/lbry-app/issues')
-        }
-      },
-      {
         type: 'separator'
       },
       {
-        label: 'Quickstart Guide',
+        label: 'Developer API Guide',
         click(item, focusedWindow){
           shell.openExternal('https://lbry.io/quickstart')
         }
