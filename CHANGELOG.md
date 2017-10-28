@@ -8,7 +8,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
 
 ## [Unreleased]
 ### Added
-  *
+  * Now you can revoke your claims from the txns list itself.(#581)
   *
 
 ### Changed
