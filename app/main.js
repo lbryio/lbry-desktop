@@ -1,6 +1,7 @@
 const {app, BrowserWindow, ipcMain} = require('electron');
 const url = require('url');
-const isDebug = process.env.NODE_ENV === 'development'
+const isDebug = process.env.NODE_ENV === 'development';
+const setMenu = require('./menu/main-menu.js');
 
 if (isDebug) {
   try
@@ -169,6 +170,12 @@ function createWindow () {
   win.on('closed', () => {
     win = null
   })
+
+  // Menu bar
+  win.setAutoHideMenuBar(true);
+  win.setMenuBarVisibility(isDebug);
+  setMenu();
+
 };
 
 function handleOpenUriRequested(uri) {

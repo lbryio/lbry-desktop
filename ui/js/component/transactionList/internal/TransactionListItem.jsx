@@ -53,6 +53,10 @@ class TransactionListItem extends React.PureComponent {
     }
   }
 
+  capitalize(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
+  }
+
   render() {
     const { reward, transaction, isRevokeable } = this.props;
     const {
@@ -108,8 +112,9 @@ class TransactionListItem extends React.PureComponent {
             />}
         </td>
         <td>
-          {type}{" "}
+          {this.capitalize(type)}{" "}
           {isRevokeable && this.getLink(type)}
+
         </td>
         <td>
           {reward &&

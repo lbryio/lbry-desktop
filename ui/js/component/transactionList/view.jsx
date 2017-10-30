@@ -1,7 +1,6 @@
 import React from "react";
 import TransactionListItem from "./internal/TransactionListItem";
 import FormField from "component/formField";
-import lbryuri from "lbryuri";
 import * as modals from "constants/modal_types";
 
 class TransactionList extends React.PureComponent {

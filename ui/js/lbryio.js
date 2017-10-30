@@ -36,80 +36,56 @@ lbryio.getExchangeRates = function() {
 };
 
 lbryio.call = function(resource, action, params = {}, method = "get") {
-  return new Promise((resolve, reject) => {
-    if (!lbryio.enabled && (resource != "discover" || action != "list")) {
-      console.log(__("Internal API disabled"));
-      reject(new Error(__("LBRY internal API is disabled")));
-      return;
+  if (!lbryio.enabled) {
+    console.log(__("Internal API disabled"));
+    return Promise.reject(new Error(__("LBRY internal API is disabled")));
+  }
+
+  if (!(method == "get" || method == "post")) {
+    return Promise.reject(new Error(__("Invalid method")));
+  }
+
+  function checkStatus(response) {
+    if (response.status >= 200 && response.status < 300) {
+      return response;
+    } else {
+      var error = new Error(response.statusText);
+      error.response = response;
+      throw error;
+    }
+  }
+
+  function parseJSON(response) {
+    return response.json();
+  }
+
+  function makeRequest(url, options) {
+    return fetch(url, options).then(checkStatus).then(parseJSON).catch(e => {
+      throw new Error(__("Something went wrong making an internal API call."));
+    });
+  }
+
+  return lbryio.getAuthToken().then(token => {
+    const fullParams = { auth_token: token, ...params };
+    const qs = querystring.stringify(fullParams);
+    let url = `${CONNECTION_STRING}${resource}/${action}?${qs}`;
+
+    let options = {
+      method: "GET",
+    };
+
+    if (method == "post") {
+      options = {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: qs,
+      };
+      url = `${CONNECTION_STRING}${resource}/${action}`;
     }
 
-    const xhr = new XMLHttpRequest();
-
-    xhr.addEventListener("error", function(event) {
-      reject(
-        new Error(__("Something went wrong making an internal API call."))
-      );
-    });
-
-    xhr.addEventListener("timeout", function() {
-      reject(new Error(__("XMLHttpRequest connection timed out")));
-    });
-
-    xhr.addEventListener("load", function() {
-      const response = JSON.parse(xhr.responseText);
-
-      if (!response.success) {
-        if (reject) {
-          const error = new Error(response.error);
-          error.xhr = xhr;
-          reject(error);
-        } else {
-          document.dispatchEvent(
-            new CustomEvent("unhandledError", {
-              detail: {
-                connectionString: connectionString,
-                method: action,
-                params: params,
-                message: response.error.message,
-                ...(response.error.data ? { data: response.error.data } : {}),
-              },
-            })
-          );
-        }
-      } else {
-        resolve(response.data);
-      }
-    });
-
-    lbryio
-      .getAuthToken()
-      .then(token => {
-        const fullParams = { auth_token: token, ...params };
-
-        if (method == "get") {
-          xhr.open(
-            "get",
-            CONNECTION_STRING +
-              resource +
-              "/" +
-              action +
-              "?" +
-              querystring.stringify(fullParams),
-            true
-          );
-          xhr.send();
-        } else if (method == "post") {
-          xhr.open("post", CONNECTION_STRING + resource + "/" + action, true);
-          xhr.setRequestHeader(
-            "Content-type",
-            "application/x-www-form-urlencoded"
-          );
-          xhr.send(querystring.stringify(fullParams));
-        } else {
-          reject(new Error(__("Invalid method")));
-        }
-      })
-      .catch(reject);
+    return makeRequest(url, options).then(response => response.data);
   });
 };
 
