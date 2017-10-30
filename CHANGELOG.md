@@ -18,6 +18,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
 
 ### Fixed
   * Fixed console errors on settings page related to improper React input properties.
+  * Fixed bug that prevented new channel reward from being claimed (#290)
 
 ### Deprecated
   *
