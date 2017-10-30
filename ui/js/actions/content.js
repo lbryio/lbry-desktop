@@ -506,35 +506,41 @@ export function doPublish(params) {
   };
 }
 
-export function doAbandonClaim(claimId, txid, nout) {
+export function doAbandonClaim(claimId, name, txid, nout) {
   return function(dispatch, getState) {
     const state = getState();
-
-    dispatch(doCloseModal());
 
     dispatch({
       type: types.ABANDON_CLAIM_STARTED,
       data: {
         claimId: claimId,
-        txid: txid,
-        nout: nout,
       },
     });
 
-    const success = dispatch({
-      type: types.ABANDON_CLAIM_SUCCEEDED,
-      data: {
-        claimId: claimId,
-        txid: txid,
-        nout: nout,
-      },
-    });
+    const errorCallback = error => {
+      dispatch(doOpenModal(modals.TRANSACTION_FAILED));
+    };
+
+    const successCallback = results => {
+      if (results.txid) {
+        dispatch({
+          type: types.ABANDON_CLAIM_SUCCEEDED,
+          data: {
+            claimId: claimId,
+          },
+        });
+        dispatch(doResolveUri(lbryuri.build({ name, claimId })));
+        dispatch(doFetchClaimListMine());
+      } else {
+        dispatch(doOpenModal(modals.TRANSACTION_FAILED));
+      }
+    };
 
     lbry
       .claim_abandon({
         txid: txid,
         nout: nout,
       })
-      .then(success);
+      .then(successCallback, errorCallback);
   };
 }

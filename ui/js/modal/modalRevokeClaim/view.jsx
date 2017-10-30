@@ -6,12 +6,15 @@ class ModalRevokeClaim extends React.PureComponent {
     super(props);
   }
 
-  s() {
-    console.log("gotcha");
+  revokeClaim() {
+    const { name, claimId, txid, nout } = this.props;
+
+    this.props.closeModal();
+    this.props.abandonClaim(claimId, name, txid, nout);
   }
 
   render() {
-    const { claimId, txid, nout, abandonClaim, closeModal } = this.props;
+    const { msg, closeModal } = this.props;
 
     return (
       <Modal
@@ -19,12 +22,11 @@ class ModalRevokeClaim extends React.PureComponent {
         contentLabel={__("Confirm Claim Revoke")}
         type="confirm"
         confirmButtonLabel={__("Yes, Revoke")}
-        // onConfirmed={this.s.bind(this)}
-        onConfirmed={() => abandonClaim(claimId, txid, nout)}
+        onConfirmed={this.revokeClaim.bind(this)}
         onAborted={closeModal}
       >
         <p>
-          {__("Are you sure you want to revoke the claim?")}
+          {msg}
         </p>
       </Modal>
     );

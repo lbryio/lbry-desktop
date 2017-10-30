@@ -32,16 +32,7 @@ class TransactionList extends React.PureComponent {
   }
 
   revokeClaim(abandonData) {
-    const {
-      name: name,
-      claimId: claimId,
-      txid: txid,
-      nout: nout,
-    } = abandonData;
-
-    const uri = lbryuri.build({ name, claimId });
-    this.props.resolveUri(uri);
-    this.props.openModal(modals.CONFIRM_CLAIM_REVOKE, { claimId, txid, nout });
+    this.props.openModal(modals.CONFIRM_CLAIM_REVOKE, abandonData);
   }
 
   render() {
@@ -83,7 +74,6 @@ class TransactionList extends React.PureComponent {
                 <th>{__("Type")} </th>
                 <th>{__("Details")} </th>
                 <th>{__("Transaction")}</th>
-                <th>{__("Action")}</th>
               </tr>
             </thead>
             <tbody>

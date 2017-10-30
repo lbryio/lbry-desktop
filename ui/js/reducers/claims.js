@@ -161,35 +161,20 @@ reducers[types.ABANDON_CLAIM_STARTED] = function(state, action) {
 };
 
 reducers[types.ABANDON_CLAIM_SUCCEEDED] = function(state, action) {
-  const { claimId, txid, nout } = action.data;
+  const { claimId } = action.data;
   const myClaims = new Set(state.myClaims);
   const byId = Object.assign({}, state.byId);
   const claimsByUri = Object.assign({}, state.claimsByUri);
-  const supports = byId[claimId].supports;
-  const uris = [];
 
-  // This logic is needed when a claim has supports
-  // and it is the support that is being abandoned
-  // so we need to remove the support from the state
-  // but this is not working, even after calling resolve on the uri.
-  if (supports && supports.length > 0) {
-    const indexToDelete = supports.findIndex(support => {
-      return support.txid === txid && support.nout === nout;
-    });
+  Object.keys(claimsByUri).forEach(uri => {
+    if (claimsByUri[uri] === claimId) {
+      delete claimsByUri[uri];
+    }
+  });
 
-    supports.splice(indexToDelete, 1);
-  }
+  delete byId[claimId];
+  myClaims.delete(claimId);
 
-  if (!supports || supports.length == 0) {
-    Object.keys(claimsByUri).forEach(uri => {
-      if (claimsByUri[uri] === claimId) {
-        delete claimsByUri[uri];
-      }
-    });
-
-    delete byId[claimId];
-    myClaims.delete(claimId);
-  }
   return Object.assign({}, state, {
     myClaims,
     byId,

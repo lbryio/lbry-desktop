@@ -6,8 +6,51 @@ import Link from "component/link";
 import lbryuri from "lbryuri";
 
 class TransactionListItem extends React.PureComponent {
-  abandonClaim(abandonData) {
+  abandonClaim() {
+    const {
+      claim_id: claimId,
+      claim_name: name,
+      txid,
+      type,
+      nout,
+    } = this.props.transaction;
+    let msg;
+
+    if (type == "tip") {
+      msg = "This will reduce the committed credits to the URL";
+    } else {
+      msg = "This will reclaim you lbc, back to your account";
+    }
+
+    const abandonData = {
+      name: name,
+      claimId: claimId,
+      txid: txid,
+      nout: nout,
+      msg: msg,
+    };
+
     this.props.revokeClaim(abandonData);
+  }
+
+  getLink(type) {
+    if (type == "tip") {
+      return (
+        <Link
+          onClick={this.abandonClaim.bind(this)}
+          icon="icon-unlock-alt"
+          title={__("Unlock Tip")}
+        />
+      );
+    } else {
+      return (
+        <Link
+          onClick={this.abandonClaim.bind(this)}
+          icon="icon-trash"
+          title={__("Delete")}
+        />
+      );
+    }
   }
 
   render() {
@@ -22,13 +65,6 @@ class TransactionListItem extends React.PureComponent {
       type,
       nout,
     } = transaction;
-
-    const abandonData = {
-      name: name,
-      claimId: claimId,
-      txid: txid,
-      nout: nout,
-    };
 
     const dateFormat = {
       month: "short",
@@ -72,7 +108,8 @@ class TransactionListItem extends React.PureComponent {
             />}
         </td>
         <td>
-          {type}
+          {type}{" "}
+          {isRevokeable && this.getLink(type)}
         </td>
         <td>
           {reward &&
@@ -91,12 +128,6 @@ class TransactionListItem extends React.PureComponent {
         </td>
         <td>
           <LinkTransaction id={txid} />
-        </td>
-        <td>
-          {isRevokeable &&
-            <Link onClick={() => this.abandonClaim(abandonData)}>
-              {__("Revoke")}
-            </Link>}
         </td>
       </tr>
     );

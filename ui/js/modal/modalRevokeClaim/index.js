@@ -6,8 +6,8 @@ import ModalRevokeClaim from "./view";
 
 const perform = dispatch => ({
   closeModal: () => dispatch(doCloseModal()),
-  abandonClaim: (claimId, txid, nout) =>
-    dispatch(doAbandonClaim(claimId, txid, nout)),
+  abandonClaim: (claimId, name, txid, nout) =>
+    dispatch(doAbandonClaim(claimId, name, txid, nout)),
 });
 
 export default connect(null, perform)(ModalRevokeClaim);
