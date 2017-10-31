@@ -45,14 +45,6 @@ reducers[types.FETCH_CLAIM_LIST_MINE_COMPLETED] = function(state, action) {
   const byId = Object.assign({}, state.byId);
   const pendingById = Object.assign({}, state.pendingById);
   const abandoningById = Object.assign({}, state.abandoningById);
-  const allMyClaimsByTxidNout = new Set(
-    claims.map(claim => `${claim.txid}:${claim.nout}`)
-  );
-  const myClaims = new Set(
-    claims
-      .map(claim => claim.claim_id)
-      .filter(claimId => Object.keys(abandoningById).indexOf(claimId) === -1)
-  );
 
   claims
     .filter(claim => claim.category && claim.category.match(/claim/))
@@ -80,8 +72,7 @@ reducers[types.FETCH_CLAIM_LIST_MINE_COMPLETED] = function(state, action) {
 
   return Object.assign({}, state, {
     isFetchingClaimListMine: false,
-    myClaims: myClaims,
-    allMyClaimsByTxidNout: allMyClaimsByTxidNout,
+    myClaims: claims,
     byId,
     pendingById,
   });

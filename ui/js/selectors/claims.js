@@ -121,13 +121,24 @@ export const selectIsFetchingClaimListMine = createSelector(
   state => !!state.isFetchingClaimListMine
 );
 
-export const selectMyClaimsRaw = createSelector(
+export const cantFigureOutVarName = createSelector(
   _selectState,
-  state => new Set(state.myClaims)
+  state => state.myClaims
 );
 
 export const selectAbandoningIds = createSelector(_selectState, state =>
   Object.keys(state.abandoningById || {})
+);
+
+export const selectMyClaimsRaw = createSelector(
+  cantFigureOutVarName,
+  selectAbandoningIds,
+  (claims, abandoningIds) =>
+    new Set(
+      claims
+        .map(claim => claim.claim_id)
+        .filter(claimId => Object.keys(abandoningIds).indexOf(claimId) === -1)
+    )
 );
 
 export const selectPendingClaims = createSelector(_selectState, state =>
@@ -158,8 +169,8 @@ export const selectMyClaimsWithoutChannels = createSelector(
 );
 
 export const selectAllMyClaimsByTxidNout = createSelector(
-  _selectState,
-  state => state.allMyClaimsByTxidNout || {}
+  cantFigureOutVarName,
+  claims => new Set(claims.map(claim => `${claim.txid}:${claim.nout}`))
 );
 
 export const selectMyClaimsOutpoints = createSelector(
