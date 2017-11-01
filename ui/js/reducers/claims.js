@@ -153,7 +153,6 @@ reducers[types.ABANDON_CLAIM_STARTED] = function(state, action) {
 
 reducers[types.ABANDON_CLAIM_SUCCEEDED] = function(state, action) {
   const { claimId } = action.data;
-  const myClaims = new Set(state.myClaims);
   const byId = Object.assign({}, state.byId);
   const claimsByUri = Object.assign({}, state.claimsByUri);
 
@@ -164,10 +163,8 @@ reducers[types.ABANDON_CLAIM_SUCCEEDED] = function(state, action) {
   });
 
   delete byId[claimId];
-  myClaims.delete(claimId);
 
   return Object.assign({}, state, {
-    myClaims,
     byId,
     claimsByUri,
   });
