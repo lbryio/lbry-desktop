@@ -1,6 +1,6 @@
 import * as types from "constants/action_types";
 import lbry from "lbry";
-import { doFetchClaimListMine } from "actions/content";
+import { doFetchClaimListMine, doAbandonClaim } from "actions/content";
 import {
   selectClaimsByUri,
   selectIsFetchingClaimListMine,
@@ -105,29 +105,7 @@ export function doDeleteFile(outpoint, deleteFromComputer, abandonClaim) {
         txid = fileInfo.outpoint.slice(0, -2);
         nout = fileInfo.outpoint.slice(-1);
 
-        dispatch({
-          type: types.ABANDON_CLAIM_STARTED,
-          data: {
-            claimId: fileInfo.claim_id,
-            txid: txid,
-            nout: nout,
-          },
-        });
-
-        const success = dispatch({
-          type: types.ABANDON_CLAIM_SUCCEEDED,
-          data: {
-            claimId: fileInfo.claim_id,
-            txid: txid,
-            nout: nout,
-          },
-        });
-        lbry
-          .claim_abandon({
-            txid: txid,
-            nout: nout,
-          })
-          .then(success);
+        dispatch(doAbandonClaim(txid, nout));
       }
     }
 

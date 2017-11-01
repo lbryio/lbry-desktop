@@ -4,14 +4,14 @@ import lbry from "lbry";
 import lbryio from "lbryio";
 import lbryuri from "lbryuri";
 import { makeSelectClientSetting } from "selectors/settings";
-import { selectBalance } from "selectors/wallet";
+import { selectBalance, selectTransactionItems } from "selectors/wallet";
 import {
   makeSelectFileInfoForUri,
   selectDownloadingByOutpoint,
 } from "selectors/file_info";
 import { selectResolvingUris } from "selectors/content";
 import { makeSelectCostInfoForUri } from "selectors/cost_info";
-import { doAlertError, doOpenModal, doCloseModal } from "actions/app";
+import { doAlertError, doOpenModal } from "actions/app";
 import { doClaimEligiblePurchaseRewards } from "actions/rewards";
 import { selectBadgeNumber } from "selectors/app";
 import { selectTotalDownloadProgress } from "selectors/file_info";
@@ -506,9 +506,13 @@ export function doPublish(params) {
   };
 }
 
-export function doAbandonClaim(claimId, name, txid, nout) {
+export function doAbandonClaim(txid, nout) {
   return function(dispatch, getState) {
     const state = getState();
+    const transactionItems = selectTransactionItems(state);
+    const { claim_id: claimId, claim_name: name } = transactionItems.find(
+      claim => claim.txid == txid && claim.nout == nout
+    );
 
     dispatch({
       type: types.ABANDON_CLAIM_STARTED,

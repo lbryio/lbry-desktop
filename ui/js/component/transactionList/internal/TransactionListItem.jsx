@@ -4,42 +4,22 @@ import { CreditAmount } from "component/common";
 import DateTime from "component/dateTime";
 import Link from "component/link";
 import lbryuri from "lbryuri";
+import * as txnTypes from "constants/transaction_types";
 
 class TransactionListItem extends React.PureComponent {
   abandonClaim() {
-    const {
-      claim_id: claimId,
-      claim_name: name,
-      txid,
-      type,
-      nout,
-    } = this.props.transaction;
-    let msg;
+    const { txid, nout } = this.props.transaction;
 
-    if (type == "tip") {
-      msg = "This will reduce the committed credits to the URL";
-    } else {
-      msg = "This will reclaim you lbc, back to your account";
-    }
-
-    const abandonData = {
-      name: name,
-      claimId: claimId,
-      txid: txid,
-      nout: nout,
-      msg: msg,
-    };
-
-    this.props.revokeClaim(abandonData);
+    this.props.revokeClaim(txid, nout);
   }
 
   getLink(type) {
-    if (type == "tip") {
+    if (type == txnTypes.TIP) {
       return (
         <Link
           onClick={this.abandonClaim.bind(this)}
           icon="icon-unlock-alt"
-          title={__("Unlock Tip")}
+          title={__("Unlock")}
         />
       );
     } else {
@@ -47,7 +27,7 @@ class TransactionListItem extends React.PureComponent {
         <Link
           onClick={this.abandonClaim.bind(this)}
           icon="icon-trash"
-          title={__("Delete")}
+          title={__("Revoke")}
         />
       );
     }
