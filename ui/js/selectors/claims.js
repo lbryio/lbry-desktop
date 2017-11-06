@@ -135,9 +135,10 @@ export const selectMyActiveClaims = createSelector(
   selectAbandoningIds,
   (claims, abandoningIds) =>
     new Set(
-      claims
-        .map(claim => claim.claim_id)
-        .filter(claimId => Object.keys(abandoningIds).indexOf(claimId) === -1)
+      claims &&
+        claims
+          .map(claim => claim.claim_id)
+          .filter(claimId => Object.keys(abandoningIds).indexOf(claimId) === -1)
     )
 );
 
