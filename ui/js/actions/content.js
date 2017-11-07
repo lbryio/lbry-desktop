@@ -78,25 +78,18 @@ export function doFetchFeaturedUris() {
       type: types.FETCH_FEATURED_CONTENT_STARTED,
     });
 
-    const success = ({ Categories, Uris }) => {
-      let featuredUris = {};
+    const success = ({ Uris }) => {
       let urisToResolve = [];
-      Categories.forEach(category => {
-        if (Uris[category] && Uris[category].length) {
-          const uris = Uris[category];
-
-          featuredUris[category] = uris;
-          urisToResolve = [...urisToResolve, ...uris];
-        }
-      });
+      for (let category in Uris) {
+        urisToResolve = [...urisToResolve, ...Uris[category]];
+      }
 
       const actions = [
         doResolveUris(urisToResolve),
         {
           type: types.FETCH_FEATURED_CONTENT_COMPLETED,
           data: {
-            categories: Categories,
-            uris: featuredUris,
+            uris: Uris,
             success: true,
           },
         },
@@ -108,15 +101,12 @@ export function doFetchFeaturedUris() {
       dispatch({
         type: types.FETCH_FEATURED_CONTENT_COMPLETED,
         data: {
-          categories: [],
           uris: {},
         },
       });
     };
 
-    lbryio
-      .call("file", "list_homepage", { version: "early-access" })
-      .then(success, failure);
+    lbryio.call("file", "list_homepage").then(success, failure);
   };
 }
 
