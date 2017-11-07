@@ -74,7 +74,7 @@ class Video extends React.PureComponent {
       );
     } else if (isLoading) {
       loadStatusMessage = __(
-        "Requesting stream... it may sit here for like 15-20 seconds in a really awkward way... we're working on it"
+        "Requesting stream..."
       );
     } else if (isDownloading) {
       loadStatusMessage = __("Downloading stream... not long left now!");
