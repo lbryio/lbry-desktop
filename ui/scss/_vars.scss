@@ -128,6 +128,7 @@ $text-color: #000;
   --card-small-width: $spacing-vertical * 10;
 
   /* Modal */
+  --modal-width: 420px;
   --modal-bg: var(--color-bg);
   --modal-overlay-bg: rgba(#F5F5F5, 0.75); // --color-canvas: #F5F5F5
   --modal-border: 1px solid rgb(204, 204, 204);

@@ -29,7 +29,7 @@
   border-radius: 4px;
   padding: $spacing-vertical;
   box-shadow: var(--box-shadow-layer);
-  max-width: 400px;
+  max-width: var(--modal-width);
 
   word-break: break-word;
 }
@@ -70,13 +70,13 @@
 
 .error-modal {
   max-width: none;
-  width: 400px;
+  width: var(--modal-width);
 }
 .error-modal__error-list { /*shitty hack/temp fix for long errors making modal unusable*/
   border: 1px solid var(--input-border-color);
   padding: 8px;
   list-style: none;
   max-height: 400px;
-  max-width: 400px;
+  max-width:  var(--modal-width);
   overflow-y: hidden;
 }

@@ -4,8 +4,7 @@ import { CreditAmount, CurrencySymbol } from "component/common";
 import Link from "component/link/index";
 
 const ModalCreditIntro = props => {
-  const { closeModal, currentBalance, totalRewardValue, verifyAccount } = props;
-
+  const { closeModal, totalRewardValue, verifyAccount } = props;
   const totalRewardRounded = Math.round(totalRewardValue / 10) * 10;
 
   return (
