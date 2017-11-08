@@ -21,5 +21,5 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
   node_modules/.bin/node-sass --output $DIR/../app/dist/css --sourcemap=none $DIR/scss/
   node_modules/.bin/node-sass --output $DIR/../app/dist/css --sourcemap=none --watch $DIR/scss/ &
 
-  node_modules/.bin/webpack --config webpack.dev.config.js --progress --colors --watch
+  node_modules/.bin/webpack --config webpack.dev.js --progress --colors --watch
 )
