@@ -39,7 +39,7 @@ ipcRenderer.on("open-menu", (event, uri) => {
 
 const dock = remote.app.dock;
 
-ipcRenderer.on("window-is-focussed", (event, data) => {
+ipcRenderer.on("window-is-focused", (event, data) => {
   if (!dock) return;
   app.store.dispatch({ type: types.WINDOW_FOCUSED });
   dock.setBadge("");

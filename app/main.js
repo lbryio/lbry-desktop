@@ -213,7 +213,7 @@ function createWindow () {
     // Registers shortcut for closing(quitting) the app
     globalShortcut.register('Alt+F4', () => safeQuit());
 
-    win.webContents.send('window-is-focussed', null);
+    win.webContents.send('window-is-focused', null);
   });
 
   // Menu bar
@@ -238,7 +238,11 @@ function createTray () {
 // This needs to be done as for linux the context menu doesn't update automatically(docs)
 function updateTray() {
   let contextMenu = Menu.buildFromTemplate(getMenuTemplate());
-  tray.setContextMenu(contextMenu);
+  if (tray) {
+    tray.setContextMenu(contextMenu);
+  } else {
+    console.log("How did update tray get called without a tray?");
+  }
 }
 
 function getMenuTemplate () {
