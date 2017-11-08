@@ -52,7 +52,7 @@ export const makeSelectClaimIsMine = rawUri => {
   const uri = lbryuri.normalize(rawUri);
   return createSelector(
     selectClaimsByUri,
-    selectMyClaimsRaw,
+    selectMyActiveClaims,
     (claims, myClaims) =>
       claims &&
       claims[uri] &&
@@ -123,11 +123,23 @@ export const selectIsFetchingClaimListMine = createSelector(
 
 export const selectMyClaimsRaw = createSelector(
   _selectState,
-  state => new Set(state.myClaims)
+  state => state.myClaims
 );
 
 export const selectAbandoningIds = createSelector(_selectState, state =>
   Object.keys(state.abandoningById || {})
+);
+
+export const selectMyActiveClaims = createSelector(
+  selectMyClaimsRaw,
+  selectAbandoningIds,
+  (claims, abandoningIds) =>
+    new Set(
+      claims &&
+        claims
+          .map(claim => claim.claim_id)
+          .filter(claimId => Object.keys(abandoningIds).indexOf(claimId) === -1)
+    )
 );
 
 export const selectPendingClaims = createSelector(_selectState, state =>
@@ -135,7 +147,7 @@ export const selectPendingClaims = createSelector(_selectState, state =>
 );
 
 export const selectMyClaims = createSelector(
-  selectMyClaimsRaw,
+  selectMyActiveClaims,
   selectClaimsById,
   selectAbandoningIds,
   selectPendingClaims,
@@ -155,6 +167,11 @@ export const selectMyClaims = createSelector(
 export const selectMyClaimsWithoutChannels = createSelector(
   selectMyClaims,
   myClaims => myClaims.filter(claim => !claim.name.match(/^@/))
+);
+
+export const selectAllMyClaimsByOutpoint = createSelector(
+  selectMyClaimsRaw,
+  claims => new Set(claims.map(claim => `${claim.txid}:${claim.nout}`))
 );
 
 export const selectMyClaimsOutpoints = createSelector(

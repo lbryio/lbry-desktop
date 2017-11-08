@@ -45,11 +45,6 @@ reducers[types.FETCH_CLAIM_LIST_MINE_COMPLETED] = function(state, action) {
   const byId = Object.assign({}, state.byId);
   const pendingById = Object.assign({}, state.pendingById);
   const abandoningById = Object.assign({}, state.abandoningById);
-  const myClaims = new Set(
-    claims
-      .map(claim => claim.claim_id)
-      .filter(claimId => Object.keys(abandoningById).indexOf(claimId) === -1)
-  );
 
   claims
     .filter(claim => claim.category && claim.category.match(/claim/))
@@ -77,7 +72,7 @@ reducers[types.FETCH_CLAIM_LIST_MINE_COMPLETED] = function(state, action) {
 
   return Object.assign({}, state, {
     isFetchingClaimListMine: false,
-    myClaims: myClaims,
+    myClaims: claims,
     byId,
     pendingById,
   });
@@ -158,10 +153,8 @@ reducers[types.ABANDON_CLAIM_STARTED] = function(state, action) {
 
 reducers[types.ABANDON_CLAIM_SUCCEEDED] = function(state, action) {
   const { claimId } = action.data;
-  const myClaims = new Set(state.myClaims);
   const byId = Object.assign({}, state.byId);
   const claimsByUri = Object.assign({}, state.claimsByUri);
-  const uris = [];
 
   Object.keys(claimsByUri).forEach(uri => {
     if (claimsByUri[uri] === claimId) {
@@ -170,10 +163,8 @@ reducers[types.ABANDON_CLAIM_SUCCEEDED] = function(state, action) {
   });
 
   delete byId[claimId];
-  myClaims.delete(claimId);
 
   return Object.assign({}, state, {
-    myClaims,
     byId,
     claimsByUri,
   });

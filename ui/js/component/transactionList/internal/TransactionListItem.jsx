@@ -4,14 +4,41 @@ import { CreditAmount } from "component/common";
 import DateTime from "component/dateTime";
 import Link from "component/link";
 import lbryuri from "lbryuri";
+import * as txnTypes from "constants/transaction_types";
 
 class TransactionListItem extends React.PureComponent {
+  abandonClaim() {
+    const { txid, nout } = this.props.transaction;
+
+    this.props.revokeClaim(txid, nout);
+  }
+
+  getLink(type) {
+    if (type == txnTypes.TIP) {
+      return (
+        <Link
+          onClick={this.abandonClaim.bind(this)}
+          icon="icon-unlock-alt"
+          title={__("Unlock")}
+        />
+      );
+    } else {
+      return (
+        <Link
+          onClick={this.abandonClaim.bind(this)}
+          icon="icon-trash"
+          title={__("Revoke")}
+        />
+      );
+    }
+  }
+
   capitalize(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
 
   render() {
-    const { reward, transaction } = this.props;
+    const { reward, transaction, isRevokeable } = this.props;
     const {
       amount,
       claim_id: claimId,
@@ -20,6 +47,7 @@ class TransactionListItem extends React.PureComponent {
       fee,
       txid,
       type,
+      nout,
     } = transaction;
 
     const dateFormat = {
@@ -43,7 +71,7 @@ class TransactionListItem extends React.PureComponent {
                 </div>
               </div>
             : <span className="empty">
-                {__("(Transaction pending)")}
+                {__("Pending")}
               </span>}
         </td>
         <td>
@@ -64,7 +92,9 @@ class TransactionListItem extends React.PureComponent {
             />}
         </td>
         <td>
-          {this.capitalize(type)}
+          {this.capitalize(type)}{" "}
+          {isRevokeable && this.getLink(type)}
+
         </td>
         <td>
           {reward &&

@@ -13,6 +13,7 @@ import ModalTransactionFailed from "modal/modalTransactionFailed";
 import ModalInsufficientBalance from "modal/modalInsufficientBalance";
 import ModalFileTimeout from "modal/modalFileTimeout";
 import ModalAffirmPurchase from "modal/modalAffirmPurchase";
+import ModalRevokeClaim from "modal/modalRevokeClaim";
 import * as modals from "constants/modal_types";
 
 class ModalRouter extends React.PureComponent {
@@ -132,6 +133,8 @@ class ModalRouter extends React.PureComponent {
         return <ModalRemoveFile {...modalProps} />;
       case modals.AFFIRM_PURCHASE:
         return <ModalAffirmPurchase {...modalProps} />;
+      case modals.CONFIRM_CLAIM_REVOKE:
+        return <ModalRevokeClaim {...modalProps} />;
       default:
         return null;
     }

@@ -8,6 +8,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
 
 ## [Unreleased]
 ### Added
+  * Now you can revoke your claims from the txns list itself.(#581)
   * The app now closes to the system tray unless specifically requested to quit. (#374)
   * Added new window menu options for reloading and help.
   * Rewards are now marked in transaction history (#660)
