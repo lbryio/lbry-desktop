@@ -8,8 +8,10 @@ Web UI version numbers should always match the corresponding version of LBRY App
 
 ## [Unreleased]
 ### Added
-  * Now you can revoke your claims from the txns list itself.(#581)
-  * The app now closes to the system tray unless specifically requested to quit. (#374)
+  * Trending! The landing page of the app now features content that is surging in popularity relative to past interest.
+  * The app now closes to the system tray. This will help improve publish seeding and network performance. Directing the app to quit or exit will close it entirely. (#374)
+  * You can now revoke past publishes to receive your credits. (#581)
+  * You can now unlock tips sent to you so you can send them elsewhere or spend them. (#581)
   * Added new window menu options for reloading and help.
   * Rewards are now marked in transaction history (#660)
   *
