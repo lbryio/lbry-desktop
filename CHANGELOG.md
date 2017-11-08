@@ -8,6 +8,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
 
 ## [Unreleased]
 ### Added
+  * The app now closes to the system tray unless specifically requested to quit. (#374)
   * Added new window menu options for reloading and help.
   * Rewards are now marked in transaction history (#660)
   *
