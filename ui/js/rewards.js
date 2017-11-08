@@ -1,4 +1,3 @@
-const hashes = require("jshashes");
 import lbry from "lbry";
 import lbryio from "lbryio";
 import { doShowSnackBar } from "actions/app";
@@ -35,54 +34,6 @@ function rewardMessage(type, amount) {
       amount
     ),
   }[type];
-}
-
-function toHex(s) {
-  let h = "";
-  for (var i = 0; i < s.length; i++) {
-    let c = s.charCodeAt(i).toString(16);
-    if (c.length < 2) {
-      c = "0".concat(c);
-    }
-    h += c;
-  }
-  return h;
-}
-
-function fromHex(h) {
-  let s = "";
-  for (let i = 0; i < h.length; i += 2) {
-    s += String.fromCharCode(parseInt(h.substr(i, 2), 16));
-  }
-  return s;
-}
-
-function reverseString(s) {
-  let o = "";
-  for (let i = s.length - 1; i >= 0; i--) {
-    o += s[i];
-  }
-  return o;
-}
-
-function pack(num) {
-  return (
-    "" +
-    String.fromCharCode(num & 0xff) +
-    String.fromCharCode((num >> 8) & 0xff) +
-    String.fromCharCode((num >> 16) & 0xff) +
-    String.fromCharCode((num >> 24) & 0xff)
-  );
-}
-
-// Returns true if claim is an initial claim, false if it's an update to an existing claim
-function isInitialClaim(claim) {
-  const reversed = reverseString(fromHex(claim.txid));
-  const concat = reversed.concat(pack(claim.nout));
-  const sha256 = new hashes.SHA256({ utf8: false }).raw(concat);
-  const ripemd160 = new hashes.RMD160({ utf8: false }).raw(sha256);
-  const hash = toHex(reverseString(ripemd160));
-  return hash == claim.claim_id;
 }
 
 const rewards = {};
@@ -149,7 +100,7 @@ rewards.claimReward = function(type) {
                   claim.name.length &&
                   claim.name[0] == "@" &&
                   claim.txid.length &&
-                  isInitialClaim(claim)
+                  claim.category == "claim"
                 );
               });
               if (claim) {
@@ -173,7 +124,7 @@ rewards.claimReward = function(type) {
                   claim.name.length &&
                   claim.name[0] != "@" &&
                   claim.txid.length &&
-                  isInitialClaim(claim)
+                  claim.category == "claim"
                 );
               });
               if (claim) {

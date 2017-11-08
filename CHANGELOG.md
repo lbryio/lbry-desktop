@@ -9,6 +9,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
 ## [Unreleased]
 ### Added
   * Now you can revoke your claims from the txns list itself.(#581)
+  * The app now closes to the system tray unless specifically requested to quit. (#374)
   * Added new window menu options for reloading and help.
   * Rewards are now marked in transaction history (#660)
   *
@@ -19,6 +20,8 @@ Web UI version numbers should always match the corresponding version of LBRY App
 
 ### Fixed
   * Fixed console errors on settings page related to improper React input properties.
+  * Fixed modals being too narrow after font change (#709)
+  * Fixed bug that prevented new channel and first publish rewards from being claimed (#290)
 
 ### Deprecated
   *

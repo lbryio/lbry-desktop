@@ -37,6 +37,14 @@ ipcRenderer.on("open-menu", (event, uri) => {
   }
 });
 
+const dock = remote.app.dock;
+
+ipcRenderer.on("window-is-focused", (event, data) => {
+  if (!dock) return;
+  app.store.dispatch({ type: types.WINDOW_FOCUSED });
+  dock.setBadge("");
+});
+
 document.addEventListener("click", event => {
   var target = event.target;
   while (target && target !== document) {
@@ -50,21 +58,6 @@ document.addEventListener("click", event => {
     }
     target = target.parentNode;
   }
-});
-
-const application = remote.app;
-const dock = application.dock;
-const win = remote.getCurrentWindow();
-
-// Tear down previous event listeners when reload
-win.removeAllListeners();
-
-// Clear the badge when the window is focused
-win.on("focus", () => {
-  if (!dock) return;
-
-  app.store.dispatch({ type: types.WINDOW_FOCUSED });
-  dock.setBadge("");
 });
 
 const initialState = app.store.getState();
