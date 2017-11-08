@@ -71,7 +71,7 @@ class TransactionListItem extends React.PureComponent {
                 </div>
               </div>
             : <span className="empty">
-                {__("(Transaction pending)")}
+                {__("Pending")}
               </span>}
         </td>
         <td>
