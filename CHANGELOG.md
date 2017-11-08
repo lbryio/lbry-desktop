@@ -14,7 +14,9 @@ Web UI version numbers should always match the corresponding version of LBRY App
   *
 
 ### Changed
-  * Replaced all instances of `XMLHttpRequest` with native `Fetch` API.
+  * Daemon updated to [v0.18.0](https://github.com/lbryio/lbry/releases/tag/v0.18.0). The largest changes here are several more
+  network improvements and fixes as well as functionality and improvements related to concurrent heavier usage (bugs and issues largely discoverd by spee.ch).
+  * Replaced all instances of `XMLHttpRequest` with native `Fetch` API (#676).
   *
 
 ### Fixed
