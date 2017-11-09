@@ -14,7 +14,7 @@ $padding-snack-horizontal: $spacing-vertical;
   margin-left: auto;
   margin-right: auto;
   min-width: 300px;
-  max-width: 500px;
+  max-width: $width-page-constrained - $spacing-vertical * 2;
   background: var(--color-dark-overlay);
   color: #f0f0f0;
 
