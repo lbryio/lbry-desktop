@@ -33,7 +33,6 @@ export function doSearch(rawQuery) {
             : Promise.reject(new Error(response.statusText));
         })
         .then(data => {
-          console.log(data);
           let uris = [];
           let actions = [];
 
@@ -56,7 +55,6 @@ export function doSearch(rawQuery) {
           dispatch(batchActions(...actions));
         })
         .catch(err => {
-          console.log(err);
           dispatch({
             type: types.SEARCH_CANCELLED,
           });
