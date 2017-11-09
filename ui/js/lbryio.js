@@ -61,7 +61,7 @@ lbryio.call = function(resource, action, params = {}, method = "get") {
 
   function makeRequest(url, options) {
     return fetch(url, options).then(checkStatus).then(parseJSON).catch(e => {
-      throw new Error(__("Something went wrong making an internal API call."));
+      throw new e();
     });
   }
 
