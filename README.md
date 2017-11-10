@@ -23,9 +23,10 @@ To install from source or make changes to the application, continue reading belo
 ### One-time Setup
 
 1. Clone this repo
-2. `INSTALL_DEPENDENCIES=true ./build.sh`
+2. `DEPS=true ./build.sh`
 
-This will download and install the LBRY app and its dependencies, including [the LBRY daemon](https://github.com/lbryio/lbry) and command line utilities like `node` and `yarn`. The LBRY app requires Node >= 6; if you have an earlier version of Node installed and want to keep it, you can use [nvm](https://github.com/creationix/nvm) to switch back and forth.
+This will download and install the LBRY app and its dependencies, including [the LBRY daemon](https://github.com/lbryio/lbry) and command line utilities like `node` and `yarn`. \
+The LBRY app requires Node >= 6; if you have an earlier version of Node installed and want to keep it, you can use [nvm](https://github.com/creationix/nvm) to switch back and forth.
 
 ### Running
 
