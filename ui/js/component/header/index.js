@@ -1,6 +1,7 @@
 import React from "react";
 import { formatCredits } from "util/formatCredits";
 import { connect } from "react-redux";
+import { selectUpgradeSkipped } from "selectors/app";
 import {
   selectIsBackDisabled,
   selectIsForwardDisabled,
@@ -19,8 +20,8 @@ const select = state => ({
   isForwardDisabled: selectIsForwardDisabled(state),
   balance: formatCredits(selectBalance(state) || 0, 1),
   publish: __("Publish"),
-  upgrade: __("Upgrade"),
-  upgradeSkipped: true,
+  upgradeLabel: __("Upgrade App"),
+  upgradeSkipped: selectUpgradeSkipped(state),
 });
 
 const perform = dispatch => ({

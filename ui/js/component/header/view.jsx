@@ -80,17 +80,18 @@ export const Header = props => {
           title={__("Settings")}
         />
       </div>
-      <rem>HEY I'M HER E</rem>
-      {upgradeSkipped
-        ? <div className="header__item">
-            <Link
-              onClick={() => downloadUpgrade()}
-              button="primary button--flat"
-              icon="icon-upload"
-              label={upgradeLabel}
-            />
-          </div>
-        : ""}
+      {upgradeSkipped ? (
+        <div className="header__item">
+          <Link
+            onClick={() => downloadUpgrade()}
+            button="primary button--flat"
+            icon="icon-arrow-up"
+            label={upgradeLabel}
+          />
+        </div>
+      ) : (
+        ""
+      )}
     </header>
   );
 };
