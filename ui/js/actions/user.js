@@ -69,7 +69,7 @@ export function doUserEmailNew(email) {
         "post"
       )
       .catch(error => {
-        if (error.xhr && error.xhr.status == 409) {
+        if (error.response && error.response.status == 409) {
           return lbryio.call(
             "user_email",
             "resend_token",
