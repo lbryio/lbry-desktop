@@ -8,4 +8,4 @@ for %%F in (
 if not defined found EXIT
 
 node %~dp0\node_modules\node-sass\bin\node-sass --output %~dp0\..\app\dist\css --sourcemap=none %~dp0\scss
-%~dp0\node_modules\.bin\webpack --config %~dp0\webpack.dev.config.js --progress --colors --watch
+%~dp0\node_modules\.bin\webpack --config %~dp0\webpack.dev.js --progress --colors --watch
