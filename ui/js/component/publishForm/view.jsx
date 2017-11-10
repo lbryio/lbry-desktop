@@ -661,7 +661,10 @@ class PublishForm extends React.PureComponent {
               <span className={!this.state.isFee ? "hidden" : ""}>
                 <FormFieldPrice
                   min="0"
-                  defaultValue={{ amount: 5.0, currency: "LBC" }}
+                  defaultValue={{
+                    amount: this._defaultPaidPrice,
+                    currency: "LBC",
+                  }}
                   onChange={val => this.handleFeeChange(val)}
                 />
               </span>
