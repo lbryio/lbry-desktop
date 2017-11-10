@@ -1,8 +1,6 @@
 #!/bin/bash
 
 set -euo pipefail
-set -x
-
 
 LINUX=false
 OSX=false
@@ -52,6 +50,9 @@ if ! cmd_exists python; then
     $INSTALL python2.7
   elif $OSX; then
     brew install python
+  else
+    echo "python2.7 required"
+    exit 1
   fi
 fi
 
@@ -66,6 +67,9 @@ if ! cmd_exists pip; then
     $INSTALL python-pip
   elif $OSX; then
     $SUDO easy_install pip
+  else
+    echo "pip required"
+    exit 1
   fi
   $SUDO pip install --upgrade pip
 fi
@@ -84,6 +88,9 @@ if ! cmd_exists node; then
     $INSTALL nodejs
   elif $OSX; then
     brew install node
+  else
+    echo "node required"
+    exit 1
   fi
 fi
 
@@ -95,16 +102,17 @@ if ! cmd_exists yarn; then
     $SUDO apt-get install yarn
   elif $OSX; then
     brew install yarn
+  else
+    echo "yarn required"
+    exit 1
   fi
 fi
 
 if ! cmd_exists unzip; then
   if $LINUX; then
     $INSTALL unzip
-  elif $OSX; then
+  else
     echo "unzip required"
     exit 1
-    # not sure this works, but OSX should come with unzip
-    # brew install unzip
   fi
 fi
