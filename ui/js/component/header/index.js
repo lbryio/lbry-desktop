@@ -11,6 +11,7 @@ import {
   doHistoryBack,
   doHistoryForward,
 } from "actions/navigation";
+import { doDownloadUpgrade } from "actions/app";
 import Header from "./view";
 
 const select = state => ({
@@ -18,12 +19,15 @@ const select = state => ({
   isForwardDisabled: selectIsForwardDisabled(state),
   balance: formatCredits(selectBalance(state) || 0, 1),
   publish: __("Publish"),
+  upgrade: __("Upgrade"),
+  upgradeSkipped: true,
 });
 
 const perform = dispatch => ({
   navigate: path => dispatch(doNavigate(path)),
   back: () => dispatch(doHistoryBack()),
   forward: () => dispatch(doHistoryForward()),
+  downloadUpgrade: () => dispatch(doDownloadUpgrade()),
 });
 
 export default connect(select, perform)(Header);

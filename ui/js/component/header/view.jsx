@@ -6,11 +6,14 @@ export const Header = props => {
   const {
     balance,
     back,
+    downloadUpgrade,
     forward,
     isBackDisabled,
     isForwardDisabled,
     navigate,
     publish,
+    upgradeLabel,
+    upgradeSkipped,
   } = props;
   return (
     <header id="header">
@@ -77,6 +80,17 @@ export const Header = props => {
           title={__("Settings")}
         />
       </div>
+      <rem>HEY I'M HER E</rem>
+      {upgradeSkipped
+        ? <div className="header__item">
+            <Link
+              onClick={() => downloadUpgrade()}
+              button="primary button--flat"
+              icon="icon-upload"
+              label={upgradeLabel}
+            />
+          </div>
+        : ""}
     </header>
   );
 };
