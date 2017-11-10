@@ -69,7 +69,7 @@ echo -e "\033[0;32mCompiling UI\x1b[m"
   npm rebuild node-sass
   node extractLocals.js
   node_modules/.bin/node-sass --output dist/css --sourcemap=none scss/
-  node_modules/.bin/webpack
+  node_modules/.bin/webpack --config webpack.prod.js
   cp -r dist/* "$ROOT/app/dist/"
 )
 
