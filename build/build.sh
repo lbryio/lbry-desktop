@@ -29,25 +29,14 @@ FULL_BUILD="${FULL_BUILD:-false}"
 if [ -n "${TEAMCITY_VERSION:-}" -o -n "${APPVEYOR:-}" ]; then
   FULL_BUILD="true"
 fi
-if [ "$FULL_BUILD" != "true" ]; then
-  echo -e "\033[1;36mDependencies will NOT be installed. Run with 'FULL_BUILD=true' to install dependencies.\x1b[m"
-fi
 
-if [ "$FULL_BUILD" == "true" ]; then
+DEPS="${DEPS:-$FULL_BUILD}"
+if [ "$DEPS" != "true" ]; then
+  echo -e "\033[1;36mDependencies will NOT be installed. Run with \"INSTALL_DEPENDENCIES=true\" to install dependencies, or \"FULL_BUILD=true\" to install dependencies and build a complete app.\x1b[m"
+else
   # install dependencies
   echo -e "\033[0;32mInstalling Dependencies\x1b[m"
-  $BUILD_DIR/prebuild.sh
-
-  VENV="$BUILD_DIR/venv"
-  if [ -d "$VENV" ]; then
-    rm -rf "$VENV"
-  fi
-  virtualenv "$VENV"
-  set +u
-  source "$VENV/bin/activate"
-  set -u
-  pip install -r "$BUILD_DIR/requirements.txt"
-  python "$BUILD_DIR/set_version.py"
+  "$BUILD_DIR/install_deps.sh"
 fi
 
 [ -d "$ROOT/dist" ] && rm -rf "$ROOT/dist"
@@ -90,7 +79,7 @@ DAEMON_URL=$(echo ${DAEMON_URL_TEMPLATE//DAEMONVER/$DAEMON_VER} | sed "s/OSNAME/
 DAEMON_VER_PATH="$BUILD_DIR/daemon.ver"
 echo "$DAEMON_VER_PATH"
 if [[ ! -f $DAEMON_VER_PATH || ! -f $ROOT/app/dist/lbrynet-daemon || "$(< "$DAEMON_VER_PATH")" != "$DAEMON_VER" ]]; then
-    wget --quiet "$DAEMON_URL" -O "$BUILD_DIR/daemon.zip"
+    curl -sL -o "$BUILD_DIR/daemon.zip" "$DAEMON_URL"
     unzip "$BUILD_DIR/daemon.zip" -d "$ROOT/app/dist/"
     rm "$BUILD_DIR/daemon.zip"
     echo "$DAEMON_VER" > "$DAEMON_VER_PATH"
@@ -134,9 +123,13 @@ if [ "$FULL_BUILD" == "true" ]; then
   # electron-build has a publish feature, but I had a hard time getting
   # it to reliably work and it also seemed difficult to configure. Not proud of
   # this, but it seemed better to write my own.
-  python "$BUILD_DIR/upload_assets.py"
-
-  deactivate
+  VENV="$BUILD_DIR/venv"
+  if [ -d "$VENV" ]; then
+    rm -rf "$VENV"
+  fi
+  virtualenv "$VENV"
+  "$VENV/bin/pip" install -r "$BUILD_DIR/requirements.txt"
+  "$VENV/bin/python" "$BUILD_DIR/upload_assets.py"
 
   echo -e '\033[0;32mBuild and packaging complete.\x1b[m'
 else

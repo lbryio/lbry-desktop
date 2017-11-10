@@ -1,8 +1,6 @@
 #!/bin/bash
 
 set -euo pipefail
-set -x
-
 
 LINUX=false
 OSX=false
@@ -18,7 +16,7 @@ fi
 
 
 SUDO=''
-if $LINUX && (( $EUID != 0 )); then
+if (( $EUID != 0 )); then
     SUDO='sudo'
 fi
 
@@ -41,7 +39,7 @@ set -eu
 
 if $LINUX; then
   INSTALL="$SUDO apt-get install --no-install-recommends -y"
-  $INSTALL build-essential libssl-dev libffi-dev libgmp3-dev python2.7-dev libsecret-1-dev wget
+  $INSTALL build-essential libssl-dev libffi-dev libgmp3-dev python2.7-dev libsecret-1-dev curl
 elif $OSX && ! cmd_exists brew ; then
   /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 fi
@@ -52,6 +50,9 @@ if ! cmd_exists python; then
     $INSTALL python2.7
   elif $OSX; then
     brew install python
+  else
+    echo "python2.7 required"
+    exit 1
   fi
 fi
 
@@ -64,11 +65,13 @@ fi
 if ! cmd_exists pip; then
   if $LINUX; then
     $INSTALL python-pip
-    $SUDO pip install --upgrade pip
+  elif $OSX; then
+    $SUDO easy_install pip
   else
-    echo "Pip required"
+    echo "pip required"
     exit 1
   fi
+  $SUDO pip install --upgrade pip
 fi
 
 if $LINUX && [ "$(pip list --format=columns | grep setuptools | wc -l)" -ge 1 ]; then
@@ -85,6 +88,9 @@ if ! cmd_exists node; then
     $INSTALL nodejs
   elif $OSX; then
     brew install node
+  else
+    echo "node required"
+    exit 1
   fi
 fi
 
@@ -96,16 +102,17 @@ if ! cmd_exists yarn; then
     $SUDO apt-get install yarn
   elif $OSX; then
     brew install yarn
+  else
+    echo "yarn required"
+    exit 1
   fi
 fi
 
 if ! cmd_exists unzip; then
   if $LINUX; then
     $INSTALL unzip
-  elif $OSX; then
+  else
     echo "unzip required"
     exit 1
-    # not sure this works, but OSX should come with unzip
-    # brew install unzip
   fi
 fi
