@@ -1,6 +1,7 @@
 import React from "react";
 import { formatCredits } from "util/formatCredits";
 import { connect } from "react-redux";
+import { selectUpgradeSkipped } from "selectors/app";
 import {
   selectIsBackDisabled,
   selectIsForwardDisabled,
@@ -11,6 +12,7 @@ import {
   doHistoryBack,
   doHistoryForward,
 } from "actions/navigation";
+import { doDownloadUpgrade } from "actions/app";
 import Header from "./view";
 
 const select = state => ({
@@ -18,12 +20,15 @@ const select = state => ({
   isForwardDisabled: selectIsForwardDisabled(state),
   balance: formatCredits(selectBalance(state) || 0, 1),
   publish: __("Publish"),
+  upgradeLabel: __("Upgrade App"),
+  upgradeSkipped: selectUpgradeSkipped(state),
 });
 
 const perform = dispatch => ({
   navigate: path => dispatch(doNavigate(path)),
   back: () => dispatch(doHistoryBack()),
   forward: () => dispatch(doHistoryForward()),
+  downloadUpgrade: () => dispatch(doDownloadUpgrade()),
 });
 
 export default connect(select, perform)(Header);
