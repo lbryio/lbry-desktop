@@ -20,6 +20,8 @@ Web UI version numbers should always match the corresponding version of LBRY App
   * Fixed regression in #697 causing transaction screen to not load for new users (#755)
   * Fixed scriolling restore/reset/set (#729)
   * Fixed sorting by title for published files (#614)
+  * App now uses the new balance_delta field in the txn list.
+  *
 
 ### Deprecated
   *
