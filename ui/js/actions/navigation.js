@@ -29,7 +29,7 @@ export function doNavigate(path, params = {}, options = {}) {
     if (currentPage != nextPage) {
       //I wasn't seeing it scroll to the proper position without this -- possibly because the page isn't fully rendered? Not sure - Jeremy
       setTimeout(() => {
-        window.scrollTo(0, scrollY ? scrollY : 0);
+        mainContent.scrollTop = scrollY ? scrollY : 0;
       }, 100);
     }
 
