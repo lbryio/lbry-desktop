@@ -8,24 +8,16 @@ Web UI version numbers should always match the corresponding version of LBRY App
 
 ## [Unreleased]
 ### Added
-  * Trending! The landing page of the app now features content that is surging in popularity relative to past interest.
-  * The app now closes to the system tray. This will help improve publish seeding and network performance. Directing the app to quit or exit will close it entirely. (#374)
-  * You can now revoke past publishes to receive your credits. (#581)
-  * You can now unlock tips sent to you so you can send them elsewhere or spend them. (#581)
-  * Added new window menu options for reloading and help.
-  * Rewards are now marked in transaction history (#660)
+  *
   *
 
 ### Changed
-  * Daemon updated to [v0.18.0](https://github.com/lbryio/lbry/releases/tag/v0.18.0). The largest changes here are several more network improvements and fixes as well as functionality and improvements related to concurrent heavier usage (bugs and issues largely discoverd by spee.ch).
-  * Improved build and first-run process for new developers.
-  * Replaced all instances of `XMLHttpRequest` with native `Fetch` API (#676).
+  *
   *
 
 ### Fixed
-  * Fixed console errors on settings page related to improper React input properties.
-  * Fixed modals being too narrow after font change (#709)
-  * Fixed bug that prevented new channel and first publish rewards from being claimed (#290)
+  *
+  *
 
 ### Deprecated
   *
@@ -34,6 +26,30 @@ Web UI version numbers should always match the corresponding version of LBRY App
 ### Removed
   *
   *
+
+## [0.18.0] - 2017-11-13
+
+### Added
+ * Trending! The landing page of the app now features content that is surging in popularity relative to past interest.
+ * The app now closes to the system tray. This will help improve publish seeding and network performance. Directing the app to quit or exit will close it entirely. (#374)
+ * You can now revoke past publishes to receive your credits. (#581)
+ * You can now unlock tips sent to you so you can send them elsewhere or spend them. (#581)
+ * Added new window menu options for reloading and help.
+ * Rewards are now marked in transaction history (#660)
+
+
+### Changed
+ * Daemon updated to [v0.18.0](https://github.com/lbryio/lbry/releases/tag/v0.18.0). The largest changes here are several more network improvements and fixes as well as functionality and improvements related to concurrent heavier usage (bugs and issues largely discoverd by spee.ch).
+ * Improved build and first-run process for new developers.
+ * Replaced all instances of `XMLHttpRequest` with native `Fetch` API (#676).
+
+
+### Fixed
+ * Fixed console errors on settings page related to improper React input properties.
+ * Fixed modals being too narrow after font change (#709)
+ * Fixed bug that prevented new channel and first publish rewards from being claimed (#290)
+
+
 
 ## [0.17.1] - 2017-10-25
 
