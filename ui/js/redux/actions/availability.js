@@ -1,6 +1,6 @@
 import * as types from "constants/action_types";
 import lbry from "lbry";
-import { selectFetchingAvailability } from "selectors/availability";
+import { selectFetchingAvailability } from "redux/selectors/availability";
 
 export function doFetchAvailability(uri) {
   return function(dispatch, getState) {

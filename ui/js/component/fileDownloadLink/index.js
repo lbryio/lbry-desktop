@@ -4,11 +4,11 @@ import {
   makeSelectFileInfoForUri,
   makeSelectDownloadingForUri,
   makeSelectLoadingForUri,
-} from "selectors/file_info";
-import { makeSelectCostInfoForUri } from "selectors/cost_info";
-import { doFetchAvailability } from "actions/availability";
-import { doOpenFileInShell } from "actions/file_info";
-import { doPurchaseUri, doStartDownload } from "actions/content";
+} from "redux/selectors/file_info";
+import { makeSelectCostInfoForUri } from "redux/selectors/cost_info";
+import { doFetchAvailability } from "redux/actions/availability";
+import { doOpenFileInShell } from "redux/actions/file_info";
+import { doPurchaseUri, doStartDownload } from "redux/actions/content";
 import FileDownloadLink from "./view";
 
 const select = (state, props) => ({

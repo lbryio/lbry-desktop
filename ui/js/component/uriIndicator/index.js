@@ -1,9 +1,9 @@
 import React from "react";
 import lbryuri from "lbryuri";
 import { connect } from "react-redux";
-import { doResolveUri } from "actions/content";
-import { makeSelectIsUriResolving } from "selectors/content";
-import { makeSelectClaimForUri } from "selectors/claims";
+import { doResolveUri } from "redux/actions/content";
+import { makeSelectIsUriResolving } from "redux/selectors/content";
+import { makeSelectClaimForUri } from "redux/selectors/claims";
 import UriIndicator from "./view";
 
 const select = (state, props) => ({

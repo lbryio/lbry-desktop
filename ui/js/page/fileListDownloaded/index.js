@@ -1,16 +1,16 @@
 import React from "react";
 import { connect } from "react-redux";
-import { doFetchFileInfosAndPublishedClaims } from "actions/file_info";
+import { doFetchFileInfosAndPublishedClaims } from "redux/actions/file_info";
 import {
   selectFileInfosDownloaded,
   selectIsFetchingFileListDownloadedOrPublished,
-} from "selectors/file_info";
+} from "redux/selectors/file_info";
 import {
   selectMyClaimsWithoutChannels,
   selectIsFetchingClaimListMine,
-} from "selectors/claims";
-import { doFetchClaimListMine } from "actions/content";
-import { doNavigate } from "actions/navigation";
+} from "redux/selectors/claims";
+import { doFetchClaimListMine } from "redux/actions/content";
+import { doNavigate } from "redux/actions/navigation";
 import FileListDownloaded from "./view";
 
 const select = state => ({

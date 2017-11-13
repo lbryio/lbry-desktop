@@ -4,12 +4,12 @@ import {
   doSendDraftTransaction,
   doSetDraftTransactionAmount,
   doSetDraftTransactionAddress,
-} from "actions/wallet";
+} from "redux/actions/wallet";
 import {
   selectDraftTransactionAmount,
   selectDraftTransactionAddress,
   selectDraftTransactionError,
-} from "selectors/wallet";
+} from "redux/selectors/wallet";
 
 import WalletSend from "./view";
 

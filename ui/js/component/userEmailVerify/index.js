@@ -1,11 +1,11 @@
 import React from "react";
 import { connect } from "react-redux";
-import { doUserEmailVerify } from "actions/user";
+import { doUserEmailVerify } from "redux/actions/user";
 import {
   selectEmailVerifyIsPending,
   selectEmailToVerify,
   selectEmailVerifyErrorMessage,
-} from "selectors/user";
+} from "redux/selectors/user";
 import UserEmailVerify from "./view";
 
 const select = state => ({

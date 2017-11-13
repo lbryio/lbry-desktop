@@ -1,9 +1,9 @@
 import React from "react";
 import { connect } from "react-redux";
-import { doSendSupport } from "actions/wallet";
+import { doSendSupport } from "redux/actions/wallet";
 import WalletSendTip from "./view";
-import { makeSelectTitleForUri } from "selectors/claims";
-import { selectIsSendingSupport } from "selectors/wallet";
+import { makeSelectTitleForUri } from "redux/selectors/claims";
+import { selectIsSendingSupport } from "redux/selectors/wallet";
 
 const select = (state, props) => ({
   isPending: selectIsSendingSupport(state),

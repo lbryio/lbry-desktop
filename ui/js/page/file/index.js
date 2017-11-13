@@ -1,19 +1,19 @@
 import React from "react";
 import { connect } from "react-redux";
-import { doNavigate } from "actions/navigation";
-import { doFetchFileInfo } from "actions/file_info";
-import { makeSelectFileInfoForUri } from "selectors/file_info";
-import { selectRewardContentClaimIds } from "selectors/content";
-import { doFetchCostInfoForUri } from "actions/cost_info";
+import { doNavigate } from "redux/actions/navigation";
+import { doFetchFileInfo } from "redux/actions/file_info";
+import { makeSelectFileInfoForUri } from "redux/selectors/file_info";
+import { selectRewardContentClaimIds } from "redux/selectors/content";
+import { doFetchCostInfoForUri } from "redux/actions/cost_info";
 import {
   makeSelectClaimForUri,
   makeSelectContentTypeForUri,
   makeSelectMetadataForUri,
-} from "selectors/claims";
-import { makeSelectCostInfoForUri } from "selectors/cost_info";
-import { selectShowNsfw } from "selectors/settings";
+} from "redux/selectors/claims";
+import { makeSelectCostInfoForUri } from "redux/selectors/cost_info";
+import { selectShowNsfw } from "redux/selectors/settings";
 import FilePage from "./view";
-import { makeSelectCurrentParam } from "selectors/navigation";
+import { makeSelectCurrentParam } from "redux/selectors/navigation";
 
 const select = (state, props) => ({
   claim: makeSelectClaimForUri(props.uri)(state),

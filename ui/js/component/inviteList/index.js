@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import {
   selectUserInvitees,
   selectUserInviteStatusIsPending,
-} from "selectors/user";
+} from "redux/selectors/user";
 import InviteList from "./view";
 
 const select = state => ({

@@ -5,11 +5,11 @@ import {
   selectUserInvitesRemaining,
   selectUserInviteNewIsPending,
   selectUserInviteNewErrorMessage,
-} from "selectors/user";
+} from "redux/selectors/user";
 import rewards from "rewards";
-import { makeSelectRewardAmountByType } from "selectors/rewards";
+import { makeSelectRewardAmountByType } from "redux/selectors/rewards";
 
-import { doUserInviteNew } from "actions/user";
+import { doUserInviteNew } from "redux/actions/user";
 
 const select = state => {
   const selectReward = makeSelectRewardAmountByType();

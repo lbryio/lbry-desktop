@@ -1,19 +1,19 @@
 import * as types from "constants/action_types";
 import lbry from "lbry";
-import { doFetchClaimListMine, doAbandonClaim } from "actions/content";
+import { doFetchClaimListMine, doAbandonClaim } from "redux/actions/content";
 import {
   selectClaimsByUri,
   selectIsFetchingClaimListMine,
   selectMyClaimsOutpoints,
-} from "selectors/claims";
+} from "redux/selectors/claims";
 import {
   selectIsFetchingFileList,
   selectFileInfosByOutpoint,
   selectUrisLoading,
   selectTotalDownloadProgress,
-} from "selectors/file_info";
-import { doCloseModal } from "actions/app";
-import { doNavigate, doHistoryBack } from "actions/navigation";
+} from "redux/selectors/file_info";
+import { doCloseModal } from "redux/actions/app";
+import { doNavigate, doHistoryBack } from "redux/actions/navigation";
 import setProgressBar from "util/setProgressBar";
 import batchActions from "util/batchActions";
 

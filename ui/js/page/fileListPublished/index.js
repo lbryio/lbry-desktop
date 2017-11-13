@@ -1,13 +1,13 @@
 import React from "react";
 import rewards from "rewards";
 import { connect } from "react-redux";
-import { doFetchClaimListMine } from "actions/content";
+import { doFetchClaimListMine } from "redux/actions/content";
 import {
   selectMyClaimsWithoutChannels,
   selectIsFetchingClaimListMine,
-} from "selectors/claims";
-import { doClaimRewardType } from "actions/rewards";
-import { doNavigate } from "actions/navigation";
+} from "redux/selectors/claims";
+import { doClaimRewardType } from "redux/actions/rewards";
+import { doNavigate } from "redux/actions/navigation";
 import FileListPublished from "./view";
 
 const select = state => ({

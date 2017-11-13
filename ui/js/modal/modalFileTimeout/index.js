@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
-import { doCloseModal } from "actions/app";
-import { makeSelectMetadataForUri } from "selectors/claims";
+import { doCloseModal } from "redux/actions/app";
+import { makeSelectMetadataForUri } from "redux/selectors/claims";
 import ModalFileTimeout from "./view";
 
 const select = state => ({

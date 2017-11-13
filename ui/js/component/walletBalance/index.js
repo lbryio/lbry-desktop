@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { selectBalance } from "selectors/wallet";
+import { selectBalance } from "redux/selectors/wallet";
 import WalletBalance from "./view";
 
 const select = state => ({
