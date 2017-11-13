@@ -11,7 +11,7 @@ class ModalTransactionFailed extends React.PureComponent {
         contentLabel={__("Transaction failed")}
         onConfirmed={closeModal}
       >
-        {__("Something went wrong")}:
+        {__("Transaction failed.")}:
       </Modal>
     );
   }
