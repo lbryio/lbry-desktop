@@ -12,27 +12,27 @@ reducers[types.FILE_LIST_STARTED] = function(state, action) {
 
 reducers[types.FILE_LIST_SUCCEEDED] = function(state, action) {
   const { fileInfos } = action.data;
-  const newByOutpoint = Object.assign({}, state.byOutpoint);
-  const pendingByOutpoint = Object.assign({}, state.pendingByOutpoint);
+  const newBySdHash = Object.assign({}, state.bySdHash);
+  const pendingBySdHash = Object.assign({}, state.pendingBySdHash);
 
   fileInfos.forEach(fileInfo => {
-    const { outpoint } = fileInfo;
+    const { sd_hash } = fileInfo;
 
-    if (outpoint) newByOutpoint[fileInfo.outpoint] = fileInfo;
+    if (sd_hash) newBySdHash[fileInfo.sd_hash] = fileInfo;
   });
 
   return Object.assign({}, state, {
     isFetchingFileList: false,
-    byOutpoint: newByOutpoint,
-    pendingByOutpoint,
+    bySdHash: newBySdHash,
+    pendingBySdHash,
   });
 };
 
 reducers[types.FETCH_FILE_INFO_STARTED] = function(state, action) {
-  const { outpoint } = action.data;
+  const { sd_hash } = action.data;
   const newFetching = Object.assign({}, state.fetching);
 
-  newFetching[outpoint] = true;
+  newFetching[sd_hash] = true;
 
   return Object.assign({}, state, {
     fetching: newFetching,
@@ -40,80 +40,80 @@ reducers[types.FETCH_FILE_INFO_STARTED] = function(state, action) {
 };
 
 reducers[types.FETCH_FILE_INFO_COMPLETED] = function(state, action) {
-  const { fileInfo, outpoint } = action.data;
+  const { fileInfo, sd_hash } = action.data;
 
-  const newByOutpoint = Object.assign({}, state.byOutpoint);
+  const newBySdHash = Object.assign({}, state.bySdHash);
   const newFetching = Object.assign({}, state.fetching);
 
-  newByOutpoint[outpoint] = fileInfo;
-  delete newFetching[outpoint];
+  newBySdHash[sd_hash] = fileInfo;
+  delete newFetching[sd_hash];
 
   return Object.assign({}, state, {
-    byOutpoint: newByOutpoint,
+    bySdHash: newBySdHash,
     fetching: newFetching,
   });
 };
 
 reducers[types.DOWNLOADING_STARTED] = function(state, action) {
-  const { uri, outpoint, fileInfo } = action.data;
+  const { uri, sd_hash, fileInfo } = action.data;
 
-  const newByOutpoint = Object.assign({}, state.byOutpoint);
-  const newDownloading = Object.assign({}, state.downloadingByOutpoint);
+  const newBySdHash = Object.assign({}, state.bySdHash);
+  const newDownloading = Object.assign({}, state.downloadingBySdHash);
   const newLoading = Object.assign({}, state.urisLoading);
 
-  newDownloading[outpoint] = true;
-  newByOutpoint[outpoint] = fileInfo;
+  newDownloading[sd_hash] = true;
+  newBySdHash[sd_hash] = fileInfo;
   delete newLoading[uri];
 
   return Object.assign({}, state, {
-    downloadingByOutpoint: newDownloading,
+    downloadingBySdHash: newDownloading,
     urisLoading: newLoading,
-    byOutpoint: newByOutpoint,
+    bySdHash: newBySdHash,
   });
 };
 
 reducers[types.DOWNLOADING_PROGRESSED] = function(state, action) {
-  const { uri, outpoint, fileInfo } = action.data;
+  const { uri, sd_hash, fileInfo } = action.data;
 
-  const newByOutpoint = Object.assign({}, state.byOutpoint);
-  const newDownloading = Object.assign({}, state.downloadingByOutpoint);
+  const newBySdHash = Object.assign({}, state.bySdHash);
+  const newDownloading = Object.assign({}, state.downloadingBySdHash);
 
-  newByOutpoint[outpoint] = fileInfo;
-  newDownloading[outpoint] = true;
+  newBySdHash[sd_hash] = fileInfo;
+  newDownloading[sd_hash] = true;
 
   return Object.assign({}, state, {
-    byOutpoint: newByOutpoint,
-    downloadingByOutpoint: newDownloading,
+    bySdHash: newBySdHash,
+    downloadingBySdHash: newDownloading,
   });
 };
 
 reducers[types.DOWNLOADING_COMPLETED] = function(state, action) {
-  const { uri, outpoint, fileInfo } = action.data;
+  const { uri, sd_hash, fileInfo } = action.data;
 
-  const newByOutpoint = Object.assign({}, state.byOutpoint);
-  const newDownloading = Object.assign({}, state.downloadingByOutpoint);
+  const newBySdHash = Object.assign({}, state.bySdHash);
+  const newDownloading = Object.assign({}, state.downloadingBySdHash);
 
-  newByOutpoint[outpoint] = fileInfo;
-  delete newDownloading[outpoint];
+  newBySdHash[sd_hash] = fileInfo;
+  delete newDownloading[sd_hash];
 
   return Object.assign({}, state, {
-    byOutpoint: newByOutpoint,
-    downloadingByOutpoint: newDownloading,
+    bySdHash: newBySdHash,
+    downloadingBySdHash: newDownloading,
   });
 };
 
 reducers[types.FILE_DELETE] = function(state, action) {
-  const { outpoint } = action.data;
+  const { sd_hash } = action.data;
 
-  const newByOutpoint = Object.assign({}, state.byOutpoint);
-  const downloadingByOutpoint = Object.assign({}, state.downloadingByOutpoint);
+  const newBySdHash = Object.assign({}, state.bySdHash);
+  const downloadingBySdHash = Object.assign({}, state.downloadingBySdHash);
 
-  delete newByOutpoint[outpoint];
-  delete downloadingByOutpoint[outpoint];
+  delete newBySdHash[sd_hash];
+  delete downloadingBySdHash[sd_hash];
 
   return Object.assign({}, state, {
-    byOutpoint: newByOutpoint,
-    downloadingByOutpoint,
+    bySdHash: newBySdHash,
+    downloadingBySdHash,
   });
 };
 

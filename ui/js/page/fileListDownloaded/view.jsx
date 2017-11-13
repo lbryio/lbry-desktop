@@ -13,10 +13,14 @@ class FileListDownloaded extends React.PureComponent {
 
   render() {
     const { fileInfos, isFetching, navigate } = this.props;
-
+    const filteredFileInfos = fileInfos.filter(
+      fileInfo => fileInfo.outpoint !== null
+    );
     let content;
-    if (fileInfos && fileInfos.length > 0) {
-      content = <FileList fileInfos={fileInfos} fetching={isFetching} />;
+    if (filteredFileInfos && filteredFileInfos.length > 0) {
+      content = (
+        <FileList fileInfos={filteredFileInfos} fetching={isFetching} />
+      );
     } else {
       if (isFetching) {
         content = <BusyMessage message={__("Loading")} />;

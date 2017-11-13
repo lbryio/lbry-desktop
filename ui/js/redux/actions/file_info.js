@@ -1,15 +1,15 @@
 import * as types from "constants/action_types";
 import lbry from "lbry";
-import { doFetchClaimListMine, doAbandonClaim } from "redux/actions/content";
+import { doFetchClaimListMine, doAbandonClaim, doResolveUri } from "redux/actions/content";
 import {
   selectClaimsByUri,
   selectIsFetchingClaimListMine,
-  selectMyClaimsOutpoints,
+  selectMyClaimSdHashesByOutpoint,
 } from "redux/selectors/claims";
 import {
   selectIsFetchingFileList,
-  selectFileInfosByOutpoint,
-  selectUrisLoading,
+  selectFileInfosBySdHash,
+  selectFetchingSdHash,
   selectTotalDownloadProgress,
 } from "redux/selectors/file_info";
 import { doCloseModal } from "redux/actions/app";
@@ -23,24 +23,24 @@ export function doFetchFileInfo(uri) {
   return function(dispatch, getState) {
     const state = getState();
     const claim = selectClaimsByUri(state)[uri];
-    const outpoint = claim ? `${claim.txid}:${claim.nout}` : null;
-    const alreadyFetching = !!selectUrisLoading(state)[uri];
+    const sd_hash = claim.value.stream.source.source;
+    const alreadyFetching = !!selectFetchingSdHash(state)[sd_hash];
 
     if (!alreadyFetching) {
       dispatch({
         type: types.FETCH_FILE_INFO_STARTED,
         data: {
-          outpoint,
+          sd_hash,
         },
       });
 
       lbry
-        .file_list({ outpoint: outpoint, full_status: true })
+        .file_list({ sd_hash: sd_hash, full_status: true })
         .then(fileInfos => {
           dispatch({
             type: types.FETCH_FILE_INFO_COMPLETED,
             data: {
-              outpoint,
+              sd_hash,
               fileInfo: fileInfos && fileInfos.length ? fileInfos[0] : null,
             },
           });
@@ -98,8 +98,11 @@ export function doDeleteFile(outpoint, deleteFromComputer, abandonClaim) {
     // If the file is for a claim we published then also abandom the claim
     const myClaimsOutpoints = selectMyClaimsOutpoints(state);
     if (abandonClaim && myClaimsOutpoints.indexOf(outpoint) !== -1) {
-      const byOutpoint = selectFileInfosByOutpoint(state);
-      const fileInfo = byOutpoint[outpoint];
+      // This is the only place which links sd_hashes to outpoints(of claims which are mine)
+      const sdHashesByOutpoint = selectMyClaimSdHashesByOutpoint(state);
+      const sdHash = sdHashesByOutpoint[outpoint];
+      const bySdHash = selectFileInfosBySdHash(state);
+      const fileInfo = bySdHash[sd_hash];
 
       if (fileInfo) {
         txid = fileInfo.outpoint.slice(0, -2);
@@ -112,7 +115,7 @@ export function doDeleteFile(outpoint, deleteFromComputer, abandonClaim) {
     dispatch({
       type: types.FILE_DELETE,
       data: {
-        outpoint,
+        sd_hash,
       },
     });
 

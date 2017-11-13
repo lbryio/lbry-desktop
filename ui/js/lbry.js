@@ -250,8 +250,14 @@ lbry.getAppVersionInfo = function() {
  */
 lbry.file_list = function(params = {}) {
   return new Promise((resolve, reject) => {
-    const { name, channel_name, outpoint } = params;
+    const { name, channel_name, outpoint, sd_hash } = params;
 
+    /**
+     * sd_hash is now used as a param to the API call
+     * see https://github.com/lbryio/lbry-app/issues/693 for reference
+     * rest all of the functionality remains the same and it is still based on outpoints
+     */
+    const newParams = { sd_hash };
     /**
      * If we're searching by outpoint, check first to see if there's a matching pending publish.
      * Pending publishes use their own faux outpoints that are always unique, so we don't need
@@ -267,7 +273,7 @@ lbry.file_list = function(params = {}) {
 
     apiCall(
       "file_list",
-      params,
+      newParams,
       fileInfos => {
         removePendingPublishIfNeeded({ name, channel_name, outpoint });
 
