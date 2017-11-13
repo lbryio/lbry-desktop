@@ -4,13 +4,14 @@ import { doFetchClaimListMine, doAbandonClaim, doResolveUri } from "redux/action
 import {
   selectClaimsByUri,
   selectIsFetchingClaimListMine,
-  selectMyClaimSdHashesByOutpoint,
+  selectMyClaimsOutpoints,
 } from "redux/selectors/claims";
 import {
   selectIsFetchingFileList,
   selectFileInfosBySdHash,
   selectFetchingSdHash,
   selectTotalDownloadProgress,
+  selectSdHashesByOutpoint,
 } from "redux/selectors/file_info";
 import { doCloseModal } from "redux/actions/app";
 import { doNavigate, doHistoryBack } from "redux/actions/navigation";
@@ -89,6 +90,7 @@ export function doOpenFileInFolder(path) {
 export function doDeleteFile(outpoint, deleteFromComputer, abandonClaim) {
   return function(dispatch, getState) {
     const state = getState();
+    const sdHash = selectSdHashesByOutpoint(state)[outpoint];
 
     lbry.file_delete({
       outpoint: outpoint,
@@ -98,9 +100,6 @@ export function doDeleteFile(outpoint, deleteFromComputer, abandonClaim) {
     // If the file is for a claim we published then also abandom the claim
     const myClaimsOutpoints = selectMyClaimsOutpoints(state);
     if (abandonClaim && myClaimsOutpoints.indexOf(outpoint) !== -1) {
-      // This is the only place which links sd_hashes to outpoints(of claims which are mine)
-      const sdHashesByOutpoint = selectMyClaimSdHashesByOutpoint(state);
-      const sdHash = sdHashesByOutpoint[outpoint];
       const bySdHash = selectFileInfosBySdHash(state);
       const fileInfo = bySdHash[sd_hash];
 
@@ -115,7 +114,7 @@ export function doDeleteFile(outpoint, deleteFromComputer, abandonClaim) {
     dispatch({
       type: types.FILE_DELETE,
       data: {
-        sd_hash,
+        sdHash,
       },
     });
 

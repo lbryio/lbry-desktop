@@ -32,7 +32,11 @@ export const makeSelectFileInfoForUri = uri => {
     selectFileInfosBySdHash,
     (claims, bySdHash) => {
       const claim = claims[uri];
-      const sd_hash = claim ? claim.value.stream.source.source : undefined;
+      let sd_hash = undefined;
+
+      if (claim && !claim.name.startsWith("@")) {
+        sd_hash = claim ? claim.value.stream.source.source : undefined;
+      }
 
       return sd_hash ? bySdHash[sd_hash] : undefined;
     }
@@ -165,5 +169,18 @@ export const selectTotalDownloadProgress = createSelector(
 
     if (fileInfos.length > 0) return totalProgress / fileInfos.length / 100.0;
     else return -1;
+  }
+);
+
+export const selectSdHashesByOutpoint = createSelector(
+  selectFileInfosBySdHash,
+  fileInfos => {
+    const sdHashesByOutpoint = {};
+
+    Object.keys(fileInfos).forEach(fileInfo => {
+      sdHashesByOutpoint[fileInfo.outpoint] = fileInfo.sd_hash;
+    });
+
+    return sdHashesByOutpoint;
   }
 );

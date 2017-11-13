@@ -257,7 +257,7 @@ lbry.file_list = function(params = {}) {
      * see https://github.com/lbryio/lbry-app/issues/693 for reference
      * rest all of the functionality remains the same and it is still based on outpoints
      */
-    const newParams = { sd_hash };
+    const newParams = { sd_hash, full_status: params.full_status };
     /**
      * If we're searching by outpoint, check first to see if there's a matching pending publish.
      * Pending publishes use their own faux outpoints that are always unique, so we don't need
