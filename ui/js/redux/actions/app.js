@@ -16,7 +16,7 @@ const { remote, ipcRenderer, shell } = require("electron");
 const path = require("path");
 const { download } = remote.require("electron-dl");
 const fs = remote.require("fs");
-const { lbrySettings: config } = require("../../../app/package.json");
+const { lbrySettings: config } = require("../../../../app/package.json");
 
 export function doOpenModal(modal, modalProps = {}) {
   return {
