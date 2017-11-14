@@ -60,7 +60,7 @@ class UriIndicator extends React.PureComponent {
 
     const inner = (
       <span>
-        {channelName} {" "}
+        <span className="channel-name">{channelName}</span> {" "}
         {!signatureIsValid
           ? <Icon
               icon={icon}
