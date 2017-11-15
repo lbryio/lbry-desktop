@@ -10,6 +10,7 @@ class App extends React.PureComponent {
     const {
       alertError,
       checkUpgradeAvailable,
+      initCheckUpgradeTimer,
       fetchRewardedContent,
     } = this.props;
 
@@ -21,6 +22,8 @@ class App extends React.PureComponent {
       checkUpgradeAvailable();
     }
 
+    initCheckUpgradeTimer();
+
     fetchRewardedContent();
 
     this.scrollListener = () => this.props.recordScroll(window.scrollY);
@@ -29,6 +32,8 @@ class App extends React.PureComponent {
 
     this.setTitleFromProps(this.props);
   }
+
+  componentDidMount() {}
 
   componentWillUnmount() {
     window.removeEventListener("scroll", this.scrollListener);

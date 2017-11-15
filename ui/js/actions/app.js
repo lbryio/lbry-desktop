@@ -5,12 +5,15 @@ import {
   selectUpgradeDownloadPath,
   selectUpgradeDownloadItem,
   selectUpgradeFilename,
+  selectIsUpgradeSkipped,
+  selectRemoteVersion,
 } from "selectors/app";
 import { doFetchDaemonSettings } from "actions/settings";
 import { doBalanceSubscribe } from "actions/wallet";
 import { doAuthenticate } from "actions/user";
 import { doFetchFileInfosAndPublishedClaims } from "actions/file_info";
 import * as modals from "constants/modal_types";
+import { selectBalance } from "../selectors/wallet";
 
 const { remote, ipcRenderer, shell } = require("electron");
 const path = require("path");
@@ -63,33 +66,31 @@ export function doDownloadUpgrade() {
     const state = getState();
     // Make a new directory within temp directory so the filename is guaranteed to be available
     const dir = fs.mkdtempSync(
-      remote.app.getPath("temp") + require("path").sep
-    ),
+        remote.app.getPath("temp") + require("path").sep
+      ),
       upgradeFilename = selectUpgradeFilename(state);
 
     let options = {
       onProgress: p => dispatch(doUpdateDownloadProgress(Math.round(p * 100))),
       directory: dir,
     };
-    download(
-      remote.getCurrentWindow(),
-      selectUpdateUrl(state),
-      options
-    ).then(downloadItem => {
-      /**
+    download(remote.getCurrentWindow(), selectUpdateUrl(state), options).then(
+      downloadItem => {
+        /**
          * TODO: get the download path directly from the download object. It should just be
          * downloadItem.getSavePath(), but the copy on the main process is being garbage collected
          * too soon.
          */
 
-      dispatch({
-        type: types.UPGRADE_DOWNLOAD_COMPLETED,
-        data: {
-          downloadItem,
-          path: path.join(dir, upgradeFilename),
-        },
-      });
-    });
+        dispatch({
+          type: types.UPGRADE_DOWNLOAD_COMPLETED,
+          data: {
+            downloadItem,
+            path: path.join(dir, upgradeFilename),
+          },
+        });
+      }
+    );
 
     dispatch({
       type: types.UPGRADE_DOWNLOAD_STARTED,
@@ -129,15 +130,25 @@ export function doCancelUpgrade() {
 export function doCheckUpgradeAvailable() {
   return function(dispatch, getState) {
     const state = getState();
+    dispatch({
+      type: types.CHECK_UPGRADE_STARTED,
+    });
 
-    lbry.getAppVersionInfo().then(({ remoteVersion, upgradeAvailable }) => {
-      if (upgradeAvailable) {
-        dispatch({
-          type: types.UPDATE_VERSION,
-          data: {
-            version: remoteVersion,
-          },
-        });
+    const success = ({ remoteVersion, upgradeAvailable }) => {
+      dispatch({
+        type: types.CHECK_UPGRADE_COMPLETED,
+        data: {
+          upgradeAvailable,
+          remoteVersion,
+        },
+      });
+
+      // If there's an available upgrade and the user hasn't skipped it or if there's a newer one, show un upgrade modal
+      if (
+        upgradeAvailable &&
+        (!selectIsUpgradeSkipped(state) ||
+          remoteVersion !== selectRemoteVersion(state))
+      ) {
         dispatch({
           type: types.OPEN_MODAL,
           data: {
@@ -145,6 +156,30 @@ export function doCheckUpgradeAvailable() {
           },
         });
       }
+    };
+
+    const failure = () => {
+      dispatch({
+        type: types.CHECK_UPGRADE_FAILED,
+      });
+    };
+
+    lbry.getAppVersionInfo().then(success, failure);
+  };
+}
+
+/*
+  Initiate a timer that will check for an app upgrade every 10 minutes.
+ */
+export function doInitCheckUpgradeTimer() {
+  return function(dispatch) {
+    const checkUpgradeTimer = setInterval(
+      () => dispatch(doCheckUpgradeAvailable()),
+      600000
+    );
+    dispatch({
+      type: types.CHECK_UPGRADE_TIMER_INITIATED,
+      data: { checkUpgradeTimer },
     });
   };
 }
@@ -153,9 +188,10 @@ export function doCheckDaemonVersion() {
   return function(dispatch, getState) {
     lbry.version().then(({ lbrynet_version }) => {
       dispatch({
-        type: config.lbrynetDaemonVersion == lbrynet_version
-          ? types.DAEMON_VERSION_MATCH
-          : types.DAEMON_VERSION_MISMATCH,
+        type:
+          config.lbrynetDaemonVersion == lbrynet_version
+            ? types.DAEMON_VERSION_MATCH
+            : types.DAEMON_VERSION_MISMATCH,
       });
     });
   };

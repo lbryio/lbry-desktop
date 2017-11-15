@@ -64,7 +64,7 @@ reducers[types.SKIP_UPGRADE] = function(state, action) {
   sessionStorage.setItem("upgradeSkipped", true);
 
   return Object.assign({}, state, {
-    upgradeSkipped: true,
+    isUpgradeSkipped: true,
     modal: null,
   });
 };
@@ -72,6 +72,19 @@ reducers[types.SKIP_UPGRADE] = function(state, action) {
 reducers[types.UPDATE_VERSION] = function(state, action) {
   return Object.assign({}, state, {
     version: action.data.version,
+  });
+};
+
+reducers[types.CHECK_UPGRADE_COMPLETED] = function(state, action) {
+  return Object.assign({}, state, {
+    isUpgradeAvailable: action.data.upgradeAvailable,
+    remoteVersion: action.data.remoteVersion,
+  });
+};
+
+reducers[types.CHECK_UPGRADE_TIMER_INITIATED] = function(state, action) {
+  return Object.assign({}, state, {
+    checkUpgradeTimer: action.data.checkUpgradeTimer,
   });
 };
 
