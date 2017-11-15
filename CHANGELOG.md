@@ -16,7 +16,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
   *
 
 ### Fixed
-  * Email verification is fixed. (#746)
+  *
   *
 
 ### Deprecated
@@ -26,6 +26,13 @@ Web UI version numbers should always match the corresponding version of LBRY App
 ### Removed
   *
   *
+
+## [0.18.2] - 2017-11-15
+
+### Fixed
+ * Email verification is fixed. (#746)
+
+
 
 ## [0.18.0] - 2017-11-13
 
