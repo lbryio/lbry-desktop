@@ -23,11 +23,12 @@ class App extends React.PureComponent {
 
     fetchRewardedContent();
 
-    this.scrollListener = () => this.props.recordScroll(window.scrollY);
-
-    window.addEventListener("scroll", this.scrollListener);
-
     this.setTitleFromProps(this.props);
+  }
+
+  componentDidMount() {
+    this.scrollListener = () => this.props.recordScroll(mainContent.scrollTop);
+    mainContent.addEventListener("scroll", this.scrollListener);
   }
 
   componentWillUnmount() {
@@ -47,7 +48,7 @@ class App extends React.PureComponent {
       <div id="window">
         <Theme />
         <Header />
-        <div id="main-content">
+        <div id="mainContent">
           <Router />
         </div>
         <ModalRouter />
