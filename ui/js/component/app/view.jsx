@@ -7,24 +7,11 @@ import lbry from "lbry";
 
 class App extends React.PureComponent {
   componentWillMount() {
-    const {
-      alertError,
-      checkUpgradeAvailable,
-      initCheckUpgradeTimer,
-      fetchRewardedContent,
-    } = this.props;
+    const { alertError } = this.props;
 
     document.addEventListener("unhandledError", event => {
       alertError(event.detail);
     });
-
-    if (!this.props.upgradeSkipped) {
-      checkUpgradeAvailable();
-    }
-
-    initCheckUpgradeTimer();
-
-    fetchRewardedContent();
 
     this.scrollListener = () => this.props.recordScroll(window.scrollY);
 

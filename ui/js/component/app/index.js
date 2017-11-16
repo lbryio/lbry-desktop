@@ -2,11 +2,9 @@ import React from "react";
 import { connect } from "react-redux";
 import { selectPageTitle } from "selectors/navigation";
 import { selectUser } from "selectors/user";
-import { doCheckUpgradeAvailable, doAlertError } from "actions/app";
+import { doAlertError } from "actions/app";
 import { doRecordScroll } from "actions/navigation";
-import { doFetchRewardedContent } from "actions/content";
 import App from "./view";
-import { doInitCheckUpgradeTimer } from "../../actions/app";
 
 const select = (state, props) => ({
   pageTitle: selectPageTitle(state),
@@ -15,9 +13,6 @@ const select = (state, props) => ({
 
 const perform = dispatch => ({
   alertError: errorList => dispatch(doAlertError(errorList)),
-  checkUpgradeAvailable: () => dispatch(doCheckUpgradeAvailable()),
-  initCheckUpgradeTimer: () => dispatch(doInitCheckUpgradeTimer()),
-  fetchRewardedContent: () => dispatch(doFetchRewardedContent()),
   recordScroll: scrollPosition => dispatch(doRecordScroll(scrollPosition)),
 });
 
