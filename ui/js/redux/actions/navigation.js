@@ -6,8 +6,8 @@ import {
   selectCurrentParams,
   selectHistoryStack,
   selectHistoryIndex,
-} from "selectors/navigation";
-import { doSearch } from "actions/search";
+} from "redux/selectors/navigation";
+import { doSearch } from "redux/actions/search";
 import { toQueryString } from "util/query_params";
 
 export function doNavigate(path, params = {}, options = {}) {

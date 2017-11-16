@@ -1,8 +1,8 @@
 import * as types from "constants/action_types";
 import lbryuri from "lbryuri";
-import { doResolveUri } from "actions/content";
-import { doNavigate } from "actions/navigation";
-import { selectCurrentPage } from "selectors/navigation";
+import { doResolveUri } from "redux/actions/content";
+import { doNavigate } from "redux/actions/navigation";
+import { selectCurrentPage } from "redux/selectors/navigation";
 import batchActions from "util/batchActions";
 
 export function doSearch(rawQuery) {

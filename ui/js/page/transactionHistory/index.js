@@ -1,10 +1,10 @@
 import React from "react";
 import { connect } from "react-redux";
-import { doFetchTransactions } from "actions/wallet";
+import { doFetchTransactions } from "redux/actions/wallet";
 import {
   selectTransactionItems,
   selectIsFetchingTransactions,
-} from "selectors/wallet";
+} from "redux/selectors/wallet";
 import TransactionHistoryPage from "./view";
 
 const select = state => ({

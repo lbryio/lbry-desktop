@@ -1,11 +1,11 @@
 import React from "react";
 import { connect } from "react-redux";
 import InvitePage from "./view";
-import { doFetchInviteStatus } from "actions/user";
+import { doFetchInviteStatus } from "redux/actions/user";
 import {
   selectUserInviteStatusFailed,
   selectUserInviteStatusIsPending,
-} from "selectors/user";
+} from "redux/selectors/user";
 
 const select = state => ({
   isFailed: selectUserInviteStatusFailed(state),

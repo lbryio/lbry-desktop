@@ -1,10 +1,10 @@
 import React from "react";
 import { connect } from "react-redux";
-import { doUserEmailNew, doUserInviteNew } from "actions/user";
+import { doUserEmailNew, doUserInviteNew } from "redux/actions/user";
 import {
   selectEmailNewIsPending,
   selectEmailNewErrorMessage,
-} from "selectors/user";
+} from "redux/selectors/user";
 import UserEmailNew from "./view";
 
 const select = state => ({

@@ -1,8 +1,8 @@
 import React from "react";
 import { connect } from "react-redux";
-import { doCloseModal } from "actions/app";
-import { doAbandonClaim } from "actions/content";
-import { selectTransactionItems } from "selectors/wallet";
+import { doCloseModal } from "redux/actions/app";
+import { doAbandonClaim } from "redux/actions/content";
+import { selectTransactionItems } from "redux/selectors/wallet";
 import ModalRevokeClaim from "./view";
 
 const select = state => ({

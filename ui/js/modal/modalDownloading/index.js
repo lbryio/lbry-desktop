@@ -1,7 +1,10 @@
 import React from "react";
 import { connect } from "react-redux";
-import { doStartUpgrade, doCancelUpgrade } from "actions/app";
-import { selectDownloadProgress, selectDownloadComplete } from "selectors/app";
+import { doStartUpgrade, doCancelUpgrade } from "redux/actions/app";
+import {
+  selectDownloadProgress,
+  selectDownloadComplete,
+} from "redux/selectors/app";
 import ModalDownloading from "./view";
 
 const select = state => ({

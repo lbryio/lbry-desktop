@@ -1,7 +1,7 @@
 import React from "react";
-import { doNavigate } from "actions/navigation";
+import { doNavigate } from "redux/actions/navigation";
 import { connect } from "react-redux";
-import { selectPathAfterAuth } from "selectors/navigation";
+import { selectPathAfterAuth } from "redux/selectors/navigation";
 import {
   selectAuthenticationIsPending,
   selectEmailToVerify,
@@ -9,7 +9,7 @@ import {
   selectUser,
   selectUserIsPending,
   selectIdentityVerifyIsPending,
-} from "selectors/user";
+} from "redux/selectors/user";
 import AuthPage from "./view";
 
 const select = state => ({

@@ -1,13 +1,13 @@
 import React from "react";
 import { connect } from "react-redux";
-import { doOpenModal } from "actions/app";
+import { doOpenModal } from "redux/actions/app";
 import * as settings from "constants/settings";
-import { selectCurrentModal, selectModalProps } from "selectors/app";
-import { selectCurrentPage } from "selectors/navigation";
-import { selectCostForCurrentPageUri } from "selectors/cost_info";
-import { makeSelectClientSetting } from "selectors/settings";
-import { selectUser } from "selectors/user";
-import { selectBalance } from "selectors/wallet";
+import { selectCurrentModal, selectModalProps } from "redux/selectors/app";
+import { selectCurrentPage } from "redux/selectors/navigation";
+import { selectCostForCurrentPageUri } from "redux/selectors/cost_info";
+import { makeSelectClientSetting } from "redux/selectors/settings";
+import { selectUser } from "redux/selectors/user";
+import { selectBalance } from "redux/selectors/wallet";
 import ModalRouter from "./view";
 
 const select = (state, props) => ({

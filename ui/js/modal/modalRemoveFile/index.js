@@ -1,9 +1,12 @@
 import React from "react";
 import { connect } from "react-redux";
-import { doCloseModal } from "actions/app";
-import { doDeleteFileAndGoBack } from "actions/file_info";
-import { makeSelectTitleForUri, makeSelectClaimIsMine } from "selectors/claims";
-import { makeSelectFileInfoForUri } from "selectors/file_info";
+import { doCloseModal } from "redux/actions/app";
+import { doDeleteFileAndGoBack } from "redux/actions/file_info";
+import {
+  makeSelectTitleForUri,
+  makeSelectClaimIsMine,
+} from "redux/selectors/claims";
+import { makeSelectFileInfoForUri } from "redux/selectors/file_info";
 import ModalRemoveFile from "./view";
 
 const select = (state, props) => ({

@@ -1,7 +1,7 @@
 import React from "react";
 import Link from "component/link";
 import { FormRow } from "component/form";
-import { doShowSnackBar } from "actions/app";
+import { doShowSnackBar } from "redux/actions/app";
 import lbry from "../lbry.js";
 
 class ReportPage extends React.Component {

@@ -111,7 +111,7 @@ export const selectPageTitle = createSelector(
         return params.query
           ? __("Search results for %s", params.query)
           : __("Search");
-      case "discover":  
+      case "discover":
       case false:
       case null:
       case "":

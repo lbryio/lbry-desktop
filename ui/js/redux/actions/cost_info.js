@@ -1,10 +1,10 @@
 import * as types from "constants/action_types";
 import lbry from "lbry";
 import lbryio from "lbryio";
-import { doResolveUri } from "actions/content";
-import { selectResolvingUris } from "selectors/content";
-import { selectClaimsByUri } from "selectors/claims";
-import { selectSettingsIsGenerous } from "selectors/settings";
+import { doResolveUri } from "redux/actions/content";
+import { selectResolvingUris } from "redux/selectors/content";
+import { selectClaimsByUri } from "redux/selectors/claims";
+import { selectSettingsIsGenerous } from "redux/selectors/settings";
 
 export function doFetchCostInfoForUri(uri) {
   return function(dispatch, getState) {

@@ -4,9 +4,9 @@ import {
   selectDraftTransaction,
   selectDraftTransactionAmount,
   selectBalance,
-} from "selectors/wallet";
-import { doOpenModal, doShowSnackBar } from "actions/app";
-import { doNavigate } from "actions/navigation";
+} from "redux/selectors/wallet";
+import { doOpenModal, doShowSnackBar } from "redux/actions/app";
+import { doNavigate } from "redux/actions/navigation";
 import * as modals from "constants/modal_types";
 
 export function doUpdateBalance() {

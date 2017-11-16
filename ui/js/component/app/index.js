@@ -1,10 +1,10 @@
 import React from "react";
 import { connect } from "react-redux";
-import { selectPageTitle } from "selectors/navigation";
-import { selectUser } from "selectors/user";
-import { doCheckUpgradeAvailable, doAlertError } from "actions/app";
-import { doRecordScroll } from "actions/navigation";
-import { doFetchRewardedContent } from "actions/content";
+import { selectPageTitle } from "redux/selectors/navigation";
+import { selectUser } from "redux/selectors/user";
+import { doCheckUpgradeAvailable, doAlertError } from "redux/actions/app";
+import { doRecordScroll } from "redux/actions/navigation";
+import { doFetchRewardedContent } from "redux/actions/content";
 import App from "./view";
 
 const select = (state, props) => ({

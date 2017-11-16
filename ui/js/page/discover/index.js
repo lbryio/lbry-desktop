@@ -1,10 +1,10 @@
 import React from "react";
 import { connect } from "react-redux";
-import { doFetchFeaturedUris } from "actions/content";
+import { doFetchFeaturedUris } from "redux/actions/content";
 import {
   selectFeaturedUris,
   selectFetchingFeaturedUris,
-} from "selectors/content";
+} from "redux/selectors/content";
 import DiscoverPage from "./view";
 
 const select = state => ({

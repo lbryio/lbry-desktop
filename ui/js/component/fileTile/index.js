@@ -1,17 +1,17 @@
 import React from "react";
 import { connect } from "react-redux";
-import { doNavigate } from "actions/navigation";
-import { doResolveUri } from "actions/content";
+import { doNavigate } from "redux/actions/navigation";
+import { doResolveUri } from "redux/actions/content";
 import {
   makeSelectClaimForUri,
   makeSelectMetadataForUri,
-} from "selectors/claims";
-import { makeSelectFileInfoForUri } from "selectors/file_info";
-import { selectShowNsfw } from "selectors/settings";
+} from "redux/selectors/claims";
+import { makeSelectFileInfoForUri } from "redux/selectors/file_info";
+import { selectShowNsfw } from "redux/selectors/settings";
 import {
   makeSelectIsUriResolving,
   selectRewardContentClaimIds,
-} from "selectors/content";
+} from "redux/selectors/content";
 import FileTile from "./view";
 
 const select = (state, props) => ({

@@ -1,5 +1,5 @@
 import { createSelector } from "reselect";
-import { selectUser } from "selectors/user";
+import { selectUser } from "redux/selectors/user";
 import rewards from "rewards";
 
 const _selectState = state => state.rewards || {};

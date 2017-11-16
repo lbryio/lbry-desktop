@@ -1,6 +1,6 @@
 import * as types from "constants/action_types";
 import * as settings from "constants/settings";
-import { doAlertError } from "actions/app";
+import { doAlertError } from "redux/actions/app";
 import batchActions from "util/batchActions";
 
 import lbry from "lbry";

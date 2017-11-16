@@ -1,5 +1,5 @@
 import { createSelector } from "reselect";
-import { selectCurrentParams } from "selectors/navigation";
+import { selectCurrentParams } from "redux/selectors/navigation";
 import lbryuri from "lbryuri";
 import { makeSelectCurrentParam } from "./navigation";
 
