@@ -13,13 +13,15 @@ import { doBalanceSubscribe } from "actions/wallet";
 import { doAuthenticate } from "actions/user";
 import { doFetchFileInfosAndPublishedClaims } from "actions/file_info";
 import * as modals from "constants/modal_types";
-import { selectBalance } from "../selectors/wallet";
+import { doFetchRewardedContent } from "actions/content";
+import { selectCurrentModal } from "../selectors/app";
 
 const { remote, ipcRenderer, shell } = require("electron");
 const path = require("path");
 const { download } = remote.require("electron-dl");
 const fs = remote.require("fs");
 const { lbrySettings: config } = require("../../../app/package.json");
+const CHECK_UPGRADE_INTERVAL = 10 * 60 * 1000;
 
 export function doOpenModal(modal, modalProps = {}) {
   return {
@@ -131,21 +133,21 @@ export function doCheckUpgradeAvailable() {
   return function(dispatch, getState) {
     const state = getState();
     dispatch({
-      type: types.CHECK_UPGRADE_STARTED,
+      type: types.CHECK_UPGRADE_START,
     });
 
     const success = ({ remoteVersion, upgradeAvailable }) => {
       dispatch({
-        type: types.CHECK_UPGRADE_COMPLETED,
+        type: types.CHECK_UPGRADE_SUCCESS,
         data: {
           upgradeAvailable,
           remoteVersion,
         },
       });
 
-      // If there's an available upgrade and the user hasn't skipped it or if there's a newer one, show un upgrade modal
       if (
         upgradeAvailable &&
+        !selectCurrentModal(state) &&
         (!selectIsUpgradeSkipped(state) ||
           remoteVersion !== selectRemoteVersion(state))
       ) {
@@ -158,27 +160,27 @@ export function doCheckUpgradeAvailable() {
       }
     };
 
-    const failure = () => {
+    const fail = () => {
       dispatch({
-        type: types.CHECK_UPGRADE_FAILED,
+        type: types.CHECK_UPGRADE_FAIL,
       });
     };
 
-    lbry.getAppVersionInfo().then(success, failure);
+    lbry.getAppVersionInfo().then(success, fail);
   };
 }
 
 /*
   Initiate a timer that will check for an app upgrade every 10 minutes.
  */
-export function doInitCheckUpgradeTimer() {
+export function doCheckUpgradeSubscribe() {
   return function(dispatch) {
     const checkUpgradeTimer = setInterval(
       () => dispatch(doCheckUpgradeAvailable()),
-      600000
+      CHECK_UPGRADE_INTERVAL
     );
     dispatch({
-      type: types.CHECK_UPGRADE_TIMER_INITIATED,
+      type: types.CHECK_UPGRADE_SUBSCRIBE,
       data: { checkUpgradeTimer },
     });
   };
@@ -212,11 +214,18 @@ export function doAlertError(errorList) {
 
 export function doDaemonReady() {
   return function(dispatch, getState) {
+    const state = getState();
+
     dispatch(doAuthenticate());
     dispatch({ type: types.DAEMON_READY });
     dispatch(doFetchDaemonSettings());
     dispatch(doBalanceSubscribe());
     dispatch(doFetchFileInfosAndPublishedClaims());
+    dispatch(doFetchRewardedContent());
+    if (!selectIsUpgradeSkipped(state)) {
+      dispatch(doCheckUpgradeAvailable());
+    }
+    dispatch(doCheckUpgradeSubscribe());
   };
 }
 

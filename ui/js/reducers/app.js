@@ -75,14 +75,14 @@ reducers[types.UPDATE_VERSION] = function(state, action) {
   });
 };
 
-reducers[types.CHECK_UPGRADE_COMPLETED] = function(state, action) {
+reducers[types.CHECK_UPGRADE_SUCCESS] = function(state, action) {
   return Object.assign({}, state, {
     isUpgradeAvailable: action.data.upgradeAvailable,
     remoteVersion: action.data.remoteVersion,
   });
 };
 
-reducers[types.CHECK_UPGRADE_TIMER_INITIATED] = function(state, action) {
+reducers[types.CHECK_UPGRADE_SUBSCRIBE] = function(state, action) {
   return Object.assign({}, state, {
     checkUpgradeTimer: action.data.checkUpgradeTimer,
   });

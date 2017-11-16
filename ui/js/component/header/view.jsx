@@ -11,8 +11,6 @@ export const Header = props => {
     isForwardDisabled,
     isUpgradeAvailable,
     navigate,
-    publish,
-    upgradeLabel,
     downloadUpgrade,
   } = props;
   return (
@@ -61,7 +59,7 @@ export const Header = props => {
           onClick={() => navigate("/publish")}
           button="primary button--flat"
           icon="icon-upload"
-          label={publish}
+          label={__("Publish")}
         />
       </div>
       <div className="header__item">
@@ -85,7 +83,7 @@ export const Header = props => {
           onClick={() => downloadUpgrade()}
           button="primary button--flat"
           icon="icon-arrow-up"
-          label={upgradeLabel}
+          label={__("Upgrade App")}
         />
       )}
     </header>

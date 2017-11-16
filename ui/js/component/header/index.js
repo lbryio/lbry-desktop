@@ -20,8 +20,6 @@ const select = state => ({
   isForwardDisabled: selectIsForwardDisabled(state),
   isUpgradeAvailable: selectIsUpgradeAvailable(state),
   balance: formatCredits(selectBalance(state) || 0, 1),
-  publish: __("Publish"),
-  upgradeLabel: __("Upgrade App"),
 });
 
 const perform = dispatch => ({
