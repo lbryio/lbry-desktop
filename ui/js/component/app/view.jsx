@@ -33,8 +33,6 @@ class App extends React.PureComponent {
     this.setTitleFromProps(this.props);
   }
 
-  componentDidMount() {}
-
   componentWillUnmount() {
     window.removeEventListener("scroll", this.scrollListener);
   }
