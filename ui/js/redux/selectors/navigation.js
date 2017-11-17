@@ -146,3 +146,9 @@ export const selectHistoryStack = createSelector(
   _selectState,
   state => state.stack
 );
+
+// returns current page attributes (scrollY, path)
+export const selectActiveHistoryEntry = createSelector(
+  _selectState,
+  state => state.stack[state.index]
+);
