@@ -171,7 +171,8 @@ export const selectMyClaimsWithoutChannels = createSelector(
 
 export const selectAllMyClaimsByOutpoint = createSelector(
   selectMyClaimsRaw,
-  claims => new Set(claims.map(claim => `${claim.txid}:${claim.nout}`))
+  claims =>
+    new Set(claims && claims.map(claim => `${claim.txid}:${claim.nout}`))
 );
 
 export const selectMyClaimsOutpoints = createSelector(

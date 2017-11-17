@@ -17,6 +17,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
 
 ### Fixed
   * Long channel names causing inconsistent thumbnail sizes (#721)
+  * Fixed regression caused in #697 (issue #755)
   *
 
 ### Deprecated
