@@ -12,12 +12,12 @@ Web UI version numbers should always match the corresponding version of LBRY App
   *
 
 ### Changed
-  *
+  * Moved all redux code into /redux folder
   *
 
 ### Fixed
   * Long channel names causing inconsistent thumbnail sizes (#721)
-  *
+  * Fixed scriolling restore/reset/set (#729)
 
 ### Deprecated
   *
