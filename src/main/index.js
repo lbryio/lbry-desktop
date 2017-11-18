@@ -9,6 +9,7 @@ import Keytar from 'keytar';
 import ChildProcess from 'child_process';
 import Assert from 'assert';
 import { app, BrowserWindow, globalShortcut, ipcMain, Menu, Tray } from 'electron';
+import { autoUpdater } from 'electron-updater';
 import mainMenu from './menu/mainMenu';
 import contextMenu from './menu/contextMenu';
 
