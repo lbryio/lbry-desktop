@@ -19,13 +19,15 @@ def get_asset_filename():
     this_dir = os.path.dirname(os.path.realpath(__file__))
     system = platform.system()
     if system == 'Darwin':
-        return glob.glob(this_dir + '/../dist/LBRY*.dmg')[0]
+        suffix = 'dmg'
     elif system == 'Linux':
-        return glob.glob(this_dir + '/../dist/LBRY*.deb')[0]
+        suffix = 'deb'
     elif system == 'Windows':
-        return glob.glob(this_dir + '/../dist/LBRY*.exe')[0]
+        suffix = 'exe'
     else:
         raise Exception("I don't know about any artifact on {}".format(system))
+
+    return glob.glob(this_dir + '/../dist/LBRY*.' + suffix)[0]
 
 
 def upload_to_s3(folder):
