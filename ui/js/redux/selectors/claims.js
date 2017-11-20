@@ -1,5 +1,4 @@
 import { createSelector } from "reselect";
-import { selectCurrentParams } from "redux/selectors/navigation";
 import lbryuri from "lbryuri";
 import { makeSelectCurrentParam } from "./navigation";
 
@@ -171,7 +170,12 @@ export const selectMyClaimsWithoutChannels = createSelector(
 
 export const selectAllMyClaimsByOutpoint = createSelector(
   selectMyClaimsRaw,
-  claims => new Set(claims.map(claim => `${claim.txid}:${claim.nout}`))
+  claims =>
+    new Set(
+      claims && claims.length
+        ? claims.map(claim => `${claim.txid}:${claim.nout}`)
+        : null
+    )
 );
 
 export const selectMyClaimsOutpoints = createSelector(
