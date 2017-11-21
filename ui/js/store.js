@@ -80,8 +80,9 @@ if (env === "development") {
 }
 
 // middleware.push(createActionBuffer(REHYDRATE)); // was causing issues with authentication reducers not firing
-
-const createStoreWithMiddleware = redux.compose(
+const composeEnhancers =
+  window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || redux.compose;
+const createStoreWithMiddleware = composeEnhancers(
   autoRehydrate(),
   redux.applyMiddleware(...middleware)
 )(redux.createStore);

@@ -1,21 +1,7 @@
-module.exports = { safeQuit }
+// Module imports
 const {app, BrowserWindow, ipcMain, Menu, Tray, globalShortcut} = require('electron');
-const url = require('url');
-const isDebug = process.env.NODE_ENV === 'development';
-const setMenu = require('./menu/main-menu.js');
-
-if (isDebug) {
-  try
-  {
-    require('electron-debug')({showDevTools: true});
-  }
-  catch (err) // electron-debug is in devDependencies, but some
-  {
-    console.error(err)
-  }
-}
-
 const path = require('path');
+const url = require('url');
 const jayson = require('jayson');
 const semver = require('semver');
 const https = require('https');
@@ -26,8 +12,31 @@ const kill = require('tree-kill');
 const child_process = require('child_process');
 const assert = require('assert');
 const {version: localVersion} = require(app.getAppPath() + '/package.json');
+const setMenu = require('./menu/main-menu.js');
 
-const VERSION_CHECK_INTERVAL = 30 * 60 * 1000;
+// Debug configs
+const isDebug = process.env.NODE_ENV === 'development';
+if (isDebug) {
+  try
+  {
+    require('electron-debug')({showDevTools: true});
+
+    const { default: installExtension, REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS } = require('electron-devtools-installer');
+    app.on('ready', () => {
+      [REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS].forEach(extension => {
+        installExtension(extension)
+          .then((name) => console.log(`Added Extension: ${name}`))
+          .catch((err) => console.log('An error occurred: ', err));
+      });
+    });
+  }
+  catch (err) // electron-debug is in devDependencies, but some
+  {
+    console.error(err)
+  }
+}
+
+// Misc constants
 const LATEST_RELEASE_API_URL = 'https://api.github.com/repos/lbryio/lbry-app/releases/latest';
 const DAEMON_PATH = process.env.LBRY_DAEMON || path.join(__dirname, 'dist', 'lbrynet-daemon');
 
@@ -283,7 +292,7 @@ function handleOpenUriRequested(uri) {
     // Window not created yet, so store up requested URI for when it is
     openUri = processRequestedUri(uri);
   } else {
-    
+
     if (win.isMinimized()) {
       win.restore()
     } else if (!win.isVisible()) {
@@ -365,7 +374,7 @@ if (isSecondaryInstance) { // We're not in the original process, so quit
   return;
 }
 
-app.on('ready', function(){
+app.on('ready', function() {
   launchDaemonIfNotRunning();
   if (process.platform === "linux") {
     checkLinuxTraySupport( err => {
@@ -545,3 +554,5 @@ ipcMain.on('get-auth-token', (event) => {
 ipcMain.on('set-auth-token', (event, token) => {
   keytar.setPassword("LBRY", "auth_token", token ? token.toString().trim() : null);
 });
+
+module.exports = { safeQuit };

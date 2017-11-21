@@ -70,7 +70,8 @@
     "devtron": "^1.4.0",
     "electron": "^1.7.9",
     "electron-builder": "^11.7.0",
-    "electron-debug": "^1.4.0"
+    "electron-debug": "^1.4.0",
+    "electron-devtools-installer": "^2.2.1"
   },
   "license": "MIT"
 }
