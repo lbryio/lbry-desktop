@@ -30,4 +30,3 @@ build/daemon.zip
 .vimrc
 
 package-lock.json
-ui/yarn.lock
