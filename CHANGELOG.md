@@ -19,6 +19,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
   * Long channel names causing inconsistent thumbnail sizes (#721)
   * Fixed regression in #697 causing transaction screen to not load for new users (#755)
   * Fixed scriolling restore/reset/set (#729)
+  * Fixed sorting by title for published files (#614)
 
 ### Deprecated
   *
