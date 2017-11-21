@@ -18,11 +18,11 @@ class FileList extends React.PureComponent {
       },
       title: function(fileInfos) {
         return fileInfos.slice().sort(function(fileInfo1, fileInfo2) {
-          const title1 = fileInfo1.metadata
-            ? fileInfo1.metadata.stream.metadata.title.toLowerCase()
+          const title1 = fileInfo1.value
+            ? fileInfo1.value.stream.metadata.title.toLowerCase()
             : fileInfo1.name;
-          const title2 = fileInfo2.metadata
-            ? fileInfo2.metadata.stream.metadata.title.toLowerCase()
+          const title2 = fileInfo2.value
+            ? fileInfo2.value.stream.metadata.title.toLowerCase()
             : fileInfo2.name;
           if (title1 < title2) {
             return -1;
