@@ -13,8 +13,8 @@ import { doBalanceSubscribe } from "redux/actions/wallet";
 import { doAuthenticate } from "redux/actions/user";
 import { doFetchFileInfosAndPublishedClaims } from "redux/actions/file_info";
 import * as modals from "constants/modal_types";
-import { doFetchRewardedContent } from "actions/content";
-import { selectCurrentModal } from "../selectors/app";
+import { doFetchRewardedContent } from "redux/actions/content";
+import { selectCurrentModal } from "redux/selectors/app";
 
 const { remote, ipcRenderer, shell } = require("electron");
 const path = require("path");
@@ -68,31 +68,33 @@ export function doDownloadUpgrade() {
     const state = getState();
     // Make a new directory within temp directory so the filename is guaranteed to be available
     const dir = fs.mkdtempSync(
-        remote.app.getPath("temp") + require("path").sep
-      ),
+      remote.app.getPath("temp") + require("path").sep
+    ),
       upgradeFilename = selectUpgradeFilename(state);
 
     let options = {
       onProgress: p => dispatch(doUpdateDownloadProgress(Math.round(p * 100))),
       directory: dir,
     };
-    download(remote.getCurrentWindow(), selectUpdateUrl(state), options).then(
-      downloadItem => {
-        /**
+    download(
+      remote.getCurrentWindow(),
+      selectUpdateUrl(state),
+      options
+    ).then(downloadItem => {
+      /**
          * TODO: get the download path directly from the download object. It should just be
          * downloadItem.getSavePath(), but the copy on the main process is being garbage collected
          * too soon.
          */
 
-        dispatch({
-          type: types.UPGRADE_DOWNLOAD_COMPLETED,
-          data: {
-            downloadItem,
-            path: path.join(dir, upgradeFilename),
-          },
-        });
-      }
-    );
+      dispatch({
+        type: types.UPGRADE_DOWNLOAD_COMPLETED,
+        data: {
+          downloadItem,
+          path: path.join(dir, upgradeFilename),
+        },
+      });
+    });
 
     dispatch({
       type: types.UPGRADE_DOWNLOAD_STARTED,
@@ -190,10 +192,9 @@ export function doCheckDaemonVersion() {
   return function(dispatch, getState) {
     lbry.version().then(({ lbrynet_version }) => {
       dispatch({
-        type:
-          config.lbrynetDaemonVersion == lbrynet_version
-            ? types.DAEMON_VERSION_MATCH
-            : types.DAEMON_VERSION_MISMATCH,
+        type: config.lbrynetDaemonVersion == lbrynet_version
+          ? types.DAEMON_VERSION_MATCH
+          : types.DAEMON_VERSION_MISMATCH,
       });
     });
   };

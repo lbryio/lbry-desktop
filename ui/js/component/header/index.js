@@ -12,8 +12,8 @@ import {
   doHistoryForward,
 } from "redux/actions/navigation";
 import Header from "./view";
-import { selectIsUpgradeAvailable } from "../../selectors/app";
-import { doDownloadUpgrade } from "../../actions/app";
+import { selectIsUpgradeAvailable } from "redux/selectors/app";
+import { doDownloadUpgrade } from "redux/actions/app";
 
 const select = state => ({
   isBackDisabled: selectIsBackDisabled(state),
