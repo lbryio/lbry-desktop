@@ -23,7 +23,7 @@ cd ui
 yarn install
 npm rebuild node-sass
 node_modules\.bin\node-sass --output dist\css --sourcemap=none scss\
-node_modules\.bin\webpack
+node_modules\.bin\webpack --config webpack.prod.js
 Copy-Item dist ..\app\ -recurse
 cd ..
 

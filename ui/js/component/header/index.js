@@ -4,13 +4,13 @@ import { connect } from "react-redux";
 import {
   selectIsBackDisabled,
   selectIsForwardDisabled,
-} from "selectors/navigation";
-import { selectBalance } from "selectors/wallet";
+} from "redux/selectors/navigation";
+import { selectBalance } from "redux/selectors/wallet";
 import {
   doNavigate,
   doHistoryBack,
   doHistoryForward,
-} from "actions/navigation";
+} from "redux/actions/navigation";
 import Header from "./view";
 import { selectIsUpgradeAvailable } from "../../selectors/app";
 import { doDownloadUpgrade } from "../../actions/app";

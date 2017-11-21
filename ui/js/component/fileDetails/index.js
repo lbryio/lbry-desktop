@@ -4,10 +4,10 @@ import {
   makeSelectClaimForUri,
   makeSelectContentTypeForUri,
   makeSelectMetadataForUri,
-} from "selectors/claims";
+} from "redux/selectors/claims";
 import FileDetails from "./view";
-import { doOpenFileInFolder } from "actions/file_info";
-import { makeSelectFileInfoForUri } from "selectors/file_info";
+import { doOpenFileInFolder } from "redux/actions/file_info";
+import { makeSelectFileInfoForUri } from "redux/selectors/file_info";
 
 const select = (state, props) => ({
   claim: makeSelectClaimForUri(props.uri)(state),

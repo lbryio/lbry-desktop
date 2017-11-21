@@ -340,9 +340,10 @@ class PublishForm extends React.PureComponent {
   handleFeePrefChange(feeEnabled) {
     this.setState({
       isFee: feeEnabled,
-      feeAmount: this.state.feeAmount == ""
-        ? this._defaultPaidPrice
-        : this.state.feeAmount,
+      feeAmount:
+        this.state.feeAmount == ""
+          ? this._defaultPaidPrice
+          : this.state.feeAmount,
     });
   }
 
@@ -556,82 +557,82 @@ class PublishForm extends React.PureComponent {
                 }
               />
             </div>
-            {!this.state.hasFile && !this.myClaimExists()
-              ? null
-              : <div>
-                  <div className="card__content">
-                    <FormRow
-                      ref="meta_title"
-                      label={__("Title")}
-                      type="text"
-                      name="title"
-                      value={this.state.meta_title}
-                      placeholder="Titular Title"
-                      onChange={event => {
-                        this.handleMetadataChange(event);
-                      }}
-                    />
-                  </div>
-                  <div className="card__content">
-                    <FormRow
-                      type="text"
-                      label={__("Thumbnail URL")}
-                      name="thumbnail"
-                      value={this.state.meta_thumbnail}
-                      placeholder="http://spee.ch/mylogo"
-                      onChange={event => {
-                        this.handleMetadataChange(event);
-                      }}
-                    />
-                  </div>
-                  <div className="card__content">
-                    <FormRow
-                      type="SimpleMDE"
-                      label={__("Description")}
-                      ref="meta_description"
-                      name="description"
-                      value={this.state.meta_description}
-                      placeholder={__("Description of your content")}
-                      onChange={text => {
-                        this.handleDescriptionChanged(text);
-                      }}
-                    />
-                  </div>
-                  <div className="card__content">
-                    <FormRow
-                      label={__("Language")}
-                      type="select"
-                      value={this.state.meta_language}
-                      name="language"
-                      onChange={event => {
-                        this.handleMetadataChange(event);
-                      }}
-                    >
-                      <option value="en">{__("English")}</option>
-                      <option value="zh">{__("Chinese")}</option>
-                      <option value="fr">{__("French")}</option>
-                      <option value="de">{__("German")}</option>
-                      <option value="jp">{__("Japanese")}</option>
-                      <option value="ru">{__("Russian")}</option>
-                      <option value="es">{__("Spanish")}</option>
-                    </FormRow>
-                  </div>
-                  <div className="card__content">
-                    <FormRow
-                      type="select"
-                      label={__("Maturity")}
-                      value={this.state.meta_nsfw}
-                      name="nsfw"
-                      onChange={event => {
-                        this.handleMetadataChange(event);
-                      }}
-                    >
-                      {/* <option value=""></option> */}
-                      <option value="0">{__("All Ages")}</option>
-                      <option value="1">{__("Adults Only")}</option>
-                    </FormRow>
-                  </div>
-                </div>}
+            {!this.state.hasFile && !this.myClaimExists() ? null : (
+              <div>
+                <div className="card__content">
+                  <FormRow
+                    ref="meta_title"
+                    label={__("Title")}
+                    type="text"
+                    name="title"
+                    value={this.state.meta_title}
+                    placeholder="Titular Title"
+                    onChange={event => {
+                      this.handleMetadataChange(event);
+                    }}
+                  />
+                </div>
+                <div className="card__content">
+                  <FormRow
+                    type="text"
+                    label={__("Thumbnail URL")}
+                    name="thumbnail"
+                    value={this.state.meta_thumbnail}
+                    placeholder="http://spee.ch/mylogo"
+                    onChange={event => {
+                      this.handleMetadataChange(event);
+                    }}
+                  />
+                </div>
+                <div className="card__content">
+                  <FormRow
+                    type="SimpleMDE"
+                    label={__("Description")}
+                    ref="meta_description"
+                    name="description"
+                    value={this.state.meta_description}
+                    placeholder={__("Description of your content")}
+                    onChange={text => {
+                      this.handleDescriptionChanged(text);
+                    }}
+                  />
+                </div>
+                <div className="card__content">
+                  <FormRow
+                    label={__("Language")}
+                    type="select"
+                    value={this.state.meta_language}
+                    name="language"
+                    onChange={event => {
+                      this.handleMetadataChange(event);
+                    }}
+                  >
+                    <option value="en">{__("English")}</option>
+                    <option value="zh">{__("Chinese")}</option>
+                    <option value="fr">{__("French")}</option>
+                    <option value="de">{__("German")}</option>
+                    <option value="jp">{__("Japanese")}</option>
+                    <option value="ru">{__("Russian")}</option>
+                    <option value="es">{__("Spanish")}</option>
+                  </FormRow>
+                </div>
+                <div className="card__content">
+                  <FormRow
+                    type="select"
+                    label={__("Maturity")}
+                    value={this.state.meta_nsfw}
+                    name="nsfw"
+                    onChange={event => {
+                      this.handleMetadataChange(event);
+                    }}
+                  >
+                    {/* <option value=""></option> */}
+                    <option value="0">{__("All Ages")}</option>
+                    <option value="1">{__("Adults Only")}</option>
+                  </FormRow>
+                </div>
+              </div>
+            )}
           </section>
 
           <section className="card">
@@ -661,17 +662,21 @@ class PublishForm extends React.PureComponent {
               <span className={!this.state.isFee ? "hidden" : ""}>
                 <FormFieldPrice
                   min="0"
-                  defaultValue={{ amount: 5.0, currency: "LBC" }}
+                  defaultValue={{
+                    amount: this._defaultPaidPrice,
+                    currency: "LBC",
+                  }}
                   onChange={val => this.handleFeeChange(val)}
                 />
               </span>
-              {this.state.isFee && this.state.feeCurrency.toUpperCase() != "LBC"
-                ? <div className="form-field__helper">
-                    {__(
-                      "All content fees are charged in LBC. For non-LBC payment methods, the number of credits charged will be adjusted based on the value of LBRY credits at the time of purchase."
-                    )}
-                  </div>
-                : null}
+              {this.state.isFee &&
+              this.state.feeCurrency.toUpperCase() != "LBC" ? (
+                <div className="form-field__helper">
+                  {__(
+                    "All content fees are charged in LBC. For non-LBC payment methods, the number of credits charged will be adjusted based on the value of LBRY credits at the time of purchase."
+                  )}
+                </div>
+              ) : null}
             </div>
           </section>
           <section className="card">
@@ -737,49 +742,45 @@ class PublishForm extends React.PureComponent {
                     "Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International"
                   )}
                 </option>
-                <option value="copyright">
-                  {__("Copyrighted...")}
-                </option>
-                <option value="other">
-                  {__("Other...")}
-                </option>
+                <option value="copyright">{__("Copyrighted...")}</option>
+                <option value="other">{__("Other...")}</option>
               </FormRow>
 
-              {this.state.licenseType == "copyright"
-                ? <FormRow
-                    label={__("Copyright notice")}
-                    type="text"
-                    name="copyright-notice"
-                    value={this.state.copyrightNotice}
-                    onChange={event => {
-                      this.handleCopyrightNoticeChange(event);
-                    }}
-                  />
-                : null}
+              {this.state.licenseType == "copyright" ? (
+                <FormRow
+                  label={__("Copyright notice")}
+                  type="text"
+                  name="copyright-notice"
+                  value={this.state.copyrightNotice}
+                  onChange={event => {
+                    this.handleCopyrightNoticeChange(event);
+                  }}
+                />
+              ) : null}
 
-              {this.state.licenseType == "other"
-                ? <FormRow
-                    label={__("License description")}
-                    type="text"
-                    name="other-license-description"
-                    value={this.state.otherLicenseDescription}
-                    onChange={event => {
-                      this.handleOtherLicenseDescriptionChange(event);
-                    }}
-                  />
-                : null}
+              {this.state.licenseType == "other" ? (
+                <FormRow
+                  label={__("License description")}
+                  type="text"
+                  name="other-license-description"
+                  value={this.state.otherLicenseDescription}
+                  onChange={event => {
+                    this.handleOtherLicenseDescriptionChange(event);
+                  }}
+                />
+              ) : null}
 
-              {this.state.licenseType == "other"
-                ? <FormRow
-                    label={__("License URL")}
-                    type="text"
-                    name="other-license-url"
-                    value={this.state.otherLicenseUrl}
-                    onChange={event => {
-                      this.handleOtherLicenseUrlChange(event);
-                    }}
-                  />
-                : null}
+              {this.state.licenseType == "other" ? (
+                <FormRow
+                  label={__("License URL")}
+                  type="text"
+                  name="other-license-url"
+                  value={this.state.otherLicenseUrl}
+                  onChange={event => {
+                    this.handleOtherLicenseUrlChange(event);
+                  }}
+                />
+              ) : null}
             </div>
           </section>
 
@@ -795,8 +796,7 @@ class PublishForm extends React.PureComponent {
               <div className="card__subtitle">
                 {__(
                   "This is the exact address where people find your content (ex. lbry://myvideo)."
-                )}
-                {" "}
+                )}{" "}
                 <Link
                   label={__("Learn more")}
                   href="https://lbry.io/faq/naming"
@@ -805,9 +805,11 @@ class PublishForm extends React.PureComponent {
             </div>
             <div className="card__content">
               <FormRow
-                prefix={`lbry://${this.state.channel === "anonymous"
-                  ? ""
-                  : `${this.state.channel}/`}`}
+                prefix={`lbry://${
+                  this.state.channel === "anonymous"
+                    ? ""
+                    : `${this.state.channel}/`
+                }`}
                 type="text"
                 ref="name"
                 placeholder="myname"
@@ -818,24 +820,26 @@ class PublishForm extends React.PureComponent {
                 helper={this.getNameBidHelpText()}
               />
             </div>
-            {this.state.rawName
-              ? <div className="card__content">
-                  <FormRow
-                    ref="bid"
-                    type="number"
-                    step="any"
-                    label={__("Deposit")}
-                    postfix="LBC"
-                    onChange={event => {
-                      this.handleBidChange(event);
-                    }}
-                    value={this.state.bid}
-                    placeholder={this.claim() ? this.topClaimValue() + 10 : 100}
-                    helper={lbcInputHelp}
-                    min="0"
-                  />
-                </div>
-              : ""}
+            {this.state.rawName ? (
+              <div className="card__content">
+                <FormRow
+                  ref="bid"
+                  type="number"
+                  step="any"
+                  label={__("Deposit")}
+                  postfix="LBC"
+                  onChange={event => {
+                    this.handleBidChange(event);
+                  }}
+                  value={this.state.bid}
+                  placeholder={this.claim() ? this.topClaimValue() + 10 : 100}
+                  helper={lbcInputHelp}
+                  min="0"
+                />
+              </div>
+            ) : (
+              ""
+            )}
           </section>
 
           <section className="card">
@@ -847,8 +851,7 @@ class PublishForm extends React.PureComponent {
                 ref="tosAgree"
                 label={
                   <span>
-                    {__("I agree to the")}
-                    {" "}
+                    {__("I agree to the")}{" "}
                     <Link
                       href="https://www.lbry.io/termsofservice"
                       label={__("LBRY terms of service")}
@@ -894,8 +897,8 @@ class PublishForm extends React.PureComponent {
           }}
         >
           <p>
-            {__("Your file has been published to LBRY at the address")}
-            {" "}<code>{this.state.uri}</code>!
+            {__("Your file has been published to LBRY at the address")}{" "}
+            <code>{this.state.uri}</code>!
           </p>
           <p>
             {__(

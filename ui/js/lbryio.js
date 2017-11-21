@@ -45,24 +45,25 @@ lbryio.call = function(resource, action, params = {}, method = "get") {
     return Promise.reject(new Error(__("Invalid method")));
   }
 
-  function checkStatus(response) {
+  function checkAndParse(response) {
     if (response.status >= 200 && response.status < 300) {
-      return response;
+      return response.json();
     } else {
-      var error = new Error(response.statusText);
-      error.response = response;
-      throw error;
+      return response.json().then(json => {
+        let error;
+        if (json.error) {
+          error = new Error(json.error);
+        } else {
+          error = new Error("Unknown API error signature");
+        }
+        error.response = response; //this is primarily a hack used in actions/user.js
+        return Promise.reject(error);
+      });
     }
   }
 
-  function parseJSON(response) {
-    return response.json();
-  }
-
   function makeRequest(url, options) {
-    return fetch(url, options).then(checkStatus).then(parseJSON).catch(e => {
-      throw e;
-    });
+    return fetch(url, options).then(checkAndParse);
   }
 
   return lbryio.getAuthToken().then(token => {

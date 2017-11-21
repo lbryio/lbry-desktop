@@ -1,7 +1,10 @@
 import React from "react";
 import { connect } from "react-redux";
-import { doSearch } from "actions/search";
-import { selectIsSearching, makeSelectSearchUris } from "selectors/search";
+import { doSearch } from "redux/actions/search";
+import {
+  selectIsSearching,
+  makeSelectSearchUris,
+} from "redux/selectors/search";
 import FileListSearch from "./view";
 
 const select = (state, props) => ({

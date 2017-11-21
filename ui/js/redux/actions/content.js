@@ -3,18 +3,18 @@ import * as settings from "constants/settings";
 import lbry from "lbry";
 import lbryio from "lbryio";
 import lbryuri from "lbryuri";
-import { makeSelectClientSetting } from "selectors/settings";
-import { selectBalance, selectTransactionItems } from "selectors/wallet";
+import { makeSelectClientSetting } from "redux/selectors/settings";
+import { selectBalance, selectTransactionItems } from "redux/selectors/wallet";
 import {
   makeSelectFileInfoForUri,
   selectDownloadingByOutpoint,
-} from "selectors/file_info";
-import { selectResolvingUris } from "selectors/content";
-import { makeSelectCostInfoForUri } from "selectors/cost_info";
-import { doAlertError, doOpenModal } from "actions/app";
-import { doClaimEligiblePurchaseRewards } from "actions/rewards";
-import { selectBadgeNumber } from "selectors/app";
-import { selectTotalDownloadProgress } from "selectors/file_info";
+} from "redux/selectors/file_info";
+import { selectResolvingUris } from "redux/selectors/content";
+import { makeSelectCostInfoForUri } from "redux/selectors/cost_info";
+import { doAlertError, doOpenModal } from "redux/actions/app";
+import { doClaimEligiblePurchaseRewards } from "redux/actions/rewards";
+import { selectBadgeNumber } from "redux/selectors/app";
+import { selectTotalDownloadProgress } from "redux/selectors/file_info";
 import setBadge from "util/setBadge";
 import setProgressBar from "util/setProgressBar";
 import batchActions from "util/batchActions";
@@ -51,10 +51,10 @@ export function doResolveUris(uris) {
           certificate: null,
         };
 
-        const { claim, certificate, claims_in_channel } = uriResolveInfo &&
-          !uriResolveInfo.error
-          ? uriResolveInfo
-          : fallbackResolveInfo;
+        const { claim, certificate, claims_in_channel } =
+          uriResolveInfo && !uriResolveInfo.error
+            ? uriResolveInfo
+            : fallbackResolveInfo;
         resolveInfo[uri] = { claim, certificate, claims_in_channel };
       }
 

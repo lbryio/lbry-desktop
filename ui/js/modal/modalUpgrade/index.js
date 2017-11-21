@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { doDownloadUpgrade, doSkipUpgrade } from "actions/app";
+import { doDownloadUpgrade, doSkipUpgrade } from "redux/actions/app";
 import ModalUpgrade from "./view";
 
 const select = state => ({});

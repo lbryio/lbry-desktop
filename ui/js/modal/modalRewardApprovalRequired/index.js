@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
-import { doCloseModal } from "actions/app";
-import { doAuthNavigate } from "actions/navigation";
+import { doCloseModal } from "redux/actions/app";
+import { doAuthNavigate } from "redux/actions/navigation";
 import ModalRewardApprovalRequired from "./view";
 
 const perform = dispatch => ({

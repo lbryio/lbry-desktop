@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
-import { doRemoveSnackBarSnack } from "actions/app";
-import { selectSnackBarSnacks } from "selectors/app";
+import { doRemoveSnackBarSnack } from "redux/actions/app";
+import { selectSnackBarSnacks } from "redux/selectors/app";
 import SnackBar from "./view";
 
 const perform = dispatch => ({

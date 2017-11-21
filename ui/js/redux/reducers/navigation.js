@@ -32,14 +32,14 @@ reducers[types.CHANGE_AFTER_AUTH_PATH] = function(state, action) {
 
 reducers[types.HISTORY_NAVIGATE] = (state, action) => {
   const { stack, index } = state;
-  const path = action.data.url;
+  const { url: path, index: newIndex, scrollY } = action.data;
 
   let newState = {
     currentPath: path,
   };
 
-  if (action.data.index >= 0) {
-    newState.index = action.data.index;
+  if (newIndex >= 0) {
+    newState.index = newIndex;
   } else if (!stack[index] || stack[index].path !== path) {
     // ^ Check for duplicated
     newState.stack = [...stack.slice(0, index + 1), { path, scrollY: 0 }];
@@ -47,7 +47,6 @@ reducers[types.HISTORY_NAVIGATE] = (state, action) => {
   }
 
   history.replaceState(null, null, "#" + path); //this allows currentPath() to retain the URL on reload
-
   return Object.assign({}, state, newState);
 };
 

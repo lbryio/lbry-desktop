@@ -2,8 +2,8 @@ import * as types from "constants/action_types";
 import * as modals from "constants/modal_types";
 import lbryio from "lbryio";
 import rewards from "rewards";
-import { selectUnclaimedRewardsByType } from "selectors/rewards";
-import { selectUserIsRewardApproved } from "selectors/user";
+import { selectUnclaimedRewardsByType } from "redux/selectors/rewards";
+import { selectUserIsRewardApproved } from "redux/selectors/user";
 
 export function doRewardList() {
   return function(dispatch, getState) {
@@ -93,12 +93,11 @@ export function doClaimEligiblePurchaseRewards() {
     if (rewardsByType[rewards.TYPE_FIRST_STREAM]) {
       dispatch(doClaimRewardType(rewards.TYPE_FIRST_STREAM));
     } else {
-      [
-        rewards.TYPE_MANY_DOWNLOADS,
-        rewards.TYPE_FEATURED_DOWNLOAD,
-      ].forEach(type => {
-        dispatch(doClaimRewardType(type));
-      });
+      [rewards.TYPE_MANY_DOWNLOADS, rewards.TYPE_FEATURED_DOWNLOAD].forEach(
+        type => {
+          dispatch(doClaimRewardType(type));
+        }
+      );
     }
   };
 }

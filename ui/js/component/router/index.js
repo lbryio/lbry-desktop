@@ -4,7 +4,7 @@ import Router from "./view.jsx";
 import {
   selectCurrentPage,
   selectCurrentParams,
-} from "selectors/navigation.js";
+} from "redux/selectors/navigation.js";
 
 const select = state => ({
   params: selectCurrentParams(state),

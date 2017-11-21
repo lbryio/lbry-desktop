@@ -3,7 +3,7 @@ import {
   selectPageTitle,
   selectCurrentPage,
   selectCurrentParams,
-} from "selectors/navigation";
+} from "redux/selectors/navigation";
 
 export const _selectState = state => state.search || {};
 

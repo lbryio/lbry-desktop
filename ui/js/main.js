@@ -5,9 +5,9 @@ import SnackBar from "component/snackBar";
 import { Provider } from "react-redux";
 import store from "store.js";
 import SplashScreen from "component/splash";
-import { doDaemonReady } from "actions/app";
-import { doNavigate } from "actions/navigation";
-import { doDownloadLanguages } from "actions/settings";
+import { doDaemonReady } from "redux/actions/app";
+import { doNavigate } from "redux/actions/navigation";
+import { doDownloadLanguages } from "redux/actions/settings";
 import * as types from "constants/action_types";
 
 const env = ENV;
@@ -71,7 +71,10 @@ var init = function() {
 
     ReactDOM.render(
       <Provider store={store}>
-        <div><App /><SnackBar /></div>
+        <div>
+          <App />
+          <SnackBar />
+        </div>
       </Provider>,
       canvas
     );

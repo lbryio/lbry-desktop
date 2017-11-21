@@ -9,26 +9,30 @@ jsonrpc.call = function(
   connectFailedCallback,
   timeout
 ) {
-  function checkStatus(response) {
+  function checkAndParse(response) {
     if (response.status >= 200 && response.status < 300) {
-      return response;
+      return response.json();
     } else {
-      var error = new Error(response.statusText);
-      error.response = response;
-      throw error;
+      return response.json().then(json => {
+        let error;
+        if (json.error) {
+          error = new Error(json.error);
+        } else {
+          error = new Error("Protocol error with unknown response signature");
+        }
+        return Promise.reject(error);
+      });
     }
-  }
-
-  function parseJSON(response) {
-    return response.json();
   }
 
   function makeRequest(url, options) {
     return new Promise((resolve, reject) => {
-      fetch(url, options).then(resolve).catch(reject);
+      fetch(url, options)
+        .then(resolve)
+        .catch(reject);
 
       if (timeout) {
-        const e = new Error(__("XMLHttpRequest connection timed out"));
+        const e = new Error(__("Protocol request timed out"));
         setTimeout(() => {
           return reject(e);
         }, timeout);
@@ -51,8 +55,7 @@ jsonrpc.call = function(
   sessionStorage.setItem("JSONRPCCounter", counter + 1);
 
   return fetch(url, options)
-    .then(checkStatus)
-    .then(parseJSON)
+    .then(checkAndParse)
     .then(response => {
       const error =
         response.error || (response.result && response.result.error);

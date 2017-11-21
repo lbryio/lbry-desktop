@@ -6,8 +6,8 @@ import {
   selectCurrentParams,
   selectHistoryStack,
   selectHistoryIndex,
-} from "selectors/navigation";
-import { doSearch } from "actions/search";
+} from "redux/selectors/navigation";
+import { doSearch } from "redux/actions/search";
 import { toQueryString } from "util/query_params";
 
 export function doNavigate(path, params = {}, options = {}) {
@@ -21,21 +21,11 @@ export function doNavigate(path, params = {}, options = {}) {
       url += "?" + toQueryString(params);
     }
 
-    const state = getState(),
-      currentPage = selectCurrentPage(state),
-      nextPage = computePageFromPath(path),
-      scrollY = options.scrollY;
-
-    if (currentPage != nextPage) {
-      //I wasn't seeing it scroll to the proper position without this -- possibly because the page isn't fully rendered? Not sure - Jeremy
-      setTimeout(() => {
-        window.scrollTo(0, scrollY ? scrollY : 0);
-      }, 100);
-    }
+    const scrollY = options.scrollY;
 
     dispatch({
       type: types.HISTORY_NAVIGATE,
-      data: { url, index: options.index },
+      data: { url, index: options.index, scrollY },
     });
   };
 }

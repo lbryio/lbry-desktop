@@ -1,8 +1,8 @@
 import React from "react";
 import rewards from "rewards";
 import { connect } from "react-redux";
-import { doCloseModal } from "actions/app";
-import { makeSelectRewardByType } from "selectors/rewards";
+import { doCloseModal } from "redux/actions/app";
+import { makeSelectRewardByType } from "redux/selectors/rewards";
 import ModalFirstReward from "./view";
 
 const select = (state, props) => {

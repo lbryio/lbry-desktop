@@ -5,7 +5,7 @@ import {
   selectIsFetchingClaimListMine,
   selectMyClaims,
   selectMyClaimsOutpoints,
-} from "selectors/claims";
+} from "redux/selectors/claims";
 
 export const _selectState = state => state.fileInfo || {};
 

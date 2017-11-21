@@ -226,7 +226,15 @@ function createWindow () {
 function createTray () {
   // Minimize to tray logic follows:
   // Set the tray icon
-  const iconPath = path.join(app.getAppPath(), "/dist/img/fav/32x32.png");
+  let iconPath;
+  if (process.platform === 'darwin') {
+    // Using @2x for mac retina screens so the icon isn't blurry
+    // file name needs to include "Template" at the end for dark menu bar
+    iconPath = path.join(app.getAppPath(), "/dist/img/fav/macTemplate@2x.png"); 
+  } else {
+    iconPath = path.join(app.getAppPath(), "/dist/img/fav/32x32.png");
+  }
+
   tray = new Tray(iconPath);
   tray.setToolTip("LBRY App");
   tray.setTitle("LBRY");

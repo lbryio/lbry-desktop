@@ -3,18 +3,18 @@ import { connect } from "react-redux";
 import {
   doFetchClaimsByChannel,
   doFetchClaimCountByChannel,
-} from "actions/content";
+} from "redux/actions/content";
 import {
   makeSelectClaimForUri,
   makeSelectClaimsInChannelForCurrentPage,
   makeSelectFetchingChannelClaims,
-} from "selectors/claims";
+} from "redux/selectors/claims";
 import {
   makeSelectCurrentParam,
   selectCurrentParams,
-} from "selectors/navigation";
-import { doNavigate } from "actions/navigation";
-import { makeSelectTotalPagesForChannel } from "selectors/content";
+} from "redux/selectors/navigation";
+import { doNavigate } from "redux/actions/navigation";
+import { makeSelectTotalPagesForChannel } from "redux/selectors/content";
 import ChannelPage from "./view";
 
 const select = (state, props) => ({

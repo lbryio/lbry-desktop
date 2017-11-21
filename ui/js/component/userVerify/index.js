@@ -1,13 +1,13 @@
 import React from "react";
 import { connect } from "react-redux";
-import { doNavigate } from "actions/navigation";
-import { doUserIdentityVerify } from "actions/user";
+import { doNavigate } from "redux/actions/navigation";
+import { doUserIdentityVerify } from "redux/actions/user";
 import rewards from "rewards";
-import { makeSelectRewardByType } from "selectors/rewards";
+import { makeSelectRewardByType } from "redux/selectors/rewards";
 import {
   selectIdentityVerifyIsPending,
   selectIdentityVerifyErrorMessage,
-} from "selectors/user";
+} from "redux/selectors/user";
 import UserVerify from "./view";
 
 const select = (state, props) => {

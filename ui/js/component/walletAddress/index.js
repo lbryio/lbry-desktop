@@ -1,10 +1,10 @@
 import React from "react";
 import { connect } from "react-redux";
-import { doCheckAddressIsMine, doGetNewAddress } from "actions/wallet";
+import { doCheckAddressIsMine, doGetNewAddress } from "redux/actions/wallet";
 import {
   selectReceiveAddress,
   selectGettingNewAddress,
-} from "selectors/wallet";
+} from "redux/selectors/wallet";
 import WalletAddress from "./view";
 
 const select = state => ({

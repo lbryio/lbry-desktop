@@ -111,7 +111,7 @@ export const selectPageTitle = createSelector(
         return params.query
           ? __("Search results for %s", params.query)
           : __("Search");
-      case "discover":  
+      case "discover":
       case false:
       case null:
       case "":
@@ -145,4 +145,10 @@ export const selectHistoryIndex = createSelector(
 export const selectHistoryStack = createSelector(
   _selectState,
   state => state.stack
+);
+
+// returns current page attributes (scrollY, path)
+export const selectActiveHistoryEntry = createSelector(
+  _selectState,
+  state => state.stack[state.index]
 );

@@ -1,9 +1,9 @@
 import * as types from "constants/action_types";
 import * as modals from "constants/modal_types";
 import lbryio from "lbryio";
-import { doOpenModal, doShowSnackBar } from "actions/app";
-import { doRewardList, doClaimRewardType } from "actions/rewards";
-import { selectEmailToVerify, selectUser } from "selectors/user";
+import { doOpenModal, doShowSnackBar } from "redux/actions/app";
+import { doRewardList, doClaimRewardType } from "redux/actions/rewards";
+import { selectEmailToVerify, selectUser } from "redux/selectors/user";
 import rewards from "rewards";
 
 export function doAuthenticate() {
@@ -69,7 +69,7 @@ export function doUserEmailNew(email) {
         "post"
       )
       .catch(error => {
-        if (error.xhr && error.xhr.status == 409) {
+        if (error.response && error.response.status == 409) {
           return lbryio.call(
             "user_email",
             "resend_token",

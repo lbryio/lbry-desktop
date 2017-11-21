@@ -4,9 +4,12 @@ import {
   makeSelectClaimRewardError,
   makeSelectRewardByType,
   makeSelectIsRewardClaimPending,
-} from "selectors/rewards";
-import { doNavigate } from "actions/navigation";
-import { doClaimRewardType, doClaimRewardClearError } from "actions/rewards";
+} from "redux/selectors/rewards";
+import { doNavigate } from "redux/actions/navigation";
+import {
+  doClaimRewardType,
+  doClaimRewardClearError,
+} from "redux/actions/rewards";
 import RewardLink from "./view";
 
 const makeSelect = () => {

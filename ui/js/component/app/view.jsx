@@ -4,28 +4,47 @@ import Header from "component/header";
 import Theme from "component/theme";
 import ModalRouter from "modal/modalRouter";
 import lbry from "lbry";
+import throttle from "util/throttle";
 
 class App extends React.PureComponent {
+  constructor() {
+    super();
+    this.mainContent = undefined;
+  }
+
   componentWillMount() {
     const { alertError } = this.props;
 
     document.addEventListener("unhandledError", event => {
       alertError(event.detail);
     });
+  }
 
-    this.scrollListener = () => this.props.recordScroll(window.scrollY);
+  componentDidMount() {
+    const { recordScroll } = this.props;
+    const mainContent = document.getElementById("main-content");
+    this.mainContent = mainContent;
 
-    window.addEventListener("scroll", this.scrollListener);
+    const scrollListener = () => recordScroll(this.mainContent.scrollTop);
 
-    this.setTitleFromProps(this.props);
+    this.mainContent.addEventListener("scroll", throttle(scrollListener, 750));
   }
 
   componentWillUnmount() {
-    window.removeEventListener("scroll", this.scrollListener);
+    this.mainContent.removeEventListener("scroll", this.scrollListener);
   }
 
   componentWillReceiveProps(props) {
     this.setTitleFromProps(props);
+  }
+
+  componentDidUpdate(prevProps) {
+    const { currentStackIndex: prevStackIndex } = prevProps;
+    const { currentStackIndex, currentPageAttributes } = this.props;
+
+    if (currentStackIndex !== prevStackIndex) {
+      this.mainContent.scrollTop = currentPageAttributes.scrollY || 0;
+    }
   }
 
   setTitleFromProps(props) {

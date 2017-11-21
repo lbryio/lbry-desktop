@@ -1,13 +1,14 @@
 import React from "react";
 import { connect } from "react-redux";
-import { makeSelectBlockDate } from "selectors/wallet";
-import { doFetchBlock } from "actions/wallet";
+import { makeSelectBlockDate } from "redux/selectors/wallet";
+import { doFetchBlock } from "redux/actions/wallet";
 import DateTime from "./view";
 
 const select = (state, props) => ({
-  date: !props.date && props.block
-    ? makeSelectBlockDate(props.block)(state)
-    : props.date,
+  date:
+    !props.date && props.block
+      ? makeSelectBlockDate(props.block)(state)
+      : props.date,
 });
 
 const perform = dispatch => ({

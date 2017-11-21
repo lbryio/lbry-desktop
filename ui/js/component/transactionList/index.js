@@ -1,9 +1,9 @@
 import React from "react";
 import { connect } from "react-redux";
-import { doNavigate } from "actions/navigation";
-import { doOpenModal } from "actions/app";
-import { selectClaimedRewardsByTransactionId } from "selectors/rewards";
-import { selectAllMyClaimsByOutpoint } from "selectors/claims";
+import { doNavigate } from "redux/actions/navigation";
+import { doOpenModal } from "redux/actions/app";
+import { selectClaimedRewardsByTransactionId } from "redux/selectors/rewards";
+import { selectAllMyClaimsByOutpoint } from "redux/selectors/claims";
 import TransactionList from "./view";
 
 const select = state => ({

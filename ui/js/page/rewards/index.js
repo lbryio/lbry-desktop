@@ -3,10 +3,10 @@ import { connect } from "react-redux";
 import {
   selectFetchingRewards,
   selectUnclaimedRewards,
-} from "selectors/rewards";
-import { selectUser } from "selectors/user";
-import { doAuthNavigate, doNavigate } from "actions/navigation";
-import { doRewardList } from "actions/rewards";
+} from "redux/selectors/rewards";
+import { selectUser } from "redux/selectors/user";
+import { doAuthNavigate, doNavigate } from "redux/actions/navigation";
+import { doRewardList } from "redux/actions/rewards";
 import RewardsPage from "./view";
 
 const select = (state, props) => {

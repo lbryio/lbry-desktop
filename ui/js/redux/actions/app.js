@@ -7,11 +7,11 @@ import {
   selectUpgradeFilename,
   selectIsUpgradeSkipped,
   selectRemoteVersion,
-} from "selectors/app";
-import { doFetchDaemonSettings } from "actions/settings";
-import { doBalanceSubscribe } from "actions/wallet";
-import { doAuthenticate } from "actions/user";
-import { doFetchFileInfosAndPublishedClaims } from "actions/file_info";
+} from "redux/selectors/app";
+import { doFetchDaemonSettings } from "redux/actions/settings";
+import { doBalanceSubscribe } from "redux/actions/wallet";
+import { doAuthenticate } from "redux/actions/user";
+import { doFetchFileInfosAndPublishedClaims } from "redux/actions/file_info";
 import * as modals from "constants/modal_types";
 import { doFetchRewardedContent } from "actions/content";
 import { selectCurrentModal } from "../selectors/app";
@@ -20,7 +20,7 @@ const { remote, ipcRenderer, shell } = require("electron");
 const path = require("path");
 const { download } = remote.require("electron-dl");
 const fs = remote.require("fs");
-const { lbrySettings: config } = require("../../../app/package.json");
+const { lbrySettings: config } = require("../../../../app/package.json");
 const CHECK_UPGRADE_INTERVAL = 10 * 60 * 1000;
 
 export function doOpenModal(modal, modalProps = {}) {
