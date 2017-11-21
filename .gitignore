@@ -23,6 +23,7 @@
 /.idea
 
 *.pyc
+*.iml
 .#*
 
 build/daemon.zip
