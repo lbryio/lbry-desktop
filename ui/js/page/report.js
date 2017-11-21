@@ -86,8 +86,7 @@ class ReportPage extends React.Component {
         <section className="card">
           <div className="card__content">
             <h3>{__("Developer?")}</h3>
-            {__("You can also")}
-            {" "}
+            {__("You can also")}{" "}
             <Link
               href="https://github.com/lbryio/lbry/issues"
               label={__("submit an issue on GitHub")}

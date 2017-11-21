@@ -12,18 +12,21 @@ import {
   doHistoryForward,
 } from "redux/actions/navigation";
 import Header from "./view";
+import { selectIsUpgradeAvailable } from "../../selectors/app";
+import { doDownloadUpgrade } from "../../actions/app";
 
 const select = state => ({
   isBackDisabled: selectIsBackDisabled(state),
   isForwardDisabled: selectIsForwardDisabled(state),
+  isUpgradeAvailable: selectIsUpgradeAvailable(state),
   balance: formatCredits(selectBalance(state) || 0, 1),
-  publish: __("Publish"),
 });
 
 const perform = dispatch => ({
   navigate: path => dispatch(doNavigate(path)),
   back: () => dispatch(doHistoryBack()),
   forward: () => dispatch(doHistoryForward()),
+  downloadUpgrade: () => dispatch(doDownloadUpgrade()),
 });
 
 export default connect(select, perform)(Header);

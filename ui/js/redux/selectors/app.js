@@ -20,13 +20,19 @@ export const selectUpdateUrl = createSelector(selectPlatform, platform => {
   }
 });
 
-export const selectVersion = createSelector(_selectState, state => {
-  return state.version;
-});
+export const selectRemoteVersion = createSelector(
+  _selectState,
+  state => state.remoteVersion
+);
+
+export const selectIsUpgradeAvailable = createSelector(
+  _selectState,
+  state => state.isUpgradeAvailable
+);
 
 export const selectUpgradeFilename = createSelector(
   selectPlatform,
-  selectVersion,
+  selectRemoteVersion,
   (platform, version) => {
     switch (platform) {
       case "darwin":
@@ -56,9 +62,9 @@ export const selectDownloadComplete = createSelector(
   state => state.upgradeDownloadCompleted
 );
 
-export const selectUpgradeSkipped = createSelector(
+export const selectIsUpgradeSkipped = createSelector(
   _selectState,
-  state => state.upgradeSkipped
+  state => state.isUpgradeSkipped
 );
 
 export const selectUpgradeDownloadPath = createSelector(

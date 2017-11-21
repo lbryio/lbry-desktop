@@ -5,18 +5,23 @@ import {
   selectUpgradeDownloadPath,
   selectUpgradeDownloadItem,
   selectUpgradeFilename,
+  selectIsUpgradeSkipped,
+  selectRemoteVersion,
 } from "redux/selectors/app";
 import { doFetchDaemonSettings } from "redux/actions/settings";
 import { doBalanceSubscribe } from "redux/actions/wallet";
 import { doAuthenticate } from "redux/actions/user";
 import { doFetchFileInfosAndPublishedClaims } from "redux/actions/file_info";
 import * as modals from "constants/modal_types";
+import { doFetchRewardedContent } from "actions/content";
+import { selectCurrentModal } from "../selectors/app";
 
 const { remote, ipcRenderer, shell } = require("electron");
 const path = require("path");
 const { download } = remote.require("electron-dl");
 const fs = remote.require("fs");
 const { lbrySettings: config } = require("../../../../app/package.json");
+const CHECK_UPGRADE_INTERVAL = 10 * 60 * 1000;
 
 export function doOpenModal(modal, modalProps = {}) {
   return {
@@ -63,33 +68,31 @@ export function doDownloadUpgrade() {
     const state = getState();
     // Make a new directory within temp directory so the filename is guaranteed to be available
     const dir = fs.mkdtempSync(
-      remote.app.getPath("temp") + require("path").sep
-    ),
+        remote.app.getPath("temp") + require("path").sep
+      ),
       upgradeFilename = selectUpgradeFilename(state);
 
     let options = {
       onProgress: p => dispatch(doUpdateDownloadProgress(Math.round(p * 100))),
       directory: dir,
     };
-    download(
-      remote.getCurrentWindow(),
-      selectUpdateUrl(state),
-      options
-    ).then(downloadItem => {
-      /**
+    download(remote.getCurrentWindow(), selectUpdateUrl(state), options).then(
+      downloadItem => {
+        /**
          * TODO: get the download path directly from the download object. It should just be
          * downloadItem.getSavePath(), but the copy on the main process is being garbage collected
          * too soon.
          */
 
-      dispatch({
-        type: types.UPGRADE_DOWNLOAD_COMPLETED,
-        data: {
-          downloadItem,
-          path: path.join(dir, upgradeFilename),
-        },
-      });
-    });
+        dispatch({
+          type: types.UPGRADE_DOWNLOAD_COMPLETED,
+          data: {
+            downloadItem,
+            path: path.join(dir, upgradeFilename),
+          },
+        });
+      }
+    );
 
     dispatch({
       type: types.UPGRADE_DOWNLOAD_STARTED,
@@ -129,15 +132,25 @@ export function doCancelUpgrade() {
 export function doCheckUpgradeAvailable() {
   return function(dispatch, getState) {
     const state = getState();
+    dispatch({
+      type: types.CHECK_UPGRADE_START,
+    });
 
-    lbry.getAppVersionInfo().then(({ remoteVersion, upgradeAvailable }) => {
-      if (upgradeAvailable) {
-        dispatch({
-          type: types.UPDATE_VERSION,
-          data: {
-            version: remoteVersion,
-          },
-        });
+    const success = ({ remoteVersion, upgradeAvailable }) => {
+      dispatch({
+        type: types.CHECK_UPGRADE_SUCCESS,
+        data: {
+          upgradeAvailable,
+          remoteVersion,
+        },
+      });
+
+      if (
+        upgradeAvailable &&
+        !selectCurrentModal(state) &&
+        (!selectIsUpgradeSkipped(state) ||
+          remoteVersion !== selectRemoteVersion(state))
+      ) {
         dispatch({
           type: types.OPEN_MODAL,
           data: {
@@ -145,6 +158,30 @@ export function doCheckUpgradeAvailable() {
           },
         });
       }
+    };
+
+    const fail = () => {
+      dispatch({
+        type: types.CHECK_UPGRADE_FAIL,
+      });
+    };
+
+    lbry.getAppVersionInfo().then(success, fail);
+  };
+}
+
+/*
+  Initiate a timer that will check for an app upgrade every 10 minutes.
+ */
+export function doCheckUpgradeSubscribe() {
+  return function(dispatch) {
+    const checkUpgradeTimer = setInterval(
+      () => dispatch(doCheckUpgradeAvailable()),
+      CHECK_UPGRADE_INTERVAL
+    );
+    dispatch({
+      type: types.CHECK_UPGRADE_SUBSCRIBE,
+      data: { checkUpgradeTimer },
     });
   };
 }
@@ -153,9 +190,10 @@ export function doCheckDaemonVersion() {
   return function(dispatch, getState) {
     lbry.version().then(({ lbrynet_version }) => {
       dispatch({
-        type: config.lbrynetDaemonVersion == lbrynet_version
-          ? types.DAEMON_VERSION_MATCH
-          : types.DAEMON_VERSION_MISMATCH,
+        type:
+          config.lbrynetDaemonVersion == lbrynet_version
+            ? types.DAEMON_VERSION_MATCH
+            : types.DAEMON_VERSION_MISMATCH,
       });
     });
   };
@@ -176,11 +214,18 @@ export function doAlertError(errorList) {
 
 export function doDaemonReady() {
   return function(dispatch, getState) {
+    const state = getState();
+
     dispatch(doAuthenticate());
     dispatch({ type: types.DAEMON_READY });
     dispatch(doFetchDaemonSettings());
     dispatch(doBalanceSubscribe());
     dispatch(doFetchFileInfosAndPublishedClaims());
+    dispatch(doFetchRewardedContent());
+    if (!selectIsUpgradeSkipped(state)) {
+      dispatch(doCheckUpgradeAvailable());
+    }
+    dispatch(doCheckUpgradeSubscribe());
   };
 }
 

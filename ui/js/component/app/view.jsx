@@ -13,23 +13,11 @@ class App extends React.PureComponent {
   }
 
   componentWillMount() {
-    const {
-      alertError,
-      checkUpgradeAvailable,
-      fetchRewardedContent,
-    } = this.props;
+    const { alertError } = this.props;
 
     document.addEventListener("unhandledError", event => {
       alertError(event.detail);
     });
-
-    if (!this.props.upgradeSkipped) {
-      checkUpgradeAvailable();
-    }
-
-    fetchRewardedContent();
-
-    this.setTitleFromProps(this.props);
   }
 
   componentDidMount() {

@@ -60,13 +60,17 @@ class UriIndicator extends React.PureComponent {
 
     const inner = (
       <span>
-        <span className="channel-name">{channelName}</span> {" "}
-        {!signatureIsValid
-          ? <Icon
-              icon={icon}
-              className={`channel-indicator__icon channel-indicator__icon--${modifier}`}
-            />
-          : ""}
+        <span className="channel-name">{channelName}</span>{" "}
+        {!signatureIsValid ? (
+          <Icon
+            icon={icon}
+            className={`channel-indicator__icon channel-indicator__icon--${
+              modifier
+            }`}
+          />
+        ) : (
+          ""
+        )}
       </span>
     );
 

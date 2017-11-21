@@ -71,7 +71,10 @@ var init = function() {
 
     ReactDOM.render(
       <Provider store={store}>
-        <div><App /><SnackBar /></div>
+        <div>
+          <App />
+          <SnackBar />
+        </div>
       </Provider>,
       canvas
     );

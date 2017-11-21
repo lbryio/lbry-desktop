@@ -51,10 +51,10 @@ export function doResolveUris(uris) {
           certificate: null,
         };
 
-        const { claim, certificate, claims_in_channel } = uriResolveInfo &&
-          !uriResolveInfo.error
-          ? uriResolveInfo
-          : fallbackResolveInfo;
+        const { claim, certificate, claims_in_channel } =
+          uriResolveInfo && !uriResolveInfo.error
+            ? uriResolveInfo
+            : fallbackResolveInfo;
         resolveInfo[uri] = { claim, certificate, claims_in_channel };
       }
 

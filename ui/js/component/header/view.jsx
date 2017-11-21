@@ -9,8 +9,9 @@ export const Header = props => {
     forward,
     isBackDisabled,
     isForwardDisabled,
+    isUpgradeAvailable,
     navigate,
-    publish,
+    downloadUpgrade,
   } = props;
   return (
     <header id="header">
@@ -58,7 +59,7 @@ export const Header = props => {
           onClick={() => navigate("/publish")}
           button="primary button--flat"
           icon="icon-upload"
-          label={publish}
+          label={__("Publish")}
         />
       </div>
       <div className="header__item">
@@ -77,6 +78,14 @@ export const Header = props => {
           title={__("Settings")}
         />
       </div>
+      {isUpgradeAvailable && (
+        <Link
+          onClick={() => downloadUpgrade()}
+          button="primary button--flat"
+          icon="icon-arrow-up"
+          label={__("Upgrade App")}
+        />
+      )}
     </header>
   );
 };

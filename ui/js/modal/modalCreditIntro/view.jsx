@@ -12,37 +12,41 @@ const ModalCreditIntro = props => {
       <section>
         <h3 className="modal__header">{__("Blockchain 101")}</h3>
         <p>
-          LBRY is controlled and powered by a blockchain asset called {" "}
-          <em><CurrencySymbol /></em>.{" "}
-          <CurrencySymbol />{" "}
+          LBRY is controlled and powered by a blockchain asset called{" "}
+          <em>
+            <CurrencySymbol />
+          </em>. <CurrencySymbol />{" "}
           {__(
             "is used to publish content, to have a say in the network rules, and to access paid content."
           )}
         </p>
-        {currentBalance <= 0
-          ? <div>
-              <p>
-                You currently have <CreditAmount amount={currentBalance} />, so
-                the actions you can take are limited.
-              </p>
-              <p>
-                However, there are a variety of ways to get credits, including
-                more than {" "}
-                {totalRewardValue
-                  ? <CreditAmount amount={totalRewardRounded} />
-                  : <span className="credit-amount">{__("?? credits")}</span>}
-                {" "}{" "}
-                {__(
-                  " in rewards available for being a proven human during the LBRY beta."
-                )}
-              </p>
-            </div>
-          : <div>
-              <p>
-                But you probably knew this, since you've already got{" "}
-                <CreditAmount amount={currentBalance} />.
-              </p>
-            </div>}
+        {currentBalance <= 0 ? (
+          <div>
+            <p>
+              You currently have <CreditAmount amount={currentBalance} />, so
+              the actions you can take are limited.
+            </p>
+            <p>
+              However, there are a variety of ways to get credits, including
+              more than{" "}
+              {totalRewardValue ? (
+                <CreditAmount amount={totalRewardRounded} />
+              ) : (
+                <span className="credit-amount">{__("?? credits")}</span>
+              )}{" "}
+              {__(
+                " in rewards available for being a proven human during the LBRY beta."
+              )}
+            </p>
+          </div>
+        ) : (
+          <div>
+            <p>
+              But you probably knew this, since you've already got{" "}
+              <CreditAmount amount={currentBalance} />.
+            </p>
+          </div>
+        )}
 
         <div className="modal__buttons">
           <Link

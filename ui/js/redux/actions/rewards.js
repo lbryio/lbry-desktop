@@ -93,12 +93,11 @@ export function doClaimEligiblePurchaseRewards() {
     if (rewardsByType[rewards.TYPE_FIRST_STREAM]) {
       dispatch(doClaimRewardType(rewards.TYPE_FIRST_STREAM));
     } else {
-      [
-        rewards.TYPE_MANY_DOWNLOADS,
-        rewards.TYPE_FEATURED_DOWNLOAD,
-      ].forEach(type => {
-        dispatch(doClaimRewardType(type));
-      });
+      [rewards.TYPE_MANY_DOWNLOADS, rewards.TYPE_FEATURED_DOWNLOAD].forEach(
+        type => {
+          dispatch(doClaimRewardType(type));
+        }
+      );
     }
   };
 }

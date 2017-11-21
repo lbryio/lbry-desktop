@@ -15,8 +15,8 @@ import AuthPage from "./view";
 const select = state => ({
   isPending:
     selectAuthenticationIsPending(state) ||
-      selectUserIsPending(state) ||
-      selectIdentityVerifyIsPending(state),
+    selectUserIsPending(state) ||
+    selectIdentityVerifyIsPending(state),
   email: selectEmailToVerify(state),
   pathAfterAuth: selectPathAfterAuth(state),
   user: selectUser(state),
