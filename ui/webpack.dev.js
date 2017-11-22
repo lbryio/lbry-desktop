@@ -3,6 +3,7 @@ const webpack = require("webpack")
 const WebpackNotifierPlugin = require("webpack-notifier")
 const merge = require('webpack-merge');
 const common = require('./webpack.common.js');
+const FlowBabelWebpackPlugin = require('./flowtype-plugin');
 
 
 const PATHS = {
@@ -23,6 +24,9 @@ module.exports = merge(common, {
     }),
     new webpack.LoaderOptionsPlugin({
       debug: true
+    }),
+    new FlowBabelWebpackPlugin({
+      warn: true
     })
   ]
 });

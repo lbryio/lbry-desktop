@@ -30,3 +30,5 @@ build/daemon.zip
 .vimrc
 
 package-lock.json
+
+.DS_Store
