@@ -1,3 +1,4 @@
+module.exports = { safeQuit };
 // Module imports
 const {app, BrowserWindow, ipcMain, Menu, Tray, globalShortcut} = require('electron');
 const path = require('path');
@@ -554,5 +555,3 @@ ipcMain.on('get-auth-token', (event) => {
 ipcMain.on('set-auth-token', (event, token) => {
   keytar.setPassword("LBRY", "auth_token", token ? token.toString().trim() : null);
 });
-
-module.exports = { safeQuit };
