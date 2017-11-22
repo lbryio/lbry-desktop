@@ -21,7 +21,13 @@ export const selectTransactionItems = createSelector(
       const tx = byId[txid];
 
       //ignore dust/fees
-      if (Math.abs(tx.amount) === Math.abs(tx.fee)) {
+      // it is fee only txn if all infos are also empty
+      if (
+        Math.abs(tx.value) === Math.abs(tx.fee) &&
+        tx.claim_info.length == 0 &&
+        tx.support_info.length == 0 &&
+        tx.update_info.length == 0
+      ) {
         return;
       }
 
@@ -60,7 +66,7 @@ export const selectTransactionItems = createSelector(
           //value on transaction, amount on outpoint
           //amount is always positive, but should match sign of value
           const amount = parseFloat(
-            item.amount ? (item.value < 0 ? -1 : 1) * item.amount : item.value
+            item.balance_delta ? item.balance_delta : item.value
           );
 
           return {
