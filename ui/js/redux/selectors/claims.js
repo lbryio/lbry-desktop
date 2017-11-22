@@ -194,8 +194,6 @@ export const selectMyClaimSdHashesByOutpoint = createSelector(
   myClaims => {
     const sdHashByOutpoint = {};
 
-    console.log(myClaims);
-
     myClaims.forEach(claim => {
       sdHashByOutpoint[`${claim.txid}:${claim.nout}`] =
         claim.value.stream.source.source;

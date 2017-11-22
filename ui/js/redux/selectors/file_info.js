@@ -143,11 +143,11 @@ export const selectDownloadingFileInfos = createSelector(
   selectDownloadingBySdHash,
   selectFileInfosBySdHash,
   (downloadingBySdHash, fileInfosBySdHash) => {
-    const sd_hashes = Object.keys(downloadingBySdHash);
+    const sdHashes = Object.keys(downloadingBySdHash);
     const fileInfos = [];
 
-    sd_hashes.forEach(sd_hash => {
-      const fileInfo = fileInfosBySdHash[sd_hash];
+    sdHashes.forEach(sdHash => {
+      const fileInfo = fileInfosBySdHash[sdHash];
 
       if (fileInfo) fileInfos.push(fileInfo);
     });

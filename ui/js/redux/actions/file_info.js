@@ -1,6 +1,6 @@
 import * as types from "constants/action_types";
 import lbry from "lbry";
-import { doFetchClaimListMine, doAbandonClaim, doResolveUri } from "redux/actions/content";
+import { doFetchClaimListMine, doAbandonClaim } from "redux/actions/content";
 import {
   selectClaimsByUri,
   selectIsFetchingClaimListMine,
