@@ -194,6 +194,18 @@ $font-size-subtext-multiple: 0.82;
   line-height: calc( var(--font-line-height) * 1 / 0.85);
 }
 
+.card--file-subtitle {
+  display: flex;
+}
+
+// this is too specific
+// it should be a helper class
+// ex. ".m-padding-left"
+// will come back to this during the redesign - sean
+.card__publish-date {
+  padding-left: 20px;
+}
+
 .card-series-submit
 {
   margin-left: auto;

@@ -59,9 +59,8 @@ class FileCard extends React.PureComponent {
 
     const uri = lbryuri.normalize(this.props.uri);
     const title = metadata && metadata.title ? metadata.title : uri;
-    const thumbnail = metadata && metadata.thumbnail
-      ? metadata.thumbnail
-      : null;
+    const thumbnail =
+      metadata && metadata.thumbnail ? metadata.thumbnail : null;
     const obscureNsfw = this.props.obscureNsfw && metadata && metadata.nsfw;
     const isRewardContent =
       claim && rewardedContentClaimIds.includes(claim.claim_id);
@@ -96,13 +95,11 @@ class FileCard extends React.PureComponent {
               </div>
               <div className="card__subtitle">
                 <span className="card__indicators">
-                  <FilePrice uri={uri} />
-                  {" "}
-                  {isRewardContent && <Icon icon={icons.FEATURED} />}
-                  {" "}
+                  <FilePrice uri={uri} />{" "}
+                  {isRewardContent && <Icon icon={icons.FEATURED} />}{" "}
                   {fileInfo && <Icon icon={icons.LOCAL} />}
                 </span>
-                <UriIndicator uri={uri} />
+                <UriIndicator uri={uri} smallCard />
               </div>
             </div>
             {/* Test for nizuka's design: should we remove description?
