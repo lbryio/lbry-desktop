@@ -21,7 +21,7 @@ class UriIndicator extends React.PureComponent {
   }
 
   render() {
-    const { claim, link, uri, isResolvingUri } = this.props;
+    const { claim, link, uri, isResolvingUri, smallCard } = this.props;
 
     if (isResolvingUri && !claim) {
       return <span className="empty">Validating...</span>;
@@ -60,7 +60,9 @@ class UriIndicator extends React.PureComponent {
 
     const inner = (
       <span>
-        <span className="channel-name">{channelName}</span>{" "}
+        <span className={`channel-name ${smallCard && "channel-name--small"}`}>
+          {channelName}
+        </span>{" "}
         {!signatureIsValid ? (
           <Icon
             icon={icon}

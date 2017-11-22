@@ -65,38 +65,45 @@ class FilePage extends React.PureComponent {
     return (
       <section className={"card " + (obscureNsfw ? "card--obscured " : "")}>
         <div className="show-page-media">
-          {isPlayable
-            ? <Video className="video-embedded" uri={uri} />
-            : metadata && metadata.thumbnail
-              ? <Thumbnail src={metadata.thumbnail} />
-              : <Thumbnail />}
+          {isPlayable ? (
+            <Video className="video-embedded" uri={uri} />
+          ) : metadata && metadata.thumbnail ? (
+            <Thumbnail src={metadata.thumbnail} />
+          ) : (
+            <Thumbnail />
+          )}
         </div>
         <div className="card__inner">
-          {(!tab || tab === "details") &&
+          {(!tab || tab === "details") && (
             <div>
-              {" "}          {" "}
+              {" "}
               <div className="card__title-identity">
-                {!fileInfo || fileInfo.written_bytes <= 0
-                  ? <span style={{ float: "right" }}>
-                      <FilePrice uri={lbryuri.normalize(uri)} />
-                      {isRewardContent &&
-                        <span>{" "}<Icon icon={icons.FEATURED} /></span>}
-                    </span>
-                  : null}
+                {!fileInfo || fileInfo.written_bytes <= 0 ? (
+                  <span style={{ float: "right" }}>
+                    <FilePrice uri={lbryuri.normalize(uri)} />
+                    {isRewardContent && (
+                      <span>
+                        {" "}
+                        <Icon icon={icons.FEATURED} />
+                      </span>
+                    )}
+                  </span>
+                ) : null}
                 <h1>{title}</h1>
-                <div className="card__subtitle">
+                <div className="card__subtitle card--file-subtitle">
                   <UriIndicator uri={uri} link={true} />
-                  <span className="divider__vertical">&bull;</span>
-                  <span>
+                  <span className="card__publish-date">
                     Published on{" "}
                     <DateTime block={height} show={DateTime.SHOW_DATE} />
                   </span>
                 </div>
               </div>
               <FileDetails uri={uri} />
-            </div>}
-          {tab === "tip" &&
-            <WalletSendTip claim_id={claim.claim_id} uri={uri} />}
+            </div>
+          )}
+          {tab === "tip" && (
+            <WalletSendTip claim_id={claim.claim_id} uri={uri} />
+          )}
         </div>
       </section>
     );
