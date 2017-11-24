@@ -41,7 +41,8 @@ class ModalRemoveFile extends React.PureComponent {
         type="confirm"
         confirmButtonLabel={__("Remove")}
         onConfirmed={() =>
-          deleteFile(outpoint, deleteChecked, abandonClaimChecked)}
+          deleteFile(outpoint, deleteChecked, abandonClaimChecked)
+        }
         onAborted={closeModal}
       >
         <p>
@@ -57,7 +58,7 @@ class ModalRemoveFile extends React.PureComponent {
             label={__("Delete this file from my computer")}
           />
         </section>
-        {claimIsMine &&
+        {claimIsMine && (
           <section>
             <FormField
               type="checkbox"
@@ -65,7 +66,8 @@ class ModalRemoveFile extends React.PureComponent {
               onClick={this.handleAbandonClaimCheckboxClicked.bind(this)}
               label={__("Abandon the claim for this URI")}
             />
-          </section>}
+          </section>
+        )}
       </Modal>
     );
   }

@@ -18,16 +18,17 @@ const RewardTile = props => {
         </div>
         <div className="card__content">{reward.reward_description}</div>
         <div className="card__actions  ">
-          {reward.reward_type == rewards.TYPE_REFERRAL &&
-            <Link
-              button="alt"
-              navigate="/invite"
-              label={__("Go To Invites")}
-            />}
+          {reward.reward_type == rewards.TYPE_REFERRAL && (
+            <Link button="alt" navigate="/invite" label={__("Go To Invites")} />
+          )}
           {reward.reward_type !== rewards.TYPE_REFERRAL &&
-            (claimed
-              ? <span><Icon icon="icon-check" /> {__("Reward claimed.")}</span>
-              : <RewardLink button="alt" reward_type={reward.reward_type} />)}
+            (claimed ? (
+              <span>
+                <Icon icon="icon-check" /> {__("Reward claimed.")}
+              </span>
+            ) : (
+              <RewardLink button="alt" reward_type={reward.reward_type} />
+            ))}
         </div>
       </div>
     </section>

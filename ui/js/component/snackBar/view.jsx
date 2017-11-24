@@ -31,12 +31,13 @@ class SnackBar extends React.PureComponent {
       <div className="snack-bar">
         {message}
         {linkText &&
-          linkTarget &&
-          <Link
-            navigate={linkTarget}
-            className="snack-bar__action"
-            label={linkText}
-          />}
+          linkTarget && (
+            <Link
+              navigate={linkTarget}
+              className="snack-bar__action"
+              label={linkText}
+            />
+          )}
       </div>
     );
   }

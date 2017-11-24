@@ -98,7 +98,7 @@ class FileList extends React.PureComponent {
       <section className="file-list__header">
         {fetching && <BusyMessage />}
         <span className="sort-section">
-          {__("Sort by")} {" "}
+          {__("Sort by")}{" "}
           <FormField type="select" onChange={this.handleSortChanged.bind(this)}>
             <option value="date">{__("Date")}</option>
             <option value="title">{__("Title")}</option>

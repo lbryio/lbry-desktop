@@ -98,25 +98,28 @@ class Video extends React.PureComponent {
         onMouseLeave={this.handleMouseOut.bind(this)}
       >
         {isPlaying &&
-          (!isReadyToPlay
-            ? <LoadingScreen status={loadStatusMessage} />
-            : <VideoPlayer
-                filename={fileInfo.file_name}
-                poster={poster}
-                downloadPath={fileInfo.download_path}
-                mediaType={mediaType}
-                contentType={contentType}
-                downloadCompleted={fileInfo.completed}
-                changeVolume={changeVolume}
-                volume={volume}
-              />)}
-        {!isPlaying &&
+          (!isReadyToPlay ? (
+            <LoadingScreen status={loadStatusMessage} />
+          ) : (
+            <VideoPlayer
+              filename={fileInfo.file_name}
+              poster={poster}
+              downloadPath={fileInfo.download_path}
+              mediaType={mediaType}
+              contentType={contentType}
+              downloadCompleted={fileInfo.completed}
+              changeVolume={changeVolume}
+              volume={volume}
+            />
+          ))}
+        {!isPlaying && (
           <div
             className="video__cover"
             style={{ backgroundImage: 'url("' + metadata.thumbnail + '")' }}
           >
             <VideoPlayButton {...this.props} mediaType={mediaType} />
-          </div>}
+          </div>
+        )}
         {this.state.showNsfwHelp && <NsfwOverlay />}
       </div>
     );

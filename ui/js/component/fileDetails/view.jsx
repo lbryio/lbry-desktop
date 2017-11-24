@@ -49,15 +49,18 @@ class FileDetails extends React.PureComponent {
           <table className="table-standard table-stretch">
             <tbody>
               <tr>
-                <td>{__("Content-Type")}</td><td>{mediaType}</td>
+                <td>{__("Content-Type")}</td>
+                <td>{mediaType}</td>
               </tr>
               <tr>
-                <td>{__("Language")}</td><td>{language}</td>
+                <td>{__("Language")}</td>
+                <td>{language}</td>
               </tr>
               <tr>
-                <td>{__("License")}</td><td>{license}</td>
+                <td>{__("License")}</td>
+                <td>{license}</td>
               </tr>
-              {downloadPath &&
+              {downloadPath && (
                 <tr>
                   <td>{__("Downloaded to")}</td>
                   <td>
@@ -65,7 +68,8 @@ class FileDetails extends React.PureComponent {
                       {downloadPath}
                     </Link>
                   </td>
-                </tr>}
+                </tr>
+              )}
             </tbody>
           </table>
         </div>

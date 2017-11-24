@@ -13,22 +13,24 @@ class FileActions extends React.PureComponent {
     return (
       <section className="card__actions">
         <FileDownloadLink uri={uri} />
-        {showDelete &&
+        {showDelete && (
           <Link
             button="text"
             icon="icon-trash"
             label={__("Remove")}
             className="no-underline"
             onClick={() => openModal(modals.CONFIRM_FILE_REMOVE, { uri })}
-          />}
-        {!claimIsMine &&
+          />
+        )}
+        {!claimIsMine && (
           <Link
             button="text"
             icon="icon-flag"
             href={`https://lbry.io/dmca?claim_id=${claimId}`}
             className="no-underline"
             label={__("report")}
-          />}
+          />
+        )}
         <Link
           button="primary"
           icon="icon-gift"
@@ -37,7 +39,7 @@ class FileActions extends React.PureComponent {
           className="card__action--right"
           navigateParams={{ uri, tab: "tip" }}
         />
-        {claimIsMine &&
+        {claimIsMine && (
           <Link
             button="alt"
             icon="icon-edit"
@@ -45,7 +47,8 @@ class FileActions extends React.PureComponent {
             navigate="/publish"
             className="card__action--right"
             navigateParams={{ id: claimId }}
-          />}
+          />
+        )}
       </section>
     );
   }

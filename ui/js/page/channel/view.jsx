@@ -44,8 +44,9 @@ class ChannelPage extends React.PureComponent {
     if (fetching) {
       contentList = <BusyMessage message={__("Fetching content")} />;
     } else {
-      contentList = claimsInChannel && claimsInChannel.length
-        ? claimsInChannel.map(claim =>
+      contentList =
+        claimsInChannel && claimsInChannel.length ? (
+          claimsInChannel.map(claim => (
             <FileTile
               key={claim.claim_id}
               uri={lbryuri.build({
@@ -54,15 +55,19 @@ class ChannelPage extends React.PureComponent {
               })}
               showLocal={true}
             />
-          )
-        : <span className="empty">{__("No content found.")}</span>;
+          ))
+        ) : (
+          <span className="empty">{__("No content found.")}</span>
+        );
     }
 
     return (
       <div>
         <section className="card">
           <div className="card__inner">
-            <div className="card__title-identity"><h1>{uri}</h1></div>
+            <div className="card__title-identity">
+              <h1>{uri}</h1>
+            </div>
           </div>
           <div className="card__content">
             <p className="empty">
@@ -76,22 +81,23 @@ class ChannelPage extends React.PureComponent {
         {contentList}
         <div />
         {(!fetching || (claimsInChannel && claimsInChannel.length)) &&
-          totalPages > 1 &&
-          <ReactPaginate
-            pageCount={totalPages}
-            pageRangeDisplayed={2}
-            previousLabel="‹"
-            nextLabel="›"
-            activeClassName="pagination__item--selected"
-            pageClassName="pagination__item"
-            previousClassName="pagination__item pagination__item--previous"
-            nextClassName="pagination__item pagination__item--next"
-            breakClassName="pagination__item pagination__item--break"
-            marginPagesDisplayed={2}
-            onPageChange={e => this.changePage(e.selected + 1)}
-            initialPage={parseInt(page - 1)}
-            containerClassName="pagination"
-          />}
+          totalPages > 1 && (
+            <ReactPaginate
+              pageCount={totalPages}
+              pageRangeDisplayed={2}
+              previousLabel="‹"
+              nextLabel="›"
+              activeClassName="pagination__item--selected"
+              pageClassName="pagination__item"
+              previousClassName="pagination__item pagination__item--previous"
+              nextClassName="pagination__item pagination__item--next"
+              breakClassName="pagination__item pagination__item--break"
+              marginPagesDisplayed={2}
+              onPageChange={e => this.changePage(e.selected + 1)}
+              initialPage={parseInt(page - 1)}
+              containerClassName="pagination"
+            />
+          )}
       </div>
     );
   }

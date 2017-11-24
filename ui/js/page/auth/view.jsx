@@ -60,29 +60,29 @@ export class AuthPage extends React.PureComponent {
     const { email, user, isPending, navigate } = this.props;
     const [innerContent, useTemplate] = this.renderMain();
 
-    return useTemplate
-      ? <main>
-          <section className="card card--form">
-            <div className="card__title-primary">
-              <h1>{this.getTitle()}</h1>
+    return useTemplate ? (
+      <main>
+        <section className="card card--form">
+          <div className="card__title-primary">
+            <h1>{this.getTitle()}</h1>
+          </div>
+          <div className="card__content">{innerContent}</div>
+          <div className="card__content">
+            <div className="help">
+              {__(
+                "This information is disclosed only to LBRY, Inc. and not to the LBRY network. It is only required to earn LBRY rewards."
+              ) + " "}
+              <Link
+                onClick={() => navigate("/discover")}
+                label={__("Return home")}
+              />.
             </div>
-            <div className="card__content">
-              {innerContent}
-            </div>
-            <div className="card__content">
-              <div className="help">
-                {__(
-                  "This information is disclosed only to LBRY, Inc. and not to the LBRY network. It is only required to earn LBRY rewards."
-                ) + " "}
-                <Link
-                  onClick={() => navigate("/discover")}
-                  label={__("Return home")}
-                />.
-              </div>
-            </div>
-          </section>
-        </main>
-      : innerContent;
+          </div>
+        </section>
+      </main>
+    ) : (
+      innerContent
+    );
   }
 }
 

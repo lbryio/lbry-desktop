@@ -18,15 +18,17 @@ class TransactionListRecent extends React.PureComponent {
           <h3>{__("Recent Transactions")}</h3>
         </div>
         <div className="card__content">
-          {fetchingTransactions &&
-            <BusyMessage message={__("Loading transactions")} />}
-          {!fetchingTransactions &&
+          {fetchingTransactions && (
+            <BusyMessage message={__("Loading transactions")} />
+          )}
+          {!fetchingTransactions && (
             <TransactionList
               transactions={transactions}
               emptyMessage={__("You have no recent transactions.")}
-            />}
+            />
+          )}
         </div>
-        {hasTransactions &&
+        {hasTransactions && (
           <div className="card__actions card__actions--bottom">
             <Link
               navigate="/history"
@@ -35,7 +37,8 @@ class TransactionListRecent extends React.PureComponent {
               className="no-underline"
               button="text"
             />
-          </div>}
+          </div>
+        )}
       </section>
     );
   }

@@ -50,7 +50,9 @@ export class BusyMessage extends React.PureComponent {
 
   render() {
     return (
-      <span>{this.props.message} <span className="busy-indicator" /></span>
+      <span>
+        {this.props.message} <span className="busy-indicator" />
+      </span>
     );
   }
 }
@@ -92,9 +94,10 @@ export class CreditAmount extends React.PureComponent {
     if (showFullPrice) {
       formattedAmount = fullPrice;
     } else {
-      formattedAmount = amount > 0 && amount < minimumRenderableAmount
-        ? "<" + minimumRenderableAmount
-        : formatCredits(amount, precision);
+      formattedAmount =
+        amount > 0 && amount < minimumRenderableAmount
+          ? "<" + minimumRenderableAmount
+          : formatCredits(amount, precision);
     }
 
     let amountText;
@@ -119,17 +122,15 @@ export class CreditAmount extends React.PureComponent {
         className={`credit-amount credit-amount--${this.props.look}`}
         title={fullPrice}
       >
-        <span>
-          {amountText}
-        </span>
-        {this.props.isEstimate
-          ? <span
-              className="credit-amount__estimate"
-              title={__("This is an estimate and does not include data fees")}
-            >
-              *
-            </span>
-          : null}
+        <span>{amountText}</span>
+        {this.props.isEstimate ? (
+          <span
+            className="credit-amount__estimate"
+            title={__("This is an estimate and does not include data fees")}
+          >
+            *
+          </span>
+        ) : null}
       </span>
     );
   }

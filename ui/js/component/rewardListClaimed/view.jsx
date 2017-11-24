@@ -10,7 +10,9 @@ const RewardListClaimed = props => {
 
   return (
     <section className="card">
-      <div className="card__title-identity"><h3>Claimed Rewards</h3></div>
+      <div className="card__title-identity">
+        <h3>Claimed Rewards</h3>
+      </div>
       <div className="card__content">
         <table className="table-standard table-stretch">
           <thead>
@@ -27,7 +29,9 @@ const RewardListClaimed = props => {
                 <tr key={reward.id}>
                   <td>{reward.reward_title}</td>
                   <td>{reward.reward_amount}</td>
-                  <td><LinkTransaction id={reward.transaction_id} /></td>
+                  <td>
+                    <LinkTransaction id={reward.transaction_id} />
+                  </td>
                   <td>
                     {reward.created_at.replace("Z", " ").replace("T", " ")}
                   </td>

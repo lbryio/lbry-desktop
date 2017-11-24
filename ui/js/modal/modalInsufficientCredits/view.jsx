@@ -17,7 +17,9 @@ class ModalInsufficientCredits extends React.PureComponent {
         onConfirmed={addFunds}
       >
         <h3 className="modal__header">{__("More Credits Required")}</h3>
-        <p>You'll need more <CurrencySymbol /> to do this.</p>
+        <p>
+          You'll need more <CurrencySymbol /> to do this.
+        </p>
       </Modal>
     );
   }

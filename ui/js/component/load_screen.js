@@ -31,11 +31,14 @@ class LoadScreen extends React.PureComponent {
         <img src={imgSrc} alt="LBRY" />
         <div className="load-screen__message">
           <h3>
-            {!this.props.isWarning
-              ? <BusyMessage message={this.props.message} />
-              : <span>
-                  <Icon icon="icon-warning" />{" " + this.props.message}
-                </span>}
+            {!this.props.isWarning ? (
+              <BusyMessage message={this.props.message} />
+            ) : (
+              <span>
+                <Icon icon="icon-warning" />
+                {" " + this.props.message}
+              </span>
+            )}
           </h3>
           <span
             className={

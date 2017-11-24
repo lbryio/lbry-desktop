@@ -67,11 +67,12 @@ export class FormRow extends React.PureComponent {
   getStateFromProps(props) {
     return {
       isError: !!props.errorMessage,
-      errorMessage: typeof props.errorMessage === "string"
-        ? props.errorMessage
-        : props.errorMessage instanceof Error
-          ? props.errorMessage.toString()
-          : "",
+      errorMessage:
+        typeof props.errorMessage === "string"
+          ? props.errorMessage
+          : props.errorMessage instanceof Error
+            ? props.errorMessage.toString()
+            : "",
     };
   }
 
@@ -135,24 +136,26 @@ export class FormRow extends React.PureComponent {
       <div
         className={"form-row" + (this.state.isFocus ? " form-row--focus" : "")}
       >
-        {this.props.label && !renderLabelInFormField
-          ? <div
+        {this.props.label && !renderLabelInFormField ? (
+          <div
+            className={
+              "form-row__label-row " +
+              (this.props.labelPrefix ? "form-row__label-row--prefix" : "")
+            }
+          >
+            <label
+              htmlFor={elementId}
               className={
-                "form-row__label-row " +
-                (this.props.labelPrefix ? "form-row__label-row--prefix" : "")
+                "form-field__label " +
+                (this.state.isError ? "form-field__label--error" : " ")
               }
             >
-              <label
-                htmlFor={elementId}
-                className={
-                  "form-field__label " +
-                  (this.state.isError ? "form-field__label--error" : " ")
-                }
-              >
-                {this.props.label}
-              </label>
-            </div>
-          : ""}
+              {this.props.label}
+            </label>
+          </div>
+        ) : (
+          ""
+        )}
         <FormField
           ref={ref => {
             this._field = ref ? ref.getWrappedInstance() : null;
@@ -162,12 +165,16 @@ export class FormRow extends React.PureComponent {
           onBlur={this.onBlur.bind(this)}
           {...fieldProps}
         />
-        {!this.state.isError && this.props.helper
-          ? <div className="form-field__helper">{this.props.helper}</div>
-          : ""}
-        {this.state.isError
-          ? <div className="form-field__error">{this.state.errorMessage}</div>
-          : ""}
+        {!this.state.isError && this.props.helper ? (
+          <div className="form-field__helper">{this.props.helper}</div>
+        ) : (
+          ""
+        )}
+        {this.state.isError ? (
+          <div className="form-field__error">{this.state.errorMessage}</div>
+        ) : (
+          ""
+        )}
       </div>
     );
   }

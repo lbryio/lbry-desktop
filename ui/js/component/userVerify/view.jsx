@@ -50,8 +50,9 @@ class UserVerify extends React.PureComponent {
               " "}
           </div>
           <div className="card__actions">
-            {errorMessage &&
-              <p className="form-field__error">{errorMessage}</p>}
+            {errorMessage && (
+              <p className="form-field__error">{errorMessage}</p>
+            )}
             <CardVerify
               label={__("Perform Card Verification")}
               disabled={isPending}
@@ -64,7 +65,6 @@ class UserVerify extends React.PureComponent {
               {__(
                 "A $1 authorization may temporarily appear with your provider."
               )}{" "}
-              {" "}
               <Link
                 href="https://lbry.io/faq/identity-requirements"
                 label={__("Read more about why we do this.")}
@@ -94,8 +94,8 @@ class UserVerify extends React.PureComponent {
           <div className="card__content">
             <div className="meta">
               This will not automatically refresh after approval. Once you have
-              synced your account, just navigate away or click
-              {" "} <Link navigate="/rewards" label="here" />.
+              synced your account, just navigate away or click{" "}
+              <Link navigate="/rewards" label="here" />.
             </div>
           </div>
         </section>
@@ -129,13 +129,11 @@ class UserVerify extends React.PureComponent {
             <h5>{__("Or, Skip It Entirely")}</h5>
           </div>
           <div className="card__content">
-
             <p className="meta">
               {__(
                 "You can continue without this step, but you will not be eligible to earn rewards."
               )}
             </p>
-
           </div>
           <div className="card__actions">
             <Link

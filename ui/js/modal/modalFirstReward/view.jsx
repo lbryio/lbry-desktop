@@ -17,8 +17,8 @@ class ModalFirstReward extends React.PureComponent {
         <section>
           <h3 className="modal__header">{__("Your First Reward")}</h3>
           <p>
-            {__("You just earned your first reward of")}
-            {" "}<CreditAmount amount={reward.reward_amount} />.
+            {__("You just earned your first reward of")}{" "}
+            <CreditAmount amount={reward.reward_amount} />.
           </p>
           <p>
             {__(

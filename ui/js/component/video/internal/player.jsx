@@ -168,14 +168,13 @@ class VideoPlayer extends React.PureComponent {
       <div>
         {["audio", "application"].indexOf(mediaType) !== -1 &&
           (!this.playableType() || hasMetadata) &&
-          !unplayable &&
-          <Thumbnail src={poster} className="video-embedded" />}
+          !unplayable && <Thumbnail src={poster} className="video-embedded" />}
         {this.playableType() &&
           !hasMetadata &&
-          !unplayable &&
-          <LoadingScreen status={noMetadataMessage} />}
-        {unplayable &&
-          <LoadingScreen status={unplayableMessage} spinner={false} />}
+          !unplayable && <LoadingScreen status={noMetadataMessage} />}
+        {unplayable && (
+          <LoadingScreen status={unplayableMessage} spinner={false} />
+        )}
         <div ref="media" className="media" />
       </div>
     );
