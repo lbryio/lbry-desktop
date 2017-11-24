@@ -29,13 +29,13 @@ This will download and install the LBRY app and its dependencies, including [the
 
 ### Running
 
-Run `./node_modules/.bin/electron src/main`
+Run `./node_modules/.bin/electron app`
 
 ### Ongoing Development
-1. `cd src/renderer`
+1. `cd ui`
 2. `./watch.sh`
 
-This will set up a monitor that will automatically compile any changes to JS or CSS folders inside of the `src/renderer` folder. This allows you to make changes and see them immediately by reloading the app.
+This will set up a monitor that will automatically compile any changes to JS or CSS folders inside of the `ui` folder. This allows you to make changes and see them immediately by reloading the app.
 
 ### Packaging
 
@@ -67,36 +67,36 @@ python build\set_version.py
 npm install -g yarn
 yarn install
 ```
-3. Change directory to `src\main` and run the following;
+3. Change directory to `app` and run the following;
 ```
 yarn install
 node_modules\.bin\electron-rebuild
 node_modules\.bin\electron-rebuild
-cd ..\..
+cd ..
 ```
-4. Change directory to `src\renderer` and run the following:
+4. Change directory to `ui` and run the following:
 ```
 yarn install
 npm rebuild node-sass
 node node_modules\node-sass\bin\node-sass --output dist\css --sourcemap=none scss\
 node_modules\.bin\webpack --config webpack.dev.config.js
-xcopy /E dist ..\main\dist
-cd ..\..
+xcopy /E dist ..\app\dist
+cd ..
 ```
-4. Download the lbry daemon and cli [binaries](https://github.com/lbryio/lbry/releases) and place them in `src\main\dist\`
+4. Download the lbry daemon and cli [binaries](https://github.com/lbryio/lbry/releases) and place them in `app\dist\`
 
 ### Building lbry-app
 1. run `node_modules\.bin\build -p never` from the root of the project.
 
 ### Running the electron app
-1. Run `node_modules\.bin\electron src\main`
+1. Run `node_modules\.bin\electron app`
 
 ### Ongoing Development
-1. `cd src\renderer`
+1. `cd ui`
 2. `watch.bat`
 
-This will set up a monitor that will automatically compile any changes to JS or CSS folders inside of the `src\renderer` folder. This allows you to make changes and see them immediately by reloading the app.
+This will set up a monitor that will automatically compile any changes to JS or CSS folders inside of the `ui` folder. This allows you to make changes and see them immediately by reloading the app.
 
 ## Internationalization
 
-If you want to help translating the lbry-app, you can copy the en.json file in /src/main/locales and modify the values while leaving the keys as their original English strings. An example for this would be: `"Skip": "Überspringen",` Translations should automatically show up in options.
+If you want to help translating the lbry-app, you can copy the en.json file in /app/locales and modify the values while leaving the keys as their original English strings. An example for this would be: `"Skip": "Überspringen",` Translations should automatically show up in options.

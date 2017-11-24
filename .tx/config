@@ -2,7 +2,7 @@
 host = https://www.transifex.com
 
 [lbry-app.app-strings]
-file_filter = src/main/dist/locales/<lang>.json
-source_file = src/main/dist/locales/en.json
+file_filter = app/dist/locales/<lang>.json
+source_file = app/dist/locales/en.json
 source_lang = en
 type = KEYVALUEJSON
