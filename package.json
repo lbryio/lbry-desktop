@@ -3,7 +3,7 @@
   "build": {
     "asar": false,
     "directories": {
-      "app": "app"
+      "app": "src/main"
     },
     "appId": "io.lbry.LBRY",
     "mac": {
