@@ -17,7 +17,7 @@ import github
 import changelog
 
 ROOT = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
-APP_PACKAGE_JSON_FILE = os.path.join(ROOT, 'src', 'main', 'package.json')
+APP_PACKAGE_JSON_FILE = os.path.join(ROOT, 'app', 'package.json')
 
 
 def main():
