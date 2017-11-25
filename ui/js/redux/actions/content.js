@@ -444,7 +444,7 @@ export function doFetchChannelListMine() {
       });
     };
 
-    lbry.channel_list_mine().then(callback);
+    lbry.channel_list().then(callback);
   };
 }
 
