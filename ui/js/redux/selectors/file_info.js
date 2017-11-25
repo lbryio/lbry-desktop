@@ -4,14 +4,14 @@ import {
   selectClaimsByUri,
   selectIsFetchingClaimListMine,
   selectMyClaims,
-  selectMyClaimsOutpoints,
+  selectMyClaimSdHashesByOutpoint,
 } from "redux/selectors/claims";
 
 export const _selectState = state => state.fileInfo || {};
 
-export const selectFileInfosByOutpoint = createSelector(
+export const selectFileInfosBySdHash = createSelector(
   _selectState,
-  state => state.byOutpoint || {}
+  state => state.bySdHash || {}
 );
 
 export const selectIsFetchingFileList = createSelector(
@@ -29,28 +29,32 @@ export const selectIsFetchingFileListDownloadedOrPublished = createSelector(
 export const makeSelectFileInfoForUri = uri => {
   return createSelector(
     selectClaimsByUri,
-    selectFileInfosByOutpoint,
-    (claims, byOutpoint) => {
-      const claim = claims[uri],
-        outpoint = claim ? `${claim.txid}:${claim.nout}` : undefined;
+    selectFileInfosBySdHash,
+    (claims, bySdHash) => {
+      const claim = claims[uri];
+      let sd_hash = undefined;
 
-      return outpoint ? byOutpoint[outpoint] : undefined;
+      if (claim && !claim.name.startsWith("@")) {
+        sd_hash = claim ? claim.value.stream.source.source : undefined;
+      }
+
+      return sd_hash ? bySdHash[sd_hash] : undefined;
     }
   );
 };
 
-export const selectDownloadingByOutpoint = createSelector(
+export const selectDownloadingBySdHash = createSelector(
   _selectState,
-  state => state.downloadingByOutpoint || {}
+  state => state.downloadingBySdHash || {}
 );
 
 export const makeSelectDownloadingForUri = uri => {
   return createSelector(
-    selectDownloadingByOutpoint,
+    selectDownloadingBySdHash,
     makeSelectFileInfoForUri(uri),
-    (byOutpoint, fileInfo) => {
+    (bySdHash, fileInfo) => {
       if (!fileInfo) return false;
-      return byOutpoint[fileInfo.outpoint];
+      return bySdHash[fileInfo.sd_hash];
     }
   );
 };
@@ -64,16 +68,21 @@ export const makeSelectLoadingForUri = uri => {
   return createSelector(selectUrisLoading, byUri => byUri && byUri[uri]);
 };
 
+export const selectFetchingSdHash = createSelector(
+  _selectState,
+  state => state.fetching || {}
+);
+
 export const selectFileInfosPendingPublish = createSelector(
   _selectState,
-  state => Object.values(state.pendingByOutpoint || {})
+  state => Object.values(state.pendingBySdHash || {})
 );
 
 export const selectFileInfosDownloaded = createSelector(
-  selectFileInfosByOutpoint,
+  selectFileInfosBySdHash,
   selectMyClaims,
-  (byOutpoint, myClaims) => {
-    return Object.values(byOutpoint).filter(fileInfo => {
+  (bySdHash, myClaims) => {
+    return Object.values(bySdHash).filter(fileInfo => {
       const myClaimIds = myClaims.map(claim => claim.claim_id);
 
       return (
@@ -86,15 +95,17 @@ export const selectFileInfosDownloaded = createSelector(
 );
 
 export const selectFileInfosPublished = createSelector(
-  selectFileInfosByOutpoint,
-  selectMyClaimsOutpoints,
+  selectFileInfosBySdHash,
+  selectMyClaimSdHashesByOutpoint,
   selectFileInfosPendingPublish,
-  (byOutpoint, outpoints, pendingPublish) => {
+  (bySdHash, sdHashesByOutpoint, pendingPublish) => {
     const fileInfos = [];
-    outpoints.forEach(outpoint => {
-      const fileInfo = byOutpoint[outpoint];
+
+    Object.keys(sdHashesByOutpoint).forEach(outpoint => {
+      const fileInfo = bySdHash[sdHashesByOutpoint[outpoint]];
       if (fileInfo) fileInfos.push(fileInfo);
     });
+
     return [...fileInfos, ...pendingPublish];
   }
 );
@@ -110,16 +121,16 @@ export const selectFileInfosPublished = createSelector(
 
 export const selectFileInfosByUri = createSelector(
   selectClaimsByUri,
-  selectFileInfosByOutpoint,
-  (claimsByUri, byOutpoint) => {
+  selectFileInfosBySdHash,
+  (claimsByUri, bySdHash) => {
     const fileInfos = {};
     const uris = Object.keys(claimsByUri);
 
     uris.forEach(uri => {
       const claim = claimsByUri[uri];
       if (claim) {
-        const outpoint = `${claim.txid}:${claim.nout}`;
-        const fileInfo = byOutpoint[outpoint];
+        const sd_hash = claim.value.stream.source.source;
+        const fileInfo = bySdHash[sd_hash];
 
         if (fileInfo) fileInfos[uri] = fileInfo;
       }
@@ -129,14 +140,14 @@ export const selectFileInfosByUri = createSelector(
 );
 
 export const selectDownloadingFileInfos = createSelector(
-  selectDownloadingByOutpoint,
-  selectFileInfosByOutpoint,
-  (downloadingByOutpoint, fileInfosByOutpoint) => {
-    const outpoints = Object.keys(downloadingByOutpoint);
+  selectDownloadingBySdHash,
+  selectFileInfosBySdHash,
+  (downloadingBySdHash, fileInfosBySdHash) => {
+    const sdHashes = Object.keys(downloadingBySdHash);
     const fileInfos = [];
 
-    outpoints.forEach(outpoint => {
-      const fileInfo = fileInfosByOutpoint[outpoint];
+    sdHashes.forEach(sdHash => {
+      const fileInfo = fileInfosBySdHash[sdHash];
 
       if (fileInfo) fileInfos.push(fileInfo);
     });
@@ -158,5 +169,18 @@ export const selectTotalDownloadProgress = createSelector(
 
     if (fileInfos.length > 0) return totalProgress / fileInfos.length / 100.0;
     else return -1;
+  }
+);
+
+export const selectSdHashesByOutpoint = createSelector(
+  selectFileInfosBySdHash,
+  fileInfos => {
+    const sdHashesByOutpoint = {};
+
+    Object.keys(fileInfos).forEach(fileInfo => {
+      sdHashesByOutpoint[fileInfo.outpoint] = fileInfo.sd_hash;
+    });
+
+    return sdHashesByOutpoint;
   }
 );

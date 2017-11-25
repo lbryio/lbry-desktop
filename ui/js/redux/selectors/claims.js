@@ -189,6 +189,20 @@ export const selectMyClaimsOutpoints = createSelector(
   }
 );
 
+export const selectMyClaimSdHashesByOutpoint = createSelector(
+  selectMyClaims,
+  myClaims => {
+    const sdHashByOutpoint = {};
+
+    myClaims.forEach(claim => {
+      sdHashByOutpoint[`${claim.txid}:${claim.nout}`] =
+        claim.value.stream.source.source;
+    });
+
+    return sdHashByOutpoint;
+  }
+);
+
 export const selectFetchingMyChannels = createSelector(
   _selectState,
   state => !!state.fetchingMyChannels

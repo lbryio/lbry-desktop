@@ -13,6 +13,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
 
 ### Changed
   * Moved all redux code into /redux folder
+  * Lots of changes in selectors, reducers and actions for deprecating `outpoints` and using `sd_hash` in `file_list` API call(#693$)
   *
 
 ### Fixed
@@ -24,7 +25,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
   *
 
 ### Deprecated
-  *
+  * Use of `outpoints` in `file_list` API call. `sd_hash` has to be used instead.(#693)
   *
 
 ### Removed
