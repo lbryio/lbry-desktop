@@ -12,8 +12,8 @@ Web UI version numbers should always match the corresponding version of LBRY App
   *
 
 ### Changed
+  * The credit balance displayed in the main app navigation displays two decimal places instead of one.
   * Moved all redux code into /redux folder
-  *
 
 ### Fixed
   * Long channel names causing inconsistent thumbnail sizes (#721)
