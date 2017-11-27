@@ -1,6 +1,4 @@
 pip install -r build\requirements.txt
-python build\set_version.py
-
 
 # Get the latest stable version of Node.js or io.js
 Install-Product node $env:nodejs_version
@@ -19,7 +17,7 @@ cd ..\..
 
 
 # build ui
-cd main\renderer
+cd src\renderer
 yarn install
 npm rebuild node-sass
 node_modules\.bin\node-sass --output dist\css --sourcemap=none scss\

@@ -63,11 +63,10 @@ exit
 2. Open command prompt in the root of the project and run the following:
 ```
 python -m pip install -r build\requirements.txt
-python build\set_version.py
 npm install -g yarn
 yarn install
 ```
-3. Change directory to `src\main` and run the following;
+3. Change directory to `src\main` and run the following:
 ```
 yarn install
 node_modules\.bin\electron-rebuild
