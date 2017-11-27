@@ -10,6 +10,7 @@ import ChildProcess from 'child_process';
 import Assert from 'assert';
 import { app, BrowserWindow, globalShortcut, ipcMain, Menu, Tray } from 'electron';
 import { autoUpdater } from 'electron-updater';
+import log from 'electron-log';
 import mainMenu from './menu/mainMenu';
 import contextMenu from './menu/contextMenu';
 
@@ -17,6 +18,9 @@ const localVersion = app.getVersion();
 
 // Debug configs
 const isDevelopment = process.env.NODE_ENV === 'development';
+
+// For now, log info messages in production for easier debugging of built apps
+log.transports.file.level = 'info';
 
 // Misc constants
 const LATEST_RELEASE_API_URL = 'https://api.github.com/repos/lbryio/lbry-app/releases/latest';
