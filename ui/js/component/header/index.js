@@ -19,7 +19,7 @@ const select = state => ({
   isBackDisabled: selectIsBackDisabled(state),
   isForwardDisabled: selectIsForwardDisabled(state),
   isUpgradeAvailable: selectIsUpgradeAvailable(state),
-  balance: formatCredits(selectBalance(state) || 0, 1),
+  balance: formatCredits(selectBalance(state) || 0, 2),
 });
 
 const perform = dispatch => ({
