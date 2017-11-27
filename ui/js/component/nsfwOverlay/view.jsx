@@ -8,7 +8,6 @@ const NsfwOverlay = props => {
         {__(
           "This content is Not Safe For Work. To view adult content, please change your"
         )}{" "}
-        {" "}{" "}
         <Link
           className="button-text"
           onClick={() => props.navigateSettings()}

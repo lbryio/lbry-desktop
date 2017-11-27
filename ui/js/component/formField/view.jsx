@@ -132,9 +132,8 @@ class FormField extends React.PureComponent {
   render() {
     // Pass all unhandled props to the field element
     const otherProps = Object.assign({}, this.props),
-      isError = this.state.isError !== null
-        ? this.state.isError
-        : this.props.hasError,
+      isError =
+        this.state.isError !== null ? this.state.isError : this.props.hasError,
       elementId = this.props.elementId ? this.props.elementId : formFieldId(),
       renderElementInsideLabel =
         this.props.label && formFieldNestedLabelTypes.includes(this.props.type);
@@ -174,11 +173,13 @@ class FormField extends React.PureComponent {
 
     return (
       <div className={"form-field form-field--" + this.props.type}>
-        {this.props.prefix
-          ? <span className="form-field__prefix">{this.props.prefix}</span>
-          : ""}
+        {this.props.prefix ? (
+          <span className="form-field__prefix">{this.props.prefix}</span>
+        ) : (
+          ""
+        )}
         {element}
-        {renderElementInsideLabel &&
+        {renderElementInsideLabel && (
           <label
             htmlFor={elementId}
             className={
@@ -186,22 +187,27 @@ class FormField extends React.PureComponent {
             }
           >
             {this.props.label}
-          </label>}
-        {formFieldFileSelectorTypes.includes(this.props.type)
-          ? <FileSelector
-              type={this.props.type}
-              onFileChosen={this.handleFileChosen.bind(this)}
-              {...(this.props.defaultValue
-                ? { initPath: this.props.defaultValue }
-                : {})}
-            />
-          : null}
-        {this.props.postfix
-          ? <span className="form-field__postfix">{this.props.postfix}</span>
-          : ""}
-        {isError && this.state.errorMessage
-          ? <div className="form-field__error">{this.state.errorMessage}</div>
-          : ""}
+          </label>
+        )}
+        {formFieldFileSelectorTypes.includes(this.props.type) ? (
+          <FileSelector
+            type={this.props.type}
+            onFileChosen={this.handleFileChosen.bind(this)}
+            {...(this.props.defaultValue
+              ? { initPath: this.props.defaultValue }
+              : {})}
+          />
+        ) : null}
+        {this.props.postfix ? (
+          <span className="form-field__postfix">{this.props.postfix}</span>
+        ) : (
+          ""
+        )}
+        {isError && this.state.errorMessage ? (
+          <div className="form-field__error">{this.state.errorMessage}</div>
+        ) : (
+          ""
+        )}
       </div>
     );
   }

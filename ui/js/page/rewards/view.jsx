@@ -44,8 +44,7 @@ class RewardsPage extends React.PureComponent {
             </div>
             <div className="card__content empty">
               <p>
-                {__("Rewards are for human beings only.")}
-                {" "}
+                {__("Rewards are for human beings only.")}{" "}
                 {__(
                   "You'll have to prove you're one of us before you can claim any rewards."
                 )}
@@ -62,8 +61,7 @@ class RewardsPage extends React.PureComponent {
             <p>
               {__(
                 "This account must undergo review before you can participate in the rewards program."
-              )}
-              {" "}
+              )}{" "}
               {__(
                 "This can take anywhere from several minutes to several days."
               )}
@@ -75,7 +73,9 @@ class RewardsPage extends React.PureComponent {
               )}
             </p>
             <p>
-              {__("If you continue to see this message, send us an email to help@lbry.io.") +
+              {__(
+                "If you continue to see this message, send us an email to help@lbry.io."
+              ) +
                 " " +
                 __("Please enjoy free content in the meantime!")}
             </p>
@@ -114,15 +114,17 @@ class RewardsPage extends React.PureComponent {
     } else if (!rewards || rewards.length <= 0) {
       return (
         <div className="card__content empty">
-          {__("There are no rewards available at this time, please check back later.")}
+          {__(
+            "There are no rewards available at this time, please check back later."
+          )}
         </div>
       );
     } else {
       return (
         <div className="card-grid">
-          {rewards.map(reward =>
+          {rewards.map(reward => (
             <RewardTile key={reward.reward_type} reward={reward} />
-          )}
+          ))}
         </div>
       );
     }

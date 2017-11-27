@@ -39,9 +39,7 @@ class BackupPage extends React.PureComponent {
               )}
             </p>
             <p>
-              <code>
-                {__(`${daemonSettings.lbryum_wallet_dir}`)}
-              </code>
+              <code>{__(`${daemonSettings.lbryum_wallet_dir}`)}</code>
             </p>
             <p>
               <strong>

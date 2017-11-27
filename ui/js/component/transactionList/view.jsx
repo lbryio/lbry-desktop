@@ -45,9 +45,9 @@ class TransactionList extends React.PureComponent {
 
     return (
       <div>
-        {(transactionList.length || this.state.filter) &&
+        {(transactionList.length || this.state.filter) && (
           <span className="sort-section">
-            {__("Filter")} {" "}
+            {__("Filter")}{" "}
             <FormField
               type="select"
               onChange={this.handleFilterChanged.bind(this)}
@@ -60,18 +60,19 @@ class TransactionList extends React.PureComponent {
               <option value="tip">{__("Tips")}</option>
               <option value="support">{__("Supports")}</option>
               <option value="update">{__("Updates")}</option>
-            </FormField>
-            {" "}
+            </FormField>{" "}
             <Link
               href="https://lbry.io/faq/transaction-types"
               icon={icons.HELP_CIRCLE}
             />
-          </span>}
-        {!transactionList.length &&
+          </span>
+        )}
+        {!transactionList.length && (
           <div className="empty">
             {emptyMessage || __("No transactions to list.")}
-          </div>}
-        {Boolean(transactionList.length) &&
+          </div>
+        )}
+        {Boolean(transactionList.length) && (
           <table className="table-standard table-transactions table-stretch">
             <thead>
               <tr>
@@ -83,7 +84,7 @@ class TransactionList extends React.PureComponent {
               </tr>
             </thead>
             <tbody>
-              {transactionList.map(t =>
+              {transactionList.map(t => (
                 <TransactionListItem
                   key={`${t.txid}:${t.nout}`}
                   transaction={t}
@@ -91,9 +92,10 @@ class TransactionList extends React.PureComponent {
                   isRevokeable={this.isRevokeable(t.txid, t.nout)}
                   revokeClaim={this.revokeClaim.bind(this)}
                 />
-              )}
+              ))}
             </tbody>
-          </table>}
+          </table>
+        )}
       </div>
     );
   }

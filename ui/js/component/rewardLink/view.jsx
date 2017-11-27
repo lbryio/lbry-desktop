@@ -25,18 +25,20 @@ const RewardLink = props => {
           claimReward(reward);
         }}
       />
-      {errorMessage
-        ? <Modal
-            isOpen={true}
-            contentLabel="Reward Claim Error"
-            className="error-modal"
-            onConfirmed={() => {
-              clearError(reward);
-            }}
-          >
-            {errorMessage}
-          </Modal>
-        : ""}
+      {errorMessage ? (
+        <Modal
+          isOpen={true}
+          contentLabel="Reward Claim Error"
+          className="error-modal"
+          onConfirmed={() => {
+            clearError(reward);
+          }}
+        >
+          {errorMessage}
+        </Modal>
+      ) : (
+        ""
+      )}
     </div>
   );
 };

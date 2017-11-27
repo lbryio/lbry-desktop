@@ -55,9 +55,8 @@ class HelpPage extends React.PureComponent {
     if (this.state.versionInfo) {
       ver = this.state.versionInfo;
       if (ver.os_system == "Darwin") {
-        osName = parseInt(ver.os_release.match(/^\d+/)) < 16
-          ? "Mac OS X"
-          : "Mac OS";
+        osName =
+          parseInt(ver.os_release.match(/^\d+/)) < 16 ? "Mac OS X" : "Mac OS";
 
         platform = `${osName} ${ver.os_release}`;
         newVerLink = "https://lbry.io/get/lbry.dmg";
@@ -97,9 +96,8 @@ class HelpPage extends React.PureComponent {
           </div>
           <div className="card__content">
             <p>
-              {__("Live help is available most hours in the")}
-              {" "}<strong>#help</strong>
-              {" "}{__("channel of our Discord chat room.")}
+              {__("Live help is available most hours in the")}{" "}
+              <strong>#help</strong> {__("channel of our Discord chat room.")}
             </p>
             <p>
               <Link
@@ -132,71 +130,80 @@ class HelpPage extends React.PureComponent {
         </section>
 
         <section className="card">
-          <div className="card__title-primary"><h3>{__("About")}</h3></div>
+          <div className="card__title-primary">
+            <h3>{__("About")}</h3>
+          </div>
           <div className="card__content">
-            {this.state.upgradeAvailable === null
-              ? ""
-              : this.state.upgradeAvailable
-                ? <p>
-                    {__("A newer version of LBRY is available.")}
-                    {" "}<Link href={newVerLink} label={__("Download now!")} />
-                  </p>
-                : <p>{__("Your copy of LBRY is up to date.")}</p>}
-            {this.state.uiVersion && ver
-              ? <table className="table-standard table-stretch table-standard--definition-list">
-                  <tbody>
-                    <tr>
-                      <th>{__("App")}</th>
-                      <td>{this.state.uiVersion}</td>
-                    </tr>
-                    <tr>
-                      <th>{__("Daemon (lbrynet)")}</th>
-                      <td>{ver.lbrynet_version}</td>
-                    </tr>
-                    <tr>
-                      <th>{__("Wallet (lbryum)")}</th>
-                      <td>{ver.lbryum_version}</td>
-                    </tr>
-                    <tr>
-                      <th>{__("Connected Email")}</th>
-                      <td>
-                        {user && user.primary_email
-                          ? user.primary_email
-                          : <span>
-                              <span className="empty">{__("none")} </span>
-                              (<Link
-                                onClick={() => doAuth()}
-                                label={__("set email")}
-                              />)
-                            </span>}
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>{__("Reward Eligible")}</th>
-                      <td>
-                        {user && user.is_reward_approved
-                          ? <Icon icon="icon-check" />
-                          : <Icon icon="icon-ban" />}
-                      </td>
-                    </tr>
-                    <tr>
-                      <th>{__("Platform")}</th>
-                      <td>{platform}</td>
-                    </tr>
-                    <tr>
-                      <th>{__("Installation ID")}</th>
-                      <td>{this.state.lbryId}</td>
-                    </tr>
-                    <tr>
-                      <th>{__("Access Token")}</th>
-                      <td>
-                        {this.state.accessTokenHidden &&
-                          <Link
-                            label={__("show")}
-                            onClick={this.showAccessToken.bind(this)}
-                          />}
-                        {!this.state.accessTokenHidden &&
-                          accessToken &&
+            {this.state.upgradeAvailable === null ? (
+              ""
+            ) : this.state.upgradeAvailable ? (
+              <p>
+                {__("A newer version of LBRY is available.")}{" "}
+                <Link href={newVerLink} label={__("Download now!")} />
+              </p>
+            ) : (
+              <p>{__("Your copy of LBRY is up to date.")}</p>
+            )}
+            {this.state.uiVersion && ver ? (
+              <table className="table-standard table-stretch table-standard--definition-list">
+                <tbody>
+                  <tr>
+                    <th>{__("App")}</th>
+                    <td>{this.state.uiVersion}</td>
+                  </tr>
+                  <tr>
+                    <th>{__("Daemon (lbrynet)")}</th>
+                    <td>{ver.lbrynet_version}</td>
+                  </tr>
+                  <tr>
+                    <th>{__("Wallet (lbryum)")}</th>
+                    <td>{ver.lbryum_version}</td>
+                  </tr>
+                  <tr>
+                    <th>{__("Connected Email")}</th>
+                    <td>
+                      {user && user.primary_email ? (
+                        user.primary_email
+                      ) : (
+                        <span>
+                          <span className="empty">{__("none")} </span>
+                          (<Link
+                            onClick={() => doAuth()}
+                            label={__("set email")}
+                          />)
+                        </span>
+                      )}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>{__("Reward Eligible")}</th>
+                    <td>
+                      {user && user.is_reward_approved ? (
+                        <Icon icon="icon-check" />
+                      ) : (
+                        <Icon icon="icon-ban" />
+                      )}
+                    </td>
+                  </tr>
+                  <tr>
+                    <th>{__("Platform")}</th>
+                    <td>{platform}</td>
+                  </tr>
+                  <tr>
+                    <th>{__("Installation ID")}</th>
+                    <td>{this.state.lbryId}</td>
+                  </tr>
+                  <tr>
+                    <th>{__("Access Token")}</th>
+                    <td>
+                      {this.state.accessTokenHidden && (
+                        <Link
+                          label={__("show")}
+                          onClick={this.showAccessToken.bind(this)}
+                        />
+                      )}
+                      {!this.state.accessTokenHidden &&
+                        accessToken && (
                           <div>
                             <p>{accessToken}</p>
                             <div className="help">
@@ -204,12 +211,15 @@ class HelpPage extends React.PureComponent {
                                 "This is equivalent to a password. Do not post or share this."
                               )}
                             </div>
-                          </div>}
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              : <BusyMessage message={__("Looking up version info")} />}
+                          </div>
+                        )}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            ) : (
+              <BusyMessage message={__("Looking up version info")} />
+            )}
           </div>
         </section>
       </main>

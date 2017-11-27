@@ -100,9 +100,11 @@ class ChannelSection extends React.PureComponent {
         <option key="anonymous" value="anonymous">
           {__("Anonymous")}
         </option>
-        {channels.map(({ name }) =>
-          <option key={name} value={name}>{name}</option>
-        )}
+        {channels.map(({ name }) => (
+          <option key={name} value={name}>
+            {name}
+          </option>
+        ))}
         <option key="new" value="new">
           {__("New channel...")}
         </option>
@@ -116,17 +118,18 @@ class ChannelSection extends React.PureComponent {
           <div className="card__subtitle">
             {__(
               "This is a username or handle that your content can be found under."
-            )}
-            {" "}
+            )}{" "}
             {__("Ex. @Marvel, @TheBeatles, @BooksByJoe")}
           </div>
         </div>
         <div className="card__content">
-          {fetchingChannels
-            ? <BusyMessage message="Updating channels" key="loading" />
-            : channelSelector}
+          {fetchingChannels ? (
+            <BusyMessage message="Updating channels" key="loading" />
+          ) : (
+            channelSelector
+          )}
         </div>
-        {this.state.addingChannel &&
+        {this.state.addingChannel && (
           <div className="card__content">
             <FormRow
               label={__("Name")}
@@ -157,7 +160,8 @@ class ChannelSection extends React.PureComponent {
                 disabled={this.state.creatingChannel}
               />
             </div>
-          </div>}
+          </div>
+        )}
       </section>
     );
   }

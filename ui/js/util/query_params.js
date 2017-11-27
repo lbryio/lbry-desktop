@@ -1,8 +1,12 @@
 export function parseQueryParams(queryString) {
   if (queryString === "") return {};
-  const parts = queryString.split("?").pop().split("&").map(function(p) {
-    return p.split("=");
-  });
+  const parts = queryString
+    .split("?")
+    .pop()
+    .split("&")
+    .map(function(p) {
+      return p.split("=");
+    });
 
   const params = {};
   parts.forEach(function(arr) {

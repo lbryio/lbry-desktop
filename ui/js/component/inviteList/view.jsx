@@ -17,21 +17,16 @@ class InviteList extends React.PureComponent {
           <h3>{__("Invite History")}</h3>
         </div>
         <div className="card__content">
-          {invitees.length === 0 &&
-            <span className="empty">{__("You haven't invited anyone.")} </span>}
-          {invitees.length > 0 &&
+          {invitees.length === 0 && (
+            <span className="empty">{__("You haven't invited anyone.")} </span>
+          )}
+          {invitees.length > 0 && (
             <table className="table-standard table-stretch">
               <thead>
                 <tr>
-                  <th>
-                    {__("Invitee Email")}
-                  </th>
-                  <th className="text-center">
-                    {__("Invite Status")}
-                  </th>
-                  <th className="text-center">
-                    {__("Reward")}
-                  </th>
+                  <th>{__("Invitee Email")}</th>
+                  <th className="text-center">{__("Invite Status")}</th>
+                  <th className="text-center">{__("Reward")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -40,27 +35,30 @@ class InviteList extends React.PureComponent {
                     <tr key={index}>
                       <td>{invitee.email}</td>
                       <td className="text-center">
-                        {invitee.invite_accepted
-                          ? <Icon icon="icon-check" />
-                          : <span className="empty">{__("unused")}</span>}
+                        {invitee.invite_accepted ? (
+                          <Icon icon="icon-check" />
+                        ) : (
+                          <span className="empty">{__("unused")}</span>
+                        )}
                       </td>
                       <td className="text-center">
-                        {invitee.invite_reward_claimed
-                          ? <Icon icon="icon-check" />
-                          : invitee.invite_reward_claimable
-                            ? <RewardLink
-                                label={__("claim")}
-                                reward_type={rewards.TYPE_REFERRAL}
-                              />
-                            : <span className="empty">
-                                {__("unclaimable")}
-                              </span>}
+                        {invitee.invite_reward_claimed ? (
+                          <Icon icon="icon-check" />
+                        ) : invitee.invite_reward_claimable ? (
+                          <RewardLink
+                            label={__("claim")}
+                            reward_type={rewards.TYPE_REFERRAL}
+                          />
+                        ) : (
+                          <span className="empty">{__("unclaimable")}</span>
+                        )}
                       </td>
                     </tr>
                   );
                 })}
               </tbody>
-            </table>}
+            </table>
+          )}
         </div>
         <div className="card__content">
           <div className="help">

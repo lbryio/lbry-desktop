@@ -11,12 +11,13 @@ const RewardSummary = props => {
         <h3>{__("Rewards")}</h3>
       </div>
       <div className="card__content">
-        {unclaimedRewardAmount > 0 &&
+        {unclaimedRewardAmount > 0 && (
           <p>
             You have{" "}
             <CreditAmount amount={unclaimedRewardAmount} precision={8} /> in
             unclaimed rewards.
-          </p>}
+          </p>
+        )}
       </div>
       <div className="card__actions">
         <Link button="alt" navigate="/rewards" label={__("Learn more")} />

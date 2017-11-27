@@ -24,29 +24,27 @@ class ModalDownloading extends React.PureComponent {
           percent={downloadProgress ? downloadProgress : 0}
           strokeWidth="4"
         />
-        {downloadComplete
-          ? <div>
-              <br />
-              <p>{__('Click "Begin Upgrade" to start the upgrade process.')}</p>
-              <p>
-                {__(
-                  "The app will close, and you will be prompted to install the latest version of LBRY."
-                )}
-              </p>
-              <p>
-                {__("After the install is complete, please reopen the app.")}
-              </p>
-            </div>
-          : null}
+        {downloadComplete ? (
+          <div>
+            <br />
+            <p>{__('Click "Begin Upgrade" to start the upgrade process.')}</p>
+            <p>
+              {__(
+                "The app will close, and you will be prompted to install the latest version of LBRY."
+              )}
+            </p>
+            <p>{__("After the install is complete, please reopen the app.")}</p>
+          </div>
+        ) : null}
         <div className="modal__buttons">
-          {downloadComplete
-            ? <Link
-                button="primary"
-                label={__("Begin Upgrade")}
-                className="modal__button"
-                onClick={startUpgrade}
-              />
-            : null}
+          {downloadComplete ? (
+            <Link
+              button="primary"
+              label={__("Begin Upgrade")}
+              className="modal__button"
+              onClick={startUpgrade}
+            />
+          ) : null}
           <Link
             button="alt"
             label={__("Cancel")}

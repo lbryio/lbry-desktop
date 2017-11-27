@@ -141,7 +141,10 @@ lbry.connect = function() {
 
       // Check every half second to see if the daemon is accepting connections
       function checkDaemonStarted() {
-        lbry.status().then(resolve).catch(checkDaemonStartedFailed);
+        lbry
+          .status()
+          .then(resolve)
+          .catch(checkDaemonStartedFailed);
       }
 
       checkDaemonStarted();

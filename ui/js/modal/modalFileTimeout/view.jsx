@@ -11,8 +11,7 @@ class ModalFileTimeout extends React.PureComponent {
         contentLabel={__("Download failed")}
         onConfirmed={closeModal}
       >
-        {__("LBRY was unable to download the stream")}{" "}
-        <strong>{title}</strong>.
+        {__("LBRY was unable to download the stream")} <strong>{title}</strong>.
       </Modal>
     );
   }

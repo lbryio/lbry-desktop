@@ -155,17 +155,18 @@ class FeaturedCategory extends React.PureComponent {
         <h3 className="card-row__header">
           {category}
           {category &&
-            category.match(/^community/i) &&
-            <ToolTip
-              label={__("What's this?")}
-              body={__(
-                'Community Content is a public space where anyone can share content with the rest of the LBRY community. Bid on the names "one," "two," "three," "four" and "five" to put your content here!'
-              )}
-              className="tooltip--header"
-            />}
+            category.match(/^community/i) && (
+              <ToolTip
+                label={__("What's this?")}
+                body={__(
+                  'Community Content is a public space where anyone can share content with the rest of the LBRY community. Bid on the names "one," "two," "three," "four" and "five" to put your content here!'
+                )}
+                className="tooltip--header"
+              />
+            )}
         </h3>
         <div className="card-row__scrollhouse">
-          {this.state.canScrollPrevious &&
+          {this.state.canScrollPrevious && (
             <div className="card-row__nav card-row__nav--left">
               <a
                 className="card-row__scroll-button"
@@ -173,8 +174,9 @@ class FeaturedCategory extends React.PureComponent {
               >
                 <Icon icon="icon-chevron-left" />
               </a>
-            </div>}
-          {this.state.canScrollNext &&
+            </div>
+          )}
+          {this.state.canScrollNext && (
             <div className="card-row__nav card-row__nav--right">
               <a
                 className="card-row__scroll-button"
@@ -182,16 +184,17 @@ class FeaturedCategory extends React.PureComponent {
               >
                 <Icon icon="icon-chevron-right" />
               </a>
-            </div>}
+            </div>
+          )}
           <div ref="rowitems" className="card-row__items">
             {names &&
-              names.map(name =>
+              names.map(name => (
                 <FileCard
                   key={name}
                   displayStyle="card"
                   uri={lbryuri.normalize(name)}
                 />
-              )}
+              ))}
           </div>
         </div>
       </div>
@@ -207,29 +210,31 @@ class DiscoverPage extends React.PureComponent {
   render() {
     const { featuredUris, fetchingFeaturedUris } = this.props;
     const hasContent =
-      typeof featuredUris === "object" && Object.keys(featuredUris).length,
+        typeof featuredUris === "object" && Object.keys(featuredUris).length,
       failedToLoad = !fetchingFeaturedUris && !hasContent;
 
     return (
       <main className={hasContent && fetchingFeaturedUris ? "reloading" : null}>
         {!hasContent &&
-          fetchingFeaturedUris &&
-          <BusyMessage message={__("Fetching content")} />}
+          fetchingFeaturedUris && (
+            <BusyMessage message={__("Fetching content")} />
+          )}
         {hasContent &&
           Object.keys(featuredUris).map(
             category =>
-              featuredUris[category].length
-                ? <FeaturedCategory
-                    key={category}
-                    category={category}
-                    names={featuredUris[category]}
-                  />
-                : ""
+              featuredUris[category].length ? (
+                <FeaturedCategory
+                  key={category}
+                  category={category}
+                  names={featuredUris[category]}
+                />
+              ) : (
+                ""
+              )
           )}
-        {failedToLoad &&
-          <div className="empty">
-            {__("Failed to load landing content.")}
-          </div>}
+        {failedToLoad && (
+          <div className="empty">{__("Failed to load landing content.")}</div>
+        )}
       </main>
     );
   }

@@ -61,9 +61,7 @@ class InviteNew extends React.PureComponent {
       <section className="card">
         <div className="card__title-primary">
           <CreditAmount amount={rewardAmount} />
-          <h3>
-            {__("Invite a Friend")}
-          </h3>
+          <h3>{__("Invite a Friend")}</h3>
         </div>
         {/*
         <div className="card__content">

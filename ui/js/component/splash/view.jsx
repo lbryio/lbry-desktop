@@ -57,9 +57,10 @@ export class SplashScreen extends React.PureComponent {
       status.blockchain_status &&
       status.blockchain_status.blocks_behind > 0
     ) {
-      const format = status.blockchain_status.blocks_behind == 1
-        ? "%s block behind"
-        : "%s blocks behind";
+      const format =
+        status.blockchain_status.blocks_behind == 1
+          ? "%s block behind"
+          : "%s blocks behind";
       this.setState({
         message: __("Blockchain Sync"),
         details: __(format, status.blockchain_status.blocks_behind),
@@ -110,12 +111,10 @@ export class SplashScreen extends React.PureComponent {
             daemon doesn't let you quit during startup, so the "Quit" buttons
             in the modals won't work. */}
         {modal == "incompatibleDaemon" &&
-          this.state.isRunning &&
-          <ModalIncompatibleDaemon />}
+          this.state.isRunning && <ModalIncompatibleDaemon />}
         {modal == modals.UPGRADE && this.state.isRunning && <ModalUpgrade />}
         {modal == modals.DOWNLOADING &&
-          this.state.isRunning &&
-          <ModalDownloading />}
+          this.state.isRunning && <ModalDownloading />}
       </div>
     );
   }

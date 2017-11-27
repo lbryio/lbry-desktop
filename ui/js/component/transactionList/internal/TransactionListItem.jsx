@@ -59,20 +59,20 @@ class TransactionListItem extends React.PureComponent {
     return (
       <tr>
         <td>
-          {date
-            ? <div>
-                <DateTime
-                  date={date}
-                  show={DateTime.SHOW_DATE}
-                  formatOptions={dateFormat}
-                />
-                <div className="meta">
-                  <DateTime date={date} show={DateTime.SHOW_TIME} />
-                </div>
+          {date ? (
+            <div>
+              <DateTime
+                date={date}
+                show={DateTime.SHOW_DATE}
+                formatOptions={dateFormat}
+              />
+              <div className="meta">
+                <DateTime date={date} show={DateTime.SHOW_TIME} />
               </div>
-            : <span className="empty">
-                {__("Pending")}
-              </span>}
+            </div>
+          ) : (
+            <span className="empty">{__("Pending")}</span>
+          )}
         </td>
         <td>
           <CreditAmount
@@ -83,33 +83,29 @@ class TransactionListItem extends React.PureComponent {
             precision={8}
           />
           <br />
-          {fee != 0 &&
-            <CreditAmount
-              amount={fee}
-              look="fee"
-              label={false}
-              precision={8}
-            />}
+          {fee != 0 && (
+            <CreditAmount amount={fee} look="fee" label={false} precision={8} />
+          )}
         </td>
         <td>
-          {this.capitalize(type)}{" "}
-          {isRevokeable && this.getLink(type)}
-
+          {this.capitalize(type)} {isRevokeable && this.getLink(type)}
         </td>
         <td>
-          {reward &&
+          {reward && (
             <Link navigate="/rewards">
               {__("Reward: %s", reward.reward_title)}
-            </Link>}
+            </Link>
+          )}
           {name &&
-            claimId &&
-            <Link
-              className="button-text"
-              navigate="/show"
-              navigateParams={{ uri: lbryuri.build({ name, claimId }) }}
-            >
-              {name}
-            </Link>}
+            claimId && (
+              <Link
+                className="button-text"
+                navigate="/show"
+                navigateParams={{ uri: lbryuri.build({ name, claimId }) }}
+              >
+                {name}
+              </Link>
+            )}
         </td>
         <td>
           <LinkTransaction id={txid} />

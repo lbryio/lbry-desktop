@@ -19,12 +19,15 @@ class ModalError extends React.PureComponent {
 
     const errorInfoList = [];
     for (let key of Object.keys(errorObj)) {
-      let val = typeof errorObj[key] == "string"
-        ? errorObj[key]
-        : JSON.stringify(errorObj[key]);
+      let val =
+        typeof errorObj[key] == "string"
+          ? errorObj[key]
+          : JSON.stringify(errorObj[key]);
       let label = error_key_labels[key];
       errorInfoList.push(
-        <li key={key}><strong>{label}</strong>: <code>{val}</code></li>
+        <li key={key}>
+          <strong>{label}</strong>: <code>{val}</code>
+        </li>
       );
     }
     const errorInfo = (

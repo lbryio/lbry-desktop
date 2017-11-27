@@ -28,18 +28,22 @@ class ShowPage extends React.PureComponent {
       innerContent = (
         <section className="card">
           <div className="card__inner">
-            <div className="card__title-identity"><h1>{uri}</h1></div>
+            <div className="card__title-identity">
+              <h1>{uri}</h1>
+            </div>
           </div>
           <div className="card__content">
-            {isResolvingUri &&
+            {isResolvingUri && (
               <BusyMessage
                 message={__("Loading magic decentralized data...")}
-              />}
+              />
+            )}
             {claim === null &&
-              !isResolvingUri &&
-              <span className="empty">
-                {__("There's nothing at this location.")}
-              </span>}
+              !isResolvingUri && (
+                <span className="empty">
+                  {__("There's nothing at this location.")}
+                </span>
+              )}
           </div>
         </section>
       );

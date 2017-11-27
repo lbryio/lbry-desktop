@@ -72,12 +72,12 @@ class FileTile extends React.PureComponent {
     const uri = lbryuri.normalize(this.props.uri);
     const isClaimed = !!claim;
     const isClaimable = lbryuri.isClaimable(uri);
-    const title = isClaimed && metadata && metadata.title
-      ? metadata.title
-      : lbryuri.parse(uri).contentName;
-    const thumbnail = metadata && metadata.thumbnail
-      ? metadata.thumbnail
-      : null;
+    const title =
+      isClaimed && metadata && metadata.title
+        ? metadata.title
+        : lbryuri.parse(uri).contentName;
+    const thumbnail =
+      metadata && metadata.thumbnail ? metadata.thumbnail : null;
     const obscureNsfw = this.props.obscureNsfw && metadata && metadata.nsfw;
     const isRewardContent =
       claim && rewardedContentClaimIds.includes(claim.claim_id);
@@ -98,9 +98,10 @@ class FileTile extends React.PureComponent {
       onClick = () => navigate("/publish", {});
       description = (
         <span className="empty">
-          {__("This location is unused.")} {" "}
-          {isClaimable &&
-            <span className="button-text">{__("Put something here!")}</span>}
+          {__("This location is unused.")}{" "}
+          {isClaimable && (
+            <span className="button-text">{__("Put something here!")}</span>
+          )}
         </span>
       );
     } else if (showEmpty === FileTile.SHOW_EMPTY_PENDING) {
@@ -123,22 +124,21 @@ class FileTile extends React.PureComponent {
             <div className="file-tile__content">
               <div className="card__title-primary">
                 <span className="card__indicators">
-                  {showPrice && <FilePrice uri={this.props.uri} />}
-                  {" "}
-                  {isRewardContent && <Icon icon={icons.FEATURED} />}
-                  {" "}
+                  {showPrice && <FilePrice uri={this.props.uri} />}{" "}
+                  {isRewardContent && <Icon icon={icons.FEATURED} />}{" "}
                   {showLocal && fileInfo && <Icon icon={icons.LOCAL} />}
                 </span>
                 <h3>
                   <TruncatedText lines={1}>{title || name}</TruncatedText>
                 </h3>
               </div>
-              {description &&
+              {description && (
                 <div className="card__content card__subtext">
                   <TruncatedText lines={!showActions ? 3 : 2}>
                     {description}
                   </TruncatedText>
-                </div>}
+                </div>
+              )}
             </div>
           </div>
         </div>

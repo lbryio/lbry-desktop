@@ -40,16 +40,19 @@ class ChannelTile extends React.PureComponent {
                 </h3>
               </div>
               <div className="card__content card__subtext">
-                {isResolvingUri &&
-                  <BusyMessage message={__("Resolving channel")} />}
-                {totalItems > 0 &&
+                {isResolvingUri && (
+                  <BusyMessage message={__("Resolving channel")} />
+                )}
+                {totalItems > 0 && (
                   <span>
                     This is a channel with {totalItems}{" "}
                     {totalItems === 1 ? " item" : " items"} inside of it.
-                  </span>}
+                  </span>
+                )}
                 {!isResolvingUri &&
-                  !totalItems &&
-                  <span className="empty">This is an empty channel.</span>}
+                  !totalItems && (
+                    <span className="empty">This is an empty channel.</span>
+                  )}
               </div>
             </div>
           </div>

@@ -11,7 +11,7 @@ const SearchNoResults = props => {
   return (
     <section>
       <span className="empty">
-        {(__("No one has checked anything in for %s yet."), query)} {" "}
+        {(__("No one has checked anything in for %s yet."), query)}{" "}
         <Link label={__("Be the first")} navigate="/publish" />
       </span>
     </section>
@@ -39,19 +39,21 @@ class FileListSearch extends React.PureComponent {
     return (
       <div>
         {isSearching &&
-          !uris &&
-          <BusyMessage message={__("Looking up the Dewey Decimals")} />}
+          !uris && (
+            <BusyMessage message={__("Looking up the Dewey Decimals")} />
+          )}
 
         {isSearching &&
-          uris &&
-          <BusyMessage message={__("Refreshing the Dewey Decimals")} />}
+          uris && <BusyMessage message={__("Refreshing the Dewey Decimals")} />}
 
         {uris && uris.length
           ? uris.map(
               uri =>
-                lbryuri.parse(uri).name[0] === "@"
-                  ? <ChannelTile key={uri} uri={uri} />
-                  : <FileTile key={uri} uri={uri} />
+                lbryuri.parse(uri).name[0] === "@" ? (
+                  <ChannelTile key={uri} uri={uri} />
+                ) : (
+                  <FileTile key={uri} uri={uri} />
+                )
             )
           : !isSearching && <SearchNoResults query={query} />}
       </div>

@@ -45,18 +45,17 @@ class FileDownloadLink extends React.PureComponent {
     } = this.props;
 
     if (loading || downloading) {
-      const progress = fileInfo && fileInfo.written_bytes
-        ? fileInfo.written_bytes / fileInfo.total_bytes * 100
-        : 0,
+      const progress =
+          fileInfo && fileInfo.written_bytes
+            ? fileInfo.written_bytes / fileInfo.total_bytes * 100
+            : 0,
         label = fileInfo
           ? progress.toFixed(0) + __("% complete")
           : __("Connecting..."),
         labelWithIcon = (
           <span className="button__content">
             <Icon icon="icon-download" />
-            <span>
-              {label}
-            </span>
+            <span>{label}</span>
           </span>
         );
 

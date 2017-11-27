@@ -96,17 +96,17 @@ export class DropDownMenu extends React.PureComponent {
             this.handleMenuIconClick(event);
           }}
         />
-        {this.state.menuOpen
-          ? <div
-              ref={div => (this._menuDiv = div)}
-              className="menu"
-              onClick={event => {
-                this.handleMenuClick(event);
-              }}
-            >
-              {this.props.children}
-            </div>
-          : null}
+        {this.state.menuOpen ? (
+          <div
+            ref={div => (this._menuDiv = div)}
+            className="menu"
+            onClick={event => {
+              this.handleMenuClick(event);
+            }}
+          >
+            {this.props.children}
+          </div>
+        ) : null}
       </div>
     );
   }

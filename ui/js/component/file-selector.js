@@ -26,9 +26,10 @@ class FileSelector extends React.PureComponent {
   handleButtonClick() {
     remote.dialog.showOpenDialog(
       {
-        properties: this.props.type == "file"
-          ? ["openFile"]
-          : ["openDirectory", "createDirectory"],
+        properties:
+          this.props.type == "file"
+            ? ["openFile"]
+            : ["openDirectory", "createDirectory"],
       },
       paths => {
         if (!paths) {
@@ -62,8 +63,7 @@ class FileSelector extends React.PureComponent {
                 : __("Choose Directory")}
             </span>
           </span>
-        </button>
-        {" "}
+        </button>{" "}
         <span className="file-selector__path">
           <input
             className="input-copyable"

@@ -5,12 +5,14 @@ class FormFieldPrice extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
-      amount: props.defaultValue && props.defaultValue.amount
-        ? props.defaultValue.amount
-        : "",
-      currency: props.defaultValue && props.defaultValue.currency
-        ? props.defaultValue.currency
-        : "LBC",
+      amount:
+        props.defaultValue && props.defaultValue.amount
+          ? props.defaultValue.amount
+          : "",
+      currency:
+        props.defaultValue && props.defaultValue.currency
+          ? props.defaultValue.currency
+          : "LBC",
     };
   }
 
