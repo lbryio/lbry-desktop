@@ -7,13 +7,13 @@ yarn install
 
 
 # do app
-cd src\main
+cd app
 yarn install
 # necessary to ensure native Node modules (e.g. keytar) are built against the correct version of Node)
 # yes, it needs to be run twice. it fails the first time, not sure why
 node_modules\.bin\electron-rebuild
 node_modules\.bin\electron-rebuild
-cd ..\..
+cd ..
 
 
 # build ui
@@ -22,18 +22,18 @@ yarn install
 npm rebuild node-sass
 node_modules\.bin\node-sass --output dist\css --sourcemap=none scss\
 node_modules\.bin\webpack --config webpack.prod.js
-Copy-Item dist ..\main\ -recurse
-cd ..\..
+Copy-Item dist ..\app\ -recurse
+cd ..
 
 
 # get daemon and cli executable
-$package_settings = (Get-Content src\main\package.json -Raw | ConvertFrom-Json).lbrySettings
+$package_settings = (Get-Content app\package.json -Raw | ConvertFrom-Json).lbrySettings
 $daemon_ver = $package_settings.lbrynetDaemonVersion
 $daemon_url_template = $package_settings.lbrynetDaemonUrlTemplate
 $daemon_url = $daemon_url_template.Replace('OSNAME', 'windows').Replace('DAEMONVER', $daemon_ver)
 Invoke-WebRequest -Uri $daemon_url -OutFile daemon.zip
-Expand-Archive daemon.zip -DestinationPath src\main\dist\
-dir src\main\dist\ # verify that daemon binary is there
+Expand-Archive daemon.zip -DestinationPath app\dist\
+dir app\dist\ # verify that daemon binary is there
 rm daemon.zip
 
 
