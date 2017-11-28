@@ -66,6 +66,9 @@
       "perMachine": true
     }
   },
+  "scripts": {
+    "start": "./node_modules/.bin/electron src/main"
+  },
   "devDependencies": {
     "devtron": "^1.4.0",
     "electron": "^1.7.9",
