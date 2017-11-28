@@ -66,11 +66,8 @@ python -m pip install -r build\requirements.txt
 npm install -g yarn
 yarn install
 ```
-<<<<<<< HEAD
+
 3. Change directory to `src\main` and run the following:
-=======
-3. Change directory to `src\main` and run the following;
->>>>>>> dbf0fae5... Update file structure to follow electron-webpack guidelines
 ```
 yarn install
 node_modules\.bin\electron-rebuild

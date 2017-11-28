@@ -17,11 +17,7 @@ cd ..\..
 
 
 # build ui
-<<<<<<< HEAD
 cd src\renderer
-=======
-cd main\renderer
->>>>>>> dbf0fae5... Update file structure to follow electron-webpack guidelines
 yarn install
 npm rebuild node-sass
 node_modules\.bin\node-sass --output dist\css --sourcemap=none scss\
