@@ -15,12 +15,12 @@ type appState = {
   modal: mixed,
   modalProps: mixed,
   platform: string,
-  upgradeSkipped: mixed,
-  daemonVersionMatched: mixed,
+  upgradeSkipped: boolean,
+  daemonVersionMatched: ?boolean,
   daemonReady: boolean,
   hasSignature: boolean,
   badgeNumber: number,
-  volume: mixed,
+  volume: number,
   downloadProgress?: number,
   upgradeDownloading?: boolean,
   upgradeDownloadComplete?: boolean,
@@ -34,12 +34,12 @@ const defaultState: appState = {
   modal: null,
   modalProps: {},
   platform: process.platform,
-  upgradeSkipped: sessionStorage.getItem("upgradeSkipped"),
+  upgradeSkipped: sessionStorage.getItem("upgradeSkipped") === "true",
   daemonVersionMatched: null,
   daemonReady: false,
   hasSignature: false,
   badgeNumber: 0,
-  volume: sessionStorage.getItem("volume") || 1,
+  volume: Number(sessionStorage.getItem("volume")) || 1,
 };
 
 reducers[types.DAEMON_READY] = function(state, action) {
@@ -84,8 +84,7 @@ reducers[types.UPGRADE_DOWNLOAD_STARTED] = function(state, action) {
 };
 
 reducers[types.SKIP_UPGRADE] = function(state, action) {
-  // $FlowFixMe: Interest error here, it appears that setItem is expecting string, not a boolean as the data parameter
-  sessionStorage.setItem("upgradeSkipped", true);
+  sessionStorage.setItem("upgradeSkipped", "true");
 
   return Object.assign({}, state, {
     isUpgradeSkipped: true,
