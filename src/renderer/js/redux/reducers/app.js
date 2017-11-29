@@ -187,7 +187,7 @@ reducers[types.VOLUME_CHANGED] = function(state, action) {
   });
 };
 
-export default function reducer(state: any = defaultState, action: any) {
+export default function reducer(state: appState = defaultState, action: any) {
   const handler = reducers[action.type];
   if (handler) return handler(state, action);
   return state;
