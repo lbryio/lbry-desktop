@@ -1,4 +1,5 @@
 [ignore]
+.*/node_modules/**
 
 [include]
 
@@ -7,5 +8,7 @@
 [lints]
 
 [options]
+suppress_comment=\\(.\\|\n\\)*\\$FlowFixMe
+suppress_comment=\\(.\\|\n\\)*\\$FlowIssue
 
 [strict]

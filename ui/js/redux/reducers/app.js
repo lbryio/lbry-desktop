@@ -1,12 +1,35 @@
-import * as types from "constants/action_types";
-import * as modalTypes from "constants/modal_types";
+// @flow
 
+import * as types from "../../constants/action_types";
+import * as modalTypes from "../../constants/modal_types";
+
+// $FlowIssue: Flow cannot find election
 const { remote } = require("electron");
+
 const application = remote.app;
 const win = remote.BrowserWindow.getFocusedWindow();
 
 const reducers = {};
-const defaultState = {
+type appState = {
+  isLoaded: boolean,
+  modal: mixed,
+  modalProps: mixed,
+  platform: string,
+  upgradeSkipped: mixed,
+  daemonVersionMatched: mixed,
+  daemonReady: boolean,
+  hasSignature: boolean,
+  badgeNumber: number,
+  volume: mixed,
+  downloadProgress?: number,
+  upgradeDownloading?: boolean,
+  upgradeDownloadComplete?: boolean,
+  checkUpgradeTimer?: mixed,
+  isUpgradeAvailable?: boolean,
+  isUpgradeSkipped?: boolean,
+  snackBar?: mixed,
+};
+const defaultState: appState = {
   isLoaded: false,
   modal: null,
   modalProps: {},
@@ -61,6 +84,7 @@ reducers[types.UPGRADE_DOWNLOAD_STARTED] = function(state, action) {
 };
 
 reducers[types.SKIP_UPGRADE] = function(state, action) {
+  // $FlowFixMe: Interest error here, it appears that setItem is expecting string, not a boolean as the data parameter
   sessionStorage.setItem("upgradeSkipped", true);
 
   return Object.assign({}, state, {
@@ -164,7 +188,7 @@ reducers[types.VOLUME_CHANGED] = function(state, action) {
   });
 };
 
-export default function reducer(state = defaultState, action) {
+export default function reducer(state: any = defaultState, action: any) {
   const handler = reducers[action.type];
   if (handler) return handler(state, action);
   return state;
