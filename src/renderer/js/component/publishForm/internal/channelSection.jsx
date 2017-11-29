@@ -48,11 +48,22 @@ class ChannelSection extends React.PureComponent {
 
   handleNewChannelBidChange(event) {
     this.setState({
-      newChannelBid: event.target.value,
+      newChannelBid: parseFloat(event.target.value),
     });
   }
 
   handleCreateChannelClick(event) {
+    const { balance } = this.props;
+    const { newChannelBid } = this.state;
+
+    if (newChannelBid > balance) {
+      this.refs.newChannelName.showError(
+        __("Unable to create channel due to insufficient funds.")
+      );
+
+      return;
+    }
+
     this.setState({
       creatingChannel: true,
     });
