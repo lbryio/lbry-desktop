@@ -1,0 +1,17 @@
+
+.channel-name {
+  display: inline-block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis
+}
+
+// this shouldn't know about the card width
+// will come back to this for the redesign - sean
+.channel-name--small {
+  width: calc(var(--card-small-width) * 2 / 3);
+}
+
+.channel-indicator__icon--invalid {
+  color: var(--color-error);
+}

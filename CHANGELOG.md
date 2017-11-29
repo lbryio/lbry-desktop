@@ -12,14 +12,16 @@ Web UI version numbers should always match the corresponding version of LBRY App
   *
 
 ### Changed
+  * The credit balance displayed in the main app navigation displays two decimal places instead of one.
   * Moved all redux code into /redux folder
-  *
 
 ### Fixed
   * Long channel names causing inconsistent thumbnail sizes (#721)
   * Fixed regression in #697 causing transaction screen to not load for new users (#755)
   * Fixed scriolling restore/reset/set (#729)
   * Fixed sorting by title for published files (#614)
+  * App now uses the new balance_delta field in the txn list.
+  *
 
 ### Deprecated
   *
