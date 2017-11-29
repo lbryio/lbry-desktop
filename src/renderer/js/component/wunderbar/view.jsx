@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import lbryuri from "lbryuri.js";
 import { Icon } from "component/common.js";
 import { parseQueryParams } from "util/query_params";
@@ -7,8 +8,8 @@ class WunderBar extends React.PureComponent {
   static TYPING_TIMEOUT = 800;
 
   static propTypes = {
-    onSearch: React.PropTypes.func.isRequired,
-    onSubmit: React.PropTypes.func.isRequired,
+    onSearch: PropTypes.func.isRequired,
+    onSubmit: PropTypes.func.isRequired,
   };
 
   constructor(props) {

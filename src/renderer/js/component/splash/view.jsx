@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import lbry from "lbry.js";
 import LoadScreen from "../load_screen.js";
 import ModalIncompatibleDaemon from "modal/modalIncompatibleDaemon";
@@ -8,8 +9,8 @@ import * as modals from "constants/modal_types";
 
 export class SplashScreen extends React.PureComponent {
   static propTypes = {
-    message: React.PropTypes.string,
-    onLoadDone: React.PropTypes.func,
+    message: PropTypes.string,
+    onLoadDone: PropTypes.func,
   };
 
   constructor(props) {

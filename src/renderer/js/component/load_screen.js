@@ -1,13 +1,14 @@
 import React from "react";
+import PropTypes from "prop-types";
 import lbry from "../lbry.js";
 import { BusyMessage, Icon } from "./common.js";
 import Link from "component/link";
 
 class LoadScreen extends React.PureComponent {
   static propTypes = {
-    message: React.PropTypes.string.isRequired,
-    details: React.PropTypes.string,
-    isWarning: React.PropTypes.bool,
+    message: PropTypes.string.isRequired,
+    details: PropTypes.string,
+    isWarning: PropTypes.bool,
   };
 
   constructor(props) {

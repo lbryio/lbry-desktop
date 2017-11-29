@@ -1,18 +1,19 @@
 import React from "react";
+import PropTypes from "prop-types";
 import ReactModal from "react-modal";
 import Link from "component/link/index";
 import app from "app.js";
 
 export class Modal extends React.PureComponent {
   static propTypes = {
-    type: React.PropTypes.oneOf(["alert", "confirm", "custom"]),
-    overlay: React.PropTypes.bool,
-    onConfirmed: React.PropTypes.func,
-    onAborted: React.PropTypes.func,
-    confirmButtonLabel: React.PropTypes.string,
-    abortButtonLabel: React.PropTypes.string,
-    confirmButtonDisabled: React.PropTypes.bool,
-    abortButtonDisabled: React.PropTypes.bool,
+    type: PropTypes.oneOf(["alert", "confirm", "custom"]),
+    overlay: PropTypes.bool,
+    onConfirmed: PropTypes.func,
+    onAborted: PropTypes.func,
+    confirmButtonLabel: PropTypes.string,
+    abortButtonLabel: PropTypes.string,
+    confirmButtonDisabled: PropTypes.bool,
+    abortButtonDisabled: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -64,8 +65,8 @@ export class Modal extends React.PureComponent {
 
 export class ExpandableModal extends React.PureComponent {
   static propTypes = {
-    expandButtonLabel: React.PropTypes.string,
-    extraContent: React.PropTypes.element,
+    expandButtonLabel: PropTypes.string,
+    extraContent: PropTypes.element,
   };
 
   static defaultProps = {
