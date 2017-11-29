@@ -35,7 +35,7 @@ export class Form extends React.PureComponent {
 }
 
 export class FormRow extends React.PureComponent {
-  spropTypes = {
+  propTypes = {
     label: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
     errorMessage: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
     // helper: PropTypes.html,
