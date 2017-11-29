@@ -39,7 +39,7 @@ if (isDebug) {
 
 // Misc constants
 const LATEST_RELEASE_API_URL = 'https://api.github.com/repos/lbryio/lbry-app/releases/latest';
-const DAEMON_PATH = process.env.LBRY_DAEMON || path.join(__dirname, 'dist', 'lbrynet-daemon');
+const DAEMON_PATH = process.env.LBRY_DAEMON || path.join(app.getAppPath(), 'dist', 'lbrynet-daemon');
 
 let client = jayson.client.http({
   host: 'localhost',
@@ -178,7 +178,7 @@ function createWindow () {
   if (isDebug) {
     win.webContents.openDevTools();
   }
-  win.loadURL(`file://${__dirname}/dist/index.html`)
+  win.loadURL(`file://${app.getAppPath()}/dist/index.html`)
   if (openUri) { // We stored and received a URI that an external app requested before we had a window object
     win.webContents.on('did-finish-load', () => {
       win.webContents.send('open-uri-requested', openUri);
@@ -240,7 +240,7 @@ function createTray () {
   if (process.platform === 'darwin') {
     // Using @2x for mac retina screens so the icon isn't blurry
     // file name needs to include "Template" at the end for dark menu bar
-    iconPath = path.join(app.getAppPath(), "/dist/img/fav/macTemplate@2x.png"); 
+    iconPath = path.join(app.getAppPath(), "/dist/img/fav/macTemplate@2x.png");
   } else {
     iconPath = path.join(app.getAppPath(), "/dist/img/fav/32x32.png");
   }
@@ -315,7 +315,7 @@ function handleDaemonSubprocessExited() {
     // TODO: maybe it would be better to restart the daemon?
     if (win) {
       console.log('Did not request daemon stop, so quitting in 5 seconds.');
-      win.loadURL(`file://${__dirname}/dist/warning.html`);
+      win.loadURL(`file://${app.getAppPath()}/dist/warning.html`);
       setTimeout(quitNow, 5000);
     } else {
       console.log('Did not request daemon stop, so quitting.');
@@ -507,7 +507,7 @@ function upgrade(event, installerPath) {
   });
 
   if (win) {
-    win.loadURL(`file://${__dirname}/dist/upgrade.html`);
+    win.loadURL(`file://${app.getAppPath()}/dist/upgrade.html`);
   }
 
   shutdownDaemonAndQuit(true);

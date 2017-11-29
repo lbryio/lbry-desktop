@@ -41,8 +41,6 @@ fi
 
 [ -d "$ROOT/dist" ] && rm -rf "$ROOT/dist"
 mkdir -p "$ROOT/dist"
-[ -d "$ROOT/src/main/dist" ] && rm -rf "$ROOT/src/main/dist"
-mkdir -p "$ROOT/src/main/dist"
 
 yarn install
 
@@ -53,13 +51,11 @@ yarn install
 ############
 echo -e "\033[0;32mCompiling UI\x1b[m"
 (
-  cd "$ROOT/src/renderer"
-  yarn install
   npm rebuild node-sass
-  node extractLocals.js
-  node_modules/.bin/node-sass --output dist/css --sourcemap=none scss/
-  node_modules/.bin/webpack --config webpack.prod.js
-  cp -r dist/* "$ROOT/src/main/dist/"
+  node src/renderer/extractLocals.js
+  node_modules/.bin/node-sass --output dist/css --sourcemap=none src/renderer/scss/
+  node_modules/.bin/webpack --config src/renderer/webpack.prod.js
+  cp -r src/renderer/dist/* "$ROOT/dist/"
 )
 
 
@@ -73,14 +69,14 @@ if $OSX; then
 else
   OSNAME="linux"
 fi
-DAEMON_VER=$(node -e "console.log(require(\"$ROOT/src/main/package.json\").lbrySettings.lbrynetDaemonVersion)")
-DAEMON_URL_TEMPLATE=$(node -e "console.log(require(\"$ROOT/src/main/package.json\").lbrySettings.lbrynetDaemonUrlTemplate)")
+DAEMON_VER=$(node -e "console.log(require(\"$ROOT/package.json\").lbrySettings.lbrynetDaemonVersion)")
+DAEMON_URL_TEMPLATE=$(node -e "console.log(require(\"$ROOT/package.json\").lbrySettings.lbrynetDaemonUrlTemplate)")
 DAEMON_URL=$(echo ${DAEMON_URL_TEMPLATE//DAEMONVER/$DAEMON_VER} | sed "s/OSNAME/$OSNAME/g")
 DAEMON_VER_PATH="$BUILD_DIR/daemon.ver"
 echo "$DAEMON_VER_PATH"
-if [[ ! -f $DAEMON_VER_PATH || ! -f $ROOT/src/main/dist/lbrynet-daemon || "$(< "$DAEMON_VER_PATH")" != "$DAEMON_VER" ]]; then
+if [[ ! -f $DAEMON_VER_PATH || ! -f $ROOT/dist/lbrynet-daemon || "$(< "$DAEMON_VER_PATH")" != "$DAEMON_VER" ]]; then
     curl -sL -o "$BUILD_DIR/daemon.zip" "$DAEMON_URL"
-    unzip "$BUILD_DIR/daemon.zip" -d "$ROOT/src/main/dist/"
+    unzip "$BUILD_DIR/daemon.zip" -d "$ROOT/dist/"
     rm "$BUILD_DIR/daemon.zip"
     echo "$DAEMON_VER" > "$DAEMON_VER_PATH"
 else
@@ -93,20 +89,6 @@ fi
 ###################
 #  Build the app  #
 ###################
-echo -e '\033[0;32mBuilding Lbry-app\x1b[m'
-(
-  cd "$ROOT/src/main"
-  yarn install
-
-  # necessary to ensure native Node modules (e.g. keytar) are built against the correct version of Node)
-  # yes, it needs to be run twice. it fails the first time, not sure why
-  set +e
-  # DEBUG=electron-rebuild node_modules/.bin/electron-rebuild .
-  node_modules/.bin/electron-rebuild "$ROOT/src/main"
-  set -e
-  node_modules/.bin/electron-rebuild "$ROOT/src/main"
-)
-
 if [ "$FULL_BUILD" == "true" ]; then
   if $OSX; then
     security unlock-keychain -p ${KEYCHAIN_PASSWORD} osx-build.keychain
@@ -133,5 +115,5 @@ if [ "$FULL_BUILD" == "true" ]; then
 
   echo -e '\033[0;32mBuild and packaging complete.\x1b[m'
 else
-  echo -e 'Build complete. Run \033[1;31m./node_modules/.bin/electron src/main\x1b[m to launch the app'
+  echo -e 'Build complete. Run \033[1;31m./node_modules/.bin/electron .\x1b[m to launch the app'
 fi

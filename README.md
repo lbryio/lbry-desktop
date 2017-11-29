@@ -29,11 +29,10 @@ This will download and install the LBRY app and its dependencies, including [the
 
 ### Running
 
-Run `./node_modules/.bin/electron src/main`
+Run `./node_modules/.bin/electron .`
 
 ### Ongoing Development
-1. `cd src/renderer`
-2. `./watch.sh`
+`./watch.sh`
 
 This will set up a monitor that will automatically compile any changes to JS or CSS folders inside of the `src/renderer` folder. This allows you to make changes and see them immediately by reloading the app.
 
@@ -65,35 +64,21 @@ exit
 python -m pip install -r build\requirements.txt
 npm install -g yarn
 yarn install
-```
-
-3. Change directory to `src\main` and run the following:
-```
-yarn install
-node_modules\.bin\electron-rebuild
-node_modules\.bin\electron-rebuild
-cd ..\..
-```
-4. Change directory to `src\renderer` and run the following:
-```
-yarn install
 npm rebuild node-sass
-node node_modules\node-sass\bin\node-sass --output dist\css --sourcemap=none scss\
-node_modules\.bin\webpack --config webpack.dev.config.js
-xcopy /E dist ..\main\dist
-cd ..\..
+node_modules\.bin\node-sass --output dist\css --sourcemap=none src\renderer\scss\
+node_modules\.bin\webpack --config src\renderer\webpack.prod.js
+xcopy /E src\renderer\dist dist
 ```
-4. Download the lbry daemon and cli [binaries](https://github.com/lbryio/lbry/releases) and place them in `src\main\dist\`
+3. Download the lbry daemon and cli [binaries](https://github.com/lbryio/lbry/releases) and place them in `dist\`
 
 ### Building lbry-app
-1. run `node_modules\.bin\build -p never` from the root of the project.
+Run `node_modules\.bin\build -p never` from the root of the project.
 
 ### Running the electron app
-1. Run `node_modules\.bin\electron src\main`
+Run `node_modules\.bin\electron .`
 
 ### Ongoing Development
-1. `cd src\renderer`
-2. `watch.bat`
+Run `watch.bat`
 
 This will set up a monitor that will automatically compile any changes to JS or CSS folders inside of the `src\renderer` folder. This allows you to make changes and see them immediately by reloading the app.
 
