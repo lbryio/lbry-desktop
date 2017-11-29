@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import FormField from "component/formField";
 import { Icon } from "component/common.js";
 
@@ -12,7 +13,7 @@ export function formFieldId() {
 
 export class Form extends React.PureComponent {
   static propTypes = {
-    onSubmit: React.PropTypes.func.isRequired,
+    onSubmit: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -34,16 +35,10 @@ export class Form extends React.PureComponent {
 }
 
 export class FormRow extends React.PureComponent {
-  static propTypes = {
-    label: React.PropTypes.oneOfType([
-      React.PropTypes.string,
-      React.PropTypes.element,
-    ]),
-    errorMessage: React.PropTypes.oneOfType([
-      React.PropTypes.string,
-      React.PropTypes.object,
-    ]),
-    // helper: React.PropTypes.html,
+  spropTypes = {
+    label: PropTypes.oneOfType([PropTypes.string, PropTypes.element]),
+    errorMessage: PropTypes.oneOfType([PropTypes.string, PropTypes.object]),
+    // helper: PropTypes.html,
   };
 
   static defaultProps = {

@@ -1,9 +1,10 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 export class ToolTip extends React.PureComponent {
   static propTypes = {
-    body: React.PropTypes.string.isRequired,
-    label: React.PropTypes.string.isRequired,
+    body: PropTypes.string.isRequired,
+    label: PropTypes.string.isRequired,
   };
 
   constructor(props) {

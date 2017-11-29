@@ -1,11 +1,12 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 const { remote } = require("electron");
 class FileSelector extends React.PureComponent {
   static propTypes = {
-    type: React.PropTypes.oneOf(["file", "directory"]),
-    initPath: React.PropTypes.string,
-    onFileChosen: React.PropTypes.func,
+    type: PropTypes.oneOf(["file", "directory"]),
+    initPath: PropTypes.string,
+    onFileChosen: PropTypes.func,
   };
 
   static defaultProps = {

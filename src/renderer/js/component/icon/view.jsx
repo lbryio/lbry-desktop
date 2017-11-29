@@ -1,10 +1,11 @@
 import React from "react";
+import PropTypes from "prop-types";
 import * as icons from "constants/icons";
 
 export default class Icon extends React.PureComponent {
   static propTypes = {
-    icon: React.PropTypes.string.isRequired,
-    fixed: React.PropTypes.bool,
+    icon: PropTypes.string.isRequired,
+    fixed: PropTypes.bool,
   };
 
   static defaultProps = {
