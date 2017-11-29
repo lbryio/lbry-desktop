@@ -1576,14 +1576,6 @@ create-hmac@^1.1.0, create-hmac@^1.1.2, create-hmac@^1.1.4:
     safe-buffer "^5.0.1"
     sha.js "^2.4.8"
 
-create-react-class@^15.5.2:
-  version "15.6.2"
-  resolved "https://registry.yarnpkg.com/create-react-class/-/create-react-class-15.6.2.tgz#cf1ed15f12aad7f14ef5f2dfe05e6c42f91ef02a"
-  dependencies:
-    fbjs "^0.8.9"
-    loose-envify "^1.3.1"
-    object-assign "^4.1.1"
-
 cross-spawn@^3.0.0:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/cross-spawn/-/cross-spawn-3.0.1.tgz#1256037ecb9f0c5f79e3d6ef135e30770184b982"
@@ -1929,10 +1921,6 @@ electron-to-chromium@^1.2.7:
 elegant-spinner@^1.0.1:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/elegant-spinner/-/elegant-spinner-1.0.1.tgz#db043521c95d7e303fd8f345bedc3349cfb0729e"
-
-element-class@^0.2.0:
-  version "0.2.2"
-  resolved "https://registry.yarnpkg.com/element-class/-/element-class-0.2.2.tgz#9d3bbd0767f9013ef8e1c8ebe722c1402a60050e"
 
 elliptic@^6.0.0:
   version "6.4.0"
@@ -2312,9 +2300,9 @@ execa@^0.7.0:
     signal-exit "^3.0.0"
     strip-eof "^1.0.0"
 
-exenv@1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/exenv/-/exenv-1.2.0.tgz#3835f127abf075bfe082d0aed4484057c78e3c89"
+exenv@^1.2.0:
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/exenv/-/exenv-1.2.2.tgz#2ae78e85d9894158670b03d47bec1f03bd91bb9d"
 
 exit-hook@^1.0.0:
   version "1.1.1"
@@ -2428,7 +2416,7 @@ fbjs@^0.6.1:
     ua-parser-js "^0.7.9"
     whatwg-fetch "^0.9.0"
 
-fbjs@^0.8.16, fbjs@^0.8.4, fbjs@^0.8.9:
+fbjs@^0.8.16, fbjs@^0.8.4:
   version "0.8.16"
   resolved "https://registry.yarnpkg.com/fbjs/-/fbjs-0.8.16.tgz#5e67432f550dc41b572bf55847b8aca64e5337db"
   dependencies:
@@ -4873,7 +4861,7 @@ promise@^7.0.3, promise@^7.1.1:
   dependencies:
     asap "~2.0.3"
 
-prop-types@^15.5.1, prop-types@^15.5.10, prop-types@^15.5.7, prop-types@^15.5.8, prop-types@^15.6.0:
+prop-types@^15.5.1, prop-types@^15.5.10, prop-types@^15.5.8, prop-types@^15.6.0:
   version "15.6.0"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.6.0.tgz#ceaf083022fc46b4a35f69e13ef75aed0d639856"
   dependencies:
@@ -5024,10 +5012,6 @@ react-addons-create-fragment@^15.0.0:
     loose-envify "^1.3.1"
     object-assign "^4.1.0"
 
-react-dom-factories@^1.0.0:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/react-dom-factories/-/react-dom-factories-1.0.2.tgz#eb7705c4db36fb501b3aa38ff759616aa0ff96e0"
-
 react-dom@^16.2.0:
   version "16.2.0"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.2.0.tgz#69003178601c0ca19b709b33a83369fe6124c044"
@@ -5045,23 +5029,19 @@ react-markdown@^2.5.0:
     commonmark-react-renderer "^4.3.4"
     prop-types "^15.5.1"
 
-react-modal@^1.5.2:
-  version "1.9.7"
-  resolved "https://registry.yarnpkg.com/react-modal/-/react-modal-1.9.7.tgz#07ef56790b953e3b98ef1e2989e347983c72871d"
+react-modal@^3.1.5:
+  version "3.1.5"
+  resolved "https://registry.yarnpkg.com/react-modal/-/react-modal-3.1.5.tgz#9cfdb7634b5003148ffb7c8ead13a36f671d744e"
   dependencies:
-    create-react-class "^15.5.2"
-    element-class "^0.2.0"
-    exenv "1.2.0"
-    lodash.assign "^4.2.0"
-    prop-types "^15.5.7"
-    react-dom-factories "^1.0.0"
+    exenv "^1.2.0"
+    prop-types "^15.5.10"
 
-react-paginate@^4.4.3:
-  version "4.4.4"
-  resolved "https://registry.yarnpkg.com/react-paginate/-/react-paginate-4.4.4.tgz#0126110e8b8438b08a2c97b59e8391d72ae0b0f3"
+react-paginate@^5.0.0:
+  version "5.0.0"
+  resolved "https://registry.yarnpkg.com/react-paginate/-/react-paginate-5.0.0.tgz#b5c12191ea81adc6d4d1b339b805e81841eaa8ea"
   dependencies:
     classnames "^2.2.5"
-    prop-types "^15.5.7"
+    prop-types "^15.6.0"
     react-addons-create-fragment "^15.0.0"
 
 react-redux@^5.0.3:
