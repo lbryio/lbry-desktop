@@ -65,6 +65,7 @@
     "eslint-plugin-react": "^6.7.1",
     "flow-babel-webpack-plugin": "^1.1.0",
     "flow-bin": "^0.59.0",
+    "flow-typed": "^2.2.3",
     "husky": "^0.13.4",
     "i18n-extract": "^0.4.4",
     "json-loader": "^0.5.4",
