@@ -10,9 +10,16 @@ const application = remote.app;
 const win = remote.BrowserWindow.getFocusedWindow();
 
 const reducers = {};
-type appState = {
+
+export type SnackBar = {
+  message: string,
+  linkText: string,
+  linkTarget: string,
+  isError: boolean,
+};
+export type AppState = {
   isLoaded: boolean,
-  modal: mixed,
+  modal: ?string,
   modalProps: mixed,
   platform: string,
   upgradeSkipped: boolean,
@@ -21,15 +28,16 @@ type appState = {
   hasSignature: boolean,
   badgeNumber: number,
   volume: number,
-  downloadProgress?: number,
-  upgradeDownloading?: boolean,
-  upgradeDownloadComplete?: boolean,
-  checkUpgradeTimer?: mixed,
-  isUpgradeAvailable?: boolean,
-  isUpgradeSkipped?: boolean,
-  snackBar?: mixed,
+  downloadProgress: ?number,
+  upgradeDownloading: ?boolean,
+  upgradeDownloadComplete: ?boolean,
+  checkUpgradeTimer: ?number,
+  isUpgradeAvailable: ?boolean,
+  isUpgradeSkipped: ?boolean,
+  snackBar: ?SnackBar,
 };
-const defaultState: appState = {
+
+const defaultState: AppState = {
   isLoaded: false,
   modal: null,
   modalProps: {},
@@ -40,6 +48,13 @@ const defaultState: appState = {
   hasSignature: false,
   badgeNumber: 0,
   volume: Number(sessionStorage.getItem("volume")) || 1,
+  downloadProgress: undefined,
+  upgradeDownloading: undefined,
+  upgradeDownloadComplete: undefined,
+  checkUpgradeTimer: undefined,
+  isUpgradeAvailable: undefined,
+  isUpgradeSkipped: undefined,
+  snackBar: undefined,
 };
 
 reducers[types.DAEMON_READY] = function(state, action) {
@@ -187,7 +202,7 @@ reducers[types.VOLUME_CHANGED] = function(state, action) {
   });
 };
 
-export default function reducer(state: appState = defaultState, action: any) {
+export default function reducer(state: AppState = defaultState, action: any) {
   const handler = reducers[action.type];
   if (handler) return handler(state, action);
   return state;
