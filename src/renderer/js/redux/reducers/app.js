@@ -1,7 +1,7 @@
 // @flow
 
-import * as types from "../../constants/action_types";
-import * as modalTypes from "../../constants/modal_types";
+import * as types from "constants/action_types";
+import * as modalTypes from "constants/modal_types";
 
 // $FlowIssue: Flow cannot find election
 const { remote } = require("electron");
@@ -48,6 +48,7 @@ const defaultState: AppState = {
   hasSignature: false,
   badgeNumber: 0,
   volume: Number(sessionStorage.getItem("volume")) || 1,
+
   downloadProgress: undefined,
   upgradeDownloading: undefined,
   upgradeDownloadComplete: undefined,

@@ -10,5 +10,6 @@
 [options]
 suppress_comment=\\(.\\|\n\\)*\\$FlowFixMe
 suppress_comment=\\(.\\|\n\\)*\\$FlowIssue
+module.name_mapper='^constants\(.*\)$' -> '<PROJECT_ROOT>/js/constants\1'
 
 [strict]
