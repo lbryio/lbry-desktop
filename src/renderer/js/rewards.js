@@ -22,7 +22,7 @@ function rewardMessage(type, amount) {
       amount
     ),
     many_downloads: __(
-      "You earned %s LBC for downloading some of the things.",
+      "You earned %s LBC for downloading a bunch of things.",
       amount
     ),
     first_publish: __(
@@ -31,6 +31,10 @@ function rewardMessage(type, amount) {
     ),
     featured_download: __(
       "You earned %s LBC for watching a featured download.",
+      amount
+    ),
+     referral: __(
+      "You earned %s LBC for referring someone.",
       amount
     ),
   }[type];
