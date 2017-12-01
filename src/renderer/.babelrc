@@ -3,4 +3,7 @@
     "es2015",
     "react"
   ],
+  "plugins" : [
+   "transform-flow-comments"
+ ]
 }

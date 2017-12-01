@@ -1,22 +1,60 @@
+// @flow
+
 import * as types from "constants/action_types";
 import * as modalTypes from "constants/modal_types";
 
 const { remote } = require("electron");
+
 const application = remote.app;
 const win = remote.BrowserWindow.getFocusedWindow();
 
 const reducers = {};
-const defaultState = {
+
+export type SnackBar = {
+  message: string,
+  linkText: string,
+  linkTarget: string,
+  isError: boolean,
+};
+export type AppState = {
+  isLoaded: boolean,
+  modal: ?string,
+  modalProps: mixed,
+  platform: string,
+  upgradeSkipped: boolean,
+  daemonVersionMatched: ?boolean,
+  daemonReady: boolean,
+  hasSignature: boolean,
+  badgeNumber: number,
+  volume: number,
+  downloadProgress: ?number,
+  upgradeDownloading: ?boolean,
+  upgradeDownloadComplete: ?boolean,
+  checkUpgradeTimer: ?number,
+  isUpgradeAvailable: ?boolean,
+  isUpgradeSkipped: ?boolean,
+  snackBar: ?SnackBar,
+};
+
+const defaultState: AppState = {
   isLoaded: false,
   modal: null,
   modalProps: {},
   platform: process.platform,
-  upgradeSkipped: sessionStorage.getItem("upgradeSkipped"),
+  upgradeSkipped: sessionStorage.getItem("upgradeSkipped") === "true",
   daemonVersionMatched: null,
   daemonReady: false,
   hasSignature: false,
   badgeNumber: 0,
-  volume: sessionStorage.getItem("volume") || 1,
+  volume: Number(sessionStorage.getItem("volume")) || 1,
+
+  downloadProgress: undefined,
+  upgradeDownloading: undefined,
+  upgradeDownloadComplete: undefined,
+  checkUpgradeTimer: undefined,
+  isUpgradeAvailable: undefined,
+  isUpgradeSkipped: undefined,
+  snackBar: undefined,
 };
 
 reducers[types.DAEMON_READY] = function(state, action) {
@@ -61,7 +99,7 @@ reducers[types.UPGRADE_DOWNLOAD_STARTED] = function(state, action) {
 };
 
 reducers[types.SKIP_UPGRADE] = function(state, action) {
-  sessionStorage.setItem("upgradeSkipped", true);
+  sessionStorage.setItem("upgradeSkipped", "true");
 
   return Object.assign({}, state, {
     isUpgradeSkipped: true,
@@ -164,7 +202,7 @@ reducers[types.VOLUME_CHANGED] = function(state, action) {
   });
 };
 
-export default function reducer(state = defaultState, action) {
+export default function reducer(state: AppState = defaultState, action: any) {
   const handler = reducers[action.type];
   if (handler) return handler(state, action);
   return state;
