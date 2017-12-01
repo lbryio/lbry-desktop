@@ -14,11 +14,12 @@ const Link = props => {
     navigate,
     navigateParams,
     doNavigate,
+    className,
   } = props;
 
-  const className =
-    (props.className || "") +
-    (!props.className && !button ? "button-text" : "") + // Non-button links get the same look as text buttons
+  const combinedClassName =
+    (className || "") +
+    (!className && !button ? "button-text" : "") + // Non-button links get the same look as text buttons
     (button ? " button-block button-" + button + " button-set-item" : "") +
     (disabled ? " disabled" : "");
 
@@ -43,7 +44,7 @@ const Link = props => {
 
   return (
     <a
-      className={className}
+      className={combinedClassName}
       href={href || "javascript:;"}
       title={title}
       onClick={onClick}

@@ -34,6 +34,16 @@ body
   color: var(--color-meta-light);
 }
 
+.credit-amount--bold
+{
+  font-weight: 700;
+}
+
+.credit-amount--colored
+{
+  color: var(--color-primary);
+}
+
 #main-content
 {
   margin: auto;

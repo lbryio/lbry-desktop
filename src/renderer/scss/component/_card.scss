@@ -26,6 +26,7 @@
 .card__actions {
   padding: 0 var(--card-padding);
 }
+
 .card--small {
   .card__title-primary,
   .card__title-identity,
@@ -72,6 +73,11 @@
     margin-bottom: var(--card-margin);
   }
 }
+
+.card__content--extra-vertical-space {
+  margin: $spacing-vertical 0;
+}
+
 $font-size-subtext-multiple: 0.82;
 .card__subtext {
   color: var(--color-meta-light);

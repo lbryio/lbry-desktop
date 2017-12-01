@@ -18,7 +18,7 @@ module.exports = {
   },
   resolve: {
     modules: [appPath, "node_modules"],
-    extensions: [".js", ".jsx", ".css"]
+    extensions: [".js", ".jsx", ".css", ".json"]
   },
   module: {
     rules: [
