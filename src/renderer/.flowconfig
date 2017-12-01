@@ -12,5 +12,6 @@ flow-typed
 suppress_comment=\\(.\\|\n\\)*\\$FlowFixMe
 suppress_comment=\\(.\\|\n\\)*\\$FlowIssue
 module.name_mapper='^constants\(.*\)$' -> '<PROJECT_ROOT>/js/constants\1'
+module.name_mapper='^redux\(.*\)$' -> '<PROJECT_ROOT>/js/redux\1'
 
 [strict]
