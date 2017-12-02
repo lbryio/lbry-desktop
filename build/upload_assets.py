@@ -9,13 +9,16 @@ import github
 import uritemplate
 import boto3
 
+S3_BUCKET = 'releases.lbry.io'
+RELEASES_S3_PATH = 'app'
+LATEST_S3_PATH = 'app/latest'
 
 def main():
     upload_to_github_if_tagged('lbryio/lbry-app')
-    upload_to_s3('app')
+    upload_to_s3(RELEASES_S3_PATH)
 
 
-def get_asset_filename():
+def get_asset_path():
     this_dir = os.path.dirname(os.path.realpath(__file__))
     system = platform.system()
     if system == 'Darwin':
@@ -27,23 +30,40 @@ def get_asset_filename():
     else:
         raise Exception("I don't know about any artifact on {}".format(system))
 
-    return glob.glob(this_dir + '/../dist/LBRY*.' + suffix)[0]
+    return os.path.realpath(glob.glob(this_dir + '/../dist/LBRY*.' + suffix)[0])
+
+def get_update_asset_path():
+    # Get the asset used used for updates. On Mac, this is a .zip; on
+    # Windows it's just the installer file.
+    if platform.system() == 'Darwin':
+        this_dir = os.path.dirname(os.path.realpath(__file__))
+        return os.path.realpath(glob.glob(this_dir + '/../dist/LBRY*.zip')[0])
+    else:
+        return get_asset_path()
+
+
+def get_latest_file_path():
+  # The update metadata file is called latest.yml on Windows, latest-mac.yml on
+  # Mac, latest-linux.yml on Linux
+  this_dir = os.path.dirname(os.path.realpath(__file__))
+  return os.path.realpath(glob.glob(this_dir + '/../dist/latest*.yml')[0])
 
 
 def upload_to_s3(folder):
-    tag = subprocess.check_output(['git', 'describe', '--always', '--abbrev=8', 'HEAD']).strip()
-    commit_date = subprocess.check_output([
-        'git', 'show', '-s', '--format=%cd', '--date=format:%Y%m%d-%H%I%S', 'HEAD']).strip()
-
-    asset_path = get_asset_filename()
-    bucket = 'releases.lbry.io'
-    key = folder + '/' + commit_date + '-' + tag + '/' + os.path.basename(asset_path)
-
-    print "Uploading " + asset_path + " to s3://" + bucket + '/' + key + ''
+    asset_path = get_asset_path()
 
     if 'AWS_ACCESS_KEY_ID' not in os.environ or 'AWS_SECRET_ACCESS_KEY' not in os.environ:
         print 'Must set AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY to publish assets to s3'
         return 1
+
+    asset_filename = os.path.basename(asset_path)
+
+    tag = subprocess.check_output(['git', 'describe', '--always', '--abbrev=8', 'HEAD']).strip()
+    commit_date = subprocess.check_output([
+        'git', 'show', '-s', '--format=%cd', '--date=format:%Y%m%d-%H%I%S', 'HEAD']).strip()
+    key = folder + '/' + commit_date + '-' + tag + '/' + asset_filename
+
+    print "Uploading asset file at " + asset_path + " to s3://" + S3_BUCKET + '/' + key
 
     s3 = boto3.resource(
         's3',
@@ -51,7 +71,32 @@ def upload_to_s3(folder):
         aws_secret_access_key=os.environ['AWS_SECRET_ACCESS_KEY'],
         config=boto3.session.Config(signature_version='s3v4')
     )
-    s3.meta.client.upload_file(asset_path, bucket, key)
+
+    s3.Object(S3_BUCKET, key).upload_file(asset_path)
+
+    # Populate the update bucket (update.lbry.io)
+
+    update_asset_path = get_update_asset_path()
+    if asset_path == update_asset_path:
+        # If the update asset and the regular built file are the same, we can
+        # just copy over.
+        print "Copying asset file to s3://" + S3_BUCKET + "/" + LATEST_S3_PATH + "/" + asset_filename
+        s3.Object(S3_BUCKET, LATEST_S3_PATH + "/" + asset_filename).copy_from(CopySource={
+            'Bucket': S3_BUCKET,
+            'Key': key
+        })
+    else:
+        update_asset_filename = os.path.basename(update_asset_path)
+        print "Uploading update asset file at", update_asset_path, \
+              "to s3://" + S3_BUCKET + "/" + LATEST_S3_PATH + "/" + update_asset_filename
+        s3.Object(S3_BUCKET, LATEST_S3_PATH + "/" + update_asset_filename).upload_file(update_asset_path)
+
+    # Upload update metadata file to update bucket
+    metadatafilepath = get_latest_file_path()
+    metadatafilename = os.path.basename(metadatafilepath)
+
+    print "Uploading update metadata file at", metadatafilepath, "to S3"
+    s3.Object(S3_BUCKET, LATEST_S3_PATH + "/" + metadatafilename).upload_file(metadatafilepath)
 
 
 def upload_to_github_if_tagged(repo_name):
@@ -77,7 +122,7 @@ def upload_to_github_if_tagged(repo_name):
         # TODO: maybe this should be an error
         return 1
 
-    asset_path = get_asset_filename()
+    asset_path = get_asset_path()
     print "Uploading " + asset_path + " to Github tag " + current_tag
     release = get_github_release(repo, current_tag)
     upload_asset_to_github(release, asset_path, gh_token)
