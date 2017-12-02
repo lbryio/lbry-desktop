@@ -26,15 +26,7 @@ class VideoPlayButton extends React.PureComponent {
   }
 
   render() {
-    const { button, label, isLoading, fileInfo, mediaType } = this.props;
-
-    /*
-     title={
-     isLoading ? "Video is Loading" :
-     !costInfo ? "Waiting on cost info..." :
-     fileInfo === undefined ? "Waiting on file info..." : ""
-     }
-     */
+    const { isLoading, fileInfo, mediaType } = this.props;
 
     const disabled = isLoading || fileInfo === undefined;
     const icon =
@@ -44,9 +36,7 @@ class VideoPlayButton extends React.PureComponent {
 
     return (
       <Link
-        button={button ? button : null}
         disabled={disabled}
-        label={label ? label : ""}
         className="video__play-button"
         icon={icon}
         onClick={() => this.watch()}

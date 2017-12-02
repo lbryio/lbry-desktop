@@ -49,3 +49,8 @@ export const selectRewardContentClaimIds = createSelector(
   _selectState,
   state => state.rewardedContentClaimIds
 );
+
+export const selectIsOverlayable = createSelector(
+  _selectState,
+  state => state.overlayable
+);

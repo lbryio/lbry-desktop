@@ -83,6 +83,12 @@ reducers[types.FETCH_CHANNEL_CLAIM_COUNT_COMPLETED] = function(state, action) {
   });
 };
 
+reducers[types.ENABLE_OVERLAY] = function(state, action) {
+  return Object.assign({}, state, {
+    overlayable: action.data.canBeOverlayed,
+  });
+};
+
 export default function reducer(state = defaultState, action) {
   const handler = reducers[action.type];
   if (handler) return handler(state, action);

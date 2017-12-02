@@ -538,3 +538,12 @@ export function doAbandonClaim(txid, nout) {
       .then(successCallback, errorCallback);
   };
 }
+
+export function doEnableOverlay(canBeOverlayed) {
+  return function(dispatch, getState) {
+    dispatch({
+      type: types.ENABLE_OVERLAY,
+      data: { canBeOverlayed },
+    });
+  };
+}

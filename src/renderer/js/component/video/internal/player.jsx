@@ -21,20 +21,24 @@ class VideoPlayer extends React.PureComponent {
   }
 
   componentDidMount() {
-    const container = this.refs.media;
+    const container = this.media;
     const {
       contentType,
       downloadPath,
       mediaType,
       changeVolume,
       volume,
+      enableOverlay,
     } = this.props;
     const loadedMetadata = e => {
       this.setState({ hasMetadata: true, startedPlaying: true });
-      this.refs.media.children[0].play();
+      this.media.children[0].play();
     };
     const renderMediaCallback = err => {
-      if (err) this.setState({ unplayable: true });
+      if (err) {
+        this.setState({ unplayable: true });
+        enableOverlay(false);
+      }
     };
     // Handle fullscreen change for the Windows platform
     const win32FullScreenChange = e => {
@@ -45,6 +49,14 @@ class VideoPlayer extends React.PureComponent {
         );
       }
     };
+
+    // not all media is "overlayable" so this has to manually set/unset for such media
+    // by default it is true for A/V, but it is set to false if the player errs
+    if (["video", "audio"].indexOf(mediaType) !== -1) {
+      enableOverlay(true);
+    } else {
+      enableOverlay(false);
+    }
 
     // use renderAudio override for mp3
     if (VideoPlayer.MP3_CONTENT_TYPES.indexOf(contentType) > -1) {
@@ -59,7 +71,7 @@ class VideoPlayer extends React.PureComponent {
     }
 
     document.addEventListener("keydown", this.togglePlayListener);
-    const mediaElement = this.refs.media.children[0];
+    const mediaElement = this.media.children[0];
     if (mediaElement) {
       mediaElement.addEventListener("click", this.togglePlayListener);
       mediaElement.addEventListener(
@@ -82,7 +94,7 @@ class VideoPlayer extends React.PureComponent {
 
   componentWillUnmount() {
     document.removeEventListener("keydown", this.togglePlayListener);
-    const mediaElement = this.refs.media.children[0];
+    const mediaElement = this.media.children[0];
     if (mediaElement) {
       mediaElement.removeEventListener("click", this.togglePlayListener);
     }
@@ -111,7 +123,7 @@ class VideoPlayer extends React.PureComponent {
       return;
     }
     event.preventDefault();
-    const mediaElement = this.refs.media.children[0];
+    const mediaElement = this.media.children[0];
     if (mediaElement) {
       if (!mediaElement.paused) {
         mediaElement.pause();
@@ -125,11 +137,11 @@ class VideoPlayer extends React.PureComponent {
     const { contentType, downloadCompleted } = this.props;
     const { startedPlaying } = this.state;
 
-    if (this.playableType() && !startedPlaying && downloadCompleted) {
-      const container = this.refs.media.children[0];
+    if (this.isPlayableType() && !startedPlaying && downloadCompleted) {
+      const container = this.media.children[0];
 
       if (VideoPlayer.MP3_CONTENT_TYPES.indexOf(contentType) > -1) {
-        this.renderAudio(this.refs.media, true);
+        this.renderAudio(this.media, true);
       } else {
         player.render(this.file(), container, {
           autoplay: true,
@@ -150,7 +162,7 @@ class VideoPlayer extends React.PureComponent {
     };
   }
 
-  playableType() {
+  isPlayableType() {
     const { mediaType } = this.props;
 
     return ["audio", "video"].indexOf(mediaType) !== -1;
@@ -162,20 +174,20 @@ class VideoPlayer extends React.PureComponent {
     const noMetadataMessage = "Waiting for metadata.";
     const unplayableMessage = "Sorry, looks like we can't play this file.";
 
-    const needsMetadata = this.playableType();
+    const needsMetadata = this.isPlayableType();
 
     return (
       <div>
         {["audio", "application"].indexOf(mediaType) !== -1 &&
-          (!this.playableType() || hasMetadata) &&
+          (!this.isPlayableType() || hasMetadata) &&
           !unplayable && <Thumbnail src={poster} className="video-embedded" />}
-        {this.playableType() &&
+        {this.isPlayableType() &&
           !hasMetadata &&
           !unplayable && <LoadingScreen status={noMetadataMessage} />}
         {unplayable && (
           <LoadingScreen status={unplayableMessage} spinner={false} />
         )}
-        <div ref="media" className="media" />
+        <div ref={ref => (this.media = ref)} className="media" />
       </div>
     );
   }
