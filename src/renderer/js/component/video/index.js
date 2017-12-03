@@ -30,14 +30,11 @@ const select = (state, props) => ({
   isDownloading: makeSelectDownloadingForUri(props.uri)(state),
   playingUri: selectPlayingUri(state),
   contentType: makeSelectContentTypeForUri(props.uri)(state),
-  volume: selectVolume(state),
 });
 
 const perform = dispatch => ({
   play: uri => dispatch(doPlayUri(uri)),
   cancelPlay: () => dispatch(doSetPlayingUri(null)),
-  changeVolume: volume => dispatch(doChangeVolume(volume)),
-  enableOverlay: canBeOverlayed => dispatch(doEnableOverlay(canBeOverlayed)),
 });
 
 export default connect(select, perform)(Video);

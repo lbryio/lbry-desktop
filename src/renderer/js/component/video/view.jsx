@@ -1,8 +1,8 @@
 import React from "react";
 import lbry from "lbry";
-import VideoPlayer from "./internal/player";
 import VideoPlayButton from "./internal/play-button";
 import LoadingScreen from "./internal/loading-screen";
+import VideoPlayer from "component/videoPlayer";
 import NsfwOverlay from "component/nsfwOverlay";
 
 class Video extends React.PureComponent {
@@ -13,8 +13,12 @@ class Video extends React.PureComponent {
     };
   }
 
-  componentWillUnmount() {
-    this.props.cancelPlay();
+  componentWillMount() {
+    const { uri, playingUri } = this.props;
+
+    if (uri !== playingUri) {
+      this.props.cancelPlay();
+    }
   }
 
   isMediaSame(nextProps) {
@@ -53,10 +57,7 @@ class Video extends React.PureComponent {
       playingUri,
       fileInfo,
       contentType,
-      changeVolume,
-      volume,
       uri,
-      enableOverlay,
     } = this.props;
 
     const isPlaying = playingUri === uri;
@@ -79,22 +80,21 @@ class Video extends React.PureComponent {
       loadStatusMessage = __("Downloading stream... not long left now!");
     }
 
-    let klasses = [];
-    klasses.push(obscureNsfw ? "video--obscured " : "");
-    if (isLoading || isDownloading) klasses.push("video-embedded", "video");
+    let classes = [];
+    classes.push(obscureNsfw ? "video--obscured " : "");
+    if (isLoading || isDownloading) classes.push("video-embedded", "video");
     if (mediaType === "video") {
-      klasses.push("video-embedded", "video");
-      klasses.push(isPlaying ? "video--active" : "video--hidden");
+      classes.push("video-embedded", "video");
+      classes.push(isPlaying ? "video--active" : "video--hidden");
     } else if (mediaType === "application") {
-      klasses.push("video-embedded");
+      classes.push("video-embedded");
     } else {
-      if (!isPlaying) klasses.push("video-embedded");
+      if (!isPlaying) classes.push("video-embedded");
     }
-    const poster = metadata.thumbnail;
 
     return (
       <div
-        className={klasses.join(" ")}
+        className={classes.join(" ")}
         onMouseEnter={this.handleMouseOver.bind(this)}
         onMouseLeave={this.handleMouseOut.bind(this)}
       >
@@ -102,17 +102,7 @@ class Video extends React.PureComponent {
           (!isReadyToPlay ? (
             <LoadingScreen status={loadStatusMessage} />
           ) : (
-            <VideoPlayer
-              filename={fileInfo.file_name}
-              poster={poster}
-              downloadPath={fileInfo.download_path}
-              mediaType={mediaType}
-              contentType={contentType}
-              downloadCompleted={fileInfo.completed}
-              changeVolume={changeVolume}
-              volume={volume}
-              enableOverlay={enableOverlay}
-            />
+            <VideoPlayer uri={uri} />
           ))}
         {!isPlaying && (
           <div
