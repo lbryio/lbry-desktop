@@ -1,7 +1,7 @@
 import React from "react";
 import lbry from "lbry";
 import VideoPlayButton from "./internal/play-button";
-import LoadingScreen from "./internal/loading-screen";
+import { LoadingScreen } from "component/common";
 import VideoPlayer from "component/videoPlayer";
 import NsfwOverlay from "component/nsfwOverlay";
 

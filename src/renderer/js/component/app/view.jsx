@@ -54,11 +54,6 @@ class App extends React.PureComponent {
   }
 
   renderVideo() {
-    // <div className="overlay">
-    // <div className="button-close">
-    // <Icon icon="icon-times" />
-    // </div>
-    // </div>
     const { playingUri, currentPage } = this.props;
 
     if (playingUri !== null && currentPage !== "show") {
@@ -67,7 +62,6 @@ class App extends React.PureComponent {
   }
 
   render() {
-    // <VideoPlayer overlay={true} uri={playingUri} />
     return (
       <div id="window">
         <Theme />
@@ -83,4 +77,3 @@ class App extends React.PureComponent {
 }
 
 export default App;
-// onClick={() => closeOverlayMedia()}>

@@ -9,7 +9,7 @@ import {
 import { selectUser } from "redux/selectors/user";
 import { doAlertError } from "redux/actions/app";
 import { doRecordScroll } from "redux/actions/navigation";
-import { selectPlayingUri, selectIsOverlayable } from "redux/selectors/content";
+import { selectPlayingUri } from "redux/selectors/content";
 import App from "./view";
 
 const select = (state, props) => ({
@@ -18,7 +18,6 @@ const select = (state, props) => ({
   currentStackIndex: selectHistoryIndex(state),
   currentPageAttributes: selectActiveHistoryEntry(state),
   playingUri: selectPlayingUri(state),
-  overlayable: selectIsOverlayable(state),
   currentPage: selectCurrentPage(state),
 });
 

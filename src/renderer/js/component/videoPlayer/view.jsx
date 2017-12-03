@@ -3,8 +3,7 @@ import React from "react";
 import player from "render-media";
 import fs from "fs";
 import lbry from "lbry";
-import LoadingScreen from "component/video/internal/loading-screen";
-import { Thumbnail } from "component/common";
+import { Thumbnail, LoadingScreen } from "component/common";
 import Link from "component/link";
 
 class VideoPlayer extends React.PureComponent {
@@ -40,7 +39,7 @@ class VideoPlayer extends React.PureComponent {
 
   componentDidMount() {
     const container = this.media;
-    const { contentType, changeVolume, volume, enableOverlay } = this.props;
+    const { contentType, changeVolume, volume } = this.props;
     const { downloadPath, mediaType } = this.state;
     const loadedMetadata = e => {
       this.setState({ hasMetadata: true, startedPlaying: true });
@@ -48,9 +47,10 @@ class VideoPlayer extends React.PureComponent {
     };
     const renderMediaCallback = err => {
       if (err) {
-        this.setState({ unplayable: true });
-        this.setState({ overlayable: true });
-        enableOverlay(false);
+        this.setState({
+          unplayable: true,
+          overlayable: true,
+        });
       }
     };
     // Handle fullscreen change for the Windows platform
@@ -67,10 +67,8 @@ class VideoPlayer extends React.PureComponent {
     // by default it is true for A/V, but it is set to false if the player errs
     if (["video", "audio"].indexOf(mediaType) !== -1) {
       this.setState({ overlayable: true });
-      enableOverlay(true);
     } else {
       this.setState({ overlayable: false });
-      enableOverlay(false);
     }
 
     // use renderAudio override for mp3
@@ -183,11 +181,6 @@ class VideoPlayer extends React.PureComponent {
     return ["audio", "video"].indexOf(mediaType) !== -1;
   }
 
-  cancel_play() {
-    console.log("yahan tak toh pahunch gaya saala");
-    this.props.cancelPlay();
-  }
-
   render() {
     const {
       contentType,
@@ -196,6 +189,7 @@ class VideoPlayer extends React.PureComponent {
       overlay,
       currentPage,
       playingUri,
+      cancelPlay,
     } = this.props;
     const { mediaType } = this.state;
     const { hasMetadata, unplayable, overlayable } = this.state;
@@ -219,13 +213,11 @@ class VideoPlayer extends React.PureComponent {
         )}
 
         {displayOverlay && (
-          <div>
-            <Link
-              className="button-close"
-              icon="icon-times"
-              onClick={() => this.cancel_play()}
-            />
-          </div>
+          <Link
+            className="button-close"
+            icon="icon-times"
+            onClick={() => cancelPlay()}
+          />
         )}
 
         <div ref={ref => (this.media = ref)} className="media" />
