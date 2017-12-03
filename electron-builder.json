@@ -1,5 +1,10 @@
 {
   "appId": "io.lbry.LBRY",
+  "publish": {
+    "provider": "s3",
+    "bucket": "releases.lbry.io",
+    "path": "app/latest"
+  },
   "mac": {
     "category": "public.app-category.entertainment"
   },
