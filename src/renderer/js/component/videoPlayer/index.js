@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { doChangeVolume } from "redux/actions/app";
 import { selectVolume } from "redux/selectors/app";
-import { doEnableOverlay } from "redux/actions/content";
+import { doEnableOverlay, doSetPlayingUri } from "redux/actions/content";
 import {
   makeSelectMetadataForUri,
   makeSelectContentTypeForUri,
@@ -24,6 +24,7 @@ const select = (state, props) => ({
 const perform = dispatch => ({
   changeVolume: volume => dispatch(doChangeVolume(volume)),
   enableOverlay: canBeOverlayed => dispatch(doEnableOverlay(canBeOverlayed)),
+  cancelPlay: () => dispatch(doSetPlayingUri(null)),
 });
 
 export default connect(select, perform)(VideoPlayer);

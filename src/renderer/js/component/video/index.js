@@ -1,12 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import { doChangeVolume } from "redux/actions/app";
-import { selectVolume } from "redux/selectors/app";
-import {
-  doPlayUri,
-  doSetPlayingUri,
-  doEnableOverlay,
-} from "redux/actions/content";
+import { doPlayUri, doSetPlayingUri } from "redux/actions/content";
 import {
   makeSelectMetadataForUri,
   makeSelectContentTypeForUri,

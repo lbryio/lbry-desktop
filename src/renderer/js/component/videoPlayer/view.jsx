@@ -4,7 +4,8 @@ import player from "render-media";
 import fs from "fs";
 import lbry from "lbry";
 import LoadingScreen from "component/video/internal/loading-screen";
-import { Thumbnail, Icon } from "component/common";
+import { Thumbnail } from "component/common";
+import Link from "component/link";
 
 class VideoPlayer extends React.PureComponent {
   static MP3_CONTENT_TYPES = ["audio/mpeg3", "audio/mpeg"];
@@ -182,6 +183,11 @@ class VideoPlayer extends React.PureComponent {
     return ["audio", "video"].indexOf(mediaType) !== -1;
   }
 
+  cancel_play() {
+    console.log("yahan tak toh pahunch gaya saala");
+    this.props.cancelPlay();
+  }
+
   render() {
     const {
       contentType,
@@ -198,8 +204,7 @@ class VideoPlayer extends React.PureComponent {
 
     const poster = metadata.thumbnail;
     const needsMetadata = this.isPlayableType();
-    const displayOverlay = overlay && currentPage !== "show";
-    console.log(displayOverlay);
+    const displayOverlay = overlay && overlayable;
 
     return (
       <div className={displayOverlay ? "overlay" : ""}>
@@ -213,12 +218,15 @@ class VideoPlayer extends React.PureComponent {
           <LoadingScreen status={unplayableMessage} spinner={false} />
         )}
 
-        {displayOverlay &&
-          overlayable && (
-            <div className="button-close">
-              <Icon icon="icon-times" />
-            </div>
-          )}
+        {displayOverlay && (
+          <div>
+            <Link
+              className="button-close"
+              icon="icon-times"
+              onClick={() => this.cancel_play()}
+            />
+          </div>
+        )}
 
         <div ref={ref => (this.media = ref)} className="media" />
       </div>

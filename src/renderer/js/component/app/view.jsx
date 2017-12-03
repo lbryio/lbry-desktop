@@ -59,9 +59,9 @@ class App extends React.PureComponent {
     // <Icon icon="icon-times" />
     // </div>
     // </div>
-    const { playingUri, overlayable, currentPage } = this.props;
+    const { playingUri, currentPage } = this.props;
 
-    if (overlayable && playingUri !== null && currentPage !== "show") {
+    if (playingUri !== null && currentPage !== "show") {
       return <VideoPlayer overlay={true} uri={playingUri} />;
     }
   }
