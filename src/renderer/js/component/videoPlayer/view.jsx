@@ -4,7 +4,7 @@ import player from "render-media";
 import fs from "fs";
 import lbry from "lbry";
 import LoadingScreen from "component/video/internal/loading-screen";
-import { Thumbnail } from "component/common";
+import { Thumbnail, Icon } from "component/common";
 
 class VideoPlayer extends React.PureComponent {
   static MP3_CONTENT_TYPES = ["audio/mpeg3", "audio/mpeg"];
@@ -31,6 +31,7 @@ class VideoPlayer extends React.PureComponent {
       filename: _filename,
       downloadPath: _downloadPath,
       completed: _completed,
+      overlayable: false,
     };
 
     this.togglePlayListener = this.togglePlay.bind(this);
@@ -47,6 +48,7 @@ class VideoPlayer extends React.PureComponent {
     const renderMediaCallback = err => {
       if (err) {
         this.setState({ unplayable: true });
+        this.setState({ overlayable: true });
         enableOverlay(false);
       }
     };
@@ -63,8 +65,10 @@ class VideoPlayer extends React.PureComponent {
     // not all media is "overlayable" so this has to manually set/unset for such media
     // by default it is true for A/V, but it is set to false if the player errs
     if (["video", "audio"].indexOf(mediaType) !== -1) {
+      this.setState({ overlayable: true });
       enableOverlay(true);
     } else {
+      this.setState({ overlayable: false });
       enableOverlay(false);
     }
 
@@ -179,17 +183,26 @@ class VideoPlayer extends React.PureComponent {
   }
 
   render() {
-    const { contentType, fileInfo, metadata } = this.props;
+    const {
+      contentType,
+      fileInfo,
+      metadata,
+      overlay,
+      currentPage,
+      playingUri,
+    } = this.props;
     const { mediaType } = this.state;
-    const { hasMetadata, unplayable } = this.state;
+    const { hasMetadata, unplayable, overlayable } = this.state;
     const noMetadataMessage = "Waiting for metadata.";
     const unplayableMessage = "Sorry, looks like we can't play this file.";
 
     const poster = metadata.thumbnail;
     const needsMetadata = this.isPlayableType();
+    const displayOverlay = overlay && currentPage !== "show";
+    console.log(displayOverlay);
 
     return (
-      <div>
+      <div className={displayOverlay ? "overlay" : ""}>
         {["audio", "application"].indexOf(mediaType) !== -1 &&
           (!this.isPlayableType() || hasMetadata) &&
           !unplayable && <Thumbnail src={poster} className="video-embedded" />}
@@ -199,6 +212,14 @@ class VideoPlayer extends React.PureComponent {
         {unplayable && (
           <LoadingScreen status={unplayableMessage} spinner={false} />
         )}
+
+        {displayOverlay &&
+          overlayable && (
+            <div className="button-close">
+              <Icon icon="icon-times" />
+            </div>
+          )}
+
         <div ref={ref => (this.media = ref)} className="media" />
       </div>
     );

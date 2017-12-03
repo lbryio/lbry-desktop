@@ -4,6 +4,7 @@ import {
   selectPageTitle,
   selectHistoryIndex,
   selectActiveHistoryEntry,
+  selectCurrentPage,
 } from "redux/selectors/navigation";
 import { selectUser } from "redux/selectors/user";
 import { doAlertError } from "redux/actions/app";
@@ -18,6 +19,7 @@ const select = (state, props) => ({
   currentPageAttributes: selectActiveHistoryEntry(state),
   playingUri: selectPlayingUri(state),
   overlayable: selectIsOverlayable(state),
+  currentPage: selectCurrentPage(state),
 });
 
 const perform = dispatch => ({

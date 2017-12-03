@@ -9,13 +9,15 @@ import {
 } from "redux/selectors/claims";
 import { makeSelectFileInfoForUri } from "redux/selectors/file_info";
 import { selectPlayingUri } from "redux/selectors/content";
+import { selectCurrentPage } from "redux/selectors/navigation";
 import VideoPlayer from "./view";
 
 const select = (state, props) => ({
+  contentType: makeSelectContentTypeForUri(props.uri)(state),
   fileInfo: makeSelectFileInfoForUri(props.uri)(state),
   metadata: makeSelectMetadataForUri(props.uri)(state),
+  currentPage: selectCurrentPage(state),
   playingUri: selectPlayingUri(state),
-  contentType: makeSelectContentTypeForUri(props.uri)(state),
   volume: selectVolume(state),
 });
 

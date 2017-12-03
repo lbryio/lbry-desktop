@@ -102,7 +102,7 @@ class Video extends React.PureComponent {
           (!isReadyToPlay ? (
             <LoadingScreen status={loadStatusMessage} />
           ) : (
-            <VideoPlayer uri={uri} />
+            <VideoPlayer overlay={false} uri={uri} />
           ))}
         {!isPlaying && (
           <div

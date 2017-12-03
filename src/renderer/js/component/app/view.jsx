@@ -54,21 +54,20 @@ class App extends React.PureComponent {
   }
 
   renderVideo() {
-    const { playingUri, overlayable } = this.props;
+    // <div className="overlay">
+    // <div className="button-close">
+    // <Icon icon="icon-times" />
+    // </div>
+    // </div>
+    const { playingUri, overlayable, currentPage } = this.props;
 
-    if (overlayable && playingUri !== null) {
-      return (
-        <div className="overlay">
-          <div className="button-close">
-            <Icon icon="icon-times" />
-          </div>
-          <VideoPlayer uri={playingUri} />
-        </div>
-      );
+    if (overlayable && playingUri !== null && currentPage !== "show") {
+      return <VideoPlayer overlay={true} uri={playingUri} />;
     }
   }
 
   render() {
+    // <VideoPlayer overlay={true} uri={playingUri} />
     return (
       <div id="window">
         <Theme />
