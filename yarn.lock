@@ -4578,7 +4578,11 @@ jayson@^2.0.2:
     json-stringify-safe "5.0.1"
     lodash "3.6.0"
 
-js-base64@^2.1.8, js-base64@^2.1.9:
+js-base64@^2.1.8:
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/js-base64/-/js-base64-2.4.0.tgz#9e566fee624751a1d720c966cd6226d29d4025aa"
+
+js-base64@^2.1.9:
   version "2.3.2"
   resolved "https://registry.yarnpkg.com/js-base64/-/js-base64-2.3.2.tgz#a79a923666372b580f8e27f51845c6f7e8fbfbaf"
 
