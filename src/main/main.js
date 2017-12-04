@@ -1,4 +1,3 @@
-module.exports = { safeQuit };
 // Module imports
 const {app, BrowserWindow, ipcMain, Menu, Tray, globalShortcut} = require('electron');
 const path = require('path');
@@ -297,7 +296,7 @@ function launchDaemon() {
 /*
  * Quits by first killing the daemon, the calling quitting for real.
  */
-function safeQuit() {
+export function safeQuit() {
   minimize = false;
   app.quit();
 }
@@ -327,7 +326,6 @@ const isSecondaryInstance = app.makeSingleInstance((argv) => {
 
 if (isSecondaryInstance) { // We're not in the original process, so quit
   quitNow();
-  return;
 }
 
 function launchDaemonIfNotRunning() {

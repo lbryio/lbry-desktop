@@ -123,17 +123,12 @@
     "y18n": "^3.2.1"
   },
   "devDependencies": {
-    "babel": "^6.5.2",
-    "babel-cli": "^6.24.1",
-    "babel-core": "^6.18.2",
-    "babel-loader": "^7.1.1",
     "babel-plugin-module-resolver": "^3.0.0",
     "babel-plugin-react-require": "^3.0.0",
     "babel-polyfill": "^6.20.0",
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.18.0",
-    "css-loader": "^0.28.4",
     "devtron": "^1.4.0",
     "electron": "^1.7.9",
     "electron-builder": "^11.7.0",
@@ -156,9 +151,7 @@
     "style-loader": "^0.19.0",
     "webpack": "^3.10.0",
     "webpack-build-notifier": "^0.1.18",
-    "webpack-merge": "^4.1.1",
-    "webpack-sources": "1.1.0",
-    "webpack-target-electron-renderer": "^0.4.0"
+    "webpack-sources": "1.1.0"
   },
   "postinstall": "install-app-deps",
   "license": "MIT",
