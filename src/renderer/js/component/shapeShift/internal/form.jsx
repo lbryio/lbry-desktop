@@ -86,7 +86,7 @@ export default (props: Props) => {
         onBlur={handleBlur}
         value={values.returnAddress}
         errorMessage={errors.returnAddress}
-        hasError={touched.returnAddress && errors.returnAddress}
+        hasError={touched.returnAddress && !!errors.returnAddress}
       />
       <span className="help">
         <span>
@@ -95,7 +95,7 @@ export default (props: Props) => {
           {__("to this address if the transaction doesn't go through.")}
         </span>
       </span>
-      <div className="shapeshift__actions">
+      <div className="card__actions card__actions--only-vertical">
         <Submit
           label={__("Begin Conversion")}
           disabled={isSubmitting || !!Object.keys(errors).length}

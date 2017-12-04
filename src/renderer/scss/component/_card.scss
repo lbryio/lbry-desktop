@@ -51,7 +51,7 @@
 .card__actions {
   margin-top: var(--card-margin);
   margin-bottom: var(--card-margin);
-  user-select: none; 
+  user-select: none;
 
 }
 .card__actions--bottom {
@@ -72,6 +72,13 @@
   table:not(:last-child) {
     margin-bottom: var(--card-margin);
   }
+}
+
+.card__actions--only-vertical {
+  margin-left: 0;
+  margin-right: 0;
+  padding-left: 0;
+  padding-right: 0;
 }
 
 .card__content--extra-vertical-space {

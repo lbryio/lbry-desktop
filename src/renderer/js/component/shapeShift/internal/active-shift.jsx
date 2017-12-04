@@ -72,8 +72,7 @@ class ActiveShapeShift extends React.PureComponent<Props> {
             <p>
               Send up to{" "}
               <span className="credit-amount--bold">
-                {originCoinDepositMax}{" "}
-                <span className="credit-amount--colored">{shiftCoinType}</span>
+                {originCoinDepositMax} {shiftCoinType}
               </span>{" "}
               to the address below.
             </p>
@@ -109,9 +108,9 @@ class ActiveShapeShift extends React.PureComponent<Props> {
             </p>
           </div>
         )}
-        <div className="shapeshift__actions">
+        <div className="card__actions card__actions--only-vertical">
           <Link
-            button="primary"
+            button={shiftState === statuses.COMPLETE ? "primary" : "alt"}
             onClick={clearShapeShift}
             label={
               shiftState === statuses.COMPLETE ||
