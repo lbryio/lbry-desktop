@@ -1,4 +1,5 @@
-import React from "react";
+// @flow
+import * as React from "react";
 import { shell } from "electron";
 import { Formik } from "formik";
 import classnames from "classnames";
@@ -8,9 +9,23 @@ import Link from "component/link";
 import Spinner from "component/common/spinner";
 import { BusyMessage } from "component/common";
 import ShapeShiftForm from "./internal/form";
-import ActiveShift from "./internal/active-shift";
+import ActiveShapeShift from "./internal/active-shift";
 
-class ShapeShift extends React.PureComponent {
+import type { ShapeShiftState } from "redux/reducers/shape_shift";
+import type { Dispatch, ShapeShiftFormValues } from "redux/actions/shape_shift";
+
+type Props = {
+  shapeShift: ShapeShiftState,
+  getCoinStats: Dispatch,
+  createShapeShift: Dispatch,
+  clearShapeShift: Dispatch,
+  getActiveShift: Dispatch,
+  doShowSnackBar: Dispatch,
+  shapeShiftInit: Dispatch,
+  receiveAddress: string,
+};
+
+class ShapeShift extends React.PureComponent<Props> {
   componentDidMount() {
     const {
       shapeShiftInit,
@@ -49,10 +64,14 @@ class ShapeShift extends React.PureComponent {
       shiftReturnAddress,
       shiftCoinType,
       shiftOrderId,
-      cancelShapeShift,
       shiftState,
-      origin,
     } = shapeShift;
+
+    const initialFormValues: ShapeShiftFormValues = {
+      receiveAddress,
+      originCoin: "BTC",
+      returnAddress: "",
+    };
 
     return (
       // add the "shapeshift__intital-wrapper class so we can avoid content jumping once everything loads"
@@ -85,11 +104,7 @@ class ShapeShift extends React.PureComponent {
               <Formik
                 onSubmit={createShapeShift}
                 validate={validateShapeShiftForm}
-                initialValues={{
-                  receiveAddress,
-                  originCoin: "BTC",
-                  returnAddress: "",
-                }}
+                initialValues={initialFormValues}
                 render={formProps => (
                   <ShapeShiftForm
                     {...formProps}
@@ -106,12 +121,12 @@ class ShapeShift extends React.PureComponent {
               />
             )}
           {hasActiveShift && (
-            <ActiveShift
+            <ActiveShapeShift
               getActiveShift={getActiveShift}
               shiftCoinType={shiftCoinType}
               shiftReturnAddress={shiftReturnAddress}
               shiftDepositAddress={shiftDepositAddress}
-              shiftDepositLimit={originCoinDepositMax}
+              originCoinDepositMax={originCoinDepositMax}
               shiftOrderId={shiftOrderId}
               shiftState={shiftState}
               clearShapeShift={clearShapeShift}

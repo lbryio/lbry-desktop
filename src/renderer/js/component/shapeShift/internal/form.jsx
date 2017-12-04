@@ -2,25 +2,48 @@ import React from "react";
 import Link from "component/link";
 import { getExampleAddress } from "util/shape_shift";
 import { Submit, FormRow } from "component/form";
+import type { ShapeShiftFormValues, Dispatch } from "redux/actions/shape_shift";
 
-export default ({
-  values,
-  errors,
-  touched,
-  handleChange,
-  handleBlur,
-  handleSubmit,
-  resetForm,
-  isSubmitting,
-  shiftSupportedCoins,
-  originCoin,
-  updating,
-  getCoinStats,
-  receiveAddress,
-  originCoinDepositMax,
-  originCoinDepositMin,
-  originCoinDepositFee,
-}) => {
+type ShapeShiftFormErrors = {
+  returnAddress?: string,
+};
+
+type Props = {
+  values: ShapeShiftFormValues,
+  errors: ShapeShiftFormErrors,
+  touched: boolean,
+  handleChange: Event => any,
+  handleBlur: Event => any,
+  handleSubmit: Event => any,
+  isSubmitting: boolean,
+  shiftSupportedCoins: Array<string>,
+  originCoin: string,
+  updating: boolean,
+  getCoinStats: Dispatch,
+  receiveAddress: string,
+  originCoinDepositFee: number,
+  originCoinDepositMin: string,
+  originCoinDepositMax: number,
+};
+
+export default (props: Props) => {
+  const {
+    values,
+    errors,
+    touched,
+    handleChange,
+    handleBlur,
+    handleSubmit,
+    isSubmitting,
+    shiftSupportedCoins,
+    originCoin,
+    updating,
+    getCoinStats,
+    receiveAddress,
+    originCoinDepositMax,
+    originCoinDepositMin,
+    originCoinDepositFee,
+  } = props;
   return (
     <form onSubmit={handleSubmit}>
       <div className="form-field">

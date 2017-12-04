@@ -1,12 +1,27 @@
-import React, { PureComponent } from "react";
+// @flow
+import * as React from "react";
 import QRCode from "qrcode.react";
 import * as statuses from "constants/shape_shift";
 import Address from "component/address";
 import Link from "component/link";
+import type { Dispatch } from "redux/actions/shape_shift";
 
-export default class ActiveShapeShift extends PureComponent {
+type Props = {
+  shiftState: ?string,
+  shiftCoinType: ?string,
+  shiftDepositAddress: ?string,
+  shiftReturnAddress: ?string,
+  shiftOrderId: ?string,
+  originCoinDepositMax: ?number,
+  clearShapeShift: Dispatch,
+  doShowSnackBar: Dispatch,
+  getActiveShift: Dispatch,
+};
+
+class ActiveShapeShift extends React.PureComponent<Props> {
   constructor() {
     super();
+    // $FlowFixMe
     this.continousFetch = undefined;
   }
 
@@ -14,12 +29,13 @@ export default class ActiveShapeShift extends PureComponent {
     const { getActiveShift, shiftDepositAddress } = this.props;
 
     getActiveShift(shiftDepositAddress);
+    // $FlowFixMe
     this.continousFetch = setInterval(() => {
       getActiveShift(shiftDepositAddress);
     }, 10000);
   }
 
-  componentWillUpdate(nextProps) {
+  componentWillUpdate(nextProps: Props) {
     const { shiftState } = nextProps;
     if (shiftState === statuses.COMPLETE) {
       this.clearContinuousFetch();
@@ -31,7 +47,9 @@ export default class ActiveShapeShift extends PureComponent {
   }
 
   clearContinuousFetch() {
+    /// $FlowFixMe
     clearInterval(this.continousFetch);
+    // $FlowFixMe
     this.continousFetch = null;
   }
 
@@ -42,7 +60,7 @@ export default class ActiveShapeShift extends PureComponent {
       shiftReturnAddress,
       shiftOrderId,
       shiftState,
-      shiftDepositLimit,
+      originCoinDepositMax,
       clearShapeShift,
       doShowSnackBar,
     } = this.props;
@@ -54,7 +72,7 @@ export default class ActiveShapeShift extends PureComponent {
             <p>
               Send up to{" "}
               <span className="credit-amount--bold">
-                {shiftDepositLimit}{" "}
+                {originCoinDepositMax}{" "}
                 <span className="credit-amount--colored">{shiftCoinType}</span>
               </span>{" "}
               to the address below.
@@ -102,13 +120,15 @@ export default class ActiveShapeShift extends PureComponent {
                 : __("Cancel")
             }
           />
-          <span className="shapeshift__link">
-            <Link
-              button="text"
-              label={__("View the status on Shapeshift.io")}
-              href={`https://shapeshift.io/#/status/${shiftOrderId}`}
-            />
-          </span>
+          {shiftOrderId && (
+            <span className="shapeshift__link">
+              <Link
+                button="text"
+                label={__("View the status on Shapeshift.io")}
+                href={`https://shapeshift.io/#/status/${shiftOrderId}`}
+              />
+            </span>
+          )}
           {shiftState === statuses.NO_DEPOSITS &&
             shiftReturnAddress && (
               <div className="shapeshift__actions-help">
@@ -123,3 +143,5 @@ export default class ActiveShapeShift extends PureComponent {
     );
   }
 }
+
+export default ActiveShapeShift;
