@@ -24,9 +24,10 @@ type Props = {
 };
 
 class ActiveShapeShift extends React.PureComponent<Props> {
+  continousFetch: ?number;
+
   constructor() {
     super();
-    // $FlowFixMe
     this.continousFetch = undefined;
   }
 
@@ -34,7 +35,6 @@ class ActiveShapeShift extends React.PureComponent<Props> {
     const { getActiveShift, shiftDepositAddress } = this.props;
 
     getActiveShift(shiftDepositAddress);
-    // $FlowFixMe
     this.continousFetch = setInterval(() => {
       getActiveShift(shiftDepositAddress);
     }, 10000);
@@ -52,10 +52,10 @@ class ActiveShapeShift extends React.PureComponent<Props> {
   }
 
   clearContinuousFetch() {
-    /// $FlowFixMe
-    clearInterval(this.continousFetch);
-    // $FlowFixMe
-    this.continousFetch = null;
+    if (this.continousFetch) {
+      clearInterval(this.continousFetch);
+      this.continousFetch = null;
+    }
   }
 
   render() {
