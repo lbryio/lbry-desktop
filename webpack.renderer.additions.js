@@ -17,6 +17,7 @@ module.exports = {
   },
   // This allows imports to be made from the renderer process root (https://moduscreate.com/blog/es6-es2015-import-no-relative-path-webpack/).
   resolve: {
+    descriptionFiles: ["package.json"],
     modules: [ELECTRON_RENDERER_PROCESS_ROOT, 'node_modules', __dirname],
     extensions: ['.js', '.jsx', '.scss']
   }
