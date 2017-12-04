@@ -5,6 +5,7 @@ import * as statuses from "constants/shape_shift";
 import Address from "component/address";
 import Link from "component/link";
 import type { Dispatch } from "redux/actions/shape_shift";
+import ShiftMarketInfo from "./market_info";
 
 type Props = {
   shiftState: ?string,
@@ -16,6 +17,10 @@ type Props = {
   clearShapeShift: Dispatch,
   doShowSnackBar: Dispatch,
   getActiveShift: Dispatch,
+  shapeShiftRate: ?number,
+  originCoinDepositMax: ?number,
+  originCoinDepositFee: ?number,
+  originCoinDepositMin: ?string,
 };
 
 class ActiveShapeShift extends React.PureComponent<Props> {
@@ -63,6 +68,9 @@ class ActiveShapeShift extends React.PureComponent<Props> {
       originCoinDepositMax,
       clearShapeShift,
       doShowSnackBar,
+      shapeShiftRate,
+      originCoinDepositFee,
+      originCoinDepositMin,
     } = this.props;
 
     return (
@@ -76,6 +84,13 @@ class ActiveShapeShift extends React.PureComponent<Props> {
               </span>{" "}
               to the address below.
             </p>
+            <ShiftMarketInfo
+              originCoin={shiftCoinType}
+              shapeShiftRate={shapeShiftRate}
+              originCoinDepositFee={originCoinDepositFee}
+              originCoinDepositMin={originCoinDepositMin}
+              originCoinDepositMax={originCoinDepositMax}
+            />
 
             <div className="shapeshift__deposit-address-wrapper">
               <Address address={shiftDepositAddress} showCopyButton />

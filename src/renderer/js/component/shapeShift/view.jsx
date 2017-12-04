@@ -65,6 +65,7 @@ class ShapeShift extends React.PureComponent<Props> {
       shiftCoinType,
       shiftOrderId,
       shiftState,
+      shapeShiftRate,
     } = shapeShift;
 
     const initialFormValues: ShapeShiftFormValues = {
@@ -116,6 +117,8 @@ class ShapeShift extends React.PureComponent<Props> {
                     originCoinDepositMax={originCoinDepositMax}
                     originCoinDepositMin={originCoinDepositMin}
                     originCoinDepositFee={originCoinDepositFee}
+                    shapeShiftRate={shapeShiftRate}
+                    updating={updating}
                   />
                 )}
               />
@@ -131,6 +134,11 @@ class ShapeShift extends React.PureComponent<Props> {
               shiftState={shiftState}
               clearShapeShift={clearShapeShift}
               doShowSnackBar={doShowSnackBar}
+              originCoinDepositMax={originCoinDepositMax}
+              originCoinDepositMin={originCoinDepositMin}
+              originCoinDepositFee={originCoinDepositFee}
+              shapeShiftRate={shapeShiftRate}
+              updating={updating}
             />
           )}
         </div>

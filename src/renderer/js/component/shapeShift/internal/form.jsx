@@ -3,6 +3,7 @@ import Link from "component/link";
 import { getExampleAddress } from "util/shape_shift";
 import { Submit, FormRow } from "component/form";
 import type { ShapeShiftFormValues, Dispatch } from "redux/actions/shape_shift";
+import ShiftMarketInfo from "./market_info";
 
 type ShapeShiftFormErrors = {
   returnAddress?: string,
@@ -24,6 +25,7 @@ type Props = {
   originCoinDepositFee: number,
   originCoinDepositMin: string,
   originCoinDepositMax: number,
+  shapeShiftRate: number,
 };
 
 export default (props: Props) => {
@@ -43,6 +45,7 @@ export default (props: Props) => {
     originCoinDepositMax,
     originCoinDepositMin,
     originCoinDepositFee,
+    shapeShiftRate,
   } = props;
   return (
     <form onSubmit={handleSubmit}>
@@ -63,18 +66,18 @@ export default (props: Props) => {
           ))}
         </select>
         <span> {__("for LBC")}</span>
-        <p className="shapeshift__tx-info help">
+        <div className="shapeshift__tx-info">
           {!updating &&
             originCoinDepositMax && (
-              <span>
-                {__("Exchange max")}: {originCoinDepositMax} {originCoin}
-                <br />
-                {__("Exchange minimun")}: {originCoinDepositMin} {originCoin}
-                <br />
-                {__("Fee")}: {originCoinDepositFee} LBC
-              </span>
+              <ShiftMarketInfo
+                originCoin={originCoin}
+                shapeShiftRate={shapeShiftRate}
+                originCoinDepositFee={originCoinDepositFee}
+                originCoinDepositMin={originCoinDepositMin}
+                originCoinDepositMax={originCoinDepositMax}
+              />
             )}
-        </p>
+        </div>
       </div>
 
       <FormRow

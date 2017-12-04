@@ -21,6 +21,7 @@ export type ShapeShiftState = {
   // using Number(x) or parseInt(x) will either change it back to scientific notation or round to zero
   originCoinDepositMin: ?string,
   originCoinDepositFee: ?number,
+  shapeShiftRate: ?number,
 };
 
 // All ShapeShift actions that will have some payload
@@ -63,6 +64,7 @@ type ShapeShiftMarketInfo = {
   limit: number,
   minimum: number,
   minerFee: number,
+  rate: number,
 };
 
 type ActiveShiftInfo = {
@@ -91,6 +93,7 @@ const defaultState: ShapeShiftState = {
   originCoinDepositMax: undefined,
   originCoinDepositMin: undefined,
   originCoinDepositFee: undefined,
+  shapeShiftRate: undefined,
 };
 
 export default handleActions(
@@ -149,6 +152,7 @@ export default handleActions(
           .toFixed(10)
           .replace(/\.?0+$/, ""),
         originCoinDepositFee: marketInfo.minerFee,
+        shapeShiftRate: marketInfo.rate,
       };
     },
     [actions.GET_COIN_STATS_FAIL]: (
