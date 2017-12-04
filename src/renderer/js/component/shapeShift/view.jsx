@@ -87,7 +87,7 @@ class ShapeShift extends React.PureComponent<Props> {
           <h3>{__("Convert Crypto to LBC")}</h3>
           <p className="help">
             {__("Powered by ShapeShift. Read our FAQ")}{" "}
-            <Link href="">{__("here")}</Link>.
+            <Link href="https://lbry.io/faq/shapeshift">{__("here")}</Link>.
             {hasActiveShift &&
               shiftState !== "complete" && (
                 <span>{__("This will update automatically.")}</span>
