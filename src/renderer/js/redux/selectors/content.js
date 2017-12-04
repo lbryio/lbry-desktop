@@ -50,7 +50,7 @@ export const selectRewardContentClaimIds = createSelector(
   state => state.rewardedContentClaimIds
 );
 
-export const selectIsOverlayable = createSelector(
+export const selectCurrentTime = createSelector(
   _selectState,
-  state => state.overlayable
+  state => state.currentTime
 );

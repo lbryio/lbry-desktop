@@ -539,11 +539,11 @@ export function doAbandonClaim(txid, nout) {
   };
 }
 
-export function doEnableOverlay(canBeOverlayed) {
+export function doSetTime(currentTime) {
   return function(dispatch, getState) {
     dispatch({
-      type: types.ENABLE_OVERLAY,
-      data: { canBeOverlayed },
+      type: types.SET_CURRENT_TIME,
+      data: { currentTime },
     });
   };
 }

@@ -83,9 +83,9 @@ reducers[types.FETCH_CHANNEL_CLAIM_COUNT_COMPLETED] = function(state, action) {
   });
 };
 
-reducers[types.ENABLE_OVERLAY] = function(state, action) {
+reducers[types.SET_CURRENT_TIME] = function(state, action) {
   return Object.assign({}, state, {
-    overlayable: action.data.canBeOverlayed,
+    currentTime: action.data.currentTime,
   });
 };
 

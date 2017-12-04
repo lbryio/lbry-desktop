@@ -39,7 +39,7 @@ class VideoPlayer extends React.PureComponent {
 
   componentDidMount() {
     const container = this.media;
-    const { contentType, changeVolume, volume } = this.props;
+    const { contentType, changeVolume, volume, currentTime } = this.props;
     const { downloadPath, mediaType } = this.state;
     const loadedMetadata = e => {
       this.setState({ hasMetadata: true, startedPlaying: true });
@@ -101,6 +101,9 @@ class VideoPlayer extends React.PureComponent {
       mediaElement.addEventListener("volumechange", () => {
         changeVolume(mediaElement.volume);
       });
+      if (currentTime && currentTime > 0) {
+        mediaElement.currentTime = currentTime;
+      }
       mediaElement.volume = volume;
     }
   }
@@ -110,6 +113,10 @@ class VideoPlayer extends React.PureComponent {
     const mediaElement = this.media.children[0];
     if (mediaElement) {
       mediaElement.removeEventListener("click", this.togglePlayListener);
+      const currentTime = mediaElement.currentTime;
+      if (currentTime) {
+        this.props.setTime(mediaElement.currentTime);
+      }
     }
   }
 
