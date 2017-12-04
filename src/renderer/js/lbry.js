@@ -204,7 +204,7 @@ lbry.publishDeprecated = function(
 };
 
 lbry.imagePath = function(file) {
-  return "img/" + file;
+  return __static + "img/" + file;
 };
 
 lbry.getMediaType = function(contentType, fileName) {

@@ -61,7 +61,7 @@ body
   &:before {
     $width: 30px;
     position: absolute;
-    background: url('../img/busy.gif') no-repeat center center;
+    background: url(__static + '../img/busy.gif') no-repeat center center;
     width: $width;
     height: $spacing-vertical;
     content: "";
@@ -127,7 +127,7 @@ p
 
 .busy-indicator
 {
-  background: url('../img/busy.gif') no-repeat center center;
+  background: url(__static + '/img/busy.gif') no-repeat center center;
   display: inline-block;
   margin: -1em 0;
   min-width: 16px;

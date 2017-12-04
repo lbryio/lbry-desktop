@@ -178,7 +178,7 @@ function createWindow () {
   if (isDebug) {
     win.webContents.openDevTools();
   }
-  win.loadURL(`file://${app.getAppPath()}/dist/index.html`)
+  win.loadURL(`file://${__static}/index.html`)
   if (openUri) { // We stored and received a URI that an external app requested before we had a window object
     win.webContents.on('did-finish-load', () => {
       win.webContents.send('open-uri-requested', openUri);
@@ -240,9 +240,9 @@ function createTray () {
   if (process.platform === 'darwin') {
     // Using @2x for mac retina screens so the icon isn't blurry
     // file name needs to include "Template" at the end for dark menu bar
-    iconPath = path.join(app.getAppPath(), "/dist/img/fav/macTemplate@2x.png");
+    iconPath = path.join(__static, "/img/fav/macTemplate@2x.png");
   } else {
-    iconPath = path.join(app.getAppPath(), "/dist/img/fav/32x32.png");
+    iconPath = path.join(__static, "/img/fav/32x32.png");
   }
 
   tray = new Tray(iconPath);
@@ -315,7 +315,7 @@ function handleDaemonSubprocessExited() {
     // TODO: maybe it would be better to restart the daemon?
     if (win) {
       console.log('Did not request daemon stop, so quitting in 5 seconds.');
-      win.loadURL(`file://${app.getAppPath()}/dist/warning.html`);
+      win.loadURL(`file://${__static}/warning.html`);
       setTimeout(quitNow, 5000);
     } else {
       console.log('Did not request daemon stop, so quitting.');
@@ -507,7 +507,7 @@ function upgrade(event, installerPath) {
   });
 
   if (win) {
-    win.loadURL(`file://${app.getAppPath()}/dist/upgrade.html`);
+    win.loadURL(`file://${__static}/upgrade.html`);
   }
 
   shutdownDaemonAndQuit(true);
