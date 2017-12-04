@@ -8,8 +8,8 @@
   },
   "homepage": "https://lbry.io/",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "webpack-dev-server --devtool eval --progress --colors --inline",
+    "dev": "electron-webpack dev",
+    "compile": "electron-webpack",
     "precommit": "lint-staged",
     "prettier": "prettier --trailing-comma es5 --write js/**/*.{js,jsx}",
     "extract-langs": "node extractLocals.js"
@@ -129,7 +129,7 @@
     "babel-loader": "^7.1.1",
     "babel-plugin-react-require": "^3.0.0",
     "babel-polyfill": "^6.20.0",
-    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.18.0",
     "css-loader": "^0.28.4",
@@ -154,7 +154,6 @@
     "style-loader": "^0.19.0",
     "webpack": "^3.10.0",
     "webpack-build-notifier": "^0.1.18",
-    "webpack-dev-server": "^2.4.4",
     "webpack-merge": "^4.1.1",
     "webpack-sources": "1.1.0",
     "webpack-target-electron-renderer": "^0.4.0"
