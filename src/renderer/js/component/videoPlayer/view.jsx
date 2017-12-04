@@ -49,7 +49,7 @@ class VideoPlayer extends React.PureComponent {
       if (err) {
         this.setState({
           unplayable: true,
-          overlayable: true,
+          overlayable: false,
         });
       }
     };

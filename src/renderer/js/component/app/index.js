@@ -4,12 +4,10 @@ import {
   selectPageTitle,
   selectHistoryIndex,
   selectActiveHistoryEntry,
-  selectCurrentPage,
 } from "redux/selectors/navigation";
 import { selectUser } from "redux/selectors/user";
 import { doAlertError } from "redux/actions/app";
 import { doRecordScroll } from "redux/actions/navigation";
-import { selectPlayingUri } from "redux/selectors/content";
 import App from "./view";
 
 const select = (state, props) => ({
@@ -17,8 +15,6 @@ const select = (state, props) => ({
   user: selectUser(state),
   currentStackIndex: selectHistoryIndex(state),
   currentPageAttributes: selectActiveHistoryEntry(state),
-  playingUri: selectPlayingUri(state),
-  currentPage: selectCurrentPage(state),
 });
 
 const perform = dispatch => ({

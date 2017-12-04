@@ -1,12 +1,11 @@
 import React from "react";
-import Router from "component/router/index";
+import Router from "component/router";
 import Header from "component/header";
 import Theme from "component/theme";
+import VideoOverlay from "component/videoOverlay";
 import ModalRouter from "modal/modalRouter";
 import lbry from "lbry";
 import throttle from "util/throttle";
-import VideoPlayer from "component/videoPlayer";
-import { Icon } from "component/common";
 
 class App extends React.PureComponent {
   constructor() {
@@ -53,21 +52,13 @@ class App extends React.PureComponent {
     window.document.title = props.pageTitle || "LBRY";
   }
 
-  renderVideo() {
-    const { playingUri, currentPage } = this.props;
-
-    if (playingUri !== null && currentPage !== "show") {
-      return <VideoPlayer overlay={true} uri={playingUri} />;
-    }
-  }
-
   render() {
     return (
       <div id="window">
         <Theme />
         <Header />
         <div id="main-content">
-          {this.renderVideo()}
+          <VideoOverlay />
           <Router />
         </div>
         <ModalRouter />

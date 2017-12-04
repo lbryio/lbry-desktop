@@ -16,17 +16,10 @@ class Video extends React.PureComponent {
   componentWillMount() {
     const { uri, playingUri } = this.props;
 
+    // If not on the same uri cancel playback
     if (uri !== playingUri) {
       this.props.cancelPlay();
     }
-  }
-
-  isMediaSame(nextProps) {
-    return (
-      this.props.fileInfo &&
-      nextProps.fileInfo &&
-      this.props.fileInfo.outpoint === nextProps.fileInfo.outpoint
-    );
   }
 
   handleMouseOver() {
