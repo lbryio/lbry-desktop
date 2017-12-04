@@ -40,24 +40,8 @@ else
 fi
 
 [ -d "$ROOT/dist" ] && rm -rf "$ROOT/dist"
-mkdir -p "$ROOT/dist"
 
 yarn install
-
-
-
-############
-#    UI    #
-############
-echo -e "\033[0;32mCompiling UI\x1b[m"
-(
-  npm rebuild node-sass
-  node src/renderer/extractLocals.js
-  node_modules/.bin/node-sass --output dist/css --sourcemap=none src/renderer/scss/
-  node_modules/.bin/webpack --config src/renderer/webpack.prod.js
-  cp -r src/renderer/dist/* "$ROOT/dist/"
-)
-
 
 
 ####################
@@ -74,9 +58,9 @@ DAEMON_URL_TEMPLATE=$(node -e "console.log(require(\"$ROOT/package.json\").lbryS
 DAEMON_URL=$(echo ${DAEMON_URL_TEMPLATE//DAEMONVER/$DAEMON_VER} | sed "s/OSNAME/$OSNAME/g")
 DAEMON_VER_PATH="$BUILD_DIR/daemon.ver"
 echo "$DAEMON_VER_PATH"
-if [[ ! -f $DAEMON_VER_PATH || ! -f $ROOT/dist/lbrynet-daemon || "$(< "$DAEMON_VER_PATH")" != "$DAEMON_VER" ]]; then
+if [[ ! -f $DAEMON_VER_PATH || ! -f $ROOT/static/daemon/lbrynet-daemon || "$(< "$DAEMON_VER_PATH")" != "$DAEMON_VER" ]]; then
     curl -sL -o "$BUILD_DIR/daemon.zip" "$DAEMON_URL"
-    unzip "$BUILD_DIR/daemon.zip" -d "$ROOT/dist/"
+    unzip "$BUILD_DIR/daemon.zip" -d "$ROOT/static/daemon/"
     rm "$BUILD_DIR/daemon.zip"
     echo "$DAEMON_VER" > "$DAEMON_VER_PATH"
 else

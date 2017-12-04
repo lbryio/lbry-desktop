@@ -11,23 +11,14 @@ if (Test-Path -Path dist\) {
 }
 New-Item -ItemType directory -Path dist\
 
-
-# build ui
-npm rebuild node-sass
-node src\renderer\extractLocals.js
-node_modules\.bin\node-sass --output dist\css --sourcemap=none src\renderer\scss\
-node_modules\.bin\webpack --config src\renderer\webpack.prod.js
-Copy-Item src\renderer\dist dist -recurse
-
-
 # get daemon and cli executable
 $package_settings = (Get-Content package.json -Raw | ConvertFrom-Json).lbrySettings
 $daemon_ver = $package_settings.lbrynetDaemonVersion
 $daemon_url_template = $package_settings.lbrynetDaemonUrlTemplate
 $daemon_url = $daemon_url_template.Replace('OSNAME', 'windows').Replace('DAEMONVER', $daemon_ver)
 Invoke-WebRequest -Uri $daemon_url -OutFile daemon.zip
-Expand-Archive daemon.zip -DestinationPath dist\
-dir dist\ # verify that daemon binary is there
+Expand-Archive daemon.zip -DestinationPath static\daemon\
+dir static\daemon\ # verify that daemon binary is there
 rm daemon.zip
 
 

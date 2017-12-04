@@ -12,7 +12,7 @@ const keytar = require('keytar');
 const kill = require('tree-kill');
 const child_process = require('child_process');
 const assert = require('assert');
-const {version: localVersion} = require(app.getAppPath() + '/package.json');
+const localVersion = app.getVersion();
 const setMenu = require('./menu/main-menu.js');
 
 // Debug configs
@@ -39,7 +39,7 @@ if (isDebug) {
 
 // Misc constants
 const LATEST_RELEASE_API_URL = 'https://api.github.com/repos/lbryio/lbry-app/releases/latest';
-const DAEMON_PATH = process.env.LBRY_DAEMON || path.join(app.getAppPath(), 'dist', 'lbrynet-daemon');
+const DAEMON_PATH = process.env.LBRY_DAEMON || path.join(__static, 'daemon/lbrynet-daemon');
 
 let client = jayson.client.http({
   host: 'localhost',
@@ -83,55 +83,12 @@ function processRequestedUri(uri) {
   //     lbry://channel/#claimid. We remove the slash here as well.
   // On Linux and Mac, we just return the URI as given.
 
-  if (process.platform == 'win32') {
+  if (process.platform === 'win32') {
     return uri.replace(/\/$/, '').replace('/#', '#');
   } else {
     return uri;
   }
 }
-
-function checkForNewVersion(callback) {
-  function formatRc(ver) {
-    // Adds dash if needed to make RC suffix semver friendly
-    return ver.replace(/([^-])rc/, '$1-rc');
-  }
-
-  let result = '';
-  const opts = {
-    headers: {
-      'User-Agent': `LBRY/${localVersion}`,
-    }
-  };
-
-  const req = https.get(Object.assign(opts, url.parse(LATEST_RELEASE_API_URL)), (res) => {
-    res.on('data', (data) => {
-      result += data;
-    });
-    res.on('end', () => {
-      const tagName = JSON.parse(result).tag_name;
-      const [_, remoteVersion] = tagName.match(/^v([\d.]+(?:-?rc\d+)?)$/);
-      if (!remoteVersion) {
-        if (win) {
-          win.webContents.send('version-info-received', null);
-        }
-      } else {
-        const upgradeAvailable = semver.gt(formatRc(remoteVersion), formatRc(localVersion));
-        if (win) {
-          win.webContents.send('version-info-received', {remoteVersion, localVersion, upgradeAvailable});
-        }
-      }
-    })
-  });
-
-  req.on('error', (err) => {
-    console.log('Failed to get current version from GitHub. Error:', err);
-    if (win) {
-      win.webContents.send('version-info-received', null);
-    }
-  });
-}
-
-ipcMain.on('version-info-requested', checkForNewVersion);
 
 /*
  * Replacement for Electron's shell.openItem. The Electron version doesn't
@@ -145,11 +102,11 @@ function openItem(fullPath) {
     };
 
     let child;
-    if (process.platform == 'darwin') {
+    if (process.platform === 'darwin') {
       child = child_process.spawn('open', [fullPath], subprocOptions);
-    } else if (process.platform == 'linux') {
+    } else if (process.platform === 'linux') {
       child = child_process.spawn('xdg-open', [fullPath], subprocOptions);
-    } else if (process.platform == 'win32') {
+    } else if (process.platform === 'win32') {
       child = child_process.spawn(fullPath, Object.assign({}, subprocOptions, {shell: true}));
     }
 
@@ -158,7 +115,7 @@ function openItem(fullPath) {
 }
 
 function getPidsForProcessName(name) {
-  if (process.platform == 'win32') {
+  if (process.platform === 'win32') {
     const tasklistOut = child_process.execSync(`tasklist /fi "Imagename eq ${name}.exe" /nh`, {encoding: 'utf8'});
     if (tasklistOut.startsWith('INFO')) {
       return [];
@@ -324,7 +281,6 @@ function handleDaemonSubprocessExited() {
   }
 }
 
-
 function launchDaemon() {
   assert(!daemonSubprocess, 'Tried to launch daemon twice');
 
@@ -337,7 +293,6 @@ function launchDaemon() {
   daemonSubprocess.stderr.on('data', (buf) => {console.log(String(buf).trim());});
   daemonSubprocess.on('exit', handleDaemonSubprocessExited);
 }
-
 
 /*
  * Quits by first killing the daemon, the calling quitting for real.
@@ -374,19 +329,6 @@ if (isSecondaryInstance) { // We're not in the original process, so quit
   quitNow();
   return;
 }
-
-app.on('ready', function() {
-  launchDaemonIfNotRunning();
-  if (process.platform === "linux") {
-    checkLinuxTraySupport( err => {
-      if (!err) createTray();
-      else minimize = false;
-    })
-  } else {
-    createTray();
-  }
-  createWindow();
-});
 
 function launchDaemonIfNotRunning() {
   // Check if the daemon is already running. If we get
@@ -437,6 +379,20 @@ function forceKillAllDaemonsAndQuit() {
   }
 }
 
+app.setAsDefaultProtocolClient('lbry');
+
+app.on('ready', function() {
+  launchDaemonIfNotRunning();
+  if (process.platform === "linux") {
+    checkLinuxTraySupport( err => {
+      if (!err) createTray();
+      else minimize = false;
+    })
+  } else {
+    createTray();
+  }
+  createWindow();
+});
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
@@ -459,7 +415,6 @@ app.on('before-quit', (event) => {
   }
 });
 
-
 app.on('activate', () => {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
@@ -467,6 +422,14 @@ app.on('activate', () => {
     createWindow()
   }
 });
+
+if (process.platform === 'darwin') {
+  app.on('open-url', (event, uri) => {
+    handleOpenUriRequested(uri);
+  });
+} else if (process.argv.length >= 2) {
+  handleOpenUriRequested(process.argv[1]);
+}
 
 // When a quit is attempted, this is called. It attempts to shutdown the daemon,
 // then calls quitNow() to quit for real.
@@ -498,7 +461,23 @@ function shutdownDaemonAndQuit(evenIfNotStartedByApp = false) {
   // If not, we should wait until the daemon is closed before we start the install.
 }
 
-function upgrade(event, installerPath) {
+// Taken from webtorrent-desktop
+function checkLinuxTraySupport (cb) {
+  // Check that we're on Ubuntu (or another debian system) and that we have
+  // libappindicator1.
+  child_process.exec('dpkg --get-selections libappindicator1', function (err, stdout) {
+    if (err) return cb(err)
+    // Unfortunately there's no cleaner way, as far as I can tell, to check
+    // whether a debian package is installed:
+    if (stdout.endsWith('\tinstall\n')) {
+      cb(null)
+    } else {
+      cb(new Error('debian package not installed'))
+    }
+  })
+}
+
+ipcMain.on('upgrade', (event, installerPath) => {
   app.on('quit', () => {
     console.log('Launching upgrade installer at', installerPath);
     // This gets triggered called after *all* other quit-related events, so
@@ -516,35 +495,48 @@ function upgrade(event, installerPath) {
   console.log('Update downloaded to', installerPath);
   console.log('The app will close, and you will be prompted to install the latest version of LBRY.');
   console.log('After the install is complete, please reopen the app.');
-}
+});
 
-// Taken from webtorrent-desktop
-function checkLinuxTraySupport (cb) {
-  // Check that we're on Ubuntu (or another debian system) and that we have
-  // libappindicator1.
-  child_process.exec('dpkg --get-selections libappindicator1', function (err, stdout) {
-    if (err) return cb(err)
-    // Unfortunately there's no cleaner way, as far as I can tell, to check
-    // whether a debian package is installed:
-    if (stdout.endsWith('\tinstall\n')) {
-      cb(null)
-    } else {
-      cb(new Error('debian package not installed'))
+ipcMain.on('version-info-requested', () => {
+  function formatRc(ver) {
+    // Adds dash if needed to make RC suffix semver friendly
+    return ver.replace(/([^-])rc/, '$1-rc');
+  }
+
+  let result = '';
+  const opts = {
+    headers: {
+      'User-Agent': `LBRY/${localVersion}`,
     }
-  })
-}
+  };
 
-ipcMain.on('upgrade', upgrade);
-
-app.setAsDefaultProtocolClient('lbry');
-
-if (process.platform == 'darwin') {
-  app.on('open-url', (event, uri) => {
-    handleOpenUriRequested(uri);
+  const req = https.get(Object.assign(opts, url.parse(LATEST_RELEASE_API_URL)), (res) => {
+    res.on('data', (data) => {
+      result += data;
+    });
+    res.on('end', () => {
+      const tagName = JSON.parse(result).tag_name;
+      const [_, remoteVersion] = tagName.match(/^v([\d.]+(?:-?rc\d+)?)$/);
+      if (!remoteVersion) {
+        if (win) {
+          win.webContents.send('version-info-received', null);
+        }
+      } else {
+        const upgradeAvailable = semver.gt(formatRc(remoteVersion), formatRc(localVersion));
+        if (win) {
+          win.webContents.send('version-info-received', {remoteVersion, localVersion, upgradeAvailable});
+        }
+      }
+    })
   });
-} else if (process.argv.length >= 2) {
-  handleOpenUriRequested(process.argv[1]);
-}
+
+  req.on('error', (err) => {
+    console.log('Failed to get current version from GitHub. Error:', err);
+    if (win) {
+      win.webContents.send('version-info-received', null);
+    }
+  });
+});
 
 ipcMain.on('get-auth-token', (event) => {
   keytar.getPassword("LBRY", "auth_token").then(token => {
