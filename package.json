@@ -151,7 +151,7 @@
     "style-loader": "^0.19.0",
     "webpack": "^3.10.0",
     "webpack-build-notifier": "^0.1.18",
-    "webpack-sources": "1.1.0"
+    "webpack-sources": "1.0.1"
   },
   "postinstall": "install-app-deps",
   "license": "MIT",
