@@ -10,6 +10,7 @@
   "scripts": {
     "dev": "electron-webpack dev",
     "compile": "electron-webpack",
+    "postinstall": "electron-builder install-app-deps",
     "precommit": "lint-staged",
     "prettier": "prettier --trailing-comma es5 --write js/**/*.{js,jsx}",
     "extract-langs": "node extractLocals.js"
@@ -130,16 +131,10 @@
     "babel-preset-stage-2": "^6.18.0",
     "devtron": "^1.4.0",
     "electron": "^1.7.9",
-    "electron-builder": "^11.7.0",
+    "electron-builder": "^19.47.1",
     "electron-debug": "^1.4.0",
     "electron-devtools-installer": "^2.2.1",
     "electron-webpack": "^1.11.0",
-    "eslint": "^3.10.2",
-    "eslint-config-airbnb": "^13.0.0",
-    "eslint-loader": "^1.6.1",
-    "eslint-plugin-import": "^2.2.0",
-    "eslint-plugin-jsx-a11y": "^2.2.3",
-    "eslint-plugin-react": "^6.7.1",
     "husky": "^0.13.4",
     "i18n-extract": "^0.4.4",
     "json-loader": "^0.5.4",
@@ -155,7 +150,6 @@
   "resolutions": {
     "webpack/webpack-sources": "1.0.1"
   },
-  "postinstall": "install-app-deps",
   "license": "MIT",
   "lint-staged": {
     "src/renderer/js/**/*.{jsx,js}": [
