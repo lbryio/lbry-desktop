@@ -10,6 +10,7 @@ import { doNavigate } from "redux/actions/navigation";
 import { doDownloadLanguages } from "redux/actions/settings";
 import * as types from "constants/action_types";
 import amplitude from "amplitude-js";
+import lbry from "lbry";
 
 const env = ENV;
 const { remote, ipcRenderer, shell } = require("electron");
@@ -70,18 +71,29 @@ var init = function() {
   app.store.dispatch(doDownloadLanguages());
 
   function onDaemonReady() {
-    window.sessionStorage.setItem("loaded", "y"); //once we've made it here once per session, we don't need to show splash again
-    app.store.dispatch(doDaemonReady());
+    lbry.status().then(info => {
+      amplitude
+        .getInstance()
+        .init(
+          "0b130efdcbdbf86ec2f7f9eff354033e",
+          info.lbry_id,
+          null,
+          function() {
+            window.sessionStorage.setItem("loaded", "y"); //once we've made it here once per session, we don't need to show splash again
+            app.store.dispatch(doDaemonReady());
 
-    ReactDOM.render(
-      <Provider store={store}>
-        <div>
-          <App />
-          <SnackBar />
-        </div>
-      </Provider>,
-      canvas
-    );
+            ReactDOM.render(
+              <Provider store={store}>
+                <div>
+                  <App />
+                  <SnackBar />
+                </div>
+              </Provider>,
+              canvas
+            );
+          }
+        );
+    });
   }
 
   if (window.sessionStorage.getItem("loaded") == "y") {
@@ -96,8 +108,4 @@ var init = function() {
   }
 };
 
-amplitude
-  .getInstance()
-  .init("0b130efdcbdbf86ec2f7f9eff354033e", null, null, function() {
-    init();
-  });
+init();
