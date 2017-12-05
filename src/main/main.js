@@ -39,6 +39,9 @@ if (isDebug) {
 // Misc constants
 const LATEST_RELEASE_API_URL = 'https://api.github.com/repos/lbryio/lbry-app/releases/latest';
 const DAEMON_PATH = process.env.LBRY_DAEMON || path.join(__static, 'daemon/lbrynet-daemon');
+const rendererUrl = isDebug
+  ? `http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`
+  : `file://${__dirname}/index.html`
 
 let client = jayson.client.http({
   host: 'localhost',
@@ -134,7 +137,7 @@ function createWindow () {
   if (isDebug) {
     win.webContents.openDevTools();
   }
-  win.loadURL(`file://${__static}/index.html`)
+  win.loadURL(rendererUrl)
   if (openUri) { // We stored and received a URI that an external app requested before we had a window object
     win.webContents.on('did-finish-load', () => {
       win.webContents.send('open-uri-requested', openUri);

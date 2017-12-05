@@ -76,7 +76,7 @@ var init = function() {
           <SnackBar />
         </div>
       </Provider>,
-      canvas
+      app
     );
   }
 
@@ -87,7 +87,7 @@ var init = function() {
       <Provider store={store}>
         <SplashScreen onReadyToLaunch={onDaemonReady} />
       </Provider>,
-      canvas
+      app
     );
   }
 };
