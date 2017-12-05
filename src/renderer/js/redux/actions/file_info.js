@@ -102,8 +102,8 @@ export function doDeleteFile(outpoint, deleteFromComputer, abandonClaim) {
       const fileInfo = byOutpoint[outpoint];
 
       if (fileInfo) {
-        txid = fileInfo.outpoint.slice(0, -2);
-        nout = fileInfo.outpoint.slice(-1);
+        const txid = fileInfo.outpoint.slice(0, -2);
+        const nout = fileInfo.outpoint.slice(-1);
 
         dispatch(doAbandonClaim(txid, nout));
       }
