@@ -10,7 +10,6 @@ import { doNavigate } from "redux/actions/navigation";
 import { doDownloadLanguages } from "redux/actions/settings";
 import * as types from "constants/action_types";
 import amplitude from "amplitude-js";
-import lbry from "lbry.js";
 
 const env = ENV;
 const { remote, ipcRenderer, shell } = require("electron");
@@ -97,15 +96,8 @@ var init = function() {
   }
 };
 
-lbry.status({ session_status: true }).then(info => {
-  amplitude
-    .getInstance()
-    .init(
-      "0b130efdcbdbf86ec2f7f9eff354033e",
-      null,
-      { deviceId: info.lbry_id },
-      function() {
-        init();
-      }
-    );
-});
+amplitude
+  .getInstance()
+  .init("0b130efdcbdbf86ec2f7f9eff354033e", null, null, function() {
+    init();
+  });
