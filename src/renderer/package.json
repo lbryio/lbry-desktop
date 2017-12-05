@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/lbryio/lbry-app",
   "dependencies": {
+    "amplitude-js": "^4.0.0",
     "from2": "^2.3.0",
     "jshashes": "^1.0.7",
     "localforage": "^1.5.0",
