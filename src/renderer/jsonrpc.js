@@ -21,6 +21,8 @@ jsonrpc.call = function(
           error = new Error("Protocol error with unknown response signature");
         }
         return Promise.reject(error);
+      }).catch(e => {
+        console.log(e);
       });
     }
   }

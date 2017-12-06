@@ -9,10 +9,11 @@ import { doDaemonReady } from "redux/actions/app";
 import { doNavigate } from "redux/actions/navigation";
 import { doDownloadLanguages } from "redux/actions/settings";
 import * as types from "constants/action_types";
+import "scss/all.scss";
 
-const env = ENV;
+const env = process.env.NODE_ENV || "production";
 const { remote, ipcRenderer, shell } = require("electron");
-const contextMenu = remote.require("./menu/context-menu");
+const contextMenu = remote.require("./main.js").setMenu;
 const app = require("./app");
 
 window.addEventListener("contextmenu", event => {
@@ -76,7 +77,7 @@ var init = function() {
           <SnackBar />
         </div>
       </Provider>,
-      app
+      document.getElementById('app')
     );
   }
 
@@ -87,7 +88,7 @@ var init = function() {
       <Provider store={store}>
         <SplashScreen onReadyToLaunch={onDaemonReady} />
       </Provider>,
-      app
+      document.getElementById('app')
     );
   }
 };

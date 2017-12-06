@@ -11,7 +11,6 @@ function setLocal(key, value) {
 }
 
 const { remote, ipcRenderer } = require("electron");
-const menu = remote.require("./menu/main-menu");
 
 let lbry = {
   isConnected: false,
@@ -204,7 +203,7 @@ lbry.publishDeprecated = function(
 };
 
 lbry.imagePath = function(file) {
-  return __static + "img/" + file;
+  return "img/" + file;
 };
 
 lbry.getMediaType = function(contentType, fileName) {

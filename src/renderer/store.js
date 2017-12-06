@@ -20,7 +20,7 @@ import createFilter from "redux-persist-transform-filter";
 const localForage = require("localforage");
 const redux = require("redux");
 const thunk = require("redux-thunk").default;
-const env = ENV;
+const env = process.env.NODE_ENV || "production";
 
 function isFunction(object) {
   return typeof object === "function";

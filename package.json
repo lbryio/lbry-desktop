@@ -132,7 +132,6 @@
     "devtron": "^1.4.0",
     "electron": "^1.7.9",
     "electron-builder": "^19.47.1",
-    "electron-debug": "^1.4.0",
     "electron-devtools-installer": "^2.2.1",
     "electron-webpack": "^1.11.0",
     "husky": "^0.13.4",
@@ -143,7 +142,6 @@
     "node-sass": "^4.7.2",
     "prettier": "^1.4.2",
     "sass-loader": "^6.0.6",
-    "style-loader": "^0.19.0",
     "webpack": "^3.10.0",
     "webpack-build-notifier": "^0.1.18"
   },

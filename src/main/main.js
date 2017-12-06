@@ -12,15 +12,13 @@ const kill = require('tree-kill');
 const child_process = require('child_process');
 const assert = require('assert');
 const localVersion = app.getVersion();
-const setMenu = require('./menu/main-menu.js');
+export const setMenu = require('./menu/main-menu.js');
 
 // Debug configs
-const isDebug = process.env.NODE_ENV === 'development';
-if (isDebug) {
+const isDevelopment = process.env.NODE_ENV === 'development';
+if (isDevelopment) {
   try
   {
-    require('electron-debug')({showDevTools: true});
-
     const { default: installExtension, REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS } = require('electron-devtools-installer');
     app.on('ready', () => {
       [REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS].forEach(extension => {
@@ -30,7 +28,7 @@ if (isDebug) {
       });
     });
   }
-  catch (err) // electron-debug is in devDependencies, but some
+  catch (err)
   {
     console.error(err)
   }
@@ -39,9 +37,9 @@ if (isDebug) {
 // Misc constants
 const LATEST_RELEASE_API_URL = 'https://api.github.com/repos/lbryio/lbry-app/releases/latest';
 const DAEMON_PATH = process.env.LBRY_DAEMON || path.join(__static, 'daemon/lbrynet-daemon');
-const rendererUrl = isDebug
+const rendererUrl = isDevelopment
   ? `http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`
-  : `file://${__dirname}/index.html`
+  : `file://${__dirname}/index.html`;
 
 let client = jayson.client.http({
   host: 'localhost',
@@ -131,10 +129,13 @@ function getPidsForProcessName(name) {
 }
 
 function createWindow () {
-  win = new BrowserWindow({backgroundColor: '#155B4A', minWidth: 800, minHeight: 600 }) //$color-primary
+  // Disable renderer process's webSecurity on development to enable CORS.
+  win = isDevelopment
+    ? new BrowserWindow({backgroundColor: '#155B4A', minWidth: 800, minHeight: 600, webPreferences: {webSecurity: false}})
+    : new BrowserWindow({backgroundColor: '#155B4A', minWidth: 800, minHeight: 600});
 
   win.maximize()
-  if (isDebug) {
+  if (isDevelopment) {
     win.webContents.openDevTools();
   }
   win.loadURL(rendererUrl)
@@ -187,7 +188,7 @@ function createWindow () {
 
   // Menu bar
   win.setAutoHideMenuBar(true);
-  win.setMenuBarVisibility(isDebug);
+  win.setMenuBarVisibility(isDevelopment);
   setMenu();
 
 };
