@@ -137,42 +137,6 @@ export class CreditAmount extends React.PureComponent {
   }
 }
 
-let addressStyle = {
-  fontFamily:
-    '"Consolas", "Lucida Console", "Adobe Source Code Pro", monospace',
-};
-export class Address extends React.PureComponent {
-  static propTypes = {
-    address: PropTypes.string,
-  };
-
-  constructor(props) {
-    super(props);
-
-    this._inputElem = null;
-  }
-
-  render() {
-    return (
-      <div className="form-field form-field--address">
-        <input
-          className="input-copyable"
-          type="text"
-          ref={input => {
-            this._inputElem = input;
-          }}
-          onFocus={() => {
-            this._inputElem.select();
-          }}
-          style={addressStyle}
-          readOnly="readonly"
-          value={this.props.address || ""}
-        />
-      </div>
-    );
-  }
-}
-
 export class Thumbnail extends React.PureComponent {
   static propTypes = {
     src: PropTypes.string,

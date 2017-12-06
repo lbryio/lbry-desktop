@@ -43,6 +43,8 @@
 
 .wunderbar--active .icon-search { color: var(--color-primary); }
 
+// below styles should be inside the common input styling
+// will come back to this with the redesign - sean
 .wunderbar__input {
   background: var(--search-bg);
   width: 100%;
