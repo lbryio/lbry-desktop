@@ -51,7 +51,25 @@ document.addEventListener("click", event => {
   var target = event.target;
   while (target && target !== document) {
     if (target.matches("a") || target.matches("button")) {
-      // TODO: Log event
+      // TODO: Look into using accessiblity labels (this would also make the app more accessible)
+      let hrefParts = window.location.href.split("#");
+      let element = target.title || target.text.trim();
+      if (element) {
+        amplitude
+          .getInstance()
+          .logEvent("CLICK", {
+            target: element,
+            location:
+              hrefParts.length > 1 ? hrefParts[hrefParts.length - 1] : "/",
+          });
+      } else {
+        amplitude
+          .getInstance()
+          .logEvent("UNMARKED_CLICK", {
+            location:
+              hrefParts.length > 1 ? hrefParts[hrefParts.length - 1] : "/",
+          });
+      }
     }
     if (
       target.matches('a[href^="http"]') ||
