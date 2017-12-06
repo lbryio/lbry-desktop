@@ -1,7 +1,8 @@
 import React from "react";
 import { Icon } from "component/common";
 import Link from "component/link";
-import lbryuri from "lbryuri.js";
+import lbryuri from "lbryuri";
+import classnames from "classnames";
 
 class UriIndicator extends React.PureComponent {
   componentWillMount() {
@@ -60,7 +61,12 @@ class UriIndicator extends React.PureComponent {
 
     const inner = (
       <span>
-        <span className={`channel-name ${smallCard && "channel-name--small"}`}>
+        <span
+          className={classnames("channel-name", {
+            "channel-name--small": smallCard,
+            "button-text no-underline": link,
+          })}
+        >
           {channelName}
         </span>{" "}
         {!signatureIsValid ? (
