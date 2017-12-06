@@ -6,7 +6,6 @@ import * as settings from "constants/settings";
 import lbry from "lbry.js";
 import Link from "component/link";
 import FormFieldPrice from "component/formFieldPrice";
-import { remote } from "electron";
 
 class SettingsPage extends React.PureComponent {
   constructor(props) {
@@ -23,7 +22,7 @@ class SettingsPage extends React.PureComponent {
     });
     const success = () => {
       this.setState({ clearingCache: false });
-      window.location.href = `${__static}/index.html`;
+      window.location.href = `${__static}/index.html`; //TODO: Update this, since index.html isn't anymore
     };
     const clear = () => this.props.clearCache().then(success.bind(this));
 
