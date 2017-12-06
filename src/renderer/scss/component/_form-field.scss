@@ -56,6 +56,11 @@
     padding-left: 5px;
     padding-right: 5px;
     width: 100%;
+    font-family: "Consolas", "Lucida Console", "Adobe Source Code Pro", monospace;
+
+    &.input-copyable--with-copy-btn {
+      width: 85%;
+    }
   }
 
   input[readonly] {

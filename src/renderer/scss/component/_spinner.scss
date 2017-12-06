@@ -1,0 +1,58 @@
+.spinner {
+  position: relative;
+  width: 11em;
+  height: 11em;
+  margin: 20px auto;
+  font-size: 3px;
+  border-radius: 50%;
+
+  background: linear-gradient(to right, #fff 10%, rgba(255, 255, 255, 0) 50%);
+  animation: spin 1.4s infinite linear;
+  transform: translateZ(0);
+
+  @keyframes spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  &:before,
+  &:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  &:before {
+    width: 50%;
+    height: 50%;
+    background: #fff;
+    border-radius: 100% 0 0 0;
+  }
+
+  &:after {
+    height: 75%;
+    width: 75%;
+    margin: auto;
+    bottom: 0;
+    right: 0;
+    background: #000;
+    border-radius: 50%;
+  }
+}
+
+.spinner.spinner--dark {
+  background: linear-gradient(to right, var(--button-primary-bg) 10%, var(--color-bg) 50%);
+
+  &:before {
+    background: var(--button-primary-bg);
+  }
+
+  &:after {
+    background: var(--color-bg);
+  }
+}

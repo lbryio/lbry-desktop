@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "component/link";
-import { Address } from "component/common";
+import Address from "component/address";
 
 class WalletAddress extends React.PureComponent {
   componentWillMount() {
