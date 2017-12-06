@@ -1,0 +1,52 @@
+{
+  "appId": "io.lbry.${name}",
+  "dmg": {
+    "iconSize": 128,
+    "contents": [
+      {
+        "x": 115,
+        "y": 164
+      },
+      {
+        "x": 387,
+        "y": 164,
+        "type": "link",
+        "path": "/Applications"
+      }
+    ],
+    "window": {
+      "x": 200,
+      "y": 200,
+      "width": 500,
+      "height": 300
+    },
+    "backgroundColor": "155B4A"
+  },
+  "protocols": [
+    {
+      "name": "lbry",
+      "schemes": ["lbry"],
+      "role": "Viewer"
+    }
+  ],
+  "linux": {
+    "target": "deb",
+    "desktop": {
+      "MimeType": "x-scheme-handler/lbry",
+      "Exec": "/opt/LBRY/lbry %U"
+    }
+  },
+  "deb": {
+    "depends": [
+      "gconf2",
+      "gconf-service",
+      "libnotify4",
+      "libappindicator1",
+      "libxtst6",
+      "libnss3",
+      "libsecret-1-0"
+    ]
+  },
+  "artifactName": "${name}_${version}_${arch}.${ext}"
+}
+

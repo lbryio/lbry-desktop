@@ -43,7 +43,6 @@ fi
 
 yarn install
 
-
 ####################
 #  daemon and cli  #
 ####################
@@ -78,7 +77,7 @@ if [ "$FULL_BUILD" == "true" ]; then
     security unlock-keychain -p ${KEYCHAIN_PASSWORD} osx-build.keychain
   fi
 
-  node_modules/.bin/build -p never
+  yarn dist
 
   if $OSX; then
     binary_name=$(find "$ROOT/dist" -iname "*dmg")

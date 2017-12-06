@@ -2,13 +2,6 @@
 /LBRY-darwin-x64
 /dist
 
-/src/renderer/dist/css/*
-/src/renderer/dist/js/*
-!/src/renderer/dist/js/mediaelement
-/src/renderer/node_modules
-/src/renderer/.sass-cache
-
-
 /src/main/dist
 /src/main/locales
 /src/main/node_modules
@@ -17,6 +10,7 @@
 /lbry-app-venv
 /lbry-app
 /lbry-venv
+/static/daemon/lbrynet*
 /daemon/build
 /daemon/venv
 /daemon/requirements.txt

@@ -10,6 +10,8 @@
   "scripts": {
     "dev": "electron-webpack dev",
     "compile": "electron-webpack",
+    "dist": "yarn compile && electron-builder",
+    "dist:dir": "yarn dist -- --dir -c.compression=store -c.mac.identity=null",
     "postinstall": "electron-builder install-app-deps",
     "precommit": "lint-staged",
     "prettier": "prettier --trailing-comma es5 --write js/**/*.{js,jsx}",
@@ -26,71 +28,6 @@
   "keywords": [
     "lbry"
   ],
-  "build": {
-    "directories": {
-      "app": "."
-    },
-    "appId": "io.lbry.LBRY",
-    "mac": {
-      "category": "public.app-category.utilities",
-      "target": "dmg"
-    },
-    "dmg": {
-      "iconSize": 128,
-      "contents": [
-        {
-          "x": 115,
-          "y": 164
-        },
-        {
-          "x": 387,
-          "y": 164,
-          "type": "link",
-          "path": "/Applications"
-        }
-      ],
-      "window": {
-        "x": 200,
-        "y": 200,
-        "width": 500,
-        "height": 300
-      },
-      "backgroundColor": "155B4A"
-    },
-    "protocols": [
-      {
-        "name": "lbry",
-        "role": "Viewer",
-        "schemes": [
-          "lbry"
-        ]
-      }
-    ],
-    "linux": {
-      "target": "deb",
-      "desktop": {
-        "MimeType": "x-scheme-handler/lbry",
-        "Exec": "/opt/LBRY/lbry %U"
-      }
-    },
-    "deb": {
-      "depends": [
-        "gconf2",
-        "gconf-service",
-        "libnotify4",
-        "libappindicator1",
-        "libxtst6",
-        "libnss3",
-        "libsecret-1-0"
-      ]
-    },
-    "win": {
-      "target": "nsis"
-    },
-    "nsis": {
-      "perMachine": true
-    }
-  },
   "dependencies": {
     "electron-dl": "^1.6.0",
     "from2": "^2.3.0",
@@ -131,7 +68,7 @@
     "babel-preset-stage-2": "^6.18.0",
     "devtron": "^1.4.0",
     "electron": "^1.7.9",
-    "electron-builder": "^19.47.1",
+    "electron-builder": "^19.48.2",
     "electron-devtools-installer": "^2.2.1",
     "electron-webpack": "^1.11.0",
     "husky": "^0.13.4",
