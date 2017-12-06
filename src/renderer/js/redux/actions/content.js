@@ -280,13 +280,17 @@ export function doLoadVideo(uri) {
           dispatch(doDownloadFile(uri, streamInfo));
         }
       })
-      .catch(error => {
+      .catch(() => {
         dispatch(doSetPlayingUri(null));
         dispatch({
           type: types.LOADING_VIDEO_FAILED,
           data: { uri },
         });
-        dispatch(doAlertError(error));
+        dispatch(
+          doAlertError(
+            `Failed to download ${uri}, please try again. If this problem persists, visit https://lbry.io/faq/support for support.`
+          )
+        );
       });
   };
 }
