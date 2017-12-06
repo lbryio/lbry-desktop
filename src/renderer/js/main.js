@@ -55,20 +55,16 @@ document.addEventListener("click", event => {
       let hrefParts = window.location.href.split("#");
       let element = target.title || target.text.trim();
       if (element) {
-        amplitude
-          .getInstance()
-          .logEvent("CLICK", {
-            target: element,
-            location:
-              hrefParts.length > 1 ? hrefParts[hrefParts.length - 1] : "/",
-          });
+        amplitude.getInstance().logEvent("CLICK", {
+          target: element,
+          location:
+            hrefParts.length > 1 ? hrefParts[hrefParts.length - 1] : "/",
+        });
       } else {
-        amplitude
-          .getInstance()
-          .logEvent("UNMARKED_CLICK", {
-            location:
-              hrefParts.length > 1 ? hrefParts[hrefParts.length - 1] : "/",
-          });
+        amplitude.getInstance().logEvent("UNMARKED_CLICK", {
+          location:
+            hrefParts.length > 1 ? hrefParts[hrefParts.length - 1] : "/",
+        });
       }
     }
     if (
@@ -90,27 +86,26 @@ var init = function() {
 
   function onDaemonReady() {
     lbry.status().then(info => {
-      amplitude
-        .getInstance()
-        .init(
-          "0b130efdcbdbf86ec2f7f9eff354033e",
-          info.lbry_id,
-          null,
-          function() {
-            window.sessionStorage.setItem("loaded", "y"); //once we've made it here once per session, we don't need to show splash again
-            app.store.dispatch(doDaemonReady());
+      amplitude.getInstance().init(
+        // Amplitude API Key
+        "0b130efdcbdbf86ec2f7f9eff354033e",
+        info.lbry_id,
+        null,
+        function() {
+          window.sessionStorage.setItem("loaded", "y"); //once we've made it here once per session, we don't need to show splash again
+          app.store.dispatch(doDaemonReady());
 
-            ReactDOM.render(
-              <Provider store={store}>
-                <div>
-                  <App />
-                  <SnackBar />
-                </div>
-              </Provider>,
-              canvas
-            );
-          }
-        );
+          ReactDOM.render(
+            <Provider store={store}>
+              <div>
+                <App />
+                <SnackBar />
+              </div>
+            </Provider>,
+            canvas
+          );
+        }
+      );
     });
   }
 
