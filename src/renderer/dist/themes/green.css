@@ -1,0 +1,45 @@
+:root {
+    /* Colors */
+    --color-primary: #FFD700;
+    --color-canvas: #01512d;
+    --color-bg:  #2e8b57;
+    --color-bg-alt: #085e00;
+    --color-meta-light: #000000;
+    --color-error: #ff0000;
+    --color-white-overlay: rgba(255, 255, 255, 0.85);
+    --color-money: #f9d302;
+
+
+    /* Tab */
+    --tab-color: rgba(255,250,250, 0.60) ;
+    --tab-active-color: rgba(255, 255, 255, 0.70);
+
+    /* Header */
+    --header-color: #ffd700;
+    --header-active-color: #ffd700;
+    --header-button-hover-bg: var(--color-bg-alt);
+
+    /* Scrollbar */
+    --scrollbar-thumb-bg: rgba(029, 108, 068, 0.50);
+    --scrollbar-thumb-hover-bg: rgba(029, 108, 068, 0.65);
+
+    /* Modal */
+    --modal-overlay-bg: var(--color-white-overlay);
+    --modal-border: 1px solid rgba(0, 0, 0, 0.25);
+
+    /* Text */
+    --text-color: #FFFFFF;
+    --text-selection-bg: rgba(255, 255, 255,0.75);
+
+    /* Table */
+    --table-border: 0;
+    --table-item-even: var(--color-bg-alt);
+    --table-item-odd: transparent;
+
+   /* search */
+    --search-bg: var(--color-canvas);
+    --search-border: 1px solid rgba(0,0,0,0.15);
+
+   /* Divider */
+    --divider: 1px solid rgba(255, 225, 225, 0.75);
+}
