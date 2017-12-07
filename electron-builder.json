@@ -1,5 +1,5 @@
 {
-  "appId": "io.lbry.${name}",
+  "appId": "io.lbry.LBRY",
   "dmg": {
     "iconSize": 128,
     "contents": [
@@ -47,6 +47,5 @@
       "libsecret-1-0"
     ]
   },
-  "artifactName": "${name}_${version}_${arch}.${ext}"
+  "artifactName": "${productName}_${version}_${arch}.${ext}"
 }
-
