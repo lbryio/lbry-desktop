@@ -13,7 +13,7 @@ import {
 import { makeSelectCostInfoForUri } from "redux/selectors/cost_info";
 import { selectShowNsfw } from "redux/selectors/settings";
 import Media from "./view";
-import { selectPlayingUri } from "redux/selectors/content";
+import { selectPlayingUri, selectOverlayable } from "redux/selectors/content";
 
 const select = (state, props) => ({
   costInfo: makeSelectCostInfoForUri(props.uri)(state),
@@ -23,6 +23,7 @@ const select = (state, props) => ({
   isLoading: makeSelectLoadingForUri(props.uri)(state),
   isDownloading: makeSelectDownloadingForUri(props.uri)(state),
   playingUri: selectPlayingUri(state),
+  overlayable: selectOverlayable(state),
   contentType: makeSelectContentTypeForUri(props.uri)(state),
 });
 

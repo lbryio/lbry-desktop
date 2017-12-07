@@ -1,5 +1,5 @@
 import React from "react";
-import VideoPlayer from "component/videoPlayer";
+import Media from "component/media";
 
 class VideoOverlay extends React.PureComponent {
   render() {
@@ -13,7 +13,7 @@ class VideoOverlay extends React.PureComponent {
     const isReadyToPlay = (haveFileInfo || isDownloading) && !isLoading;
 
     if (isReadyToPlay && playingUri !== null && currentPage !== "show") {
-      return <VideoPlayer overlay={true} uri={playingUri} />;
+      return <Media overlay={true} uri={playingUri} />;
     }
 
     return null;

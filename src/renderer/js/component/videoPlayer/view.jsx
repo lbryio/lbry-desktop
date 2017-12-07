@@ -31,7 +31,6 @@ class VideoPlayer extends React.PureComponent {
       filename: _filename,
       downloadPath: _downloadPath,
       completed: _completed,
-      overlayable: false,
     };
 
     this.togglePlayListener = this.togglePlay.bind(this);
@@ -47,10 +46,8 @@ class VideoPlayer extends React.PureComponent {
     };
     const renderMediaCallback = err => {
       if (err) {
-        this.setState({
-          unplayable: true,
-          overlayable: false,
-        });
+        this.setState({ unplayable: true });
+        this.props.setOverlayable(false);
       }
     };
     // Handle fullscreen change for the Windows platform
@@ -66,9 +63,9 @@ class VideoPlayer extends React.PureComponent {
     // not all media is "overlayable" so this has to manually set/unset for such media
     // by default it is true for A/V, but it is set to false if the player errs
     if (["video", "audio"].indexOf(mediaType) !== -1) {
-      this.setState({ overlayable: true });
+      this.props.setOverlayable(true);
     } else {
-      this.setState({ overlayable: false });
+      this.props.setOverlayable(false);
     }
 
     // use renderAudio override for mp3
@@ -124,7 +121,7 @@ class VideoPlayer extends React.PureComponent {
       mediaElement.removeEventListener("click", this.togglePlayListener);
       const currentTime = mediaElement.currentTime;
       if (currentTime) {
-        this.props.setTime(mediaElement.currentTime);
+        this.props.setTime(currentTime);
       }
     }
   }
@@ -140,6 +137,7 @@ class VideoPlayer extends React.PureComponent {
     audio.autoplay = autoplay;
     audio.controls = true;
     audio.src = downloadPath;
+    audio.style = "width: 100%;";
     container.appendChild(audio);
   }
 
@@ -197,46 +195,47 @@ class VideoPlayer extends React.PureComponent {
     return ["audio", "video"].indexOf(mediaType) !== -1;
   }
 
+  displayOverlayButtons() {
+    const { uri, navigate, cancelPlay } = this.props;
+    return (
+      <div>
+        <Link
+          className="button-close"
+          icon="icon-times"
+          onClick={() => cancelPlay()}
+        />
+        <Link
+          className="button-open-page"
+          icon="icon-expand"
+          onClick={() => navigate("/show", { uri })}
+        />
+      </div>
+    );
+  }
+
   render() {
-    const { metadata, overlay, uri, cancelPlay, navigate } = this.props;
-    const { mediaType } = this.state;
-    const { hasMetadata, unplayable, overlayable } = this.state;
+    const { metadata, overlay } = this.props;
+    const { hasMetadata, unplayable, mediaType } = this.state;
     const noMetadataMessage = "Waiting for metadata.";
     const unplayableMessage = "Sorry, looks like we can't play this file.";
 
     const poster = metadata.thumbnail;
     const needsMetadata = this.isPlayableType();
-    const displayOverlay = overlay && overlayable;
 
     return (
-      <div className={displayOverlay ? "overlay" : ""}>
+      <div>
         {["audio", "application"].indexOf(mediaType) !== -1 &&
-          !displayOverlay &&
           (!this.isPlayableType() || hasMetadata) &&
-          !unplayable && <Thumbnail src={poster} className="video-embedded" />}
+          !unplayable && <Thumbnail src={poster} className="media-embedded" />}
         {this.isPlayableType() &&
-          !displayOverlay &&
           !hasMetadata &&
-          !unplayable && <LoadingScreen status={noMetadataMessage} />}
+          !unplayable &&
+          !overlay && <LoadingScreen status={noMetadataMessage} />}
         {unplayable &&
-          (!displayOverlay && (
+          !overlay && (
             <LoadingScreen status={unplayableMessage} spinner={false} />
-          ))}
-
-        {displayOverlay && (
-          <Link
-            className="button-close"
-            icon="icon-times"
-            onClick={() => cancelPlay()}
-          />
-        )}
-        {displayOverlay && (
-          <Link
-            className="button-open-page"
-            icon="icon-expand"
-            onClick={() => navigate("/show", { uri })}
-          />
-        )}
+          )}
+        {overlay && this.displayOverlayButtons()}
 
         <div ref={ref => (this.media = ref)} className="media" />
       </div>

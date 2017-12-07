@@ -2,7 +2,11 @@ import React from "react";
 import { connect } from "react-redux";
 import { doChangeVolume } from "redux/actions/app";
 import { doNavigate } from "redux/actions/navigation";
-import { doSetPlayingUri, doSetTime } from "redux/actions/content";
+import {
+  doSetPlayingUri,
+  doSetTime,
+  doSetOverlayable,
+} from "redux/actions/content";
 import {
   makeSelectMetadataForUri,
   makeSelectContentTypeForUri,
@@ -25,6 +29,7 @@ const perform = dispatch => ({
   setTime: currentTime => dispatch(doSetTime(currentTime)),
   changeVolume: volume => dispatch(doChangeVolume(volume)),
   cancelPlay: () => dispatch(doSetPlayingUri(null)),
+  setOverlayable: overlayable => dispatch(doSetOverlayable(overlayable)),
 });
 
 export default connect(select, perform)(VideoPlayer);

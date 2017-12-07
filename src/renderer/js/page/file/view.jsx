@@ -66,7 +66,7 @@ class FilePage extends React.PureComponent {
       <section className={"card " + (obscureNsfw ? "card--obscured " : "")}>
         <div className="show-page-media">
           {isPlayable ? (
-            <Media className="video-embedded" uri={uri} />
+            <Media className="media-embedded" uri={uri} overlay={false} />
           ) : metadata && metadata.thumbnail ? (
             <Thumbnail src={metadata.thumbnail} />
           ) : (

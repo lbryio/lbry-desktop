@@ -54,27 +54,43 @@ class Media extends React.PureComponent {
   }
 
   determineClasses(isPlaying, mediaType) {
-    const { isLoading, isDownloading } = this.props;
+    const { isLoading, isDownloading, overlay, overlayable } = this.props;
 
     let classes = [];
     classes.push(this.isNSFW() ? "video--obscured " : "");
 
-    if (isLoading || isDownloading) classes.push("video-embedded", "video");
+    if (isLoading || isDownloading) classes.push("media-embedded", "video");
 
     if (mediaType === "video") {
-      classes.push("video-embedded", "video");
+      classes.push("media-embedded", "video");
       classes.push(isPlaying ? "video--active" : "video--hidden");
     } else if (mediaType === "application") {
-      classes.push("video-embedded");
-    } else {
-      if (!isPlaying) classes.push("video-embedded");
+      classes.push("media-embedded");
+    } else if (!isPlaying) {
+      classes.push("media-embedded");
+    }
+    if (overlay && overlayable) {
+      classes.push("overlay");
+
+      // We remove media-embedded on the overlay
+      if (classes.indexOf("media-embedded") != -1) {
+        classes.splice(classes.indexOf("media-embedded"), 1);
+      }
     }
 
-    return classes.join(" ");
+    return classes.join(" ").trim();
   }
 
   render() {
-    const { metadata, playingUri, fileInfo, contentType, uri } = this.props;
+    const {
+      metadata,
+      playingUri,
+      fileInfo,
+      contentType,
+      uri,
+      overlay,
+      overlayable,
+    } = this.props;
 
     const isPlaying = playingUri === uri;
     const isReadyToPlay = fileInfo && fileInfo.written_bytes > 0;
@@ -82,6 +98,10 @@ class Media extends React.PureComponent {
       contentType,
       fileInfo && fileInfo.file_name
     );
+
+    if (overlay && !overlayable) {
+      return null;
+    }
 
     return (
       <div
@@ -93,7 +113,7 @@ class Media extends React.PureComponent {
           (!isReadyToPlay ? (
             <LoadingScreen status={this.determineLoadStatusMessage()} />
           ) : (
-            <VideoPlayer overlay={false} uri={uri} />
+            <VideoPlayer overlay={overlay} uri={uri} />
           ))}
         {!isPlaying && (
           <div

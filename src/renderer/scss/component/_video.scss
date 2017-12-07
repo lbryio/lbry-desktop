@@ -1,5 +1,5 @@
 
-$height-video-embedded: $width-page-constrained * 9 / 16;
+$height-media-embedded: $width-page-constrained * 9 / 16;
 
 video {
   object-fit: contain;
@@ -16,10 +16,10 @@ video {
   color: white;
 }
 
-.video-embedded {
+.media-embedded {
   max-width: $width-page-constrained;
-  max-height: $height-video-embedded;
-  height: $height-video-embedded;
+  max-height: $height-media-embedded;
+  height: $height-media-embedded;
   position: relative;
   video {
     height: 100%;
@@ -29,7 +29,7 @@ video {
     left: 0;
   }
   &.video--hidden {
-    height: $height-video-embedded;
+    height: $height-media-embedded;
   }
 }
 .video--obscured .video__cover
@@ -87,48 +87,46 @@ video {
 
 .overlay {
   position: fixed;
-  max-height: 50%;
-  max-width: 50%;
-  width: 20%;
-  height: inherit;
-  bottom: 1%;
-  right: 1%;
+  max-width: 25%;
+  bottom: 2%;
+  right: 2%;
   z-index: 3;
+  border: black solid 1px;
+  box-sizing: border-box;
   box-shadow: var(--box-shadow-layer);
 
-  &:hover .button-close {
-    display: inline-block;
-    background: rgba(0, 0, 0, 0.5);
-    position: absolute;
-    height: 22px;
-    width: 22px;
-    top: 0px;
-    right: 0px;
-    color: #FFF;
-    text-align: center;
-    cursor: pointer;
-    z-index: 4;
+  .button-close,
+  .button-open-page {
+    display: none;
   }
 
-  &:hover .button-open-page {
-    display: inline-block;
-    background: rgba(0, 0, 0, 0.5);
-    position: absolute;
-    height: 22px;
-    width: 22px;
-    top: 0px;
-    left: 0px;
-    color: #FFF;
-    text-align: center;
-    cursor: pointer;
-    z-index: 4;
+  &:hover{
+    .button-close,
+    .button-open-page {
+      display: inline-block;
+      background: rgba(0, 0, 0, 0.5);
+      position: absolute;
+      height: 22px;
+      width: 22px;
+      top: 0px;
+      color: #FFF;
+      text-align: center;
+      cursor: pointer;
+      z-index: 4;
+    }
+
+    .button-close {
+       right: 0px;
+    }
+
+    .button-open-page {
+       left: 0px;
+    }
+  }
+
+  img {
+    width: 100%;
+    height: auto;
   }
 }
 
-.overlay .button-close {
-  display: none;
-}
-
-.overlay .button-open-page {
-  display: none;
-}

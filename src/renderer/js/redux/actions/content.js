@@ -547,3 +547,12 @@ export function doSetTime(currentTime) {
     });
   };
 }
+
+export function doSetOverlayable(overlayable) {
+  return function(dispatch, getState) {
+    dispatch({
+      type: types.SET_OVERLAYABLE,
+      data: { overlayable },
+    });
+  };
+}
