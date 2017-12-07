@@ -46,7 +46,10 @@ def get_latest_file_path():
   # The update metadata file is called latest.yml on Windows, latest-mac.yml on
   # Mac, latest-linux.yml on Linux
   this_dir = os.path.dirname(os.path.realpath(__file__))
-  return os.path.realpath(glob.glob(this_dir + '/../dist/latest*.yml')[0])
+
+  latestfilematches = glob.glob(this_dir + '/../dist/latest*.yml')
+
+  return latestfilematches[0] if latestfilematches else None
 
 
 def upload_to_s3(folder):
@@ -91,12 +94,15 @@ def upload_to_s3(folder):
               "to s3://" + S3_BUCKET + "/" + LATEST_S3_PATH + "/" + update_asset_filename
         s3.Object(S3_BUCKET, LATEST_S3_PATH + "/" + update_asset_filename).upload_file(update_asset_path)
 
-    # Upload update metadata file to update bucket
     metadatafilepath = get_latest_file_path()
-    metadatafilename = os.path.basename(metadatafilepath)
 
-    print "Uploading update metadata file at", metadatafilepath, "to S3"
-    s3.Object(S3_BUCKET, LATEST_S3_PATH + "/" + metadatafilename).upload_file(metadatafilepath)
+    if metadatafilepath is not None:
+        # For some reason latest-linux.yml isn't being created, but it's OK because updates don't
+        # work on Linux yet anyway.
+        metadatafilename = os.path.basename(metadatafilepath)
+
+        print "Uploading update metadata file at", metadatafilepath, "to S3"
+        s3.Object(S3_BUCKET, LATEST_S3_PATH + "/" + metadatafilename).upload_file(metadatafilepath)
 
 
 def upload_to_github_if_tagged(repo_name):
