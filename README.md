@@ -30,7 +30,7 @@ This will download and install the LBRY app and its dependencies, including [the
 ### Ongoing Development
 Run `yarn dev`
 
-This will set up a server that will automatically compile any changes made inside `src\` folder and automatically reload the app without loosing the state.
+This will set up a server that will automatically compile any changes made inside `src\` folder and automatically reload the app without losing the state.
 
 ### Packaging
 
@@ -70,7 +70,7 @@ Run `yarn dist`
 ### Ongoing Development
 Run `yarn dev`
 
-This will set up a server that will automatically compile any changes made inside `src\` folder and automatically reload the app without loosing the state.
+This will set up a server that will automatically compile any changes made inside `src\` folder and automatically reload the app without losing the state.
 
 ## Internationalization
 
