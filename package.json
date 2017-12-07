@@ -8,14 +8,14 @@
   },
   "homepage": "https://lbry.io/",
   "scripts": {
+    "extract-langs": "node src/renderer/extractLocals.js",
     "dev": "electron-webpack dev",
-    "compile": "electron-webpack",
+    "compile": "electron-webpack && yarn extract-langs",
     "dist": "yarn compile && electron-builder",
     "dist:dir": "yarn dist -- --dir -c.compression=store -c.mac.identity=null",
     "postinstall": "electron-builder install-app-deps",
     "precommit": "lint-staged",
-    "prettier": "prettier --trailing-comma es5 --write js/**/*.{js,jsx}",
-    "extract-langs": "node extractLocals.js"
+    "prettier": "prettier --trailing-comma es5 --write js/**/*.{js,jsx}"
   },
   "main": "src/main/main.js",
   "repository": {
