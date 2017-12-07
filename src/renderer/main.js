@@ -9,6 +9,8 @@ import { doDaemonReady } from "redux/actions/app";
 import { doNavigate } from "redux/actions/navigation";
 import { doDownloadLanguages } from "redux/actions/settings";
 import * as types from "constants/action_types";
+import amplitude from "amplitude-js";
+import lbry from "lbry";
 import "scss/all.scss";
 
 const env = process.env.NODE_ENV || "production";
@@ -56,6 +58,23 @@ ipcRenderer.on("window-is-focused", (event, data) => {
 document.addEventListener("click", event => {
   var target = event.target;
   while (target && target !== document) {
+    if (target.matches("a") || target.matches("button")) {
+      // TODO: Look into using accessiblity labels (this would also make the app more accessible)
+      let hrefParts = window.location.href.split("#");
+      let element = target.title || target.text.trim();
+      if (element) {
+        amplitude.getInstance().logEvent("CLICK", {
+          target: element,
+          location:
+            hrefParts.length > 1 ? hrefParts[hrefParts.length - 1] : "/",
+        });
+      } else {
+        amplitude.getInstance().logEvent("UNMARKED_CLICK", {
+          location:
+            hrefParts.length > 1 ? hrefParts[hrefParts.length - 1] : "/",
+        });
+      }
+    }
     if (
       target.matches('a[href^="http"]') ||
       target.matches('a[href^="mailto"]')
@@ -74,18 +93,28 @@ var init = function() {
   app.store.dispatch(doDownloadLanguages());
 
   function onDaemonReady() {
-    window.sessionStorage.setItem("loaded", "y"); //once we've made it here once per session, we don't need to show splash again
-    app.store.dispatch(doDaemonReady());
+    lbry.status().then(info => {
+      amplitude.getInstance().init(
+        // Amplitude API Key
+        "0b130efdcbdbf86ec2f7f9eff354033e",
+        info.lbry_id,
+        null,
+        function() {
+          window.sessionStorage.setItem("loaded", "y"); //once we've made it here once per session, we don't need to show splash again
+          app.store.dispatch(doDaemonReady());
 
-    ReactDOM.render(
-      <Provider store={store}>
-        <div>
-          <App />
-          <SnackBar />
-        </div>
-      </Provider>,
-      document.getElementById('app')
-    );
+          ReactDOM.render(
+            <Provider store={store}>
+              <div>
+                <App />
+                <SnackBar />
+              </div>
+            </Provider>,
+            document.getElementById('app')
+          );
+        }
+      );
+    });
   }
 
   if (window.sessionStorage.getItem("loaded") == "y") {

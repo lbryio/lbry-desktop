@@ -11,6 +11,7 @@ import searchReducer from "redux/reducers/search";
 import settingsReducer from "redux/reducers/settings";
 import userReducer from "redux/reducers/user";
 import walletReducer from "redux/reducers/wallet";
+import shapeShiftReducer from "redux/reducers/shape_shift";
 import { persistStore, autoRehydrate } from "redux-persist";
 import createCompressor from "redux-persist-transform-compress";
 import createFilter from "redux-persist-transform-filter";
@@ -67,6 +68,7 @@ const reducers = redux.combineReducers({
   settings: settingsReducer,
   wallet: walletReducer,
   user: userReducer,
+  shapeShift: shapeShiftReducer,
 });
 
 const bulkThunk = createBulkThunkMiddleware();
