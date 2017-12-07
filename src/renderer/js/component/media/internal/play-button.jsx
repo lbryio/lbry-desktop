@@ -17,11 +17,11 @@ class VideoPlayButton extends React.PureComponent {
       "Space" === event.code
     ) {
       event.preventDefault();
-      this.watch();
+      this.renderMedia();
     }
   }
 
-  watch() {
+  renderMedia() {
     this.props.play(this.props.uri);
   }
 
@@ -39,7 +39,7 @@ class VideoPlayButton extends React.PureComponent {
         disabled={disabled}
         className="video__play-button"
         icon={icon}
-        onClick={() => this.watch()}
+        onClick={() => this.renderMedia()}
       />
     );
   }

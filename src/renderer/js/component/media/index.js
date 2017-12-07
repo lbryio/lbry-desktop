@@ -12,7 +12,7 @@ import {
 } from "redux/selectors/file_info";
 import { makeSelectCostInfoForUri } from "redux/selectors/cost_info";
 import { selectShowNsfw } from "redux/selectors/settings";
-import Video from "./view";
+import Media from "./view";
 import { selectPlayingUri } from "redux/selectors/content";
 
 const select = (state, props) => ({
@@ -31,4 +31,4 @@ const perform = dispatch => ({
   cancelPlay: () => dispatch(doSetPlayingUri(null)),
 });
 
-export default connect(select, perform)(Video);
+export default connect(select, perform)(Media);

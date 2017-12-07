@@ -3,7 +3,7 @@ import VideoPlayer from "component/videoPlayer";
 
 class VideoOverlay extends React.PureComponent {
   render() {
-    const { playingUri, currentPage, cancelPlay } = this.props;
+    const { playingUri, currentPage } = this.props;
 
     const isDownloading = this.props.isDownloading(playingUri);
     const isLoading = this.props.isLoading(playingUri);

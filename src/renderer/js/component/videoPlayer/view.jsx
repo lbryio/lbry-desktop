@@ -39,7 +39,7 @@ class VideoPlayer extends React.PureComponent {
 
   componentDidMount() {
     const container = this.media;
-    const { contentType, changeVolume, volume, currentTime } = this.props;
+    const { contentType, changeVolume, volume } = this.props;
     const { downloadPath, mediaType } = this.state;
     const loadedMetadata = e => {
       this.setState({ hasMetadata: true, startedPlaying: true });
@@ -101,10 +101,19 @@ class VideoPlayer extends React.PureComponent {
       mediaElement.addEventListener("volumechange", () => {
         changeVolume(mediaElement.volume);
       });
-      if (currentTime && currentTime > 0) {
-        mediaElement.currentTime = currentTime;
-      }
       mediaElement.volume = volume;
+    }
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const mediaElement = this.media.children[0];
+    const { currentTime } = nextProps;
+    const shouldSeek =
+      currentTime !== this.props.currentTime && currentTime && currentTime > 0;
+
+    if (mediaElement && shouldSeek) {
+      mediaElement.currentTime = nextProps.currentTime;
+      this.props.setTime(null);
     }
   }
 
@@ -189,15 +198,7 @@ class VideoPlayer extends React.PureComponent {
   }
 
   render() {
-    const {
-      contentType,
-      fileInfo,
-      metadata,
-      overlay,
-      currentPage,
-      playingUri,
-      cancelPlay,
-    } = this.props;
+    const { metadata, overlay, uri, cancelPlay, navigate } = this.props;
     const { mediaType } = this.state;
     const { hasMetadata, unplayable, overlayable } = this.state;
     const noMetadataMessage = "Waiting for metadata.";
@@ -210,20 +211,30 @@ class VideoPlayer extends React.PureComponent {
     return (
       <div className={displayOverlay ? "overlay" : ""}>
         {["audio", "application"].indexOf(mediaType) !== -1 &&
+          !displayOverlay &&
           (!this.isPlayableType() || hasMetadata) &&
           !unplayable && <Thumbnail src={poster} className="video-embedded" />}
         {this.isPlayableType() &&
+          !displayOverlay &&
           !hasMetadata &&
           !unplayable && <LoadingScreen status={noMetadataMessage} />}
-        {unplayable && (
-          <LoadingScreen status={unplayableMessage} spinner={false} />
-        )}
+        {unplayable &&
+          (!displayOverlay && (
+            <LoadingScreen status={unplayableMessage} spinner={false} />
+          ))}
 
         {displayOverlay && (
           <Link
             className="button-close"
             icon="icon-times"
             onClick={() => cancelPlay()}
+          />
+        )}
+        {displayOverlay && (
+          <Link
+            className="button-open-page"
+            icon="icon-expand"
+            onClick={() => navigate("/show", { uri })}
           />
         )}
 

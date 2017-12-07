@@ -1,5 +1,4 @@
 import { connect } from "react-redux";
-import { doSetPlayingUri } from "redux/actions/content";
 import {
   makeSelectFileInfoForUri,
   makeSelectDownloadingForUri,
@@ -17,8 +16,4 @@ const select = (state, props) => ({
   fileInfo: uri => makeSelectFileInfoForUri(uri)(state),
 });
 
-const perform = dispatch => ({
-  cancelPlay: () => dispatch(doSetPlayingUri(null)),
-});
-
-export default connect(select, perform)(VideoOverlay);
+export default connect(select, null)(VideoOverlay);

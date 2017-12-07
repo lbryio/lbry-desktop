@@ -96,7 +96,6 @@ video {
   z-index: 3;
   box-shadow: var(--box-shadow-layer);
 
-
   &:hover .button-close {
     display: inline-block;
     background: rgba(0, 0, 0, 0.5);
@@ -110,8 +109,26 @@ video {
     cursor: pointer;
     z-index: 4;
   }
+
+  &:hover .button-open-page {
+    display: inline-block;
+    background: rgba(0, 0, 0, 0.5);
+    position: absolute;
+    height: 22px;
+    width: 22px;
+    top: 0px;
+    left: 0px;
+    color: #FFF;
+    text-align: center;
+    cursor: pointer;
+    z-index: 4;
+  }
 }
 
 .overlay .button-close {
+  display: none;
+}
+
+.overlay .button-open-page {
   display: none;
 }

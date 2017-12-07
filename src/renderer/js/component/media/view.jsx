@@ -5,7 +5,7 @@ import { LoadingScreen } from "component/common";
 import VideoPlayer from "component/videoPlayer";
 import NsfwOverlay from "component/nsfwOverlay";
 
-class Video extends React.PureComponent {
+class Media extends React.PureComponent {
   constructor(props) {
     super(props);
     this.state = {
@@ -22,44 +22,21 @@ class Video extends React.PureComponent {
     }
   }
 
+  isNSFW() {
+    const { obscureNsfw, metadata } = this.props;
+    return obscureNsfw && metadata && metadata.nsfw;
+  }
+
   handleMouseOver() {
-    if (
-      this.props.obscureNsfw &&
-      this.props.metadata &&
-      this.props.metadata.nsfw
-    ) {
-      this.setState({
-        showNsfwHelp: true,
-      });
-    }
+    if (this.isNSFW()) this.setState({ showNsfwHelp: true });
   }
 
   handleMouseOut() {
-    if (this.state.showNsfwHelp) {
-      this.setState({
-        showNsfwHelp: false,
-      });
-    }
+    this.setState({ showNsfwHelp: false });
   }
 
-  render() {
-    const {
-      metadata,
-      isLoading,
-      isDownloading,
-      playingUri,
-      fileInfo,
-      contentType,
-      uri,
-    } = this.props;
-
-    const isPlaying = playingUri === uri;
-    const isReadyToPlay = fileInfo && fileInfo.written_bytes > 0;
-    const obscureNsfw = this.props.obscureNsfw && metadata && metadata.nsfw;
-    const mediaType = lbry.getMediaType(
-      contentType,
-      fileInfo && fileInfo.file_name
-    );
+  determineLoadStatusMessage() {
+    const { fileInfo, isLoading, isDownloading } = this.props;
 
     let loadStatusMessage = "";
 
@@ -73,9 +50,17 @@ class Video extends React.PureComponent {
       loadStatusMessage = __("Downloading stream... not long left now!");
     }
 
+    return loadStatusMessage;
+  }
+
+  determineClasses(isPlaying, mediaType) {
+    const { isLoading, isDownloading } = this.props;
+
     let classes = [];
-    classes.push(obscureNsfw ? "video--obscured " : "");
+    classes.push(this.isNSFW() ? "video--obscured " : "");
+
     if (isLoading || isDownloading) classes.push("video-embedded", "video");
+
     if (mediaType === "video") {
       classes.push("video-embedded", "video");
       classes.push(isPlaying ? "video--active" : "video--hidden");
@@ -85,15 +70,28 @@ class Video extends React.PureComponent {
       if (!isPlaying) classes.push("video-embedded");
     }
 
+    return classes.join(" ");
+  }
+
+  render() {
+    const { metadata, playingUri, fileInfo, contentType, uri } = this.props;
+
+    const isPlaying = playingUri === uri;
+    const isReadyToPlay = fileInfo && fileInfo.written_bytes > 0;
+    const mediaType = lbry.getMediaType(
+      contentType,
+      fileInfo && fileInfo.file_name
+    );
+
     return (
       <div
-        className={classes.join(" ")}
+        className={this.determineClasses(isPlaying, mediaType)}
         onMouseEnter={this.handleMouseOver.bind(this)}
         onMouseLeave={this.handleMouseOut.bind(this)}
       >
         {isPlaying &&
           (!isReadyToPlay ? (
-            <LoadingScreen status={loadStatusMessage} />
+            <LoadingScreen status={this.determineLoadStatusMessage()} />
           ) : (
             <VideoPlayer overlay={false} uri={uri} />
           ))}
@@ -111,4 +109,4 @@ class Video extends React.PureComponent {
   }
 }
 
-export default Video;
+export default Media;
