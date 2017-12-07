@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { doCloseModal } from "redux/actions/app";
-import { doAuthNavigate } from "redux/actions/navigation";
+import { doNavigate } from "redux/actions/navigation";
 import { doSetClientSetting } from "redux/actions/settings";
 import { selectUserIsRewardApproved } from "redux/selectors/user";
 import { selectBalance } from "redux/selectors/wallet";
@@ -25,17 +25,16 @@ const select = (state, props) => {
 };
 
 const perform = dispatch => () => {
-  const closeModal = () => {
-    dispatch(doSetClientSetting(settings.CREDIT_INTRO_ACKNOWLEDGED, true));
-    dispatch(doCloseModal());
-  };
-
   return {
-    verifyAccount: () => {
-      closeModal();
-      dispatch(doAuthNavigate("/discover"));
+    addBalance: () => {
+      dispatch(doSetClientSetting(settings.CREDIT_REQUIRED_ACKNOWLEDGED, true));
+      dispatch(doNavigate("/getcredits"));
+      dispatch(doCloseModal());
     },
-    closeModal: closeModal,
+    closeModal: () => {
+      dispatch(doSetClientSetting(settings.CREDIT_REQUIRED_ACKNOWLEDGED, true));
+      dispatch(doCloseModal());
+    },
   };
 };
 

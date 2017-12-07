@@ -882,6 +882,7 @@ class PublishForm extends React.PureComponent {
                 !this.state.submitting ? __("Publish") : __("Publishing...")
               }
               disabled={
+                this.props.balance <= 0 ||
                 this.state.submitting ||
                 (this.state.uri &&
                   this.props.resolvingUris.indexOf(this.state.uri) !== -1) ||

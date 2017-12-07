@@ -14,14 +14,15 @@ export const selectUserIsPending = createSelector(
 
 export const selectUser = createSelector(_selectState, state => state.user);
 
-export const selectEmailToVerify = createSelector(
-  _selectState,
-  state => state.emailToVerify
-);
-
 export const selectUserEmail = createSelector(
   selectUser,
   user => (user ? user.primary_email : null)
+);
+
+export const selectEmailToVerify = createSelector(
+  _selectState,
+  selectUserEmail,
+  (state, userEmail) => state.emailToVerify || userEmail
 );
 
 export const selectUserIsRewardApproved = createSelector(

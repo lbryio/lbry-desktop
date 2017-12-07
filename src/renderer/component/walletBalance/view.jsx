@@ -23,11 +23,12 @@ const WalletBalance = props => {
         )}
       </div>
       <div className="card__actions">
+        <Link button="alt" navigate="/getcredits" label={__("Get Credits")} />
         <Link
-          button="primary"
+          button="alt"
           disabled={balance === 0}
           navigate="/backup"
-          label={__("Backup wallet")}
+          label={__("Backup Wallet")}
         />
       </div>
     </section>

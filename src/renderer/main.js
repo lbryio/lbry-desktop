@@ -61,7 +61,7 @@ document.addEventListener("click", event => {
     if (target.matches("a") || target.matches("button")) {
       // TODO: Look into using accessiblity labels (this would also make the app more accessible)
       let hrefParts = window.location.href.split("#");
-      let element = target.title || target.text.trim();
+      let element = target.title || (target.text && target.text.trim());
       if (element) {
         amplitude.getInstance().logEvent("CLICK", {
           target: element,

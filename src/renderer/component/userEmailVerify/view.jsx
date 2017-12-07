@@ -1,5 +1,6 @@
 import React from "react";
 import Link from "component/link";
+import { CreditAmount } from "component/common";
 import { Form, FormRow, Submit } from "component/form.js";
 
 class UserEmailVerify extends React.PureComponent {
@@ -23,10 +24,16 @@ class UserEmailVerify extends React.PureComponent {
   }
 
   render() {
-    const { errorMessage, isPending } = this.props;
+    const {
+      cancelButton,
+      errorMessage,
+      email,
+      isPending,
+      rewardAmount,
+    } = this.props;
     return (
       <Form onSubmit={this.handleSubmit.bind(this)}>
-        <p>{__("Please enter the verification code emailed to you.")}</p>
+        <p>Please enter the verification code emailed to {email}.</p>
         <FormRow
           type="text"
           label={__("Verification Code")}
@@ -41,12 +48,14 @@ class UserEmailVerify extends React.PureComponent {
         <div className="form-field__helper">
           <p>
             {__("Email")}{" "}
-            <Link href="mailto:help@lbry.io" label="help@lbry.io" />{" "}
+            <Link href="mailto:help@lbry.io" label="help@lbry.io" /> or join our{" "}
+            <Link href="https://chat.lbry.io" label="chat" />{" "}
             {__("if you encounter any trouble with your code.")}
           </p>
         </div>
-        <div className="form-row-submit form-row-submit--with-footer">
-          <Submit label={__("Verify")} disabled={this.state.submitting} />
+        <div className="form-row-submit">
+          <Submit label={__("Verify")} disabled={isPending} />
+          {cancelButton}
         </div>
       </Form>
     );

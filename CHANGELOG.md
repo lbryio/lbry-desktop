@@ -9,9 +9,11 @@ Web UI version numbers should always match the corresponding version of LBRY App
 ## [Unreleased]
 ### Added
   * ShapeShift integration
-  *
 
 ### Changed
+  * The first run process for new users has changed substantially. New users can now easily receive one credit.
+  * The wallet area has been re-organized. Send and Receive are now on the same page. A new page, "Get Credits", explains how users can add LBRY credits to the app.
+  * The prompt for an insufficient balance is much more user-friendly.
   * The credit balance displayed in the main app navigation displays two decimal places instead of one.
   * Moved all redux code into /redux folder
   * Channel names in pages are highlighted to indicate them being clickable(#814)
@@ -27,7 +29,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
   *
 
 ### Deprecated
-  *
+  * We previous two separate modals for insufficient credits. These have been combined.
   *
 
 ### Removed

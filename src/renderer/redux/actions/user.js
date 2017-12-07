@@ -61,6 +61,22 @@ export function doUserEmailNew(email) {
       type: types.USER_EMAIL_NEW_STARTED,
       email: email,
     });
+
+    const success = () => {
+      dispatch({
+        type: types.USER_EMAIL_NEW_SUCCESS,
+        data: { email },
+      });
+      dispatch(doUserFetch());
+    }
+
+    const failure = error => {
+      dispatch({
+        type: types.USER_EMAIL_NEW_FAILURE,
+        data: { error },
+      });
+    }
+
     lbryio
       .call(
         "user_email",
@@ -75,23 +91,11 @@ export function doUserEmailNew(email) {
             "resend_token",
             { email: email, only_if_expired: true },
             "post"
-          );
+          ).then(success, failure);
         }
         throw error;
       })
-      .then(() => {
-        dispatch({
-          type: types.USER_EMAIL_NEW_SUCCESS,
-          data: { email },
-        });
-        dispatch(doUserFetch());
-      })
-      .catch(error => {
-        dispatch({
-          type: types.USER_EMAIL_NEW_FAILURE,
-          data: { error },
-        });
-      });
+      .then(success, failure);
   };
 }
 
@@ -118,7 +122,8 @@ export function doUserEmailVerify(verificationToken) {
             type: types.USER_EMAIL_VERIFY_SUCCESS,
             data: { email },
           });
-          dispatch(doUserFetch());
+          dispatch(doClaimRewardType(rewards.TYPE_CONFIRM_EMAIL)),
+            dispatch(doUserFetch());
         } else {
           throw new Error("Your email is still not verified."); //shouldn't happen
         }

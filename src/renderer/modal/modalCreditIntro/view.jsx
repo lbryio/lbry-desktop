@@ -4,55 +4,42 @@ import { CreditAmount, CurrencySymbol } from "component/common";
 import Link from "component/link/index";
 
 const ModalCreditIntro = props => {
-  const { closeModal, totalRewardValue, currentBalance, verifyAccount } = props;
+  const { closeModal, totalRewardValue, currentBalance, addBalance } = props;
   const totalRewardRounded = Math.round(totalRewardValue / 10) * 10;
 
   return (
     <Modal type="custom" isOpen={true} contentLabel="Welcome to LBRY">
       <section>
-        <h3 className="modal__header">{__("Blockchain 101")}</h3>
+        <h3 className="modal__header">
+          {__("Computer Wizard Needs Tokens Badly")}
+        </h3>
         <p>
-          LBRY is controlled and powered by a blockchain asset called{" "}
-          <em>
+          Some actions require{" "} LBRY credits
+          (<em>
             <CurrencySymbol />
-          </em>. <CurrencySymbol />{" "}
-          {__(
-            "is used to publish content, to have a say in the network rules, and to access paid content."
-          )}
+          </em>), the blockchain token that powers the LBRY network.
         </p>
-        {currentBalance <= 0 ? (
-          <div>
-            <p>
-              You currently have <CreditAmount amount={currentBalance} />, so
-              the actions you can take are limited.
-            </p>
-            <p>
-              However, there are a variety of ways to get credits, including
-              more than{" "}
-              {totalRewardValue ? (
-                <CreditAmount amount={totalRewardRounded} />
-              ) : (
-                <span className="credit-amount">{__("?? credits")}</span>
-              )}{" "}
-              {__(
-                " in rewards available for being a proven human during the LBRY beta."
-              )}
-            </p>
-          </div>
-        ) : (
-          <div>
-            <p>
-              But you probably knew this, since you've already got{" "}
-              <CreditAmount amount={currentBalance} />.
-            </p>
-          </div>
+        {currentBalance <= 0 && (
+          <p>
+            You currently have <CreditAmount amount={currentBalance} />, so the
+            actions you can take are limited.
+          </p>
         )}
+        <p>
+          There are a variety of ways to get credits, including more than{" "}
+          {totalRewardValue ? (
+            <CreditAmount amount={totalRewardRounded} />
+          ) : (
+            <span className="credit-amount">{__("?? credits")}</span>
+          )}{" "}
+          {__(" in free rewards for participating in the LBRY beta.")}
+        </p>
 
         <div className="modal__buttons">
           <Link
             button="primary"
-            onClick={verifyAccount}
-            label={__("I'm Totally A Human")}
+            onClick={addBalance}
+            label={__("Get Credits")}
           />
           <Link
             button="alt"
