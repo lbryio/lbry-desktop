@@ -1,13 +1,14 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { formatCredits, formatFullPrice } from "util/formatCredits";
 import lbry from "../lbry.js";
 
 //component/icon.js
 export class Icon extends React.PureComponent {
   static propTypes = {
-    icon: React.PropTypes.string.isRequired,
-    className: React.PropTypes.string,
-    fixed: React.PropTypes.bool,
+    icon: PropTypes.string.isRequired,
+    className: PropTypes.string,
+    fixed: PropTypes.bool,
   };
 
   render() {
@@ -24,7 +25,7 @@ export class Icon extends React.PureComponent {
 
 export class TruncatedText extends React.PureComponent {
   static propTypes = {
-    lines: React.PropTypes.number,
+    lines: PropTypes.number,
   };
 
   static defaultProps = {
@@ -45,7 +46,7 @@ export class TruncatedText extends React.PureComponent {
 
 export class BusyMessage extends React.PureComponent {
   static propTypes = {
-    message: React.PropTypes.string,
+    message: PropTypes.string,
   };
 
   render() {
@@ -65,14 +66,14 @@ export class CurrencySymbol extends React.PureComponent {
 
 export class CreditAmount extends React.PureComponent {
   static propTypes = {
-    amount: React.PropTypes.number.isRequired,
-    precision: React.PropTypes.number,
-    isEstimate: React.PropTypes.bool,
-    label: React.PropTypes.bool,
-    showFree: React.PropTypes.bool,
-    showFullPrice: React.PropTypes.bool,
-    showPlus: React.PropTypes.bool,
-    look: React.PropTypes.oneOf(["indicator", "plain", "fee"]),
+    amount: PropTypes.number.isRequired,
+    precision: PropTypes.number,
+    isEstimate: PropTypes.bool,
+    label: PropTypes.bool,
+    showFree: PropTypes.bool,
+    showFullPrice: PropTypes.bool,
+    showPlus: PropTypes.bool,
+    look: PropTypes.oneOf(["indicator", "plain", "fee"]),
   };
 
   static defaultProps = {
@@ -142,7 +143,7 @@ let addressStyle = {
 };
 export class Address extends React.PureComponent {
   static propTypes = {
-    address: React.PropTypes.string,
+    address: PropTypes.string,
   };
 
   constructor(props) {
@@ -174,7 +175,7 @@ export class Address extends React.PureComponent {
 
 export class Thumbnail extends React.PureComponent {
   static propTypes = {
-    src: React.PropTypes.string,
+    src: PropTypes.string,
   };
 
   handleError() {

@@ -1,13 +1,14 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { Icon } from "./common.js";
 import Link from "component/link";
 
 export class DropDownMenuItem extends React.PureComponent {
   static propTypes = {
-    href: React.PropTypes.string,
-    label: React.PropTypes.string,
-    icon: React.PropTypes.string,
-    onClick: React.PropTypes.func,
+    href: PropTypes.string,
+    label: PropTypes.string,
+    icon: PropTypes.string,
+    onClick: PropTypes.func,
   };
 
   static defaultProps = {

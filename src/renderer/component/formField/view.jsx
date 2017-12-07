@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import FileSelector from "component/file-selector.js";
 import SimpleMDE from "react-simplemde-editor";
 import { formFieldNestedLabelTypes, formFieldId } from "../form";
@@ -8,14 +9,14 @@ const formFieldFileSelectorTypes = ["file", "directory"];
 
 class FormField extends React.PureComponent {
   static propTypes = {
-    type: React.PropTypes.string.isRequired,
-    prefix: React.PropTypes.string,
-    postfix: React.PropTypes.string,
-    hasError: React.PropTypes.bool,
-    trim: React.PropTypes.bool,
-    regexp: React.PropTypes.oneOfType([
-      React.PropTypes.instanceOf(RegExp),
-      React.PropTypes.string,
+    type: PropTypes.string.isRequired,
+    prefix: PropTypes.string,
+    postfix: PropTypes.string,
+    hasError: PropTypes.bool,
+    trim: PropTypes.bool,
+    regexp: PropTypes.oneOfType([
+      PropTypes.instanceOf(RegExp),
+      PropTypes.string,
     ]),
   };
 

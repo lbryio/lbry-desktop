@@ -1,10 +1,11 @@
 import React from "react";
+import PropTypes from "prop-types";
 import ReactMarkdown from "react-markdown";
 import ReactDOMServer from "react-dom/server";
 
 class TruncatedMarkdown extends React.PureComponent {
   static propTypes = {
-    lines: React.PropTypes.number,
+    lines: PropTypes.number,
   };
 
   static defaultProps = {
