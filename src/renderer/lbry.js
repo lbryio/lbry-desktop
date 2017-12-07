@@ -203,7 +203,7 @@ lbry.publishDeprecated = function(
 };
 
 lbry.imagePath = function(file) {
-  return __static +"/img/" + file;
+  return staticResourcesPath + "/img/" + file;
 };
 
 lbry.getMediaType = function(contentType, fileName) {

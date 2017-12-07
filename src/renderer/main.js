@@ -13,8 +13,15 @@ import "scss/all.scss";
 
 const env = process.env.NODE_ENV || "production";
 const { remote, ipcRenderer, shell } = require("electron");
-const contextMenu = remote.require("./main.js").setMenu;
+const contextMenu = remote.require("./main.js").contextMenu;
 const app = require("./app");
+
+// Workaround for https://github.com/electron-userland/electron-webpack/issues/52
+if (process.env.NODE_ENV !== 'development') {
+  window.staticResourcesPath = require("path").join(remote.app.getAppPath(), "../static").replace(/\\/g, "\\\\");
+} else {
+  window.staticResourcesPath = "";
+}
 
 window.addEventListener("contextmenu", event => {
   contextMenu.showContextMenu(

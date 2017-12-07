@@ -36,5 +36,5 @@ export const selectLanguages = createSelector(
 
 export const selectThemePath = createSelector(
   makeSelectClientSetting(settings.THEME),
-  theme => __static + "/themes/" + (theme || "light") + ".css"
+  theme => staticResourcesPath + "/themes/" + (theme || "light") + ".css"
 );

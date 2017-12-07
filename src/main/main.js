@@ -12,7 +12,8 @@ const kill = require('tree-kill');
 const child_process = require('child_process');
 const assert = require('assert');
 const localVersion = app.getVersion();
-export const setMenu = require('./menu/main-menu.js');
+const setMenu = require('./menu/main-menu.js');
+export const contextMenu = require('./menu/context-menu');
 
 // Debug configs
 const isDevelopment = process.env.NODE_ENV === 'development';

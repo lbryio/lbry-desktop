@@ -52,7 +52,7 @@ export function doSetClientSetting(key, value) {
 
 export function doGetThemes() {
   return function(dispatch, getState) {
-    const dir = `${__static}/themes`;
+    const dir = `${staticResourcesPath}/themes`;
 
     readdir(dir, (error, files) => {
       if (!error) {

@@ -22,7 +22,7 @@ class SettingsPage extends React.PureComponent {
     });
     const success = () => {
       this.setState({ clearingCache: false });
-      window.location.href = `${__static}/index.html`; //TODO: Update this, since index.html isn't anymore
+      window.location.href = "index.html";
     };
     const clear = () => this.props.clearCache().then(success.bind(this));
 
