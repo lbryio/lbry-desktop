@@ -98,5 +98,5 @@ if [ "$FULL_BUILD" == "true" ]; then
 
   echo -e '\033[0;32mBuild and packaging complete.\x1b[m'
 else
-  echo -e 'Build complete. Run \033[1;31m./node_modules/.bin/electron .\x1b[m to launch the app'
+  echo -e 'Build complete. Run \033[1;31myarn dev\x1b[m to launch the app'
 fi
