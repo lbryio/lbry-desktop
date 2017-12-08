@@ -135,6 +135,8 @@ function createWindow () {
     ? new BrowserWindow({backgroundColor: '#155B4A', minWidth: 800, minHeight: 600, webPreferences: {webSecurity: false}})
     : new BrowserWindow({backgroundColor: '#155B4A', minWidth: 800, minHeight: 600});
 
+  win.webContents.session.setUserAgent(`LBRY/${localVersion}`);
+
   win.maximize()
   if (isDevelopment) {
     win.webContents.openDevTools();
