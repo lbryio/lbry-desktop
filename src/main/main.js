@@ -174,6 +174,8 @@ function getPidsForProcessName(name) {
 function createWindow () {
   win = new BrowserWindow({backgroundColor: '#155B4A', minWidth: 800, minHeight: 600 }) //$color-primary
 
+  win.webContents.session.setUserAgent(`LBRY/${localVersion}`);
+
   win.maximize()
   if (isDebug) {
     win.webContents.openDevTools();
@@ -240,7 +242,7 @@ function createTray () {
   if (process.platform === 'darwin') {
     // Using @2x for mac retina screens so the icon isn't blurry
     // file name needs to include "Template" at the end for dark menu bar
-    iconPath = path.join(app.getAppPath(), "/dist/img/fav/macTemplate@2x.png"); 
+    iconPath = path.join(app.getAppPath(), "/dist/img/fav/macTemplate@2x.png");
   } else {
     iconPath = path.join(app.getAppPath(), "/dist/img/fav/32x32.png");
   }
