@@ -83,6 +83,18 @@ reducers[types.FETCH_CHANNEL_CLAIM_COUNT_COMPLETED] = function(state, action) {
   });
 };
 
+reducers[types.SET_CURRENT_TIME] = function(state, action) {
+  return Object.assign({}, state, {
+    currentTime: action.data.currentTime,
+  });
+};
+
+reducers[types.SET_OVERLAYABLE] = function(state, action) {
+  return Object.assign({}, state, {
+    overlayable: action.data.overlayable,
+  });
+};
+
 export default function reducer(state = defaultState, action) {
   const handler = reducers[action.type];
   if (handler) return handler(state, action);

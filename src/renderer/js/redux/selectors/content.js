@@ -49,3 +49,13 @@ export const selectRewardContentClaimIds = createSelector(
   _selectState,
   state => state.rewardedContentClaimIds
 );
+
+export const selectCurrentTime = createSelector(
+  _selectState,
+  state => state.currentTime
+);
+
+export const selectOverlayable = createSelector(
+  _selectState,
+  state => state.overlayable
+);

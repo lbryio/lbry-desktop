@@ -194,3 +194,22 @@ export class Thumbnail extends React.PureComponent {
     );
   }
 }
+
+export class LoadingScreen extends React.PureComponent {
+  static defaultProps = {
+    spinner: true,
+  };
+
+  render() {
+    const { status, spinner } = this.props;
+    return (
+      <div className="video__loading-screen">
+        <div>
+          {spinner && <div className="video__loading-spinner" />}
+
+          <div className="video__loading-status">{status}</div>
+        </div>
+      </div>
+    );
+  }
+}

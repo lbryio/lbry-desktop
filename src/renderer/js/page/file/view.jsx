@@ -1,7 +1,7 @@
 import React from "react";
 import lbry from "lbry.js";
 import lbryuri from "lbryuri.js";
-import Video from "component/video";
+import Media from "component/media";
 import { Thumbnail } from "component/common";
 import FilePrice from "component/filePrice";
 import FileDetails from "component/fileDetails";
@@ -66,7 +66,7 @@ class FilePage extends React.PureComponent {
       <section className={"card " + (obscureNsfw ? "card--obscured " : "")}>
         <div className="show-page-media">
           {isPlayable ? (
-            <Video className="video-embedded" uri={uri} />
+            <Media className="media-embedded" uri={uri} overlay={false} />
           ) : metadata && metadata.thumbnail ? (
             <Thumbnail src={metadata.thumbnail} />
           ) : (

@@ -542,3 +542,21 @@ export function doAbandonClaim(txid, nout) {
       .then(successCallback, errorCallback);
   };
 }
+
+export function doSetTime(currentTime) {
+  return function(dispatch, getState) {
+    dispatch({
+      type: types.SET_CURRENT_TIME,
+      data: { currentTime },
+    });
+  };
+}
+
+export function doSetOverlayable(overlayable) {
+  return function(dispatch, getState) {
+    dispatch({
+      type: types.SET_OVERLAYABLE,
+      data: { overlayable },
+    });
+  };
+}
