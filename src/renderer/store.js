@@ -12,16 +12,15 @@ import settingsReducer from "redux/reducers/settings";
 import userReducer from "redux/reducers/user";
 import walletReducer from "redux/reducers/wallet";
 import shapeShiftReducer from "redux/reducers/shape_shift";
+import subscriptionsReducer from "redux/reducers/subscriptions";
 import { persistStore, autoRehydrate } from "redux-persist";
 import createCompressor from "redux-persist-transform-compress";
 import createFilter from "redux-persist-transform-filter";
-//import { REHYDRATE } from "redux-persist/constants";
-//import createActionBuffer from "redux-action-buffer";
+import localForage from "localforage";
+import { createStore, applyMiddleware, compose, combineReducers } from "redux";
+import thunk from "redux-thunk";
 
-const localForage = require("localforage");
-const redux = require("redux");
-const thunk = require("redux-thunk").default;
-const env = process.env.NODE_ENV || "production";
+const env = process.env.NODE_ENV || "production"
 
 function isFunction(object) {
   return typeof object === "function";
@@ -55,7 +54,7 @@ function enableBatching(reducer) {
   };
 }
 
-const reducers = redux.combineReducers({
+const reducers = combineReducers({
   app: appReducer,
   navigation: navigationReducer,
   availability: availabilityReducer,
@@ -69,6 +68,7 @@ const reducers = redux.combineReducers({
   wallet: walletReducer,
   user: userReducer,
   shapeShift: shapeShiftReducer,
+  subscriptions: subscriptionsReducer,
 });
 
 const bulkThunk = createBulkThunkMiddleware();
@@ -81,26 +81,36 @@ if (env === "development") {
   middleware.push(logger);
 }
 
-// middleware.push(createActionBuffer(REHYDRATE)); // was causing issues with authentication reducers not firing
-const composeEnhancers =
-  window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || redux.compose;
-const createStoreWithMiddleware = composeEnhancers(
-  autoRehydrate(),
-  redux.applyMiddleware(...middleware)
-)(redux.createStore);
+const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
-const reduxStore = createStoreWithMiddleware(enableBatching(reducers));
+const store = createStore(
+  enableBatching(reducers),
+  {}, // initial state
+  composeEnhancers(
+    autoRehydrate({
+      log: env === "development",
+    }),
+    applyMiddleware(...middleware)
+  )
+);
+
 const compressor = createCompressor();
 const saveClaimsFilter = createFilter("claims", ["byId", "claimsByUri"]);
+const subscriptionsFilter = createFilter("subscriptions", ["subscriptions"]);
 
 const persistOptions = {
-  whitelist: ["claims"],
+  whitelist: ["claims", "subscriptions"],
   // Order is important. Needs to be compressed last or other transforms can't
   // read the data
-  transforms: [saveClaimsFilter, compressor],
+  transforms: [saveClaimsFilter, subscriptionsFilter, compressor],
   debounce: 10000,
   storage: localForage,
 };
-window.cacheStore = persistStore(reduxStore, persistOptions);
 
-export default reduxStore;
+window.cacheStore = persistStore(store, persistOptions, err => {
+  if (err) {
+    console.error("Unable to load saved settings");
+  }
+});
+
+export default store;

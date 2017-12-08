@@ -41,6 +41,13 @@ export const Header = props => {
           title={__("Discover Content")}
         />
       </div>
+      <div className="header__item">
+        <Link
+          onClick={() => navigate("/subscriptions")}
+          button="alt button--flat"
+          icon="icon-at"
+        />
+      </div>
       <div className="header__item header__item--wunderbar">
         <WunderBar />
       </div>

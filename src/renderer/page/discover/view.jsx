@@ -4,14 +4,41 @@ import lbryuri from "lbryuri";
 import FileCard from "component/fileCard";
 import { Icon, BusyMessage } from "component/common.js";
 import ToolTip from "component/tooltip.js";
+import SubHeader from "component/subHeader";
+import classnames from "classnames";
+import Link from "component/link";
 
-class FeaturedCategory extends React.PureComponent {
+// This should be in a separate file
+export class FeaturedCategory extends React.PureComponent {
+  constructor() {
+    super();
+
+    this.state = {
+      numItems: undefined,
+      canScrollPrevious: false,
+      canScrollNext: false,
+    };
+  }
+
   componentWillMount() {
     this.setState({
       numItems: this.props.names.length,
-      canScrollPrevious: false,
-      canScrollNext: true,
     });
+  }
+
+  componentDidMount() {
+    const cardRow = ReactDOM.findDOMNode(this.refs.rowitems);
+    const cards = cardRow.getElementsByTagName("section");
+
+    // check if the last card is visible
+    const lastCard = cards[cards.length - 1];
+    const isCompletelyVisible = this.isCardVisible(lastCard, cardRow, false);
+
+    if (!isCompletelyVisible) {
+      this.setState({
+        canScrollNext: true,
+      });
+    }
   }
 
   handleScrollPrevious() {
@@ -148,12 +175,21 @@ class FeaturedCategory extends React.PureComponent {
   }
 
   render() {
-    const { category, names } = this.props;
+    const { category, names, categoryLink } = this.props;
 
     return (
       <div className="card-row card-row--small">
         <h3 className="card-row__header">
-          {category}
+          {categoryLink ? (
+            <Link
+              className="no-underline"
+              label={category}
+              href={categoryLink}
+            />
+          ) : (
+            category
+          )}
+
           {category &&
             category.match(/^community/i) && (
               <ToolTip
@@ -214,24 +250,28 @@ class DiscoverPage extends React.PureComponent {
       failedToLoad = !fetchingFeaturedUris && !hasContent;
 
     return (
-      <main className={hasContent && fetchingFeaturedUris ? "reloading" : null}>
+      <main
+        className={classnames("main main--no-margin", {
+          reloading: hasContent && fetchingFeaturedUris,
+        })}
+      >
+        <SubHeader fullWidth smallMargin />
         {!hasContent &&
           fetchingFeaturedUris && (
             <BusyMessage message={__("Fetching content")} />
           )}
         {hasContent &&
-          Object.keys(featuredUris).map(
-            category =>
-              featuredUris[category].length ? (
-                <FeaturedCategory
-                  key={category}
-                  category={category}
-                  names={featuredUris[category]}
-                />
-              ) : (
-                ""
-              )
-          )}
+          Object.keys(featuredUris).map(category => {
+            return featuredUris[category].length ? (
+              <FeaturedCategory
+                key={category}
+                category={category}
+                names={featuredUris[category]}
+              />
+            ) : (
+              ""
+            );
+          })}
         {failedToLoad && (
           <div className="empty">{__("Failed to load landing content.")}</div>
         )}

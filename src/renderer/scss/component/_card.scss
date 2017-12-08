@@ -233,6 +233,10 @@ $font-size-subtext-multiple: 0.82;
   }
 }
 
+.card-row__placeholder {
+  padding-bottom: $spacing-vertical;
+}
+
 $padding-top-card-hover-hack: 20px;
 $padding-right-card-hover-hack: 30px;
 
