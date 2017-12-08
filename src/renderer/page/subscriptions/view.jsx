@@ -56,14 +56,7 @@ export default class extends React.PureComponent<Props> {
   render() {
     const { subscriptions, savedSubscriptions } = this.props;
 
-    let someClaimsNotLoaded;
-    for (var i = 0; i < subscriptions.length; i++) {
-      const subscription = subscriptions[i];
-      if (!subscription.claims.length) {
-        someClaimsNotLoaded = true;
-        break;
-      }
-    }
+    const someClaimsNotLoaded = Boolean(subscriptions.find(subscription => !subscription.claims.length))
 
     const fetchingSubscriptions =
       !!savedSubscriptions.length &&
@@ -92,17 +85,12 @@ export default class extends React.PureComponent<Props> {
                   return "";
                 }
 
-                // creating uris for each subscription file
-                const names = subscription.claims.slice().map(claim => {
-                  return `${claim.name}#${claim.claim_id}`;
-                });
-
                 return (
                   <FeaturedCategory
                     key={subscription.channelName}
                     categoryLink={`lbry://${subscription.uri}`}
                     category={subscription.channelName}
-                    names={names}
+                    names={subscription.claims}
                   />
                 );
               })}

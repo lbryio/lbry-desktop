@@ -64,7 +64,7 @@ export const selectHeaderLinks = createSelector(selectCurrentPage, page => {
     case "discover":
     case "subscriptions":
       return {
-        discover: __("Home"),
+        discover: __("Discover"),
         subscriptions: __("Subscriptions"),
       };
     default:

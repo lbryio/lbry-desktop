@@ -39,6 +39,11 @@ export const selectSubscriptionsFromClaims = createSelector(
         });
       }
 
+      // all we really need is a uri for each claim
+      channelClaims = channelClaims.map(claim => {
+        return `${claim.name}#${claim.claim_id}`;
+      })
+
       fetchedSubscriptions.push({
         claims: channelClaims,
         channelName: subscription.channelName,
