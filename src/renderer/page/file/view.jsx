@@ -11,6 +11,7 @@ import WalletSendTip from "component/walletSendTip";
 import DateTime from "component/dateTime";
 import * as icons from "constants/icons";
 import Link from "component/link";
+import SubscribeButton from "component/subscribeButton";
 
 class FilePage extends React.PureComponent {
   componentDidMount() {
@@ -43,9 +44,6 @@ class FilePage extends React.PureComponent {
       tab,
       uri,
       rewardedContentClaimIds,
-      channelSubscribe,
-      channelUnsubscribe,
-      subscriptions,
     } = this.props;
 
     const showTipBox = tab == "tip";
@@ -56,7 +54,6 @@ class FilePage extends React.PureComponent {
       );
     }
 
-    const { height, channel_name: channelName, value } = claim;
     const title = metadata.title;
     const isRewardContent = rewardedContentClaimIds.includes(claim.claim_id);
     const mediaType = lbry.getMediaType(contentType);
@@ -65,30 +62,14 @@ class FilePage extends React.PureComponent {
     const isPlayable =
       Object.values(player.mime).indexOf(contentType) !== -1 ||
       mediaType === "audio";
-
+    const { height, channel_name: channelName, value } = claim;
     const channelClaimId =
       value &&
       value.publisherSignature &&
       value.publisherSignature.certificateId;
 
-    const canSubscribe = !!channelName && !!channelClaimId;
-
-    let isSubscribed;
-    let subscriptionHandler;
-    let subscriptionLabel;
     let subscriptionUri;
-
-    if (canSubscribe) {
-      isSubscribed =
-        subscriptions
-          .map(subscription => subscription.channelName)
-          .indexOf(channelName) !== -1;
-
-      subscriptionHandler = isSubscribed
-        ? channelUnsubscribe
-        : channelSubscribe;
-
-      subscriptionLabel = isSubscribed ? "Unsubscribe" : "Subscribe";
+    if (channelName && channelClaimId) {
       subscriptionUri = lbryuri.build(
         { channelName, claimId: channelClaimId },
         false
@@ -131,20 +112,7 @@ class FilePage extends React.PureComponent {
                   </span>
                 </div>
               </div>
-              {canSubscribe && (
-                <div className="card__actions">
-                  <Link
-                    button="primary"
-                    onClick={() =>
-                      subscriptionHandler({
-                        channelName,
-                        uri: subscriptionUri,
-                      })
-                    }
-                    label={subscriptionLabel}
-                  />
-                </div>
-              )}
+              <SubscribeButton uri={subscriptionUri} channelName={channelName} />
               <FileDetails uri={uri} />
             </div>
           )}

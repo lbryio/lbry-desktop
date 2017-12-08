@@ -3,7 +3,7 @@ import * as actions from "constants/action_types";
 import type { Subscription, Action, Dispatch } from "redux/reducers/subscriptions";
 import lbry from "lbry";
 
-export const channelSubscribe = (subscription: Subscription) => (
+export const doChannelSubscribe = (subscription: Subscription) => (
   dispatch: Dispatch
 ) => {
   return dispatch({
@@ -12,7 +12,7 @@ export const channelSubscribe = (subscription: Subscription) => (
   });
 };
 
-export const channelUnsubscribe = (subscription: Subscription) => (
+export const doChannelUnsubscribe = (subscription: Subscription) => (
   dispatch: Dispatch
 ) => {
   return dispatch({

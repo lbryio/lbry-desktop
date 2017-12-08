@@ -14,12 +14,12 @@ export type Subscription = {
 };
 
 // Subscription action types
-type ChannelSubscribe = {
+type doChannelSubscribe = {
   type: actions.CHANNEL_SUBSCRIBE,
   data: Subscription,
 };
 
-type ChannelUnsubscribe = {
+type doChannelUnsubscribe = {
   type: actions.CHANNEL_UNSUBSCRIBE,
   data: Subscription,
 };
@@ -28,7 +28,7 @@ type HasFetchedSubscriptions = {
   type: actions.HAS_FETCHED_SUBSCRIPTIONS
 }
 
-export type Action = ChannelSubscribe | ChannelUnsubscribe | HasFetchedSubscriptions;
+export type Action = doChannelSubscribe | doChannelUnsubscribe | HasFetchedSubscriptions;
 export type Dispatch = (action: Action) => any;
 
 const defaultState = {
@@ -40,7 +40,7 @@ export default handleActions(
   {
     [actions.CHANNEL_SUBSCRIBE]: (
       state: SubscriptionState,
-      action: ChannelSubscribe
+      action: doChannelSubscribe
     ): SubscriptionState => {
       const newSubscription: Subscription = action.data;
       let newSubscriptions: Array<Subscription> = state.subscriptions.slice();
@@ -53,7 +53,7 @@ export default handleActions(
     },
     [actions.CHANNEL_UNSUBSCRIBE]: (
       state: SubscriptionState,
-      action: ChannelUnsubscribe
+      action: doChannelUnsubscribe
     ): SubscriptionState => {
       const subscriptionToRemove: Subscription = action.data;
 

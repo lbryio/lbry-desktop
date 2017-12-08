@@ -4,6 +4,7 @@ import { BusyMessage } from "component/common";
 import FileTile from "component/fileTile";
 import ReactPaginate from "react-paginate";
 import Link from "component/link";
+import SubscribeButton from "component/subscribeButton";
 
 class ChannelPage extends React.PureComponent {
   componentDidMount() {
@@ -39,23 +40,12 @@ class ChannelPage extends React.PureComponent {
       uri,
       page,
       totalPages,
-      channelSubscribe,
-      channelUnsubscribe,
+      doChannelSubscribe,
+      doChannelUnsubscribe,
       subscriptions,
     } = this.props;
 
     const { name, claim_id: claimId } = claim;
-
-    const isSubscribed =
-      subscriptions
-        .map(subscription => subscription.channelName)
-        .indexOf(name) !== -1;
-
-    const subscriptionHandler = isSubscribed
-      ? channelUnsubscribe
-      : channelSubscribe;
-
-    const subscriptionLabel = isSubscribed ? "Unsubscribe" : "Subscribe";
     const subscriptionUri = lbryuri.build(
       { channelName: name, claimId },
       false
@@ -89,18 +79,7 @@ class ChannelPage extends React.PureComponent {
             <div className="card__title-identity">
               <h1>{uri}</h1>
             </div>
-            <div className="card__actions">
-              <Link
-                button="primary"
-                label={subscriptionLabel}
-                onClick={() =>
-                  subscriptionHandler({
-                    channelName: name,
-                    uri: subscriptionUri,
-                  })
-                }
-              />
-            </div>
+            <SubscribeButton uri={uri} channelName={name} />
           </div>
           <div className="card__content">
             <p className="empty">
