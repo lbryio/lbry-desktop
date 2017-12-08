@@ -8,30 +8,32 @@ Web UI version numbers should always match the corresponding version of LBRY App
 
 ## [Unreleased]
 ### Added
-  * ShapeShift integration
-  * In-app subscriptions
+  * Subscriptions. File and channel pages now show a subscribe button. A new "Subscriptions" tab appears on the homepage shows the most recent content from subscribed channels.
+  * LBC acquisition widget. Convert other popular cryptos into LBC via a ShapeShift integration.
+  * [Flow](https://flow.org/) static type checking. This is a dev-only feature, but will make development faster, less error prone, and better for newcomers.
 
 ### Changed
   * The first run process for new users has changed substantially. New users can now easily receive one credit.
   * The wallet area has been re-organized. Send and Receive are now on the same page. A new page, "Get Credits", explains how users can add LBRY credits to the app.
+  * Significant structural changes to code organization, packaging, and building. The app now follows a typical electron folder structure. All 3 `package.json` files have been reduced to a single file. Redux related code was moved into it's own subfolder.
+  * The macOS docking icon has been improved.
   * The prompt for an insufficient balance is much more user-friendly.
   * The credit balance displayed in the main app navigation displays two decimal places instead of one.
-  * Moved all redux code into /redux folder
-  * Channel names in pages are highlighted to indicate them being clickable(#814)
   * Video download error messages are now more understandable.
   *
 
 ### Fixed
   * Long channel names causing inconsistent thumbnail sizes (#721)
-  * Fixed regression in #697 causing transaction screen to not load for new users (#755)
-  * Fixed scriolling restore/reset/set (#729)
+  * Channel names in pages are highlighted to indicate them being clickable (#814)
+  * Fixed the transaction screen not loading for brand new users (#755)
+  * Fixed issues with scrolling and back and forward navigation (#729)
   * Fixed sorting by title for published files (#614)
-  * App now uses the new balance_delta field in the txn list.
+  * App now uses the new `balance_delta` field provided by the LBRY API
   * Abandoning from the claim page now works.
   *
 
 ### Deprecated
-  * We previous two separate modals for insufficient credits. These have been combined.
+  * We previous had two separate modals for insufficient credits. These have been combined.
   *
 
 ### Removed
