@@ -23,12 +23,12 @@ Web UI version numbers should always match the corresponding version of LBRY App
   *
 
 ### Fixed
-  * Long channel names causing inconsistent thumbnail sizes (#721)
-  * Channel names in pages are highlighted to indicate them being clickable (#814)
-  * Fixed the transaction screen not loading for brand new users (#755)
-  * Fixed issues with scrolling and back and forward navigation (#729)
-  * Fixed sorting by title for published files (#614)
-  * App now uses the new `balance_delta` field provided by the LBRY API
+  * Long channel names causing inconsistent thumbnail sizes (#721)[https://github.com/lbryio/lbry-app/issues/721]
+  * Channel names in pages are highlighted to indicate them being clickable (#814)[https://github.com/lbryio/lbry-app/issues/814]
+  * Fixed the transaction screen not loading for brand new users (#755)[https://github.com/lbryio/lbry-app/issues/755]
+  * Fixed issues with scrolling and back and forward navigation (#729)[https://github.com/lbryio/lbry-app/issues/729]
+  * Fixed sorting by title for published files (#614)[https://github.com/lbryio/lbry-app/issues/614]
+  * App now uses the new `balance_delta` field provided by the LBRY API (#611)[https://github.com/lbryio/lbry-app/issues/611]
   * Abandoning from the claim page now works.
   *
 
