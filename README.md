@@ -27,22 +27,17 @@ To install from source or make changes to the application, continue reading belo
 
 This will download and install the LBRY app and its dependencies, including [the LBRY daemon](https://github.com/lbryio/lbry) and command line utilities like `node` and `yarn`. The LBRY app requires Node >= 6; if you have an earlier version of Node installed and want to keep it, you can use [nvm](https://github.com/creationix/nvm) to switch back and forth.
 
-### Running
-
-Run `./node_modules/.bin/electron src/main`
-
 ### Ongoing Development
-1. `cd src/renderer`
-2. `./watch.sh`
+Run `yarn dev`
 
-This will set up a monitor that will automatically compile any changes to JS or CSS folders inside of the `src/renderer` folder. This allows you to make changes and see them immediately by reloading the app.
+This will set up a server that will automatically compile any changes made inside `src\` folder and automatically reload the app without losing the state.
 
 ### Packaging
 
-We use [electron-builder](https://github.com/electron-userland/electron-builder)
-to create distributable packages, which is run by calling:
+Run `yarn dist`
 
-`node_modules/.bin/build -p never`
+We use [electron-builder](https://github.com/electron-userland/electron-builder)
+to create distributable packages.
 
 ## Development on Windows
 
@@ -65,38 +60,18 @@ exit
 python -m pip install -r build\requirements.txt
 npm install -g yarn
 yarn install
+yarn dist
 ```
-
-3. Change directory to `src\main` and run the following:
-```
-yarn install
-node_modules\.bin\electron-rebuild
-node_modules\.bin\electron-rebuild
-cd ..\..
-```
-4. Change directory to `src\renderer` and run the following:
-```
-yarn install
-npm rebuild node-sass
-node node_modules\node-sass\bin\node-sass --output dist\css --sourcemap=none scss\
-node_modules\.bin\webpack --config webpack.dev.config.js
-xcopy /E dist ..\main\dist
-cd ..\..
-```
-4. Download the lbry daemon and cli [binaries](https://github.com/lbryio/lbry/releases) and place them in `src\main\dist\`
+3. Download the lbry daemon and cli [binaries](https://github.com/lbryio/lbry/releases) and place them in `dist\`
 
 ### Building lbry-app
-1. run `node_modules\.bin\build -p never` from the root of the project.
-
-### Running the electron app
-1. Run `node_modules\.bin\electron src\main`
+Run `yarn dist`
 
 ### Ongoing Development
-1. `cd src\renderer`
-2. `watch.bat`
+Run `yarn dev`
 
-This will set up a monitor that will automatically compile any changes to JS or CSS folders inside of the `src\renderer` folder. This allows you to make changes and see them immediately by reloading the app.
+This will set up a server that will automatically compile any changes made inside `src\` folder and automatically reload the app without losing the state.
 
 ## Internationalization
 
-If you want to help translating the lbry-app, you can copy the en.json file in /src/main/locales and modify the values while leaving the keys as their original English strings. An example for this would be: `"Skip": "Überspringen",` Translations should automatically show up in options.
+If you want to help translating the lbry-app, you can copy the `en.json` file in `/dist/locales/` and modify the values while leaving the keys as their original English strings. An example for this would be: `"Skip": "Überspringen",` Translations should automatically show up in options.

@@ -52,7 +52,7 @@ export function doSetClientSetting(key, value) {
 
 export function doGetThemes() {
   return function(dispatch, getState) {
-    const dir = `${remote.app.getAppPath()}/dist/themes`;
+    const dir = `${staticResourcesPath}/themes`;
 
     readdir(dir, (error, files) => {
       if (!error) {

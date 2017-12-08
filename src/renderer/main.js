@@ -11,11 +11,19 @@ import { doDownloadLanguages } from "redux/actions/settings";
 import * as types from "constants/action_types";
 import amplitude from "amplitude-js";
 import lbry from "lbry";
+import "scss/all.scss";
 
-const env = ENV;
+const env = process.env.NODE_ENV || "production";
 const { remote, ipcRenderer, shell } = require("electron");
-const contextMenu = remote.require("./menu/context-menu");
+const contextMenu = remote.require("./main.js").contextMenu;
 const app = require("./app");
+
+// Workaround for https://github.com/electron-userland/electron-webpack/issues/52
+if (process.env.NODE_ENV !== 'development') {
+  window.staticResourcesPath = require("path").join(remote.app.getAppPath(), "../static").replace(/\\/g, "\\\\");
+} else {
+  window.staticResourcesPath = "";
+}
 
 window.addEventListener("contextmenu", event => {
   contextMenu.showContextMenu(
@@ -102,7 +110,7 @@ var init = function() {
                 <SnackBar />
               </div>
             </Provider>,
-            canvas
+            document.getElementById('app')
           );
         }
       );
@@ -116,7 +124,7 @@ var init = function() {
       <Provider store={store}>
         <SplashScreen onReadyToLaunch={onDaemonReady} />
       </Provider>,
-      canvas
+      document.getElementById('app')
     );
   }
 };

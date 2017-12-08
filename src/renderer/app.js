@@ -1,7 +1,7 @@
 import store from "store.js";
 import { remote } from "electron";
 
-const env = ENV;
+const env = process.env.NODE_ENV || "production";
 const config = {
   ...require(`./config/${env}`),
 };

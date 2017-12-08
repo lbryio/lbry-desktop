@@ -1,4 +1,3 @@
-module.exports = { safeQuit };
 // Module imports
 const {app, BrowserWindow, ipcMain, Menu, Tray, globalShortcut} = require('electron');
 const path = require('path');
@@ -12,16 +11,15 @@ const keytar = require('keytar');
 const kill = require('tree-kill');
 const child_process = require('child_process');
 const assert = require('assert');
-const {version: localVersion} = require(app.getAppPath() + '/package.json');
+const localVersion = app.getVersion();
 const setMenu = require('./menu/main-menu.js');
+export const contextMenu = require('./menu/context-menu');
 
 // Debug configs
-const isDebug = process.env.NODE_ENV === 'development';
-if (isDebug) {
+const isDevelopment = process.env.NODE_ENV === 'development';
+if (isDevelopment) {
   try
   {
-    require('electron-debug')({showDevTools: true});
-
     const { default: installExtension, REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS } = require('electron-devtools-installer');
     app.on('ready', () => {
       [REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS].forEach(extension => {
@@ -31,7 +29,7 @@ if (isDebug) {
       });
     });
   }
-  catch (err) // electron-debug is in devDependencies, but some
+  catch (err)
   {
     console.error(err)
   }
@@ -39,7 +37,10 @@ if (isDebug) {
 
 // Misc constants
 const LATEST_RELEASE_API_URL = 'https://api.github.com/repos/lbryio/lbry-app/releases/latest';
-const DAEMON_PATH = process.env.LBRY_DAEMON || path.join(__dirname, 'dist', 'lbrynet-daemon');
+const DAEMON_PATH = process.env.LBRY_DAEMON || path.join(__static, 'daemon/lbrynet-daemon');
+const rendererUrl = isDevelopment
+  ? `http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`
+  : `file://${__dirname}/index.html`;
 
 let client = jayson.client.http({
   host: 'localhost',
@@ -83,55 +84,12 @@ function processRequestedUri(uri) {
   //     lbry://channel/#claimid. We remove the slash here as well.
   // On Linux and Mac, we just return the URI as given.
 
-  if (process.platform == 'win32') {
+  if (process.platform === 'win32') {
     return uri.replace(/\/$/, '').replace('/#', '#');
   } else {
     return uri;
   }
 }
-
-function checkForNewVersion(callback) {
-  function formatRc(ver) {
-    // Adds dash if needed to make RC suffix semver friendly
-    return ver.replace(/([^-])rc/, '$1-rc');
-  }
-
-  let result = '';
-  const opts = {
-    headers: {
-      'User-Agent': `LBRY/${localVersion}`,
-    }
-  };
-
-  const req = https.get(Object.assign(opts, url.parse(LATEST_RELEASE_API_URL)), (res) => {
-    res.on('data', (data) => {
-      result += data;
-    });
-    res.on('end', () => {
-      const tagName = JSON.parse(result).tag_name;
-      const [_, remoteVersion] = tagName.match(/^v([\d.]+(?:-?rc\d+)?)$/);
-      if (!remoteVersion) {
-        if (win) {
-          win.webContents.send('version-info-received', null);
-        }
-      } else {
-        const upgradeAvailable = semver.gt(formatRc(remoteVersion), formatRc(localVersion));
-        if (win) {
-          win.webContents.send('version-info-received', {remoteVersion, localVersion, upgradeAvailable});
-        }
-      }
-    })
-  });
-
-  req.on('error', (err) => {
-    console.log('Failed to get current version from GitHub. Error:', err);
-    if (win) {
-      win.webContents.send('version-info-received', null);
-    }
-  });
-}
-
-ipcMain.on('version-info-requested', checkForNewVersion);
 
 /*
  * Replacement for Electron's shell.openItem. The Electron version doesn't
@@ -145,11 +103,11 @@ function openItem(fullPath) {
     };
 
     let child;
-    if (process.platform == 'darwin') {
+    if (process.platform === 'darwin') {
       child = child_process.spawn('open', [fullPath], subprocOptions);
-    } else if (process.platform == 'linux') {
+    } else if (process.platform === 'linux') {
       child = child_process.spawn('xdg-open', [fullPath], subprocOptions);
-    } else if (process.platform == 'win32') {
+    } else if (process.platform === 'win32') {
       child = child_process.spawn(fullPath, Object.assign({}, subprocOptions, {shell: true}));
     }
 
@@ -158,7 +116,7 @@ function openItem(fullPath) {
 }
 
 function getPidsForProcessName(name) {
-  if (process.platform == 'win32') {
+  if (process.platform === 'win32') {
     const tasklistOut = child_process.execSync(`tasklist /fi "Imagename eq ${name}.exe" /nh`, {encoding: 'utf8'});
     if (tasklistOut.startsWith('INFO')) {
       return [];
@@ -172,15 +130,18 @@ function getPidsForProcessName(name) {
 }
 
 function createWindow () {
-  win = new BrowserWindow({backgroundColor: '#155B4A', minWidth: 800, minHeight: 600 }) //$color-primary
+  // Disable renderer process's webSecurity on development to enable CORS.
+  win = isDevelopment
+    ? new BrowserWindow({backgroundColor: '#155B4A', minWidth: 800, minHeight: 600, webPreferences: {webSecurity: false}})
+    : new BrowserWindow({backgroundColor: '#155B4A', minWidth: 800, minHeight: 600});
 
   win.webContents.session.setUserAgent(`LBRY/${localVersion}`);
 
   win.maximize()
-  if (isDebug) {
+  if (isDevelopment) {
     win.webContents.openDevTools();
   }
-  win.loadURL(`file://${__dirname}/dist/index.html`)
+  win.loadURL(rendererUrl)
   if (openUri) { // We stored and received a URI that an external app requested before we had a window object
     win.webContents.on('did-finish-load', () => {
       win.webContents.send('open-uri-requested', openUri);
@@ -230,7 +191,7 @@ function createWindow () {
 
   // Menu bar
   win.setAutoHideMenuBar(true);
-  win.setMenuBarVisibility(isDebug);
+  win.setMenuBarVisibility(isDevelopment);
   setMenu();
 
 };
@@ -242,9 +203,9 @@ function createTray () {
   if (process.platform === 'darwin') {
     // Using @2x for mac retina screens so the icon isn't blurry
     // file name needs to include "Template" at the end for dark menu bar
-    iconPath = path.join(app.getAppPath(), "/dist/img/fav/macTemplate@2x.png");
+    iconPath = path.join(__static, "/img/fav/macTemplate@2x.png");
   } else {
-    iconPath = path.join(app.getAppPath(), "/dist/img/fav/32x32.png");
+    iconPath = path.join(__static, "/img/fav/32x32.png");
   }
 
   tray = new Tray(iconPath);
@@ -317,7 +278,7 @@ function handleDaemonSubprocessExited() {
     // TODO: maybe it would be better to restart the daemon?
     if (win) {
       console.log('Did not request daemon stop, so quitting in 5 seconds.');
-      win.loadURL(`file://${__dirname}/dist/warning.html`);
+      win.loadURL(`file://${__static}/warning.html`);
       setTimeout(quitNow, 5000);
     } else {
       console.log('Did not request daemon stop, so quitting.');
@@ -325,7 +286,6 @@ function handleDaemonSubprocessExited() {
     }
   }
 }
-
 
 function launchDaemon() {
   assert(!daemonSubprocess, 'Tried to launch daemon twice');
@@ -340,11 +300,10 @@ function launchDaemon() {
   daemonSubprocess.on('exit', handleDaemonSubprocessExited);
 }
 
-
 /*
  * Quits by first killing the daemon, the calling quitting for real.
  */
-function safeQuit() {
+export function safeQuit() {
   minimize = false;
   app.quit();
 }
@@ -374,21 +333,7 @@ const isSecondaryInstance = app.makeSingleInstance((argv) => {
 
 if (isSecondaryInstance) { // We're not in the original process, so quit
   quitNow();
-  return;
 }
-
-app.on('ready', function() {
-  launchDaemonIfNotRunning();
-  if (process.platform === "linux") {
-    checkLinuxTraySupport( err => {
-      if (!err) createTray();
-      else minimize = false;
-    })
-  } else {
-    createTray();
-  }
-  createWindow();
-});
 
 function launchDaemonIfNotRunning() {
   // Check if the daemon is already running. If we get
@@ -439,6 +384,20 @@ function forceKillAllDaemonsAndQuit() {
   }
 }
 
+app.setAsDefaultProtocolClient('lbry');
+
+app.on('ready', function() {
+  launchDaemonIfNotRunning();
+  if (process.platform === "linux") {
+    checkLinuxTraySupport( err => {
+      if (!err) createTray();
+      else minimize = false;
+    })
+  } else {
+    createTray();
+  }
+  createWindow();
+});
 
 // Quit when all windows are closed.
 app.on('window-all-closed', () => {
@@ -461,7 +420,6 @@ app.on('before-quit', (event) => {
   }
 });
 
-
 app.on('activate', () => {
   // On macOS it's common to re-create a window in the app when the
   // dock icon is clicked and there are no other windows open.
@@ -469,6 +427,14 @@ app.on('activate', () => {
     createWindow()
   }
 });
+
+if (process.platform === 'darwin') {
+  app.on('open-url', (event, uri) => {
+    handleOpenUriRequested(uri);
+  });
+} else if (process.argv.length >= 2) {
+  handleOpenUriRequested(process.argv[1]);
+}
 
 // When a quit is attempted, this is called. It attempts to shutdown the daemon,
 // then calls quitNow() to quit for real.
@@ -500,26 +466,6 @@ function shutdownDaemonAndQuit(evenIfNotStartedByApp = false) {
   // If not, we should wait until the daemon is closed before we start the install.
 }
 
-function upgrade(event, installerPath) {
-  app.on('quit', () => {
-    console.log('Launching upgrade installer at', installerPath);
-    // This gets triggered called after *all* other quit-related events, so
-    // we'll only get here if we're fully prepared and quitting for real.
-    openItem(installerPath);
-  });
-
-  if (win) {
-    win.loadURL(`file://${__dirname}/dist/upgrade.html`);
-  }
-
-  shutdownDaemonAndQuit(true);
-  // wait for daemon to shut down before upgrading
-  // what to do if no shutdown in a long time?
-  console.log('Update downloaded to', installerPath);
-  console.log('The app will close, and you will be prompted to install the latest version of LBRY.');
-  console.log('After the install is complete, please reopen the app.');
-}
-
 // Taken from webtorrent-desktop
 function checkLinuxTraySupport (cb) {
   // Check that we're on Ubuntu (or another debian system) and that we have
@@ -536,17 +482,66 @@ function checkLinuxTraySupport (cb) {
   })
 }
 
-ipcMain.on('upgrade', upgrade);
-
-app.setAsDefaultProtocolClient('lbry');
-
-if (process.platform == 'darwin') {
-  app.on('open-url', (event, uri) => {
-    handleOpenUriRequested(uri);
+ipcMain.on('upgrade', (event, installerPath) => {
+  app.on('quit', () => {
+    console.log('Launching upgrade installer at', installerPath);
+    // This gets triggered called after *all* other quit-related events, so
+    // we'll only get here if we're fully prepared and quitting for real.
+    openItem(installerPath);
   });
-} else if (process.argv.length >= 2) {
-  handleOpenUriRequested(process.argv[1]);
-}
+
+  if (win) {
+    win.loadURL(`file://${__static}/upgrade.html`);
+  }
+
+  shutdownDaemonAndQuit(true);
+  // wait for daemon to shut down before upgrading
+  // what to do if no shutdown in a long time?
+  console.log('Update downloaded to', installerPath);
+  console.log('The app will close, and you will be prompted to install the latest version of LBRY.');
+  console.log('After the install is complete, please reopen the app.');
+});
+
+ipcMain.on('version-info-requested', () => {
+  function formatRc(ver) {
+    // Adds dash if needed to make RC suffix semver friendly
+    return ver.replace(/([^-])rc/, '$1-rc');
+  }
+
+  let result = '';
+  const opts = {
+    headers: {
+      'User-Agent': `LBRY/${localVersion}`,
+    }
+  };
+
+  const req = https.get(Object.assign(opts, url.parse(LATEST_RELEASE_API_URL)), (res) => {
+    res.on('data', (data) => {
+      result += data;
+    });
+    res.on('end', () => {
+      const tagName = JSON.parse(result).tag_name;
+      const [_, remoteVersion] = tagName.match(/^v([\d.]+(?:-?rc\d+)?)$/);
+      if (!remoteVersion) {
+        if (win) {
+          win.webContents.send('version-info-received', null);
+        }
+      } else {
+        const upgradeAvailable = semver.gt(formatRc(remoteVersion), formatRc(localVersion));
+        if (win) {
+          win.webContents.send('version-info-received', {remoteVersion, localVersion, upgradeAvailable});
+        }
+      }
+    })
+  });
+
+  req.on('error', (err) => {
+    console.log('Failed to get current version from GitHub. Error:', err);
+    if (win) {
+      win.webContents.send('version-info-received', null);
+    }
+  });
+});
 
 ipcMain.on('get-auth-token', (event) => {
   keytar.getPassword("LBRY", "auth_token").then(token => {

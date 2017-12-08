@@ -5,41 +5,26 @@ Install-Product node $env:nodejs_version
 npm install -g yarn
 yarn install
 
-
-# do app
-cd src\main
-yarn install
-# necessary to ensure native Node modules (e.g. keytar) are built against the correct version of Node)
-# yes, it needs to be run twice. it fails the first time, not sure why
-node_modules\.bin\electron-rebuild
-node_modules\.bin\electron-rebuild
-cd ..\..
-
-
-# build ui
-cd src\renderer
-yarn install
-npm rebuild node-sass
-node_modules\.bin\node-sass --output dist\css --sourcemap=none scss\
-node_modules\.bin\webpack --config webpack.prod.js
-Copy-Item dist ..\main\ -recurse
-cd ..\..
-
+# clean dist\
+if (Test-Path -Path dist\) {
+    Remove-Item -Recurse -Force dist\
+}
+New-Item -ItemType directory -Path dist\
 
 # get daemon and cli executable
-$package_settings = (Get-Content src\main\package.json -Raw | ConvertFrom-Json).lbrySettings
+$package_settings = (Get-Content package.json -Raw | ConvertFrom-Json).lbrySettings
 $daemon_ver = $package_settings.lbrynetDaemonVersion
 $daemon_url_template = $package_settings.lbrynetDaemonUrlTemplate
 $daemon_url = $daemon_url_template.Replace('OSNAME', 'windows').Replace('DAEMONVER', $daemon_ver)
 Invoke-WebRequest -Uri $daemon_url -OutFile daemon.zip
-Expand-Archive daemon.zip -DestinationPath src\main\dist\
-dir src\main\dist\ # verify that daemon binary is there
+Expand-Archive daemon.zip -DestinationPath static\daemon\
+dir static\daemon\ # verify that daemon binary is there
 rm daemon.zip
 
 
 # build electron app
-node_modules\.bin\build -p never
-$binary_name = Get-ChildItem -Path dist -Filter '*.exe' -Name
+yarn dist
+$binary_name = Get-ChildItem -Path dist -Filter 'LBRY Setup*.exe' -Name
 $new_name = $binary_name -replace '^LBRY Setup (.*)\.exe$', 'LBRY_$1.exe'
 Rename-Item -Path "dist\$binary_name" -NewName $new_name
 dir dist # verify that binary was built/named correctly

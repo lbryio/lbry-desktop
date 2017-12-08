@@ -19,7 +19,7 @@ def get_asset_filename():
     this_dir = os.path.dirname(os.path.realpath(__file__))
     system = platform.system()
     if system == 'Darwin':
-        return glob.glob(this_dir + '/../dist/mac/LBRY*.dmg')[0]
+        return glob.glob(this_dir + '/../dist/LBRY*.dmg')[0]
     elif system == 'Linux':
         return glob.glob(this_dir + '/../dist/LBRY*.deb')[0]
     elif system == 'Windows':

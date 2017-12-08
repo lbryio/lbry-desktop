@@ -1,3 +1,5 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto:400,400i,500,500i,700);
+
 html
 {
   height: 100%;
@@ -66,7 +68,7 @@ body
   &:before {
     $width: 30px;
     position: absolute;
-    background: url('../img/busy.gif') no-repeat center center;
+    background: url('../../../static/img/busy.gif') no-repeat center center;
     width: $width;
     height: $spacing-vertical;
     content: "";
@@ -132,7 +134,7 @@ p
 
 .busy-indicator
 {
-  background: url('../img/busy.gif') no-repeat center center;
+  background: url('../../../static/img/busy.gif') no-repeat center center;
   display: inline-block;
   margin: -1em 0;
   min-width: 16px;

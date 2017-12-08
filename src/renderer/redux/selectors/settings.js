@@ -1,5 +1,6 @@
 import * as settings from "constants/settings";
 import { createSelector } from "reselect";
+import path from "path";
 
 const _selectState = state => state.settings || {};
 
@@ -35,5 +36,5 @@ export const selectLanguages = createSelector(
 
 export const selectThemePath = createSelector(
   makeSelectClientSetting(settings.THEME),
-  theme => "themes/" + (theme || "light") + ".css"
+  theme => staticResourcesPath + "/themes/" + (theme || "light") + ".css"
 );

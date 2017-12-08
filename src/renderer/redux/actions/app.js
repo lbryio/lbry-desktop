@@ -20,7 +20,7 @@ const { remote, ipcRenderer, shell } = require("electron");
 const path = require("path");
 const { download } = remote.require("electron-dl");
 const fs = remote.require("fs");
-const { lbrySettings: config } = require("../../../../main/package.json");
+const { lbrySettings: config } = require("package.json");
 const CHECK_UPGRADE_INTERVAL = 10 * 60 * 1000;
 
 export function doOpenModal(modal, modalProps = {}) {
