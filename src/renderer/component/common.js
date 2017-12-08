@@ -69,7 +69,7 @@ export class CreditAmount extends React.PureComponent {
     amount: PropTypes.number.isRequired,
     precision: PropTypes.number,
     isEstimate: PropTypes.bool,
-    label: PropTypes.bool,
+    label: PropTypes.oneOfType([PropTypes.string, PropTypes.bool]),
     showFree: PropTypes.bool,
     showFullPrice: PropTypes.bool,
     showPlus: PropTypes.bool,
@@ -106,10 +106,12 @@ export class CreditAmount extends React.PureComponent {
       amountText = __("free");
     } else {
       if (this.props.label) {
-        amountText =
-          formattedAmount +
-          " " +
-          (parseFloat(amount) == 1 ? __("credit") : __("credits"));
+        const label =
+          typeof this.props.label === "string"
+            ? this.props.label
+            : parseFloat(amount) == 1 ? __("credit") : __("credits");
+
+        amountText = formattedAmount + " " + label;
       } else {
         amountText = formattedAmount;
       }

@@ -63,9 +63,8 @@ export const selectWunderBarIcon = createSelector(
         return "icon-rocket";
       case "invite":
         return "icon-envelope-open";
-      case "address":
-      case "receive":
-        return "icon-credit-card";
+      case "getcredits":
+        return "icon-shopping-cart";
       case "wallet":
       case "backup":
         return "icon-bank";

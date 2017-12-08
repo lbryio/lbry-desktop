@@ -20,7 +20,11 @@ const RewardSummary = props => {
         )}
       </div>
       <div className="card__actions">
-        <Link button="alt" navigate="/rewards" label={__("Learn more")} />
+        <Link
+          button="primary"
+          navigate="/rewards"
+          label={__("Claim Rewards")}
+        />
       </div>
     </section>
   );

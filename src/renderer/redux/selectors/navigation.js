@@ -37,17 +37,17 @@ export const selectHeaderLinks = createSelector(selectCurrentPage, page => {
     case "wallet":
     case "history":
     case "send":
-    case "receive":
+    case "getcredits":
     case "invite":
     case "rewards":
     case "backup":
       return {
         wallet: __("Overview"),
-        history: __("History"),
-        send: __("Send Credits"),
-        receive: __("Get Credits"),
+        getcredits: __("Get Credits"),
+        send: __("Send / Receive"),
         rewards: __("Rewards"),
         invite: __("Invites"),
+        history: __("History"),
       };
     case "downloaded":
     case "published":
@@ -78,8 +78,8 @@ export const selectPageTitle = createSelector(
       case "wallet":
         return __("Wallet");
       case "send":
-        return __("Send LBRY Credits");
-      case "receive":
+        return __("Send or Receive LBRY Credits");
+      case "getcredits":
         return __("Get LBRY Credits");
       case "backup":
         return __("Backup Your Wallet");

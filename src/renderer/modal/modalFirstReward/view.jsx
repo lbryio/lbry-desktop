@@ -32,12 +32,7 @@ class ModalFirstReward extends React.PureComponent {
           </p>
           <p>
             {__(
-              "No need to understand it all just yet! Try watching or downloading something next."
-            )}
-          </p>
-          <p>
-            {__(
-              "Finally, please know that LBRY is an early beta and that it earns the name."
+              "No need to understand it all just yet! Try watching or publishing something next."
             )}
           </p>
         </section>

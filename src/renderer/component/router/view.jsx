@@ -3,8 +3,8 @@ import SettingsPage from "page/settings";
 import HelpPage from "page/help";
 import ReportPage from "page/report.js";
 import WalletPage from "page/wallet";
-import ReceiveCreditsPage from "page/receiveCredits";
-import SendCreditsPage from "page/sendCredits";
+import GetCreditsPage from "../../page/getCredits";
+import SendReceivePage from "page/sendCredits";
 import ShowPage from "page/show";
 import PublishPage from "page/publish";
 import DiscoverPage from "page/discover";
@@ -38,11 +38,11 @@ const Router = props => {
     invite: <InvitePage params={params} />,
     publish: <PublishPage params={params} />,
     published: <FileListPublished params={params} />,
-    receive: <ReceiveCreditsPage params={params} />,
+    getcredits: <GetCreditsPage params={params} />,
     report: <ReportPage params={params} />,
     rewards: <RewardsPage params={params} />,
     search: <SearchPage params={params} />,
-    send: <SendCreditsPage params={params} />,
+    send: <SendReceivePage params={params} />,
     settings: <SettingsPage params={params} />,
     show: <ShowPage {...params} />,
     wallet: <WalletPage params={params} />,

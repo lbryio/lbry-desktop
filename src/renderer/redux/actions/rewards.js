@@ -4,6 +4,7 @@ import lbryio from "lbryio";
 import rewards from "rewards";
 import { selectUnclaimedRewardsByType } from "redux/selectors/rewards";
 import { selectUserIsRewardApproved } from "redux/selectors/user";
+import { selectClaimedRewardsById } from "../selectors/rewards";
 
 export function doRewardList() {
   return function(dispatch, getState) {
@@ -42,7 +43,7 @@ export function doClaimRewardType(rewardType) {
       return;
     }
 
-    if (!userIsRewardApproved) {
+    if (!userIsRewardApproved && rewardType !== rewards.TYPE_CONFIRM_EMAIL) {
       return dispatch({
         type: types.OPEN_MODAL,
         data: { modal: modals.REWARD_APPROVAL_REQUIRED },
@@ -61,7 +62,7 @@ export function doClaimRewardType(rewardType) {
           reward,
         },
       });
-      if (reward.reward_type == rewards.TYPE_NEW_USER) {
+      if (reward.reward_type == rewards.TYPE_CONFIRM_EMAIL) {
         dispatch({
           type: types.OPEN_MODAL,
           data: { modal: modals.FIRST_REWARD },

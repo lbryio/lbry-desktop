@@ -1,5 +1,5 @@
 import React from "react";
-import Link from "component/link";
+import { CreditAmount } from "component/common";
 import { Form, FormRow, Submit } from "component/form.js";
 
 class UserEmailNew extends React.PureComponent {
@@ -23,35 +23,41 @@ class UserEmailNew extends React.PureComponent {
   }
 
   render() {
-    const { errorMessage, isPending } = this.props;
+    const { cancelButton, errorMessage, isPending, rewardAmount } = this.props;
 
     return (
-      <Form onSubmit={this.handleSubmit.bind(this)}>
+      <div>
         <p>
-          {__(
-            "This process is required to prevent abuse of the rewards program."
-          )}
+          Let us know your email and you'll receive{" "}
+          <CreditAmount amount={rewardAmount} label="LBC" />, the blockchain
+          token used by LBRY.
         </p>
         <p>
           {__(
-            "We will also contact you about updates and new content, but you can unsubscribe at any time."
+            "We'll also let you know about LBRY updates, security issues, and great new content."
           )}
         </p>
-        <FormRow
-          type="text"
-          label="Email"
-          placeholder="youremail@example.org"
-          name="email"
-          value={this.state.email}
-          errorMessage={errorMessage}
-          onChange={event => {
-            this.handleEmailChanged(event);
-          }}
-        />
-        <div className="form-row-submit">
-          <Submit label="Next" disabled={isPending} />
-        </div>
-      </Form>
+        <p>
+          {__("We'll never sell your email, and you can unsubscribe at any time.")}
+        </p>
+        <Form onSubmit={this.handleSubmit.bind(this)}>
+          <FormRow
+            type="text"
+            label="Email"
+            placeholder="youremail@example.org"
+            name="email"
+            value={this.state.email}
+            errorMessage={errorMessage}
+            onChange={event => {
+              this.handleEmailChanged(event);
+            }}
+          />
+          <div className="form-row-submit">
+            <Submit label="Submit" disabled={isPending} />
+            {cancelButton}
+          </div>
+        </Form>
+      </div>
     );
   }
 }

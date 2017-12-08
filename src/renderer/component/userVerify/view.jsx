@@ -79,8 +79,15 @@ class UserVerify extends React.PureComponent {
           <div className="card__content">
             <p>
               {__(
-                "If you have a YouTube account with subscribers and views, you can sync your account to be granted instant verification."
+                "If you have a YouTube account with subscribers and views, you can sync your account and content to be granted instant verification."
               )}
+            </p>
+            <p>
+              {__("Some account minimums apply.")}{" "}
+              <Link
+                href="https://lbry.io/faq/youtube"
+                label={__("Read more.")}
+              />
             </p>
           </div>
           <div className="card__actions">

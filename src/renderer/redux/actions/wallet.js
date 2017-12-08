@@ -97,7 +97,7 @@ export function doSendDraftTransaction() {
     const amount = selectDraftTransactionAmount(state);
 
     if (balance - amount <= 0) {
-      return dispatch(doOpenModal(modals.INSUFFICIENT_BALANCE));
+      return dispatch(doOpenModal(modals.INSUFFICIENT_CREDITS));
     }
 
     dispatch({
@@ -162,7 +162,7 @@ export function doSendSupport(amount, claim_id, uri) {
     const balance = selectBalance(state);
 
     if (balance - amount <= 0) {
-      return dispatch(doOpenModal(modals.INSUFFICIENT_BALANCE));
+      return dispatch(doOpenModal(modals.INSUFFICIENT_CREDITS));
     }
 
     dispatch({

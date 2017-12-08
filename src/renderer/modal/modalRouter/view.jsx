@@ -2,7 +2,6 @@ import React from "react";
 import ModalError from "modal/modalError";
 import ModalAuthFailure from "modal/modalAuthFailure";
 import ModalDownloading from "modal/modalDownloading";
-import ModalInsufficientCredits from "modal/modalInsufficientCredits";
 import ModalUpgrade from "modal/modalUpgrade";
 import ModalWelcome from "modal/modalWelcome";
 import ModalFirstReward from "modal/modalFirstReward";
@@ -10,10 +9,10 @@ import ModalRewardApprovalRequired from "modal/modalRewardApprovalRequired";
 import ModalCreditIntro from "modal/modalCreditIntro";
 import ModalRemoveFile from "modal/modalRemoveFile";
 import ModalTransactionFailed from "modal/modalTransactionFailed";
-import ModalInsufficientBalance from "modal/modalInsufficientBalance";
 import ModalFileTimeout from "modal/modalFileTimeout";
 import ModalAffirmPurchase from "modal/modalAffirmPurchase";
 import ModalRevokeClaim from "modal/modalRevokeClaim";
+import ModalEmailCollection from "../modalEmailCollection";
 import * as modals from "constants/modal_types";
 
 class ModalRouter extends React.PureComponent {
@@ -43,8 +42,8 @@ class ModalRouter extends React.PureComponent {
 
     const transitionModal = [
       this.checkShowWelcome,
+      this.checkShowEmail,
       this.checkShowCreditIntro,
-      this.checkShowInsufficientCredits,
     ].reduce((acc, func) => {
       return !acc ? func.bind(this)(props) : acc;
     }, false);
@@ -74,24 +73,30 @@ class ModalRouter extends React.PureComponent {
     }
   }
 
-  checkShowCreditIntro(props) {
-    const { page, isCreditIntroAcknowledged, user } = props;
-
+  checkShowEmail(props) {
+    const {
+      isEmailCollectionAcknowledged,
+      isVerificationCandidate,
+      user,
+    } = props;
     if (
-      !isCreditIntroAcknowledged &&
+      !isEmailCollectionAcknowledged &&
+      isVerificationCandidate &&
       user &&
-      !user.is_reward_approved &&
-      (["rewards", "send", "receive", "publish", "wallet"].includes(page) ||
-        this.isPaidShowPage(props))
+      !user.has_verified_email
     ) {
-      return modals.CREDIT_INTRO;
+      return modals.EMAIL_COLLECTION;
     }
   }
 
-  checkShowInsufficientCredits(props) {
-    const { balance, page } = props;
+  checkShowCreditIntro(props) {
+    const { balance, page, isCreditIntroAcknowledged } = props;
 
-    if (balance <= 0 && ["send", "publish"].includes(page)) {
+    if (
+      balance <= 0 &&
+      !isCreditIntroAcknowledged &&
+      (["send", "publish"].includes(page) || this.isPaidShowPage(props))
+    ) {
       return modals.INSUFFICIENT_CREDITS;
     }
   }
@@ -114,19 +119,15 @@ class ModalRouter extends React.PureComponent {
       case modals.FILE_TIMEOUT:
         return <ModalFileTimeout {...modalProps} />;
       case modals.INSUFFICIENT_CREDITS:
-        return <ModalInsufficientCredits {...modalProps} />;
+        return <ModalCreditIntro {...modalProps} />;
       case modals.WELCOME:
         return <ModalWelcome {...modalProps} />;
       case modals.FIRST_REWARD:
         return <ModalFirstReward {...modalProps} />;
       case modals.AUTHENTICATION_FAILURE:
         return <ModalAuthFailure {...modalProps} />;
-      case modals.CREDIT_INTRO:
-        return <ModalCreditIntro {...modalProps} />;
       case modals.TRANSACTION_FAILED:
         return <ModalTransactionFailed {...modalProps} />;
-      case modals.INSUFFICIENT_BALANCE:
-        return <ModalInsufficientBalance {...modalProps} />;
       case modals.REWARD_APPROVAL_REQUIRED:
         return <ModalRewardApprovalRequired {...modalProps} />;
       case modals.CONFIRM_FILE_REMOVE:
@@ -135,6 +136,8 @@ class ModalRouter extends React.PureComponent {
         return <ModalAffirmPurchase {...modalProps} />;
       case modals.CONFIRM_CLAIM_REVOKE:
         return <ModalRevokeClaim {...modalProps} />;
+      case modals.EMAIL_COLLECTION:
+        return <ModalEmailCollection {...modalProps} />;
       default:
         return null;
     }

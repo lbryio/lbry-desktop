@@ -1,5 +1,5 @@
 import React from "react";
 import { connect } from "react-redux";
-import SendCreditsPage from "./view";
+import SendReceivePage from "./view";
 
-export default connect(null, null)(SendCreditsPage);
+export default connect(null, null)(SendReceivePage);

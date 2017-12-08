@@ -24,9 +24,10 @@ const defaultState = {
       settings.NEW_USER_ACKNOWLEDGED,
       false
     ),
-    credit_intro_acknowledged: getLocalStorageSetting(
-      settings.CREDIT_INTRO_ACKNOWLEDGED
+    email_collection_acknowledged: getLocalStorageSetting(
+      settings.EMAIL_COLLECTION_ACKNOWLEDGED
     ),
+    credit_required_acknowledged: false, //this needs to be re-acknowledged every run
     language: getLocalStorageSetting(settings.LANGUAGE, "en"),
     theme: getLocalStorageSetting(settings.THEME, "light"),
     themes: getLocalStorageSetting(settings.THEMES, []),

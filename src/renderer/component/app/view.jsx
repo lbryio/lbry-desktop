@@ -3,7 +3,7 @@ import Router from "component/router/index";
 import Header from "component/header";
 import Theme from "component/theme";
 import ModalRouter from "modal/modalRouter";
-import lbry from "lbry";
+import ReactModal from "react-modal";
 import throttle from "util/throttle";
 
 class App extends React.PureComponent {
@@ -28,6 +28,8 @@ class App extends React.PureComponent {
     const scrollListener = () => recordScroll(this.mainContent.scrollTop);
 
     this.mainContent.addEventListener("scroll", throttle(scrollListener, 750));
+
+    ReactModal.setAppElement("#window"); //fuck this
   }
 
   componentWillUnmount() {
