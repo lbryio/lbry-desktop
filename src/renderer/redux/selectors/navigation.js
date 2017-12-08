@@ -61,6 +61,12 @@ export const selectHeaderLinks = createSelector(selectCurrentPage, page => {
         settings: __("Settings"),
         help: __("Help"),
       };
+    case "discover":
+    case "subscriptions":
+      return {
+        discover: __("Discover"),
+        subscriptions: __("Subscriptions"),
+      };
     default:
       return null;
   }
@@ -111,6 +117,8 @@ export const selectPageTitle = createSelector(
         return params.query
           ? __("Search results for %s", params.query)
           : __("Search");
+      case "subscriptions":
+        return __("Your Subscriptions");
       case "discover":
       case false:
       case null:

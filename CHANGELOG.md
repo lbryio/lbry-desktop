@@ -9,6 +9,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
 ## [Unreleased]
 ### Added
   * ShapeShift integration
+  * In-app subscriptions
 
 ### Changed
   * The first run process for new users has changed substantially. New users can now easily receive one credit.

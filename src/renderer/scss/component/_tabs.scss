@@ -50,7 +50,16 @@ nav.sub-header
       color: var(--tab-active-color);
     }
   }
+
+  &.sub-header--full-width {
+    max-width: 100%;
+  }
+
+  &.sub-header--small-margin {
+    margin-bottom: $spacing-vertical;
+  }
 }
+
 
 @keyframes activeTab {
     from {width: 0;}

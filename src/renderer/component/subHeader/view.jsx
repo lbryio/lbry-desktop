@@ -1,8 +1,9 @@
 import React from "react";
 import Link from "component/link";
+import classnames from "classnames";
 
 const SubHeader = props => {
-  const { subLinks, currentPage, navigate, modifier } = props;
+  const { subLinks, currentPage, navigate, fullWidth, smallMargin } = props;
 
   const links = [];
 
@@ -22,7 +23,10 @@ const SubHeader = props => {
 
   return (
     <nav
-      className={"sub-header" + (modifier ? " sub-header--" + modifier : "")}
+      className={classnames("sub-header", {
+        "sub-header--full-width": fullWidth,
+        "sub-header--small-margin": smallMargin,
+      })}
     >
       {links}
     </nav>

@@ -77,6 +77,8 @@ export const selectWunderBarIcon = createSelector(
       case "discover":
       case "search":
         return "icon-search";
+      case "subscriptions":
+        return "icon-th-list";
       default:
         return "icon-file";
     }

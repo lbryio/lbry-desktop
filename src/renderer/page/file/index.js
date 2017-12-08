@@ -1,4 +1,3 @@
-import React from "react";
 import { connect } from "react-redux";
 import { doNavigate } from "redux/actions/navigation";
 import { doFetchFileInfo } from "redux/actions/file_info";
@@ -24,6 +23,7 @@ const select = (state, props) => ({
   tab: makeSelectCurrentParam("tab")(state),
   fileInfo: makeSelectFileInfoForUri(props.uri)(state),
   rewardedContentClaimIds: selectRewardContentClaimIds(state, props),
+
 });
 
 const perform = dispatch => ({

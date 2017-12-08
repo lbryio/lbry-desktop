@@ -3,6 +3,8 @@ import lbryuri from "lbryuri";
 import { BusyMessage } from "component/common";
 import FileTile from "component/fileTile";
 import ReactPaginate from "react-paginate";
+import Link from "component/link";
+import SubscribeButton from "component/subscribeButton";
 
 class ChannelPage extends React.PureComponent {
   componentDidMount() {
@@ -38,7 +40,16 @@ class ChannelPage extends React.PureComponent {
       uri,
       page,
       totalPages,
+      doChannelSubscribe,
+      doChannelUnsubscribe,
+      subscriptions,
     } = this.props;
+
+    const { name, claim_id: claimId } = claim;
+    const subscriptionUri = lbryuri.build(
+      { channelName: name, claimId },
+      false
+    );
 
     let contentList;
     if (fetching) {
@@ -68,6 +79,7 @@ class ChannelPage extends React.PureComponent {
             <div className="card__title-identity">
               <h1>{uri}</h1>
             </div>
+            <SubscribeButton uri={uri} channelName={name} />
           </div>
           <div className="card__content">
             <p className="empty">
