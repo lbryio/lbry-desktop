@@ -9,7 +9,7 @@ import lbry from 'lbry';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { doConditionalAuthNavigate, doDaemonReady, doShowSnackBar } from 'redux/actions/app';
+import { doConditionalAuthNavigate, doDaemonReady, doShowSnackBar, doAutoUpdate } from 'redux/actions/app';
 import { doNavigate } from 'redux/actions/navigation';
 import { doDownloadLanguages } from 'redux/actions/settings';
 import { doUserEmailVerify } from 'redux/actions/user';
@@ -17,6 +17,7 @@ import 'scss/all.scss';
 import store from 'store';
 import app from './app';
 
+const { autoUpdater } = remote.require('electron-updater');
 const { contextMenu } = remote.require('./main.js');
 
 window.addEventListener('contextmenu', event => {
@@ -97,6 +98,10 @@ document.addEventListener('click', event => {
 });
 
 const init = () => {
+  autoUpdater.on("update-downloaded", () => {
+    app.store.dispatch(doAutoUpdate());
+  });
+
   app.store.dispatch(doDownloadLanguages());
 
   function onDaemonReady() {

@@ -20,6 +20,7 @@ import {
   selectUpgradeFilename,
 } from 'redux/selectors/app';
 
+const { autoUpdater } = remote.require('electron-updater');
 const { download } = remote.require('electron-dl');
 const Fs = remote.require('fs');
 const { lbrySettings: config } = require('package.json');
@@ -105,6 +106,16 @@ export function doDownloadUpgrade() {
   };
 }
 
+export function doAutoUpdate() {
+  return function(dispatch, getState) {
+    const state = getState();
+    dispatch({
+      type: types.OPEN_MODAL,
+      data: modals.AUTO_UPDATE_DOWNLOADED,
+    });
+  };
+}
+
 export function doCancelUpgrade() {
   return (dispatch, getState) => {
     const state = getState();
@@ -134,6 +145,12 @@ export function doCheckUpgradeAvailable() {
     dispatch({
       type: ACTIONS.CHECK_UPGRADE_START,
     });
+
+    if (["win32", "darwin"].includes(process.platform)) {
+      // On Windows and Mac, updates happen silently
+      autoUpdater.checkForUpdates();
+      return;
+    }
 
     const success = ({ remoteVersion, upgradeAvailable }) => {
       dispatch({
