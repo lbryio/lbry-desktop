@@ -1,5 +1,8 @@
 {
   "appId": "io.lbry.LBRY",
+  "mac": {
+    "category": "public.app-category.entertainment",
+  },
   "dmg": {
     "iconSize": 128,
     "contents": [
@@ -20,7 +23,7 @@
       "width": 500,
       "height": 300
     },
-    "backgroundColor": "155B4A"
+    "background": "build/background.png"
   },
   "protocols": [
     {
