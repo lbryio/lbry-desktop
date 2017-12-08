@@ -5,6 +5,7 @@
 /src/main/dist
 /src/main/locales
 /src/main/node_modules
+/src/renderer/dist
 /build/venv
 /build/daemon.ver
 /lbry-app-venv
