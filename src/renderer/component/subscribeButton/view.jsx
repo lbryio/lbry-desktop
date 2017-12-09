@@ -31,5 +31,5 @@ export default ({
         })}
       />
     </div>
-  ) : "";
+  ) : null;
 }
