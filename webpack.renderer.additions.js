@@ -1,5 +1,4 @@
 const path = require('path');
-const FlowBabelWebpackPlugin = require('./src/renderer/flowtype-plugin');
 
 const ELECTRON_RENDERER_PROCESS_ROOT = path.resolve(__dirname, 'src/renderer/');
 
@@ -20,10 +19,15 @@ module.exports = {
   resolve: {
     modules: [ELECTRON_RENDERER_PROCESS_ROOT, 'node_modules', __dirname],
     extensions: ['.js', '.jsx', '.scss']
-  },
-  plugins: [
-    new FlowBabelWebpackPlugin({
+  }
+};
+
+if (process.env.NODE_ENV === 'development') {
+  const FLOW_BABEL_WEBPACK_PLUGIN = require('./src/renderer/flowtype-plugin');
+
+  module.exports.plugins = [
+    new FLOW_BABEL_WEBPACK_PLUGIN({
       warn: true
     })
   ]
-};
+}
