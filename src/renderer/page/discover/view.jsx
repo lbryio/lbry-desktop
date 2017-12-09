@@ -184,7 +184,8 @@ export class FeaturedCategory extends React.PureComponent {
             <Link
               className="no-underline"
               label={category}
-              href={categoryLink}
+              navigate="/show"
+              navigateParams={{ uri: categoryLink }}
             />
           ) : (
             category

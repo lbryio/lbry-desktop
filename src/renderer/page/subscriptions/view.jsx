@@ -88,7 +88,7 @@ export default class extends React.PureComponent<Props> {
                 return (
                   <FeaturedCategory
                     key={subscription.channelName}
-                    categoryLink={`lbry://${subscription.uri}`}
+                    categoryLink={subscription.uri}
                     category={subscription.channelName}
                     names={subscription.claims}
                   />
