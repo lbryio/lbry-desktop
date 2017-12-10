@@ -3,8 +3,7 @@ import { Modal } from "modal/modal";
 import { Line } from "rc-progress";
 import Link from "component/link/index";
 
-const { remote } = require("electron");
-const { autoUpdater } = remote.require("electron-updater");
+const { ipcRenderer } = require("electron");
 
 class ModalAutoUpdateDownloaded extends React.PureComponent {
   render() {
@@ -13,7 +12,9 @@ class ModalAutoUpdateDownloaded extends React.PureComponent {
         isOpen={true}
         contentLabel={__("Update downloaded")}
         confirmButtonLabel={__("Update and Restart")}
-        onConfirmed={autoUpdater.quitAndInstall()}
+        onConfirmed={() => {
+          ipcRenderer.send("autoUpdate");
+        }}
       >
         <section>
           <h3 className="text-center">{__("LBRY Leveled Up")}</h3>

@@ -20,6 +20,8 @@ import app from './app';
 const { autoUpdater } = remote.require('electron-updater');
 const { contextMenu } = remote.require('./main.js');
 
+autoUpdater.logger = remote.require("electron-log");
+
 window.addEventListener('contextmenu', event => {
   contextMenu(remote.getCurrentWindow(), event.x, event.y, app.env === 'development');
   event.preventDefault();
@@ -102,6 +104,18 @@ const init = () => {
     app.store.dispatch(doAutoUpdate());
   });
 
+  if (["win32", "darwin"].includes(process.platform)) {
+    autoUpdater.on("update-available", () => {
+      console.log("Update available");
+    });
+    autoUpdater.on("update-not-available", () => {
+      console.log("Update not available");
+    });
+    autoUpdater.on("update-downloaded", () => {
+      console.log("Update downloaded");
+      app.store.dispatch(doAutoUpdate());
+    });
+  }
   app.store.dispatch(doDownloadLanguages());
 
   function onDaemonReady() {
