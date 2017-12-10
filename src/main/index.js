@@ -436,6 +436,9 @@ app.on('before-quit', event => {
     shutdownDaemonAndQuit();
   } else {
     console.log('Quitting.');
+    if (autoUpdating) {
+      minimize = false;
+    }
   }
 });
 
@@ -520,6 +523,11 @@ ipcMain.on('version-info-requested', () => {
       rendererWindow.webContents.send('version-info-received', null);
     }
   });
+});
+
+ipcMain.on('autoUpdate', () => {
+  minimize = false;
+  autoUpdater.quitAndInstall();
 });
 
 ipcMain.on('get-auth-token', event => {
