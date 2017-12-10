@@ -182,7 +182,7 @@ export class FeaturedCategory extends React.PureComponent {
         <h3 className="card-row__header">
           {categoryLink ? (
             <Link
-              className="no-underline"
+              className="button-text no-underline"
               label={category}
               navigate="/show"
               navigateParams={{ uri: categoryLink }}
