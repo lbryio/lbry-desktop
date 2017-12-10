@@ -23,6 +23,7 @@ export default ({
   return channelName && uri ? (
     <div className="card__actions">
       <Link
+        iconRight={isSubscribed ? "" : "at"}
         button={isSubscribed ? "alt" : "primary"}
         label={subscriptionLabel}
         onClick={() => subscriptionHandler({
