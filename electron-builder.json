@@ -50,5 +50,8 @@
       "libsecret-1-0"
     ]
   },
+  "nsis": {
+    "perMachine": true
+  },
   "artifactName": "${productName}_${version}_${arch}.${ext}"
 }
