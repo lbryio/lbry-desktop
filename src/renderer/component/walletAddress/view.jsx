@@ -13,7 +13,7 @@ class WalletAddress extends React.PureComponent {
     return (
       <section className="card">
         <div className="card__title-primary">
-          <h3>{__("Receive credits")}</h3>
+          <h3>{__("Receive Credits")}</h3>
         </div>
         <div className="card__content">
           <p>
