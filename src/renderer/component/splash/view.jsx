@@ -100,22 +100,23 @@ export class SplashScreen extends React.PureComponent {
 
   render() {
     const { modal } = this.props;
+    const { message, details, isLagging, isRunning } = this.state;
 
     return (
       <div>
         <LoadScreen
-          message={this.state.message}
-          details={this.state.details}
-          isWarning={this.state.isLagging}
+          message={message}
+          details={details}
+          isWarning={isLagging}
         />
         {/* Temp hack: don't show any modals on splash screen daemon is running;
             daemon doesn't let you quit during startup, so the "Quit" buttons
             in the modals won't work. */}
         {modal == "incompatibleDaemon" &&
-          this.state.isRunning && <ModalIncompatibleDaemon />}
-        {modal == modals.UPGRADE && this.state.isRunning && <ModalUpgrade />}
+          isRunning && <ModalIncompatibleDaemon />}
+        {modal == modals.UPGRADE && isRunning && <ModalUpgrade />}
         {modal == modals.DOWNLOADING &&
-          this.state.isRunning && <ModalDownloading />}
+          isRunning && <ModalDownloading />}
       </div>
     );
   }

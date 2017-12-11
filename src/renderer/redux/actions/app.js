@@ -9,7 +9,7 @@ import {
   selectRemoteVersion,
 } from "redux/selectors/app";
 import { doFetchDaemonSettings } from "redux/actions/settings";
-import { doBalanceSubscribe } from "redux/actions/wallet";
+import { doBalanceSubscribe, doFetchTransactions } from "redux/actions/wallet";
 import { doAuthenticate } from "redux/actions/user";
 import { doFetchFileInfosAndPublishedClaims } from "redux/actions/file_info";
 import * as modals from "constants/modal_types";
@@ -222,6 +222,7 @@ export function doDaemonReady() {
     dispatch(doBalanceSubscribe());
     dispatch(doFetchFileInfosAndPublishedClaims());
     dispatch(doFetchRewardedContent());
+    dispatch(doFetchTransactions(false));
     if (!selectIsUpgradeSkipped(state)) {
       dispatch(doCheckUpgradeAvailable());
     }
