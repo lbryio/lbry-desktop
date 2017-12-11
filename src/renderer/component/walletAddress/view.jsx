@@ -13,12 +13,12 @@ class WalletAddress extends React.PureComponent {
     return (
       <section className="card">
         <div className="card__title-primary">
-          <h3>{__("Wallet Address")}</h3>
+          <h3>{__("Receive credits")}</h3>
         </div>
         <div className="card__content">
           <p>
             {__(
-              "Use this address to receive credits sent by another user (or yourself)."
+              "Use this wallet address to receive credits sent by another user (or yourself)."
             )}
           </p>
           <Address address={receiveAddress} />
