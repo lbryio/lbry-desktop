@@ -1,9 +1,14 @@
+// @flow
 import React from "react";
 import Link from "component/link";
 import { CreditAmount } from "component/common";
 
-const RewardSummary = props => {
-  const { balance, unclaimedRewardAmount } = props;
+type Props = {
+  unclaimedRewardAmount: number,
+}
+
+const RewardSummary = (props: Props) => {
+  const { unclaimedRewardAmount } = props;
 
   return (
     <section className="card">
