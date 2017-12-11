@@ -19,8 +19,8 @@ Web UI version numbers should always match the corresponding version of LBRY App
   * The macOS docking icon has been improved.
   * The prompt for an insufficient balance is much more user-friendly.
   * The credit balance displayed in the main app navigation displays two decimal places instead of one.
-  * Video download error messages are now more understandable.
-  *
+  * Video download error messages are now more understandable.([#328](https://github.com/lbryio/lbry-app/issues/328))
+  * Windows path to the daemon/CLI executables changed to: `C:\Program Files (x86)\LBRY\resources\static\daemon`
 
 ### Fixed
   * Long channel names causing inconsistent thumbnail sizes ([#721](https://github.com/lbryio/lbry-app/issues/721))
@@ -29,7 +29,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
   * Fixed issues with scrolling and back and forward navigation ([#729](https://github.com/lbryio/lbry-app/issues/729))
   * Fixed sorting by title for published files ([#614](https://github.com/lbryio/lbry-app/issues/614))
   * App now uses the new `balance_delta` field provided by the LBRY API ([#611](https://github.com/lbryio/lbry-app/issues/611))
-  * Abandoning from the claim page now works.
+  * Abandoning from the claim page now works.([#883](https://github.com/lbryio/lbry-app/issues/833))
   *
 
 ### Deprecated
