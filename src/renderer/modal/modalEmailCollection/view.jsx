@@ -33,7 +33,7 @@ class ModalEmailCollection extends React.PureComponent {
       <Modal type="custom" isOpen={true} contentLabel="Email">
         <section>
           <h3 className="modal__header">
-            Can We <strike>Touch You</strike> Stay In Touch?
+            Can We Stay In Touch?
           </h3>
           {this.renderInner()}
         </section>

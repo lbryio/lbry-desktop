@@ -8,6 +8,7 @@ const Link = props => {
     style,
     label,
     icon,
+    iconRight,
     button,
     disabled,
     children,
@@ -36,8 +37,9 @@ const Link = props => {
   } else {
     content = (
       <span {...("button" in props ? { className: "button__content" } : {})}>
-        {"icon" in props ? <Icon icon={icon} fixed={true} /> : null}
+        {icon ? <Icon icon={icon} fixed={true} /> : null}
         {label ? <span className="link-label">{label}</span> : null}
+        {iconRight ? <Icon icon={iconRight} fixed={true} /> : null}
       </span>
     );
   }
