@@ -7,15 +7,17 @@
     "email": "hello@lbry.io"
   },
   "homepage": "https://lbry.io/",
+  "license": "MIT",
   "scripts": {
     "extract-langs": "node src/renderer/extractLocals.js",
     "dev": "electron-webpack dev",
-    "compile": "electron-webpack && yarn extract-langs",
     "dist": "yarn compile && electron-builder",
     "dist:dir": "yarn dist -- --dir -c.compression=store -c.mac.identity=null",
+    "compile": "electron-webpack && yarn extract-langs",
     "postinstall": "electron-builder install-app-deps",
     "precommit": "lint-staged",
-    "prettier": "prettier --trailing-comma es5 --write js/**/*.{js,jsx}"
+    "prettier": "prettier --trailing-comma es5 --write src/**/*.{jsx,js}",
+    "flow": "flow check"
   },
   "main": "src/main/main.js",
   "repository": {
@@ -77,7 +79,6 @@
     "electron-builder": "^19.48.2",
     "electron-devtools-installer": "^2.2.1",
     "electron-webpack": "^1.11.0",
-    "flow-babel-webpack-plugin": "^1.1.0",
     "flow-bin": "^0.61.0",
     "flow-typed": "^2.2.3",
     "husky": "^0.14.3",
@@ -94,9 +95,8 @@
   "resolutions": {
     "webpack/webpack-sources": "1.0.1"
   },
-  "license": "MIT",
   "lint-staged": {
-    "src/renderer/js/**/*.{jsx,js}": [
+    "src/**/*.{jsx,js}": [
       "prettier --trailing-comma es5 --write",
       "git add"
     ]

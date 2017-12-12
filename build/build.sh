@@ -37,11 +37,10 @@ else
   # install dependencies
   echo -e "\033[0;32mInstalling Dependencies\x1b[m"
   "$BUILD_DIR/install_deps.sh"
+  yarn install
 fi
 
 [ -d "$ROOT/dist" ] && rm -rf "$ROOT/dist"
-
-yarn install
 
 ####################
 #  daemon and cli  #
