@@ -5,7 +5,7 @@ var merge = require('lodash.merge');
 var store = {
   error: null,
   flowOptions: [
-    'status',
+    'check',
     '--color=always',
   ],
   options: {
