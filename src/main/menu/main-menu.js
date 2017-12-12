@@ -1,5 +1,5 @@
 const { app, shell, Menu } = require('electron');
-const { safeQuit } = require('../main.js');
+const { safeQuit } = require('../index.js');
 
 const baseTemplate = [
   {
