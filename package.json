@@ -7,6 +7,7 @@
     "email": "hello@lbry.io"
   },
   "homepage": "https://lbry.io/",
+  "license": "MIT",
   "scripts": {
     "extract-langs": "node src/renderer/extractLocals.js",
     "dev": "electron-webpack dev",
@@ -15,7 +16,7 @@
     "dist:dir": "yarn dist -- --dir -c.compression=store -c.mac.identity=null",
     "postinstall": "electron-builder install-app-deps",
     "precommit": "lint-staged",
-    "prettier": "prettier --trailing-comma es5 --write js/**/*.{js,jsx}"
+    "prettier": "prettier --trailing-comma es5 --write src/**/*.{js,jsx}"
   },
   "main": "src/main/main.js",
   "repository": {
@@ -94,9 +95,8 @@
   "resolutions": {
     "webpack/webpack-sources": "1.0.1"
   },
-  "license": "MIT",
   "lint-staged": {
-    "src/renderer/js/**/*.{jsx,js}": [
+    "src/**/*.{js,jsx}": [
       "prettier --trailing-comma es5 --write",
       "git add"
     ]

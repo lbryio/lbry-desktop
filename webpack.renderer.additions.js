@@ -23,7 +23,7 @@ module.exports = {
 };
 
 if (process.env.NODE_ENV === 'development') {
-  const FLOW_BABEL_WEBPACK_PLUGIN = require('./src/renderer/flowtype-plugin');
+  const FLOW_BABEL_WEBPACK_PLUGIN = require('./flowtype-plugin');
 
   module.exports.plugins = [
     new FLOW_BABEL_WEBPACK_PLUGIN({
