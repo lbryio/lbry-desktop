@@ -1,12 +1,8 @@
 pip install -r build\requirements.txt
 
-# sign binary
+# Decrypt cert
 nuget install secure-file -ExcludeVersion
 secure-file\tools\secure-file -decrypt build\lbry3.pfx.enc -secret "$env:pfx_key"
-Write-Host "Testing for lbry3"
-Test-Path build\lbry3.pfx
-
-# & ${env:SIGNTOOL_PATH} sign /f build\lbry3.pfx /p "$env:key_pass" /tr http://tsa.starfieldtech.com /td SHA256 /fd SHA256 dist\*.exe
 
 # Get the latest stable version of Node.js or io.js
 Install-Product node $env:nodejs_version

@@ -3,23 +3,17 @@ environment:
   nodejs_version: 7
   GH_TOKEN:
     secure: LiI5jyuHUw6XbH4kC3gP1HX4P/v4rwD/gCNtaFhQu2AvJz1/1wALkp5ECnIxRySN
-  key_pass:
-    secure: u6DydPcdrUJlxGL9uc7yQRYG8+5rY6aAEE9nfCSzFyNzZlX9NniOp8Uh5ZKQqX7bGEngLI6ipbLfiJvn0XFnhbn2iTkOuMqOXVJVOehvwlQ=
   pfx_key:
     secure: 1mwqyRy7hDqDjDK+TIAoaXyXzpNgwruFNA6TPkinUcVM7A+NLD33RQLnfnwVy+R5ovD2pUfhQ6+N0Fqebv6tZh436LIEsock+6IOdpgFwrg=
-  # find with: Get-Childitem –Path "C:\Program Files (x86)\Microsoft SDKs\Windows\" -Include *signtool* -File -Recurse -ErrorAction SilentlyContinue
-  # SIGNTOOL_PATH: C:\Program Files (x86)\Microsoft SDKs\Windows\v7.1A\Bin\signtool.exe
   AWS_ACCESS_KEY_ID:
     secure: iVGwoJ7ogspjSmuqr+haVPLglSgQsp6tUZx6mIlKH7Q=
   AWS_SECRET_ACCESS_KEY:
     secure: zKaqdZGPl0exDL5YhJkb33prSemC9Rzg9S7Lw2wFy1WnJ6ffgl6mQH7jqJDUTqsY
-  CSC_LINK: C:\projects\lbry-app\build\lbry3.pfx
+  CSC_LINK: build\lbry3.pfx
   CSC_KEY_PASSWORD:
     secure: u6DydPcdrUJlxGL9uc7yQRYG8+5rY6aAEE9nfCSzFyNzZlX9NniOp8Uh5ZKQqX7bGEngLI6ipbLfiJvn0XFnhbn2iTkOuMqOXVJVOehvwlQ=
 
 skip_branch_with_pr: false
-
-image: Visual Studio 2017
 
 clone_folder: C:\projects\lbry-app
 
