@@ -5,7 +5,7 @@ import { CreditAmount } from "component/common";
 
 type Props = {
   unclaimedRewardAmount: number,
-}
+};
 
 const RewardSummary = (props: Props) => {
   const { unclaimedRewardAmount } = props;
@@ -19,11 +19,15 @@ const RewardSummary = (props: Props) => {
         {unclaimedRewardAmount > 0 ? (
           <p>
             {__("You have")}{" "}
-            <CreditAmount amount={unclaimedRewardAmount} precision={8} />
-            {" "}{__("in unclaimed rewards")}.
+            <CreditAmount amount={unclaimedRewardAmount} precision={8} />{" "}
+            {__("in unclaimed rewards")}.
           </p>
         ) : (
-          <p>{__("There are no rewards available at this time, please check back later")}.</p>
+          <p>
+            {__(
+              "There are no rewards available at this time, please check back later"
+            )}.
+          </p>
         )}
       </div>
       <div className="card__actions">

@@ -84,7 +84,7 @@ fi
 
 if ! cmd_exists node; then
   if $LINUX; then
-    curl -sL https://deb.nodesource.com/setup_7.x | $SUDO -E bash -
+    curl -sL https://deb.nodesource.com/setup_8.x | $SUDO -E bash -
     $INSTALL nodejs
   elif $OSX; then
     brew install node
