@@ -21,13 +21,3 @@ module.exports = {
     extensions: ['.js', '.jsx', '.scss']
   }
 };
-
-if (process.env.NODE_ENV === 'development') {
-  const FLOW_BABEL_WEBPACK_PLUGIN = require('./src/renderer/flowtype-plugin');
-
-  module.exports.plugins = [
-    new FLOW_BABEL_WEBPACK_PLUGIN({
-      warn: true
-    })
-  ]
-}
