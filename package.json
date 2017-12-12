@@ -15,8 +15,7 @@
     "dist": "yarn compile && electron-builder",
     "dist:dir": "yarn dist -- --dir -c.compression=store -c.mac.identity=null",
     "postinstall": "electron-builder install-app-deps",
-    "precommit": "lint-staged",
-    "prettier": "prettier --trailing-comma es5 --write src/**/*.{js,jsx}"
+    "precommit": "lint-staged"
   },
   "main": "src/main/main.js",
   "repository": {
