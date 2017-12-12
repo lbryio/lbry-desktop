@@ -7,10 +7,6 @@ import lbry from "lbry";
 import fs from "fs";
 import http from "http";
 
-const { remote } = require("electron");
-const { extname } = require("path");
-const { readdir } = remote.require("fs");
-
 export function doFetchDaemonSettings() {
   return function(dispatch, getState) {
     lbry.settings_get().then(settings => {
@@ -52,22 +48,14 @@ export function doSetClientSetting(key, value) {
 
 export function doGetThemes() {
   return function(dispatch, getState) {
-    const dir = `${staticResourcesPath}/themes`;
+    const themes = ["light", "dark"];
+    dispatch(
+      doSetClientSetting(
+        settings.THEMES,
+        themes
+      )
+    );
 
-    readdir(dir, (error, files) => {
-      if (!error) {
-        dispatch(
-          doSetClientSetting(
-            settings.THEMES,
-            files
-              .filter(file => extname(file) === ".css")
-              .map(file => file.replace(".css", ""))
-          )
-        );
-      } else {
-        dispatch(doAlertError(error));
-      }
-    });
   };
 }
 
