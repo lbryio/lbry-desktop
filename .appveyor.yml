@@ -13,6 +13,9 @@ environment:
     secure: iVGwoJ7ogspjSmuqr+haVPLglSgQsp6tUZx6mIlKH7Q=
   AWS_SECRET_ACCESS_KEY:
     secure: zKaqdZGPl0exDL5YhJkb33prSemC9Rzg9S7Lw2wFy1WnJ6ffgl6mQH7jqJDUTqsY
+  CSC_LINK: build\lbry3.pfx
+  CSC_KEY_PASSWORD:
+    secure: u6DydPcdrUJlxGL9uc7yQRYG8+5rY6aAEE9nfCSzFyNzZlX9NniOp8Uh5ZKQqX7bGEngLI6ipbLfiJvn0XFnhbn2iTkOuMqOXVJVOehvwlQ=
 
 skip_branch_with_pr: false
 
