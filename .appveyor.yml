@@ -19,6 +19,8 @@ environment:
 
 skip_branch_with_pr: false
 
+image: Visual Studio 2017
+
 clone_folder: C:\projects\lbry-app
 
 build_script:
