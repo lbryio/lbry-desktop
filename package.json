@@ -21,8 +21,7 @@
     "dist": "yarn compile && electron-builder",
     "dist:dir": "yarn dist -- --dir -c.compression=store -c.mac.identity=null",
     "postinstall": "electron-builder install-app-deps",
-    "precommit": "lint-staged",
-    "prettier": "prettier --trailing-comma es5 --write src/renderer/**/*.{js,jsx}"
+    "precommit": "lint-staged"
   },
   "main": "src/main/index.js",
   "keywords": [
@@ -100,7 +99,7 @@
   },
   "license": "MIT",
   "lint-staged": {
-    "src/renderer/**/*.{jsx,js}": [
+    "src/**/*.{js,jsx}": [
       "prettier --trailing-comma es5 --write",
       "git add"
     ]

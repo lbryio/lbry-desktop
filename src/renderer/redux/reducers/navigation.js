@@ -1,6 +1,5 @@
 import * as types from "constants/action_types";
 import { parseQueryParams } from "util/query_params";
-import amplitude from "amplitude-js";
 
 const currentPath = () => {
   const hash = document.location.hash;
@@ -71,13 +70,7 @@ reducers[types.WINDOW_SCROLLED] = (state, action) => {
 export default function reducer(state = defaultState, action) {
   const handler = reducers[action.type];
   if (handler) {
-    let nextState = handler(state, action);
-    if (nextState.currentPath !== state.currentPath) {
-      amplitude
-        .getInstance()
-        .logEvent("NAVIGATION", { destination: nextState.currentPath });
-    }
-    return nextState;
+    return handler(state, action);
   }
   return state;
 }
