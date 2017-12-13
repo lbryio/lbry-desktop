@@ -12,7 +12,10 @@
       "webpack": {
         "config": "webpack.renderer.additions.js"
       }
-    }
+    },
+    "import/core-modules": [
+      "electron"
+    ]
   },
   "parser": "babel-eslint",
   "env": {
