@@ -4,7 +4,8 @@ import lbry from "lbry";
 import lbryio from "lbryio";
 import lbryuri from "lbryuri";
 import { makeSelectClientSetting } from "redux/selectors/settings";
-import { selectBalance, selectTransactionItems } from "redux/selectors/wallet";
+import { selectMyClaimsRaw } from "redux/selectors/claims";
+import { selectBalance } from "redux/selectors/wallet";
 import {
   makeSelectFileInfoForUri,
   selectDownloadingByOutpoint,
@@ -288,7 +289,9 @@ export function doLoadVideo(uri) {
         });
         dispatch(
           doAlertError(
-            `Failed to download ${uri}, please try again. If this problem persists, visit https://lbry.io/faq/support for support.`
+            `Failed to download ${
+              uri
+            }, please try again. If this problem persists, visit https://lbry.io/faq/support for support.`
           )
         );
       });
@@ -503,8 +506,8 @@ export function doPublish(params) {
 export function doAbandonClaim(txid, nout) {
   return function(dispatch, getState) {
     const state = getState();
-    const transactionItems = selectTransactionItems(state);
-    const { claim_id: claimId, claim_name: name } = transactionItems.find(
+    const myClaims = selectMyClaimsRaw(state);
+    const { claim_id: claimId, name: name } = myClaims.find(
       claim => claim.txid == txid && claim.nout == nout
     );
 
