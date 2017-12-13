@@ -42,9 +42,9 @@ export function doResolveUris(uris) {
       data: { uris },
     });
 
-    let resolveInfo = {};
+    const resolveInfo = {};
     lbry.resolve({ uris: urisToResolve }).then(result => {
-      for (let [uri, uriResolveInfo] of Object.entries(result)) {
+      for (const [uri, uriResolveInfo] of Object.entries(result)) {
         const fallbackResolveInfo = {
           claim: null,
           claims_in_channel: null,
@@ -80,7 +80,7 @@ export function doFetchFeaturedUris() {
 
     const success = ({ Uris }) => {
       let urisToResolve = [];
-      for (let category in Uris) {
+      for (const category in Uris) {
         urisToResolve = [...urisToResolve, ...Uris[category]];
       }
 
@@ -144,7 +144,7 @@ export function doUpdateLoadStatus(uri, outpoint) {
 
     lbry
       .file_list({
-        outpoint: outpoint,
+        outpoint,
         full_status: true,
       })
       .then(([fileInfo]) => {
@@ -239,7 +239,7 @@ export function doDownloadFile(uri, streamInfo) {
 
     lbryio
       .call("file", "view", {
-        uri: uri,
+        uri,
         outpoint: streamInfo.outpoint,
         claim_id: streamInfo.claim_id,
       })
@@ -288,7 +288,9 @@ export function doLoadVideo(uri) {
         });
         dispatch(
           doAlertError(
-            `Failed to download ${uri}, please try again. If this problem persists, visit https://lbry.io/faq/support for support.`
+            `Failed to download ${
+              uri
+            }, please try again. If this problem persists, visit https://lbry.io/faq/support for support.`
           )
         );
       });
@@ -511,7 +513,7 @@ export function doAbandonClaim(txid, nout) {
     dispatch({
       type: types.ABANDON_CLAIM_STARTED,
       data: {
-        claimId: claimId,
+        claimId,
       },
     });
 
@@ -524,7 +526,7 @@ export function doAbandonClaim(txid, nout) {
         dispatch({
           type: types.ABANDON_CLAIM_SUCCEEDED,
           data: {
-            claimId: claimId,
+            claimId,
           },
         });
         dispatch(doResolveUri(lbryuri.build({ name, claimId })));
@@ -536,8 +538,8 @@ export function doAbandonClaim(txid, nout) {
 
     lbry
       .claim_abandon({
-        txid: txid,
-        nout: nout,
+        txid,
+        nout,
       })
       .then(successCallback, errorCallback);
   };

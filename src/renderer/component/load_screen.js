@@ -37,15 +37,14 @@ class LoadScreen extends React.PureComponent {
             ) : (
               <span>
                 <Icon icon="icon-warning" />
-                {" " + this.props.message}
+                {` ${this.props.message}`}
               </span>
             )}
           </h3>
           <span
-            className={
-              "load-screen__details " +
-              (this.props.isWarning ? "load-screen__details--warning" : "")
-            }
+            className={`load-screen__details ${
+              this.props.isWarning ? "load-screen__details--warning" : ""
+            }`}
           >
             {this.props.details}
           </span>

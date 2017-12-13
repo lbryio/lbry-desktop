@@ -95,15 +95,16 @@ rewards.claimReward = function(type) {
         case rewards.TYPE_FIRST_CHANNEL:
           lbry
             .claim_list_mine()
-            .then(function(claims) {
-              let claim = claims.reverse().find(function(claim) {
-                return (
-                  claim.name.length &&
-                  claim.name[0] == "@" &&
-                  claim.txid.length &&
-                  claim.category == "claim"
+            .then(claims => {
+              const claim = claims
+                .reverse()
+                .find(
+                  claim =>
+                    claim.name.length &&
+                    claim.name[0] == "@" &&
+                    claim.txid.length &&
+                    claim.category == "claim"
                 );
-              });
               if (claim) {
                 params.transaction_id = claim.txid;
                 requestReward(resolve, reject, params);
@@ -120,14 +121,15 @@ rewards.claimReward = function(type) {
           lbry
             .claim_list_mine()
             .then(claims => {
-              let claim = claims.reverse().find(function(claim) {
-                return (
-                  claim.name.length &&
-                  claim.name[0] != "@" &&
-                  claim.txid.length &&
-                  claim.category == "claim"
+              const claim = claims
+                .reverse()
+                .find(
+                  claim =>
+                    claim.name.length &&
+                    claim.name[0] != "@" &&
+                    claim.txid.length &&
+                    claim.category == "claim"
                 );
-              });
               if (claim) {
                 params.transaction_id = claim.txid;
                 requestReward(resolve, reject, params);

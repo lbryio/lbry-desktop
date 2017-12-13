@@ -106,7 +106,7 @@ export const createShapeShift = (
 
   const pair = `${originCoin.toLowerCase()}_lbc`;
   const options = {
-    returnAddress: returnAddress,
+    returnAddress,
   };
 
   dispatch({ type: types.PREPARE_SHAPE_SHIFT_START });

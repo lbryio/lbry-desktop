@@ -39,17 +39,17 @@ function savePendingPublish({ name, channel_name }) {
   if (channel_name) {
     uri = lbryuri.build({ name: channel_name, path: name }, false);
   } else {
-    uri = lbryuri.build({ name: name }, false);
+    uri = lbryuri.build({ name }, false);
   }
   ++pendingId;
   const pendingPublishes = getLocal("pendingPublishes") || [];
   const newPendingPublish = {
     name,
     channel_name,
-    claim_id: "pending-" + pendingId,
-    txid: "pending-" + pendingId,
+    claim_id: `pending-${pendingId}`,
+    txid: `pending-${pendingId}`,
     nout: 0,
-    outpoint: "pending-" + pendingId + ":0",
+    outpoint: `pending-${pendingId}:0`,
     time: Date.now(),
   };
   setLocal("pendingPublishes", [...pendingPublishes, newPendingPublish]);
@@ -119,7 +119,7 @@ function pendingPublishToDummyFileInfo({ name, outpoint, claim_id }) {
   return { name, outpoint, claim_id, metadata: null };
 }
 
-//core
+// core
 lbry._connectPromise = null;
 lbry.connect = function() {
   if (lbry._connectPromise === null) {
@@ -203,19 +203,19 @@ lbry.publishDeprecated = function(
 };
 
 lbry.imagePath = function(file) {
-  return staticResourcesPath + "/img/" + file;
+  return `${staticResourcesPath}/img/${file}`;
 };
 
 lbry.getMediaType = function(contentType, fileName) {
   if (contentType) {
     return /^[^/]+/.exec(contentType)[0];
   } else if (fileName) {
-    var dotIndex = fileName.lastIndexOf(".");
+    const dotIndex = fileName.lastIndexOf(".");
     if (dotIndex == -1) {
       return "unknown";
     }
 
-    var ext = fileName.substr(dotIndex + 1);
+    const ext = fileName.substr(dotIndex + 1);
     if (/^mp4|m4v|webm|flv|f4v|ogv$/i.test(ext)) {
       return "video";
     } else if (/^mp3|m4a|aac|wav|flac|ogg|opus$/i.test(ext)) {
@@ -224,12 +224,10 @@ lbry.getMediaType = function(contentType, fileName) {
       /^html|htm|xml|pdf|odf|doc|docx|md|markdown|txt|epub|org$/i.test(ext)
     ) {
       return "document";
-    } else {
-      return "unknown";
     }
-  } else {
     return "unknown";
   }
+  return "unknown";
 };
 
 lbry.getAppVersionInfo = function() {
@@ -273,7 +271,7 @@ lbry.file_list = function(params = {}) {
       fileInfos => {
         removePendingPublishIfNeeded({ name, channel_name, outpoint });
 
-        //if a naked file_list call, append the pending file infos
+        // if a naked file_list call, append the pending file infos
         if (!name && !channel_name && !outpoint) {
           const dummyFileInfos = lbry
             .getPendingPublishes()
@@ -295,11 +293,11 @@ lbry.claim_list_mine = function(params = {}) {
       "claim_list_mine",
       params,
       claims => {
-        for (let { name, channel_name, txid, nout } of claims) {
+        for (const { name, channel_name, txid, nout } of claims) {
           removePendingPublishIfNeeded({
             name,
             channel_name,
-            outpoint: txid + ":" + nout,
+            outpoint: `${txid}:${nout}`,
           });
         }
 
@@ -318,7 +316,7 @@ lbry.resolve = function(params = {}) {
     apiCall(
       "resolve",
       params,
-      function(data) {
+      data => {
         if ("uri" in params) {
           // If only a single URI was requested, don't nest the results in an object
           resolve(data && data[params.uri] ? data[params.uri] : {});
@@ -332,7 +330,7 @@ lbry.resolve = function(params = {}) {
 };
 
 lbry = new Proxy(lbry, {
-  get: function(target, name) {
+  get(target, name) {
     if (name in target) {
       return target[name];
     }

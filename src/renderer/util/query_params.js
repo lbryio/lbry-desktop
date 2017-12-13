@@ -4,12 +4,10 @@ export function parseQueryParams(queryString) {
     .split("?")
     .pop()
     .split("&")
-    .map(function(p) {
-      return p.split("=");
-    });
+    .map(p => p.split("="));
 
   const params = {};
-  parts.forEach(function(arr) {
+  parts.forEach(arr => {
     params[arr[0]] = arr[1];
   });
   return params;
@@ -21,7 +19,7 @@ export function toQueryString(params) {
   const parts = [];
   for (const key in params) {
     if (params.hasOwnProperty(key) && params[key]) {
-      parts.push(key + "=" + params[key]);
+      parts.push(`${key}=${params[key]}`);
     }
   }
   return parts.join("&");

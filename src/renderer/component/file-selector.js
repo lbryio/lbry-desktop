@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 
 const { remote } = require("electron");
+
 class FileSelector extends React.PureComponent {
   static propTypes = {
     type: PropTypes.oneOf(["file", "directory"]),
@@ -40,7 +41,7 @@ class FileSelector extends React.PureComponent {
 
         const path = paths[0];
         this.setState({
-          path: path,
+          path,
         });
         if (this.props.onFileChosen) {
           this.props.onFileChosen(path);

@@ -1,4 +1,5 @@
 const { remote } = require("electron");
+
 const application = remote.app;
 const dock = application.dock;
 const win = remote.BrowserWindow.getFocusedWindow();

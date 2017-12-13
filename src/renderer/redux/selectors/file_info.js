@@ -26,8 +26,8 @@ export const selectIsFetchingFileListDownloadedOrPublished = createSelector(
     isFetchingFileList || isFetchingClaimListMine
 );
 
-export const makeSelectFileInfoForUri = uri => {
-  return createSelector(
+export const makeSelectFileInfoForUri = uri =>
+  createSelector(
     selectClaimsByUri,
     selectFileInfosByOutpoint,
     (claims, byOutpoint) => {
@@ -37,15 +37,14 @@ export const makeSelectFileInfoForUri = uri => {
       return outpoint ? byOutpoint[outpoint] : undefined;
     }
   );
-};
 
 export const selectDownloadingByOutpoint = createSelector(
   _selectState,
   state => state.downloadingByOutpoint || {}
 );
 
-export const makeSelectDownloadingForUri = uri => {
-  return createSelector(
+export const makeSelectDownloadingForUri = uri =>
+  createSelector(
     selectDownloadingByOutpoint,
     makeSelectFileInfoForUri(uri),
     (byOutpoint, fileInfo) => {
@@ -53,16 +52,14 @@ export const makeSelectDownloadingForUri = uri => {
       return byOutpoint[fileInfo.outpoint];
     }
   );
-};
 
 export const selectUrisLoading = createSelector(
   _selectState,
   state => state.urisLoading || {}
 );
 
-export const makeSelectLoadingForUri = uri => {
-  return createSelector(selectUrisLoading, byUri => byUri && byUri[uri]);
-};
+export const makeSelectLoadingForUri = uri =>
+  createSelector(selectUrisLoading, byUri => byUri && byUri[uri]);
 
 export const selectFileInfosPendingPublish = createSelector(
   _selectState,
@@ -72,8 +69,8 @@ export const selectFileInfosPendingPublish = createSelector(
 export const selectFileInfosDownloaded = createSelector(
   selectFileInfosByOutpoint,
   selectMyClaims,
-  (byOutpoint, myClaims) => {
-    return Object.values(byOutpoint).filter(fileInfo => {
+  (byOutpoint, myClaims) =>
+    Object.values(byOutpoint).filter(fileInfo => {
       const myClaimIds = myClaims.map(claim => claim.claim_id);
 
       return (
@@ -81,8 +78,7 @@ export const selectFileInfosDownloaded = createSelector(
         myClaimIds.indexOf(fileInfo.claim_id) === -1 &&
         (fileInfo.completed || fileInfo.written_bytes)
       );
-    });
-  }
+    })
 );
 
 export const selectFileInfosPublished = createSelector(
@@ -157,6 +153,6 @@ export const selectTotalDownloadProgress = createSelector(
     const totalProgress = progress.reduce((a, b) => a + b, 0);
 
     if (fileInfos.length > 0) return totalProgress / fileInfos.length / 100.0;
-    else return -1;
+    return -1;
   }
 );

@@ -24,17 +24,18 @@ export function doSearch(rawQuery) {
     });
 
     if (page != "search") {
-      dispatch(doNavigate("search", { query: query }));
+      dispatch(doNavigate("search", { query }));
     } else {
-      fetch("https://lighthouse.lbry.io/search?s=" + query)
-        .then(response => {
-          return response.status === 200
-            ? Promise.resolve(response.json())
-            : Promise.reject(new Error(response.statusText));
-        })
+      fetch(`https://lighthouse.lbry.io/search?s=${query}`)
+        .then(
+          response =>
+            response.status === 200
+              ? Promise.resolve(response.json())
+              : Promise.reject(new Error(response.statusText))
+        )
         .then(data => {
-          let uris = [];
-          let actions = [];
+          const uris = [];
+          const actions = [];
 
           data.forEach(result => {
             const uri = lbryuri.build({

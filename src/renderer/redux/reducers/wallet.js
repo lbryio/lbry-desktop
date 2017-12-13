@@ -25,7 +25,7 @@ reducers[types.FETCH_TRANSACTIONS_STARTED] = function(state, action) {
 };
 
 reducers[types.FETCH_TRANSACTIONS_COMPLETED] = function(state, action) {
-  let byId = Object.assign({}, state.transactions);
+  const byId = Object.assign({}, state.transactions);
 
   const { transactions } = action.data;
 

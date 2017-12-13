@@ -3,7 +3,8 @@ import {
   doChannelSubscribe,
   doChannelUnsubscribe,
 } from "redux/actions/subscriptions";
-import { selectSubscriptions } from "redux/selectors/subscriptions";;
+import { selectSubscriptions } from "redux/selectors/subscriptions";
+
 import SubscribeButton from "./view";
 
 const select = (state, props) => ({
@@ -12,5 +13,5 @@ const select = (state, props) => ({
 
 export default connect(select, {
   doChannelSubscribe,
-  doChannelUnsubscribe
+  doChannelUnsubscribe,
 })(SubscribeButton);

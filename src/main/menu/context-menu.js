@@ -1,34 +1,33 @@
-const {Menu} = require('electron');
-const electron = require('electron');
+const { Menu } = require("electron");
+const electron = require("electron");
+
 const app = electron.app;
 
 const contextMenuTemplate = [
   {
-    role: 'cut',
+    role: "cut",
   },
   {
-    role: 'copy',
+    role: "copy",
   },
   {
-    role: 'paste',
+    role: "paste",
   },
 ];
 
 module.exports = {
   showContextMenu(win, posX, posY, showDevItems) {
-    let template = contextMenuTemplate.slice();
+    const template = contextMenuTemplate.slice();
     if (showDevItems) {
       template.push({
-        type: 'separator',
+        type: "separator",
       });
-      template.push(
-        {
-          label: 'Inspect Element',
-          click() {
-            win.inspectElement(posX, posY);
-          }
-        }
-      );
+      template.push({
+        label: "Inspect Element",
+        click() {
+          win.inspectElement(posX, posY);
+        },
+      });
     }
 
     Menu.buildFromTemplate(template).popup(win);

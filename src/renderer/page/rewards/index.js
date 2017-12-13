@@ -9,13 +9,11 @@ import { doAuthNavigate, doNavigate } from "redux/actions/navigation";
 import { doRewardList } from "redux/actions/rewards";
 import RewardsPage from "./view";
 
-const select = (state, props) => {
-  return {
-    fetching: selectFetchingRewards(state),
-    rewards: selectUnclaimedRewards(state),
-    user: selectUser(state),
-  };
-};
+const select = (state, props) => ({
+  fetching: selectFetchingRewards(state),
+  rewards: selectUnclaimedRewards(state),
+  user: selectUser(state),
+});
 
 const perform = dispatch => ({
   fetchRewards: () => dispatch(doRewardList()),

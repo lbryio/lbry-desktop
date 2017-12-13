@@ -30,7 +30,7 @@ export class Modal extends React.PureComponent {
       <ReactModal
         onCloseRequested={this.props.onAborted || this.props.onConfirmed}
         {...this.props}
-        className={(this.props.className || "") + " modal"}
+        className={`${this.props.className || ""} modal`}
         overlayClassName={
           ![null, undefined, ""].includes(this.props.overlayClassName)
             ? this.props.overlayClassName

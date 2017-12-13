@@ -14,19 +14,18 @@ export const selectClientSettings = createSelector(
   state => state.clientSettings || {}
 );
 
-export const makeSelectClientSetting = setting => {
-  return createSelector(
+export const makeSelectClientSetting = setting =>
+  createSelector(
     selectClientSettings,
     settings => (settings ? settings[setting] : undefined)
   );
-};
 
 export const selectSettingsIsGenerous = createSelector(
   selectDaemonSettings,
   settings => settings && settings.is_generous_host
 );
 
-//refactor me
+// refactor me
 export const selectShowNsfw = makeSelectClientSetting(settings.SHOW_NSFW);
 
 export const selectLanguages = createSelector(
@@ -36,5 +35,5 @@ export const selectLanguages = createSelector(
 
 export const selectThemePath = createSelector(
   makeSelectClientSetting(settings.THEME),
-  theme => staticResourcesPath + "/themes/" + (theme || "light") + ".css"
+  theme => `${staticResourcesPath}/themes/${theme || "light"}.css`
 );

@@ -9,7 +9,7 @@ reducers[types.RESOLVE_URIS_COMPLETED] = function(state, action) {
   const byUri = Object.assign({}, state.claimsByUri);
   const byId = Object.assign({}, state.byId);
 
-  for (let [uri, { certificate, claim }] of Object.entries(resolveInfo)) {
+  for (const [uri, { certificate, claim }] of Object.entries(resolveInfo)) {
     if (claim) {
       byId[claim.claim_id] = claim;
       byUri[uri] = claim.claim_id;
@@ -51,12 +51,11 @@ reducers[types.FETCH_CLAIM_LIST_MINE_COMPLETED] = function(state, action) {
     .forEach(claim => {
       byId[claim.claim_id] = claim;
 
-      const pending = Object.values(pendingById).find(pendingClaim => {
-        return (
+      const pending = Object.values(pendingById).find(
+        pendingClaim =>
           pendingClaim.name == claim.name &&
           pendingClaim.channel_name == claim.channel_name
-        );
-      });
+      );
 
       if (pending) {
         delete pendingById[pending.claim_id];
@@ -115,7 +114,7 @@ reducers[types.FETCH_CHANNEL_CLAIMS_COMPLETED] = function(state, action) {
 
   const claimsByChannel = Object.assign({}, state.claimsByChannel);
   const byChannel = Object.assign({}, claimsByChannel[uri]);
-  const allClaimIds = new Set(byChannel["all"]);
+  const allClaimIds = new Set(byChannel.all);
   const currentPageClaimIds = [];
   const byId = Object.assign({}, state.byId);
   const fetchingChannelClaims = Object.assign({}, state.fetchingChannelClaims);
@@ -128,7 +127,7 @@ reducers[types.FETCH_CHANNEL_CLAIMS_COMPLETED] = function(state, action) {
     });
   }
 
-  byChannel["all"] = allClaimIds;
+  byChannel.all = allClaimIds;
   byChannel[page] = currentPageClaimIds;
   claimsByChannel[uri] = byChannel;
   delete fetchingChannelClaims[uri];

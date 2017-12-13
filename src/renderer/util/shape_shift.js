@@ -20,7 +20,7 @@ const validateAddress = (coinType, address) => {
 };
 
 export const validateShapeShiftForm = (vals, props) => {
-  let errors = {};
+  const errors = {};
 
   if (!vals.returnAddress) {
     return errors;
@@ -45,6 +45,4 @@ const exampleCoinAddresses = {
     "466XMeJEcowYGx7RzUJj3VDWBZgRWErVQQX6tHYbsacS5QF6v3tidE6LZZnTJgzeEh6bKEEJ6GC9jHirrUKvJwVKVj9e7jm",
 };
 
-export const getExampleAddress = coin => {
-  return exampleCoinAddresses[coin];
-};
+export const getExampleAddress = coin => exampleCoinAddresses[coin];

@@ -3,7 +3,7 @@ import * as settings from "constants/settings";
 import LANGUAGES from "constants/languages";
 
 function getLocalStorageSetting(setting, fallback) {
-  var localStorageVal = localStorage.getItem("setting_" + setting);
+  const localStorageVal = localStorage.getItem(`setting_${setting}`);
   return localStorageVal === null ? fallback : JSON.parse(localStorageVal);
 }
 
@@ -27,7 +27,7 @@ const defaultState = {
     email_collection_acknowledged: getLocalStorageSetting(
       settings.EMAIL_COLLECTION_ACKNOWLEDGED
     ),
-    credit_required_acknowledged: false, //this needs to be re-acknowledged every run
+    credit_required_acknowledged: false, // this needs to be re-acknowledged every run
     language: getLocalStorageSetting(settings.LANGUAGE, "en"),
     theme: getLocalStorageSetting(settings.THEME, "light"),
     themes: getLocalStorageSetting(settings.THEMES, []),
@@ -47,8 +47,8 @@ reducers[types.CLIENT_SETTING_CHANGED] = function(state, action) {
 
   clientSettings[key] = value;
 
-  //this technically probably shouldn't happen here, and should be fixed when we're no longer using localStorage at all for persistent app state
-  localStorage.setItem("setting_" + key, JSON.stringify(value));
+  // this technically probably shouldn't happen here, and should be fixed when we're no longer using localStorage at all for persistent app state
+  localStorage.setItem(`setting_${key}`, JSON.stringify(value));
 
   return Object.assign({}, state, {
     clientSettings,
@@ -62,8 +62,9 @@ reducers[types.DOWNLOAD_LANGUAGE_SUCCEEDED] = function(state, action) {
   const langCode = language.substring(0, 2);
 
   if (LANGUAGES[langCode]) {
-    languages[language] =
-      LANGUAGES[langCode][0] + " (" + LANGUAGES[langCode][1] + ")";
+    languages[language] = `${LANGUAGES[langCode][0]} (${
+      LANGUAGES[langCode][1]
+    })`;
   } else {
     languages[langCode] = langCode;
   }

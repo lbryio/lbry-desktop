@@ -12,8 +12,10 @@ jsonrpc.call = function(
   function checkAndParse(response) {
     if (response.status >= 200 && response.status < 300) {
       return response.json();
-    } else {
-      return response.json().then(json => {
+    }
+    return response
+      .json()
+      .then(json => {
         let error;
         if (json.error) {
           error = new Error(json.error);
@@ -21,10 +23,10 @@ jsonrpc.call = function(
           error = new Error("Protocol error with unknown response signature");
         }
         return Promise.reject(error);
-      }).catch(e => {
+      })
+      .catch(e => {
         console.error(e);
       });
-    }
   }
 
   function makeRequest(url, options) {
@@ -35,9 +37,7 @@ jsonrpc.call = function(
 
       if (timeout) {
         const e = new Error(__("Protocol request timed out"));
-        setTimeout(() => {
-          return reject(e);
-        }, timeout);
+        setTimeout(() => reject(e), timeout);
       }
     });
   }
@@ -48,8 +48,8 @@ jsonrpc.call = function(
     method: "POST",
     body: JSON.stringify({
       jsonrpc: "2.0",
-      method: method,
-      params: params,
+      method,
+      params,
       id: counter,
     }),
   };
@@ -70,11 +70,11 @@ jsonrpc.call = function(
         return errorCallback(error);
       }
 
-      var errorEvent = new CustomEvent("unhandledError", {
+      const errorEvent = new CustomEvent("unhandledError", {
         detail: {
-          connectionString: connectionString,
-          method: method,
-          params: params,
+          connectionString,
+          method,
+          params,
           code: error.code,
           message: error.message || error,
           data: error.data,
@@ -87,11 +87,11 @@ jsonrpc.call = function(
         return connectFailedCallback(e);
       }
 
-      var errorEvent = new CustomEvent("unhandledError", {
+      const errorEvent = new CustomEvent("unhandledError", {
         detail: {
-          connectionString: connectionString,
-          method: method,
-          params: params,
+          connectionString,
+          method,
+          params,
           code: e.response && e.response.status,
           message: __("Connection to API server failed"),
         },

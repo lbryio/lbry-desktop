@@ -19,7 +19,7 @@ export function doNavigate(path, params = {}, options = {}) {
 
     let url = path;
     if (params && Object.values(params).length) {
-      url += "?" + toQueryString(params);
+      url += `?${toQueryString(params)}`;
     }
 
     const scrollY = options.scrollY;

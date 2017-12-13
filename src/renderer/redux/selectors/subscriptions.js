@@ -21,7 +21,7 @@ export const selectSubscriptionsFromClaims = createSelector(
       return [];
     }
 
-    let fetchedSubscriptions = [];
+    const fetchedSubscriptions = [];
 
     savedSubscriptions.forEach(subscription => {
       let channelClaims = [];
@@ -40,9 +40,9 @@ export const selectSubscriptionsFromClaims = createSelector(
       }
 
       // all we really need is a uri for each claim
-      channelClaims = channelClaims.map(claim => {
-        return `${claim.name}#${claim.claim_id}`;
-      })
+      channelClaims = channelClaims.map(
+        claim => `${claim.name}#${claim.claim_id}`
+      );
 
       fetchedSubscriptions.push({
         claims: channelClaims,

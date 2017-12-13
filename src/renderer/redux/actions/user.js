@@ -59,7 +59,7 @@ export function doUserEmailNew(email) {
   return function(dispatch, getState) {
     dispatch({
       type: types.USER_EMAIL_NEW_STARTED,
-      email: email,
+      email,
     });
 
     const success = () => {
@@ -68,30 +68,32 @@ export function doUserEmailNew(email) {
         data: { email },
       });
       dispatch(doUserFetch());
-    }
+    };
 
     const failure = error => {
       dispatch({
         type: types.USER_EMAIL_NEW_FAILURE,
         data: { error },
       });
-    }
+    };
 
     lbryio
       .call(
         "user_email",
         "new",
-        { email: email, send_verification_email: true },
+        { email, send_verification_email: true },
         "post"
       )
       .catch(error => {
         if (error.response && error.response.status == 409) {
-          return lbryio.call(
-            "user_email",
-            "resend_token",
-            { email: email, only_if_expired: true },
-            "post"
-          ).then(success, failure);
+          return lbryio
+            .call(
+              "user_email",
+              "resend_token",
+              { email, only_if_expired: true },
+              "post"
+            )
+            .then(success, failure);
         }
         throw error;
       })
@@ -113,7 +115,7 @@ export function doUserEmailVerify(verificationToken) {
       .call(
         "user_email",
         "confirm",
-        { verification_token: verificationToken, email: email },
+        { verification_token: verificationToken, email },
         "post"
       )
       .then(userEmail => {
@@ -125,7 +127,7 @@ export function doUserEmailVerify(verificationToken) {
           dispatch(doClaimRewardType(rewards.TYPE_CONFIRM_EMAIL)),
             dispatch(doUserFetch());
         } else {
-          throw new Error("Your email is still not verified."); //shouldn't happen
+          throw new Error("Your email is still not verified."); // shouldn't happen
         }
       })
       .catch(error => {
@@ -156,7 +158,7 @@ export function doUserIdentityVerify(stripeToken) {
         } else {
           throw new Error(
             "Your identity is still not verified. This should not happen."
-          ); //shouldn't happen
+          ); // shouldn't happen
         }
       })
       .catch(error => {
@@ -214,7 +216,7 @@ export function doUserInviteNew(email) {
     });
 
     lbryio
-      .call("user", "invite", { email: email }, "post")
+      .call("user", "invite", { email }, "post")
       .then(invite => {
         dispatch({
           type: types.USER_INVITE_NEW_SUCCESS,

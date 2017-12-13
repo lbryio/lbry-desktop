@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { formatCredits, formatFullPrice } from "util/formatCredits";
 import lbry from "../lbry.js";
 
-//component/icon.js
+// component/icon.js
 export class Icon extends React.PureComponent {
   static propTypes = {
     icon: PropTypes.string.isRequired,
@@ -13,12 +13,9 @@ export class Icon extends React.PureComponent {
 
   render() {
     const { fixed, className } = this.props;
-    const spanClassName =
-      "icon " +
-      ("fixed" in this.props ? "icon-fixed-width " : "") +
-      this.props.icon +
-      " " +
-      (this.props.className || "");
+    const spanClassName = `icon ${
+      "fixed" in this.props ? "icon-fixed-width " : ""
+    }${this.props.icon} ${this.props.className || ""}`;
     return <span className={spanClassName} />;
   }
 }
@@ -90,14 +87,14 @@ export class CreditAmount extends React.PureComponent {
     const { amount, precision, showFullPrice } = this.props;
 
     let formattedAmount;
-    let fullPrice = formatFullPrice(amount, 2);
+    const fullPrice = formatFullPrice(amount, 2);
 
     if (showFullPrice) {
       formattedAmount = fullPrice;
     } else {
       formattedAmount =
         amount > 0 && amount < minimumRenderableAmount
-          ? "<" + minimumRenderableAmount
+          ? `<${minimumRenderableAmount}`
           : formatCredits(amount, precision);
     }
 
@@ -111,12 +108,12 @@ export class CreditAmount extends React.PureComponent {
             ? this.props.label
             : parseFloat(amount) == 1 ? __("credit") : __("credits");
 
-        amountText = formattedAmount + " " + label;
+        amountText = `${formattedAmount} ${label}`;
       } else {
         amountText = formattedAmount;
       }
       if (this.props.showPlus && amount > 0) {
-        amountText = "+" + amountText;
+        amountText = `+${amountText}`;
       }
     }
 

@@ -1,136 +1,136 @@
-const { app, shell, Menu } = require('electron');
-const { safeQuit } = require('../index.js');
+const { app, shell, Menu } = require("electron");
+const { safeQuit } = require("../index.js");
 
 const baseTemplate = [
   {
-    label: 'File',
+    label: "File",
     submenu: [
       {
-        label: 'Quit',
+        label: "Quit",
         accelerator: "CommandOrControl+Q",
         click: () => safeQuit(),
       },
-    ]
+    ],
   },
   {
-    label: 'Edit',
+    label: "Edit",
     submenu: [
       {
-        role: 'undo',
+        role: "undo",
       },
       {
-        role: 'redo',
+        role: "redo",
       },
       {
-        type: 'separator',
+        type: "separator",
       },
       {
-        role: 'cut',
+        role: "cut",
       },
       {
-        role: 'copy',
+        role: "copy",
       },
       {
-        role: 'paste',
+        role: "paste",
       },
       {
-        role: 'selectall',
+        role: "selectall",
       },
-    ]
+    ],
   },
   {
-    label: 'View',
+    label: "View",
     submenu: [
       {
-        role: 'reload'
+        role: "reload",
       },
       {
-        label: 'Developer',
+        label: "Developer",
         submenu: [
           {
-            role: 'forcereload'
+            role: "forcereload",
           },
           {
-            role: 'toggledevtools'
+            role: "toggledevtools",
           },
-        ]
+        ],
       },
       {
-        type: 'separator'
+        type: "separator",
       },
       {
-        role: 'togglefullscreen'
-      }
-    ]
+        role: "togglefullscreen",
+      },
+    ],
   },
   {
-    role: 'help',
+    role: "help",
     submenu: [
       {
-        label: 'Learn More',
+        label: "Learn More",
         click(item, focusedWindow) {
           if (focusedWindow) {
-            focusedWindow.webContents.send('open-menu', '/help');
+            focusedWindow.webContents.send("open-menu", "/help");
           }
-        }
+        },
       },
       {
-        label: 'Frequently Asked Questions',
-        click(item, focusedWindow){
-         shell.openExternal('https://lbry.io/faq')
-      }
+        label: "Frequently Asked Questions",
+        click(item, focusedWindow) {
+          shell.openExternal("https://lbry.io/faq");
+        },
       },
       {
-        type: 'separator'
+        type: "separator",
       },
       {
-        label: 'Report Issue',
-        click(item, focusedWindow){
-          shell.openExternal('https://lbry.io/faq/contributing#report-a-bug');
-        }
+        label: "Report Issue",
+        click(item, focusedWindow) {
+          shell.openExternal("https://lbry.io/faq/contributing#report-a-bug");
+        },
       },
       {
-        type: 'separator'
+        type: "separator",
       },
       {
-        label: 'Developer API Guide',
-        click(item, focusedWindow){
-          shell.openExternal('https://lbry.io/quickstart')
-        }
+        label: "Developer API Guide",
+        click(item, focusedWindow) {
+          shell.openExternal("https://lbry.io/quickstart");
+        },
       },
-    ]
-  }
+    ],
+  },
 ];
 
 const macOSAppMenuTemplate = {
   label: app.getName(),
   submenu: [
     {
-      role: 'about',
+      role: "about",
     },
     {
-      type: 'separator',
+      type: "separator",
     },
     {
-      role: 'hide',
+      role: "hide",
     },
     {
-      role: 'hideothers',
+      role: "hideothers",
     },
     {
-      role: 'unhide',
+      role: "unhide",
     },
     {
-      type: 'separator',
+      type: "separator",
     },
     {
-      role: 'quit',
+      role: "quit",
     },
-  ]
+  ],
 };
 
 module.exports = () => {
-    let template = baseTemplate.slice();
-    (process.platform === 'darwin') && template.unshift(macOSAppMenuTemplate);
-    Menu.setApplicationMenu(Menu.buildFromTemplate(template));
+  const template = baseTemplate.slice();
+  process.platform === "darwin" && template.unshift(macOSAppMenuTemplate);
+  Menu.setApplicationMenu(Menu.buildFromTemplate(template));
 };

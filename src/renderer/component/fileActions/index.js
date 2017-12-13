@@ -8,7 +8,7 @@ import FileActions from "./view";
 
 const select = (state, props) => ({
   fileInfo: makeSelectFileInfoForUri(props.uri)(state),
-  /*availability check is disabled due to poor performance, TBD if it dies forever or requires daemon fix*/
+  /* availability check is disabled due to poor performance, TBD if it dies forever or requires daemon fix */
   costInfo: makeSelectCostInfoForUri(props.uri)(state),
   claimIsMine: makeSelectClaimIsMine(props.uri)(state),
 });

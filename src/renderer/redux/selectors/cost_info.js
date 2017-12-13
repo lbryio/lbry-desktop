@@ -8,12 +8,11 @@ export const selectAllCostInfoByUri = createSelector(
   state => state.byUri || {}
 );
 
-export const makeSelectCostInfoForUri = uri => {
-  return createSelector(
+export const makeSelectCostInfoForUri = uri =>
+  createSelector(
     selectAllCostInfoByUri,
     costInfos => costInfos && costInfos[uri]
   );
-};
 
 export const selectCostForCurrentPageUri = createSelector(
   selectAllCostInfoByUri,
@@ -27,9 +26,8 @@ export const selectFetchingCostInfo = createSelector(
   state => state.fetching || {}
 );
 
-export const makeSelectFetchingCostInfoForUri = uri => {
-  return createSelector(
+export const makeSelectFetchingCostInfoForUri = uri =>
+  createSelector(
     selectFetchingCostInfo,
     fetchingByUri => fetchingByUri && fetchingByUri[uri]
   );
-};

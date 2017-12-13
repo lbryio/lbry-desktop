@@ -20,7 +20,7 @@ export const selectTransactionItems = createSelector(
     Object.keys(byId).forEach(txid => {
       const tx = byId[txid];
 
-      //ignore dust/fees
+      // ignore dust/fees
       // it is fee only txn if all infos are also empty
       if (
         Math.abs(tx.value) === Math.abs(tx.fee) &&
@@ -31,7 +31,7 @@ export const selectTransactionItems = createSelector(
         return;
       }
 
-      let append = [];
+      const append = [];
 
       append.push(
         ...tx.claim_info.map(item =>
@@ -63,16 +63,16 @@ export const selectTransactionItems = createSelector(
 
       items.push(
         ...append.map(item => {
-          //value on transaction, amount on outpoint
-          //amount is always positive, but should match sign of value
+          // value on transaction, amount on outpoint
+          // amount is always positive, but should match sign of value
           const amount = parseFloat(
             item.balance_delta ? item.balance_delta : item.value
           );
 
           return {
-            txid: txid,
+            txid,
             date: tx.timestamp ? new Date(parseInt(tx.timestamp) * 1000) : null,
-            amount: amount,
+            amount,
             fee: amount < 0 ? -1 * tx.fee / append.length : 0,
             claim_id: item.claim_id,
             claim_name: item.claim_name,
@@ -89,19 +89,15 @@ export const selectTransactionItems = createSelector(
 export const selectRecentTransactions = createSelector(
   selectTransactionItems,
   transactions => {
-    let threshold = new Date();
+    const threshold = new Date();
     threshold.setDate(threshold.getDate() - 7);
-    return transactions.filter(transaction => {
-      return transaction.date > threshold;
-    });
+    return transactions.filter(transaction => transaction.date > threshold);
   }
 );
 
 export const selectHasTransactions = createSelector(
   selectTransactionItems,
-  transactions => {
-    return transactions && transactions.length > 0;
-  }
+  transactions => transactions && transactions.length > 0
 );
 
 export const selectIsFetchingTransactions = createSelector(
@@ -146,10 +142,9 @@ export const selectDraftTransactionError = createSelector(
 
 export const selectBlocks = createSelector(_selectState, state => state.blocks);
 
-export const makeSelectBlockDate = block => {
-  return createSelector(
+export const makeSelectBlockDate = block =>
+  createSelector(
     selectBlocks,
     blocks =>
       blocks && blocks[block] ? new Date(blocks[block].time * 1000) : undefined
   );
-};

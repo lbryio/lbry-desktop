@@ -24,18 +24,16 @@ const select = (state, props) => {
   };
 };
 
-const perform = dispatch => () => {
-  return {
-    addBalance: () => {
-      dispatch(doSetClientSetting(settings.CREDIT_REQUIRED_ACKNOWLEDGED, true));
-      dispatch(doNavigate("/getcredits"));
-      dispatch(doCloseModal());
-    },
-    closeModal: () => {
-      dispatch(doSetClientSetting(settings.CREDIT_REQUIRED_ACKNOWLEDGED, true));
-      dispatch(doCloseModal());
-    },
-  };
-};
+const perform = dispatch => () => ({
+  addBalance: () => {
+    dispatch(doSetClientSetting(settings.CREDIT_REQUIRED_ACKNOWLEDGED, true));
+    dispatch(doNavigate("/getcredits"));
+    dispatch(doCloseModal());
+  },
+  closeModal: () => {
+    dispatch(doSetClientSetting(settings.CREDIT_REQUIRED_ACKNOWLEDGED, true));
+    dispatch(doCloseModal());
+  },
+});
 
 export default connect(select, perform)(ModalCreditIntro);

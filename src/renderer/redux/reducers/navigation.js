@@ -4,7 +4,7 @@ import { parseQueryParams } from "util/query_params";
 const currentPath = () => {
   const hash = document.location.hash;
   if (hash !== "") return hash.replace(/^#/, "");
-  else return "/discover";
+  return "/discover";
 };
 
 const reducers = {};
@@ -34,7 +34,7 @@ reducers[types.HISTORY_NAVIGATE] = (state, action) => {
   const { stack, index } = state;
   const { url: path, index: newIndex, scrollY } = action.data;
 
-  let newState = {
+  const newState = {
     currentPath: path,
   };
 
@@ -46,7 +46,7 @@ reducers[types.HISTORY_NAVIGATE] = (state, action) => {
     newState.index = newState.stack.length - 1;
   }
 
-  history.replaceState(null, null, "#" + path); //this allows currentPath() to retain the URL on reload
+  history.replaceState(null, null, `#${path}`); // this allows currentPath() to retain the URL on reload
   return Object.assign({}, state, newState);
 };
 
@@ -61,7 +61,7 @@ reducers[types.WINDOW_SCROLLED] = (state, action) => {
       }
       return {
         ...stackItem,
-        scrollY: scrollY,
+        scrollY,
       };
     }),
   });

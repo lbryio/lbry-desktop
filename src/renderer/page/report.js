@@ -71,10 +71,9 @@ class ReportPage extends React.Component {
                 onClick={event => {
                   this.submitMessage(event);
                 }}
-                className={
-                  "button-block button-primary " +
-                  (this.state.submitting ? "disabled" : "")
-                }
+                className={`button-block button-primary ${
+                  this.state.submitting ? "disabled" : ""
+                }`}
               >
                 {this.state.submitting
                   ? __("Submitting...")

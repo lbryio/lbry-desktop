@@ -18,9 +18,11 @@ import { selectCurrentModal } from "redux/selectors/app";
 
 const { remote, ipcRenderer, shell } = require("electron");
 const path = require("path");
+
 const { download } = remote.require("electron-dl");
 const fs = remote.require("fs");
 const { lbrySettings: config } = require("package.json");
+
 const CHECK_UPGRADE_INTERVAL = 10 * 60 * 1000;
 
 export function doOpenModal(modal, modalProps = {}) {
@@ -43,7 +45,7 @@ export function doUpdateDownloadProgress(percent) {
   return {
     type: types.UPGRADE_DOWNLOAD_PROGRESSED,
     data: {
-      percent: percent,
+      percent,
     },
   };
 }
@@ -72,7 +74,7 @@ export function doDownloadUpgrade() {
       ),
       upgradeFilename = selectUpgradeFilename(state);
 
-    let options = {
+    const options = {
       onProgress: p => dispatch(doUpdateDownloadProgress(Math.round(p * 100))),
       directory: dir,
     };

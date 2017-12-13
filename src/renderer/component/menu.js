@@ -16,7 +16,7 @@ export class DropDownMenuItem extends React.PureComponent {
   };
 
   render() {
-    var icon = this.props.icon ? <Icon icon={this.props.icon} fixed /> : null;
+    const icon = this.props.icon ? <Icon icon={this.props.icon} fixed /> : null;
 
     return (
       <a
@@ -70,7 +70,7 @@ export class DropDownMenu extends React.PureComponent {
     });
   }
 
-  /*this will force "this" to always be the class, even when passed to an event listener*/
+  /* this will force "this" to always be the class, even when passed to an event listener */
   handleWindowClick = e => {
     if (
       this.state.menuOpen &&

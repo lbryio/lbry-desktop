@@ -34,17 +34,15 @@ export function doFetchFileInfo(uri) {
         },
       });
 
-      lbry
-        .file_list({ outpoint: outpoint, full_status: true })
-        .then(fileInfos => {
-          dispatch({
-            type: types.FETCH_FILE_INFO_COMPLETED,
-            data: {
-              outpoint,
-              fileInfo: fileInfos && fileInfos.length ? fileInfos[0] : null,
-            },
-          });
+      lbry.file_list({ outpoint, full_status: true }).then(fileInfos => {
+        dispatch({
+          type: types.FETCH_FILE_INFO_COMPLETED,
+          data: {
+            outpoint,
+            fileInfo: fileInfos && fileInfos.length ? fileInfos[0] : null,
+          },
         });
+      });
     }
   };
 }
@@ -91,7 +89,7 @@ export function doDeleteFile(outpoint, deleteFromComputer, abandonClaim) {
     const state = getState();
 
     lbry.file_delete({
-      outpoint: outpoint,
+      outpoint,
       delete_from_download_dir: deleteFromComputer,
     });
 

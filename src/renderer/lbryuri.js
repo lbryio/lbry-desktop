@@ -103,7 +103,7 @@ lbryuri.parse = function(uri, requireProto = false) {
   if (
     claimId &&
     (claimId.length > CLAIM_ID_MAX_LEN || !claimId.match(/^[0-9a-f]+$/)) &&
-    !claimId.match(/^pending/) //ought to be dropped when savePendingPublish drops hack
+    !claimId.match(/^pending/) // ought to be dropped when savePendingPublish drops hack
   ) {
     throw new Error(__(`Invalid claim ID %s.`, claimId));
   }
@@ -166,7 +166,7 @@ lbryuri.build = function(uriObj, includeProto = true, allowExtraProps = false) {
   if (channelName) {
     const channelNameFormatted = channelName.startsWith("@")
       ? channelName
-      : "@" + channelName;
+      : `@${channelName}`;
     if (!name) {
       name = channelNameFormatted;
     } else if (name !== channelNameFormatted) {

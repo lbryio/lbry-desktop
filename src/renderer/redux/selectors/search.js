@@ -23,19 +23,18 @@ export const selectSearchUrisByQuery = createSelector(
   state => state.urisByQuery
 );
 
-export const makeSelectSearchUris = query => {
-  //replace statement below is kind of ugly, and repeated in doSearch action
-  return createSelector(
+export const makeSelectSearchUris = query =>
+  // replace statement below is kind of ugly, and repeated in doSearch action
+  createSelector(
     selectSearchUrisByQuery,
     byQuery => byQuery[query ? query.replace(/^lbry:\/\//i, "") : query]
   );
-};
 
 export const selectWunderBarAddress = createSelector(
   selectCurrentPage,
   selectPageTitle,
   selectSearchQuery,
-  (page, title, query) => (page != "search" ? title : query ? query : title)
+  (page, title, query) => (page != "search" ? title : query || title)
 );
 
 export const selectWunderBarIcon = createSelector(

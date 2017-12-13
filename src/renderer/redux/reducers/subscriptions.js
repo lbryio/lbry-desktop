@@ -5,7 +5,7 @@ import { handleActions } from "util/redux-utils";
 // Subscription redux types
 export type SubscriptionState = {
   subscriptions: Array<Subscription>,
-  hasFetchedSubscriptions: boolean
+  hasFetchedSubscriptions: boolean,
 };
 
 export type Subscription = {
@@ -25,15 +25,18 @@ type doChannelUnsubscribe = {
 };
 
 type HasFetchedSubscriptions = {
-  type: actions.HAS_FETCHED_SUBSCRIPTIONS
-}
+  type: actions.HAS_FETCHED_SUBSCRIPTIONS,
+};
 
-export type Action = doChannelSubscribe | doChannelUnsubscribe | HasFetchedSubscriptions;
+export type Action =
+  | doChannelSubscribe
+  | doChannelUnsubscribe
+  | HasFetchedSubscriptions;
 export type Dispatch = (action: Action) => any;
 
 const defaultState = {
   subscriptions: [],
-  hasFetchedSubscriptions: false
+  hasFetchedSubscriptions: false,
 };
 
 export default handleActions(
@@ -43,7 +46,7 @@ export default handleActions(
       action: doChannelSubscribe
     ): SubscriptionState => {
       const newSubscription: Subscription = action.data;
-      let newSubscriptions: Array<Subscription> = state.subscriptions.slice();
+      const newSubscriptions: Array<Subscription> = state.subscriptions.slice();
       newSubscriptions.unshift(newSubscription);
 
       return {
@@ -59,9 +62,10 @@ export default handleActions(
 
       const newSubscriptions = state.subscriptions
         .slice()
-        .filter(subscription => {
-          return subscription.channelName !== subscriptionToRemove.channelName;
-        });
+        .filter(
+          subscription =>
+            subscription.channelName !== subscriptionToRemove.channelName
+        );
 
       return {
         ...state,
@@ -73,8 +77,8 @@ export default handleActions(
       action: HasFetchedSubscriptions
     ): SubscriptionState => ({
       ...state,
-      hasFetchedSubscriptions: true
-    })
+      hasFetchedSubscriptions: true,
+    }),
   },
   defaultState
 );

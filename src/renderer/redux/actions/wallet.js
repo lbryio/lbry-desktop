@@ -11,14 +11,14 @@ import * as modals from "constants/modal_types";
 
 export function doUpdateBalance() {
   return function(dispatch, getState) {
-    lbry.wallet_balance().then(balance => {
-      return dispatch({
+    lbry.wallet_balance().then(balance =>
+      dispatch({
         type: types.UPDATE_BALANCE,
         data: {
-          balance: balance,
+          balance,
         },
-      });
-    });
+      })
+    );
   };
 }
 
@@ -35,14 +35,16 @@ export function doFetchTransactions(fetch_tip_info = true) {
       type: types.FETCH_TRANSACTIONS_STARTED,
     });
 
-    lbry.transaction_list({ include_tip_info: fetch_tip_info }).then(results => {
-      dispatch({
-        type: types.FETCH_TRANSACTIONS_COMPLETED,
-        data: {
-          transactions: results,
-        },
+    lbry
+      .transaction_list({ include_tip_info: fetch_tip_info })
+      .then(results => {
+        dispatch({
+          type: types.FETCH_TRANSACTIONS_COMPLETED,
+          data: {
+            transactions: results,
+          },
+        });
       });
-    });
   };
 }
 
@@ -63,7 +65,7 @@ export function doGetNewAddress() {
       type: types.GET_NEW_ADDRESS_STARTED,
     });
 
-    lbry.wallet_new_address().then(function(address) {
+    lbry.wallet_new_address().then(address => {
       localStorage.setItem("wallet_address", address);
       dispatch({
         type: types.GET_NEW_ADDRESS_COMPLETED,
@@ -201,8 +203,8 @@ export function doSendSupport(amount, claim_id, uri) {
 
     lbry
       .wallet_send({
-        claim_id: claim_id,
-        amount: amount,
+        claim_id,
+        amount,
       })
       .then(successCallback, errorCallback);
   };

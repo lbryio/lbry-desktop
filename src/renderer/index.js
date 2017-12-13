@@ -15,12 +15,15 @@ import "scss/all.scss";
 
 const env = process.env.NODE_ENV || "production";
 const { remote, ipcRenderer, shell } = require("electron");
+
 const contextMenu = remote.require("./main.js").contextMenu;
 const app = require("./app");
 
 // Workaround for https://github.com/electron-userland/electron-webpack/issues/52
-if (process.env.NODE_ENV !== 'development') {
-  window.staticResourcesPath = require("path").join(remote.app.getAppPath(), "../static").replace(/\\/g, "\\\\");
+if (process.env.NODE_ENV !== "development") {
+  window.staticResourcesPath = require("path")
+    .join(remote.app.getAppPath(), "../static")
+    .replace(/\\/g, "\\\\");
 } else {
   window.staticResourcesPath = "";
 }
@@ -56,12 +59,12 @@ ipcRenderer.on("window-is-focused", (event, data) => {
 });
 
 document.addEventListener("click", event => {
-  var target = event.target;
+  let target = event.target;
   while (target && target !== document) {
     if (target.matches("a") || target.matches("button")) {
       // TODO: Look into using accessiblity labels (this would also make the app more accessible)
-      let hrefParts = window.location.href.split("#");
-      let element = target.title || (target.text && target.text.trim());
+      const hrefParts = window.location.href.split("#");
+      const element = target.title || (target.text && target.text.trim());
       if (element) {
         amplitude.getInstance().logEvent("CLICK", {
           target: element,
@@ -89,7 +92,7 @@ document.addEventListener("click", event => {
 
 const initialState = app.store.getState();
 
-var init = function() {
+const init = function() {
   app.store.dispatch(doDownloadLanguages());
 
   function onDaemonReady() {
@@ -99,8 +102,8 @@ var init = function() {
         "0b130efdcbdbf86ec2f7f9eff354033e",
         info.lbry_id,
         null,
-        function() {
-          window.sessionStorage.setItem("loaded", "y"); //once we've made it here once per session, we don't need to show splash again
+        () => {
+          window.sessionStorage.setItem("loaded", "y"); // once we've made it here once per session, we don't need to show splash again
           app.store.dispatch(doDaemonReady());
 
           ReactDOM.render(
@@ -110,7 +113,7 @@ var init = function() {
                 <SnackBar />
               </div>
             </Provider>,
-            document.getElementById('app')
+            document.getElementById("app")
           );
         }
       );
@@ -124,7 +127,7 @@ var init = function() {
       <Provider store={store}>
         <SplashScreen onReadyToLaunch={onDaemonReady} />
       </Provider>,
-      document.getElementById('app')
+      document.getElementById("app")
     );
   }
 };

@@ -1,4 +1,5 @@
 const { remote } = require("electron");
+
 const application = remote.app;
 const win = remote.getCurrentWindow();
 

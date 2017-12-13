@@ -22,28 +22,25 @@ export const selectPlayingUri = createSelector(
   state => state.playingUri
 );
 
-export const makeSelectIsUriResolving = uri => {
-  return createSelector(
+export const makeSelectIsUriResolving = uri =>
+  createSelector(
     selectResolvingUris,
     resolvingUris => resolvingUris && resolvingUris.indexOf(uri) != -1
   );
-};
 
 export const selectChannelClaimCounts = createSelector(
   _selectState,
   state => state.channelClaimCounts || {}
 );
 
-export const makeSelectTotalItemsForChannel = uri => {
-  return createSelector(selectChannelClaimCounts, byUri => byUri && byUri[uri]);
-};
+export const makeSelectTotalItemsForChannel = uri =>
+  createSelector(selectChannelClaimCounts, byUri => byUri && byUri[uri]);
 
-export const makeSelectTotalPagesForChannel = uri => {
-  return createSelector(
+export const makeSelectTotalPagesForChannel = uri =>
+  createSelector(
     selectChannelClaimCounts,
     byUri => byUri && byUri[uri] && Math.ceil(byUri[uri] / 10)
   );
-};
 
 export const selectRewardContentClaimIds = createSelector(
   _selectState,

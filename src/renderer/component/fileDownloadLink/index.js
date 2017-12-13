@@ -13,7 +13,7 @@ import FileDownloadLink from "./view";
 
 const select = (state, props) => ({
   fileInfo: makeSelectFileInfoForUri(props.uri)(state),
-  /*availability check is disabled due to poor performance, TBD if it dies forever or requires daemon fix*/
+  /* availability check is disabled due to poor performance, TBD if it dies forever or requires daemon fix */
   downloading: makeSelectDownloadingForUri(props.uri)(state),
   costInfo: makeSelectCostInfoForUri(props.uri)(state),
   loading: makeSelectLoadingForUri(props.uri)(state),

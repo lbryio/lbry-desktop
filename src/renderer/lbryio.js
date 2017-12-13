@@ -48,18 +48,17 @@ lbryio.call = function(resource, action, params = {}, method = "get") {
   function checkAndParse(response) {
     if (response.status >= 200 && response.status < 300) {
       return response.json();
-    } else {
-      return response.json().then(json => {
-        let error;
-        if (json.error) {
-          error = new Error(json.error);
-        } else {
-          error = new Error("Unknown API error signature");
-        }
-        error.response = response; //this is primarily a hack used in actions/user.js
-        return Promise.reject(error);
-      });
     }
+    return response.json().then(json => {
+      let error;
+      if (json.error) {
+        error = new Error(json.error);
+      } else {
+        error = new Error("Unknown API error signature");
+      }
+      error.response = response; // this is primarily a hack used in actions/user.js
+      return Promise.reject(error);
+    });
   }
 
   function makeRequest(url, options) {
@@ -92,8 +91,8 @@ lbryio.call = function(resource, action, params = {}, method = "get") {
 
 lbryio._authToken = null;
 
-lbryio.getAuthToken = () => {
-  return new Promise((resolve, reject) => {
+lbryio.getAuthToken = () =>
+  new Promise((resolve, reject) => {
     if (lbryio._authToken) {
       resolve(lbryio._authToken);
     } else {
@@ -104,16 +103,13 @@ lbryio.getAuthToken = () => {
       ipcRenderer.send("get-auth-token");
     }
   });
-};
 
 lbryio.setAuthToken = token => {
   lbryio._authToken = token ? token.toString().trim() : null;
   ipcRenderer.send("set-auth-token", token);
 };
 
-lbryio.getCurrentUser = () => {
-  return lbryio.call("user", "me");
-};
+lbryio.getCurrentUser = () => lbryio.call("user", "me");
 
 lbryio.authenticate = function() {
   if (!lbryio.enabled) {
@@ -141,12 +137,8 @@ lbryio.authenticate = function() {
           // check that token works
           return lbryio
             .getCurrentUser()
-            .then(() => {
-              return true;
-            })
-            .catch(() => {
-              return false;
-            });
+            .then(() => true)
+            .catch(() => false);
         })
         .then(isTokenValid => {
           if (isTokenValid) {
@@ -155,8 +147,8 @@ lbryio.authenticate = function() {
 
           return lbry
             .status()
-            .then(status => {
-              return lbryio.call(
+            .then(status =>
+              lbryio.call(
                 "user",
                 "new",
                 {
@@ -165,8 +157,8 @@ lbryio.authenticate = function() {
                   app_id: status.installation_id,
                 },
                 "post"
-              );
-            })
+              )
+            )
             .then(response => {
               if (!response.auth_token) {
                 throw new Error(__("auth_token is missing from response"));
@@ -182,10 +174,9 @@ lbryio.authenticate = function() {
   return lbryio._authenticationPromise;
 };
 
-lbryio.getStripeToken = () => {
-  return CONNECTION_STRING.startsWith("http://localhost:")
+lbryio.getStripeToken = () =>
+  CONNECTION_STRING.startsWith("http://localhost:")
     ? "pk_test_NoL1JWL7i1ipfhVId5KfDZgo"
     : "pk_live_e8M4dRNnCCbmpZzduEUZBgJO";
-};
 
 export default lbryio;

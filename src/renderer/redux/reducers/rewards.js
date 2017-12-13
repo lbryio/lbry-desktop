@@ -3,7 +3,7 @@ import * as types from "constants/action_types";
 const reducers = {};
 const defaultState = {
   fetching: false,
-  claimedRewardsById: {}, //id => reward
+  claimedRewardsById: {}, // id => reward
   unclaimedRewardsByType: {},
   claimPendingByType: {},
   claimErrorsByType: {},
@@ -64,7 +64,10 @@ reducers[types.CLAIM_REWARD_STARTED] = function(state, action) {
 reducers[types.CLAIM_REWARD_SUCCESS] = function(state, action) {
   const { reward } = action.data;
 
-  let unclaimedRewardsByType = Object.assign({}, state.unclaimedRewardsByType);
+  const unclaimedRewardsByType = Object.assign(
+    {},
+    state.unclaimedRewardsByType
+  );
   const existingReward = unclaimedRewardsByType[reward.reward_type];
   delete state.unclaimedRewardsByType[reward.reward_type];
 
@@ -73,7 +76,7 @@ reducers[types.CLAIM_REWARD_SUCCESS] = function(state, action) {
     reward_description: existingReward.reward_description,
   });
 
-  let claimedRewardsById = Object.assign({}, state.claimedRewardsById);
+  const claimedRewardsById = Object.assign({}, state.claimedRewardsById);
   claimedRewardsById[reward.id] = newReward;
 
   const newState = Object.assign({}, state, {

@@ -40,12 +40,11 @@ export const selectAllClaimsByChannel = createSelector(
   state => state.claimsByChannel || {}
 );
 
-export const makeSelectClaimForUri = uri => {
-  return createSelector(
+export const makeSelectClaimForUri = uri =>
+  createSelector(
     selectClaimsByUri,
     claims => claims && claims[lbryuri.normalize(uri)]
   );
-};
 
 export const makeSelectClaimIsMine = rawUri => {
   const uri = lbryuri.normalize(rawUri);
@@ -65,12 +64,11 @@ export const selectAllFetchingChannelClaims = createSelector(
   state => state.fetchingChannelClaims || {}
 );
 
-export const makeSelectFetchingChannelClaims = uri => {
-  return createSelector(
+export const makeSelectFetchingChannelClaims = uri =>
+  createSelector(
     selectAllFetchingChannelClaims,
     fetching => fetching && fetching[uri]
   );
-};
 
 export const makeSelectClaimsInChannelForCurrentPage = uri => {
   const pageSelector = makeSelectCurrentParam("page");
@@ -90,30 +88,27 @@ export const makeSelectClaimsInChannelForCurrentPage = uri => {
   );
 };
 
-export const makeSelectMetadataForUri = uri => {
-  return createSelector(makeSelectClaimForUri(uri), claim => {
+export const makeSelectMetadataForUri = uri =>
+  createSelector(makeSelectClaimForUri(uri), claim => {
     const metadata =
       claim && claim.value && claim.value.stream && claim.value.stream.metadata;
 
-    const value = metadata ? metadata : claim === undefined ? undefined : null;
+    const value = metadata || (claim === undefined ? undefined : null);
     return value;
   });
-};
 
-export const makeSelectTitleForUri = uri => {
-  return createSelector(
+export const makeSelectTitleForUri = uri =>
+  createSelector(
     makeSelectMetadataForUri(uri),
     metadata => metadata && metadata.title
   );
-};
 
-export const makeSelectContentTypeForUri = uri => {
-  return createSelector(makeSelectClaimForUri(uri), claim => {
+export const makeSelectContentTypeForUri = uri =>
+  createSelector(makeSelectClaimForUri(uri), claim => {
     const source =
       claim && claim.value && claim.value.stream && claim.value.stream.source;
     return source ? source.contentType : undefined;
   });
-};
 
 export const selectIsFetchingClaimListMine = createSelector(
   _selectState,
@@ -203,7 +198,7 @@ export const selectMyChannelClaims = createSelector(
 
     ids.forEach(id => {
       if (byId[id]) {
-        //I'm not sure why this check is necessary, but it ought to be a quick fix for https://github.com/lbryio/lbry-app/issues/544
+        // I'm not sure why this check is necessary, but it ought to be a quick fix for https://github.com/lbryio/lbry-app/issues/544
         claims.push(byId[id]);
       }
     });

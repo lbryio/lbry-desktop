@@ -17,7 +17,7 @@ export function formatFullPrice(amount, precision) {
     const index = decimals.indexOf(first);
 
     // Set format fraction
-    formated = "." + fraction.substring(0, index + precision);
+    formated = `.${fraction.substring(0, index + precision)}`;
   }
 
   return parseFloat(quantity[0] + formated);

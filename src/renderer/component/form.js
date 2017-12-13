@@ -8,7 +8,7 @@ let formFieldCounter = 0;
 export const formFieldNestedLabelTypes = ["radio", "checkbox"];
 
 export function formFieldId() {
-  return "form-field-" + ++formFieldCounter;
+  return `form-field-${++formFieldCounter}`;
 }
 
 export class Form extends React.PureComponent {
@@ -129,21 +129,19 @@ export class FormRow extends React.PureComponent {
 
     return (
       <div
-        className={"form-row" + (this.state.isFocus ? " form-row--focus" : "")}
+        className={`form-row${this.state.isFocus ? " form-row--focus" : ""}`}
       >
         {this.props.label && !renderLabelInFormField ? (
           <div
-            className={
-              "form-row__label-row " +
-              (this.props.labelPrefix ? "form-row__label-row--prefix" : "")
-            }
+            className={`form-row__label-row ${
+              this.props.labelPrefix ? "form-row__label-row--prefix" : ""
+            }`}
           >
             <label
               htmlFor={elementId}
-              className={
-                "form-field__label " +
-                (this.state.isError ? "form-field__label--error" : " ")
-              }
+              className={`form-field__label ${
+                this.state.isError ? "form-field__label--error" : " "
+              }`}
             >
               {this.props.label}
             </label>
@@ -178,16 +176,14 @@ export class FormRow extends React.PureComponent {
 export const Submit = props => {
   const { title, label, icon, disabled } = props;
 
-  const className =
-    "button-block" +
+  const className = `${"button-block" +
     " button-primary" +
     " button-set-item" +
-    " button--submit" +
-    (disabled ? " disabled" : "");
+    " button--submit"}${disabled ? " disabled" : ""}`;
 
   const content = (
     <span className="button__content">
-      {"icon" in props ? <Icon icon={icon} fixed={true} /> : null}
+      {"icon" in props ? <Icon icon={icon} fixed /> : null}
       {label ? <span className="button-label">{label}</span> : null}
     </span>
   );

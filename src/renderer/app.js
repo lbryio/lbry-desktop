@@ -6,18 +6,19 @@ const config = {
   ...require(`./config/${env}`),
 };
 const i18n = require("y18n")({
-  directory: remote.app.getAppPath() + "/locales",
+  directory: `${remote.app.getAppPath()}/locales`,
   updateFiles: false,
   locale: "en",
 });
+
 const logs = [];
 const app = {
-  env: env,
-  config: config,
-  store: store,
-  i18n: i18n,
-  logs: logs,
-  log: function(message) {
+  env,
+  config,
+  store,
+  i18n,
+  logs,
+  log(message) {
     logs.push(message);
   },
 };

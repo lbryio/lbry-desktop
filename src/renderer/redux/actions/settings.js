@@ -22,7 +22,7 @@ export function doFetchDaemonSettings() {
 
 export function doSetDaemonSetting(key, value) {
   return function(dispatch, getState) {
-    let settings = {};
+    const settings = {};
     settings[key] = value;
     lbry.settings_set(settings).then(settings);
     lbry.settings_get().then(settings => {
@@ -49,19 +49,13 @@ export function doSetClientSetting(key, value) {
 export function doGetThemes() {
   return function(dispatch, getState) {
     const themes = ["light", "dark"];
-    dispatch(
-      doSetClientSetting(
-        settings.THEMES,
-        themes
-      )
-    );
-
+    dispatch(doSetClientSetting(settings.THEMES, themes));
   };
 }
 
 export function doDownloadLanguage(langFile) {
   return function(dispatch, getState) {
-    const destinationPath = app.i18n.directory + "/" + langFile;
+    const destinationPath = `${app.i18n.directory}/${langFile}`;
     const language = langFile.replace(".json", "");
     const req = http.get(
       {
@@ -82,7 +76,7 @@ export function doDownloadLanguage(langFile) {
             // push to our local list
             dispatch({
               type: types.DOWNLOAD_LANGUAGE_SUCCEEDED,
-              data: { language: language },
+              data: { language },
             });
           });
 
@@ -102,7 +96,7 @@ export function doDownloadLanguage(langFile) {
       });
     };
 
-    req.setTimeout(30000, function() {
+    req.setTimeout(30000, () => {
       req.abort();
     });
 
@@ -114,7 +108,7 @@ export function doDownloadLanguage(langFile) {
 
 export function doDownloadLanguages() {
   return function(dispatch, getState) {
-    //temporarily disable i18n so I can get a working build out -- Jeremy
+    // temporarily disable i18n so I can get a working build out -- Jeremy
     return;
 
     if (!fs.existsSync(app.i18n.directory)) {
@@ -124,11 +118,10 @@ export function doDownloadLanguages() {
     function checkStatus(response) {
       if (response.status >= 200 && response.status < 300) {
         return response;
-      } else {
-        throw new Error(
-          __("The list of available languages could not be retrieved.")
-        );
       }
+      throw new Error(
+        __("The list of available languages could not be retrieved.")
+      );
     }
 
     function parseJSON(response) {

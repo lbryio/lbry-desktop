@@ -8,12 +8,10 @@ import {
 import { doCheckDaemonVersion } from "redux/actions/app";
 import SplashScreen from "./view";
 
-const select = state => {
-  return {
-    modal: selectCurrentModal(state),
-    daemonVersionMatched: selectDaemonVersionMatched(state),
-  };
-};
+const select = state => ({
+  modal: selectCurrentModal(state),
+  daemonVersionMatched: selectDaemonVersionMatched(state),
+});
 
 const perform = dispatch => ({
   checkDaemonVersion: () => dispatch(doCheckDaemonVersion()),
