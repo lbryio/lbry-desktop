@@ -8,15 +8,17 @@ Web UI version numbers should always match the corresponding version of LBRY App
 
 ## [Unreleased]
 ### Added
-  *
+  * Added empty rewards message on overview page (https://github.com/lbryio/lbry-app/pull/847).
   *
 
 ### Changed
-  *
+  * Updated developer tools and restructured code (https://github.com/lbryio/lbry-app/pull/861)(https://github.com/lbryio/lbry-app/pull/862).
   *
 
 ### Fixed
-  *
+  * Fixed typos (https://github.com/lbryio/lbry-app/pull/845)(https://github.com/lbryio/lbry-app/pull/846).
+  * Fixed theme-related error while running in development (https://github.com/lbryio/lbry-app/pull/865).
+  * Fixed build/signing error on Windows (https://github.com/lbryio/lbry-app/pull/864).
   *
 
 ### Deprecated
