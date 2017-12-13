@@ -99,7 +99,7 @@ if ! cmd_exists yarn; then
     curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | $SUDO apt-key add -
     echo "deb https://dl.yarnpkg.com/debian/ stable main" | $SUDO tee /etc/apt/sources.list.d/yarn.list
     $SUDO apt-get update
-    $SUDO apt-get install yarn
+    $SUDO apt-get -o Dpkg::Options::="--force-overwrite" install yarn
   elif $OSX; then
     brew install yarn
   else
