@@ -21,7 +21,8 @@
     "dist": "yarn compile && electron-builder",
     "dist:dir": "yarn dist -- --dir -c.compression=store -c.mac.identity=null",
     "postinstall": "electron-builder install-app-deps",
-    "precommit": "lint-staged"
+    "precommit": "lint-staged",
+    "lint": "eslint src/"
   },
   "main": "src/main/index.js",
   "keywords": [
@@ -76,6 +77,14 @@
     "electron-builder": "^19.48.2",
     "electron-devtools-installer": "^2.2.1",
     "electron-webpack": "^1.11.0",
+    "electron-webpack-eslint": "^1.2.0",
+    "eslint-config-airbnb": "^16.1.0",
+    "eslint-config-prettier": "^2.9.0",
+    "eslint-import-resolver-webpack": "^0.8.3",
+    "eslint-plugin-flowtype": "^2.40.1",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-jsx-a11y": "^6.0.3",
+    "eslint-plugin-react": "^7.5.1",
     "flow-babel-webpack-plugin": "^1.1.0",
     "flow-bin": "^0.61.0",
     "flow-typed": "^2.2.3",
