@@ -16,6 +16,7 @@ const Link = props => {
     navigateParams,
     doNavigate,
     className,
+    span,
   } = props;
 
   const combinedClassName =
@@ -26,7 +27,8 @@ const Link = props => {
 
   const onClick =
     !props.onClick && navigate
-      ? () => {
+      ? e => {
+          e.stopPropagation();
           doNavigate(navigate, navigateParams || {});
         }
       : props.onClick;
@@ -44,16 +46,18 @@ const Link = props => {
     );
   }
 
-  return (
-    <a
-      className={combinedClassName}
-      href={href || "javascript:;"}
-      title={title}
-      onClick={onClick}
-      {...("style" in props ? { style: style } : {})}
-    >
-      {content}
-    </a>
+  const linkProps = {
+    className: combinedClassName,
+    href: href || "javascript:;",
+    title,
+    onClick,
+    style,
+  };
+
+  return span ? (
+    <span {...linkProps}>{content}</span>
+  ) : (
+    <a {...linkProps}>{content}</a>
   );
 };
 
