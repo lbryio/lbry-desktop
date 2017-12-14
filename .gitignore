@@ -12,6 +12,7 @@
 /lbry-app
 /lbry-venv
 /static/daemon/lbrynet*
+/static/locales
 /daemon/build
 /daemon/venv
 /daemon/requirements.txt

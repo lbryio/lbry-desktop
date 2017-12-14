@@ -1,7 +1,7 @@
 const extract = require("i18n-extract");
 const fs = require("fs");
 
-const dir = `${__dirname}/../../dist/locales`;
+const dir = `${__dirname}/../../static/locales`;
 const path = `${dir}/en.json`;
 
 if (!fs.existsSync(dir)) {

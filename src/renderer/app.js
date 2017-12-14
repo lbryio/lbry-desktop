@@ -1,12 +1,15 @@
-import store from "store.js";
+import store from "store";
 import { remote } from "electron";
+import path from "path";
 
 const env = process.env.NODE_ENV || "production";
 const config = {
   ...require(`./config/${env}`),
 };
 const i18n = require("y18n")({
-  directory: `${remote.app.getAppPath()}/locales`,
+  directory: path
+    .join(remote.app.getAppPath(), "/../static/locales")
+    .replace(/\\/g, "\\\\"),
   updateFiles: false,
   locale: "en",
 });
