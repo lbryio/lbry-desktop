@@ -21,7 +21,7 @@ class WalletAddress extends React.PureComponent {
               "Use this wallet address to receive credits sent by another user (or yourself)."
             )}
           </p>
-          <Address address={receiveAddress} />
+          <Address address={receiveAddress} showCopyButton />
         </div>
         <div className="card__actions">
           <Link
