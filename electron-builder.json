@@ -1,7 +1,7 @@
 {
   "appId": "io.lbry.LBRY",
   "mac": {
-    "category": "public.app-category.entertainment",
+    "category": "public.app-category.entertainment"
   },
   "dmg": {
     "iconSize": 128,
@@ -34,6 +34,7 @@
   ],
   "linux": {
     "target": "deb",
+    "category": "Video",
     "desktop": {
       "MimeType": "x-scheme-handler/lbry",
       "Exec": "/opt/LBRY/lbry %U"
