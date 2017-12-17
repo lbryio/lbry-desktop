@@ -9,13 +9,8 @@ import github
 import uritemplate
 import boto3
 
-S3_BUCKET = 'releases.lbry.io'
-RELEASES_S3_PATH = 'app'
-LATEST_S3_PATH = 'app/latest'
-
 def main():
     upload_to_github_if_tagged('lbryio/lbry-app')
-    upload_to_s3(RELEASES_S3_PATH)
 
 
 def get_asset_path():
@@ -50,60 +45,6 @@ def get_latest_file_path():
   latestfilematches = glob.glob(this_dir + '/../dist/latest*.yml')
 
   return latestfilematches[0] if latestfilematches else None
-
-
-def upload_to_s3(folder):
-    asset_path = get_asset_path()
-
-    if 'AWS_ACCESS_KEY_ID' not in os.environ or 'AWS_SECRET_ACCESS_KEY' not in os.environ:
-        print 'Must set AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY to publish assets to s3'
-        return 1
-
-    asset_filename = os.path.basename(asset_path)
-
-    tag = subprocess.check_output(['git', 'describe', '--always', '--abbrev=8', 'HEAD']).strip()
-    commit_date = subprocess.check_output([
-        'git', 'show', '-s', '--format=%cd', '--date=format:%Y%m%d-%H%I%S', 'HEAD']).strip()
-    key = folder + '/' + commit_date + '-' + tag + '/' + asset_filename
-
-    print "Uploading asset file at " + asset_path + " to s3://" + S3_BUCKET + '/' + key
-
-    s3 = boto3.resource(
-        's3',
-        aws_access_key_id=os.environ['AWS_ACCESS_KEY_ID'],
-        aws_secret_access_key=os.environ['AWS_SECRET_ACCESS_KEY'],
-        config=boto3.session.Config(signature_version='s3v4')
-    )
-
-    s3.Object(S3_BUCKET, key).upload_file(asset_path)
-
-    # Populate the update bucket (update.lbry.io)
-
-    update_asset_path = get_update_asset_path()
-    if asset_path == update_asset_path:
-        # If the update asset and the regular built file are the same, we can
-        # just copy over.
-        print "Copying asset file to s3://" + S3_BUCKET + "/" + LATEST_S3_PATH + "/" + asset_filename
-        s3.Object(S3_BUCKET, LATEST_S3_PATH + "/" + asset_filename).copy_from(CopySource={
-            'Bucket': S3_BUCKET,
-            'Key': key
-        })
-    else:
-        update_asset_filename = os.path.basename(update_asset_path)
-        print "Uploading update asset file at", update_asset_path, \
-              "to s3://" + S3_BUCKET + "/" + LATEST_S3_PATH + "/" + update_asset_filename
-        s3.Object(S3_BUCKET, LATEST_S3_PATH + "/" + update_asset_filename).upload_file(update_asset_path)
-
-    metadatafilepath = get_latest_file_path()
-
-    if metadatafilepath is not None:
-        # For some reason latest-linux.yml isn't being created, but it's OK because updates don't
-        # work on Linux yet anyway.
-        metadatafilename = os.path.basename(metadatafilepath)
-
-        print "Uploading update metadata file at", metadatafilepath, "to S3"
-        s3.Object(S3_BUCKET, LATEST_S3_PATH + "/" + metadatafilename).upload_file(metadatafilepath)
-
 
 def upload_to_github_if_tagged(repo_name):
     try:
