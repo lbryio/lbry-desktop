@@ -124,9 +124,10 @@ class VideoPlayer extends React.PureComponent {
     }
   }
 
-  pauseVideo() {
-    console.log("pauseVideo called");
-    this.refs.media.children[0].pause();
+  componentWillReceiveProps() {
+    console.log("!!VIDEO PLAYA RECIEVE PROPS:", this.props);
+    // console.log("pauseVideo called");
+    // this.refs.media.children[0].pause();
   }
 
   componentDidUpdate() {
@@ -176,19 +177,28 @@ class VideoPlayer extends React.PureComponent {
 
     return (
       <div>
-        {["audio", "application"].indexOf(mediaType) !== -1 &&
-          (!this.playableType() || hasMetadata) &&
-          !unplayable && <Thumbnail src={poster} className="video-embedded" />}
-        {this.playableType() &&
-          !hasMetadata &&
-          !unplayable && <LoadingScreen status={noMetadataMessage} />}
-        {unplayable && (
-          <LoadingScreen status={unplayableMessage} spinner={false} />
-        )}
-        <div ref="media" className="media" />
+        <p>videoPause: {videoPause}</p>
+        <div>
+          {["audio", "application"].indexOf(mediaType) !== -1 &&
+            (!this.playableType() || hasMetadata) &&
+            !unplayable && (
+              <Thumbnail src={poster} className="video-embedded" />
+            )}
+          {this.playableType() &&
+            !hasMetadata &&
+            !unplayable && <LoadingScreen status={noMetadataMessage} />}
+          {unplayable && (
+            <LoadingScreen status={unplayableMessage} spinner={false} />
+          )}
+          <div ref="media" className="media" />
+        </div>
       </div>
     );
   }
 }
 
-export default VideoPlayer;
+const select = (state, props) => ({
+  videoPause: selectVideoPause(state),
+});
+
+export default connect(select, {})(VideoPlayer);
