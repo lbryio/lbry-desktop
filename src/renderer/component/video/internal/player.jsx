@@ -5,6 +5,9 @@ import player from "render-media";
 import fs from "fs";
 import LoadingScreen from "./loading-screen";
 
+import { connect } from "react-redux";
+import { selectVideoPause } from "redux/selectors/video";
+
 class VideoPlayer extends React.PureComponent {
   static MP3_CONTENT_TYPES = ["audio/mpeg3", "audio/mpeg"];
 
@@ -121,6 +124,11 @@ class VideoPlayer extends React.PureComponent {
     }
   }
 
+  pauseVideo() {
+    console.log("pauseVideo called");
+    this.refs.media.children[0].pause();
+  }
+
   componentDidUpdate() {
     const { contentType, downloadCompleted } = this.props;
     const { startedPlaying } = this.state;
@@ -157,12 +165,14 @@ class VideoPlayer extends React.PureComponent {
   }
 
   render() {
-    const { mediaType, poster } = this.props;
+    const { mediaType, poster, videoPause } = this.props;
     const { hasMetadata, unplayable } = this.state;
     const noMetadataMessage = "Waiting for metadata.";
     const unplayableMessage = "Sorry, looks like we can't play this file.";
 
     const needsMetadata = this.playableType();
+
+    console.log("VideoPlayer render; videoPause:", videoPause);
 
     return (
       <div>

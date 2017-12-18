@@ -42,7 +42,14 @@ class FileDownloadLink extends React.PureComponent {
       purchaseUri,
       costInfo,
       loading,
+      videoPause,
     } = this.props;
+
+    const openFile = () => {
+      openInShell(fileInfo.download_path);
+      console.log("FileDownloadLink view");
+      videoPause(true);
+    };
 
     if (loading || downloading) {
       const progress =
@@ -93,7 +100,7 @@ class FileDownloadLink extends React.PureComponent {
           button="text"
           icon="icon-external-link-square"
           className="no-underline"
-          onClick={() => openInShell(fileInfo.download_path)}
+          onClick={() => openFile()}
         />
       );
     }

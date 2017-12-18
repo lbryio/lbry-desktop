@@ -8,6 +8,7 @@ import NsfwOverlay from "component/nsfwOverlay";
 class Video extends React.PureComponent {
   constructor(props) {
     super(props);
+    console.log("PROPS:", props);
     this.state = {
       showNsfwHelp: false,
     };
@@ -56,7 +57,10 @@ class Video extends React.PureComponent {
       changeVolume,
       volume,
       uri,
+      videoPause,
     } = this.props;
+
+    console.log("VIDEO VIEW videoPause:", videoPause);
 
     const isPlaying = playingUri === uri;
     const isReadyToPlay = fileInfo && fileInfo.written_bytes > 0;
@@ -110,6 +114,7 @@ class Video extends React.PureComponent {
               downloadCompleted={fileInfo.completed}
               changeVolume={changeVolume}
               volume={volume}
+              videoPause={videoPause}
             />
           ))}
         {!isPlaying && (
