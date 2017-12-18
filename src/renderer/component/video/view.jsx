@@ -8,10 +8,16 @@ import NsfwOverlay from "component/nsfwOverlay";
 class Video extends React.PureComponent {
   constructor(props) {
     super(props);
-    console.log("PROPS:", props);
+    console.log("video view props", props);
     this.state = {
       showNsfwHelp: false,
     };
+  }
+
+  componentWillReceiveProps() {
+    console.log("!!VIDEO PLAYA RECIEVE PROPS:", this.props);
+    // console.log("pauseVideo called");
+    // this.refs.media.children[0].pause();
   }
 
   componentWillUnmount() {

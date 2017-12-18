@@ -5,8 +5,8 @@ import player from "render-media";
 import fs from "fs";
 import LoadingScreen from "./loading-screen";
 
-import { connect } from "react-redux";
-import { selectVideoPause } from "redux/selectors/video";
+// import { connect } from "react-redux";
+// import { selectVideoPause } from "redux/selectors/video";
 
 class VideoPlayer extends React.PureComponent {
   static MP3_CONTENT_TYPES = ["audio/mpeg3", "audio/mpeg"];
@@ -124,12 +124,6 @@ class VideoPlayer extends React.PureComponent {
     }
   }
 
-  componentWillReceiveProps() {
-    console.log("!!VIDEO PLAYA RECIEVE PROPS:", this.props);
-    // console.log("pauseVideo called");
-    // this.refs.media.children[0].pause();
-  }
-
   componentDidUpdate() {
     const { contentType, downloadCompleted } = this.props;
     const { startedPlaying } = this.state;
@@ -177,28 +171,19 @@ class VideoPlayer extends React.PureComponent {
 
     return (
       <div>
-        <p>videoPause: {videoPause}</p>
-        <div>
-          {["audio", "application"].indexOf(mediaType) !== -1 &&
-            (!this.playableType() || hasMetadata) &&
-            !unplayable && (
-              <Thumbnail src={poster} className="video-embedded" />
-            )}
-          {this.playableType() &&
-            !hasMetadata &&
-            !unplayable && <LoadingScreen status={noMetadataMessage} />}
-          {unplayable && (
-            <LoadingScreen status={unplayableMessage} spinner={false} />
-          )}
-          <div ref="media" className="media" />
-        </div>
+        {["audio", "application"].indexOf(mediaType) !== -1 &&
+          (!this.playableType() || hasMetadata) &&
+          !unplayable && <Thumbnail src={poster} className="video-embedded" />}
+        {this.playableType() &&
+          !hasMetadata &&
+          !unplayable && <LoadingScreen status={noMetadataMessage} />}
+        {unplayable && (
+          <LoadingScreen status={unplayableMessage} spinner={false} />
+        )}
+        <div ref="media" className="media" />
       </div>
     );
   }
 }
 
-const select = (state, props) => ({
-  videoPause: selectVideoPause(state),
-});
-
-export default connect(select, {})(VideoPlayer);
+export default VideoPlayer;
