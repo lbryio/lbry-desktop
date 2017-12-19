@@ -48,7 +48,7 @@ Lastly, don't feel limited by this list. Should LBRY have built-in Tor support? 
 Name | Role | Discord | Email
 --- | --- | --- | ---
 [Liam](https://github.com/liamcardenas) | The application engineer in charge of community development. He is the person to contact with any development/contribution related questions. | liamsdouble | liam@lbry.io
-[Tom](https://github.com/tzarebczan) | Community manager. He knows more than anyone about the app and all of its flaws. Reach out to him with any questions about how the app works, if a bug has been reported, or if a feature should be requested. | jigglytom | tom@lbry.io
+[Tom](https://github.com/tzarebczan) | Community manager. He knows more than anyone about the app and all of its flaws. Reach out to him with any questions about how the app works, if a bug has been reported, or if a feature should be requested. | jiggytom | tom@lbry.io
 [Sean](https://github.com/seanyesmunt) | An application engineer who focuses largely on UI/UX. If you have a design or implementation question, feel free to reach out to him. | sean | sean@lbry.io
 
 Join our discord [here](https://chat.lbry.io/).
