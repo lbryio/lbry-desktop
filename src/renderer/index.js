@@ -19,8 +19,10 @@ const contextMenu = remote.require("./main.js").contextMenu;
 const app = require("./app");
 
 // Workaround for https://github.com/electron-userland/electron-webpack/issues/52
-if (process.env.NODE_ENV !== 'development') {
-  window.staticResourcesPath = require("path").join(remote.app.getAppPath(), "../static").replace(/\\/g, "\\\\");
+if (process.env.NODE_ENV !== "development") {
+  window.staticResourcesPath = require("path")
+    .join(remote.app.getAppPath(), "../static")
+    .replace(/\\/g, "\\\\");
 } else {
   window.staticResourcesPath = "";
 }
@@ -54,6 +56,16 @@ ipcRenderer.on("window-is-focused", (event, data) => {
   app.store.dispatch({ type: types.WINDOW_FOCUSED });
   dock.setBadge("");
 });
+
+(function(history) {
+  var replaceState = history.replaceState;
+  history.replaceState = function(_, __, path) {
+    amplitude
+      .getInstance()
+      .logEvent("NAVIGATION", { destination: path ? path.slice(1) : path });
+    return replaceState.apply(history, arguments);
+  };
+})(window.history);
 
 document.addEventListener("click", event => {
   var target = event.target;
@@ -110,7 +122,7 @@ var init = function() {
                 <SnackBar />
               </div>
             </Provider>,
-            document.getElementById('app')
+            document.getElementById("app")
           );
         }
       );
@@ -124,7 +136,7 @@ var init = function() {
       <Provider store={store}>
         <SplashScreen onReadyToLaunch={onDaemonReady} />
       </Provider>,
-      document.getElementById('app')
+      document.getElementById("app")
     );
   }
 };
