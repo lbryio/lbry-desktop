@@ -19,8 +19,10 @@ const contextMenu = remote.require("./main.js").contextMenu;
 const app = require("./app");
 
 // Workaround for https://github.com/electron-userland/electron-webpack/issues/52
-if (process.env.NODE_ENV !== 'development') {
-  window.staticResourcesPath = require("path").join(remote.app.getAppPath(), "../static").replace(/\\/g, "\\\\");
+if (process.env.NODE_ENV !== "development") {
+  window.staticResourcesPath = require("path")
+    .join(remote.app.getAppPath(), "../static")
+    .replace(/\\/g, "\\\\");
 } else {
   window.staticResourcesPath = "";
 }
@@ -55,13 +57,24 @@ ipcRenderer.on("window-is-focused", (event, data) => {
   dock.setBadge("");
 });
 
+(function(history) {
+  var replaceState = history.replaceState;
+  history.replaceState = function(_, __, path) {
+    amplitude
+      .getInstance()
+      .logEvent("NAVIGATION", { destination: path ? path.slice(1) : path });
+    return replaceState.apply(history, arguments);
+  };
+})(window.history);
+
 document.addEventListener("click", event => {
   var target = event.target;
   while (target && target !== document) {
     if (target.matches("a") || target.matches("button")) {
       // TODO: Look into using accessiblity labels (this would also make the app more accessible)
       let hrefParts = window.location.href.split("#");
-      let element = target.title || (target.text && target.text.trim());
+      let element =
+        target.title || (target.textContent && target.textContent.trim());
       if (element) {
         amplitude.getInstance().logEvent("CLICK", {
           target: element,
@@ -72,6 +85,7 @@ document.addEventListener("click", event => {
         amplitude.getInstance().logEvent("UNMARKED_CLICK", {
           location:
             hrefParts.length > 1 ? hrefParts[hrefParts.length - 1] : "/",
+          source: target.outerHTML,
         });
       }
     }
@@ -110,7 +124,7 @@ var init = function() {
                 <SnackBar />
               </div>
             </Provider>,
-            document.getElementById('app')
+            document.getElementById("app")
           );
         }
       );
@@ -124,7 +138,7 @@ var init = function() {
       <Provider store={store}>
         <SplashScreen onReadyToLaunch={onDaemonReady} />
       </Provider>,
-      document.getElementById('app')
+      document.getElementById("app")
     );
   }
 };

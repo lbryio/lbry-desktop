@@ -9,7 +9,6 @@ import {
 } from "redux/selectors/navigation";
 import { doSearch } from "redux/actions/search";
 import { toQueryString } from "util/query_params";
-import amplitude from "amplitude-js";
 
 export function doNavigate(path, params = {}, options = {}) {
   return function(dispatch, getState) {
@@ -23,8 +22,6 @@ export function doNavigate(path, params = {}, options = {}) {
     }
 
     const scrollY = options.scrollY;
-
-    amplitude.getInstance().logEvent("NAVIGATION", { destination: url });
 
     dispatch({
       type: types.HISTORY_NAVIGATE,
