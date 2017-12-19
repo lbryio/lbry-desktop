@@ -2,6 +2,14 @@
 
 You found this page! That means you are well on your way to contributing to the LBRY app. This application is primarily written in JavaScript and is built on [Electron](https://electronjs.org) while utilizing [React](https://reactjs.org) and [Redux](https://redux.js.org) for UI and application state.
 
+## TL;DR?
+* [Here](https://github.com/lbryio/lbry-app/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22+no%3Aassignee) is a list of help wanted issues.
+* Comment on an issue to let us know if you are going to work on it, don't take an issue that someone has reserved less than 3 days ago
+* Submit a pull request and get paid in LBC
+* Don't hesitate to contact us with any questions or comments
+
+## Longer Version
+
 LBRY is an open source project, and therefore is developed out in the open for everyone to see. What you see here are the latest source code changes and issues.
 
 Since LBRY is an based around a decentralized community, we believe that the app will be strongest if it receives contributions from individuals outside the core team -- such as yourself!
