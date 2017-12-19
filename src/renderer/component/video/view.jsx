@@ -8,17 +8,9 @@ import NsfwOverlay from "component/nsfwOverlay";
 class Video extends React.PureComponent {
   constructor(props) {
     super(props);
-    // console.log("video view props", props);
     this.state = {
       showNsfwHelp: false,
-      // videoPause: false,
     };
-  }
-
-  componentWillReceiveProps(nextProps) {
-    console.log("VIDEO COMPONENT WILL RECIEVE NEXTPROPS:", nextProps);
-    // this.setState({videoPause: nextProps.videoPause});
-    // this.refs.media.children[0].pause();
   }
 
   componentWillUnmount() {
@@ -65,9 +57,15 @@ class Video extends React.PureComponent {
       volume,
       uri,
       videoPause,
+      // setVideoPause,
     } = this.props;
 
-    console.log("VIDEO VIEW videoPause:", videoPause);
+    // console.log("setVideoPause", setVideoPause);
+
+    const confirmVideoPause = val => {
+      console.log("this.props.setVideoPause:", this.props.setVideoPause);
+      this.props.setVideoPause(val);
+    };
 
     const isPlaying = playingUri === uri;
     const isReadyToPlay = fileInfo && fileInfo.written_bytes > 0;
@@ -103,38 +101,37 @@ class Video extends React.PureComponent {
     const poster = metadata.thumbnail;
 
     return (
-      <div>
-        <p>videoPause: {videoPause}</p>
-        <div
-          className={klasses.join(" ")}
-          onMouseEnter={this.handleMouseOver.bind(this)}
-          onMouseLeave={this.handleMouseOut.bind(this)}
-        >
-          {isPlaying &&
-            (!isReadyToPlay ? (
-              <LoadingScreen status={loadStatusMessage} />
-            ) : (
-              <VideoPlayer
-                filename={fileInfo.file_name}
-                poster={poster}
-                downloadPath={fileInfo.download_path}
-                mediaType={mediaType}
-                contentType={contentType}
-                downloadCompleted={fileInfo.completed}
-                changeVolume={changeVolume}
-                volume={volume}
-              />
-            ))}
-          {!isPlaying && (
-            <div
-              className="video__cover"
-              style={{ backgroundImage: 'url("' + metadata.thumbnail + '")' }}
-            >
-              <VideoPlayButton {...this.props} mediaType={mediaType} />
-            </div>
-          )}
-          {this.state.showNsfwHelp && <NsfwOverlay />}
-        </div>
+      <div
+        className={klasses.join(" ")}
+        onMouseEnter={this.handleMouseOver.bind(this)}
+        onMouseLeave={this.handleMouseOut.bind(this)}
+      >
+        {isPlaying &&
+          (!isReadyToPlay ? (
+            <LoadingScreen status={loadStatusMessage} />
+          ) : (
+            <VideoPlayer
+              filename={fileInfo.file_name}
+              poster={poster}
+              downloadPath={fileInfo.download_path}
+              mediaType={mediaType}
+              contentType={contentType}
+              downloadCompleted={fileInfo.completed}
+              changeVolume={changeVolume}
+              volume={volume}
+              videoPause={videoPause}
+              confirmVideoPause={confirmVideoPause}
+            />
+          ))}
+        {!isPlaying && (
+          <div
+            className="video__cover"
+            style={{ backgroundImage: 'url("' + metadata.thumbnail + '")' }}
+          >
+            <VideoPlayButton {...this.props} mediaType={mediaType} />
+          </div>
+        )}
+        {this.state.showNsfwHelp && <NsfwOverlay />}
       </div>
     );
   }

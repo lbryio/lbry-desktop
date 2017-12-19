@@ -25,7 +25,7 @@ const perform = dispatch => ({
   openInShell: path => dispatch(doOpenFileInShell(path)),
   purchaseUri: uri => dispatch(doPurchaseUri(uri)),
   restartDownload: (uri, outpoint) => dispatch(doStartDownload(uri, outpoint)),
-  videoPause: val => dispatch(setVideoPause(val)),
+  setVideoPause: val => dispatch(setVideoPause(val)),
 });
 
 export default connect(select, perform)(FileDownloadLink);

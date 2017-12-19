@@ -35,6 +35,7 @@ const perform = dispatch => ({
   play: uri => dispatch(doPlayUri(uri)),
   cancelPlay: () => dispatch(doSetPlayingUri(null)),
   changeVolume: volume => dispatch(doChangeVolume(volume)),
+  setVideoPause: val => dispatch(setVideoPause(val)),
 });
 
 export default connect(select, perform)(Video);

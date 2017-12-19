@@ -42,13 +42,12 @@ class FileDownloadLink extends React.PureComponent {
       purchaseUri,
       costInfo,
       loading,
-      videoPause,
+      setVideoPause,
     } = this.props;
 
     const openFile = () => {
       openInShell(fileInfo.download_path);
-      console.log("FileDownloadLink view");
-      videoPause(true);
+      setVideoPause(true);
     };
 
     if (loading || downloading) {
