@@ -4,7 +4,6 @@ import { Thumbnail } from "component/common";
 import player from "render-media";
 import fs from "fs";
 import LoadingScreen from "./loading-screen";
-import { setVideoPause } from "../../../redux/actions/video";
 
 class VideoPlayer extends React.PureComponent {
   static MP3_CONTENT_TYPES = ["audio/mpeg3", "audio/mpeg"];
@@ -24,7 +23,7 @@ class VideoPlayer extends React.PureComponent {
   componentWillReceiveProps(nextProps) {
     if (nextProps.videoPause) {
       this.refs.media.children[0].pause();
-      this.props.confirmVideoPause(false);
+      this.props.setVideoPause(false);
     }
   }
 

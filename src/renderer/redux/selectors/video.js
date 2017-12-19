@@ -3,7 +3,7 @@ import { createSelector } from "reselect";
 
 const _selectState = state => state.video || {};
 
-export const selectVideoPause = createSelector(_selectState, state => {
-  console.log("VIDEO PAUSE SELECTOR", state);
-  return state.videoPause;
-});
+export const selectVideoPause = createSelector(
+  _selectState,
+  state => state.videoPause
+);

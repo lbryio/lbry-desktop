@@ -19,11 +19,7 @@ export default handleActions(
     [actions.SET_VIDEO_PAUSE]: (
       state: VideoState,
       action: setVideoPause
-    ): VideoState => {
-      console.log("VIDEO REDUCER STATE", state);
-      console.log("VIDEO REDUCER ACTION", action);
-      return { ...state, videoPause: action.data };
-    },
+    ): VideoState => ({ ...state, videoPause: action.data }),
   },
   defaultState
 );

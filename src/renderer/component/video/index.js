@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { doChangeVolume } from "redux/actions/app";
 import { selectVolume } from "redux/selectors/app";
 import { doPlayUri, doSetPlayingUri } from "redux/actions/content";
+import { setVideoPause } from "redux/actions/video";
 import {
   makeSelectMetadataForUri,
   makeSelectContentTypeForUri,
