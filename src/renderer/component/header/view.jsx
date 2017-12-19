@@ -46,6 +46,7 @@ export const Header = props => {
           onClick={() => navigate("/subscriptions")}
           button="alt button--flat"
           icon="icon-at"
+          title={__("My Subscriptions")}
         />
       </div>
       <div className="header__item header__item--wunderbar">

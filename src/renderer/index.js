@@ -73,7 +73,8 @@ document.addEventListener("click", event => {
     if (target.matches("a") || target.matches("button")) {
       // TODO: Look into using accessiblity labels (this would also make the app more accessible)
       let hrefParts = window.location.href.split("#");
-      let element = target.title || (target.text && target.text.trim());
+      let element =
+        target.title || (target.textContent && target.textContent.trim());
       if (element) {
         amplitude.getInstance().logEvent("CLICK", {
           target: element,
@@ -84,6 +85,7 @@ document.addEventListener("click", event => {
         amplitude.getInstance().logEvent("UNMARKED_CLICK", {
           location:
             hrefParts.length > 1 ? hrefParts[hrefParts.length - 1] : "/",
+          source: target.outerHTML,
         });
       }
     }
