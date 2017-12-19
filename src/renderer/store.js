@@ -13,6 +13,7 @@ import userReducer from "redux/reducers/user";
 import walletReducer from "redux/reducers/wallet";
 import shapeShiftReducer from "redux/reducers/shape_shift";
 import subscriptionsReducer from "redux/reducers/subscriptions";
+import videoReducer from "redux/reducers/video";
 import { persistStore, autoRehydrate } from "redux-persist";
 import createCompressor from "redux-persist-transform-compress";
 import createFilter from "redux-persist-transform-filter";
@@ -20,7 +21,7 @@ import localForage from "localforage";
 import { createStore, applyMiddleware, compose, combineReducers } from "redux";
 import thunk from "redux-thunk";
 
-const env = process.env.NODE_ENV || "production"
+const env = process.env.NODE_ENV || "production";
 
 function isFunction(object) {
   return typeof object === "function";
@@ -69,6 +70,7 @@ const reducers = combineReducers({
   user: userReducer,
   shapeShift: shapeShiftReducer,
   subscriptions: subscriptionsReducer,
+  video: videoReducer,
 });
 
 const bulkThunk = createBulkThunkMiddleware();

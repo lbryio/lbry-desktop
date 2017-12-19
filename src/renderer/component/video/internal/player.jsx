@@ -20,6 +20,13 @@ class VideoPlayer extends React.PureComponent {
     this.togglePlayListener = this.togglePlay.bind(this);
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.videoPause) {
+      this.refs.media.children[0].pause();
+      this.props.setVideoPause(false);
+    }
+  }
+
   componentDidMount() {
     const container = this.refs.media;
     const {

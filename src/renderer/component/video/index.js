@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { doChangeVolume } from "redux/actions/app";
 import { selectVolume } from "redux/selectors/app";
 import { doPlayUri, doSetPlayingUri } from "redux/actions/content";
+import { setVideoPause } from "redux/actions/video";
 import {
   makeSelectMetadataForUri,
   makeSelectContentTypeForUri,
@@ -14,6 +15,7 @@ import {
 } from "redux/selectors/file_info";
 import { makeSelectCostInfoForUri } from "redux/selectors/cost_info";
 import { selectShowNsfw } from "redux/selectors/settings";
+import { selectVideoPause } from "redux/selectors/video";
 import Video from "./view";
 import { selectPlayingUri } from "redux/selectors/content";
 
@@ -27,12 +29,14 @@ const select = (state, props) => ({
   playingUri: selectPlayingUri(state),
   contentType: makeSelectContentTypeForUri(props.uri)(state),
   volume: selectVolume(state),
+  videoPause: selectVideoPause(state),
 });
 
 const perform = dispatch => ({
   play: uri => dispatch(doPlayUri(uri)),
   cancelPlay: () => dispatch(doSetPlayingUri(null)),
   changeVolume: volume => dispatch(doChangeVolume(volume)),
+  setVideoPause: val => dispatch(setVideoPause(val)),
 });
 
 export default connect(select, perform)(Video);
