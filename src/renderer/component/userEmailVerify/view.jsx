@@ -67,7 +67,10 @@ class UserEmailVerify extends React.PureComponent {
           </p>
         </div>
         <div className="form-row-submit">
-          <Submit label={__("Verify")} disabled={isPending} />
+          <Submit
+            label={__("Verify")}
+            disabled={isPending || !this.state.code || !this.state.recaptcha}
+          />
           {cancelButton}
         </div>
       </Form>
