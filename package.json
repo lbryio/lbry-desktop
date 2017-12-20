@@ -28,6 +28,7 @@
     "lbry"
   ],
   "dependencies": {
+    "@segment/load-script": "^1.0.1",
     "amplitude-js": "^4.0.0",
     "classnames": "^2.2.5",
     "electron-dl": "^1.6.0",
