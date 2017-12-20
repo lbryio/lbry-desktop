@@ -4,6 +4,7 @@
   ],
   "extends": [
     "airbnb",
+    "plugin:import/electron",
     "plugin:flowtype/recommended",
     "prettier"
   ],
@@ -12,10 +13,7 @@
       "webpack": {
         "config": "webpack.renderer.additions.js"
       }
-    },
-    "import/core-modules": [
-      "electron"
-    ]
+    }
   },
   "parser": "babel-eslint",
   "env": {
