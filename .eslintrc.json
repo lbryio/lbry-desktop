@@ -26,5 +26,9 @@
     "__": true,
     "__n": true,
     "app": true
+  },
+  "rules": {
+    "import/no-commonjs": 1,
+    "import/no-amd": 1
   }
 }
