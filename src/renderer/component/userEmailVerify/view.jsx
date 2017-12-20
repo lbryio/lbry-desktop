@@ -2,6 +2,12 @@ import React from "react";
 import Link from "component/link";
 import { CreditAmount } from "component/common";
 import { Form, FormRow, Submit } from "component/form.js";
+import Recaptcha from "react-recaptcha";
+
+const sitekey =
+  process.env.NODE_ENV === "development"
+    ? "6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
+    : "6LcWvj0UAAAAAGBAEp6-UDoe0_iSAn8IZW0GDcf0";
 
 class UserEmailVerify extends React.PureComponent {
   constructor(props) {
@@ -9,6 +15,7 @@ class UserEmailVerify extends React.PureComponent {
 
     this.state = {
       code: "",
+      recaptcha: "",
     };
   }
 
@@ -19,8 +26,14 @@ class UserEmailVerify extends React.PureComponent {
   }
 
   handleSubmit() {
-    const { code } = this.state;
-    this.props.verifyUserEmail(code);
+    const { code, recaptcha } = this.state;
+    this.props.verifyUserEmail(code, recaptcha);
+  }
+
+  verifyCallback(response) {
+    this.setState({
+      recaptcha: String(response),
+    });
   }
 
   render() {
@@ -44,6 +57,10 @@ class UserEmailVerify extends React.PureComponent {
           }}
           errorMessage={errorMessage}
         />
+        <Recaptcha
+          sitekey={sitekey}
+          verifyCallback={this.verifyCallback.bind(this)}
+        />
         {/* render help separately so it always shows */}
         <div className="form-field__helper">
           <p>
@@ -54,7 +71,10 @@ class UserEmailVerify extends React.PureComponent {
           </p>
         </div>
         <div className="form-row-submit">
-          <Submit label={__("Verify")} disabled={isPending} />
+          <Submit
+            label={__("Verify")}
+            disabled={isPending || !this.state.code || !this.state.recaptcha}
+          />
           {cancelButton}
         </div>
       </Form>

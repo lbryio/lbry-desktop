@@ -17,6 +17,9 @@ const env = process.env.NODE_ENV || "production";
 const { remote, ipcRenderer, shell } = require("electron");
 const contextMenu = remote.require("./main.js").contextMenu;
 const app = require("./app");
+const load = require("@segment/load-script");
+
+load("//www.google.com/recaptcha/api.js?render=explicit");
 
 // Workaround for https://github.com/electron-userland/electron-webpack/issues/52
 if (process.env.NODE_ENV !== "development") {
