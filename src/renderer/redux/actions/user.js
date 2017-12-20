@@ -105,7 +105,7 @@ export function doUserEmailVerify(verificationToken, recaptcha) {
   return function(dispatch, getState) {
     const email = selectEmailToVerify(getState());
     verificationToken = verificationToken.toString().trim();
-    recaptcha = recaptcha.toString().trim();
+    recaptcha = recaptcha.toString();
 
     dispatch({
       type: types.USER_EMAIL_VERIFY_STARTED,
