@@ -1,20 +1,21 @@
 const extract = require("i18n-extract");
 const fs = require("fs");
+const path = require("path");
 
-const dir = `${__dirname}/../../static/locales`;
-const path = `${dir}/en.json`;
+const outputDir = `${__dirname}/../static/locales`;
+const outputPath = `${outputDir}/en.json`;
 
-if (!fs.existsSync(dir)) {
-  fs.mkdirSync(dir);
+if (!fs.existsSync(outputDir)) {
+  fs.mkdirSync(outputDir);
 }
 
-fs.writeFile(path, "{}", "utf8", err => {
+fs.writeFile(outputPath, "{}", "utf8", err => {
   if (err) {
     return console.log(err);
   }
-  const enLocale = require(path);
+  const enLocale = require(outputPath);
 
-  const keys = extract.extractFromFiles(["js/**/*.{js,jsx}"], {
+  const keys = extract.extractFromFiles("src/**/*.{js,jsx}", {
     marker: "__",
   });
 
@@ -22,7 +23,7 @@ fs.writeFile(path, "{}", "utf8", err => {
   reports = reports.concat(extract.findMissing(enLocale, keys));
 
   if (reports.length > 0) {
-    fs.readFile(path, "utf8", (err, data) => {
+    fs.readFile(outputPath, "utf8", (err, data) => {
       if (err) {
         console.log(err);
       } else {
@@ -36,7 +37,7 @@ fs.writeFile(path, "{}", "utf8", err => {
         }
 
         const json = JSON.stringify(localeObj, null, "\t"); // convert it back to json-string
-        fs.writeFile(path, json, "utf8", err => {
+        fs.writeFile(outputPath, json, "utf8", err => {
           if (err) {
             throw err;
           }
