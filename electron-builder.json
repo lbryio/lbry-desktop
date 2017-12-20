@@ -1,7 +1,7 @@
 {
   "appId": "io.lbry.LBRY",
   "mac": {
-    "category": "public.app-category.entertainment",
+    "category": "public.app-category.entertainment"
   },
   "dmg": {
     "iconSize": 128,

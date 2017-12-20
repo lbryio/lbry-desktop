@@ -14,17 +14,17 @@
     "name": "LBRY Inc.",
     "email": "hello@lbry.io"
   },
+  "main": "src/main/index.js",
   "scripts": {
-    "extract-langs": "node src/renderer/extractLocals.js",
+    "extract-langs": "node build/extractLocals.js",
     "dev": "electron-webpack dev",
     "compile": "electron-webpack && yarn extract-langs",
-    "dist": "yarn compile && electron-builder",
-    "dist:dir": "yarn dist -- --dir -c.compression=store -c.mac.identity=null",
+    "build": "yarn compile && electron-builder build",
     "postinstall": "electron-builder install-app-deps",
     "precommit": "lint-staged",
-    "lint": "eslint src/"
+    "lint": "eslint src/",
+    "pretty": "prettier src/ --write"
   },
-  "main": "src/main/index.js",
   "keywords": [
     "lbry"
   ],
@@ -65,6 +65,7 @@
     "y18n": "^4.0.0"
   },
   "devDependencies": {
+    "babel-eslint": "^8.0.3",
     "babel-plugin-module-resolver": "^3.0.0",
     "babel-plugin-react-require": "^3.0.0",
     "babel-polyfill": "^6.20.0",
@@ -74,10 +75,10 @@
     "bluebird": "^3.5.1",
     "devtron": "^1.4.0",
     "electron": "^1.7.9",
-    "electron-builder": "^19.48.2",
+    "electron-builder": "^19.49.0",
     "electron-devtools-installer": "^2.2.1",
     "electron-webpack": "^1.11.0",
-    "electron-webpack-eslint": "^1.2.0",
+    "eslint": "^4.13.1",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-config-prettier": "^2.9.0",
     "eslint-import-resolver-webpack": "^0.8.3",
@@ -109,7 +110,7 @@
   "license": "MIT",
   "lint-staged": {
     "src/**/*.{js,jsx}": [
-      "prettier --trailing-comma es5 --write",
+      "prettier --write",
       "git add"
     ]
   },

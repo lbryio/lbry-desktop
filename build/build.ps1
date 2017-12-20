@@ -26,7 +26,7 @@ dir static\daemon\ # verify that daemon binary is there
 rm daemon.zip
 
 # build electron app
-yarn dist
+yarn build
 dir dist # verify that binary was built/named correctly
 
 python build\upload_assets.py

@@ -32,9 +32,9 @@ Run `yarn dev`
 
 This will set up a server that will automatically compile any changes made inside `src\` folder and automatically reload the app without losing the state.
 
-### Packaging
+### Build
 
-Run `yarn dist`
+Run `yarn build`
 
 We use [electron-builder](https://github.com/electron-userland/electron-builder)
 to create distributable packages.
@@ -60,15 +60,15 @@ exit
 python -m pip install -r build\requirements.txt
 npm install -g yarn
 yarn install
-yarn dist
+yarn build
 ```
-3. Download the lbry daemon and cli [binaries](https://github.com/lbryio/lbry/releases) and place them in `dist\`
-
-### Building lbry-app
-Run `yarn dist`
+3. Download the lbry daemon and cli [binaries](https://github.com/lbryio/lbry/releases) and place them in `static\daemon`
 
 ### Ongoing Development
 Run `yarn dev`
+
+### Build
+Run `yarn build`
 
 This will set up a server that will automatically compile any changes made inside `src\` folder and automatically reload the app without losing the state.
 
