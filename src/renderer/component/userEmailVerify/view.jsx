@@ -3,6 +3,8 @@ import Link from "component/link";
 import { CreditAmount } from "component/common";
 import { Form, FormRow, Submit } from "component/form.js";
 
+var Recaptcha = require("react-recaptcha");
+
 class UserEmailVerify extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -44,6 +46,7 @@ class UserEmailVerify extends React.PureComponent {
           }}
           errorMessage={errorMessage}
         />
+        <Recaptcha sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI" />
         {/* render help separately so it always shows */}
         <div className="form-field__helper">
           <p>
