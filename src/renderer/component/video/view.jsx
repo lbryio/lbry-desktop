@@ -56,8 +56,10 @@ class Video extends React.PureComponent {
       changeVolume,
       volume,
       uri,
-      videoPause,
-      setVideoPause,
+      doPlay,
+      doPause,
+      mediaPaused,
+      mediaPosition,
     } = this.props;
 
     const isPlaying = playingUri === uri;
@@ -93,6 +95,9 @@ class Video extends React.PureComponent {
     }
     const poster = metadata.thumbnail;
 
+    const mediaId = uri.split("#")[1];
+    console.log("mediaId:", mediaId);
+
     return (
       <div
         className={klasses.join(" ")}
@@ -112,8 +117,11 @@ class Video extends React.PureComponent {
               downloadCompleted={fileInfo.completed}
               changeVolume={changeVolume}
               volume={volume}
-              videoPause={videoPause}
-              setVideoPause={setVideoPause}
+              doPlay={doPlay}
+              doPause={doPause}
+              mediaId={mediaId}
+              paused={mediaPaused}
+              position={mediaPosition}
             />
           ))}
         {!isPlaying && (

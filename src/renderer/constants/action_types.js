@@ -167,3 +167,8 @@ export const HAS_FETCHED_SUBSCRIPTIONS = "HAS_FETCHED_SUBSCRIPTIONS";
 
 // Video controls
 export const SET_VIDEO_PAUSE = "SET_VIDEO_PAUSE";
+
+// Media controls
+export const MEDIA_PLAY = "MEDIA_PLAY";
+export const MEDIA_PAUSE = "MEDIA_PAUSE";
+export const MEDIA_POSITION = "MEDIA_POSITION";

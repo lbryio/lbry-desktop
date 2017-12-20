@@ -20,11 +20,10 @@ class VideoPlayer extends React.PureComponent {
     this.togglePlayListener = this.togglePlay.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.videoPause) {
-      this.refs.media.children[0].pause();
-      this.props.setVideoPause(false);
-    }
+  componentWillReceiveProps(next) {
+    const el = this.refs.media.children[0];
+    if (!this.props.paused && next.paused && !el.paused) el.pause();
+    // if (this.props.paused && !next.paused && el.paused) el.play();
   }
 
   componentDidMount() {
@@ -35,7 +34,15 @@ class VideoPlayer extends React.PureComponent {
       mediaType,
       changeVolume,
       volume,
+      mediaId,
+      position,
     } = this.props;
+
+    // I'm using a Timeout because I'm not sure where this should happen
+    if (position > 0) {
+      setTimeout(() => (mediaElement.currentTime = position), 900);
+    }
+
     const loadedMetadata = e => {
       this.setState({ hasMetadata: true, startedPlaying: true });
       this.refs.media.children[0].play();
@@ -68,6 +75,11 @@ class VideoPlayer extends React.PureComponent {
     document.addEventListener("keydown", this.togglePlayListener);
     const mediaElement = this.refs.media.children[0];
     if (mediaElement) {
+      mediaElement.addEventListener("play", () => this.props.doPlay());
+      mediaElement.addEventListener("pause", () => {
+        console.log("CURRENT TIME:", mediaElement.currentTime);
+        this.props.doPause(this.props.mediaId, mediaElement.currentTime);
+      });
       mediaElement.addEventListener("click", this.togglePlayListener);
       mediaElement.addEventListener(
         "loadedmetadata",
@@ -92,7 +104,9 @@ class VideoPlayer extends React.PureComponent {
     const mediaElement = this.refs.media.children[0];
     if (mediaElement) {
       mediaElement.removeEventListener("click", this.togglePlayListener);
+      //mediaElement.removeEventListener("play"); ??
     }
+    this.props.doPause(this.props.mediaId, mediaElement.currentTime);
   }
 
   renderAudio(container, autoplay) {
