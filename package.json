@@ -30,6 +30,7 @@
   ],
   "dependencies": {
     "amplitude-js": "^4.0.0",
+    "bluebird": "^3.5.1",
     "classnames": "^2.2.5",
     "electron-dl": "^1.6.0",
     "formik": "^0.10.4",
@@ -72,7 +73,6 @@
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.18.0",
-    "bluebird": "^3.5.1",
     "devtron": "^1.4.0",
     "electron": "^1.7.9",
     "electron-builder": "^19.49.0",
