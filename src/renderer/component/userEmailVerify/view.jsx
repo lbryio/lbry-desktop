@@ -11,6 +11,7 @@ class UserEmailVerify extends React.PureComponent {
 
     this.state = {
       code: "",
+      recaptcha: "",
     };
   }
 
@@ -21,8 +22,14 @@ class UserEmailVerify extends React.PureComponent {
   }
 
   handleSubmit() {
-    const { code } = this.state;
-    this.props.verifyUserEmail(code);
+    const { code, recaptcha } = this.state;
+    this.props.verifyUserEmail(code, recaptcha);
+  }
+
+  verifyCallback(response) {
+    this.setState({
+      recaptcha: String(response).trim(),
+    });
   }
 
   render() {
@@ -46,7 +53,10 @@ class UserEmailVerify extends React.PureComponent {
           }}
           errorMessage={errorMessage}
         />
-        <Recaptcha sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI" />
+        <Recaptcha
+          sitekey="6LeIxAcTAAAAAJcZVRqyHh71UMIEGNQ_MXjiZKhI"
+          verifyCallback={this.verifyCallback.bind(this)}
+        />
         {/* render help separately so it always shows */}
         <div className="form-field__helper">
           <p>

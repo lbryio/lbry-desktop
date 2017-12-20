@@ -20,7 +20,8 @@ const select = state => ({
 });
 
 const perform = dispatch => ({
-  verifyUserEmail: code => dispatch(doUserEmailVerify(code)),
+  verifyUserEmail: (code, recaptcha) =>
+    dispatch(doUserEmailVerify(code, recaptcha)),
 });
 
 export default connect(select, perform)(UserEmailVerify);

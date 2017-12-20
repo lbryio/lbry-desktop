@@ -68,14 +68,14 @@ export function doUserEmailNew(email) {
         data: { email },
       });
       dispatch(doUserFetch());
-    }
+    };
 
     const failure = error => {
       dispatch({
         type: types.USER_EMAIL_NEW_FAILURE,
         data: { error },
       });
-    }
+    };
 
     lbryio
       .call(
@@ -86,12 +86,14 @@ export function doUserEmailNew(email) {
       )
       .catch(error => {
         if (error.response && error.response.status == 409) {
-          return lbryio.call(
-            "user_email",
-            "resend_token",
-            { email: email, only_if_expired: true },
-            "post"
-          ).then(success, failure);
+          return lbryio
+            .call(
+              "user_email",
+              "resend_token",
+              { email: email, only_if_expired: true },
+              "post"
+            )
+            .then(success, failure);
         }
         throw error;
       })
@@ -99,10 +101,11 @@ export function doUserEmailNew(email) {
   };
 }
 
-export function doUserEmailVerify(verificationToken) {
+export function doUserEmailVerify(verificationToken, recaptcha) {
   return function(dispatch, getState) {
     const email = selectEmailToVerify(getState());
     verificationToken = verificationToken.toString().trim();
+    recaptcha = recaptcha.toString().trim();
 
     dispatch({
       type: types.USER_EMAIL_VERIFY_STARTED,
@@ -113,7 +116,11 @@ export function doUserEmailVerify(verificationToken) {
       .call(
         "user_email",
         "confirm",
-        { verification_token: verificationToken, email: email },
+        {
+          verification_token: verificationToken,
+          email: email,
+          recaptcha: recaptcha,
+        },
         "post"
       )
       .then(userEmail => {
