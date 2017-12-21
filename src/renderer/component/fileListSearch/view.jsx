@@ -1,9 +1,9 @@
-import React from "react";
-import FileTile from "component/fileTile";
-import ChannelTile from "component/channelTile";
-import Link from "component/link";
-import { BusyMessage } from "component/common.js";
-import lbryuri from "lbryuri";
+import React from 'react';
+import FileTile from 'component/fileTile';
+import ChannelTile from 'component/channelTile';
+import Link from 'component/link';
+import { BusyMessage } from 'component/common.js';
+import lbryuri from 'lbryuri';
 
 const SearchNoResults = props => {
   const { query } = props;
@@ -11,8 +11,8 @@ const SearchNoResults = props => {
   return (
     <section>
       <span className="empty">
-        {(__("No one has checked anything in for %s yet."), query)}{" "}
-        <Link label={__("Be the first")} navigate="/publish" />
+        {(__('No one has checked anything in for %s yet.'), query)}{' '}
+        <Link label={__('Be the first')} navigate="/publish" />
       </span>
     </section>
   );
@@ -38,18 +38,14 @@ class FileListSearch extends React.PureComponent {
 
     return (
       <div>
-        {isSearching &&
-          !uris && (
-            <BusyMessage message={__("Looking up the Dewey Decimals")} />
-          )}
+        {isSearching && !uris && <BusyMessage message={__('Looking up the Dewey Decimals')} />}
 
-        {isSearching &&
-          uris && <BusyMessage message={__("Refreshing the Dewey Decimals")} />}
+        {isSearching && uris && <BusyMessage message={__('Refreshing the Dewey Decimals')} />}
 
         {uris && uris.length
           ? uris.map(
               uri =>
-                lbryuri.parse(uri).name[0] === "@" ? (
+                lbryuri.parse(uri).name[0] === '@' ? (
                   <ChannelTile key={uri} uri={uri} />
                 ) : (
                   <FileTile key={uri} uri={uri} />

@@ -1,16 +1,13 @@
-import React from "react";
-import { connect } from "react-redux";
+import React from 'react';
+import { connect } from 'react-redux';
 import {
   makeSelectClaimRewardError,
   makeSelectRewardByType,
   makeSelectIsRewardClaimPending,
-} from "redux/selectors/rewards";
-import { doNavigate } from "redux/actions/navigation";
-import {
-  doClaimRewardType,
-  doClaimRewardClearError,
-} from "redux/actions/rewards";
-import RewardLink from "./view";
+} from 'redux/selectors/rewards';
+import { doNavigate } from 'redux/actions/navigation';
+import { doClaimRewardType, doClaimRewardClearError } from 'redux/actions/rewards';
+import RewardLink from './view';
 
 const makeSelect = () => {
   const selectIsPending = makeSelectIsRewardClaimPending();

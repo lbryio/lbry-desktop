@@ -1,18 +1,18 @@
 // @flow
-import * as React from "react";
-import { shell } from "electron";
-import { Formik } from "formik";
-import classnames from "classnames";
-import * as statuses from "constants/shape_shift";
-import { validateShapeShiftForm } from "util/shape_shift";
-import Link from "component/link";
-import Spinner from "component/common/spinner";
-import { BusyMessage } from "component/common";
-import ShapeShiftForm from "./internal/form";
-import ActiveShapeShift from "./internal/active-shift";
+import * as React from 'react';
+import { shell } from 'electron';
+import { Formik } from 'formik';
+import classnames from 'classnames';
+import * as statuses from 'constants/shape_shift';
+import { validateShapeShiftForm } from 'util/shape_shift';
+import Link from 'component/link';
+import Spinner from 'component/common/spinner';
+import { BusyMessage } from 'component/common';
+import ShapeShiftForm from './internal/form';
+import ActiveShapeShift from './internal/active-shift';
 
-import type { ShapeShiftState } from "redux/reducers/shape_shift";
-import type { Dispatch, ShapeShiftFormValues } from "redux/actions/shape_shift";
+import type { ShapeShiftState } from 'redux/reducers/shape_shift';
+import type { Dispatch, ShapeShiftFormValues } from 'redux/actions/shape_shift';
 
 type Props = {
   shapeShift: ShapeShiftState,
@@ -27,10 +27,7 @@ type Props = {
 
 class ShapeShift extends React.PureComponent<Props> {
   componentDidMount() {
-    const {
-      shapeShiftInit,
-      shapeShift: { hasActiveShift, shiftSupportedCoins },
-    } = this.props;
+    const { shapeShiftInit, shapeShift: { hasActiveShift, shiftSupportedCoins } } = this.props;
 
     if (!hasActiveShift && !shiftSupportedCoins.length) {
       // calls shapeshift to see list of supported coins for shifting
@@ -70,8 +67,8 @@ class ShapeShift extends React.PureComponent<Props> {
 
     const initialFormValues: ShapeShiftFormValues = {
       receiveAddress,
-      originCoin: "BTC",
-      returnAddress: "",
+      originCoin: 'BTC',
+      returnAddress: '',
     };
 
     return (
@@ -80,19 +77,17 @@ class ShapeShift extends React.PureComponent<Props> {
       // if the markup below changes for the initial render (form.jsx) there will be content jumping
       // the styling in shapeshift.scss will need to be updated to the correct min-height
       <section
-        className={classnames("card shapeshift__wrapper", {
-          "shapeshift__initial-wrapper": loading,
+        className={classnames('card shapeshift__wrapper', {
+          'shapeshift__initial-wrapper': loading,
         })}
       >
         <div className="card__title-primary">
-          <h3>{__("Convert Crypto to LBC")}</h3>
+          <h3>{__('Convert Crypto to LBC')}</h3>
           <p className="help">
-            {__("Powered by ShapeShift. Read our FAQ")}{" "}
-            <Link href="https://lbry.io/faq/shapeshift">{__("here")}</Link>.
+            {__('Powered by ShapeShift. Read our FAQ')}{' '}
+            <Link href="https://lbry.io/faq/shapeshift">{__('here')}</Link>.
             {hasActiveShift &&
-              shiftState !== "complete" && (
-                <span>{__("This will update automatically.")}</span>
-              )}
+              shiftState !== 'complete' && <span>{__('This will update automatically.')}</span>}
           </p>
         </div>
 

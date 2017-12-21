@@ -1,5 +1,5 @@
-import React from "react";
-import Icon from "component/icon";
+import React from 'react';
+import Icon from 'component/icon';
 
 const Link = props => {
   const {
@@ -19,10 +19,10 @@ const Link = props => {
   } = props;
 
   const combinedClassName =
-    (className || "") +
-    (!className && !button ? "button-text" : "") + // Non-button links get the same look as text buttons
-    (button ? " button-block button-" + button + " button-set-item" : "") +
-    (disabled ? " disabled" : "");
+    (className || '') +
+    (!className && !button ? 'button-text' : '') + // Non-button links get the same look as text buttons
+    (button ? ` button-block button-${button} button-set-item` : '') +
+    (disabled ? ' disabled' : '');
 
   const onClick =
     !props.onClick && navigate
@@ -36,10 +36,10 @@ const Link = props => {
     content = children;
   } else {
     content = (
-      <span {...("button" in props ? { className: "button__content" } : {})}>
-        {icon ? <Icon icon={icon} fixed={true} /> : null}
+      <span {...('button' in props ? { className: 'button__content' } : {})}>
+        {icon ? <Icon icon={icon} fixed /> : null}
         {label ? <span className="link-label">{label}</span> : null}
-        {iconRight ? <Icon icon={iconRight} fixed={true} /> : null}
+        {iconRight ? <Icon icon={iconRight} fixed /> : null}
       </span>
     );
   }
@@ -47,10 +47,10 @@ const Link = props => {
   return (
     <a
       className={combinedClassName}
-      href={href || "javascript:;"}
+      href={href || 'javascript:;'}
       title={title}
       onClick={onClick}
-      {...("style" in props ? { style: style } : {})}
+      {...('style' in props ? { style } : {})}
     >
       {content}
     </a>

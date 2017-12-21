@@ -1,19 +1,12 @@
-import React from "react";
-import { formatCredits } from "util/formatCredits";
-import { connect } from "react-redux";
-import {
-  selectIsBackDisabled,
-  selectIsForwardDisabled,
-} from "redux/selectors/navigation";
-import { selectBalance } from "redux/selectors/wallet";
-import {
-  doNavigate,
-  doHistoryBack,
-  doHistoryForward,
-} from "redux/actions/navigation";
-import Header from "./view";
-import { selectIsUpgradeAvailable } from "redux/selectors/app";
-import { doDownloadUpgrade } from "redux/actions/app";
+import React from 'react';
+import { formatCredits } from 'util/formatCredits';
+import { connect } from 'react-redux';
+import { selectIsBackDisabled, selectIsForwardDisabled } from 'redux/selectors/navigation';
+import { selectBalance } from 'redux/selectors/wallet';
+import { doNavigate, doHistoryBack, doHistoryForward } from 'redux/actions/navigation';
+import Header from './view';
+import { selectIsUpgradeAvailable } from 'redux/selectors/app';
+import { doDownloadUpgrade } from 'redux/actions/app';
 
 const select = state => ({
   isBackDisabled: selectIsBackDisabled(state),

@@ -1,11 +1,11 @@
-import React from "react";
-import FormField from "component/formField";
-import { FormRow } from "component/form.js";
-import SubHeader from "component/subHeader";
-import * as settings from "constants/settings";
-import lbry from "lbry.js";
-import Link from "component/link";
-import FormFieldPrice from "component/formFieldPrice";
+import React from 'react';
+import FormField from 'component/formField';
+import { FormRow } from 'component/form.js';
+import SubHeader from 'component/subHeader';
+import * as settings from 'constants/settings';
+import lbry from 'lbry.js';
+import Link from 'component/link';
+import FormFieldPrice from 'component/formFieldPrice';
 
 class SettingsPage extends React.PureComponent {
   constructor(props) {
@@ -22,7 +22,7 @@ class SettingsPage extends React.PureComponent {
     });
     const success = () => {
       this.setState({ clearingCache: false });
-      window.location.href = "index.html";
+      window.location.href = 'index.html';
     };
     const clear = () => this.props.clearCache().then(success.bind(this));
 
@@ -34,30 +34,30 @@ class SettingsPage extends React.PureComponent {
   }
 
   onRunOnStartChange(event) {
-    this.setDaemonSetting("run_on_startup", event.target.checked);
+    this.setDaemonSetting('run_on_startup', event.target.checked);
   }
 
   onShareDataChange(event) {
-    this.setDaemonSetting("share_usage_data", event.target.checked);
+    this.setDaemonSetting('share_usage_data', event.target.checked);
   }
 
   onDownloadDirChange(event) {
-    this.setDaemonSetting("download_directory", event.target.value);
+    this.setDaemonSetting('download_directory', event.target.value);
   }
 
   onKeyFeeChange(newValue) {
-    let setting = newValue;
+    const setting = newValue;
 
-    //this is stupid and should be fixed... somewhere
+    // this is stupid and should be fixed... somewhere
     if (setting && (setting.amount === undefined || setting.amount === null)) {
       setting.amount = 0;
     }
 
-    this.setDaemonSetting("max_key_fee", setting);
+    this.setDaemonSetting('max_key_fee', setting);
   }
 
   onKeyFeeDisableChange(isDisabled) {
-    this.setDaemonSetting("disable_max_key_fee", isDisabled);
+    this.setDaemonSetting('disable_max_key_fee', isDisabled);
   }
 
   onThemeChange(event) {
@@ -109,10 +109,7 @@ class SettingsPage extends React.PureComponent {
   }
 
   onShowUnavailableChange(event) {
-    this.props.setClientSetting(
-      settings.SHOW_UNAVAILABLE,
-      event.target.checked
-    );
+    this.props.setClientSetting(settings.SHOW_UNAVAILABLE, event.target.checked);
   }
 
   componentWillMount() {
@@ -137,7 +134,7 @@ class SettingsPage extends React.PureComponent {
     if (!daemonSettings || Object.keys(daemonSettings).length === 0) {
       return (
         <main className="main--single-column">
-          <span className="empty">{__("Failed to load settings.")}</span>
+          <span className="empty">{__('Failed to load settings.')}</span>
         </main>
       );
     }
@@ -169,21 +166,21 @@ class SettingsPage extends React.PureComponent {
         </section> */}
         <section className="card">
           <div className="card__content">
-            <h4>{__("Download Directory")}</h4>
+            <h4>{__('Download Directory')}</h4>
           </div>
           <div className="card__content">
             <FormRow
               type="directory"
               name="download_directory"
               defaultValue={daemonSettings.download_directory}
-              helper={__("LBRY downloads will be saved here.")}
+              helper={__('LBRY downloads will be saved here.')}
               onChange={this.onDownloadDirChange.bind(this)}
             />
           </div>
         </section>
         <section className="card">
           <div className="card__content">
-            <h4>{__("Max Purchase Price")}</h4>
+            <h4>{__('Max Purchase Price')}</h4>
           </div>
           <div className="card__content">
             <FormRow
@@ -193,7 +190,7 @@ class SettingsPage extends React.PureComponent {
                 this.onKeyFeeDisableChange(true);
               }}
               defaultChecked={daemonSettings.disable_max_key_fee}
-              label={__("No Limit")}
+              label={__('No Limit')}
             />
             <div className="form-row">
               <FormField
@@ -203,11 +200,7 @@ class SettingsPage extends React.PureComponent {
                   this.onKeyFeeDisableChange(false);
                 }}
                 defaultChecked={!daemonSettings.disable_max_key_fee}
-                label={
-                  daemonSettings.disable_max_key_fee
-                    ? __("Choose limit")
-                    : __("Limit to")
-                }
+                label={daemonSettings.disable_max_key_fee ? __('Choose limit') : __('Limit to')}
               />
               {!daemonSettings.disable_max_key_fee && (
                 <FormFieldPrice
@@ -216,14 +209,14 @@ class SettingsPage extends React.PureComponent {
                   defaultValue={
                     daemonSettings.max_key_fee
                       ? daemonSettings.max_key_fee
-                      : { currency: "USD", amount: 50 }
+                      : { currency: 'USD', amount: 50 }
                   }
                 />
               )}
             </div>
             <div className="form-field__helper">
               {__(
-                "This will prevent you from purchasing any content over this cost, as a safety measure."
+                'This will prevent you from purchasing any content over this cost, as a safety measure.'
               )}
             </div>
           </div>
@@ -231,14 +224,14 @@ class SettingsPage extends React.PureComponent {
 
         <section className="card">
           <div className="card__content">
-            <h4>{__("Purchase Confirmations")}</h4>
+            <h4>{__('Purchase Confirmations')}</h4>
           </div>
           <div className="card__content">
             <FormRow
               type="radio"
               name="instant_purchase_max"
               defaultChecked={!instantPurchaseEnabled}
-              label={__("Ask for confirmation of all purchases")}
+              label={__('Ask for confirmation of all purchases')}
               onClick={e => {
                 this.onInstantPurchaseEnabledChange(false);
               }}
@@ -248,10 +241,9 @@ class SettingsPage extends React.PureComponent {
                 type="radio"
                 name="instant_purchase_max"
                 defaultChecked={instantPurchaseEnabled}
-                label={
-                  "Single-click purchasing of content less than" +
-                  (instantPurchaseEnabled ? "" : "...")
-                }
+                label={`Single-click purchasing of content less than${
+                  instantPurchaseEnabled ? '' : '...'
+                }`}
                 onClick={e => {
                   this.onInstantPurchaseEnabledChange(true);
                 }}
@@ -265,30 +257,30 @@ class SettingsPage extends React.PureComponent {
               )}
             </div>
             <div className="form-field__helper">
-              When this option is chosen, LBRY won't ask you to confirm
-              downloads below the given price.
+              When this option is chosen, LBRY won't ask you to confirm downloads below the given
+              price.
             </div>
           </div>
         </section>
 
         <section className="card">
           <div className="card__content">
-            <h4>{__("Content")}</h4>
+            <h4>{__('Content')}</h4>
           </div>
           <div className="card__content">
             <FormRow
               type="checkbox"
               onChange={this.onShowUnavailableChange.bind(this)}
               defaultChecked={showUnavailable}
-              label={__("Show unavailable content in search results")}
+              label={__('Show unavailable content in search results')}
             />
             <FormRow
-              label={__("Show NSFW content")}
+              label={__('Show NSFW content')}
               type="checkbox"
               onChange={this.onShowNsfwChange.bind(this)}
               defaultChecked={showNsfw}
               helper={__(
-                "NSFW content may include nudity, intense sexuality, profanity, or other adult content. By displaying NSFW content, you are affirming you are of legal age to view mature content in your country or jurisdiction.  "
+                'NSFW content may include nudity, intense sexuality, profanity, or other adult content. By displaying NSFW content, you are affirming you are of legal age to view mature content in your country or jurisdiction.  '
               )}
             />
           </div>
@@ -296,23 +288,21 @@ class SettingsPage extends React.PureComponent {
 
         <section className="card">
           <div className="card__content">
-            <h4>{__("Share Diagnostic Data")}</h4>
+            <h4>{__('Share Diagnostic Data')}</h4>
           </div>
           <div className="card__content">
             <FormRow
               type="checkbox"
               onChange={this.onShareDataChange.bind(this)}
               defaultChecked={daemonSettings.share_usage_data}
-              label={__(
-                "Help make LBRY better by contributing diagnostic data about my usage"
-              )}
+              label={__('Help make LBRY better by contributing diagnostic data about my usage')}
             />
           </div>
         </section>
 
         <section className="card">
           <div className="card__content">
-            <h4>{__("Theme")}</h4>
+            <h4>{__('Theme')}</h4>
           </div>
           <div className="card__content">
             <FormField
@@ -332,16 +322,12 @@ class SettingsPage extends React.PureComponent {
 
         <section className="card">
           <div className="card__content">
-            <h4>{__("Application Cache")}</h4>
+            <h4>{__('Application Cache')}</h4>
           </div>
           <div className="card__content">
             <p>
               <Link
-                label={
-                  this.state.clearingCache
-                    ? __("Clearing")
-                    : __("Clear the cache")
-                }
+                label={this.state.clearingCache ? __('Clearing') : __('Clear the cache')}
                 icon="icon-trash"
                 button="alt"
                 onClick={this.clearCache.bind(this)}

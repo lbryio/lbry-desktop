@@ -1,14 +1,14 @@
-import React from "react";
-import { connect } from "react-redux";
-import { doUserEmailVerify } from "redux/actions/user";
+import React from 'react';
+import { connect } from 'react-redux';
+import { doUserEmailVerify } from 'redux/actions/user';
 import {
   selectEmailVerifyIsPending,
   selectEmailToVerify,
   selectEmailVerifyErrorMessage,
-} from "redux/selectors/user";
-import UserEmailVerify from "./view";
-import rewards from "rewards";
-import { makeSelectRewardAmountByType } from "redux/selectors/rewards";
+} from 'redux/selectors/user';
+import UserEmailVerify from './view';
+import rewards from 'rewards';
+import { makeSelectRewardAmountByType } from 'redux/selectors/rewards';
 
 const select = state => ({
   isPending: selectEmailVerifyIsPending(state),

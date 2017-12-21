@@ -1,7 +1,7 @@
-import React from "react";
-import { connect } from "react-redux";
-import { doQuit, doSkipWrongDaemonNotice } from "redux/actions/app";
-import ModalIncompatibleDaemon from "./view";
+import React from 'react';
+import { connect } from 'react-redux';
+import { doQuit, doSkipWrongDaemonNotice } from 'redux/actions/app';
+import ModalIncompatibleDaemon from './view';
 
 const select = state => ({});
 

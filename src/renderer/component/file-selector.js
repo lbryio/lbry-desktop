@@ -1,17 +1,17 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 
-const { remote } = require("electron");
+const { remote } = require('electron');
 
 class FileSelector extends React.PureComponent {
   static propTypes = {
-    type: PropTypes.oneOf(["file", "directory"]),
+    type: PropTypes.oneOf(['file', 'directory']),
     initPath: PropTypes.string,
     onFileChosen: PropTypes.func,
   };
 
   static defaultProps = {
-    type: "file",
+    type: 'file',
   };
 
   constructor(props) {
@@ -28,10 +28,7 @@ class FileSelector extends React.PureComponent {
   handleButtonClick() {
     remote.dialog.showOpenDialog(
       {
-        properties:
-          this.props.type == "file"
-            ? ["openFile"]
-            : ["openDirectory", "createDirectory"],
+        properties: this.props.type == 'file' ? ['openFile'] : ['openDirectory', 'createDirectory'],
       },
       paths => {
         if (!paths) {
@@ -60,12 +57,10 @@ class FileSelector extends React.PureComponent {
         >
           <span className="button__content">
             <span className="button-label">
-              {this.props.type == "file"
-                ? __("Choose File")
-                : __("Choose Directory")}
+              {this.props.type == 'file' ? __('Choose File') : __('Choose Directory')}
             </span>
           </span>
-        </button>{" "}
+        </button>{' '}
         <span className="file-selector__path">
           <input
             className="input-copyable"
@@ -77,7 +72,7 @@ class FileSelector extends React.PureComponent {
               this._inputElem.select();
             }}
             readOnly="readonly"
-            value={this.state.path || __("No File Chosen")}
+            value={this.state.path || __('No File Chosen')}
           />
         </span>
       </div>

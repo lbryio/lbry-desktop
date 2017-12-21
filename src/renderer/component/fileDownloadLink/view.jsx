@@ -1,6 +1,6 @@
-import React from "react";
-import { Icon, BusyMessage } from "component/common";
-import Link from "component/link";
+import React from 'react';
+import { Icon, BusyMessage } from 'component/common';
+import Link from 'component/link';
 
 class FileDownloadLink extends React.PureComponent {
   componentWillMount() {
@@ -34,24 +34,14 @@ class FileDownloadLink extends React.PureComponent {
   }
 
   render() {
-    const {
-      fileInfo,
-      downloading,
-      uri,
-      openInShell,
-      purchaseUri,
-      costInfo,
-      loading,
-    } = this.props;
+    const { fileInfo, downloading, uri, openInShell, purchaseUri, costInfo, loading } = this.props;
 
     if (loading || downloading) {
       const progress =
           fileInfo && fileInfo.written_bytes
             ? fileInfo.written_bytes / fileInfo.total_bytes * 100
             : 0,
-        label = fileInfo
-          ? progress.toFixed(0) + __("% complete")
-          : __("Connecting..."),
+        label = fileInfo ? progress.toFixed(0) + __('% complete') : __('Connecting...'),
         labelWithIcon = (
           <span className="button__content">
             <Icon icon="icon-download" />
@@ -63,7 +53,7 @@ class FileDownloadLink extends React.PureComponent {
         <div className="faux-button-block file-download button-set-item">
           <div
             className="faux-button-block file-download__overlay"
-            style={{ width: progress + "%" }}
+            style={{ width: `${progress}%` }}
           >
             {labelWithIcon}
           </div>
@@ -72,24 +62,23 @@ class FileDownloadLink extends React.PureComponent {
       );
     } else if (fileInfo === null && !downloading) {
       if (!costInfo) {
-        return <BusyMessage message={__("Fetching cost info")} />;
-      } else {
-        return (
-          <Link
-            button="text"
-            label={__("Download")}
-            icon="icon-download"
-            className="no-underline"
-            onClick={() => {
-              purchaseUri(uri);
-            }}
-          />
-        );
+        return <BusyMessage message={__('Fetching cost info')} />;
       }
+      return (
+        <Link
+          button="text"
+          label={__('Download')}
+          icon="icon-download"
+          className="no-underline"
+          onClick={() => {
+            purchaseUri(uri);
+          }}
+        />
+      );
     } else if (fileInfo && fileInfo.download_path) {
       return (
         <Link
-          label={__("Open")}
+          label={__('Open')}
           button="text"
           icon="icon-external-link-square"
           className="no-underline"

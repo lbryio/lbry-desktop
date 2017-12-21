@@ -1,5 +1,5 @@
-import React from "react";
-import Link from "component/link";
+import React from 'react';
+import Link from 'component/link';
 
 class SnackBar extends React.PureComponent {
   constructor(props) {
@@ -13,7 +13,7 @@ class SnackBar extends React.PureComponent {
     const { snacks, removeSnack } = this.props;
 
     if (!snacks.length) {
-      this._hideTimeout = null; //should be unmounting anyway, but be safe?
+      this._hideTimeout = null; // should be unmounting anyway, but be safe?
       return null;
     }
 
@@ -32,11 +32,7 @@ class SnackBar extends React.PureComponent {
         {message}
         {linkText &&
           linkTarget && (
-            <Link
-              navigate={linkTarget}
-              className="snack-bar__action"
-              label={linkText}
-            />
+            <Link navigate={linkTarget} className="snack-bar__action" label={linkText} />
           )}
       </div>
     );

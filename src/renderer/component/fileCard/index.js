@@ -1,18 +1,12 @@
-import React from "react";
-import { connect } from "react-redux";
-import { doNavigate } from "redux/actions/navigation";
-import { doResolveUri } from "redux/actions/content";
-import { selectShowNsfw } from "redux/selectors/settings";
-import {
-  makeSelectClaimForUri,
-  makeSelectMetadataForUri,
-} from "redux/selectors/claims";
-import { makeSelectFileInfoForUri } from "redux/selectors/file_info";
-import {
-  makeSelectIsUriResolving,
-  selectRewardContentClaimIds,
-} from "redux/selectors/content";
-import FileCard from "./view";
+import React from 'react';
+import { connect } from 'react-redux';
+import { doNavigate } from 'redux/actions/navigation';
+import { doResolveUri } from 'redux/actions/content';
+import { selectShowNsfw } from 'redux/selectors/settings';
+import { makeSelectClaimForUri, makeSelectMetadataForUri } from 'redux/selectors/claims';
+import { makeSelectFileInfoForUri } from 'redux/selectors/file_info';
+import { makeSelectIsUriResolving, selectRewardContentClaimIds } from 'redux/selectors/content';
+import FileCard from './view';
 
 const select = (state, props) => ({
   claim: makeSelectClaimForUri(props.uri)(state),

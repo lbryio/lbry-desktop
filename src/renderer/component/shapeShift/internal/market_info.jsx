@@ -1,5 +1,5 @@
 // @flow
-import React from "react";
+import React from 'react';
 
 type Props = {
   shapeShiftRate: ?number,
@@ -21,13 +21,13 @@ export default (props: Props) => {
   return (
     <div>
       <span className="help">
-        {__("Receive")} {shapeShiftRate} LBC
-        {" / "}
-        {"1"} {originCoin} {__("less")} {originCoinDepositFee} LBC {__("fee")}.
+        {__('Receive')} {shapeShiftRate} LBC
+        {' / '}
+        {'1'} {originCoin} {__('less')} {originCoinDepositFee} LBC {__('fee')}.
         <br />
-        {__("Exchange max")}: {originCoinDepositMax} {originCoin}
+        {__('Exchange max')}: {originCoinDepositMax} {originCoin}
         <br />
-        {__("Exchange min")}: {originCoinDepositMin} {originCoin}
+        {__('Exchange min')}: {originCoinDepositMin} {originCoin}
       </span>
     </div>
   );

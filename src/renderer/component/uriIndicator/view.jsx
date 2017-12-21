@@ -1,8 +1,8 @@
-import React from "react";
-import { Icon } from "component/common";
-import Link from "component/link";
-import lbryuri from "lbryuri";
-import classnames from "classnames";
+import React from 'react';
+import { Icon } from 'component/common';
+import Link from 'component/link';
+import lbryuri from 'lbryuri';
+import classnames from 'classnames';
 
 class UriIndicator extends React.PureComponent {
   componentWillMount() {
@@ -39,9 +39,7 @@ class UriIndicator extends React.PureComponent {
       value,
     } = claim;
     const channelClaimId =
-      value &&
-      value.publisherSignature &&
-      value.publisherSignature.certificateId;
+      value && value.publisherSignature && value.publisherSignature.certificateId;
 
     if (!hasSignature || !channelName) {
       return <span className="empty">Anonymous</span>;
@@ -50,34 +48,30 @@ class UriIndicator extends React.PureComponent {
     let icon, channelLink, modifier;
 
     if (signatureIsValid) {
-      modifier = "valid";
-      channelLink = link
-        ? lbryuri.build({ channelName, claimId: channelClaimId }, false)
-        : false;
+      modifier = 'valid';
+      channelLink = link ? lbryuri.build({ channelName, claimId: channelClaimId }, false) : false;
     } else {
-      icon = "icon-times-circle";
-      modifier = "invalid";
+      icon = 'icon-times-circle';
+      modifier = 'invalid';
     }
 
     const inner = (
       <span>
         <span
-          className={classnames("channel-name", {
-            "channel-name--small": smallCard,
-            "button-text no-underline": link,
+          className={classnames('channel-name', {
+            'channel-name--small': smallCard,
+            'button-text no-underline': link,
           })}
         >
           {channelName}
-        </span>{" "}
+        </span>{' '}
         {!signatureIsValid ? (
           <Icon
             icon={icon}
-            className={`channel-indicator__icon channel-indicator__icon--${
-              modifier
-            }`}
+            className={`channel-indicator__icon channel-indicator__icon--${modifier}`}
           />
         ) : (
-          ""
+          ''
         )}
       </span>
     );
@@ -87,11 +81,7 @@ class UriIndicator extends React.PureComponent {
     }
 
     return (
-      <Link
-        navigate="/show"
-        navigateParams={{ uri: channelLink }}
-        className="no-underline"
-      >
+      <Link navigate="/show" navigateParams={{ uri: channelLink }} className="no-underline">
         {inner}
       </Link>
     );

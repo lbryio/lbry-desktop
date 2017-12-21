@@ -1,8 +1,8 @@
-import React from "react";
-import { connect } from "react-redux";
-import { selectIsSearching, selectSearchQuery } from "redux/selectors/search";
-import { doNavigate } from "redux/actions/navigation";
-import SearchPage from "./view";
+import React from 'react';
+import { connect } from 'react-redux';
+import { selectIsSearching, selectSearchQuery } from 'redux/selectors/search';
+import { doNavigate } from 'redux/actions/navigation';
+import SearchPage from './view';
 
 const select = state => ({
   isSearching: selectIsSearching(state),

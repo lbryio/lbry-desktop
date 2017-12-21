@@ -1,5 +1,5 @@
-import React from "react";
-import { Modal } from "modal/modal";
+import React from 'react';
+import { Modal } from 'modal/modal';
 
 class ModalRewardApprovalRequired extends React.PureComponent {
   render() {
@@ -7,18 +7,16 @@ class ModalRewardApprovalRequired extends React.PureComponent {
 
     return (
       <Modal
-        isOpen={true}
-        contentLabel={__("Human Verification Required")}
+        isOpen
+        contentLabel={__('Human Verification Required')}
         onConfirmed={doAuth}
         onAborted={closeModal}
         type="confirm"
         confirmButtonLabel={__("I'm Totally Real")}
-        abortButtonLabel={__("Never Mind")}
+        abortButtonLabel={__('Never Mind')}
       >
         <section>
-          <h3 className="modal__header">
-            {__("This is awkward. Are you real?")}
-          </h3>
+          <h3 className="modal__header">{__('This is awkward. Are you real?')}</h3>
           <p>
             {__(
               "Before we can give you any credits, we need to perform a brief check to make sure you're a new and unique person."

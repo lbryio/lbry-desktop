@@ -1,8 +1,8 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { clipboard } from "electron";
-import Link from "component/link";
-import classnames from "classnames";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { clipboard } from 'electron';
+import Link from 'component/link';
+import classnames from 'classnames';
 
 export default class Address extends React.PureComponent {
   static propTypes = {
@@ -21,8 +21,8 @@ export default class Address extends React.PureComponent {
     return (
       <div className="form-field form-field--address">
         <input
-          className={classnames("input-copyable", {
-            "input-copyable--with-copy-btn": showCopyButton,
+          className={classnames('input-copyable', {
+            'input-copyable--with-copy-btn': showCopyButton,
           })}
           type="text"
           ref={input => {
@@ -32,7 +32,7 @@ export default class Address extends React.PureComponent {
             this._inputElem.select();
           }}
           readOnly="readonly"
-          value={address || ""}
+          value={address || ''}
         />
         {showCopyButton && (
           <span className="header__item">
@@ -41,7 +41,7 @@ export default class Address extends React.PureComponent {
               icon="clipboard"
               onClick={() => {
                 clipboard.writeText(address);
-                doShowSnackBar({ message: __("Address copied") });
+                doShowSnackBar({ message: __('Address copied') });
               }}
             />
           </span>

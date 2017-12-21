@@ -1,7 +1,7 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { formatCredits, formatFullPrice } from "util/formatCredits";
-import lbry from "../lbry.js";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { formatCredits, formatFullPrice } from 'util/formatCredits';
+import lbry from '../lbry.js';
 
 // component/icon.js
 export class Icon extends React.PureComponent {
@@ -13,9 +13,9 @@ export class Icon extends React.PureComponent {
 
   render() {
     const { fixed, className } = this.props;
-    const spanClassName = `icon ${
-      "fixed" in this.props ? "icon-fixed-width " : ""
-    }${this.props.icon} ${this.props.className || ""}`;
+    const spanClassName = `icon ${'fixed' in this.props ? 'icon-fixed-width ' : ''}${
+      this.props.icon
+    } ${this.props.className || ''}`;
     return <span className={spanClassName} />;
   }
 }
@@ -31,10 +31,7 @@ export class TruncatedText extends React.PureComponent {
 
   render() {
     return (
-      <span
-        className="truncated-text"
-        style={{ WebkitLineClamp: this.props.lines }}
-      >
+      <span className="truncated-text" style={{ WebkitLineClamp: this.props.lines }}>
         {this.props.children}
       </span>
     );
@@ -70,14 +67,14 @@ export class CreditAmount extends React.PureComponent {
     showFree: PropTypes.bool,
     showFullPrice: PropTypes.bool,
     showPlus: PropTypes.bool,
-    look: PropTypes.oneOf(["indicator", "plain", "fee"]),
+    look: PropTypes.oneOf(['indicator', 'plain', 'fee']),
   };
 
   static defaultProps = {
     precision: 2,
     label: true,
     showFree: false,
-    look: "indicator",
+    look: 'indicator',
     showFullPrice: false,
     showPlus: false,
   };
@@ -100,13 +97,13 @@ export class CreditAmount extends React.PureComponent {
 
     let amountText;
     if (this.props.showFree && parseFloat(this.props.amount) === 0) {
-      amountText = __("free");
+      amountText = __('free');
     } else {
       if (this.props.label) {
         const label =
-          typeof this.props.label === "string"
+          typeof this.props.label === 'string'
             ? this.props.label
-            : parseFloat(amount) == 1 ? __("credit") : __("credits");
+            : parseFloat(amount) == 1 ? __('credit') : __('credits');
 
         amountText = `${formattedAmount} ${label}`;
       } else {
@@ -118,15 +115,12 @@ export class CreditAmount extends React.PureComponent {
     }
 
     return (
-      <span
-        className={`credit-amount credit-amount--${this.props.look}`}
-        title={fullPrice}
-      >
+      <span className={`credit-amount credit-amount--${this.props.look}`} title={fullPrice}>
         <span>{amountText}</span>
         {this.props.isEstimate ? (
           <span
             className="credit-amount__estimate"
-            title={__("This is an estimate and does not include data fees")}
+            title={__('This is an estimate and does not include data fees')}
           >
             *
           </span>
@@ -152,7 +146,7 @@ export class Thumbnail extends React.PureComponent {
   constructor(props) {
     super(props);
 
-    this._defaultImageUri = lbry.imagePath("default-thumb.svg");
+    this._defaultImageUri = lbry.imagePath('default-thumb.svg');
     this._maxLoadTime = 10000;
     this._isMounted = false;
 
@@ -177,7 +171,7 @@ export class Thumbnail extends React.PureComponent {
   }
 
   render() {
-    const className = this.props.className ? this.props.className : "",
+    const className = this.props.className ? this.props.className : '',
       otherProps = Object.assign({}, this.props);
     delete otherProps.className;
     return (

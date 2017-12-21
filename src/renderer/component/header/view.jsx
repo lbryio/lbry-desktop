@@ -1,6 +1,6 @@
-import React from "react";
-import Link from "component/link";
-import WunderBar from "component/wunderbar";
+import React from 'react';
+import Link from 'component/link';
+import WunderBar from 'component/wunderbar';
 
 export const Header = props => {
   const {
@@ -21,7 +21,7 @@ export const Header = props => {
           disabled={isBackDisabled}
           button="alt button--flat"
           icon="icon-arrow-left"
-          title={__("Back")}
+          title={__('Back')}
         />
       </div>
       <div className="header__item">
@@ -30,59 +30,55 @@ export const Header = props => {
           disabled={isForwardDisabled}
           button="alt button--flat"
           icon="icon-arrow-right"
-          title={__("Forward")}
+          title={__('Forward')}
         />
       </div>
       <div className="header__item">
         <Link
-          onClick={() => navigate("/discover")}
+          onClick={() => navigate('/discover')}
           button="alt button--flat"
           icon="icon-home"
-          title={__("Discover Content")}
+          title={__('Discover Content')}
         />
       </div>
       <div className="header__item">
-        <Link
-          onClick={() => navigate("/subscriptions")}
-          button="alt button--flat"
-          icon="icon-at"
-        />
+        <Link onClick={() => navigate('/subscriptions')} button="alt button--flat" icon="icon-at" />
       </div>
       <div className="header__item header__item--wunderbar">
         <WunderBar />
       </div>
       <div className="header__item">
         <Link
-          onClick={() => navigate("/wallet")}
+          onClick={() => navigate('/wallet')}
           button="text"
           className="no-underline"
           icon="icon-bank"
           label={balance}
-          title={__("Wallet")}
+          title={__('Wallet')}
         />
       </div>
       <div className="header__item">
         <Link
-          onClick={() => navigate("/publish")}
+          onClick={() => navigate('/publish')}
           button="primary button--flat"
           icon="icon-upload"
-          label={__("Publish")}
+          label={__('Publish')}
         />
       </div>
       <div className="header__item">
         <Link
-          onClick={() => navigate("/downloaded")}
+          onClick={() => navigate('/downloaded')}
           button="alt button--flat"
           icon="icon-folder"
-          title={__("Downloads and Publishes")}
+          title={__('Downloads and Publishes')}
         />
       </div>
       <div className="header__item">
         <Link
-          onClick={() => navigate("/settings")}
+          onClick={() => navigate('/settings')}
           button="alt button--flat"
           icon="icon-gear"
-          title={__("Settings")}
+          title={__('Settings')}
         />
       </div>
       {isUpgradeAvailable && (
@@ -90,7 +86,7 @@ export const Header = props => {
           onClick={() => downloadUpgrade()}
           button="primary button--flat"
           icon="icon-arrow-up"
-          label={__("Upgrade App")}
+          label={__('Upgrade App')}
         />
       )}
     </header>

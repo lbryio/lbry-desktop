@@ -1,11 +1,11 @@
-import React from "react";
-import PropTypes from "prop-types";
-import FileSelector from "component/file-selector.js";
-import SimpleMDE from "react-simplemde-editor";
-import { formFieldNestedLabelTypes, formFieldId } from "../form";
-import style from "react-simplemde-editor/dist/simplemde.min.css";
+import React from 'react';
+import PropTypes from 'prop-types';
+import FileSelector from 'component/file-selector.js';
+import SimpleMDE from 'react-simplemde-editor';
+import { formFieldNestedLabelTypes, formFieldId } from '../form';
+import style from 'react-simplemde-editor/dist/simplemde.min.css';
 
-const formFieldFileSelectorTypes = ["file", "directory"];
+const formFieldFileSelectorTypes = ['file', 'directory'];
 
 class FormField extends React.PureComponent {
   static propTypes = {
@@ -14,10 +14,7 @@ class FormField extends React.PureComponent {
     postfix: PropTypes.string,
     hasError: PropTypes.bool,
     trim: PropTypes.bool,
-    regexp: PropTypes.oneOfType([
-      PropTypes.instanceOf(RegExp),
-      PropTypes.string,
-    ]),
+    regexp: PropTypes.oneOfType([PropTypes.instanceOf(RegExp), PropTypes.string]),
   };
 
   static defaultProps = {
@@ -27,7 +24,7 @@ class FormField extends React.PureComponent {
   constructor(props) {
     super(props);
 
-    this._fieldRequiredText = __("This field is required");
+    this._fieldRequiredText = __('This field is required');
     this._type = null;
     this._element = null;
     this._extraElementProps = {};
@@ -39,22 +36,22 @@ class FormField extends React.PureComponent {
   }
 
   componentWillMount() {
-    if (["text", "number", "radio", "checkbox"].includes(this.props.type)) {
-      this._element = "input";
+    if (['text', 'number', 'radio', 'checkbox'].includes(this.props.type)) {
+      this._element = 'input';
       this._type = this.props.type;
-    } else if (this.props.type == "text-number") {
-      this._element = "input";
-      this._type = "text";
-    } else if (this.props.type == "SimpleMDE") {
+    } else if (this.props.type == 'text-number') {
+      this._element = 'input';
+      this._type = 'text';
+    } else if (this.props.type == 'SimpleMDE') {
       this._element = SimpleMDE;
-      this._type = "textarea";
+      this._type = 'textarea';
       this._extraElementProps.options = {
         placeholder: this.props.placeholder,
-        hideIcons: ["heading", "image", "fullscreen", "side-by-side"],
+        hideIcons: ['heading', 'image', 'fullscreen', 'side-by-side'],
       };
     } else if (formFieldFileSelectorTypes.includes(this.props.type)) {
-      this._element = "input";
-      this._type = "hidden";
+      this._element = 'input';
+      this._type = 'hidden';
     } else {
       // Non <input> field, e.g. <select>, <textarea>
       this._element = this.props.type;
@@ -66,7 +63,7 @@ class FormField extends React.PureComponent {
      * We have to add the webkitdirectory attribute here because React doesn't allow it in JSX
      * https://github.com/facebook/react/issues/3468
      */
-    if (this.props.type == "directory") {
+    if (this.props.type == 'directory') {
       this.refs.field.webkitdirectory = true;
     }
   }
@@ -75,7 +72,7 @@ class FormField extends React.PureComponent {
     this.refs.field.value = path;
     if (this.props.onChange) {
       // Updating inputs programmatically doesn't generate an event, so we have to make our own
-      const event = new Event("change", { bubbles: true });
+      const event = new Event('change', { bubbles: true });
       this.refs.field.dispatchEvent(event); // This alone won't generate a React event, but we use it to attach the field as a target
       this.props.onChange(event);
     }
@@ -91,20 +88,17 @@ class FormField extends React.PureComponent {
   clearError() {
     this.setState({
       isError: false,
-      errorMessage: "",
+      errorMessage: '',
     });
   }
 
   getValue() {
-    if (this.props.type == "checkbox") {
+    if (this.props.type == 'checkbox') {
       return this.refs.field.checked;
-    } else if (this.props.type == "SimpleMDE") {
+    } else if (this.props.type == 'SimpleMDE') {
       return this.refs.field.simplemde.value();
-    } else {
-      return this.props.trim
-        ? this.refs.field.value.trim()
-        : this.refs.field.value;
     }
+    return this.props.trim ? this.refs.field.value.trim() : this.refs.field.value;
   }
 
   getSelectedElement() {
@@ -116,9 +110,9 @@ class FormField extends React.PureComponent {
   }
 
   validate() {
-    if ("regexp" in this.props) {
+    if ('regexp' in this.props) {
       if (!this.getValue().match(this.props.regexp)) {
-        this.showError(__("Invalid format."));
+        this.showError(__('Invalid format.'));
       } else {
         this.clearError();
       }
@@ -133,8 +127,7 @@ class FormField extends React.PureComponent {
   render() {
     // Pass all unhandled props to the field element
     const otherProps = Object.assign({}, this.props),
-      isError =
-        this.state.isError !== null ? this.state.isError : this.props.hasError,
+      isError = this.state.isError !== null ? this.state.isError : this.props.hasError,
       elementId = this.props.elementId ? this.props.elementId : formFieldId(),
       renderElementInsideLabel =
         this.props.label && formFieldNestedLabelTypes.includes(this.props.type);
@@ -158,13 +151,8 @@ class FormField extends React.PureComponent {
         placeholder={this.props.placeholder}
         onBlur={() => this.validate()}
         onFocus={() => this.props.onFocus && this.props.onFocus()}
-        className={
-          "form-field__input form-field__input-" +
-          this.props.type +
-          " " +
-          (this.props.className || "") +
-          (isError ? "form-field__input--error" : "")
-        }
+        className={`form-field__input form-field__input-${this.props.type} ${this.props.className ||
+          ''}${isError ? 'form-field__input--error' : ''}`}
         {...otherProps}
         {...this._extraElementProps}
       >
@@ -173,19 +161,13 @@ class FormField extends React.PureComponent {
     );
 
     return (
-      <div className={"form-field form-field--" + this.props.type}>
-        {this.props.prefix ? (
-          <span className="form-field__prefix">{this.props.prefix}</span>
-        ) : (
-          ""
-        )}
+      <div className={`form-field form-field--${this.props.type}`}>
+        {this.props.prefix ? <span className="form-field__prefix">{this.props.prefix}</span> : ''}
         {element}
         {renderElementInsideLabel && (
           <label
             htmlFor={elementId}
-            className={
-              "form-field__label " + (isError ? "form-field__label--error" : "")
-            }
+            className={`form-field__label ${isError ? 'form-field__label--error' : ''}`}
           >
             {this.props.label}
           </label>
@@ -194,20 +176,18 @@ class FormField extends React.PureComponent {
           <FileSelector
             type={this.props.type}
             onFileChosen={this.handleFileChosen.bind(this)}
-            {...(this.props.defaultValue
-              ? { initPath: this.props.defaultValue }
-              : {})}
+            {...(this.props.defaultValue ? { initPath: this.props.defaultValue } : {})}
           />
         ) : null}
         {this.props.postfix ? (
           <span className="form-field__postfix">{this.props.postfix}</span>
         ) : (
-          ""
+          ''
         )}
         {isError && this.state.errorMessage ? (
           <div className="form-field__error">{this.state.errorMessage}</div>
         ) : (
-          ""
+          ''
         )}
       </div>
     );
