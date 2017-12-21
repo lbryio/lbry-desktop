@@ -14,6 +14,7 @@ import amplitude from 'amplitude-js';
 import lbry from 'lbry';
 import 'scss/all.scss';
 import { ipcRenderer, remote, shell } from 'electron';
+import app from './app';
 
 const { contextMenu } = remote.require('./main.js');
 

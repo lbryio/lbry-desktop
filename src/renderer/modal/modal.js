@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ReactModal from 'react-modal';
 import Link from 'component/link/index';
-import app from 'app.js';
+import app from 'app';
 
 export class Modal extends React.PureComponent {
   static propTypes = {
