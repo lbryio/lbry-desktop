@@ -85,6 +85,7 @@
     "eslint-plugin-flowtype": "^2.40.1",
     "eslint-plugin-import": "^2.8.0",
     "eslint-plugin-jsx-a11y": "^6.0.3",
+    "eslint-plugin-prettier": "^2.4.0",
     "eslint-plugin-react": "^7.5.1",
     "flow-babel-webpack-plugin": "^1.1.0",
     "flow-bin": "^0.61.0",
