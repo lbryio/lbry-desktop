@@ -1,6 +1,5 @@
-const { remote } = require("electron");
+import { remote } from 'electron';
 
-const application = remote.app;
 const win = remote.getCurrentWindow();
 
 const setProgressBar = progress => {

@@ -6,28 +6,27 @@ $width-page-constrained: 800px;
 $text-color: #000;
 
 :root {
-
   /* Colors */
-  --color-brand: #155B4A;
-  --color-primary: #155B4A;
-  --color-primary-light: saturate(lighten(#155B4A, 50%), 20%);
-  --color-light-alt: hsl(hue(#155B4A), 15, 85);
-  --color-dark-overlay: rgba(32,32,32,0.9);
+  --color-brand: #155b4a;
+  --color-primary: #155b4a;
+  --color-primary-light: saturate(lighten(#155b4a, 50%), 20%);
+  --color-light-alt: hsl(hue(#155b4a), 15, 85);
+  --color-dark-overlay: rgba(32, 32, 32, 0.9);
   --color-help: rgba(0, 0, 0, 0.54);
   --color-notice: #8a6d3b;
   --color-error: #a94442;
   --color-load-screen-text: #c3c3c3;
   --color-meta-light: #505050;
-  --color-money: #216C2A;
+  --color-money: #216c2a;
   --color-download: rgba(0, 0, 0, 0.75);
   --color-canvas: #f5f5f5;
   --color-bg: #ffffff;
-  --color-bg-alt: #D9D9D9;
+  --color-bg-alt: #d9d9d9;
 
   /* Misc */
   --content-max-width: 1000px;
   --nsfw-blur-intensity: 20px;
-  --height-video-embedded: $width-page-constrained * 9 / 16 ;
+  --height-video-embedded: $width-page-constrained * 9 / 16;
 
   /* Font */
   --font-size: 16px;
@@ -35,20 +34,21 @@ $text-color: #000;
   --font-size-subtext-multiple: 0.82;
 
   /* Shadows */
-  --box-shadow-layer: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
-  --box-shadow-focus: 2px 4px 4px 0 rgba(0,0,0,.14),2px 5px 3px -2px rgba(0,0,0,.2),2px 3px 7px 0 rgba(0,0,0,.12);
+  --box-shadow-layer: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+  --box-shadow-focus: 2px 4px 4px 0 rgba(0, 0, 0, 0.14), 2px 5px 3px -2px rgba(0, 0, 0, 0.2),
+    2px 3px 7px 0 rgba(0, 0, 0, 0.12);
 
   /* Transition */
-  --transition-duration: .225s;
+  --transition-duration: 0.225s;
   --transition-type: ease;
 
   /* Text */
   --text-color: $text-color;
-  --text-help-color: #EEE;
+  --text-help-color: #eee;
   --text-max-width: 660px;
   --text-link-padding: 4px;
-  --text-selection-bg: rgba(saturate(lighten(#155B4A, 20%), 20%), 1); // temp color
-  --text-selection-color: #FFF;
+  --text-selection-bg: rgba(saturate(lighten(#155b4a, 20%), 20%), 1); // temp color
+  --text-selection-color: #fff;
 
   /* Window */
   --window-bg: var(--color-canvas);
@@ -72,7 +72,7 @@ $text-color: #000;
 
   /* input:hover */
   --input-hover-border-color: rgba(0, 0, 0, 0.87);
- /* input:placeholder */
+  /* input:placeholder */
   --input-placeholder-color: rgba(0, 0, 0, 0.42);
   --input-placeholder-opacity: 1;
 
@@ -82,9 +82,9 @@ $text-color: #000;
 
   /* Button */
   --button-bg: var(--color-bg-alt);
-  --button-color: #FFF;
+  --button-color: #fff;
   --button-primary-bg: var(--color-primary);
-  --button-primary-color: #FFF;
+  --button-primary-color: #fff;
   --button-padding: $spacing-vertical * 2/3;
   --button-height: $spacing-vertical * 1.5;
   --button-intra-margin: $spacing-vertical;
@@ -93,14 +93,14 @@ $text-color: #000;
   /* Header */
   --header-bg: var(--color-bg);
   --header-color: #666;
-  --header-active-color: rgba(0,0,0, 0.85);
+  --header-active-color: rgba(0, 0, 0, 0.85);
   --header-height: $spacing-vertical * 2.5;
   --header-button-bg: transparent; //var(--button-bg);
   --header-button-hover-bg: rgba(100, 100, 100, 0.15);
 
   /* Header -> search */
   --search-bg: rgba(255, 255, 255, 0.7);
-  --search-border:1px solid #ccc;
+  --search-border: 1px solid #ccc;
   --search-color: #666;
   --search-active-color: var(--header-active-color);
   --search-active-shadow: 0 0 3px 0px var(--text-selection-bg);
@@ -130,7 +130,7 @@ $text-color: #000;
   /* Modal */
   --modal-width: 440px;
   --modal-bg: var(--color-bg);
-  --modal-overlay-bg: rgba(#F5F5F5, 0.75); // --color-canvas: #F5F5F5
+  --modal-overlay-bg: rgba(#f5f5f5, 0.75); // --color-canvas: #F5F5F5
   --modal-border: 1px solid rgb(204, 204, 204);
 
   /* Menu */
@@ -146,7 +146,7 @@ $text-color: #000;
 
   /* Scrollbar */
   --scrollbar-radius: 10px;
-  --scrollbar-thumb-bg: rgba(0, 0, 0, 0.20);
+  --scrollbar-thumb-bg: rgba(0, 0, 0, 0.2);
   --scrollbar-thumb-hover-bg: rgba(0, 0, 0, 0.35);
   --scrollbar-thumb-active-bg: var(--color-primary);
   --scrollbar-track-bg: transparent;
@@ -156,6 +156,5 @@ $text-color: #000;
 
   /* Animation :) */
   --animation-duration: 0.3s;
-  --animation-style: cubic-bezier(.55,0,.1,1);
-
+  --animation-style: cubic-bezier(0.55, 0, 0.1, 1);
 }

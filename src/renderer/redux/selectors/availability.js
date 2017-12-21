@@ -1,22 +1,7 @@
-import { createSelector } from "reselect";
+import { createSelector } from 'reselect';
 
-const _selectState = state => state.availability;
+const selectState = state => state.availability;
 
-export const selectAvailabilityByUri = createSelector(
-  _selectState,
-  state => state.byUri || {}
-);
+const selectFetchingAvailability = createSelector(selectState, state => state.fetching || {});
 
-export const makeSelectIsAvailableForUri = uri =>
-  createSelector(
-    selectAvailabilityByUri,
-    byUri => (!byUri || byUri[uri] === undefined ? undefined : byUri[uri] > 0)
-  );
-
-export const selectFetchingAvailability = createSelector(
-  _selectState,
-  state => state.fetching || {}
-);
-
-export const makeSelectFetchingAvailabilityForUri = uri =>
-  createSelector(selectFetchingAvailability, byUri => byUri && byUri[uri]);
+export { selectFetchingAvailability as default };

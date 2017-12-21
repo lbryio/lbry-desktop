@@ -22,8 +22,8 @@
     "build": "yarn compile && electron-builder build",
     "postinstall": "electron-builder install-app-deps",
     "precommit": "lint-staged",
-    "lint": "eslint src/**/*.{js,jsx} --fix",
-    "pretty": "prettier src/**/*.{js,jsx,scss,json} --write"
+    "lint": "eslint 'src/**/*.{js,jsx}' --fix",
+    "pretty-print": "prettier 'src/**/*.{js,jsx,scss,json}' --write"
   },
   "keywords": [
     "lbry"

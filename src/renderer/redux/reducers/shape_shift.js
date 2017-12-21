@@ -1,7 +1,7 @@
 // @flow
-import { handleActions } from "util/redux-utils";
-import * as actions from "constants/action_types";
-import * as statuses from "constants/shape_shift";
+import handleActions from 'util/redux-utils';
+import * as ACTIONS from 'constants/action_types';
+import * as STATUSES from 'constants/shape_shift';
 
 export type ShapeShiftState = {
   loading: boolean,
@@ -24,40 +24,6 @@ export type ShapeShiftState = {
   shapeShiftRate: ?number,
 };
 
-// All ShapeShift actions that will have some payload
-export type GetSupportedCoinsSuccess = {
-  type: actions.GET_SUPPORTED_COINS_SUCCESS,
-  data: Array<string>,
-};
-export type GetCoinStatsStart = {
-  type: actions.GET_SUPPORTED_COINS_SUCCESS,
-  data: string,
-};
-export type GetCoinStatsSuccess = {
-  type: actions.GET_COIN_STATS_SUCCESS,
-  data: ShapeShiftMarketInfo,
-};
-export type GetCoinStatsFail = {
-  type: actions.GET_COIN_STATS_FAIL,
-  data: string,
-};
-export type PrepareShapeShiftSuccess = {
-  type: actions.PREPARE_SHAPE_SHIFT_SUCCESS,
-  data: ActiveShiftInfo,
-};
-export type PrepareShapeShiftFail = {
-  type: actions.PREPARE_SHAPE_SHIFT_FAIL,
-  data: ShapeShiftErrorResponse,
-};
-export type GetActiveShiftSuccess = {
-  type: actions.GET_ACTIVE_SHIFT_SUCCESS,
-  data: string,
-};
-export type GetActiveShiftFail = {
-  type: actions.GET_ACTIVE_SHIFT_FAIL,
-  data: ShapeShiftErrorResponse,
-};
-
 // ShapeShift sub-types
 // Defined for actions that contain an object in the payload
 type ShapeShiftMarketInfo = {
@@ -76,6 +42,40 @@ type ActiveShiftInfo = {
 
 type ShapeShiftErrorResponse = {
   message: string,
+};
+
+// All ShapeShift actions that will have some payload
+export type GetSupportedCoinsSuccess = {
+  type: ACTIONS.GET_SUPPORTED_COINS_SUCCESS,
+  data: Array<string>,
+};
+export type GetCoinStatsStart = {
+  type: ACTIONS.GET_SUPPORTED_COINS_SUCCESS,
+  data: string,
+};
+export type GetCoinStatsSuccess = {
+  type: ACTIONS.GET_COIN_STATS_SUCCESS,
+  data: ShapeShiftMarketInfo,
+};
+export type GetCoinStatsFail = {
+  type: ACTIONS.GET_COIN_STATS_FAIL,
+  data: string,
+};
+export type PrepareShapeShiftSuccess = {
+  type: ACTIONS.PREPARE_SHAPE_SHIFT_SUCCESS,
+  data: ActiveShiftInfo,
+};
+export type PrepareShapeShiftFail = {
+  type: ACTIONS.PREPARE_SHAPE_SHIFT_FAIL,
+  data: ShapeShiftErrorResponse,
+};
+export type GetActiveShiftSuccess = {
+  type: ACTIONS.GET_ACTIVE_SHIFT_SUCCESS,
+  data: string,
+};
+export type GetActiveShiftFail = {
+  type: ACTIONS.GET_ACTIVE_SHIFT_FAIL,
+  data: ShapeShiftErrorResponse,
 };
 
 const defaultState: ShapeShiftState = {
@@ -98,14 +98,12 @@ const defaultState: ShapeShiftState = {
 
 export default handleActions(
   {
-    [actions.GET_SUPPORTED_COINS_START]: (
-      state: ShapeShiftState
-    ): ShapeShiftState => ({
+    [ACTIONS.GET_SUPPORTED_COINS_START]: (state: ShapeShiftState): ShapeShiftState => ({
       ...state,
       loading: true,
       error: undefined,
     }),
-    [actions.GET_SUPPORTED_COINS_SUCCESS]: (
+    [ACTIONS.GET_SUPPORTED_COINS_SUCCESS]: (
       state: ShapeShiftState,
       action: GetSupportedCoinsSuccess
     ): ShapeShiftState => {
@@ -116,15 +114,13 @@ export default handleActions(
         shiftSupportedCoins,
       };
     },
-    [actions.GET_SUPPORTED_COINS_FAIL]: (
-      state: ShapeShiftState
-    ): ShapeShiftState => ({
+    [ACTIONS.GET_SUPPORTED_COINS_FAIL]: (state: ShapeShiftState): ShapeShiftState => ({
       ...state,
       loading: false,
-      error: "Error getting available coins",
+      error: 'Error getting available coins',
     }),
 
-    [actions.GET_COIN_STATS_START]: (
+    [ACTIONS.GET_COIN_STATS_START]: (
       state: ShapeShiftState,
       action: GetCoinStatsStart
     ): ShapeShiftState => {
@@ -135,7 +131,7 @@ export default handleActions(
         originCoin: coin,
       };
     },
-    [actions.GET_COIN_STATS_SUCCESS]: (
+    [ACTIONS.GET_COIN_STATS_SUCCESS]: (
       state: ShapeShiftState,
       action: GetCoinStatsSuccess
     ): ShapeShiftState => {
@@ -148,14 +144,12 @@ export default handleActions(
         originCoinDepositMax: marketInfo.limit,
         // this will come in scientific notation
         // toFixed shows the real number, then regex to remove trailing zeros
-        originCoinDepositMin: marketInfo.minimum
-          .toFixed(10)
-          .replace(/\.?0+$/, ""),
+        originCoinDepositMin: marketInfo.minimum.toFixed(10).replace(/\.?0+$/, ''),
         originCoinDepositFee: marketInfo.minerFee,
         shapeShiftRate: marketInfo.rate,
       };
     },
-    [actions.GET_COIN_STATS_FAIL]: (
+    [ACTIONS.GET_COIN_STATS_FAIL]: (
       state: ShapeShiftState,
       action: GetCoinStatsFail
     ): ShapeShiftState => {
@@ -167,13 +161,11 @@ export default handleActions(
       };
     },
 
-    [actions.PREPARE_SHAPE_SHIFT_START]: (
-      state: ShapeShiftState
-    ): ShapeShiftState => ({
+    [ACTIONS.PREPARE_SHAPE_SHIFT_START]: (state: ShapeShiftState): ShapeShiftState => ({
       ...state,
       error: undefined,
     }),
-    [actions.PREPARE_SHAPE_SHIFT_SUCCESS]: (
+    [ACTIONS.PREPARE_SHAPE_SHIFT_SUCCESS]: (
       state: ShapeShiftState,
       action: PrepareShapeShiftSuccess
     ) => {
@@ -185,13 +177,10 @@ export default handleActions(
         shiftCoinType: activeShiftInfo.depositType,
         shiftReturnAddress: activeShiftInfo.returnAddress,
         shiftOrderId: activeShiftInfo.orderId,
-        shiftState: statuses.NO_DEPOSITS,
+        shiftState: STATUSES.NO_DEPOSITS,
       };
     },
-    [actions.PREPARE_SHAPE_SHIFT_FAIL]: (
-      state: ShapeShiftState,
-      action: PrepareShapeShiftFail
-    ) => {
+    [ACTIONS.PREPARE_SHAPE_SHIFT_FAIL]: (state: ShapeShiftState, action: PrepareShapeShiftFail) => {
       const error: ShapeShiftErrorResponse = action.data;
       return {
         ...state,
@@ -199,7 +188,7 @@ export default handleActions(
       };
     },
 
-    [actions.CLEAR_SHAPE_SHIFT]: (state: ShapeShiftState): ShapeShiftState => ({
+    [ACTIONS.CLEAR_SHAPE_SHIFT]: (state: ShapeShiftState): ShapeShiftState => ({
       ...state,
       loading: false,
       updating: false,
@@ -211,14 +200,12 @@ export default handleActions(
       originCoin: state.shiftSupportedCoins[0],
     }),
 
-    [actions.GET_ACTIVE_SHIFT_START]: (
-      state: ShapeShiftState
-    ): ShapeShiftState => ({
+    [ACTIONS.GET_ACTIVE_SHIFT_START]: (state: ShapeShiftState): ShapeShiftState => ({
       ...state,
       error: undefined,
       updating: true,
     }),
-    [actions.GET_ACTIVE_SHIFT_SUCCESS]: (
+    [ACTIONS.GET_ACTIVE_SHIFT_SUCCESS]: (
       state: ShapeShiftState,
       action: GetActiveShiftSuccess
     ): ShapeShiftState => {
@@ -229,7 +216,7 @@ export default handleActions(
         shiftState: status,
       };
     },
-    [actions.GET_ACTIVE_SHIFT_FAIL]: (
+    [ACTIONS.GET_ACTIVE_SHIFT_FAIL]: (
       state: ShapeShiftState,
       action: GetActiveShiftFail
     ): ShapeShiftState => {

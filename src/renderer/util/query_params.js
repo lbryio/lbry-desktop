@@ -1,26 +1,28 @@
 export function parseQueryParams(queryString) {
-  if (queryString === "") return {};
+  if (queryString === '') return {};
   const parts = queryString
-    .split("?")
+    .split('?')
     .pop()
-    .split("&")
-    .map(p => p.split("="));
+    .split('&')
+    .map(p => p.split('='));
 
   const params = {};
-  parts.forEach(arr => {
-    params[arr[0]] = arr[1];
+  parts.forEach(array => {
+    const [first, second] = array;
+    params[first] = second;
   });
   return params;
 }
 
 export function toQueryString(params) {
-  if (!params) return "";
+  if (!params) return '';
 
   const parts = [];
-  for (const key in params) {
-    if (params.hasOwnProperty(key) && params[key]) {
+  Object.keys(params).forEach(key => {
+    if (Object.prototype.hasOwnProperty.call(params, key) && params[key]) {
       parts.push(`${key}=${params[key]}`);
     }
-  }
-  return parts.join("&");
+  });
+
+  return parts.join('&');
 }

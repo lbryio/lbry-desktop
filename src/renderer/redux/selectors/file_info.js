@@ -1,45 +1,39 @@
-import lbry from "lbry";
-import { createSelector } from "reselect";
+import { createSelector } from 'reselect';
 import {
   selectClaimsByUri,
   selectIsFetchingClaimListMine,
   selectMyClaims,
   selectMyClaimsOutpoints,
-} from "redux/selectors/claims";
+} from 'redux/selectors/claims';
 
-export const _selectState = state => state.fileInfo || {};
+export const selectState = state => state.fileInfo || {};
 
 export const selectFileInfosByOutpoint = createSelector(
-  _selectState,
+  selectState,
   state => state.byOutpoint || {}
 );
 
 export const selectIsFetchingFileList = createSelector(
-  _selectState,
-  state => !!state.isFetchingFileList
+  selectState,
+  state => state.isFetchingFileList
 );
 
 export const selectIsFetchingFileListDownloadedOrPublished = createSelector(
   selectIsFetchingFileList,
   selectIsFetchingClaimListMine,
-  (isFetchingFileList, isFetchingClaimListMine) =>
-    isFetchingFileList || isFetchingClaimListMine
+  (isFetchingFileList, isFetchingClaimListMine) => isFetchingFileList || isFetchingClaimListMine
 );
 
 export const makeSelectFileInfoForUri = uri =>
-  createSelector(
-    selectClaimsByUri,
-    selectFileInfosByOutpoint,
-    (claims, byOutpoint) => {
-      const claim = claims[uri],
-        outpoint = claim ? `${claim.txid}:${claim.nout}` : undefined;
+  createSelector(selectClaimsByUri, selectFileInfosByOutpoint, (claims, byOutpoint) => {
+    const claim = claims[uri];
+    const outpoint = claim ? `${claim.txid}:${claim.nout}` : undefined;
 
-      return outpoint ? byOutpoint[outpoint] : undefined;
-    }
-  );
+    return outpoint ? byOutpoint[outpoint] : undefined;
+  });
 
 export const selectDownloadingByOutpoint = createSelector(
-  _selectState,
+  selectState,
   state => state.downloadingByOutpoint || {}
 );
 
@@ -53,17 +47,13 @@ export const makeSelectDownloadingForUri = uri =>
     }
   );
 
-export const selectUrisLoading = createSelector(
-  _selectState,
-  state => state.urisLoading || {}
-);
+export const selectUrisLoading = createSelector(selectState, state => state.urisLoading || {});
 
 export const makeSelectLoadingForUri = uri =>
   createSelector(selectUrisLoading, byUri => byUri && byUri[uri]);
 
-export const selectFileInfosPendingPublish = createSelector(
-  _selectState,
-  state => Object.values(state.pendingByOutpoint || {})
+export const selectFileInfosPendingPublish = createSelector(selectState, state =>
+  Object.values(state.pendingByOutpoint || {})
 );
 
 export const selectFileInfosDownloaded = createSelector(
@@ -141,18 +131,15 @@ export const selectDownloadingFileInfos = createSelector(
   }
 );
 
-export const selectTotalDownloadProgress = createSelector(
-  selectDownloadingFileInfos,
-  fileInfos => {
-    const progress = [];
+export const selectTotalDownloadProgress = createSelector(selectDownloadingFileInfos, fileInfos => {
+  const progress = [];
 
-    fileInfos.forEach(fileInfo => {
-      progress.push(fileInfo.written_bytes / fileInfo.total_bytes * 100);
-    });
+  fileInfos.forEach(fileInfo => {
+    progress.push(fileInfo.written_bytes / fileInfo.total_bytes * 100);
+  });
 
-    const totalProgress = progress.reduce((a, b) => a + b, 0);
+  const totalProgress = progress.reduce((a, b) => a + b, 0);
 
-    if (fileInfos.length > 0) return totalProgress / fileInfos.length / 100.0;
-    return -1;
-  }
-);
+  if (fileInfos.length > 0) return totalProgress / fileInfos.length / 100.0;
+  return -1;
+});

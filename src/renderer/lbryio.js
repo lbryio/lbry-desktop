@@ -1,48 +1,46 @@
-import lbry from "./lbry.js";
+import Lbry from 'lbry';
+import querystring from 'querystring';
+import { ipcRenderer } from 'electron';
 
-const querystring = require("querystring");
-const { ipcRenderer } = require("electron");
-
-const lbryio = {
+const Lbryio = {
   enabled: true,
-  _authenticationPromise: null,
-  _exchangePromise: null,
-  _exchangeLastFetched: null,
+  authenticationPromise: null,
+  exchangePromise: null,
+  exchangeLastFetched: null,
 };
 
 const CONNECTION_STRING = process.env.LBRY_APP_API_URL
-  ? process.env.LBRY_APP_API_URL.replace(/\/*$/, "/") // exactly one slash at the end
-  : "https://api.lbry.io/";
+  ? process.env.LBRY_APP_API_URL.replace(/\/*$/, '/') // exactly one slash at the end
+  : 'https://api.lbry.io/';
 
 const EXCHANGE_RATE_TIMEOUT = 20 * 60 * 1000;
 
-lbryio.getExchangeRates = function() {
+Lbryio.getExchangeRates = function() {
   if (
-    !lbryio._exchangeLastFetched ||
-    Date.now() - lbryio._exchangeLastFetched > EXCHANGE_RATE_TIMEOUT
+    !Lbryio.exchangeLastFetched ||
+    Date.now() - Lbryio.exchangeLastFetched > EXCHANGE_RATE_TIMEOUT
   ) {
-    lbryio._exchangePromise = new Promise((resolve, reject) => {
-      lbryio
-        .call("lbc", "exchange_rate", {}, "get", true)
-        .then(({ lbc_usd, lbc_btc, btc_usd }) => {
-          const rates = { lbc_usd, lbc_btc, btc_usd };
+    Lbryio.exchangePromise = new Promise((resolve, reject) => {
+      Lbryio.call('lbc', 'exchange_rate', {}, 'get', true)
+        .then(({ lbc_usd: LBC_USD, lbc_btc: LBC_BTC, btc_usd: BTC_USD }) => {
+          const rates = { LBC_USD, LBC_BTC, BTC_USD };
           resolve(rates);
         })
         .catch(reject);
     });
-    lbryio._exchangeLastFetched = Date.now();
+    Lbryio.exchangeLastFetched = Date.now();
   }
-  return lbryio._exchangePromise;
+  return Lbryio.exchangePromise;
 };
 
-lbryio.call = function(resource, action, params = {}, method = "get") {
-  if (!lbryio.enabled) {
-    console.log(__("Internal API disabled"));
-    return Promise.reject(new Error(__("LBRY internal API is disabled")));
+Lbryio.call = function(resource, action, params = {}, method = 'get') {
+  if (!Lbryio.enabled) {
+    console.log(__('Internal API disabled'));
+    return Promise.reject(new Error(__('LBRY internal API is disabled')));
   }
 
-  if (!(method == "get" || method == "post")) {
-    return Promise.reject(new Error(__("Invalid method")));
+  if (!(method === 'get' || method === 'post')) {
+    return Promise.reject(new Error(__('Invalid method')));
   }
 
   function checkAndParse(response) {
@@ -54,7 +52,7 @@ lbryio.call = function(resource, action, params = {}, method = "get") {
       if (json.error) {
         error = new Error(json.error);
       } else {
-        error = new Error("Unknown API error signature");
+        error = new Error('Unknown API error signature');
       }
       error.response = response; // this is primarily a hack used in actions/user.js
       return Promise.reject(error);
@@ -65,20 +63,20 @@ lbryio.call = function(resource, action, params = {}, method = "get") {
     return fetch(url, options).then(checkAndParse);
   }
 
-  return lbryio.getAuthToken().then(token => {
+  return Lbryio.getAuthToken().then(token => {
     const fullParams = { auth_token: token, ...params };
     const qs = querystring.stringify(fullParams);
     let url = `${CONNECTION_STRING}${resource}/${action}?${qs}`;
 
     let options = {
-      method: "GET",
+      method: 'GET',
     };
 
-    if (method == "post") {
+    if (method === 'post') {
       options = {
-        method: "POST",
+        method: 'POST',
         headers: {
-          "Content-Type": "application/x-www-form-urlencoded",
+          'Content-Type': 'application/x-www-form-urlencoded',
         },
         body: qs,
       };
@@ -89,35 +87,35 @@ lbryio.call = function(resource, action, params = {}, method = "get") {
   });
 };
 
-lbryio._authToken = null;
+Lbryio.authToken = null;
 
-lbryio.getAuthToken = () =>
-  new Promise((resolve, reject) => {
-    if (lbryio._authToken) {
-      resolve(lbryio._authToken);
+Lbryio.getAuthToken = () =>
+  new Promise(resolve => {
+    if (Lbryio.authToken) {
+      resolve(Lbryio.authToken);
     } else {
-      ipcRenderer.once("auth-token-response", (event, token) => {
-        lbryio._authToken = token;
+      ipcRenderer.once('auth-token-response', (event, token) => {
+        Lbryio.authToken = token;
         return resolve(token);
       });
-      ipcRenderer.send("get-auth-token");
+      ipcRenderer.send('get-auth-token');
     }
   });
 
-lbryio.setAuthToken = token => {
-  lbryio._authToken = token ? token.toString().trim() : null;
-  ipcRenderer.send("set-auth-token", token);
+Lbryio.setAuthToken = token => {
+  Lbryio.authToken = token ? token.toString().trim() : null;
+  ipcRenderer.send('set-auth-token', token);
 };
 
-lbryio.getCurrentUser = () => lbryio.call("user", "me");
+Lbryio.getCurrentUser = () => Lbryio.call('user', 'me');
 
-lbryio.authenticate = function() {
-  if (!lbryio.enabled) {
-    return new Promise((resolve, reject) => {
+Lbryio.authenticate = function() {
+  if (!Lbryio.enabled) {
+    return new Promise(resolve => {
       resolve({
         id: 1,
-        language: "en",
-        primary_email: "disabled@lbry.io",
+        language: 'en',
+        primary_email: 'disabled@lbry.io',
         has_verified_email: true,
         is_identity_verified: true,
         is_reward_approved: false,
@@ -125,58 +123,55 @@ lbryio.authenticate = function() {
     });
   }
 
-  if (lbryio._authenticationPromise === null) {
-    lbryio._authenticationPromise = new Promise((resolve, reject) => {
-      lbryio
-        .getAuthToken()
+  if (Lbryio.authenticationPromise === null) {
+    Lbryio.authenticationPromise = new Promise((resolve, reject) => {
+      Lbryio.getAuthToken()
         .then(token => {
           if (!token || token.length > 60) {
             return false;
           }
 
           // check that token works
-          return lbryio
-            .getCurrentUser()
+          return Lbryio.getCurrentUser()
             .then(() => true)
             .catch(() => false);
         })
         .then(isTokenValid => {
           if (isTokenValid) {
-            return;
+            return reject;
           }
 
-          return lbry
-            .status()
+          return Lbry.status()
             .then(status =>
-              lbryio.call(
-                "user",
-                "new",
+              Lbryio.call(
+                'user',
+                'new',
                 {
-                  auth_token: "",
-                  language: "en",
+                  auth_token: '',
+                  language: 'en',
                   app_id: status.installation_id,
                 },
-                "post"
+                'post'
               )
             )
             .then(response => {
               if (!response.auth_token) {
-                throw new Error(__("auth_token is missing from response"));
+                throw new Error(__('auth_token is missing from response'));
               }
-              return lbryio.setAuthToken(response.auth_token);
+              return Lbryio.setAuthToken(response.auth_token);
             });
         })
-        .then(lbryio.getCurrentUser)
+        .then(Lbryio.getCurrentUser)
         .then(resolve, reject);
     });
   }
 
-  return lbryio._authenticationPromise;
+  return Lbryio.authenticationPromise;
 };
 
-lbryio.getStripeToken = () =>
-  CONNECTION_STRING.startsWith("http://localhost:")
-    ? "pk_test_NoL1JWL7i1ipfhVId5KfDZgo"
-    : "pk_live_e8M4dRNnCCbmpZzduEUZBgJO";
+Lbryio.getStripeToken = () =>
+  CONNECTION_STRING.startsWith('http://localhost:')
+    ? 'pk_test_NoL1JWL7i1ipfhVId5KfDZgo'
+    : 'pk_live_e8M4dRNnCCbmpZzduEUZBgJO';
 
-export default lbryio;
+export default Lbryio;

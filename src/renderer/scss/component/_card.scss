@@ -12,12 +12,11 @@
   //below added to prevent scrollbar on long titles when show page loads, would prefer a cleaner CSS solution
   overflow-x: hidden;
 }
-.card--obscured
-{
+.card--obscured {
   position: relative;
 }
 .card--obscured .card__inner {
-  filter: blur( var(--nsfw-blur-intensity) );
+  filter: blur(var(--nsfw-blur-intensity));
 }
 .card__title-primary,
 .card__title-identity,
@@ -52,7 +51,6 @@
   margin-top: var(--card-margin);
   margin-bottom: var(--card-margin);
   user-select: none;
-
 }
 .card__actions--bottom {
   margin-top: $spacing-vertical * 1/3;
@@ -88,7 +86,7 @@
 $font-size-subtext-multiple: 0.82;
 .card__subtext {
   color: var(--color-meta-light);
-  font-size: calc( var(--font-size-subtext-multiple) * 1.0em );
+  font-size: calc(var(--font-size-subtext-multiple) * 1em);
   margin-top: $spacing-vertical * 1/3;
   margin-bottom: $spacing-vertical * 1/3;
 }
@@ -96,7 +94,9 @@ $font-size-subtext-multiple: 0.82;
   white-space: pre-wrap;
 }
 .card__subtext--two-lines {
-  height: calc( var(--font-size) * var(--font-size-subtext-multiple) * var(--font-line-height) * 2); /*this is so one line text still has the proper height*/
+  height: calc(
+    var(--font-size) * var(--font-size-subtext-multiple) * var(--font-line-height) * 2
+  ); /*this is so one line text still has the proper height*/
 }
 .card-overlay {
   position: absolute;
@@ -117,7 +117,7 @@ $font-size-subtext-multiple: 0.82;
   cursor: pointer;
 }
 .card--link {
-  transition: transform 0.2s  var(--animation-style);
+  transition: transform 0.2s var(--animation-style);
 }
 .card--link:hover {
   position: relative;
@@ -126,7 +126,7 @@ $font-size-subtext-multiple: 0.82;
   transform: scale(var(--card-link-scaling)) translateX(var(--card-hover-translate));
   transform-origin: 50% 50%;
   overflow-x: visible;
-  overflow-y: visible
+  overflow-y: visible;
 }
 .card--link:hover ~ .card--link {
   transform: translateX(calc(var(--card-hover-translate) * 2));
@@ -139,49 +139,49 @@ $font-size-subtext-multiple: 0.82;
 }
 
 .card__media--autothumb {
-  position: relative
+  position: relative;
 }
 .card__media--autothumb.purple {
-  background-color: #9c27b0
+  background-color: #9c27b0;
 }
 .card__media--autothumb.red {
-  background-color: #e53935
+  background-color: #e53935;
 }
 .card__media--autothumb.pink {
-  background-color: #e91e63
+  background-color: #e91e63;
 }
 .card__media--autothumb.indigo {
-  background-color: #3f51b5
+  background-color: #3f51b5;
 }
 .card__media--autothumb.blue {
-  background-color: #2196f3
+  background-color: #2196f3;
 }
 .card__media--autothumb.light-blue {
-  background-color: #039be5
+  background-color: #039be5;
 }
 .card__media--autothumb.cyan {
-  background-color: #00acc1
+  background-color: #00acc1;
 }
 .card__media--autothumb.teal {
-  background-color: #009688
+  background-color: #009688;
 }
 .card__media--autothumb.green {
-  background-color: #43a047
+  background-color: #43a047;
 }
 .card__media--autothumb.yellow {
-  background-color: #ffeb3b
+  background-color: #ffeb3b;
 }
 .card__media--autothumb.orange {
-  background-color: #ffa726
+  background-color: #ffa726;
 }
 
 .card__media--autothumb .card__autothumb__text {
-  font-size: 2.0em;
+  font-size: 2em;
   width: 100%;
   color: #ffffff;
   text-align: center;
   position: absolute;
-  top: 36%
+  top: 36%;
 }
 
 .card__indicators {
@@ -194,17 +194,17 @@ $font-size-subtext-multiple: 0.82;
   white-space: normal;
 }
 .card--small .card__media {
-  height: calc( var(--card-small-width) * 9 / 16);
+  height: calc(var(--card-small-width) * 9 / 16);
 }
 
 .card--form {
-  width: calc( var(--input-width) + var(--card-padding) * 2);
+  width: calc(var(--input-width) + var(--card-padding) * 2);
 }
 
 .card__subtitle {
   color: var(--color-help);
   font-size: 0.85em;
-  line-height: calc( var(--font-line-height) * 1 / 0.85);
+  line-height: calc(var(--font-line-height) * 1 / 0.85);
 }
 
 .card--file-subtitle {
@@ -219,8 +219,7 @@ $font-size-subtext-multiple: 0.82;
   padding-left: 20px;
 }
 
-.card-series-submit
-{
+.card-series-submit {
   margin-left: auto;
   margin-right: auto;
   max-width: var(--card-max-width);
@@ -279,7 +278,7 @@ $padding-right-card-hover-hack: 30px;
   position: absolute;
   padding: 0 var(--card-margin);
   height: 100%;
-  top: calc( $padding-top-card-hover-hack - var(--card-margin) );
+  top: calc($padding-top-card-hover-hack - var(--card-margin));
 }
 .card-row__nav .card-row__scroll-button {
   background: var(--card-bg);
@@ -295,8 +294,8 @@ $padding-right-card-hover-hack: 30px;
   transition: transform 0.2s var(--animation-style);
 
   &:hover {
-    opacity: 1.0;
-    transform: scale(calc( var(--card-link-scaling) * 1.1));
+    opacity: 1;
+    transform: scale(calc(var(--card-link-scaling) * 1.1));
   }
 }
 .card-row__nav--left {
@@ -311,11 +310,11 @@ if we keep doing things like this, we should add a real grid system, but I'm goi
  */
 .card-grid {
   $margin-card-grid: $spacing-vertical * 2/3;
-  display:flex;
+  display: flex;
   flex-wrap: wrap;
   > .card {
     width: $width-page-constrained / 2 - $margin-card-grid / 2;
-    flex-grow:1;
+    flex-grow: 1;
   }
   > .card:nth-of-type(2n - 1):not(:last-child) {
     margin-right: $margin-card-grid;

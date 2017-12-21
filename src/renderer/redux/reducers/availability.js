@@ -1,9 +1,9 @@
-import * as types from "constants/action_types";
+import * as ACTIONS from 'constants/action_types';
 
 const reducers = {};
 const defaultState = {};
 
-reducers[types.FETCH_AVAILABILITY_STARTED] = function(state, action) {
+reducers[ACTIONS.FETCH_AVAILABILITY_STARTED] = function(state, action) {
   const { uri } = action.data;
   const newFetching = Object.assign({}, state.fetching);
 
@@ -14,7 +14,7 @@ reducers[types.FETCH_AVAILABILITY_STARTED] = function(state, action) {
   });
 };
 
-reducers[types.FETCH_AVAILABILITY_COMPLETED] = function(state, action) {
+reducers[ACTIONS.FETCH_AVAILABILITY_COMPLETED] = function(state, action) {
   const { uri, availability } = action.data;
 
   const newFetching = Object.assign({}, state.fetching);

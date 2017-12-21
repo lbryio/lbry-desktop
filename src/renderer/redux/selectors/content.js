@@ -1,35 +1,26 @@
-import { createSelector } from "reselect";
+import { createSelector } from 'reselect';
 
-export const _selectState = state => state.content || {};
+export const selectState = state => state.content || {};
 
-export const selectFeaturedUris = createSelector(
-  _selectState,
-  state => state.featuredUris
-);
+export const selectFeaturedUris = createSelector(selectState, state => state.featuredUris);
 
 export const selectFetchingFeaturedUris = createSelector(
-  _selectState,
+  selectState,
   state => !!state.fetchingFeaturedContent
 );
 
-export const selectResolvingUris = createSelector(
-  _selectState,
-  state => state.resolvingUris || []
-);
+export const selectResolvingUris = createSelector(selectState, state => state.resolvingUris || []);
 
-export const selectPlayingUri = createSelector(
-  _selectState,
-  state => state.playingUri
-);
+export const selectPlayingUri = createSelector(selectState, state => state.playingUri);
 
 export const makeSelectIsUriResolving = uri =>
   createSelector(
     selectResolvingUris,
-    resolvingUris => resolvingUris && resolvingUris.indexOf(uri) != -1
+    resolvingUris => resolvingUris && resolvingUris.indexOf(uri) !== -1
   );
 
 export const selectChannelClaimCounts = createSelector(
-  _selectState,
+  selectState,
   state => state.channelClaimCounts || {}
 );
 
@@ -43,6 +34,6 @@ export const makeSelectTotalPagesForChannel = uri =>
   );
 
 export const selectRewardContentClaimIds = createSelector(
-  _selectState,
+  selectState,
   state => state.rewardedContentClaimIds
 );

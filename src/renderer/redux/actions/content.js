@@ -1,65 +1,63 @@
-import * as types from "constants/action_types";
-import * as settings from "constants/settings";
-import lbry from "lbry";
-import lbryio from "lbryio";
-import lbryuri from "lbryuri";
-import { makeSelectClientSetting } from "redux/selectors/settings";
-import { selectBalance, selectTransactionItems } from "redux/selectors/wallet";
+import { ipcRenderer } from 'electron';
+import * as ACTIONS from 'constants/action_types';
+import * as SETTINGS from 'constants/settings';
+import Lbry from 'lbry';
+import Lbryio from 'lbryio';
+import Lbryuri from 'lbryuri';
+import { makeSelectClientSetting } from 'redux/selectors/settings';
+import { selectBalance, selectTransactionItems } from 'redux/selectors/wallet';
 import {
   makeSelectFileInfoForUri,
   selectDownloadingByOutpoint,
-} from "redux/selectors/file_info";
-import { selectResolvingUris } from "redux/selectors/content";
-import { makeSelectCostInfoForUri } from "redux/selectors/cost_info";
-import { doAlertError, doOpenModal } from "redux/actions/app";
-import { doClaimEligiblePurchaseRewards } from "redux/actions/rewards";
-import { selectBadgeNumber } from "redux/selectors/app";
-import { selectTotalDownloadProgress } from "redux/selectors/file_info";
-import setBadge from "util/setBadge";
-import setProgressBar from "util/setProgressBar";
-import batchActions from "util/batchActions";
-import * as modals from "constants/modal_types";
-
-const { ipcRenderer } = require("electron");
+  selectTotalDownloadProgress,
+} from 'redux/selectors/file_info';
+import { selectResolvingUris } from 'redux/selectors/content';
+import { makeSelectCostInfoForUri } from 'redux/selectors/cost_info';
+import { doAlertError, doOpenModal } from 'redux/actions/app';
+import { doClaimEligiblePurchaseRewards } from 'redux/actions/rewards';
+import { selectBadgeNumber } from 'redux/selectors/app';
+import setBadge from 'util/setBadge';
+import setProgressBar from 'util/setProgressBar';
+import batchActions from 'util/batchActions';
+import * as MODALS from 'constants/modal_types';
 
 const DOWNLOAD_POLL_INTERVAL = 250;
 
 export function doResolveUris(uris) {
   return function(dispatch, getState) {
-    uris = uris.map(lbryuri.normalize);
+    const normalizedUris = uris.map(Lbryuri.normalize);
     const state = getState();
 
     // Filter out URIs that are already resolving
     const resolvingUris = selectResolvingUris(state);
-    const urisToResolve = uris.filter(uri => !resolvingUris.includes(uri));
+    const urisToResolve = normalizedUris.filter(uri => !resolvingUris.includes(uri));
 
     if (urisToResolve.length === 0) {
       return;
     }
 
     dispatch({
-      type: types.RESOLVE_URIS_STARTED,
-      data: { uris },
+      type: ACTIONS.RESOLVE_URIS_STARTED,
+      data: { uris: normalizedUris },
     });
 
     const resolveInfo = {};
-    lbry.resolve({ uris: urisToResolve }).then(result => {
-      for (const [uri, uriResolveInfo] of Object.entries(result)) {
+    Lbry.resolve({ uris: urisToResolve }).then(result => {
+      Object.entries(result).forEach(([uri, uriResolveInfo]) => {
         const fallbackResolveInfo = {
           claim: null,
-          claims_in_channel: null,
+          claimsInChannel: null,
           certificate: null,
         };
 
-        const { claim, certificate, claims_in_channel } =
-          uriResolveInfo && !uriResolveInfo.error
-            ? uriResolveInfo
-            : fallbackResolveInfo;
-        resolveInfo[uri] = { claim, certificate, claims_in_channel };
-      }
+        const { claim, certificate, claims_in_channel: claimsInChannel } =
+          uriResolveInfo && !uriResolveInfo.error ? uriResolveInfo : fallbackResolveInfo;
+
+        resolveInfo[uri] = { claim, certificate, claimsInChannel };
+      });
 
       dispatch({
-        type: types.RESOLVE_URIS_COMPLETED,
+        type: ACTIONS.RESOLVE_URIS_COMPLETED,
         data: { resolveInfo },
       });
     });
@@ -71,23 +69,21 @@ export function doResolveUri(uri) {
 }
 
 export function doFetchFeaturedUris() {
-  return function(dispatch, getState) {
-    const state = getState();
-
+  return function(dispatch) {
     dispatch({
-      type: types.FETCH_FEATURED_CONTENT_STARTED,
+      type: ACTIONS.FETCH_FEATURED_CONTENT_STARTED,
     });
 
     const success = ({ Uris }) => {
       let urisToResolve = [];
-      for (const category in Uris) {
+      Object.keys(Uris).forEach(category => {
         urisToResolve = [...urisToResolve, ...Uris[category]];
-      }
+      });
 
       const actions = [
         doResolveUris(urisToResolve),
         {
-          type: types.FETCH_FEATURED_CONTENT_COMPLETED,
+          type: ACTIONS.FETCH_FEATURED_CONTENT_COMPLETED,
           data: {
             uris: Uris,
             success: true,
@@ -99,24 +95,22 @@ export function doFetchFeaturedUris() {
 
     const failure = () => {
       dispatch({
-        type: types.FETCH_FEATURED_CONTENT_COMPLETED,
+        type: ACTIONS.FETCH_FEATURED_CONTENT_COMPLETED,
         data: {
           uris: {},
         },
       });
     };
 
-    lbryio.call("file", "list_homepage").then(success, failure);
+    Lbryio.call('file', 'list_homepage').then(success, failure);
   };
 }
 
 export function doFetchRewardedContent() {
-  return function(dispatch, getState) {
-    const state = getState();
-
+  return function(dispatch) {
     const success = nameToClaimId => {
       dispatch({
-        type: types.FETCH_REWARD_CONTENT_COMPLETED,
+        type: ACTIONS.FETCH_REWARD_CONTENT_COMPLETED,
         data: {
           claimIds: Object.values(nameToClaimId),
           success: true,
@@ -126,7 +120,7 @@ export function doFetchRewardedContent() {
 
     const failure = () => {
       dispatch({
-        type: types.FETCH_REWARD_CONTENT_COMPLETED,
+        type: ACTIONS.FETCH_REWARD_CONTENT_COMPLETED,
         data: {
           claimIds: [],
           success: false,
@@ -134,73 +128,69 @@ export function doFetchRewardedContent() {
       });
     };
 
-    lbryio.call("reward", "list_featured").then(success, failure);
+    Lbryio.call('reward', 'list_featured').then(success, failure);
   };
 }
 
 export function doUpdateLoadStatus(uri, outpoint) {
   return function(dispatch, getState) {
-    const state = getState();
+    Lbry.file_list({
+      outpoint,
+      full_status: true,
+    }).then(([fileInfo]) => {
+      if (!fileInfo || fileInfo.written_bytes === 0) {
+        // download hasn't started yet
+        setTimeout(() => {
+          dispatch(doUpdateLoadStatus(uri, outpoint));
+        }, DOWNLOAD_POLL_INTERVAL);
+      } else if (fileInfo.completed) {
+        // TODO this isn't going to get called if they reload the client before
+        // the download finished
+        dispatch({
+          type: ACTIONS.DOWNLOADING_COMPLETED,
+          data: {
+            uri,
+            outpoint,
+            fileInfo,
+          },
+        });
 
-    lbry
-      .file_list({
-        outpoint,
-        full_status: true,
-      })
-      .then(([fileInfo]) => {
-        if (!fileInfo || fileInfo.written_bytes == 0) {
-          // download hasn't started yet
-          setTimeout(() => {
-            dispatch(doUpdateLoadStatus(uri, outpoint));
-          }, DOWNLOAD_POLL_INTERVAL);
-        } else if (fileInfo.completed) {
-          // TODO this isn't going to get called if they reload the client before
-          // the download finished
-          dispatch({
-            type: types.DOWNLOADING_COMPLETED,
-            data: {
-              uri,
-              outpoint,
-              fileInfo,
-            },
-          });
+        const badgeNumber = selectBadgeNumber(getState());
+        setBadge(badgeNumber === 0 ? '' : `${badgeNumber}`);
 
-          const badgeNumber = selectBadgeNumber(getState());
-          setBadge(badgeNumber === 0 ? "" : `${badgeNumber}`);
+        const totalProgress = selectTotalDownloadProgress(getState());
+        setProgressBar(totalProgress);
 
-          const totalProgress = selectTotalDownloadProgress(getState());
-          setProgressBar(totalProgress);
+        const notif = new window.Notification('LBRY Download Complete', {
+          body: fileInfo.metadata.stream.metadata.title,
+          silent: false,
+        });
+        notif.onclick = () => {
+          ipcRenderer.send('focusWindow', 'main');
+        };
+      } else {
+        // ready to play
+        const { total_bytes: totalBytes, written_bytes: writtenBytes } = fileInfo;
+        const progress = writtenBytes / totalBytes * 100;
 
-          const notif = new window.Notification("LBRY Download Complete", {
-            body: fileInfo.metadata.stream.metadata.title,
-            silent: false,
-          });
-          notif.onclick = () => {
-            ipcRenderer.send("focusWindow", "main");
-          };
-        } else {
-          // ready to play
-          const { total_bytes, written_bytes } = fileInfo;
-          const progress = written_bytes / total_bytes * 100;
+        dispatch({
+          type: ACTIONS.DOWNLOADING_PROGRESSED,
+          data: {
+            uri,
+            outpoint,
+            fileInfo,
+            progress,
+          },
+        });
 
-          dispatch({
-            type: types.DOWNLOADING_PROGRESSED,
-            data: {
-              uri,
-              outpoint,
-              fileInfo,
-              progress,
-            },
-          });
+        const totalProgress = selectTotalDownloadProgress(getState());
+        setProgressBar(totalProgress);
 
-          const totalProgress = selectTotalDownloadProgress(getState());
-          setProgressBar(totalProgress);
-
-          setTimeout(() => {
-            dispatch(doUpdateLoadStatus(uri, outpoint));
-          }, DOWNLOAD_POLL_INTERVAL);
-        }
-      });
+        setTimeout(() => {
+          dispatch(doUpdateLoadStatus(uri, outpoint));
+        }, DOWNLOAD_POLL_INTERVAL);
+      }
+    });
   };
 }
 
@@ -209,16 +199,16 @@ export function doStartDownload(uri, outpoint) {
     const state = getState();
 
     if (!outpoint) {
-      throw new Error("outpoint is required to begin a download");
+      throw new Error('outpoint is required to begin a download');
     }
 
     const { downloadingByOutpoint = {} } = state.fileInfo;
 
     if (downloadingByOutpoint[outpoint]) return;
 
-    lbry.file_list({ outpoint, full_status: true }).then(([fileInfo]) => {
+    Lbry.file_list({ outpoint, full_status: true }).then(([fileInfo]) => {
       dispatch({
-        type: types.DOWNLOADING_STARTED,
+        type: ACTIONS.DOWNLOADING_STARTED,
         data: {
           uri,
           outpoint,
@@ -232,50 +222,50 @@ export function doStartDownload(uri, outpoint) {
 }
 
 export function doDownloadFile(uri, streamInfo) {
-  return function(dispatch, getState) {
-    const state = getState();
-
+  return function(dispatch) {
     dispatch(doStartDownload(uri, streamInfo.outpoint));
 
-    lbryio
-      .call("file", "view", {
-        uri,
-        outpoint: streamInfo.outpoint,
-        claim_id: streamInfo.claim_id,
-      })
-      .catch(() => {});
+    Lbryio.call('file', 'view', {
+      uri,
+      outpoint: streamInfo.outpoint,
+      claim_id: streamInfo.claim_id,
+    }).catch(() => {});
 
     dispatch(doClaimEligiblePurchaseRewards());
   };
 }
 
-export function doLoadVideo(uri) {
-  return function(dispatch, getState) {
-    const state = getState();
-
+export function doSetPlayingUri(uri) {
+  return function(dispatch) {
     dispatch({
-      type: types.LOADING_VIDEO_STARTED,
+      type: ACTIONS.SET_PLAYING_URI,
+      data: { uri },
+    });
+  };
+}
+
+export function doLoadVideo(uri) {
+  return function(dispatch) {
+    dispatch({
+      type: ACTIONS.LOADING_VIDEO_STARTED,
       data: {
         uri,
       },
     });
 
-    lbry
-      .get({ uri })
+    Lbry.get({ uri })
       .then(streamInfo => {
         const timeout =
-          streamInfo === null ||
-          typeof streamInfo !== "object" ||
-          streamInfo.error == "Timeout";
+          streamInfo === null || typeof streamInfo !== 'object' || streamInfo.error === 'Timeout';
 
         if (timeout) {
           dispatch(doSetPlayingUri(null));
           dispatch({
-            type: types.LOADING_VIDEO_FAILED,
+            type: ACTIONS.LOADING_VIDEO_FAILED,
             data: { uri },
           });
 
-          dispatch(doOpenModal(modals.FILE_TIMEOUT, { uri }));
+          dispatch(doOpenModal(MODALS.FILE_TIMEOUT, { uri }));
         } else {
           dispatch(doDownloadFile(uri, streamInfo));
         }
@@ -283,7 +273,7 @@ export function doLoadVideo(uri) {
       .catch(() => {
         dispatch(doSetPlayingUri(null));
         dispatch({
-          type: types.LOADING_VIDEO_FAILED,
+          type: ACTIONS.LOADING_VIDEO_FAILED,
           data: { uri },
         });
         dispatch(
@@ -303,12 +293,11 @@ export function doPurchaseUri(uri) {
     const balance = selectBalance(state);
     const fileInfo = makeSelectFileInfoForUri(uri)(state);
     const downloadingByOutpoint = selectDownloadingByOutpoint(state);
-    const alreadyDownloading =
-      fileInfo && !!downloadingByOutpoint[fileInfo.outpoint];
+    const alreadyDownloading = fileInfo && !!downloadingByOutpoint[fileInfo.outpoint];
 
     function attemptPlay(cost, instantPurchaseMax = null) {
       if (cost > 0 && (!instantPurchaseMax || cost > instantPurchaseMax)) {
-        dispatch(doOpenModal(modals.AFFIRM_PURCHASE, { uri }));
+        dispatch(doOpenModal(MODALS.AFFIRM_PURCHASE, { uri }));
       } else {
         dispatch(doLoadVideo(uri));
       }
@@ -321,12 +310,14 @@ export function doPurchaseUri(uri) {
       // doLoadVideo action to reconstruct the file from the blobs
       if (!fileInfo.written_bytes) dispatch(doLoadVideo(uri));
 
-      return Promise.resolve();
+      Promise.resolve();
+      return;
     }
 
     // we are already downloading the file
     if (alreadyDownloading) {
-      return Promise.resolve();
+      Promise.resolve();
+      return;
     }
 
     const costInfo = makeSelectCostInfoForUri(uri)(state);
@@ -334,25 +325,21 @@ export function doPurchaseUri(uri) {
 
     if (cost > balance) {
       dispatch(doSetPlayingUri(null));
-      dispatch(doOpenModal(modals.INSUFFICIENT_CREDITS));
-      return Promise.resolve();
+      dispatch(doOpenModal(MODALS.INSUFFICIENT_CREDITS));
+      Promise.resolve();
+      return;
     }
 
-    if (
-      cost == 0 ||
-      !makeSelectClientSetting(settings.INSTANT_PURCHASE_ENABLED)(state)
-    ) {
+    if (cost === 0 || !makeSelectClientSetting(SETTINGS.INSTANT_PURCHASE_ENABLED)(state)) {
       attemptPlay(cost);
     } else {
-      const instantPurchaseMax = makeSelectClientSetting(
-        settings.INSTANT_PURCHASE_MAX
-      )(state);
-      if (instantPurchaseMax.currency == "LBC") {
+      const instantPurchaseMax = makeSelectClientSetting(SETTINGS.INSTANT_PURCHASE_MAX)(state);
+      if (instantPurchaseMax.currency === 'LBC') {
         attemptPlay(cost, instantPurchaseMax.amount);
       } else {
         // Need to convert currency of instant purchase maximum before trying to play
-        lbryio.getExchangeRates().then(({ lbc_usd }) => {
-          attemptPlay(cost, instantPurchaseMax.amount / lbc_usd);
+        Lbryio.getExchangeRates().then(({ LBC_USD }) => {
+          attemptPlay(cost, instantPurchaseMax.amount / LBC_USD);
         });
       }
     }
@@ -360,22 +347,22 @@ export function doPurchaseUri(uri) {
 }
 
 export function doFetchClaimsByChannel(uri, page) {
-  return function(dispatch, getState) {
+  return function(dispatch) {
     dispatch({
-      type: types.FETCH_CHANNEL_CLAIMS_STARTED,
+      type: ACTIONS.FETCH_CHANNEL_CLAIMS_STARTED,
       data: { uri, page },
     });
 
-    lbry.claim_list_by_channel({ uri, page: page || 1 }).then(result => {
+    Lbry.claim_list_by_channel({ uri, page: page || 1 }).then(result => {
       const claimResult = result[uri] || {};
-      const { claims_in_channel, returned_page } = claimResult;
+      const { claims_in_channel: claimsInChannel, returned_page: returnedPage } = claimResult;
 
       dispatch({
-        type: types.FETCH_CHANNEL_CLAIMS_COMPLETED,
+        type: ACTIONS.FETCH_CHANNEL_CLAIMS_COMPLETED,
         data: {
           uri,
-          claims: claims_in_channel || [],
-          page: returned_page || undefined,
+          claims: claimsInChannel || [],
+          page: returnedPage || undefined,
         },
       });
     });
@@ -383,18 +370,18 @@ export function doFetchClaimsByChannel(uri, page) {
 }
 
 export function doFetchClaimCountByChannel(uri) {
-  return function(dispatch, getState) {
+  return function(dispatch) {
     dispatch({
-      type: types.FETCH_CHANNEL_CLAIM_COUNT_STARTED,
+      type: ACTIONS.FETCH_CHANNEL_CLAIM_COUNT_STARTED,
       data: { uri },
     });
 
-    lbry.claim_list_by_channel({ uri }).then(result => {
-      const claimResult = result[uri],
-        totalClaims = claimResult ? claimResult.claims_in_channel : 0;
+    Lbry.claim_list_by_channel({ uri }).then(result => {
+      const claimResult = result[uri];
+      const totalClaims = claimResult ? claimResult.claims_in_channel : 0;
 
       dispatch({
-        type: types.FETCH_CHANNEL_CLAIM_COUNT_COMPLETED,
+        type: ACTIONS.FETCH_CHANNEL_CLAIM_COUNT_COMPLETED,
         data: {
           uri,
           totalClaims,
@@ -405,14 +392,14 @@ export function doFetchClaimCountByChannel(uri) {
 }
 
 export function doFetchClaimListMine() {
-  return function(dispatch, getState) {
+  return function(dispatch) {
     dispatch({
-      type: types.FETCH_CLAIM_LIST_MINE_STARTED,
+      type: ACTIONS.FETCH_CLAIM_LIST_MINE_STARTED,
     });
 
-    lbry.claim_list_mine().then(claims => {
+    Lbry.claim_list_mine().then(claims => {
       dispatch({
-        type: types.FETCH_CLAIM_LIST_MINE_COMPLETED,
+        type: ACTIONS.FETCH_CLAIM_LIST_MINE_COMPLETED,
         data: {
           claims,
         },
@@ -422,69 +409,59 @@ export function doFetchClaimListMine() {
 }
 
 export function doPlayUri(uri) {
-  return function(dispatch, getState) {
+  return function(dispatch) {
     dispatch(doSetPlayingUri(uri));
     dispatch(doPurchaseUri(uri));
   };
 }
 
-export function doSetPlayingUri(uri) {
-  return function(dispatch, getState) {
-    dispatch({
-      type: types.SET_PLAYING_URI,
-      data: { uri },
-    });
-  };
-}
-
 export function doFetchChannelListMine() {
-  return function(dispatch, getState) {
+  return function(dispatch) {
     dispatch({
-      type: types.FETCH_CHANNEL_LIST_MINE_STARTED,
+      type: ACTIONS.FETCH_CHANNEL_LIST_MINE_STARTED,
     });
 
     const callback = channels => {
       dispatch({
-        type: types.FETCH_CHANNEL_LIST_MINE_COMPLETED,
+        type: ACTIONS.FETCH_CHANNEL_LIST_MINE_COMPLETED,
         data: { claims: channels },
       });
     };
 
-    lbry.channel_list_mine().then(callback);
+    Lbry.channel_list_mine().then(callback);
   };
 }
 
 export function doCreateChannel(name, amount) {
-  return function(dispatch, getState) {
+  return function(dispatch) {
     dispatch({
-      type: types.CREATE_CHANNEL_STARTED,
+      type: ACTIONS.CREATE_CHANNEL_STARTED,
     });
 
     return new Promise((resolve, reject) => {
-      lbry
-        .channel_new({
-          channel_name: name,
-          amount: parseFloat(amount),
-        })
-        .then(
-          channelClaim => {
-            channelClaim.name = name;
-            dispatch({
-              type: types.CREATE_CHANNEL_COMPLETED,
-              data: { channelClaim },
-            });
-            resolve(channelClaim);
-          },
-          err => {
-            reject(err);
-          }
-        );
+      Lbry.channel_new({
+        channel_name: name,
+        amount: parseFloat(amount),
+      }).then(
+        channelClaim => {
+          const newChannelClaim = channelClaim;
+          newChannelClaim.name = name;
+          dispatch({
+            type: ACTIONS.CREATE_CHANNEL_COMPLETED,
+            data: { newChannelClaim },
+          });
+          resolve(newChannelClaim);
+        },
+        error => {
+          reject(error);
+        }
+      );
     });
   };
 }
 
 export function doPublish(params) {
-  return function(dispatch, getState) {
+  return function(dispatch) {
     return new Promise((resolve, reject) => {
       const success = claim => {
         resolve(claim);
@@ -497,7 +474,7 @@ export function doPublish(params) {
       };
       const failure = err => reject(err);
 
-      lbry.publishDeprecated(params, null, success, failure);
+      Lbry.publishDeprecated(params, null, success, failure);
     });
   };
 }
@@ -507,40 +484,38 @@ export function doAbandonClaim(txid, nout) {
     const state = getState();
     const transactionItems = selectTransactionItems(state);
     const { claim_id: claimId, claim_name: name } = transactionItems.find(
-      claim => claim.txid == txid && claim.nout == nout
+      claim => claim.txid === txid && claim.nout === nout
     );
 
     dispatch({
-      type: types.ABANDON_CLAIM_STARTED,
+      type: ACTIONS.ABANDON_CLAIM_STARTED,
       data: {
         claimId,
       },
     });
 
-    const errorCallback = error => {
-      dispatch(doOpenModal(modals.TRANSACTION_FAILED));
+    const errorCallback = () => {
+      dispatch(doOpenModal(MODALS.TRANSACTION_FAILED));
     };
 
     const successCallback = results => {
       if (results.txid) {
         dispatch({
-          type: types.ABANDON_CLAIM_SUCCEEDED,
+          type: ACTIONS.ABANDON_CLAIM_SUCCEEDED,
           data: {
             claimId,
           },
         });
-        dispatch(doResolveUri(lbryuri.build({ name, claimId })));
+        dispatch(doResolveUri(Lbryuri.build({ name, claimId })));
         dispatch(doFetchClaimListMine());
       } else {
-        dispatch(doOpenModal(modals.TRANSACTION_FAILED));
+        dispatch(doOpenModal(MODALS.TRANSACTION_FAILED));
       }
     };
 
-    lbry
-      .claim_abandon({
-        txid,
-        nout,
-      })
-      .then(successCallback, errorCallback);
+    Lbry.claim_abandon({
+      txid,
+      nout,
+    }).then(successCallback, errorCallback);
   };
 }

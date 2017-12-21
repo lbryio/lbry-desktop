@@ -1,18 +1,10 @@
-import * as types from "constants/action_types";
-import {
-  computePageFromPath,
-  selectPageTitle,
-  selectCurrentPage,
-  selectCurrentParams,
-  selectHistoryStack,
-  selectHistoryIndex,
-} from "redux/selectors/navigation";
-import { doSearch } from "redux/actions/search";
-import { toQueryString } from "util/query_params";
-import amplitude from "amplitude-js";
+import * as ACTIONS from 'constants/action_types';
+import { selectHistoryStack, selectHistoryIndex } from 'redux/selectors/navigation';
+import { toQueryString } from 'util/query_params';
+import amplitude from 'amplitude-js';
 
 export function doNavigate(path, params = {}, options = {}) {
-  return function(dispatch, getState) {
+  return function(dispatch) {
     if (!path) {
       return;
     }
@@ -22,40 +14,38 @@ export function doNavigate(path, params = {}, options = {}) {
       url += `?${toQueryString(params)}`;
     }
 
-    const scrollY = options.scrollY;
+    const { scrollY } = options;
 
-    amplitude.getInstance().logEvent("NAVIGATION", { destination: url });
+    amplitude.getInstance().logEvent('NAVIGATION', { destination: url });
 
     dispatch({
-      type: types.HISTORY_NAVIGATE,
+      type: ACTIONS.HISTORY_NAVIGATE,
       data: { url, index: options.index, scrollY },
     });
   };
 }
 
 export function doAuthNavigate(pathAfterAuth = null, params = {}) {
-  return function(dispatch, getState) {
+  return function(dispatch) {
     if (pathAfterAuth) {
       dispatch({
-        type: types.CHANGE_AFTER_AUTH_PATH,
+        type: ACTIONS.CHANGE_AFTER_AUTH_PATH,
         data: {
           path: `${pathAfterAuth}?${toQueryString(params)}`,
         },
       });
     }
-    dispatch(doNavigate("/auth"));
+    dispatch(doNavigate('/auth'));
   };
 }
 
 export function doHistoryTraverse(dispatch, state, modifier) {
-  const stack = selectHistoryStack(state),
-    index = selectHistoryIndex(state) + modifier;
+  const stack = selectHistoryStack(state);
+  const index = selectHistoryIndex(state) + modifier;
 
   if (index >= 0 && index < stack.length) {
     const historyItem = stack[index];
-    return dispatch(
-      doNavigate(historyItem.path, {}, { scrollY: historyItem.scrollY, index })
-    );
+    dispatch(doNavigate(historyItem.path, {}, { scrollY: historyItem.scrollY, index }));
   }
 }
 
@@ -72,9 +62,9 @@ export function doHistoryForward() {
 }
 
 export function doRecordScroll(scroll) {
-  return function(dispatch, getState) {
+  return function(dispatch) {
     dispatch({
-      type: types.WINDOW_SCROLLED,
+      type: ACTIONS.WINDOW_SCROLLED,
       data: { scrollY: scroll },
     });
   };

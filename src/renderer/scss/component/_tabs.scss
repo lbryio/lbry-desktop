@@ -1,14 +1,12 @@
 /* Tabs */
 
-nav.sub-header
-{
+nav.sub-header {
   text-transform: uppercase;
   max-width: $width-page-constrained;
   margin-bottom: 40px;
   border-bottom: var(--divider);
   user-select: none;
-  > a
-  {
+  > a {
     height: 38px;
     line-height: 38px;
     text-align: center;
@@ -21,16 +19,13 @@ nav.sub-header
     color: var(--tab-color);
     position: relative;
 
-    &:first-child
-    {
+    &:first-child {
       margin-left: 0;
     }
-    &:last-child
-    {
+    &:last-child {
       margin-right: 0;
     }
-    &.sub-header-selected
-    {
+    &.sub-header-selected {
       color: var(--tab-active-color);
       &:before {
         width: 100%;
@@ -45,8 +40,7 @@ nav.sub-header
         animation-timing-function: var(--animation-style);
       }
     }
-    &:hover
-    {
+    &:hover {
       color: var(--tab-active-color);
     }
   }
@@ -60,8 +54,11 @@ nav.sub-header
   }
 }
 
-
 @keyframes activeTab {
-    from {width: 0;}
-    to {width: 100%;}
+  from {
+    width: 0;
+  }
+  to {
+    width: 100%;
+  }
 }

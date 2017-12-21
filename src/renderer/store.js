@@ -1,29 +1,27 @@
-import { createLogger } from "redux-logger";
-import appReducer from "redux/reducers/app";
-import availabilityReducer from "redux/reducers/availability";
-import claimsReducer from "redux/reducers/claims";
-import contentReducer from "redux/reducers/content";
-import costInfoReducer from "redux/reducers/cost_info";
-import fileInfoReducer from "redux/reducers/file_info";
-import navigationReducer from "redux/reducers/navigation";
-import rewardsReducer from "redux/reducers/rewards";
-import searchReducer from "redux/reducers/search";
-import settingsReducer from "redux/reducers/settings";
-import userReducer from "redux/reducers/user";
-import walletReducer from "redux/reducers/wallet";
-import shapeShiftReducer from "redux/reducers/shape_shift";
-import subscriptionsReducer from "redux/reducers/subscriptions";
-import { persistStore, autoRehydrate } from "redux-persist";
-import createCompressor from "redux-persist-transform-compress";
-import createFilter from "redux-persist-transform-filter";
-import localForage from "localforage";
-import { createStore, applyMiddleware, compose, combineReducers } from "redux";
-import thunk from "redux-thunk";
-
-const env = process.env.NODE_ENV || "production"
+import { createLogger } from 'redux-logger';
+import appReducer from 'redux/reducers/app';
+import availabilityReducer from 'redux/reducers/availability';
+import claimsReducer from 'redux/reducers/claims';
+import contentReducer from 'redux/reducers/content';
+import costInfoReducer from 'redux/reducers/cost_info';
+import fileInfoReducer from 'redux/reducers/file_info';
+import navigationReducer from 'redux/reducers/navigation';
+import rewardsReducer from 'redux/reducers/rewards';
+import searchReducer from 'redux/reducers/search';
+import settingsReducer from 'redux/reducers/settings';
+import userReducer from 'redux/reducers/user';
+import walletReducer from 'redux/reducers/wallet';
+import shapeShiftReducer from 'redux/reducers/shape_shift';
+import subscriptionsReducer from 'redux/reducers/subscriptions';
+import { persistStore, autoRehydrate } from 'redux-persist';
+import createCompressor from 'redux-persist-transform-compress';
+import createFilter from 'redux-persist-transform-filter';
+import localForage from 'localforage';
+import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
+import thunk from 'redux-thunk';
 
 function isFunction(object) {
-  return typeof object === "function";
+  return typeof object === 'function';
 }
 
 function isNotFunction(object) {
@@ -32,10 +30,8 @@ function isNotFunction(object) {
 
 function createBulkThunkMiddleware() {
   return ({ dispatch, getState }) => next => action => {
-    if (action.type === "BATCH_ACTIONS") {
-      action.actions
-        .filter(isFunction)
-        .map(actionFn => actionFn(dispatch, getState));
+    if (action.type === 'BATCH_ACTIONS') {
+      action.actions.filter(isFunction).map(actionFn => actionFn(dispatch, getState));
     }
     return next(action);
   };
@@ -44,10 +40,8 @@ function createBulkThunkMiddleware() {
 function enableBatching(reducer) {
   return function batchingReducer(state, action) {
     switch (action.type) {
-      case "BATCH_ACTIONS":
-        return action.actions
-          .filter(isNotFunction)
-          .reduce(batchingReducer, state);
+      case 'BATCH_ACTIONS':
+        return action.actions.filter(isNotFunction).reduce(batchingReducer, state);
       default:
         return reducer(state, action);
     }
@@ -74,13 +68,14 @@ const reducers = combineReducers({
 const bulkThunk = createBulkThunkMiddleware();
 const middleware = [thunk, bulkThunk];
 
-if (env === "development") {
+if (app.env === 'development') {
   const logger = createLogger({
     collapsed: true,
   });
   middleware.push(logger);
 }
 
+// eslint-disable-next-line no-underscore-dangle
 const composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
 const store = createStore(
@@ -88,18 +83,18 @@ const store = createStore(
   {}, // initial state
   composeEnhancers(
     autoRehydrate({
-      log: env === "development",
+      log: app.env === 'development',
     }),
     applyMiddleware(...middleware)
   )
 );
 
 const compressor = createCompressor();
-const saveClaimsFilter = createFilter("claims", ["byId", "claimsByUri"]);
-const subscriptionsFilter = createFilter("subscriptions", ["subscriptions"]);
+const saveClaimsFilter = createFilter('claims', ['byId', 'claimsByUri']);
+const subscriptionsFilter = createFilter('subscriptions', ['subscriptions']);
 
 const persistOptions = {
-  whitelist: ["claims", "subscriptions"],
+  whitelist: ['claims', 'subscriptions'],
   // Order is important. Needs to be compressed last or other transforms can't
   // read the data
   transforms: [saveClaimsFilter, subscriptionsFilter, compressor],
@@ -109,7 +104,7 @@ const persistOptions = {
 
 window.cacheStore = persistStore(store, persistOptions, err => {
   if (err) {
-    console.error("Unable to load saved settings");
+    console.error('Unable to load saved SETTINGS');
   }
 });
 

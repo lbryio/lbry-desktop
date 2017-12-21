@@ -1,10 +1,7 @@
 // util for creating reducers
 // based off of redux-actions
 // https://redux-actions.js.org/docs/api/handleAction.html#handleactions
-export const handleActions = (actionMap, defaultState) => (
-  state = defaultState,
-  action
-) => {
+const handleActions = (actionMap, defaultState) => (state = defaultState, action) => {
   const handler = actionMap[action.type];
 
   if (handler) {
@@ -16,3 +13,5 @@ export const handleActions = (actionMap, defaultState) => (
   // returning a copy here breaks redux-persist
   return state;
 };
+
+export { handleActions as default };
