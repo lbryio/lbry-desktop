@@ -6,6 +6,7 @@ import { Form, FormRow, Submit } from "component/form.js";
 import Link from "component/link";
 import FormFieldPrice from "component/formFieldPrice";
 import Modal from "modal/modal";
+import * as modals from "constants/modal_types";
 import { BusyMessage } from "component/common";
 import ChannelSection from "./internal/channelSection";
 
@@ -158,6 +159,13 @@ class PublishForm extends React.PureComponent {
   handlePublishStarted() {
     this.setState({
       modal: "publishStarted",
+    });
+  }
+
+  handleConfirmUpload() {
+    console.log("handleConfirmUpload()");
+    this.setState({
+      modal: "upload",
     });
   }
 
@@ -526,8 +534,16 @@ class PublishForm extends React.PureComponent {
     });
   }
 
+  upload() {
+    this.setState({
+      modal: null,
+    });
+    this.props.upload("haha");
+  }
+
   render() {
     const { mode, submitting } = this.state;
+    const { selectUploadUrl, selectUploadStatus } = this.props;
 
     const lbcInputHelp = __(
       "This LBC remains yours and the deposit can be undone at any time."
@@ -581,6 +597,11 @@ class PublishForm extends React.PureComponent {
                     }}
                   />
                 </div>
+
+                <div className="card__content">
+                  <span onClick={() => this.handleConfirmUpload()}>hello</span>
+                </div>
+
                 <div className="card__content">
                   <FormRow
                     type="text"
@@ -593,6 +614,7 @@ class PublishForm extends React.PureComponent {
                     }}
                   />
                 </div>
+
                 <div className="card__content">
                   <FormRow
                     type="SimpleMDE"
@@ -926,6 +948,13 @@ class PublishForm extends React.PureComponent {
           {__(
             "The following error occurred when attempting to publish your file"
           )}: {this.state.errorMessage}
+        </Modal>
+        <Modal
+          isOpen={this.state.modal == "upload"}
+          contentLabel={__("Confirm File Upload")}
+          onConfirmed={() => this.upload()}
+        >
+          <p>{__("Comfirm file upload")}</p>
         </Modal>
       </main>
     );

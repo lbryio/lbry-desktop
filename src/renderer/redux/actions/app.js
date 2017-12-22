@@ -24,6 +24,7 @@ const { lbrySettings: config } = require("package.json");
 const CHECK_UPGRADE_INTERVAL = 10 * 60 * 1000;
 
 export function doOpenModal(modal, modalProps = {}) {
+  console.log("app.js");
   return {
     type: types.OPEN_MODAL,
     data: {
