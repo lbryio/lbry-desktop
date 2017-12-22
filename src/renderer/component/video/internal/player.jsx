@@ -100,9 +100,8 @@ class VideoPlayer extends React.PureComponent {
     const mediaElement = this.refs.media.children[0];
     if (mediaElement) {
       mediaElement.removeEventListener("click", this.togglePlayListener);
-      //mediaElement.removeEventListener("play"); ??
     }
-    this.props.doPause(this.props.mediaId, mediaElement.currentTime);
+    this.props.doPause();
   }
 
   renderAudio(container, autoplay) {
