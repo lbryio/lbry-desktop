@@ -38,11 +38,6 @@ class VideoPlayer extends React.PureComponent {
       position,
     } = this.props;
 
-    // I'm using a Timeout because I'm not sure where this should happen
-    if (position > 0) {
-      setTimeout(() => (mediaElement.currentTime = position), 900);
-    }
-
     const loadedMetadata = e => {
       this.setState({ hasMetadata: true, startedPlaying: true });
       this.refs.media.children[0].play();
@@ -75,6 +70,7 @@ class VideoPlayer extends React.PureComponent {
     document.addEventListener("keydown", this.togglePlayListener);
     const mediaElement = this.refs.media.children[0];
     if (mediaElement) {
+      mediaElement.currentTime = position;
       mediaElement.addEventListener("play", () => this.props.doPlay());
       mediaElement.addEventListener("pause", () => {
         console.log("CURRENT TIME:", mediaElement.currentTime);
