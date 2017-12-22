@@ -8,7 +8,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
 
 ## [Unreleased]
 ### Added
-  *
+  * Added copy address button to the Wallet Address component on Send / Receive (#875)
   *
 
 ### Changed

@@ -1,6 +1,6 @@
 // @flow
 import * as ACTIONS from 'constants/action_types';
-import handleActions from 'util/redux-utils';
+import { handleActions } from 'util/redux-utils';
 
 export type Subscription = {
   channelName: string,

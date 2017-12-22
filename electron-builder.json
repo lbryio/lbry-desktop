@@ -34,6 +34,7 @@
   ],
   "linux": {
     "target": "deb",
+    "category": "Video",
     "desktop": {
       "MimeType": "x-scheme-handler/lbry",
       "Exec": "/opt/LBRY/lbry %U"

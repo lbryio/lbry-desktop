@@ -48,13 +48,22 @@ ipcRenderer.on('window-is-focused', () => {
   dock.setBadge('');
 });
 
+(function(history, ...args) {
+  const { replaceState } = history;
+  const newHistory = history;
+  newHistory.replaceState = function(_, __, path) {
+    amplitude.getInstance().logEvent('NAVIGATION', { destination: path ? path.slice(1) : path });
+    return replaceState.apply(history, args);
+  };
+})(window.history);
+
 document.addEventListener('click', event => {
   let { target } = event;
   while (target && target !== document) {
     if (target.matches('a') || target.matches('button')) {
       // TODO: Look into using accessiblity labels (this would also make the app more accessible)
       const hrefParts = window.location.href.split('#');
-      const element = target.title || (target.text && target.text.trim());
+      const element = target.title || (target.textContent && target.textContent.trim());
       if (element) {
         amplitude.getInstance().logEvent('CLICK', {
           target: element,
@@ -63,6 +72,7 @@ document.addEventListener('click', event => {
       } else {
         amplitude.getInstance().logEvent('UNMARKED_CLICK', {
           location: hrefParts.length > 1 ? hrefParts[hrefParts.length - 1] : '/',
+          source: target.outerHTML,
         });
       }
     }

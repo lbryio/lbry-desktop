@@ -22,7 +22,7 @@ class UriIndicator extends React.PureComponent {
   }
 
   render() {
-    const { claim, link, uri, isResolvingUri, smallCard } = this.props;
+    const { claim, link, uri, isResolvingUri, smallCard, span } = this.props;
 
     if (isResolvingUri && !claim) {
       return <span className="empty">Validating...</span>;
@@ -81,7 +81,12 @@ class UriIndicator extends React.PureComponent {
     }
 
     return (
-      <Link navigate="/show" navigateParams={{ uri: channelLink }} className="no-underline">
+      <Link
+        navigate="/show"
+        navigateParams={{ uri: channelLink }}
+        className="no-underline"
+        span={span}
+      >
         {inner}
       </Link>
     );

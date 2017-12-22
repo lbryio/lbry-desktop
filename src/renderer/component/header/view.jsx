@@ -42,7 +42,12 @@ export const Header = props => {
         />
       </div>
       <div className="header__item">
-        <Link onClick={() => navigate('/subscriptions')} button="alt button--flat" icon="icon-at" />
+        <Link
+          onClick={() => navigate('/subscriptions')}
+          button="alt button--flat"
+          icon="icon-at"
+          title={__('My Subscriptions')}
+        />
       </div>
       <div className="header__item header__item--wunderbar">
         <WunderBar />

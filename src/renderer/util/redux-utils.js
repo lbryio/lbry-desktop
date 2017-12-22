@@ -1,7 +1,9 @@
 // util for creating reducers
 // based off of redux-actions
 // https://redux-actions.js.org/docs/api/handleAction.html#handleactions
-const handleActions = (actionMap, defaultState) => (state = defaultState, action) => {
+
+// eslint-disable-next-line import/prefer-default-export
+export const handleActions = (actionMap, defaultState) => (state = defaultState, action) => {
   const handler = actionMap[action.type];
 
   if (handler) {
@@ -13,5 +15,3 @@ const handleActions = (actionMap, defaultState) => (state = defaultState, action
   // returning a copy here breaks redux-persist
   return state;
 };
-
-export { handleActions as default };

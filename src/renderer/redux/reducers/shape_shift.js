@@ -1,5 +1,5 @@
 // @flow
-import handleActions from 'util/redux-utils';
+import { handleActions } from 'util/redux-utils';
 import * as ACTIONS from 'constants/action_types';
 import * as STATUSES from 'constants/shape_shift';
 

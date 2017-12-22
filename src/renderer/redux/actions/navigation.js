@@ -1,7 +1,6 @@
 import * as ACTIONS from 'constants/action_types';
 import { selectHistoryStack, selectHistoryIndex } from 'redux/selectors/navigation';
 import { toQueryString } from 'util/query_params';
-import amplitude from 'amplitude-js';
 
 export function doNavigate(path, params = {}, options = {}) {
   return function(dispatch) {
@@ -15,8 +14,6 @@ export function doNavigate(path, params = {}, options = {}) {
     }
 
     const { scrollY } = options;
-
-    amplitude.getInstance().logEvent('NAVIGATION', { destination: url });
 
     dispatch({
       type: ACTIONS.HISTORY_NAVIGATE,

@@ -1,3 +1,58 @@
-## Contributing to LBRY
+# Contributing to LBRY
 
-https://lbry.io/faq/contributing
+You found this page! That means you are well on your way to contributing to the LBRY app. This application is primarily written in JavaScript and is built on [Electron](https://electronjs.org) while utilizing [React](https://reactjs.org) and [Redux](https://redux.js.org) for UI and application state.
+
+## TL;DR?
+* [Here](https://github.com/lbryio/lbry-app/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22+no%3Aassignee) is a list of help wanted issues.
+* Comment on an issue to let us know if you are going to work on it, don't take an issue that someone has reserved less than 3 days ago
+* Submit a pull request and get paid in LBC
+* Don't hesitate to contact us with any questions or comments
+
+## Longer Version
+
+LBRY is an open source project, and therefore is developed out in the open for everyone to see. What you see here are the latest source code changes and issues.
+
+Since LBRY is an based around a decentralized community, we believe that the app will be strongest if it receives contributions from individuals outside the core team -- such as yourself!
+
+In order to make contributing as easy and rewarding of possible, we have instituted the following system:
+
+* Anyone can view all issues in the system by clicking on the [Issues](https://github.com/lbryio/lbry-app/issues) button at the top of the page. Feel free to add an issue if you think we have missed something (and you might earn some LBC in the process because we do tip people for reporting bugs).
+* Once on the [Issues](https://github.com/lbryio/lbry-app/issues) page, a potential contributor can filter issues by the [Help Wanted](https://github.com/lbryio/lbry-app/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22+no%3Aassignee) label to see a curated list of suggested issues with which community members can help.
+* Every [Help Wanted](https://github.com/lbryio/lbry-app/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22+no%3Aassignee) issue is ranked on a scale from zero to four.
+
+Level | Description
+--- | ---
+[**level 0**](https://github.com/lbryio/lbry-app/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22+label%3A%22level+0%22+no%3Aassignee) | Typos and text edits -- a tech savvy non-programmer can fix these
+[**level 1**](https://github.com/lbryio/lbry-app/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22+label%3A%22level+1%22+no%3Aassignee) | Programming issues that require little knowledge of how the LBRY app works
+[**level 2**](https://github.com/lbryio/lbry-app/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22+label%3A%22level+2%22+no%3Aassignee) | Issues of average difficulty that require the developer to dig into how the app works a little bit
+[**level 3**](https://github.com/lbryio/lbry-app/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22+label%3A%22level+3%22+no%3Aassignee) | Issues that are likely too tricky to be level 2 or require more thinking outside of the box
+[**level 4**](https://github.com/lbryio/lbry-app/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22+label%3A%22level+4%22+no%3Aassignee) | Big features or really hard issues
+
+The process of ranking issues is highly subjective. The purpose of sorting issues like this is to give contributors a general idea about the type of issues they are looking at. It could very well be the case that a level 1 issue is more difficult than a level 2, for instance. This system is meant to help you find relevant issues, not to prevent you from working on issues that you otherwise would. If these rankings don't work for you, feel free to ignore them.
+
+* After deciding what to work on, a potential contributor can [fork](https://help.github.com/articles/fork-a-repo/) this repository, make his or her changes, and submit a [pull request](https://help.github.com/articles/creating-a-pull-request-from-a-fork/). A contributor wanting to reserve an issue in advance can leave a comment saying that he or she is working on it. Contributors should respect other people's efforts to complete issues in a timely manner and, therefore, not begin working on anything reserved (or updated) within the last 3 days. If someone has been officially assigned an issue via Github's assignment system, it is also not available. Contributors are encouraged to ask if they have any questions about issue availability.
+* Once the pull request is visible in the LBRY repo, a LBRY team member will review it and make sure it is up to our standards. At this point, the contributor may have to change his or her code based on our suggestions and comments.
+* Then, upon a satisfactory review of the code, we will merge it and send the contributor a tip (in LBC) for the contribution.
+
+We are dedicated to being fair and friendly in this process. In __general__, level 4 issues will be paid more than level 3 issues which will be paid more than level 2, and so on. However, this is not due to their labeling, but rather how difficult they end up being. Maybe an issue labeled "level 1" turns out to be very difficult. In this case we would be **more than happy** to tip accordingly. If you do good work, we want you to be rewarded for it.
+
+Also, we are here to enable you. We want you to succeed, so do not hesitate to ask questions. If you need some information or assistance in completing an issue, please let us know! That is what we are here for-- pushing development forward.
+
+Lastly, don't feel limited by this list. Should LBRY have built-in Tor support? Add it! It's not in the issue tracker but maybe it's a good idea. Do you think the search layout is unintuitive? Change it! We welcome all feedback and suggestions. That said, it may be the case that we do not wish to incorporate your change if you don't check with us first (also, please check with us especially if you are planning on adding Tor support :P). If you want to add a feature that is not listed in the issue tracker, go ahead and [create an issue](https://github.com/lbryio/lbry-app/issues/new), and say in the description that you would like to try to implement it yourself. This way we can tell you in advance if we will accept your changes and we can point you in the right direction.
+
+# Tom's "Voice of the User" Wishlist
+
+[Anything marked with **both** "Help Wanted" and "Tom's 'Voice of the User' Wishlist"](https://github.com/lbryio/lbry-app/issues?q=is%3Aopen+is%3Aissue+label%3A%22Tom%27s+%5C%22Voice+of+the+User%5C%22+Wishlist%22+label%3A%22help+wanted%22+no%3Aassignee) will earn you an extra 50 LBC on top of what we would otherwise tip you.
+
+# Get In Touch
+Name | Role | Discord | Email
+--- | --- | --- | ---
+[Liam](https://github.com/liamcardenas) | The application engineer in charge of community development. He is the person to contact with any development/contribution related questions. | liamsdouble | liam@lbry.io
+[Tom](https://github.com/tzarebczan) | Community manager. He knows more than anyone about the app and all of its flaws. Reach out to him with any questions about how the app works, if a bug has been reported, or if a feature should be requested. | jiggytom | tom@lbry.io
+[Sean](https://github.com/seanyesmunt) | An application engineer who focuses largely on UI/UX. If you have a design or implementation question, feel free to reach out to him. | sean | sean@lbry.io
+
+Join our discord [here](https://chat.lbry.io/).
+
+# More Information
+
+More information about contributing to LBRY [here](https://lbry.io/faq/contributing).

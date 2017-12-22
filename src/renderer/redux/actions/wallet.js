@@ -29,13 +29,13 @@ export function doBalanceSubscribe() {
   };
 }
 
-export function doFetchTransactions(fetch_tip_info = true) {
+export function doFetchTransactions() {
   return function(dispatch) {
     dispatch({
       type: ACTIONS.FETCH_TRANSACTIONS_STARTED,
     });
 
-    Lbry.transaction_list({ include_tip_info: fetch_tip_info }).then(results => {
+    Lbry.transaction_list({ include_tip_info: true }).then(results => {
       dispatch({
         type: ACTIONS.FETCH_TRANSACTIONS_COMPLETED,
         data: {

@@ -86,19 +86,21 @@ class FileCard extends React.PureComponent {
                 <TruncatedText lines={1}>{title}</TruncatedText>
               </div>
               <div className="card__subtitle">
-                <span className="card__indicators">
+                <span className="card__indicators card--file-subtitle">
                   <FilePrice uri={uri} /> {isRewardContent && <Icon icon={icons.FEATURED} />}{' '}
                   {fileInfo && <Icon icon={icons.LOCAL} />}
                 </span>
-                <UriIndicator uri={uri} smallCard />
+                <span className="card--file-subtitle">
+                  <UriIndicator uri={uri} link span smallCard />
+                </span>
               </div>
             </div>
-            {/* Test for nizuka's design: should we remove description?
+          </Link>
+          {/* Test for nizuka's design: should we remove description?
             <div className="card__content card__subtext card__subtext--two-lines">
               <TruncatedMarkdown lines={2}>{description}</TruncatedMarkdown>
             </div>
             */}
-          </Link>
         </div>
         {obscureNsfw && this.state.hovered && <NsfwOverlay />}
       </section>
