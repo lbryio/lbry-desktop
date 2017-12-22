@@ -72,10 +72,10 @@ class VideoPlayer extends React.PureComponent {
     if (mediaElement) {
       mediaElement.currentTime = position;
       mediaElement.addEventListener("play", () => this.props.doPlay());
-      mediaElement.addEventListener("pause", () => {
-        console.log("CURRENT TIME:", mediaElement.currentTime);
-        this.props.doPause(this.props.mediaId, mediaElement.currentTime);
-      });
+      mediaElement.addEventListener("pause", () => this.props.doPause());
+      mediaElement.addEventListener("timeupdate", () =>
+        this.props.savePosition(mediaId, mediaElement.currentTime)
+      );
       mediaElement.addEventListener("click", this.togglePlayListener);
       mediaElement.addEventListener(
         "loadedmetadata",
