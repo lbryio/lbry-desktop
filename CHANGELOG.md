@@ -15,7 +15,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
   *
 
 ### Changed
-  * Contributor documentation
+  * Contributor documentation (#879)
   *
 
 ### Fixed
