@@ -33,7 +33,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
  * Added copy address button to the Wallet Address component on Send / Receive (#875)
  * Link to creators’ channels on homepage (#869)
  * Pause playing video when file is opened (#880)
- * Reenabled rewards with new verification process (#897)
+ * Add captcha to verification process (#897)
 
 
 ### Changed
