@@ -8,18 +8,15 @@ Web UI version numbers should always match the corresponding version of LBRY App
 
 ## [Unreleased]
 ### Added
-  * Added copy address button to the Wallet Address component on Send / Receive (#875)
-  * Link to creators’ channels on homepage (#869)
-  * Pause playing video when file is opened (#880)
-  * Reenabled rewards with new verification process (#897)
+  *
   *
 
 ### Changed
-  * Contributor documentation (#879)
+  *
   *
 
 ### Fixed
-  * Linux app categorization (#877)
+  *
   *
 
 ### Deprecated
@@ -29,6 +26,24 @@ Web UI version numbers should always match the corresponding version of LBRY App
 ### Removed
   *
   *
+
+## [0.19.2] - 2017-12-22
+
+### Added
+ * Added copy address button to the Wallet Address component on Send / Receive (#875)
+ * Link to creators’ channels on homepage (#869)
+ * Pause playing video when file is opened (#880)
+ * Reenabled rewards with new verification process (#897)
+
+
+### Changed
+ * Contributor documentation (#879)
+
+
+### Fixed
+ * Linux app categorization (#877)
+
+
 
 ## [0.19.1] - 2017-12-13
 
