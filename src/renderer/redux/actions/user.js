@@ -68,14 +68,14 @@ export function doUserEmailNew(email) {
         data: { email },
       });
       dispatch(doUserFetch());
-    }
+    };
 
     const failure = error => {
       dispatch({
         type: types.USER_EMAIL_NEW_FAILURE,
         data: { error },
       });
-    }
+    };
 
     lbryio
       .call(
@@ -86,12 +86,14 @@ export function doUserEmailNew(email) {
       )
       .catch(error => {
         if (error.response && error.response.status == 409) {
-          return lbryio.call(
-            "user_email",
-            "resend_token",
-            { email: email, only_if_expired: true },
-            "post"
-          ).then(success, failure);
+          return lbryio
+            .call(
+              "user_email",
+              "resend_token",
+              { email: email, only_if_expired: true },
+              "post"
+            )
+            .then(success, failure);
         }
         throw error;
       })
@@ -99,21 +101,25 @@ export function doUserEmailNew(email) {
   };
 }
 
-export function doUserEmailVerify(verificationToken) {
+export function doUserEmailVerify(verificationToken, recaptcha) {
   return function(dispatch, getState) {
     const email = selectEmailToVerify(getState());
-    verificationToken = verificationToken.toString().trim();
 
     dispatch({
       type: types.USER_EMAIL_VERIFY_STARTED,
       code: verificationToken,
+      recaptcha: recaptcha,
     });
 
     lbryio
       .call(
         "user_email",
         "confirm",
-        { verification_token: verificationToken, email: email },
+        {
+          verification_token: verificationToken,
+          email: email,
+          recaptcha: recaptcha,
+        },
         "post"
       )
       .then(userEmail => {
@@ -128,12 +134,13 @@ export function doUserEmailVerify(verificationToken) {
           throw new Error("Your email is still not verified."); //shouldn't happen
         }
       })
-      .catch(error => {
-        dispatch({
-          type: types.USER_EMAIL_VERIFY_FAILURE,
-          data: { error },
-        });
-      });
+      .catch(error => dispatch(doUserEmailVerifyFailure(error)));
+  };
+}
+export function doUserEmailVerifyFailure(error) {
+  return {
+    type: types.USER_EMAIL_VERIFY_FAILURE,
+    data: { error },
   };
 }
 

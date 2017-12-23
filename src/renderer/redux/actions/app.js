@@ -7,6 +7,7 @@ import {
   selectUpgradeFilename,
   selectIsUpgradeSkipped,
   selectRemoteVersion,
+  selectCurrentModal,
 } from "redux/selectors/app";
 import { doFetchDaemonSettings } from "redux/actions/settings";
 import { doBalanceSubscribe } from "redux/actions/wallet";
@@ -14,8 +15,7 @@ import { doAuthenticate } from "redux/actions/user";
 import { doFetchFileInfosAndPublishedClaims } from "redux/actions/file_info";
 import * as modals from "constants/modal_types";
 import { doFetchRewardedContent } from "redux/actions/content";
-import { selectCurrentModal } from "redux/selectors/app";
-
+import { doAuthNavigate } from "redux/actions/navigation";
 const { remote, ipcRenderer, shell } = require("electron");
 const path = require("path");
 const { download } = remote.require("electron-dl");
@@ -264,5 +264,14 @@ export function doChangeVolume(volume) {
         volume,
       },
     });
+  };
+}
+
+export function doConditionalAuthNavigate(newSession) {
+  return function(dispatch, getState) {
+    const state = getState();
+    if (newSession || selectCurrentModal(state) !== "email_collection") {
+      dispatch(doAuthNavigate());
+    }
   };
 }
