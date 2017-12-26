@@ -20,7 +20,12 @@ class UserEmailVerify extends React.PureComponent {
 
   handleSubmit() {
     const { code } = this.state;
-    this.props.verifyUserEmail(code);
+    try {
+      const verification = JSON.parse(atob(code));
+      this.props.verifyUserEmail(verification.token, verification.recaptcha);
+    } catch (error) {
+      this.props.verifyUserEmailFailure('Invalid Verification Token');
+    }
   }
 
   render() {

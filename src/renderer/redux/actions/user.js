@@ -116,20 +116,31 @@ export function doUserEmailNew(email) {
   };
 }
 
-export function doUserEmailVerify(verificationToken) {
+export function doUserEmailVerifyFailure(error) {
+  return {
+    type: ACTIONS.USER_EMAIL_VERIFY_FAILURE,
+    data: { error },
+  };
+}
+
+export function doUserEmailVerify(verificationToken, recaptcha) {
   return function(dispatch, getState) {
     const email = selectEmailToVerify(getState());
-    const trimmedVerificationToken = verificationToken.toString().trim();
 
     dispatch({
       type: ACTIONS.USER_EMAIL_VERIFY_STARTED,
-      code: trimmedVerificationToken,
+      code: verificationToken,
+      recaptcha,
     });
 
     Lbryio.call(
       'user_email',
       'confirm',
-      { verification_token: trimmedVerificationToken, email },
+      {
+        verification_token: verificationToken,
+        email,
+        recaptcha,
+      },
       'post'
     )
       .then(userEmail => {
@@ -144,12 +155,7 @@ export function doUserEmailVerify(verificationToken) {
           throw new Error('Your email is still not verified.'); // shouldn't happen
         }
       })
-      .catch(error => {
-        dispatch({
-          type: ACTIONS.USER_EMAIL_VERIFY_FAILURE,
-          data: { error },
-        });
-      });
+      .catch(error => dispatch(doUserEmailVerifyFailure(error)));
   };
 }
 

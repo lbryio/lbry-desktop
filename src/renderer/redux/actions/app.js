@@ -15,7 +15,8 @@ import { doAuthenticate } from 'redux/actions/user';
 import { doFetchFileInfosAndPublishedClaims } from 'redux/actions/file_info';
 import * as MODALS from 'constants/modal_types';
 import { doFetchRewardedContent } from 'redux/actions/content';
-import { ipcRenderer, remote } from 'electron';
+import { doAuthNavigate } from 'redux/actions/navigation';
+import { remote, ipcRenderer } from 'electron';
 import Path from 'path';
 
 const { download } = remote.require('electron-dl');
@@ -259,5 +260,14 @@ export function doChangeVolume(volume) {
         volume,
       },
     });
+  };
+}
+
+export function doConditionalAuthNavigate(newSession) {
+  return function(dispatch, getState) {
+    const state = getState();
+    if (newSession || selectCurrentModal(state) !== 'email_collection') {
+      dispatch(doAuthNavigate());
+    }
   };
 }

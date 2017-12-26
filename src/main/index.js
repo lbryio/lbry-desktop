@@ -95,7 +95,6 @@ function openItem(fullPath) {
   // Causes child process reference to be garbage collected, allowing main process to exit
   child.unref();
 }
-
 /*
  * Quits by first killing the daemon, the calling quitting for real.
  */
@@ -167,7 +166,7 @@ function createWindow() {
   if (openUri) {
     // We stored and received a URI that an external app requested before we had a window object
     window.webContents.on('did-finish-load', () => {
-      window.webContents.send('open-uri-requested', openUri);
+      window.webContents.send('open-uri-requested', openUri, true);
     });
   }
 

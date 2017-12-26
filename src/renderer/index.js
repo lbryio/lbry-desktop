@@ -6,7 +6,8 @@ import SnackBar from 'component/snackBar';
 import { Provider } from 'react-redux';
 import store from 'store';
 import SplashScreen from 'component/splash';
-import { doDaemonReady } from 'redux/actions/app';
+import { doDaemonReady, doShowSnackBar, doConditionalAuthNavigate } from 'redux/actions/app';
+import { doUserEmailVerify } from 'redux/actions/user';
 import { doNavigate } from 'redux/actions/navigation';
 import { doDownloadLanguages } from 'redux/actions/settings';
 import * as ACTIONS from 'constants/action_types';
@@ -28,9 +29,24 @@ window.addEventListener('contextmenu', event => {
   event.preventDefault();
 });
 
-ipcRenderer.on('open-uri-requested', (event, uri) => {
+ipcRenderer.on('open-uri-requested', (event, uri, newSession) => {
   if (uri && uri.startsWith('lbry://')) {
-    app.store.dispatch(doNavigate('/show', { uri }));
+    if (uri.startsWith('lbry://?verify=')) {
+      let verification = {};
+      try {
+        verification = JSON.parse(atob(uri.substring(15)));
+      } catch (error) {
+        console.log(error);
+      }
+      if (verification.token && verification.recaptcha) {
+        app.store.dispatch(doConditionalAuthNavigate(newSession));
+        app.store.dispatch(doUserEmailVerify(verification.token, verification.recaptcha));
+      } else {
+        app.store.dispatch(doShowSnackBar({ message: 'Invalid Verification URI' }));
+      }
+    } else {
+      app.store.dispatch(doNavigate('/show', { uri }));
+    }
   }
 });
 
