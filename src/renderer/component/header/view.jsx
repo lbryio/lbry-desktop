@@ -86,6 +86,14 @@ export const Header = props => {
           title={__("Settings")}
         />
       </div>
+      <div className="header__item">
+        <Link
+          onClick={() => navigate("/help")}
+          button="alt button--flat"
+          icon="icon-question-circle"
+          title={__("Help")}
+        />
+      </div>
       {isUpgradeAvailable && (
         <Link
           onClick={() => downloadUpgrade()}
