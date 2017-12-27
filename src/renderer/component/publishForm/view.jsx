@@ -952,7 +952,10 @@ class PublishForm extends React.PureComponent {
         <Modal
           isOpen={this.state.modal == "upload"}
           contentLabel={__("Confirm File Upload")}
+          type="confirm"
+          confirmButtonLabel={__("Upload")}
           onConfirmed={() => this.upload()}
+          onAborted={() => this.closeModal()}
         >
           <p>{__("Comfirm file upload")}</p>
         </Modal>
