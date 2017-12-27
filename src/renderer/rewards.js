@@ -9,7 +9,7 @@ function rewardMessage(type, amount) {
       amount
     ),
     new_user: __("You earned %s LBC new user reward.", amount),
-    confirm_email: __(
+    verified_email: __(
       "You earned %s LBC for verifying your email address.",
       amount
     ),
@@ -41,7 +41,7 @@ const rewards = {};
 
 rewards.TYPE_NEW_DEVELOPER = "new_developer";
 rewards.TYPE_NEW_USER = "new_user";
-rewards.TYPE_CONFIRM_EMAIL = "confirm_email";
+rewards.TYPE_CONFIRM_EMAIL = "verified_email";
 rewards.TYPE_FIRST_CHANNEL = "new_channel";
 rewards.TYPE_FIRST_STREAM = "first_stream";
 rewards.TYPE_MANY_DOWNLOADS = "many_downloads";
