@@ -1,9 +1,9 @@
 import * as ACTIONS from 'constants/action_types';
-import { selectHistoryStack, selectHistoryIndex } from 'redux/selectors/navigation';
+import { selectHistoryIndex, selectHistoryStack } from 'redux/selectors/navigation';
 import { toQueryString } from 'util/query_params';
 
 export function doNavigate(path, params = {}, options = {}) {
-  return function(dispatch) {
+  return dispatch => {
     if (!path) {
       return;
     }
@@ -23,7 +23,7 @@ export function doNavigate(path, params = {}, options = {}) {
 }
 
 export function doAuthNavigate(pathAfterAuth = null, params = {}) {
-  return function(dispatch) {
+  return dispatch => {
     if (pathAfterAuth) {
       dispatch({
         type: ACTIONS.CHANGE_AFTER_AUTH_PATH,
@@ -47,19 +47,15 @@ export function doHistoryTraverse(dispatch, state, modifier) {
 }
 
 export function doHistoryBack() {
-  return function(dispatch, getState) {
-    return doHistoryTraverse(dispatch, getState(), -1);
-  };
+  return (dispatch, getState) => doHistoryTraverse(dispatch, getState(), -1);
 }
 
 export function doHistoryForward() {
-  return function(dispatch, getState) {
-    return doHistoryTraverse(dispatch, getState(), 1);
-  };
+  return (dispatch, getState) => doHistoryTraverse(dispatch, getState(), 1);
 }
 
 export function doRecordScroll(scroll) {
-  return function(dispatch) {
+  return dispatch => {
     dispatch({
       type: ACTIONS.WINDOW_SCROLLED,
       data: { scrollY: scroll },

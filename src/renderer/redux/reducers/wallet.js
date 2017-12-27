@@ -18,13 +18,12 @@ const defaultState = {
   sendingSupport: false,
 };
 
-reducers[ACTIONS.FETCH_TRANSACTIONS_STARTED] = function(state) {
-  return Object.assign({}, state, {
+reducers[ACTIONS.FETCH_TRANSACTIONS_STARTED] = state =>
+  Object.assign({}, state, {
     fetchingTransactions: true,
   });
-};
 
-reducers[ACTIONS.FETCH_TRANSACTIONS_COMPLETED] = function(state, action) {
+reducers[ACTIONS.FETCH_TRANSACTIONS_COMPLETED] = (state, action) => {
   const byId = Object.assign({}, state.transactions);
 
   const { transactions } = action.data;
@@ -39,13 +38,12 @@ reducers[ACTIONS.FETCH_TRANSACTIONS_COMPLETED] = function(state, action) {
   });
 };
 
-reducers[ACTIONS.GET_NEW_ADDRESS_STARTED] = function(state) {
-  return Object.assign({}, state, {
+reducers[ACTIONS.GET_NEW_ADDRESS_STARTED] = state =>
+  Object.assign({}, state, {
     gettingNewAddress: true,
   });
-};
 
-reducers[ACTIONS.GET_NEW_ADDRESS_COMPLETED] = function(state, action) {
+reducers[ACTIONS.GET_NEW_ADDRESS_COMPLETED] = (state, action) => {
   const { address } = action.data;
 
   localStorage.setItem('receiveAddress', address);
@@ -55,25 +53,22 @@ reducers[ACTIONS.GET_NEW_ADDRESS_COMPLETED] = function(state, action) {
   });
 };
 
-reducers[ACTIONS.UPDATE_BALANCE] = function(state, action) {
-  return Object.assign({}, state, {
+reducers[ACTIONS.UPDATE_BALANCE] = (state, action) =>
+  Object.assign({}, state, {
     balance: action.data.balance,
   });
-};
 
-reducers[ACTIONS.CHECK_ADDRESS_IS_MINE_STARTED] = function(state) {
-  return Object.assign({}, state, {
+reducers[ACTIONS.CHECK_ADDRESS_IS_MINE_STARTED] = state =>
+  Object.assign({}, state, {
     checkingAddressOwnership: true,
   });
-};
 
-reducers[ACTIONS.CHECK_ADDRESS_IS_MINE_COMPLETED] = function(state) {
-  return Object.assign({}, state, {
+reducers[ACTIONS.CHECK_ADDRESS_IS_MINE_COMPLETED] = state =>
+  Object.assign({}, state, {
     checkingAddressOwnership: false,
   });
-};
 
-reducers[ACTIONS.SET_DRAFT_TRANSACTION_AMOUNT] = function(state, action) {
+reducers[ACTIONS.SET_DRAFT_TRANSACTION_AMOUNT] = (state, action) => {
   const oldDraft = state.draftTransaction;
   const newDraft = Object.assign({}, oldDraft, {
     amount: parseFloat(action.data.amount),
@@ -84,7 +79,7 @@ reducers[ACTIONS.SET_DRAFT_TRANSACTION_AMOUNT] = function(state, action) {
   });
 };
 
-reducers[ACTIONS.SET_DRAFT_TRANSACTION_ADDRESS] = function(state, action) {
+reducers[ACTIONS.SET_DRAFT_TRANSACTION_ADDRESS] = (state, action) => {
   const oldDraft = state.draftTransaction;
   const newDraft = Object.assign({}, oldDraft, {
     address: action.data.address,
@@ -95,7 +90,7 @@ reducers[ACTIONS.SET_DRAFT_TRANSACTION_ADDRESS] = function(state, action) {
   });
 };
 
-reducers[ACTIONS.SEND_TRANSACTION_STARTED] = function(state) {
+reducers[ACTIONS.SEND_TRANSACTION_STARTED] = state => {
   const newDraftTransaction = Object.assign({}, state.draftTransaction, {
     sending: true,
   });
@@ -105,13 +100,12 @@ reducers[ACTIONS.SEND_TRANSACTION_STARTED] = function(state) {
   });
 };
 
-reducers[ACTIONS.SEND_TRANSACTION_COMPLETED] = function(state) {
-  return Object.assign({}, state, {
+reducers[ACTIONS.SEND_TRANSACTION_COMPLETED] = state =>
+  Object.assign({}, state, {
     draftTransaction: buildDraftTransaction(),
   });
-};
 
-reducers[ACTIONS.SEND_TRANSACTION_FAILED] = function(state, action) {
+reducers[ACTIONS.SEND_TRANSACTION_FAILED] = (state, action) => {
   const newDraftTransaction = Object.assign({}, state.draftTransaction, {
     sending: false,
     error: action.data.error,
@@ -122,24 +116,21 @@ reducers[ACTIONS.SEND_TRANSACTION_FAILED] = function(state, action) {
   });
 };
 
-reducers[ACTIONS.SUPPORT_TRANSACTION_STARTED] = function(state) {
-  return Object.assign({}, state, {
+reducers[ACTIONS.SUPPORT_TRANSACTION_STARTED] = state =>
+  Object.assign({}, state, {
     sendingSupport: true,
   });
-};
 
-reducers[ACTIONS.SUPPORT_TRANSACTION_COMPLETED] = function(state) {
-  return Object.assign({}, state, {
+reducers[ACTIONS.SUPPORT_TRANSACTION_COMPLETED] = state =>
+  Object.assign({}, state, {
     sendingSupport: false,
   });
-};
 
-reducers[ACTIONS.SUPPORT_TRANSACTION_FAILED] = function(state, action) {
-  return Object.assign({}, state, {
+reducers[ACTIONS.SUPPORT_TRANSACTION_FAILED] = (state, action) =>
+  Object.assign({}, state, {
     error: action.data.error,
     sendingSupport: false,
   });
-};
 
 reducers[ACTIONS.FETCH_BLOCK_SUCCESS] = (state, action) => {
   const { block, block: { height } } = action.data;

@@ -1,4 +1,4 @@
-const { remote } = require('electron');
+import { remote } from 'electron';
 
 const application = remote.app;
 const { dock } = application;

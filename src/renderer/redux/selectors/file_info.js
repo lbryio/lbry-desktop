@@ -1,10 +1,9 @@
-import { createSelector } from 'reselect';
 import {
   selectClaimsByUri,
   selectIsFetchingClaimListMine,
   selectMyClaims,
-  selectMyClaimsOutpoints,
 } from 'redux/selectors/claims';
+import { createSelector } from 'reselect';
 
 export const selectState = state => state.fileInfo || {};
 
@@ -52,10 +51,6 @@ export const selectUrisLoading = createSelector(selectState, state => state.uris
 export const makeSelectLoadingForUri = uri =>
   createSelector(selectUrisLoading, byUri => byUri && byUri[uri]);
 
-export const selectFileInfosPendingPublish = createSelector(selectState, state =>
-  Object.values(state.pendingByOutpoint || {})
-);
-
 export const selectFileInfosDownloaded = createSelector(
   selectFileInfosByOutpoint,
   selectMyClaims,
@@ -71,20 +66,6 @@ export const selectFileInfosDownloaded = createSelector(
     })
 );
 
-export const selectFileInfosPublished = createSelector(
-  selectFileInfosByOutpoint,
-  selectMyClaimsOutpoints,
-  selectFileInfosPendingPublish,
-  (byOutpoint, outpoints, pendingPublish) => {
-    const fileInfos = [];
-    outpoints.forEach(outpoint => {
-      const fileInfo = byOutpoint[outpoint];
-      if (fileInfo) fileInfos.push(fileInfo);
-    });
-    return [...fileInfos, ...pendingPublish];
-  }
-);
-
 // export const selectFileInfoForUri = (state, props) => {
 //   const claims = selectClaimsByUri(state),
 //     claim = claims[props.uri],
@@ -93,26 +74,6 @@ export const selectFileInfosPublished = createSelector(
 
 //   return outpoint && fileInfos ? fileInfos[outpoint] : undefined;
 // };
-
-export const selectFileInfosByUri = createSelector(
-  selectClaimsByUri,
-  selectFileInfosByOutpoint,
-  (claimsByUri, byOutpoint) => {
-    const fileInfos = {};
-    const uris = Object.keys(claimsByUri);
-
-    uris.forEach(uri => {
-      const claim = claimsByUri[uri];
-      if (claim) {
-        const outpoint = `${claim.txid}:${claim.nout}`;
-        const fileInfo = byOutpoint[outpoint];
-
-        if (fileInfo) fileInfos[uri] = fileInfo;
-      }
-    });
-    return fileInfos;
-  }
-);
 
 export const selectDownloadingFileInfos = createSelector(
   selectDownloadingByOutpoint,

@@ -1,6 +1,6 @@
+import { ipcRenderer } from 'electron';
 import Lbry from 'lbry';
 import querystring from 'querystring';
-import { ipcRenderer } from 'electron';
 
 const Lbryio = {
   enabled: true,
@@ -15,7 +15,7 @@ const CONNECTION_STRING = process.env.LBRY_APP_API_URL
 
 const EXCHANGE_RATE_TIMEOUT = 20 * 60 * 1000;
 
-Lbryio.getExchangeRates = function() {
+Lbryio.getExchangeRates = () => {
   if (
     !Lbryio.exchangeLastFetched ||
     Date.now() - Lbryio.exchangeLastFetched > EXCHANGE_RATE_TIMEOUT
@@ -33,7 +33,7 @@ Lbryio.getExchangeRates = function() {
   return Lbryio.exchangePromise;
 };
 
-Lbryio.call = function(resource, action, params = {}, method = 'get') {
+Lbryio.call = (resource, action, params = {}, method = 'get') => {
   if (!Lbryio.enabled) {
     console.log(__('Internal API disabled'));
     return Promise.reject(new Error(__('LBRY internal API is disabled')));
@@ -54,7 +54,7 @@ Lbryio.call = function(resource, action, params = {}, method = 'get') {
       } else {
         error = new Error('Unknown API error signature');
       }
-      error.response = response; // this is primarily a hack used in actions/user.js
+      error.response = response; // This is primarily a hack used in actions/user.js
       return Promise.reject(error);
     });
   }
@@ -109,7 +109,7 @@ Lbryio.setAuthToken = token => {
 
 Lbryio.getCurrentUser = () => Lbryio.call('user', 'me');
 
-Lbryio.authenticate = function() {
+Lbryio.authenticate = () => {
   if (!Lbryio.enabled) {
     return new Promise(resolve => {
       resolve({
