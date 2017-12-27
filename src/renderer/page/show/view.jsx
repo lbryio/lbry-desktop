@@ -1,8 +1,8 @@
-import React from "react";
-import lbryuri from "lbryuri";
-import { BusyMessage } from "component/common";
-import ChannelPage from "page/channel";
-import FilePage from "page/file";
+import React from 'react';
+import lbryuri from 'lbryuri';
+import { BusyMessage } from 'component/common';
+import ChannelPage from 'page/channel';
+import FilePage from 'page/file';
 
 class ShowPage extends React.PureComponent {
   componentWillMount() {
@@ -22,7 +22,7 @@ class ShowPage extends React.PureComponent {
   render() {
     const { claim, isResolvingUri, uri } = this.props;
 
-    let innerContent = "";
+    let innerContent = '';
 
     if ((isResolvingUri && !claim) || !claim) {
       innerContent = (
@@ -33,21 +33,15 @@ class ShowPage extends React.PureComponent {
             </div>
           </div>
           <div className="card__content">
-            {isResolvingUri && (
-              <BusyMessage
-                message={__("Loading magic decentralized data...")}
-              />
-            )}
+            {isResolvingUri && <BusyMessage message={__('Loading magic decentralized data...')} />}
             {claim === null &&
               !isResolvingUri && (
-                <span className="empty">
-                  {__("There's nothing at this location.")}
-                </span>
+                <span className="empty">{__("There's nothing at this location.")}</span>
               )}
           </div>
         </section>
       );
-    } else if (claim && claim.name.length && claim.name[0] === "@") {
+    } else if (claim && claim.name.length && claim.name[0] === '@') {
       innerContent = <ChannelPage uri={uri} />;
     } else if (claim) {
       innerContent = <FilePage uri={uri} />;

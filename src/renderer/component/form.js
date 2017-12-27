@@ -1,14 +1,14 @@
-import React from "react";
-import PropTypes from "prop-types";
-import FormField from "component/formField";
-import { Icon } from "component/common.js";
+import React from 'react';
+import PropTypes from 'prop-types';
+import FormField from 'component/formField';
+import { Icon } from 'component/common.js';
 
 let formFieldCounter = 0;
 
-export const formFieldNestedLabelTypes = ["radio", "checkbox"];
+export const formFieldNestedLabelTypes = ['radio', 'checkbox'];
 
 export function formFieldId() {
-  return "form-field-" + ++formFieldCounter;
+  return `form-field-${++formFieldCounter}`;
 }
 
 export class Form extends React.PureComponent {
@@ -26,11 +26,7 @@ export class Form extends React.PureComponent {
   }
 
   render() {
-    return (
-      <form onSubmit={event => this.handleSubmit(event)}>
-        {this.props.children}
-      </form>
-    );
+    return <form onSubmit={event => this.handleSubmit(event)}>{this.props.children}</form>;
   }
 }
 
@@ -50,7 +46,7 @@ export class FormRow extends React.PureComponent {
 
     this._field = null;
 
-    this._fieldRequiredText = __("This field is required");
+    this._fieldRequiredText = __('This field is required');
 
     this.state = this.getStateFromProps(props);
   }
@@ -63,11 +59,9 @@ export class FormRow extends React.PureComponent {
     return {
       isError: !!props.errorMessage,
       errorMessage:
-        typeof props.errorMessage === "string"
+        typeof props.errorMessage === 'string'
           ? props.errorMessage
-          : props.errorMessage instanceof Error
-            ? props.errorMessage.toString()
-            : "",
+          : props.errorMessage instanceof Error ? props.errorMessage.toString() : '',
     };
   }
 
@@ -85,7 +79,7 @@ export class FormRow extends React.PureComponent {
   clearError(text) {
     this.setState({
       isError: false,
-      errorMessage: "",
+      errorMessage: '',
     });
   }
 
@@ -116,9 +110,7 @@ export class FormRow extends React.PureComponent {
   render() {
     const fieldProps = Object.assign({}, this.props),
       elementId = formFieldId(),
-      renderLabelInFormField = formFieldNestedLabelTypes.includes(
-        this.props.type
-      );
+      renderLabelInFormField = formFieldNestedLabelTypes.includes(this.props.type);
 
     if (!renderLabelInFormField) {
       delete fieldProps.label;
@@ -128,28 +120,24 @@ export class FormRow extends React.PureComponent {
     delete fieldProps.isFocus;
 
     return (
-      <div
-        className={"form-row" + (this.state.isFocus ? " form-row--focus" : "")}
-      >
+      <div className={`form-row${this.state.isFocus ? ' form-row--focus' : ''}`}>
         {this.props.label && !renderLabelInFormField ? (
           <div
-            className={
-              "form-row__label-row " +
-              (this.props.labelPrefix ? "form-row__label-row--prefix" : "")
-            }
+            className={`form-row__label-row ${
+              this.props.labelPrefix ? 'form-row__label-row--prefix' : ''
+            }`}
           >
             <label
               htmlFor={elementId}
-              className={
-                "form-field__label " +
-                (this.state.isError ? "form-field__label--error" : " ")
-              }
+              className={`form-field__label ${
+                this.state.isError ? 'form-field__label--error' : ' '
+              }`}
             >
               {this.props.label}
             </label>
           </div>
         ) : (
-          ""
+          ''
         )}
         <FormField
           ref={ref => {
@@ -163,12 +151,12 @@ export class FormRow extends React.PureComponent {
         {!this.state.isError && this.props.helper ? (
           <div className="form-field__helper">{this.props.helper}</div>
         ) : (
-          ""
+          ''
         )}
         {this.state.isError ? (
           <div className="form-field__error">{this.state.errorMessage}</div>
         ) : (
-          ""
+          ''
         )}
       </div>
     );
@@ -178,16 +166,14 @@ export class FormRow extends React.PureComponent {
 export const Submit = props => {
   const { title, label, icon, disabled } = props;
 
-  const className =
-    "button-block" +
-    " button-primary" +
-    " button-set-item" +
-    " button--submit" +
-    (disabled ? " disabled" : "");
+  const className = `${'button-block' +
+    ' button-primary' +
+    ' button-set-item' +
+    ' button--submit'}${disabled ? ' disabled' : ''}`;
 
   const content = (
     <span className="button__content">
-      {"icon" in props ? <Icon icon={icon} fixed={true} /> : null}
+      {'icon' in props ? <Icon icon={icon} fixed /> : null}
       {label ? <span className="button-label">{label}</span> : null}
     </span>
   );

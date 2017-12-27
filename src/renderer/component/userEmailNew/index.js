@@ -1,13 +1,10 @@
-import React from "react";
-import { connect } from "react-redux";
-import { doUserEmailNew, doUserInviteNew } from "redux/actions/user";
-import {
-  selectEmailNewIsPending,
-  selectEmailNewErrorMessage,
-} from "redux/selectors/user";
-import UserEmailNew from "./view";
-import rewards from "rewards";
-import { makeSelectRewardAmountByType } from "redux/selectors/rewards";
+import React from 'react';
+import { connect } from 'react-redux';
+import { doUserEmailNew, doUserInviteNew } from 'redux/actions/user';
+import { selectEmailNewIsPending, selectEmailNewErrorMessage } from 'redux/selectors/user';
+import UserEmailNew from './view';
+import rewards from 'rewards';
+import { makeSelectRewardAmountByType } from 'redux/selectors/rewards';
 
 const select = state => ({
   isPending: selectEmailNewIsPending(state),

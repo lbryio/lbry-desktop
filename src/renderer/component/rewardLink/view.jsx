@@ -1,33 +1,23 @@
-import React from "react";
-import Modal from "modal/modal";
-import Link from "component/link";
+import React from 'react';
+import Modal from 'modal/modal';
+import Link from 'component/link';
 
 const RewardLink = props => {
-  const {
-    reward,
-    button,
-    claimReward,
-    clearError,
-    errorMessage,
-    label,
-    isPending,
-  } = props;
+  const { reward, button, claimReward, clearError, errorMessage, label, isPending } = props;
 
   return (
     <div className="reward-link">
       <Link
         button={button}
         disabled={isPending}
-        label={
-          isPending ? __("Claiming...") : label ? label : __("Claim Reward")
-        }
+        label={isPending ? __('Claiming...') : label || __('Claim Reward')}
         onClick={() => {
           claimReward(reward);
         }}
       />
       {errorMessage ? (
         <Modal
-          isOpen={true}
+          isOpen
           contentLabel="Reward Claim Error"
           className="error-modal"
           onConfirmed={() => {
@@ -37,7 +27,7 @@ const RewardLink = props => {
           {errorMessage}
         </Modal>
       ) : (
-        ""
+        ''
       )}
     </div>
   );

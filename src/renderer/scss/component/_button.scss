@@ -1,4 +1,4 @@
-@import "../mixin/link.scss";
+@import '../mixin/link.scss';
 
 $button-focus-shift: 12%;
 
@@ -6,14 +6,13 @@ $button-focus-shift: 12%;
   position: relative;
   display: inline-block;
 
-  + .button-set-item
-  {
+  + .button-set-item {
     margin-left: var(--button-intra-margin);
   }
 }
 
-.button-block, .faux-button-block
-{
+.button-block,
+.faux-button-block {
   display: inline-block;
   height: var(--button-height);
   line-height: var(--button-height);
@@ -22,26 +21,21 @@ $button-focus-shift: 12%;
   text-align: center;
   border-radius: var(--button-radius);
   text-transform: uppercase;
-  .icon
-  {
+  .icon {
     top: 0em;
   }
-  .icon:first-child
-  {
+  .icon:first-child {
     padding-right: 5px;
   }
-  .icon:last-child
-  {
+  .icon:last-child {
     padding-left: 5px;
   }
-  .icon:only-child
-  {
+  .icon:only-child {
     padding-left: 0;
     padding-right: 0;
   }
 }
-.button-block
-{
+.button-block {
   cursor: pointer;
   font-weight: 500;
   font-size: 14px;
@@ -57,9 +51,7 @@ $button-focus-shift: 12%;
   }
 }
 
-.button-primary
-{
-
+.button-primary {
   color: var(--button-primary-color);
   background-color: var(--button-primary-bg);
   box-shadow: var(--box-shadow-layer);
@@ -70,14 +62,12 @@ $button-focus-shift: 12%;
     //box-shadow: $box-shadow-focus;
   }
 }
-.button-alt
-{
+.button-alt {
   background-color: var(--button-bg);
   box-shadow: var(--box-shadow-layer);
 }
 
-.button-text
-{
+.button-text {
   @include text-link();
   display: inline-block;
 
@@ -85,17 +75,15 @@ $button-focus-shift: 12%;
     margin: 0 var(--text-link-padding);
   }
 }
-.button-text-help
-{
+.button-text-help {
   @include text-link(var(--text-help-color));
   font-size: 0.8em;
 }
-.button--flat
-{
+.button--flat {
   box-shadow: none !important;
 }
 
 .button--submit {
-    font-family: inherit;
-    line-height: 0;
+  font-family: inherit;
+  line-height: 0;
 }

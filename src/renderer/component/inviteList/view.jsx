@@ -1,7 +1,7 @@
-import React from "react";
-import { Icon } from "component/common";
-import RewardLink from "component/rewardLink";
-import rewards from "rewards.js";
+import React from 'react';
+import { Icon } from 'component/common';
+import RewardLink from 'component/rewardLink';
+import rewards from 'rewards.js';
 
 class InviteList extends React.PureComponent {
   render() {
@@ -14,7 +14,7 @@ class InviteList extends React.PureComponent {
     return (
       <section className="card">
         <div className="card__title-primary">
-          <h3>{__("Invite History")}</h3>
+          <h3>{__('Invite History')}</h3>
         </div>
         <div className="card__content">
           {invitees.length === 0 && (
@@ -24,38 +24,33 @@ class InviteList extends React.PureComponent {
             <table className="table-standard table-stretch">
               <thead>
                 <tr>
-                  <th>{__("Invitee Email")}</th>
-                  <th className="text-center">{__("Invite Status")}</th>
-                  <th className="text-center">{__("Reward")}</th>
+                  <th>{__('Invitee Email')}</th>
+                  <th className="text-center">{__('Invite Status')}</th>
+                  <th className="text-center">{__('Reward')}</th>
                 </tr>
               </thead>
               <tbody>
-                {invitees.map((invitee, index) => {
-                  return (
-                    <tr key={index}>
-                      <td>{invitee.email}</td>
-                      <td className="text-center">
-                        {invitee.invite_accepted ? (
-                          <Icon icon="icon-check" />
-                        ) : (
-                          <span className="empty">{__("unused")}</span>
-                        )}
-                      </td>
-                      <td className="text-center">
-                        {invitee.invite_reward_claimed ? (
-                          <Icon icon="icon-check" />
-                        ) : invitee.invite_reward_claimable ? (
-                          <RewardLink
-                            label={__("claim")}
-                            reward_type={rewards.TYPE_REFERRAL}
-                          />
-                        ) : (
-                          <span className="empty">{__("unclaimable")}</span>
-                        )}
-                      </td>
-                    </tr>
-                  );
-                })}
+                {invitees.map((invitee, index) => (
+                  <tr key={index}>
+                    <td>{invitee.email}</td>
+                    <td className="text-center">
+                      {invitee.invite_accepted ? (
+                        <Icon icon="icon-check" />
+                      ) : (
+                        <span className="empty">{__('unused')}</span>
+                      )}
+                    </td>
+                    <td className="text-center">
+                      {invitee.invite_reward_claimed ? (
+                        <Icon icon="icon-check" />
+                      ) : invitee.invite_reward_claimable ? (
+                        <RewardLink label={__('claim')} reward_type={rewards.TYPE_REFERRAL} />
+                      ) : (
+                        <span className="empty">{__('unclaimable')}</span>
+                      )}
+                    </td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           )}
@@ -63,7 +58,7 @@ class InviteList extends React.PureComponent {
         <div className="card__content">
           <div className="help">
             {__(
-              "The maximum number of invite rewards is currently limited. Invite reward can only be claimed if the invitee passes the humanness test."
+              'The maximum number of invite rewards is currently limited. Invite reward can only be claimed if the invitee passes the humanness test.'
             )}
           </div>
         </div>

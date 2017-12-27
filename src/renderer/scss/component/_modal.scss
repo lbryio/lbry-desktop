@@ -1,5 +1,5 @@
-
-.modal-overlay, .error-modal-overlay {
+.modal-overlay,
+.error-modal-overlay {
   position: fixed;
   display: flex;
   justify-content: center;
@@ -72,11 +72,12 @@
   max-width: none;
   width: var(--modal-width);
 }
-.error-modal__error-list { /*shitty hack/temp fix for long errors making modal unusable*/
+.error-modal__error-list {
+  /*shitty hack/temp fix for long errors making modal unusable*/
   border: 1px solid var(--input-border-color);
   padding: 8px;
   list-style: none;
   max-height: 400px;
-  max-width:  var(--modal-width);
+  max-width: var(--modal-width);
   overflow-y: hidden;
 }

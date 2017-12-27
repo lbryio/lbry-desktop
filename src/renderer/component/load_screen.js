@@ -1,8 +1,8 @@
-import React from "react";
-import PropTypes from "prop-types";
-import lbry from "../lbry.js";
-import { BusyMessage, Icon } from "./common.js";
-import Link from "component/link";
+import React from 'react';
+import PropTypes from 'prop-types';
+import lbry from '../lbry.js';
+import { BusyMessage, Icon } from './common.js';
+import Link from 'component/link';
 
 class LoadScreen extends React.PureComponent {
   static propTypes = {
@@ -26,7 +26,7 @@ class LoadScreen extends React.PureComponent {
   };
 
   render() {
-    const imgSrc = lbry.imagePath("lbry-white-485x160.png");
+    const imgSrc = lbry.imagePath('lbry-white-485x160.png');
     return (
       <div className="load-screen">
         <img src={imgSrc} alt="LBRY" />
@@ -37,15 +37,14 @@ class LoadScreen extends React.PureComponent {
             ) : (
               <span>
                 <Icon icon="icon-warning" />
-                {" " + this.props.message}
+                {` ${this.props.message}`}
               </span>
             )}
           </h3>
           <span
-            className={
-              "load-screen__details " +
-              (this.props.isWarning ? "load-screen__details--warning" : "")
-            }
+            className={`load-screen__details ${
+              this.props.isWarning ? 'load-screen__details--warning' : ''
+            }`}
           >
             {this.props.details}
           </span>

@@ -1,4 +1,6 @@
-*, *:before, *:after {
+*,
+*:before,
+*:after {
   box-sizing: border-box;
 }
 
@@ -7,17 +9,18 @@ $md-checkbox-border-color: var(--input-border-color);
 $md-checkbox-size: 20px;
 $md-checkbox-padding: 4px;
 $md-checkmark-width: 2px;
-$md-checkmark-color: #FFF;
+$md-checkmark-color: #fff;
 
 .form-field--checkbox {
   position: relative;
 
   label {
     cursor: pointer;
-    &:before, &:after {
-      content: "";
+    &:before,
+    &:after {
+      content: '';
       position: absolute;
-      left:0;
+      left: 0;
       top: 0;
     }
 
@@ -29,7 +32,7 @@ $md-checkmark-color: #FFF;
       border: 2px solid $md-checkbox-border-color;
       border-radius: 2px;
       cursor: pointer;
-      transition: background .3s;
+      transition: background 0.3s;
     }
 
     &:after {
@@ -37,19 +40,17 @@ $md-checkmark-color: #FFF;
     }
   }
 
-  input[type="checkbox"] {
+  input[type='checkbox'] {
     outline: 0;
     visibility: hidden;
     margin-right: 16px;
 
     &:checked {
-
-       + label:before{
+      + label:before {
         background: $md-checkbox-checked-color;
-        border:none;
+        border: none;
       }
       + label:after {
-
         $md-checkmark-size: $md-checkbox-size - 2*$md-checkbox-padding;
 
         transform: rotate(-45deg);
@@ -65,5 +66,4 @@ $md-checkmark-color: #FFF;
       }
     }
   }
-
 }

@@ -1,30 +1,26 @@
-import * as types from "constants/action_types";
-import * as modals from "constants/modal_types";
-import lbryio from "lbryio";
-import rewards from "rewards";
-import { selectUnclaimedRewardsByType } from "redux/selectors/rewards";
-import { selectUserIsRewardApproved } from "redux/selectors/user";
-import { selectClaimedRewardsById } from "../selectors/rewards";
+import * as ACTIONS from 'constants/action_types';
+import * as MODALS from 'constants/modal_types';
+import Lbryio from 'lbryio';
+import rewards from 'rewards';
+import { selectUnclaimedRewardsByType } from 'redux/selectors/rewards';
+import { selectUserIsRewardApproved } from 'redux/selectors/user';
 
 export function doRewardList() {
-  return function(dispatch, getState) {
-    const state = getState();
-
+  return function(dispatch) {
     dispatch({
-      type: types.FETCH_REWARDS_STARTED,
+      type: ACTIONS.FETCH_REWARDS_STARTED,
     });
 
-    lbryio
-      .call("reward", "list", { multiple_rewards_per_type: true })
+    Lbryio.call('reward', 'list', { multiple_rewards_per_type: true })
       .then(userRewards => {
         dispatch({
-          type: types.FETCH_REWARDS_COMPLETED,
+          type: ACTIONS.FETCH_REWARDS_COMPLETED,
           data: { userRewards },
         });
       })
       .catch(() => {
         dispatch({
-          type: types.FETCH_REWARDS_COMPLETED,
+          type: ACTIONS.FETCH_REWARDS_COMPLETED,
           data: { userRewards: [] },
         });
       });
@@ -33,46 +29,48 @@ export function doRewardList() {
 
 export function doClaimRewardType(rewardType) {
   return function(dispatch, getState) {
-    const state = getState(),
-      rewardsByType = selectUnclaimedRewardsByType(state),
-      reward = rewardsByType[rewardType],
-      userIsRewardApproved = selectUserIsRewardApproved(state);
+    const state = getState();
+    const rewardsByType = selectUnclaimedRewardsByType(state);
+    const reward = rewardsByType[rewardType];
+    const userIsRewardApproved = selectUserIsRewardApproved(state);
 
     if (!reward || reward.transaction_id) {
-      //already claimed or doesn't exist, do nothing
+      // already claimed or doesn't exist, do nothing
       return;
     }
 
     if (!userIsRewardApproved && rewardType !== rewards.TYPE_CONFIRM_EMAIL) {
-      return dispatch({
-        type: types.OPEN_MODAL,
-        data: { modal: modals.REWARD_APPROVAL_REQUIRED },
+      dispatch({
+        type: ACTIONS.OPEN_MODAL,
+        data: { modal: MODALS.REWARD_APPROVAL_REQUIRED },
       });
+
+      return;
     }
 
     dispatch({
-      type: types.CLAIM_REWARD_STARTED,
+      type: ACTIONS.CLAIM_REWARD_STARTED,
       data: { reward },
     });
 
-    const success = reward => {
+    const success = successReward => {
       dispatch({
-        type: types.CLAIM_REWARD_SUCCESS,
+        type: ACTIONS.CLAIM_REWARD_SUCCESS,
         data: {
-          reward,
+          reward: successReward,
         },
       });
-      if (reward.reward_type == rewards.TYPE_CONFIRM_EMAIL) {
+      if (successReward.reward_type === rewards.TYPE_CONFIRM_EMAIL) {
         dispatch({
-          type: types.OPEN_MODAL,
-          data: { modal: modals.FIRST_REWARD },
+          type: ACTIONS.OPEN_MODAL,
+          data: { modal: MODALS.FIRST_REWARD },
         });
       }
     };
 
     const failure = error => {
       dispatch({
-        type: types.CLAIM_REWARD_FAILURE,
+        type: ACTIONS.CLAIM_REWARD_FAILURE,
         data: { reward, error },
       });
     };
@@ -83,30 +81,28 @@ export function doClaimRewardType(rewardType) {
 
 export function doClaimEligiblePurchaseRewards() {
   return function(dispatch, getState) {
-    const state = getState(),
-      rewardsByType = selectUnclaimedRewardsByType(state),
-      userIsRewardApproved = selectUserIsRewardApproved(state);
+    const state = getState();
+    const rewardsByType = selectUnclaimedRewardsByType(state);
+    const userIsRewardApproved = selectUserIsRewardApproved(state);
 
-    if (!userIsRewardApproved || !lbryio.enabled) {
+    if (!userIsRewardApproved || !Lbryio.enabled) {
       return;
     }
 
     if (rewardsByType[rewards.TYPE_FIRST_STREAM]) {
       dispatch(doClaimRewardType(rewards.TYPE_FIRST_STREAM));
     } else {
-      [rewards.TYPE_MANY_DOWNLOADS, rewards.TYPE_FEATURED_DOWNLOAD].forEach(
-        type => {
-          dispatch(doClaimRewardType(type));
-        }
-      );
+      [rewards.TYPE_MANY_DOWNLOADS, rewards.TYPE_FEATURED_DOWNLOAD].forEach(type => {
+        dispatch(doClaimRewardType(type));
+      });
     }
   };
 }
 
 export function doClaimRewardClearError(reward) {
-  return function(dispatch, getState) {
+  return function(dispatch) {
     dispatch({
-      type: types.CLAIM_REWARD_CLEAR_ERROR,
+      type: ACTIONS.CLAIM_REWARD_CLEAR_ERROR,
       data: { reward },
     });
   };

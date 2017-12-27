@@ -1,5 +1,5 @@
-const { app, shell, Menu } = require('electron');
-const { safeQuit } = require('../index.js');
+import { app, Menu, shell } from 'electron';
+import { safeQuit } from '../index';
 
 const baseTemplate = [
   {
@@ -7,10 +7,10 @@ const baseTemplate = [
     submenu: [
       {
         label: 'Quit',
-        accelerator: "CommandOrControl+Q",
+        accelerator: 'CommandOrControl+Q',
         click: () => safeQuit(),
       },
-    ]
+    ],
   },
   {
     label: 'Edit',
@@ -36,32 +36,32 @@ const baseTemplate = [
       {
         role: 'selectall',
       },
-    ]
+    ],
   },
   {
     label: 'View',
     submenu: [
       {
-        role: 'reload'
+        role: 'reload',
       },
       {
         label: 'Developer',
         submenu: [
           {
-            role: 'forcereload'
+            role: 'forcereload',
           },
           {
-            role: 'toggledevtools'
+            role: 'toggledevtools',
           },
-        ]
+        ],
       },
       {
-        type: 'separator'
+        type: 'separator',
       },
       {
-        role: 'togglefullscreen'
-      }
-    ]
+        role: 'togglefullscreen',
+      },
+    ],
   },
   {
     role: 'help',
@@ -72,34 +72,34 @@ const baseTemplate = [
           if (focusedWindow) {
             focusedWindow.webContents.send('open-menu', '/help');
           }
-        }
+        },
       },
       {
         label: 'Frequently Asked Questions',
-        click(item, focusedWindow){
-         shell.openExternal('https://lbry.io/faq')
-      }
+        click() {
+          shell.openExternal('https://lbry.io/faq');
+        },
       },
       {
-        type: 'separator'
+        type: 'separator',
       },
       {
         label: 'Report Issue',
-        click(item, focusedWindow){
+        click() {
           shell.openExternal('https://lbry.io/faq/contributing#report-a-bug');
-        }
+        },
       },
       {
-        type: 'separator'
+        type: 'separator',
       },
       {
         label: 'Developer API Guide',
-        click(item, focusedWindow){
-          shell.openExternal('https://lbry.io/quickstart')
-        }
+        click() {
+          shell.openExternal('https://lbry.io/quickstart');
+        },
       },
-    ]
-  }
+    ],
+  },
 ];
 
 const macOSAppMenuTemplate = {
@@ -126,11 +126,13 @@ const macOSAppMenuTemplate = {
     {
       role: 'quit',
     },
-  ]
+  ],
 };
 
-module.exports = () => {
-    let template = baseTemplate.slice();
-    (process.platform === 'darwin') && template.unshift(macOSAppMenuTemplate);
-    Menu.setApplicationMenu(Menu.buildFromTemplate(template));
+export default () => {
+  const template = baseTemplate.slice();
+  if (process.platform === 'darwin') {
+    template.unshift(macOSAppMenuTemplate);
+  }
+  Menu.setApplicationMenu(Menu.buildFromTemplate(template));
 };

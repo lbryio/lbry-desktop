@@ -1,8 +1,8 @@
-import React from "react";
-import PropTypes from "prop-types";
-import lbryuri from "lbryuri.js";
-import { Icon } from "component/common.js";
-import { parseQueryParams } from "util/query_params";
+import React from 'react';
+import PropTypes from 'prop-types';
+import lbryuri from 'lbryuri.js';
+import { Icon } from 'component/common.js';
+import { parseQueryParams } from 'util/query_params';
 
 class WunderBar extends React.PureComponent {
   static TYPING_TIMEOUT = 800;
@@ -45,7 +45,7 @@ class WunderBar extends React.PureComponent {
 
     this._isSearchDispatchPending = true;
 
-    let searchQuery = event.target.value;
+    const searchQuery = event.target.value;
 
     this._userTypingTimer = setTimeout(() => {
       const hasQuery = searchQuery.length === 0;
@@ -68,19 +68,16 @@ class WunderBar extends React.PureComponent {
 
   onFocus() {
     this._stateBeforeSearch = this.state;
-    let newState = {
-      icon: "icon-search",
+    const newState = {
+      icon: 'icon-search',
       isActive: true,
     };
 
     this._focusPending = true;
-    //below is hacking, improved when we have proper routing
-    if (
-      !this.state.address.startsWith("lbry://") &&
-      this.state.icon !== "icon-search"
-    ) {
-      //onFocus, if they are not on an exact URL or a search page, clear the bar
-      newState.address = "";
+    // below is hacking, improved when we have proper routing
+    if (!this.state.address.startsWith('lbry://') && this.state.icon !== 'icon-search') {
+      // onFocus, if they are not on an exact URL or a search page, clear the bar
+      newState.address = '';
     }
     this.setState(newState);
   }
@@ -91,7 +88,7 @@ class WunderBar extends React.PureComponent {
         this.onBlur();
       }, WunderBar.TYPING_TIMEOUT + 1);
     } else {
-      let commonState = { isActive: false };
+      const commonState = { isActive: false };
       if (this._resetOnNextBlur) {
         this.setState(Object.assign({}, this._stateBeforeSearch, commonState));
         this._input.value = this.state.address;
@@ -108,7 +105,7 @@ class WunderBar extends React.PureComponent {
       const start = this._input.selectionStart,
         end = this._input.selectionEnd;
 
-      this._input.value = this.state.address; //this causes cursor to go to end of input
+      this._input.value = this.state.address; // this causes cursor to go to end of input
 
       this._input.setSelectionRange(start, end);
 
@@ -122,23 +119,23 @@ class WunderBar extends React.PureComponent {
   onKeyPress(event) {
     if (event.charCode == 13 && this._input.value) {
       let uri = null,
-        method = "onSubmit",
+        method = 'onSubmit',
         extraParams = {};
 
       this._resetOnNextBlur = false;
       clearTimeout(this._userTypingTimer);
 
-      const parts = this._input.value.trim().split("?");
+      const parts = this._input.value.trim().split('?');
       const value = parts.shift();
-      if (parts.length > 0) extraParams = parseQueryParams(parts.join(""));
+      if (parts.length > 0) extraParams = parseQueryParams(parts.join(''));
 
       try {
         uri = lbryuri.normalize(value);
         this.setState({ value: uri });
       } catch (error) {
-        //then it's not a valid URL, so let's search
+        // then it's not a valid URL, so let's search
         uri = value;
-        method = "onSearch";
+        method = 'onSearch';
       }
 
       this.props[method](uri, extraParams);
@@ -152,12 +149,8 @@ class WunderBar extends React.PureComponent {
 
   render() {
     return (
-      <div
-        className={
-          "wunderbar" + (this.state.isActive ? " wunderbar--active" : "")
-        }
-      >
-        {this.state.icon ? <Icon fixed icon={this.state.icon} /> : ""}
+      <div className={`wunderbar${this.state.isActive ? ' wunderbar--active' : ''}`}>
+        {this.state.icon ? <Icon fixed icon={this.state.icon} /> : ''}
         <input
           className="wunderbar__input"
           type="search"
@@ -167,7 +160,7 @@ class WunderBar extends React.PureComponent {
           onChange={this.onChange}
           onKeyPress={this.onKeyPress}
           value={this.state.address}
-          placeholder={__("Find movies, music, games, and more")}
+          placeholder={__('Find movies, music, games, and more')}
         />
       </div>
     );

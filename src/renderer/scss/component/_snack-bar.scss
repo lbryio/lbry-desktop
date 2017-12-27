@@ -1,4 +1,3 @@
-
 $padding-snack-horizontal: $spacing-vertical;
 
 .snack-bar {
@@ -24,7 +23,7 @@ $padding-snack-horizontal: $spacing-vertical;
 
   border-radius: 2px;
 
-  transition: all  var(--transition-duration) var(--transition-type);
+  transition: all var(--transition-duration) var(--transition-type);
 
   z-index: 10000; /*hack to get it over react modal */
 }

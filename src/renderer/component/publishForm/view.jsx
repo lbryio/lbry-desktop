@@ -1,44 +1,44 @@
-import React from "react";
-import lbry from "lbry";
-import lbryuri from "lbryuri";
-import FormField from "component/formField";
-import { Form, FormRow, Submit } from "component/form.js";
-import Link from "component/link";
-import FormFieldPrice from "component/formFieldPrice";
-import Modal from "modal/modal";
-import { BusyMessage } from "component/common";
-import ChannelSection from "./internal/channelSection";
+import React from 'react';
+import lbry from 'lbry';
+import lbryuri from 'lbryuri';
+import FormField from 'component/formField';
+import { Form, FormRow, Submit } from 'component/form.js';
+import Link from 'component/link';
+import FormFieldPrice from 'component/formFieldPrice';
+import Modal from 'modal/modal';
+import { BusyMessage } from 'component/common';
+import ChannelSection from './internal/channelSection';
 
 class PublishForm extends React.PureComponent {
   constructor(props) {
     super(props);
 
-    this._requiredFields = ["name", "bid", "meta_title", "tosAgree"];
+    this._requiredFields = ['name', 'bid', 'meta_title', 'tosAgree'];
 
-    this._defaultCopyrightNotice = "All rights reserved.";
+    this._defaultCopyrightNotice = 'All rights reserved.';
     this._defaultPaidPrice = 0.01;
 
     this.state = {
       id: null,
       uri: null,
-      rawName: "",
-      name: "",
+      rawName: '',
+      name: '',
       bid: 10,
       hasFile: false,
-      feeAmount: "",
-      feeCurrency: "LBC",
-      channel: "anonymous",
-      newChannelName: "@",
+      feeAmount: '',
+      feeCurrency: 'LBC',
+      channel: 'anonymous',
+      newChannelName: '@',
       newChannelBid: 10,
-      meta_title: "",
-      meta_thumbnail: "",
-      meta_description: "",
-      meta_language: "en",
-      meta_nsfw: "0",
-      licenseType: "",
+      meta_title: '',
+      meta_thumbnail: '',
+      meta_description: '',
+      meta_language: 'en',
+      meta_nsfw: '0',
+      licenseType: '',
       copyrightNotice: this._defaultCopyrightNotice,
-      otherLicenseDescription: "",
-      otherLicenseUrl: "",
+      otherLicenseDescription: '',
+      otherLicenseUrl: '',
       tosAgree: false,
       prefillDone: false,
       uploadProgress: 0.0,
@@ -50,7 +50,7 @@ class PublishForm extends React.PureComponent {
       isFee: false,
       customUrl: false,
       source: null,
-      mode: "publish",
+      mode: 'publish',
     };
   }
 
@@ -65,7 +65,7 @@ class PublishForm extends React.PureComponent {
     const { bid } = this.state;
 
     if (bid > balance) {
-      this.handlePublishError({ message: "insufficient funds" });
+      this.handlePublishError({ message: 'insufficient funds' });
 
       return;
     }
@@ -74,16 +74,16 @@ class PublishForm extends React.PureComponent {
       submitting: true,
     });
 
-    let checkFields = this._requiredFields;
+    const checkFields = this._requiredFields;
     if (!this.myClaimExists()) {
-      checkFields.unshift("file");
+      checkFields.unshift('file');
     }
 
     let missingFieldFound = false;
-    for (let fieldName of checkFields) {
+    for (const fieldName of checkFields) {
       const field = this.refs[fieldName];
       if (field) {
-        if (field.getValue() === "" || field.getValue() === false) {
+        if (field.getValue() === '' || field.getValue() === false) {
           field.showRequiredError();
           if (!missingFieldFound) {
             field.focus();
@@ -102,10 +102,10 @@ class PublishForm extends React.PureComponent {
       return;
     }
 
-    let metadata = {};
+    const metadata = {};
 
-    for (let metaField of ["title", "description", "thumbnail", "language"]) {
-      const value = this.state["meta_" + metaField];
+    for (const metaField of ['title', 'description', 'thumbnail', 'language']) {
+      const value = this.state[`meta_${metaField}`];
       if (value) {
         metadata[metaField] = value;
       }
@@ -115,19 +115,19 @@ class PublishForm extends React.PureComponent {
     metadata.licenseUrl = this.getLicenseUrl();
     metadata.nsfw = !!parseInt(this.state.meta_nsfw);
 
-    var doPublish = () => {
-      var publishArgs = {
+    const doPublish = () => {
+      const publishArgs = {
         name: this.state.name,
         bid: parseFloat(this.state.bid),
-        metadata: metadata,
-        ...(this.state.channel != "new" && this.state.channel != "anonymous"
+        metadata,
+        ...(this.state.channel != 'new' && this.state.channel != 'anonymous'
           ? { channel_name: this.state.channel }
           : {}),
       };
 
       const { source } = this.state;
 
-      if (this.refs.file.getValue() !== "") {
+      if (this.refs.file.getValue() !== '') {
         publishArgs.file_path = this.refs.file.getValue();
       } else if (source) {
         publishArgs.sources = source;
@@ -145,7 +145,7 @@ class PublishForm extends React.PureComponent {
         metadata.fee = {
           currency: this.state.feeCurrency,
           amount: parseFloat(this.state.feeAmount),
-          address: address,
+          address,
         };
 
         doPublish();
@@ -157,18 +157,18 @@ class PublishForm extends React.PureComponent {
 
   handlePublishStarted() {
     this.setState({
-      modal: "publishStarted",
+      modal: 'publishStarted',
     });
   }
 
   handlePublishStartedConfirmed() {
-    this.props.navigate("/published");
+    this.props.navigate('/published');
   }
 
   handlePublishError(error) {
     this.setState({
       submitting: false,
-      modal: "error",
+      modal: 'error',
       errorMessage: error.message,
     });
   }
@@ -220,13 +220,11 @@ class PublishForm extends React.PureComponent {
   myClaimInfo() {
     const { id } = this.state;
 
-    return Object.values(this.props.myClaims).find(
-      claim => claim.claim_id === id
-    );
+    return Object.values(this.props.myClaims).find(claim => claim.claim_id === id);
   }
 
   handleNameChange(event) {
-    var rawName = event.target.value;
+    const rawName = event.target.value;
     this.setState({
       customUrl: Boolean(rawName.length),
     });
@@ -237,33 +235,31 @@ class PublishForm extends React.PureComponent {
   nameChanged(rawName) {
     if (!rawName) {
       this.setState({
-        rawName: "",
-        name: "",
-        uri: "",
+        rawName: '',
+        name: '',
+        uri: '',
         prefillDone: false,
-        mode: "publish",
+        mode: 'publish',
       });
 
       return;
     }
 
     if (!lbryuri.isValidName(rawName, false)) {
-      this.refs.name.showError(
-        __("LBRY names must contain only letters, numbers and dashes.")
-      );
+      this.refs.name.showError(__('LBRY names must contain only letters, numbers and dashes.'));
       return;
     }
 
-    let channel = "";
-    if (this.state.channel !== "anonymous") channel = this.state.channel;
+    let channel = '';
+    if (this.state.channel !== 'anonymous') channel = this.state.channel;
 
     const name = rawName.toLowerCase();
     const uri = lbryuri.build({ contentName: name, channelName: channel });
     this.setState({
-      rawName: rawName,
-      name: name,
+      rawName,
+      name,
       prefillDone: false,
-      mode: "publish",
+      mode: 'publish',
       uri,
     });
 
@@ -282,26 +278,18 @@ class PublishForm extends React.PureComponent {
     const { claim_id, name, channel_name, amount } = claimInfo;
     const { source, metadata } = claimInfo.value.stream;
 
-    const {
-      license,
-      licenseUrl,
-      title,
-      thumbnail,
-      description,
-      language,
-      nsfw,
-    } = metadata;
+    const { license, licenseUrl, title, thumbnail, description, language, nsfw } = metadata;
 
-    let newState = {
+    const newState = {
       id: claim_id,
-      channel: channel_name || "anonymous",
+      channel: channel_name || 'anonymous',
       bid: amount,
       meta_title: title,
       meta_thumbnail: thumbnail,
       meta_description: description,
       meta_language: language,
       meta_nsfw: nsfw,
-      mode: "edit",
+      mode: 'edit',
       prefillDone: true,
       rawName: name,
       name,
@@ -309,21 +297,18 @@ class PublishForm extends React.PureComponent {
     };
 
     if (license == this._defaultCopyrightNotice) {
-      newState.licenseType = "copyright";
+      newState.licenseType = 'copyright';
       newState.copyrightNotice = this._defaultCopyrightNotice;
     } else {
       // If the license URL or description matches one of the drop-down options, use that
-      let licenseType = "other"; // Will be overridden if we find a match
-      for (let option of this._meta_license.getOptions()) {
-        if (
-          option.getAttribute("data-url") === licenseUrl ||
-          option.text === license
-        ) {
+      let licenseType = 'other'; // Will be overridden if we find a match
+      for (const option of this._meta_license.getOptions()) {
+        if (option.getAttribute('data-url') === licenseUrl || option.text === license) {
           licenseType = option.value;
         }
       }
 
-      if (licenseType == "other") {
+      if (licenseType == 'other') {
         newState.otherLicenseDescription = license;
         newState.otherLicenseUrl = licenseUrl;
       }
@@ -349,10 +334,7 @@ class PublishForm extends React.PureComponent {
   handleFeePrefChange(feeEnabled) {
     this.setState({
       isFee: feeEnabled,
-      feeAmount:
-        this.state.feeAmount == ""
-          ? this._defaultPaidPrice
-          : this.state.feeAmount,
+      feeAmount: this.state.feeAmount == '' ? this._defaultPaidPrice : this.state.feeAmount,
     });
   }
 
@@ -363,7 +345,7 @@ class PublishForm extends React.PureComponent {
      * more complex logic and the final value is determined at submit time.
      */
     this.setState({
-      ["meta_" + event.target.name]: event.target.value,
+      [`meta_${event.target.name}`]: event.target.value,
     });
   }
 
@@ -399,7 +381,7 @@ class PublishForm extends React.PureComponent {
 
   handleChannelChange(channelName) {
     this.setState({
-      mode: "publish",
+      mode: 'publish',
       channel: channelName,
     });
     const nameChanged = () => this.nameChanged(this.state.rawName);
@@ -414,9 +396,9 @@ class PublishForm extends React.PureComponent {
 
   getLicense() {
     switch (this.state.licenseType) {
-      case "copyright":
+      case 'copyright':
         return this.state.copyrightNotice;
-      case "other":
+      case 'other':
         return this.state.otherLicenseDescription;
       default:
         return this._meta_license.getSelectedElement().text;
@@ -425,12 +407,12 @@ class PublishForm extends React.PureComponent {
 
   getLicenseUrl() {
     switch (this.state.licenseType) {
-      case "copyright":
-        return "";
-      case "other":
+      case 'copyright':
+        return '';
+      case 'other':
         return this.state.otherLicenseUrl;
       default:
-        return this._meta_license.getSelectedElement().getAttribute("data-url");
+        return this._meta_license.getSelectedElement().getAttribute('data-url');
     }
   }
 
@@ -450,8 +432,8 @@ class PublishForm extends React.PureComponent {
     const { mode } = this.state;
     if (this.refs.file.getValue()) {
       this.setState({ hasFile: true });
-      if (!this.state.customUrl && mode !== "edit") {
-        let fileName = this._getFileName(this.refs.file.getValue());
+      if (!this.state.customUrl && mode !== 'edit') {
+        const fileName = this._getFileName(this.refs.file.getValue());
         this.nameChanged(fileName);
       }
     } else {
@@ -460,11 +442,11 @@ class PublishForm extends React.PureComponent {
   }
 
   _getFileName(fileName) {
-    const path = require("path");
+    const path = require('path');
     const extension = path.extname(fileName);
 
     fileName = path.basename(fileName, extension);
-    fileName = fileName.replace(lbryuri.REGEXP_INVALID_URI, "");
+    fileName = fileName.replace(lbryuri.REGEXP_INVALID_URI, '');
     return fileName;
   }
 
@@ -474,23 +456,20 @@ class PublishForm extends React.PureComponent {
     const claim = this.claim();
 
     if (prefillDone) {
-      return __("Existing claim data was prefilled");
+      return __('Existing claim data was prefilled');
     }
 
     if (uri && resolvingUris.indexOf(uri) !== -1 && claim === undefined) {
-      return __("Checking...");
+      return __('Checking...');
     } else if (!name) {
-      return __("Select a URL for this publish.");
+      return __('Select a URL for this publish.');
     } else if (!claim) {
-      return __("This URL is unused.");
+      return __('This URL is unused.');
     } else if (this.myClaimExists() && !prefillDone) {
       return (
         <span>
-          {__("You already have a claim with this name.")}{" "}
-          <Link
-            label={__("Edit existing claim")}
-            onClick={() => this.handleEditClaim()}
-          />
+          {__('You already have a claim with this name.')}{' '}
+          <Link label={__('Edit existing claim')} onClick={() => this.handleEditClaim()} />
         </span>
       );
     } else if (claim) {
@@ -504,20 +483,18 @@ class PublishForm extends React.PureComponent {
             )}
           </span>
         );
-      } else {
-        return (
-          <span>
-            {__(
-              'A deposit of at least "%s" credits is required to win "%s". However, you can still get a permanent URL for any amount.',
-              topClaimValue,
-              name
-            )}
-          </span>
-        );
       }
-    } else {
-      return "";
+      return (
+        <span>
+          {__(
+            'A deposit of at least "%s" credits is required to win "%s". However, you can still get a permanent URL for any amount.',
+            topClaimValue,
+            name
+          )}
+        </span>
+      );
     }
+    return '';
   }
 
   closeModal() {
@@ -529,14 +506,12 @@ class PublishForm extends React.PureComponent {
   render() {
     const { mode, submitting } = this.state;
 
-    const lbcInputHelp = __(
-      "This LBC remains yours and the deposit can be undone at any time."
-    );
+    const lbcInputHelp = __('This LBC remains yours and the deposit can be undone at any time.');
 
-    let submitLabel = !submitting ? __("Publish") : __("Publishing...");
+    let submitLabel = !submitting ? __('Publish') : __('Publishing...');
 
-    if (mode === "edit") {
-      submitLabel = !submitting ? __("Update") : __("Updating...");
+    if (mode === 'edit') {
+      submitLabel = !submitting ? __('Update') : __('Updating...');
     }
 
     return (
@@ -544,10 +519,8 @@ class PublishForm extends React.PureComponent {
         <Form onSubmit={this.handleSubmit.bind(this)}>
           <section className="card">
             <div className="card__title-primary">
-              <h4>{__("Content")}</h4>
-              <div className="card__subtitle">
-                {__("What are you publishing?")}
-              </div>
+              <h4>{__('Content')}</h4>
+              <div className="card__subtitle">{__('What are you publishing?')}</div>
             </div>
             <div className="card__content">
               <FormRow
@@ -571,7 +544,7 @@ class PublishForm extends React.PureComponent {
                 <div className="card__content">
                   <FormRow
                     ref="meta_title"
-                    label={__("Title")}
+                    label={__('Title')}
                     type="text"
                     name="title"
                     value={this.state.meta_title}
@@ -584,7 +557,7 @@ class PublishForm extends React.PureComponent {
                 <div className="card__content">
                   <FormRow
                     type="text"
-                    label={__("Thumbnail URL")}
+                    label={__('Thumbnail URL')}
                     name="thumbnail"
                     value={this.state.meta_thumbnail}
                     placeholder="http://spee.ch/mylogo"
@@ -596,11 +569,11 @@ class PublishForm extends React.PureComponent {
                 <div className="card__content">
                   <FormRow
                     type="SimpleMDE"
-                    label={__("Description")}
+                    label={__('Description')}
                     ref="meta_description"
                     name="description"
                     value={this.state.meta_description}
-                    placeholder={__("Description of your content")}
+                    placeholder={__('Description of your content')}
                     onChange={text => {
                       this.handleDescriptionChanged(text);
                     }}
@@ -608,7 +581,7 @@ class PublishForm extends React.PureComponent {
                 </div>
                 <div className="card__content">
                   <FormRow
-                    label={__("Language")}
+                    label={__('Language')}
                     type="select"
                     value={this.state.meta_language}
                     name="language"
@@ -616,19 +589,19 @@ class PublishForm extends React.PureComponent {
                       this.handleMetadataChange(event);
                     }}
                   >
-                    <option value="en">{__("English")}</option>
-                    <option value="zh">{__("Chinese")}</option>
-                    <option value="fr">{__("French")}</option>
-                    <option value="de">{__("German")}</option>
-                    <option value="jp">{__("Japanese")}</option>
-                    <option value="ru">{__("Russian")}</option>
-                    <option value="es">{__("Spanish")}</option>
+                    <option value="en">{__('English')}</option>
+                    <option value="zh">{__('Chinese')}</option>
+                    <option value="fr">{__('French')}</option>
+                    <option value="de">{__('German')}</option>
+                    <option value="jp">{__('Japanese')}</option>
+                    <option value="ru">{__('Russian')}</option>
+                    <option value="es">{__('Spanish')}</option>
                   </FormRow>
                 </div>
                 <div className="card__content">
                   <FormRow
                     type="select"
-                    label={__("Maturity")}
+                    label={__('Maturity')}
                     value={this.state.meta_nsfw}
                     name="nsfw"
                     onChange={event => {
@@ -636,8 +609,8 @@ class PublishForm extends React.PureComponent {
                     }}
                   >
                     {/* <option value=""></option> */}
-                    <option value="0">{__("All Ages")}</option>
-                    <option value="1">{__("Adults Only")}</option>
+                    <option value="0">{__('All Ages')}</option>
+                    <option value="1">{__('Adults Only')}</option>
                   </FormRow>
                 </div>
               </div>
@@ -646,14 +619,12 @@ class PublishForm extends React.PureComponent {
 
           <section className="card">
             <div className="card__title-primary">
-              <h4>{__("Price")}</h4>
-              <div className="card__subtitle">
-                {__("How much does this content cost?")}
-              </div>
+              <h4>{__('Price')}</h4>
+              <div className="card__subtitle">{__('How much does this content cost?')}</div>
             </div>
             <div className="card__content">
               <FormRow
-                label={__("Free")}
+                label={__('Free')}
                 type="radio"
                 name="isFree"
                 onChange={() => this.handleFeePrefChange(false)}
@@ -662,27 +633,26 @@ class PublishForm extends React.PureComponent {
               <FormField
                 type="radio"
                 name="isFree"
-                label={!this.state.isFee ? __("Choose price...") : __("Price ")}
+                label={!this.state.isFee ? __('Choose price...') : __('Price ')}
                 onChange={() => {
                   this.handleFeePrefChange(true);
                 }}
                 checked={this.state.isFee}
               />
-              <span className={!this.state.isFee ? "hidden" : ""}>
+              <span className={!this.state.isFee ? 'hidden' : ''}>
                 <FormFieldPrice
                   min="0"
                   defaultValue={{
                     amount: this._defaultPaidPrice,
-                    currency: "LBC",
+                    currency: 'LBC',
                   }}
                   onChange={val => this.handleFeeChange(val)}
                 />
               </span>
-              {this.state.isFee &&
-              this.state.feeCurrency.toUpperCase() != "LBC" ? (
+              {this.state.isFee && this.state.feeCurrency.toUpperCase() != 'LBC' ? (
                 <div className="form-field__helper">
                   {__(
-                    "All content fees are charged in LBC. For non-LBC payment methods, the number of credits charged will be adjusted based on the value of LBRY credits at the time of purchase."
+                    'All content fees are charged in LBC. For non-LBC payment methods, the number of credits charged will be adjusted based on the value of LBRY credits at the time of purchase.'
                   )}
                 </div>
               ) : null}
@@ -690,7 +660,7 @@ class PublishForm extends React.PureComponent {
           </section>
           <section className="card">
             <div className="card__title-primary">
-              <h4>{__("License")}</h4>
+              <h4>{__('License')}</h4>
             </div>
             <div className="card__content">
               <FormRow
@@ -703,61 +673,51 @@ class PublishForm extends React.PureComponent {
                   this.handleLicenseTypeChange(event);
                 }}
               >
-                <option>{__("None")}</option>
-                <option value="publicDomain">{__("Public Domain")}</option>
+                <option>{__('None')}</option>
+                <option value="publicDomain">{__('Public Domain')}</option>
                 <option
                   value="cc-by"
                   data-url="https://creativecommons.org/licenses/by/4.0/legalcode"
                 >
-                  {__("Creative Commons Attribution 4.0 International")}
+                  {__('Creative Commons Attribution 4.0 International')}
                 </option>
                 <option
                   value="cc-by-sa"
                   data-url="https://creativecommons.org/licenses/by-sa/4.0/legalcode"
                 >
-                  {__(
-                    "Creative Commons Attribution-ShareAlike 4.0 International"
-                  )}
+                  {__('Creative Commons Attribution-ShareAlike 4.0 International')}
                 </option>
                 <option
                   value="cc-by-nd"
                   data-url="https://creativecommons.org/licenses/by-nd/4.0/legalcode"
                 >
-                  {__(
-                    "Creative Commons Attribution-NoDerivatives 4.0 International"
-                  )}
+                  {__('Creative Commons Attribution-NoDerivatives 4.0 International')}
                 </option>
                 <option
                   value="cc-by-nc"
                   data-url="https://creativecommons.org/licenses/by-nc/4.0/legalcode"
                 >
-                  {__(
-                    "Creative Commons Attribution-NonCommercial 4.0 International"
-                  )}
+                  {__('Creative Commons Attribution-NonCommercial 4.0 International')}
                 </option>
                 <option
                   value="cc-by-nc-sa"
                   data-url="https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode"
                 >
-                  {__(
-                    "Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International"
-                  )}
+                  {__('Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International')}
                 </option>
                 <option
                   value="cc-by-nc-nd"
                   data-url="https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode"
                 >
-                  {__(
-                    "Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International"
-                  )}
+                  {__('Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International')}
                 </option>
-                <option value="copyright">{__("Copyrighted...")}</option>
-                <option value="other">{__("Other...")}</option>
+                <option value="copyright">{__('Copyrighted...')}</option>
+                <option value="other">{__('Other...')}</option>
               </FormRow>
 
-              {this.state.licenseType == "copyright" ? (
+              {this.state.licenseType == 'copyright' ? (
                 <FormRow
-                  label={__("Copyright notice")}
+                  label={__('Copyright notice')}
                   type="text"
                   name="copyright-notice"
                   value={this.state.copyrightNotice}
@@ -767,9 +727,9 @@ class PublishForm extends React.PureComponent {
                 />
               ) : null}
 
-              {this.state.licenseType == "other" ? (
+              {this.state.licenseType == 'other' ? (
                 <FormRow
-                  label={__("License description")}
+                  label={__('License description')}
                   type="text"
                   name="other-license-description"
                   value={this.state.otherLicenseDescription}
@@ -779,9 +739,9 @@ class PublishForm extends React.PureComponent {
                 />
               ) : null}
 
-              {this.state.licenseType == "other" ? (
+              {this.state.licenseType == 'other' ? (
                 <FormRow
-                  label={__("License URL")}
+                  label={__('License URL')}
                   type="text"
                   name="other-license-url"
                   value={this.state.otherLicenseUrl}
@@ -801,23 +761,18 @@ class PublishForm extends React.PureComponent {
 
           <section className="card">
             <div className="card__title-primary">
-              <h4>{__("Content URL")}</h4>
+              <h4>{__('Content URL')}</h4>
               <div className="card__subtitle">
                 {__(
-                  "This is the exact address where people find your content (ex. lbry://myvideo)."
-                )}{" "}
-                <Link
-                  label={__("Learn more")}
-                  href="https://lbry.io/faq/naming"
-                />.
+                  'This is the exact address where people find your content (ex. lbry://myvideo).'
+                )}{' '}
+                <Link label={__('Learn more')} href="https://lbry.io/faq/naming" />.
               </div>
             </div>
             <div className="card__content">
               <FormRow
                 prefix={`lbry://${
-                  this.state.channel === "anonymous"
-                    ? ""
-                    : `${this.state.channel}/`
+                  this.state.channel === 'anonymous' ? '' : `${this.state.channel}/`
                 }`}
                 type="text"
                 ref="name"
@@ -835,7 +790,7 @@ class PublishForm extends React.PureComponent {
                   ref="bid"
                   type="number"
                   step="any"
-                  label={__("Deposit")}
+                  label={__('Deposit')}
                   postfix="LBC"
                   onChange={event => {
                     this.handleBidChange(event);
@@ -847,23 +802,23 @@ class PublishForm extends React.PureComponent {
                 />
               </div>
             ) : (
-              ""
+              ''
             )}
           </section>
 
           <section className="card">
             <div className="card__title-primary">
-              <h4>{__("Terms of Service")}</h4>
+              <h4>{__('Terms of Service')}</h4>
             </div>
             <div className="card__content">
               <FormRow
                 ref="tosAgree"
                 label={
                   <span>
-                    {__("I agree to the")}{" "}
+                    {__('I agree to the')}{' '}
                     <Link
                       href="https://www.lbry.io/termsofservice"
-                      label={__("LBRY terms of service")}
+                      label={__('LBRY terms of service')}
                     />
                   </span>
                 }
@@ -878,36 +833,27 @@ class PublishForm extends React.PureComponent {
 
           <div className="card-series-submit">
             <Submit
-              label={
-                !this.state.submitting ? __("Publish") : __("Publishing...")
-              }
+              label={!this.state.submitting ? __('Publish') : __('Publishing...')}
               disabled={
                 this.props.balance <= 0 ||
                 this.state.submitting ||
-                (this.state.uri &&
-                  this.props.resolvingUris.indexOf(this.state.uri) !== -1) ||
-                (this.claim() &&
-                  !this.topClaimIsMine() &&
-                  this.state.bid <= this.topClaimValue())
+                (this.state.uri && this.props.resolvingUris.indexOf(this.state.uri) !== -1) ||
+                (this.claim() && !this.topClaimIsMine() && this.state.bid <= this.topClaimValue())
               }
             />
-            <Link
-              button="cancel"
-              onClick={this.props.back}
-              label={__("Cancel")}
-            />
+            <Link button="cancel" onClick={this.props.back} label={__('Cancel')} />
           </div>
         </Form>
 
         <Modal
-          isOpen={this.state.modal == "publishStarted"}
-          contentLabel={__("File published")}
+          isOpen={this.state.modal == 'publishStarted'}
+          contentLabel={__('File published')}
           onConfirmed={event => {
             this.handlePublishStartedConfirmed(event);
           }}
         >
           <p>
-            {__("Your file has been published to LBRY at the address")}{" "}
+            {__('Your file has been published to LBRY at the address')}{' '}
             <code>{this.state.uri}</code>!
           </p>
           <p>
@@ -917,15 +863,14 @@ class PublishForm extends React.PureComponent {
           </p>
         </Modal>
         <Modal
-          isOpen={this.state.modal == "error"}
-          contentLabel={__("Error publishing file")}
+          isOpen={this.state.modal == 'error'}
+          contentLabel={__('Error publishing file')}
           onConfirmed={event => {
             this.closeModal(event);
           }}
         >
-          {__(
-            "The following error occurred when attempting to publish your file"
-          )}: {this.state.errorMessage}
+          {__('The following error occurred when attempting to publish your file')}:{' '}
+          {this.state.errorMessage}
         </Modal>
       </main>
     );

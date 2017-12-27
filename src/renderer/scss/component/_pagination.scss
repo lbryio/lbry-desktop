@@ -1,4 +1,3 @@
-
 .pagination {
   display: block;
   padding: 0;
@@ -13,7 +12,9 @@
   border-radius: 2px;
   &:not(.pagination__item--selected):hover {
     background: rgba(0, 0, 0, 0.2);
-    > a { cursor: hand }
+    > a {
+      cursor: hand;
+    }
   }
   > a {
     display: inline-block;
@@ -21,12 +22,13 @@
   }
 }
 
-.pagination__item--previous, .pagination__item--next {
+.pagination__item--previous,
+.pagination__item--next {
   font-size: 1.2em;
 }
 
 .pagination__item--break {
-    padding: 0 $spacing-vertical * 2 / 3;
+  padding: 0 $spacing-vertical * 2 / 3;
 }
 
 .pagination__item--selected {

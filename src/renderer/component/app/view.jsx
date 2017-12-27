@@ -1,10 +1,10 @@
-import React from "react";
-import Router from "component/router/index";
-import Header from "component/header";
-import Theme from "component/theme";
-import ModalRouter from "modal/modalRouter";
-import ReactModal from "react-modal";
-import throttle from "util/throttle";
+import React from 'react';
+import Router from 'component/router/index';
+import Header from 'component/header';
+import Theme from 'component/theme';
+import ModalRouter from 'modal/modalRouter';
+import ReactModal from 'react-modal';
+import throttle from 'util/throttle';
 
 class App extends React.PureComponent {
   constructor() {
@@ -15,25 +15,25 @@ class App extends React.PureComponent {
   componentWillMount() {
     const { alertError } = this.props;
 
-    document.addEventListener("unhandledError", event => {
+    document.addEventListener('unhandledError', event => {
       alertError(event.detail);
     });
   }
 
   componentDidMount() {
     const { recordScroll } = this.props;
-    const mainContent = document.getElementById("main-content");
+    const mainContent = document.getElementById('main-content');
     this.mainContent = mainContent;
 
     const scrollListener = () => recordScroll(this.mainContent.scrollTop);
 
-    this.mainContent.addEventListener("scroll", throttle(scrollListener, 750));
+    this.mainContent.addEventListener('scroll', throttle(scrollListener, 750));
 
-    ReactModal.setAppElement("#window"); //fuck this
+    ReactModal.setAppElement('#window'); // fuck this
   }
 
   componentWillUnmount() {
-    this.mainContent.removeEventListener("scroll", this.scrollListener);
+    this.mainContent.removeEventListener('scroll', this.scrollListener);
   }
 
   componentWillReceiveProps(props) {
@@ -50,7 +50,7 @@ class App extends React.PureComponent {
   }
 
   setTitleFromProps(props) {
-    window.document.title = props.pageTitle || "LBRY";
+    window.document.title = props.pageTitle || 'LBRY';
   }
 
   render() {

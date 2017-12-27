@@ -1,16 +1,15 @@
-.file-download, .file-download__overlay {
-   .button__content {
-     margin: 0 var(--text-link-padding);
-   }
+.file-download,
+.file-download__overlay {
+  .button__content {
+    margin: 0 var(--text-link-padding);
+  }
 }
 
-.file-download
-{
+.file-download {
   position: relative;
   color: var(--color-download);
 }
-.file-download__overlay
-{
+.file-download__overlay {
   background: var(--color-download);
   color: var(--color-bg);
   position: absolute;

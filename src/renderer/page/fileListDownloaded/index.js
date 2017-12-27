@@ -1,17 +1,17 @@
-import React from "react";
-import { connect } from "react-redux";
-import { doFetchFileInfosAndPublishedClaims } from "redux/actions/file_info";
+import React from 'react';
+import { connect } from 'react-redux';
+import { doFetchFileInfosAndPublishedClaims } from 'redux/actions/file_info';
 import {
   selectFileInfosDownloaded,
   selectIsFetchingFileListDownloadedOrPublished,
-} from "redux/selectors/file_info";
+} from 'redux/selectors/file_info';
 import {
   selectMyClaimsWithoutChannels,
   selectIsFetchingClaimListMine,
-} from "redux/selectors/claims";
-import { doFetchClaimListMine } from "redux/actions/content";
-import { doNavigate } from "redux/actions/navigation";
-import FileListDownloaded from "./view";
+} from 'redux/selectors/claims';
+import { doFetchClaimListMine } from 'redux/actions/content';
+import { doNavigate } from 'redux/actions/navigation';
+import FileListDownloaded from './view';
 
 const select = state => ({
   fileInfos: selectFileInfosDownloaded(state),
@@ -22,8 +22,7 @@ const select = state => ({
 
 const perform = dispatch => ({
   navigate: path => dispatch(doNavigate(path)),
-  fetchFileInfosDownloaded: () =>
-    dispatch(doFetchFileInfosAndPublishedClaims()),
+  fetchFileInfosDownloaded: () => dispatch(doFetchFileInfosAndPublishedClaims()),
   fetchClaims: () => dispatch(doFetchClaimListMine()),
 });
 

@@ -19,8 +19,8 @@ const validateAddress = (coinType, address) => {
   return coinRegex.test(address);
 };
 
-export const validateShapeShiftForm = (vals, props) => {
-  let errors = {};
+export const validateShapeShiftForm = vals => {
+  const errors = {};
 
   if (!vals.returnAddress) {
     return errors;
@@ -36,15 +36,13 @@ export const validateShapeShiftForm = (vals, props) => {
 };
 
 const exampleCoinAddresses = {
-  BTC: "1745oPaHeW7Fmpb1fUKTtasYfxr4zu9bwq",
-  BCH: "1745oPaHeW7Fmpb1fUKTtasYfxr4zu9bwq",
-  ETH: "0x8507cA6a274123fC8f80d929AF9D83602bC4e8cC",
-  DASH: "XedBP7vLPFXbS3URjrH2Z57Fg9SWftBmQ6",
-  LTC: "LgZivMvFMTDoqcA5weCQ2QrmRp7pa56bBk",
+  BTC: '1745oPaHeW7Fmpb1fUKTtasYfxr4zu9bwq',
+  BCH: '1745oPaHeW7Fmpb1fUKTtasYfxr4zu9bwq',
+  ETH: '0x8507cA6a274123fC8f80d929AF9D83602bC4e8cC',
+  DASH: 'XedBP7vLPFXbS3URjrH2Z57Fg9SWftBmQ6',
+  LTC: 'LgZivMvFMTDoqcA5weCQ2QrmRp7pa56bBk',
   XMR:
-    "466XMeJEcowYGx7RzUJj3VDWBZgRWErVQQX6tHYbsacS5QF6v3tidE6LZZnTJgzeEh6bKEEJ6GC9jHirrUKvJwVKVj9e7jm",
+    '466XMeJEcowYGx7RzUJj3VDWBZgRWErVQQX6tHYbsacS5QF6v3tidE6LZZnTJgzeEh6bKEEJ6GC9jHirrUKvJwVKVj9e7jm',
 };
 
-export const getExampleAddress = coin => {
-  return exampleCoinAddresses[coin];
-};
+export const getExampleAddress = coin => exampleCoinAddresses[coin];

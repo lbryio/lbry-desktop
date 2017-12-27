@@ -1,21 +1,18 @@
-import React from "react";
-import Link from "component/link";
+import React from 'react';
+import Link from 'component/link';
 
 class VideoPlayButton extends React.PureComponent {
   componentDidMount() {
     this.keyDownListener = this.onKeyDown.bind(this);
-    document.addEventListener("keydown", this.keyDownListener);
+    document.addEventListener('keydown', this.keyDownListener);
   }
 
   componentWillUnmount() {
-    document.removeEventListener("keydown", this.keyDownListener);
+    document.removeEventListener('keydown', this.keyDownListener);
   }
 
   onKeyDown(event) {
-    if (
-      "input" !== event.target.tagName.toLowerCase() &&
-      "Space" === event.code
-    ) {
+    if (event.target.tagName.toLowerCase() !== 'input' && event.code === 'Space') {
       event.preventDefault();
       this.watch();
     }
@@ -37,16 +34,13 @@ class VideoPlayButton extends React.PureComponent {
      */
 
     const disabled = isLoading || fileInfo === undefined;
-    const icon =
-      ["audio", "video"].indexOf(mediaType) !== -1
-        ? "icon-play"
-        : "icon-folder-o";
+    const icon = ['audio', 'video'].indexOf(mediaType) !== -1 ? 'icon-play' : 'icon-folder-o';
 
     return (
       <Link
-        button={button ? button : null}
+        button={button || null}
         disabled={disabled}
-        label={label ? label : ""}
+        label={label || ''}
         className="video__play-button"
         icon={icon}
         onClick={() => this.watch()}

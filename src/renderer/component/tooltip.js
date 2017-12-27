@@ -1,5 +1,5 @@
-import React from "react";
-import PropTypes from "prop-types";
+import React from 'react';
+import PropTypes from 'prop-types';
 
 export class ToolTip extends React.PureComponent {
   static propTypes = {
@@ -29,7 +29,7 @@ export class ToolTip extends React.PureComponent {
 
   render() {
     return (
-      <span className={"tooltip " + (this.props.className || "")}>
+      <span className={`tooltip ${this.props.className || ''}`}>
         <a
           className="tooltip__link"
           onClick={() => {
@@ -39,9 +39,7 @@ export class ToolTip extends React.PureComponent {
           {this.props.label}
         </a>
         <div
-          className={
-            "tooltip__body " + (this.state.showTooltip ? "" : " hidden")
-          }
+          className={`tooltip__body ${this.state.showTooltip ? '' : ' hidden'}`}
           onMouseOut={() => {
             this.handleTooltipMouseOut();
           }}

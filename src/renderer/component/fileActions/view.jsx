@@ -1,7 +1,7 @@
-import React from "react";
-import Link from "component/link";
-import FileDownloadLink from "component/fileDownloadLink";
-import * as modals from "constants/modal_types";
+import React from 'react';
+import Link from 'component/link';
+import FileDownloadLink from 'component/fileDownloadLink';
+import * as modals from 'constants/modal_types';
 
 class FileActions extends React.PureComponent {
   render() {
@@ -17,7 +17,7 @@ class FileActions extends React.PureComponent {
           <Link
             button="text"
             icon="icon-trash"
-            label={__("Remove")}
+            label={__('Remove')}
             className="no-underline"
             onClick={() => openModal(modals.CONFIRM_FILE_REMOVE, { uri })}
           />
@@ -28,22 +28,22 @@ class FileActions extends React.PureComponent {
             icon="icon-flag"
             href={`https://lbry.io/dmca?claim_id=${claimId}`}
             className="no-underline"
-            label={__("report")}
+            label={__('report')}
           />
         )}
         <Link
           button="primary"
           icon="icon-gift"
-          label={__("Support")}
+          label={__('Support')}
           navigate="/show"
           className="card__action--right"
-          navigateParams={{ uri, tab: "tip" }}
+          navigateParams={{ uri, tab: 'tip' }}
         />
         {claimIsMine && (
           <Link
             button="alt"
             icon="icon-edit"
-            label={__("Edit")}
+            label={__('Edit')}
             navigate="/publish"
             className="card__action--right"
             navigateParams={{ id: claimId }}

@@ -1,11 +1,10 @@
 // @flow
 
-import * as types from "constants/action_types";
-import * as modalTypes from "constants/modal_types";
+import * as ACTIONS from 'constants/action_types';
+import * as MODALS from 'constants/modal_types';
 
-const { remote } = require("electron");
+const { remote } = require('electron');
 
-const application = remote.app;
 const win = remote.BrowserWindow.getFocusedWindow();
 
 const reducers = {};
@@ -41,12 +40,12 @@ const defaultState: AppState = {
   modal: null,
   modalProps: {},
   platform: process.platform,
-  upgradeSkipped: sessionStorage.getItem("upgradeSkipped") === "true",
+  upgradeSkipped: sessionStorage.getItem('upgradeSkipped') === 'true',
   daemonVersionMatched: null,
   daemonReady: false,
   hasSignature: false,
   badgeNumber: 0,
-  volume: Number(sessionStorage.getItem("volume")) || 1,
+  volume: Number(sessionStorage.getItem('volume')) || 1,
 
   downloadProgress: undefined,
   upgradeDownloading: undefined,
@@ -57,26 +56,26 @@ const defaultState: AppState = {
   snackBar: undefined,
 };
 
-reducers[types.DAEMON_READY] = function(state, action) {
+reducers[ACTIONS.DAEMON_READY] = function(state) {
   return Object.assign({}, state, {
     daemonReady: true,
   });
 };
 
-reducers[types.DAEMON_VERSION_MATCH] = function(state, action) {
+reducers[ACTIONS.DAEMON_VERSION_MATCH] = function(state) {
   return Object.assign({}, state, {
     daemonVersionMatched: true,
   });
 };
 
-reducers[types.DAEMON_VERSION_MISMATCH] = function(state, action) {
+reducers[ACTIONS.DAEMON_VERSION_MISMATCH] = function(state) {
   return Object.assign({}, state, {
     daemonVersionMatched: false,
-    modal: modalTypes.INCOMPATIBLE_DAEMON,
+    modal: MODALS.INCOMPATIBLE_DAEMON,
   });
 };
 
-reducers[types.UPGRADE_CANCELLED] = function(state, action) {
+reducers[ACTIONS.UPGRADE_CANCELLED] = function(state) {
   return Object.assign({}, state, {
     downloadProgress: null,
     upgradeDownloadComplete: false,
@@ -84,7 +83,7 @@ reducers[types.UPGRADE_CANCELLED] = function(state, action) {
   });
 };
 
-reducers[types.UPGRADE_DOWNLOAD_COMPLETED] = function(state, action) {
+reducers[ACTIONS.UPGRADE_DOWNLOAD_COMPLETED] = function(state, action) {
   return Object.assign({}, state, {
     downloadPath: action.data.path,
     upgradeDownloading: false,
@@ -92,14 +91,14 @@ reducers[types.UPGRADE_DOWNLOAD_COMPLETED] = function(state, action) {
   });
 };
 
-reducers[types.UPGRADE_DOWNLOAD_STARTED] = function(state, action) {
+reducers[ACTIONS.UPGRADE_DOWNLOAD_STARTED] = function(state) {
   return Object.assign({}, state, {
     upgradeDownloading: true,
   });
 };
 
-reducers[types.SKIP_UPGRADE] = function(state, action) {
-  sessionStorage.setItem("upgradeSkipped", "true");
+reducers[ACTIONS.SKIP_UPGRADE] = function(state) {
+  sessionStorage.setItem('upgradeSkipped', 'true');
 
   return Object.assign({}, state, {
     isUpgradeSkipped: true,
@@ -107,46 +106,46 @@ reducers[types.SKIP_UPGRADE] = function(state, action) {
   });
 };
 
-reducers[types.UPDATE_VERSION] = function(state, action) {
+reducers[ACTIONS.UPDATE_VERSION] = function(state, action) {
   return Object.assign({}, state, {
     version: action.data.version,
   });
 };
 
-reducers[types.CHECK_UPGRADE_SUCCESS] = function(state, action) {
+reducers[ACTIONS.CHECK_UPGRADE_SUCCESS] = function(state, action) {
   return Object.assign({}, state, {
     isUpgradeAvailable: action.data.upgradeAvailable,
     remoteVersion: action.data.remoteVersion,
   });
 };
 
-reducers[types.CHECK_UPGRADE_SUBSCRIBE] = function(state, action) {
+reducers[ACTIONS.CHECK_UPGRADE_SUBSCRIBE] = function(state, action) {
   return Object.assign({}, state, {
     checkUpgradeTimer: action.data.checkUpgradeTimer,
   });
 };
 
-reducers[types.OPEN_MODAL] = function(state, action) {
+reducers[ACTIONS.OPEN_MODAL] = function(state, action) {
   return Object.assign({}, state, {
     modal: action.data.modal,
     modalProps: action.data.modalProps || {},
   });
 };
 
-reducers[types.CLOSE_MODAL] = function(state, action) {
+reducers[ACTIONS.CLOSE_MODAL] = function(state) {
   return Object.assign({}, state, {
     modal: undefined,
     modalProps: {},
   });
 };
 
-reducers[types.UPGRADE_DOWNLOAD_PROGRESSED] = function(state, action) {
+reducers[ACTIONS.UPGRADE_DOWNLOAD_PROGRESSED] = function(state, action) {
   return Object.assign({}, state, {
     downloadProgress: action.data.percent,
   });
 };
 
-reducers[types.SHOW_SNACKBAR] = function(state, action) {
+reducers[ACTIONS.SHOW_SNACKBAR] = function(state, action) {
   const { message, linkText, linkTarget, isError } = action.data;
   const snackBar = Object.assign({}, state.snackBar);
   const snacks = Object.assign([], snackBar.snacks);
@@ -165,7 +164,7 @@ reducers[types.SHOW_SNACKBAR] = function(state, action) {
   });
 };
 
-reducers[types.REMOVE_SNACKBAR_SNACK] = function(state, action) {
+reducers[ACTIONS.REMOVE_SNACKBAR_SNACK] = function(state) {
   const snackBar = Object.assign({}, state.snackBar);
   const snacks = Object.assign([], snackBar.snacks);
   snacks.shift();
@@ -179,8 +178,8 @@ reducers[types.REMOVE_SNACKBAR_SNACK] = function(state, action) {
   });
 };
 
-reducers[types.DOWNLOADING_COMPLETED] = function(state, action) {
-  const badgeNumber = state.badgeNumber;
+reducers[ACTIONS.DOWNLOADING_COMPLETED] = function(state) {
+  const { badgeNumber } = state;
 
   // Don't update the badge number if the window is focused
   if (win && win.isFocused()) return Object.assign({}, state);
@@ -190,13 +189,13 @@ reducers[types.DOWNLOADING_COMPLETED] = function(state, action) {
   });
 };
 
-reducers[types.WINDOW_FOCUSED] = function(state, action) {
+reducers[ACTIONS.WINDOW_FOCUSED] = function(state) {
   return Object.assign({}, state, {
     badgeNumber: 0,
   });
 };
 
-reducers[types.VOLUME_CHANGED] = function(state, action) {
+reducers[ACTIONS.VOLUME_CHANGED] = function(state, action) {
   return Object.assign({}, state, {
     volume: action.data.volume,
   });

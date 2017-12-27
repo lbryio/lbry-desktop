@@ -1,6 +1,6 @@
-import React from "react";
-import PropTypes from "prop-types";
-import * as icons from "constants/icons";
+import React from 'react';
+import PropTypes from 'prop-types';
+import * as icons from 'constants/icons';
 
 export default class Icon extends React.PureComponent {
   static propTypes = {
@@ -15,17 +15,17 @@ export default class Icon extends React.PureComponent {
   getIconClass() {
     const { icon } = this.props;
 
-    return icon.startsWith("icon-") ? icon : "icon-" + icon;
+    return icon.startsWith('icon-') ? icon : `icon-${icon}`;
   }
 
   getIconTitle() {
     switch (this.props.icon) {
       case icons.FEATURED:
-        return __("Watch this and earn rewards.");
+        return __('Watch this and earn rewards.');
       case icons.LOCAL:
-        return __("You have a copy of this file.");
+        return __('You have a copy of this file.');
       default:
-        return "";
+        return '';
     }
   }
 
@@ -33,8 +33,7 @@ export default class Icon extends React.PureComponent {
     const className = this.getIconClass(),
       title = this.getIconTitle();
 
-    const spanClassName =
-      "icon " + className + (this.props.fixed ? " icon-fixed-width " : "");
+    const spanClassName = `icon ${className}${this.props.fixed ? ' icon-fixed-width ' : ''}`;
 
     return <span className={spanClassName} title={title} />;
   }

@@ -1,5 +1,5 @@
-import React from "react";
-import { CreditAmount } from "component/common";
+import React from 'react';
+import { CreditAmount } from 'component/common';
 
 class FilePrice extends React.PureComponent {
   componentWillMount() {
@@ -19,14 +19,12 @@ class FilePrice extends React.PureComponent {
   }
 
   render() {
-    const { costInfo, look = "indicator", showFullPrice = false } = this.props;
+    const { costInfo, look = 'indicator', showFullPrice = false } = this.props;
 
     const isEstimate = costInfo ? !costInfo.includesData : null;
 
     if (!costInfo) {
-      return (
-        <span className={`credit-amount credit-amount--${look}`}>???</span>
-      );
+      return <span className={`credit-amount credit-amount--${look}`}>???</span>;
     }
 
     return (
@@ -34,7 +32,7 @@ class FilePrice extends React.PureComponent {
         label={false}
         amount={costInfo.cost}
         isEstimate={isEstimate}
-        showFree={true}
+        showFree
         showFullPrice={showFullPrice}
       />
     );

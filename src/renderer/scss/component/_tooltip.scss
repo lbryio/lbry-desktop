@@ -1,4 +1,4 @@
-@import "../mixin/link.scss";
+@import '../mixin/link.scss';
 
 .tooltip {
   position: relative;
@@ -27,7 +27,7 @@
 
 .tooltip--header .tooltip__link {
   @include text-link(#aaa);
-  font-size: calc( var(--font-size) * 3/4 );
+  font-size: calc(var(--font-size) * 3/4);
   margin-left: var(--button-padding);
   vertical-align: middle;
 }

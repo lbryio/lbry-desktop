@@ -1,6 +1,6 @@
-import React from "react";
-import Link from "component/link";
-import Address from "component/address";
+import React from 'react';
+import Link from 'component/link';
+import Address from 'component/address';
 
 class WalletAddress extends React.PureComponent {
   componentWillMount() {
@@ -13,19 +13,17 @@ class WalletAddress extends React.PureComponent {
     return (
       <section className="card">
         <div className="card__title-primary">
-          <h3>{__("Receive Credits")}</h3>
+          <h3>{__('Receive Credits')}</h3>
         </div>
         <div className="card__content">
           <p>
-            {__(
-              "Use this wallet address to receive credits sent by another user (or yourself)."
-            )}
+            {__('Use this wallet address to receive credits sent by another user (or yourself).')}
           </p>
           <Address address={receiveAddress} showCopyButton />
         </div>
         <div className="card__actions">
           <Link
-            label={__("Get New Address")}
+            label={__('Get New Address')}
             button="primary"
             icon="icon-refresh"
             onClick={getNewAddress}
@@ -36,7 +34,7 @@ class WalletAddress extends React.PureComponent {
           <div className="help">
             <p>
               {__(
-                "You can generate a new address at any time, and any previous addresses will continue to work. Using multiple addresses can be helpful for keeping track of incoming payments from multiple sources."
+                'You can generate a new address at any time, and any previous addresses will continue to work. Using multiple addresses can be helpful for keeping track of incoming payments from multiple sources.'
               )}
             </p>
           </div>

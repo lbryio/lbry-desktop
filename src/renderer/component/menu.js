@@ -1,7 +1,7 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { Icon } from "./common.js";
-import Link from "component/link";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { Icon } from './common.js';
+import Link from 'component/link';
 
 export class DropDownMenuItem extends React.PureComponent {
   static propTypes = {
@@ -12,22 +12,22 @@ export class DropDownMenuItem extends React.PureComponent {
   };
 
   static defaultProps = {
-    iconPosition: "left",
+    iconPosition: 'left',
   };
 
   render() {
-    var icon = this.props.icon ? <Icon icon={this.props.icon} fixed /> : null;
+    const icon = this.props.icon ? <Icon icon={this.props.icon} fixed /> : null;
 
     return (
       <a
         className="menu__menu-item"
         onClick={this.props.onClick}
-        href={this.props.href || "javascript:"}
+        href={this.props.href || 'javascript:'}
         label={this.props.label}
       >
-        {this.props.iconPosition == "left" ? icon : null}
+        {this.props.iconPosition == 'left' ? icon : null}
         {this.props.label}
-        {this.props.iconPosition == "left" ? null : icon}
+        {this.props.iconPosition == 'left' ? null : icon}
       </a>
     );
   }
@@ -47,7 +47,7 @@ export class DropDownMenu extends React.PureComponent {
 
   componentWillUnmount() {
     if (this._isWindowClickBound) {
-      window.removeEventListener("click", this.handleWindowClick, false);
+      window.removeEventListener('click', this.handleWindowClick, false);
     }
   }
 
@@ -57,7 +57,7 @@ export class DropDownMenu extends React.PureComponent {
     });
     if (!this.state.menuOpen && !this._isWindowClickBound) {
       this._isWindowClickBound = true;
-      window.addEventListener("click", this.handleWindowClick, false);
+      window.addEventListener('click', this.handleWindowClick, false);
       e.stopPropagation();
     }
     return false;
@@ -70,12 +70,9 @@ export class DropDownMenu extends React.PureComponent {
     });
   }
 
-  /*this will force "this" to always be the class, even when passed to an event listener*/
+  /* this will force "this" to always be the class, even when passed to an event listener */
   handleWindowClick = e => {
-    if (
-      this.state.menuOpen &&
-      (!this._menuDiv || !this._menuDiv.contains(e.target))
-    ) {
+    if (this.state.menuOpen && (!this._menuDiv || !this._menuDiv.contains(e.target))) {
       this.setState({
         menuOpen: false,
       });
@@ -85,7 +82,7 @@ export class DropDownMenu extends React.PureComponent {
   render() {
     if (!this.state.menuOpen && this._isWindowClickBound) {
       this._isWindowClickBound = false;
-      window.removeEventListener("click", this.handleWindowClick, false);
+      window.removeEventListener('click', this.handleWindowClick, false);
     }
     return (
       <div className="menu-container">

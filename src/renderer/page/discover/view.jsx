@@ -1,12 +1,12 @@
-import React from "react";
-import ReactDOM from "react-dom";
-import lbryuri from "lbryuri";
-import FileCard from "component/fileCard";
-import { Icon, BusyMessage } from "component/common.js";
-import ToolTip from "component/tooltip.js";
-import SubHeader from "component/subHeader";
-import classnames from "classnames";
-import Link from "component/link";
+import React from 'react';
+import ReactDOM from 'react-dom';
+import lbryuri from 'lbryuri';
+import FileCard from 'component/fileCard';
+import { Icon, BusyMessage } from 'component/common.js';
+import ToolTip from 'component/tooltip.js';
+import SubHeader from 'component/subHeader';
+import classnames from 'classnames';
+import Link from 'component/link';
 
 // This should be in a separate file
 export class FeaturedCategory extends React.PureComponent {
@@ -28,7 +28,7 @@ export class FeaturedCategory extends React.PureComponent {
 
   componentDidMount() {
     const cardRow = ReactDOM.findDOMNode(this.refs.rowitems);
-    const cards = cardRow.getElementsByTagName("section");
+    const cards = cardRow.getElementsByTagName('section');
 
     // check if the last card is visible
     const lastCard = cards[cards.length - 1];
@@ -45,10 +45,10 @@ export class FeaturedCategory extends React.PureComponent {
     const cardRow = ReactDOM.findDOMNode(this.refs.rowitems);
     if (cardRow.scrollLeft > 0) {
       // check the visible cards
-      const cards = cardRow.getElementsByTagName("section");
+      const cards = cardRow.getElementsByTagName('section');
       let firstVisibleCard = null;
       let firstVisibleIdx = -1;
-      for (var i = 0; i < cards.length; i++) {
+      for (let i = 0; i < cards.length; i++) {
         if (this.isCardVisible(cards[i], cardRow, false)) {
           firstVisibleCard = cards[i];
           firstVisibleIdx = i;
@@ -77,10 +77,10 @@ export class FeaturedCategory extends React.PureComponent {
     const cardRow = ReactDOM.findDOMNode(this.refs.rowitems);
 
     // check the visible cards
-    const cards = cardRow.getElementsByTagName("section");
+    const cards = cardRow.getElementsByTagName('section');
     let lastVisibleCard = null;
     let lastVisibleIdx = -1;
-    for (var i = 0; i < cards.length; i++) {
+    for (let i = 0; i < cards.length; i++) {
       if (this.isCardVisible(cards[i], cardRow, true)) {
         lastVisibleCard = cards[i];
         lastVisibleIdx = i;
@@ -91,7 +91,7 @@ export class FeaturedCategory extends React.PureComponent {
       const numDisplayed = this.numDisplayedCards(cardRow);
       const animationCallback = () => {
         // update last visible index after scroll
-        for (var i = 0; i < cards.length; i++) {
+        for (let i = 0; i < cards.length; i++) {
           if (this.isCardVisible(cards[i], cardRow, true)) {
             lastVisibleIdx = i;
           }
@@ -105,10 +105,7 @@ export class FeaturedCategory extends React.PureComponent {
 
       this.scrollCardItemsLeftAnimated(
         cardRow,
-        Math.min(
-          lastVisibleCard.offsetLeft,
-          cardRow.scrollWidth - cardRow.clientWidth
-        ),
+        Math.min(lastVisibleCard.offsetLeft, cardRow.scrollWidth - cardRow.clientWidth),
         100,
         animationCallback
       );
@@ -128,19 +125,14 @@ export class FeaturedCategory extends React.PureComponent {
     const diff = target - cardRow.scrollLeft;
     const tick = diff / duration * 10;
     setTimeout(() => {
-      cardRow.scrollLeft = cardRow.scrollLeft + tick;
+      cardRow.scrollLeft += tick;
       if (cardRow.scrollLeft === target) {
         if (callback) {
           callback();
         }
         return;
       }
-      component.scrollCardItemsLeftAnimated(
-        cardRow,
-        target,
-        duration - 10,
-        callback
-      );
+      component.scrollCardItemsLeftAnimated(cardRow, target, duration - 10, callback);
     }, 10);
   }
 
@@ -154,14 +146,13 @@ export class FeaturedCategory extends React.PureComponent {
 
     return (
       (sectionLeft >= 0 && sectionEnd <= cardRowWidth) ||
-      (((sectionLeft < 0 && sectionEnd > 0) ||
-        (sectionLeft > 0 && sectionLeft <= cardRowWidth)) &&
+      (((sectionLeft < 0 && sectionEnd > 0) || (sectionLeft > 0 && sectionLeft <= cardRowWidth)) &&
         partialVisibility)
     );
   }
 
   numDisplayedCards(cardRow) {
-    const cards = cardRow.getElementsByTagName("section");
+    const cards = cardRow.getElementsByTagName('section');
     const cardRowWidth = cardRow.offsetWidth;
     // get the width of the first card and then calculate
     const cardWidth = cards.length > 0 ? cards[0].offsetWidth : 0;
@@ -205,20 +196,14 @@ export class FeaturedCategory extends React.PureComponent {
         <div className="card-row__scrollhouse">
           {this.state.canScrollPrevious && (
             <div className="card-row__nav card-row__nav--left">
-              <a
-                className="card-row__scroll-button"
-                onClick={this.handleScrollPrevious.bind(this)}
-              >
+              <a className="card-row__scroll-button" onClick={this.handleScrollPrevious.bind(this)}>
                 <Icon icon="icon-chevron-left" />
               </a>
             </div>
           )}
           {this.state.canScrollNext && (
             <div className="card-row__nav card-row__nav--right">
-              <a
-                className="card-row__scroll-button"
-                onClick={this.handleScrollNext.bind(this)}
-              >
+              <a className="card-row__scroll-button" onClick={this.handleScrollNext.bind(this)}>
                 <Icon icon="icon-chevron-right" />
               </a>
             </div>
@@ -226,11 +211,7 @@ export class FeaturedCategory extends React.PureComponent {
           <div ref="rowitems" className="card-row__items">
             {names &&
               names.map(name => (
-                <FileCard
-                  key={name}
-                  displayStyle="card"
-                  uri={lbryuri.normalize(name)}
-                />
+                <FileCard key={name} displayStyle="card" uri={lbryuri.normalize(name)} />
               ))}
           </div>
         </div>
@@ -246,36 +227,31 @@ class DiscoverPage extends React.PureComponent {
 
   render() {
     const { featuredUris, fetchingFeaturedUris } = this.props;
-    const hasContent =
-        typeof featuredUris === "object" && Object.keys(featuredUris).length,
+    const hasContent = typeof featuredUris === 'object' && Object.keys(featuredUris).length,
       failedToLoad = !fetchingFeaturedUris && !hasContent;
 
     return (
       <main
-        className={classnames("main main--no-margin", {
+        className={classnames('main main--no-margin', {
           reloading: hasContent && fetchingFeaturedUris,
         })}
       >
         <SubHeader fullWidth smallMargin />
-        {!hasContent &&
-          fetchingFeaturedUris && (
-            <BusyMessage message={__("Fetching content")} />
-          )}
+        {!hasContent && fetchingFeaturedUris && <BusyMessage message={__('Fetching content')} />}
         {hasContent &&
-          Object.keys(featuredUris).map(category => {
-            return featuredUris[category].length ? (
-              <FeaturedCategory
-                key={category}
-                category={category}
-                names={featuredUris[category]}
-              />
-            ) : (
-              ""
-            );
-          })}
-        {failedToLoad && (
-          <div className="empty">{__("Failed to load landing content.")}</div>
-        )}
+          Object.keys(featuredUris).map(
+            category =>
+              featuredUris[category].length ? (
+                <FeaturedCategory
+                  key={category}
+                  category={category}
+                  names={featuredUris[category]}
+                />
+              ) : (
+                ''
+              )
+          )}
+        {failedToLoad && <div className="empty">{__('Failed to load landing content.')}</div>}
       </main>
     );
   }

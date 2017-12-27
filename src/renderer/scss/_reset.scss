@@ -1,39 +1,70 @@
-body, div, dl, dt, dd, ul, ol, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, input, select, textarea, p, blockquote, th, td, iframe
-{
-    margin:0;
-    padding:0;
+body,
+div,
+dl,
+dt,
+dd,
+ul,
+ol,
+li,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+pre,
+code,
+form,
+fieldset,
+legend,
+input,
+select,
+textarea,
+p,
+blockquote,
+th,
+td,
+iframe {
+  margin: 0;
+  padding: 0;
 }
-:focus
-{
+:focus {
   outline: 0;
 }
 input::-webkit-search-cancel-button {
   /* Remove default */
   -webkit-appearance: none;
 }
-table
-{
+table {
   border-collapse: collapse;
-  border-spacing:0;
+  border-spacing: 0;
 }
-fieldset, img, iframe
-{
-	border: 0;
+fieldset,
+img,
+iframe {
+  border: 0;
 }
-h1, h2, h3, h4, h5, h6
-{
-    font-weight:normal;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-weight: normal;
 }
-ol, ul
-{
+ol,
+ul {
+  list-style-position: inside;
+  > li {
     list-style-position: inside;
-    > li { list-style-position: inside; }
+  }
 }
-input, textarea, select
-{
-  font-family:inherit;
-  font-size:inherit;
-  font-weight:inherit;
+input,
+textarea,
+select {
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
   border: 0 none;
 }
 img {
@@ -42,8 +73,7 @@ img {
   vertical-align: middle;
   -ms-interpolation-mode: bicubic;
 }
-a
-{
-    color: inherit;
-    text-decoration: none;
+a {
+  color: inherit;
+  text-decoration: none;
 }

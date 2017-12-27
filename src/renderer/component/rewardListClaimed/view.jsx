@@ -1,5 +1,5 @@
-import React from "react";
-import LinkTransaction from "component/linkTransaction";
+import React from 'react';
+import LinkTransaction from 'component/linkTransaction';
 
 const RewardListClaimed = props => {
   const { rewards } = props;
@@ -17,27 +17,23 @@ const RewardListClaimed = props => {
         <table className="table-standard table-stretch">
           <thead>
             <tr>
-              <th>{__("Title")}</th>
-              <th>{__("Amount")}</th>
-              <th>{__("Transaction")}</th>
-              <th>{__("Date")}</th>
+              <th>{__('Title')}</th>
+              <th>{__('Amount')}</th>
+              <th>{__('Transaction')}</th>
+              <th>{__('Date')}</th>
             </tr>
           </thead>
           <tbody>
-            {rewards.map(reward => {
-              return (
-                <tr key={reward.id}>
-                  <td>{reward.reward_title}</td>
-                  <td>{reward.reward_amount}</td>
-                  <td>
-                    <LinkTransaction id={reward.transaction_id} />
-                  </td>
-                  <td>
-                    {reward.created_at.replace("Z", " ").replace("T", " ")}
-                  </td>
-                </tr>
-              );
-            })}
+            {rewards.map(reward => (
+              <tr key={reward.id}>
+                <td>{reward.reward_title}</td>
+                <td>{reward.reward_amount}</td>
+                <td>
+                  <LinkTransaction id={reward.transaction_id} />
+                </td>
+                <td>{reward.created_at.replace('Z', ' ').replace('T', ' ')}</td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>

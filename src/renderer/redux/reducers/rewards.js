@@ -1,25 +1,25 @@
-import * as types from "constants/action_types";
+import * as ACTIONS from 'constants/action_types';
 
 const reducers = {};
 const defaultState = {
   fetching: false,
-  claimedRewardsById: {}, //id => reward
+  claimedRewardsById: {}, // id => reward
   unclaimedRewardsByType: {},
   claimPendingByType: {},
   claimErrorsByType: {},
 };
 
-reducers[types.FETCH_REWARDS_STARTED] = function(state, action) {
+reducers[ACTIONS.FETCH_REWARDS_STARTED] = function(state) {
   return Object.assign({}, state, {
     fetching: true,
   });
 };
 
-reducers[types.FETCH_REWARDS_COMPLETED] = function(state, action) {
+reducers[ACTIONS.FETCH_REWARDS_COMPLETED] = function(state, action) {
   const { userRewards } = action.data;
 
-  let unclaimedRewards = {},
-    claimedRewards = {};
+  const unclaimedRewards = {};
+  const claimedRewards = {};
   userRewards.forEach(reward => {
     if (reward.transaction_id) {
       claimedRewards[reward.id] = reward;
@@ -35,7 +35,7 @@ reducers[types.FETCH_REWARDS_COMPLETED] = function(state, action) {
   });
 };
 
-function setClaimRewardState(state, reward, isClaiming, errorMessage = "") {
+function setClaimRewardState(state, reward, isClaiming, errorMessage = '') {
   const newClaimPendingByType = Object.assign({}, state.claimPendingByType);
   const newClaimErrorsByType = Object.assign({}, state.claimErrorsByType);
   if (isClaiming) {
@@ -55,25 +55,24 @@ function setClaimRewardState(state, reward, isClaiming, errorMessage = "") {
   });
 }
 
-reducers[types.CLAIM_REWARD_STARTED] = function(state, action) {
+reducers[ACTIONS.CLAIM_REWARD_STARTED] = function(state, action) {
   const { reward } = action.data;
 
-  return setClaimRewardState(state, reward, true, "");
+  return setClaimRewardState(state, reward, true, '');
 };
 
-reducers[types.CLAIM_REWARD_SUCCESS] = function(state, action) {
+reducers[ACTIONS.CLAIM_REWARD_SUCCESS] = function(state, action) {
   const { reward } = action.data;
 
-  let unclaimedRewardsByType = Object.assign({}, state.unclaimedRewardsByType);
+  const unclaimedRewardsByType = Object.assign({}, state.unclaimedRewardsByType);
   const existingReward = unclaimedRewardsByType[reward.reward_type];
-  delete state.unclaimedRewardsByType[reward.reward_type];
 
   const newReward = Object.assign({}, reward, {
     reward_title: existingReward.reward_title,
     reward_description: existingReward.reward_description,
   });
 
-  let claimedRewardsById = Object.assign({}, state.claimedRewardsById);
+  const claimedRewardsById = Object.assign({}, state.claimedRewardsById);
   claimedRewardsById[reward.id] = newReward;
 
   const newState = Object.assign({}, state, {
@@ -81,24 +80,19 @@ reducers[types.CLAIM_REWARD_SUCCESS] = function(state, action) {
     claimedRewardsById,
   });
 
-  return setClaimRewardState(newState, newReward, false, "");
+  return setClaimRewardState(newState, newReward, false, '');
 };
 
-reducers[types.CLAIM_REWARD_FAILURE] = function(state, action) {
+reducers[ACTIONS.CLAIM_REWARD_FAILURE] = function(state, action) {
   const { reward, error } = action.data;
 
-  return setClaimRewardState(state, reward, false, error ? error.message : "");
+  return setClaimRewardState(state, reward, false, error ? error.message : '');
 };
 
-reducers[types.CLAIM_REWARD_CLEAR_ERROR] = function(state, action) {
+reducers[ACTIONS.CLAIM_REWARD_CLEAR_ERROR] = function(state, action) {
   const { reward } = action.data;
 
-  return setClaimRewardState(
-    state,
-    reward,
-    state.claimPendingByType[reward.reward_type],
-    ""
-  );
+  return setClaimRewardState(state, reward, state.claimPendingByType[reward.reward_type], '');
 };
 
 export default function reducer(state = defaultState, action) {

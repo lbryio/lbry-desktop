@@ -1,11 +1,11 @@
 // @flow
-import * as React from "react";
-import QRCode from "qrcode.react";
-import * as statuses from "constants/shape_shift";
-import Address from "component/address";
-import Link from "component/link";
-import type { Dispatch } from "redux/actions/shape_shift";
-import ShiftMarketInfo from "./market_info";
+import * as React from 'react';
+import QRCode from 'qrcode.react';
+import * as statuses from 'constants/shape_shift';
+import Address from 'component/address';
+import Link from 'component/link';
+import type { Dispatch } from 'redux/actions/shape_shift';
+import ShiftMarketInfo from './market_info';
 
 type Props = {
   shiftState: ?string,
@@ -78,10 +78,10 @@ class ActiveShapeShift extends React.PureComponent<Props> {
         {shiftState === statuses.NO_DEPOSITS && (
           <div>
             <p>
-              Send up to{" "}
+              Send up to{' '}
               <span className="credit-amount--bold">
                 {originCoinDepositMax} {shiftCoinType}
-              </span>{" "}
+              </span>{' '}
               to the address below.
             </p>
             <ShiftMarketInfo
@@ -104,41 +104,32 @@ class ActiveShapeShift extends React.PureComponent<Props> {
         {shiftState === statuses.RECEIVED && (
           <div className="card__content--extra-vertical-space">
             <p>
-              {__(
-                "ShapeShift has received your payment! Sending the funds to your LBRY wallet."
-              )}
+              {__('ShapeShift has received your payment! Sending the funds to your LBRY wallet.')}
             </p>
-            <span className="help">
-              {__("This can take a while, especially with BTC.")}
-            </span>
+            <span className="help">{__('This can take a while, especially with BTC.')}</span>
           </div>
         )}
 
         {shiftState === statuses.COMPLETE && (
           <div className="card__content--extra-vertical-space">
-            <p>
-              {__(
-                "Transaction complete! You should see the new LBC in your wallet."
-              )}
-            </p>
+            <p>{__('Transaction complete! You should see the new LBC in your wallet.')}</p>
           </div>
         )}
         <div className="card__actions card__actions--only-vertical">
           <Link
-            button={shiftState === statuses.COMPLETE ? "primary" : "alt"}
+            button={shiftState === statuses.COMPLETE ? 'primary' : 'alt'}
             onClick={clearShapeShift}
             label={
-              shiftState === statuses.COMPLETE ||
-              shiftState === statuses.RECEIVED
-                ? __("Done")
-                : __("Cancel")
+              shiftState === statuses.COMPLETE || shiftState === statuses.RECEIVED
+                ? __('Done')
+                : __('Cancel')
             }
           />
           {shiftOrderId && (
             <span className="shapeshift__link">
               <Link
                 button="text"
-                label={__("View the status on Shapeshift.io")}
+                label={__('View the status on Shapeshift.io')}
                 href={`https://shapeshift.io/#/status/${shiftOrderId}`}
               />
             </span>
@@ -147,8 +138,8 @@ class ActiveShapeShift extends React.PureComponent<Props> {
             shiftReturnAddress && (
               <div className="shapeshift__actions-help">
                 <span className="help">
-                  If the transaction doesn't go through, ShapeShift will return
-                  your {shiftCoinType} back to {shiftReturnAddress}
+                  If the transaction doesn't go through, ShapeShift will return your {shiftCoinType}{' '}
+                  back to {shiftReturnAddress}
                 </span>
               </div>
             )}
