@@ -23,7 +23,7 @@
     "postinstall": "electron-builder install-app-deps",
     "precommit": "lint-staged",
     "lint": "eslint 'src/**/*.{js,jsx}' --fix",
-    "pretty-print": "prettier 'src/**/*.{js,jsx,scss,json}' --write"
+    "format": "prettier 'src/**/*.{js,jsx,scss,json}' --write"
   },
   "keywords": [
     "lbry"
