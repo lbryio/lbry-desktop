@@ -19,7 +19,7 @@ const lbryProxy = new Proxy(Lbry, {
       return target[name];
     }
 
-    return params =>
+    return (params = {}) =>
       new Promise((resolve, reject) => {
         apiCall(name, params, resolve, reject);
       });
@@ -213,7 +213,7 @@ Lbry.getAppVersionInfo = () =>
  * Returns results from the file_list API method, plus dummy entries for pending publishes.
  * (If a real publish with the same name is found, the pending publish will be ignored and removed.)
  */
-Lbry.file_list = params =>
+Lbry.file_list = (params = {}) =>
   new Promise((resolve, reject) => {
     const { name, channel_name: channelName, outpoint } = params;
 
@@ -249,7 +249,7 @@ Lbry.file_list = params =>
     );
   });
 
-Lbry.claim_list_mine = params =>
+Lbry.claim_list_mine = (params = {}) =>
   new Promise((resolve, reject) => {
     apiCall(
       'claim_list_mine',
@@ -270,7 +270,7 @@ Lbry.claim_list_mine = params =>
     );
   });
 
-Lbry.resolve = params =>
+Lbry.resolve = (params = {}) =>
   new Promise((resolve, reject) => {
     apiCall(
       'resolve',
