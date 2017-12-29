@@ -43,6 +43,12 @@ This will download and install the LBRY app and its dependencies, including
 The LBRY app requires Node >= 6; if you have an earlier version of Node installed and want to keep
 it, you can use [nvm](https://github.com/creationix/nvm) to switch back and forth.
 
+### Running
+
+The app can be run from the sources using the following command:
+
+`yarn dev`
+
 ### On Windows
 
 #### Windows Dependency
