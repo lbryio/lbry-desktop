@@ -55,6 +55,7 @@ class Video extends React.PureComponent {
       contentType,
       changeVolume,
       volume,
+      claim,
       uri,
       doPlay,
       doPause,
@@ -62,6 +63,8 @@ class Video extends React.PureComponent {
       mediaPaused,
       mediaPosition,
     } = this.props;
+
+    console.log("mediaPosition:", mediaPosition);
 
     const isPlaying = playingUri === uri;
     const isReadyToPlay = fileInfo && fileInfo.written_bytes > 0;
@@ -96,9 +99,6 @@ class Video extends React.PureComponent {
     }
     const poster = metadata.thumbnail;
 
-    const mediaId = uri.split("#")[1];
-    console.log("mediaId:", mediaId);
-
     return (
       <div
         className={klasses.join(" ")}
@@ -121,7 +121,7 @@ class Video extends React.PureComponent {
               doPlay={doPlay}
               doPause={doPause}
               savePosition={savePosition}
-              mediaId={mediaId}
+              id={claim.claim_id}
               paused={mediaPaused}
               position={mediaPosition}
             />

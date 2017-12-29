@@ -4,7 +4,9 @@ import { handleActions } from "util/redux-utils";
 
 export type MediaState = {
   paused: Boolean,
-  positions: Object,
+  positions: {
+    [string]: number,
+  },
 };
 
 export type Action = any;

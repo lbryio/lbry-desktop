@@ -4,7 +4,6 @@ import { doChangeVolume } from "redux/actions/app";
 import { selectVolume } from "redux/selectors/app";
 import { doPlayUri, doSetPlayingUri } from "redux/actions/content";
 import { doPlay, doPause, savePosition } from "redux/actions/media";
-// import { setVideoPause } from "redux/actions/video";
 import {
   makeSelectMetadataForUri,
   makeSelectContentTypeForUri,
@@ -16,15 +15,16 @@ import {
 } from "redux/selectors/file_info";
 import { makeSelectCostInfoForUri } from "redux/selectors/cost_info";
 import { selectShowNsfw } from "redux/selectors/settings";
-// import { selectVideoPause } from "redux/selectors/video";
 import {
   selectMediaPaused,
   makeSelectMediaPositionForUri,
 } from "redux/selectors/media";
 import Video from "./view";
 import { selectPlayingUri } from "redux/selectors/content";
+import { makeSelectClaimForUri } from "redux/selectors/claims";
 
 const select = (state, props) => ({
+  claim: makeSelectClaimForUri(props.uri)(state),
   costInfo: makeSelectCostInfoForUri(props.uri)(state),
   fileInfo: makeSelectFileInfoForUri(props.uri)(state),
   metadata: makeSelectMetadataForUri(props.uri)(state),
@@ -34,7 +34,6 @@ const select = (state, props) => ({
   playingUri: selectPlayingUri(state),
   contentType: makeSelectContentTypeForUri(props.uri)(state),
   volume: selectVolume(state),
-  // videoPause: selectVideoPause(state),
   mediaPaused: selectMediaPaused(state),
   mediaPosition: makeSelectMediaPositionForUri(props.uri)(state),
 });
@@ -43,7 +42,6 @@ const perform = dispatch => ({
   play: uri => dispatch(doPlayUri(uri)),
   cancelPlay: () => dispatch(doSetPlayingUri(null)),
   changeVolume: volume => dispatch(doChangeVolume(volume)),
-  // setVideoPause: val => dispatch(setVideoPause(val)),
   doPlay: () => dispatch(doPlay()),
   doPause: () => dispatch(doPause()),
   savePosition: (id, position) => dispatch(savePosition(id, position)),
