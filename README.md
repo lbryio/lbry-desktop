@@ -27,6 +27,14 @@ To install from source or make changes to the application, continue reading belo
 
 This will download and install the LBRY app and its dependencies, including [the LBRY daemon](https://github.com/lbryio/lbry) and command line utilities like `node` and `yarn`. The LBRY app requires Node >= 6; if you have an earlier version of Node installed and want to keep it, you can use [nvm](https://github.com/creationix/nvm) to switch back and forth.
 
+#### Arch Linux and Other Non-Debian Distributions
+
+Running the build script with `DEPS=true` triggers a bash script with `apt-get` specific commands. If you are using a distribution without `apt-get`, try running the script as:
+
+`./build.sh`
+
+You may also have to install the package [libsecret](https://wiki.gnome.org/Projects/Libsecret) if it is not already installed.
+
 ### Ongoing Development
 Run `yarn dev`
 
