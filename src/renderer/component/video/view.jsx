@@ -64,8 +64,6 @@ class Video extends React.PureComponent {
       mediaPosition,
     } = this.props;
 
-    console.log("mediaPosition:", mediaPosition);
-
     const isPlaying = playingUri === uri;
     const isReadyToPlay = fileInfo && fileInfo.written_bytes > 0;
     const obscureNsfw = this.props.obscureNsfw && metadata && metadata.nsfw;
