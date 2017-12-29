@@ -38,8 +38,6 @@ class VideoPlayer extends React.PureComponent {
       id,
     } = this.props;
 
-    console.log("position:", position);
-
     const loadedMetadata = e => {
       this.setState({ hasMetadata: true, startedPlaying: true });
       this.refs.media.children[0].play();
