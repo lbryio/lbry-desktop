@@ -60,16 +60,22 @@ our styling rules and code best practices.
 
 ### Run
 
-LBRY app can be run for development by using the command `yarn dev`. This will launch the app and
-provide HMR (Hot Module Replacement). Any change made to the sources will automatically reload the
-app without losing its state.
+LBRY app can be run for development by using the command:
+
+`yarn dev`
+
+This will launch the app and provide HMR (Hot Module Replacement). Any change made to the sources
+will automatically reload the app without losing its state.
 
 ### Lint
 
 Code linting is ensured by [ESLint](https://eslint.org/).
 
-You can lint all the project's sources at any time by using the `yarn lint` command. If you desire
-to lint a specific file or directory you can use `yarn eslint 'glob/pattern'`.
+You can lint all the project's sources at any time by running:
+
+`yarn lint`
+
+If you desire to lint a specific file or directory you can use `yarn eslint 'glob/pattern'`.
 
 In addition to those commands, staged files are automatically linted before commit. Please take the
 time to fix all staged files' linting problems before committing or suppress them if necessary.
@@ -83,8 +89,12 @@ Project's sources are formatted using [Prettier](https://prettier.io/).
 
 Staged files are automatically formatted before commit.
 
-You can also use the command `yarn format` for applying formatting rules to all project's code
-sources. For formatting a specific file or directory use `yarn prettier 'glob/pattern'`.
+You can also use the following command:
+
+`yarn format`
+
+for applying formatting rules to all project's code sources. For formatting a specific file or
+directory use `yarn prettier 'glob/pattern'`.
 
 Editor integrations are available [here](https://prettier.io/docs/en/editors.html).
 
