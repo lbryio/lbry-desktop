@@ -1,6 +1,5 @@
 import React from 'react';
 import Link from 'component/link';
-import { CreditAmount } from 'component/common';
 import { Form, FormRow, Submit } from 'component/form.js';
 
 class UserEmailVerify extends React.PureComponent {
@@ -29,7 +28,7 @@ class UserEmailVerify extends React.PureComponent {
   }
 
   render() {
-    const { cancelButton, errorMessage, email, isPending, rewardAmount } = this.props;
+    const { cancelButton, errorMessage, email, isPending } = this.props;
     return (
       <Form onSubmit={this.handleSubmit.bind(this)}>
         <p>Please enter the verification code emailed to {email}.</p>
