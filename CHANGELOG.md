@@ -12,12 +12,11 @@ Web UI version numbers should always match the corresponding version of LBRY App
   *
 
 ### Changed
-  * Improved internal code structuring by adding linting integration -- developers only (#891)
-  * Improved developer documentation (#910)
+  *
   *
 
 ### Fixed
-  * Added snackbar text in place where it was coming up blank (#902)
+  *
   *
 
 ### Deprecated
@@ -25,8 +24,24 @@ Web UI version numbers should always match the corresponding version of LBRY App
   *
 
 ### Removed
-  * Removed email verification reward (#914)
   *
+  *
+
+## [0.19.3] - 2017-12-30
+
+### Changed
+ * Improved internal code structuring by adding linting integration -- developers only (#891)
+ * Improved developer documentation (#910)
+
+
+### Removed
+ * Removed email verification reward (#914)
+
+
+### Fixed
+ * Added snackbar text in place where it was coming up blank (#902)
+
+
 
 ## [0.19.2] - 2017-12-22
 
