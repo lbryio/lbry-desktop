@@ -60,7 +60,7 @@ export function doClaimRewardType(rewardType) {
           reward: successReward,
         },
       });
-      if (successReward.reward_type === rewards.TYPE_CONFIRM_EMAIL) {
+      if (successReward.reward_type === rewards.TYPE_NEW_USER) {
         dispatch({
           type: ACTIONS.OPEN_MODAL,
           data: { modal: MODALS.FIRST_REWARD },

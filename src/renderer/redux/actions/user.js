@@ -149,7 +149,6 @@ export function doUserEmailVerify(verificationToken, recaptcha) {
             type: ACTIONS.USER_EMAIL_VERIFY_SUCCESS,
             data: { email },
           });
-          dispatch(doClaimRewardType(rewards.TYPE_CONFIRM_EMAIL));
           dispatch(doUserFetch());
         } else {
           throw new Error('Your email is still not verified.'); // shouldn't happen
