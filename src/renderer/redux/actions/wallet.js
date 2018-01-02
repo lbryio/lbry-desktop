@@ -200,7 +200,7 @@ export function doSendSupport(amount, claimId, uri) {
     };
 
     Lbry.wallet_send({
-      claimId,
+      claim_id: claimId,
       amount,
     }).then(successCallback, errorCallback);
   };
