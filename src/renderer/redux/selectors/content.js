@@ -6,7 +6,7 @@ export const selectFeaturedUris = createSelector(selectState, state => state.fea
 
 export const selectFetchingFeaturedUris = createSelector(
   selectState,
-  state => !!state.fetchingFeaturedContent
+  state => state.fetchingFeaturedContent
 );
 
 export const selectResolvingUris = createSelector(selectState, state => state.resolvingUris || []);

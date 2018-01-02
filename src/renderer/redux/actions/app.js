@@ -1,23 +1,24 @@
+/* eslint-disable import/no-commonjs */
 import * as ACTIONS from 'constants/action_types';
+import * as MODALS from 'constants/modal_types';
+import { ipcRenderer, remote } from 'electron';
 import Lbry from 'lbry';
+import Path from 'path';
+import { doFetchRewardedContent } from 'redux/actions/content';
+import { doFetchFileInfosAndPublishedClaims } from 'redux/actions/file_info';
+import { doAuthNavigate } from 'redux/actions/navigation';
+import { doFetchDaemonSettings } from 'redux/actions/settings';
+import { doAuthenticate } from 'redux/actions/user';
+import { doBalanceSubscribe } from 'redux/actions/wallet';
 import {
-  selectUpdateUrl,
-  selectUpgradeDownloadPath,
-  selectUpgradeDownloadItem,
-  selectUpgradeFilename,
+  selectCurrentModal,
   selectIsUpgradeSkipped,
   selectRemoteVersion,
-  selectCurrentModal,
+  selectUpdateUrl,
+  selectUpgradeDownloadItem,
+  selectUpgradeDownloadPath,
+  selectUpgradeFilename,
 } from 'redux/selectors/app';
-import { doFetchDaemonSettings } from 'redux/actions/settings';
-import { doBalanceSubscribe } from 'redux/actions/wallet';
-import { doAuthenticate } from 'redux/actions/user';
-import { doFetchFileInfosAndPublishedClaims } from 'redux/actions/file_info';
-import * as MODALS from 'constants/modal_types';
-import { doFetchRewardedContent } from 'redux/actions/content';
-import { doAuthNavigate } from 'redux/actions/navigation';
-import { remote, ipcRenderer } from 'electron';
-import Path from 'path';
 
 const { download } = remote.require('electron-dl');
 const Fs = remote.require('fs');
@@ -57,7 +58,7 @@ export function doSkipUpgrade() {
 }
 
 export function doStartUpgrade() {
-  return function(dispatch, getState) {
+  return (dispatch, getState) => {
     const state = getState();
     const upgradeDownloadPath = selectUpgradeDownloadPath(state);
 
@@ -66,7 +67,7 @@ export function doStartUpgrade() {
 }
 
 export function doDownloadUpgrade() {
-  return function(dispatch, getState) {
+  return (dispatch, getState) => {
     const state = getState();
     // Make a new directory within temp directory so the filename is guaranteed to be available
     const dir = Fs.mkdtempSync(remote.app.getPath('temp') + Path.sep);
@@ -105,7 +106,7 @@ export function doDownloadUpgrade() {
 }
 
 export function doCancelUpgrade() {
-  return function(dispatch, getState) {
+  return (dispatch, getState) => {
     const state = getState();
     const upgradeDownloadItem = selectUpgradeDownloadItem(state);
 
@@ -128,7 +129,7 @@ export function doCancelUpgrade() {
 }
 
 export function doCheckUpgradeAvailable() {
-  return function(dispatch, getState) {
+  return (dispatch, getState) => {
     const state = getState();
     dispatch({
       type: ACTIONS.CHECK_UPGRADE_START,
@@ -171,7 +172,7 @@ export function doCheckUpgradeAvailable() {
   Initiate a timer that will check for an app upgrade every 10 minutes.
  */
 export function doCheckUpgradeSubscribe() {
-  return function(dispatch) {
+  return dispatch => {
     const checkUpgradeTimer = setInterval(
       () => dispatch(doCheckUpgradeAvailable()),
       CHECK_UPGRADE_INTERVAL
@@ -184,7 +185,7 @@ export function doCheckUpgradeSubscribe() {
 }
 
 export function doCheckDaemonVersion() {
-  return function(dispatch) {
+  return dispatch => {
     Lbry.version().then(({ lbrynet_version: lbrynetVersion }) => {
       dispatch({
         type:
@@ -197,7 +198,7 @@ export function doCheckDaemonVersion() {
 }
 
 export function doAlertError(errorList) {
-  return function(dispatch) {
+  return dispatch => {
     dispatch({
       type: ACTIONS.OPEN_MODAL,
       data: {
@@ -209,7 +210,7 @@ export function doAlertError(errorList) {
 }
 
 export function doDaemonReady() {
-  return function(dispatch, getState) {
+  return (dispatch, getState) => {
     const state = getState();
 
     dispatch(doAuthenticate());
@@ -239,7 +240,7 @@ export function doRemoveSnackBarSnack() {
 }
 
 export function doClearCache() {
-  return function() {
+  return () => {
     window.cacheStore.purge();
 
     return Promise.resolve();
@@ -247,13 +248,13 @@ export function doClearCache() {
 }
 
 export function doQuit() {
-  return function() {
+  return () => {
     remote.app.quit();
   };
 }
 
 export function doChangeVolume(volume) {
-  return function(dispatch) {
+  return dispatch => {
     dispatch({
       type: ACTIONS.VOLUME_CHANGED,
       data: {
@@ -264,7 +265,7 @@ export function doChangeVolume(volume) {
 }
 
 export function doConditionalAuthNavigate(newSession) {
-  return function(dispatch, getState) {
+  return (dispatch, getState) => {
     const state = getState();
     if (newSession || selectCurrentModal(state) !== 'email_collection') {
       dispatch(doAuthNavigate());

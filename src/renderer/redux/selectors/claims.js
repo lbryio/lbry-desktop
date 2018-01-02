@@ -1,6 +1,6 @@
-import { createSelector } from 'reselect';
 import Lbryuri from 'lbryuri';
 import { makeSelectCurrentParam } from 'redux/selectors/navigation';
+import { createSelector } from 'reselect';
 
 const selectState = state => state.claims || {};
 
@@ -19,9 +19,7 @@ export const selectClaimsByUri = createSelector(selectState, selectClaimsById, (
     if (claimId === null) {
       claims[uri] = null;
     } else {
-      const claim = byId[claimId];
-
-      claims[uri] = claim;
+      claims[uri] = byId[claimId];
     }
   });
 
@@ -94,8 +92,7 @@ export const makeSelectMetadataForUri = uri =>
   createSelector(makeSelectClaimForUri(uri), claim => {
     const metadata = claim && claim.value && claim.value.stream && claim.value.stream.metadata;
 
-    const value = metadata || (claim === undefined ? undefined : null);
-    return value;
+    return metadata || (claim === undefined ? undefined : null);
   });
 
 export const makeSelectTitleForUri = uri =>
@@ -109,7 +106,7 @@ export const makeSelectContentTypeForUri = uri =>
 
 export const selectIsFetchingClaimListMine = createSelector(
   selectState,
-  state => !!state.isFetchingClaimListMine
+  state => state.isFetchingClaimListMine
 );
 
 export const selectPendingClaims = createSelector(selectState, state =>
@@ -154,7 +151,7 @@ export const selectMyClaimsOutpoints = createSelector(selectMyClaims, myClaims =
 
 export const selectFetchingMyChannels = createSelector(
   selectState,
-  state => !!state.fetchingMyChannels
+  state => state.fetchingMyChannels
 );
 
 export const selectMyChannelClaims = createSelector(

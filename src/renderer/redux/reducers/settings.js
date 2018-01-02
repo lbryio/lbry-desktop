@@ -1,6 +1,6 @@
 import * as ACTIONS from 'constants/action_types';
-import * as SETTINGS from 'constants/settings';
 import LANGUAGES from 'constants/languages';
+import * as SETTINGS from 'constants/settings';
 
 function getLocalStorageSetting(setting, fallback) {
   const localStorageVal = localStorage.getItem(`setting_${setting}`);
@@ -27,13 +27,12 @@ const defaultState = {
   languages: {},
 };
 
-reducers[ACTIONS.DAEMON_SETTINGS_RECEIVED] = function(state, action) {
-  return Object.assign({}, state, {
+reducers[ACTIONS.DAEMON_SETTINGS_RECEIVED] = (state, action) =>
+  Object.assign({}, state, {
     daemonSettings: action.data.settings,
   });
-};
 
-reducers[ACTIONS.CLIENT_SETTING_CHANGED] = function(state, action) {
+reducers[ACTIONS.CLIENT_SETTING_CHANGED] = (state, action) => {
   const { key, value } = action.data;
   const clientSettings = Object.assign({}, state.clientSettings);
 
@@ -47,7 +46,7 @@ reducers[ACTIONS.CLIENT_SETTING_CHANGED] = function(state, action) {
   });
 };
 
-reducers[ACTIONS.DOWNLOAD_LANGUAGE_SUCCEEDED] = function(state, action) {
+reducers[ACTIONS.DOWNLOAD_LANGUAGE_SUCCEEDED] = (state, action) => {
   const languages = Object.assign({}, state.languages);
   const { language } = action.data;
 
@@ -62,7 +61,7 @@ reducers[ACTIONS.DOWNLOAD_LANGUAGE_SUCCEEDED] = function(state, action) {
   return Object.assign({}, state, { languages });
 };
 
-reducers[ACTIONS.DOWNLOAD_LANGUAGE_FAILED] = function(state, action) {
+reducers[ACTIONS.DOWNLOAD_LANGUAGE_FAILED] = (state, action) => {
   const languages = Object.assign({}, state.languages);
   delete languages[action.data.language];
   return Object.assign({}, state, { languages });

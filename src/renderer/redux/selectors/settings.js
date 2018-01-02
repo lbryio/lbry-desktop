@@ -13,11 +13,6 @@ export const selectClientSettings = createSelector(
 export const makeSelectClientSetting = setting =>
   createSelector(selectClientSettings, settings => (settings ? settings[setting] : undefined));
 
-export const selectSettingsIsGenerous = createSelector(
-  selectDaemonSettings,
-  settings => settings && settings.is_generous_host
-);
-
 // refactor me
 export const selectShowNsfw = makeSelectClientSetting(SETTINGS.SHOW_NSFW);
 

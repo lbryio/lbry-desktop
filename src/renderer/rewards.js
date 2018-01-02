@@ -39,7 +39,7 @@ rewards.SORT_ORDER = [
   rewards.TYPE_NEW_DEVELOPER,
 ];
 
-rewards.claimReward = function(type) {
+rewards.claimReward = type => {
   function requestReward(resolve, reject, params) {
     if (!Lbryio.enabled) {
       reject(new Error(__('Rewards are not enabled.')));

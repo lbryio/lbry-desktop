@@ -7,13 +7,12 @@ const defaultState = {
   channelClaimCounts: {},
 };
 
-reducers[ACTIONS.FETCH_FEATURED_CONTENT_STARTED] = function(state) {
-  return Object.assign({}, state, {
+reducers[ACTIONS.FETCH_FEATURED_CONTENT_STARTED] = state =>
+  Object.assign({}, state, {
     fetchingFeaturedContent: true,
   });
-};
 
-reducers[ACTIONS.FETCH_FEATURED_CONTENT_COMPLETED] = function(state, action) {
+reducers[ACTIONS.FETCH_FEATURED_CONTENT_COMPLETED] = (state, action) => {
   const { uris, success } = action.data;
 
   return Object.assign({}, state, {
@@ -23,7 +22,7 @@ reducers[ACTIONS.FETCH_FEATURED_CONTENT_COMPLETED] = function(state, action) {
   });
 };
 
-reducers[ACTIONS.FETCH_REWARD_CONTENT_COMPLETED] = function(state, action) {
+reducers[ACTIONS.FETCH_REWARD_CONTENT_COMPLETED] = (state, action) => {
   const { claimIds } = action.data;
 
   return Object.assign({}, state, {
@@ -31,7 +30,7 @@ reducers[ACTIONS.FETCH_REWARD_CONTENT_COMPLETED] = function(state, action) {
   });
 };
 
-reducers[ACTIONS.RESOLVE_URIS_STARTED] = function(state, action) {
+reducers[ACTIONS.RESOLVE_URIS_STARTED] = (state, action) => {
   const { uris } = action.data;
 
   const oldResolving = state.resolvingUris || [];
@@ -48,7 +47,7 @@ reducers[ACTIONS.RESOLVE_URIS_STARTED] = function(state, action) {
   });
 };
 
-reducers[ACTIONS.RESOLVE_URIS_COMPLETED] = function(state, action) {
+reducers[ACTIONS.RESOLVE_URIS_COMPLETED] = (state, action) => {
   const { resolveInfo } = action.data;
   const channelClaimCounts = Object.assign({}, state.channelClaimCounts);
 
@@ -69,7 +68,7 @@ reducers[ACTIONS.SET_PLAYING_URI] = (state, action) =>
     playingUri: action.data.uri,
   });
 
-reducers[ACTIONS.FETCH_CHANNEL_CLAIM_COUNT_COMPLETED] = function(state, action) {
+reducers[ACTIONS.FETCH_CHANNEL_CLAIM_COUNT_COMPLETED] = (state, action) => {
   const channelClaimCounts = Object.assign({}, state.channelClaimCounts);
   const { uri, totalClaims } = action.data;
 

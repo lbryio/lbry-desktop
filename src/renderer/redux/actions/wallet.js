@@ -1,16 +1,16 @@
 import * as ACTIONS from 'constants/action_types';
+import * as MODALS from 'constants/modal_types';
 import Lbry from 'lbry';
-import {
-  selectDraftTransaction,
-  selectDraftTransactionAmount,
-  selectBalance,
-} from 'redux/selectors/wallet';
 import { doOpenModal, doShowSnackBar } from 'redux/actions/app';
 import { doNavigate } from 'redux/actions/navigation';
-import * as MODALS from 'constants/modal_types';
+import {
+  selectBalance,
+  selectDraftTransaction,
+  selectDraftTransactionAmount,
+} from 'redux/selectors/wallet';
 
 export function doUpdateBalance() {
-  return function(dispatch) {
+  return dispatch => {
     Lbry.wallet_balance().then(balance =>
       dispatch({
         type: ACTIONS.UPDATE_BALANCE,
@@ -23,14 +23,14 @@ export function doUpdateBalance() {
 }
 
 export function doBalanceSubscribe() {
-  return function(dispatch) {
+  return dispatch => {
     dispatch(doUpdateBalance());
     setInterval(() => dispatch(doUpdateBalance()), 5000);
   };
 }
 
 export function doFetchTransactions() {
-  return function(dispatch) {
+  return dispatch => {
     dispatch({
       type: ACTIONS.FETCH_TRANSACTIONS_STARTED,
     });
@@ -47,7 +47,7 @@ export function doFetchTransactions() {
 }
 
 export function doFetchBlock(height) {
-  return function(dispatch) {
+  return dispatch => {
     Lbry.block_show({ height }).then(block => {
       dispatch({
         type: ACTIONS.FETCH_BLOCK_SUCCESS,
@@ -58,7 +58,7 @@ export function doFetchBlock(height) {
 }
 
 export function doGetNewAddress() {
-  return function(dispatch) {
+  return dispatch => {
     dispatch({
       type: ACTIONS.GET_NEW_ADDRESS_STARTED,
     });
@@ -74,7 +74,7 @@ export function doGetNewAddress() {
 }
 
 export function doCheckAddressIsMine(address) {
-  return function(dispatch) {
+  return dispatch => {
     dispatch({
       type: ACTIONS.CHECK_ADDRESS_IS_MINE_STARTED,
     });
@@ -90,7 +90,7 @@ export function doCheckAddressIsMine(address) {
 }
 
 export function doSendDraftTransaction() {
-  return function(dispatch, getState) {
+  return (dispatch, getState) => {
     const state = getState();
     const draftTx = selectDraftTransaction(state);
     const balance = selectBalance(state);
@@ -156,7 +156,7 @@ export function doSetDraftTransactionAddress(address) {
 }
 
 export function doSendSupport(amount, claimId, uri) {
-  return function(dispatch, getState) {
+  return (dispatch, getState) => {
     const state = getState();
     const balance = selectBalance(state);
 

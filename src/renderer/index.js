@@ -1,20 +1,20 @@
+import amplitude from 'amplitude-js';
+import App from 'component/app';
+import SnackBar from 'component/snackBar';
+import SplashScreen from 'component/splash';
+import * as ACTIONS from 'constants/action_types';
+import { ipcRenderer, remote, shell } from 'electron';
+import lbry from 'lbry';
 /* eslint-disable react/jsx-filename-extension */
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from 'component/app';
-import SnackBar from 'component/snackBar';
 import { Provider } from 'react-redux';
-import store from 'store';
-import SplashScreen from 'component/splash';
-import { doDaemonReady, doShowSnackBar, doConditionalAuthNavigate } from 'redux/actions/app';
-import { doUserEmailVerify } from 'redux/actions/user';
+import { doConditionalAuthNavigate, doDaemonReady, doShowSnackBar } from 'redux/actions/app';
 import { doNavigate } from 'redux/actions/navigation';
 import { doDownloadLanguages } from 'redux/actions/settings';
-import * as ACTIONS from 'constants/action_types';
-import amplitude from 'amplitude-js';
-import lbry from 'lbry';
+import { doUserEmailVerify } from 'redux/actions/user';
 import 'scss/all.scss';
-import { ipcRenderer, remote, shell } from 'electron';
+import store from 'store';
 import app from './app';
 
 const { contextMenu } = remote.require('./main.js');
@@ -64,10 +64,10 @@ ipcRenderer.on('window-is-focused', () => {
   dock.setBadge('');
 });
 
-(function(history, ...args) {
+((history, ...args) => {
   const { replaceState } = history;
   const newHistory = history;
-  newHistory.replaceState = function(_, __, path) {
+  newHistory.replaceState = (_, __, path) => {
     amplitude.getInstance().logEvent('NAVIGATION', { destination: path ? path.slice(1) : path });
     return replaceState.apply(history, args);
   };
@@ -101,7 +101,7 @@ document.addEventListener('click', event => {
   }
 });
 
-const init = function initializeReactApp() {
+const init = () => {
   app.store.dispatch(doDownloadLanguages());
 
   function onDaemonReady() {

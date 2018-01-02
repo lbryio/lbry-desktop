@@ -1,5 +1,5 @@
-import jsonrpc from 'jsonrpc';
 import { ipcRenderer } from 'electron';
+import jsonrpc from 'jsonrpc';
 
 const CHECK_DAEMON_STARTED_TRY_NUMBER = 200;
 
@@ -19,11 +19,10 @@ const lbryProxy = new Proxy(Lbry, {
       return target[name];
     }
 
-    return function(params = {}) {
-      return new Promise((resolve, reject) => {
+    return (params = {}) =>
+      new Promise((resolve, reject) => {
         apiCall(name, params, resolve, reject);
       });
-    };
   },
 });
 
@@ -76,7 +75,7 @@ function removePendingPublishIfNeeded({ name, channelName, outpoint }) {
  * Gets the current list of pending publish attempts. Filters out any that have timed out and
  * removes them from the list.
  */
-Lbry.getPendingPublishes = function() {
+Lbry.getPendingPublishes = () => {
   const pendingPublishes = getLocal('pendingPublishes') || [];
   const newPendingPublishes = pendingPublishes.filter(
     pub => Date.now() - pub.time <= Lbry.pendingPublishTimeout
@@ -110,7 +109,7 @@ function pendingPublishToDummyFileInfo({ name, outpoint, claimId }) {
 
 // core
 Lbry.connectPromise = null;
-Lbry.connect = function() {
+Lbry.connect = () => {
   if (Lbry.connectPromise === null) {
     Lbry.connectPromise = new Promise((resolve, reject) => {
       let tryNum = 0;
@@ -144,7 +143,7 @@ Lbry.connect = function() {
  * This currently includes a work-around to cache the file in local storage so that the pending
  * publish can appear in the UI immediately.
  */
-Lbry.publishDeprecated = function(params, fileListedCallback, publishedCallback, errorCallback) {
+Lbry.publishDeprecated = (params, fileListedCallback, publishedCallback, errorCallback) => {
   // Give a short grace period in case publish() returns right away or (more likely) gives an error
   const returnPendingTimeout = setTimeout(
     () => {
@@ -173,11 +172,9 @@ Lbry.publishDeprecated = function(params, fileListedCallback, publishedCallback,
   );
 };
 
-Lbry.imagePath = function(file) {
-  return `${staticResourcesPath}/img/${file}`;
-};
+Lbry.imagePath = file => `${staticResourcesPath}/img/${file}`;
 
-Lbry.getMediaType = function(contentType, fileName) {
+Lbry.getMediaType = (contentType, fileName) => {
   if (contentType) {
     return /^[^/]+/.exec(contentType)[0];
   } else if (fileName) {
@@ -199,14 +196,13 @@ Lbry.getMediaType = function(contentType, fileName) {
   return 'unknown';
 };
 
-Lbry.getAppVersionInfo = function() {
-  return new Promise(resolve => {
+Lbry.getAppVersionInfo = () =>
+  new Promise(resolve => {
     ipcRenderer.once('version-info-received', (event, versionInfo) => {
       resolve(versionInfo);
     });
     ipcRenderer.send('version-info-requested');
   });
-};
 
 /**
  * Wrappers for API methods to simulate missing or future behavior. Unlike the old-style stubs,
@@ -217,8 +213,8 @@ Lbry.getAppVersionInfo = function() {
  * Returns results from the file_list API method, plus dummy entries for pending publishes.
  * (If a real publish with the same name is found, the pending publish will be ignored and removed.)
  */
-Lbry.file_list = function(params = {}) {
-  return new Promise((resolve, reject) => {
+Lbry.file_list = (params = {}) =>
+  new Promise((resolve, reject) => {
     const { name, channel_name: channelName, outpoint } = params;
 
     /**
@@ -252,10 +248,9 @@ Lbry.file_list = function(params = {}) {
       reject
     );
   });
-};
 
-Lbry.claim_list_mine = function(params = {}) {
-  return new Promise((resolve, reject) => {
+Lbry.claim_list_mine = (params = {}) =>
+  new Promise((resolve, reject) => {
     apiCall(
       'claim_list_mine',
       params,
@@ -274,10 +269,9 @@ Lbry.claim_list_mine = function(params = {}) {
       reject
     );
   });
-};
 
-Lbry.resolve = function(params = {}) {
-  return new Promise((resolve, reject) => {
+Lbry.resolve = (params = {}) =>
+  new Promise((resolve, reject) => {
     apiCall(
       'resolve',
       params,
@@ -292,6 +286,5 @@ Lbry.resolve = function(params = {}) {
       reject
     );
   });
-};
 
 export default lbryProxy;
