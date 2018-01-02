@@ -1,5 +1,6 @@
 {
   "appId": "io.lbry.LBRY",
+  "productName": "LBRY",
   "mac": {
     "category": "public.app-category.entertainment"
   },
