@@ -279,9 +279,7 @@ export function doLoadVideo(uri) {
         });
         dispatch(
           doAlertError(
-            `Failed to download ${
-              uri
-            }, please try again. If this problem persists, visit https://lbry.io/faq/support for support.`
+            `Failed to download ${uri}, please try again. If this problem persists, visit https://lbry.io/faq/support for support.`
           )
         );
       });
@@ -444,14 +442,14 @@ export function doCreateChannel(name, amount) {
         channel_name: name,
         amount: parseFloat(amount),
       }).then(
-        channelClaim => {
-          const newChannelClaim = channelClaim;
-          newChannelClaim.name = name;
+        newChannelClaim => {
+          const channelClaim = newChannelClaim;
+          channelClaim.name = name;
           dispatch({
             type: ACTIONS.CREATE_CHANNEL_COMPLETED,
-            data: { newChannelClaim },
+            data: { channelClaim },
           });
-          resolve(newChannelClaim);
+          resolve(channelClaim);
         },
         error => {
           reject(error);
