@@ -50,7 +50,7 @@ the case that a level 1 issue is more difficult than a level 2, for instance. Th
 to help you find relevant issues, not to prevent you from working on issues that you otherwise
 would. If these rankings don't work for you, feel free to ignore them.
 
-The [UX label, when applied in conjunction with Help Wanted](https://github.com/lbryio/lbry-app/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22+label%3Aux), indicates that the contributor ought to implement the feature in a creative way that provides a good user experience. These issues often have no set instruction for how the experience should be and leave it to the contributor to figure out. This may be challenging for people who do not like UX, but also more fun and rewarding for those who do.
+The [UX label, when applied in conjunction with Help Wanted](https://github.com/lbryio/lbry-app/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22+label%3Aux+no%3Aassignee), indicates that the contributor ought to implement the feature in a creative way that provides a good user experience. These issues often have no set instruction for how the experience should be and leave it to the contributor to figure out. This may be challenging for people who do not like UX, but also more fun and rewarding for those who do.
 
 ## Develop
 
