@@ -3,6 +3,7 @@ import ModalError from 'modal/modalError';
 import ModalAuthFailure from 'modal/modalAuthFailure';
 import ModalDownloading from 'modal/modalDownloading';
 import ModalAutoUpdateDownloaded from "modal/modalAutoUpdateDownloaded";
+import ModalUpdateCloseAlert from "modal/modalUpdateCloseAlert";
 import ModalUpgrade from 'modal/modalUpgrade';
 import ModalWelcome from 'modal/modalWelcome';
 import ModalFirstReward from 'modal/modalFirstReward';
@@ -105,6 +106,8 @@ class ModalRouter extends React.PureComponent {
         return <ModalDownloading {...modalProps} />;
       case modals.AUTO_UPDATE_DOWNLOADED:
         return <ModalAutoUpdateDownloaded {...modalProps} />;
+      case modals.UPDATE_CLOSE_ALERT:
+        return <ModalUpdateCloseAlert {...modalProps} />;
       case modals.ERROR:
         return <ModalError {...modalProps} />;
       case modals.FILE_TIMEOUT:

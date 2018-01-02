@@ -9,7 +9,7 @@ import lbry from 'lbry';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { doConditionalAuthNavigate, doDaemonReady, doShowSnackBar, doAutoUpdate } from 'redux/actions/app';
+import { doConditionalAuthNavigate, doOpenModal, doDaemonReady, doShowSnackBar, doAutoUpdate } from 'redux/actions/app';
 import { doNavigate } from 'redux/actions/navigation';
 import { doDownloadLanguages } from 'redux/actions/settings';
 import { doUserEmailVerify } from 'redux/actions/user';
@@ -62,7 +62,7 @@ ipcRenderer.on('window-is-focused', () => {
   dock.setBadge('');
 });
 
-((history, ...args) => {
+(function(history, ...args) {
   const { replaceState } = history;
   const newHistory = history;
   newHistory.replaceState = (_, __, path) => {

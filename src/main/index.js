@@ -48,6 +48,20 @@ let daemonSubprocess;
 // if it dies when we didn't ask it to shut down, we want to alert the user.
 let daemonStopRequested = false;
 
+// This keeps track of whether a new file has been downloaded. We mostly
+// handle auto-update stuff in the render process, but need to know this
+// in order to display the extra confirmation dialog we show on close
+// on Windows.
+let updateDownloaded;
+if (process.platform === 'win32') {
+  updateDownloaded = false;
+}
+
+// This is used to keep track of whether we are showing he special dialog
+// that we show on Windows after you decline an upgrade and close the app later.
+let showingUpdateCloseAlert = false;
+
+
 // When a quit is attempted, we cancel the quit, do some preparations, then
 // this is set to true and app.quit() is called again to quit for real.
 let readyToQuit = false;
@@ -406,6 +420,10 @@ if (isDevelopment) {
     });
 }
 
+autoUpdater.on('update-downloaded', () => {
+  updateDownloaded = true;
+});
+
 app.setAsDefaultProtocolClient('lbry');
 
 app.on('ready', () => {
@@ -431,7 +449,12 @@ app.on('window-all-closed', () => {
 });
 
 app.on('before-quit', event => {
-  if (!readyToQuit) {
+  if (process.platform === 'darwin' && updateDownloaded && !showingUpdateCloseAlert) {
+    // We haven't shown the special dialog that we show on Windows
+    // if the user declines an update and then quits later
+    rendererWindow.webContents.send('quitRequested');
+    showingUpdateCloseAlert = true;
+  } else if (!readyToQuit) {
     // We need to shutdown the daemon before we're ready to actually quit. This
     // event will be triggered re-entrantly once preparation is done.
     event.preventDefault();

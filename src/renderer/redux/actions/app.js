@@ -110,8 +110,8 @@ export function doAutoUpdate() {
   return function(dispatch, getState) {
     const state = getState();
     dispatch({
-      type: types.OPEN_MODAL,
-      data: { modal: modals.AUTO_UPDATE_DOWNLOADED },
+      type: ACTIONS.OPEN_MODAL,
+      data: { modal: MODALS.AUTO_UPDATE_DOWNLOADED },
     });
   };
 }
