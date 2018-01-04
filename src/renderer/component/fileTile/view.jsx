@@ -1,3 +1,4 @@
+/* eslint-disable */
 import React from 'react';
 import * as icons from 'constants/icons';
 import lbryuri from 'lbryuri.js';
@@ -5,7 +6,7 @@ import CardMedia from 'component/cardMedia';
 import { TruncatedText } from 'component/common.js';
 import FilePrice from 'component/filePrice';
 import NsfwOverlay from 'component/nsfwOverlay';
-import Icon from 'component/icon';
+import Icon from 'component/common/icon';
 
 class FileTile extends React.PureComponent {
   static SHOW_EMPTY_PUBLISH = 'publish';
@@ -133,3 +134,4 @@ class FileTile extends React.PureComponent {
 }
 
 export default FileTile;
+/* eslint-enable */

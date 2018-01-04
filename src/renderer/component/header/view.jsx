@@ -1,8 +1,20 @@
+// @flow
 import React from 'react';
-import Link from 'component/link';
+import Button from 'component/link';
 import WunderBar from 'component/wunderbar';
 
-export const Header = props => {
+type Props = {
+  balance: string,
+  back: any => void,
+  forward: any => void,
+  isBackDisabled: boolean,
+  isForwardDisabled: boolean,
+  isUpgradeAvailable: boolean,
+  navigate: any => void,
+  downloadUpgrade: any => void,
+};
+
+export const Header = (props: Props) => {
   const {
     balance,
     back,
@@ -15,85 +27,57 @@ export const Header = props => {
   } = props;
   return (
     <header id="header">
-      <div className="header__item">
-        <Link
+      <div className="header__actions-left">
+        <Button
+          alt
+          circle
           onClick={back}
           disabled={isBackDisabled}
-          button="alt button--flat"
-          icon="icon-arrow-left"
-          title={__('Back')}
+          icon="arrow-left"
+          description={__('Navigate back')}
         />
-      </div>
-      <div className="header__item">
-        <Link
+
+        <Button
+          alt
+          circle
           onClick={forward}
           disabled={isForwardDisabled}
-          button="alt button--flat"
-          icon="icon-arrow-right"
-          title={__('Forward')}
+          icon="arrow-right"
+          description={__('Navigate forward')}
         />
+
+        <Button alt onClick={() => navigate('/discover')} icon="home" description={__('Home')} />
       </div>
-      <div className="header__item">
-        <Link
-          onClick={() => navigate('/discover')}
-          button="alt button--flat"
-          icon="icon-home"
-          title={__('Discover Content')}
-        />
-      </div>
-      <div className="header__item">
-        <Link
-          onClick={() => navigate('/subscriptions')}
-          button="alt button--flat"
-          icon="icon-at"
-          title={__('My Subscriptions')}
-        />
-      </div>
-      <div className="header__item header__item--wunderbar">
-        <WunderBar />
-      </div>
-      <div className="header__item">
-        <Link
+
+      <WunderBar />
+
+      <div className="header__actions-right">
+        <Button
+          inverse
           onClick={() => navigate('/wallet')}
-          button="text"
-          className="no-underline"
-          icon="icon-bank"
-          label={balance}
+          icon="user"
+          label={isUpgradeAvailable ? `${balance} LBC` : `You have ${balance} LBC`}
           title={__('Wallet')}
         />
-      </div>
-      <div className="header__item">
-        <Link
+
+        <Button
           onClick={() => navigate('/publish')}
-          button="primary button--flat"
-          icon="icon-upload"
-          label={__('Publish')}
+          icon="cloud-upload"
+          label={isUpgradeAvailable ? '' : __('Publish')}
         />
+
+        <Button alt onClick={() => navigate('/settings')} icon="gear" title={__('Settings')} />
+
+        <Button alt onClick={() => navigate('/help')} icon="question" title={__('Help')} />
+        {isUpgradeAvailable && (
+          <Button
+            onClick={() => downloadUpgrade()}
+            icon="arrow-up"
+            label={__('Upgrade App')}
+            title={__('Upgrade app')}
+          />
+        )}
       </div>
-      <div className="header__item">
-        <Link
-          onClick={() => navigate('/downloaded')}
-          button="alt button--flat"
-          icon="icon-folder"
-          title={__('Downloads and Publishes')}
-        />
-      </div>
-      <div className="header__item">
-        <Link
-          onClick={() => navigate('/settings')}
-          button="alt button--flat"
-          icon="icon-gear"
-          title={__('Settings')}
-        />
-      </div>
-      {isUpgradeAvailable && (
-        <Link
-          onClick={() => downloadUpgrade()}
-          button="primary button--flat"
-          icon="icon-arrow-up"
-          label={__('Upgrade App')}
-        />
-      )}
     </header>
   );
 };

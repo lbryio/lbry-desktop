@@ -1,60 +1,99 @@
-import React from 'react';
-import Icon from 'component/icon';
+// @flow
+import * as React from 'react';
+import Icon from 'component/common/icon';
+import classnames from 'classnames';
 
-const Link = props => {
+type Props = {
+  onClick: ?(any) => any,
+  href: ?string,
+  title: ?string,
+  label: ?string,
+  icon: ?string,
+  iconRight: ?string,
+  disabled: ?boolean,
+  children: ?React.Node,
+  navigate: ?string,
+  // TODO: these (nav) should be a reusable type
+  doNavigate: (string, ?any) => void,
+  navigateParams: any,
+  className: ?string,
+  inverse: ?boolean,
+  circle: ?boolean,
+  alt: ?boolean,
+  flat: ?boolean,
+  fakeLink: ?boolean,
+  description: ?string,
+};
+
+const Button = (props: Props) => {
   const {
+    onClick,
     href,
     title,
-    style,
     label,
     icon,
     iconRight,
-    button,
     disabled,
     children,
     navigate,
     navigateParams,
     doNavigate,
     className,
-    span,
+    inverse,
+    alt,
+    circle,
+    flat,
+    fakeLink,
+    description,
+    ...otherProps
   } = props;
 
-  const combinedClassName =
-    (className || '') +
-    (!className && !button ? 'button-text' : '') + // Non-button links get the same look as text buttons
-    (button ? ` button-block button-${button} button-set-item` : '') +
-    (disabled ? ' disabled' : '');
+  const combinedClassName = classnames(
+    {
+      btn: !fakeLink,
+      'btn--link': fakeLink,
+      'btn--primary': !fakeLink && !alt,
+      'btn--alt': alt,
+      'btn--inverse': inverse,
+      'btn--disabled': disabled,
+      'btn--circle': circle,
+      'btn--flat': flat,
+    },
+    className
+  );
 
-  const onClick =
-    !props.onClick && navigate
+  const extendedOnClick =
+    !onClick && navigate
       ? event => {
           event.stopPropagation();
           doNavigate(navigate, navigateParams || {});
         }
-      : props.onClick;
+      : onClick;
 
-  let content;
-  if (children) {
-    content = children;
-  } else {
-    content = (
-      <span {...('button' in props ? { className: 'button__content' } : {})}>
-        {icon ? <Icon icon={icon} fixed /> : null}
-        {label ? <span className="link-label">{label}</span> : null}
-        {iconRight ? <Icon icon={iconRight} fixed /> : null}
-      </span>
-    );
-  }
+  const content = (
+    <React.Fragment>
+      {icon && <Icon icon={icon} fixed />}
+      {label && <span className="btn__label">{label}</span>}
+      {children && children}
+      {iconRight && <Icon icon={iconRight} fixed />}
+    </React.Fragment>
+  );
 
-  const linkProps = {
-    className: combinedClassName,
-    href: href || 'javascript:;',
-    title,
-    onClick,
-    style,
-  };
-
-  return span ? <span {...linkProps}>{content}</span> : <a {...linkProps}>{content}</a>;
+  return href ? (
+    <a className={combinedClassName} href={href} title={title}>
+      {content}
+    </a>
+  ) : (
+    <button
+      aria-label={description || title}
+      className={combinedClassName}
+      onClick={extendedOnClick}
+      disabled={disabled}
+      {...otherProps}
+    >
+      {content}
+    </button>
+  );
 };
 
-export default Link;
+export default Button;
