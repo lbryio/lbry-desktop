@@ -85,7 +85,7 @@ const Button = (props: Props) => {
     </a>
   ) : (
     <button
-      aria-label={description || title}
+      aria-label={description || label || title}
       className={combinedClassName}
       onClick={extendedOnClick}
       disabled={disabled}

@@ -1,6 +1,7 @@
 // Generic html styles used accross the App
 // component specific styling should go in the component scss file
 
+// The actual fonts used will change ex: medium vs regular
 @font-face {
   font-family: 'Metropolis';
   font-weight: normal;
@@ -17,14 +18,6 @@
   src: url('../../../static/font/metropolis/Metropolis-SemiBold.woff2') format('woff2');
 }
 
-// @font-face {
-//   font-family: 'Metropolis';
-//   font-weight: 700;
-//   font-style: normal;
-//   text-rendering: optimizeLegibility;
-//   src: url('../../../static/font/metropolis/Metropolis-SemiBold.woff2') format('woff2');
-// }
-
 @font-face {
   font-family: 'Metropolis';
   font-weight: 800;
@@ -32,23 +25,6 @@
   text-rendering: optimizeLegibility;
   src: url('../../../static/font/metropolis/Metropolis-ExtraBold.woff2') format('woff2');
 }
-
-// TODO: use this
-// @font-face {
-//   font-family: 'Metropolis';
-//   font-weight: normal;
-//   font-style: italic;
-//   text-rendering: optimizeLegibility;
-//   src: url('../../../static/font/metropolis/Metropolis-MediumItalic.woff2') format('woff2');
-// }
-//
-// @font-face {
-//   font-family: 'Metropolis';
-//   font-weight: lighter;
-//   font-style: normal;
-//   text-rendering: optimizeLegibility;
-//   src: url('../../../static/font/metropolis/Metropolis-Light.woff2') format('woff2');
-// }
 
 html {
   height: 100%;
@@ -105,14 +81,14 @@ code {
   background-color: var(--color-bg-alt);
 }
 
-// Why is this needed?
+// Without this buttons don't have the Metropolis font
 button {
   font-family: inherit;
 }
 
 #window {
   height: 100%;
-  overflow: hidden; // so the scrollbar will not extend into the header
+  overflow: hidden;
 }
 
 #main-content {
@@ -124,7 +100,8 @@ button {
   // don't use {bottom/top} here
   // they cause flashes of un-rendered content when scrolling
   margin-top: var(--header-height);
-  padding-bottom: var(--header-height); // fix this scrollbar extends beyond screen
+  // TODO: fix this scrollbar extends beyond screen at the bottom
+  padding-bottom: var(--header-height);
   background-color: var(--color-bg);
 }
 

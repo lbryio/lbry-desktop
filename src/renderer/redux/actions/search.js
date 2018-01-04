@@ -11,7 +11,6 @@ const handleResponse = response =>
     ? Promise.resolve(response.json())
     : Promise.reject(new Error(response.statusText));
 
-// eslint-disable-next-line import/prefer-default-export
 export const doSearch = rawQuery => (dispatch, getState) => {
   const state = getState();
   const page = selectCurrentPage(state);

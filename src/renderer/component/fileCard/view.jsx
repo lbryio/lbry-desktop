@@ -10,6 +10,7 @@ import NsfwOverlay from 'component/nsfwOverlay';
 import * as icons from 'constants/icons';
 import classnames from 'classnames';
 
+// TODO: iron these out
 type Props = {
   isResolvingUri: boolean,
   resolveUri: string => void,

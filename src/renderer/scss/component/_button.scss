@@ -1,11 +1,7 @@
-// Styles for the <Button /> component
-// may be a button or a html element
-
 /*
-
 TODO:
 Determine [disabled] or .disabled
-
+Add <a> support (probably just get rid of button prefix)
 */
 
 button {
@@ -79,22 +75,4 @@ button.btn--link {
 
 .btn__label {
   padding: 0 5px;
-}
-
-.btn--with-help + .button__help {
-  position: absolute;
-  // display: none;
-  transition: 0s display;
-  z-index: 1;
-  width: 120px;
-  // top: -5px;
-  left: 105%;
-  border-radius: 5px;
-  background-color: var(--color-placeholder);
-  box-shadow: var(--box-shadow-layer);
-}
-
-.btn--with-help:hover + .button__help {
-  display: block;
-  transition-delay: 1s;
 }

@@ -57,25 +57,26 @@ export const Header = (props: Props) => {
           onClick={() => navigate('/wallet')}
           icon="user"
           label={isUpgradeAvailable ? `${balance} LBC` : `You have ${balance} LBC`}
-          title={__('Wallet')}
+          description={__('Your wallet')}
         />
 
         <Button
           onClick={() => navigate('/publish')}
           icon="cloud-upload"
           label={isUpgradeAvailable ? '' : __('Publish')}
+          description={__('Publish content')}
         />
 
-        <Button alt onClick={() => navigate('/settings')} icon="gear" title={__('Settings')} />
+        <Button
+          alt
+          onClick={() => navigate('/settings')}
+          icon="gear"
+          description={__('Settings')}
+        />
 
-        <Button alt onClick={() => navigate('/help')} icon="question" title={__('Help')} />
+        <Button alt onClick={() => navigate('/help')} icon="question" description={__('Help')} />
         {isUpgradeAvailable && (
-          <Button
-            onClick={() => downloadUpgrade()}
-            icon="arrow-up"
-            label={__('Upgrade App')}
-            title={__('Upgrade app')}
-          />
+          <Button onClick={() => downloadUpgrade()} icon="arrow-up" label={__('Upgrade App')} />
         )}
       </div>
     </header>
