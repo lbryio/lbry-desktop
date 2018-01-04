@@ -1,5 +1,5 @@
 import React from 'react';
-import { Icon } from 'component/common';
+import Icon from 'component/icon';
 import Link from 'component/link';
 import lbryuri from 'lbryuri';
 import classnames from 'classnames';

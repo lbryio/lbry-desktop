@@ -3,7 +3,8 @@ import React from 'react';
 import lbry from 'lbry.js';
 import Link from 'component/link';
 import SubHeader from 'component/subHeader';
-import { BusyMessage, Icon } from 'component/common';
+import { BusyMessage } from 'component/common';
+import Icon from 'component/icon';
 
 class HelpPage extends React.PureComponent {
   constructor(props) {
