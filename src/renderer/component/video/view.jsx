@@ -62,7 +62,6 @@ class Video extends React.PureComponent {
       savePosition,
       mediaPaused,
       mediaPosition,
-      positions,
     } = this.props;
 
     const isPlaying = playingUri === uri;
