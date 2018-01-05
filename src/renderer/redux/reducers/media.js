@@ -27,12 +27,12 @@ export default handleActions(
     }),
 
     [actions.MEDIA_POSITION]: (state: MediaState, action: Action) => {
-      const { id, position } = action;
+      const { outpoint, position } = action.data;
       return {
         ...state,
         positions: {
           ...state.positions,
-          [id]: position,
+          [outpoint]: position,
         },
       };
     },

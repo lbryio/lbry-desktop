@@ -62,6 +62,7 @@ class Video extends React.PureComponent {
       savePosition,
       mediaPaused,
       mediaPosition,
+      positions,
     } = this.props;
 
     const isPlaying = playingUri === uri;
@@ -119,7 +120,8 @@ class Video extends React.PureComponent {
               doPlay={doPlay}
               doPause={doPause}
               savePosition={savePosition}
-              id={claim.claim_id}
+              claim={claim}
+              uri={uri}
               paused={mediaPaused}
               position={mediaPosition}
             />

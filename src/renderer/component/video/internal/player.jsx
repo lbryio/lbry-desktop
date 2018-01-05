@@ -35,7 +35,8 @@ class VideoPlayer extends React.PureComponent {
       changeVolume,
       volume,
       position,
-      id,
+      claim,
+      uri,
     } = this.props;
 
     const loadedMetadata = e => {
@@ -70,11 +71,11 @@ class VideoPlayer extends React.PureComponent {
     document.addEventListener("keydown", this.togglePlayListener);
     const mediaElement = this.refs.media.children[0];
     if (mediaElement) {
-      mediaElement.currentTime = position;
+      mediaElement.currentTime = position || 0;
       mediaElement.addEventListener("play", () => this.props.doPlay());
       mediaElement.addEventListener("pause", () => this.props.doPause());
       mediaElement.addEventListener("timeupdate", () =>
-        this.props.savePosition(id, mediaElement.currentTime)
+        this.props.savePosition(claim.claim_id, mediaElement.currentTime)
       );
       mediaElement.addEventListener("click", this.togglePlayListener);
       mediaElement.addEventListener(

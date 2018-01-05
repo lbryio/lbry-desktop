@@ -1,6 +1,7 @@
 import * as settings from "constants/settings";
 import { createSelector } from "reselect";
 import lbryuri from "lbryuri";
+import { makeSelectClaimForUri } from "redux/selectors/claims";
 
 const _selectState = state => state.media || {};
 
@@ -10,7 +11,7 @@ export const selectMediaPaused = createSelector(
 );
 
 export const makeSelectMediaPositionForUri = uri =>
-  createSelector(_selectState, state => {
-    const obj = lbryuri.parse(uri);
-    return state.positions[obj.claimId] || null;
+  createSelector(_selectState, makeSelectClaimForUri(uri), (state, claim) => {
+    const outpoint = `${claim.txid}:${claim.nout}`;
+    return state.positions[outpoint] || null;
   });
