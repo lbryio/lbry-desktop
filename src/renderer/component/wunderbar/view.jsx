@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import lbryuri from 'lbryuri.js';
-import { Icon } from 'component/common.js';
+import Icon from 'component/icon';
 import { parseQueryParams } from 'util/query_params';
 
 class WunderBar extends React.PureComponent {

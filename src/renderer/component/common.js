@@ -3,23 +3,6 @@ import PropTypes from 'prop-types';
 import { formatCredits, formatFullPrice } from 'util/formatCredits';
 import lbry from '../lbry.js';
 
-// component/icon.js
-export class Icon extends React.PureComponent {
-  static propTypes = {
-    icon: PropTypes.string.isRequired,
-    className: PropTypes.string,
-    fixed: PropTypes.bool,
-  };
-
-  render() {
-    const { fixed, className } = this.props;
-    const spanClassName = `icon ${'fixed' in this.props ? 'icon-fixed-width ' : ''}${
-      this.props.icon
-    } ${this.props.className || ''}`;
-    return <span className={spanClassName} />;
-  }
-}
-
 export class TruncatedText extends React.PureComponent {
   static propTypes = {
     lines: PropTypes.number,
