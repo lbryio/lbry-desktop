@@ -3,7 +3,6 @@ export const INCOMPATIBLE_DAEMON = 'incompatibleDaemon';
 export const FILE_TIMEOUT = 'file_timeout';
 export const DOWNLOADING = 'downloading';
 export const AUTO_UPDATE_DOWNLOADED = "auto_update_downloaded";
-export const UPDATE_CLOSE_ALERT = "updateCloseAlert";
 export const ERROR = 'error';
 export const INSUFFICIENT_CREDITS = 'insufficient_credits';
 export const UPGRADE = 'upgrade';

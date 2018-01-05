@@ -8,7 +8,7 @@ import Https from 'https';
 import Keytar from 'keytar';
 import ChildProcess from 'child_process';
 import Assert from 'assert';
-import { app, BrowserWindow, globalShortcut, ipcMain, Menu, Tray } from 'electron';
+import { app, dialog, BrowserWindow, globalShortcut, ipcMain, Menu, Tray } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import mainMenu from './menu/mainMenu';
@@ -48,18 +48,14 @@ let daemonSubprocess;
 // if it dies when we didn't ask it to shut down, we want to alert the user.
 let daemonStopRequested = false;
 
-// This keeps track of whether a new file has been downloaded. We mostly
-// handle auto-update stuff in the render process, but need to know this
-// in order to display the extra confirmation dialog we show on close
-// on Windows.
-let updateDownloaded;
-if (process.platform === 'win32') {
-  updateDownloaded = false;
-}
+// This keeps track of whether the user has declined an update that was downloaded
+// through the Electron auto-update system. When the user declines an update on Windows,
+// they will get a confusing dialog, so we show our own dialog first.
+let autoUpdateDeclined = false;
 
 // This is used to keep track of whether we are showing he special dialog
 // that we show on Windows after you decline an upgrade and close the app later.
-let showingUpdateCloseAlert = false;
+let showingAutoUpdateCloseAlert = false;
 
 
 // When a quit is attempted, we cancel the quit, do some preparations, then
@@ -420,10 +416,6 @@ if (isDevelopment) {
     });
 }
 
-autoUpdater.on('update-downloaded', () => {
-  updateDownloaded = true;
-});
-
 app.setAsDefaultProtocolClient('lbry');
 
 app.on('ready', () => {
@@ -449,18 +441,25 @@ app.on('window-all-closed', () => {
 });
 
 app.on('before-quit', event => {
-  if (process.platform === 'darwin' && updateDownloaded && !showingUpdateCloseAlert) {
-    // We haven't shown the special dialog that we show on Windows
-    // if the user declines an update and then quits later
-    rendererWindow.webContents.send('quitRequested');
-    showingUpdateCloseAlert = true;
-  } else if (!readyToQuit) {
+  if (!readyToQuit) {
     // We need to shutdown the daemon before we're ready to actually quit. This
     // event will be triggered re-entrantly once preparation is done.
     event.preventDefault();
     shutdownDaemonAndQuit();
-  } else {
-    console.log('Quitting.');
+  } else if (process.platform == 'win32' && autoUpdateDeclined && !showingAutoUpdateCloseAlert) {
+    // On Windows, if the user declined an update and closes the app later,
+    // they get a confusing permission escalation dialog, so we display a
+    // dialog to warn them.
+    event.preventDefault();
+    showingAutoUpdateCloseAlert = true;
+    dialog.showMessageBox({
+      type: "info",
+      title: "LBRY Will Upgrade",
+      message: "Please select \"Yes\" at the upgrade prompt shown after the app closes.",
+    }, () => {
+      // After the user approves the dialog, we can quit once and for all.
+      quitNow();
+    });
   }
 });
 
@@ -549,7 +548,11 @@ ipcMain.on('version-info-requested', () => {
 
 ipcMain.on('autoUpdate', () => {
   minimize = false;
-  autoUpdater.quitAndInstall();
+  app.quit();
+});
+
+ipcMain.on('autoUpdateDeclined', () => {
+  autoUpdateDeclined = true;
 });
 
 ipcMain.on('get-auth-token', event => {

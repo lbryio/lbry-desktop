@@ -19,7 +19,10 @@ class ModalAutoUpdateDownloaded extends React.PureComponent {
         onConfirmed={() => {
           ipcRenderer.send("autoUpdate");
         }}
-        onAborted={closeModal}
+        onAborted={() => {
+          ipcRenderer.send("autoUpdateDeclined");
+          closeModal();
+        }}
       >
         <section>
           <h3 className="text-center">{__("LBRY Leveled Up")}</h3>
