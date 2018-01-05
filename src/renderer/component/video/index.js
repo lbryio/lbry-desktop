@@ -44,7 +44,8 @@ const perform = dispatch => ({
   changeVolume: volume => dispatch(doChangeVolume(volume)),
   doPlay: () => dispatch(doPlay()),
   doPause: () => dispatch(doPause()),
-  savePosition: (id, position) => dispatch(savePosition(id, position)),
+  savePosition: (claimId, position) =>
+    dispatch(savePosition(claimId, position)),
 });
 
 export default connect(select, perform)(Video);
