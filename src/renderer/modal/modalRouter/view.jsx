@@ -1,19 +1,19 @@
-import React from "react";
-import ModalError from "modal/modalError";
-import ModalAuthFailure from "modal/modalAuthFailure";
-import ModalDownloading from "modal/modalDownloading";
-import ModalUpgrade from "modal/modalUpgrade";
-import ModalWelcome from "modal/modalWelcome";
-import ModalFirstReward from "modal/modalFirstReward";
-import ModalRewardApprovalRequired from "modal/modalRewardApprovalRequired";
-import ModalCreditIntro from "modal/modalCreditIntro";
-import ModalRemoveFile from "modal/modalRemoveFile";
-import ModalTransactionFailed from "modal/modalTransactionFailed";
-import ModalFileTimeout from "modal/modalFileTimeout";
-import ModalAffirmPurchase from "modal/modalAffirmPurchase";
-import ModalRevokeClaim from "modal/modalRevokeClaim";
-import ModalEmailCollection from "../modalEmailCollection";
-import * as modals from "constants/modal_types";
+import React from 'react';
+import ModalError from 'modal/modalError';
+import ModalAuthFailure from 'modal/modalAuthFailure';
+import ModalDownloading from 'modal/modalDownloading';
+import ModalUpgrade from 'modal/modalUpgrade';
+import ModalWelcome from 'modal/modalWelcome';
+import ModalFirstReward from 'modal/modalFirstReward';
+import ModalRewardApprovalRequired from 'modal/modalRewardApprovalRequired';
+import ModalCreditIntro from 'modal/modalCreditIntro';
+import ModalRemoveFile from 'modal/modalRemoveFile';
+import ModalTransactionFailed from 'modal/modalTransactionFailed';
+import ModalFileTimeout from 'modal/modalFileTimeout';
+import ModalAffirmPurchase from 'modal/modalAffirmPurchase';
+import ModalRevokeClaim from 'modal/modalRevokeClaim';
+import ModalEmailCollection from '../modalEmailCollection';
+import * as modals from 'constants/modal_types';
 
 class ModalRouter extends React.PureComponent {
   constructor(props) {
@@ -44,14 +44,11 @@ class ModalRouter extends React.PureComponent {
       this.checkShowWelcome,
       this.checkShowEmail,
       this.checkShowCreditIntro,
-    ].reduce((acc, func) => {
-      return !acc ? func.bind(this)(props) : acc;
-    }, false);
+    ].reduce((acc, func) => (!acc ? func.bind(this)(props) : acc), false);
 
     if (
       transitionModal &&
-      (transitionModal != this.state.lastTransitionModal ||
-        page != this.state.lastTransitionPage)
+      (transitionModal != this.state.lastTransitionModal || page != this.state.lastTransitionPage)
     ) {
       openModal(transitionModal);
       this.setState({
@@ -63,22 +60,13 @@ class ModalRouter extends React.PureComponent {
 
   checkShowWelcome(props) {
     const { isWelcomeAcknowledged, user } = props;
-    if (
-      !isWelcomeAcknowledged &&
-      user &&
-      !user.is_reward_approved &&
-      !user.is_identity_verified
-    ) {
+    if (!isWelcomeAcknowledged && user && !user.is_reward_approved && !user.is_identity_verified) {
       return modals.WELCOME;
     }
   }
 
   checkShowEmail(props) {
-    const {
-      isEmailCollectionAcknowledged,
-      isVerificationCandidate,
-      user,
-    } = props;
+    const { isEmailCollectionAcknowledged, isVerificationCandidate, user } = props;
     if (
       !isEmailCollectionAcknowledged &&
       isVerificationCandidate &&
@@ -95,7 +83,7 @@ class ModalRouter extends React.PureComponent {
     if (
       balance <= 0 &&
       !isCreditIntroAcknowledged &&
-      (["send", "publish"].includes(page) || this.isPaidShowPage(props))
+      (['send', 'publish'].includes(page) || this.isPaidShowPage(props))
     ) {
       return modals.INSUFFICIENT_CREDITS;
     }
@@ -103,7 +91,7 @@ class ModalRouter extends React.PureComponent {
 
   isPaidShowPage(props) {
     const { page, showPageCost } = props;
-    return page === "show" && showPageCost > 0;
+    return page === 'show' && showPageCost > 0;
   }
 
   render() {

@@ -1,31 +1,34 @@
-import * as types from "constants/action_types";
-import lbry from "lbry";
+/* eslint-disable import/no-commonjs */
+import * as ACTIONS from 'constants/action_types';
+import * as MODALS from 'constants/modal_types';
+import { ipcRenderer, remote } from 'electron';
+import Lbry from 'lbry';
+import Path from 'path';
+import { doFetchRewardedContent } from 'redux/actions/content';
+import { doFetchFileInfosAndPublishedClaims } from 'redux/actions/file_info';
+import { doAuthNavigate } from 'redux/actions/navigation';
+import { doFetchDaemonSettings } from 'redux/actions/settings';
+import { doAuthenticate } from 'redux/actions/user';
+import { doBalanceSubscribe } from 'redux/actions/wallet';
 import {
-  selectUpdateUrl,
-  selectUpgradeDownloadPath,
-  selectUpgradeDownloadItem,
-  selectUpgradeFilename,
+  selectCurrentModal,
   selectIsUpgradeSkipped,
   selectRemoteVersion,
-} from "redux/selectors/app";
-import { doFetchDaemonSettings } from "redux/actions/settings";
-import { doBalanceSubscribe, doFetchTransactions } from "redux/actions/wallet";
-import { doAuthenticate } from "redux/actions/user";
-import { doFetchFileInfosAndPublishedClaims } from "redux/actions/file_info";
-import * as modals from "constants/modal_types";
-import { doFetchRewardedContent } from "redux/actions/content";
-import { selectCurrentModal } from "redux/selectors/app";
+  selectUpdateUrl,
+  selectUpgradeDownloadItem,
+  selectUpgradeDownloadPath,
+  selectUpgradeFilename,
+} from 'redux/selectors/app';
 
-const { remote, ipcRenderer, shell } = require("electron");
-const path = require("path");
-const { download } = remote.require("electron-dl");
-const fs = remote.require("fs");
-const { lbrySettings: config } = require("package.json");
+const { download } = remote.require('electron-dl');
+const Fs = remote.require('fs');
+const { lbrySettings: config } = require('package.json');
+
 const CHECK_UPGRADE_INTERVAL = 10 * 60 * 1000;
 
 export function doOpenModal(modal, modalProps = {}) {
   return {
-    type: types.OPEN_MODAL,
+    type: ACTIONS.OPEN_MODAL,
     data: {
       modal,
       modalProps,
@@ -35,79 +38,75 @@ export function doOpenModal(modal, modalProps = {}) {
 
 export function doCloseModal() {
   return {
-    type: types.CLOSE_MODAL,
+    type: ACTIONS.CLOSE_MODAL,
   };
 }
 
 export function doUpdateDownloadProgress(percent) {
   return {
-    type: types.UPGRADE_DOWNLOAD_PROGRESSED,
+    type: ACTIONS.UPGRADE_DOWNLOAD_PROGRESSED,
     data: {
-      percent: percent,
+      percent,
     },
   };
 }
 
 export function doSkipUpgrade() {
   return {
-    type: types.SKIP_UPGRADE,
+    type: ACTIONS.SKIP_UPGRADE,
   };
 }
 
 export function doStartUpgrade() {
-  return function(dispatch, getState) {
+  return (dispatch, getState) => {
     const state = getState();
     const upgradeDownloadPath = selectUpgradeDownloadPath(state);
 
-    ipcRenderer.send("upgrade", upgradeDownloadPath);
+    ipcRenderer.send('upgrade', upgradeDownloadPath);
   };
 }
 
 export function doDownloadUpgrade() {
-  return function(dispatch, getState) {
+  return (dispatch, getState) => {
     const state = getState();
     // Make a new directory within temp directory so the filename is guaranteed to be available
-    const dir = fs.mkdtempSync(
-        remote.app.getPath("temp") + require("path").sep
-      ),
-      upgradeFilename = selectUpgradeFilename(state);
+    const dir = Fs.mkdtempSync(remote.app.getPath('temp') + Path.sep);
+    const upgradeFilename = selectUpgradeFilename(state);
 
-    let options = {
+    const options = {
       onProgress: p => dispatch(doUpdateDownloadProgress(Math.round(p * 100))),
       directory: dir,
     };
-    download(remote.getCurrentWindow(), selectUpdateUrl(state), options).then(
-      downloadItem => {
-        /**
-         * TODO: get the download path directly from the download object. It should just be
-         * downloadItem.getSavePath(), but the copy on the main process is being garbage collected
-         * too soon.
-         */
+    download(remote.getCurrentWindow(), selectUpdateUrl(state), options).then(downloadItem => {
+      /**
+       * TODO: get the download path directly from the download object. It should just be
+       * downloadItem.getSavePath(), but the copy on the main process is being garbage collected
+       * too soon.
+       */
 
-        dispatch({
-          type: types.UPGRADE_DOWNLOAD_COMPLETED,
-          data: {
-            downloadItem,
-            path: path.join(dir, upgradeFilename),
-          },
-        });
-      }
-    );
+      dispatch({
+        type: ACTIONS.UPGRADE_DOWNLOAD_COMPLETED,
+        data: {
+          downloadItem,
+          path: Path.join(dir, upgradeFilename),
+        },
+      });
+    });
 
     dispatch({
-      type: types.UPGRADE_DOWNLOAD_STARTED,
+      type: ACTIONS.UPGRADE_DOWNLOAD_STARTED,
     });
     dispatch({
-      type: types.OPEN_MODAL,
+      type: ACTIONS.OPEN_MODAL,
       data: {
-        modal: modals.DOWNLOADING,
+        modal: MODALS.DOWNLOADING,
       },
     });
   };
 }
 
 export function doCancelUpgrade() {
-  return function(dispatch, getState) {
+  return (dispatch, getState) => {
     const state = getState();
     const upgradeDownloadItem = selectUpgradeDownloadItem(state);
 
@@ -125,20 +124,20 @@ export function doCancelUpgrade() {
       }
     }
 
-    dispatch({ type: types.UPGRADE_CANCELLED });
+    dispatch({ type: ACTIONS.UPGRADE_CANCELLED });
   };
 }
 
 export function doCheckUpgradeAvailable() {
-  return function(dispatch, getState) {
+  return (dispatch, getState) => {
     const state = getState();
     dispatch({
-      type: types.CHECK_UPGRADE_START,
+      type: ACTIONS.CHECK_UPGRADE_START,
     });
 
     const success = ({ remoteVersion, upgradeAvailable }) => {
       dispatch({
-        type: types.CHECK_UPGRADE_SUCCESS,
+        type: ACTIONS.CHECK_UPGRADE_SUCCESS,
         data: {
           upgradeAvailable,
           remoteVersion,
@@ -148,13 +147,12 @@ export function doCheckUpgradeAvailable() {
       if (
         upgradeAvailable &&
         !selectCurrentModal(state) &&
-        (!selectIsUpgradeSkipped(state) ||
-          remoteVersion !== selectRemoteVersion(state))
+        (!selectIsUpgradeSkipped(state) || remoteVersion !== selectRemoteVersion(state))
       ) {
         dispatch({
-          type: types.OPEN_MODAL,
+          type: ACTIONS.OPEN_MODAL,
           data: {
-            modal: modals.UPGRADE,
+            modal: MODALS.UPGRADE,
           },
         });
       }
@@ -162,11 +160,11 @@ export function doCheckUpgradeAvailable() {
 
     const fail = () => {
       dispatch({
-        type: types.CHECK_UPGRADE_FAIL,
+        type: ACTIONS.CHECK_UPGRADE_FAIL,
       });
     };
 
-    lbry.getAppVersionInfo().then(success, fail);
+    Lbry.getAppVersionInfo().then(success, fail);
   };
 }
 
@@ -174,38 +172,37 @@ export function doCheckUpgradeAvailable() {
   Initiate a timer that will check for an app upgrade every 10 minutes.
  */
 export function doCheckUpgradeSubscribe() {
-  return function(dispatch) {
+  return dispatch => {
     const checkUpgradeTimer = setInterval(
       () => dispatch(doCheckUpgradeAvailable()),
       CHECK_UPGRADE_INTERVAL
     );
     dispatch({
-      type: types.CHECK_UPGRADE_SUBSCRIBE,
+      type: ACTIONS.CHECK_UPGRADE_SUBSCRIBE,
       data: { checkUpgradeTimer },
     });
   };
 }
 
 export function doCheckDaemonVersion() {
-  return function(dispatch, getState) {
-    lbry.version().then(({ lbrynet_version }) => {
+  return dispatch => {
+    Lbry.version().then(({ lbrynet_version: lbrynetVersion }) => {
       dispatch({
         type:
-          config.lbrynetDaemonVersion == lbrynet_version
-            ? types.DAEMON_VERSION_MATCH
-            : types.DAEMON_VERSION_MISMATCH,
+          config.lbrynetDaemonVersion === lbrynetVersion
+            ? ACTIONS.DAEMON_VERSION_MATCH
+            : ACTIONS.DAEMON_VERSION_MISMATCH,
       });
     });
   };
 }
 
 export function doAlertError(errorList) {
-  return function(dispatch, getState) {
-    const state = getState();
+  return dispatch => {
     dispatch({
-      type: types.OPEN_MODAL,
+      type: ACTIONS.OPEN_MODAL,
       data: {
-        modal: modals.ERROR,
+        modal: MODALS.ERROR,
         modalProps: { error: errorList },
       },
     });
@@ -213,16 +210,15 @@ export function doAlertError(errorList) {
 }
 
 export function doDaemonReady() {
-  return function(dispatch, getState) {
+  return (dispatch, getState) => {
     const state = getState();
 
     dispatch(doAuthenticate());
-    dispatch({ type: types.DAEMON_READY });
+    dispatch({ type: ACTIONS.DAEMON_READY });
     dispatch(doFetchDaemonSettings());
     dispatch(doBalanceSubscribe());
     dispatch(doFetchFileInfosAndPublishedClaims());
     dispatch(doFetchRewardedContent());
-    dispatch(doFetchTransactions(false));
     if (!selectIsUpgradeSkipped(state)) {
       dispatch(doCheckUpgradeAvailable());
     }
@@ -232,19 +228,19 @@ export function doDaemonReady() {
 
 export function doShowSnackBar(data) {
   return {
-    type: types.SHOW_SNACKBAR,
+    type: ACTIONS.SHOW_SNACKBAR,
     data,
   };
 }
 
 export function doRemoveSnackBarSnack() {
   return {
-    type: types.REMOVE_SNACKBAR_SNACK,
+    type: ACTIONS.REMOVE_SNACKBAR_SNACK,
   };
 }
 
 export function doClearCache() {
-  return function(dispatch, getState) {
+  return () => {
     window.cacheStore.purge();
 
     return Promise.resolve();
@@ -252,18 +248,27 @@ export function doClearCache() {
 }
 
 export function doQuit() {
-  return function(dispatch, getState) {
+  return () => {
     remote.app.quit();
   };
 }
 
 export function doChangeVolume(volume) {
-  return function(dispatch, getState) {
+  return dispatch => {
     dispatch({
-      type: types.VOLUME_CHANGED,
+      type: ACTIONS.VOLUME_CHANGED,
       data: {
         volume,
       },
     });
+  };
+}
+
+export function doConditionalAuthNavigate(newSession) {
+  return (dispatch, getState) => {
+    const state = getState();
+    if (newSession || selectCurrentModal(state) !== 'email_collection') {
+      dispatch(doAuthNavigate());
+    }
   };
 }

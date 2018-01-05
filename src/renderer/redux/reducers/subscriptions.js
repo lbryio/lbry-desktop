@@ -1,49 +1,49 @@
 // @flow
-import * as actions from "constants/action_types";
-import { handleActions } from "util/redux-utils";
-
-// Subscription redux types
-export type SubscriptionState = {
-  subscriptions: Array<Subscription>,
-  hasFetchedSubscriptions: boolean
-};
+import * as ACTIONS from 'constants/action_types';
+import { handleActions } from 'util/redux-utils';
 
 export type Subscription = {
   channelName: string,
   uri: string,
 };
 
+// Subscription redux types
+export type SubscriptionState = {
+  subscriptions: Array<Subscription>,
+  hasFetchedSubscriptions: boolean,
+};
+
 // Subscription action types
 type doChannelSubscribe = {
-  type: actions.CHANNEL_SUBSCRIBE,
+  type: ACTIONS.CHANNEL_SUBSCRIBE,
   data: Subscription,
 };
 
 type doChannelUnsubscribe = {
-  type: actions.CHANNEL_UNSUBSCRIBE,
+  type: ACTIONS.CHANNEL_UNSUBSCRIBE,
   data: Subscription,
 };
 
 type HasFetchedSubscriptions = {
-  type: actions.HAS_FETCHED_SUBSCRIPTIONS
-}
+  type: ACTIONS.HAS_FETCHED_SUBSCRIPTIONS,
+};
 
 export type Action = doChannelSubscribe | doChannelUnsubscribe | HasFetchedSubscriptions;
 export type Dispatch = (action: Action) => any;
 
 const defaultState = {
   subscriptions: [],
-  hasFetchedSubscriptions: false
+  hasFetchedSubscriptions: false,
 };
 
 export default handleActions(
   {
-    [actions.CHANNEL_SUBSCRIBE]: (
+    [ACTIONS.CHANNEL_SUBSCRIBE]: (
       state: SubscriptionState,
       action: doChannelSubscribe
     ): SubscriptionState => {
       const newSubscription: Subscription = action.data;
-      let newSubscriptions: Array<Subscription> = state.subscriptions.slice();
+      const newSubscriptions: Array<Subscription> = state.subscriptions.slice();
       newSubscriptions.unshift(newSubscription);
 
       return {
@@ -51,7 +51,7 @@ export default handleActions(
         subscriptions: newSubscriptions,
       };
     },
-    [actions.CHANNEL_UNSUBSCRIBE]: (
+    [ACTIONS.CHANNEL_UNSUBSCRIBE]: (
       state: SubscriptionState,
       action: doChannelUnsubscribe
     ): SubscriptionState => {
@@ -59,22 +59,17 @@ export default handleActions(
 
       const newSubscriptions = state.subscriptions
         .slice()
-        .filter(subscription => {
-          return subscription.channelName !== subscriptionToRemove.channelName;
-        });
+        .filter(subscription => subscription.channelName !== subscriptionToRemove.channelName);
 
       return {
         ...state,
         subscriptions: newSubscriptions,
       };
     },
-    [actions.HAS_FETCHED_SUBSCRIPTIONS]: (
-      state: SubscriptionState,
-      action: HasFetchedSubscriptions
-    ): SubscriptionState => ({
+    [ACTIONS.HAS_FETCHED_SUBSCRIPTIONS]: (state: SubscriptionState): SubscriptionState => ({
       ...state,
-      hasFetchedSubscriptions: true
-    })
+      hasFetchedSubscriptions: true,
+    }),
   },
   defaultState
 );

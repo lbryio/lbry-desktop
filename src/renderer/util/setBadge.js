@@ -1,6 +1,7 @@
-const { remote } = require("electron");
+import { remote } from 'electron';
+
 const application = remote.app;
-const dock = application.dock;
+const { dock } = application;
 const win = remote.BrowserWindow.getFocusedWindow();
 const setBadge = text => {
   if (!dock) return;

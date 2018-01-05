@@ -1,6 +1,6 @@
-import React from "react";
-import PropTypes from "prop-types";
-import Link from "component/link";
+import React from 'react';
+import PropTypes from 'prop-types';
+import Link from 'component/link';
 
 let scriptLoading = false;
 let scriptLoaded = false;
@@ -48,8 +48,8 @@ class CardVerify extends React.Component {
 
     scriptLoading = true;
 
-    const script = document.createElement("script");
-    script.src = "https://checkout.stripe.com/checkout.js";
+    const script = document.createElement('script');
+    script.src = 'https://checkout.stripe.com/checkout.js';
     script.async = 1;
 
     this.loadPromise = (() => {
@@ -69,12 +69,8 @@ class CardVerify extends React.Component {
         };
       });
       const wrappedPromise = new Promise((accept, cancel) => {
-        promise.then(
-          () => (canceled ? cancel({ isCanceled: true }) : accept())
-        );
-        promise.catch(
-          error => (canceled ? cancel({ isCanceled: true }) : cancel(error))
-        );
+        promise.then(() => (canceled ? cancel({ isCanceled: true }) : accept()));
+        promise.catch(error => (canceled ? cancel({ isCanceled: true }) : cancel(error)));
       });
 
       return {
@@ -85,9 +81,7 @@ class CardVerify extends React.Component {
       };
     })();
 
-    this.loadPromise.promise
-      .then(this.onScriptLoaded)
-      .catch(this.onScriptError);
+    this.loadPromise.promise.then(this.onScriptLoaded).catch(this.onScriptError);
 
     document.body.appendChild(script);
   }
@@ -119,7 +113,7 @@ class CardVerify extends React.Component {
   };
 
   onScriptError = (...args) => {
-    throw new Error("Unable to load credit validation script.");
+    throw new Error('Unable to load credit validation script.');
   };
 
   onClosed = () => {
@@ -139,10 +133,10 @@ class CardVerify extends React.Component {
     CardVerify.stripeHandler.open({
       allowRememberMe: false,
       closed: this.onClosed,
-      description: __("Confirm Identity"),
+      description: __('Confirm Identity'),
       email: this.props.email,
-      locale: "auto",
-      panelLabel: "Verify",
+      locale: 'auto',
+      panelLabel: 'Verify',
       token: this.props.token,
       zipCode: true,
     });
@@ -151,9 +145,7 @@ class CardVerify extends React.Component {
   onClick = () => {
     if (scriptDidError) {
       try {
-        throw new Error(
-          "Tried to call onClick, but StripeCheckout failed to load"
-        );
+        throw new Error('Tried to call onClick, but StripeCheckout failed to load');
       } catch (x) {}
     } else if (CardVerify.stripeHandler) {
       this.showStripeDialog();
@@ -168,9 +160,7 @@ class CardVerify extends React.Component {
         button="alt"
         label={this.props.label}
         icon="icon-lock"
-        disabled={
-          this.props.disabled || this.state.open || this.hasPendingClick
-        }
+        disabled={this.props.disabled || this.state.open || this.hasPendingClick}
         onClick={this.onClick.bind(this)}
       />
     );

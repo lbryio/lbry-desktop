@@ -1,9 +1,9 @@
 // @flow
-import React from "react";
-import SubHeader from "component/subHeader";
-import { BusyMessage } from "component/common.js";
-import { FeaturedCategory } from "page/discover/view";
-import type { Subscription } from "redux/reducers/subscriptions";
+import React from 'react';
+import SubHeader from 'component/subHeader';
+import { BusyMessage } from 'component/common.js';
+import { FeaturedCategory } from 'page/discover/view';
+import type { Subscription } from 'redux/reducers/subscriptions';
 
 type SavedSubscriptions = Array<Subscription>;
 
@@ -31,11 +31,7 @@ export default class extends React.PureComponent<Props> {
   }
 
   componentWillReceiveProps(props: Props) {
-    const {
-      savedSubscriptions,
-      hasFetchedSubscriptions,
-      setHasFetchedSubscriptions,
-    } = props;
+    const { savedSubscriptions, hasFetchedSubscriptions, setHasFetchedSubscriptions } = props;
 
     if (!hasFetchedSubscriptions && savedSubscriptions.length) {
       this.fetchSubscriptions(savedSubscriptions);
@@ -56,12 +52,13 @@ export default class extends React.PureComponent<Props> {
   render() {
     const { subscriptions, savedSubscriptions } = this.props;
 
-    const someClaimsNotLoaded = Boolean(subscriptions.find(subscription => !subscription.claims.length))
+    const someClaimsNotLoaded = Boolean(
+      subscriptions.find(subscription => !subscription.claims.length)
+    );
 
     const fetchingSubscriptions =
       !!savedSubscriptions.length &&
-      (subscriptions.length !== savedSubscriptions.length ||
-        someClaimsNotLoaded);
+      (subscriptions.length !== savedSubscriptions.length || someClaimsNotLoaded);
 
     return (
       <main className="main main--no-margin">
@@ -71,7 +68,7 @@ export default class extends React.PureComponent<Props> {
         )}
         {fetchingSubscriptions && (
           <div className="card-row__placeholder">
-            <BusyMessage message={__("Fetching subscriptions")} />
+            <BusyMessage message={__('Fetching subscriptions')} />
           </div>
         )}
         {!!savedSubscriptions.length && (
@@ -82,7 +79,7 @@ export default class extends React.PureComponent<Props> {
                   // will need to update when you can subscribe to empty channels
                   // for now this prevents issues with FeaturedCategory being rendered
                   // before the names (claim uris) are populated
-                  return "";
+                  return '';
                 }
 
                 return (

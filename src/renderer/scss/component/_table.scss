@@ -1,9 +1,9 @@
-
 table.table-standard {
   word-wrap: break-word;
   max-width: 100%;
 
-  th, td {
+  th,
+  td {
     padding: $spacing-vertical/2 8px;
   }
   th {
@@ -13,7 +13,8 @@ table.table-standard {
   td {
     vertical-align: top;
   }
-  thead th, > tr:first-child th {
+  thead th,
+  > tr:first-child th {
     vertical-align: bottom;
     font-weight: 500;
     font-size: 0.9em;
@@ -32,7 +33,7 @@ table.table-standard {
   }
   tfoot td {
     padding: $spacing-vertical / 2 8px;
-    font-size: .85em;
+    font-size: 0.85em;
   }
   tbody {
     tr {
@@ -62,9 +63,19 @@ table.table-stretch {
 }
 
 table.table-transactions {
-  td:nth-of-type(1) { width: 15%; }
-  td:nth-of-type(2) { width: 15%; }
-  td:nth-of-type(3) { width: 15%; }
-  td:nth-of-type(4) { width: 40%; }
-  td:nth-of-type(5) { width: 15%; }
+  td:nth-of-type(1) {
+    width: 15%;
+  }
+  td:nth-of-type(2) {
+    width: 15%;
+  }
+  td:nth-of-type(3) {
+    width: 15%;
+  }
+  td:nth-of-type(4) {
+    width: 40%;
+  }
+  td:nth-of-type(5) {
+    width: 15%;
+  }
 }

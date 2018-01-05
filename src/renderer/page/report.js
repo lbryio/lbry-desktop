@@ -1,8 +1,8 @@
-import React from "react";
-import Link from "component/link";
-import { FormRow } from "component/form";
-import { doShowSnackBar } from "redux/actions/app";
-import lbry from "../lbry.js";
+import React from 'react';
+import Link from 'component/link';
+import { FormRow } from 'component/form';
+import { doShowSnackBar } from 'redux/actions/app';
+import lbry from '../lbry.js';
 
 class ReportPage extends React.Component {
   constructor(props) {
@@ -10,7 +10,7 @@ class ReportPage extends React.Component {
 
     this.state = {
       submitting: false,
-      message: "",
+      message: '',
     };
   }
 
@@ -27,13 +27,13 @@ class ReportPage extends React.Component {
 
         // Display global notice
         const action = doShowSnackBar({
-          message: __("Message received! Thanks for helping."),
+          message: __('Message received! Thanks for helping.'),
           isError: false,
         });
         window.app.store.dispatch(action);
       });
 
-      this.setState({ message: "" });
+      this.setState({ message: '' });
     }
   }
 
@@ -48,10 +48,10 @@ class ReportPage extends React.Component {
       <main className="main--single-column">
         <section className="card">
           <div className="card__content">
-            <h3>{__("Report an Issue")}</h3>
+            <h3>{__('Report an Issue')}</h3>
             <p>
               {__(
-                "Please describe the problem you experienced and any information you think might be useful to us. Links to screenshots are great!"
+                'Please describe the problem you experienced and any information you think might be useful to us. Links to screenshots are great!'
               )}
             </p>
             <div className="form-row">
@@ -63,7 +63,7 @@ class ReportPage extends React.Component {
                 onChange={event => {
                   this.onMessageChange(event);
                 }}
-                placeholder={__("Description of your issue")}
+                placeholder={__('Description of your issue')}
               />
             </div>
             <div className="form-row form-row-submit">
@@ -71,25 +71,20 @@ class ReportPage extends React.Component {
                 onClick={event => {
                   this.submitMessage(event);
                 }}
-                className={
-                  "button-block button-primary " +
-                  (this.state.submitting ? "disabled" : "")
-                }
+                className={`button-block button-primary ${this.state.submitting ? 'disabled' : ''}`}
               >
-                {this.state.submitting
-                  ? __("Submitting...")
-                  : __("Submit Report")}
+                {this.state.submitting ? __('Submitting...') : __('Submit Report')}
               </button>
             </div>
           </div>
         </section>
         <section className="card">
           <div className="card__content">
-            <h3>{__("Developer?")}</h3>
-            {__("You can also")}{" "}
+            <h3>{__('Developer?')}</h3>
+            {__('You can also')}{' '}
             <Link
               href="https://github.com/lbryio/lbry/issues"
-              label={__("submit an issue on GitHub")}
+              label={__('submit an issue on GitHub')}
             />.
           </div>
         </section>

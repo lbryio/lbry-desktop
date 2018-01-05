@@ -1,11 +1,10 @@
 // @flow
 
-import * as types from "constants/action_types";
-import * as modalTypes from "constants/modal_types";
+import * as ACTIONS from 'constants/action_types';
+import * as MODALS from 'constants/modal_types';
 
-const { remote } = require("electron");
+import { remote } from 'electron';
 
-const application = remote.app;
 const win = remote.BrowserWindow.getFocusedWindow();
 
 const reducers = {};
@@ -41,12 +40,12 @@ const defaultState: AppState = {
   modal: null,
   modalProps: {},
   platform: process.platform,
-  upgradeSkipped: sessionStorage.getItem("upgradeSkipped") === "true",
+  upgradeSkipped: sessionStorage.getItem('upgradeSkipped') === 'true',
   daemonVersionMatched: null,
   daemonReady: false,
   hasSignature: false,
   badgeNumber: 0,
-  volume: Number(sessionStorage.getItem("volume")) || 1,
+  volume: Number(sessionStorage.getItem('volume')) || 1,
 
   downloadProgress: undefined,
   upgradeDownloading: undefined,
@@ -57,49 +56,43 @@ const defaultState: AppState = {
   snackBar: undefined,
 };
 
-reducers[types.DAEMON_READY] = function(state, action) {
-  return Object.assign({}, state, {
+reducers[ACTIONS.DAEMON_READY] = state =>
+  Object.assign({}, state, {
     daemonReady: true,
   });
-};
 
-reducers[types.DAEMON_VERSION_MATCH] = function(state, action) {
-  return Object.assign({}, state, {
+reducers[ACTIONS.DAEMON_VERSION_MATCH] = state =>
+  Object.assign({}, state, {
     daemonVersionMatched: true,
   });
-};
 
-reducers[types.DAEMON_VERSION_MISMATCH] = function(state, action) {
-  return Object.assign({}, state, {
+reducers[ACTIONS.DAEMON_VERSION_MISMATCH] = state =>
+  Object.assign({}, state, {
     daemonVersionMatched: false,
-    modal: modalTypes.INCOMPATIBLE_DAEMON,
+    modal: MODALS.INCOMPATIBLE_DAEMON,
   });
-};
 
-reducers[types.UPGRADE_CANCELLED] = function(state, action) {
-  return Object.assign({}, state, {
+reducers[ACTIONS.UPGRADE_CANCELLED] = state =>
+  Object.assign({}, state, {
     downloadProgress: null,
     upgradeDownloadComplete: false,
     modal: null,
   });
-};
 
-reducers[types.UPGRADE_DOWNLOAD_COMPLETED] = function(state, action) {
-  return Object.assign({}, state, {
+reducers[ACTIONS.UPGRADE_DOWNLOAD_COMPLETED] = (state, action) =>
+  Object.assign({}, state, {
     downloadPath: action.data.path,
     upgradeDownloading: false,
     upgradeDownloadCompleted: true,
   });
-};
 
-reducers[types.UPGRADE_DOWNLOAD_STARTED] = function(state, action) {
-  return Object.assign({}, state, {
+reducers[ACTIONS.UPGRADE_DOWNLOAD_STARTED] = state =>
+  Object.assign({}, state, {
     upgradeDownloading: true,
   });
-};
 
-reducers[types.SKIP_UPGRADE] = function(state, action) {
-  sessionStorage.setItem("upgradeSkipped", "true");
+reducers[ACTIONS.SKIP_UPGRADE] = state => {
+  sessionStorage.setItem('upgradeSkipped', 'true');
 
   return Object.assign({}, state, {
     isUpgradeSkipped: true,
@@ -107,46 +100,40 @@ reducers[types.SKIP_UPGRADE] = function(state, action) {
   });
 };
 
-reducers[types.UPDATE_VERSION] = function(state, action) {
-  return Object.assign({}, state, {
+reducers[ACTIONS.UPDATE_VERSION] = (state, action) =>
+  Object.assign({}, state, {
     version: action.data.version,
   });
-};
 
-reducers[types.CHECK_UPGRADE_SUCCESS] = function(state, action) {
-  return Object.assign({}, state, {
+reducers[ACTIONS.CHECK_UPGRADE_SUCCESS] = (state, action) =>
+  Object.assign({}, state, {
     isUpgradeAvailable: action.data.upgradeAvailable,
     remoteVersion: action.data.remoteVersion,
   });
-};
 
-reducers[types.CHECK_UPGRADE_SUBSCRIBE] = function(state, action) {
-  return Object.assign({}, state, {
+reducers[ACTIONS.CHECK_UPGRADE_SUBSCRIBE] = (state, action) =>
+  Object.assign({}, state, {
     checkUpgradeTimer: action.data.checkUpgradeTimer,
   });
-};
 
-reducers[types.OPEN_MODAL] = function(state, action) {
-  return Object.assign({}, state, {
+reducers[ACTIONS.OPEN_MODAL] = (state, action) =>
+  Object.assign({}, state, {
     modal: action.data.modal,
     modalProps: action.data.modalProps || {},
   });
-};
 
-reducers[types.CLOSE_MODAL] = function(state, action) {
-  return Object.assign({}, state, {
+reducers[ACTIONS.CLOSE_MODAL] = state =>
+  Object.assign({}, state, {
     modal: undefined,
     modalProps: {},
   });
-};
 
-reducers[types.UPGRADE_DOWNLOAD_PROGRESSED] = function(state, action) {
-  return Object.assign({}, state, {
+reducers[ACTIONS.UPGRADE_DOWNLOAD_PROGRESSED] = (state, action) =>
+  Object.assign({}, state, {
     downloadProgress: action.data.percent,
   });
-};
 
-reducers[types.SHOW_SNACKBAR] = function(state, action) {
+reducers[ACTIONS.SHOW_SNACKBAR] = (state, action) => {
   const { message, linkText, linkTarget, isError } = action.data;
   const snackBar = Object.assign({}, state.snackBar);
   const snacks = Object.assign([], snackBar.snacks);
@@ -165,7 +152,7 @@ reducers[types.SHOW_SNACKBAR] = function(state, action) {
   });
 };
 
-reducers[types.REMOVE_SNACKBAR_SNACK] = function(state, action) {
+reducers[ACTIONS.REMOVE_SNACKBAR_SNACK] = state => {
   const snackBar = Object.assign({}, state.snackBar);
   const snacks = Object.assign([], snackBar.snacks);
   snacks.shift();
@@ -179,8 +166,8 @@ reducers[types.REMOVE_SNACKBAR_SNACK] = function(state, action) {
   });
 };
 
-reducers[types.DOWNLOADING_COMPLETED] = function(state, action) {
-  const badgeNumber = state.badgeNumber;
+reducers[ACTIONS.DOWNLOADING_COMPLETED] = state => {
+  const { badgeNumber } = state;
 
   // Don't update the badge number if the window is focused
   if (win && win.isFocused()) return Object.assign({}, state);
@@ -190,17 +177,15 @@ reducers[types.DOWNLOADING_COMPLETED] = function(state, action) {
   });
 };
 
-reducers[types.WINDOW_FOCUSED] = function(state, action) {
-  return Object.assign({}, state, {
+reducers[ACTIONS.WINDOW_FOCUSED] = state =>
+  Object.assign({}, state, {
     badgeNumber: 0,
   });
-};
 
-reducers[types.VOLUME_CHANGED] = function(state, action) {
-  return Object.assign({}, state, {
+reducers[ACTIONS.VOLUME_CHANGED] = (state, action) =>
+  Object.assign({}, state, {
     volume: action.data.volume,
   });
-};
 
 export default function reducer(state: AppState = defaultState, action: any) {
   const handler = reducers[action.type];

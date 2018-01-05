@@ -77,7 +77,7 @@ if [ "$FULL_BUILD" == "true" ]; then
     security unlock-keychain -p ${KEYCHAIN_PASSWORD} osx-build.keychain
   fi
 
-  yarn dist
+  yarn build
 
   # electron-build has a publish feature, but I had a hard time getting
   # it to reliably work and it also seemed difficult to configure. Not proud of

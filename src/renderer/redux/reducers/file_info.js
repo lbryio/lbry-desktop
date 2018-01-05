@@ -1,16 +1,14 @@
-import * as types from "constants/action_types";
-import lbryuri from "lbryuri";
+import * as ACTIONS from 'constants/action_types';
 
 const reducers = {};
 const defaultState = {};
 
-reducers[types.FILE_LIST_STARTED] = function(state, action) {
-  return Object.assign({}, state, {
+reducers[ACTIONS.FILE_LIST_STARTED] = state =>
+  Object.assign({}, state, {
     isFetchingFileList: true,
   });
-};
 
-reducers[types.FILE_LIST_SUCCEEDED] = function(state, action) {
+reducers[ACTIONS.FILE_LIST_SUCCEEDED] = (state, action) => {
   const { fileInfos } = action.data;
   const newByOutpoint = Object.assign({}, state.byOutpoint);
   const pendingByOutpoint = Object.assign({}, state.pendingByOutpoint);
@@ -28,7 +26,7 @@ reducers[types.FILE_LIST_SUCCEEDED] = function(state, action) {
   });
 };
 
-reducers[types.FETCH_FILE_INFO_STARTED] = function(state, action) {
+reducers[ACTIONS.FETCH_FILE_INFO_STARTED] = (state, action) => {
   const { outpoint } = action.data;
   const newFetching = Object.assign({}, state.fetching);
 
@@ -39,7 +37,7 @@ reducers[types.FETCH_FILE_INFO_STARTED] = function(state, action) {
   });
 };
 
-reducers[types.FETCH_FILE_INFO_COMPLETED] = function(state, action) {
+reducers[ACTIONS.FETCH_FILE_INFO_COMPLETED] = (state, action) => {
   const { fileInfo, outpoint } = action.data;
 
   const newByOutpoint = Object.assign({}, state.byOutpoint);
@@ -54,7 +52,7 @@ reducers[types.FETCH_FILE_INFO_COMPLETED] = function(state, action) {
   });
 };
 
-reducers[types.DOWNLOADING_STARTED] = function(state, action) {
+reducers[ACTIONS.DOWNLOADING_STARTED] = (state, action) => {
   const { uri, outpoint, fileInfo } = action.data;
 
   const newByOutpoint = Object.assign({}, state.byOutpoint);
@@ -72,8 +70,8 @@ reducers[types.DOWNLOADING_STARTED] = function(state, action) {
   });
 };
 
-reducers[types.DOWNLOADING_PROGRESSED] = function(state, action) {
-  const { uri, outpoint, fileInfo } = action.data;
+reducers[ACTIONS.DOWNLOADING_PROGRESSED] = (state, action) => {
+  const { outpoint, fileInfo } = action.data;
 
   const newByOutpoint = Object.assign({}, state.byOutpoint);
   const newDownloading = Object.assign({}, state.downloadingByOutpoint);
@@ -87,8 +85,8 @@ reducers[types.DOWNLOADING_PROGRESSED] = function(state, action) {
   });
 };
 
-reducers[types.DOWNLOADING_COMPLETED] = function(state, action) {
-  const { uri, outpoint, fileInfo } = action.data;
+reducers[ACTIONS.DOWNLOADING_COMPLETED] = (state, action) => {
+  const { outpoint, fileInfo } = action.data;
 
   const newByOutpoint = Object.assign({}, state.byOutpoint);
   const newDownloading = Object.assign({}, state.downloadingByOutpoint);
@@ -102,7 +100,7 @@ reducers[types.DOWNLOADING_COMPLETED] = function(state, action) {
   });
 };
 
-reducers[types.FILE_DELETE] = function(state, action) {
+reducers[ACTIONS.FILE_DELETE] = (state, action) => {
   const { outpoint } = action.data;
 
   const newByOutpoint = Object.assign({}, state.byOutpoint);
@@ -117,7 +115,7 @@ reducers[types.FILE_DELETE] = function(state, action) {
   });
 };
 
-reducers[types.LOADING_VIDEO_STARTED] = function(state, action) {
+reducers[ACTIONS.LOADING_VIDEO_STARTED] = (state, action) => {
   const { uri } = action.data;
 
   const newLoading = Object.assign({}, state.urisLoading);
@@ -129,7 +127,7 @@ reducers[types.LOADING_VIDEO_STARTED] = function(state, action) {
   });
 };
 
-reducers[types.LOADING_VIDEO_FAILED] = function(state, action) {
+reducers[ACTIONS.LOADING_VIDEO_FAILED] = (state, action) => {
   const { uri } = action.data;
 
   const newLoading = Object.assign({}, state.urisLoading);
@@ -141,13 +139,14 @@ reducers[types.LOADING_VIDEO_FAILED] = function(state, action) {
   });
 };
 
-reducers[types.FETCH_DATE] = function(state, action) {
+reducers[ACTIONS.FETCH_DATE] = (state, action) => {
   const { time } = action.data;
   if (time) {
     return Object.assign({}, state, {
       publishedDate: time,
     });
   }
+  return null;
 };
 
 export default function reducer(state = defaultState, action) {

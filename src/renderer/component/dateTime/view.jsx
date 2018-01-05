@@ -1,15 +1,15 @@
-import React from "react";
+import React from 'react';
 
 class DateTime extends React.PureComponent {
-  static SHOW_DATE = "date";
-  static SHOW_TIME = "time";
-  static SHOW_BOTH = "both";
+  static SHOW_DATE = 'date';
+  static SHOW_TIME = 'time';
+  static SHOW_BOTH = 'both';
 
   static defaultProps = {
     formatOptions: {
-      month: "long",
-      day: "numeric",
-      year: "numeric",
+      month: 'long',
+      day: 'numeric',
+      year: 'numeric',
     },
   };
 
@@ -37,12 +37,12 @@ class DateTime extends React.PureComponent {
       <span>
         {date &&
           (show == DateTime.SHOW_BOTH || show === DateTime.SHOW_DATE) &&
-          date.toLocaleDateString([locale, "en-US"], formatOptions)}
-        {show == DateTime.SHOW_BOTH && " "}
+          date.toLocaleDateString([locale, 'en-US'], formatOptions)}
+        {show == DateTime.SHOW_BOTH && ' '}
         {date &&
           (show == DateTime.SHOW_BOTH || show === DateTime.SHOW_TIME) &&
           date.toLocaleTimeString()}
-        {!date && "..."}
+        {!date && '...'}
       </span>
     );
   }

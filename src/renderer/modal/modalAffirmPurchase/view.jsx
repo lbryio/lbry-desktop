@@ -1,6 +1,6 @@
-import React from "react";
-import FilePrice from "component/filePrice";
-import { Modal } from "modal/modal";
+import React from 'react';
+import FilePrice from 'component/filePrice';
+import { Modal } from 'modal/modal';
 
 class ModalAffirmPurchase extends React.PureComponent {
   onAffirmPurchase() {
@@ -14,16 +14,16 @@ class ModalAffirmPurchase extends React.PureComponent {
     return (
       <Modal
         type="confirm"
-        isOpen={true}
-        contentLabel={__("Confirm Purchase")}
+        isOpen
+        contentLabel={__('Confirm Purchase')}
         onConfirmed={this.onAffirmPurchase.bind(this)}
         onAborted={cancelPurchase}
       >
-        {__("This will purchase")} <strong>{title}</strong> {__("for")}{" "}
+        {__('This will purchase')} <strong>{title}</strong> {__('for')}{' '}
         <strong>
-          <FilePrice uri={uri} showFullPrice={true} look="plain" />
-        </strong>{" "}
-        {__("credits")}.
+          <FilePrice uri={uri} showFullPrice look="plain" />
+        </strong>{' '}
+        {__('credits')}.
       </Modal>
     );
   }

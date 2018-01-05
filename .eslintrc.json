@@ -1,0 +1,33 @@
+{
+  "plugins": ["flowtype"],
+  "extends": [
+    "airbnb",
+    "plugin:import/electron",
+    "plugin:flowtype/recommended",
+    "plugin:prettier/recommended"
+  ],
+  "settings": {
+    "import/resolver": {
+      "webpack": {
+        "config": "webpack.renderer.additions.js"
+      }
+    }
+  },
+  "parser": "babel-eslint",
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "globals": {
+    "__static": true,
+    "staticResourcesPath": true,
+    "__": true,
+    "__n": true,
+    "app": true
+  },
+  "rules": {
+    "import/no-commonjs": "warn",
+    "import/no-amd": "warn",
+    "func-names": ["warn", "as-needed"]
+  }
+}

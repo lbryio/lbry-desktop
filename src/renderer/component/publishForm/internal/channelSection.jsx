@@ -1,15 +1,15 @@
-import React from "react";
-import lbryuri from "lbryuri";
-import { FormRow } from "component/form.js";
-import { BusyMessage } from "component/common";
-import Link from "component/link";
+import React from 'react';
+import lbryuri from 'lbryuri';
+import { FormRow } from 'component/form.js';
+import { BusyMessage } from 'component/common';
+import Link from 'component/link';
 
 class ChannelSection extends React.PureComponent {
   constructor(props) {
     super(props);
 
     this.state = {
-      newChannelName: "@",
+      newChannelName: '@',
       newChannelBid: 10,
       addingChannel: false,
     };
@@ -17,7 +17,7 @@ class ChannelSection extends React.PureComponent {
 
   handleChannelChange(event) {
     const channel = event.target.value;
-    if (channel === "new") this.setState({ addingChannel: true });
+    if (channel === 'new') this.setState({ addingChannel: true });
     else {
       this.setState({ addingChannel: false });
       this.props.handleChannelChange(event.target.value);
@@ -25,21 +25,17 @@ class ChannelSection extends React.PureComponent {
   }
 
   handleNewChannelNameChange(event) {
-    const newChannelName = event.target.value.startsWith("@")
+    const newChannelName = event.target.value.startsWith('@')
       ? event.target.value
-      : "@" + event.target.value;
+      : `@${event.target.value}`;
 
-    if (
-      newChannelName.length > 1 &&
-      !lbryuri.isValidName(newChannelName.substr(1), false)
-    ) {
+    if (newChannelName.length > 1 && !lbryuri.isValidName(newChannelName.substr(1), false)) {
       this.refs.newChannelName.showError(
-        __("LBRY channel names must contain only letters, numbers and dashes.")
+        __('LBRY channel names must contain only letters, numbers and dashes.')
       );
       return;
-    } else {
-      this.refs.newChannelName.clearError();
     }
+    this.refs.newChannelName.clearError();
 
     this.setState({
       newChannelName,
@@ -57,9 +53,7 @@ class ChannelSection extends React.PureComponent {
     const { newChannelBid } = this.state;
 
     if (newChannelBid > balance) {
-      this.refs.newChannelName.showError(
-        __("Unable to create channel due to insufficient funds.")
-      );
+      this.refs.newChannelName.showError(__('Unable to create channel due to insufficient funds.'));
 
       return;
     }
@@ -85,19 +79,17 @@ class ChannelSection extends React.PureComponent {
       this.setState({
         creatingChannel: false,
       });
-      this.refs.newChannelName.showError(
-        __("Unable to create channel due to an internal error.")
-      );
+      this.refs.newChannelName.showError(__('Unable to create channel due to an internal error.'));
     };
     this.props.createChannel(newChannelName, amount).then(success, failure);
   }
 
   render() {
     const lbcInputHelp = __(
-      "This LBC remains yours. It is a deposit to reserve the name and can be undone at any time."
+      'This LBC remains yours. It is a deposit to reserve the name and can be undone at any time.'
     );
 
-    const channel = this.state.addingChannel ? "new" : this.props.channel;
+    const channel = this.state.addingChannel ? 'new' : this.props.channel;
     const { fetchingChannels, channels = [] } = this.props;
 
     const channelSelector = (
@@ -109,7 +101,7 @@ class ChannelSection extends React.PureComponent {
         value={channel}
       >
         <option key="anonymous" value="anonymous">
-          {__("Anonymous")}
+          {__('Anonymous')}
         </option>
         {channels.map(({ name }) => (
           <option key={name} value={name}>
@@ -117,7 +109,7 @@ class ChannelSection extends React.PureComponent {
           </option>
         ))}
         <option key="new" value="new">
-          {__("New channel...")}
+          {__('New channel...')}
         </option>
       </FormRow>
     );
@@ -125,12 +117,10 @@ class ChannelSection extends React.PureComponent {
     return (
       <section className="card">
         <div className="card__title-primary">
-          <h4>{__("Channel Name")}</h4>
+          <h4>{__('Channel Name')}</h4>
           <div className="card__subtitle">
-            {__(
-              "This is a username or handle that your content can be found under."
-            )}{" "}
-            {__("Ex. @Marvel, @TheBeatles, @BooksByJoe")}
+            {__('This is a username or handle that your content can be found under.')}{' '}
+            {__('Ex. @Marvel, @TheBeatles, @BooksByJoe')}
           </div>
         </div>
         <div className="card__content">
@@ -143,13 +133,13 @@ class ChannelSection extends React.PureComponent {
         {this.state.addingChannel && (
           <div className="card__content">
             <FormRow
-              label={__("Name")}
+              label={__('Name')}
               type="text"
               onChange={this.handleNewChannelNameChange.bind(this)}
               value={this.state.newChannelName}
             />
             <FormRow
-              label={__("Deposit")}
+              label={__('Deposit')}
               postfix="LBC"
               step="any"
               min="0"
@@ -163,9 +153,7 @@ class ChannelSection extends React.PureComponent {
               <Link
                 button="primary"
                 label={
-                  !this.state.creatingChannel
-                    ? __("Create channel")
-                    : __("Creating channel...")
+                  !this.state.creatingChannel ? __('Create channel') : __('Creating channel...')
                 }
                 onClick={this.handleCreateChannelClick.bind(this)}
                 disabled={this.state.creatingChannel}

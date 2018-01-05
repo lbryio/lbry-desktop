@@ -1,9 +1,9 @@
-import React from "react";
-import { doAuthNavigate } from "redux/actions/navigation";
-import { connect } from "react-redux";
-import { doFetchAccessToken } from "redux/actions/user";
-import { selectAccessToken, selectUser } from "redux/selectors/user";
-import HelpPage from "./view";
+import React from 'react';
+import { doAuthNavigate } from 'redux/actions/navigation';
+import { connect } from 'react-redux';
+import { doFetchAccessToken } from 'redux/actions/user';
+import { selectAccessToken, selectUser } from 'redux/selectors/user';
+import HelpPage from './view';
 
 const select = state => ({
   user: selectUser(state),
@@ -11,7 +11,7 @@ const select = state => ({
 });
 
 const perform = dispatch => ({
-  doAuth: () => dispatch(doAuthNavigate("/help")),
+  doAuth: () => dispatch(doAuthNavigate('/help')),
   fetchAccessToken: () => dispatch(doFetchAccessToken()),
 });
 

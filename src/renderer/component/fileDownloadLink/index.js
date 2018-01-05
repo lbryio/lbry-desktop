@@ -1,20 +1,20 @@
-import React from "react";
-import { connect } from "react-redux";
+import React from 'react';
+import { connect } from 'react-redux';
 import {
   makeSelectFileInfoForUri,
   makeSelectDownloadingForUri,
   makeSelectLoadingForUri,
-} from "redux/selectors/file_info";
-import { makeSelectCostInfoForUri } from "redux/selectors/cost_info";
-import { doFetchAvailability } from "redux/actions/availability";
-import { doOpenFileInShell } from "redux/actions/file_info";
-import { doPurchaseUri, doStartDownload } from "redux/actions/content";
-import { doPause } from "redux/actions/media";
-import FileDownloadLink from "./view";
+} from 'redux/selectors/file_info';
+import { makeSelectCostInfoForUri } from 'redux/selectors/cost_info';
+import { doFetchAvailability } from 'redux/actions/availability';
+import { doOpenFileInShell } from 'redux/actions/file_info';
+import { doPurchaseUri, doStartDownload } from 'redux/actions/content';
+import { doPause } from 'redux/actions/media';
+import FileDownloadLink from './view';
 
 const select = (state, props) => ({
   fileInfo: makeSelectFileInfoForUri(props.uri)(state),
-  /*availability check is disabled due to poor performance, TBD if it dies forever or requires daemon fix*/
+  /* availability check is disabled due to poor performance, TBD if it dies forever or requires daemon fix */
   downloading: makeSelectDownloadingForUri(props.uri)(state),
   costInfo: makeSelectCostInfoForUri(props.uri)(state),
   loading: makeSelectLoadingForUri(props.uri)(state),

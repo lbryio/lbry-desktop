@@ -1,4 +1,4 @@
-import * as types from "constants/action_types";
+import * as ACTIONS from 'constants/action_types';
 
 const reducers = {};
 const defaultState = {
@@ -6,15 +6,12 @@ const defaultState = {
   searching: false,
 };
 
-reducers[types.SEARCH_STARTED] = function(state, action) {
-  const { query } = action.data;
-
-  return Object.assign({}, state, {
+reducers[ACTIONS.SEARCH_STARTED] = state =>
+  Object.assign({}, state, {
     searching: true,
   });
-};
 
-reducers[types.SEARCH_COMPLETED] = function(state, action) {
+reducers[ACTIONS.SEARCH_COMPLETED] = (state, action) => {
   const { query, uris } = action.data;
 
   return Object.assign({}, state, {
@@ -23,11 +20,10 @@ reducers[types.SEARCH_COMPLETED] = function(state, action) {
   });
 };
 
-reducers[types.SEARCH_CANCELLED] = function(state, action) {
-  return Object.assign({}, state, {
+reducers[ACTIONS.SEARCH_CANCELLED] = state =>
+  Object.assign({}, state, {
     searching: false,
   });
-};
 
 export default function reducer(state = defaultState, action) {
   const handler = reducers[action.type];

@@ -1,40 +1,37 @@
-import * as types from "constants/action_types";
-import { parseQueryParams } from "util/query_params";
+import * as ACTIONS from 'constants/action_types';
 
-const currentPath = () => {
-  const hash = document.location.hash;
-  if (hash !== "") return hash.replace(/^#/, "");
-  else return "/discover";
+const getCurrentPath = () => {
+  const { hash } = document.location;
+  if (hash !== '') return hash.replace(/^#/, '');
+  return '/discover';
 };
 
 const reducers = {};
 const defaultState = {
-  currentPath: currentPath(),
-  pathAfterAuth: "/discover",
+  currentPath: getCurrentPath(),
+  pathAfterAuth: '/discover',
   index: 0,
   stack: [],
 };
 
-reducers[types.DAEMON_READY] = function(state, action) {
+reducers[ACTIONS.DAEMON_READY] = state => {
   const { currentPath } = state;
-  const params = parseQueryParams(currentPath.split("?")[1] || "");
 
   return Object.assign({}, state, {
     stack: [{ path: currentPath, scrollY: 0 }],
   });
 };
 
-reducers[types.CHANGE_AFTER_AUTH_PATH] = function(state, action) {
-  return Object.assign({}, state, {
+reducers[ACTIONS.CHANGE_AFTER_AUTH_PATH] = (state, action) =>
+  Object.assign({}, state, {
     pathAfterAuth: action.data.path,
   });
-};
 
-reducers[types.HISTORY_NAVIGATE] = (state, action) => {
+reducers[ACTIONS.HISTORY_NAVIGATE] = (state, action) => {
   const { stack, index } = state;
-  const { url: path, index: newIndex, scrollY } = action.data;
+  const { url: path, index: newIndex } = action.data;
 
-  let newState = {
+  const newState = {
     currentPath: path,
   };
 
@@ -46,12 +43,11 @@ reducers[types.HISTORY_NAVIGATE] = (state, action) => {
     newState.index = newState.stack.length - 1;
   }
 
-  history.replaceState(null, null, "#" + path); //this allows currentPath() to retain the URL on reload
   return Object.assign({}, state, newState);
 };
 
-reducers[types.WINDOW_SCROLLED] = (state, action) => {
-  const { stack, index } = state;
+reducers[ACTIONS.WINDOW_SCROLLED] = (state, action) => {
+  const { index } = state;
   const { scrollY } = action.data;
 
   return Object.assign({}, state, {
@@ -61,7 +57,7 @@ reducers[types.WINDOW_SCROLLED] = (state, action) => {
       }
       return {
         ...stackItem,
-        scrollY: scrollY,
+        scrollY,
       };
     }),
   });
