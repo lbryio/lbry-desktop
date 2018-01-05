@@ -20,12 +20,7 @@ import app from './app';
 const { contextMenu } = remote.require('./main.js');
 
 window.addEventListener('contextmenu', event => {
-  contextMenu.showContextMenu(
-    remote.getCurrentWindow(),
-    event.x,
-    event.y,
-    app.env === 'development'
-  );
+  contextMenu(remote.getCurrentWindow(), event.x, event.y, app.env === 'development');
   event.preventDefault();
 });
 

@@ -10,9 +10,9 @@ import ChildProcess from 'child_process';
 import Assert from 'assert';
 import { app, BrowserWindow, globalShortcut, ipcMain, Menu, Tray } from 'electron';
 import mainMenu from './menu/mainMenu';
+import contextMenu from './menu/contextMenu';
 
 const localVersion = app.getVersion();
-export { contextMenu as Default } from './menu/contextMenu';
 
 // Debug configs
 const isDevelopment = process.env.NODE_ENV === 'development';
@@ -526,3 +526,5 @@ ipcMain.on('get-auth-token', event => {
 ipcMain.on('set-auth-token', (event, token) => {
   Keytar.setPassword('LBRY', 'auth_token', token ? token.toString().trim() : null);
 });
+
+export { contextMenu };
