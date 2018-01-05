@@ -14,7 +14,7 @@ export const doPause = () => (dispatch: Dispatch) =>
     type: actions.MEDIA_PAUSE,
   });
 
-export function savePosition(claimId, position) {
+export function savePosition(claimId: String, position: Number) {
   return function(dispatch: Dispatch, getState: Function) {
     const state = getState();
     const claim = state.claims.byId[claimId];
