@@ -23,7 +23,6 @@ class VideoPlayer extends React.PureComponent {
   componentWillReceiveProps(next) {
     const el = this.refs.media.children[0];
     if (!this.props.paused && next.paused && !el.paused) el.pause();
-    // if (this.props.paused && !next.paused && el.paused) el.play();
   }
 
   componentDidMount() {
