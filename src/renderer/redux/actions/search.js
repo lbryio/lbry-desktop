@@ -6,10 +6,10 @@ import { selectCurrentPage } from 'redux/selectors/navigation';
 import batchActions from 'util/batchActions';
 
 // TODO: this should be in a util
-const handleResponse = response =>
-  response.status === 200
-    ? Promise.resolve(response.json())
-    : Promise.reject(new Error(response.statusText));
+const handleSearchApiResponse = searchResponse =>
+  searchResponse.status === 200
+    ? Promise.resolve(searchResponse.json())
+    : Promise.reject(new Error(searchResponse.statusText));
 
 export const doSearch = rawQuery => (dispatch, getState) => {
   const state = getState();
@@ -19,13 +19,13 @@ export const doSearch = rawQuery => (dispatch, getState) => {
 
   if (!query) {
     dispatch({
-      type: ACTIONS.SEARCH_CANCELLED,
+      type: ACTIONS.SEARCH_FAIL,
     });
     return;
   }
 
   dispatch({
-    type: ACTIONS.SEARCH_STARTED,
+    type: ACTIONS.SEARCH_START,
     data: { query },
   });
 
@@ -33,7 +33,7 @@ export const doSearch = rawQuery => (dispatch, getState) => {
     dispatch(doNavigate('search', { query }));
   } else {
     fetch(`https://lighthouse.lbry.io/search?s=${query}`)
-      .then(handleResponse)
+      .then(handleSearchApiResponse)
       .then(data => {
         const uris = [];
         const actions = [];
@@ -48,7 +48,7 @@ export const doSearch = rawQuery => (dispatch, getState) => {
         });
 
         actions.push({
-          type: ACTIONS.SEARCH_COMPLETED,
+          type: ACTIONS.SEARCH_SUCCESS,
           data: {
             query,
             uris,
@@ -58,7 +58,7 @@ export const doSearch = rawQuery => (dispatch, getState) => {
       })
       .catch(() => {
         dispatch({
-          type: ACTIONS.SEARCH_CANCELLED,
+          type: ACTIONS.SEARCH_FAIL,
         });
       });
   }
@@ -70,7 +70,7 @@ export const updateSearchQuery = searchQuery => ({
 });
 
 export const getSearchSuggestions = value => dispatch => {
-  dispatch({ type: ACTIONS.GET_SEARCH_SUGGESTIONS_START });
+  dispatch({ type: ACTIONS.SEARCH_SUGGESTIONS_START });
   if (!value) {
     dispatch({
       type: ACTIONS.GET_SEARCH_SUGGESTIONS_SUCCESS,
@@ -87,7 +87,7 @@ export const getSearchSuggestions = value => dispatch => {
 
   // need to handle spaces in the query?
   fetch(`https://lighthouse.lbry.io/autocomplete?s=${searchValue}`)
-    .then(handleResponse)
+    .then(handleSearchApiResponse)
     .then(suggestions => {
       const formattedSuggestions = suggestions.slice(0, 5).map(suggestion => ({
         label: suggestion,

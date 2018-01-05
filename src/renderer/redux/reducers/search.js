@@ -20,11 +20,11 @@ const defaultState = {
 
 export default handleActions(
   {
-    [ACTIONS.SEARCH_STARTED]: (state: SearchState): SearchState => ({
+    [ACTIONS.SEARCH_START]: (state: SearchState): SearchState => ({
       ...state,
       searching: true,
     }),
-    [ACTIONS.SEARCH_COMPLETED]: (state: SearchState, action): SearchState => {
+    [ACTIONS.SEARCH_SUCCESS]: (state: SearchState, action): SearchState => {
       const { query, uris } = action.data;
 
       return {
@@ -34,7 +34,7 @@ export default handleActions(
       };
     },
 
-    [ACTIONS.SEARCH_CANCELLED]: (state: SearchState): SearchState => ({
+    [ACTIONS.SEARCH_FAIL]: (state: SearchState): SearchState => ({
       ...state,
       searching: false,
     }),
@@ -46,7 +46,7 @@ export default handleActions(
       isActive: true,
     }),
 
-    [ACTIONS.GET_SEARCH_SUGGESTIONS_START]: (state: SearchState): SearchState => ({
+    [ACTIONS.SEARCH_SUGGESTIONS_START]: (state: SearchState): SearchState => ({
       ...state,
       searchingForSuggestions: true,
       suggestions: [],
