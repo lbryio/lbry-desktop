@@ -279,7 +279,9 @@ export function doLoadVideo(uri) {
         });
         dispatch(
           doAlertError(
-            `Failed to download ${uri}, please try again. If this problem persists, visit https://lbry.io/faq/support for support.`
+            `Failed to download ${
+              uri
+            }, please try again. If this problem persists, visit https://lbry.io/faq/support for support.`
           )
         );
       });
