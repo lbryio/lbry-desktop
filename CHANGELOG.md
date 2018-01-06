@@ -8,15 +8,17 @@ Web UI version numbers should always match the corresponding version of LBRY App
 
 ## [Unreleased]
 ### Added
-  *
+  * Video state tracking in redux - developer only (#890)
   *
 
 ### Changed
-  *
+  * Improved text content in app (#921)
   *
 
 ### Fixed
-  *
+  * Right click works in the app again (#928)
+  * Icons are now the rights size (#925)
+  * Fixed tip sending error (#918)
   *
 
 ### Deprecated
