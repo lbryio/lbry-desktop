@@ -48,10 +48,14 @@ let daemonSubprocess;
 // if it dies when we didn't ask it to shut down, we want to alert the user.
 let daemonStopRequested = false;
 
-// This keeps track of whether the user has declined an update that was downloaded
-// through the Electron auto-update system. When the user declines an update on Windows,
-// they will get a confusing dialog, so we show our own dialog first.
-let autoUpdateDeclined = false;
+
+// This is set to true if an auto update has been downloaded through the Electron
+// auto-update system and is ready to install. If the user declined an update earlier,
+// it will still install on shutdown.
+let autoUpdateDownloaded = false;
+
+// Keeps track of whether the user has accepted an auto-update through the interface.
+let autoUpdateAccepted = false;
 
 // This is used to keep track of whether we are showing he special dialog
 // that we show on Windows after you decline an upgrade and close the app later.
@@ -446,20 +450,26 @@ app.on('before-quit', event => {
     // event will be triggered re-entrantly once preparation is done.
     event.preventDefault();
     shutdownDaemonAndQuit();
-  } else if (process.platform == 'win32' && autoUpdateDeclined && !showingAutoUpdateCloseAlert) {
-    // On Windows, if the user declined an update and closes the app later,
-    // they get a confusing permission escalation dialog, so we display a
-    // dialog to warn them.
-    event.preventDefault();
-    showingAutoUpdateCloseAlert = true;
-    dialog.showMessageBox({
-      type: "info",
-      title: "LBRY Will Upgrade",
-      message: "Please select \"Yes\" at the upgrade prompt shown after the app closes.",
-    }, () => {
-      // After the user approves the dialog, we can quit once and for all.
-      quitNow();
-    });
+  } else if (autoUpdateDownloaded) {
+    if (autoUpdateAccepted) {
+      // User accepted the update, so install the update and restart.
+      autoUpdater.quitAndInstall();
+    } else if (process.platform == 'win32' && !showingAutoUpdateCloseAlert) {
+      // We have an update downloaded, but the user declined it (or closed the app without
+      // accepting it). Now the user is closing the app, so the new update will install.
+      // On Mac this is silent, but on Windows they get a confusing permission escalation
+      // dialog, so we show Windows users a warning dialog first.
+      event.preventDefault();
+      showingAutoUpdateCloseAlert = true;
+      dialog.showMessageBox({
+        type: "info",
+        title: "LBRY Will Upgrade",
+        message: "Please select \"Yes\" at the upgrade prompt shown after the app closes.",
+      }, () => {
+        // After the user approves the dialog, we can quit once and for all.
+        quitNow();
+      });
+    }
   }
 });
 
@@ -546,14 +556,17 @@ ipcMain.on('version-info-requested', () => {
   });
 });
 
-ipcMain.on('autoUpdate', () => {
+
+autoUpdater.on('update-downloaded', () => {
+  autoUpdateDownloaded = true;
+});
+
+ipcMain.on('autoUpdateAccepted', () => {
+  autoUpdateAccepted = true;
   minimize = false;
   app.quit();
 });
 
-ipcMain.on('autoUpdateDeclined', () => {
-  autoUpdateDeclined = true;
-});
 
 ipcMain.on('get-auth-token', event => {
   Keytar.getPassword('LBRY', 'auth_token').then(token => {

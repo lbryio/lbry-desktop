@@ -17,7 +17,7 @@ class ModalAutoUpdateDownloaded extends React.PureComponent {
         confirmButtonLabel={__("Update and Restart")}
         abortButtonLabel={__("Don't Update")}
         onConfirmed={() => {
-          ipcRenderer.send("autoUpdate");
+          ipcRenderer.send("autoUpdateAccepted");
         }}
         onAborted={() => {
           ipcRenderer.send("autoUpdateDeclined");
