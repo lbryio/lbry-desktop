@@ -21,16 +21,24 @@ class VideoPlayer extends React.PureComponent {
     this.togglePlayListener = this.togglePlay.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.videoPause) {
-      this.refs.media.children[0].pause();
-      this.props.setVideoPause(false);
-    }
+  componentWillReceiveProps(next) {
+    const el = this.refs.media.children[0];
+    if (!this.props.paused && next.paused && !el.paused) el.pause();
   }
 
   componentDidMount() {
     const container = this.refs.media;
-    const { contentType, downloadPath, mediaType, changeVolume, volume } = this.props;
+    const {
+      contentType,
+      downloadPath,
+      mediaType,
+      changeVolume,
+      volume,
+      position,
+      claim,
+      uri,
+    } = this.props;
+
     const loadedMetadata = e => {
       this.setState({ hasMetadata: true, startedPlaying: true });
       this.refs.media.children[0].play();
@@ -61,6 +69,12 @@ class VideoPlayer extends React.PureComponent {
     document.addEventListener('keydown', this.togglePlayListener);
     const mediaElement = this.refs.media.children[0];
     if (mediaElement) {
+      mediaElement.currentTime = position || 0;
+      mediaElement.addEventListener('play', () => this.props.doPlay());
+      mediaElement.addEventListener('pause', () => this.props.doPause());
+      mediaElement.addEventListener('timeupdate', () =>
+        this.props.savePosition(claim.claim_id, mediaElement.currentTime)
+      );
       mediaElement.addEventListener('click', this.togglePlayListener);
       mediaElement.addEventListener('loadedmetadata', loadedMetadata.bind(this), {
         once: true,
@@ -79,6 +93,7 @@ class VideoPlayer extends React.PureComponent {
     if (mediaElement) {
       mediaElement.removeEventListener('click', this.togglePlayListener);
     }
+    this.props.doPause();
   }
 
   renderAudio(container, autoplay) {

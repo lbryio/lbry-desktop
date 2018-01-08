@@ -9,7 +9,7 @@ import { makeSelectCostInfoForUri } from 'redux/selectors/cost_info';
 import { doFetchAvailability } from 'redux/actions/availability';
 import { doOpenFileInShell } from 'redux/actions/file_info';
 import { doPurchaseUri, doStartDownload } from 'redux/actions/content';
-import { setVideoPause } from 'redux/actions/video';
+import { doPause } from 'redux/actions/media';
 import FileDownloadLink from './view';
 
 const select = (state, props) => ({
@@ -25,7 +25,7 @@ const perform = dispatch => ({
   openInShell: path => dispatch(doOpenFileInShell(path)),
   purchaseUri: uri => dispatch(doPurchaseUri(uri)),
   restartDownload: (uri, outpoint) => dispatch(doStartDownload(uri, outpoint)),
-  setVideoPause: val => dispatch(setVideoPause(val)),
+  doPause: () => dispatch(doPause()),
 });
 
 export default connect(select, perform)(FileDownloadLink);

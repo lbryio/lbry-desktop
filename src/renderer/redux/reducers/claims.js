@@ -4,7 +4,7 @@ const reducers = {};
 
 const defaultState = {};
 
-reducers[ACTIONS.RESOLVE_URIS_COMPLETED] = function(state, action) {
+reducers[ACTIONS.RESOLVE_URIS_COMPLETED] = (state, action) => {
   const { resolveInfo } = action.data;
   const byUri = Object.assign({}, state.claimsByUri);
   const byId = Object.assign({}, state.byId);
@@ -33,13 +33,12 @@ reducers[ACTIONS.RESOLVE_URIS_COMPLETED] = function(state, action) {
   });
 };
 
-reducers[ACTIONS.FETCH_CLAIM_LIST_MINE_STARTED] = function(state) {
-  return Object.assign({}, state, {
+reducers[ACTIONS.FETCH_CLAIM_LIST_MINE_STARTED] = state =>
+  Object.assign({}, state, {
     isFetchingClaimListMine: true,
   });
-};
 
-reducers[ACTIONS.FETCH_CLAIM_LIST_MINE_COMPLETED] = function(state, action) {
+reducers[ACTIONS.FETCH_CLAIM_LIST_MINE_COMPLETED] = (state, action) => {
   const { claims } = action.data;
   const byId = Object.assign({}, state.byId);
   const pendingById = Object.assign({}, state.pendingById);
@@ -72,11 +71,10 @@ reducers[ACTIONS.FETCH_CLAIM_LIST_MINE_COMPLETED] = function(state, action) {
   });
 };
 
-reducers[ACTIONS.FETCH_CHANNEL_LIST_MINE_STARTED] = function(state) {
-  return Object.assign({}, state, { fetchingMyChannels: true });
-};
+reducers[ACTIONS.FETCH_CHANNEL_LIST_MINE_STARTED] = state =>
+  Object.assign({}, state, { fetchingMyChannels: true });
 
-reducers[ACTIONS.FETCH_CHANNEL_LIST_MINE_COMPLETED] = function(state, action) {
+reducers[ACTIONS.FETCH_CHANNEL_LIST_MINE_COMPLETED] = (state, action) => {
   const { claims } = action.data;
   const myChannelClaims = new Set(state.myChannelClaims);
   const byId = Object.assign({}, state.byId);
@@ -93,7 +91,7 @@ reducers[ACTIONS.FETCH_CHANNEL_LIST_MINE_COMPLETED] = function(state, action) {
   });
 };
 
-reducers[ACTIONS.FETCH_CHANNEL_CLAIMS_STARTED] = function(state, action) {
+reducers[ACTIONS.FETCH_CHANNEL_CLAIMS_STARTED] = (state, action) => {
   const { uri, page } = action.data;
   const fetchingChannelClaims = Object.assign({}, state.fetchingChannelClaims);
 
@@ -104,7 +102,7 @@ reducers[ACTIONS.FETCH_CHANNEL_CLAIMS_STARTED] = function(state, action) {
   });
 };
 
-reducers[ACTIONS.FETCH_CHANNEL_CLAIMS_COMPLETED] = function(state, action) {
+reducers[ACTIONS.FETCH_CHANNEL_CLAIMS_COMPLETED] = (state, action) => {
   const { uri, claims, page } = action.data;
 
   const claimsByChannel = Object.assign({}, state.claimsByChannel);
@@ -134,7 +132,7 @@ reducers[ACTIONS.FETCH_CHANNEL_CLAIMS_COMPLETED] = function(state, action) {
   });
 };
 
-reducers[ACTIONS.ABANDON_CLAIM_STARTED] = function(state, action) {
+reducers[ACTIONS.ABANDON_CLAIM_STARTED] = (state, action) => {
   const { claimId } = action.data;
   const abandoningById = Object.assign({}, state.abandoningById);
 
@@ -145,7 +143,7 @@ reducers[ACTIONS.ABANDON_CLAIM_STARTED] = function(state, action) {
   });
 };
 
-reducers[ACTIONS.ABANDON_CLAIM_SUCCEEDED] = function(state, action) {
+reducers[ACTIONS.ABANDON_CLAIM_SUCCEEDED] = (state, action) => {
   const { claimId } = action.data;
   const byId = Object.assign({}, state.byId);
   const claimsByUri = Object.assign({}, state.claimsByUri);
@@ -164,7 +162,7 @@ reducers[ACTIONS.ABANDON_CLAIM_SUCCEEDED] = function(state, action) {
   });
 };
 
-reducers[ACTIONS.CREATE_CHANNEL_COMPLETED] = function(state, action) {
+reducers[ACTIONS.CREATE_CHANNEL_COMPLETED] = (state, action) => {
   const { channelClaim } = action.data;
   const byId = Object.assign({}, state.byId);
   const myChannelClaims = new Set(state.myChannelClaims);

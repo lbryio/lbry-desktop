@@ -28,7 +28,7 @@ Lbryuri.REGEXP_ADDRESS = /^b(?=[^0OIl]{32,33})[0-9A-Za-z]{32,33}$/;
  *   - contentName (string): For anon claims, the name; for channel claims, the path
  *   - channelName (string, if present): Channel name without @
  */
-Lbryuri.parse = function(uri, requireProto = false) {
+Lbryuri.parse = (uri, requireProto = false) => {
   // Break into components. Empty sub-matches are converted to null
   const componentsRegex = new RegExp(
     '^((?:lbry://)?)' + // protocol
@@ -147,7 +147,7 @@ Lbryuri.parse = function(uri, requireProto = false) {
  *
  * The channelName key will accept names with or without the @ prefix.
  */
-Lbryuri.build = function(uriObj, includeProto = true) {
+Lbryuri.build = (uriObj, includeProto = true) => {
   const { claimId, claimSequence, bidPosition, contentName, channelName } = uriObj;
 
   let { name, path } = uriObj;
@@ -192,14 +192,14 @@ Lbryuri.build = function(uriObj, includeProto = true) {
 
 /* Takes a parseable LBRY URI and converts it to standard, canonical format (currently this just
  * consists of adding the lbry:// prefix if needed) */
-Lbryuri.normalize = function(uri) {
+Lbryuri.normalize = uri => {
   if (uri.match(/pending_claim/)) return uri;
 
   const { name, path, bidPosition, claimSequence, claimId } = Lbryuri.parse(uri);
   return Lbryuri.build({ name, path, claimSequence, bidPosition, claimId });
 };
 
-Lbryuri.isValid = function(uri) {
+Lbryuri.isValid = uri => {
   let parts;
   try {
     parts = Lbryuri.parse(Lbryuri.normalize(uri));
@@ -209,12 +209,12 @@ Lbryuri.isValid = function(uri) {
   return parts && parts.name;
 };
 
-Lbryuri.isValidName = function(name, checkCase = true) {
+Lbryuri.isValidName = (name, checkCase = true) => {
   const regexp = new RegExp('^[a-z0-9-]+$', checkCase ? '' : 'i');
   return regexp.test(name);
 };
 
-Lbryuri.isClaimable = function(uri) {
+Lbryuri.isClaimable = uri => {
   let parts;
   try {
     parts = Lbryuri.parse(Lbryuri.normalize(uri));

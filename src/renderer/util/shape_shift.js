@@ -1,6 +1,6 @@
 // these don't need to be exact
-// shapeshift does a more thourough check on validity
-// just general matches to prevent unneccesary api calls
+// Shapeshift does a more thorough check on validity
+// just general matches to prevent unnecessary api calls
 export const coinRegexPatterns = {
   BTC: /^[13][a-km-zA-HJ-NP-Z1-9]{25,34}$/,
   BCH: /^[13][a-km-zA-HJ-NP-Z1-9]{25,34}$/,

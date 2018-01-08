@@ -3,7 +3,7 @@ import * as ACTIONS from 'constants/action_types';
 const reducers = {};
 const defaultState = {};
 
-reducers[ACTIONS.FETCH_AVAILABILITY_STARTED] = function(state, action) {
+reducers[ACTIONS.FETCH_AVAILABILITY_STARTED] = (state, action) => {
   const { uri } = action.data;
   const newFetching = Object.assign({}, state.fetching);
 
@@ -14,7 +14,7 @@ reducers[ACTIONS.FETCH_AVAILABILITY_STARTED] = function(state, action) {
   });
 };
 
-reducers[ACTIONS.FETCH_AVAILABILITY_COMPLETED] = function(state, action) {
+reducers[ACTIONS.FETCH_AVAILABILITY_COMPLETED] = (state, action) => {
   const { uri, availability } = action.data;
 
   const newFetching = Object.assign({}, state.fetching);

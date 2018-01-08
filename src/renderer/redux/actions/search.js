@@ -7,7 +7,7 @@ import batchActions from 'util/batchActions';
 
 // eslint-disable-next-line import/prefer-default-export
 export function doSearch(rawQuery) {
-  return function(dispatch, getState) {
+  return (dispatch, getState) => {
     const state = getState();
     const page = selectCurrentPage(state);
 

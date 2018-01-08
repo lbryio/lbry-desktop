@@ -1,36 +1,47 @@
+import amplitude from 'amplitude-js';
+import App from 'component/app';
+import SnackBar from 'component/snackBar';
+import SplashScreen from 'component/splash';
+import * as ACTIONS from 'constants/action_types';
+import { ipcRenderer, remote, shell } from 'electron';
+import lbry from 'lbry';
 /* eslint-disable react/jsx-filename-extension */
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from 'component/app';
-import SnackBar from 'component/snackBar';
 import { Provider } from 'react-redux';
-import store from 'store';
-import SplashScreen from 'component/splash';
-import { doDaemonReady } from 'redux/actions/app';
+import { doConditionalAuthNavigate, doDaemonReady, doShowSnackBar } from 'redux/actions/app';
 import { doNavigate } from 'redux/actions/navigation';
 import { doDownloadLanguages } from 'redux/actions/settings';
-import * as ACTIONS from 'constants/action_types';
-import amplitude from 'amplitude-js';
-import lbry from 'lbry';
+import { doUserEmailVerify } from 'redux/actions/user';
 import 'scss/all.scss';
-import { ipcRenderer, remote, shell } from 'electron';
+import store from 'store';
 import app from './app';
 
 const { contextMenu } = remote.require('./main.js');
 
 window.addEventListener('contextmenu', event => {
-  contextMenu.showContextMenu(
-    remote.getCurrentWindow(),
-    event.x,
-    event.y,
-    app.env === 'development'
-  );
+  contextMenu(remote.getCurrentWindow(), event.x, event.y, app.env === 'development');
   event.preventDefault();
 });
 
-ipcRenderer.on('open-uri-requested', (event, uri) => {
+ipcRenderer.on('open-uri-requested', (event, uri, newSession) => {
   if (uri && uri.startsWith('lbry://')) {
-    app.store.dispatch(doNavigate('/show', { uri }));
+    if (uri.startsWith('lbry://?verify=')) {
+      let verification = {};
+      try {
+        verification = JSON.parse(atob(uri.substring(15)));
+      } catch (error) {
+        console.log(error);
+      }
+      if (verification.token && verification.recaptcha) {
+        app.store.dispatch(doConditionalAuthNavigate(newSession));
+        app.store.dispatch(doUserEmailVerify(verification.token, verification.recaptcha));
+      } else {
+        app.store.dispatch(doShowSnackBar({ message: 'Invalid Verification URI' }));
+      }
+    } else {
+      app.store.dispatch(doNavigate('/show', { uri }));
+    }
   }
 });
 
@@ -48,10 +59,10 @@ ipcRenderer.on('window-is-focused', () => {
   dock.setBadge('');
 });
 
-(function(history, ...args) {
+((history, ...args) => {
   const { replaceState } = history;
   const newHistory = history;
-  newHistory.replaceState = function(_, __, path) {
+  newHistory.replaceState = (_, __, path) => {
     amplitude.getInstance().logEvent('NAVIGATION', { destination: path ? path.slice(1) : path });
     return replaceState.apply(history, args);
   };
@@ -85,7 +96,7 @@ document.addEventListener('click', event => {
   }
 });
 
-const init = function initializeReactApp() {
+const init = () => {
   app.store.dispatch(doDownloadLanguages());
 
   function onDaemonReady() {

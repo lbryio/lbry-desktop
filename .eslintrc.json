@@ -1,7 +1,5 @@
 {
-  "plugins": [
-    "flowtype"
-  ],
+  "plugins": ["flowtype"],
   "extends": [
     "airbnb",
     "plugin:import/electron",
@@ -28,7 +26,8 @@
     "app": true
   },
   "rules": {
-    "import/no-commonjs": 1,
-    "import/no-amd": 1
+    "import/no-commonjs": "warn",
+    "import/no-amd": "warn",
+    "func-names": ["warn", "as-needed"]
   }
 }

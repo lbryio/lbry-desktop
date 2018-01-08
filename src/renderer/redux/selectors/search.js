@@ -1,9 +1,9 @@
-import { createSelector } from 'reselect';
 import {
-  selectPageTitle,
   selectCurrentPage,
   selectCurrentParams,
+  selectPageTitle,
 } from 'redux/selectors/navigation';
+import { createSelector } from 'reselect';
 
 export const selectState = state => state.search || {};
 
@@ -13,7 +13,7 @@ export const selectSearchQuery = createSelector(
   (page, params) => (page === 'search' ? params && params.query : null)
 );
 
-export const selectIsSearching = createSelector(selectState, state => !!state.searching);
+export const selectIsSearching = createSelector(selectState, state => state.searching);
 
 export const selectSearchUrisByQuery = createSelector(selectState, state => state.urisByQuery);
 

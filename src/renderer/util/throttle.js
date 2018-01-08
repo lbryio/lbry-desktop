@@ -14,7 +14,7 @@ export default function throttle(func, wait, options = {}) {
   let previous = 0;
   const getNow = () => new Date().getTime();
 
-  const later = function() {
+  const later = () => {
     previous = options.leading === false ? 0 : getNow();
     timeout = null;
     result = func.apply(context, args);
@@ -24,7 +24,7 @@ export default function throttle(func, wait, options = {}) {
     }
   };
 
-  const throttled = function(...funcArgs) {
+  const throttled = function throttled(...funcArgs) {
     const now = getNow();
 
     if (!previous && options.leading === false) previous = now;
@@ -53,7 +53,7 @@ export default function throttle(func, wait, options = {}) {
     return result;
   };
 
-  throttled.cancel = function() {
+  throttled.cancel = () => {
     clearTimeout(timeout);
     previous = 0;
     timeout = null;

@@ -6,13 +6,12 @@ const defaultState = {
   searching: false,
 };
 
-reducers[ACTIONS.SEARCH_STARTED] = function(state) {
-  return Object.assign({}, state, {
+reducers[ACTIONS.SEARCH_STARTED] = state =>
+  Object.assign({}, state, {
     searching: true,
   });
-};
 
-reducers[ACTIONS.SEARCH_COMPLETED] = function(state, action) {
+reducers[ACTIONS.SEARCH_COMPLETED] = (state, action) => {
   const { query, uris } = action.data;
 
   return Object.assign({}, state, {
@@ -21,11 +20,10 @@ reducers[ACTIONS.SEARCH_COMPLETED] = function(state, action) {
   });
 };
 
-reducers[ACTIONS.SEARCH_CANCELLED] = function(state) {
-  return Object.assign({}, state, {
+reducers[ACTIONS.SEARCH_CANCELLED] = state =>
+  Object.assign({}, state, {
     searching: false,
   });
-};
 
 export default function reducer(state = defaultState, action) {
   const handler = reducers[action.type];

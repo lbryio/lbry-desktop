@@ -4,7 +4,7 @@ import { selectClaimsByUri } from 'redux/selectors/claims';
 
 // eslint-disable-next-line import/prefer-default-export
 export function doFetchCostInfoForUri(uri) {
-  return function(dispatch, getState) {
+  return (dispatch, getState) => {
     const state = getState();
     const claim = selectClaimsByUri(state)[uri];
 

@@ -1,5 +1,6 @@
 import React from 'react';
-import { Icon, BusyMessage } from 'component/common';
+import { BusyMessage } from 'component/common';
+import Icon from 'component/icon';
 import Link from 'component/link';
 
 class FileDownloadLink extends React.PureComponent {
@@ -42,12 +43,12 @@ class FileDownloadLink extends React.PureComponent {
       purchaseUri,
       costInfo,
       loading,
-      setVideoPause,
+      doPause,
     } = this.props;
 
     const openFile = () => {
       openInShell(fileInfo.download_path);
-      setVideoPause(true);
+      doPause();
     };
 
     if (loading || downloading) {

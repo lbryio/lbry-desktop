@@ -1,6 +1,6 @@
 {
   "name": "lbry-app",
-  "version": "0.19.1",
+  "version": "0.19.4rc2",
   "description": "A browser for the LBRY network, a digital marketplace controlled by its users.",
   "homepage": "https://lbry.io/",
   "bugs": {
@@ -23,7 +23,7 @@
     "postinstall": "electron-builder install-app-deps",
     "precommit": "lint-staged",
     "lint": "eslint 'src/**/*.{js,jsx}' --fix",
-    "pretty-print": "prettier 'src/**/*.{js,jsx,scss,json}' --write"
+    "format": "prettier 'src/**/*.{js,jsx,scss,json}' --write"
   },
   "keywords": [
     "lbry"

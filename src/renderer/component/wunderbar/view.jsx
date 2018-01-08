@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import lbryuri from 'lbryuri.js';
-import { Icon } from 'component/common.js';
+import Icon from 'component/icon';
 import { parseQueryParams } from 'util/query_params';
 
 class WunderBar extends React.PureComponent {
@@ -160,7 +160,7 @@ class WunderBar extends React.PureComponent {
           onChange={this.onChange}
           onKeyPress={this.onKeyPress}
           value={this.state.address}
-          placeholder={__('Find movies, music, games, and more')}
+          placeholder={__('Find videos, music, games, and more')}
         />
       </div>
     );

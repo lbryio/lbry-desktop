@@ -10,9 +10,9 @@ import ChildProcess from 'child_process';
 import assert from 'assert';
 import { app, BrowserWindow, globalShortcut, ipcMain, Menu, Tray } from 'electron';
 import mainMenu from './menu/mainMenu';
+import contextMenu from './menu/contextMenu';
 
 const localVersion = app.getVersion();
-export { contextMenu as Default } from './menu/contextMenu';
 
 // Debug configs
 const isDevelopment = process.env.NODE_ENV === 'development';
@@ -95,7 +95,6 @@ function openItem(fullPath) {
   // Causes child process reference to be garbage collected, allowing main process to exit
   child.unref();
 }
-
 /*
  * Quits by first killing the daemon, the calling quitting for real.
  */
@@ -167,7 +166,7 @@ function createWindow() {
   if (openURI) {
     // We stored and received a URI that an external app requested before we had a window object
     window.webContents.on('did-finish-load', () => {
-      window.webContents.send('open-uri-requested', openURI);
+      window.webContents.send('open-uri-requested', openURI, true);
     });
   }
 
@@ -527,3 +526,5 @@ ipcMain.on('get-auth-token', event => {
 ipcMain.on('set-auth-token', (event, token) => {
   keytar.setPassword('LBRY', 'auth_token', token ? token.toString().trim() : null);
 });
+
+export { contextMenu };

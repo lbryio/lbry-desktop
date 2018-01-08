@@ -3,7 +3,7 @@
 import * as ACTIONS from 'constants/action_types';
 import * as MODALS from 'constants/modal_types';
 
-const { remote } = require('electron');
+import { remote } from 'electron';
 
 const win = remote.BrowserWindow.getFocusedWindow();
 
@@ -56,48 +56,42 @@ const defaultState: AppState = {
   snackBar: undefined,
 };
 
-reducers[ACTIONS.DAEMON_READY] = function(state) {
-  return Object.assign({}, state, {
+reducers[ACTIONS.DAEMON_READY] = state =>
+  Object.assign({}, state, {
     daemonReady: true,
   });
-};
 
-reducers[ACTIONS.DAEMON_VERSION_MATCH] = function(state) {
-  return Object.assign({}, state, {
+reducers[ACTIONS.DAEMON_VERSION_MATCH] = state =>
+  Object.assign({}, state, {
     daemonVersionMatched: true,
   });
-};
 
-reducers[ACTIONS.DAEMON_VERSION_MISMATCH] = function(state) {
-  return Object.assign({}, state, {
+reducers[ACTIONS.DAEMON_VERSION_MISMATCH] = state =>
+  Object.assign({}, state, {
     daemonVersionMatched: false,
     modal: MODALS.INCOMPATIBLE_DAEMON,
   });
-};
 
-reducers[ACTIONS.UPGRADE_CANCELLED] = function(state) {
-  return Object.assign({}, state, {
+reducers[ACTIONS.UPGRADE_CANCELLED] = state =>
+  Object.assign({}, state, {
     downloadProgress: null,
     upgradeDownloadComplete: false,
     modal: null,
   });
-};
 
-reducers[ACTIONS.UPGRADE_DOWNLOAD_COMPLETED] = function(state, action) {
-  return Object.assign({}, state, {
+reducers[ACTIONS.UPGRADE_DOWNLOAD_COMPLETED] = (state, action) =>
+  Object.assign({}, state, {
     downloadPath: action.data.path,
     upgradeDownloading: false,
     upgradeDownloadCompleted: true,
   });
-};
 
-reducers[ACTIONS.UPGRADE_DOWNLOAD_STARTED] = function(state) {
-  return Object.assign({}, state, {
+reducers[ACTIONS.UPGRADE_DOWNLOAD_STARTED] = state =>
+  Object.assign({}, state, {
     upgradeDownloading: true,
   });
-};
 
-reducers[ACTIONS.SKIP_UPGRADE] = function(state) {
+reducers[ACTIONS.SKIP_UPGRADE] = state => {
   sessionStorage.setItem('upgradeSkipped', 'true');
 
   return Object.assign({}, state, {
@@ -106,46 +100,40 @@ reducers[ACTIONS.SKIP_UPGRADE] = function(state) {
   });
 };
 
-reducers[ACTIONS.UPDATE_VERSION] = function(state, action) {
-  return Object.assign({}, state, {
+reducers[ACTIONS.UPDATE_VERSION] = (state, action) =>
+  Object.assign({}, state, {
     version: action.data.version,
   });
-};
 
-reducers[ACTIONS.CHECK_UPGRADE_SUCCESS] = function(state, action) {
-  return Object.assign({}, state, {
+reducers[ACTIONS.CHECK_UPGRADE_SUCCESS] = (state, action) =>
+  Object.assign({}, state, {
     isUpgradeAvailable: action.data.upgradeAvailable,
     remoteVersion: action.data.remoteVersion,
   });
-};
 
-reducers[ACTIONS.CHECK_UPGRADE_SUBSCRIBE] = function(state, action) {
-  return Object.assign({}, state, {
+reducers[ACTIONS.CHECK_UPGRADE_SUBSCRIBE] = (state, action) =>
+  Object.assign({}, state, {
     checkUpgradeTimer: action.data.checkUpgradeTimer,
   });
-};
 
-reducers[ACTIONS.OPEN_MODAL] = function(state, action) {
-  return Object.assign({}, state, {
+reducers[ACTIONS.OPEN_MODAL] = (state, action) =>
+  Object.assign({}, state, {
     modal: action.data.modal,
     modalProps: action.data.modalProps || {},
   });
-};
 
-reducers[ACTIONS.CLOSE_MODAL] = function(state) {
-  return Object.assign({}, state, {
+reducers[ACTIONS.CLOSE_MODAL] = state =>
+  Object.assign({}, state, {
     modal: undefined,
     modalProps: {},
   });
-};
 
-reducers[ACTIONS.UPGRADE_DOWNLOAD_PROGRESSED] = function(state, action) {
-  return Object.assign({}, state, {
+reducers[ACTIONS.UPGRADE_DOWNLOAD_PROGRESSED] = (state, action) =>
+  Object.assign({}, state, {
     downloadProgress: action.data.percent,
   });
-};
 
-reducers[ACTIONS.SHOW_SNACKBAR] = function(state, action) {
+reducers[ACTIONS.SHOW_SNACKBAR] = (state, action) => {
   const { message, linkText, linkTarget, isError } = action.data;
   const snackBar = Object.assign({}, state.snackBar);
   const snacks = Object.assign([], snackBar.snacks);
@@ -164,7 +152,7 @@ reducers[ACTIONS.SHOW_SNACKBAR] = function(state, action) {
   });
 };
 
-reducers[ACTIONS.REMOVE_SNACKBAR_SNACK] = function(state) {
+reducers[ACTIONS.REMOVE_SNACKBAR_SNACK] = state => {
   const snackBar = Object.assign({}, state.snackBar);
   const snacks = Object.assign([], snackBar.snacks);
   snacks.shift();
@@ -178,7 +166,7 @@ reducers[ACTIONS.REMOVE_SNACKBAR_SNACK] = function(state) {
   });
 };
 
-reducers[ACTIONS.DOWNLOADING_COMPLETED] = function(state) {
+reducers[ACTIONS.DOWNLOADING_COMPLETED] = state => {
   const { badgeNumber } = state;
 
   // Don't update the badge number if the window is focused
@@ -189,17 +177,15 @@ reducers[ACTIONS.DOWNLOADING_COMPLETED] = function(state) {
   });
 };
 
-reducers[ACTIONS.WINDOW_FOCUSED] = function(state) {
-  return Object.assign({}, state, {
+reducers[ACTIONS.WINDOW_FOCUSED] = state =>
+  Object.assign({}, state, {
     badgeNumber: 0,
   });
-};
 
-reducers[ACTIONS.VOLUME_CHANGED] = function(state, action) {
-  return Object.assign({}, state, {
+reducers[ACTIONS.VOLUME_CHANGED] = (state, action) =>
+  Object.assign({}, state, {
     volume: action.data.volume,
   });
-};
 
 export default function reducer(state: AppState = defaultState, action: any) {
   const handler = reducers[action.type];

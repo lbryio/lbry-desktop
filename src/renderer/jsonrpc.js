@@ -1,13 +1,13 @@
 const jsonrpc = {};
 
-jsonrpc.call = function callJsonRpc(
+jsonrpc.call = (
   connectionString,
   method,
   params,
   callback,
   errorCallback,
   connectFailedCallback
-) {
+) => {
   function checkAndParse(response) {
     if (response.status >= 200 && response.status < 300) {
       return response.json();

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import * as icons from 'constants/icons';
+import classnames from 'classnames';
 
 export default class Icon extends React.PureComponent {
   static propTypes = {
@@ -30,10 +31,19 @@ export default class Icon extends React.PureComponent {
   }
 
   render() {
-    const className = this.getIconClass(),
-      title = this.getIconTitle();
+    const { icon, fixed, className, leftPad } = this.props;
+    const iconClass = this.getIconClass();
+    const title = this.getIconTitle();
 
-    const spanClassName = `icon ${className}${this.props.fixed ? ' icon-fixed-width ' : ''}`;
+    const spanClassName = classnames(
+      'icon',
+      iconClass,
+      {
+        'icon-fixed-width': fixed,
+        'icon--left-pad': leftPad,
+      },
+      className
+    );
 
     return <span className={spanClassName} title={title} />;
   }

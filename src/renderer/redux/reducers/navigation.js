@@ -14,7 +14,7 @@ const defaultState = {
   stack: [],
 };
 
-reducers[ACTIONS.DAEMON_READY] = function(state) {
+reducers[ACTIONS.DAEMON_READY] = state => {
   const { currentPath } = state;
 
   return Object.assign({}, state, {
@@ -22,11 +22,10 @@ reducers[ACTIONS.DAEMON_READY] = function(state) {
   });
 };
 
-reducers[ACTIONS.CHANGE_AFTER_AUTH_PATH] = function(state, action) {
-  return Object.assign({}, state, {
+reducers[ACTIONS.CHANGE_AFTER_AUTH_PATH] = (state, action) =>
+  Object.assign({}, state, {
     pathAfterAuth: action.data.path,
   });
-};
 
 reducers[ACTIONS.HISTORY_NAVIGATE] = (state, action) => {
   const { stack, index } = state;

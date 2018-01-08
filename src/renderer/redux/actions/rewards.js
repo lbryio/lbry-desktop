@@ -1,12 +1,12 @@
 import * as ACTIONS from 'constants/action_types';
 import * as MODALS from 'constants/modal_types';
 import Lbryio from 'lbryio';
-import rewards from 'rewards';
 import { selectUnclaimedRewardsByType } from 'redux/selectors/rewards';
 import { selectUserIsRewardApproved } from 'redux/selectors/user';
+import rewards from 'rewards';
 
 export function doRewardList() {
-  return function(dispatch) {
+  return dispatch => {
     dispatch({
       type: ACTIONS.FETCH_REWARDS_STARTED,
     });
@@ -28,7 +28,7 @@ export function doRewardList() {
 }
 
 export function doClaimRewardType(rewardType) {
-  return function(dispatch, getState) {
+  return (dispatch, getState) => {
     const state = getState();
     const rewardsByType = selectUnclaimedRewardsByType(state);
     const reward = rewardsByType[rewardType];
@@ -60,7 +60,7 @@ export function doClaimRewardType(rewardType) {
           reward: successReward,
         },
       });
-      if (successReward.reward_type === rewards.TYPE_CONFIRM_EMAIL) {
+      if (successReward.reward_type === rewards.TYPE_NEW_USER) {
         dispatch({
           type: ACTIONS.OPEN_MODAL,
           data: { modal: MODALS.FIRST_REWARD },
@@ -80,7 +80,7 @@ export function doClaimRewardType(rewardType) {
 }
 
 export function doClaimEligiblePurchaseRewards() {
-  return function(dispatch, getState) {
+  return (dispatch, getState) => {
     const state = getState();
     const rewardsByType = selectUnclaimedRewardsByType(state);
     const userIsRewardApproved = selectUserIsRewardApproved(state);
@@ -100,7 +100,7 @@ export function doClaimEligiblePurchaseRewards() {
 }
 
 export function doClaimRewardClearError(reward) {
-  return function(dispatch) {
+  return dispatch => {
     dispatch({
       type: ACTIONS.CLAIM_REWARD_CLEAR_ERROR,
       data: { reward },

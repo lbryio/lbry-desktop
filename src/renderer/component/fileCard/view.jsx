@@ -87,8 +87,9 @@ class FileCard extends React.PureComponent {
               </div>
               <div className="card__subtitle">
                 <span className="card__indicators card--file-subtitle">
-                  <FilePrice uri={uri} /> {isRewardContent && <Icon icon={icons.FEATURED} />}{' '}
-                  {fileInfo && <Icon icon={icons.LOCAL} />}
+                  <FilePrice uri={uri} />{' '}
+                  {isRewardContent && <Icon icon={icons.FEATURED} leftPad />}{' '}
+                  {fileInfo && <Icon icon={icons.LOCAL} leftPad />}
                 </span>
                 <span className="card--file-subtitle">
                   <UriIndicator uri={uri} link span smallCard />

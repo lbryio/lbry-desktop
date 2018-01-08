@@ -2,12 +2,12 @@ import * as ACTIONS from 'constants/action_types';
 import * as MODALS from 'constants/modal_types';
 import Lbryio from 'lbryio';
 import { doOpenModal, doShowSnackBar } from 'redux/actions/app';
-import { doRewardList, doClaimRewardType } from 'redux/actions/rewards';
+import { doClaimRewardType, doRewardList } from 'redux/actions/rewards';
 import { selectEmailToVerify } from 'redux/selectors/user';
 import rewards from 'rewards';
 
 export function doFetchInviteStatus() {
-  return function(dispatch) {
+  return dispatch => {
     dispatch({
       type: ACTIONS.USER_INVITE_STATUS_FETCH_STARTED,
     });
@@ -32,7 +32,7 @@ export function doFetchInviteStatus() {
 }
 
 export function doAuthenticate() {
-  return function(dispatch) {
+  return dispatch => {
     dispatch({
       type: ACTIONS.AUTHENTICATION_STARTED,
     });
@@ -56,7 +56,7 @@ export function doAuthenticate() {
 }
 
 export function doUserFetch() {
-  return function(dispatch) {
+  return dispatch => {
     dispatch({
       type: ACTIONS.USER_FETCH_STARTED,
     });
@@ -79,7 +79,7 @@ export function doUserFetch() {
 }
 
 export function doUserEmailNew(email) {
-  return function(dispatch) {
+  return dispatch => {
     dispatch({
       type: ACTIONS.USER_EMAIL_NEW_STARTED,
       email,
@@ -116,20 +116,31 @@ export function doUserEmailNew(email) {
   };
 }
 
-export function doUserEmailVerify(verificationToken) {
-  return function(dispatch, getState) {
+export function doUserEmailVerifyFailure(error) {
+  return {
+    type: ACTIONS.USER_EMAIL_VERIFY_FAILURE,
+    data: { error },
+  };
+}
+
+export function doUserEmailVerify(verificationToken, recaptcha) {
+  return (dispatch, getState) => {
     const email = selectEmailToVerify(getState());
-    const trimmedVerificationToken = verificationToken.toString().trim();
 
     dispatch({
       type: ACTIONS.USER_EMAIL_VERIFY_STARTED,
-      code: trimmedVerificationToken,
+      code: verificationToken,
+      recaptcha,
     });
 
     Lbryio.call(
       'user_email',
       'confirm',
-      { verification_token: trimmedVerificationToken, email },
+      {
+        verification_token: verificationToken,
+        email,
+        recaptcha,
+      },
       'post'
     )
       .then(userEmail => {
@@ -138,23 +149,17 @@ export function doUserEmailVerify(verificationToken) {
             type: ACTIONS.USER_EMAIL_VERIFY_SUCCESS,
             data: { email },
           });
-          dispatch(doClaimRewardType(rewards.TYPE_CONFIRM_EMAIL));
           dispatch(doUserFetch());
         } else {
           throw new Error('Your email is still not verified.'); // shouldn't happen
         }
       })
-      .catch(error => {
-        dispatch({
-          type: ACTIONS.USER_EMAIL_VERIFY_FAILURE,
-          data: { error },
-        });
-      });
+      .catch(error => dispatch(doUserEmailVerifyFailure(error)));
   };
 }
 
 export function doUserIdentityVerify(stripeToken) {
-  return function(dispatch) {
+  return dispatch => {
     dispatch({
       type: ACTIONS.USER_IDENTITY_VERIFY_STARTED,
       token: stripeToken,
@@ -182,7 +187,7 @@ export function doUserIdentityVerify(stripeToken) {
 }
 
 export function doFetchAccessToken() {
-  return function(dispatch) {
+  return dispatch => {
     const success = token =>
       dispatch({
         type: ACTIONS.FETCH_ACCESS_TOKEN_SUCCESS,
@@ -193,7 +198,7 @@ export function doFetchAccessToken() {
 }
 
 export function doUserInviteNew(email) {
-  return function(dispatch) {
+  return dispatch => {
     dispatch({
       type: ACTIONS.USER_INVITE_NEW_STARTED,
     });

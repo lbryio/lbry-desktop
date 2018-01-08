@@ -1,31 +1,31 @@
-import { ipcRenderer } from 'electron';
 import * as ACTIONS from 'constants/action_types';
+import * as MODALS from 'constants/modal_types';
 import * as SETTINGS from 'constants/settings';
+import { ipcRenderer } from 'electron';
 import Lbry from 'lbry';
 import Lbryio from 'lbryio';
 import Lbryuri from 'lbryuri';
-import { makeSelectClientSetting } from 'redux/selectors/settings';
+import { doAlertError, doOpenModal } from 'redux/actions/app';
+import { doClaimEligiblePurchaseRewards } from 'redux/actions/rewards';
+import { selectBadgeNumber } from 'redux/selectors/app';
 import { selectMyClaimsRaw } from 'redux/selectors/claims';
-import { selectBalance } from 'redux/selectors/wallet';
+import { selectResolvingUris } from 'redux/selectors/content';
+import { makeSelectCostInfoForUri } from 'redux/selectors/cost_info';
 import {
   makeSelectFileInfoForUri,
   selectDownloadingByOutpoint,
   selectTotalDownloadProgress,
 } from 'redux/selectors/file_info';
-import { selectResolvingUris } from 'redux/selectors/content';
-import { makeSelectCostInfoForUri } from 'redux/selectors/cost_info';
-import { doAlertError, doOpenModal } from 'redux/actions/app';
-import { doClaimEligiblePurchaseRewards } from 'redux/actions/rewards';
-import { selectBadgeNumber } from 'redux/selectors/app';
+import { makeSelectClientSetting } from 'redux/selectors/settings';
+import { selectBalance } from 'redux/selectors/wallet';
+import batchActions from 'util/batchActions';
 import setBadge from 'util/setBadge';
 import setProgressBar from 'util/setProgressBar';
-import batchActions from 'util/batchActions';
-import * as MODALS from 'constants/modal_types';
 
 const DOWNLOAD_POLL_INTERVAL = 250;
 
 export function doResolveUris(uris) {
-  return function(dispatch, getState) {
+  return (dispatch, getState) => {
     const normalizedUris = uris.map(Lbryuri.normalize);
     const state = getState();
 
@@ -70,7 +70,7 @@ export function doResolveUri(uri) {
 }
 
 export function doFetchFeaturedUris() {
-  return function(dispatch) {
+  return dispatch => {
     dispatch({
       type: ACTIONS.FETCH_FEATURED_CONTENT_STARTED,
     });
@@ -108,7 +108,7 @@ export function doFetchFeaturedUris() {
 }
 
 export function doFetchRewardedContent() {
-  return function(dispatch) {
+  return dispatch => {
     const success = nameToClaimId => {
       dispatch({
         type: ACTIONS.FETCH_REWARD_CONTENT_COMPLETED,
@@ -134,7 +134,7 @@ export function doFetchRewardedContent() {
 }
 
 export function doUpdateLoadStatus(uri, outpoint) {
-  return function(dispatch, getState) {
+  return (dispatch, getState) => {
     Lbry.file_list({
       outpoint,
       full_status: true,
@@ -196,7 +196,7 @@ export function doUpdateLoadStatus(uri, outpoint) {
 }
 
 export function doStartDownload(uri, outpoint) {
-  return function(dispatch, getState) {
+  return (dispatch, getState) => {
     const state = getState();
 
     if (!outpoint) {
@@ -223,7 +223,7 @@ export function doStartDownload(uri, outpoint) {
 }
 
 export function doDownloadFile(uri, streamInfo) {
-  return function(dispatch) {
+  return dispatch => {
     dispatch(doStartDownload(uri, streamInfo.outpoint));
 
     Lbryio.call('file', 'view', {
@@ -237,7 +237,7 @@ export function doDownloadFile(uri, streamInfo) {
 }
 
 export function doSetPlayingUri(uri) {
-  return function(dispatch) {
+  return dispatch => {
     dispatch({
       type: ACTIONS.SET_PLAYING_URI,
       data: { uri },
@@ -246,7 +246,7 @@ export function doSetPlayingUri(uri) {
 }
 
 export function doLoadVideo(uri) {
-  return function(dispatch) {
+  return dispatch => {
     dispatch({
       type: ACTIONS.LOADING_VIDEO_STARTED,
       data: {
@@ -289,7 +289,7 @@ export function doLoadVideo(uri) {
 }
 
 export function doPurchaseUri(uri) {
-  return function(dispatch, getState) {
+  return (dispatch, getState) => {
     const state = getState();
     const balance = selectBalance(state);
     const fileInfo = makeSelectFileInfoForUri(uri)(state);
@@ -348,7 +348,7 @@ export function doPurchaseUri(uri) {
 }
 
 export function doFetchClaimsByChannel(uri, page) {
-  return function(dispatch) {
+  return dispatch => {
     dispatch({
       type: ACTIONS.FETCH_CHANNEL_CLAIMS_STARTED,
       data: { uri, page },
@@ -371,7 +371,7 @@ export function doFetchClaimsByChannel(uri, page) {
 }
 
 export function doFetchClaimCountByChannel(uri) {
-  return function(dispatch) {
+  return dispatch => {
     dispatch({
       type: ACTIONS.FETCH_CHANNEL_CLAIM_COUNT_STARTED,
       data: { uri },
@@ -393,7 +393,7 @@ export function doFetchClaimCountByChannel(uri) {
 }
 
 export function doFetchClaimListMine() {
-  return function(dispatch) {
+  return dispatch => {
     dispatch({
       type: ACTIONS.FETCH_CLAIM_LIST_MINE_STARTED,
     });
@@ -410,14 +410,14 @@ export function doFetchClaimListMine() {
 }
 
 export function doPlayUri(uri) {
-  return function(dispatch) {
+  return dispatch => {
     dispatch(doSetPlayingUri(uri));
     dispatch(doPurchaseUri(uri));
   };
 }
 
 export function doFetchChannelListMine() {
-  return function(dispatch) {
+  return dispatch => {
     dispatch({
       type: ACTIONS.FETCH_CHANNEL_LIST_MINE_STARTED,
     });
@@ -434,7 +434,7 @@ export function doFetchChannelListMine() {
 }
 
 export function doCreateChannel(name, amount) {
-  return function(dispatch) {
+  return dispatch => {
     dispatch({
       type: ACTIONS.CREATE_CHANNEL_STARTED,
     });
@@ -444,14 +444,14 @@ export function doCreateChannel(name, amount) {
         channel_name: name,
         amount: parseFloat(amount),
       }).then(
-        channelClaim => {
-          const newChannelClaim = channelClaim;
-          newChannelClaim.name = name;
+        newChannelClaim => {
+          const channelClaim = newChannelClaim;
+          channelClaim.name = name;
           dispatch({
             type: ACTIONS.CREATE_CHANNEL_COMPLETED,
-            data: { newChannelClaim },
+            data: { channelClaim },
           });
-          resolve(newChannelClaim);
+          resolve(channelClaim);
         },
         error => {
           reject(error);
@@ -462,8 +462,8 @@ export function doCreateChannel(name, amount) {
 }
 
 export function doPublish(params) {
-  return function(dispatch) {
-    return new Promise((resolve, reject) => {
+  return dispatch =>
+    new Promise((resolve, reject) => {
       const success = claim => {
         resolve(claim);
 
@@ -477,11 +477,10 @@ export function doPublish(params) {
 
       Lbry.publishDeprecated(params, null, success, failure);
     });
-  };
 }
 
 export function doAbandonClaim(txid, nout) {
-  return function(dispatch, getState) {
+  return (dispatch, getState) => {
     const state = getState();
     const myClaims = selectMyClaimsRaw(state);
     const { claim_id: claimId, name } = myClaims.find(

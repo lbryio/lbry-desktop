@@ -51,9 +51,13 @@ class Video extends React.PureComponent {
       contentType,
       changeVolume,
       volume,
+      claim,
       uri,
-      videoPause,
-      setVideoPause,
+      doPlay,
+      doPause,
+      savePosition,
+      mediaPaused,
+      mediaPosition,
     } = this.props;
 
     const isPlaying = playingUri === uri;
@@ -103,8 +107,13 @@ class Video extends React.PureComponent {
               downloadCompleted={fileInfo.completed}
               changeVolume={changeVolume}
               volume={volume}
-              videoPause={videoPause}
-              setVideoPause={setVideoPause}
+              doPlay={doPlay}
+              doPause={doPause}
+              savePosition={savePosition}
+              claim={claim}
+              uri={uri}
+              paused={mediaPaused}
+              position={mediaPosition}
             />
           ))}
         {!isPlaying && (

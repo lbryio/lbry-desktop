@@ -1,12 +1,12 @@
 import * as ACTIONS from 'constants/action_types';
 import * as SETTINGS from 'constants/settings';
-
-import Lbry from 'lbry';
 import Fs from 'fs';
 import Http from 'http';
 
+import Lbry from 'lbry';
+
 export function doFetchDaemonSettings() {
-  return function(dispatch) {
+  return dispatch => {
     Lbry.settings_get().then(settings => {
       dispatch({
         type: ACTIONS.DAEMON_SETTINGS_RECEIVED,
@@ -19,15 +19,15 @@ export function doFetchDaemonSettings() {
 }
 
 export function doSetDaemonSetting(key, value) {
-  return function(dispatch) {
-    const settings = {};
-    settings[key] = value;
-    Lbry.settings_set(settings).then(settings);
-    Lbry.settings_get().then(remoteSettings => {
+  return dispatch => {
+    const newSettings = {};
+    newSettings[key] = value;
+    Lbry.settings_set(newSettings).then(newSettings);
+    Lbry.settings_get().then(settings => {
       dispatch({
         type: ACTIONS.DAEMON_SETTINGS_RECEIVED,
         data: {
-          remoteSettings,
+          settings,
         },
       });
     });
@@ -45,14 +45,14 @@ export function doSetClientSetting(key, value) {
 }
 
 export function doGetThemes() {
-  return function(dispatch) {
+  return dispatch => {
     const themes = ['light', 'dark'];
     dispatch(doSetClientSetting(SETTINGS.THEMES, themes));
   };
 }
 
 export function doDownloadLanguage(langFile) {
-  return function(dispatch) {
+  return dispatch => {
     const destinationPath = `${app.i18n.directory}/${langFile}`;
     const language = langFile.replace('.json', '');
     const errorHandler = () => {
@@ -105,7 +105,7 @@ export function doDownloadLanguage(langFile) {
 }
 
 export function doDownloadLanguages() {
-  return function() {
+  return () => {
     // temporarily disable i18n so I can get a working build out -- Jeremy
     // if (!Fs.existsSync(app.i18n.directory)) {
     //   Fs.mkdirSync(app.i18n.directory);
@@ -135,7 +135,7 @@ export function doDownloadLanguages() {
 }
 
 export function doChangeLanguage(language) {
-  return function(dispatch) {
+  return dispatch => {
     dispatch(doSetClientSetting(SETTINGS.LANGUAGE, language));
     app.i18n.setLocale(language);
   };
