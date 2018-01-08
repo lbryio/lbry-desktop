@@ -8,7 +8,7 @@ import https from 'https';
 import keytar from 'keytar-prebuild';
 import ChildProcess from 'child_process';
 import assert from 'assert';
-import { app, BrowserWindow, globalShortcut, ipcMain, Menu, Tray } from 'electron';
+import { app, BrowserWindow, globalShortcut, ipcMain, Menu, Tray, dialog } from 'electron';
 import mainMenu from './menu/mainMenu';
 import contextMenu from './menu/contextMenu';
 
@@ -170,6 +170,10 @@ function createWindow() {
     });
   }
 
+  window.webContents.on('crashed', () => {
+    safeQuit();
+  });
+
   window.removeAllListeners();
 
   window.on('close', event => {
@@ -209,6 +213,23 @@ function createWindow() {
     globalShortcut.register('Alt+F4', () => safeQuit());
 
     window.webContents.send('window-is-focused', null);
+  });
+
+  window.on('unresponsive', () => {
+    dialog.showMessageBox(
+      window,
+      {
+        type: 'warning',
+        buttons: ['Wait', 'Quit'],
+        title: 'LBRY Unresponsive',
+        defaultId: 1,
+        message: 'LBRY is not responding. Would you like to quit?',
+        cancelId: 0,
+      },
+      buttonIndex => {
+        if (buttonIndex === 1) safeQuit();
+      }
+    );
   });
 
   mainMenu();
@@ -525,6 +546,11 @@ ipcMain.on('get-auth-token', event => {
 
 ipcMain.on('set-auth-token', (event, token) => {
   keytar.setPassword('LBRY', 'auth_token', token ? token.toString().trim() : null);
+});
+
+process.on('uncaughtException', error => {
+  console.error(error);
+  safeQuit();
 });
 
 export { contextMenu };
