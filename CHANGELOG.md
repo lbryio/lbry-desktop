@@ -41,6 +41,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
  * Right click works in the app again (#928)
  * Icons are now the rights size (#925)
  * Fixed tip sending error (#918)
+ * Newly created channel immediately available for publishing
 
 
 
