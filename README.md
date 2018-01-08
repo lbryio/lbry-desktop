@@ -31,12 +31,11 @@ development and testing purposes.
 * [Git](https://git-scm.com/downloads)
 * [Node.js](https://nodejs.org/en/download/)
 * [Yarn](https://yarnpkg.com/en/docs/install)
-* `yarn --add-python-to-path install --global --production windows-build-tools` (Windows only)
 
 ### One-time Setup
 
 1. Clone this repo
-2. `DEPS=true ./build.sh`
+2. `./build.sh`
 
 This will download and install the LBRY app and its dependencies, including
 [the LBRY daemon](https://github.com/lbryio/lbry) and command line utilities like `node` and `yarn`.
@@ -61,40 +60,10 @@ The app can be run from the sources using the following command:
 
 ### On Windows
 
-#### Windows Dependency
-
-1. Download and install `git` from <a href="https://git-for-windows.github.io/">github.io<a>
-   (configure to use command prompt integration)
-2. Download and install `npm` and `node` from
-   <a href="https://nodejs.org/en/download/current/">nodejs.org<a>
-3. Download and install `python 2.7` from
-   <a href="https://www.python.org/downloads/windows/">python.org</a>
-4. Download and Install `Microsoft Visual C++ Compiler for Python 2.7` from
-   <a href="https://www.microsoft.com/en-us/download/confirmation.aspx?id=44266">Microsoft<a>
-5. Download and install `.NET Framework 2.0 Software Development Kit (SDK) (x64)` from
-   <a href="https://www.microsoft.com/en-gb/download/details.aspx?id=15354">Microsoft<a> (may need
-   to extract setup.exe and install manually by running install.exe as Administrator)
-
 #### One-time Setup
 
-1. Open a command prompt as administrator and run the following:
-
-```
-npm install --global --production windows-build-tools
-exit
-```
-
-2. Open a command prompt in the root of the project and run the following:
-
-```
-python -m pip install -r build\requirements.txt
-npm install -g yarn
-yarn install
-yarn build
-```
-
-3. Download the lbry daemon and CLI [binaries](https://github.com/lbryio/lbry/releases) and place
-   them in `static\daemon`.
+Download the lbry daemon and CLI [binaries](https://github.com/lbryio/lbry/releases) and place them
+in `static\daemon`.
 
 ### Build
 

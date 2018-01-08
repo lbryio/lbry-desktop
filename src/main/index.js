@@ -5,7 +5,7 @@ import url from 'url';
 import Jayson from 'jayson';
 import SemVer from 'semver';
 import https from 'https';
-import keytar from 'keytar';
+import keytar from 'keytar-prebuild';
 import ChildProcess from 'child_process';
 import assert from 'assert';
 import { app, BrowserWindow, globalShortcut, ipcMain, Menu, Tray } from 'electron';
