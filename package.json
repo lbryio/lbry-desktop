@@ -20,6 +20,7 @@
     "dev": "electron-webpack dev",
     "compile": "electron-webpack && yarn extract-langs",
     "build": "yarn compile && electron-builder build",
+    "build:dir": "yarn build -- --dir -c.compression=store -c.mac.identity=null",
     "postinstall": "electron-builder install-app-deps",
     "precommit": "lint-staged",
     "lint": "eslint 'src/**/*.{js,jsx}' --fix",
