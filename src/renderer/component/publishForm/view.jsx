@@ -52,6 +52,7 @@ class PublishForm extends React.PureComponent {
       customUrl: false,
       source: null,
       mode: "publish",
+      thumbnailUploadPath: "",
     };
   }
 
@@ -162,10 +163,10 @@ class PublishForm extends React.PureComponent {
     });
   }
 
-  handleConfirmUpload() {
-    console.log("handleConfirmUpload()");
+  handleConfirmUpload(event) {
     this.setState({
       modal: "upload",
+      thumbnailUploadPath: event.target.value,
     });
   }
 
@@ -534,11 +535,12 @@ class PublishForm extends React.PureComponent {
     });
   }
 
-  upload() {
+  upload(path) {
+    console.log("this.upload(path), path:", path);
     this.setState({
       modal: null,
     });
-    this.props.upload("haha");
+    this.props.upload(path);
   }
 
   render() {
@@ -599,7 +601,14 @@ class PublishForm extends React.PureComponent {
                 </div>
 
                 <div className="card__content">
-                  <span onClick={() => this.handleConfirmUpload()}>hello</span>
+                  <FormRow
+                    name="thumbnail"
+                    ref="thumbnail"
+                    type="file"
+                    onChange={event => {
+                      this.handleConfirmUpload(event);
+                    }}
+                  />
                 </div>
 
                 <div className="card__content">
@@ -954,10 +963,12 @@ class PublishForm extends React.PureComponent {
           contentLabel={__("Confirm File Upload")}
           type="confirm"
           confirmButtonLabel={__("Upload")}
-          onConfirmed={() => this.upload()}
+          path={this.state.thumbnailUploadPath}
+          onConfirmed={() => this.upload(this.state.thumbnailUploadPath)}
           onAborted={() => this.closeModal()}
         >
           <p>{__("Comfirm file upload")}</p>
+          <p>Upload {this.state.thumbnailUploadPath}?</p>
         </Modal>
       </main>
     );
