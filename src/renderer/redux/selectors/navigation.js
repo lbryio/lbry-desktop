@@ -68,30 +68,6 @@ export const selectPageTitle = createSelector(
   selectCurrentParams,
   (page, params) => {
     switch (page) {
-      case 'settings':
-        return __('Settings');
-      case 'report':
-        return __('Report');
-      case 'wallet':
-        return __('Wallet');
-      case 'send':
-        return __('Send or Receive LBRY Credits');
-      case 'getcredits':
-        return __('Get LBRY Credits');
-      case 'backup':
-        return __('Backup Your Wallet');
-      case 'rewards':
-        return __('Rewards');
-      case 'invite':
-        return __('Invites');
-      case 'start':
-        return __('Start');
-      case 'publish':
-        return params.id ? __('Edit') : __('Publish');
-      case 'help':
-        return __('Help');
-      case 'developer':
-        return __('Developer');
       case 'show': {
         const parts = [Lbryuri.normalize(params.uri)];
         // If the params has any keys other than "uri"
@@ -100,21 +76,14 @@ export const selectPageTitle = createSelector(
         }
         return parts.join('?');
       }
-      case 'downloaded':
-        return __('Downloads & Purchases');
-      case 'published':
-        return __('Publications');
-      case 'search':
-        return params.query ? __('Search results for %s', params.query) : __('Search');
-      case 'subscriptions':
-        return __('Your Subscriptions');
       case 'discover':
+        return __('Discover');
       case false:
       case null:
       case '':
         return '';
       default:
-        return page[0].toUpperCase() + (page.length > 0 ? page.substr(1) : '');
+        return '';
     }
   }
 );
