@@ -1,6 +1,3 @@
-// just disabling the linter because this file shouldn't even exist
-// will continue to move components over to /components/common/{comp} - sean
-/* eslint-disable */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { formatCredits, formatFullPrice } from 'util/formatCredits';
@@ -173,4 +170,3 @@ export class Thumbnail extends React.PureComponent {
     );
   }
 }
-/* eslint-enable */

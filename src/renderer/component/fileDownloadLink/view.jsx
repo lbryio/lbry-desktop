@@ -1,6 +1,6 @@
 import React from 'react';
 import { BusyMessage } from 'component/common';
-import Icon from 'component/common/icon';
+import Icon from 'component/icon';
 import Link from 'component/link';
 
 class FileDownloadLink extends React.PureComponent {
