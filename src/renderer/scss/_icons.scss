@@ -27,6 +27,16 @@
   transform: translate(0, 0);
 }
 
+.icon--fixed-width {
+  /* This borrowed is from a component of Font Awesome we're not using, maybe add it? */
+  width: (18em / 14);
+  text-align: center;
+}
+
+.icon--padded {
+  padding: 0 3px;
+}
+
 /* Adjustments for icon size and alignment */
 .icon-rocket {
   color: orangered;

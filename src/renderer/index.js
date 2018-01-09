@@ -31,7 +31,7 @@ ipcRenderer.on('open-uri-requested', (event, uri, newSession) => {
       try {
         verification = JSON.parse(atob(uri.substring(15)));
       } catch (error) {
-        console.log(error);
+        console.log(error); // eslint-disable-line no-console
       }
       if (verification.token && verification.recaptcha) {
         app.store.dispatch(doConditionalAuthNavigate(newSession));
@@ -112,10 +112,10 @@ const init = () => {
 
           ReactDOM.render(
             <Provider store={store}>
-              <div>
+              <React.Fragment>
                 <App />
                 <SnackBar />
-              </div>
+              </React.Fragment>
             </Provider>,
             document.getElementById('app')
           );
