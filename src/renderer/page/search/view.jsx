@@ -1,21 +1,15 @@
-// @flow
 import React from 'react';
 import lbryuri from 'lbryuri';
 import FileTile from 'component/fileTile';
 import FileListSearch from 'component/fileListSearch';
-import ToolTip from 'component/common/tooltip';
-import Page from 'component/page';
+import { ToolTip } from 'component/tooltip.js';
 
-type Props = {
-  query: ?string,
-};
-
-class SearchPage extends React.PureComponent<Props> {
+class SearchPage extends React.PureComponent {
   render() {
     const { query } = this.props;
 
     return (
-      <Page>
+      <main className="main--single-column">
         {lbryuri.isValid(query) ? (
           <section className="section-spaced">
             <h3 className="card-row__header">
@@ -42,7 +36,7 @@ class SearchPage extends React.PureComponent<Props> {
           </h3>
           <FileListSearch query={query} />
         </section>
-      </Page>
+      </main>
     );
   }
 }

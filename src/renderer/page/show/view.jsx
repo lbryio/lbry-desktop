@@ -1,24 +1,17 @@
-/* eslint-disable */
 import React from 'react';
+import lbryuri from 'lbryuri';
 import { BusyMessage } from 'component/common';
 import ChannelPage from 'page/channel';
 import FilePage from 'page/file';
 
-type Props = {
-  isResolvingUri: boolean,
-  resolveUri: string => void,
-  uri: string,
-  claim: { name: string },
-};
-
-class ShowPage extends React.PureComponent<Props> {
+class ShowPage extends React.PureComponent {
   componentWillMount() {
     const { isResolvingUri, resolveUri, uri } = this.props;
 
     if (!isResolvingUri) resolveUri(uri);
   }
 
-  componentWillReceiveProps(nextProps: Props) {
+  componentWillReceiveProps(nextProps) {
     const { isResolvingUri, resolveUri, claim, uri } = nextProps;
 
     if (!isResolvingUri && claim === undefined && uri) {
@@ -54,9 +47,8 @@ class ShowPage extends React.PureComponent<Props> {
       innerContent = <FilePage uri={uri} />;
     }
 
-    return innerContent;
+    return <main className="main--single-column">{innerContent}</main>;
   }
 }
 
 export default ShowPage;
-/* eslint-enable */

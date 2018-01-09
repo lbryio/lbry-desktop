@@ -1,20 +1,8 @@
-// @flow
 import React from 'react';
-import Button from 'component/link';
+import Link from 'component/link';
 import WunderBar from 'component/wunderbar';
 
-type Props = {
-  balance: string,
-  back: any => void,
-  forward: any => void,
-  isBackDisabled: boolean,
-  isForwardDisabled: boolean,
-  isUpgradeAvailable: boolean,
-  navigate: any => void,
-  downloadUpgrade: any => void,
-};
-
-export const Header = (props: Props) => {
+export const Header = props => {
   const {
     balance,
     back,
@@ -27,58 +15,85 @@ export const Header = (props: Props) => {
   } = props;
   return (
     <header id="header">
-      <div className="header__actions-left">
-        <Button
-          alt
-          circle
+      <div className="header__item">
+        <Link
           onClick={back}
           disabled={isBackDisabled}
-          icon="arrow-left"
-          description={__('Navigate back')}
+          button="alt button--flat"
+          icon="icon-arrow-left"
+          title={__('Back')}
         />
-
-        <Button
-          alt
-          circle
+      </div>
+      <div className="header__item">
+        <Link
           onClick={forward}
           disabled={isForwardDisabled}
-          icon="arrow-right"
-          description={__('Navigate forward')}
+          button="alt button--flat"
+          icon="icon-arrow-right"
+          title={__('Forward')}
         />
-
-        <Button alt onClick={() => navigate('/discover')} icon="home" description={__('Home')} />
       </div>
-
-      <WunderBar />
-
-      <div className="header__actions-right">
-        <Button
-          inverse
+      <div className="header__item">
+        <Link
+          onClick={() => navigate('/discover')}
+          button="alt button--flat"
+          icon="icon-home"
+          title={__('Discover Content')}
+        />
+      </div>
+      <div className="header__item">
+        <Link
+          onClick={() => navigate('/subscriptions')}
+          button="alt button--flat"
+          icon="icon-at"
+          title={__('My Subscriptions')}
+        />
+      </div>
+      <div className="header__item header__item--wunderbar">
+        <WunderBar />
+      </div>
+      <div className="header__item">
+        <Link
           onClick={() => navigate('/wallet')}
-          icon="user"
-          label={isUpgradeAvailable ? `${balance} LBC` : `You have ${balance} LBC`}
-          description={__('Your wallet')}
+          button="text"
+          className="no-underline"
+          icon="icon-bank"
+          label={balance}
+          title={__('Wallet')}
         />
-
-        <Button
-          onClick={() => navigate('/publish')}
-          icon="cloud-upload"
-          label={isUpgradeAvailable ? '' : __('Publish')}
-          description={__('Publish content')}
-        />
-
-        <Button
-          alt
-          onClick={() => navigate('/settings')}
-          icon="gear"
-          description={__('Settings')}
-        />
-
-        <Button alt onClick={() => navigate('/help')} icon="question" description={__('Help')} />
-        {isUpgradeAvailable && (
-          <Button onClick={() => downloadUpgrade()} icon="arrow-up" label={__('Upgrade App')} />
-        )}
       </div>
+      <div className="header__item">
+        <Link
+          onClick={() => navigate('/publish')}
+          button="primary button--flat"
+          icon="icon-upload"
+          label={__('Publish')}
+        />
+      </div>
+      <div className="header__item">
+        <Link
+          onClick={() => navigate('/downloaded')}
+          button="alt button--flat"
+          icon="icon-folder"
+          title={__('Downloads and Publishes')}
+        />
+      </div>
+      <div className="header__item">
+        <Link
+          onClick={() => navigate('/settings')}
+          button="alt button--flat"
+          icon="icon-gear"
+          title={__('Settings')}
+        />
+      </div>
+      {isUpgradeAvailable && (
+        <Link
+          onClick={() => downloadUpgrade()}
+          button="primary button--flat"
+          icon="icon-arrow-up"
+          label={__('Upgrade App')}
+        />
+      )}
     </header>
   );
 };

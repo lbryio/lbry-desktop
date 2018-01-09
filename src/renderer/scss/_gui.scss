@@ -1,30 +1,4 @@
-// Generic html styles used accross the App
-// component specific styling should go in the component scss file
-
-// The actual fonts used will change ex: medium vs regular
-@font-face {
-  font-family: 'Metropolis';
-  font-weight: normal;
-  font-style: normal;
-  text-rendering: optimizeLegibility;
-  src: url('../../../static/font/metropolis/Metropolis-Medium.woff2') format('woff2');
-}
-
-@font-face {
-  font-family: 'Metropolis';
-  font-weight: 600;
-  font-style: normal;
-  text-rendering: optimizeLegibility;
-  src: url('../../../static/font/metropolis/Metropolis-SemiBold.woff2') format('woff2');
-}
-
-@font-face {
-  font-family: 'Metropolis';
-  font-weight: 800;
-  font-style: normal;
-  text-rendering: optimizeLegibility;
-  src: url('../../../static/font/metropolis/Metropolis-ExtraBold.woff2') format('woff2');
-}
+@import url(https://fonts.googleapis.com/css?family=Roboto:400,400i,500,500i,700);
 
 html {
   height: 100%;
@@ -33,18 +7,82 @@ html {
 
 body {
   color: var(--text-color);
-  font-family: 'Metropolis', sans-serif;
+  font-family: 'Roboto', sans-serif;
   line-height: var(--font-line-height);
-  height: 100%;
-  overflow: hidden;
 }
 
-h1,
-h2,
-h3,
-h4,
-h5 {
+/* Custom text selection */
+*::selection {
+  background: var(--text-selection-bg);
+  color: var(--text-selection-color);
+}
+
+#window {
+  min-height: 100vh;
+  background: var(--window-bg);
+}
+
+.credit-amount--indicator {
+  font-weight: 500;
+  color: var(--color-money);
+}
+.credit-amount--fee {
+  font-size: 0.9em;
+  color: var(--color-meta-light);
+}
+
+.credit-amount--bold {
   font-weight: 700;
+}
+
+#main-content {
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  overflow: overlay;
+  padding: $spacing-vertical;
+  position: absolute;
+  top: var(--header-height);
+  bottom: 0;
+  left: 4px;
+  right: 4px;
+  main {
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 100%;
+  }
+  main.main--single-column {
+    width: $width-page-constrained;
+  }
+
+  main.main--no-margin {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}
+
+.reloading {
+  &:before {
+    $width: 30px;
+    position: absolute;
+    background: url('../../../static/img/busy.gif') no-repeat center center;
+    width: $width;
+    height: $spacing-vertical;
+    content: '';
+    left: 50%;
+    margin-left: -1 / 2 * $width;
+    display: inline-block;
+  }
+}
+
+.icon-fixed-width {
+  /* This borrowed is from a component of Font Awesome we're not using, maybe add it? */
+  width: (18em / 14);
+  text-align: center;
+}
+
+.icon--left-pad {
+  padding-left: 3px;
 }
 
 h2 {
@@ -62,13 +100,11 @@ h4 {
 h5 {
   font-size: 1.1em;
 }
-
 sup,
 sub {
   vertical-align: baseline;
   position: relative;
 }
-
 sup {
   top: -0.4em;
 }
@@ -81,67 +117,11 @@ code {
   background-color: var(--color-bg-alt);
 }
 
-// Without this buttons don't have the Metropolis font
-button {
-  font-family: inherit;
-}
-
-#window {
-  height: 100%;
-  overflow: hidden;
-}
-
-#main-content {
-  height: 100%;
-  overflow-y: auto;
-  position: absolute;
-  left: 0px;
-  right: 0px;
-  // don't use {bottom/top} here
-  // they cause flashes of un-rendered content when scrolling
-  margin-top: var(--header-height);
-  // TODO: fix this scrollbar extends beyond screen at the bottom
-  padding-bottom: var(--header-height);
-  background-color: var(--color-bg);
-}
-
-.main {
-  padding: 0 $spacing-vertical * 2/3;
-}
-
-.main--no-padding {
-  padding-left: 0;
-  padding-right: 0;
-}
-
-.page__header {
-  padding: $spacing-vertical * 2/3;
-  padding-bottom: 0;
-}
-
-.page__title {
-  font-weight: 800;
-  font-size: 3em;
-}
-
-/* Custom text selection */
-*::selection {
-  background: var(--text-selection-bg);
-  color: var(--text-selection-color);
-}
-
-.credit-amount--indicator {
-  font-weight: 500;
-  color: var(--color-money);
-}
-
-.credit-amount--fee {
-  font-size: 0.9em;
-  color: var(--color-meta-light);
-}
-
-.credit-amount--bold {
-  font-weight: 700;
+p {
+  margin-bottom: 0.8em;
+  &:last-child {
+    margin-bottom: 0;
+  }
 }
 
 .hidden {
@@ -211,4 +191,8 @@ button {
 
 section.section-spaced {
   margin-bottom: $spacing-vertical;
+}
+
+.text-center {
+  text-align: center;
 }

@@ -6,8 +6,6 @@ $width-page-constrained: 800px;
 $text-color: #000;
 
 :root {
-  --spacing-vertical: 24px;
-
   /* Colors */
   --color-brand: #155b4a;
   --color-primary: #155b4a;
@@ -23,8 +21,7 @@ $text-color: #000;
   --color-download: rgba(0, 0, 0, 0.75);
   --color-canvas: #f5f5f5;
   --color-bg: #ffffff;
-  --color-bg-alt: #f6f6f6;
-  --color-placeholder: #ececec;
+  --color-bg-alt: #d9d9d9;
 
   /* Misc */
   --content-max-width: 1000px;
@@ -37,7 +34,7 @@ $text-color: #000;
   --font-size-subtext-multiple: 0.82;
 
   /* Shadows */
-  --box-shadow-layer: 0px 1px 3px 0px rgba(0, 0, 0, 0.2);
+  --box-shadow-layer: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
   --box-shadow-focus: 2px 4px 4px 0 rgba(0, 0, 0, 0.14), 2px 5px 3px -2px rgba(0, 0, 0, 0.2),
     2px 3px 7px 0 rgba(0, 0, 0, 0.12);
 
@@ -52,6 +49,9 @@ $text-color: #000;
   --text-link-padding: 4px;
   --text-selection-bg: rgba(saturate(lighten(#155b4a, 20%), 20%), 1); // temp color
   --text-selection-color: #fff;
+
+  /* Window */
+  --window-bg: var(--color-canvas);
 
   /* Form */
   --form-label-color: rgba(0, 0, 0, 0.54);
@@ -80,23 +80,21 @@ $text-color: #000;
   --select-bg: var(--color-bg-alt);
   --select-color: var(--text-color);
 
-  //TODO: determine proper button variables;
   /* Button */
-  --btn-primary-color: #fff;
-  --button-alt-color: var(--text-color);
-  --btn-primary-bg: var(--color-primary);
-  --btn-alt-bg: red;
-  --btn-radius: 10px;
-  // below needed?
-  --btn-padding: $spacing-vertical * 2/3;
-  --btn-height: $spacing-vertical * 1.5;
-  --btn-intra-margin: $spacing-vertical;
+  --button-bg: var(--color-bg-alt);
+  --button-color: #fff;
+  --button-primary-bg: var(--color-primary);
+  --button-primary-color: #fff;
+  --button-padding: $spacing-vertical * 2/3;
+  --button-height: $spacing-vertical * 1.5;
+  --button-intra-margin: $spacing-vertical;
+  --button-radius: 3px;
 
   /* Header */
   --header-bg: var(--color-bg);
   --header-color: #666;
   --header-active-color: rgba(0, 0, 0, 0.85);
-  --header-height: 65px;
+  --header-height: $spacing-vertical * 2.5;
   --header-button-bg: transparent; //var(--button-bg);
   --header-button-hover-bg: rgba(100, 100, 100, 0.15);
 
@@ -144,6 +142,7 @@ $text-color: #000;
   --tooltip-width: 300px;
   --tooltip-bg: var(--color-bg);
   --tooltip-color: var(--text-color);
+  --tooltip-border: 1px solid #aaa;
 
   /* Scrollbar */
   --scrollbar-radius: 10px;

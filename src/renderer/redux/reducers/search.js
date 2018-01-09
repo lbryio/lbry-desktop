@@ -1,75 +1,32 @@
-// @flow
 import * as ACTIONS from 'constants/action_types';
-import { handleActions } from 'util/redux-utils';
 
-type SearchState = {
-  isActive: boolean,
-  searchQuery: string,
-  searchingForSuggestions: boolean,
-  suggestions: Array<string>,
-  urisByQuery: {},
-};
-
+const reducers = {};
 const defaultState = {
-  isActive: false,
-  searchQuery: '', // needs to be an empty string for input focusing
-  searchingForSuggestions: false,
-  suggestions: [],
   urisByQuery: {},
+  searching: false,
 };
 
-export default handleActions(
-  {
-    [ACTIONS.SEARCH_START]: (state: SearchState): SearchState => ({
-      ...state,
-      searching: true,
-    }),
-    [ACTIONS.SEARCH_SUCCESS]: (state: SearchState, action): SearchState => {
-      const { query, uris } = action.data;
+reducers[ACTIONS.SEARCH_STARTED] = state =>
+  Object.assign({}, state, {
+    searching: true,
+  });
 
-      return {
-        ...state,
-        searching: false,
-        urisByQuery: Object.assign({}, state.urisByQuery, { [query]: uris }),
-      };
-    },
+reducers[ACTIONS.SEARCH_COMPLETED] = (state, action) => {
+  const { query, uris } = action.data;
 
-    [ACTIONS.SEARCH_FAIL]: (state: SearchState): SearchState => ({
-      ...state,
-      searching: false,
-    }),
+  return Object.assign({}, state, {
+    searching: false,
+    urisByQuery: Object.assign({}, state.urisByQuery, { [query]: uris }),
+  });
+};
 
-    [ACTIONS.UPDATE_SEARCH_QUERY]: (state: SearchState, action): SearchState => ({
-      ...state,
-      searchQuery: action.data.searchQuery,
-      suggestions: [],
-      isActive: true,
-    }),
+reducers[ACTIONS.SEARCH_CANCELLED] = state =>
+  Object.assign({}, state, {
+    searching: false,
+  });
 
-    [ACTIONS.SEARCH_SUGGESTIONS_START]: (state: SearchState): SearchState => ({
-      ...state,
-      searchingForSuggestions: true,
-      suggestions: [],
-    }),
-    [ACTIONS.GET_SEARCH_SUGGESTIONS_SUCCESS]: (state: SearchState, action): SearchState => ({
-      ...state,
-      searchingForSuggestions: false,
-      suggestions: action.data,
-    }),
-    [ACTIONS.GET_SEARCH_SUGGESTIONS_FAIL]: (state: SearchState): SearchState => ({
-      ...state,
-      searchingForSuggestions: false,
-      // error, TODO: figure this out on the search page
-    }),
-
-    // clear the searchQuery on back/forward
-    // it may be populated by the page title for search/file pages
-    // if going home, it should be blank
-    [ACTIONS.HISTORY_NAVIGATE]: (state: SearchState): SearchState => ({
-      ...state,
-      searchQuery: '',
-      isActive: false,
-    }),
-  },
-  defaultState
-);
+export default function reducer(state = defaultState, action) {
+  const handler = reducers[action.type];
+  if (handler) return handler(state, action);
+  return state;
+}

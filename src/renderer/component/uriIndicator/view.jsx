@@ -1,46 +1,35 @@
-// @flow
 import React from 'react';
-import { Icon } from 'component/common';
-import Button from 'component/link';
+import Icon from 'component/icon';
+import Link from 'component/link';
 import lbryuri from 'lbryuri';
 import classnames from 'classnames';
 
-type Props = {
-  isResolvingUri: boolean,
-  resolveUri: string => void,
-  claim: {
-    channel_name: string,
-    has_signature: boolean,
-    signature_is_valid: boolean,
-    value: {
-      publisherSignature: { certificateId: string },
-    },
-  },
-  uri: string,
-  link: ?boolean,
-};
-
-class UriIndicator extends React.PureComponent<Props> {
+class UriIndicator extends React.PureComponent {
   componentWillMount() {
     this.resolve(this.props);
   }
 
-  componentWillReceiveProps(nextProps: Props) {
+  componentWillReceiveProps(nextProps) {
     this.resolve(nextProps);
   }
 
-  resolve = (props: Props) => {
+  resolve(props) {
     const { isResolvingUri, resolveUri, claim, uri } = props;
 
     if (!isResolvingUri && claim === undefined && uri) {
       resolveUri(uri);
     }
-  };
+  }
 
   render() {
-    const { claim, link, isResolvingUri } = this.props;
+    const { claim, link, uri, isResolvingUri, smallCard, span } = this.props;
+
+    if (isResolvingUri && !claim) {
+      return <span className="empty">Validating...</span>;
+    }
+
     if (!claim) {
-      return <span className="empty">{isResolvingUri ? 'Validating...' : 'Unused'}</span>;
+      return <span className="empty">Unused</span>;
     }
 
     const {
@@ -49,17 +38,14 @@ class UriIndicator extends React.PureComponent<Props> {
       signature_is_valid: signatureIsValid,
       value,
     } = claim;
-
     const channelClaimId =
       value && value.publisherSignature && value.publisherSignature.certificateId;
 
     if (!hasSignature || !channelName) {
-      return <span>Anonymous</span>;
+      return <span className="empty">Anonymous</span>;
     }
 
-    let icon;
-    let channelLink;
-    let modifier;
+    let icon, channelLink, modifier;
 
     if (signatureIsValid) {
       modifier = 'valid';
@@ -73,6 +59,7 @@ class UriIndicator extends React.PureComponent<Props> {
       <span>
         <span
           className={classnames('channel-name', {
+            'channel-name--small': smallCard,
             'button-text no-underline': link,
           })}
         >
@@ -94,9 +81,14 @@ class UriIndicator extends React.PureComponent<Props> {
     }
 
     return (
-      <Button navigate="/show" navigateParams={{ uri: channelLink }} fakeLink>
+      <Link
+        navigate="/show"
+        navigateParams={{ uri: channelLink }}
+        className="no-underline"
+        span={span}
+      >
         {inner}
-      </Button>
+      </Link>
     );
   }
 }

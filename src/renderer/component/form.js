@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import FormField from 'component/formField';
-import Icon from 'component/common/icon';
+import Icon from 'component/icon';
 
 let formFieldCounter = 0;
 
