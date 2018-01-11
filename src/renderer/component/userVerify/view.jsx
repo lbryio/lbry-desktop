@@ -66,7 +66,29 @@ class UserVerify extends React.PureComponent {
         </section>
         <section className="card card--form">
           <div className="card__title-primary">
-            <h3>{__('2) Proof via YouTube')}</h3>
+            <h3>{__('2) Proof via Phone')}</h3>
+          </div>
+          <div className="card__content">
+            {`${__(
+              'You will receive an SMS text message confirming that your phone number is correct.'
+            )}`}
+          </div>
+          <div className="card__actions">
+            {errorMessage && <p className="form-field__error">{errorMessage}</p>}
+            <CardVerify
+              label={__('Submit Phone Number')}
+              disabled={isPending}
+              token={this.onToken.bind(this)}
+              stripeKey={lbryio.getStripeToken()}
+            />
+          </div>
+          <div className="card__content">
+            <div className="meta">{__('Standard messaging rates apply.')} </div>
+          </div>
+        </section>
+        <section className="card card--form">
+          <div className="card__title-primary">
+            <h3>{__('3) Proof via YouTube')}</h3>
           </div>
           <div className="card__content">
             <p>
@@ -96,7 +118,7 @@ class UserVerify extends React.PureComponent {
         </section>
         <section className="card card--form">
           <div className="card__title-primary">
-            <h3>{__('3) Proof via Chat')}</h3>
+            <h3>{__('4) Proof via Chat')}</h3>
           </div>
           <div className="card__content">
             <p>
