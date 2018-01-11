@@ -1,5 +1,5 @@
 import * as ACTIONS from 'constants/action_types';
-import Lbryio from 'lbryio';
+import Lbryio from 'lbry-redux';
 import { selectClaimsByUri } from 'redux/selectors/claims';
 
 // eslint-disable-next-line import/prefer-default-export

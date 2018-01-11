@@ -3,7 +3,7 @@ import appReducer from 'redux/reducers/app';
 import availabilityReducer from 'redux/reducers/availability';
 import claimsReducer from 'redux/reducers/claims';
 import contentReducer from 'redux/reducers/content';
-import costInfoReducer from 'redux/reducers/cost_info';
+import costInfoReducer from 'lbry-redux';
 import fileInfoReducer from 'redux/reducers/file_info';
 import navigationReducer from 'redux/reducers/navigation';
 import rewardsReducer from 'redux/reducers/rewards';
