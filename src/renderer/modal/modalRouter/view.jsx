@@ -12,7 +12,7 @@ import ModalTransactionFailed from 'modal/modalTransactionFailed';
 import ModalFileTimeout from 'modal/modalFileTimeout';
 import ModalAffirmPurchase from 'modal/modalAffirmPurchase';
 import ModalRevokeClaim from 'modal/modalRevokeClaim';
-import ModalEmailCollection from '../modalEmailCollection';
+import ModalPhoneCollection from '../modalPhoneCollection';
 import * as modals from 'constants/modal_types';
 
 class ModalRouter extends React.PureComponent {
@@ -125,7 +125,7 @@ class ModalRouter extends React.PureComponent {
       case modals.CONFIRM_CLAIM_REVOKE:
         return <ModalRevokeClaim {...modalProps} />;
       case modals.EMAIL_COLLECTION:
-        return <ModalEmailCollection {...modalProps} />;
+        return <ModalPhoneCollection {...modalProps} />;
       default:
         return null;
     }

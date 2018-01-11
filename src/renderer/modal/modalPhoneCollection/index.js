@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { doCloseModal } from 'redux/actions/app';
 import { doSetClientSetting } from 'redux/actions/settings';
 import { selectEmailToVerify, selectUser } from 'redux/selectors/user';
-import ModalEmailCollection from './view';
+import ModalPhoneCollection from './view';
 
 const select = state => ({
   email: selectEmailToVerify(state),
@@ -18,4 +18,4 @@ const perform = dispatch => () => ({
   },
 });
 
-export default connect(select, perform)(ModalEmailCollection);
+export default connect(select, perform)(ModalPhoneCollection);

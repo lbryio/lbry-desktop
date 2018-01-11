@@ -4,7 +4,7 @@ import Link from 'component/link/index';
 import UserEmailNew from 'component/userEmailNew';
 import UserEmailVerify from 'component/userEmailVerify';
 
-class ModalEmailCollection extends React.PureComponent {
+class ModalPhoneCollection extends React.PureComponent {
   renderInner() {
     const { closeModal, email, user } = this.props;
 
@@ -37,4 +37,4 @@ class ModalEmailCollection extends React.PureComponent {
   }
 }
 
-export default ModalEmailCollection;
+export default ModalPhoneCollection;
