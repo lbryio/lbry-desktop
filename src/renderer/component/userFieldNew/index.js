@@ -1,8 +1,8 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { doUserEmailNew, doUserInviteNew } from 'redux/actions/user';
+import { doUserFieldNew, doUserInviteNew } from 'redux/actions/user';
 import { selectEmailNewIsPending, selectEmailNewErrorMessage } from 'redux/selectors/user';
-import UserEmailNew from './view';
+import UserFieldNew from './view';
 
 const select = state => ({
   isPending: selectEmailNewIsPending(state),
@@ -10,7 +10,7 @@ const select = state => ({
 });
 
 const perform = dispatch => ({
-  addUserEmail: email => dispatch(doUserEmailNew(email)),
+  addUserEmail: email => dispatch(doUserFieldNew(email)),
 });
 
-export default connect(select, perform)(UserEmailNew);
+export default connect(select, perform)(UserFieldNew);

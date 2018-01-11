@@ -1,7 +1,7 @@
 import React from 'react';
 import { Form, FormRow, Submit } from 'component/form.js';
 
-class UserEmailNew extends React.PureComponent {
+class UserFieldNew extends React.PureComponent {
   constructor(props) {
     super(props);
 
@@ -52,4 +52,4 @@ class UserEmailNew extends React.PureComponent {
   }
 }
 
-export default UserEmailNew;
+export default UserFieldNew;

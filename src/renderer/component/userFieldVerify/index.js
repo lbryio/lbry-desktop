@@ -1,12 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { doUserEmailVerify, doUserEmailVerifyFailure } from 'redux/actions/user';
+import { doUserFieldVerify, doUserFieldVerifyFailure } from 'redux/actions/user';
 import {
   selectEmailVerifyIsPending,
   selectEmailToVerify,
   selectEmailVerifyErrorMessage,
 } from 'redux/selectors/user';
-import UserEmailVerify from './view';
+import UserFieldVerify from './view';
 
 const select = state => ({
   isPending: selectEmailVerifyIsPending(state),
@@ -15,8 +15,8 @@ const select = state => ({
 });
 
 const perform = dispatch => ({
-  verifyUserEmail: (code, recaptcha) => dispatch(doUserEmailVerify(code, recaptcha)),
-  verifyUserEmailFailure: error => dispatch(doUserEmailVerifyFailure(error)),
+  verifyUserEmail: (code, recaptcha) => dispatch(doUserFieldVerify(code, recaptcha)),
+  verifyUserEmailFailure: error => dispatch(doUserFieldVerifyFailure(error)),
 });
 
-export default connect(select, perform)(UserEmailVerify);
+export default connect(select, perform)(UserFieldVerify);

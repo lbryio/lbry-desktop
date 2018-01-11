@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'component/link';
 import { Form, FormRow, Submit } from 'component/form.js';
 
-class UserEmailVerify extends React.PureComponent {
+class UserFieldVerify extends React.PureComponent {
   constructor(props) {
     super(props);
 
@@ -59,4 +59,4 @@ class UserEmailVerify extends React.PureComponent {
   }
 }
 
-export default UserEmailVerify;
+export default UserFieldVerify;

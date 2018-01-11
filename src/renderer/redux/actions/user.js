@@ -78,7 +78,7 @@ export function doUserFetch() {
   };
 }
 
-export function doUserEmailNew(email) {
+export function doUserFieldNew(email) {
   return dispatch => {
     dispatch({
       type: ACTIONS.USER_EMAIL_NEW_STARTED,
@@ -116,14 +116,14 @@ export function doUserEmailNew(email) {
   };
 }
 
-export function doUserEmailVerifyFailure(error) {
+export function doUserFieldVerifyFailure(error) {
   return {
     type: ACTIONS.USER_EMAIL_VERIFY_FAILURE,
     data: { error },
   };
 }
 
-export function doUserEmailVerify(verificationToken, recaptcha) {
+export function doUserFieldVerify(verificationToken, recaptcha) {
   return (dispatch, getState) => {
     const email = selectEmailToVerify(getState());
 
@@ -154,7 +154,7 @@ export function doUserEmailVerify(verificationToken, recaptcha) {
           throw new Error('Your email is still not verified.'); // shouldn't happen
         }
       })
-      .catch(error => dispatch(doUserEmailVerifyFailure(error)));
+      .catch(error => dispatch(doUserFieldVerifyFailure(error)));
   };
 }
 
