@@ -8,20 +8,52 @@ import { error } from "util";
 
 export const beginUpload = (filePath: string) => (dispatch: Dispatch) => {
   const thumbnail = fs.readFileSync(filePath);
-  const givenName = path.basename(filePath, path.extname(filePath));
-  const safeName = givenName.replace(/\s+/g, "-").toLowerCase();
-  let claimName = safeName;
+  const extName = path.extname(filePath);
+  const fileName = path.basename(filePath, extName);
+  const safeName = fileName.replace(/\s+/g, "-").toLowerCase();
 
-  let status = checkName(safeName);
-  let count = 0;
-  console.log("status1:", status);
-  while (!status && count < 5) {
-    claimName = `safeName-${makeid()}`;
-    console.log("claimName", claimName);
-    status = checkName(claimName);
-    console.log("while.status:", status);
-    count++;
-  }
+  const getName = (name, count = 1, limit = 10) => {
+    console.log("getName", name, count, limit);
+    name = count > 1 ? `${name}-${makeid()}` : name;
+    fetch(`https://spee.ch/api/claim-is-available/${name}`)
+      .then(res => res.json())
+      .then(status => {
+        console.log("fetch1 then2 status:", status);
+        if (status) {
+          console.log("status:true, name:", name);
+          let data = new FormData();
+          data.append("name", name);
+          const blob = new Blob(thumbnail, { type: ".jpeg" });
+          data.append("file", blob, path.basename(filePath));
+          // fetch("https://httpbin.org/post", {
+          fetch("https://spee.ch/api/claim-publish", {
+            method: "POST",
+            body: data,
+          })
+            .then(response => response.json())
+            .then(json => console.log("fetch2 then2:", json))
+            .catch(err => console.log("beginUpload fetch catch, err:", err));
+        } else return count >= limit ? false : getName(name, count + 1, limit);
+      })
+      .catch(err => false);
+  };
+
+  getName(safeName);
+
+  // console.log("claimName:", claimName);
+
+  // return;
+
+  // let status = checkName(safeName);
+  // let count = 0;
+  // console.log("status1:", status);
+  // while (!status && count < 5) {
+  //   claimName = `safeName-${makeid()}`;
+  //   console.log("claimName", claimName);
+  //   status = checkName(claimName);
+  //   console.log("while.status:", status);
+  //   count++;
+  // }
 
   // dispatch({ type: actions.SPEECH_UPLOAD_BEGIN });
   // console.log("claimName:", claimName);
@@ -34,27 +66,34 @@ export const beginUpload = (filePath: string) => (dispatch: Dispatch) => {
   //   .then(json => console.log("2nd then:", json))
   //   .catch(err => console.log("beginUpload fetch catch, err:", err));
 
-  return;
+  // return;
 
-  function checkName(name) {
-    let nameStatus: Boolean = false;
+  // function checkName(name, count=1, limit=10) {
 
-    // const response = fetch(`https://spee.ch/api/claim-is-available/${name}`);
-    // const json = response.json();
-    // return json;
+  //   return fetch(`https://spee.ch/api/claim-is-available/${count > 1 ? `name-${makeid()}` : name}`)
+  //          .then(res => res.json())
+  //          .then(status => status       ? json  :
+  //                          count>=limit ? false :
+  //                          checkName(name, count+1, limit));
 
-    fetch(`https://spee.ch/api/claim-is-available/${name}`)
-      .then(response => response.json())
-      .then(json => {
-        console.log("2nd then, json:", json);
-        nameStatus = json;
-        // return json;
-      })
-      .catch(err => console.log("ERROR:", err));
+  // let nameStatus: Boolean = false;
 
-    console.log("nameStatus:", nameStatus);
-    return nameStatus;
-  }
+  // const response = fetch(`https://spee.ch/api/claim-is-available/${name}`);
+  // const json = response.json();
+  // return json;
+
+  // fetch(`https://spee.ch/api/claim-is-available/${name}`)
+  //   .then(response => response.json())
+  //   .then(json => {
+  //     console.log("2nd then, json:", json);
+  //     nameStatus = json;
+  //     // return json;
+  //   })
+  //   .catch(err => console.log("ERROR:", err));
+
+  // console.log("nameStatus:", nameStatus);
+  // return nameStatus;
+  // }
 
   function makeid() {
     var text = "";
