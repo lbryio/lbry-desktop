@@ -23,9 +23,8 @@ export const beginUpload = (filePath: string) => (dispatch: Dispatch) => {
           console.log("status:true, name:", name);
           let data = new FormData();
           data.append("name", name);
-          const blob = new Blob(thumbnail, { type: ".jpeg" });
+          const blob = new Blob(thumbnail, { type: "image/jpeg" });
           data.append("file", blob, path.basename(filePath));
-          // fetch("https://httpbin.org/post", {
           fetch("https://spee.ch/api/claim-publish", {
             method: "POST",
             body: data,
