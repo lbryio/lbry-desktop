@@ -13,9 +13,9 @@ class ModalAutoUpdateDownloaded extends React.PureComponent {
       <Modal
         isOpen={true}
         type="confirm"
-        contentLabel={__("Update downloaded")}
-        confirmButtonLabel={__("Update and Restart")}
-        abortButtonLabel={__("Don't Update")}
+        contentLabel={__("Update Downloaded")}
+        confirmButtonLabel={__("Use it Now")}
+        abortButtonLabel={__("Upgrade on Restart")}
         onConfirmed={() => {
           ipcRenderer.send("autoUpdateAccepted");
         }}
@@ -28,7 +28,7 @@ class ModalAutoUpdateDownloaded extends React.PureComponent {
           <h3 className="text-center">{__("LBRY Leveled Up")}</h3>
           <p>
             {__(
-              "A new version of LBRY has been downloaded and is ready to install."
+              'A new version of LBRY has been released, downloaded, and is ready for you to use pending a restart.'
             )}
           </p>
         </section>

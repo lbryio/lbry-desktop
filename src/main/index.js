@@ -462,9 +462,9 @@ app.on('before-quit', event => {
       event.preventDefault();
       showingAutoUpdateCloseAlert = true;
       dialog.showMessageBox({
-        type: "info",
-        title: "LBRY will upgrade",
-        message: "Please select \"Yes\" at the upgrade prompt shown after the app closes.",
+        type: 'info',
+        title: 'LBRY Will Upgrade',
+        message: 'LBRY has a pending upgrade. Please select "Yes" to install it on the prompt shown after this one.',
       }, () => {
         // After the user approves the dialog, we can quit once and for all.
         quitNow();
