@@ -10,6 +10,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { doConditionalAuthNavigate, doDaemonReady, doShowSnackBar } from 'redux/actions/app';
+import { doUpdateIsNightAsync } from 'redux/actions/settings';
 import { doNavigate } from 'redux/actions/navigation';
 import { doDownloadLanguages } from 'redux/actions/settings';
 import { doUserEmailVerify } from 'redux/actions/user';
@@ -97,6 +98,7 @@ document.addEventListener('click', event => {
 });
 
 const init = () => {
+  app.store.dispatch(doUpdateIsNightAsync());
   app.store.dispatch(doDownloadLanguages());
 
   function onDaemonReady() {
