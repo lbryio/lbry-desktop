@@ -53,6 +53,7 @@ class PublishForm extends React.PureComponent {
       source: null,
       mode: "publish",
       thumbnailUploadPath: "",
+      thumbnailNFSW: false,
     };
   }
 
@@ -421,6 +422,12 @@ class PublishForm extends React.PureComponent {
     });
   }
 
+  handleThumbNSFWChange(event) {
+    this.setState({
+      thumbnailNFSW: event.target.checked,
+    });
+  }
+
   getLicense() {
     switch (this.state.licenseType) {
       case "copyright":
@@ -605,10 +612,15 @@ class PublishForm extends React.PureComponent {
                     name="thumbnail"
                     ref="thumbnail"
                     type="file"
+                    accept=".png, .jpg, .jpeg"
                     onChange={event => {
                       this.handleConfirmUpload(event);
                     }}
                   />
+                </div>
+
+                <div className="card__content">
+                  upload status: {this.selectUploadUrl}
                 </div>
 
                 <div className="card__content">

@@ -13,12 +13,8 @@ const select = state => ({
 });
 
 const perform = dispatch => ({
-  openModal: (modal, props) => {
-    console.log("modal:", modal);
-    console.log("props:", props);
-    return dispatch(doOpenModal(modal, props));
-  },
-  upload: path => dispatch(beginUpload(path)),
+  openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
+  upload: (path, nsfw) => dispatch(beginUpload(path, nsfw)),
 });
 
 export default connect(select, perform)(PublishForm);

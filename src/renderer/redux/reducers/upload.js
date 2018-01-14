@@ -3,7 +3,7 @@ import * as actions from "constants/action_types";
 import { handleActions } from "util/redux-utils";
 
 export type UploadState = {
-  status: string,
+  status: string | null,
   url: string | null,
 };
 
@@ -27,8 +27,8 @@ export type Action =
 export type Dispatch = (action: Action) => any;
 
 const defaultState = {
-  url: "",
   status: null,
+  url: null,
 };
 
 export default handleActions(
@@ -37,6 +37,7 @@ export default handleActions(
       state: UploadState,
       action: beginSpeechUpload
     ): UploadState => {
+      console.log("SPEECH UPLOAD BEGIN:", action);
       return {
         ...state,
         status: "upload",
@@ -48,10 +49,11 @@ export default handleActions(
       state: UploadState,
       action: speechUploadSuccess
     ): UploadState => {
+      console.log("SPEECH UPLOAD SUCCESS:", action);
       return {
         ...state,
         status: "success",
-        url: action.url,
+        url: action.data.url,
       };
     },
 
@@ -59,12 +61,14 @@ export default handleActions(
       state: UploadState,
       action: speechUploadError
     ): UploadState => {
+      console.log("SPEECH UPLOAD ERROR");
       return {
         ...state,
-        status: "upload",
+        status: null,
         url: null,
       };
     },
   },
+
   defaultState
 );
