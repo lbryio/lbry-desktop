@@ -48,6 +48,11 @@ export const selectEmailNewErrorMessage = createSelector(
   state => state.emailNewErrorMessage
 );
 
+export const selectPhoneNewErrorMessage = createSelector(
+  selectState,
+  state => state.phoneNewErrorMessage
+);
+
 export const selectEmailVerifyIsPending = createSelector(
   selectState,
   state => state.emailVerifyIsPending
@@ -56,6 +61,11 @@ export const selectEmailVerifyIsPending = createSelector(
 export const selectEmailVerifyErrorMessage = createSelector(
   selectState,
   state => state.emailVerifyErrorMessage
+);
+
+export const selectPhoneVerifyErrorMessage = createSelector(
+  selectState,
+  state => state.phoneVerifyErrorMessage
 );
 
 export const selectIdentityVerifyIsPending = createSelector(

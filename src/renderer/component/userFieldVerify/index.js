@@ -6,6 +6,7 @@ import {
   selectEmailToVerify,
   selectPhoneToVerify,
   selectEmailVerifyErrorMessage,
+  selectPhoneVerifyErrorMessage,
 } from 'redux/selectors/user';
 import UserFieldVerify from './view';
 
@@ -13,7 +14,8 @@ const select = state => ({
   isPending: selectEmailVerifyIsPending(state),
   email: selectEmailToVerify(state),
   phone: selectPhoneToVerify(state),
-  errorMessage: selectEmailVerifyErrorMessage(state),
+  emailErrorMessage: selectEmailVerifyErrorMessage(state),
+  phoneErrorMessage: selectPhoneVerifyErrorMessage(state),
 });
 
 const perform = dispatch => ({

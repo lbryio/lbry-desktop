@@ -33,7 +33,14 @@ class UserFieldVerify extends React.PureComponent {
   }
 
   render() {
-    const { cancelButton, errorMessage, email, isPending, phone } = this.props;
+    const {
+      cancelButton,
+      emailErrorMessage,
+      phoneErrorMessage,
+      email,
+      isPending,
+      phone,
+    } = this.props;
     return (
       <Form onSubmit={this.handleSubmit.bind(this)}>
         <p>Please enter the verification code sent to {phone || email}.</p>
@@ -45,7 +52,7 @@ class UserFieldVerify extends React.PureComponent {
           onChange={event => {
             this.handleCodeChanged(event);
           }}
-          errorMessage={errorMessage}
+          errorMessage={emailErrorMessage || phoneErrorMessage}
         />
         {/* render help separately so it always shows */}
         <div className="form-field__helper">

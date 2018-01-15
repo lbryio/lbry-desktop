@@ -27,7 +27,7 @@ class UserFieldNew extends React.PureComponent {
   }
 
   render() {
-    const { cancelButton, errorMessage, isPending, fieldType } = this.props;
+    const { cancelButton, emailErrorMessage, phoneErrorMessage, isPending, fieldType } = this.props;
 
     return fieldType === 'phone' ? (
       <div>
@@ -43,7 +43,7 @@ class UserFieldNew extends React.PureComponent {
             placeholder="(555) 555-5555"
             name="phone"
             value={this.state.phone}
-            errorMessage={errorMessage}
+            errorMessage={phoneErrorMessage}
             onChange={event => {
               this.handleChanged(event, 'phone');
             }}
@@ -67,7 +67,7 @@ class UserFieldNew extends React.PureComponent {
             placeholder="youremail@example.org"
             name="email"
             value={this.state.email}
-            errorMessage={errorMessage}
+            errorMessage={emailErrorMessage}
             onChange={event => {
               this.handleChanged(event, 'email');
             }}

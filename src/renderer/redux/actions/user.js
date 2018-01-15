@@ -92,10 +92,10 @@ export function doUserPhoneNew(phone) {
       });
     };
 
-    const failure = error => {
+    const failure = () => {
       dispatch({
         type: ACTIONS.USER_PHONE_NEW_FAILURE,
-        data: { error },
+        data: { error: 'An error occurred while processing this phone number.' },
       });
     };
 
