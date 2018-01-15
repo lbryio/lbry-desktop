@@ -33,6 +33,7 @@
     "amplitude-js": "^4.0.0",
     "bluebird": "^3.5.1",
     "classnames": "^2.2.5",
+    "dom-scroll-into-view": "^1.2.1",
     "electron-dl": "^1.6.0",
     "formik": "^0.10.4",
     "from2": "^2.3.0",
