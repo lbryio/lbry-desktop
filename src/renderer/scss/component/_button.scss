@@ -1,89 +1,78 @@
-@import '../mixin/link.scss';
+/*
+TODO:
+Determine [disabled] or .disabled
+Add <a> support (probably just get rid of button prefix)
+*/
 
-$button-focus-shift: 12%;
-
-.button-set-item {
-  position: relative;
-  display: inline-block;
-
-  + .button-set-item {
-    margin-left: var(--button-intra-margin);
-  }
-}
-
-.button-block,
-.faux-button-block {
-  display: inline-block;
-  height: var(--button-height);
-  line-height: var(--button-height);
+button {
+  border: none;
   text-decoration: none;
-  border: 0 none;
-  text-align: center;
-  border-radius: var(--button-radius);
-  text-transform: uppercase;
-  .icon {
-    top: 0em;
-  }
-  .icon:first-child {
-    padding-right: 5px;
-  }
-  .icon:last-child {
-    padding-left: 5px;
-  }
-  .icon:only-child {
-    padding-left: 0;
-    padding-right: 0;
-  }
-}
-.button-block {
   cursor: pointer;
-  font-weight: 500;
-  font-size: 14px;
-  user-select: none;
-  transition: background var(--animation-duration) var(--animation-style);
+  position: relative;
 }
 
-.button__content {
-  margin: 0 var(--button-padding);
-  display: flex;
-  .link-label {
-    text-decoration: none !important;
+button:disabled.btn--disabled {
+  cursor: default;
+  background-color: transparent;
+}
+
+button.btn {
+  padding: 10px;
+  margin: 0 5px;
+  border-radius: var(--btn-radius);
+  color: var(--btn-primary-color);
+  background-color: var(--btn-primary-bg);
+
+  &:hover:not(.btn--disabled) {
+    box-shadow: var(--box-shadow-layer);
   }
 }
 
-.button-primary {
-  color: var(--button-primary-color);
-  background-color: var(--button-primary-bg);
-  box-shadow: var(--box-shadow-layer);
+button.btn.btn--alt {
+  color: var(--btn-alt-color);
+  background-color: #efefef;
 
-  &:focus {
-    //color: var(--button-primary-active-color);
-    //background-color:color: var(--button-primary-active-bg);
-    //box-shadow: $box-shadow-focus;
+  &:hover {
+    color: #111;
+  }
+
+  &:active {
+    background-color: #cdcdcd;
+  }
+
+  &:disabled {
+    color: var(--color-help);
+    background-color: transparent;
   }
 }
-.button-alt {
-  background-color: var(--button-bg);
-  box-shadow: var(--box-shadow-layer);
-}
 
-.button-text {
-  @include text-link();
-  display: inline-block;
+button.btn.btn--circle {
+  border-radius: 50%;
+  transition: all 0.2s;
 
-  .button__content {
-    margin: 0 var(--text-link-padding);
+  &:hover:not([disabled]) {
+    border-radius: var(--btn-radius);
   }
 }
-.button-text-help {
-  @include text-link(var(--text-help-color));
-  font-size: 0.8em;
-}
-.button--flat {
-  box-shadow: none !important;
+
+button.btn.btn--inverse {
+  box-shadow: none;
+  background-color: transparent;
+  color: var(--btn-primary-bg);
 }
 
-.button--submit {
-  font-family: inherit;
-  line-height: 0;
+button.btn--link {
+  padding: 0;
+  margin: 0;
+  background-color: inherit;
+  font-size: 0.9em;
+  color: var(--btn-primary-bg); // this should be a different color
+
+  &:hover {
+    border-bottom: 1px solid;
+  }
+}
+
+.btn__label {
+  padding: 0 5px;
 }

@@ -1,8 +1,8 @@
 // @flow
 import React from 'react';
 import SubHeader from 'component/subHeader';
-import { BusyMessage } from 'component/common.js';
-import { FeaturedCategory } from 'page/discover/view';
+import { BusyMessage } from 'component/common';
+import CategoryList from 'component/common/category-list';
 import type { Subscription } from 'redux/reducers/subscriptions';
 
 type SavedSubscriptions = Array<Subscription>;
@@ -83,7 +83,7 @@ export default class extends React.PureComponent<Props> {
                 }
 
                 return (
-                  <FeaturedCategory
+                  <CategoryList
                     key={subscription.channelName}
                     categoryLink={subscription.uri}
                     category={subscription.channelName}
