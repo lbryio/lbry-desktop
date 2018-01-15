@@ -12,7 +12,7 @@ import { Provider } from 'react-redux';
 import { doConditionalAuthNavigate, doDaemonReady, doShowSnackBar } from 'redux/actions/app';
 import { doNavigate } from 'redux/actions/navigation';
 import { doDownloadLanguages } from 'redux/actions/settings';
-import { doUserFieldVerify } from 'redux/actions/user';
+import { doUserEmailVerify } from 'redux/actions/user';
 import 'scss/all.scss';
 import store from 'store';
 import app from './app';
@@ -35,7 +35,7 @@ ipcRenderer.on('open-uri-requested', (event, uri, newSession) => {
       }
       if (verification.token && verification.recaptcha) {
         app.store.dispatch(doConditionalAuthNavigate(newSession));
-        app.store.dispatch(doUserFieldVerify(verification.token, verification.recaptcha));
+        app.store.dispatch(doUserEmailVerify(verification.token, verification.recaptcha));
       } else {
         app.store.dispatch(doShowSnackBar({ message: 'Invalid Verification URI' }));
       }

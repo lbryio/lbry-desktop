@@ -3,7 +3,7 @@ import * as MODALS from 'constants/modal_types';
 import Lbryio from 'lbryio';
 import { doOpenModal, doShowSnackBar } from 'redux/actions/app';
 import { doClaimRewardType, doRewardList } from 'redux/actions/rewards';
-import { selectEmailToVerify } from 'redux/selectors/user';
+import { selectEmailToVerify, selectPhoneToVerify } from 'redux/selectors/user';
 import rewards from 'rewards';
 
 export function doFetchInviteStatus() {
@@ -78,7 +78,72 @@ export function doUserFetch() {
   };
 }
 
-export function doUserFieldNew(email) {
+export function doUserPhoneNew(phone) {
+  return dispatch => {
+    dispatch({
+      type: ACTIONS.USER_PHONE_NEW_STARTED,
+      phone,
+    });
+
+    const success = () => {
+      dispatch({
+        type: ACTIONS.USER_PHONE_NEW_SUCCESS,
+        data: { phone },
+      });
+    };
+
+    const failure = error => {
+      dispatch({
+        type: ACTIONS.USER_PHONE_NEW_FAILURE,
+        data: { error },
+      });
+    };
+
+    Lbryio.call('user_phone', 'new', { phone_number: phone, country_code: 1 }, 'post').then(
+      success,
+      failure
+    );
+  };
+}
+
+export function doUserPhoneVerifyFailure(error) {
+  return {
+    type: ACTIONS.USER_PHONE_VERIFY_FAILURE,
+    data: { error },
+  };
+}
+
+export function doUserPhoneVerify(verificationCode) {
+  return (dispatch, getState) => {
+    const phone_number = selectPhoneToVerify(getState());
+
+    dispatch({
+      type: ACTIONS.USER_PHONE_VERIFY_STARTED,
+      code: verificationCode,
+    });
+
+    Lbryio.call(
+      'user_phone',
+      'confirm',
+      {
+        verification_code: verificationCode,
+        phone_number,
+        country_code: '1',
+      },
+      'post'
+    )
+      .then(userEmail => {
+        dispatch({
+          type: ACTIONS.USER_PHONE_VERIFY_SUCCESS,
+          data: { phone_number },
+        });
+        dispatch(doUserFetch());
+      })
+      .catch(error => dispatch(doUserPhoneVerifyFailure(error)));
+  };
+}
+
+export function doUserEmailNew(email) {
   return dispatch => {
     dispatch({
       type: ACTIONS.USER_EMAIL_NEW_STARTED,
@@ -116,14 +181,14 @@ export function doUserFieldNew(email) {
   };
 }
 
-export function doUserFieldVerifyFailure(error) {
+export function doUserEmailVerifyFailure(error) {
   return {
     type: ACTIONS.USER_EMAIL_VERIFY_FAILURE,
     data: { error },
   };
 }
 
-export function doUserFieldVerify(verificationToken, recaptcha) {
+export function doUserEmailVerify(verificationToken, recaptcha) {
   return (dispatch, getState) => {
     const email = selectEmailToVerify(getState());
 
@@ -154,7 +219,7 @@ export function doUserFieldVerify(verificationToken, recaptcha) {
           throw new Error('Your email is still not verified.'); // shouldn't happen
         }
       })
-      .catch(error => dispatch(doUserFieldVerifyFailure(error)));
+      .catch(error => dispatch(doUserEmailVerifyFailure(error)));
   };
 }
 

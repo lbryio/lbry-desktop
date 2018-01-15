@@ -3,18 +3,19 @@ import * as settings from 'constants/settings';
 import { connect } from 'react-redux';
 import { doCloseModal } from 'redux/actions/app';
 import { doSetClientSetting } from 'redux/actions/settings';
-import { selectEmailToVerify, selectUser } from 'redux/selectors/user';
+import { selectPhoneToVerify, selectUser } from 'redux/selectors/user';
 import ModalPhoneCollection from './view';
+import { doNavigate } from 'redux/actions/navigation';
 
 const select = state => ({
-  email: selectEmailToVerify(state),
+  phone: selectPhoneToVerify(state),
   user: selectUser(state),
 });
 
 const perform = dispatch => () => ({
   closeModal: () => {
-    dispatch(doSetClientSetting(settings.EMAIL_COLLECTION_ACKNOWLEDGED, true));
     dispatch(doCloseModal());
+    dispatch(doNavigate('/rewards'));
   },
 });
 

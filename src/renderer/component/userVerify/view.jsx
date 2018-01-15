@@ -23,7 +23,7 @@ class UserVerify extends React.PureComponent {
   }
 
   render() {
-    const { errorMessage, isPending, navigate } = this.props;
+    const { errorMessage, isPending, navigate, verifyPhone, modal } = this.props;
     return (
       <div>
         <section className="card card--form">
@@ -74,12 +74,13 @@ class UserVerify extends React.PureComponent {
             )}`}
           </div>
           <div className="card__actions">
-            {errorMessage && <p className="form-field__error">{errorMessage}</p>}
-            <CardVerify
+            <Link
+              onClick={() => {
+                verifyPhone();
+              }}
+              button="alt"
+              icon="icon-phone"
               label={__('Submit Phone Number')}
-              disabled={isPending}
-              token={this.onToken.bind(this)}
-              stripeKey={lbryio.getStripeToken()}
             />
           </div>
           <div className="card__content">

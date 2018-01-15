@@ -16,10 +16,21 @@ export const selectUserEmail = createSelector(
   user => (user ? user.primary_email : null)
 );
 
+export const selectUserPhone = createSelector(
+  selectUser,
+  user => (user ? user.phone_number : null)
+);
+
 export const selectEmailToVerify = createSelector(
   selectState,
   selectUserEmail,
   (state, userEmail) => state.emailToVerify || userEmail
+);
+
+export const selectPhoneToVerify = createSelector(
+  selectState,
+  selectUserPhone,
+  (state, userPhone) => state.phoneToVerify || userPhone
 );
 
 export const selectUserIsRewardApproved = createSelector(

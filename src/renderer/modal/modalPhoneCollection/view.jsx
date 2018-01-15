@@ -6,14 +6,14 @@ import UserFieldVerify from 'component/userFieldVerify';
 
 class ModalPhoneCollection extends React.PureComponent {
   renderInner() {
-    const { closeModal, email, user } = this.props;
+    const { closeModal, phone, user } = this.props;
 
     const cancelButton = <Link button="text" onClick={closeModal} label={__('Not Now')} />;
 
-    if (!user.has_verified_email && !email) {
-      return <UserFieldNew cancelButton={cancelButton} />;
-    } else if (!user.has_verified_email) {
-      return <UserFieldVerify cancelButton={cancelButton} />;
+    if (!user.phone_number && !phone) {
+      return <UserFieldNew cancelButton={cancelButton} fieldType="phone" />;
+    } else if (!user.phone_number) {
+      return <UserFieldVerify cancelButton={cancelButton} fieldType="phone" />;
     }
     closeModal();
   }

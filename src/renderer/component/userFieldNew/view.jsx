@@ -6,25 +6,58 @@ class UserFieldNew extends React.PureComponent {
     super(props);
 
     this.state = {
+      phone: '',
       email: '',
     };
   }
 
-  handleEmailChanged(event) {
+  handleChanged(event, fieldType) {
+    console.log({
+      [fieldType]: event.target.value,
+    });
     this.setState({
-      email: event.target.value,
+      [fieldType]: event.target.value,
     });
   }
 
   handleSubmit() {
-    const { email } = this.state;
-    this.props.addUserEmail(email);
+    const { email, phone } = this.state;
+    if (phone) {
+      this.props.addUserPhone(phone);
+    } else {
+      this.props.addUserEmail(email);
+    }
   }
 
   render() {
-    const { cancelButton, errorMessage, isPending } = this.props;
+    const { cancelButton, errorMessage, isPending, fieldType } = this.props;
 
-    return (
+    return fieldType === 'phone' ? (
+      <div>
+        <p>
+          {__(
+            'Enter your phone number and we will send you a verification code. We will not share your phone number with third parties.'
+          )}
+        </p>
+        <Form onSubmit={this.handleSubmit.bind(this)}>
+          <FormRow
+            type="text"
+            label="Phone"
+            placeholder="(555) 555-5555"
+            name="phone"
+            value={this.state.phone}
+            errorMessage={errorMessage}
+            onChange={event => {
+              this.handleChanged(event, 'phone');
+            }}
+          />
+          <div className="form-row-submit">
+            <Submit label="Submit" disabled={isPending} />
+            {cancelButton}
+          </div>
+        </Form>
+      </div>
+    ) : (
       <div>
         <p>
           {__("We'll let you know about LBRY updates, security issues, and great new content.")}
@@ -39,7 +72,7 @@ class UserFieldNew extends React.PureComponent {
             value={this.state.email}
             errorMessage={errorMessage}
             onChange={event => {
-              this.handleEmailChanged(event);
+              this.handleChanged(event, 'email');
             }}
           />
           <div className="form-row-submit">

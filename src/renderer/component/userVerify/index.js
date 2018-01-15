@@ -9,6 +9,9 @@ import {
   selectIdentityVerifyErrorMessage,
 } from 'redux/selectors/user';
 import UserVerify from './view';
+import { selectCurrentModal } from 'redux/selectors/app';
+import { doOpenModal } from 'redux/actions/app';
+import { PHONE_COLLECTION } from 'constants/modal_types';
 
 const select = (state, props) => {
   const selectReward = makeSelectRewardByType();
@@ -17,12 +20,14 @@ const select = (state, props) => {
     isPending: selectIdentityVerifyIsPending(state),
     errorMessage: selectIdentityVerifyErrorMessage(state),
     reward: selectReward(state, { reward_type: rewards.TYPE_NEW_USER }),
+    modal: selectCurrentModal(state),
   };
 };
 
 const perform = dispatch => ({
   navigate: uri => dispatch(doNavigate(uri)),
   verifyUserIdentity: token => dispatch(doUserIdentityVerify(token)),
+  verifyPhone: () => dispatch(doOpenModal(PHONE_COLLECTION)),
 });
 
 export default connect(select, perform)(UserVerify);

@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { doUserFieldNew, doUserInviteNew } from 'redux/actions/user';
+import { doUserEmailNew, doUserPhoneNew, doUserInviteNew } from 'redux/actions/user';
 import { selectEmailNewIsPending, selectEmailNewErrorMessage } from 'redux/selectors/user';
 import UserFieldNew from './view';
 
@@ -10,7 +10,8 @@ const select = state => ({
 });
 
 const perform = dispatch => ({
-  addUserEmail: email => dispatch(doUserFieldNew(email)),
+  addUserEmail: email => dispatch(doUserEmailNew(email)),
+  addUserPhone: phone => dispatch(doUserPhoneNew(phone)),
 });
 
 export default connect(select, perform)(UserFieldNew);

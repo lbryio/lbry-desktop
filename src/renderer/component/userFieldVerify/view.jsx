@@ -19,19 +19,24 @@ class UserFieldVerify extends React.PureComponent {
 
   handleSubmit() {
     const { code } = this.state;
-    try {
-      const verification = JSON.parse(atob(code));
-      this.props.verifyUserEmail(verification.token, verification.recaptcha);
-    } catch (error) {
-      this.props.verifyUserEmailFailure('Invalid Verification Token');
+    const { fieldType } = this.props;
+    if (fieldType === 'phone') {
+      this.props.verifyUserPhone(code);
+    } else {
+      try {
+        const verification = JSON.parse(atob(code));
+        this.props.verifyUserEmail(verification.token, verification.recaptcha);
+      } catch (error) {
+        this.props.verifyUserEmailFailure('Invalid Verification Token');
+      }
     }
   }
 
   render() {
-    const { cancelButton, errorMessage, email, isPending } = this.props;
+    const { cancelButton, errorMessage, email, isPending, phone } = this.props;
     return (
       <Form onSubmit={this.handleSubmit.bind(this)}>
-        <p>Please enter the verification code emailed to {email}.</p>
+        <p>Please enter the verification code sent to {phone || email}.</p>
         <FormRow
           type="text"
           label={__('Verification Code')}
