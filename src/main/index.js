@@ -1,14 +1,14 @@
 /* eslint-disable no-console */
 // Module imports
-import Path from 'path';
-import Url from 'url';
+import path from 'path';
+import url from 'url';
 import Jayson from 'jayson';
-import Semver from 'semver';
-import Https from 'https';
-import Keytar from 'keytar';
+import SemVer from 'semver';
+import https from 'https';
+import keytar from 'keytar-prebuild';
 import ChildProcess from 'child_process';
-import Assert from 'assert';
-import { app, BrowserWindow, globalShortcut, ipcMain, Menu, Tray } from 'electron';
+import assert from 'assert';
+import { app, BrowserWindow, globalShortcut, ipcMain, Menu, Tray, dialog } from 'electron';
 import mainMenu from './menu/mainMenu';
 import contextMenu from './menu/contextMenu';
 
@@ -18,9 +18,9 @@ const localVersion = app.getVersion();
 const isDevelopment = process.env.NODE_ENV === 'development';
 
 // Misc constants
-const LATEST_RELEASE_API_URL = 'https://api.github.com/repos/lbryio/lbry-app/releases/latest';
-const DAEMON_PATH = process.env.LBRY_DAEMON || Path.join(__static, 'daemon/lbrynet-daemon');
-const rendererUrl = isDevelopment
+const latestReleaseAPIURL = 'https://api.github.com/repos/lbryio/lbry-app/releases/latest';
+const daemonPath = process.env.LBRY_DAEMON || path.join(__static, 'daemon/lbrynet-daemon');
+const rendererURL = isDevelopment
   ? `http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`
   : `file://${__dirname}/index.html`;
 
@@ -47,7 +47,7 @@ let readyToQuit = false;
 
 // If we receive a URI to open from an external app but there's no window to
 // sendCredits it to, it's cached in this variable.
-let openUri = null;
+let openURI = null;
 
 // Set this to true to minimize on clicking close
 // false for normal action
@@ -56,7 +56,7 @@ let minimize = true;
 // Keep the tray also, it is getting GC'd if put in createTray()
 let tray = null;
 
-function processRequestedUri(uri) {
+function processRequestedURI(URI) {
   // Windows normalizes URIs when they're passed in from other apps. On Windows,
   // this function tries to restore the original URI that was typed.
   //   - If the URI has no path, Windows adds a trailing slash. LBRY URIs
@@ -67,9 +67,9 @@ function processRequestedUri(uri) {
   // On Linux and Mac, we just return the URI as given.
 
   if (process.platform === 'win32') {
-    return uri.replace(/\/$/, '').replace('/#', '#');
+    return URI.replace(/\/$/, '').replace('/#', '#');
   }
-  return uri;
+  return URI;
 }
 
 /*
@@ -162,13 +162,17 @@ function createWindow() {
   if (isDevelopment) {
     window.webContents.openDevTools();
   }
-  window.loadURL(rendererUrl);
-  if (openUri) {
+  window.loadURL(rendererURL);
+  if (openURI) {
     // We stored and received a URI that an external app requested before we had a window object
     window.webContents.on('did-finish-load', () => {
-      window.webContents.send('open-uri-requested', openUri, true);
+      window.webContents.send('open-uri-requested', openURI, true);
     });
   }
+
+  window.webContents.on('crashed', () => {
+    safeQuit();
+  });
 
   window.removeAllListeners();
 
@@ -211,6 +215,23 @@ function createWindow() {
     window.webContents.send('window-is-focused', null);
   });
 
+  window.on('unresponsive', () => {
+    dialog.showMessageBox(
+      window,
+      {
+        type: 'warning',
+        buttons: ['Wait', 'Quit'],
+        title: 'LBRY Unresponsive',
+        defaultId: 1,
+        message: 'LBRY is not responding. Would you like to quit?',
+        cancelId: 0,
+      },
+      buttonIndex => {
+        if (buttonIndex === 1) safeQuit();
+      }
+    );
+  });
+
   mainMenu();
 
   return window;
@@ -223,9 +244,9 @@ function createTray() {
   if (process.platform === 'darwin') {
     // Using @2x for mac retina screens so the icon isn't blurry
     // file name needs to include "Template" at the end for dark menu bar
-    iconPath = Path.join(__static, '/img/fav/macTemplate@2x.png');
+    iconPath = path.join(__static, '/img/fav/macTemplate@2x.png');
   } else {
-    iconPath = Path.join(__static, '/img/fav/32x32.png');
+    iconPath = path.join(__static, '/img/fav/32x32.png');
   }
 
   tray = new Tray(iconPath);
@@ -236,10 +257,10 @@ function createTray() {
   });
 }
 
-function handleOpenUriRequested(uri) {
+function handleOpenURIRequested(URI) {
   if (!rendererWindow) {
     // Window not created yet, so store up requested URI for when it is
-    openUri = processRequestedUri(uri);
+    openURI = processRequestedURI(URI);
   } else {
     if (rendererWindow.isMinimized()) {
       rendererWindow.restore();
@@ -248,7 +269,7 @@ function handleOpenUriRequested(uri) {
     }
 
     rendererWindow.focus();
-    rendererWindow.webContents.send('open-uri-requested', processRequestedUri(uri));
+    rendererWindow.webContents.send('open-uri-requested', processRequestedURI(URI));
   }
 }
 
@@ -282,10 +303,10 @@ function handleDaemonSubprocessExited() {
 }
 
 function launchDaemon() {
-  Assert(!daemonSubprocess, 'Tried to launch daemon twice');
+  assert(!daemonSubprocess, 'Tried to launch daemon twice');
 
-  console.log('Launching daemon:', DAEMON_PATH);
-  daemonSubprocess = ChildProcess.spawn(DAEMON_PATH);
+  console.log('Launching daemon:', daemonPath);
+  daemonSubprocess = ChildProcess.spawn(daemonPath);
   // Need to handle the data event instead of attaching to
   // process.stdout because the latter doesn't work. I believe on
   // windows it buffers stdout and we don't get any meaningful output
@@ -300,7 +321,7 @@ function launchDaemon() {
 
 const isSecondaryInstance = app.makeSingleInstance(argv => {
   if (argv.length >= 2) {
-    handleOpenUriRequested(argv[1]); // This will handle restoring and focusing the window
+    handleOpenURIRequested(argv[1]); // This will handle restoring and focusing the window
   } else if (rendererWindow) {
     if (rendererWindow.isMinimized()) {
       rendererWindow.restore();
@@ -443,11 +464,11 @@ app.on('activate', () => {
 });
 
 if (process.platform === 'darwin') {
-  app.on('open-url', (event, uri) => {
-    handleOpenUriRequested(uri);
+  app.on('open-url', (event, URI) => {
+    handleOpenURIRequested(URI);
   });
 } else if (process.argv.length >= 2) {
-  handleOpenUriRequested(process.argv[1]);
+  handleOpenURIRequested(process.argv[1]);
 }
 
 ipcMain.on('upgrade', (event, installerPath) => {
@@ -485,7 +506,7 @@ ipcMain.on('version-info-requested', () => {
     },
   };
 
-  const req = Https.get(Object.assign(opts, Url.parse(LATEST_RELEASE_API_URL)), res => {
+  const req = https.get(Object.assign(opts, url.parse(latestReleaseAPIURL)), res => {
     res.on('data', data => {
       result += data;
     });
@@ -497,7 +518,7 @@ ipcMain.on('version-info-requested', () => {
           rendererWindow.webContents.send('version-info-received', null);
         }
       } else {
-        const upgradeAvailable = Semver.gt(formatRc(remoteVersion), formatRc(localVersion));
+        const upgradeAvailable = SemVer.gt(formatRc(remoteVersion), formatRc(localVersion));
         if (rendererWindow) {
           rendererWindow.webContents.send('version-info-received', {
             remoteVersion,
@@ -518,13 +539,18 @@ ipcMain.on('version-info-requested', () => {
 });
 
 ipcMain.on('get-auth-token', event => {
-  Keytar.getPassword('LBRY', 'auth_token').then(token => {
+  keytar.getPassword('LBRY', 'auth_token').then(token => {
     event.sender.send('auth-token-response', token ? token.toString().trim() : null);
   });
 });
 
 ipcMain.on('set-auth-token', (event, token) => {
-  Keytar.setPassword('LBRY', 'auth_token', token ? token.toString().trim() : null);
+  keytar.setPassword('LBRY', 'auth_token', token ? token.toString().trim() : null);
+});
+
+process.on('uncaughtException', error => {
+  console.error(error);
+  safeQuit();
 });
 
 export { contextMenu };
