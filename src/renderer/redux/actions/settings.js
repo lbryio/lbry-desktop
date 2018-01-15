@@ -67,7 +67,7 @@ function isNight() {
   const startNightMoment = moment('19:00', 'HH:mm');
   const endNightTime = moment('8:00', 'HH:mm');
   const momentNow = moment();
-  return momentNow.isAfter(endNightTime) && momentNow.isBefore(startNightMoment) ? false : true;
+  return !(momentNow.isAfter(endNightTime) && momentNow.isBefore(startNightMoment));
 }
 
 export function doUpdateIsNight() {

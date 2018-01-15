@@ -1,6 +1,5 @@
 import * as SETTINGS from 'constants/settings';
 import { createSelector } from 'reselect';
-import moment from 'moment';
 
 const selectState = state => state.settings || {};
 
