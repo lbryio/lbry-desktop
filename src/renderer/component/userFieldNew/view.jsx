@@ -12,9 +12,6 @@ class UserFieldNew extends React.PureComponent {
   }
 
   handleChanged(event, fieldType) {
-    console.log({
-      [fieldType]: event.target.value,
-    });
     this.setState({
       [fieldType]: event.target.value,
     });
