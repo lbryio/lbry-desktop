@@ -10,8 +10,9 @@ export const Header = props => {
     isBackDisabled,
     isForwardDisabled,
     isUpgradeAvailable,
+    autoUpdateDownloaded,
     navigate,
-    downloadUpgrade,
+    downloadUpgradeRequested,
   } = props;
   return (
     <header id="header">
@@ -86,9 +87,9 @@ export const Header = props => {
           title={__('Settings')}
         />
       </div>
-      {isUpgradeAvailable && (
+      {(autoUpdateDownloaded || (process.platform === 'linux' && isUpgradeAvailable)) && (
         <Link
-          onClick={() => downloadUpgrade()}
+          onClick={() => downloadUpgradeRequested()}
           button="primary button--flat"
           icon="icon-arrow-up"
           label={__('Upgrade App')}

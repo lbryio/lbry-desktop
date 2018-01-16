@@ -67,6 +67,26 @@ export function doStartUpgrade() {
   };
 }
 
+export function doDownloadUpgradeRequested() {
+  // This means the user requested an upgrade by clicking the "upgrade" button in the navbar.
+  // If on Mac and Windows, we do some new behavior for the auto-update system.
+  // This will probably be reorganized once we get auto-update going on Linux and remove
+  // the old logic.
+
+  return (dispatch, getState) => {
+    const state = getState();
+
+    if (['win32', 'darwin'].includes(process.platform)) { // electron-updater behavior
+      dispatch({
+        type: ACTIONS.OPEN_MODAL,
+        data: { modal: MODALS.AUTO_UPDATE_CONFIRM },
+      });
+    } else { // Old behavior for Linux
+      doDownloadUpgrade();
+    }
+  };
+}
+
 export function doDownloadUpgrade() {
   return (dispatch, getState) => {
     const state = getState();
@@ -109,6 +129,10 @@ export function doDownloadUpgrade() {
 export function doAutoUpdate() {
   return function(dispatch, getState) {
     const state = getState();
+    dispatch({
+      type: ACTIONS.AUTO_UPDATE_DOWNLOADED,
+    });
+
     dispatch({
       type: ACTIONS.OPEN_MODAL,
       data: { modal: MODALS.AUTO_UPDATE_DOWNLOADED },

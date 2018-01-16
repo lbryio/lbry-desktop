@@ -46,6 +46,7 @@ const defaultState: AppState = {
   hasSignature: false,
   badgeNumber: 0,
   volume: Number(sessionStorage.getItem('volume')) || 1,
+  autoUpdateDownloaded: false,
 
   downloadProgress: undefined,
   upgradeDownloading: undefined,
@@ -77,6 +78,11 @@ reducers[ACTIONS.UPGRADE_CANCELLED] = state =>
     downloadProgress: null,
     upgradeDownloadComplete: false,
     modal: null,
+  });
+
+reducers[ACTIONS.AUTO_UPDATE_DOWNLOADED] = state =>
+  Object.assign({}, state, {
+    autoUpdateDownloaded: true,
   });
 
 reducers[ACTIONS.UPGRADE_DOWNLOAD_COMPLETED] = (state, action) =>
