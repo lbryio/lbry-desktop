@@ -53,6 +53,7 @@ class PublishForm extends React.PureComponent {
       source: null,
       mode: "publish",
       thumbnailUploadPath: "",
+      thumbnailUploadStatus: "upload",
       thumbnailNFSW: false,
     };
   }
@@ -458,6 +459,38 @@ class PublishForm extends React.PureComponent {
     this.setState({ id });
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.uploadStatus === "error") {
+      alert("UPLOAD FAILED, PLEASE TRY AGAIN.");
+      this.props.resetUpload();
+    }
+
+    if (nextProps.uploadStatus === "upload") {
+      this.setState({
+        thumbnailUploadStatus: "upload",
+      });
+    }
+
+    if (nextProps.uploadStatus === "manual") {
+      this.setState({
+        thumbnailUploadStatus: "manual",
+      });
+    }
+
+    if (nextProps.uploadStatus === "sending") {
+      this.setState({
+        thumbnailUploadStatus: "sending",
+      });
+    }
+
+    if (nextProps.uploadStatus === "complete") {
+      this.setState({
+        thumbnailUploadStatus: "complete",
+        meta_thumbnail: nextProps.uploadUrl,
+      });
+    }
+  }
+
   componentDidMount() {
     this.handleEditClaim();
   }
@@ -610,6 +643,7 @@ class PublishForm extends React.PureComponent {
                 <div className="card__content">
                   <FormRow
                     name="thumbnail"
+                    label={__("Upload Thumbnail")}
                     ref="thumbnail"
                     type="file"
                     accept=".png, .jpg, .jpeg"

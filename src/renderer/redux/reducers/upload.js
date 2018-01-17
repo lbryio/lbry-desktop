@@ -20,14 +20,19 @@ type speechUploadError = {
   type: actions.SPEECH_UPLOAD_ERROR,
 };
 
+type speechUploadReset = {
+  type: actions.SPEECH_UPLOAD_RESET,
+};
+
 export type Action =
   | beginSpeechUpload
   | speechUploadSuccess
-  | speechUploadError;
+  | speechUploadError
+  | speechUploadReset;
 export type Dispatch = (action: Action) => any;
 
 const defaultState = {
-  status: null,
+  status: "upload",
   url: null,
 };
 
@@ -36,38 +41,38 @@ export default handleActions(
     [actions.SPEECH_UPLOAD_BEGIN]: (
       state: UploadState,
       action: beginSpeechUpload
-    ): UploadState => {
-      console.log("SPEECH UPLOAD BEGIN:", action);
-      return {
-        ...state,
-        status: "upload",
-        url: null,
-      };
-    },
+    ): UploadState => ({
+      ...state,
+      status: "sending",
+      url: null,
+    }),
 
     [actions.SPEECH_UPLOAD_SUCCESS]: (
       state: UploadState,
       action: speechUploadSuccess
-    ): UploadState => {
-      console.log("SPEECH UPLOAD SUCCESS:", action);
-      return {
-        ...state,
-        status: "success",
-        url: action.data.url,
-      };
-    },
+    ): UploadState => ({
+      ...state,
+      status: "complete",
+      url: action.data.url,
+    }),
 
     [actions.SPEECH_UPLOAD_ERROR]: (
       state: UploadState,
       action: speechUploadError
-    ): UploadState => {
-      console.log("SPEECH UPLOAD ERROR");
-      return {
-        ...state,
-        status: null,
-        url: null,
-      };
-    },
+    ): UploadState => ({
+      ...state,
+      status: "error",
+      url: null,
+    }),
+
+    [actions.SPEECH_UPLOAD_RESET]: (
+      state: UploadState,
+      action: speechUploadReset
+    ): UploadState => ({
+      ...state,
+      status: "upload",
+      url: null,
+    }),
   },
 
   defaultState

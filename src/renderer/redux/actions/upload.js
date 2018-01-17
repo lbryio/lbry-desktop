@@ -6,7 +6,10 @@ import fs from "fs";
 import path from "path";
 // import { error } from "util";
 
-export const beginUpload = (filePath: string, nsfw: boolean = false) => (
+export const resetSpeechUpload = () => (dispatch: Dispatch) =>
+  dispatch({ type: actions.SPEECH_UPLOAD_RESET });
+
+export const beginSpeechUpload = (filePath: string, nsfw: boolean = false) => (
   dispatch: Dispatch
 ) => {
   const thumbnail = fs.readFileSync(filePath);
@@ -26,6 +29,7 @@ export const beginUpload = (filePath: string, nsfw: boolean = false) => (
       data.append("name", available ? safeName : `${safeName}-${makeid()}`);
       const blob = new Blob([thumbnail], { type: `image/${fileExt.slice(1)}` });
       data.append("file", blob, path.basename(filePath));
+      // data.append("nsfw", nsfw);
       return fetch("https://spee.ch/api/claim-publish", {
         method: "POST",
         body: data,
@@ -36,10 +40,7 @@ export const beginUpload = (filePath: string, nsfw: boolean = false) => (
             json.success
               ? dispatch({
                   type: actions.SPEECH_UPLOAD_SUCCESS,
-                  data: {
-                    url: `${json.message.url}${fileExt}`,
-                    nsfw,
-                  },
+                  data: { url: `${json.message.url}${fileExt}` },
                 })
               : dispatch({ type: actions.SPEECH_UPLOAD_ERROR })
         )
@@ -51,10 +52,8 @@ export const beginUpload = (filePath: string, nsfw: boolean = false) => (
     var text = "";
     var possible =
       "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
     for (var i = 0; i < 7; i++)
       text += possible.charAt(Math.floor(Math.random() * possible.length));
-
     return text;
   }
 };
