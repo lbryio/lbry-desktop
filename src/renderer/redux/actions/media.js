@@ -1,8 +1,6 @@
 // @flow
-import * as actions from "constants/action_types";
-import type { Action, Dispatch } from "redux/reducers/media";
-import lbry from "lbry";
-import { makeSelectClaimForUri } from "redux/selectors/claims";
+import * as actions from 'constants/action_types';
+import type { Dispatch } from 'redux/reducers/media';
 
 export const doPlay = () => (dispatch: Dispatch) =>
   dispatch({

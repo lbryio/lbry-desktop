@@ -2,14 +2,12 @@
 import * as ACTIONS from 'constants/action_types';
 import * as MODALS from 'constants/modal_types';
 import { ipcRenderer, remote } from 'electron';
-import Lbry from 'lbry';
+import { Lbry, doBalanceSubscribe, doFetchFileInfosAndPublishedClaims } from 'lbry-redux';
 import Path from 'path';
 import { doFetchRewardedContent } from 'redux/actions/content';
-import { doFetchFileInfosAndPublishedClaims } from 'redux/actions/file_info';
 import { doAuthNavigate } from 'redux/actions/navigation';
 import { doFetchDaemonSettings } from 'redux/actions/settings';
 import { doAuthenticate } from 'redux/actions/user';
-import { doBalanceSubscribe } from 'redux/actions/wallet';
 import {
   selectCurrentModal,
   selectIsUpgradeSkipped,
@@ -25,22 +23,6 @@ const Fs = remote.require('fs');
 const { lbrySettings: config } = require('package.json');
 
 const CHECK_UPGRADE_INTERVAL = 10 * 60 * 1000;
-
-export function doOpenModal(modal, modalProps = {}) {
-  return {
-    type: ACTIONS.OPEN_MODAL,
-    data: {
-      modal,
-      modalProps,
-    },
-  };
-}
-
-export function doCloseModal() {
-  return {
-    type: ACTIONS.CLOSE_MODAL,
-  };
-}
 
 export function doUpdateDownloadProgress(percent) {
   return {
@@ -223,13 +205,6 @@ export function doDaemonReady() {
       dispatch(doCheckUpgradeAvailable());
     }
     dispatch(doCheckUpgradeSubscribe());
-  };
-}
-
-export function doShowSnackBar(data) {
-  return {
-    type: ACTIONS.SHOW_SNACKBAR,
-    data,
   };
 }
 

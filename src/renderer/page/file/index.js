@@ -1,18 +1,18 @@
 import { connect } from 'react-redux';
 import { doNavigate } from 'redux/actions/navigation';
-import { doFetchFileInfo } from 'redux/actions/file_info';
-import { makeSelectFileInfoForUri } from 'redux/selectors/file_info';
-import { selectRewardContentClaimIds } from 'redux/selectors/content';
-import { doFetchCostInfoForUri } from 'redux/actions/cost_info';
 import {
+  doFetchFileInfo,
+  doFetchCostInfoForUri,
+  makeSelectCostInfoForUri,
+  makeSelectFileInfoForUri,
   makeSelectClaimForUri,
   makeSelectContentTypeForUri,
   makeSelectMetadataForUri,
-} from 'redux/selectors/claims';
-import { makeSelectCostInfoForUri } from 'redux/selectors/cost_info';
+} from 'lbry-redux';
+import { selectRewardContentClaimIds } from 'redux/selectors/content';
 import { selectShowNsfw } from 'redux/selectors/settings';
-import FilePage from './view';
 import { makeSelectCurrentParam } from 'redux/selectors/navigation';
+import FilePage from './view';
 
 const select = (state, props) => ({
   claim: makeSelectClaimForUri(props.uri)(state),

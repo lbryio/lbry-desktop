@@ -1,12 +1,11 @@
-import React from 'react';
 import { formatCredits } from 'util/formatCredits';
 import { connect } from 'react-redux';
 import { selectIsBackDisabled, selectIsForwardDisabled } from 'redux/selectors/navigation';
-import { selectBalance } from 'redux/selectors/wallet';
+import { selectBalance } from 'lbry-redux';
 import { doNavigate, doHistoryBack, doHistoryForward } from 'redux/actions/navigation';
-import Header from './view';
 import { selectIsUpgradeAvailable } from 'redux/selectors/app';
 import { doDownloadUpgrade } from 'redux/actions/app';
+import header from './view';
 
 const select = state => ({
   isBackDisabled: selectIsBackDisabled(state),
@@ -22,4 +21,4 @@ const perform = dispatch => ({
   downloadUpgrade: () => dispatch(doDownloadUpgrade()),
 });
 
-export default connect(select, perform)(Header);
+export default connect(select, perform)(header);

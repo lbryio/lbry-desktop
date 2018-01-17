@@ -1,16 +1,18 @@
 import { createLogger } from 'redux-logger';
 import appReducer from 'redux/reducers/app';
 import availabilityReducer from 'redux/reducers/availability';
-import claimsReducer from 'redux/reducers/claims';
 import contentReducer from 'redux/reducers/content';
-import costInfoReducer from 'lbry-redux';
-import fileInfoReducer from 'redux/reducers/file_info';
+import {
+  claimsReducer,
+  costInfoReducer,
+  fileInfoReducer,
+  searchReducer,
+  walletReducer,
+} from 'lbry-redux';
 import navigationReducer from 'redux/reducers/navigation';
 import rewardsReducer from 'redux/reducers/rewards';
-import searchReducer from 'redux/reducers/search';
 import settingsReducer from 'redux/reducers/settings';
 import userReducer from 'redux/reducers/user';
-import walletReducer from 'redux/reducers/wallet';
 import shapeShiftReducer from 'redux/reducers/shape_shift';
 import subscriptionsReducer from 'redux/reducers/subscriptions';
 import mediaReducer from 'redux/reducers/media';

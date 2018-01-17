@@ -1,9 +1,6 @@
-import React from 'react';
 import { connect } from 'react-redux';
-import { doSendSupport } from 'redux/actions/wallet';
+import { doSendSupport, makeSelectTitleForUri, selectIsSendingSupport } from 'lbry-redux';
 import WalletSendTip from './view';
-import { makeSelectTitleForUri } from 'redux/selectors/claims';
-import { selectIsSendingSupport } from 'redux/selectors/wallet';
 
 const select = (state, props) => ({
   isPending: selectIsSendingSupport(state),
@@ -11,7 +8,7 @@ const select = (state, props) => ({
 });
 
 const perform = dispatch => ({
-  sendSupport: (amount, claim_id, uri) => dispatch(doSendSupport(amount, claim_id, uri)),
+  sendSupport: (amount, claimId, uri) => dispatch(doSendSupport(amount, claimId, uri)),
 });
 
 export default connect(select, perform)(WalletSendTip);

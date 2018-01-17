@@ -1,13 +1,10 @@
-import React from 'react';
 import { connect } from 'react-redux';
-import { doFetchTransactions } from 'redux/actions/wallet';
 import {
-  selectBalance,
+  doFetchTransactions,
   selectRecentTransactions,
   selectHasTransactions,
   selectIsFetchingTransactions,
-} from 'redux/selectors/wallet';
-
+} from 'lbry-redux';
 import TransactionListRecent from './view';
 
 const select = state => ({

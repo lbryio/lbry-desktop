@@ -1,15 +1,12 @@
-import React from 'react';
 import { connect } from 'react-redux';
 import {
   doSendDraftTransaction,
   doSetDraftTransactionAmount,
   doSetDraftTransactionAddress,
-} from 'redux/actions/wallet';
-import {
   selectDraftTransactionAmount,
   selectDraftTransactionAddress,
   selectDraftTransactionError,
-} from 'redux/selectors/wallet';
+} from 'lbry-redux';
 
 import WalletSend from './view';
 

@@ -1,22 +1,21 @@
-import React from 'react';
 import { connect } from 'react-redux';
 import { doNavigate, doHistoryBack } from 'redux/actions/navigation';
 import { doClaimRewardType } from 'redux/actions/rewards';
 import {
+  doResolveUri,
   selectMyClaims,
   selectFetchingMyChannels,
   selectMyChannelClaims,
   selectClaimsByUri,
-} from 'redux/selectors/claims';
-import { selectResolvingUris } from 'redux/selectors/content';
+  selectResolvingUris,
+  selectBalance,
+} from 'lbry-redux';
 import {
   doFetchClaimListMine,
   doFetchChannelListMine,
-  doResolveUri,
   doCreateChannel,
   doPublish,
 } from 'redux/actions/content';
-import { selectBalance } from 'redux/selectors/wallet';
 import rewards from 'rewards';
 import PublishPage from './view';
 

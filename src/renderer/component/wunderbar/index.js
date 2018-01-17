@@ -1,7 +1,5 @@
-import React from 'react';
 import { connect } from 'react-redux';
-import lbryuri from 'lbryuri.js';
-import { selectWunderBarAddress, selectWunderBarIcon } from 'redux/selectors/search';
+import { Lbryuri, selectWunderBarAddress, selectWunderBarIcon } from 'lbry-redux';
 import { doNavigate } from 'redux/actions/navigation';
 import Wunderbar from './view';
 
@@ -13,7 +11,7 @@ const select = state => ({
 const perform = dispatch => ({
   onSearch: query => dispatch(doNavigate('/search', { query })),
   onSubmit: (query, extraParams) =>
-    dispatch(doNavigate('/show', { uri: lbryuri.normalize(query), ...extraParams })),
+    dispatch(doNavigate('/show', { uri: Lbryuri.normalize(query), ...extraParams })),
 });
 
 export default connect(select, perform)(Wunderbar);

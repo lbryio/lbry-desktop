@@ -1,15 +1,12 @@
-import React from 'react';
 import { connect } from 'react-redux';
-import { doFetchFileInfosAndPublishedClaims } from 'redux/actions/file_info';
 import {
+  doFetchClaimListMine,
+  doFetchFileInfosAndPublishedClaims,
   selectFileInfosDownloaded,
   selectIsFetchingFileListDownloadedOrPublished,
-} from 'redux/selectors/file_info';
-import {
   selectMyClaimsWithoutChannels,
   selectIsFetchingClaimListMine,
-} from 'redux/selectors/claims';
-import { doFetchClaimListMine } from 'redux/actions/content';
+} from 'lbry-redux';
 import { doNavigate } from 'redux/actions/navigation';
 import FileListDownloaded from './view';
 
