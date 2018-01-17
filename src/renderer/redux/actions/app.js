@@ -10,6 +10,8 @@ import { doAuthNavigate } from 'redux/actions/navigation';
 import { doFetchDaemonSettings } from 'redux/actions/settings';
 import { doAuthenticate } from 'redux/actions/user';
 import { doBalanceSubscribe } from 'redux/actions/wallet';
+import { doPause } from "redux/actions/media";
+
 import {
   selectCurrentModal,
   selectIsUpgradeSkipped,
@@ -76,6 +78,10 @@ export function doDownloadUpgradeRequested() {
 
   return (dispatch, getState) => {
     const state = getState();
+
+    // Pause video if needed
+    dispatch(doPause());
+
     const autoUpdateDeclined = selectAutoUpdateDeclined(state);
 
     if (['win32', 'darwin'].includes(process.platform)) { // electron-updater behavior

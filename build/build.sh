@@ -73,9 +73,9 @@ fi
 #  Build the app  #
 ###################
 if [ "$FULL_BUILD" == "true" ]; then
-  if $OSX; then
-    security unlock-keychain -p ${KEYCHAIN_PASSWORD} osx-build.keychain
-  fi
+  # if $OSX; then
+  #   security unlock-keychain -p ${KEYCHAIN_PASSWORD} osx-build.keychain
+  # fi
 
   yarn build
 
