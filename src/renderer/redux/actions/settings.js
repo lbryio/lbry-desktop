@@ -6,7 +6,7 @@ import Http from 'http';
 import Lbry from 'lbry';
 import moment from 'moment';
 
-const UPDATE_IS_NIGHT_INTERVAL = 10 * 1000;
+const UPDATE_IS_NIGHT_INTERVAL = 60 * 1000;
 
 export function doFetchDaemonSettings() {
   return dispatch => {

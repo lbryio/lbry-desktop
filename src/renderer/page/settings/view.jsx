@@ -327,7 +327,7 @@ class SettingsPage extends React.PureComponent {
               type="checkbox"
               onChange={this.onAutomaticDarkModeChange.bind(this)}
               defaultChecked={automaticDarkModeEnabled}
-              label={__('Automatic dark mode (switch to dark theme between 9pm and 8am)')}
+              label={__('Automatic dark mode (9pm to 8am)')}
             />
           </div>
         </section>
