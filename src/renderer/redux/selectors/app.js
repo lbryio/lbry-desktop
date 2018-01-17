@@ -58,6 +58,10 @@ export const selectUpgradeDownloadItem = createSelector(selectState, state => st
 
 export const selectAutoUpdateDownloaded = createSelector(selectState, state => state.autoUpdateDownloaded);
 
+export const selectAutoUpdateDeclined = createSelector(selectState, state => state.autoUpdateDeclined);
+
+export const selectModalsAllowed = createSelector(selectState, state => state.modalsAllowed);
+
 export const selectModalProps = createSelector(selectState, state => state.modalProps);
 
 export const selectDaemonVersionMatched = createSelector(

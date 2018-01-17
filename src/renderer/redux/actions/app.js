@@ -18,6 +18,7 @@ import {
   selectUpgradeDownloadItem,
   selectUpgradeDownloadPath,
   selectUpgradeFilename,
+  selectAutoUpdateDeclined,
 } from 'redux/selectors/app';
 
 const { autoUpdater } = remote.require('electron-updater');
@@ -75,12 +76,23 @@ export function doDownloadUpgradeRequested() {
 
   return (dispatch, getState) => {
     const state = getState();
+    const autoUpdateDeclined = selectAutoUpdateDeclined(state);
 
     if (['win32', 'darwin'].includes(process.platform)) { // electron-updater behavior
-      dispatch({
-        type: ACTIONS.OPEN_MODAL,
-        data: { modal: MODALS.AUTO_UPDATE_CONFIRM },
-      });
+      if (autoUpdateDeclined) {
+        // The user declined an update before, so show the "confirm" dialog
+        dispatch({
+          type: ACTIONS.OPEN_MODAL,
+          data: { modal: MODALS.AUTO_UPDATE_CONFIRM },
+        });
+      } else {
+        // The user was never shown the original update dialog (e.g. because they were
+        // watching a video). So show the inital "update downloaded" dialog.
+        dispatch({
+          type: ACTIONS.OPEN_MODAL,
+          data: { modal: MODALS.AUTO_UPDATE_DOWNLOADED },
+        });
+      }
     } else { // Old behavior for Linux
       doDownloadUpgrade();
     }
@@ -138,6 +150,15 @@ export function doAutoUpdate() {
       data: { modal: MODALS.AUTO_UPDATE_DOWNLOADED },
     });
   };
+}
+
+export function doAutoUpdateDeclined() {
+  return function(dispatch, getState) {
+    const state = getState();
+    dispatch({
+      type: ACTIONS.AUTO_UPDATE_DECLINED,
+    });
+  }
 }
 
 export function doCancelUpgrade() {

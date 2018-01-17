@@ -7,7 +7,7 @@ const { ipcRenderer } = require("electron");
 
 class ModalAutoUpdateConfirm extends React.PureComponent {
   render() {
-    const { closeModal } = this.props;
+    const { closeModal, declineAutoUpdate } = this.props;
 
     return (
       <Modal
@@ -20,6 +20,7 @@ class ModalAutoUpdateConfirm extends React.PureComponent {
           ipcRenderer.send("autoUpdateAccepted");
         }}
         onAborted={() => {
+          declineAutoUpdate();
           closeModal();
         }}
       >
