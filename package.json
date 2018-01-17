@@ -41,7 +41,7 @@
     "jshashes": "^1.0.7",
     "keytar": "^4.0.3",
     "localforage": "^1.5.0",
-    "lbry-redux": "lbryio/lbry-redux",
+    "lbry-redux": "lbryio/lbry-redux#common-components-refactor",
     "npm": "^5.5.1",
     "qrcode.react": "^0.7.2",
     "rc-progress": "^2.0.6",
