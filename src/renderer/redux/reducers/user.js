@@ -55,11 +55,15 @@ reducers[ACTIONS.USER_FETCH_FAILURE] = state =>
     user: null,
   });
 
-reducers[ACTIONS.USER_PHONE_NEW_STARTED] = state =>
-  Object.assign({}, state, {
+reducers[ACTIONS.USER_PHONE_NEW_STARTED] = (state, action) => {
+  const user = Object.assign({}, state.user);
+  user.country_code = action.data.country_code;
+  return Object.assign({}, state, {
     phoneNewIsPending: true,
     phoneNewErrorMessage: '',
+    user,
   });
+};
 
 reducers[ACTIONS.USER_PHONE_NEW_SUCCESS] = (state, action) =>
   Object.assign({}, state, {

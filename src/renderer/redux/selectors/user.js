@@ -21,6 +21,11 @@ export const selectUserPhone = createSelector(
   user => (user ? user.phone_number : null)
 );
 
+export const selectUserCountryCode = createSelector(
+  selectUser,
+  user => (user ? user.country_code : null)
+);
+
 export const selectEmailToVerify = createSelector(
   selectState,
   selectUserEmail,

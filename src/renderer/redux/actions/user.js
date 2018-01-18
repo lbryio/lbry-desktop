@@ -3,7 +3,11 @@ import * as MODALS from 'constants/modal_types';
 import Lbryio from 'lbryio';
 import { doOpenModal, doShowSnackBar } from 'redux/actions/app';
 import { doClaimRewardType, doRewardList } from 'redux/actions/rewards';
-import { selectEmailToVerify, selectPhoneToVerify } from 'redux/selectors/user';
+import {
+  selectEmailToVerify,
+  selectPhoneToVerify,
+  selectUserCountryCode,
+} from 'redux/selectors/user';
 import rewards from 'rewards';
 
 export function doFetchInviteStatus() {
@@ -78,11 +82,11 @@ export function doUserFetch() {
   };
 }
 
-export function doUserPhoneNew(phone) {
+export function doUserPhoneNew(phone, country_code) {
   return dispatch => {
     dispatch({
       type: ACTIONS.USER_PHONE_NEW_STARTED,
-      phone,
+      data: { phone, country_code },
     });
 
     const success = () => {
@@ -99,7 +103,7 @@ export function doUserPhoneNew(phone) {
       });
     };
 
-    Lbryio.call('user', 'phone_number_new', { phone_number: phone, country_code: 1 }, 'post').then(
+    Lbryio.call('user', 'phone_number_new', { phone_number: phone, country_code }, 'post').then(
       success,
       failure
     );
@@ -116,6 +120,7 @@ export function doUserPhoneVerifyFailure(error) {
 export function doUserPhoneVerify(verificationCode) {
   return (dispatch, getState) => {
     const phoneNumber = selectPhoneToVerify(getState());
+    const countryCode = selectUserCountryCode(getState());
 
     dispatch({
       type: ACTIONS.USER_PHONE_VERIFY_STARTED,
@@ -128,7 +133,7 @@ export function doUserPhoneVerify(verificationCode) {
       {
         verification_code: verificationCode,
         phone_number: phoneNumber,
-        country_code: '1',
+        country_code: countryCode,
       },
       'post'
     )

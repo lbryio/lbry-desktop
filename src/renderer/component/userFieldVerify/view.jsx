@@ -40,10 +40,14 @@ class UserFieldVerify extends React.PureComponent {
       email,
       isPending,
       phone,
+      countryCode,
     } = this.props;
     return (
       <Form onSubmit={this.handleSubmit.bind(this)}>
-        <p>Please enter the verification code sent to {phone || email}.</p>
+        <p>
+          Please enter the verification code sent to {countryCode ? `+${countryCode}` : ''}
+          {phone || email}.
+        </p>
         <FormRow
           type="text"
           label={__('Verification Code')}

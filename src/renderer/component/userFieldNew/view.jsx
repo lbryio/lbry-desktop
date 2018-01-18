@@ -8,19 +8,53 @@ class UserFieldNew extends React.PureComponent {
     this.state = {
       phone: '',
       email: '',
+      country_code: '+1',
     };
+
+    this.formatPhone = this.formatPhone.bind(this);
+  }
+
+  formatPhone(value) {
+    const { country_code } = this.state;
+    value = value.replace(/\D/g, '');
+    if (country_code === '+1') {
+      if (!value) {
+        return '';
+      } else if (value.length < 4) {
+        return value;
+      } else if (value.length < 7) {
+        return `(${value.substring(0, 3)}) ${value.substring(3)}`;
+      }
+      const fullNumber = `(${value.substring(0, 3)}) ${value.substring(3, 6)}-${value.substring(
+        6
+      )}`;
+      return fullNumber.length <= 14 ? fullNumber : fullNumber.substring(0, 14);
+    }
+    return value;
+  }
+
+  formatCountryCode(value) {
+    if (value) {
+      return `+${value.replace(/\D/g, '')}`;
+    }
+    return '+1';
   }
 
   handleChanged(event, fieldType) {
+    const formatter = {
+      email: _ => _,
+      phone: this.formatPhone,
+      country_code: this.formatCountryCode,
+    };
     this.setState({
-      [fieldType]: event.target.value,
+      [fieldType]: formatter[fieldType](event.target.value),
     });
   }
 
   handleSubmit() {
-    const { email, phone } = this.state;
+    const { email, phone, country_code } = this.state;
     if (phone) {
-      this.props.addUserPhone(phone);
+      this.props.addUserPhone(phone.replace(/\D/g, ''), country_code.replace(/\D/g, ''));
     } else {
       this.props.addUserEmail(email);
     }
@@ -39,8 +73,18 @@ class UserFieldNew extends React.PureComponent {
         <Form onSubmit={this.handleSubmit.bind(this)}>
           <FormRow
             type="text"
+            label="Country Code"
+            name="country_code"
+            value={this.state.country_code}
+            errorMessage={phoneErrorMessage}
+            onChange={event => {
+              this.handleChanged(event, 'country_code');
+            }}
+          />
+          <FormRow
+            type="text"
             label="Phone"
-            placeholder="(555) 555-5555"
+            placeholder={this.state.country_code === '+1' ? '(555) 555-5555' : '5555555555'}
             name="phone"
             value={this.state.phone}
             errorMessage={phoneErrorMessage}

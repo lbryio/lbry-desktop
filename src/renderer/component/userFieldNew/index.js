@@ -16,7 +16,7 @@ const select = state => ({
 
 const perform = dispatch => ({
   addUserEmail: email => dispatch(doUserEmailNew(email)),
-  addUserPhone: phone => dispatch(doUserPhoneNew(phone)),
+  addUserPhone: (phone, country_code) => dispatch(doUserPhoneNew(phone, country_code)),
 });
 
 export default connect(select, perform)(UserFieldNew);
