@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-filename-extension */
 import amplitude from 'amplitude-js';
 import App from 'component/app';
 import SnackBar from 'component/snackBar';
@@ -5,7 +6,6 @@ import SplashScreen from 'component/splash';
 import * as ACTIONS from 'constants/action_types';
 import { ipcRenderer, remote, shell } from 'electron';
 import lbry from 'lbry';
-/* eslint-disable react/jsx-filename-extension */
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
@@ -16,13 +16,6 @@ import { doUserEmailVerify } from 'redux/actions/user';
 import 'scss/all.scss';
 import store from 'store';
 import app from './app';
-
-const { contextMenu } = remote.require('./main.js');
-
-window.addEventListener('contextmenu', event => {
-  contextMenu(remote.getCurrentWindow(), event.x, event.y, app.env === 'development');
-  event.preventDefault();
-});
 
 ipcRenderer.on('open-uri-requested', (event, uri, newSession) => {
   if (uri && uri.startsWith('lbry://')) {
