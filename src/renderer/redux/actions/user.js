@@ -99,7 +99,7 @@ export function doUserPhoneNew(phone) {
       });
     };
 
-    Lbryio.call('user_phone', 'new', { phone_number: phone, country_code: 1 }, 'post').then(
+    Lbryio.call('user', 'phone_number_new', { phone_number: phone, country_code: 1 }, 'post').then(
       success,
       failure
     );
@@ -115,7 +115,7 @@ export function doUserPhoneVerifyFailure(error) {
 
 export function doUserPhoneVerify(verificationCode) {
   return (dispatch, getState) => {
-    const phone_number = selectPhoneToVerify(getState());
+    const phoneNumber = selectPhoneToVerify(getState());
 
     dispatch({
       type: ACTIONS.USER_PHONE_VERIFY_STARTED,
@@ -123,19 +123,19 @@ export function doUserPhoneVerify(verificationCode) {
     });
 
     Lbryio.call(
-      'user_phone',
-      'confirm',
+      'user',
+      'phone_number_confirm',
       {
         verification_code: verificationCode,
-        phone_number,
+        phone_number: phoneNumber,
         country_code: '1',
       },
       'post'
     )
-      .then(userEmail => {
+      .then(() => {
         dispatch({
           type: ACTIONS.USER_PHONE_VERIFY_SUCCESS,
-          data: { phone_number },
+          data: { phone_number: phoneNumber },
         });
         dispatch(doUserFetch());
       })
