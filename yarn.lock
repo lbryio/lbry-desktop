@@ -9448,6 +9448,13 @@ yargs@~3.10.0:
     decamelize "^1.0.0"
     window-size "0.1.0"
 
+yarnhook@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/yarnhook/-/yarnhook-0.1.1.tgz#6e67757327e6390cb313f371bdc44ded7c5e047b"
+  dependencies:
+    execa "^0.8.0"
+    find-parent-dir "^0.3.0"
+
 yauzl@2.4.1:
   version "2.4.1"
   resolved "https://registry.yarnpkg.com/yauzl/-/yauzl-2.4.1.tgz#9528f442dab1b2284e58b4379bb194e22e0c4005"
