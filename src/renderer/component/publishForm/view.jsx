@@ -423,9 +423,16 @@ class PublishForm extends React.PureComponent {
     });
   }
 
-  handleThumbNSFWChange(event) {
+  // handleThumbNSFWChange(event) {
+  //   this.setState({
+  //     thumbnailNFSW: event.target.checked,
+  //   });
+  // }
+
+  handleThumbnailStatusChange(status) {
+    console.log("status change:", status);
     this.setState({
-      thumbnailNFSW: event.target.checked,
+      thumbnailUploadStatus: status,
     });
   }
 
@@ -462,26 +469,26 @@ class PublishForm extends React.PureComponent {
   componentWillReceiveProps(nextProps) {
     if (nextProps.uploadStatus === "error") {
       alert("UPLOAD FAILED, PLEASE TRY AGAIN.");
-      this.props.resetUpload();
+      // this.props.resetUpload();
     }
 
-    if (nextProps.uploadStatus === "upload") {
-      this.setState({
-        thumbnailUploadStatus: "upload",
-      });
-    }
+    // if (nextProps.uploadStatus === "upload") {
+    //   this.setState({
+    //     thumbnailUploadStatus: "upload",
+    //   });
+    // }
 
-    if (nextProps.uploadStatus === "manual") {
-      this.setState({
-        thumbnailUploadStatus: "manual",
-      });
-    }
+    // if (nextProps.uploadStatus === "manual") {
+    //   this.setState({
+    //     thumbnailUploadStatus: "manual",
+    //   });
+    // }
 
-    if (nextProps.uploadStatus === "sending") {
-      this.setState({
-        thumbnailUploadStatus: "sending",
-      });
-    }
+    // if (nextProps.uploadStatus === "sending") {
+    //   this.setState({
+    //     thumbnailUploadStatus: "sending",
+    //   });
+    // }
 
     if (nextProps.uploadStatus === "complete") {
       this.setState({
@@ -576,16 +583,15 @@ class PublishForm extends React.PureComponent {
   }
 
   upload(path) {
-    console.log("this.upload(path), path:", path);
+    this.closeModal();
     this.setState({
-      modal: null,
+      thumbnailUploadStatus: "sending",
     });
     this.props.upload(path);
   }
 
   render() {
     const { mode, submitting } = this.state;
-    const { selectUploadUrl, selectUploadStatus } = this.props;
 
     const lbcInputHelp = __(
       "This LBC remains yours and the deposit can be undone at any time."
@@ -640,7 +646,14 @@ class PublishForm extends React.PureComponent {
                   />
                 </div>
 
-                <div className="card__content">
+                <div
+                  className="card__content"
+                  style={
+                    this.state.thumbnailUploadStatus !== "manual"
+                      ? null
+                      : { display: "none" }
+                  }
+                >
                   <FormRow
                     name="thumbnail"
                     label={__("Upload Thumbnail")}
@@ -653,11 +666,14 @@ class PublishForm extends React.PureComponent {
                   />
                 </div>
 
-                <div className="card__content">
-                  upload status: {this.selectUploadUrl}
-                </div>
-
-                <div className="card__content">
+                <div
+                  className="card__content"
+                  style={
+                    this.state.thumbnailUploadStatus === "manual"
+                      ? null
+                      : { display: "none" }
+                  }
+                >
                   <FormRow
                     type="text"
                     label={__("Thumbnail URL")}
@@ -668,6 +684,54 @@ class PublishForm extends React.PureComponent {
                       this.handleMetadataChange(event);
                     }}
                   />
+                </div>
+
+                <div
+                  className="card__content"
+                  style={
+                    this.state.thumbnailUploadStatus === "upload"
+                      ? null
+                      : { display: "none" }
+                  }
+                >
+                  <a onClick={() => this.handleThumbnailStatusChange("manual")}>
+                    Enter Thumbnail URL
+                  </a>
+                </div>
+
+                <div
+                  className="card__content"
+                  style={
+                    this.state.thumbnailUploadStatus === "manual"
+                      ? null
+                      : { display: "none" }
+                  }
+                >
+                  <a onClick={() => this.handleThumbnailStatusChange("upload")}>
+                    Upload Thumbnail
+                  </a>
+                </div>
+
+                <div
+                  className="card__content"
+                  style={
+                    this.state.thumbnailUploadStatus === "sending"
+                      ? null
+                      : { display: "none" }
+                  }
+                >
+                  Uploading thumbnail...
+                </div>
+
+                <div
+                  className="card__content"
+                  style={
+                    this.state.thumbnailUploadStatus === "complete"
+                      ? null
+                      : { display: "none" }
+                  }
+                >
+                  Complete: {this.state.meta_thumbnail}
                 </div>
 
                 <div className="card__content">
