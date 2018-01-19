@@ -25,7 +25,7 @@ const defaultState = {
     themes: getLocalStorageSetting(SETTINGS.THEMES, []),
     automaticDarkModeEnabled: getLocalStorageSetting(SETTINGS.AUTOMATIC_DARK_MODE_ENABLED, false),
   },
-  isNight: true,
+  isNight: false,
   languages: {},
 };
 

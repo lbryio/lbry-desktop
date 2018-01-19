@@ -6,7 +6,7 @@ import Http from 'http';
 import Lbry from 'lbry';
 import moment from 'moment';
 
-const UPDATE_IS_NIGHT_INTERVAL = 60 * 1000;
+const UPDATE_IS_NIGHT_INTERVAL = 10 * 60 * 1000;
 
 export function doFetchDaemonSettings() {
   return dispatch => {
@@ -56,6 +56,7 @@ export function doGetThemes() {
 
 export function doUpdateIsNightAsync() {
   return dispatch => {
+    dispatch(doUpdateIsNight());
     const updateIsNightInterval = setInterval(
       () => dispatch(doUpdateIsNight()),
       UPDATE_IS_NIGHT_INTERVAL
@@ -63,17 +64,16 @@ export function doUpdateIsNightAsync() {
   };
 }
 
-function isNight() {
-  const startNightMoment = moment('19:00', 'HH:mm');
-  const endNightTime = moment('8:00', 'HH:mm');
-  const momentNow = moment();
-  return !(momentNow.isAfter(endNightTime) && momentNow.isBefore(startNightMoment));
-}
-
 export function doUpdateIsNight() {
+  const momentNow = moment();
   return {
     type: ACTIONS.UPDATE_IS_NIGHT,
-    data: { isNight: isNight() },
+    data: { isNight: () => {
+      const startNightMoment = moment('19:00', 'HH:mm');
+      const endNightMoment = moment('8:00', 'HH:mm');
+      return !(momentNow.isAfter(endNightMoment) && momentNow.isBefore(startNightMoment));
+      }
+    },
   };
 }
 
