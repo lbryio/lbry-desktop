@@ -1,6 +1,5 @@
 import * as settings from 'constants/settings';
 import { createSelector } from 'reselect';
-import lbryuri from 'lbryuri';
 import { makeSelectClaimForUri } from 'redux/selectors/claims';
 
 const _selectState = state => state.media || {};

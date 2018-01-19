@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 import { parseQueryParams, toQueryString } from 'util/query_params';
-import Lbryuri from 'lbryuri';
+import { normalizeURI } from 'lbryURI';
 
 export const selectState = state => state.navigation || {};
 
@@ -93,7 +93,7 @@ export const selectPageTitle = createSelector(
       case 'developer':
         return __('Developer');
       case 'show': {
-        const parts = [Lbryuri.normalize(params.uri)];
+        const parts = [normalizeURI(params.uri)];
         // If the params has any keys other than "uri"
         if (Object.keys(params).length > 1) {
           parts.push(toQueryString(Object.assign({}, params, { uri: null })));

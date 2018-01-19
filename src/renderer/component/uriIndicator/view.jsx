@@ -1,7 +1,7 @@
 import React from 'react';
 import Icon from 'component/icon';
 import Link from 'component/link';
-import lbryuri from 'lbryuri';
+import { buildURI } from 'lbryURI';
 import classnames from 'classnames';
 
 class UriIndicator extends React.PureComponent {
@@ -49,7 +49,7 @@ class UriIndicator extends React.PureComponent {
 
     if (signatureIsValid) {
       modifier = 'valid';
-      channelLink = link ? lbryuri.build({ channelName, claimId: channelClaimId }, false) : false;
+      channelLink = link ? buildURI({ channelName, claimId: channelClaimId }, false) : false;
     } else {
       icon = 'icon-times-circle';
       modifier = 'invalid';

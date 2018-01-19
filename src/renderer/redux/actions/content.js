@@ -4,7 +4,7 @@ import * as SETTINGS from 'constants/settings';
 import { ipcRenderer } from 'electron';
 import Lbry from 'lbry';
 import Lbryio from 'lbryio';
-import Lbryuri from 'lbryuri';
+import { normalizeURI, buildURI } from 'lbryURI';
 import { doAlertError, doOpenModal } from 'redux/actions/app';
 import { doClaimEligiblePurchaseRewards } from 'redux/actions/rewards';
 import { selectBadgeNumber } from 'redux/selectors/app';
@@ -26,7 +26,7 @@ const DOWNLOAD_POLL_INTERVAL = 250;
 
 export function doResolveUris(uris) {
   return (dispatch, getState) => {
-    const normalizedUris = uris.map(Lbryuri.normalize);
+    const normalizedUris = uris.map(normalizeURI);
     const state = getState();
 
     // Filter out URIs that are already resolving
@@ -506,7 +506,7 @@ export function doAbandonClaim(txid, nout) {
             claimId,
           },
         });
-        dispatch(doResolveUri(Lbryuri.build({ name, claimId })));
+        dispatch(doResolveUri(buildURI({ name, claimId })));
         dispatch(doFetchClaimListMine());
       } else {
         dispatch(doOpenModal(MODALS.TRANSACTION_FAILED));

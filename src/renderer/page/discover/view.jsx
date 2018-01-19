@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import lbryuri from 'lbryuri';
+import { normalizeURI } from 'lbryURI';
 import FileCard from 'component/fileCard';
 import { BusyMessage } from 'component/common.js';
 import Icon from 'component/icon';
@@ -212,7 +212,7 @@ export class FeaturedCategory extends React.PureComponent {
           <div ref="rowitems" className="card-row__items">
             {names &&
               names.map(name => (
-                <FileCard key={name} displayStyle="card" uri={lbryuri.normalize(name)} />
+                <FileCard key={name} displayStyle="card" uri={normalizeURI(name)} />
               ))}
           </div>
         </div>
