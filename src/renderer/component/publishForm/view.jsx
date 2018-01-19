@@ -659,7 +659,6 @@ class PublishForm extends React.PureComponent {
                     label={__("Upload Thumbnail")}
                     ref="thumbnail"
                     type="file"
-                    accept=".png, .jpg, .jpeg"
                     onChange={event => {
                       this.handleConfirmUpload(event);
                     }}
