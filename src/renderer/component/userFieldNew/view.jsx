@@ -1,5 +1,6 @@
 import React from 'react';
 import { Form, FormRow, Submit } from 'component/form.js';
+import FormField from 'component/formField';
 
 class UserFieldNew extends React.PureComponent {
   constructor(props) {
@@ -71,27 +72,21 @@ class UserFieldNew extends React.PureComponent {
           )}
         </p>
         <Form onSubmit={this.handleSubmit.bind(this)}>
-          <FormRow
-            type="text"
-            label="Country Code"
-            name="country_code"
-            value={this.state.country_code}
-            errorMessage={phoneErrorMessage}
-            onChange={event => {
-              this.handleChanged(event, 'country_code');
-            }}
-          />
-          <FormRow
-            type="text"
-            label="Phone"
-            placeholder={this.state.country_code === '+1' ? '(555) 555-5555' : '5555555555'}
-            name="phone"
-            value={this.state.phone}
-            errorMessage={phoneErrorMessage}
-            onChange={event => {
-              this.handleChanged(event, 'phone');
-            }}
-          />
+          <div className="form-row-phone">
+            <FormField type="select">
+              <option>(US) +1</option>
+            </FormField>
+            <FormRow
+              type="text"
+              placeholder={this.state.country_code === '+1' ? '(555) 555-5555' : '5555555555'}
+              name="phone"
+              value={this.state.phone}
+              errorMessage={phoneErrorMessage}
+              onChange={event => {
+                this.handleChanged(event, 'phone');
+              }}
+            />
+          </div>
           <div className="form-row-submit">
             <Submit label="Submit" disabled={isPending} />
             {cancelButton}
