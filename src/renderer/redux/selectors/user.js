@@ -16,10 +16,26 @@ export const selectUserEmail = createSelector(
   user => (user ? user.primary_email : null)
 );
 
+export const selectUserPhone = createSelector(
+  selectUser,
+  user => (user ? user.phone_number : null)
+);
+
+export const selectUserCountryCode = createSelector(
+  selectUser,
+  user => (user ? user.country_code : null)
+);
+
 export const selectEmailToVerify = createSelector(
   selectState,
   selectUserEmail,
   (state, userEmail) => state.emailToVerify || userEmail
+);
+
+export const selectPhoneToVerify = createSelector(
+  selectState,
+  selectUserPhone,
+  (state, userPhone) => state.phoneToVerify || userPhone
 );
 
 export const selectUserIsRewardApproved = createSelector(
@@ -37,6 +53,11 @@ export const selectEmailNewErrorMessage = createSelector(
   state => state.emailNewErrorMessage
 );
 
+export const selectPhoneNewErrorMessage = createSelector(
+  selectState,
+  state => state.phoneNewErrorMessage
+);
+
 export const selectEmailVerifyIsPending = createSelector(
   selectState,
   state => state.emailVerifyIsPending
@@ -45,6 +66,11 @@ export const selectEmailVerifyIsPending = createSelector(
 export const selectEmailVerifyErrorMessage = createSelector(
   selectState,
   state => state.emailVerifyErrorMessage
+);
+
+export const selectPhoneVerifyErrorMessage = createSelector(
+  selectState,
+  state => state.phoneVerifyErrorMessage
 );
 
 export const selectIdentityVerifyIsPending = createSelector(
