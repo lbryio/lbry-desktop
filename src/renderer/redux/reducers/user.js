@@ -71,12 +71,6 @@ reducers[ACTIONS.USER_PHONE_NEW_SUCCESS] = (state, action) =>
     phoneNewIsPending: false,
   });
 
-reducers[ACTIONS.USER_PHONE_NEW_EXISTS] = (state, action) =>
-  Object.assign({}, state, {
-    phoneToVerify: action.data.phone,
-    phoneNewIsPending: false,
-  });
-
 reducers[ACTIONS.USER_PHONE_NEW_FAILURE] = (state, action) =>
   Object.assign({}, state, {
     phoneNewIsPending: false,
