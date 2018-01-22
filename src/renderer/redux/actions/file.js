@@ -1,15 +1,15 @@
 import * as ACTIONS from 'constants/action_types';
 import { shell } from 'electron';
-import { doHistoryBack } from 'redux/actions/navigation';
 import {
   Lbry,
+  batchActions,
   doAbandonClaim,
   doCloseModal,
+  doHistoryBack,
   selectMyClaimsOutpoints,
   selectFileInfosByOutpoint,
   selectTotalDownloadProgress,
 } from 'lbry-redux';
-import batchActions from 'util/batchActions';
 import setProgressBar from 'util/setProgressBar';
 
 export function doOpenFileInFolder(path) {

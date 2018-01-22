@@ -1,7 +1,8 @@
 import { connect } from 'react-redux';
-import { doNavigate, doHistoryBack } from 'redux/actions/navigation';
 import { doClaimRewardType } from 'redux/actions/rewards';
 import {
+  doNavigate,
+  doHistoryBack,
   doResolveUri,
   selectMyClaims,
   selectFetchingMyChannels,

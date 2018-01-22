@@ -1,17 +1,18 @@
 import React from 'react';
-import lbryuri from 'lbryuri';
 import { BusyMessage } from 'component/common';
 import ChannelPage from 'page/channel';
 import FilePage from 'page/file';
 
 class ShowPage extends React.PureComponent {
   componentWillMount() {
+    // eslint-disable-next-line react/prop-types
     const { isResolvingUri, resolveUri, uri } = this.props;
 
     if (!isResolvingUri) resolveUri(uri);
   }
 
   componentWillReceiveProps(nextProps) {
+    // eslint-disable-next-line react/prop-types
     const { isResolvingUri, resolveUri, claim, uri } = nextProps;
 
     if (!isResolvingUri && claim === undefined && uri) {

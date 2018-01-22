@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
-import { doNavigate } from 'redux/actions/navigation';
 import { selectShowNsfw } from 'redux/selectors/settings';
 import {
+  doNavigate,
   doResolveUri,
   makeSelectClaimForUri,
   makeSelectMetadataForUri,

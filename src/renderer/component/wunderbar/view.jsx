@@ -1,14 +1,16 @@
 import React from 'react';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import PropTypes from 'prop-types';
-import lbryuri from 'lbryuri.js';
 import Icon from 'component/icon';
-import { parseQueryParams } from 'util/query_params';
+import { Lbryuri, parseQueryParams } from 'lbry-redux';
 
+/* eslint-disable no-underscore-dangle */
 class WunderBar extends React.PureComponent {
   static TYPING_TIMEOUT = 800;
 
   static propTypes = {
     onSearch: PropTypes.func.isRequired,
+    // eslint-disable-next-line react/no-unused-prop-types
     onSubmit: PropTypes.func.isRequired,
   };
 
@@ -25,9 +27,37 @@ class WunderBar extends React.PureComponent {
     this.onKeyPress = this.onKeyPress.bind(this);
     this.onReceiveRef = this.onReceiveRef.bind(this);
     this.state = {
+      // eslint-disable-next-line react/prop-types
       address: this.props.address,
+      // eslint-disable-next-line react/prop-types
       icon: this.props.icon,
     };
+  }
+
+  componentWillReceiveProps(nextProps) {
+    if (
+      // eslint-disable-next-line react/prop-types
+      nextProps.viewingPage !== this.props.viewingPage ||
+      nextProps.address !== this.props.address
+    ) {
+      this.setState({ address: nextProps.address, icon: nextProps.icon });
+    }
+  }
+
+  componentDidUpdate() {
+    if (this._input) {
+      const start = this._input.selectionStart;
+      const end = this._input.selectionEnd;
+
+      this._input.value = this.state.address; // this causes cursor to go to end of input
+
+      this._input.setSelectionRange(start, end);
+
+      if (this._focusPending) {
+        this._input.select();
+        this._focusPending = false;
+      }
+    }
   }
 
   componentWillUnmount() {
@@ -55,15 +85,6 @@ class WunderBar extends React.PureComponent {
         this.props.onSearch(searchQuery.trim());
       }
     }, WunderBar.TYPING_TIMEOUT); // 800ms delay, tweak for faster/slower
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (
-      nextProps.viewingPage !== this.props.viewingPage ||
-      nextProps.address != this.props.address
-    ) {
-      this.setState({ address: nextProps.address, icon: nextProps.icon });
-    }
   }
 
   onFocus() {
@@ -100,27 +121,11 @@ class WunderBar extends React.PureComponent {
     }
   }
 
-  componentDidUpdate() {
-    if (this._input) {
-      const start = this._input.selectionStart,
-        end = this._input.selectionEnd;
-
-      this._input.value = this.state.address; // this causes cursor to go to end of input
-
-      this._input.setSelectionRange(start, end);
-
-      if (this._focusPending) {
-        this._input.select();
-        this._focusPending = false;
-      }
-    }
-  }
-
   onKeyPress(event) {
-    if (event.charCode == 13 && this._input.value) {
-      let uri = null,
-        method = 'onSubmit',
-        extraParams = {};
+    if (event.charCode === 13 && this._input.value) {
+      let uri = null;
+      let method = 'onSubmit';
+      let extraParams = {};
 
       this._resetOnNextBlur = false;
       clearTimeout(this._userTypingTimer);
@@ -130,7 +135,8 @@ class WunderBar extends React.PureComponent {
       if (parts.length > 0) extraParams = parseQueryParams(parts.join(''));
 
       try {
-        uri = lbryuri.normalize(value);
+        uri = Lbryuri.normalize(value);
+        // eslint-disable-next-line react/no-unused-state
         this.setState({ value: uri });
       } catch (error) {
         // then it's not a valid URL, so let's search

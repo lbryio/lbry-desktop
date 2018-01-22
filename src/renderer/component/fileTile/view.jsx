@@ -1,12 +1,13 @@
 import React from 'react';
 import * as icons from 'constants/icons';
-import lbryuri from 'lbryuri.js';
+import { Lbryuri } from 'lbry-redux';
 import CardMedia from 'component/cardMedia';
-import { TruncatedText } from 'component/common.js';
+import { TruncatedText } from 'component/common';
 import FilePrice from 'component/filePrice';
 import NsfwOverlay from 'component/nsfwOverlay';
 import Icon from 'component/icon';
 
+/* eslint-disable react/prop-types, react/jsx-no-bind */
 class FileTile extends React.PureComponent {
   static SHOW_EMPTY_PUBLISH = 'publish';
   static SHOW_EMPTY_PENDING = 'pending';
@@ -29,6 +30,7 @@ class FileTile extends React.PureComponent {
     if (!isResolvingUri && !claim && uri) resolveUri(uri);
   }
 
+  // eslint-disable-next-line no-unused-vars
   componentWillReceiveProps(nextProps) {
     const { isResolvingUri, claim, uri, resolveUri } = this.props;
 
@@ -65,11 +67,11 @@ class FileTile extends React.PureComponent {
       fileInfo,
     } = this.props;
 
-    const uri = lbryuri.normalize(this.props.uri);
+    const uri = Lbryuri.normalize(this.props.uri);
     const isClaimed = !!claim;
-    const isClaimable = lbryuri.isClaimable(uri);
+    const isClaimable = Lbryuri.isClaimable(uri);
     const title =
-      isClaimed && metadata && metadata.title ? metadata.title : lbryuri.parse(uri).contentName;
+      isClaimed && metadata && metadata.title ? metadata.title : Lbryuri.parse(uri).contentName;
     const thumbnail = metadata && metadata.thumbnail ? metadata.thumbnail : null;
     const obscureNsfw = this.props.obscureNsfw && metadata && metadata.nsfw;
     const isRewardContent = claim && rewardedContentClaimIds.includes(claim.claim_id);
@@ -78,6 +80,7 @@ class FileTile extends React.PureComponent {
 
     let name = '';
     if (claim) {
+      // eslint-disable-next-line prefer-destructuring
       name = claim.name;
     }
 
@@ -98,6 +101,7 @@ class FileTile extends React.PureComponent {
       description = <span className="empty">{__('This file is pending confirmation.')}</span>;
     }
 
+    /* eslint-disable jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */
     return (
       <section
         className={`file-tile card ${obscureNsfw ? 'card--obscured ' : ''}`}

@@ -1,8 +1,9 @@
 import { connect } from 'react-redux';
-import { doNavigate } from 'redux/actions/navigation';
 import {
   doFetchFileInfo,
   doFetchCostInfoForUri,
+  doNavigate,
+  makeSelectCurrentParam,
   makeSelectCostInfoForUri,
   makeSelectFileInfoForUri,
   makeSelectClaimForUri,
@@ -11,7 +12,6 @@ import {
 } from 'lbry-redux';
 import { selectRewardContentClaimIds } from 'redux/selectors/content';
 import { selectShowNsfw } from 'redux/selectors/settings';
-import { makeSelectCurrentParam } from 'redux/selectors/navigation';
 import FilePage from './view';
 
 const select = (state, props) => ({

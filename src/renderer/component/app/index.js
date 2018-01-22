@@ -1,15 +1,15 @@
-import React from 'react';
 import { connect } from 'react-redux';
 import {
+  doRecordScroll,
   selectPageTitle,
   selectHistoryIndex,
   selectActiveHistoryEntry,
-} from 'redux/selectors/navigation';
+} from 'lbry-redux';
 import { selectUser } from 'redux/selectors/user';
 import { doAlertError } from 'redux/actions/app';
-import { doRecordScroll } from 'redux/actions/navigation';
 import App from './view';
 
+// eslint-disable-next-line no-unused-vars
 const select = (state, props) => ({
   pageTitle: selectPageTitle(state),
   user: selectUser(state),

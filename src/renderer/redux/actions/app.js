@@ -2,10 +2,15 @@
 import * as ACTIONS from 'constants/action_types';
 import * as MODALS from 'constants/modal_types';
 import { ipcRenderer, remote } from 'electron';
-import { Lbry, doBalanceSubscribe, doFetchFileInfosAndPublishedClaims } from 'lbry-redux';
+import {
+  Lbry,
+  doAuthNavigate,
+  doBalanceSubscribe,
+  doFetchFileInfosAndPublishedClaims,
+} from 'lbry-redux';
+import Native from 'native';
 import Path from 'path';
 import { doFetchRewardedContent } from 'redux/actions/content';
-import { doAuthNavigate } from 'redux/actions/navigation';
 import { doFetchDaemonSettings } from 'redux/actions/settings';
 import { doAuthenticate } from 'redux/actions/user';
 import {
@@ -146,7 +151,7 @@ export function doCheckUpgradeAvailable() {
       });
     };
 
-    Lbry.getAppVersionInfo().then(success, fail);
+    Native.getAppVersionInfo().then(success, fail);
   };
 }
 

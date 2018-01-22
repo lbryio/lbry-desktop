@@ -2,12 +2,12 @@ import { connect } from 'react-redux';
 import {
   doFetchClaimListMine,
   doFetchFileInfosAndPublishedClaims,
+  doNavigate,
   selectFileInfosDownloaded,
   selectIsFetchingFileListDownloadedOrPublished,
   selectMyClaimsWithoutChannels,
   selectIsFetchingClaimListMine,
 } from 'lbry-redux';
-import { doNavigate } from 'redux/actions/navigation';
 import FileListDownloaded from './view';
 
 const select = state => ({

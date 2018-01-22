@@ -4,6 +4,8 @@ import * as SETTINGS from 'constants/settings';
 import { ipcRenderer } from 'electron';
 import {
   Lbry,
+  Lbryapi,
+  batchActions,
   doResolveUris,
   doFetchClaimListMine,
   doOpenModal,
@@ -18,7 +20,6 @@ import { doAlertError } from 'redux/actions/app';
 import { doClaimEligiblePurchaseRewards } from 'redux/actions/rewards';
 import { selectBadgeNumber } from 'redux/selectors/app';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
-import batchActions from 'util/batchActions';
 import setBadge from 'util/setBadge';
 import setProgressBar from 'util/setProgressBar';
 
@@ -292,7 +293,7 @@ export function doPurchaseUri(uri) {
         attemptPlay(cost, instantPurchaseMax.amount);
       } else {
         // Need to convert currency of instant purchase maximum before trying to play
-        Lbryio.getExchangeRates().then(({ LBC_USD }) => {
+        Lbryapi.getExchangeRates().then(({ LBC_USD }) => {
           attemptPlay(cost, instantPurchaseMax.amount / LBC_USD);
         });
       }

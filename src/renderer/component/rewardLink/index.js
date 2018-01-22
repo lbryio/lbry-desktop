@@ -1,11 +1,10 @@
-import React from 'react';
 import { connect } from 'react-redux';
 import {
   makeSelectClaimRewardError,
   makeSelectRewardByType,
   makeSelectIsRewardClaimPending,
 } from 'redux/selectors/rewards';
-import { doNavigate } from 'redux/actions/navigation';
+import { doNavigate } from 'lbry-redux';
 import { doClaimRewardType, doClaimRewardClearError } from 'redux/actions/rewards';
 import RewardLink from './view';
 

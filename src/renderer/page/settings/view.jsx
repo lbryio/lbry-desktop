@@ -1,9 +1,8 @@
 import React from 'react';
 import FormField from 'component/formField';
-import { FormRow } from 'component/form.js';
+import { FormRow } from 'component/form';
 import SubHeader from 'component/subHeader';
 import * as settings from 'constants/settings';
-import lbry from 'lbry.js';
 import Link from 'component/link';
 import FormFieldPrice from 'component/formFieldPrice';
 
@@ -16,22 +15,12 @@ class SettingsPage extends React.PureComponent {
     };
   }
 
-  clearCache() {
-    this.setState({
-      clearingCache: true,
-    });
-    const success = () => {
-      this.setState({ clearingCache: false });
-      window.location.href = 'index.html';
-    };
-    const clear = () => this.props.clearCache().then(success.bind(this));
-
-    setTimeout(clear, 1000, { once: true });
+  componentWillMount() {
+    // eslint-disable-next-line react/prop-types
+    this.props.getThemes();
   }
 
-  setDaemonSetting(name, value) {
-    this.props.setDaemonSetting(name, value);
-  }
+  componentDidMount() {}
 
   onRunOnStartChange(event) {
     this.setDaemonSetting('run_on_startup', event.target.checked);
@@ -62,6 +51,7 @@ class SettingsPage extends React.PureComponent {
 
   onThemeChange(event) {
     const { value } = event.target;
+    // eslint-disable-next-line react/prop-types
     this.props.setClientSetting(settings.THEME, value);
   }
 
@@ -71,6 +61,39 @@ class SettingsPage extends React.PureComponent {
 
   onInstantPurchaseMaxChange(newValue) {
     this.props.setClientSetting(settings.INSTANT_PURCHASE_MAX, newValue);
+  }
+
+  onShowNsfwChange(event) {
+    this.props.setClientSetting(settings.SHOW_NSFW, event.target.checked);
+  }
+
+  onLanguageChange(e) {
+    // eslint-disable-next-line react/prop-types
+    this.props.changeLanguage(e.target.value);
+    this.forceUpdate();
+  }
+
+  onShowUnavailableChange(event) {
+    this.props.setClientSetting(settings.SHOW_UNAVAILABLE, event.target.checked);
+  }
+
+  setDaemonSetting(name, value) {
+    // eslint-disable-next-line react/prop-types
+    this.props.setDaemonSetting(name, value);
+  }
+
+  clearCache() {
+    this.setState({
+      clearingCache: true,
+    });
+    const success = () => {
+      this.setState({ clearingCache: false });
+      window.location.href = 'index.html';
+    };
+    // eslint-disable-next-line react/prop-types
+    const clear = () => this.props.clearCache().then(success.bind(this));
+
+    setTimeout(clear, 1000, { once: true });
   }
 
   // onMaxUploadPrefChange(isLimited) {
@@ -99,30 +122,10 @@ class SettingsPage extends React.PureComponent {
   //   this.setDaemonSetting("max_download", Number(event.target.value));
   // }
 
-  onShowNsfwChange(event) {
-    this.props.setClientSetting(settings.SHOW_NSFW, event.target.checked);
-  }
-
-  onLanguageChange(e) {
-    this.props.changeLanguage(e.target.value);
-    this.forceUpdate();
-  }
-
-  onShowUnavailableChange(event) {
-    this.props.setClientSetting(settings.SHOW_UNAVAILABLE, event.target.checked);
-  }
-
-  componentWillMount() {
-    this.props.getThemes();
-  }
-
-  componentDidMount() {}
-
   render() {
+    /* eslint-disable react/prop-types */
     const {
       daemonSettings,
-      language,
-      languages,
       showNsfw,
       instantPurchaseEnabled,
       instantPurchaseMax,
@@ -130,6 +133,7 @@ class SettingsPage extends React.PureComponent {
       theme,
       themes,
     } = this.props;
+    /* eslint-enable react/prop-types */
 
     if (!daemonSettings || Object.keys(daemonSettings).length === 0) {
       return (
@@ -138,6 +142,8 @@ class SettingsPage extends React.PureComponent {
         </main>
       );
     }
+
+    /* eslint-disable react/jsx-no-bind, no-shadow, no-unused-vars, jsx-a11y/anchor-is-valid */
     return (
       <main className="main--single-column">
         <SubHeader />
@@ -257,8 +263,8 @@ class SettingsPage extends React.PureComponent {
               )}
             </div>
             <div className="form-field__helper">
-              When this option is chosen, LBRY won't ask you to confirm downloads below the given
-              price.
+              When this option is chosen, LBRY won&apos;t ask you to confirm downloads below the
+              given price.
             </div>
           </div>
         </section>
@@ -338,6 +344,7 @@ class SettingsPage extends React.PureComponent {
         </section>
       </main>
     );
+    /* eslint-enable react/jsx-no-bind, no-shadow, no-unused-vars, jsx-a11y/anchor-is-valid */
   }
 }
 

@@ -1,6 +1,5 @@
 import React from 'react';
-import lbry from 'lbry';
-import lbryuri from 'lbryuri';
+import { Lbry, Lbryuri } from 'lbry-redux';
 import Video from 'component/video';
 import { Thumbnail } from 'component/common';
 import FilePrice from 'component/filePrice';
@@ -10,9 +9,9 @@ import Icon from 'component/icon';
 import WalletSendTip from 'component/walletSendTip';
 import DateTime from 'component/dateTime';
 import * as icons from 'constants/icons';
-import Link from 'component/link';
 import SubscribeButton from 'component/subscribeButton';
 
+/* eslint-disable react/prop-types, class-methods-use-this, no-nested-ternary */
 class FilePage extends React.PureComponent {
   componentDidMount() {
     this.fetchFileInfo(this.props);
@@ -46,15 +45,18 @@ class FilePage extends React.PureComponent {
       rewardedContentClaimIds,
     } = this.props;
 
-    const showTipBox = tab == 'tip';
+    // eslint-disable-next-line no-unused-vars
+    const showTipBox = tab === 'tip';
 
     if (!claim || !metadata) {
       return <span className="empty">{__('Empty claim or metadata info.')}</span>;
     }
 
+    // eslint-disable-next-line prefer-destructuring
     const title = metadata.title;
     const isRewardContent = rewardedContentClaimIds.includes(claim.claim_id);
-    const mediaType = lbry.getMediaType(contentType);
+    const mediaType = Lbry.getMediaType(contentType);
+    // eslint-disable-next-line global-require
     const player = require('render-media');
     const obscureNsfw = this.props.obscureNsfw && metadata && metadata.nsfw;
     const isPlayable =
@@ -65,7 +67,7 @@ class FilePage extends React.PureComponent {
 
     let subscriptionUri;
     if (channelName && channelClaimId) {
-      subscriptionUri = lbryuri.build({ channelName, claimId: channelClaimId }, false);
+      subscriptionUri = Lbryuri.build({ channelName, claimId: channelClaimId }, false);
     }
 
     return (
@@ -86,7 +88,7 @@ class FilePage extends React.PureComponent {
               <div className="card__title-identity">
                 {!fileInfo || fileInfo.written_bytes <= 0 ? (
                   <span style={{ float: 'right' }}>
-                    <FilePrice uri={lbryuri.normalize(uri)} />
+                    <FilePrice uri={Lbryuri.normalize(uri)} />
                     {isRewardContent && (
                       <span>
                         {' '}

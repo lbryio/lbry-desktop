@@ -1,6 +1,5 @@
 import { connect } from 'react-redux';
-import { doCloseModal } from 'lbry-redux';
-import { doAuthNavigate } from 'redux/actions/navigation';
+import { doAuthNavigate, doCloseModal } from 'lbry-redux';
 import ModalRewardApprovalRequired from './view';
 
 const perform = dispatch => ({

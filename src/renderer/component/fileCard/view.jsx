@@ -1,5 +1,5 @@
 import React from 'react';
-import lbryuri from 'lbryuri.js';
+import { Lbryuri } from 'lbry-redux';
 import CardMedia from 'component/cardMedia';
 import Link from 'component/link';
 import { TruncatedText } from 'component/common';
@@ -7,9 +7,9 @@ import Icon from 'component/icon';
 import FilePrice from 'component/filePrice';
 import UriIndicator from 'component/uriIndicator';
 import NsfwOverlay from 'component/nsfwOverlay';
-import TruncatedMarkdown from 'component/truncatedMarkdown';
 import * as icons from 'constants/icons';
 
+/* eslint-disable react/prop-types, react/jsx-no-bind, jsx-a11y/anchor-is-valid */
 class FileCard extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -27,6 +27,7 @@ class FileCard extends React.PureComponent {
     this.resolve(nextProps);
   }
 
+  // eslint-disable-next-line class-methods-use-this
   resolve(props) {
     const { isResolvingUri, resolveUri, claim, uri } = props;
 
@@ -57,16 +58,18 @@ class FileCard extends React.PureComponent {
       rewardedContentClaimIds,
     } = this.props;
 
-    const uri = lbryuri.normalize(this.props.uri);
+    const uri = Lbryuri.normalize(this.props.uri);
     const title = metadata && metadata.title ? metadata.title : uri;
     const thumbnail = metadata && metadata.thumbnail ? metadata.thumbnail : null;
     const obscureNsfw = this.props.obscureNsfw && metadata && metadata.nsfw;
     const isRewardContent = claim && rewardedContentClaimIds.includes(claim.claim_id);
 
+    // eslint-disable-next-line no-unused-vars
     let description = '';
     if (isResolvingUri && !claim) {
       description = __('Loading...');
     } else if (metadata && metadata.description) {
+      // eslint-disable-next-line prefer-destructuring
       description = metadata.description;
     } else if (claim === null) {
       description = __('This address contains no content.');

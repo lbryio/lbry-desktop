@@ -1,6 +1,5 @@
-import React from 'react';
 import { connect } from 'react-redux';
-import { doNavigate } from 'redux/actions/navigation';
+import { doNavigate } from 'lbry-redux';
 import { doUserIdentityVerify } from 'redux/actions/user';
 import rewards from 'rewards';
 import { makeSelectRewardByType } from 'redux/selectors/rewards';
@@ -10,6 +9,7 @@ import {
 } from 'redux/selectors/user';
 import UserVerify from './view';
 
+// eslint-disable-next-line  no-unused-vars
 const select = (state, props) => {
   const selectReward = makeSelectRewardByType();
 

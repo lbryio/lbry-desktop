@@ -1,14 +1,15 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
-import lbry from 'lbry.js';
+import { Lbry } from 'lbry-redux';
 import FileActions from 'component/fileActions';
 import Link from 'component/link';
-import DateTime from 'component/dateTime';
 
+// eslint-disable-next-line import/no-commonjs
 const path = require('path');
 
 class FileDetails extends React.PureComponent {
   render() {
+    // eslint-disable-next-line react/prop-types
     const { claim, contentType, fileInfo, metadata, openFolder, uri } = this.props;
 
     if (!claim || !metadata) {
@@ -20,10 +21,11 @@ class FileDetails extends React.PureComponent {
     }
 
     const { description, language, license } = metadata;
-    const mediaType = lbry.getMediaType(contentType);
+    const mediaType = Lbry.getMediaType(contentType);
 
     const downloadPath = fileInfo ? path.normalize(fileInfo.download_path) : null;
 
+    /* eslint-disable jsx-a11y/anchor-is-valid */
     return (
       <div>
         <div className="divider__horizontal" />

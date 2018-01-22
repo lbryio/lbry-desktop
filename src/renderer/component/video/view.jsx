@@ -1,10 +1,11 @@
 import React from 'react';
-import lbry from 'lbry';
+import { Lbry } from 'lbry-redux';
+import NsfwOverlay from 'component/nsfwOverlay';
 import VideoPlayer from './internal/player';
 import VideoPlayButton from './internal/play-button';
 import LoadingScreen from './internal/loading-screen';
-import NsfwOverlay from 'component/nsfwOverlay';
 
+/* eslint-disable react/prop-types, react/jsx-no-bind */
 class Video extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -63,7 +64,7 @@ class Video extends React.PureComponent {
     const isPlaying = playingUri === uri;
     const isReadyToPlay = fileInfo && fileInfo.written_bytes > 0;
     const obscureNsfw = this.props.obscureNsfw && metadata && metadata.nsfw;
-    const mediaType = lbry.getMediaType(contentType, fileInfo && fileInfo.file_name);
+    const mediaType = Lbry.getMediaType(contentType, fileInfo && fileInfo.file_name);
 
     let loadStatusMessage = '';
 

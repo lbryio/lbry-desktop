@@ -1,5 +1,4 @@
-import React from 'react';
-import { doAuthNavigate } from 'redux/actions/navigation';
+import { doAuthNavigate } from 'lbry-redux';
 import { connect } from 'react-redux';
 import { doFetchAccessToken } from 'redux/actions/user';
 import { selectAccessToken, selectUser } from 'redux/selectors/user';

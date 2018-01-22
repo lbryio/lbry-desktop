@@ -1,9 +1,8 @@
-import React from 'react';
 import { connect } from 'react-redux';
-import { selectCurrentPage, selectHeaderLinks } from 'redux/selectors/navigation';
-import { doNavigate } from 'redux/actions/navigation';
+import { doNavigate, selectCurrentPage, selectHeaderLinks } from 'lbry-redux';
 import SubHeader from './view';
 
+// eslint-disable-next-line no-unused-vars
 const select = (state, props) => ({
   currentPage: selectCurrentPage(state),
   subLinks: selectHeaderLinks(state),

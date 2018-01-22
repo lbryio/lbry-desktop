@@ -1,7 +1,5 @@
-import React from 'react';
-import { doNavigate } from 'redux/actions/navigation';
+import { doNavigate, selectPathAfterAuth } from 'lbry-redux';
 import { connect } from 'react-redux';
-import { selectPathAfterAuth } from 'redux/selectors/navigation';
 import {
   selectAuthenticationIsPending,
   selectEmailToVerify,
@@ -10,6 +8,7 @@ import {
   selectUserIsPending,
   selectIdentityVerifyIsPending,
 } from 'redux/selectors/user';
+// eslint-disable-next-line import/no-named-as-default
 import AuthPage from './view';
 
 const select = state => ({

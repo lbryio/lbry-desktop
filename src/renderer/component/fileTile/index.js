@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
-import { doNavigate } from 'redux/actions/navigation';
 import {
+  doNavigate,
   doResolveUri,
   makeSelectClaimForUri,
   makeSelectMetadataForUri,

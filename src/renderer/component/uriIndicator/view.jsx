@@ -1,7 +1,7 @@
 import React from 'react';
 import Icon from 'component/icon';
 import Link from 'component/link';
-import lbryuri from 'lbryuri';
+import { Lbryuri } from 'lbry-redux';
 import classnames from 'classnames';
 
 class UriIndicator extends React.PureComponent {
@@ -13,6 +13,7 @@ class UriIndicator extends React.PureComponent {
     this.resolve(nextProps);
   }
 
+  // eslint-disable-next-line class-methods-use-this
   resolve(props) {
     const { isResolvingUri, resolveUri, claim, uri } = props;
 
@@ -22,6 +23,7 @@ class UriIndicator extends React.PureComponent {
   }
 
   render() {
+    // eslint-disable-next-line react/prop-types, no-unused-vars
     const { claim, link, uri, isResolvingUri, smallCard, span } = this.props;
 
     if (isResolvingUri && !claim) {
@@ -45,11 +47,13 @@ class UriIndicator extends React.PureComponent {
       return <span className="empty">Anonymous</span>;
     }
 
-    let icon, channelLink, modifier;
+    let icon;
+    let channelLink;
+    let modifier;
 
     if (signatureIsValid) {
       modifier = 'valid';
-      channelLink = link ? lbryuri.build({ channelName, claimId: channelClaimId }, false) : false;
+      channelLink = link ? Lbryuri.build({ channelName, claimId: channelClaimId }, false) : false;
     } else {
       icon = 'icon-times-circle';
       modifier = 'invalid';
@@ -80,6 +84,7 @@ class UriIndicator extends React.PureComponent {
       return inner;
     }
 
+    /* eslint-disable jsx-a11y/anchor-is-valid */
     return (
       <Link
         navigate="/show"

@@ -1,14 +1,15 @@
 import React from 'react';
-import lbry from 'lbry';
+import Native from 'native';
 import { ExpandableModal } from 'modal/modal';
 
 class ModalError extends React.PureComponent {
   render() {
+    // eslint-disable-next-line react/prop-types
     const { closeModal, error } = this.props;
 
     const errorObj = typeof error === 'string' ? { message: error } : error;
 
-    const error_key_labels = {
+    const errorKeyLabels = {
       connectionString: __('API connection string'),
       method: __('Method'),
       params: __('Parameters'),
@@ -18,9 +19,10 @@ class ModalError extends React.PureComponent {
     };
 
     const errorInfoList = [];
+    // eslint-disable-next-line no-restricted-syntax
     for (const key of Object.keys(errorObj)) {
       const val = typeof errorObj[key] === 'string' ? errorObj[key] : JSON.stringify(errorObj[key]);
-      const label = error_key_labels[key];
+      const label = errorKeyLabels[key];
       errorInfoList.push(
         <li key={key}>
           <strong>{label}</strong>: <code>{val}</code>
@@ -42,7 +44,11 @@ class ModalError extends React.PureComponent {
 
         <div className="error-modal__content">
           <div>
-            <img className="error-modal__warning-symbol" src={lbry.imagePath('warning.png')} />
+            <img
+              alt=""
+              className="error-modal__warning-symbol"
+              src={Native.imagePath('warning.png')}
+            />
           </div>
           <p>
             {__(

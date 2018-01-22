@@ -3,18 +3,13 @@ import LinkTransaction from 'component/linkTransaction';
 import { CreditAmount } from 'component/common';
 import DateTime from 'component/dateTime';
 import Link from 'component/link';
-import lbryuri from 'lbryuri';
+import { Lbryuri } from 'lbry-redux';
 import * as txnTypes from 'constants/transaction_types';
 
 class TransactionListItem extends React.PureComponent {
-  abandonClaim() {
-    const { txid, nout } = this.props.transaction;
-
-    this.props.revokeClaim(txid, nout);
-  }
-
+  /* eslint-disable jsx-a11y/anchor-is-valid, react/jsx-no-bind */
   getLink(type) {
-    if (type == txnTypes.TIP) {
+    if (type === txnTypes.TIP) {
       return (
         <Link onClick={this.abandonClaim.bind(this)} icon="icon-unlock-alt" title={__('Unlock')} />
       );
@@ -22,11 +17,21 @@ class TransactionListItem extends React.PureComponent {
     return <Link onClick={this.abandonClaim.bind(this)} icon="icon-trash" title={__('Revoke')} />;
   }
 
+  abandonClaim() {
+    // eslint-disable-next-line react/prop-types
+    const { txid, nout } = this.props.transaction;
+
+    // eslint-disable-next-line react/prop-types
+    this.props.revokeClaim(txid, nout);
+  }
+
+  // eslint-disable-next-line class-methods-use-this
   capitalize(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
 
   render() {
+    // eslint-disable-next-line react/prop-types
     const { reward, transaction, isRevokeable } = this.props;
     const {
       amount,
@@ -36,6 +41,7 @@ class TransactionListItem extends React.PureComponent {
       fee,
       txid,
       type,
+      // eslint-disable-next-line no-unused-vars
       nout,
     } = transaction;
 
@@ -62,7 +68,7 @@ class TransactionListItem extends React.PureComponent {
         <td>
           <CreditAmount amount={amount} look="plain" label={false} showPlus precision={8} />
           <br />
-          {fee != 0 && <CreditAmount amount={fee} look="fee" label={false} precision={8} />}
+          {fee !== 0 && <CreditAmount amount={fee} look="fee" label={false} precision={8} />}
         </td>
         <td>
           {this.capitalize(type)} {isRevokeable && this.getLink(type)}
@@ -74,7 +80,7 @@ class TransactionListItem extends React.PureComponent {
               <Link
                 className="button-text"
                 navigate="/show"
-                navigateParams={{ uri: lbryuri.build({ name, claimId }) }}
+                navigateParams={{ uri: Lbryuri.build({ name, claimId }) }}
               >
                 {name}
               </Link>

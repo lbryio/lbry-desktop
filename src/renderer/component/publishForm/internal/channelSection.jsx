@@ -1,9 +1,10 @@
 import React from 'react';
-import lbryuri from 'lbryuri';
-import { FormRow } from 'component/form.js';
+import { Lbryuri } from 'lbry-redux';
+import { FormRow } from 'component/form';
 import { BusyMessage } from 'component/common';
 import Link from 'component/link';
 
+/* eslint-disable react/prop-types, react/jsx-no-bind, jsx-a11y/tabindex-no-positive, jsx-a11y/anchor-is-valid */
 class ChannelSection extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -29,12 +30,14 @@ class ChannelSection extends React.PureComponent {
       ? event.target.value
       : `@${event.target.value}`;
 
-    if (newChannelName.length > 1 && !lbryuri.isValidName(newChannelName.substr(1), false)) {
+    if (newChannelName.length > 1 && !Lbryuri.isValidName(newChannelName.substr(1), false)) {
+      // eslint-disable-next-line react/no-string-refs
       this.refs.newChannelName.showError(
         __('LBRY channel names must contain only letters, numbers and dashes.')
       );
       return;
     }
+    // eslint-disable-next-line react/no-string-refs
     this.refs.newChannelName.clearError();
 
     this.setState({
@@ -48,11 +51,13 @@ class ChannelSection extends React.PureComponent {
     });
   }
 
+  // eslint-disable-next-line no-unused-vars
   handleCreateChannelClick(event) {
     const { balance } = this.props;
     const { newChannelBid } = this.state;
 
     if (newChannelBid > balance) {
+      // eslint-disable-next-line react/no-string-refs
       this.refs.newChannelName.showError(__('Unable to create channel due to insufficient funds.'));
 
       return;
@@ -62,6 +67,7 @@ class ChannelSection extends React.PureComponent {
       creatingChannel: true,
     });
 
+    // eslint-disable-next-line prefer-destructuring
     const newChannelName = this.state.newChannelName;
     const amount = parseFloat(this.state.newChannelBid);
     this.setState({
@@ -71,14 +77,17 @@ class ChannelSection extends React.PureComponent {
       this.setState({
         creatingChannel: false,
         addingChannel: false,
+        // eslint-disable-next-line react/no-unused-state
         channel: newChannelName,
       });
       this.props.handleChannelChange(newChannelName);
     };
+    // eslint-disable-next-line no-unused-vars
     const failure = err => {
       this.setState({
         creatingChannel: false,
       });
+      // eslint-disable-next-line react/no-string-refs
       this.refs.newChannelName.showError(__('Unable to create channel due to an internal error.'));
     };
     this.props.createChannel(newChannelName, amount).then(success, failure);
@@ -114,6 +123,7 @@ class ChannelSection extends React.PureComponent {
       </FormRow>
     );
 
+    /* eslint-disable react/no-string-refs */
     return (
       <section className="card">
         <div className="card__title-primary">

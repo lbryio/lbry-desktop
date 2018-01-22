@@ -1,6 +1,5 @@
 import { connect } from 'react-redux';
-import { selectIsSearching, selectSearchQuery } from 'lbry-redux';
-import { doNavigate } from 'redux/actions/navigation';
+import { doNavigate, selectIsSearching, selectSearchQuery } from 'lbry-redux';
 import SearchPage from './view';
 
 const select = state => ({

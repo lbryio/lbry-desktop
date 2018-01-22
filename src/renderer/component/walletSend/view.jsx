@@ -1,7 +1,8 @@
 import React from 'react';
 import { Form, FormRow, Submit } from 'component/form';
-import lbryuri from 'lbryuri';
+import { Lbryuri } from 'lbry-redux';
 
+/* eslint-disable react/prop-types, react/jsx-no-bind */
 class WalletSend extends React.PureComponent {
   handleSubmit() {
     const { amount, address, sendToAddress } = this.props;
@@ -13,6 +14,7 @@ class WalletSend extends React.PureComponent {
   }
 
   render() {
+    // eslint-disable-next-line no-unused-vars
     const { closeModal, modal, setAmount, setAddress, amount, address, error } = this.props;
 
     return (
@@ -42,7 +44,7 @@ class WalletSend extends React.PureComponent {
               size="60"
               onChange={setAddress}
               value={address}
-              regexp={lbryuri.REGEXP_ADDRESS}
+              regexp={Lbryuri.REGEXP_ADDRESS}
               trim
             />
             <div className="form-row-submit">

@@ -1,11 +1,13 @@
 // @TODO: Customize advice based on OS
 import React from 'react';
-import lbry from 'lbry.js';
+import { Lbry } from 'lbry-redux';
+import Native from 'native';
 import Link from 'component/link';
 import SubHeader from 'component/subHeader';
 import { BusyMessage } from 'component/common';
 import Icon from 'component/icon';
 
+/* eslint-disable react/prop-types, react/jsx-no-bind, no-nested-ternary, jsx-a11y/anchor-is-valid */
 class HelpPage extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -20,18 +22,19 @@ class HelpPage extends React.PureComponent {
   }
 
   componentWillMount() {
-    lbry.getAppVersionInfo().then(({ remoteVersion, localVersion, upgradeAvailable }) => {
+    // eslint-disable-next-line no-unused-vars
+    Native.getAppVersionInfo().then(({ remoteVersion, localVersion, upgradeAvailable }) => {
       this.setState({
         uiVersion: localVersion,
         upgradeAvailable,
       });
     });
-    lbry.version().then(info => {
+    Lbry.version().then(info => {
       this.setState({
         versionInfo: info,
       });
     });
-    lbry.status({ session_status: true }).then(info => {
+    Lbry.status({ session_status: true }).then(info => {
       this.setState({
         lbryId: info.lbry_id,
       });
@@ -47,18 +50,21 @@ class HelpPage extends React.PureComponent {
   }
 
   render() {
-    let ver, osName, platform, newVerLink;
+    let ver;
+    let osName;
+    let platform;
+    let newVerLink;
 
     const { accessToken, doAuth, user } = this.props;
 
     if (this.state.versionInfo) {
       ver = this.state.versionInfo;
-      if (ver.os_system == 'Darwin') {
-        osName = parseInt(ver.os_release.match(/^\d+/)) < 16 ? 'Mac OS X' : 'Mac OS';
+      if (ver.os_system === 'Darwin') {
+        osName = parseInt(ver.os_release.match(/^\d+/), 10) < 16 ? 'Mac OS X' : 'Mac OS';
 
         platform = `${osName} ${ver.os_release}`;
         newVerLink = 'https://lbry.io/get/lbry.dmg';
-      } else if (ver.os_system == 'Linux') {
+      } else if (ver.os_system === 'Linux') {
         platform = `Linux (${ver.platform})`;
         newVerLink = 'https://lbry.io/get/lbry.deb';
       } else {

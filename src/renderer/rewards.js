@@ -1,6 +1,5 @@
-import Lbry from 'lbry';
+import { Lbry, doShowSnackBar } from 'lbry-redux';
 import Lbryio from 'lbryio';
-import { doShowSnackBar } from 'redux/actions/app';
 
 function rewardMessage(type, amount) {
   return {

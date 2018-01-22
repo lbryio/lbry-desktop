@@ -1,6 +1,5 @@
 import { connect } from 'react-redux';
-import { Lbryuri, selectWunderBarAddress, selectWunderBarIcon } from 'lbry-redux';
-import { doNavigate } from 'redux/actions/navigation';
+import { Lbryuri, doNavigate, selectWunderBarAddress, selectWunderBarIcon } from 'lbry-redux';
 import Wunderbar from './view';
 
 const select = state => ({

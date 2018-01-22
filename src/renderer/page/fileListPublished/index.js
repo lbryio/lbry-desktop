@@ -2,11 +2,11 @@ import rewards from 'rewards';
 import { connect } from 'react-redux';
 import {
   doFetchClaimListMine,
+  doNavigate,
   selectMyClaimsWithoutChannels,
   selectIsFetchingClaimListMine,
 } from 'lbry-redux';
 import { doClaimRewardType } from 'redux/actions/rewards';
-import { doNavigate } from 'redux/actions/navigation';
 import FileListPublished from './view';
 
 const select = state => ({

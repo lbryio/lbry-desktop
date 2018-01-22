@@ -4,13 +4,12 @@ import SnackBar from 'component/snackBar';
 import SplashScreen from 'component/splash';
 import * as ACTIONS from 'constants/action_types';
 import { ipcRenderer, remote, shell } from 'electron';
-import lbry from 'lbry';
 /* eslint-disable react/jsx-filename-extension */
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { doConditionalAuthNavigate, doDaemonReady, doShowSnackBar } from 'redux/actions/app';
-import { doNavigate } from 'redux/actions/navigation';
+import { Lbry, doNavigate } from 'lbry-redux';
 import { doDownloadLanguages } from 'redux/actions/settings';
 import { doUserEmailVerify } from 'redux/actions/user';
 import 'scss/all.scss';
@@ -100,7 +99,7 @@ const init = () => {
   app.store.dispatch(doDownloadLanguages());
 
   function onDaemonReady() {
-    lbry.status().then(info => {
+    Lbry.status().then(info => {
       amplitude.getInstance().init(
         // Amplitude API Key
         '0b130efdcbdbf86ec2f7f9eff354033e',

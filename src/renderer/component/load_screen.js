@@ -1,19 +1,25 @@
 import React from 'react';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import PropTypes from 'prop-types';
-import lbry from '../lbry.js';
-import { BusyMessage, Icon } from './common.js';
-import Link from 'component/link';
+import Native from 'native';
+import { BusyMessage, Icon } from './common';
 
 class LoadScreen extends React.PureComponent {
   static propTypes = {
     message: PropTypes.string.isRequired,
+    // eslint-disable-next-line react/require-default-props
     details: PropTypes.string,
     isWarning: PropTypes.bool,
+  };
+
+  static defaultProps = {
+    isWarning: false,
   };
 
   constructor(props) {
     super(props);
 
+    /* eslint-disable react/no-unused-state */
     this.state = {
       message: null,
       details: null,
@@ -21,12 +27,9 @@ class LoadScreen extends React.PureComponent {
     };
   }
 
-  static defaultProps = {
-    isWarning: false,
-  };
-
+  /* eslint-disable react/jsx-filename-extension */
   render() {
-    const imgSrc = lbry.imagePath('lbry-white-485x160.png');
+    const imgSrc = Native.imagePath('lbry-white-485x160.png');
     return (
       <div className="load-screen">
         <img src={imgSrc} alt="LBRY" />

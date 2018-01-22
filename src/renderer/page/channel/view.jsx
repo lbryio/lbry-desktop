@@ -1,11 +1,11 @@
 import React from 'react';
-import lbryuri from 'lbryuri';
+import { Lbryuri } from 'lbry-redux';
 import { BusyMessage } from 'component/common';
 import FileTile from 'component/fileTile';
 import ReactPaginate from 'react-paginate';
-import Link from 'component/link';
 import SubscribeButton from 'component/subscribeButton';
 
+/* eslint-disable react/prop-types, react/jsx-no-bind, no-unused-vars, no-shadow */
 class ChannelPage extends React.PureComponent {
   componentDidMount() {
     const { uri, page, fetchClaims, fetchClaimCount } = this.props;
@@ -20,7 +20,7 @@ class ChannelPage extends React.PureComponent {
     if (nextProps.page && page !== nextProps.page) {
       fetchClaims(nextProps.uri, nextProps.page);
     }
-    if (nextProps.uri != uri) {
+    if (nextProps.uri !== uri) {
       fetchClaimCount(uri);
     }
   }
@@ -46,7 +46,7 @@ class ChannelPage extends React.PureComponent {
     } = this.props;
 
     const { name, claim_id: claimId } = claim;
-    const subscriptionUri = lbryuri.build({ channelName: name, claimId }, false);
+    const subscriptionUri = Lbryuri.build({ channelName: name, claimId }, false);
 
     let contentList;
     if (fetching) {
@@ -57,7 +57,7 @@ class ChannelPage extends React.PureComponent {
           claimsInChannel.map(claim => (
             <FileTile
               key={claim.claim_id}
-              uri={lbryuri.build({
+              uri={Lbryuri.build({
                 name: claim.name,
                 claimId: claim.claim_id,
               })}
@@ -103,7 +103,7 @@ class ChannelPage extends React.PureComponent {
               breakClassName="pagination__item pagination__item--break"
               marginPagesDisplayed={2}
               onPageChange={e => this.changePage(e.selected + 1)}
-              initialPage={parseInt(page - 1)}
+              initialPage={parseInt(page - 1, 10)}
               containerClassName="pagination"
             />
           )}

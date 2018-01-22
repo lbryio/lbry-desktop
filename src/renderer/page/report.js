@@ -1,8 +1,7 @@
 import React from 'react';
 import Link from 'component/link';
 import { FormRow } from 'component/form';
-import { doShowSnackBar } from 'redux/actions/app';
-import lbry from '../lbry.js';
+import { Lbry, doShowSnackBar } from 'lbry-redux';
 
 class ReportPage extends React.Component {
   constructor(props) {
@@ -14,13 +13,20 @@ class ReportPage extends React.Component {
     };
   }
 
+  onMessageChange(event) {
+    this.setState({
+      message: event.target.value,
+    });
+  }
+
   submitMessage() {
+    // eslint-disable-next-line prefer-destructuring
     const message = this.state.message;
     if (message) {
       this.setState({
         submitting: true,
       });
-      lbry.report_bug({ message }).then(() => {
+      Lbry.report_bug({ message }).then(() => {
         this.setState({
           submitting: false,
         });
@@ -37,13 +43,8 @@ class ReportPage extends React.Component {
     }
   }
 
-  onMessageChange(event) {
-    this.setState({
-      message: event.target.value,
-    });
-  }
-
   render() {
+    /* eslint-disable react/jsx-filename-extension */
     return (
       <main className="main--single-column">
         <section className="card">

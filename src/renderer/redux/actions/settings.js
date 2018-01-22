@@ -2,8 +2,7 @@ import * as ACTIONS from 'constants/action_types';
 import * as SETTINGS from 'constants/settings';
 import Fs from 'fs';
 import Http from 'http';
-
-import Lbry from 'lbry';
+import { Lbry } from 'lbry-redux';
 
 export function doFetchDaemonSettings() {
   return dispatch => {
