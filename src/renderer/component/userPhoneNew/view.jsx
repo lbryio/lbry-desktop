@@ -2,6 +2,7 @@ import React from 'react';
 import { Form, FormRow, Submit } from 'component/form.js';
 import FormField from 'component/formField';
 
+const os = require('os').type();
 const countryCodes = require('country-data')
   .callingCountries.all.filter(_ => _.emoji)
   .reduce(
@@ -79,7 +80,8 @@ class UserPhoneNew extends React.PureComponent {
             <FormField type="select" onChange={this.handleSelect.bind(this)}>
               {countryCodes.map((country, index) => (
                 <option key={index} value={country.countryCallingCode}>
-                  {country.emoji} {country.countryCallingCode}
+                  {os === 'Darwin' ? country.emoji : `(${country.alpha2})`}{' '}
+                  {country.countryCallingCode}
                 </option>
               ))}
             </FormField>
