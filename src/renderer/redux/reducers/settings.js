@@ -23,7 +23,9 @@ const defaultState = {
     language: getLocalStorageSetting(SETTINGS.LANGUAGE, 'en'),
     theme: getLocalStorageSetting(SETTINGS.THEME, 'light'),
     themes: getLocalStorageSetting(SETTINGS.THEMES, []),
+    automaticDarkModeEnabled: getLocalStorageSetting(SETTINGS.AUTOMATIC_DARK_MODE_ENABLED, false),
   },
+  isNight: false,
   languages: {},
 };
 
@@ -45,6 +47,11 @@ reducers[ACTIONS.CLIENT_SETTING_CHANGED] = (state, action) => {
     clientSettings,
   });
 };
+
+reducers[ACTIONS.UPDATE_IS_NIGHT] = (state, action) =>
+  Object.assign({}, state, {
+    isNight: action.data.isNight,
+  });
 
 reducers[ACTIONS.DOWNLOAD_LANGUAGE_SUCCEEDED] = (state, action) => {
   const languages = Object.assign({}, state.languages);
