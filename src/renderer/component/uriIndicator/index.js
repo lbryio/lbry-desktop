@@ -1,5 +1,5 @@
 import React from 'react';
-import lbryuri from 'lbryuri';
+import { normalizeURI } from 'lbryURI';
 import { connect } from 'react-redux';
 import { doResolveUri } from 'redux/actions/content';
 import { makeSelectIsUriResolving } from 'redux/selectors/content';
@@ -9,7 +9,7 @@ import UriIndicator from './view';
 const select = (state, props) => ({
   claim: makeSelectClaimForUri(props.uri)(state),
   isResolvingUri: makeSelectIsUriResolving(props.uri)(state),
-  uri: lbryuri.normalize(props.uri),
+  uri: normalizeURI(props.uri),
 });
 
 const perform = dispatch => ({

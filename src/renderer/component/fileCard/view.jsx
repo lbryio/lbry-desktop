@@ -1,5 +1,5 @@
 import React from 'react';
-import lbryuri from 'lbryuri.js';
+import { normalizeURI } from 'lbryURI';
 import CardMedia from 'component/cardMedia';
 import Link from 'component/link';
 import { TruncatedText } from 'component/common';
@@ -57,7 +57,7 @@ class FileCard extends React.PureComponent {
       rewardedContentClaimIds,
     } = this.props;
 
-    const uri = lbryuri.normalize(this.props.uri);
+    const uri = normalizeURI(this.props.uri);
     const title = metadata && metadata.title ? metadata.title : uri;
     const thumbnail = metadata && metadata.thumbnail ? metadata.thumbnail : null;
     const obscureNsfw = this.props.obscureNsfw && metadata && metadata.nsfw;

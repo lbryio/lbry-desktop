@@ -1,10 +1,8 @@
-const CHANNEL_NAME_MIN_LEN = 1;
-const CLAIM_ID_MAX_LEN = 40;
+const channelNameMinLength = 1;
+const claimIdMaxLength = 40;
 
-const Lbryuri = {};
-
-Lbryuri.REGEXP_INVALID_URI = /[^A-Za-z0-9-]/g;
-Lbryuri.REGEXP_ADDRESS = /^b(?=[^0OIl]{32,33})[0-9A-Za-z]{32,33}$/;
+export const regexInvalidURI = /[^A-Za-z0-9-]/g;
+export const regexAddress = /^b(?=[^0OIl]{32,33})[0-9A-Za-z]{32,33}$/;
 
 /**
  * Parses a LBRY name into its component parts. Throws errors with user-friendly
@@ -28,7 +26,7 @@ Lbryuri.REGEXP_ADDRESS = /^b(?=[^0OIl]{32,33})[0-9A-Za-z]{32,33}$/;
  *   - contentName (string): For anon claims, the name; for channel claims, the path
  *   - channelName (string, if present): Channel name without @
  */
-Lbryuri.parse = (uri, requireProto = false) => {
+export function parseURI(URI, requireProto = false) {
   // Break into components. Empty sub-matches are converted to null
   const componentsRegex = new RegExp(
     '^((?:lbry://)?)' + // protocol
@@ -37,7 +35,7 @@ Lbryuri.parse = (uri, requireProto = false) => {
       '(/?)(.*)' // path separator, path
   );
   const [proto, name, modSep, modVal, pathSep, path] = componentsRegex
-    .exec(uri)
+    .exec(URI)
     .slice(1)
     .map(match => match || null);
 
@@ -61,14 +59,14 @@ Lbryuri.parse = (uri, requireProto = false) => {
       throw new Error(__('No channel name after @.'));
     }
 
-    if (channelName.length < CHANNEL_NAME_MIN_LEN) {
-      throw new Error(__(`Channel names must be at least %s characters.`, CHANNEL_NAME_MIN_LEN));
+    if (channelName.length < channelNameMinLength) {
+      throw new Error(__(`Channel names must be at least %s characters.`, channelNameMinLength));
     }
 
     contentName = path;
   }
 
-  const nameBadChars = (channelName || name).match(Lbryuri.REGEXP_INVALID_URI);
+  const nameBadChars = (channelName || name).match(regexInvalidURI);
   if (nameBadChars) {
     throw new Error(
       __(
@@ -99,7 +97,7 @@ Lbryuri.parse = (uri, requireProto = false) => {
 
   if (
     claimId &&
-    (claimId.length > CLAIM_ID_MAX_LEN || !claimId.match(/^[0-9a-f]+$/)) &&
+    (claimId.length > claimIdMaxLength || !claimId.match(/^[0-9a-f]+$/)) &&
     !claimId.match(/^pending/) // ought to be dropped when savePendingPublish drops hack
   ) {
     throw new Error(__(`Invalid claim ID %s.`, claimId));
@@ -119,7 +117,7 @@ Lbryuri.parse = (uri, requireProto = false) => {
       throw new Error(__('Only channel URIs may have a path.'));
     }
 
-    const pathBadChars = path.match(Lbryuri.REGEXP_INVALID_URI);
+    const pathBadChars = path.match(regexInvalidURI);
     if (pathBadChars) {
       throw new Error(__(`Invalid character in path: %s`, pathBadChars.join(', ')));
     }
@@ -140,17 +138,17 @@ Lbryuri.parse = (uri, requireProto = false) => {
     ...(claimId ? { claimId } : {}),
     ...(path ? { path } : {}),
   };
-};
+}
 
 /**
- * Takes an object in the same format returned by lbryuri.parse() and builds a URI.
+ * Takes an object in the same format returned by parse() and builds a URI.
  *
  * The channelName key will accept names with or without the @ prefix.
  */
-Lbryuri.build = (uriObj, includeProto = true) => {
-  const { claimId, claimSequence, bidPosition, contentName, channelName } = uriObj;
+export function buildURI(URIObj, includeProto = true) {
+  const { claimId, claimSequence, bidPosition, contentName, channelName } = URIObj;
 
-  let { name, path } = uriObj;
+  let { name, path } = URIObj;
 
   if (channelName) {
     const channelNameFormatted = channelName.startsWith('@') ? channelName : `@${channelName}`;
@@ -188,36 +186,35 @@ Lbryuri.build = (uriObj, includeProto = true) => {
     (bidPosition ? `${bidPosition}` : '') +
     (path ? `/${path}` : '')
   );
-};
+}
 
-/* Takes a parseable LBRY URI and converts it to standard, canonical format (currently this just
- * consists of adding the lbry:// prefix if needed) */
-Lbryuri.normalize = uri => {
-  if (uri.match(/pending_claim/)) return uri;
+/* Takes a parseable LBRY URI and converts it to standard, canonical format */
+export function normalizeURI(URI) {
+  if (URI.match(/pending_claim/)) return URI;
 
-  const { name, path, bidPosition, claimSequence, claimId } = Lbryuri.parse(uri);
-  return Lbryuri.build({ name, path, claimSequence, bidPosition, claimId });
-};
+  const { name, path, bidPosition, claimSequence, claimId } = parseURI(URI);
+  return buildURI({ name, path, claimSequence, bidPosition, claimId });
+}
 
-Lbryuri.isValid = uri => {
+export function isURIValid(URI) {
   let parts;
   try {
-    parts = Lbryuri.parse(Lbryuri.normalize(uri));
+    parts = parseURI(normalizeURI(URI));
   } catch (error) {
     return false;
   }
   return parts && parts.name;
-};
+}
 
-Lbryuri.isValidName = (name, checkCase = true) => {
+export function isNameValid(name, checkCase = true) {
   const regexp = new RegExp('^[a-z0-9-]+$', checkCase ? '' : 'i');
   return regexp.test(name);
-};
+}
 
-Lbryuri.isClaimable = uri => {
+export function isURIClaimable(URI) {
   let parts;
   try {
-    parts = Lbryuri.parse(Lbryuri.normalize(uri));
+    parts = parseURI(normalizeURI(URI));
   } catch (error) {
     return false;
   }
@@ -230,7 +227,4 @@ Lbryuri.isClaimable = uri => {
     !parts.isChannel &&
     !parts.path
   );
-};
-
-window.lbryuri = Lbryuri;
-export default Lbryuri;
+}

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import lbryuri from 'lbryuri.js';
+import { normalizeURI } from 'lbryURI';
 import Icon from 'component/icon';
 import { parseQueryParams } from 'util/query_params';
 
@@ -130,7 +130,7 @@ class WunderBar extends React.PureComponent {
       if (parts.length > 0) extraParams = parseQueryParams(parts.join(''));
 
       try {
-        uri = lbryuri.normalize(value);
+        uri = normalizeURI(value);
         this.setState({ value: uri });
       } catch (error) {
         // then it's not a valid URL, so let's search

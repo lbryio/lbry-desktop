@@ -1,6 +1,6 @@
 import React from 'react';
 import lbry from 'lbry';
-import lbryuri from 'lbryuri';
+import { buildURI, normalizeURI } from 'lbryURI';
 import Video from 'component/video';
 import { Thumbnail } from 'component/common';
 import FilePrice from 'component/filePrice';
@@ -65,7 +65,7 @@ class FilePage extends React.PureComponent {
 
     let subscriptionUri;
     if (channelName && channelClaimId) {
-      subscriptionUri = lbryuri.build({ channelName, claimId: channelClaimId }, false);
+      subscriptionUri = buildURI({ channelName, claimId: channelClaimId }, false);
     }
 
     return (
@@ -86,7 +86,7 @@ class FilePage extends React.PureComponent {
               <div className="card__title-identity">
                 {!fileInfo || fileInfo.written_bytes <= 0 ? (
                   <span style={{ float: 'right' }}>
-                    <FilePrice uri={lbryuri.normalize(uri)} />
+                    <FilePrice uri={normalizeURI(uri)} />
                     {isRewardContent && (
                       <span>
                         {' '}

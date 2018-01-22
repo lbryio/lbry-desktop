@@ -1,5 +1,5 @@
 import * as ACTIONS from 'constants/action_types';
-import Lbryuri from 'lbryuri';
+import { buildURI } from 'lbryURI';
 import { doResolveUri } from 'redux/actions/content';
 import { doNavigate } from 'redux/actions/navigation';
 import { selectCurrentPage } from 'redux/selectors/navigation';
@@ -40,7 +40,7 @@ export function doSearch(rawQuery) {
           const actions = [];
 
           data.forEach(result => {
-            const uri = Lbryuri.build({
+            const uri = buildURI({
               name: result.name,
               claimId: result.claimId,
             });
