@@ -18,13 +18,12 @@ const countryCodes = require('country-data')
     return 0;
   });
 
-class UserFieldNew extends React.PureComponent {
+class UserPhoneNew extends React.PureComponent {
   constructor(props) {
     super(props);
 
     this.state = {
       phone: '',
-      email: '',
       country_code: '+1',
     };
 
@@ -50,21 +49,9 @@ class UserFieldNew extends React.PureComponent {
     return value;
   }
 
-  formatCountryCode(value) {
-    if (value) {
-      return `+${value.replace(/\D/g, '')}`;
-    }
-    return '+1';
-  }
-
-  handleChanged(event, fieldType) {
-    const formatter = {
-      email: _ => _,
-      phone: this.formatPhone,
-      country_code: this.formatCountryCode,
-    };
+  handleChanged(event) {
     this.setState({
-      [fieldType]: formatter[fieldType](event.target.value),
+      phone: this.formatPhone(event.target.value),
     });
   }
 
@@ -73,18 +60,14 @@ class UserFieldNew extends React.PureComponent {
   }
 
   handleSubmit() {
-    const { email, phone, country_code } = this.state;
-    if (phone) {
-      this.props.addUserPhone(phone.replace(/\D/g, ''), country_code.substring(1));
-    } else {
-      this.props.addUserEmail(email);
-    }
+    const { phone, country_code } = this.state;
+    this.props.addUserPhone(phone.replace(/\D/g, ''), country_code.substring(1));
   }
 
   render() {
-    const { cancelButton, emailErrorMessage, phoneErrorMessage, isPending, fieldType } = this.props;
+    const { cancelButton, phoneErrorMessage, isPending } = this.props;
 
-    return fieldType === 'phone' ? (
+    return (
       <div>
         <p>
           {__(
@@ -107,34 +90,10 @@ class UserFieldNew extends React.PureComponent {
               value={this.state.phone}
               errorMessage={phoneErrorMessage}
               onChange={event => {
-                this.handleChanged(event, 'phone');
+                this.handleChanged(event);
               }}
             />
           </div>
-          <div className="form-row-submit">
-            <Submit label="Submit" disabled={isPending} />
-            {cancelButton}
-          </div>
-        </Form>
-      </div>
-    ) : (
-      <div>
-        <p>
-          {__("We'll let you know about LBRY updates, security issues, and great new content.")}
-        </p>
-        <p>{__("We'll never sell your email, and you can unsubscribe at any time.")}</p>
-        <Form onSubmit={this.handleSubmit.bind(this)}>
-          <FormRow
-            type="text"
-            label="Email"
-            placeholder="youremail@example.org"
-            name="email"
-            value={this.state.email}
-            errorMessage={emailErrorMessage}
-            onChange={event => {
-              this.handleChanged(event, 'email');
-            }}
-          />
           <div className="form-row-submit">
             <Submit label="Submit" disabled={isPending} />
             {cancelButton}
@@ -145,4 +104,4 @@ class UserFieldNew extends React.PureComponent {
   }
 }
 
-export default UserFieldNew;
+export default UserPhoneNew;

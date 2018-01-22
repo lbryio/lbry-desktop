@@ -2,7 +2,7 @@ import React from 'react';
 import Link from 'component/link';
 import { Form, FormRow, Submit } from 'component/form.js';
 
-class UserFieldVerify extends React.PureComponent {
+class UserPhoneVerify extends React.PureComponent {
   constructor(props) {
     super(props);
 
@@ -19,34 +19,16 @@ class UserFieldVerify extends React.PureComponent {
 
   handleSubmit() {
     const { code } = this.state;
-    const { fieldType } = this.props;
-    if (fieldType === 'phone') {
-      this.props.verifyUserPhone(code);
-    } else {
-      try {
-        const verification = JSON.parse(atob(code));
-        this.props.verifyUserEmail(verification.token, verification.recaptcha);
-      } catch (error) {
-        this.props.verifyUserEmailFailure('Invalid Verification Token');
-      }
-    }
+    this.props.verifyUserPhone(code);
   }
 
   render() {
-    const {
-      cancelButton,
-      emailErrorMessage,
-      phoneErrorMessage,
-      email,
-      isPending,
-      phone,
-      countryCode,
-    } = this.props;
+    const { cancelButton, phoneErrorMessage, phone, countryCode } = this.props;
     return (
       <Form onSubmit={this.handleSubmit.bind(this)}>
         <p>
-          Please enter the verification code sent to {countryCode ? `+${countryCode}` : ''}
-          {phone || email}.
+          Please enter the verification code sent to {`+${countryCode}`}
+          {phone}.
         </p>
         <FormRow
           type="text"
@@ -56,7 +38,7 @@ class UserFieldVerify extends React.PureComponent {
           onChange={event => {
             this.handleCodeChanged(event);
           }}
-          errorMessage={emailErrorMessage || phoneErrorMessage}
+          errorMessage={phoneErrorMessage}
         />
         {/* render help separately so it always shows */}
         <div className="form-field__helper">
@@ -67,7 +49,7 @@ class UserFieldVerify extends React.PureComponent {
           </p>
         </div>
         <div className="form-row-submit">
-          <Submit label={__('Verify')} disabled={isPending} />
+          <Submit label={__('Verify')} />
           {cancelButton}
         </div>
       </Form>
@@ -75,4 +57,4 @@ class UserFieldVerify extends React.PureComponent {
   }
 }
 
-export default UserFieldVerify;
+export default UserPhoneVerify;

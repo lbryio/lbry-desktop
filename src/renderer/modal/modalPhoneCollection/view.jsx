@@ -1,8 +1,8 @@
 import React from 'react';
 import { Modal } from 'modal/modal';
 import Link from 'component/link/index';
-import UserFieldNew from 'component/userFieldNew';
-import UserFieldVerify from 'component/userFieldVerify';
+import UserPhoneNew from 'component/userPhoneNew';
+import UserPhoneVerify from 'component/userPhoneVerify';
 
 class ModalPhoneCollection extends React.PureComponent {
   renderInner() {
@@ -11,9 +11,9 @@ class ModalPhoneCollection extends React.PureComponent {
     const cancelButton = <Link button="text" onClick={closeModal} label={__('Not Now')} />;
 
     if (!user.phone_number && !phone) {
-      return <UserFieldNew cancelButton={cancelButton} fieldType="phone" />;
+      return <UserPhoneNew cancelButton={cancelButton} />;
     } else if (!user.phone_number) {
-      return <UserFieldVerify cancelButton={cancelButton} fieldType="phone" />;
+      return <UserPhoneVerify cancelButton={cancelButton} />;
     }
     closeModal();
   }

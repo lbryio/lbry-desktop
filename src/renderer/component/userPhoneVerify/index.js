@@ -1,0 +1,21 @@
+import React from 'react';
+import { connect } from 'react-redux';
+import { doUserPhoneVerify } from 'redux/actions/user';
+import {
+  selectPhoneToVerify,
+  selectPhoneVerifyErrorMessage,
+  selectUserCountryCode,
+} from 'redux/selectors/user';
+import UserPhoneVerify from './view';
+
+const select = state => ({
+  phone: selectPhoneToVerify(state),
+  countryCode: selectUserCountryCode(state),
+  phoneErrorMessage: selectPhoneVerifyErrorMessage(state),
+});
+
+const perform = dispatch => ({
+  verifyUserPhone: code => dispatch(doUserPhoneVerify(code)),
+});
+
+export default connect(select, perform)(UserPhoneVerify);

@@ -1,8 +1,8 @@
 import React from 'react';
 import { BusyMessage } from 'component/common';
 import Link from 'component/link';
-import UserFieldNew from 'component/userFieldNew';
-import UserFieldVerify from 'component/userFieldVerify';
+import UserEmailNew from 'component/userEmailNew';
+import UserEmailVerify from 'component/userEmailVerify';
 import UserVerify from 'component/userVerify';
 
 export class AuthPage extends React.PureComponent {
@@ -45,9 +45,9 @@ export class AuthPage extends React.PureComponent {
     if (isPending) {
       return [<BusyMessage message={__('Authenticating')} />, true];
     } else if (user && !user.has_verified_email && !email) {
-      return [<UserFieldNew />, true];
+      return [<UserEmailNew />, true];
     } else if (user && !user.has_verified_email) {
-      return [<UserFieldVerify />, true];
+      return [<UserEmailVerify />, true];
     } else if (user && !user.is_identity_verified) {
       return [<UserVerify />, false];
     }
