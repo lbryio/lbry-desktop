@@ -6,6 +6,7 @@ export const ERROR = 'error';
 export const INSUFFICIENT_CREDITS = 'insufficient_credits';
 export const UPGRADE = 'upgrade';
 export const WELCOME = 'welcome';
+export const EMAIL_COLLECTION = 'email_collection';
 export const PHONE_COLLECTION = 'phone_collection';
 export const FIRST_REWARD = 'first_reward';
 export const AUTHENTICATION_FAILURE = 'auth_failure';

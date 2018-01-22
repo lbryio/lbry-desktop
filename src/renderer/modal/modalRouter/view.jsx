@@ -12,6 +12,7 @@ import ModalTransactionFailed from 'modal/modalTransactionFailed';
 import ModalFileTimeout from 'modal/modalFileTimeout';
 import ModalAffirmPurchase from 'modal/modalAffirmPurchase';
 import ModalRevokeClaim from 'modal/modalRevokeClaim';
+import ModalEmailCollection from '../modalEmailCollection';
 import ModalPhoneCollection from '../modalPhoneCollection';
 import * as modals from 'constants/modal_types';
 
@@ -40,10 +41,11 @@ class ModalRouter extends React.PureComponent {
       return;
     }
 
-    const transitionModal = [this.checkShowWelcome, this.checkShowCreditIntro].reduce(
-      (acc, func) => (!acc ? func.bind(this)(props) : acc),
-      false
-    );
+    const transitionModal = [
+      this.checkShowWelcome,
+      this.checkShowEmail,
+      this.checkShowCreditIntro,
+    ].reduce((acc, func) => (!acc ? func.bind(this)(props) : acc), false);
 
     if (
       transitionModal &&
@@ -61,6 +63,18 @@ class ModalRouter extends React.PureComponent {
     const { isWelcomeAcknowledged, user } = props;
     if (!isWelcomeAcknowledged && user && !user.is_reward_approved && !user.is_identity_verified) {
       return modals.WELCOME;
+    }
+  }
+
+  checkShowEmail(props) {
+    const { isEmailCollectionAcknowledged, isVerificationCandidate, user } = props;
+    if (
+      !isEmailCollectionAcknowledged &&
+      isVerificationCandidate &&
+      user &&
+      !user.has_verified_email
+    ) {
+      return modals.EMAIL_COLLECTION;
     }
   }
 
@@ -113,6 +127,8 @@ class ModalRouter extends React.PureComponent {
         return <ModalRevokeClaim {...modalProps} />;
       case modals.PHONE_COLLECTION:
         return <ModalPhoneCollection {...modalProps} />;
+      case modals.EMAIL_COLLECTION:
+        return <ModalEmailCollection {...modalProps} />;
       default:
         return null;
     }
