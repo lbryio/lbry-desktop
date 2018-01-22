@@ -1,6 +1,6 @@
 // @flow
-import * as actions from "constants/action_types";
-import { handleActions } from "util/redux-utils";
+import * as actions from 'constants/action_types';
+import { handleActions } from 'util/redux-utils';
 
 export type MediaState = {
   paused: Boolean,
@@ -16,11 +16,13 @@ const defaultState = { paused: true, positions: {} };
 
 export default handleActions(
   {
+    // eslint-disable-next-line no-unused-vars
     [actions.MEDIA_PLAY]: (state: MediaState, action: Action) => ({
       ...state,
       paused: false,
     }),
 
+    // eslint-disable-next-line no-unused-vars
     [actions.MEDIA_PAUSE]: (state: MediaState, action: Action) => ({
       ...state,
       paused: true,

@@ -38,11 +38,11 @@ To make contributing as easy and rewarding of possible, we have instituted the f
 
 | Level                                                                                                                                         | Description                                                                                        |
 | --------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| [**level 0**](https://github.com/lbryio/lbry-app/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22+label%3A%22level+0%22+no%3Aassignee) | Typos and text edits -- a tech-savvy non-programmer can fix these                                  |
-| [**level 1**](https://github.com/lbryio/lbry-app/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22+label%3A%22level+1%22+no%3Aassignee) | Programming issues that require little knowledge of how the LBRY app works                         |
-| [**level 2**](https://github.com/lbryio/lbry-app/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22+label%3A%22level+2%22+no%3Aassignee) | Issues of average difficulty that require the developer to dig into how the app works a little bit |
-| [**level 3**](https://github.com/lbryio/lbry-app/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22+label%3A%22level+3%22+no%3Aassignee) | Issues that are likely too tricky to be level 2 or require more thinking outside of the box        |
-| [**level 4**](https://github.com/lbryio/lbry-app/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22+label%3A%22level+4%22+no%3Aassignee) | Big features or really hard issues                                                                 |
+| [**level 0**](https://github.com/lbryio/lbry-app/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22+label%3A%22level%3A+0%22+no%3Aassignee) | Typos and text edits -- a tech-savvy non-programmer can fix these                                  |
+| [**level 1**](https://github.com/lbryio/lbry-app/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22+label%3A%22level%3A+1%22+no%3Aassignee) | Programming issues that require little knowledge of how the LBRY app works                         |
+| [**level 2**](https://github.com/lbryio/lbry-app/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22+label%3A%22level%3A+2%22+no%3Aassignee) | Issues of average difficulty that require the developer to dig into how the app works a little bit |
+| [**level 3**](https://github.com/lbryio/lbry-app/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22+label%3A%22level%3A+3%22+no%3Aassignee) | Issues that are likely too tricky to be level 2 or require more thinking outside of the box        |
+| [**level 4**](https://github.com/lbryio/lbry-app/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22+label%3A%22level%3A+4%22+no%3Aassignee) | Big features or really hard issues                                                                 |
 
 The process of ranking issues is highly subjective. The purpose of sorting issues like this is to
 give contributors a general idea about the type of issues they are looking at. It could very well be
