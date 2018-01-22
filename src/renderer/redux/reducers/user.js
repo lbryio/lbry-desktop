@@ -71,6 +71,11 @@ reducers[ACTIONS.USER_PHONE_NEW_SUCCESS] = (state, action) =>
     phoneNewIsPending: false,
   });
 
+reducers[ACTIONS.USER_PHONE_RESET] = state =>
+  Object.assign({}, state, {
+    phoneToVerify: null,
+  });
+
 reducers[ACTIONS.USER_PHONE_NEW_FAILURE] = (state, action) =>
   Object.assign({}, state, {
     phoneNewIsPending: false,

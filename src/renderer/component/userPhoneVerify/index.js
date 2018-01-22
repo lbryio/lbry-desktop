@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { doUserPhoneVerify } from 'redux/actions/user';
+import { doUserPhoneVerify, doUserPhoneReset } from 'redux/actions/user';
 import {
   selectPhoneToVerify,
   selectPhoneVerifyErrorMessage,
@@ -15,6 +15,7 @@ const select = state => ({
 });
 
 const perform = dispatch => ({
+  resetPhone: () => dispatch(doUserPhoneReset()),
   verifyUserPhone: code => dispatch(doUserPhoneVerify(code)),
 });
 

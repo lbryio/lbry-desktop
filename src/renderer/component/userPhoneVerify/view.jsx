@@ -22,13 +22,22 @@ class UserPhoneVerify extends React.PureComponent {
     this.props.verifyUserPhone(code);
   }
 
+  reset() {
+    const { resetPhone } = this.props;
+    resetPhone();
+  }
+
   render() {
     const { cancelButton, phoneErrorMessage, phone, countryCode } = this.props;
     return (
       <Form onSubmit={this.handleSubmit.bind(this)}>
         <p>
-          Please enter the verification code sent to {`+${countryCode}`}
-          {phone}.
+          {__(
+            `Please enter the verification code sent to +${countryCode}${
+              phone
+            }. Didn't receive it? `
+          )}
+          <Link onClick={this.reset.bind(this)} label="Go back." />
         </p>
         <FormRow
           type="text"

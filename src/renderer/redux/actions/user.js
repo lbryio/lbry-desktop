@@ -82,6 +82,12 @@ export function doUserFetch() {
   };
 }
 
+export function doUserPhoneReset() {
+  return {
+    type: ACTIONS.USER_PHONE_RESET,
+  };
+}
+
 export function doUserPhoneNew(phone, country_code) {
   return dispatch => {
     dispatch({
