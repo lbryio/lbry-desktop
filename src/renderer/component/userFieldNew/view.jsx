@@ -2,6 +2,22 @@ import React from 'react';
 import { Form, FormRow, Submit } from 'component/form.js';
 import FormField from 'component/formField';
 
+const countryCodes = require('country-data')
+  .callingCountries.all.filter(_ => _.emoji)
+  .reduce(
+    (acc, cur) => acc.concat(cur.countryCallingCodes.map(_ => ({ ...cur, countryCallingCode: _ }))),
+    []
+  )
+  .sort((a, b) => {
+    if (a.countryCallingCodes[0] < b.countryCallingCodes[0]) {
+      return -1;
+    }
+    if (a.countryCallingCodes[0] > b.countryCallingCodes[0]) {
+      return 1;
+    }
+    return 0;
+  });
+
 class UserFieldNew extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -52,10 +68,14 @@ class UserFieldNew extends React.PureComponent {
     });
   }
 
+  handleSelect(event) {
+    this.setState({ country_code: event.target.value });
+  }
+
   handleSubmit() {
     const { email, phone, country_code } = this.state;
     if (phone) {
-      this.props.addUserPhone(phone.replace(/\D/g, ''), country_code.replace(/\D/g, ''));
+      this.props.addUserPhone(phone.replace(/\D/g, ''), country_code.substring(1));
     } else {
       this.props.addUserEmail(email);
     }
@@ -73,8 +93,12 @@ class UserFieldNew extends React.PureComponent {
         </p>
         <Form onSubmit={this.handleSubmit.bind(this)}>
           <div className="form-row-phone">
-            <FormField type="select">
-              <option>(US) +1</option>
+            <FormField type="select" onChange={this.handleSelect.bind(this)}>
+              {countryCodes.map(country => (
+                <option value={country.countryCallingCode}>
+                  {country.emoji} {country.countryCallingCode}
+                </option>
+              ))}
             </FormField>
             <FormRow
               type="text"

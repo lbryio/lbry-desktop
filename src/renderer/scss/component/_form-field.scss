@@ -8,8 +8,9 @@
 .form-row-phone {
   display: flex;
 
-  select {
-    margin-right: 5px;
+  .form-field__input-text {
+    margin-left: 5px;
+    width: calc(0.85 * var(--input-width));
   }
 }
 
