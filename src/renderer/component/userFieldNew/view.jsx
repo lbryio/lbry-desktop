@@ -9,10 +9,10 @@ const countryCodes = require('country-data')
     []
   )
   .sort((a, b) => {
-    if (a.countryCallingCodes[0] < b.countryCallingCodes[0]) {
+    if (a.countryCallingCode < b.countryCallingCode) {
       return -1;
     }
-    if (a.countryCallingCodes[0] > b.countryCallingCodes[0]) {
+    if (a.countryCallingCode > b.countryCallingCode) {
       return 1;
     }
     return 0;
@@ -94,8 +94,8 @@ class UserFieldNew extends React.PureComponent {
         <Form onSubmit={this.handleSubmit.bind(this)}>
           <div className="form-row-phone">
             <FormField type="select" onChange={this.handleSelect.bind(this)}>
-              {countryCodes.map(country => (
-                <option value={country.countryCallingCode}>
+              {countryCodes.map((country, index) => (
+                <option key={index} value={country.countryCallingCode}>
                   {country.emoji} {country.countryCallingCode}
                 </option>
               ))}
