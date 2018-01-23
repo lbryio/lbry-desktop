@@ -1,6 +1,6 @@
 // @flow
-import * as actions from "constants/action_types";
-import { handleActions } from "util/redux-utils";
+import * as actions from 'constants/action_types';
+import { handleActions } from 'util/redux-utils';
 
 export type MediaState = {
   paused: Boolean,

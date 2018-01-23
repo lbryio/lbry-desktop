@@ -15,7 +15,7 @@ class ModalAutoUpdateConfirm extends React.PureComponent {
         type="confirm"
         contentLabel={__("Update Downloaded")}
         confirmButtonLabel={__("Upgrade")}
-        abortButtonLabel={__("Now now")}
+        abortButtonLabel={__("Not now")}
         onConfirmed={() => {
           ipcRenderer.send("autoUpdateAccepted");
         }}

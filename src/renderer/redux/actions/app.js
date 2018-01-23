@@ -100,7 +100,7 @@ export function doDownloadUpgradeRequested() {
         });
       }
     } else { // Old behavior for Linux
-      doDownloadUpgrade();
+      dispatch(doDownloadUpgrade());
     }
   };
 }

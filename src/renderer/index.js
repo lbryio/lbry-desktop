@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-filename-extension */
 import amplitude from 'amplitude-js';
 import App from 'component/app';
 import SnackBar from 'component/snackBar';
@@ -5,7 +6,6 @@ import SplashScreen from 'component/splash';
 import * as ACTIONS from 'constants/action_types';
 import { ipcRenderer, remote, shell } from 'electron';
 import lbry from 'lbry';
-/* eslint-disable react/jsx-filename-extension */
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
@@ -18,7 +18,6 @@ import store from 'store';
 import app from './app';
 
 const { autoUpdater } = remote.require('electron-updater');
-const { contextMenu } = remote.require('./main.js');
 
 autoUpdater.logger = remote.require("electron-log");
 

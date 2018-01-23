@@ -90,7 +90,6 @@ reducers[ACTIONS.AUTO_UPDATE_DOWNLOADED] = state =>
   });
 
 reducers[ACTIONS.AUTO_UPDATE_DECLINED] = state => {
-  console.log('in AUTO_UPDATE_DECLINED reducer')
   return Object.assign({}, state, {
     autoUpdateDeclined: true,
   });
