@@ -78,6 +78,9 @@ class FileCard extends React.PureComponent<Props> {
         })}
       >
         <CardMedia thumbnail={thumbnail} />
+        <div className="card-media__internal-links">
+          <FilePrice uri={uri} />
+        </div>
 
         <div className="card__title-identity">
           <div className="card__title--small">
@@ -87,8 +90,8 @@ class FileCard extends React.PureComponent<Props> {
           <div className="card__subtitle">
             <UriIndicator uri={uri} link />
             <div className="card--file-subtitle">
-              <FilePrice uri={uri} /> {isRewardContent && <Icon icon={icons.FEATURED} padded />}
-              {fileInfo && <Icon icon={icons.LOCAL} padded />}
+              {isRewardContent && <Icon icon={icons.FEATURED} />}
+              {fileInfo && <Icon icon={icons.LOCAL} />}
             </div>
           </div>
         </div>

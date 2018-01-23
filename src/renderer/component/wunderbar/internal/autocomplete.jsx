@@ -466,6 +466,7 @@ export default class Autocomplete extends React.Component {
     const menu = this.props.renderMenu(items, this.props.value, style);
     return React.cloneElement(menu, {
       ref: e => (this.refs.menu = e),
+      className: 'wunderbar__menu',
       // Ignore blur to prevent menu from de-rendering before we can process click
       onMouseEnter: () => this.setIgnoreBlur(true),
       onMouseLeave: () => this.setIgnoreBlur(false),

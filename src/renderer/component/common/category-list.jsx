@@ -200,7 +200,7 @@ class CategoryList extends React.PureComponent<Props, State> {
             <h3>
               {categoryLink ? (
                 <Button
-                  className="button-text no-underline"
+                  noStyle
                   label={category}
                   navigate="/show"
                   navigateParams={{ uri: categoryLink }}
@@ -219,20 +219,20 @@ class CategoryList extends React.PureComponent<Props, State> {
                 />
               )}
           </div>
-          <div>
+          <div className="card-row__scroll-btns">
             <Button
               inverse
               circle
               disabled={!canScrollPrevious}
               onClick={this.handleScrollPrevious}
-              icon="chevron-left"
+              icon="ChevronLeft"
             />
             <Button
               inverse
               circle
               disabled={!canScrollNext}
               onClick={this.handleScrollNext}
-              icon="chevron-right"
+              icon="ChevronRight"
             />
           </div>
         </div>

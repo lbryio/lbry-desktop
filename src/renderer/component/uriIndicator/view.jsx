@@ -3,7 +3,7 @@ import React from 'react';
 import Button from 'component/link';
 import { buildURI } from 'lbryURI';
 import classnames from 'classnames';
-import Icon from 'component/common/icon';
+// import Icon from 'component/common/icon';
 
 type Props = {
   isResolvingUri: boolean,
@@ -57,7 +57,8 @@ class UriIndicator extends React.PureComponent<Props> {
       return <span>Anonymous</span>;
     }
 
-    let icon;
+    // I'll look at this when working on the file page
+    // let icon;
     let channelLink;
     let modifier;
 
@@ -65,8 +66,8 @@ class UriIndicator extends React.PureComponent<Props> {
       modifier = 'valid';
       channelLink = link ? buildURI({ channelName, claimId: channelClaimId }, false) : false;
     } else {
-      icon = 'icon-times-circle';
-      modifier = 'invalid';
+      // icon = 'icon-times-circle';
+      // modifier = 'invalid';
     }
 
     // {!signatureIsValid ? (
@@ -94,7 +95,7 @@ class UriIndicator extends React.PureComponent<Props> {
     }
 
     return (
-      <Button navigate="/show" navigateParams={{ uri: channelLink }} fakeLink>
+      <Button navigate="/show" navigateParams={{ uri: channelLink }} noStyle>
         {inner}
       </Button>
     );

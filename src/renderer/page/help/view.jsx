@@ -2,9 +2,9 @@
 import React from 'react';
 import lbry from 'lbry.js';
 import Link from 'component/link';
-import SubHeader from 'component/subHeader';
 import { BusyMessage } from 'component/common';
 import Icon from 'component/common/icon';
+import Page from 'component/page';
 
 class HelpPage extends React.PureComponent {
   constructor(props) {
@@ -70,8 +70,7 @@ class HelpPage extends React.PureComponent {
     }
 
     return (
-      <main className="main--single-column">
-        <SubHeader />
+      <Page>
         <section className="card">
           <div className="card__title-primary">
             <h3>{__('Read the FAQ')}</h3>
@@ -210,7 +209,7 @@ class HelpPage extends React.PureComponent {
             )}
           </div>
         </section>
-      </main>
+      </Page>
     );
   }
 }

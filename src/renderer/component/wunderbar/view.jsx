@@ -2,6 +2,8 @@
 import React from 'react';
 import { normalizeURI } from 'lbryURI';
 import classnames from 'classnames';
+import throttle from 'util/throttle';
+import Icon from 'component/common/icon';
 import Autocomplete from './internal/autocomplete';
 
 type Props = {
@@ -16,29 +18,22 @@ type Props = {
 };
 
 class WunderBar extends React.PureComponent<Props> {
-  constructor() {
-    super();
+  constructor(props: Props) {
+    super(props);
+
     (this: any).handleSubmit = this.handleSubmit.bind(this);
     (this: any).handleChange = this.handleChange.bind(this);
     (this: any).focus = this.focus.bind(this);
+    (this: any).throttledGetSearchSuggestions = throttle(this.props.getSearchSuggestions, 1000);
     this.input = undefined;
   }
-
-  input: ?HTMLInputElement;
 
   handleChange(e: SyntheticInputEvent<*>) {
     const { updateSearchQuery, getSearchSuggestions } = this.props;
     const { value } = e.target;
 
     updateSearchQuery(value);
-    getSearchSuggestions(value);
-  }
-
-  focus() {
-    const { input } = this;
-    if (input) {
-      input.focus();
-    }
+    this.throttledGetSearchSuggestions(value);
   }
 
   handleSubmit(value: string) {
@@ -70,6 +65,16 @@ class WunderBar extends React.PureComponent<Props> {
     }
   }
 
+  focus() {
+    const { input } = this;
+    if (input) {
+      input.focus();
+    }
+  }
+
+  input: ?HTMLInputElement;
+  throttledGetSearchSuggestions: string => void;
+
   render() {
     const { searchQuery, isActive, address, suggestions } = this.props;
 
@@ -83,12 +88,13 @@ class WunderBar extends React.PureComponent<Props> {
           'header__wunderbar--active': isActive,
         })}
       >
+        <Icon icon="Search" />
         <Autocomplete
           autoHighlight
           ref={ref => {
             this.input = ref;
           }}
-          wrapperStyle={{ flex: 1, minHeight: 0 }}
+          wrapperStyle={{ flex: 1 }}
           value={wunderbarValue}
           items={suggestions}
           getItemValue={item => item.value}
@@ -108,7 +114,8 @@ class WunderBar extends React.PureComponent<Props> {
                 'wunderbar__active-suggestion': isHighlighted,
               })}
             >
-              {item.label}
+              <Icon icon={item.icon} />
+              <span className="wunderbar__suggestion-label">{item.label}</span>
             </div>
           )}
         />

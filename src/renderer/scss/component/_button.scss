@@ -3,34 +3,35 @@ TODO:
 Determine [disabled] or .disabled
 Add <a> support (probably just get rid of button prefix)
 */
-
-button {
+.btn {
   border: none;
   text-decoration: none;
   cursor: pointer;
   position: relative;
-}
-
-button:disabled.btn--disabled {
-  cursor: default;
-  background-color: transparent;
-}
-
-button.btn {
+  font-weight: 600;
   padding: 10px;
-  margin: 0 5px;
+  height: var(--btn-height);
+  min-width: var(--btn-height);
   border-radius: var(--btn-radius);
   color: var(--btn-primary-color);
   background-color: var(--btn-primary-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  fill: currentColor; // for proper icon color
 
-  &:hover:not(.btn--disabled) {
+  &:hover {
     box-shadow: var(--box-shadow-layer);
+  }
+
+  .icon + .btn__label {
+    padding-left: 5px;
   }
 }
 
-button.btn.btn--alt {
+.btn.btn--alt {
   color: var(--btn-alt-color);
-  background-color: #efefef;
+  background-color: var(--color-white);
 
   &:hover {
     color: #111;
@@ -46,30 +47,71 @@ button.btn.btn--alt {
   }
 }
 
-button.btn.btn--circle {
-  border-radius: 50%;
-  transition: all 0.2s;
+.btn.btn--inverse {
+  background-color: transparent;
+  color: var(--btn-inverse-color);
 
-  &:hover:not([disabled]) {
-    border-radius: var(--btn-radius);
+  &:hover {
+    background-color: var(--btn-inverse-bg);
   }
 }
 
-button.btn.btn--inverse {
-  box-shadow: none;
-  background-color: transparent;
-  color: var(--btn-primary-bg);
-}
-
-button.btn--link {
+.btn.btn--link {
   padding: 0;
   margin: 0;
   background-color: inherit;
-  font-size: 0.9em;
-  color: var(--btn-primary-bg); // this should be a different color
+  font-size: 1em;
+  color: var(--btn-inverse-color);
+  border-radius: 0;
+  display: inline;
 
   &:hover {
     border-bottom: 1px solid;
+    box-shadow: none;
+  }
+}
+
+.btn--no-style {
+  font-size: inherit;
+  font-weight: inherit;
+  color: inherit;
+  background-color: inherit;
+  border-radius: 0;
+  padding: 5px 0;
+  margin: 0;
+
+  &:hover {
+    box-shadow: none;
+    color: var(--color-primary);
+  }
+}
+
+.btn.btn--link.btn--no-underline:hover {
+  border-bottom: none;
+}
+
+.btn--link,
+.btn--no-style {
+  height: auto;
+
+  .btn__label {
+    padding: 0;
+  }
+}
+
+.btn.btn--disabled:disabled {
+  cursor: default;
+
+  &.btn--primary {
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+
+  &.btn--alt {
+    // Come back to me
+  }
+
+  &:hover {
+    box-shadow: none;
   }
 }
 

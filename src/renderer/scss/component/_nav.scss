@@ -1,0 +1,51 @@
+.nav {
+  grid-area: nav;
+  background-color: var(--color-nav-bg);
+  padding-top: 16px;
+
+  hr {
+    width: 40px;
+    border: solid 1px var(--color-grey);
+    margin: $spacing-vertical $spacing-vertical * 2/3 $spacing-vertical * 2;
+  }
+}
+
+.nav__actions-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px;
+}
+
+.nav__actions-history {
+  display: flex;
+}
+
+.nav__primary {
+  padding-top: $spacing-vertical * 3;
+}
+
+.nav__link {
+  padding: $spacing-vertical / 3 0 $spacing-vertical / 3 $spacing-vertical * 2/3;
+  font-weight: bold;
+  color: var(--color-grey-dark);
+
+  // The hover effect should be on the li
+  // Need to have the button grow
+  & .btn:hover {
+    color: var(--color-black);
+  }
+}
+
+.nav__link--active {
+  color: var(--color-black);
+}
+
+.nav__sub {
+  padding-top: 5px;
+}
+
+.nav__sub-link {
+  padding: 5px $spacing-vertical * 2/3;
+  font-size: 0.8em;
+}

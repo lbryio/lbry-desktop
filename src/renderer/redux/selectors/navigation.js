@@ -1,6 +1,5 @@
 import { createSelector } from 'reselect';
-import { parseQueryParams, toQueryString } from 'util/query_params';
-import { normalizeURI } from 'lbryURI';
+import { parseQueryParams } from 'util/query_params';
 
 export const selectState = state => state.navigation || {};
 
@@ -22,72 +21,6 @@ export const selectCurrentParams = createSelector(selectCurrentPath, path => {
 export const makeSelectCurrentParam = param =>
   createSelector(selectCurrentParams, params => (params ? params[param] : undefined));
 
-export const selectHeaderLinks = createSelector(selectCurrentPage, page => {
-  // This contains intentional fall throughs
-  switch (page) {
-    case 'wallet':
-    case 'history':
-    case 'send':
-    case 'getcredits':
-    case 'invite':
-    case 'rewards':
-    case 'backup':
-      return {
-        wallet: __('Overview'),
-        getcredits: __('Get Credits'),
-        send: __('Send / Receive'),
-        rewards: __('Rewards'),
-        invite: __('Invites'),
-        history: __('History'),
-      };
-    case 'downloaded':
-    case 'published':
-      return {
-        downloaded: __('Downloaded'),
-        published: __('Published'),
-      };
-    case 'settings':
-    case 'help':
-      return {
-        settings: __('Settings'),
-        help: __('Help'),
-      };
-    case 'discover':
-    case 'subscriptions':
-      return {
-        discover: __('Discover'),
-        subscriptions: __('Subscriptions'),
-      };
-    default:
-      return null;
-  }
-});
-
-export const selectPageTitle = createSelector(
-  selectCurrentPage,
-  selectCurrentParams,
-  (page, params) => {
-    switch (page) {
-      case 'show': {
-        const parts = [normalizeURI(params.uri)];
-        // If the params has any keys other than "uri"
-        if (Object.keys(params).length > 1) {
-          parts.push(toQueryString(Object.assign({}, params, { uri: null })));
-        }
-        return parts.join('?');
-      }
-      case 'discover':
-        return __('Discover');
-      case false:
-      case null:
-      case '':
-        return '';
-      default:
-        return '';
-    }
-  }
-);
-
 export const selectPathAfterAuth = createSelector(selectState, state => state.pathAfterAuth);
 
 export const selectIsBackDisabled = createSelector(selectState, state => state.index === 0);
@@ -97,6 +30,8 @@ export const selectIsForwardDisabled = createSelector(
   state => state.index === state.stack.length - 1
 );
 
+export const selectIsHome = createSelector(selectCurrentPage, page => page === 'discover');
+
 export const selectHistoryIndex = createSelector(selectState, state => state.index);
 
 export const selectHistoryStack = createSelector(selectState, state => state.stack);
@@ -105,4 +40,127 @@ export const selectHistoryStack = createSelector(selectState, state => state.sta
 export const selectActiveHistoryEntry = createSelector(
   selectState,
   state => state.stack[state.index]
+);
+
+export const selectPageTitle = createSelector(
+  selectCurrentPage,
+  (page) => {
+    switch (page) {
+      default:
+        return '';
+    }
+  }
+);
+
+export const selectNavLinks = createSelector(
+  selectCurrentPage,
+  selectHistoryStack,
+  (currentPage, historyStack) => {
+    const isWalletPage = page =>
+      page === 'wallet' ||
+      page === 'send' ||
+      page === 'getcredits' ||
+      page === 'rewards' ||
+      page === 'history';
+
+    let walletLink;
+    if (isWalletPage(currentPage)) {
+      // If they are on a wallet page, the top level link should direct them to the overview page
+      walletLink = '/wallet';
+    } else {
+      // check to see if they've recently been on a wallet sub-link
+      const previousStack = historyStack.slice().reverse();
+      for (let i = 0; i < previousStack.length; i += 1) {
+        const currentStackItem = previousStack[i];
+
+        // Trim off the "/" from the path
+        const pageInStack = currentStackItem.path.slice(1);
+        if (isWalletPage(pageInStack)) {
+          walletLink = currentStackItem.path;
+          break;
+        }
+      }
+    }
+
+    const walletSubLinks = [
+      {
+        label: 'Overview',
+        path: '/wallet',
+        active: currentPage === 'wallet',
+      },
+      {
+        label: 'Send & Recieve',
+        path: '/send',
+        active: currentPage === 'send',
+      },
+      {
+        label: 'Get Credits',
+        path: '/getcredits',
+        active: currentPage === 'getcredits',
+      },
+      {
+        label: 'Rewards',
+        path: '/rewards',
+        active: currentPage === 'rewards',
+      },
+      {
+        label: 'My Transactions',
+        path: '/history',
+        active: currentPage === 'history',
+      },
+    ];
+
+    const navLinks = {
+      primary: [
+        {
+          label: 'Explore',
+          path: '/discover',
+          active: currentPage === 'discover',
+          icon: 'Compass',
+        },
+        {
+          label: 'Subscriptions',
+          path: '/subscriptions',
+          active: currentPage === 'subscriptions',
+          icon: 'AtSign',
+        },
+      ],
+      secondary: [
+        {
+          label: 'Wallet',
+          path: walletLink || '/wallet', // If they've never been to a wallet page, take them to the overview
+          active:
+            currentPage === 'wallet' ||
+            !!walletSubLinks.find(({ path }) => currentPage === path.slice(1)),
+          subLinks: walletSubLinks,
+          icon: 'CreditCard',
+        },
+        {
+          label: 'Publish',
+          path: '/publish',
+          active: currentPage === 'publish',
+          icon: 'UploadCloud',
+        },
+        {
+          label: 'Settings',
+          path: '/settings',
+          active: currentPage === 'settings',
+          icon: 'Settings',
+        },
+        {
+          label: 'Backup Wallet',
+          path: '/backup',
+          active: currentPage === 'backup',
+          icon: 'Save',
+        },
+        {
+          label: 'Help',
+          path: '/help',
+          active: currentPage === 'help',
+          icon: 'HelpCircle',
+        },
+      ],
+    };
+    return navLinks;
+  }
 );

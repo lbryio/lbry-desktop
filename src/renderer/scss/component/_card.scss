@@ -1,20 +1,23 @@
 .card {
   margin-left: auto;
   margin-right: auto;
-  max-width: var(--card-max-width);
   border-radius: var(--card-radius);
   overflow: auto;
   user-select: text;
   display: flex;
+  position: relative;
 }
 
-.card--placeholder {
-  background-color: black;
+.card--section {
+  flex-direction: column;
+  background-color: var(--color-white);
+  padding: $spacing-vertical;
+  margin-top: $spacing-vertical * 2/3;
+  box-shadow: var(--box-shadow-layer);
 }
 
 .card--small {
   width: var(--card-small-width);
-  min-height: var(--card-small-width);
   overflow-x: hidden;
   white-space: normal;
 }
@@ -48,7 +51,8 @@
   margin-top: $spacing-vertical * 1/3;
 }
 
-// TODO: regular .card__title for show page
+// TODO: regular .card__title
+// maybe not needed?
 .card__title--small {
   font-weight: 600;
   font-size: 0.9em;
@@ -60,145 +64,24 @@
   padding-top: $spacing-vertical * 1/3;
 }
 
-// .card__title-primary .meta {
-//   white-space: nowrap;
-//   overflow: hidden;
-//   text-overflow: ellipsis;
-// }
-//
+.card-media__internal-links {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+}
 
-//
-// .card__actions {
-//   margin-top: var(--card-margin);
-//   margin-bottom: var(--card-margin);
-//   user-select: none;
-// }
-//
-// .card__actions--bottom {
-//   margin-top: $spacing-vertical * 1/3;
-//   margin-bottom: $spacing-vertical * 1/3;
-//   border-top: var(--divider);
-// }
-//
-// .card__actions--form-submit {
-//   margin-top: $spacing-vertical;
-//   margin-bottom: var(--card-margin);
-// }
-//
-// .card__action--right {
-//   float: right;
-// }
-//
-// .card__content {
-//   margin-top: var(--card-margin);
-//   margin-bottom: var(--card-margin);
-//   table:not(:last-child) {
-//     margin-bottom: var(--card-margin);
-//   }
-// }
-//
-// .card__actions--only-vertical {
-//   margin-left: 0;
-//   margin-right: 0;
-//   padding-left: 0;
-//   padding-right: 0;
-// }
-//
-// .card__content--extra-vertical-space {
-//   margin: $spacing-vertical 0;
-// }
-//
-// $font-size-subtext-multiple: 0.82;
-// .card__subtext {
-//   color: var(--color-meta-light);
-//   font-size: calc(var(--font-size-subtext-multiple) * 1em);
-//   margin-top: $spacing-vertical * 1/3;
-//   margin-bottom: $spacing-vertical * 1/3;
-// }
-// .card__subtext--allow-newlines {
-//   white-space: pre-wrap;
-// }
-// .card__subtext--two-lines {
-//   height: calc(
-//     var(--font-size) * var(--font-size-subtext-multiple) * var(--font-line-height) * 2
-//   ); /*this is so one line text still has the proper height*/
-// }
-// .card-overlay {
-//   position: absolute;
-//   left: 0px;
-//   right: 0px;
-//   top: 0px;
-//   bottom: 0px;
-//   padding: 20px;
-//   background-color: var(--color-dark-overlay);
-//   color: #fff;
-//   display: flex;
-//   align-items: center;
-//   font-weight: 600;
-// }
-//
-//
-// .card__media--autothumb {
-//   position: relative;
-// }
-// .card__media--autothumb.purple {
-//   background-color: #9c27b0;
-// }
-// .card__media--autothumb.red {
-//   background-color: #e53935;
-// }
-// .card__media--autothumb.pink {
-//   background-color: #e91e63;
-// }
-// .card__media--autothumb.indigo {
-//   background-color: #3f51b5;
-// }
-// .card__media--autothumb.blue {
-//   background-color: #2196f3;
-// }
-// .card__media--autothumb.light-blue {
-//   background-color: #039be5;
-// }
-// .card__media--autothumb.cyan {
-//   background-color: #00acc1;
-// }
-// .card__media--autothumb.teal {
-//   background-color: #009688;
-// }
-// .card__media--autothumb.green {
-//   background-color: #43a047;
-// }
-// .card__media--autothumb.yellow {
-//   background-color: #ffeb3b;
-// }
-// .card__media--autothumb.orange {
-//   background-color: #ffa726;
-// }
-//
-// .card__media--autothumb .card__autothumb__text {
-//   font-size: 2em;
-//   width: 100%;
-//   color: #ffffff;
-//   text-align: center;
-//   position: absolute;
-//   top: 36%;
-// }
-//
-// .card--form {
-//   width: calc(var(--input-width) + var(--card-padding) * 2);
-// }
-//
+.card__content {
+  margin-top: var(--card-margin);
+  margin-bottom: var(--card-margin);
+}
 
-//
-// .card-series-submit {
-//   margin-left: auto;
-//   margin-right: auto;
-//   max-width: var(--card-max-width);
-//   padding: $spacing-vertical / 2;
-// }
+.card__actions {
+  margin-top: var(--card-margin);
+  display: flex;
+}
 
 /*
- .card-row is used on the discover page
+ .card-row is used on the discover/subscriptions page
  It is a list of cards that extend past the right edge of the screen
  There are left/right arrows to scroll the cards and view hidden content
 */
@@ -208,6 +91,14 @@
   width: 100%;
   min-width: var(--card-small-width);
   padding-top: $spacing-vertical;
+
+  &:first-of-type {
+    padding-top: $spacing-vertical * 2/3;
+  }
+
+  &:last-of-type {
+    padding-bottom: $spacing-vertical * 2/3;
+  }
 }
 
 .card-row__header {
@@ -225,6 +116,10 @@
   align-items: center;
 }
 
+.card-row__scroll-btns {
+  display: flex;
+}
+
 .card-row__scrollhouse {
   padding-top: $spacing-vertical * 2/3;
   overflow: hidden;
@@ -233,26 +128,10 @@
     display: inline-block;
     vertical-align: top;
     margin-left: $spacing-vertical * 2/3;
+    overflow: visible;
   }
 
   .card:last-of-type {
-    padding-right: $spacing-vertical * 2/3;
+    margin-right: $spacing-vertical * 2/3;
   }
 }
-
-/*
-if we keep doing things like this, we should add a real grid system, but I'm going to be a selective dick about it - Jeremy
- */
-//TODO: css grid
-// .card-grid {
-//   $margin-card-grid: $spacing-vertical * 2/3;
-//   display: flex;
-//   flex-wrap: wrap;
-//   > .card {
-//     width: $width-page-constrained / 2 - $margin-card-grid / 2;
-//     flex-grow: 1;
-//   }
-//   > .card:nth-of-type(2n - 1):not(:last-child) {
-//     margin-right: $margin-card-grid;
-//   }
-// }

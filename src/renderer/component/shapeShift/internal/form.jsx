@@ -1,7 +1,7 @@
+// @flow
 import React from 'react';
-import Link from 'component/link';
 import { getExampleAddress } from 'util/shape_shift';
-import { Submit, FormRow } from 'component/form';
+import { FormField, Submit } from 'component/common/form';
 import type { ShapeShiftFormValues, Dispatch } from 'redux/actions/shape_shift';
 import ShiftMarketInfo from './market_info';
 
@@ -12,7 +12,7 @@ type ShapeShiftFormErrors = {
 type Props = {
   values: ShapeShiftFormValues,
   errors: ShapeShiftFormErrors,
-  touched: boolean,
+  touched: { returnAddress: boolean },
   handleChange: Event => any,
   handleBlur: Event => any,
   handleSubmit: Event => any,
@@ -21,7 +21,6 @@ type Props = {
   originCoin: string,
   updating: boolean,
   getCoinStats: Dispatch,
-  receiveAddress: string,
   originCoinDepositFee: number,
   originCoinDepositMin: string,
   originCoinDepositMax: number,
@@ -41,7 +40,6 @@ export default (props: Props) => {
     originCoin,
     updating,
     getCoinStats,
-    receiveAddress,
     originCoinDepositMax,
     originCoinDepositMin,
     originCoinDepositFee,
@@ -49,23 +47,27 @@ export default (props: Props) => {
   } = props;
   return (
     <form onSubmit={handleSubmit}>
-      <div className="form-field">
-        <span>{__('Exchange')} </span>
-        <select
-          className="form-field__input form-field__input-select"
-          name="originCoin"
-          onChange={e => {
-            getCoinStats(e.target.value);
-            handleChange(e);
-          }}
-        >
-          {shiftSupportedCoins.map(coin => (
-            <option key={coin} value={coin}>
-              {coin}
-            </option>
-          ))}
-        </select>
-        <span> {__('for LBC')}</span>
+      <FormField
+        prefix={__('Exchange')}
+        postfix={__('for LBC')}
+        render={() => (
+          <select
+            className="form-field__input form-field__input-select"
+            name="originCoin"
+            onChange={e => {
+              getCoinStats(e.target.value);
+              handleChange(e);
+            }}
+          >
+            {shiftSupportedCoins.map(coin => (
+              <option key={coin} value={coin}>
+                {coin}
+              </option>
+            ))}
+          </select>
+        )}
+      />
+      <div>
         <div className="shapeshift__tx-info">
           {!updating &&
             originCoinDepositMax && (
@@ -80,16 +82,19 @@ export default (props: Props) => {
         </div>
       </div>
 
-      <FormRow
-        type="text"
-        name="returnAddress"
-        placeholder={getExampleAddress(originCoin)}
+      <FormField
         label={__('Return address')}
-        onChange={handleChange}
-        onBlur={handleBlur}
-        value={values.returnAddress}
-        errorMessage={errors.returnAddress}
-        hasError={touched.returnAddress && !!errors.returnAddress}
+        error={touched.returnAddress && !!errors.returnAddress && errors.returnAddress}
+        render={() => (
+          <input
+            type="text"
+            name="returnAddress"
+            placeholder={getExampleAddress(originCoin)}
+            onChange={handleChange}
+            onBlur={handleBlur}
+            value={values.returnAddress}
+          />
+        )}
       />
       <span className="help">
         <span>

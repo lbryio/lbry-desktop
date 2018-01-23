@@ -1,52 +1,56 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+// @flow
+import * as React from 'react';
 import { clipboard } from 'electron';
-import Link from 'component/link';
-import classnames from 'classnames';
+import { FormField } from 'component/common/form';
+import Button from 'component/link';
 
-export default class Address extends React.PureComponent {
-  static propTypes = {
-    address: PropTypes.string,
-  };
+type Props = {
+  address: string,
+  doShowSnackBar: ({ message: string }) => void,
+};
 
-  constructor(props) {
-    super(props);
+export default class Address extends React.PureComponent<Props> {
+  constructor() {
+    super();
 
-    this._inputElem = null;
+    this.input = null;
   }
 
+  input: ?HTMLInputElement;
+
   render() {
-    const { address, showCopyButton, doShowSnackBar } = this.props;
+    const { address, doShowSnackBar } = this.props;
 
     return (
-      <div className="form-field form-field--address">
-        <input
-          className={classnames('input-copyable', {
-            'input-copyable--with-copy-btn': showCopyButton,
-          })}
-          type="text"
-          ref={input => {
-            this._inputElem = input;
-          }}
-          onFocus={() => {
-            this._inputElem.select();
-          }}
-          readOnly="readonly"
-          value={address || ''}
-        />
-        {showCopyButton && (
-          <span className="header__item">
-            <Link
-              button="alt button--flat"
-              icon="clipboard"
+      <FormField
+        name="address"
+        render={() => (
+          <React.Fragment>
+            <input
+              id="address"
+              className="input-copyable"
+              readOnly
+              value={address || ''}
+              ref={input => {
+                this.input = input;
+              }}
+              onFocus={() => {
+                if (this.input) {
+                  this.input.select();
+                }
+              }}
+            />
+            <Button
+              alt
+              icon="Clipboard"
               onClick={() => {
                 clipboard.writeText(address);
                 doShowSnackBar({ message: __('Address copied') });
               }}
             />
-          </span>
+          </React.Fragment>
         )}
-      </div>
+      />
     );
   }
 }

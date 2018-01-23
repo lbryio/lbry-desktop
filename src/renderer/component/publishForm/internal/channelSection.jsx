@@ -1,6 +1,8 @@
+// I'll come back to this
+/* eslint-disable */
 import React from 'react';
 import { isNameValid } from 'lbryURI';
-import { FormRow } from 'component/form.js';
+import { FormRow } from 'component/common/form';
 import { BusyMessage } from 'component/common';
 import Link from 'component/link';
 
@@ -167,3 +169,4 @@ class ChannelSection extends React.PureComponent {
 }
 
 export default ChannelSection;
+/* eslint-enable */

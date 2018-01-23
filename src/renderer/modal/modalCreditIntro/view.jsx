@@ -1,6 +1,9 @@
+// I'll come back to this
+/* esline-disable */
 import React from 'react';
 import { Modal } from 'modal/modal';
-import { CreditAmount, CurrencySymbol } from 'component/common';
+import { CurrencySymbol } from 'component/common';
+import CreditAmount from 'component/common/credit-amount';
 import Link from 'component/link/index';
 
 const ModalCreditIntro = props => {
@@ -46,3 +49,4 @@ const ModalCreditIntro = props => {
 };
 
 export default ModalCreditIntro;
+/* esline-enable */

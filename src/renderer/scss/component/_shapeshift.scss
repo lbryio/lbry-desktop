@@ -1,17 +1,3 @@
-// Can't think of a better way to do this
-// The initial shapeshift form is 311px tall
-// the .shapeshift__initial-wrapper class is only added when the form is being loaded
-// Once the form is rendered, there is a very smooth transition because the height doesn't change
-.shapeshift__wrapper.shapeshift__initial-wrapper {
-  min-height: 346px;
-}
-
-.shapeshift__content {
-  .spinner {
-    margin-top: $spacing-vertical * 3;
-  }
-}
-
 .shapeshift__tx-info {
   min-height: 63px;
 }

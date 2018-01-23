@@ -1,6 +1,8 @@
+// I'll come back to this
+/* eslint-disable */
 import React from 'react';
 import LinkTransaction from 'component/linkTransaction';
-import { CreditAmount } from 'component/common';
+import CreditAmount from 'component/common/credit-amount';
 import DateTime from 'component/dateTime';
 import Link from 'component/link';
 import { buildURI } from 'lbryURI';
@@ -89,3 +91,4 @@ class TransactionListItem extends React.PureComponent {
 }
 
 export default TransactionListItem;
+/* eslint-disable */
