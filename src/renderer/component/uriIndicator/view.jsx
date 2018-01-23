@@ -2,8 +2,8 @@
 import React from 'react';
 import Button from 'component/link';
 import { buildURI } from 'lbryURI';
-import { Icon } from 'component/common';
 import classnames from 'classnames';
+import Icon from 'component/common/icon';
 
 type Props = {
   isResolvingUri: boolean,
@@ -69,6 +69,14 @@ class UriIndicator extends React.PureComponent<Props> {
       modifier = 'invalid';
     }
 
+    // {!signatureIsValid ? (
+    //   <Icon
+    //   icon={icon}
+    //   className={`channel-indicator__icon channel-indicator__icon--${modifier}`}
+    //   />
+    // ) : (
+    //   ''
+    // )}
     const inner = (
       <span>
         <span
@@ -78,14 +86,6 @@ class UriIndicator extends React.PureComponent<Props> {
         >
           {channelName}
         </span>{' '}
-        {!signatureIsValid ? (
-          <Icon
-            icon={icon}
-            className={`channel-indicator__icon channel-indicator__icon--${modifier}`}
-          />
-        ) : (
-          ''
-        )}
       </span>
     );
 

@@ -1,5 +1,5 @@
 import * as ACTIONS from 'constants/action_types';
-import { buildURI } from 'lbryURI';
+import { normalizeURI } from 'lbryURI';
 import { doResolveUri } from 'redux/actions/content';
 import { doNavigate } from 'redux/actions/navigation';
 import { selectCurrentPage } from 'redux/selectors/navigation';
@@ -98,7 +98,7 @@ export const getSearchSuggestions = value => dispatch => {
       // If it's not a valid uri, then add a "search for {query}" result
       const searchLabel = `Search for "${value}"`;
       try {
-        const uri = Lbryuri.normalize(value);
+        const uri = normalizeURI(value);
         formattedSuggestions.unshift(
           { label: uri, value: uri },
           { label: searchLabel, value: `${value}?search` }

@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { normalizeURI } from 'lbryURI.js';
+import { normalizeURI } from 'lbryURI';
 import { selectState as selectSearch, selectWunderBarAddress } from 'redux/selectors/search';
 import { doNavigate } from 'redux/actions/navigation';
 import { updateSearchQuery, getSearchSuggestions } from 'redux/actions/search';

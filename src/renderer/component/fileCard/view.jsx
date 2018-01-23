@@ -49,7 +49,6 @@ class FileCard extends React.PureComponent<Props> {
       rewardedContentClaimIds,
       obscureNsfw,
     } = this.props;
-
     const uri = normalizeURI(this.props.uri);
     const title = metadata && metadata.title ? metadata.title : uri;
     const thumbnail = metadata && metadata.thumbnail ? metadata.thumbnail : null;
