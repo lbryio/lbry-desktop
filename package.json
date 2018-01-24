@@ -117,7 +117,7 @@
   },
   "license": "MIT",
   "lbrySettings": {
-    "lbrynetDaemonVersion": "0.18.0",
+    "lbrynetDaemonVersion": "0.18.2",
     "lbrynetDaemonUrlTemplate": "https://github.com/lbryio/lbry/releases/download/vDAEMONVER/lbrynet-daemon-vDAEMONVER-OSNAME.zip"
   }
 }
