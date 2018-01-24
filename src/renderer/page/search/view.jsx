@@ -6,7 +6,6 @@ import { ToolTip } from 'component/tooltip';
 
 class SearchPage extends React.PureComponent {
   render() {
-    // eslint-disable-next-line react/prop-types
     const { query } = this.props;
 
     return (

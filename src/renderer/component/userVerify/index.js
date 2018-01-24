@@ -9,7 +9,6 @@ import {
 } from 'redux/selectors/user';
 import UserVerify from './view';
 
-// eslint-disable-next-line  no-unused-vars
 const select = (state, props) => {
   const selectReward = makeSelectRewardByType();
 

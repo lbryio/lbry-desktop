@@ -16,7 +16,6 @@ class SettingsPage extends React.PureComponent {
   }
 
   componentWillMount() {
-    // eslint-disable-next-line react/prop-types
     this.props.getThemes();
   }
 
@@ -51,7 +50,6 @@ class SettingsPage extends React.PureComponent {
 
   onThemeChange(event) {
     const { value } = event.target;
-    // eslint-disable-next-line react/prop-types
     this.props.setClientSetting(settings.THEME, value);
   }
 
@@ -68,7 +66,6 @@ class SettingsPage extends React.PureComponent {
   }
 
   onLanguageChange(e) {
-    // eslint-disable-next-line react/prop-types
     this.props.changeLanguage(e.target.value);
     this.forceUpdate();
   }
@@ -78,7 +75,6 @@ class SettingsPage extends React.PureComponent {
   }
 
   setDaemonSetting(name, value) {
-    // eslint-disable-next-line react/prop-types
     this.props.setDaemonSetting(name, value);
   }
 
@@ -90,7 +86,6 @@ class SettingsPage extends React.PureComponent {
       this.setState({ clearingCache: false });
       window.location.href = 'index.html';
     };
-    // eslint-disable-next-line react/prop-types
     const clear = () => this.props.clearCache().then(success.bind(this));
 
     setTimeout(clear, 1000, { once: true });
@@ -123,7 +118,6 @@ class SettingsPage extends React.PureComponent {
   // }
 
   render() {
-    /* eslint-disable react/prop-types */
     const {
       daemonSettings,
       showNsfw,
@@ -133,7 +127,6 @@ class SettingsPage extends React.PureComponent {
       theme,
       themes,
     } = this.props;
-    /* eslint-enable react/prop-types */
 
     if (!daemonSettings || Object.keys(daemonSettings).length === 0) {
       return (
@@ -143,7 +136,6 @@ class SettingsPage extends React.PureComponent {
       );
     }
 
-    /* eslint-disable react/jsx-no-bind, no-shadow, no-unused-vars, jsx-a11y/anchor-is-valid */
     return (
       <main className="main--single-column">
         <SubHeader />

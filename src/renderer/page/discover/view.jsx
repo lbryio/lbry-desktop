@@ -47,7 +47,6 @@ export class FeaturedCategory extends React.PureComponent {
     if (cardRow.scrollLeft > 0) {
       // check the visible cards
       const cards = cardRow.getElementsByTagName('section');
-      // eslint-disable-next-line no-unused-vars
       let firstVisibleCard = null;
       let firstVisibleIdx = -1;
       for (let i = 0; i < cards.length; i++) {
@@ -117,7 +116,6 @@ export class FeaturedCategory extends React.PureComponent {
   scrollCardItemsLeftAnimated(cardRow, target, duration, callback) {
     const diff = target - cardRow.scrollLeft;
     if (!duration || duration <= diff) {
-      // eslint-disable-next-line no-param-reassign
       cardRow.scrollLeft = target;
       if (callback) {
         callback();

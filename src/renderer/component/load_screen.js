@@ -24,7 +24,6 @@ class LoadScreen extends React.PureComponent {
     };
   }
 
-  /* eslint-disable react/jsx-filename-extension */
   render() {
     const imgSrc = Native.imagePath('lbry-white-485x160.png');
     return (

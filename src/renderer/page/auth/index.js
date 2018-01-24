@@ -8,7 +8,6 @@ import {
   selectUserIsPending,
   selectIdentityVerifyIsPending,
 } from 'redux/selectors/user';
-// eslint-disable-next-line import/no-named-as-default
 import AuthPage from './view';
 
 const select = state => ({
