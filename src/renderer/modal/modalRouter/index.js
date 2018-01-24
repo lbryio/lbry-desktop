@@ -12,7 +12,6 @@ import { selectUser, selectUserIsVerificationCandidate } from 'redux/selectors/u
 
 import ModalRouter from './view';
 
-// eslint-disable-next-line no-unused-vars
 const select = (state, props) => ({
   balance: selectBalance(state),
   showPageCost: selectCostForCurrentPageUri(state),

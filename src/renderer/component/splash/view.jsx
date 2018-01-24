@@ -1,5 +1,4 @@
 import React from 'react';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import PropTypes from 'prop-types';
 import { Lbry } from 'lbry-redux';
 import ModalIncompatibleDaemon from 'modal/modalIncompatibleDaemon';
@@ -9,7 +8,6 @@ import * as modals from 'constants/modal_types';
 import LoadScreen from '../load_screen';
 
 export class SplashScreen extends React.PureComponent {
-  /* eslint-disable react/require-default-props, react/no-unused-prop-types */
   static propTypes = {
     message: PropTypes.string,
     onLoadDone: PropTypes.func,
@@ -26,7 +24,6 @@ export class SplashScreen extends React.PureComponent {
     };
   }
 
-  /* eslint-disable react/prop-types */
   componentDidMount() {
     Lbry.connect()
       .then(this.props.checkDaemonVersion)
@@ -90,7 +87,6 @@ export class SplashScreen extends React.PureComponent {
 
   updateStatus() {
     Lbry.status().then(status => {
-      // eslint-disable-next-line no-underscore-dangle
       this._updateStatusCallback(status);
     });
   }

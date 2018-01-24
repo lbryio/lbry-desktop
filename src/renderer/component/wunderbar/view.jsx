@@ -1,16 +1,13 @@
 import React from 'react';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import PropTypes from 'prop-types';
 import Icon from 'component/icon';
 import { Lbryuri, parseQueryParams } from 'lbry-redux';
 
-/* eslint-disable no-underscore-dangle */
 class WunderBar extends React.PureComponent {
   static TYPING_TIMEOUT = 800;
 
   static propTypes = {
     onSearch: PropTypes.func.isRequired,
-    // eslint-disable-next-line react/no-unused-prop-types
     onSubmit: PropTypes.func.isRequired,
   };
 
@@ -27,16 +24,13 @@ class WunderBar extends React.PureComponent {
     this.onKeyPress = this.onKeyPress.bind(this);
     this.onReceiveRef = this.onReceiveRef.bind(this);
     this.state = {
-      // eslint-disable-next-line react/prop-types
       address: this.props.address,
-      // eslint-disable-next-line react/prop-types
       icon: this.props.icon,
     };
   }
 
   componentWillReceiveProps(nextProps) {
     if (
-      // eslint-disable-next-line react/prop-types
       nextProps.viewingPage !== this.props.viewingPage ||
       nextProps.address !== this.props.address
     ) {
@@ -136,7 +130,6 @@ class WunderBar extends React.PureComponent {
 
       try {
         uri = Lbryuri.normalize(value);
-        // eslint-disable-next-line react/no-unused-state
         this.setState({ value: uri });
       } catch (error) {
         // then it's not a valid URL, so let's search

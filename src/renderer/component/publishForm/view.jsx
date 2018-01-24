@@ -4,7 +4,6 @@ import FormField from 'component/formField';
 import { Form, FormRow, Submit } from 'component/form';
 import Link from 'component/link';
 import FormFieldPrice from 'component/formFieldPrice';
-// eslint-disable-next-line import/no-named-as-default
 import Modal from 'modal/modal';
 import ChannelSection from './internal/channelSection';
 
@@ -12,7 +11,6 @@ class PublishForm extends React.PureComponent {
   constructor(props) {
     super(props);
 
-    /* eslint-disable no-underscore-dangle */
     this._requiredFields = ['name', 'bid', 'meta_title', 'tosAgree'];
     this._defaultCopyrightNotice = 'All rights reserved.';
     this._defaultPaidPrice = 0.01;
@@ -53,7 +51,6 @@ class PublishForm extends React.PureComponent {
     };
   }
 
-  /* eslint-disable jsx-a11y/anchor-is-valid, react/no-string-refs, react/jsx-no-bind, no-unused-vars, react/prop-types */
   componentWillMount() {
     this.props.fetchClaimListMine();
     this._updateChannelList();
@@ -102,7 +99,6 @@ class PublishForm extends React.PureComponent {
   }
 
   myClaimExists() {
-    // eslint-disable-next-line react/prop-types
     const { myClaims } = this.props;
     const { name } = this.state;
 
@@ -163,13 +159,11 @@ class PublishForm extends React.PureComponent {
     }
 
     if (!Lbryuri.isValidName(rawName, false)) {
-      // eslint-disable-next-line react/no-string-refs
       this.refs.name.showError(__('LBRY names must contain only letters, numbers and dashes.'));
       return;
     }
 
     let channel = '';
-    // eslint-disable-next-line prefer-destructuring
     if (this.state.channel !== 'anonymous') channel = this.state.channel;
 
     const name = rawName.toLowerCase();
@@ -186,7 +180,6 @@ class PublishForm extends React.PureComponent {
       clearTimeout(this.resolveUriTimeout);
       this.resolveUriTimeout = undefined;
     }
-    // eslint-disable-next-line react/prop-types
     const resolve = () => this.props.resolveUri(uri);
 
     this.resolveUriTimeout = setTimeout(resolve.bind(this), 500, {
@@ -195,7 +188,6 @@ class PublishForm extends React.PureComponent {
   }
 
   handlePrefillClaim(claimInfo) {
-    // eslint-disable-next-line camelcase
     const { claim_id, name, channel_name, amount } = claimInfo;
     const { source, metadata } = claimInfo.value.stream;
 
@@ -203,7 +195,6 @@ class PublishForm extends React.PureComponent {
 
     const newState = {
       id: claim_id,
-      // eslint-disable-next-line camelcase
       channel: channel_name || 'anonymous',
       bid: amount,
       meta_title: title,
@@ -224,7 +215,6 @@ class PublishForm extends React.PureComponent {
     } else {
       // If the license URL or description matches one of the drop-down options, use that
       let licenseType = 'other'; // Will be overridden if we find a match
-      // eslint-disable-next-line no-restricted-syntax
       for (const option of this._meta_license.getOptions()) {
         if (option.getAttribute('data-url') === licenseUrl || option.text === license) {
           licenseType = option.value;
@@ -318,7 +308,6 @@ class PublishForm extends React.PureComponent {
   }
 
   claim() {
-    // eslint-disable-next-line react/prop-types
     const { claimsByUri } = this.props;
     const { uri } = this.state;
     return claimsByUri[uri];
@@ -330,13 +319,10 @@ class PublishForm extends React.PureComponent {
     return parseFloat(this.claim().effective_amount);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getFileName(fileName) {
-    // eslint-disable-next-line global-require
     const path = require('path');
     const extension = path.extname(fileName);
 
-    /* eslint-disable no-param-reassign */
     fileName = path.basename(fileName, extension);
     fileName = fileName.replace(Lbryuri.REGEXP_INVALID_URI, '');
     return fileName;
@@ -351,7 +337,6 @@ class PublishForm extends React.PureComponent {
   }
 
   handlePublishStartedConfirmed() {
-    // eslint-disable-next-line react/prop-types
     this.props.navigate('/published');
   }
 
@@ -362,7 +347,6 @@ class PublishForm extends React.PureComponent {
   }
 
   handleSubmit() {
-    // eslint-disable-next-line react/prop-types
     const { balance } = this.props;
     const { bid } = this.state;
 
@@ -382,7 +366,6 @@ class PublishForm extends React.PureComponent {
     }
 
     let missingFieldFound = false;
-    // eslint-disable-next-line no-restricted-syntax
     for (const fieldName of checkFields) {
       const field = this.refs[fieldName];
       if (field) {
@@ -407,7 +390,6 @@ class PublishForm extends React.PureComponent {
 
     const metadata = {};
 
-    // eslint-disable-next-line no-restricted-syntax
     for (const metaField of ['title', 'description', 'thumbnail', 'language']) {
       const value = this.state[`meta_${metaField}`];
       if (value) {
@@ -460,7 +442,6 @@ class PublishForm extends React.PureComponent {
   }
 
   _updateChannelList(channel) {
-    // eslint-disable-next-line react/prop-types
     const { fetchingChannels, fetchChannelListMine } = this.props;
 
     if (!fetchingChannels) fetchChannelListMine();

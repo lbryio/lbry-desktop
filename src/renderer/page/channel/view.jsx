@@ -5,7 +5,6 @@ import FileTile from 'component/fileTile';
 import ReactPaginate from 'react-paginate';
 import SubscribeButton from 'component/subscribeButton';
 
-/* eslint-disable react/prop-types, react/jsx-no-bind, no-unused-vars, no-shadow */
 class ChannelPage extends React.PureComponent {
   componentDidMount() {
     const { uri, page, fetchClaims, fetchClaimCount } = this.props;

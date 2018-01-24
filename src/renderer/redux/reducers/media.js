@@ -16,13 +16,11 @@ const defaultState = { paused: true, positions: {} };
 
 export default handleActions(
   {
-    // eslint-disable-next-line no-unused-vars
     [actions.MEDIA_PLAY]: (state: MediaState, action: Action) => ({
       ...state,
       paused: false,
     }),
 
-    // eslint-disable-next-line no-unused-vars
     [actions.MEDIA_PAUSE]: (state: MediaState, action: Action) => ({
       ...state,
       paused: true,

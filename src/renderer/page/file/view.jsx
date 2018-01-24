@@ -11,7 +11,6 @@ import DateTime from 'component/dateTime';
 import * as icons from 'constants/icons';
 import SubscribeButton from 'component/subscribeButton';
 
-/* eslint-disable react/prop-types, class-methods-use-this, no-nested-ternary */
 class FilePage extends React.PureComponent {
   componentDidMount() {
     this.fetchFileInfo(this.props);
@@ -45,18 +44,15 @@ class FilePage extends React.PureComponent {
       rewardedContentClaimIds,
     } = this.props;
 
-    // eslint-disable-next-line no-unused-vars
     const showTipBox = tab === 'tip';
 
     if (!claim || !metadata) {
       return <span className="empty">{__('Empty claim or metadata info.')}</span>;
     }
 
-    // eslint-disable-next-line prefer-destructuring
     const title = metadata.title;
     const isRewardContent = rewardedContentClaimIds.includes(claim.claim_id);
     const mediaType = Lbry.getMediaType(contentType);
-    // eslint-disable-next-line global-require
     const player = require('render-media');
     const obscureNsfw = this.props.obscureNsfw && metadata && metadata.nsfw;
     const isPlayable =

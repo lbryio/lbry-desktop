@@ -12,7 +12,6 @@ class FileList extends React.PureComponent {
       sortBy: 'date',
     };
 
-    // eslint-disable-next-line no-underscore-dangle
     this._sortFunctions = {
       date(fileInfos) {
         return fileInfos.slice().reverse();
@@ -48,7 +47,6 @@ class FileList extends React.PureComponent {
     };
   }
 
-  // eslint-disable-next-line class-methods-use-this
   getChannelSignature(fileInfo) {
     if (fileInfo.value) {
       return fileInfo.value.publisherSignature.certificateId;
@@ -63,13 +61,10 @@ class FileList extends React.PureComponent {
   }
 
   render() {
-    // eslint-disable-next-line react/prop-types, no-unused-vars
     const { handleSortChanged, fetching, fileInfos } = this.props;
     const { sortBy } = this.state;
     const content = [];
 
-    /* eslint-disable react/prop-types, react/jsx-no-bind */
-    // eslint-disable-next-line no-underscore-dangle
     this._sortFunctions[sortBy](fileInfos).forEach(fileInfo => {
       const uriParams = {};
 

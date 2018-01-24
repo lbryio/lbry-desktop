@@ -7,7 +7,6 @@ import { Lbryuri } from 'lbry-redux';
 import * as txnTypes from 'constants/transaction_types';
 
 class TransactionListItem extends React.PureComponent {
-  /* eslint-disable jsx-a11y/anchor-is-valid, react/jsx-no-bind */
   getLink(type) {
     if (type === txnTypes.TIP) {
       return (
@@ -18,20 +17,16 @@ class TransactionListItem extends React.PureComponent {
   }
 
   abandonClaim() {
-    // eslint-disable-next-line react/prop-types
     const { txid, nout } = this.props.transaction;
 
-    // eslint-disable-next-line react/prop-types
     this.props.revokeClaim(txid, nout);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   capitalize(string) {
     return string.charAt(0).toUpperCase() + string.slice(1);
   }
 
   render() {
-    // eslint-disable-next-line react/prop-types
     const { reward, transaction, isRevokeable } = this.props;
     const {
       amount,
@@ -41,7 +36,6 @@ class TransactionListItem extends React.PureComponent {
       fee,
       txid,
       type,
-      // eslint-disable-next-line no-unused-vars
       nout,
     } = transaction;
 

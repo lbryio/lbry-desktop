@@ -1,5 +1,4 @@
 import React from 'react';
-// eslint-disable-next-line import/no-extraneous-dependencies
 import PropTypes from 'prop-types';
 import Native from 'native';
 import { BusyMessage, Icon } from './common';
@@ -7,7 +6,6 @@ import { BusyMessage, Icon } from './common';
 class LoadScreen extends React.PureComponent {
   static propTypes = {
     message: PropTypes.string.isRequired,
-    // eslint-disable-next-line react/require-default-props
     details: PropTypes.string,
     isWarning: PropTypes.bool,
   };
@@ -19,7 +17,6 @@ class LoadScreen extends React.PureComponent {
   constructor(props) {
     super(props);
 
-    /* eslint-disable react/no-unused-state */
     this.state = {
       message: null,
       details: null,

@@ -5,7 +5,6 @@ import VideoPlayer from './internal/player';
 import VideoPlayButton from './internal/play-button';
 import LoadingScreen from './internal/loading-screen';
 
-/* eslint-disable react/prop-types, react/jsx-no-bind */
 class Video extends React.PureComponent {
   constructor(props) {
     super(props);

@@ -20,7 +20,6 @@ class ReportPage extends React.Component {
   }
 
   submitMessage() {
-    // eslint-disable-next-line prefer-destructuring
     const message = this.state.message;
     if (message) {
       this.setState({
@@ -44,7 +43,6 @@ class ReportPage extends React.Component {
   }
 
   render() {
-    /* eslint-disable react/jsx-filename-extension */
     return (
       <main className="main--single-column">
         <section className="card">

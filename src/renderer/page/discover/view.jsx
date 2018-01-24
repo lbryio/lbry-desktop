@@ -4,13 +4,11 @@ import { Lbryuri } from 'lbry-redux';
 import FileCard from 'component/fileCard';
 import { BusyMessage } from 'component/common';
 import Icon from 'component/icon';
-// eslint-disable-next-line import/no-named-as-default
 import ToolTip from 'component/tooltip';
 import SubHeader from 'component/subHeader';
 import classnames from 'classnames';
 import Link from 'component/link';
 
-/* eslint-disable react/prop-types, react/no-unused-state, react/no-find-dom-node, react/no-string-refs */
 // This should be in a separate file
 export class FeaturedCategory extends React.PureComponent {
   constructor() {
@@ -38,7 +36,6 @@ export class FeaturedCategory extends React.PureComponent {
     const isCompletelyVisible = this.isCardVisible(lastCard, cardRow, false);
 
     if (!isCompletelyVisible) {
-      // eslint-disable-next-line react/no-did-mount-set-state
       this.setState({
         canScrollNext: true,
       });
@@ -53,7 +50,6 @@ export class FeaturedCategory extends React.PureComponent {
       // eslint-disable-next-line no-unused-vars
       let firstVisibleCard = null;
       let firstVisibleIdx = -1;
-      // eslint-disable-next-line no-plusplus
       for (let i = 0; i < cards.length; i++) {
         if (this.isCardVisible(cards[i], cardRow, false)) {
           firstVisibleCard = cards[i];
@@ -86,7 +82,6 @@ export class FeaturedCategory extends React.PureComponent {
     const cards = cardRow.getElementsByTagName('section');
     let lastVisibleCard = null;
     let lastVisibleIdx = -1;
-    // eslint-disable-next-line no-plusplus
     for (let i = 0; i < cards.length; i++) {
       if (this.isCardVisible(cards[i], cardRow, true)) {
         lastVisibleCard = cards[i];
@@ -95,11 +90,9 @@ export class FeaturedCategory extends React.PureComponent {
     }
 
     if (lastVisibleCard) {
-      // eslint-disable-next-line no-unused-vars
       const numDisplayed = this.numDisplayedCards(cardRow);
       const animationCallback = () => {
         // update last visible index after scroll
-        // eslint-disable-next-line no-plusplus
         for (let i = 0; i < cards.length; i++) {
           if (this.isCardVisible(cards[i], cardRow, true)) {
             lastVisibleIdx = i;
@@ -135,7 +128,6 @@ export class FeaturedCategory extends React.PureComponent {
     const component = this;
     const tick = diff / duration * 10;
     setTimeout(() => {
-      // eslint-disable-next-line no-param-reassign
       cardRow.scrollLeft += tick;
       if (cardRow.scrollLeft === target) {
         if (callback) {
@@ -147,7 +139,6 @@ export class FeaturedCategory extends React.PureComponent {
     }, 10);
   }
 
-  // eslint-disable-next-line class-methods-use-this
   isCardVisible(section, cardRow, partialVisibility) {
     // check if a card is fully or partialy visible in its parent
     const cardRowWidth = cardRow.offsetWidth;
@@ -162,7 +153,6 @@ export class FeaturedCategory extends React.PureComponent {
     );
   }
 
-  // eslint-disable-next-line class-methods-use-this
   numDisplayedCards(cardRow) {
     const cards = cardRow.getElementsByTagName('section');
     const cardRowWidth = cardRow.offsetWidth;
@@ -177,7 +167,6 @@ export class FeaturedCategory extends React.PureComponent {
     return 1;
   }
 
-  /* eslint-disable jsx-a11y/anchor-is-valid, jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events, react/jsx-no-bind, react/no-multi-comp */
   render() {
     const { category, names, categoryLink } = this.props;
 

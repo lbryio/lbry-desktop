@@ -7,7 +7,6 @@ import SubHeader from 'component/subHeader';
 import { BusyMessage } from 'component/common';
 import Icon from 'component/icon';
 
-/* eslint-disable react/prop-types, react/jsx-no-bind, no-nested-ternary, jsx-a11y/anchor-is-valid */
 class HelpPage extends React.PureComponent {
   constructor(props) {
     super(props);
@@ -22,7 +21,6 @@ class HelpPage extends React.PureComponent {
   }
 
   componentWillMount() {
-    // eslint-disable-next-line no-unused-vars
     Native.getAppVersionInfo().then(({ remoteVersion, localVersion, upgradeAvailable }) => {
       this.setState({
         uiVersion: localVersion,

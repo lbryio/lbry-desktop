@@ -5,5 +5,4 @@
 *.pyc
 /static/daemon/lbrynet*
 /static/locales
-
-
+/.idea

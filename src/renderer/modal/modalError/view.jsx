@@ -4,7 +4,6 @@ import { ExpandableModal } from 'modal/modal';
 
 class ModalError extends React.PureComponent {
   render() {
-    // eslint-disable-next-line react/prop-types
     const { closeModal, error } = this.props;
 
     const errorObj = typeof error === 'string' ? { message: error } : error;
@@ -19,7 +18,6 @@ class ModalError extends React.PureComponent {
     };
 
     const errorInfoList = [];
-    // eslint-disable-next-line no-restricted-syntax
     for (const key of Object.keys(errorObj)) {
       const val = typeof errorObj[key] === 'string' ? errorObj[key] : JSON.stringify(errorObj[key]);
       const label = errorKeyLabels[key];

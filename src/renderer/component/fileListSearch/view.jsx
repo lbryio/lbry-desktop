@@ -6,10 +6,8 @@ import { BusyMessage } from 'component/common';
 import { Lbryuri } from 'lbry-redux';
 
 const SearchNoResults = props => {
-  // eslint-disable-next-line react/prop-types
   const { query } = props;
 
-  /* eslint-disable jsx-a11y/anchor-is-valid */
   return (
     <section>
       <span className="empty">
@@ -26,19 +24,16 @@ class FileListSearch extends React.PureComponent {
   }
 
   componentWillReceiveProps(props) {
-    // eslint-disable-next-line react/prop-types
     if (props.query !== this.props.query) {
       this.doSearch(props);
     }
   }
 
   doSearch(props) {
-    // eslint-disable-next-line react/prop-types
     this.props.search(props.query);
   }
 
   render() {
-    // eslint-disable-next-line react/prop-types
     const { isSearching, uris, query } = this.props;
 
     return (

@@ -7,7 +7,6 @@ import FilePrice from 'component/filePrice';
 import NsfwOverlay from 'component/nsfwOverlay';
 import Icon from 'component/icon';
 
-/* eslint-disable react/prop-types, react/jsx-no-bind */
 class FileTile extends React.PureComponent {
   static SHOW_EMPTY_PUBLISH = 'publish';
   static SHOW_EMPTY_PENDING = 'pending';
@@ -30,7 +29,6 @@ class FileTile extends React.PureComponent {
     if (!isResolvingUri && !claim && uri) resolveUri(uri);
   }
 
-  // eslint-disable-next-line no-unused-vars
   componentWillReceiveProps(nextProps) {
     const { isResolvingUri, claim, uri, resolveUri } = this.props;
 
@@ -80,7 +78,6 @@ class FileTile extends React.PureComponent {
 
     let name = '';
     if (claim) {
-      // eslint-disable-next-line prefer-destructuring
       name = claim.name;
     }
 
@@ -101,7 +98,6 @@ class FileTile extends React.PureComponent {
       description = <span className="empty">{__('This file is pending confirmation.')}</span>;
     }
 
-    /* eslint-disable jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions */
     return (
       <section
         className={`file-tile card ${obscureNsfw ? 'card--obscured ' : ''}`}
