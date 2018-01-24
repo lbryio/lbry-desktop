@@ -22,9 +22,6 @@
     "build": "yarn compile && electron-builder build",
     "build:dir": "yarn build -- --dir -c.compression=store -c.mac.identity=null",
     "postinstall": "electron-builder install-app-deps",
-    "postmerge": "yarnhook",
-    "postcheckout": "yarnhook",
-    "postrewrite": "yarnhook",
     "precommit": "lint-staged",
     "lint": "eslint 'src/**/*.{js,jsx}' --fix",
     "format": "prettier 'src/**/*.{js,jsx,scss,json}' --write"
@@ -108,8 +105,7 @@
     "prettier": "^1.4.2",
     "sass-loader": "^6.0.6",
     "webpack": "^3.10.0",
-    "webpack-build-notifier": "^0.1.18",
-    "yarnhook": "^0.1.1"
+    "webpack-build-notifier": "^0.1.18"
   },
   "resolutions": {
     "webpack/webpack-sources": "1.0.1"
