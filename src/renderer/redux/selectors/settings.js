@@ -18,7 +18,18 @@ export const selectShowNsfw = makeSelectClientSetting(SETTINGS.SHOW_NSFW);
 
 export const selectLanguages = createSelector(selectState, state => state.languages || {});
 
+export const selectTheme = makeSelectClientSetting(SETTINGS.THEME);
+export const selectAutomaticDarkModeEnabled = makeSelectClientSetting(
+  SETTINGS.AUTOMATIC_DARK_MODE_ENABLED
+);
+export const selectIsNight = createSelector(selectState, state => state.isNight);
+
 export const selectThemePath = createSelector(
-  makeSelectClientSetting(SETTINGS.THEME),
-  theme => `${staticResourcesPath}/themes/${theme || 'light'}.css`
+  selectTheme,
+  selectAutomaticDarkModeEnabled,
+  selectIsNight,
+  (theme, automaticDarkModeEnabled, isNight) => {
+    const dynamicTheme = automaticDarkModeEnabled && isNight ? 'dark' : theme;
+    return `${staticResourcesPath}/themes/${dynamicTheme || 'light'}.css`;
+  }
 );

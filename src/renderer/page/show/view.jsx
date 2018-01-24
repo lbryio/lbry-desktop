@@ -1,5 +1,4 @@
 import React from 'react';
-import lbryuri from 'lbryuri';
 import { BusyMessage } from 'component/common';
 import ChannelPage from 'page/channel';
 import FilePage from 'page/file';

@@ -3,7 +3,7 @@ import FileTile from 'component/fileTile';
 import ChannelTile from 'component/channelTile';
 import Link from 'component/link';
 import { BusyMessage } from 'component/common.js';
-import lbryuri from 'lbryuri';
+import { parseURI } from 'lbryURI';
 
 const SearchNoResults = props => {
   const { query } = props;
@@ -45,7 +45,7 @@ class FileListSearch extends React.PureComponent {
         {uris && uris.length
           ? uris.map(
               uri =>
-                lbryuri.parse(uri).name[0] === '@' ? (
+                parseURI(uri).name[0] === '@' ? (
                   <ChannelTile key={uri} uri={uri} />
                 ) : (
                   <FileTile key={uri} uri={uri} />

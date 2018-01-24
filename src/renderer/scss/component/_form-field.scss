@@ -5,6 +5,15 @@
   margin-bottom: $spacing-vertical;
 }
 
+.form-row-phone {
+  display: flex;
+
+  .form-field__input-text {
+    margin-left: 5px;
+    width: calc(0.85 * var(--input-width));
+  }
+}
+
 .form-row__label-row {
   margin-top: $spacing-vertical * 5/6;
   margin-bottom: 0px;
@@ -32,7 +41,7 @@
     box-sizing: border-box;
     padding-left: 5px;
     padding-right: 5px;
-    height: $spacing-vertical;
+    height: var(--select-height);
     background: var(--select-bg);
     color: var(--select-color);
     &:focus {

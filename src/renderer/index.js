@@ -116,6 +116,7 @@ const init = () => {
       app.store.dispatch(doAutoUpdate());
     });
   }
+  app.store.dispatch(doUpdateIsNightAsync());
   app.store.dispatch(doDownloadLanguages());
 
   function onDaemonReady() {

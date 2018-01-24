@@ -1,6 +1,6 @@
 import React from 'react';
 import { Form, FormRow, Submit } from 'component/form';
-import lbryuri from 'lbryuri';
+import { regexAddress } from 'lbryURI';
 
 class WalletSend extends React.PureComponent {
   handleSubmit() {
@@ -42,7 +42,7 @@ class WalletSend extends React.PureComponent {
               size="60"
               onChange={setAddress}
               value={address}
-              regexp={lbryuri.REGEXP_ADDRESS}
+              regexp={regexAddress}
               trim
             />
             <div className="form-row-submit">

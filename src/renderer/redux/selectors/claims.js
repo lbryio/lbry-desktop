@@ -1,4 +1,4 @@
-import Lbryuri from 'lbryuri';
+import { normalizeURI } from 'lbryURI';
 import { makeSelectCurrentParam } from 'redux/selectors/navigation';
 import { createSelector } from 'reselect';
 
@@ -32,7 +32,7 @@ export const selectAllClaimsByChannel = createSelector(
 );
 
 export const makeSelectClaimForUri = uri =>
-  createSelector(selectClaimsByUri, claims => claims && claims[Lbryuri.normalize(uri)]);
+  createSelector(selectClaimsByUri, claims => claims && claims[normalizeURI(uri)]);
 
 export const selectMyClaimsRaw = createSelector(selectState, state => state.myClaims);
 
@@ -53,7 +53,7 @@ export const selectMyActiveClaims = createSelector(
 );
 
 export const makeSelectClaimIsMine = rawUri => {
-  const uri = Lbryuri.normalize(rawUri);
+  const uri = normalizeURI(rawUri);
   return createSelector(
     selectClaimsByUri,
     selectMyActiveClaims,
