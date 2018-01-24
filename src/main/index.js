@@ -10,8 +10,6 @@ import Daemon from './Daemon';
 import Tray from './Tray';
 import createWindow from './createWindow';
 
-// For now, log info messages in production for easier debugging
-log.transports.file.level = '';
 autoUpdater.autoDownload = true;
 
 // This is set to true if an auto update has been downloaded through the Electron
