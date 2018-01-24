@@ -198,8 +198,13 @@ export function doCheckUpgradeAvailable() {
     });
 
     if (["win32", "darwin"].includes(process.platform)) {
-      // On Windows and Mac, updates happen silently
-      autoUpdater.checkForUpdates();
+      // On Windows and Mac, updates happen silently through
+      // electron-updater.
+      const autoUpdateDeclined = selectAutoUpdateDeclined(state);
+
+      if (!autoUpdateDeclined) {
+        autoUpdater.checkForUpdates();
+      }
       return;
     }
 
