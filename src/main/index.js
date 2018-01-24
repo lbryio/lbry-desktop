@@ -6,7 +6,6 @@ import url from 'url';
 import https from 'https';
 import { shell, app, ipcMain, dialog } from 'electron';
 import { autoUpdater } from 'electron-updater';
-import log from 'electron-log';
 import Daemon from './Daemon';
 import Tray from './Tray';
 import createWindow from './createWindow';
@@ -23,7 +22,7 @@ let autoUpdateDownloaded = false;
 // Keeps track of whether the user has accepted an auto-update through the interface.
 let autoUpdateAccepted = false;
 
-// This is used to keep track of whether we are showing he special dialog
+// This is used to keep track of whether we are showing the special dialog
 // that we show on Windows after you decline an upgrade and close the app later.
 let showingAutoUpdateCloseAlert = false;
 
@@ -86,7 +85,7 @@ app.on('activate', () => {
   if (!rendererWindow) rendererWindow = createWindow();
 });
 
-app.on('will-quit', (e) => {
+app.on('will-quit', (event) => {
   if (process.platform === 'win32' && autoUpdateDownloaded && !autoUpdateAccepted && !showingAutoUpdateCloseAlert) {
     // We're on Win and have an update downloaded, but the user declined it (or closed
     // the app without accepting it). Now the user is closing the app, so the new update
@@ -102,7 +101,7 @@ app.on('will-quit', (e) => {
       app.quit();
     });
 
-    e.preventDefault();
+    event.preventDefault();
     return;
   }
 

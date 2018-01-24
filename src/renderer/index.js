@@ -10,6 +10,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { doConditionalAuthNavigate, doDaemonReady, doShowSnackBar, doAutoUpdate } from 'redux/actions/app';
+import { doUpdateIsNightAsync } from 'redux/actions/settings';
 import { doNavigate } from 'redux/actions/navigation';
 import { doDownloadLanguages } from 'redux/actions/settings';
 import { doUserEmailVerify } from 'redux/actions/user';
