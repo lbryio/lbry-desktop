@@ -13,6 +13,7 @@ import ModalFileTimeout from "modal/modalFileTimeout";
 import ModalAffirmPurchase from "modal/modalAffirmPurchase";
 import ModalRevokeClaim from "modal/modalRevokeClaim";
 import ModalEmailCollection from "../modalEmailCollection";
+import ModalSpeechUpload from "../modalSpeechUpload";
 import * as modals from "constants/modal_types";
 
 class ModalRouter extends React.PureComponent {
@@ -138,6 +139,8 @@ class ModalRouter extends React.PureComponent {
         return <ModalRevokeClaim {...modalProps} />;
       case modals.EMAIL_COLLECTION:
         return <ModalEmailCollection {...modalProps} />;
+      case modals.CONFIRM_SPEECH_UPLOAD:
+        return <ModalSpeechUpload {...modalProps} />;
       default:
         return null;
     }

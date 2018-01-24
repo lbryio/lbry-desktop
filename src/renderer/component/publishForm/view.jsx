@@ -9,6 +9,7 @@ import Modal from "modal/modal";
 import * as modals from "constants/modal_types";
 import { BusyMessage } from "component/common";
 import ChannelSection from "./internal/channelSection";
+import { doOpenModal } from "redux/actions/app";
 
 class PublishForm extends React.PureComponent {
   constructor(props) {
@@ -166,10 +167,12 @@ class PublishForm extends React.PureComponent {
   }
 
   handleConfirmUpload(event) {
-    this.setState({
-      modal: "upload",
-      thumbnailUploadPath: event.target.value,
-    });
+    console.log("handleConfirmUpload:", event.target.value);
+    doOpenModal(modals.CONFIRM_SPEECH_UPLOAD, { path: event.target.value });
+    // this.setState({
+    //   modal: "upload",
+    //   thumbnailUploadPath: event.target.value,
+    // });
   }
 
   handlePublishStartedConfirmed() {
@@ -1067,7 +1070,7 @@ class PublishForm extends React.PureComponent {
             "The following error occurred when attempting to publish your file"
           )}: {this.state.errorMessage}
         </Modal>
-        <Modal
+        {/*<Modal
           isOpen={this.state.modal == "upload"}
           contentLabel={__("Confirm File Upload")}
           type="confirm"
@@ -1078,7 +1081,7 @@ class PublishForm extends React.PureComponent {
         >
           <p>{__("Comfirm file upload")}</p>
           <p>Upload {this.state.thumbnailUploadPath}?</p>
-        </Modal>
+        </Modal>*/}
       </main>
     );
   }

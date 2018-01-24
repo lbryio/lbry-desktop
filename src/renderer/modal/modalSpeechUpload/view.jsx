@@ -11,13 +11,15 @@ class ModalSpeechUpload extends React.PureComponent {
   render() {
     const { closeModal, beginUpload, path } = this.props;
 
+    // onConfirmed={() => beginUpload(path)}
+
     return (
       <Modal
         isOpen={true}
         contentLabel={__("Confirm Thumbnail Upload")}
         type="confirm"
         confirmButtonLabel={__("Upload")}
-        onConfirmed={() => beginUpload("haha")}
+        onConfirmed={() => console.log("confirm spee.ch upload, path:", path)}
         onAborted={closeModal}
       >
         <p>{__("Please confirm spee.ch upload.")}</p>
