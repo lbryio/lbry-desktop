@@ -10,6 +10,8 @@ import { doAuthNavigate } from 'redux/actions/navigation';
 import { doFetchDaemonSettings } from 'redux/actions/settings';
 import { doAuthenticate } from 'redux/actions/user';
 import { doBalanceSubscribe } from 'redux/actions/wallet';
+import { doPause } from "redux/actions/media";
+
 import {
   selectCurrentModal,
   selectIsUpgradeSkipped,
@@ -18,8 +20,10 @@ import {
   selectUpgradeDownloadItem,
   selectUpgradeDownloadPath,
   selectUpgradeFilename,
+  selectAutoUpdateDeclined,
 } from 'redux/selectors/app';
 
+const { autoUpdater } = remote.require('electron-updater');
 const { download } = remote.require('electron-dl');
 const Fs = remote.require('fs');
 const { lbrySettings: config } = require('package.json');
@@ -66,6 +70,41 @@ export function doStartUpgrade() {
   };
 }
 
+export function doDownloadUpgradeRequested() {
+  // This means the user requested an upgrade by clicking the "upgrade" button in the navbar.
+  // If on Mac and Windows, we do some new behavior for the auto-update system.
+  // This will probably be reorganized once we get auto-update going on Linux and remove
+  // the old logic.
+
+  return (dispatch, getState) => {
+    const state = getState();
+
+    // Pause video if needed
+    dispatch(doPause());
+
+    const autoUpdateDeclined = selectAutoUpdateDeclined(state);
+
+    if (['win32', 'darwin'].includes(process.platform)) { // electron-updater behavior
+      if (autoUpdateDeclined) {
+        // The user declined an update before, so show the "confirm" dialog
+        dispatch({
+          type: ACTIONS.OPEN_MODAL,
+          data: { modal: MODALS.AUTO_UPDATE_CONFIRM },
+        });
+      } else {
+        // The user was never shown the original update dialog (e.g. because they were
+        // watching a video). So show the inital "update downloaded" dialog.
+        dispatch({
+          type: ACTIONS.OPEN_MODAL,
+          data: { modal: MODALS.AUTO_UPDATE_DOWNLOADED },
+        });
+      }
+    } else { // Old behavior for Linux
+      dispatch(doDownloadUpgrade());
+    }
+  };
+}
+
 export function doDownloadUpgrade() {
   return (dispatch, getState) => {
     const state = getState();
@@ -105,6 +144,29 @@ export function doDownloadUpgrade() {
   };
 }
 
+export function doAutoUpdate() {
+  return function(dispatch, getState) {
+    const state = getState();
+    dispatch({
+      type: ACTIONS.AUTO_UPDATE_DOWNLOADED,
+    });
+
+    dispatch({
+      type: ACTIONS.OPEN_MODAL,
+      data: { modal: MODALS.AUTO_UPDATE_DOWNLOADED },
+    });
+  };
+}
+
+export function doAutoUpdateDeclined() {
+  return function(dispatch, getState) {
+    const state = getState();
+    dispatch({
+      type: ACTIONS.AUTO_UPDATE_DECLINED,
+    });
+  }
+}
+
 export function doCancelUpgrade() {
   return (dispatch, getState) => {
     const state = getState();
@@ -134,6 +196,17 @@ export function doCheckUpgradeAvailable() {
     dispatch({
       type: ACTIONS.CHECK_UPGRADE_START,
     });
+
+    if (["win32", "darwin"].includes(process.platform)) {
+      // On Windows and Mac, updates happen silently through
+      // electron-updater.
+      const autoUpdateDeclined = selectAutoUpdateDeclined(state);
+
+      if (!autoUpdateDeclined) {
+        autoUpdater.checkForUpdates();
+      }
+      return;
+    }
 
     const success = ({ remoteVersion, upgradeAvailable }) => {
       dispatch({

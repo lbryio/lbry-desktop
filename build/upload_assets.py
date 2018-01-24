@@ -9,48 +9,42 @@ import github
 import uritemplate
 import boto3
 
-
 def main():
     upload_to_github_if_tagged('lbryio/lbry-app')
-    upload_to_s3('app')
 
 
-def get_asset_filename():
+def get_asset_path():
     this_dir = os.path.dirname(os.path.realpath(__file__))
     system = platform.system()
     if system == 'Darwin':
-        return glob.glob(this_dir + '/../dist/LBRY*.dmg')[0]
+        suffix = 'dmg'
     elif system == 'Linux':
-        return glob.glob(this_dir + '/../dist/LBRY*.deb')[0]
+        suffix = 'deb'
     elif system == 'Windows':
-        return glob.glob(this_dir + '/../dist/LBRY*.exe')[0]
+        suffix = 'exe'
     else:
         raise Exception("I don't know about any artifact on {}".format(system))
 
+    return os.path.realpath(glob.glob(this_dir + '/../dist/LBRY*.' + suffix)[0])
 
-def upload_to_s3(folder):
-    tag = subprocess.check_output(['git', 'describe', '--always', '--abbrev=8', 'HEAD']).strip()
-    commit_date = subprocess.check_output([
-        'git', 'show', '-s', '--format=%cd', '--date=format:%Y%m%d-%H%I%S', 'HEAD']).strip()
+def get_update_asset_path():
+    # Get the asset used used for updates. On Mac, this is a .zip; on
+    # Windows it's just the installer file.
+    if platform.system() == 'Darwin':
+        this_dir = os.path.dirname(os.path.realpath(__file__))
+        return os.path.realpath(glob.glob(this_dir + '/../dist/LBRY*.zip')[0])
+    else:
+        return get_asset_path()
 
-    asset_path = get_asset_filename()
-    bucket = 'releases.lbry.io'
-    key = folder + '/' + commit_date + '-' + tag + '/' + os.path.basename(asset_path)
 
-    print "Uploading " + asset_path + " to s3://" + bucket + '/' + key + ''
+def get_latest_file_path():
+  # The update metadata file is called latest.yml on Windows, latest-mac.yml on
+  # Mac, latest-linux.yml on Linux
+  this_dir = os.path.dirname(os.path.realpath(__file__))
 
-    if 'AWS_ACCESS_KEY_ID' not in os.environ or 'AWS_SECRET_ACCESS_KEY' not in os.environ:
-        print 'Must set AWS_ACCESS_KEY_ID and AWS_SECRET_ACCESS_KEY to publish assets to s3'
-        return 1
+  latestfilematches = glob.glob(this_dir + '/../dist/latest*.yml')
 
-    s3 = boto3.resource(
-        's3',
-        aws_access_key_id=os.environ['AWS_ACCESS_KEY_ID'],
-        aws_secret_access_key=os.environ['AWS_SECRET_ACCESS_KEY'],
-        config=boto3.session.Config(signature_version='s3v4')
-    )
-    s3.meta.client.upload_file(asset_path, bucket, key)
-
+  return latestfilematches[0] if latestfilematches else None
 
 def upload_to_github_if_tagged(repo_name):
     try:
@@ -75,7 +69,7 @@ def upload_to_github_if_tagged(repo_name):
         # TODO: maybe this should be an error
         return 1
 
-    asset_path = get_asset_filename()
+    asset_path = get_asset_path()
     print "Uploading " + asset_path + " to Github tag " + current_tag
     release = get_github_release(repo, current_tag)
     upload_asset_to_github(release, asset_path, gh_token)

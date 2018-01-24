@@ -79,6 +79,12 @@ if [ "$FULL_BUILD" == "true" ]; then
 
   yarn build
 
+  # Workaround: TeamCity expects the dmg to be in dist/mac, but in the new electron-builder
+  # it's put directly in dist/ (the right way to solve this is to update the TeamCity config)
+  if $OSX; then
+    cp dist/*.dmg dist/mac
+  fi
+
   # electron-build has a publish feature, but I had a hard time getting
   # it to reliably work and it also seemed difficult to configure. Not proud of
   # this, but it seemed better to write my own.

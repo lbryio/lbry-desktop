@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { doOpenModal } from 'redux/actions/app';
 import * as settings from 'constants/settings';
-import { selectCurrentModal, selectModalProps } from 'redux/selectors/app';
+import { selectCurrentModal, selectModalProps, selectModalsAllowed } from 'redux/selectors/app';
 import { selectCurrentPage } from 'redux/selectors/navigation';
 import { selectCostForCurrentPageUri } from 'redux/selectors/cost_info';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
@@ -24,6 +24,7 @@ const select = (state, props) => ({
   ),
   isWelcomeAcknowledged: makeSelectClientSetting(settings.NEW_USER_ACKNOWLEDGED)(state),
   user: selectUser(state),
+  modalsAllowed: selectModalsAllowed(state),
 });
 
 const perform = dispatch => ({

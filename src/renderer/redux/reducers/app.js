@@ -26,6 +26,8 @@ export type AppState = {
   hasSignature: boolean,
   badgeNumber: number,
   volume: number,
+  autoUpdateDeclined: boolean,
+  modalsAllowed: boolean,
   downloadProgress: ?number,
   upgradeDownloading: ?boolean,
   upgradeDownloadComplete: ?boolean,
@@ -46,6 +48,9 @@ const defaultState: AppState = {
   hasSignature: false,
   badgeNumber: 0,
   volume: Number(sessionStorage.getItem('volume')) || 1,
+  autoUpdateDownloaded: false,
+  autoUpdateDeclined: false,
+  modalsAllowed: true,
 
   downloadProgress: undefined,
   upgradeDownloading: undefined,
@@ -79,6 +84,17 @@ reducers[ACTIONS.UPGRADE_CANCELLED] = state =>
     modal: null,
   });
 
+reducers[ACTIONS.AUTO_UPDATE_DOWNLOADED] = state =>
+  Object.assign({}, state, {
+    autoUpdateDownloaded: true,
+  });
+
+reducers[ACTIONS.AUTO_UPDATE_DECLINED] = state => {
+  return Object.assign({}, state, {
+    autoUpdateDeclined: true,
+  });
+}
+
 reducers[ACTIONS.UPGRADE_DOWNLOAD_COMPLETED] = (state, action) =>
   Object.assign({}, state, {
     downloadPath: action.data.path,
@@ -91,6 +107,11 @@ reducers[ACTIONS.UPGRADE_DOWNLOAD_STARTED] = state =>
     upgradeDownloading: true,
   });
 
+reducers[ACTIONS.CHANGE_MODALS_ALLOWED] = (state, action) =>
+  Object.assign({}, state, {
+    modalsAllowed: action.data.modalsAllowed,
+  });
+
 reducers[ACTIONS.SKIP_UPGRADE] = state => {
   sessionStorage.setItem('upgradeSkipped', 'true');
 
@@ -98,6 +119,28 @@ reducers[ACTIONS.SKIP_UPGRADE] = state => {
     isUpgradeSkipped: true,
     modal: null,
   });
+};
+
+reducers[ACTIONS.MEDIA_PLAY] = state => {
+  return Object.assign({}, state, {
+    modalsAllowed: false,
+  });
+};
+
+reducers[ACTIONS.MEDIA_PAUSE] = state => {
+  return Object.assign({}, state, {
+    modalsAllowed: true,
+  });
+};
+
+reducers[ACTIONS.SET_PLAYING_URI] = (state, action) => {
+  if (action.data.uri === null) {
+    return Object.assign({}, state, {
+      modalsAllowed: true,
+    });
+  } else {
+    return state;
+  }
 };
 
 reducers[ACTIONS.UPDATE_VERSION] = (state, action) =>
@@ -116,12 +159,16 @@ reducers[ACTIONS.CHECK_UPGRADE_SUBSCRIBE] = (state, action) =>
     checkUpgradeTimer: action.data.checkUpgradeTimer,
   });
 
-reducers[ACTIONS.OPEN_MODAL] = (state, action) =>
-  Object.assign({}, state, {
-    modal: action.data.modal,
-    modalProps: action.data.modalProps || {},
-  });
-
+reducers[ACTIONS.OPEN_MODAL] = (state, action) => {
+  if (!state.modalsAllowed) {
+    return state;
+  } else {
+    return Object.assign({}, state, {
+      modal: action.data.modal,
+      modalProps: action.data.modalProps || {},
+    });
+  }
+};
 reducers[ACTIONS.CLOSE_MODAL] = state =>
   Object.assign({}, state, {
     modal: undefined,
