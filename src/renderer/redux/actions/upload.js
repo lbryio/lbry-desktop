@@ -28,7 +28,7 @@ export const beginSpeechUpload = (filePath: string, nsfw: boolean = false) => (
       let data = new FormData();
       data.append("name", available ? safeName : `${safeName}-${makeid()}`);
       const blob = new Blob([thumbnail], { type: `image/${fileExt.slice(1)}` });
-      data.append("file", blob, path.basename(filePath));
+      data.append("file", blob);
       data.append("nsfw", nsfw);
       return fetch("https://spee.ch/api/claim-publish", {
         method: "POST",
