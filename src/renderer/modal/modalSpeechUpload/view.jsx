@@ -5,13 +5,26 @@ import FormField from "component/formField/index";
 class ModalSpeechUpload extends React.PureComponent {
   constructor(props) {
     super(props);
-    console.log("ModalSpeechUpload constructor");
+
+    this.state = {
+      nsfw: false,
+    };
+  }
+
+  handleNsfwCheckboxClicked(event) {
+    this.setState({
+      nsfw: event.target.checked,
+    });
+  }
+
+  upload() {
+    this.props.beginUpload(this.props.path, this.state.nsfw);
+    this.props.closeModal();
   }
 
   render() {
-    const { closeModal, beginUpload, path } = this.props;
-
-    // onConfirmed={() => beginUpload(path)}
+    const { closeModal } = this.props;
+    const { nsfw } = this.state;
 
     return (
       <Modal
@@ -19,11 +32,20 @@ class ModalSpeechUpload extends React.PureComponent {
         contentLabel={__("Confirm Thumbnail Upload")}
         type="confirm"
         confirmButtonLabel={__("Upload")}
-        onConfirmed={() => console.log("confirm spee.ch upload, path:", path)}
+        onConfirmed={() => this.upload()}
         onAborted={closeModal}
       >
         <p>{__("Please confirm spee.ch upload.")}</p>
         <p>{this.props.path}</p>
+
+        <section>
+          <FormField
+            type="checkbox"
+            checked={nsfw}
+            onClick={this.handleNsfwCheckboxClicked.bind(this)}
+            label={__("NSFW")}
+          />
+        </section>
       </Modal>
     );
   }

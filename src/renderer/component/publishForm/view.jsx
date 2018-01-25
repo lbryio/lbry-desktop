@@ -9,7 +9,7 @@ import Modal from "modal/modal";
 import * as modals from "constants/modal_types";
 import { BusyMessage } from "component/common";
 import ChannelSection from "./internal/channelSection";
-import { doOpenModal } from "redux/actions/app";
+// import { doOpenModal } from "redux/actions/app";
 
 class PublishForm extends React.PureComponent {
   constructor(props) {
@@ -166,14 +166,14 @@ class PublishForm extends React.PureComponent {
     });
   }
 
-  handleConfirmUpload(event) {
-    console.log("handleConfirmUpload:", event.target.value);
-    doOpenModal(modals.CONFIRM_SPEECH_UPLOAD, { path: event.target.value });
-    // this.setState({
-    //   modal: "upload",
-    //   thumbnailUploadPath: event.target.value,
-    // });
-  }
+  // handleConfirmUpload(event) {
+  //   console.log("handleConfirmUpload:", event.target.value);
+  //   this.props.doOpenModal(modals.CONFIRM_SPEECH_UPLOAD, { path: event.target.value });
+  //   // this.setState({
+  //   //   modal: "upload",
+  //   //   thumbnailUploadPath: event.target.value,
+  //   // });
+  // }
 
   handlePublishStartedConfirmed() {
     this.props.navigate("/published");
@@ -595,6 +595,7 @@ class PublishForm extends React.PureComponent {
 
   render() {
     const { mode, submitting } = this.state;
+    const { openModal } = this.props;
 
     const lbcInputHelp = __(
       "This LBC remains yours and the deposit can be undone at any time."
@@ -663,7 +664,9 @@ class PublishForm extends React.PureComponent {
                     ref="thumbnail"
                     type="file"
                     onChange={event => {
-                      this.handleConfirmUpload(event);
+                      openModal(modals.CONFIRM_SPEECH_UPLOAD, {
+                        path: event.target.value,
+                      });
                     }}
                   />
                 </div>

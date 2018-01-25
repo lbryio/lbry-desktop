@@ -127,6 +127,7 @@ reducers[types.CHECK_UPGRADE_SUBSCRIBE] = function(state, action) {
 };
 
 reducers[types.OPEN_MODAL] = function(state, action) {
+  console.log("open modal reducer\nstate:", state, "\naction:", action);
   return Object.assign({}, state, {
     modal: action.data.modal,
     modalProps: action.data.modalProps || {},

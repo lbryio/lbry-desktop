@@ -7,7 +7,7 @@ import ModalSpeechUpload from "./view";
 const perform = dispatch => ({
   closeModal: () => dispatch(doCloseModal()),
   resetUpload: () => dispatch(resetSpeechUpload()),
-  beginUpload: path => dispatch(beginSpeechUpload(path)),
+  beginUpload: (path, nsfw) => dispatch(beginSpeechUpload(path, nsfw)),
 });
 
 export default connect(null, perform)(ModalSpeechUpload);
