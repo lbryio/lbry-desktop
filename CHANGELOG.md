@@ -30,17 +30,17 @@ Web UI version numbers should always match the corresponding version of LBRY App
 ## [0.19.4] - 2018-01-08
 
 ### Added
- * Video state tracking in redux - developer only (#890)
+ * Video state tracking in redux - developer only ([#890](https://github.com/lbryio/lbry-app/pull/890))
 
 
 ### Changed
- * Improved text content in app (#921)
+ * Improved text content in app ([#921](https://github.com/lbryio/lbry-app/pull/921))
 
 
 ### Fixed
- * Right click works in the app again (#928)
- * Icons are now the rights size (#925)
- * Fixed tip sending error (#918)
+ * Right click works in the app again ([#928](https://github.com/lbryio/lbry-app/pull/928))
+ * Icons are now the rights size ([#925](https://github.com/lbryio/lbry-app/pull/925))
+ * Fixed tip sending error ([#918](https://github.com/lbryio/lbry-app/pull/918))
  * Newly created channel immediately available for publishing
 
 
@@ -48,51 +48,51 @@ Web UI version numbers should always match the corresponding version of LBRY App
 ## [0.19.3] - 2017-12-30
 
 ### Changed
- * Improved internal code structuring by adding linting integration -- developers only (#891)
- * Improved developer documentation (#910)
+ * Improved internal code structuring by adding linting integration -- developers only ([#891](https://github.com/lbryio/lbry-app/pull/891))
+ * Improved developer documentation ([#910](https://github.com/lbryio/lbry-app/pull/910))
 
 
 ### Removed
- * Removed email verification reward (#914)
+ * Removed email verification reward ([#914](https://github.com/lbryio/lbry-app/pull/921))
 
 
 ### Fixed
- * Added snackbar text in place where it was coming up blank (#902)
+ * Added snackbar text in place where it was coming up blank ([#902](https://github.com/lbryio/lbry-app/pull/902))
 
 
 
 ## [0.19.2] - 2017-12-22
 
 ### Added
- * Added copy address button to the Wallet Address component on Send / Receive (#875)
- * Link to creators’ channels on homepage (#869)
- * Pause playing video when file is opened (#880)
- * Add captcha to verification process (#897)
+ * Added copy address button to the Wallet Address component on Send / Receive ([#875](https://github.com/lbryio/lbry-app/pull/875))
+ * Link to creators’ channels on homepage ([#869](https://github.com/lbryio/lbry-app/pull/869))
+ * Pause playing video when file is opened ([#880](https://github.com/lbryio/lbry-app/pull/880))
+ * Add captcha to verification process ([#897](https://github.com/lbryio/lbry-app/pull/897))
 
 
 ### Changed
- * Contributor documentation (#879)
+ * Contributor documentation ([#879](https://github.com/lbryio/lbry-app/pull/879))
 
 
 ### Fixed
- * Linux app categorization (#877)
+ * Linux app categorization ([#877](https://github.com/lbryio/lbry-app/pull/877))
 
 
 
 ## [0.19.1] - 2017-12-13
 
 ### Added
- * Added empty rewards message on overview page (https://github.com/lbryio/lbry-app/pull/847).
+ * Added empty rewards message on overview page ([#847](https://github.com/lbryio/lbry-app/pull/847))
 
 
 ### Changed
- * Updated developer tools and restructured code (https://github.com/lbryio/lbry-app/pull/861)(https://github.com/lbryio/lbry-app/pull/862).
+ * Updated developer tools and restructured code ([#861](https://github.com/lbryio/lbry-app/pull/861) / [#862](https://github.com/lbryio/lbry-app/pull/862))
 
 
 ### Fixed
- * Fixed typos (https://github.com/lbryio/lbry-app/pull/845)(https://github.com/lbryio/lbry-app/pull/846).
- * Fixed theme-related error while running in development (https://github.com/lbryio/lbry-app/pull/865).
- * Fixed build/signing error on Windows (https://github.com/lbryio/lbry-app/pull/864).
+ * Fixed typos ([#845](https://github.com/lbryio/lbry-app/pull/845) / [#846](https://github.com/lbryio/lbry-app/pull/846))
+ * Fixed theme-related error while running in development ([#865](https://github.com/lbryio/lbry-app/pull/865))
+ * Fixed build/signing error on Windows ([#864](https://github.com/lbryio/lbry-app/pull/864))
 
 
 
