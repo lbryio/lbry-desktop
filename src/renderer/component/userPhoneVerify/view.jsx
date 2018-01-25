@@ -1,6 +1,8 @@
+// I'll come back to this
+/* eslint-disable */
 import React from 'react';
 import Link from 'component/link';
-import { Form, FormRow, Submit } from 'component/form.js';
+import { Form, FormElement, Submit } from 'component/common/form';
 
 class UserPhoneVerify extends React.PureComponent {
   constructor(props) {
@@ -33,21 +35,23 @@ class UserPhoneVerify extends React.PureComponent {
       <Form onSubmit={this.handleSubmit.bind(this)}>
         <p>
           {__(
-            `Please enter the verification code sent to +${countryCode}${
-              phone
-            }. Didn't receive it? `
+            `Please enter the verification code sent to +${countryCode}${phone}. Didn't receive it? `
           )}
           <Link onClick={this.reset.bind(this)} label="Go back." />
         </p>
-        <FormRow
-          type="text"
+        <FormElement
           label={__('Verification Code')}
-          name="code"
-          value={this.state.code}
-          onChange={event => {
-            this.handleCodeChanged(event);
-          }}
           errorMessage={phoneErrorMessage}
+          render={() => (
+            <input
+              type="text"
+              name="code"
+              value={this.state.code}
+              onChange={event => {
+                this.handleCodeChanged(event);
+              }}
+            />
+          )}
         />
         {/* render help separately so it always shows */}
         <div className="form-field__helper">
@@ -67,3 +71,4 @@ class UserPhoneVerify extends React.PureComponent {
 }
 
 export default UserPhoneVerify;
+/* eslint-enable */

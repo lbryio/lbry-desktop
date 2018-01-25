@@ -1,5 +1,5 @@
 import * as ACTIONS from 'constants/action_types';
-import { normalizeURI } from 'lbryURI';
+import { normalizeURI, buildURI } from 'lbryURI';
 import { doResolveUri } from 'redux/actions/content';
 import { doNavigate } from 'redux/actions/navigation';
 import { selectCurrentPage } from 'redux/selectors/navigation';
@@ -89,10 +89,17 @@ export const getSearchSuggestions = value => dispatch => {
   fetch(`https://lighthouse.lbry.io/autocomplete?s=${searchValue}`)
     .then(handleSearchApiResponse)
     .then(suggestions => {
-      const formattedSuggestions = suggestions.slice(0, 5).map(suggestion => ({
-        label: suggestion,
-        value: suggestion,
-      }));
+      const formattedSuggestions = suggestions.slice(0, 5).map(suggestion => {
+        // This will need to be more robust when the api starts returning lbry uris
+        const isChannel = suggestion.startsWith('@');
+        const suggestionObj = {
+          value: suggestion,
+          label: isChannel ? suggestion.slice(1) : suggestion,
+          icon: isChannel ? 'AtSign' : 'Search',
+        };
+
+        return suggestionObj;
+      });
 
       // Should we add lbry://{query} as the first result?
       // If it's not a valid uri, then add a "search for {query}" result
@@ -100,12 +107,12 @@ export const getSearchSuggestions = value => dispatch => {
       try {
         const uri = normalizeURI(value);
         formattedSuggestions.unshift(
-          { label: uri, value: uri },
-          { label: searchLabel, value: `${value}?search` }
+          { label: uri, value: uri, icon: 'Compass' },
+          { label: searchLabel, value: `${value}?search`, icon: 'Search' }
         );
       } catch (e) {
         if (value) {
-          formattedSuggestions.unshift({ label: searchLabel, value });
+          formattedSuggestions.unshift({ label: searchLabel, value, icon: 'Search' });
         }
       }
 

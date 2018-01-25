@@ -1,7 +1,7 @@
 import React from 'react';
 import { BusyMessage } from 'component/common';
-import SubHeader from 'component/subHeader';
 import TransactionList from 'component/transactionList';
+import Page from 'component/page';
 
 class TransactionHistoryPage extends React.PureComponent {
   componentWillMount() {
@@ -12,9 +12,8 @@ class TransactionHistoryPage extends React.PureComponent {
     const { fetchingTransactions, transactions } = this.props;
 
     return (
-      <main className="main--single-column">
-        <SubHeader />
-        <section className="card">
+      <Page>
+        <section className="card card--section">
           <div
             className={`card__title-primary ${
               fetchingTransactions && transactions.length ? 'reloading' : ''
@@ -35,7 +34,7 @@ class TransactionHistoryPage extends React.PureComponent {
             )}
           </div>
         </section>
-      </main>
+      </Page>
     );
   }
 }

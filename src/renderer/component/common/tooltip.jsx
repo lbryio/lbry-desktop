@@ -46,7 +46,7 @@ class ToolTip extends React.PureComponent<Props, State> {
       <span className="tooltip">
         <Button fakeLink className="help tooltip__link" onClick={this.handleClick}>
           {label}
-          {showTooltip && <Icon icon="times" fixed />}
+          {showTooltip && <Icon icon="X" />}
         </Button>
         <div className={classnames('tooltip__body', { hidden: !showTooltip })}>{body}</div>
       </span>

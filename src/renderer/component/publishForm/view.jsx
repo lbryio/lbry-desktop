@@ -1,8 +1,10 @@
+// I'll come back to this
+/* eslint-disable */
 import React from 'react';
 import lbry from 'lbry';
 import { isNameValid, buildURI, regexInvalidURI } from 'lbryURI';
 import FormField from 'component/formField';
-import { Form, FormRow, Submit } from 'component/form.js';
+import { Form, FormRow } from 'component/common/form';
 import Link from 'component/link';
 import FormFieldPrice from 'component/formFieldPrice';
 import Modal from 'modal/modal';
@@ -832,7 +834,8 @@ class PublishForm extends React.PureComponent {
           </section>
 
           <div className="card-series-submit">
-            <Submit
+            <Link
+              type="submit"
               label={!this.state.submitting ? __('Publish') : __('Publishing...')}
               disabled={
                 this.props.balance <= 0 ||
@@ -878,3 +881,4 @@ class PublishForm extends React.PureComponent {
 }
 
 export default PublishForm;
+/* eslint-enable */

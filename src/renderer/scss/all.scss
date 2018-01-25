@@ -1,7 +1,6 @@
 @charset "UTF-8";
 @import '_reset';
 @import '_vars';
-@import '_icons';
 @import '_gui';
 @import 'component/_table';
 @import 'component/_button.scss';
@@ -28,4 +27,5 @@
 @import 'component/_radio.scss';
 @import 'component/_shapeshift.scss';
 @import 'component/_spinner.scss';
+@import 'component/_nav.scss';
 @import 'page/_show.scss';

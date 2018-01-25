@@ -1,5 +1,7 @@
+// I'll come back to this
+/* eslint-disable */
 import React from 'react';
-import { Form, FormRow, Submit } from 'component/form.js';
+import { Form, FormRow, Submit } from 'component/common/form';
 
 class UserEmailNew extends React.PureComponent {
   constructor(props) {
@@ -53,3 +55,4 @@ class UserEmailNew extends React.PureComponent {
 }
 
 export default UserEmailNew;
+/* eslint-enable */

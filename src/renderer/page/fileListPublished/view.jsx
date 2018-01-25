@@ -3,7 +3,6 @@ import Link from 'component/link';
 import FileTile from 'component/fileTile';
 import { BusyMessage, Thumbnail } from 'component/common.js';
 import FileList from 'component/fileList';
-import SubHeader from 'component/subHeader';
 
 class FileListPublished extends React.PureComponent {
   componentWillMount() {
@@ -41,12 +40,7 @@ class FileListPublished extends React.PureComponent {
       );
     }
 
-    return (
-      <main className="main--single-column">
-        <SubHeader />
-        {content}
-      </main>
-    );
+    return <main className="main--single-column">{content}</main>;
   }
 }
 

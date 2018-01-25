@@ -1,60 +1,86 @@
-#header {
+.header {
+  grid-area: header;
+  display: flex;
   display: flex;
   align-items: center;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: var(--header-height);
-  z-index: 3;
-  box-sizing: border-box;
-  color: var(--header-color);
-  background-color: var(--header-bg);
-}
-
-.header__actions-left {
-  display: flex;
-  padding: 0 5px;
+  justify-content: space-between;
+  padding: 0 $spacing-vertical;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  background-color: var(--color-bg);
 }
 
 .header__actions-right {
   margin-left: auto;
+  padding-left: $spacing-vertical / 2;
+  display: flex;
 }
 
 .header__wunderbar {
+  z-index: 1;
   flex: 1;
-  max-width: 325px;
   min-width: 175px;
-  overflow: hidden;
+  overflow: visible;
   white-space: nowrap;
   text-overflow: ellipsis;
-  height: 100%;
   display: flex;
   align-items: center;
-  padding: 10px 5px;
   cursor: text;
-}
+  position: relative;
 
-.wunderbar__input {
-  height: 50%;
-  width: 100%;
-  color: var(--search-color);
-  padding: 10px;
-  background-color: #f3f3f3;
-  border-radius: 10px;
-  font-size: 0.9em;
-
-  &:focus {
-    // TODO: focus style
+  .icon {
+    position: absolute;
+    left: 10px;
   }
 }
 
+.wunderbar__input {
+  height: var(--btn-height);
+  border-radius: var(--btn-radius);
+  width: 100%;
+  max-width: 700px;
+  color: var(--search-color);
+  background-color: var(--search-bg-color);
+  box-shadow: var(--box-shadow-layer);
+  padding: 10px;
+  padding-left: 30px;
+  font-size: 0.9em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: none;
+
+  &:focus {
+    background-color: var(--color-bg);
+    border-radius: 0;
+    border-bottom: 1px solid var(--color-grey);
+    box-shadow: none;
+  }
+}
+
+.wunderbar__menu {
+  max-width: 100px;
+  overflow-x: hidden;
+}
+
 .wunderbar__suggestion {
-  padding: 5px;
+  padding: 10px;
   background-color: var(--header-bg);
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  text-overflow: ellipsis;
+
+  &:not(:first-of-type) {
+    border-top: 1px solid var(--color-divider);
+  }
+}
+
+.wunderbar__suggestion-label {
+  padding-left: $spacing-vertical;
 }
 
 .wunderbar__active-suggestion {
-  background-color: #a3ffb0;
+  background-color: var(--color-secondary);
 }

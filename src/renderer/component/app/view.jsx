@@ -1,11 +1,12 @@
 // @flow
 import React from 'react';
 import Router from 'component/router/index';
-import Header from 'component/header';
 import Theme from 'component/theme';
 import ModalRouter from 'modal/modalRouter';
 import ReactModal from 'react-modal';
 import throttle from 'util/throttle';
+import SideBar from 'component/sideBar';
+import Header from 'component/header';
 
 type Props = {
   alertError: (string | {}) => void,
@@ -33,7 +34,7 @@ class App extends React.PureComponent<Props> {
   }
 
   componentDidMount() {
-    const mainContent = document.getElementById('main-content');
+    const mainContent = document.getElementById('content');
     this.mainContent = mainContent;
 
     if (this.mainContent) {
@@ -82,9 +83,14 @@ class App extends React.PureComponent<Props> {
     return (
       <div id="window">
         <Theme />
-        <Header />
-        <Router />
-        <ModalRouter />
+        <main className="page">
+          <SideBar />
+          <Header />
+          <div className="content" id="content">
+            <Router />
+            <ModalRouter />
+          </div>
+        </main>
       </div>
     );
   }

@@ -1,6 +1,8 @@
+// I'll come back to this
+/* eslint-disable */
 import React from 'react';
 import TransactionListItem from './internal/TransactionListItem';
-import FormField from 'component/formField';
+import { FormRow } from 'component/common/form';
 import Link from 'component/link';
 import * as icons from 'constants/icons';
 import * as modals from 'constants/modal_types';
@@ -44,20 +46,24 @@ class TransactionList extends React.PureComponent {
     return (
       <div>
         {(transactionList.length || this.state.filter) && (
-          <span className="sort-section">
-            {__('Filter')}{' '}
-            <FormField type="select" onChange={this.handleFilterChanged.bind(this)}>
-              <option value="">{__('All')}</option>
-              <option value="spend">{__('Spends')}</option>
-              <option value="receive">{__('Receives')}</option>
-              <option value="publish">{__('Publishes')}</option>
-              <option value="channel">{__('Channels')}</option>
-              <option value="tip">{__('Tips')}</option>
-              <option value="support">{__('Supports')}</option>
-              <option value="update">{__('Updates')}</option>
-            </FormField>{' '}
-            <Link href="https://lbry.io/faq/transaction-types" icon={icons.HELP_CIRCLE} />
-          </span>
+          <FormRow
+            prefix={__('Filter')}
+            postfix={
+              <Link fakeLink href="https://lbry.io/faq/transaction-types" label={__('Help')} />
+            }
+            render={() => (
+              <select>
+                <option value="">{__('All')}</option>
+                <option value="spend">{__('Spends')}</option>
+                <option value="receive">{__('Receives')}</option>
+                <option value="publish">{__('Publishes')}</option>
+                <option value="channel">{__('Channels')}</option>
+                <option value="tip">{__('Tips')}</option>
+                <option value="support">{__('Supports')}</option>
+                <option value="update">{__('Updates')}</option>
+              </select>
+            )}
+          />
         )}
         {!transactionList.length && (
           <div className="empty">{emptyMessage || __('No transactions to list.')}</div>
@@ -92,3 +98,4 @@ class TransactionList extends React.PureComponent {
 }
 
 export default TransactionList;
+/* eslint-enable */

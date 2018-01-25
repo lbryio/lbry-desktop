@@ -1,11 +1,11 @@
 import React from 'react';
 import FormField from 'component/formField';
-import { FormRow } from 'component/form.js';
-import SubHeader from 'component/subHeader';
+import { FormRow } from 'component/common/form';
 import * as settings from 'constants/settings';
 import lbry from 'lbry.js';
 import Link from 'component/link';
 import FormFieldPrice from 'component/formFieldPrice';
+import Page from 'component/page';
 
 class SettingsPage extends React.PureComponent {
   constructor(props) {
@@ -144,8 +144,7 @@ class SettingsPage extends React.PureComponent {
       );
     }
     return (
-      <main className="main--single-column">
-        <SubHeader />
+      <Page>
         {/*
         <section className="card">
           <div className="card__content">
@@ -348,7 +347,7 @@ class SettingsPage extends React.PureComponent {
             </p>
           </div>
         </section>
-      </main>
+      </Page>
     );
   }
 }

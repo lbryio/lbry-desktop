@@ -1,6 +1,9 @@
+// I'll come back to this
+/* eslint-disable */
 import React from 'react';
-import { BusyMessage, CreditAmount } from 'component/common';
-import { Form, FormRow, Submit } from 'component/form.js';
+import { BusyMessage } from 'component/common';
+import CreditAmount from 'component/common/credit-amount';
+// import { Form, FormField } from 'component/common/form';
 
 class FormInviteNew extends React.PureComponent {
   constructor(props) {
@@ -24,25 +27,25 @@ class FormInviteNew extends React.PureComponent {
 
   render() {
     const { errorMessage, isPending } = this.props;
-
-    return (
-      <Form onSubmit={this.handleSubmit.bind(this)}>
-        <FormRow
-          type="text"
-          label="Email"
-          placeholder="youremail@example.org"
-          name="email"
-          value={this.state.email}
-          errorMessage={errorMessage}
-          onChange={event => {
-            this.handleEmailChanged(event);
-          }}
-        />
-        <div className="form-row-submit">
-          <Submit label={__('Send Invite')} disabled={isPending} />
-        </div>
-      </Form>
-    );
+    return null;
+    // return (
+    //   <Form onSubmit={this.handleSubmit.bind(this)}>
+    //     <FormRow
+    //       type="text"
+    //       label="Email"
+    //       placeholder="youremail@example.org"
+    //       name="email"
+    //       value={this.state.email}
+    //       errorMessage={errorMessage}
+    //       onChange={event => {
+    //         this.handleEmailChanged(event);
+    //       }}
+    //     />
+    //     <div className="form-row-submit">
+    //       <Submit label={__('Send Invite')} disabled={isPending} />
+    //     </div>
+    //   </Form>
+    // );
   }
 }
 
@@ -80,3 +83,4 @@ class InviteNew extends React.PureComponent {
 }
 
 export default InviteNew;
+/* eslint-enable */

@@ -5,78 +5,34 @@ import WunderBar from 'component/wunderbar';
 
 type Props = {
   balance: string,
-  back: any => void,
-  forward: any => void,
-  isBackDisabled: boolean,
-  isForwardDisabled: boolean,
-  isUpgradeAvailable: boolean,
   navigate: any => void,
   downloadUpgrade: any => void,
+  isUpgradeAvailable: boolean,
 };
 
-export const Header = (props: Props) => {
-  const {
-    balance,
-    back,
-    forward,
-    isBackDisabled,
-    isForwardDisabled,
-    isUpgradeAvailable,
-    navigate,
-    downloadUpgrade,
-  } = props;
+const Header = (props: Props) => {
+  const { balance, isUpgradeAvailable, navigate, downloadUpgrade } = props;
   return (
-    <header id="header">
-      <div className="header__actions-left">
-        <Button
-          alt
-          circle
-          onClick={back}
-          disabled={isBackDisabled}
-          icon="arrow-left"
-          description={__('Navigate back')}
-        />
-
-        <Button
-          alt
-          circle
-          onClick={forward}
-          disabled={isForwardDisabled}
-          icon="arrow-right"
-          description={__('Navigate forward')}
-        />
-
-        <Button alt onClick={() => navigate('/discover')} icon="home" description={__('Home')} />
-      </div>
-
+    <header className="header">
       <WunderBar />
-
       <div className="header__actions-right">
         <Button
           inverse
           onClick={() => navigate('/wallet')}
-          icon="user"
+          icon="User"
           label={isUpgradeAvailable ? `${balance} LBC` : `You have ${balance} LBC`}
           description={__('Your wallet')}
         />
 
         <Button
           onClick={() => navigate('/publish')}
-          icon="cloud-upload"
+          icon="UploadCloud"
           label={isUpgradeAvailable ? '' : __('Publish')}
           description={__('Publish content')}
         />
 
-        <Button
-          alt
-          onClick={() => navigate('/settings')}
-          icon="gear"
-          description={__('Settings')}
-        />
-
-        <Button alt onClick={() => navigate('/help')} icon="question" description={__('Help')} />
         {isUpgradeAvailable && (
-          <Button onClick={() => downloadUpgrade()} icon="arrow-up" label={__('Upgrade App')} />
+          <Button onClick={() => downloadUpgrade()} icon="Download" label={__('Upgrade App')} />
         )}
       </div>
     </header>

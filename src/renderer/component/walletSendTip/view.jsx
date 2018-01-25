@@ -1,6 +1,8 @@
+// I'll come back to this
+/* eslint-disable */
 import React from 'react';
 import Link from 'component/link';
-import { FormRow } from 'component/form';
+import { FormRow } from 'component/common/form';
 import UriIndicator from 'component/uriIndicator';
 
 class WalletSendTip extends React.PureComponent {
@@ -67,3 +69,4 @@ class WalletSendTip extends React.PureComponent {
 }
 
 export default WalletSendTip;
+/* eslint-enable */
