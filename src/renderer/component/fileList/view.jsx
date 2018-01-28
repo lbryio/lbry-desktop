@@ -1,5 +1,5 @@
 import React from 'react';
-import { Lbryuri } from 'lbry-redux';
+import { buildURI } from 'lbry-redux';
 import FormField from 'component/formField';
 import FileTile from 'component/fileTile';
 import { BusyMessage } from 'component/common';
@@ -76,7 +76,7 @@ class FileList extends React.PureComponent {
         uriParams.claimId = fileInfo.claim_id;
         uriParams.name = fileInfo.name;
       }
-      const uri = Lbryuri.build(uriParams);
+      const uri = buildURI(uriParams);
 
       content.push(
         <FileTile

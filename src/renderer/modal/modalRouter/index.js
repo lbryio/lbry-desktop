@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import * as settings from 'constants/settings';
-import { selectCurrentModal, selectModalProps } from 'redux/selectors/app';
+import { selectCurrentModal, selectModalProps, selectModalsAllowed } from 'redux/selectors/app';
 import {
   doOpenModal,
   selectCostForCurrentPageUri,
@@ -25,6 +25,7 @@ const select = (state, props) => ({
   ),
   isWelcomeAcknowledged: makeSelectClientSetting(settings.NEW_USER_ACKNOWLEDGED)(state),
   user: selectUser(state),
+  modalsAllowed: selectModalsAllowed(state),
 });
 
 const perform = dispatch => ({

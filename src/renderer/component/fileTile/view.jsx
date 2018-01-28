@@ -1,6 +1,6 @@
 import React from 'react';
 import * as icons from 'constants/icons';
-import { Lbryuri } from 'lbry-redux';
+import { normalizeURI, isURIClaimable, parseURI } from 'lbry-redux';
 import CardMedia from 'component/cardMedia';
 import { TruncatedText } from 'component/common';
 import FilePrice from 'component/filePrice';
@@ -65,11 +65,11 @@ class FileTile extends React.PureComponent {
       fileInfo,
     } = this.props;
 
-    const uri = Lbryuri.normalize(this.props.uri);
+    const uri = normalizeURI(this.props.uri);
     const isClaimed = !!claim;
-    const isClaimable = Lbryuri.isClaimable(uri);
+    const isClaimable = isURIClaimable(uri);
     const title =
-      isClaimed && metadata && metadata.title ? metadata.title : Lbryuri.parse(uri).contentName;
+      isClaimed && metadata && metadata.title ? metadata.title : parseURI(uri).contentName;
     const thumbnail = metadata && metadata.thumbnail ? metadata.thumbnail : null;
     const obscureNsfw = this.props.obscureNsfw && metadata && metadata.nsfw;
     const isRewardContent = claim && rewardedContentClaimIds.includes(claim.claim_id);

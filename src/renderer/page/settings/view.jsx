@@ -53,6 +53,10 @@ class SettingsPage extends React.PureComponent {
     this.props.setClientSetting(settings.THEME, value);
   }
 
+  onAutomaticDarkModeChange(event) {
+    this.props.setClientSetting(settings.AUTOMATIC_DARK_MODE_ENABLED, event.target.checked);
+  }
+
   onInstantPurchaseEnabledChange(enabled) {
     this.props.setClientSetting(settings.INSTANT_PURCHASE_ENABLED, enabled);
   }
@@ -126,6 +130,7 @@ class SettingsPage extends React.PureComponent {
       showUnavailable,
       theme,
       themes,
+      automaticDarkModeEnabled,
     } = this.props;
 
     if (!daemonSettings || Object.keys(daemonSettings).length === 0) {
@@ -315,6 +320,13 @@ class SettingsPage extends React.PureComponent {
                 </option>
               ))}
             </FormField>
+
+            <FormRow
+              type="checkbox"
+              onChange={this.onAutomaticDarkModeChange.bind(this)}
+              defaultChecked={automaticDarkModeEnabled}
+              label={__('Automatic dark mode (9pm to 8am)')}
+            />
           </div>
         </section>
 

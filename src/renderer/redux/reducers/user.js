@@ -55,6 +55,55 @@ reducers[ACTIONS.USER_FETCH_FAILURE] = state =>
     user: null,
   });
 
+reducers[ACTIONS.USER_PHONE_NEW_STARTED] = (state, action) => {
+  const user = Object.assign({}, state.user);
+  user.country_code = action.data.country_code;
+  return Object.assign({}, state, {
+    phoneNewIsPending: true,
+    phoneNewErrorMessage: '',
+    user,
+  });
+};
+
+reducers[ACTIONS.USER_PHONE_NEW_SUCCESS] = (state, action) =>
+  Object.assign({}, state, {
+    phoneToVerify: action.data.phone,
+    phoneNewIsPending: false,
+  });
+
+reducers[ACTIONS.USER_PHONE_RESET] = state =>
+  Object.assign({}, state, {
+    phoneToVerify: null,
+  });
+
+reducers[ACTIONS.USER_PHONE_NEW_FAILURE] = (state, action) =>
+  Object.assign({}, state, {
+    phoneNewIsPending: false,
+    phoneNewErrorMessage: action.data.error,
+  });
+
+reducers[ACTIONS.USER_PHONE_VERIFY_STARTED] = state =>
+  Object.assign({}, state, {
+    phoneVerifyIsPending: true,
+    phoneVerifyErrorMessage: '',
+  });
+
+reducers[ACTIONS.USER_PHONE_VERIFY_SUCCESS] = (state, action) => {
+  const user = Object.assign({}, state.user);
+  user.phone_number = action.data.phone_number;
+  return Object.assign({}, state, {
+    phoneToVerify: '',
+    phoneVerifyIsPending: false,
+    user,
+  });
+};
+
+reducers[ACTIONS.USER_PHONE_VERIFY_FAILURE] = (state, action) =>
+  Object.assign({}, state, {
+    phoneVerifyIsPending: false,
+    phoneVerifyErrorMessage: action.data.error,
+  });
+
 reducers[ACTIONS.USER_EMAIL_NEW_STARTED] = state =>
   Object.assign({}, state, {
     emailNewIsPending: true,

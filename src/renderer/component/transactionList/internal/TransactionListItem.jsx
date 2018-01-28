@@ -3,7 +3,7 @@ import LinkTransaction from 'component/linkTransaction';
 import { CreditAmount } from 'component/common';
 import DateTime from 'component/dateTime';
 import Link from 'component/link';
-import { Lbryuri } from 'lbry-redux';
+import { buildURI } from 'lbry-redux';
 import * as txnTypes from 'constants/transaction_types';
 
 class TransactionListItem extends React.PureComponent {
@@ -74,7 +74,7 @@ class TransactionListItem extends React.PureComponent {
               <Link
                 className="button-text"
                 navigate="/show"
-                navigateParams={{ uri: Lbryuri.build({ name, claimId }) }}
+                navigateParams={{ uri: buildURI({ name, claimId }) }}
               >
                 {name}
               </Link>

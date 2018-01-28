@@ -1,5 +1,5 @@
 import React from 'react';
-import { Lbryuri } from 'lbry-redux';
+import { isNameValid } from 'lbry-redux';
 import { FormRow } from 'component/form';
 import { BusyMessage } from 'component/common';
 import Link from 'component/link';
@@ -29,7 +29,7 @@ class ChannelSection extends React.PureComponent {
       ? event.target.value
       : `@${event.target.value}`;
 
-    if (newChannelName.length > 1 && !Lbryuri.isValidName(newChannelName.substr(1), false)) {
+    if (newChannelName.length > 1 && !isNameValid(newChannelName.substr(1), false)) {
       this.refs.newChannelName.showError(
         __('LBRY channel names must contain only letters, numbers and dashes.')
       );

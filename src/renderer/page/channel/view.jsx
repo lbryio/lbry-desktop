@@ -1,5 +1,5 @@
 import React from 'react';
-import { Lbryuri } from 'lbry-redux';
+import { buildURI } from 'lbry-redux';
 import { BusyMessage } from 'component/common';
 import FileTile from 'component/fileTile';
 import ReactPaginate from 'react-paginate';
@@ -45,7 +45,7 @@ class ChannelPage extends React.PureComponent {
     } = this.props;
 
     const { name, claim_id: claimId } = claim;
-    const subscriptionUri = Lbryuri.build({ channelName: name, claimId }, false);
+    const subscriptionUri = buildURI({ channelName: name, claimId }, false);
 
     let contentList;
     if (fetching) {
@@ -56,7 +56,7 @@ class ChannelPage extends React.PureComponent {
           claimsInChannel.map(claim => (
             <FileTile
               key={claim.claim_id}
-              uri={Lbryuri.build({
+              uri={buildURI({
                 name: claim.name,
                 claimId: claim.claim_id,
               })}

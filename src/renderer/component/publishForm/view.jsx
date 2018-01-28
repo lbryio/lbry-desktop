@@ -1,5 +1,5 @@
 import React from 'react';
-import { Lbry, Lbryuri } from 'lbry-redux';
+import { Lbry, isNameValid, buildURI, regexInvalidURI } from 'lbry-redux';
 import FormField from 'component/formField';
 import { Form, FormRow, Submit } from 'component/form';
 import Link from 'component/link';
@@ -158,7 +158,7 @@ class PublishForm extends React.PureComponent {
       return;
     }
 
-    if (!Lbryuri.isValidName(rawName, false)) {
+    if (!isNameValid(rawName, false)) {
       this.refs.name.showError(__('LBRY names must contain only letters, numbers and dashes.'));
       return;
     }
@@ -167,7 +167,7 @@ class PublishForm extends React.PureComponent {
     if (this.state.channel !== 'anonymous') channel = this.state.channel;
 
     const name = rawName.toLowerCase();
-    const uri = Lbryuri.build({ contentName: name, channelName: channel });
+    const uri = buildURI({ contentName: name, channelName: channel });
     this.setState({
       rawName,
       name,
@@ -324,7 +324,7 @@ class PublishForm extends React.PureComponent {
     const extension = path.extname(fileName);
 
     fileName = path.basename(fileName, extension);
-    fileName = fileName.replace(Lbryuri.REGEXP_INVALID_URI, '');
+    fileName = fileName.replace(regexInvalidURI, '');
     return fileName;
   }
 

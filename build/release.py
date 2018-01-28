@@ -53,7 +53,7 @@ def main():
         run_sanity_checks(repo, branch)
     repo.assert_new_tag_is_absent()
 
-    is_rc = re.search('\drc\d+$', repo.new_version) is not None
+    is_rc = re.search('-rc\d+$', repo.new_version) is not None
     # only have a release message for real releases, not for RCs
     release_msg = '' if is_rc else repo.get_unreleased_changelog()
 

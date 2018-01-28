@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Icon from 'component/icon';
-import { Lbryuri, parseQueryParams } from 'lbry-redux';
+import { normalizeURI, parseQueryParams } from 'lbry-redux';
 
 class WunderBar extends React.PureComponent {
   static TYPING_TIMEOUT = 800;
@@ -129,7 +129,7 @@ class WunderBar extends React.PureComponent {
       if (parts.length > 0) extraParams = parseQueryParams(parts.join(''));
 
       try {
-        uri = Lbryuri.normalize(value);
+        uri = normalizeURI(value);
         this.setState({ value: uri });
       } catch (error) {
         // then it's not a valid URL, so let's search

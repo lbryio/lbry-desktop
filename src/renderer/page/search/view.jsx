@@ -1,5 +1,5 @@
 import React from 'react';
-import { Lbryuri } from 'lbry-redux';
+import { isURIValid, normalizeURI } from 'lbry-redux';
 import FileTile from 'component/fileTile';
 import FileListSearch from 'component/fileListSearch';
 import { ToolTip } from 'component/tooltip';
@@ -10,7 +10,7 @@ class SearchPage extends React.PureComponent {
 
     return (
       <main className="main--single-column">
-        {Lbryuri.isValid(query) ? (
+        {isURIValid(query) ? (
           <section className="section-spaced">
             <h3 className="card-row__header">
               {__('Exact URL')}{' '}
@@ -20,7 +20,7 @@ class SearchPage extends React.PureComponent {
                 className="tooltip--header"
               />
             </h3>
-            <FileTile uri={Lbryuri.normalize(query)} showEmpty={FileTile.SHOW_EMPTY_PUBLISH} />
+            <FileTile uri={normalizeURI(query)} showEmpty={FileTile.SHOW_EMPTY_PUBLISH} />
           </section>
         ) : (
           ''

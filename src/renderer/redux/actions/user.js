@@ -3,7 +3,11 @@ import * as MODALS from 'constants/modal_types';
 import Lbryio from 'lbryio';
 import { doOpenModal, doShowSnackBar } from 'lbry-redux';
 import { doClaimRewardType, doRewardList } from 'redux/actions/rewards';
-import { selectEmailToVerify } from 'redux/selectors/user';
+import {
+  selectEmailToVerify,
+  selectPhoneToVerify,
+  selectUserCountryCode,
+} from 'redux/selectors/user';
 import rewards from 'rewards';
 
 export function doFetchInviteStatus() {
@@ -75,6 +79,78 @@ export function doUserFetch() {
           data: { error },
         });
       });
+  };
+}
+
+export function doUserPhoneReset() {
+  return {
+    type: ACTIONS.USER_PHONE_RESET,
+  };
+}
+
+export function doUserPhoneNew(phone, country_code) {
+  return dispatch => {
+    dispatch({
+      type: ACTIONS.USER_PHONE_NEW_STARTED,
+      data: { phone, country_code },
+    });
+
+    const success = () => {
+      dispatch({
+        type: ACTIONS.USER_PHONE_NEW_SUCCESS,
+        data: { phone },
+      });
+    };
+
+    const failure = () => {
+      dispatch({
+        type: ACTIONS.USER_PHONE_NEW_FAILURE,
+        data: { error: 'An error occurred while processing this phone number.' },
+      });
+    };
+
+    Lbryio.call('user', 'phone_number_new', { phone_number: phone, country_code }, 'post').then(
+      success,
+      failure
+    );
+  };
+}
+
+export function doUserPhoneVerifyFailure(error) {
+  return {
+    type: ACTIONS.USER_PHONE_VERIFY_FAILURE,
+    data: { error },
+  };
+}
+
+export function doUserPhoneVerify(verificationCode) {
+  return (dispatch, getState) => {
+    const phoneNumber = selectPhoneToVerify(getState());
+    const countryCode = selectUserCountryCode(getState());
+
+    dispatch({
+      type: ACTIONS.USER_PHONE_VERIFY_STARTED,
+      code: verificationCode,
+    });
+
+    Lbryio.call(
+      'user',
+      'phone_number_confirm',
+      {
+        verification_code: verificationCode,
+        phone_number: phoneNumber,
+        country_code: countryCode,
+      },
+      'post'
+    )
+      .then(() => {
+        dispatch({
+          type: ACTIONS.USER_PHONE_VERIFY_SUCCESS,
+          data: { phone_number: phoneNumber },
+        });
+        dispatch(doUserFetch());
+      })
+      .catch(error => dispatch(doUserPhoneVerifyFailure(error)));
   };
 }
 

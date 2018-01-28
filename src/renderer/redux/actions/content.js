@@ -2,23 +2,25 @@ import * as ACTIONS from 'constants/action_types';
 import * as MODALS from 'constants/modal_types';
 import * as SETTINGS from 'constants/settings';
 import { ipcRenderer } from 'electron';
+import Lbryio from 'lbryio';
+import { doAlertError } from 'redux/actions/app';
+import { doClaimEligiblePurchaseRewards } from 'redux/actions/rewards';
+import { selectBadgeNumber } from 'redux/selectors/app';
 import {
   Lbry,
   Lbryapi,
+  buildURI,
   batchActions,
   doResolveUris,
   doFetchClaimListMine,
   doOpenModal,
   makeSelectCostInfoForUri,
   makeSelectFileInfoForUri,
+  normalizeURI,
   selectDownloadingByOutpoint,
   selectTotalDownloadProgress,
   selectBalance,
 } from 'lbry-redux';
-import Lbryio from 'lbryio';
-import { doAlertError } from 'redux/actions/app';
-import { doClaimEligiblePurchaseRewards } from 'redux/actions/rewards';
-import { selectBadgeNumber } from 'redux/selectors/app';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import setBadge from 'util/setBadge';
 import setProgressBar from 'util/setProgressBar';
