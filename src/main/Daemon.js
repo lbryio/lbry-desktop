@@ -13,19 +13,19 @@ export default class Daemon {
 
   launch() {
     // Kill any running daemon
-    if (process.platform === 'win32') {
-      try {
-        execSync('taskkill /im lbrynet-daemon.exe /t /f');
-      } catch (error) {
-        console.warn(error.message);
-      }
-    } else {
-      try {
-        execSync('pkill lbrynet-daemon');
-      } catch (error) {
-        console.warn(error.message);
-      }
-    }
+    // if (process.platform === 'win32') {
+    //   try {
+    //     execSync('taskkill /im lbrynet-daemon.exe /t /f');
+    //   } catch (error) {
+    //     console.warn(error.message);
+    //   }
+    // } else {
+    //   try {
+    //     execSync('pkill lbrynet-daemon');
+    //   } catch (error) {
+    //     console.warn(error.message);
+    //   }
+    // }
 
     console.log('Launching daemon:', Daemon.path);
     this.subprocess = spawn(Daemon.path);

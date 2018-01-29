@@ -83,21 +83,30 @@ app.on('activate', () => {
   if (!rendererWindow) rendererWindow = createWindow();
 });
 
-app.on('will-quit', (event) => {
-  if (process.platform === 'win32' && autoUpdateDownloaded && !autoUpdateAccepted && !showingAutoUpdateCloseAlert) {
+app.on('will-quit', event => {
+  if (
+    process.platform === 'win32' &&
+    autoUpdateDownloaded &&
+    !autoUpdateAccepted &&
+    !showingAutoUpdateCloseAlert
+  ) {
     // We're on Win and have an update downloaded, but the user declined it (or closed
     // the app without accepting it). Now the user is closing the app, so the new update
     // will install. On Mac this is silent, but on Windows they get a confusing permission
     // escalation dialog, so we show Windows users a warning dialog first.
 
     showingAutoUpdateCloseAlert = true;
-    dialog.showMessageBox({
-      type: 'info',
-      title: 'LBRY Will Upgrade',
-      message: 'LBRY has a pending upgrade. Please select "Yes" to install it on the prompt shown after this one.',
-    }, () => {
-      app.quit();
-    });
+    dialog.showMessageBox(
+      {
+        type: 'info',
+        title: 'LBRY Will Upgrade',
+        message:
+          'LBRY has a pending upgrade. Please select "Yes" to install it on the prompt shown after this one.',
+      },
+      () => {
+        app.quit();
+      }
+    );
 
     event.preventDefault();
     return;
@@ -144,7 +153,7 @@ ipcMain.on('upgrade', (event, installerPath) => {
 
 autoUpdater.on('update-downloaded', () => {
   autoUpdateDownloaded = true;
-})
+});
 
 ipcMain.on('autoUpdateAccepted', () => {
   autoUpdateAccepted = true;
