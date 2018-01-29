@@ -1,5 +1,7 @@
 # LBRY App
 
+[![dependencies](https://david-dm.org/lbryio/lbry-app/status.svg)](https://david-dm.org/lbryio/lbry-app)
+
 The LBRY app is a graphical browser for the decentralized content marketplace provided by the
 [LBRY](https://lbry.io) protocol. It is essentially the
 [lbry daemon](https://github.com/lbryio/lbry) bundled with a UI using
