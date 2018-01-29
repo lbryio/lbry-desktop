@@ -84,7 +84,10 @@ class UserVerify extends React.PureComponent {
             />
           </div>
           <div className="card__content">
-            <div className="meta">{__('Standard messaging rates apply.')} </div>
+            <div className="meta">
+              {__('Standard messaging rates apply. Having trouble?')}{' '}
+              <Link href="https://lbry.io/faq/phone" label={__('Learn more.')} />
+            </div>
           </div>
         </section>
         <section className="card card--form">
