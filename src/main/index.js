@@ -2,6 +2,7 @@
 // Module imports
 import keytar from 'keytar-prebuild';
 import SemVer from 'semver';
+import findProcess from 'find-process';
 import url from 'url';
 import https from 'https';
 import { shell, app, ipcMain, dialog } from 'electron';
@@ -57,18 +58,22 @@ app.setAsDefaultProtocolClient('lbry');
 app.setName('LBRY');
 
 app.on('ready', async () => {
-  daemon = new Daemon();
-  daemon.on('exit', () => {
-    daemon = null;
-    if (!isQuitting) {
-      dialog.showErrorBox(
-        'Daemon has Exited',
-        'The daemon may have encountered an unexpected error, or another daemon instance is already running.'
-      );
-      app.quit();
-    }
-  });
-  daemon.launch();
+  const processList = await findProcess('name', 'lbrynet-daemon');
+  const isDaemonRunning = processList.length > 0;
+  if (!isDaemonRunning) {
+    daemon = new Daemon();
+    daemon.on('exit', () => {
+      daemon = null;
+      if (!isQuitting) {
+        dialog.showErrorBox(
+          'Daemon has Exited',
+          'The daemon may have encountered an unexpected error, or another daemon instance is already running.'
+        );
+        app.quit();
+      }
+    });
+    daemon.launch();
+  }
   if (process.env.NODE_ENV === 'development') {
     await installExtensions();
   }
