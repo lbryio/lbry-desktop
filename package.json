@@ -36,7 +36,7 @@
     "electron-dl": "^1.6.0",
     "electron-log": "^2.2.12",
     "electron-publisher-s3": "^19.47.0",
-    "electron-updater": "^2.16.1",
+    "electron-updater": "^2.18.2",
     "find-process": "^1.1.0",
     "formik": "^0.10.4",
     "from2": "^2.3.0",

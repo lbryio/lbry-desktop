@@ -2849,7 +2849,7 @@ electron-to-chromium@^1.2.7, electron-to-chromium@^1.3.27:
   version "1.3.27"
   resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.27.tgz#78ecb8a399066187bb374eede35d9c70565a803d"
 
-electron-updater@^2.16.1:
+electron-updater@^2.18.2:
   version "2.20.1"
   resolved "https://registry.yarnpkg.com/electron-updater/-/electron-updater-2.20.1.tgz#3d2714a3e472fbf198f6053daf8fd12209101aa2"
   dependencies:
@@ -9486,13 +9486,6 @@ yargs@~3.10.0:
     cliui "^2.1.0"
     decamelize "^1.0.0"
     window-size "0.1.0"
-
-yarnhook@^0.1.1:
-  version "0.1.1"
-  resolved "https://registry.yarnpkg.com/yarnhook/-/yarnhook-0.1.1.tgz#6e67757327e6390cb313f371bdc44ded7c5e047b"
-  dependencies:
-    execa "^0.8.0"
-    find-parent-dir "^0.3.0"
 
 yauzl@2.4.1:
   version "2.4.1"
