@@ -8,15 +8,22 @@ Web UI version numbers should always match the corresponding version of LBRY App
 
 ## [Unreleased]
 ### Added
+  * Added Automatic Dark Mode (https://github.com/lbryio/lbry-app/pull/950)
+  * Re-introduce build dir / dist dir option for isolated build environments (https://github.com/lbryio/lbry-app/pull/933)
+  * Added sms as a method for reward identity verification (https://github.com/lbryio/lbry-app/pull/946)
+  * Added auto-update (https://github.com/lbryio/lbry-app/pull/808)
   *
-  *
+  
 
 ### Changed
-  *
+  * Refactored Electron's main process (https://github.com/lbryio/lbry-app/pull/951)
+  * Refactored lbryuri.js into separate named exports (https://github.com/lbryio/lbry-app/pull/957)
+  * Upgraded Daemon to version 18.2 (https://github.com/lbryio/lbry-app/pull/961)
   *
 
 ### Fixed
-  *
+  * Fixed issues in documentation (https://github.com/lbryio/lbry-app/pull/945)
+  * Fixed linting errors (https://github.com/lbryio/lbry-app/pull/929)
   *
 
 ### Deprecated
