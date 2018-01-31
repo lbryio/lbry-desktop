@@ -4,11 +4,11 @@
   "description": "A browser for the LBRY network, a digital marketplace controlled by its users.",
   "homepage": "https://lbry.io/",
   "bugs": {
-    "url": "https://github.com/lbryio/lbry-app/issues"
+    "url": "https://github.com/IGassmann/lbry-app/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/lbryio/lbry-app"
+    "url": "https://github.com/IGassmann/lbry-app"
   },
   "author": {
     "name": "LBRY Inc.",
