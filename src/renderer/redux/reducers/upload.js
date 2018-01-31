@@ -3,8 +3,8 @@ import * as actions from "constants/action_types";
 import { handleActions } from "util/redux-utils";
 
 export type UploadState = {
-  status: string | null,
-  url: string | null,
+  status: ?string,
+  url: ?string,
 };
 
 type beginSpeechUpload = {
