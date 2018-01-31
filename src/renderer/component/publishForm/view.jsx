@@ -10,7 +10,6 @@ import Modal from "modal/modal";
 import * as modals from "constants/modal_types";
 import { BusyMessage } from "component/common";
 import ChannelSection from "./internal/channelSection";
-// import { doOpenModal } from "redux/actions/app";
 
 class PublishForm extends React.PureComponent {
   constructor(props) {
@@ -54,9 +53,6 @@ class PublishForm extends React.PureComponent {
       customUrl: false,
       source: null,
       mode: "publish",
-      thumbnailUploadPath: "",
-      thumbnailUploadStatus: "upload",
-      thumbnailNFSW: false,
     };
   }
 
@@ -166,15 +162,6 @@ class PublishForm extends React.PureComponent {
       modal: "publishStarted",
     });
   }
-
-  // handleConfirmUpload(event) {
-  //   console.log("handleConfirmUpload:", event.target.value);
-  //   this.props.doOpenModal(modals.CONFIRM_SPEECH_UPLOAD, { path: event.target.value });
-  //   // this.setState({
-  //   //   modal: "upload",
-  //   //   thumbnailUploadPath: event.target.value,
-  //   // });
-  // }
 
   handlePublishStartedConfirmed() {
     this.props.navigate("/published");
@@ -427,19 +414,6 @@ class PublishForm extends React.PureComponent {
     });
   }
 
-  // handleThumbNSFWChange(event) {
-  //   this.setState({
-  //     thumbnailNFSW: event.target.checked,
-  //   });
-  // }
-
-  handleThumbnailStatusChange(status) {
-    console.log("status change:", status);
-    this.setState({
-      thumbnailUploadStatus: status,
-    });
-  }
-
   getLicense() {
     switch (this.state.licenseType) {
       case "copyright":
@@ -472,27 +446,11 @@ class PublishForm extends React.PureComponent {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.uploadStatus === "error") {
-      alert("UPLOAD FAILED, PLEASE TRY AGAIN.");
-      // this.props.resetUpload();
+      this.props.alertError("Upload failed. Please try again.");
+      this.setState({
+        thumbnailUploadStatus: "upload",
+      });
     }
-
-    // if (nextProps.uploadStatus === "upload") {
-    //   this.setState({
-    //     thumbnailUploadStatus: "upload",
-    //   });
-    // }
-
-    // if (nextProps.uploadStatus === "manual") {
-    //   this.setState({
-    //     thumbnailUploadStatus: "manual",
-    //   });
-    // }
-
-    // if (nextProps.uploadStatus === "sending") {
-    //   this.setState({
-    //     thumbnailUploadStatus: "sending",
-    //   });
-    // }
 
     if (nextProps.uploadStatus === "complete") {
       this.setState({
@@ -580,23 +538,9 @@ class PublishForm extends React.PureComponent {
     }
   }
 
-  closeModal() {
-    this.setState({
-      modal: null,
-    });
-  }
-
-  upload(path) {
-    this.closeModal();
-    this.setState({
-      thumbnailUploadStatus: "sending",
-    });
-    this.props.upload(path);
-  }
-
   render() {
     const { mode, submitting } = this.state;
-    const { openModal } = this.props;
+    const { openModal, uploadStatus, uploadUrl } = this.props;
 
     const lbcInputHelp = __(
       "This LBC remains yours and the deposit can be undone at any time."
@@ -651,7 +595,10 @@ class PublishForm extends React.PureComponent {
                   />
                 </div>
 
-                <SpeechUpload />
+                <SpeechUpload
+                  uploadStatus={uploadStatus}
+                  uploadUrl={uploadUrl}
+                />
 
                 <div className="card__content">
                   <FormRow

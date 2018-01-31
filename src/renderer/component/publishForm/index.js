@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import PublishForm from "./view";
 import { selectBalance } from "redux/selectors/wallet";
 import { selectUploadUrl, selectUploadStatus } from "redux/selectors/upload";
-import { doOpenModal } from "redux/actions/app";
+import { doAlertError, doOpenModal } from "redux/actions/app";
 import { beginSpeechUpload, resetSpeechUpload } from "redux/actions/upload";
 
 const select = state => ({
@@ -14,6 +14,7 @@ const select = state => ({
 
 const perform = dispatch => ({
   openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
+  alertError: errorList => dispatch(doAlertError(errorList)),
   upload: (path, nsfw) => dispatch(beginSpeechUpload(path, nsfw)),
   resetUpload: () => dispatch(resetSpeechUpload()),
 });

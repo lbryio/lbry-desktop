@@ -13,68 +13,7 @@ class SpeechUpload extends React.PureComponent {
 
     this.state = {
       thumbnailUploadPath: "",
-      thumbnailUploadStatus: "upload",
-      thumbnailNFSW: false,
     };
-  }
-
-  // handleThumbNSFWChange(event) {
-  //   this.setState({
-  //     thumbnailNFSW: event.target.checked,
-  //   });
-  // }
-
-  handleThumbnailStatusChange(status) {
-    console.log("status change:", status);
-    this.setState({
-      thumbnailUploadStatus: status,
-    });
-  }
-
-  // componentWillReceiveProps(nextProps) {
-  //   if (nextProps.uploadStatus === "error") {
-  //     alert("UPLOAD FAILED, PLEASE TRY AGAIN.");
-  //     // this.props.resetUpload();
-  //   }
-
-  //   // if (nextProps.uploadStatus === "upload") {
-  //   //   this.setState({
-  //   //     thumbnailUploadStatus: "upload",
-  //   //   });
-  //   // }
-
-  //   // if (nextProps.uploadStatus === "manual") {
-  //   //   this.setState({
-  //   //     thumbnailUploadStatus: "manual",
-  //   //   });
-  //   // }
-
-  //   // if (nextProps.uploadStatus === "sending") {
-  //   //   this.setState({
-  //   //     thumbnailUploadStatus: "sending",
-  //   //   });
-  //   // }
-
-  //   if (nextProps.uploadStatus === "complete") {
-  //     this.setState({
-  //       thumbnailUploadStatus: "complete",
-  //       meta_thumbnail: nextProps.uploadUrl,
-  //     });
-  //   }
-  // }
-
-  closeModal() {
-    this.setState({
-      modal: null,
-    });
-  }
-
-  upload(path) {
-    this.closeModal();
-    this.setState({
-      thumbnailUploadStatus: "sending",
-    });
-    this.props.upload(path);
   }
 
   render() {
@@ -85,15 +24,12 @@ class SpeechUpload extends React.PureComponent {
         <div
           className="card__content"
           style={
-            this.state.thumbnailUploadStatus !== "manual"
-              ? null
-              : { display: "none" }
+            this.props.uploadStatus !== "manual" ? null : { display: "none" }
           }
         >
           <FormRow
             name="thumbnail"
             label={__("Upload Thumbnail")}
-            ref="thumbnail"
             type="file"
             onChange={event => {
               openModal(modals.CONFIRM_SPEECH_UPLOAD, {
@@ -106,9 +42,7 @@ class SpeechUpload extends React.PureComponent {
         <div
           className="card__content"
           style={
-            this.state.thumbnailUploadStatus === "manual"
-              ? null
-              : { display: "none" }
+            this.props.uploadStatus === "manual" ? null : { display: "none" }
           }
         >
           <FormRow
@@ -126,9 +60,7 @@ class SpeechUpload extends React.PureComponent {
         <div
           className="card__content"
           style={
-            this.state.thumbnailUploadStatus === "upload"
-              ? null
-              : { display: "none" }
+            this.props.uploadStatus === "upload" ? null : { display: "none" }
           }
         >
           <a onClick={() => this.handleThumbnailStatusChange("manual")}>
@@ -139,9 +71,7 @@ class SpeechUpload extends React.PureComponent {
         <div
           className="card__content"
           style={
-            this.state.thumbnailUploadStatus === "manual"
-              ? null
-              : { display: "none" }
+            this.props.uploadStatus === "manual" ? null : { display: "none" }
           }
         >
           <a onClick={() => this.handleThumbnailStatusChange("upload")}>
@@ -152,9 +82,7 @@ class SpeechUpload extends React.PureComponent {
         <div
           className="card__content"
           style={
-            this.state.thumbnailUploadStatus === "sending"
-              ? null
-              : { display: "none" }
+            this.props.uploadStatus === "sending" ? null : { display: "none" }
           }
         >
           Uploading thumbnail...
@@ -163,12 +91,10 @@ class SpeechUpload extends React.PureComponent {
         <div
           className="card__content"
           style={
-            this.state.thumbnailUploadStatus === "complete"
-              ? null
-              : { display: "none" }
+            this.props.uploadStatus === "complete" ? null : { display: "none" }
           }
         >
-          Complete: {this.state.meta_thumbnail}
+          Complete: {this.props.uploadUrl}
         </div>
       </div>
     );

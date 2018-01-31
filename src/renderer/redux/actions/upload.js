@@ -4,7 +4,6 @@ import type { Action, Dispatch } from "redux/reducers/upload";
 import lbry from "lbry";
 import fs from "fs";
 import path from "path";
-// import { error } from "util";
 
 export const resetSpeechUpload = () => (dispatch: Dispatch) =>
   dispatch({ type: actions.SPEECH_UPLOAD_RESET });
@@ -27,9 +26,9 @@ export const beginSpeechUpload = (filePath: string, nsfw: boolean = false) => (
     .then(available => {
       let data = new FormData();
       const name = available ? safeName : `${safeName}-${makeid()}`;
-      const file = new file([thumbnail], { type: `image/${fileExt.slice(1)}` });
+      const blob = new Blob([thumbnail], { type: `image/${fileExt.slice(1)}` });
       data.append("name", name);
-      data.append("file", file);
+      data.append("file", blob);
       data.append("nsfw", nsfw);
       return fetch("https://spee.ch/api/claim-publish", {
         method: "POST",
@@ -45,9 +44,13 @@ export const beginSpeechUpload = (filePath: string, nsfw: boolean = false) => (
                 })
               : dispatch({ type: actions.SPEECH_UPLOAD_ERROR })
         )
-        .catch(err => dispatch({ type: actions.SPEECH_UPLOAD_ERROR }));
+        .catch(err =>
+          dispatch({ type: actions.SPEECH_UPLOAD_ERROR, data: { err } })
+        );
     })
-    .catch(err => dispatch({ type: actions.SPEECH_UPLOAD_ERROR }));
+    .catch(err =>
+      dispatch({ type: actions.SPEECH_UPLOAD_ERROR, data: { err } })
+    );
 
   function makeid() {
     var text = "";
