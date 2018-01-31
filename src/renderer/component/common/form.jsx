@@ -26,11 +26,12 @@ type FormFieldProps = {
   prefix?: string,
   postfix?: string,
   error?: string | boolean,
+  helper?: string | React.Node,
 };
 
 export class FormField extends React.PureComponent<FormFieldProps> {
   render() {
-    const { render, label, prefix, postfix, error } = this.props;
+    const { render, label, prefix, postfix, error, helper } = this.props;
     /* eslint-disable jsx-a11y/label-has-for */
     // Will come back to this on the settings page
     // Need htmlFor on the label
@@ -47,6 +48,7 @@ export class FormField extends React.PureComponent<FormFieldProps> {
             {typeof error === 'string' ? error : __('There was an error')}
           </div>
         )}
+        {helper && <div className="form-field__help">{helper}</div>}
       </div>
     );
     /* eslint-enable jsx-a11y/label-has-for */

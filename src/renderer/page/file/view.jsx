@@ -1,4 +1,4 @@
-/* eslint-disable */
+// @flow
 import React from 'react';
 import lbry from 'lbry';
 import { buildURI, normalizeURI } from 'lbryURI';
@@ -12,29 +12,58 @@ import Icon from 'component/common/icon';
 import WalletSendTip from 'component/walletSendTip';
 import DateTime from 'component/dateTime';
 import * as icons from 'constants/icons';
-import Link from 'component/link';
+import Button from 'component/link';
 import SubscribeButton from 'component/subscribeButton';
 import Page from 'component/page';
 import classnames from 'classnames';
 import player from 'render-media';
+import * as modals from 'constants/modal_types';
 
-class FilePage extends React.PureComponent {
+type Props = {
+  claim: {
+    claim_id: string,
+    height: number,
+    channel_name: string,
+    value: {
+      publisherSignature: ?{
+        certificateId: ?string
+      }
+    }
+  },
+  fileInfo: {},
+  metadata: {
+    title: string,
+    thumbnail: string,
+    nsfw: boolean
+  },
+  contentType: string,
+  uri: string,
+  rewardedContentClaimIds: Array<string>,
+  obscureNsfw: boolean,
+  playingUri: ?string,
+  isPaused: boolean,
+  openModal: (string, any) => void,
+  fetchFileInfo: (string) => void,
+  fetchCostInfo: (string) => void,
+}
+
+class FilePage extends React.Component<Props> {
   componentDidMount() {
     this.fetchFileInfo(this.props);
     this.fetchCostInfo(this.props);
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: Props) {
     this.fetchFileInfo(nextProps);
   }
 
-  fetchFileInfo(props) {
+  fetchFileInfo(props: Props) {
     if (props.fileInfo === undefined) {
       props.fetchFileInfo(props.uri);
     }
   }
 
-  fetchCostInfo(props) {
+  fetchCostInfo(props: Props) {
     if (props.costInfo === undefined) {
       props.fetchCostInfo(props.uri);
     }
@@ -51,6 +80,7 @@ class FilePage extends React.PureComponent {
       obscureNsfw,
       playingUri,
       isPaused,
+      openModal,
     } = this.props;
 
     // This should be included below in the page
@@ -65,9 +95,9 @@ class FilePage extends React.PureComponent {
     const shouldObscureThumbnail = obscureNsfw && metadata.nsfw;
     const thumbnail = metadata.thumbnail;
     const { height, channel_name: channelName, value } = claim;
+    const mediaType = lbry.getMediaType(contentType);
     const isPlayable =
       Object.values(player.mime).indexOf(contentType) !== -1 || mediaType === 'audio';
-    const mediaType = lbry.getMediaType(contentType);
     const channelClaimId =
       value && value.publisherSignature && value.publisherSignature.certificateId;
     let subscriptionUri;
@@ -76,7 +106,6 @@ class FilePage extends React.PureComponent {
     }
 
     const isPlaying = playingUri === uri && !isPaused;
-    console.log('isPlaying?', isPlaying);
 
     return (
       <Page>
@@ -112,7 +141,12 @@ class FilePage extends React.PureComponent {
             <div className="card__channel-info">
               <UriIndicator uri={uri} link />
               <div className="card__actions card__actions--no-margin">
-                <Link alt iconRight="Send" label={__('Enjoy this? Send a tip')} />
+                <Button
+                  alt
+                  iconRight="Send"
+                  label={__('Enjoy this? Send a tip')}
+                  onClick={() => openModal(modals.SEND_TIP, { uri })}
+                />
                 <SubscribeButton uri={subscriptionUri} channelName={channelName} />
               </div>
             </div>
@@ -128,4 +162,3 @@ class FilePage extends React.PureComponent {
 }
 
 export default FilePage;
-/* eslint-enable */

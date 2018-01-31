@@ -14,3 +14,4 @@ export const TRANSACTION_FAILED = 'transaction_failed';
 export const REWARD_APPROVAL_REQUIRED = 'reward_approval_required';
 export const AFFIRM_PURCHASE = 'affirm_purchase';
 export const CONFIRM_CLAIM_REVOKE = 'confirmClaimRevoke';
+export const SEND_TIP = 'sendTip';

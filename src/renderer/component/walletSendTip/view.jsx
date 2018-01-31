@@ -1,66 +1,92 @@
-// I'll come back to this
-/* eslint-disable */
+// @flow
 import React from 'react';
-import Link from 'component/link';
-import { FormRow } from 'component/common/form';
+import Button from 'component/link';
+import { FormField } from 'component/common/form';
 import UriIndicator from 'component/uriIndicator';
 
-class WalletSendTip extends React.PureComponent {
-  constructor(props) {
+type Props = {
+  claim_id: string,
+  uri: string,
+  title: string,
+  errorMessage: string,
+  isPending: boolean,
+  sendSupport: (number, string, string) => void,
+  onCancel: () => void,
+  sendTipCallback?: () => void,
+};
+
+type State = {
+  amount: number,
+};
+
+class WalletSendTip extends React.PureComponent<Props, State> {
+  constructor(props: Props) {
     super(props);
 
     this.state = {
-      amount: 0.0,
+      amount: 0,
     };
+
+    (this: any).handleSendButtonClicked = this.handleSendButtonClicked.bind(this);
   }
 
   handleSendButtonClicked() {
-    const { claim_id, uri } = this.props;
-    const amount = this.state.amount;
-    this.props.sendSupport(amount, claim_id, uri);
+    const { claim_id: claimId, uri, sendSupport, sendTipCallback } = this.props;
+    const { amount } = this.state;
+
+    sendSupport(amount, claimId, uri);
+
+    // ex: close modal
+    if (sendTipCallback) {
+      sendTipCallback();
+    }
   }
 
-  handleSupportPriceChange(event) {
+  handleSupportPriceChange(event: SyntheticInputEvent<*>) {
     this.setState({
       amount: Number(event.target.value),
     });
   }
 
   render() {
-    const { errorMessage, isPending, title, uri } = this.props;
+    const { errorMessage, isPending, title, uri, onCancel } = this.props;
 
     return (
       <div>
         <div className="card__title-primary">
           <h1>
-            {__('Send a tip')} <UriIndicator uri={uri} />
+            {__('Send a tip to')} <UriIndicator uri={uri} />
           </h1>
         </div>
         <div className="card__content">
-          <FormRow
+          <FormField
             label={__('Amount')}
             postfix={__('LBC')}
-            min="0"
-            step="any"
-            type="number"
-            errorMessage={errorMessage}
+            error={errorMessage}
             helper={
               <span>
-                {`${__('This will appear as a tip for "%s" located at %s.', title, uri)} `}
-                <Link label={__('Learn more')} href="https://lbry.io/faq/tipping" />
+                {__(`This will appear as a tip for ${title} located at ${uri}.`)}
+                {" "}
+                <Button label={__('Learn more')} fakeLink href="https://lbry.io/faq/tipping" />
               </span>
             }
-            placeholder="1.00"
-            onChange={event => this.handleSupportPriceChange(event)}
+            render={() => (
+              <input
+                min="0"
+                step="any"
+                type="number"
+                placeholder="1.00"
+                onChange={event => this.handleSupportPriceChange(event)}
+              />
+            )}
           />
-          <div className="form-row-submit">
-            <Link
+          <div className="card__actions">
+            <Button
               label={__('Send')}
-              button="primary"
               disabled={isPending}
-              onClick={this.handleSendButtonClicked.bind(this)}
+              onClick={this.handleSendButtonClicked}
             />
-            <Link label={__('Cancel')} button="alt" navigate="/show" navigateParams={{ uri }} />
+            <Button alt label={__('Cancel')} onClick={onCancel} navigateParams={{ uri }} />
           </div>
         </div>
       </div>
@@ -69,4 +95,3 @@ class WalletSendTip extends React.PureComponent {
 }
 
 export default WalletSendTip;
-/* eslint-enable */

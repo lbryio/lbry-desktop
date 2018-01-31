@@ -12,6 +12,7 @@ import {
 import { makeSelectCostInfoForUri } from 'redux/selectors/cost_info';
 import { selectShowNsfw } from 'redux/selectors/settings';
 import { selectMediaPaused } from 'redux/selectors/media';
+import { doOpenModal } from 'redux/actions/app';
 import FilePage from './view';
 
 const select = (state, props) => ({
@@ -30,6 +31,7 @@ const perform = dispatch => ({
   navigate: (path, params) => dispatch(doNavigate(path, params)),
   fetchFileInfo: uri => dispatch(doFetchFileInfo(uri)),
   fetchCostInfo: uri => dispatch(doFetchCostInfoForUri(uri)),
+  openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
 });
 
 export default connect(select, perform)(FilePage);
