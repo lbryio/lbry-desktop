@@ -29,7 +29,7 @@ class WunderBar extends React.PureComponent<Props> {
   }
 
   handleChange(e: SyntheticInputEvent<*>) {
-    const { updateSearchQuery, getSearchSuggestions } = this.props;
+    const { updateSearchQuery } = this.props;
     const { value } = e.target;
 
     updateSearchQuery(value);
@@ -74,7 +74,6 @@ class WunderBar extends React.PureComponent<Props> {
 
   input: ?HTMLInputElement;
   throttledGetSearchSuggestions: string => void;
-
   render() {
     const { searchQuery, isActive, address, suggestions } = this.props;
 

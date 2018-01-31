@@ -33,7 +33,7 @@ class WalletSendTip extends React.PureComponent {
       <div>
         <div className="card__title-primary">
           <h1>
-            {__('Support')} <UriIndicator uri={uri} />
+            {__('Send a tip')} <UriIndicator uri={uri} />
           </h1>
         </div>
         <div className="card__content">

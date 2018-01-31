@@ -1,8 +1,4 @@
-import {
-  selectCurrentPage,
-  selectCurrentParams,
-  selectPageTitle,
-} from 'redux/selectors/navigation';
+import { selectCurrentPage, selectCurrentParams } from 'redux/selectors/navigation';
 import { createSelector } from 'reselect';
 
 export const selectState = state => state.search || {};
@@ -26,13 +22,13 @@ export const makeSelectSearchUris = query =>
 
 export const selectWunderBarAddress = createSelector(
   selectCurrentPage,
-  selectPageTitle,
   selectSearchQuery,
-  (page, title, query) => {
+  selectCurrentParams,
+  (page, query, params) => {
     // only populate the wunderbar address if we are on the file/channel pages
     // or show the search query
     if (page === 'show') {
-      return title;
+      return params.uri;
     } else if (page === 'search') {
       return query;
     }

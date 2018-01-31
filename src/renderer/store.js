@@ -96,7 +96,7 @@ const saveClaimsFilter = createFilter('claims', ['byId', 'claimsByUri']);
 const subscriptionsFilter = createFilter('subscriptions', ['subscriptions']);
 
 const persistOptions = {
-  whitelist: ['claims', 'subscriptions'],
+  whitelist: ['claims', 'subscriptions', 'navigation'],
   // Order is important. Needs to be compressed last or other transforms can't
   // read the data
   transforms: [saveClaimsFilter, subscriptionsFilter, compressor],
@@ -106,7 +106,7 @@ const persistOptions = {
 
 window.cacheStore = persistStore(store, persistOptions, err => {
   if (err) {
-    console.error('Unable to load saved SETTINGS');
+    console.error('Unable to load saved settings'); // eslint-disable-line no-console
   }
 });
 

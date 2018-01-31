@@ -5,11 +5,21 @@
   .form-field:not(:first-of-type) {
     padding-left: $spacing-vertical;
   }
+
+  &.form-row--padded {
+    padding: $spacing-vertical * 2/3 0;
+  }
 }
 
 .form-field__wrapper {
   display: flex;
   padding: $spacing-vertical / 3 0;
+
+  // Hmm, not sure about this
+  // without this the checkbox isn't on the same line as other form-field text
+  input[type='checkbox'] {
+    margin-top: 5px;
+  }
 }
 
 .form-field__error {

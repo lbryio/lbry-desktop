@@ -1,8 +1,29 @@
-/*
-TODO:
-Determine [disabled] or .disabled
-Add <a> support (probably just get rid of button prefix)
-*/
+// This will go away
+// It's for the download progress "button"
+.faux-button-block {
+  display: inline-block;
+  height: var(--button-height);
+  line-height: var(--button-height);
+  text-decoration: none;
+  border: 0 none;
+  text-align: center;
+  border-radius: var(--button-radius);
+  text-transform: uppercase;
+  .icon {
+    top: 0em;
+  }
+  .icon:first-child {
+    padding-right: 5px;
+  }
+  .icon:last-child {
+    padding-left: 5px;
+  }
+  .icon:only-child {
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+
 .btn {
   border: none;
   text-decoration: none;
@@ -19,6 +40,7 @@ Add <a> support (probably just get rid of button prefix)
   align-items: center;
   justify-content: center;
   fill: currentColor; // for proper icon color
+  font-size: 0.8em;
 
   &:hover {
     box-shadow: var(--box-shadow-layer);
@@ -69,6 +91,11 @@ Add <a> support (probably just get rid of button prefix)
     border-bottom: 1px solid;
     box-shadow: none;
   }
+}
+
+.btn--secondary {
+  background-color: var(--color-secondary);
+  color: var(--color-primary);
 }
 
 .btn--no-style {

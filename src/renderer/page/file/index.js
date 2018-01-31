@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { doNavigate } from 'redux/actions/navigation';
 import { doFetchFileInfo } from 'redux/actions/file_info';
 import { makeSelectFileInfoForUri } from 'redux/selectors/file_info';
-import { selectRewardContentClaimIds } from 'redux/selectors/content';
+import { selectRewardContentClaimIds, selectPlayingUri } from 'redux/selectors/content';
 import { doFetchCostInfoForUri } from 'redux/actions/cost_info';
 import {
   makeSelectClaimForUri,
@@ -11,8 +11,8 @@ import {
 } from 'redux/selectors/claims';
 import { makeSelectCostInfoForUri } from 'redux/selectors/cost_info';
 import { selectShowNsfw } from 'redux/selectors/settings';
+import { selectMediaPaused } from 'redux/selectors/media';
 import FilePage from './view';
-import { makeSelectCurrentParam } from 'redux/selectors/navigation';
 
 const select = (state, props) => ({
   claim: makeSelectClaimForUri(props.uri)(state),
@@ -20,9 +20,10 @@ const select = (state, props) => ({
   costInfo: makeSelectCostInfoForUri(props.uri)(state),
   metadata: makeSelectMetadataForUri(props.uri)(state),
   obscureNsfw: !selectShowNsfw(state),
-  tab: makeSelectCurrentParam('tab')(state),
   fileInfo: makeSelectFileInfoForUri(props.uri)(state),
   rewardedContentClaimIds: selectRewardContentClaimIds(state, props),
+  playingUri: selectPlayingUri(state),
+  isPaused: selectMediaPaused(state),
 });
 
 const perform = dispatch => ({

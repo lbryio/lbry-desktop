@@ -1,6 +1,8 @@
-const { remote } = require('electron');
-
+// This file has a lot going on.
+// I will add flow when I come back to fix the issue where the video player doesn't scale
+/* eslint-disable */
 import React from 'react';
+import { remote } from 'electron';
 import { Thumbnail } from 'component/common';
 import player from 'render-media';
 import fs from 'fs';
@@ -21,9 +23,9 @@ class VideoPlayer extends React.PureComponent {
     this.togglePlayListener = this.togglePlay.bind(this);
   }
 
-  componentWillReceiveProps(next) {
+  componentWillReceiveProps(nextProps) {
     const el = this.refs.media.children[0];
-    if (!this.props.paused && next.paused && !el.paused) el.pause();
+    if (!this.props.paused && nextProps.paused && !el.paused) el.pause();
   }
 
   componentDidMount() {
@@ -171,7 +173,7 @@ class VideoPlayer extends React.PureComponent {
     const needsMetadata = this.playableType();
 
     return (
-      <div>
+      <React.Fragment>
         {['audio', 'application'].indexOf(mediaType) !== -1 &&
           (!this.playableType() || hasMetadata) &&
           !unplayable && <Thumbnail src={poster} className="video-embedded" />}
@@ -180,9 +182,10 @@ class VideoPlayer extends React.PureComponent {
           !unplayable && <LoadingScreen status={noMetadataMessage} />}
         {unplayable && <LoadingScreen status={unplayableMessage} spinner={false} />}
         <div ref="media" className="media" />
-      </div>
+      </React.Fragment>
     );
   }
 }
 
 export default VideoPlayer;
+/* eslint-disable */

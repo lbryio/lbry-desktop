@@ -1,26 +1,36 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+// @flow
+/* eslint-disable react/no-multi-comp */
+// These should probably just be combined into one modal component
+import * as React from 'react';
 import ReactModal from 'react-modal';
-import Link from 'component/link/index';
+import Button from 'component/link/index';
 import app from 'app';
 
-export class Modal extends React.PureComponent {
-  static propTypes = {
-    type: PropTypes.oneOf(['alert', 'confirm', 'custom']),
-    overlay: PropTypes.bool,
-    onConfirmed: PropTypes.func,
-    onAborted: PropTypes.func,
-    confirmButtonLabel: PropTypes.string,
-    abortButtonLabel: PropTypes.string,
-    confirmButtonDisabled: PropTypes.bool,
-    abortButtonDisabled: PropTypes.bool,
-  };
+type ModalProps = {
+  type: string,
+  overlay: boolean,
+  confirmButtonLabel: string,
+  abortButtonLabel: string,
+  confirmButtonDisabled: boolean,
+  abortButtonDisabled: boolean,
+  onConfirmed?: any => any,
+  onAborted?: any => any,
+  className?: string,
+  overlayClassName?: string,
+  children?: React.Node,
+  extraContent?: React.Node,
+  expandButtonLabel?: string,
+  hideButtonLabel?: string,
+};
 
+export class Modal extends React.PureComponent<ModalProps> {
   static defaultProps = {
     type: 'alert',
     overlay: true,
+    /* eslint-disable no-underscore-dangle */
     confirmButtonLabel: app.i18n.__('OK'),
     abortButtonLabel: app.i18n.__('Cancel'),
+    /* eslint-enable no-underscore-dangle */
     confirmButtonDisabled: false,
     abortButtonDisabled: false,
   };
@@ -38,20 +48,17 @@ export class Modal extends React.PureComponent {
         }
       >
         <div>{this.props.children}</div>
-        {this.props.type == 'custom' ? null : ( // custom modals define their own buttons
-          <div className="modal__buttons">
-            <Link
-              button="primary"
+        {this.props.type === 'custom' ? null : ( // custom modals define their own buttons
+          <div className="card__actions card__actions--center">
+            <Button
               label={this.props.confirmButtonLabel}
-              className="modal__button"
               disabled={this.props.confirmButtonDisabled}
               onClick={this.props.onConfirmed}
             />
-            {this.props.type == 'confirm' ? (
-              <Link
-                button="alt"
+            {this.props.type === 'confirm' ? (
+              <Button
+                alt
                 label={this.props.abortButtonLabel}
-                className="modal__button"
                 disabled={this.props.abortButtonDisabled}
                 onClick={this.props.onAborted}
               />
@@ -63,19 +70,20 @@ export class Modal extends React.PureComponent {
   }
 }
 
-export class ExpandableModal extends React.PureComponent {
-  static propTypes = {
-    expandButtonLabel: PropTypes.string,
-    extraContent: PropTypes.element,
-  };
+type State = {
+  expanded: boolean,
+};
 
+export class ExpandableModal extends React.PureComponent<ModalProps, State> {
   static defaultProps = {
+    /* eslint-disable no-underscore-dangle */
     confirmButtonLabel: app.i18n.__('OK'),
     expandButtonLabel: app.i18n.__('Show More...'),
     hideButtonLabel: app.i18n.__('Show Less'),
+    /* eslint-enable no-underscore-dangle */
   };
 
-  constructor(props) {
+  constructor(props: ModalProps) {
     super(props);
 
     this.state = {
@@ -95,13 +103,13 @@ export class ExpandableModal extends React.PureComponent {
         {this.props.children}
         {this.state.expanded ? this.props.extraContent : null}
         <div className="modal__buttons">
-          <Link
+          <Button
             button="primary"
             label={this.props.confirmButtonLabel}
             className="modal__button"
             onClick={this.props.onConfirmed}
           />
-          <Link
+          <Button
             button="alt"
             label={!this.state.expanded ? this.props.expandButtonLabel : this.props.hideButtonLabel}
             className="modal__button"
@@ -116,3 +124,4 @@ export class ExpandableModal extends React.PureComponent {
 }
 
 export default Modal;
+/* eslint-enable react/no-multi-comp */

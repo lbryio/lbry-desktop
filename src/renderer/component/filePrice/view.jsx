@@ -38,7 +38,7 @@ class FilePrice extends React.PureComponent<Props> {
     const isEstimate = costInfo ? !costInfo.includesData : false;
 
     if (!costInfo) {
-      return <span className="credit-amount">???</span>;
+      return <span className="credit-amount">PRICE</span>;
     }
 
     return (
