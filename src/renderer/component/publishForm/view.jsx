@@ -5,7 +5,7 @@ import FormField from "component/formField";
 import { Form, FormRow, Submit } from "component/form.js";
 import Link from "component/link";
 import FormFieldPrice from "component/formFieldPrice";
-import { SpeechUpload } from "component/speechUpload";
+import SpeechUpload from "component/speechUpload";
 import Modal from "modal/modal";
 import * as modals from "constants/modal_types";
 import { BusyMessage } from "component/common";
