@@ -2,15 +2,23 @@
 /* eslint-disable react/no-multi-comp */
 import * as React from 'react';
 import Button from 'component/link';
+import classnames from 'classnames';
 
 type FormRowProps = {
   children: React.Node,
+  padded?: boolean,
 };
 
-export const FormRow = (props: FormRowProps) => {
-  const { children } = props;
-  return <div className="form-row">{children}</div>;
-};
+export class FormRow extends React.PureComponent<FormRowProps> {
+  static defaultProps = {
+    padded: false,
+  };
+
+  render() {
+    const { children, padded } = this.props;
+    return <div className={classnames('form-row', { 'form-row--padded': padded })}>{children}</div>;
+  }
+}
 
 type FormFieldProps = {
   render: () => React.Node,
@@ -18,18 +26,18 @@ type FormFieldProps = {
   prefix?: string,
   postfix?: string,
   error?: string | boolean,
+  helper?: string | React.Node,
 };
 
 export class FormField extends React.PureComponent<FormFieldProps> {
   render() {
-    const { render, label, prefix, postfix, error } = this.props;
+    const { render, label, prefix, postfix, error, helper } = this.props;
+    /* eslint-disable jsx-a11y/label-has-for */
+    // Will come back to this on the settings page
+    // Need htmlFor on the label
     return (
       <div className="form-field">
-        {label && (
-            <label className="form-field__label">
-              {label}
-            </label>
-          )}
+        {label && <label className="form-field__label">{label}</label>}
         <div className="form-field__wrapper">
           {prefix && <span className="form-field__prefix">{prefix}</span>}
           {render()}
@@ -40,8 +48,10 @@ export class FormField extends React.PureComponent<FormFieldProps> {
             {typeof error === 'string' ? error : __('There was an error')}
           </div>
         )}
+        {helper && <div className="form-field__help">{helper}</div>}
       </div>
     );
+    /* eslint-enable jsx-a11y/label-has-for */
   }
 }
 

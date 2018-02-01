@@ -1,7 +1,23 @@
+// @flow
 import React from 'react';
-import Link from 'component/link';
+import Button from 'component/link';
+import type { Subscription } from 'redux/reducers/subscriptions';
 
-export default ({ channelName, uri, subscriptions, doChannelSubscribe, doChannelUnsubscribe }) => {
+type SubscribtionArgs = {
+  channelName: string,
+  uri: string,
+};
+
+type Props = {
+  channelName: ?string,
+  uri: ?string,
+  subscriptions: Array<Subscription>,
+  doChannelSubscribe: ({ channelName: string, uri: string }) => void,
+  doChannelUnsubscribe: SubscribtionArgs => void,
+};
+
+export default (props: Props) => {
+  const { channelName, uri, subscriptions, doChannelSubscribe, doChannelUnsubscribe } = props;
   const isSubscribed =
     subscriptions.map(subscription => subscription.channelName).indexOf(channelName) !== -1;
 
@@ -10,18 +26,16 @@ export default ({ channelName, uri, subscriptions, doChannelSubscribe, doChannel
   const subscriptionLabel = isSubscribed ? __('Unsubscribe') : __('Subscribe');
 
   return channelName && uri ? (
-    <div className="card__actions">
-      <Link
-        iconRight={isSubscribed ? '' : 'at'}
-        button={isSubscribed ? 'alt' : 'primary'}
-        label={subscriptionLabel}
-        onClick={() =>
-          subscriptionHandler({
-            channelName,
-            uri,
-          })
-        }
-      />
-    </div>
+    <Button
+      iconRight="AtSign"
+      alt={isSubscribed}
+      label={subscriptionLabel}
+      onClick={() =>
+        subscriptionHandler({
+          channelName,
+          uri,
+        })
+      }
+    />
   ) : null;
 };

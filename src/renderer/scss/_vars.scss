@@ -18,7 +18,7 @@ $width-page-constrained: 800px;
 
   --text-color: var(--color-black);
   --color-brand: #155b4a;
-  // --color-dark-overlay: rgba(32, 32, 32, 0.9);
+  --color-dark-overlay: rgba(32, 32, 32, 0.9);
   --color-help: rgba(0, 0, 0, 0.54);
   // --color-notice: #8a6d3b;
   --color-error: #a94442;
@@ -32,14 +32,18 @@ $width-page-constrained: 800px;
   --color-placeholder: #ececec;
   --color-nav-bg: #f6f6f6;
 
-  /* Misc */
+  /* Video */
+  --height-video-embedded: 450px;
+  --height-video-embedded-min: 325px;
+  --width-video-embedded: 700px;
+
+  // --width-video-embedded: var(--height-video-embedded) * 16/9;
   // --content-max-width: 1000px;
   // --nsfw-blur-intensity: 20px;
-  // --height-video-embedded: $width-page-constrained * 9 / 16;
 
   /* Font */
   --font-size: 16px;
-  --font-line-height: 1.3333;
+  --font-line-height: 1.7;
   --font-size-subtext-multiple: 0.82;
 
   /* Shadows */

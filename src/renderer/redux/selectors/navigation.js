@@ -42,15 +42,12 @@ export const selectActiveHistoryEntry = createSelector(
   state => state.stack[state.index]
 );
 
-export const selectPageTitle = createSelector(
-  selectCurrentPage,
-  (page) => {
-    switch (page) {
-      default:
-        return '';
-    }
+export const selectPageTitle = createSelector(selectCurrentPage, page => {
+  switch (page) {
+    default:
+      return '';
   }
-);
+});
 
 export const selectNavLinks = createSelector(
   selectCurrentPage,
