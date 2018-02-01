@@ -39,7 +39,7 @@
   ],
   "linux": {
     "target": "deb",
-    "category": "Video",
+    "category": "Video;AudioVideo;",
     "desktop": {
       "MimeType": "x-scheme-handler/lbry",
       "Exec": "/opt/LBRY/lbry %U"
