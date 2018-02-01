@@ -21,6 +21,7 @@
     "compile": "electron-webpack && yarn extract-langs",
     "build": "yarn compile && electron-builder build",
     "build:dir": "yarn build -- --dir -c.compression=store -c.mac.identity=null",
+    "release": "yarn build",
     "postinstall": "electron-builder install-app-deps",
     "lint": "eslint 'src/**/*.{js,jsx}' --fix",
     "format": "prettier 'src/**/*.{js,jsx,scss,json}' --write"
