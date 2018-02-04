@@ -10,10 +10,6 @@ import * as modals from "constants/modal_types";
 class SpeechUpload extends React.PureComponent {
   constructor(props) {
     super(props);
-
-    this.state = {
-      thumbnailUploadPath: "",
-    };
   }
 
   render() {
