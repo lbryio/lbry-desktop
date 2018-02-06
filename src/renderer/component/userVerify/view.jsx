@@ -86,7 +86,10 @@ class UserVerify extends React.PureComponent {
             />
           </div>
           <div className="card__content">
-            <div className="meta">{__('Standard messaging rates apply.')} </div>
+            <div className="meta">
+              {__('Standard messaging rates apply. Having trouble?')}{' '}
+              <Link href="https://lbry.io/faq/phone" label={__('Read more.')} />
+            </div>
           </div>
         </section>
         <section className="card card--form">
@@ -106,7 +109,7 @@ class UserVerify extends React.PureComponent {
           </div>
           <div className="card__actions">
             <Link
-              href="https://api.lbry.io/yt/connect"
+              href="https://api.lbry.io/yt/connect?type=verify"
               button="alt"
               icon="icon-youtube"
               label={__('YouTube Account Sync')}

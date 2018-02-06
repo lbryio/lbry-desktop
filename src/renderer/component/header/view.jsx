@@ -8,10 +8,13 @@ type Props = {
   navigate: any => void,
   downloadUpgrade: any => void,
   isUpgradeAvailable: boolean,
+  autoUpdateDownloaded: boolean
 };
 
 const Header = (props: Props) => {
-  const { balance, isUpgradeAvailable, navigate, downloadUpgrade } = props;
+  const { balance, isUpgradeAvailable, navigate, downloadUpgrade, autoUpdateDownloaded } = props;
+  const showUpgradeButton = autoUpdateDownloaded || (process.platform === 'linux' && isUpgradeAvailable);
+
   return (
     <header className="header">
       <WunderBar />
@@ -31,7 +34,7 @@ const Header = (props: Props) => {
           description={__('Publish content')}
         />
 
-        {isUpgradeAvailable && (
+        {showUpgradeButton && (
           <Button onClick={() => downloadUpgrade()} icon="Download" label={__('Upgrade App')} />
         )}
       </div>

@@ -102,10 +102,10 @@ export function doUserPhoneNew(phone, country_code) {
       });
     };
 
-    const failure = () => {
+    const failure = error => {
       dispatch({
         type: ACTIONS.USER_PHONE_NEW_FAILURE,
-        data: { error: 'An error occurred while processing this phone number.' },
+        data: { error },
       });
     };
 

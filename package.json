@@ -1,6 +1,6 @@
 {
   "name": "LBRY",
-  "version": "0.19.4",
+  "version": "0.20.0",
   "description": "A browser for the LBRY network, a digital marketplace controlled by its users.",
   "homepage": "https://lbry.io/",
   "bugs": {
@@ -22,10 +22,6 @@
     "build": "yarn compile && electron-builder build",
     "build:dir": "yarn build -- --dir -c.compression=store -c.mac.identity=null",
     "postinstall": "electron-builder install-app-deps",
-    "postmerge": "yarnhook",
-    "postcheckout": "yarnhook",
-    "postrewrite": "yarnhook",
-    "precommit": "lint-staged",
     "lint": "eslint 'src/**/*.{js,jsx}' --fix",
     "format": "prettier 'src/**/*.{js,jsx,scss,json}' --write"
   },
@@ -39,6 +35,10 @@
     "country-data": "^0.0.31",
     "dom-scroll-into-view": "^1.2.1",
     "electron-dl": "^1.6.0",
+    "electron-log": "^2.2.12",
+    "electron-publisher-s3": "^19.47.0",
+    "electron-updater": "^2.18.2",
+    "find-process": "^1.1.0",
     "formik": "^0.10.4",
     "from2": "^2.3.0",
     "install": "^0.10.2",
@@ -82,8 +82,8 @@
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.18.0",
     "devtron": "^1.4.0",
-    "electron": "^1.7.9",
-    "electron-builder": "^19.49.0",
+    "electron": "^1.7.11",
+    "electron-builder": "^19.55.2",
     "electron-devtools-installer": "^2.2.1",
     "electron-webpack": "^1.11.0",
     "eslint": "^4.13.1",
@@ -107,8 +107,7 @@
     "prettier": "^1.4.2",
     "sass-loader": "^6.0.6",
     "webpack": "^3.10.0",
-    "webpack-build-notifier": "^0.1.18",
-    "yarnhook": "^0.1.1"
+    "webpack-build-notifier": "^0.1.18"
   },
   "resolutions": {
     "webpack/webpack-sources": "1.0.1"
@@ -119,7 +118,7 @@
   },
   "license": "MIT",
   "lbrySettings": {
-    "lbrynetDaemonVersion": "0.18.0",
+    "lbrynetDaemonVersion": "0.18.2",
     "lbrynetDaemonUrlTemplate": "https://github.com/lbryio/lbry/releases/download/vDAEMONVER/lbrynet-daemon-vDAEMONVER-OSNAME.zip"
   }
 }

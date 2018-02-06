@@ -1,6 +1,10 @@
 {
   "appId": "io.lbry.LBRY",
-  "productName": "LBRY",
+  "publish": {
+    "provider": "s3",
+    "bucket": "releases.lbry.io",
+    "path": "app/latest"
+  },
   "mac": {
     "category": "public.app-category.entertainment"
   },
@@ -35,7 +39,7 @@
   ],
   "linux": {
     "target": "deb",
-    "category": "Video",
+    "category": "Video;AudioVideo;",
     "desktop": {
       "MimeType": "x-scheme-handler/lbry",
       "Exec": "/opt/LBRY/lbry %U"

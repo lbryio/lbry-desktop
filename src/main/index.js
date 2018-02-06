@@ -2,12 +2,28 @@
 // Module imports
 import keytar from 'keytar-prebuild';
 import SemVer from 'semver';
+import findProcess from 'find-process';
 import url from 'url';
 import https from 'https';
 import { shell, app, ipcMain, dialog } from 'electron';
+import { autoUpdater } from 'electron-updater';
 import Daemon from './Daemon';
 import Tray from './Tray';
 import createWindow from './createWindow';
+
+autoUpdater.autoDownload = true;
+
+// This is set to true if an auto update has been downloaded through the Electron
+// auto-update system and is ready to install. If the user declined an update earlier,
+// it will still install on shutdown.
+let autoUpdateDownloaded = false;
+
+// Keeps track of whether the user has accepted an auto-update through the interface.
+let autoUpdateAccepted = false;
+
+// This is used to keep track of whether we are showing the special dialog
+// that we show on Windows after you decline an upgrade and close the app later.
+let showingAutoUpdateCloseAlert = false;
 
 // Keep a global reference, if you don't, they will be closed automatically when the JavaScript
 // object is garbage collected.
@@ -42,18 +58,22 @@ app.setAsDefaultProtocolClient('lbry');
 app.setName('LBRY');
 
 app.on('ready', async () => {
-  daemon = new Daemon();
-  daemon.on('exit', () => {
-    daemon = null;
-    if (!isQuitting) {
-      dialog.showErrorBox(
-        'Daemon has Exited',
-        'The daemon may have encountered an unexpected error, or another daemon instance is already running.'
-      );
-      app.quit();
-    }
-  });
-  daemon.launch();
+  const processList = await findProcess('name', 'lbrynet-daemon');
+  const isDaemonRunning = processList.length > 0;
+  if (!isDaemonRunning) {
+    daemon = new Daemon();
+    daemon.on('exit', () => {
+      daemon = null;
+      if (!isQuitting) {
+        dialog.showErrorBox(
+          'Daemon has Exited',
+          'The daemon may have encountered an unexpected error, or another daemon instance is already running.'
+        );
+        app.quit();
+      }
+    });
+    daemon.launch();
+  }
   if (process.env.NODE_ENV === 'development') {
     await installExtensions();
   }
@@ -68,7 +88,35 @@ app.on('activate', () => {
   if (!rendererWindow) rendererWindow = createWindow();
 });
 
-app.on('will-quit', () => {
+app.on('will-quit', event => {
+  if (
+    process.platform === 'win32' &&
+    autoUpdateDownloaded &&
+    !autoUpdateAccepted &&
+    !showingAutoUpdateCloseAlert
+  ) {
+    // We're on Win and have an update downloaded, but the user declined it (or closed
+    // the app without accepting it). Now the user is closing the app, so the new update
+    // will install. On Mac this is silent, but on Windows they get a confusing permission
+    // escalation dialog, so we show Windows users a warning dialog first.
+
+    showingAutoUpdateCloseAlert = true;
+    dialog.showMessageBox(
+      {
+        type: 'info',
+        title: 'LBRY Will Upgrade',
+        message:
+          'LBRY has a pending upgrade. Please select "Yes" to install it on the prompt shown after this one.',
+      },
+      () => {
+        app.quit();
+      }
+    );
+
+    event.preventDefault();
+    return;
+  }
+
   isQuitting = true;
   if (daemon) daemon.quit();
 });
@@ -106,6 +154,15 @@ ipcMain.on('upgrade', (event, installerPath) => {
   );
   console.log('After the install is complete, please reopen the app.');
   app.quit();
+});
+
+autoUpdater.on('update-downloaded', () => {
+  autoUpdateDownloaded = true;
+});
+
+ipcMain.on('autoUpdateAccepted', () => {
+  autoUpdateAccepted = true;
+  autoUpdater.quitAndInstall();
 });
 
 ipcMain.on('version-info-requested', () => {

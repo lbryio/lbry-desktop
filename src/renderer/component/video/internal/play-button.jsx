@@ -16,7 +16,7 @@ class VideoPlayButton extends React.PureComponent<Props> {
   }
 
   render() {
-    const { isLoading, fileInfo, mediaType } = this.props;
+    const { fileInfo, mediaType, isLoading } = this.props;
 
     /*
       TODO: Add title back to button
