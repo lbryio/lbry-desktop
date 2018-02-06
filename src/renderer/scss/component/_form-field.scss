@@ -1,24 +1,34 @@
 .form-row {
   display: flex;
   flex-direction: row;
+  align-items: flex-end;
 
   .form-field:not(:first-of-type) {
     padding-left: $spacing-vertical;
   }
 
   &.form-row--padded {
-    padding: $spacing-vertical * 2/3 0;
+    padding-top: $spacing-vertical * 2/3;
+  }
+
+  &.form-row--centered {
+    align-items: center;
   }
 }
 
-.form-field__wrapper {
+.form-field__input {
   display: flex;
-  padding: $spacing-vertical / 3 0;
+  padding-top: $spacing-vertical / 3;
 
-  // Hmm, not sure about this
-  // without this the checkbox isn't on the same line as other form-field text
-  input[type='checkbox'] {
+  input[type='checkbox'],
+  input[type='radio'] {
     margin-top: 5px;
+  }
+}
+
+.form-field {
+  label {
+    cursor: pointer;
   }
 }
 
@@ -30,18 +40,24 @@
   color: var(--color-grey-dark);
 }
 
+.form-field__help {
+  color: var(--color-grey-dark);
+  font-size: 0.8em;
+  padding-top: $spacing-vertical * 1/3;
+}
+
 .form-field__prefix {
-  padding-right: 5px;
+  padding-right: $spacing-vertical * 1/3;
 }
 
 .form-field__postfix {
-  padding-left: 5px;
+  padding-left: $spacing-vertical * 1/3;
 }
 
 // Not sure if I like these
 // Maybe this should be in gui.scss?
-.input--lbc-amount {
-  width: 75px;
+.input--price-amount {
+  width: 50px;
   font-weight: 700;
 }
 

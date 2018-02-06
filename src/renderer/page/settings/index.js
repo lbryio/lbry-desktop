@@ -1,4 +1,3 @@
-import React from 'react';
 import { connect } from 'react-redux';
 import * as settings from 'constants/settings';
 import { doClearCache } from 'redux/actions/app';
@@ -6,7 +5,6 @@ import {
   doSetDaemonSetting,
   doSetClientSetting,
   doGetThemes,
-  doSetTheme,
   doChangeLanguage,
 } from 'redux/actions/settings';
 import {
@@ -23,8 +21,7 @@ const select = state => ({
   showUnavailable: makeSelectClientSetting(settings.SHOW_UNAVAILABLE)(state),
   instantPurchaseEnabled: makeSelectClientSetting(settings.INSTANT_PURCHASE_ENABLED)(state),
   instantPurchaseMax: makeSelectClientSetting(settings.INSTANT_PURCHASE_MAX)(state),
-  showUnavailable: makeSelectClientSetting(settings.SHOW_UNAVAILABLE)(state),
-  theme: makeSelectClientSetting(settings.THEME)(state),
+  currentTheme: makeSelectClientSetting(settings.THEME)(state),
   themes: makeSelectClientSetting(settings.THEMES)(state),
   language: selectCurrentLanguage(state),
   languages: selectLanguages(state),

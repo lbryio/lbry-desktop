@@ -95,7 +95,7 @@ class FileCard extends React.PureComponent<Props> {
             </div>
           </div>
         </div>
-        {obscureNsfw && <NsfwOverlay />}
+        {shouldObscureNsfw && <NsfwOverlay />}
       </section>
     );
     /* eslint-enable jsx-a11y/click-events-have-key-events */

@@ -1,4 +1,4 @@
-// This will go away
+// This will be moved and updated once we figure out how it should look
 // It's for the download progress "button"
 .faux-button-block {
   display: inline-block;
@@ -9,6 +9,8 @@
   text-align: center;
   border-radius: var(--button-radius);
   text-transform: uppercase;
+  color: var(--color-white);
+
   .icon {
     top: 0em;
   }
