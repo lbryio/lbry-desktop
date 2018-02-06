@@ -40,15 +40,7 @@ class WalletSend extends React.PureComponent<Props> {
             }}
             onSubmit={this.handleSubmit}
             validate={validateSendTx}
-            render={({
-              values,
-              errors,
-              touched,
-              handleChange,
-              handleBlur,
-              handleSubmit,
-              isSubmitting,
-            }) => (
+            render={({ values, errors, touched, handleChange, handleBlur, handleSubmit }) => (
               <Form onSubmit={handleSubmit}>
                 <FormRow>
                   <FormField
@@ -57,7 +49,7 @@ class WalletSend extends React.PureComponent<Props> {
                     error={!!values.amount && touched.amount && errors.amount}
                     render={() => (
                       <input
-                        className="input--lbc-amount"
+                        className="input--price-amount"
                         type="number"
                         name="amount"
                         min="0"

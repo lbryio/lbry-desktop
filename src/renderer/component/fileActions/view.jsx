@@ -22,9 +22,8 @@ class FileActions extends React.PureComponent<Props> {
     const { fileInfo, uri, openModal, claimIsMine, vertical } = this.props;
 
     const claimId = fileInfo ? fileInfo.claim_id : '';
-    // showDelete = fileInfo && Object.keys(fileInfo).length > 0;
+    const showDelete = fileInfo && Object.keys(fileInfo).length > 0;
 
-    const showDelete = true;
     return (
       <section className={classnames('card__actions', { 'card__actions--vertical': vertical })}>
         <FileDownloadLink uri={uri} />

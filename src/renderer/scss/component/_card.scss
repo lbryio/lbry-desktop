@@ -69,7 +69,7 @@
 .card__title {
   font-size: 1.5em;
   font-weight: 800;
-  padding: $spacing-vertical / 3 0;
+  padding: 0;
 }
 
 .card__title--small {
@@ -88,10 +88,20 @@
   padding-top: 0;
 }
 
-.card-media__internal-links {
-  position: absolute;
-  top: $spacing-vertical * 2/3;
-  right: $spacing-vertical * 2/3;
+// .card-media__internal__links should always be inside a card
+.card {
+  .card-media__internal-links {
+    position: absolute;
+    top: $spacing-vertical * 2/3;
+    right: $spacing-vertical * 2/3;
+  }
+}
+
+.card--small {
+  .card-media__internal-links {
+    top: $spacing-vertical * 1/3;
+    right: $spacing-vertical * 1/3;
+  }
 }
 
 // Channel info with buttons on the right side
@@ -107,7 +117,6 @@
 
 .card__content {
   margin-top: var(--card-margin);
-  margin-bottom: var(--card-margin);
 }
 
 .card__subtext-title {
