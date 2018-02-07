@@ -1,6 +1,6 @@
 .load-screen {
   color: white;
-  background: var(--color-brand);
+  background: var(--color-primary);
   background-size: cover;
   min-height: 100vh;
   min-width: 100vw;
@@ -10,20 +10,18 @@
   justify-content: center;
 }
 
+.load-screen__title {
+  font-weight: 800;
+  font-size: 4em;
+}
+
 .load-screen__message {
-  margin-top: 24px;
-  width: 325px;
+  font-size: 1.5em;
+  margin-top: $spacing-vertical * 2/3;
   text-align: center;
 }
 
 .load-screen__details {
-  color: var(--color-load-screen-text);
-}
-
-.load-screen__details--warning {
-  color: white;
-}
-
-.load-screen__cancel-link {
-  color: white;
+  padding-top: $spacing-vertical * 2/3;
+  max-width: 400px;
 }
