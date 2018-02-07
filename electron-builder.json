@@ -1,11 +1,13 @@
 {
   "appId": "io.lbry.LBRY",
+  "productName": "LBRY",
   "publish": {
     "provider": "s3",
     "bucket": "releases.lbry.io",
     "path": "app/latest"
   },
   "mac": {
+    "target": "dmg",
     "category": "public.app-category.entertainment"
   },
   "dmg": {
@@ -38,23 +40,11 @@
     }
   ],
   "linux": {
-    "target": "deb",
     "category": "Video",
     "desktop": {
       "MimeType": "x-scheme-handler/lbry",
       "Exec": "/opt/LBRY/lbry %U"
     }
-  },
-  "deb": {
-    "depends": [
-      "gconf2",
-      "gconf-service",
-      "libnotify4",
-      "libappindicator1",
-      "libxtst6",
-      "libnss3",
-      "libsecret-1-0"
-    ]
   },
   "nsis": {
     "perMachine": true
