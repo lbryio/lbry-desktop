@@ -1,6 +1,6 @@
 {
   "name": "lbry-app",
-  "version": "0.21.0",
+  "version": "0.22.0",
   "description": "A browser for the LBRY network, a digital marketplace controlled by its users.",
   "homepage": "https://lbry.io/",
   "bugs": {
@@ -72,7 +72,6 @@
     "y18n": "^4.0.0"
   },
   "devDependencies": {
-    "adm-zip": "^0.4.7",
     "axios": "^0.17.1",
     "babel-eslint": "^8.0.3",
     "babel-plugin-module-resolver": "^3.0.0",
