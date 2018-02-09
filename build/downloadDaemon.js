@@ -15,6 +15,7 @@ module.exports = function(context) {
     .replace(/DAEMONVER/g, daemonVersion)
     .replace(/OSNAME/g, currentPlatform);
   const tmpZipPath = 'build/daemon.zip';
+  console.log(daemonURL);
 
   return new Promise(resolve => {
     axios
