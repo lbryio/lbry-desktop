@@ -33,7 +33,7 @@ module.exports = function(context) {
       })
       .then(() => {
         return decompress(tmpZipPath, 'static/daemon', {
-          filter: file => path.basename(file.path) === 'lbrynet-daemon',
+          filter: file => path.basename(file.path).replace(path.extname(file.path), '') === 'lbrynet-daemon',
         });
       })
       .then(() => {
