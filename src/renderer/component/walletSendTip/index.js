@@ -1,4 +1,4 @@
-import * as MODALS from 'constants/modal-types'; 
+import * as MODALS from 'constants/modal_types'; 
 import { connect } from 'react-redux';
 import {
   ACTIONS,

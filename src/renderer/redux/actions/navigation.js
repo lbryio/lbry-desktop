@@ -1,5 +1,4 @@
-import * as ACTIONS from 'constants/action_types';
-import { selectHistoryIndex, selectHistoryStack } from 'redux/selectors/navigation';
+import { ACTIONS, selectHistoryIndex, selectHistoryStack } from 'lbry-redux';
 import { toQueryString } from 'util/query_params';
 
 export function doNavigate(path, params = {}, options = {}) {
