@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { selectFetchingRewards, selectUnclaimedRewards } from 'redux/selectors/rewards';
 import { selectUser } from 'redux/selectors/user';
-import { doAuthNavigate, doNavigate } from 'lbry-redux';
+import { doAuthNavigate, doNavigate } from 'redux/actions/navigation';
 import { doRewardList } from 'redux/actions/rewards';
 import RewardsPage from './view';
 

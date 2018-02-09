@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
-import { doNavigate, selectCurrentPage, selectHeaderLinks } from 'lbry-redux';
+import { selectCurrentPage, selectHeaderLinks } from 'lbry-redux';
+import { doNavigate } from 'redux/actions/navigation';
 import SubHeader from './view';
 
 const select = (state, props) => ({

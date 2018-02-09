@@ -1,5 +1,6 @@
-import { doNavigate, selectPathAfterAuth } from 'lbry-redux';
+import { selectPathAfterAuth } from 'lbry-redux';
 import { connect } from 'react-redux';
+import { doNavigate } from 'redux/actions/navigation';
 import {
   selectAuthenticationIsPending,
   selectEmailToVerify,

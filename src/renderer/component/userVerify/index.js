@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { doNavigate } from 'lbry-redux';
+import { doNavigate } from 'redux/actions/navigation';
 import { doUserIdentityVerify } from 'redux/actions/user';
 import rewards from 'rewards';
 import { makeSelectRewardByType } from 'redux/selectors/rewards';
