@@ -1,7 +1,6 @@
 import { connect } from 'react-redux';
 import { doClaimRewardType } from 'redux/actions/rewards';
 import {
-  doNavigate,
   doHistoryBack,
   doResolveUri,
   selectMyClaims,
@@ -17,6 +16,7 @@ import {
   doCreateChannel,
   doPublish,
 } from 'redux/actions/content';
+import { doNavigate } from 'redux/actions/navigation';
 import rewards from 'rewards';
 import PublishPage from './view';
 

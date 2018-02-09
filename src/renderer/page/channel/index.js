@@ -1,13 +1,13 @@
 import { connect } from 'react-redux';
 import { doFetchClaimsByChannel, doFetchClaimCountByChannel } from 'redux/actions/content';
 import {
-  doNavigate,
   makeSelectClaimForUri,
   makeSelectClaimsInChannelForCurrentPage,
   makeSelectFetchingChannelClaims,
   makeSelectCurrentParam,
   selectCurrentParams,
 } from 'lbry-redux';
+import { doNavigate } from 'redux/actions/navigation';
 import { makeSelectTotalPagesForChannel } from 'redux/selectors/content';
 import ChannelPage from './view';
 

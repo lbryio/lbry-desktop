@@ -1,14 +1,14 @@
 import { connect } from 'react-redux';
-import { selectShowNsfw } from 'redux/selectors/settings';
 import {
-  doNavigate,
   doResolveUri,
   makeSelectClaimForUri,
   makeSelectMetadataForUri,
   makeSelectFileInfoForUri,
   makeSelectIsUriResolving,
 } from 'lbry-redux';
+import { doNavigate } from 'redux/actions/navigation';
 import { selectRewardContentClaimIds } from 'redux/selectors/content';
+import { selectShowNsfw } from 'redux/selectors/settings';
 import FileCard from './view';
 
 const select = (state, props) => ({

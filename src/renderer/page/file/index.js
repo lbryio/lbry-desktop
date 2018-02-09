@@ -2,7 +2,6 @@ import { connect } from 'react-redux';
 import {
   doFetchFileInfo,
   doFetchCostInfoForUri,
-  doNavigate,
   makeSelectCurrentParam,
   makeSelectCostInfoForUri,
   makeSelectFileInfoForUri,
@@ -10,6 +9,7 @@ import {
   makeSelectContentTypeForUri,
   makeSelectMetadataForUri,
 } from 'lbry-redux';
+import { doNavigate } from 'redux/actions/navigation';
 import { selectRewardContentClaimIds } from 'redux/selectors/content';
 import { selectShowNsfw } from 'redux/selectors/settings';
 import FilePage from './view';

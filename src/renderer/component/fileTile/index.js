@@ -1,12 +1,12 @@
 import { connect } from 'react-redux';
 import {
-  doNavigate,
   doResolveUri,
   makeSelectClaimForUri,
   makeSelectMetadataForUri,
   makeSelectFileInfoForUri,
   makeSelectIsUriResolving,
 } from 'lbry-redux';
+import { doNavigate } from 'redux/actions/navigation';
 import { selectShowNsfw } from 'redux/selectors/settings';
 import { selectRewardContentClaimIds } from 'redux/selectors/content';
 import FileTile from './view';

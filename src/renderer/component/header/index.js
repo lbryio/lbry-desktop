@@ -1,13 +1,15 @@
 import { formatCredits } from 'util/formatCredits';
 import { connect } from 'react-redux';
 import {
-  doNavigate,
-  doHistoryBack,
-  doHistoryForward,
   selectBalance,
   selectIsBackDisabled,
   selectIsForwardDisabled,
 } from 'lbry-redux';
+import {
+  doNavigate,
+  doHistoryBack,
+  doHistoryForward,
+} from 'redux/actions/navigation';
 import { selectIsUpgradeAvailable, selectAutoUpdateDownloaded } from 'redux/selectors/app';
 import { doDownloadUpgradeRequested } from 'redux/actions/app';
 import header from './view';
