@@ -37,7 +37,7 @@
   "linux": {
     "category": "AudioVideo;Video",
     "desktop": {
-      "MimeType": "x-scheme-handler/lbry"
+      "MimeType": "x-scheme-handler/lbry;"
     }
   },
   "nsis": {
