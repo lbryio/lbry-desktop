@@ -29,21 +29,16 @@
   },
   "protocols": [
     {
-      "name": "lbry",
+      "name": "LBRY URI",
       "schemes": ["lbry"],
       "role": "Viewer"
     }
   ],
   "linux": {
-    "category": "Video",
-    "desktop": {
-      "MimeType": "x-scheme-handler/lbry;",
-      "Exec": "/opt/LBRY/lbry %U"
-    }
+    "category": "AudioVideo, Video"
   },
   "nsis": {
     "perMachine": true
   },
-  "beforeBuild": "build/downloadDaemon.js",
-  "artifactName": "${productName}_${version}.${ext}"
+  "beforeBuild": "build/downloadDaemon.js"
 }
