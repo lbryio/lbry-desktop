@@ -1,11 +1,13 @@
 {
   "appId": "io.lbry.LBRY",
+  "productName": "LBRY",
   "publish": {
     "provider": "s3",
     "bucket": "releases.lbry.io",
     "path": "app/latest"
   },
   "mac": {
+    "target": "dmg",
     "category": "public.app-category.entertainment"
   },
   "dmg": {
@@ -32,7 +34,7 @@
   },
   "protocols": [
     {
-      "name": "lbry",
+      "name": "LBRY URI",
       "schemes": ["lbry"],
       "role": "Viewer"
     }
@@ -60,5 +62,5 @@
     "perMachine": true
   },
   "beforeBuild": "build/downloadDaemon.js",
-  "artifactName": "${productName}_${version}_${arch}.${ext}"
+  "artifactName": "${productName}_${version}.${ext}"
 }
