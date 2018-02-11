@@ -5137,7 +5137,7 @@ keypress@0.1.x:
   version "0.1.0"
   resolved "https://registry.yarnpkg.com/keypress/-/keypress-0.1.0.tgz#4a3188d4291b66b4f65edb99f806aa9ae293592a"
 
-keytar-prebuild@^4.0.4:
+keytar-prebuild@^4.1.1:
   version "4.1.1"
   resolved "https://registry.yarnpkg.com/keytar-prebuild/-/keytar-prebuild-4.1.1.tgz#f31cd3b2e5de743303f8c2f607f29f0117981295"
   dependencies:
