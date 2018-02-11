@@ -83,7 +83,7 @@
     "decompress": "^4.2.0",
     "devtron": "^1.4.0",
     "electron": "^1.7.11",
-    "electron-builder": "^19.49.0",
+    "electron-builder": "^19.56.0",
     "electron-devtools-installer": "^2.2.1",
     "electron-webpack": "^1.11.0",
     "eslint": "^4.13.1",
