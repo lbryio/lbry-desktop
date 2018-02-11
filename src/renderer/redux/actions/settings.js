@@ -2,7 +2,6 @@ import * as ACTIONS from 'constants/action_types';
 import * as SETTINGS from 'constants/settings';
 import Fs from 'fs';
 import Http from 'http';
-
 import Lbry from 'lbry';
 import moment from 'moment';
 
@@ -54,6 +53,20 @@ export function doGetThemes() {
   };
 }
 
+export function doUpdateIsNight() {
+  const momentNow = moment();
+  return {
+    type: ACTIONS.UPDATE_IS_NIGHT,
+    data: {
+      isNight: (() => {
+        const startNightMoment = moment('19:00', 'HH:mm');
+        const endNightMoment = moment('8:00', 'HH:mm');
+        return !(momentNow.isAfter(endNightMoment) && momentNow.isBefore(startNightMoment));
+      })(),
+    },
+  };
+}
+
 export function doUpdateIsNightAsync() {
   return dispatch => {
     dispatch(doUpdateIsNight());
@@ -61,19 +74,6 @@ export function doUpdateIsNightAsync() {
       () => dispatch(doUpdateIsNight()),
       UPDATE_IS_NIGHT_INTERVAL
     );
-  };
-}
-
-export function doUpdateIsNight() {
-  const momentNow = moment();
-  return {
-    type: ACTIONS.UPDATE_IS_NIGHT,
-    data: { isNight: (() => {
-        const startNightMoment = moment('19:00', 'HH:mm');
-        const endNightMoment = moment('8:00', 'HH:mm');
-        return !(momentNow.isAfter(endNightMoment) && momentNow.isBefore(startNightMoment));
-      })()
-    },
   };
 }
 
