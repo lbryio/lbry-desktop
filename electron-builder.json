@@ -35,7 +35,10 @@
     }
   ],
   "linux": {
-    "category": "AudioVideo, Video"
+    "category": "AudioVideo;Video",
+    "desktop": {
+      "MimeType": "x-scheme-handler/lbry"
+    }
   },
   "nsis": {
     "perMachine": true
