@@ -1,11 +1,11 @@
 {
   "appId": "io.lbry.LBRY",
   "productName": "LBRY",
-  "publish": {
+  "publish": [{
     "provider": "s3",
     "bucket": "releases.lbry.io",
     "path": "app/latest"
-  },
+  }, "github"],
   "mac": {
     "target": "dmg",
     "category": "public.app-category.entertainment"
