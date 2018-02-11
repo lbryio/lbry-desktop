@@ -43,5 +43,6 @@
   "nsis": {
     "perMachine": true
   },
-  "beforeBuild": "build/downloadDaemon.js"
+  "beforeBuild": "build/downloadDaemon.js",
+  "artifactName": "${productName}_${version}.${ext}"
 }
