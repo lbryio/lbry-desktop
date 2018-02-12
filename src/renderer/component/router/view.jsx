@@ -22,7 +22,7 @@ import SubscriptionsPage from 'page/subscriptions';
 const route = (page, routesMap) => {
   const component = routesMap[page];
 
-  return component;
+  return component || DiscoverPage;
 };
 
 const Router = props => {

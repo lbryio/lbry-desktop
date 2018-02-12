@@ -23,12 +23,13 @@ export default class Address extends React.PureComponent<Props> {
 
     return (
       <FormField
+        stretch
         name="address"
         render={() => (
           <React.Fragment>
             <input
               id="address"
-              className="input-copyable"
+              className="input-copyable form-field__input"
               readOnly
               value={address || ''}
               ref={input => {

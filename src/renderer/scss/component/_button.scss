@@ -37,7 +37,11 @@
   min-width: var(--btn-height);
   border-radius: var(--btn-radius);
   color: var(--btn-primary-color);
-  background-color: var(--btn-primary-bg);
+
+  // TODO: Why does using --color-primary not work here? something is being overriden
+  // background-color: var(--color-primary);
+  background-color: #44b098;
+  
   display: flex;
   align-items: center;
   justify-content: center;
@@ -111,7 +115,6 @@
 
   &:hover {
     box-shadow: none;
-    color: var(--color-primary);
   }
 }
 

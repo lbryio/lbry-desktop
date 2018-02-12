@@ -60,24 +60,41 @@ export const selectNavLinks = createSelector(
       page === 'rewards' ||
       page === 'history';
 
-    let walletLink;
-    if (isWalletPage(currentPage)) {
-      // If they are on a wallet page, the top level link should direct them to the overview page
-      walletLink = '/wallet';
-    } else {
-      // check to see if they've recently been on a wallet sub-link
-      const previousStack = historyStack.slice().reverse();
+    const isMyLbryPage = page =>
+      page === 'downloaded' ||
+      page === 'published' ||
+      page === 'settings';
+
+
+    const previousStack = historyStack.slice().reverse();
+
+    const getPreviousSubLinkPath = (checkIfValidPage) => {
       for (let i = 0; i < previousStack.length; i += 1) {
         const currentStackItem = previousStack[i];
 
         // Trim off the "/" from the path
         const pageInStack = currentStackItem.path.slice(1);
-        if (isWalletPage(pageInStack)) {
-          walletLink = currentStackItem.path;
-          break;
+        if (checkIfValidPage(pageInStack)) {
+          return currentStackItem.path;
         }
       }
     }
+
+    // Gets the last active sublink in a section
+    const getActiveSublink = (category) => {
+      if (category === 'wallet') {
+        const previousPath = getPreviousSubLinkPath(isWalletPage);
+        return previousPath ? previousPath : '/wallet';
+      } else if (category === 'myLbry') {
+        const previousPath = getPreviousSubLinkPath(isMyLbryPage);
+        return previousPath ? previousPath : '/downloaded';
+      }
+
+      return undefined;
+    }
+
+    const isCurrentlyWalletPage = isWalletPage(currentPage);
+    const isCurrentlyMyLbryPage = isMyLbryPage(currentPage);
 
     const walletSubLinks = [
       {
@@ -101,11 +118,29 @@ export const selectNavLinks = createSelector(
         active: currentPage === 'rewards',
       },
       {
-        label: 'My Transactions',
+        label: 'Transactions',
         path: '/history',
         active: currentPage === 'history',
       },
     ];
+
+    const myLbrySubLinks = [
+      {
+        label: 'Downloads',
+        path: '/downloaded',
+        active: currentPage === 'downloaded',
+      },
+      {
+        label: 'Publishes',
+        path: '/published',
+        active: currentPage === 'published',
+      },
+      {
+        label: 'Settings',
+        path: '/settings',
+        active: currentPage === 'settings',
+      },
+    ]
 
     const navLinks = {
       primary: [
@@ -125,27 +160,20 @@ export const selectNavLinks = createSelector(
       secondary: [
         {
           label: 'Wallet',
-          path: walletLink || '/wallet', // If they've never been to a wallet page, take them to the overview
-          active:
-            currentPage === 'wallet' ||
-            !!walletSubLinks.find(({ path }) => currentPage === path.slice(1)),
-          subLinks: walletSubLinks,
           icon: 'CreditCard',
+          subLinks: walletSubLinks,
+          path: isCurrentlyWalletPage ? '/wallet' : getActiveSublink('wallet'),
+          active: isWalletPage(currentPage)
         },
         {
-          label: 'Publish',
-          path: '/publish',
-          active: currentPage === 'publish',
-          icon: 'UploadCloud',
-        },
-        {
-          label: 'Settings',
-          path: '/settings',
-          active: currentPage === 'settings',
+          label: 'My LBRY',
           icon: 'Settings',
+          subLinks: myLbrySubLinks,
+          path: isCurrentlyMyLbryPage ? '/downloaded' : getActiveSublink('myLbry'),
+          active: isMyLbryPage(currentPage)
         },
         {
-          label: 'Backup Wallet',
+          label: 'Backup',
           path: '/backup',
           active: currentPage === 'backup',
           icon: 'Save',
@@ -158,6 +186,7 @@ export const selectNavLinks = createSelector(
         },
       ],
     };
+
     return navLinks;
   }
 );

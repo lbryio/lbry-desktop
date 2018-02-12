@@ -67,8 +67,8 @@
 }
 
 .card__title {
-  font-size: 1.5em;
-  font-weight: 800;
+  font-size: 1.2em;
+  font-weight: 700;
   padding: 0;
 }
 
@@ -86,6 +86,12 @@
 .card__subtitle--file {
   font-size: 1em;
   padding-top: 0;
+}
+
+.card__meta {
+  color: var(--color-help);
+  font-size: 0.85em;
+  padding-top: $spacing-vertical * 2/3;
 }
 
 // .card-media__internal__links should always be inside a card
@@ -109,10 +115,6 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-
-  .card__actions .btn:not(:first-of-type) {
-    margin-left: $spacing-vertical / 3;
-  }
 }
 
 .card__content {
@@ -137,10 +139,14 @@
 .card__actions {
   margin-top: var(--card-margin);
   display: flex;
+
+  .btn:nth-child(n + 2) {
+    margin-left: $spacing-vertical / 3;
+  }
 }
 
 .card__actions--no-margin {
-  magin-top: 0;
+  margin-top: 0;
 }
 
 .card__actions--vertical {

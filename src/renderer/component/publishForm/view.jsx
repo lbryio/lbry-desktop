@@ -3,10 +3,8 @@
 import React from 'react';
 import lbry from 'lbry';
 import { isNameValid, buildURI, regexInvalidURI } from 'lbryURI';
-import FormField from 'component/formField';
 import { Form, FormRow } from 'component/common/form';
 import Link from 'component/link';
-import FormFieldPrice from 'component/formFieldPrice';
 import Modal from 'modal/modal';
 import { BusyMessage } from 'component/common';
 import ChannelSection from './internal/channelSection';
@@ -516,367 +514,369 @@ class PublishForm extends React.PureComponent {
       submitLabel = !submitting ? __('Update') : __('Updating...');
     }
 
-    return (
-      <main className="main--single-column">
-        <Form onSubmit={this.handleSubmit.bind(this)}>
-          <section className="card">
-            <div className="card__title-primary">
-              <h4>{__('Content')}</h4>
-              <div className="card__subtitle">{__('What are you publishing?')}</div>
-            </div>
-            <div className="card__content">
-              <FormRow
-                name="file"
-                ref="file"
-                type="file"
-                onChange={event => {
-                  this.onFileChange(event);
-                }}
-                helper={
-                  this.myClaimExists()
-                    ? __(
-                        "If you don't choose a file, the file from your existing claim will be used."
-                      )
-                    : null
-                }
-              />
-            </div>
-            {!this.state.hasFile && !this.myClaimExists() ? null : (
-              <div>
-                <div className="card__content">
-                  <FormRow
-                    ref="meta_title"
-                    label={__('Title')}
-                    type="text"
-                    name="title"
-                    value={this.state.meta_title}
-                    placeholder="Titular Title"
-                    onChange={event => {
-                      this.handleMetadataChange(event);
-                    }}
-                  />
-                </div>
-                <div className="card__content">
-                  <FormRow
-                    type="text"
-                    label={__('Thumbnail URL')}
-                    name="thumbnail"
-                    value={this.state.meta_thumbnail}
-                    placeholder="http://spee.ch/mylogo"
-                    onChange={event => {
-                      this.handleMetadataChange(event);
-                    }}
-                  />
-                </div>
-                <div className="card__content">
-                  <FormRow
-                    type="SimpleMDE"
-                    label={__('Description')}
-                    ref="meta_description"
-                    name="description"
-                    value={this.state.meta_description}
-                    placeholder={__('Description of your content')}
-                    onChange={text => {
-                      this.handleDescriptionChanged(text);
-                    }}
-                  />
-                </div>
-                <div className="card__content">
-                  <FormRow
-                    label={__('Language')}
-                    type="select"
-                    value={this.state.meta_language}
-                    name="language"
-                    onChange={event => {
-                      this.handleMetadataChange(event);
-                    }}
-                  >
-                    <option value="en">{__('English')}</option>
-                    <option value="zh">{__('Chinese')}</option>
-                    <option value="fr">{__('French')}</option>
-                    <option value="de">{__('German')}</option>
-                    <option value="jp">{__('Japanese')}</option>
-                    <option value="ru">{__('Russian')}</option>
-                    <option value="es">{__('Spanish')}</option>
-                  </FormRow>
-                </div>
-                <div className="card__content">
-                  <FormRow
-                    type="select"
-                    label={__('Maturity')}
-                    value={this.state.meta_nsfw}
-                    name="nsfw"
-                    onChange={event => {
-                      this.handleMetadataChange(event);
-                    }}
-                  >
-                    {/* <option value=""></option> */}
-                    <option value="0">{__('All Ages')}</option>
-                    <option value="1">{__('Adults Only')}</option>
-                  </FormRow>
-                </div>
-              </div>
-            )}
-          </section>
+    return null;
 
-          <section className="card">
-            <div className="card__title-primary">
-              <h4>{__('Price')}</h4>
-              <div className="card__subtitle">{__('How much does this content cost?')}</div>
-            </div>
-            <div className="card__content">
-              <FormRow
-                label={__('Free')}
-                type="radio"
-                name="isFree"
-                onChange={() => this.handleFeePrefChange(false)}
-                checked={!this.state.isFee}
-              />
-              <FormField
-                type="radio"
-                name="isFree"
-                label={!this.state.isFee ? __('Choose price...') : __('Price ')}
-                onChange={() => {
-                  this.handleFeePrefChange(true);
-                }}
-                checked={this.state.isFee}
-              />
-              <span className={!this.state.isFee ? 'hidden' : ''}>
-                <FormFieldPrice
-                  min="0"
-                  defaultValue={{
-                    amount: this._defaultPaidPrice,
-                    currency: 'LBC',
-                  }}
-                  onChange={val => this.handleFeeChange(val)}
-                />
-              </span>
-              {this.state.isFee && this.state.feeCurrency.toUpperCase() != 'LBC' ? (
-                <div className="form-field__helper">
-                  {__(
-                    'All content fees are charged in LBC. For non-LBC payment methods, the number of credits charged will be adjusted based on the value of LBRY credits at the time of purchase.'
-                  )}
-                </div>
-              ) : null}
-            </div>
-          </section>
-          <section className="card">
-            <div className="card__title-primary">
-              <h4>{__('License')}</h4>
-            </div>
-            <div className="card__content">
-              <FormRow
-                type="select"
-                value={this.state.licenseType}
-                ref={row => {
-                  this._meta_license = row;
-                }}
-                onChange={event => {
-                  this.handleLicenseTypeChange(event);
-                }}
-              >
-                <option>{__('None')}</option>
-                <option value="publicDomain">{__('Public Domain')}</option>
-                <option
-                  value="cc-by"
-                  data-url="https://creativecommons.org/licenses/by/4.0/legalcode"
-                >
-                  {__('Creative Commons Attribution 4.0 International')}
-                </option>
-                <option
-                  value="cc-by-sa"
-                  data-url="https://creativecommons.org/licenses/by-sa/4.0/legalcode"
-                >
-                  {__('Creative Commons Attribution-ShareAlike 4.0 International')}
-                </option>
-                <option
-                  value="cc-by-nd"
-                  data-url="https://creativecommons.org/licenses/by-nd/4.0/legalcode"
-                >
-                  {__('Creative Commons Attribution-NoDerivatives 4.0 International')}
-                </option>
-                <option
-                  value="cc-by-nc"
-                  data-url="https://creativecommons.org/licenses/by-nc/4.0/legalcode"
-                >
-                  {__('Creative Commons Attribution-NonCommercial 4.0 International')}
-                </option>
-                <option
-                  value="cc-by-nc-sa"
-                  data-url="https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode"
-                >
-                  {__('Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International')}
-                </option>
-                <option
-                  value="cc-by-nc-nd"
-                  data-url="https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode"
-                >
-                  {__('Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International')}
-                </option>
-                <option value="copyright">{__('Copyrighted...')}</option>
-                <option value="other">{__('Other...')}</option>
-              </FormRow>
-
-              {this.state.licenseType == 'copyright' ? (
-                <FormRow
-                  label={__('Copyright notice')}
-                  type="text"
-                  name="copyright-notice"
-                  value={this.state.copyrightNotice}
-                  onChange={event => {
-                    this.handleCopyrightNoticeChange(event);
-                  }}
-                />
-              ) : null}
-
-              {this.state.licenseType == 'other' ? (
-                <FormRow
-                  label={__('License description')}
-                  type="text"
-                  name="other-license-description"
-                  value={this.state.otherLicenseDescription}
-                  onChange={event => {
-                    this.handleOtherLicenseDescriptionChange(event);
-                  }}
-                />
-              ) : null}
-
-              {this.state.licenseType == 'other' ? (
-                <FormRow
-                  label={__('License URL')}
-                  type="text"
-                  name="other-license-url"
-                  value={this.state.otherLicenseUrl}
-                  onChange={event => {
-                    this.handleOtherLicenseUrlChange(event);
-                  }}
-                />
-              ) : null}
-            </div>
-          </section>
-
-          <ChannelSection
-            {...this.props}
-            handleChannelChange={this.handleChannelChange.bind(this)}
-            channel={this.state.channel}
-          />
-
-          <section className="card">
-            <div className="card__title-primary">
-              <h4>{__('Content URL')}</h4>
-              <div className="card__subtitle">
-                {__(
-                  'This is the exact address where people find your content (ex. lbry://myvideo).'
-                )}{' '}
-                <Link label={__('Learn more')} href="https://lbry.io/faq/naming" />.
-              </div>
-            </div>
-            <div className="card__content">
-              <FormRow
-                prefix={`lbry://${
-                  this.state.channel === 'anonymous' ? '' : `${this.state.channel}/`
-                }`}
-                type="text"
-                ref="name"
-                placeholder="myname"
-                value={this.state.rawName}
-                onChange={event => {
-                  this.handleNameChange(event);
-                }}
-                helper={this.getNameBidHelpText()}
-              />
-            </div>
-            {this.state.rawName ? (
-              <div className="card__content">
-                <FormRow
-                  ref="bid"
-                  type="number"
-                  step="any"
-                  label={__('Deposit')}
-                  postfix="LBC"
-                  onChange={event => {
-                    this.handleBidChange(event);
-                  }}
-                  value={this.state.bid}
-                  placeholder={this.claim() ? this.topClaimValue() + 10 : 100}
-                  helper={lbcInputHelp}
-                  min="0"
-                />
-              </div>
-            ) : (
-              ''
-            )}
-          </section>
-
-          <section className="card">
-            <div className="card__title-primary">
-              <h4>{__('Terms of Service')}</h4>
-            </div>
-            <div className="card__content">
-              <FormRow
-                ref="tosAgree"
-                label={
-                  <span>
-                    {__('I agree to the')}{' '}
-                    <Link
-                      href="https://www.lbry.io/termsofservice"
-                      label={__('LBRY terms of service')}
-                    />
-                  </span>
-                }
-                type="checkbox"
-                checked={this.state.tosAgree}
-                onChange={event => {
-                  this.handleTOSChange(event);
-                }}
-              />
-            </div>
-          </section>
-
-          <div className="card-series-submit">
-            <Link
-              type="submit"
-              label={!this.state.submitting ? __('Publish') : __('Publishing...')}
-              disabled={
-                this.props.balance <= 0 ||
-                this.state.submitting ||
-                (this.state.uri && this.props.resolvingUris.indexOf(this.state.uri) !== -1) ||
-                (this.claim() && !this.topClaimIsMine() && this.state.bid <= this.topClaimValue())
-              }
-            />
-            <Link button="cancel" onClick={this.props.back} label={__('Cancel')} />
-          </div>
-        </Form>
-
-        <Modal
-          isOpen={this.state.modal == 'publishStarted'}
-          contentLabel={__('File published')}
-          onConfirmed={event => {
-            this.handlePublishStartedConfirmed(event);
-          }}
-        >
-          <p>
-            {__('Your file has been published to LBRY at the address')}{' '}
-            <code>{this.state.uri}</code>!
-          </p>
-          <p>
-            {__(
-              'The file will take a few minutes to appear for other LBRY users. Until then it will be listed as "pending" under your published files.'
-            )}
-          </p>
-        </Modal>
-        <Modal
-          isOpen={this.state.modal == 'error'}
-          contentLabel={__('Error publishing file')}
-          onConfirmed={event => {
-            this.closeModal(event);
-          }}
-        >
-          {__('The following error occurred when attempting to publish your file')}:{' '}
-          {this.state.errorMessage}
-        </Modal>
-      </main>
-    );
+    // return (
+    //   <main className="main--single-column">
+    //     <Form onSubmit={this.handleSubmit.bind(this)}>
+    //       <section className="card">
+    //         <div className="card__title-primary">
+    //           <h4>{__('Content')}</h4>
+    //           <div className="card__subtitle">{__('What are you publishing?')}</div>
+    //         </div>
+    //         <div className="card__content">
+    //           <FormRow
+    //             name="file"
+    //             ref="file"
+    //             type="file"
+    //             onChange={event => {
+    //               this.onFileChange(event);
+    //             }}
+    //             helper={
+    //               this.myClaimExists()
+    //                 ? __(
+    //                     "If you don't choose a file, the file from your existing claim will be used."
+    //                   )
+    //                 : null
+    //             }
+    //           />
+    //         </div>
+    //         {!this.state.hasFile && !this.myClaimExists() ? null : (
+    //           <div>
+    //             <div className="card__content">
+    //               <FormRow
+    //                 ref="meta_title"
+    //                 label={__('Title')}
+    //                 type="text"
+    //                 name="title"
+    //                 value={this.state.meta_title}
+    //                 placeholder="Titular Title"
+    //                 onChange={event => {
+    //                   this.handleMetadataChange(event);
+    //                 }}
+    //               />
+    //             </div>
+    //             <div className="card__content">
+    //               <FormRow
+    //                 type="text"
+    //                 label={__('Thumbnail URL')}
+    //                 name="thumbnail"
+    //                 value={this.state.meta_thumbnail}
+    //                 placeholder="http://spee.ch/mylogo"
+    //                 onChange={event => {
+    //                   this.handleMetadataChange(event);
+    //                 }}
+    //               />
+    //             </div>
+    //             <div className="card__content">
+    //               <FormRow
+    //                 type="SimpleMDE"
+    //                 label={__('Description')}
+    //                 ref="meta_description"
+    //                 name="description"
+    //                 value={this.state.meta_description}
+    //                 placeholder={__('Description of your content')}
+    //                 onChange={text => {
+    //                   this.handleDescriptionChanged(text);
+    //                 }}
+    //               />
+    //             </div>
+    //             <div className="card__content">
+    //               <FormRow
+    //                 label={__('Language')}
+    //                 type="select"
+    //                 value={this.state.meta_language}
+    //                 name="language"
+    //                 onChange={event => {
+    //                   this.handleMetadataChange(event);
+    //                 }}
+    //               >
+    //                 <option value="en">{__('English')}</option>
+    //                 <option value="zh">{__('Chinese')}</option>
+    //                 <option value="fr">{__('French')}</option>
+    //                 <option value="de">{__('German')}</option>
+    //                 <option value="jp">{__('Japanese')}</option>
+    //                 <option value="ru">{__('Russian')}</option>
+    //                 <option value="es">{__('Spanish')}</option>
+    //               </FormRow>
+    //             </div>
+    //             <div className="card__content">
+    //               <FormRow
+    //                 type="select"
+    //                 label={__('Maturity')}
+    //                 value={this.state.meta_nsfw}
+    //                 name="nsfw"
+    //                 onChange={event => {
+    //                   this.handleMetadataChange(event);
+    //                 }}
+    //               >
+    //                 {/* <option value=""></option> */}
+    //                 <option value="0">{__('All Ages')}</option>
+    //                 <option value="1">{__('Adults Only')}</option>
+    //               </FormRow>
+    //             </div>
+    //           </div>
+    //         )}
+    //       </section>
+    //
+    //       <section className="card">
+    //         <div className="card__title-primary">
+    //           <h4>{__('Price')}</h4>
+    //           <div className="card__subtitle">{__('How much does this content cost?')}</div>
+    //         </div>
+    //         <div className="card__content">
+    //           <FormRow
+    //             label={__('Free')}
+    //             type="radio"
+    //             name="isFree"
+    //             onChange={() => this.handleFeePrefChange(false)}
+    //             checked={!this.state.isFee}
+    //           />
+    //           <FormField
+    //             type="radio"
+    //             name="isFree"
+    //             label={!this.state.isFee ? __('Choose price...') : __('Price ')}
+    //             onChange={() => {
+    //               this.handleFeePrefChange(true);
+    //             }}
+    //             checked={this.state.isFee}
+    //           />
+    //           <span className={!this.state.isFee ? 'hidden' : ''}>
+    //             <FormFieldPrice
+    //               min="0"
+    //               defaultValue={{
+    //                 amount: this._defaultPaidPrice,
+    //                 currency: 'LBC',
+    //               }}
+    //               onChange={val => this.handleFeeChange(val)}
+    //             />
+    //           </span>
+    //           {this.state.isFee && this.state.feeCurrency.toUpperCase() != 'LBC' ? (
+    //             <div className="form-field__helper">
+    //               {__(
+    //                 'All content fees are charged in LBC. For non-LBC payment methods, the number of credits charged will be adjusted based on the value of LBRY credits at the time of purchase.'
+    //               )}
+    //             </div>
+    //           ) : null}
+    //         </div>
+    //       </section>
+    //       <section className="card">
+    //         <div className="card__title-primary">
+    //           <h4>{__('License')}</h4>
+    //         </div>
+    //         <div className="card__content">
+    //           <FormRow
+    //             type="select"
+    //             value={this.state.licenseType}
+    //             ref={row => {
+    //               this._meta_license = row;
+    //             }}
+    //             onChange={event => {
+    //               this.handleLicenseTypeChange(event);
+    //             }}
+    //           >
+    //             <option>{__('None')}</option>
+    //             <option value="publicDomain">{__('Public Domain')}</option>
+    //             <option
+    //               value="cc-by"
+    //               data-url="https://creativecommons.org/licenses/by/4.0/legalcode"
+    //             >
+    //               {__('Creative Commons Attribution 4.0 International')}
+    //             </option>
+    //             <option
+    //               value="cc-by-sa"
+    //               data-url="https://creativecommons.org/licenses/by-sa/4.0/legalcode"
+    //             >
+    //               {__('Creative Commons Attribution-ShareAlike 4.0 International')}
+    //             </option>
+    //             <option
+    //               value="cc-by-nd"
+    //               data-url="https://creativecommons.org/licenses/by-nd/4.0/legalcode"
+    //             >
+    //               {__('Creative Commons Attribution-NoDerivatives 4.0 International')}
+    //             </option>
+    //             <option
+    //               value="cc-by-nc"
+    //               data-url="https://creativecommons.org/licenses/by-nc/4.0/legalcode"
+    //             >
+    //               {__('Creative Commons Attribution-NonCommercial 4.0 International')}
+    //             </option>
+    //             <option
+    //               value="cc-by-nc-sa"
+    //               data-url="https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode"
+    //             >
+    //               {__('Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International')}
+    //             </option>
+    //             <option
+    //               value="cc-by-nc-nd"
+    //               data-url="https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode"
+    //             >
+    //               {__('Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International')}
+    //             </option>
+    //             <option value="copyright">{__('Copyrighted...')}</option>
+    //             <option value="other">{__('Other...')}</option>
+    //           </FormRow>
+    //
+    //           {this.state.licenseType == 'copyright' ? (
+    //             <FormRow
+    //               label={__('Copyright notice')}
+    //               type="text"
+    //               name="copyright-notice"
+    //               value={this.state.copyrightNotice}
+    //               onChange={event => {
+    //                 this.handleCopyrightNoticeChange(event);
+    //               }}
+    //             />
+    //           ) : null}
+    //
+    //           {this.state.licenseType == 'other' ? (
+    //             <FormRow
+    //               label={__('License description')}
+    //               type="text"
+    //               name="other-license-description"
+    //               value={this.state.otherLicenseDescription}
+    //               onChange={event => {
+    //                 this.handleOtherLicenseDescriptionChange(event);
+    //               }}
+    //             />
+    //           ) : null}
+    //
+    //           {this.state.licenseType == 'other' ? (
+    //             <FormRow
+    //               label={__('License URL')}
+    //               type="text"
+    //               name="other-license-url"
+    //               value={this.state.otherLicenseUrl}
+    //               onChange={event => {
+    //                 this.handleOtherLicenseUrlChange(event);
+    //               }}
+    //             />
+    //           ) : null}
+    //         </div>
+    //       </section>
+    //
+    //       <ChannelSection
+    //         {...this.props}
+    //         handleChannelChange={this.handleChannelChange.bind(this)}
+    //         channel={this.state.channel}
+    //       />
+    //
+    //       <section className="card">
+    //         <div className="card__title-primary">
+    //           <h4>{__('Content URL')}</h4>
+    //           <div className="card__subtitle">
+    //             {__(
+    //               'This is the exact address where people find your content (ex. lbry://myvideo).'
+    //             )}{' '}
+    //             <Link label={__('Learn more')} href="https://lbry.io/faq/naming" />.
+    //           </div>
+    //         </div>
+    //         <div className="card__content">
+    //           <FormRow
+    //             prefix={`lbry://${
+    //               this.state.channel === 'anonymous' ? '' : `${this.state.channel}/`
+    //             }`}
+    //             type="text"
+    //             ref="name"
+    //             placeholder="myname"
+    //             value={this.state.rawName}
+    //             onChange={event => {
+    //               this.handleNameChange(event);
+    //             }}
+    //             helper={this.getNameBidHelpText()}
+    //           />
+    //         </div>
+    //         {this.state.rawName ? (
+    //           <div className="card__content">
+    //             <FormRow
+    //               ref="bid"
+    //               type="number"
+    //               step="any"
+    //               label={__('Deposit')}
+    //               postfix="LBC"
+    //               onChange={event => {
+    //                 this.handleBidChange(event);
+    //               }}
+    //               value={this.state.bid}
+    //               placeholder={this.claim() ? this.topClaimValue() + 10 : 100}
+    //               helper={lbcInputHelp}
+    //               min="0"
+    //             />
+    //           </div>
+    //         ) : (
+    //           ''
+    //         )}
+    //       </section>
+    //
+    //       <section className="card">
+    //         <div className="card__title-primary">
+    //           <h4>{__('Terms of Service')}</h4>
+    //         </div>
+    //         <div className="card__content">
+    //           <FormRow
+    //             ref="tosAgree"
+    //             label={
+    //               <span>
+    //                 {__('I agree to the')}{' '}
+    //                 <Link
+    //                   href="https://www.lbry.io/termsofservice"
+    //                   label={__('LBRY terms of service')}
+    //                 />
+    //               </span>
+    //             }
+    //             type="checkbox"
+    //             checked={this.state.tosAgree}
+    //             onChange={event => {
+    //               this.handleTOSChange(event);
+    //             }}
+    //           />
+    //         </div>
+    //       </section>
+    //
+    //       <div className="card-series-submit">
+    //         <Link
+    //           type="submit"
+    //           label={!this.state.submitting ? __('Publish') : __('Publishing...')}
+    //           disabled={
+    //             this.props.balance <= 0 ||
+    //             this.state.submitting ||
+    //             (this.state.uri && this.props.resolvingUris.indexOf(this.state.uri) !== -1) ||
+    //             (this.claim() && !this.topClaimIsMine() && this.state.bid <= this.topClaimValue())
+    //           }
+    //         />
+    //         <Link button="cancel" onClick={this.props.back} label={__('Cancel')} />
+    //       </div>
+    //     </Form>
+    //
+    //     <Modal
+    //       isOpen={this.state.modal == 'publishStarted'}
+    //       contentLabel={__('File published')}
+    //       onConfirmed={event => {
+    //         this.handlePublishStartedConfirmed(event);
+    //       }}
+    //     >
+    //       <p>
+    //         {__('Your file has been published to LBRY at the address')}{' '}
+    //         <code>{this.state.uri}</code>!
+    //       </p>
+    //       <p>
+    //         {__(
+    //           'The file will take a few minutes to appear for other LBRY users. Until then it will be listed as "pending" under your published files.'
+    //         )}
+    //       </p>
+    //     </Modal>
+    //     <Modal
+    //       isOpen={this.state.modal == 'error'}
+    //       contentLabel={__('Error publishing file')}
+    //       onConfirmed={event => {
+    //         this.closeModal(event);
+    //       }}
+    //     >
+    //       {__('The following error occurred when attempting to publish your file')}:{' '}
+    //       {this.state.errorMessage}
+    //     </Modal>
+    //   </main>
+    // );
   }
 }
 

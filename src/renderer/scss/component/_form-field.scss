@@ -14,6 +14,16 @@
   &.form-row--centered {
     align-items: center;
   }
+
+  .form-field--strech {
+    flex: 1;
+  }
+}
+
+.form-field {
+  label {
+    cursor: pointer;
+  }
 }
 
 .form-field__input {
@@ -26,18 +36,12 @@
   }
 }
 
-.form-field {
-  label {
-    cursor: pointer;
-  }
-}
-
 .form-field__error {
   color: var(--color-error);
 }
 
 .form-field__label {
-  color: var(--color-grey-dark);
+  color: var(--color-black);
 }
 
 .form-field__help {

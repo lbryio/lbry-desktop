@@ -22,7 +22,7 @@ class TransactionListRecent extends React.PureComponent<Props> {
 
     return (
       <section className="card card--section">
-        <h2>{__('Recent Transactions')}</h2>
+        <div className="card__title">{__('Recent Transactions')}</div>
         <div className="card__content">
           {fetchingTransactions && <BusyMessage message={__('Loading transactions')} />}
           {!fetchingTransactions && (

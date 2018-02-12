@@ -233,7 +233,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
 
             <section className="card card--section">
               <div className="card__title">{__('Content Settings')}</div>
-              <div className="card__content">
                 <FormField
                   type="checkbox"
                   name="show_unavailable"
@@ -251,7 +250,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
                     'NSFW content may include nudity, intense sexuality, profanity, or other adult content. By displaying NSFW content, you are affirming you are of legal age to view mature content in your country or jurisdiction.  '
                   )}
                 />
-              </div>
             </section>
 
             <section className="card card--section">
