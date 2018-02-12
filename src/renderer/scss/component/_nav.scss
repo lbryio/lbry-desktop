@@ -1,51 +1,84 @@
 .nav {
   grid-area: nav;
   background-color: var(--color-nav-bg);
-  padding-top: 16px;
 
   hr {
     width: 40px;
     border: solid 1px var(--color-grey);
-    margin: $spacing-vertical $spacing-vertical * 2/3 $spacing-vertical * 2;
+    margin: $spacing-vertical $spacing-vertical * 2/3;
   }
 }
 
 .nav__actions-top {
+  height: var(--header-height);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 5px;
+  padding: 0 $spacing-vertical * 1/3;
 }
 
 .nav__actions-history {
   display: flex;
+
+  .btn {
+    margin-left: $spacing-vertical * 1/3;
+  }
 }
 
+// Sidebar links
 .nav__primary {
-  padding-top: $spacing-vertical * 3;
+  padding-top: $spacing-vertical;
 }
 
 .nav__link {
   padding: $spacing-vertical / 3 0 $spacing-vertical / 3 $spacing-vertical * 2/3;
-  font-weight: bold;
   color: var(--color-grey-dark);
 
-  // The hover effect should be on the li
-  // Need to have the button grow
-  & .btn:hover {
+  .btn:hover {
     color: var(--color-black);
   }
+
+  .btn__label {
+    margin-left: $spacing-vertical * 1/3;
+  }
+}
+
+.nav__link--primary {
+  font-weight: bold;
+}
+
+.nav__link--sub {
+  font-size: .9em;
+  font-weight: 400;
+  margin-left: 5px;
+  color: var(--color-grey-dark);
+  padding: 5px $spacing-vertical * 2/3;
 }
 
 .nav__link--active {
   color: var(--color-black);
 }
 
-.nav__sub {
-  padding-top: 5px;
+.nav__sub-links {
+  padding-top: $spacing-vertical * 1/3;
 }
 
-.nav__sub-link {
-  padding: 5px $spacing-vertical * 2/3;
-  font-size: 0.8em;
+// Sub links animations
+// The -appear, -leave classes are added by 'react-transition-group'
+.nav__sub-appear,
+.nav__sub-leave {
+  max-height: 0;
+  opacity: 0;
+}
+
+.nav__sub-appear.nav__sub-appear-active {
+  // using max-height is a hack to animate to height "auto"
+  // Needs to be some arbitrarily large height
+  max-height: 500px;
+  opacity: 1;
+  transition: max-height .5s ease-in-out, opacity .5s ease-in-out;
+}
+
+.nav__sub {
+  padding-top: 5px;
 }

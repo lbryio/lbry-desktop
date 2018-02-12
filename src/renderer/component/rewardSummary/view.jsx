@@ -13,7 +13,7 @@ const RewardSummary = (props: Props) => {
 
   return (
     <section className="card card--section">
-      <h2>{__('Rewards')}</h2>
+      <div className="card__title">{__('Rewards')}</div>
       <p className="card__subtitle">
         {hasRewards ? (
           <React.Fragment>

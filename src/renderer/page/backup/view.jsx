@@ -1,45 +1,54 @@
-import React from 'react';
+// @flow
+import * as React from 'react';
 import Link from 'component/link';
 import Page from 'component/page';
 
-class BackupPage extends React.PureComponent {
+type Props = {
+  daemonSettings: {
+    lbryum_wallet_dir: ?string
+  }
+}
+
+class BackupPage extends React.PureComponent<Props> {
   render() {
     const { daemonSettings } = this.props;
+    const { lbryum_wallet_dir } = daemonSettings;
 
-    if (!daemonSettings || Object.keys(daemonSettings).length === 0) {
-      return (
-        <main className="main--single-column">
-          <SubHeader />
-          <span className="empty">{__('Failed to load settings.')}</span>
-        </main>
-      );
-    }
+    const noDaemonSettings = Object.keys(daemonSettings).length === 0;
 
     return (
       <Page>
         <section className="card card--section">
-          <div className="card__title-primary">
-            <h3>{__('Backup Your LBRY Credits')}</h3>
+        {noDaemonSettings ? (
+          <div className="card__title">{__('Failed to load settings.')}</div>
+        ) : (
+          <React.Fragment>
+          <div className="card__title">
+            {__('Backup Your LBRY Credits')}
           </div>
+          <p className="card__subtitle">
+            {__(
+              'Your LBRY credits are controllable by you and only you, via wallet file(s) stored locally on your computer.'
+            )}
+          </p>
           <div className="card__content">
-            <p>
-              {__(
-                'Your LBRY credits are controllable by you and only you, via wallet file(s) stored locally on your computer.'
-              )}
-            </p>
             <p>
               {__(
                 'Currently, there is no automatic wallet backup. If you lose access to these files, you will lose your credits permanently.'
               )}
             </p>
+            </div>
+            <div className="card__content">
             <p>
               {__(
                 'However, it is fairly easy to back up manually. To backup your wallet, make a copy of the folder listed below:'
               )}
             </p>
             <p>
-              <code>{__(`${daemonSettings.lbryum_wallet_dir}`)}</code>
+              <code>{lbryum_wallet_dir}</code>
             </p>
+            </div>
+            <div className="card__content">
             <p>
               <strong>
                 {__(
@@ -50,11 +59,14 @@ class BackupPage extends React.PureComponent {
             <p>
               For more details on backing up and best practices,{' '}
               <Link
+                fakeLink
                 href="https://lbry.io/faq/how-to-backup-wallet"
                 label={__('see this article')}
               />.
             </p>
           </div>
+          </React.Fragment>
+        )}
         </section>
       </Page>
     );

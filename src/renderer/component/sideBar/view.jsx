@@ -1,7 +1,9 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import Button from 'component/link';
 import classnames from 'classnames';
+import Icon from 'component/common/icon';
+import { CSSTransitionGroup } from 'react-transition-group'
 
 type SideBarLink = {
   label: string,
@@ -59,36 +61,44 @@ const SideBar = (props: Props) => {
           {navLinks.primary.map(({ label, path, active, icon }) => (
             <li
               key={path}
-              className={classnames('nav__link nav__primary-link', { 'nav__link--active': active })}
+              className={classnames('nav__link nav__link--primary', { 'nav__link--active': active })}
             >
               <Button noStyle navigate={path} label={label} icon={icon} />
             </li>
           ))}
         </ul>
         <hr />
-        <ul className="nav__secondary">
+        <ul>
           {navLinks.secondary.map(({ label, path, active, icon, subLinks = [] }) => (
             <li
-              key={path}
-              className={classnames('nav__link nav__secondary-link', {
-                'nav__link--active': active && !subLinks.length,
+              key={label}
+              className={classnames('nav__link', {
+                'nav__link--active': active,
               })}
             >
-              <Button noStyle navigate={path} label={label} icon={icon} />
-              {!!subLinks.length &&
-                active && (
-                  <ul className="nav__sub">
-                    {subLinks.map(({ label: subLabel, path: subPath, active: subLinkActive }) => (
-                      <li
-                        key={subPath}
-                        className={classnames('nav__link nav__sub-link', {
-                          'nav__link--active': subLinkActive,
-                        })}
-                      >
-                        <Button noStyle navigate={subPath} label={subLabel} />
-                      </li>
-                    ))}
+            <Button noStyle navigate={path} label={label} icon={icon} />
+
+            {!!subLinks.length && active && (
+                <CSSTransitionGroup
+                  transitionAppear
+                  transitionLeave
+                  transitionAppearTimeout={300}
+                  transitionEnterTimeout={300}
+                  transitionLeaveTimeout={300}
+                  transitionName="nav__sub">
+                  <ul key="0" className="nav__sub-links">
+                  {subLinks.map(({ label: subLabel, path: subPath, active: subLinkActive }) => (
+                    <li
+                    key={subPath}
+                    className={classnames('nav__link--sub', {
+                      'nav__link--active': subLinkActive,
+                    })}
+                    >
+                    {subPath ? <Button noStyle navigate={subPath} label={subLabel} /> : <span>{subLabel}</span>}
+                    </li>
+                  ))}
                   </ul>
+                  </CSSTransitionGroup>
                 )}
             </li>
           ))}
@@ -97,5 +107,6 @@ const SideBar = (props: Props) => {
     </nav>
   );
 };
+
 
 export default SideBar;

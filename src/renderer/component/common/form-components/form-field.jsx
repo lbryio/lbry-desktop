@@ -1,5 +1,6 @@
 // @flow
 import * as React from 'react';
+import classnames from 'classnames';
 
 type Props = {
   name: string,
@@ -13,22 +14,30 @@ type Props = {
   onChange?: any => any,
   defaultValue?: string | number,
   placeholder?: string | number,
+  children?: React.Node,
+  stretch?: boolean
 };
 
 export class FormField extends React.PureComponent<Props> {
   render() {
-    const { render, label, prefix, postfix, error, helper, name, type, ...inputProps } = this.props;
+    const { render, label, prefix, postfix, error, helper, name, type, children, stretch, ...inputProps } = this.props;
 
     // Allow a type prop to determine the input or more customizability with a render prop
     let Input;
     if (type) {
-      Input = () => <input type={type} id={name} {...inputProps} />;
+      if (type === 'select') {
+        Input = () => (
+          <select id={name} {...inputProps}>{children}</select>
+        )
+      } else {
+        Input = () => <input type={type} id={name} {...inputProps} />;
+      }
     } else if (render) {
       Input = render;
     }
 
     return (
-      <div className="form-field">
+      <div className={classnames("form-field", { "form-field--stretch": stretch })}>
         {label && (
           <label className="form-field__label" htmlFor={name}>
             {label}

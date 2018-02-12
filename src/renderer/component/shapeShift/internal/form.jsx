@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import { getExampleAddress } from 'util/shape_shift';
-import { FormField, Submit } from 'component/common/form';
+import { FormField, FormRow, Submit } from 'component/common/form';
 import type { ShapeShiftFormValues, Dispatch } from 'redux/actions/shape_shift';
 import ShiftMarketInfo from './market_info';
 
@@ -50,59 +50,46 @@ export default (props: Props) => {
       <FormField
         prefix={__('Exchange')}
         postfix={__('for LBC')}
-        render={() => (
-          <select
-            className="form-field__input form-field__input-select"
-            name="originCoin"
-            onChange={e => {
-              getCoinStats(e.target.value);
-              handleChange(e);
-            }}
-          >
-            {shiftSupportedCoins.map(coin => (
-              <option key={coin} value={coin}>
-                {coin}
-              </option>
-            ))}
-          </select>
-        )}
+        type="select"
+        name="origin_coin"
+        onChange={e => {
+          getCoinStats(e.target.value);
+          handleChange(e);
+        }}>
+        {shiftSupportedCoins.map(coin => (
+          <option key={coin} value={coin}>
+            {coin}
+          </option>
+        ))}
+        </FormField>
+      <ShiftMarketInfo
+        originCoin={originCoin}
+        shapeShiftRate={shapeShiftRate}
+        originCoinDepositFee={originCoinDepositFee}
+        originCoinDepositMin={originCoinDepositMin}
+        originCoinDepositMax={originCoinDepositMax}
       />
-      <div>
-        <div className="shapeshift__tx-info">
-          {!updating &&
-            originCoinDepositMax && (
-              <ShiftMarketInfo
-                originCoin={originCoin}
-                shapeShiftRate={shapeShiftRate}
-                originCoinDepositFee={originCoinDepositFee}
-                originCoinDepositMin={originCoinDepositMin}
-                originCoinDepositMax={originCoinDepositMax}
-              />
-            )}
-        </div>
-      </div>
 
+      <FormRow padded>
       <FormField
         label={__('Return address')}
         error={touched.returnAddress && !!errors.returnAddress && errors.returnAddress}
-        render={() => (
-          <input
-            type="text"
-            name="returnAddress"
-            placeholder={getExampleAddress(originCoin)}
-            onChange={handleChange}
-            onBlur={handleBlur}
-            value={values.returnAddress}
-          />
-        )}
+        type="text"
+        name="return_address"
+        className="input--address"
+        placeholder={getExampleAddress(originCoin)}
+        onChange={handleChange}
+        onBlur={handleBlur}
+        value={values.returnAddress}
       />
+      </FormRow>
       <span className="help">
         <span>
-          ({__('optional but recommended')}) {__('We will return your')} {originCoin}{' '}
+          ({__('optional but recommended')})<br/>{__('We will return your')} {originCoin}{' '}
           {__("to this address if the transaction doesn't go through.")}
         </span>
       </span>
-      <div className="card__actions card__actions--only-vertical">
+      <div className="card__actions">
         <Submit
           label={__('Begin Conversion')}
           disabled={isSubmitting || !!Object.keys(errors).length}

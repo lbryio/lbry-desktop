@@ -67,7 +67,7 @@ class ShapeShift extends React.PureComponent<Props> {
 
     return (
       <section className="card card--section">
-        <h2>{__('Convert Crypto to LBC')}</h2>
+        <div className="card__title">{__('Convert Crypto to LBC')}</div>
         <p className="card__subtitle">
           {__('Powered by ShapeShift. Read our FAQ')}{' '}
           <Link fakeLink label={__('here')} href="https://lbry.io/faq/shapeshift" />.
@@ -75,11 +75,9 @@ class ShapeShift extends React.PureComponent<Props> {
             shiftState !== 'complete' && <span>{__('This will update automatically.')}</span>}
         </p>
 
-        <div className="card__content shapeshift__content">
+        <div className="card__content">
           {error && <div className="form-field__error">{error}</div>}
-          {!loading &&
-            !hasActiveShift &&
-            !!shiftSupportedCoins.length && (
+          {!hasActiveShift && (
               <Formik
                 onSubmit={createShapeShift}
                 validate={validateShapeShiftForm}

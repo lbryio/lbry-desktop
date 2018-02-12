@@ -19,7 +19,7 @@ class HelpPage extends React.PureComponent {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     lbry.getAppVersionInfo().then(({ remoteVersion, localVersion, upgradeAvailable }) => {
       this.setState({
         uiVersion: localVersion,
@@ -71,76 +71,71 @@ class HelpPage extends React.PureComponent {
 
     return (
       <Page>
-        <section className="card">
-          <div className="card__title-primary">
-            <h3>{__('Read the FAQ')}</h3>
+        <section className="card card--section">
+          <div className="card__title">
+            {__('Read the FAQ')}
           </div>
-          <div className="card__content">
-            <p>{__('Our FAQ answers many common questions.')}</p>
-            <p>
-              <Link
-                href="https://lbry.io/faq"
-                label={__('Read the FAQ')}
-                icon="icon-question"
-                button="alt"
-              />
-            </p>
-          </div>
-        </section>
-        <section className="card">
-          <div className="card__title-primary">
-            <h3>{__('Get Live Help')}</h3>
-          </div>
-          <div className="card__content">
-            <p>
-              {__('Live help is available most hours in the')} <strong>#help</strong>{' '}
-              {__('channel of our Discord chat room.')}
-            </p>
-            <p>
-              <Link
-                button="alt"
-                label={__('Join Our Chat')}
-                icon="icon-comments"
-                href="https://chat.lbry.io"
-              />
-            </p>
-          </div>
-        </section>
-        <section className="card">
-          <div className="card__title-primary">
-            <h3>{__('Report a Bug')}</h3>
-          </div>
-          <div className="card__content">
-            <p>{__('Did you find something wrong?')}</p>
-            <p>
-              <Link
-                navigate="/report"
-                label={__('Submit a Bug Report')}
-                icon="icon-bug"
-                button="alt"
-              />
-            </p>
-            <div className="meta">{__('Thanks! LBRY is made by its users.')}</div>
+          <p className="card__subtitle">{__('Our FAQ answers many common questions.')}</p>
+
+          <div className="card__actions">
+            <Link
+              href="https://lbry.io/faq"
+              label={__('Read the FAQ')}
+              icon="HelpCircle"
+              button="alt"
+            />
           </div>
         </section>
 
-        <section className="card">
-          <div className="card__title-primary">
-            <h3>{__('About')}</h3>
+        <section className="card card--section">
+          <div className="card__title">
+            {__('Get Live Help')}
+          </div>
+          <p className="card__subtitle">
+          {__('Live help is available most hours in the')} <strong>#help</strong>{' '}
+          {__('channel of our Discord chat room.')}
+          </p>
+          <div className="card__actions">
+            <Link
+              label={__('Join Our Chat')}
+              icon="MessageCircle"
+              href="https://chat.lbry.io"
+            />
+          </div>
+        </section>
+
+        <section className="card card--section">
+          <div className="card__title">
+            {__('Report a Bug')}
+          </div>
+          <p className="card__subtitle">{__('Did you find something wrong?')}</p>
+
+          <div className="card__actions">
+            <Link
+              navigate="/report"
+              label={__('Submit a Bug Report')}
+              icon="Flag"
+              button="alt"
+            />
+          </div>
+          <div className="card__meta">{__('Thanks! LBRY is made by its users.')}</div>
+        </section>
+
+        <section className="card card--section">
+          <div className="card__title">
+            {__('About')}
           </div>
           <div className="card__content">
-            {this.state.upgradeAvailable === null ? (
-              ''
-            ) : this.state.upgradeAvailable ? (
-              <p>
-                {__('A newer version of LBRY is available.')}{' '}
-                <Link href={newVerLink} label={__('Download now!')} />
-              </p>
-            ) : (
-              <p>{__('Your copy of LBRY is up to date.')}</p>
-            )}
+          {this.state.upgradeAvailable !== null && this.state.upgradeAvailable ? (
+            <p>
+              {__('A newer version of LBRY is available.')}{' '}
+              <Link href={newVerLink} label={__('Download now!')} />
+            </p>
+          ) : (
+            <p>{__('Your LBRY app is up to date.')}</p>
+          )}
             {this.state.uiVersion && ver ? (
-              <table className="table-standard table-stretch table-standard--definition-list">
+              <table className="card__content table-standard table-stretch table-standard--definition-list">
                 <tbody>
                   <tr>
                     <th>{__('App')}</th>
@@ -171,9 +166,9 @@ class HelpPage extends React.PureComponent {
                     <th>{__('Reward Eligible')}</th>
                     <td>
                       {user && user.is_reward_approved ? (
-                        <Icon icon="icon-check" />
+                        __("Yes")
                       ) : (
-                        <Icon icon="icon-ban" />
+                        __("No")
                       )}
                     </td>
                   </tr>
@@ -189,7 +184,7 @@ class HelpPage extends React.PureComponent {
                     <th>{__('Access Token')}</th>
                     <td>
                       {this.state.accessTokenHidden && (
-                        <Link label={__('show')} onClick={this.showAccessToken.bind(this)} />
+                        <Link fakeLink label={__('View')} onClick={this.showAccessToken.bind(this)} />
                       )}
                       {!this.state.accessTokenHidden &&
                         accessToken && (

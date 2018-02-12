@@ -1,6 +1,6 @@
 import React from 'react';
 import { buildURI } from 'lbryURI';
-import FormField from 'component/formField';
+import { FormField } from 'component/common/form';
 import FileTile from 'component/fileTile';
 import { BusyMessage } from 'component/common.js';
 
