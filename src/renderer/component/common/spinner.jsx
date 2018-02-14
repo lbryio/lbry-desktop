@@ -1,14 +1,22 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
+import classnames from 'classnames';
 
-const Spinner = () => (
-  <div className="spinner">
-    <div className="rect1" />
-    <div className="rect2" />
-    <div className="rect3" />
-    <div className="rect4" />
-    <div className="rect5" />
-  </div>
-);
+type Props = {
+  dark?: boolean,
+}
 
+const Spinner = (props: Props) => {
+  const { dark } = props;
+  return (
+    <div className={classnames("spinner", { "spinner--dark": dark })}>
+      <div className="rect rect1" />
+      <div className="rect rect2" />
+      <div className="rect rect3" />
+      <div className="rect rect4" />
+      <div className="rect rect5" />
+    </div>
+  );
+
+}
 export default Spinner;

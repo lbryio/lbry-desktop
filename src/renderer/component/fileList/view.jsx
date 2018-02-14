@@ -1,7 +1,7 @@
 import React from 'react';
 import { buildURI } from 'lbryURI';
 import { FormField } from 'component/common/form';
-import FileTile from 'component/fileTile';
+import FileCard from 'component/fileCard';
 import { BusyMessage } from 'component/common.js';
 
 class FileList extends React.PureComponent {
@@ -79,27 +79,29 @@ class FileList extends React.PureComponent {
       const uri = buildURI(uriParams);
 
       content.push(
-        <FileTile
+        <FileCard
           key={fileInfo.outpoint || fileInfo.claim_id}
           uri={uri}
           showPrice={false}
-          showLocal={false}
-          showActions
-          showEmpty={this.props.fileTileShowEmpty}
         />
       );
     });
+
     return (
-      <section className="file-list__header">
-        {fetching && <BusyMessage />}
-        <span className="sort-section">
-          {__('Sort by')}{' '}
-          <FormField type="select" onChange={this.handleSortChanged.bind(this)}>
-            <option value="date">{__('Date')}</option>
-            <option value="title">{__('Title')}</option>
-          </FormField>
-        </span>
-        {content}
+      <section>
+          <React.Fragment>
+            <div className="file-list__sort">
+              <FormField prefix={__('Sort by')} type="select" onChange={this.handleSortChanged.bind(this)}>
+                <option value="date">{__('Date')}</option>
+                <option value="title">{__('Title')}</option>
+              </FormField>
+            </div>
+
+            <div className="file-list">
+              {content}
+            </div>
+          </React.Fragment>
+
       </section>
     );
   }

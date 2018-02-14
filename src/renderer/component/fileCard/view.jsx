@@ -21,9 +21,14 @@ type Props = {
   navigate: (string, ?{}) => void,
   rewardedContentClaimIds: Array<string>,
   obscureNsfw: boolean,
+  showPrice: boolean
 };
 
 class FileCard extends React.PureComponent<Props> {
+  static defaultProps = {
+    showPrice: true
+  }
+
   componentWillMount() {
     this.resolve(this.props);
   }
@@ -48,6 +53,7 @@ class FileCard extends React.PureComponent<Props> {
       navigate,
       rewardedContentClaimIds,
       obscureNsfw,
+      showPrice
     } = this.props;
     const uri = normalizeURI(this.props.uri);
     const title = metadata && metadata.title ? metadata.title : uri;
@@ -79,7 +85,7 @@ class FileCard extends React.PureComponent<Props> {
       >
         <CardMedia thumbnail={thumbnail} />
         <div className="card-media__internal-links">
-          <FilePrice uri={uri} />
+          {showPrice && <FilePrice uri={uri} />}
         </div>
 
         <div className="card__title-identity">

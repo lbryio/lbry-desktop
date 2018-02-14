@@ -1,46 +1,32 @@
 import React from 'react';
 import Link from 'component/link';
-import FileTile from 'component/fileTile';
-import { BusyMessage, Thumbnail } from 'component/common.js';
 import FileList from 'component/fileList';
+import Page from 'component/page';
 
 class FileListPublished extends React.PureComponent {
-  componentWillMount() {
-    if (!this.props.isFetching) this.props.fetchClaims();
-  }
-
-  componentDidUpdate() {
-    // if (this.props.claims.length > 0) this.props.fetchClaims();
-  }
-
   render() {
-    const { claims, isFetching, navigate } = this.props;
+    const { claims, navigate } = this.props;
+    const hasClaims = claims && claims.length > 0;
 
-    let content;
-
-    if (claims && claims.length > 0) {
-      content = (
-        <FileList
-          fileInfos={claims}
-          fetching={isFetching}
-          fileTileShowEmpty={FileTile.SHOW_EMPTY_PENDING}
-        />
-      );
-    } else if (isFetching) {
-      content = <BusyMessage message={__('Loading')} />;
-    } else {
-      content = (
-        <span>
-          {__("It looks like you haven't published anything to LBRY yet. Go")}{' '}
-          <Link
-            onClick={() => navigate('/publish')}
-            label={__('share your beautiful cats with the world')}
-          />!
-        </span>
-      );
-    }
-
-    return <main className="main--single-column">{content}</main>;
+    return (
+      <Page>
+        {hasClaims ? (
+          <FileList
+            fileInfos={claims}
+          />
+        ) : (
+          <div className="page__empty">
+            {__("It looks like you haven't published anything to LBRY yet.")}
+            <div className="card__actions card__actions--center">
+              <Link
+                onClick={() => navigate('/publish')}
+                label={__('Publish something new')}
+              />
+            </div>
+          </div>
+        )}
+      </Page>
+    )
   }
 }
 
