@@ -8,6 +8,7 @@ import FormFieldPrice from "component/formFieldPrice";
 import SpeechUpload from "component/speechUpload";
 import Modal from "modal/modal";
 import * as modals from "constants/modal_types";
+import * as status from "constants/upload";
 import { BusyMessage } from "component/common";
 import ChannelSection from "./internal/channelSection";
 
@@ -445,16 +446,16 @@ class PublishForm extends React.PureComponent {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.uploadStatus === "error") {
+    if (nextProps.uploadStatus === status.ERROR) {
       this.props.alertError("Upload failed. Please try again.");
       this.setState({
-        thumbnailUploadStatus: "upload",
+        thumbnailUploadStatus: status.UPLOAD,
       });
     }
 
-    if (nextProps.uploadStatus === "complete") {
+    if (nextProps.uploadStatus === status.COMPLETE) {
       this.setState({
-        thumbnailUploadStatus: "complete",
+        thumbnailUploadStatus: status.COMPLETE,
         meta_thumbnail: nextProps.uploadUrl,
       });
     }

@@ -6,6 +6,7 @@ import { Form, FormRow, Submit } from "component/form.js";
 import Link from "component/link";
 import Modal from "modal/modal";
 import * as modals from "constants/modal_types";
+import * as status from "constants/upload";
 
 class SpeechUpload extends React.PureComponent {
   constructor(props) {
@@ -24,7 +25,9 @@ class SpeechUpload extends React.PureComponent {
         <div
           className="card__content"
           style={
-            this.props.uploadStatus !== "manual" ? null : { display: "none" }
+            this.props.uploadStatus !== status.MANUAL
+              ? null
+              : { display: "none" }
           }
         >
           <FormRow
@@ -42,7 +45,9 @@ class SpeechUpload extends React.PureComponent {
         <div
           className="card__content"
           style={
-            this.props.uploadStatus === "manual" ? null : { display: "none" }
+            this.props.uploadStatus === status.MANUAL
+              ? null
+              : { display: "none" }
           }
         >
           <FormRow
@@ -60,7 +65,9 @@ class SpeechUpload extends React.PureComponent {
         <div
           className="card__content"
           style={
-            this.props.uploadStatus === "upload" ? null : { display: "none" }
+            this.props.uploadStatus === status.UPLOAD
+              ? null
+              : { display: "none" }
           }
         >
           <a onClick={() => this.handleThumbnailStatusChange("manual")}>
@@ -71,7 +78,9 @@ class SpeechUpload extends React.PureComponent {
         <div
           className="card__content"
           style={
-            this.props.uploadStatus === "manual" ? null : { display: "none" }
+            this.props.uploadStatus === status.MANUAL
+              ? null
+              : { display: "none" }
           }
         >
           <a onClick={() => this.handleThumbnailStatusChange("upload")}>
@@ -82,7 +91,9 @@ class SpeechUpload extends React.PureComponent {
         <div
           className="card__content"
           style={
-            this.props.uploadStatus === "sending" ? null : { display: "none" }
+            this.props.uploadStatus === status.SENDING
+              ? null
+              : { display: "none" }
           }
         >
           Uploading thumbnail...
@@ -91,7 +102,9 @@ class SpeechUpload extends React.PureComponent {
         <div
           className="card__content"
           style={
-            this.props.uploadStatus === "complete" ? null : { display: "none" }
+            this.props.uploadStatus === status.COMPLETE
+              ? null
+              : { display: "none" }
           }
         >
           Complete: {this.props.uploadUrl}

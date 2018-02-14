@@ -1,6 +1,7 @@
 // @flow
 import * as actions from "constants/action_types";
 import { handleActions } from "util/redux-utils";
+import * as status from "constants/upload";
 
 export type UploadState = {
   status: ?string,
@@ -32,7 +33,7 @@ export type Action =
 export type Dispatch = (action: Action) => any;
 
 const defaultState = {
-  status: "upload",
+  status: status.UPLOAD,
   url: null,
 };
 
@@ -43,7 +44,7 @@ export default handleActions(
       action: beginSpeechUpload
     ): UploadState => ({
       ...state,
-      status: "sending",
+      status: status.SENDING,
       url: null,
     }),
 
@@ -52,7 +53,7 @@ export default handleActions(
       action: speechUploadSuccess
     ): UploadState => ({
       ...state,
-      status: "complete",
+      status: status.SENDING,
       url: action.data.url,
     }),
 
@@ -61,7 +62,7 @@ export default handleActions(
       action: speechUploadError
     ): UploadState => ({
       ...state,
-      status: "error",
+      status: status.ERROR,
       url: null,
     }),
 
@@ -70,7 +71,7 @@ export default handleActions(
       action: speechUploadReset
     ): UploadState => ({
       ...state,
-      status: "upload",
+      status: status.UPLOAD,
       url: null,
     }),
   },
