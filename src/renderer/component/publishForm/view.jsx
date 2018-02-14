@@ -448,6 +448,7 @@ class PublishForm extends React.PureComponent {
   componentWillReceiveProps(nextProps) {
     if (nextProps.uploadStatus === status.ERROR) {
       this.props.alertError("Upload failed. Please try again.");
+      this.props.resetUpload();
       // need to make file input blank
     }
 
