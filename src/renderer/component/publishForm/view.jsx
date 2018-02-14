@@ -452,8 +452,8 @@ class PublishForm extends React.PureComponent {
     }
 
     if (
-      nextProps.uploadStatus === status.COMPLETE ||
-      this.props.uploadStatus === status.MANUAL
+      this.props.uploadStatus === status.MANUAL ||
+      nextProps.uploadStatus === status.COMPLETE
     ) {
       this.setState({
         meta_thumbnail: nextProps.uploadUrl,
