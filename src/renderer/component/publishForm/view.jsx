@@ -446,18 +446,13 @@ class PublishForm extends React.PureComponent {
   }
 
   componentWillReceiveProps(nextProps) {
-    console.log("nexProps:", nextProps);
-
     if (nextProps.uploadStatus === status.ERROR) {
       this.props.alertError("Upload failed. Please try again.");
-      this.setState({
-        thumbnailUploadStatus: status.UPLOAD,
-      });
+      // need to make file input blank
     }
 
     if (nextProps.uploadStatus === status.COMPLETE) {
       this.setState({
-        thumbnailUploadStatus: status.COMPLETE,
         meta_thumbnail: nextProps.uploadUrl,
       });
     }
