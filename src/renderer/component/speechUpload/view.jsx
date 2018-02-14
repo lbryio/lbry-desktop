@@ -17,6 +17,14 @@ class SpeechUpload extends React.PureComponent {
     };
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.uploadStatus === status.ERROR) {
+      this.props.alertError("Upload failed. Please try again.");
+      this.props.resetUpload();
+      console.log(`this.refs.thumbnail.value = ""`);
+    }
+  }
+
   render() {
     const { openModal } = this.props;
 
@@ -26,6 +34,7 @@ class SpeechUpload extends React.PureComponent {
           <div className="card__content">
             <FormRow
               name="thumbnail"
+              ref="thumbnail"
               label={__("Upload Thumbnail")}
               type="file"
               onChange={event => {

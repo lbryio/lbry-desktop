@@ -446,12 +446,6 @@ class PublishForm extends React.PureComponent {
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.uploadStatus === status.ERROR) {
-      this.props.alertError("Upload failed. Please try again.");
-      this.props.resetUpload();
-      // need to make file input blank
-    }
-
     if (
       this.props.uploadStatus === status.MANUAL ||
       nextProps.uploadStatus === status.COMPLETE
@@ -542,7 +536,13 @@ class PublishForm extends React.PureComponent {
 
   render() {
     const { mode, submitting } = this.state;
-    const { openModal, uploadStatus, uploadUrl } = this.props;
+    const {
+      openModal,
+      uploadStatus,
+      uploadUrl,
+      alertError,
+      resetUpload,
+    } = this.props;
 
     const lbcInputHelp = __(
       "This LBC remains yours and the deposit can be undone at any time."
@@ -600,6 +600,8 @@ class PublishForm extends React.PureComponent {
                 <SpeechUpload
                   uploadStatus={uploadStatus}
                   uploadUrl={uploadUrl}
+                  alertError={alertError}
+                  resetUpload={resetUpload}
                 />
 
                 <div className="card__content">
