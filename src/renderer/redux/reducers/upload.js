@@ -53,7 +53,7 @@ export default handleActions(
       action: speechUploadSuccess
     ): UploadState => ({
       ...state,
-      status: status.SENDING,
+      status: status.COMPLETE,
       url: action.data.url,
     }),
 
