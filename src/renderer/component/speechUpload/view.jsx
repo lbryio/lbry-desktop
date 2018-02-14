@@ -37,71 +37,39 @@ class SpeechUpload extends React.PureComponent {
           </div>
         )}
 
-        <div
-          className="card__content"
-          style={
-            this.props.uploadStatus === status.MANUAL
-              ? null
-              : { display: "none" }
-          }
-        >
-          <FormRow
-            type="text"
-            label={__("Thumbnail URL")}
-            name="thumbnail"
-            value={this.state.meta_thumbnail}
-            placeholder="http://spee.ch/mylogo"
-            onChange={event => this.props.setManualUrl(event.target.value)}
-          />
-        </div>
+        {this.props.uploadStatus !== status.MANUAL ? null : (
+          <div>
+            <div className="card__content">
+              <FormRow
+                type="text"
+                label={__("Thumbnail URL")}
+                name="thumbnail"
+                value={this.state.meta_thumbnail}
+                placeholder="http://spee.ch/mylogo"
+                onChange={event => this.props.setManualUrl(event.target.value)}
+              />
+            </div>
+            <div className="card__content">
+              <a onClick={() => this.props.resetUpload()}>Upload Thumbnail</a>
+            </div>
+          </div>
+        )}
 
-        <div
-          className="card__content"
-          style={
-            this.props.uploadStatus === status.UPLOAD
-              ? null
-              : { display: "none" }
-          }
-        >
-          <a onClick={() => this.props.setManualStatus()}>
-            Enter Thumbnail URL
-          </a>
-        </div>
+        {this.props.uploadStatus !== status.UPLOAD ? null : (
+          <div className="card__content">
+            <a onClick={() => this.props.setManualStatus()}>
+              Enter Thumbnail URL
+            </a>
+          </div>
+        )}
 
-        <div
-          className="card__content"
-          style={
-            this.props.uploadStatus === status.MANUAL
-              ? null
-              : { display: "none" }
-          }
-        >
-          <a onClick={() => this.handleThumbnailStatusChange("upload")}>
-            Upload Thumbnail
-          </a>
-        </div>
+        {this.props.uploadStatus !== status.SENDING ? null : (
+          <div className="card__content">Uploading thumbnail...</div>
+        )}
 
-        <div
-          className="card__content"
-          style={
-            this.props.uploadStatus === status.SENDING
-              ? null
-              : { display: "none" }
-          }
-        >
-          Uploading thumbnail...
-        </div>
-
-        <div
-          className="card__content"
-          style={
-            this.props.uploadStatus === status.COMPLETE
-              ? null
-              : { display: "none" }
-          }
-        >
-          Complete: {this.props.uploadUrl}
-        </div>
+        {this.props.uploadStatus !== status.COMPLETE ? null : (
+          <div className="card__content">Complete: {this.props.uploadUrl}</div>
+        )}
       </div>
     );
   }
