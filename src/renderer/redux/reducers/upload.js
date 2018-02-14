@@ -25,11 +25,22 @@ type speechUploadReset = {
   type: actions.SPEECH_UPLOAD_RESET,
 };
 
+type setThumbnailStatusManual = {
+  type: actions.THUMBNAIL_SET_MANUAL_STATUS,
+};
+
+type setManualThumbnailUrl = {
+  type: actions.THUMBNAIL_MANUAL_URL_UPDATE,
+  url: string,
+};
+
 export type Action =
   | beginSpeechUpload
   | speechUploadSuccess
   | speechUploadError
-  | speechUploadReset;
+  | speechUploadReset
+  | setThumbnailStatusManual
+  | setManualThumbnailUrl;
 export type Dispatch = (action: Action) => any;
 
 const defaultState = {
@@ -73,6 +84,23 @@ export default handleActions(
       ...state,
       status: status.UPLOAD,
       url: null,
+    }),
+
+    [actions.THUMBNAIL_SET_MANUAL_STATUS]: (
+      state: UploadState,
+      action: setThumbnailStatusManual
+    ): UploadState => ({
+      ...state,
+      status: status.MANUAL,
+      url: null,
+    }),
+
+    [actions.THUMBNAIL_MANUAL_URL_UPDATE]: (
+      state: UploadState,
+      action: setManualThumbnailUrl
+    ): UploadState => ({
+      ...state,
+      url: action.data.url,
     }),
   },
 

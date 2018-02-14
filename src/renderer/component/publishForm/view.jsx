@@ -451,7 +451,10 @@ class PublishForm extends React.PureComponent {
       // need to make file input blank
     }
 
-    if (nextProps.uploadStatus === status.COMPLETE) {
+    if (
+      nextProps.uploadStatus === status.COMPLETE ||
+      this.props.uploadStatus === status.MANUAL
+    ) {
       this.setState({
         meta_thumbnail: nextProps.uploadUrl,
       });

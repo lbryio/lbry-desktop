@@ -4,9 +4,19 @@ import type { Action, Dispatch } from "redux/reducers/upload";
 import lbry from "lbry";
 import fs from "fs";
 import path from "path";
+import { disconnect } from "cluster";
 
 export const resetSpeechUpload = () => (dispatch: Dispatch) =>
   dispatch({ type: actions.SPEECH_UPLOAD_RESET });
+
+export const setThumbnailStatusManual = () => (dispatch: Dispatch) =>
+  dispatch({ type: actions.THUMBNAIL_SET_MANUAL_STATUS });
+
+export const setManualThumbnailUrl = (url: string) => (dispatch: Dispatch) =>
+  dispatch({
+    type: actions.THUMBNAIL_MANUAL_URL_UPDATE,
+    data: { url },
+  });
 
 export const beginSpeechUpload = (filePath: string, nsfw: boolean = false) => (
   dispatch: Dispatch

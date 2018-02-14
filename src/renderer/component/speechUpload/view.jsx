@@ -22,25 +22,20 @@ class SpeechUpload extends React.PureComponent {
 
     return (
       <div>
-        <div
-          className="card__content"
-          style={
-            this.props.uploadStatus !== status.MANUAL
-              ? null
-              : { display: "none" }
-          }
-        >
-          <FormRow
-            name="thumbnail"
-            label={__("Upload Thumbnail")}
-            type="file"
-            onChange={event => {
-              openModal(modals.CONFIRM_SPEECH_UPLOAD, {
-                path: event.target.value,
-              });
-            }}
-          />
-        </div>
+        {this.props.uploadStatus === status.MANUAL ? null : (
+          <div className="card__content">
+            <FormRow
+              name="thumbnail"
+              label={__("Upload Thumbnail")}
+              type="file"
+              onChange={event => {
+                openModal(modals.CONFIRM_SPEECH_UPLOAD, {
+                  path: event.target.value,
+                });
+              }}
+            />
+          </div>
+        )}
 
         <div
           className="card__content"
@@ -56,9 +51,7 @@ class SpeechUpload extends React.PureComponent {
             name="thumbnail"
             value={this.state.meta_thumbnail}
             placeholder="http://spee.ch/mylogo"
-            onChange={event => {
-              this.handleMetadataChange(event);
-            }}
+            onChange={event => this.props.setManualUrl(event.target.value)}
           />
         </div>
 
@@ -70,7 +63,7 @@ class SpeechUpload extends React.PureComponent {
               : { display: "none" }
           }
         >
-          <a onClick={() => this.handleThumbnailStatusChange("manual")}>
+          <a onClick={() => this.props.setManualStatus()}>
             Enter Thumbnail URL
           </a>
         </div>
