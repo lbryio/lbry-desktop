@@ -116,8 +116,8 @@ class FileList extends React.PureComponent {
         <span className="sort-section">
           {__('Sort by')}{' '}
           <FormField type="select" onChange={this.handleSortChanged.bind(this)}>
-            <option value="dateNew">{__('Date (Newest First)')}</option>
-            <option value="dateOld">{__('Date (Oldest First)')}</option>
+            <option value="dateNew">{__('Newest First')}</option>
+            <option value="dateOld">{__('Oldest First')}</option>
             <option value="title">{__('Title')}</option>
           </FormField>
         </span>
