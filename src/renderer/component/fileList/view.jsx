@@ -15,7 +15,6 @@ class FileList extends React.PureComponent {
     this._sortFunctions = {
       dateNew(fileInfos) {
         return fileInfos.slice().sort((fileInfo1, fileInfo2) => {
-          console.log(fileInfo1);
           const height1 = fileInfo1.height
           const height2 = fileInfo2.height
           if (height1 > height2) {
