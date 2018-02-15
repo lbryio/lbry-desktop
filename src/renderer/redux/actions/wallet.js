@@ -35,7 +35,7 @@ export function doFetchTransactions() {
       type: ACTIONS.FETCH_TRANSACTIONS_STARTED,
     });
 
-    Lbry.transaction_list({ include_tip_info: true }).then(results => {
+    Lbry.transaction_list().then(results => {
       dispatch({
         type: ACTIONS.FETCH_TRANSACTIONS_COMPLETED,
         data: {
