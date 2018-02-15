@@ -16,7 +16,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
   *
 
 ### Fixed
-  *
+  * Fixed sort by date of published content ([#986](https://github.com/lbryio/lbry-app/issues/986))
   *
 
 ### Deprecated
