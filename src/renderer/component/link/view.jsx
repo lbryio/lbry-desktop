@@ -68,6 +68,7 @@ const Button = (props: Props) => {
           'btn--circle': circle,
           'btn--flat': flat,
           'btn--no-underline': fakeLink && noUnderline,
+          'btn--external-link': href
         },
     className
   );

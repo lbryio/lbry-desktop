@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import LinkTransaction from 'component/linkTransaction';
+import LinkTransaction from 'component/common/transaction-link';
 
 type Reward = {
   id: string,

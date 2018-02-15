@@ -167,6 +167,12 @@
   }
 }
 
+.card__actions-top-corner {
+  position: absolute;
+  top: $spacing-vertical;
+  right: $spacing-vertical;
+}
+
 /*
  .card-row is used on the discover/subscriptions page
  It is a list of cards that extend past the right edge of the screen

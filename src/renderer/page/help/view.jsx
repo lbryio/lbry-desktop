@@ -125,84 +125,83 @@ class HelpPage extends React.PureComponent {
           <div className="card__title">
             {__('About')}
           </div>
-          <div className="card__content">
           {this.state.upgradeAvailable !== null && this.state.upgradeAvailable ? (
-            <p>
+            <div className="card__subtitle">
               {__('A newer version of LBRY is available.')}{' '}
-              <Link href={newVerLink} label={__('Download now!')} />
-            </p>
+              <Link fakeLink href={newVerLink} label={__('Download now!')} />
+            </div>
           ) : (
-            <p>{__('Your LBRY app is up to date.')}</p>
+            <div className="card__subtitle">{__('Your LBRY app is up to date.')}</div>
           )}
-            {this.state.uiVersion && ver ? (
-              <table className="card__content table-standard table-stretch table-standard--definition-list">
-                <tbody>
-                  <tr>
-                    <th>{__('App')}</th>
-                    <td>{this.state.uiVersion}</td>
-                  </tr>
-                  <tr>
-                    <th>{__('Daemon (lbrynet)')}</th>
-                    <td>{ver.lbrynet_version}</td>
-                  </tr>
-                  <tr>
-                    <th>{__('Wallet (lbryum)')}</th>
-                    <td>{ver.lbryum_version}</td>
-                  </tr>
-                  <tr>
-                    <th>{__('Connected Email')}</th>
-                    <td>
-                      {user && user.primary_email ? (
-                        user.primary_email
-                      ) : (
-                        <span>
-                          <span className="empty">{__('none')} </span>
-                          (<Link onClick={() => doAuth()} label={__('set email')} />)
-                        </span>
-                      )}
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>{__('Reward Eligible')}</th>
-                    <td>
-                      {user && user.is_reward_approved ? (
-                        __("Yes")
-                      ) : (
-                        __("No")
-                      )}
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>{__('Platform')}</th>
-                    <td>{platform}</td>
-                  </tr>
-                  <tr>
-                    <th>{__('Installation ID')}</th>
-                    <td>{this.state.lbryId}</td>
-                  </tr>
-                  <tr>
-                    <th>{__('Access Token')}</th>
-                    <td>
-                      {this.state.accessTokenHidden && (
-                        <Link fakeLink label={__('View')} onClick={this.showAccessToken.bind(this)} />
-                      )}
-                      {!this.state.accessTokenHidden &&
-                        accessToken && (
-                          <div>
-                            <p>{accessToken}</p>
-                            <div className="help">
-                              {__('This is equivalent to a password. Do not post or share this.')}
-                            </div>
+
+          {this.state.uiVersion && ver ? (
+            <table className="table table--stretch table--help">
+              <tbody>
+                <tr>
+                  <td>{__('App')}</td>
+                  <td>{this.state.uiVersion}</td>
+                </tr>
+                <tr>
+                  <td>{__('Daemon (lbrynet)')}</td>
+                  <td>{ver.lbrynet_version}</td>
+                </tr>
+                <tr>
+                  <td>{__('Wallet (lbryum)')}</td>
+                  <td>{ver.lbryum_version}</td>
+                </tr>
+                <tr>
+                  <td>{__('Connected Email')}</td>
+                  <td>
+                    {user && user.primary_email ? (
+                      user.primary_email
+                    ) : (
+                      <span>
+                        <span className="empty">{__('none')} </span>
+                        (<Link onClick={() => doAuth()} label={__('set email')} />)
+                      </span>
+                    )}
+                  </td>
+                </tr>
+                <tr>
+                  <td>{__('Reward Eligible')}</td>
+                  <td>
+                    {user && user.is_reward_approved ? (
+                      __("Yes")
+                    ) : (
+                      __("No")
+                    )}
+                  </td>
+                </tr>
+                <tr>
+                  <td>{__('Platform')}</td>
+                  <td>{platform}</td>
+                </tr>
+                <tr>
+                  <td>{__('Installation ID')}</td>
+                  <td>{this.state.lbryId}</td>
+                </tr>
+                <tr>
+                  <td>{__('Access Token')}</td>
+                  <td>
+                    {this.state.accessTokenHidden && (
+                      <Link fakeLink label={__('View')} onClick={this.showAccessToken.bind(this)} />
+                    )}
+                    {!this.state.accessTokenHidden &&
+                      accessToken && (
+                        <div>
+                          <p>{accessToken}</p>
+                          <div className="help">
+                            {__('This is equivalent to a password. Do not post or share this.')}
                           </div>
-                        )}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            ) : (
-              <BusyMessage message={__('Looking up version info')} />
-            )}
-          </div>
+                        </div>
+                      )}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          ) : (
+            <BusyMessage message={__('Looking up version info')} />
+          )}
         </section>
       </Page>
     );

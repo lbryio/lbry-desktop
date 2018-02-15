@@ -9,15 +9,16 @@ $width-page-constrained: 800px;
   --color-white: #fff;
   --color-black: #000; // I shouldn't use color names like this
   --color-grey: #d6d6d6;
-  --color-grey-dark: #8e8e8e;
+  --color-grey-dark: #888;
   --color-primary: #44b098;
   --color-primary-dark: #2c6e60;
   --color-secondary: #6afbda;
   --color-third: #fbd55e;
+  --color-fourth: #49b2e2;
   --color-divider: #e3e3e3;
 
   --text-color: var(--color-black);
-  --color-brand: #155b4a;
+  // --color-brand: #155b4a;
   --color-dark-overlay: rgba(32, 32, 32, 0.9);
   --color-help: rgba(0, 0, 0, 0.54);
   // --color-notice: #8a6d3b;
@@ -89,7 +90,7 @@ $width-page-constrained: 800px;
   --btn-primary-color: #fff;
   --button-alt-color: var(--text-color);
   --btn-primary-bg: var(--color-primary);
-  --btn-inverse-color: var(--color-primary-dark);
+  --btn-inverse-color: var(--color-primary);
   --btn-inverse-bg: var(--color-white);
   --btn-radius: 20px;
   --btn-height: 40px;
