@@ -138,6 +138,7 @@ app.on('will-finish-launching', () => {
 
 app.on('window-all-closed', () => {
   // Subscribe to event so the app doesn't quit when closing the window.
+  rendererWindow = null;
 });
 
 ipcMain.on('upgrade', (event, installerPath) => {
