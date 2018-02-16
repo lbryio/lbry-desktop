@@ -9,6 +9,7 @@ import {
   selectUserCountryCode,
 } from 'redux/selectors/user';
 import rewards from 'rewards';
+import analytics from 'analytics';
 
 export function doFetchInviteStatus() {
   return dispatch => {
@@ -42,6 +43,7 @@ export function doAuthenticate() {
     });
     Lbryio.authenticate()
       .then(user => {
+        analytics.setUser(user);
         dispatch({
           type: ACTIONS.AUTHENTICATION_SUCCESS,
           data: { user },
@@ -66,6 +68,7 @@ export function doUserFetch() {
     });
     Lbryio.getCurrentUser()
       .then(user => {
+        analytics.setUser(user);
         dispatch(doRewardList());
 
         dispatch({
