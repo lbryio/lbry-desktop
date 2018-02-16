@@ -1,5 +1,4 @@
 /* eslint-disable react/jsx-filename-extension */
-import amplitude from 'amplitude-js';
 import App from 'component/app';
 import SnackBar from 'component/snackBar';
 import SplashScreen from 'component/splash';
@@ -17,6 +16,7 @@ import { doUserEmailVerify } from 'redux/actions/user';
 import 'scss/all.scss';
 import store from 'store';
 import app from './app';
+import analytics from './analytics';
 
 const { autoUpdater } = remote.require('electron-updater');
 
@@ -62,15 +62,6 @@ ipcRenderer.on('window-is-focused', () => {
   dock.setBadge('');
 });
 
-((history, ...args) => {
-  const { replaceState } = history;
-  const newHistory = history;
-  newHistory.replaceState = (_, __, path) => {
-    amplitude.getInstance().logEvent('NAVIGATION', { destination: path ? path.slice(1) : path });
-    return replaceState.apply(history, args);
-  };
-})(window.history);
-
 document.addEventListener('click', event => {
   let { target } = event;
   while (target && target !== document) {
@@ -79,12 +70,12 @@ document.addEventListener('click', event => {
       const hrefParts = window.location.href.split('#');
       const element = target.title || (target.textContent && target.textContent.trim());
       if (element) {
-        amplitude.getInstance().logEvent('CLICK', {
+        analytics.track('CLICK', {
           target: element,
           location: hrefParts.length > 1 ? hrefParts[hrefParts.length - 1] : '/',
         });
       } else {
-        amplitude.getInstance().logEvent('UNMARKED_CLICK', {
+        analytics.track('UNMARKED_CLICK', {
           location: hrefParts.length > 1 ? hrefParts[hrefParts.length - 1] : '/',
           source: target.outerHTML,
         });
@@ -120,28 +111,18 @@ const init = () => {
   app.store.dispatch(doDownloadLanguages());
 
   function onDaemonReady() {
-    lbry.status().then(info => {
-      amplitude.getInstance().init(
-        // Amplitude API Key
-        '0b130efdcbdbf86ec2f7f9eff354033e',
-        info.lbry_id,
-        null,
-        () => {
-          window.sessionStorage.setItem('loaded', 'y'); // once we've made it here once per session, we don't need to show splash again
-          app.store.dispatch(doDaemonReady());
+    window.sessionStorage.setItem('loaded', 'y'); // once we've made it here once per session, we don't need to show splash again
+    app.store.dispatch(doDaemonReady());
 
-          ReactDOM.render(
-            <Provider store={store}>
-              <div>
-                <App />
-                <SnackBar />
-              </div>
-            </Provider>,
-            document.getElementById('app')
-          );
-        }
-      );
-    });
+    ReactDOM.render(
+      <Provider store={store}>
+        <div>
+          <App />
+          <SnackBar />
+        </div>
+      </Provider>,
+      document.getElementById('app')
+    );
   }
 
   if (window.sessionStorage.getItem('loaded') === 'y') {
