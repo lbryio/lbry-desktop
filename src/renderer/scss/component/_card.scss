@@ -160,10 +160,17 @@
 
 .card__actions--center {
   align-items: center;
+  justify-content: center;
 
   .btn {
     margin: 0 $spacing-vertical / 3;
   }
+}
+
+.card__actions-top-corner {
+  position: absolute;
+  top: $spacing-vertical;
+  right: $spacing-vertical;
 }
 
 /*

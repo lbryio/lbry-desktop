@@ -4,16 +4,17 @@ import { BusyMessage } from 'component/common';
 import Button from 'component/link';
 import TransactionList from 'component/transactionList';
 import * as icons from 'constants/icons';
+import type { Transaction } from 'component/transactionList/view';
 
 type Props = {
   fetchTransactions: () => void,
   fetchingTransactions: boolean,
   hasTransactions: boolean,
-  transactions: Array<{}>, // Will iron this out when I work on transactions page - Sean
+  transactions: Array<Transaction>,
 };
 
 class TransactionListRecent extends React.PureComponent<Props> {
-  componentWillMount() {
+  componentDidMount() {
     this.props.fetchTransactions();
   }
 
@@ -27,6 +28,7 @@ class TransactionListRecent extends React.PureComponent<Props> {
           {fetchingTransactions && <BusyMessage message={__('Loading transactions')} />}
           {!fetchingTransactions && (
             <TransactionList
+              noFilter
               transactions={transactions}
               emptyMessage={__("Looks like you don't have any recent transactions.")}
             />

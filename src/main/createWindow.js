@@ -5,7 +5,7 @@ import setupContextMenu from './menu/setupContextMenu';
 export default deepLinkingURIArg => {
   let windowConfiguration = {
     backgroundColor: '#44b098',
-    minWidth: 800,
+    minWidth: 950,
     minHeight: 600,
     autoHideMenuBar: true,
     show: false,

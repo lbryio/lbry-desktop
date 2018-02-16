@@ -196,6 +196,11 @@ dd {
   font-size: 3em;
 }
 
+.page__empty {
+  margin-top: 200px;
+  text-align: center;
+}
+
 .columns {
   display: flex;
   justify-content: space-between;
@@ -244,6 +249,13 @@ dd {
 .credit-amount--large {
   font-size: 2em;
   font-weight: 800;
+}
+
+.credit-amount--plain {
+  background-color: inherit;
+  color: inherit;
+  font-weight: inherit;
+  font-size: 1em;
 }
 
 //

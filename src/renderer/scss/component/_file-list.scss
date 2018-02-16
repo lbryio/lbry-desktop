@@ -1,0 +1,11 @@
+.file-list {
+  display: grid;
+  grid-gap: $spacing-vertical * 2/3;
+  grid-template-columns: repeat(auto-fill, var(--card-small-width));
+  margin-top: $spacing-vertical * 2/3;
+}
+
+.file-list__sort {
+  display: flex;
+  justify-content: flex-end;
+}
