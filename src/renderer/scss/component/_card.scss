@@ -34,6 +34,16 @@
   // }
 }
 
+.card--wallet-balance {
+  background: url('../../../static/img/stripe-background.png') no-repeat;
+  background-size: cover;
+  color: var(--color-white);
+
+  .card__subtitle {
+    color: var(--color-white);
+  }
+}
+
 .card__media {
   background-size: cover;
   background-repeat: no-repeat;

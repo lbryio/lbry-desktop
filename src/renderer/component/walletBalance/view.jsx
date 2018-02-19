@@ -9,7 +9,7 @@ type Props = {
 const WalletBalance = (props: Props) => {
   const { balance } = props;
   return (
-    <section className="card card--section">
+    <section className="card card--section card--wallet-balance">
       <div className="card__title">{__('Balance')}</div>
       <span className="card__subtitle">{__('You currently have')}</span>
       <div className="card__content">
