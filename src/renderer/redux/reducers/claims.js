@@ -71,10 +71,10 @@ reducers[ACTIONS.FETCH_CLAIM_LIST_MINE_COMPLETED] = (state, action) => {
   });
 };
 
-reducers[ACTIONS.FETCH_CHANNEL_LIST_MINE_STARTED] = state =>
+reducers[ACTIONS.FETCH_CHANNEL_LIST_STARTED] = state =>
   Object.assign({}, state, { fetchingMyChannels: true });
 
-reducers[ACTIONS.FETCH_CHANNEL_LIST_MINE_COMPLETED] = (state, action) => {
+reducers[ACTIONS.FETCH_CHANNEL_LIST_COMPLETED] = (state, action) => {
   const { claims } = action.data;
   const myChannelClaims = new Set(state.myChannelClaims);
   const byId = Object.assign({}, state.byId);

@@ -419,17 +419,17 @@ export function doPlayUri(uri) {
 export function doFetchChannelListMine() {
   return dispatch => {
     dispatch({
-      type: ACTIONS.FETCH_CHANNEL_LIST_MINE_STARTED,
+      type: ACTIONS.FETCH_CHANNEL_LIST_STARTED,
     });
 
     const callback = channels => {
       dispatch({
-        type: ACTIONS.FETCH_CHANNEL_LIST_MINE_COMPLETED,
+        type: ACTIONS.FETCH_CHANNEL_LIST_COMPLETED,
         data: { claims: channels },
       });
     };
 
-    Lbry.channel_list_mine().then(callback);
+    Lbry.channel_list().then(callback);
   };
 }
 
