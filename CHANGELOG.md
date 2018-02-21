@@ -12,7 +12,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
   *
 
 ### Changed
-  *
+  * Remove include_tip_info parameter from transaction_list call ([#1019](https://github.com/lbryio/lbry-app/issues/1019))
   *
 
 ### Fixed
