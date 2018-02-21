@@ -34,7 +34,7 @@ export function parseURI(URI, requireProto = false) {
     '([:$#]?)([^/]*)' + // modifier separator, modifier (stops at the first path separator or end)
       '(/?)(.*)' // path separator, path
   );
-  const [proto, claim_name, modSep, modVal, pathSep, path] = componentsRegex
+  const [proto, claimName, modSep, modVal, pathSep, path] = componentsRegex
     .exec(URI)
     .slice(1)
     .map(match => match || null);
@@ -47,12 +47,12 @@ export function parseURI(URI, requireProto = false) {
   }
 
   // Validate and process name
-  if (!claim_name) {
+  if (!claimName) {
     throw new Error(__('URI does not include name.'));
   }
 
-  const isChannel = claim_name.startsWith('@');
-  const channelName = isChannel ? claim_name.slice(1) : claim_name;
+  const isChannel = claimName.startsWith('@');
+  const channelName = isChannel ? claimName.slice(1) : claimName;
 
   if (isChannel) {
     if (!channelName) {
@@ -66,7 +66,7 @@ export function parseURI(URI, requireProto = false) {
     contentName = path;
   }
 
-  const nameBadChars = (channelName || claim_name).match(regexInvalidURI);
+  const nameBadChars = (channelName || claimName).match(regexInvalidURI);
   if (nameBadChars) {
     throw new Error(
       __(
@@ -128,7 +128,7 @@ export function parseURI(URI, requireProto = false) {
   }
 
   return {
-    claim_name,
+    claim_name: claimName,
     path,
     isChannel,
     ...(contentName ? { contentName } : {}),
