@@ -20,10 +20,10 @@ class FileList extends React.PureComponent {
         return fileInfos.slice().sort((fileInfo1, fileInfo2) => {
           const title1 = fileInfo1.value
             ? fileInfo1.value.stream.metadata.title.toLowerCase()
-            : fileInfo1.name;
+            : fileInfo1.claim_name;
           const title2 = fileInfo2.value
             ? fileInfo2.value.stream.metadata.title.toLowerCase()
-            : fileInfo2.name;
+            : fileInfo2.claim_name;
           if (title1 < title2) {
             return -1;
           } else if (title1 > title2) {
@@ -51,7 +51,7 @@ class FileList extends React.PureComponent {
     if (fileInfo.value) {
       return fileInfo.value.publisherSignature.certificateId;
     }
-    return fileInfo.metadata.publisherSignature.certificateId;
+    return fileInfo.channel_claim_id;
   }
 
   handleSortChanged(event) {
@@ -70,11 +70,11 @@ class FileList extends React.PureComponent {
 
       if (fileInfo.channel_name) {
         uriParams.channelName = fileInfo.channel_name;
-        uriParams.contentName = fileInfo.name;
+        uriParams.contentName = fileInfo.claim_name;
         uriParams.claimId = this.getChannelSignature(fileInfo);
       } else {
         uriParams.claimId = fileInfo.claim_id;
-        uriParams.name = fileInfo.name;
+        uriParams.claim_name = fileInfo.claim_name;
       }
       const uri = buildURI(uriParams);
 
