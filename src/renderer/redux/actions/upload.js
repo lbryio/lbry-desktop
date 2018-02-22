@@ -31,33 +31,26 @@ export const beginSpeechUpload = (filePath: string, nsfw: boolean = false) => (
 
   dispatch({ type: actions.SPEECH_UPLOAD_BEGIN });
 
-  return fetch(`https://spee.ch/api/claim-is-available/${safeName}`)
+  let data = new FormData();
+  const name = makeid();
+  const blob = new Blob([thumbnail], { type: `image/${fileExt.slice(1)}` });
+  data.append("name", name);
+  data.append("file", blob);
+  data.append("nsfw", nsfw);
+  return fetch("https://spee.ch/api/claim-publish", {
+    method: "POST",
+    body: data,
+  })
     .then(response => response.json())
-    .then(available => {
-      let data = new FormData();
-      const name = available ? safeName : `${safeName}-${makeid()}`;
-      const blob = new Blob([thumbnail], { type: `image/${fileExt.slice(1)}` });
-      data.append("name", name);
-      data.append("file", blob);
-      data.append("nsfw", nsfw);
-      return fetch("https://spee.ch/api/claim-publish", {
-        method: "POST",
-        body: data,
-      })
-        .then(response => response.json())
-        .then(
-          json =>
-            json.success
-              ? dispatch({
-                  type: actions.SPEECH_UPLOAD_SUCCESS,
-                  data: { url: `${json.message.url}${fileExt}` },
-                })
-              : dispatch({ type: actions.SPEECH_UPLOAD_ERROR })
-        )
-        .catch(err =>
-          dispatch({ type: actions.SPEECH_UPLOAD_ERROR, data: { err } })
-        );
-    })
+    .then(
+      json =>
+        json.success
+          ? dispatch({
+              type: actions.SPEECH_UPLOAD_SUCCESS,
+              data: { url: `${json.message.url}${fileExt}` },
+            })
+          : dispatch({ type: actions.SPEECH_UPLOAD_ERROR })
+    )
     .catch(err =>
       dispatch({ type: actions.SPEECH_UPLOAD_ERROR, data: { err } })
     );
@@ -66,7 +59,7 @@ export const beginSpeechUpload = (filePath: string, nsfw: boolean = false) => (
     var text = "";
     var possible =
       "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    for (var i = 0; i < 7; i++)
+    for (var i = 0; i < 24; i++)
       text += possible.charAt(Math.floor(Math.random() * possible.length));
     return text;
   }
