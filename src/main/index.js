@@ -67,7 +67,9 @@ app.on('ready', async () => {
       if (!isQuitting) {
         dialog.showErrorBox(
           'Daemon has Exited',
-          'The daemon may have encountered an unexpected error, or another daemon instance is already running.'
+          'The daemon may have encountered an unexpected error, or another daemon instance is already running. \n' +
+          'For more information please visit: \n' +
+          'https://lbry.io/faq/startup-troubleshooting'
         );
         app.quit();
       }
