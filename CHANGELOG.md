@@ -8,7 +8,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
 
 ## [Unreleased]
 ### Added
-  *
+  * Added startup-troubleshooting FAQ URL to daemon error ([#1039](https://github.com/lbryio/lbry-app/pull/1039))
   *
 
 ### Changed
