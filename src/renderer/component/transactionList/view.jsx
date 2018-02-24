@@ -2,7 +2,7 @@ import React from 'react';
 import TransactionListItem from './internal/TransactionListItem';
 import FormField from 'component/formField';
 import Link from 'component/link';
-//import FileExporter from 'component/file-exporter.js';
+import FileExporter from 'component/file-exporter.js';
 import * as icons from 'constants/icons';
 import * as modals from 'constants/modal_types';
 
@@ -44,6 +44,7 @@ class TransactionList extends React.PureComponent {
 
     return (
       <div>
+        {Boolean(transactionList.length) && <FileExporter data={transactions} title={__("Export Transactions")} />}
         {(transactionList.length || this.state.filter) && (
           <span className="sort-section">
             {__('Filter')}{' '}
