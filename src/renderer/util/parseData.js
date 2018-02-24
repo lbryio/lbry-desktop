@@ -1,4 +1,5 @@
-const parseJson = data => JSON.stringify(data);
+// Beautify JSON
+const parseJson = data => JSON.stringify(data, null, "\t");
 
 // No need for an external module:
 // https://gist.github.com/btzr-io/55c3450ea3d709fc57540e762899fb85
