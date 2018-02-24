@@ -1,4 +1,3 @@
-
 const parseJson = data => JSON.stringify(data);
 
 // No need for an external module:
@@ -23,9 +22,9 @@ const parseCsv = data => {
   return `${getHeaders(data[0])} \n ${getData(data)}`;
 };
 
-export function parseData(data, format) {
+const parseData = (data, format) => {
   // Check for validation
-  const valid = (data && data[0]) && format;
+  const valid = data && data[0] && format;
   // Pick a format
   const formats = {
     csv: list => parseCsv(list),
@@ -33,4 +32,6 @@ export function parseData(data, format) {
   };
   // Return parsed data: JSON || CSV
   return valid && formats[format] ? formats[format](data) : undefined;
-}
+};
+
+export default parseData;
