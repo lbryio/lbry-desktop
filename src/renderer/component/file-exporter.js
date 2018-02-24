@@ -64,7 +64,7 @@ class FileExporter extends React.PureComponent {
     const { title, label } = this.props;
     return (
       <Link
-        button="alt"
+        button="primary"
         icon={icons.DOWNLOAD}
         title={title || __('Export')}
         label={label || __('Export')}
