@@ -34,8 +34,6 @@ class FileExporter extends React.PureComponent {
     const { onFileCreated } = this.props;
     fs.writeFile(filename, data, err => {
       if (err) throw err;
-      //Debug
-      console.log('The file has been saved!', filename);
       // Do something after creation
       onFileCreated && onFileCreated(filename);
     });
@@ -57,8 +55,6 @@ class FileExporter extends React.PureComponent {
       const format = path.extname(filename).replace(/\./g, '');
       // Parse data to string with the chosen format
       const parsed = parseData(data, format);
-      // Debug
-      console.log(parsed, data, format);
       // Write file
       parsed && this.handleFileCreation(filename, parsed);
     });
