@@ -62,6 +62,18 @@ ipcRenderer.on('window-is-focused', () => {
   dock.setBadge('');
 });
 
+'use strict';
+
+document.addEventListener('dragover', function (event) {
+  event.preventDefault();
+  return false;
+}, false);
+
+document.addEventListener('drop', function (event) {
+  event.preventDefault();
+  return false;
+}, false);
+
 document.addEventListener('click', event => {
   let { target } = event;
   while (target && target !== document) {
