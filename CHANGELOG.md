@@ -16,7 +16,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
   *
 
 ### Fixed
-  *
+  * Disable drag and drop of files into the app ([#1045](https://github.com/lbryio/lbry-app/pull/1045))
   *
 
 ### Deprecated
