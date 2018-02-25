@@ -48,7 +48,7 @@ class VideoPlayer extends React.PureComponent {
       player.append(
         this.file(),
         container,
-        { autoplay: false, controls: true },
+        { autoplay: true, controls: true },
         renderMediaCallback.bind(this)
       );
     }
