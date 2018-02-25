@@ -1,5 +1,4 @@
-const { remote } = require('electron');
-
+import { remote } from 'electron';
 import React from 'react';
 import { Thumbnail } from 'component/common';
 import player from 'render-media';
@@ -21,33 +20,21 @@ class VideoPlayer extends React.PureComponent {
     this.togglePlayListener = this.togglePlay.bind(this);
   }
 
-  componentWillReceiveProps(next) {
-    const el = this.refs.media.children[0];
-    if (!this.props.paused && next.paused && !el.paused) el.pause();
-  }
-
   componentDidMount() {
-    const container = this.refs.media;
-    const {
-      contentType,
-      downloadPath,
-      mediaType,
-      changeVolume,
-      volume,
-      position,
-      claim,
-      uri,
-    } = this.props;
+    const container = this.media;
+    const { contentType, changeVolume, volume, position, claim } = this.props;
 
-    const loadedMetadata = e => {
+    const loadedMetadata = () => {
       this.setState({ hasMetadata: true, startedPlaying: true });
-      this.refs.media.children[0].play();
+      this.media.children[0].play();
     };
-    const renderMediaCallback = err => {
-      if (err) this.setState({ unplayable: true });
+
+    const renderMediaCallback = error => {
+      if (error) this.setState({ unplayable: true });
     };
+
     // Handle fullscreen change for the Windows platform
-    const win32FullScreenChange = e => {
+    const win32FullScreenChange = () => {
       const win = remote.BrowserWindow.getFocusedWindow();
       if (process.platform === 'win32') {
         win.setMenu(document.webkitIsFullScreen ? null : remote.Menu.getApplicationMenu());
@@ -67,7 +54,7 @@ class VideoPlayer extends React.PureComponent {
     }
 
     document.addEventListener('keydown', this.togglePlayListener);
-    const mediaElement = this.refs.media.children[0];
+    const mediaElement = this.media.children[0];
     if (mediaElement) {
       mediaElement.currentTime = position || 0;
       mediaElement.addEventListener('play', () => this.props.doPlay());
@@ -87,27 +74,36 @@ class VideoPlayer extends React.PureComponent {
     }
   }
 
+  componentWillReceiveProps(next) {
+    const el = this.media.children[0];
+    if (!this.props.paused && next.paused && !el.paused) el.pause();
+  }
+
+  componentDidUpdate() {
+    const { contentType, downloadCompleted } = this.props;
+    const { startedPlaying } = this.state;
+
+    if (this.playableType() && !startedPlaying && downloadCompleted) {
+      const container = this.media.children[0];
+
+      if (VideoPlayer.MP3_CONTENT_TYPES.indexOf(contentType) > -1) {
+        this.renderAudio(this.media, true);
+      } else {
+        player.render(this.file(), container, {
+          autoplay: true,
+          controls: true,
+        });
+      }
+    }
+  }
+
   componentWillUnmount() {
     document.removeEventListener('keydown', this.togglePlayListener);
-    const mediaElement = this.refs.media.children[0];
+    const mediaElement = this.media.children[0];
     if (mediaElement) {
       mediaElement.removeEventListener('click', this.togglePlayListener);
     }
     this.props.doPause();
-  }
-
-  renderAudio(container, autoplay) {
-    if (container.firstChild) {
-      container.firstChild.remove();
-    }
-
-    // clear the container
-    const { downloadPath } = this.props;
-    const audio = document.createElement('audio');
-    audio.autoplay = autoplay;
-    audio.controls = true;
-    audio.src = downloadPath;
-    container.appendChild(audio);
   }
 
   togglePlay(event) {
@@ -119,30 +115,12 @@ class VideoPlayer extends React.PureComponent {
       return;
     }
     event.preventDefault();
-    const mediaElement = this.refs.media.children[0];
+    const mediaElement = this.media.children[0];
     if (mediaElement) {
       if (!mediaElement.paused) {
         mediaElement.pause();
       } else {
         mediaElement.play();
-      }
-    }
-  }
-
-  componentDidUpdate() {
-    const { contentType, downloadCompleted } = this.props;
-    const { startedPlaying } = this.state;
-
-    if (this.playableType() && !startedPlaying && downloadCompleted) {
-      const container = this.refs.media.children[0];
-
-      if (VideoPlayer.MP3_CONTENT_TYPES.indexOf(contentType) > -1) {
-        this.renderAudio(this.refs.media, true);
-      } else {
-        player.render(this.file(), container, {
-          autoplay: true,
-          controls: true,
-        });
       }
     }
   }
@@ -162,13 +140,25 @@ class VideoPlayer extends React.PureComponent {
     return ['audio', 'video'].indexOf(mediaType) !== -1;
   }
 
+  renderAudio(container, autoplay) {
+    if (container.firstChild) {
+      container.firstChild.remove();
+    }
+
+    // clear the container
+    const { downloadPath } = this.props;
+    const audio = document.createElement('audio');
+    audio.autoplay = autoplay;
+    audio.controls = true;
+    audio.src = downloadPath;
+    container.appendChild(audio);
+  }
+
   render() {
     const { mediaType, poster } = this.props;
     const { hasMetadata, unplayable } = this.state;
     const noMetadataMessage = 'Waiting for metadata.';
     const unplayableMessage = "Sorry, looks like we can't play this file.";
-
-    const needsMetadata = this.playableType();
 
     return (
       <div>
@@ -179,7 +169,12 @@ class VideoPlayer extends React.PureComponent {
           !hasMetadata &&
           !unplayable && <LoadingScreen status={noMetadataMessage} />}
         {unplayable && <LoadingScreen status={unplayableMessage} spinner={false} />}
-        <div ref="media" className="media" />
+        <div
+          ref={container => {
+            this.media = container;
+          }}
+          className="media"
+        />
       </div>
     );
   }
