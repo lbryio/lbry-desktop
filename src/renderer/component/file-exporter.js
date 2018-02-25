@@ -12,6 +12,7 @@ class FileExporter extends React.PureComponent {
     data: PropTypes.array,
     type: PropTypes.oneOf(['json', 'csv']),
     title: PropTypes.string,
+    label: PropTypes.string,
     defaultPath: PropTypes.string,
     onFileCreated: PropTypes.func,
   };
@@ -22,12 +23,6 @@ class FileExporter extends React.PureComponent {
 
   constructor(props) {
     super(props);
-  }
-
-  componentWillMount() {
-    this.setState({
-      path: this.props.initPath || null,
-    });
   }
 
   handleFileCreation(filename, data) {
