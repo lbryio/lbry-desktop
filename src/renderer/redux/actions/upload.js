@@ -18,7 +18,10 @@ export const setManualThumbnailUrl = (url: string) => (dispatch: Dispatch) =>
     data: { url },
   });
 
-export const beginSpeechUpload = (filePath: string, nsfw: boolean = false) => (
+export const beginSpeechUpload = (
+  filePath: string,
+  nsfw: boolean = false
+) => (
   dispatch: Dispatch
 ) => {
   const thumbnail = fs.readFileSync(filePath);
@@ -36,7 +39,7 @@ export const beginSpeechUpload = (filePath: string, nsfw: boolean = false) => (
   const blob = new Blob([thumbnail], { type: `image/${fileExt.slice(1)}` });
   data.append("name", name);
   data.append("file", blob);
-  data.append("nsfw", nsfw);
+  data.append("nsfw", nsfw.toString());
   return fetch("https://spee.ch/api/claim-publish", {
     method: "POST",
     body: data,

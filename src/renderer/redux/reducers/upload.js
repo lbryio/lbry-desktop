@@ -14,7 +14,9 @@ type beginSpeechUpload = {
 
 type speechUploadSuccess = {
   type: actions.SPEECH_UPLOAD_SUCCESS,
-  url: string,
+  data: {
+    url: string
+  },
 };
 
 type speechUploadError = {
@@ -31,7 +33,9 @@ type setThumbnailStatusManual = {
 
 type setManualThumbnailUrl = {
   type: actions.THUMBNAIL_MANUAL_URL_UPDATE,
-  url: string,
+  data: {
+    url: string
+  },
 };
 
 export type Action =
