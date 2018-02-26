@@ -7,7 +7,7 @@ import Modal from "modal/modal";
 import * as modals from "constants/modal_types";
 import * as status from "constants/upload";
 
-class SpeechUpload extends React.PureComponent {
+class SelectThumbnail extends React.PureComponent {
   constructor(props) {
     super(props);
 
@@ -49,7 +49,7 @@ class SpeechUpload extends React.PureComponent {
             <FormRow
               name="thumbnail"
               ref="thumbnail"
-              label={__("Upload Thumbnail")}
+              label={__("Select Thumbnail")}
               type="file"
               onChange={event => {
                 openModal(modals.CONFIRM_SPEECH_UPLOAD, {
@@ -80,4 +80,4 @@ class SpeechUpload extends React.PureComponent {
   }
 }
 
-export default SpeechUpload;
+export default SelectThumbnail;

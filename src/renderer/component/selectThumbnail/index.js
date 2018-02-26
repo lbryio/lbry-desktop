@@ -1,6 +1,6 @@
 import React from "react";
 import { connect } from "react-redux";
-import SpeechUpload from "./view";
+import SelectThumbnail from "./view";
 import { doOpenModal } from "redux/actions/app";
 import {
   beginSpeechUpload,
@@ -17,4 +17,4 @@ const perform = dispatch => ({
   setManualUrl: url => dispatch(setManualThumbnailUrl(url)),
 });
 
-export default connect(null, perform)(SpeechUpload);
+export default connect(null, perform)(SelectThumbnail);

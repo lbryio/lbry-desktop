@@ -5,7 +5,7 @@ import FormField from 'component/formField';
 import { Form, FormRow, Submit } from 'component/form.js';
 import Link from 'component/link';
 import FormFieldPrice from 'component/formFieldPrice';
-import SpeechUpload from "component/speechUpload";
+import SelectThumbnail from "component/selectThumbnail";
 import Modal from 'modal/modal';
 import * as modals from "constants/modal_types";
 import * as status from "constants/upload";
@@ -575,7 +575,7 @@ class PublishForm extends React.PureComponent {
                     }}
                   />
                 </div>
-                <SpeechUpload
+                <SelectThumbnail
                   uploadStatus={uploadStatus}
                   uploadUrl={uploadUrl}
                   alertError={alertError}
