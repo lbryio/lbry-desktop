@@ -28,23 +28,7 @@ class SpeechUpload extends React.PureComponent {
 
     return (
       <div>
-        {this.props.uploadStatus === status.MANUAL ? null : (
-          <div className="card__content">
-            <FormRow
-              name="thumbnail"
-              ref="thumbnail"
-              label={__("Upload Thumbnail")}
-              type="file"
-              onChange={event => {
-                openModal(modals.CONFIRM_SPEECH_UPLOAD, {
-                  path: event.target.value,
-                });
-              }}
-            />
-          </div>
-        )}
-
-        {this.props.uploadStatus !== status.MANUAL ? null : (
+        {this.props.uploadStatus === status.MANUAL ? (
           <div>
             <div className="card__content">
               <FormRow
@@ -59,6 +43,20 @@ class SpeechUpload extends React.PureComponent {
             <div className="card__content">
               <a onClick={() => this.props.resetUpload()}>Upload Thumbnail</a>
             </div>
+          </div>
+        ) : (
+          <div className="card__content">
+            <FormRow
+              name="thumbnail"
+              ref="thumbnail"
+              label={__("Upload Thumbnail")}
+              type="file"
+              onChange={event => {
+                openModal(modals.CONFIRM_SPEECH_UPLOAD, {
+                  path: event.target.value,
+                });
+              }}
+            />
           </div>
         )}
 
