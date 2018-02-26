@@ -14,6 +14,10 @@ const RewardSummary = (props: Props) => {
     <section className="card">
       <div className="card__title-primary">
         <h3>{__('Rewards')}</h3>
+        <p className="help">
+            {__('Read our')}{' '}
+            <Link href="https://lbry.io/faq/rewards">{__('FAQ')}</Link>{' '}{__('to learn more about LBRY Rewards')}.
+          </p>
       </div>
       <div className="card__content">
         {unclaimedRewardAmount > 0 ? (
