@@ -10,15 +10,10 @@ const { remote } = require('electron');
 class FileExporter extends React.PureComponent {
   static propTypes = {
     data: PropTypes.array,
-    type: PropTypes.oneOf(['json', 'csv']),
     title: PropTypes.string,
     label: PropTypes.string,
     defaultPath: PropTypes.string,
     onFileCreated: PropTypes.func,
-  };
-
-  static defaultProps = {
-    type: 'json',
   };
 
   constructor(props) {
