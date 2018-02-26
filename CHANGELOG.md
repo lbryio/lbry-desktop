@@ -16,7 +16,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
   *
 
 ### Fixed
-  *
+  * Fixed issue where when pasting a content's description using the context menu causes the information to be lost ([#818](https://github.com/lbryio/lbry-app/issues/818))
   *
 
 ### Deprecated
