@@ -46,9 +46,10 @@ class TransactionList extends React.PureComponent {
       <div>
         {Boolean(transactionList.length) && (
           <FileExporter
-            data={transactions}
-            title={__("Export Transactions")}
-            label={__("Export")} />
+            data={transactionList}
+            title={__('Export Transactions')}
+            label={__('Export')}
+          />
         )}
         {(transactionList.length || this.state.filter) && (
           <span className="sort-section">
