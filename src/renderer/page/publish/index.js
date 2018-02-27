@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { doNavigate, doHistoryBack } from 'redux/actions/navigation';
+import { doNavigate } from 'redux/actions/navigation';
 import { doClaimRewardType } from 'redux/actions/rewards';
 import {
   selectMyClaims,
@@ -24,7 +24,6 @@ import {
   doToggleTos,
   doUpdatePublishForm,
   doPublish,
-  doClearPublishError
 } from 'redux/actions/publish';
 import PublishPage from './view';
 
@@ -78,7 +77,6 @@ const perform = dispatch => ({
   clearPublish: () => dispatch(doClearPublish()),
   resolveUri: (uri) => dispatch(doResolveUri(uri)),
   publish: (params) => dispatch(doPublish(params)),
-  clearError: () => dispatch(doClearPublishError()),
   navigate: path => dispatch(doNavigate(path)),
 });
 

@@ -36,7 +36,7 @@ type FileInfo = {
       certificateId: string,
     }
   },
-  metadata?: {
+  metadata: {
     publisherSignature: {
       certificateId: string
     }
@@ -69,11 +69,15 @@ class FileList extends React.PureComponent<Props, State> {
   }
 
   getChannelSignature = (fileInfo: FileInfo) => {
+    if (fileInfo.pending) {
+      return undefined;
+    }
+
     if (fileInfo.value) {
       return fileInfo.value.publisherSignature.certificateId;
-    } else if (fileInfo.metadata) {
-      return fileInfo.metadata.publisherSignature.certificateId;
     }
+
+    return fileInfo.metadata.publisherSignature.certificateId;
   }
 
   render() {
@@ -94,16 +98,14 @@ class FileList extends React.PureComponent<Props, State> {
       if (fileInfo.channel_name) {
         uriParams.channelName = channel_name;
         uriParams.contentName = name;
-        if (!pending) {
-          uriParams.claimId = this.getChannelSignature(fileInfo);
-        }
+        uriParams.claimId = this.getChannelSignature(fileInfo);
       } else {
         uriParams.claimId = claim_id;
         uriParams.name = name;
       }
 
       const uri = buildURI(uriParams);
-      
+
       content.push(
         <FileCard
           pending={pending}

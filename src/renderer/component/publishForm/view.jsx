@@ -51,11 +51,8 @@ type Props = {
   uri: ?string,
   bidError: ?string,
   publishing: boolean,
-  publishError: ?string,
-  publishSuccess: boolean,
   balance: number,
   clearError: () => void,
-  navigate: (string) => void,
   clearPublish: () => void,
   clearFilePath: () => void,
   resolveUri: (string) => void,
@@ -97,7 +94,8 @@ class PublishForm extends React.PureComponent<Props> {
       copyrightNotice,
       name,
       contentIsFree,
-      price
+      price,
+      uri
     } = this.props;
 
     let publishingLicense;
@@ -129,7 +127,8 @@ class PublishForm extends React.PureComponent<Props> {
       copyrightNotice,
       name,
       contentIsFree,
-      price
+      price,
+      uri
     };
 
     publish(publishParams);
@@ -244,18 +243,18 @@ class PublishForm extends React.PureComponent<Props> {
       // These are just extra help at the bottom of the screen
       return (
         <div className="card__subtitle form-field__error">
-          {nameError && <p>{__("The URL you created is not valid.")}</p>}
-          {bidError && <p>{__("You don't have enough credits for the bid amount you chose.")}</p>}
+          {nameError && <div>{__("The URL you created is not valid.")}</div>}
+          {bidError && <div>{__("You don't have enough credits for the bid amount you chose.")}</div>}
         </div>
       )
     }
 
     return (
       <div className="card__subtitle form-field__error">
-        {!title && <p>A title is required</p>}
-        {!name && <p>A URL is required</p>}
-        {!bid && <p>A bid amount is required</p>}
-        {!tosAccepted && <p>You must agree to the terms of service</p>}
+        {!title && <div>{__("A title is required")}</div>}
+        {!name && <div>{__("A URL is required")}</div>}
+        {!bid && <div>{__("A bid amount is required")}</div>}
+        {!tosAccepted && <div>{__("You must agree to the terms of service")}</div>}
       </div>
     )
   }
@@ -288,10 +287,6 @@ class PublishForm extends React.PureComponent<Props> {
       uri,
       bidError,
       publishing,
-      publishError,
-      publishSuccess,
-      clearError,
-      navigate,
       clearPublish
     } = this.props;
 
@@ -300,273 +295,245 @@ class PublishForm extends React.PureComponent<Props> {
     const prefillName = prefillClaim.name || "";
 
     return (
-      <React.Fragment>
-        <Form onSubmit={this.handlePublish}>
-          <section className={classnames("card card--section")}>
-            <div className="card__title">{__('Content')}</div>
-            <div className="card__subtitle">{__('What are you publishing?')}</div>
-            {filePath && (
-              <div className="card-media__internal-links">
-                <Button inverse icon="X" label={__("Clear")} onClick={clearPublish} />
-              </div>
-            )}
-            <FileSelector
-              currentPath={filePath}
-              onFileChosen={this.handleFileChange}
-            />
-            {isEditing && prefillClaim.name &&  (
-              <p className="card__subtitle">{__("If you don't choose a file, the file from your existing claim")}{" "}{`"${prefillName}"`}{" "}{__("will be used.")}</p>
-            )}
-          </section>
-          <div className={classnames({ "card--disabled": formDisabled })}>
-            <section className="card card--section">
-              <FormRow>
-                <FormField
-                  stretch
-                  type="text"
-                  name="content_title"
-                  label={__("Title")}
-                  placeholder={__("Titular Title")}
-                  disabled={formDisabled}
-                  value={title}
-                  onChange={(e) => updatePublishForm({ title: e.target.value })}
-                />
-              </FormRow>
-              <FormRow padded>
-                <FormField
-                  stretch
-                  type="text"
-                  name="content_thumbnail"
-                  label={__("Thumbnail")}
-                  placeholder="http://spee.ch/mylogo"
-                  value={thumbnail}
-                  disabled={formDisabled}
-                  onChange={(e) => updatePublishForm({ thumbnail: e.target.value })}
-                />
-              </FormRow>
-              <FormRow padded>
-                <FormField
-                  stretch
-                  type="markdown"
-                  name="content_description"
-                  label={__('Description')}
-                  placeholder={__('Description of your content')}
-                  value={description}
-                  disabled={formDisabled}
-                  onChange={text => updatePublishForm({ description: text })}
-                />
-              </FormRow>
-            </section>
-
-            <section className="card card--section">
-              <div className="card__title">
-                {__('Price')}
-              </div>
-              <div className="card__subtitle">{__('How much will this content cost?')}</div>
-              <div className="card__content">
-                <FormField
-                  type="radio"
-                  name="content_free"
-                  postfix={__('Free')}
-                  checked={contentIsFree}
-                  disabled={formDisabled}
-                  onChange={() => updatePublishForm({ contentIsFree: true })}
-                />
-                <FormField
-                  type="radio"
-                  name="content_cost"
-                  postfix={__('Choose price')}
-                  checked={!contentIsFree}
-                  disabled={formDisabled}
-                  onChange={() => updatePublishForm({ contentIsFree: false })}
-                />
-
-                <FormFieldPrice
-                  name="content_cost_amount"
-                  min="0"
-                  price={price}
-                  onChange={(price) => updatePublishForm({ price })}
-                  disabled={formDisabled || contentIsFree}
-                />
-              {price.currency !== "LBC" && (
-                <p className="form-field__help">
-                  {__(
-                    'All content fees are charged in LBC. For non-LBC payment methods, the number of credits charged will be adjusted based on the value of LBRY credits at the time of purchase.'
-                  )}
-                </p>
-              )}
-              </div>
-            </section>
-
-            <section className="card card--section">
-              <div className="card__title">{__("Anonymous or under a channel?")}</div>
-              <p className="card__subtitle">
-                {__('This is a username or handle that your content can be found under.')}{' '}
-                {__('Ex. @Marvel, @TheBeatles, @BooksByJoe')}
-              </p>
-              <ChannelSection
-                channel={channel}
-                onChannelChange={this.handleChannelChange}
-              />
-            </section>
-
-            <section className="card card--section">
-              <div className="card__title">
-                {__("Where can people find this content?")}
-              </div>
-              <p className="card__subtitle">
-                {__("The LBRY URL is the exact address where people find your content (ex. lbry://myvideo).")}
-                {" "}
-                <Button fakeLink label={__('Learn more')} href="https://lbry.io/faq/naming" />
-              </p>
-              <div className="card__content">
-                <FormRow>
-                  <FormField
-                    stretch
-                    prefix={`lbry://${
-                      (channel === 'anonymous' || channel === 'new') ? '' : `${channel}/`
-                    }`}
-                    type="text"
-                    name="content_name"
-                    placeholder="myname"
-                    value={name || prefillClaim.name || ""}
-                    onChange={event => this.handleNameChange(event.target.value)}
-                    error={nameError}
-                    helper={(
-                      <BidHelpText
-                        uri={uri}
-                        isResolvingUri={isResolvingUri}
-                        winningBidForClaimUri={winningBidForClaimUri}
-                        claimIsMine={!!myClaimForUri}
-                        onEditMyClaim={this.editExistingClaim} />
-                    )}
-                    />
-                </FormRow>
-              </div>
-              <div className={classnames("card__content", { "card--disabled": !name })}>
-                <FormField
-                  className="input--price-amount"
-                  type="number"
-                  name="content_bid"
-                  step="any"
-                  label={__('Deposit')}
-                  postfix="LBC"
-                  value={bid}
-                  error={bidError}
-                  min="0"
-                  disabled={!name}
-                  onChange={event => this.handleBidChange(event.target.value)}
-                  helper={__('This LBC remains yours and the deposit can be undone at any time.')}
-                  placeholder={winningBidForClaimUri ? winningBidForClaimUri + 10 : 10}
-                />
-              </div>
-            </section>
-
-            <section className="card card--section">
-              <FormRow>
-                <FormField
-                  type="checkbox"
-                  name="content_is_mature"
-                  postfix={__('Mature audiences only')}
-                  checked={nsfw}
-                  onChange={(event) => updatePublishForm({ nsfw: event.target.checked })}
-                />
-              </FormRow>
-
-              <FormRow padded>
-                <FormField
-                  label={__('Language')}
-                  type="select"
-                  name="content_language"
-                  value={language}
-                  onChange={event => updatePublishForm({ language: event.target.value })}
-                  >
-                  <option value="en">{__('English')}</option>
-                  <option value="zh">{__('Chinese')}</option>
-                  <option value="fr">{__('French')}</option>
-                  <option value="de">{__('German')}</option>
-                  <option value="jp">{__('Japanese')}</option>
-                  <option value="ru">{__('Russian')}</option>
-                  <option value="es">{__('Spanish')}</option>
-                </FormField>
-              </FormRow>
-
-              <LicenseType
-                licenseType={licenseType}
-                otherLicenseDescription={otherLicenseDescription}
-                licenseUrl={licenseUrl}
-                copyrightNotice={copyrightNotice}
-                handleLicenseChange={(licenseType, licenseUrl) => updatePublishForm({ licenseType, licenseUrl })}
-                handleLicenseDescriptionChange={(event) => updatePublishForm({ otherLicenseDescription: event.target.value })}
-                handleLicenseUrlChange={(event) => updatePublishForm({ licenseUrl: event.target.value })}
-                handleCopyrightNoticeChange={(event) => updatePublishForm({ copyrightNotice: event.target.value })}
-              />
-            </section>
-
-            <section className="card card--section">
-              <div className="card__title">
-                {__('Terms of Service')}
-              </div>
-              <div className="card__content">
-                <FormField
-                  name="lbry_tos"
-                  type="checkbox"
-                  checked={tosAccepted}
-                  postfix={
-                    <span>
-                      {__('I agree to the')}{' '}
-                      <Button
-                        fakeLink
-                        href="https://www.lbry.io/termsofservice"
-                        label={__('LBRY terms of service')}
-                      />
-                    </span>
-                  }
-                  onChange={event => updatePublishForm({ tosAccepted: event.target.checked })}
-                />
-              </div>
-            </section>
-
-            <div className="card__actions">
-              <Submit
-                label={!publishing ? __('Publish') : __('Publishing...')}
-                disabled={
-                  formDisabled ||
-                  !formValid ||
-                  publishing
-                }/>
-                <Button alt onClick={this.handleCancelPublish} label={__('Cancel')} />
+      <Form onSubmit={this.handlePublish}>
+        <section className={classnames("card card--section")}>
+          <div className="card__title">{__('Content')}</div>
+          <div className="card__subtitle">{__('What are you publishing?')}</div>
+          {filePath && (
+            <div className="card-media__internal-links">
+              <Button inverse icon="X" label={__("Clear")} onClick={clearPublish} />
             </div>
-            {!formDisabled && !formValid && this.renderFormErrors()}
-          </div>
-        </Form>
-        <Modal
-          isOpen={publishSuccess}
-          contentLabel={__('File published')}
-          onConfirmed={() => {
-            clearPublish();
-            navigate('/published');
-          }}
-        >
-          <p>
-            {__('Your file has been published to LBRY at the address')}{' '}
-            <code>{uri}</code>!
-          </p>
-          <p>
-            {__(
-              'The file will take a few minutes to appear for other LBRY users. Until then it will be listed as "pending" under your published files.'
+          )}
+          <FileSelector
+            currentPath={filePath}
+            onFileChosen={this.handleFileChange}
+          />
+          {isEditing && prefillClaim.name &&  (
+            <p className="card__subtitle">{__("If you don't choose a file, the file from your existing claim")}{" "}{`"${prefillName}"`}{" "}{__("will be used.")}</p>
+          )}
+        </section>
+        <div className={classnames({ "card--disabled": formDisabled })}>
+          <section className="card card--section">
+            <FormRow>
+              <FormField
+                stretch
+                type="text"
+                name="content_title"
+                label={__("Title")}
+                placeholder={__("Titular Title")}
+                disabled={formDisabled}
+                value={title}
+                onChange={(e) => updatePublishForm({ title: e.target.value })}
+              />
+            </FormRow>
+            <FormRow padded>
+              <FormField
+                stretch
+                type="text"
+                name="content_thumbnail"
+                label={__("Thumbnail")}
+                placeholder="http://spee.ch/mylogo"
+                value={thumbnail}
+                disabled={formDisabled}
+                onChange={(e) => updatePublishForm({ thumbnail: e.target.value })}
+              />
+            </FormRow>
+            <FormRow padded>
+              <FormField
+                stretch
+                type="markdown"
+                name="content_description"
+                label={__('Description')}
+                placeholder={__('Description of your content')}
+                value={description}
+                disabled={formDisabled}
+                onChange={text => updatePublishForm({ description: text })}
+              />
+            </FormRow>
+          </section>
+
+          <section className="card card--section">
+            <div className="card__title">
+              {__('Price')}
+            </div>
+            <div className="card__subtitle">{__('How much will this content cost?')}</div>
+            <div className="card__content">
+              <FormField
+                type="radio"
+                name="content_free"
+                postfix={__('Free')}
+                checked={contentIsFree}
+                disabled={formDisabled}
+                onChange={() => updatePublishForm({ contentIsFree: true })}
+              />
+              <FormField
+                type="radio"
+                name="content_cost"
+                postfix={__('Choose price')}
+                checked={!contentIsFree}
+                disabled={formDisabled}
+                onChange={() => updatePublishForm({ contentIsFree: false })}
+              />
+
+              <FormFieldPrice
+                name="content_cost_amount"
+                min="0"
+                price={price}
+                onChange={(price) => updatePublishForm({ price })}
+                disabled={formDisabled || contentIsFree}
+              />
+            {price.currency !== "LBC" && (
+              <p className="form-field__help">
+                {__(
+                  'All content fees are charged in LBC. For non-LBC payment methods, the number of credits charged will be adjusted based on the value of LBRY credits at the time of purchase.'
+                )}
+              </p>
             )}
-          </p>
-        </Modal>
-        <Modal
-          isOpen={!!publishError}
-          contentLabel={__('Error publishing file')}
-          onConfirmed={() => clearError()}
-        >
-          {__('The following error occurred when attempting to publish your file')}:{' '}
-          {publishError}
-        </Modal>
-      </React.Fragment>
+            </div>
+          </section>
+
+          <section className="card card--section">
+            <div className="card__title">{__("Anonymous or under a channel?")}</div>
+            <p className="card__subtitle">
+              {__('This is a username or handle that your content can be found under.')}{' '}
+              {__('Ex. @Marvel, @TheBeatles, @BooksByJoe')}
+            </p>
+            <ChannelSection
+              channel={channel}
+              onChannelChange={this.handleChannelChange}
+            />
+          </section>
+
+          <section className="card card--section">
+            <div className="card__title">
+              {__("Where can people find this content?")}
+            </div>
+            <p className="card__subtitle">
+              {__("The LBRY URL is the exact address where people find your content (ex. lbry://myvideo).")}
+              {" "}
+              <Button fakeLink label={__('Learn more')} href="https://lbry.io/faq/naming" />
+            </p>
+            <div className="card__content">
+              <FormRow>
+                <FormField
+                  stretch
+                  prefix={`lbry://${
+                    (channel === 'anonymous' || channel === 'new') ? '' : `${channel}/`
+                  }`}
+                  type="text"
+                  name="content_name"
+                  placeholder="myname"
+                  value={name || prefillClaim.name || ""}
+                  onChange={event => this.handleNameChange(event.target.value)}
+                  error={nameError}
+                  helper={(
+                    <BidHelpText
+                      uri={uri}
+                      isResolvingUri={isResolvingUri}
+                      winningBidForClaimUri={winningBidForClaimUri}
+                      claimIsMine={!!myClaimForUri}
+                      onEditMyClaim={this.editExistingClaim} />
+                  )}
+                  />
+              </FormRow>
+            </div>
+            <div className={classnames("card__content", { "card--disabled": !name })}>
+              <FormField
+                className="input--price-amount"
+                type="number"
+                name="content_bid"
+                step="any"
+                label={__('Deposit')}
+                postfix="LBC"
+                value={bid}
+                error={bidError}
+                min="0"
+                disabled={!name}
+                onChange={event => this.handleBidChange(event.target.value)}
+                helper={__('This LBC remains yours and the deposit can be undone at any time.')}
+                placeholder={winningBidForClaimUri ? winningBidForClaimUri + 10 : 10}
+              />
+            </div>
+          </section>
+
+          <section className="card card--section">
+            <FormRow>
+              <FormField
+                type="checkbox"
+                name="content_is_mature"
+                postfix={__('Mature audiences only')}
+                checked={nsfw}
+                onChange={(event) => updatePublishForm({ nsfw: event.target.checked })}
+              />
+            </FormRow>
+
+            <FormRow padded>
+              <FormField
+                label={__('Language')}
+                type="select"
+                name="content_language"
+                value={language}
+                onChange={event => updatePublishForm({ language: event.target.value })}
+                >
+                <option value="en">{__('English')}</option>
+                <option value="zh">{__('Chinese')}</option>
+                <option value="fr">{__('French')}</option>
+                <option value="de">{__('German')}</option>
+                <option value="jp">{__('Japanese')}</option>
+                <option value="ru">{__('Russian')}</option>
+                <option value="es">{__('Spanish')}</option>
+              </FormField>
+            </FormRow>
+
+            <LicenseType
+              licenseType={licenseType}
+              otherLicenseDescription={otherLicenseDescription}
+              licenseUrl={licenseUrl}
+              copyrightNotice={copyrightNotice}
+              handleLicenseChange={(licenseType, licenseUrl) => updatePublishForm({ licenseType, licenseUrl })}
+              handleLicenseDescriptionChange={(event) => updatePublishForm({ otherLicenseDescription: event.target.value })}
+              handleLicenseUrlChange={(event) => updatePublishForm({ licenseUrl: event.target.value })}
+              handleCopyrightNoticeChange={(event) => updatePublishForm({ copyrightNotice: event.target.value })}
+            />
+          </section>
+
+          <section className="card card--section">
+            <div className="card__title">
+              {__('Terms of Service')}
+            </div>
+            <div className="card__content">
+              <FormField
+                name="lbry_tos"
+                type="checkbox"
+                checked={tosAccepted}
+                postfix={
+                  <span>
+                    {__('I agree to the')}{' '}
+                    <Button
+                      fakeLink
+                      href="https://www.lbry.io/termsofservice"
+                      label={__('LBRY terms of service')}
+                    />
+                  </span>
+                }
+                onChange={event => updatePublishForm({ tosAccepted: event.target.checked })}
+              />
+            </div>
+          </section>
+
+          <div className="card__actions">
+            <Submit
+              label={!publishing ? __('Publish') : __('Publishing...')}
+              disabled={
+                formDisabled ||
+                !formValid ||
+                publishing
+              }/>
+              <Button alt onClick={this.handleCancelPublish} label={__('Cancel')} />
+          </div>
+          {!formDisabled && !formValid && this.renderFormErrors()}
+        </div>
+      </Form>
     );
   }
 }

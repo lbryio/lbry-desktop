@@ -26,18 +26,18 @@ export class FormField extends React.PureComponent<Props> {
   render() {
     const { render, label, prefix, postfix, error, helper, name, type, children, stretch, ...inputProps } = this.props;
 
-    let Input;
+    let input;
     if (type) {
       if (type === 'select') {
-        Input = <select id={name} {...inputProps}>{children}</select>
+        input = <select id={name} {...inputProps}>{children}</select>
       } else if (type === 'markdown') {
-        Input = (
+        input = (
           <div className="form-field--SimpleMDE">
             <SimpleMDE {...inputProps} type="textarea" options={{ hideIcons: ['heading', 'image', 'fullscreen', 'side-by-side'] }} />
           </div>
         )
       } else {
-        Input = <input type={type} id={name} {...inputProps} />;
+        input = <input type={type} id={name} {...inputProps} />;
       }
     }
 
@@ -54,7 +54,7 @@ export class FormField extends React.PureComponent<Props> {
               {prefix}
             </label>
           )}
-          {Input}
+          {input}
           {postfix && (
             <label htmlFor={name} className="form-field__postfix">
               {postfix}

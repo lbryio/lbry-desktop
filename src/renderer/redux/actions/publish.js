@@ -1,14 +1,14 @@
 import Lbry from 'lbry';
 import * as ACTIONS from 'constants/action_types';
+import * as MODALS from 'constants/modal_types';
 import { doFetchClaimListMine } from 'redux/actions/content';
 import { selectMyClaimsWithoutChannels } from 'redux/selectors/claims';
 import { selectPendingPublishes } from 'redux/selectors/publish';
+import { doOpenModal } from 'redux/actions/app';
 import type { UpdatePublishFormData, UpdatePublishFormAction, PublishParams } from 'redux/reducers/publish';
-
 export type Action =
   UpdatePublishFormAction
   | { type: ACTIONS.CLEAR_PUBLISH }
-  | { TYPE: ACTIONS.CLEAR_PUBLISH_ERROR };
 
 type PromiseAction = Promise<Action>;
 export type Dispatch = (action: Action | PromiseAction | Array<Action>) => any;
@@ -19,9 +19,6 @@ export const doClearPublish = () => (dispatch: Dispatch): Action =>
 
 export const doUpdatePublishForm = (publishFormValue: {}): Action => (dispatch: Dispatch): Action =>
   dispatch({ type: ACTIONS.UPDATE_PUBLISH_FORM, data: { ...publishFormValue }})
-
-export const doClearPublishError = (): Action => (dispatch) =>
-  dispatch({ type: ACTIONS.CLEAR_PUBLISH_ERROR })
 
 export const doPublish = (params: PublishParams): Action => {
   const {
@@ -37,7 +34,8 @@ export const doPublish = (params: PublishParams): Action => {
     channel,
     title,
     contentIsFree,
-    price
+    price,
+    uri
   } = params;
 
   const channel_name = (channel === 'anonymous' || channel === 'new') ? '' : channel;
@@ -70,15 +68,17 @@ export const doPublish = (params: PublishParams): Action => {
   return dispatch => {
     dispatch({ type: ACTIONS.PUBLISH_START });
 
-    const success = claim => {
+    const success = () => {
       dispatch({ type: ACTIONS.PUBLISH_SUCCESS, data: { pendingPublish: publishPayload } });
+      dispatch(doOpenModal(MODALS.PUBLISH, { uri }))
     };
 
     const failure = error => {
-      dispatch({ type: ACTIONS.PUBLISH_FAIL, data: { error: error.message } })
+      dispatch({ type: ACTIONS.PUBLISH_FAIL })
+      dispatch(doOpenModal(MODALS.ERROR, { error: error.message }))
     };
 
-    return Lbry.publishContent(publishPayload, success, failure);
+    return Lbry.publish(publishPayload).then(success, failure);
   }
 }
 

@@ -65,10 +65,11 @@ export type PublishParams = {
   channel: string,
   title: string,
   contentIsFree: boolean,
+  uri: string,
   price: {
     currency: string,
     amount: number,
-  }
+  },
 }
 
 const defaultState: PublishState = {
@@ -112,15 +113,14 @@ export default handleActions(
       const { pendingPublishes } = state;
       return { ...defaultState, pendingPublishes }
     },
-    [ACTIONS.PUBLISH_START]: (state: PublishState): PublishState => ({ ...state, publishing: true }),
-    [ACTIONS.PUBLISH_FAIL]: (state: PublishState, action): PublishState => {
-      const { data: { error } } = action;
-      return {
+    [ACTIONS.PUBLISH_START]: (state: PublishState): PublishState => ({
+      ...state,
+      publishing: true
+    }),
+    [ACTIONS.PUBLISH_FAIL]: (state: PublishState): PublishState => ({
         ...state,
-        publishing: false,
-        publishError: error
-      }
-    },
+        publishing: false
+    }),
     [ACTIONS.PUBLISH_SUCCESS]: (state: PublishState, action): PublishState => {
       const { pendingPublish } = action.data;
 
@@ -130,11 +130,9 @@ export default handleActions(
       return {
         ...state,
         publishing: false,
-        publishSuccess: true,
         pendingPublishes: newPendingPublishes
       }
     },
-    [ACTIONS.CLEAR_PUBLISH_ERROR]: (state: PublishState): PublishState => ({ ...state, publishError: undefined }),
     [ACTIONS.REMOVE_PENDING_PUBLISH]: (state: PublishState, action) => {
       const { name } =  action.data;
       const pendingPublishes = state.pendingPublishes.filter((publish) => publish.name !== name);

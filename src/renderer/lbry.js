@@ -65,13 +65,6 @@ Lbry.connect = () => {
   return Lbry.connectPromise;
 };
 
-/**
- * Publishes a file
- */
-Lbry.publishContent = (params, publishedCallback, errorCallback) => {
-  lbryProxy.publish(params).then(publishedCallback, errorCallback);
-};
-
 Lbry.imagePath = file => `${staticResourcesPath}/img/${file}`;
 
 Lbry.getMediaType = (contentType, fileName) => {
