@@ -11,7 +11,7 @@ import {
   makeSelectDownloadingForUri,
 } from 'redux/selectors/file_info';
 import { makeSelectCostInfoForUri } from 'redux/selectors/cost_info';
-import { selectShowNsfw } from 'redux/selectors/settings';
+import { selectShowNsfw, selectAutoplay } from 'redux/selectors/settings';
 import { selectMediaPaused, makeSelectMediaPositionForUri } from 'redux/selectors/media';
 import Video from './view';
 import { selectPlayingUri } from 'redux/selectors/content';
@@ -30,6 +30,7 @@ const select = (state, props) => ({
   volume: selectVolume(state),
   mediaPaused: selectMediaPaused(state),
   mediaPosition: makeSelectMediaPositionForUri(props.uri)(state),
+  autoplay: selectAutoplay(state),
 });
 
 const perform = dispatch => ({
