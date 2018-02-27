@@ -1,4 +1,4 @@
-import { app, Menu, Tray as ElectronTray } from 'electron';
+import { app, Menu, Tray } from 'electron';
 import path from 'path';
 
 export default window => {
@@ -17,7 +17,7 @@ export default window => {
     }
   }
 
-  const tray = new ElectronTray(iconPath);
+  const tray = new Tray(iconPath);
 
   tray.on('double-click', () => {
     window.show();
