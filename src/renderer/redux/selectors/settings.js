@@ -33,3 +33,5 @@ export const selectThemePath = createSelector(
     return `${staticResourcesPath}/themes/${dynamicTheme || 'light'}.css`;
   }
 );
+
+export const selectAutoplay = makeSelectClientSetting(SETTINGS.AUTOPLAY);
