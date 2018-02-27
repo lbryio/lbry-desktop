@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 import { clipboard } from 'electron';
-import { FormField } from 'component/common/form';
+import { FormRow } from 'component/common/form';
 import Button from 'component/link';
 
 type Props = {
@@ -22,36 +22,30 @@ export default class Address extends React.PureComponent<Props> {
     const { address, doShowSnackBar } = this.props;
 
     return (
-      <FormField
-        stretch
-        name="address"
-        render={() => (
-          <React.Fragment>
-            <input
-              id="address"
-              className="input-copyable form-field__input"
-              readOnly
-              value={address || ''}
-              ref={input => {
-                this.input = input;
-              }}
-              onFocus={() => {
-                if (this.input) {
-                  this.input.select();
-                }
-              }}
-            />
-            <Button
-              alt
-              icon="Clipboard"
-              onClick={() => {
-                clipboard.writeText(address);
-                doShowSnackBar({ message: __('Address copied') });
-              }}
-            />
-          </React.Fragment>
-        )}
-      />
+
+        <FormRow>
+          <input
+            className="input-copyable form-field__input"
+            readOnly
+            value={address || ''}
+            ref={input => {
+              this.input = input;
+            }}
+            onFocus={() => {
+              if (this.input) {
+                this.input.select();
+              }
+            }}
+          />
+          <Button
+            alt
+            icon="Clipboard"
+            onClick={() => {
+              clipboard.writeText(address);
+              doShowSnackBar({ message: __('Address copied') });
+            }}
+          />
+      </FormRow>
     );
   }
 }

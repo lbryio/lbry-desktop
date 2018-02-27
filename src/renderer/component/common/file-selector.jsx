@@ -3,11 +3,12 @@ import React from 'react';
 import { remote } from 'electron';
 import Button from 'component/link';
 import { FormRow } from 'component/common/form';
+import path from 'path';
 
 type Props = {
   type: string,
-  currentPath: string,
-  onFileChosen: string => void,
+  currentPath: ?string,
+  onFileChosen: (string, string) => void,
 };
 
 class FileSelector extends React.PureComponent<Props> {
@@ -32,9 +33,12 @@ class FileSelector extends React.PureComponent<Props> {
           return;
         }
 
-        const path = paths[0];
+        const filePath = paths[0];
+        const extension = path.extname(filePath);
+        const fileName = path.basename(filePath, extension);
+
         if (this.props.onFileChosen) {
-          this.props.onFileChosen(path);
+          this.props.onFileChosen(filePath, fileName);
         }
       }
     );

@@ -22,11 +22,6 @@ const { autoUpdater } = remote.require('electron-updater');
 
 autoUpdater.logger = remote.require("electron-log");
 
-window.addEventListener('contextmenu', event => {
-  contextMenu(remote.getCurrentWindow(), event.x, event.y, app.env === 'development');
-  event.preventDefault();
-});
-
 ipcRenderer.on('open-uri-requested', (event, uri, newSession) => {
   if (uri && uri.startsWith('lbry://')) {
     if (uri.startsWith('lbry://?verify=')) {
@@ -103,7 +98,7 @@ const init = () => {
   autoUpdater.on("update-downloaded", () => {
     app.store.dispatch(doAutoUpdate());
   });
-
+  
   if (["win32", "darwin"].includes(process.platform)) {
     autoUpdater.on("update-available", () => {
       console.log("Update available");

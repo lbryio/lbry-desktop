@@ -8,14 +8,18 @@ import {
 } from 'redux/selectors/wallet';
 
 export function doUpdateBalance() {
-  return dispatch => {
-    Lbry.wallet_balance().then(balance =>
-      dispatch({
-        type: ACTIONS.UPDATE_BALANCE,
-        data: {
-          balance,
-        },
-      })
+  return (dispatch, getState) => {
+    const { wallet: { balance: balanceInStore } } = getState();
+    Lbry.wallet_balance().then(balance => {
+      if (balanceInStore !== balance) {
+        return dispatch({
+          type: ACTIONS.UPDATE_BALANCE,
+          data: {
+            balance,
+          },
+        })
+      }
+    }
     );
   };
 }

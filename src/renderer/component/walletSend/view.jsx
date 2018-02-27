@@ -42,36 +42,28 @@ class WalletSend extends React.PureComponent<Props> {
               <Form onSubmit={handleSubmit}>
                 <FormRow>
                   <FormField
+                    type="number"
+                    name="amount"
                     label={__('Amount')}
                     postfix={__('LBC')}
+                    className="input--price-amount"
+                    min="0"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.amount}
                     error={!!values.amount && touched.amount && errors.amount}
-                    render={() => (
-                      <input
-                        className="input--price-amount"
-                        type="number"
-                        name="amount"
-                        min="0"
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        value={values.amount}
-                      />
-                    )}
                   />
 
                   <FormField
+                    type="text"
+                    name="address"
+                    placeholder="bbFxRyXXXXXXXXXXXZD8nE7XTLUxYnddTs"
+                    className="input--address"
                     label={__('Recipient address')}
                     error={!!values.address && touched.address && errors.address}
-                    render={() => (
-                      <input
-                        className="input--address"
-                        type="text"
-                        name="address"
-                        placeholder="bbFxRyXXXXXXXXXXXZD8nE7XTLUxYnddTs"
-                        onChange={handleChange}
-                        onBlur={handleBlur}
-                        value={values.address}
-                      />
-                    )}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.address}
                   />
                 </FormRow>
                 <div className="card__actions">
