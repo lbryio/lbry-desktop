@@ -16,7 +16,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
   *
 
 ### Fixed
-  *
+  * Fix night mode start time, set to 9PM (#1050)
   *
 
 ### Deprecated
