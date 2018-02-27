@@ -296,7 +296,7 @@ export function doPurchaseUri(uri) {
     const downloadingByOutpoint = selectDownloadingByOutpoint(state);
     const alreadyDownloading = fileInfo && !!downloadingByOutpoint[fileInfo.outpoint];
 
-    function attemptPlay(cost, instantPurchaseMax = null) {
+    function attemptPlay(cost = 0, instantPurchaseMax = null) {
       if (cost > 0 && (!instantPurchaseMax || cost > instantPurchaseMax)) {
         dispatch(doOpenModal(MODALS.AFFIRM_PURCHASE, { uri }));
       } else {
