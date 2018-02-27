@@ -2,15 +2,16 @@ import * as ACTIONS from 'constants/action_types';
 import * as SETTINGS from 'constants/settings';
 import Fs from 'fs';
 import Http from 'http';
-
 import Lbry from 'lbry';
 import moment from 'moment';
+import analytics from 'analytics';
 
 const UPDATE_IS_NIGHT_INTERVAL = 10 * 60 * 1000;
 
 export function doFetchDaemonSettings() {
   return dispatch => {
     Lbry.settings_get().then(settings => {
+      analytics.toggle(settings.share_usage_data);
       dispatch({
         type: ACTIONS.DAEMON_SETTINGS_RECEIVED,
         data: {
@@ -27,6 +28,7 @@ export function doSetDaemonSetting(key, value) {
     newSettings[key] = value;
     Lbry.settings_set(newSettings).then(newSettings);
     Lbry.settings_get().then(settings => {
+      analytics.toggle(settings.share_usage_data, true);
       dispatch({
         type: ACTIONS.DAEMON_SETTINGS_RECEIVED,
         data: {
@@ -69,7 +71,7 @@ export function doUpdateIsNight() {
   return {
     type: ACTIONS.UPDATE_IS_NIGHT,
     data: { isNight: (() => {
-        const startNightMoment = moment('19:00', 'HH:mm');
+        const startNightMoment = moment('21:00', 'HH:mm');
         const endNightMoment = moment('8:00', 'HH:mm');
         return !(momentNow.isAfter(endNightMoment) && momentNow.isBefore(startNightMoment));
       })()
