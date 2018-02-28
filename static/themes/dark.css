@@ -1,31 +1,15 @@
 :root {
-    /* Colors ( Remove later ) */
+
+    /* Overwrite main colors */
+    --color-bg: #1a2327;
+    --color-bg-alt: #314048;
     --color-primary:  #009688;
-    --color-canvas: #0f1517;
-    --color-bg: #1a2327;
-    --color-bg-alt: #314048;
     --color-help: rgba(255,255,255, 0.5);
     --color-error: #a94442;
     --color-load-screen-text: #FFF;
-    --color-money: #1DE9B6;
-    --color-meta-light: #757575;
     --color-dark-overlay: rgba(15, 21, 23, 0.85);
     --color-download: rgba(255, 255, 255, 0.75);
     --color-grey: rgba(255,255,255, 0.5);
-
-    /* Main colors ( NEW ) */
-    --color-bg: #1a2327;
-    --color-bg-alt: #314048;
-    --color-help: rgba(255,255,255, 0.5);
-    --color-error: #a94442;
-    --color-load-screen-text: #FFF;
-    --color-money: #1DE9B6;
-    --color-meta-light: #757575;
-    --color-dark-overlay: rgba(15, 21, 23, 0.85);
-    --color-download: rgba(255, 255, 255, 0.75);
-    --color-grey: rgba(255,255,255, 0.5);
-
-
 
     /* Nav */
     --nav-bg:  var(--color-bg);
@@ -89,5 +73,5 @@
     --scrollbar-thumb-hover-bg: rgba(255, 255, 255, 0.35);
 
     /* Divider */
-    --divider: 1px solid rgba(255, 225, 225, 0.12);
+    --divider-color: rgba(255, 225, 225, 0.12);
 }
