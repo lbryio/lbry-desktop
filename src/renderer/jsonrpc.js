@@ -15,7 +15,7 @@ jsonrpc.call = (
     return response.json().then(json => {
       let error;
       if (json.error) {
-        error = new Error(json.error);
+        error = new Error(json.error.message);
       } else {
         error = new Error('Protocol error with unknown response signature');
       }
