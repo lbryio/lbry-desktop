@@ -19,7 +19,7 @@ class FeaturedCategory extends React.PureComponent {
 
   componentWillMount() {
     this.setState({
-      numItems: this.props.names.length,
+      numItems: this.props.uris.length,
     });
   }
 
@@ -163,7 +163,7 @@ class FeaturedCategory extends React.PureComponent {
   }
 
   render() {
-    const { category, names, categoryLink } = this.props;
+    const { category, uris, categoryLink } = this.props;
 
     return (
       <div className="card-row card-row--small">
@@ -206,9 +206,9 @@ class FeaturedCategory extends React.PureComponent {
             </div>
           )}
           <div ref="rowitems" className="card-row__items">
-            {names &&
-              names.map(name => (
-                <FileCard key={name} displayStyle="card" uri={normalizeURI(name)} />
+            {uris &&
+              uris.map(uri => (
+                <FileCard key={uri} displayStyle="card" uri={normalizeURI(uri)} />
               ))}
           </div>
         </div>

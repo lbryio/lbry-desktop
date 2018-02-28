@@ -87,7 +87,7 @@ export default class extends React.PureComponent<Props> {
                     key={subscription.channelName}
                     categoryLink={subscription.uri}
                     category={subscription.channelName}
-                    names={subscription.claims}
+                    uris={subscription.claims}
                   />
                 );
               })}

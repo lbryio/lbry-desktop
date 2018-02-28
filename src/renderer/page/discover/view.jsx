@@ -30,12 +30,12 @@ class DiscoverPage extends React.PureComponent {
         {!hasContent && fetchingFeaturedUris && <BusyMessage message={__('Fetching content')} />}
         {hasContent &&
           Object.keys(featuredUris).map(
-            category =>
-              featuredUris[category].length ? (
+            uri =>
+              featuredUris[uri].length ? (
                 <FeaturedCategory
-                  key={category}
-                  category={category}
-                  names={featuredUris[category]}
+                  key={uri}
+                  category={uri}
+                  uris={featuredUris[uri]}
                 />
               ) : (
                 ''
