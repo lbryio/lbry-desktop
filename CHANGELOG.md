@@ -19,7 +19,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
   * Fixed sort by date of published content ([#986](https://github.com/lbryio/lbry-app/issues/986))
   * Fix night mode start time, set to 9PM (#1050)
   * Fix night mode start time, set to 9PM ([#1050](https://github.com/lbryio/lbry-app/issues/1050))
-  *
+  * Disable drag and drop of files into the app ([#1045](https://github.com/lbryio/lbry-app/pull/1045))
 
 ### Deprecated
   *
