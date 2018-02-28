@@ -8,8 +8,8 @@ Web UI version numbers should always match the corresponding version of LBRY App
 
 ## [Unreleased]
 ### Added
-  **
-   * Add Rewards FAQ to LBRY app ([#1041](https://github.com/lbryio/lbry-app/pull/1041))
+   * Save app state when closing to tray ([#968](https://github.com/lbryio/lbry-app/issues/968))
+   * Add Rewards FAQ to LBRY app ([#1041](https://github.com/lbryio/lbry-app/pull/1041))
    
 
 ### Changed
