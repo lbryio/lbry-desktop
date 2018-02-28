@@ -17,9 +17,6 @@ $width-page-constrained: 800px;
   --color-primary-dark: #2c6e60;
   --color-third: #fbd55e;
   --color-fourth: #49b2e2;
-
-
-  --text-color: var(--color-black);
   --color-dark-overlay: rgba(32, 32, 32, 0.9);
   --color-help: rgba(0, 0, 0, 0.54);
   --color-error: #a94442;
@@ -28,10 +25,8 @@ $width-page-constrained: 800px;
   --color-placeholder: #ececec;
   --color-nav-bg: #f6f6f6;
 
-  /* Video */
-  --height-video-embedded: 450px;
-  --height-video-embedded-min: 325px;
-  --width-video-embedded: 700px;
+  /* Page */
+  --page-bg: var(--color-bg);
 
   /* Font */
   --font-size: 16px;
@@ -43,11 +38,17 @@ $width-page-constrained: 800px;
   --box-shadow-layer: 0 4px 9px -2px var(--box-shadow-color);
 
   /* Text */
+  --text-color: var(--color-black);
   --text-help-color: #eee;
   --text-max-width: 660px;
   --text-link-padding: 4px;
   --text-selection-bg: rgba(saturate(lighten(#155b4a, 20%), 20%), 1); // temp color
   --text-selection-color: #fff;
+
+  /* Video */
+  --height-video-embedded: 450px;
+  --height-video-embedded-min: 325px;
+  --width-video-embedded: 700px;
 
   /* Form */
   --form-label-color: rgba(0, 0, 0, 0.54);
@@ -93,6 +94,7 @@ $width-page-constrained: 800px;
 
   /* Nav */
   --nav-bg: var(--color-nav-bg);
+
   /* Header */
   --header-bg: var(--color-white);
   --header-color: var(--color-text);
