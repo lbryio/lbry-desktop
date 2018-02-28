@@ -9,12 +9,33 @@ class FileList extends React.PureComponent {
     super(props);
 
     this.state = {
-      sortBy: 'date',
+      sortBy: 'dateNew',
     };
 
     this._sortFunctions = {
-      date(fileInfos) {
-        return fileInfos.slice().reverse();
+      dateNew(fileInfos) {
+        return fileInfos.slice().sort((fileInfo1, fileInfo2) => {
+          const height1 = fileInfo1.height
+          const height2 = fileInfo2.height
+          if (height1 > height2) {
+            return -1;
+          } else if (height1 < height2) {
+            return 1;
+          }
+          return 0;
+        });    
+      },
+      dateOld(fileInfos) {
+        return fileInfos.slice().sort((fileInfo1, fileInfo2) => {
+          const height1 = fileInfo1.height
+          const height2 = fileInfo2.height
+          if (height1 < height2) {
+            return -1;
+          } else if (height1 > height2) {
+            return 1;
+          }
+          return 0;
+        });    
       },
       title(fileInfos) {
         return fileInfos.slice().sort((fileInfo1, fileInfo2) => {
@@ -95,7 +116,8 @@ class FileList extends React.PureComponent {
         <span className="sort-section">
           {__('Sort by')}{' '}
           <FormField type="select" onChange={this.handleSortChanged.bind(this)}>
-            <option value="date">{__('Date')}</option>
+            <option value="dateNew">{__('Newest First')}</option>
+            <option value="dateOld">{__('Oldest First')}</option>
             <option value="title">{__('Title')}</option>
           </FormField>
         </span>
