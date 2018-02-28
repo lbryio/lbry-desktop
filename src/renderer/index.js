@@ -65,11 +65,9 @@ ipcRenderer.on('window-is-focused', () => {
 document.addEventListener('dragover', event => {
   event.preventDefault();
 })
-document.addEventListener('drop', function (event) {
+document.addEventListener('drop', event => {
   event.preventDefault();
-  return false;
-}, false);
-
+});
 document.addEventListener('click', event => {
   let { target } = event;
   while (target && target !== document) {
