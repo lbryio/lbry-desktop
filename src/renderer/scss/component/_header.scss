@@ -8,7 +8,7 @@
   align-items: center;
   justify-content: space-between;
   height: 100%;
-  background-color: var(--color-bg);
+  background-color: var(--header-bg);
 }
 
 .header__actions-right {
@@ -56,9 +56,9 @@
   border-bottom: none;
 
   &:focus {
-    background-color: var(--color-bg);
+    background-color: var(--search-active-bg);
     border-radius: 0;
-    border-bottom: 1px solid var(--color-grey);
+    border-bottom: 1px solid var(--search-active-border-color);
     box-shadow: none;
   }
 }
@@ -86,5 +86,6 @@
 }
 
 .wunderbar__active-suggestion {
+  // Use a new variable
   background-color: var(--color-secondary);
 }

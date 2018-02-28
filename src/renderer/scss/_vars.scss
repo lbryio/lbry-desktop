@@ -45,6 +45,9 @@ $width-page-constrained: 800px;
   --text-selection-bg: rgba(saturate(lighten(#155b4a, 20%), 20%), 1); // temp color
   --text-selection-color: #fff;
 
+  /* Divider */
+  --divider-color: #e3e3e3;
+
   /* Video */
   --height-video-embedded: 450px;
   --height-video-embedded-min: 325px;
@@ -90,7 +93,7 @@ $width-page-constrained: 800px;
   // --> Inverse
   --btn-inverse-bg: var(--btn-alt-bg);
   --btn-inverse-color: var(--color-primary);
-  
+
   /* Nav */
   --nav-bg: var(--color-nav-bg);
 
@@ -105,8 +108,10 @@ $width-page-constrained: 800px;
   /* Header -> search */
   --search-bg: #fff;
   --search-color: #666;
+  --search-active-bg: transparent;
   --search-active-color: var(--header-active-color);
   --search-active-shadow: 0 6px 9px -2px var(--color-grey--dark);
+  --search-active-border-color: var(--divider-color);
 
   /* Table */
   --table-border: 1px solid #e2e2e2;
@@ -139,8 +144,6 @@ $width-page-constrained: 800px;
   --scrollbar-thumb-active-bg: var(--color-primary);
   --scrollbar-track-bg: transparent;
 
-  /* Divider */
-  --divider-color: #e3e3e3;
 
   // /* Animation */
   // --animation-duration: 0.3s;

@@ -11,6 +11,9 @@
     --color-download: rgba(255, 255, 255, 0.75);
     --color-grey: rgba(255,255,255, 0.5);
 
+    /* Page */
+    --page-bg: #151515;
+
     /* Nav */
     --nav-bg:  var(--color-bg);
     --nav-color: #FFF;
@@ -46,7 +49,6 @@
     /* Search */
     --search-bg: rgba(0,0,0, 0.45);
     --search-color: #757575;
-    --search-active-bg: rgba(0,0,0, 0.75);
     --search-border: 1px solid rgba(0,0,0, 0.25);
 
     /* Tab */
