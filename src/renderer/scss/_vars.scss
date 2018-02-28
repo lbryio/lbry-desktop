@@ -49,7 +49,8 @@ $width-page-constrained: 800px;
 
   /* Shadows */
   // --box-shadow-layer: 0px 1px 3px 0px rgba(0, 0, 0, 0.2);
-  --box-shadow-layer: 0 4px 9px -2px var(--color-grey);
+  --box-shadow-color: var(--color-grey);
+  --box-shadow-layer: 0 4px 9px -2px var(--box-shadow-color);
 
   /* Text */
   --text-help-color: #eee;
@@ -88,13 +89,16 @@ $width-page-constrained: 800px;
 
   /* Button */
   --btn-primary-color: #fff;
-  --button-alt-color: var(--text-color);
   --btn-primary-bg: var(--color-primary);
+  --btn-alt-bg: var(--color-white);
+  --btn-alt-color: var(--text-color);
+  --btn-inverse-bg: var(--btn-alt-bg);
   --btn-inverse-color: var(--color-primary);
-  --btn-inverse-bg: var(--color-white);
   --btn-radius: 20px;
   --btn-height: 40px;
 
+  /* Nav */
+  --nav-bg: var(--color-nav-bg);
   /* Header */
   --header-bg: var(--color-white);
   --header-color: var(--color-text);
@@ -104,8 +108,8 @@ $width-page-constrained: 800px;
   --header-button-hover-bg: rgba(100, 100, 100, 0.15);
 
   /* Header -> search */
+  --search-bg: #fff;
   --search-color: #666;
-  --search-bg-color: #fff;
   --search-active-color: var(--header-active-color);
   --search-active-shadow: 0 6px 9px -2px var(--color-grey--dark);
 
@@ -115,6 +119,7 @@ $width-page-constrained: 800px;
   --table-item-odd: #f4f4f4;
 
   /* Card */
+  --card-bg: var(--color-white);
   --card-hover-translate: 10px;
   --card-margin: $spacing-vertical * 2/3;
   --card-max-width: $width-page-constrained;

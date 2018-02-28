@@ -1,5 +1,5 @@
 :root {
-    /* Colors */
+    /* Colors ( Remove later ) */
     --color-primary:  #009688;
     --color-canvas: #0f1517;
     --color-bg: #1a2327;
@@ -11,7 +11,31 @@
     --color-meta-light: #757575;
     --color-dark-overlay: rgba(15, 21, 23, 0.85);
     --color-download: rgba(255, 255, 255, 0.75);
+    --color-grey: rgba(255,255,255, 0.5);
 
+    /* Main colors ( NEW ) */
+    --color-bg: #1a2327;
+    --color-bg-alt: #314048;
+    --color-help: rgba(255,255,255, 0.5);
+    --color-error: #a94442;
+    --color-load-screen-text: #FFF;
+    --color-money: #1DE9B6;
+    --color-meta-light: #757575;
+    --color-dark-overlay: rgba(15, 21, 23, 0.85);
+    --color-download: rgba(255, 255, 255, 0.75);
+    --color-grey: rgba(255,255,255, 0.5);
+
+
+
+    /* Nav */
+    --nav-bg:  var(--color-bg);
+    --nav-color: #FFF;
+
+    /* Card */
+    --card-bg: var(--color-bg);
+
+    /* Shadows */
+    --box-shadow-color: rgba(0, 0, 0, 0.25);
 
     /* Text */
     --text-color: #FFF;
@@ -19,6 +43,9 @@
 
     /* Form */
     --form-label-color: rgba(255, 255, 255, 0.70);
+
+    /* Button */
+    --btn-alt-bg: var(--color-bg-alt);
 
     /* Input */
     --input-bg: transparent;
@@ -43,6 +70,7 @@
     --tab-active-color: rgba(255,255,255, 0.75);
 
     /* Header */
+    --header-bg: transparent;
     --header-color: #CCC;
     --header-active-color: #FFF;
     --header-button-hover-bg: var(--color-bg-alt);
