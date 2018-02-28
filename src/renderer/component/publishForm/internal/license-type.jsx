@@ -2,6 +2,13 @@
 import * as React from "react";
 import { FormRow, FormField } from 'component/common/form';
 import Button from 'component/link';
+import {
+  CC_LICENSES,
+  COPYRIGHT,
+  OTHER,
+  PUBLIC_DOMAIN,
+  NONE
+} from 'constants/licenses';
 
 type Props = {
   licenseType: string,
@@ -14,7 +21,7 @@ type Props = {
   handleCopyrightNoticeChange: (SyntheticInputEvent<*>) => void,
 }
 
-class LiscenseType extends React.PureComponent<Props> {
+class LicenseType extends React.PureComponent<Props> {
   constructor() {
     super();
 
@@ -45,13 +52,6 @@ class LiscenseType extends React.PureComponent<Props> {
       handleCopyrightNoticeChange,
      } = this.props;
 
-    const ccBy = __('Creative Commons Attribution 4.0 International');
-    const ccBySa = __('Creative Commons Attribution-ShareAlike 4.0 International');
-    const ccByNd = __('Creative Commons Attribution-NoDerivatives 4.0 International');
-    const ccByNc = __('Creative Commons Attribution-NonCommercial 4.0 International');
-    const ccByNcSa = __('Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International');
-    const ccByNcNd = __('Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International');
-
     return (
       <div className="card__content">
         <FormField
@@ -60,49 +60,23 @@ class LiscenseType extends React.PureComponent<Props> {
           value={licenseType}
           onChange={this.handleLicenseOnChange}
         >
-          <option>{__('None')}</option>
-          <option value="Public Domain">{__('Public Domain')}</option>
-          <option
-            value={ccBy}
-            data-url="https://creativecommons.org/licenses/by/4.0/legalcode"
-          >
-            {ccBy}
-          </option>
-          <option
-            value={ccBySa}
-            data-url="https://creativecommons.org/licenses/by-sa/4.0/legalcode"
-          >
-            {ccBySa}
-          </option>
-          <option
-            value={ccByNd}
-            data-url="https://creativecommons.org/licenses/by-nd/4.0/legalcode"
-          >
-            {ccByNd}
-          </option>
-          <option
-            value={ccByNc}
-            data-url="https://creativecommons.org/licenses/by-nc/4.0/legalcode"
-          >
-            {ccByNc}
-          </option>
-          <option
-            value={ccByNcSa}
-            data-url="https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode"
-          >
-            {ccByNcSa}
-          </option>
-          <option
-            value={ccByNcNd}
-            data-url="https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode"
-          >
-            {ccByNcNd}
-          </option>
-          <option value="copyright">{__('Copyrighted...')}</option>
-          <option value="other">{__('Other...')}</option>
+          <option value={NONE}>{__('None')}</option>
+          <option value={PUBLIC_DOMAIN}>{__('Public Domain')}</option>
+          {CC_LICENSES.map(({ value, url }) => (
+            <option
+              key={value}
+              value={value}
+              data-url={url}
+            >
+              {value}
+            </option>
+          ))}
+
+          <option value={COPYRIGHT}>{__('Copyrighted...')}</option>
+          <option value={OTHER}>{__('Other...')}</option>
         </FormField>
 
-        {licenseType === 'copyright' && (
+        {licenseType === COPYRIGHT && (
           <FormRow padded>
             <FormField
               stretch
@@ -115,7 +89,7 @@ class LiscenseType extends React.PureComponent<Props> {
           </FormRow>
         )}
 
-        {licenseType === 'other' && (
+        {licenseType === OTHER && (
           <React.Fragment>
             <FormRow padded>
               <FormField
@@ -142,4 +116,4 @@ class LiscenseType extends React.PureComponent<Props> {
   }
 }
 
-export default LiscenseType;
+export default LicenseType;

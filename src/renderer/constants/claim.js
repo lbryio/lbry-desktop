@@ -1,0 +1,1 @@
+export const MINIMUM_PUBLISH_BID = 0.00000001;

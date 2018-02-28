@@ -14,6 +14,8 @@ import type { PublishParams, UpdatePublishFormData } from 'redux/actions/publish
 import FileSelector from 'component/common/file-selector';
 import BidHelpText from './internal/bid-help-text';
 import LicenseType from './internal/license-type';
+import { COPYRIGHT, OTHER } from 'constants/licenses';
+import { MINIMUM_PUBLISH_BID } from 'constants/claim';
 
 type Props = {
   publish: (PublishParams) => void,
@@ -56,6 +58,7 @@ type Props = {
   clearPublish: () => void,
   clearFilePath: () => void,
   resolveUri: (string) => void,
+  scrollToTop: () => void,
 }
 
 class PublishForm extends React.PureComponent<Props> {
@@ -100,17 +103,17 @@ class PublishForm extends React.PureComponent<Props> {
 
     let publishingLicense;
     switch (licenseType) {
-      case 'copyright':
+      case COPYRIGHT:
         publishingLicense = copyrightNotice;
         break;
-      case 'other':
+      case OTHER:
         publishingLicense = otherLicenseDescription;
         break;
       default:
         publishingLicense = licenseType;
     }
 
-    let publishingLicenseUrl = licenseType === 'copyright' ? '' : licenseUrl;
+    let publishingLicenseUrl = licenseType === COPYRIGHT ? '' : licenseUrl;
 
     const publishParams = {
       filePath,
@@ -135,14 +138,8 @@ class PublishForm extends React.PureComponent<Props> {
   }
 
   handleCancelPublish() {
-    const { clearPublish } = this.props;
-
-    // #content wraps every page and lives in component/page
-    const mainContent = document.getElementById("content");
-    if (mainContent) {
-      mainContent.scrollTop = 0; // It would be nice to animate this
-    }
-
+    const { clearPublish, scrollToTop } = this.props;
+    scrollToTop();
     clearPublish();
   }
 
@@ -202,7 +199,7 @@ class PublishForm extends React.PureComponent<Props> {
     let bidError;
     if (balance <= bid) {
       bidError = __('Not enough credits');
-    } else if (bid <= 0.00000001) {
+    } else if (bid <= MINIMUM_PUBLISH_BID) {
       bidError = __('Bid must be higher');
     }
 
