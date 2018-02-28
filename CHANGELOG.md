@@ -38,7 +38,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
  * Added auto-update ([#808](https://github.com/lbryio/lbry-app/pull/808))
 
 
-### Change
+### Changed
  * Refactored Electron's main process ([#951](https://github.com/lbryio/lbry-app/pull/951))
  * Refactored lbryuri.js into separate named exports ([#957](https://github.com/lbryio/lbry-app/pull/957))
  * Upgraded Daemon to [version 18.2](https://github.com/lbryio/lbry/releases/tag/v0.18.2) ([#961](https://github.com/lbryio/lbry-app/pull/961))
