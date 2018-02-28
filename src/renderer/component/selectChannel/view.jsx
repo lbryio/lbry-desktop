@@ -4,6 +4,7 @@ import { isNameValid } from 'lbryURI';
 import { FormRow, FormField } from 'component/common/form';
 import { BusyMessage } from 'component/common';
 import Link from 'component/link';
+import { CHANNEL_NEW, CHANNEL_ANONYMOUS } from 'constants/claim';
 
 type Props = {
   channel: string, //currently selected channel
@@ -31,7 +32,7 @@ class ChannelSection extends React.PureComponent<Props, State> {
 
     this.state = {
       newChannelName: '',
-      newChannelBid: 10,
+      newChannelBid: 0.1,
       addingChannel: false,
       creatingChannel: false,
       newChannelNameError: '',
@@ -56,7 +57,7 @@ class ChannelSection extends React.PureComponent<Props, State> {
     const { onChannelChange } = this.props;
     const channel = event.target.value;
 
-    if (channel === 'new') {
+    if (channel === CHANNEL_NEW) {
       this.setState({ addingChannel: true });
       onChannelChange(channel);
     } else {
@@ -156,7 +157,7 @@ class ChannelSection extends React.PureComponent<Props, State> {
                 onChange={this.handleChannelChange}
                 value={channel}
               >
-                <option key="anonymous" value="anonymous">
+                <option value={CHANNEL_ANONYMOUS}>
                   {__('Anonymous')}
                 </option>
                 {channels.map(({ name }) => (
@@ -164,7 +165,7 @@ class ChannelSection extends React.PureComponent<Props, State> {
                     {name}
                   </option>
                 ))}
-                <option key="new" value="new">
+                <option value={CHANNEL_NEW}>
                   {__('New channel...')}
                 </option>
               </FormField>

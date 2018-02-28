@@ -1,6 +1,7 @@
 // @flow
 import { handleActions } from 'util/redux-utils';
 import * as ACTIONS from 'constants/action_types';
+import { CHANNEL_ANONYMOUS } from 'constants/claim';
 
 type PublishState = {
   filePath: ?string,
@@ -84,11 +85,11 @@ const defaultState: PublishState = {
   description: "",
   language: "en",
   nsfw: false,
-  channel: "anonymous",
+  channel: CHANNEL_ANONYMOUS,
   tosAccepted: false,
   name: "",
   nameError: undefined,
-  bid: 0.5,
+  bid: 0.1,
   bidError: undefined,
   licenseType: "None",
   otherLicenseDescription: "",

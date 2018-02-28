@@ -16,6 +16,7 @@ import BidHelpText from './internal/bid-help-text';
 import LicenseType from './internal/license-type';
 import { COPYRIGHT, OTHER } from 'constants/licenses';
 import { MINIMUM_PUBLISH_BID } from 'constants/claim';
+import { CHANNEL_NEW, CHANNEL_ANONYMOUS } from 'constants/claim';
 
 type Props = {
   publish: (PublishParams) => void,
@@ -200,7 +201,7 @@ class PublishForm extends React.PureComponent<Props> {
     if (balance <= bid) {
       bidError = __('Not enough credits');
     } else if (bid <= MINIMUM_PUBLISH_BID) {
-      bidError = __('Bid must be higher');
+      bidError = __('Your bid must be higher');
     }
 
     updatePublishForm({ bid, bidError })
@@ -210,7 +211,7 @@ class PublishForm extends React.PureComponent<Props> {
   getNewUri(name: string, channel: string) {
     const { resolveUri } = this.props;
     // If they are midway through a channel creation, treat it as anonymous until it completes
-    const channelName = (channel === 'anonymous' || channel === 'new') ? '' : channel;
+    const channelName = (channel === CHANNEL_ANONYMOUS || channel === CHANNEL_NEW) ? '' : channel;
 
     let uri;
     try {
@@ -238,10 +239,11 @@ class PublishForm extends React.PureComponent<Props> {
     if (nameError || bidError) {
       // There will be inline errors if either of these exist
       // These are just extra help at the bottom of the screen
+      // There could be multiple bid errors, so just duplicate it at the bottom
       return (
         <div className="card__subtitle form-field__error">
           {nameError && <div>{__("The URL you created is not valid.")}</div>}
-          {bidError && <div>{__("You don't have enough credits for the bid amount you chose.")}</div>}
+          {bidError && <div>{bidError}</div>}
         </div>
       )
     }
@@ -415,7 +417,7 @@ class PublishForm extends React.PureComponent<Props> {
                 <FormField
                   stretch
                   prefix={`lbry://${
-                    (channel === 'anonymous' || channel === 'new') ? '' : `${channel}/`
+                    (channel === CHANNEL_ANONYMOUS || channel === CHANNEL_NEW) ? '' : `${channel}/`
                   }`}
                   type="text"
                   name="content_name"
@@ -448,7 +450,7 @@ class PublishForm extends React.PureComponent<Props> {
                 disabled={!name}
                 onChange={event => this.handleBidChange(event.target.value)}
                 helper={__('This LBC remains yours and the deposit can be undone at any time.')}
-                placeholder={winningBidForClaimUri ? winningBidForClaimUri + 10 : 10}
+                placeholder={winningBidForClaimUri ? winningBidForClaimUri + 0.1 : 0.1}
               />
             </div>
           </section>

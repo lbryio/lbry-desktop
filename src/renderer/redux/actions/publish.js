@@ -6,6 +6,8 @@ import { selectMyClaimsWithoutChannels } from 'redux/selectors/claims';
 import { selectPendingPublishes } from 'redux/selectors/publish';
 import { doOpenModal } from 'redux/actions/app';
 import type { UpdatePublishFormData, UpdatePublishFormAction, PublishParams } from 'redux/reducers/publish';
+import { CHANNEL_NEW, CHANNEL_ANONYMOUS } from 'constants/claim';
+
 export type Action =
   UpdatePublishFormAction
   | { type: ACTIONS.CLEAR_PUBLISH }
@@ -38,7 +40,7 @@ export const doPublish = (params: PublishParams): Action => {
     uri
   } = params;
 
-  const channel_name = (channel === 'anonymous' || channel === 'new') ? '' : channel;
+  const channel_name = (channel === CHANNEL_ANONYMOUS || channel === CHANNEL_NEW) ? '' : channel;
   const fee = contentIsFree || !price.amount ? undefined : { ...price };
 
   const metadata = {
