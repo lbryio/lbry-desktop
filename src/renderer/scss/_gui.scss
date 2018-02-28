@@ -118,7 +118,7 @@ input {
     background: var(--input-bg);
     color: var(--input-disabled-color);
     font-family: 'Consolas', 'Lucida Console', 'Adobe Source Code Pro', monospace;
-    border-bottom: 1px dotted var(--color-divider);
+    border-bottom: 1px dotted var(--divider-color);
     width: 100%;
     flex: 1;
   }
@@ -269,7 +269,7 @@ dd {
 // }
 
 .divider__horizontal {
-  border-top: var(--color-divider);
+  border-top: var(--divider-color);
   margin: 16px 0;
 }
 

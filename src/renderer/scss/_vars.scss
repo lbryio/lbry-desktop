@@ -7,27 +7,22 @@ $width-page-constrained: 800px;
 :root {
   /* Colors */
   --color-white: #fff;
-  --color-black: #000; // I shouldn't use color names like this
+  --color-black: #000;
+  --color-primary: #44b098;
+  --color-secondary: #6afbda;
+
+  /* ? */
   --color-grey: #d6d6d6;
   --color-grey-dark: #888;
-  --color-primary: #44b098;
   --color-primary-dark: #2c6e60;
-  --color-secondary: #6afbda;
   --color-third: #fbd55e;
   --color-fourth: #49b2e2;
-  --color-divider: #e3e3e3;
+
 
   --text-color: var(--color-black);
-  // --color-brand: #155b4a;
   --color-dark-overlay: rgba(32, 32, 32, 0.9);
   --color-help: rgba(0, 0, 0, 0.54);
-  // --color-notice: #8a6d3b;
   --color-error: #a94442;
-  // --color-load-screen-text: #c3c3c3;
-  // --color-meta-light: #505050;
-  // --color-money: #216c2a;
-  // --color-download: rgba(0, 0, 0, 0.75);
-  // --color-canvas: #f5f5f5;
   --color-bg: #fafafa;
   --color-bg-alt: #f6f6f6;
   --color-placeholder: #ececec;
@@ -38,17 +33,12 @@ $width-page-constrained: 800px;
   --height-video-embedded-min: 325px;
   --width-video-embedded: 700px;
 
-  // --width-video-embedded: var(--height-video-embedded) * 16/9;
-  // --content-max-width: 1000px;
-  // --nsfw-blur-intensity: 20px;
-
   /* Font */
   --font-size: 16px;
   --font-line-height: 1.7;
   --font-size-subtext-multiple: 0.82;
 
   /* Shadows */
-  // --box-shadow-layer: 0px 1px 3px 0px rgba(0, 0, 0, 0.2);
   --box-shadow-color: var(--color-grey);
   --box-shadow-layer: 0 4px 9px -2px var(--box-shadow-color);
 
@@ -68,17 +58,14 @@ $width-page-constrained: 800px;
   --input-color: var(--text-color);
   --input-border-size: 1px;
   --input-border-color: var(--color-grey-dark);
-
-  /* input:active */
+  /* --> input:active */
   --input-active-bg: transparent;
-
-  /* input:disabled */
+  /* --> input:disabled */
   --input-disabled-border-color: rgba(0, 0, 0, 0.42);
   --input-disabled-color: rgba(0, 0, 0, 0.54);
-
-  /* input:hover */
+  /* --> input:hover */
   --input-hover-border-color: rgba(0, 0, 0, 0.87);
-  /* input:placeholder */
+  /* --> input:placeholder */
   --input-placeholder-color: rgba(0, 0, 0, 0.42);
   --input-placeholder-opacity: 1;
 
@@ -88,14 +75,21 @@ $width-page-constrained: 800px;
   --select-height: 30px;
 
   /* Button */
-  --btn-primary-color: #fff;
-  --btn-primary-bg: var(--color-primary);
-  --btn-alt-bg: var(--color-white);
-  --btn-alt-color: var(--text-color);
-  --btn-inverse-bg: var(--btn-alt-bg);
-  --btn-inverse-color: var(--color-primary);
   --btn-radius: 20px;
   --btn-height: 40px;
+  // --> Primary
+  --btn-primary-bg: var(--color-primary);
+  --btn-primary-color: var(--color-white);
+  // --> Secondary
+  --btn-secondary-bg: var(--color-secondary);
+  --btn-secondary-color: var(--color-white);
+  // --> Alternative
+  --btn-alt-bg: var(--color-white);
+  --btn-alt-color: var(--text-color);
+  // --> Inverse
+  --btn-inverse-bg: var(--btn-alt-bg);
+  --btn-inverse-color: var(--color-primary);
+
 
   /* Nav */
   --nav-bg: var(--color-nav-bg);
@@ -129,7 +123,7 @@ $width-page-constrained: 800px;
   /* Modal */
   --modal-width: 440px;
   --modal-bg: var(--color-bg);
-  --modal-overlay-bg: rgba(#f5f5f5, 0.75); // --color-canvas: #F5F5F5
+  --modal-overlay-bg: rgba(#f5f5f5, 0.75);
   --modal-border: 1px solid rgb(204, 204, 204);
 
   // /* Tooltip */
@@ -144,10 +138,10 @@ $width-page-constrained: 800px;
   --scrollbar-thumb-active-bg: var(--color-primary);
   --scrollbar-track-bg: transparent;
 
-  // /* Divider */
-  // --divider: 1px solid rgba(0, 0, 0, 0.12);
-  //
-  // /* Animation :) */
+  /* Divider */
+  --divider-color: #e3e3e3;
+
+  // /* Animation */
   // --animation-duration: 0.3s;
   // --animation-style: cubic-bezier(0.55, 0, 0.1, 1);
 }

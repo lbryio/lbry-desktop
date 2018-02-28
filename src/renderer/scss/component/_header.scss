@@ -77,7 +77,7 @@
   text-overflow: ellipsis;
 
   &:not(:first-of-type) {
-    border-top: 1px solid var(--color-divider);
+    border-top: 1px solid var(--divider-color);
   }
 }
 

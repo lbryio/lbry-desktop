@@ -9,7 +9,7 @@
   text-align: center;
   border-radius: var(--button-radius);
   text-transform: uppercase;
-  color: var(--color-white);
+  color: var(--btn-color);
 
   .icon {
     top: 0em;
@@ -37,7 +37,7 @@
   min-width: var(--btn-height);
   border-radius: var(--btn-radius);
   color: var(--btn-primary-color);
-  background-color: var(--color-primary);
+  background-color: var(--btn-primary-bg);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -66,7 +66,7 @@
   }
 
   &:disabled {
-    color: var(--color-help);
+    color: var(--btn-disabled-color);
     background-color: transparent;
   }
 }
@@ -102,8 +102,8 @@
 }
 
 .btn.btn--secondary {
-  background-color: var(--color-secondary);
-  color: var(--color-primary);
+  background-color: var(--button-secondary-bg);
+  color: var(--button-secondary-color);
 }
 
 .btn.btn--no-style {
