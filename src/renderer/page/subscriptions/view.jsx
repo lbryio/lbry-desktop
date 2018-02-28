@@ -2,7 +2,7 @@
 import React from 'react';
 import SubHeader from 'component/subHeader';
 import { BusyMessage } from 'component/common.js';
-import { FeaturedCategory } from 'page/discover/view';
+import FeaturedCategory from 'component/featuredCategory';
 import type { Subscription } from 'redux/reducers/subscriptions';
 
 type SavedSubscriptions = Array<Subscription>;
