@@ -34,6 +34,7 @@
 
     /* Button */
     --btn-alt-bg: var(--color-bg-alt);
+    --btn-primary-disabled-bg: #2e3e46;
 
     /* Input */
     --input-bg: transparent;
@@ -49,7 +50,7 @@
 
     /* Search */
     --search-bg: var(--color-bg);
-    --search-active-bg: rgba(0, 0, 0, 0.75);
+    --search-active-bg: transparent;
     --search-color: #FFF;
     --search-menu-item-active-bg: rgba(0, 0, 0, 0.45);
 
