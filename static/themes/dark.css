@@ -19,7 +19,8 @@
     --nav-color: #FFF;
 
     /* Card */
-    --card-bg: var(--color-bg);
+    --card-bg:  rgba(15, 21, 23, 0.85); /* var(--color-bg); */
+    --card-media-bg: rgba(15, 21, 23, 0.85);
 
     /* Shadows */
     --box-shadow-color: rgba(0, 0, 0, 0.25);

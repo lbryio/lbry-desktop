@@ -129,6 +129,7 @@ $width-page-constrained: 800px;
   --card-max-width: $width-page-constrained;
   --card-radius: 2px;
   --card-small-width: $spacing-vertical * 10;
+  --card-media-bg: var(--color-placeholder);
 
   /* Modal */
   --modal-width: 440px;
