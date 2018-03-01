@@ -11,7 +11,12 @@
       "webpack": {
         "config": "webpack.renderer.additions.js"
       }
-    }
+    },
+    "prettier/prettier": ["error", {
+      "trailingComma": "es5",
+      "printWidth": 100,
+      "singleQuote": true
+    }]
   },
   "parser": "babel-eslint",
   "env": {
