@@ -4,7 +4,6 @@
     "airbnb",
     "plugin:import/electron",
     "plugin:flowtype/recommended",
-    "plugin:prettier/recommended"
   ],
   "settings": {
     "import/resolver": {
@@ -28,11 +27,6 @@
   "rules": {
     "import/no-commonjs": "warn",
     "import/no-amd": "warn",
-    "func-names": ["warn", "as-needed"],
-    "prettier/prettier": ["error", {
-      "trailingComma": "es5",
-      "printWidth": 100,
-      "singleQuote": true
-    }]
+    "func-names": ["warn", "as-needed"]
   }
 }
