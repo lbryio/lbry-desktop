@@ -84,6 +84,7 @@ $width-page-constrained: 800px;
   // --> Primary
   --btn-primary-bg: var(--color-primary);
   --btn-primary-color: var(--color-white);
+  --btn-primary-disabled-bg: rgba(0, 0, 0, 0.5);
   // --> Secondary
   --btn-secondary-bg: var(--color-secondary);
   --btn-secondary-color: var(--color-white);
@@ -143,7 +144,6 @@ $width-page-constrained: 800px;
   --scrollbar-thumb-hover-bg: rgba(0, 0, 0, 0.35);
   --scrollbar-thumb-active-bg: var(--color-primary);
   --scrollbar-track-bg: transparent;
-
 
   // /* Animation */
   // --animation-duration: 0.3s;

@@ -12,7 +12,7 @@
     --color-grey: rgba(255,255,255, 0.5);
 
     /* Page */
-    --page-bg: #151515;
+    --page-bg: #080a0b;
 
     /* Nav */
     --nav-bg:  var(--color-bg);
@@ -47,9 +47,9 @@
     --input-disabled-border-color: rgba(255, 255, 255, 0.70);
 
     /* Search */
-    --search-bg: rgba(0,0,0, 0.45);
-    --search-color: #757575;
-    --search-border: 1px solid rgba(0,0,0, 0.25);
+    --search-bg: var(--color-bg);
+    --search-active-bg: rgba(0, 0, 0, 0.75);
+    --search-color: #FFF;
 
     /* Tab */
     --tab-color: rgba(255,255,255, 0.5) ;
@@ -75,5 +75,5 @@
     --scrollbar-thumb-hover-bg: rgba(255, 255, 255, 0.35);
 
     /* Divider */
-    --divider-color: rgba(255, 225, 225, 0.12);
+    --divider-color: #314048;
 }
