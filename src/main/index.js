@@ -31,7 +31,7 @@ let rendererWindow;
 let tray;
 let daemon;
 
-let isQuitting;
+let isQuitting
 
 const updateRendererWindow = window => {
   rendererWindow = window;
@@ -41,7 +41,7 @@ const installExtensions = async () => {
   // eslint-disable-next-line import/no-extraneous-dependencies,global-require
   const installer = require('electron-devtools-installer');
   // eslint-disable-next-line import/no-extraneous-dependencies,global-require
-  const devtronExtension = require('devtron');
+  const devtronExtension = require("devtron");
   const forceDownload = !!process.env.UPGRADE_EXTENSIONS;
   const extensions = ['REACT_DEVELOPER_TOOLS', 'REDUX_DEVTOOLS'];
 
