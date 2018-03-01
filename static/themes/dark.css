@@ -65,6 +65,7 @@
     --table-border: 0;
     --table-item-even: var(--color-bg-alt);
     --table-item-odd: transparent;
+    --table-item-color: #BFBFBF;
 
     /* Modal */
     --modal-overlay-bg: var(--color-dark-overlay);

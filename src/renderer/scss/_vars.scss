@@ -115,9 +115,10 @@ $width-page-constrained: 800px;
   --search-active-border-color: var(--divider-color);
   --search-menu-bg: var(--color-bg-alt);
   --search-menu-item-active-bg: var(--color-secondary);
-  
+
   /* Table */
   --table-border: 1px solid #e2e2e2;
+  --table-item-color: var(--color-grey-dark);
   --table-item-even: white;
   --table-item-odd: #f4f4f4;
 
