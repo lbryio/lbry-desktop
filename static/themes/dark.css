@@ -33,8 +33,12 @@
     --form-label-color: rgba(255, 255, 255, 0.70);
 
     /* Button */
-    --btn-alt-bg: var(--color-bg-alt);
     --btn-primary-disabled-bg: #2e3e46;
+    /* --> Alternative */
+    --btn-alt-bg: var(--color-bg-alt);
+    --btn-alt-color: var(--text-color);
+    --btn-alt-hover-color: white;
+    --btn-alt-active-bg: #465b66;
 
     /* Input */
     --input-bg: transparent;
