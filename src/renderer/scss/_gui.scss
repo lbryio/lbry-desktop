@@ -98,6 +98,7 @@ ul {
 }
 
 input {
+  background: var(--input-bg);
   border-bottom: var(--input-border-size) solid var(--input-border-color);
   color: var(--input-color);
   line-height: 1;
@@ -105,8 +106,7 @@ input {
 
   &[type='radio'],
   &[type='checkbox'],
-  &[type='file'],
-  &[type='select'] {
+  &[type='file'] {
     cursor: pointer;
   }
 
@@ -128,6 +128,18 @@ input {
     border-bottom: var(--input-border-size) solid var(--input-disabled-color);
   }
 }
+
+select {
+  background: var(--select-bg);
+  color: var(--select-color);
+  cursor: pointer;
+
+  &:disabled {
+    color: var(--input-disabled-color);
+  }
+}
+
+
 
 button + input {
   margin-left: $spacing-vertical * 2/3;
