@@ -34,7 +34,7 @@
 .nav__link {
   padding: $spacing-vertical / 3 0 $spacing-vertical / 3 $spacing-vertical * 2/3;
   color: var(--nav-color);
-  opacity: 0.35;
+  opacity: 0.5;
 
   .btn:hover {
     color: var(--nav-color-hover);
@@ -51,11 +51,12 @@
 }
 
 .nav__link--sub {
+  color: inherit;
   font-size: .9em;
   font-weight: 400;
   margin-left: 5px;
-  color: var(--nav-sub-color);
   padding: 5px $spacing-vertical * 2/3;
+  opacity: 0.5;
 }
 
 .nav__link--active {
