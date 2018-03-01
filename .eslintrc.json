@@ -3,14 +3,20 @@
   "extends": [
     "airbnb",
     "plugin:import/electron",
-    "plugin:flowtype/recommended"
+    "plugin:flowtype/recommended",
+    "plugin:prettier/recommended"
   ],
   "settings": {
     "import/resolver": {
       "webpack": {
         "config": "webpack.renderer.additions.js"
       }
-    }
+    },
+    "prettier/prettier": ["error", null, {
+      "trailingComma": "es5",
+      "printWidth": 100,
+      "singleQuote": true
+    }]
   },
   "parser": "babel-eslint",
   "env": {
