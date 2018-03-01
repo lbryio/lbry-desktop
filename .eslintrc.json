@@ -11,7 +11,10 @@
       "webpack": {
         "config": "webpack.renderer.additions.js"
       }
-    }
+    },
+    "prettier/prettier": ["error", null, {
+      "usePrettierrc": true
+    }]
   },
   "parser": "babel-eslint",
   "env": {
