@@ -91,6 +91,8 @@ $width-page-constrained: 800px;
   // --> Alternative
   --btn-alt-bg: var(--color-white);
   --btn-alt-color: var(--text-color);
+  --btn-alt-hover-color: #111;
+  --btn-alt-active-bg: #cdcdcd;
   // --> Inverse
   --btn-inverse-bg: var(--btn-alt-bg);
   --btn-inverse-color: var(--color-primary);

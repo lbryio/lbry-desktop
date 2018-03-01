@@ -58,11 +58,11 @@
   background-color: var(--btn-alt-bg);
 
   &:hover {
-    color: #111;
+    color: var(--btn-alt-hover-color);
   }
 
   &:active {
-    background-color: #cdcdcd;
+    background-color: var(--btn-alt-active-bg);
   }
 }
 
