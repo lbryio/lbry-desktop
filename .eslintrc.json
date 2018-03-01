@@ -11,10 +11,7 @@
       "webpack": {
         "config": "webpack.renderer.additions.js"
       }
-    },
-    "prettier/prettier": ["error", null, {
-      "usePrettierrc": true
-    }]
+    }
   },
   "parser": "babel-eslint",
   "env": {
@@ -31,6 +28,11 @@
   "rules": {
     "import/no-commonjs": "warn",
     "import/no-amd": "warn",
-    "func-names": ["warn", "as-needed"]
+    "func-names": ["warn", "as-needed"],
+    "prettier/prettier": ["error", {
+      "trailingComma": "es5",
+      "printWidth": 100,
+      "singleQuote": true
+    }]
   }
 }
