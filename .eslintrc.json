@@ -3,7 +3,7 @@
   "extends": [
     "airbnb",
     "plugin:import/electron",
-    "plugin:flowtype/recommended",
+    "plugin:flowtype/recommended"
   ],
   "settings": {
     "import/resolver": {
