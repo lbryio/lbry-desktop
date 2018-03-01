@@ -4,19 +4,14 @@
     "airbnb",
     "plugin:import/electron",
     "plugin:flowtype/recommended",
-    "plugin:prettier/recommended"
+    "prettier"
   ],
   "settings": {
     "import/resolver": {
       "webpack": {
         "config": "webpack.renderer.additions.js"
       }
-    },
-    "prettier/prettier": ["error", null, {
-      "trailingComma": "es5",
-      "printWidth": 100,
-      "singleQuote": true
-    }]
+    }
   },
   "parser": "babel-eslint",
   "env": {
@@ -33,6 +28,7 @@
   "rules": {
     "import/no-commonjs": "warn",
     "import/no-amd": "warn",
-    "func-names": ["warn", "as-needed"]
+    "func-names": ["warn", "as-needed"],
+    "prettier/prettier": "error"
   }
 }
