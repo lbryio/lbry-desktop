@@ -12,6 +12,7 @@ type Props = {
   disabled: boolean,
   name: string,
   label: string,
+  step: ?number
 };
 
 export class FormFieldPrice extends React.PureComponent<Props> {
@@ -26,7 +27,7 @@ export class FormFieldPrice extends React.PureComponent<Props> {
     const { price, onChange } = this.props;
     onChange({
       currency: price.currency,
-      amount: parseInt(event.target.value, 10),
+      amount: parseFloat(event.target.value),
     });
   }
 
@@ -39,7 +40,7 @@ export class FormFieldPrice extends React.PureComponent<Props> {
   }
 
   render() {
-    const { price, placeholder, min, disabled, name, label } = this.props;
+    const { price, placeholder, min, disabled, name, label, step } = this.props;
 
     return (
       <FormRow padded>
@@ -53,23 +54,21 @@ export class FormFieldPrice extends React.PureComponent<Props> {
           onChange={this.handleAmountChange}
           placeholder={placeholder || 5}
           disabled={disabled}
+          step={step || "any"}
         />
 
         <FormField
           name={`${name}_currency`}
-          render={() => (
-            <select
-              id={`${name}_currency`}
-              className="form-field"
-              disabled={disabled}
-              onChange={this.handleCurrencyChange}
-              defaultValue={price.currency}
-            >
-              <option value="LBC">{__('LBRY Credits (LBC)')}</option>
-              <option value="USD">{__('US Dollars')}</option>
-            </select>
-          )}
-        />
+          type="select"
+          id={`${name}_currency`}
+          className="form-field"
+          disabled={disabled}
+          onChange={this.handleCurrencyChange}
+          value={price.currency}
+          >
+          <option value="LBC">{__('LBRY Credits (LBC)')}</option>
+          <option value="USD">{__('US Dollars')}</option>
+        </FormField>
       </FormRow>
     );
   }

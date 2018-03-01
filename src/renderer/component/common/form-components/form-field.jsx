@@ -1,6 +1,10 @@
 // @flow
 import * as React from 'react';
 import classnames from 'classnames';
+import Icon from 'component/common/icon';
+import FormRow from './form-row';
+import SimpleMDE from 'react-simplemde-editor';
+import style from 'react-simplemde-editor/dist/simplemde.min.css';
 
 type Props = {
   name: string,
@@ -15,29 +19,30 @@ type Props = {
   defaultValue?: string | number,
   placeholder?: string | number,
   children?: React.Node,
-  stretch?: boolean
+  stretch?: boolean,
 };
 
 export class FormField extends React.PureComponent<Props> {
   render() {
     const { render, label, prefix, postfix, error, helper, name, type, children, stretch, ...inputProps } = this.props;
 
-    // Allow a type prop to determine the input or more customizability with a render prop
-    let Input;
+    let input;
     if (type) {
       if (type === 'select') {
-        Input = () => (
-          <select id={name} {...inputProps}>{children}</select>
+        input = <select id={name} {...inputProps}>{children}</select>
+      } else if (type === 'markdown') {
+        input = (
+          <div className="form-field--SimpleMDE">
+            <SimpleMDE {...inputProps} type="textarea" options={{ hideIcons: ['heading', 'image', 'fullscreen', 'side-by-side'] }} />
+          </div>
         )
       } else {
-        Input = () => <input type={type} id={name} {...inputProps} />;
+        input = <input type={type} id={name} {...inputProps} />;
       }
-    } else if (render) {
-      Input = render;
     }
 
     return (
-      <div className={classnames("form-field", { "form-field--stretch": stretch })}>
+      <div className={classnames("form-field", { "form-field--stretch": stretch || type === "markdown" })}>
         {label && (
           <label className="form-field__label" htmlFor={name}>
             {label}
@@ -49,19 +54,19 @@ export class FormField extends React.PureComponent<Props> {
               {prefix}
             </label>
           )}
-          {Input && <Input />}
+          {input}
           {postfix && (
             <label htmlFor={name} className="form-field__postfix">
               {postfix}
             </label>
           )}
         </div>
-        {error && (
-          <div className="form-field__error">
-            {typeof error === 'string' ? error : __('There was an error')}
-          </div>
+        {(helper || error) && (
+          <label htmlFor={name} className={classnames("form-field__help", { "form-field__error": error })}>
+            {!error && helper}
+            {error}
+          </label>
         )}
-        {helper && <div className="form-field__help">{helper}</div>}
       </div>
     );
   }

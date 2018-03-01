@@ -25,13 +25,35 @@
   height: calc(var(--card-small-width) * 9 / 16);
 }
 
-.card__link {
+.card--link {
   cursor: pointer;
 
   // TODO: hover animations
   // :hover {
   //
   // }
+}
+
+.card--pending {
+  opacity: 0.5;
+}
+
+.card--wallet-balance {
+  background: url('../../../static/img/stripe-background.png') no-repeat;
+  background-size: cover;
+  color: var(--color-white);
+
+  .card__subtitle {
+    color: var(--color-white);
+  }
+}
+
+.card--disabled {
+  opacity: 0.3;
+
+  .card--section {
+    box-shadow: none;
+  }
 }
 
 .card__media {

@@ -15,9 +15,19 @@
     align-items: center;
   }
 
-  .form-field--strech {
-    flex: 1;
+  .form-field.form-field--stretch {
+    width: 100%;
+
+    input {
+      width: 100%;
+      max-width: 400px;
+    }
   }
+}
+
+.form-field--SimpleMDE {
+  display: block;
+  width: 100%;
 }
 
 .form-field__input {
@@ -30,10 +40,6 @@
   }
 }
 
-.form-field__error {
-  color: var(--color-error);
-}
-
 .form-field__label {
   color: var(--form-label-color);
 }
@@ -42,6 +48,10 @@
   color: var(--color-help);
   font-size: 0.8em;
   padding-top: $spacing-vertical * 1/3;
+}
+
+.form-field__error {
+  color: var(--color-error);
 }
 
 .form-field__prefix {

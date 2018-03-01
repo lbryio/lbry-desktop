@@ -8,7 +8,7 @@ type Props = {
 
 export class Form extends React.PureComponent<Props> {
   render() {
-    const { children, onSubmit } = this.props;
+    const { children, onSubmit, ...otherProps } = this.props;
     return (
       <form
         className="form"
@@ -16,6 +16,7 @@ export class Form extends React.PureComponent<Props> {
           event.preventDefault();
           onSubmit(event);
         }}
+        {...otherProps}
       >
         {children}
       </form>
