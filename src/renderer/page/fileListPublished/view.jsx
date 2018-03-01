@@ -4,15 +4,21 @@ import FileList from 'component/fileList';
 import Page from 'component/page';
 
 class FileListPublished extends React.PureComponent {
-  render() {
-    const { claims, navigate } = this.props;
-    const hasClaims = claims && claims.length > 0;
+  componentDidMount() {
+    const { pendingPublishes, checkIfPublishesConfirmed } = this.props;
+    if (pendingPublishes.length) {
+      checkIfPublishesConfirmed(pendingPublishes);
+    }
+  }
 
+  render() {
+    const { claims, pendingPublishes, navigate } = this.props;
+    const fileInfos = [...claims, ...pendingPublishes]
     return (
       <Page>
-        {hasClaims ? (
+        {!!fileInfos.length ? (
           <FileList
-            fileInfos={claims}
+            fileInfos={fileInfos}
           />
         ) : (
           <div className="page__empty">

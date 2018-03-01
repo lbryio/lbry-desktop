@@ -30,6 +30,7 @@ const sortFunctions = {
 type FileInfo = {
   name: string,
   channelName: ?string,
+  pending?: boolean,
   value?: {
     publisherSignature: {
       certificateId: string,
@@ -68,9 +69,14 @@ class FileList extends React.PureComponent<Props, State> {
   }
 
   getChannelSignature = (fileInfo: FileInfo) => {
+    if (fileInfo.pending) {
+      return undefined;
+    }
+
     if (fileInfo.value) {
       return fileInfo.value.publisherSignature.certificateId;
     }
+
     return fileInfo.metadata.publisherSignature.certificateId;
   }
 
@@ -80,21 +86,30 @@ class FileList extends React.PureComponent<Props, State> {
     const content = [];
 
     sortFunctions[sortBy](fileInfos).forEach(fileInfo => {
+      const {
+        channel_name,
+        name,
+        claim_id,
+        outpoint,
+        pending,
+      } = fileInfo;
       const uriParams = {};
 
       if (fileInfo.channel_name) {
-        uriParams.channelName = fileInfo.channel_name;
-        uriParams.contentName = fileInfo.name;
+        uriParams.channelName = channel_name;
+        uriParams.contentName = name;
         uriParams.claimId = this.getChannelSignature(fileInfo);
       } else {
-        uriParams.claimId = fileInfo.claim_id;
-        uriParams.name = fileInfo.name;
+        uriParams.claimId = claim_id;
+        uriParams.name = name;
       }
+
       const uri = buildURI(uriParams);
 
       content.push(
         <FileCard
-          key={fileInfo.outpoint || fileInfo.claim_id}
+          pending={pending}
+          key={outpoint || claim_id || name}
           uri={uri}
           showPrice={false}
         />

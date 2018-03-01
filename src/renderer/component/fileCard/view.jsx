@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { normalizeURI } from 'lbryURI';
 import CardMedia from 'component/cardMedia';
 import { TruncatedText } from 'component/common';
@@ -21,7 +21,8 @@ type Props = {
   navigate: (string, ?{}) => void,
   rewardedContentClaimIds: Array<string>,
   obscureNsfw: boolean,
-  showPrice: boolean
+  showPrice: boolean,
+  pending?: boolean
 };
 
 class FileCard extends React.PureComponent<Props> {
@@ -53,34 +54,26 @@ class FileCard extends React.PureComponent<Props> {
       navigate,
       rewardedContentClaimIds,
       obscureNsfw,
-      showPrice
+      showPrice,
+      pending
     } = this.props;
-    const uri = normalizeURI(this.props.uri);
+    const uri = !pending ? normalizeURI(this.props.uri) : this.props.uri;
     const title = metadata && metadata.title ? metadata.title : uri;
     const thumbnail = metadata && metadata.thumbnail ? metadata.thumbnail : null;
     const shouldObscureNsfw = obscureNsfw && metadata && metadata.nsfw;
     const isRewardContent = claim && rewardedContentClaimIds.includes(claim.claim_id);
 
-    // Come back to this on other pages
-    // let description = '';
-    // if (isResolvingUri && !claim) {
-    //   description = __('Loading...');
-    // } else if (metadata && metadata.description) {
-    //   description = metadata.description;
-    // } else if (claim === null) {
-    //   description = __('This address contains no content.');
-    // }
-
-    // We don't want to allow a click handler unless it's in focus
-    // I'll come back to this when I work on site-wide keyboard navigation
+    // We should be able to tab through cards
     /* eslint-disable jsx-a11y/click-events-have-key-events */
     return (
       <section
         tabIndex="0"
         role="button"
-        onClick={() => navigate('/show', { uri })}
-        className={classnames('card card--small card__link', {
+        onClick={!pending ? () => navigate('/show', { uri }) : () => {}}
+        className={classnames('card card--small', {
           'card--obscured': shouldObscureNsfw,
+          'card--link': !pending,
+          'card--pending': pending
         })}
       >
         <CardMedia thumbnail={thumbnail} />
@@ -92,13 +85,18 @@ class FileCard extends React.PureComponent<Props> {
           <div className="card__title--small">
             <TruncatedText lines={3}>{title}</TruncatedText>
           </div>
-
           <div className="card__subtitle">
-            <UriIndicator uri={uri} link />
-            <div className="card--file-subtitle">
-              {isRewardContent && <Icon icon={icons.FEATURED} />}
-              {fileInfo && <Icon icon={icons.LOCAL} />}
-            </div>
+            {pending ? (
+              <div>Pending...</div>
+            ) : (
+              <React.Fragment>
+                <UriIndicator uri={uri} link />
+                <div className="card--file-subtitle">
+                  {isRewardContent && <Icon icon={icons.FEATURED} />}
+                  {fileInfo && <Icon icon={icons.LOCAL} />}
+                </div>
+              </React.Fragment>
+            )}
           </div>
         </div>
         {shouldObscureNsfw && <NsfwOverlay />}

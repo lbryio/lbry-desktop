@@ -126,7 +126,12 @@ input {
   &:disabled {
     color: var(--input-disabled-color);
     border-bottom: var(--input-border-size) solid var(--input-disabled-color);
+    cursor: default;
   }
+}
+
+input::placeholder {
+  opacity: .5;
 }
 
 button + input {
