@@ -66,11 +66,12 @@
 .wunderbar__menu {
   max-width: 100px;
   overflow-x: hidden;
+  background: var(--search-menu-bg) !important;
 }
 
 .wunderbar__suggestion {
   padding: 10px;
-  background-color: var(--header-bg);
+  background-color: transparent;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -86,6 +87,5 @@
 }
 
 .wunderbar__active-suggestion {
-  // Use a new variable
-  background-color: var(--color-secondary);
+  background-color: var(--search-menu-item-active-bg);
 }
