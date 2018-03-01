@@ -35,11 +35,11 @@
 }
 
 .form-field__label {
-  color: var(--color-black);
+  color: var(--form-label-color);
 }
 
 .form-field__help {
-  color: var(--color-grey-dark);
+  color: var(--color-help);
   font-size: 0.8em;
   padding-top: $spacing-vertical * 1/3;
 }
