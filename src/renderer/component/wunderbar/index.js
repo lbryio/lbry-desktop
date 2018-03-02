@@ -1,8 +1,8 @@
-import React from 'react';
 import { connect } from 'react-redux';
-import { normalizeURI } from 'lbryURI.js';
-import { selectWunderBarAddress, selectWunderBarIcon } from 'redux/selectors/search';
+
+import { normalizeURI } from 'lbryURI';
 import { doNavigate } from 'redux/actions/navigation';
+import { selectWunderBarAddress, selectWunderBarIcon } from 'redux/selectors/search';
 import Wunderbar from './view';
 
 const select = state => ({
