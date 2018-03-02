@@ -76,21 +76,29 @@ export function doFetchFeaturedUris() {
     });
 
     const success = ({ Uris }) => {
+
+      Uris["@BoomBust#5462a0ced61fc3f86225908608872f0fda2cbc32"] = [];
+      Uris["@nickatnyte#5b7c7a202201033d99e1be2930d290c127c0f4fe"] = [];
+
       let urisToResolve = [];
-      Object.keys(Uris).forEach(category => {
-        urisToResolve = [...urisToResolve, ...Uris[category]];
+      let actions = [];
+      Object.keys(Uris).forEach(uri => {
+        if (uri.indexOf("@")===0 && !Uris[uri].length) {
+          actions.push(doFetchClaimsByChannel(uri, 1));
+        }
+        else {
+          urisToResolve = [...urisToResolve, ...Uris[uri]];
+        }
       });
 
-      const actions = [
-        doResolveUris(urisToResolve),
-        {
-          type: ACTIONS.FETCH_FEATURED_CONTENT_COMPLETED,
-          data: {
-            uris: Uris,
-            success: true,
-          },
+      actions.push(doResolveUris(urisToResolve));
+      actions.push({
+        type: ACTIONS.FETCH_FEATURED_CONTENT_COMPLETED,
+        data: {
+          uris: Uris,
+          success: true,
         },
-      ];
+      });
       dispatch(batchActions(...actions));
     };
 
@@ -106,6 +114,7 @@ export function doFetchFeaturedUris() {
     Lbryio.call('file', 'list_homepage').then(success, failure);
   };
 }
+
 
 export function doFetchRewardedContent() {
   return dispatch => {
