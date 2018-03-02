@@ -9,7 +9,9 @@ Web UI version numbers should always match the corresponding version of LBRY App
 ## [Unreleased]
 ### Added
   * Save app state when closing to tray ([#968](https://github.com/lbryio/lbry-app/issues/968))
+  * Added ability to export wallet transactions to JSON and CSV format ([#976](https://github.com/lbryio/lbry-app/pull/976))
   * Add Rewards FAQ to LBRY app ([#1041](https://github.com/lbryio/lbry-app/pull/1041))
+  *
 
 ### Changed
   *

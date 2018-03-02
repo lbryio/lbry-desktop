@@ -10,7 +10,7 @@ import { doAuthNavigate } from 'redux/actions/navigation';
 import { doFetchDaemonSettings } from 'redux/actions/settings';
 import { doAuthenticate } from 'redux/actions/user';
 import { doBalanceSubscribe } from 'redux/actions/wallet';
-import { doPause } from "redux/actions/media";
+import { doPause } from 'redux/actions/media';
 
 import {
   selectCurrentModal,
@@ -84,7 +84,8 @@ export function doDownloadUpgradeRequested() {
 
     const autoUpdateDeclined = selectAutoUpdateDeclined(state);
 
-    if (['win32', 'darwin'].includes(process.platform)) { // electron-updater behavior
+    if (['win32', 'darwin'].includes(process.platform)) {
+      // electron-updater behavior
       if (autoUpdateDeclined) {
         // The user declined an update before, so show the "confirm" dialog
         dispatch({
@@ -99,7 +100,8 @@ export function doDownloadUpgradeRequested() {
           data: { modal: MODALS.AUTO_UPDATE_DOWNLOADED },
         });
       }
-    } else { // Old behavior for Linux
+    } else {
+      // Old behavior for Linux
       dispatch(doDownloadUpgrade());
     }
   };
@@ -164,7 +166,7 @@ export function doAutoUpdateDeclined() {
     dispatch({
       type: ACTIONS.AUTO_UPDATE_DECLINED,
     });
-  }
+  };
 }
 
 export function doCancelUpgrade() {
@@ -197,7 +199,7 @@ export function doCheckUpgradeAvailable() {
       type: ACTIONS.CHECK_UPGRADE_START,
     });
 
-    if (["win32", "darwin"].includes(process.platform)) {
+    if (['win32', 'darwin'].includes(process.platform)) {
       // On Windows and Mac, updates happen silently through
       // electron-updater.
       const autoUpdateDeclined = selectAutoUpdateDeclined(state);

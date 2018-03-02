@@ -334,7 +334,7 @@ class SettingsPage extends React.PureComponent {
             <FormRow
               type="checkbox"
               disabled={theme === 'dark'}
-              onChange={(e) => this.onAutomaticDarkModeChange(e.target.checked)}
+              onChange={e => this.onAutomaticDarkModeChange(e.target.checked)}
               checked={automaticDarkModeEnabled}
               label={__('Automatic dark mode (9pm to 8am)')}
             />
