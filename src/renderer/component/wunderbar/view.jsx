@@ -10,6 +10,7 @@ class WunderBar extends React.PureComponent {
 
   static propTypes = {
     address: PropTypes.string.isRequired,
+    currentPath: PropTypes.string.isRequired,
     icon: PropTypes.string.isRequired,
     onSearch: PropTypes.func.isRequired,
   };
@@ -72,6 +73,11 @@ class WunderBar extends React.PureComponent {
     this.isSearchDispatchPending = true;
 
     const searchQuery = event.target.value;
+
+    // If we are not on the search page yet, navigate to it
+    if (!this.props.currentPath.startsWith('/search?')) {
+      this.props.onSearch(searchQuery.trim());
+    }
 
     this.userTypingTimer = setTimeout(() => {
       const hasQuery = searchQuery.length === 0;
