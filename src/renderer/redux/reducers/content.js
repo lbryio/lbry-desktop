@@ -33,9 +33,11 @@ reducers[ACTIONS.FETCH_FEATURED_CHANNELS_COMPLETED] = (state, action) => {
   const { channels, success } = action.data;
   let featured = state.featuredUris;
 
-  for (let key in channels) {
-    featured[key] = channels[key];
-  }
+  Object.keys(channels).forEach(
+    key => {
+      featured[key] = channels[key];
+    }
+  );
 
   return Object.assign({}, state, {
     fetchingFeaturedChannels: false,
