@@ -15,10 +15,30 @@ reducers[ACTIONS.FETCH_FEATURED_CONTENT_STARTED] = state =>
 reducers[ACTIONS.FETCH_FEATURED_CONTENT_COMPLETED] = (state, action) => {
   const { uris, success } = action.data;
 
+  console.log("FETCH_FEATURED_CONTENT_COMPLETED");
+
   return Object.assign({}, state, {
     fetchingFeaturedContent: false,
     fetchingFeaturedContentFailed: !success,
     featuredUris: uris,
+  });
+};
+
+reducers[ACTIONS.FETCH_FEATURED_CHANNELS_STARTED] = state =>
+  Object.assign({}, state, {
+    fetchingFeaturedChannels: true,
+  });
+
+reducers[ACTIONS.FETCH_FEATURED_CHANNELS_COMPLETED] = (state, action) => {
+  const { channels, success } = action.data;
+  const featured = state.featuredUris;
+
+  for (let key in channels) featured[key] = channels[key];
+
+  return Object.assign({}, state, {
+    fetchingFeaturedChannels: false,
+    fetchingFeaturedChannelsFailed: !success,
+    featuredUris: featured,
   });
 };
 
@@ -50,6 +70,8 @@ reducers[ACTIONS.RESOLVE_URIS_STARTED] = (state, action) => {
 reducers[ACTIONS.RESOLVE_URIS_COMPLETED] = (state, action) => {
   const { resolveInfo } = action.data;
   const channelClaimCounts = Object.assign({}, state.channelClaimCounts);
+
+  console.log("RESOLVE_URIS_COMPLETED");
 
   Object.entries(resolveInfo).forEach(([uri, { certificate, claimsInChannel }]) => {
     if (certificate && !Number.isNaN(claimsInChannel)) {

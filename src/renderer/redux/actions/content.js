@@ -57,6 +57,8 @@ export function doResolveUris(uris) {
         resolveInfo[uri] = { claim, certificate, claimsInChannel };
       });
 
+      console.log("resolveInfo:", resolveInfo);
+
       dispatch({
         type: ACTIONS.RESOLVE_URIS_COMPLETED,
         data: { resolveInfo },
@@ -76,12 +78,23 @@ export function doFetchFeaturedUris() {
     });
 
     const success = ({ Uris }) => {
+
+      Uris["@LupoTV"] = [];
+      Uris["@CryptoCandor"] = [];
+
       let urisToResolve = [];
+      let channels = [];
       Object.keys(Uris).forEach(category => {
-        urisToResolve = [...urisToResolve, ...Uris[category]];
+        if (category.indexOf("@") === 0) {
+          channels.push(category);
+        }
+        else {
+          urisToResolve = [...urisToResolve, ...Uris[category]];
+        }
       });
 
       const actions = [
+        doFetchFeaturedChannels(channels),
         doResolveUris(urisToResolve),
         {
           type: ACTIONS.FETCH_FEATURED_CONTENT_COMPLETED,
@@ -345,6 +358,33 @@ export function doPurchaseUri(uri) {
       }
     }
   };
+}
+
+export function doFetchFeaturedChannels(uris) {
+  return dispatch => {
+    dispatch({
+      type: ACTIONS.FETCH_FEATURED_CHANNELS_STARTED
+    });
+
+    Lbry.claim_list_by_channel({uris, page: 1}).then(result => {
+      
+      let featuredChannels = {};
+      for (let key in result) {
+        featuredChannels[key] = result[key].claims_in_channel.map(
+          claim => `${claim.name}#${claim.claim_id}`
+        );
+      }
+
+      dispatch({
+        type: ACTIONS.FETCH_FEATURED_CHANNELS_COMPLETED,
+        data: {
+          channels: featuredChannels,
+          success: true
+        }
+      })
+
+    });
+  }
 }
 
 export function doFetchClaimsByChannel(uri, page) {
