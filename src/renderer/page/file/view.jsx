@@ -40,9 +40,9 @@ class FilePage extends React.PureComponent {
     props.checkSubscriptionLatest(
       {
         channelName: props.claim.channel_name,
-        uri: `${props.claim.channel_name}#${props.claim.value.publisherSignature.certificateId}`,
+        uri: buildURI({ contentName: props.claim.channel_name, claimId: props.claim.value.publisherSignature.certificateId }, false),
       },
-      `${props.claim.name}#${props.claim.claim_id}`
+      buildURI({ contentName: props.claim.name, claimId: props.claim.claim_id }, false)
     );
   }
 

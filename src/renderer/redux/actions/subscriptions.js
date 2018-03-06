@@ -5,6 +5,7 @@ import { selectSubscriptions } from 'redux/selectors/subscriptions';
 import Lbry from 'lbry';
 import { doPurchaseUri } from 'redux/actions/content';
 import { doNavigate } from 'redux/actions/navigation';
+import { buildURI } from 'lbryURI';
 
 const CHECK_SUBSCRIPTIONS_INTERVAL = 10 * 60 * 1000;
 
@@ -50,7 +51,7 @@ export const doCheckSubscription = (subscription: Subscription) => (dispatch: Di
     let count = subscription.latest
       ? claimsInChannel.reduce(
           (prev, cur, index) =>
-            `${cur.name}#${cur.claim_id}` === subscription.latest ? index : prev,
+            buildURI({ contentName: cur.name, claimId: cur.claim_id}, false) === subscription.latest ? index : prev,
           -1
         )
       : 1;
@@ -58,7 +59,7 @@ export const doCheckSubscription = (subscription: Subscription) => (dispatch: Di
     if (count !== 0) {
       if (!claimsInChannel[0].value.stream.metadata.fee) {
         dispatch(
-          doPurchaseUri(`${claimsInChannel[0].name}#${claimsInChannel[0].claim_id}`, { cost: 0 })
+          doPurchaseUri(buildURI({ contentName: claimsInChannel[0].name, claimId: claimsInChannel[0].claim_id }, false), { cost: 0 })
         );
       }
 
@@ -71,12 +72,13 @@ export const doCheckSubscription = (subscription: Subscription) => (dispatch: Di
       notif.onclick = () => {
         dispatch(
           doNavigate('/show', {
-            uri: `lbry://${claimsInChannel[0].name}#${claimsInChannel[0].claim_id}`,
+            uri: buildURI({ contentName: claimsInChannel[0].name, claimId: claimsInChannel[0].claim_id }, true),
           })
         );
       };
     }
 
+    //$FlowIssue
     dispatch({
       type: ACTIONS.CHECK_SUBSCRIPTION_COMPLETED,
       data: subscription,
@@ -94,7 +96,7 @@ export const checkSubscriptionLatest = (channel: Subscription, uri: string) => (
     if (
       claimsInChannel &&
       claimsInChannel.length &&
-      `${claimsInChannel[0].name}#${claimsInChannel[0].claim_id}` === uri
+      buildURI({ contentName: claimsInChannel[0].name, claimId: claimsInChannel[0].claim_id }, false) === uri
     ) {
       dispatch(setSubscriptionLatest(channel, uri));
     }
