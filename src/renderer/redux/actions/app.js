@@ -20,11 +20,11 @@ import {
   selectUpgradeFilename,
   selectAutoUpdateDeclined,
 } from 'redux/selectors/app';
+import { lbrySettings as config } from 'package.json';
 
 const { autoUpdater } = remote.require('electron-updater');
 const { download } = remote.require('electron-dl');
 const Fs = remote.require('fs');
-const { lbrySettings: config } = require('package.json');
 
 const CHECK_UPGRADE_INTERVAL = 10 * 60 * 1000;
 
@@ -90,7 +90,7 @@ export function doDownloadUpgradeRequested() {
       });
     } else {
       // The user was never shown the original update dialog (e.g. because they were
-      // watching a video). So show the inital "update downloaded" dialog.
+      // watching a video). So show the initial "update downloaded" dialog.
       dispatch({
         type: ACTIONS.OPEN_MODAL,
         data: { modal: MODALS.AUTO_UPDATE_DOWNLOADED },
@@ -139,7 +139,7 @@ export function doDownloadUpgrade() {
 }
 
 export function doAutoUpdate() {
-  return function(dispatch) {
+  return dispatch => {
     dispatch({
       type: ACTIONS.AUTO_UPDATE_DOWNLOADED,
     });
@@ -152,7 +152,7 @@ export function doAutoUpdate() {
 }
 
 export function doAutoUpdateDeclined() {
-  return function(dispatch) {
+  return dispatch => {
     dispatch({
       type: ACTIONS.AUTO_UPDATE_DECLINED,
     });
@@ -173,6 +173,7 @@ export function doCancelUpgrade() {
       try {
         upgradeDownloadItem.cancel();
       } catch (err) {
+        // eslint-disable-next-line no-console
         console.error(err);
         // Do nothing
       }
