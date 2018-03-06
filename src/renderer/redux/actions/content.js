@@ -77,17 +77,23 @@ export function doFetchFeaturedUris() {
 
     const success = ({ Uris }) => {
 
-      Uris["@LupoTV"] = [];
+      Uris["@LupoTV"] = ["howtocommunicatebetter#c4081b27764b845fcd611e91addf321d78cb06af"];
       Uris["@CryptoCandor"] = [];
 
       let urisToResolve = [];
       let channels = [];
       Object.keys(Uris).forEach(category => {
-        if (category.indexOf("@") === 0) {
+        if (
+          category.indexOf("@") === 0 &&
+          !Uris[category].length
+        ) {
           channels.push(category);
         }
         else {
-          urisToResolve = [...urisToResolve, ...Uris[category]];
+          urisToResolve = [
+            ...urisToResolve,
+            ...Uris[category]
+          ];
         }
       });
 
