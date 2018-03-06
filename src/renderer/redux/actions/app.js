@@ -11,6 +11,7 @@ import { doFetchDaemonSettings } from 'redux/actions/settings';
 import { doAuthenticate } from 'redux/actions/user';
 import { doBalanceSubscribe } from 'redux/actions/wallet';
 import { doPause } from 'redux/actions/media';
+import { doCheckSubscriptions } from 'redux/actions/subscriptions';
 
 import {
   selectCurrentModal,
@@ -298,6 +299,7 @@ export function doDaemonReady() {
       dispatch(doCheckUpgradeAvailable());
     }
     dispatch(doCheckUpgradeSubscribe());
+    dispatch(doCheckSubscriptions());
   };
 }
 

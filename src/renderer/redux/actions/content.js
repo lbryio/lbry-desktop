@@ -289,7 +289,7 @@ export function doLoadVideo(uri) {
   };
 }
 
-export function doPurchaseUri(uri) {
+export function doPurchaseUri(uri, specificCostInfo) {
   return (dispatch, getState) => {
     const state = getState();
     const balance = selectBalance(state);
@@ -322,7 +322,7 @@ export function doPurchaseUri(uri) {
       return;
     }
 
-    const costInfo = makeSelectCostInfoForUri(uri)(state);
+    const costInfo = makeSelectCostInfoForUri(uri)(state) || specificCostInfo;
     const { cost } = costInfo;
 
     if (cost > balance) {
@@ -359,8 +359,8 @@ export function doFetchClaimsByChannel(uri, page) {
       const claimResult = result[uri] || {};
       const { claims_in_channel: claimsInChannel, returned_page: returnedPage } = claimResult;
 
-      if(claimResult && claimResult.claims_in_channel && claimResult.claims_in_channel.length) {
-        let latest = claimResult.claims_in_channel[0];
+      if(claimsInChannel && claimsInChannel.length) {
+        let latest = claimsInChannel[0];
         dispatch(setSubscriptionLatest({
           channelName: latest.channel_name,
           uri: `${latest.channel_name}#${latest.value.publisherSignature.certificateId}`

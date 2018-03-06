@@ -37,7 +37,15 @@ type setSubscriptionLatest = {
   }
 }
 
-export type Action = doChannelSubscribe | doChannelUnsubscribe | HasFetchedSubscriptions | setSubscriptionLatest;
+type CheckSubscriptionStarted = {
+  type: ACTIONS.CHECK_SUBSCRIPTION_STARTED
+}
+
+type CheckSubscriptionCompleted = {
+  type: ACTIONS.CHECK_SUBSCRIPTION_COMPLETED
+}
+
+export type Action = doChannelSubscribe | doChannelUnsubscribe | HasFetchedSubscriptions | setSubscriptionLatest | CheckSubscriptionStarted | CheckSubscriptionCompleted | Function;
 export type Dispatch = (action: Action) => any;
 
 const defaultState = {
