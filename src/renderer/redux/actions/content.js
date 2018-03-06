@@ -381,6 +381,15 @@ export function doFetchFeaturedChannels(uris) {
           success: true
         }
       })
+    })
+    .catch(err => {
+      return dispatch({
+        type: ACTIONS.FETCH_FEATURED_CHANNELS_COMPLETED,
+        data: {
+          channels: null,
+          success: false
+        }
+      })
     });
   }
 }
