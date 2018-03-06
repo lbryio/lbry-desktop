@@ -1,6 +1,7 @@
 import * as ACTIONS from 'constants/action_types';
 import { selectHistoryIndex, selectHistoryStack } from 'redux/selectors/navigation';
 import { toQueryString } from 'util/query_params';
+import analytics from 'analytics';
 
 export function doNavigate(path, params = {}, options = {}) {
   return dispatch => {
@@ -12,6 +13,8 @@ export function doNavigate(path, params = {}, options = {}) {
     if (params && Object.values(params).length) {
       url += `?${toQueryString(params)}`;
     }
+
+    analytics.track('NAVIGATION', { destination: url });
 
     const { scrollY } = options;
 

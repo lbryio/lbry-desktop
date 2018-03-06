@@ -8,7 +8,7 @@ import https from 'https';
 import { shell, app, ipcMain, dialog } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import Daemon from './Daemon';
-import Tray from './Tray';
+import createTray from './createTray';
 import createWindow from './createWindow';
 
 autoUpdater.autoDownload = true;
@@ -32,11 +32,7 @@ let rendererWindow;
 let tray;
 let daemon;
 
-let isQuitting;
-
-const updateRendererWindow = window => {
-  rendererWindow = window;
-};
+const appState = {};
 
 const installExtensions = async () => {
   // eslint-disable-next-line import/no-extraneous-dependencies,global-require
@@ -64,10 +60,12 @@ app.on('ready', async () => {
     daemon = new Daemon();
     daemon.on('exit', () => {
       daemon = null;
-      if (!isQuitting) {
+      if (!appState.isQuitting) {
         dialog.showErrorBox(
           'Daemon has Exited',
-          'The daemon may have encountered an unexpected error, or another daemon instance is already running.'
+          'The daemon may have encountered an unexpected error, or another daemon instance is already running. \n\n' +
+          'For more information please visit: \n' +
+          'https://lbry.io/faq/startup-troubleshooting'
         );
         app.quit();
       }
@@ -77,15 +75,12 @@ app.on('ready', async () => {
   if (process.env.NODE_ENV === 'development') {
     await installExtensions();
   }
-  rendererWindow = createWindow();
-  tray = new Tray(rendererWindow, updateRendererWindow);
-  tray.create();
+  rendererWindow = createWindow(appState);
+  tray = createTray(rendererWindow);
 });
 
 app.on('activate', () => {
-  // On macOS it's common to re-create a window in the app when the
-  // dock icon is clicked and there are no other windows open.
-  if (!rendererWindow) rendererWindow = createWindow();
+  rendererWindow.show();
 });
 
 app.on('will-quit', event => {
@@ -117,7 +112,7 @@ app.on('will-quit', event => {
     return;
   }
 
-  isQuitting = true;
+  appState.isQuitting = true;
   if (daemon) daemon.quit();
 });
 
@@ -126,18 +121,13 @@ app.on('will-finish-launching', () => {
   // Protocol handler for macOS
   app.on('open-url', (event, URL) => {
     event.preventDefault();
-    if (rendererWindow && !rendererWindow.isDestroyed()) {
-      rendererWindow.webContents.send('open-uri-requested', URL);
-      rendererWindow.show();
-      rendererWindow.focus();
-    } else {
-      rendererWindow = createWindow(URL);
-    }
+    rendererWindow.webContents.send('open-uri-requested', URL);
+    rendererWindow.show();
   });
 });
 
-app.on('window-all-closed', () => {
-  // Subscribe to event so the app doesn't quit when closing the window.
+app.on('before-quit', () => {
+  appState.isQuitting = true;
 });
 
 ipcMain.on('upgrade', (event, installerPath) => {
@@ -224,7 +214,7 @@ ipcMain.on('set-auth-token', (event, token) => {
 
 process.on('uncaughtException', error => {
   dialog.showErrorBox('Error Encountered', `Caught error: ${error}`);
-  isQuitting = true;
+  appState.isQuitting = true;
   if (daemon) daemon.quit();
   app.exit(1);
 });
@@ -240,14 +230,8 @@ const isSecondInstance = app.makeSingleInstance(argv => {
     URI = argv[1].replace(/\/$/, '').replace('/#', '#');
   }
 
-  if (rendererWindow && !rendererWindow.isDestroyed()) {
-    rendererWindow.webContents.send('open-uri-requested', URI);
-
-    rendererWindow.show();
-    rendererWindow.focus();
-  } else {
-    rendererWindow = createWindow(URI);
-  }
+  rendererWindow.webContents.send('open-uri-requested', URI);
+  rendererWindow.show();
 });
 
 if (isSecondInstance) {

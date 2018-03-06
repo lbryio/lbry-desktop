@@ -8,7 +8,10 @@ Web UI version numbers should always match the corresponding version of LBRY App
 
 ## [Unreleased]
 ### Added
-  *
+  * Save app state when closing to tray ([#968](https://github.com/lbryio/lbry-app/issues/968))
+  * Added startup-troubleshooting FAQ URL to daemon error ([#1039](https://github.com/lbryio/lbry-app/pull/1039))
+  * Added ability to export wallet transactions to JSON and CSV format ([#976](https://github.com/lbryio/lbry-app/pull/976))
+  * Add Rewards FAQ to LBRY app ([#1041](https://github.com/lbryio/lbry-app/pull/1041))
   *
 
 ### Changed
@@ -16,8 +19,10 @@ Web UI version numbers should always match the corresponding version of LBRY App
   *
 
 ### Fixed
-  *
-  *
+  * Fixed sort by date of published content ([#986](https://github.com/lbryio/lbry-app/issues/986))
+  * Fix night mode start time, set to 9PM (#1050)
+  * Fix night mode start time, set to 9PM ([#1050](https://github.com/lbryio/lbry-app/issues/1050))
+  * Disable drag and drop of files into the app ([#1045](https://github.com/lbryio/lbry-app/pull/1045))
 
 ### Deprecated
   *
