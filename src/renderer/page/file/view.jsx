@@ -37,10 +37,13 @@ class FilePage extends React.PureComponent {
   }
 
   checkSubscriptionLatest(props) {
-    props.checkSubscriptionLatest({
-      channelName: props.claim.channel_name,
-      uri: `${props.claim.channel_name}#${props.claim.value.publisherSignature.certificateId}`,
-    }, `${props.claim.name}#${props.claim.claim_id}`);
+    props.checkSubscriptionLatest(
+      {
+        channelName: props.claim.channel_name,
+        uri: `${props.claim.channel_name}#${props.claim.value.publisherSignature.certificateId}`,
+      },
+      `${props.claim.name}#${props.claim.claim_id}`
+    );
   }
 
   render() {

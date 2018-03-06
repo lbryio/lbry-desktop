@@ -359,12 +359,17 @@ export function doFetchClaimsByChannel(uri, page) {
       const claimResult = result[uri] || {};
       const { claims_in_channel: claimsInChannel, returned_page: returnedPage } = claimResult;
 
-      if(claimsInChannel && claimsInChannel.length) {
+      if (claimsInChannel && claimsInChannel.length) {
         let latest = claimsInChannel[0];
-        dispatch(setSubscriptionLatest({
-          channelName: latest.channel_name,
-          uri: `${latest.channel_name}#${latest.value.publisherSignature.certificateId}`
-        }, `${latest.name}#${latest.claim_id}`));
+        dispatch(
+          setSubscriptionLatest(
+            {
+              channelName: latest.channel_name,
+              uri: `${latest.channel_name}#${latest.value.publisherSignature.certificateId}`,
+            },
+            `${latest.name}#${latest.claim_id}`
+          )
+        );
       }
 
       dispatch({

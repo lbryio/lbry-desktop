@@ -20,9 +20,15 @@ export const doChannelUnsubscribe = (subscription: Subscription) => (dispatch: D
     data: subscription,
   });
 
-export const doCheckSubscriptions = () => (dispatch: Dispatch, getState: () => SubscriptionState) => {
+export const doCheckSubscriptions = () => (
+  dispatch: Dispatch,
+  getState: () => SubscriptionState
+) => {
   const checkSubscriptionsTimer = setInterval(
-    () => selectSubscriptions(getState()).map((subscription: Subscription) => dispatch(doCheckSubscription(subscription))),
+    () =>
+      selectSubscriptions(getState()).map((subscription: Subscription) =>
+        dispatch(doCheckSubscription(subscription))
+      ),
     CHECK_SUBSCRIPTIONS_INTERVAL
   );
   dispatch({
@@ -41,47 +47,69 @@ export const doCheckSubscription = (subscription: Subscription) => (dispatch: Di
     const claimResult = result[subscription.uri] || {};
     const { claims_in_channel: claimsInChannel } = claimResult;
 
-    let count = subscription.latest ? claimsInChannel.reduce((prev, cur, index) => `${cur.name}#${cur.claim_id}` === subscription.latest ? index : prev, -1) : 1;
+    let count = subscription.latest
+      ? claimsInChannel.reduce(
+          (prev, cur, index) =>
+            `${cur.name}#${cur.claim_id}` === subscription.latest ? index : prev,
+          -1
+        )
+      : 1;
 
-    if(count !== 0) {
-      if(!claimsInChannel[0].value.stream.metadata.fee) {
-        dispatch(doPurchaseUri(`${claimsInChannel[0].name}#${claimsInChannel[0].claim_id}`, {cost: 0}));
+    if (count !== 0) {
+      if (!claimsInChannel[0].value.stream.metadata.fee) {
+        dispatch(
+          doPurchaseUri(`${claimsInChannel[0].name}#${claimsInChannel[0].claim_id}`, { cost: 0 })
+        );
       }
 
       const notif = new window.Notification(subscription.channelName, {
-        body: `Posted ${claimsInChannel[0].value.stream.metadata.title}${count > 1 ? ` and ${count-1} other new items` : '' }${count < 0 ? ' and 9+ other new items' : ''}`,
+        body: `Posted ${claimsInChannel[0].value.stream.metadata.title}${
+          count > 1 ? ` and ${count - 1} other new items` : ''
+        }${count < 0 ? ' and 9+ other new items' : ''}`,
         silent: false,
       });
       notif.onclick = () => {
-        dispatch(doNavigate('/show', { uri: `lbry://${claimsInChannel[0].name}#${claimsInChannel[0].claim_id}` }))
+        dispatch(
+          doNavigate('/show', {
+            uri: `lbry://${claimsInChannel[0].name}#${claimsInChannel[0].claim_id}`,
+          })
+        );
       };
     }
 
     dispatch({
       type: ACTIONS.CHECK_SUBSCRIPTION_COMPLETED,
-      data: subscription
+      data: subscription,
     });
   });
-}
+};
 
-export const checkSubscriptionLatest = (channel: Subscription, uri: string) => (dispatch: Dispatch) => {
+export const checkSubscriptionLatest = (channel: Subscription, uri: string) => (
+  dispatch: Dispatch
+) => {
   Lbry.claim_list_by_channel({ uri: channel.uri, page: 1 }).then(result => {
     const claimResult = result[channel.uri] || {};
     const { claims_in_channel: claimsInChannel } = claimResult;
 
-    if(claimsInChannel && claimsInChannel.length && `${claimsInChannel[0].name}#${claimsInChannel[0].claim_id}` === uri) {
+    if (
+      claimsInChannel &&
+      claimsInChannel.length &&
+      `${claimsInChannel[0].name}#${claimsInChannel[0].claim_id}` === uri
+    ) {
       dispatch(setSubscriptionLatest(channel, uri));
     }
   });
-}
+};
 
-export const setSubscriptionLatest = (subscription: Subscription, uri: string) => (dispatch: Dispatch) =>
- dispatch({
+export const setSubscriptionLatest = (subscription: Subscription, uri: string) => (
+  dispatch: Dispatch
+) =>
+  dispatch({
     type: ACTIONS.SET_SUBSCRIPTION_LATEST,
     data: {
       subscription,
-      uri
-    }
+      uri,
+    },
   });
 
 export const setHasFetchedSubscriptions = () => (dispatch: Dispatch) =>

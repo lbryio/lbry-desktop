@@ -5,7 +5,7 @@ import { handleActions } from 'util/redux-utils';
 export type Subscription = {
   channelName: string,
   uri: string,
-  latest: ?string
+  latest: ?string,
 };
 
 // Subscription redux types
@@ -33,19 +33,26 @@ type setSubscriptionLatest = {
   type: ACTIONS.SET_SUBSCRIPTION_LATEST,
   data: {
     subscription: Subscription,
-    uri: string
-  }
-}
+    uri: string,
+  },
+};
 
 type CheckSubscriptionStarted = {
-  type: ACTIONS.CHECK_SUBSCRIPTION_STARTED
-}
+  type: ACTIONS.CHECK_SUBSCRIPTION_STARTED,
+};
 
 type CheckSubscriptionCompleted = {
-  type: ACTIONS.CHECK_SUBSCRIPTION_COMPLETED
-}
+  type: ACTIONS.CHECK_SUBSCRIPTION_COMPLETED,
+};
 
-export type Action = doChannelSubscribe | doChannelUnsubscribe | HasFetchedSubscriptions | setSubscriptionLatest | CheckSubscriptionStarted | CheckSubscriptionCompleted | Function;
+export type Action =
+  | doChannelSubscribe
+  | doChannelUnsubscribe
+  | HasFetchedSubscriptions
+  | setSubscriptionLatest
+  | CheckSubscriptionStarted
+  | CheckSubscriptionCompleted
+  | Function;
 export type Dispatch = (action: Action) => any;
 
 const defaultState = {
@@ -92,8 +99,13 @@ export default handleActions(
       action: setSubscriptionLatest
     ): SubscriptionState => ({
       ...state,
-      subscriptions: state.subscriptions.map(subscription => subscription.channelName === action.data.subscription.channelName ? {...subscription, latest: action.data.uri} : subscription)
-    })
+      subscriptions: state.subscriptions.map(
+        subscription =>
+          subscription.channelName === action.data.subscription.channelName
+            ? { ...subscription, latest: action.data.uri }
+            : subscription
+      ),
+    }),
   },
   defaultState
 );

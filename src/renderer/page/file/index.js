@@ -30,7 +30,8 @@ const perform = dispatch => ({
   navigate: (path, params) => dispatch(doNavigate(path, params)),
   fetchFileInfo: uri => dispatch(doFetchFileInfo(uri)),
   fetchCostInfo: uri => dispatch(doFetchCostInfoForUri(uri)),
-  checkSubscriptionLatest: (subscription, uri) => dispatch(checkSubscriptionLatest(subscription, uri)),
+  checkSubscriptionLatest: (subscription, uri) =>
+    dispatch(checkSubscriptionLatest(subscription, uri)),
 });
 
 export default connect(select, perform)(FilePage);

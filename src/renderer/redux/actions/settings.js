@@ -70,7 +70,8 @@ export function doUpdateIsNight() {
   const momentNow = moment();
   return {
     type: ACTIONS.UPDATE_IS_NIGHT,
-    data: { isNight: (() => {
+    data: {
+      isNight: (() => {
         const startNightMoment = moment('21:00', 'HH:mm');
         const endNightMoment = moment('8:00', 'HH:mm');
         return !(momentNow.isAfter(endNightMoment) && momentNow.isBefore(startNightMoment));
