@@ -57,8 +57,6 @@ export function doResolveUris(uris) {
         resolveInfo[uri] = { claim, certificate, claimsInChannel };
       });
 
-      console.log("resolveInfo:", resolveInfo);
-
       dispatch({
         type: ACTIONS.RESOLVE_URIS_COMPLETED,
         data: { resolveInfo },

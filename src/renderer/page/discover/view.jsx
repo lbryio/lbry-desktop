@@ -11,14 +11,16 @@ import Link from 'component/link';
 
 // This should be in a separate file
 export class FeaturedCategory extends React.PureComponent {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.state = {
       numItems: undefined,
       canScrollPrevious: false,
       canScrollNext: false,
     };
+
+    console.log("<FeaturedCategory>", props.category, ":", props.names);
   }
 
   componentWillMount() {
@@ -226,8 +228,25 @@ class DiscoverPage extends React.PureComponent {
     this.props.fetchFeaturedUris();
   }
 
+  componentWillReceiveProps(next) {
+    console.log("<DiscoverPage> next.featuredUris:", next.featuredUris);
+  }
+
   render() {
-    const { featuredUris, fetchingFeaturedUris } = this.props;
+    const { fetchingFeaturedUris } = this.props;
+    let featuredUris = this.props.featuredUris || {};
+    featuredUris["@LupoTV"] = [
+      "howtocommunicatebetter#c4081b27764b845fcd611e91addf321d78cb06af",
+      "chinesenewyeartreat#63f9f2f5c671b611be1edfa24bc693aa580ec465",
+      "liveormuscut#e13c34a5695f4da6823740fc008d5f5718c60bc0",
+      "trollingshow#fc2372485ba33a372a155f98af4ac8e920a6a59f",
+      "livesignalapp#79b4ee1f567a8eee26b16763cf887ff66c737fcb",
+      "livebrian#c1f550e73cfd5b8c959c7e904700126dd601150c",
+      "manifestinganimals#330098c7115193b8ee8d2d2c9029f7dc603e112c",
+      "live13018#3cbceb23812039bfead9831e70e3d978fc078c89",
+      "howtogrowmushroomsonlogs#d1e7af68f92906bbfa1591ac987d7dd0265a7323",
+      "youtubecryptojacking#15ce9bf13466f680646a0f0b42d2a30057a7f382"
+    ];
     const hasContent = typeof featuredUris === 'object' && Object.keys(featuredUris).length,
       failedToLoad = !fetchingFeaturedUris && !hasContent;
 
@@ -249,7 +268,7 @@ class DiscoverPage extends React.PureComponent {
                   names={featuredUris[category]}
                 />
               ) : (
-                ''
+                <p key={category}>{category}</p>
               )
           )}
         {failedToLoad && <div className="empty">{__('Failed to load landing content.')}</div>}
