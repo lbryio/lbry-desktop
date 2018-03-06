@@ -1,11 +1,16 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { doFetchFeaturedUris } from 'redux/actions/content';
-import { selectFeaturedUris, selectFetchingFeaturedUris } from 'redux/selectors/content';
+import {
+  selectFeaturedUris,
+  selectFetchingFeaturedUris,
+  selectFeaturedChannels,
+} from 'redux/selectors/content';
 import DiscoverPage from './view';
 
 const select = state => ({
   featuredUris: selectFeaturedUris(state),
+  featuredChannels: selectFeaturedChannels(state),
   fetchingFeaturedUris: selectFetchingFeaturedUris(state),
 });
 

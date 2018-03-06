@@ -4,6 +4,8 @@ export const selectState = state => state.content || {};
 
 export const selectFeaturedUris = createSelector(selectState, state => state.featuredUris);
 
+export const selectFeaturedChannels = createSelector(selectState, state => state.featuredChannels);
+
 export const selectFetchingFeaturedUris = createSelector(
   selectState,
   state => state.fetchingFeaturedContent

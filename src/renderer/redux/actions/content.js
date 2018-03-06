@@ -373,7 +373,7 @@ export function doFetchFeaturedChannels(uris) {
         );
       }
 
-      dispatch({
+      return dispatch({
         type: ACTIONS.FETCH_FEATURED_CHANNELS_COMPLETED,
         data: {
           channels: featuredChannels,
