@@ -263,6 +263,7 @@ class DiscoverPage extends React.PureComponent {
               )
           )
         }
+        {hasContent && !hasChannels && <BusyMessage message={__('Fetching featured channels')} />}
         {hasChannels &&
           Object.keys(featuredChannels).map(
             channel => 
