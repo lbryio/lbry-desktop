@@ -226,10 +226,6 @@ class DiscoverPage extends React.PureComponent {
     this.props.fetchFeaturedUris();
   }
 
-  componentWillReceiveProps(next) {
-    // console.log("<DiscoverPage> next.featuredUris:", next.featuredUris);
-  }
-
   render() {
     const {
       featuredUris,
@@ -270,7 +266,8 @@ class DiscoverPage extends React.PureComponent {
               featuredChannels[channel].length ? (
                 <FeaturedCategory
                   key={channel}
-                  category={channel}
+                  category={channel.split("#")[0]}
+                  categoryLink={channel}
                   names={featuredChannels[channel]}
                 />
             ) : (

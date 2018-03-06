@@ -364,11 +364,12 @@ export function doFetchFeaturedChannels(uris) {
       type: ACTIONS.FETCH_FEATURED_CHANNELS_STARTED
     });
 
-    Lbry.claim_list_by_channel({uris, page: 1}).then(result => {
-      
+    Lbry.claim_list_by_channel({uris, page: 1})
+    .then(result => {      
       let featuredChannels = {};
       for (let key in result) {
-        featuredChannels[key] = result[key].claims_in_channel.map(
+        const address = `${key}#${result[key].claims_in_channel[0].value.publisherSignature.certificateId}`;
+        featuredChannels[address] = result[key].claims_in_channel.map(
           claim => `${claim.name}#${claim.claim_id}`
         );
       }
@@ -380,7 +381,6 @@ export function doFetchFeaturedChannels(uris) {
           success: true
         }
       })
-
     });
   }
 }
