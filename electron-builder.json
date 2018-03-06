@@ -1,11 +1,6 @@
 {
   "appId": "io.lbry.LBRY",
   "productName": "LBRY",
-  "publish": [{
-    "provider": "s3",
-    "bucket": "releases.lbry.io",
-    "path": "app/latest"
-  }, "github"],
   "mac": {
     "target": "dmg",
     "category": "public.app-category.entertainment"
@@ -30,7 +25,7 @@
       "width": 500,
       "height": 300
     },
-    "background": "build/background.png"
+    "background": "./build/background.png"
   },
   "protocols": [
     {
@@ -40,7 +35,6 @@
     }
   ],
   "linux": {
-    "target": "deb",
     "category": "AudioVideo;Video",
     "desktop": {
       "MimeType": "x-scheme-handler/lbry;"
@@ -49,6 +43,5 @@
   "nsis": {
     "perMachine": true
   },
-  "beforeBuild": "build/downloadDaemon.js",
   "artifactName": "${productName}_${version}.${ext}"
 }

@@ -4,40 +4,42 @@ const fs = require('fs');
 const packageJSON = require('../package.json');
 const axios = require('axios');
 const decompress = require('decompress');
+const os = require('os');
 
-module.exports = context => {
-  const daemonURLTemplate = packageJSON.lbrySettings.lbrynetDaemonUrlTemplate;
-  const daemonVersion = packageJSON.lbrySettings.lbrynetDaemonVersion;
-  let currentPlatform = context.platform.toString();
-  if (currentPlatform === 'mac') currentPlatform = 'macos';
+const daemonURLTemplate = packageJSON.lbrySettings.lbrynetDaemonUrlTemplate;
+const daemonVersion = packageJSON.lbrySettings.lbrynetDaemonVersion;
+let currentPlatform = os.platform();
+if (currentPlatform === 'darwin') currentPlatform = 'macos';
+if (currentPlatform === 'win32') currentPlatform = 'windows';
 
-  const daemonURL = daemonURLTemplate
-    .replace(/DAEMONVER/g, daemonVersion)
-    .replace(/OSNAME/g, currentPlatform);
-  const tmpZipPath = 'build/daemon.zip';
+const daemonURL = daemonURLTemplate
+  .replace(/DAEMONVER/g, daemonVersion)
+  .replace(/OSNAME/g, currentPlatform);
+const tmpZipPath = 'build/daemon.zip';
 
-  return new Promise(resolve => {
-    axios
-      .request({
-        responseType: 'arraybuffer',
-        url: daemonURL,
-        method: 'get',
-        headers: {
-          'Content-Type': 'application/zip',
-        },
-      })
-      .then(result => {
-        fs.writeFileSync(tmpZipPath, result.data);
-        return true;
-      })
-      .then(() => {
-        return decompress(tmpZipPath, 'static/daemon', {
-          filter: file =>
-            path.basename(file.path).replace(path.extname(file.path), '') === 'lbrynet-daemon',
-        });
-      })
-      .then(() => {
-        return resolve(true);
-      });
+console.log('\x1b[34minfo\x1b[0m Downloading daemon...');
+axios
+  .request({
+    responseType: 'arraybuffer',
+    url: daemonURL,
+    method: 'get',
+    headers: {
+      'Content-Type': 'application/zip',
+    },
+  })
+  .then(result => {
+    fs.writeFileSync(tmpZipPath, result.data);
+    return true;
+  })
+  .then(() => {
+    decompress(tmpZipPath, 'static/daemon', {
+      filter: file =>
+        path.basename(file.path).replace(path.extname(file.path), '') === 'lbrynet-daemon',
+    });
+  })
+  .then(() => {
+    console.log('\x1b[32msuccess\x1b[0m Daemon downloaded!');
+  })
+  .catch(error => {
+    console.error(`\x1b[31merror\x1b[0m Daemon download failed due to: \x1b[35m${error}\x1b[0m`);
   });
-};
