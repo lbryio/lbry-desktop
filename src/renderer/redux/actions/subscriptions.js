@@ -14,5 +14,16 @@ export const doChannelUnsubscribe = (subscription: Subscription) => (dispatch: D
     data: subscription,
   });
 
+export const setSubscriptionLatest = (subscription: Subscription, uri: string) => (dispatch: Dispatch) =>
+{
+  return dispatch({
+    type: ACTIONS.SET_SUBSCRIPTION_LATEST,
+    data: {
+      subscription,
+      uri
+    }
+  })
+};
+
 export const setHasFetchedSubscriptions = () => (dispatch: Dispatch) =>
   dispatch({ type: ACTIONS.HAS_FETCHED_SUBSCRIPTIONS });

@@ -7,6 +7,7 @@ import Lbryio from 'lbryio';
 import { normalizeURI, buildURI } from 'lbryURI';
 import { doAlertError, doOpenModal } from 'redux/actions/app';
 import { doClaimEligiblePurchaseRewards } from 'redux/actions/rewards';
+import { setSubscriptionLatest } from 'redux/actions/subscriptions';
 import { selectBadgeNumber } from 'redux/selectors/app';
 import { selectMyClaimsRaw } from 'redux/selectors/claims';
 import { selectResolvingUris } from 'redux/selectors/content';
@@ -357,6 +358,14 @@ export function doFetchClaimsByChannel(uri, page) {
     Lbry.claim_list_by_channel({ uri, page: page || 1 }).then(result => {
       const claimResult = result[uri] || {};
       const { claims_in_channel: claimsInChannel, returned_page: returnedPage } = claimResult;
+
+      if(claimResult && claimResult.claims_in_channel && claimResult.claims_in_channel.length) {
+        let latest = claimResult.claims_in_channel[0];
+        dispatch(setSubscriptionLatest({
+          channelName: latest.channel_name,
+          uri: `${latest.channel_name}#${latest.value.publisherSignature.certificateId}`
+        }, `${latest.name}#${latest.claim_id}`));
+      }
 
       dispatch({
         type: ACTIONS.FETCH_CHANNEL_CLAIMS_COMPLETED,
