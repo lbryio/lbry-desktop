@@ -41,7 +41,7 @@ export const doCheckSubscription = (subscription: Subscription) => (dispatch: Di
     const claimResult = result[subscription.uri] || {};
     const { claims_in_channel: claimsInChannel } = claimResult;
 
-    let count = claimsInChannel.reduce((prev, cur, index) => `${cur.name}#${cur.claim_id}` === subscription.latest ? index : prev, -1)
+    let count = subscription.latest ? claimsInChannel.reduce((prev, cur, index) => `${cur.name}#${cur.claim_id}` === subscription.latest ? index : prev, -1) : 1;
 
     if(count !== 0) {
       if(!claimsInChannel[0].value.stream.metadata.fee) {
@@ -64,16 +64,25 @@ export const doCheckSubscription = (subscription: Subscription) => (dispatch: Di
   });
 }
 
+export const checkSubscriptionLatest = (channel: Subscription, uri: string) => (dispatch: Dispatch) => {
+  Lbry.claim_list_by_channel({ uri: channel.uri, page: 1 }).then(result => {
+    const claimResult = result[channel.uri] || {};
+    const { claims_in_channel: claimsInChannel } = claimResult;
+
+    if(claimsInChannel && claimsInChannel.length && `${claimsInChannel[0].name}#${claimsInChannel[0].claim_id}` === uri) {
+      dispatch(setSubscriptionLatest(channel, uri));
+    }
+  });
+}
+
 export const setSubscriptionLatest = (subscription: Subscription, uri: string) => (dispatch: Dispatch) =>
-{
-  return dispatch({
+ dispatch({
     type: ACTIONS.SET_SUBSCRIPTION_LATEST,
     data: {
       subscription,
       uri
     }
-  })
-};
+  });
 
 export const setHasFetchedSubscriptions = () => (dispatch: Dispatch) =>
   dispatch({ type: ACTIONS.HAS_FETCHED_SUBSCRIPTIONS });
