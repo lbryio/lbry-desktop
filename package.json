@@ -34,6 +34,7 @@
     "classnames": "^2.2.5",
     "country-data": "^0.0.31",
     "electron-dl": "^1.6.0",
+    "electron-is-dev": "^0.3.0",
     "electron-log": "^2.2.12",
     "electron-publisher-s3": "^19.47.0",
     "electron-updater": "^2.18.2",
@@ -75,6 +76,7 @@
   "devDependencies": {
     "axios": "^0.18.0",
     "babel-eslint": "^8.2.2",
+    "babel-plugin-module-resolver": "^3.1.0",
     "babel-polyfill": "^6.20.0",
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",

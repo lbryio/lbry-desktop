@@ -23,7 +23,7 @@ class FileList extends React.PureComponent {
             return 1;
           }
           return 0;
-        });    
+        });
       },
       dateOld(fileInfos) {
         return fileInfos.slice().sort((fileInfo1, fileInfo2) => {
@@ -35,7 +35,7 @@ class FileList extends React.PureComponent {
             return 1;
           }
           return 0;
-        });    
+        });
       },
       title(fileInfos) {
         return fileInfos.slice().sort((fileInfo1, fileInfo2) => {

@@ -1,4 +1,5 @@
 import { app, BrowserWindow, dialog } from 'electron';
+import isDev from 'electron-is-dev';
 import setupBarMenu from './menu/setupBarMenu';
 import setupContextMenu from './menu/setupContextMenu';
 
@@ -12,20 +13,18 @@ export default appState => {
   };
 
   // Disable renderer process's webSecurity on development to enable CORS.
-  windowConfiguration =
-    process.env.NODE_ENV === 'development'
-      ? {
-          ...windowConfiguration,
-          webPreferences: {
-            webSecurity: false,
-          },
-        }
-      : windowConfiguration;
+  windowConfiguration = isDev
+    ? {
+        ...windowConfiguration,
+        webPreferences: {
+          webSecurity: false,
+        },
+      }
+    : windowConfiguration;
 
-  const rendererURL =
-    process.env.NODE_ENV === 'development'
-      ? `http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`
-      : `file://${__dirname}/index.html`;
+  const rendererURL = isDev
+    ? `http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`
+    : `file://${__dirname}/index.html`;
 
   let window = new BrowserWindow(windowConfiguration);
 
@@ -84,7 +83,7 @@ export default appState => {
   window.webContents.on('did-finish-load', () => {
     window.webContents.send('open-uri-requested', deepLinkingURI, true);
     window.webContents.session.setUserAgent(`LBRY/${app.getVersion()}`);
-    if (process.env.NODE_ENV === 'development') {
+    if (isDev) {
       window.webContents.openDevTools();
     }
   });

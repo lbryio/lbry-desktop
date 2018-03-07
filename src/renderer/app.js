@@ -2,6 +2,7 @@ import store from 'store';
 import { remote } from 'electron';
 import Path from 'path';
 import y18n from 'y18n';
+import isDev from 'electron-is-dev';
 
 const env = process.env.NODE_ENV || 'production';
 const i18n = y18n({
@@ -22,7 +23,7 @@ const app = {
 };
 
 // Workaround for https://github.com/electron-userland/electron-webpack/issues/52
-if (env !== 'development') {
+if (!isDev) {
   window.staticResourcesPath = Path.join(remote.app.getAppPath(), '../static').replace(
     /\\/g,
     '\\\\'

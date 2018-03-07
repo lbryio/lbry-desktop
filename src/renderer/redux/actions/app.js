@@ -1,9 +1,9 @@
-/* eslint-disable import/no-commonjs */
+import isDev from 'electron-is-dev';
+import Lbry from 'lbry';
+import path from 'path';
 import * as ACTIONS from 'constants/action_types';
 import * as MODALS from 'constants/modal_types';
 import { ipcRenderer, remote } from 'electron';
-import Lbry from 'lbry';
-import Path from 'path';
 import { doFetchRewardedContent } from 'redux/actions/content';
 import { doFetchFileInfosAndPublishedClaims } from 'redux/actions/file_info';
 import { doAuthNavigate } from 'redux/actions/navigation';
@@ -103,7 +103,7 @@ export function doDownloadUpgrade() {
   return (dispatch, getState) => {
     const state = getState();
     // Make a new directory within temp directory so the filename is guaranteed to be available
-    const dir = Fs.mkdtempSync(remote.app.getPath('temp') + Path.sep);
+    const dir = Fs.mkdtempSync(remote.app.getPath('temp') + path.sep);
     const upgradeFilename = selectUpgradeFilename(state);
 
     const options = {
@@ -121,7 +121,7 @@ export function doDownloadUpgrade() {
         type: ACTIONS.UPGRADE_DOWNLOAD_COMPLETED,
         data: {
           downloadItem,
-          path: Path.join(dir, upgradeFilename),
+          path: path.join(dir, upgradeFilename),
         },
       });
     });
@@ -192,7 +192,7 @@ export function doCheckUpgradeAvailable() {
 
     const autoUpdateDeclined = selectAutoUpdateDeclined(state);
 
-    if (!autoUpdateDeclined && process.env.NODE_ENV !== 'development') {
+    if (!autoUpdateDeclined && !isDev) {
       autoUpdater.checkForUpdates();
     }
   };
