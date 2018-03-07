@@ -14,6 +14,7 @@ import { makeSelectCostInfoForUri } from 'redux/selectors/cost_info';
 import { selectShowNsfw } from 'redux/selectors/settings';
 import FilePage from './view';
 import { makeSelectCurrentParam } from 'redux/selectors/navigation';
+import { selectSubscriptions } from 'redux/selectors/subscriptions';
 
 const select = (state, props) => ({
   claim: makeSelectClaimForUri(props.uri)(state),
@@ -24,6 +25,7 @@ const select = (state, props) => ({
   tab: makeSelectCurrentParam('tab')(state),
   fileInfo: makeSelectFileInfoForUri(props.uri)(state),
   rewardedContentClaimIds: selectRewardContentClaimIds(state, props),
+  subscriptions: selectSubscriptions(state),
 });
 
 const perform = dispatch => ({
