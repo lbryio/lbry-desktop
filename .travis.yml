@@ -41,3 +41,5 @@ script:
 branches:
   except:
     - "/^v\\d+\\.\\d+\\.\\d+$/"
+addons:
+  artifacts: true
