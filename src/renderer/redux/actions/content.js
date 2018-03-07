@@ -360,7 +360,7 @@ export function doFetchClaimsByChannel(uri, page) {
       const { claims_in_channel: claimsInChannel, returned_page: returnedPage } = claimResult;
 
       if (claimsInChannel && claimsInChannel.length) {
-        let latest = claimsInChannel[0];
+        const latest = claimsInChannel[0];
         dispatch(
           setSubscriptionLatest(
             {

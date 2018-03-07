@@ -48,7 +48,7 @@ export const doCheckSubscription = (subscription: Subscription) => (dispatch: Di
     const claimResult = result[subscription.uri] || {};
     const { claims_in_channel: claimsInChannel } = claimResult;
 
-    let count = subscription.latest
+    const count = subscription.latest
       ? claimsInChannel.reduce(
           (prev, cur, index) =>
             buildURI({ contentName: cur.name, claimId: cur.claim_id }, false) ===
