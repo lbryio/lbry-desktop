@@ -10,21 +10,9 @@
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/7zip-bin-mac/-/7zip-bin-mac-1.0.1.tgz#3e68778bbf0926adc68159427074505d47555c02"
 
-"7zip-bin-win@~2.1.1":
-  version "2.1.1"
-  resolved "https://registry.yarnpkg.com/7zip-bin-win/-/7zip-bin-win-2.1.1.tgz#8acfc28bb34e53a9476b46ae85a97418e6035c20"
-
 "7zip-bin-win@~2.2.0":
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/7zip-bin-win/-/7zip-bin-win-2.2.0.tgz#0b81c43e911100f3ece2ebac4f414ca95a572d5b"
-
-"7zip-bin@^2.4.1":
-  version "2.4.1"
-  resolved "https://registry.yarnpkg.com/7zip-bin/-/7zip-bin-2.4.1.tgz#88cf99736d35b104dab1d430c4edd1d51e58aade"
-  optionalDependencies:
-    "7zip-bin-linux" "~1.3.1"
-    "7zip-bin-mac" "~1.0.1"
-    "7zip-bin-win" "~2.1.1"
 
 "7zip-bin@~3.1.0":
   version "3.1.0"
@@ -560,9 +548,9 @@ autoprefixer@^6.3.1:
     postcss "^5.2.16"
     postcss-value-parser "^3.2.3"
 
-aws-sdk@^2.186.0:
-  version "2.188.0"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.188.0.tgz#9062abc7dba6393459fa2f3423cf5d294f004611"
+aws-sdk@^2.202.0:
+  version "2.205.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.205.0.tgz#1a93730253e2be027a4bd3af9248cbda0573de80"
   dependencies:
     buffer "4.9.1"
     events "^1.1.1"
@@ -1580,27 +1568,9 @@ buffers@~0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/buffers/-/buffers-0.1.1.tgz#b24579c3bed4d6d396aeee6d9a8ae7f5482ab7bb"
 
-builder-util-runtime@4.0.5, builder-util-runtime@^4.0.5:
+builder-util-runtime@4.0.5, builder-util-runtime@^4.0.5, builder-util-runtime@~4.0.5:
   version "4.0.5"
   resolved "https://registry.yarnpkg.com/builder-util-runtime/-/builder-util-runtime-4.0.5.tgz#5340cf9886b9283ea6e5b20dc09b5e3e461aef62"
-  dependencies:
-    bluebird-lst "^1.0.5"
-    debug "^3.1.0"
-    fs-extra-p "^4.5.0"
-    sax "^1.2.4"
-
-builder-util-runtime@^4.0.3, builder-util-runtime@^4.0.4:
-  version "4.0.4"
-  resolved "https://registry.yarnpkg.com/builder-util-runtime/-/builder-util-runtime-4.0.4.tgz#c92c352097006a07f3324ea200fa815440cba198"
-  dependencies:
-    bluebird-lst "^1.0.5"
-    debug "^3.1.0"
-    fs-extra-p "^4.5.0"
-    sax "^1.2.4"
-
-builder-util-runtime@~4.0.3:
-  version "4.0.3"
-  resolved "https://registry.yarnpkg.com/builder-util-runtime/-/builder-util-runtime-4.0.3.tgz#c9f1959598e3fb534cdbe9ce4160e985af11a0fe"
   dependencies:
     bluebird-lst "^1.0.5"
     debug "^3.1.0"
@@ -1644,26 +1614,6 @@ builder-util@5.6.3, builder-util@^5.6.0:
     source-map-support "^0.5.3"
     stat-mode "^0.2.2"
     temp-file "^3.1.1"
-
-builder-util@^4.2.1:
-  version "4.2.2"
-  resolved "https://registry.yarnpkg.com/builder-util/-/builder-util-4.2.2.tgz#366b2bc32324bfe5565a7e4f13f86238fef5e92b"
-  dependencies:
-    "7zip-bin" "^2.4.1"
-    bluebird-lst "^1.0.5"
-    builder-util-runtime "^4.0.4"
-    chalk "^2.3.0"
-    debug "^3.1.0"
-    fs-extra-p "^4.5.0"
-    ini "^1.3.5"
-    is-ci "^1.1.0"
-    js-yaml "^3.10.0"
-    lazy-val "^1.0.3"
-    semver "^5.5.0"
-    source-map-support "^0.5.3"
-    stat-mode "^0.2.2"
-    temp-file "^3.1.1"
-    tunnel-agent "^0.6.0"
 
 builtin-modules@^1.0.0, builtin-modules@^1.1.1:
   version "1.1.1"
@@ -3090,7 +3040,7 @@ electron-osx-sign@0.4.8:
     minimist "^1.2.0"
     plist "^2.1.0"
 
-electron-publish@20.2.0:
+electron-publish@20.2.0, electron-publish@~20.2.0:
   version "20.2.0"
   resolved "https://registry.yarnpkg.com/electron-publish/-/electron-publish-20.2.0.tgz#1812738c4a4e14a8e156a9a083424a6e4e8e8264"
   dependencies:
@@ -3102,45 +3052,34 @@ electron-publish@20.2.0:
     lazy-val "^1.0.3"
     mime "^2.2.0"
 
-electron-publish@~19.55.2:
-  version "19.55.2"
-  resolved "https://registry.yarnpkg.com/electron-publish/-/electron-publish-19.55.2.tgz#773b6d13bc11312095848c08b3287f98c91ccc7e"
+electron-publisher-s3@^20.2.0:
+  version "20.2.0"
+  resolved "https://registry.yarnpkg.com/electron-publisher-s3/-/electron-publisher-s3-20.2.0.tgz#6c2963adb1f33bdd0f4ce273988e2f74fc5c53b7"
   dependencies:
+    aws-sdk "^2.202.0"
     bluebird-lst "^1.0.5"
-    builder-util "^4.2.1"
-    builder-util-runtime "^4.0.3"
-    chalk "^2.3.0"
-    fs-extra-p "^4.5.0"
-    mime "^2.2.0"
-
-electron-publisher-s3@^19.47.0:
-  version "19.55.2"
-  resolved "https://registry.yarnpkg.com/electron-publisher-s3/-/electron-publisher-s3-19.55.2.tgz#59446ebcf465e01995f67820592f13142d4146d8"
-  dependencies:
-    aws-sdk "^2.186.0"
-    bluebird-lst "^1.0.5"
-    builder-util "^4.2.1"
-    electron-publish "~19.55.2"
-    fs-extra-p "^4.5.0"
+    builder-util "^5.6.0"
+    electron-publish "~20.2.0"
+    fs-extra-p "^4.5.2"
     mime "^2.2.0"
 
 electron-to-chromium@^1.2.7, electron-to-chromium@^1.3.27:
   version "1.3.27"
   resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.27.tgz#78ecb8a399066187bb374eede35d9c70565a803d"
 
-electron-updater@^2.18.2:
-  version "2.20.1"
-  resolved "https://registry.yarnpkg.com/electron-updater/-/electron-updater-2.20.1.tgz#3d2714a3e472fbf198f6053daf8fd12209101aa2"
+electron-updater@^2.21.0:
+  version "2.21.0"
+  resolved "https://registry.yarnpkg.com/electron-updater/-/electron-updater-2.21.0.tgz#3c8765af946090100f7df982127e4c3412cbc1af"
   dependencies:
     bluebird-lst "^1.0.5"
-    builder-util-runtime "~4.0.3"
+    builder-util-runtime "~4.0.5"
     electron-is-dev "^0.3.0"
-    fs-extra-p "^4.5.0"
+    fs-extra-p "^4.5.2"
     js-yaml "^3.10.0"
     lazy-val "^1.0.3"
     lodash.isequal "^4.5.0"
     semver "^5.5.0"
-    source-map-support "^0.5.2"
+    source-map-support "^0.5.3"
 
 electron-webpack-js@~1.2.0:
   version "1.2.0"
@@ -4981,7 +4920,7 @@ inherits@2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/inherits/-/inherits-2.0.1.tgz#b17d08d326b4423e568eff719f91b0b1cbdf69f1"
 
-ini@^1.3.4, ini@^1.3.5, ini@~1.3.0, ini@~1.3.4:
+ini@^1.3.4, ini@~1.3.0, ini@~1.3.4:
   version "1.3.5"
   resolved "https://registry.yarnpkg.com/ini/-/ini-1.3.5.tgz#eee25f56db1c9ec6085e0c22778083f596abf927"
 
@@ -9119,7 +9058,7 @@ source-map-support@^0.5.0:
   dependencies:
     source-map "^0.6.0"
 
-source-map-support@^0.5.2, source-map-support@^0.5.3:
+source-map-support@^0.5.3:
   version "0.5.3"
   resolved "https://registry.yarnpkg.com/source-map-support/-/source-map-support-0.5.3.tgz#2b3d5fff298cfa4d1afd7d4352d569e9a0158e76"
   dependencies:

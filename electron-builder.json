@@ -46,6 +46,9 @@
       "MimeType": "x-scheme-handler/lbry;"
     }
   },
+  "win": {
+    "certificateSubjectName": "CN=\"LBRY, Inc\", O=\"LBRY, Inc\", L=Manchester, S=New Hampshire, C=US"
+  },
   "nsis": {
     "perMachine": true
   },
