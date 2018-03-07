@@ -43,32 +43,6 @@ fi
 
 yarn install
 
-####################
-#  daemon and cli  #
-####################
-echo -e "\033[0;32mGrabbing Daemon and CLI\x1b[m"
-if $OSX; then
-  OSNAME="macos"
-else
-  OSNAME="linux"
-fi
-DAEMON_VER=$(node -e "console.log(require(\"$ROOT/package.json\").lbrySettings.lbrynetDaemonVersion)")
-DAEMON_URL_TEMPLATE=$(node -e "console.log(require(\"$ROOT/package.json\").lbrySettings.lbrynetDaemonUrlTemplate)")
-DAEMON_URL=$(echo ${DAEMON_URL_TEMPLATE//DAEMONVER/$DAEMON_VER} | sed "s/OSNAME/$OSNAME/g")
-DAEMON_VER_PATH="$BUILD_DIR/daemon.ver"
-echo "$DAEMON_VER_PATH"
-if [[ ! -f $DAEMON_VER_PATH || ! -f $ROOT/static/daemon/lbrynet-daemon || "$(< "$DAEMON_VER_PATH")" != "$DAEMON_VER" ]]; then
-    curl -sL -o "$BUILD_DIR/daemon.zip" "$DAEMON_URL"
-    unzip -o "$BUILD_DIR/daemon.zip" -d "$ROOT/static/daemon/"
-    rm "$BUILD_DIR/daemon.zip"
-    echo "$DAEMON_VER" > "$DAEMON_VER_PATH"
-else
-    echo -e "\033[4;31mAlready have daemon version $DAEMON_VER, skipping download\x1b[m"
-fi
-
-
-
-
 ###################
 #  Build the app  #
 ###################
