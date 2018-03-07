@@ -1,8 +1,10 @@
-/* eslint-disable */
+/* eslint-disable no-console,import/no-commonjs */
 const path = require('path');
 const fs = require('fs');
 const packageJSON = require('../package.json');
+// eslint-disable-next-line import/no-extraneous-dependencies
 const axios = require('axios');
+// eslint-disable-next-line import/no-extraneous-dependencies
 const decompress = require('decompress');
 const os = require('os');
 
