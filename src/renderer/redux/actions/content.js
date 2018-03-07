@@ -365,7 +365,13 @@ export function doFetchClaimsByChannel(uri, page) {
           setSubscriptionLatest(
             {
               channelName: latest.channel_name,
-              uri: buildURI({ contentName: latest.channel_name, claimId: latest.value.publisherSignature.certificateId }, false),
+              uri: buildURI(
+                {
+                  contentName: latest.channel_name,
+                  claimId: latest.value.publisherSignature.certificateId,
+                },
+                false
+              ),
             },
             buildURI({ contentName: latest.name, claimId: latest.claim_id }, false)
           )
