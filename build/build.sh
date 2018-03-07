@@ -59,7 +59,7 @@ DAEMON_VER_PATH="$BUILD_DIR/daemon.ver"
 echo "$DAEMON_VER_PATH"
 if [[ ! -f $DAEMON_VER_PATH || ! -f $ROOT/static/daemon/lbrynet-daemon || "$(< "$DAEMON_VER_PATH")" != "$DAEMON_VER" ]]; then
     curl -sL -o "$BUILD_DIR/daemon.zip" "$DAEMON_URL"
-    unzip "$BUILD_DIR/daemon.zip" -d "$ROOT/static/daemon/"
+    unzip -o "$BUILD_DIR/daemon.zip" -d "$ROOT/static/daemon/"
     rm "$BUILD_DIR/daemon.zip"
     echo "$DAEMON_VER" > "$DAEMON_VER_PATH"
 else

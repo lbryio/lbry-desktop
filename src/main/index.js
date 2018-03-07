@@ -7,6 +7,7 @@ import url from 'url';
 import https from 'https';
 import { shell, app, ipcMain, dialog } from 'electron';
 import { autoUpdater } from 'electron-updater';
+import isDev from 'electron-is-dev';
 import Daemon from './Daemon';
 import createTray from './createTray';
 import createWindow from './createWindow';
@@ -64,15 +65,15 @@ app.on('ready', async () => {
         dialog.showErrorBox(
           'Daemon has Exited',
           'The daemon may have encountered an unexpected error, or another daemon instance is already running. \n\n' +
-          'For more information please visit: \n' +
-          'https://lbry.io/faq/startup-troubleshooting'
+            'For more information please visit: \n' +
+            'https://lbry.io/faq/startup-troubleshooting'
         );
         app.quit();
       }
     });
     daemon.launch();
   }
-  if (process.env.NODE_ENV === 'development') {
+  if (isDev) {
     await installExtensions();
   }
   rendererWindow = createWindow(appState);
