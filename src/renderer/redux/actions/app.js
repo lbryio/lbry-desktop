@@ -192,7 +192,7 @@ export function doCheckUpgradeAvailable() {
 
     const autoUpdateDeclined = selectAutoUpdateDeclined(state);
 
-    if (!autoUpdateDeclined) {
+    if (!autoUpdateDeclined && process.env.NODE_ENV !== 'development') {
       autoUpdater.checkForUpdates();
     }
   };
