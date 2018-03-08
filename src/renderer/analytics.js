@@ -1,5 +1,6 @@
 // @flow
 import mixpanel from 'mixpanel-browser';
+import Lbryio from 'lbryio';
 
 mixpanel.init('691723e855cabb9d27a7a79002216967');
 
@@ -7,6 +8,7 @@ type Analytics = {
   track: (string, ?Object) => void,
   setUser: Object => void,
   toggle: (boolean, ?boolean) => void,
+  apiLog: (string, string, string) => void,
 };
 
 let analyticsEnabled: boolean = false;
@@ -37,6 +39,15 @@ const analytics: Analytics = {
     }
     analyticsEnabled = enabled;
   },
+  apiLog: (uri: string, outpoint: string, claim_id: string): void => {
+    if(analyticsEnabled) {
+      Lbryio.call('file', 'view', {
+        uri,
+        outpoint: outpoint,
+        claim_id: claim_id,
+      }).catch(() => {});
+    }
+  }
 };
 
 export default analytics;
