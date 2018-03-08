@@ -62,7 +62,13 @@ class WalletSendTip extends React.PureComponent<Props, State> {
           <FormField
             label={__('Amount')}
             postfix={__('LBC')}
+            className="input--price-amount"
             error={errorMessage}
+            min="0"
+            step="any"
+            type="number"
+            placeholder="1.00"
+            onChange={event => this.handleSupportPriceChange(event)}
             helper={
               <span>
                 {__(`This will appear as a tip for ${title} located at ${uri}.`)}
@@ -70,15 +76,6 @@ class WalletSendTip extends React.PureComponent<Props, State> {
                 <Button label={__('Learn more')} fakeLink href="https://lbry.io/faq/tipping" />
               </span>
             }
-            render={() => (
-              <input
-                min="0"
-                step="any"
-                type="number"
-                placeholder="1.00"
-                onChange={event => this.handleSupportPriceChange(event)}
-              />
-            )}
           />
           <div className="card__actions">
             <Button

@@ -102,6 +102,7 @@ input {
   color: var(--input-color);
   line-height: 1;
   cursor: text;
+  background-color: transparent;
 
   &[type='radio'],
   &[type='checkbox'],
