@@ -22,21 +22,6 @@ reducers[ACTIONS.FETCH_FEATURED_CONTENT_COMPLETED] = (state, action) => {
   });
 };
 
-reducers[ACTIONS.FETCH_FEATURED_CHANNELS_STARTED] = state =>
-  Object.assign({}, state, {
-    fetchingFeaturedChannels: true,
-  });
-
-reducers[ACTIONS.FETCH_FEATURED_CHANNELS_COMPLETED] = (state, action) => {
-  const { channels, success } = action.data;
-
-  return Object.assign({}, state, {
-    fetchingFeaturedChannels: false,
-    fetchingFeaturedChannelsFailed: !success,
-    featuredChannels: channels,
-  });
-};
-
 reducers[ACTIONS.FETCH_REWARD_CONTENT_COMPLETED] = (state, action) => {
   const { claimIds } = action.data;
 
