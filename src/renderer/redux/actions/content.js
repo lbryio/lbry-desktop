@@ -90,7 +90,10 @@ export function doFetchFeaturedUris() {
           actions.push(doFetchClaimsByChannel(category, 1));
         }
         else {
-          urisToResolve = [...urisToResolve, ...Uris[category]];
+          urisToResolve = [
+            ...urisToResolve,
+            ...Uris[category]
+          ];
         }
       });
 
