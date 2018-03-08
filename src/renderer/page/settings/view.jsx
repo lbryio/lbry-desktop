@@ -308,7 +308,7 @@ class SettingsPage extends React.PureComponent {
               type="checkbox"
               onChange={this.onShareDataChange.bind(this)}
               defaultChecked={daemonSettings.share_usage_data}
-              label={__('Help make LBRY better by contributing diagnostic data about my usage')}
+              label={__('Help make LBRY better by contributing analytics and diagnostic data and about my usage')}
             />
           </div>
         </section>
