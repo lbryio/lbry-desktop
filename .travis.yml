@@ -42,4 +42,6 @@ branches:
   except:
     - "/^v\\d+\\.\\d+\\.\\d+$/"
 addons:
-  artifacts: true
+  artifacts:
+    paths:
+     - $(git ls-files -o dist/{*.dmg,*.AppImage,*.exe} | tr "\n" ":")
