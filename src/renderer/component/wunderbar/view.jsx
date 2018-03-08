@@ -6,6 +6,7 @@ import { parseQueryParams } from 'util/query_params';
 
 class WunderBar extends React.PureComponent {
   static TYPING_TIMEOUT = 800;
+  static START_SEARCH = 100;
 
   static propTypes = {
     onSearch: PropTypes.func.isRequired,
@@ -43,6 +44,8 @@ class WunderBar extends React.PureComponent {
 
     this.setState({ address: event.target.value });
 
+    const searchDispatchWasPending = this._isSearchDispatchPending;
+
     this._isSearchDispatchPending = true;
 
     const searchQuery = event.target.value;
@@ -54,7 +57,8 @@ class WunderBar extends React.PureComponent {
       if (searchQuery) {
         this.props.onSearch(searchQuery.trim());
       }
-    }, WunderBar.TYPING_TIMEOUT); // 800ms delay, tweak for faster/slower
+    },
+    searchDispatchWasPending ? WunderBar.TYPING_TIMEOUT : WunderBar.START_SEARCH);
   }
 
   componentWillReceiveProps(nextProps) {
