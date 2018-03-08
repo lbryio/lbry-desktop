@@ -105,7 +105,7 @@ class FileTile extends React.PureComponent<Props> {
                   <Button
                     fakeLink
                     label={__('Put something here!')}
-                    onClick={(e) => {
+                    onClick={e => {
                       // avoid navigating to /show from clicking on the section
                       e.preventDefault();
                       navigate('/publish');

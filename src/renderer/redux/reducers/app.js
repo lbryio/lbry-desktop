@@ -234,7 +234,7 @@ reducers[ACTIONS.VOLUME_CHANGED] = (state, action) =>
     volume: action.data.volume,
   });
 
-reducers[ACTIONS.HISTORY_NAVIGATE] = (state) =>
+reducers[ACTIONS.HISTORY_NAVIGATE] = state =>
   Object.assign({}, state, {
     modal: undefined,
     modalProps: {},

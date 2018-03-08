@@ -34,7 +34,6 @@ class WunderBar extends React.PureComponent<Props> {
   }
 
   handleSubmit(value: string, suggestion?: { value: string, type: string }) {
-    debugger;
     const { onSubmit, onSearch } = this.props;
     const query = value.trim();
     const getParams = () => {
