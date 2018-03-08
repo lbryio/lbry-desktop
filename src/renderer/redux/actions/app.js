@@ -1,32 +1,32 @@
-/* eslint-disable import/no-commonjs */
+import isDev from 'electron-is-dev';
+import Lbry from 'lbry';
+import path from 'path';
 import * as ACTIONS from 'constants/action_types';
 import * as MODALS from 'constants/modal_types';
 import { ipcRenderer, remote } from 'electron';
-import Lbry from 'lbry';
-import Path from 'path';
 import { doFetchRewardedContent } from 'redux/actions/content';
 import { doFetchFileInfosAndPublishedClaims } from 'redux/actions/file_info';
 import { doAuthNavigate } from 'redux/actions/navigation';
 import { doFetchDaemonSettings } from 'redux/actions/settings';
 import { doAuthenticate } from 'redux/actions/user';
 import { doBalanceSubscribe } from 'redux/actions/wallet';
-import { doPause } from "redux/actions/media";
+import { doPause } from 'redux/actions/media';
+import { doCheckSubscriptions } from 'redux/actions/subscriptions';
 
 import {
   selectCurrentModal,
   selectIsUpgradeSkipped,
-  selectRemoteVersion,
   selectUpdateUrl,
   selectUpgradeDownloadItem,
   selectUpgradeDownloadPath,
   selectUpgradeFilename,
   selectAutoUpdateDeclined,
 } from 'redux/selectors/app';
+import { lbrySettings as config } from 'package.json';
 
 const { autoUpdater } = remote.require('electron-updater');
 const { download } = remote.require('electron-dl');
 const Fs = remote.require('fs');
-const { lbrySettings: config } = require('package.json');
 
 const CHECK_UPGRADE_INTERVAL = 10 * 60 * 1000;
 
@@ -84,23 +84,19 @@ export function doDownloadUpgradeRequested() {
 
     const autoUpdateDeclined = selectAutoUpdateDeclined(state);
 
-    if (['win32', 'darwin'].includes(process.platform)) { // electron-updater behavior
-      if (autoUpdateDeclined) {
-        // The user declined an update before, so show the "confirm" dialog
-        dispatch({
-          type: ACTIONS.OPEN_MODAL,
-          data: { modal: MODALS.AUTO_UPDATE_CONFIRM },
-        });
-      } else {
-        // The user was never shown the original update dialog (e.g. because they were
-        // watching a video). So show the inital "update downloaded" dialog.
-        dispatch({
-          type: ACTIONS.OPEN_MODAL,
-          data: { modal: MODALS.AUTO_UPDATE_DOWNLOADED },
-        });
-      }
-    } else { // Old behavior for Linux
-      dispatch(doDownloadUpgrade());
+    if (autoUpdateDeclined) {
+      // The user declined an update before, so show the "confirm" dialog
+      dispatch({
+        type: ACTIONS.OPEN_MODAL,
+        data: { modal: MODALS.AUTO_UPDATE_CONFIRM },
+      });
+    } else {
+      // The user was never shown the original update dialog (e.g. because they were
+      // watching a video). So show the initial "update downloaded" dialog.
+      dispatch({
+        type: ACTIONS.OPEN_MODAL,
+        data: { modal: MODALS.AUTO_UPDATE_DOWNLOADED },
+      });
     }
   };
 }
@@ -109,7 +105,7 @@ export function doDownloadUpgrade() {
   return (dispatch, getState) => {
     const state = getState();
     // Make a new directory within temp directory so the filename is guaranteed to be available
-    const dir = Fs.mkdtempSync(remote.app.getPath('temp') + Path.sep);
+    const dir = Fs.mkdtempSync(remote.app.getPath('temp') + path.sep);
     const upgradeFilename = selectUpgradeFilename(state);
 
     const options = {
@@ -127,7 +123,7 @@ export function doDownloadUpgrade() {
         type: ACTIONS.UPGRADE_DOWNLOAD_COMPLETED,
         data: {
           downloadItem,
-          path: Path.join(dir, upgradeFilename),
+          path: path.join(dir, upgradeFilename),
         },
       });
     });
@@ -145,8 +141,7 @@ export function doDownloadUpgrade() {
 }
 
 export function doAutoUpdate() {
-  return function(dispatch, getState) {
-    const state = getState();
+  return dispatch => {
     dispatch({
       type: ACTIONS.AUTO_UPDATE_DOWNLOADED,
     });
@@ -159,12 +154,11 @@ export function doAutoUpdate() {
 }
 
 export function doAutoUpdateDeclined() {
-  return function(dispatch, getState) {
-    const state = getState();
+  return dispatch => {
     dispatch({
       type: ACTIONS.AUTO_UPDATE_DECLINED,
     });
-  }
+  };
 }
 
 export function doCancelUpgrade() {
@@ -181,6 +175,7 @@ export function doCancelUpgrade() {
       try {
         upgradeDownloadItem.cancel();
       } catch (err) {
+        // eslint-disable-next-line no-console
         console.error(err);
         // Do nothing
       }
@@ -197,47 +192,11 @@ export function doCheckUpgradeAvailable() {
       type: ACTIONS.CHECK_UPGRADE_START,
     });
 
-    if (["win32", "darwin"].includes(process.platform)) {
-      // On Windows and Mac, updates happen silently through
-      // electron-updater.
-      const autoUpdateDeclined = selectAutoUpdateDeclined(state);
+    const autoUpdateDeclined = selectAutoUpdateDeclined(state);
 
-      if (!autoUpdateDeclined) {
-        autoUpdater.checkForUpdates();
-      }
-      return;
+    if (!autoUpdateDeclined && !isDev) {
+      autoUpdater.checkForUpdates();
     }
-
-    const success = ({ remoteVersion, upgradeAvailable }) => {
-      dispatch({
-        type: ACTIONS.CHECK_UPGRADE_SUCCESS,
-        data: {
-          upgradeAvailable,
-          remoteVersion,
-        },
-      });
-
-      if (
-        upgradeAvailable &&
-        !selectCurrentModal(state) &&
-        (!selectIsUpgradeSkipped(state) || remoteVersion !== selectRemoteVersion(state))
-      ) {
-        dispatch({
-          type: ACTIONS.OPEN_MODAL,
-          data: {
-            modal: MODALS.UPGRADE,
-          },
-        });
-      }
-    };
-
-    const fail = () => {
-      dispatch({
-        type: ACTIONS.CHECK_UPGRADE_FAIL,
-      });
-    };
-
-    Lbry.getAppVersionInfo().then(success, fail);
   };
 }
 
@@ -296,6 +255,7 @@ export function doDaemonReady() {
       dispatch(doCheckUpgradeAvailable());
     }
     dispatch(doCheckUpgradeSubscribe());
+    dispatch(doCheckSubscriptions());
   };
 }
 

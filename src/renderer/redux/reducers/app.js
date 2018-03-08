@@ -93,7 +93,7 @@ reducers[ACTIONS.AUTO_UPDATE_DECLINED] = state => {
   return Object.assign({}, state, {
     autoUpdateDeclined: true,
   });
-}
+};
 
 reducers[ACTIONS.UPGRADE_DOWNLOAD_COMPLETED] = (state, action) =>
   Object.assign({}, state, {

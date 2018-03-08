@@ -4,7 +4,7 @@
     "airbnb",
     "plugin:import/electron",
     "plugin:flowtype/recommended",
-    "plugin:prettier/recommended"
+    "prettier"
   ],
   "settings": {
     "import/resolver": {

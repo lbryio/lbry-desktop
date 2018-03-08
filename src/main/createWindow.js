@@ -1,8 +1,9 @@
 import { app, BrowserWindow, dialog } from 'electron';
+import isDev from 'electron-is-dev';
 import setupBarMenu from './menu/setupBarMenu';
 import setupContextMenu from './menu/setupContextMenu';
 
-export default deepLinkingURIArg => {
+export default appState => {
   let windowConfiguration = {
     backgroundColor: '#155B4A',
     minWidth: 800,
@@ -12,20 +13,18 @@ export default deepLinkingURIArg => {
   };
 
   // Disable renderer process's webSecurity on development to enable CORS.
-  windowConfiguration =
-    process.env.NODE_ENV === 'development'
-      ? {
-          ...windowConfiguration,
-          webPreferences: {
-            webSecurity: false,
-          },
-        }
-      : windowConfiguration;
+  windowConfiguration = isDev
+    ? {
+        ...windowConfiguration,
+        webPreferences: {
+          webSecurity: false,
+        },
+      }
+    : windowConfiguration;
 
-  const rendererURL =
-    process.env.NODE_ENV === 'development'
-      ? `http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`
-      : `file://${__dirname}/index.html`;
+  const rendererURL = isDev
+    ? `http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`
+    : `file://${__dirname}/index.html`;
 
   let window = new BrowserWindow(windowConfiguration);
 
@@ -35,11 +34,7 @@ export default deepLinkingURIArg => {
 
   let deepLinkingURI;
   // Protocol handler for win32
-  if (
-    !deepLinkingURIArg &&
-    process.platform === 'win32' &&
-    String(process.argv[1]).startsWith('lbry')
-  ) {
+  if (process.platform === 'win32' && String(process.argv[1]).startsWith('lbry')) {
     // Keep only command line / deep linked arguments
     // Windows normalizes URIs when they're passed in from other apps. On Windows, this tries to
     // restore the original URI that was typed.
@@ -48,15 +43,16 @@ export default deepLinkingURIArg => {
     //   - In a URI with a claim ID, like lbry://channel#claimid, Windows interprets the hash mark as
     //     an anchor and converts it to lbry://channel/#claimid. We remove the slash here as well.
     deepLinkingURI = process.argv[1].replace(/\/$/, '').replace('/#', '#');
-  } else {
-    deepLinkingURI = deepLinkingURIArg;
   }
 
   setupBarMenu();
   setupContextMenu(window);
 
-  window.on('closed', () => {
-    window = null;
+  window.on('close', event => {
+    if (!appState.isQuitting) {
+      event.preventDefault();
+      window.hide();
+    }
   });
 
   window.on('focus', () => {
@@ -87,7 +83,7 @@ export default deepLinkingURIArg => {
   window.webContents.on('did-finish-load', () => {
     window.webContents.send('open-uri-requested', deepLinkingURI, true);
     window.webContents.session.setUserAgent(`LBRY/${app.getVersion()}`);
-    if (process.env.NODE_ENV === 'development') {
+    if (isDev) {
       window.webContents.openDevTools();
     }
   });
