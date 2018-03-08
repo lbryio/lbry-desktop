@@ -77,31 +77,31 @@ export function doFetchFeaturedUris() {
 
     const success = ({ Uris }) => {
 
-      Uris["@LupoTV"] = [];
+      Uris["@LupoTV"] = ["howtocommunicatebetter#c4081b27764b845fcd611e91addf321d78cb06af"];
       Uris["@CryptoCandor"] = [];
 
       let urisToResolve = [];
-      let channels = [];
+      let actions = [];
       Object.keys(Uris).forEach(category => {
-        if (category.indexOf("@") === 0) {
-          channels.push(category);
+        if (
+          category.indexOf("@") === 0 &&
+          !Uris[category].length
+        ) {
+          actions.push(doFetchClaimsByChannel(category, 1));
         }
         else {
           urisToResolve = [...urisToResolve, ...Uris[category]];
         }
       });
 
-      const actions = [
-        doFetchFeaturedChannels(channels),
-        doResolveUris(urisToResolve),
-        {
-          type: ACTIONS.FETCH_FEATURED_CONTENT_COMPLETED,
-          data: {
-            uris: Uris,
-            success: true,
-          },
+      actions.push(doResolveUris(urisToResolve));
+      actions.push({
+        type: ACTIONS.FETCH_FEATURED_CONTENT_COMPLETED,
+        data: {
+          uris: Uris,
+          success: true,
         },
-      ];
+      });
       dispatch(batchActions(...actions));
     };
 
@@ -356,42 +356,6 @@ export function doPurchaseUri(uri) {
       }
     }
   };
-}
-
-export function doFetchFeaturedChannels(uris) {
-  return dispatch => {
-    dispatch({
-      type: ACTIONS.FETCH_FEATURED_CHANNELS_STARTED
-    });
-
-    Lbry.claim_list_by_channel({uris, page: 1})
-    .then(result => {      
-      let featuredChannels = {};
-      for (let key in result) {
-        const address = `${key}#${result[key].claims_in_channel[0].value.publisherSignature.certificateId}`;
-        featuredChannels[address] = result[key].claims_in_channel.map(
-          claim => `${claim.name}#${claim.claim_id}`
-        );
-      }
-
-      return dispatch({
-        type: ACTIONS.FETCH_FEATURED_CHANNELS_COMPLETED,
-        data: {
-          channels: featuredChannels,
-          success: true
-        }
-      })
-    })
-    .catch(err => {
-      return dispatch({
-        type: ACTIONS.FETCH_FEATURED_CHANNELS_COMPLETED,
-        data: {
-          channels: null,
-          success: false
-        }
-      })
-    });
-  }
 }
 
 export function doFetchClaimsByChannel(uri, page) {

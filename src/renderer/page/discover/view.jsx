@@ -11,8 +11,8 @@ import Link from 'component/link';
 
 // This should be in a separate file
 export class FeaturedCategory extends React.PureComponent {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
 
     this.state = {
       numItems: undefined,
@@ -230,12 +230,35 @@ class DiscoverPage extends React.PureComponent {
     const {
       featuredUris,
       fetchingFeaturedUris,
-      featuredChannels,
+      claimsByChannel,
+      claimsById,
     } = this.props;
+    const hasContent = typeof featuredUris === 'object' && Object.keys(featuredUris).length,
+      failedToLoad = !fetchingFeaturedUris && !hasContent;
 
-    const hasContent = typeof featuredUris === 'object' && Object.keys(featuredUris).length;
-    const hasChannels = typeof featuredChannels === 'object' && Object.keys(featuredChannels).length;
-    const failedToLoad = !fetchingFeaturedUris && !hasContent;
+    if (!!featuredUris && !!claimsByChannel) {
+      let channels = [];
+      Object.keys(featuredUris).forEach(key => {
+        if (key.indexOf("@") === 0) {
+          channels.push(key);
+        }
+      });
+      Object.keys(claimsByChannel).forEach(key => {
+        if (channels.includes(key)) {
+          delete featuredUris[key];
+          const ids = claimsByChannel[key][1];
+          let uris = [];
+          const newKey = `${key}#${claimsById[ids[0]].value.publisherSignature.certificateId}`;
+          ids.forEach(id => {
+            const claim = claimsById[id] ? claimsById[id] : null;
+            if (claim) {
+              uris.push(`${claim.name}#${claim.claim_id}`);
+            }
+          });
+          featuredUris[newKey] = uris;
+        }
+      });
+    }
 
     return (
       <main
@@ -249,32 +272,24 @@ class DiscoverPage extends React.PureComponent {
           Object.keys(featuredUris).map(
             category =>
               featuredUris[category].length ? (
-                <FeaturedCategory
+                category.indexOf("@") === 0 ? (
+                  <FeaturedCategory
+                    key={category}
+                    category={category.split("#")[0]}
+                    categoryLink={category}
+                    names={featuredUris[category]}
+                  />
+                ) : (
+                  <FeaturedCategory
                   key={category}
                   category={category}
                   names={featuredUris[category]}
                 />
+                )
               ) : (
                 ''
               )
-          )
-        }
-        {hasContent && !hasChannels && <BusyMessage message={__('Fetching featured channels')} />}
-        {hasChannels &&
-          Object.keys(featuredChannels).map(
-            channel => 
-              featuredChannels[channel].length ? (
-                <FeaturedCategory
-                  key={channel}
-                  category={channel.split("#")[0]}
-                  categoryLink={channel}
-                  names={featuredChannels[channel]}
-                />
-            ) : (
-              ''
-            )
-          )
-        }
+          )}
         {failedToLoad && <div className="empty">{__('Failed to load landing content.')}</div>}
       </main>
     );
