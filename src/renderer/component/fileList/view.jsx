@@ -15,27 +15,27 @@ class FileList extends React.PureComponent {
     this._sortFunctions = {
       dateNew(fileInfos) {
         return fileInfos.slice().sort((fileInfo1, fileInfo2) => {
-          const height1 = fileInfo1.height
-          const height2 = fileInfo2.height
+          const height1 = fileInfo1.height;
+          const height2 = fileInfo2.height;
           if (height1 > height2) {
             return -1;
           } else if (height1 < height2) {
             return 1;
           }
           return 0;
-        });    
+        });
       },
       dateOld(fileInfos) {
         return fileInfos.slice().sort((fileInfo1, fileInfo2) => {
-          const height1 = fileInfo1.height
-          const height2 = fileInfo2.height
+          const height1 = fileInfo1.height;
+          const height2 = fileInfo2.height;
           if (height1 < height2) {
             return -1;
           } else if (height1 > height2) {
             return 1;
           }
           return 0;
-        });    
+        });
       },
       title(fileInfos) {
         return fileInfos.slice().sort((fileInfo1, fileInfo2) => {

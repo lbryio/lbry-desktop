@@ -33,9 +33,7 @@ class ModalEmailCollection extends React.PureComponent {
           <div className="card__content">{this.renderInner()}</div>
           <div className="card__content">
             <div className="help">
-              {`${__(
-                'Your email may be used to sync usage data across devices.'
-              )} `}
+              {`${__('Your email may be used to sync usage data across devices.')} `}
             </div>
           </div>
         </section>

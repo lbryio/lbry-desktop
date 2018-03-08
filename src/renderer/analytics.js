@@ -39,15 +39,15 @@ const analytics: Analytics = {
     }
     analyticsEnabled = enabled;
   },
-  apiLog: (uri: string, outpoint: string, claim_id: string): void => {
-    if(analyticsEnabled) {
+  apiLog: (uri: string, outpoint: string, claimId: string): void => {
+    if (analyticsEnabled) {
       Lbryio.call('file', 'view', {
         uri,
-        outpoint: outpoint,
-        claim_id: claim_id,
+        outpoint,
+        claim_id: claimId,
       }).catch(() => {});
     }
-  }
+  },
 };
 
 export default analytics;

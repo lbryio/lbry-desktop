@@ -69,7 +69,7 @@ ipcRenderer.on('window-is-focused', () => {
 
 document.addEventListener('dragover', event => {
   event.preventDefault();
-})
+});
 document.addEventListener('drop', event => {
   event.preventDefault();
 });
