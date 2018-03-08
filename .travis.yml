@@ -43,8 +43,9 @@ branches:
     - "/^v\\d+\\.\\d+\\.\\d+$/"
 addons:
   artifacts:
+    s3_region: us-east-2
     working_dir: dist
     paths:
      - $(git ls-files -o dist/{*.dmg,*.exe,*.AppImage} | tr "\n" ":")
     target_paths:
-     - /commit-${TRAVIS_COMMIT:0:7}_build-${TRAVIS_BUILD_NUMBER}_tag-${TRAVIS_TAG}
+     - /app/commit-${TRAVIS_COMMIT:0:7}_build-${TRAVIS_BUILD_NUMBER}_tag-${TRAVIS_TAG}
