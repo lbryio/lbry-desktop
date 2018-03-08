@@ -50,6 +50,25 @@
   }
 }
 
+// For slide down animation on the search modal
+// Slide down isn't possible without doing a lot of re-work to the modal component
+.ReactModal__Overlay {
+  .modal--fullscreen {
+    transition: bottom 250ms ease-in-out;
+    bottom: 100vh;
+  }
+
+  &--after-open {
+    .modal--fullscreen {
+      bottom: 0;
+    }
+  }
+
+  &--before-close {
+    bottom: 100vh;
+  }
+}
+
 .modal__header {
   margin-bottom: $spacing-vertical * 2/3;
   text-align: center;
@@ -88,6 +107,7 @@
   max-width: none;
   width: var(--modal-width);
 }
+
 .error-modal__error-list {
   /*shitty hack/temp fix for long errors making modal unusable*/
   border: 1px solid var(--input-border-color);
