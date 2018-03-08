@@ -108,6 +108,7 @@ $width-page-constrained: 800px;
   --search-bg-color: #fff;
   --search-active-color: var(--header-active-color);
   --search-active-shadow: 0 6px 9px -2px var(--color-grey--dark);
+  --search-modal-input-height: 70px;
 
   /* Table */
   --table-border: 1px solid #e2e2e2;
@@ -120,6 +121,9 @@ $width-page-constrained: 800px;
   --card-max-width: $width-page-constrained;
   --card-radius: 2px;
   --card-small-width: $spacing-vertical * 10;
+
+  /* File Tile Card */
+  --file-tile--media-size: 60px;
 
   /* Modal */
   --modal-width: 440px;

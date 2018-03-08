@@ -18,6 +18,7 @@ import ModalEmailCollection from '../modalEmailCollection';
 import ModalPhoneCollection from '../modalPhoneCollection';
 import ModalSendTip from '../modalSendTip';
 import ModalPublish from '../modalPublish';
+import ModalSearch from '../modalSearch';
 import * as modals from 'constants/modal_types';
 
 class ModalRouter extends React.PureComponent {
@@ -141,6 +142,8 @@ class ModalRouter extends React.PureComponent {
         return <ModalSendTip {...modalProps} />;
       case modals.PUBLISH:
         return <ModalPublish {...modalProps} />;
+      case modals.SEARCH:
+        return <ModalSearch {...modalProps} />;
       default:
         return null;
     }

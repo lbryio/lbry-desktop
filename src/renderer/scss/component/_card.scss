@@ -27,11 +27,6 @@
 
 .card--link {
   cursor: pointer;
-
-  // TODO: hover animations
-  // :hover {
-  //
-  // }
 }
 
 .card--pending {
@@ -95,13 +90,16 @@
 }
 
 .card__title--small {
-  font-weight: 600;
+  font-weight: 700;
   font-size: 0.9em;
+  line-height: 1.3;
 }
 
 .card__subtitle {
+  display: flex;
   color: var(--color-help);
   font-size: 0.85em;
+  font-weight: 700;
   padding-top: $spacing-vertical * 1/3;
 }
 
@@ -137,6 +135,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.card__channel-info {
+  padding: $spacing-vertical * 2 0;
 }
 
 .card__content {

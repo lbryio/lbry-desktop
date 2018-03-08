@@ -7,7 +7,7 @@ import { BusyMessage } from 'component/common.js';
 
 const sortFunctions = {
   date: (fileInfos: Array<FileInfo>) => {
-    return fileInfos.slice().reverse();
+    return fileInfos.slice();
   },
   title: (fileInfos) => {
     return fileInfos.slice().sort((fileInfo1, fileInfo2) => {
@@ -44,6 +44,7 @@ type FileInfo = {
 }
 
 type Props = {
+  hideFilter: boolean,
   fileInfos: Array<FileInfo>
 }
 
@@ -52,6 +53,10 @@ type State = {
 }
 
 class FileList extends React.PureComponent<Props, State> {
+  static defaultProps = {
+    hideFilter: false
+  }
+
   constructor(props: Props) {
     super(props);
 
@@ -81,7 +86,7 @@ class FileList extends React.PureComponent<Props, State> {
   }
 
   render() {
-    const { fileInfos } = this.props;
+    const { fileInfos, hideFilter } = this.props;
     const { sortBy } = this.state;
     const content = [];
 
@@ -119,10 +124,12 @@ class FileList extends React.PureComponent<Props, State> {
     return (
       <section>
         <div className="file-list__sort">
-          <FormField prefix={__('Sort by')} type="select" value={sortBy} onChange={this.handleSortChanged}>
-            <option value="date">{__('Date')}</option>
-            <option value="title">{__('Title')}</option>
-          </FormField>
+          {!hideFilter && (
+            <FormField prefix={__('Sort by')} type="select" value={sortBy} onChange={this.handleSortChanged}>
+              <option value="date">{__('Date')}</option>
+              <option value="title">{__('Title')}</option>
+            </FormField>
+          )}
         </div>
         <div className="file-list">
           {content}

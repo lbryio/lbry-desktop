@@ -5,6 +5,7 @@ import * as React from 'react';
 import ReactModal from 'react-modal';
 import Button from 'component/link/index';
 import app from 'app';
+import classnames from 'classnames';
 
 type ModalProps = {
   type: string,
@@ -21,6 +22,7 @@ type ModalProps = {
   extraContent?: React.Node,
   expandButtonLabel?: string,
   hideButtonLabel?: string,
+  fullScreen: boolean
 };
 
 export class Modal extends React.PureComponent<ModalProps> {
@@ -33,34 +35,52 @@ export class Modal extends React.PureComponent<ModalProps> {
     /* eslint-enable no-underscore-dangle */
     confirmButtonDisabled: false,
     abortButtonDisabled: false,
+    fullScreen: false,
   };
 
   render() {
+    const {
+      children,
+      type,
+      confirmButtonLabel,
+      confirmButtonDisabled,
+      onConfirmed,
+      abortButtonLabel,
+      abortButtonDisabled,
+      onAborted,
+      fullScreen,
+      className,
+      overlayClassName,
+      ...modalProps
+    } = this.props;
     return (
       <ReactModal
-        onCloseRequested={this.props.onAborted || this.props.onConfirmed}
-        {...this.props}
-        className={`${this.props.className || ''} modal`}
+        {...modalProps}
+        onCloseRequested={onAborted || onConfirmed}
+        className={classnames(className, {
+          'modal': !fullScreen,
+          'modal--fullscreen': fullScreen,
+        })}
         overlayClassName={
-          ![null, undefined, ''].includes(this.props.overlayClassName)
-            ? this.props.overlayClassName
+          ![null, undefined, ''].includes(overlayClassName)
+            ? overlayClassName
             : 'modal-overlay'
         }
       >
-        <div>{this.props.children}</div>
-        {this.props.type === 'custom' ? null : ( // custom modals define their own buttons
+        <div>{children}</div>
+        {type === 'custom' ? null : ( // custom modals define their own buttons
           <div className="card__actions card__actions--center">
             <Button
-              label={this.props.confirmButtonLabel}
-              disabled={this.props.confirmButtonDisabled}
-              onClick={this.props.onConfirmed}
+              label={confirmButtonLabel}
+              disabled={confirmButtonDisabled}
+              onClick={onConfirmed}
             />
-            {this.props.type === 'confirm' ? (
+            {type === 'confirm' ? (
               <Button
                 alt
-                label={this.props.abortButtonLabel}
-                disabled={this.props.abortButtonDisabled}
-                onClick={this.props.onAborted}
+                label={abortButtonLabel}
+                disabled={abortButtonDisabled}
+                onClick={onAborted}
               />
             ) : null}
           </div>

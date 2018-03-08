@@ -191,7 +191,7 @@ export default class Autocomplete extends React.Component {
       padding: '2px 0',
       fontSize: '90%',
       position: 'fixed',
-      overflow: 'auto',
+      overflow: 'hidden',
       maxHeight: '50%', // TODO: don't cheat, let it flow to the bottom,
     },
     autoHighlight: true,
@@ -324,18 +324,16 @@ export default class Autocomplete extends React.Component {
     Enter(event) {
       // Key code 229 is used for selecting items from character selectors (Pinyin, Kana, etc)
       if (event.keyCode !== 13) return;
-      if (!this.isOpen()) {
-        // menu is closed so there is no selection to accept -> do nothing
-      } else if (this.state.highlightedIndex == null) {
-        // input has focus but no menu item is selected + enter is hit -> close the menu, highlight whatever's in input
-        this.setState(
-          {
-            isOpen: false,
-          },
-          () => {
-            this.refs.input.select();
-          }
-        );
+
+      const inputValue = this.refs.input.value;
+      if (!inputValue) return;
+
+      if (!this.isOpen() || this.state.highlightedIndex == null) {
+        // User pressed enter before any search suggestions were populated
+        this.setState({ isOpen: false }, () => {
+          this.props.onSelect(inputValue);
+          this.refs.input.blur();
+        });
       } else {
         // text entered + menu item has been highlighted + enter is hit -> update value to that of selected menu item, close the menu
         event.preventDefault();
@@ -347,9 +345,8 @@ export default class Autocomplete extends React.Component {
             highlightedIndex: null,
           },
           () => {
-            // this.refs.input.focus() // TODO: file issue
-            this.refs.input.setSelectionRange(value.length, value.length);
             this.props.onSelect(value, item);
+            this.refs.input.blur();
           }
         );
       }
@@ -525,6 +522,10 @@ export default class Autocomplete extends React.Component {
       }, 0);
       return;
     }
+
+    // Highlight
+    this.refs.input.select();
+
     this.setState({ isOpen: true });
     const { onFocus } = this.props.inputProps;
     if (onFocus) {

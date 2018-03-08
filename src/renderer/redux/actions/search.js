@@ -1,20 +1,15 @@
 import * as ACTIONS from 'constants/action_types';
-import { normalizeURI, buildURI } from 'lbryURI';
+import * as SEARCH_TYPES from 'constants/search';
+import { normalizeURI, buildURI, parseURI, isURIValid } from 'lbryURI';
 import { doResolveUri } from 'redux/actions/content';
 import { doNavigate } from 'redux/actions/navigation';
 import { selectCurrentPage } from 'redux/selectors/navigation';
+import { makeSelectSearchUris } from 'redux/selectors/search';
 import batchActions from 'util/batchActions';
+import handleFetchResponse from 'util/handle-fetch';
 
-// TODO: this should be in a util
-const handleSearchApiResponse = searchResponse =>
-  searchResponse.status === 200
-    ? Promise.resolve(searchResponse.json())
-    : Promise.reject(new Error(searchResponse.statusText));
-
-export const doSearch = rawQuery => (dispatch, getState) => {
+export const doSearch = (rawQuery) => (dispatch, getState) => {
   const state = getState();
-  const page = selectCurrentPage(state);
-
   const query = rawQuery.replace(/^lbry:\/\//i, '');
 
   if (!query) {
@@ -24,107 +19,160 @@ export const doSearch = rawQuery => (dispatch, getState) => {
     return;
   }
 
+  // If we have already searched for something, we don't need to do anything
+  const urisForQuery = makeSelectSearchUris(query)(state);
+  if (urisForQuery && !!urisForQuery.length) {
+    return;
+  }
+
+  // If the user is on the file page with a pre-populated uri and they select
+  // the search option without typing anything, searchQuery will be empty
+  // We need to populate it so the input is filled on the search page
+  if (!state.search.searchQuery) {
+    dispatch({
+      type: ACTIONS.UPDATE_SEARCH_QUERY,
+      data: { searchQuery: query },
+    })
+  }
+
   dispatch({
-    type: ACTIONS.SEARCH_START,
-    data: { query },
+    type: ACTIONS.SEARCH_START
   });
 
-  if (page !== 'search') {
-    dispatch(doNavigate('search', { query }));
-  } else {
-    fetch(`https://lighthouse.lbry.io/search?s=${query}`)
-      .then(handleSearchApiResponse)
-      .then(data => {
-        const uris = [];
-        const actions = [];
+  fetch(`https://lighthouse.lbry.io/search?s=${query}`)
+    .then(handleFetchResponse)
+    .then(data => {
+      const uris = [];
+      const actions = [];
 
-        data.forEach(result => {
-          const uri = buildURI({
-            name: result.name,
-            claimId: result.claimId,
-          });
-          actions.push(doResolveUri(uri));
-          uris.push(uri);
+      data.forEach(result => {
+        const uri = buildURI({
+          name: result.name,
+          claimId: result.claimId,
         });
-
-        actions.push({
-          type: ACTIONS.SEARCH_SUCCESS,
-          data: {
-            query,
-            uris,
-          },
-        });
-        dispatch(batchActions(...actions));
-      })
-      .catch(() => {
-        dispatch({
-          type: ACTIONS.SEARCH_FAIL,
-        });
+        actions.push(doResolveUri(uri));
+        uris.push(uri);
       });
-  }
+
+      actions.push({
+        type: ACTIONS.SEARCH_SUCCESS,
+        data: {
+          query,
+          uris,
+        },
+      });
+      dispatch(batchActions(...actions));
+    })
+    .catch(() => {
+      dispatch({
+        type: ACTIONS.SEARCH_FAIL,
+      });
+    });
 };
 
-export const updateSearchQuery = searchQuery => ({
-  type: ACTIONS.UPDATE_SEARCH_QUERY,
-  data: { searchQuery },
-});
-
-export const getSearchSuggestions = value => dispatch => {
-  dispatch({ type: ACTIONS.SEARCH_SUGGESTIONS_START });
-  if (!value) {
+export const doUpdateSearchQuery =
+  (query: string, shouldSkipSuggestions: ?boolean) => dispatch => {
     dispatch({
-      type: ACTIONS.GET_SEARCH_SUGGESTIONS_SUCCESS,
-      data: [],
+      type: ACTIONS.UPDATE_SEARCH_QUERY,
+      data: { query },
+    })
+
+    // Don't fetch new suggestions if the user just added a space
+    if (!query.endsWith(" ") || !shouldSkipSuggestions) {
+      dispatch(getSearchSuggestions(query));
+    }
+  };
+
+export const getSearchSuggestions = (value: string) => (dispatch, getState) => {
+  const { search: searchState } = getState();
+  const query = value.trim();
+
+  const isPrefix = () => {
+    return query === "@"
+      || query === "lbry:"
+      || query === "lbry:/"
+      || query === "lbry://"
+  }
+
+  if (!query || isPrefix()) {
+    dispatch({
+      type: ACTIONS.UPDATE_SEARCH_SUGGESTIONS,
+      data: { suggestions: [] },
     });
     return;
   }
 
-  // This should probably be more robust
-  let searchValue = value;
-  if (searchValue.startsWith('lbry://')) {
-    searchValue = searchValue.slice(7);
+  let suggestions = [];
+  try {
+    // If the user is about to manually add the claim id ignore it until they
+    // actually add one. This would hardly ever happen, but then the search
+    // suggestions won't change just from adding a '#' after a uri
+    let uriQuery = query;
+    if (uriQuery.endsWith("#")) {
+      uriQuery = uriQuery.slice(0, -1);
+    }
+
+    const uri = normalizeURI(uriQuery);
+    const { name, isChannel } = parseURI(uri);
+
+    suggestions.push({
+      value: uri,
+      shorthand: isChannel ? name.slice(1) : name,
+      type: isChannel ? SEARCH_TYPES.CHANNEL : SEARCH_TYPES.FILE
+    }, {
+      value: name,
+      type: SEARCH_TYPES.SEARCH
+    });
+
+    // If it's a valid url, don't fetch any extra search results
+    return dispatch({
+      type: ACTIONS.UPDATE_SEARCH_SUGGESTIONS,
+      data: { suggestions },
+    });
+  } catch (e) {
+    suggestions.push({
+      value: query,
+      type: SEARCH_TYPES.SEARCH
+    })
   }
 
-  // need to handle spaces in the query?
-  fetch(`https://lighthouse.lbry.io/autocomplete?s=${searchValue}`)
-    .then(handleSearchApiResponse)
-    .then(suggestions => {
-      const formattedSuggestions = suggestions.slice(0, 5).map(suggestion => {
+  // Populate the current search query suggestion before fetching results
+  dispatch({
+    type: ACTIONS.UPDATE_SEARCH_SUGGESTIONS,
+    data: { suggestions },
+  });
+
+  // strip out any basic stuff for more accurate search results
+  let searchValue = value.replace(/lbry:\/\//g, "").replace(/-/g, " ");
+  if (searchValue.includes('#')) {
+    // This should probably be more robust, but I think it's fine for now
+    // Remove everything after # to get rid of the claim id
+    searchValue = searchValue.substring(0, searchValue.indexOf('#'));
+  }
+
+  return fetch(`https://lighthouse.lbry.io/autocomplete?s=${searchValue}`)
+    .then(handleFetchResponse)
+    .then(apiSuggestions => {
+      const formattedSuggestions = apiSuggestions.slice(0, 6).map(suggestion => {
         // This will need to be more robust when the api starts returning lbry uris
         const isChannel = suggestion.startsWith('@');
         const suggestionObj = {
-          value: suggestion,
-          label: isChannel ? suggestion.slice(1) : suggestion,
-          icon: isChannel ? 'AtSign' : 'Search',
+          value: isChannel ? `lbry://${suggestion}` : suggestion,
+          shorthand: isChannel ? suggestion.slice(1) : '',
+          type: isChannel ? 'channel' : 'search',
         };
 
         return suggestionObj;
       });
 
-      // Should we add lbry://{query} as the first result?
-      // If it's not a valid uri, then add a "search for {query}" result
-      const searchLabel = `Search for "${value}"`;
-      try {
-        const uri = normalizeURI(value);
-        formattedSuggestions.unshift(
-          { label: uri, value: uri, icon: 'Compass' },
-          { label: searchLabel, value: `${value}?search`, icon: 'Search' }
-        );
-      } catch (e) {
-        if (value) {
-          formattedSuggestions.unshift({ label: searchLabel, value, icon: 'Search' });
-        }
-      }
-
-      return dispatch({
-        type: ACTIONS.GET_SEARCH_SUGGESTIONS_SUCCESS,
-        data: formattedSuggestions,
+      suggestions = suggestions.concat(formattedSuggestions);
+      dispatch({
+        type: ACTIONS.UPDATE_SEARCH_SUGGESTIONS,
+        data: { suggestions },
       });
     })
-    .catch(err =>
-      dispatch({
-        type: ACTIONS.GET_SEARCH_SUGGESTIONS_FAIL,
-        data: err,
-      })
-    );
+    .catch(() => {
+      // If the fetch fails, do nothing
+      // Basic search suggestions are already populated at this point
+    });
 };

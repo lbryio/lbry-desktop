@@ -18,3 +18,4 @@ export const AFFIRM_PURCHASE = 'affirm_purchase';
 export const CONFIRM_CLAIM_REVOKE = 'confirm_claim_revoke';
 export const SEND_TIP = 'send_tip';
 export const PUBLISH = 'publish';
+export const SEARCH = 'search';

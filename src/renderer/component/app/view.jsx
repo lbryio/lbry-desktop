@@ -60,9 +60,7 @@ class App extends React.PureComponent<Props> {
 
   componentWillUnmount() {
     if (this.mainContent) {
-      // having issues with this
-      // $FlowFixMe
-      this.mainContent.removeEventListener('scroll');
+      this.mainContent.removeEventListener('scroll', this.scrollListener);
     }
   }
 

@@ -5,12 +5,12 @@ import classnames from 'classnames';
 import throttle from 'util/throttle';
 import Icon from 'component/common/icon';
 import Autocomplete from './internal/autocomplete';
+import { parseQueryParams } from 'util/query_params';
 
 type Props = {
   updateSearchQuery: string => void,
-  getSearchSuggestions: string => void,
   onSearch: string => void,
-  onSubmit: string => void,
+  onSubmit: (string, {}) => void,
   searchQuery: ?string,
   isActive: boolean,
   address: ?string,
@@ -23,8 +23,6 @@ class WunderBar extends React.PureComponent<Props> {
 
     (this: any).handleSubmit = this.handleSubmit.bind(this);
     (this: any).handleChange = this.handleChange.bind(this);
-    (this: any).focus = this.focus.bind(this);
-    (this: any).throttledGetSearchSuggestions = throttle(this.props.getSearchSuggestions, 1000);
     this.input = undefined;
   }
 
@@ -33,47 +31,63 @@ class WunderBar extends React.PureComponent<Props> {
     const { value } = e.target;
 
     updateSearchQuery(value);
-    this.throttledGetSearchSuggestions(value);
   }
 
-  handleSubmit(value: string) {
-    if (!value) {
+  handleSubmit(value: string, suggestion?: { value: string, type: string }) {
+    debugger;
+    const { onSubmit, onSearch } = this.props;
+    const query = value.trim();
+    const getParams = () => {
+      const parts = query.split('?');
+      const value = parts.shift();
+
+      let extraParams = {};
+      if (parts.length > 0){
+        extraParams = parseQueryParams(parts.join(''));
+      }
+
+      return extraParams;
+    }
+
+    // User selected a suggestion
+    if (suggestion) {
+      if (suggestion.type === 'search') {
+        onSearch(query);
+      } else {
+        const params = getParams();
+        const uri = normalizeURI(query);
+        onSubmit(uri, params);
+      }
+
       return;
     }
 
-    const { onSubmit, onSearch } = this.props;
-
-    // if they choose the "search for {value}" in the suggestions
-    // it will contain the {query}?search
-    const choseDoSuggestedSearch = value.endsWith('?search');
-
-    let searchValue = value;
-    if (choseDoSuggestedSearch) {
-      searchValue = value.slice(0, -7); // trim off ?search
-    }
-
-    if (this.input) {
-      this.input.blur();
-    }
-
+    // Currently no suggestion is highlighted. The user may have started
+    // typing, then lost focus and came back later on the same page
     try {
-      const uri = normalizeURI(value);
-      onSubmit(uri);
+      const uri = normalizeURI(query);
+      const params = getParams();
+      onSubmit(uri, params);
     } catch (e) {
-      // search query isn't a valid uri
-      onSearch(searchValue);
+      onSearch(query);
     }
+
+    return;
   }
 
-  focus() {
-    const { input } = this;
-    if (input) {
-      input.focus();
+
+  getSuggestionIcon = (type: string) => {
+    switch (type) {
+      case 'file':
+        return 'Compass'
+      case 'channel':
+        return 'AtSign'
+      default:
+        return 'Search'
     }
   }
 
   input: ?HTMLInputElement;
-  throttledGetSearchSuggestions: string => void;
 
   render() {
     const { searchQuery, isActive, address, suggestions } = this.props;
@@ -84,18 +98,15 @@ class WunderBar extends React.PureComponent<Props> {
 
     return (
       <div
-        className={classnames('header__wunderbar', {
-          'header__wunderbar--active': isActive,
+        className={classnames('wunderbar', {
+          'wunderbar--active': isActive,
         })}
       >
         <Icon icon="Search" />
         <Autocomplete
           autoHighlight
-          ref={ref => {
-            this.input = ref;
-          }}
           wrapperStyle={{ flex: 1 }}
-          value={wunderbarValue}
+          value={wunderbarValue || ""}
           items={suggestions}
           getItemValue={item => item.value}
           onChange={this.handleChange}
@@ -107,15 +118,20 @@ class WunderBar extends React.PureComponent<Props> {
               placeholder="Search for videos, music, games and more"
             />
           )}
-          renderItem={(item, isHighlighted) => (
+          renderItem={({ value, type, shorthand }, isHighlighted) => (
             <div
-              key={item.value}
+              key={value}
               className={classnames('wunderbar__suggestion', {
                 'wunderbar__active-suggestion': isHighlighted,
               })}
             >
-              <Icon icon={item.icon} />
-              <span className="wunderbar__suggestion-label">{item.label}</span>
+              <Icon icon={this.getSuggestionIcon(type)} />
+              <span className="wunderbar__suggestion-label">{shorthand || value}</span>
+              {(true || isHighlighted) && (
+                <span className="wunderbar__suggestion-label--action">
+                  {"-  "}{type === "search" ? "Search" : value}
+                </span>
+              )}
             </div>
           )}
         />

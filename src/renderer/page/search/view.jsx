@@ -1,49 +1,48 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { isURIValid, normalizeURI } from 'lbryURI';
 import FileTile from 'component/fileTile';
 import FileListSearch from 'component/fileListSearch';
 import ToolTip from 'component/common/tooltip';
 import Page from 'component/page';
+import debounce from 'util/debounce';
 
 type Props = {
   query: ?string,
+  updateSearchQuery: (string) => void,
 };
 
 class SearchPage extends React.PureComponent<Props> {
   render() {
-    const { query } = this.props;
-
+    const { query, updateSearchQuery } = this.props;
     return (
-      <Page>
-        {isURIValid(query) ? (
-          <section className="section-spaced">
-            <h3 className="card-row__header">
-              {__('Exact URL')}{' '}
+      <Page noPadding>
+        <div className="search__wrapper">
+          <input
+            className="search__input"
+            value={query}
+            placeholder={__("Search for anything...")}
+            onChange={(event) => updateSearchQuery(event.target.value)}
+          />
+
+        {isURIValid(query) && (
+          <React.Fragment>
+            <div className="file-list__header">
+              {__('Exact URL')}
               <ToolTip
                 label="?"
                 body={__('This is the resolution of a LBRY URL and not controlled by LBRY Inc.')}
                 className="tooltip--header"
               />
-            </h3>
-            <FileTile uri={normalizeURI(query)} showEmpty={FileTile.SHOW_EMPTY_PUBLISH} />
-          </section>
-        ) : (
-          ''
+            </div>
+            <FileTile fullWidth uri={normalizeURI(query)} showUri />
+          </React.Fragment>
         )}
-        <section className="section-spaced">
-          <h3 className="card-row__header">
-            {__('Search Results for')} {query}{' '}
-            <ToolTip
-              label="?"
-              body={__('These search results are provided by LBRY, Inc.')}
-              className="tooltip--header"
-            />
-          </h3>
-          <FileListSearch query={query} />
-        </section>
+        <FileListSearch query={query} />
+      </div>
       </Page>
     );
   }
 }
+
 export default SearchPage;

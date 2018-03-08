@@ -9,3 +9,36 @@
   display: flex;
   justify-content: flex-end;
 }
+
+.file-list__header {
+  margin-top: $spacing-vertical * 4/3;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.file-tile {
+  display: flex;
+  margin-top: $spacing-vertical;
+  max-width: 260px;
+  height: var(--file-tile--media-size);
+
+  .card__media {
+    flex: 0 0 var(--file-tile--media-size);
+  }
+
+  .card__subtitle {
+    line-height: 1;
+  }
+}
+
+.file-tile--fullwidth {
+  max-width: none;
+}
+
+.file-tile__info {
+  margin-left: $spacing-vertical * 1/3;
+}
+
+.file-tile__uri {
+  color: var(--color-grey-dark);
+}

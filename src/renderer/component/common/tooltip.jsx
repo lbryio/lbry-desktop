@@ -44,7 +44,7 @@ class ToolTip extends React.PureComponent<Props, State> {
 
     return (
       <span className="tooltip">
-        <Button fakeLink className="help tooltip__link" onClick={this.handleClick}>
+        <Button noUnderline fakeLink className="help tooltip__link" onClick={this.handleClick}>
           {label}
           {showTooltip && <Icon icon="X" />}
         </Button>

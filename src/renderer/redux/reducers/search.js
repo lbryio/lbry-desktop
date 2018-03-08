@@ -2,18 +2,45 @@
 import * as ACTIONS from 'constants/action_types';
 import { handleActions } from 'util/redux-utils';
 
+type SearchSuccess = {
+  type: ACTIONS.SEARCH_SUCCESS,
+  data: {
+    query: string,
+    uris: Array<string>
+  }
+}
+
+type UpdateSearchQuery = {
+  type: ACTIONS.UPDATE_SEARCH_QUERY,
+  data: {
+    query: string
+  }
+}
+
+type SearchSuggestion = {
+  value: string,
+  shorthand: string,
+  type: string,
+}
+
+type UpdateSearchSuggestions = {
+  type: ACTIONS.UPDATE_SEARCH_SUGGESTIONS,
+  data: {
+    suggestions: Array<SearchSuggestion>
+  }
+}
+
 type SearchState = {
   isActive: boolean,
   searchQuery: string,
-  searchingForSuggestions: boolean,
-  suggestions: Array<string>,
+  suggestions: Array<SearchSuggestion>,
   urisByQuery: {},
 };
+
 
 const defaultState = {
   isActive: false,
   searchQuery: '', // needs to be an empty string for input focusing
-  searchingForSuggestions: false,
   suggestions: [],
   urisByQuery: {},
 };
@@ -24,7 +51,7 @@ export default handleActions(
       ...state,
       searching: true,
     }),
-    [ACTIONS.SEARCH_SUCCESS]: (state: SearchState, action): SearchState => {
+    [ACTIONS.SEARCH_SUCCESS]: (state: SearchState, action: SearchSuccess): SearchState => {
       const { query, uris } = action.data;
 
       return {
@@ -39,27 +66,16 @@ export default handleActions(
       searching: false,
     }),
 
-    [ACTIONS.UPDATE_SEARCH_QUERY]: (state: SearchState, action): SearchState => ({
+    [ACTIONS.UPDATE_SEARCH_QUERY]: (state: SearchState, action: UpdateSearchQuery): SearchState => ({
       ...state,
-      searchQuery: action.data.searchQuery,
-      suggestions: [],
+      searchQuery: action.data.query,
       isActive: true,
     }),
 
-    [ACTIONS.SEARCH_SUGGESTIONS_START]: (state: SearchState): SearchState => ({
+    [ACTIONS.UPDATE_SEARCH_SUGGESTIONS]:
+    (state: SearchState, action: UpdateSearchSuggestions): SearchState => ({
       ...state,
-      searchingForSuggestions: true,
-      suggestions: [],
-    }),
-    [ACTIONS.GET_SEARCH_SUGGESTIONS_SUCCESS]: (state: SearchState, action): SearchState => ({
-      ...state,
-      searchingForSuggestions: false,
-      suggestions: action.data,
-    }),
-    [ACTIONS.GET_SEARCH_SUGGESTIONS_FAIL]: (state: SearchState): SearchState => ({
-      ...state,
-      searchingForSuggestions: false,
-      // error, TODO: figure this out on the search page
+      suggestions: action.data.suggestions,
     }),
 
     // clear the searchQuery on back/forward

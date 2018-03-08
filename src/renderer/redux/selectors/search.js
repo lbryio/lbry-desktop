@@ -3,6 +3,10 @@ import { createSelector } from 'reselect';
 
 export const selectState = state => state.search || {};
 
+export const selectSearchValue = createSelector(selectState, state => {
+  return state.searchQuery;
+});
+
 export const selectSearchQuery = createSelector(
   selectCurrentPage,
   selectCurrentParams,
@@ -29,10 +33,8 @@ export const selectWunderBarAddress = createSelector(
     // or show the search query
     if (page === 'show') {
       return params.uri;
-    } else if (page === 'search') {
+    } else {
       return query;
     }
-
-    return '';
   }
 );
