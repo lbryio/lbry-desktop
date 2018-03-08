@@ -1,8 +1,13 @@
 // @flow
 import mixpanel from 'mixpanel-browser';
 import Lbryio from 'lbryio';
+import isDev from 'electron-is-dev';
 
-mixpanel.init('691723e855cabb9d27a7a79002216967');
+if (isDev) {
+  mixpanel.init('691723e855cabb9d27a7a79002216967');
+} else {
+  mixpanel.init('af5c6b8110068fa4f5c4600c81f05e60');
+}
 
 type Analytics = {
   track: (string, ?Object) => void,
