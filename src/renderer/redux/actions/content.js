@@ -22,6 +22,7 @@ import { selectBalance } from 'redux/selectors/wallet';
 import batchActions from 'util/batchActions';
 import setBadge from 'util/setBadge';
 import setProgressBar from 'util/setProgressBar';
+import analytics from 'analytics';
 
 const DOWNLOAD_POLL_INTERVAL = 250;
 
@@ -227,11 +228,7 @@ export function doDownloadFile(uri, streamInfo) {
   return dispatch => {
     dispatch(doStartDownload(uri, streamInfo.outpoint));
 
-    Lbryio.call('file', 'view', {
-      uri,
-      outpoint: streamInfo.outpoint,
-      claim_id: streamInfo.claim_id,
-    }).catch(() => {});
+    analytics.apiLog(uri, streamInfo.output, streamInfo.claim_id);
 
     dispatch(doClaimEligiblePurchaseRewards());
   };
