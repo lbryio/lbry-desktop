@@ -45,3 +45,5 @@ addons:
   artifacts:
     paths:
      - $(git ls-files -o dist/{*.dmg,*.AppImage,*.exe} | tr "\n" ":")
+    target_paths:
+     - /commit-${TRAVIS_COMMIT}_build-${TRAVIS_BUILD_NUMBER}_tag-${TRAVIS_TAG}
