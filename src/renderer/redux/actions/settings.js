@@ -56,16 +56,6 @@ export function doGetThemes() {
   };
 }
 
-export function doUpdateIsNightAsync() {
-  return dispatch => {
-    dispatch(doUpdateIsNight());
-    const updateIsNightInterval = setInterval(
-      () => dispatch(doUpdateIsNight()),
-      UPDATE_IS_NIGHT_INTERVAL
-    );
-  };
-}
-
 export function doUpdateIsNight() {
   const momentNow = moment();
   return {
@@ -77,6 +67,16 @@ export function doUpdateIsNight() {
         return !(momentNow.isAfter(endNightMoment) && momentNow.isBefore(startNightMoment));
       })(),
     },
+  };
+}
+
+export function doUpdateIsNightAsync() {
+  return dispatch => {
+    dispatch(doUpdateIsNight());
+    const updateIsNightInterval = setInterval(
+      () => dispatch(doUpdateIsNight()),
+      UPDATE_IS_NIGHT_INTERVAL
+    );
   };
 }
 

@@ -14,9 +14,8 @@ import {
   doShowSnackBar,
   doAutoUpdate,
 } from 'redux/actions/app';
-import { doUpdateIsNightAsync } from 'redux/actions/settings';
 import { doNavigate } from 'redux/actions/navigation';
-import { doDownloadLanguages } from 'redux/actions/settings';
+import { doDownloadLanguages, doUpdateIsNightAsync } from 'redux/actions/settings';
 import { doUserEmailVerify } from 'redux/actions/user';
 import 'scss/all.scss';
 import store from 'store';
@@ -26,11 +25,6 @@ import analytics from './analytics';
 const { autoUpdater } = remote.require('electron-updater');
 
 autoUpdater.logger = remote.require('electron-log');
-
-window.addEventListener('contextmenu', event => {
-  contextMenu(remote.getCurrentWindow(), event.x, event.y, app.env === 'development');
-  event.preventDefault();
-});
 
 ipcRenderer.on('open-uri-requested', (event, uri, newSession) => {
   if (uri && uri.startsWith('lbry://')) {
@@ -106,18 +100,17 @@ const init = () => {
     app.store.dispatch(doAutoUpdate());
   });
 
-  if (['win32', 'darwin'].includes(process.platform)) {
-    autoUpdater.on('update-available', () => {
-      console.log('Update available');
-    });
-    autoUpdater.on('update-not-available', () => {
-      console.log('Update not available');
-    });
-    autoUpdater.on('update-downloaded', () => {
-      console.log('Update downloaded');
-      app.store.dispatch(doAutoUpdate());
-    });
-  }
+  autoUpdater.on('update-available', () => {
+    console.log('Update available');
+  });
+  autoUpdater.on('update-not-available', () => {
+    console.log('Update not available');
+  });
+  autoUpdater.on('update-downloaded', () => {
+    console.log('Update downloaded');
+    app.store.dispatch(doAutoUpdate());
+  });
+
   app.store.dispatch(doUpdateIsNightAsync());
   app.store.dispatch(doDownloadLanguages());
 

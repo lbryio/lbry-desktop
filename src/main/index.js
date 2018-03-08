@@ -7,6 +7,7 @@ import url from 'url';
 import https from 'https';
 import { shell, app, ipcMain, dialog } from 'electron';
 import { autoUpdater } from 'electron-updater';
+import isDev from 'electron-is-dev';
 import Daemon from './Daemon';
 import createTray from './createTray';
 import createWindow from './createWindow';
@@ -72,7 +73,7 @@ app.on('ready', async () => {
     });
     daemon.launch();
   }
-  if (process.env.NODE_ENV === 'development') {
+  if (isDev) {
     await installExtensions();
   }
   rendererWindow = createWindow(appState);

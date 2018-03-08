@@ -1,5 +1,6 @@
 // @flow
 import { Menu, BrowserWindow } from 'electron';
+import isDev from 'electron-is-dev';
 
 export default (rendererWindow: BrowserWindow) => {
   rendererWindow.webContents.on('context-menu', (e, params) => {
@@ -17,7 +18,7 @@ export default (rendererWindow: BrowserWindow) => {
       },
     ];
 
-    if (process.env.NODE_ENV === 'development') {
+    if (isDev) {
       template.push(...developmentTemplateAddition);
     }
 
