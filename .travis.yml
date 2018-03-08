@@ -43,7 +43,6 @@ branches:
     - "/^v\\d+\\.\\d+\\.\\d+$/"
 addons:
   artifacts:
-    s3_region: us-east-2
     working_dir: dist
     paths:
      - $(git ls-files -o dist/{*.dmg,*.exe,*.AppImage} | tr "\n" ":")
