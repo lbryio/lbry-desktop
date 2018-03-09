@@ -30,11 +30,11 @@ export function parseURI(URI, requireProto = false) {
   // Break into components. Empty sub-matches are converted to null
   const componentsRegex = new RegExp(
     '^((?:lbry://)?)' + // protocol
-    '([^:$#/]*)' + // name (stops at the first separator or end)
+    '([^:$#/]*)' + // claim name (stops at the first separator or end)
     '([:$#]?)([^/]*)' + // modifier separator, modifier (stops at the first path separator or end)
       '(/?)(.*)' // path separator, path
   );
-  const [proto, name, modSep, modVal, pathSep, path] = componentsRegex
+  const [proto, claimName, modSep, modVal, pathSep, path] = componentsRegex
     .exec(URI)
     .slice(1)
     .map(match => match || null);
@@ -47,12 +47,12 @@ export function parseURI(URI, requireProto = false) {
   }
 
   // Validate and process name
-  if (!name) {
+  if (!claimName) {
     throw new Error(__('URI does not include name.'));
   }
 
-  const isChannel = name.startsWith('@');
-  const channelName = isChannel ? name.slice(1) : name;
+  const isChannel = claimName.startsWith('@');
+  const channelName = isChannel ? claimName.slice(1) : claimName;
 
   if (isChannel) {
     if (!channelName) {
@@ -66,7 +66,7 @@ export function parseURI(URI, requireProto = false) {
     contentName = path;
   }
 
-  const nameBadChars = (channelName || name).match(regexInvalidURI);
+  const nameBadChars = (channelName || claimName).match(regexInvalidURI);
   if (nameBadChars) {
     throw new Error(
       __(
@@ -128,7 +128,7 @@ export function parseURI(URI, requireProto = false) {
   }
 
   return {
-    name,
+    claimName,
     path,
     isChannel,
     ...(contentName ? { contentName } : {}),
@@ -148,24 +148,24 @@ export function parseURI(URI, requireProto = false) {
 export function buildURI(URIObj, includeProto = true) {
   const { claimId, claimSequence, bidPosition, contentName, channelName } = URIObj;
 
-  let { name, path } = URIObj;
+  let { claimName, path } = URIObj;
 
   if (channelName) {
     const channelNameFormatted = channelName.startsWith('@') ? channelName : `@${channelName}`;
-    if (!name) {
-      name = channelNameFormatted;
-    } else if (name !== channelNameFormatted) {
+    if (!claimName) {
+      claimName = channelNameFormatted;
+    } else if (claimName !== channelNameFormatted) {
       throw new Error(
         __(
-          'Received a channel content URI, but name and channelName do not match. "name" represents the value in the name position of the URI (lbry://name...), which for channel content will be the channel name. In most cases, to construct a channel URI you should just pass channelName and contentName.'
+          'Received a channel content URI, but claim name and channelName do not match. "name" represents the value in the name position of the URI (lbry://name...), which for channel content will be the channel name. In most cases, to construct a channel URI you should just pass channelName and contentName.'
         )
       );
     }
   }
 
   if (contentName) {
-    if (!name) {
-      name = contentName;
+    if (!claimName) {
+      claimName = contentName;
     } else if (!path) {
       path = contentName;
     }
@@ -180,7 +180,7 @@ export function buildURI(URIObj, includeProto = true) {
 
   return (
     (includeProto ? 'lbry://' : '') +
-    name +
+    claimName +
     (claimId ? `#${claimId}` : '') +
     (claimSequence ? `:${claimSequence}` : '') +
     (bidPosition ? `${bidPosition}` : '') +
@@ -192,8 +192,8 @@ export function buildURI(URIObj, includeProto = true) {
 export function normalizeURI(URI) {
   if (URI.match(/pending_claim/)) return URI;
 
-  const { name, path, bidPosition, claimSequence, claimId } = parseURI(URI);
-  return buildURI({ name, path, claimSequence, bidPosition, claimId });
+  const { claimName, path, bidPosition, claimSequence, claimId } = parseURI(URI);
+  return buildURI({ claimName, path, claimSequence, bidPosition, claimId });
 }
 
 export function isURIValid(URI) {
@@ -203,12 +203,12 @@ export function isURIValid(URI) {
   } catch (error) {
     return false;
   }
-  return parts && parts.name;
+  return parts && parts.claimName;
 }
 
-export function isNameValid(name, checkCase = true) {
+export function isNameValid(claimName, checkCase = true) {
   const regexp = new RegExp('^[a-z0-9-]+$', checkCase ? '' : 'i');
-  return regexp.test(name);
+  return regexp.test(claimName);
 }
 
 export function isURIClaimable(URI) {
@@ -220,7 +220,7 @@ export function isURIClaimable(URI) {
   }
   return (
     parts &&
-    parts.name &&
+    parts.claimName &&
     !parts.claimId &&
     !parts.bidPosition &&
     !parts.claimSequence &&

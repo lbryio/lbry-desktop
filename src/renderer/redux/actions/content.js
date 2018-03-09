@@ -277,9 +277,7 @@ export function doLoadVideo(uri) {
         });
         dispatch(
           doAlertError(
-            `Failed to download ${
-              uri
-            }, please try again. If this problem persists, visit https://lbry.io/faq/support for support.`
+            `Failed to download ${uri}, please try again. If this problem persists, visit https://lbry.io/faq/support for support.`
           )
         );
       });
@@ -436,17 +434,17 @@ export function doPlayUri(uri) {
 export function doFetchChannelListMine() {
   return dispatch => {
     dispatch({
-      type: ACTIONS.FETCH_CHANNEL_LIST_MINE_STARTED,
+      type: ACTIONS.FETCH_CHANNEL_LIST_STARTED,
     });
 
     const callback = channels => {
       dispatch({
-        type: ACTIONS.FETCH_CHANNEL_LIST_MINE_COMPLETED,
+        type: ACTIONS.FETCH_CHANNEL_LIST_COMPLETED,
         data: { claims: channels },
       });
     };
 
-    Lbry.channel_list_mine().then(callback);
+    Lbry.channel_list().then(callback);
   };
 }
 
@@ -523,7 +521,7 @@ export function doAbandonClaim(txid, nout) {
             claimId,
           },
         });
-        dispatch(doResolveUri(buildURI({ name, claimId })));
+        dispatch(doResolveUri(buildURI({ claimName: name, claimId })));
         dispatch(doFetchClaimListMine());
       } else {
         dispatch(doOpenModal(MODALS.TRANSACTION_FAILED));

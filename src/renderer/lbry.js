@@ -211,11 +211,11 @@ Lbry.getAppVersionInfo = () =>
 
 /**
  * Returns results from the file_list API method, plus dummy entries for pending publishes.
- * (If a real publish with the same name is found, the pending publish will be ignored and removed.)
+ * (If a real publish with the same claim name is found, the pending publish will be ignored and removed.)
  */
 Lbry.file_list = (params = {}) =>
   new Promise((resolve, reject) => {
-    const { name, channel_name: channelName, outpoint } = params;
+    const { claim_name: claimName, channel_name: channelName, outpoint } = params;
 
     /**
      * If we're searching by outpoint, check first to see if there's a matching pending publish.
@@ -234,10 +234,10 @@ Lbry.file_list = (params = {}) =>
       'file_list',
       params,
       fileInfos => {
-        removePendingPublishIfNeeded({ name, channelName, outpoint });
+        removePendingPublishIfNeeded({ name: claimName, channelName, outpoint });
 
         // if a naked file_list call, append the pending file infos
-        if (!name && !channelName && !outpoint) {
+        if (!claimName && !channelName && !outpoint) {
           const dummyFileInfos = Lbry.getPendingPublishes().map(pendingPublishToDummyFileInfo);
 
           resolve([...fileInfos, ...dummyFileInfos]);
