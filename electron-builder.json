@@ -4,7 +4,8 @@
   "publish": [{
     "provider": "s3",
     "bucket": "build.lbry.io",
-    "path": "app/release"
+    "path": "app/release",
+    "region": "us-east-1"
   }, "github"],
   "mac": {
     "target": "dmg",
