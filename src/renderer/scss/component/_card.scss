@@ -10,7 +10,7 @@
 }
 
 .card--section {
-  background-color: var(--color-white);
+  background-color: var(--card-bg);
   padding: $spacing-vertical;
   margin-top: $spacing-vertical * 2/3;
   box-shadow: var(--box-shadow-layer);
@@ -55,7 +55,7 @@
   background-size: cover;
   background-repeat: no-repeat;
   background-position: 50% 50%;
-  background-color: var(--color-placeholder);
+  background-color: var(--card-media-bg);
 }
 
 .card__media--autothumb {
@@ -146,14 +146,15 @@
 }
 
 .card__subtext-title {
-  color: var(--color-black);
+  color: inherit;
   margin-top: $spacing-vertical * 3/2;
   font-size: calc(var(--font-size-subtext-multiple) * 1.5em);
   font-weight: 700;
 }
 
 .card__subtext {
-  color: var(--color-grey-dark);
+  /* color: var(--color-grey-dark); */
+  opacity: 0.65;
   font-size: calc(var(--font-size-subtext-multiple) * 1em);
   padding-top: $spacing-vertical * 1/3;
   word-break: break-word;
@@ -255,6 +256,7 @@
 
 // TODO: come back to this
 // Do we want an opacity over the image?
+// Use a css var instead...
 .card--obscured {
   background-color: #e09898;
 }

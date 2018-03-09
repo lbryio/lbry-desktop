@@ -43,18 +43,19 @@
 .wunderbar__menu {
   max-width: 100px;
   overflow-x: hidden;
+  background: var(--search-menu-bg) !important;
 }
 
 .wunderbar__suggestion {
   padding: 10px;
-  background-color: var(--header-bg);
+  background-color: transparent;
   cursor: pointer;
   display: flex;
   align-items: center;
   text-overflow: ellipsis;
 
   &:not(:first-of-type) {
-    border-top: 1px solid var(--color-divider);
+    border-top: 1px solid var(--divider-color);
   }
 }
 
@@ -71,7 +72,7 @@
 }
 
 .wunderbar__active-suggestion {
-  background-color: var(--color-secondary);
+  background-color: var(--search-menu-item-active-bg);
 }
 
 // Search modal

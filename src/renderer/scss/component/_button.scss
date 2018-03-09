@@ -9,7 +9,7 @@
   text-align: center;
   border-radius: var(--button-radius);
   text-transform: uppercase;
-  color: var(--color-white);
+  color: var(--btn-color);
 
   .icon {
     top: 0em;
@@ -37,7 +37,7 @@
   min-width: var(--btn-height);
   border-radius: var(--btn-radius);
   color: var(--btn-primary-color);
-  background-color: var(--color-primary);
+  background-color: var(--btn-primary-bg);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -55,19 +55,14 @@
 
 .btn.btn--alt {
   color: var(--btn-alt-color);
-  background-color: var(--color-white);
+  background-color: var(--btn-alt-bg);
 
   &:hover {
-    color: #111;
+    color: var(--btn-alt-hover-color);
   }
 
   &:active {
-    background-color: #cdcdcd;
-  }
-
-  &:disabled {
-    color: var(--color-help);
-    background-color: transparent;
+    background-color: var(--btn-alt-active-bg);
   }
 }
 
@@ -98,13 +93,14 @@
 }
 
 .btn.btn--external-link:not(.btn--primary):not(.btn--secondary) {
+  /* Rename css vars */
   color: var(--color-fourth);
   border-bottom: 1px solid var(--color-fourth);
 }
 
 .btn.btn--secondary {
-  background-color: var(--color-secondary);
-  color: var(--color-primary);
+  background-color: var(--btn-secondary-bg);
+  color: var(--btn-secondary-color);
 }
 
 .btn.btn--no-style {
@@ -136,19 +132,22 @@
 
 .btn.btn--disabled:disabled {
   cursor: default;
+  opacity: 0.5;
 
   &.btn--primary {
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: var(--btn-primary-disabled-bg);
   }
 
-  &.btn--alt {
-    // Come back to me
+  &.btn--alt{
+    //color: var(--btn-alt-disabled-color);
+    background-color: transparent;
   }
 
   &:hover {
     box-shadow: none;
   }
 }
+
 
 .btn__label {
   padding: 0 5px;
