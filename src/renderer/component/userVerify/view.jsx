@@ -1,3 +1,5 @@
+// I'll come back to This
+/* eslint-disable */
 import React from 'react';
 import Link from 'component/link';
 import CardVerify from 'component/cardVerify';
@@ -25,8 +27,8 @@ class UserVerify extends React.PureComponent {
   render() {
     const { errorMessage, isPending, navigate, verifyPhone, modal } = this.props;
     return (
-      <div>
-        <section className="card card--form">
+      <React.Fragment>
+        <section className="card card--section">
           <div className="card__title-primary">
             <h1>{__('Final Human Proof')}</h1>
           </div>
@@ -36,7 +38,7 @@ class UserVerify extends React.PureComponent {
             </p>
           </div>
         </section>
-        <section className="card card--form">
+        <section className="card card--section">
           <div className="card__title-primary">
             <h3>{__('1) Proof via Credit')}</h3>
           </div>
@@ -64,7 +66,7 @@ class UserVerify extends React.PureComponent {
             </div>
           </div>
         </section>
-        <section className="card card--form">
+        <section className="card card--section">
           <div className="card__title-primary">
             <h3>{__('2) Proof via Phone')}</h3>
           </div>
@@ -120,7 +122,7 @@ class UserVerify extends React.PureComponent {
             </div>
           </div>
         </section>
-        <section className="card card--form">
+        <section className="card card--section">
           <div className="card__title-primary">
             <h3>{__('4) Proof via Chat')}</h3>
           </div>
@@ -145,7 +147,7 @@ class UserVerify extends React.PureComponent {
             />
           </div>
         </section>
-        <section className="card card--form">
+        <section className="card card--section">
           <div className="card__title-primary">
             <h5>{__('Or, Skip It Entirely')}</h5>
           </div>
@@ -160,9 +162,10 @@ class UserVerify extends React.PureComponent {
             <Link onClick={() => navigate('/discover')} button="alt" label={__('Skip Rewards')} />
           </div>
         </section>
-      </div>
+      </React.Fragment>
     );
   }
 }
 
 export default UserVerify;
+/* eslint-enable */

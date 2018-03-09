@@ -1,5 +1,5 @@
 import React from 'react';
-import Icon from 'component/icon';
+import Icon from 'component/common/icon';
 import RewardLink from 'component/rewardLink';
 import rewards from 'rewards.js';
 

@@ -1,48 +1,34 @@
+// @flow
 import React from 'react';
-import Link from 'component/link';
+import Button from 'component/link';
 
-class VideoPlayButton extends React.PureComponent {
-  componentDidMount() {
-    this.keyDownListener = this.onKeyDown.bind(this);
-    document.addEventListener('keydown', this.keyDownListener);
-  }
+type Props = {
+  play: string => void,
+  isLoading: boolean,
+  uri: string,
+  mediaType: string,
+  fileInfo: ?{},
+};
 
-  componentWillUnmount() {
-    document.removeEventListener('keydown', this.keyDownListener);
-  }
-
-  onKeyDown(event) {
-    if (event.target.tagName.toLowerCase() !== 'input' && event.code === 'Space') {
-      event.preventDefault();
-      this.watch();
-    }
-  }
-
+class VideoPlayButton extends React.PureComponent<Props> {
   watch() {
     this.props.play(this.props.uri);
   }
 
   render() {
-    const { button, label, fileInfo, mediaType } = this.props;
-
-    /*
-     title={
-     isLoading ? "Video is Loading" :
-     !costInfo ? "Waiting on cost info..." :
-     fileInfo === undefined ? "Waiting on file info..." : ""
-     }
-     */
-
-    const icon = ['audio', 'video'].indexOf(mediaType) !== -1 ? 'icon-play' : 'icon-folder-o';
+    const { fileInfo, mediaType, isLoading } = this.props;
+    const disabled = isLoading || fileInfo === undefined;
+    const doesPlayback = ['audio', 'video'].indexOf(mediaType) !== -1;
+    const icon = doesPlayback ? 'Play' : 'Folder';
+    const label = doesPlayback ? 'Play' : 'View';
 
     return (
-      <Link
-        button={button || null}
-        disabled={fileInfo === undefined}
-        label={label || ''}
-        className="video__play-button"
+      <Button
+        secondary
+        disabled={disabled}
+        label={label}
         icon={icon}
-        onClick={() => this.watch()}
+        onClick={this.watch}
       />
     );
   }

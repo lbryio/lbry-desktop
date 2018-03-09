@@ -1,8 +1,10 @@
+// This file is going to die
+/* eslint-disable */
 import React from 'react';
 import PropTypes from 'prop-types';
-import FileSelector from 'component/file-selector.js';
+import FileSelector from 'component/common/file-selector';
 import SimpleMDE from 'react-simplemde-editor';
-import { formFieldNestedLabelTypes, formFieldId } from '../form';
+import { formFieldNestedLabelTypes, formFieldId } from 'component/common/form';
 import style from 'react-simplemde-editor/dist/simplemde.min.css';
 
 const formFieldFileSelectorTypes = ['file', 'directory'];
@@ -195,3 +197,4 @@ class FormField extends React.PureComponent {
 }
 
 export default FormField;
+/* eslint-enable */

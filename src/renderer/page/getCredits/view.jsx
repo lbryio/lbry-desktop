@@ -1,25 +1,24 @@
 import React from 'react';
-import SubHeader from 'component/subHeader';
 import Link from 'component/link';
 import RewardSummary from 'component/rewardSummary';
 import ShapeShift from 'component/shapeShift';
+import Page from 'component/page';
 
 const GetCreditsPage = props => (
-  <main className="main--single-column">
-    <SubHeader />
+  <Page>
     <RewardSummary />
     <ShapeShift />
-    <section className="card">
-      <div className="card__title-primary">
-        <h3>{__('From External Wallet')}</h3>
+    <section className="card card--section">
+      <div className="card__title">
+        {__('From External Wallet')}
       </div>
       <div className="card__actions">
-        <Link button="alt" navigate="/send" icon="icon-send" label={__('Send / Receive')} />
+        <Link navigate="/send" label={__('Send / Receive')} />
       </div>
     </section>
-    <section className="card">
-      <div className="card__title-primary">
-        <h3>{__('More ways to get LBRY Credits')}</h3>
+    <section className="card card--section">
+      <div className="card__title">
+        {__('More ways to get LBRY Credits')}
       </div>
       <div className="card__content">
         <p>
@@ -29,10 +28,10 @@ const GetCreditsPage = props => (
         </p>
       </div>
       <div className="card__actions">
-        <Link button="alt" href="https://lbry.io/faq/earn-credits" label={__('Read More')} />
+        <Link fakeLink href="https://lbry.io/faq/earn-credits" label={__('Read More')} />
       </div>
     </section>
-  </main>
+  </Page>
 );
 
 export default GetCreditsPage;

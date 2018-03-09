@@ -1,7 +1,20 @@
+// @flow
 import React from 'react';
-import LinkTransaction from 'component/linkTransaction';
+import LinkTransaction from 'component/common/transaction-link';
 
-const RewardListClaimed = props => {
+type Reward = {
+  id: string,
+  reward_title: string,
+  reward_amount: number,
+  transaction_id: string,
+  created_at: string,
+};
+
+type Props = {
+  rewards: Array<Reward>,
+};
+
+const RewardListClaimed = (props: Props) => {
   const { rewards } = props;
 
   if (!rewards || !rewards.length) {
@@ -9,7 +22,7 @@ const RewardListClaimed = props => {
   }
 
   return (
-    <section className="card">
+    <section className="card card--section">
       <div className="card__title-identity">
         <h3>Claimed Rewards</h3>
       </div>

@@ -2,8 +2,10 @@ import {
   selectClaimsByUri,
   selectIsFetchingClaimListMine,
   selectMyClaims,
+  selectClaimsById
 } from 'redux/selectors/claims';
 import { createSelector } from 'reselect';
+import { buildURI } from 'lbryURI';
 
 export const selectState = state => state.fileInfo || {};
 
@@ -27,7 +29,6 @@ export const makeSelectFileInfoForUri = uri =>
   createSelector(selectClaimsByUri, selectFileInfosByOutpoint, (claims, byOutpoint) => {
     const claim = claims[uri];
     const outpoint = claim ? `${claim.txid}:${claim.nout}` : undefined;
-
     return outpoint ? byOutpoint[outpoint] : undefined;
   });
 
@@ -104,3 +105,91 @@ export const selectTotalDownloadProgress = createSelector(selectDownloadingFileI
   if (fileInfos.length > 0) return totalProgress / fileInfos.length / 100.0;
   return -1;
 });
+
+export const selectSearchDownloadUris = (query) => createSelector(
+  selectFileInfosDownloaded,
+  selectClaimsById,
+  (fileInfos, claimsById) => {
+    if (!query || !fileInfos.length) {
+      return null;
+    }
+
+    const queryParts = query.toLowerCase().split(' ');
+    const searchQueryDictionary = {};
+    queryParts.forEach(subQuery => {
+      searchQueryDictionary[subQuery] = subQuery;
+    });
+
+    const arrayContainsQueryPart = (array) => {
+      for (var i = 0; i < array.length; i += 1) {
+        const subQuery = array[i];
+        if (searchQueryDictionary[subQuery]) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    let downloadResultsFromQuery = [];
+    fileInfos.forEach((fileInfo) => {
+      const { channel_name, name, metadata } = fileInfo;
+      const { stream: { metadata: { author, description, title } } } = metadata;
+
+      if (channel_name) {
+        const channelName = channel_name.toLowerCase();
+        const strippedOutChannelName = channelName.slice(1); // trim off the @
+        if (searchQueryDictionary[channel_name] || searchQueryDictionary[strippedOutChannelName]) {
+          downloadResultsFromQuery.push(fileInfo);
+          return;
+        }
+      }
+
+      const nameParts = name.toLowerCase().split('-');
+      if (arrayContainsQueryPart(nameParts)) {
+        downloadResultsFromQuery.push(fileInfo);
+        return;
+      }
+
+      const titleParts = title.toLowerCase().split(' ');
+      if (arrayContainsQueryPart(titleParts)) {
+        downloadResultsFromQuery.push(fileInfo);
+        return;
+      }
+
+      if (author) {
+        const authorParts = author.toLowerCase().split(' ');
+        if (arrayContainsQueryPart(authorParts)) {
+          downloadResultsFromQuery.push(fileInfo);
+          return;
+        }
+      }
+
+      if (description) {
+        const descriptionParts = description.toLowerCase().split(' ');
+        if (arrayContainsQueryPart(descriptionParts)) {
+          downloadResultsFromQuery.push(fileInfo);
+          return;
+        }
+      }
+    });
+
+    return downloadResultsFromQuery.length ? downloadResultsFromQuery.map((fileInfo) => {
+      const { channel_name, claim_id, name, value, metadata } = fileInfo;
+      const uriParams = {};
+
+      if (channel_name) {
+        uriParams.channelName = channel_name;
+        uriParams.contentName = name;
+        uriParams.claimId = value
+          ? value.publisherSignature.certificateId
+          : metadata.publisherSignature.certificateId;
+      } else {
+        uriParams.claimId = claim_id;
+        uriParams.name = name;
+      }
+
+      const uri = buildURI(uriParams);
+      return uri;
+    }) : null;
+  }
+)

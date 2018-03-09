@@ -1,67 +1,94 @@
+// @flow
 import React from 'react';
 import Router from 'component/router/index';
-import Header from 'component/header';
 import Theme from 'component/theme';
 import ModalRouter from 'modal/modalRouter';
 import ReactModal from 'react-modal';
 import throttle from 'util/throttle';
+import SideBar from 'component/sideBar';
+import Header from 'component/header';
 
-class App extends React.PureComponent {
+type Props = {
+  alertError: (string | {}) => void,
+  recordScroll: number => void,
+  currentStackIndex: number,
+  currentPageAttributes: { path: string, scrollY: number },
+  pageTitle: ?string,
+};
+
+class App extends React.PureComponent<Props> {
   constructor() {
     super();
     this.mainContent = undefined;
+    (this: any).scrollListener = this.scrollListener.bind(this);
   }
 
   componentWillMount() {
     const { alertError } = this.props;
 
-    document.addEventListener('unhandledError', event => {
+    // TODO: create type for this object
+    // it lives in jsonrpc.js
+    document.addEventListener('unhandledError', (event: any) => {
       alertError(event.detail);
     });
   }
 
   componentDidMount() {
-    const { recordScroll } = this.props;
-    const mainContent = document.getElementById('main-content');
+    const mainContent = document.getElementById('content');
     this.mainContent = mainContent;
 
-    const scrollListener = () => recordScroll(this.mainContent.scrollTop);
-
-    this.mainContent.addEventListener('scroll', throttle(scrollListener, 750));
+    if (this.mainContent) {
+      this.mainContent.addEventListener('scroll', throttle(this.scrollListener, 750));
+    }
 
     ReactModal.setAppElement('#window'); // fuck this
   }
 
-  componentWillUnmount() {
-    this.mainContent.removeEventListener('scroll', this.scrollListener);
+  componentWillReceiveProps(props: Props) {
+    const { pageTitle } = props;
+    this.setTitleFromProps(pageTitle);
   }
 
-  componentWillReceiveProps(props) {
-    this.setTitleFromProps(props);
-  }
-
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps: Props) {
     const { currentStackIndex: prevStackIndex } = prevProps;
     const { currentStackIndex, currentPageAttributes } = this.props;
 
-    if (currentStackIndex !== prevStackIndex) {
+    if (this.mainContent && currentStackIndex !== prevStackIndex && currentPageAttributes) {
       this.mainContent.scrollTop = currentPageAttributes.scrollY || 0;
     }
   }
 
-  setTitleFromProps(props) {
-    window.document.title = props.pageTitle || 'LBRY';
+  componentWillUnmount() {
+    if (this.mainContent) {
+      this.mainContent.removeEventListener('scroll', this.scrollListener);
+    }
   }
+
+  setTitleFromProps = (title: ?string) => {
+    window.document.title = title || 'LBRY';
+  };
+
+  scrollListener() {
+    const { recordScroll } = this.props;
+    if (this.mainContent) {
+      recordScroll(this.mainContent.scrollTop);
+    }
+  }
+
+  mainContent: ?HTMLElement;
 
   render() {
     return (
       <div id="window">
         <Theme />
-        <Header />
-        <div id="main-content">
-          <Router />
-        </div>
-        <ModalRouter />
+        <main className="page">
+          <SideBar />
+          <Header />
+          <div className="content" id="content">
+            <Router />
+            <ModalRouter />
+          </div>
+        </main>
       </div>
     );
   }

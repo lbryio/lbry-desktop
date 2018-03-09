@@ -234,6 +234,12 @@ reducers[ACTIONS.VOLUME_CHANGED] = (state, action) =>
     volume: action.data.volume,
   });
 
+reducers[ACTIONS.HISTORY_NAVIGATE] = state =>
+  Object.assign({}, state, {
+    modal: undefined,
+    modalProps: {},
+  });
+
 export default function reducer(state: AppState = defaultState, action: any) {
   const handler = reducers[action.type];
   if (handler) return handler(state, action);

@@ -1,6 +1,8 @@
+// I'll come back to this
+/* eslint-disable */
 import React from 'react';
 import Link from 'component/link';
-import { Form, FormRow, Submit } from 'component/form.js';
+import { Form, FormField, Submit } from 'component/common/form';
 
 class UserEmailVerify extends React.PureComponent {
   constructor(props) {
@@ -29,19 +31,22 @@ class UserEmailVerify extends React.PureComponent {
 
   render() {
     const { cancelButton, errorMessage, email, isPending } = this.props;
+    // <FormField
+    // label={__('Verification Code')}
+    // errorMessage={errorMessage}
+    // render{() => (
+    //   <input
+    //   name="code"
+    //   value={this.state.code}
+    //   onChange={event => {
+    //     this.handleCodeChanged(event);
+    //   }}
+    //   />
+    // )}
+    // />
     return (
       <Form onSubmit={this.handleSubmit.bind(this)}>
         <p>Please enter the verification code emailed to {email}.</p>
-        <FormRow
-          type="text"
-          label={__('Verification Code')}
-          name="code"
-          value={this.state.code}
-          onChange={event => {
-            this.handleCodeChanged(event);
-          }}
-          errorMessage={errorMessage}
-        />
         {/* render help separately so it always shows */}
         <div className="form-field__helper">
           <p>
@@ -60,3 +65,4 @@ class UserEmailVerify extends React.PureComponent {
 }
 
 export default UserEmailVerify;
+/* eslint-enable */

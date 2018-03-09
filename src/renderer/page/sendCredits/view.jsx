@@ -1,14 +1,13 @@
 import React from 'react';
-import SubHeader from 'component/subHeader';
 import WalletSend from 'component/walletSend';
 import WalletAddress from 'component/walletAddress';
+import Page from 'component/page';
 
 const SendReceivePage = props => (
-  <main className="main--single-column">
-    <SubHeader />
+  <Page>
     <WalletSend />
     <WalletAddress />
-  </main>
+  </Page>
 );
 
 export default SendReceivePage;

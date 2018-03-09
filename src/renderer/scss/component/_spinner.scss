@@ -1,58 +1,49 @@
 .spinner {
-  position: relative;
-  width: 11em;
-  height: 11em;
-  margin: 20px auto;
-  font-size: 3px;
-  border-radius: 50%;
+  margin: $spacing-vertical * 1/3;
+  width: 50px;
+  height: 40px;
+  text-align: center;
+  font-size: 10px;
 
-  background: linear-gradient(to right, #fff 10%, rgba(255, 255, 255, 0) 50%);
-  animation: spin 1.4s infinite linear;
-  transform: translateZ(0);
+  .rect {
+    display: inline-block;
+    height: 100%;
+    width: 6px;
+    margin: 0 2px;
+    background-color: var(--color-white);
+    animation: sk-stretchdelay 1.2s infinite ease-in-out;
 
-  @keyframes spin {
-    from {
-      transform: rotate(0deg);
+    &.rect2 {
+      animation-delay: -1.1s;
     }
-    to {
-      transform: rotate(360deg);
+
+    &.rect3 {
+      animation-delay: -1s;
     }
-  }
 
-  &:before,
-  &:after {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-  }
+    &.rect4 {
+      animation-delay: -0.9s;
+    }
 
-  &:before {
-    width: 50%;
-    height: 50%;
-    background: #fff;
-    border-radius: 100% 0 0 0;
-  }
-
-  &:after {
-    height: 75%;
-    width: 75%;
-    margin: auto;
-    bottom: 0;
-    right: 0;
-    background: #000;
-    border-radius: 50%;
+    &.rect5 {
+      animation-delay: -0.8s;
+    }
   }
 }
 
-.spinner.spinner--dark {
-  background: linear-gradient(to right, var(--button-primary-bg) 10%, var(--color-bg) 50%);
-
-  &:before {
-    background: var(--button-primary-bg);
+.spinner--dark {
+  .rect {
+    background-color: var(--color-black);
   }
+}
 
-  &:after {
-    background: var(--color-bg);
+@keyframes sk-stretchdelay {
+  0%,
+  40%,
+  100% {
+    transform: scaleY(0.4);
+  }
+  20% {
+    transform: scaleY(1);
   }
 }
