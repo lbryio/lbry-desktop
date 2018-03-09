@@ -521,7 +521,7 @@ export function doAbandonClaim(txid, nout) {
             claimId,
           },
         });
-        dispatch(doResolveUri(buildURI({ claimName, claimId })));
+        dispatch(doResolveUri(buildURI({ claimName: name, claimId })));
         dispatch(doFetchClaimListMine());
       } else {
         dispatch(doOpenModal(MODALS.TRANSACTION_FAILED));
