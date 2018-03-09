@@ -15,8 +15,8 @@ class FileList extends React.PureComponent {
     this._sortFunctions = {
       dateNew: fileInfos =>
         fileInfos.slice().sort((fileInfo1, fileInfo2) => {
-          const height1 = this.props.claimsById[fileInfo1.claim_id].height;
-          const height2 = this.props.claimsById[fileInfo2.claim_id].height;
+          const height1 = this.props.claimsById[fileInfo1.claim_id] ? this.props.claimsById[fileInfo1.claim_id].height : 0;
+          const height2 = this.props.claimsById[fileInfo2.claim_id] ? this.props.claimsById[fileInfo2.claim_id].height : 0;
           if (height1 > height2) {
             return -1;
           } else if (height1 < height2) {
@@ -26,8 +26,8 @@ class FileList extends React.PureComponent {
         }),
       dateOld: fileInfos =>
         fileInfos.slice().sort((fileInfo1, fileInfo2) => {
-          const height1 = this.props.claimsById[fileInfo1.claim_id].height;
-          const height2 = this.props.claimsById[fileInfo2.claim_id].height;
+          const height1 = this.props.claimsById[fileInfo1.claim_id] ? this.props.claimsById[fileInfo1.claim_id].height : 999999;
+          const height2 = this.props.claimsById[fileInfo2.claim_id] ? this.props.claimsById[fileInfo2.claim_id].height : 999999;
           if (height1 < height2) {
             return -1;
           } else if (height1 > height2) {
