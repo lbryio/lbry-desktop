@@ -98,6 +98,7 @@ ul {
 }
 
 input {
+  background: var(--input-bg);
   border-bottom: var(--input-border-size) solid var(--input-border-color);
   color: var(--input-color);
   line-height: 1;
@@ -106,8 +107,7 @@ input {
 
   &[type='radio'],
   &[type='checkbox'],
-  &[type='file'],
-  &[type='select'] {
+  &[type='file'] {
     cursor: pointer;
   }
 
@@ -119,7 +119,7 @@ input {
     background: var(--input-bg);
     color: var(--input-disabled-color);
     font-family: 'Consolas', 'Lucida Console', 'Adobe Source Code Pro', monospace;
-    border-bottom: 1px dotted var(--color-divider);
+    border-bottom: 1px dotted var(--divider-color);
     width: 100%;
     flex: 1;
   }
@@ -133,6 +133,16 @@ input {
 
 input::placeholder {
   opacity: .5;
+}
+
+select {
+  background: var(--select-bg);
+  color: var(--select-color);
+  cursor: pointer;
+
+  &:disabled {
+    color: var(--input-disabled-color);
+  }
 }
 
 button + input {
@@ -168,7 +178,7 @@ dd {
   grid-template-areas:
     'nav header'
     'nav content';
-  background-color: var(--color-bg);
+  background-color: var(--page-bg);
 }
 
 /*
@@ -275,7 +285,7 @@ dd {
 // }
 
 .divider__horizontal {
-  border-top: var(--color-divider);
+  border-top: var(--divider-color);
   margin: 16px 0;
 }
 

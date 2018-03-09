@@ -1,17 +1,29 @@
 :root {
-    /* Colors */
-    --color-primary:  #009688;
-    --color-canvas: #0f1517;
+
+    /* Overwrite main colors */
     --color-bg: #1a2327;
     --color-bg-alt: #314048;
+    --color-primary:  #009688;
     --color-help: rgba(255,255,255, 0.5);
     --color-error: #a94442;
     --color-load-screen-text: #FFF;
-    --color-money: #1DE9B6;
-    --color-meta-light: #757575;
     --color-dark-overlay: rgba(15, 21, 23, 0.85);
     --color-download: rgba(255, 255, 255, 0.75);
+    --color-grey: rgba(255,255,255, 0.5);
 
+    /* Page */
+    --page-bg: #080a0b;
+
+    /* Nav */
+    --nav-bg:  var(--color-bg);
+    --nav-color: #FFF;
+
+    /* Card */
+    --card-bg: var(--color-bg);
+    --card-media-bg: rgba(15, 21, 23, 0.85);
+
+    /* Shadows */
+    --box-shadow-color: rgba(0, 0, 0, 0.25);
 
     /* Text */
     --text-color: #FFF;
@@ -19,6 +31,14 @@
 
     /* Form */
     --form-label-color: rgba(255, 255, 255, 0.70);
+
+    /* Button */
+    --btn-primary-disabled-bg: #2e3e46;
+    /* --> Alternative */
+    --btn-alt-bg: var(--color-bg-alt);
+    --btn-alt-color: var(--text-color);
+    --btn-alt-hover-color: white;
+    --btn-alt-active-bg: #465b66;
 
     /* Input */
     --input-bg: transparent;
@@ -33,16 +53,17 @@
     --input-disabled-border-color: rgba(255, 255, 255, 0.70);
 
     /* Search */
-    --search-bg: rgba(0,0,0, 0.45);
-    --search-color: #757575;
-    --search-active-bg: rgba(0,0,0, 0.75);
-    --search-border: 1px solid rgba(0,0,0, 0.25);
+    --search-bg: var(--color-bg);
+    --search-active-bg: transparent;
+    --search-color: #FFF;
+    --search-menu-item-active-bg: rgba(0, 0, 0, 0.45);
 
     /* Tab */
     --tab-color: rgba(255,255,255, 0.5) ;
     --tab-active-color: rgba(255,255,255, 0.75);
 
     /* Header */
+    --header-bg: transparent;
     --header-color: #CCC;
     --header-active-color: #FFF;
     --header-button-hover-bg: var(--color-bg-alt);
@@ -51,6 +72,7 @@
     --table-border: 0;
     --table-item-even: var(--color-bg-alt);
     --table-item-odd: transparent;
+    --table-item-color: #BFBFBF;
 
     /* Modal */
     --modal-overlay-bg: var(--color-dark-overlay);
@@ -61,5 +83,5 @@
     --scrollbar-thumb-hover-bg: rgba(255, 255, 255, 0.35);
 
     /* Divider */
-    --divider: 1px solid rgba(255, 225, 225, 0.12);
+    --divider-color: #314048;
 }
