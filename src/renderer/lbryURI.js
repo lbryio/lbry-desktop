@@ -128,7 +128,7 @@ export function parseURI(URI, requireProto = false) {
   }
 
   return {
-    claim_name: claimName,
+    claimName,
     path,
     isChannel,
     ...(contentName ? { contentName } : {}),
@@ -192,8 +192,8 @@ export function buildURI(URIObj, includeProto = true) {
 export function normalizeURI(URI) {
   if (URI.match(/pending_claim/)) return URI;
 
-  const { claim_name, path, bidPosition, claimSequence, claimId } = parseURI(URI);
-  return buildURI({ claimName: claim_name, path, claimSequence, bidPosition, claimId });
+  const { claimName, path, bidPosition, claimSequence, claimId } = parseURI(URI);
+  return buildURI({ claimName, path, claimSequence, bidPosition, claimId });
 }
 
 export function isURIValid(URI) {
@@ -203,12 +203,12 @@ export function isURIValid(URI) {
   } catch (error) {
     return false;
   }
-  return parts && parts.claim_name;
+  return parts && parts.claimName;
 }
 
-export function isNameValid(claim_name, checkCase = true) {
+export function isNameValid(claimName, checkCase = true) {
   const regexp = new RegExp('^[a-z0-9-]+$', checkCase ? '' : 'i');
-  return regexp.test(claim_name);
+  return regexp.test(claimName);
 }
 
 export function isURIClaimable(URI) {
@@ -220,7 +220,7 @@ export function isURIClaimable(URI) {
   }
   return (
     parts &&
-    parts.claim_name &&
+    parts.claimName &&
     !parts.claimId &&
     !parts.bidPosition &&
     !parts.claimSequence &&
