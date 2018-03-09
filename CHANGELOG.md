@@ -15,7 +15,6 @@ Web UI version numbers should always match the corresponding version of LBRY App
   * Notifications when the channel a user subscribes to uploads new content ([#1066](https://github.com/lbryio/lbry-app/pull/1066))
   * Codacy support for Github contributions ([#1059](https://github.com/lbryio/lbry-app/pull/1059))
   * App category for Linux ([#877](https://github.com/lbryio/lbry-app/pull/877))
-  * 
 
 ### Changed
   * Improved privacy by allowing users to turn off the file view counter and better understand privacy settings ([#1074](https://github.com/lbryio/lbry-app/pull/1074))
@@ -26,7 +25,6 @@ Web UI version numbers should always match the corresponding version of LBRY App
   * Keep node_modules up-to-date when yarn.lock changes due to git ([#955](https://github.com/lbryio/lbry-app/pull/955))
   * Do not kill an existing daemon, instead check if one exists ([#973](https://github.com/lbryio/lbry-app/pull/973))
   * Enable play button immediately after user clicks download ([#987](https://github.com/lbryio/lbry-app/pull/987))
-  * 
   
 ### Fixed
   * Fixed sort by date of published content ([#986](https://github.com/lbryio/lbry-app/issues/986))
@@ -39,7 +37,6 @@ Web UI version numbers should always match the corresponding version of LBRY App
   * Fix right click bug ([#928](https://github.com/lbryio/lbry-app/pull/928))
   * Fix Election linting errors ([#929](https://github.com/lbryio/lbry-app/pull/929))
   * App will no longer reset when minimizing to tray ([#1042](https://github.com/lbryio/lbry-app/pull/1042))
-  * 
 
 ### Deprecated
   *
