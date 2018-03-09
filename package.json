@@ -1,6 +1,6 @@
 {
   "name": "lbry-app",
-  "version": "0.21.0",
+  "version": "0.21.0-rc.1",
   "description": "A browser for the LBRY network, a digital marketplace controlled by its users.",
   "homepage": "https://lbry.io/",
   "bugs": {
