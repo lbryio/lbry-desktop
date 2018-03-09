@@ -87,7 +87,7 @@ class FileList extends React.PureComponent {
 
       if (fileInfo.channel_name) {
         uriParams.channelName = fileInfo.channel_name;
-        uriParams.contentName = fileInfo.claim_name;
+        uriParams.contentName = fileInfo.claim_name || fileInfo.name;
         uriParams.claimId = this.getChannelSignature(fileInfo);
       } else {
         uriParams.claimId = fileInfo.claim_id;
