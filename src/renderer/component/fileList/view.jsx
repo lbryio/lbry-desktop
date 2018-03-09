@@ -13,7 +13,7 @@ class FileList extends React.PureComponent {
     };
 
     this._sortFunctions = {
-      dateNew: (fileInfos) =>
+      dateNew: fileInfos =>
         fileInfos.slice().sort((fileInfo1, fileInfo2) => {
           const height1 = this.props.claimsById[fileInfo1.claim_id].height;
           const height2 = this.props.claimsById[fileInfo2.claim_id].height;
@@ -24,7 +24,7 @@ class FileList extends React.PureComponent {
           }
           return 0;
         }),
-      dateOld: (fileInfos) =>
+      dateOld: fileInfos =>
         fileInfos.slice().sort((fileInfo1, fileInfo2) => {
           const height1 = this.props.claimsById[fileInfo1.claim_id].height;
           const height2 = this.props.claimsById[fileInfo2.claim_id].height;
@@ -35,7 +35,7 @@ class FileList extends React.PureComponent {
           }
           return 0;
         }),
-      title: (fileInfos) =>
+      title: fileInfos =>
         fileInfos.slice().sort((fileInfo1, fileInfo2) => {
           const title1 = fileInfo1.value
             ? fileInfo1.value.stream.metadata.title.toLowerCase()
@@ -50,7 +50,7 @@ class FileList extends React.PureComponent {
           }
           return 0;
         }),
-      filename: (fileInfos) =>
+      filename: fileInfos =>
         fileInfos.slice().sort(({ file_name: fileName1 }, { file_name: fileName2 }) => {
           const fileName1Lower = fileName1.toLowerCase();
           const fileName2Lower = fileName2.toLowerCase();
@@ -61,8 +61,8 @@ class FileList extends React.PureComponent {
           }
           return 0;
         }),
-      };
-    }
+    };
+  }
 
   getChannelSignature(fileInfo) {
     if (fileInfo.value) {
