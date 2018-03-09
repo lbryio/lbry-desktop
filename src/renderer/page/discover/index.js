@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { doFetchFeaturedUris } from 'redux/actions/content';
 import { selectFeaturedUris, selectFetchingFeaturedUris } from 'redux/selectors/content';
 import { selectAllClaimsByChannel, selectClaimsById } from 'redux/selectors/claims'
+import { selectDiscover } from 'redux/selectors/discover';
 import DiscoverPage from './view';
 
 const select = state => ({
@@ -10,6 +11,7 @@ const select = state => ({
   fetchingFeaturedUris: selectFetchingFeaturedUris(state),
   claimsByChannel: selectAllClaimsByChannel(state),
   claimsById: selectClaimsById(state),
+  categories: selectDiscover(state),
 });
 
 const perform = dispatch => ({

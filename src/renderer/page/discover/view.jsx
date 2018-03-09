@@ -232,33 +232,10 @@ class DiscoverPage extends React.PureComponent {
       fetchingFeaturedUris,
       claimsByChannel,
       claimsById,
+      categories,
     } = this.props;
-    const hasContent = typeof featuredUris === 'object' && Object.keys(featuredUris).length,
+    const hasContent = typeof categories === 'object' && Object.keys(categories).length,
       failedToLoad = !fetchingFeaturedUris && !hasContent;
-
-    if (!!featuredUris && !!claimsByChannel) {
-      let channels = [];
-      Object.keys(featuredUris).forEach(key => {
-        if (key.indexOf("@") === 0) {
-          channels.push(key);
-        }
-      });
-      Object.keys(claimsByChannel).forEach(key => {
-        if (channels.includes(key)) {
-          delete featuredUris[key];
-          const ids = claimsByChannel[key][1];
-          let uris = [];
-          const newKey = `${key}#${claimsById[ids[0]].value.publisherSignature.certificateId}`;
-          ids.forEach(id => {
-            const claim = claimsById[id] ? claimsById[id] : null;
-            if (claim) {
-              uris.push(`${claim.name}#${claim.claim_id}`);
-            }
-          });
-          featuredUris[newKey] = uris;
-        }
-      });
-    }
 
     return (
       <main
@@ -269,21 +246,21 @@ class DiscoverPage extends React.PureComponent {
         <SubHeader fullWidth smallMargin />
         {!hasContent && fetchingFeaturedUris && <BusyMessage message={__('Fetching content')} />}
         {hasContent &&
-          Object.keys(featuredUris).map(
+          Object.keys(categories).map(
             category =>
-              featuredUris[category].length ? (
+              categories[category].length ? (
                 category.indexOf("@") === 0 ? (
                   <FeaturedCategory
                     key={category}
                     category={category.split("#")[0]}
                     categoryLink={category}
-                    names={featuredUris[category]}
+                    names={categories[category]}
                   />
                 ) : (
                   <FeaturedCategory
                   key={category}
                   category={category}
-                  names={featuredUris[category]}
+                  names={categories[category]}
                 />
                 )
               ) : (
