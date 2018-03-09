@@ -95,7 +95,7 @@ class FileList extends React.PureComponent {
         uriParams.claimId = this.getChannelSignature(fileInfo);
       } else {
         uriParams.claimId = fileInfo.claim_id;
-        uriParams.claimName = fileInfo.claim_name;
+        uriParams.claimName = fileInfo.claim_name || fileInfo.name;
       }
       const uri = buildURI(uriParams);
 
