@@ -3,8 +3,8 @@
   "productName": "LBRY",
   "publish": [{
     "provider": "s3",
-    "bucket": "releases.lbry.io",
-    "path": "app/latest"
+    "bucket": "build.lbry.io",
+    "path": "app/release"
   }, "github"],
   "mac": {
     "target": "dmg",
