@@ -476,24 +476,6 @@ export function doCreateChannel(name, amount) {
   };
 }
 
-export function doPublish(params) {
-  return dispatch =>
-    new Promise((resolve, reject) => {
-      const success = claim => {
-        resolve(claim);
-
-        if (claim === true) dispatch(doFetchClaimListMine());
-        else
-          setTimeout(() => dispatch(doFetchClaimListMine()), 20000, {
-            once: true,
-          });
-      };
-      const failure = err => reject(err);
-
-      Lbry.publishDeprecated(params, null, success, failure);
-    });
-}
-
 export function doAbandonClaim(txid, nout) {
   return (dispatch, getState) => {
     const state = getState();

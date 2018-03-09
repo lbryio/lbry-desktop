@@ -1,11 +1,20 @@
+// @flow
 import React from 'react';
 import { BusyMessage } from 'component/common';
-import Link from 'component/link';
+import Button from 'component/link';
 import TransactionList from 'component/transactionList';
 import * as icons from 'constants/icons';
+import type { Transaction } from 'component/transactionList/view';
 
-class TransactionListRecent extends React.PureComponent {
-  componentWillMount() {
+type Props = {
+  fetchTransactions: () => void,
+  fetchingTransactions: boolean,
+  hasTransactions: boolean,
+  transactions: Array<Transaction>,
+};
+
+class TransactionListRecent extends React.PureComponent<Props> {
+  componentDidMount() {
     this.props.fetchTransactions();
   }
 
@@ -13,28 +22,21 @@ class TransactionListRecent extends React.PureComponent {
     const { fetchingTransactions, hasTransactions, transactions } = this.props;
 
     return (
-      <section className="card">
-        <div className="card__title-primary">
-          <h3>{__('Recent Transactions')}</h3>
-        </div>
+      <section className="card card--section">
+        <div className="card__title">{__('Recent Transactions')}</div>
         <div className="card__content">
           {fetchingTransactions && <BusyMessage message={__('Loading transactions')} />}
           {!fetchingTransactions && (
             <TransactionList
+              noFilter
               transactions={transactions}
-              emptyMessage={__('You have no recent transactions.')}
+              emptyMessage={__("Looks like you don't have any recent transactions.")}
             />
           )}
         </div>
         {hasTransactions && (
-          <div className="card__actions card__actions--bottom">
-            <Link
-              navigate="/history"
-              label={__('Full History')}
-              icon={icons.HISTORY}
-              className="no-underline"
-              button="text"
-            />
+          <div className="card__actions">
+            <Button navigate="/history" label={__('Full History')} icon="Clock" />
           </div>
         )}
       </section>

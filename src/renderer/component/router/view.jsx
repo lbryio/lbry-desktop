@@ -13,7 +13,6 @@ import FileListDownloaded from 'page/fileListDownloaded';
 import FileListPublished from 'page/fileListPublished';
 import TransactionHistoryPage from 'page/transactionHistory';
 import ChannelPage from 'page/channel';
-import SearchPage from 'page/search';
 import AuthPage from 'page/auth';
 import InvitePage from 'page/invite';
 import BackupPage from 'page/backup';
@@ -22,7 +21,7 @@ import SubscriptionsPage from 'page/subscriptions';
 const route = (page, routesMap) => {
   const component = routesMap[page];
 
-  return component;
+  return component || DiscoverPage;
 };
 
 const Router = props => {
@@ -42,7 +41,6 @@ const Router = props => {
     getcredits: <GetCreditsPage params={params} />,
     report: <ReportPage params={params} />,
     rewards: <RewardsPage params={params} />,
-    search: <SearchPage params={params} />,
     send: <SendReceivePage params={params} />,
     settings: <SettingsPage params={params} />,
     show: <ShowPage {...params} />,

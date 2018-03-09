@@ -2,9 +2,9 @@
 import React from 'react';
 import lbry from 'lbry.js';
 import Link from 'component/link';
-import SubHeader from 'component/subHeader';
 import { BusyMessage } from 'component/common';
-import Icon from 'component/icon';
+import Icon from 'component/common/icon';
+import Page from 'component/page';
 
 class HelpPage extends React.PureComponent {
   constructor(props) {
@@ -19,7 +19,7 @@ class HelpPage extends React.PureComponent {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     lbry.getAppVersionInfo().then(({ remoteVersion, localVersion, upgradeAvailable }) => {
       this.setState({
         uiVersion: localVersion,
@@ -70,147 +70,140 @@ class HelpPage extends React.PureComponent {
     }
 
     return (
-      <main className="main--single-column">
-        <SubHeader />
-        <section className="card">
-          <div className="card__title-primary">
-            <h3>{__('Read the FAQ')}</h3>
+      <Page>
+        <section className="card card--section">
+          <div className="card__title">
+            {__('Read the FAQ')}
           </div>
-          <div className="card__content">
-            <p>{__('Our FAQ answers many common questions.')}</p>
-            <p>
-              <Link
-                href="https://lbry.io/faq"
-                label={__('Read the FAQ')}
-                icon="icon-question"
-                button="alt"
-              />
-            </p>
-          </div>
-        </section>
-        <section className="card">
-          <div className="card__title-primary">
-            <h3>{__('Get Live Help')}</h3>
-          </div>
-          <div className="card__content">
-            <p>
-              {__('Live help is available most hours in the')} <strong>#help</strong>{' '}
-              {__('channel of our Discord chat room.')}
-            </p>
-            <p>
-              <Link
-                button="alt"
-                label={__('Join Our Chat')}
-                icon="icon-comments"
-                href="https://chat.lbry.io"
-              />
-            </p>
-          </div>
-        </section>
-        <section className="card">
-          <div className="card__title-primary">
-            <h3>{__('Report a Bug')}</h3>
-          </div>
-          <div className="card__content">
-            <p>{__('Did you find something wrong?')}</p>
-            <p>
-              <Link
-                navigate="/report"
-                label={__('Submit a Bug Report')}
-                icon="icon-bug"
-                button="alt"
-              />
-            </p>
-            <div className="meta">{__('Thanks! LBRY is made by its users.')}</div>
+          <p className="card__subtitle">{__('Our FAQ answers many common questions.')}</p>
+
+          <div className="card__actions">
+            <Link
+              href="https://lbry.io/faq"
+              label={__('Read the FAQ')}
+              icon="HelpCircle"
+              button="alt"
+            />
           </div>
         </section>
 
-        <section className="card">
-          <div className="card__title-primary">
-            <h3>{__('About')}</h3>
+        <section className="card card--section">
+          <div className="card__title">
+            {__('Get Live Help')}
           </div>
-          <div className="card__content">
-            {this.state.upgradeAvailable === null ? (
-              ''
-            ) : this.state.upgradeAvailable ? (
-              <p>
-                {__('A newer version of LBRY is available.')}{' '}
-                <Link href={newVerLink} label={__('Download now!')} />
-              </p>
-            ) : (
-              <p>{__('Your copy of LBRY is up to date.')}</p>
-            )}
-            {this.state.uiVersion && ver ? (
-              <table className="table-standard table-stretch table-standard--definition-list">
-                <tbody>
-                  <tr>
-                    <th>{__('App')}</th>
-                    <td>{this.state.uiVersion}</td>
-                  </tr>
-                  <tr>
-                    <th>{__('Daemon (lbrynet)')}</th>
-                    <td>{ver.lbrynet_version}</td>
-                  </tr>
-                  <tr>
-                    <th>{__('Wallet (lbryum)')}</th>
-                    <td>{ver.lbryum_version}</td>
-                  </tr>
-                  <tr>
-                    <th>{__('Connected Email')}</th>
-                    <td>
-                      {user && user.primary_email ? (
-                        user.primary_email
-                      ) : (
-                        <span>
-                          <span className="empty">{__('none')} </span>
-                          (<Link onClick={() => doAuth()} label={__('set email')} />)
-                        </span>
-                      )}
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>{__('Reward Eligible')}</th>
-                    <td>
-                      {user && user.is_reward_approved ? (
-                        <Icon icon="icon-check" />
-                      ) : (
-                        <Icon icon="icon-ban" />
-                      )}
-                    </td>
-                  </tr>
-                  <tr>
-                    <th>{__('Platform')}</th>
-                    <td>{platform}</td>
-                  </tr>
-                  <tr>
-                    <th>{__('Installation ID')}</th>
-                    <td>{this.state.lbryId}</td>
-                  </tr>
-                  <tr>
-                    <th>{__('Access Token')}</th>
-                    <td>
-                      {this.state.accessTokenHidden && (
-                        <Link label={__('show')} onClick={this.showAccessToken.bind(this)} />
-                      )}
-                      {!this.state.accessTokenHidden &&
-                        accessToken && (
-                          <div>
-                            <p>{accessToken}</p>
-                            <div className="help">
-                              {__('This is equivalent to a password. Do not post or share this.')}
-                            </div>
-                          </div>
-                        )}
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            ) : (
-              <BusyMessage message={__('Looking up version info')} />
-            )}
+          <p className="card__subtitle">
+          {__('Live help is available most hours in the')} <strong>#help</strong>{' '}
+          {__('channel of our Discord chat room.')}
+          </p>
+          <div className="card__actions">
+            <Link
+              label={__('Join Our Chat')}
+              icon="MessageCircle"
+              href="https://chat.lbry.io"
+            />
           </div>
         </section>
-      </main>
+
+        <section className="card card--section">
+          <div className="card__title">
+            {__('Report a Bug')}
+          </div>
+          <p className="card__subtitle">{__('Did you find something wrong?')}</p>
+
+          <div className="card__actions">
+            <Link
+              navigate="/report"
+              label={__('Submit a Bug Report')}
+              icon="Flag"
+              button="alt"
+            />
+          </div>
+          <div className="card__meta">{__('Thanks! LBRY is made by its users.')}</div>
+        </section>
+
+        <section className="card card--section">
+          <div className="card__title">
+            {__('About')}
+          </div>
+          {this.state.upgradeAvailable !== null && this.state.upgradeAvailable ? (
+            <div className="card__subtitle">
+              {__('A newer version of LBRY is available.')}{' '}
+              <Link fakeLink href={newVerLink} label={__('Download now!')} />
+            </div>
+          ) : (
+            <div className="card__subtitle">{__('Your LBRY app is up to date.')}</div>
+          )}
+
+          {this.state.uiVersion && ver ? (
+            <table className="table table--stretch table--help">
+              <tbody>
+                <tr>
+                  <td>{__('App')}</td>
+                  <td>{this.state.uiVersion}</td>
+                </tr>
+                <tr>
+                  <td>{__('Daemon (lbrynet)')}</td>
+                  <td>{ver.lbrynet_version}</td>
+                </tr>
+                <tr>
+                  <td>{__('Wallet (lbryum)')}</td>
+                  <td>{ver.lbryum_version}</td>
+                </tr>
+                <tr>
+                  <td>{__('Connected Email')}</td>
+                  <td>
+                    {user && user.primary_email ? (
+                      user.primary_email
+                    ) : (
+                      <span>
+                        <span className="empty">{__('none')} </span>
+                        (<Link onClick={() => doAuth()} label={__('set email')} />)
+                      </span>
+                    )}
+                  </td>
+                </tr>
+                <tr>
+                  <td>{__('Reward Eligible')}</td>
+                  <td>
+                    {user && user.is_reward_approved ? (
+                      __("Yes")
+                    ) : (
+                      __("No")
+                    )}
+                  </td>
+                </tr>
+                <tr>
+                  <td>{__('Platform')}</td>
+                  <td>{platform}</td>
+                </tr>
+                <tr>
+                  <td>{__('Installation ID')}</td>
+                  <td>{this.state.lbryId}</td>
+                </tr>
+                <tr>
+                  <td>{__('Access Token')}</td>
+                  <td>
+                    {this.state.accessTokenHidden && (
+                      <Link fakeLink label={__('View')} onClick={this.showAccessToken.bind(this)} />
+                    )}
+                    {!this.state.accessTokenHidden &&
+                      accessToken && (
+                        <div>
+                          <p>{accessToken}</p>
+                          <div className="help">
+                            {__('This is equivalent to a password. Do not post or share this.')}
+                          </div>
+                        </div>
+                      )}
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          ) : (
+            <BusyMessage message={__('Looking up version info')} />
+          )}
+        </section>
+      </Page>
     );
   }
 }

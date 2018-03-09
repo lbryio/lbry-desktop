@@ -17,6 +17,9 @@ import ModalRevokeClaim from 'modal/modalRevokeClaim';
 import ModalEmailCollection from 'modal/modalEmailCollection';
 import ModalPhoneCollection from 'modal/modalPhoneCollection';
 import ModalFirstSubscription from 'modal/modalFirstSubscription';
+import ModalSendTip from '../modalSendTip';
+import ModalPublish from '../modalPublish';
+import ModalSearch from '../modalSearch';
 import * as modals from 'constants/modal_types';
 
 class ModalRouter extends React.PureComponent {
@@ -136,8 +139,17 @@ class ModalRouter extends React.PureComponent {
         return <ModalPhoneCollection {...modalProps} />;
       case modals.EMAIL_COLLECTION:
         return <ModalEmailCollection {...modalProps} />;
+<<<<<<< HEAD
       case modals.FIRST_SUBSCRIPTION:
         return <ModalFirstSubscription {...modalProps} />;
+=======
+      case modals.SEND_TIP:
+        return <ModalSendTip {...modalProps} />;
+      case modals.PUBLISH:
+        return <ModalPublish {...modalProps} />;
+      case modals.SEARCH:
+        return <ModalSearch {...modalProps} />;
+>>>>>>> [redesign] first run
       default:
         return null;
     }

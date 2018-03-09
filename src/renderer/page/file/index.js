@@ -2,7 +2,7 @@ import { connect } from 'react-redux';
 import { doNavigate } from 'redux/actions/navigation';
 import { doFetchFileInfo } from 'redux/actions/file_info';
 import { makeSelectFileInfoForUri } from 'redux/selectors/file_info';
-import { selectRewardContentClaimIds } from 'redux/selectors/content';
+import { selectRewardContentClaimIds, selectPlayingUri } from 'redux/selectors/content';
 import { doFetchCostInfoForUri } from 'redux/actions/cost_info';
 import { doCheckSubscription } from 'redux/actions/subscriptions';
 import {
@@ -12,6 +12,8 @@ import {
 } from 'redux/selectors/claims';
 import { makeSelectCostInfoForUri } from 'redux/selectors/cost_info';
 import { selectShowNsfw } from 'redux/selectors/settings';
+import { selectMediaPaused } from 'redux/selectors/media';
+import { doOpenModal } from 'redux/actions/app';
 import FilePage from './view';
 import { makeSelectCurrentParam } from 'redux/selectors/navigation';
 import { selectSubscriptions } from 'redux/selectors/subscriptions';
@@ -22,10 +24,11 @@ const select = (state, props) => ({
   costInfo: makeSelectCostInfoForUri(props.uri)(state),
   metadata: makeSelectMetadataForUri(props.uri)(state),
   obscureNsfw: !selectShowNsfw(state),
-  tab: makeSelectCurrentParam('tab')(state),
   fileInfo: makeSelectFileInfoForUri(props.uri)(state),
   rewardedContentClaimIds: selectRewardContentClaimIds(state, props),
   subscriptions: selectSubscriptions(state),
+  playingUri: selectPlayingUri(state),
+  isPaused: selectMediaPaused(state),
 });
 
 const perform = dispatch => ({
@@ -33,6 +36,7 @@ const perform = dispatch => ({
   fetchFileInfo: uri => dispatch(doFetchFileInfo(uri)),
   fetchCostInfo: uri => dispatch(doFetchCostInfoForUri(uri)),
   checkSubscription: subscription => dispatch(doCheckSubscription(subscription)),
+  openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
 });
 
 export default connect(select, perform)(FilePage);

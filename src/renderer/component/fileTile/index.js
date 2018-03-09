@@ -10,8 +10,7 @@ import FileTile from './view';
 
 const select = (state, props) => ({
   claim: makeSelectClaimForUri(props.uri)(state),
-  fileInfo: makeSelectFileInfoForUri(props.uri)(state),
-  obscureNsfw: !selectShowNsfw(state),
+  isDownloaded: !!makeSelectFileInfoForUri(props.uri)(state),
   metadata: makeSelectMetadataForUri(props.uri)(state),
   isResolvingUri: makeSelectIsUriResolving(props.uri)(state),
   rewardedContentClaimIds: selectRewardContentClaimIds(state, props),

@@ -1,57 +1,97 @@
+// @flow
 import React from 'react';
 import FileTile from 'component/fileTile';
 import ChannelTile from 'component/channelTile';
 import Link from 'component/link';
 import { BusyMessage } from 'component/common.js';
 import { parseURI } from 'lbryURI';
+import debounce from 'util/debounce';
 
-const SearchNoResults = props => {
-  const { query } = props;
+const SEARCH_DEBOUNCE_TIME = 800;
 
+const NoResults = () => {
   return (
-    <section>
-      <span className="empty">
-        {(__('No one has checked anything in for %s yet.'), query)}{' '}
-        <Link label={__('Be the first')} navigate="/publish" />
-      </span>
-    </section>
+    <div className="file-tile">
+      {__("No results")}
+    </div>
   );
 };
 
-class FileListSearch extends React.PureComponent {
-  componentWillMount() {
-    this.doSearch(this.props);
+type Props = {
+  search: (string) => void,
+  query: string,
+  uris: ?Array<string>,
+  downloadUris: ?Array<string>
+}
+
+class FileListSearch extends React.PureComponent<Props> {
+  debouncedSearch: (string) => void
+
+  constructor(props: Props) {
+    super(props);
+    this.debouncedSearch = debounce(this.props.search, SEARCH_DEBOUNCE_TIME);
   }
 
-  componentWillReceiveProps(props) {
-    if (props.query != this.props.query) {
-      this.doSearch(props);
+  componentDidMount() {
+    const { search, query } = this.props;
+    search(query);
+  }
+
+  componentWillReceiveProps(nextProps: Props) {
+    const { query: nextQuery } = nextProps;
+    const { query: currentQuerry } = this.props;
+
+    if (nextQuery !== currentQuerry) {
+      this.debouncedSearch(nextQuery);
     }
   }
 
-  doSearch(props) {
-    this.props.search(props.query);
-  }
-
   render() {
-    const { isSearching, uris, query } = this.props;
+    const {
+      uris,
+      query,
+      downloadUris
+    } = this.props;
 
-    return (
-      <div>
-        {isSearching && !uris && <BusyMessage message={__('Looking up the Dewey Decimals')} />}
+    let fileResults = [];
+    let channelResults = [];
+    uris && uris.forEach((uri) => {
+      const isChannel = parseURI(uri).claimName[0] === '@';
+      if (isChannel) {
+        channelResults.push(uri);
+      } else {
+        fileResults.push(uri);
+      }
+    })
 
-        {isSearching && uris && <BusyMessage message={__('Refreshing the Dewey Decimals')} />}
+    return query && (
+      <div className="search__results">
+        <div className="search-result__column">
+          <div className="file-list__header">
+            {__('Files')}
+          </div>
+          {fileResults.length ? fileResults.map((uri) => (
+            <FileTile key={uri} uri={uri} />
+          )) : <NoResults />}
+        </div>
 
-        {uris && uris.length
-          ? uris.map(
-              uri =>
-                parseURI(uri).claimName[0] === '@' ? (
-                  <ChannelTile key={uri} uri={uri} />
-                ) : (
-                  <FileTile key={uri} uri={uri} />
-                )
-            )
-          : !isSearching && <SearchNoResults query={query} />}
+        <div className="search-result__column">
+          <div className="file-list__header">
+            {__('Channels')}
+          </div>
+          {channelResults.length ? channelResults.map((uri) => (
+            <ChannelTile key={uri} uri={uri} />
+          )) : <NoResults />}
+        </div>
+
+        <div className="search-result__column">
+          <div className="file-list__header">
+            {__('Your downloads')}
+          </div>
+          {(downloadUris && downloadUris.length) ? downloadUris.map((uri) => (
+            <FileTile test key={uri} uri={uri} />
+            )) : <NoResults />}
+        </div>
       </div>
     );
   }

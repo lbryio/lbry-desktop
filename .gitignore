@@ -6,5 +6,4 @@
 *.pyc
 /static/daemon/lbrynet*
 /static/locales
-
-
+npm-debug.log*

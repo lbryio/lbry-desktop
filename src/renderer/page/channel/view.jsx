@@ -1,12 +1,35 @@
+// @flow
 import React from 'react';
-import { buildURI } from 'lbryURI';
+import { buildURI, parseURI } from 'lbryURI';
 import { BusyMessage } from 'component/common';
 import FileTile from 'component/fileTile';
 import ReactPaginate from 'react-paginate';
-import Link from 'component/link';
+import Button from 'component/link';
 import SubscribeButton from 'component/subscribeButton';
+import Page from 'component/page';
+import FileList from 'component/fileList';
+import * as modals from 'constants/modal_types';
 
-class ChannelPage extends React.PureComponent {
+type Props = {
+  uri: string,
+  page: number,
+  totalPages: number,
+  fetching: boolean,
+  params: { page: number },
+  claim: {
+    name: string,
+    claim_id: string,
+  },
+  claimsInChannel: any,
+  fetchClaims: (string, number) => void,
+  fetchClaimCount: (string) => void,
+  navigate: (string, {}) => void,
+  doChannelSubscribe: (string) => void,
+  doChannelUnsubscribe: (string) => void,
+  openModal: (string, {}) => void,
+}
+
+class ChannelPage extends React.PureComponent<Props> {
   componentDidMount() {
     const { uri, page, fetchClaims, fetchClaimCount } = this.props;
 
@@ -14,7 +37,7 @@ class ChannelPage extends React.PureComponent {
     fetchClaimCount(uri);
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: Props) {
     const { page, uri, fetching, fetchClaims, fetchClaimCount } = this.props;
 
     if (nextProps.page && page !== nextProps.page) {
@@ -25,7 +48,7 @@ class ChannelPage extends React.PureComponent {
     }
   }
 
-  changePage(pageNumber) {
+  changePage(pageNumber: number) {
     const { params } = this.props;
     const newParams = Object.assign({}, params, { page: pageNumber });
 
@@ -40,11 +63,8 @@ class ChannelPage extends React.PureComponent {
       uri,
       page,
       totalPages,
-      doChannelSubscribe,
-      doChannelUnsubscribe,
-      subscriptions,
+      openModal
     } = this.props;
-
     const { name, claim_id: claimId } = claim;
     const subscriptionUri = buildURI({ channelName: name, claimId }, false);
 
@@ -54,41 +74,32 @@ class ChannelPage extends React.PureComponent {
     } else {
       contentList =
         claimsInChannel && claimsInChannel.length ? (
-          claimsInChannel.map(claim => (
-            <FileTile
-              key={claim.claim_id}
-              uri={buildURI({
-                claimName: claim.name,
-                claimId: claim.claim_id,
-              })}
-              showLocal
-            />
-          ))
+          <FileList
+            hideFilter
+            fileInfos={claimsInChannel}
+          />
         ) : (
           <span className="empty">{__('No content found.')}</span>
         );
     }
 
     return (
-      <div>
-        <section className="card">
-          <div className="card__inner">
-            <div className="card__title-identity">
-              <h1>{uri}</h1>
-            </div>
+      <Page>
+        <section className="card__channel-info card__channel-info--large">
+          <h1>{name}</h1>
+          <div className="card__actions card__actions--no-margin">
+            <Button
+              alt
+              iconRight="Send"
+              label={__('Enjoy this? Send a tip')}
+              onClick={() => openModal(modals.SEND_TIP, { uri })}
+            />
             <SubscribeButton uri={uri} channelName={name} />
           </div>
-          <div className="card__content">
-            <p className="empty">
-              {__(
-                'Channel pages are empty for all publishers currently, but will be coming in a future update.'
-              )}
-            </p>
-          </div>
         </section>
-        <h3 className="card-row__header">{__('Published Content')}</h3>
-        {contentList}
-        <div />
+        <section>
+          {contentList}
+        </section>
         {(!fetching || (claimsInChannel && claimsInChannel.length)) &&
           totalPages > 1 && (
             <ReactPaginate
@@ -105,9 +116,9 @@ class ChannelPage extends React.PureComponent {
               onPageChange={e => this.changePage(e.selected + 1)}
               initialPage={parseInt(page - 1)}
               containerClassName="pagination"
-            />
-          )}
-      </div>
+              />
+            )}
+      </Page>
     );
   }
 }

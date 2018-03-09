@@ -1,111 +1,108 @@
-import React from 'react';
+// @flow
+import * as React from 'react';
 import { normalizeURI } from 'lbryURI';
 import CardMedia from 'component/cardMedia';
-import Link from 'component/link';
 import { TruncatedText } from 'component/common';
-import Icon from 'component/icon';
+import Icon from 'component/common/icon';
 import FilePrice from 'component/filePrice';
 import UriIndicator from 'component/uriIndicator';
 import NsfwOverlay from 'component/nsfwOverlay';
-import TruncatedMarkdown from 'component/truncatedMarkdown';
 import * as icons from 'constants/icons';
+import classnames from 'classnames';
 
-class FileCard extends React.PureComponent {
-  constructor(props) {
-    super(props);
+// TODO: iron these out
+type Props = {
+  isResolvingUri: boolean,
+  resolveUri: string => void,
+  uri: string,
+  claim: ?{ claim_id: string },
+  fileInfo: ?{},
+  metadata: ?{ nsfw: boolean, thumbnail: ?string },
+  navigate: (string, ?{}) => void,
+  rewardedContentClaimIds: Array<string>,
+  obscureNsfw: boolean,
+  showPrice: boolean,
+  pending?: boolean
+};
 
-    this.state = {
-      hovered: false,
-    };
+class FileCard extends React.PureComponent<Props> {
+  static defaultProps = {
+    showPrice: true
   }
 
   componentWillMount() {
     this.resolve(this.props);
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: Props) {
     this.resolve(nextProps);
   }
 
-  resolve(props) {
+  resolve = (props: Props) => {
     const { isResolvingUri, resolveUri, claim, uri } = props;
 
     if (!isResolvingUri && claim === undefined && uri) {
       resolveUri(uri);
     }
-  }
-
-  handleMouseOver() {
-    this.setState({
-      hovered: true,
-    });
-  }
-
-  handleMouseOut() {
-    this.setState({
-      hovered: false,
-    });
-  }
+  };
 
   render() {
     const {
       claim,
       fileInfo,
       metadata,
-      isResolvingUri,
       navigate,
       rewardedContentClaimIds,
+      obscureNsfw,
+      showPrice,
+      pending
     } = this.props;
-
-    const uri = normalizeURI(this.props.uri);
+    const uri = !pending ? normalizeURI(this.props.uri) : this.props.uri;
     const title = metadata && metadata.title ? metadata.title : uri;
     const thumbnail = metadata && metadata.thumbnail ? metadata.thumbnail : null;
-    const obscureNsfw = this.props.obscureNsfw && metadata && metadata.nsfw;
+    const shouldObscureNsfw = obscureNsfw && metadata && metadata.nsfw;
     const isRewardContent = claim && rewardedContentClaimIds.includes(claim.claim_id);
 
-    let description = '';
-    if (isResolvingUri && !claim) {
-      description = __('Loading...');
-    } else if (metadata && metadata.description) {
-      description = metadata.description;
-    } else if (claim === null) {
-      description = __('This address contains no content.');
-    }
-
+    // We should be able to tab through cards
+    /* eslint-disable jsx-a11y/click-events-have-key-events */
     return (
       <section
-        className={`card card--small card--link ${obscureNsfw ? 'card--obscured ' : ''}`}
-        onMouseEnter={this.handleMouseOver.bind(this)}
-        onMouseLeave={this.handleMouseOut.bind(this)}
+        tabIndex="0"
+        role="button"
+        onClick={!pending ? () => navigate('/show', { uri }) : () => {}}
+        className={classnames('card card--small', {
+          'card--obscured': shouldObscureNsfw,
+          'card--link': !pending,
+          'card--pending': pending
+        })}
       >
-        <div className="card__inner">
-          <Link onClick={() => navigate('/show', { uri })} className="card__link">
-            <CardMedia title={title} thumbnail={thumbnail} />
-            <div className="card__title-identity">
-              <div className="card__title" title={title}>
-                <TruncatedText lines={1}>{title}</TruncatedText>
-              </div>
-              <div className="card__subtitle">
-                <span className="card__indicators card--file-subtitle">
-                  <FilePrice uri={uri} />{' '}
-                  {isRewardContent && <Icon icon={icons.FEATURED} leftPad />}{' '}
-                  {fileInfo && <Icon icon={icons.LOCAL} leftPad />}
-                </span>
-                <span className="card--file-subtitle">
-                  <UriIndicator uri={uri} link span smallCard />
-                </span>
-              </div>
-            </div>
-          </Link>
-          {/* Test for nizuka's design: should we remove description?
-            <div className="card__content card__subtext card__subtext--two-lines">
-              <TruncatedMarkdown lines={2}>{description}</TruncatedMarkdown>
-            </div>
-            */}
+        <CardMedia thumbnail={thumbnail} />
+        <div className="card-media__internal-links">
+          {showPrice && <FilePrice uri={uri} />}
         </div>
-        {obscureNsfw && this.state.hovered && <NsfwOverlay />}
+
+        <div className="card__title-identity">
+          <div className="card__title--small">
+            <TruncatedText lines={3}>{title}</TruncatedText>
+          </div>
+          <div className="card__subtitle">
+            {pending ? (
+              <div>Pending...</div>
+            ) : (
+              <React.Fragment>
+                <UriIndicator uri={uri} link />
+                <div className="card--file-subtitle">
+                  {isRewardContent && <Icon icon={icons.FEATURED} />}
+                  {fileInfo && <Icon icon={icons.LOCAL} />}
+                </div>
+              </React.Fragment>
+            )}
+          </div>
+        </div>
+        {shouldObscureNsfw && <NsfwOverlay />}
       </section>
     );
+    /* eslint-enable jsx-a11y/click-events-have-key-events */
   }
 }
 

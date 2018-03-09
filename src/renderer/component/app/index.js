@@ -1,4 +1,3 @@
-import React from 'react';
 import { connect } from 'react-redux';
 import {
   selectPageTitle,
@@ -10,7 +9,7 @@ import { doAlertError } from 'redux/actions/app';
 import { doRecordScroll } from 'redux/actions/navigation';
 import App from './view';
 
-const select = (state, props) => ({
+const select = state => ({
   pageTitle: selectPageTitle(state),
   user: selectUser(state),
   currentStackIndex: selectHistoryIndex(state),

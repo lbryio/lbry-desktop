@@ -2,69 +2,69 @@
 Both of these should probably die and become variables as well
  */
 $spacing-vertical: 24px;
-$width-page-constrained: 800px;
-$text-color: #000;
+$spacing-width: 36px;
+$large-breakpoint: 1279px; // css variables do not work inside media queries
 
 :root {
+  /* Widths & spacings */
+  --side-nav-width: 220px;
+  --video-aspect-ratio: 56.25%; // 9 x 16
+  --snack-bar-width: 756px;
+
   /* Colors */
-  --color-brand: #155b4a;
-  --color-primary: #155b4a;
-  --color-primary-light: saturate(lighten(#155b4a, 50%), 20%);
-  --color-light-alt: hsl(hue(#155b4a), 15, 85);
+  --color-white: #fff;
+  --color-black: #000;
+  --color-grey: #d6d6d6;
+  --color-grey-light: #f6f6f6;
+  --color-grey-dark: #888;
+  --color-primary: #44b098;
+  --color-primary-dark: #2c6e60;
+  --color-primary-light: #64c9b2;
+  --color-secondary: #6afbda;
+  --color-teal: #19a6a3;
+  --color-dark-blue: #2f6f61;
+  --color-light-blue: #49b2e2;
+  --color-red: #e2495e;
+  --color-yellow: #fbd55e;
+  --color-divider: #e3e3e3;
+
+  --text-color: var(--color-black);
+  --text-color-inverse: var(--color-white);
+
   --color-dark-overlay: rgba(32, 32, 32, 0.9);
   --color-help: rgba(0, 0, 0, 0.54);
-  --color-notice: #8a6d3b;
   --color-error: #a94442;
-  --color-load-screen-text: #c3c3c3;
-  --color-meta-light: #505050;
-  --color-money: #216c2a;
-  --color-download: rgba(0, 0, 0, 0.75);
-  --color-canvas: #f5f5f5;
-  --color-bg: #ffffff;
-  --color-bg-alt: #d9d9d9;
-
-  /* Misc */
-  --content-max-width: 1000px;
-  --nsfw-blur-intensity: 20px;
-  --height-video-embedded: $width-page-constrained * 9 / 16;
-
-  /* Font */
-  --font-size: 16px;
-  --font-line-height: 1.3333;
-  --font-size-subtext-multiple: 0.82;
+  --color-download: var(--color-white);
+  --color-download-overlay: var(--color-black);
+  --color-bg: #fafafa;
+  --color-bg-alt: var(--color-grey-light);
+  --color-placeholder: #ececec;
+  --color-nav-bg: var(--color-grey-light);
 
   /* Shadows */
-  --box-shadow-layer: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-  --box-shadow-focus: 2px 4px 4px 0 rgba(0, 0, 0, 0.14), 2px 5px 3px -2px rgba(0, 0, 0, 0.2),
-    2px 3px 7px 0 rgba(0, 0, 0, 0.12);
-
-  /* Transition */
-  --transition-duration: 0.225s;
-  --transition-type: ease;
+  --box-shadow-layer: 0 4px 9px -2px var(--color-grey);
+  --box-shadow-button: 0 10px 20px rgba(0, 0, 0, 0.1);
+  --box-shadow-wunderbar: 0px 10px 20px rgba(0, 0, 0, 0.03);
 
   /* Text */
-  --text-color: $text-color;
   --text-help-color: #eee;
   --text-max-width: 660px;
   --text-link-padding: 4px;
   --text-selection-bg: rgba(saturate(lighten(#155b4a, 20%), 20%), 1); // temp color
   --text-selection-color: #fff;
 
-  /* Window */
-  --window-bg: var(--color-canvas);
-
   /* Form */
   --form-label-color: rgba(0, 0, 0, 0.54);
 
   /* Input */
   --input-bg: transparent;
-  --input-width: 330px;
+  --input-label-color: var(--color-grey-dark);
   --input-color: var(--text-color);
-  --input-border-size: 2px;
-  --input-border-color: rgba(0, 0, 0, 0.54);
-
-  /* input:active */
-  --input-active-bg: transparent;
+  --input-border-size: 1px;
+  --input-border-color: var(--color-grey-dark);
+  --input-copyable-bg: var(--color-grey-light);
+  --input-copyable-color: var(--color-grey-dark);
+  --input-copyable-border: var(--color-grey);
 
   /* input:disabled */
   --input-disabled-border-color: rgba(0, 0, 0, 0.42);
@@ -82,36 +82,32 @@ $text-color: #000;
   --select-height: 30px;
 
   /* Button */
-  --button-bg: var(--color-bg-alt);
-  --button-color: #fff;
-  --button-primary-bg: var(--color-primary);
-  --button-primary-color: #fff;
-  --button-padding: $spacing-vertical * 2/3;
-  --button-height: $spacing-vertical * 1.5;
-  --button-intra-margin: $spacing-vertical;
-  --button-radius: 3px;
+  --btn-bg-primary: var(--color-primary);
+  --btn-color-primary: var(--color-white);
+  --btn-bg-primary-hover: var(--color-primary-light);
+  --btn-bg-alt: var(--color-white);
+  --btn-color-alt: var(--text-color);
+  --btn-color-inverse: var(--color-primary);
+  --btn-external-color: var(--color-light-blue);
+  --btn-bg-secondary: var(--color-teal);
+  --btn-bg-danger: var(--color-red);
+  --btn-radius: 20px;
+  --btn-height: 36px;
 
   /* Header */
-  --header-bg: var(--color-bg);
-  --header-color: #666;
+  --header-bg: var(--color-white);
+  --header-color: var(--color-text);
   --header-active-color: rgba(0, 0, 0, 0.85);
-  --header-height: $spacing-vertical * 2.5;
-  --header-button-bg: transparent; //var(--button-bg);
+  --header-height: $spacing-width * 3;
+  --header-button-bg: transparent;
   --header-button-hover-bg: rgba(100, 100, 100, 0.15);
 
   /* Header -> search */
-  --search-bg: rgba(255, 255, 255, 0.7);
-  --search-border: 1px solid #ccc;
   --search-color: #666;
+  --search-bg-color: #fff;
   --search-active-color: var(--header-active-color);
-  --search-active-shadow: 0 0 3px 0px var(--text-selection-bg);
-
-  /* Tabs */
-  --tab-bg: transparent;
-  --tab-color: rgba(0, 0, 0, 0.5);
-  --tab-active-color: var(--color-primary);
-  --tab-border-size: 2px;
-  --tab-border: var(--tab-border-size) solid var(--tab-active-color);
+  --search-active-shadow: 0 6px 9px -2px var(--color-grey--dark);
+  --search-modal-input-height: 70px;
 
   /* Table */
   --table-border: 1px solid #e2e2e2;
@@ -119,14 +115,12 @@ $text-color: #000;
   --table-item-odd: #f4f4f4;
 
   /* Card */
-  --card-bg: var(--color-bg);
-  --card-hover-translate: 10px;
-  --card-margin: $spacing-vertical * 2/3;
-  --card-max-width: $width-page-constrained;
-  --card-padding: $spacing-vertical * 2/3;
   --card-radius: 2px;
-  --card-link-scaling: 1.1;
-  --card-small-width: $spacing-vertical * 10;
+  --card-margin: $spacing-vertical * 2/3;
+  --card-wallet-color: var(--text-color-inverse);
+
+  /* File Tile Card */
+  --file-tile--media-size: 60px;
 
   /* Modal */
   --modal-width: 440px;
@@ -134,16 +128,10 @@ $text-color: #000;
   --modal-overlay-bg: rgba(#f5f5f5, 0.75); // --color-canvas: #F5F5F5
   --modal-border: 1px solid rgb(204, 204, 204);
 
-  /* Menu */
-  --menu-bg: var(--color-bg);
-  --menu-radius: 2px;
-  --menu-item-hover-bg: var(--color-bg-alt);
-
-  /* Tooltip */
+  // /* Tooltip */
   --tooltip-width: 300px;
   --tooltip-bg: var(--color-bg);
   --tooltip-color: var(--text-color);
-  --tooltip-border: 1px solid #aaa;
 
   /* Scrollbar */
   --scrollbar-radius: 10px;
@@ -152,10 +140,7 @@ $text-color: #000;
   --scrollbar-thumb-active-bg: var(--color-primary);
   --scrollbar-track-bg: transparent;
 
-  /* Divider */
-  --divider: 1px solid rgba(0, 0, 0, 0.12);
-
-  /* Animation :) */
+  // /* Animation :) */
   --animation-duration: 0.3s;
   --animation-style: cubic-bezier(0.55, 0, 0.1, 1);
 }
