@@ -7,10 +7,7 @@ import { selectDiscover } from 'redux/selectors/discover';
 import DiscoverPage from './view';
 
 const select = state => ({
-  featuredUris: selectFeaturedUris(state),
   fetchingFeaturedUris: selectFetchingFeaturedUris(state),
-  claimsByChannel: selectAllClaimsByChannel(state),
-  claimsById: selectClaimsById(state),
   categories: selectDiscover(state),
 });
 

@@ -228,10 +228,7 @@ class DiscoverPage extends React.PureComponent {
 
   render() {
     const {
-      featuredUris,
       fetchingFeaturedUris,
-      claimsByChannel,
-      claimsById,
       categories,
     } = this.props;
     const hasContent = typeof categories === 'object' && Object.keys(categories).length,
