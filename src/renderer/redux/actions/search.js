@@ -41,7 +41,7 @@ export function doSearch(rawQuery) {
 
           data.forEach(result => {
             const uri = buildURI({
-              name: result.name,
+              claimName: result.name,
               claimId: result.claimId,
             });
             actions.push(doResolveUri(uri));
