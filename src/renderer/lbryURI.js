@@ -148,13 +148,13 @@ export function parseURI(URI, requireProto = false) {
 export function buildURI(URIObj, includeProto = true) {
   const { claimId, claimSequence, bidPosition, contentName, channelName } = URIObj;
 
-  let { claim_name, path } = URIObj;
+  let { claimName, path } = URIObj;
 
   if (channelName) {
     const channelNameFormatted = channelName.startsWith('@') ? channelName : `@${channelName}`;
-    if (!claim_name) {
-      claim_name = channelNameFormatted;
-    } else if (claim_name !== channelNameFormatted) {
+    if (!claimName) {
+      claimName = channelNameFormatted;
+    } else if (claimName !== channelNameFormatted) {
       throw new Error(
         __(
           'Received a channel content URI, but claim name and channelName do not match. "name" represents the value in the name position of the URI (lbry://name...), which for channel content will be the channel name. In most cases, to construct a channel URI you should just pass channelName and contentName.'
@@ -164,8 +164,8 @@ export function buildURI(URIObj, includeProto = true) {
   }
 
   if (contentName) {
-    if (!claim_name) {
-      claim_name = contentName;
+    if (!claimName) {
+      claimName = contentName;
     } else if (!path) {
       path = contentName;
     }
@@ -180,7 +180,7 @@ export function buildURI(URIObj, includeProto = true) {
 
   return (
     (includeProto ? 'lbry://' : '') +
-    claim_name +
+    claimName +
     (claimId ? `#${claimId}` : '') +
     (claimSequence ? `:${claimSequence}` : '') +
     (bidPosition ? `${bidPosition}` : '') +
@@ -193,7 +193,7 @@ export function normalizeURI(URI) {
   if (URI.match(/pending_claim/)) return URI;
 
   const { claim_name, path, bidPosition, claimSequence, claimId } = parseURI(URI);
-  return buildURI({ claim_name, path, claimSequence, bidPosition, claimId });
+  return buildURI({ claimName: claim_name, path, claimSequence, bidPosition, claimId });
 }
 
 export function isURIValid(URI) {
