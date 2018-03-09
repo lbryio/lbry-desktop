@@ -215,7 +215,7 @@ Lbry.getAppVersionInfo = () =>
  */
 Lbry.file_list = (params = {}) =>
   new Promise((resolve, reject) => {
-    const { claim_name, channel_name: channelName, outpoint } = params;
+    const { claim_name: claimName, channel_name: channelName, outpoint } = params;
 
     /**
      * If we're searching by outpoint, check first to see if there's a matching pending publish.
@@ -234,10 +234,10 @@ Lbry.file_list = (params = {}) =>
       'file_list',
       params,
       fileInfos => {
-        removePendingPublishIfNeeded({ claim_name, channelName, outpoint });
+        removePendingPublishIfNeeded({ name: claimName, channelName, outpoint });
 
         // if a naked file_list call, append the pending file infos
-        if (!claim_name && !channelName && !outpoint) {
+        if (!claimName && !channelName && !outpoint) {
           const dummyFileInfos = Lbry.getPendingPublishes().map(pendingPublishToDummyFileInfo);
 
           resolve([...fileInfos, ...dummyFileInfos]);
