@@ -25,6 +25,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
   * Keep node_modules up-to-date when yarn.lock changes due to git ([#955](https://github.com/lbryio/lbry-app/pull/955))
   * Do not kill an existing daemon, instead check if one exists ([#973](https://github.com/lbryio/lbry-app/pull/973))
   * Enable play button immediately after user clicks download ([#987](https://github.com/lbryio/lbry-app/pull/987))
+  * Significantly improved search performance ([#1032](https://github.com/lbryio/lbry-app/pull/1032))
   
 ### Fixed
   * Fixed sort by date of published content ([#986](https://github.com/lbryio/lbry-app/issues/986))
