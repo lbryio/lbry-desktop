@@ -71,6 +71,13 @@ export function doResolveUri(uri) {
 
 export function doFetchFeaturedUris() {
   return dispatch => {
+    dispatch(doFetchFeaturedUrisNow());
+    setInterval(() => dispatch(doFetchFeaturedUrisNow()), 40000);
+  }
+}
+
+export function doFetchFeaturedUrisNow() {
+  return dispatch => {
     dispatch({
       type: ACTIONS.FETCH_FEATURED_CONTENT_STARTED,
     });
