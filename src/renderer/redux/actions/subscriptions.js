@@ -7,7 +7,7 @@ import { doPurchaseUri } from 'redux/actions/content';
 import { doNavigate } from 'redux/actions/navigation';
 import { buildURI } from 'lbryURI';
 
-const CHECK_SUBSCRIPTIONS_INTERVAL = 10 * 60 * 1000;
+const CHECK_SUBSCRIPTIONS_INTERVAL = 60 * 60 * 1000;
 
 export const doChannelSubscribe = (subscription: Subscription) => (dispatch: Dispatch) =>
   dispatch({
