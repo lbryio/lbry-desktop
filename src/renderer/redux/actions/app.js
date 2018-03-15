@@ -324,6 +324,12 @@ export function doClearCache() {
   };
 }
 
+export function doQuit() {
+  return () => {
+    remote.app.quit();
+  };
+}
+
 export function doQuitAnyDaemon() {
   return dispatch => {
     try {
@@ -334,13 +340,9 @@ export function doQuitAnyDaemon() {
       }
     } catch (error) {
       dispatch(doAlertError(`Quitting daemon failed due to: ${error.message}`));
+    } finally {
+      dispatch(doQuit());
     }
-  };
-}
-
-export function doQuit() {
-  return () => {
-    remote.app.quit();
   };
 }
 

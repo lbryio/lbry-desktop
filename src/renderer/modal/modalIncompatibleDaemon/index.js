@@ -7,4 +7,4 @@ const perform = dispatch => ({
   quitAnyDaemon: () => dispatch(doQuitAnyDaemon()),
 });
 
-export default connect(perform)(ModalIncompatibleDaemon);
+export default connect(null, perform)(ModalIncompatibleDaemon);

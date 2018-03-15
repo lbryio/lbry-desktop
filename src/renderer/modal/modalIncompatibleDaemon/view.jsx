@@ -1,16 +1,8 @@
-// @flow
-
 import React from 'react';
 import { Modal } from 'modal/modal';
 import Link from 'component/link/index';
-import type { Dispatch } from 'src/renderer/redux/actions/shape_shift';
 
-type Props = {
-  quit: Dispatch,
-  quitAnyDaemon: Dispatch,
-};
-
-class ModalIncompatibleDaemon extends React.PureComponent<Props> {
+class ModalIncompatibleDaemon extends React.PureComponent {
   render() {
     const { quit, quitAnyDaemon } = this.props;
 
@@ -18,7 +10,7 @@ class ModalIncompatibleDaemon extends React.PureComponent<Props> {
       <Modal
         isOpen
         contentLabel={__('Incompatible daemon running')}
-        type="alert"
+        type="confirm"
         confirmButtonLabel={__('Quit daemon')}
         abortButtonLabel={__('Do nothing')}
         onConfirmed={quitAnyDaemon}
