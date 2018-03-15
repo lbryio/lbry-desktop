@@ -76,7 +76,15 @@ class ChannelPage extends React.PureComponent {
             <div className="card__title-identity">
               <h1>{uri}</h1>
             </div>
-            <SubscribeButton uri={uri} channelName={name} />
+            <div className="card__actions">
+              <SubscribeButton uri={uri} channelName={name} />
+              <Link
+                iconRight="icon-external-link"
+                button="primary"
+                label={__('SHARE')}
+                href={`https://spee.ch/@${name}`}
+              />
+            </div>
           </div>
           <div className="card__content">
             <p className="empty">
