@@ -4,7 +4,7 @@ import { doFetchFileInfo } from 'redux/actions/file_info';
 import { makeSelectFileInfoForUri } from 'redux/selectors/file_info';
 import { selectRewardContentClaimIds } from 'redux/selectors/content';
 import { doFetchCostInfoForUri } from 'redux/actions/cost_info';
-import { checkSubscriptionLatest } from 'redux/actions/subscriptions';
+import { doCheckSubscription } from 'redux/actions/subscriptions';
 import {
   makeSelectClaimForUri,
   makeSelectContentTypeForUri,
@@ -32,8 +32,7 @@ const perform = dispatch => ({
   navigate: (path, params) => dispatch(doNavigate(path, params)),
   fetchFileInfo: uri => dispatch(doFetchFileInfo(uri)),
   fetchCostInfo: uri => dispatch(doFetchCostInfoForUri(uri)),
-  checkSubscriptionLatest: (subscription, uri) =>
-    dispatch(checkSubscriptionLatest(subscription, uri)),
+  checkSubscription: subscription => dispatch(doCheckSubscription(subscription)),
 });
 
 export default connect(select, perform)(FilePage);

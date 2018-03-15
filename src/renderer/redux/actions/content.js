@@ -165,7 +165,7 @@ export function doUpdateLoadStatus(uri, outpoint) {
         setProgressBar(totalProgress);
 
         const notif = new window.Notification('LBRY Download Complete', {
-          body: fileInfo.metadata.stream.metadata.title,
+          body: fileInfo.metadata.title,
           silent: false,
         });
         notif.onclick = () => {
