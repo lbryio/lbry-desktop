@@ -47,4 +47,4 @@ addons:
     paths:
      - $(git ls-files -o dist/{*.dmg,*.exe,*.deb} | tr "\n" ":")
     target_paths:
-     - /app/build-${TRAVIS_BUILD_NUMBER}_commit-${TRAVIS_COMMIT:0:7}$([ ! -z ${TRAVIS_TAG} ] && echo "_tag-${TRAVIS_TAG}")
+     - /app/build-${TRAVIS_BUILD_NUMBER}_commit-${TRAVIS_COMMIT:0:7}$([ ! -z ${TRAVIS_TAG} ] && echo _tag-${TRAVIS_TAG})
