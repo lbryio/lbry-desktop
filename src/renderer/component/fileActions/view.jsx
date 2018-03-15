@@ -10,6 +10,8 @@ class FileActions extends React.PureComponent {
     const claimId = fileInfo ? fileInfo.claim_id : null,
       showDelete = fileInfo && Object.keys(fileInfo).length > 0;
 
+    console.log("TRAV", fileInfo);
+
     return (
       <section className="card__actions">
         <FileDownloadLink uri={uri} />
@@ -31,6 +33,13 @@ class FileActions extends React.PureComponent {
             label={__('report')}
           />
         )}
+        <Link
+          button="text"
+          icon="icon-external-link"
+          href={`https://spee.ch/${claimId}/${fileInfo.claim_name}`}
+          className="no-underline"
+          label={__('share')}
+        />
         <Link
           button="primary"
           icon="icon-gift"
