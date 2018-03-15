@@ -82,7 +82,7 @@ class ChannelPage extends React.PureComponent {
                 iconRight="icon-external-link"
                 button="primary"
                 label={__('SHARE')}
-                href={`https://spee.ch/@${name}`}
+                href={`https://spee.ch/${name}`}
               />
             </div>
           </div>
