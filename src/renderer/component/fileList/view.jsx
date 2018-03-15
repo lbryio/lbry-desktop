@@ -13,34 +13,40 @@ class FileList extends React.PureComponent {
     };
 
     this._sortFunctions = {
-      dateNew: fileInfos => this.props.sortByHeight ? fileInfos.slice().sort((fileInfo1, fileInfo2) => {
-          const height1 = this.props.claimsById[fileInfo1.claim_id]
-            ? this.props.claimsById[fileInfo1.claim_id].height
-            : 0;
-          const height2 = this.props.claimsById[fileInfo2.claim_id]
-            ? this.props.claimsById[fileInfo2.claim_id].height
-            : 0;
-          if (height1 > height2) {
-            return -1;
-          } else if (height1 < height2) {
-            return 1;
-          }
-          return 0;
-        }) : [...fileInfos].reverse(),
-      dateOld: fileInfos => this.props.sortByHeight ? fileInfos.slice().sort((fileInfo1, fileInfo2) => {
-          const height1 = this.props.claimsById[fileInfo1.claim_id]
-            ? this.props.claimsById[fileInfo1.claim_id].height
-            : 999999;
-          const height2 = this.props.claimsById[fileInfo2.claim_id]
-            ? this.props.claimsById[fileInfo2.claim_id].height
-            : 999999;
-          if (height1 < height2) {
-            return -1;
-          } else if (height1 > height2) {
-            return 1;
-          }
-          return 0;
-        }) :  fileInfos,
+      dateNew: fileInfos =>
+        this.props.sortByHeight
+          ? fileInfos.slice().sort((fileInfo1, fileInfo2) => {
+              const height1 = this.props.claimsById[fileInfo1.claim_id]
+                ? this.props.claimsById[fileInfo1.claim_id].height
+                : 0;
+              const height2 = this.props.claimsById[fileInfo2.claim_id]
+                ? this.props.claimsById[fileInfo2.claim_id].height
+                : 0;
+              if (height1 > height2) {
+                return -1;
+              } else if (height1 < height2) {
+                return 1;
+              }
+              return 0;
+            })
+          : [...fileInfos].reverse(),
+      dateOld: fileInfos =>
+        this.props.sortByHeight
+          ? fileInfos.slice().sort((fileInfo1, fileInfo2) => {
+              const height1 = this.props.claimsById[fileInfo1.claim_id]
+                ? this.props.claimsById[fileInfo1.claim_id].height
+                : 999999;
+              const height2 = this.props.claimsById[fileInfo2.claim_id]
+                ? this.props.claimsById[fileInfo2.claim_id].height
+                : 999999;
+              if (height1 < height2) {
+                return -1;
+              } else if (height1 > height2) {
+                return 1;
+              }
+              return 0;
+            })
+          : fileInfos,
       title: fileInfos =>
         fileInfos.slice().sort((fileInfo1, fileInfo2) => {
           const title1 = fileInfo1.value
