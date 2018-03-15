@@ -10,8 +10,6 @@ class FileActions extends React.PureComponent {
     const claimId = fileInfo ? fileInfo.claim_id : null,
       showDelete = fileInfo && Object.keys(fileInfo).length > 0;
 
-    console.log("TRAV", fileInfo);
-
     return (
       <section className="card__actions">
         <FileDownloadLink uri={uri} />
