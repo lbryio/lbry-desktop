@@ -14,6 +14,7 @@ import walletReducer from 'redux/reducers/wallet';
 import shapeShiftReducer from 'redux/reducers/shape_shift';
 import subscriptionsReducer from 'redux/reducers/subscriptions';
 import mediaReducer from 'redux/reducers/media';
+import uploadReducer from "redux/reducers/upload";
 import { persistStore, autoRehydrate } from 'redux-persist';
 import createCompressor from 'redux-persist-transform-compress';
 import createFilter from 'redux-persist-transform-filter';
@@ -65,6 +66,7 @@ const reducers = combineReducers({
   shapeShift: shapeShiftReducer,
   subscriptions: subscriptionsReducer,
   media: mediaReducer,
+  upload: uploadReducer,
 });
 
 const bulkThunk = createBulkThunkMiddleware();
