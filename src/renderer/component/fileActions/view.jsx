@@ -31,13 +31,15 @@ class FileActions extends React.PureComponent {
             label={__('report')}
           />
         )}
-        <Link
-          button="text"
-          iconRight="icon-external-link"
-          href={`https://spee.ch/${claimId}/${fileInfo.claim_name}`}
-          className="no-underline"
-          label={__('share')}
-        />
+        {fileInfo.mime_type === "video/mp4" && (
+          <Link
+            button="text"
+            iconRight="icon-external-link"
+            href={`https://spee.ch/${claimId}/${fileInfo.claim_name}`}
+            className="no-underline"
+            label={__('share')}
+          />
+        )}
         <Link
           button="primary"
           icon="icon-gift"
