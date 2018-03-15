@@ -3,9 +3,6 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
-The LBRY Web UI comes bundled as part of [LBRYApp](https://github.com/lbryio/lbry-app).
-Web UI version numbers should always match the corresponding version of LBRY App.
-
 ## [Unreleased]
 ### Added
   * Save app state when closing to tray ([#968](https://github.com/lbryio/lbry-app/issues/968))
@@ -20,7 +17,7 @@ Web UI version numbers should always match the corresponding version of LBRY App
   * Improved privacy by allowing users to turn off the file view counter and better understand privacy settings ([#1074](https://github.com/lbryio/lbry-app/pull/1074))
   * Disabled auto dark mode if dark mode is selected ([#1006](https://github.com/lbryio/lbry-app/pull/1006))
   * Refactor Electron's main process ([#951](https://github.com/lbryio/lbry-app/pull/951))
-  * Refactor lbryuri.js into separate named exports ([#957](https://github.com/lbryio/lbry-app/pull/957))
+  * Refactor `lbryuri.js` into separate named exports ([#957](https://github.com/lbryio/lbry-app/pull/957))
   * Keep node_modules up-to-date when yarn.lock changes due to git ([#955](https://github.com/lbryio/lbry-app/pull/955))
   * Do not kill an existing daemon, instead check if one exists ([#973](https://github.com/lbryio/lbry-app/pull/973))
   * Enable play button immediately after user clicks download ([#987](https://github.com/lbryio/lbry-app/pull/987))
@@ -28,7 +25,6 @@ Web UI version numbers should always match the corresponding version of LBRY App
   
 ### Fixed
   * Fixed sort by date of published content ([#986](https://github.com/lbryio/lbry-app/issues/986))
-  * Fix night mode start time, set to 9PM (#1050)
   * Fix night mode start time, set to 9PM ([#1050](https://github.com/lbryio/lbry-app/issues/1050))
   * Disable drag and drop of files into the app ([#1045](https://github.com/lbryio/lbry-app/pull/1045))
   * Fixed uninformative error message ([#1046](https://github.com/lbryio/lbry-app/pull/1046))
