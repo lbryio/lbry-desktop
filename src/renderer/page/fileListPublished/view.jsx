@@ -25,6 +25,7 @@ class FileListPublished extends React.PureComponent {
           fileInfos={claims}
           fetching={isFetching}
           fileTileShowEmpty={FileTile.SHOW_EMPTY_PENDING}
+          sortByHeight
         />
       );
     } else if (isFetching) {
