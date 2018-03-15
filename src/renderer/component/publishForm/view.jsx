@@ -61,15 +61,6 @@ class PublishForm extends React.PureComponent {
   }
 
   handleSubmit() {
-    const { balance } = this.props;
-    const { bid } = this.state;
-
-    if (bid > balance) {
-      this.handlePublishError({ message: 'insufficient funds' });
-
-      return;
-    }
-
     this.setState({
       submitting: true,
     });
