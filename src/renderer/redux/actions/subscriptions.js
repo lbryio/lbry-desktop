@@ -38,7 +38,9 @@ export const doCheckSubscriptions = () => (
   });
 };
 
-export const doCheckSubscription = (subscription: Subscription, notify?: boolean) => (dispatch: Dispatch) => {
+export const doCheckSubscription = (subscription: Subscription, notify?: boolean) => (
+  dispatch: Dispatch
+) => {
   dispatch({
     type: ACTIONS.CHECK_SUBSCRIPTION_STARTED,
     data: subscription,
@@ -90,16 +92,21 @@ export const doCheckSubscription = (subscription: Subscription, notify?: boolean
       };
     }
 
-    dispatch(setSubscriptionLatest({
-      channelName: claimsInChannel[0].channel_name,
-      uri: buildURI(
-        { channelName: claimsInChannel[0].channel_name, claimId: claimsInChannel[0].claim_id },
-        false
+    dispatch(
+      setSubscriptionLatest(
+        {
+          channelName: claimsInChannel[0].channel_name,
+          uri: buildURI(
+            { channelName: claimsInChannel[0].channel_name, claimId: claimsInChannel[0].claim_id },
+            false
+          ),
+        },
+        buildURI(
+          { contentName: claimsInChannel[0].name, claimId: claimsInChannel[0].claim_id },
+          false
+        )
       )
-    }, buildURI(
-      { contentName: claimsInChannel[0].name, claimId: claimsInChannel[0].claim_id },
-      false
-    )));
+    );
 
     dispatch({
       type: ACTIONS.CHECK_SUBSCRIPTION_COMPLETED,
