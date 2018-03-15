@@ -35,7 +35,7 @@ class FileActions extends React.PureComponent {
         )}
         <Link
           button="text"
-          icon="icon-external-link"
+          iconRight="icon-external-link"
           href={`https://spee.ch/${claimId}/${fileInfo.claim_name}`}
           className="no-underline"
           label={__('share')}
