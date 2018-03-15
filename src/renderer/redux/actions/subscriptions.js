@@ -28,7 +28,7 @@ export const doCheckSubscriptions = () => (
   const checkSubscriptionsTimer = setInterval(
     () =>
       selectSubscriptions(getState()).map((subscription: Subscription) =>
-        dispatch(doCheckSubscription(subscription))
+        dispatch(doCheckSubscription(subscription, true))
       ),
     CHECK_SUBSCRIPTIONS_INTERVAL
   );
@@ -38,7 +38,7 @@ export const doCheckSubscriptions = () => (
   });
 };
 
-export const doCheckSubscription = (subscription: Subscription) => (dispatch: Dispatch) => {
+export const doCheckSubscription = (subscription: Subscription, notify?: boolean) => (dispatch: Dispatch) => {
   dispatch({
     type: ACTIONS.CHECK_SUBSCRIPTION_STARTED,
     data: subscription,
@@ -59,7 +59,7 @@ export const doCheckSubscription = (subscription: Subscription) => (dispatch: Di
         )
       : 1;
 
-    if (count !== 0) {
+    if (count !== 0 && notify) {
       if (!claimsInChannel[0].value.stream.metadata.fee) {
         dispatch(
           doPurchaseUri(
@@ -90,31 +90,21 @@ export const doCheckSubscription = (subscription: Subscription) => (dispatch: Di
       };
     }
 
-    //$FlowIssue
+    dispatch(setSubscriptionLatest({
+      channelName: claimsInChannel[0].channel_name,
+      uri: buildURI(
+        { channelName: claimsInChannel[0].channel_name, claimId: claimsInChannel[0].claim_id },
+        false
+      )
+    }, buildURI(
+      { contentName: claimsInChannel[0].name, claimId: claimsInChannel[0].claim_id },
+      false
+    )));
+
     dispatch({
       type: ACTIONS.CHECK_SUBSCRIPTION_COMPLETED,
       data: subscription,
     });
-  });
-};
-
-export const checkSubscriptionLatest = (channel: Subscription, uri: string) => (
-  dispatch: Dispatch
-) => {
-  Lbry.claim_list_by_channel({ uri: channel.uri, page: 1 }).then(result => {
-    const claimResult = result[channel.uri] || {};
-    const { claims_in_channel: claimsInChannel } = claimResult;
-
-    if (
-      claimsInChannel &&
-      claimsInChannel.length &&
-      buildURI(
-        { contentName: claimsInChannel[0].name, claimId: claimsInChannel[0].claim_id },
-        false
-      ) === uri
-    ) {
-      dispatch(setSubscriptionLatest(channel, uri));
-    }
   });
 };
 

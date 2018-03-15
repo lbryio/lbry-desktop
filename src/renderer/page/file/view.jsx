@@ -17,7 +17,7 @@ class FilePage extends React.PureComponent {
   componentDidMount() {
     this.fetchFileInfo(this.props);
     this.fetchCostInfo(this.props);
-    this.checkSubscriptionLatest(this.props);
+    this.checkSubscription(this.props);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -36,13 +36,13 @@ class FilePage extends React.PureComponent {
     }
   }
 
-  checkSubscriptionLatest(props) {
+  checkSubscription(props) {
     if (
       props.subscriptions
         .map(subscription => subscription.channelName)
         .indexOf(props.claim.channel_name) !== -1
     ) {
-      props.checkSubscriptionLatest(
+      props.checkSubscription(
         {
           channelName: props.claim.channel_name,
           uri: buildURI(
@@ -52,9 +52,7 @@ class FilePage extends React.PureComponent {
             },
             false
           ),
-        },
-        buildURI({ contentName: props.claim.name, claimId: props.claim.claim_id }, false)
-      );
+        });
     }
   }
 
