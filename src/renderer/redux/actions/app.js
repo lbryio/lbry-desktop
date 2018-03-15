@@ -21,6 +21,7 @@ import {
   selectUpgradeDownloadPath,
   selectUpgradeFilename,
   selectAutoUpdateDeclined,
+  selectRemoteVersion,
 } from 'redux/selectors/app';
 import { lbrySettings as config } from 'package.json';
 
@@ -70,37 +71,6 @@ export function doStartUpgrade() {
   };
 }
 
-export function doDownloadUpgradeRequested() {
-  // This means the user requested an upgrade by clicking the "upgrade" button in the navbar.
-  // If on Mac and Windows, we do some new behavior for the auto-update system.
-  // This will probably be reorganized once we get auto-update going on Linux and remove
-  // the old logic.
-
-  return (dispatch, getState) => {
-    const state = getState();
-
-    // Pause video if needed
-    dispatch(doPause());
-
-    const autoUpdateDeclined = selectAutoUpdateDeclined(state);
-
-    if (autoUpdateDeclined) {
-      // The user declined an update before, so show the "confirm" dialog
-      dispatch({
-        type: ACTIONS.OPEN_MODAL,
-        data: { modal: MODALS.AUTO_UPDATE_CONFIRM },
-      });
-    } else {
-      // The user was never shown the original update dialog (e.g. because they were
-      // watching a video). So show the initial "update downloaded" dialog.
-      dispatch({
-        type: ACTIONS.OPEN_MODAL,
-        data: { modal: MODALS.AUTO_UPDATE_DOWNLOADED },
-      });
-    }
-  };
-}
-
 export function doDownloadUpgrade() {
   return (dispatch, getState) => {
     const state = getState();
@@ -137,6 +107,43 @@ export function doDownloadUpgrade() {
         modal: MODALS.DOWNLOADING,
       },
     });
+  };
+}
+
+export function doDownloadUpgradeRequested() {
+  // This means the user requested an upgrade by clicking the "upgrade" button in the navbar.
+  // If on Mac and Windows, we do some new behavior for the auto-update system.
+  // This will probably be reorganized once we get auto-update going on Linux and remove
+  // the old logic.
+
+  return (dispatch, getState) => {
+    const state = getState();
+
+    // Pause video if needed
+    dispatch(doPause());
+
+    const autoUpdateDeclined = selectAutoUpdateDeclined(state);
+
+    if (['win32', 'darwin'].includes(process.platform)) {
+      // electron-updater behavior
+      if (autoUpdateDeclined) {
+        // The user declined an update before, so show the "confirm" dialog
+        dispatch({
+          type: ACTIONS.OPEN_MODAL,
+          data: { modal: MODALS.AUTO_UPDATE_CONFIRM },
+        });
+      } else {
+        // The user was never shown the original update dialog (e.g. because they were
+        // watching a video). So show the inital "update downloaded" dialog.
+        dispatch({
+          type: ACTIONS.OPEN_MODAL,
+          data: { modal: MODALS.AUTO_UPDATE_DOWNLOADED },
+        });
+      }
+    } else {
+      // Old behavior for Linux
+      dispatch(doDownloadUpgrade());
+    }
   };
 }
 
@@ -192,11 +199,47 @@ export function doCheckUpgradeAvailable() {
       type: ACTIONS.CHECK_UPGRADE_START,
     });
 
-    const autoUpdateDeclined = selectAutoUpdateDeclined(state);
+    if (['win32', 'darwin'].includes(process.platform)) {
+      // On Windows and Mac, updates happen silently through
+      // electron-updater.
+      const autoUpdateDeclined = selectAutoUpdateDeclined(state);
 
-    if (!autoUpdateDeclined && !isDev) {
-      autoUpdater.checkForUpdates();
+      if (!autoUpdateDeclined && !isDev) {
+        autoUpdater.checkForUpdates();
+      }
+      return;
     }
+
+    const success = ({ remoteVersion, upgradeAvailable }) => {
+      dispatch({
+        type: ACTIONS.CHECK_UPGRADE_SUCCESS,
+        data: {
+          upgradeAvailable,
+          remoteVersion,
+        },
+      });
+
+      if (
+        upgradeAvailable &&
+        !selectCurrentModal(state) &&
+        (!selectIsUpgradeSkipped(state) || remoteVersion !== selectRemoteVersion(state))
+      ) {
+        dispatch({
+          type: ACTIONS.OPEN_MODAL,
+          data: {
+            modal: MODALS.UPGRADE,
+          },
+        });
+      }
+    };
+
+    const fail = () => {
+      dispatch({
+        type: ACTIONS.CHECK_UPGRADE_FAIL,
+      });
+    };
+
+    Lbry.getAppVersionInfo().then(success, fail);
   };
 }
 

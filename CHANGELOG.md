@@ -19,7 +19,6 @@ Web UI version numbers should always match the corresponding version of LBRY App
 ### Changed
   * Improved privacy by allowing users to turn off the file view counter and better understand privacy settings ([#1074](https://github.com/lbryio/lbry-app/pull/1074))
   * Disabled auto dark mode if dark mode is selected ([#1006](https://github.com/lbryio/lbry-app/pull/1006))
-  * AppImage support for Linux instead of .deb ([#1010](https://github.com/lbryio/lbry-app/pull/1010))
   * Refactor Electron's main process ([#951](https://github.com/lbryio/lbry-app/pull/951))
   * Refactor lbryuri.js into separate named exports ([#957](https://github.com/lbryio/lbry-app/pull/957))
   * Keep node_modules up-to-date when yarn.lock changes due to git ([#955](https://github.com/lbryio/lbry-app/pull/955))

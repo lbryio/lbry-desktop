@@ -100,17 +100,18 @@ const init = () => {
     app.store.dispatch(doAutoUpdate());
   });
 
-  autoUpdater.on('update-available', () => {
-    console.log('Update available');
-  });
-  autoUpdater.on('update-not-available', () => {
-    console.log('Update not available');
-  });
-  autoUpdater.on('update-downloaded', () => {
-    console.log('Update downloaded');
-    app.store.dispatch(doAutoUpdate());
-  });
-
+  if (['win32', 'darwin'].includes(process.platform)) {
+    autoUpdater.on('update-available', () => {
+      console.log('Update available');
+    });
+    autoUpdater.on('update-not-available', () => {
+      console.log('Update not available');
+    });
+    autoUpdater.on('update-downloaded', () => {
+      console.log('Update downloaded');
+      app.store.dispatch(doAutoUpdate());
+    });
+  }
   app.store.dispatch(doUpdateIsNightAsync());
   app.store.dispatch(doDownloadLanguages());
 
