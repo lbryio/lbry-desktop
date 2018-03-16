@@ -10,10 +10,12 @@ const ModalFirstSubscription = props => {
       <section>
         <h3 className="modal__header">{__('Your first subscription!')}</h3>
         <p>
-          {__('When you subscribe to a channel, you will automatically download, and be notified of, all of its new content.')}
+          {__(
+            'When you subscribe to a channel, you will automatically download, and be notified of, all of its new content.'
+          )}
         </p>
         <div className="modal__buttons">
-          <Link button="primary" onClick={closeModal} label={__("Got it")} />
+          <Link button="primary" onClick={closeModal} label={__('Got it')} />
         </div>
       </section>
     </Modal>

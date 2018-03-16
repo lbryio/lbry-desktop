@@ -2,7 +2,14 @@ import React from 'react';
 import Link from 'component/link';
 import * as modals from 'constants/modal_types';
 
-export default ({ channelName, uri, subscriptions, doChannelSubscribe, doChannelUnsubscribe, doOpenModal }) => {
+export default ({
+  channelName,
+  uri,
+  subscriptions,
+  doChannelSubscribe,
+  doChannelUnsubscribe,
+  doOpenModal,
+}) => {
   const isSubscribed =
     subscriptions.map(subscription => subscription.channelName).indexOf(channelName) !== -1;
 
@@ -17,15 +24,14 @@ export default ({ channelName, uri, subscriptions, doChannelSubscribe, doChannel
         button={isSubscribed ? 'alt' : 'primary'}
         label={subscriptionLabel}
         onClick={() => {
-          if(!subscriptions.length) {
+          if (!subscriptions.length) {
             doOpenModal(modals.FIRST_SUBSCRIPTION);
           }
           subscriptionHandler({
             channelName,
             uri,
-          })
-        }
-        }
+          });
+        }}
       />
     </div>
   ) : null;

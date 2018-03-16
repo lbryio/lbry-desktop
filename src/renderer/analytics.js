@@ -4,7 +4,6 @@ import Lbryio from 'lbryio';
 import isDev from 'electron-is-dev';
 import type { Subscription } from 'redux/reducers/subscriptions';
 
-
 if (isDev) {
   mixpanel.init('691723e855cabb9d27a7a79002216967');
 } else {
@@ -16,8 +15,8 @@ type Analytics = {
   setUser: Object => void,
   toggle: (boolean, ?boolean) => void,
   apiLogView: (string, string, string) => void,
-  apiLogSubscribe: (Subscription) => void,
-  apiLogUnsubscribe: (Subscription) => void,
+  apiLogSubscribe: Subscription => void,
+  apiLogUnsubscribe: Subscription => void,
 };
 
 let analyticsEnabled: boolean = false;
@@ -60,14 +59,14 @@ const analytics: Analytics = {
   apiLogSubscribe: (subscription: Subscription): void => {
     if (analyticsEnabled) {
       Lbryio.call('subscription', 'new', {
-        subscription
+        subscription,
       }).catch(() => {});
     }
   },
   apiLogUnsubscribe: (subscription: Subscription): void => {
     if (analyticsEnabled) {
       Lbryio.call('subscription', 'delete', {
-        subscription
+        subscription,
       }).catch(() => {});
     }
   },

@@ -19,7 +19,7 @@ export const doChannelSubscribe = (subscription: Subscription) => (dispatch: Dis
   analytics.apiLogSubscribe(subscription);
 
   dispatch(doCheckSubscription(subscription, true));
-}
+};
 
 export const doChannelUnsubscribe = (subscription: Subscription) => (dispatch: Dispatch) => {
   dispatch({
@@ -28,7 +28,7 @@ export const doChannelUnsubscribe = (subscription: Subscription) => (dispatch: D
   });
 
   analytics.apiLogUnsubscribe(subscription);
-}
+};
 
 export const doCheckSubscriptions = () => (
   dispatch: Dispatch,
