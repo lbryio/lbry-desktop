@@ -79,9 +79,9 @@ class ChannelPage extends React.PureComponent {
             <div className="card__actions">
               <SubscribeButton uri={uri} channelName={name} />
               <Link
-                iconRight="icon-external-link"
+                iconRight="icon-globe"
                 button="primary"
-                label={__('SHARE')}
+                label={__('View on Web')}
                 href={`https://spee.ch/${name}`}
               />
             </div>

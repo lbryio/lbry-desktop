@@ -10,7 +10,10 @@ class FileActions extends React.PureComponent {
     const claimId = fileInfo ? fileInfo.claim_id : null,
       showDelete = fileInfo && Object.keys(fileInfo).length > 0;
     
-    const speechSharable = ["video", "image"].includes(fileInfo.mime_type.split("/")[0]);
+    const speechSharable = fileInfo.mime_type ? ["video", "image"].includes(fileInfo.mime_type.split("/")[0]) : false;
+
+    console.log("fileInfo:", fileInfo);
+    console.log("uri:", uri);
 
     return (
       <section className="card__actions">
@@ -36,10 +39,10 @@ class FileActions extends React.PureComponent {
         {speechSharable && (
           <Link
             button="text"
-            iconRight="icon-external-link"
+            iconRight="icon-globe"
             href={`https://spee.ch/${fileInfo.claim_name}#${claimId}`}
             className="no-underline"
-            label={__('share')}
+            label={__('View on Web')}
           />
         )}
         <Link
