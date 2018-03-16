@@ -78,15 +78,17 @@ class RewardsPage extends React.PureComponent {
   }
 
   renderUnclaimedRewards() {
-    const { fetching, rewards, user, daemonSettings } = this.props;
+    const { fetching, rewards, user, daemonSettings, navigate } = this.props;
 
     if (!daemonSettings.share_usage_data) {
       return (
         <div className="card__content empty">
           <p>
             {__(
-              'Rewards are currently disabled for your account. Turn on diagnostic data sharing, in Settings, in order to re-enable them.'
-            )}
+              'Rewards are currently disabled for your account. Turn on diagnostic data sharing, in'
+            )}{' '}
+            <Link onClick={() => navigate('/settings')} label="Settings" />
+            {__(', in order to re-enable them.')}
           </p>
         </div>
       );
