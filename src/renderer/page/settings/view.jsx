@@ -309,10 +309,10 @@ class SettingsPage extends React.PureComponent {
               onChange={this.onShareDataChange.bind(this)}
               defaultChecked={daemonSettings.share_usage_data}
               label={__(
-                'Help make LBRY better by contributing analytics and diagnostic data and about my usage.'
+                'Help make LBRY better by contributing analytics and diagnostic data about my usage.'
               )}
               helper={__(
-                'You will be ineligble to earn rewards while diagnostics are not being shared.'
+                'You will be ineligible to earn rewards while diagnostics are not being shared.'
               )}
             />
           </div>
