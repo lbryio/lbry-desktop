@@ -82,7 +82,7 @@ class ChannelPage extends React.PureComponent {
                 iconRight="icon-globe"
                 button="primary"
                 label={__('View on Web')}
-                href={`https://spee.ch/${name}`}
+                href={`https://spee.ch/${name}#${claimId}`}
               />
             </div>
           </div>
