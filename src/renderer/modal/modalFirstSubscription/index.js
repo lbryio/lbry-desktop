@@ -1,4 +1,3 @@
-import React from 'react';
 import { connect } from 'react-redux';
 import { doCloseModal } from 'redux/actions/app';
 import { doNavigate } from 'redux/actions/navigation';
