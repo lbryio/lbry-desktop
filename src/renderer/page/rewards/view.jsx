@@ -29,9 +29,9 @@ class RewardsPage extends React.PureComponent {
   // }
 
   renderPageHeader() {
-    const { doAuth, navigate, user } = this.props;
+    const { doAuth, navigate, user, daemonSettings } = this.props;
 
-    if (user && !user.is_reward_approved) {
+    if (user && !user.is_reward_approved && daemonSettings.share_usage_data) {
       if (!user.primary_email || !user.has_verified_email || !user.is_identity_verified) {
         return (
           <section className="card">
@@ -78,9 +78,19 @@ class RewardsPage extends React.PureComponent {
   }
 
   renderUnclaimedRewards() {
-    const { fetching, rewards, user } = this.props;
+    const { fetching, rewards, user, daemonSettings } = this.props;
 
-    if (fetching) {
+    if (!daemonSettings.share_usage_data) {
+      return (
+        <div className="card__content empty">
+          <p>
+            {__(
+              'Rewards are currently disabled for your account. Turn on diagnostic data sharing, in Settings, in order to re-enable them.'
+            )}
+          </p>
+        </div>
+      );
+    } else if (fetching) {
       return (
         <div className="card__content">
           <BusyMessage message={__('Fetching rewards')} />
