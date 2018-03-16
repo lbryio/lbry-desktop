@@ -5,15 +5,12 @@ import * as modals from 'constants/modal_types';
 
 class FileActions extends React.PureComponent {
   render() {
-    const { fileInfo, uri, openModal, claimIsMine } = this.props;
+    const { fileInfo, uri, openModal, claimIsMine, costInfo } = this.props;
 
     const claimId = fileInfo ? fileInfo.claim_id : null,
-      showDelete = fileInfo && Object.keys(fileInfo).length > 0;
-    
-    const speechSharable = fileInfo.mime_type ? ["video", "image"].includes(fileInfo.mime_type.split("/")[0]) : false;
-
-    console.log("fileInfo:", fileInfo);
-    console.log("uri:", uri);
+      showDelete = fileInfo && Object.keys(fileInfo).length > 0,
+      free = costInfo && costInfo.cost === 0,
+      speechSharable = free && fileInfo && ["video", "image"].includes(fileInfo.mime_type.split("/")[0]);
 
     return (
       <section className="card__actions">
