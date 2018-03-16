@@ -49,7 +49,7 @@ export default appState => {
   setupContextMenu(window);
 
   window.on('close', event => {
-    if (!appState.isQuitting) {
+    if (!appState.isQuitting && !appState.autoUpdateAccepted) {
       event.preventDefault();
       window.hide();
     }
