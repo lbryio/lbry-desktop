@@ -43,7 +43,7 @@ reducers[ACTIONS.FETCH_CLAIM_LIST_MINE_COMPLETED] = (state, action) => {
   const byId = Object.assign({}, state.byId);
   const pendingById = Object.assign({}, state.pendingById);
 
-  claims.filter(claim => claim.category && claim.category.match(/claim/)).forEach(claim => {
+  claims.filter(claim => claim.category && (claim.category.match(/claim/) || claim.category.match(/update/))).forEach(claim => {
     byId[claim.claim_id] = claim;
 
     const pending = Object.values(pendingById).find(
