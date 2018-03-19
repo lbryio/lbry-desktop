@@ -78,9 +78,6 @@ export function doFetchFeaturedUris() {
     });
 
     const success = ({ Uris }) => {
-      Uris['@LupoTV'] = ['howtocommunicatebetter#c4081b27764b845fcd611e91addf321d78cb06af'];
-      Uris['@CryptoCandor'] = [];
-
       let urisToResolve = [];
       let actions = [];
       Object.keys(Uris).forEach(category => {
