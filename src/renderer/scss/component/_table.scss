@@ -18,7 +18,7 @@ table.table-standard {
     vertical-align: bottom;
     font-weight: 500;
     font-size: 0.9em;
-    padding: $spacing-vertical/4+1 8px $spacing-vertical/4-2;
+    padding: $spacing-vertical/4 + 1 8px $spacing-vertical/4-2;
     text-align: left;
     border-bottom: var(--table-border);
     img {

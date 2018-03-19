@@ -33,9 +33,7 @@ class UserPhoneVerify extends React.PureComponent {
       <Form onSubmit={this.handleSubmit.bind(this)}>
         <p>
           {__(
-            `Please enter the verification code sent to +${countryCode}${
-              phone
-            }. Didn't receive it? `
+            `Please enter the verification code sent to +${countryCode}${phone}. Didn't receive it? `
           )}
           <Link onClick={this.reset.bind(this)} label="Go back." />
         </p>

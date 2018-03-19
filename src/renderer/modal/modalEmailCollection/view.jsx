@@ -30,7 +30,12 @@ class ModalEmailCollection extends React.PureComponent {
       <Modal type="custom" isOpen contentLabel="Email">
         <section>
           <h3 className="modal__header">Can We Stay In Touch?</h3>
-          {this.renderInner()}
+          <div className="card__content">{this.renderInner()}</div>
+          <div className="card__content">
+            <div className="help">
+              {`${__('Your email may be used to sync usage data across devices.')} `}
+            </div>
+          </div>
         </section>
       </Modal>
     );

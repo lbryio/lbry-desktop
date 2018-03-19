@@ -3,21 +3,36 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
-The LBRY Web UI comes bundled as part of [LBRYApp](https://github.com/lbryio/lbry-app).
-Web UI version numbers should always match the corresponding version of LBRY App.
-
 ## [Unreleased]
 ### Added
-  *
-  *
+  * Save app state when closing to tray ([#968](https://github.com/lbryio/lbry-app/issues/968))
+  * Added startup-troubleshooting FAQ URL to daemon error ([#1039](https://github.com/lbryio/lbry-app/pull/1039))
+  * Added ability to export wallet transactions to JSON and CSV format ([#976](https://github.com/lbryio/lbry-app/pull/976))
+  * Add Rewards FAQ to LBRY app ([#1041](https://github.com/lbryio/lbry-app/pull/1041))
+  * Notifications when the channel a user subscribes to uploads new content ([#1066](https://github.com/lbryio/lbry-app/pull/1066))
+  * Codacy support for Github contributions ([#1059](https://github.com/lbryio/lbry-app/pull/1059))
+  * App category for Linux ([#877](https://github.com/lbryio/lbry-app/pull/877))
 
 ### Changed
-  *
-  *
-
+  * Improved privacy by allowing users to turn off the file view counter and better understand privacy settings ([#1074](https://github.com/lbryio/lbry-app/pull/1074))
+  * Disabled auto dark mode if dark mode is selected ([#1006](https://github.com/lbryio/lbry-app/pull/1006))
+  * Refactor Electron's main process ([#951](https://github.com/lbryio/lbry-app/pull/951))
+  * Refactor `lbryuri.js` into separate named exports ([#957](https://github.com/lbryio/lbry-app/pull/957))
+  * Keep node_modules up-to-date when yarn.lock changes due to git ([#955](https://github.com/lbryio/lbry-app/pull/955))
+  * Do not kill an existing daemon, instead check if one exists ([#973](https://github.com/lbryio/lbry-app/pull/973))
+  * Enable play button immediately after user clicks download ([#987](https://github.com/lbryio/lbry-app/pull/987))
+  * Significantly improved search performance ([#1032](https://github.com/lbryio/lbry-app/pull/1032))
+  
 ### Fixed
-  *
-  *
+  * Fixed sort by date of published content ([#986](https://github.com/lbryio/lbry-app/issues/986))
+  * Fix night mode start time, set to 9PM ([#1050](https://github.com/lbryio/lbry-app/issues/1050))
+  * Disable drag and drop of files into the app ([#1045](https://github.com/lbryio/lbry-app/pull/1045))
+  * Fixed uninformative error message ([#1046](https://github.com/lbryio/lbry-app/pull/1046))
+  * Update documentation for DevTools and fix some ESLint warnings ([#911](https://github.com/lbryio/lbry-app/pull/911))
+  * Fix error wherein user cannot send tip because transaction fails ([#918](https://github.com/lbryio/lbry-app/pull/918))
+  * Fix right click bug ([#928](https://github.com/lbryio/lbry-app/pull/928))
+  * Fix Election linting errors ([#929](https://github.com/lbryio/lbry-app/pull/929))
+  * App will no longer reset when minimizing to tray ([#1042](https://github.com/lbryio/lbry-app/pull/1042))
 
 ### Deprecated
   *
