@@ -67,6 +67,19 @@ document.addEventListener('dragover', event => {
 document.addEventListener('drop', event => {
   event.preventDefault();
 });
+document.addEventListener("keydown", function (event) {
+  event.stopPropagation();
+  event.preventDefault();
+  if(event.ctrlKey && event.keyCode == 81)
+  {
+    console.log("CTRL + Q was pressed!");
+  }
+  else
+  {
+    console.log("Something else was pressed.");
+  }
+ remote.app.quit();
+});
 document.addEventListener('click', event => {
   let { target } = event;
   while (target && target !== document) {
