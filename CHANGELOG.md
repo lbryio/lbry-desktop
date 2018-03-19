@@ -22,6 +22,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
   * Do not kill an existing daemon, instead check if one exists ([#973](https://github.com/lbryio/lbry-app/pull/973))
   * Enable play button immediately after user clicks download ([#987](https://github.com/lbryio/lbry-app/pull/987))
   * Significantly improved search performance ([#1032](https://github.com/lbryio/lbry-app/pull/1032))
+  * Allow editing of claims when bid is greater than current balance ([1105](https://github.com/lbryio/lbry-app/pull/1105))
   
 ### Fixed
   * Fixed sort by date of published content ([#986](https://github.com/lbryio/lbry-app/issues/986))
