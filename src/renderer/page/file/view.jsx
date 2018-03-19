@@ -123,7 +123,9 @@ class FilePage extends React.PureComponent {
                   </span>
                 </div>
               </div>
-              <SubscribeButton uri={subscriptionUri} channelName={channelName} />
+              <section className="card__actions">
+                <SubscribeButton uri={subscriptionUri} channelName={channelName} />
+              </section>
               <FileDetails uri={uri} />
             </div>
           )}

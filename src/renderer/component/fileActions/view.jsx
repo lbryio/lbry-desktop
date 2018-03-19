@@ -5,10 +5,12 @@ import * as modals from 'constants/modal_types';
 
 class FileActions extends React.PureComponent {
   render() {
-    const { fileInfo, uri, openModal, claimIsMine } = this.props;
+    const { fileInfo, uri, openModal, claimIsMine, costInfo } = this.props;
 
     const claimId = fileInfo ? fileInfo.claim_id : null,
-      showDelete = fileInfo && Object.keys(fileInfo).length > 0;
+      showDelete = fileInfo && Object.keys(fileInfo).length > 0,
+      free = costInfo && costInfo.cost === 0,
+      speechSharable = free && fileInfo && ["video", "image"].includes(fileInfo.mime_type.split("/")[0]);
 
     return (
       <section className="card__actions">
@@ -29,6 +31,15 @@ class FileActions extends React.PureComponent {
             href={`https://lbry.io/dmca?claim_id=${claimId}`}
             className="no-underline"
             label={__('report')}
+          />
+        )}
+        {speechSharable && (
+          <Link
+            button="text"
+            iconRight="icon-globe"
+            href={`https://spee.ch/${fileInfo.claim_name}#${claimId}`}
+            className="no-underline"
+            label={__('View on Web')}
           />
         )}
         <Link
