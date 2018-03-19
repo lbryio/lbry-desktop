@@ -43,6 +43,8 @@ export default appState => {
     //   - In a URI with a claim ID, like lbry://channel#claimid, Windows interprets the hash mark as
     //     an anchor and converts it to lbry://channel/#claimid. We remove the slash here as well.
     deepLinkingURI = process.argv[1].replace(/\/$/, '').replace('/#', '#');
+  } else if (process.platform === 'darwin') {
+    deepLinkingURI = appState.macDeepLinkingURI;
   }
 
   setupBarMenu();

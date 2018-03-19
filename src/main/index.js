@@ -110,8 +110,13 @@ app.on('will-finish-launching', () => {
   // Protocol handler for macOS
   app.on('open-url', (event, URL) => {
     event.preventDefault();
-    rendererWindow.webContents.send('open-uri-requested', URL);
-    rendererWindow.show();
+
+    if (rendererWindow) {
+      rendererWindow.webContents.send('open-uri-requested', URL);
+      rendererWindow.show();
+    } else {
+      appState.macDeepLinkingURI = URL;
+    }
   });
 });
 
