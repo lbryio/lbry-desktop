@@ -89,7 +89,7 @@
     "electron-builder": "^20.5.1",
     "electron-devtools-installer": "^2.2.3",
     "electron-webpack": "^1.13.0",
-    "eslint": "^4.18.2",
+    "eslint": "^4.19.0",
     "eslint-config-airbnb": "^16.1.0",
     "eslint-config-prettier": "^2.9.0",
     "eslint-import-resolver-webpack": "^0.8.4",
