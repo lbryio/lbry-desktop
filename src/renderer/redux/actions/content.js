@@ -78,24 +78,16 @@ export function doFetchFeaturedUris() {
     });
 
     const success = ({ Uris }) => {
-
-      Uris["@LupoTV"] = ["howtocommunicatebetter#c4081b27764b845fcd611e91addf321d78cb06af"];
-      Uris["@CryptoCandor"] = [];
+      Uris['@LupoTV'] = ['howtocommunicatebetter#c4081b27764b845fcd611e91addf321d78cb06af'];
+      Uris['@CryptoCandor'] = [];
 
       let urisToResolve = [];
       let actions = [];
       Object.keys(Uris).forEach(category => {
-        if (
-          category.indexOf("@") === 0 &&
-          !Uris[category].length
-        ) {
+        if (category.indexOf('@') === 0 && !Uris[category].length) {
           actions.push(doFetchClaimsByChannel(category, 1));
-        }
-        else {
-          urisToResolve = [
-            ...urisToResolve,
-            ...Uris[category]
-          ];
+        } else {
+          urisToResolve = [...urisToResolve, ...Uris[category]];
         }
       });
 
@@ -291,7 +283,9 @@ export function doLoadVideo(uri) {
         });
         dispatch(
           doAlertError(
-            `Failed to download ${uri}, please try again. If this problem persists, visit https://lbry.io/faq/support for support.`
+            `Failed to download ${
+              uri
+            }, please try again. If this problem persists, visit https://lbry.io/faq/support for support.`
           )
         );
       });

@@ -227,10 +227,7 @@ class DiscoverPage extends React.PureComponent {
   }
 
   render() {
-    const {
-      fetchingFeaturedUris,
-      categories,
-    } = this.props;
+    const { fetchingFeaturedUris, categories } = this.props;
     const hasContent = typeof categories === 'object' && Object.keys(categories).length,
       failedToLoad = !fetchingFeaturedUris && !hasContent;
 
@@ -246,19 +243,19 @@ class DiscoverPage extends React.PureComponent {
           Object.keys(categories).map(
             category =>
               categories[category].length ? (
-                category.indexOf("@") === 0 ? (
+                category.indexOf('@') === 0 ? (
                   <FeaturedCategory
                     key={category}
-                    category={category.split("#")[0]}
+                    category={category.split('#')[0]}
                     categoryLink={category}
                     names={categories[category]}
                   />
                 ) : (
                   <FeaturedCategory
-                  key={category}
-                  category={category}
-                  names={categories[category]}
-                />
+                    key={category}
+                    category={category}
+                    names={categories[category]}
+                  />
                 )
               ) : (
                 ''

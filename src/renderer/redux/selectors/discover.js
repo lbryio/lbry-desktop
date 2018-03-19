@@ -1,26 +1,15 @@
 import { createSelector } from 'reselect';
 import { selectFeaturedUris } from './content';
-import {
-  selectClaimsById,
-  selectAllClaimsByChannel
-} from './claims';
+import { selectClaimsById, selectAllClaimsByChannel } from './claims';
 
 export const selectDiscover = createSelector(
-  [
-    selectFeaturedUris,
-    selectClaimsById,
-    selectAllClaimsByChannel
-  ],
-  (
-    featuredUris,
-    claimsById,
-    claimsByChannel
-  ) => {
+  [selectFeaturedUris, selectClaimsById, selectAllClaimsByChannel],
+  (featuredUris, claimsById, claimsByChannel) => {
     let categories = featuredUris;
     if (!!categories && !!claimsByChannel) {
       let channels = [];
       Object.keys(categories).forEach(key => {
-        if (key.indexOf("@") === 0) {
+        if (key.indexOf('@') === 0) {
           channels.push(key);
         }
       });
@@ -42,4 +31,4 @@ export const selectDiscover = createSelector(
     }
     return categories;
   }
-)
+);
