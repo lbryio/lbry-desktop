@@ -3987,13 +3987,9 @@ flow-babel-webpack-plugin@^1.1.1:
     flow-bin ">=0.44.2 <1"
     lodash.merge "^4.6.0"
 
-"flow-bin@>=0.44.2 <1":
-  version "0.61.0"
-  resolved "https://registry.yarnpkg.com/flow-bin/-/flow-bin-0.61.0.tgz#d0473a8c35dbbf4de573823f4932124397d32d35"
-
-flow-bin@^0.66.0:
-  version "0.66.0"
-  resolved "https://registry.yarnpkg.com/flow-bin/-/flow-bin-0.66.0.tgz#a96dde7015dc3343fd552a7b4963c02be705ca26"
+"flow-bin@>=0.44.2 <1", flow-bin@^0.68.0:
+  version "0.68.0"
+  resolved "https://registry.yarnpkg.com/flow-bin/-/flow-bin-0.68.0.tgz#86c2d14857d306eb2e85e274f2eebf543564f623"
 
 flow-typed@^2.3.0:
   version "2.3.0"
