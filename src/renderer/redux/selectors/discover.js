@@ -29,6 +29,7 @@ export const selectDiscover = createSelector(
         }
       });
     }
+    console.log("select:", categories);
     return categories;
   }
 );

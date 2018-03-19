@@ -222,14 +222,63 @@ export class FeaturedCategory extends React.PureComponent {
 }
 
 class DiscoverPage extends React.PureComponent {
+
+  constructor(props) {
+    super(props);
+  }
   componentWillMount() {
     this.props.fetchFeaturedUris();
   }
 
+  // WAT IZ HAPPENING
+  componentWillReceiveProps(next) {
+    if (next.categories !== this.props.categories) {
+      console.log("receive:", next.categories);
+    }
+    else {
+      console.log("other update")
+    }
+  }
+
   render() {
-    const { fetchingFeaturedUris, categories } = this.props;
+    const {
+      fetchingFeaturedUris,
+      // categories
+      featuredUris,
+      claimsById,
+      claimsByChannel
+    } = this.props;
+
+    let categories = featuredUris;
+    if (!!categories && !!claimsByChannel) {
+      let channels = [];
+      Object.keys(categories).forEach(key => {
+        if (key.indexOf('@') === 0) {
+          channels.push(key);
+        }
+      });
+      Object.keys(claimsByChannel).forEach(key => {
+        if (channels.includes(key)) {
+          delete categories[key];
+          const ids = claimsByChannel[key][1];
+          let uris = [];
+          const newKey = `${key}#${claimsById[ids[0]].value.publisherSignature.certificateId}`;
+          ids.forEach(id => {
+            const claim = claimsById[id] ? claimsById[id] : null;
+            if (claim) {
+              uris.push(`${claim.name}#${claim.claim_id}`);
+            }
+          });
+          categories[newKey] = uris;
+        }
+      });
+    }
+    console.log("select:", categories);
+
     const hasContent = typeof categories === 'object' && Object.keys(categories).length,
       failedToLoad = !fetchingFeaturedUris && !hasContent;
+
+    console.log("render:", categories);
 
     return (
       <main
@@ -241,8 +290,9 @@ class DiscoverPage extends React.PureComponent {
         {!hasContent && fetchingFeaturedUris && <BusyMessage message={__('Fetching content')} />}
         {hasContent &&
           Object.keys(categories).map(
-            category =>
-              categories[category].length ? (
+            category => {
+              // console.log("map:", categories);
+              return categories[category].length ? (
                 category.indexOf('@') === 0 ? (
                   <FeaturedCategory
                     key={category}
@@ -260,6 +310,7 @@ class DiscoverPage extends React.PureComponent {
               ) : (
                 ''
               )
+            }
           )}
         {failedToLoad && <div className="empty">{__('Failed to load landing content.')}</div>}
       </main>
