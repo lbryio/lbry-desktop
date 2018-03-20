@@ -22,6 +22,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
   * Do not kill an existing daemon, instead check if one exists ([#973](https://github.com/lbryio/lbry-app/pull/973))
   * Enable play button immediately after user clicks download ([#987](https://github.com/lbryio/lbry-app/pull/987))
   * Significantly improved search performance ([#1032](https://github.com/lbryio/lbry-app/pull/1032))
+  * Allow editing of claims when bid is greater than current balance ([1105](https://github.com/lbryio/lbry-app/pull/1105))
   
 ### Fixed
   * Fixed sort by date of published content ([#986](https://github.com/lbryio/lbry-app/issues/986))
@@ -32,8 +33,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
   * Fix error wherein user cannot send tip because transaction fails ([#918](https://github.com/lbryio/lbry-app/pull/918))
   * Fix right click bug ([#928](https://github.com/lbryio/lbry-app/pull/928))
   * Fix Election linting errors ([#929](https://github.com/lbryio/lbry-app/pull/929))
-  * App will no longer reset when minimizing to tray ([#1042](https://github.com/lbryio/lbry-app/pull/1042))
-  * Improve menu / keyboard shortcut to Quit LBRY app ([#1002](https://github.com/lbryio/lbry-app/issues/1002))
+  * App will no longer reset when minimizing to tray ([#1042](https://github.com/lbryio/lbry-app/pull/1042))  * Improve menu / keyboard shortcut to Quit LBRY app ([#1002](https://github.com/lbryio/lbry-app/issues/1002))
+  * Fix Windows notifications not showing ([1145](https://github.com/lbryio/lbry-app/pull/1145))
+
 
 ### Deprecated
   *
@@ -44,7 +46,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
   *
 
 ## [0.20.0] - 2018-01-30
-
 ### Added
  * Added Automatic Dark Mode ([#950](https://github.com/lbryio/lbry-app/pull/950))
  * Re-introduce build dir / dist dir option for isolated build environments ([#933](https://github.com/lbryio/lbry-app/pull/933))
