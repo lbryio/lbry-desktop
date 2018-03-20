@@ -1,12 +1,13 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import PropTypes from 'prop-types';
 import { normalizeURI } from 'lbryURI';
 import FileCard from 'component/fileCard';
 import Icon from 'component/icon';
 import ToolTip from 'component/tooltip.js';
 import Link from 'component/link';
 
-export default class FeaturedCategory extends React.PureComponent {
+class FeaturedCategory extends React.PureComponent {
   constructor(props) {
     super(props);
 
@@ -237,3 +238,14 @@ export default class FeaturedCategory extends React.PureComponent {
     );
   }
 }
+
+FeaturedCategory.propTypes = {
+  category: PropTypes.string,
+  categoryLink: PropTypes.node,
+  names: PropTypes.array,
+  claimsById: PropTypes.object,
+  claimsByChannel: PropTypes.object,
+  fetchChannel: PropTypes.func
+}
+
+export default FeaturedCategory;
