@@ -8,6 +8,22 @@ import ToolTip from 'component/tooltip.js';
 import Link from 'component/link';
 
 class FeaturedCategory extends React.PureComponent {
+  static propTypes = {
+    category: PropTypes.string.isRequired,
+    "categoryLink?": PropTypes.string,
+    names: PropTypes.array,
+    claimsByChannel: PropTypes.object,
+    claimsById: PropTypes.object,
+    fetchChannel: PropTypes.func
+  }
+    
+  static defaultProps = {
+    categoryLink: null,
+    names: [],
+    claimsByChannel: {},
+    claimsById: {}
+  }
+
   constructor(props) {
     super(props);
 
@@ -239,14 +255,5 @@ class FeaturedCategory extends React.PureComponent {
   }
 }
 
-FeaturedCategory.propTypes = {
-  category: PropTypes.string.isRequired,
-  categoryLink?: PropTypes.string
-}
-
-FeaturedCategory.defaultProps = {
-  categoryLink: null,
-  claimsByChannel: {}
-}
 
 export default FeaturedCategory;
