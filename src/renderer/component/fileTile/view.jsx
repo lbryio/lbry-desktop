@@ -89,7 +89,7 @@ class FileTile extends React.PureComponent<Props> {
           )}
           {!isResolvingUri && (
             <React.Fragment>
-              <div className="card__title--small">
+              <div className="card__title--small card__title--file">
                 <TruncatedText lines={2}>
                   {title || name}
                 </TruncatedText>
@@ -103,7 +103,7 @@ class FileTile extends React.PureComponent<Props> {
                 <React.Fragment>
                   {__('This location is unused.')}{' '}
                   <Button
-                    fakeLink
+                    button="link"
                     label={__('Put something here!')}
                     onClick={e => {
                       // avoid navigating to /show from clicking on the section

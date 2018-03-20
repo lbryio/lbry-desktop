@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import Button from 'component/link';
 import WunderBar from 'component/wunderbar';
 
@@ -29,14 +29,24 @@ const Header = (props: Props) => {
       <WunderBar />
       <div className="header__actions-right">
         <Button
-          inverse
+          button="inverse"
+          className="btn--header-balance"
           onClick={() => navigate('/wallet')}
-          icon="User"
-          label={isUpgradeAvailable ? `${balance} LBC` : `You have ${balance} LBC`}
+          label={isUpgradeAvailable ? (
+            `${balance}`
+          ) : (
+            <React.Fragment>
+              <span className="btn__label--balance">You have</span>{" "}
+              <span>{balance} LBC</span>
+            </React.Fragment>
+          )}
+          iconRight="LBC"
           description={__('Your wallet')}
         />
 
         <Button
+          uppercase
+          button="primary"
           onClick={() => navigate('/publish')}
           icon="UploadCloud"
           label={isUpgradeAvailable ? '' : __('Publish')}
@@ -45,6 +55,7 @@ const Header = (props: Props) => {
 
         {showUpgradeButton && (
           <Button
+            button="primary"
             onClick={downloadUpgradeRequested}
             icon="Download"
             label={__('Upgrade App')} />

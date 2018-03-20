@@ -58,7 +58,8 @@ export const selectNavLinks = createSelector(
       page === 'send' ||
       page === 'getcredits' ||
       page === 'rewards' ||
-      page === 'history';
+      page === 'history' ||
+      page === 'invite';
 
     const isMyLbryPage = page =>
       page === 'downloaded' ||
@@ -118,6 +119,11 @@ export const selectNavLinks = createSelector(
         active: currentPage === 'rewards',
       },
       {
+        label: 'Invites',
+        path: '/invite',
+        active: currentPage === 'invite',
+      },
+      {
         label: 'Transactions',
         path: '/history',
         active: currentPage === 'history',
@@ -139,6 +145,11 @@ export const selectNavLinks = createSelector(
         label: 'Settings',
         path: '/settings',
         active: currentPage === 'settings',
+      },
+      {
+        label: 'Backup',
+        path: '/backup',
+        active: currentPage === 'backup',
       },
     ]
 
@@ -173,10 +184,10 @@ export const selectNavLinks = createSelector(
           active: isMyLbryPage(currentPage)
         },
         {
-          label: 'Backup',
-          path: '/backup',
-          active: currentPage === 'backup',
-          icon: 'Save',
+          label: 'Publish',
+          icon: 'UploadCloud',
+          path: '/publish',
+          active: currentPage === 'publish'
         },
         {
           label: 'Help',

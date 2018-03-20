@@ -20,30 +20,28 @@ type Props = {
 
 const RewardTile = (props: Props) => {
   const { reward } = props;
-
   const claimed = !!reward.transaction_id;
 
   return (
     <section className="card card--section">
-      <div className="card__inner">
-        <div className="card__title-primary">
-          <CreditAmount amount={reward.reward_amount} />
-          <h3>{reward.reward_title}</h3>
-        </div>
-        <div className="card__content">{reward.reward_description}</div>
-        <div className="card__actions  ">
-          {reward.reward_type === rewards.TYPE_REFERRAL && (
-            <Button alt navigate="/invite" label={__('Go To Invites')} />
-          )}
-          {reward.reward_type !== rewards.TYPE_REFERRAL &&
-            (claimed ? (
-              <span>
-                <Icon icon="icon-check" /> {__('Reward claimed.')}
-              </span>
-            ) : (
-              <RewardLink button="alt" reward_type={reward.reward_type} />
-            ))}
-        </div>
+      <div className="card__title">
+        {reward.reward_title}
+      </div>
+      <div className="card__subtitle">
+        {reward.reward_description}
+      </div>
+      <div className="card__actions">
+        {reward.reward_type === rewards.TYPE_REFERRAL && (
+          <Button button="primary" navigate="/invite" label={__('Go To Invites')} />
+        )}
+        {reward.reward_type !== rewards.TYPE_REFERRAL &&
+          (claimed ? (
+            <span>
+              <Icon icon="icon-check" /> {__('Reward claimed.')}
+            </span>
+          ) : (
+            <RewardLink reward_type={reward.reward_type} />
+          ))}
       </div>
     </section>
   );

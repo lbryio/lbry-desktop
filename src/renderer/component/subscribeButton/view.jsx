@@ -27,8 +27,8 @@ export default (props: Props) => {
 
   return channelName && uri ? (
     <Button
-      iconRight="AtSign"
-      alt={isSubscribed}
+      icon={isSubscribed ? undefined : "Heart"}
+      button={isSubscribed ? "danger" : "alt"}
       label={subscriptionLabel}
       onClick={() =>
         subscriptionHandler({

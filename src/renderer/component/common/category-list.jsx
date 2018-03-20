@@ -197,18 +197,15 @@ class CategoryList extends React.PureComponent<Props, State> {
       <div className="card-row">
         <div className="card-row__header">
           <div className="card-row__title">
-            <h3>
-              {categoryLink ? (
-                <Button
-                  noStyle
-                  label={category}
-                  navigate="/show"
-                  navigateParams={{ uri: categoryLink }}
-                />
-              ) : (
-                category
-              )}
-            </h3>
+            {categoryLink ? (
+              <Button
+                label={category}
+                navigate="/show"
+                navigateParams={{ uri: categoryLink }}
+              />
+            ) : (
+              category
+            )}
             {category &&
               category.match(/^community/i) && (
                 <ToolTip
@@ -221,15 +218,13 @@ class CategoryList extends React.PureComponent<Props, State> {
           </div>
           <div className="card-row__scroll-btns">
             <Button
-              inverse
-              circle
+              className="btn--arrow"
               disabled={!canScrollPrevious}
               onClick={this.handleScrollPrevious}
               icon="ChevronLeft"
             />
             <Button
-              inverse
-              circle
+              className="btn--arrow"
               disabled={!canScrollNext}
               onClick={this.handleScrollNext}
               icon="ChevronRight"

@@ -2,54 +2,49 @@
 Both of these should probably die and become variables as well
  */
 $spacing-vertical: 24px;
-$width-page-constrained: 800px;
+$spacing-width: 36px;
+$large-breakpoint: 1279px; // css variables do not work inside media queries
 
 :root {
+  /* Widths & spacings */
+  --side-nav-width: 220px;
+  --video-aspect-ratio: 56.25%; // 9 x 16
+  --snack-bar-width: 756px;
+
   /* Colors */
   --color-white: #fff;
-  --color-black: #000; // I shouldn't use color names like this
+  --color-black: #000;
   --color-grey: #d6d6d6;
+  --color-grey-light: #f6f6f6;
   --color-grey-dark: #888;
   --color-primary: #44b098;
   --color-primary-dark: #2c6e60;
+  --color-primary-light: #64c9b2;
   --color-secondary: #6afbda;
-  --color-third: #fbd55e;
-  --color-fourth: #49b2e2;
+  --color-teal: #19a6a3;
+  --color-dark-blue: #2f6f61;
+  --color-light-blue: #49b2e2;
+  --color-red: #e2495e;
+  --color-yellow: #fbd55e;
   --color-divider: #e3e3e3;
 
   --text-color: var(--color-black);
-  // --color-brand: #155b4a;
+  --text-color-inverse: var(--color-white);
+
   --color-dark-overlay: rgba(32, 32, 32, 0.9);
   --color-help: rgba(0, 0, 0, 0.54);
-  // --color-notice: #8a6d3b;
   --color-error: #a94442;
-  // --color-load-screen-text: #c3c3c3;
-  // --color-meta-light: #505050;
-  // --color-money: #216c2a;
-  // --color-download: rgba(0, 0, 0, 0.75);
-  // --color-canvas: #f5f5f5;
+  --color-download: var(--color-white);
+  --color-download-overlay: var(--color-black);
   --color-bg: #fafafa;
-  --color-bg-alt: #f6f6f6;
+  --color-bg-alt: var(--color-grey-light);
   --color-placeholder: #ececec;
-  --color-nav-bg: #f6f6f6;
-
-  /* Video */
-  --height-video-embedded: 450px;
-  --height-video-embedded-min: 325px;
-  --width-video-embedded: 700px;
-
-  // --width-video-embedded: var(--height-video-embedded) * 16/9;
-  // --content-max-width: 1000px;
-  // --nsfw-blur-intensity: 20px;
-
-  /* Font */
-  --font-size: 16px;
-  --font-line-height: 1.7;
-  --font-size-subtext-multiple: 0.82;
+  --color-nav-bg: var(--color-grey-light);
 
   /* Shadows */
-  // --box-shadow-layer: 0px 1px 3px 0px rgba(0, 0, 0, 0.2);
   --box-shadow-layer: 0 4px 9px -2px var(--color-grey);
+  --box-shadow-button: 0 10px 20px rgba(0, 0, 0, 0.1);
+  --box-shadow-wunderbar: 0px 10px 20px rgba(0, 0, 0, 0.03);
 
   /* Text */
   --text-help-color: #eee;
@@ -67,9 +62,9 @@ $width-page-constrained: 800px;
   --input-color: var(--text-color);
   --input-border-size: 1px;
   --input-border-color: var(--color-grey-dark);
-
-  /* input:active */
-  --input-active-bg: transparent;
+  --input-copyable-bg: var(--color-grey-light);
+  --input-copyable-color: var(--color-grey-dark);
+  --input-copyable-border: var(--color-grey);
 
   /* input:disabled */
   --input-disabled-border-color: rgba(0, 0, 0, 0.42);
@@ -87,20 +82,24 @@ $width-page-constrained: 800px;
   --select-height: 30px;
 
   /* Button */
-  --btn-primary-color: #fff;
-  --button-alt-color: var(--text-color);
-  --btn-primary-bg: var(--color-primary);
-  --btn-inverse-color: var(--color-primary);
-  --btn-inverse-bg: var(--color-white);
+  --btn-bg-primary: var(--color-primary);
+  --btn-color-primary: var(--color-white);
+  --btn-bg-primary-hover: var(--color-primary-light);
+  --btn-bg-alt: var(--color-white);
+  --btn-color-alt: var(--text-color);
+  --btn-color-inverse: var(--color-primary);
+  --btn-external-color: var(--color-light-blue);
+  --btn-bg-secondary: var(--color-teal);
+  --btn-bg-danger: var(--color-red);
   --btn-radius: 20px;
-  --btn-height: 40px;
+  --btn-height: 36px;
 
   /* Header */
   --header-bg: var(--color-white);
   --header-color: var(--color-text);
   --header-active-color: rgba(0, 0, 0, 0.85);
-  --header-height: $spacing-vertical * 3;
-  --header-button-bg: transparent; //var(--button-bg);
+  --header-height: $spacing-width * 3;
+  --header-button-bg: transparent;
   --header-button-hover-bg: rgba(100, 100, 100, 0.15);
 
   /* Header -> search */
@@ -116,11 +115,9 @@ $width-page-constrained: 800px;
   --table-item-odd: #f4f4f4;
 
   /* Card */
-  --card-hover-translate: 10px;
-  --card-margin: $spacing-vertical * 2/3;
-  --card-max-width: $width-page-constrained;
   --card-radius: 2px;
-  --card-small-width: $spacing-vertical * 10;
+  --card-margin: $spacing-vertical * 2/3;
+  --card-wallet-color: var(--text-color-inverse);
 
   /* File Tile Card */
   --file-tile--media-size: 60px;
@@ -143,10 +140,7 @@ $width-page-constrained: 800px;
   --scrollbar-thumb-active-bg: var(--color-primary);
   --scrollbar-track-bg: transparent;
 
-  // /* Divider */
-  // --divider: 1px solid rgba(0, 0, 0, 0.12);
-  //
   // /* Animation :) */
-  // --animation-duration: 0.3s;
-  // --animation-style: cubic-bezier(0.55, 0, 0.1, 1);
+  --animation-duration: 0.3s;
+  --animation-style: cubic-bezier(0.55, 0, 0.1, 1);
 }

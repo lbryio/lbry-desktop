@@ -71,12 +71,11 @@ class FileCard extends React.PureComponent<Props> {
         role="button"
         onClick={!pending ? () => navigate('/show', { uri }) : () => {}}
         className={classnames('card card--small', {
-          'card--obscured': shouldObscureNsfw,
           'card--link': !pending,
           'card--pending': pending
         })}
       >
-        <CardMedia thumbnail={thumbnail} />
+        <CardMedia nsfw={shouldObscureNsfw} thumbnail={thumbnail} />
         <div className="card-media__internal-links">
           {showPrice && <FilePrice uri={uri} />}
         </div>
@@ -91,15 +90,12 @@ class FileCard extends React.PureComponent<Props> {
             ) : (
               <React.Fragment>
                 <UriIndicator uri={uri} link />
-                <div className="card--file-subtitle">
-                  {isRewardContent && <Icon icon={icons.FEATURED} />}
-                  {fileInfo && <Icon icon={icons.LOCAL} />}
-                </div>
+                {isRewardContent && <Icon icon={icons.FEATURED} />}
+                {fileInfo && <Icon icon={icons.LOCAL} />}
               </React.Fragment>
             )}
           </div>
         </div>
-        {shouldObscureNsfw && <NsfwOverlay />}
       </section>
     );
     /* eslint-enable jsx-a11y/click-events-have-key-events */

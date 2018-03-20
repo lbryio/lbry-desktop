@@ -10,10 +10,19 @@ import { doNavigate } from 'redux/actions/navigation';
 import { doOpenModal } from 'redux/actions/app';
 import Wunderbar from './view';
 
-const select = state => ({
-  ...selectSearch(state),
-  address: selectWunderBarAddress(state),
-});
+const select = state => {
+  const { isActive, searchQuery, ...searchState} = selectSearch(state);
+  const address = selectWunderBarAddress(state);
+
+  // if we are on the file/channel page
+  // use the address in the history stack
+  const wunderbarValue = isActive ? searchQuery : searchQuery || address;
+
+  return {
+    ...searchState,
+    wunderbarValue
+  }
+};
 
 const perform = dispatch => ({
   onSearch: query => {

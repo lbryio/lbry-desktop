@@ -32,23 +32,24 @@ const SideBar = (props: Props) => {
     <nav className="nav">
       <div className="nav__actions-top">
         <Button
-          alt
+          noPadding
+          button="alt"
           icon="Home"
+          className="btn--home-nav"
           description={__('Home')}
           onClick={() => navigate('/discover')}
-          disabled={isHome}
         />
         <div className="nav__actions-history">
           <Button
-            alt
-            icon="ArrowLeft"
+            className="btn--arrow"
+            icon="ChevronLeft"
             description={__('Navigate back')}
             onClick={back}
             disabled={isBackDisabled}
           />
           <Button
-            alt
-            icon="ArrowRight"
+            className="btn--arrow"
+            icon="ChevronRight"
             description={__('Navigate forward')}
             onClick={forward}
             disabled={isForwardDisabled}
@@ -63,7 +64,7 @@ const SideBar = (props: Props) => {
               key={path}
               className={classnames('nav__link nav__link--primary', { 'nav__link--active': active })}
             >
-              <Button noStyle navigate={path} label={label} icon={icon} />
+              <Button navigate={path} label={label} icon={icon} />
             </li>
           ))}
         </ul>
@@ -76,7 +77,7 @@ const SideBar = (props: Props) => {
                 'nav__link--active': active,
               })}
             >
-            <Button noStyle navigate={path} label={label} icon={icon} />
+            <Button navigate={path} label={label} icon={icon} />
 
             {!!subLinks.length && active && (
                 <CSSTransitionGroup

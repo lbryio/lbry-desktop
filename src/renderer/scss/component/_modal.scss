@@ -54,18 +54,18 @@
 // Slide down isn't possible without doing a lot of re-work to the modal component
 .ReactModal__Overlay {
   .modal--fullscreen {
-    transition: bottom 250ms ease-in-out;
-    bottom: 100vh;
+    transition: height var(--animation-style) var(--animation-style);
+    height: 0;
   }
 
   &--after-open {
     .modal--fullscreen {
-      bottom: 0;
+      height: 100vh;
     }
   }
 
   &--before-close {
-    bottom: 100vh;
+    height: 0;
   }
 }
 

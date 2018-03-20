@@ -57,7 +57,7 @@ class ChannelTile extends React.PureComponent<Props> {
           )}
           {!isResolvingUri && (
             <React.Fragment>
-              <div className="card__title--small">
+              <div className="card__title--small card__title--file">
                 <TruncatedText lines={1}>{channelName || uri}</TruncatedText>
               </div>
               <div className="card__subtitle">

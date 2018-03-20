@@ -31,6 +31,7 @@ class WalletAddress extends React.PureComponent<Props> {
 
         <div className="card__actions">
           <Link
+            button="alt"
             label={__('Get New Address')}
             icon="RefreshCw"
             onClick={getNewAddress}

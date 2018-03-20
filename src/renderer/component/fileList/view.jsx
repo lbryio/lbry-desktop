@@ -5,28 +5,6 @@ import { FormField } from 'component/common/form';
 import FileCard from 'component/fileCard';
 import { BusyMessage } from 'component/common.js';
 
-const sortFunctions = {
-  date: (fileInfos: Array<FileInfo>) => {
-    return fileInfos.slice();
-  },
-  title: (fileInfos) => {
-    return fileInfos.slice().sort((fileInfo1, fileInfo2) => {
-      const title1 = fileInfo1.value
-        ? fileInfo1.value.stream.metadata.title.toLowerCase()
-        : fileInfo1.name;
-      const title2 = fileInfo2.value
-        ? fileInfo2.value.stream.metadata.title.toLowerCase()
-        : fileInfo2.name;
-      if (title1 < title2) {
-        return -1;
-      } else if (title1 > title2) {
-        return 1;
-      }
-      return 0;
-    });
-  },
-};
-
 type FileInfo = {
   name: string,
   channelName: ?string,
@@ -52,6 +30,61 @@ type State = {
   sortBy: string
 }
 
+const sortFunctions = {
+  dateNew(fileInfos) {
+    return fileInfos.slice().sort((fileInfo1, fileInfo2) => {
+      const height1 = fileInfo1.height;
+      const height2 = fileInfo2.height;
+      if (height1 > height2) {
+        return -1;
+      } else if (height1 < height2) {
+        return 1;
+      }
+      return 0;
+    });
+  },
+  dateOld(fileInfos) {
+    return fileInfos.slice().sort((fileInfo1, fileInfo2) => {
+      const height1 = fileInfo1.height;
+      const height2 = fileInfo2.height;
+      if (height1 < height2) {
+        return -1;
+      } else if (height1 > height2) {
+        return 1;
+      }
+      return 0;
+    });
+  },
+  title(fileInfos) {
+    return fileInfos.slice().sort((fileInfo1, fileInfo2) => {
+      const title1 = fileInfo1.value
+        ? fileInfo1.value.stream.metadata.title.toLowerCase()
+        : fileInfo1.name;
+      const title2 = fileInfo2.value
+        ? fileInfo2.value.stream.metadata.title.toLowerCase()
+        : fileInfo2.name;
+      if (title1 < title2) {
+        return -1;
+      } else if (title1 > title2) {
+        return 1;
+      }
+      return 0;
+    });
+  },
+  filename(fileInfos) {
+    return fileInfos.slice().sort(({ file_name: fileName1 }, { file_name: fileName2 }) => {
+      const fileName1Lower = fileName1.toLowerCase();
+      const fileName2Lower = fileName2.toLowerCase();
+      if (fileName1Lower < fileName2Lower) {
+        return -1;
+      } else if (fileName2Lower > fileName1Lower) {
+        return 1;
+      }
+      return 0;
+    });
+  },
+}
+
 class FileList extends React.PureComponent<Props, State> {
   static defaultProps = {
     hideFilter: false
@@ -62,61 +95,6 @@ class FileList extends React.PureComponent<Props, State> {
 
     this.state = {
       sortBy: 'dateNew',
-    };
-
-    this._sortFunctions = {
-      dateNew(fileInfos) {
-        return fileInfos.slice().sort((fileInfo1, fileInfo2) => {
-          const height1 = fileInfo1.height;
-          const height2 = fileInfo2.height;
-          if (height1 > height2) {
-            return -1;
-          } else if (height1 < height2) {
-            return 1;
-          }
-          return 0;
-        });
-      },
-      dateOld(fileInfos) {
-        return fileInfos.slice().sort((fileInfo1, fileInfo2) => {
-          const height1 = fileInfo1.height;
-          const height2 = fileInfo2.height;
-          if (height1 < height2) {
-            return -1;
-          } else if (height1 > height2) {
-            return 1;
-          }
-          return 0;
-        });
-      },
-      title(fileInfos) {
-        return fileInfos.slice().sort((fileInfo1, fileInfo2) => {
-          const title1 = fileInfo1.value
-            ? fileInfo1.value.stream.metadata.title.toLowerCase()
-            : fileInfo1.name;
-          const title2 = fileInfo2.value
-            ? fileInfo2.value.stream.metadata.title.toLowerCase()
-            : fileInfo2.name;
-          if (title1 < title2) {
-            return -1;
-          } else if (title1 > title2) {
-            return 1;
-          }
-          return 0;
-        });
-      },
-      filename(fileInfos) {
-        return fileInfos.slice().sort(({ file_name: fileName1 }, { file_name: fileName2 }) => {
-          const fileName1Lower = fileName1.toLowerCase();
-          const fileName2Lower = fileName2.toLowerCase();
-          if (fileName1Lower < fileName2Lower) {
-            return -1;
-          } else if (fileName2Lower > fileName1Lower) {
-            return 1;
-          }
-          return 0;
-        });
-      },
     };
   }
 
@@ -184,7 +162,7 @@ class FileList extends React.PureComponent<Props, State> {
             </FormField>
           )}
         </div>
-        <div className="file-list">
+        <div className="card__list">
           {content}
         </div>
       </section>

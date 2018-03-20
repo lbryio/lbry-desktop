@@ -33,10 +33,10 @@ class TransactionListItem extends React.PureComponent<Props> {
   getLink(type: string) {
     if (type === txnTypes.TIP) {
       return (
-        <Link onClick={this.abandonClaim} label={__('Unlock Tip')} />
+        <Link button="link" onClick={this.abandonClaim} label={__('Unlock Tip')} />
       );
     }
-    return <Link onClick={this.abandonClaim} label={__('Abandon Claim')} />;
+    return <Link button="link" onClick={this.abandonClaim} label={__('Abandon Claim')} />;
   }
 
   capitalize(string: string) {
@@ -65,23 +65,23 @@ class TransactionListItem extends React.PureComponent<Props> {
     return (
       <tr>
         <td>
-          <CreditAmount amount={amount} plain showPlus precision={8} />
+          <CreditAmount amount={amount} plain noStyle showPlus precision={8} />
           <br />
 
           {fee !== 0 && (
             <span className="table__item-label">
-              <CreditAmount plain fee amount={fee} precision={8} />
+              <CreditAmount plain noStyle fee amount={fee} precision={8} />
             </span>
           )}
         </td>
-        <td>
+        <td className="table__item--actionable">
           <span>{this.capitalize(type)}</span> {isRevokeable && this.getLink(type)}
         </td>
-        <td>
-          {reward && reward.reward_title}
+        <td className="table__item--actionable">
+          {reward && <span>{reward.reward_title}</span>}
           {name && claimId && (
             <Link
-              fakeLink
+              button="link"
               navigate="/show"
               navigateParams={{ uri: buildURI({ name, claimId }) }}
             >

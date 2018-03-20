@@ -5,7 +5,7 @@ import classnames from 'classnames';
 type Props = {
   src: string,
   shouldObscure: boolean,
-  className: ?string,
+  className?: string,
 };
 
 const Thumbnail = (props: Props) => {
@@ -14,7 +14,9 @@ const Thumbnail = (props: Props) => {
   return (
     <img
       alt={__('Image thumbnail')}
-      className={classnames({ 'card--obscured': shouldObscure }, className)}
+      className={classnames('card__media', {
+        'card--obscured': shouldObscure
+      }, className)}
       src={src}
     />
   );

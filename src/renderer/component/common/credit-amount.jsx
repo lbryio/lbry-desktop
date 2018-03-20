@@ -12,7 +12,8 @@ type Props = {
   isEstimate?: boolean,
   large?: boolean,
   plain?: boolean,
-  fee?: boolean
+  fee?: boolean,
+  noStyle?: boolean
 };
 
 class CreditAmount extends React.PureComponent<Props> {
@@ -24,7 +25,18 @@ class CreditAmount extends React.PureComponent<Props> {
   };
 
   render() {
-    const { amount, precision, showFullPrice, showFree, showPlus, large, isEstimate, plain, fee } = this.props;
+    const {
+      amount,
+      precision,
+      showFullPrice,
+      showFree,
+      showPlus,
+      large,
+      isEstimate,
+      plain,
+      noStyle,
+      fee
+    } = this.props;
 
     const minimumRenderableAmount = 10 ** (-1 * precision);
     const fullPrice = formatFullPrice(amount, 2);
@@ -67,6 +79,7 @@ class CreditAmount extends React.PureComponent<Props> {
           'credit-amount--cost': !large && !isFree,
           'credit-amount--large': large,
           'credit-amount--plain': plain,
+          'credit-amount--no-style': noStyle
         })}
       >
         {amountText}

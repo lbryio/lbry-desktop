@@ -11,7 +11,7 @@ class FileListDownloaded extends React.PureComponent {
 
 
     return (
-      <Page>
+      <Page notContained>
       {hasDownloads ? (
           <FileList fileInfos={fileInfos} />
         ) : (
@@ -19,8 +19,9 @@ class FileListDownloaded extends React.PureComponent {
             {__("You haven't downloaded anything from LBRY yet.")}
             <div className="card__actions card__actions--center">
               <Link
-              onClick={() => navigate('/discover')}
-              label={__('Explore new content')}
+                button="primary"
+                onClick={() => navigate('/discover')}
+                label={__('Explore new content')}
               />
             </div>
           </div>

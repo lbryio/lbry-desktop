@@ -67,26 +67,18 @@ class ModalRemoveFile extends React.PureComponent<Props, State> {
         <FormRow padded>
           <FormField
             prefix={__('Also delete this file from my computer')}
-            render={() => (
-              <input
-                type="checkbox"
-                checked={deleteChecked}
-                onChange={this.handleDeleteCheckboxClicked}
-              />
-            )}
+            type="checkbox"
+            checked={deleteChecked}
+            onChange={this.handleDeleteCheckboxClicked}
           />
         </FormRow>
-        {!claimIsMine && (
+        {claimIsMine && (
           <FormRow>
             <FormField
               prefix={__('Abandon the claim for this URI')}
-              render={() => (
-                <input
-                  type="checkbox"
-                  checked={abandonClaimChecked}
-                  onChange={this.handleAbandonClaimCheckboxClicked}
-                />
-              )}
+              type="checkbox"
+              checked={abandonClaimChecked}
+              onChange={this.handleAbandonClaimCheckboxClicked}
             />
           </FormRow>
         )}

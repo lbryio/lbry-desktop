@@ -20,7 +20,7 @@ export type Transaction = {
 
 type Props = {
   emptyMessage: ?string,
-  noFilter?: boolean,
+  slim?: boolean,
   transactions: Array<Transaction>,
   rewards: {},
   openModal: (string, any) => void,
@@ -70,7 +70,7 @@ class TransactionList extends React.PureComponent<Props, State> {
   }
 
   render() {
-    const { emptyMessage, rewards, transactions, noFilter } = this.props;
+    const { emptyMessage, rewards, transactions, slim } = this.props;
     const { filter } = this.state;
     const transactionList = transactions.filter(this.filterTransaction);
 
@@ -79,14 +79,16 @@ class TransactionList extends React.PureComponent<Props, State> {
         {!transactionList.length && (
           <div className="card__content">{emptyMessage || __('No transactions to list.')}</div>
         )}
-        {!!transactionList.length && (
-          <FileExporter
-            data={transactionList}
-            title={__('Export Transactions')}
-            label={__('Export')}
-            />
+        {!slim && !!transactionList.length && (
+          <div className="card__actions">
+            <FileExporter
+              data={transactionList}
+              title={__('Export Transactions')}
+              label={__('Export')}
+              />
+          </div>
         )}
-        {!noFilter && transactionList.length && (
+        {!slim && transactionList.length && (
           <div className="card__actions-top-corner">
             <FormField
               type="select"
@@ -94,7 +96,7 @@ class TransactionList extends React.PureComponent<Props, State> {
               onChange={this.handleFilterChanged}
               prefix={__('Show')}
               postfix={
-                <Link fakeLink href="https://lbry.io/faq/transaction-types" label={__('Help')} />
+                <Link button="link" href="https://lbry.io/faq/transaction-types" label={__('Help')} />
               }
               >
               <option value="all">{__('All')}</option>
@@ -109,7 +111,7 @@ class TransactionList extends React.PureComponent<Props, State> {
           </div>
         )}
         {!!transactionList.length && (
-          <table className="table table--transactions table--stretch">
+          <table className="card__content table table--transactions table--stretch">
             <thead>
               <tr>
                 <th>{__('Amount')}</th>

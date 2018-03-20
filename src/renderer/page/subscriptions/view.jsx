@@ -4,6 +4,7 @@ import Page from 'component/page';
 import { BusyMessage } from 'component/common';
 import CategoryList from 'component/common/category-list';
 import type { Subscription } from 'redux/reducers/subscriptions';
+import Button from 'component/link';
 
 type SavedSubscriptions = Array<Subscription>;
 
@@ -63,7 +64,16 @@ export default class extends React.PureComponent<Props> {
     return (
       <Page noPadding isLoading={fetchingSubscriptions}>
         {!savedSubscriptions.length && (
-          <span>{__("You haven't subscribed to any channels yet")}</span>
+          <div className="page__empty">
+            {__("It looks like you aren't subscribed to any channels yet.")}
+            <div className="card__actions card__actions--center">
+              <Button
+                button="primary"
+                navigate="/discover"
+                label={__('Explore new content')}
+              />
+            </div>
+          </div>
         )}
         {!!savedSubscriptions.length && (
           <div>

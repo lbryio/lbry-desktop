@@ -43,9 +43,10 @@ export class FormField extends React.PureComponent<Props> {
 
     return (
       <div className={classnames("form-field", { "form-field--stretch": stretch || type === "markdown" })}>
-        {label && (
-          <label className="form-field__label" htmlFor={name}>
-            {label}
+        {(label || error) && (
+          <label className={classnames("form-field__label", { "form-field__error": error })} htmlFor={name}>
+            {!error && label}
+            {error}
           </label>
         )}
         <div className="form-field__input">
@@ -61,10 +62,9 @@ export class FormField extends React.PureComponent<Props> {
             </label>
           )}
         </div>
-        {(helper || error) && (
-          <label htmlFor={name} className={classnames("form-field__help", { "form-field__error": error })}>
-            {!error && helper}
-            {error}
+        {helper && (
+          <label htmlFor={name} className="form-field__help">
+            {helper}
           </label>
         )}
       </div>

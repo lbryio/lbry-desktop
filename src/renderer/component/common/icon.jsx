@@ -15,7 +15,11 @@ class IconComponent extends React.PureComponent<Props> {
   render() {
     const { icon, size = 14 } = this.props;
     const Icon = Icons[icon];
-    return Icon ? <Icon size={size} className="icon" /> : null;
+    let color;
+    if (icon === 'Heart') {
+      color = '#e2495e'
+    }
+    return Icon ? <Icon size={size} className="icon" color={color} /> : null;
   }
 }
 

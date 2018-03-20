@@ -1,7 +1,8 @@
 .video__embedded {
   position: relative;
   background-color: var(--color-black);
-  min-height: var(--height-video-embedded-min);
+  width: 100%;
+  padding-top: var(--video-aspect-ratio);
   position: relative;
   display: flex;
   align-items: center;
@@ -22,9 +23,9 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background-size: auto 100%;
-  background-position: center center;
+  background-size: cover;
   background-repeat: no-repeat;
+  background-position: 50% 50%;
   display: flex;
   align-items: center;
   justify-content: center;

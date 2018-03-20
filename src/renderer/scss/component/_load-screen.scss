@@ -11,17 +11,23 @@
 }
 
 .load-screen__title {
-  font-weight: 800;
-  font-size: 4em;
+  font-family: 'metropolis-bold';
+  font-size: 60px;
+  line-height: 100px;
 }
 
 .load-screen__message {
-  font-size: 1.5em;
+  font-family: 'metropolis-semibold';
+  font-size: 16px;
+  line-height: 20px;
   margin-top: $spacing-vertical * 2/3;
   text-align: center;
 }
 
 .load-screen__details {
+  font-family: 12px 'metropolis-medium';
+  font-size: 12px;
+  line-height: 1;
   padding-top: $spacing-vertical * 2/3;
   max-width: 400px;
 }

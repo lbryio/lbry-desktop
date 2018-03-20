@@ -118,7 +118,7 @@ class ActiveShapeShift extends React.PureComponent<Props> {
         )}
         <div className="card__actions">
           <Link
-            primary
+            button="primary"
             onClick={clearShapeShift}
             label={
               shiftState === statuses.COMPLETE || shiftState === statuses.RECEIVED
@@ -128,7 +128,7 @@ class ActiveShapeShift extends React.PureComponent<Props> {
           />
           {shiftOrderId && (
               <Link
-                inverse
+                button="inverse"
                 label={__('View the status on Shapeshift.io')}
                 href={`https://shapeshift.io/#/status/${shiftOrderId}`}
               />

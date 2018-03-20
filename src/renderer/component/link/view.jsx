@@ -17,16 +17,11 @@ type Props = {
   doNavigate: (string, ?any) => void,
   navigateParams: any,
   className: ?string,
-  inverse: ?boolean,
-  circle: ?boolean,
-  alt: ?boolean,
-  flat: ?boolean,
-  fakeLink: ?boolean,
-  noStyle: ?boolean,
-  noUnderline: ?boolean,
   description: ?string,
-  secondary: ?boolean,
-  type: string
+  type: string,
+  button: ?string, // primary, secondary, alt, link
+  noPadding: ?boolean, // to remove padding and allow circular buttons
+  uppercase: ?boolean
 };
 
 class Button extends React.PureComponent<Props> {
@@ -48,35 +43,32 @@ class Button extends React.PureComponent<Props> {
       navigateParams,
       doNavigate,
       className,
-      inverse,
-      alt,
-      circle,
-      flat,
-      fakeLink,
       description,
-      noStyle,
-      noUnderline,
-      secondary,
+      button,
       type,
+      noPadding,
+      uppercase,
       ...otherProps
     } = this.props;
 
     const combinedClassName = classnames(
       'btn',
-      noStyle
-        ? 'btn--no-style'
-        : {
-            'btn--link': fakeLink || href,
-            'btn--primary': !alt && !fakeLink && !secondary, // default to primary
-            'btn--secondary': secondary,
-            'btn--alt': alt,
-            'btn--inverse': inverse,
+      {
+        'btn--no-padding': noPadding,
+      },
+      button
+        ? {
+            'btn--primary': button === 'primary',
+            'btn--secondary': button === 'secondary',
+            'btn--alt': button === 'alt',
+            'btn--danger': button === 'danger',
+            'btn--inverse': button === 'inverse',
             'btn--disabled': disabled,
-            'btn--circle': circle,
-            'btn--flat': flat,
-            'btn--no-underline': fakeLink && noUnderline,
-            'btn--external-link': href
-          },
+            'btn--link': button === 'link',
+            'btn--external-link': button === 'link' && href,
+            'btn--uppercase': uppercase
+          }
+        : 'btn--no-style',
       className
     );
 
@@ -89,12 +81,12 @@ class Button extends React.PureComponent<Props> {
         : onClick;
 
     const content = (
-      <React.Fragment>
+      <span className="btn__content">
         {icon && <Icon icon={icon} />}
         {label && <span className="btn__label">{label}</span>}
         {children && children}
         {iconRight && <Icon icon={iconRight} />}
-      </React.Fragment>
+      </span>
     );
 
     return href ? (

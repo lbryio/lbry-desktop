@@ -15,7 +15,7 @@ class FileListPublished extends React.PureComponent {
     const { claims, pendingPublishes, navigate } = this.props;
     const fileInfos = [...claims, ...pendingPublishes]
     return (
-      <Page>
+      <Page notContained>
         {!!fileInfos.length ? (
           <FileList
             fileInfos={fileInfos}
@@ -25,6 +25,7 @@ class FileListPublished extends React.PureComponent {
             {__("It looks like you haven't published anything to LBRY yet.")}
             <div className="card__actions card__actions--center">
               <Link
+                button="primary"
                 onClick={() => navigate('/publish')}
                 label={__('Publish something new')}
               />

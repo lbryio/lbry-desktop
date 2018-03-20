@@ -12,7 +12,7 @@ class InviteList extends React.PureComponent {
     }
 
     return (
-      <section className="card">
+      <section className="card card--section">
         <div className="card__title-primary">
           <h3>{__('Invite History')}</h3>
         </div>
@@ -21,7 +21,7 @@ class InviteList extends React.PureComponent {
             <span className="empty">{__("You haven't invited anyone.")} </span>
           )}
           {invitees.length > 0 && (
-            <table className="table-standard table-stretch">
+            <table className="table table--stretch">
               <thead>
                 <tr>
                   <th>{__('Invitee Email')}</th>

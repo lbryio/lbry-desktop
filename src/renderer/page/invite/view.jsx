@@ -2,6 +2,7 @@ import React from 'react';
 import { BusyMessage } from 'component/common';
 import InviteNew from 'component/inviteNew';
 import InviteList from 'component/inviteList';
+import Page from 'component/page';
 
 class InvitePage extends React.PureComponent {
   componentWillMount() {
@@ -12,13 +13,17 @@ class InvitePage extends React.PureComponent {
     const { isPending, isFailed } = this.props;
 
     return (
-      <main className="main--single-column">
+      <Page>
         {isPending && <BusyMessage message={__('Checking your invite status')} />}
         {!isPending &&
           isFailed && <span className="empty">{__('Failed to retrieve invite status.')}</span>}
-        {!isPending && !isFailed && <InviteNew />}
-        {!isPending && !isFailed && <InviteList />}
-      </main>
+        {!isPending && !isFailed && (
+          <React.Fragment>
+            <InviteNew />
+            <InviteList />
+          </React.Fragment>
+        )}
+      </Page>
     );
   }
 }

@@ -249,7 +249,7 @@ class PublishForm extends React.PureComponent<Props> {
     }
 
     return (
-      <div className="card__subtitle form-field__error">
+      <div className="card__content card__subtitle card__subtitle--block form-field__error">
         {!title && <div>{__("A title is required")}</div>}
         {!name && <div>{__("A URL is required")}</div>}
         {!bid && <div>{__("A bid amount is required")}</div>}
@@ -300,7 +300,7 @@ class PublishForm extends React.PureComponent<Props> {
           <div className="card__subtitle">{__('What are you publishing?')}</div>
           {filePath && (
             <div className="card-media__internal-links">
-              <Button inverse icon="X" label={__("Clear")} onClick={clearPublish} />
+              <Button button="inverse" icon="X" label={__("Clear")} onClick={clearPublish} />
             </div>
           )}
           <FileSelector
@@ -410,7 +410,7 @@ class PublishForm extends React.PureComponent<Props> {
             <p className="card__subtitle">
               {__("The LBRY URL is the exact address where people find your content (ex. lbry://myvideo).")}
               {" "}
-              <Button fakeLink label={__('Learn more')} href="https://lbry.io/faq/naming" />
+              <Button button="link" label={__('Learn more')} href="https://lbry.io/faq/naming" />
             </p>
             <div className="card__content">
               <FormRow>
@@ -509,7 +509,7 @@ class PublishForm extends React.PureComponent<Props> {
                   <span>
                     {__('I agree to the')}{' '}
                     <Button
-                      fakeLink
+                      button="link"
                       href="https://www.lbry.io/termsofservice"
                       label={__('LBRY terms of service')}
                     />
@@ -528,7 +528,7 @@ class PublishForm extends React.PureComponent<Props> {
                 !formValid ||
                 publishing
               }/>
-              <Button alt onClick={this.handleCancelPublish} label={__('Cancel')} />
+            <Button button="alt" onClick={this.handleCancelPublish} label={__('Cancel')} />
           </div>
           {!formDisabled && !formValid && this.renderFormErrors()}
         </div>
