@@ -14,6 +14,15 @@ import createWindow from './createWindow';
 
 autoUpdater.autoDownload = true;
 
+// This is set to true if an auto update has been downloaded through the Electron
+// auto-update system and is ready to install. If the user declined an update earlier,
+// it will still install on shutdown.
+let autoUpdateDownloaded = false;
+
+// This is used to keep track of whether we are showing the special dialog
+// that we show on Windows after you decline an upgrade and close the app later.
+let showingAutoUpdateCloseAlert = false;
+
 // Keep a global reference, if you don't, they will be closed automatically when the JavaScript
 // object is garbage collected.
 let rendererWindow;
@@ -75,16 +84,16 @@ app.on('activate', () => {
 app.on('will-quit', event => {
   if (
     process.platform === 'win32' &&
-    appState.autoUpdateDownloaded &&
+    autoUpdateDownloaded &&
     !appState.autoUpdateAccepted &&
-    !appState.showingAutoUpdateCloseAlert
+    !showingAutoUpdateCloseAlert
   ) {
-    // We're on Win and have an update downloaded, but the user postponed it (or closed
+    // We're on Win and have an update downloaded, but the user declined it (or closed
     // the app without accepting it). Now the user is closing the app, so the new update
     // will install. On Mac this is silent, but on Windows they get a confusing permission
     // escalation dialog, so we show Windows users a warning dialog first.
 
-    appState.showingAutoUpdateCloseAlert = true;
+    showingAutoUpdateCloseAlert = true;
     dialog.showMessageBox(
       {
         type: 'info',
@@ -122,9 +131,6 @@ app.on('will-finish-launching', () => {
 
 app.on('before-quit', () => {
   appState.isQuitting = true;
-  if (appState.autoUpdateAccepted) {
-    if (daemon) daemon.quit();
-  }
 });
 
 ipcMain.on('upgrade', (event, installerPath) => {
@@ -144,7 +150,7 @@ ipcMain.on('upgrade', (event, installerPath) => {
 });
 
 autoUpdater.on('update-downloaded', () => {
-  appState.autoUpdateDownloaded = true;
+  autoUpdateDownloaded = true;
 });
 
 ipcMain.on('autoUpdateAccepted', () => {
