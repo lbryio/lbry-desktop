@@ -33,7 +33,11 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
   * Fix error wherein user cannot send tip because transaction fails ([#918](https://github.com/lbryio/lbry-app/pull/918))
   * Fix right click bug ([#928](https://github.com/lbryio/lbry-app/pull/928))
   * Fix Election linting errors ([#929](https://github.com/lbryio/lbry-app/pull/929))
-  * App will no longer reset when minimizing to tray ([#1042](https://github.com/lbryio/lbry-app/pull/1042))  * Improve menu / keyboard shortcut to Quit LBRY app ([#1002](https://github.com/lbryio/lbry-app/issues/1002))
+  * App will no longer reset when minimizing to tray ([#1042](https://github.com/lbryio/lbry-app/pull/1042))  
+  * Improve menu / keyboard shortcut to Quit LBRY app ([#1002](https://github.com/lbryio/lbry-app/issues/1002))
+  * App will no longer reset when minimizing to tray ([#1042](https://github.com/lbryio/lbry-app/pull/1042))
+  * Error when clicking LBRY URLs when app is closed on macOS ([#1119](https://github.com/lbryio/lbry-app/issues/1119))
+  * LBRY URLs not working on Linux ([#1120](https://github.com/lbryio/lbry-app/issues/1120))
   * Fix Windows notifications not showing ([1145](https://github.com/lbryio/lbry-app/pull/1145))
 
 
