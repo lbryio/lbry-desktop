@@ -240,7 +240,8 @@ class FeaturedCategory extends React.PureComponent {
 }
 
 FeaturedCategory.propTypes = {
-  category: PropTypes.string.isRequired
+  category: PropTypes.string.isRequired,
+  categoryLink?: PropTypes.string
 }
 
 FeaturedCategory.defaultProps = {
