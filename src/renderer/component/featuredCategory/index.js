@@ -1,4 +1,3 @@
-import React from 'react';
 import { connect } from 'react-redux';
 import { selectAllClaimsByChannel, selectClaimsById } from 'redux/selectors/claims';
 import { doFetchClaimsByChannel } from 'redux/actions/content';

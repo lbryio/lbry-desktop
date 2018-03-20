@@ -172,8 +172,7 @@ export default class FeaturedCategory extends React.PureComponent {
       names,
       categoryLink,
       claimsByChannel,
-      claimsById,
-      fetchChannel
+      claimsById
     } = this.props;
     const {
       canScrollPrevious,
