@@ -50,6 +50,7 @@ const installExtensions = async () => {
 
 app.setAsDefaultProtocolClient('lbry');
 app.setName('LBRY');
+app.setAppUserModelId('io.lbry.LBRY');
 
 app.on('ready', async () => {
   const processList = await findProcess('name', 'lbrynet-daemon');
