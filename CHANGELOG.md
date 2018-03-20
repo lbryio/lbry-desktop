@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
   * Notifications when the channel a user subscribes to uploads new content ([#1066](https://github.com/lbryio/lbry-app/pull/1066))
   * Codacy support for Github contributions ([#1059](https://github.com/lbryio/lbry-app/pull/1059))
   * App category for Linux ([#877](https://github.com/lbryio/lbry-app/pull/877))
+  * Add YouTube Sync reward ([1147](https://github.com/lbryio/lbry-app/pull/1147))
 
 ### Changed
   * Improved privacy by allowing users to turn off the file view counter and better understand privacy settings ([#1074](https://github.com/lbryio/lbry-app/pull/1074))
