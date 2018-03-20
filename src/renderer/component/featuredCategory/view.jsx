@@ -240,11 +240,8 @@ class FeaturedCategory extends React.PureComponent {
 }
 
 FeaturedCategory.propTypes = {
-  category: PropTypes.string,
   categoryLink: PropTypes.node,
-  names: PropTypes.array,
   claimsById: PropTypes.object,
-  claimsByChannel: PropTypes.object,
   fetchChannel: PropTypes.func
 }
 
