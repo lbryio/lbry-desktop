@@ -10,7 +10,7 @@ import Link from 'component/link';
 class FeaturedCategory extends React.PureComponent {
   static propTypes = {
     category: PropTypes.string.isRequired,
-    "categoryLink?": PropTypes.string,
+    categoryLink: PropTypes.string,
     names: PropTypes.array,
     claimsByChannel: PropTypes.object,
     claimsById: PropTypes.object,
