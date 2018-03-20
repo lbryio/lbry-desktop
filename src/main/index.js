@@ -65,8 +65,8 @@ app.on('ready', async () => {
             'For more information please visit: \n' +
             'https://lbry.io/faq/startup-troubleshooting'
         );
-        app.quit();
       }
+      app.quit();
     });
     daemon.launch();
   }
@@ -111,7 +111,10 @@ app.on('will-quit', event => {
   }
 
   appState.isQuitting = true;
-  if (daemon) daemon.quit();
+  if (daemon) {
+    daemon.quit();
+    event.preventDefault();
+  }
 });
 
 // https://electronjs.org/docs/api/app#event-will-finish-launching
