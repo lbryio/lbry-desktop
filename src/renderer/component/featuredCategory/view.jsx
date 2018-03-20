@@ -240,9 +240,12 @@ class FeaturedCategory extends React.PureComponent {
 }
 
 FeaturedCategory.propTypes = {
-  categoryLink: PropTypes.node,
-  claimsById: PropTypes.object,
-  fetchChannel: PropTypes.func
+  category: PropTypes.string.isRequired
+}
+
+FeaturedCategory.defaultProps = {
+  categoryLink: null,
+  claimsByChannel: {}
 }
 
 export default FeaturedCategory;
