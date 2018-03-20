@@ -13,6 +13,7 @@ function rewardMessage(type, amount) {
     first_publish: __('You earned %s LBC for making your first publication.', amount),
     featured_download: __('You earned %s LBC for watching a featured download.', amount),
     referral: __('You earned %s LBC for referring someone.', amount),
+    youtube_creator: __('You earned %s LBC for syncing your YouTube channel.', amount),
   }[type];
 }
 
