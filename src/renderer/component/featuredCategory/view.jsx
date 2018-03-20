@@ -12,8 +12,8 @@ class FeaturedCategory extends React.PureComponent {
     category: PropTypes.string.isRequired,
     categoryLink: PropTypes.string,
     names: PropTypes.arrayOf(PropTypes.string),
-    claimsByChannel: PropTypes.object,
-    claimsById: PropTypes.object,
+    claimsByChannel: PropTypes.objectOf(PropTypes.any),
+    claimsById: PropTypes.objectOf(PropTypes.any),
     fetchChannel: PropTypes.func
   }
     
