@@ -34,6 +34,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
   * Fix right click bug ([#928](https://github.com/lbryio/lbry-app/pull/928))
   * Fix Election linting errors ([#929](https://github.com/lbryio/lbry-app/pull/929))
   * App will no longer reset when minimizing to tray ([#1042](https://github.com/lbryio/lbry-app/pull/1042))
+  * Fix Windows notifications not showing ([1145](https://github.com/lbryio/lbry-app/pull/1145))
 
 ### Deprecated
   *
