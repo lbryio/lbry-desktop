@@ -4,7 +4,6 @@ import SnackBar from 'component/snackBar';
 import SplashScreen from 'component/splash';
 import * as ACTIONS from 'constants/action_types';
 import { ipcRenderer, remote, shell } from 'electron';
-import lbry from 'lbry';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
@@ -98,6 +97,10 @@ document.addEventListener('click', event => {
 const init = () => {
   autoUpdater.on('update-downloaded', () => {
     app.store.dispatch(doAutoUpdate());
+  });
+
+  autoUpdater.on('error', (error) => {
+    console.error(error.message)
   });
 
   if (['win32', 'darwin'].includes(process.platform)) {
