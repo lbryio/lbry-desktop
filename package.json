@@ -5,6 +5,9 @@
   "keywords": [
     "lbry"
   ],
+  "build": {
+	  "appId": "io.lbry.LBRY"
+  },
   "license": "MIT",
   "homepage": "https://lbry.io/",
   "bugs": {
