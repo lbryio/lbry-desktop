@@ -46,7 +46,8 @@
     "target": "deb",
     "category": "AudioVideo;Video",
     "desktop": {
-      "MimeType": "x-scheme-handler/lbry;"
+      "MimeType": "x-scheme-handler/lbry",
+      "Exec": "/opt/LBRY/lbry %U"
     }
   },
   "deb": {

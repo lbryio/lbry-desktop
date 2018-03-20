@@ -33,8 +33,11 @@ export default appState => {
   window.loadURL(rendererURL);
 
   let deepLinkingURI;
-  // Protocol handler for win32
-  if (process.platform === 'win32' && String(process.argv[1]).startsWith('lbry')) {
+  if (
+    (process.platform === 'win32' || process.platform === 'linux') &&
+    String(process.argv[1]).startsWith('lbry')
+  ) {
+    [, deepLinkingURI] = process.argv;
     // Keep only command line / deep linked arguments
     // Windows normalizes URIs when they're passed in from other apps. On Windows, this tries to
     // restore the original URI that was typed.
@@ -42,7 +45,11 @@ export default appState => {
     //     path, so we just strip it off.
     //   - In a URI with a claim ID, like lbry://channel#claimid, Windows interprets the hash mark as
     //     an anchor and converts it to lbry://channel/#claimid. We remove the slash here as well.
-    deepLinkingURI = process.argv[1].replace(/\/$/, '').replace('/#', '#');
+    if (process.platform === 'win32') {
+      deepLinkingURI = deepLinkingURI.replace(/\/$/, '').replace('/#', '#');
+    }
+  } else {
+    deepLinkingURI = appState.macDeepLinkingURI;
   }
 
   setupBarMenu();
