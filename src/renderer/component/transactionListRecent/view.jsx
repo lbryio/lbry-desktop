@@ -28,7 +28,7 @@ class TransactionListRecent extends React.PureComponent<Props> {
           {fetchingTransactions && <BusyMessage message={__('Loading transactions')} />}
           {!fetchingTransactions && (
             <TransactionList
-              noFilter
+              slim
               transactions={transactions}
               emptyMessage={__("Looks like you don't have any recent transactions.")}
             />
@@ -36,7 +36,7 @@ class TransactionListRecent extends React.PureComponent<Props> {
         </div>
         {hasTransactions && (
           <div className="card__actions">
-            <Button navigate="/history" label={__('Full History')} icon="Clock" />
+            <Button button="primary" navigate="/history" label={__('Full History')} icon="Clock" />
           </div>
         )}
       </section>

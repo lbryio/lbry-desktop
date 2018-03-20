@@ -114,8 +114,7 @@ class RewardsPage extends React.PureComponent {
       );
     }
     return (
-      // TODO: come back to me and actually implement a grid
-      <div className="card-grid">
+      <div className="card__list card__list--rewards">
         {rewards.map(reward => <RewardTile key={reward.reward_type} reward={reward} />)}
       </div>
     );

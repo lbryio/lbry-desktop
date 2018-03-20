@@ -91,6 +91,7 @@ export default (props: Props) => {
       </span>
       <div className="card__actions">
         <Submit
+          button="primary"
           label={__('Begin Conversion')}
           disabled={isSubmitting || !!Object.keys(errors).length}
         />

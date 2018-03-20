@@ -73,17 +73,18 @@ class WalletSendTip extends React.PureComponent<Props, State> {
               <span>
                 {__(`This will appear as a tip for ${title} located at ${uri}.`)}
                 {" "}
-                <Button label={__('Learn more')} fakeLink href="https://lbry.io/faq/tipping" />
+                <Button label={__('Learn more')} button="link" href="https://lbry.io/faq/tipping" />
               </span>
             }
           />
           <div className="card__actions">
             <Button
+              button="primary"
               label={__('Send')}
               disabled={isPending}
               onClick={this.handleSendButtonClicked}
             />
-            <Button alt label={__('Cancel')} onClick={onCancel} navigateParams={{ uri }} />
+            <Button button="alt" label={__('Cancel')} onClick={onCancel} navigateParams={{ uri }} />
           </div>
         </div>
       </div>

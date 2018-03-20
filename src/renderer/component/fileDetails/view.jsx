@@ -36,37 +36,32 @@ const FileDetails = (props: Props) => {
   const downloadPath = fileInfo ? path.normalize(fileInfo.download_path) : null;
 
   return (
-    <div>
-      <div className="card__content">
-        <div className="card__subtext-title">About</div>
-        <div className="card__subtext">
-          <ReactMarkdown
-            source={description || ''}
-            escapeHtml
-            disallowedTypes={['Heading', 'HtmlInline', 'HtmlBlock']}
-          />
-        </div>
-        <div className="card__subtext-title">Info</div>
-        <div className="card__subtext">
-          <dl>
-            <dt>{__('Content-Type')}</dt>
-            <dd>{mediaType}</dd>
-            <dt>{__('Language')}</dt>
-            <dd>{language}</dd>
-            <dt>{__('License')}</dt>
-            <dd>{license}</dd>
-            {downloadPath && (
-              <React.Fragment>
-                <dt>{__('Downloaded to')}</dt>
-                <dd>
-                  <Button fakeLink onClick={() => openFolder(downloadPath)} label={downloadPath} />
-                </dd>
-              </React.Fragment>
-            )}
-          </dl>
-        </div>
+    <React.Fragment>
+      {description && (
+        <React.Fragment>
+          <div className="card__subtext-title">About</div>
+          <div className="card__subtext">
+            <ReactMarkdown
+              source={description || ''}
+              escapeHtml
+              disallowedTypes={['Heading', 'HtmlInline', 'HtmlBlock']}
+            />
+          </div>
+        </React.Fragment>
+      )}
+      <div className="card__subtext-title">Info</div>
+      <div className="card__subtext">
+        <div>{__('Content-Type')}{": "}{mediaType}</div>
+        <div>{__('Language')}{": "}{language}</div>
+        <div>{__('License')}{": "}{license}</div>
+        {downloadPath && (
+          <div>
+            {__('Downloaded to')}{': '}
+            <Button button="link" onClick={() => openFolder(downloadPath)} label={downloadPath} />
+          </div>
+        )}
       </div>
-    </div>
+    </React.Fragment>
   );
 };
 

@@ -20,7 +20,7 @@ class ModalSearch extends React.PureComponent<Props> {
         type="custom"
         fullScreen
       >
-        <Button icon="X" alt onClick={closeModal} />
+        <Button noPadding button="alt" icon="X" alt onClick={closeModal} />
         <SearchPage />
       </Modal>
     );

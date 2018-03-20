@@ -13,8 +13,15 @@ export class Submit extends React.PureComponent<Props> {
   };
 
   render() {
-    const { label, disabled } = this.props;
-    return <Button type="submit" label={label} disabled={disabled} />;
+    const { label, disabled, ...otherProps } = this.props;
+    return (
+        <Button
+          button="primary"
+          type="submit"
+          label={label}
+          disabled={disabled}
+          {...otherProps} />
+    );
   }
 }
 

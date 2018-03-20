@@ -1,38 +1,35 @@
 .nav {
   grid-area: nav;
   background-color: var(--color-nav-bg);
+  padding: $spacing-width;
 
   hr {
-    width: 40px;
+    width: 24px;
+    margin: 36px 0;
+    // width: 40px;
     border: solid 1px var(--color-grey);
     margin: $spacing-vertical $spacing-vertical * 2/3;
   }
 }
 
 .nav__actions-top {
-  height: var(--header-height);
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  padding: 0 $spacing-vertical * 1/3;
 }
 
 .nav__actions-history {
   display: flex;
-
-  .btn {
-    margin-left: $spacing-vertical * 1/3;
-  }
 }
 
 // Sidebar links
 .nav__primary {
-  padding-top: $spacing-vertical;
+  padding-top: 80px;
 }
 
 .nav__link {
-  padding: $spacing-vertical / 3 0 $spacing-vertical / 3 $spacing-vertical * 2/3;
+  padding-top: $spacing-vertical / 3;
   color: var(--color-grey-dark);
+  white-space: nowrap;
 
   .btn:hover {
     color: var(--color-black);
@@ -44,15 +41,14 @@
 }
 
 .nav__link--primary {
-  font-weight: bold;
+  font: normal 400 16px/36px 'metropolis-semibold';
 }
 
 .nav__link--sub {
-  font-size: .9em;
-  font-weight: 400;
+  font: normal 400 14px/30px 'metropolis-medium';
   margin-left: 5px;
   color: var(--color-grey-dark);
-  padding: 5px $spacing-vertical * 2/3;
+  padding: 5px $spacing-vertical * 2/3 0 $spacing-vertical * 2/3;
 }
 
 .nav__link--active {
@@ -60,7 +56,7 @@
 }
 
 .nav__sub-links {
-  padding-top: $spacing-vertical * 1/3;
+  padding-bottom: $spacing-vertical * 1/3;
 }
 
 // Sub links animations
@@ -76,7 +72,7 @@
   // Needs to be some arbitrarily large height
   max-height: 500px;
   opacity: 1;
-  transition: max-height .5s ease-in-out, opacity .5s ease-in-out;
+  transition: all var(--animation-duration) var(--animation-style);
 }
 
 .nav__sub {

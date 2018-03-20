@@ -17,7 +17,10 @@ const RewardSummary = (props: Props) => {
       <p className="card__subtitle">
         {hasRewards ? (
           <React.Fragment>
-            {__('You have')} <CreditAmount amount={unclaimedRewardAmount} precision={8} />{' '}
+            {__('You have')}
+            &nbsp;
+            <CreditAmount noStyle amount={unclaimedRewardAmount} precision={8} />
+            &nbsp;
             {__('in unclaimed rewards')}.
           </React.Fragment>
         ) : (
@@ -27,11 +30,11 @@ const RewardSummary = (props: Props) => {
         )}
       </p>
       <div className="card__actions">
-        <Button navigate="/rewards" label={hasRewards ? __('Claim Rewards') : __('View Rewards')} />
+        <Button button="primary" navigate="/rewards" label={hasRewards ? __('Claim Rewards') : __('View Rewards')} />
       </div>
-      <p className="help">
+      <p className="help help--padded">
         {__('Read our')}{' '}
-        <Button label={__('FAQ')} href="https://lbry.io/faq/rewards" />{' '}
+        <Button button="link" label={__('FAQ')} href="https://lbry.io/faq/rewards" />{' '}
         {__('to learn more about LBRY Rewards')}.
       </p>
     </section>

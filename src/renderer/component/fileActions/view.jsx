@@ -27,30 +27,29 @@ class FileActions extends React.PureComponent<Props> {
     return (
       <section className={classnames('card__actions', { 'card__actions--vertical': vertical })}>
         <FileDownloadLink uri={uri} />
+        {claimIsMine && (
+          <Button
+            icon="Edit3"
+            className="btn--file-actions"
+            description={__('Edit')}
+            navigate="/publish"
+            navigateParams={{ id: claimId }}
+          />
+        )}
         {showDelete && (
           <Button
-            alt
+            className="btn--file-actions"
             icon="Trash"
-            label={__('Remove')}
+            description={__('Delete')}
             onClick={() => openModal(modals.CONFIRM_FILE_REMOVE, { uri })}
           />
         )}
         {!claimIsMine && (
           <Button
-            alt
+            className="btn--file-actions"
             icon="Flag"
             href={`https://lbry.io/dmca?claim_id=${claimId}`}
-            label={__('Report')}
-          />
-        )}
-
-        {claimIsMine && (
-          <Button
-            icon="Edit3"
-            label={__('Edit')}
-            navigate="/publish"
-            className="card__action--right"
-            navigateParams={{ id: claimId }}
+            description={__('Report content')}
           />
         )}
       </section>

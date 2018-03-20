@@ -23,7 +23,7 @@ export default class Address extends React.PureComponent<Props> {
 
     return (
 
-        <FormRow>
+        <FormRow verticallyCentered padded>
           <input
             className="input-copyable form-field__input"
             readOnly
@@ -38,7 +38,8 @@ export default class Address extends React.PureComponent<Props> {
             }}
           />
           <Button
-            alt
+            noPadding
+            button="secondary"
             icon="Clipboard"
             onClick={() => {
               clipboard.writeText(address);

@@ -1,0 +1,9 @@
+.media,
+.video__loading-screen {
+  margin-top: var(--video-aspect-ratio);
+}
+
+img {
+  max-height: 100%;
+  max-width: 100%;
+}

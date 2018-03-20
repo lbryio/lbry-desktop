@@ -54,30 +54,14 @@ class UriIndicator extends React.PureComponent<Props> {
       value && value.publisherSignature && value.publisherSignature.certificateId;
 
     if (!hasSignature || !channelName) {
-      return <span>Anonymous</span>;
+      return <span className="channel-name">Anonymous</span>;
     }
 
-    // I'll look at this when working on the file page
-    // let icon;
     let channelLink;
-    let modifier;
-
     if (signatureIsValid) {
-      modifier = 'valid';
       channelLink = link ? buildURI({ channelName, claimId: channelClaimId }, false) : false;
-    } else {
-      // icon = 'icon-times-circle';
-      // modifier = 'invalid';
     }
 
-    // {!signatureIsValid ? (
-    //   <Icon
-    //   icon={icon}
-    //   className={`channel-indicator__icon channel-indicator__icon--${modifier}`}
-    //   />
-    // ) : (
-    //   ''
-    // )}
     const inner = (
       <span>
         <span
@@ -95,7 +79,11 @@ class UriIndicator extends React.PureComponent<Props> {
     }
 
     return (
-      <Button navigate="/show" navigateParams={{ uri: channelLink }} noStyle>
+      <Button
+        noPadding
+        className="btn--uri-indicator"
+        navigate="/show"
+        navigateParams={{ uri: channelLink }}>
         {inner}
       </Button>
     );

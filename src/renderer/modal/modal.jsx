@@ -71,13 +71,14 @@ export class Modal extends React.PureComponent<ModalProps> {
         {type === 'custom' ? null : ( // custom modals define their own buttons
           <div className="card__actions card__actions--center">
             <Button
+              button="primary"
               label={confirmButtonLabel}
               disabled={confirmButtonDisabled}
               onClick={onConfirmed}
             />
             {type === 'confirm' ? (
               <Button
-                alt
+                button="alt"
                 label={abortButtonLabel}
                 disabled={abortButtonDisabled}
                 onClick={onAborted}

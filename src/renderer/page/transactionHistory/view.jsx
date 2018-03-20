@@ -21,9 +21,10 @@ class TransactionHistoryPage extends React.PureComponent {
           >
             <h3>{__('Transaction History')}</h3>
           </div>
-          <div className="card__content">
             {fetchingTransactions && !transactions.length ? (
-              <BusyMessage message={__('Loading transactions')} />
+              <div className="card__content">
+                <BusyMessage message={__('Loading transactions')} />
+              </div>
             ) : (
               ''
             )}
@@ -32,7 +33,6 @@ class TransactionHistoryPage extends React.PureComponent {
             ) : (
               ''
             )}
-          </div>
         </section>
       </Page>
     );

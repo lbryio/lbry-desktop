@@ -3,7 +3,6 @@ import { doNavigate, doHistoryBack, doHistoryForward } from 'redux/actions/navig
 import {
   selectIsBackDisabled,
   selectIsForwardDisabled,
-  selectIsHome,
   selectNavLinks,
 } from 'redux/selectors/navigation';
 import SideBar from './view';
@@ -12,7 +11,6 @@ const select = state => ({
   navLinks: selectNavLinks(state),
   isBackDisabled: selectIsBackDisabled(state),
   isForwardDisabled: selectIsForwardDisabled(state),
-  isHome: selectIsHome(state),
 });
 
 const perform = dispatch => ({

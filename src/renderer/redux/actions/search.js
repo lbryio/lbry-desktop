@@ -25,6 +25,10 @@ export const doSearch = (rawQuery) => (dispatch, getState) => {
     return;
   }
 
+  dispatch({
+    type: ACTIONS.SEARCH_START
+  });
+  
   // If the user is on the file page with a pre-populated uri and they select
   // the search option without typing anything, searchQuery will be empty
   // We need to populate it so the input is filled on the search page
@@ -34,10 +38,6 @@ export const doSearch = (rawQuery) => (dispatch, getState) => {
       data: { searchQuery: query },
     })
   }
-
-  dispatch({
-    type: ACTIONS.SEARCH_START
-  });
 
   fetch(`https://lighthouse.lbry.io/search?s=${query}`)
     .then(handleFetchResponse)

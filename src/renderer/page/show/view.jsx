@@ -1,8 +1,9 @@
-/* eslint-disable */
+// @flow
 import React from 'react';
 import { BusyMessage } from 'component/common';
 import ChannelPage from 'page/channel';
 import FilePage from 'page/file';
+import Page from 'component/page';
 
 type Props = {
   isResolvingUri: boolean,
@@ -12,7 +13,7 @@ type Props = {
 };
 
 class ShowPage extends React.PureComponent<Props> {
-  componentWillMount() {
+  componentDidMount() {
     const { isResolvingUri, resolveUri, uri } = this.props;
 
     if (!isResolvingUri) resolveUri(uri);
@@ -33,20 +34,22 @@ class ShowPage extends React.PureComponent<Props> {
 
     if ((isResolvingUri && !claim) || !claim) {
       innerContent = (
-        <section className="card">
-          <div className="card__inner">
-            <div className="card__title-identity">
-              <h1>{uri}</h1>
-            </div>
-          </div>
-          <div className="card__content">
-            {isResolvingUri && <BusyMessage message={__('Loading magic decentralized data...')} />}
-            {claim === null &&
-              !isResolvingUri && (
-                <span className="empty">{__("There's nothing at this location.")}</span>
+        <Page>
+          <section className="card">
+            <h1>{uri}</h1>
+            <div className="card__content">
+              {isResolvingUri && (
+                <BusyMessage message={__('Loading decentralized data...')} />
               )}
-          </div>
-        </section>
+              {claim === null &&
+                !isResolvingUri && (
+                  <span className="empty">
+                    {__("There's nothing at this location.")}
+                  </span>
+                )}
+            </div>
+          </section>
+        </Page>
       );
     } else if (claim && claim.name.length && claim.name[0] === '@') {
       innerContent = <ChannelPage uri={uri} />;
@@ -59,4 +62,3 @@ class ShowPage extends React.PureComponent<Props> {
 }
 
 export default ShowPage;
-/* eslint-enable */

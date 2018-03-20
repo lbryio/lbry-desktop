@@ -12,7 +12,7 @@ const TransactionLink = (props: Props) => {
   const href = `https://explorer.lbry.io/#!/transaction/${id}`;
   const label = id.substr(0, 7);
 
-  return <Link fakeLink href={href} label={label} />;
+  return <Link button="link" href={href} label={label} />;
 };
 
 export default TransactionLink;

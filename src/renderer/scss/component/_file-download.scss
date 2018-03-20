@@ -8,10 +8,14 @@
 .file-download {
   position: relative;
   color: var(--color-download);
+  font-size: 12px;
+  font-family: 'metropolis-medium';
 }
+
 .file-download__overlay {
   background: var(--color-download);
-  color: var(--color-bg);
+  color: var(--color-download-overlay);
+  border-radius: var(--btn-radius);
   position: absolute;
   white-space: nowrap;
   overflow: hidden;

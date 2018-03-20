@@ -84,12 +84,12 @@ class ChannelPage extends React.PureComponent<Props> {
     }
 
     return (
-      <Page>
+      <Page notContained>
         <section className="card__channel-info card__channel-info--large">
           <h1>{name}</h1>
           <div className="card__actions card__actions--no-margin">
             <Button
-              alt
+              button="alt"
               iconRight="Send"
               label={__('Enjoy this? Send a tip')}
               onClick={() => openModal(modals.SEND_TIP, { uri })}

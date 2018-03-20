@@ -11,9 +11,7 @@ type Props = {
   updateSearchQuery: string => void,
   onSearch: string => void,
   onSubmit: (string, {}) => void,
-  searchQuery: ?string,
-  isActive: boolean,
-  address: ?string,
+  wunderbarValue: ?string,
   suggestions: Array<string>,
 };
 
@@ -89,18 +87,12 @@ class WunderBar extends React.PureComponent<Props> {
   input: ?HTMLInputElement;
 
   render() {
-    const { searchQuery, isActive, address, suggestions } = this.props;
+    const { wunderbarValue, suggestions } = this.props;
 
-    // if we are on the file/channel page
-    // use the address in the history stack
-    const wunderbarValue = isActive ? searchQuery : searchQuery || address;
+
 
     return (
-      <div
-        className={classnames('wunderbar', {
-          'wunderbar--active': isActive,
-        })}
-      >
+      <div className="wunderbar">
         <Icon icon="Search" />
         <Autocomplete
           autoHighlight

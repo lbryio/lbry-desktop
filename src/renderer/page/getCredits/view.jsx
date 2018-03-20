@@ -13,7 +13,11 @@ const GetCreditsPage = props => (
         {__('From External Wallet')}
       </div>
       <div className="card__actions">
-        <Link navigate="/send" label={__('Send / Receive')} />
+        <Link
+          button="primary"
+          icon="Send"
+          navigate="/send"
+          label={__('Send / Receive')} />
       </div>
     </section>
     <section className="card card--section">
@@ -28,7 +32,7 @@ const GetCreditsPage = props => (
         </p>
       </div>
       <div className="card__actions">
-        <Link fakeLink href="https://lbry.io/faq/earn-credits" label={__('Read More')} />
+        <Link button="primary" href="https://lbry.io/faq/earn-credits" label={__('Read More')} />
       </div>
     </section>
   </Page>

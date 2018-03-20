@@ -44,9 +44,9 @@ class BackupPage extends React.PureComponent<Props> {
                 'However, it is fairly easy to back up manually. To backup your wallet, make a copy of the folder listed below:'
               )}
             </p>
-            <p>
+            <div className="card__content">
               <code>{lbryum_wallet_dir}</code>
-            </p>
+            </div>
             </div>
             <div className="card__content">
             <p>
@@ -59,7 +59,7 @@ class BackupPage extends React.PureComponent<Props> {
             <p>
               For more details on backing up and best practices,{' '}
               <Link
-                fakeLink
+                button="link"
                 href="https://lbry.io/faq/how-to-backup-wallet"
                 label={__('see this article')}
               />.

@@ -12,6 +12,7 @@ type DraftTransaction = {
 
 type Props = {
   sendToAddress: DraftTransaction => void,
+  balance: number
 };
 
 class WalletSend extends React.PureComponent<Props> {
@@ -27,6 +28,8 @@ class WalletSend extends React.PureComponent<Props> {
   }
 
   render() {
+    const { balance } = this.props;
+
     return (
       <section className="card card--section">
         <div className="card__title">{__('Send Credits')}</div>
@@ -51,7 +54,10 @@ class WalletSend extends React.PureComponent<Props> {
                     onChange={handleChange}
                     onBlur={handleBlur}
                     value={values.amount}
-                    error={!!values.amount && touched.amount && errors.amount}
+                    error={
+                      !!values.amount && touched.amount && errors.amount
+                      || values.amount > balance && __("Not enough")
+                    }
                   />
 
                   <FormField
@@ -68,8 +74,8 @@ class WalletSend extends React.PureComponent<Props> {
                 </FormRow>
                 <div className="card__actions">
                   <Button
+                    button="primary"
                     type="submit"
-                    icon="Send"
                     label={__('Send')}
                     disabled={
                       !values.address ||

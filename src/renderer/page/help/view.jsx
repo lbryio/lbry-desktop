@@ -82,7 +82,7 @@ class HelpPage extends React.PureComponent {
               href="https://lbry.io/faq"
               label={__('Read the FAQ')}
               icon="HelpCircle"
-              button="alt"
+              button="primary"
             />
           </div>
         </section>
@@ -97,6 +97,7 @@ class HelpPage extends React.PureComponent {
           </p>
           <div className="card__actions">
             <Link
+              button="primary"
               label={__('Join Our Chat')}
               icon="MessageCircle"
               href="https://chat.lbry.io"
@@ -115,7 +116,7 @@ class HelpPage extends React.PureComponent {
               navigate="/report"
               label={__('Submit a Bug Report')}
               icon="Flag"
-              button="alt"
+              button="primary"
             />
           </div>
           <div className="card__meta">{__('Thanks! LBRY is made by its users.')}</div>
@@ -128,7 +129,7 @@ class HelpPage extends React.PureComponent {
           {this.state.upgradeAvailable !== null && this.state.upgradeAvailable ? (
             <div className="card__subtitle">
               {__('A newer version of LBRY is available.')}{' '}
-              <Link fakeLink href={newVerLink} label={__('Download now!')} />
+              <Link button="link" href={newVerLink} label={__('Download now!')} />
             </div>
           ) : (
             <div className="card__subtitle">{__('Your LBRY app is up to date.')}</div>
@@ -184,7 +185,7 @@ class HelpPage extends React.PureComponent {
                   <td>{__('Access Token')}</td>
                   <td>
                     {this.state.accessTokenHidden && (
-                      <Link fakeLink label={__('View')} onClick={this.showAccessToken.bind(this)} />
+                      <Link button="link" label={__('View')} onClick={this.showAccessToken.bind(this)} />
                     )}
                     {!this.state.accessTokenHidden &&
                       accessToken && (

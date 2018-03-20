@@ -26,7 +26,7 @@ class BidHelpText extends React.PureComponent<Props> {
       return (
       <React.Fragment>
         {__("You already have a claim at")}{` ${uri} `}
-        <Button fakeLink label="Edit it" onClick={onEditMyClaim} /><br />
+        <Button button="link" label="Edit it" onClick={onEditMyClaim} /><br />
         {__("Publishing will update your existing claim.")}
       </React.Fragment>
       )

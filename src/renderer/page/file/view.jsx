@@ -103,12 +103,6 @@ class FilePage extends React.Component<Props> {
       openModal,
     } = this.props;
 
-    // This should be included below in the page
-    // Come back to me
-    if (!claim || !metadata) {
-      return <span className="empty">{__('Empty claim or metadata info.')}</span>;
-    }
-
     // File info
     const title = metadata.title;
     const isRewardContent = rewardedContentClaimIds.includes(claim.claim_id);
@@ -126,56 +120,61 @@ class FilePage extends React.Component<Props> {
     }
 
     const isPlaying = playingUri === uri && !isPaused;
-
     return (
-      <Page>
-        <section className="card">
-          <div>
-            {isPlayable ? (
-              <Video className="video__embedded" uri={uri} />
-            ) : (
-              <Thumbnail
-                shouldObscure={shouldObscureThumbnail}
-                className="video__embedded"
-                src={thumbnail}
-              />
-            )}
-            {!isPlaying && (
-              <div className="card-media__internal-links">
-                <FileActions uri={uri} vertical />
-              </div>
-            )}
-          </div>
-          <div className="card--content">
-            <div className="card__title-identity--file">
-              <h1 className="card__title">{title}</h1>
-              <div className="card__title-identity-icons">
-                <FilePrice uri={normalizeURI(uri)} />
-                {isRewardContent && <Icon icon={icons.FEATURED} />}
-              </div>
-            </div>
-            <span className="card__subtitle card__subtitle--file">
-              {__('Published on')} <DateTime block={height} show={DateTime.SHOW_DATE} />
-            </span>
-
-            <div className="card__channel-info">
-              <UriIndicator uri={uri} link />
-              <div className="card__actions card__actions--no-margin">
-                <Button
-                  alt
-                  iconRight="Send"
-                  label={__('Enjoy this? Send a tip')}
-                  onClick={() => openModal(modals.SEND_TIP, { uri })}
+      <Page extraPadding>
+        {(!claim || !metadata) ? (
+          <section>
+            <span className="empty">{__('Empty claim or metadata info.')}</span>
+          </section>
+        ) : (
+          <section className="card">
+            <div>
+              {isPlayable ? (
+                <Video className="video__embedded" uri={uri} />
+              ) : (
+                <Thumbnail
+                  shouldObscure={shouldObscureThumbnail}
+                  src={thumbnail}
                 />
-                <SubscribeButton uri={subscriptionUri} channelName={channelName} />
+              )}
+              {!isPlaying && (
+                <div className="card-media__internal-links">
+                  <FileActions uri={uri} vertical />
+                </div>
+              )}
+            </div>
+            <div className="card__content">
+              <div className="card__title-identity--file">
+                <h1 className="card__title card__title--file">{title}</h1>
+                <div className="card__title-identity-icons">
+                  <FilePrice uri={normalizeURI(uri)} />
+                  {isRewardContent && <Icon icon={icons.FEATURED} />}
+                </div>
+              </div>
+              <span className="card__subtitle card__subtitle--file">
+                {__('Published on')}&nbsp;
+                <DateTime block={height} show={DateTime.SHOW_DATE} />
+              </span>
+
+              <div className="card__channel-info">
+                <UriIndicator uri={uri} link />
+                <div className="card__actions card__actions--no-margin">
+                  <Button
+                    button="alt"
+                    iconRight="Send"
+                    label={__('Enjoy this? Send a tip')}
+                    onClick={() => openModal(modals.SEND_TIP, { uri })}
+                  />
+                  <SubscribeButton uri={subscriptionUri} channelName={channelName} />
+                </div>
               </div>
             </div>
-          </div>
 
-          <div className="card--content">
-            <FileDetails uri={uri} />
-          </div>
-        </section>
+            <div className="card__content">
+              <FileDetails uri={uri} />
+            </div>
+          </section>
+        )}
       </Page>
     );
   }

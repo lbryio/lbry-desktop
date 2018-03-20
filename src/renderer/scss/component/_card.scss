@@ -13,16 +13,26 @@
   background-color: var(--color-white);
   padding: $spacing-vertical;
   margin-top: $spacing-vertical * 2/3;
-  box-shadow: var(--box-shadow-layer);
 }
 
 .card--small {
   width: var(--card-small-width);
   overflow-x: hidden;
   white-space: normal;
-}
-.card--small .card__media {
-  height: calc(var(--card-small-width) * 9 / 16);
+
+  .card__media {
+    padding-top: var(--video-aspect-ratio)
+  }
+
+  .card__media-text {
+    // for the weird padding required for dynamic height
+    // this lets the text sit in the middle instead of the bottom
+    margin-top: calc(var(--video-aspect-ratio) * -1);
+  }
+
+  .channel-name {
+    font-size: 12px;
+  }
 }
 
 .card--link {
@@ -36,16 +46,15 @@
 .card--wallet-balance {
   background: url('../../../static/img/stripe-background.png') no-repeat;
   background-size: cover;
-  color: var(--color-white);
+  color: var(--card-wallet-color);
+  justify-content: space-between;
 
   .card__subtitle {
-    color: var(--color-white);
+    color: var(--card-wallet-color);
   }
 }
 
 .card--disabled {
-  opacity: 0.3;
-
   .card--section {
     box-shadow: none;
   }
@@ -58,14 +67,15 @@
   background-color: var(--color-placeholder);
 }
 
-.card__media--autothumb {
+.card__media--no-img {
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
 }
 
-.card__title-identity {
-  margin-top: $spacing-vertical * 1/3;
+.card__media--nsfw {
+  background-color: var(--color-error);
 }
 
 .card__title-identity--file {
@@ -81,36 +91,52 @@
 .card__title-identity-icons {
   display: flex;
   align-items: center;
+  align-self: flex-start;
+  padding-top: $spacing-width;
 }
 
 .card__title {
-  font-size: 1.2em;
-  font-weight: 700;
-  padding: 0;
+  font-size: 18px;
+}
+
+.card__title--file {
+  font-family: 'metropolis-bold';
+  font-size: 28px;
+  line-height: 36px;
+  padding-top: 20px;
 }
 
 .card__title--small {
-  font-weight: 700;
-  font-size: 0.9em;
-  line-height: 1.3;
+  font-size: 14px;
+  line-height: 18px;
+  padding-top: 20px;
+}
+
+.card__title--file {
+  padding-top: 0;
+  padding-bottom: 5px;
 }
 
 .card__subtitle {
   display: flex;
+  align-items: center;
   color: var(--color-help);
-  font-size: 0.85em;
-  font-weight: 700;
-  padding-top: $spacing-vertical * 1/3;
+  font-size: 14px;
+  font-family: 'metropolis-medium';
+
+  .icon {
+    margin-left: $spacing-vertical * 1/3;
+  }
 }
 
-.card__subtitle--file {
-  font-size: 1em;
-  padding-top: 0;
+.card__subtitle--block {
+  display: block;
 }
 
 .card__meta {
   color: var(--color-help);
-  font-size: 0.85em;
+  font-size: 14px;
+  font-family: 'metropolis-medium';
   padding-top: $spacing-vertical * 2/3;
 }
 
@@ -135,10 +161,12 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
+  padding: $spacing-width 0;
 }
 
-.card__channel-info {
-  padding: $spacing-vertical * 2 0;
+.card__channel-info--large {
+  padding-top: 0;
+  padding-bottom: $spacing-width;
 }
 
 .card__content {
@@ -147,9 +175,12 @@
 
 .card__subtext-title {
   color: var(--color-black);
-  margin-top: $spacing-vertical * 3/2;
   font-size: calc(var(--font-size-subtext-multiple) * 1.5em);
   font-weight: 700;
+
+  &:not(:first-of-type) {
+    margin-top: $spacing-vertical * 3/2;
+  }
 }
 
 .card__subtext {
@@ -164,7 +195,7 @@
   margin-top: var(--card-margin);
   display: flex;
 
-  .btn:nth-child(n + 2) {
+  &:not(.card__actions--vertical) .btn:nth-child(n + 2) {
     margin-left: $spacing-vertical / 3;
   }
 }
@@ -176,9 +207,10 @@
 .card__actions--vertical {
   flex-direction: column;
   margin-top: 0;
+  align-items: flex-end;
 
   .btn:not(:first-child) {
-    margin-top: $spacing-vertical * 2/3;
+    margin-top: $spacing-vertical * 1/3;
   }
 }
 
@@ -210,7 +242,7 @@
   padding-top: $spacing-vertical;
 
   &:first-of-type {
-    padding-top: $spacing-vertical * 2/3;
+    padding-top: 0;
   }
 
   &:last-of-type {
@@ -225,16 +257,68 @@
   // specific padding-left styling is needed here
   // this needs to be used on a page with noPadding
   // doing so allows the content to scroll to the edge of the screen
-  padding-left: $spacing-vertical * 2/3;
+  padding-left: $spacing-width;
 }
 
 .card-row__title {
   display: flex;
   align-items: center;
+  font-size: 18px;
+  line-height: 24px;
 }
 
 .card-row__scroll-btns {
   display: flex;
+  padding-right: $spacing-width - 10px; // page padding - 1/2 width of arrow button
+}
+
+.card-row__scrollhouse {
+  padding-top: $spacing-vertical * 2/3;
+  overflow: hidden;
+
+  .card:first-of-type {
+    margin-left: $spacing-width;
+  }
+
+  .card:last-of-type {
+    margin-right: $spacing-vertical * 2/3;
+  }
+}
+
+/*
+  How cards are displayed in lists
+*/
+.card__list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+
+  .card {
+    flex: 0 0 calc((100% / 3 - 16px));
+    margin-bottom: 60px;
+  }
+
+  @media only screen and (min-width: $large-breakpoint) {
+    .card {
+      flex: 0 0 calc((100% / 4) - 16px);
+    }
+  }
+}
+
+.card__list--rewards {
+  .card {
+    flex: 0 0 calc(50% - 16px);
+    margin-bottom: 0;
+
+    &:last-of-type {
+      flex: 0 0 100%;
+    }
+  }
+}
+
+.card__list:after {
+  content: '';
+  flex: auto;
 }
 
 .card-row__scrollhouse {
@@ -244,17 +328,67 @@
   .card {
     display: inline-block;
     vertical-align: top;
-    margin-left: $spacing-vertical * 2/3;
     overflow: visible;
+    // -- three cards on a screen
+    // -- minus 12px for 1/3 of the page padding (36px)
+    // -- minus 20px for the card's margin
+    // Ideally we should be able to use $spacing-width / 3, but I'm not sure
+    // how inside the calc function
+    width: calc((100% / 3) - 12px - 20px);
+  }
+
+  .card:not(:first-of-type) {
+    margin-left: 20px;
   }
 
   .card:last-of-type {
-    margin-right: $spacing-vertical * 2/3;
+    margin-right: 20px;
+  }
+
+  @media only screen and (min-width : $large-breakpoint) {
+    .card {
+      width: calc((100% / 4) - 12px - 20px);
+    }
   }
 }
 
-// TODO: come back to this
-// Do we want an opacity over the image?
-.card--obscured {
-  background-color: #e09898;
+
+.card__media--autothumb {
+  color: red !important;
+}
+
+.card__media {
+  &.card__media--autothumb.purple {
+    background-color: #9c27b0;
+  }
+  &.card__media--autothumb.red {
+    background-color: #e53935;
+  }
+  &.card__media--autothumb.pink {
+    background-color: #e91e63;
+  }
+  &.card__media--autothumb.indigo {
+    background-color: #3f51b5;
+  }
+  &.card__media--autothumb.blue {
+    background-color: #2196f3;
+  }
+  &.card__media--autothumb.light-blue {
+    background-color: #039be5;
+  }
+  &.card__media--autothumb.cyan {
+    background-color: #00acc1;
+  }
+  &.card__media--autothumb.teal {
+    background-color: #009688;
+  }
+  &.card__media--autothumb.green {
+    background-color: #43a047;
+  }
+  &.card__media--autothumb.yellow {
+    background-color: #ffeb3b;
+  }
+  &.card__media--autothumb.orange {
+    background-color: #ffa726;
+  }
 }

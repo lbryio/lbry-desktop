@@ -20,6 +20,7 @@ const NoResults = () => {
 type Props = {
   search: (string) => void,
   query: string,
+  isSearching: boolean,
   uris: ?Array<string>,
   downloadUris: ?Array<string>
 }
@@ -50,7 +51,8 @@ class FileListSearch extends React.PureComponent<Props> {
     const {
       uris,
       query,
-      downloadUris
+      downloadUris,
+      isSearching
     } = this.props;
 
     let fileResults = [];
@@ -70,18 +72,22 @@ class FileListSearch extends React.PureComponent<Props> {
           <div className="file-list__header">
             {__('Files')}
           </div>
-          {fileResults.length ? fileResults.map((uri) => (
-            <FileTile key={uri} uri={uri} />
-          )) : <NoResults />}
+          {!isSearching && (
+            fileResults.length ? fileResults.map((uri) => (
+              <FileTile key={uri} uri={uri} />
+            )) : <NoResults />
+          )}
         </div>
 
         <div className="search-result__column">
           <div className="file-list__header">
             {__('Channels')}
           </div>
-          {channelResults.length ? channelResults.map((uri) => (
-            <ChannelTile key={uri} uri={uri} />
-          )) : <NoResults />}
+          {!isSearching && (
+            channelResults.length ? channelResults.map((uri) => (
+              <ChannelTile key={uri} uri={uri} />
+            )) : <NoResults />
+          )}
         </div>
 
         <div className="search-result__column">

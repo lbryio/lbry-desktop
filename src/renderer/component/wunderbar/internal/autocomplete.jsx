@@ -527,6 +527,7 @@ export default class Autocomplete extends React.Component {
     this.refs.input.select();
 
     this.setState({ isOpen: true });
+
     const { onFocus } = this.props.inputProps;
     if (onFocus) {
       onFocus(event);

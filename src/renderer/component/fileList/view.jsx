@@ -5,28 +5,6 @@ import { FormField } from 'component/common/form';
 import FileCard from 'component/fileCard';
 import { BusyMessage } from 'component/common.js';
 
-const sortFunctions = {
-  date: (fileInfos: Array<FileInfo>) => {
-    return fileInfos.slice();
-  },
-  title: (fileInfos) => {
-    return fileInfos.slice().sort((fileInfo1, fileInfo2) => {
-      const title1 = fileInfo1.value
-        ? fileInfo1.value.stream.metadata.title.toLowerCase()
-        : fileInfo1.name;
-      const title2 = fileInfo2.value
-        ? fileInfo2.value.stream.metadata.title.toLowerCase()
-        : fileInfo2.name;
-      if (title1 < title2) {
-        return -1;
-      } else if (title1 > title2) {
-        return 1;
-      }
-      return 0;
-    });
-  },
-};
-
 type FileInfo = {
   name: string,
   channelName: ?string,
@@ -150,7 +128,7 @@ class FileList extends React.PureComponent<Props, State> {
     const { sortBy } = this.state;
     const content = [];
 
-    sortFunctions[sortBy](fileInfos).forEach(fileInfo => {
+    this.sortFunctions[sortBy](fileInfos).forEach(fileInfo => {
       const {
         channel_name,
         name,
@@ -192,7 +170,7 @@ class FileList extends React.PureComponent<Props, State> {
             </FormField>
           )}
         </div>
-        <div className="file-list">
+        <div className="card__list">
           {content}
         </div>
       </section>
