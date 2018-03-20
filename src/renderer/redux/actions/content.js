@@ -78,6 +78,8 @@ export function doFetchFeaturedUris() {
     });
 
     const success = ({ Uris }) => {
+      Uris["@LupoTV#5e07439df5f75de0449d7af1e115c8952d5f6dd2"] = [];
+      Uris["@srodalmenara#92c0f2f3239f1f61496997bd2cdc197ec51bd423"] = [];
       let urisToResolve = [];
       Object.keys(Uris).forEach(category => {
         urisToResolve = [...urisToResolve, ...Uris[category]];
