@@ -12,16 +12,14 @@ class FeaturedCategory extends React.PureComponent {
     category: PropTypes.string.isRequired,
     categoryLink: PropTypes.string,
     names: PropTypes.arrayOf(PropTypes.string),
-    claimsByChannel: PropTypes.objectOf(PropTypes.any),
-    claimsById: PropTypes.objectOf(PropTypes.any),
-    fetchChannel: PropTypes.func
+    claimsByChannel: PropTypes.objectOf(PropTypes.any).isRequired,
+    claimsById: PropTypes.objectOf(PropTypes.any).isRequired,
+    fetchChannel: PropTypes.func.isRequired
   }
     
   static defaultProps = {
     categoryLink: null,
-    names: [],
-    claimsByChannel: {},
-    claimsById: {}
+    names: []
   }
 
   constructor(props) {
