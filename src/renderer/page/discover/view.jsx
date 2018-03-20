@@ -1,13 +1,8 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
-import { normalizeURI } from 'lbryURI';
-import FileCard from 'component/fileCard';
 import { BusyMessage } from 'component/common.js';
-import Icon from 'component/icon';
 import ToolTip from 'component/tooltip.js';
 import SubHeader from 'component/subHeader';
 import classnames from 'classnames';
-import Link from 'component/link';
 import FeaturedCategory from 'component/featuredCategory';
 
 class DiscoverPage extends React.PureComponent {
