@@ -44,7 +44,7 @@
     "formik": "^0.10.4",
     "from2": "^2.3.0",
     "install": "^0.10.2",
-    "jayson": "^2.0.2",
+    "jayson": "^2.0.5",
     "jshashes": "^1.0.7",
     "keytar-prebuild": "4.0.4",
     "localforage": "^1.5.0",
