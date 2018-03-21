@@ -62,14 +62,22 @@ class SpeechUpload extends React.PureComponent {
               />
             </div>
             <div className="card__content">
-              <a onClick={() => this.props.resetUpload()}>Upload Thumbnail</a>
+              <a
+                className="link"
+                onClick={() => this.props.resetUpload()}
+              >
+                Upload Thumbnail
+              </a>
             </div>
           </div>
         )}
 
         {this.props.uploadStatus !== status.UPLOAD ? null : (
           <div className="card__content">
-            <a onClick={() => this.props.setManualStatus()}>
+            <a
+              className="link"
+              onClick={() => this.props.setManualStatus()}
+            >
               Enter Thumbnail URL
             </a>
           </div>

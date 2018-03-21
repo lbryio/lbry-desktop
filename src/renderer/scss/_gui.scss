@@ -196,3 +196,10 @@ section.section-spaced {
 .text-center {
   text-align: center;
 }
+
+a.link {
+  cursor: pointer;
+  &:hover {
+    text-decoration: underline;
+  }
+}
