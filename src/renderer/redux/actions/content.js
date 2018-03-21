@@ -80,6 +80,18 @@ export function doFetchFeaturedUris() {
     const success = ({ Uris }) => {
       Uris["@LupoTV#5e07439df5f75de0449d7af1e115c8952d5f6dd2"] = [];
       Uris["@srodalmenara#92c0f2f3239f1f61496997bd2cdc197ec51bd423"] = [];
+      Uris["DRAKE2"] = [
+        "hell-let-loose-release-date-confirmed#9f81960ff463b145cfc5eab967b77ab07fa43884",
+        "squad-9-7-urban-superfob-defense-ft#8b0153dc3d59dd48299fb9775f05a8790f2cded6",
+        "squad-9-7-crazy-comeback-ft-karmakut#9fe4ab4d6ee771e426cab0e794327d3338b12633",
+        "canadian-invasion-motorized-infantry#d24b717a28f9d0aef43bcd903b4c0e7b3e665747",
+        "rising-storm-2-vietnam-acceptable-losses#e16c72bce66dfde9e600e3185fa0c74cc279fa08",
+        "operation-flashpoint-dragon-revival#70e2e2919062103d498f1ad3c8b9677930a20d32",
+        "squad-9-5-fob-finder-ft-karmakut#6336ee579e65ead84499b553525a09aec02374d8",
+        "brothers-in-arms-reborn-i-return-just#219b8bbb828467fd74f2ef91b11d885b2f37ca5a",
+        "lock-on-flaming-cliffs-2-guns-only#0202f733bae03b6d598b7b337f5122981b13c995",
+        "project-reality-v0-97-yamalia-sniper-op#23cd660c20238dabe3269472811615be94be8a3b"
+      ];
       let urisToResolve = [];
       Object.keys(Uris).forEach(category => {
         urisToResolve = [...urisToResolve, ...Uris[category]];
