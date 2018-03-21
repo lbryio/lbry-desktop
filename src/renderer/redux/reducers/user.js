@@ -14,6 +14,7 @@ const defaultState = {
   invitesRemaining: undefined,
   invitees: undefined,
   user: undefined,
+  history: {}
 };
 
 reducers[ACTIONS.AUTHENTICATION_STARTED] = state =>
@@ -217,6 +218,27 @@ reducers[ACTIONS.USER_INVITE_STATUS_FETCH_FAILURE] = state =>
     invitesRemaining: null,
     invitees: null,
   });
+
+reducers[ACTIONS.USER_HISTORY_SAVE] = (state, action) => ({
+  ...state,
+  history: {
+    [action.data.uri]: action.data.time,
+    ...state.history
+  }
+});
+
+reducers[ACTIONS.USER_HISTORY_CLEAR_ITEM] = (state, action) => ({
+  ...state,
+  history: {
+    ...state.history,
+    [action.data.uri]: null
+  }
+});
+
+reducers[ACTIONS.USER_HISTORY_ALL] = (state, action) => ({
+  ...state,
+  history: {}
+});
 
 export default function reducer(state = defaultState, action) {
   const handler = reducers[action.type];
