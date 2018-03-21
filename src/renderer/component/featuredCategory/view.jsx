@@ -152,7 +152,7 @@ class FeaturedCategory extends React.PureComponent {
 
   isCardVisible(section, cardRow, partialVisibility) {
 
-    if (this.state.isChannel) return 0;
+    if (!section) return false;
     // check if a card is fully or partialy visible in its parent
     const cardRowWidth = cardRow.offsetWidth;
     const cardRowLeft = cardRow.scrollLeft;
