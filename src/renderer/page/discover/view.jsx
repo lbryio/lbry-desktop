@@ -32,7 +32,6 @@ class DiscoverPage extends React.PureComponent {
                     key={category}
                     category={category.split("#")[0]}
                     categoryLink={category}
-                    names={[]}
                   />
                 )
               }
