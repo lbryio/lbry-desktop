@@ -244,6 +244,9 @@ class FeaturedCategory extends React.PureComponent {
                 <FileCard key={name} displayStyle="card" uri={normalizeURI(name)} />
               ))
             }
+            {isChannel && !channelLoaded && (
+              <div style={{height: "224px"}} />
+            )}
             {channelLoaded &&
               claimsByChannel[category][1].map(claim => (
                 <FileCard key={claim} displayStyle="card" uri={normalizeURI(`${claimsById[claim].name}#${claim}`)} />
