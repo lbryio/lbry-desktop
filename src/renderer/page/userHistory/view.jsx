@@ -1,10 +1,16 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { normalizeURI } from 'lbryURI';
 import FileTile from 'component/fileTile';
 import { ToolTip } from 'component/tooltip.js';
 import SubHeader from 'component/subHeader';
 
 class UserHistoryPage extends React.PureComponent {
+  
+  static propTypes = {
+    saveUserHistory: PropTypes.func.isRequired
+  }
+
   render() {
     const { history } = this.props;
 
