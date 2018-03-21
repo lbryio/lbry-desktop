@@ -111,7 +111,7 @@
     "node-sass": "^4.7.2",
     "prettier": "^1.11.1",
     "sass-loader": "^6.0.7",
-    "webpack": "^3.10.0",
+    "webpack": "^4.2.0",
     "webpack-build-notifier": "^0.1.23"
   },
   "engines": {
