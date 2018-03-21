@@ -46,7 +46,7 @@
     "install": "^0.10.2",
     "jayson": "^2.0.2",
     "jshashes": "^1.0.7",
-    "keytar-prebuild": "4.0.4",
+    "keytar-prebuild": "4.1.1",
     "localforage": "^1.5.0",
     "mixpanel-browser": "^2.17.1",
     "moment": "^2.20.1",
