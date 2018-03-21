@@ -1,7 +1,6 @@
 import React from 'react';
-import { isURIValid, normalizeURI } from 'lbryURI';
+import { normalizeURI } from 'lbryURI';
 import FileTile from 'component/fileTile';
-import FileListSearch from 'component/fileListSearch';
 import { ToolTip } from 'component/tooltip.js';
 import SubHeader from 'component/subHeader';
 
