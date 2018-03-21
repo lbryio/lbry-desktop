@@ -18,6 +18,7 @@ class FilePage extends React.PureComponent {
     this.fetchFileInfo(this.props);
     this.fetchCostInfo(this.props);
     this.checkSubscription(this.props);
+    this.props.saveUserHistory(this.props.uri);
   }
 
   componentWillReceiveProps(nextProps) {
