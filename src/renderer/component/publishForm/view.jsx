@@ -431,6 +431,7 @@ class PublishForm extends React.PureComponent {
 
   componentDidMount() {
     this.handleEditClaim();
+    this.props.resetUpload();
   }
 
   onFileChange() {

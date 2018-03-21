@@ -1,11 +1,16 @@
 import * as settings from "constants/settings";
 import { createSelector } from "reselect";
 
-const _selectState = state => state.upload || {};
+const selectState = state => state.upload || {};
 
-export const selectUploadUrl = createSelector(_selectState, state => state.url);
+export const selectUploadUrl = createSelector(selectState, state => state.url);
 
 export const selectUploadStatus = createSelector(
-  _selectState,
+  selectState,
   state => state.status
+);
+
+export const selectUploadApiStatus = createSelector(
+  selectState,
+  state => state.api
 );

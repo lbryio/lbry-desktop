@@ -8,6 +8,11 @@ import {
   setThumbnailStatusManual,
   setManualThumbnailUrl,
 } from "redux/actions/upload";
+import { selectUploadApiStatus } from "redux/selectors/upload";
+
+const select = state => ({
+  apiStatus: selectUploadApiStatus(state)
+});
 
 const perform = dispatch => ({
   openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
@@ -17,4 +22,4 @@ const perform = dispatch => ({
   setManualUrl: url => dispatch(setManualThumbnailUrl(url)),
 });
 
-export default connect(null, perform)(SpeechUpload);
+export default connect(select, perform)(SpeechUpload);

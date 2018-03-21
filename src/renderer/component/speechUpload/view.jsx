@@ -17,10 +17,6 @@ class SpeechUpload extends React.PureComponent {
     };
   }
 
-  componentDidMount() {
-    this.props.resetUpload();
-  }
-
   componentWillReceiveProps(nextProps) {
     if (nextProps.uploadStatus === status.ERROR) {
       this.props.alertError("Upload failed. Please try again.");
@@ -29,11 +25,34 @@ class SpeechUpload extends React.PureComponent {
   }
 
   render() {
-    const { openModal } = this.props;
+    const { openModal, apiStatus, uploadStatus } = this.props;
 
     return (
       <div>
-        {this.props.uploadStatus === status.MANUAL ? null : (
+        {!apiStatus || uploadStatus === status.MANUAL ? (
+          <div>
+            <div className="card__content">
+              <FormRow
+                type="text"
+                label={__("Thumbnail URL")}
+                name="thumbnail"
+                value={this.state.meta_thumbnail}
+                placeholder="http://spee.ch/mylogo"
+                onChange={event => this.props.setManualUrl(event.target.value)}
+              />
+            </div>
+            {apiStatus && (
+              <div className="card__content">
+                <a
+                  className="link"
+                  onClick={() => this.props.resetUpload()}
+                >
+                  Upload Thumbnail
+                </a>
+              </div>
+            )}
+          </div>
+        ) : (
           <div className="card__content">
             <FormRow
               name="thumbnail"
@@ -49,30 +68,7 @@ class SpeechUpload extends React.PureComponent {
           </div>
         )}
 
-        {this.props.uploadStatus !== status.MANUAL ? null : (
-          <div>
-            <div className="card__content">
-              <FormRow
-                type="text"
-                label={__("Thumbnail URL")}
-                name="thumbnail"
-                value={this.state.meta_thumbnail}
-                placeholder="http://spee.ch/mylogo"
-                onChange={event => this.props.setManualUrl(event.target.value)}
-              />
-            </div>
-            <div className="card__content">
-              <a
-                className="link"
-                onClick={() => this.props.resetUpload()}
-              >
-                Upload Thumbnail
-              </a>
-            </div>
-          </div>
-        )}
-
-        {this.props.uploadStatus !== status.UPLOAD ? null : (
+        {apiStatus && uploadStatus === status.UPLOAD && (
           <div className="card__content">
             <a
               className="link"
@@ -83,11 +79,11 @@ class SpeechUpload extends React.PureComponent {
           </div>
         )}
 
-        {this.props.uploadStatus !== status.SENDING ? null : (
+        {apiStatus && uploadStatus === status.SENDING && (
           <div className="card__content">Uploading thumbnail...</div>
         )}
 
-        {this.props.uploadStatus !== status.COMPLETE ? null : (
+        {apiStatus && uploadStatus === status.COMPLETE && (
           <div className="card__content">Complete: {this.props.uploadUrl}</div>
         )}
       </div>

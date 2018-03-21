@@ -6,8 +6,28 @@ import fs from "fs";
 import path from "path";
 import { disconnect } from "cluster";
 
-export const resetSpeechUpload = () => (dispatch: Dispatch) =>
-  dispatch({ type: actions.SPEECH_UPLOAD_RESET });
+export const resetSpeechUpload = () => (dispatch: Dispatch) => {
+  return fetch("https://spee.ch/api/channel/availability/@testing")
+    .then(response => {
+      console.log("res:", response);
+      return dispatch({
+        type: actions.SPEECH_UPLOAD_RESET,
+        data: {
+          api: true
+        }
+      })
+    })
+    .catch(err => {
+      console.log("err:", err);
+      return dispatch({
+        type: actions.SPEECH_UPLOAD_RESET,
+        data: {
+          api: false
+        }
+      })
+    })
+
+}
 
 export const setThumbnailStatusManual = () => (dispatch: Dispatch) =>
   dispatch({ type: actions.THUMBNAIL_SET_MANUAL_STATUS });

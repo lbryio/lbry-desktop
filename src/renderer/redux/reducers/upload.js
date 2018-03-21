@@ -23,6 +23,9 @@ type speechUploadError = {
 
 type speechUploadReset = {
   type: actions.SPEECH_UPLOAD_RESET,
+  data: {
+    api: boolean
+  }
 };
 
 type setThumbnailStatusManual = {
@@ -46,6 +49,7 @@ export type Dispatch = (action: Action) => any;
 const defaultState = {
   status: status.UPLOAD,
   url: null,
+  api: false
 };
 
 export default handleActions(
@@ -84,6 +88,7 @@ export default handleActions(
       ...state,
       status: status.UPLOAD,
       url: null,
+      api: action.data.api
     }),
 
     [actions.THUMBNAIL_SET_MANUAL_STATUS]: (
