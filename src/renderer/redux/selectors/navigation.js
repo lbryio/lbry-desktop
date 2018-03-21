@@ -54,9 +54,11 @@ export const selectHeaderLinks = createSelector(selectCurrentPage, page => {
       };
     case 'discover':
     case 'subscriptions':
+    case 'user_history':
       return {
         discover: __('Discover'),
         subscriptions: __('Subscriptions'),
+        user_history: __('User History')
       };
     default:
       return null;
