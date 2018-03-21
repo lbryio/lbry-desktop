@@ -74,7 +74,7 @@ const reducers = combineReducers({
 const bulkThunk = createBulkThunkMiddleware();
 const middleware = [thunk, bulkThunk];
 
-if (true || app.env === 'development') {
+if (app.env === 'development') {
   const logger = createLogger({
     collapsed: true,
   });
