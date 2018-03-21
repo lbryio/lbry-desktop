@@ -230,7 +230,7 @@ export function doDownloadFile(uri, streamInfo) {
   return dispatch => {
     dispatch(doStartDownload(uri, streamInfo.outpoint));
 
-    analytics.apiLog(uri, streamInfo.output, streamInfo.claim_id);
+    analytics.apiLogView(uri, streamInfo.output, streamInfo.claim_id);
 
     dispatch(doClaimEligiblePurchaseRewards());
   };

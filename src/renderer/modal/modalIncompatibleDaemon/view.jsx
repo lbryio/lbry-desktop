@@ -4,15 +4,17 @@ import Link from 'component/link/index';
 
 class ModalIncompatibleDaemon extends React.PureComponent {
   render() {
-    const { quit } = this.props;
+    const { quit, quitAnyDaemon } = this.props;
 
     return (
       <Modal
         isOpen
         contentLabel={__('Incompatible daemon running')}
-        type="alert"
-        confirmButtonLabel={__('Quit')}
-        onConfirmed={quit}
+        type="confirm"
+        confirmButtonLabel={__('Quit daemon')}
+        abortButtonLabel={__('Do nothing')}
+        onConfirmed={quitAnyDaemon}
+        onAborted={quit}
       >
         {__(
           'This browser is running with an incompatible version of the LBRY protocol and your install must be repaired. '

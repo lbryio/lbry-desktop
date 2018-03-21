@@ -2,6 +2,7 @@
 import mixpanel from 'mixpanel-browser';
 import Lbryio from 'lbryio';
 import isDev from 'electron-is-dev';
+import type { Subscription } from 'redux/reducers/subscriptions';
 
 if (isDev) {
   mixpanel.init('691723e855cabb9d27a7a79002216967');
@@ -13,7 +14,9 @@ type Analytics = {
   track: (string, ?Object) => void,
   setUser: Object => void,
   toggle: (boolean, ?boolean) => void,
-  apiLog: (string, string, string) => void,
+  apiLogView: (string, string, string) => void,
+  apiLogSubscribe: Subscription => void,
+  apiLogUnsubscribe: Subscription => void,
 };
 
 let analyticsEnabled: boolean = false;
@@ -44,12 +47,26 @@ const analytics: Analytics = {
     }
     analyticsEnabled = enabled;
   },
-  apiLog: (uri: string, outpoint: string, claimId: string): void => {
+  apiLogView: (uri: string, outpoint: string, claimId: string): void => {
     if (analyticsEnabled) {
       Lbryio.call('file', 'view', {
         uri,
         outpoint,
         claim_id: claimId,
+      }).catch(() => {});
+    }
+  },
+  apiLogSubscribe: (subscription: Subscription): void => {
+    if (analyticsEnabled) {
+      Lbryio.call('subscription', 'new', {
+        subscription,
+      }).catch(() => {});
+    }
+  },
+  apiLogUnsubscribe: (subscription: Subscription): void => {
+    if (analyticsEnabled) {
+      Lbryio.call('subscription', 'delete', {
+        subscription,
       }).catch(() => {});
     }
   },

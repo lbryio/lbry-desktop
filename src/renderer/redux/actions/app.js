@@ -1,3 +1,4 @@
+import { execSync } from 'child_process';
 import isDev from 'electron-is-dev';
 import Lbry from 'lbry';
 import path from 'path';
@@ -326,6 +327,22 @@ export function doClearCache() {
 export function doQuit() {
   return () => {
     remote.app.quit();
+  };
+}
+
+export function doQuitAnyDaemon() {
+  return dispatch => {
+    try {
+      if (process.platform === 'win32') {
+        execSync('taskkill /im lbrynet-daemon.exe /t /f');
+      } else {
+        execSync('pkill lbrynet-daemon');
+      }
+    } catch (error) {
+      dispatch(doAlertError(`Quitting daemon failed due to: ${error.message}`));
+    } finally {
+      dispatch(doQuit());
+    }
   };
 }
 

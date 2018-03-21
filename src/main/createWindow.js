@@ -1,15 +1,32 @@
-import { app, BrowserWindow, dialog } from 'electron';
+import { app, BrowserWindow, dialog, screen } from 'electron';
 import isDev from 'electron-is-dev';
+import windowStateKeeper from 'electron-window-state';
+
 import setupBarMenu from './menu/setupBarMenu';
 import setupContextMenu from './menu/setupContextMenu';
 
 export default appState => {
+  // Get primary display dimensions from Electron.
+  const { width, height } = screen.getPrimaryDisplay().workAreaSize;
+
+  // Load the previous state with fallback to defaults.
+  const windowState = windowStateKeeper({
+    defaultWidth: width,
+    defaultHeight: height,
+  });
+
   let windowConfiguration = {
     backgroundColor: '#155B4A',
     minWidth: 800,
     minHeight: 600,
     autoHideMenuBar: true,
     show: false,
+    // Create the window using the state information.
+    x: windowState.x,
+    y: windowState.y,
+    // If state is undefined, create window as maximized.
+    width: windowState.width === undefined ? width : windowState.width,
+    height: windowState.height === undefined ? height : windowState.height,
   };
 
   // Disable renderer process's webSecurity on development to enable CORS.
@@ -28,13 +45,19 @@ export default appState => {
 
   let window = new BrowserWindow(windowConfiguration);
 
-  window.maximize();
+  // Let us register listeners on the window, so we can update the state
+  // automatically (the listeners will be removed when the window is closed)
+  // and restore the maximized or full screen state.
+  windowState.manage(window);
 
   window.loadURL(rendererURL);
 
   let deepLinkingURI;
-  // Protocol handler for win32
-  if (process.platform === 'win32' && String(process.argv[1]).startsWith('lbry')) {
+  if (
+    (process.platform === 'win32' || process.platform === 'linux') &&
+    String(process.argv[1]).startsWith('lbry')
+  ) {
+    [, deepLinkingURI] = process.argv;
     // Keep only command line / deep linked arguments
     // Windows normalizes URIs when they're passed in from other apps. On Windows, this tries to
     // restore the original URI that was typed.
@@ -42,14 +65,18 @@ export default appState => {
     //     path, so we just strip it off.
     //   - In a URI with a claim ID, like lbry://channel#claimid, Windows interprets the hash mark as
     //     an anchor and converts it to lbry://channel/#claimid. We remove the slash here as well.
-    deepLinkingURI = process.argv[1].replace(/\/$/, '').replace('/#', '#');
+    if (process.platform === 'win32') {
+      deepLinkingURI = deepLinkingURI.replace(/\/$/, '').replace('/#', '#');
+    }
+  } else {
+    deepLinkingURI = appState.macDeepLinkingURI;
   }
 
   setupBarMenu();
   setupContextMenu(window);
 
   window.on('close', event => {
-    if (!appState.isQuitting) {
+    if (!appState.isQuitting && !appState.autoUpdateAccepted) {
       event.preventDefault();
       window.hide();
     }

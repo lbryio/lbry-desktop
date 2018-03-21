@@ -19,9 +19,6 @@ autoUpdater.autoDownload = true;
 // it will still install on shutdown.
 let autoUpdateDownloaded = false;
 
-// Keeps track of whether the user has accepted an auto-update through the interface.
-let autoUpdateAccepted = false;
-
 // This is used to keep track of whether we are showing the special dialog
 // that we show on Windows after you decline an upgrade and close the app later.
 let showingAutoUpdateCloseAlert = false;
@@ -53,6 +50,7 @@ const installExtensions = async () => {
 
 app.setAsDefaultProtocolClient('lbry');
 app.setName('LBRY');
+app.setAppUserModelId('io.lbry.LBRY');
 
 app.on('ready', async () => {
   const processList = await findProcess('name', 'lbrynet-daemon');
@@ -68,8 +66,8 @@ app.on('ready', async () => {
             'For more information please visit: \n' +
             'https://lbry.io/faq/startup-troubleshooting'
         );
-        app.quit();
       }
+      app.quit();
     });
     daemon.launch();
   }
@@ -88,7 +86,7 @@ app.on('will-quit', event => {
   if (
     process.platform === 'win32' &&
     autoUpdateDownloaded &&
-    !autoUpdateAccepted &&
+    !appState.autoUpdateAccepted &&
     !showingAutoUpdateCloseAlert
   ) {
     // We're on Win and have an update downloaded, but the user declined it (or closed
@@ -114,7 +112,10 @@ app.on('will-quit', event => {
   }
 
   appState.isQuitting = true;
-  if (daemon) daemon.quit();
+  if (daemon) {
+    daemon.quit();
+    event.preventDefault();
+  }
 });
 
 // https://electronjs.org/docs/api/app#event-will-finish-launching
@@ -122,8 +123,13 @@ app.on('will-finish-launching', () => {
   // Protocol handler for macOS
   app.on('open-url', (event, URL) => {
     event.preventDefault();
-    rendererWindow.webContents.send('open-uri-requested', URL);
-    rendererWindow.show();
+
+    if (rendererWindow) {
+      rendererWindow.webContents.send('open-uri-requested', URL);
+      rendererWindow.show();
+    } else {
+      appState.macDeepLinkingURI = URL;
+    }
   });
 });
 
@@ -152,7 +158,7 @@ autoUpdater.on('update-downloaded', () => {
 });
 
 ipcMain.on('autoUpdateAccepted', () => {
-  autoUpdateAccepted = true;
+  appState.autoUpdateAccepted = true;
   autoUpdater.quitAndInstall();
 });
 
@@ -222,16 +228,26 @@ process.on('uncaughtException', error => {
 
 // Force single instance application
 const isSecondInstance = app.makeSingleInstance(argv => {
-  // Protocol handler for win32
-  // argv: An array of the second instance’s (command line / deep linked) arguments
+  if (
+    (process.platform === 'win32' || process.platform === 'linux') &&
+    String(argv[1]).startsWith('lbry')
+  ) {
+    let URI = argv[1];
 
-  let URI;
-  if (process.platform === 'win32' && String(argv[1]).startsWith('lbry')) {
     // Keep only command line / deep linked arguments
-    URI = argv[1].replace(/\/$/, '').replace('/#', '#');
+    // Windows normalizes URIs when they're passed in from other apps. On Windows, this tries to
+    // restore the original URI that was typed.
+    //   - If the URI has no path, Windows adds a trailing slash. LBRY URIs can't have a slash with no
+    //     path, so we just strip it off.
+    //   - In a URI with a claim ID, like lbry://channel#claimid, Windows interprets the hash mark as
+    //     an anchor and converts it to lbry://channel/#claimid. We remove the slash here as well.
+    if (process.platform === 'win32') {
+      URI = URI.replace(/\/$/, '').replace('/#', '#');
+    }
+
+    rendererWindow.webContents.send('open-uri-requested', URI);
   }
 
-  rendererWindow.webContents.send('open-uri-requested', URI);
   rendererWindow.show();
 });
 

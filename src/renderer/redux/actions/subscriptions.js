@@ -6,20 +6,29 @@ import Lbry from 'lbry';
 import { doPurchaseUri } from 'redux/actions/content';
 import { doNavigate } from 'redux/actions/navigation';
 import { buildURI } from 'lbryURI';
+import analytics from 'analytics';
 
 const CHECK_SUBSCRIPTIONS_INTERVAL = 60 * 60 * 1000;
 
-export const doChannelSubscribe = (subscription: Subscription) => (dispatch: Dispatch) =>
+export const doChannelSubscribe = (subscription: Subscription) => (dispatch: Dispatch) => {
   dispatch({
     type: ACTIONS.CHANNEL_SUBSCRIBE,
     data: subscription,
   });
 
-export const doChannelUnsubscribe = (subscription: Subscription) => (dispatch: Dispatch) =>
+  analytics.apiLogSubscribe(subscription);
+
+  dispatch(doCheckSubscription(subscription, true));
+};
+
+export const doChannelUnsubscribe = (subscription: Subscription) => (dispatch: Dispatch) => {
   dispatch({
     type: ACTIONS.CHANNEL_UNSUBSCRIBE,
     data: subscription,
   });
+
+  analytics.apiLogUnsubscribe(subscription);
+};
 
 export const doCheckSubscriptions = () => (
   dispatch: Dispatch,
