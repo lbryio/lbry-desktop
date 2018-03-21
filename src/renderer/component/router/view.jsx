@@ -18,7 +18,7 @@ import AuthPage from 'page/auth';
 import InvitePage from 'page/invite';
 import BackupPage from 'page/backup';
 import SubscriptionsPage from 'page/subscriptions';
-import UserHistoryPage from 'page/user_history'
+import UserHistoryPage from 'page/userHistory'
 
 const route = (page, routesMap) => {
   const component = routesMap[page];
