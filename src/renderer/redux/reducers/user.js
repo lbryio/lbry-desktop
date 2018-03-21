@@ -235,7 +235,7 @@ reducers[ACTIONS.USER_HISTORY_CLEAR_ITEM] = (state, action) => ({
   }
 });
 
-reducers[ACTIONS.USER_HISTORY_CLEAR_ALL] = (state, action) => ({
+reducers[ACTIONS.USER_HISTORY_CLEAR_ALL] = state => ({
   ...state,
   history: {}
 });
