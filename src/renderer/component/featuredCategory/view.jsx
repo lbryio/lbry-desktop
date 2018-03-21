@@ -194,6 +194,9 @@ class FeaturedCategory extends React.PureComponent {
       canScrollNext,
       isChannel
     } = this.state;
+    
+    const channelLoaded = isChannel && claimsByChannel && claimsByChannel[category];
+    const canScroll = isChannel ? channelLoaded : names.length;
 
     return (
       <div className="card-row card-row--small">
@@ -221,14 +224,14 @@ class FeaturedCategory extends React.PureComponent {
             )}
         </h3>
         <div className="card-row__scrollhouse">
-          {names.length===0 && canScrollPrevious && (
+          {canScroll && canScrollPrevious && (
             <div className="card-row__nav card-row__nav--left">
               <a className="card-row__scroll-button" onClick={this.handleScrollPrevious.bind(this)}>
                 <Icon icon="icon-chevron-left" />
               </a>
             </div>
           )}
-          {names.length===0 && canScrollNext && (
+          {canScroll && canScrollNext && (
             <div className="card-row__nav card-row__nav--right">
               <a className="card-row__scroll-button" onClick={this.handleScrollNext.bind(this)}>
                 <Icon icon="icon-chevron-right" />
@@ -241,7 +244,7 @@ class FeaturedCategory extends React.PureComponent {
                 <FileCard key={name} displayStyle="card" uri={normalizeURI(name)} />
               ))
             }
-            {isChannel && claimsByChannel && claimsByChannel[category] &&
+            {channelLoaded &&
               claimsByChannel[category][1].map(claim => (
                 <FileCard key={claim} displayStyle="card" uri={normalizeURI(`${claimsById[claim].name}#${claim}`)} />
               ))
