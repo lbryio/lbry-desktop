@@ -10,6 +10,7 @@ const { remote } = require('electron');
 class FileExporter extends React.PureComponent {
   static propTypes = {
     data: PropTypes.array,
+    name: PropTypes.string,
     title: PropTypes.string,
     label: PropTypes.string,
     defaultPath: PropTypes.string,
@@ -35,7 +36,16 @@ class FileExporter extends React.PureComponent {
     const options = {
       title,
       defaultPath,
-      filters: [{ name: 'JSON', extensions: ['json'] }, { name: 'CSV', extensions: ['csv'] }],
+      filters: [
+          {
+              name: 'CSV',
+              extensions: ['csv']
+          },
+          {
+              name: 'JSON',
+              extensions: ['json']
+          }
+      ],
     };
 
     remote.dialog.showSaveDialog(options, filename => {
