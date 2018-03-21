@@ -65,7 +65,7 @@
     "redux-logger": "^3.0.1",
     "redux-persist": "^4.8.0",
     "redux-persist-transform-compress": "^4.2.0",
-    "redux-persist-transform-filter": "0.0.10",
+    "redux-persist-transform-filter": "0.0.16",
     "redux-thunk": "^2.2.0",
     "render-media": "^2.12.0",
     "reselect": "^3.0.0",
