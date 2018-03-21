@@ -8271,9 +8271,9 @@ reduce-function-call@^1.0.1:
   dependencies:
     balanced-match "^0.4.2"
 
-redux-action-buffer@^1.1.0:
-  version "1.1.0"
-  resolved "https://registry.yarnpkg.com/redux-action-buffer/-/redux-action-buffer-1.1.0.tgz#9c692ab6532b042d0d43a9f01a48ada120fc941a"
+redux-action-buffer@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/redux-action-buffer/-/redux-action-buffer-1.2.0.tgz#2ec0a1d899cc9f6f44ccdeb431ee52ad41dd9755"
 
 redux-logger@^3.0.1:
   version "3.0.6"
