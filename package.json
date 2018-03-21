@@ -100,7 +100,7 @@
     "eslint-plugin-prettier": "^2.6.0",
     "eslint-plugin-react": "^7.7.0",
     "flow-babel-webpack-plugin": "^1.1.1",
-    "flow-bin": "^0.66.0",
+    "flow-bin": "^0.68.0",
     "flow-typed": "^2.3.0",
     "husky": "^0.14.3",
     "i18n-extract": "^0.5.1",
