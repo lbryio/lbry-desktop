@@ -17,11 +17,14 @@ class SpeechUpload extends React.PureComponent {
     };
   }
 
+  componentDidMount() {
+    this.props.resetUpload();
+  }
+
   componentWillReceiveProps(nextProps) {
     if (nextProps.uploadStatus === status.ERROR) {
       this.props.alertError("Upload failed. Please try again.");
       this.props.resetUpload();
-      console.log(`this.refs.thumbnail.value = ""`);
     }
   }
 
