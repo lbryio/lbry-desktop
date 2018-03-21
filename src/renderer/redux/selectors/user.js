@@ -116,3 +116,8 @@ export const selectUserInviteNewErrorMessage = createSelector(
   selectState,
   state => state.inviteNewErrorMessage
 );
+
+export const selectUserHistory = createSelector(
+  selectState,
+  state => state.history
+);
