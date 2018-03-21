@@ -14,6 +14,10 @@ import Link from 'component/link';
 import SubscribeButton from 'component/subscribeButton';
 
 class FilePage extends React.PureComponent {
+  static propTypes = {
+    saveUserHistory: PropTypes.func.isRequired
+  }
+
   componentDidMount() {
     this.fetchFileInfo(this.props);
     this.fetchCostInfo(this.props);

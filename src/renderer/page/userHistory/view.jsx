@@ -7,7 +7,7 @@ import SubHeader from 'component/subHeader';
 class UserHistoryPage extends React.PureComponent {
   
   static propTypes = {
-    saveUserHistory: PropTypes.func.isRequired
+    history: PropTypes.objectOf(PropTypes.string)
   }
 
   render() {
