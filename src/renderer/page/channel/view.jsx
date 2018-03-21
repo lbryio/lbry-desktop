@@ -1,10 +1,10 @@
-import React from "react";
-import lbryuri from "lbryuri";
-import { BusyMessage } from "component/common";
-import FileTile from "component/fileTile";
-import ReactPaginate from "react-paginate";
-import Link from "component/link";
-import SubscribeButton from "component/subscribeButton";
+import React from 'react';
+import { buildURI } from 'lbryURI';
+import { BusyMessage } from 'component/common';
+import FileTile from 'component/fileTile';
+import ReactPaginate from 'react-paginate';
+import Link from 'component/link';
+import SubscribeButton from 'component/subscribeButton';
 
 class ChannelPage extends React.PureComponent {
   componentDidMount() {
@@ -29,7 +29,7 @@ class ChannelPage extends React.PureComponent {
     const { params } = this.props;
     const newParams = Object.assign({}, params, { page: pageNumber });
 
-    this.props.navigate("/show", newParams);
+    this.props.navigate('/show', newParams);
   }
 
   render() {
@@ -46,29 +46,26 @@ class ChannelPage extends React.PureComponent {
     } = this.props;
 
     const { name, claim_id: claimId } = claim;
-    const subscriptionUri = lbryuri.build(
-      { channelName: name, claimId },
-      false
-    );
+    const subscriptionUri = buildURI({ channelName: name, claimId }, false);
 
     let contentList;
     if (fetching) {
-      contentList = <BusyMessage message={__("Fetching content")} />;
+      contentList = <BusyMessage message={__('Fetching content')} />;
     } else {
       contentList =
         claimsInChannel && claimsInChannel.length ? (
           claimsInChannel.map(claim => (
             <FileTile
               key={claim.claim_id}
-              uri={lbryuri.build({
-                name: claim.name,
+              uri={buildURI({
+                claimName: claim.name,
                 claimId: claim.claim_id,
               })}
-              showLocal={true}
+              showLocal
             />
           ))
         ) : (
-          <span className="empty">{__("No content found.")}</span>
+          <span className="empty">{__('No content found.')}</span>
         );
     }
 
@@ -84,12 +81,12 @@ class ChannelPage extends React.PureComponent {
           <div className="card__content">
             <p className="empty">
               {__(
-                "Channel pages are empty for all publishers currently, but will be coming in a future update."
+                'Channel pages are empty for all publishers currently, but will be coming in a future update.'
               )}
             </p>
           </div>
         </section>
-        <h3 className="card-row__header">{__("Published Content")}</h3>
+        <h3 className="card-row__header">{__('Published Content')}</h3>
         {contentList}
         <div />
         {(!fetching || (claimsInChannel && claimsInChannel.length)) &&

@@ -1,15 +1,15 @@
-import React from "react";
-import * as icons from "constants/icons";
-import lbryuri from "lbryuri.js";
-import CardMedia from "component/cardMedia";
-import { TruncatedText } from "component/common.js";
-import FilePrice from "component/filePrice";
-import NsfwOverlay from "component/nsfwOverlay";
-import Icon from "component/icon";
+import React from 'react';
+import * as icons from 'constants/icons';
+import { normalizeURI, isURIClaimable, parseURI } from 'lbryURI';
+import CardMedia from 'component/cardMedia';
+import { TruncatedText } from 'component/common.js';
+import FilePrice from 'component/filePrice';
+import NsfwOverlay from 'component/nsfwOverlay';
+import Icon from 'component/icon';
 
 class FileTile extends React.PureComponent {
-  static SHOW_EMPTY_PUBLISH = "publish";
-  static SHOW_EMPTY_PENDING = "pending";
+  static SHOW_EMPTY_PUBLISH = 'publish';
+  static SHOW_EMPTY_PENDING = 'pending';
 
   static defaultProps = {
     showPrice: true,
@@ -36,11 +36,7 @@ class FileTile extends React.PureComponent {
   }
 
   handleMouseOver() {
-    if (
-      this.props.obscureNsfw &&
-      this.props.metadata &&
-      this.props.metadata.nsfw
-    ) {
+    if (this.props.obscureNsfw && this.props.metadata && this.props.metadata.nsfw) {
       this.setState({
         showNsfwHelp: true,
       });
@@ -69,63 +65,53 @@ class FileTile extends React.PureComponent {
       fileInfo,
     } = this.props;
 
-    const uri = lbryuri.normalize(this.props.uri);
+    const uri = normalizeURI(this.props.uri);
     const isClaimed = !!claim;
-    const isClaimable = lbryuri.isClaimable(uri);
+    const isClaimable = isURIClaimable(uri);
     const title =
-      isClaimed && metadata && metadata.title
-        ? metadata.title
-        : lbryuri.parse(uri).contentName;
-    const thumbnail =
-      metadata && metadata.thumbnail ? metadata.thumbnail : null;
+      isClaimed && metadata && metadata.title ? metadata.title : parseURI(uri).contentName;
+    const thumbnail = metadata && metadata.thumbnail ? metadata.thumbnail : null;
     const obscureNsfw = this.props.obscureNsfw && metadata && metadata.nsfw;
-    const isRewardContent =
-      claim && rewardedContentClaimIds.includes(claim.claim_id);
+    const isRewardContent = claim && rewardedContentClaimIds.includes(claim.claim_id);
 
-    let onClick = () => navigate("/show", { uri });
+    let onClick = () => navigate('/show', { uri });
 
-    let name = "";
+    let name = '';
     if (claim) {
       name = claim.name;
     }
 
-    let description = "";
+    let description = '';
     if (isClaimed) {
       description = metadata && metadata.description;
     } else if (isResolvingUri) {
-      description = __("Loading...");
+      description = __('Loading...');
     } else if (showEmpty === FileTile.SHOW_EMPTY_PUBLISH) {
-      onClick = () => navigate("/publish", {});
+      onClick = () => navigate('/publish', {});
       description = (
         <span className="empty">
-          {__("This location is unused.")}{" "}
-          {isClaimable && (
-            <span className="button-text">{__("Put something here!")}</span>
-          )}
+          {__('This location is unused.')}{' '}
+          {isClaimable && <span className="button-text">{__('Put something here!')}</span>}
         </span>
       );
     } else if (showEmpty === FileTile.SHOW_EMPTY_PENDING) {
-      description = (
-        <span className="empty">
-          {__("This file is pending confirmation.")}
-        </span>
-      );
+      description = <span className="empty">{__('This file is pending confirmation.')}</span>;
     }
 
     return (
       <section
-        className={"file-tile card " + (obscureNsfw ? "card--obscured " : "")}
+        className={`file-tile card ${obscureNsfw ? 'card--obscured ' : ''}`}
         onMouseEnter={this.handleMouseOver.bind(this)}
         onMouseLeave={this.handleMouseOut.bind(this)}
       >
         <div onClick={onClick} className="card__link">
-          <div className={"card__inner file-tile__row"}>
+          <div className="card__inner file-tile__row">
             <CardMedia title={title || name} thumbnail={thumbnail} />
             <div className="file-tile__content">
               <div className="card__title-primary">
                 <span className="card__indicators">
-                  {showPrice && <FilePrice uri={this.props.uri} />}{" "}
-                  {isRewardContent && <Icon icon={icons.FEATURED} />}{" "}
+                  {showPrice && <FilePrice uri={this.props.uri} />}{' '}
+                  {isRewardContent && <Icon icon={icons.FEATURED} />}{' '}
                   {showLocal && fileInfo && <Icon icon={icons.LOCAL} />}
                 </span>
                 <h3>
@@ -134,9 +120,7 @@ class FileTile extends React.PureComponent {
               </div>
               {description && (
                 <div className="card__content card__subtext">
-                  <TruncatedText lines={!showActions ? 3 : 2}>
-                    {description}
-                  </TruncatedText>
+                  <TruncatedText lines={!showActions ? 3 : 2}>{description}</TruncatedText>
                 </div>
               )}
             </div>

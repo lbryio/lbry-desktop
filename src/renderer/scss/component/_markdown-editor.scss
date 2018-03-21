@@ -1,17 +1,17 @@
 .CodeMirror {
-    background: var(--color-canvas) !important;
-    border: 0px !important;
-    border-radius: 0px !important;
-    color: var(--text-color) !important;
-    box-shadow: var(--box-shadow-layer);
+  background: var(--color-canvas) !important;
+  border: 0px !important;
+  border-radius: 0px !important;
+  color: var(--text-color) !important;
+  box-shadow: var(--box-shadow-layer);
 }
 
 .editor-toolbar {
-    opacity: 1 !important;
-    border: 0 !important;
-    background: var(--color-bg-alt);
-    border-radius: 0 !important;
-    box-shadow: var(--box-shadow-layer);
+  opacity: 1 !important;
+  border: 0 !important;
+  background: var(--color-bg-alt);
+  border-radius: 0 !important;
+  box-shadow: var(--box-shadow-layer);
 }
 
 .editor-toolbar i.separator {
@@ -20,85 +20,85 @@
 }
 
 .editor-toolbar.fullscreen {
-    background: var(--color-bg) !important;
+  background: var(--color-bg) !important;
 }
 
 div.editor-toolbar a {
-    opacity: 0.64;
-    color:  var(--text-color) !important;
+  opacity: 0.64;
+  color: var(--text-color) !important;
 }
 
 .editor-toolbar a.active,
 .editor-toolbar a:hover {
-    opacity: 1;
-    background: var(--button-bg) !important;
-    border-color: transparent !important;
+  opacity: 1;
+  background: var(--button-bg) !important;
+  border-color: transparent !important;
 }
 
 .editor-toolbar.disabled-for-preview a:not(.no-disable) {
-    background:  var(--color-bg-alt) !important;
-    border-color: transparent !important;
+  background: var(--color-bg-alt) !important;
+  border-color: transparent !important;
 }
 
 .editor-statusbar {
-    color: var(--form-label-color) !important;
+  color: var(--form-label-color) !important;
 }
 
 .editor-preview {
-    background: var(--card-bg) !important;
-    border: 0 !important;
+  background: var(--card-bg) !important;
+  border: 0 !important;
 }
 
 .editor-preview-side {
-    background: var(--color-bg-alt) !important;
-    border: 1px solid var(--input-border-color) !important;
+  background: var(--color-bg-alt) !important;
+  border: 1px solid var(--input-border-color) !important;
 }
 
 .editor-preview pre,
 .editor-preview-side pre {
-    background: #eee;
+  background: #eee;
 }
 
 .editor-preview table td,
 .editor-preview table th,
 .editor-preview-side table td,
 .editor-preview-side table th {
-    border: 1px solid var(--input-border-color) !important;
+  border: 1px solid var(--input-border-color) !important;
 }
 
 .CodeMirror .CodeMirror-code .cm-tag {
-    color: #63a35c;
+  color: #63a35c;
 }
 
 .CodeMirror .CodeMirror-code .cm-attribute {
-    color: #795da3;
+  color: #795da3;
 }
 
 .CodeMirror .CodeMirror-code .cm-string {
-    color: #183691;
+  color: #183691;
 }
 
 .CodeMirror .CodeMirror-selected {
-    background: var(--text-selection-bg) !important;
-    color: var(--text-selection-color) !important;
+  background: var(--text-selection-bg) !important;
+  color: var(--text-selection-color) !important;
 }
 
-.CodeMirror .CodeMirror-cursor{
-    border-color: var(--color-primary) !important;
+.CodeMirror .CodeMirror-cursor {
+  border-color: var(--color-primary) !important;
 }
 
 .CodeMirror .CodeMirror-code .cm-comment {
-    background: rgba(0, 0, 0, .05);
+  background: rgba(0, 0, 0, 0.05);
 }
 
 .CodeMirror .CodeMirror-code .cm-link {
-    color: #7f8c8d;
+  color: #7f8c8d;
 }
 
 .CodeMirror .CodeMirror-code .cm-url {
-    color: #aab2b3;
+  color: #aab2b3;
 }
 
 .CodeMirror .CodeMirror-placeholder {
-    opacity: .5;
+  opacity: 0.5;
 }

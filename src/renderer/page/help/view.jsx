@@ -1,9 +1,10 @@
-//@TODO: Customize advice based on OS
-import React from "react";
-import lbry from "lbry.js";
-import Link from "component/link";
-import SubHeader from "component/subHeader";
-import { BusyMessage, Icon } from "component/common";
+// @TODO: Customize advice based on OS
+import React from 'react';
+import lbry from 'lbry.js';
+import Link from 'component/link';
+import SubHeader from 'component/subHeader';
+import { BusyMessage } from 'component/common';
+import Icon from 'component/icon';
 
 class HelpPage extends React.PureComponent {
   constructor(props) {
@@ -19,14 +20,12 @@ class HelpPage extends React.PureComponent {
   }
 
   componentWillMount() {
-    lbry
-      .getAppVersionInfo()
-      .then(({ remoteVersion, localVersion, upgradeAvailable }) => {
-        this.setState({
-          uiVersion: localVersion,
-          upgradeAvailable: upgradeAvailable,
-        });
+    lbry.getAppVersionInfo().then(({ remoteVersion, localVersion, upgradeAvailable }) => {
+      this.setState({
+        uiVersion: localVersion,
+        upgradeAvailable,
       });
+    });
     lbry.version().then(info => {
       this.setState({
         versionInfo: info,
@@ -54,18 +53,17 @@ class HelpPage extends React.PureComponent {
 
     if (this.state.versionInfo) {
       ver = this.state.versionInfo;
-      if (ver.os_system == "Darwin") {
-        osName =
-          parseInt(ver.os_release.match(/^\d+/)) < 16 ? "Mac OS X" : "Mac OS";
+      if (ver.os_system == 'Darwin') {
+        osName = parseInt(ver.os_release.match(/^\d+/)) < 16 ? 'Mac OS X' : 'Mac OS';
 
         platform = `${osName} ${ver.os_release}`;
-        newVerLink = "https://lbry.io/get/lbry.dmg";
-      } else if (ver.os_system == "Linux") {
+        newVerLink = 'https://lbry.io/get/lbry.dmg';
+      } else if (ver.os_system == 'Linux') {
         platform = `Linux (${ver.platform})`;
-        newVerLink = "https://lbry.io/get/lbry.deb";
+        newVerLink = 'https://lbry.io/get/lbry.deb';
       } else {
         platform = `Windows (${ver.platform})`;
-        newVerLink = "https://lbry.io/get/lbry.msi";
+        newVerLink = 'https://lbry.io/get/lbry.msi';
       }
     } else {
       ver = null;
@@ -76,14 +74,14 @@ class HelpPage extends React.PureComponent {
         <SubHeader />
         <section className="card">
           <div className="card__title-primary">
-            <h3>{__("Read the FAQ")}</h3>
+            <h3>{__('Read the FAQ')}</h3>
           </div>
           <div className="card__content">
-            <p>{__("Our FAQ answers many common questions.")}</p>
+            <p>{__('Our FAQ answers many common questions.')}</p>
             <p>
               <Link
                 href="https://lbry.io/faq"
-                label={__("Read the FAQ")}
+                label={__('Read the FAQ')}
                 icon="icon-question"
                 button="alt"
               />
@@ -92,17 +90,17 @@ class HelpPage extends React.PureComponent {
         </section>
         <section className="card">
           <div className="card__title-primary">
-            <h3>{__("Get Live Help")}</h3>
+            <h3>{__('Get Live Help')}</h3>
           </div>
           <div className="card__content">
             <p>
-              {__("Live help is available most hours in the")}{" "}
-              <strong>#help</strong> {__("channel of our Discord chat room.")}
+              {__('Live help is available most hours in the')} <strong>#help</strong>{' '}
+              {__('channel of our Discord chat room.')}
             </p>
             <p>
               <Link
                 button="alt"
-                label={__("Join Our Chat")}
+                label={__('Join Our Chat')}
                 icon="icon-comments"
                 href="https://chat.lbry.io"
               />
@@ -111,72 +109,67 @@ class HelpPage extends React.PureComponent {
         </section>
         <section className="card">
           <div className="card__title-primary">
-            <h3>{__("Report a Bug")}</h3>
+            <h3>{__('Report a Bug')}</h3>
           </div>
           <div className="card__content">
-            <p>{__("Did you find something wrong?")}</p>
+            <p>{__('Did you find something wrong?')}</p>
             <p>
               <Link
                 navigate="/report"
-                label={__("Submit a Bug Report")}
+                label={__('Submit a Bug Report')}
                 icon="icon-bug"
                 button="alt"
               />
             </p>
-            <div className="meta">
-              {__("Thanks! LBRY is made by its users.")}
-            </div>
+            <div className="meta">{__('Thanks! LBRY is made by its users.')}</div>
           </div>
         </section>
 
         <section className="card">
           <div className="card__title-primary">
-            <h3>{__("About")}</h3>
+            <h3>{__('About')}</h3>
           </div>
           <div className="card__content">
             {this.state.upgradeAvailable === null ? (
-              ""
+              ''
             ) : this.state.upgradeAvailable ? (
               <p>
-                {__("A newer version of LBRY is available.")}{" "}
-                <Link href={newVerLink} label={__("Download now!")} />
+                {__('A newer version of LBRY is available.')}{' '}
+                <Link href={newVerLink} label={__('Download now!')} />
               </p>
             ) : (
-              <p>{__("Your copy of LBRY is up to date.")}</p>
+              <p>{__('Your copy of LBRY is up to date.')}</p>
             )}
             {this.state.uiVersion && ver ? (
               <table className="table-standard table-stretch table-standard--definition-list">
                 <tbody>
                   <tr>
-                    <th>{__("App")}</th>
+                    <th>{__('App')}</th>
                     <td>{this.state.uiVersion}</td>
                   </tr>
                   <tr>
-                    <th>{__("Daemon (lbrynet)")}</th>
+                    <th>{__('Daemon (lbrynet)')}</th>
                     <td>{ver.lbrynet_version}</td>
                   </tr>
                   <tr>
-                    <th>{__("Wallet (lbryum)")}</th>
+                    <th>{__('Wallet (lbryum)')}</th>
                     <td>{ver.lbryum_version}</td>
                   </tr>
                   <tr>
-                    <th>{__("Connected Email")}</th>
+                    <th>{__('Connected Email')}</th>
                     <td>
                       {user && user.primary_email ? (
                         user.primary_email
                       ) : (
                         <span>
-                          <span className="empty">{__("none")} </span>
-                          (<Link
-                            onClick={() => doAuth()}
-                            label={__("set email")}
-                          />)
+                          <span className="empty">{__('none')} </span>
+                          (<Link onClick={() => doAuth()} label={__('set email')} />)
                         </span>
                       )}
                     </td>
                   </tr>
                   <tr>
-                    <th>{__("Reward Eligible")}</th>
+                    <th>{__('Reward Eligible')}</th>
                     <td>
                       {user && user.is_reward_approved ? (
                         <Icon icon="icon-check" />
@@ -186,30 +179,25 @@ class HelpPage extends React.PureComponent {
                     </td>
                   </tr>
                   <tr>
-                    <th>{__("Platform")}</th>
+                    <th>{__('Platform')}</th>
                     <td>{platform}</td>
                   </tr>
                   <tr>
-                    <th>{__("Installation ID")}</th>
+                    <th>{__('Installation ID')}</th>
                     <td>{this.state.lbryId}</td>
                   </tr>
                   <tr>
-                    <th>{__("Access Token")}</th>
+                    <th>{__('Access Token')}</th>
                     <td>
                       {this.state.accessTokenHidden && (
-                        <Link
-                          label={__("show")}
-                          onClick={this.showAccessToken.bind(this)}
-                        />
+                        <Link label={__('show')} onClick={this.showAccessToken.bind(this)} />
                       )}
                       {!this.state.accessTokenHidden &&
                         accessToken && (
                           <div>
                             <p>{accessToken}</p>
                             <div className="help">
-                              {__(
-                                "This is equivalent to a password. Do not post or share this."
-                              )}
+                              {__('This is equivalent to a password. Do not post or share this.')}
                             </div>
                           </div>
                         )}
@@ -218,7 +206,7 @@ class HelpPage extends React.PureComponent {
                 </tbody>
               </table>
             ) : (
-              <BusyMessage message={__("Looking up version info")} />
+              <BusyMessage message={__('Looking up version info')} />
             )}
           </div>
         </section>

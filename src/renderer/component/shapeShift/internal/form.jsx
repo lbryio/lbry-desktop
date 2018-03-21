@@ -1,9 +1,9 @@
-import React from "react";
-import Link from "component/link";
-import { getExampleAddress } from "util/shape_shift";
-import { Submit, FormRow } from "component/form";
-import type { ShapeShiftFormValues, Dispatch } from "redux/actions/shape_shift";
-import ShiftMarketInfo from "./market_info";
+import React from 'react';
+import Link from 'component/link';
+import { getExampleAddress } from 'util/shape_shift';
+import { Submit, FormRow } from 'component/form';
+import type { ShapeShiftFormValues, Dispatch } from 'redux/actions/shape_shift';
+import ShiftMarketInfo from './market_info';
 
 type ShapeShiftFormErrors = {
   returnAddress?: string,
@@ -50,7 +50,7 @@ export default (props: Props) => {
   return (
     <form onSubmit={handleSubmit}>
       <div className="form-field">
-        <span>{__("Exchange")} </span>
+        <span>{__('Exchange')} </span>
         <select
           className="form-field__input form-field__input-select"
           name="originCoin"
@@ -65,7 +65,7 @@ export default (props: Props) => {
             </option>
           ))}
         </select>
-        <span> {__("for LBC")}</span>
+        <span> {__('for LBC')}</span>
         <div className="shapeshift__tx-info">
           {!updating &&
             originCoinDepositMax && (
@@ -84,7 +84,7 @@ export default (props: Props) => {
         type="text"
         name="returnAddress"
         placeholder={getExampleAddress(originCoin)}
-        label={__("Return address")}
+        label={__('Return address')}
         onChange={handleChange}
         onBlur={handleBlur}
         value={values.returnAddress}
@@ -93,14 +93,13 @@ export default (props: Props) => {
       />
       <span className="help">
         <span>
-          ({__("optional but recommended")}) {__("We will return your")}{" "}
-          {originCoin}{" "}
+          ({__('optional but recommended')}) {__('We will return your')} {originCoin}{' '}
           {__("to this address if the transaction doesn't go through.")}
         </span>
       </span>
       <div className="card__actions card__actions--only-vertical">
         <Submit
-          label={__("Begin Conversion")}
+          label={__('Begin Conversion')}
           disabled={isSubmitting || !!Object.keys(errors).length}
         />
       </div>

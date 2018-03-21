@@ -1,29 +1,10 @@
 /node_modules
-/LBRY-darwin-x64
 /dist
-
-/src/main/dist
-/src/main/locales
-/src/main/node_modules
-/src/renderer/dist
-/build/venv
 /build/daemon.ver
-/lbry-app-venv
-/lbry-app
-/lbry-venv
-/static/daemon/lbrynet*
-/daemon/build
-/daemon/venv
-/daemon/requirements.txt
-/.idea
-
+/build/daemon.zip
+/build/venv
 *.pyc
-*.iml
-.#*
+/static/daemon/lbrynet*
+/static/locales
 
-build/daemon.zip
-.vimrc
 
-package-lock.json
-
-.DS_Store

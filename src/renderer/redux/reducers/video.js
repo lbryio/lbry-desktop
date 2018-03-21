@@ -1,11 +1,11 @@
 // @flow
-import * as actions from "constants/action_types";
-import { handleActions } from "util/redux-utils";
+import * as ACTIONS from 'constants/action_types';
+import { handleActions } from 'util/redux-utils';
 
 export type VideoState = { videoPause: boolean };
 
 type setVideoPause = {
-  type: actions.SET_VIDEO_PAUSE,
+  type: ACTIONS.SET_VIDEO_PAUSE,
   data: boolean,
 };
 
@@ -16,10 +16,10 @@ const defaultState = { videoPause: false };
 
 export default handleActions(
   {
-    [actions.SET_VIDEO_PAUSE]: (
-      state: VideoState,
-      action: setVideoPause
-    ): VideoState => ({ ...state, videoPause: action.data }),
+    [ACTIONS.SET_VIDEO_PAUSE]: (state: VideoState, action: setVideoPause): VideoState => ({
+      ...state,
+      videoPause: action.data,
+    }),
   },
   defaultState
 );

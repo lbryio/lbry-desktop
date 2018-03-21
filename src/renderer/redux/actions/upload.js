@@ -21,6 +21,7 @@ export const setManualThumbnailUrl = (url: string) => (dispatch: Dispatch) =>
 export const beginSpeechUpload = (filePath: string, nsfw: boolean = false) => (
   dispatch: Dispatch
 ) => {
+  console.log(filePath);
   const thumbnail = fs.readFileSync(filePath);
   const fileExt = path.extname(filePath);
   const fileName = path.basename(filePath, fileExt);
@@ -37,19 +38,21 @@ export const beginSpeechUpload = (filePath: string, nsfw: boolean = false) => (
   data.append("name", name);
   data.append("file", blob);
   data.append("nsfw", nsfw);
-  return fetch("https://spee.ch/api/claim-publish", {
+  return fetch("https://spee.ch/api/claim/publish", {
     method: "POST",
     body: data,
   })
     .then(response => response.json())
     .then(
-      json =>
-        json.success
+      json => {
+        console.log(json);
+        return json.success
           ? dispatch({
               type: actions.SPEECH_UPLOAD_SUCCESS,
-              data: { url: `${json.message.url}${fileExt}` },
+              data: { url: `${json.data.url}${fileExt}` },
             })
           : dispatch({ type: actions.SPEECH_UPLOAD_ERROR })
+      }
     )
     .catch(err =>
       dispatch({ type: actions.SPEECH_UPLOAD_ERROR, data: { err } })

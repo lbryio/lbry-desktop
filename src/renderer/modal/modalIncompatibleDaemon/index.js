@@ -1,12 +1,10 @@
-import React from "react";
-import { connect } from "react-redux";
-import { doQuit, doSkipWrongDaemonNotice } from "redux/actions/app";
-import ModalIncompatibleDaemon from "./view";
-
-const select = state => ({});
+import { connect } from 'react-redux';
+import { doQuit, doQuitAnyDaemon } from 'redux/actions/app';
+import ModalIncompatibleDaemon from './view';
 
 const perform = dispatch => ({
   quit: () => dispatch(doQuit()),
+  quitAnyDaemon: () => dispatch(doQuitAnyDaemon()),
 });
 
-export default connect(select, perform)(ModalIncompatibleDaemon);
+export default connect(null, perform)(ModalIncompatibleDaemon);

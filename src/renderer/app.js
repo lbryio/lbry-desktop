@@ -1,29 +1,41 @@
-import store from "store.js";
-import { remote } from "electron";
+import store from 'store';
+import { remote } from 'electron';
+import Path from 'path';
+import y18n from 'y18n';
+import isDev from 'electron-is-dev';
 
-const env = process.env.NODE_ENV || "production";
-const config = {
-  ...require(`./config/${env}`),
-};
-const i18n = require("y18n")({
-  directory: remote.app.getAppPath() + "/locales",
+const env = process.env.NODE_ENV || 'production';
+const i18n = y18n({
+  directory: Path.join(remote.app.getAppPath(), '/../static/locales').replace(/\\/g, '\\\\'),
   updateFiles: false,
-  locale: "en",
+  locale: 'en',
 });
+
 const logs = [];
 const app = {
-  env: env,
-  config: config,
-  store: store,
-  i18n: i18n,
-  logs: logs,
-  log: function(message) {
+  env,
+  store,
+  i18n,
+  logs,
+  log(message) {
     logs.push(message);
   },
 };
 
-window.__ = i18n.__;
-window.__n = i18n.__n;
+// Workaround for https://github.com/electron-userland/electron-webpack/issues/52
+if (!isDev) {
+  window.staticResourcesPath = Path.join(remote.app.getAppPath(), '../static').replace(
+    /\\/g,
+    '\\\\'
+  );
+} else {
+  window.staticResourcesPath = '';
+}
 
+// eslint-disable-next-line no-underscore-dangle
+global.__ = i18n.__;
+// eslint-disable-next-line no-underscore-dangle
+global.__n = i18n.__n;
 global.app = app;
-module.exports = app;
+
+export default app;

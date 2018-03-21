@@ -1,26 +1,25 @@
-import * as types from "constants/action_types";
-import lbry from "lbry";
-import { doFetchClaimListMine, doAbandonClaim } from "redux/actions/content";
+import * as ACTIONS from 'constants/action_types';
+import { shell } from 'electron';
+import Lbry from 'lbry';
+import { doCloseModal } from 'redux/actions/app';
+import { doAbandonClaim, doFetchClaimListMine } from 'redux/actions/content';
+import { doHistoryBack } from 'redux/actions/navigation';
 import {
   selectClaimsByUri,
   selectIsFetchingClaimListMine,
   selectMyClaimsOutpoints,
-} from "redux/selectors/claims";
+} from 'redux/selectors/claims';
 import {
-  selectIsFetchingFileList,
   selectFileInfosByOutpoint,
-  selectUrisLoading,
+  selectIsFetchingFileList,
   selectTotalDownloadProgress,
-} from "redux/selectors/file_info";
-import { doCloseModal } from "redux/actions/app";
-import { doNavigate, doHistoryBack } from "redux/actions/navigation";
-import setProgressBar from "util/setProgressBar";
-import batchActions from "util/batchActions";
-
-const { shell } = require("electron");
+  selectUrisLoading,
+} from 'redux/selectors/file_info';
+import batchActions from 'util/batchActions';
+import setProgressBar from 'util/setProgressBar';
 
 export function doFetchFileInfo(uri) {
-  return function(dispatch, getState) {
+  return (dispatch, getState) => {
     const state = getState();
     const claim = selectClaimsByUri(state)[uri];
     const outpoint = claim ? `${claim.txid}:${claim.nout}` : null;
@@ -28,40 +27,38 @@ export function doFetchFileInfo(uri) {
 
     if (!alreadyFetching) {
       dispatch({
-        type: types.FETCH_FILE_INFO_STARTED,
+        type: ACTIONS.FETCH_FILE_INFO_STARTED,
         data: {
           outpoint,
         },
       });
 
-      lbry
-        .file_list({ outpoint: outpoint, full_status: true })
-        .then(fileInfos => {
-          dispatch({
-            type: types.FETCH_FILE_INFO_COMPLETED,
-            data: {
-              outpoint,
-              fileInfo: fileInfos && fileInfos.length ? fileInfos[0] : null,
-            },
-          });
+      Lbry.file_list({ outpoint, full_status: true }).then(fileInfos => {
+        dispatch({
+          type: ACTIONS.FETCH_FILE_INFO_COMPLETED,
+          data: {
+            outpoint,
+            fileInfo: fileInfos && fileInfos.length ? fileInfos[0] : null,
+          },
         });
+      });
     }
   };
 }
 
 export function doFileList() {
-  return function(dispatch, getState) {
+  return (dispatch, getState) => {
     const state = getState();
     const isFetching = selectIsFetchingFileList(state);
 
     if (!isFetching) {
       dispatch({
-        type: types.FILE_LIST_STARTED,
+        type: ACTIONS.FILE_LIST_STARTED,
       });
 
-      lbry.file_list().then(fileInfos => {
+      Lbry.file_list().then(fileInfos => {
         dispatch({
-          type: types.FILE_LIST_SUCCEEDED,
+          type: ACTIONS.FILE_LIST_SUCCEEDED,
           data: {
             fileInfos,
           },
@@ -71,8 +68,14 @@ export function doFileList() {
   };
 }
 
+export function doOpenFileInFolder(path) {
+  return () => {
+    shell.showItemInFolder(path);
+  };
+}
+
 export function doOpenFileInShell(path) {
-  return function(dispatch, getState) {
+  return dispatch => {
     const success = shell.openItem(path);
     if (!success) {
       dispatch(doOpenFileInFolder(path));
@@ -80,22 +83,16 @@ export function doOpenFileInShell(path) {
   };
 }
 
-export function doOpenFileInFolder(path) {
-  return function(dispatch, getState) {
-    shell.showItemInFolder(path);
-  };
-}
-
 export function doDeleteFile(outpoint, deleteFromComputer, abandonClaim) {
-  return function(dispatch, getState) {
+  return (dispatch, getState) => {
     const state = getState();
 
-    lbry.file_delete({
-      outpoint: outpoint,
+    Lbry.file_delete({
+      outpoint,
       delete_from_download_dir: deleteFromComputer,
     });
 
-    // If the file is for a claim we published then also abandom the claim
+    // If the file is for a claim we published then also abandon the claim
     const myClaimsOutpoints = selectMyClaimsOutpoints(state);
     if (abandonClaim && myClaimsOutpoints.indexOf(outpoint) !== -1) {
       const byOutpoint = selectFileInfosByOutpoint(state);
@@ -110,7 +107,7 @@ export function doDeleteFile(outpoint, deleteFromComputer, abandonClaim) {
     }
 
     dispatch({
-      type: types.FILE_DELETE,
+      type: ACTIONS.FILE_DELETE,
       data: {
         outpoint,
       },
@@ -121,12 +118,8 @@ export function doDeleteFile(outpoint, deleteFromComputer, abandonClaim) {
   };
 }
 
-export function doDeleteFileAndGoBack(
-  fileInfo,
-  deleteFromComputer,
-  abandonClaim
-) {
-  return function(dispatch, getState) {
+export function doDeleteFileAndGoBack(fileInfo, deleteFromComputer, abandonClaim) {
+  return dispatch => {
     const actions = [];
     actions.push(doCloseModal());
     actions.push(doHistoryBack());
@@ -136,10 +129,10 @@ export function doDeleteFileAndGoBack(
 }
 
 export function doFetchFileInfosAndPublishedClaims() {
-  return function(dispatch, getState) {
-    const state = getState(),
-      isFetchingClaimListMine = selectIsFetchingClaimListMine(state),
-      isFetchingFileInfo = selectIsFetchingFileList(state);
+  return (dispatch, getState) => {
+    const state = getState();
+    const isFetchingClaimListMine = selectIsFetchingClaimListMine(state);
+    const isFetchingFileInfo = selectIsFetchingFileList(state);
 
     if (!isFetchingClaimListMine) dispatch(doFetchClaimListMine());
     if (!isFetchingFileInfo) dispatch(doFileList());

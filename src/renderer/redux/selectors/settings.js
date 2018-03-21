@@ -1,40 +1,35 @@
-import * as settings from "constants/settings";
-import { createSelector } from "reselect";
-import path from "path";
+import * as SETTINGS from 'constants/settings';
+import { createSelector } from 'reselect';
 
-const _selectState = state => state.settings || {};
+const selectState = state => state.settings || {};
 
-export const selectDaemonSettings = createSelector(
-  _selectState,
-  state => state.daemonSettings
-);
+export const selectDaemonSettings = createSelector(selectState, state => state.daemonSettings);
 
 export const selectClientSettings = createSelector(
-  _selectState,
+  selectState,
   state => state.clientSettings || {}
 );
 
-export const makeSelectClientSetting = setting => {
-  return createSelector(
-    selectClientSettings,
-    settings => (settings ? settings[setting] : undefined)
-  );
-};
+export const makeSelectClientSetting = setting =>
+  createSelector(selectClientSettings, settings => (settings ? settings[setting] : undefined));
 
-export const selectSettingsIsGenerous = createSelector(
-  selectDaemonSettings,
-  settings => settings && settings.is_generous_host
+// refactor me
+export const selectShowNsfw = makeSelectClientSetting(SETTINGS.SHOW_NSFW);
+
+export const selectLanguages = createSelector(selectState, state => state.languages || {});
+
+export const selectTheme = makeSelectClientSetting(SETTINGS.THEME);
+export const selectAutomaticDarkModeEnabled = makeSelectClientSetting(
+  SETTINGS.AUTOMATIC_DARK_MODE_ENABLED
 );
-
-//refactor me
-export const selectShowNsfw = makeSelectClientSetting(settings.SHOW_NSFW);
-
-export const selectLanguages = createSelector(
-  _selectState,
-  state => state.languages || {}
-);
+export const selectIsNight = createSelector(selectState, state => state.isNight);
 
 export const selectThemePath = createSelector(
-  makeSelectClientSetting(settings.THEME),
-  theme => staticResourcesPath + "/themes/" + (theme || "light") + ".css"
+  selectTheme,
+  selectAutomaticDarkModeEnabled,
+  selectIsNight,
+  (theme, automaticDarkModeEnabled, isNight) => {
+    const dynamicTheme = automaticDarkModeEnabled && isNight ? 'dark' : theme;
+    return `${staticResourcesPath}/themes/${dynamicTheme || 'light'}.css`;
+  }
 );

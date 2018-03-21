@@ -40,8 +40,12 @@ set -eu
 if $LINUX; then
   INSTALL="$SUDO apt-get install --no-install-recommends -y"
   $INSTALL build-essential libssl-dev libffi-dev libgmp3-dev python2.7-dev libsecret-1-dev curl
-elif $OSX && ! cmd_exists brew ; then
-  /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+elif $OSX; then
+  if ! cmd_exists brew; then
+    /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
+  else
+    brew update
+  fi
 fi
 
 
@@ -99,7 +103,7 @@ if ! cmd_exists yarn; then
     curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | $SUDO apt-key add -
     echo "deb https://dl.yarnpkg.com/debian/ stable main" | $SUDO tee /etc/apt/sources.list.d/yarn.list
     $SUDO apt-get update
-    $SUDO apt-get install yarn
+    $SUDO apt-get -o Dpkg::Options::="--force-overwrite" install yarn
   elif $OSX; then
     brew install yarn
   else

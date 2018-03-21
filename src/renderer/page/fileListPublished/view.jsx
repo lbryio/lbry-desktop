@@ -1,9 +1,9 @@
-import React from "react";
-import Link from "component/link";
-import FileTile from "component/fileTile";
-import { BusyMessage, Thumbnail } from "component/common.js";
-import FileList from "component/fileList";
-import SubHeader from "component/subHeader";
+import React from 'react';
+import Link from 'component/link';
+import FileTile from 'component/fileTile';
+import { BusyMessage, Thumbnail } from 'component/common.js';
+import FileList from 'component/fileList';
+import SubHeader from 'component/subHeader';
 
 class FileListPublished extends React.PureComponent {
   componentWillMount() {
@@ -25,22 +25,21 @@ class FileListPublished extends React.PureComponent {
           fileInfos={claims}
           fetching={isFetching}
           fileTileShowEmpty={FileTile.SHOW_EMPTY_PENDING}
+          sortByHeight
         />
       );
+    } else if (isFetching) {
+      content = <BusyMessage message={__('Loading')} />;
     } else {
-      if (isFetching) {
-        content = <BusyMessage message={__("Loading")} />;
-      } else {
-        content = (
-          <span>
-            {__("It looks like you haven't published anything to LBRY yet. Go")}{" "}
-            <Link
-              onClick={() => navigate("/publish")}
-              label={__("share your beautiful cats with the world")}
-            />!
-          </span>
-        );
-      }
+      content = (
+        <span>
+          {__("It looks like you haven't published anything to LBRY yet. Go")}{' '}
+          <Link
+            onClick={() => navigate('/publish')}
+            label={__('share your beautiful cats with the world')}
+          />!
+        </span>
+      );
     }
 
     return (

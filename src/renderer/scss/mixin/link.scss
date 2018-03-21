@@ -1,6 +1,5 @@
-@mixin text-link($color: var(--color-primary), $hover-opacity: 0.70) {
-  .icon
-  {
+@mixin text-link($color: var(--color-primary), $hover-opacity: 0.7) {
+  .icon {
     &:first-child {
       padding-right: 5px;
     }
@@ -15,10 +14,9 @@
       text-decoration: none;
     }
   }
-  &:hover
-  {
+  &:hover {
     opacity: $hover-opacity;
-    transition: opacity  var(--transition-duration) var(--transition-type);
+    transition: opacity var(--transition-duration) var(--transition-type);
     text-decoration: underline;
     .icon {
       text-decoration: none;

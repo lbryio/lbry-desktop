@@ -1,20 +1,21 @@
-var extract = require("i18n-extract");
+const extract = require("i18n-extract");
 const fs = require("fs");
+const path = require("path");
 
-var dir = __dirname + "/../../dist/locales";
-var path = dir + "/en.json";
+const outputDir = `${__dirname}/../static/locales`;
+const outputPath = `${outputDir}/en.json`;
 
-if (!fs.existsSync(dir)) {
-  fs.mkdirSync(dir);
+if (!fs.existsSync(outputDir)) {
+  fs.mkdirSync(outputDir);
 }
 
-fs.writeFile(path, "{}", "utf8", function(err) {
+fs.writeFile(outputPath, "{}", "utf8", err => {
   if (err) {
     return console.log(err);
   }
-  var enLocale = require(path);
+  const enLocale = require(outputPath);
 
-  const keys = extract.extractFromFiles(["js/**/*.{js,jsx}"], {
+  const keys = extract.extractFromFiles("src/**/*.{js,jsx}", {
     marker: "__",
   });
 
@@ -22,21 +23,21 @@ fs.writeFile(path, "{}", "utf8", function(err) {
   reports = reports.concat(extract.findMissing(enLocale, keys));
 
   if (reports.length > 0) {
-    fs.readFile(path, "utf8", function readFileCallback(err, data) {
+    fs.readFile(outputPath, "utf8", (err, data) => {
       if (err) {
         console.log(err);
       } else {
         localeObj = JSON.parse(data);
 
-        for (var i = 0; i < reports.length; i++) {
+        for (let i = 0; i < reports.length; i++) {
           // no need to care for other types than MISSING because starting file will always be empty
           if (reports[i].type === "MISSING") {
             localeObj[reports[i].key] = reports[i].key;
           }
         }
 
-        var json = JSON.stringify(localeObj, null, "\t"); //convert it back to json-string
-        fs.writeFile(path, json, "utf8", function callback(err) {
+        const json = JSON.stringify(localeObj, null, "\t"); // convert it back to json-string
+        fs.writeFile(outputPath, json, "utf8", err => {
           if (err) {
             throw err;
           }

@@ -1,49 +1,24 @@
-import * as types from "constants/action_types";
-import lbry from "lbry";
-import lbryio from "lbryio";
-import { doResolveUri } from "redux/actions/content";
-import { selectResolvingUris } from "redux/selectors/content";
-import { selectClaimsByUri } from "redux/selectors/claims";
-import { selectSettingsIsGenerous } from "redux/selectors/settings";
+import * as ACTIONS from 'constants/action_types';
+import Lbryio from 'lbryio';
+import { selectClaimsByUri } from 'redux/selectors/claims';
 
+// eslint-disable-next-line import/prefer-default-export
 export function doFetchCostInfoForUri(uri) {
-  return function(dispatch, getState) {
-    const state = getState(),
-      claim = selectClaimsByUri(state)[uri],
-      isGenerous = selectSettingsIsGenerous(state);
+  return (dispatch, getState) => {
+    const state = getState();
+    const claim = selectClaimsByUri(state)[uri];
 
-    if (!claim) return null;
-
-    function begin() {
-      dispatch({
-        type: types.FETCH_COST_INFO_STARTED,
-        data: {
-          uri,
-        },
-      });
-    }
+    if (!claim) return;
 
     function resolve(costInfo) {
       dispatch({
-        type: types.FETCH_COST_INFO_COMPLETED,
+        type: ACTIONS.FETCH_COST_INFO_COMPLETED,
         data: {
           uri,
           costInfo,
         },
       });
     }
-
-    /**
-     * "Generous" check below is disabled. We're no longer attempting to include or estimate data fees regardless of settings.
-     *
-     * This should be modified when lbry.stream_cost_estimate is reliable and performant.
-     */
-
-    /*
-      lbry.stream_cost_estimate({ uri }).then(cost => {
-        cacheAndResolve(cost);
-      }, reject);
-     */
 
     const fee =
       claim.value && claim.value.stream && claim.value.stream.metadata
@@ -52,35 +27,12 @@ export function doFetchCostInfoForUri(uri) {
 
     if (fee === undefined) {
       resolve({ cost: 0, includesData: true });
-    } else if (fee.currency == "LBC") {
+    } else if (fee.currency === 'LBC') {
       resolve({ cost: fee.amount, includesData: true });
     } else {
-      // begin();
-      lbryio.getExchangeRates().then(({ lbc_usd }) => {
-        resolve({ cost: fee.amount / lbc_usd, includesData: true });
+      Lbryio.getExchangeRates().then(({ LBC_USD }) => {
+        resolve({ cost: fee.amount / LBC_USD, includesData: true });
       });
     }
-
-    // if (isGenerous && claim) {
-    //   let cost;
-    //   const fee = claim.value &&
-    //     claim.value.stream &&
-    //     claim.value.stream.metadata
-    //     ? claim.value.stream.metadata.fee
-    //     : undefined;
-    //   if (fee === undefined) {
-    //     resolve({ cost: 0, includesData: true });
-    //   } else if (fee.currency == "LBC") {
-    //     resolve({ cost: fee.amount, includesData: true });
-    //   } else {
-    //     // begin();
-    //     lbryio.getExchangeRates().then(({ lbc_usd }) => {
-    //       resolve({ cost: fee.amount / lbc_usd, includesData: true });
-    //     });
-    //   }
-    // } else {
-    //   begin();
-    //   lbry.getCostInfo(uri).then(resolve);
-    // }
   };
 }

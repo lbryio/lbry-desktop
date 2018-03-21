@@ -1,28 +1,41 @@
-import { createSelector } from "reselect";
+import { createSelector } from 'reselect';
 
-export const _selectState = state => state.user || {};
+export const selectState = state => state.user || {};
 
 export const selectAuthenticationIsPending = createSelector(
-  _selectState,
+  selectState,
   state => state.authenticationIsPending
 );
 
-export const selectUserIsPending = createSelector(
-  _selectState,
-  state => state.userIsPending
-);
+export const selectUserIsPending = createSelector(selectState, state => state.userIsPending);
 
-export const selectUser = createSelector(_selectState, state => state.user);
+export const selectUser = createSelector(selectState, state => state.user);
 
 export const selectUserEmail = createSelector(
   selectUser,
   user => (user ? user.primary_email : null)
 );
 
+export const selectUserPhone = createSelector(
+  selectUser,
+  user => (user ? user.phone_number : null)
+);
+
+export const selectUserCountryCode = createSelector(
+  selectUser,
+  user => (user ? user.country_code : null)
+);
+
 export const selectEmailToVerify = createSelector(
-  _selectState,
+  selectState,
   selectUserEmail,
   (state, userEmail) => state.emailToVerify || userEmail
+);
+
+export const selectPhoneToVerify = createSelector(
+  selectState,
+  selectUserPhone,
+  (state, userPhone) => state.phoneToVerify || userPhone
 );
 
 export const selectUserIsRewardApproved = createSelector(
@@ -31,32 +44,42 @@ export const selectUserIsRewardApproved = createSelector(
 );
 
 export const selectEmailNewIsPending = createSelector(
-  _selectState,
+  selectState,
   state => state.emailNewIsPending
 );
 
 export const selectEmailNewErrorMessage = createSelector(
-  _selectState,
+  selectState,
   state => state.emailNewErrorMessage
 );
 
+export const selectPhoneNewErrorMessage = createSelector(
+  selectState,
+  state => state.phoneNewErrorMessage
+);
+
 export const selectEmailVerifyIsPending = createSelector(
-  _selectState,
+  selectState,
   state => state.emailVerifyIsPending
 );
 
 export const selectEmailVerifyErrorMessage = createSelector(
-  _selectState,
+  selectState,
   state => state.emailVerifyErrorMessage
 );
 
+export const selectPhoneVerifyErrorMessage = createSelector(
+  selectState,
+  state => state.phoneVerifyErrorMessage
+);
+
 export const selectIdentityVerifyIsPending = createSelector(
-  _selectState,
+  selectState,
   state => state.identityVerifyIsPending
 );
 
 export const selectIdentityVerifyErrorMessage = createSelector(
-  _selectState,
+  selectState,
   state => state.identityVerifyErrorMessage
 );
 
@@ -65,37 +88,31 @@ export const selectUserIsVerificationCandidate = createSelector(
   user => user && (!user.has_verified_email || !user.is_identity_verified)
 );
 
-export const selectAccessToken = createSelector(
-  _selectState,
-  state => state.accessToken
-);
+export const selectAccessToken = createSelector(selectState, state => state.accessToken);
 
 export const selectUserInviteStatusIsPending = createSelector(
-  _selectState,
+  selectState,
   state => state.inviteStatusIsPending
 );
 
 export const selectUserInvitesRemaining = createSelector(
-  _selectState,
+  selectState,
   state => state.invitesRemaining
 );
 
-export const selectUserInvitees = createSelector(
-  _selectState,
-  state => state.invitees
-);
+export const selectUserInvitees = createSelector(selectState, state => state.invitees);
 
 export const selectUserInviteStatusFailed = createSelector(
   selectUserInvitesRemaining,
-  inviteStatus => selectUserInvitesRemaining === null
+  () => selectUserInvitesRemaining === null
 );
 
 export const selectUserInviteNewIsPending = createSelector(
-  _selectState,
+  selectState,
   state => state.inviteNewIsPending
 );
 
 export const selectUserInviteNewErrorMessage = createSelector(
-  _selectState,
+  selectState,
   state => state.inviteNewErrorMessage
 );

@@ -1,102 +1,85 @@
 const jsonrpc = {};
 
-jsonrpc.call = function(
+jsonrpc.call = (
   connectionString,
   method,
   params,
   callback,
   errorCallback,
-  connectFailedCallback,
-  timeout
-) {
+  connectFailedCallback
+) => {
   function checkAndParse(response) {
     if (response.status >= 200 && response.status < 300) {
       return response.json();
-    } else {
-      return response.json().then(json => {
-        let error;
-        if (json.error) {
-          error = new Error(json.error);
-        } else {
-          error = new Error("Protocol error with unknown response signature");
-        }
-        return Promise.reject(error);
-      }).catch(e => {
-        console.error(e);
-      });
     }
-  }
-
-  function makeRequest(url, options) {
-    return new Promise((resolve, reject) => {
-      fetch(url, options)
-        .then(resolve)
-        .catch(reject);
-
-      if (timeout) {
-        const e = new Error(__("Protocol request timed out"));
-        setTimeout(() => {
-          return reject(e);
-        }, timeout);
+    return response.json().then(json => {
+      let error;
+      if (json.error) {
+        error = new Error(json.error.message);
+      } else {
+        error = new Error('Protocol error with unknown response signature');
       }
+      return Promise.reject(error);
     });
   }
 
-  const counter = parseInt(sessionStorage.getItem("JSONRPCCounter") || 0);
+  const counter = parseInt(sessionStorage.getItem('JSONRPCCounter') || 0, 10);
   const url = connectionString;
   const options = {
-    method: "POST",
+    method: 'POST',
     body: JSON.stringify({
-      jsonrpc: "2.0",
-      method: method,
-      params: params,
+      jsonrpc: '2.0',
+      method,
+      params,
       id: counter,
     }),
   };
 
-  sessionStorage.setItem("JSONRPCCounter", counter + 1);
+  sessionStorage.setItem('JSONRPCCounter', counter + 1);
 
   return fetch(url, options)
     .then(checkAndParse)
     .then(response => {
-      const error =
-        response.error || (response.result && response.result.error);
+      const error = response.error || (response.result && response.result.error);
 
-      if (!error && typeof callback === "function") {
+      if (!error && typeof callback === 'function') {
         return callback(response.result);
       }
 
-      if (error && typeof errorCallback === "function") {
+      if (error && typeof errorCallback === 'function') {
         return errorCallback(error);
       }
 
-      var errorEvent = new CustomEvent("unhandledError", {
+      const errorEvent = new CustomEvent('unhandledError', {
         detail: {
-          connectionString: connectionString,
-          method: method,
-          params: params,
+          connectionString,
+          method,
+          params,
           code: error.code,
           message: error.message || error,
           data: error.data,
         },
       });
       document.dispatchEvent(errorEvent);
+
+      return Promise.resolve();
     })
-    .catch(e => {
+    .catch(error => {
       if (connectFailedCallback) {
-        return connectFailedCallback(e);
+        return connectFailedCallback(error);
       }
 
-      var errorEvent = new CustomEvent("unhandledError", {
+      const errorEvent = new CustomEvent('unhandledError', {
         detail: {
-          connectionString: connectionString,
-          method: method,
-          params: params,
-          code: e.response && e.response.status,
-          message: __("Connection to API server failed"),
+          connectionString,
+          method,
+          params,
+          code: error.response && error.response.status,
+          message: __('Connection to API server failed'),
         },
       });
       document.dispatchEvent(errorEvent);
+      return Promise.resolve();
     });
 };
 

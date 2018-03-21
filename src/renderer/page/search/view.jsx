@@ -1,8 +1,8 @@
-import React from "react";
-import lbryuri from "lbryuri";
-import FileTile from "component/fileTile";
-import FileListSearch from "component/fileListSearch";
-import { ToolTip } from "component/tooltip.js";
+import React from 'react';
+import { isURIValid, normalizeURI } from 'lbryURI';
+import FileTile from 'component/fileTile';
+import FileListSearch from 'component/fileListSearch';
+import { ToolTip } from 'component/tooltip.js';
 
 class SearchPage extends React.PureComponent {
   render() {
@@ -10,32 +10,27 @@ class SearchPage extends React.PureComponent {
 
     return (
       <main className="main--single-column">
-        {lbryuri.isValid(query) ? (
+        {isURIValid(query) ? (
           <section className="section-spaced">
             <h3 className="card-row__header">
-              {__("Exact URL")}{" "}
+              {__('Exact URL')}{' '}
               <ToolTip
                 label="?"
-                body={__(
-                  "This is the resolution of a LBRY URL and not controlled by LBRY Inc."
-                )}
+                body={__('This is the resolution of a LBRY URL and not controlled by LBRY Inc.')}
                 className="tooltip--header"
               />
             </h3>
-            <FileTile
-              uri={lbryuri.normalize(query)}
-              showEmpty={FileTile.SHOW_EMPTY_PUBLISH}
-            />
+            <FileTile uri={normalizeURI(query)} showEmpty={FileTile.SHOW_EMPTY_PUBLISH} />
           </section>
         ) : (
-          ""
+          ''
         )}
         <section className="section-spaced">
           <h3 className="card-row__header">
-            {__("Search Results for")} {query}{" "}
+            {__('Search Results for')} {query}{' '}
             <ToolTip
               label="?"
-              body={__("These search results are provided by LBRY, Inc.")}
+              body={__('These search results are provided by LBRY, Inc.')}
               className="tooltip--header"
             />
           </h3>

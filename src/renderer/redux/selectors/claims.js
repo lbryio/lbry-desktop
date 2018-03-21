@@ -1,79 +1,77 @@
-import { createSelector } from "reselect";
-import lbryuri from "lbryuri";
-import { makeSelectCurrentParam } from "./navigation";
+import { normalizeURI } from 'lbryURI';
+import { makeSelectCurrentParam } from 'redux/selectors/navigation';
+import { createSelector } from 'reselect';
 
-const _selectState = state => state.claims || {};
+const selectState = state => state.claims || {};
 
-export const selectClaimsById = createSelector(
-  _selectState,
-  state => state.byId || {}
-);
+export const selectClaimsById = createSelector(selectState, state => state.byId || {});
 
-export const selectClaimsByUri = createSelector(
-  _selectState,
-  selectClaimsById,
-  (state, byId) => {
-    const byUri = state.claimsByUri || {};
-    const claims = {};
+export const selectClaimsByUri = createSelector(selectState, selectClaimsById, (state, byId) => {
+  const byUri = state.claimsByUri || {};
+  const claims = {};
 
-    Object.keys(byUri).forEach(uri => {
-      const claimId = byUri[uri];
+  Object.keys(byUri).forEach(uri => {
+    const claimId = byUri[uri];
 
-      // NOTE returning a null claim allows us to differentiate between an
-      // undefined (never fetched claim) and one which just doesn't exist. Not
-      // the cleanest solution but couldn't think of anything better right now
-      if (claimId === null) {
-        claims[uri] = null;
-      } else {
-        const claim = byId[claimId];
+    // NOTE returning a null claim allows us to differentiate between an
+    // undefined (never fetched claim) and one which just doesn't exist. Not
+    // the cleanest solution but couldn't think of anything better right now
+    if (claimId === null) {
+      claims[uri] = null;
+    } else {
+      claims[uri] = byId[claimId];
+    }
+  });
 
-        claims[uri] = claim;
-      }
-    });
-
-    return claims;
-  }
-);
+  return claims;
+});
 
 export const selectAllClaimsByChannel = createSelector(
-  _selectState,
+  selectState,
   state => state.claimsByChannel || {}
 );
 
-export const makeSelectClaimForUri = uri => {
-  return createSelector(
-    selectClaimsByUri,
-    claims => claims && claims[lbryuri.normalize(uri)]
-  );
-};
+export const makeSelectClaimForUri = uri =>
+  createSelector(selectClaimsByUri, claims => claims && claims[normalizeURI(uri)]);
+
+export const selectMyClaimsRaw = createSelector(selectState, state => state.myClaims);
+
+export const selectAbandoningIds = createSelector(selectState, state =>
+  Object.keys(state.abandoningById || {})
+);
+
+export const selectMyActiveClaims = createSelector(
+  selectMyClaimsRaw,
+  selectAbandoningIds,
+  (claims, abandoningIds) =>
+    new Set(
+      claims &&
+        claims
+          .map(claim => claim.claim_id)
+          .filter(claimId => Object.keys(abandoningIds).indexOf(claimId) === -1)
+    )
+);
 
 export const makeSelectClaimIsMine = rawUri => {
-  const uri = lbryuri.normalize(rawUri);
+  const uri = normalizeURI(rawUri);
   return createSelector(
     selectClaimsByUri,
     selectMyActiveClaims,
     (claims, myClaims) =>
-      claims &&
-      claims[uri] &&
-      claims[uri].claim_id &&
-      myClaims.has(claims[uri].claim_id)
+      claims && claims[uri] && claims[uri].claim_id && myClaims.has(claims[uri].claim_id)
   );
 };
 
 export const selectAllFetchingChannelClaims = createSelector(
-  _selectState,
+  selectState,
   state => state.fetchingChannelClaims || {}
 );
 
-export const makeSelectFetchingChannelClaims = uri => {
-  return createSelector(
-    selectAllFetchingChannelClaims,
-    fetching => fetching && fetching[uri]
-  );
-};
+export const makeSelectFetchingChannelClaims = uri =>
+  createSelector(selectAllFetchingChannelClaims, fetching => fetching && fetching[uri]);
 
 export const makeSelectClaimsInChannelForCurrentPage = uri => {
-  const pageSelector = makeSelectCurrentParam("page");
+  const pageSelector = makeSelectCurrentParam('page');
 
   return createSelector(
     selectClaimsById,
@@ -90,58 +88,28 @@ export const makeSelectClaimsInChannelForCurrentPage = uri => {
   );
 };
 
-export const makeSelectMetadataForUri = uri => {
-  return createSelector(makeSelectClaimForUri(uri), claim => {
-    const metadata =
-      claim && claim.value && claim.value.stream && claim.value.stream.metadata;
+export const makeSelectMetadataForUri = uri =>
+  createSelector(makeSelectClaimForUri(uri), claim => {
+    const metadata = claim && claim.value && claim.value.stream && claim.value.stream.metadata;
 
-    const value = metadata ? metadata : claim === undefined ? undefined : null;
-    return value;
+    return metadata || (claim === undefined ? undefined : null);
   });
-};
 
-export const makeSelectTitleForUri = uri => {
-  return createSelector(
-    makeSelectMetadataForUri(uri),
-    metadata => metadata && metadata.title
-  );
-};
+export const makeSelectTitleForUri = uri =>
+  createSelector(makeSelectMetadataForUri(uri), metadata => metadata && metadata.title);
 
-export const makeSelectContentTypeForUri = uri => {
-  return createSelector(makeSelectClaimForUri(uri), claim => {
-    const source =
-      claim && claim.value && claim.value.stream && claim.value.stream.source;
+export const makeSelectContentTypeForUri = uri =>
+  createSelector(makeSelectClaimForUri(uri), claim => {
+    const source = claim && claim.value && claim.value.stream && claim.value.stream.source;
     return source ? source.contentType : undefined;
   });
-};
 
 export const selectIsFetchingClaimListMine = createSelector(
-  _selectState,
-  state => !!state.isFetchingClaimListMine
+  selectState,
+  state => state.isFetchingClaimListMine
 );
 
-export const selectMyClaimsRaw = createSelector(
-  _selectState,
-  state => state.myClaims
-);
-
-export const selectAbandoningIds = createSelector(_selectState, state =>
-  Object.keys(state.abandoningById || {})
-);
-
-export const selectMyActiveClaims = createSelector(
-  selectMyClaimsRaw,
-  selectAbandoningIds,
-  (claims, abandoningIds) =>
-    new Set(
-      claims &&
-        claims
-          .map(claim => claim.claim_id)
-          .filter(claimId => Object.keys(abandoningIds).indexOf(claimId) === -1)
-    )
-);
-
-export const selectPendingClaims = createSelector(_selectState, state =>
+export const selectPendingClaims = createSelector(selectState, state =>
   Object.values(state.pendingById || {})
 );
 
@@ -156,46 +124,38 @@ export const selectMyClaims = createSelector(
     myClaimIds.forEach(id => {
       const claim = byId[id];
 
-      if (claim && abandoningIds.indexOf(id) == -1) claims.push(claim);
+      if (claim && abandoningIds.indexOf(id) === -1) claims.push(claim);
     });
 
     return [...claims, ...pendingClaims];
   }
 );
 
-export const selectMyClaimsWithoutChannels = createSelector(
-  selectMyClaims,
-  myClaims => myClaims.filter(claim => !claim.name.match(/^@/))
+export const selectMyClaimsWithoutChannels = createSelector(selectMyClaims, myClaims =>
+  myClaims.filter(claim => !claim.name.match(/^@/))
 );
 
 export const selectAllMyClaimsByOutpoint = createSelector(
   selectMyClaimsRaw,
   claims =>
-    new Set(
-      claims && claims.length
-        ? claims.map(claim => `${claim.txid}:${claim.nout}`)
-        : null
-    )
+    new Set(claims && claims.length ? claims.map(claim => `${claim.txid}:${claim.nout}`) : null)
 );
 
-export const selectMyClaimsOutpoints = createSelector(
-  selectMyClaims,
-  myClaims => {
-    const outpoints = [];
+export const selectMyClaimsOutpoints = createSelector(selectMyClaims, myClaims => {
+  const outpoints = [];
 
-    myClaims.forEach(claim => outpoints.push(`${claim.txid}:${claim.nout}`));
+  myClaims.forEach(claim => outpoints.push(`${claim.txid}:${claim.nout}`));
 
-    return outpoints;
-  }
-);
+  return outpoints;
+});
 
 export const selectFetchingMyChannels = createSelector(
-  _selectState,
-  state => !!state.fetchingMyChannels
+  selectState,
+  state => state.fetchingMyChannels
 );
 
 export const selectMyChannelClaims = createSelector(
-  _selectState,
+  selectState,
   selectClaimsById,
   (state, byId) => {
     const ids = state.myChannelClaims || [];
@@ -203,7 +163,7 @@ export const selectMyChannelClaims = createSelector(
 
     ids.forEach(id => {
       if (byId[id]) {
-        //I'm not sure why this check is necessary, but it ought to be a quick fix for https://github.com/lbryio/lbry-app/issues/544
+        // I'm not sure why this check is necessary, but it ought to be a quick fix for https://github.com/lbryio/lbry-app/issues/544
         claims.push(byId[id]);
       }
     });

@@ -1,7 +1,9 @@
-import { createSelector } from "reselect";
+import { createSelector } from 'reselect';
 
-const _selectState = state => state.shapeShift;
+const selectState = state => state.shapeShift;
 
-export const selectShapeShift = createSelector(_selectState, state => ({
+export const selectShapeShift = createSelector(selectState, state => ({
   ...state,
 }));
+
+export { selectShapeShift as default };

@@ -1,4 +1,4 @@
-@import "../mixin/link.scss";
+@import '../mixin/link.scss';
 
 .tooltip {
   position: relative;
@@ -20,14 +20,14 @@
   border: var(--tooltip-border);
   color: var(--tooltip-color);
   background-color: var(--tooltip-bg);
-  font-size: calc(var(--font-size) * 7/8);
+  font-size: calc(var(--font-size) * 7 / 8);
   line-height: var(--font-line-height);
   box-shadow: var(--box-shadow-layer);
 }
 
 .tooltip--header .tooltip__link {
   @include text-link(#aaa);
-  font-size: calc( var(--font-size) * 3/4 );
+  font-size: calc(var(--font-size) * 3 / 4);
   margin-left: var(--button-padding);
   vertical-align: middle;
 }

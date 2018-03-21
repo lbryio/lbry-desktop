@@ -1,5 +1,30 @@
-import jsonrpc from "./jsonrpc.js";
-import lbryuri from "./lbryuri.js";
+import { ipcRenderer } from 'electron';
+import jsonrpc from 'jsonrpc';
+
+const CHECK_DAEMON_STARTED_TRY_NUMBER = 200;
+
+const Lbry = {
+  isConnected: false,
+  daemonConnectionString: 'http://localhost:5279',
+  pendingPublishTimeout: 20 * 60 * 1000,
+};
+
+function apiCall(method, params, resolve, reject) {
+  return jsonrpc.call(Lbry.daemonConnectionString, method, params, resolve, reject, reject);
+}
+
+const lbryProxy = new Proxy(Lbry, {
+  get(target, name) {
+    if (name in target) {
+      return target[name];
+    }
+
+    return (params = {}) =>
+      new Promise((resolve, reject) => {
+        apiCall(name, params, resolve, reject);
+      });
+  },
+});
 
 function getLocal(key, fallback = undefined) {
   const itemRaw = localStorage.getItem(key);
@@ -10,49 +35,24 @@ function setLocal(key, value) {
   localStorage.setItem(key, JSON.stringify(value));
 }
 
-const { remote, ipcRenderer } = require("electron");
-
-let lbry = {
-  isConnected: false,
-  daemonConnectionString: "http://localhost:5279",
-  pendingPublishTimeout: 20 * 60 * 1000,
-};
-
-function apiCall(method, params, resolve, reject) {
-  return jsonrpc.call(
-    lbry.daemonConnectionString,
-    method,
-    params,
-    resolve,
-    reject,
-    reject
-  );
-}
-
 /**
  * Records a publish attempt in local storage. Returns a dictionary with all the data needed to
  * needed to make a dummy claim or file info object.
  */
 let pendingId = 0;
-function savePendingPublish({ name, channel_name }) {
-  let uri;
-  if (channel_name) {
-    uri = lbryuri.build({ name: channel_name, path: name }, false);
-  } else {
-    uri = lbryuri.build({ name: name }, false);
-  }
-  ++pendingId;
-  const pendingPublishes = getLocal("pendingPublishes") || [];
+function savePendingPublish({ name, channelName }) {
+  pendingId += 1;
+  const pendingPublishes = getLocal('pendingPublishes') || [];
   const newPendingPublish = {
     name,
-    channel_name,
-    claim_id: "pending-" + pendingId,
-    txid: "pending-" + pendingId,
+    channelName,
+    claim_id: `pending-${pendingId}`,
+    txid: `pending-${pendingId}`,
     nout: 0,
-    outpoint: "pending-" + pendingId + ":0",
+    outpoint: `pending-${pendingId}:0`,
     time: Date.now(),
   };
-  setLocal("pendingPublishes", [...pendingPublishes, newPendingPublish]);
+  setLocal('pendingPublishes', [...pendingPublishes, newPendingPublish]);
   return newPendingPublish;
 }
 
@@ -60,31 +60,27 @@ function savePendingPublish({ name, channel_name }) {
  * If there is a pending publish with the given name or outpoint, remove it.
  * A channel name may also be provided along with name.
  */
-function removePendingPublishIfNeeded({ name, channel_name, outpoint }) {
+function removePendingPublishIfNeeded({ name, channelName, outpoint }) {
   function pubMatches(pub) {
     return (
       pub.outpoint === outpoint ||
-      (pub.name === name &&
-        (!channel_name || pub.channel_name === channel_name))
+      (pub.name === name && (!channelName || pub.channel_name === channelName))
     );
   }
 
-  setLocal(
-    "pendingPublishes",
-    lbry.getPendingPublishes().filter(pub => !pubMatches(pub))
-  );
+  setLocal('pendingPublishes', Lbry.getPendingPublishes().filter(pub => !pubMatches(pub)));
 }
 
 /**
  * Gets the current list of pending publish attempts. Filters out any that have timed out and
  * removes them from the list.
  */
-lbry.getPendingPublishes = function() {
-  const pendingPublishes = getLocal("pendingPublishes") || [];
+Lbry.getPendingPublishes = () => {
+  const pendingPublishes = getLocal('pendingPublishes') || [];
   const newPendingPublishes = pendingPublishes.filter(
-    pub => Date.now() - pub.time <= lbry.pendingPublishTimeout
+    pub => Date.now() - pub.time <= Lbry.pendingPublishTimeout
   );
-  setLocal("pendingPublishes", newPendingPublishes);
+  setLocal('pendingPublishes', newPendingPublishes);
   return newPendingPublishes;
 };
 
@@ -92,65 +88,52 @@ lbry.getPendingPublishes = function() {
  * Gets a pending publish attempt by its name or (fake) outpoint. A channel name can also be
  * provided along withe the name. If no pending publish is found, returns null.
  */
-function getPendingPublish({ name, channel_name, outpoint }) {
-  const pendingPublishes = lbry.getPendingPublishes();
+function getPendingPublish({ name, channelName, outpoint }) {
+  const pendingPublishes = Lbry.getPendingPublishes();
   return (
     pendingPublishes.find(
       pub =>
         pub.outpoint === outpoint ||
-        (pub.name === name &&
-          (!channel_name || pub.channel_name === channel_name))
+        (pub.name === name && (!channelName || pub.channel_name === channelName))
     ) || null
   );
 }
 
-function pendingPublishToDummyClaim({
-  channel_name,
-  name,
-  outpoint,
-  claim_id,
-  txid,
-  nout,
-}) {
-  return { name, outpoint, claim_id, txid, nout, channel_name };
+function pendingPublishToDummyClaim({ channelName, name, outpoint, claimId, txid, nout }) {
+  return { name, outpoint, claimId, txid, nout, channelName };
 }
 
-function pendingPublishToDummyFileInfo({ name, outpoint, claim_id }) {
-  return { name, outpoint, claim_id, metadata: null };
+function pendingPublishToDummyFileInfo({ name, outpoint, claimId }) {
+  return { name, outpoint, claimId, metadata: null };
 }
 
-//core
-lbry._connectPromise = null;
-lbry.connect = function() {
-  if (lbry._connectPromise === null) {
-    lbry._connectPromise = new Promise((resolve, reject) => {
+// core
+Lbry.connectPromise = null;
+Lbry.connect = () => {
+  if (Lbry.connectPromise === null) {
+    Lbry.connectPromise = new Promise((resolve, reject) => {
       let tryNum = 0;
-
-      function checkDaemonStartedFailed() {
-        if (tryNum <= 200) {
-          // Move # of tries into constant or config option
-          setTimeout(() => {
-            tryNum++;
-            checkDaemonStarted();
-          }, tryNum < 50 ? 400 : 1000);
-        } else {
-          reject(new Error("Unable to connect to LBRY"));
-        }
-      }
 
       // Check every half second to see if the daemon is accepting connections
       function checkDaemonStarted() {
-        lbry
+        tryNum += 1;
+        lbryProxy
           .status()
           .then(resolve)
-          .catch(checkDaemonStartedFailed);
+          .catch(() => {
+            if (tryNum <= CHECK_DAEMON_STARTED_TRY_NUMBER) {
+              setTimeout(checkDaemonStarted, tryNum < 50 ? 400 : 1000);
+            } else {
+              reject(new Error('Unable to connect to LBRY'));
+            }
+          });
       }
 
       checkDaemonStarted();
     });
   }
 
-  return lbry._connectPromise;
+  return Lbry.connectPromise;
 };
 
 /**
@@ -160,13 +143,24 @@ lbry.connect = function() {
  * This currently includes a work-around to cache the file in local storage so that the pending
  * publish can appear in the UI immediately.
  */
-lbry.publishDeprecated = function(
-  params,
-  fileListedCallback,
-  publishedCallback,
-  errorCallback
-) {
-  lbry.publish(params).then(
+Lbry.publishDeprecated = (params, fileListedCallback, publishedCallback, errorCallback) => {
+  // Give a short grace period in case publish() returns right away or (more likely) gives an error
+  const returnPendingTimeout = setTimeout(
+    () => {
+      const { name, channel_name: channelName } = params;
+      if (publishedCallback || fileListedCallback) {
+        savePendingPublish({
+          name,
+          channelName,
+        });
+        publishedCallback(true);
+      }
+    },
+    2000,
+    { once: true }
+  );
+
+  lbryProxy.publish(params).then(
     result => {
       if (returnPendingTimeout) clearTimeout(returnPendingTimeout);
       publishedCallback(result);
@@ -176,70 +170,39 @@ lbry.publishDeprecated = function(
       errorCallback(err);
     }
   );
-
-  // Give a short grace period in case publish() returns right away or (more likely) gives an error
-  const returnPendingTimeout = setTimeout(
-    () => {
-      if (publishedCallback) {
-        savePendingPublish({
-          name: params.name,
-          channel_name: params.channel_name,
-        });
-        publishedCallback(true);
-      }
-
-      if (fileListedCallback) {
-        const { name, channel_name } = params;
-        savePendingPublish({
-          name: params.name,
-          channel_name: params.channel_name,
-        });
-        fileListedCallback(true);
-      }
-    },
-    2000,
-    { once: true }
-  );
 };
 
-lbry.imagePath = function(file) {
-  return staticResourcesPath + "/img/" + file;
-};
+Lbry.imagePath = file => `${staticResourcesPath}/img/${file}`;
 
-lbry.getMediaType = function(contentType, fileName) {
+Lbry.getMediaType = (contentType, fileName) => {
   if (contentType) {
     return /^[^/]+/.exec(contentType)[0];
   } else if (fileName) {
-    var dotIndex = fileName.lastIndexOf(".");
-    if (dotIndex == -1) {
-      return "unknown";
+    const dotIndex = fileName.lastIndexOf('.');
+    if (dotIndex === -1) {
+      return 'unknown';
     }
 
-    var ext = fileName.substr(dotIndex + 1);
+    const ext = fileName.substr(dotIndex + 1);
     if (/^mp4|m4v|webm|flv|f4v|ogv$/i.test(ext)) {
-      return "video";
+      return 'video';
     } else if (/^mp3|m4a|aac|wav|flac|ogg|opus$/i.test(ext)) {
-      return "audio";
-    } else if (
-      /^html|htm|xml|pdf|odf|doc|docx|md|markdown|txt|epub|org$/i.test(ext)
-    ) {
-      return "document";
-    } else {
-      return "unknown";
+      return 'audio';
+    } else if (/^html|htm|xml|pdf|odf|doc|docx|md|markdown|txt|epub|org$/i.test(ext)) {
+      return 'document';
     }
-  } else {
-    return "unknown";
+    return 'unknown';
   }
+  return 'unknown';
 };
 
-lbry.getAppVersionInfo = function() {
-  return new Promise((resolve, reject) => {
-    ipcRenderer.once("version-info-received", (event, versionInfo) => {
+Lbry.getAppVersionInfo = () =>
+  new Promise(resolve => {
+    ipcRenderer.once('version-info-received', (event, versionInfo) => {
       resolve(versionInfo);
     });
-    ipcRenderer.send("version-info-requested");
+    ipcRenderer.send('version-info-requested');
   });
-};
 
 /**
  * Wrappers for API methods to simulate missing or future behavior. Unlike the old-style stubs,
@@ -248,11 +211,11 @@ lbry.getAppVersionInfo = function() {
 
 /**
  * Returns results from the file_list API method, plus dummy entries for pending publishes.
- * (If a real publish with the same name is found, the pending publish will be ignored and removed.)
+ * (If a real publish with the same claim name is found, the pending publish will be ignored and removed.)
  */
-lbry.file_list = function(params = {}) {
-  return new Promise((resolve, reject) => {
-    const { name, channel_name, outpoint } = params;
+Lbry.file_list = (params = {}) =>
+  new Promise((resolve, reject) => {
+    const { claim_name: claimName, channel_name: channelName, outpoint } = params;
 
     /**
      * If we're searching by outpoint, check first to see if there's a matching pending publish.
@@ -268,16 +231,14 @@ lbry.file_list = function(params = {}) {
     }
 
     apiCall(
-      "file_list",
+      'file_list',
       params,
       fileInfos => {
-        removePendingPublishIfNeeded({ name, channel_name, outpoint });
+        removePendingPublishIfNeeded({ name: claimName, channelName, outpoint });
 
-        //if a naked file_list call, append the pending file infos
-        if (!name && !channel_name && !outpoint) {
-          const dummyFileInfos = lbry
-            .getPendingPublishes()
-            .map(pendingPublishToDummyFileInfo);
+        // if a naked file_list call, append the pending file infos
+        if (!claimName && !channelName && !outpoint) {
+          const dummyFileInfos = Lbry.getPendingPublishes().map(pendingPublishToDummyFileInfo);
 
           resolve([...fileInfos, ...dummyFileInfos]);
         } else {
@@ -287,39 +248,35 @@ lbry.file_list = function(params = {}) {
       reject
     );
   });
-};
 
-lbry.claim_list_mine = function(params = {}) {
-  return new Promise((resolve, reject) => {
+Lbry.claim_list_mine = (params = {}) =>
+  new Promise((resolve, reject) => {
     apiCall(
-      "claim_list_mine",
+      'claim_list_mine',
       params,
       claims => {
-        for (let { name, channel_name, txid, nout } of claims) {
+        claims.forEach(({ name, channel_name: channelName, txid, nout }) => {
           removePendingPublishIfNeeded({
             name,
-            channel_name,
-            outpoint: txid + ":" + nout,
+            channelName,
+            outpoint: `${txid}:${nout}`,
           });
-        }
+        });
 
-        const dummyClaims = lbry
-          .getPendingPublishes()
-          .map(pendingPublishToDummyClaim);
+        const dummyClaims = Lbry.getPendingPublishes().map(pendingPublishToDummyClaim);
         resolve([...claims, ...dummyClaims]);
       },
       reject
     );
   });
-};
 
-lbry.resolve = function(params = {}) {
-  return new Promise((resolve, reject) => {
+Lbry.resolve = (params = {}) =>
+  new Promise((resolve, reject) => {
     apiCall(
-      "resolve",
+      'resolve',
       params,
-      function(data) {
-        if ("uri" in params) {
+      data => {
+        if ('uri' in params) {
           // If only a single URI was requested, don't nest the results in an object
           resolve(data && data[params.uri] ? data[params.uri] : {});
         } else {
@@ -329,20 +286,5 @@ lbry.resolve = function(params = {}) {
       reject
     );
   });
-};
 
-lbry = new Proxy(lbry, {
-  get: function(target, name) {
-    if (name in target) {
-      return target[name];
-    }
-
-    return function(params = {}) {
-      return new Promise((resolve, reject) => {
-        apiCall(name, params, resolve, reject);
-      });
-    };
-  },
-});
-
-export default lbry;
+export default lbryProxy;

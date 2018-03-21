@@ -1,6 +1,6 @@
 import React from "react";
 import lbry from "lbry";
-import lbryuri from "lbryuri";
+import lbryuri from 'lbryURI';
 import FormField from "component/formField";
 import { Form, FormRow, Submit } from "component/form.js";
 import Link from "component/link";

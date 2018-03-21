@@ -1,44 +1,47 @@
-import * as types from "constants/action_types";
-import lbryuri from "lbryuri";
-import { doResolveUri } from "redux/actions/content";
-import { doNavigate } from "redux/actions/navigation";
-import { selectCurrentPage } from "redux/selectors/navigation";
-import batchActions from "util/batchActions";
+import * as ACTIONS from 'constants/action_types';
+import { buildURI } from 'lbryURI';
+import { doResolveUri } from 'redux/actions/content';
+import { doNavigate } from 'redux/actions/navigation';
+import { selectCurrentPage } from 'redux/selectors/navigation';
+import batchActions from 'util/batchActions';
 
+// eslint-disable-next-line import/prefer-default-export
 export function doSearch(rawQuery) {
-  return function(dispatch, getState) {
+  return (dispatch, getState) => {
     const state = getState();
     const page = selectCurrentPage(state);
 
-    const query = rawQuery.replace(/^lbry:\/\//i, "");
+    const query = rawQuery.replace(/^lbry:\/\//i, '');
 
     if (!query) {
-      return dispatch({
-        type: types.SEARCH_CANCELLED,
+      dispatch({
+        type: ACTIONS.SEARCH_CANCELLED,
       });
+      return;
     }
 
     dispatch({
-      type: types.SEARCH_STARTED,
+      type: ACTIONS.SEARCH_STARTED,
       data: { query },
     });
 
-    if (page != "search") {
-      dispatch(doNavigate("search", { query: query }));
+    if (page !== 'search') {
+      dispatch(doNavigate('search', { query }));
     } else {
-      fetch("https://lighthouse.lbry.io/search?s=" + query)
-        .then(response => {
-          return response.status === 200
-            ? Promise.resolve(response.json())
-            : Promise.reject(new Error(response.statusText));
-        })
+      fetch(`https://lighthouse.lbry.io/search?s=${query}`)
+        .then(
+          response =>
+            response.status === 200
+              ? Promise.resolve(response.json())
+              : Promise.reject(new Error(response.statusText))
+        )
         .then(data => {
-          let uris = [];
-          let actions = [];
+          const uris = [];
+          const actions = [];
 
           data.forEach(result => {
-            const uri = lbryuri.build({
-              name: result.name,
+            const uri = buildURI({
+              claimName: result.name,
               claimId: result.claimId,
             });
             actions.push(doResolveUri(uri));
@@ -46,7 +49,7 @@ export function doSearch(rawQuery) {
           });
 
           actions.push({
-            type: types.SEARCH_COMPLETED,
+            type: ACTIONS.SEARCH_COMPLETED,
             data: {
               query,
               uris,
@@ -54,9 +57,9 @@ export function doSearch(rawQuery) {
           });
           dispatch(batchActions(...actions));
         })
-        .catch(err => {
+        .catch(() => {
           dispatch({
-            type: types.SEARCH_CANCELLED,
+            type: ACTIONS.SEARCH_CANCELLED,
           });
         });
     }

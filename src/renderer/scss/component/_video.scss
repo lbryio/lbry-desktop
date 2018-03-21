@@ -1,4 +1,3 @@
-
 $height-video-embedded: $width-page-constrained * 9 / 16;
 
 video {
@@ -32,12 +31,10 @@ video {
     height: $height-video-embedded;
   }
 }
-.video--obscured .video__cover
-{
+.video--obscured .video__cover {
   position: relative;
   filter: blur(var(--nsfw-blur-intensity));
 }
-
 
 .video__loading-screen {
   height: 100%;

@@ -1,18 +1,18 @@
-import React from "react";
+import React from 'react';
 
 class CardMedia extends React.PureComponent {
   static AUTO_THUMB_CLASSES = [
-    "purple",
-    "red",
-    "pink",
-    "indigo",
-    "blue",
-    "light-blue",
-    "cyan",
-    "teal",
-    "green",
-    "yellow",
-    "orange",
+    'purple',
+    'red',
+    'pink',
+    'indigo',
+    'blue',
+    'light-blue',
+    'cyan',
+    'teal',
+    'green',
+    'yellow',
+    'orange',
   ];
 
   componentWillMount() {
@@ -29,12 +29,7 @@ class CardMedia extends React.PureComponent {
     const atClass = this.state.autoThumbClass;
 
     if (thumbnail) {
-      return (
-        <div
-          className="card__media"
-          style={{ backgroundImage: "url('" + thumbnail + "')" }}
-        />
-      );
+      return <div className="card__media" style={{ backgroundImage: `url('${thumbnail}')` }} />;
     }
 
     return (
@@ -42,8 +37,8 @@ class CardMedia extends React.PureComponent {
         <div className="card__autothumb__text">
           {title &&
             title
-              .replace(/\s+/g, "")
-              .substring(0, Math.min(title.replace(" ", "").length, 5))
+              .replace(/\s+/g, '')
+              .substring(0, Math.min(title.replace(' ', '').length, 5))
               .toUpperCase()}
         </div>
       </div>

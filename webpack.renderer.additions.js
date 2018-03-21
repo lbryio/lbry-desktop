@@ -1,4 +1,6 @@
 const path = require('path');
+const FlowFlowPlugin = require('./flowtype-plugin');
+const isDev = require('electron-is-dev');
 
 const ELECTRON_RENDERER_PROCESS_ROOT = path.resolve(__dirname, 'src/renderer/');
 
@@ -10,24 +12,22 @@ module.exports = {
         test: /\.jsx?$/,
         loader: 'babel-loader',
         options: {
-          presets: ['env', 'react', 'stage-2']
-        }
-      }
-    ]
+          presets: ['env', 'react', 'stage-2'],
+        },
+      },
+    ],
   },
   // This allows imports to be made from the renderer process root (https://moduscreate.com/blog/es6-es2015-import-no-relative-path-webpack/).
   resolve: {
     modules: [ELECTRON_RENDERER_PROCESS_ROOT, 'node_modules', __dirname],
-    extensions: ['.js', '.jsx', '.scss']
-  }
+    extensions: ['.js', '.jsx', '.scss'],
+  },
 };
 
-if (process.env.NODE_ENV === 'development') {
-  const FLOW_BABEL_WEBPACK_PLUGIN = require('./flowtype-plugin');
-
+if (isDev) {
   module.exports.plugins = [
-    new FLOW_BABEL_WEBPACK_PLUGIN({
-      warn: true
-    })
-  ]
+    new FlowFlowPlugin({
+      warn: true,
+    }),
+  ];
 }

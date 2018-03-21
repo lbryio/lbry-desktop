@@ -1,10 +1,10 @@
-import React from "react";
-import LinkTransaction from "component/linkTransaction";
-import { CreditAmount } from "component/common";
-import DateTime from "component/dateTime";
-import Link from "component/link";
-import lbryuri from "lbryuri";
-import * as txnTypes from "constants/transaction_types";
+import React from 'react';
+import LinkTransaction from 'component/linkTransaction';
+import { CreditAmount } from 'component/common';
+import DateTime from 'component/dateTime';
+import Link from 'component/link';
+import { buildURI } from 'lbryURI';
+import * as txnTypes from 'constants/transaction_types';
 
 class TransactionListItem extends React.PureComponent {
   abandonClaim() {
@@ -16,21 +16,10 @@ class TransactionListItem extends React.PureComponent {
   getLink(type) {
     if (type == txnTypes.TIP) {
       return (
-        <Link
-          onClick={this.abandonClaim.bind(this)}
-          icon="icon-unlock-alt"
-          title={__("Unlock")}
-        />
-      );
-    } else {
-      return (
-        <Link
-          onClick={this.abandonClaim.bind(this)}
-          icon="icon-trash"
-          title={__("Revoke")}
-        />
+        <Link onClick={this.abandonClaim.bind(this)} icon="icon-unlock-alt" title={__('Unlock')} />
       );
     }
+    return <Link onClick={this.abandonClaim.bind(this)} icon="icon-trash" title={__('Revoke')} />;
   }
 
   capitalize(string) {
@@ -51,9 +40,9 @@ class TransactionListItem extends React.PureComponent {
     } = transaction;
 
     const dateFormat = {
-      month: "short",
-      day: "numeric",
-      year: "numeric",
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
     };
 
     return (
@@ -61,47 +50,31 @@ class TransactionListItem extends React.PureComponent {
         <td>
           {date ? (
             <div>
-              <DateTime
-                date={date}
-                show={DateTime.SHOW_DATE}
-                formatOptions={dateFormat}
-              />
+              <DateTime date={date} show={DateTime.SHOW_DATE} formatOptions={dateFormat} />
               <div className="meta">
                 <DateTime date={date} show={DateTime.SHOW_TIME} />
               </div>
             </div>
           ) : (
-            <span className="empty">{__("Pending")}</span>
+            <span className="empty">{__('Pending')}</span>
           )}
         </td>
         <td>
-          <CreditAmount
-            amount={amount}
-            look="plain"
-            label={false}
-            showPlus={true}
-            precision={8}
-          />
+          <CreditAmount amount={amount} look="plain" label={false} showPlus precision={8} />
           <br />
-          {fee != 0 && (
-            <CreditAmount amount={fee} look="fee" label={false} precision={8} />
-          )}
+          {fee != 0 && <CreditAmount amount={fee} look="fee" label={false} precision={8} />}
         </td>
         <td>
           {this.capitalize(type)} {isRevokeable && this.getLink(type)}
         </td>
         <td>
-          {reward && (
-            <Link navigate="/rewards">
-              {__("Reward: %s", reward.reward_title)}
-            </Link>
-          )}
+          {reward && <Link navigate="/rewards">{__('Reward: %s', reward.reward_title)}</Link>}
           {name &&
             claimId && (
               <Link
                 className="button-text"
                 navigate="/show"
-                navigateParams={{ uri: lbryuri.build({ name, claimId }) }}
+                navigateParams={{ uri: buildURI({ claimName: name, claimId }) }}
               >
                 {name}
               </Link>

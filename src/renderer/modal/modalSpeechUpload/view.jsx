@@ -35,8 +35,7 @@ class ModalSpeechUpload extends React.PureComponent {
         onConfirmed={() => this.upload()}
         onAborted={closeModal}
       >
-        <p>{__("Please confirm spee.ch upload.")}</p>
-        <p>{this.props.path}</p>
+        <p>{`Confirm upload: ${this.props.path}`}</p>
 
         <section>
           <FormField

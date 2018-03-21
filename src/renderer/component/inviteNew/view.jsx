@@ -1,13 +1,13 @@
-import React from "react";
-import { BusyMessage, CreditAmount } from "component/common";
-import { Form, FormRow, Submit } from "component/form.js";
+import React from 'react';
+import { BusyMessage, CreditAmount } from 'component/common';
+import { Form, FormRow, Submit } from 'component/form.js';
 
 class FormInviteNew extends React.PureComponent {
   constructor(props) {
     super(props);
 
     this.state = {
-      email: "",
+      email: '',
     };
   }
 
@@ -39,7 +39,7 @@ class FormInviteNew extends React.PureComponent {
           }}
         />
         <div className="form-row-submit">
-          <Submit label={__("Send Invite")} disabled={isPending} />
+          <Submit label={__('Send Invite')} disabled={isPending} />
         </div>
       </Form>
     );
@@ -61,7 +61,7 @@ class InviteNew extends React.PureComponent {
       <section className="card">
         <div className="card__title-primary">
           <CreditAmount amount={rewardAmount} />
-          <h3>{__("Invite a Friend")}</h3>
+          <h3>{__('Invite a Friend')}</h3>
         </div>
         {/*
         <div className="card__content">
@@ -71,16 +71,8 @@ class InviteNew extends React.PureComponent {
             <p className="empty">{__("You have no invites.")}</p>}
         </div> */}
         <div className="card__content">
-          <p>
-            {__(
-              "Or an enemy. Or your cousin Jerry, who you're kind of unsure about."
-            )}
-          </p>
-          <FormInviteNew
-            errorMessage={errorMessage}
-            inviteNew={inviteNew}
-            isPending={isPending}
-          />
+          <p>{__("Or an enemy. Or your cousin Jerry, who you're kind of unsure about.")}</p>
+          <FormInviteNew errorMessage={errorMessage} inviteNew={inviteNew} isPending={isPending} />
         </div>
       </section>
     );

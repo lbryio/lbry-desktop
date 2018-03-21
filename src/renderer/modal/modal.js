@@ -1,12 +1,12 @@
-import React from "react";
-import PropTypes from "prop-types";
-import ReactModal from "react-modal";
-import Link from "component/link/index";
-import app from "app.js";
+import React from 'react';
+import PropTypes from 'prop-types';
+import ReactModal from 'react-modal';
+import Link from 'component/link/index';
+import app from 'app';
 
 export class Modal extends React.PureComponent {
   static propTypes = {
-    type: PropTypes.oneOf(["alert", "confirm", "custom"]),
+    type: PropTypes.oneOf(['alert', 'confirm', 'custom']),
     overlay: PropTypes.bool,
     onConfirmed: PropTypes.func,
     onAborted: PropTypes.func,
@@ -17,10 +17,10 @@ export class Modal extends React.PureComponent {
   };
 
   static defaultProps = {
-    type: "alert",
+    type: 'alert',
     overlay: true,
-    confirmButtonLabel: app.i18n.__("OK"),
-    abortButtonLabel: app.i18n.__("Cancel"),
+    confirmButtonLabel: app.i18n.__('OK'),
+    abortButtonLabel: app.i18n.__('Cancel'),
     confirmButtonDisabled: false,
     abortButtonDisabled: false,
   };
@@ -30,15 +30,15 @@ export class Modal extends React.PureComponent {
       <ReactModal
         onCloseRequested={this.props.onAborted || this.props.onConfirmed}
         {...this.props}
-        className={(this.props.className || "") + " modal"}
+        className={`${this.props.className || ''} modal`}
         overlayClassName={
-          ![null, undefined, ""].includes(this.props.overlayClassName)
+          ![null, undefined, ''].includes(this.props.overlayClassName)
             ? this.props.overlayClassName
-            : "modal-overlay"
+            : 'modal-overlay'
         }
       >
         <div>{this.props.children}</div>
-        {this.props.type == "custom" ? null : ( // custom modals define their own buttons
+        {this.props.type == 'custom' ? null : ( // custom modals define their own buttons
           <div className="modal__buttons">
             <Link
               button="primary"
@@ -47,7 +47,7 @@ export class Modal extends React.PureComponent {
               disabled={this.props.confirmButtonDisabled}
               onClick={this.props.onConfirmed}
             />
-            {this.props.type == "confirm" ? (
+            {this.props.type == 'confirm' ? (
               <Link
                 button="alt"
                 label={this.props.abortButtonLabel}
@@ -70,9 +70,9 @@ export class ExpandableModal extends React.PureComponent {
   };
 
   static defaultProps = {
-    confirmButtonLabel: app.i18n.__("OK"),
-    expandButtonLabel: app.i18n.__("Show More..."),
-    hideButtonLabel: app.i18n.__("Show Less"),
+    confirmButtonLabel: app.i18n.__('OK'),
+    expandButtonLabel: app.i18n.__('Show More...'),
+    hideButtonLabel: app.i18n.__('Show Less'),
   };
 
   constructor(props) {
@@ -103,11 +103,7 @@ export class ExpandableModal extends React.PureComponent {
           />
           <Link
             button="alt"
-            label={
-              !this.state.expanded
-                ? this.props.expandButtonLabel
-                : this.props.hideButtonLabel
-            }
+            label={!this.state.expanded ? this.props.expandButtonLabel : this.props.hideButtonLabel}
             className="modal__button"
             onClick={() => {
               this.toggleExpanded();

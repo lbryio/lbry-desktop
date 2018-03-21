@@ -1,5 +1,5 @@
-import React from "react";
-import Spinner from "component/common/spinner";
+import React from 'react';
+import Spinner from 'component/common/spinner';
 
 const LoadingScreen = ({ status, spinner = true }) => (
   <div className="video__loading-screen">

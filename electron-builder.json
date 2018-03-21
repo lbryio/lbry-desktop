@@ -1,7 +1,17 @@
 {
   "appId": "io.lbry.LBRY",
+  "productName": "LBRY",
+  "publish": [
+    {
+      "provider": "s3",
+      "bucket": "build.lbry.io",
+      "path": "app/release",
+      "region": "us-east-1"
+    },
+    "github"
+  ],
   "mac": {
-    "category": "public.app-category.entertainment",
+    "category": "public.app-category.entertainment"
   },
   "dmg": {
     "iconSize": 128,
@@ -23,17 +33,18 @@
       "width": 500,
       "height": 300
     },
-    "background": "build/background.png"
+    "background": "./build/background.png"
   },
   "protocols": [
     {
-      "name": "lbry",
+      "name": "LBRY URI",
       "schemes": ["lbry"],
       "role": "Viewer"
     }
   ],
   "linux": {
     "target": "deb",
+    "category": "AudioVideo;Video",
     "desktop": {
       "MimeType": "x-scheme-handler/lbry",
       "Exec": "/opt/LBRY/lbry %U"
@@ -53,5 +64,6 @@
   "nsis": {
     "perMachine": true
   },
-  "artifactName": "${productName}_${version}_${arch}.${ext}"
+  "artifactName": "${productName}_${version}",
+  "beforeBuild": "./build/checkDaemonPlatform.js"
 }

@@ -1,7 +1,7 @@
-import React from "react";
-import Link from "component/link";
-import { FormRow } from "component/form";
-import UriIndicator from "component/uriIndicator";
+import React from 'react';
+import Link from 'component/link';
+import { FormRow } from 'component/form';
+import UriIndicator from 'component/uriIndicator';
 
 class WalletSendTip extends React.PureComponent {
   constructor(props) {
@@ -14,7 +14,7 @@ class WalletSendTip extends React.PureComponent {
 
   handleSendButtonClicked() {
     const { claim_id, uri } = this.props;
-    let amount = this.state.amount;
+    const amount = this.state.amount;
     this.props.sendSupport(amount, claim_id, uri);
   }
 
@@ -31,28 +31,21 @@ class WalletSendTip extends React.PureComponent {
       <div>
         <div className="card__title-primary">
           <h1>
-            {__("Support")} <UriIndicator uri={uri} />
+            {__('Support')} <UriIndicator uri={uri} />
           </h1>
         </div>
         <div className="card__content">
           <FormRow
-            label={__("Amount")}
-            postfix={__("LBC")}
+            label={__('Amount')}
+            postfix={__('LBC')}
             min="0"
             step="any"
             type="number"
             errorMessage={errorMessage}
             helper={
               <span>
-                {__(
-                  'This will appear as a tip for "%s" located at %s.',
-                  title,
-                  uri
-                ) + " "}
-                <Link
-                  label={__("Learn more")}
-                  href="https://lbry.io/faq/tipping"
-                />
+                {`${__('This will appear as a tip for "%s" located at %s.', title, uri)} `}
+                <Link label={__('Learn more')} href="https://lbry.io/faq/tipping" />
               </span>
             }
             placeholder="1.00"
@@ -60,17 +53,12 @@ class WalletSendTip extends React.PureComponent {
           />
           <div className="form-row-submit">
             <Link
-              label={__("Send")}
+              label={__('Send')}
               button="primary"
               disabled={isPending}
               onClick={this.handleSendButtonClicked.bind(this)}
             />
-            <Link
-              label={__("Cancel")}
-              button="alt"
-              navigate="/show"
-              navigateParams={{ uri }}
-            />
+            <Link label={__('Cancel')} button="alt" navigate="/show" navigateParams={{ uri }} />
           </div>
         </div>
       </div>

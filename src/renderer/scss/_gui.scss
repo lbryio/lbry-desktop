@@ -1,13 +1,11 @@
 @import url(https://fonts.googleapis.com/css?family=Roboto:400,400i,500,500i,700);
 
-html
-{
+html {
   height: 100%;
   font-size: var(--font-size);
 }
 
-body
-{
+body {
   color: var(--text-color);
   font-family: 'Roboto', sans-serif;
   line-height: var(--font-line-height);
@@ -19,30 +17,25 @@ body
   color: var(--text-selection-color);
 }
 
-#window
-{
+#window {
   min-height: 100vh;
   background: var(--window-bg);
 }
 
-.credit-amount--indicator
-{
+.credit-amount--indicator {
   font-weight: 500;
   color: var(--color-money);
 }
-.credit-amount--fee
-{
+.credit-amount--fee {
   font-size: 0.9em;
   color: var(--color-meta-light);
 }
 
-.credit-amount--bold
-{
+.credit-amount--bold {
   font-weight: 700;
 }
 
-#main-content
-{
+#main-content {
   margin: auto;
   display: flex;
   flex-direction: column;
@@ -58,8 +51,7 @@ body
     margin-right: auto;
     max-width: 100%;
   }
-  main.main--single-column
-  {
+  main.main--single-column {
     width: $width-page-constrained;
   }
 
@@ -76,7 +68,7 @@ body
     background: url('../../../static/img/busy.gif') no-repeat center center;
     width: $width;
     height: $spacing-vertical;
-    content: "";
+    content: '';
     left: 50%;
     margin-left: -1 / 2 * $width;
     display: inline-block;
@@ -89,34 +81,45 @@ body
   text-align: center;
 }
 
+.icon--left-pad {
+  padding-left: 3px;
+}
+
 h2 {
   font-size: 1.75em;
 }
 
-h3 { font-size: 1.4em; }
+h3 {
+  font-size: 1.4em;
+}
 
 h4 {
   font-size: 1.2em;
 }
 
-h5 { font-size: 1.1em; }
-sup, sub {
- vertical-align: baseline;
- position: relative;
+h5 {
+  font-size: 1.1em;
 }
-sup { top: -0.4em; }
-sub { top: 0.4em; }
+sup,
+sub {
+  vertical-align: baseline;
+  position: relative;
+}
+sup {
+  top: -0.4em;
+}
+sub {
+  top: 0.4em;
+}
 
 code {
   font: 0.8em Consolas, 'Lucida Console', 'Source Sans', monospace;
   background-color: var(--color-bg-alt);
 }
 
-p
-{
+p {
   margin-bottom: 0.8em;
-  &:last-child
-  {
+  &:last-child {
     margin-bottom: 0;
   }
 }
@@ -137,8 +140,7 @@ p
   -webkit-box-orient: vertical;
 }
 
-.busy-indicator
-{
+.busy-indicator {
   background: url('../../../static/img/busy.gif') no-repeat center center;
   display: inline-block;
   margin: -1em 0;
@@ -146,30 +148,26 @@ p
   min-height: 8px;
   vertical-align: middle;
   padding: 0 30px;
-  &:last-child
-  {
+  &:last-child {
     padding-right: 2px;
   }
-  &:first-child
-  {
+  &:first-child {
     padding-left: 2px;
   }
 }
 
 .help {
-  font-size: .85em;
+  font-size: 0.85em;
   color: var(--color-help);
 }
 
-.meta
-{
+.meta {
   font-size: 0.9em;
   color: var(--color-meta-light);
 }
 
-.empty
-{
-  color:var(--color-meta-light);
+.empty {
+  color: var(--color-meta-light);
   font-style: italic;
 }
 
@@ -185,7 +183,6 @@ p
   display: block;
   margin-bottom: $spacing-vertical * 2/3;
 
-
   text-align: right;
   line-height: 1;
   font-size: 0.85em;
@@ -196,7 +193,6 @@ section.section-spaced {
   margin-bottom: $spacing-vertical;
 }
 
-.text-center
-{
+.text-center {
   text-align: center;
 }
