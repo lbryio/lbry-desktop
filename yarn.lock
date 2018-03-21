@@ -3050,15 +3050,15 @@ electron-to-chromium@^1.2.7, electron-to-chromium@^1.3.27:
   version "1.3.27"
   resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.27.tgz#78ecb8a399066187bb374eede35d9c70565a803d"
 
-electron-updater@^2.21.0:
-  version "2.21.0"
-  resolved "https://registry.yarnpkg.com/electron-updater/-/electron-updater-2.21.0.tgz#3c8765af946090100f7df982127e4c3412cbc1af"
+electron-updater@^2.21.1:
+  version "2.21.1"
+  resolved "https://registry.yarnpkg.com/electron-updater/-/electron-updater-2.21.1.tgz#d380b0b46873b855d137a6ac88ad1757c1049e1e"
   dependencies:
     bluebird-lst "^1.0.5"
     builder-util-runtime "~4.0.5"
     electron-is-dev "^0.3.0"
     fs-extra-p "^4.5.2"
-    js-yaml "^3.10.0"
+    js-yaml "^3.11.0"
     lazy-val "^1.0.3"
     lodash.isequal "^4.5.0"
     semver "^5.5.0"
