@@ -15,6 +15,7 @@ import { selectShowNsfw } from 'redux/selectors/settings';
 import FilePage from './view';
 import { makeSelectCurrentParam } from 'redux/selectors/navigation';
 import { selectSubscriptions } from 'redux/selectors/subscriptions';
+import { doUserHistorySave } from 'redux/actions/user';
 
 const select = (state, props) => ({
   claim: makeSelectClaimForUri(props.uri)(state),
@@ -33,6 +34,7 @@ const perform = dispatch => ({
   fetchFileInfo: uri => dispatch(doFetchFileInfo(uri)),
   fetchCostInfo: uri => dispatch(doFetchCostInfoForUri(uri)),
   checkSubscription: subscription => dispatch(doCheckSubscription(subscription)),
+  saveUserHistory: uri => dispatch(doUserHistorySave(uri))
 });
 
 export default connect(select, perform)(FilePage);
