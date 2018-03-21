@@ -34,7 +34,7 @@
     "bluebird": "^3.5.1",
     "classnames": "^2.2.5",
     "country-data": "^0.0.31",
-    "electron-dl": "^1.6.0",
+    "electron-dl": "^1.11.0",
     "electron-is-dev": "^0.3.0",
     "electron-log": "^2.2.12",
     "electron-publisher-s3": "^20.2.0",
