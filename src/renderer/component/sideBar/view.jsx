@@ -95,7 +95,7 @@ const SideBar = (props: Props) => {
                       'nav__link--active': subLinkActive,
                     })}
                     >
-                    {subPath ? <Button noStyle navigate={subPath} label={subLabel} /> : <span>{subLabel}</span>}
+                    {subPath ? <Button navigate={subPath} label={subLabel} /> : <span>{subLabel}</span>}
                     </li>
                   ))}
                   </ul>

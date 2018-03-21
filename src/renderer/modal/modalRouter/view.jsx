@@ -139,17 +139,14 @@ class ModalRouter extends React.PureComponent {
         return <ModalPhoneCollection {...modalProps} />;
       case modals.EMAIL_COLLECTION:
         return <ModalEmailCollection {...modalProps} />;
-<<<<<<< HEAD
       case modals.FIRST_SUBSCRIPTION:
         return <ModalFirstSubscription {...modalProps} />;
-=======
       case modals.SEND_TIP:
         return <ModalSendTip {...modalProps} />;
       case modals.PUBLISH:
         return <ModalPublish {...modalProps} />;
       case modals.SEARCH:
         return <ModalSearch {...modalProps} />;
->>>>>>> [redesign] first run
       default:
         return null;
     }

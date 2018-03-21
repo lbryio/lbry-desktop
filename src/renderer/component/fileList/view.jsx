@@ -42,7 +42,7 @@ class FileList extends React.PureComponent<Props, State> {
       sortBy: 'dateNew',
     };
 
-    this._sortFunctions = {
+    this.sortFunctions = {
       dateNew: fileInfos =>
         this.props.sortByHeight
           ? fileInfos.slice().sort((fileInfo1, fileInfo2) => {

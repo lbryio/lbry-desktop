@@ -309,6 +309,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
               </span>
               <div className="card__content">
                 <Button
+                  button="primary"
                   label={this.state.clearingCache ? __('Clearing') : __('Clear the cache')}
                   icon="AlertCircle"
                   onClick={this.clearCache}
