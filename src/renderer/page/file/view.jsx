@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import lbry from 'lbry';
 import { buildURI, normalizeURI } from 'lbryURI';
 import Video from 'component/video';
