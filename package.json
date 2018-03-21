@@ -47,7 +47,7 @@
     "jayson": "^2.0.2",
     "jshashes": "^1.0.7",
     "keytar-prebuild": "4.0.4",
-    "localforage": "^1.5.0",
+    "localforage": "^1.6.0",
     "mixpanel-browser": "^2.17.1",
     "moment": "^2.20.1",
     "npm": "^5.5.1",
