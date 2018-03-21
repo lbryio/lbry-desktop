@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
   * Codacy support for Github contributions ([#1059](https://github.com/lbryio/lbry-app/pull/1059))
   * App category for Linux ([#877](https://github.com/lbryio/lbry-app/pull/877))
   * Add YouTube Sync reward ([1147](https://github.com/lbryio/lbry-app/pull/1147))
+  * Retain previous screen sizing on startup ([#338](https://github.com/lbryio/lbry-app/issues/338))
 
 ### Changed
   * Update LBRY Protocol to 0.19.1 (See change log for [0.19.0](https://github.com/lbryio/lbry/releases/tag/v0.19.0) and [0.19.1](https://github.com/lbryio/lbry/releases/tag/v0.19.1))

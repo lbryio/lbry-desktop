@@ -1,15 +1,32 @@
-import { app, BrowserWindow, dialog } from 'electron';
+import { app, BrowserWindow, dialog, screen } from 'electron';
 import isDev from 'electron-is-dev';
+import windowStateKeeper from 'electron-window-state';
+
 import setupBarMenu from './menu/setupBarMenu';
 import setupContextMenu from './menu/setupContextMenu';
 
 export default appState => {
+  // Get primary display dimensions from Electron.
+  const { width, height } = screen.getPrimaryDisplay().workAreaSize;
+
+  // Load the previous state with fallback to defaults.
+  const windowState = windowStateKeeper({
+    defaultWidth: width,
+    defaultHeight: height,
+  });
+
   let windowConfiguration = {
     backgroundColor: '#155B4A',
     minWidth: 800,
     minHeight: 600,
     autoHideMenuBar: true,
     show: false,
+    // Create the window using the state information.
+    x: windowState.x,
+    y: windowState.y,
+    // If state is undefined, create window as maximized.
+    width: windowState.width === undefined ? width : windowState.width,
+    height: windowState.height === undefined ? height : windowState.height,
   };
 
   // Disable renderer process's webSecurity on development to enable CORS.
@@ -28,7 +45,10 @@ export default appState => {
 
   let window = new BrowserWindow(windowConfiguration);
 
-  window.maximize();
+  // Let us register listeners on the window, so we can update the state
+  // automatically (the listeners will be removed when the window is closed)
+  // and restore the maximized or full screen state.
+  windowState.manage(window);
 
   window.loadURL(rendererURL);
 
