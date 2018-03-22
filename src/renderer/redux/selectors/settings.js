@@ -30,6 +30,6 @@ export const selectThemePath = createSelector(
   selectIsNight,
   (theme, automaticDarkModeEnabled, isNight) => {
     const dynamicTheme = automaticDarkModeEnabled && isNight ? 'dark' : theme;
-    return `file://${__static}/themes/${dynamicTheme || 'light'}.css`;
+    return `${staticResourcesPath}/themes/${dynamicTheme || 'light'}.css`;
   }
 );
