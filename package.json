@@ -86,7 +86,7 @@
     "del": "^3.0.0",
     "devtron": "^1.4.0",
     "electron": "1.7.12",
-    "electron-builder": "^20.6.2",
+    "electron-builder": "^20.7.1",
     "electron-devtools-installer": "^2.2.3",
     "electron-webpack": "^1.13.0",
     "eslint": "^4.19.0",
