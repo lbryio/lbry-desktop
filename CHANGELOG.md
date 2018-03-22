@@ -3,7 +3,9 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
-## [Unreleased]
+## [0.21.2] - 2018-03-22
+
+
 ### Added
   * Save app state when closing to tray ([#968](https://github.com/lbryio/lbry-app/issues/968))
   * Added startup-troubleshooting FAQ URL to daemon error ([#1039](https://github.com/lbryio/lbry-app/pull/1039))
@@ -14,6 +16,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
   * App category for Linux ([#877](https://github.com/lbryio/lbry-app/pull/877))
   * Add YouTube Sync reward ([#1147](https://github.com/lbryio/lbry-app/pull/1147))
   * Retain previous screen sizing on startup ([#338](https://github.com/lbryio/lbry-app/issues/338))
+
 
 ### Changed
   * Update LBRY Protocol to 0.19.1 (See change log for [0.19.0](https://github.com/lbryio/lbry/releases/tag/v0.19.0) and [0.19.1](https://github.com/lbryio/lbry/releases/tag/v0.19.1))
@@ -26,6 +29,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
   * Enable play button immediately after user clicks download ([#987](https://github.com/lbryio/lbry-app/pull/987))
   * Significantly improved search performance ([#1032](https://github.com/lbryio/lbry-app/pull/1032))
   * Allow editing of claims when bid is greater than current balance ([#1105](https://github.com/lbryio/lbry-app/pull/1105))
+
 
 ### Fixed
   * Fixed sort by date of published content ([#986](https://github.com/lbryio/lbry-app/issues/986))
@@ -43,13 +47,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
   * Fix export issues ([#1163](https://github.com/lbryio/lbry-app/pull/1163))
   * Fix __static path not resolving on development environment
 
-### Deprecated
-  *
-  *
 
-### Removed
-  *
-  *
 
 ## [0.20.0] - 2018-01-30
 
