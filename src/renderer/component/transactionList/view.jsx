@@ -47,6 +47,7 @@ class TransactionList extends React.PureComponent {
         {Boolean(transactionList.length) && (
           <FileExporter
             data={transactionList}
+            name={__('lbry-transactions')}
             title={__('Export Transactions')}
             label={__('Export')}
           />

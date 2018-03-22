@@ -31,7 +31,7 @@ class FileExporter extends React.PureComponent {
   }
 
   handleButtonClick() {
-    const { title, defaultPath, data } = this.props;
+    const { title, data, name: defaultPath } = this.props;
 
     const options = {
       title,
