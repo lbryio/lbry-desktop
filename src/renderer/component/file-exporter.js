@@ -13,6 +13,7 @@ class FileExporter extends React.PureComponent {
     name: PropTypes.string,
     title: PropTypes.string,
     label: PropTypes.string,
+    filters: PropTypes.array,
     defaultPath: PropTypes.string,
     onFileCreated: PropTypes.func,
   };
@@ -31,7 +32,7 @@ class FileExporter extends React.PureComponent {
   }
 
   handleButtonClick() {
-    const { title, data, name: defaultPath } = this.props;
+    const { title, data, filters, name: defaultPath } = this.props;
 
     const options = {
       title,
@@ -54,7 +55,7 @@ class FileExporter extends React.PureComponent {
       // Get extension and remove initial dot
       const format = path.extname(filename).replace(/\./g, '');
       // Parse data to string with the chosen format
-      const parsed = parseData(data, format);
+      const parsed = parseData(data, format, filters);
       // Write file
       parsed && this.handleFileCreation(filename, parsed);
     });
