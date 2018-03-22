@@ -55,7 +55,7 @@
     "react": "^16.2.0",
     "react-dom": "^16.2.0",
     "react-markdown": "^2.5.0",
-    "react-modal": "^3.1.7",
+    "react-modal": "^3.3.2",
     "react-paginate": "^5.2.1",
     "react-redux": "^5.0.3",
     "react-simplemde-editor": "^3.6.11",
