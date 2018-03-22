@@ -54,7 +54,7 @@ class TransactionList extends React.PureComponent<Props, State> {
   filterTransaction(transaction: Transaction) {
     const { filter } = this.state;
 
-    return filter == 'all' || filter === transaction.type;
+    return filter === 'all' || filter === transaction.type;
   }
 
   isRevokeable(txid: string, nout: number) {

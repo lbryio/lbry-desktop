@@ -18,6 +18,8 @@ class HelpPage extends React.PureComponent {
       upgradeAvailable: null,
       accessTokenHidden: true,
     };
+
+    (this: any).showAccessToken = this.showAccessToken.bind(this);
   }
 
   componentDidMount() {
@@ -175,7 +177,7 @@ class HelpPage extends React.PureComponent {
                       <Button
                         button="link"
                         label={__('View')}
-                        onClick={this.showAccessToken.bind(this)}
+                        onClick={this.showAccessToken}
                       />
                     )}
                     {!this.state.accessTokenHidden &&

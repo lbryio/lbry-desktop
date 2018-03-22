@@ -22,8 +22,6 @@ type Props = {
 };
 
 class FileListSearch extends React.PureComponent<Props> {
-  debouncedSearch: string => void;
-
   constructor(props: Props) {
     super(props);
     this.debouncedSearch = debounce(this.props.search, SEARCH_DEBOUNCE_TIME);
@@ -42,6 +40,8 @@ class FileListSearch extends React.PureComponent<Props> {
       this.debouncedSearch(nextQuery);
     }
   }
+
+  debouncedSearch: string => void;
 
   render() {
     const { uris, query, downloadUris, isSearching } = this.props;

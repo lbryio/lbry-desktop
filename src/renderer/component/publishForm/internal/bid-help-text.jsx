@@ -8,6 +8,8 @@ type Props = {
   winningBidForClaimUri: ?number,
   claimIsMine: ?boolean,
   onEditMyClaim: any => void,
+  claimBeingEdited: ?string,
+  name: string
 };
 
 class BidHelpText extends React.PureComponent<Props> {

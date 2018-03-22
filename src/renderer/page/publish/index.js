@@ -2,12 +2,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { doNavigate } from 'redux/actions/navigation';
 import { doClaimRewardType } from 'redux/actions/rewards';
-import { selectMyClaims, selectClaimsByUri, selectClaimById } from 'redux/selectors/claims';
+import { selectMyClaims, selectClaimsByUri } from 'redux/selectors/claims';
 import { selectResolvingUris } from 'redux/selectors/content';
 import { selectPublishFormValues } from 'redux/selectors/publish';
 import { doResolveUri } from 'redux/actions/content';
 import { selectBalance } from 'redux/selectors/wallet';
-import { makeSelectFileInfoForUri } from 'redux/selectors/file_info';
 import {
   doUpdateFilePath,
   doClearFilePath,

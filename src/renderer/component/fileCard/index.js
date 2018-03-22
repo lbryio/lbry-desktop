@@ -17,14 +17,12 @@ const select = (state, props) => {
 
   const pendingPublish = selectPendingPublish(props.uri)(state);
 
-  let fileCardInfo = pendingPublish
-    ? pendingPublish
-    : {
-        claim: makeSelectClaimForUri(props.uri)(state),
-        fileInfo: makeSelectFileInfoForUri(props.uri)(state),
-        metadata: makeSelectMetadataForUri(props.uri)(state),
-        isResolvingUri: makeSelectIsUriResolving(props.uri)(state),
-      };
+  let fileCardInfo = pendingPublish || {
+    claim: makeSelectClaimForUri(props.uri)(state),
+    fileInfo: makeSelectFileInfoForUri(props.uri)(state),
+    metadata: makeSelectMetadataForUri(props.uri)(state),
+    isResolvingUri: makeSelectIsUriResolving(props.uri)(state),
+  }
 
   return {
     obscureNsfw: !selectShowNsfw(state),

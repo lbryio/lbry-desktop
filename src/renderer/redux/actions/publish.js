@@ -1,3 +1,4 @@
+// @flow
 import Lbry from 'lbry';
 import * as ACTIONS from 'constants/action_types';
 import * as MODALS from 'constants/modal_types';
@@ -12,19 +13,23 @@ import type {
 } from 'redux/reducers/publish';
 import { CHANNEL_NEW, CHANNEL_ANONYMOUS } from 'constants/claim';
 
-export type Action = UpdatePublishFormAction | { type: ACTIONS.CLEAR_PUBLISH };
-
+type Action = UpdatePublishFormAction | { type: ACTIONS.CLEAR_PUBLISH }
 type PromiseAction = Promise<Action>;
-export type Dispatch = (action: Action | PromiseAction | Array<Action>) => any;
+type Dispatch = (action: Action | PromiseAction | Array<Action>) => any;
 type ThunkAction = (dispatch: Dispatch) => any;
+type GetState = () => {};
 
 export const doClearPublish = () => (dispatch: Dispatch): Action =>
   dispatch({ type: ACTIONS.CLEAR_PUBLISH });
 
-export const doUpdatePublishForm = (publishFormValue: {}): Action => (dispatch: Dispatch): Action =>
-  dispatch({ type: ACTIONS.UPDATE_PUBLISH_FORM, data: { ...publishFormValue } });
+export const doUpdatePublishForm = (publishFormValue: UpdatePublishFormData) =>
+  (dispatch: Dispatch): UpdatePublishFormAction =>
+  dispatch({
+    type: ACTIONS.UPDATE_PUBLISH_FORM,
+    data: { ...publishFormValue }
+  });
 
-export const doPrepareEdit = (claim: {}) => (dispatch: Dispatch): Action => {
+export const doPrepareEdit = (claim: any) => (dispatch: Dispatch) => {
   const { name, amount, channel_name, value: { stream: { metadata } } } = claim;
   const {
     author,
@@ -54,12 +59,11 @@ export const doPrepareEdit = (claim: {}) => (dispatch: Dispatch): Action => {
     thumbnail,
     title,
   };
-  console.log('claim', claim);
 
   dispatch({ type: ACTIONS.DO_PREPARE_EDIT, data: publishData });
 };
 
-export const doPublish = (params: PublishParams): Action => {
+export const doPublish = (params: PublishParams): ThunkAction => {
   const {
     name,
     bid,
@@ -104,11 +108,14 @@ export const doPublish = (params: PublishParams): Action => {
     metadata,
   };
 
-  return dispatch => {
+  return (dispatch: Dispatch) => {
     dispatch({ type: ACTIONS.PUBLISH_START });
 
     const success = () => {
-      dispatch({ type: ACTIONS.PUBLISH_SUCCESS, data: { pendingPublish: publishPayload } });
+      dispatch({
+        type: ACTIONS.PUBLISH_SUCCESS,
+        data: { pendingPublish: publishPayload }
+      });
       dispatch(doOpenModal(MODALS.PUBLISH, { uri }));
     };
 
@@ -123,7 +130,7 @@ export const doPublish = (params: PublishParams): Action => {
 
 // Calls claim_list_mine until any pending publishes are confirmed
 export const doCheckPendingPublishes = () => {
-  return (dispatch, getState) => {
+  return (dispatch: Dispatch, getState: GetState) => {
     const state = getState();
     const pendingPublishes = selectPendingPublishes(state);
     const myClaims = selectMyClaimsWithoutChannels(state);

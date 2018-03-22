@@ -173,17 +173,17 @@ export const selectSearchDownloadUris = query =>
 
     return downloadResultsFromQuery.length
       ? downloadResultsFromQuery.map(fileInfo => {
-          const { channel_name, claim_id, name, value, metadata } = fileInfo;
+          const { channel_name: channelName, claim_id: claimId, name, value, metadata } = fileInfo;
           const uriParams = {};
 
-          if (channel_name) {
-            uriParams.channelName = channel_name;
+          if (channelName) {
+            uriParams.channelName = channelName;
             uriParams.contentName = name;
             uriParams.claimId = value
               ? value.publisherSignature.certificateId
               : metadata.publisherSignature.certificateId;
           } else {
-            uriParams.claimId = claim_id;
+            uriParams.claimId = claimId;
             uriParams.name = name;
           }
 

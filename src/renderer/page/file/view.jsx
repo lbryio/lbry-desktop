@@ -42,9 +42,12 @@ type Props = {
   obscureNsfw: boolean,
   playingUri: ?string,
   isPaused: boolean,
+  claimIsMine: boolean,
+  navigate: (string, {}) => void,
   openModal: (string, any) => void,
   fetchFileInfo: string => void,
   fetchCostInfo: string => void,
+  prepareEdit: ({}) => void,
 };
 
 class FilePage extends React.Component<Props> {

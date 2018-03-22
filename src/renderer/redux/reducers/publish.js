@@ -50,7 +50,7 @@ export type UpdatePublishFormData = {
 };
 
 export type UpdatePublishFormAction = {
-  type: string,
+  type: ACTIONS.UPDATE_PUBLISH_FORM | ACTIONS.DO_PREPARE_EDIT,
   data: UpdatePublishFormData,
 };
 
@@ -68,6 +68,8 @@ export type PublishParams = {
   title: string,
   contentIsFree: boolean,
   uri: string,
+  license: ?string,
+  licenseUrl: ?string,
   price: {
     currency: string,
     amount: number,

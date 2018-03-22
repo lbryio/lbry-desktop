@@ -81,6 +81,7 @@ class PublishForm extends React.PureComponent<Props> {
     (this: any).handleChannelChange = this.handleChannelChange.bind(this);
     (this: any).editExistingClaim = this.editExistingClaim.bind(this);
     (this: any).getNewUri = this.getNewUri.bind(this);
+    (this: any).getSubmitLabel = this.getSubmitLabel.bind(this);
   }
 
   handlePublish() {
@@ -233,6 +234,15 @@ class PublishForm extends React.PureComponent<Props> {
     return '';
   }
 
+  getSubmitLabel() {
+    const { editing, publishing }  = this.props;
+    if (!editing) {
+      return !publishing ? __('Publish') : __('Publishing...');
+    } else {
+      return !publishing ?  __('Edit') : __('Editing');
+    }
+  }
+
   checkIsFormValid() {
     const { name, nameError, title, bid, bidError, tosAccepted } = this.props;
     return name && !nameError && title && bid && !bidError && tosAccepted;
@@ -302,7 +312,7 @@ class PublishForm extends React.PureComponent<Props> {
         <section className={classnames('card card--section')}>
           <div className="card__title">{__('Content')}</div>
           <div className="card__subtitle">
-            {!!editing ? __('Editing a claim') : __('What are you publishing?')}
+            {editing ? __('Editing a claim') : __('What are you publishing?')}
           </div>
           {(filePath || !!editing) && (
             <div className="card-media__internal-links">
@@ -388,7 +398,7 @@ class PublishForm extends React.PureComponent<Props> {
                 name="content_cost_amount"
                 min="0"
                 price={price}
-                onChange={price => updatePublishForm({ price })}
+                onChange={newPrice => updatePublishForm({ price: newPrice })}
                 disabled={formDisabled || contentIsFree}
               />
               {price.currency !== 'LBC' && (
@@ -537,11 +547,7 @@ class PublishForm extends React.PureComponent<Props> {
 
           <div className="card__actions">
             <Submit
-              label={
-                !editing
-                  ? !publishing ? __('Publish') : __('Publishing...')
-                  : !publishing ? __('Edit') : __('Editing')
-              }
+              label={this.getSubmitLabel}
               disabled={formDisabled || !formValid || publishing}
             />
             <Button button="alt" onClick={this.handleCancelPublish} label={__('Cancel')} />

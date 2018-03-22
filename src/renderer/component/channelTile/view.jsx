@@ -2,7 +2,6 @@
 import * as React from 'react';
 import CardMedia from 'component/cardMedia';
 import TruncatedText from 'component/common/truncated-text';
-import BusyIndicator from 'component/common/busy-indicator';
 
 /*
   This component can probably be combined with FileTile

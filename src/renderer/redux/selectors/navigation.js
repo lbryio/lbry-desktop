@@ -76,6 +76,8 @@ export const selectNavLinks = createSelector(
           return currentStackItem.path;
         }
       }
+
+      return undefined;
     };
 
     // Gets the last active sublink in a section
