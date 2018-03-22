@@ -20,7 +20,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Changed
   * Update LBRY Protocol to 0.19.1 (See change log for [0.19.0](https://github.com/lbryio/lbry/releases/tag/v0.19.0) and [0.19.1](https://github.com/lbryio/lbry/releases/tag/v0.19.1))
-  * Improved privacy by allowing users to turn off the file view counter and better understand privacy settings ([#1074](https://github.com/lbryio/lbry-app/pull/1074))
+  * Improved privacy by allowing users to turn off the file view counter and better understand privacy settings ([#1074](https://github.com/lbryio/lbry-app/pull/1074) / [#1116](https://github.com/lbryio/lbry-app/pull/1116))
   * Disabled auto dark mode if dark mode is selected ([#1006](https://github.com/lbryio/lbry-app/pull/1006))
   * Refactor Electron's main process ([#951](https://github.com/lbryio/lbry-app/pull/951))
   * Refactor `lbryuri.js` into separate named exports ([#957](https://github.com/lbryio/lbry-app/pull/957))
@@ -37,7 +37,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
   * Disable drag and drop of files into the app ([#1045](https://github.com/lbryio/lbry-app/pull/1045))
   * Fixed uninformative error message ([#1046](https://github.com/lbryio/lbry-app/pull/1046))
   * Update documentation for DevTools and fix some ESLint warnings ([#911](https://github.com/lbryio/lbry-app/pull/911))
-  * Fix error wherein user cannot send tip because transaction fails ([#918](https://github.com/lbryio/lbry-app/pull/918))
   * Fix right click bug ([#928](https://github.com/lbryio/lbry-app/pull/928))
   * Fix Election linting errors ([#929](https://github.com/lbryio/lbry-app/pull/929))
   * App will no longer reset when minimizing to tray ([#1042](https://github.com/lbryio/lbry-app/pull/1042))
