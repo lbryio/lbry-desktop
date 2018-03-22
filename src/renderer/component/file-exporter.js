@@ -12,8 +12,13 @@ class FileExporter extends React.PureComponent {
     data: PropTypes.array,
     title: PropTypes.string,
     label: PropTypes.string,
+    filters: PropTypes.arrayOf(PropTypes.string),
     defaultPath: PropTypes.string,
     onFileCreated: PropTypes.func,
+  };
+
+  static defaultProps = {
+    filters: [],
   };
 
   constructor(props) {
@@ -30,12 +35,21 @@ class FileExporter extends React.PureComponent {
   }
 
   handleButtonClick() {
-    const { title, defaultPath, data } = this.props;
+    const { title, data, defaultPath, filters } = this.props;
 
     const options = {
       title,
       defaultPath,
-      filters: [{ name: 'JSON', extensions: ['json'] }, { name: 'CSV', extensions: ['csv'] }],
+      filters: [
+        {
+          name: 'CSV',
+          extensions: ['csv'],
+        },
+        {
+          name: 'JSON',
+          extensions: ['json'],
+        },
+      ],
     };
 
     remote.dialog.showSaveDialog(options, filename => {
@@ -44,7 +58,7 @@ class FileExporter extends React.PureComponent {
       // Get extension and remove initial dot
       const format = path.extname(filename).replace(/\./g, '');
       // Parse data to string with the chosen format
-      const parsed = parseData(data, format);
+      const parsed = parseData(data, format, filters);
       // Write file
       parsed && this.handleFileCreation(filename, parsed);
     });
