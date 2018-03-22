@@ -20,9 +20,9 @@ class FileDetails extends React.PureComponent {
     }
 
     const { description, language, license } = metadata;
-    const mediaType = contentType || lbry.getMediaType(contentType);
-
+    console.log(this.props)
     const downloadPath = fileInfo ? path.normalize(fileInfo.download_path) : null;
+    const mediaType =  contentType || "unknown";
 
     return (
       <div>

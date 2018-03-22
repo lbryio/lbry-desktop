@@ -174,19 +174,21 @@ Lbry.publishDeprecated = (params, fileListedCallback, publishedCallback, errorCa
 
 Lbry.imagePath = file => `file://${__static}/img/${file}`;
 
+// This isn't used anymore: remove it?
 Lbry.getMediaType = (fileName = '') => {
-  // No need for this: if(contentType) return /^[^/]+/.exec(contentType)[0];
-  const dotIndex = fileName.lastIndexOf('.');
-  if (dotIndex === -1) return 'unknown';
-
-  const ext = fileName.substr(dotIndex + 1);
-
-  if (/^mp4|m4v|webm|flv|f4v|ogv$/i.test(ext)) {
-    return `video/${ext}`;
-  } else if (/^mp3|m4a|aac|wav|flac|ogg|opus$/i.test(ext)) {
-    return `audio/${ext}`;
-  } else if (/^html|htm|xml|pdf|odf|doc|docx|md|markdown|txt|epub|org$/i.test(ext)) {
-    return `document/${ext}`;
+  if (fileName) {
+      // Check for extension
+      const dotIndex = fileName.lastIndexOf('.');
+      if (dotIndex === -1) return 'unknown';
+      // Get file extension
+      const ext = fileName.substr(dotIndex + 1);
+      if (/^mp4|m4v|webm|flv|f4v|ogv$/i.test(ext)) {
+        return `video/${ext}`;
+      } else if (/^mp3|m4a|aac|wav|flac|ogg|opus$/i.test(ext)) {
+        return `audio/${ext}`;
+      } else if (/^html|htm|xml|pdf|odf|doc|docx|md|markdown|txt|epub|org$/i.test(ext)) {
+        return `document/${ext}`;
+      }
   }
   return 'unknown';
 };
