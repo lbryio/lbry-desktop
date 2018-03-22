@@ -62,8 +62,10 @@ class ChannelSection extends React.PureComponent {
 
       return;
     }
-        if (newChannelBid === balance) {
-      this.refs.newChannelName.showError(__('Please decrease your bid to account for transaction fees.'));
+    if (newChannelBid === balance) {
+      this.refs.newChannelName.showError(
+        __('Please decrease your bid to account for transaction fees.')
+      );
 
       return;
     }

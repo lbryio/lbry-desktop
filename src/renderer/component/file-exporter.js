@@ -38,14 +38,14 @@ class FileExporter extends React.PureComponent {
       title,
       defaultPath,
       filters: [
-          {
-              name: 'CSV',
-              extensions: ['csv']
-          },
-          {
-              name: 'JSON',
-              extensions: ['json']
-          }
+        {
+          name: 'CSV',
+          extensions: ['csv'],
+        },
+        {
+          name: 'JSON',
+          extensions: ['json'],
+        },
       ],
     };
 

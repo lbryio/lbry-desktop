@@ -1,35 +1,41 @@
-// Beautify JSON
-const parseJson = data => JSON.stringify(data, null, '\t');
+// JSON parser
+const parseJson = (data, filters = []) => {
+  const list = data.map(item => {
+    const temp = {};
+    // Apply filters
+    for (const [key, value] of Object.entries(item)) {
+      if (!filters.includes(key)) temp[key] = value;
+    }
+    return temp;
+  });
+  // Beautify JSON
+  return JSON.stringify(list, null, '\t');
+}
 
+// CSV Parser
 // No need for an external module:
 // https://gist.github.com/btzr-io/55c3450ea3d709fc57540e762899fb85
 const parseCsv = (data, filters=[]) => {
 
-  // Filters!
-  const filterKeys = (list, ([key])) => {
-      !filters.includes(key) && list.push(key)
-      return list;
-  };
-
-  const filterValues = (list, ([key, value])) => {
-      !filters.includes(key) && list.push(value||'')
-      return list;
-  };
-
   // Get items for header
-  const getHeaders = temp =>
-    Object.entries(temp)
-      .reduce(filterKeys)
-      .join(',');
+  const getHeaders = temp => {
+      const headers = [];
+      // Apply filters
+      for (const [key] of Object.entries(temp)) {
+        !filters.includes(key) && headers.push(key);
+      }
+      return headers.join(',');
+  };
 
   // Get rows content
   const getData = list =>
-    list
-      .map(item => {
-        const row = Object.entries(item)
-          .reduce(filterValues)
-          .join(',');
-        return row;
+    list.map(item => {
+          const row = [];
+           // Apply filters
+          for (const [key, value] of Object.entries(item)) {
+            !filters.includes(key) && row.push(value);
+          }
+        return row.join(',');
       })
       .join('\n');
   // Return CSV string
