@@ -20,7 +20,6 @@
   },
   "globals": {
     "__static": true,
-    "staticResourcesPath": true,
     "__": true,
     "__n": true,
     "app": true
