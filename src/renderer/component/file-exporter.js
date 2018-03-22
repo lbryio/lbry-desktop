@@ -12,8 +12,13 @@ class FileExporter extends React.PureComponent {
     data: PropTypes.array,
     title: PropTypes.string,
     label: PropTypes.string,
+    filters: PropTypes.array,
     defaultPath: PropTypes.string,
     onFileCreated: PropTypes.func,
+  };
+
+  static defaultProps = {
+    filters: [],
   };
 
   constructor(props) {
