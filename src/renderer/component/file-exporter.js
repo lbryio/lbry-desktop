@@ -10,10 +10,8 @@ const { remote } = require('electron');
 class FileExporter extends React.PureComponent {
   static propTypes = {
     data: PropTypes.array,
-    name: PropTypes.string,
     title: PropTypes.string,
     label: PropTypes.string,
-    filters: PropTypes.array,
     defaultPath: PropTypes.string,
     onFileCreated: PropTypes.func,
   };
@@ -32,7 +30,7 @@ class FileExporter extends React.PureComponent {
   }
 
   handleButtonClick() {
-    const { title, data, filters, name: defaultPath } = this.props;
+    const { title, data, defaultPath, filters = [] } = this.props;
 
     const options = {
       title,

@@ -47,10 +47,10 @@ class TransactionList extends React.PureComponent {
         {Boolean(transactionList.length) && (
           <FileExporter
             data={transactionList}
-            name={__('lbry-transactions-history')}
             label={__('Export')}
             title={__('Export Transactions')}
             filters={['nout']}
+            defaultPath={__('lbry-transactions-history')}
           />
         )}
         {(transactionList.length || this.state.filter) && (
