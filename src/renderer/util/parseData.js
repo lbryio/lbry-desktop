@@ -17,18 +17,16 @@ const parseJson = (data, filters = []) => {
 // https://gist.github.com/btzr-io/55c3450ea3d709fc57540e762899fb85
 const parseCsv = (data, filters = []) => {
   // Get items for header
-  const getHeaders = temp => {
-    // Apply filters
-    return Object.entries(temp)
+  const getHeaders = temp =>
+    Object.entries(temp)
       .map(([key]) => {
         if (!filters.includes(key)) return key;
       })
       .join(',');
-  };
 
   // Get rows content
-  const getData = list => {
-    return list
+  const getData = list =>
+    list
       .map(item =>
         Object.entries(item)
           .map(([key, value]) => {
@@ -37,7 +35,6 @@ const parseCsv = (data, filters = []) => {
           .join(',')
       )
       .join('\n');
-  };
 
   // Return CSV string
   return `${getHeaders(data[0])} \n ${getData(data)}`;
