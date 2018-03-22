@@ -124,7 +124,23 @@ class HelpPage extends React.PureComponent {
             <div className="meta">{__('Thanks! LBRY is made by its users.')}</div>
           </div>
         </section>
-
+        <section className="card">
+          <div className="card__title-primary">
+            <h3>{__('LBRY Services status')}</h3>
+          </div>
+          <div className="card__content">
+            <p>{__('Check the current status and statistics of all LBRY Services. If any of the services are down, it could be a sign of temporary problems.')}</p>
+            <p>
+              <Link
+                href="https://status.lbry.io/"
+                label={__('LBRY Services monitors')}
+                icon="icon-question"
+                button="alt"
+              />
+            </p>
+          </div>
+        </section>
+        
         <section className="card">
           <div className="card__title-primary">
             <h3>{__('About')}</h3>
