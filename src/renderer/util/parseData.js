@@ -20,7 +20,7 @@ const parseCsv = (data, filters = []) => {
   const getHeaders = item => {
     const list = [];
     // Apply filters
-    Object.entries(temp).forEach(([key]) => {
+    Object.entries(item).forEach(([key]) => {
       if (!filters.includes(key)) list.push(key);
     });
     // return headers

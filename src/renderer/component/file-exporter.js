@@ -12,7 +12,7 @@ class FileExporter extends React.PureComponent {
     data: PropTypes.array,
     title: PropTypes.string,
     label: PropTypes.string,
-    filters: PropTypes.arrayof(PropTypes.string),
+    filters: PropTypes.arrayOf(PropTypes.string),
     defaultPath: PropTypes.string,
     onFileCreated: PropTypes.func,
   };
@@ -35,7 +35,7 @@ class FileExporter extends React.PureComponent {
   }
 
   handleButtonClick() {
-    const { title, data, defaultPath, filters = [] } = this.props;
+    const { title, data, defaultPath, filters } = this.props;
 
     const options = {
       title,
