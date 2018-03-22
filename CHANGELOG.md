@@ -46,6 +46,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
   * Fix Windows notifications not showing ([#1145](https://github.com/lbryio/lbry-app/pull/1145))
   * Fix export issues ([#1163](https://github.com/lbryio/lbry-app/pull/1163))
   * Fix __static path not resolving on development environment
+  * Fix Content-type not shown correctly in file description ([#863](https://github.com/lbryio/lbry-app/pull/863))
 
 
 
