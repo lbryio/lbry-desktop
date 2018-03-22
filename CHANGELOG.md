@@ -12,7 +12,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
   * Notifications when the channel a user subscribes to uploads new content ([#1066](https://github.com/lbryio/lbry-app/pull/1066))
   * Codacy support for Github contributions ([#1059](https://github.com/lbryio/lbry-app/pull/1059))
   * App category for Linux ([#877](https://github.com/lbryio/lbry-app/pull/877))
-  * Add YouTube Sync reward ([1147](https://github.com/lbryio/lbry-app/pull/1147))
+  * Add YouTube Sync reward ([#1147](https://github.com/lbryio/lbry-app/pull/1147))
   * Retain previous screen sizing on startup ([#338](https://github.com/lbryio/lbry-app/issues/338))
 
 ### Changed
@@ -25,8 +25,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
   * Do not kill an existing daemon, instead check if one exists ([#973](https://github.com/lbryio/lbry-app/pull/973))
   * Enable play button immediately after user clicks download ([#987](https://github.com/lbryio/lbry-app/pull/987))
   * Significantly improved search performance ([#1032](https://github.com/lbryio/lbry-app/pull/1032))
-  * Allow editing of claims when bid is greater than current balance ([1105](https://github.com/lbryio/lbry-app/pull/1105))
-  
+  * Allow editing of claims when bid is greater than current balance ([#1105](https://github.com/lbryio/lbry-app/pull/1105))
+
 ### Fixed
   * Fixed sort by date of published content ([#986](https://github.com/lbryio/lbry-app/issues/986))
   * Fix night mode start time, set to 9PM ([#1050](https://github.com/lbryio/lbry-app/issues/1050))
@@ -39,7 +39,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
   * App will no longer reset when minimizing to tray ([#1042](https://github.com/lbryio/lbry-app/pull/1042))
   * Error when clicking LBRY URLs when app is closed on macOS ([#1119](https://github.com/lbryio/lbry-app/issues/1119))
   * LBRY URLs not working on Linux ([#1120](https://github.com/lbryio/lbry-app/issues/1120))
-  * Fix Windows notifications not showing ([1145](https://github.com/lbryio/lbry-app/pull/1145))
+  * Fix Windows notifications not showing ([#1145](https://github.com/lbryio/lbry-app/pull/1145))
+  * Fix export issues ([#1157](https://github.com/lbryio/lbry-app/pull/1157))
 
 ### Deprecated
   *
