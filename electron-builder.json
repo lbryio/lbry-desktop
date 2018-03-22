@@ -65,6 +65,6 @@
     "perMachine": true,
     "createDesktopShortcut": "always"
   },
-  "artifactName": "${productName}_${version}",
+  "artifactName": "${productName}_${version}.${ext}",
   "beforeBuild": "./build/checkDaemonPlatform.js"
 }
