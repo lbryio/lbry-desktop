@@ -12,7 +12,7 @@ type Props = {
   disabled: boolean,
   name: string,
   label: string,
-  step: ?number
+  step: ?number,
 };
 
 export class FormFieldPrice extends React.PureComponent<Props> {
@@ -54,7 +54,7 @@ export class FormFieldPrice extends React.PureComponent<Props> {
           onChange={this.handleAmountChange}
           placeholder={placeholder || 5}
           disabled={disabled}
-          step={step || "any"}
+          step={step || 'any'}
         />
 
         <FormField
@@ -65,7 +65,7 @@ export class FormFieldPrice extends React.PureComponent<Props> {
           disabled={disabled}
           onChange={this.handleCurrencyChange}
           value={price.currency}
-          >
+        >
           <option value="LBC">{__('LBRY Credits (LBC)')}</option>
           <option value="USD">{__('US Dollars')}</option>
         </FormField>

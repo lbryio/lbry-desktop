@@ -1,7 +1,8 @@
 // @flow
 import React from 'react';
 import * as modals from 'constants/modal_types';
-import Button from 'component/link';
+import * as icons from 'constants/icons';
+import Button from 'component/button';
 import type { Subscription } from 'redux/reducers/subscriptions';
 
 type SubscribtionArgs = {
@@ -15,7 +16,7 @@ type Props = {
   subscriptions: Array<Subscription>,
   doChannelSubscribe: ({ channelName: string, uri: string }) => void,
   doChannelUnsubscribe: SubscribtionArgs => void,
-  doOpenModal: (string) => void,
+  doOpenModal: string => void,
 };
 
 export default (props: Props) => {
@@ -25,7 +26,7 @@ export default (props: Props) => {
     subscriptions,
     doChannelSubscribe,
     doChannelUnsubscribe,
-    doOpenModal
+    doOpenModal,
   } = props;
 
   const isSubscribed =
@@ -36,8 +37,8 @@ export default (props: Props) => {
 
   return channelName && uri ? (
     <Button
-      icon={isSubscribed ? undefined : "Heart"}
-      button={isSubscribed ? "danger" : "alt"}
+      icon={isSubscribed ? undefined : icons.HEART}
+      button={isSubscribed ? 'danger' : 'alt'}
       label={subscriptionLabel}
       onClick={() => {
         if (!subscriptions.length) {

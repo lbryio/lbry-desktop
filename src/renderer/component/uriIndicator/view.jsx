@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import Button from 'component/link';
+import Button from 'component/button';
 import { buildURI } from 'lbryURI';
 import classnames from 'classnames';
 // import Icon from 'component/common/icon';
@@ -83,7 +83,8 @@ class UriIndicator extends React.PureComponent<Props> {
         noPadding
         className="btn--uri-indicator"
         navigate="/show"
-        navigateParams={{ uri: channelLink }}>
+        navigateParams={{ uri: channelLink }}
+      >
         {inner}
       </Button>
     );

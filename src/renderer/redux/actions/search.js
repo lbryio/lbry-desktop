@@ -8,7 +8,7 @@ import { makeSelectSearchUris } from 'redux/selectors/search';
 import batchActions from 'util/batchActions';
 import handleFetchResponse from 'util/handle-fetch';
 
-export const doSearch = (rawQuery) => (dispatch, getState) => {
+export const doSearch = rawQuery => (dispatch, getState) => {
   const state = getState();
   const query = rawQuery.replace(/^lbry:\/\//i, '');
 
@@ -26,9 +26,9 @@ export const doSearch = (rawQuery) => (dispatch, getState) => {
   }
 
   dispatch({
-    type: ACTIONS.SEARCH_START
+    type: ACTIONS.SEARCH_START,
   });
-  
+
   // If the user is on the file page with a pre-populated uri and they select
   // the search option without typing anything, searchQuery will be empty
   // We need to populate it so the input is filled on the search page
@@ -36,7 +36,7 @@ export const doSearch = (rawQuery) => (dispatch, getState) => {
     dispatch({
       type: ACTIONS.UPDATE_SEARCH_QUERY,
       data: { searchQuery: query },
-    })
+    });
   }
 
   fetch(`https://lighthouse.lbry.io/search?s=${query}`)
@@ -70,29 +70,25 @@ export const doSearch = (rawQuery) => (dispatch, getState) => {
     });
 };
 
-export const doUpdateSearchQuery =
-  (query: string, shouldSkipSuggestions: ?boolean) => dispatch => {
-    dispatch({
-      type: ACTIONS.UPDATE_SEARCH_QUERY,
-      data: { query },
-    })
+export const doUpdateSearchQuery = (query: string, shouldSkipSuggestions: ?boolean) => dispatch => {
+  dispatch({
+    type: ACTIONS.UPDATE_SEARCH_QUERY,
+    data: { query },
+  });
 
-    // Don't fetch new suggestions if the user just added a space
-    if (!query.endsWith(" ") || !shouldSkipSuggestions) {
-      dispatch(getSearchSuggestions(query));
-    }
-  };
+  // Don't fetch new suggestions if the user just added a space
+  if (!query.endsWith(' ') || !shouldSkipSuggestions) {
+    dispatch(getSearchSuggestions(query));
+  }
+};
 
 export const getSearchSuggestions = (value: string) => (dispatch, getState) => {
   const { search: searchState } = getState();
   const query = value.trim();
 
   const isPrefix = () => {
-    return query === "@"
-      || query === "lbry:"
-      || query === "lbry:/"
-      || query === "lbry://"
-  }
+    return query === '@' || query === 'lbry:' || query === 'lbry:/' || query === 'lbry://';
+  };
 
   if (!query || isPrefix()) {
     dispatch({
@@ -108,21 +104,24 @@ export const getSearchSuggestions = (value: string) => (dispatch, getState) => {
     // actually add one. This would hardly ever happen, but then the search
     // suggestions won't change just from adding a '#' after a uri
     let uriQuery = query;
-    if (uriQuery.endsWith("#")) {
+    if (uriQuery.endsWith('#')) {
       uriQuery = uriQuery.slice(0, -1);
     }
 
     const uri = normalizeURI(uriQuery);
     const { name, isChannel } = parseURI(uri);
 
-    suggestions.push({
-      value: uri,
-      shorthand: isChannel ? name.slice(1) : name,
-      type: isChannel ? SEARCH_TYPES.CHANNEL : SEARCH_TYPES.FILE
-    }, {
-      value: name,
-      type: SEARCH_TYPES.SEARCH
-    });
+    suggestions.push(
+      {
+        value: uri,
+        shorthand: isChannel ? name.slice(1) : name,
+        type: isChannel ? SEARCH_TYPES.CHANNEL : SEARCH_TYPES.FILE,
+      },
+      {
+        value: name,
+        type: SEARCH_TYPES.SEARCH,
+      }
+    );
 
     // If it's a valid url, don't fetch any extra search results
     return dispatch({
@@ -132,8 +131,8 @@ export const getSearchSuggestions = (value: string) => (dispatch, getState) => {
   } catch (e) {
     suggestions.push({
       value: query,
-      type: SEARCH_TYPES.SEARCH
-    })
+      type: SEARCH_TYPES.SEARCH,
+    });
   }
 
   // Populate the current search query suggestion before fetching results
@@ -143,7 +142,7 @@ export const getSearchSuggestions = (value: string) => (dispatch, getState) => {
   });
 
   // strip out any basic stuff for more accurate search results
-  let searchValue = value.replace(/lbry:\/\//g, "").replace(/-/g, " ");
+  let searchValue = value.replace(/lbry:\/\//g, '').replace(/-/g, ' ');
   if (searchValue.includes('#')) {
     // This should probably be more robust, but I think it's fine for now
     // Remove everything after # to get rid of the claim id

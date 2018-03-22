@@ -93,31 +93,34 @@ class Video extends React.PureComponent<Props> {
 
     return (
       <div className={classnames('video', {}, className)}>
-        {isPlaying &&
-          (!isReadyToPlay ? (
-            <LoadingScreen status={loadStatusMessage} />
-          ) : (
-            <VideoPlayer
-              filename={fileInfo.file_name}
-              poster={poster}
-              downloadPath={fileInfo.download_path}
-              mediaType={mediaType}
-              contentType={contentType}
-              downloadCompleted={fileInfo.completed}
-              changeVolume={changeVolume}
-              volume={volume}
-              doPlay={doPlay}
-              doPause={doPause}
-              savePosition={savePosition}
-              claim={claim}
-              uri={uri}
-              paused={mediaPaused}
-              position={mediaPosition}
-            />
-          ))}
+        {isPlaying && (
+          <div className="content__view">
+            {!isReadyToPlay ? (
+              <LoadingScreen status={loadStatusMessage} />
+            ) : (
+              <VideoPlayer
+                filename={fileInfo.file_name}
+                poster={poster}
+                downloadPath={fileInfo.download_path}
+                mediaType={mediaType}
+                contentType={contentType}
+                downloadCompleted={fileInfo.completed}
+                changeVolume={changeVolume}
+                volume={volume}
+                doPlay={doPlay}
+                doPause={doPause}
+                savePosition={savePosition}
+                claim={claim}
+                uri={uri}
+                paused={mediaPaused}
+                position={mediaPosition}
+              />
+            )}
+          </div>
+        )}
         {!isPlaying && (
           <div
-            className={classnames('video__cover', { 'card--obscured': shouldObscureNsfw })}
+            className={classnames('content__cover', { 'card__media--nsfw': shouldObscureNsfw })}
             style={!shouldObscureNsfw && poster ? { backgroundImage: `url("${poster}")` } : {}}
           >
             <VideoPlayButton

@@ -6,6 +6,7 @@ import throttle from 'util/throttle';
 import Icon from 'component/common/icon';
 import Autocomplete from './internal/autocomplete';
 import { parseQueryParams } from 'util/query_params';
+import * as icons from 'constants/icons';
 
 type Props = {
   updateSearchQuery: string => void,
@@ -39,12 +40,12 @@ class WunderBar extends React.PureComponent<Props> {
       const value = parts.shift();
 
       let extraParams = {};
-      if (parts.length > 0){
+      if (parts.length > 0) {
         extraParams = parseQueryParams(parts.join(''));
       }
 
       return extraParams;
-    }
+    };
 
     // User selected a suggestion
     if (suggestion) {
@@ -72,32 +73,29 @@ class WunderBar extends React.PureComponent<Props> {
     return;
   }
 
-
   getSuggestionIcon = (type: string) => {
     switch (type) {
       case 'file':
-        return 'Compass'
+        return icons.COMPASS;
       case 'channel':
-        return 'AtSign'
+        return icons.AT_SIGN;
       default:
-        return 'Search'
+        return icons.SEARCH;
     }
-  }
+  };
 
   input: ?HTMLInputElement;
 
   render() {
     const { wunderbarValue, suggestions } = this.props;
 
-
-
     return (
       <div className="wunderbar">
-        <Icon icon="Search" />
+        <Icon icon={icons.SEARCH} />
         <Autocomplete
           autoHighlight
           wrapperStyle={{ flex: 1 }}
-          value={wunderbarValue || ""}
+          value={wunderbarValue || ''}
           items={suggestions}
           getItemValue={item => item.value}
           onChange={this.handleChange}
@@ -120,7 +118,8 @@ class WunderBar extends React.PureComponent<Props> {
               <span className="wunderbar__suggestion-label">{shorthand || value}</span>
               {(true || isHighlighted) && (
                 <span className="wunderbar__suggestion-label--action">
-                  {"-  "}{type === "search" ? "Search" : value}
+                  {'-  '}
+                  {type === 'search' ? 'Search' : value}
                 </span>
               )}
             </div>

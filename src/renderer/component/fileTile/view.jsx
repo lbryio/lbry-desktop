@@ -3,10 +3,10 @@ import * as React from 'react';
 import * as icons from 'constants/icons';
 import { normalizeURI, isURIClaimable, parseURI } from 'lbryURI';
 import CardMedia from 'component/cardMedia';
-import { TruncatedText } from 'component/common.js';
+import TruncatedText from 'component/common/truncated-text';
 import FilePrice from 'component/filePrice';
 import Icon from 'component/common/icon';
-import Button from 'component/link';
+import Button from 'component/button';
 import classnames from 'classnames';
 
 type Props = {
@@ -20,12 +20,12 @@ type Props = {
   claim: ?{
     name: string,
     channel_name: string,
-    claim_id: string
+    claim_id: string,
   },
   metadata: {},
-  resolveUri: (string) => void,
+  resolveUri: string => void,
   navigate: (string, ?{}) => void,
-}
+};
 
 class FileTile extends React.PureComponent<Props> {
   static defaultProps = {
@@ -62,8 +62,7 @@ class FileTile extends React.PureComponent<Props> {
     const title =
       isClaimed && metadata && metadata.title ? metadata.title : parseURI(uri).contentName;
     const thumbnail = metadata && metadata.thumbnail ? metadata.thumbnail : null;
-    const isRewardContent =
-      claim && rewardedContentClaimIds.includes(claim.claim_id);
+    const isRewardContent = claim && rewardedContentClaimIds.includes(claim.claim_id);
 
     let onClick = () => navigate('/show', { uri });
 
@@ -76,26 +75,21 @@ class FileTile extends React.PureComponent<Props> {
 
     return (
       <section
-        className={classnames("file-tile card--link", {
-          'file-tile--fullwidth': fullWidth
+        className={classnames('file-tile card--link', {
+          'file-tile--fullwidth': fullWidth,
         })}
-        onClick={onClick}>
+        onClick={onClick}
+      >
         <CardMedia title={title || name} thumbnail={thumbnail} />
         <div className="file-tile__info">
-          {isResolvingUri && (
-            <div className="card__title--small">
-              {__('Loading...')}
-            </div>
-          )}
+          {isResolvingUri && <div className="card__title--small">{__('Loading...')}</div>}
           {!isResolvingUri && (
             <React.Fragment>
               <div className="card__title--small card__title--file">
-                <TruncatedText lines={2}>
-                  {title || name}
-                </TruncatedText>
+                <TruncatedText lines={2}>{title || name}</TruncatedText>
               </div>
               <div className="card__subtitle">
-                {showUri ? uri : channel || __("Anonymous")}
+                {showUri ? uri : channel || __('Anonymous')}
                 {isRewardContent && <Icon icon={icons.FEATURED} />}
                 {showLocal && isDownloaded && <Icon icon={icons.LOCAL} />}
               </div>
@@ -109,7 +103,8 @@ class FileTile extends React.PureComponent<Props> {
                       // avoid navigating to /show from clicking on the section
                       e.preventDefault();
                       navigate('/publish');
-                    }} />
+                    }}
+                  />
                 </React.Fragment>
               )}
             </React.Fragment>

@@ -35,7 +35,6 @@ function setLocal(key, value) {
   localStorage.setItem(key, JSON.stringify(value));
 }
 
-
 // core
 Lbry.connectPromise = null;
 Lbry.connect = () => {

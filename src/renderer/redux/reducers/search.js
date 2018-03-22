@@ -6,29 +6,29 @@ type SearchSuccess = {
   type: ACTIONS.SEARCH_SUCCESS,
   data: {
     query: string,
-    uris: Array<string>
-  }
-}
+    uris: Array<string>,
+  },
+};
 
 type UpdateSearchQuery = {
   type: ACTIONS.UPDATE_SEARCH_QUERY,
   data: {
-    query: string
-  }
-}
+    query: string,
+  },
+};
 
 type SearchSuggestion = {
   value: string,
   shorthand: string,
   type: string,
-}
+};
 
 type UpdateSearchSuggestions = {
   type: ACTIONS.UPDATE_SEARCH_SUGGESTIONS,
   data: {
-    suggestions: Array<SearchSuggestion>
-  }
-}
+    suggestions: Array<SearchSuggestion>,
+  },
+};
 
 type SearchState = {
   isActive: boolean,
@@ -36,7 +36,6 @@ type SearchState = {
   suggestions: Array<SearchSuggestion>,
   urisByQuery: {},
 };
-
 
 const defaultState = {
   isActive: false,
@@ -66,14 +65,19 @@ export default handleActions(
       searching: false,
     }),
 
-    [ACTIONS.UPDATE_SEARCH_QUERY]: (state: SearchState, action: UpdateSearchQuery): SearchState => ({
+    [ACTIONS.UPDATE_SEARCH_QUERY]: (
+      state: SearchState,
+      action: UpdateSearchQuery
+    ): SearchState => ({
       ...state,
       searchQuery: action.data.query,
       isActive: true,
     }),
 
-    [ACTIONS.UPDATE_SEARCH_SUGGESTIONS]:
-    (state: SearchState, action: UpdateSearchSuggestions): SearchState => ({
+    [ACTIONS.UPDATE_SEARCH_SUGGESTIONS]: (
+      state: SearchState,
+      action: UpdateSearchSuggestions
+    ): SearchState => ({
       ...state,
       suggestions: action.data.suggestions,
     }),
@@ -93,7 +97,7 @@ export default handleActions(
     [ACTIONS.CLOSE_MODAL]: (state: SearchState): SearchState => ({
       ...state,
       isActive: false,
-    })
+    }),
   },
   defaultState
 );

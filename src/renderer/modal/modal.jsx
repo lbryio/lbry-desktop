@@ -3,7 +3,7 @@
 // These should probably just be combined into one modal component
 import * as React from 'react';
 import ReactModal from 'react-modal';
-import Button from 'component/link/index';
+import Button from 'component/button';
 import app from 'app';
 import classnames from 'classnames';
 
@@ -22,7 +22,7 @@ type ModalProps = {
   extraContent?: React.Node,
   expandButtonLabel?: string,
   hideButtonLabel?: string,
-  fullScreen: boolean
+  fullScreen: boolean,
 };
 
 export class Modal extends React.PureComponent<ModalProps> {
@@ -58,13 +58,11 @@ export class Modal extends React.PureComponent<ModalProps> {
         {...modalProps}
         onCloseRequested={onAborted || onConfirmed}
         className={classnames(className, {
-          'modal': !fullScreen,
+          modal: !fullScreen,
           'modal--fullscreen': fullScreen,
         })}
         overlayClassName={
-          ![null, undefined, ''].includes(overlayClassName)
-            ? overlayClassName
-            : 'modal-overlay'
+          ![null, undefined, ''].includes(overlayClassName) ? overlayClassName : 'modal-overlay'
         }
       >
         <div>{children}</div>

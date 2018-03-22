@@ -55,13 +55,14 @@ export default (props: Props) => {
         onChange={e => {
           getCoinStats(e.target.value);
           handleChange(e);
-        }}>
+        }}
+      >
         {shiftSupportedCoins.map(coin => (
           <option key={coin} value={coin}>
             {coin}
           </option>
         ))}
-        </FormField>
+      </FormField>
       <ShiftMarketInfo
         originCoin={originCoin}
         shapeShiftRate={shapeShiftRate}
@@ -71,21 +72,22 @@ export default (props: Props) => {
       />
 
       <FormRow padded>
-      <FormField
-        label={__('Return address')}
-        error={touched.returnAddress && !!errors.returnAddress && errors.returnAddress}
-        type="text"
-        name="return_address"
-        className="input--address"
-        placeholder={getExampleAddress(originCoin)}
-        onChange={handleChange}
-        onBlur={handleBlur}
-        value={values.returnAddress}
-      />
+        <FormField
+          label={__('Return address')}
+          error={touched.returnAddress && !!errors.returnAddress && errors.returnAddress}
+          type="text"
+          name="return_address"
+          className="input--address"
+          placeholder={getExampleAddress(originCoin)}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          value={values.returnAddress}
+        />
       </FormRow>
       <span className="help">
         <span>
-          ({__('optional but recommended')})<br/>{__('We will return your')} {originCoin}{' '}
+          ({__('optional but recommended')})<br />
+          {__('We will return your')} {originCoin}{' '}
           {__("to this address if the transaction doesn't go through.")}
         </span>
       </span>

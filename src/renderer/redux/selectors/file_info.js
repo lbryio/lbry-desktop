@@ -2,7 +2,7 @@ import {
   selectClaimsByUri,
   selectIsFetchingClaimListMine,
   selectMyClaims,
-  selectClaimsById
+  selectClaimsById,
 } from 'redux/selectors/claims';
 import { createSelector } from 'reselect';
 import { buildURI } from 'lbryURI';
@@ -106,10 +106,8 @@ export const selectTotalDownloadProgress = createSelector(selectDownloadingFileI
   return -1;
 });
 
-export const selectSearchDownloadUris = (query) => createSelector(
-  selectFileInfosDownloaded,
-  selectClaimsById,
-  (fileInfos, claimsById) => {
+export const selectSearchDownloadUris = query =>
+  createSelector(selectFileInfosDownloaded, selectClaimsById, (fileInfos, claimsById) => {
     if (!query || !fileInfos.length) {
       return null;
     }
@@ -120,7 +118,7 @@ export const selectSearchDownloadUris = (query) => createSelector(
       searchQueryDictionary[subQuery] = subQuery;
     });
 
-    const arrayContainsQueryPart = (array) => {
+    const arrayContainsQueryPart = array => {
       for (var i = 0; i < array.length; i += 1) {
         const subQuery = array[i];
         if (searchQueryDictionary[subQuery]) {
@@ -128,10 +126,10 @@ export const selectSearchDownloadUris = (query) => createSelector(
         }
       }
       return false;
-    }
+    };
 
     let downloadResultsFromQuery = [];
-    fileInfos.forEach((fileInfo) => {
+    fileInfos.forEach(fileInfo => {
       const { channel_name, name, metadata } = fileInfo;
       const { stream: { metadata: { author, description, title } } } = metadata;
 
@@ -173,23 +171,24 @@ export const selectSearchDownloadUris = (query) => createSelector(
       }
     });
 
-    return downloadResultsFromQuery.length ? downloadResultsFromQuery.map((fileInfo) => {
-      const { channel_name, claim_id, name, value, metadata } = fileInfo;
-      const uriParams = {};
+    return downloadResultsFromQuery.length
+      ? downloadResultsFromQuery.map(fileInfo => {
+          const { channel_name: channelName, claim_id: claimId, name, value, metadata } = fileInfo;
+          const uriParams = {};
 
-      if (channel_name) {
-        uriParams.channelName = channel_name;
-        uriParams.contentName = name;
-        uriParams.claimId = value
-          ? value.publisherSignature.certificateId
-          : metadata.publisherSignature.certificateId;
-      } else {
-        uriParams.claimId = claim_id;
-        uriParams.name = name;
-      }
+          if (channelName) {
+            uriParams.channelName = channelName;
+            uriParams.contentName = name;
+            uriParams.claimId = value
+              ? value.publisherSignature.certificateId
+              : metadata.publisherSignature.certificateId;
+          } else {
+            uriParams.claimId = claimId;
+            uriParams.name = name;
+          }
 
-      const uri = buildURI(uriParams);
-      return uri;
-    }) : null;
-  }
-)
+          const uri = buildURI(uriParams);
+          return uri;
+        })
+      : null;
+  });

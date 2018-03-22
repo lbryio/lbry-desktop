@@ -7,12 +7,12 @@ import FileListPublished from './view';
 
 const select = state => ({
   claims: selectMyClaimsWithoutChannels(state),
-  pendingPublishes: selectPendingPublishes(state)
-})
+  pendingPublishes: selectPendingPublishes(state),
+});
 
 const perform = dispatch => ({
   navigate: path => dispatch(doNavigate(path)),
-  checkIfPublishesConfirmed: (publishes) => dispatch(doCheckPendingPublishes(publishes))
+  checkIfPublishesConfirmed: publishes => dispatch(doCheckPendingPublishes(publishes)),
 });
 
 export default connect(select, perform)(FileListPublished);

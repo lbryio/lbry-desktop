@@ -1,8 +1,8 @@
 import React from 'react';
-import { BusyMessage } from 'component/common';
+import BusyIndicator from 'component/common/busy-indicator';
 import RewardListClaimed from 'component/rewardListClaimed';
 import RewardTile from 'component/rewardTile';
-import Link from 'component/link';
+import Button from 'component/button';
 import Page from 'component/page';
 
 class RewardsPage extends React.PureComponent {
@@ -45,7 +45,7 @@ class RewardsPage extends React.PureComponent {
               </p>
             </div>
             <div className="card__content">
-              <Link onClick={doAuth} button="primary" label="Prove Humanity" />
+              <Button onClick={doAuth} button="primary" label="Prove Humanity" />
             </div>
           </section>
         );
@@ -70,7 +70,7 @@ class RewardsPage extends React.PureComponent {
             )}`}
           </p>
           <p>
-            <Link onClick={() => navigate('/discover')} button="primary" label="Return Home" />
+            <Button onClick={() => navigate('/discover')} button="primary" label="Return Home" />
           </p>
         </div>
       );
@@ -87,7 +87,7 @@ class RewardsPage extends React.PureComponent {
             {__(
               'Rewards are currently disabled for your account. Turn on diagnostic data sharing, in'
             )}{' '}
-            <Link onClick={() => navigate('/settings')} label="Settings" />
+            <Button onClick={() => navigate('/settings')} label="Settings" />
             {__(', in order to re-enable them.')}
           </p>
         </div>
@@ -95,7 +95,7 @@ class RewardsPage extends React.PureComponent {
     } else if (fetching) {
       return (
         <div className="card__content">
-          <BusyMessage message={__('Fetching rewards')} />
+          <BusyIndicator message={__('Fetching rewards')} />
         </div>
       );
     } else if (user === null) {

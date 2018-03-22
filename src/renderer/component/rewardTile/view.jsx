@@ -3,8 +3,9 @@ import React from 'react';
 import CreditAmount from 'component/common/credit-amount';
 import Icon from 'component/common/icon';
 import RewardLink from 'component/rewardLink';
-import Button from 'component/link';
+import Button from 'component/button';
 import rewards from 'rewards';
+import * as icons from 'constants/icons';
 
 type Props = {
   reward: {
@@ -24,12 +25,8 @@ const RewardTile = (props: Props) => {
 
   return (
     <section className="card card--section">
-      <div className="card__title">
-        {reward.reward_title}
-      </div>
-      <div className="card__subtitle">
-        {reward.reward_description}
-      </div>
+      <div className="card__title">{reward.reward_title}</div>
+      <div className="card__subtitle">{reward.reward_description}</div>
       <div className="card__actions">
         {reward.reward_type === rewards.TYPE_REFERRAL && (
           <Button button="primary" navigate="/invite" label={__('Go To Invites')} />
@@ -37,7 +34,7 @@ const RewardTile = (props: Props) => {
         {reward.reward_type !== rewards.TYPE_REFERRAL &&
           (claimed ? (
             <span>
-              <Icon icon="icon-check" /> {__('Reward claimed.')}
+              <Icon icon={icons.CHECK} /> {__('Reward claimed.')}
             </span>
           ) : (
             <RewardLink reward_type={reward.reward_type} />

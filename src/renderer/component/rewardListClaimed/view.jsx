@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import LinkTransaction from 'component/common/transaction-link';
+import ButtonTransaction from 'component/common/transaction-link';
 
 type Reward = {
   id: string,
@@ -23,9 +23,7 @@ const RewardListClaimed = (props: Props) => {
 
   return (
     <section className="card card--section">
-      <div className="card__title">
-        Claimed Rewards
-      </div>
+      <div className="card__title">Claimed Rewards</div>
 
       <table className="card__content table table--stretch">
         <thead>
@@ -42,7 +40,7 @@ const RewardListClaimed = (props: Props) => {
               <td>{reward.reward_title}</td>
               <td>{reward.reward_amount}</td>
               <td>
-                <LinkTransaction id={reward.transaction_id} />
+                <ButtonTransaction id={reward.transaction_id} />
               </td>
               <td>{reward.created_at.replace('Z', ' ').replace('T', ' ')}</td>
             </tr>

@@ -66,7 +66,7 @@ const reducers = combineReducers({
   shapeShift: shapeShiftReducer,
   subscriptions: subscriptionsReducer,
   media: mediaReducer,
-  publish: publishReducer
+  publish: publishReducer,
 });
 
 const bulkThunk = createBulkThunkMiddleware();

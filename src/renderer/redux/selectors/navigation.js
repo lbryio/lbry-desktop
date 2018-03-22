@@ -62,14 +62,11 @@ export const selectNavLinks = createSelector(
       page === 'invite';
 
     const isMyLbryPage = page =>
-      page === 'downloaded' ||
-      page === 'published' ||
-      page === 'settings';
-
+      page === 'downloaded' || page === 'published' || page === 'settings';
 
     const previousStack = historyStack.slice().reverse();
 
-    const getPreviousSubLinkPath = (checkIfValidPage) => {
+    const getPreviousSubLinkPath = checkIfValidPage => {
       for (let i = 0; i < previousStack.length; i += 1) {
         const currentStackItem = previousStack[i];
 
@@ -79,10 +76,12 @@ export const selectNavLinks = createSelector(
           return currentStackItem.path;
         }
       }
-    }
+
+      return undefined;
+    };
 
     // Gets the last active sublink in a section
-    const getActiveSublink = (category) => {
+    const getActiveSublink = category => {
       if (category === 'wallet') {
         const previousPath = getPreviousSubLinkPath(isWalletPage);
         return previousPath ? previousPath : '/wallet';
@@ -92,7 +91,7 @@ export const selectNavLinks = createSelector(
       }
 
       return undefined;
-    }
+    };
 
     const isCurrentlyWalletPage = isWalletPage(currentPage);
     const isCurrentlyMyLbryPage = isMyLbryPage(currentPage);
@@ -151,7 +150,7 @@ export const selectNavLinks = createSelector(
         path: '/backup',
         active: currentPage === 'backup',
       },
-    ]
+    ];
 
     const navLinks = {
       primary: [
@@ -174,20 +173,20 @@ export const selectNavLinks = createSelector(
           icon: 'CreditCard',
           subLinks: walletSubLinks,
           path: isCurrentlyWalletPage ? '/wallet' : getActiveSublink('wallet'),
-          active: isWalletPage(currentPage)
+          active: isWalletPage(currentPage),
         },
         {
           label: 'My LBRY',
           icon: 'Settings',
           subLinks: myLbrySubLinks,
           path: isCurrentlyMyLbryPage ? '/downloaded' : getActiveSublink('myLbry'),
-          active: isMyLbryPage(currentPage)
+          active: isMyLbryPage(currentPage),
         },
         {
           label: 'Publish',
           icon: 'UploadCloud',
           path: '/publish',
-          active: currentPage === 'publish'
+          active: currentPage === 'publish',
         },
         {
           label: 'Help',

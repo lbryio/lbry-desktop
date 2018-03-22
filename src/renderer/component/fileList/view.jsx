@@ -3,7 +3,7 @@ import * as React from 'react';
 import { buildURI } from 'lbryURI';
 import { FormField } from 'component/common/form';
 import FileCard from 'component/fileCard';
-import { BusyMessage } from 'component/common.js';
+import BusyIndicator from 'component/common/busy-indicator';
 
 type FileInfo = {
   name: string,
@@ -12,28 +12,28 @@ type FileInfo = {
   value?: {
     publisherSignature: {
       certificateId: string,
-    }
+    },
   },
   metadata: {
     publisherSignature: {
-      certificateId: string
-    }
-  }
-}
+      certificateId: string,
+    },
+  },
+};
 
 type Props = {
   hideFilter: boolean,
-  fileInfos: Array<FileInfo>
-}
+  fileInfos: Array<FileInfo>,
+};
 
 type State = {
-  sortBy: string
-}
+  sortBy: string,
+};
 
 class FileList extends React.PureComponent<Props, State> {
   static defaultProps = {
-    hideFilter: false
-  }
+    hideFilter: false,
+  };
 
   constructor(props: Props) {
     super(props);
@@ -121,7 +121,7 @@ class FileList extends React.PureComponent<Props, State> {
       return fileInfo.value.publisherSignature.certificateId;
     }
     return fileInfo.channel_claim_id;
-  }
+  };
 
   render() {
     const { fileInfos, hideFilter } = this.props;
@@ -129,14 +129,7 @@ class FileList extends React.PureComponent<Props, State> {
     const content = [];
 
     this.sortFunctions[sortBy](fileInfos).forEach(fileInfo => {
-      const {
-        channel_name,
-        name,
-        claim_name,
-        claim_id,
-        outpoint,
-        pending,
-      } = fileInfo;
+      const { channel_name, name, claim_name, claim_id, outpoint } = fileInfo;
       const uriParams = {};
 
       if (fileInfo.channel_name) {
@@ -150,29 +143,25 @@ class FileList extends React.PureComponent<Props, State> {
 
       const uri = buildURI(uriParams);
 
-      content.push(
-        <FileCard
-          pending={pending}
-          key={outpoint || claim_id || name}
-          uri={uri}
-          showPrice={false}
-        />
-      );
+      content.push(<FileCard key={outpoint || claim_id || name} uri={uri} showPrice={false} />);
     });
 
     return (
       <section>
         <div className="file-list__sort">
           {!hideFilter && (
-            <FormField prefix={__('Sort by')} type="select" value={sortBy} onChange={this.handleSortChanged}>
+            <FormField
+              prefix={__('Sort by')}
+              type="select"
+              value={sortBy}
+              onChange={this.handleSortChanged}
+            >
               <option value="date">{__('Date')}</option>
               <option value="title">{__('Title')}</option>
             </FormField>
           )}
         </div>
-        <div className="card__list">
-          {content}
-        </div>
+        <div className="card__list">{content}</div>
       </section>
     );
   }

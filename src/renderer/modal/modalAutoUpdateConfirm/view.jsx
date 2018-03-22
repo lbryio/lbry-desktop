@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal } from 'modal/modal';
 import { Line } from 'rc-progress';
-import Link from 'component/link/index';
+import Button from 'component/button';
 
 const { ipcRenderer } = require('electron');
 
@@ -29,7 +29,10 @@ class ModalAutoUpdateConfirm extends React.PureComponent {
           <p>{__('Your LBRY update is ready. Restart LBRY now to use it!')}</p>
           <p className="meta text-center">
             {__('Want to know what has changed?')} See the{' '}
-            <Link label={__('release notes')} href="https://github.com/lbryio/lbry-app/releases" />.
+            <Button
+              label={__('release notes')}
+              href="https://github.com/lbryio/lbry-app/releases"
+            />.
           </p>
         </section>
       </Modal>

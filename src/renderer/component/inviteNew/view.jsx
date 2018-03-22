@@ -1,7 +1,7 @@
 // I'll come back to this
 /* eslint-disable */
 import React from 'react';
-import { BusyMessage } from 'component/common';
+import BusyIndicator from 'component/common/busy-indicator';
 import CreditAmount from 'component/common/credit-amount';
 import { Form, FormRow, FormField, Submit } from 'component/common/form';
 
@@ -45,7 +45,7 @@ class FormInviteNew extends React.PureComponent {
             onChange={event => {
               this.handleEmailChanged(event);
             }}
-            />
+          />
         </FormRow>
         <div className="card__actions">
           <Submit label={label} disabled={isPending} />
@@ -68,9 +68,7 @@ class InviteNew extends React.PureComponent {
 
     return (
       <section className="card card--section">
-        <div className="card__title">
-          {__('Invite a Friend')}
-        </div>
+        <div className="card__title">{__('Invite a Friend')}</div>
         <div className="card__subtitle">
           {__("Or an enemy. Or your cousin Jerry, who you're kind of unsure about.")}
         </div>

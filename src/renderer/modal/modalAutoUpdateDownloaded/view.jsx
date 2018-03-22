@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal } from 'modal/modal';
 import { Line } from 'rc-progress';
-import Link from 'component/link/index';
+import Button from 'component/button';
 
 const { ipcRenderer } = require('electron');
 

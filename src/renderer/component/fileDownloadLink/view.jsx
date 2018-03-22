@@ -1,7 +1,8 @@
 import React from 'react';
 import Icon from 'component/common/icon';
-import Link from 'component/link';
+import Button from 'component/button';
 import classnames from 'classnames';
+import * as icons from 'constants/icons';
 
 class FileDownloadLink extends React.PureComponent {
   componentWillMount() {
@@ -53,17 +54,16 @@ class FileDownloadLink extends React.PureComponent {
 
     if (loading || downloading) {
       const progress =
-          fileInfo && fileInfo.written_bytes
-            ? fileInfo.written_bytes / fileInfo.total_bytes * 100
-            : 0;
-      const label =
-        fileInfo ? progress.toFixed(0) + __('% complete') : __('Connecting...');
+        fileInfo && fileInfo.written_bytes
+          ? fileInfo.written_bytes / fileInfo.total_bytes * 100
+          : 0;
+      const label = fileInfo ? progress.toFixed(0) + __('% complete') : __('Connecting...');
 
       return (
         <div className="file-download btn__content">
           <div
             className={classnames('file-download__overlay', {
-              'btn__content': !!progress
+              btn__content: !!progress,
             })}
             style={{ width: `${progress}%` }}
           >
@@ -78,10 +78,10 @@ class FileDownloadLink extends React.PureComponent {
       }
 
       return (
-        <Link
+        <Button
           className="btn--file-actions"
           description={__('Download')}
-          icon="DownloadCloud"
+          icon={icons.DOWNLOAD}
           onClick={() => {
             purchaseUri(uri);
           }}
@@ -89,11 +89,12 @@ class FileDownloadLink extends React.PureComponent {
       );
     } else if (fileInfo && fileInfo.download_path) {
       return (
-        <Link
+        <Button
           className="btn--file-actions"
           description={__('Open')}
-          icon="BookOpen"
-          onClick={() => openFile()} />
+          icon={icons.DOWNLOAD}
+          onClick={() => openFile()}
+        />
       );
     }
 

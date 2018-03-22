@@ -2,18 +2,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { doNavigate } from 'redux/actions/navigation';
 import { doClaimRewardType } from 'redux/actions/rewards';
-import {
-  selectMyClaims,
-  selectClaimsByUri,
-  selectClaimById
-} from 'redux/selectors/claims';
+import { selectMyClaims, selectClaimsByUri } from 'redux/selectors/claims';
 import { selectResolvingUris } from 'redux/selectors/content';
 import { selectPublishFormValues } from 'redux/selectors/publish';
-import {
-  doResolveUri,
-} from 'redux/actions/content';
+import { doResolveUri } from 'redux/actions/content';
 import { selectBalance } from 'redux/selectors/wallet';
-import { makeSelectFileInfoForUri } from 'redux/selectors/file_info';
 import {
   doUpdateFilePath,
   doClearFilePath,
@@ -25,17 +18,14 @@ import {
   doUpdatePublishForm,
   doPublish,
 } from 'redux/actions/publish';
+import { makeSelectCostInfoForUri } from 'redux/selectors/cost_info';
+import { doPrepareEdit } from 'redux/actions/publish';
 import PublishPage from './view';
 
 const select = (state, props) => {
   const publishState = selectPublishFormValues(state);
   const { uri, name } = publishState;
   const { params: { id } } = props;
-
-  let prefillClaim;
-  if (id) {
-    prefillClaim = selectClaimById(id)(state);
-  }
 
   const resolvingUris = selectResolvingUris(state);
   let isResolvingUri = false;
@@ -54,30 +44,24 @@ const select = (state, props) => {
     myClaimForUri = myClaims.find(claim => claim.name === name);
   }
 
-  let myFileInfoForUri;
-  if (!!myClaimForUri) {
-    myFileInfoForUri = makeSelectFileInfoForUri(uri)(state);
-  }
-
   return {
     ...publishState,
-    prefillClaim,
-    isEditing: !!prefillClaim,
     isResolvingUri,
     claimForUri,
     winningBidForClaimUri,
     myClaimForUri,
-    myFileInfoForUri,
+    costInfo: makeSelectCostInfoForUri(props.uri)(state),
     balance: selectBalance(state),
-  }
+  };
 };
 
 const perform = dispatch => ({
-  updatePublishForm: (value) => dispatch(doUpdatePublishForm(value)),
+  updatePublishForm: value => dispatch(doUpdatePublishForm(value)),
   clearPublish: () => dispatch(doClearPublish()),
-  resolveUri: (uri) => dispatch(doResolveUri(uri)),
-  publish: (params) => dispatch(doPublish(params)),
+  resolveUri: uri => dispatch(doResolveUri(uri)),
+  publish: params => dispatch(doPublish(params)),
   navigate: path => dispatch(doNavigate(path)),
+  prepareEdit: claim => dispatch(doPrepareEdit(claim)),
 });
 
 export default connect(select, perform)(PublishPage);

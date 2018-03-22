@@ -1,9 +1,9 @@
-// I'll come back to This
 /* eslint-disable */
 import React from 'react';
-import Link from 'component/link';
+import Button from 'component/button';
 import CardVerify from 'component/cardVerify';
 import lbryio from 'lbryio.js';
+import * as icons from 'constants/icons';
 
 class UserVerify extends React.PureComponent {
   constructor(props) {
@@ -59,7 +59,7 @@ class UserVerify extends React.PureComponent {
           <div className="card__content">
             <div className="meta">
               {__('A $1 authorization may temporarily appear with your provider.')}{' '}
-              <Link
+              <Button
                 href="https://lbry.io/faq/identity-requirements"
                 label={__('Read more about why we do this.')}
               />
@@ -76,19 +76,19 @@ class UserVerify extends React.PureComponent {
             )}`}
           </div>
           <div className="card__actions">
-            <Link
+            <Button
               onClick={() => {
                 verifyPhone();
               }}
               button="alt"
-              icon="icon-phone"
+              icon={icons.PHONE}
               label={__('Submit Phone Number')}
             />
           </div>
           <div className="card__content">
             <div className="meta">
               {__('Standard messaging rates apply. Having trouble?')}{' '}
-              <Link href="https://lbry.io/faq/phone" label={__('Read more.')} />
+              <Button href="https://lbry.io/faq/phone" label={__('Read more.')} />
             </div>
           </div>
         </section>
@@ -109,10 +109,10 @@ class UserVerify extends React.PureComponent {
             </p>
           </div>
           <div className="card__actions">
-            <Link
+            <Button
               href="https://chat.lbry.io"
               button="alt"
-              icon="icon-comments"
+              icon={icons.MESSAGE}
               label={__('Join LBRY Chat')}
             />
           </div>
@@ -129,7 +129,7 @@ class UserVerify extends React.PureComponent {
             </p>
           </div>
           <div className="card__actions">
-            <Link onClick={() => navigate('/discover')} button="alt" label={__('Skip Rewards')} />
+            <Button onClick={() => navigate('/discover')} button="alt" label={__('Skip Rewards')} />
           </div>
         </section>
       </React.Fragment>

@@ -1,5 +1,5 @@
 import React from 'react';
-import Link from 'component/link';
+import Button from 'component/button';
 import { FileTile } from 'component/fileTile';
 import FileList from 'component/fileList';
 import Page from 'component/page';
@@ -9,16 +9,15 @@ class FileListDownloaded extends React.PureComponent {
     const { fileInfos, navigate } = this.props;
     const hasDownloads = fileInfos && fileInfos.length > 0;
 
-
     return (
       <Page notContained>
-      {hasDownloads ? (
+        {hasDownloads ? (
           <FileList fileInfos={fileInfos} />
         ) : (
           <div className="page__empty">
             {__("You haven't downloaded anything from LBRY yet.")}
             <div className="card__actions card__actions--center">
-              <Link
+              <Button
                 button="primary"
                 onClick={() => navigate('/discover')}
                 label={__('Explore new content')}

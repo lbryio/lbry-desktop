@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal } from 'modal/modal';
-import Link from 'component/link/index';
+import Button from 'component/button';
 import UserPhoneNew from 'component/userPhoneNew';
 import UserPhoneVerify from 'component/userPhoneVerify';
 
@@ -8,7 +8,7 @@ class ModalPhoneCollection extends React.PureComponent {
   renderInner() {
     const { closeModal, phone, user } = this.props;
 
-    const cancelButton = <Link button="text" onClick={closeModal} label={__('Not Now')} />;
+    const cancelButton = <Button button="text" onClick={closeModal} label={__('Not Now')} />;
 
     if (!user.phone_number && !phone) {
       return <UserPhoneNew cancelButton={cancelButton} />;

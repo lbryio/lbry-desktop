@@ -2,7 +2,8 @@
 import React from 'react';
 import classnames from 'classnames';
 import Icon from 'component/common/icon';
-import Button from 'component/link';
+import Button from 'component/button';
+import * as icons from 'constants/icons';
 
 type Props = {
   body: string,
@@ -46,7 +47,7 @@ class ToolTip extends React.PureComponent<Props, State> {
       <span className="tooltip">
         <Button button="link" className="help tooltip__link" onClick={this.handleClick}>
           {label}
-          {showTooltip && <Icon icon="X" />}
+          {showTooltip && <Icon icon={icons.CLOSE} />}
         </Button>
         <div className={classnames('tooltip__body', { hidden: !showTooltip })}>{body}</div>
       </span>

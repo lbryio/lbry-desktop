@@ -2,19 +2,19 @@
 import React from 'react';
 import { isNameValid } from 'lbryURI';
 import { FormRow, FormField } from 'component/common/form';
-import { BusyMessage } from 'component/common';
-import Link from 'component/link';
+import BusyIndicator from 'component/common/busy-indicator';
+import Button from 'component/button';
 import { CHANNEL_NEW, CHANNEL_ANONYMOUS } from 'constants/claim';
 
 type Props = {
   channel: string, //currently selected channel
   channels: Array<{ name: string }>,
   balance: number,
-  onChannelChange: (string) => void,
+  onChannelChange: string => void,
   createChannel: (string, number) => Promise<any>,
   fetchChannelListMine: () => void,
   fetchingChannels: boolean,
-}
+};
 
 type State = {
   newChannelName: string,
@@ -23,8 +23,8 @@ type State = {
   creatingChannel: boolean,
   newChannelNameError: string,
   newChannelBidError: string,
-  createChannelError: ?string
-}
+  createChannelError: ?string,
+};
 
 class ChannelSection extends React.PureComponent<Props, State> {
   constructor(props: Props) {
@@ -69,7 +69,7 @@ class ChannelSection extends React.PureComponent<Props, State> {
   handleNewChannelNameChange(event: SyntheticInputEvent<*>) {
     let newChannelName = event.target.value;
 
-    if (newChannelName.startsWith("@")) {
+    if (newChannelName.startsWith('@')) {
       newChannelName = newChannelName.slice(1);
     }
 
@@ -89,11 +89,11 @@ class ChannelSection extends React.PureComponent<Props, State> {
     const newChannelBid = parseFloat(event.target.value);
     let newChannelBidError;
     if (newChannelBid === balance) {
-      newChannelBidError = __('Please decrease your bid to account for transaction fees')
+      newChannelBidError = __('Please decrease your bid to account for transaction fees');
     } else if (newChannelBid > balance) {
       newChannelBidError = __('Not enough credits');
     }
-    
+
     this.setState({
       newChannelBid,
       newChannelBidError,
@@ -115,7 +115,6 @@ class ChannelSection extends React.PureComponent<Props, State> {
       createChannelError: undefined,
     });
 
-
     const success = () => {
       this.setState({
         creatingChannel: false,
@@ -128,10 +127,9 @@ class ChannelSection extends React.PureComponent<Props, State> {
     const failure = err => {
       this.setState({
         creatingChannel: false,
-        createChannelError: __('Unable to create channel due to an internal error.')
+        createChannelError: __('Unable to create channel due to an internal error.'),
       });
     };
-
 
     createChannel(channelName, newChannelBid).then(success, failure);
   }
@@ -146,37 +144,31 @@ class ChannelSection extends React.PureComponent<Props, State> {
       newChannelBidError,
       creatingChannel,
       createChannelError,
-      addingChannel
+      addingChannel,
     } = this.state;
 
     return (
-        <div className="card__content">
-          {createChannelError && (
-            <div className="form-field__error">{createChannelError}</div>
-          )}
-          {fetchingChannels ? (
-            <BusyMessage message="Updating channels" />
-          ) : (
-              <FormField
-                key="channel"
-                type="select"
-                tabIndex="1"
-                onChange={this.handleChannelChange}
-                value={channel}
-              >
-                <option value={CHANNEL_ANONYMOUS}>
-                  {__('Anonymous')}
-                </option>
-                {channels.map(({ name }) => (
-                  <option key={name} value={name}>
-                    {name}
-                  </option>
-                ))}
-                <option value={CHANNEL_NEW}>
-                  {__('New channel...')}
-                </option>
-              </FormField>
-          )}
+      <div className="card__content">
+        {createChannelError && <div className="form-field__error">{createChannelError}</div>}
+        {fetchingChannels ? (
+          <BusyIndicator message="Updating channels" />
+        ) : (
+          <FormField
+            key="channel"
+            type="select"
+            tabIndex="1"
+            onChange={this.handleChannelChange}
+            value={channel}
+          >
+            <option value={CHANNEL_ANONYMOUS}>{__('Anonymous')}</option>
+            {channels.map(({ name }) => (
+              <option key={name} value={name}>
+                {name}
+              </option>
+            ))}
+            <option value={CHANNEL_NEW}>{__('New channel...')}</option>
+          </FormField>
+        )}
         {addingChannel && (
           <div className="card__content">
             <FormRow padded>
@@ -187,7 +179,7 @@ class ChannelSection extends React.PureComponent<Props, State> {
                 error={newChannelNameError}
                 value={newChannelName}
                 onChange={this.handleNewChannelNameChange}
-                />
+              />
             </FormRow>
             <FormRow padded>
               <FormField
@@ -202,13 +194,12 @@ class ChannelSection extends React.PureComponent<Props, State> {
                 error={newChannelBidError}
                 value={newChannelBid}
                 onChange={this.handleNewChannelBidChange}
-                />
+              />
             </FormRow>
             <div className="card__actions">
-              <Link
-                label={
-                  !creatingChannel ? __('Create channel') : __('Creating channel...')
-                }
+              <Button
+                button="primary"
+                label={!creatingChannel ? __('Create channel') : __('Creating channel...')}
                 onClick={this.handleCreateChannelClick}
                 disabled={
                   !newChannelName ||

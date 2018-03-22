@@ -2,7 +2,8 @@
 import * as React from 'react';
 import { FormField, FormFieldPrice } from 'component/common/form';
 import * as settings from 'constants/settings';
-import Button from 'component/link';
+import * as icons from 'constants/icons';
+import Button from 'component/button';
 import Page from 'component/page';
 import FileSelector from 'component/common/file-selector';
 
@@ -238,28 +239,30 @@ class SettingsPage extends React.PureComponent<Props, State> {
 
             <section className="card card--section">
               <div className="card__title">{__('Content Settings')}</div>
-                <FormField
-                  type="checkbox"
-                  name="show_unavailable"
-                  onChange={this.onShowUnavailableChange}
-                  checked={showUnavailable}
-                  postfix={__('Show unavailable content in search results')}
-                />
-                <FormField
-                  type="checkbox"
-                  name="show_nsfw"
-                  onChange={this.onShowNsfwChange}
-                  checked={showNsfw}
-                  postfix={__('Show NSFW content')}
-                  helper={__(
-                    'NSFW content may include nudity, intense sexuality, profanity, or other adult content. By displaying NSFW content, you are affirming you are of legal age to view mature content in your country or jurisdiction.  '
-                  )}
-                />
+              <FormField
+                type="checkbox"
+                name="show_unavailable"
+                onChange={this.onShowUnavailableChange}
+                checked={showUnavailable}
+                postfix={__('Show unavailable content in search results')}
+              />
+              <FormField
+                type="checkbox"
+                name="show_nsfw"
+                onChange={this.onShowNsfwChange}
+                checked={showNsfw}
+                postfix={__('Show NSFW content')}
+                helper={__(
+                  'NSFW content may include nudity, intense sexuality, profanity, or other adult content. By displaying NSFW content, you are affirming you are of legal age to view mature content in your country or jurisdiction.  '
+                )}
+              />
             </section>
 
             <section className="card card--section">
               <div className="card__title">{__('Share Diagnostic Data')}</div>
-              <div className="card__subtitle">{__('List what we are doing with the data here')}</div>
+              <div className="card__subtitle">
+                {__('List what we are doing with the data here')}
+              </div>
               <div className="card__content">
                 <FormField
                   type="checkbox"
@@ -286,11 +289,11 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 value={currentTheme}
                 disabled={automaticDarkModeEnabled}
               >
-              {themes.map(theme => (
-                <option key={theme} value={theme}>
-                  {theme}
-                </option>
-              ))}
+                {themes.map(theme => (
+                  <option key={theme} value={theme}>
+                    {theme}
+                  </option>
+                ))}
               </FormField>
 
               <FormField
@@ -311,7 +314,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 <Button
                   button="primary"
                   label={this.state.clearingCache ? __('Clearing') : __('Clear the cache')}
-                  icon="AlertCircle"
+                  icon={icons.ALERT}
                   onClick={this.clearCache}
                   disabled={this.state.clearingCache}
                 />

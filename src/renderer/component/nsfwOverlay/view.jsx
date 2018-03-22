@@ -1,5 +1,5 @@
 import React from 'react';
-import Button from 'component/link';
+import Button from 'component/button';
 
 const NsfwOverlay = () => (
   <div className="card-overlay">

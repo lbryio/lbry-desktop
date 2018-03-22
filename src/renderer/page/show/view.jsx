@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import { BusyMessage } from 'component/common';
+import BusyIndicator from 'component/common/busy-indicator';
 import ChannelPage from 'page/channel';
 import FilePage from 'page/file';
 import Page from 'component/page';
@@ -38,14 +38,10 @@ class ShowPage extends React.PureComponent<Props> {
           <section className="card">
             <h1>{uri}</h1>
             <div className="card__content">
-              {isResolvingUri && (
-                <BusyMessage message={__('Loading decentralized data...')} />
-              )}
+              {isResolvingUri && <BusyIndicator message={__('Loading decentralized data...')} />}
               {claim === null &&
                 !isResolvingUri && (
-                  <span className="empty">
-                    {__("There's nothing at this location.")}
-                  </span>
+                  <span className="empty">{__("There's nothing at this location.")}</span>
                 )}
             </div>
           </section>

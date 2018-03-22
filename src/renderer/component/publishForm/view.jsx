@@ -3,9 +3,9 @@ import * as React from 'react';
 import lbry from 'lbry';
 import { isNameValid, buildURI, regexInvalidURI } from 'lbryURI';
 import { Form, FormField, FormRow, FormFieldPrice, Submit } from 'component/common/form';
-import Button from 'component/link';
+import Button from 'component/button';
 import Modal from 'modal/modal';
-import { BusyMessage } from 'component/common';
+import BusyIndicator from 'component/common/busy-indicator';
 import ChannelSection from 'component/selectChannel';
 import Icon from 'component/common/icon';
 import classnames from 'classnames';
@@ -17,14 +17,15 @@ import LicenseType from './internal/license-type';
 import { COPYRIGHT, OTHER } from 'constants/licenses';
 import { MINIMUM_PUBLISH_BID } from 'constants/claim';
 import { CHANNEL_NEW, CHANNEL_ANONYMOUS } from 'constants/claim';
+import * as icons from 'constants/icons';
 
 type Props = {
-  publish: (PublishParams) => void,
+  publish: PublishParams => void,
   filePath: ?string,
   bid: ?number,
-  isEditing: boolean,
+  editing: ?string,
   prefillClaim: {
-    name?: string
+    name?: string,
   },
   title: ?string,
   thumbnail: ?string,
@@ -34,18 +35,18 @@ type Props = {
   contentIsFree: boolean,
   price: {
     amount: number,
-    currency: string
+    currency: string,
   },
   channel: string,
   name: ?string,
   tosAccepted: boolean,
-  updatePublishForm: (UpdatePublishFormData) => void,
+  updatePublishForm: UpdatePublishFormData => void,
   bid: number,
   nameError: ?string,
   isResolvingUri: boolean,
   winningBidForClaimUri: number,
   myClaimForUri: ?{
-    amount: number
+    amount: number,
   },
   licenseType: string,
   otherLicenseDescription: ?string,
@@ -58,14 +59,15 @@ type Props = {
   clearError: () => void,
   clearPublish: () => void,
   clearFilePath: () => void,
-  resolveUri: (string) => void,
+  resolveUri: string => void,
   scrollToTop: () => void,
-}
+  prepareEdit: ({}) => void,
+};
 
 class PublishForm extends React.PureComponent<Props> {
   static defaultProps = {
-    prefillClaim: {}
-  }
+    prefillClaim: {},
+  };
 
   constructor(props: Props) {
     super(props);
@@ -79,6 +81,7 @@ class PublishForm extends React.PureComponent<Props> {
     (this: any).handleChannelChange = this.handleChannelChange.bind(this);
     (this: any).editExistingClaim = this.editExistingClaim.bind(this);
     (this: any).getNewUri = this.getNewUri.bind(this);
+    (this: any).getSubmitLabel = this.getSubmitLabel.bind(this);
   }
 
   handlePublish() {
@@ -99,7 +102,7 @@ class PublishForm extends React.PureComponent<Props> {
       name,
       contentIsFree,
       price,
-      uri
+      uri,
     } = this.props;
 
     let publishingLicense;
@@ -132,7 +135,7 @@ class PublishForm extends React.PureComponent<Props> {
       name,
       contentIsFree,
       price,
-      uri
+      uri,
     };
 
     publish(publishParams);
@@ -145,10 +148,10 @@ class PublishForm extends React.PureComponent<Props> {
   }
 
   editExistingClaim() {
-    const { myClaimForUri, updatePublishForm } = this.props;
+    const { myClaimForUri, prepareEdit, scrollToTop } = this.props;
     if (myClaimForUri) {
-      const { amount } = myClaimForUri;
-      updatePublishForm({ bid: amount }); // This needs to be extended, other data lives in fileInfo
+      prepareEdit(myClaimForUri);
+      scrollToTop();
     }
   }
 
@@ -172,7 +175,10 @@ class PublishForm extends React.PureComponent<Props> {
     }
 
     if (!isNameValid(name, false)) {
-      updatePublishForm({ name, nameError: __('LBRY names must contain only letters, numbers and dashes.') })
+      updatePublishForm({
+        name,
+        nameError: __('LBRY names must contain only letters, numbers and dashes.'),
+      });
       return;
     }
 
@@ -181,16 +187,16 @@ class PublishForm extends React.PureComponent<Props> {
       name,
       uri,
       nameError: undefined,
-    })
+    });
   }
 
   handleChannelChange(channelName: string) {
     const { name, updatePublishForm, resolveUri } = this.props;
     if (name) {
       const uri = this.getNewUri(name, channelName);
-      updatePublishForm({ channel: channelName, uri })
+      updatePublishForm({ channel: channelName, uri });
     } else {
-      updatePublishForm({ channel: channelName })
+      updatePublishForm({ channel: channelName });
     }
   }
 
@@ -204,14 +210,14 @@ class PublishForm extends React.PureComponent<Props> {
       bidError = __('Your bid must be higher');
     }
 
-    updatePublishForm({ bid, bidError })
+    updatePublishForm({ bid, bidError });
   }
 
   // Returns a new uri to be used in the form and begins to resolve that uri for bid help text
   getNewUri(name: string, channel: string) {
     const { resolveUri } = this.props;
     // If they are midway through a channel creation, treat it as anonymous until it completes
-    const channelName = (channel === CHANNEL_ANONYMOUS || channel === CHANNEL_NEW) ? '' : channel;
+    const channelName = channel === CHANNEL_ANONYMOUS || channel === CHANNEL_NEW ? '' : channel;
 
     let uri;
     try {
@@ -225,7 +231,16 @@ class PublishForm extends React.PureComponent<Props> {
       return uri;
     }
 
-    return "";
+    return '';
+  }
+
+  getSubmitLabel() {
+    const { editing, publishing }  = this.props;
+    if (!editing) {
+      return !publishing ? __('Publish') : __('Publishing...');
+    } else {
+      return !publishing ?  __('Edit') : __('Editing');
+    }
   }
 
   checkIsFormValid() {
@@ -242,26 +257,26 @@ class PublishForm extends React.PureComponent<Props> {
       // There could be multiple bid errors, so just duplicate it at the bottom
       return (
         <div className="card__subtitle form-field__error">
-          {nameError && <div>{__("The URL you created is not valid.")}</div>}
+          {nameError && <div>{__('The URL you created is not valid.')}</div>}
           {bidError && <div>{bidError}</div>}
         </div>
-      )
+      );
     }
 
     return (
       <div className="card__content card__subtitle card__subtitle--block form-field__error">
-        {!title && <div>{__("A title is required")}</div>}
-        {!name && <div>{__("A URL is required")}</div>}
-        {!bid && <div>{__("A bid amount is required")}</div>}
-        {!tosAccepted && <div>{__("You must agree to the terms of service")}</div>}
+        {!title && <div>{__('A title is required')}</div>}
+        {!name && <div>{__('A URL is required')}</div>}
+        {!bid && <div>{__('A bid amount is required')}</div>}
+        {!tosAccepted && <div>{__('You must agree to the terms of service')}</div>}
       </div>
-    )
+    );
   }
 
   render() {
     const {
       filePath,
-      isEditing,
+      editing,
       prefillClaim,
       title,
       thumbnail,
@@ -286,43 +301,50 @@ class PublishForm extends React.PureComponent<Props> {
       uri,
       bidError,
       publishing,
-      clearPublish
+      clearPublish,
     } = this.props;
 
-    const formDisabled = !filePath || publishing;
+    const formDisabled = (!filePath && !editing) || publishing;
     const formValid = this.checkIsFormValid();
-    const prefillName = prefillClaim.name || "";
 
     return (
       <Form onSubmit={this.handlePublish}>
-        <section className={classnames("card card--section")}>
+        <section className={classnames('card card--section')}>
           <div className="card__title">{__('Content')}</div>
-          <div className="card__subtitle">{__('What are you publishing?')}</div>
-          {filePath && (
+          <div className="card__subtitle">
+            {editing ? __('Editing a claim') : __('What are you publishing?')}
+          </div>
+          {(filePath || !!editing) && (
             <div className="card-media__internal-links">
-              <Button button="inverse" icon="X" label={__("Clear")} onClick={clearPublish} />
+              <Button
+                button="inverse"
+                icon={icons.CLOSE}
+                label={__('Clear')}
+                onClick={clearPublish}
+              />
             </div>
           )}
-          <FileSelector
-            currentPath={filePath}
-            onFileChosen={this.handleFileChange}
-          />
-          {isEditing && prefillClaim.name &&  (
-            <p className="card__subtitle">{__("If you don't choose a file, the file from your existing claim")}{" "}{`"${prefillName}"`}{" "}{__("will be used.")}</p>
+          <FileSelector currentPath={filePath} onFileChosen={this.handleFileChange} />
+          {!!editing && (
+            <p className="card__content card__subtitle">
+              {__("If you don't choose a file, the file from your existing claim")}
+              {` "${name}" `}
+              {__('will be used.')}
+            </p>
           )}
         </section>
-        <div className={classnames({ "card--disabled": formDisabled })}>
+        <div className={classnames({ 'card--disabled': formDisabled })}>
           <section className="card card--section">
             <FormRow>
               <FormField
                 stretch
                 type="text"
                 name="content_title"
-                label={__("Title")}
-                placeholder={__("Titular Title")}
+                label={__('Title')}
+                placeholder={__('Titular Title')}
                 disabled={formDisabled}
                 value={title}
-                onChange={(e) => updatePublishForm({ title: e.target.value })}
+                onChange={e => updatePublishForm({ title: e.target.value })}
               />
             </FormRow>
             <FormRow padded>
@@ -330,11 +352,11 @@ class PublishForm extends React.PureComponent<Props> {
                 stretch
                 type="text"
                 name="content_thumbnail"
-                label={__("Thumbnail")}
+                label={__('Thumbnail')}
                 placeholder="http://spee.ch/mylogo"
                 value={thumbnail}
                 disabled={formDisabled}
-                onChange={(e) => updatePublishForm({ thumbnail: e.target.value })}
+                onChange={e => updatePublishForm({ thumbnail: e.target.value })}
               />
             </FormRow>
             <FormRow padded>
@@ -352,9 +374,7 @@ class PublishForm extends React.PureComponent<Props> {
           </section>
 
           <section className="card card--section">
-            <div className="card__title">
-              {__('Price')}
-            </div>
+            <div className="card__title">{__('Price')}</div>
             <div className="card__subtitle">{__('How much will this content cost?')}</div>
             <div className="card__content">
               <FormField
@@ -378,38 +398,34 @@ class PublishForm extends React.PureComponent<Props> {
                 name="content_cost_amount"
                 min="0"
                 price={price}
-                onChange={(price) => updatePublishForm({ price })}
+                onChange={newPrice => updatePublishForm({ price: newPrice })}
                 disabled={formDisabled || contentIsFree}
               />
-            {price.currency !== "LBC" && (
-              <p className="form-field__help">
-                {__(
-                  'All content fees are charged in LBC. For non-LBC payment methods, the number of credits charged will be adjusted based on the value of LBRY credits at the time of purchase.'
-                )}
-              </p>
-            )}
+              {price.currency !== 'LBC' && (
+                <p className="form-field__help">
+                  {__(
+                    'All content fees are charged in LBC. For non-LBC payment methods, the number of credits charged will be adjusted based on the value of LBRY credits at the time of purchase.'
+                  )}
+                </p>
+              )}
             </div>
           </section>
 
           <section className="card card--section">
-            <div className="card__title">{__("Anonymous or under a channel?")}</div>
+            <div className="card__title">{__('Anonymous or under a channel?')}</div>
             <p className="card__subtitle">
               {__('This is a username or handle that your content can be found under.')}{' '}
               {__('Ex. @Marvel, @TheBeatles, @BooksByJoe')}
             </p>
-            <ChannelSection
-              channel={channel}
-              onChannelChange={this.handleChannelChange}
-            />
+            <ChannelSection channel={channel} onChannelChange={this.handleChannelChange} />
           </section>
 
           <section className="card card--section">
-            <div className="card__title">
-              {__("Where can people find this content?")}
-            </div>
+            <div className="card__title">{__('Where can people find this content?')}</div>
             <p className="card__subtitle">
-              {__("The LBRY URL is the exact address where people find your content (ex. lbry://myvideo).")}
-              {" "}
+              {__(
+                'The LBRY URL is the exact address where people find your content (ex. lbry://myvideo).'
+              )}{' '}
               <Button button="link" label={__('Learn more')} href="https://lbry.io/faq/naming" />
             </p>
             <div className="card__content">
@@ -417,26 +433,29 @@ class PublishForm extends React.PureComponent<Props> {
                 <FormField
                   stretch
                   prefix={`lbry://${
-                    (channel === CHANNEL_ANONYMOUS || channel === CHANNEL_NEW) ? '' : `${channel}/`
+                    channel === CHANNEL_ANONYMOUS || channel === CHANNEL_NEW ? '' : `${channel}/`
                   }`}
                   type="text"
                   name="content_name"
                   placeholder="myname"
-                  value={name || prefillClaim.name || ""}
+                  value={name}
                   onChange={event => this.handleNameChange(event.target.value)}
                   error={nameError}
-                  helper={(
+                  helper={
                     <BidHelpText
                       uri={uri}
+                      name={name}
                       isResolvingUri={isResolvingUri}
                       winningBidForClaimUri={winningBidForClaimUri}
                       claimIsMine={!!myClaimForUri}
-                      onEditMyClaim={this.editExistingClaim} />
-                  )}
-                  />
+                      claimBeingEdited={editing}
+                      onEditMyClaim={this.editExistingClaim}
+                    />
+                  }
+                />
               </FormRow>
             </div>
-            <div className={classnames("card__content", { "card--disabled": !name })}>
+            <div className={classnames('card__content', { 'card--disabled': !name })}>
               <FormField
                 className="input--price-amount"
                 type="number"
@@ -448,7 +467,7 @@ class PublishForm extends React.PureComponent<Props> {
                 error={bidError}
                 min="0"
                 disabled={!name}
-                onChange={event => this.handleBidChange(event.target.value)}
+                onChange={event => this.handleBidChange(parseFloat(event.target.value))}
                 helper={__('This LBC remains yours and the deposit can be undone at any time.')}
                 placeholder={winningBidForClaimUri ? winningBidForClaimUri + 0.1 : 0.1}
               />
@@ -462,7 +481,7 @@ class PublishForm extends React.PureComponent<Props> {
                 name="content_is_mature"
                 postfix={__('Mature audiences only')}
                 checked={nsfw}
-                onChange={(event) => updatePublishForm({ nsfw: event.target.checked })}
+                onChange={event => updatePublishForm({ nsfw: event.target.checked })}
               />
             </FormRow>
 
@@ -473,7 +492,7 @@ class PublishForm extends React.PureComponent<Props> {
                 name="content_language"
                 value={language}
                 onChange={event => updatePublishForm({ language: event.target.value })}
-                >
+              >
                 <option value="en">{__('English')}</option>
                 <option value="zh">{__('Chinese')}</option>
                 <option value="fr">{__('French')}</option>
@@ -489,17 +508,23 @@ class PublishForm extends React.PureComponent<Props> {
               otherLicenseDescription={otherLicenseDescription}
               licenseUrl={licenseUrl}
               copyrightNotice={copyrightNotice}
-              handleLicenseChange={(licenseType, licenseUrl) => updatePublishForm({ licenseType, licenseUrl })}
-              handleLicenseDescriptionChange={(event) => updatePublishForm({ otherLicenseDescription: event.target.value })}
-              handleLicenseUrlChange={(event) => updatePublishForm({ licenseUrl: event.target.value })}
-              handleCopyrightNoticeChange={(event) => updatePublishForm({ copyrightNotice: event.target.value })}
+              handleLicenseChange={(licenseType, licenseUrl) =>
+                updatePublishForm({ licenseType, licenseUrl })
+              }
+              handleLicenseDescriptionChange={event =>
+                updatePublishForm({ otherLicenseDescription: event.target.value })
+              }
+              handleLicenseUrlChange={event =>
+                updatePublishForm({ licenseUrl: event.target.value })
+              }
+              handleCopyrightNoticeChange={event =>
+                updatePublishForm({ copyrightNotice: event.target.value })
+              }
             />
           </section>
 
           <section className="card card--section">
-            <div className="card__title">
-              {__('Terms of Service')}
-            </div>
+            <div className="card__title">{__('Terms of Service')}</div>
             <div className="card__content">
               <FormField
                 name="lbry_tos"
@@ -522,12 +547,9 @@ class PublishForm extends React.PureComponent<Props> {
 
           <div className="card__actions">
             <Submit
-              label={!publishing ? __('Publish') : __('Publishing...')}
-              disabled={
-                formDisabled ||
-                !formValid ||
-                publishing
-              }/>
+              label={this.getSubmitLabel}
+              disabled={formDisabled || !formValid || publishing}
+            />
             <Button button="alt" onClick={this.handleCancelPublish} label={__('Cancel')} />
           </div>
           {!formDisabled && !formValid && this.renderFormErrors()}

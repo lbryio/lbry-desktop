@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 import CardMedia from 'component/cardMedia';
-import { TruncatedText, BusyMessage } from 'component/common.js';
+import TruncatedText from 'component/common/truncated-text';
 
 /*
   This component can probably be combined with FileTile
@@ -14,9 +14,9 @@ type Props = {
   totalItems: number,
   claim: ?{
     claim_id: string,
-    name: string
+    name: string,
   },
-  resolveUri: (string) => void,
+  resolveUri: string => void,
   navigate: (string, ?{}) => void,
 };
 
@@ -50,11 +50,7 @@ class ChannelTile extends React.PureComponent<Props> {
       <section className="file-tile card--link" onClick={onClick}>
         <CardMedia title={channelName} thumbnail={null} />
         <div className="file-tile__info">
-          {isResolvingUri && (
-            <div className="card__title--small">
-              {__('Loading...')}
-            </div>
-          )}
+          {isResolvingUri && <div className="card__title--small">{__('Loading...')}</div>}
           {!isResolvingUri && (
             <React.Fragment>
               <div className="card__title--small card__title--file">
@@ -63,11 +59,10 @@ class ChannelTile extends React.PureComponent<Props> {
               <div className="card__subtitle">
                 {totalItems > 0 && (
                   <span>
-                    {totalItems}{' '}{totalItems === 1 ? 'file' : 'files'}
+                    {totalItems} {totalItems === 1 ? 'file' : 'files'}
                   </span>
                 )}
-                {!isResolvingUri &&
-                  !totalItems && <span>This is an empty channel.</span>}
+                {!isResolvingUri && !totalItems && <span>This is an empty channel.</span>}
               </div>
             </React.Fragment>
           )}
