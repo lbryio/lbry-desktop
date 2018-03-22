@@ -1,5 +1,5 @@
 import React from 'react';
-import { BusyMessage } from 'component/common';
+import BusyIndicator from 'component/common/busy-indicator';
 import InviteNew from 'component/inviteNew';
 import InviteList from 'component/inviteList';
 import Page from 'component/page';
@@ -14,15 +14,16 @@ class InvitePage extends React.PureComponent {
 
     return (
       <Page>
-        {isPending && <BusyMessage message={__('Checking your invite status')} />}
+        {isPending && <BusyIndicator message={__('Checking your invite status')} />}
         {!isPending &&
           isFailed && <span className="empty">{__('Failed to retrieve invite status.')}</span>}
-        {!isPending && !isFailed && (
-          <React.Fragment>
-            <InviteNew />
-            <InviteList />
-          </React.Fragment>
-        )}
+        {!isPending &&
+          !isFailed && (
+            <React.Fragment>
+              <InviteNew />
+              <InviteList />
+            </React.Fragment>
+          )}
       </Page>
     );
   }

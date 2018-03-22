@@ -1,4 +1,3 @@
-
 import * as React from 'react';
 import lbry from 'lbry';
 import LoadScreen from './internal/load-screen';
@@ -10,15 +9,15 @@ import * as modals from 'constants/modal_types';
 type Props = {
   message: string,
   checkDaemonVersion: () => Promise<any>,
-  modal: string
-}
+  modal: string,
+};
 
 type State = {
   details: string,
   message: string,
   isRunning: boolean,
   isLagging: boolean,
-}
+};
 
 export class SplashScreen extends React.PureComponent<Props, State> {
   constructor(props: Props) {
@@ -89,7 +88,6 @@ export class SplashScreen extends React.PureComponent<Props, State> {
       .connect()
       .then(checkDaemonVersion)
       .then(() => {
-
         this.updateStatus();
       })
       .catch(() => {

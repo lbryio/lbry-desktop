@@ -3,7 +3,8 @@ import React from 'react';
 import { normalizeURI } from 'lbryURI';
 import ToolTip from 'component/common/tooltip';
 import FileCard from 'component/fileCard';
-import Button from 'component/link';
+import Button from 'component/button';
+import * as icons from 'constants/icons';
 
 type Props = {
   category: string,
@@ -198,11 +199,7 @@ class CategoryList extends React.PureComponent<Props, State> {
         <div className="card-row__header">
           <div className="card-row__title">
             {categoryLink ? (
-              <Button
-                label={category}
-                navigate="/show"
-                navigateParams={{ uri: categoryLink }}
-              />
+              <Button label={category} navigate="/show" navigateParams={{ uri: categoryLink }} />
             ) : (
               category
             )}
@@ -221,13 +218,13 @@ class CategoryList extends React.PureComponent<Props, State> {
               className="btn--arrow"
               disabled={!canScrollPrevious}
               onClick={this.handleScrollPrevious}
-              icon="ChevronLeft"
+              icon={icons.ARROW_LEFT}
             />
             <Button
               className="btn--arrow"
               disabled={!canScrollNext}
               onClick={this.handleScrollNext}
-              icon="ChevronRight"
+              icon={icons.ARROW_RIGHT}
             />
           </div>
         </div>

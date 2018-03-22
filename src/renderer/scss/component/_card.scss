@@ -21,7 +21,7 @@
   white-space: normal;
 
   .card__media {
-    padding-top: var(--video-aspect-ratio)
+    padding-top: var(--video-aspect-ratio);
   }
 
   .card__media-text {
@@ -55,9 +55,7 @@
 }
 
 .card--disabled {
-  .card--section {
-    box-shadow: none;
-  }
+  opacity: 0.3;
 }
 
 .card__media {
@@ -92,7 +90,6 @@
   display: flex;
   align-items: center;
   align-self: flex-start;
-  padding-top: $spacing-width;
 }
 
 .card__title {
@@ -176,7 +173,6 @@
 .card__subtext-title {
   color: var(--color-black);
   font-size: calc(var(--font-size-subtext-multiple) * 1.5em);
-  font-weight: 700;
 
   &:not(:first-of-type) {
     margin-top: $spacing-vertical * 3/2;
@@ -188,7 +184,8 @@
   font-size: calc(var(--font-size-subtext-multiple) * 1em);
   padding-top: $spacing-vertical * 1/3;
   word-break: break-word;
-  font-weight: 300;
+  font-family: 'metropolis-medium';
+  font-size: 13px;
 }
 
 .card__actions {
@@ -345,13 +342,12 @@
     margin-right: 20px;
   }
 
-  @media only screen and (min-width : $large-breakpoint) {
+  @media only screen and (min-width: $large-breakpoint) {
     .card {
       width: calc((100% / 4) - 12px - 20px);
     }
   }
 }
-
 
 .card__media--autothumb {
   color: red !important;

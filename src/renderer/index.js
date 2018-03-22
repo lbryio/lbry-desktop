@@ -99,9 +99,9 @@ const init = () => {
     app.store.dispatch(doAutoUpdate());
   });
 
-  autoUpdater.on('error', (error) => {
+  autoUpdater.on('error', error => {
     // eslint-disable-next-line no-console
-    console.error(error.message)
+    console.error(error.message);
   });
 
   if (['win32', 'darwin'].includes(process.platform)) {

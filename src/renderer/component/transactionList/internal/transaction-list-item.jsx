@@ -1,9 +1,9 @@
 // @flow
 import React from 'react';
-import LinkTransaction from 'component/common/transaction-link';
+import ButtonTransaction from 'component/common/transaction-link';
 import CreditAmount from 'component/common/credit-amount';
 import DateTime from 'component/dateTime';
-import Link from 'component/link';
+import Button from 'component/button';
 import { buildURI } from 'lbryURI';
 import * as txnTypes from 'constants/transaction_types';
 import type { Transaction } from '../view';
@@ -13,9 +13,9 @@ type Props = {
   revokeClaim: (string, number) => void,
   isRevokeable: boolean,
   reward: ?{
-    reward_title: string
-  }
-}
+    reward_title: string,
+  },
+};
 
 class TransactionListItem extends React.PureComponent<Props> {
   constructor() {
@@ -32,11 +32,9 @@ class TransactionListItem extends React.PureComponent<Props> {
 
   getLink(type: string) {
     if (type === txnTypes.TIP) {
-      return (
-        <Link button="link" onClick={this.abandonClaim} label={__('Unlock Tip')} />
-      );
+      return <Button button="link" onClick={this.abandonClaim} label={__('Unlock Tip')} />;
     }
-    return <Link button="link" onClick={this.abandonClaim} label={__('Abandon Claim')} />;
+    return <Button button="link" onClick={this.abandonClaim} label={__('Abandon Claim')} />;
   }
 
   capitalize(string: string) {
@@ -79,19 +77,20 @@ class TransactionListItem extends React.PureComponent<Props> {
         </td>
         <td className="table__item--actionable">
           {reward && <span>{reward.reward_title}</span>}
-          {name && claimId && (
-            <Link
-              button="link"
-              navigate="/show"
-              navigateParams={{ uri: buildURI({ claimName: name, claimId }) }}
-            >
-              {name}
-            </Link>
-          )}
+          {name &&
+            claimId && (
+              <Button
+                button="link"
+                navigate="/show"
+                navigateParams={{ uri: buildURI({ claimName: name, claimId }) }}
+              >
+                {name}
+              </Button>
+            )}
         </td>
 
         <td>
-          <LinkTransaction id={txid} />
+          <ButtonTransaction id={txid} />
         </td>
         <td>
           {date ? (

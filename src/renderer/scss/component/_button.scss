@@ -7,7 +7,6 @@ button:disabled {
   text-decoration: none;
   cursor: pointer;
   position: relative;
-  font-weight: 600;
   padding: 10px;
   height: var(--btn-height);
   min-width: var(--btn-height);
@@ -21,7 +20,7 @@ button:disabled {
   font-size: 12px;
   transition: all var(--animation-duration) var(--animation-style);
   font-family: 'metropolis-medium';
-  
+
   &:not(:disabled) {
     box-shadow: var(--box-shadow-button);
   }
@@ -177,7 +176,7 @@ button:disabled {
 .btn.btn--file-actions {
   background-color: var(--color-black);
   color: var(--color-white);
-  opacity: .8;
+  opacity: 0.8;
   border-radius: var(--btn-radius);
   height: var(--btn-height);
   padding: 0 3px;

@@ -1,7 +1,7 @@
 /* eslint-disable */
 import React from 'react';
 import { remote } from 'electron';
-import { Thumbnail } from 'component/common';
+import Thumbnail from 'component/common/thumbnail';
 import player from 'render-media';
 import fs from 'fs';
 import LoadingScreen from './loading-screen';
@@ -170,7 +170,7 @@ class VideoPlayer extends React.PureComponent {
       <React.Fragment>
         {['audio', 'application'].indexOf(mediaType) !== -1 &&
           (!this.playableType() || hasMetadata) &&
-          !unplayable && <Thumbnail src={poster} className="video-embedded" />}
+          !unplayable && <Thumbnail src={poster} />}
         {this.playableType() &&
           !hasMetadata &&
           !unplayable && <LoadingScreen status={noMetadataMessage} />}
@@ -179,9 +179,8 @@ class VideoPlayer extends React.PureComponent {
           ref={container => {
             this.media = container;
           }}
-          className="media"
         />
-    </React.Fragment>
+      </React.Fragment>
     );
   }
 }

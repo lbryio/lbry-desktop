@@ -14,22 +14,24 @@ const select = (state, props) => {
   let fileInfo;
   let metadata;
   let isResolvingUri;
-  
+
   const pendingPublish = selectPendingPublish(props.uri)(state);
-  
-  let fileCardInfo = pendingPublish ? pendingPublish : ({
-    claim: makeSelectClaimForUri(props.uri)(state),
-    fileInfo: makeSelectFileInfoForUri(props.uri)(state),
-    metadata: makeSelectMetadataForUri(props.uri)(state),
-    isResolvingUri: makeSelectIsUriResolving(props.uri)(state),
-  })
-  
+
+  let fileCardInfo = pendingPublish
+    ? pendingPublish
+    : {
+        claim: makeSelectClaimForUri(props.uri)(state),
+        fileInfo: makeSelectFileInfoForUri(props.uri)(state),
+        metadata: makeSelectMetadataForUri(props.uri)(state),
+        isResolvingUri: makeSelectIsUriResolving(props.uri)(state),
+      };
+
   return {
     obscureNsfw: !selectShowNsfw(state),
     rewardedContentClaimIds: selectRewardContentClaimIds(state, props),
     ...fileCardInfo,
     pending: !!pendingPublish,
-  }
+  };
 };
 
 const perform = dispatch => ({

@@ -3,9 +3,7 @@ import * as MODALS from 'constants/modal_types';
 import Lbry from 'lbry';
 import { doOpenModal, doShowSnackBar } from 'redux/actions/app';
 import { doNavigate } from 'redux/actions/navigation';
-import {
-  selectBalance,
-} from 'redux/selectors/wallet';
+import { selectBalance } from 'redux/selectors/wallet';
 
 export function doUpdateBalance() {
   return (dispatch, getState) => {
@@ -17,10 +15,9 @@ export function doUpdateBalance() {
           data: {
             balance,
           },
-        })
+        });
       }
-    }
-    );
+    });
   };
 }
 

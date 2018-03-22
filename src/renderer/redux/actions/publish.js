@@ -5,12 +5,14 @@ import { doFetchClaimListMine } from 'redux/actions/content';
 import { selectMyClaimsWithoutChannels } from 'redux/selectors/claims';
 import { selectPendingPublishes } from 'redux/selectors/publish';
 import { doOpenModal } from 'redux/actions/app';
-import type { UpdatePublishFormData, UpdatePublishFormAction, PublishParams } from 'redux/reducers/publish';
+import type {
+  UpdatePublishFormData,
+  UpdatePublishFormAction,
+  PublishParams,
+} from 'redux/reducers/publish';
 import { CHANNEL_NEW, CHANNEL_ANONYMOUS } from 'constants/claim';
 
-export type Action =
-  UpdatePublishFormAction
-  | { type: ACTIONS.CLEAR_PUBLISH }
+export type Action = UpdatePublishFormAction | { type: ACTIONS.CLEAR_PUBLISH };
 
 type PromiseAction = Promise<Action>;
 export type Dispatch = (action: Action | PromiseAction | Array<Action>) => any;
@@ -20,7 +22,42 @@ export const doClearPublish = () => (dispatch: Dispatch): Action =>
   dispatch({ type: ACTIONS.CLEAR_PUBLISH });
 
 export const doUpdatePublishForm = (publishFormValue: {}): Action => (dispatch: Dispatch): Action =>
-  dispatch({ type: ACTIONS.UPDATE_PUBLISH_FORM, data: { ...publishFormValue }})
+  dispatch({ type: ACTIONS.UPDATE_PUBLISH_FORM, data: { ...publishFormValue } });
+
+export const doPrepareEdit = (claim: {}) => (dispatch: Dispatch): Action => {
+  const { name, amount, channel_name, value: { stream: { metadata } } } = claim;
+  const {
+    author,
+    description,
+    fee,
+    language,
+    license,
+    licenseUrl,
+    nsfw,
+    thumbnail,
+    title,
+  } = metadata;
+
+  const publishData = {
+    name,
+    channel: channel_name,
+    bid: amount,
+    price: { amount: fee.amount, currency: fee.currency },
+    contentIsFree: !fee.amount,
+    author,
+    description,
+    fee,
+    language,
+    license,
+    licenseUrl,
+    nsfw,
+    thumbnail,
+    title,
+  };
+  console.log('claim', claim);
+
+  dispatch({ type: ACTIONS.DO_PREPARE_EDIT, data: publishData });
+};
 
 export const doPublish = (params: PublishParams): Action => {
   const {
@@ -37,10 +74,10 @@ export const doPublish = (params: PublishParams): Action => {
     title,
     contentIsFree,
     price,
-    uri
+    uri,
   } = params;
 
-  const channel_name = (channel === CHANNEL_ANONYMOUS || channel === CHANNEL_NEW) ? '' : channel;
+  const channel_name = channel === CHANNEL_ANONYMOUS || channel === CHANNEL_NEW ? '' : channel;
   const fee = contentIsFree || !price.amount ? undefined : { ...price };
 
   const metadata = {
@@ -49,7 +86,7 @@ export const doPublish = (params: PublishParams): Action => {
     license,
     licenseUrl,
     language,
-  }
+  };
 
   if (fee) {
     metadata.fee = fee;
@@ -64,25 +101,25 @@ export const doPublish = (params: PublishParams): Action => {
     name,
     channel_name,
     bid,
-    metadata
-  }
+    metadata,
+  };
 
   return dispatch => {
     dispatch({ type: ACTIONS.PUBLISH_START });
 
     const success = () => {
       dispatch({ type: ACTIONS.PUBLISH_SUCCESS, data: { pendingPublish: publishPayload } });
-      dispatch(doOpenModal(MODALS.PUBLISH, { uri }))
+      dispatch(doOpenModal(MODALS.PUBLISH, { uri }));
     };
 
     const failure = error => {
-      dispatch({ type: ACTIONS.PUBLISH_FAIL })
-      dispatch(doOpenModal(MODALS.ERROR, { error: error.message }))
+      dispatch({ type: ACTIONS.PUBLISH_FAIL });
+      dispatch(doOpenModal(MODALS.ERROR, { error: error.message }));
     };
 
     return Lbry.publish(publishPayload).then(success, failure);
-  }
-}
+  };
+};
 
 // Calls claim_list_mine until any pending publishes are confirmed
 export const doCheckPendingPublishes = () => {
@@ -102,13 +139,13 @@ export const doCheckPendingPublishes = () => {
             pendingPublishMap[name] = name;
           });
 
-          claims.forEach((claim) => {
+          claims.forEach(claim => {
             if (pendingPublishMap[claim.name]) {
               dispatch({
                 type: ACTIONS.REMOVE_PENDING_PUBLISH,
                 data: {
-                  name: claim.name
-                }
+                  name: claim.name,
+                },
               });
               dispatch({
                 type: ACTIONS.FETCH_CLAIM_LIST_MINE_COMPLETED,
@@ -124,13 +161,13 @@ export const doCheckPendingPublishes = () => {
           clearInterval(publishCheckInterval);
         }
       });
-    }
+    };
 
     if (pendingPublishes.length) {
       checkFileList();
       publishCheckInterval = setInterval(() => {
         checkFileList();
-      }, 10000)
+      }, 10000);
     }
   };
-}
+};

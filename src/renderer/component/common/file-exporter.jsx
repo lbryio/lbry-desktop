@@ -3,7 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import React from 'react';
 import PropTypes from 'prop-types';
-import Link from 'component/link';
+import Button from 'component/button';
 import parseData from 'util/parseData';
 import * as icons from 'constants/icons';
 import { remote } from 'electron';
@@ -13,11 +13,11 @@ type Props = {
   title: string,
   label: string,
   defaultPath?: string,
-  onFileCreated?: (string) => void,
-}
+  onFileCreated?: string => void,
+};
 
 class FileExporter extends React.PureComponent<Props> {
-  handleButtonClick: () => void
+  handleButtonClick: () => void;
 
   constructor() {
     super();
@@ -57,9 +57,9 @@ class FileExporter extends React.PureComponent<Props> {
   render() {
     const { title, label } = this.props;
     return (
-      <Link
+      <Button
         button="primary"
-        icon="Download"
+        icon={icons.DOWNLOAD}
         label={label || __('Export')}
         onClick={this.handleButtonClick}
       />

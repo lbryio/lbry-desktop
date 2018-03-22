@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import Button from 'component/link';
+import Button from 'component/button';
 import { FormField } from 'component/common/form';
 import UriIndicator from 'component/uriIndicator';
 
@@ -71,8 +71,7 @@ class WalletSendTip extends React.PureComponent<Props, State> {
             onChange={event => this.handleSupportPriceChange(event)}
             helper={
               <span>
-                {__(`This will appear as a tip for ${title} located at ${uri}.`)}
-                {" "}
+                {__(`This will appear as a tip for ${title} located at ${uri}.`)}{' '}
                 <Button label={__('Learn more')} button="link" href="https://lbry.io/faq/tipping" />
               </span>
             }

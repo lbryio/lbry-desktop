@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 import { FormField } from 'component/common/form';
-import Link from 'component/link';
+import Button from 'component/button';
 import FileExporter from 'component/common/file-exporter';
 import * as icons from 'constants/icons';
 import * as modals from 'constants/modal_types';
@@ -15,8 +15,8 @@ export type Transaction = {
   nout: number,
   txid: string,
   type: string,
-  date: Date
-}
+  date: Date,
+};
 
 type Props = {
   emptyMessage: ?string,
@@ -24,26 +24,25 @@ type Props = {
   transactions: Array<Transaction>,
   rewards: {},
   openModal: (string, any) => void,
-  myClaims: any
-}
+  myClaims: any,
+};
 
 type State = {
-  filter: string
-}
+  filter: string,
+};
 
 class TransactionList extends React.PureComponent<Props, State> {
   constructor(props: Props) {
     super(props);
 
     this.state = {
-      filter: "all",
+      filter: 'all',
     };
 
     (this: any).handleFilterChanged = this.handleFilterChanged.bind(this);
     (this: any).filterTransaction = this.filterTransaction.bind(this);
     (this: any).revokeClaim = this.revokeClaim.bind(this);
     (this: any).isRevokeable = this.isRevokeable.bind(this);
-
   }
 
   handleFilterChanged(event: SyntheticInputEvent<*>) {
@@ -55,7 +54,7 @@ class TransactionList extends React.PureComponent<Props, State> {
   filterTransaction(transaction: Transaction) {
     const { filter } = this.state;
 
-    return filter == "all" || filter === transaction.type;
+    return filter == 'all' || filter === transaction.type;
   }
 
   isRevokeable(txid: string, nout: number) {
@@ -77,18 +76,19 @@ class TransactionList extends React.PureComponent<Props, State> {
     return (
       <React.Fragment>
         {!transactionList.length && (
-          <div className="card__content">{emptyMessage || __('No transactions to list.')}</div>
+          <p className="card__content">{emptyMessage || __('No transactions to list.')}</p>
         )}
-        {!slim && !!transactionList.length && (
-          <div className="card__actions">
-            <FileExporter
-              data={transactionList}
-              title={__('Export Transactions')}
-              label={__('Export')}
+        {!slim &&
+          !!transactionList.length && (
+            <div className="card__actions">
+              <FileExporter
+                data={transactionList}
+                title={__('Export Transactions')}
+                label={__('Export')}
               />
-          </div>
-        )}
-        {!slim && transactionList.length && (
+            </div>
+          )}
+        {!slim && (
           <div className="card__actions-top-corner">
             <FormField
               type="select"
@@ -96,9 +96,13 @@ class TransactionList extends React.PureComponent<Props, State> {
               onChange={this.handleFilterChanged}
               prefix={__('Show')}
               postfix={
-                <Link button="link" href="https://lbry.io/faq/transaction-types" label={__('Help')} />
+                <Button
+                  button="link"
+                  href="https://lbry.io/faq/transaction-types"
+                  label={__('Help')}
+                />
               }
-              >
+            >
               <option value="all">{__('All')}</option>
               <option value="spend">{__('Spends')}</option>
               <option value="receive">{__('Receives')}</option>

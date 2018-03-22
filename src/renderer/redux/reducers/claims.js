@@ -43,18 +43,22 @@ reducers[ACTIONS.FETCH_CLAIM_LIST_MINE_COMPLETED] = (state, action) => {
   const byId = Object.assign({}, state.byId);
   const pendingById = Object.assign({}, state.pendingById);
 
-  claims.filter(claim => claim.category && (claim.category.match(/claim/) || claim.category.match(/update/))).forEach(claim => {
-    byId[claim.claim_id] = claim;
+  claims
+    .filter(
+      claim => claim.category && (claim.category.match(/claim/) || claim.category.match(/update/))
+    )
+    .forEach(claim => {
+      byId[claim.claim_id] = claim;
 
-    const pending = Object.values(pendingById).find(
-      pendingClaim =>
-        pendingClaim.name === claim.name && pendingClaim.channel_name === claim.channel_name
-    );
+      const pending = Object.values(pendingById).find(
+        pendingClaim =>
+          pendingClaim.name === claim.name && pendingClaim.channel_name === claim.channel_name
+      );
 
-    if (pending) {
-      delete pendingById[pending.claim_id];
-    }
-  });
+      if (pending) {
+        delete pendingById[pending.claim_id];
+      }
+    });
 
   // Remove old timed out pending publishes
   Object.values(pendingById)

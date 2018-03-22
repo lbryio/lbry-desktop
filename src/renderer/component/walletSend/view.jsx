@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import Button from 'component/link';
+import Button from 'component/button';
 import { Form, FormRow, FormField } from 'component/common/form';
 import { Formik } from 'formik';
 import { validateSendTx } from 'util/form-validation';
@@ -12,7 +12,7 @@ type DraftTransaction = {
 
 type Props = {
   sendToAddress: DraftTransaction => void,
-  balance: number
+  balance: number,
 };
 
 class WalletSend extends React.PureComponent<Props> {
@@ -55,8 +55,8 @@ class WalletSend extends React.PureComponent<Props> {
                     onBlur={handleBlur}
                     value={values.amount}
                     error={
-                      !!values.amount && touched.amount && errors.amount
-                      || values.amount > balance && __("Not enough")
+                      (!!values.amount && touched.amount && errors.amount) ||
+                      (values.amount > balance && __('Not enough'))
                     }
                   />
 

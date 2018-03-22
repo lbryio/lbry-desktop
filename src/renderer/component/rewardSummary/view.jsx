@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import Button from 'component/link';
+import Button from 'component/button';
 import CreditAmount from 'component/common/credit-amount';
 
 type Props = {
@@ -30,7 +30,11 @@ const RewardSummary = (props: Props) => {
         )}
       </p>
       <div className="card__actions">
-        <Button button="primary" navigate="/rewards" label={hasRewards ? __('Claim Rewards') : __('View Rewards')} />
+        <Button
+          button="primary"
+          navigate="/rewards"
+          label={hasRewards ? __('Claim Rewards') : __('View Rewards')}
+        />
       </div>
       <p className="help help--padded">
         {__('Read our')}{' '}

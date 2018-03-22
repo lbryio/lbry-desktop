@@ -4,6 +4,7 @@ import * as ACTIONS from 'constants/action_types';
 import { CHANNEL_ANONYMOUS } from 'constants/claim';
 
 type PublishState = {
+  editing: ?string,
   filePath: ?string,
   contentIsFree: boolean,
   price: {
@@ -23,8 +24,8 @@ type PublishState = {
   otherLicenseDescription: string,
   licenseUrl: string,
   copyrightNotice: string,
-  pendingPublishes: Array<any>
-}
+  pendingPublishes: Array<any>,
+};
 
 export type UpdatePublishFormData = {
   filePath?: string,
@@ -46,12 +47,12 @@ export type UpdatePublishFormData = {
   otherLicenseDescription?: string,
   licenseUrl?: string,
   copyrightNotice?: string,
-}
+};
 
 export type UpdatePublishFormAction = {
   type: string,
   data: UpdatePublishFormData,
-}
+};
 
 export type PublishParams = {
   name: string,
@@ -71,30 +72,31 @@ export type PublishParams = {
     currency: string,
     amount: number,
   },
-}
+};
 
 const defaultState: PublishState = {
+  editing: undefined,
   filePath: undefined,
   contentIsFree: true,
   price: {
     amount: 1,
-    currency: "LBC"
+    currency: 'LBC',
   },
-  title: "",
-  thumbnail: "",
-  description: "",
-  language: "en",
+  title: '',
+  thumbnail: '',
+  description: '',
+  language: 'en',
   nsfw: false,
   channel: CHANNEL_ANONYMOUS,
   tosAccepted: false,
-  name: "",
+  name: '',
   nameError: undefined,
   bid: 0.1,
   bidError: undefined,
-  licenseType: "None",
-  otherLicenseDescription: "",
-  licenseUrl: "",
-  copyrightNotice: "All rights reserved",
+  licenseType: 'None',
+  otherLicenseDescription: '',
+  licenseUrl: '',
+  copyrightNotice: 'All rights reserved',
   publishing: false,
   publishSuccess: false,
   publishError: undefined,
@@ -107,20 +109,20 @@ export default handleActions(
       const { data } = action;
       return {
         ...state,
-        ...data
-      }
+        ...data,
+      };
     },
     [ACTIONS.CLEAR_PUBLISH]: (state: PublishState): PublishState => {
       const { pendingPublishes } = state;
-      return { ...defaultState, pendingPublishes }
+      return { ...defaultState, pendingPublishes };
     },
     [ACTIONS.PUBLISH_START]: (state: PublishState): PublishState => ({
       ...state,
-      publishing: true
+      publishing: true,
     }),
     [ACTIONS.PUBLISH_FAIL]: (state: PublishState): PublishState => ({
-        ...state,
-        publishing: false
+      ...state,
+      publishing: false,
     }),
     [ACTIONS.PUBLISH_SUCCESS]: (state: PublishState, action): PublishState => {
       const { pendingPublish } = action.data;
@@ -131,17 +133,26 @@ export default handleActions(
       return {
         ...state,
         publishing: false,
-        pendingPublishes: newPendingPublishes
-      }
+        pendingPublishes: newPendingPublishes,
+      };
     },
     [ACTIONS.REMOVE_PENDING_PUBLISH]: (state: PublishState, action) => {
-      const { name } =  action.data;
-      const pendingPublishes = state.pendingPublishes.filter((publish) => publish.name !== name);
+      const { name } = action.data;
+      const pendingPublishes = state.pendingPublishes.filter(publish => publish.name !== name);
       return {
         ...state,
-        pendingPublishes
-      }
-    }
+        pendingPublishes,
+      };
+    },
+    [ACTIONS.DO_PREPARE_EDIT]: (state: PublishState, action) => {
+      const { ...publishData } = action.data;
+
+      return {
+        ...defaultState,
+        editing: publishData.name,
+        ...publishData,
+      };
+    },
   },
   defaultState
 );

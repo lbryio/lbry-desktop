@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal } from 'modal/modal';
-import Link from 'component/link/index';
+import Button from 'component/button';
 import UserEmailNew from 'component/userEmailNew';
 import UserEmailVerify from 'component/userEmailVerify';
 
@@ -8,7 +8,7 @@ class ModalEmailCollection extends React.PureComponent {
   renderInner() {
     const { closeModal, email, user } = this.props;
 
-    const cancelButton = <Link button="text" onClick={closeModal} label={__('Not Now')} />;
+    const cancelButton = <Button button="text" onClick={closeModal} label={__('Not Now')} />;
 
     if (!user.has_verified_email && !email) {
       return <UserEmailNew cancelButton={cancelButton} />;

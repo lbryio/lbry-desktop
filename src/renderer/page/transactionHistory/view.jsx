@@ -1,5 +1,5 @@
 import React from 'react';
-import { BusyMessage } from 'component/common';
+import BusyIndicator from 'component/common/busy-indicator';
 import TransactionList from 'component/transactionList';
 import Page from 'component/page';
 
@@ -21,18 +21,18 @@ class TransactionHistoryPage extends React.PureComponent {
           >
             <h3>{__('Transaction History')}</h3>
           </div>
-            {fetchingTransactions && !transactions.length ? (
-              <div className="card__content">
-                <BusyMessage message={__('Loading transactions')} />
-              </div>
-            ) : (
-              ''
-            )}
-            {transactions && transactions.length ? (
-              <TransactionList transactions={transactions} />
-            ) : (
-              ''
-            )}
+          {fetchingTransactions && !transactions.length ? (
+            <div className="card__content">
+              <BusyIndicator message={__('Loading transactions')} />
+            </div>
+          ) : (
+            ''
+          )}
+          {transactions && transactions.length ? (
+            <TransactionList transactions={transactions} />
+          ) : (
+            ''
+          )}
         </section>
       </Page>
     );

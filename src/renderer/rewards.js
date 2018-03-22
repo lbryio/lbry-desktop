@@ -39,7 +39,7 @@ rewards.SORT_ORDER = [
   rewards.TYPE_MANY_DOWNLOADS,
   rewards.TYPE_REFERRAL,
   rewards.TYPE_NEW_DEVELOPER,
-  rewards.YOUTUBE_CREATOR
+  rewards.YOUTUBE_CREATOR,
 ];
 
 rewards.claimReward = type => {

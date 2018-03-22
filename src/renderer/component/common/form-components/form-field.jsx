@@ -24,27 +24,54 @@ type Props = {
 
 export class FormField extends React.PureComponent<Props> {
   render() {
-    const { render, label, prefix, postfix, error, helper, name, type, children, stretch, ...inputProps } = this.props;
+    const {
+      render,
+      label,
+      prefix,
+      postfix,
+      error,
+      helper,
+      name,
+      type,
+      children,
+      stretch,
+      ...inputProps
+    } = this.props;
 
     let input;
     if (type) {
       if (type === 'select') {
-        input = <select id={name} {...inputProps}>{children}</select>
+        input = (
+          <select id={name} {...inputProps}>
+            {children}
+          </select>
+        );
       } else if (type === 'markdown') {
         input = (
           <div className="form-field--SimpleMDE">
-            <SimpleMDE {...inputProps} type="textarea" options={{ hideIcons: ['heading', 'image', 'fullscreen', 'side-by-side'] }} />
+            <SimpleMDE
+              {...inputProps}
+              type="textarea"
+              options={{ hideIcons: ['heading', 'image', 'fullscreen', 'side-by-side'] }}
+            />
           </div>
-        )
+        );
       } else {
         input = <input type={type} id={name} {...inputProps} />;
       }
     }
 
     return (
-      <div className={classnames("form-field", { "form-field--stretch": stretch || type === "markdown" })}>
+      <div
+        className={classnames('form-field', {
+          'form-field--stretch': stretch || type === 'markdown',
+        })}
+      >
         {(label || error) && (
-          <label className={classnames("form-field__label", { "form-field__error": error })} htmlFor={name}>
+          <label
+            className={classnames('form-field__label', { 'form-field__error': error })}
+            htmlFor={name}
+          >
             {!error && label}
             {error}
           </label>

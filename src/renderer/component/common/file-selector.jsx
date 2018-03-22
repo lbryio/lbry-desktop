@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import { remote } from 'electron';
-import Button from 'component/link';
+import Button from 'component/button';
 import { FormRow } from 'component/common/form';
 import path from 'path';
 

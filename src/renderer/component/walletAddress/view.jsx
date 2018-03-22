@@ -1,7 +1,8 @@
 // @flow
 import React from 'react';
-import Link from 'component/link';
+import Button from 'component/button';
 import Address from 'component/address';
+import * as icons from 'constants/icons';
 
 type Props = {
   checkAddressIsMine: string => void,
@@ -30,10 +31,10 @@ class WalletAddress extends React.PureComponent<Props> {
         </div>
 
         <div className="card__actions">
-          <Link
+          <Button
             button="alt"
             label={__('Get New Address')}
-            icon="RefreshCw"
+            icon={icons.REFRESH}
             onClick={getNewAddress}
             disabled={gettingNewAddress}
           />

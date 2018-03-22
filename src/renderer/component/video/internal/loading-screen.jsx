@@ -15,10 +15,10 @@ class LoadingScreen extends React.PureComponent<Props> {
   render() {
     const { status, spinner } = this.props;
     return (
-      <div className="video__loading-screen">
+      <div className="content__loading">
         {spinner && <Spinner />}
 
-        <span className="video__loading-text">{status}</span>
+        <span className="content__loading-text">{status}</span>
       </div>
     );
   }

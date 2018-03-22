@@ -1,10 +1,10 @@
 // @flow
 import React from 'react';
 import { buildURI, parseURI } from 'lbryURI';
-import { BusyMessage } from 'component/common';
+import BusyIndicator from 'component/common/busy-indicator';
 import FileTile from 'component/fileTile';
 import ReactPaginate from 'react-paginate';
-import Button from 'component/link';
+import Button from 'component/button';
 import SubscribeButton from 'component/subscribeButton';
 import Page from 'component/page';
 import FileList from 'component/fileList';
@@ -22,12 +22,12 @@ type Props = {
   },
   claimsInChannel: any,
   fetchClaims: (string, number) => void,
-  fetchClaimCount: (string) => void,
+  fetchClaimCount: string => void,
   navigate: (string, {}) => void,
-  doChannelSubscribe: (string) => void,
-  doChannelUnsubscribe: (string) => void,
+  doChannelSubscribe: string => void,
+  doChannelUnsubscribe: string => void,
   openModal: (string, {}) => void,
-}
+};
 
 class ChannelPage extends React.PureComponent<Props> {
   componentDidMount() {
@@ -56,28 +56,17 @@ class ChannelPage extends React.PureComponent<Props> {
   }
 
   render() {
-    const {
-      fetching,
-      claimsInChannel,
-      claim,
-      uri,
-      page,
-      totalPages,
-      openModal
-    } = this.props;
+    const { fetching, claimsInChannel, claim, uri, page, totalPages, openModal } = this.props;
     const { name, claim_id: claimId } = claim;
     const subscriptionUri = buildURI({ channelName: name, claimId }, false);
 
     let contentList;
     if (fetching) {
-      contentList = <BusyMessage message={__('Fetching content')} />;
+      contentList = <BusyIndicator message={__('Fetching content')} />;
     } else {
       contentList =
         claimsInChannel && claimsInChannel.length ? (
-          <FileList
-            hideFilter
-            fileInfos={claimsInChannel}
-          />
+          <FileList hideFilter fileInfos={claimsInChannel} />
         ) : (
           <span className="empty">{__('No content found.')}</span>
         );
@@ -97,9 +86,7 @@ class ChannelPage extends React.PureComponent<Props> {
             <SubscribeButton uri={uri} channelName={name} />
           </div>
         </section>
-        <section>
-          {contentList}
-        </section>
+        <section>{contentList}</section>
         {(!fetching || (claimsInChannel && claimsInChannel.length)) &&
           totalPages > 1 && (
             <ReactPaginate
@@ -116,8 +103,8 @@ class ChannelPage extends React.PureComponent<Props> {
               onPageChange={e => this.changePage(e.selected + 1)}
               initialPage={parseInt(page - 1)}
               containerClassName="pagination"
-              />
-            )}
+            />
+          )}
       </Page>
     );
   }

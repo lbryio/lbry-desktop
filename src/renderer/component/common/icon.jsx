@@ -1,7 +1,10 @@
 // @flow
 import React from 'react';
 // import * as icons from 'constants/icons';
-import * as Icons from 'react-feather';
+import * as FeatherIcons from 'react-feather';
+import * as icons from 'constants/icons';
+
+const RED_COLOR = '#e2495e';
 
 type Props = {
   icon: string,
@@ -14,10 +17,10 @@ class IconComponent extends React.PureComponent<Props> {
 
   render() {
     const { icon, size = 14 } = this.props;
-    const Icon = Icons[icon];
+    const Icon = FeatherIcons[icon];
     let color;
-    if (icon === 'Heart') {
-      color = '#e2495e'
+    if (icon === icons.HEART) {
+      color = RED_COLOR;
     }
     return Icon ? <Icon size={size} className="icon" color={color} /> : null;
   }

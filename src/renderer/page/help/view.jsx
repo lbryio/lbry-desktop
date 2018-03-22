@@ -1,10 +1,11 @@
 // @TODO: Customize advice based on OS
 import React from 'react';
 import lbry from 'lbry.js';
-import Link from 'component/link';
-import { BusyMessage } from 'component/common';
+import Button from 'component/button';
+import BusyIndicator from 'component/common/busy-indicator';
 import Icon from 'component/common/icon';
 import Page from 'component/page';
+import * as icons from 'constants/icons';
 
 class HelpPage extends React.PureComponent {
   constructor(props) {
@@ -72,50 +73,44 @@ class HelpPage extends React.PureComponent {
     return (
       <Page>
         <section className="card card--section">
-          <div className="card__title">
-            {__('Read the FAQ')}
-          </div>
+          <div className="card__title">{__('Read the FAQ')}</div>
           <p className="card__subtitle">{__('Our FAQ answers many common questions.')}</p>
 
           <div className="card__actions">
-            <Link
+            <Button
               href="https://lbry.io/faq"
               label={__('Read the FAQ')}
-              icon="HelpCircle"
+              icon={icons.HELP}
               button="primary"
             />
           </div>
         </section>
 
         <section className="card card--section">
-          <div className="card__title">
-            {__('Get Live Help')}
-          </div>
+          <div className="card__title">{__('Get Live Help')}</div>
           <p className="card__subtitle">
-          {__('Live help is available most hours in the')} <strong>#help</strong>{' '}
-          {__('channel of our Discord chat room.')}
+            {__('Live help is available most hours in the')} <strong>#help</strong>{' '}
+            {__('channel of our Discord chat room.')}
           </p>
           <div className="card__actions">
-            <Link
+            <Button
               button="primary"
               label={__('Join Our Chat')}
-              icon="MessageCircle"
+              icon={icons.MESSAGE}
               href="https://chat.lbry.io"
             />
           </div>
         </section>
 
         <section className="card card--section">
-          <div className="card__title">
-            {__('Report a Bug')}
-          </div>
+          <div className="card__title">{__('Report a Bug')}</div>
           <p className="card__subtitle">{__('Did you find something wrong?')}</p>
 
           <div className="card__actions">
-            <Link
+            <Button
               navigate="/report"
               label={__('Submit a Bug Report')}
-              icon="Flag"
+              icon={icons.REPORT}
               button="primary"
             />
           </div>
@@ -123,13 +118,11 @@ class HelpPage extends React.PureComponent {
         </section>
 
         <section className="card card--section">
-          <div className="card__title">
-            {__('About')}
-          </div>
+          <div className="card__title">{__('About')}</div>
           {this.state.upgradeAvailable !== null && this.state.upgradeAvailable ? (
             <div className="card__subtitle">
               {__('A newer version of LBRY is available.')}{' '}
-              <Link button="link" href={newVerLink} label={__('Download now!')} />
+              <Button button="link" href={newVerLink} label={__('Download now!')} />
             </div>
           ) : (
             <div className="card__subtitle">{__('Your LBRY app is up to date.')}</div>
@@ -158,20 +151,14 @@ class HelpPage extends React.PureComponent {
                     ) : (
                       <span>
                         <span className="empty">{__('none')} </span>
-                        (<Link onClick={() => doAuth()} label={__('set email')} />)
+                        (<Button onClick={() => doAuth()} label={__('set email')} />)
                       </span>
                     )}
                   </td>
                 </tr>
                 <tr>
                   <td>{__('Reward Eligible')}</td>
-                  <td>
-                    {user && user.is_reward_approved ? (
-                      __("Yes")
-                    ) : (
-                      __("No")
-                    )}
-                  </td>
+                  <td>{user && user.is_reward_approved ? __('Yes') : __('No')}</td>
                 </tr>
                 <tr>
                   <td>{__('Platform')}</td>
@@ -185,7 +172,11 @@ class HelpPage extends React.PureComponent {
                   <td>{__('Access Token')}</td>
                   <td>
                     {this.state.accessTokenHidden && (
-                      <Link button="link" label={__('View')} onClick={this.showAccessToken.bind(this)} />
+                      <Button
+                        button="link"
+                        label={__('View')}
+                        onClick={this.showAccessToken.bind(this)}
+                      />
                     )}
                     {!this.state.accessTokenHidden &&
                       accessToken && (
@@ -201,7 +192,7 @@ class HelpPage extends React.PureComponent {
               </tbody>
             </table>
           ) : (
-            <BusyMessage message={__('Looking up version info')} />
+            <BusyIndicator message={__('Looking up version info')} />
           )}
         </section>
       </Page>

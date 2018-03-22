@@ -1,7 +1,7 @@
 // I'll come back to this
 /* eslint-disable */
 import React from 'react';
-import Link from 'component/link';
+import Button from 'component/button';
 import { Form, FormField, Submit } from 'component/common/form';
 
 class UserEmailVerify extends React.PureComponent {
@@ -50,8 +50,8 @@ class UserEmailVerify extends React.PureComponent {
         {/* render help separately so it always shows */}
         <div className="form-field__helper">
           <p>
-            {__('Email')} <Link href="mailto:help@lbry.io" label="help@lbry.io" /> or join our{' '}
-            <Link href="https://chat.lbry.io" label="chat" />{' '}
+            {__('Email')} <Button href="mailto:help@lbry.io" label="help@lbry.io" /> or join our{' '}
+            <Button href="https://chat.lbry.io" label="chat" />{' '}
             {__('if you encounter any trouble with your code.')}
           </p>
         </div>

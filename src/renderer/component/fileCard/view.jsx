@@ -2,7 +2,7 @@
 import * as React from 'react';
 import { normalizeURI } from 'lbryURI';
 import CardMedia from 'component/cardMedia';
-import { TruncatedText } from 'component/common';
+import TruncatedText from 'component/common/truncated-text';
 import Icon from 'component/common/icon';
 import FilePrice from 'component/filePrice';
 import UriIndicator from 'component/uriIndicator';
@@ -22,13 +22,13 @@ type Props = {
   rewardedContentClaimIds: Array<string>,
   obscureNsfw: boolean,
   showPrice: boolean,
-  pending?: boolean
+  pending?: boolean,
 };
 
 class FileCard extends React.PureComponent<Props> {
   static defaultProps = {
-    showPrice: true
-  }
+    showPrice: true,
+  };
 
   componentWillMount() {
     this.resolve(this.props);
@@ -55,7 +55,7 @@ class FileCard extends React.PureComponent<Props> {
       rewardedContentClaimIds,
       obscureNsfw,
       showPrice,
-      pending
+      pending,
     } = this.props;
     const uri = !pending ? normalizeURI(this.props.uri) : this.props.uri;
     const title = metadata && metadata.title ? metadata.title : uri;
@@ -72,13 +72,11 @@ class FileCard extends React.PureComponent<Props> {
         onClick={!pending ? () => navigate('/show', { uri }) : () => {}}
         className={classnames('card card--small', {
           'card--link': !pending,
-          'card--pending': pending
+          'card--pending': pending,
         })}
       >
         <CardMedia nsfw={shouldObscureNsfw} thumbnail={thumbnail} />
-        <div className="card-media__internal-links">
-          {showPrice && <FilePrice uri={uri} />}
-        </div>
+        <div className="card-media__internal-links">{showPrice && <FilePrice uri={uri} />}</div>
 
         <div className="card__title-identity">
           <div className="card__title--small">

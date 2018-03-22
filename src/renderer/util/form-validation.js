@@ -5,10 +5,10 @@ import { regexAddress } from 'lbryURI';
 type DraftTxValues = {
   address: string,
   // amount: number
-}
+};
 
 export const validateSendTx = (formValues: DraftTxValues) => {
-  const { address } = formValues
+  const { address } = formValues;
   const errors = {};
 
   // All we need to check is if the address is valid
