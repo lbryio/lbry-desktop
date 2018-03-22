@@ -11,7 +11,7 @@ class UserHistoryPage extends React.PureComponent {
   }
 
   render() {
-    const { history } = this.props;
+    const { history, clear } = this.props;
 
     return (
       <div>
@@ -21,7 +21,9 @@ class UserHistoryPage extends React.PureComponent {
             <div style={{width: "800px"}}>
               {Object.keys(history).length > 0 ?
                 Object.keys(history).map(uri => (
-                  <FileTile key={uri} uri={normalizeURI(uri)} />
+                  <div key={uri}>
+                    <FileTile uri={normalizeURI(uri)} />
+                  </div>
                 )
               ) : (
                 <p>You have no saved history. Go find some content!</p>

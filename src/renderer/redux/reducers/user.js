@@ -227,13 +227,11 @@ reducers[ACTIONS.USER_HISTORY_SAVE] = (state, action) => ({
   }
 });
 
-reducers[ACTIONS.USER_HISTORY_CLEAR_ITEM] = (state, action) => ({
-  ...state,
-  history: {
-    ...state.history,
-    [action.data.uri]: null
-  }
-});
+reducers[ACTIONS.USER_HISTORY_CLEAR_ITEM] = (state, action) => {
+  let history = {...state.history};
+  delete history[action.data.uri];
+  return { ...state, history };
+};
 
 reducers[ACTIONS.USER_HISTORY_CLEAR_ALL] = state => ({
   ...state,
