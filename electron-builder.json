@@ -64,6 +64,6 @@
   "nsis": {
     "perMachine": true
   },
-  "artifactName": "${productName}_${version}",
+  "artifactName": "${productName}_${version}.${ext}",
   "beforeBuild": "./build/checkDaemonPlatform.js"
 }
