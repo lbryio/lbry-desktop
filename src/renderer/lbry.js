@@ -172,7 +172,7 @@ Lbry.publishDeprecated = (params, fileListedCallback, publishedCallback, errorCa
   );
 };
 
-Lbry.imagePath = file => `file://${__static}/img/${file}`;
+Lbry.imagePath = file => `${staticResourcesPath}/img/${file}`;
 
 Lbry.getMediaType = (contentType, fileName) => {
   if (contentType) {

@@ -22,6 +22,16 @@ const app = {
   },
 };
 
+// Workaround for https://github.com/electron-userland/electron-webpack/issues/52
+if (!isDev) {
+  window.staticResourcesPath = Path.join(remote.app.getAppPath(), '../static').replace(
+    /\\/g,
+    '\\\\'
+  );
+} else {
+  window.staticResourcesPath = '';
+}
+
 // eslint-disable-next-line no-underscore-dangle
 global.__ = i18n.__;
 // eslint-disable-next-line no-underscore-dangle
