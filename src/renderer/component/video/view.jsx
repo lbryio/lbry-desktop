@@ -1,5 +1,4 @@
 import React from 'react';
-import lbry from 'lbry';
 import VideoPlayer from './internal/player';
 import VideoPlayButton from './internal/play-button';
 import LoadingScreen from './internal/loading-screen';
@@ -63,7 +62,9 @@ class Video extends React.PureComponent {
     const isPlaying = playingUri === uri;
     const isReadyToPlay = fileInfo && fileInfo.written_bytes > 0;
     const obscureNsfw = this.props.obscureNsfw && metadata && metadata.nsfw;
-    const mediaType = lbry.getMediaType(contentType, fileInfo && fileInfo.file_name);
+
+    // TODO -> fallback: lbry.getMediaType(fileInfo && fileInfo.file_name)
+    const mediaType = /^[^/]+/.exec(contentType);
 
     let loadStatusMessage = '';
 
