@@ -204,6 +204,20 @@ Lbry.getAppVersionInfo = () =>
     ipcRenderer.send('version-info-requested');
   });
 
+Lbry.getFileTitle = fileInfo => {
+  const { value, metadata, claim_name, name } = fileInfo;
+  if (metadata) {
+    // downloaded claim
+    return metadata.title || claim_name;
+  } else if (value) {
+    // published claim
+    const { title } = value.stream.metadata;
+    return title || name;
+  }
+  // Invalid claim
+  return '';
+};
+
 /**
  * Wrappers for API methods to simulate missing or future behavior. Unlike the old-style stubs,
  * these are designed to be transparent wrappers around the corresponding API methods.

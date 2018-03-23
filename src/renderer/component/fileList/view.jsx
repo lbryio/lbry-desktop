@@ -1,4 +1,5 @@
 import React from 'react';
+import lbry from 'lbry.js';
 import { buildURI } from 'lbryURI';
 import FormField from 'component/formField';
 import FileTile from 'component/fileTile';
@@ -49,12 +50,8 @@ class FileList extends React.PureComponent {
           : fileInfos,
       title: fileInfos =>
         fileInfos.slice().sort((fileInfo1, fileInfo2) => {
-          const title1 = fileInfo1.value
-            ? fileInfo1.value.stream.metadata.title.toLowerCase()
-            : fileInfo1.claim_name;
-          const title2 = fileInfo2.value
-            ? fileInfo2.value.stream.metadata.title.toLowerCase()
-            : fileInfo2.claim_name;
+          const title1 = lbry.getFileTitle(fileInfo1).toLowerCase();
+          const title2 = lbry.getFileTitle(fileInfo2).toLowerCase();
           if (title1 < title2) {
             return -1;
           } else if (title1 > title2) {
