@@ -2,6 +2,7 @@ table.table {
   word-wrap: break-word;
   max-width: 100%;
   text-align: left;
+  margin-top: $spacing-width;
 
   tr td:first-of-type,
   tr th:first-of-type {

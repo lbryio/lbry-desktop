@@ -1,10 +1,10 @@
 // @flow
 import React from 'react';
 import Page from 'component/page';
-import { BusyMessage } from 'component/common';
+import BusyIndicator from 'component/common/busy-indicator';
 import CategoryList from 'component/common/category-list';
 import type { Subscription } from 'redux/reducers/subscriptions';
-import Button from 'component/link';
+import Button from 'component/button';
 
 type SavedSubscriptions = Array<Subscription>;
 
@@ -67,11 +67,7 @@ export default class extends React.PureComponent<Props> {
           <div className="page__empty">
             {__("It looks like you aren't subscribed to any channels yet.")}
             <div className="card__actions card__actions--center">
-              <Button
-                button="primary"
-                navigate="/discover"
-                label={__('Explore new content')}
-              />
+              <Button button="primary" navigate="/discover" label={__('Explore new content')} />
             </div>
           </div>
         )}

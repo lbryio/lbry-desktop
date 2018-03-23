@@ -1,9 +1,10 @@
 // @flow
 import * as React from 'react';
-import Button from 'component/link';
+import Button from 'component/button';
 import classnames from 'classnames';
 import Icon from 'component/common/icon';
-import { CSSTransitionGroup } from 'react-transition-group'
+import { CSSTransitionGroup } from 'react-transition-group';
+import * as icons from 'constants/icons';
 
 type SideBarLink = {
   label: string,
@@ -34,7 +35,7 @@ const SideBar = (props: Props) => {
         <Button
           noPadding
           button="alt"
-          icon="Home"
+          icon={icons.HOME}
           className="btn--home-nav"
           description={__('Home')}
           onClick={() => navigate('/discover')}
@@ -42,14 +43,14 @@ const SideBar = (props: Props) => {
         <div className="nav__actions-history">
           <Button
             className="btn--arrow"
-            icon="ChevronLeft"
+            icon={icons.ARROW_LEFT}
             description={__('Navigate back')}
             onClick={back}
             disabled={isBackDisabled}
           />
           <Button
             className="btn--arrow"
-            icon="ChevronRight"
+            icon={icons.ARROW_RIGHT}
             description={__('Navigate forward')}
             onClick={forward}
             disabled={isForwardDisabled}
@@ -62,7 +63,9 @@ const SideBar = (props: Props) => {
           {navLinks.primary.map(({ label, path, active, icon }) => (
             <li
               key={path}
-              className={classnames('nav__link nav__link--primary', { 'nav__link--active': active })}
+              className={classnames('nav__link nav__link--primary', {
+                'nav__link--active': active,
+              })}
             >
               <Button navigate={path} label={label} icon={icon} />
             </li>
@@ -77,28 +80,34 @@ const SideBar = (props: Props) => {
                 'nav__link--active': active,
               })}
             >
-            <Button navigate={path} label={label} icon={icon} />
+              <Button navigate={path} label={label} icon={icon} />
 
-            {!!subLinks.length && active && (
-                <CSSTransitionGroup
-                  transitionAppear
-                  transitionLeave
-                  transitionAppearTimeout={300}
-                  transitionEnterTimeout={300}
-                  transitionLeaveTimeout={300}
-                  transitionName="nav__sub">
-                  <ul key="0" className="nav__sub-links">
-                  {subLinks.map(({ label: subLabel, path: subPath, active: subLinkActive }) => (
-                    <li
-                    key={subPath}
-                    className={classnames('nav__link--sub', {
-                      'nav__link--active': subLinkActive,
-                    })}
-                    >
-                    {subPath ? <Button navigate={subPath} label={subLabel} /> : <span>{subLabel}</span>}
-                    </li>
-                  ))}
-                  </ul>
+              {!!subLinks.length &&
+                active && (
+                  <CSSTransitionGroup
+                    transitionAppear
+                    transitionLeave
+                    transitionAppearTimeout={300}
+                    transitionEnterTimeout={300}
+                    transitionLeaveTimeout={300}
+                    transitionName="nav__sub"
+                  >
+                    <ul key="0" className="nav__sub-links">
+                      {subLinks.map(({ label: subLabel, path: subPath, active: subLinkActive }) => (
+                        <li
+                          key={subPath}
+                          className={classnames('nav__link--sub', {
+                            'nav__link--active': subLinkActive,
+                          })}
+                        >
+                          {subPath ? (
+                            <Button navigate={subPath} label={subLabel} />
+                          ) : (
+                            <span>{subLabel}</span>
+                          )}
+                        </li>
+                      ))}
+                    </ul>
                   </CSSTransitionGroup>
                 )}
             </li>
@@ -108,6 +117,5 @@ const SideBar = (props: Props) => {
     </nav>
   );
 };
-
 
 export default SideBar;

@@ -24,8 +24,8 @@ class DiscoverPage extends React.PureComponent<Props> {
         {hasContent &&
           Object.keys(featuredUris).map(
             category =>
-            featuredUris[category].length ? (
-              <CategoryList key={category} category={category} names={featuredUris[category]} />
+              featuredUris[category].length ? (
+                <CategoryList key={category} category={category} names={featuredUris[category]} />
               ) : (
                 ''
               )

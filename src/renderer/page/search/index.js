@@ -12,7 +12,7 @@ const select = state => ({
 
 const perform = dispatch => ({
   navigate: path => dispatch(doNavigate(path)),
-  updateSearchQuery: query => dispatch(doUpdateSearchQuery(query))
+  updateSearchQuery: query => dispatch(doUpdateSearchQuery(query)),
 });
 
 export default connect(select, perform)(SearchPage);

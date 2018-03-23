@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal } from 'modal/modal';
-import Link from 'component/link/index';
+import Button from 'component/button';
 
 const ModalWelcome = props => {
   const { closeModal } = props;
@@ -18,7 +18,7 @@ const ModalWelcome = props => {
           {__('Below, LBRY is controlled by users -- you -- via blockchain and decentralization.')}
         </p>
         <div className="modal__buttons">
-          <Link button="primary" onClick={closeModal} label={__("Blockchain Centaurs? I'm In")} />
+          <Button button="primary" onClick={closeModal} label={__("Blockchain Centaurs? I'm In")} />
         </div>
       </section>
     </Modal>

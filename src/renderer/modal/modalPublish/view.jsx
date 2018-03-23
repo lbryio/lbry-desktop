@@ -6,7 +6,7 @@ import SendTip from 'component/walletSendTip';
 type Props = {
   closeModal: () => void,
   clearPublish: () => void,
-  navigate: (string) => void,
+  navigate: string => void,
   uri: string,
 };
 
@@ -25,8 +25,7 @@ class ModalSendTip extends React.PureComponent<Props> {
         }}
       >
         <p>
-          {__('Your file has been published to LBRY at the address')}{' '}
-          <code>{uri}</code>!
+          {__('Your file has been published to LBRY at the address')} <code>{uri}</code>!
         </p>
         <p>
           {__(

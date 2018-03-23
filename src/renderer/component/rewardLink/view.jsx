@@ -1,13 +1,13 @@
 import React from 'react';
 import Modal from 'modal/modal';
-import Link from 'component/link';
+import Button from 'component/button';
 
 const RewardLink = props => {
   const { reward, button, claimReward, clearError, errorMessage, label, isPending } = props;
 
   return !reward ? null : (
     <div className="reward-link">
-      <Link
+      <Button
         button="primary"
         disabled={isPending}
         label={isPending ? __('Claiming...') : label || `${__('Get')} ${reward.reward_amount} LBC`}

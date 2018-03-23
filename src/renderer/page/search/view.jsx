@@ -11,7 +11,7 @@ const MODAL_ANIMATION_TIME = 250;
 
 type Props = {
   query: ?string,
-  updateSearchQuery: (string) => void,
+  updateSearchQuery: string => void,
 };
 
 class SearchPage extends React.PureComponent<Props> {
@@ -31,7 +31,7 @@ class SearchPage extends React.PureComponent<Props> {
     }, MODAL_ANIMATION_TIME);
   }
 
-  input: ?HTMLInputElement
+  input: ?HTMLInputElement;
 
   render() {
     const { query, updateSearchQuery } = this.props;
@@ -39,28 +39,28 @@ class SearchPage extends React.PureComponent<Props> {
       <Page noPadding>
         <div className="search__wrapper">
           <input
-            ref={input => this.input = input}
+            ref={input => (this.input = input)}
             className="search__input"
             value={query}
-            placeholder={__("Search for anything...")}
-            onChange={(event) => updateSearchQuery(event.target.value)}
+            placeholder={__('Search for anything...')}
+            onChange={event => updateSearchQuery(event.target.value)}
           />
 
-        {isURIValid(query) && (
-          <React.Fragment>
-            <div className="file-list__header">
-              {__('Exact URL')}
-              <ToolTip
-                label="?"
-                body={__('This is the resolution of a LBRY URL and not controlled by LBRY Inc.')}
-                className="tooltip--header"
-              />
-            </div>
-            <FileTile fullWidth uri={normalizeURI(query)} showUri />
-          </React.Fragment>
-        )}
-        <FileListSearch query={query} />
-      </div>
+          {isURIValid(query) && (
+            <React.Fragment>
+              <div className="file-list__header">
+                {__('Exact URL')}
+                <ToolTip
+                  label="?"
+                  body={__('This is the resolution of a LBRY URL and not controlled by LBRY Inc.')}
+                  className="tooltip--header"
+                />
+              </div>
+              <FileTile fullWidth uri={normalizeURI(query)} showUri />
+            </React.Fragment>
+          )}
+          <FileListSearch query={query} />
+        </div>
       </Page>
     );
   }

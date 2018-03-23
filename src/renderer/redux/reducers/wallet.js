@@ -11,7 +11,7 @@ const defaultState = {
   receiveAddress,
   gettingNewAddress: false,
   sendingSupport: false,
-  sendingTx: false
+  sendingTx: false,
 };
 
 reducers[ACTIONS.FETCH_TRANSACTIONS_STARTED] = state =>
@@ -78,7 +78,7 @@ reducers[ACTIONS.SEND_TRANSACTION_COMPLETED] = state =>
 reducers[ACTIONS.SEND_TRANSACTION_FAILED] = (state, action) => {
   return Object.assign({}, state, {
     sendingTx: false,
-    error: action.data.error
+    error: action.data.error,
   });
 };
 

@@ -10,13 +10,17 @@ export const selectPendingPublishes = createSelector(selectState, state => {
 export const selectPublishFormValues = createSelector(selectState, state => {
   const { pendingPublish, ...formValues } = state;
   return formValues;
-})
+});
 
-export const selectPendingPublish = (uri) => createSelector(selectPendingPublishes, pendingPublishes => {
-  const { name } = parseURI(uri);
-  if (!pendingPublishes.length) {
-    return null;
-  }
+export const selectPendingPublish = uri =>
+  createSelector(selectPendingPublishes, pendingPublishes => {
+    const { claimName, contentName } = parseURI(uri);
 
-  return pendingPublishes.filter((publish) => publish.name === name)[0];
-})
+    if (!pendingPublishes.length) {
+      return null;
+    }
+
+    return pendingPublishes.filter(
+      publish => publish.name === claimName || publish.name === contentName
+    )[0];
+  });

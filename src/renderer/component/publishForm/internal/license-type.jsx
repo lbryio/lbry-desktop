@@ -1,14 +1,8 @@
 // @flow
-import * as React from "react";
+import * as React from 'react';
 import { FormRow, FormField } from 'component/common/form';
-import Button from 'component/link';
-import {
-  CC_LICENSES,
-  COPYRIGHT,
-  OTHER,
-  PUBLIC_DOMAIN,
-  NONE
-} from 'constants/licenses';
+import Button from 'component/button';
+import { CC_LICENSES, COPYRIGHT, OTHER, PUBLIC_DOMAIN, NONE } from 'constants/licenses';
 
 type Props = {
   licenseType: string,
@@ -19,7 +13,7 @@ type Props = {
   handleLicenseDescriptionChange: (SyntheticInputEvent<*>) => void,
   handleLicenseUrlChange: (SyntheticInputEvent<*>) => void,
   handleCopyrightNoticeChange: (SyntheticInputEvent<*>) => void,
-}
+};
 
 class LicenseType extends React.PureComponent<Props> {
   constructor() {
@@ -35,7 +29,7 @@ class LicenseType extends React.PureComponent<Props> {
 
     const selectedOption = options[selectedIndex];
     const licenseType = selectedOption.value;
-    const licenseUrl = selectedOption.getAttribute("data-url");
+    const licenseUrl = selectedOption.getAttribute('data-url');
 
     handleLicenseChange(licenseType, licenseUrl);
   }
@@ -50,12 +44,12 @@ class LicenseType extends React.PureComponent<Props> {
       handleLicenseDescriptionChange,
       handleLicenseUrlChange,
       handleCopyrightNoticeChange,
-     } = this.props;
+    } = this.props;
 
     return (
       <div className="card__content">
         <FormField
-          label={__("License (Optional)")}
+          label={__('License (Optional)')}
           type="select"
           value={licenseType}
           onChange={this.handleLicenseOnChange}
@@ -63,11 +57,7 @@ class LicenseType extends React.PureComponent<Props> {
           <option value={NONE}>{__('None')}</option>
           <option value={PUBLIC_DOMAIN}>{__('Public Domain')}</option>
           {CC_LICENSES.map(({ value, url }) => (
-            <option
-              key={value}
-              value={value}
-              data-url={url}
-            >
+            <option key={value} value={value} data-url={url}>
               {value}
             </option>
           ))}
@@ -85,7 +75,7 @@ class LicenseType extends React.PureComponent<Props> {
               name="copyright-notice"
               value={copyrightNotice}
               onChange={handleCopyrightNoticeChange}
-              />
+            />
           </FormRow>
         )}
 
@@ -98,7 +88,7 @@ class LicenseType extends React.PureComponent<Props> {
                 name="other-license-description"
                 value={otherLicenseDescription}
                 onChange={handleLicenseDescriptionChange}
-                />
+              />
             </FormRow>
             <FormRow padded>
               <FormField
@@ -107,12 +97,12 @@ class LicenseType extends React.PureComponent<Props> {
                 name="other-license-url"
                 value={licenseUrl}
                 onChange={handleLicenseUrlChange}
-                />
+              />
             </FormRow>
           </React.Fragment>
         )}
       </div>
-    )
+    );
   }
 }
 

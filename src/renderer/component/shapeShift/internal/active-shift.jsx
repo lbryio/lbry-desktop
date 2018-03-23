@@ -4,7 +4,7 @@ import QRCode from 'component/common/qr-code';
 import { FormRow } from 'component/common/form';
 import * as statuses from 'constants/shape_shift';
 import Address from 'component/address';
-import Link from 'component/link';
+import Button from 'component/button';
 import type { Dispatch } from 'redux/actions/shape_shift';
 import ShiftMarketInfo from './market_info';
 
@@ -117,7 +117,7 @@ class ActiveShapeShift extends React.PureComponent<Props> {
           </div>
         )}
         <div className="card__actions">
-          <Link
+          <Button
             button="primary"
             onClick={clearShapeShift}
             label={
@@ -127,11 +127,11 @@ class ActiveShapeShift extends React.PureComponent<Props> {
             }
           />
           {shiftOrderId && (
-              <Link
-                button="inverse"
-                label={__('View the status on Shapeshift.io')}
-                href={`https://shapeshift.io/#/status/${shiftOrderId}`}
-              />
+            <Button
+              button="inverse"
+              label={__('View the status on Shapeshift.io')}
+              href={`https://shapeshift.io/#/status/${shiftOrderId}`}
+            />
           )}
           {shiftState === statuses.NO_DEPOSITS &&
             shiftReturnAddress && (

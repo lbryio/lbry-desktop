@@ -1,10 +1,10 @@
 // @flow
 import React from 'react';
-import Button from 'component/link';
+import Button from 'component/button';
 import FileDownloadLink from 'component/fileDownloadLink';
 import * as modals from 'constants/modal_types';
 import classnames from 'classnames';
-
+import * as icons from 'constants/icons';
 type FileInfo = {
   claim_id: string,
 };
@@ -27,19 +27,10 @@ class FileActions extends React.PureComponent<Props> {
     return (
       <section className={classnames('card__actions', { 'card__actions--vertical': vertical })}>
         <FileDownloadLink uri={uri} />
-        {claimIsMine && (
-          <Button
-            icon="Edit3"
-            className="btn--file-actions"
-            description={__('Edit')}
-            navigate="/publish"
-            navigateParams={{ id: claimId }}
-          />
-        )}
         {showDelete && (
           <Button
             className="btn--file-actions"
-            icon="Trash"
+            icon={icons.TRASH}
             description={__('Delete')}
             onClick={() => openModal(modals.CONFIRM_FILE_REMOVE, { uri })}
           />
@@ -47,7 +38,7 @@ class FileActions extends React.PureComponent<Props> {
         {!claimIsMine && (
           <Button
             className="btn--file-actions"
-            icon="Flag"
+            icon={icons.REPORT}
             href={`https://lbry.io/dmca?claim_id=${claimId}`}
             description={__('Report content')}
           />

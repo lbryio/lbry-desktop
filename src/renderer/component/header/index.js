@@ -1,9 +1,6 @@
 import { connect } from 'react-redux';
 import { doNavigate } from 'redux/actions/navigation';
-import {
-  selectIsUpgradeAvailable,
-  selectAutoUpdateDownloaded
-} from 'redux/selectors/app';
+import { selectIsUpgradeAvailable, selectAutoUpdateDownloaded } from 'redux/selectors/app';
 import { formatCredits } from 'util/formatCredits';
 import { selectBalance } from 'redux/selectors/wallet';
 import Header from './view';

@@ -21,13 +21,13 @@ type Props = {
   type: string,
   button: ?string, // primary, secondary, alt, link
   noPadding: ?boolean, // to remove padding and allow circular buttons
-  uppercase: ?boolean
+  uppercase: ?boolean,
 };
 
 class Button extends React.PureComponent<Props> {
   static defaultProps = {
-    type: "button"
-  }
+    type: 'button',
+  };
 
   render() {
     const {
@@ -66,7 +66,7 @@ class Button extends React.PureComponent<Props> {
             'btn--disabled': disabled,
             'btn--link': button === 'link',
             'btn--external-link': button === 'link' && href,
-            'btn--uppercase': uppercase
+            'btn--uppercase': uppercase,
           }
         : 'btn--no-style',
       className

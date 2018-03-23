@@ -2,7 +2,7 @@
 import * as React from 'react';
 import ReactMarkdown from 'react-markdown';
 import lbry from 'lbry';
-import Button from 'component/link';
+import Button from 'component/button';
 import path from 'path';
 
 type Props = {
@@ -51,12 +51,25 @@ const FileDetails = (props: Props) => {
       )}
       <div className="card__subtext-title">Info</div>
       <div className="card__subtext">
-        <div>{__('Content-Type')}{": "}{mediaType}</div>
-        <div>{__('Language')}{": "}{language}</div>
-        <div>{__('License')}{": "}{license}</div>
+        <div>
+          {__('Content-Type')}
+          {': '}
+          {mediaType}
+        </div>
+        <div>
+          {__('Language')}
+          {': '}
+          {language}
+        </div>
+        <div>
+          {__('License')}
+          {': '}
+          {license}
+        </div>
         {downloadPath && (
           <div>
-            {__('Downloaded to')}{': '}
+            {__('Downloaded to')}
+            {': '}
             <Button button="link" onClick={() => openFolder(downloadPath)} label={downloadPath} />
           </div>
         )}

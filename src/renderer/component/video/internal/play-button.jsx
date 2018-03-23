@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import Button from 'component/link';
+import Button from 'component/button';
 
 type Props = {
   play: string => void,

@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import Button from 'component/link';
+import Button from 'component/button';
 
 type Props = {
   label: string,
@@ -15,12 +15,7 @@ export class Submit extends React.PureComponent<Props> {
   render() {
     const { label, disabled, ...otherProps } = this.props;
     return (
-        <Button
-          button="primary"
-          type="submit"
-          label={label}
-          disabled={disabled}
-          {...otherProps} />
+      <Button button="primary" type="submit" label={label} disabled={disabled} {...otherProps} />
     );
   }
 }

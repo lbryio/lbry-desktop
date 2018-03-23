@@ -5,11 +5,11 @@ import Page from 'component/page';
 class PublishPage extends React.PureComponent {
   scrollToTop = () => {
     // #content wraps every <Page>
-    const mainContent = document.getElementById("content");
+    const mainContent = document.getElementById('content');
     if (mainContent) {
       mainContent.scrollTop = 0; // It would be nice to animate this
     }
-  }
+  };
 
   render() {
     return (
@@ -18,6 +18,6 @@ class PublishPage extends React.PureComponent {
       </Page>
     );
   }
-};
+}
 
 export default PublishPage;

@@ -12,7 +12,7 @@ import Icon from 'component/common/icon';
 import WalletSendTip from 'component/walletSendTip';
 import DateTime from 'component/dateTime';
 import * as icons from 'constants/icons';
-import Button from 'component/link';
+import Button from 'component/button';
 import SubscribeButton from 'component/subscribeButton';
 import Page from 'component/page';
 import classnames from 'classnames';
@@ -26,15 +26,15 @@ type Props = {
     channel_name: string,
     value: {
       publisherSignature: ?{
-        certificateId: ?string
-      }
-    }
+        certificateId: ?string,
+      },
+    },
   },
   fileInfo: {},
   metadata: {
     title: string,
     thumbnail: string,
-    nsfw: boolean
+    nsfw: boolean,
   },
   contentType: string,
   uri: string,
@@ -42,10 +42,13 @@ type Props = {
   obscureNsfw: boolean,
   playingUri: ?string,
   isPaused: boolean,
+  claimIsMine: boolean,
+  navigate: (string, {}) => void,
   openModal: (string, any) => void,
-  fetchFileInfo: (string) => void,
-  fetchCostInfo: (string) => void,
-}
+  fetchFileInfo: string => void,
+  fetchCostInfo: string => void,
+  prepareEdit: ({}) => void,
+};
 
 class FilePage extends React.Component<Props> {
   componentDidMount() {
@@ -101,6 +104,10 @@ class FilePage extends React.Component<Props> {
       playingUri,
       isPaused,
       openModal,
+      claimIsMine,
+      prepareEdit,
+      navigate,
+      costInfo,
     } = this.props;
 
     // File info
@@ -122,27 +129,22 @@ class FilePage extends React.Component<Props> {
     const isPlaying = playingUri === uri && !isPaused;
     return (
       <Page extraPadding>
-        {(!claim || !metadata) ? (
+        {!claim || !metadata ? (
           <section>
             <span className="empty">{__('Empty claim or metadata info.')}</span>
           </section>
         ) : (
           <section className="card">
-            <div>
-              {isPlayable ? (
-                <Video className="video__embedded" uri={uri} />
-              ) : (
-                <Thumbnail
-                  shouldObscure={shouldObscureThumbnail}
-                  src={thumbnail}
-                />
-              )}
-              {!isPlaying && (
-                <div className="card-media__internal-links">
-                  <FileActions uri={uri} vertical />
-                </div>
-              )}
-            </div>
+            {isPlayable ? (
+              <Video className="content__embedded" uri={uri} />
+            ) : (
+              <Thumbnail shouldObscure={shouldObscureThumbnail} src={thumbnail} />
+            )}
+            {!isPlaying && (
+              <div className="card-media__internal-links">
+                <FileActions uri={uri} vertical />
+              </div>
+            )}
             <div className="card__content">
               <div className="card__title-identity--file">
                 <h1 className="card__title card__title--file">{title}</h1>
@@ -155,17 +157,31 @@ class FilePage extends React.Component<Props> {
                 {__('Published on')}&nbsp;
                 <DateTime block={height} show={DateTime.SHOW_DATE} />
               </span>
-
+              {metadata.nsfw && <div>NSFW</div>}
               <div className="card__channel-info">
                 <UriIndicator uri={uri} link />
                 <div className="card__actions card__actions--no-margin">
-                  <Button
-                    button="alt"
-                    iconRight="Send"
-                    label={__('Enjoy this? Send a tip')}
-                    onClick={() => openModal(modals.SEND_TIP, { uri })}
-                  />
-                  <SubscribeButton uri={subscriptionUri} channelName={channelName} />
+                  {claimIsMine ? (
+                    <Button
+                      button="primary"
+                      icon={icons.EDIT}
+                      label={__('Edit')}
+                      onClick={() => {
+                        prepareEdit(claim);
+                        navigate('/publish');
+                      }}
+                    />
+                  ) : (
+                    <React.Fragment>
+                      <Button
+                        button="alt"
+                        iconRight="Send"
+                        label={__('Enjoy this? Send a tip')}
+                        onClick={() => openModal(modals.SEND_TIP, { uri })}
+                      />
+                      <SubscribeButton uri={subscriptionUri} channelName={channelName} />
+                    </React.Fragment>
+                  )}
                 </div>
               </div>
             </div>

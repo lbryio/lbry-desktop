@@ -1,7 +1,10 @@
 // @flow
 import React from 'react';
 // import * as icons from 'constants/icons';
-import * as Icons from 'react-feather';
+import * as FeatherIcons from 'react-feather';
+import * as icons from 'constants/icons';
+
+const RED_COLOR = '#e2495e';
 
 type Props = {
   icon: string,
@@ -13,12 +16,19 @@ class IconComponent extends React.PureComponent<Props> {
   // Add some some sort of hover flyout with the title?
 
   render() {
-    const { icon, size = 14 } = this.props;
-    const Icon = Icons[icon];
+    const { icon } = this.props;
+    const Icon = FeatherIcons[icon];
+
     let color;
-    if (icon === 'Heart') {
-      color = '#e2495e'
+    if (icon === icons.HEART) {
+      color = RED_COLOR;
     }
+
+    let size = 14;
+    if (icon === icons.ARROW_LEFT || icon === icons.ARROW_RIGHT) {
+      size = 18;
+    }
+
     return Icon ? <Icon size={size} className="icon" color={color} /> : null;
   }
 }
