@@ -7460,9 +7460,9 @@ redux-persist-transform-compress@^4.2.0:
     json-stringify-safe "^5.0.1"
     lz-string "^1.4.4"
 
-redux-persist-transform-filter@0.0.10:
-  version "0.0.10"
-  resolved "https://registry.yarnpkg.com/redux-persist-transform-filter/-/redux-persist-transform-filter-0.0.10.tgz#9a3b106ce8939d2cbbf5212c747ed177fff14280"
+redux-persist-transform-filter@0.0.16:
+  version "0.0.16"
+  resolved "https://registry.yarnpkg.com/redux-persist-transform-filter/-/redux-persist-transform-filter-0.0.16.tgz#0c21dc166774c12fb3f090f7a2f5ea90f7ba0cea"
   dependencies:
     lodash.forin "^4.4.0"
     lodash.get "^4.4.2"
