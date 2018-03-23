@@ -1,5 +1,4 @@
 import React from 'react';
-import lbry from 'lbry';
 import { buildURI, normalizeURI } from 'lbryURI';
 import Video from 'component/video';
 import { Thumbnail } from 'component/common';
@@ -74,7 +73,7 @@ class FilePage extends React.PureComponent {
 
     const title = metadata.title;
     const isRewardContent = rewardedContentClaimIds.includes(claim.claim_id);
-    const mediaType = /^[^/]+/.exec(contentType);
+    const mediaType = /^[^/]+/.exec(contentType)[0];
     const player = require('render-media');
     const obscureNsfw = this.props.obscureNsfw && metadata && metadata.nsfw;
     const isPlayable =

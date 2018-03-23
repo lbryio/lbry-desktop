@@ -64,7 +64,7 @@ class Video extends React.PureComponent {
     const obscureNsfw = this.props.obscureNsfw && metadata && metadata.nsfw;
 
     // TODO -> fallback: lbry.getMediaType(fileInfo && fileInfo.file_name)
-    const mediaType = /^[^/]+/.exec(contentType);
+    const mediaType = /^[^/]+/.exec(contentType)[0];
 
     let loadStatusMessage = '';
 
