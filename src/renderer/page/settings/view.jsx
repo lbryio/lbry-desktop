@@ -123,6 +123,10 @@ class SettingsPage extends React.PureComponent {
     this.props.setClientSetting(settings.SHOW_UNAVAILABLE, event.target.checked);
   }
 
+  onAutoplayChange(event) {
+    this.props.setClientSetting(settings.AUTOPLAY, event.target.checked);
+  }
+
   componentWillMount() {
     this.props.getThemes();
   }
@@ -141,6 +145,7 @@ class SettingsPage extends React.PureComponent {
       theme,
       themes,
       automaticDarkModeEnabled,
+      autoplay,
     } = this.props;
 
     if (!daemonSettings || Object.keys(daemonSettings).length === 0) {
@@ -295,6 +300,20 @@ class SettingsPage extends React.PureComponent {
               helper={__(
                 'NSFW content may include nudity, intense sexuality, profanity, or other adult content. By displaying NSFW content, you are affirming you are of legal age to view mature content in your country or jurisdiction.  '
               )}
+            />
+          </div>
+        </section>
+
+        <section className="card">
+          <div className="card__content">
+            <h4>{__('Autoplay')}</h4>
+          </div>
+          <div className="card__content">
+            <FormRow
+              type="checkbox"
+              onChange={this.onAutoplayChange.bind(this)}
+              defaultChecked={autoplay}
+              label={__('Automatically play media files')}
             />
           </div>
         </section>

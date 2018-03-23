@@ -13,6 +13,7 @@ import {
   makeSelectClientSetting,
   selectDaemonSettings,
   selectLanguages,
+  selectAutoplay,
 } from 'redux/selectors/settings';
 import { selectCurrentLanguage } from 'redux/selectors/app';
 import SettingsPage from './view';
@@ -28,6 +29,7 @@ const select = state => ({
   themes: makeSelectClientSetting(settings.THEMES)(state),
   language: selectCurrentLanguage(state),
   languages: selectLanguages(state),
+  autoplay: selectAutoplay(state),
   automaticDarkModeEnabled: makeSelectClientSetting(settings.AUTOMATIC_DARK_MODE_ENABLED)(state),
 });
 

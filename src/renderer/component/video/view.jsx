@@ -13,6 +13,12 @@ class Video extends React.PureComponent {
     };
   }
 
+  componentDidMount() {
+    if (this.props.autoplay) {
+      this.props.play(this.props.uri);
+    }
+  }
+
   componentWillUnmount() {
     this.props.cancelPlay();
   }
