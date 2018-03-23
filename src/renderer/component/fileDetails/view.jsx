@@ -1,6 +1,5 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
-import lbry from 'lbry.js';
 import FileActions from 'component/fileActions';
 import Link from 'component/link';
 import DateTime from 'component/dateTime';
