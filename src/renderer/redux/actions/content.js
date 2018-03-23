@@ -5,6 +5,7 @@ import { ipcRenderer } from 'electron';
 import Lbryio from 'lbryio';
 import { doAlertError } from 'redux/actions/app';
 import { doClaimEligiblePurchaseRewards } from 'redux/actions/rewards';
+import { setSubscriptionLatest } from 'redux/actions/subscriptions';
 import { selectBadgeNumber } from 'redux/selectors/app';
 import {
   Lbry,
@@ -16,7 +17,6 @@ import {
   doOpenModal,
   makeSelectCostInfoForUri,
   makeSelectFileInfoForUri,
-  normalizeURI,
   selectDownloadingByOutpoint,
   selectTotalDownloadProgress,
   selectBalance,
@@ -24,6 +24,7 @@ import {
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import setBadge from 'util/setBadge';
 import setProgressBar from 'util/setProgressBar';
+import analytics from 'analytics';
 
 const DOWNLOAD_POLL_INTERVAL = 250;
 
@@ -121,7 +122,7 @@ export function doUpdateLoadStatus(uri, outpoint) {
         setProgressBar(totalProgress);
 
         const notif = new window.Notification('LBRY Download Complete', {
-          body: fileInfo.metadata.stream.metadata.title,
+          body: fileInfo.metadata.title,
           silent: false,
         });
         notif.onclick = () => {
@@ -184,11 +185,7 @@ export function doDownloadFile(uri, streamInfo) {
   return dispatch => {
     dispatch(doStartDownload(uri, streamInfo.outpoint));
 
-    Lbryio.call('file', 'view', {
-      uri,
-      outpoint: streamInfo.outpoint,
-      claim_id: streamInfo.claim_id,
-    }).catch(() => {});
+    analytics.apiLogView(uri, streamInfo.output, streamInfo.claim_id);
 
     dispatch(doClaimEligiblePurchaseRewards());
   };
@@ -244,7 +241,7 @@ export function doLoadVideo(uri) {
   };
 }
 
-export function doPurchaseUri(uri) {
+export function doPurchaseUri(uri, specificCostInfo) {
   return (dispatch, getState) => {
     const state = getState();
     const balance = selectBalance(state);
@@ -277,7 +274,7 @@ export function doPurchaseUri(uri) {
       return;
     }
 
-    const costInfo = makeSelectCostInfoForUri(uri)(state);
+    const costInfo = makeSelectCostInfoForUri(uri)(state) || specificCostInfo;
     const { cost } = costInfo;
 
     if (cost > balance) {
@@ -313,6 +310,25 @@ export function doFetchClaimsByChannel(uri, page) {
     Lbry.claim_list_by_channel({ uri, page: page || 1 }).then(result => {
       const claimResult = result[uri] || {};
       const { claims_in_channel: claimsInChannel, returned_page: returnedPage } = claimResult;
+
+      if (claimsInChannel && claimsInChannel.length) {
+        const latest = claimsInChannel[0];
+        dispatch(
+          setSubscriptionLatest(
+            {
+              channelName: latest.channel_name,
+              uri: buildURI(
+                {
+                  contentName: latest.channel_name,
+                  claimId: latest.value.publisherSignature.certificateId,
+                },
+                false
+              ),
+            },
+            buildURI({ contentName: latest.name, claimId: latest.claim_id }, false)
+          )
+        );
+      }
 
       dispatch({
         type: ACTIONS.FETCH_CHANNEL_CLAIMS_COMPLETED,
@@ -358,17 +374,17 @@ export function doPlayUri(uri) {
 export function doFetchChannelListMine() {
   return dispatch => {
     dispatch({
-      type: ACTIONS.FETCH_CHANNEL_LIST_MINE_STARTED,
+      type: ACTIONS.FETCH_CHANNEL_LIST_STARTED,
     });
 
     const callback = channels => {
       dispatch({
-        type: ACTIONS.FETCH_CHANNEL_LIST_MINE_COMPLETED,
+        type: ACTIONS.FETCH_CHANNEL_LIST_COMPLETED,
         data: { claims: channels },
       });
     };
 
-    Lbry.channel_list_mine().then(callback);
+    Lbry.channel_list().then(callback);
   };
 }
 

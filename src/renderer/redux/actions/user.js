@@ -9,6 +9,7 @@ import {
   selectUserCountryCode,
 } from 'redux/selectors/user';
 import rewards from 'rewards';
+import analytics from 'analytics';
 
 export function doFetchInviteStatus() {
   return dispatch => {
@@ -42,6 +43,7 @@ export function doAuthenticate() {
     });
     Lbryio.authenticate()
       .then(user => {
+        analytics.setUser(user);
         dispatch({
           type: ACTIONS.AUTHENTICATION_SUCCESS,
           data: { user },
@@ -66,6 +68,7 @@ export function doUserFetch() {
     });
     Lbryio.getCurrentUser()
       .then(user => {
+        analytics.setUser(user);
         dispatch(doRewardList());
 
         dispatch({
@@ -102,10 +105,10 @@ export function doUserPhoneNew(phone, country_code) {
       });
     };
 
-    const failure = () => {
+    const failure = error => {
       dispatch({
         type: ACTIONS.USER_PHONE_NEW_FAILURE,
-        data: { error: 'An error occurred while processing this phone number.' },
+        data: { error },
       });
     };
 

@@ -45,7 +45,7 @@ class FileListSearch extends React.PureComponent {
         {uris && uris.length
           ? uris.map(
               uri =>
-                parseURI(uri).name[0] === '@' ? (
+                parseURI(uri).claimName[0] === '@' ? (
                   <ChannelTile key={uri} uri={uri} />
                 ) : (
                   <FileTile key={uri} uri={uri} />

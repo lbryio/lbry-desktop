@@ -56,9 +56,15 @@ export const selectUpgradeDownloadPath = createSelector(selectState, state => st
 
 export const selectUpgradeDownloadItem = createSelector(selectState, state => state.downloadItem);
 
-export const selectAutoUpdateDownloaded = createSelector(selectState, state => state.autoUpdateDownloaded);
+export const selectAutoUpdateDownloaded = createSelector(
+  selectState,
+  state => state.autoUpdateDownloaded
+);
 
-export const selectAutoUpdateDeclined = createSelector(selectState, state => state.autoUpdateDeclined);
+export const selectAutoUpdateDeclined = createSelector(
+  selectState,
+  state => state.autoUpdateDeclined
+);
 
 export const selectModalsAllowed = createSelector(selectState, state => state.modalsAllowed);
 

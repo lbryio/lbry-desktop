@@ -51,7 +51,7 @@ $md-checkmark-color: #fff;
         border: none;
       }
       + label:after {
-        $md-checkmark-size: $md-checkbox-size - 2*$md-checkbox-padding;
+        $md-checkmark-size: $md-checkbox-size - 2 * $md-checkbox-padding;
 
         transform: rotate(-45deg);
 

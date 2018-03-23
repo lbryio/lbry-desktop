@@ -2,10 +2,10 @@ import { remote } from 'electron';
 
 const application = remote.app;
 const { dock } = application;
-const win = remote.BrowserWindow.getFocusedWindow();
+const browserWindow = remote.getCurrentWindow();
 const setBadge = text => {
   if (!dock) return;
-  if (win.isFocused()) return;
+  if (browserWindow.isFocused()) return;
 
   dock.setBadge(text);
 };

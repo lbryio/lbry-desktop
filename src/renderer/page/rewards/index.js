@@ -3,9 +3,11 @@ import { selectFetchingRewards, selectUnclaimedRewards } from 'redux/selectors/r
 import { selectUser } from 'redux/selectors/user';
 import { doAuthNavigate, doNavigate } from 'redux/actions/navigation';
 import { doRewardList } from 'redux/actions/rewards';
+import { selectDaemonSettings } from 'redux/selectors/settings';
 import RewardsPage from './view';
 
 const select = (state, props) => ({
+  daemonSettings: selectDaemonSettings(state),
   fetching: selectFetchingRewards(state),
   rewards: selectUnclaimedRewards(state),
   user: selectUser(state),

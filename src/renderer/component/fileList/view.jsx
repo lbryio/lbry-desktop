@@ -9,31 +9,61 @@ class FileList extends React.PureComponent {
     super(props);
 
     this.state = {
-      sortBy: 'date',
+      sortBy: 'dateNew',
     };
 
     this._sortFunctions = {
-      date(fileInfos) {
-        return fileInfos.slice().reverse();
-      },
-      title(fileInfos) {
-        return fileInfos.slice().sort((fileInfo1, fileInfo2) => {
+      dateNew: fileInfos =>
+        this.props.sortByHeight
+          ? fileInfos.slice().sort((fileInfo1, fileInfo2) => {
+              const height1 = this.props.claimsById[fileInfo1.claim_id]
+                ? this.props.claimsById[fileInfo1.claim_id].height
+                : 0;
+              const height2 = this.props.claimsById[fileInfo2.claim_id]
+                ? this.props.claimsById[fileInfo2.claim_id].height
+                : 0;
+              if (height1 > height2) {
+                return -1;
+              } else if (height1 < height2) {
+                return 1;
+              }
+              return 0;
+            })
+          : [...fileInfos].reverse(),
+      dateOld: fileInfos =>
+        this.props.sortByHeight
+          ? fileInfos.slice().sort((fileInfo1, fileInfo2) => {
+              const height1 = this.props.claimsById[fileInfo1.claim_id]
+                ? this.props.claimsById[fileInfo1.claim_id].height
+                : 999999;
+              const height2 = this.props.claimsById[fileInfo2.claim_id]
+                ? this.props.claimsById[fileInfo2.claim_id].height
+                : 999999;
+              if (height1 < height2) {
+                return -1;
+              } else if (height1 > height2) {
+                return 1;
+              }
+              return 0;
+            })
+          : fileInfos,
+      title: fileInfos =>
+        fileInfos.slice().sort((fileInfo1, fileInfo2) => {
           const title1 = fileInfo1.value
             ? fileInfo1.value.stream.metadata.title.toLowerCase()
-            : fileInfo1.name;
+            : fileInfo1.claim_name;
           const title2 = fileInfo2.value
             ? fileInfo2.value.stream.metadata.title.toLowerCase()
-            : fileInfo2.name;
+            : fileInfo2.claim_name;
           if (title1 < title2) {
             return -1;
           } else if (title1 > title2) {
             return 1;
           }
           return 0;
-        });
-      },
-      filename(fileInfos) {
-        return fileInfos.slice().sort(({ file_name: fileName1 }, { file_name: fileName2 }) => {
+        }),
+      filename: fileInfos =>
+        fileInfos.slice().sort(({ file_name: fileName1 }, { file_name: fileName2 }) => {
           const fileName1Lower = fileName1.toLowerCase();
           const fileName2Lower = fileName2.toLowerCase();
           if (fileName1Lower < fileName2Lower) {
@@ -42,8 +72,7 @@ class FileList extends React.PureComponent {
             return 1;
           }
           return 0;
-        });
-      },
+        }),
     };
   }
 
@@ -51,7 +80,7 @@ class FileList extends React.PureComponent {
     if (fileInfo.value) {
       return fileInfo.value.publisherSignature.certificateId;
     }
-    return fileInfo.metadata.publisherSignature.certificateId;
+    return fileInfo.channel_claim_id;
   }
 
   handleSortChanged(event) {
@@ -70,11 +99,11 @@ class FileList extends React.PureComponent {
 
       if (fileInfo.channel_name) {
         uriParams.channelName = fileInfo.channel_name;
-        uriParams.contentName = fileInfo.name;
+        uriParams.contentName = fileInfo.claim_name || fileInfo.name;
         uriParams.claimId = this.getChannelSignature(fileInfo);
       } else {
         uriParams.claimId = fileInfo.claim_id;
-        uriParams.name = fileInfo.name;
+        uriParams.claimName = fileInfo.claim_name || fileInfo.name;
       }
       const uri = buildURI(uriParams);
 
@@ -95,7 +124,8 @@ class FileList extends React.PureComponent {
         <span className="sort-section">
           {__('Sort by')}{' '}
           <FormField type="select" onChange={this.handleSortChanged.bind(this)}>
-            <option value="date">{__('Date')}</option>
+            <option value="dateNew">{__('Newest First')}</option>
+            <option value="dateOld">{__('Oldest First')}</option>
             <option value="title">{__('Title')}</option>
           </FormField>
         </span>

@@ -1,45 +1,63 @@
-import { app, BrowserWindow, dialog } from 'electron';
+import { app, BrowserWindow, dialog, screen } from 'electron';
+import isDev from 'electron-is-dev';
+import windowStateKeeper from 'electron-window-state';
+
 import setupBarMenu from './menu/setupBarMenu';
 import setupContextMenu from './menu/setupContextMenu';
 
-export default deepLinkingURIArg => {
+export default appState => {
+  // Get primary display dimensions from Electron.
+  const { width, height } = screen.getPrimaryDisplay().workAreaSize;
+
+  // Load the previous state with fallback to defaults.
+  const windowState = windowStateKeeper({
+    defaultWidth: width,
+    defaultHeight: height,
+  });
+
   let windowConfiguration = {
     backgroundColor: '#155B4A',
     minWidth: 800,
     minHeight: 600,
     autoHideMenuBar: true,
     show: false,
+    // Create the window using the state information.
+    x: windowState.x,
+    y: windowState.y,
+    // If state is undefined, create window as maximized.
+    width: windowState.width === undefined ? width : windowState.width,
+    height: windowState.height === undefined ? height : windowState.height,
   };
 
   // Disable renderer process's webSecurity on development to enable CORS.
-  windowConfiguration =
-    process.env.NODE_ENV === 'development'
-      ? {
-          ...windowConfiguration,
-          webPreferences: {
-            webSecurity: false,
-          },
-        }
-      : windowConfiguration;
+  windowConfiguration = isDev
+    ? {
+        ...windowConfiguration,
+        webPreferences: {
+          webSecurity: false,
+        },
+      }
+    : windowConfiguration;
 
-  const rendererURL =
-    process.env.NODE_ENV === 'development'
-      ? `http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`
-      : `file://${__dirname}/index.html`;
+  const rendererURL = isDev
+    ? `http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`
+    : `file://${__dirname}/index.html`;
 
   let window = new BrowserWindow(windowConfiguration);
 
-  window.maximize();
+  // Let us register listeners on the window, so we can update the state
+  // automatically (the listeners will be removed when the window is closed)
+  // and restore the maximized or full screen state.
+  windowState.manage(window);
 
   window.loadURL(rendererURL);
 
   let deepLinkingURI;
-  // Protocol handler for win32
   if (
-    !deepLinkingURIArg &&
-    process.platform === 'win32' &&
+    (process.platform === 'win32' || process.platform === 'linux') &&
     String(process.argv[1]).startsWith('lbry')
   ) {
+    [, deepLinkingURI] = process.argv;
     // Keep only command line / deep linked arguments
     // Windows normalizes URIs when they're passed in from other apps. On Windows, this tries to
     // restore the original URI that was typed.
@@ -47,16 +65,21 @@ export default deepLinkingURIArg => {
     //     path, so we just strip it off.
     //   - In a URI with a claim ID, like lbry://channel#claimid, Windows interprets the hash mark as
     //     an anchor and converts it to lbry://channel/#claimid. We remove the slash here as well.
-    deepLinkingURI = process.argv[1].replace(/\/$/, '').replace('/#', '#');
+    if (process.platform === 'win32') {
+      deepLinkingURI = deepLinkingURI.replace(/\/$/, '').replace('/#', '#');
+    }
   } else {
-    deepLinkingURI = deepLinkingURIArg;
+    deepLinkingURI = appState.macDeepLinkingURI;
   }
 
   setupBarMenu();
   setupContextMenu(window);
 
-  window.on('closed', () => {
-    window = null;
+  window.on('close', event => {
+    if (!appState.isQuitting && !appState.autoUpdateAccepted) {
+      event.preventDefault();
+      window.hide();
+    }
   });
 
   window.on('focus', () => {
@@ -87,7 +110,7 @@ export default deepLinkingURIArg => {
   window.webContents.on('did-finish-load', () => {
     window.webContents.send('open-uri-requested', deepLinkingURI, true);
     window.webContents.session.setUserAgent(`LBRY/${app.getVersion()}`);
-    if (process.env.NODE_ENV === 'development') {
+    if (isDev) {
       window.webContents.openDevTools();
     }
   });

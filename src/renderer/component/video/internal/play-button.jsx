@@ -23,7 +23,7 @@ class VideoPlayButton extends React.PureComponent {
   }
 
   render() {
-    const { button, label, isLoading, fileInfo, mediaType } = this.props;
+    const { button, label, fileInfo, mediaType } = this.props;
 
     /*
      title={
@@ -33,13 +33,12 @@ class VideoPlayButton extends React.PureComponent {
      }
      */
 
-    const disabled = isLoading || fileInfo === undefined;
     const icon = ['audio', 'video'].indexOf(mediaType) !== -1 ? 'icon-play' : 'icon-folder-o';
 
     return (
       <Link
         button={button || null}
-        disabled={disabled}
+        disabled={fileInfo === undefined}
         label={label || ''}
         className="video__play-button"
         icon={icon}

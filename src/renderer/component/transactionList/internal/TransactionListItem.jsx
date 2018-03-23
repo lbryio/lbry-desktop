@@ -74,7 +74,7 @@ class TransactionListItem extends React.PureComponent {
               <Link
                 className="button-text"
                 navigate="/show"
-                navigateParams={{ uri: buildURI({ name, claimId }) }}
+                navigateParams={{ uri: buildURI({ claimName: name, claimId }) }}
               >
                 {name}
               </Link>

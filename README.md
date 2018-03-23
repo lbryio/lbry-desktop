@@ -1,8 +1,11 @@
 # LBRY App
 
+[![Build Status](https://travis-ci.org/lbryio/lbry-app.svg?branch=master)](https://travis-ci.org/lbryio/lbry-app)
+[![dependencies](https://david-dm.org/lbryio/lbry-app/status.svg)](https://david-dm.org/lbryio/lbry-app)
+
 The LBRY app is a graphical browser for the decentralized content marketplace provided by the
 [LBRY](https://lbry.io) protocol. It is essentially the
-[lbry daemon](https://github.com/lbryio/lbry) bundled with a UI using
+[lbry daemon](https://github.com/lbryio/lbry) bundled with an UI using
 [Electron](http://electron.atom.io/).
 
 ![App screenshot](https://lbry.io/img/lbry-ui.png)

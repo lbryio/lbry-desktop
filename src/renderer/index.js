@@ -1,5 +1,4 @@
 /* eslint-disable react/jsx-filename-extension */
-import amplitude from 'amplitude-js';
 import App from 'component/app';
 import SnackBar from 'component/snackBar';
 import SplashScreen from 'component/splash';
@@ -8,24 +7,23 @@ import { ipcRenderer, remote, shell } from 'electron';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-
-import { Lbry, doShowSnackBar } from 'lbry-redux';
-import { doConditionalAuthNavigate, doDaemonReady, doAutoUpdate} from 'redux/actions/app';
+import {
+  doConditionalAuthNavigate,
+  doDaemonReady,
+  doShowSnackBar,
+  doAutoUpdate,
+} from 'redux/actions/app';
 import { doNavigate } from 'redux/actions/navigation';
-import { doUpdateIsNightAsync, doDownloadLanguages } from 'redux/actions/settings';
+import { doDownloadLanguages, doUpdateIsNightAsync } from 'redux/actions/settings';
 import { doUserEmailVerify } from 'redux/actions/user';
 import 'scss/all.scss';
 import store from 'store';
 import app from './app';
+import analytics from './analytics';
 
 const { autoUpdater } = remote.require('electron-updater');
 
-autoUpdater.logger = remote.require("electron-log");
-
-window.addEventListener('contextmenu', event => {
-  contextMenu(remote.getCurrentWindow(), event.x, event.y, app.env === 'development');
-  event.preventDefault();
-});
+autoUpdater.logger = remote.require('electron-log');
 
 ipcRenderer.on('open-uri-requested', (event, uri, newSession) => {
   if (uri && uri.startsWith('lbry://')) {
@@ -62,15 +60,12 @@ ipcRenderer.on('window-is-focused', () => {
   dock.setBadge('');
 });
 
-((history, ...args) => {
-  const { replaceState } = history;
-  const newHistory = history;
-  newHistory.replaceState = (_, __, path) => {
-    amplitude.getInstance().logEvent('NAVIGATION', { destination: path ? path.slice(1) : path });
-    return replaceState.apply(history, args);
-  };
-})(window.history);
-
+document.addEventListener('dragover', event => {
+  event.preventDefault();
+});
+document.addEventListener('drop', event => {
+  event.preventDefault();
+});
 document.addEventListener('click', event => {
   let { target } = event;
   while (target && target !== document) {
@@ -79,12 +74,12 @@ document.addEventListener('click', event => {
       const hrefParts = window.location.href.split('#');
       const element = target.title || (target.textContent && target.textContent.trim());
       if (element) {
-        amplitude.getInstance().logEvent('CLICK', {
+        analytics.track('CLICK', {
           target: element,
           location: hrefParts.length > 1 ? hrefParts[hrefParts.length - 1] : '/',
         });
       } else {
-        amplitude.getInstance().logEvent('UNMARKED_CLICK', {
+        analytics.track('UNMARKED_CLICK', {
           location: hrefParts.length > 1 ? hrefParts[hrefParts.length - 1] : '/',
           source: target.outerHTML,
         });
@@ -100,19 +95,24 @@ document.addEventListener('click', event => {
 });
 
 const init = () => {
-  autoUpdater.on("update-downloaded", () => {
+  autoUpdater.on('update-downloaded', () => {
     app.store.dispatch(doAutoUpdate());
   });
 
-  if (["win32", "darwin"].includes(process.platform)) {
-    autoUpdater.on("update-available", () => {
-      console.log("Update available");
+  autoUpdater.on('error', error => {
+    // eslint-disable-next-line no-console
+    console.error(error.message);
+  });
+
+  if (['win32', 'darwin'].includes(process.platform)) {
+    autoUpdater.on('update-available', () => {
+      console.log('Update available');
     });
-    autoUpdater.on("update-not-available", () => {
-      console.log("Update not available");
+    autoUpdater.on('update-not-available', () => {
+      console.log('Update not available');
     });
-    autoUpdater.on("update-downloaded", () => {
-      console.log("Update downloaded");
+    autoUpdater.on('update-downloaded', () => {
+      console.log('Update downloaded');
       app.store.dispatch(doAutoUpdate());
     });
   }
@@ -120,28 +120,18 @@ const init = () => {
   app.store.dispatch(doDownloadLanguages());
 
   function onDaemonReady() {
-    Lbry.status().then(info => {
-      amplitude.getInstance().init(
-        // Amplitude API Key
-        '0b130efdcbdbf86ec2f7f9eff354033e',
-        info.lbry_id,
-        null,
-        () => {
-          window.sessionStorage.setItem('loaded', 'y'); // once we've made it here once per session, we don't need to show splash again
-          app.store.dispatch(doDaemonReady());
+    window.sessionStorage.setItem('loaded', 'y'); // once we've made it here once per session, we don't need to show splash again
+    app.store.dispatch(doDaemonReady());
 
-          ReactDOM.render(
-            <Provider store={store}>
-              <div>
-                <App />
-                <SnackBar />
-              </div>
-            </Provider>,
-            document.getElementById('app')
-          );
-        }
-      );
-    });
+    ReactDOM.render(
+      <Provider store={store}>
+        <div>
+          <App />
+          <SnackBar />
+        </div>
+      </Provider>,
+      document.getElementById('app')
+    );
   }
 
   if (window.sessionStorage.getItem('loaded') === 'y') {
