@@ -1,10 +1,11 @@
 import React from 'react';
 import { Lbry, isNameValid, buildURI, regexInvalidURI } from 'lbry-redux';
 import FormField from 'component/formField';
-import { Form, FormRow, Submit } from 'component/form';
+import { Form, FormRow, Submit } from 'component/form.js';
 import Link from 'component/link';
 import FormFieldPrice from 'component/formFieldPrice';
 import Modal from 'modal/modal';
+import { BusyMessage } from 'component/common';
 import ChannelSection from './internal/channelSection';
 
 class PublishForm extends React.PureComponent {
@@ -12,6 +13,7 @@ class PublishForm extends React.PureComponent {
     super(props);
 
     this._requiredFields = ['name', 'bid', 'meta_title', 'tosAgree'];
+
     this._defaultCopyrightNotice = 'All rights reserved.';
     this._defaultPaidPrice = 0.01;
 
@@ -51,51 +53,126 @@ class PublishForm extends React.PureComponent {
     };
   }
 
-  componentWillMount() {
-    this.props.fetchClaimListMine();
-    this._updateChannelList();
+  _updateChannelList(channel) {
+    const { fetchingChannels, fetchChannelListMine } = this.props;
 
-    const { id } = this.props.params;
-    this.setState({ id });
+    if (!fetchingChannels) fetchChannelListMine();
   }
 
-  componentDidMount() {
-    this.handleEditClaim();
-  }
+  handleSubmit() {
+    this.setState({
+      submitting: true,
+    });
 
-  onFileChange() {
-    const { mode } = this.state;
-    if (this.refs.file.getValue()) {
-      this.setState({ hasFile: true });
-      if (!this.state.customUrl && mode !== 'edit') {
-        const fileName = this._getFileName(this.refs.file.getValue());
-        this.nameChanged(fileName);
+    const checkFields = this._requiredFields;
+    if (!this.myClaimExists()) {
+      checkFields.unshift('file');
+    }
+
+    let missingFieldFound = false;
+    for (const fieldName of checkFields) {
+      const field = this.refs[fieldName];
+      if (field) {
+        if (field.getValue() === '' || field.getValue() === false) {
+          field.showRequiredError();
+          if (!missingFieldFound) {
+            field.focus();
+            missingFieldFound = true;
+          }
+        } else {
+          field.clearError();
+        }
       }
+    }
+
+    if (missingFieldFound) {
+      this.setState({
+        submitting: false,
+      });
+      return;
+    }
+
+    const metadata = {};
+
+    for (const metaField of ['title', 'description', 'thumbnail', 'language']) {
+      const value = this.state[`meta_${metaField}`];
+      if (value) {
+        metadata[metaField] = value;
+      }
+    }
+
+    metadata.license = this.getLicense();
+    metadata.licenseUrl = this.getLicenseUrl();
+    metadata.nsfw = !!parseInt(this.state.meta_nsfw);
+
+    const doPublish = () => {
+      const publishArgs = {
+        name: this.state.name,
+        bid: parseFloat(this.state.bid),
+        metadata,
+        ...(this.state.channel != 'new' && this.state.channel != 'anonymous'
+          ? { channel_name: this.state.channel }
+          : {}),
+      };
+
+      const { source } = this.state;
+
+      if (this.refs.file.getValue() !== '') {
+        publishArgs.file_path = this.refs.file.getValue();
+      } else if (source) {
+        publishArgs.sources = source;
+      }
+
+      const success = claim => {};
+      const failure = error => this.handlePublishError(error);
+
+      this.handlePublishStarted();
+      this.props.publish(publishArgs).then(success, failure);
+    };
+
+    if (this.state.isFee && parseFloat(this.state.feeAmount) > 0) {
+      Lbry.wallet_unused_address().then(address => {
+        metadata.fee = {
+          currency: this.state.feeCurrency,
+          amount: parseFloat(this.state.feeAmount),
+          address,
+        };
+
+        doPublish();
+      });
     } else {
-      this.setState({ hasFile: false });
+      doPublish();
     }
   }
 
-  getLicenseUrl() {
-    switch (this.state.licenseType) {
-      case 'copyright':
-        return '';
-      case 'other':
-        return this.state.otherLicenseUrl;
-      default:
-        return this._meta_license.getSelectedElement().getAttribute('data-url');
-    }
+  handlePublishStarted() {
+    this.setState({
+      modal: 'publishStarted',
+    });
   }
 
-  getLicense() {
-    switch (this.state.licenseType) {
-      case 'copyright':
-        return this.state.copyrightNotice;
-      case 'other':
-        return this.state.otherLicenseDescription;
-      default:
-        return this._meta_license.getSelectedElement().text;
-    }
+  handlePublishStartedConfirmed() {
+    this.props.navigate('/published');
+  }
+
+  handlePublishError(error) {
+    this.setState({
+      submitting: false,
+      modal: 'error',
+      errorMessage: error.message,
+    });
+  }
+
+  claim() {
+    const { claimsByUri } = this.props;
+    const { uri } = this.state;
+    return claimsByUri[uri];
+  }
+
+  topClaimValue() {
+    if (!this.claim()) return null;
+
+    return parseFloat(this.claim().effective_amount);
   }
 
   myClaimExists() {
@@ -209,7 +286,7 @@ class PublishForm extends React.PureComponent {
       source,
     };
 
-    if (license === this._defaultCopyrightNotice) {
+    if (license == this._defaultCopyrightNotice) {
       newState.licenseType = 'copyright';
       newState.copyrightNotice = this._defaultCopyrightNotice;
     } else {
@@ -221,7 +298,7 @@ class PublishForm extends React.PureComponent {
         }
       }
 
-      if (licenseType === 'other') {
+      if (licenseType == 'other') {
         newState.otherLicenseDescription = license;
         newState.otherLicenseUrl = licenseUrl;
       }
@@ -247,7 +324,7 @@ class PublishForm extends React.PureComponent {
   handleFeePrefChange(feeEnabled) {
     this.setState({
       isFee: feeEnabled,
-      feeAmount: this.state.feeAmount === '' ? this._defaultPaidPrice : this.state.feeAmount,
+      feeAmount: this.state.feeAmount == '' ? this._defaultPaidPrice : this.state.feeAmount,
     });
   }
 
@@ -307,16 +384,51 @@ class PublishForm extends React.PureComponent {
     });
   }
 
-  claim() {
-    const { claimsByUri } = this.props;
-    const { uri } = this.state;
-    return claimsByUri[uri];
+  getLicense() {
+    switch (this.state.licenseType) {
+      case 'copyright':
+        return this.state.copyrightNotice;
+      case 'other':
+        return this.state.otherLicenseDescription;
+      default:
+        return this._meta_license.getSelectedElement().text;
+    }
   }
 
-  topClaimValue() {
-    if (!this.claim()) return null;
+  getLicenseUrl() {
+    switch (this.state.licenseType) {
+      case 'copyright':
+        return '';
+      case 'other':
+        return this.state.otherLicenseUrl;
+      default:
+        return this._meta_license.getSelectedElement().getAttribute('data-url');
+    }
+  }
 
-    return parseFloat(this.claim().effective_amount);
+  componentWillMount() {
+    this.props.fetchClaimListMine();
+    this._updateChannelList();
+
+    const { id } = this.props.params;
+    this.setState({ id });
+  }
+
+  componentDidMount() {
+    this.handleEditClaim();
+  }
+
+  onFileChange() {
+    const { mode } = this.state;
+    if (this.refs.file.getValue()) {
+      this.setState({ hasFile: true });
+      if (!this.state.customUrl && mode !== 'edit') {
+        const fileName = this._getFileName(this.refs.file.getValue());
+        this.nameChanged(fileName);
+      }
+    } else {
+      this.setState({ hasFile: false });
+    }
   }
 
   _getFileName(fileName) {
@@ -328,123 +440,51 @@ class PublishForm extends React.PureComponent {
     return fileName;
   }
 
-  handlePublishError(error) {
-    this.setState({
-      submitting: false,
-      modal: 'error',
-      errorMessage: error.message,
-    });
-  }
+  getNameBidHelpText() {
+    const { prefillDone, name, uri } = this.state;
+    const { resolvingUris } = this.props;
+    const claim = this.claim();
 
-  handlePublishStartedConfirmed() {
-    this.props.navigate('/published');
-  }
-
-  handlePublishStarted() {
-    this.setState({
-      modal: 'publishStarted',
-    });
-  }
-
-  handleSubmit() {
-    const { balance } = this.props;
-    const { bid } = this.state;
-
-    if (bid > balance) {
-      this.handlePublishError({ message: 'insufficient funds' });
-
-      return;
+    if (prefillDone) {
+      return __('Existing claim data was prefilled');
     }
 
-    this.setState({
-      submitting: true,
-    });
-
-    const checkFields = this._requiredFields;
-    if (!this.myClaimExists()) {
-      checkFields.unshift('file');
-    }
-
-    let missingFieldFound = false;
-    for (const fieldName of checkFields) {
-      const field = this.refs[fieldName];
-      if (field) {
-        if (field.getValue() === '' || field.getValue() === false) {
-          field.showRequiredError();
-          if (!missingFieldFound) {
-            field.focus();
-            missingFieldFound = true;
-          }
-        } else {
-          field.clearError();
-        }
+    if (uri && resolvingUris.indexOf(uri) !== -1 && claim === undefined) {
+      return __('Checking...');
+    } else if (!name) {
+      return __('Select a URL for this publish.');
+    } else if (!claim) {
+      return __('This URL is unused.');
+    } else if (this.myClaimExists() && !prefillDone) {
+      return (
+        <span>
+          {__('You already have a claim with this name.')}{' '}
+          <Link label={__('Edit existing claim')} onClick={() => this.handleEditClaim()} />
+        </span>
+      );
+    } else if (claim) {
+      const topClaimValue = this.topClaimValue();
+      if (topClaimValue === 1) {
+        return (
+          <span>
+            {__(
+              'A deposit of at least one credit is required to win "%s". However, you can still get a permanent URL for any amount.',
+              name
+            )}
+          </span>
+        );
       }
+      return (
+        <span>
+          {__(
+            'A deposit of at least "%s" credits is required to win "%s". However, you can still get a permanent URL for any amount.',
+            topClaimValue,
+            name
+          )}
+        </span>
+      );
     }
-
-    if (missingFieldFound) {
-      this.setState({
-        submitting: false,
-      });
-      return;
-    }
-
-    const metadata = {};
-
-    for (const metaField of ['title', 'description', 'thumbnail', 'language']) {
-      const value = this.state[`meta_${metaField}`];
-      if (value) {
-        metadata[metaField] = value;
-      }
-    }
-
-    metadata.license = this.getLicense();
-    metadata.licenseUrl = this.getLicenseUrl();
-    metadata.nsfw = !!parseInt(this.state.meta_nsfw, 10);
-
-    const doPublish = () => {
-      const publishArgs = {
-        name: this.state.name,
-        bid: parseFloat(this.state.bid),
-        metadata,
-        ...(this.state.channel !== 'new' && this.state.channel !== 'anonymous'
-          ? { channel_name: this.state.channel }
-          : {}),
-      };
-
-      const { source } = this.state;
-
-      if (this.refs.file.getValue() !== '') {
-        publishArgs.file_path = this.refs.file.getValue();
-      } else if (source) {
-        publishArgs.sources = source;
-      }
-
-      const success = claim => {};
-      const failure = error => this.handlePublishError(error);
-
-      this.handlePublishStarted();
-      this.props.publish(publishArgs).then(success, failure);
-    };
-
-    if (this.state.isFee && parseFloat(this.state.feeAmount) > 0) {
-      Lbry.wallet_unused_address().then(address => {
-        metadata.fee = {
-          currency: this.state.feeCurrency,
-          amount: parseFloat(this.state.feeAmount),
-          address,
-        };
-
-        doPublish();
-      });
-    } else {
-      doPublish();
-    }
-  }
-
-  _updateChannelList(channel) {
-    const { fetchingChannels, fetchChannelListMine } = this.props;
-
-    if (!fetchingChannels) fetchChannelListMine();
+    return '';
   }
 
   closeModal() {
@@ -599,7 +639,7 @@ class PublishForm extends React.PureComponent {
                   onChange={val => this.handleFeeChange(val)}
                 />
               </span>
-              {this.state.isFee && this.state.feeCurrency.toUpperCase() !== 'LBC' ? (
+              {this.state.isFee && this.state.feeCurrency.toUpperCase() != 'LBC' ? (
                 <div className="form-field__helper">
                   {__(
                     'All content fees are charged in LBC. For non-LBC payment methods, the number of credits charged will be adjusted based on the value of LBRY credits at the time of purchase.'
@@ -665,7 +705,7 @@ class PublishForm extends React.PureComponent {
                 <option value="other">{__('Other...')}</option>
               </FormRow>
 
-              {this.state.licenseType === 'copyright' ? (
+              {this.state.licenseType == 'copyright' ? (
                 <FormRow
                   label={__('Copyright notice')}
                   type="text"
@@ -677,7 +717,7 @@ class PublishForm extends React.PureComponent {
                 />
               ) : null}
 
-              {this.state.licenseType === 'other' ? (
+              {this.state.licenseType == 'other' ? (
                 <FormRow
                   label={__('License description')}
                   type="text"
@@ -689,7 +729,7 @@ class PublishForm extends React.PureComponent {
                 />
               ) : null}
 
-              {this.state.licenseType === 'other' ? (
+              {this.state.licenseType == 'other' ? (
                 <FormRow
                   label={__('License URL')}
                   type="text"
@@ -796,7 +836,7 @@ class PublishForm extends React.PureComponent {
         </Form>
 
         <Modal
-          isOpen={this.state.modal === 'publishStarted'}
+          isOpen={this.state.modal == 'publishStarted'}
           contentLabel={__('File published')}
           onConfirmed={event => {
             this.handlePublishStartedConfirmed(event);
@@ -813,7 +853,7 @@ class PublishForm extends React.PureComponent {
           </p>
         </Modal>
         <Modal
-          isOpen={this.state.modal === 'error'}
+          isOpen={this.state.modal == 'error'}
           contentLabel={__('Error publishing file')}
           onConfirmed={event => {
             this.closeModal(event);

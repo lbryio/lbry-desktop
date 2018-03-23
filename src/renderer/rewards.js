@@ -12,6 +12,7 @@ function rewardMessage(type, amount) {
     first_publish: __('You earned %s LBC for making your first publication.', amount),
     featured_download: __('You earned %s LBC for watching a featured download.', amount),
     referral: __('You earned %s LBC for referring someone.', amount),
+    youtube_creator: __('You earned %s LBC for syncing your YouTube channel.', amount),
   }[type];
 }
 
@@ -26,6 +27,7 @@ rewards.TYPE_MANY_DOWNLOADS = 'many_downloads';
 rewards.TYPE_FIRST_PUBLISH = 'first_publish';
 rewards.TYPE_FEATURED_DOWNLOAD = 'featured_download';
 rewards.TYPE_REFERRAL = 'referral';
+rewards.YOUTUBE_CREATOR = 'youtube_creator';
 rewards.SORT_ORDER = [
   rewards.TYPE_NEW_USER,
   rewards.TYPE_CONFIRM_EMAIL,
@@ -36,6 +38,7 @@ rewards.SORT_ORDER = [
   rewards.TYPE_MANY_DOWNLOADS,
   rewards.TYPE_REFERRAL,
   rewards.TYPE_NEW_DEVELOPER,
+  rewards.YOUTUBE_CREATOR,
 ];
 
 rewards.claimReward = type => {

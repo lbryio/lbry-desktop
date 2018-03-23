@@ -84,42 +84,15 @@ class UserVerify extends React.PureComponent {
             />
           </div>
           <div className="card__content">
-            <div className="meta">{__('Standard messaging rates apply.')} </div>
-          </div>
-        </section>
-        <section className="card card--form">
-          <div className="card__title-primary">
-            <h3>{__('3) Proof via YouTube')}</h3>
-          </div>
-          <div className="card__content">
-            <p>
-              {__(
-                'If you have a YouTube account with subscribers and views, you can sync your account and content to be granted instant verification.'
-              )}
-            </p>
-            <p>
-              {__('Some account minimums apply.')}{' '}
-              <Link href="https://lbry.io/faq/youtube" label={__('Read more.')} />
-            </p>
-          </div>
-          <div className="card__actions">
-            <Link
-              href="https://api.lbry.io/yt/connect"
-              button="alt"
-              icon="icon-youtube"
-              label={__('YouTube Account Sync')}
-            />
-          </div>
-          <div className="card__content">
             <div className="meta">
-              This will not automatically refresh after approval. Once you have synced your account,
-              just navigate away or click <Link navigate="/rewards" label="here" />.
+              {__('Standard messaging rates apply. Having trouble?')}{' '}
+              <Link href="https://lbry.io/faq/phone" label={__('Read more.')} />
             </div>
           </div>
         </section>
         <section className="card card--form">
           <div className="card__title-primary">
-            <h3>{__('4) Proof via Chat')}</h3>
+            <h3>{__('3) Proof via Chat')}</h3>
           </div>
           <div className="card__content">
             <p>

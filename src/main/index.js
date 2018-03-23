@@ -2,12 +2,14 @@
 // Module imports
 import keytar from 'keytar-prebuild';
 import SemVer from 'semver';
+import findProcess from 'find-process';
 import url from 'url';
 import https from 'https';
 import { shell, app, ipcMain, dialog } from 'electron';
 import { autoUpdater } from 'electron-updater';
+import isDev from 'electron-is-dev';
 import Daemon from './Daemon';
-import Tray from './Tray';
+import createTray from './createTray';
 import createWindow from './createWindow';
 
 autoUpdater.autoDownload = true;
@@ -16,9 +18,6 @@ autoUpdater.autoDownload = true;
 // auto-update system and is ready to install. If the user declined an update earlier,
 // it will still install on shutdown.
 let autoUpdateDownloaded = false;
-
-// Keeps track of whether the user has accepted an auto-update through the interface.
-let autoUpdateAccepted = false;
 
 // This is used to keep track of whether we are showing the special dialog
 // that we show on Windows after you decline an upgrade and close the app later.
@@ -31,11 +30,7 @@ let rendererWindow;
 let tray;
 let daemon;
 
-let isQuitting;
-
-const updateRendererWindow = window => {
-  rendererWindow = window;
-};
+const appState = {};
 
 const installExtensions = async () => {
   // eslint-disable-next-line import/no-extraneous-dependencies,global-require
@@ -55,56 +50,72 @@ const installExtensions = async () => {
 
 app.setAsDefaultProtocolClient('lbry');
 app.setName('LBRY');
+app.setAppUserModelId('io.lbry.LBRY');
 
 app.on('ready', async () => {
-  daemon = new Daemon();
-  daemon.on('exit', () => {
-    daemon = null;
-    if (!isQuitting) {
-      dialog.showErrorBox(
-        'Daemon has Exited',
-        'The daemon may have encountered an unexpected error, or another daemon instance is already running.'
-      );
+  const processList = await findProcess('name', 'lbrynet-daemon');
+  const isDaemonRunning = processList.length > 0;
+  if (!isDaemonRunning) {
+    daemon = new Daemon();
+    daemon.on('exit', () => {
+      daemon = null;
+      if (!appState.isQuitting) {
+        dialog.showErrorBox(
+          'Daemon has Exited',
+          'The daemon may have encountered an unexpected error, or another daemon instance is already running. \n\n' +
+            'For more information please visit: \n' +
+            'https://lbry.io/faq/startup-troubleshooting'
+        );
+      }
       app.quit();
-    }
-  });
-  daemon.launch();
-  if (process.env.NODE_ENV === 'development') {
+    });
+    daemon.launch();
+  }
+  if (isDev) {
     await installExtensions();
   }
-  rendererWindow = createWindow();
-  tray = new Tray(rendererWindow, updateRendererWindow);
-  tray.create();
+  rendererWindow = createWindow(appState);
+  tray = createTray(rendererWindow);
 });
 
 app.on('activate', () => {
-  // On macOS it's common to re-create a window in the app when the
-  // dock icon is clicked and there are no other windows open.
-  if (!rendererWindow) rendererWindow = createWindow();
+  rendererWindow.show();
 });
 
-app.on('will-quit', (event) => {
-  if (process.platform === 'win32' && autoUpdateDownloaded && !autoUpdateAccepted && !showingAutoUpdateCloseAlert) {
+app.on('will-quit', event => {
+  if (
+    process.platform === 'win32' &&
+    autoUpdateDownloaded &&
+    !appState.autoUpdateAccepted &&
+    !showingAutoUpdateCloseAlert
+  ) {
     // We're on Win and have an update downloaded, but the user declined it (or closed
     // the app without accepting it). Now the user is closing the app, so the new update
     // will install. On Mac this is silent, but on Windows they get a confusing permission
     // escalation dialog, so we show Windows users a warning dialog first.
 
     showingAutoUpdateCloseAlert = true;
-    dialog.showMessageBox({
-      type: 'info',
-      title: 'LBRY Will Upgrade',
-      message: 'LBRY has a pending upgrade. Please select "Yes" to install it on the prompt shown after this one.',
-    }, () => {
-      app.quit();
-    });
+    dialog.showMessageBox(
+      {
+        type: 'info',
+        title: 'LBRY Will Upgrade',
+        message:
+          'LBRY has a pending upgrade. Please select "Yes" to install it on the prompt shown after this one.',
+      },
+      () => {
+        app.quit();
+      }
+    );
 
     event.preventDefault();
     return;
   }
 
-  isQuitting = true;
-  if (daemon) daemon.quit();
+  appState.isQuitting = true;
+  if (daemon) {
+    daemon.quit();
+    event.preventDefault();
+  }
 });
 
 // https://electronjs.org/docs/api/app#event-will-finish-launching
@@ -112,18 +123,18 @@ app.on('will-finish-launching', () => {
   // Protocol handler for macOS
   app.on('open-url', (event, URL) => {
     event.preventDefault();
-    if (rendererWindow && !rendererWindow.isDestroyed()) {
+
+    if (rendererWindow) {
       rendererWindow.webContents.send('open-uri-requested', URL);
       rendererWindow.show();
-      rendererWindow.focus();
     } else {
-      rendererWindow = createWindow(URL);
+      appState.macDeepLinkingURI = URL;
     }
   });
 });
 
-app.on('window-all-closed', () => {
-  // Subscribe to event so the app doesn't quit when closing the window.
+app.on('before-quit', () => {
+  appState.isQuitting = true;
 });
 
 ipcMain.on('upgrade', (event, installerPath) => {
@@ -144,10 +155,10 @@ ipcMain.on('upgrade', (event, installerPath) => {
 
 autoUpdater.on('update-downloaded', () => {
   autoUpdateDownloaded = true;
-})
+});
 
 ipcMain.on('autoUpdateAccepted', () => {
-  autoUpdateAccepted = true;
+  appState.autoUpdateAccepted = true;
   autoUpdater.quitAndInstall();
 });
 
@@ -210,29 +221,35 @@ ipcMain.on('set-auth-token', (event, token) => {
 
 process.on('uncaughtException', error => {
   dialog.showErrorBox('Error Encountered', `Caught error: ${error}`);
-  isQuitting = true;
+  appState.isQuitting = true;
   if (daemon) daemon.quit();
   app.exit(1);
 });
 
 // Force single instance application
 const isSecondInstance = app.makeSingleInstance(argv => {
-  // Protocol handler for win32
-  // argv: An array of the second instance’s (command line / deep linked) arguments
+  if (rendererWindow) {
+    if (
+      (process.platform === 'win32' || process.platform === 'linux') &&
+      String(argv[1]).startsWith('lbry')
+    ) {
+      let URI = argv[1];
 
-  let URI;
-  if (process.platform === 'win32' && String(argv[1]).startsWith('lbry')) {
-    // Keep only command line / deep linked arguments
-    URI = argv[1].replace(/\/$/, '').replace('/#', '#');
-  }
+      // Keep only command line / deep linked arguments
+      // Windows normalizes URIs when they're passed in from other apps. On Windows, this tries to
+      // restore the original URI that was typed.
+      //   - If the URI has no path, Windows adds a trailing slash. LBRY URIs can't have a slash with no
+      //     path, so we just strip it off.
+      //   - In a URI with a claim ID, like lbry://channel#claimid, Windows interprets the hash mark as
+      //     an anchor and converts it to lbry://channel/#claimid. We remove the slash here as well.
+      if (process.platform === 'win32') {
+        URI = URI.replace(/\/$/, '').replace('/#', '#');
+      }
 
-  if (rendererWindow && !rendererWindow.isDestroyed()) {
-    rendererWindow.webContents.send('open-uri-requested', URI);
+      rendererWindow.webContents.send('open-uri-requested', URI);
+    }
 
     rendererWindow.show();
-    rendererWindow.focus();
-  } else {
-    rendererWindow = createWindow(URI);
   }
 });
 

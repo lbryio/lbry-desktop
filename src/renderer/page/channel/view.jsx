@@ -57,7 +57,7 @@ class ChannelPage extends React.PureComponent {
             <FileTile
               key={claim.claim_id}
               uri={buildURI({
-                name: claim.name,
+                claimName: claim.name,
                 claimId: claim.claim_id,
               })}
               showLocal

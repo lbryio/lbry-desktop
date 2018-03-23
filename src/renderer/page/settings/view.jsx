@@ -13,6 +13,8 @@ class SettingsPage extends React.PureComponent {
     this.state = {
       clearingCache: false,
     };
+
+    this.onAutomaticDarkModeChange = this.onAutomaticDarkModeChange.bind(this);
   }
 
   componentWillMount() {
@@ -50,11 +52,16 @@ class SettingsPage extends React.PureComponent {
 
   onThemeChange(event) {
     const { value } = event.target;
+
+    if (value === 'dark') {
+      this.onAutomaticDarkModeChange(false);
+    }
+
     this.props.setClientSetting(settings.THEME, value);
   }
 
-  onAutomaticDarkModeChange(event) {
-    this.props.setClientSetting(settings.AUTOMATIC_DARK_MODE_ENABLED, event.target.checked);
+  onAutomaticDarkModeChange(value) {
+    this.props.setClientSetting(settings.AUTOMATIC_DARK_MODE_ENABLED, value);
   }
 
   onInstantPurchaseEnabledChange(enabled) {
@@ -298,7 +305,12 @@ class SettingsPage extends React.PureComponent {
               type="checkbox"
               onChange={this.onShareDataChange.bind(this)}
               defaultChecked={daemonSettings.share_usage_data}
-              label={__('Help make LBRY better by contributing diagnostic data about my usage')}
+              label={__(
+                'Help make LBRY better by contributing analytics and diagnostic data about my usage.'
+              )}
+              helper={__(
+                'You will be ineligible to earn rewards while diagnostics are not being shared.'
+              )}
             />
           </div>
         </section>
@@ -323,8 +335,9 @@ class SettingsPage extends React.PureComponent {
 
             <FormRow
               type="checkbox"
-              onChange={this.onAutomaticDarkModeChange.bind(this)}
-              defaultChecked={automaticDarkModeEnabled}
+              disabled={theme === 'dark'}
+              onChange={e => this.onAutomaticDarkModeChange(e.target.checked)}
+              checked={automaticDarkModeEnabled}
               label={__('Automatic dark mode (9pm to 8am)')}
             />
           </div>

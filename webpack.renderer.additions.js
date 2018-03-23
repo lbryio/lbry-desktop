@@ -1,5 +1,6 @@
 const path = require('path');
 const FlowFlowPlugin = require('./flowtype-plugin');
+const isDev = require('electron-is-dev');
 
 const ELECTRON_RENDERER_PROCESS_ROOT = path.resolve(__dirname, 'src/renderer/');
 
@@ -23,7 +24,7 @@ module.exports = {
   },
 };
 
-if (process.env.NODE_ENV === 'development') {
+if (isDev) {
   module.exports.plugins = [
     new FlowFlowPlugin({
       warn: true,
