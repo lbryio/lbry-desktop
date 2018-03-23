@@ -81,7 +81,7 @@ export const doPublish = (params: PublishParams): ThunkAction => {
     uri,
   } = params;
 
-  const channel_name = channel === CHANNEL_ANONYMOUS || channel === CHANNEL_NEW ? '' : channel;
+  const channelName = channel === CHANNEL_ANONYMOUS || channel === CHANNEL_NEW ? '' : channel;
   const fee = contentIsFree || !price.amount ? undefined : { ...price };
 
   const metadata = {
@@ -103,7 +103,7 @@ export const doPublish = (params: PublishParams): ThunkAction => {
   const publishPayload = {
     file_path,
     name,
-    channel_name,
+    channel_name: channelName,
     bid,
     metadata,
   };

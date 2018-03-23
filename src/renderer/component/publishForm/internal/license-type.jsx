@@ -1,7 +1,6 @@
 // @flow
 import * as React from 'react';
 import { FormRow, FormField } from 'component/common/form';
-import Button from 'component/button';
 import { CC_LICENSES, COPYRIGHT, OTHER, PUBLIC_DOMAIN, NONE } from 'constants/licenses';
 
 type Props = {

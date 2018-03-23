@@ -2,7 +2,6 @@ import {
   selectClaimsByUri,
   selectIsFetchingClaimListMine,
   selectMyClaims,
-  selectClaimsById,
 } from 'redux/selectors/claims';
 import { createSelector } from 'reselect';
 import { buildURI } from 'lbryURI';

@@ -19,7 +19,7 @@ class HelpPage extends React.PureComponent {
       accessTokenHidden: true,
     };
 
-    (this: any).showAccessToken = this.showAccessToken.bind(this);
+    this.showAccessToken = this.showAccessToken.bind(this);
   }
 
   componentDidMount() {

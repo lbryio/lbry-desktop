@@ -129,21 +129,32 @@ class FileList extends React.PureComponent<Props, State> {
     const content = [];
 
     this.sortFunctions[sortBy](fileInfos).forEach(fileInfo => {
-      const { channel_name, name, claim_name: claimName, claim_id, outpoint } = fileInfo;
+      const {
+        channel_name: channelName,
+        name,
+        claim_name: claimName,
+        claim_id: claimId,
+        outpoint
+      } = fileInfo;
       const uriParams = {};
 
       if (fileInfo.channel_name) {
-        uriParams.channelName = channel_name;
+        uriParams.channelName = channelName;
         uriParams.contentName = claimName || name;
         uriParams.claimId = this.getChannelSignature(fileInfo);
       } else {
-        uriParams.claimId = claim_id;
+        uriParams.claimId = claimId;
         uriParams.claimName = claimName || name;
       }
 
       const uri = buildURI(uriParams);
 
-      content.push(<FileCard key={outpoint || claim_id || name} uri={uri} showPrice={false} />);
+      content.push(
+        <FileCard
+          key={outpoint || claimId || name}
+          uri={uri}
+          showPrice={false} />
+      );
     });
 
     return (

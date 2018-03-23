@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import lbry from 'lbry';
 import { buildURI, normalizeURI } from 'lbryURI';
 import Video from 'component/video';
@@ -43,7 +43,8 @@ type Props = {
   playingUri: ?string,
   isPaused: boolean,
   claimIsMine: boolean,
-  navigate: (string, {}) => void,
+  costInfo: ?{},
+  navigate: (string, ?{}) => void,
   openModal: (string, any) => void,
   fetchFileInfo: string => void,
   fetchCostInfo: string => void,
@@ -52,24 +53,30 @@ type Props = {
 
 class FilePage extends React.Component<Props> {
   componentDidMount() {
-    this.fetchFileInfo(this.props);
-    this.fetchCostInfo(this.props);
+    const {
+      uri,
+      fileInfo,
+      fetchFileInfo,
+      costInfo,
+      fetchCostInfo
+    } = this.props;
+
+    if (fileInfo === undefined) {
+      fetchFileInfo(uri);
+    }
+
+
+    if (costInfo === undefined) {
+      fetchCostInfo(uri);
+    }
+
     this.checkSubscription(this.props);
   }
 
   componentWillReceiveProps(nextProps: Props) {
-    this.fetchFileInfo(nextProps);
-  }
-
-  fetchFileInfo(props: Props) {
-    if (props.fileInfo === undefined) {
-      props.fetchFileInfo(props.uri);
-    }
-  }
-
-  fetchCostInfo(props: Props) {
-    if (props.costInfo === undefined) {
-      props.fetchCostInfo(props.uri);
+    const { fetchFileInfo, uri } = this.props;
+    if (nextProps.fileInfo === undefined) {
+      fetchFileInfo(uri);
     }
   }
 

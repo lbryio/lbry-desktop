@@ -118,8 +118,9 @@ class RewardsPage extends React.PureComponent {
     const isNotEligible = !user.primary_email || !user.has_verified_email || !user.is_identity_verified
     return (
       <div className={classnames("card__list--rewards", {
-        "card--disabled": isNotEligible
-      })}>
+          "card--disabled": isNotEligible
+        })}
+      >
         {rewards.map(reward => <RewardTile key={reward.reward_type} reward={reward} />)}
       </div>
     );

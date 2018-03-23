@@ -20,7 +20,7 @@ type Props = {
     name: string,
     claim_id: string,
   },
-  claimsInChannel: any,
+  claimsInChannel: Array<{}>,
   fetchClaims: (string, number) => void,
   fetchClaimCount: string => void,
   navigate: (string, {}) => void,

@@ -48,7 +48,7 @@ class FileListSearch extends React.PureComponent<Props> {
 
     let fileResults = [];
     let channelResults = [];
-    uris &&
+    if (uris && uris.length) {
       uris.forEach(uri => {
         const isChannel = parseURI(uri).claimName[0] === '@';
         if (isChannel) {
@@ -57,6 +57,7 @@ class FileListSearch extends React.PureComponent<Props> {
           fileResults.push(uri);
         }
       });
+    }
 
     return (
       query && (
