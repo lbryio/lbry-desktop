@@ -50,10 +50,10 @@ class FileList extends React.PureComponent {
       title: fileInfos =>
         fileInfos.slice().sort((fileInfo1, fileInfo2) => {
           const getFileTitle = fileInfo => {
-            const { value, metadata, claim_name, name } = fileInfo;
+            const { value, metadata, name, claim_name: claimName } = fileInfo;
             if (metadata) {
               // downloaded claim
-              return metadata.title || claim_name;
+              return metadata.title || claimName;
             } else if (value) {
               // published claim
               const { title } = value.stream.metadata;
