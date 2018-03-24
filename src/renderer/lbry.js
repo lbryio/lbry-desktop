@@ -174,6 +174,14 @@ Lbry.publishDeprecated = (params, fileListedCallback, publishedCallback, errorCa
 
 Lbry.imagePath = file => `${staticResourcesPath}/img/${file}`;
 
+Lbry.getAppVersionInfo = () =>
+  new Promise(resolve => {
+    ipcRenderer.once('version-info-received', (event, versionInfo) => {
+      resolve(versionInfo);
+    });
+    ipcRenderer.send('version-info-requested');
+  });
+
 Lbry.getMediaType = (contentType, fileName) => {
   if (contentType) {
     return /^[^/]+/.exec(contentType)[0];
