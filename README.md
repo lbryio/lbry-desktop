@@ -44,7 +44,7 @@ development and testing purposes.
 
 This will download and install the LBRY app and its dependencies, including
 [the LBRY daemon](https://github.com/lbryio/lbry) and command line utilities like `node` and `yarn`.
-The LBRY app requires Node >= 6; if you have an earlier version of Node installed and want to keep
+The LBRY app requires Node >= 7; if you have an earlier version of Node installed and want to keep
 it, you can use [nvm](https://github.com/creationix/nvm) to switch back and forth.
 
 #### Arch Linux and Other Non-Debian Distributions
