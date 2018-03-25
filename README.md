@@ -39,40 +39,18 @@ development and testing purposes.
 
 ### One-time Setup
 
-1. Clone this repo
-2. `DEPS=true ./build.sh`
-
-This will download and install the LBRY app and its dependencies, including
-[the LBRY daemon](https://github.com/lbryio/lbry) and command line utilities like `node` and `yarn`.
-The LBRY app requires Node >= 7; if you have an earlier version of Node installed and want to keep
-it, you can use [nvm](https://github.com/creationix/nvm) to switch back and forth.
-
-#### Arch Linux and Other Non-Debian Distributions
-
-Running the build script with `DEPS=true` triggers a bash script with `apt-get` specific commands.
-If you are using a distribution without `apt-get`, try running the script as:
-
-`./build.sh`
-
-You may also have to install the package [libsecret](https://wiki.gnome.org/Projects/Libsecret) if
-it is not already installed.
+1. Clone this repository
+2. Run `$ yarn`
 
 ### Running
 
 The app can be run from the sources using the following command:
 
-`yarn dev`
-
-### On Windows
-
-#### One-time Setup
-
-Download the lbry daemon and CLI [binaries](https://github.com/lbryio/lbry/releases) and place them
-in `static\daemon`.
+`$ yarn dev`
 
 ### Build
 
-Run `yarn build`.
+Run `$ yarn build`.
 
 We use [electron-builder](https://github.com/electron-userland/electron-builder) to create
 distributable packages.
