@@ -1,9 +1,15 @@
 import React from 'react';
 import Link from 'component/link';
 import classnames from 'classnames';
+import * as NOTIFICATION_TYPES from 'constants/notification_types';
 
 const SubHeader = props => {
-  const { subLinks, currentPage, navigate, fullWidth, smallMargin } = props;
+  const { subLinks, currentPage, navigate, fullWidth, smallMargin, notifications } = props;
+
+  const badges = Object.keys(notifications).reduce(
+    (acc, cur) => (notifications[cur].type === NOTIFICATION_TYPES.DOWNLOADING ? acc : acc + 1),
+    0
+  );
 
   const links = [];
 
@@ -14,7 +20,9 @@ const SubHeader = props => {
         key={link}
         className={link == currentPage ? 'sub-header-selected' : 'sub-header-unselected'}
       >
-        {subLinks[link]}
+        {subLinks[link] === 'Subscriptions' && badges
+          ? `Subscriptions (${badges})`
+          : subLinks[link]}
       </Link>
     );
   }

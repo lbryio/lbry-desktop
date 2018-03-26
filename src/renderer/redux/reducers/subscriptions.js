@@ -1,5 +1,6 @@
 // @flow
 import * as ACTIONS from 'constants/action_types';
+import * as NOTIFICATION_TYPES from 'constants/notification_types';
 import { handleActions } from 'util/redux-utils';
 
 export type Subscription = {
@@ -8,10 +9,23 @@ export type Subscription = {
   latest: ?string,
 };
 
+export type NotificationType =
+  | NOTIFICATION_TYPES.DOWNLOADING
+  | NOTIFICATION_TYPES.DOWNLOADED
+  | NOTIFICATION_TYPES.NOTIFY_ONLY;
+
+export type SubscriptionNotifications = {
+  [string]: {
+    subscription: Subscription,
+    type: NotificationType,
+  },
+};
+
 // Subscription redux types
 export type SubscriptionState = {
   subscriptions: Array<Subscription>,
   hasFetchedSubscriptions: boolean,
+  notifications: SubscriptionNotifications,
 };
 
 // Subscription action types
@@ -37,6 +51,22 @@ type setSubscriptionLatest = {
   },
 };
 
+type setSubscriptionNotification = {
+  type: ACTIONS.SET_SUBSCRIPTION_NOTIFICATION,
+  data: {
+    subscription: Subscription,
+    uri: string,
+    type: NotificationType,
+  },
+};
+
+type setSubscriptionNotifications = {
+  type: ACTIONS.SET_SUBSCRIPTION_NOTIFICATIONS,
+  data: {
+    notifications: SubscriptionNotifications,
+  },
+};
+
 type CheckSubscriptionStarted = {
   type: ACTIONS.CHECK_SUBSCRIPTION_STARTED,
 };
@@ -50,6 +80,7 @@ export type Action =
   | doChannelUnsubscribe
   | HasFetchedSubscriptions
   | setSubscriptionLatest
+  | setSubscriptionNotification
   | CheckSubscriptionStarted
   | CheckSubscriptionCompleted
   | Function;
@@ -58,6 +89,7 @@ export type Dispatch = (action: Action) => any;
 const defaultState = {
   subscriptions: [],
   hasFetchedSubscriptions: false,
+  notifications: {},
 };
 
 export default handleActions(
@@ -105,6 +137,23 @@ export default handleActions(
             ? { ...subscription, latest: action.data.uri }
             : subscription
       ),
+    }),
+    [ACTIONS.SET_SUBSCRIPTION_NOTIFICATION]: (
+      state: SubscriptionState,
+      action: setSubscriptionNotification
+    ): SubscriptionState => ({
+      ...state,
+      notifications: {
+        ...state.notifications,
+        [action.data.uri]: { subscription: action.data.subscription, type: action.data.type },
+      },
+    }),
+    [ACTIONS.SET_SUBSCRIPTION_NOTIFICATIONS]: (
+      state: SubscriptionState,
+      action: setSubscriptionNotifications
+    ): SubscriptionState => ({
+      ...state,
+      notifications: action.data.notifications,
     }),
   },
   defaultState
