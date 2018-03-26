@@ -4,3 +4,4 @@
 /static/daemon/lbrynet*
 /static/locales
 yarn-error.log
+npm-debug.log*

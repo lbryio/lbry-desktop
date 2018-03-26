@@ -1,9 +1,10 @@
 // @flow
 import * as React from 'react';
-import QRCode from 'qrcode.react';
+import QRCode from 'component/common/qr-code';
+import { FormRow } from 'component/common/form';
 import * as statuses from 'constants/shape_shift';
 import Address from 'component/address';
-import Link from 'component/link';
+import Button from 'component/button';
 import type { Dispatch } from 'redux/actions/shape_shift';
 import ShiftMarketInfo from './market_info';
 
@@ -92,12 +93,12 @@ class ActiveShapeShift extends React.PureComponent<Props> {
               originCoinDepositMax={originCoinDepositMax}
             />
 
-            <div className="shapeshift__deposit-address-wrapper">
-              <Address address={shiftDepositAddress} showCopyButton />
-              <div className="shapeshift__qrcode">
+            {shiftDepositAddress && (
+              <FormRow verticallyCentered padded>
+                <Address address={shiftDepositAddress} showCopyButton />
                 <QRCode value={shiftDepositAddress} />
-              </div>
-            </div>
+              </FormRow>
+            )}
           </div>
         )}
 
@@ -115,9 +116,9 @@ class ActiveShapeShift extends React.PureComponent<Props> {
             <p>{__('Transaction complete! You should see the new LBC in your wallet.')}</p>
           </div>
         )}
-        <div className="card__actions card__actions--only-vertical">
-          <Link
-            button={shiftState === statuses.COMPLETE ? 'primary' : 'alt'}
+        <div className="card__actions">
+          <Button
+            button="primary"
             onClick={clearShapeShift}
             label={
               shiftState === statuses.COMPLETE || shiftState === statuses.RECEIVED
@@ -126,13 +127,11 @@ class ActiveShapeShift extends React.PureComponent<Props> {
             }
           />
           {shiftOrderId && (
-            <span className="shapeshift__link">
-              <Link
-                button="text"
-                label={__('View the status on Shapeshift.io')}
-                href={`https://shapeshift.io/#/status/${shiftOrderId}`}
-              />
-            </span>
+            <Button
+              button="inverse"
+              label={__('View the status on Shapeshift.io')}
+              href={`https://shapeshift.io/#/status/${shiftOrderId}`}
+            />
           )}
           {shiftState === statuses.NO_DEPOSITS &&
             shiftReturnAddress && (

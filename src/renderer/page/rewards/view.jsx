@@ -1,9 +1,10 @@
 import React from 'react';
-import { BusyMessage } from 'component/common';
+import BusyIndicator from 'component/common/busy-indicator';
 import RewardListClaimed from 'component/rewardListClaimed';
 import RewardTile from 'component/rewardTile';
-import SubHeader from 'component/subHeader';
-import Link from 'component/link';
+import Button from 'component/button';
+import Page from 'component/page';
+import classnames from 'classnames';
 
 class RewardsPage extends React.PureComponent {
   /*
@@ -34,18 +35,16 @@ class RewardsPage extends React.PureComponent {
     if (user && !user.is_reward_approved && daemonSettings.share_usage_data) {
       if (!user.primary_email || !user.has_verified_email || !user.is_identity_verified) {
         return (
-          <section className="card">
-            <div className="card__title-primary">
-              <h3>{__('Humans Only')}</h3>
-            </div>
-            <div className="card__content empty">
+          <section className="card card--section">
+            <div className="card__title">{__('Humans Only')}</div>
+            <div className="card__subtitle">
               <p>
                 {__('Rewards are for human beings only.')}{' '}
                 {__("You'll have to prove you're one of us before you can claim any rewards.")}
               </p>
             </div>
             <div className="card__content">
-              <Link onClick={doAuth} button="primary" label="Prove Humanity" />
+              <Button onClick={doAuth} button="primary" label="Prove Humanity" />
             </div>
           </section>
         );
@@ -70,7 +69,7 @@ class RewardsPage extends React.PureComponent {
             )}`}
           </p>
           <p>
-            <Link onClick={() => navigate('/discover')} button="primary" label="Return Home" />
+            <Button onClick={() => navigate('/discover')} button="primary" label="Return Home" />
           </p>
         </div>
       );
@@ -87,7 +86,7 @@ class RewardsPage extends React.PureComponent {
             {__(
               'Rewards are currently disabled for your account. Turn on diagnostic data sharing, in'
             )}{' '}
-            <Link onClick={() => navigate('/settings')} label="Settings" />
+            <Button onClick={() => navigate('/settings')} label="Settings" />
             {__(', in order to re-enable them.')}
           </p>
         </div>
@@ -95,12 +94,12 @@ class RewardsPage extends React.PureComponent {
     } else if (fetching) {
       return (
         <div className="card__content">
-          <BusyMessage message={__('Fetching rewards')} />
+          <BusyIndicator message={__('Fetching rewards')} />
         </div>
       );
     } else if (user === null) {
       return (
-        <div className="card__content empty">
+        <div className="card__content">
           <p>
             {__('This application is unable to earn rewards due to an authentication failure.')}
           </p>
@@ -108,13 +107,20 @@ class RewardsPage extends React.PureComponent {
       );
     } else if (!rewards || rewards.length <= 0) {
       return (
-        <div className="card__content empty">
+        <div className="card__content">
           {__('There are no rewards available at this time, please check back later.')}
         </div>
       );
     }
+
+    const isNotEligible =
+      !user.primary_email || !user.has_verified_email || !user.is_identity_verified;
     return (
-      <div className="card-grid">
+      <div
+        className={classnames('card__list--rewards', {
+          'card--disabled': isNotEligible,
+        })}
+      >
         {rewards.map(reward => <RewardTile key={reward.reward_type} reward={reward} />)}
       </div>
     );
@@ -122,12 +128,11 @@ class RewardsPage extends React.PureComponent {
 
   render() {
     return (
-      <main className="main--single-column">
-        <SubHeader />
+      <Page>
         {this.renderPageHeader()}
         {this.renderUnclaimedRewards()}
         {<RewardListClaimed />}
-      </main>
+      </Page>
     );
   }
 }

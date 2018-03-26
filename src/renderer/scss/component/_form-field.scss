@@ -1,195 +1,89 @@
-.form-row-submit {
-  margin-top: $spacing-vertical;
-}
-.form-row-submit--with-footer {
-  margin-bottom: $spacing-vertical;
-}
-
-.form-row-phone {
+.form-row {
   display: flex;
+  flex-direction: row;
+  align-items: flex-end;
 
-  .form-field__input-text {
-    margin-left: 5px;
-    width: calc(0.85 * var(--input-width));
-  }
-}
-
-.form-row__label-row {
-  margin-top: $spacing-vertical * 5/6;
-  margin-bottom: 0px;
-  line-height: 1;
-  font-size: calc(0.9 * var(--font-size));
-}
-.form-row__label-row--prefix {
-  float: left;
-  margin-right: 5px;
-}
-
-.form-row--focus {
-  .form-field__label,
-  .form-field__prefix {
-    color: var(--color-primary) !important;
-  }
-}
-
-.form-field {
-  display: inline-block;
-  margin: 8px 0;
-
-  select {
-    transition: outline var(--transition-duration) var(--transition-type);
-    box-sizing: border-box;
-    padding-left: 5px;
-    padding-right: 5px;
-    height: var(--select-height);
-    background: var(--select-bg);
-    color: var(--select-color);
-    &:focus {
-      outline: var(--input-border-size) solid var(--color-primary);
-    }
+  .form-field:not(:first-of-type) {
+    padding-left: $spacing-vertical;
   }
 
-  input[type='radio'],
-  input[type='checkbox'] {
-    &:checked + .form-field__label {
-      color: var(--text-color);
-    }
+  &.form-row--padded {
+    padding-top: $spacing-vertical * 2/3;
   }
 
-  input[type='text'].input-copyable {
-    background: var(--input-bg);
-    color: var(--input-disabled-color);
-    line-height: 1;
-    padding-top: $spacing-vertical * 1/3;
-    padding-bottom: $spacing-vertical * 1/3;
-    padding-left: 5px;
-    padding-right: 5px;
+  &.form-row--centered {
+    align-items: center;
+  }
+
+  .form-field.form-field--stretch {
     width: 100%;
-    font-family: 'Consolas', 'Lucida Console', 'Adobe Source Code Pro', monospace;
 
-    &.input-copyable--with-copy-btn {
-      width: 85%;
+    input {
+      width: 100%;
+      max-width: 400px;
     }
   }
 
-  input[readonly] {
-    color: var(--input-disabled-color) !important;
-    border-bottom: 1px dashed var(--input-disabled-border-color) !important;
+  input + .btn {
+    margin-left: $spacing-vertical * 1/3;
   }
-
-  input[readonly]:focus {
-    background: var(--input-bg) !important;
-    border-bottom: 1px dashed var(--input-disabled-border-color) !important;
-  }
-
-  textarea,
-  input[type='text'],
-  input[type='password'],
-  input[type='email'],
-  input[type='number'],
-  input[type='search'],
-  input[type='date'] {
-    background: var(--input-bg);
-    border-bottom: var(--input-border-size) solid var(--input-border-color);
-    caret-color: var(--color-primary);
-    color: var(--input-color);
-    cursor: pointer;
-    line-height: 1;
-    padding: 0 1px 8px 1px;
-    box-sizing: border-box;
-    -webkit-appearance: none;
-    transition: all var(--transition-duration) var(--transition-type);
-
-    &::-webkit-input-placeholder {
-      color: var(--input-placeholder-color);
-      opacity: var(--input-placeholder-opacity) !important;
-    }
-
-    &:focus {
-      border-color: var(--color-primary);
-      background: var(--input-active-bg);
-    }
-
-    &:hover:not(:focus) {
-      border-color: var(--input-hover-border-color);
-    }
-
-    &.form-field__input--error {
-      border-color: var(--color-error);
-    }
-
-    &.form-field__input--inline {
-      padding-top: 0;
-      padding-bottom: 0;
-      border-bottom-width: var(--input-border-size);
-      margin-left: 8px;
-      margin-right: 8px;
-    }
-  }
-
-  textarea {
-    padding: 2px;
-    border: var(--input-border-size) solid var(--input-border-color);
-  }
-}
-.form-field--address {
-  width: 100%;
 }
 
 .form-field--SimpleMDE {
   display: block;
+  width: 100%;
 }
 
-.form-field__label,
-.form-row__label {
-  color: var(--form-label-color);
-  &[for] {
-    cursor: pointer;
+.form-field__input {
+  display: flex;
+  padding-top: $spacing-vertical / 3;
+  height: 36px;
+
+  input[type='checkbox'],
+  input[type='radio'] {
+    margin-top: 5px;
   }
 }
 
-.form-row__label-row .form-field__label--error {
-  /*the row restriction is to prevent coloring checkboxes and radio labels*/
-  color: var(--color-error);
+.form-field__help,
+.form-field__label,
+.form-field__error {
+  font-size: 12px;
+  font-family: 'metropolis-medium';
 }
 
-.form-field__input-text {
-  width: var(--input-width);
+.form-field__label {
+  color: var(--color-black);
 }
 
-.form-field__prefix {
-  margin-right: 4px;
-}
-.form-field__postfix {
-  margin-left: 4px;
-}
-
-.form-field__input-number {
-  width: 70px;
-  text-align: right;
-}
-
-.form-field--textarea {
-  width: 100%;
-}
-.form-field__input-textarea {
-  width: 100%;
-}
-
-.form-field__error,
-.form-field__helper {
-  margin-top: $spacing-vertical * 1/3;
-  font-size: 0.8em;
-  transition: opacity var(--transition-duration) var(--transition-type);
+.form-field__help {
+  color: var(--color-grey-dark);
+  padding-top: $spacing-vertical * 1/3;
 }
 
 .form-field__error {
   color: var(--color-error);
 }
-.form-field__helper {
-  color: var(--color-help);
+
+.form-field__prefix,
+.form-field__postfix {
+  font-family: 'metropolis-medium';
 }
 
-.form-field__input.form-field__input-SimpleMDE .CodeMirror-scroll {
-  height: auto;
+.form-field__prefix {
+  padding-right: $spacing-vertical * 1/3;
+}
+
+.form-field__postfix {
+  padding-left: $spacing-vertical * 1/3;
+}
+
+// Not sure if I like these
+// Maybe this should be in gui.scss?
+.input--price-amount {
+  width: 60px;
+}
+
+.input--address {
+  width: 370px;
 }

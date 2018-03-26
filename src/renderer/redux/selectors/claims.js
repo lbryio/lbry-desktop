@@ -6,6 +6,12 @@ const selectState = state => state.claims || {};
 
 export const selectClaimsById = createSelector(selectState, state => state.byId || {});
 
+export const selectClaimById = id =>
+  createSelector(selectClaimsById, claims => {
+    const claimById = claims[id];
+    return claimById;
+  });
+
 export const selectClaimsByUri = createSelector(selectState, selectClaimsById, (state, byId) => {
   const byUri = state.claimsByUri || {};
   const claims = {};

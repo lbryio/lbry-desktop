@@ -1,18 +1,36 @@
-import React from 'react';
+// @flow
+import * as React from 'react';
 import CardMedia from 'component/cardMedia';
-import { TruncatedText, BusyMessage } from 'component/common.js';
+import TruncatedText from 'component/common/truncated-text';
 
-class ChannelTile extends React.PureComponent {
+/*
+  This component can probably be combined with FileTile
+  Currently the only difference is showing the number of files/empty channel
+*/
+
+type Props = {
+  uri: string,
+  isResolvingUri: boolean,
+  totalItems: number,
+  claim: ?{
+    claim_id: string,
+    name: string,
+  },
+  resolveUri: string => void,
+  navigate: (string, ?{}) => void,
+};
+
+class ChannelTile extends React.PureComponent<Props> {
   componentDidMount() {
     const { uri, resolveUri } = this.props;
 
     resolveUri(uri);
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: Props) {
     const { uri, resolveUri } = this.props;
 
-    if (nextProps.uri != uri) {
+    if (nextProps.uri !== uri) {
       resolveUri(uri);
     }
   }
@@ -29,29 +47,25 @@ class ChannelTile extends React.PureComponent {
     const onClick = () => navigate('/show', { uri });
 
     return (
-      <section className="file-tile card">
-        <div onClick={onClick} className="card__link">
-          <div className="card__inner file-tile__row">
-            {channelName && <CardMedia title={channelName} thumbnail={null} />}
-            <div className="file-tile__content">
-              <div className="card__title-primary">
-                <h3>
-                  <TruncatedText lines={1}>{channelName || uri}</TruncatedText>
-                </h3>
+      <section className="file-tile card--link" onClick={onClick} role="button">
+        <CardMedia title={channelName} thumbnail={null} />
+        <div className="file-tile__info">
+          {isResolvingUri && <div className="card__title--small">{__('Loading...')}</div>}
+          {!isResolvingUri && (
+            <React.Fragment>
+              <div className="card__title--small card__title--file">
+                <TruncatedText lines={1}>{channelName || uri}</TruncatedText>
               </div>
-              <div className="card__content card__subtext">
-                {isResolvingUri && <BusyMessage message={__('Resolving channel')} />}
+              <div className="card__subtitle">
                 {totalItems > 0 && (
                   <span>
-                    This is a channel with {totalItems} {totalItems === 1 ? ' item' : ' items'}{' '}
-                    inside of it.
+                    {totalItems} {totalItems === 1 ? 'file' : 'files'}
                   </span>
                 )}
-                {!isResolvingUri &&
-                  !totalItems && <span className="empty">This is an empty channel.</span>}
+                {!isResolvingUri && !totalItems && <span>This is an empty channel.</span>}
               </div>
-            </div>
-          </div>
+            </React.Fragment>
+          )}
         </div>
       </section>
     );

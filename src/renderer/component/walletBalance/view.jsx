@@ -1,33 +1,21 @@
+// @flow
 import React from 'react';
-import Link from 'component/link';
-import { CreditAmount } from 'component/common';
+import CreditAmount from 'component/common/credit-amount';
 
-const WalletBalance = props => {
-  const { balance, navigate } = props;
-  /*
-<div className="help">
-          <Link
-            onClick={() => navigate("/backup")}
-            label={__("Backup Your Wallet")}
-          />
-        </div>
- */
+type Props = {
+  balance: number,
+};
+
+const WalletBalance = (props: Props) => {
+  const { balance } = props;
   return (
-    <section className="card">
-      <div className="card__title-primary">
-        <h3>{__('Balance')}</h3>
+    <section className="card card--section card--wallet-balance">
+      <div>
+        <div className="card__title">{__('Balance')}</div>
+        <span className="card__subtitle">{__('You currently have')}</span>
       </div>
       <div className="card__content">
-        {(balance || balance === 0) && <CreditAmount amount={balance} precision={8} />}
-      </div>
-      <div className="card__actions">
-        <Link button="alt" navigate="/getcredits" label={__('Get Credits')} />
-        <Link
-          button="alt"
-          disabled={balance === 0}
-          navigate="/backup"
-          label={__('Backup Wallet')}
-        />
+        {(balance || balance === 0) && <CreditAmount large amount={balance} precision={8} />}
       </div>
     </section>
   );

@@ -1,52 +1,47 @@
+// @flow
 import React from 'react';
-import Link from 'component/link';
+import Button from 'component/button';
 import FileDownloadLink from 'component/fileDownloadLink';
 import * as modals from 'constants/modal_types';
+import classnames from 'classnames';
+import * as icons from 'constants/icons';
 
-class FileActions extends React.PureComponent {
+type FileInfo = {
+  claim_id: string,
+};
+
+type Props = {
+  uri: string,
+  openModal: (string, any) => void,
+  claimIsMine: boolean,
+  fileInfo: FileInfo,
+  vertical?: boolean, // should the buttons be stacked vertically?
+};
+
+class FileActions extends React.PureComponent<Props> {
   render() {
-    const { fileInfo, uri, openModal, claimIsMine } = this.props;
+    const { fileInfo, uri, openModal, claimIsMine, vertical } = this.props;
 
-    const claimId = fileInfo ? fileInfo.claim_id : null,
-      showDelete = fileInfo && Object.keys(fileInfo).length > 0;
+    const claimId = fileInfo ? fileInfo.claim_id : '';
+    const showDelete = fileInfo && Object.keys(fileInfo).length > 0;
 
     return (
-      <section className="card__actions">
+      <section className={classnames('card__actions', { 'card__actions--vertical': vertical })}>
         <FileDownloadLink uri={uri} />
         {showDelete && (
-          <Link
-            button="text"
-            icon="icon-trash"
-            label={__('Remove')}
-            className="no-underline"
+          <Button
+            className="btn--file-actions"
+            icon={icons.TRASH}
+            description={__('Delete')}
             onClick={() => openModal(modals.CONFIRM_FILE_REMOVE, { uri })}
           />
         )}
         {!claimIsMine && (
-          <Link
-            button="text"
-            icon="icon-flag"
+          <Button
+            className="btn--file-actions"
+            icon={icons.REPORT}
             href={`https://lbry.io/dmca?claim_id=${claimId}`}
-            className="no-underline"
-            label={__('report')}
-          />
-        )}
-        <Link
-          button="primary"
-          icon="icon-gift"
-          label={__('Support')}
-          navigate="/show"
-          className="card__action--right"
-          navigateParams={{ uri, tab: 'tip' }}
-        />
-        {claimIsMine && (
-          <Link
-            button="alt"
-            icon="icon-edit"
-            label={__('Edit')}
-            navigate="/publish"
-            className="card__action--right"
-            navigateParams={{ id: claimId }}
+            description={__('Report content')}
           />
         )}
       </section>

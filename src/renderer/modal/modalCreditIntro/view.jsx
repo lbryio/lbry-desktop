@@ -1,7 +1,10 @@
+// I'll come back to this
+/* esline-disable */
 import React from 'react';
 import { Modal } from 'modal/modal';
-import { CreditAmount, CurrencySymbol } from 'component/common';
-import Link from 'component/link/index';
+import CurrencySymbol from 'component/common/lbc-symbol';
+import CreditAmount from 'component/common/credit-amount';
+import Button from 'component/button';
 
 const ModalCreditIntro = props => {
   const { closeModal, totalRewardValue, currentBalance, addBalance } = props;
@@ -33,8 +36,8 @@ const ModalCreditIntro = props => {
         </p>
 
         <div className="modal__buttons">
-          <Link button="primary" onClick={addBalance} label={__('Get Credits')} />
-          <Link
+          <Button button="primary" onClick={addBalance} label={__('Get Credits')} />
+          <Button
             button="alt"
             onClick={closeModal}
             label={currentBalance <= 0 ? __('Use Without LBC') : __('Meh, Not Now')}
@@ -46,3 +49,4 @@ const ModalCreditIntro = props => {
 };
 
 export default ModalCreditIntro;
+/* esline-enable */

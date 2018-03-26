@@ -1,6 +1,7 @@
-import { remote } from 'electron';
+/* eslint-disable */
 import React from 'react';
-import { Thumbnail } from 'component/common';
+import { remote } from 'electron';
+import Thumbnail from 'component/common/thumbnail';
 import player from 'render-media';
 import fs from 'fs';
 import LoadingScreen from './loading-screen';
@@ -18,6 +19,11 @@ class VideoPlayer extends React.PureComponent {
     };
 
     this.togglePlayListener = this.togglePlay.bind(this);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    const el = this.refs.media.children[0];
+    if (!this.props.paused && nextProps.paused && !el.paused) el.pause();
   }
 
   componentDidMount() {
@@ -161,10 +167,10 @@ class VideoPlayer extends React.PureComponent {
     const unplayableMessage = "Sorry, looks like we can't play this file.";
 
     return (
-      <div>
+      <React.Fragment>
         {['audio', 'application'].indexOf(mediaType) !== -1 &&
           (!this.playableType() || hasMetadata) &&
-          !unplayable && <Thumbnail src={poster} className="video-embedded" />}
+          !unplayable && <Thumbnail src={poster} />}
         {this.playableType() &&
           !hasMetadata &&
           !unplayable && <LoadingScreen status={noMetadataMessage} />}
@@ -173,11 +179,11 @@ class VideoPlayer extends React.PureComponent {
           ref={container => {
             this.media = container;
           }}
-          className="media"
         />
-      </div>
+      </React.Fragment>
     );
   }
 }
 
 export default VideoPlayer;
+/* eslint-disable */

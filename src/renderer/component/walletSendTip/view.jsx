@@ -1,64 +1,89 @@
+// @flow
 import React from 'react';
-import Link from 'component/link';
-import { FormRow } from 'component/form';
+import Button from 'component/button';
+import { FormField } from 'component/common/form';
 import UriIndicator from 'component/uriIndicator';
 
-class WalletSendTip extends React.PureComponent {
-  constructor(props) {
+type Props = {
+  claim_id: string,
+  uri: string,
+  title: string,
+  errorMessage: string,
+  isPending: boolean,
+  sendSupport: (number, string, string) => void,
+  onCancel: () => void,
+  sendTipCallback?: () => void,
+};
+
+type State = {
+  amount: number,
+};
+
+class WalletSendTip extends React.PureComponent<Props, State> {
+  constructor(props: Props) {
     super(props);
 
     this.state = {
-      amount: 0.0,
+      amount: 0,
     };
+
+    (this: any).handleSendButtonClicked = this.handleSendButtonClicked.bind(this);
   }
 
   handleSendButtonClicked() {
-    const { claim_id, uri } = this.props;
-    const amount = this.state.amount;
-    this.props.sendSupport(amount, claim_id, uri);
+    const { claim_id: claimId, uri, sendSupport, sendTipCallback } = this.props;
+    const { amount } = this.state;
+
+    sendSupport(amount, claimId, uri);
+
+    // ex: close modal
+    if (sendTipCallback) {
+      sendTipCallback();
+    }
   }
 
-  handleSupportPriceChange(event) {
+  handleSupportPriceChange(event: SyntheticInputEvent<*>) {
     this.setState({
       amount: Number(event.target.value),
     });
   }
 
   render() {
-    const { errorMessage, isPending, title, uri } = this.props;
+    const { errorMessage, isPending, title, uri, onCancel } = this.props;
 
     return (
       <div>
-        <div className="card__title-primary">
+        <div className="card__title">
           <h1>
-            {__('Support')} <UriIndicator uri={uri} />
+            {__('Send a tip to')} <UriIndicator uri={uri} />
           </h1>
         </div>
         <div className="card__content">
-          <FormRow
+          <FormField
             label={__('Amount')}
             postfix={__('LBC')}
+            className="input--price-amount"
+            error={errorMessage}
             min="0"
             step="any"
             type="number"
-            errorMessage={errorMessage}
-            helper={
-              <span>
-                {`${__('This will appear as a tip for "%s" located at %s.', title, uri)} `}
-                <Link label={__('Learn more')} href="https://lbry.io/faq/tipping" />
-              </span>
-            }
             placeholder="1.00"
             onChange={event => this.handleSupportPriceChange(event)}
+            helper={
+              <span>
+                {__(`This will appear as a tip for ${title} located at ${uri}.`)}{' '}
+                <Button label={__('Learn more')} button="link" href="https://lbry.io/faq/tipping" />
+              </span>
+            }
           />
-          <div className="form-row-submit">
-            <Link
-              label={__('Send')}
+          <div className="card__actions">
+            <Button
               button="primary"
+              label={__('Send')}
               disabled={isPending}
-              onClick={this.handleSendButtonClicked.bind(this)}
+              onClick={this.handleSendButtonClicked}
             />
-            <Link label={__('Cancel')} button="alt" navigate="/show" navigateParams={{ uri }} />
+            <Button button="alt" label={__('Cancel')} onClick={onCancel} navigateParams={{ uri }} />
           </div>
         </div>
       </div>

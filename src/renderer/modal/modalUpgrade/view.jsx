@@ -1,6 +1,6 @@
 import React from 'react';
 import { Modal } from 'modal/modal';
-import Link from 'component/link';
+import Button from 'component/button';
 
 class ModalUpgrade extends React.PureComponent {
   render() {
@@ -24,7 +24,7 @@ class ModalUpgrade extends React.PureComponent {
         </p>
         <p className="meta text-center">
           {__('Want to know what has changed?')} See the{' '}
-          <Link label={__('release notes')} href="https://github.com/lbryio/lbry-app/releases" />.
+          <Button label={__('release notes')} href="https://github.com/lbryio/lbry-app/releases" />.
         </p>
       </Modal>
     );

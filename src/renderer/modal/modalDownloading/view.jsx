@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal } from 'modal/modal';
 import { Line } from 'rc-progress';
-import Link from 'component/link/index';
+import Button from 'component/button';
 
 class ModalDownloading extends React.PureComponent {
   render() {
@@ -26,14 +26,14 @@ class ModalDownloading extends React.PureComponent {
         ) : null}
         <div className="modal__buttons">
           {downloadComplete ? (
-            <Link
+            <Button
               button="primary"
               label={__('Begin Upgrade')}
               className="modal__button"
               onClick={startUpgrade}
             />
           ) : null}
-          <Link
+          <Button
             button="alt"
             label={__('Cancel')}
             className="modal__button"

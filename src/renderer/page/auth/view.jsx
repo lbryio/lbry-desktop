@@ -1,9 +1,10 @@
 import React from 'react';
-import { BusyMessage } from 'component/common';
-import Link from 'component/link';
+import BusyIndicator from 'component/common/busy-indicator';
+import Button from 'component/button';
 import UserEmailNew from 'component/userEmailNew';
 import UserEmailVerify from 'component/userEmailVerify';
 import UserVerify from 'component/userVerify';
+import Page from 'component/page';
 
 export class AuthPage extends React.PureComponent {
   componentWillMount() {
@@ -43,7 +44,7 @@ export class AuthPage extends React.PureComponent {
     const { email, isPending, isVerificationCandidate, user } = this.props;
 
     if (isPending) {
-      return [<BusyMessage message={__('Authenticating')} />, true];
+      return [<BusyIndicator message={__('Authenticating')} />, true];
     } else if (user && !user.has_verified_email && !email) {
       return [<UserEmailNew />, true];
     } else if (user && !user.has_verified_email) {
@@ -58,25 +59,27 @@ export class AuthPage extends React.PureComponent {
     const { email, user, isPending, navigate } = this.props;
     const [innerContent, useTemplate] = this.renderMain();
 
-    return useTemplate ? (
-      <main>
-        <section className="card card--form">
-          <div className="card__title-primary">
-            <h1>{this.getTitle()}</h1>
-          </div>
-          <div className="card__content">{innerContent}</div>
-          <div className="card__content">
-            <div className="help">
-              {`${__(
-                'This information is disclosed only to LBRY, Inc. and not to the LBRY network. It is only required to earn LBRY rewards and may be used to sync usage data across devices.'
-              )} `}
-              <Link onClick={() => navigate('/discover')} label={__('Return home')} />.
+    return (
+      <Page>
+        {useTemplate ? (
+          <section className="card card--section">
+            <div className="card__title">
+              <h1>{this.getTitle()}</h1>
             </div>
-          </div>
-        </section>
-      </main>
-    ) : (
-      innerContent
+            <div className="card__content">{innerContent}</div>
+            <div className="card__content">
+              <div className="help">
+                {`${__(
+                  'This information is disclosed only to LBRY, Inc. and not to the LBRY network. It is only required to earn LBRY rewards and may be used to sync usage data across devices.'
+                )} `}
+                <Button onClick={() => navigate('/discover')} label={__('Return home')} />.
+              </div>
+            </div>
+          </section>
+        ) : (
+          innerContent
+        )}
+      </Page>
     );
   }
 }
