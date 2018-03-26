@@ -33,6 +33,7 @@ const Fs = remote.require('fs');
 const CHECK_UPGRADE_INTERVAL = 10 * 60 * 1000;
 
 export function doOpenModal(modal, modalProps = {}) {
+  console.log("app.js\nmodal:", modal, "\nprops:", modalProps);
   return {
     type: ACTIONS.OPEN_MODAL,
     data: {

@@ -1,13 +1,16 @@
-import React from 'react';
-import lbry from 'lbry';
+import React from "react";
+import lbry from "lbry";
 import { isNameValid, buildURI, regexInvalidURI } from 'lbryURI';
-import FormField from 'component/formField';
-import { Form, FormRow, Submit } from 'component/form.js';
-import Link from 'component/link';
-import FormFieldPrice from 'component/formFieldPrice';
-import Modal from 'modal/modal';
-import { BusyMessage } from 'component/common';
-import ChannelSection from './internal/channelSection';
+import FormField from "component/formField";
+import { Form, FormRow, Submit } from "component/form.js";
+import Link from "component/link";
+import FormFieldPrice from "component/formFieldPrice";
+import SpeechUpload from "component/speechUpload";
+import Modal from "modal/modal";
+import * as modals from "constants/modal_types";
+import * as status from "constants/upload";
+import { BusyMessage } from "component/common";
+import ChannelSection from "./internal/channelSection";
 
 class PublishForm extends React.PureComponent {
   constructor(props) {
@@ -415,8 +418,20 @@ class PublishForm extends React.PureComponent {
     this.setState({ id });
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (
+      this.props.uploadStatus === status.MANUAL ||
+      nextProps.uploadStatus === status.COMPLETE
+    ) {
+      this.setState({
+        meta_thumbnail: nextProps.uploadUrl,
+      });
+    }
+  }
+
   componentDidMount() {
     this.handleEditClaim();
+    this.props.resetUpload();
   }
 
   onFileChange() {
@@ -488,14 +503,15 @@ class PublishForm extends React.PureComponent {
     return '';
   }
 
-  closeModal() {
-    this.setState({
-      modal: null,
-    });
-  }
-
   render() {
     const { mode, submitting } = this.state;
+    const {
+      openModal,
+      uploadStatus,
+      uploadUrl,
+      alertError,
+      resetUpload,
+    } = this.props;
 
     const lbcInputHelp = __('This LBC remains yours and the deposit can be undone at any time.');
 
@@ -545,18 +561,14 @@ class PublishForm extends React.PureComponent {
                     }}
                   />
                 </div>
-                <div className="card__content">
-                  <FormRow
-                    type="text"
-                    label={__('Thumbnail URL')}
-                    name="thumbnail"
-                    value={this.state.meta_thumbnail}
-                    placeholder="http://spee.ch/mylogo"
-                    onChange={event => {
-                      this.handleMetadataChange(event);
-                    }}
-                  />
-                </div>
+
+                <SpeechUpload
+                  uploadStatus={uploadStatus}
+                  uploadUrl={uploadUrl}
+                  alertError={alertError}
+                  resetUpload={resetUpload}
+                />
+
                 <div className="card__content">
                   <FormRow
                     type="SimpleMDE"

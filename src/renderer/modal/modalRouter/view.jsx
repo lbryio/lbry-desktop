@@ -17,6 +17,7 @@ import ModalRevokeClaim from 'modal/modalRevokeClaim';
 import ModalEmailCollection from 'modal/modalEmailCollection';
 import ModalPhoneCollection from 'modal/modalPhoneCollection';
 import ModalFirstSubscription from 'modal/modalFirstSubscription';
+import ModalSpeechUpload from 'modal/modalSpeechUpload';
 import * as modals from 'constants/modal_types';
 
 class ModalRouter extends React.PureComponent {
@@ -136,6 +137,8 @@ class ModalRouter extends React.PureComponent {
         return <ModalPhoneCollection {...modalProps} />;
       case modals.EMAIL_COLLECTION:
         return <ModalEmailCollection {...modalProps} />;
+      case modals.CONFIRM_SPEECH_UPLOAD:
+        return <ModalSpeechUpload {...modalProps} />;
       case modals.FIRST_SUBSCRIPTION:
         return <ModalFirstSubscription {...modalProps} />;
       default:

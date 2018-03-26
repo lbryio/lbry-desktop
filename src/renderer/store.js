@@ -1,25 +1,28 @@
-import { createLogger } from 'redux-logger';
-import appReducer from 'redux/reducers/app';
-import availabilityReducer from 'redux/reducers/availability';
-import claimsReducer from 'redux/reducers/claims';
-import contentReducer from 'redux/reducers/content';
-import costInfoReducer from 'redux/reducers/cost_info';
-import fileInfoReducer from 'redux/reducers/file_info';
-import navigationReducer from 'redux/reducers/navigation';
-import rewardsReducer from 'redux/reducers/rewards';
-import searchReducer from 'redux/reducers/search';
-import settingsReducer from 'redux/reducers/settings';
-import userReducer from 'redux/reducers/user';
-import walletReducer from 'redux/reducers/wallet';
-import shapeShiftReducer from 'redux/reducers/shape_shift';
-import subscriptionsReducer from 'redux/reducers/subscriptions';
-import mediaReducer from 'redux/reducers/media';
-import { persistStore, autoRehydrate } from 'redux-persist';
-import createCompressor from 'redux-persist-transform-compress';
-import createFilter from 'redux-persist-transform-filter';
-import localForage from 'localforage';
-import { createStore, applyMiddleware, compose, combineReducers } from 'redux';
-import thunk from 'redux-thunk';
+import { createLogger } from "redux-logger";
+import appReducer from "redux/reducers/app";
+import availabilityReducer from "redux/reducers/availability";
+import claimsReducer from "redux/reducers/claims";
+import contentReducer from "redux/reducers/content";
+import costInfoReducer from "redux/reducers/cost_info";
+import fileInfoReducer from "redux/reducers/file_info";
+import navigationReducer from "redux/reducers/navigation";
+import rewardsReducer from "redux/reducers/rewards";
+import searchReducer from "redux/reducers/search";
+import settingsReducer from "redux/reducers/settings";
+import userReducer from "redux/reducers/user";
+import walletReducer from "redux/reducers/wallet";
+import shapeShiftReducer from "redux/reducers/shape_shift";
+import subscriptionsReducer from "redux/reducers/subscriptions";
+import mediaReducer from "redux/reducers/media";
+import uploadReducer from "redux/reducers/upload";
+import { persistStore, autoRehydrate } from "redux-persist";
+import createCompressor from "redux-persist-transform-compress";
+import createFilter from "redux-persist-transform-filter";
+import localForage from "localforage";
+import { createStore, applyMiddleware, compose, combineReducers } from "redux";
+import thunk from "redux-thunk";
+
+const env = process.env.NODE_ENV || "production";
 
 function isFunction(object) {
   return typeof object === 'function';
@@ -64,7 +67,8 @@ const reducers = combineReducers({
   user: userReducer,
   shapeShift: shapeShiftReducer,
   subscriptions: subscriptionsReducer,
-  media: mediaReducer,
+  upload: uploadReducer,
+  media: mediaReducer
 });
 
 const bulkThunk = createBulkThunkMiddleware();
