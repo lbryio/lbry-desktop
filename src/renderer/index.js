@@ -15,7 +15,7 @@ import {
 } from 'redux/actions/app';
 import { doNavigate } from 'redux/actions/navigation';
 import { doDownloadLanguages, doUpdateIsNightAsync } from 'redux/actions/settings';
-import { doUserEmailVerify, doAuthenticate } from 'redux/actions/user';
+import { doUserEmailVerify } from 'redux/actions/user';
 import 'scss/all.scss';
 import store from 'store';
 import app from './app';
@@ -95,8 +95,6 @@ document.addEventListener('click', event => {
 });
 
 const init = () => {
-  app.store.dispatch(doAuthenticate());
-
   autoUpdater.on('update-downloaded', () => {
     app.store.dispatch(doAutoUpdate());
   });
