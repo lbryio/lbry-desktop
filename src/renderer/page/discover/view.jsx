@@ -222,13 +222,21 @@ export class FeaturedCategory extends React.PureComponent {
 }
 
 class DiscoverPage extends React.PureComponent {
+
+  constructor(props) {
+    super(props);
+  }
   componentWillMount() {
     this.props.fetchFeaturedUris();
   }
 
   render() {
-    const { featuredUris, fetchingFeaturedUris } = this.props;
-    const hasContent = typeof featuredUris === 'object' && Object.keys(featuredUris).length,
+    const {
+      fetchingFeaturedUris,
+      categories
+    } = this.props;
+
+    const hasContent = typeof categories === 'object' && Object.keys(categories).length,
       failedToLoad = !fetchingFeaturedUris && !hasContent;
 
     return (
@@ -240,14 +248,23 @@ class DiscoverPage extends React.PureComponent {
         <SubHeader fullWidth smallMargin />
         {!hasContent && fetchingFeaturedUris && <BusyMessage message={__('Fetching content')} />}
         {hasContent &&
-          Object.keys(featuredUris).map(
+          Object.keys(categories).map(
             category =>
-              featuredUris[category].length ? (
-                <FeaturedCategory
-                  key={category}
-                  category={category}
-                  names={featuredUris[category]}
-                />
+              categories[category].length ? (
+                category.indexOf('@') === 0 ? (
+                  <FeaturedCategory
+                    key={category}
+                    category={category.split('#')[0]}
+                    categoryLink={category}
+                    names={categories[category]}
+                  />
+                ) : (
+                  <FeaturedCategory
+                    key={category}
+                    category={category}
+                    names={categories[category]}
+                  />
+                )
               ) : (
                 ''
               )
