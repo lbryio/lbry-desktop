@@ -305,3 +305,29 @@ export function doUserInviteNew(email) {
       });
   };
 }
+
+export function doUserHistorySave(uri) {
+  return dispatch => {
+    dispatch({
+      type: ACTIONS.USER_HISTORY_SAVE,
+      data: {
+        uri,
+        time: Date.now()
+      }
+    })
+  };
+}
+
+export function doUserHistoryClearItem(uri) {
+  return dispatch => {
+    dispatch({
+      type: ACTIONS.USER_HISTORY_CLEAR_ITEM,
+      data: {uri}  
+    })
+  };
+}
+
+export function doUserHistoryClearAll() {
+  return dispatch => dispatch({type: ACTIONS.USER_HISTORY_CLEAR_ALL});
+}
+

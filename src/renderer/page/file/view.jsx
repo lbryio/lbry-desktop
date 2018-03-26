@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import lbry from 'lbry';
 import { buildURI, normalizeURI } from 'lbryURI';
 import Video from 'component/video';
@@ -14,10 +15,15 @@ import Link from 'component/link';
 import SubscribeButton from 'component/subscribeButton';
 
 class FilePage extends React.PureComponent {
+  static propTypes = {
+    saveUserHistory: PropTypes.func.isRequired
+  }
+
   componentDidMount() {
     this.fetchFileInfo(this.props);
     this.fetchCostInfo(this.props);
     this.checkSubscription(this.props);
+    this.props.saveUserHistory(this.props.uri);
   }
 
   componentWillReceiveProps(nextProps) {

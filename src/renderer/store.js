@@ -94,12 +94,13 @@ const store = createStore(
 const compressor = createCompressor();
 const saveClaimsFilter = createFilter('claims', ['byId', 'claimsByUri']);
 const subscriptionsFilter = createFilter('subscriptions', ['subscriptions']);
+const userHistoryFilter = createFilter('user', ['history']);
 
 const persistOptions = {
-  whitelist: ['claims', 'subscriptions'],
+  whitelist: ['claims', 'subscriptions', 'user'],
   // Order is important. Needs to be compressed last or other transforms can't
   // read the data
-  transforms: [saveClaimsFilter, subscriptionsFilter, compressor],
+  transforms: [saveClaimsFilter, subscriptionsFilter, userHistoryFilter, compressor],
   debounce: 10000,
   storage: localForage,
 };
