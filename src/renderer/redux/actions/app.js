@@ -9,6 +9,7 @@ import { doFetchRewardedContent } from 'redux/actions/content';
 import { doFetchFileInfosAndPublishedClaims } from 'redux/actions/file_info';
 import { doAuthNavigate } from 'redux/actions/navigation';
 import { doFetchDaemonSettings } from 'redux/actions/settings';
+import { doAuthenticate } from 'redux/actions/user';
 import { doBalanceSubscribe } from 'redux/actions/wallet';
 import { doPause } from 'redux/actions/media';
 import { doCheckSubscriptions } from 'redux/actions/subscriptions';
@@ -288,6 +289,7 @@ export function doDaemonReady() {
   return (dispatch, getState) => {
     const state = getState();
 
+    dispatch(doAuthenticate());
     dispatch({ type: ACTIONS.DAEMON_READY });
     dispatch(doFetchDaemonSettings());
     dispatch(doBalanceSubscribe());
