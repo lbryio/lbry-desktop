@@ -35,78 +35,6 @@ function setLocal(key, value) {
   localStorage.setItem(key, JSON.stringify(value));
 }
 
-/**
- * Records a publish attempt in local storage. Returns a dictionary with all the data needed to
- * needed to make a dummy claim or file info object.
- */
-let pendingId = 0;
-function savePendingPublish({ name, channelName }) {
-  pendingId += 1;
-  const pendingPublishes = getLocal('pendingPublishes') || [];
-  const newPendingPublish = {
-    name,
-    channelName,
-    claim_id: `pending-${pendingId}`,
-    txid: `pending-${pendingId}`,
-    nout: 0,
-    outpoint: `pending-${pendingId}:0`,
-    time: Date.now(),
-  };
-  setLocal('pendingPublishes', [...pendingPublishes, newPendingPublish]);
-  return newPendingPublish;
-}
-
-/**
- * If there is a pending publish with the given name or outpoint, remove it.
- * A channel name may also be provided along with name.
- */
-function removePendingPublishIfNeeded({ name, channelName, outpoint }) {
-  function pubMatches(pub) {
-    return (
-      pub.outpoint === outpoint ||
-      (pub.name === name && (!channelName || pub.channel_name === channelName))
-    );
-  }
-
-  setLocal('pendingPublishes', Lbry.getPendingPublishes().filter(pub => !pubMatches(pub)));
-}
-
-/**
- * Gets the current list of pending publish attempts. Filters out any that have timed out and
- * removes them from the list.
- */
-Lbry.getPendingPublishes = () => {
-  const pendingPublishes = getLocal('pendingPublishes') || [];
-  const newPendingPublishes = pendingPublishes.filter(
-    pub => Date.now() - pub.time <= Lbry.pendingPublishTimeout
-  );
-  setLocal('pendingPublishes', newPendingPublishes);
-  return newPendingPublishes;
-};
-
-/**
- * Gets a pending publish attempt by its name or (fake) outpoint. A channel name can also be
- * provided along withe the name. If no pending publish is found, returns null.
- */
-function getPendingPublish({ name, channelName, outpoint }) {
-  const pendingPublishes = Lbry.getPendingPublishes();
-  return (
-    pendingPublishes.find(
-      pub =>
-        pub.outpoint === outpoint ||
-        (pub.name === name && (!channelName || pub.channel_name === channelName))
-    ) || null
-  );
-}
-
-function pendingPublishToDummyClaim({ channelName, name, outpoint, claimId, txid, nout }) {
-  return { name, outpoint, claimId, txid, nout, channelName };
-}
-
-function pendingPublishToDummyFileInfo({ name, outpoint, claimId }) {
-  return { name, outpoint, claimId, metadata: null };
-}
-
 // core
 Lbry.connectPromise = null;
 Lbry.connect = () => {
@@ -134,42 +62,6 @@ Lbry.connect = () => {
   }
 
   return Lbry.connectPromise;
-};
-
-/**
- * Publishes a file. The optional fileListedCallback is called when the file becomes available in
- * lbry.file_list() during the publish process.
- *
- * This currently includes a work-around to cache the file in local storage so that the pending
- * publish can appear in the UI immediately.
- */
-Lbry.publishDeprecated = (params, fileListedCallback, publishedCallback, errorCallback) => {
-  // Give a short grace period in case publish() returns right away or (more likely) gives an error
-  const returnPendingTimeout = setTimeout(
-    () => {
-      const { name, channel_name: channelName } = params;
-      if (publishedCallback || fileListedCallback) {
-        savePendingPublish({
-          name,
-          channelName,
-        });
-        publishedCallback(true);
-      }
-    },
-    2000,
-    { once: true }
-  );
-
-  lbryProxy.publish(params).then(
-    result => {
-      if (returnPendingTimeout) clearTimeout(returnPendingTimeout);
-      publishedCallback(result);
-    },
-    err => {
-      if (returnPendingTimeout) clearTimeout(returnPendingTimeout);
-      errorCallback(err);
-    }
-  );
 };
 
 Lbry.imagePath = file => `${staticResourcesPath}/img/${file}`;
@@ -217,33 +109,11 @@ Lbry.file_list = (params = {}) =>
   new Promise((resolve, reject) => {
     const { claim_name: claimName, channel_name: channelName, outpoint } = params;
 
-    /**
-     * If we're searching by outpoint, check first to see if there's a matching pending publish.
-     * Pending publishes use their own faux outpoints that are always unique, so we don't need
-     * to check if there's a real file.
-     */
-    if (outpoint) {
-      const pendingPublish = getPendingPublish({ outpoint });
-      if (pendingPublish) {
-        resolve([pendingPublishToDummyFileInfo(pendingPublish)]);
-        return;
-      }
-    }
-
     apiCall(
       'file_list',
       params,
       fileInfos => {
-        removePendingPublishIfNeeded({ name: claimName, channelName, outpoint });
-
-        // if a naked file_list call, append the pending file infos
-        if (!claimName && !channelName && !outpoint) {
-          const dummyFileInfos = Lbry.getPendingPublishes().map(pendingPublishToDummyFileInfo);
-
-          resolve([...fileInfos, ...dummyFileInfos]);
-        } else {
-          resolve(fileInfos);
-        }
+        resolve(fileInfos);
       },
       reject
     );
@@ -255,16 +125,7 @@ Lbry.claim_list_mine = (params = {}) =>
       'claim_list_mine',
       params,
       claims => {
-        claims.forEach(({ name, channel_name: channelName, txid, nout }) => {
-          removePendingPublishIfNeeded({
-            name,
-            channelName,
-            outpoint: `${txid}:${nout}`,
-          });
-        });
-
-        const dummyClaims = Lbry.getPendingPublishes().map(pendingPublishToDummyClaim);
-        resolve([...claims, ...dummyClaims]);
+        resolve(claims);
       },
       reject
     );

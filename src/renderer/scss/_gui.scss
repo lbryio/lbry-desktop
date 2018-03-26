@@ -1,14 +1,235 @@
-@import url(https://fonts.googleapis.com/css?family=Roboto:400,400i,500,500i,700);
+// Generic html styles used accross the App
+// component specific styling should go in the component scss file
+
+@font-face {
+  font-family: 'metropolis-bold';
+  src: url('../../../static/font/metropolis/bold.eot');
+  src: url('../../../static/font/metropolis/bold.eot?#iefix') format('embedded-opentype'),
+    url('../../../static/font/metropolis/bold.woff') format('woff'),
+    url('../../../static/font/metropolis/bold.ttf') format('truetype'),
+    url('../../../static/font/metropolis/bold.svg#metropolis-bold') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'metropolis-semibold';
+  src: url('../../../static/font/metropolis/semibold.eot');
+  src: url('../../../static/font/metropolis/semibold.eot?#iefix') format('embedded-opentype'),
+    url('../../../static/font/metropolis/semibold.woff') format('woff'),
+    url('../../../static/font/metropolis/semibold.ttf') format('truetype'),
+    url('../../../static/font/metropolis/semibold.svg#metropolis-semibold') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'metropolis-medium';
+  src: url('../../../static/font/metropolis/medium.eot');
+  src: url('../../../static/font/metropolis/medium.eot?#iefix') format('embedded-opentype'),
+    url('../../../static/font/metropolis/medium.woff') format('woff'),
+    url('../../../static/font/metropolis/medium.ttf') format('truetype'),
+    url('../../../static/font/metropolis/medium.svg#metropolis-medium') format('svg');
+  font-weight: normal;
+  font-style: normal;
+}
 
 html {
   height: 100%;
-  font-size: var(--font-size);
 }
 
 body {
+  font-family: 'metropolis-semibold';
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 1.5;
   color: var(--text-color);
-  font-family: 'Roboto', sans-serif;
-  line-height: var(--font-line-height);
+  height: 100%;
+  overflow: hidden;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+code {
+  font: 1.5em Consolas, 'Lucida Console', 'Source Sans', monospace;
+  background-color: var(--color-bg-alt);
+}
+
+// Without this buttons don't have the Metropolis font
+button {
+  font-weight: inherit;
+  font-family: inherit;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+input {
+  border-bottom: var(--input-border-size) dotted var(--input-border-color);
+  color: var(--input-color);
+  line-height: 1;
+  cursor: text;
+  background-color: transparent;
+  font-family: 'metropolis-medium';
+
+  &[type='radio'],
+  &[type='checkbox'],
+  &[type='file'],
+  &[type='select'] {
+    cursor: pointer;
+  }
+
+  &[type='file'] {
+    border-bottom: none;
+  }
+
+  &.input-copyable {
+    flex: 1;
+    background: var(--input-copyable-bg);
+    color: var(--input-copyable-color);
+    padding: 10px 16px;
+    border: 1px dashed var(--input-copyable-border);
+  }
+
+  &:not(.input-copyable):not(.wunderbar__input):not(:placeholder-shown) {
+    border-bottom: var(--input-border-size) solid var(--input-border-color);
+  }
+
+  &:disabled {
+    color: var(--input-disabled-color);
+    border-bottom: var(--input-border-size) solid var(--input-disabled-color);
+    cursor: default;
+  }
+}
+
+input::placeholder {
+  opacity: 0.5;
+}
+
+button + input {
+  margin-left: $spacing-vertical * 2/3;
+}
+
+dl {
+  width: 100%;
+  overflow: hidden;
+  padding: 0;
+  margin: 0;
+  overflow-x: scroll;
+}
+
+dt {
+  float: left;
+  width: 20%;
+  padding: 0;
+  margin: 0;
+}
+
+dd {
+  float: left;
+  width: 80%;
+  padding: 0;
+  margin: 0;
+}
+
+p {
+  font-family: 'metropolis-medium';
+}
+
+.page {
+  display: grid;
+  grid-template-rows: var(--header-height) calc(100vh - var(--header-height));
+  grid-template-columns: var(--side-nav-width) auto;
+  grid-template-areas:
+    'nav header'
+    'nav content';
+  background-color: var(--color-bg);
+
+  @media only screen and (min-width: $medium-breakpoint) {
+    grid-template-columns: var(--side-nav-width-m) auto;
+  }
+
+  @media only screen and (min-width: $large-breakpoint) {
+    grid-template-columns: var(--side-nav-width-l) auto;
+  }
+}
+
+/*
+  Page content
+*/
+.content {
+  grid-area: content;
+  overflow: auto;
+}
+
+.main {
+  padding: $spacing-width $spacing-width;
+  margin: auto;
+}
+
+.main--contained {
+  max-width: 1000px;
+  margin: 0 80px - $spacing-width;
+
+  @media only screen and (min-width: $medium-breakpoint) {
+    margin: 0 120px - $spacing-width;
+  }
+
+  @media only screen and (min-width: $large-breakpoint) {
+    margin: 0 200px - $spacing-width;
+  }
+}
+
+.main--no-padding {
+  padding-left: 0;
+  padding-right: 0;
+  margin: 0;
+}
+
+.main--extra-padding {
+  padding-left: 100px;
+  padding-right: 100px;
+}
+
+.page__header {
+  padding: $spacing-vertical * 2/3;
+  padding-bottom: 0;
+}
+
+.page__title {
+  // not currently using page titles on any page
+}
+
+.page__empty {
+  margin-top: 200px;
+  text-align: center;
+  font-family: 'metropolis-medium';
+}
+
+.columns {
+  display: flex;
+  justify-content: space-between;
+
+  > * {
+    flex-grow: 1;
+    flex-basis: 0;
+
+    &:not(:first-of-type):not(:last-of-type) {
+      margin: 0 $spacing-vertical / 3;
+    }
+
+    &:first-of-type {
+      margin-right: $spacing-vertical / 3;
+    }
+
+    &:last-of-type {
+      margin-left: $spacing-vertical / 3;
+    }
+  }
 }
 
 /* Custom text selection */
@@ -17,111 +238,47 @@ body {
   color: var(--text-selection-color);
 }
 
-#window {
-  min-height: 100vh;
-  background: var(--window-bg);
+.credit-amount {
+  padding: 5px;
+  border-radius: 5px;
+  font-family: 'metropolis-bold';
+  font-size: 8px;
 }
 
-.credit-amount--indicator {
-  font-weight: 500;
-  color: var(--color-money);
-}
-.credit-amount--fee {
-  font-size: 0.9em;
-  color: var(--color-meta-light);
+.credit-amount--large {
+  font-family: 'metropolis-semibold';
+  font-size: 36px;
 }
 
-.credit-amount--bold {
-  font-weight: 700;
+.credit-amount--free {
+  color: var(--color-dark-blue);
+  background-color: var(--color-secondary);
 }
 
-#main-content {
-  margin: auto;
-  display: flex;
-  flex-direction: column;
-  overflow: overlay;
-  padding: $spacing-vertical;
-  position: absolute;
-  top: var(--header-height);
-  bottom: 0;
-  left: 4px;
-  right: 4px;
-  main {
-    margin-left: auto;
-    margin-right: auto;
-    max-width: 100%;
-  }
-  main.main--single-column {
-    width: $width-page-constrained;
-  }
-
-  main.main--no-margin {
-    margin-left: 0;
-    margin-right: 0;
-  }
+.credit-amount--cost {
+  color: var(--color-black);
+  background-color: var(--color-yellow);
 }
 
-.reloading {
-  &:before {
-    $width: 30px;
-    position: absolute;
-    background: url('../../../static/img/busy.gif') no-repeat center center;
-    width: $width;
-    height: $spacing-vertical;
-    content: '';
-    left: 50%;
-    margin-left: -1 / 2 * $width;
-    display: inline-block;
-  }
+.credit-amount--plain {
+  background-color: inherit;
+  color: inherit;
+  font-weight: inherit;
+  font-size: inherit;
 }
 
-.icon-fixed-width {
-  /* This borrowed is from a component of Font Awesome we're not using, maybe add it? */
-  width: (18em / 14);
-  text-align: center;
+.credit-amount.credit-amount--no-style {
+  padding: 0;
+  font-size: inherit;
+  font-weight: inherit;
+  color: inherit;
+  background-color: transparent;
+  font-family: 'metropolis-medium';
 }
 
-.icon--left-pad {
-  padding-left: 3px;
-}
-
-h2 {
-  font-size: 1.75em;
-}
-
-h3 {
-  font-size: 1.4em;
-}
-
-h4 {
-  font-size: 1.2em;
-}
-
-h5 {
-  font-size: 1.1em;
-}
-sup,
-sub {
-  vertical-align: baseline;
-  position: relative;
-}
-sup {
-  top: -0.4em;
-}
-sub {
-  top: 0.4em;
-}
-
-code {
-  font: 0.8em Consolas, 'Lucida Console', 'Source Sans', monospace;
-  background-color: var(--color-bg-alt);
-}
-
-p {
-  margin-bottom: 0.8em;
-  &:last-child {
-    margin-bottom: 0;
-  }
+.divider__horizontal {
+  border-top: var(--color-divider);
+  margin: 16px 0;
 }
 
 .hidden {
@@ -141,6 +298,10 @@ p {
 }
 
 .busy-indicator {
+  font-family: 'metropolis-medium';
+}
+
+.busy-indicator__loader {
   background: url('../../../static/img/busy.gif') no-repeat center center;
   display: inline-block;
   margin: -1em 0;
@@ -157,42 +318,22 @@ p {
 }
 
 .help {
-  font-size: 0.85em;
+  font-size: 12px;
+  font-family: 'metropolis-medium';
   color: var(--color-help);
 }
 
+.help--padded {
+  padding-top: $spacing-vertical * 2/3;
+}
+
 .meta {
-  font-size: 0.9em;
+  font-family: 'metropolis-medium';
+  font-size: 14px;
   color: var(--color-meta-light);
 }
 
 .empty {
   color: var(--color-meta-light);
   font-style: italic;
-}
-
-/*should be redone/moved*/
-.file-list__header {
-  .busy-indicator {
-    float: left;
-    margin-top: 12px;
-  }
-}
-
-.sort-section {
-  display: block;
-  margin-bottom: $spacing-vertical * 2/3;
-
-  text-align: right;
-  line-height: 1;
-  font-size: 0.85em;
-  color: var(--color-help);
-}
-
-section.section-spaced {
-  margin-bottom: $spacing-vertical;
-}
-
-.text-center {
-  text-align: center;
 }

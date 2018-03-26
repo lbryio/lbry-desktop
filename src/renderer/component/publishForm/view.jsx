@@ -1,869 +1,547 @@
-import React from 'react';
+// @flow
+import * as React from 'react';
 import lbry from 'lbry';
-import { isNameValid, buildURI, regexInvalidURI } from 'lbryURI';
-import FormField from 'component/formField';
-import { Form, FormRow, Submit } from 'component/form.js';
-import Link from 'component/link';
-import FormFieldPrice from 'component/formFieldPrice';
+import { isNameValid, buildURI, regexInvalidURI, parseURI } from 'lbryURI';
+import { Form, FormField, FormRow, FormFieldPrice, Submit } from 'component/common/form';
+import Button from 'component/button';
 import Modal from 'modal/modal';
-import { BusyMessage } from 'component/common';
-import ChannelSection from './internal/channelSection';
+import ChannelSection from 'component/selectChannel';
+import Icon from 'component/common/icon';
+import classnames from 'classnames';
+import type { PublishParams, UpdatePublishFormData } from 'redux/reducers/publish';
+import FileSelector from 'component/common/file-selector';
+import BidHelpText from './internal/bid-help-text';
+import LicenseType from './internal/license-type';
+import { COPYRIGHT, OTHER } from 'constants/licenses';
+import { MINIMUM_PUBLISH_BID } from 'constants/claim';
+import { CHANNEL_NEW, CHANNEL_ANONYMOUS } from 'constants/claim';
+import * as icons from 'constants/icons';
 
-class PublishForm extends React.PureComponent {
-  constructor(props) {
+type Props = {
+  publish: PublishParams => void,
+  filePath: ?string,
+  bid: ?number,
+  editingURI: ?string,
+  title: ?string,
+  thumbnail: ?string,
+  description: ?string,
+  language: string,
+  nsfw: boolean,
+  contentIsFree: boolean,
+  price: {
+    amount: number,
+    currency: string,
+  },
+  channel: string,
+  name: ?string,
+  tosAccepted: boolean,
+  updatePublishForm: UpdatePublishFormData => void,
+  bid: number,
+  nameError: ?string,
+  isResolvingUri: boolean,
+  winningBidForClaimUri: number,
+  myClaimForUri: ?{
+    amount: number,
+  },
+  licenseType: string,
+  otherLicenseDescription: ?string,
+  licenseUrl: ?string,
+  copyrightNotice: ?string,
+  uri: ?string,
+  bidError: ?string,
+  publishing: boolean,
+  balance: number,
+  clearPublish: () => void,
+  resolveUri: string => void,
+  scrollToTop: () => void,
+  prepareEdit: ({}) => void,
+};
+
+class PublishForm extends React.PureComponent<Props> {
+  constructor(props: Props) {
     super(props);
 
-    this._requiredFields = ['name', 'bid', 'meta_title', 'tosAgree'];
-
-    this._defaultCopyrightNotice = 'All rights reserved.';
-    this._defaultPaidPrice = 0.01;
-
-    this.state = {
-      id: null,
-      uri: null,
-      rawName: '',
-      name: '',
-      bid: 10,
-      hasFile: false,
-      feeAmount: '',
-      feeCurrency: 'LBC',
-      channel: 'anonymous',
-      newChannelName: '@',
-      newChannelBid: 10,
-      meta_title: '',
-      meta_thumbnail: '',
-      meta_description: '',
-      meta_language: 'en',
-      meta_nsfw: '0',
-      licenseType: '',
-      copyrightNotice: this._defaultCopyrightNotice,
-      otherLicenseDescription: '',
-      otherLicenseUrl: '',
-      tosAgree: false,
-      prefillDone: false,
-      uploadProgress: 0.0,
-      uploaded: false,
-      errorMessage: null,
-      submitting: false,
-      creatingChannel: false,
-      modal: null,
-      isFee: false,
-      customUrl: false,
-      source: null,
-      mode: 'publish',
-    };
+    (this: any).handleFileChange = this.handleFileChange.bind(this);
+    (this: any).checkIsFormValid = this.checkIsFormValid.bind(this);
+    (this: any).renderFormErrors = this.renderFormErrors.bind(this);
+    (this: any).handlePublish = this.handlePublish.bind(this);
+    (this: any).handleCancelPublish = this.handleCancelPublish.bind(this);
+    (this: any).handleNameChange = this.handleNameChange.bind(this);
+    (this: any).handleChannelChange = this.handleChannelChange.bind(this);
+    (this: any).editExistingClaim = this.editExistingClaim.bind(this);
+    (this: any).getNewUri = this.getNewUri.bind(this);
   }
 
-  _updateChannelList(channel) {
-    const { fetchingChannels, fetchChannelListMine } = this.props;
-
-    if (!fetchingChannels) fetchChannelListMine();
-  }
-
-  handleSubmit() {
-    this.setState({
-      submitting: true,
-    });
-
-    const checkFields = this._requiredFields;
-    if (!this.myClaimExists()) {
-      checkFields.unshift('file');
-    }
-
-    let missingFieldFound = false;
-    for (const fieldName of checkFields) {
-      const field = this.refs[fieldName];
-      if (field) {
-        if (field.getValue() === '' || field.getValue() === false) {
-          field.showRequiredError();
-          if (!missingFieldFound) {
-            field.focus();
-            missingFieldFound = true;
-          }
-        } else {
-          field.clearError();
-        }
-      }
-    }
-
-    if (missingFieldFound) {
-      this.setState({
-        submitting: false,
-      });
-      return;
-    }
-
-    const metadata = {};
-
-    for (const metaField of ['title', 'description', 'thumbnail', 'language']) {
-      const value = this.state[`meta_${metaField}`];
-      if (value) {
-        metadata[metaField] = value;
-      }
-    }
-
-    metadata.license = this.getLicense();
-    metadata.licenseUrl = this.getLicenseUrl();
-    metadata.nsfw = !!parseInt(this.state.meta_nsfw);
-
-    const doPublish = () => {
-      const publishArgs = {
-        name: this.state.name,
-        bid: parseFloat(this.state.bid),
-        metadata,
-        ...(this.state.channel != 'new' && this.state.channel != 'anonymous'
-          ? { channel_name: this.state.channel }
-          : {}),
-      };
-
-      const { source } = this.state;
-
-      if (this.refs.file.getValue() !== '') {
-        publishArgs.file_path = this.refs.file.getValue();
-      } else if (source) {
-        publishArgs.sources = source;
-      }
-
-      const success = claim => {};
-      const failure = error => this.handlePublishError(error);
-
-      this.handlePublishStarted();
-      this.props.publish(publishArgs).then(success, failure);
-    };
-
-    if (this.state.isFee && parseFloat(this.state.feeAmount) > 0) {
-      lbry.wallet_unused_address().then(address => {
-        metadata.fee = {
-          currency: this.state.feeCurrency,
-          amount: parseFloat(this.state.feeAmount),
-          address,
-        };
-
-        doPublish();
-      });
-    } else {
-      doPublish();
-    }
-  }
-
-  handlePublishStarted() {
-    this.setState({
-      modal: 'publishStarted',
-    });
-  }
-
-  handlePublishStartedConfirmed() {
-    this.props.navigate('/published');
-  }
-
-  handlePublishError(error) {
-    this.setState({
-      submitting: false,
-      modal: 'error',
-      errorMessage: error.message,
-    });
-  }
-
-  claim() {
-    const { claimsByUri } = this.props;
-    const { uri } = this.state;
-    return claimsByUri[uri];
-  }
-
-  topClaimValue() {
-    if (!this.claim()) return null;
-
-    return parseFloat(this.claim().effective_amount);
-  }
-
-  myClaimExists() {
-    const { myClaims } = this.props;
-    const { name } = this.state;
-
-    if (!name) return false;
-
-    return !!myClaims.find(claim => claim.name === name);
-  }
-
-  handleEditClaim() {
-    const claimInfo = this.claim() || this.myClaimInfo();
-
-    if (claimInfo) {
-      this.handlePrefillClaim(claimInfo);
-    }
-  }
-
-  topClaimIsMine() {
-    const myClaimInfo = this.myClaimInfo();
-    const { claimsByUri } = this.props;
-    const { uri } = this.state;
-
-    if (!uri) return null;
-
-    const claim = claimsByUri[uri];
-
-    if (!claim) return true;
-    if (!myClaimInfo) return false;
-
-    return myClaimInfo.amount >= claim.amount;
-  }
-
-  myClaimInfo() {
-    const { id } = this.state;
-
-    return Object.values(this.props.myClaims).find(claim => claim.claim_id === id);
-  }
-
-  handleNameChange(event) {
-    const rawName = event.target.value;
-    this.setState({
-      customUrl: Boolean(rawName.length),
-    });
-
-    this.nameChanged(rawName);
-  }
-
-  nameChanged(rawName) {
-    if (!rawName) {
-      this.setState({
-        rawName: '',
-        name: '',
-        uri: '',
-        prefillDone: false,
-        mode: 'publish',
-      });
-
-      return;
-    }
-
-    if (!isNameValid(rawName, false)) {
-      this.refs.name.showError(__('LBRY names must contain only letters, numbers and dashes.'));
-      return;
-    }
-
-    let channel = '';
-    if (this.state.channel !== 'anonymous') channel = this.state.channel;
-
-    const name = rawName.toLowerCase();
-    const uri = buildURI({ contentName: name, channelName: channel });
-    this.setState({
-      rawName,
+  handlePublish() {
+    const {
+      publish,
+      filePath,
+      bid,
+      title,
+      thumbnail,
+      description,
+      language,
+      nsfw,
+      channel,
+      licenseType,
+      licenseUrl,
+      otherLicenseDescription,
+      copyrightNotice,
       name,
-      prefillDone: false,
-      mode: 'publish',
+      contentIsFree,
+      price,
       uri,
-    });
+    } = this.props;
 
-    if (this.resolveUriTimeout) {
-      clearTimeout(this.resolveUriTimeout);
-      this.resolveUriTimeout = undefined;
+    let publishingLicense;
+    switch (licenseType) {
+      case COPYRIGHT:
+        publishingLicense = copyrightNotice;
+        break;
+      case OTHER:
+        publishingLicense = otherLicenseDescription;
+        break;
+      default:
+        publishingLicense = licenseType;
     }
-    const resolve = () => this.props.resolveUri(uri);
 
-    this.resolveUriTimeout = setTimeout(resolve.bind(this), 500, {
-      once: true,
-    });
-  }
+    const publishingLicenseUrl = licenseType === COPYRIGHT ? '' : licenseUrl;
 
-  handlePrefillClaim(claimInfo) {
-    const { claim_id, name, channel_name, amount } = claimInfo;
-    const { source, metadata } = claimInfo.value.stream;
-
-    const { license, licenseUrl, title, thumbnail, description, language, nsfw } = metadata;
-
-    const newState = {
-      id: claim_id,
-      channel: channel_name || 'anonymous',
-      bid: amount,
-      meta_title: title,
-      meta_thumbnail: thumbnail,
-      meta_description: description,
-      meta_language: language,
-      meta_nsfw: nsfw,
-      mode: 'edit',
-      prefillDone: true,
-      rawName: name,
+    const publishParams = {
+      filePath,
+      bid,
+      title,
+      thumbnail,
+      description,
+      language,
+      nsfw,
+      channel,
+      license: publishingLicense,
+      licenseUrl: publishingLicenseUrl,
+      otherLicenseDescription,
+      copyrightNotice,
       name,
-      source,
+      contentIsFree,
+      price,
+      uri,
     };
 
-    if (license == this._defaultCopyrightNotice) {
-      newState.licenseType = 'copyright';
-      newState.copyrightNotice = this._defaultCopyrightNotice;
+    publish(publishParams);
+  }
+
+  handleCancelPublish() {
+    const { clearPublish, scrollToTop } = this.props;
+    scrollToTop();
+    clearPublish();
+  }
+
+  editExistingClaim() {
+    const { myClaimForUri, prepareEdit, scrollToTop } = this.props;
+    if (myClaimForUri) {
+      prepareEdit(myClaimForUri);
+      scrollToTop();
+    }
+  }
+
+  handleFileChange(filePath: string, fileName: string) {
+    const { updatePublishForm, channel } = this.props;
+    const parsedFileName = fileName.replace(regexInvalidURI, '');
+    const uri = this.getNewUri(parsedFileName, channel);
+
+    if (filePath) {
+      updatePublishForm({ filePath, name: parsedFileName, uri });
+    }
+  }
+
+  handleNameChange(name: ?string) {
+    const { channel, updatePublishForm } = this.props;
+
+    if (!name) {
+      updatePublishForm({ name, nameError: undefined });
+      return;
+    }
+
+    if (!isNameValid(name, false)) {
+      updatePublishForm({
+        name,
+        nameError: __('LBRY names must contain only letters, numbers and dashes.'),
+      });
+      return;
+    }
+
+    const uri = this.getNewUri(name, channel);
+    updatePublishForm({
+      name,
+      uri,
+      nameError: undefined,
+    });
+  }
+
+  handleChannelChange(channelName: string) {
+    const { name, updatePublishForm } = this.props;
+    if (name) {
+      const uri = this.getNewUri(name, channelName);
+      updatePublishForm({ channel: channelName, uri });
     } else {
-      // If the license URL or description matches one of the drop-down options, use that
-      let licenseType = 'other'; // Will be overridden if we find a match
-      for (const option of this._meta_license.getOptions()) {
-        if (option.getAttribute('data-url') === licenseUrl || option.text === license) {
-          licenseType = option.value;
-        }
-      }
-
-      if (licenseType == 'other') {
-        newState.otherLicenseDescription = license;
-        newState.otherLicenseUrl = licenseUrl;
-      }
-      newState.licenseType = licenseType;
-    }
-
-    this.setState(newState);
-  }
-
-  handleBidChange(event) {
-    this.setState({
-      bid: event.target.value,
-    });
-  }
-
-  handleFeeChange(newValue) {
-    this.setState({
-      feeAmount: newValue.amount,
-      feeCurrency: newValue.currency,
-    });
-  }
-
-  handleFeePrefChange(feeEnabled) {
-    this.setState({
-      isFee: feeEnabled,
-      feeAmount: this.state.feeAmount == '' ? this._defaultPaidPrice : this.state.feeAmount,
-    });
-  }
-
-  handleMetadataChange(event) {
-    /**
-     * This function is used for all metadata inputs that store the final value directly into state.
-     * The only exceptions are inputs related to license description and license URL, which require
-     * more complex logic and the final value is determined at submit time.
-     */
-    this.setState({
-      [`meta_${event.target.name}`]: event.target.value,
-    });
-  }
-
-  handleDescriptionChanged(text) {
-    this.setState({
-      meta_description: text,
-    });
-  }
-
-  handleLicenseTypeChange(event) {
-    this.setState({
-      licenseType: event.target.value,
-    });
-  }
-
-  handleCopyrightNoticeChange(event) {
-    this.setState({
-      copyrightNotice: event.target.value,
-    });
-  }
-
-  handleOtherLicenseDescriptionChange(event) {
-    this.setState({
-      otherLicenseDescription: event.target.value,
-    });
-  }
-
-  handleOtherLicenseUrlChange(event) {
-    this.setState({
-      otherLicenseUrl: event.target.value,
-    });
-  }
-
-  handleChannelChange(channelName) {
-    this.setState({
-      mode: 'publish',
-      channel: channelName,
-    });
-    const nameChanged = () => this.nameChanged(this.state.rawName);
-    setTimeout(nameChanged.bind(this), 500, { once: true });
-  }
-
-  handleTOSChange(event) {
-    this.setState({
-      tosAgree: event.target.checked,
-    });
-  }
-
-  getLicense() {
-    switch (this.state.licenseType) {
-      case 'copyright':
-        return this.state.copyrightNotice;
-      case 'other':
-        return this.state.otherLicenseDescription;
-      default:
-        return this._meta_license.getSelectedElement().text;
+      updatePublishForm({ channel: channelName });
     }
   }
 
-  getLicenseUrl() {
-    switch (this.state.licenseType) {
-      case 'copyright':
-        return '';
-      case 'other':
-        return this.state.otherLicenseUrl;
-      default:
-        return this._meta_license.getSelectedElement().getAttribute('data-url');
-    }
-  }
+  handleBidChange(bid: number) {
+    const { balance, updatePublishForm } = this.props;
 
-  componentWillMount() {
-    this.props.fetchClaimListMine();
-    this._updateChannelList();
-
-    const { id } = this.props.params;
-    this.setState({ id });
-  }
-
-  componentDidMount() {
-    this.handleEditClaim();
-  }
-
-  onFileChange() {
-    const { mode } = this.state;
-    if (this.refs.file.getValue()) {
-      this.setState({ hasFile: true });
-      if (!this.state.customUrl && mode !== 'edit') {
-        const fileName = this._getFileName(this.refs.file.getValue());
-        this.nameChanged(fileName);
-      }
-    } else {
-      this.setState({ hasFile: false });
-    }
-  }
-
-  _getFileName(fileName) {
-    const path = require('path');
-    const extension = path.extname(fileName);
-
-    fileName = path.basename(fileName, extension);
-    fileName = fileName.replace(regexInvalidURI, '');
-    return fileName;
-  }
-
-  getNameBidHelpText() {
-    const { prefillDone, name, uri } = this.state;
-    const { resolvingUris } = this.props;
-    const claim = this.claim();
-
-    if (prefillDone) {
-      return __('Existing claim data was prefilled');
+    let bidError;
+    if (balance <= bid) {
+      bidError = __('Not enough credits');
+    } else if (bid <= MINIMUM_PUBLISH_BID) {
+      bidError = __('Your bid must be higher');
     }
 
-    if (uri && resolvingUris.indexOf(uri) !== -1 && claim === undefined) {
-      return __('Checking...');
-    } else if (!name) {
-      return __('Select a URL for this publish.');
-    } else if (!claim) {
-      return __('This URL is unused.');
-    } else if (this.myClaimExists() && !prefillDone) {
-      return (
-        <span>
-          {__('You already have a claim with this name.')}{' '}
-          <Link label={__('Edit existing claim')} onClick={() => this.handleEditClaim()} />
-        </span>
-      );
-    } else if (claim) {
-      const topClaimValue = this.topClaimValue();
-      if (topClaimValue === 1) {
-        return (
-          <span>
-            {__(
-              'A deposit of at least one credit is required to win "%s". However, you can still get a permanent URL for any amount.',
-              name
-            )}
-          </span>
-        );
-      }
-      return (
-        <span>
-          {__(
-            'A deposit of at least "%s" credits is required to win "%s". However, you can still get a permanent URL for any amount.',
-            topClaimValue,
-            name
-          )}
-        </span>
-      );
+    updatePublishForm({ bid, bidError });
+  }
+
+  // Returns a new uri to be used in the form and begins to resolve that uri for bid help text
+  getNewUri(name: string, channel: string) {
+    const { resolveUri } = this.props;
+    // If they are midway through a channel creation, treat it as anonymous until it completes
+    const channelName = channel === CHANNEL_ANONYMOUS || channel === CHANNEL_NEW ? '' : channel;
+
+    let uri;
+    try {
+      uri = buildURI({ contentName: name, channelName });
+    } catch (e) {
+      // something wrong with channel or name
     }
+
+    if (uri) {
+      resolveUri(uri);
+      return uri;
+    }
+
     return '';
   }
 
-  closeModal() {
-    this.setState({
-      modal: null,
-    });
+  checkIsFormValid() {
+    const { name, nameError, title, bid, bidError, tosAccepted } = this.props;
+    return name && !nameError && title && bid && !bidError && tosAccepted;
   }
 
-  render() {
-    const { mode, submitting } = this.state;
+  renderFormErrors() {
+    const { name, nameError, title, bid, bidError, tosAccepted } = this.props;
 
-    const lbcInputHelp = __('This LBC remains yours and the deposit can be undone at any time.');
-
-    let submitLabel = !submitting ? __('Publish') : __('Publishing...');
-
-    if (mode === 'edit') {
-      submitLabel = !submitting ? __('Update') : __('Updating...');
+    if (nameError || bidError) {
+      // There will be inline errors if either of these exist
+      // These are just extra help at the bottom of the screen
+      // There could be multiple bid errors, so just duplicate it at the bottom
+      return (
+        <div className="card__subtitle form-field__error">
+          {nameError && <div>{__('The URL you created is not valid.')}</div>}
+          {bidError && <div>{bidError}</div>}
+        </div>
+      );
     }
 
     return (
-      <main className="main--single-column">
-        <Form onSubmit={this.handleSubmit.bind(this)}>
-          <section className="card">
-            <div className="card__title-primary">
-              <h4>{__('Content')}</h4>
-              <div className="card__subtitle">{__('What are you publishing?')}</div>
-            </div>
-            <div className="card__content">
-              <FormRow
-                name="file"
-                ref="file"
-                type="file"
-                onChange={event => {
-                  this.onFileChange(event);
-                }}
-                helper={
-                  this.myClaimExists()
-                    ? __(
-                        "If you don't choose a file, the file from your existing claim will be used."
-                      )
-                    : null
-                }
+      <div className="card__content card__subtitle card__subtitle--block form-field__error">
+        {!title && <div>{__('A title is required')}</div>}
+        {!name && <div>{__('A URL is required')}</div>}
+        {!bid && <div>{__('A bid amount is required')}</div>}
+        {!tosAccepted && <div>{__('You must agree to the terms of service')}</div>}
+      </div>
+    );
+  }
+
+  render() {
+    const {
+      filePath,
+      editingURI,
+      title,
+      thumbnail,
+      description,
+      language,
+      nsfw,
+      contentIsFree,
+      price,
+      channel,
+      name,
+      tosAccepted,
+      updatePublishForm,
+      bid,
+      nameError,
+      isResolvingUri,
+      winningBidForClaimUri,
+      myClaimForUri,
+      licenseType,
+      otherLicenseDescription,
+      licenseUrl,
+      copyrightNotice,
+      uri,
+      bidError,
+      publishing,
+      clearPublish,
+    } = this.props;
+
+    const formDisabled = (!filePath && !editingURI) || publishing;
+    const formValid = this.checkIsFormValid();
+
+    const isStillEditing = editingURI === uri;
+    let submitLabel;
+    if (isStillEditing) {
+      submitLabel = !publishing ? __('Edit') : __('Editing...');
+    } else {
+      submitLabel = !publishing ? __('Publish') : __('Publishing...');
+    }
+
+    console.log('this.props', this.props);
+    return (
+      <Form onSubmit={this.handlePublish}>
+        <section className={classnames('card card--section')}>
+          <div className="card__title">{__('Content')}</div>
+          <div className="card__subtitle">
+            {editingURI ? __('Editing a claim') : __('What are you publishing?')}
+          </div>
+          {(filePath || !!editingURI) && (
+            <div className="card-media__internal-links">
+              <Button
+                button="inverse"
+                icon={icons.CLOSE}
+                label={__('Clear')}
+                onClick={clearPublish}
               />
             </div>
-            {!this.state.hasFile && !this.myClaimExists() ? null : (
-              <div>
-                <div className="card__content">
-                  <FormRow
-                    ref="meta_title"
-                    label={__('Title')}
-                    type="text"
-                    name="title"
-                    value={this.state.meta_title}
-                    placeholder="Titular Title"
-                    onChange={event => {
-                      this.handleMetadataChange(event);
-                    }}
-                  />
-                </div>
-                <div className="card__content">
-                  <FormRow
-                    type="text"
-                    label={__('Thumbnail URL')}
-                    name="thumbnail"
-                    value={this.state.meta_thumbnail}
-                    placeholder="http://spee.ch/mylogo"
-                    onChange={event => {
-                      this.handleMetadataChange(event);
-                    }}
-                  />
-                </div>
-                <div className="card__content">
-                  <FormRow
-                    type="SimpleMDE"
-                    label={__('Description')}
-                    ref="meta_description"
-                    name="description"
-                    value={this.state.meta_description}
-                    placeholder={__('Description of your content')}
-                    onChange={text => {
-                      this.handleDescriptionChanged(text);
-                    }}
-                  />
-                </div>
-                <div className="card__content">
-                  <FormRow
-                    label={__('Language')}
-                    type="select"
-                    value={this.state.meta_language}
-                    name="language"
-                    onChange={event => {
-                      this.handleMetadataChange(event);
-                    }}
-                  >
-                    <option value="en">{__('English')}</option>
-                    <option value="zh">{__('Chinese')}</option>
-                    <option value="fr">{__('French')}</option>
-                    <option value="de">{__('German')}</option>
-                    <option value="jp">{__('Japanese')}</option>
-                    <option value="ru">{__('Russian')}</option>
-                    <option value="es">{__('Spanish')}</option>
-                  </FormRow>
-                </div>
-                <div className="card__content">
-                  <FormRow
-                    type="select"
-                    label={__('Maturity')}
-                    value={this.state.meta_nsfw}
-                    name="nsfw"
-                    onChange={event => {
-                      this.handleMetadataChange(event);
-                    }}
-                  >
-                    {/* <option value=""></option> */}
-                    <option value="0">{__('All Ages')}</option>
-                    <option value="1">{__('Adults Only')}</option>
-                  </FormRow>
-                </div>
-              </div>
-            )}
+          )}
+          <FileSelector currentPath={filePath} onFileChosen={this.handleFileChange} />
+          {!!editingURI && (
+            <p className="card__content card__subtitle">
+              {__("If you don't choose a file, the file from your existing claim")}
+              {` "${name}" `}
+              {__('will be used.')}
+            </p>
+          )}
+        </section>
+        <div className={classnames({ 'card--disabled': formDisabled })}>
+          <section className="card card--section">
+            <FormRow>
+              <FormField
+                stretch
+                type="text"
+                name="content_title"
+                label={__('Title')}
+                placeholder={__('Titular Title')}
+                disabled={formDisabled}
+                value={title}
+                onChange={e => updatePublishForm({ title: e.target.value })}
+              />
+            </FormRow>
+            <FormRow padded>
+              <FormField
+                stretch
+                type="text"
+                name="content_thumbnail"
+                label={__('Thumbnail')}
+                placeholder="http://spee.ch/mylogo"
+                value={thumbnail}
+                disabled={formDisabled}
+                onChange={e => updatePublishForm({ thumbnail: e.target.value })}
+              />
+            </FormRow>
+            <FormRow padded>
+              <FormField
+                stretch
+                type="markdown"
+                name="content_description"
+                label={__('Description')}
+                placeholder={__('Description of your content')}
+                value={description}
+                disabled={formDisabled}
+                onChange={text => updatePublishForm({ description: text })}
+              />
+            </FormRow>
           </section>
 
-          <section className="card">
-            <div className="card__title-primary">
-              <h4>{__('Price')}</h4>
-              <div className="card__subtitle">{__('How much does this content cost?')}</div>
-            </div>
+          <section className="card card--section">
+            <div className="card__title">{__('Price')}</div>
+            <div className="card__subtitle">{__('How much will this content cost?')}</div>
             <div className="card__content">
-              <FormRow
-                label={__('Free')}
+              <FormField
                 type="radio"
-                name="isFree"
-                onChange={() => this.handleFeePrefChange(false)}
-                checked={!this.state.isFee}
+                name="content_free"
+                postfix={__('Free')}
+                checked={contentIsFree}
+                disabled={formDisabled}
+                onChange={() => updatePublishForm({ contentIsFree: true })}
               />
               <FormField
                 type="radio"
-                name="isFree"
-                label={!this.state.isFee ? __('Choose price...') : __('Price ')}
-                onChange={() => {
-                  this.handleFeePrefChange(true);
-                }}
-                checked={this.state.isFee}
+                name="content_cost"
+                postfix={__('Choose price')}
+                checked={!contentIsFree}
+                disabled={formDisabled}
+                onChange={() => updatePublishForm({ contentIsFree: false })}
               />
-              <span className={!this.state.isFee ? 'hidden' : ''}>
-                <FormFieldPrice
-                  min="0"
-                  defaultValue={{
-                    amount: this._defaultPaidPrice,
-                    currency: 'LBC',
-                  }}
-                  onChange={val => this.handleFeeChange(val)}
-                />
-              </span>
-              {this.state.isFee && this.state.feeCurrency.toUpperCase() != 'LBC' ? (
-                <div className="form-field__helper">
+
+              <FormFieldPrice
+                name="content_cost_amount"
+                min="0"
+                price={price}
+                onChange={newPrice => updatePublishForm({ price: newPrice })}
+                disabled={formDisabled || contentIsFree}
+              />
+              {price.currency !== 'LBC' && (
+                <p className="form-field__help">
                   {__(
                     'All content fees are charged in LBC. For non-LBC payment methods, the number of credits charged will be adjusted based on the value of LBRY credits at the time of purchase.'
                   )}
-                </div>
-              ) : null}
+                </p>
+              )}
             </div>
           </section>
-          <section className="card">
-            <div className="card__title-primary">
-              <h4>{__('License')}</h4>
-            </div>
+
+          <section className="card card--section">
+            <div className="card__title">{__('Anonymous or under a channel?')}</div>
+            <p className="card__subtitle">
+              {__('This is a username or handle that your content can be found under.')}{' '}
+              {__('Ex. @Marvel, @TheBeatles, @BooksByJoe')}
+            </p>
+            <ChannelSection channel={channel} onChannelChange={this.handleChannelChange} />
+          </section>
+
+          <section className="card card--section">
+            <div className="card__title">{__('Where can people find this content?')}</div>
+            <p className="card__subtitle">
+              {__(
+                'The LBRY URL is the exact address where people find your content (ex. lbry://myvideo).'
+              )}{' '}
+              <Button button="link" label={__('Learn more')} href="https://lbry.io/faq/naming" />
+            </p>
             <div className="card__content">
-              <FormRow
-                type="select"
-                value={this.state.licenseType}
-                ref={row => {
-                  this._meta_license = row;
-                }}
-                onChange={event => {
-                  this.handleLicenseTypeChange(event);
-                }}
-              >
-                <option>{__('None')}</option>
-                <option value="publicDomain">{__('Public Domain')}</option>
-                <option
-                  value="cc-by"
-                  data-url="https://creativecommons.org/licenses/by/4.0/legalcode"
-                >
-                  {__('Creative Commons Attribution 4.0 International')}
-                </option>
-                <option
-                  value="cc-by-sa"
-                  data-url="https://creativecommons.org/licenses/by-sa/4.0/legalcode"
-                >
-                  {__('Creative Commons Attribution-ShareAlike 4.0 International')}
-                </option>
-                <option
-                  value="cc-by-nd"
-                  data-url="https://creativecommons.org/licenses/by-nd/4.0/legalcode"
-                >
-                  {__('Creative Commons Attribution-NoDerivatives 4.0 International')}
-                </option>
-                <option
-                  value="cc-by-nc"
-                  data-url="https://creativecommons.org/licenses/by-nc/4.0/legalcode"
-                >
-                  {__('Creative Commons Attribution-NonCommercial 4.0 International')}
-                </option>
-                <option
-                  value="cc-by-nc-sa"
-                  data-url="https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode"
-                >
-                  {__('Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International')}
-                </option>
-                <option
-                  value="cc-by-nc-nd"
-                  data-url="https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode"
-                >
-                  {__('Creative Commons Attribution-NonCommercial-NoDerivatives 4.0 International')}
-                </option>
-                <option value="copyright">{__('Copyrighted...')}</option>
-                <option value="other">{__('Other...')}</option>
+              <FormRow>
+                <FormField
+                  stretch
+                  prefix={`lbry://${
+                    channel === CHANNEL_ANONYMOUS || channel === CHANNEL_NEW ? '' : `${channel}/`
+                  }`}
+                  type="text"
+                  name="content_name"
+                  placeholder="myname"
+                  value={name}
+                  onChange={event => this.handleNameChange(event.target.value)}
+                  error={nameError}
+                  helper={
+                    <BidHelpText
+                      uri={uri}
+                      editingURI={editingURI}
+                      isResolvingUri={isResolvingUri}
+                      winningBidForClaimUri={winningBidForClaimUri}
+                      claimIsMine={!!myClaimForUri}
+                      onEditMyClaim={this.editExistingClaim}
+                    />
+                  }
+                />
               </FormRow>
-
-              {this.state.licenseType == 'copyright' ? (
-                <FormRow
-                  label={__('Copyright notice')}
-                  type="text"
-                  name="copyright-notice"
-                  value={this.state.copyrightNotice}
-                  onChange={event => {
-                    this.handleCopyrightNoticeChange(event);
-                  }}
-                />
-              ) : null}
-
-              {this.state.licenseType == 'other' ? (
-                <FormRow
-                  label={__('License description')}
-                  type="text"
-                  name="other-license-description"
-                  value={this.state.otherLicenseDescription}
-                  onChange={event => {
-                    this.handleOtherLicenseDescriptionChange(event);
-                  }}
-                />
-              ) : null}
-
-              {this.state.licenseType == 'other' ? (
-                <FormRow
-                  label={__('License URL')}
-                  type="text"
-                  name="other-license-url"
-                  value={this.state.otherLicenseUrl}
-                  onChange={event => {
-                    this.handleOtherLicenseUrlChange(event);
-                  }}
-                />
-              ) : null}
             </div>
-          </section>
-
-          <ChannelSection
-            {...this.props}
-            handleChannelChange={this.handleChannelChange.bind(this)}
-            channel={this.state.channel}
-          />
-
-          <section className="card">
-            <div className="card__title-primary">
-              <h4>{__('Content URL')}</h4>
-              <div className="card__subtitle">
-                {__(
-                  'This is the exact address where people find your content (ex. lbry://myvideo).'
-                )}{' '}
-                <Link label={__('Learn more')} href="https://lbry.io/faq/naming" />.
-              </div>
-            </div>
-            <div className="card__content">
-              <FormRow
-                prefix={`lbry://${
-                  this.state.channel === 'anonymous' ? '' : `${this.state.channel}/`
-                }`}
-                type="text"
-                ref="name"
-                placeholder="myname"
-                value={this.state.rawName}
-                onChange={event => {
-                  this.handleNameChange(event);
-                }}
-                helper={this.getNameBidHelpText()}
+            <div className={classnames('card__content', { 'card--disabled': !name })}>
+              <FormField
+                className="input--price-amount"
+                type="number"
+                name="content_bid"
+                step="any"
+                label={__('Deposit')}
+                postfix="LBC"
+                value={bid}
+                error={bidError}
+                min="0"
+                disabled={!name}
+                onChange={event => this.handleBidChange(parseFloat(event.target.value))}
+                helper={__('This LBC remains yours and the deposit can be undone at any time.')}
+                placeholder={winningBidForClaimUri ? winningBidForClaimUri + 0.1 : 0.1}
               />
             </div>
-            {this.state.rawName ? (
-              <div className="card__content">
-                <FormRow
-                  ref="bid"
-                  type="number"
-                  step="any"
-                  label={__('Deposit')}
-                  postfix="LBC"
-                  onChange={event => {
-                    this.handleBidChange(event);
-                  }}
-                  value={this.state.bid}
-                  placeholder={this.claim() ? this.topClaimValue() + 10 : 100}
-                  helper={lbcInputHelp}
-                  min="0"
-                />
-              </div>
-            ) : (
-              ''
-            )}
           </section>
 
-          <section className="card">
-            <div className="card__title-primary">
-              <h4>{__('Terms of Service')}</h4>
-            </div>
+          <section className="card card--section">
+            <FormRow>
+              <FormField
+                type="checkbox"
+                name="content_is_mature"
+                postfix={__('Mature audiences only')}
+                checked={nsfw}
+                onChange={event => updatePublishForm({ nsfw: event.target.checked })}
+              />
+            </FormRow>
+
+            <FormRow padded>
+              <FormField
+                label={__('Language')}
+                type="select"
+                name="content_language"
+                value={language}
+                onChange={event => updatePublishForm({ language: event.target.value })}
+              >
+                <option value="en">{__('English')}</option>
+                <option value="zh">{__('Chinese')}</option>
+                <option value="fr">{__('French')}</option>
+                <option value="de">{__('German')}</option>
+                <option value="jp">{__('Japanese')}</option>
+                <option value="ru">{__('Russian')}</option>
+                <option value="es">{__('Spanish')}</option>
+              </FormField>
+            </FormRow>
+
+            <LicenseType
+              licenseType={licenseType}
+              otherLicenseDescription={otherLicenseDescription}
+              licenseUrl={licenseUrl}
+              copyrightNotice={copyrightNotice}
+              handleLicenseChange={(newLicenseType, newLicenseUrl) =>
+                updatePublishForm({
+                  licenseType: newLicenseType,
+                  licenseUrl: newLicenseUrl,
+                })
+              }
+              handleLicenseDescriptionChange={event =>
+                updatePublishForm({
+                  otherLicenseDescription: event.target.value,
+                })
+              }
+              handleLicenseUrlChange={event =>
+                updatePublishForm({ licenseUrl: event.target.value })
+              }
+              handleCopyrightNoticeChange={event =>
+                updatePublishForm({ copyrightNotice: event.target.value })
+              }
+            />
+          </section>
+
+          <section className="card card--section">
+            <div className="card__title">{__('Terms of Service')}</div>
             <div className="card__content">
-              <FormRow
-                ref="tosAgree"
-                label={
+              <FormField
+                name="lbry_tos"
+                type="checkbox"
+                checked={tosAccepted}
+                postfix={
                   <span>
                     {__('I agree to the')}{' '}
-                    <Link
+                    <Button
+                      button="link"
                       href="https://www.lbry.io/termsofservice"
                       label={__('LBRY terms of service')}
                     />
                   </span>
                 }
-                type="checkbox"
-                checked={this.state.tosAgree}
-                onChange={event => {
-                  this.handleTOSChange(event);
-                }}
+                onChange={event => updatePublishForm({ tosAccepted: event.target.checked })}
               />
             </div>
           </section>
 
-          <div className="card-series-submit">
-            <Submit
-              label={!this.state.submitting ? __('Publish') : __('Publishing...')}
-              disabled={
-                this.props.balance <= 0 ||
-                this.state.submitting ||
-                (this.state.uri && this.props.resolvingUris.indexOf(this.state.uri) !== -1) ||
-                (this.claim() && !this.topClaimIsMine() && this.state.bid <= this.topClaimValue())
-              }
-            />
-            <Link button="cancel" onClick={this.props.back} label={__('Cancel')} />
+          <div className="card__actions">
+            <Submit label={submitLabel} disabled={formDisabled || !formValid || publishing} />
+            <Button button="alt" onClick={this.handleCancelPublish} label={__('Cancel')} />
           </div>
-        </Form>
-
-        <Modal
-          isOpen={this.state.modal == 'publishStarted'}
-          contentLabel={__('File published')}
-          onConfirmed={event => {
-            this.handlePublishStartedConfirmed(event);
-          }}
-        >
-          <p>
-            {__('Your file has been published to LBRY at the address')}{' '}
-            <code>{this.state.uri}</code>!
-          </p>
-          <p>
-            {__(
-              'The file will take a few minutes to appear for other LBRY users. Until then it will be listed as "pending" under your published files.'
-            )}
-          </p>
-        </Modal>
-        <Modal
-          isOpen={this.state.modal == 'error'}
-          contentLabel={__('Error publishing file')}
-          onConfirmed={event => {
-            this.closeModal(event);
-          }}
-        >
-          {__('The following error occurred when attempting to publish your file')}:{' '}
-          {this.state.errorMessage}
-        </Modal>
-      </main>
+          {!formDisabled && !formValid && this.renderFormErrors()}
+        </div>
+      </Form>
     );
   }
 }

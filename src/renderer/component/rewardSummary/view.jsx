@@ -1,7 +1,7 @@
 // @flow
-import React from 'react';
-import Link from 'component/link';
-import { CreditAmount } from 'component/common';
+import * as React from 'react';
+import Button from 'component/button';
+import CreditAmount from 'component/common/credit-amount';
 
 type Props = {
   unclaimedRewardAmount: number,
@@ -9,29 +9,38 @@ type Props = {
 
 const RewardSummary = (props: Props) => {
   const { unclaimedRewardAmount } = props;
+  const hasRewards = unclaimedRewardAmount > 0;
 
   return (
-    <section className="card">
-      <div className="card__title-primary">
-        <h3>{__('Rewards')}</h3>
-        <p className="help">
-          {__('Read our')} <Link href="https://lbry.io/faq/rewards">{__('FAQ')}</Link>{' '}
-          {__('to learn more about LBRY Rewards')}.
-        </p>
-      </div>
-      <div className="card__content">
-        {unclaimedRewardAmount > 0 ? (
-          <p>
-            {__('You have')} <CreditAmount amount={unclaimedRewardAmount} precision={8} />{' '}
+    <section className="card card--section">
+      <div className="card__title">{__('Rewards')}</div>
+      <p className="card__subtitle">
+        {hasRewards ? (
+          <React.Fragment>
+            {__('You have')}
+            &nbsp;
+            <CreditAmount noStyle amount={unclaimedRewardAmount} precision={8} />
+            &nbsp;
             {__('in unclaimed rewards')}.
-          </p>
+          </React.Fragment>
         ) : (
-          <p>{__('There are no rewards available at this time, please check back later')}.</p>
+          <React.Fragment>
+            {__('There are no rewards available at this time, please check back later')}.
+          </React.Fragment>
         )}
-      </div>
+      </p>
       <div className="card__actions">
-        <Link button="primary" navigate="/rewards" label={__('Claim Rewards')} />
+        <Button
+          button="primary"
+          navigate="/rewards"
+          label={hasRewards ? __('Claim Rewards') : __('View Rewards')}
+        />
       </div>
+      <p className="help help--padded">
+        {__('Read our')}{' '}
+        <Button button="link" label={__('FAQ')} href="https://lbry.io/faq/rewards" />{' '}
+        {__('to learn more about LBRY Rewards')}.
+      </p>
     </section>
   );
 };

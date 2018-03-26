@@ -2,10 +2,8 @@
 
 .tooltip {
   position: relative;
-}
-
-.tooltip__link {
-  @include text-link();
+  padding: 0 $spacing-vertical / 3;
+  font-size: 12px;
 }
 
 .tooltip__body {
@@ -17,16 +15,15 @@
   box-sizing: border-box;
   padding: $spacing-vertical / 2;
   width: var(--tooltip-width);
-  border: var(--tooltip-border);
   color: var(--tooltip-color);
   background-color: var(--tooltip-bg);
   font-size: calc(var(--font-size) * 7 / 8);
   line-height: var(--font-line-height);
   box-shadow: var(--box-shadow-layer);
+  border-radius: var(--card-radius);
 }
 
-.tooltip--header .tooltip__link {
-  @include text-link(#aaa);
+.tooltip__link {
   font-size: calc(var(--font-size) * 3 / 4);
   margin-left: var(--button-padding);
   vertical-align: middle;

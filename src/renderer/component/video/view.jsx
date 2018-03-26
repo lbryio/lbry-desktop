@@ -1,44 +1,53 @@
+// @flow
 import React from 'react';
 import lbry from 'lbry';
+import classnames from 'classnames';
 import VideoPlayer from './internal/player';
 import VideoPlayButton from './internal/play-button';
 import LoadingScreen from './internal/loading-screen';
-import NsfwOverlay from 'component/nsfwOverlay';
 
-class Video extends React.PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      showNsfwHelp: false,
-    };
-  }
+type Props = {
+  cancelPlay: () => void,
+  fileInfo: {
+    outpoint: string,
+    file_name: string,
+    written_bytes: number,
+    download_path: string,
+    completed: boolean,
+  },
+  metadata: ?{
+    nsfw: boolean,
+    thumbnail: string,
+  },
+  isLoading: boolean,
+  isDownloading: boolean,
+  playingUri: ?string,
+  contentType: string,
+  changeVolume: number => void,
+  volume: number,
+  claim: {},
+  uri: string,
+  doPlay: () => void,
+  doPause: () => void,
+  savePosition: (string, number) => void,
+  mediaPaused: boolean,
+  mediaPosition: ?number,
+  className: ?string,
+  obscureNsfw: boolean,
+  play: string => void,
+};
 
+class Video extends React.PureComponent<Props> {
   componentWillUnmount() {
     this.props.cancelPlay();
   }
 
-  isMediaSame(nextProps) {
+  isMediaSame(nextProps: Props) {
     return (
       this.props.fileInfo &&
       nextProps.fileInfo &&
       this.props.fileInfo.outpoint === nextProps.fileInfo.outpoint
     );
-  }
-
-  handleMouseOver() {
-    if (this.props.obscureNsfw && this.props.metadata && this.props.metadata.nsfw) {
-      this.setState({
-        showNsfwHelp: true,
-      });
-    }
-  }
-
-  handleMouseOut() {
-    if (this.state.showNsfwHelp) {
-      this.setState({
-        showNsfwHelp: false,
-      });
-    }
   }
 
   render() {
@@ -58,11 +67,14 @@ class Video extends React.PureComponent {
       savePosition,
       mediaPaused,
       mediaPosition,
+      className,
+      obscureNsfw,
+      play,
     } = this.props;
 
     const isPlaying = playingUri === uri;
     const isReadyToPlay = fileInfo && fileInfo.written_bytes > 0;
-    const obscureNsfw = this.props.obscureNsfw && metadata && metadata.nsfw;
+    const shouldObscureNsfw = obscureNsfw && metadata && metadata.nsfw;
     const mediaType = lbry.getMediaType(contentType, fileInfo && fileInfo.file_name);
 
     let loadStatusMessage = '';
@@ -77,51 +89,49 @@ class Video extends React.PureComponent {
       loadStatusMessage = __('Downloading stream... not long left now!');
     }
 
-    const klasses = [];
-    klasses.push(obscureNsfw ? 'video--obscured ' : '');
-    if (isLoading || isDownloading) klasses.push('video-embedded', 'video');
-    if (mediaType === 'video') {
-      klasses.push('video-embedded', 'video');
-      klasses.push(isPlaying ? 'video--active' : 'video--hidden');
-    } else if (mediaType === 'application') {
-      klasses.push('video-embedded');
-    } else if (!isPlaying) klasses.push('video-embedded');
-    const poster = metadata.thumbnail;
+    const poster = metadata && metadata.thumbnail;
 
     return (
-      <div
-        className={klasses.join(' ')}
-        onMouseEnter={this.handleMouseOver.bind(this)}
-        onMouseLeave={this.handleMouseOut.bind(this)}
-      >
-        {isPlaying &&
-          (!isReadyToPlay ? (
-            <LoadingScreen status={loadStatusMessage} />
-          ) : (
-            <VideoPlayer
-              filename={fileInfo.file_name}
-              poster={poster}
-              downloadPath={fileInfo.download_path}
-              mediaType={mediaType}
-              contentType={contentType}
-              downloadCompleted={fileInfo.completed}
-              changeVolume={changeVolume}
-              volume={volume}
-              doPlay={doPlay}
-              doPause={doPause}
-              savePosition={savePosition}
-              claim={claim}
-              uri={uri}
-              paused={mediaPaused}
-              position={mediaPosition}
-            />
-          ))}
-        {!isPlaying && (
-          <div className="video__cover" style={{ backgroundImage: `url("${metadata.thumbnail}")` }}>
-            <VideoPlayButton {...this.props} mediaType={mediaType} />
+      <div className={classnames('video', {}, className)}>
+        {isPlaying && (
+          <div className="content__view">
+            {!isReadyToPlay ? (
+              <LoadingScreen status={loadStatusMessage} />
+            ) : (
+              <VideoPlayer
+                filename={fileInfo.file_name}
+                poster={poster}
+                downloadPath={fileInfo.download_path}
+                mediaType={mediaType}
+                contentType={contentType}
+                downloadCompleted={fileInfo.completed}
+                changeVolume={changeVolume}
+                volume={volume}
+                doPlay={doPlay}
+                doPause={doPause}
+                savePosition={savePosition}
+                claim={claim}
+                uri={uri}
+                paused={mediaPaused}
+                position={mediaPosition}
+              />
+            )}
           </div>
         )}
-        {this.state.showNsfwHelp && <NsfwOverlay />}
+        {!isPlaying && (
+          <div
+            className={classnames('content__cover', { 'card__media--nsfw': shouldObscureNsfw })}
+            style={!shouldObscureNsfw && poster ? { backgroundImage: `url("${poster}")` } : {}}
+          >
+            <VideoPlayButton
+              play={play}
+              fileInfo={fileInfo}
+              uri={uri}
+              isLoading={isLoading}
+              mediaType={mediaType}
+            />
+          </div>
+        )}
       </div>
     );
   }

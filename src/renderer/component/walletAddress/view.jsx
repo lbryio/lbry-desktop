@@ -1,8 +1,17 @@
+// @flow
 import React from 'react';
-import Link from 'component/link';
+import Button from 'component/button';
 import Address from 'component/address';
+import * as icons from 'constants/icons';
 
-class WalletAddress extends React.PureComponent {
+type Props = {
+  checkAddressIsMine: string => void,
+  receiveAddress: string,
+  getNewAddress: () => void,
+  gettingNewAddress: boolean,
+};
+
+class WalletAddress extends React.PureComponent<Props> {
   componentWillMount() {
     this.props.checkAddressIsMine(this.props.receiveAddress);
   }
@@ -11,21 +20,21 @@ class WalletAddress extends React.PureComponent {
     const { receiveAddress, getNewAddress, gettingNewAddress } = this.props;
 
     return (
-      <section className="card">
-        <div className="card__title-primary">
-          <h3>{__('Receive Credits')}</h3>
-        </div>
+      <section className="card card--section">
+        <div className="card__title">{__('Receive Credits')}</div>
+        <p className="card__subtitle">
+          {__('Use this wallet address to receive credits sent by another user (or yourself).')}
+        </p>
+
         <div className="card__content">
-          <p>
-            {__('Use this wallet address to receive credits sent by another user (or yourself).')}
-          </p>
           <Address address={receiveAddress} showCopyButton />
         </div>
+
         <div className="card__actions">
-          <Link
+          <Button
+            button="alt"
             label={__('Get New Address')}
-            button="primary"
-            icon="icon-refresh"
+            icon={icons.REFRESH}
             onClick={getNewAddress}
             disabled={gettingNewAddress}
           />

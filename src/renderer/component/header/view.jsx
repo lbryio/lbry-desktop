@@ -1,100 +1,68 @@
-import React from 'react';
-import Link from 'component/link';
+// @flow
+import * as React from 'react';
+import Button from 'component/button';
 import WunderBar from 'component/wunderbar';
+import * as icons from 'constants/icons';
 
-export const Header = props => {
+type Props = {
+  balance: string,
+  navigate: any => void,
+  downloadUpgradeRequested: any => void,
+  isUpgradeAvailable: boolean,
+  autoUpdateDownloaded: boolean,
+};
+
+const Header = (props: Props) => {
   const {
     balance,
-    back,
-    forward,
-    isBackDisabled,
-    isForwardDisabled,
     isUpgradeAvailable,
-    autoUpdateDownloaded,
     navigate,
     downloadUpgradeRequested,
+    autoUpdateDownloaded,
   } = props;
+
+  const showUpgradeButton =
+    autoUpdateDownloaded || (process.platform === 'linux' && isUpgradeAvailable);
+
   return (
-    <header id="header">
-      <div className="header__item">
-        <Link
-          onClick={back}
-          disabled={isBackDisabled}
-          button="alt button--flat"
-          icon="icon-arrow-left"
-          title={__('Back')}
-        />
-      </div>
-      <div className="header__item">
-        <Link
-          onClick={forward}
-          disabled={isForwardDisabled}
-          button="alt button--flat"
-          icon="icon-arrow-right"
-          title={__('Forward')}
-        />
-      </div>
-      <div className="header__item">
-        <Link
-          onClick={() => navigate('/discover')}
-          button="alt button--flat"
-          icon="icon-home"
-          title={__('Discover Content')}
-        />
-      </div>
-      <div className="header__item">
-        <Link
-          onClick={() => navigate('/subscriptions')}
-          button="alt button--flat"
-          icon="icon-at"
-          title={__('My Subscriptions')}
-        />
-      </div>
-      <div className="header__item header__item--wunderbar">
-        <WunderBar />
-      </div>
-      <div className="header__item">
-        <Link
+    <header className="header">
+      <WunderBar />
+      <div className="header__actions-right">
+        <Button
+          button="inverse"
+          className="btn--header-balance"
           onClick={() => navigate('/wallet')}
-          button="text"
-          className="no-underline"
-          icon="icon-bank"
-          label={balance}
-          title={__('Wallet')}
+          label={
+            isUpgradeAvailable ? (
+              `${balance}`
+            ) : (
+              <React.Fragment>
+                <span className="btn__label--balance">You have</span> <span>{balance} LBC</span>
+              </React.Fragment>
+            )
+          }
+          iconRight="LBC"
+          description={__('Your wallet')}
         />
-      </div>
-      <div className="header__item">
-        <Link
+
+        <Button
+          uppercase
+          button="primary"
           onClick={() => navigate('/publish')}
-          button="primary button--flat"
-          icon="icon-upload"
-          label={__('Publish')}
+          icon={icons.UPLOAD}
+          label={isUpgradeAvailable ? '' : __('Publish')}
+          description={__('Publish content')}
         />
+
+        {showUpgradeButton && (
+          <Button
+            button="primary"
+            onClick={downloadUpgradeRequested}
+            icon={icons.DOWNLOAD}
+            label={__('Upgrade App')}
+          />
+        )}
       </div>
-      <div className="header__item">
-        <Link
-          onClick={() => navigate('/downloaded')}
-          button="alt button--flat"
-          icon="icon-folder"
-          title={__('Downloads and Publishes')}
-        />
-      </div>
-      <div className="header__item">
-        <Link
-          onClick={() => navigate('/settings')}
-          button="alt button--flat"
-          icon="icon-gear"
-          title={__('Settings')}
-        />
-      </div>
-      {(autoUpdateDownloaded || (process.platform === 'linux' && isUpgradeAvailable)) && (
-        <Link
-          onClick={() => downloadUpgradeRequested()}
-          button="primary button--flat"
-          icon="icon-arrow-up"
-          label={__('Upgrade App')}
-        />
-      )}
     </header>
   );
 };

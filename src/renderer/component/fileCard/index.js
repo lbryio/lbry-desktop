@@ -6,16 +6,31 @@ import { selectShowNsfw } from 'redux/selectors/settings';
 import { makeSelectClaimForUri, makeSelectMetadataForUri } from 'redux/selectors/claims';
 import { makeSelectFileInfoForUri } from 'redux/selectors/file_info';
 import { makeSelectIsUriResolving, selectRewardContentClaimIds } from 'redux/selectors/content';
+import { selectPendingPublish } from 'redux/selectors/publish';
 import FileCard from './view';
 
-const select = (state, props) => ({
-  claim: makeSelectClaimForUri(props.uri)(state),
-  fileInfo: makeSelectFileInfoForUri(props.uri)(state),
-  obscureNsfw: !selectShowNsfw(state),
-  metadata: makeSelectMetadataForUri(props.uri)(state),
-  rewardedContentClaimIds: selectRewardContentClaimIds(state, props),
-  isResolvingUri: makeSelectIsUriResolving(props.uri)(state),
-});
+const select = (state, props) => {
+  let claim;
+  let fileInfo;
+  let metadata;
+  let isResolvingUri;
+
+  const pendingPublish = selectPendingPublish(props.uri)(state);
+
+  const fileCardInfo = pendingPublish || {
+    claim: makeSelectClaimForUri(props.uri)(state),
+    fileInfo: makeSelectFileInfoForUri(props.uri)(state),
+    metadata: makeSelectMetadataForUri(props.uri)(state),
+    isResolvingUri: makeSelectIsUriResolving(props.uri)(state),
+  };
+
+  return {
+    obscureNsfw: !selectShowNsfw(state),
+    rewardedContentClaimIds: selectRewardContentClaimIds(state, props),
+    ...fileCardInfo,
+    pending: !!pendingPublish,
+  };
+};
 
 const perform = dispatch => ({
   navigate: (path, params) => dispatch(doNavigate(path, params)),

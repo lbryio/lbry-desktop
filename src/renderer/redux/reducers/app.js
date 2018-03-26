@@ -138,9 +138,8 @@ reducers[ACTIONS.SET_PLAYING_URI] = (state, action) => {
     return Object.assign({}, state, {
       modalsAllowed: true,
     });
-  } else {
-    return state;
   }
+  return state;
 };
 
 reducers[ACTIONS.UPDATE_VERSION] = (state, action) =>
@@ -162,12 +161,11 @@ reducers[ACTIONS.CHECK_UPGRADE_SUBSCRIBE] = (state, action) =>
 reducers[ACTIONS.OPEN_MODAL] = (state, action) => {
   if (!state.modalsAllowed) {
     return state;
-  } else {
-    return Object.assign({}, state, {
-      modal: action.data.modal,
-      modalProps: action.data.modalProps || {},
-    });
   }
+  return Object.assign({}, state, {
+    modal: action.data.modal,
+    modalProps: action.data.modalProps || {},
+  });
 };
 reducers[ACTIONS.CLOSE_MODAL] = state =>
   Object.assign({}, state, {
@@ -232,6 +230,12 @@ reducers[ACTIONS.WINDOW_FOCUSED] = state =>
 reducers[ACTIONS.VOLUME_CHANGED] = (state, action) =>
   Object.assign({}, state, {
     volume: action.data.volume,
+  });
+
+reducers[ACTIONS.HISTORY_NAVIGATE] = state =>
+  Object.assign({}, state, {
+    modal: undefined,
+    modalProps: {},
   });
 
 export default function reducer(state: AppState = defaultState, action: any) {

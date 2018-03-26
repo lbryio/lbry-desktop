@@ -1,7 +1,7 @@
 import React from 'react';
 import { Modal } from 'modal/modal';
 import { Line } from 'rc-progress';
-import Link from 'component/link/index';
+import Button from 'component/button';
 
 const { ipcRenderer } = require('electron');
 
@@ -11,7 +11,7 @@ class ModalAutoUpdateDownloaded extends React.PureComponent {
 
     return (
       <Modal
-        isOpen={true}
+        isOpen
         type="confirm"
         contentLabel={__('Update Downloaded')}
         confirmButtonLabel={__('Use it Now')}

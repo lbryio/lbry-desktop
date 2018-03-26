@@ -1,55 +1,93 @@
+// @flow
 import React from 'react';
-import { Form, FormRow, Submit } from 'component/form';
-import { regexAddress } from 'lbryURI';
+import Button from 'component/button';
+import { Form, FormRow, FormField } from 'component/common/form';
+import { Formik } from 'formik';
+import { validateSendTx } from 'util/form-validation';
 
-class WalletSend extends React.PureComponent {
-  handleSubmit() {
-    const { amount, address, sendToAddress } = this.props;
-    const validSubmit = parseFloat(amount) > 0.0 && address;
+type DraftTransaction = {
+  address: string,
+  amount: number | string, // So we can use a placeholder in the input
+};
 
-    if (validSubmit) {
-      sendToAddress();
-    }
+type Props = {
+  sendToAddress: DraftTransaction => void,
+  balance: number,
+};
+
+class WalletSend extends React.PureComponent<Props> {
+  constructor() {
+    super();
+
+    (this: any).handleSubmit = this.handleSubmit.bind(this);
+  }
+
+  handleSubmit(values: DraftTransaction) {
+    const { sendToAddress } = this.props;
+    sendToAddress(values);
   }
 
   render() {
-    const { closeModal, modal, setAmount, setAddress, amount, address, error } = this.props;
+    const { balance } = this.props;
 
     return (
-      <section className="card">
-        <Form onSubmit={this.handleSubmit.bind(this)}>
-          <div className="card__title-primary">
-            <h3>{__('Send Credits')}</h3>
-          </div>
-          <div className="card__content">
-            <FormRow
-              label={__('Amount')}
-              postfix={__('LBC')}
-              step="any"
-              min="0"
-              type="number"
-              placeholder="1.23"
-              size="10"
-              onChange={setAmount}
-              value={amount}
-            />
-          </div>
-          <div className="card__content">
-            <FormRow
-              label={__('Recipient Address')}
-              placeholder="bbFxRyXXXXXXXXXXXZD8nE7XTLUxYnddTs"
-              type="text"
-              size="60"
-              onChange={setAddress}
-              value={address}
-              regexp={regexAddress}
-              trim
-            />
-            <div className="form-row-submit">
-              <Submit label={__('Send')} disabled={!(parseFloat(amount) > 0.0) || !address} />
-            </div>
-          </div>
-        </Form>
+      <section className="card card--section">
+        <div className="card__title">{__('Send Credits')}</div>
+        <div className="card__content">
+          <Formik
+            initialValues={{
+              address: '',
+              amount: '',
+            }}
+            onSubmit={this.handleSubmit}
+            validate={validateSendTx}
+            render={({ values, errors, touched, handleChange, handleBlur, handleSubmit }) => (
+              <Form onSubmit={handleSubmit}>
+                <FormRow>
+                  <FormField
+                    type="number"
+                    name="amount"
+                    label={__('Amount')}
+                    postfix={__('LBC')}
+                    className="input--price-amount"
+                    min="0"
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.amount}
+                    error={
+                      (!!values.amount && touched.amount && errors.amount) ||
+                      (values.amount > balance && __('Not enough'))
+                    }
+                  />
+
+                  <FormField
+                    type="text"
+                    name="address"
+                    placeholder="bbFxRyXXXXXXXXXXXZD8nE7XTLUxYnddTs"
+                    className="input--address"
+                    label={__('Recipient address')}
+                    error={!!values.address && touched.address && errors.address}
+                    onChange={handleChange}
+                    onBlur={handleBlur}
+                    value={values.address}
+                  />
+                </FormRow>
+                <div className="card__actions">
+                  <Button
+                    button="primary"
+                    type="submit"
+                    label={__('Send')}
+                    disabled={
+                      !values.address ||
+                      !!Object.keys(errors).length ||
+                      !(parseFloat(values.amount) > 0.0)
+                    }
+                  />
+                </div>
+              </Form>
+            )}
+          />
+        </div>
       </section>
     );
   }

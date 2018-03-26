@@ -1,46 +1,51 @@
+// @flow
 import React from 'react';
+import classnames from 'classnames';
 
-class CardMedia extends React.PureComponent {
-  static AUTO_THUMB_CLASSES = [
-    'purple',
-    'red',
-    'pink',
-    'indigo',
-    'blue',
-    'light-blue',
-    'cyan',
-    'teal',
-    'green',
-    'yellow',
-    'orange',
-  ];
+type Props = {
+  thumbnail: ?string, // externally sourced image
+  nsfw: ?boolean,
+};
 
-  componentWillMount() {
-    this.setState({
-      autoThumbClass:
-        CardMedia.AUTO_THUMB_CLASSES[
-          Math.floor(Math.random() * CardMedia.AUTO_THUMB_CLASSES.length)
-        ],
-    });
-  }
+const autoThumbColors = [
+  'purple',
+  'red',
+  'pink',
+  'indigo',
+  'blue',
+  'light-blue',
+  'cyan',
+  'teal',
+  'green',
+  'yellow',
+  'orange',
+];
+
+class CardMedia extends React.PureComponent<Props> {
+  getAutoThumbClass = () => {
+    return autoThumbColors[Math.floor(Math.random() * autoThumbColors.length)];
+  };
 
   render() {
-    const { title, thumbnail } = this.props;
-    const atClass = this.state.autoThumbClass;
+    const { thumbnail, nsfw } = this.props;
 
-    if (thumbnail) {
-      return <div className="card__media" style={{ backgroundImage: `url('${thumbnail}')` }} />;
+    const generateAutothumb = !thumbnail && !nsfw;
+    let autoThumbClass;
+    if (generateAutothumb) {
+      autoThumbClass = `card__media--autothumb.${this.getAutoThumbClass()}`;
     }
 
     return (
-      <div className={`card__media card__media--autothumb ${atClass}`}>
-        <div className="card__autothumb__text">
-          {title &&
-            title
-              .replace(/\s+/g, '')
-              .substring(0, Math.min(title.replace(' ', '').length, 5))
-              .toUpperCase()}
-        </div>
+      <div
+        style={thumbnail && !nsfw ? { backgroundImage: `url('${thumbnail}')` } : {}}
+        className={classnames('card__media', autoThumbClass, {
+          'card__media--no-img': !thumbnail || nsfw,
+          'card__media--nsfw': nsfw,
+        })}
+      >
+        {(!thumbnail || nsfw) && (
+          <span className="card__media-text">{nsfw ? __('NSFW') : 'LBRY'}</span>
+        )}
       </div>
     );
   }

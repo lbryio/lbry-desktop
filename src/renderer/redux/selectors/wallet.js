@@ -96,26 +96,6 @@ export const selectGettingNewAddress = createSelector(
   state => state.gettingNewAddress
 );
 
-export const selectDraftTransaction = createSelector(
-  selectState,
-  state => state.draftTransaction || {}
-);
-
-export const selectDraftTransactionAmount = createSelector(
-  selectDraftTransaction,
-  draft => draft.amount
-);
-
-export const selectDraftTransactionAddress = createSelector(
-  selectDraftTransaction,
-  draft => draft.address
-);
-
-export const selectDraftTransactionError = createSelector(
-  selectDraftTransaction,
-  draft => draft.error
-);
-
 export const selectBlocks = createSelector(selectState, state => state.blocks);
 
 export const makeSelectBlockDate = block =>

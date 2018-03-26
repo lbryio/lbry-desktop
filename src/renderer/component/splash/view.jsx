@@ -1,19 +1,25 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import lbry from 'lbry.js';
-import LoadScreen from '../load_screen.js';
+import * as React from 'react';
+import lbry from 'lbry';
+import LoadScreen from './internal/load-screen';
 import ModalIncompatibleDaemon from 'modal/modalIncompatibleDaemon';
 import ModalUpgrade from 'modal/modalUpgrade';
 import ModalDownloading from 'modal/modalDownloading';
 import * as modals from 'constants/modal_types';
 
-export class SplashScreen extends React.PureComponent {
-  static propTypes = {
-    message: PropTypes.string,
-    onLoadDone: PropTypes.func,
-  };
+type Props = {
+  checkDaemonVersion: () => Promise<any>,
+  modal: string,
+};
 
-  constructor(props) {
+type State = {
+  details: string,
+  message: string,
+  isRunning: boolean,
+  isLagging: boolean,
+};
+
+export class SplashScreen extends React.PureComponent<Props, State> {
+  constructor(props: Props) {
     super(props);
 
     this.state = {
@@ -75,9 +81,11 @@ export class SplashScreen extends React.PureComponent {
   }
 
   componentDidMount() {
+    const { checkDaemonVersion } = this.props;
+
     lbry
       .connect()
-      .then(this.props.checkDaemonVersion)
+      .then(checkDaemonVersion)
       .then(() => {
         this.updateStatus();
       })
@@ -97,15 +105,19 @@ export class SplashScreen extends React.PureComponent {
     const { message, details, isLagging, isRunning } = this.state;
 
     return (
-      <div>
+      <React.Fragment>
         <LoadScreen message={message} details={details} isWarning={isLagging} />
         {/* Temp hack: don't show any modals on splash screen daemon is running;
             daemon doesn't let you quit during startup, so the "Quit" buttons
             in the modals won't work. */}
-        {modal == 'incompatibleDaemon' && isRunning && <ModalIncompatibleDaemon />}
-        {modal == modals.UPGRADE && isRunning && <ModalUpgrade />}
-        {modal == modals.DOWNLOADING && isRunning && <ModalDownloading />}
-      </div>
+        {isRunning && (
+          <React.Fragment>
+            {modal === modals.INCOMPATIBLE_DAEMON && <ModalIncompatibleDaemon />}
+            {modal === modals.UPGRADE && <ModalUpgrade />}
+            {modal === modals.DOWNLOADING && <ModalDownloading />}
+          </React.Fragment>
+        )}
+      </React.Fragment>
     );
   }
 }

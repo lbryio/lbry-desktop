@@ -1,0 +1,98 @@
+.nav {
+  grid-area: nav;
+  background-color: var(--color-nav-bg);
+  padding: $spacing-width;
+
+  hr {
+    width: 24px;
+    margin: 36px 0;
+    // width: 40px;
+    border: solid 1px var(--color-grey);
+    margin: $spacing-vertical $spacing-vertical * 2/3;
+  }
+}
+
+.nav__actions-top {
+  display: flex;
+  justify-content: space-between;
+}
+
+.nav__actions-history {
+  display: flex;
+}
+
+// Sidebar links
+.nav__primary {
+  padding-top: 80px;
+}
+
+.nav__link {
+  // padding-top: $spacing-vertical / 3;
+  color: var(--color-grey-dark);
+  white-space: nowrap;
+
+  .btn__label {
+    margin-left: $spacing-vertical * 1/3;
+  }
+
+  .btn {
+    font: normal 400 16px/36px 'metropolis-semibold';
+
+    @media only screen and (min-width: $medium-breakpoint) {
+      font: normal 400 18px/40px 'metropolis-semibold';
+    }
+
+    @media only screen and (min-width: $large-breakpoint) {
+      font: normal 400 21px/50px 'metropolis-semibold';
+    }
+  }
+
+  .btn:hover {
+    color: var(--color-black);
+  }
+}
+
+.nav__link--sub {
+  margin-left: 5px;
+  padding-left: $spacing-vertical * 2/3;
+
+  .btn {
+    font: normal 400 14px/30px 'metropolis-medium';
+
+    @media only screen and (min-width: $medium-breakpoint) {
+      font: normal 400 15px/30px 'metropolis-semibold';
+    }
+
+    @media only screen and (min-width: $large-breakpoint) {
+      font: normal 400 18px/40px 'metropolis-medium';
+    }
+  }
+}
+
+.nav__link--active {
+  color: var(--color-black);
+}
+
+.nav__sub-links {
+  padding-bottom: $spacing-vertical * 1/3;
+}
+
+// Sub links animations
+// The -appear, -leave classes are added by 'react-transition-group'
+.nav__sub-appear,
+.nav__sub-leave {
+  max-height: 0;
+  opacity: 0;
+}
+
+.nav__sub-appear.nav__sub-appear-active {
+  // using max-height is a hack to animate to height "auto"
+  // Needs to be some arbitrarily large height
+  max-height: 500px;
+  opacity: 1;
+  transition: all var(--animation-duration) var(--animation-style);
+}
+
+.nav__sub {
+  padding-top: 5px;
+}

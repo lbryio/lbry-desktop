@@ -1,6 +1,6 @@
 .load-screen {
   color: white;
-  background: var(--color-brand);
+  background: var(--color-primary);
   background-size: cover;
   min-height: 100vh;
   min-width: 100vw;
@@ -10,20 +10,24 @@
   justify-content: center;
 }
 
+.load-screen__title {
+  font-family: 'metropolis-bold';
+  font-size: 60px;
+  line-height: 100px;
+}
+
 .load-screen__message {
-  margin-top: 24px;
-  width: 325px;
+  font-family: 'metropolis-semibold';
+  font-size: 16px;
+  line-height: 20px;
+  margin-top: $spacing-vertical * 2/3;
   text-align: center;
 }
 
 .load-screen__details {
-  color: var(--color-load-screen-text);
-}
-
-.load-screen__details--warning {
-  color: white;
-}
-
-.load-screen__cancel-link {
-  color: white;
+  font-family: 12px 'metropolis-medium';
+  font-size: 12px;
+  line-height: 1;
+  padding-top: $spacing-vertical * 2/3;
+  max-width: 400px;
 }

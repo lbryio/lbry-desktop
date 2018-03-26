@@ -27,6 +27,7 @@ const defaultState = {
   },
   isNight: false,
   languages: {},
+  daemonSettings: {},
 };
 
 reducers[ACTIONS.DAEMON_SETTINGS_RECEIVED] = (state, action) =>

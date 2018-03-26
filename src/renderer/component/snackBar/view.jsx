@@ -1,5 +1,5 @@
 import React from 'react';
-import Link from 'component/link';
+import Button from 'component/button';
 
 class SnackBar extends React.PureComponent {
   constructor(props) {
@@ -32,7 +32,7 @@ class SnackBar extends React.PureComponent {
         {message}
         {linkText &&
           linkTarget && (
-            <Link navigate={linkTarget} className="snack-bar__action" label={linkText} />
+            <Button navigate={linkTarget} className="snack-bar__action" label={linkText} />
           )}
       </div>
     );

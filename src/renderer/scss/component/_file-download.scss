@@ -1,17 +1,19 @@
 .file-download,
 .file-download__overlay {
-  .button__content {
-    margin: 0 var(--text-link-padding);
-  }
+  padding: 5px;
 }
 
 .file-download {
   position: relative;
   color: var(--color-download);
+  font-size: 12px;
+  font-family: 'metropolis-medium';
 }
+
 .file-download__overlay {
   background: var(--color-download);
-  color: var(--color-bg);
+  color: var(--color-download-overlay);
+  border-radius: var(--btn-radius);
   position: absolute;
   white-space: nowrap;
   overflow: hidden;

@@ -4,6 +4,7 @@ import {
   selectMyClaims,
 } from 'redux/selectors/claims';
 import { createSelector } from 'reselect';
+import { buildURI } from 'lbryURI';
 
 export const selectState = state => state.fileInfo || {};
 
@@ -27,7 +28,6 @@ export const makeSelectFileInfoForUri = uri =>
   createSelector(selectClaimsByUri, selectFileInfosByOutpoint, (claims, byOutpoint) => {
     const claim = claims[uri];
     const outpoint = claim ? `${claim.txid}:${claim.nout}` : undefined;
-
     return outpoint ? byOutpoint[outpoint] : undefined;
   });
 
@@ -104,3 +104,92 @@ export const selectTotalDownloadProgress = createSelector(selectDownloadingFileI
   if (fileInfos.length > 0) return totalProgress / fileInfos.length / 100.0;
   return -1;
 });
+
+export const selectSearchDownloadUris = query =>
+  createSelector(selectFileInfosDownloaded, fileInfos => {
+    if (!query || !fileInfos.length) {
+      return null;
+    }
+
+    const queryParts = query.toLowerCase().split(' ');
+    const searchQueryDictionary = {};
+    queryParts.forEach(subQuery => {
+      searchQueryDictionary[subQuery] = subQuery;
+    });
+
+    const arrayContainsQueryPart = array => {
+      for (let i = 0; i < array.length; i += 1) {
+        const subQuery = array[i];
+        if (searchQueryDictionary[subQuery]) {
+          return true;
+        }
+      }
+      return false;
+    };
+
+    const downloadResultsFromQuery = [];
+    fileInfos.forEach(fileInfo => {
+      const { channel_name, claim_name, metadata } = fileInfo;
+      const { author, description, title } = metadata;
+
+      if (channel_name) {
+        const channelName = channel_name.toLowerCase();
+        const strippedOutChannelName = channelName.slice(1); // trim off the @
+        if (searchQueryDictionary[channel_name] || searchQueryDictionary[strippedOutChannelName]) {
+          downloadResultsFromQuery.push(fileInfo);
+          return;
+        }
+      }
+
+      const nameParts = claim_name.toLowerCase().split('-');
+      if (arrayContainsQueryPart(nameParts)) {
+        downloadResultsFromQuery.push(fileInfo);
+        return;
+      }
+
+      const titleParts = title.toLowerCase().split(' ');
+      if (arrayContainsQueryPart(titleParts)) {
+        downloadResultsFromQuery.push(fileInfo);
+        return;
+      }
+
+      if (author) {
+        const authorParts = author.toLowerCase().split(' ');
+        if (arrayContainsQueryPart(authorParts)) {
+          downloadResultsFromQuery.push(fileInfo);
+          return;
+        }
+      }
+
+      if (description) {
+        const descriptionParts = description.toLowerCase().split(' ');
+        if (arrayContainsQueryPart(descriptionParts)) {
+          downloadResultsFromQuery.push(fileInfo);
+        }
+      }
+    });
+
+    return downloadResultsFromQuery.length
+      ? downloadResultsFromQuery.map(fileInfo => {
+          const {
+            channel_name: channelName,
+            claim_id: claimId,
+            claim_name: claimName,
+            value,
+            metadata,
+          } = fileInfo;
+          const uriParams = {};
+
+          if (channelName) {
+            uriParams.channelName = channelName;
+          }
+
+          uriParams.claimId = claimId;
+          uriParams.claimId = claimId;
+          uriParams.contentName = claimName;
+
+          const uri = buildURI(uriParams);
+          return uri;
+        })
+      : null;
+  });
