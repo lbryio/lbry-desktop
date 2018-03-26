@@ -4,6 +4,8 @@ import { selectAllClaimsByChannel, selectClaimsById } from './claims';
 // get the entire subscriptions state
 const selectState = state => state.subscriptions || {};
 
+export const selectNotifications = createSelector(selectState, state => state.notifications);
+
 // list of saved channel names and uris
 export const selectSubscriptions = createSelector(selectState, state => state.subscriptions);
 
@@ -23,7 +25,7 @@ export const selectSubscriptionsFromClaims = createSelector(
       let channelClaims = [];
 
       // if subscribed channel has content
-      if (channelIds[subscription.uri]) {
+      if (channelIds[subscription.uri] && channelIds[subscription.uri]['1']) {
         // This will need to be more robust, we will want to be able to load more than the first page
         const pageOneChannelIds = channelIds[subscription.uri]['1'];
 

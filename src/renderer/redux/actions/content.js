@@ -1,13 +1,20 @@
 import * as ACTIONS from 'constants/action_types';
 import * as MODALS from 'constants/modal_types';
 import * as SETTINGS from 'constants/settings';
+import * as NOTIFICATION_TYPES from 'constants/notification_types';
 import { ipcRenderer } from 'electron';
 import Lbry from 'lbry';
 import Lbryio from 'lbryio';
 import { normalizeURI, buildURI } from 'lbryURI';
 import { doAlertError, doOpenModal } from 'redux/actions/app';
 import { doClaimEligiblePurchaseRewards } from 'redux/actions/rewards';
-import { setSubscriptionLatest } from 'redux/actions/subscriptions';
+import { doNavigate } from 'redux/actions/navigation';
+import {
+  setSubscriptionLatest,
+  setSubscriptionNotification,
+  setSubscriptionNotifications,
+} from 'redux/actions/subscriptions';
+import { selectNotifications } from 'redux/selectors/subscriptions';
 import { selectBadgeNumber } from 'redux/selectors/app';
 import { selectMyClaimsRaw } from 'redux/selectors/claims';
 import { selectResolvingUris } from 'redux/selectors/content';
@@ -164,13 +171,45 @@ export function doUpdateLoadStatus(uri, outpoint) {
         const totalProgress = selectTotalDownloadProgress(getState());
         setProgressBar(totalProgress);
 
-        const notif = new window.Notification('LBRY Download Complete', {
-          body: fileInfo.metadata.title,
-          silent: false,
-        });
-        notif.onclick = () => {
-          ipcRenderer.send('focusWindow', 'main');
-        };
+        const notifications = selectNotifications(getState());
+        if (notifications[uri] && notifications[uri].type === NOTIFICATION_TYPES.DOWNLOADING) {
+          const count = Object.keys(notifications).reduce(
+            (acc, cur) =>
+              notifications[cur].subscription.channelName ===
+              notifications[uri].subscription.channelName
+                ? acc + 1
+                : acc,
+            0
+          );
+          const notif = new window.Notification(notifications[uri].subscription.channelName, {
+            body: `Posted ${fileInfo.metadata.title}${
+              count > 1 && count < 10 ? ` and ${count - 1} other new items` : ''
+            }${count > 9 ? ' and 9+ other new items' : ''}`,
+            silent: false,
+          });
+          notif.onclick = () => {
+            dispatch(
+              doNavigate('/show', {
+                uri,
+              })
+            );
+          };
+          dispatch(
+            setSubscriptionNotification(
+              notifications[uri].subscription,
+              uri,
+              NOTIFICATION_TYPES.DOWNLOADED
+            )
+          );
+        } else {
+          const notif = new window.Notification('LBRY Download Complete', {
+            body: fileInfo.metadata.title,
+            silent: false,
+          });
+          notif.onclick = () => {
+            ipcRenderer.send('focusWindow', 'main');
+          };
+        }
       } else {
         // ready to play
         const { total_bytes: totalBytes, written_bytes: writtenBytes } = fileInfo;
@@ -344,7 +383,7 @@ export function doPurchaseUri(uri, specificCostInfo) {
 }
 
 export function doFetchClaimsByChannel(uri, page) {
-  return dispatch => {
+  return (dispatch, getState) => {
     dispatch({
       type: ACTIONS.FETCH_CHANNEL_CLAIMS_STARTED,
       data: { uri, page },
@@ -371,6 +410,17 @@ export function doFetchClaimsByChannel(uri, page) {
             buildURI({ contentName: latest.name, claimId: latest.claim_id }, false)
           )
         );
+        const notifications = selectNotifications(getState());
+        const newNotifications = {};
+        Object.keys(notifications).forEach(cur => {
+          if (
+            notifications[cur].subscription.channelName !== latest.channel_name ||
+            notifications[cur].type === NOTIFICATION_TYPES.DOWNLOADING
+          ) {
+            newNotifications[cur] = { ...notifications[cur] };
+          }
+        });
+        dispatch(setSubscriptionNotifications(newNotifications));
       }
 
       dispatch({
