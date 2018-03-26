@@ -33,7 +33,6 @@
       "printWidth": 100,
       "singleQuote": true
     }],
-    "func-names": ["warn", "as-needed"],
-    "arrow-body-style": "off"
+    "func-names": ["warn", "as-needed"]
   }
 }

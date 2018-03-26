@@ -3953,7 +3953,7 @@ fresh@0.5.2:
   version "0.5.2"
   resolved "https://registry.yarnpkg.com/fresh/-/fresh-0.5.2.tgz#3d8cadd90d976569fa835ab1f8e4b23a105605a7"
 
-from2@^2.1.0, from2@^2.3.0:
+from2@^2.1.0:
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/from2/-/from2-2.3.0.tgz#8bfb5502bde4a4d36cfdeea007fcca21d7e382af"
   dependencies:
@@ -4699,10 +4699,6 @@ inquirer@^3.0.6:
     strip-ansi "^4.0.0"
     through "^2.3.6"
 
-install@^0.10.2:
-  version "0.10.4"
-  resolved "https://registry.yarnpkg.com/install/-/install-0.10.4.tgz#9cb09115768b93a582d1450a6ba3f275975b49aa"
-
 internal-ip@1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/internal-ip/-/internal-ip-1.2.0.tgz#ae9fbf93b984878785d50a8de1b356956058cf5c"
@@ -5316,10 +5312,6 @@ jsesc@~0.5.0:
   version "0.5.0"
   resolved "https://registry.yarnpkg.com/jsesc/-/jsesc-0.5.0.tgz#e7dee66e35d6fc16f710fe91d5cf69f70f08911d"
 
-jshashes@^1.0.7:
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/jshashes/-/jshashes-1.0.7.tgz#bed8c97a0e9632fd0513916f55f76dd5486be59f"
-
 json-loader@^0.5.4:
   version "0.5.7"
   resolved "https://registry.yarnpkg.com/json-loader/-/json-loader-0.5.7.tgz#dca14a70235ff82f0ac9a3abeb60d337a365185d"
@@ -5403,12 +5395,12 @@ jsx-ast-utils@^2.0.0, jsx-ast-utils@^2.0.1:
   dependencies:
     array-includes "^3.0.3"
 
-keytar-prebuild@4.1.1:
-  version "4.1.1"
-  resolved "https://registry.yarnpkg.com/keytar-prebuild/-/keytar-prebuild-4.1.1.tgz#f31cd3b2e5de743303f8c2f607f29f0117981295"
+keytar-prebuild@4.0.4:
+  version "4.0.4"
+  resolved "https://registry.yarnpkg.com/keytar-prebuild/-/keytar-prebuild-4.0.4.tgz#eb6354c68f2b3609dc325ef8709844632652d602"
   dependencies:
-    nan "2.8.0"
-    prebuild-install "^2.5.0"
+    nan "2.7.0"
+    prebuild-install "^2.2.2"
 
 killable@^1.0.0:
   version "1.0.0"
@@ -6087,9 +6079,9 @@ mute-stream@0.0.7:
   version "0.0.7"
   resolved "https://registry.yarnpkg.com/mute-stream/-/mute-stream-0.0.7.tgz#3075ce93bc21b8fab43e1bc4da7e8115ed1e7bab"
 
-nan@2.8.0:
-  version "2.8.0"
-  resolved "https://registry.yarnpkg.com/nan/-/nan-2.8.0.tgz#ed715f3fe9de02b57a5e6252d90a96675e1f085a"
+nan@2.7.0:
+  version "2.7.0"
+  resolved "https://registry.yarnpkg.com/nan/-/nan-2.7.0.tgz#d95bf721ec877e08db276ed3fc6eb78f9083ad46"
 
 nan@^2.3.0, nan@^2.3.2:
   version "2.10.0"
@@ -7024,7 +7016,7 @@ postcss@^6.0.1:
     source-map "^0.6.1"
     supports-color "^5.3.0"
 
-prebuild-install@^2.5.0:
+prebuild-install@^2.2.2:
   version "2.5.1"
   resolved "https://registry.yarnpkg.com/prebuild-install/-/prebuild-install-2.5.1.tgz#0f234140a73760813657c413cdccdda58296b1da"
   dependencies:
