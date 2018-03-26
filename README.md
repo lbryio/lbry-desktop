@@ -1,5 +1,6 @@
 # LBRY App
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/d2864a0d659546948d0741404fb03623)](https://app.codacy.com/app/LBRY/lbry-app?utm_source=github.com&utm_medium=referral&utm_content=lbryio/lbry-app&utm_campaign=badger)
 [![Build Status](https://travis-ci.org/lbryio/lbry-app.svg?branch=master)](https://travis-ci.org/lbryio/lbry-app)
 [![dependencies](https://david-dm.org/lbryio/lbry-app/status.svg)](https://david-dm.org/lbryio/lbry-app)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/78b627d4f5524792adc48719835e1523)](https://www.codacy.com/app/LBRY/lbry-app?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=lbryio/lbry-app&amp;utm_campaign=Badge_Grade)
