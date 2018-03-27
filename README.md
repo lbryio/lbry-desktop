@@ -37,12 +37,12 @@ development and testing purposes.
 * [Node.js](https://nodejs.org/en/download/)
 * [Yarn](https://yarnpkg.com/en/docs/install)
 
-### One-time Setup
+### Setup
 
 1. Clone this repository
 2. Run `$ yarn`
 
-### Running
+### Run
 
 The app can be run from the sources using the following command:
 
@@ -50,7 +50,7 @@ The app can be run from the sources using the following command:
 
 ### Build
 
-Run `$ yarn build`.
+Run `$ yarn build`
 
 We use [electron-builder](https://github.com/electron-userland/electron-builder) to create
 distributable packages.

@@ -27,6 +27,7 @@
     "dev": "electron-webpack dev",
     "lint": "eslint 'src/**/*.{js,jsx}' --fix && flow",
     "format": "prettier 'src/**/*.{js,jsx,scss,json}' --write",
+    "flow-defs": "flow-typed install",
     "release": "yarn compile && electron-builder build",
     "precommit": "lint-staged",
     "postmerge": "yarnhook",
