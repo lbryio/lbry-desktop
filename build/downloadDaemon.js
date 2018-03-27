@@ -23,7 +23,7 @@ const downloadDaemon = targetPlatform =>
     const daemonURL = daemonURLTemplate
       .replace(/DAEMONVER/g, daemonVersion)
       .replace(/OSNAME/g, daemonPlatform);
-    const tmpZipPath = 'build/daemon.zip';
+    const tmpZipPath = 'dist/daemon.zip';
 
     console.log('\x1b[34minfo\x1b[0m Downloading daemon...');
     axios
