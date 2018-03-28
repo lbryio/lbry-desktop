@@ -1,5 +1,10 @@
 import { connect } from 'react-redux';
-import { doSearch, selectIsSearching, makeSelectSearchUris } from 'lbry-redux';
+import {
+  doSearch,
+  selectIsSearching,
+  makeSelectSearchUris,
+  selectSearchDownloadUris,
+} from 'lbry-redux';
 import { doNavigate } from 'redux/actions/navigation';
 import FileListSearch from './view';
 
@@ -8,8 +13,9 @@ const navigateToSearch = () => {
 };
 
 const select = (state, props) => ({
-  isSearching: selectIsSearching(state),
   uris: makeSelectSearchUris(props.query)(state),
+  downloadUris: selectSearchDownloadUris(props.query)(state),
+  isSearching: selectIsSearching(state),
 });
 
 const perform = dispatch => ({

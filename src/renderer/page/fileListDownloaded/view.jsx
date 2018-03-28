@@ -1,41 +1,31 @@
 import React from 'react';
-import Link from 'component/link';
+import Button from 'component/button';
 import { FileTile } from 'component/fileTile';
-import { BusyMessage, Thumbnail } from 'component/common.js';
 import FileList from 'component/fileList';
-import SubHeader from 'component/subHeader';
+import Page from 'component/page';
 
 class FileListDownloaded extends React.PureComponent {
-  componentWillMount() {
-    if (!this.props.isFetchingClaims) this.props.fetchClaims();
-    if (!this.props.isFetching) this.props.fetchFileInfosDownloaded();
-  }
-
   render() {
-    const { fileInfos, isFetching, navigate } = this.props;
-
-    let content;
-    if (fileInfos && fileInfos.length > 0) {
-      content = <FileList fileInfos={fileInfos} fetching={isFetching} />;
-    } else if (isFetching) {
-      content = <BusyMessage message={__('Loading')} />;
-    } else {
-      content = (
-        <span>
-          {__("You haven't downloaded anything from LBRY yet. Go")}{' '}
-          <Link
-            onClick={() => navigate('/discover')}
-            label={__('search for your first download')}
-          />!
-        </span>
-      );
-    }
+    const { fileInfos, navigate } = this.props;
+    const hasDownloads = fileInfos && fileInfos.length > 0;
 
     return (
-      <main className="main--single-column">
-        <SubHeader />
-        {content}
-      </main>
+      <Page notContained>
+        {hasDownloads ? (
+          <FileList fileInfos={fileInfos} />
+        ) : (
+          <div className="page__empty">
+            {__("You haven't downloaded anything from LBRY yet.")}
+            <div className="card__actions card__actions--center">
+              <Button
+                button="primary"
+                onClick={() => navigate('/discover')}
+                label={__('Explore new content')}
+              />
+            </div>
+          </div>
+        )}
+      </Page>
     );
   }
 }

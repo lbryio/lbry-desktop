@@ -16,6 +16,7 @@ import userReducer from 'redux/reducers/user';
 import shapeShiftReducer from 'redux/reducers/shape_shift';
 import subscriptionsReducer from 'redux/reducers/subscriptions';
 import mediaReducer from 'redux/reducers/media';
+import publishReducer from 'redux/reducers/publish';
 import { persistStore, autoRehydrate } from 'redux-persist';
 import createCompressor from 'redux-persist-transform-compress';
 import createFilter from 'redux-persist-transform-filter';
@@ -67,6 +68,7 @@ const reducers = combineReducers({
   shapeShift: shapeShiftReducer,
   subscriptions: subscriptionsReducer,
   media: mediaReducer,
+  publish: publishReducer,
 });
 
 const bulkThunk = createBulkThunkMiddleware();
@@ -96,19 +98,21 @@ const store = createStore(
 const compressor = createCompressor();
 const saveClaimsFilter = createFilter('claims', ['byId', 'claimsByUri']);
 const subscriptionsFilter = createFilter('subscriptions', ['subscriptions']);
+// We only need to persist the receiveAddress for the wallet
+const walletFilter = createFilter('wallet', ['receiveAddress']);
 
 const persistOptions = {
-  whitelist: ['claims', 'subscriptions'],
+  whitelist: ['claims', 'subscriptions', 'navigation', 'publish', 'wallet'],
   // Order is important. Needs to be compressed last or other transforms can't
   // read the data
-  transforms: [saveClaimsFilter, subscriptionsFilter, compressor],
+  transforms: [saveClaimsFilter, subscriptionsFilter, walletFilter, compressor],
   debounce: 10000,
   storage: localForage,
 };
 
 window.cacheStore = persistStore(store, persistOptions, err => {
   if (err) {
-    console.error('Unable to load saved SETTINGS');
+    console.error('Unable to load saved settings'); // eslint-disable-line no-console
   }
 });
 

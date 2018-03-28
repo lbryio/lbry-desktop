@@ -1,9 +1,7 @@
 /node_modules
 /dist
-/build/daemon.ver
 /build/daemon.zip
-/build/venv
-*.pyc
 /static/daemon/lbrynet*
 /static/locales
 /.idea
+yarn-error.log

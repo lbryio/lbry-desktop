@@ -1,9 +1,10 @@
 // @flow
 import React from 'react';
-import SubHeader from 'component/subHeader';
-import { BusyMessage } from 'component/common.js';
-import { FeaturedCategory } from 'page/discover/view';
+import Page from 'component/page';
+import CategoryList from 'component/common/category-list';
 import type { Subscription } from 'redux/reducers/subscriptions';
+import * as NOTIFICATION_TYPES from 'constants/notification_types';
+import Button from 'component/button';
 
 type SavedSubscriptions = Array<Subscription>;
 
@@ -23,11 +24,23 @@ export default class extends React.PureComponent<Props> {
   // that causes this component to be rendered with zero savedSubscriptions
   // we need to wait until persist/REHYDRATE has fired before rendering the page
   componentDidMount() {
-    const { savedSubscriptions, setHasFetchedSubscriptions } = this.props;
+    const {
+      savedSubscriptions,
+      setHasFetchedSubscriptions,
+      notifications,
+      setSubscriptionNotifications,
+    } = this.props;
     if (savedSubscriptions.length) {
       this.fetchSubscriptions(savedSubscriptions);
       setHasFetchedSubscriptions();
     }
+    const newNotifications = {};
+    Object.keys(notifications).forEach(cur => {
+      if (notifications[cur].type === NOTIFICATION_TYPES.DOWNLOADING) {
+        newNotifications[cur] = { ...notifications[cur] };
+      }
+    });
+    setSubscriptionNotifications(newNotifications);
   }
 
   componentWillReceiveProps(props: Props) {
@@ -52,6 +65,7 @@ export default class extends React.PureComponent<Props> {
   render() {
     const { subscriptions, savedSubscriptions } = this.props;
 
+    // TODO: if you are subscribed to an empty channel, this will always be true (but it should not be)
     const someClaimsNotLoaded = Boolean(
       subscriptions.find(subscription => !subscription.claims.length)
     );
@@ -61,14 +75,13 @@ export default class extends React.PureComponent<Props> {
       (subscriptions.length !== savedSubscriptions.length || someClaimsNotLoaded);
 
     return (
-      <main className="main main--no-margin">
-        <SubHeader fullWidth smallMargin />
+      <Page noPadding isLoading={fetchingSubscriptions}>
         {!savedSubscriptions.length && (
-          <span>{__("You haven't subscribed to any channels yet")}</span>
-        )}
-        {fetchingSubscriptions && (
-          <div className="card-row__placeholder">
-            <BusyMessage message={__('Fetching subscriptions')} />
+          <div className="page__empty">
+            {__("It looks like you aren't subscribed to any channels yet.")}
+            <div className="card__actions card__actions--center">
+              <Button button="primary" navigate="/discover" label={__('Explore new content')} />
+            </div>
           </div>
         )}
         {!!savedSubscriptions.length && (
@@ -83,7 +96,7 @@ export default class extends React.PureComponent<Props> {
                 }
 
                 return (
-                  <FeaturedCategory
+                  <CategoryList
                     key={subscription.channelName}
                     categoryLink={subscription.uri}
                     category={subscription.channelName}
@@ -93,7 +106,7 @@ export default class extends React.PureComponent<Props> {
               })}
           </div>
         )}
-      </main>
+      </Page>
     );
   }
 }

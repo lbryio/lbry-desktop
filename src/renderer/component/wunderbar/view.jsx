@@ -1,165 +1,124 @@
+// @flow
 import React from 'react';
-import PropTypes from 'prop-types';
-import Icon from 'component/icon';
-import { normalizeURI, parseQueryParams } from 'lbry-redux';
+import classnames from 'classnames';
+import Icon from 'component/common/icon';
+import Autocomplete from './internal/autocomplete';
+import { parseQueryParams } from 'lbry-redux';
+import * as icons from 'constants/icons';
 
-class WunderBar extends React.PureComponent {
-  static TYPING_TIMEOUT = 800;
+type Props = {
+  updateSearchQuery: string => void,
+  onSearch: string => void,
+  onSubmit: (string, {}) => void,
+  wunderbarValue: ?string,
+  suggestions: Array<string>,
+};
 
-  static propTypes = {
-    onSearch: PropTypes.func.isRequired,
-    onSubmit: PropTypes.func.isRequired,
+class WunderBar extends React.PureComponent<Props> {
+  constructor(props: Props) {
+    super(props);
+
+    (this: any).handleSubmit = this.handleSubmit.bind(this);
+    (this: any).handleChange = this.handleChange.bind(this);
+    this.input = undefined;
+  }
+
+  getSuggestionIcon = (type: string) => {
+    switch (type) {
+      case 'file':
+        return icons.COMPASS;
+      case 'channel':
+        return icons.AT_SIGN;
+      default:
+        return icons.SEARCH;
+    }
   };
 
-  constructor(props) {
-    super(props);
-    this._userTypingTimer = null;
-    this._isSearchDispatchPending = false;
-    this._input = null;
-    this._stateBeforeSearch = null;
-    this._resetOnNextBlur = true;
-    this.onChange = this.onChange.bind(this);
-    this.onFocus = this.onFocus.bind(this);
-    this.onBlur = this.onBlur.bind(this);
-    this.onKeyPress = this.onKeyPress.bind(this);
-    this.onReceiveRef = this.onReceiveRef.bind(this);
-    this.state = {
-      address: this.props.address,
-      icon: this.props.icon,
-    };
+  handleChange(e: SyntheticInputEvent<*>) {
+    const { updateSearchQuery } = this.props;
+    const { value } = e.target;
+
+    updateSearchQuery(value);
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (
-      nextProps.viewingPage !== this.props.viewingPage ||
-      nextProps.address !== this.props.address
-    ) {
-      this.setState({ address: nextProps.address, icon: nextProps.icon });
-    }
-  }
+  handleSubmit(value: string, suggestion?: { value: string, type: string }) {
+    const { onSubmit, onSearch } = this.props;
+    const query = value.trim();
+    const getParams = () => {
+      const parts = query.split('?');
 
-  componentDidUpdate() {
-    if (this._input) {
-      const start = this._input.selectionStart;
-      const end = this._input.selectionEnd;
-
-      this._input.value = this.state.address; // this causes cursor to go to end of input
-
-      this._input.setSelectionRange(start, end);
-
-      if (this._focusPending) {
-        this._input.select();
-        this._focusPending = false;
-      }
-    }
-  }
-
-  componentWillUnmount() {
-    if (this.userTypingTimer) {
-      clearTimeout(this._userTypingTimer);
-    }
-  }
-
-  onChange(event) {
-    if (this._userTypingTimer) {
-      clearTimeout(this._userTypingTimer);
-    }
-
-    this.setState({ address: event.target.value });
-
-    this._isSearchDispatchPending = true;
-
-    const searchQuery = event.target.value;
-
-    this._userTypingTimer = setTimeout(() => {
-      const hasQuery = searchQuery.length === 0;
-      this._resetOnNextBlur = hasQuery;
-      this._isSearchDispatchPending = false;
-      if (searchQuery) {
-        this.props.onSearch(searchQuery.trim());
-      }
-    }, WunderBar.TYPING_TIMEOUT); // 800ms delay, tweak for faster/slower
-  }
-
-  onFocus() {
-    this._stateBeforeSearch = this.state;
-    const newState = {
-      icon: 'icon-search',
-      isActive: true,
-    };
-
-    this._focusPending = true;
-    // below is hacking, improved when we have proper routing
-    if (!this.state.address.startsWith('lbry://') && this.state.icon !== 'icon-search') {
-      // onFocus, if they are not on an exact URL or a search page, clear the bar
-      newState.address = '';
-    }
-    this.setState(newState);
-  }
-
-  onBlur() {
-    if (this._isSearchDispatchPending) {
-      setTimeout(() => {
-        this.onBlur();
-      }, WunderBar.TYPING_TIMEOUT + 1);
-    } else {
-      const commonState = { isActive: false };
-      if (this._resetOnNextBlur) {
-        this.setState(Object.assign({}, this._stateBeforeSearch, commonState));
-        this._input.value = this.state.address;
-      } else {
-        this._resetOnNextBlur = true;
-        this._stateBeforeSearch = this.state;
-        this.setState(commonState);
-      }
-    }
-  }
-
-  onKeyPress(event) {
-    if (event.charCode === 13 && this._input.value) {
-      let uri = null;
-      let method = 'onSubmit';
       let extraParams = {};
-
-      this._resetOnNextBlur = false;
-      clearTimeout(this._userTypingTimer);
-
-      const parts = this._input.value.trim().split('?');
-      const value = parts.shift();
-      if (parts.length > 0) extraParams = parseQueryParams(parts.join(''));
-
-      try {
-        uri = normalizeURI(value);
-        this.setState({ value: uri });
-      } catch (error) {
-        // then it's not a valid URL, so let's search
-        uri = value;
-        method = 'onSearch';
+      if (parts.length > 0) {
+        extraParams = parseQueryParams(parts.join(''));
       }
 
-      this.props[method](uri, extraParams);
-      this._input.blur();
+      return extraParams;
+    };
+
+    // User selected a suggestion
+    if (suggestion) {
+      if (suggestion.type === 'search') {
+        onSearch(query);
+      } else {
+        const params = getParams();
+        const uri = normalizeURI(query);
+        onSubmit(uri, params);
+      }
+
+      return;
+    }
+
+    // Currently no suggestion is highlighted. The user may have started
+    // typing, then lost focus and came back later on the same page
+    try {
+      const uri = normalizeURI(query);
+      const params = getParams();
+      onSubmit(uri, params);
+    } catch (e) {
+      onSearch(query);
     }
   }
 
-  onReceiveRef(ref) {
-    this._input = ref;
-  }
+  input: ?HTMLInputElement;
 
   render() {
+    const { wunderbarValue, suggestions } = this.props;
+
     return (
-      <div className={`wunderbar${this.state.isActive ? ' wunderbar--active' : ''}`}>
-        {this.state.icon ? <Icon fixed icon={this.state.icon} /> : ''}
-        <input
-          className="wunderbar__input"
-          type="search"
-          ref={this.onReceiveRef}
-          onFocus={this.onFocus}
-          onBlur={this.onBlur}
-          onChange={this.onChange}
-          onKeyPress={this.onKeyPress}
-          value={this.state.address}
-          placeholder={__('Find videos, music, games, and more')}
+      <div className="wunderbar">
+        <Icon icon={icons.SEARCH} />
+        <Autocomplete
+          autoHighlight
+          wrapperStyle={{ flex: 1 }}
+          value={wunderbarValue || ''}
+          items={suggestions}
+          getItemValue={item => item.value}
+          onChange={this.handleChange}
+          onSelect={this.handleSubmit}
+          renderInput={props => (
+            <input
+              {...props}
+              className="wunderbar__input"
+              placeholder="Search for videos, music, games and more"
+            />
+          )}
+          renderItem={({ value, type, shorthand }, isHighlighted) => (
+            <div
+              key={value}
+              className={classnames('wunderbar__suggestion', {
+                'wunderbar__active-suggestion': isHighlighted,
+              })}
+            >
+              <Icon icon={this.getSuggestionIcon(type)} />
+              <span className="wunderbar__suggestion-label">{shorthand || value}</span>
+              {(true || isHighlighted) && (
+                <span className="wunderbar__suggestion-label--action">
+                  {'-  '}
+                  {type === 'search' ? 'Search' : value}
+                </span>
+              )}
+            </div>
+          )}
         />
       </div>
     );

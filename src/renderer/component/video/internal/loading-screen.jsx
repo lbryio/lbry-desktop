@@ -1,14 +1,27 @@
+// @flow
 import React from 'react';
 import Spinner from 'component/common/spinner';
 
-const LoadingScreen = ({ status, spinner = true }) => (
-  <div className="video__loading-screen">
-    <div>
-      {spinner && <Spinner />}
+type Props = {
+  spinner: boolean,
+  status: string,
+};
 
-      <div className="video__loading-status">{status}</div>
-    </div>
-  </div>
-);
+class LoadingScreen extends React.PureComponent<Props> {
+  static defaultProps = {
+    spinner: true,
+  };
+
+  render() {
+    const { status, spinner } = this.props;
+    return (
+      <div className="content__loading">
+        {spinner && <Spinner />}
+
+        <span className="content__loading-text">{status}</span>
+      </div>
+    );
+  }
+}
 
 export default LoadingScreen;

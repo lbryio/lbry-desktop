@@ -1,19 +1,25 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import * as React from 'react';
 import { Lbry } from 'lbry-redux';
+import LoadScreen from './internal/load-screen';
 import ModalIncompatibleDaemon from 'modal/modalIncompatibleDaemon';
 import ModalUpgrade from 'modal/modalUpgrade';
 import ModalDownloading from 'modal/modalDownloading';
 import * as modals from 'constants/modal_types';
-import LoadScreen from '../load_screen';
 
-export class SplashScreen extends React.PureComponent {
-  static propTypes = {
-    message: PropTypes.string,
-    onLoadDone: PropTypes.func,
-  };
+type Props = {
+  checkDaemonVersion: () => Promise<any>,
+  modal: string,
+};
 
-  constructor(props) {
+type State = {
+  details: string,
+  message: string,
+  isRunning: boolean,
+  isLagging: boolean,
+};
+
+export class SplashScreen extends React.PureComponent<Props, State> {
+  constructor(props: Props) {
     super(props);
 
     this.state = {
@@ -24,26 +30,15 @@ export class SplashScreen extends React.PureComponent {
     };
   }
 
-  componentDidMount() {
-    Lbry.connect()
-      .then(this.props.checkDaemonVersion)
-      .then(() => {
-        this.updateStatus();
-      })
-      .catch(() => {
-        this.setState({
-          isLagging: true,
-          message: __('Connection Failure'),
-          details: __(
-            'Try closing all LBRY processes and starting again. If this still happens, your anti-virus software or firewall may be preventing LBRY from connecting. Contact hello@lbry.io if you think this is a software bug.'
-          ),
-        });
-      });
+  updateStatus() {
+    Lbry.status().then(status => {
+      this._updateStatusCallback(status);
+    });
   }
 
   _updateStatusCallback(status) {
     const startupStatus = status.startup_status;
-    if (startupStatus.code === 'started') {
+    if (startupStatus.code == 'started') {
       // Wait until we are able to resolve a name before declaring
       // that we are done.
       // TODO: This is a hack, and the logic should live in the daemon
@@ -67,7 +62,7 @@ export class SplashScreen extends React.PureComponent {
     }
     if (status.blockchain_status && status.blockchain_status.blocks_behind > 0) {
       const format =
-        status.blockchain_status.blocks_behind === 1 ? '%s block behind' : '%s blocks behind';
+        status.blockchain_status.blocks_behind == 1 ? '%s block behind' : '%s blocks behind';
       this.setState({
         message: __('Blockchain Sync'),
         details: __(format, status.blockchain_status.blocks_behind),
@@ -85,10 +80,23 @@ export class SplashScreen extends React.PureComponent {
     }, 500);
   }
 
-  updateStatus() {
-    Lbry.status().then(status => {
-      this._updateStatusCallback(status);
-    });
+  componentDidMount() {
+    const { checkDaemonVersion } = this.props;
+
+    Lbry.connect()
+      .then(checkDaemonVersion)
+      .then(() => {
+        this.updateStatus();
+      })
+      .catch(() => {
+        this.setState({
+          isLagging: true,
+          message: __('Connection Failure'),
+          details: __(
+            'Try closing all LBRY processes and starting again. If this still happens, your anti-virus software or firewall may be preventing LBRY from connecting. Contact hello@lbry.io if you think this is a software bug.'
+          ),
+        });
+      });
   }
 
   render() {
@@ -96,15 +104,19 @@ export class SplashScreen extends React.PureComponent {
     const { message, details, isLagging, isRunning } = this.state;
 
     return (
-      <div>
+      <React.Fragment>
         <LoadScreen message={message} details={details} isWarning={isLagging} />
         {/* Temp hack: don't show any modals on splash screen daemon is running;
             daemon doesn't let you quit during startup, so the "Quit" buttons
             in the modals won't work. */}
-        {modal === 'incompatibleDaemon' && isRunning && <ModalIncompatibleDaemon />}
-        {modal === modals.UPGRADE && isRunning && <ModalUpgrade />}
-        {modal === modals.DOWNLOADING && isRunning && <ModalDownloading />}
-      </div>
+        {isRunning && (
+          <React.Fragment>
+            {modal === modals.INCOMPATIBLE_DAEMON && <ModalIncompatibleDaemon />}
+            {modal === modals.UPGRADE && <ModalUpgrade />}
+            {modal === modals.DOWNLOADING && <ModalDownloading />}
+          </React.Fragment>
+        )}
+      </React.Fragment>
     );
   }
 }

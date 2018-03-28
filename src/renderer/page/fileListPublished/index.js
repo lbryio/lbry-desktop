@@ -1,23 +1,18 @@
-import rewards from 'rewards';
 import { connect } from 'react-redux';
-import {
-  doFetchClaimListMine,
-  selectMyClaimsWithoutChannels,
-  selectIsFetchingClaimListMine,
-} from 'lbry-redux';
+import { selectMyClaimsWithoutChannels } from 'lbry-redux';
 import { doNavigate } from 'redux/actions/navigation';
-import { doClaimRewardType } from 'redux/actions/rewards';
+import { selectPendingPublishes } from 'redux/selectors/publish';
+import { doCheckPendingPublishes } from 'redux/actions/publish';
 import FileListPublished from './view';
 
 const select = state => ({
   claims: selectMyClaimsWithoutChannels(state),
-  isFetching: selectIsFetchingClaimListMine(state),
+  pendingPublishes: selectPendingPublishes(state),
 });
 
 const perform = dispatch => ({
   navigate: path => dispatch(doNavigate(path)),
-  fetchClaims: () => dispatch(doFetchClaimListMine()),
-  claimFirstPublishReward: () => dispatch(doClaimRewardType(rewards.TYPE_FIRST_PUBLISH)),
+  checkIfPublishesConfirmed: publishes => dispatch(doCheckPendingPublishes(publishes)),
 });
 
 export default connect(select, perform)(FileListPublished);
