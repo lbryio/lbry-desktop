@@ -1,16 +1,11 @@
 import { connect } from 'react-redux';
 import {
   doSearch,
-  selectIsSearching,
   makeSelectSearchUris,
+  selectIsSearching,
   selectSearchDownloadUris,
 } from 'lbry-redux';
-import { doNavigate } from 'redux/actions/navigation';
 import FileListSearch from './view';
-
-const navigateToSearch = () => {
-  dispatch(doNavigate('/search'));
-};
 
 const select = (state, props) => ({
   uris: makeSelectSearchUris(props.query)(state),
@@ -19,7 +14,7 @@ const select = (state, props) => ({
 });
 
 const perform = dispatch => ({
-  search: search => dispatch(doSearch(search, navigateToSearch)),
+  search: search => dispatch(doSearch(search)),
 });
 
 export default connect(select, perform)(FileListSearch);

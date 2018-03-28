@@ -129,52 +129,50 @@ export const doPublish = (params: PublishParams): ThunkAction => {
 };
 
 // Calls claim_list_mine until any pending publishes are confirmed
-export const doCheckPendingPublishes = () => {
-  return (dispatch: Dispatch, getState: GetState) => {
-    const state = getState();
-    const pendingPublishes = selectPendingPublishes(state);
-    const myClaims = selectMyClaimsWithoutChannels(state);
+export const doCheckPendingPublishes = () => (dispatch: Dispatch, getState: GetState) => {
+  const state = getState();
+  const pendingPublishes = selectPendingPublishes(state);
+  const myClaims = selectMyClaimsWithoutChannels(state);
 
-    let publishCheckInterval;
+  let publishCheckInterval;
 
-    const checkFileList = () => {
-      Lbry.claim_list_mine().then(claims => {
-        const claimsWithoutChannels = claims.filter(claim => !claim.name.match(/^@/));
-        if (myClaims.length !== claimsWithoutChannels.length) {
-          const pendingPublishMap = {};
-          pendingPublishes.forEach(({ name }) => {
-            pendingPublishMap[name] = name;
-          });
+  const checkFileList = () => {
+    Lbry.claim_list_mine().then(claims => {
+      const claimsWithoutChannels = claims.filter(claim => !claim.name.match(/^@/));
+      if (myClaims.length !== claimsWithoutChannels.length) {
+        const pendingPublishMap = {};
+        pendingPublishes.forEach(({ name }) => {
+          pendingPublishMap[name] = name;
+        });
 
-          claims.forEach(claim => {
-            if (pendingPublishMap[claim.name]) {
-              dispatch({
-                type: ACTIONS.REMOVE_PENDING_PUBLISH,
-                data: {
-                  name: claim.name,
-                },
-              });
-              dispatch({
-                type: ACTIONS.FETCH_CLAIM_LIST_MINE_COMPLETED,
-                data: {
-                  claims,
-                },
-              });
+        claims.forEach(claim => {
+          if (pendingPublishMap[claim.name]) {
+            dispatch({
+              type: ACTIONS.REMOVE_PENDING_PUBLISH,
+              data: {
+                name: claim.name,
+              },
+            });
+            dispatch({
+              type: ACTIONS.FETCH_CLAIM_LIST_MINE_COMPLETED,
+              data: {
+                claims,
+              },
+            });
 
-              delete pendingPublishMap[claim.name];
-            }
-          });
+            delete pendingPublishMap[claim.name];
+          }
+        });
 
-          clearInterval(publishCheckInterval);
-        }
-      });
-    };
-
-    if (pendingPublishes.length) {
-      checkFileList();
-      publishCheckInterval = setInterval(() => {
-        checkFileList();
-      }, 10000);
-    }
+        clearInterval(publishCheckInterval);
+      }
+    });
   };
+
+  if (pendingPublishes.length) {
+    checkFileList();
+    publishCheckInterval = setInterval(() => {
+      checkFileList();
+    }, 10000);
+  }
 };

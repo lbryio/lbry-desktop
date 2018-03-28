@@ -3,17 +3,13 @@ import isDev from 'electron-is-dev';
 import path from 'path';
 import * as MODALS from 'constants/modal_types';
 import { ipcRenderer, remote } from 'electron';
-import {
-  ACTIONS,
-  Lbry,
-  doAuthNavigate,
-  doBalanceSubscribe,
-  doFetchFileInfosAndPublishedClaims,
-} from 'lbry-redux';
+import { ACTIONS, Lbry, doBalanceSubscribe, doFetchFileInfosAndPublishedClaims } from 'lbry-redux';
 import Native from 'native';
 import { doFetchRewardedContent } from 'redux/actions/content';
 import { doFetchDaemonSettings } from 'redux/actions/settings';
+import { doAuthNavigate } from 'redux/actions/navigation';
 import { doAuthenticate } from 'redux/actions/user';
+import { doPause } from 'redux/actions/media';
 import { doCheckSubscriptions } from 'redux/actions/subscriptions';
 import {
   selectCurrentModal,
@@ -32,6 +28,22 @@ const { download } = remote.require('electron-dl');
 const Fs = remote.require('fs');
 
 const CHECK_UPGRADE_INTERVAL = 10 * 60 * 1000;
+
+export function doOpenModal(modal, modalProps = {}) {
+  return {
+    type: ACTIONS.OPEN_MODAL,
+    data: {
+      modal,
+      modalProps,
+    },
+  };
+}
+
+export function doCloseModal() {
+  return {
+    type: ACTIONS.CLOSE_MODAL,
+  };
+}
 
 export function doUpdateDownloadProgress(percent) {
   return {

@@ -2,9 +2,10 @@
 import React from 'react';
 import classnames from 'classnames';
 import Icon from 'component/common/icon';
-import Autocomplete from './internal/autocomplete';
-import { parseQueryParams } from 'lbry-redux';
+import { normalizeURI } from 'lbry-redux';
+import { parseQueryParams } from 'util/query_params';
 import * as icons from 'constants/icons';
+import Autocomplete from './internal/autocomplete';
 
 type Props = {
   updateSearchQuery: string => void,
