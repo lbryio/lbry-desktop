@@ -42,11 +42,11 @@ export default () => {
             }
           },
         },
-      {
-      label: 'Close',
-      accelerator: 'CmdOrCtrl+Q',
-      role: 'quit',
-    },
+        {
+          label: 'Close',
+          accelerator: 'CmdOrCtrl+Q',
+          role: 'quit',
+        },
         {
           label: 'Frequently Asked Questions',
           click: () => {
