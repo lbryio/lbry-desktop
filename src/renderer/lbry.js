@@ -66,6 +66,14 @@ Lbry.connect = () => {
 
 Lbry.imagePath = file => `${staticResourcesPath}/img/${file}`;
 
+Lbry.getAppVersionInfo = () =>
+  new Promise(resolve => {
+    ipcRenderer.once('version-info-received', (event, versionInfo) => {
+      resolve(versionInfo);
+    });
+    ipcRenderer.send('version-info-requested');
+  });
+
 Lbry.getMediaType = (contentType, fileName) => {
   if (contentType) {
     return /^[^/]+/.exec(contentType)[0];
@@ -87,14 +95,6 @@ Lbry.getMediaType = (contentType, fileName) => {
   }
   return 'unknown';
 };
-
-Lbry.getAppVersionInfo = () =>
-  new Promise(resolve => {
-    ipcRenderer.once('version-info-received', (event, versionInfo) => {
-      resolve(versionInfo);
-    });
-    ipcRenderer.send('version-info-requested');
-  });
 
 /**
  * Wrappers for API methods to simulate missing or future behavior. Unlike the old-style stubs,

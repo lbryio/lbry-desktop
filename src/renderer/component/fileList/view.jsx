@@ -82,12 +82,21 @@ class FileList extends React.PureComponent<Props, State> {
           : fileInfos,
       title: fileInfos =>
         fileInfos.slice().sort((fileInfo1, fileInfo2) => {
-          const title1 = fileInfo1.value
-            ? fileInfo1.value.stream.metadata.title.toLowerCase()
-            : fileInfo1.claim_name;
-          const title2 = fileInfo2.value
-            ? fileInfo2.value.stream.metadata.title.toLowerCase()
-            : fileInfo2.claim_name;
+          const getFileTitle = fileInfo => {
+            const { value, metadata, name, claim_name: claimName } = fileInfo;
+            if (metadata) {
+              // downloaded claim
+              return metadata.title || claimName;
+            } else if (value) {
+              // published claim
+              const { title } = value.stream.metadata;
+              return title || name;
+            }
+            // Invalid claim
+            return '';
+          };
+          const title1 = getFileTitle(fileInfo1).toLowerCase();
+          const title2 = getFileTitle(fileInfo2).toLowerCase();
           if (title1 < title2) {
             return -1;
           } else if (title1 > title2) {
