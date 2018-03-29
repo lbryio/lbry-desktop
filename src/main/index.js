@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 // Module imports
-import keytar from 'keytar-prebuild';
+import keytar from 'keytar';
 import SemVer from 'semver';
 import findProcess from 'find-process';
 import url from 'url';
