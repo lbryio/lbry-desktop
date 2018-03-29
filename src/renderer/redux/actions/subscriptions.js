@@ -1,6 +1,12 @@
 // @flow
 import * as ACTIONS from 'constants/action_types';
-import type { Subscription, Dispatch, SubscriptionState } from 'redux/reducers/subscriptions';
+import * as NOTIFICATION_TYPES from 'constants/notification_types';
+import type {
+  Subscription,
+  Dispatch,
+  SubscriptionState,
+  SubscriptionNotifications,
+} from 'redux/reducers/subscriptions';
 import { selectSubscriptions } from 'redux/selectors/subscriptions';
 import Lbry from 'lbry';
 import { doPurchaseUri } from 'redux/actions/content';
@@ -9,6 +15,7 @@ import { buildURI } from 'lbryURI';
 import analytics from 'analytics';
 
 const CHECK_SUBSCRIPTIONS_INTERVAL = 60 * 60 * 1000;
+const SUBSCRIPTION_DOWNLOAD_LIMIT = 1;
 
 export const doChannelSubscribe = (subscription: Subscription) => (dispatch: Dispatch) => {
   dispatch({
@@ -59,63 +66,47 @@ export const doCheckSubscription = (subscription: Subscription, notify?: boolean
     const claimResult = result[subscription.uri] || {};
     const { claims_in_channel: claimsInChannel } = claimResult;
 
-    const count = subscription.latest
-      ? claimsInChannel.reduce(
-          (prev, cur, index) =>
-            buildURI({ contentName: cur.name, claimId: cur.claim_id }, false) ===
-            subscription.latest
-              ? index
-              : prev,
-          -1
-        )
-      : 1;
-
-    if (count !== 0 && notify) {
-      if (!claimsInChannel[0].value.stream.metadata.fee) {
-        dispatch(
-          doPurchaseUri(
-            buildURI(
-              { contentName: claimsInChannel[0].name, claimId: claimsInChannel[0].claim_id },
-              false
-            ),
-            { cost: 0 }
-          )
-        );
+    if (claimsInChannel) {
+      if (notify) {
+        claimsInChannel.reduce((prev, cur, index) => {
+          const uri = buildURI({ contentName: cur.name, claimId: cur.claim_id }, false);
+          if (prev === -1 && uri !== subscription.latest) {
+            dispatch(
+              setSubscriptionNotification(
+                subscription,
+                uri,
+                index < SUBSCRIPTION_DOWNLOAD_LIMIT && !cur.value.stream.metadata.fee
+                  ? NOTIFICATION_TYPES.DOWNLOADING
+                  : NOTIFICATION_TYPES.NOTIFY_ONLY
+              )
+            );
+            if (index < SUBSCRIPTION_DOWNLOAD_LIMIT && !cur.value.stream.metadata.fee) {
+              dispatch(doPurchaseUri(uri, { cost: 0 }));
+            }
+          }
+          return uri === subscription.latest || !subscription.latest ? index : prev;
+        }, -1);
       }
 
-      const notif = new window.Notification(subscription.channelName, {
-        body: `Posted ${claimsInChannel[0].value.stream.metadata.title}${
-          count > 1 ? ` and ${count - 1} other new items` : ''
-        }${count < 0 ? ' and 9+ other new items' : ''}`,
-        silent: false,
-      });
-      notif.onclick = () => {
-        dispatch(
-          doNavigate('/show', {
+      dispatch(
+        setSubscriptionLatest(
+          {
+            channelName: claimsInChannel[0].channel_name,
             uri: buildURI(
-              { contentName: claimsInChannel[0].name, claimId: claimsInChannel[0].claim_id },
-              true
+              {
+                channelName: claimsInChannel[0].channel_name,
+                claimId: claimsInChannel[0].claim_id,
+              },
+              false
             ),
-          })
-        );
-      };
-    }
-
-    dispatch(
-      setSubscriptionLatest(
-        {
-          channelName: claimsInChannel[0].channel_name,
-          uri: buildURI(
-            { channelName: claimsInChannel[0].channel_name, claimId: claimsInChannel[0].claim_id },
+          },
+          buildURI(
+            { contentName: claimsInChannel[0].name, claimId: claimsInChannel[0].claim_id },
             false
-          ),
-        },
-        buildURI(
-          { contentName: claimsInChannel[0].name, claimId: claimsInChannel[0].claim_id },
-          false
+          )
         )
-      )
-    );
+      );
+    }
 
     dispatch({
       type: ACTIONS.CHECK_SUBSCRIPTION_COMPLETED,
@@ -132,6 +123,30 @@ export const setSubscriptionLatest = (subscription: Subscription, uri: string) =
     data: {
       subscription,
       uri,
+    },
+  });
+
+export const setSubscriptionNotification = (
+  subscription: Subscription,
+  uri: string,
+  notificationType: string
+) => (dispatch: Dispatch) =>
+  dispatch({
+    type: ACTIONS.SET_SUBSCRIPTION_NOTIFICATION,
+    data: {
+      subscription,
+      uri,
+      type: notificationType,
+    },
+  });
+
+export const setSubscriptionNotifications = (notifications: SubscriptionNotifications) => (
+  dispatch: Dispatch
+) =>
+  dispatch({
+    type: ACTIONS.SET_SUBSCRIPTION_NOTIFICATIONS,
+    data: {
+      notifications,
     },
   });
 

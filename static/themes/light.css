@@ -1,8 +1,1 @@
-:root {
-    /* Colors */
-    --color-primary: #155B4A;
-
-    /* search */
-    --search-bg: var(--color-canvas);
-    --search-border: 1px solid rgba(0,0,0,0.15);
-}
+:root {}

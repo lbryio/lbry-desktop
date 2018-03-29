@@ -1,6 +1,5 @@
 import { createSelector } from 'reselect';
-import { parseQueryParams, toQueryString } from 'util/query_params';
-import { normalizeURI } from 'lbryURI';
+import { parseQueryParams } from 'util/query_params';
 
 export const selectState = state => state.navigation || {};
 
@@ -22,103 +21,6 @@ export const selectCurrentParams = createSelector(selectCurrentPath, path => {
 export const makeSelectCurrentParam = param =>
   createSelector(selectCurrentParams, params => (params ? params[param] : undefined));
 
-export const selectHeaderLinks = createSelector(selectCurrentPage, page => {
-  // This contains intentional fall throughs
-  switch (page) {
-    case 'wallet':
-    case 'history':
-    case 'send':
-    case 'getcredits':
-    case 'invite':
-    case 'rewards':
-    case 'backup':
-      return {
-        wallet: __('Overview'),
-        getcredits: __('Get Credits'),
-        send: __('Send / Receive'),
-        rewards: __('Rewards'),
-        invite: __('Invites'),
-        history: __('History'),
-      };
-    case 'downloaded':
-    case 'published':
-      return {
-        downloaded: __('Downloaded'),
-        published: __('Published'),
-      };
-    case 'settings':
-    case 'help':
-      return {
-        settings: __('Settings'),
-        help: __('Help'),
-      };
-    case 'discover':
-    case 'subscriptions':
-      return {
-        discover: __('Discover'),
-        subscriptions: __('Subscriptions'),
-      };
-    default:
-      return null;
-  }
-});
-
-export const selectPageTitle = createSelector(
-  selectCurrentPage,
-  selectCurrentParams,
-  (page, params) => {
-    switch (page) {
-      case 'settings':
-        return __('Settings');
-      case 'report':
-        return __('Report');
-      case 'wallet':
-        return __('Wallet');
-      case 'send':
-        return __('Send or Receive LBRY Credits');
-      case 'getcredits':
-        return __('Get LBRY Credits');
-      case 'backup':
-        return __('Backup Your Wallet');
-      case 'rewards':
-        return __('Rewards');
-      case 'invite':
-        return __('Invites');
-      case 'start':
-        return __('Start');
-      case 'publish':
-        return params.id ? __('Edit') : __('Publish');
-      case 'help':
-        return __('Help');
-      case 'developer':
-        return __('Developer');
-      case 'show': {
-        const parts = [normalizeURI(params.uri)];
-        // If the params has any keys other than "uri"
-        if (Object.keys(params).length > 1) {
-          parts.push(toQueryString(Object.assign({}, params, { uri: null })));
-        }
-        return parts.join('?');
-      }
-      case 'downloaded':
-        return __('Downloads & Purchases');
-      case 'published':
-        return __('Publications');
-      case 'search':
-        return params.query ? __('Search results for %s', params.query) : __('Search');
-      case 'subscriptions':
-        return __('Your Subscriptions');
-      case 'discover':
-      case false:
-      case null:
-      case '':
-        return '';
-      default:
-        return page[0].toUpperCase() + (page.length > 0 ? page.substr(1) : '');
-    }
-  }
-);
-
 export const selectPathAfterAuth = createSelector(selectState, state => state.pathAfterAuth);
 
 export const selectIsBackDisabled = createSelector(selectState, state => state.index === 0);
@@ -128,6 +30,8 @@ export const selectIsForwardDisabled = createSelector(
   state => state.index === state.stack.length - 1
 );
 
+export const selectIsHome = createSelector(selectCurrentPage, page => page === 'discover');
+
 export const selectHistoryIndex = createSelector(selectState, state => state.index);
 
 export const selectHistoryStack = createSelector(selectState, state => state.stack);
@@ -136,4 +40,163 @@ export const selectHistoryStack = createSelector(selectState, state => state.sta
 export const selectActiveHistoryEntry = createSelector(
   selectState,
   state => state.stack[state.index]
+);
+
+export const selectPageTitle = createSelector(selectCurrentPage, page => {
+  switch (page) {
+    default:
+      return '';
+  }
+});
+
+export const selectNavLinks = createSelector(
+  selectCurrentPage,
+  selectHistoryStack,
+  (currentPage, historyStack) => {
+    const isWalletPage = page =>
+      page === 'wallet' ||
+      page === 'send' ||
+      page === 'getcredits' ||
+      page === 'rewards' ||
+      page === 'history' ||
+      page === 'invite';
+
+    const isMyLbryPage = page =>
+      page === 'downloaded' || page === 'published' || page === 'settings';
+
+    const previousStack = historyStack.slice().reverse();
+
+    const getPreviousSubLinkPath = checkIfValidPage => {
+      for (let i = 0; i < previousStack.length; i += 1) {
+        const currentStackItem = previousStack[i];
+
+        // Trim off the "/" from the path
+        const pageInStack = currentStackItem.path.slice(1);
+        if (checkIfValidPage(pageInStack)) {
+          return currentStackItem.path;
+        }
+      }
+
+      return undefined;
+    };
+
+    // Gets the last active sublink in a section
+    const getActiveSublink = category => {
+      if (category === 'wallet') {
+        const previousPath = getPreviousSubLinkPath(isWalletPage);
+        return previousPath || '/wallet';
+      } else if (category === 'myLbry') {
+        const previousPath = getPreviousSubLinkPath(isMyLbryPage);
+        return previousPath || '/downloaded';
+      }
+
+      return undefined;
+    };
+
+    const isCurrentlyWalletPage = isWalletPage(currentPage);
+    const isCurrentlyMyLbryPage = isMyLbryPage(currentPage);
+
+    const walletSubLinks = [
+      {
+        label: 'Overview',
+        path: '/wallet',
+        active: currentPage === 'wallet',
+      },
+      {
+        label: 'Send & Recieve',
+        path: '/send',
+        active: currentPage === 'send',
+      },
+      {
+        label: 'Get Credits',
+        path: '/getcredits',
+        active: currentPage === 'getcredits',
+      },
+      {
+        label: 'Rewards',
+        path: '/rewards',
+        active: currentPage === 'rewards',
+      },
+      {
+        label: 'Invites',
+        path: '/invite',
+        active: currentPage === 'invite',
+      },
+      {
+        label: 'Transactions',
+        path: '/history',
+        active: currentPage === 'history',
+      },
+    ];
+
+    const myLbrySubLinks = [
+      {
+        label: 'Downloads',
+        path: '/downloaded',
+        active: currentPage === 'downloaded',
+      },
+      {
+        label: 'Publishes',
+        path: '/published',
+        active: currentPage === 'published',
+      },
+      {
+        label: 'Settings',
+        path: '/settings',
+        active: currentPage === 'settings',
+      },
+      {
+        label: 'Backup',
+        path: '/backup',
+        active: currentPage === 'backup',
+      },
+    ];
+
+    const navLinks = {
+      primary: [
+        {
+          label: 'Explore',
+          path: '/discover',
+          active: currentPage === 'discover',
+          icon: 'Compass',
+        },
+        {
+          label: 'Subscriptions',
+          path: '/subscriptions',
+          active: currentPage === 'subscriptions',
+          icon: 'AtSign',
+        },
+      ],
+      secondary: [
+        {
+          label: 'Wallet',
+          icon: 'CreditCard',
+          subLinks: walletSubLinks,
+          path: isCurrentlyWalletPage ? '/wallet' : getActiveSublink('wallet'),
+          active: isWalletPage(currentPage),
+        },
+        {
+          label: 'My LBRY',
+          icon: 'Settings',
+          subLinks: myLbrySubLinks,
+          path: isCurrentlyMyLbryPage ? '/downloaded' : getActiveSublink('myLbry'),
+          active: isMyLbryPage(currentPage),
+        },
+        {
+          label: 'Publish',
+          icon: 'UploadCloud',
+          path: '/publish',
+          active: currentPage === 'publish',
+        },
+        {
+          label: 'Help',
+          path: '/help',
+          active: currentPage === 'help',
+          icon: 'HelpCircle',
+        },
+      ],
+    };
+
+    return navLinks;
+  }
 );

@@ -30,8 +30,43 @@
   padding: $spacing-vertical;
   box-shadow: var(--box-shadow-layer);
   max-width: var(--modal-width);
-
   word-break: break-word;
+}
+
+.modal--fullscreen {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: $spacing-vertical;
+  background: var(--modal-bg);
+  overflow-y: scroll;
+
+  .main {
+    // I will come back to these when I do media queries
+    // They should be variables
+    padding: 130px 80px 0 80px;
+  }
+}
+
+// For slide down animation on the search modal
+// Slide down isn't possible without doing a lot of re-work to the modal component
+.ReactModal__Overlay {
+  .modal--fullscreen {
+    transition: height var(--animation-style) var(--animation-style);
+    height: 0;
+  }
+
+  &--after-open {
+    .modal--fullscreen {
+      height: 100vh;
+    }
+  }
+
+  &--before-close {
+    height: 0;
+  }
 }
 
 .modal__header {
@@ -72,6 +107,7 @@
   max-width: none;
   width: var(--modal-width);
 }
+
 .error-modal__error-list {
   /*shitty hack/temp fix for long errors making modal unusable*/
   border: 1px solid var(--input-border-color);
@@ -80,4 +116,8 @@
   max-height: 400px;
   max-width: var(--modal-width);
   overflow-y: hidden;
+}
+
+.error-modal__content p {
+  padding: 0 0 $spacing-vertical $spacing-vertical;
 }

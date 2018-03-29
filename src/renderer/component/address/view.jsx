@@ -1,52 +1,52 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+// @flow
+import * as React from 'react';
 import { clipboard } from 'electron';
-import Link from 'component/link';
-import classnames from 'classnames';
+import { FormRow } from 'component/common/form';
+import Button from 'component/button';
+import * as icons from 'constants/icons';
 
-export default class Address extends React.PureComponent {
-  static propTypes = {
-    address: PropTypes.string,
-  };
+type Props = {
+  address: string,
+  doShowSnackBar: ({ message: string }) => void,
+};
 
-  constructor(props) {
-    super(props);
+export default class Address extends React.PureComponent<Props> {
+  constructor() {
+    super();
 
-    this._inputElem = null;
+    this.input = null;
   }
 
+  input: ?HTMLInputElement;
+
   render() {
-    const { address, showCopyButton, doShowSnackBar } = this.props;
+    const { address, doShowSnackBar } = this.props;
 
     return (
-      <div className="form-field form-field--address">
+      <FormRow verticallyCentered padded>
         <input
-          className={classnames('input-copyable', {
-            'input-copyable--with-copy-btn': showCopyButton,
-          })}
-          type="text"
+          className="input-copyable form-field__input"
+          readOnly
+          value={address || ''}
           ref={input => {
-            this._inputElem = input;
+            this.input = input;
           }}
           onFocus={() => {
-            this._inputElem.select();
+            if (this.input) {
+              this.input.select();
+            }
           }}
-          readOnly="readonly"
-          value={address || ''}
         />
-        {showCopyButton && (
-          <span className="header__item">
-            <Link
-              button="alt button--flat"
-              icon="clipboard"
-              onClick={() => {
-                clipboard.writeText(address);
-                doShowSnackBar({ message: __('Address copied') });
-              }}
-            />
-          </span>
-        )}
-      </div>
+        <Button
+          noPadding
+          button="secondary"
+          icon={icons.CLIPBOARD}
+          onClick={() => {
+            clipboard.writeText(address);
+            doShowSnackBar({ message: __('Address copied') });
+          }}
+        />
+      </FormRow>
     );
   }
 }

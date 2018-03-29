@@ -9,6 +9,7 @@ import {
 import { makeSelectCurrentParam, selectCurrentParams } from 'redux/selectors/navigation';
 import { doNavigate } from 'redux/actions/navigation';
 import { makeSelectTotalPagesForChannel } from 'redux/selectors/content';
+import { doOpenModal } from 'redux/actions/app';
 import ChannelPage from './view';
 
 const select = (state, props) => ({
@@ -24,6 +25,7 @@ const perform = dispatch => ({
   fetchClaims: (uri, page) => dispatch(doFetchClaimsByChannel(uri, page)),
   fetchClaimCount: uri => dispatch(doFetchClaimCountByChannel(uri)),
   navigate: (path, params) => dispatch(doNavigate(path, params)),
+  openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
 });
 
 export default connect(select, perform)(ChannelPage);

@@ -1,26 +1,49 @@
+// @flow
 import React from 'react';
 import { Modal } from 'modal/modal';
-import FormField from 'component/formField/index';
+import { FormRow, FormField } from 'component/common/form';
 
-class ModalRemoveFile extends React.PureComponent {
-  constructor(props) {
+type Props = {
+  claimIsMine: boolean,
+  closeModal: () => void,
+  deleteFile: (string, boolean, boolean) => void,
+  title: string,
+  fileInfo: {
+    outpoint: string,
+  },
+};
+
+type State = {
+  deleteChecked: boolean,
+  abandonClaimChecked: boolean,
+};
+
+class ModalRemoveFile extends React.PureComponent<Props, State> {
+  constructor(props: Props) {
     super(props);
 
     this.state = {
-      deleteChecked: false,
+      deleteChecked: true,
       abandonClaimChecked: false,
     };
+
+    (this: any).handleDeleteCheckboxClicked = this.handleDeleteCheckboxClicked.bind(this);
+    (this: any).handleAbandonClaimCheckboxClicked = this.handleAbandonClaimCheckboxClicked.bind(
+      this
+    );
   }
 
-  handleDeleteCheckboxClicked(event) {
+  handleDeleteCheckboxClicked() {
+    const { deleteChecked } = this.state;
     this.setState({
-      deleteChecked: event.target.checked,
+      deleteChecked: !deleteChecked,
     });
   }
 
-  handleAbandonClaimCheckboxClicked(event) {
+  handleAbandonClaimCheckboxClicked() {
+    const { abandonClaimChecked } = this.state;
     this.setState({
-      abandonClaimChecked: event.target.checked,
+      abandonClaimChecked: !abandonClaimChecked,
     });
   }
 
@@ -38,26 +61,26 @@ class ModalRemoveFile extends React.PureComponent {
         onAborted={closeModal}
       >
         <p>
-          {__("Are you sure you'd like to remove")} <cite>{title}</cite> {__('from LBRY?')}
+          {__("Are you sure you'd like to remove")} <cite>{title}</cite> {__('from the LBRY app?')}
         </p>
 
-        <section>
+        <FormRow padded>
           <FormField
+            prefix={__('Also delete this file from my computer')}
             type="checkbox"
             checked={deleteChecked}
-            onClick={this.handleDeleteCheckboxClicked.bind(this)}
-            label={__('Delete this file from my computer')}
+            onChange={this.handleDeleteCheckboxClicked}
           />
-        </section>
+        </FormRow>
         {claimIsMine && (
-          <section>
+          <FormRow>
             <FormField
+              prefix={__('Abandon the claim for this URI')}
               type="checkbox"
               checked={abandonClaimChecked}
-              onClick={this.handleAbandonClaimCheckboxClicked.bind(this)}
-              label={__('Abandon the claim for this URI')}
+              onChange={this.handleAbandonClaimCheckboxClicked}
             />
-          </section>
+          </FormRow>
         )}
       </Modal>
     );

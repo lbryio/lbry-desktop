@@ -1,21 +1,54 @@
-import React from 'react';
+// @flow
+import * as React from 'react';
 import { buildURI } from 'lbryURI';
-import FormField from 'component/formField';
-import FileTile from 'component/fileTile';
-import { BusyMessage } from 'component/common.js';
+import { FormField } from 'component/common/form';
+import FileCard from 'component/fileCard';
 
-class FileList extends React.PureComponent {
-  constructor(props) {
+type FileInfo = {
+  name: string,
+  channelName: ?string,
+  pending?: boolean,
+  value?: {
+    publisherSignature: {
+      certificateId: string,
+    },
+  },
+  metadata: {
+    publisherSignature: {
+      certificateId: string,
+    },
+  },
+};
+
+type Props = {
+  hideFilter: boolean,
+  fileInfos: Array<FileInfo>,
+};
+
+type State = {
+  sortBy: string,
+};
+
+class FileList extends React.PureComponent<Props, State> {
+  static defaultProps = {
+    hideFilter: false,
+  };
+
+  constructor(props: Props) {
     super(props);
 
     this.state = {
       sortBy: 'dateNew',
     };
 
-    this._sortFunctions = {
+    this.sortFunctions = {
       dateNew: fileInfos =>
         this.props.sortByHeight
           ? fileInfos.slice().sort((fileInfo1, fileInfo2) => {
+              if (fileInfo1.pending) {
+                return -1;
+              }
+
               const height1 = this.props.claimsById[fileInfo1.claim_id]
                 ? this.props.claimsById[fileInfo1.claim_id].height
                 : 0;
@@ -49,12 +82,21 @@ class FileList extends React.PureComponent {
           : fileInfos,
       title: fileInfos =>
         fileInfos.slice().sort((fileInfo1, fileInfo2) => {
-          const title1 = fileInfo1.value
-            ? fileInfo1.value.stream.metadata.title.toLowerCase()
-            : fileInfo1.claim_name;
-          const title2 = fileInfo2.value
-            ? fileInfo2.value.stream.metadata.title.toLowerCase()
-            : fileInfo2.claim_name;
+          const getFileTitle = fileInfo => {
+            const { value, metadata, name, claim_name: claimName } = fileInfo;
+            if (metadata) {
+              // downloaded claim
+              return metadata.title || claimName;
+            } else if (value) {
+              // published claim
+              const { title } = value.stream.metadata;
+              return title || name;
+            }
+            // Invalid claim
+            return '';
+          };
+          const title1 = getFileTitle(fileInfo1).toLowerCase();
+          const title2 = getFileTitle(fileInfo2).toLowerCase();
           if (title1 < title2) {
             return -1;
           } else if (title1 > title2) {
@@ -76,60 +118,62 @@ class FileList extends React.PureComponent {
     };
   }
 
-  getChannelSignature(fileInfo) {
+  getChannelSignature = (fileInfo: FileInfo) => {
+    if (fileInfo.pending) {
+      return undefined;
+    }
+
     if (fileInfo.value) {
       return fileInfo.value.publisherSignature.certificateId;
     }
     return fileInfo.channel_claim_id;
-  }
+  };
 
-  handleSortChanged(event) {
+  handleSortChanged(event: SyntheticInputEvent<*>) {
     this.setState({
       sortBy: event.target.value,
     });
   }
 
   render() {
-    const { handleSortChanged, fetching, fileInfos } = this.props;
+    const { fileInfos, hideFilter } = this.props;
     const { sortBy } = this.state;
     const content = [];
 
-    this._sortFunctions[sortBy](fileInfos).forEach(fileInfo => {
+    this.sortFunctions[sortBy](fileInfos).forEach(fileInfo => {
+      const { channel_name: channelName, name: claimName, claim_id: claimId } = fileInfo;
       const uriParams = {};
 
-      if (fileInfo.channel_name) {
-        uriParams.channelName = fileInfo.channel_name;
-        uriParams.contentName = fileInfo.claim_name || fileInfo.name;
+      if (channelName) {
+        uriParams.channelName = channelName;
+        uriParams.contentName = claimName;
         uriParams.claimId = this.getChannelSignature(fileInfo);
       } else {
-        uriParams.claimId = fileInfo.claim_id;
-        uriParams.claimName = fileInfo.claim_name || fileInfo.name;
+        uriParams.claimId = claimId;
+        uriParams.claimName = claimName;
       }
+
       const uri = buildURI(uriParams);
 
-      content.push(
-        <FileTile
-          key={fileInfo.outpoint || fileInfo.claim_id}
-          uri={uri}
-          showPrice={false}
-          showLocal={false}
-          showActions
-          showEmpty={this.props.fileTileShowEmpty}
-        />
-      );
+      content.push(<FileCard key={claimName} uri={uri} showPrice={false} />);
     });
+
     return (
-      <section className="file-list__header">
-        {fetching && <BusyMessage />}
-        <span className="sort-section">
-          {__('Sort by')}{' '}
-          <FormField type="select" onChange={this.handleSortChanged.bind(this)}>
-            <option value="dateNew">{__('Newest First')}</option>
-            <option value="dateOld">{__('Oldest First')}</option>
-            <option value="title">{__('Title')}</option>
-          </FormField>
-        </span>
-        {content}
+      <section>
+        <div className="file-list__sort">
+          {!hideFilter && (
+            <FormField
+              prefix={__('Sort by')}
+              type="select"
+              value={sortBy}
+              onChange={this.handleSortChanged}
+            >
+              <option value="date">{__('Date')}</option>
+              <option value="title">{__('Title')}</option>
+            </FormField>
+          )}
+        </div>
+        <div className="card__list">{content}</div>
       </section>
     );
   }

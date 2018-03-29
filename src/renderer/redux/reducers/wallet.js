@@ -2,10 +2,6 @@ import * as ACTIONS from 'constants/action_types';
 
 const reducers = {};
 const receiveAddress = localStorage.getItem('receiveAddress');
-const buildDraftTransaction = () => ({
-  amount: undefined,
-  address: undefined,
-});
 
 const defaultState = {
   balance: undefined,
@@ -14,8 +10,8 @@ const defaultState = {
   fetchingTransactions: false,
   receiveAddress,
   gettingNewAddress: false,
-  draftTransaction: buildDraftTransaction(),
   sendingSupport: false,
+  sendingTx: false,
 };
 
 reducers[ACTIONS.FETCH_TRANSACTIONS_STARTED] = state =>
@@ -68,51 +64,21 @@ reducers[ACTIONS.CHECK_ADDRESS_IS_MINE_COMPLETED] = state =>
     checkingAddressOwnership: false,
   });
 
-reducers[ACTIONS.SET_DRAFT_TRANSACTION_AMOUNT] = (state, action) => {
-  const oldDraft = state.draftTransaction;
-  const newDraft = Object.assign({}, oldDraft, {
-    amount: parseFloat(action.data.amount),
-  });
-
-  return Object.assign({}, state, {
-    draftTransaction: newDraft,
-  });
-};
-
-reducers[ACTIONS.SET_DRAFT_TRANSACTION_ADDRESS] = (state, action) => {
-  const oldDraft = state.draftTransaction;
-  const newDraft = Object.assign({}, oldDraft, {
-    address: action.data.address,
-  });
-
-  return Object.assign({}, state, {
-    draftTransaction: newDraft,
-  });
-};
-
 reducers[ACTIONS.SEND_TRANSACTION_STARTED] = state => {
-  const newDraftTransaction = Object.assign({}, state.draftTransaction, {
-    sending: true,
-  });
-
   return Object.assign({}, state, {
-    draftTransaction: newDraftTransaction,
+    sendingTx: true,
   });
 };
 
 reducers[ACTIONS.SEND_TRANSACTION_COMPLETED] = state =>
   Object.assign({}, state, {
-    draftTransaction: buildDraftTransaction(),
+    sendingTx: false,
   });
 
 reducers[ACTIONS.SEND_TRANSACTION_FAILED] = (state, action) => {
-  const newDraftTransaction = Object.assign({}, state.draftTransaction, {
-    sending: false,
-    error: action.data.error,
-  });
-
   return Object.assign({}, state, {
-    draftTransaction: newDraftTransaction,
+    sendingTx: false,
+    error: action.data.error,
   });
 };
 

@@ -1,89 +1,193 @@
-@import '../mixin/link.scss';
-
-$button-focus-shift: 12%;
-
-.button-set-item {
-  position: relative;
-  display: inline-block;
-
-  + .button-set-item {
-    margin-left: var(--button-intra-margin);
-  }
+button:disabled {
+  cursor: default;
 }
 
-.button-block,
-.faux-button-block {
-  display: inline-block;
-  height: var(--button-height);
-  line-height: var(--button-height);
+.btn {
+  border: none;
   text-decoration: none;
-  border: 0 none;
-  text-align: center;
-  border-radius: var(--button-radius);
-  text-transform: uppercase;
-  .icon {
-    top: 0em;
+  cursor: pointer;
+  position: relative;
+  padding: 10px;
+  height: var(--btn-height);
+  min-width: var(--btn-height);
+  border-radius: var(--btn-radius);
+  background-color: var(--btn-bg-primary);
+  color: var(--btn-color-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  fill: currentColor; // for proper icon color
+  font-size: 12px;
+  transition: all var(--animation-duration) var(--animation-style);
+  font-family: 'metropolis-medium';
+
+  &:not(:disabled) {
+    box-shadow: var(--box-shadow-button);
   }
-  .icon:first-child {
-    padding-right: 5px;
+
+  &:hover {
+    box-shadow: none;
+    background-color: var(--btn-bg-primary-hover);
   }
-  .icon:last-child {
+
+  .icon + .btn__label {
     padding-left: 5px;
   }
-  .icon:only-child {
-    padding-left: 0;
-    padding-right: 0;
-  }
-}
-.button-block {
-  cursor: pointer;
-  font-weight: 500;
-  font-size: 14px;
-  user-select: none;
-  transition: background var(--animation-duration) var(--animation-style);
 }
 
-.button__content {
-  margin: 0 var(--button-padding);
-  display: flex;
-  .link-label {
-    text-decoration: none !important;
+.btn.btn--alt {
+  color: var(--btn-color-alt);
+  background-color: var(--btn-bg-alt);
+
+  &:disabled {
+    color: var(--color-help);
+    background-color: transparent;
   }
 }
 
-.button-primary {
-  color: var(--button-primary-color);
-  background-color: var(--button-primary-bg);
-  box-shadow: var(--box-shadow-layer);
-
-  &:focus {
-    //color: var(--button-primary-active-color);
-    //background-color:color: var(--button-primary-active-bg);
-    //box-shadow: $box-shadow-focus;
-  }
-}
-.button-alt {
-  background-color: var(--button-bg);
-  box-shadow: var(--box-shadow-layer);
+.btn.btn--danger {
+  background-color: var(--btn-bg-danger);
 }
 
-.button-text {
-  @include text-link();
+.btn.btn--inverse {
+  background-color: transparent;
+  box-shadow: none;
+  color: var(--btn-color-inverse);
+}
+
+.btn.btn--link {
+  padding: 0;
+  margin: 0;
+  background-color: inherit;
+  font-size: 1em;
+  color: var(--btn-color-inverse);
+  border-radius: 0;
   display: inline-block;
+  min-width: 0;
+  box-shadow: none;
+  text-align: left;
+}
 
-  .button__content {
-    margin: 0 var(--text-link-padding);
+.btn.btn--external-link {
+  color: var(--btn-external-color);
+}
+
+.btn.btn--secondary {
+  background-color: var(--btn-bg-secondary);
+}
+
+.btn.btn--no-style {
+  font-size: inherit;
+  font-weight: inherit;
+  color: inherit;
+  background-color: inherit;
+  border-radius: 0;
+  padding: 0;
+  margin: 0;
+  box-shadow: none;
+  min-width: 0;
+}
+
+.btn--link,
+.btn--no-style {
+  height: auto;
+
+  .btn__label,
+  .btn__content {
+    padding: 0;
   }
 }
-.button-text-help {
-  @include text-link(var(--text-help-color));
-  font-size: 0.8em;
-}
-.button--flat {
-  box-shadow: none !important;
+
+.btn.btn--disabled:disabled {
+  cursor: default;
+
+  &.btn--primary {
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+
+  &:hover {
+    box-shadow: none;
+  }
 }
 
-.button--submit {
-  font-family: inherit;
-  line-height: 0;
+.btn.btn--uppercase {
+  text-transform: uppercase;
+}
+
+.btn:not(.btn--no-padding):not(.btn--link) {
+  .btn__content {
+    padding: 0 8px;
+    display: flex;
+    align-items: center;
+  }
+}
+
+.icon + .btn__label,
+.btn__label + .icon {
+  margin-left: 5px;
+}
+
+/*
+  Everything below this is variations of the default button classes
+  You must pass in a className, props will not set these classes,
+  if you use these in several different places they should probably
+  be applied via props
+*/
+
+.btn.btn--home-nav {
+  box-shadow: none;
+
+  .btn__content {
+    padding: 0;
+  }
+}
+
+.btn.btn--arrow {
+  width: var(--btn-arrow-width);
+
+  &:disabled {
+    opacity: 0.3;
+  }
+}
+
+.btn--uri-indicator {
+  transition: color var(--animation-duration) var(--animation-duration);
+
+  &:hover {
+    color: var(--color-light-blue);
+  }
+}
+
+.btn.btn--header-balance {
+  font-family: 'metropolis-medium';
+  font-size: 13px;
+
+  @media only screen and (min-width: $medium-breakpoint) {
+    font-size: 18px;
+  }
+
+  @media only screen and (min-width: $large-breakpoint) {
+    font-size: 21px;
+  }
+
+  .btn__label--balance {
+    color: var(--color-grey-dark);
+  }
+
+  &:hover {
+    background-color: transparent;
+
+    .btn__label--balance {
+      color: var(--btn-primary-bg);
+    }
+  }
+}
+
+.btn.btn--file-actions {
+  background-color: var(--color-black);
+  color: var(--color-white);
+  opacity: 0.8;
+  border-radius: var(--btn-radius);
+  height: var(--btn-height);
+  padding: 0 3px;
 }

@@ -1,11 +1,5 @@
-$padding-snack-horizontal: $spacing-vertical;
-
 .snack-bar {
-  $height-snack: $spacing-vertical * 2;
-  $padding-snack-vertical: $spacing-vertical / 4;
-
-  line-height: $height-snack - $padding-snack-vertical * 2;
-  padding: $padding-snack-vertical $padding-snack-horizontal;
+  padding: $spacing-vertical;
   position: fixed;
   top: $spacing-vertical;
   left: 0;
@@ -13,18 +7,14 @@ $padding-snack-horizontal: $spacing-vertical;
   margin-left: auto;
   margin-right: auto;
   min-width: 300px;
-  max-width: $width-page-constrained - $spacing-vertical * 2;
+  max-width: var(--snack-bar-width);
   background: var(--color-dark-overlay);
   color: #f0f0f0;
-
   display: flex;
   justify-content: space-between;
   align-items: center;
-
   border-radius: 2px;
-
   transition: all var(--transition-duration) var(--transition-type);
-
   z-index: 10000; /*hack to get it over react modal */
 }
 
@@ -32,7 +22,7 @@ $padding-snack-horizontal: $spacing-vertical;
   display: inline-block;
   text-transform: uppercase;
   color: var(--color-primary-light);
-  margin: 0px 0px 0px $padding-snack-horizontal;
+  margin: 0px 0px 0px $spacing-vertical;
   min-width: min-content;
   &:hover {
     text-decoration: underline;

@@ -1,16 +1,25 @@
+// @flow
 import React from 'react';
-import { BusyMessage } from 'component/common';
+import BusyIndicator from 'component/common/busy-indicator';
 import ChannelPage from 'page/channel';
 import FilePage from 'page/file';
+import Page from 'component/page';
 
-class ShowPage extends React.PureComponent {
-  componentWillMount() {
+type Props = {
+  isResolvingUri: boolean,
+  resolveUri: string => void,
+  uri: string,
+  claim: { name: string },
+};
+
+class ShowPage extends React.PureComponent<Props> {
+  componentDidMount() {
     const { isResolvingUri, resolveUri, uri } = this.props;
 
     if (!isResolvingUri) resolveUri(uri);
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: Props) {
     const { isResolvingUri, resolveUri, claim, uri } = nextProps;
 
     if (!isResolvingUri && claim === undefined && uri) {
@@ -25,20 +34,18 @@ class ShowPage extends React.PureComponent {
 
     if ((isResolvingUri && !claim) || !claim) {
       innerContent = (
-        <section className="card">
-          <div className="card__inner">
-            <div className="card__title-identity">
-              <h1>{uri}</h1>
+        <Page>
+          <section className="card">
+            <h1>{uri}</h1>
+            <div className="card__content">
+              {isResolvingUri && <BusyIndicator message={__('Loading decentralized data...')} />}
+              {claim === null &&
+                !isResolvingUri && (
+                  <span className="empty">{__("There's nothing at this location.")}</span>
+                )}
             </div>
-          </div>
-          <div className="card__content">
-            {isResolvingUri && <BusyMessage message={__('Loading magic decentralized data...')} />}
-            {claim === null &&
-              !isResolvingUri && (
-                <span className="empty">{__("There's nothing at this location.")}</span>
-              )}
-          </div>
-        </section>
+          </section>
+        </Page>
       );
     } else if (claim && claim.name.length && claim.name[0] === '@') {
       innerContent = <ChannelPage uri={uri} />;
@@ -46,7 +53,7 @@ class ShowPage extends React.PureComponent {
       innerContent = <FilePage uri={uri} />;
     }
 
-    return <main className="main--single-column">{innerContent}</main>;
+    return innerContent;
   }
 }
 

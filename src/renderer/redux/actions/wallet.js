@@ -3,22 +3,21 @@ import * as MODALS from 'constants/modal_types';
 import Lbry from 'lbry';
 import { doOpenModal, doShowSnackBar } from 'redux/actions/app';
 import { doNavigate } from 'redux/actions/navigation';
-import {
-  selectBalance,
-  selectDraftTransaction,
-  selectDraftTransactionAmount,
-} from 'redux/selectors/wallet';
+import { selectBalance } from 'redux/selectors/wallet';
 
 export function doUpdateBalance() {
-  return dispatch => {
-    Lbry.wallet_balance().then(balance =>
-      dispatch({
-        type: ACTIONS.UPDATE_BALANCE,
-        data: {
-          balance,
-        },
-      })
-    );
+  return (dispatch, getState) => {
+    const { wallet: { balance: balanceInStore } } = getState();
+    Lbry.wallet_balance().then(balance => {
+      if (balanceInStore !== balance) {
+        return dispatch({
+          type: ACTIONS.UPDATE_BALANCE,
+          data: {
+            balance,
+          },
+        });
+      }
+    });
   };
 }
 
@@ -89,12 +88,10 @@ export function doCheckAddressIsMine(address) {
   };
 }
 
-export function doSendDraftTransaction() {
+export function doSendDraftTransaction({ amount, address }) {
   return (dispatch, getState) => {
     const state = getState();
-    const draftTx = selectDraftTransaction(state);
     const balance = selectBalance(state);
-    const amount = selectDraftTransactionAmount(state);
 
     if (balance - amount <= 0) {
       dispatch(doOpenModal(MODALS.INSUFFICIENT_CREDITS));
@@ -135,23 +132,9 @@ export function doSendDraftTransaction() {
     };
 
     Lbry.wallet_send({
-      amount: draftTx.amount,
-      address: draftTx.address,
+      amount,
+      address,
     }).then(successCallback, errorCallback);
-  };
-}
-
-export function doSetDraftTransactionAmount(amount) {
-  return {
-    type: ACTIONS.SET_DRAFT_TRANSACTION_AMOUNT,
-    data: { amount },
-  };
-}
-
-export function doSetDraftTransactionAddress(address) {
-  return {
-    type: ACTIONS.SET_DRAFT_TRANSACTION_ADDRESS,
-    data: { address },
   };
 }
 

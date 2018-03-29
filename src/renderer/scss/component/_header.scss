@@ -1,64 +1,19 @@
-#header {
-  color: var(--header-color);
-  background: var(--header-bg);
+.header {
+  grid-area: header;
   display: flex;
-  align-items: center;
-  justify-content: space-around;
-  position: fixed;
-  box-shadow: var(--box-shadow-layer);
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 3;
-  padding: $spacing-vertical / 2;
-  box-sizing: border-box;
-}
-.header__item {
-  padding-left: $spacing-vertical / 4;
-  padding-right: $spacing-vertical / 4;
-  .button-alt {
-    background: var(--header-button-bg) !important;
-    font-size: 1em;
-  }
-  .button-alt:hover {
-    background: var(--header-button-hover-bg) !important;
-  }
+  z-index: 1;
+  justify-content: space-between;
+  padding: $spacing-width $spacing-width 0 $spacing-width;
+  background-color: var(--color-bg);
+  // height: 100px;
 }
 
-.header__item--wunderbar {
-  flex-grow: 1;
-}
+.header__actions-right {
+  margin-left: auto;
+  padding-left: $spacing-vertical / 2;
+  display: flex;
 
-.wunderbar {
-  position: relative;
-  .icon {
-    position: absolute;
-    left: 10px;
-    top: $spacing-vertical / 2 - 4px; //hacked
-  }
-}
-
-.wunderbar--active .icon-search {
-  color: var(--color-primary);
-}
-
-// below styles should be inside the common input styling
-// will come back to this with the redesign - sean
-.wunderbar__input {
-  background: var(--search-bg);
-  width: 100%;
-  color: var(--search-color);
-  height: $spacing-vertical * 1.5;
-  line-height: $spacing-vertical * 1.5;
-  padding-left: 38px;
-  padding-right: 5px;
-  border-radius: 2px;
-  border: var(--search-border);
-  transition: box-shadow var(--transition-duration) var(--transition-type);
-  &:focus {
-    background: var(--search-active-bg);
-    color: var(--search-active-color);
-    box-shadow: var(--search-active-shadow);
-    border-color: var(--color-primary);
+  .btn {
+    margin-left: $spacing-vertical * 1/3;
   }
 }

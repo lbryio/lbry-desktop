@@ -1,28 +1,14 @@
-import React from 'react';
 import { connect } from 'react-redux';
-import {
-  doSendDraftTransaction,
-  doSetDraftTransactionAmount,
-  doSetDraftTransactionAddress,
-} from 'redux/actions/wallet';
-import {
-  selectDraftTransactionAmount,
-  selectDraftTransactionAddress,
-  selectDraftTransactionError,
-} from 'redux/selectors/wallet';
-
+import { doSendDraftTransaction } from 'redux/actions/wallet';
+import { selectBalance } from 'redux/selectors/wallet';
 import WalletSend from './view';
 
-const select = state => ({
-  address: selectDraftTransactionAddress(state),
-  amount: selectDraftTransactionAmount(state),
-  error: selectDraftTransactionError(state),
+const perform = dispatch => ({
+  sendToAddress: values => dispatch(doSendDraftTransaction(values)),
 });
 
-const perform = dispatch => ({
-  sendToAddress: () => dispatch(doSendDraftTransaction()),
-  setAmount: event => dispatch(doSetDraftTransactionAmount(event.target.value)),
-  setAddress: event => dispatch(doSetDraftTransactionAddress(event.target.value)),
+const select = state => ({
+  balance: selectBalance(state),
 });
 
 export default connect(select, perform)(WalletSend);
