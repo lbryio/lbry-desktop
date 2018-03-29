@@ -472,6 +472,10 @@ async@^2.1.2, async@^2.4.1:
   dependencies:
     lodash "^4.14.0"
 
+async@~0.9.0:
+  version "0.9.2"
+  resolved "https://registry.yarnpkg.com/async/-/async-0.9.2.tgz#aea74d5e61c1f899613bf64bda66d4c78f2fd17d"
+
 asynckit@^0.4.0:
   version "0.4.0"
   resolved "https://registry.yarnpkg.com/asynckit/-/asynckit-0.4.0.tgz#c79ed97f7f34cb8f2ba1bc9790bcc366474b4b79"
@@ -3992,6 +3996,12 @@ fs-extra@^5.0.0:
     graceful-fs "^4.1.2"
     jsonfile "^4.0.0"
     universalify "^0.1.0"
+
+fs-path@^0.0.24:
+  version "0.0.24"
+  resolved "https://registry.yarnpkg.com/fs-path/-/fs-path-0.0.24.tgz#21a4b8d7dce5bae6d208261955dbc2bcf1e75c06"
+  dependencies:
+    async "~0.9.0"
 
 fs-write-stream-atomic@^1.0.8:
   version "1.0.10"
