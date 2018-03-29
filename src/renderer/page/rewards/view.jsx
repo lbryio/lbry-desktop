@@ -84,10 +84,12 @@ class RewardsPage extends React.PureComponent {
         <div className="card__content empty">
           <p>
             {__(
-              'Rewards are currently disabled for your account. Turn on diagnostic data sharing, in'
+              'Rewards are currently disabled for your account. Turn on diagnostic data sharing in,'
             )}{' '}
-            <Button onClick={() => navigate('/settings')} label="Settings" />
-            {__(', in order to re-enable them.')}
+          </p>
+          <p>
+            <Button onClick={() => navigate('/settings')} button="primary" label="Settings" />
+            {__('in order to re-enable them.')}
           </p>
         </div>
       );
