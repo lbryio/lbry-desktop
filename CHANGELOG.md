@@ -3,6 +3,9 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [Unreleased]
+   * Add keyboard shortcut to quit the app on Windows ([#1202](https://github.com/lbryio/lbry-app/pull/1202))
+
 ## [0.21.2] - 2018-03-22
 
 
