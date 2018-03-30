@@ -55,7 +55,7 @@ class UserEmailNew extends React.PureComponent<Props, State> {
               placeholder="youremail@example.org"
               name="email"
               value={this.state.email}
-              errorMessage={errorMessage}
+              error={errorMessage}
               onChange={this.handleEmailChanged}
             />
           </FormRow>
