@@ -51,6 +51,10 @@
   input.paginate-channel {
     width: 35px;
   }
+    
+  &.form-field--auto-height {
+    height: auto;
+  }
 }
 
 .form-field__help,

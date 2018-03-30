@@ -114,7 +114,7 @@ button:disabled {
   text-transform: uppercase;
 }
 
-.btn:not(.btn--no-padding):not(.btn--link) {
+.btn:not(.btn--no-padding):not(.btn--link):not(.btn--no-style) {
   .btn__content {
     padding: 0 8px;
     display: flex;
