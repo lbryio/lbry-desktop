@@ -1,7 +1,6 @@
 import { app, Menu, shell } from 'electron';
 
 export default () => {
-  const newLocal = 'quit';
   const template = [
     {
       label: 'Edit',
