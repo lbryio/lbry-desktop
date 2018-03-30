@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
   * App category for Linux ([#877](https://github.com/lbryio/lbry-app/pull/877))
   * Add YouTube Sync reward ([#1147](https://github.com/lbryio/lbry-app/pull/1147))
   * Retain previous screen sizing on startup ([#338](https://github.com/lbryio/lbry-app/issues/338))
+  * Add 'Go to page' input on channel pagination ([#1166](https://github.com/lbryio/lbry-app/pull/1166))
 
 
 ### Changed
