@@ -1,12 +1,15 @@
 // @flow
 import React from 'react';
 import BusyIndicator from 'component/common/busy-indicator';
+import Button from 'component/button';
 import { FormField, FormRow } from 'component/common/form';
 import ReactPaginate from 'react-paginate';
 import SubscribeButton from 'component/subscribeButton';
+import ViewOnWebButton from 'component/viewOnWebButton';
 import Page from 'component/page';
 import FileList from 'component/fileList';
 import type { Claim } from 'types/claim';
+import { MODALS } from 'lbry-redux';
 
 type Props = {
   uri: string,
@@ -19,6 +22,7 @@ type Props = {
   fetchClaims: (string, number) => void,
   fetchClaimCount: string => void,
   navigate: (string, {}) => void,
+  openModal: (string, {}) => void,
 };
 
 class ChannelPage extends React.PureComponent<Props> {
@@ -56,8 +60,8 @@ class ChannelPage extends React.PureComponent<Props> {
   }
 
   render() {
-    const { fetching, claimsInChannel, claim, page, totalPages } = this.props;
-    const { name, permanent_url: permanentUrl } = claim;
+    const { fetching, claimsInChannel, claim, page, totalPages, uri, openModal } = this.props;
+    const { name, permanent_url: permanentUrl, claim_id: claimId } = claim;
 
     let contentList;
     if (fetching) {
@@ -76,7 +80,14 @@ class ChannelPage extends React.PureComponent<Props> {
         <section className="card__channel-info card__channel-info--large">
           <h1>{name}</h1>
           <div className="card__actions card__actions--no-margin">
+            <Button
+              button="alt"
+              iconRight="Send"
+              label={__('Enjoy this? Send a tip')}
+              onClick={() => openModal(MODALS.SEND_TIP, { uri })}
+            />
             <SubscribeButton uri={permanentUrl} channelName={name} />
+            <ViewOnWebButton uri={`${name}:${claimId}`} />
           </div>
         </section>
         <section>{contentList}</section>

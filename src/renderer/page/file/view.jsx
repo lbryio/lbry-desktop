@@ -13,6 +13,7 @@ import DateTime from 'component/dateTime';
 import * as icons from 'constants/icons';
 import Button from 'component/button';
 import SubscribeButton from 'component/subscribeButton';
+import ViewOnWebButton from 'component/viewOnWebButton';
 import Page from 'component/page';
 import player from 'render-media';
 import * as settings from 'constants/settings';
@@ -80,12 +81,7 @@ class FilePage extends React.Component<Props> {
   }
 
   checkSubscription = (props: Props) => {
-    if (
-      props.claim.value.publisherSignature &&
-      props.subscriptions
-        .map(subscription => subscription.channelName)
-        .indexOf(props.claim.channel_name) !== -1
-    ) {
+    if (props.subscriptions.find(sub => sub.channelName === props.claim.channel_name)) {
       props.checkSubscription({
         channelName: props.claim.channel_name,
         uri: buildURI(
@@ -114,6 +110,7 @@ class FilePage extends React.Component<Props> {
       prepareEdit,
       navigate,
       autoplay,
+      costInfo,
     } = this.props;
 
     // File info
@@ -130,6 +127,11 @@ class FilePage extends React.Component<Props> {
     if (channelName && channelClaimId) {
       subscriptionUri = buildURI({ channelName, claimId: channelClaimId }, false);
     }
+    const speechSharable =
+      costInfo &&
+      costInfo.cost === 0 &&
+      contentType &&
+      ['video', 'image'].includes(contentType.split('/')[0]);
 
     // We want to use the short form uri for editing
     // This is what the user is used to seeing, they don't care about the claim id
@@ -190,6 +192,14 @@ class FilePage extends React.Component<Props> {
                       />
                       <SubscribeButton uri={subscriptionUri} channelName={channelName} />
                     </React.Fragment>
+                  )}
+                  {speechSharable && (
+                    <ViewOnWebButton
+                      uri={buildURI({
+                        claimId: claim.claim_id,
+                        contentName: claim.name,
+                      }).slice(7)}
+                    />
                   )}
                 </div>
               </div>
