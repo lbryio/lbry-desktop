@@ -49,9 +49,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
   * LBRY URLs not working on Linux ([#1120](https://github.com/lbryio/lbry-app/issues/1120))
   * Fix Windows notifications not showing ([#1145](https://github.com/lbryio/lbry-app/pull/1145))
   * Fix export issues ([#1163](https://github.com/lbryio/lbry-app/pull/1163))
-  * Fix Keyboard Shortcut to Quit APP ([#1163](https://github.com/lbryio/lbry-app/pull/1202))
-
-
+ 
 ## [0.20.0] - 2018-01-30
 
 ### Added
