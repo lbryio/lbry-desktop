@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import BusyIndicator from 'component/common/busy-indicator';
 import Button from 'component/button';
@@ -6,29 +7,31 @@ import UserEmailVerify from 'component/userEmailVerify';
 import UserVerify from 'component/userVerify';
 import Page from 'component/page';
 
-export class AuthPage extends React.PureComponent {
+type Props = {
+  isPending: boolean,
+  email: string,
+  // Not sure why it isn't recognizing that we are using this prop type
+  // Something to do with how we are passing all the props through probably
+  pathAfterAuth: string, // eslint-disable-line react/no-unused-prop-types
+  user: ?{
+    has_verified_email: boolean,
+    is_reward_approved: boolean,
+    is_identity_verified: boolean,
+  },
+  navigate: (string, ?{}) => void,
+};
+
+export class AuthPage extends React.PureComponent<Props> {
   componentWillMount() {
     this.navigateIfAuthenticated(this.props);
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: Props) {
     this.navigateIfAuthenticated(nextProps);
   }
 
-  navigateIfAuthenticated(props) {
-    const { isPending, user } = props;
-    if (
-      !isPending &&
-      user &&
-      user.has_verified_email &&
-      (user.is_reward_approved || user.is_identity_verified)
-    ) {
-      props.navigate(props.pathAfterAuth);
-    }
-  }
-
   getTitle() {
-    const { email, isPending, isVerificationCandidate, user } = this.props;
+    const { email, isPending, user } = this.props;
 
     if (isPending || (user && !user.has_verified_email && !email)) {
       return __('Human Proofing');
@@ -40,8 +43,20 @@ export class AuthPage extends React.PureComponent {
     return __('Welcome to LBRY');
   }
 
+  navigateIfAuthenticated = (props: Props) => {
+    const { isPending, user, pathAfterAuth, navigate } = props;
+    if (
+      !isPending &&
+      user &&
+      user.has_verified_email &&
+      (user.is_reward_approved || user.is_identity_verified)
+    ) {
+      navigate(pathAfterAuth);
+    }
+  };
+
   renderMain() {
-    const { email, isPending, isVerificationCandidate, user } = this.props;
+    const { email, isPending, user } = this.props;
 
     if (isPending) {
       return [<BusyIndicator message={__('Authenticating')} />, true];
@@ -56,7 +71,7 @@ export class AuthPage extends React.PureComponent {
   }
 
   render() {
-    const { email, user, isPending, navigate } = this.props;
+    const { navigate } = this.props;
     const [innerContent, useTemplate] = this.renderMain();
 
     return (
@@ -72,7 +87,11 @@ export class AuthPage extends React.PureComponent {
                 {`${__(
                   'This information is disclosed only to LBRY, Inc. and not to the LBRY network. It is only required to earn LBRY rewards and may be used to sync usage data across devices.'
                 )} `}
-                <Button onClick={() => navigate('/discover')} label={__('Return home')} />.
+                <Button
+                  button="link"
+                  onClick={() => navigate('/discover')}
+                  label={__('Return home.')}
+                />
               </div>
             </div>
           </section>

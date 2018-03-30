@@ -1,21 +1,29 @@
+// @flow
 import React from 'react';
 import { Modal } from 'modal/modal';
 import Button from 'component/button';
 import UserEmailNew from 'component/userEmailNew';
 import UserEmailVerify from 'component/userEmailVerify';
 
-class ModalEmailCollection extends React.PureComponent {
+type Props = {
+  closeModal: () => void,
+  email: string,
+  user: ?{ has_verified_email: boolean },
+};
+
+class ModalEmailCollection extends React.PureComponent<Props> {
   renderInner() {
     const { closeModal, email, user } = this.props;
 
-    const cancelButton = <Button button="text" onClick={closeModal} label={__('Not Now')} />;
+    const cancelButton = <Button button="link" onClick={closeModal} label={__('Not Now')} />;
 
-    if (!user.has_verified_email && !email) {
+    if (user && !user.has_verified_email && !email) {
       return <UserEmailNew cancelButton={cancelButton} />;
-    } else if (!user.has_verified_email) {
+    } else if (user && !user.has_verified_email) {
       return <UserEmailVerify cancelButton={cancelButton} />;
     }
-    closeModal();
+
+    return closeModal();
   }
 
   render() {

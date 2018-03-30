@@ -43,6 +43,10 @@
   input[type='radio'] {
     margin-top: 5px;
   }
+
+  &.form-field--auto-height {
+    height: auto;
+  }
 }
 
 .form-field__help,
