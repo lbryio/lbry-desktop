@@ -355,6 +355,14 @@
   }
 }
 
+.card__success-msg {
+  border-left: 2px solid var(--success-msg-border);
+  color: var(--success-msg-color);
+  background-color: var(--success-msg-bg);
+  padding: $spacing-vertical * 1/3;
+  margin: $spacing-vertical * 1/3 0;
+}
+
 .card__media--autothumb {
   color: red !important;
 }

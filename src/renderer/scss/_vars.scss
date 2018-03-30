@@ -31,6 +31,9 @@ $large-breakpoint: 1760px;
   --color-light-blue: #49b2e2;
   --color-red: #e2495e;
   --color-yellow: #fbd55e;
+  --color-green: #399483;
+  --color-green-light: #effbe4;
+  --color-green-blue: #2ec1a8;
   --color-divider: #e3e3e3;
 
   --text-color: var(--color-black);
@@ -123,6 +126,9 @@ $large-breakpoint: 1760px;
   --card-radius: 2px;
   --card-margin: $spacing-vertical * 2/3;
   --card-wallet-color: var(--text-color-inverse);
+  --success-msg-color: var(--color-green);
+  --success-msg-border: var(--color-green-blue);
+  --success-msg-bg: var(--color-green-light);
 
   /* File Tile Card */
   --file-tile--media-size: 60px;

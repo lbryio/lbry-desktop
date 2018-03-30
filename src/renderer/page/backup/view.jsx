@@ -12,7 +12,7 @@ type Props = {
 class BackupPage extends React.PureComponent<Props> {
   render() {
     const { daemonSettings } = this.props;
-    const { lbryum_wallet_dir } = daemonSettings;
+    const { lbryum_wallet_dir: lbryumWalletDir } = daemonSettings;
 
     const noDaemonSettings = Object.keys(daemonSettings).length === 0;
 
@@ -35,24 +35,16 @@ class BackupPage extends React.PureComponent<Props> {
                     'Currently, there is no automatic wallet backup. If you lose access to these files, you will lose your credits permanently.'
                   )}
                 </p>
-              </div>
-              <div className="card__content">
                 <p>
                   {__(
                     'However, it is fairly easy to back up manually. To backup your wallet, make a copy of the folder listed below:'
                   )}
                 </p>
-                <div className="card__content">
-                  <code>{lbryum_wallet_dir}</code>
-                </div>
-              </div>
-              <div className="card__content">
+                <p className="card__success-msg">{lbryumWalletDir}</p>
                 <p>
-                  <strong>
-                    {__(
-                      'Access to these files are equivalent to having access to your credits. Keep any copies you make of your wallet in a secure place.'
-                    )}
-                  </strong>
+                  {__(
+                    'Access to these files are equivalent to having access to your credits. Keep any copies you make of your wallet in a secure place.'
+                  )}
                 </p>
                 <p>
                   For more details on backing up and best practices,{' '}
