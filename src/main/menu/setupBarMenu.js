@@ -1,6 +1,7 @@
 import { app, Menu, shell } from 'electron';
 
 export default () => {
+  const newLocal = 'quit';
   const template = [
     {
       label: 'Edit',
@@ -27,7 +28,11 @@ export default () => {
     },
     {
       role: 'window',
-      submenu: [{ role: 'minimize' }, { role: 'close' }],
+      submenu: [
+        { role: 'minimize' },
+        { role: 'close' },
+        { role: 'quit', accelerator: 'CmdOrCtrl+Q' },
+      ],
     },
     {
       role: 'help',
@@ -41,11 +46,6 @@ export default () => {
               shell.openExternal('https://lbry.io/faq');
             }
           },
-        },
-        {
-          label: 'Close',
-          accelerator: 'CmdOrCtrl+Q',
-          role: 'quit',
         },
         {
           label: 'Frequently Asked Questions',
