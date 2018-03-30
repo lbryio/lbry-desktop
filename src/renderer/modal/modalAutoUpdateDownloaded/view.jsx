@@ -32,6 +32,10 @@ class ModalAutoUpdateDownloaded extends React.PureComponent {
               'A new version of LBRY has been released, downloaded, and is ready for you to use pending a restart.'
             )}
           </p>
+          <p className="meta text-center">
+            {__('Want to know what has changed?')} See the{' '}
+            <Button label={__('release notes')} href="https://github.com/lbryio/lbry-app/releases" />.
+          </p>
         </section>
       </Modal>
     );
