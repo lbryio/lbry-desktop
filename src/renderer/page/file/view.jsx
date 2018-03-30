@@ -1,6 +1,5 @@
 // @flow
 import * as React from 'react';
-import lbry from 'lbry';
 import { buildURI, normalizeURI } from 'lbryURI';
 import Video from 'component/video';
 import Thumbnail from 'component/common/thumbnail';
@@ -114,7 +113,10 @@ class FilePage extends React.Component<Props> {
     const shouldObscureThumbnail = obscureNsfw && metadata.nsfw;
     const thumbnail = metadata.thumbnail;
     const { height, channel_name: channelName, value } = claim;
-    const mediaType = lbry.getMediaType(contentType);
+    
+    // TODO: Add fall back
+    const mediaType = /^[^/]+/.exec(contentType)[0];
+
     const isPlayable =
       Object.values(player.mime).indexOf(contentType) !== -1 || mediaType === 'audio';
     const channelClaimId =

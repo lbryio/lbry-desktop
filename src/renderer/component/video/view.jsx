@@ -1,6 +1,5 @@
 // @flow
 import React from 'react';
-import lbry from 'lbry';
 import classnames from 'classnames';
 import VideoPlayer from './internal/player';
 import VideoPlayButton from './internal/play-button';
@@ -74,8 +73,11 @@ class Video extends React.PureComponent<Props> {
 
     const isPlaying = playingUri === uri;
     const isReadyToPlay = fileInfo && fileInfo.written_bytes > 0;
+    const obscureNsfw = this.props.obscureNsfw && metadata && metadata.nsfw;
     const shouldObscureNsfw = obscureNsfw && metadata && metadata.nsfw;
-    const mediaType = lbry.getMediaType(contentType, fileInfo && fileInfo.file_name);
+    
+    // TODO: Add a fall back
+    const mediaType = /^[^/]+/.exec(contentType)[0];
 
     let loadStatusMessage = '';
 
