@@ -81,12 +81,13 @@ class RewardsPage extends React.PureComponent {
 
     if (!daemonSettings.share_usage_data) {
       return (
-        <div className="card__content empty">
+        <div className="card card--section">
+          <div className="card__title">{__('Disabled')}</div>
           <p>
             {__(
               'Rewards are currently disabled for your account. Turn on diagnostic data sharing, in'
             )}{' '}
-            <Button onClick={() => navigate('/settings')} label="Settings" />
+            <Button button="link" onClick={() => navigate('/settings')} label="Settings" />
             {__(', in order to re-enable them.')}
           </p>
         </div>
