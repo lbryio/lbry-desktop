@@ -3,6 +3,10 @@ import { app, Menu, shell } from 'electron';
 export default () => {
   const template = [
     {
+      label: 'File',
+      submenu: [{ role: 'quit', accelerator: 'CmdOrCtrl+Q' }],
+    },
+    {
       label: 'Edit',
       submenu: [
         { role: 'undo' },
@@ -27,11 +31,7 @@ export default () => {
     },
     {
       role: 'window',
-      submenu: [
-        { role: 'minimize' },
-        { role: 'close' },
-        { role: 'quit', accelerator: 'CmdOrCtrl+Q' },
-      ],
+      submenu: [{ role: 'minimize' }, { role: 'close' }],
     },
     {
       role: 'help',
