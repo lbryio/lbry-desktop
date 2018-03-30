@@ -7,11 +7,15 @@
     padding-left: $spacing-vertical;
   }
 
+  &.form-row--centered {
+    justify-content: center;
+  }
+
   &.form-row--padded {
     padding-top: $spacing-vertical * 2/3;
   }
 
-  &.form-row--centered {
+  &.form-row--vertically-centered {
     align-items: center;
   }
 
@@ -44,6 +48,10 @@
     margin-top: 5px;
   }
 
+  input.paginate-channel {
+    width: 35px;
+  }
+    
   &.form-field--auto-height {
     height: auto;
   }
