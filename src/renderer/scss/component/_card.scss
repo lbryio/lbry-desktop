@@ -336,7 +336,7 @@
     display: inline-block;
     vertical-align: top;
     overflow: visible;
-    // we should use $spacing-width - 1px here, not sure why it isn't working
+    // 35 px to handle to padding between cards
     width: calc((100% / 3) - 35px);
   }
 
@@ -350,6 +350,7 @@
 
   @media only screen and (min-width: $medium-breakpoint) {
     .card {
+      // 31 px to handle to padding between cards
       width: calc((100% / 4) - 31px);
     }
   }
