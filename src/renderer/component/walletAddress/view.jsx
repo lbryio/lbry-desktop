@@ -32,7 +32,7 @@ class WalletAddress extends React.PureComponent<Props> {
 
         <div className="card__actions">
           <Button
-            button="alt"
+            button="primary"
             label={__('Get New Address')}
             icon={icons.REFRESH}
             onClick={getNewAddress}
