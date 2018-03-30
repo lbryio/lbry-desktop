@@ -76,7 +76,7 @@ export class Modal extends React.PureComponent<ModalProps> {
             />
             {type === 'confirm' ? (
               <Button
-                button="alt"
+                button="link"
                 label={abortButtonLabel}
                 disabled={abortButtonDisabled}
                 onClick={onAborted}

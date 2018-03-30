@@ -1,18 +1,31 @@
-// I'll come back to this
-/* eslint-disable */
-import React from 'react';
-import { Form, FormRow, Submit } from 'component/common/form';
+// @flow
+import * as React from 'react';
+import { FormField, Form, FormRow, Submit } from 'component/common/form';
 
-class UserEmailNew extends React.PureComponent {
-  constructor(props) {
-    super(props);
+type Props = {
+  cancelButton: React.Node,
+  errorMessage: ?string,
+  isPending: boolean,
+  addUserEmail: string => void,
+};
+
+type State = {
+  email: string,
+};
+
+class UserEmailNew extends React.PureComponent<Props, State> {
+  constructor() {
+    super();
 
     this.state = {
       email: '',
     };
+
+    (this: any).handleSubmit = this.handleSubmit.bind(this);
+    (this: any).handleEmailChanged = this.handleEmailChanged.bind(this);
   }
 
-  handleEmailChanged(event) {
+  handleEmailChanged(event: SyntheticInputEvent<*>) {
     this.setState({
       email: event.target.value,
     });
@@ -20,7 +33,8 @@ class UserEmailNew extends React.PureComponent {
 
   handleSubmit() {
     const { email } = this.state;
-    this.props.addUserEmail(email);
+    const { addUserEmail } = this.props;
+    addUserEmail(email);
   }
 
   render() {
@@ -32,19 +46,20 @@ class UserEmailNew extends React.PureComponent {
           {__("We'll let you know about LBRY updates, security issues, and great new content.")}
         </p>
         <p>{__("We'll never sell your email, and you can unsubscribe at any time.")}</p>
-        <Form onSubmit={this.handleSubmit.bind(this)}>
-          <FormRow
-            type="text"
-            label="Email"
-            placeholder="youremail@example.org"
-            name="email"
-            value={this.state.email}
-            errorMessage={errorMessage}
-            onChange={event => {
-              this.handleEmailChanged(event);
-            }}
-          />
-          <div className="form-row-submit">
+        <Form onSubmit={this.handleSubmit}>
+          <FormRow>
+            <FormField
+              stretch
+              type="email"
+              label="Email"
+              placeholder="youremail@example.org"
+              name="email"
+              value={this.state.email}
+              errorMessage={errorMessage}
+              onChange={this.handleEmailChanged}
+            />
+          </FormRow>
+          <div className="card__actions">
             <Submit label="Submit" disabled={isPending} />
             {cancelButton}
           </div>
@@ -55,4 +70,3 @@ class UserEmailNew extends React.PureComponent {
 }
 
 export default UserEmailNew;
-/* eslint-enable */
