@@ -50,7 +50,7 @@ type Props = {
   clearPublish: () => void,
   resolveUri: string => void,
   scrollToTop: () => void,
-  prepareEdit: ({}) => void,
+  prepareEdit: ({ }) => void,
 };
 
 class PublishForm extends React.PureComponent<Props> {
@@ -374,14 +374,15 @@ class PublishForm extends React.PureComponent<Props> {
                 disabled={formDisabled}
                 onChange={() => updatePublishForm({ contentIsFree: false })}
               />
-
-              <FormFieldPrice
-                name="content_cost_amount"
-                min="0"
-                price={price}
-                onChange={newPrice => updatePublishForm({ price: newPrice })}
-                disabled={formDisabled || contentIsFree}
-              />
+              <span className={contentIsFree ? 'hidden' : ''}>
+                <FormFieldPrice
+                  name="content_cost_amount"
+                  min="0"
+                  price={price}
+                  onChange={newPrice => updatePublishForm({ price: newPrice })}
+                  disabled={formDisabled || contentIsFree}
+                />
+              </span>
               {price.currency !== 'LBC' && (
                 <p className="form-field__help">
                   {__(
@@ -389,6 +390,7 @@ class PublishForm extends React.PureComponent<Props> {
                   )}
                 </p>
               )}
+
             </div>
           </section>
 
@@ -415,7 +417,7 @@ class PublishForm extends React.PureComponent<Props> {
                   stretch
                   prefix={`lbry://${
                     channel === CHANNEL_ANONYMOUS || channel === CHANNEL_NEW ? '' : `${channel}/`
-                  }`}
+                    }`}
                   type="text"
                   name="content_name"
                   placeholder="myname"
