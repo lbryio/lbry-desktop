@@ -52,7 +52,7 @@ export class FormFieldPrice extends React.PureComponent<Props> {
           min={min}
           value={price.amount || ''}
           onChange={this.handleAmountChange}
-          placeholder={placeholder || 5}
+          placeholder={placeholder || 0}
           disabled={disabled}
           step={step || 'any'}
         />
