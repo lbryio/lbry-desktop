@@ -1,6 +1,6 @@
 // @flow
+import { STATUSES } from 'lbry-redux';
 import * as MODALS from 'constants/modal_types';
-import * as STATUSES from 'constants/thumbnail_upload_statuses';
 import React from 'react';
 import { FormField } from 'component/common/form';
 import FileSelector from 'component/common/file-selector';

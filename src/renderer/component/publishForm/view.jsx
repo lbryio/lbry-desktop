@@ -389,7 +389,6 @@ class PublishForm extends React.PureComponent<Props> {
                 updatePublishForm={updatePublishForm}
                 formDisabled={formDisabled}
               />
-              <p>status: {uploadThumbnailStatus}</p>
             </FormRow>
             <FormRow padded>
               <FormField
