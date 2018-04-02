@@ -49,25 +49,25 @@ class SelectThumbnail extends React.PureComponent<Props> {
         )}
 
         {status === statuses.READY && (
-          <div>
+          <p>
             <a
               className="link"
               onClick={() => updatePublishForm({ uploadThumbnailStatus: statuses.MANUAL })}
             >
               Enter URL Manually
             </a>
-          </div>
+          </p>
         )}
 
         {status === statuses.MANUAL && (
-          <div>
+          <p>
             <a
               className="link"
               onClick={() => updatePublishForm({ uploadThumbnailStatus: statuses.READY })}
             >
               Upload Thumbnail
             </a>
-          </div>
+          </p>
         )}
 
         {status === statuses.IN_PROGRESS && <div>uploading...</div>}
