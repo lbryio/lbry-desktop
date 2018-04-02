@@ -23,6 +23,7 @@ type Props = {
   title: ?string,
   thumbnail: ?string,
   uploadThumbnailStatus: ?string,
+  uploadStatus: ?string,
   description: ?string,
   language: string,
   nsfw: boolean,
@@ -274,6 +275,7 @@ class PublishForm extends React.PureComponent<Props> {
       title,
       thumbnail,
       uploadThumbnailStatus,
+      uploadStatus,
       description,
       language,
       nsfw,
@@ -363,6 +365,7 @@ class PublishForm extends React.PureComponent<Props> {
                 updatePublishForm={updatePublishForm}
                 formDisabled={formDisabled}
               />
+              <p>status: {uploadStatus}</p>
             </FormRow>
             <FormRow padded>
               <FormField
