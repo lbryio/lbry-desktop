@@ -22,6 +22,8 @@ type FileInfo = {
 
 type Props = {
   hideFilter: boolean,
+  sortByHeight?: boolean,
+  claimsById: Array<{}>,
   fileInfos: Array<FileInfo>,
 };
 
@@ -141,16 +143,25 @@ class FileList extends React.PureComponent<Props, State> {
     const content = [];
 
     this.sortFunctions[sortBy](fileInfos).forEach(fileInfo => {
-      const { channel_name: channelName, name: claimName, claim_id: claimId } = fileInfo;
+      const {
+        channel_name: channelName,
+        name: claimName,
+        claim_name: claimNameDownloaded,
+        claim_id: claimId,
+      } = fileInfo;
       const uriParams = {};
+
+      // This is unfortunate
+      // https://github.com/lbryio/lbry/issues/1159
+      const name = claimName || claimNameDownloaded;
 
       if (channelName) {
         uriParams.channelName = channelName;
-        uriParams.contentName = claimName;
+        uriParams.contentName = name;
         uriParams.claimId = this.getChannelSignature(fileInfo);
       } else {
         uriParams.claimId = claimId;
-        uriParams.claimName = claimName;
+        uriParams.claimName = name;
       }
 
       const uri = buildURI(uriParams);
