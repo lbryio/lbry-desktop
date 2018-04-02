@@ -1,6 +1,6 @@
 // @flow
-import * as modals from 'constants/modal_types';
-import * as statuses from 'constants/thumbnail_upload_statuses';
+import * as MODALS from 'constants/modal_types';
+import * as STATUSES from 'constants/thumbnail_upload_statuses';
 import React from 'react';
 import { FormField } from 'component/common/form';
 import FileSelector from 'component/common/file-selector';
@@ -25,17 +25,17 @@ class SelectThumbnail extends React.PureComponent<Props> {
 
     return (
       <div>
-        {(status === statuses.READY || status === statuses.IN_PROGRESS) && (
+        {(status === STATUSES.READY || status === STATUSES.IN_PROGRESS) && (
           <div>
             <span className="form-field__label">{__('Thumbnail')}</span>
             <FileSelector
               fileLabel={__('Choose Thumbnail')}
-              onFileChosen={path => openModal(modals.CONFIRM_THUMBNAIL_UPLOAD, { path })}
+              onFileChosen={path => openModal(MODALS.CONFIRM_THUMBNAIL_UPLOAD, { path })}
             />
           </div>
         )}
 
-        {(status === statuses.API_DOWN || status === statuses.MANUAL) && (
+        {(status === STATUSES.API_DOWN || status === STATUSES.MANUAL) && (
           <FormField
             stretch
             type="text"
@@ -48,31 +48,31 @@ class SelectThumbnail extends React.PureComponent<Props> {
           />
         )}
 
-        {status === statuses.READY && (
+        {status === STATUSES.READY && (
           <p>
             <a
               className="link"
-              onClick={() => updatePublishForm({ uploadThumbnailStatus: statuses.MANUAL })}
+              onClick={() => updatePublishForm({ uploadThumbnailStatus: STATUSES.MANUAL })}
             >
               Enter URL Manually
             </a>
           </p>
         )}
 
-        {status === statuses.MANUAL && (
+        {status === STATUSES.MANUAL && (
           <p>
             <a
               className="link"
-              onClick={() => updatePublishForm({ uploadThumbnailStatus: statuses.READY })}
+              onClick={() => updatePublishForm({ uploadThumbnailStatus: STATUSES.READY })}
             >
               Upload Thumbnail
             </a>
           </p>
         )}
 
-        {status === statuses.IN_PROGRESS && <p>uploading...</p>}
+        {status === STATUSES.IN_PROGRESS && <p>uploading...</p>}
 
-        {status === statuses.COMPLETE && (
+        {status === STATUSES.COMPLETE && (
           <div>
             <p className="form-field__label">{__('Thumbnail')}</p>
             <p>
