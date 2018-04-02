@@ -50,7 +50,7 @@ export class FormFieldPrice extends React.PureComponent<Props> {
           type="number"
           className="form-field input--price-amount"
           min={min}
-          value={price.amount || ''}
+          value={price.amount}
           onChange={this.handleAmountChange}
           placeholder={placeholder || 0}
           disabled={disabled}
