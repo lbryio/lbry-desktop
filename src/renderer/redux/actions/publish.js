@@ -72,7 +72,7 @@ export const doUploadThumbnail = (filePath: string, nsfw: boolean) => (dispatch:
       batchActions(
         {
           type: ACTIONS.UPDATE_PUBLISH_FORM,
-          data: { uploadThumbnailStatus: STATUSES.DOWN },
+          data: { uploadThumbnailStatus: STATUSES.API_DOWN },
         },
         doAlertError(error)
       )
@@ -104,9 +104,9 @@ export const doUploadThumbnail = (filePath: string, nsfw: boolean) => (dispatch:
                 thumbnail: `${json.data.url}${fileExt}`,
               },
             })
-          : uploadError()
+          : uploadError(['Upload failed'])
     )
-    .catch(() => uploadError());
+    .catch(err => uploadError([err.message]));
 };
 
 export const doPrepareEdit = (claim: any) => (dispatch: Dispatch) => {
