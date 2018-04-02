@@ -67,7 +67,7 @@ export const doUploadThumbnail = (filePath: string, nsfw: boolean) => (dispatch:
     return text;
   };
 
-  const uploadError = (error: string = '') =>
+  const uploadError = (error = '') =>
     dispatch(
       batchActions(
         {
@@ -104,9 +104,9 @@ export const doUploadThumbnail = (filePath: string, nsfw: boolean) => (dispatch:
                 thumbnail: `${json.data.url}${fileExt}`,
               },
             })
-          : uploadError(['Upload failed'])
+          : uploadError('Upload failed')
     )
-    .catch(err => uploadError([err.message]));
+    .catch(err => uploadError(err.message));
 };
 
 export const doPrepareEdit = (claim: any) => (dispatch: Dispatch) => {
