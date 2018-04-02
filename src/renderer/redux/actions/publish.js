@@ -74,7 +74,7 @@ export const doUploadThumbnail = (filePath: string, nsfw: boolean) => (dispatch:
           type: ACTIONS.UPDATE_PUBLISH_FORM,
           data: { uploadThumbnailStatus: STATUSES.API_DOWN },
         },
-        doAlertError(error)
+        dispatch(doNotify({ id: MODALS.ERROR, error }))
       )
     );
 
