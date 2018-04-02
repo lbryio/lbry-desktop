@@ -70,7 +70,7 @@ class SelectThumbnail extends React.PureComponent<Props> {
           </p>
         )}
 
-        {status === statuses.IN_PROGRESS && <div>uploading...</div>}
+        {status === statuses.IN_PROGRESS && <p>uploading...</p>}
 
         {status === statuses.COMPLETE && (
           <div>
