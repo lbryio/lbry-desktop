@@ -13,8 +13,9 @@ type Props = {
 
 class ModalConfirmThumbnailUpload extends React.PureComponent<Props> {
   upload() {
-    this.props.upload(this.props.path, this.props.nsfw);
-    this.props.closeModal();
+    const { upload, closeModal, path, nsfw } = this.props;
+    upload(path, nsfw);
+    closeModal();
   }
 
   render() {
