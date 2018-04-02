@@ -23,7 +23,6 @@ type Props = {
   title: ?string,
   thumbnail: ?string,
   uploadThumbnailStatus: ?string,
-  uploadStatus: ?string,
   description: ?string,
   language: string,
   nsfw: boolean,
@@ -79,6 +78,32 @@ class PublishForm extends React.PureComponent<Props> {
     const { resolveUri } = this.props;
     // If they are midway through a channel creation, treat it as anonymous until it completes
     const channelName = channel === CHANNEL_ANONYMOUS || channel === CHANNEL_NEW ? '' : channel;
+  }
+
+  componentWillMount() {
+    this.props.resetThumbnailStatus();
+  }
+
+  handlePublish() {
+    const {
+      publish,
+      filePath,
+      bid,
+      title,
+      thumbnail,
+      description,
+      language,
+      nsfw,
+      channel,
+      licenseType,
+      licenseUrl,
+      otherLicenseDescription,
+      copyrightNotice,
+      name,
+      contentIsFree,
+      price,
+      uri,
+    } = this.props;
 
     let uri;
     try {
@@ -275,7 +300,6 @@ class PublishForm extends React.PureComponent<Props> {
       title,
       thumbnail,
       uploadThumbnailStatus,
-      uploadStatus,
       description,
       language,
       nsfw,
@@ -365,7 +389,7 @@ class PublishForm extends React.PureComponent<Props> {
                 updatePublishForm={updatePublishForm}
                 formDisabled={formDisabled}
               />
-              <p>status: {uploadStatus}</p>
+              <p>status: {uploadThumbnailStatus}</p>
             </FormRow>
             <FormRow padded>
               <FormField
