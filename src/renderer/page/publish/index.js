@@ -57,7 +57,7 @@ const perform = dispatch => ({
   publish: params => dispatch(doPublish(params)),
   navigate: path => dispatch(doNavigate(path)),
   prepareEdit: claim => dispatch(doPrepareEdit(claim)),
-  resetThumbnail: () => dispatch(doResetThumbnailStatus()),
+  resetThumbnailStatus: () => dispatch(doResetThumbnailStatus()),
 });
 
 export default connect(select, perform)(PublishPage);
