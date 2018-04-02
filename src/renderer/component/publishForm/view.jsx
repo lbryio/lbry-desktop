@@ -7,6 +7,7 @@ import ChannelSection from 'component/selectChannel';
 import classnames from 'classnames';
 import type { PublishParams, UpdatePublishFormData } from 'redux/reducers/publish';
 import FileSelector from 'component/common/file-selector';
+import SelectThumbnail from 'component/selectThumbnail';
 import { COPYRIGHT, OTHER } from 'constants/licenses';
 import { CHANNEL_NEW, CHANNEL_ANONYMOUS, MINIMUM_PUBLISH_BID } from 'constants/claim';
 import * as icons from 'constants/icons';
@@ -356,17 +357,12 @@ class PublishForm extends React.PureComponent<Props> {
               />
             </FormRow>
             <FormRow padded>
-              <FormField
-                stretch
-                type="text"
-                name="content_thumbnail"
-                label={__('Thumbnail')}
-                placeholder="http://spee.ch/mylogo"
-                value={thumbnail}
-                disabled={formDisabled}
-                onChange={e => updatePublishForm({ thumbnail: e.target.value })}
+              <SelectThumbnail
+                thumbnail={thumbnail}
+                uploadThumbnailStatus={uploadThumbnailStatus}
+                updatePublishForm={updatePublishForm}
+                formDisabled={formDisabled}
               />
-              <p>status: {uploadThumbnailStatus}</p>
             </FormRow>
             <FormRow padded>
               <FormField
