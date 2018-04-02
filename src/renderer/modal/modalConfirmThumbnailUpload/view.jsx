@@ -8,7 +8,7 @@ type Props = {
   path: string,
   nsfw: boolean,
   closeModal: () => void,
-  updatePublishForm: any => void,
+  updatePublishForm: ({}) => void,
 };
 
 class ModalConfirmThumbnailUpload extends React.PureComponent<Props> {
