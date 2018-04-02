@@ -21,6 +21,7 @@ type Props = {
   editingURI: ?string,
   title: ?string,
   thumbnail: ?string,
+  uploadStatus: ?string,
   description: ?string,
   language: string,
   nsfw: boolean,
@@ -267,6 +268,7 @@ class PublishForm extends React.PureComponent<Props> {
       editingURI,
       title,
       thumbnail,
+      uploadStatus,
       description,
       language,
       nsfw,
@@ -360,6 +362,7 @@ class PublishForm extends React.PureComponent<Props> {
                 disabled={formDisabled}
                 onChange={e => updatePublishForm({ thumbnail: e.target.value })}
               />
+              <p>status: {uploadStatus}</p>
             </FormRow>
             <FormRow padded>
               <FormField
