@@ -67,7 +67,7 @@ export const doUploadThumbnail = (filePath: string, nsfw: boolean) => (dispatch:
     return text;
   };
 
-  const uploadError = (error = '') =>
+  const uploadError = (error: string = '') =>
     dispatch(
       batchActions(
         {
