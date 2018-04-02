@@ -38,13 +38,21 @@ export const doResetThumbnailStatus = () => (dispatch: Dispatch): Action =>
     .then(() =>
       dispatch({
         type: ACTIONS.UPDATE_PUBLISH_FORM,
-        data: { uploadThumbnailStatus: STATUSES.READY },
+        data: {
+          uploadThumbnailStatus: STATUSES.READY,
+          thumbnail: '',
+          nsfw: false,
+        },
       })
     )
     .catch(() =>
       dispatch({
         type: ACTIONS.UPDATE_PUBLISH_FORM,
-        data: { uploadThumbnailStatus: STATUSES.API_DOWN },
+        data: {
+          uploadThumbnailStatus: STATUSES.API_DOWN,
+          thumbnail: '',
+          nsfw: false,
+        },
       })
     );
 
@@ -64,7 +72,7 @@ export const doUploadThumbnail = (filePath: string, nsfw: boolean) => (dispatch:
       batchActions(
         {
           type: ACTIONS.UPDATE_PUBLISH_FORM,
-          data: { thumbnailStatus: STATUSES.DOWN },
+          data: { uploadThumbnailStatus: STATUSES.DOWN },
         },
         doAlertError(error)
       )
@@ -72,7 +80,7 @@ export const doUploadThumbnail = (filePath: string, nsfw: boolean) => (dispatch:
 
   dispatch({
     type: ACTIONS.UPDATE_PUBLISH_FORM,
-    data: { thumbnailStatus: STATUSES.IN_PROGRESS },
+    data: { uploadThumbnailStatus: STATUSES.IN_PROGRESS },
   });
 
   const data = new FormData();
@@ -92,8 +100,8 @@ export const doUploadThumbnail = (filePath: string, nsfw: boolean) => (dispatch:
           ? dispatch({
               type: ACTIONS.UPDATE_PUBLISH_FORM,
               data: {
-                thumbnailStatus: STATUSES.COMPLETE,
-                thumbnailUrl: `${json.data.url}${fileExt}`,
+                uploadThumbnailStatus: STATUSES.COMPLETE,
+                thumbnail: `${json.data.url}${fileExt}`,
               },
             })
           : uploadError()
