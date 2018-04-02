@@ -185,18 +185,20 @@ class SettingsPage extends React.PureComponent<Props, State> {
                   checked={!daemonSettings.disable_max_key_fee}
                   postfix={__('Choose limit')}
                 />
-                <FormFieldPrice
-                  name="max_key_fee"
-                  label="Max purchase price"
-                  min={0}
-                  onChange={this.onKeyFeeChange}
-                  disabled={daemonSettings.disable_max_key_fee}
-                  price={
-                    daemonSettings.max_key_fee
-                      ? daemonSettings.max_key_fee
-                      : { currency: 'USD', amount: 50 }
-                  }
-                />
+                <span className={daemonSettings.disable_max_key_fee ? 'hidden' : ''}>
+                  <FormFieldPrice
+                    name="max_key_fee"
+                    label="Max purchase price"
+                    min={0}
+                    onChange={this.onKeyFeeChange}
+                    disabled={daemonSettings.disable_max_key_fee}
+                    price={
+                      daemonSettings.max_key_fee
+                        ? daemonSettings.max_key_fee
+                        : { currency: 'USD', amount: 50 }
+                    }
+                  />
+                </span>
               </div>
             </section>
 
@@ -217,7 +219,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
                     this.onInstantPurchaseEnabledChange(false);
                   }}
                 />
-
                 <FormField
                   type="radio"
                   name="instant_purchases"
@@ -227,13 +228,15 @@ class SettingsPage extends React.PureComponent<Props, State> {
                     this.onInstantPurchaseEnabledChange(true);
                   }}
                 />
-                <FormFieldPrice
-                  label={__('Confirmation price')}
-                  disabled={!instantPurchaseEnabled}
-                  min={0.1}
-                  onChange={this.onInstantPurchaseMaxChange}
-                  price={instantPurchaseMax}
-                />
+                <span className={!instantPurchaseEnabled ? 'hidden' : ''}>
+                  <FormFieldPrice
+                    label={__('Confirmation price')}
+                    disabled={!instantPurchaseEnabled}
+                    min={0.1}
+                    onChange={this.onInstantPurchaseMaxChange}
+                    price={instantPurchaseMax}
+                  />
+                </span>
               </div>
             </section>
 
