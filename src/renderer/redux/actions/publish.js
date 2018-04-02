@@ -38,13 +38,13 @@ export const doResetThumbnailStatus = () => (dispatch: Dispatch): Action =>
     .then(() =>
       dispatch({
         type: ACTIONS.UPDATE_PUBLISH_FORM,
-        data: { thumbnailStatus: STATUSES.READY },
+        data: { uploadThumbnailStatus: STATUSES.READY },
       })
     )
     .catch(() =>
       dispatch({
         type: ACTIONS.UPDATE_PUBLISH_FORM,
-        data: { thumbnailStatus: STATUSES.DOWN },
+        data: { uploadThumbnailStatus: STATUSES.API_DOWN },
       })
     );
 

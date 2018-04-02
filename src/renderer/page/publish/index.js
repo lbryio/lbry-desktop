@@ -10,6 +10,7 @@ import {
 import { doNavigate } from 'redux/actions/navigation';
 import { selectPublishFormValues } from 'redux/selectors/publish';
 import {
+  doResetThumbnailStatus,
   doClearPublish,
   doUpdatePublishForm,
   doPublish,
@@ -55,7 +56,8 @@ const perform = dispatch => ({
   resolveUri: uri => dispatch(doResolveUri(uri)),
   publish: params => dispatch(doPublish(params)),
   navigate: path => dispatch(doNavigate(path)),
-  prepareEdit: (claim, uri) => dispatch(doPrepareEdit(claim, uri)),
+  prepareEdit: claim => dispatch(doPrepareEdit(claim)),
+  resetThumbnail: () => dispatch(doResetThumbnailStatus()),
 });
 
 export default connect(select, perform)(PublishPage);

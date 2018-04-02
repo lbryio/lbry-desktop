@@ -21,7 +21,7 @@ type Props = {
   editingURI: ?string,
   title: ?string,
   thumbnail: ?string,
-  uploadStatus: ?string,
+  uploadThumbnailStatus: ?string,
   description: ?string,
   language: string,
   nsfw: boolean,
@@ -50,7 +50,8 @@ type Props = {
   clearPublish: () => void,
   resolveUri: string => void,
   scrollToTop: () => void,
-  prepareEdit: ({}, string) => void,
+  prepareEdit: ({}) => void,
+  resetThumbnailStatus: () => void,
 };
 
 class PublishForm extends React.PureComponent<Props> {
@@ -68,7 +69,10 @@ class PublishForm extends React.PureComponent<Props> {
     (this: any).getNewUri = this.getNewUri.bind(this);
   }
 
-  // Returns a new uri to be used in the form and begins to resolve that uri for bid help text
+  componentWillMount() {
+    this.props.resetThumbnailStatus();
+  }
+
   getNewUri(name: string, channel: string) {
     const { resolveUri } = this.props;
     // If they are midway through a channel creation, treat it as anonymous until it completes
@@ -268,7 +272,7 @@ class PublishForm extends React.PureComponent<Props> {
       editingURI,
       title,
       thumbnail,
-      uploadStatus,
+      uploadThumbnailStatus,
       description,
       language,
       nsfw,
@@ -362,7 +366,7 @@ class PublishForm extends React.PureComponent<Props> {
                 disabled={formDisabled}
                 onChange={e => updatePublishForm({ thumbnail: e.target.value })}
               />
-              <p>status: {uploadStatus}</p>
+              <p>status: {uploadThumbnailStatus}</p>
             </FormRow>
             <FormRow padded>
               <FormField
