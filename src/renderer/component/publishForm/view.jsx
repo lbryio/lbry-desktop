@@ -38,6 +38,11 @@ type Props = {
   winningBidForClaimUri: number,
   myClaimForUri: ?{
     amount: number,
+    value: {
+      stream: {
+        source: { source: string },
+      },
+    },
   },
   licenseType: string,
   otherLicenseDescription: ?string,
@@ -187,6 +192,7 @@ class PublishForm extends React.PureComponent<Props> {
       contentIsFree,
       price,
       uri,
+      myClaimForUri,
     } = this.props;
 
     let publishingLicense;
@@ -221,6 +227,12 @@ class PublishForm extends React.PureComponent<Props> {
       price,
       uri,
     };
+
+    // Editing a claim
+    if (!filePath && myClaimForUri) {
+      const { source } = myClaimForUri.value.stream;
+      publishParams.source = source;
+    }
 
     publish(publishParams);
   }
