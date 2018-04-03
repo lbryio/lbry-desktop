@@ -1,21 +1,33 @@
-// I'll come back to this
-/* eslint-disable */
+// @flow
 import React from 'react';
 import Button from 'component/button';
 import { Form, FormField, FormRow, Submit } from 'component/common/form';
 
-class UserEmailVerify extends React.PureComponent {
-  constructor(props) {
+type Props = {
+  cancelButton: React.Node,
+  errorMessage: ?string,
+  email: string,
+  isPending: boolean,
+  verifyUserEmail: (string, string) => void,
+  verifyUserEmailFailure: string => void,
+};
+
+type State = {
+  code: string,
+};
+
+class UserEmailVerify extends React.PureComponent<Props, State> {
+  constructor(props: Props) {
     super(props);
 
     this.state = {
       code: '',
     };
 
-    this.handleSubmit = this.handleSubmit.bind(this);
+    (this: any).handleSubmit = this.handleSubmit.bind(this);
   }
 
-  handleCodeChanged(event) {
+  handleCodeChanged(event: SyntheticInputEvent<*>) {
     this.setState({
       code: String(event.target.value).trim(),
     });
@@ -66,4 +78,3 @@ class UserEmailVerify extends React.PureComponent {
 }
 
 export default UserEmailVerify;
-/* eslint-enable */
