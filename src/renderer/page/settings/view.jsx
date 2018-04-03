@@ -227,7 +227,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                     this.onInstantPurchaseEnabledChange(true);
                   }}
                 />
-                {!instantPurchaseEnabled && (
+                {instantPurchaseEnabled && (
                   <FormFieldPrice
                     label={__('Confirmation price')}
                     min={0.1}
