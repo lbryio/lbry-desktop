@@ -2,7 +2,7 @@
 /* eslint-disable */
 import React from 'react';
 import Button from 'component/button';
-import { Form, FormField, Submit } from 'component/common/form';
+import { Form, FormField, FormRow, Submit } from 'component/common/form';
 
 class UserEmailVerify extends React.PureComponent {
   constructor(props) {
@@ -11,6 +11,8 @@ class UserEmailVerify extends React.PureComponent {
     this.state = {
       code: '',
     };
+
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   handleCodeChanged(event) {
@@ -31,31 +33,30 @@ class UserEmailVerify extends React.PureComponent {
 
   render() {
     const { cancelButton, errorMessage, email, isPending } = this.props;
-    // <FormField
-    // label={__('Verification Code')}
-    // errorMessage={errorMessage}
-    // render{() => (
-    //   <input
-    //   name="code"
-    //   value={this.state.code}
-    //   onChange={event => {
-    //     this.handleCodeChanged(event);
-    //   }}
-    //   />
-    // )}
-    // />
+
     return (
-      <Form onSubmit={this.handleSubmit.bind(this)}>
+      <Form onSubmit={this.handleSubmit}>
         <p>Please enter the verification code emailed to {email}.</p>
-        {/* render help separately so it always shows */}
-        <div className="form-field__helper">
+        <FormRow>
+          <FormField
+            stretch
+            name="code"
+            type="text"
+            placeholder="eyJyZWNhcHRjaGEiOiIw..."
+            label={__('Verification Code')}
+            error={errorMessage}
+            value={this.state.code}
+            onChange={event => this.handleCodeChanged(event)}
+          />
+        </FormRow>
+        <div className="help">
           <p>
-            {__('Email')} <Button href="mailto:help@lbry.io" label="help@lbry.io" /> or join our{' '}
-            <Button href="https://chat.lbry.io" label="chat" />{' '}
+            {__('Email')} <Button button="link" href="mailto:help@lbry.io" label="help@lbry.io" />{' '}
+            or join our <Button button="link" href="https://chat.lbry.io" label="chat" />{' '}
             {__('if you encounter any trouble with your code.')}
           </p>
         </div>
-        <div className="form-row-submit">
+        <div className="card__actions">
           <Submit label={__('Verify')} disabled={isPending} />
           {cancelButton}
         </div>
