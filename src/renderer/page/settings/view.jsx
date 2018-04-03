@@ -191,7 +191,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
                     label="Max purchase price"
                     min={0}
                     onChange={this.onKeyFeeChange}
-                    disabled={daemonSettings.disable_max_key_fee}
                     price={
                       daemonSettings.max_key_fee
                         ? daemonSettings.max_key_fee
@@ -231,7 +230,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 <span className={!instantPurchaseEnabled ? 'hidden' : ''}>
                   <FormFieldPrice
                     label={__('Confirmation price')}
-                    disabled={!instantPurchaseEnabled}
                     min={0.1}
                     onChange={this.onInstantPurchaseMaxChange}
                     price={instantPurchaseMax}
