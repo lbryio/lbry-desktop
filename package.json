@@ -48,7 +48,7 @@
     "find-process": "^1.1.0",
     "formik": "^0.10.4",
     "keytar": "^4.2.1",
-    "localforage": "^1.5.0",
+    "localforage": "^1.7.1",
     "mixpanel-browser": "^2.17.1",
     "moment": "^2.22.0",
     "qrcode.react": "^0.8.0",
