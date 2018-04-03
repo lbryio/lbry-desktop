@@ -140,13 +140,20 @@ class PublishForm extends React.PureComponent<Props> {
   }
 
   handleFileChange(filePath: string, fileName: string) {
-    const { updatePublishForm, channel } = this.props;
-    const parsedFileName = fileName.replace(regexInvalidURI, '');
-    const uri = this.getNewUri(parsedFileName, channel);
+    const { updatePublishForm, channel, name } = this.props;
+    const newFileParams: {
+      filePath: string,
+      name?: string,
+      uri?: string
+    } = { filePath };
 
-    if (filePath) {
-      updatePublishForm({ filePath, name: parsedFileName, uri });
+    if (!name) {
+      const parsedFileName = fileName.replace(regexInvalidURI, '');
+      const uri = this.getNewUri(parsedFileName, channel);
+      newFileParams.name = parsedFileName;
     }
+
+    updatePublishForm(newFileParams);
   }
 
   handleNameChange(name: ?string) {

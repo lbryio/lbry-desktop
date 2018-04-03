@@ -2,6 +2,7 @@ import {
   selectClaimsByUri,
   selectIsFetchingClaimListMine,
   selectMyClaims,
+  selectClaimsById,
 } from 'redux/selectors/claims';
 import { createSelector } from 'reselect';
 import { buildURI } from 'lbryURI';
@@ -106,7 +107,7 @@ export const selectTotalDownloadProgress = createSelector(selectDownloadingFileI
 });
 
 export const selectSearchDownloadUris = query =>
-  createSelector(selectFileInfosDownloaded, fileInfos => {
+  createSelector(selectFileInfosDownloaded, selectClaimsById, (fileInfos, claimsById) => {
     if (!query || !fileInfos.length) {
       return null;
     }
@@ -129,19 +130,19 @@ export const selectSearchDownloadUris = query =>
 
     const downloadResultsFromQuery = [];
     fileInfos.forEach(fileInfo => {
-      const { channel_name, claim_name, metadata } = fileInfo;
+      const { channel_name: channelName, claim_name: claimName, metadata } = fileInfo;
       const { author, description, title } = metadata;
 
-      if (channel_name) {
-        const channelName = channel_name.toLowerCase();
-        const strippedOutChannelName = channelName.slice(1); // trim off the @
-        if (searchQueryDictionary[channel_name] || searchQueryDictionary[strippedOutChannelName]) {
+      if (channelName) {
+        const lowerCaseChannel = channelName.toLowerCase();
+        const strippedOutChannelName = lowerCaseChannel.slice(1); // trim off the @
+        if (searchQueryDictionary[channelName] || searchQueryDictionary[strippedOutChannelName]) {
           downloadResultsFromQuery.push(fileInfo);
           return;
         }
       }
 
-      const nameParts = claim_name.toLowerCase().split('-');
+      const nameParts = claimName.toLowerCase().split('-');
       if (arrayContainsQueryPart(nameParts)) {
         downloadResultsFromQuery.push(fileInfo);
         return;
@@ -171,22 +172,23 @@ export const selectSearchDownloadUris = query =>
 
     return downloadResultsFromQuery.length
       ? downloadResultsFromQuery.map(fileInfo => {
-          const {
-            channel_name: channelName,
-            claim_id: claimId,
-            claim_name: claimName,
-            value,
-            metadata,
-          } = fileInfo;
+          const { channel_name: channelName, claim_id: claimId, claim_name: claimName } = fileInfo;
+
           const uriParams = {};
 
           if (channelName) {
+            const claim = claimsById[claimId];
+            if (claim.value) {
+              uriParams.claimId = claim.value.publisherSignature.certificateId;
+            } else {
+              uriParams.claimId = claimId;
+            }
             uriParams.channelName = channelName;
+            uriParams.contentName = claimName;
+          } else {
+            uriParams.claimId = claimId;
+            uriParams.claimName = claimName;
           }
-
-          uriParams.claimId = claimId;
-          uriParams.claimId = claimId;
-          uriParams.contentName = claimName;
 
           const uri = buildURI(uriParams);
           return uri;
