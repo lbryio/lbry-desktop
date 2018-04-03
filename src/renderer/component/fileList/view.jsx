@@ -166,7 +166,7 @@ class FileList extends React.PureComponent<Props, State> {
 
       const uri = buildURI(uriParams);
 
-      content.push(<FileCard key={claimName} uri={uri} showPrice={false} />);
+      content.push(<FileCard key={uri} uri={uri} showPrice={false} />);
     });
 
     return (
