@@ -185,7 +185,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                   checked={!daemonSettings.disable_max_key_fee}
                   postfix={__('Choose limit')}
                 />
-                <span className={daemonSettings.disable_max_key_fee ? 'hidden' : ''}>
+                {daemonSettings.disable_max_key_fee && (
                   <FormFieldPrice
                     name="max_key_fee"
                     label="Max purchase price"
@@ -197,7 +197,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                         : { currency: 'USD', amount: 50 }
                     }
                   />
-                </span>
+                )}
               </div>
             </section>
 
@@ -227,14 +227,14 @@ class SettingsPage extends React.PureComponent<Props, State> {
                     this.onInstantPurchaseEnabledChange(true);
                   }}
                 />
-                <span className={!instantPurchaseEnabled ? 'hidden' : ''}>
+                {!instantPurchaseEnabled && (
                   <FormFieldPrice
                     label={__('Confirmation price')}
                     min={0.1}
                     onChange={this.onInstantPurchaseMaxChange}
                     price={instantPurchaseMax}
                   />
-                </span>
+                )}
               </div>
             </section>
 
