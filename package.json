@@ -87,7 +87,7 @@
     "decompress": "^4.2.0",
     "del": "^3.0.0",
     "devtron": "^1.4.0",
-    "electron": "1.7.13",
+    "electron": "^1.8.4",
     "electron-builder": "^20.8.1",
     "electron-devtools-installer": "^2.2.3",
     "electron-webpack": "^1.13.0",
