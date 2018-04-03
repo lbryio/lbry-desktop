@@ -185,7 +185,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                   checked={!daemonSettings.disable_max_key_fee}
                   postfix={__('Choose limit')}
                 />
-                {daemonSettings.disable_max_key_fee && (
+                {!daemonSettings.disable_max_key_fee && (
                   <FormFieldPrice
                     name="max_key_fee"
                     label="Max purchase price"
