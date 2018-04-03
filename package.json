@@ -115,7 +115,7 @@
     "sass-loader": "^6.0.7",
     "webpack": "^3.10.0",
     "webpack-build-notifier": "^0.1.23",
-    "yarnhook": "^0.1.1"
+    "yarnhook": "^0.2.0"
   },
   "engines": {
     "node": ">=7",
