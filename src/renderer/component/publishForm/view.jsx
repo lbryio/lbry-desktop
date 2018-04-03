@@ -68,6 +68,106 @@ class PublishForm extends React.PureComponent<Props> {
     (this: any).getNewUri = this.getNewUri.bind(this);
   }
 
+  // Returns a new uri to be used in the form and begins to resolve that uri for bid help text
+  getNewUri(name: string, channel: string) {
+    const { resolveUri } = this.props;
+    // If they are midway through a channel creation, treat it as anonymous until it completes
+    const channelName = channel === CHANNEL_ANONYMOUS || channel === CHANNEL_NEW ? '' : channel;
+
+    let uri;
+    try {
+      uri = buildURI({ contentName: name, channelName });
+    } catch (e) {
+      // something wrong with channel or name
+    }
+
+    if (uri) {
+      resolveUri(uri);
+      return uri;
+    }
+
+    return '';
+  }
+
+  handleFileChange(filePath: string, fileName: string) {
+    const { updatePublishForm, channel, name } = this.props;
+    const newFileParams: {
+      filePath: string,
+      name?: string,
+      uri?: string,
+    } = { filePath };
+
+    if (!name) {
+      const parsedFileName = fileName.replace(regexInvalidURI, '');
+      const uri = this.getNewUri(parsedFileName, channel);
+      newFileParams.name = parsedFileName;
+      newFileParams.uri = uri;
+    }
+
+    updatePublishForm(newFileParams);
+  }
+
+  handleNameChange(name: ?string) {
+    const { channel, updatePublishForm } = this.props;
+
+    if (!name) {
+      updatePublishForm({ name, nameError: undefined });
+      return;
+    }
+
+    if (!isNameValid(name, false)) {
+      updatePublishForm({
+        name,
+        nameError: __('LBRY names must contain only letters, numbers and dashes.'),
+      });
+      return;
+    }
+
+    const uri = this.getNewUri(name, channel);
+    updatePublishForm({
+      name,
+      uri,
+      nameError: undefined,
+    });
+  }
+
+  handleChannelChange(channelName: string) {
+    const { name, updatePublishForm } = this.props;
+    if (name) {
+      const uri = this.getNewUri(name, channelName);
+      updatePublishForm({ channel: channelName, uri });
+    } else {
+      updatePublishForm({ channel: channelName });
+    }
+  }
+
+  handleBidChange(bid: number) {
+    const { balance, updatePublishForm } = this.props;
+
+    let bidError;
+    if (balance <= bid) {
+      bidError = __('Not enough credits');
+    } else if (bid <= MINIMUM_PUBLISH_BID) {
+      bidError = __('Your bid must be higher');
+    }
+
+    updatePublishForm({ bid, bidError });
+  }
+
+  editExistingClaim() {
+    const { myClaimForUri, prepareEdit, scrollToTop } = this.props;
+    if (myClaimForUri) {
+      prepareEdit(myClaimForUri);
+      scrollToTop();
+    }
+  }
+
+  handleCancelPublish() {
+    const { clearPublish, scrollToTop } = this.props;
+    scrollToTop();
+    clearPublish();
+  }
+
   handlePublish() {
     const {
       publish,
@@ -123,105 +223,6 @@ class PublishForm extends React.PureComponent<Props> {
     };
 
     publish(publishParams);
-  }
-
-  handleCancelPublish() {
-    const { clearPublish, scrollToTop } = this.props;
-    scrollToTop();
-    clearPublish();
-  }
-
-  editExistingClaim() {
-    const { myClaimForUri, prepareEdit, scrollToTop } = this.props;
-    if (myClaimForUri) {
-      prepareEdit(myClaimForUri);
-      scrollToTop();
-    }
-  }
-
-  handleFileChange(filePath: string, fileName: string) {
-    const { updatePublishForm, channel, name } = this.props;
-    const newFileParams: {
-      filePath: string,
-      name?: string,
-      uri?: string
-    } = { filePath };
-
-    if (!name) {
-      const parsedFileName = fileName.replace(regexInvalidURI, '');
-      const uri = this.getNewUri(parsedFileName, channel);
-      newFileParams.name = parsedFileName;
-    }
-
-    updatePublishForm(newFileParams);
-  }
-
-  handleNameChange(name: ?string) {
-    const { channel, updatePublishForm } = this.props;
-
-    if (!name) {
-      updatePublishForm({ name, nameError: undefined });
-      return;
-    }
-
-    if (!isNameValid(name, false)) {
-      updatePublishForm({
-        name,
-        nameError: __('LBRY names must contain only letters, numbers and dashes.'),
-      });
-      return;
-    }
-
-    const uri = this.getNewUri(name, channel);
-    updatePublishForm({
-      name,
-      uri,
-      nameError: undefined,
-    });
-  }
-
-  handleChannelChange(channelName: string) {
-    const { name, updatePublishForm } = this.props;
-    if (name) {
-      const uri = this.getNewUri(name, channelName);
-      updatePublishForm({ channel: channelName, uri });
-    } else {
-      updatePublishForm({ channel: channelName });
-    }
-  }
-
-  handleBidChange(bid: number) {
-    const { balance, updatePublishForm } = this.props;
-
-    let bidError;
-    if (balance <= bid) {
-      bidError = __('Not enough credits');
-    } else if (bid <= MINIMUM_PUBLISH_BID) {
-      bidError = __('Your bid must be higher');
-    }
-
-    updatePublishForm({ bid, bidError });
-  }
-
-  // Returns a new uri to be used in the form and begins to resolve that uri for bid help text
-  getNewUri(name: string, channel: string) {
-    const { resolveUri } = this.props;
-    // If they are midway through a channel creation, treat it as anonymous until it completes
-    const channelName = channel === CHANNEL_ANONYMOUS || channel === CHANNEL_NEW ? '' : channel;
-
-    let uri;
-    try {
-      uri = buildURI({ contentName: name, channelName });
-    } catch (e) {
-      // something wrong with channel or name
-    }
-
-    if (uri) {
-      resolveUri(uri);
-      return uri;
-    }
-
-    return '';
   }
 
   checkIsFormValid() {
@@ -421,7 +422,9 @@ class PublishForm extends React.PureComponent<Props> {
                 <FormField
                   stretch
                   prefix={`lbry://${
-                    channel === CHANNEL_ANONYMOUS || channel === CHANNEL_NEW ? '' : `${channel}/`
+                    !channel || channel === CHANNEL_ANONYMOUS || channel === CHANNEL_NEW
+                      ? ''
+                      : `${channel}/`
                   }`}
                   type="text"
                   name="content_name"
