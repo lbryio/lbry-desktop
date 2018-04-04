@@ -4,8 +4,7 @@ import { doCloseModal } from 'lbry-redux';
 import { makeSelectRewardByType } from 'redux/selectors/rewards';
 import ModalFirstReward from './view';
 
-// eslint-disable-next-line no-unused-vars
-const select = (state, props) => {
+const select = state => {
   const selectReward = makeSelectRewardByType();
 
   return {

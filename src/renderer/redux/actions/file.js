@@ -4,12 +4,12 @@ import {
   Lbry,
   batchActions,
   doAbandonClaim,
-  doCloseModal,
-  doHistoryBack,
   selectMyClaimsOutpoints,
   selectFileInfosByOutpoint,
   selectTotalDownloadProgress,
 } from 'lbry-redux';
+import { doCloseModal } from 'redux/actions/app';
+import { doHistoryBack } from 'redux/actions/navigation';
 import setProgressBar from 'util/setProgressBar';
 
 export function doOpenFileInFolder(path) {

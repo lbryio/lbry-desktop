@@ -3,5 +3,4 @@
 /build/daemon.zip
 /static/daemon/lbrynet*
 /static/locales
-/.idea
 yarn-error.log
