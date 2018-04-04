@@ -25,6 +25,7 @@ type Props = {
   sortByHeight?: boolean,
   claimsById: Array<{}>,
   fileInfos: Array<FileInfo>,
+  checkPending?: boolean,
 };
 
 type State = {
@@ -138,7 +139,7 @@ class FileList extends React.PureComponent<Props, State> {
   }
 
   render() {
-    const { fileInfos, hideFilter } = this.props;
+    const { fileInfos, hideFilter, checkPending } = this.props;
     const { sortBy } = this.state;
     const content = [];
 
@@ -166,7 +167,7 @@ class FileList extends React.PureComponent<Props, State> {
 
       const uri = buildURI(uriParams);
 
-      content.push(<FileCard key={uri} uri={uri} />);
+      content.push(<FileCard key={uri} uri={uri} checkPending={checkPending} />);
     });
 
     return (
