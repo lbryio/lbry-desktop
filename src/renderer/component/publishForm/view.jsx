@@ -231,7 +231,7 @@ class PublishForm extends React.PureComponent<Props> {
     // Editing a claim
     if (!filePath && myClaimForUri) {
       const { source } = myClaimForUri.value.stream;
-      publishParams.source = source;
+      publishParams.sources = source;
     }
 
     publish(publishParams);
