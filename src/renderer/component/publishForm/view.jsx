@@ -38,6 +38,11 @@ type Props = {
   winningBidForClaimUri: number,
   myClaimForUri: ?{
     amount: number,
+    value: {
+      stream: {
+        source: { source: string },
+      },
+    },
   },
   licenseType: string,
   otherLicenseDescription: ?string,
@@ -68,75 +73,25 @@ class PublishForm extends React.PureComponent<Props> {
     (this: any).getNewUri = this.getNewUri.bind(this);
   }
 
-  handlePublish() {
-    const {
-      publish,
-      filePath,
-      bid,
-      title,
-      thumbnail,
-      description,
-      language,
-      nsfw,
-      channel,
-      licenseType,
-      licenseUrl,
-      otherLicenseDescription,
-      copyrightNotice,
-      name,
-      contentIsFree,
-      price,
-      uri,
-    } = this.props;
+  // Returns a new uri to be used in the form and begins to resolve that uri for bid help text
+  getNewUri(name: string, channel: string) {
+    const { resolveUri } = this.props;
+    // If they are midway through a channel creation, treat it as anonymous until it completes
+    const channelName = channel === CHANNEL_ANONYMOUS || channel === CHANNEL_NEW ? '' : channel;
 
-    let publishingLicense;
-    switch (licenseType) {
-      case COPYRIGHT:
-        publishingLicense = copyrightNotice;
-        break;
-      case OTHER:
-        publishingLicense = otherLicenseDescription;
-        break;
-      default:
-        publishingLicense = licenseType;
+    let uri;
+    try {
+      uri = buildURI({ contentName: name, channelName });
+    } catch (e) {
+      // something wrong with channel or name
     }
 
-    const publishingLicenseUrl = licenseType === COPYRIGHT ? '' : licenseUrl;
-
-    const publishParams = {
-      filePath,
-      bid,
-      title,
-      thumbnail,
-      description,
-      language,
-      nsfw,
-      channel,
-      license: publishingLicense,
-      licenseUrl: publishingLicenseUrl,
-      otherLicenseDescription,
-      copyrightNotice,
-      name,
-      contentIsFree,
-      price,
-      uri,
-    };
-
-    publish(publishParams);
-  }
-
-  handleCancelPublish() {
-    const { clearPublish, scrollToTop } = this.props;
-    scrollToTop();
-    clearPublish();
-  }
-
-  editExistingClaim() {
-    const { myClaimForUri, prepareEdit, scrollToTop } = this.props;
-    if (myClaimForUri) {
-      prepareEdit(myClaimForUri);
-      scrollToTop();
+    if (uri) {
+      resolveUri(uri);
+      return uri;
     }
+
+    return '';
   }
 
   handleFileChange(filePath: string, fileName: string) {
@@ -144,13 +99,14 @@ class PublishForm extends React.PureComponent<Props> {
     const newFileParams: {
       filePath: string,
       name?: string,
-      uri?: string
+      uri?: string,
     } = { filePath };
 
     if (!name) {
       const parsedFileName = fileName.replace(regexInvalidURI, '');
       const uri = this.getNewUri(parsedFileName, channel);
       newFileParams.name = parsedFileName;
+      newFileParams.uri = uri;
     }
 
     updatePublishForm(newFileParams);
@@ -203,25 +159,82 @@ class PublishForm extends React.PureComponent<Props> {
     updatePublishForm({ bid, bidError });
   }
 
-  // Returns a new uri to be used in the form and begins to resolve that uri for bid help text
-  getNewUri(name: string, channel: string) {
-    const { resolveUri } = this.props;
-    // If they are midway through a channel creation, treat it as anonymous until it completes
-    const channelName = channel === CHANNEL_ANONYMOUS || channel === CHANNEL_NEW ? '' : channel;
+  editExistingClaim() {
+    const { myClaimForUri, prepareEdit, scrollToTop } = this.props;
+    if (myClaimForUri) {
+      prepareEdit(myClaimForUri);
+      scrollToTop();
+    }
+  }
 
-    let uri;
-    try {
-      uri = buildURI({ contentName: name, channelName });
-    } catch (e) {
-      // something wrong with channel or name
+  handleCancelPublish() {
+    const { clearPublish, scrollToTop } = this.props;
+    scrollToTop();
+    clearPublish();
+  }
+
+  handlePublish() {
+    const {
+      publish,
+      filePath,
+      bid,
+      title,
+      thumbnail,
+      description,
+      language,
+      nsfw,
+      channel,
+      licenseType,
+      licenseUrl,
+      otherLicenseDescription,
+      copyrightNotice,
+      name,
+      contentIsFree,
+      price,
+      uri,
+      myClaimForUri,
+    } = this.props;
+
+    let publishingLicense;
+    switch (licenseType) {
+      case COPYRIGHT:
+        publishingLicense = copyrightNotice;
+        break;
+      case OTHER:
+        publishingLicense = otherLicenseDescription;
+        break;
+      default:
+        publishingLicense = licenseType;
     }
 
-    if (uri) {
-      resolveUri(uri);
-      return uri;
+    const publishingLicenseUrl = licenseType === COPYRIGHT ? '' : licenseUrl;
+
+    const publishParams = {
+      filePath,
+      bid,
+      title,
+      thumbnail,
+      description,
+      language,
+      nsfw,
+      channel,
+      license: publishingLicense,
+      licenseUrl: publishingLicenseUrl,
+      otherLicenseDescription,
+      copyrightNotice,
+      name,
+      contentIsFree,
+      price,
+      uri,
+    };
+
+    // Editing a claim
+    if (!filePath && myClaimForUri) {
+      const { source } = myClaimForUri.value.stream;
+      publishParams.sources = source;
     }
 
-    return '';
+    publish(publishParams);
   }
 
   checkIsFormValid() {
@@ -421,7 +434,9 @@ class PublishForm extends React.PureComponent<Props> {
                 <FormField
                   stretch
                   prefix={`lbry://${
-                    channel === CHANNEL_ANONYMOUS || channel === CHANNEL_NEW ? '' : `${channel}/`
+                    !channel || channel === CHANNEL_ANONYMOUS || channel === CHANNEL_NEW
+                      ? ''
+                      : `${channel}/`
                   }`}
                   type="text"
                   name="content_name"

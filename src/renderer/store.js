@@ -98,7 +98,7 @@ const saveClaimsFilter = createFilter('claims', ['byId', 'claimsByUri']);
 const subscriptionsFilter = createFilter('subscriptions', ['subscriptions']);
 
 const persistOptions = {
-  whitelist: ['claims', 'subscriptions', 'navigation', 'publish'],
+  whitelist: ['claims', 'subscriptions', 'publish'],
   // Order is important. Needs to be compressed last or other transforms can't
   // read the data
   transforms: [saveClaimsFilter, subscriptionsFilter, compressor],
