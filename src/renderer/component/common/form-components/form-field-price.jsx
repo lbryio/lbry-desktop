@@ -53,7 +53,7 @@ export class FormFieldPrice extends React.PureComponent<Props> {
           min={min}
           value={price.amount}
           onChange={this.handleAmountChange}
-          placeholder={placeholder || 5}
+          placeholder={placeholder || 0}
           disabled={disabled}
           step={step || 'any'}
         />
@@ -63,6 +63,9 @@ export class FormFieldPrice extends React.PureComponent<Props> {
           type="select"
           id={`${name}_currency`}
           className="form-field"
+          min={min}
+          value={price.amount}
+          onChange={this.handleAmountChange}
           disabled={disabled}
           onChange={this.handleCurrencyChange}
           value={price.currency}
