@@ -234,8 +234,7 @@ class CategoryList extends React.PureComponent<Props, State> {
           }}
           className="card-row__scrollhouse"
         >
-          {names &&
-            names.map(name => <FileCard key={name} displayStyle="card" uri={normalizeURI(name)} />)}
+          {names && names.map(name => <FileCard key={name} uri={normalizeURI(name)} />)}
         </div>
       </div>
     );
