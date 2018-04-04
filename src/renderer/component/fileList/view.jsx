@@ -44,6 +44,8 @@ class FileList extends React.PureComponent<Props, State> {
       sortBy: 'dateNew',
     };
 
+    (this: any).handleSortChanged = this.handleSortChanged.bind(this);
+
     this.sortFunctions = {
       dateNew: fileInfos =>
         this.props.sortByHeight
@@ -180,7 +182,8 @@ class FileList extends React.PureComponent<Props, State> {
               value={sortBy}
               onChange={this.handleSortChanged}
             >
-              <option value="date">{__('Date')}</option>
+              <option value="dateNew">{__('Newest First')}</option>
+              <option value="dateOld">{__('Oldest First')}</option>
               <option value="title">{__('Title')}</option>
             </FormField>
           )}
