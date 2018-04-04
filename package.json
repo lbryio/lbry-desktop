@@ -84,6 +84,8 @@
     "babel-preset-env": "^1.6.1",
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-2": "^6.18.0",
+    "danger": "^3.4.5",
+    "danger-plugin-eslint": "^0.1.0",
     "decompress": "^4.2.0",
     "del": "^3.0.0",
     "devtron": "^1.4.0",
