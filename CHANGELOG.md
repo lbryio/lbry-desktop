@@ -3,6 +3,18 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [Unreleased]
+
+### Added
+   * Add keyboard shortcut to quit the app on Windows ([#1202](https://github.com/lbryio/lbry-app/pull/1202))
+   * Build for both architectures (x86 and x64) for Windows ([#1262](https://github.com/lbryio/lbry-app/pull/1262))
+
+
+### Fixed
+   * Black screen on macOS after maximizing LBRY and then closing ([#1235](https://github.com/lbryio/lbry-app/pull/1235))
+
+
+
 ## [0.21.2] - 2018-03-22
 
 
@@ -16,6 +28,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
   * App category for Linux ([#877](https://github.com/lbryio/lbry-app/pull/877))
   * Add YouTube Sync reward ([#1147](https://github.com/lbryio/lbry-app/pull/1147))
   * Retain previous screen sizing on startup ([#338](https://github.com/lbryio/lbry-app/issues/338))
+  * Add 'Go to page' input on channel pagination ([#1166](https://github.com/lbryio/lbry-app/pull/1166))
 
 
 ### Changed
@@ -44,8 +57,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
   * LBRY URLs not working on Linux ([#1120](https://github.com/lbryio/lbry-app/issues/1120))
   * Fix Windows notifications not showing ([#1145](https://github.com/lbryio/lbry-app/pull/1145))
   * Fix export issues ([#1163](https://github.com/lbryio/lbry-app/pull/1163))
-
-
 
 ## [0.20.0] - 2018-01-30
 

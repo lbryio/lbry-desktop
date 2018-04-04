@@ -1,5 +1,5 @@
 <!--
-Thanks for reporting an issue to LBRY and helping us improve! 
+Thanks for reporting an issue to LBRY and helping us improve!
 
 To make it possible for us to help you, please fill out below information carefully.
 
@@ -8,27 +8,29 @@ Before reporting any issues, please make sure that you're using the latest versi
 - Standalone daemon: https://github.com/lbryio/lbry/releases
 
 We are also available on live chat at https://chat.lbry.io
---> 
+-->
 
 
 ## The Issue
 
-### Steps to reproduce
+### Steps to Reproduce
 1.
 2.
 3.
 
-### Expected behaviour
-Tell us what should happen
+### Expected Behaviour
+Tell us what should happen.
 
-### Actual behaviour
-Tell us what happens instead
+### Actual Behaviour
+Tell us what happens instead.
 
+### Suggested Solutions
+Tell us your suggested solutions if you have any.
 
 ## System Configuration
 
-<!-- For the app, this info is in the About section at the bottom of the Help page. 
-     You can include a screenshot instead of typing it out --> 
+<!-- For the app, this info is in the About section at the bottom of the Help page.
+     You can include a screenshot instead of typing it out -->
 
 <!-- For the daemon, run:
      curl 'http://localhost:5279' --data '{"method":"version"}'

@@ -1,20 +1,17 @@
 // @flow
 import * as React from 'react';
-import { isNameValid, buildURI, regexInvalidURI, parseURI } from 'lbry-redux';
+import { isNameValid, buildURI, regexInvalidURI } from 'lbry-redux';
 import { Form, FormField, FormRow, FormFieldPrice, Submit } from 'component/common/form';
 import Button from 'component/button';
-import Modal from 'modal/modal';
 import ChannelSection from 'component/selectChannel';
-import Icon from 'component/common/icon';
 import classnames from 'classnames';
 import type { PublishParams, UpdatePublishFormData } from 'redux/reducers/publish';
 import FileSelector from 'component/common/file-selector';
+import { COPYRIGHT, OTHER } from 'constants/licenses';
+import { CHANNEL_NEW, CHANNEL_ANONYMOUS, MINIMUM_PUBLISH_BID } from 'constants/claim';
+import * as icons from 'constants/icons';
 import BidHelpText from './internal/bid-help-text';
 import LicenseType from './internal/license-type';
-import { COPYRIGHT, OTHER } from 'constants/licenses';
-import { MINIMUM_PUBLISH_BID } from 'constants/claim';
-import { CHANNEL_NEW, CHANNEL_ANONYMOUS } from 'constants/claim';
-import * as icons from 'constants/icons';
 
 type Props = {
   publish: PublishParams => void,
@@ -143,13 +140,20 @@ class PublishForm extends React.PureComponent<Props> {
   }
 
   handleFileChange(filePath: string, fileName: string) {
-    const { updatePublishForm, channel } = this.props;
-    const parsedFileName = fileName.replace(regexInvalidURI, '');
-    const uri = this.getNewUri(parsedFileName, channel);
+    const { updatePublishForm, channel, name } = this.props;
+    const newFileParams: {
+      filePath: string,
+      name?: string,
+      uri?: string,
+    } = { filePath };
 
-    if (filePath) {
-      updatePublishForm({ filePath, name: parsedFileName, uri });
+    if (!name) {
+      const parsedFileName = fileName.replace(regexInvalidURI, '');
+      const uri = this.getNewUri(parsedFileName, channel);
+      newFileParams.name = parsedFileName;
     }
+
+    updatePublishForm(newFileParams);
   }
 
   handleNameChange(name: ?string) {
@@ -291,7 +295,6 @@ class PublishForm extends React.PureComponent<Props> {
       submitLabel = !publishing ? __('Publish') : __('Publishing...');
     }
 
-    console.log('this.props', this.props);
     return (
       <Form onSubmit={this.handlePublish}>
         <section className={classnames('card card--section')}>

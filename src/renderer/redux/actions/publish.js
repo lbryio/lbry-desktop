@@ -33,7 +33,12 @@ export const doPrepareEdit = (claim: any) => (dispatch: Dispatch) => {
   const {
     author,
     description,
-    fee,
+    // use same values as default state
+    // fee will be undefined for free content
+    fee = {
+      amount: 0,
+      currency: 'LBC',
+    },
     language,
     license,
     licenseUrl,
@@ -66,7 +71,7 @@ export const doPublish = (params: PublishParams): ThunkAction => {
   const {
     name,
     bid,
-    filePath: file_path,
+    filePath,
     description,
     language,
     license,
@@ -101,7 +106,7 @@ export const doPublish = (params: PublishParams): ThunkAction => {
   }
 
   const publishPayload = {
-    file_path,
+    file_path: filePath,
     name,
     channel_name: channelName,
     bid,

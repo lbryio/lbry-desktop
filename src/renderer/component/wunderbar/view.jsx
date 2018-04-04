@@ -1,8 +1,8 @@
 // @flow
 import React from 'react';
 import classnames from 'classnames';
-import Icon from 'component/common/icon';
 import { normalizeURI } from 'lbry-redux';
+import Icon from 'component/common/icon';
 import { parseQueryParams } from 'util/query_params';
 import * as icons from 'constants/icons';
 import Autocomplete from './internal/autocomplete';

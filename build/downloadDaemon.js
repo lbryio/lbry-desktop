@@ -1,6 +1,6 @@
 /* eslint-disable no-console,import/no-extraneous-dependencies,import/no-commonjs */
 const path = require('path');
-const fs = require('fs');
+const fs = require('fs-path');
 const packageJSON = require('../package.json');
 const axios = require('axios');
 const decompress = require('decompress');
@@ -23,7 +23,7 @@ const downloadDaemon = targetPlatform =>
     const daemonURL = daemonURLTemplate
       .replace(/DAEMONVER/g, daemonVersion)
       .replace(/OSNAME/g, daemonPlatform);
-    const tmpZipPath = 'build/daemon.zip';
+    const tmpZipPath = 'dist/daemon.zip';
 
     console.log('\x1b[34minfo\x1b[0m Downloading daemon...');
     axios

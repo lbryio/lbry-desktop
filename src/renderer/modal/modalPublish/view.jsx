@@ -23,9 +23,8 @@ class ModalSendTip extends React.PureComponent<Props> {
           closeModal();
         }}
       >
-        <p>
-          {__('Your file has been published to LBRY at the address')} <code>{uri}</code>!
-        </p>
+        <p>{__('Your file has been published to LBRY at the address')}</p>
+        <p className="card__success-msg">{uri}</p>
         <p>
           {__(
             'The file will take a few minutes to appear for other LBRY users. Until then it will be listed as "pending" under your published files.'

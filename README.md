@@ -36,6 +36,7 @@ development and testing purposes.
 * [Git](https://git-scm.com/downloads)
 * [Node.js](https://nodejs.org/en/download/)
 * [Yarn](https://yarnpkg.com/en/docs/install)
+* [C++ Build Tools](https://github.com/felixrieseberg/windows-build-tools) (Only needed on Windows)
 
 ### One-time Setup
 

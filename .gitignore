@@ -1,6 +1,5 @@
 /node_modules
 /dist
-/build/daemon.zip
 /static/daemon/lbrynet*
 /static/locales
 yarn-error.log
