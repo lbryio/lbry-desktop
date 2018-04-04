@@ -3,11 +3,9 @@ import React from 'react';
 import BusyIndicator from 'component/common/busy-indicator';
 import { FormField, FormRow } from 'component/common/form';
 import ReactPaginate from 'react-paginate';
-import Button from 'component/button';
 import SubscribeButton from 'component/subscribeButton';
 import Page from 'component/page';
 import FileList from 'component/fileList';
-import * as modals from 'constants/modal_types';
 
 type Props = {
   uri: string,
@@ -23,7 +21,6 @@ type Props = {
   fetchClaims: (string, number) => void,
   fetchClaimCount: string => void,
   navigate: (string, {}) => void,
-  openModal: (string, {}) => void,
 };
 
 class ChannelPage extends React.PureComponent<Props> {
@@ -61,7 +58,7 @@ class ChannelPage extends React.PureComponent<Props> {
   }
 
   render() {
-    const { fetching, claimsInChannel, claim, uri, page, totalPages, openModal } = this.props;
+    const { fetching, claimsInChannel, claim, uri, page, totalPages } = this.props;
     const { name } = claim;
 
     let contentList;
@@ -81,12 +78,6 @@ class ChannelPage extends React.PureComponent<Props> {
         <section className="card__channel-info card__channel-info--large">
           <h1>{name}</h1>
           <div className="card__actions card__actions--no-margin">
-            <Button
-              button="alt"
-              iconRight="Send"
-              label={__('Enjoy this? Send a tip')}
-              onClick={() => openModal(modals.SEND_TIP, { uri })}
-            />
             <SubscribeButton uri={uri} channelName={name} />
           </div>
         </section>

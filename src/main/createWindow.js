@@ -78,7 +78,14 @@ export default appState => {
   window.on('close', event => {
     if (!appState.isQuitting && !appState.autoUpdateAccepted) {
       event.preventDefault();
-      window.hide();
+      if (window.isFullScreen()) {
+        window.once('leave-full-screen', () => {
+          window.hide();
+        });
+        window.setFullScreen(false);
+      } else {
+        window.hide();
+      }
     }
   });
 

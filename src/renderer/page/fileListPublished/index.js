@@ -1,13 +1,13 @@
 import { connect } from 'react-redux';
 import { selectMyClaimsWithoutChannels } from 'redux/selectors/claims';
-import { selectPendingPublishes } from 'redux/selectors/publish';
+import { selectPendingPublishesLessEdits } from 'redux/selectors/publish';
 import { doNavigate } from 'redux/actions/navigation';
 import { doCheckPendingPublishes } from 'redux/actions/publish';
 import FileListPublished from './view';
 
 const select = state => ({
   claims: selectMyClaimsWithoutChannels(state),
-  pendingPublishes: selectPendingPublishes(state),
+  pendingPublishes: selectPendingPublishesLessEdits(state),
 });
 
 const perform = dispatch => ({

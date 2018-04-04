@@ -1,4 +1,3 @@
-import React from 'react';
 import { connect } from 'react-redux';
 import { doNavigate } from 'redux/actions/navigation';
 import { doResolveUri } from 'redux/actions/content';
@@ -10,12 +9,10 @@ import { selectPendingPublish } from 'redux/selectors/publish';
 import FileCard from './view';
 
 const select = (state, props) => {
-  let claim;
-  let fileInfo;
-  let metadata;
-  let isResolvingUri;
-
-  const pendingPublish = selectPendingPublish(props.uri)(state);
+  let pendingPublish;
+  if (props.checkPending) {
+    pendingPublish = selectPendingPublish(props.uri)(state);
+  }
 
   const fileCardInfo = pendingPublish || {
     claim: makeSelectClaimForUri(props.uri)(state),

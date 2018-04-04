@@ -3,9 +3,15 @@ import { parseURI } from 'lbryURI';
 
 const selectState = state => state.publish || {};
 
-export const selectPendingPublishes = createSelector(selectState, state => {
-  return state.pendingPublishes.map(pendingClaim => ({ ...pendingClaim, pending: true })) || [];
-});
+export const selectPendingPublishes = createSelector(
+  selectState,
+  state => state.pendingPublishes.map(pendingClaim => ({ ...pendingClaim, pending: true })) || []
+);
+
+export const selectPendingPublishesLessEdits = createSelector(
+  selectPendingPublishes,
+  pendingPublishes => pendingPublishes.filter(pendingPublish => !pendingPublish.sources)
+);
 
 export const selectPublishFormValues = createSelector(selectState, state => {
   const { pendingPublish, ...formValues } = state;
