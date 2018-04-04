@@ -435,10 +435,6 @@ class PublishForm extends React.PureComponent<Props> {
                 <FormField
                   stretch
                   prefix={`lbry://${
-
-                    channel === CHANNEL_ANONYMOUS || channel === CHANNEL_NEW ? '' : `${channel}/`
-                    }`}
-
                     !channel || channel === CHANNEL_ANONYMOUS || channel === CHANNEL_NEW
                       ? ''
                       : `${channel}/`
