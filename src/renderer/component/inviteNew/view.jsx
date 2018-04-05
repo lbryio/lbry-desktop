@@ -92,7 +92,7 @@ class InviteNew extends React.PureComponent {
         <p className="help help--padded">
           {__('Read our')}{' '}
           <Button button="link" label={__('FAQ')} href="https://lbry.io/faq/referrals" />{' '}
-          {__('to learn more about LBRY Referral Program')}.
+          {__('to learn more about Referrals')}.
         </p>
       </section>
     );
