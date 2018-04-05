@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
-import { doOpenModal } from 'redux/actions/app';
 import {
+  doOpenModal,
   makeSelectCostInfoForUri,
   makeSelectFileInfoForUri,
   makeSelectClaimIsMine,

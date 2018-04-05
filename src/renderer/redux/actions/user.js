@@ -1,7 +1,7 @@
 import * as ACTIONS from 'constants/action_types';
 import * as MODALS from 'constants/modal_types';
 import Lbryio from 'lbryio';
-import { doOpenModal, doShowSnackBar } from 'redux/actions/app';
+import { doOpenModal, doShowSnackBar } from 'lbry-redux';
 import { doClaimRewardType, doRewardList } from 'redux/actions/rewards';
 import {
   selectEmailToVerify,
@@ -91,11 +91,11 @@ export function doUserPhoneReset() {
   };
 }
 
-export function doUserPhoneNew(phone, countryCode) {
+export function doUserPhoneNew(phone, country_code) {
   return dispatch => {
     dispatch({
       type: ACTIONS.USER_PHONE_NEW_STARTED,
-      data: { phone, country_code: countryCode },
+      data: { phone, country_code },
     });
 
     const success = () => {
@@ -112,12 +112,10 @@ export function doUserPhoneNew(phone, countryCode) {
       });
     };
 
-    Lbryio.call(
-      'user',
-      'phone_number_new',
-      { phone_number: phone, country_code: countryCode },
-      'post'
-    ).then(success, failure);
+    Lbryio.call('user', 'phone_number_new', { phone_number: phone, country_code }, 'post').then(
+      success,
+      failure
+    );
   };
 }
 
