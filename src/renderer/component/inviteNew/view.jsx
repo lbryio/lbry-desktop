@@ -3,6 +3,7 @@
 import React from 'react';
 import BusyIndicator from 'component/common/busy-indicator';
 import CreditAmount from 'component/common/credit-amount';
+import Button from 'component/button';
 import { Form, FormRow, FormField, Submit } from 'component/common/form';
 
 class FormInviteNew extends React.PureComponent {
@@ -69,6 +70,7 @@ class InviteNew extends React.PureComponent {
     return (
       <section className="card card--section">
         <div className="card__title">{__('Invite a Friend')}</div>
+
         <div className="card__subtitle">
           {__("Or an enemy. Or your cousin Jerry, who you're kind of unsure about.")}
         </div>
@@ -87,6 +89,11 @@ class InviteNew extends React.PureComponent {
             rewardAmount={rewardAmount}
           />
         </div>
+        <p className="help help--padded">
+          {__('Read our')}{' '}
+          <Button button="link" label={__('FAQ')} href="https://lbry.io/faq/referrals" />{' '}
+          {__('to learn more about LBRY Referral Program')}.
+        </p>
       </section>
     );
   }
