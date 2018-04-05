@@ -1,14 +1,25 @@
-import React from 'react';
 import { connect } from 'react-redux';
-import { doNavigate } from 'redux/actions/navigation';
 import { doClaimRewardType } from 'redux/actions/rewards';
-import { selectMyClaims, selectClaimsByUri } from 'redux/selectors/claims';
-import { selectResolvingUris } from 'redux/selectors/content';
+import {
+  doHistoryBack,
+  doResolveUri,
+  makeSelectCostInfoForUri,
+  selectMyClaims,
+  selectFetchingMyChannels,
+  selectMyChannelClaims,
+  selectClaimsByUri,
+  selectResolvingUris,
+  selectBalance,
+} from 'lbry-redux';
+import {
+  doFetchClaimListMine,
+  doFetchChannelListMine,
+  doCreateChannel,
+} from 'redux/actions/content';
+import { doNavigate } from 'redux/actions/navigation';
+import rewards from 'rewards';
 import { selectPublishFormValues } from 'redux/selectors/publish';
-import { doResolveUri } from 'redux/actions/content';
-import { selectBalance } from 'redux/selectors/wallet';
 import { doClearPublish, doUpdatePublishForm, doPublish } from 'redux/actions/publish';
-import { makeSelectCostInfoForUri } from 'redux/selectors/cost_info';
 import { doPrepareEdit } from 'redux/actions/publish';
 import PublishPage from './view';
 

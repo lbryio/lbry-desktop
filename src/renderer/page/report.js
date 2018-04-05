@@ -1,8 +1,8 @@
 import React from 'react';
 import Button from 'component/button';
 import { FormRow } from 'component/common/form';
+import { Lbry } from 'lbry-redux';
 import { doShowSnackBar } from 'redux/actions/app';
-import lbry from '../lbry.js';
 
 class ReportPage extends React.Component {
   constructor(props) {
@@ -14,13 +14,19 @@ class ReportPage extends React.Component {
     };
   }
 
+  onMessageChange(event) {
+    this.setState({
+      message: event.target.value,
+    });
+  }
+
   submitMessage() {
     const message = this.state.message;
     if (message) {
       this.setState({
         submitting: true,
       });
-      lbry.report_bug({ message }).then(() => {
+      Lbry.report_bug({ message }).then(() => {
         this.setState({
           submitting: false,
         });
@@ -35,12 +41,6 @@ class ReportPage extends React.Component {
 
       this.setState({ message: '' });
     }
-  }
-
-  onMessageChange(event) {
-    this.setState({
-      message: event.target.value,
-    });
   }
 
   render() {

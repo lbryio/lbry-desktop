@@ -1,8 +1,6 @@
 // @flow
-import Lbry from 'lbry';
-import * as ACTIONS from 'constants/action_types';
 import * as MODALS from 'constants/modal_types';
-import { selectMyClaimsWithoutChannels } from 'redux/selectors/claims';
+import { ACTIONS, Lbry, selectMyClaimsWithoutChannels } from 'lbry-redux';
 import { selectPendingPublishes } from 'redux/selectors/publish';
 import { doOpenModal } from 'redux/actions/app';
 import type {

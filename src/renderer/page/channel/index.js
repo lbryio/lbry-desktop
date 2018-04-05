@@ -1,12 +1,12 @@
-import React from 'react';
 import { connect } from 'react-redux';
 import { doFetchClaimsByChannel, doFetchClaimCountByChannel } from 'redux/actions/content';
 import {
   makeSelectClaimForUri,
   makeSelectClaimsInChannelForCurrentPage,
   makeSelectFetchingChannelClaims,
-} from 'redux/selectors/claims';
-import { makeSelectCurrentParam, selectCurrentParams } from 'redux/selectors/navigation';
+  makeSelectCurrentParam,
+  selectCurrentParams,
+} from 'lbry-redux';
 import { doNavigate } from 'redux/actions/navigation';
 import { makeSelectTotalPagesForChannel } from 'redux/selectors/content';
 import { doOpenModal } from 'redux/actions/app';

@@ -1,4 +1,3 @@
-import React from 'react';
 import { connect } from 'react-redux';
 import { doNavigate } from 'redux/actions/navigation';
 import Button from './view';

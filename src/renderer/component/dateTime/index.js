@@ -1,7 +1,5 @@
-import React from 'react';
 import { connect } from 'react-redux';
-import { makeSelectBlockDate } from 'redux/selectors/wallet';
-import { doFetchBlock } from 'redux/actions/wallet';
+import { doFetchBlock, makeSelectBlockDate } from 'lbry-redux';
 import DateTime from './view';
 
 const select = (state, props) => ({

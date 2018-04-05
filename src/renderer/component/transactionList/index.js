@@ -1,9 +1,7 @@
-import React from 'react';
 import { connect } from 'react-redux';
-import { doNavigate } from 'redux/actions/navigation';
-import { doOpenModal } from 'redux/actions/app';
 import { selectClaimedRewardsByTransactionId } from 'redux/selectors/rewards';
-import { selectAllMyClaimsByOutpoint } from 'redux/selectors/claims';
+import { doNavigate } from 'redux/actions/navigation';
+import { doOpenModal, selectAllMyClaimsByOutpoint } from 'lbry-redux';
 import TransactionList from './view';
 
 const select = state => ({

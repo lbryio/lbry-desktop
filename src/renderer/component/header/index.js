@@ -1,10 +1,10 @@
 import { connect } from 'react-redux';
+import { selectBalance } from 'lbry-redux';
+import { formatCredits } from 'util/formatCredits';
 import { doNavigate } from 'redux/actions/navigation';
 import { selectIsUpgradeAvailable, selectAutoUpdateDownloaded } from 'redux/selectors/app';
-import { formatCredits } from 'util/formatCredits';
-import { selectBalance } from 'redux/selectors/wallet';
-import Header from './view';
 import { doDownloadUpgradeRequested } from 'redux/actions/app';
+import Header from './view';
 
 const select = state => ({
   isUpgradeAvailable: selectIsUpgradeAvailable(state),

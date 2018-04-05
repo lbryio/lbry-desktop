@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { parseURI } from 'lbryURI';
+import { parseURI } from 'lbry-redux';
 
 const selectState = state => state.publish || {};
 

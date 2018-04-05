@@ -1,7 +1,10 @@
 import { connect } from 'react-redux';
-import { doSendSupport } from 'redux/actions/wallet';
-import { makeSelectTitleForUri, makeSelectClaimForUri } from 'redux/selectors/claims';
-import { selectIsSendingSupport } from 'redux/selectors/wallet';
+import {
+  doSendSupport,
+  makeSelectTitleForUri,
+  makeSelectClaimForUri,
+  selectIsSendingSupport,
+} from 'lbry-redux';
 import WalletSendTip from './view';
 
 const select = (state, props) => ({

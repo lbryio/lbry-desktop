@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { normalizeURI } from 'lbryURI';
+import { normalizeURI } from 'lbry-redux';
 import CardMedia from 'component/cardMedia';
 import TruncatedText from 'component/common/truncated-text';
 import Icon from 'component/common/icon';
