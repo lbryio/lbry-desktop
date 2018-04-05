@@ -178,7 +178,7 @@ export const selectSearchDownloadUris = query =>
 
           if (channelName) {
             const claim = claimsById[claimId];
-            if (claim.value) {
+            if (claim && claim.value) {
               uriParams.claimId = claim.value.publisherSignature.certificateId;
             } else {
               uriParams.claimId = claimId;
