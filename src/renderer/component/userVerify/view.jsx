@@ -60,6 +60,7 @@ class UserVerify extends React.PureComponent {
             <div className="meta">
               {__('A $1 authorization may temporarily appear with your provider.')}{' '}
               <Button
+                button="link"
                 href="https://lbry.io/faq/identity-requirements"
                 label={__('Read more about why we do this.')}
               />
@@ -80,7 +81,7 @@ class UserVerify extends React.PureComponent {
               onClick={() => {
                 verifyPhone();
               }}
-              button="alt"
+              button="primary"
               icon={icons.PHONE}
               label={__('Submit Phone Number')}
             />
@@ -88,11 +89,11 @@ class UserVerify extends React.PureComponent {
           <div className="card__content">
             <div className="meta">
               {__('Standard messaging rates apply. Having trouble?')}{' '}
-              <Button href="https://lbry.io/faq/phone" label={__('Read more.')} />
+              <Button button="link" href="https://lbry.io/faq/phone" label={__('Read more.')} />
             </div>
           </div>
         </section>
-        <section className="card card--form">
+        <section className="card card--section">
           <div className="card__title">
             <h3>{__('3) Proof via Chat')}</h3>
           </div>
@@ -111,7 +112,7 @@ class UserVerify extends React.PureComponent {
           <div className="card__actions">
             <Button
               href="https://chat.lbry.io"
-              button="alt"
+              button="primary"
               icon={icons.MESSAGE}
               label={__('Join LBRY Chat')}
             />
@@ -129,7 +130,7 @@ class UserVerify extends React.PureComponent {
             </p>
           </div>
           <div className="card__actions">
-            <Button onClick={() => navigate('/discover')} button="alt" label={__('Skip Rewards')} />
+            <Button onClick={() => navigate('/discover')} button="primary" label={__('Skip Rewards')} />
           </div>
         </section>
       </React.Fragment>
