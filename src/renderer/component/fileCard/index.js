@@ -13,12 +13,10 @@ import { selectPendingPublish } from 'redux/selectors/publish';
 import FileCard from './view';
 
 const select = (state, props) => {
-  let claim;
-  let fileInfo;
-  let metadata;
-  let isResolvingUri;
-
-  const pendingPublish = selectPendingPublish(props.uri)(state);
+  let pendingPublish;
+  if (props.checkPending) {
+    pendingPublish = selectPendingPublish(props.uri)(state);
+  }
 
   const fileCardInfo = pendingPublish || {
     claim: makeSelectClaimForUri(props.uri)(state),

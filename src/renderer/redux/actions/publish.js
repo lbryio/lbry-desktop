@@ -82,6 +82,7 @@ export const doPublish = (params: PublishParams): ThunkAction => {
     contentIsFree,
     price,
     uri,
+    sources,
   } = params;
 
   const channelName = channel === CHANNEL_ANONYMOUS || channel === CHANNEL_NEW ? '' : channel;
@@ -105,12 +106,17 @@ export const doPublish = (params: PublishParams): ThunkAction => {
   }
 
   const publishPayload = {
-    file_path: filePath,
     name,
     channel_name: channelName,
     bid,
     metadata,
   };
+
+  if (filePath) {
+    publishPayload.file_path = filePath;
+  } else {
+    publishPayload.sources = sources;
+  }
 
   return (dispatch: Dispatch) => {
     dispatch({ type: ACTIONS.PUBLISH_START });

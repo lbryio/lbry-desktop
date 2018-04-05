@@ -102,7 +102,7 @@ const subscriptionsFilter = createFilter('subscriptions', ['subscriptions']);
 const walletFilter = createFilter('wallet', ['receiveAddress']);
 
 const persistOptions = {
-  whitelist: ['claims', 'subscriptions', 'navigation', 'publish', 'wallet'],
+  whitelist: ['claims', 'subscriptions', 'publish', 'wallet'],
   // Order is important. Needs to be compressed last or other transforms can't
   // read the data
   transforms: [saveClaimsFilter, subscriptionsFilter, walletFilter, compressor],

@@ -25,6 +25,7 @@ type Props = {
   sortByHeight?: boolean,
   claimsById: Array<{}>,
   fileInfos: Array<FileInfo>,
+  checkPending?: boolean,
 };
 
 type State = {
@@ -42,6 +43,8 @@ class FileList extends React.PureComponent<Props, State> {
     this.state = {
       sortBy: 'dateNew',
     };
+
+    (this: any).handleSortChanged = this.handleSortChanged.bind(this);
 
     this.sortFunctions = {
       dateNew: fileInfos =>
@@ -138,7 +141,7 @@ class FileList extends React.PureComponent<Props, State> {
   }
 
   render() {
-    const { fileInfos, hideFilter } = this.props;
+    const { fileInfos, hideFilter, checkPending } = this.props;
     const { sortBy } = this.state;
     const content = [];
 
@@ -166,7 +169,7 @@ class FileList extends React.PureComponent<Props, State> {
 
       const uri = buildURI(uriParams);
 
-      content.push(<FileCard key={uri} uri={uri} showPrice={false} />);
+      content.push(<FileCard key={uri} uri={uri} checkPending={checkPending} />);
     });
 
     return (
@@ -179,7 +182,8 @@ class FileList extends React.PureComponent<Props, State> {
               value={sortBy}
               onChange={this.handleSortChanged}
             >
-              <option value="date">{__('Date')}</option>
+              <option value="dateNew">{__('Newest First')}</option>
+              <option value="dateOld">{__('Oldest First')}</option>
               <option value="title">{__('Title')}</option>
             </FormField>
           )}

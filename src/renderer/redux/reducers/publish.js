@@ -75,6 +75,12 @@ export type PublishParams = {
     currency: string,
     amount: number,
   },
+  source?: {
+    contentType: string,
+    source: string,
+    sourceType: string,
+    version: string,
+  },
 };
 
 const defaultState: PublishState = {
