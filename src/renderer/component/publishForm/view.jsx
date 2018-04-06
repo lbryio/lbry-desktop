@@ -55,7 +55,7 @@ type Props = {
   clearPublish: () => void,
   resolveUri: string => void,
   scrollToTop: () => void,
-  prepareEdit: ({}) => void,
+  prepareEdit: ({}, uri) => void,
 };
 
 class PublishForm extends React.PureComponent<Props> {
@@ -159,10 +159,10 @@ class PublishForm extends React.PureComponent<Props> {
     updatePublishForm({ bid, bidError });
   }
 
-  editExistingClaim() {
-    const { myClaimForUri, prepareEdit, scrollToTop } = this.props;
+  editExistingClaim(myClaimForUri: ?{}, uri: string) {
+    const { prepareEdit, scrollToTop } = this.props;
     if (myClaimForUri) {
-      prepareEdit(myClaimForUri);
+      prepareEdit(myClaimForUri, uri);
       scrollToTop();
     }
   }
@@ -300,7 +300,8 @@ class PublishForm extends React.PureComponent<Props> {
     const formDisabled = (!filePath && !editingURI) || publishing;
     const formValid = this.checkIsFormValid();
 
-    const isStillEditing = editingURI === uri;
+    const simpleUri = uri && uri.split('#')[0];
+    const isStillEditing = editingURI === simpleUri;
     let submitLabel;
     if (isStillEditing) {
       submitLabel = !publishing ? __('Edit') : __('Editing...');
@@ -446,11 +447,11 @@ class PublishForm extends React.PureComponent<Props> {
                   error={nameError}
                   helper={
                     <BidHelpText
-                      uri={uri}
+                      uri={simpleUri}
                       editingURI={editingURI}
                       isResolvingUri={isResolvingUri}
                       winningBidForClaimUri={winningBidForClaimUri}
-                      claimIsMine={!!myClaimForUri}
+                      myClaimForUri={myClaimForUri}
                       onEditMyClaim={this.editExistingClaim}
                     />
                   }
