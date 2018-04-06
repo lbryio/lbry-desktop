@@ -56,6 +56,8 @@ export class FormField extends React.PureComponent<Props> {
             />
           </div>
         );
+      } else if (type === 'textarea') {
+        input = <textarea type={type} id={name} {...inputProps} />;
       } else {
         input = <input type={type} id={name} {...inputProps} />;
       }
