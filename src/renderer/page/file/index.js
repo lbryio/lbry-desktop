@@ -15,10 +15,9 @@ import { makeSelectCostInfoForUri } from 'redux/selectors/cost_info';
 import { selectShowNsfw } from 'redux/selectors/settings';
 import { selectMediaPaused } from 'redux/selectors/media';
 import { doOpenModal } from 'redux/actions/app';
-import FilePage from './view';
-import { makeSelectCurrentParam } from 'redux/selectors/navigation';
 import { selectSubscriptions } from 'redux/selectors/subscriptions';
 import { doPrepareEdit } from 'redux/actions/publish';
+import FilePage from './view';
 
 const select = (state, props) => ({
   claim: makeSelectClaimForUri(props.uri)(state),
@@ -40,7 +39,7 @@ const perform = dispatch => ({
   fetchCostInfo: uri => dispatch(doFetchCostInfoForUri(uri)),
   checkSubscription: subscription => dispatch(doCheckSubscription(subscription)),
   openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
-  prepareEdit: publishData => dispatch(doPrepareEdit(publishData)),
+  prepareEdit: (publishData, uri) => dispatch(doPrepareEdit(publishData, uri)),
 });
 
 export default connect(select, perform)(FilePage);

@@ -10,7 +10,7 @@ export const selectPendingPublishes = createSelector(
 
 export const selectPendingPublishesLessEdits = createSelector(
   selectPendingPublishes,
-  pendingPublishes => pendingPublishes.filter(pendingPublish => !pendingPublish.sources)
+  pendingPublishes => pendingPublishes.filter(pendingPublish => !pendingPublish.isEdit)
 );
 
 export const selectPublishFormValues = createSelector(selectState, state => {
