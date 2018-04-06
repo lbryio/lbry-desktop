@@ -338,3 +338,9 @@ p {
   color: var(--color-meta-light);
   font-style: italic;
 }
+
+.qr-code {
+  &.qr-code--right-padding {
+    padding-right: $spacing-vertical * 2/3;
+  }
+}

@@ -19,6 +19,10 @@
     align-items: center;
   }
 
+  &.form-row--stretch {
+    flex: 1;
+  }
+
   .form-field.form-field--stretch {
     width: 100%;
 
