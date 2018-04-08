@@ -33,6 +33,18 @@
   }
 }
 
+.form-field--textarea {
+  background-color: var(--search-bg-color);
+  border-radius: var(--btn-radius);
+  box-shadow: var(--box-shadow-wunderbar);
+  color: var(--search-color);
+  display: block;
+  font-size: 13px;
+  padding: 5px;
+  resize: none;
+  width: 100%;
+}
+
 .form-field--SimpleMDE {
   display: block;
   width: 100%;
