@@ -1,26 +1,19 @@
 .file-download,
 .file-download__overlay {
   padding: 5px;
+  width: 100%;
 }
 
 .file-download {
-  position: relative;
-  background-color: var(--color-black);
-  border-radius: var(--btn-radius);
   color: var(--color-download);
   font-size: 12px;
   opacity: 0.8;
   font-family: 'metropolis-medium';
+  height: 36px;
 }
 
 .file-download__overlay {
   background: var(--color-download);
   color: var(--color-download-overlay);
-  border-radius: var(--btn-radius);
-  position: absolute;
-  white-space: nowrap;
-  overflow: hidden;
-  z-index: 1;
-  top: 0px;
-  left: 0px;
+  width: 100%;
 }

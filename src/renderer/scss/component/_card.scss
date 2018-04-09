@@ -131,6 +131,13 @@
   }
 }
 
+.card__subtitle--file {
+  align-items: baseline;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
 .card__subtitle--file-info {
   display: flex;
   align-items: center;
@@ -145,15 +152,6 @@
   font-size: 14px;
   font-family: 'metropolis-medium';
   padding-top: $spacing-vertical * 2/3;
-}
-
-// .card-media__internal__links should always be inside a card
-.card {
-  .card-media__internal-links {
-    position: absolute;
-    top: $spacing-vertical * 2/3;
-    right: $spacing-vertical * 2/3;
-  }
 }
 
 .card--small {
@@ -203,6 +201,10 @@
 
   &:not(.card__actions--vertical) .btn:nth-child(n + 2) {
     margin-left: $spacing-vertical / 3;
+  }
+
+  &.file__actions {
+    margin-top: 0px;
   }
 }
 
