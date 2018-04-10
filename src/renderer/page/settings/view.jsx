@@ -185,21 +185,21 @@ class SettingsPage extends React.PureComponent<Props, State> {
                   checked={!daemonSettings.disable_max_key_fee}
                   postfix={__('Choose limit')}
                 />
-                <FormFieldPrice
-                  name="max_key_fee"
-                  label="Max purchase price"
-                  min={0}
-                  onChange={this.onKeyFeeChange}
-                  disabled={daemonSettings.disable_max_key_fee}
-                  price={
-                    daemonSettings.max_key_fee
-                      ? daemonSettings.max_key_fee
-                      : { currency: 'USD', amount: 50 }
-                  }
-                />
+                {!daemonSettings.disable_max_key_fee && (
+                  <FormFieldPrice
+                    name="max_key_fee"
+                    label="Max purchase price"
+                    min={0}
+                    onChange={this.onKeyFeeChange}
+                    price={
+                      daemonSettings.max_key_fee
+                        ? daemonSettings.max_key_fee
+                        : { currency: 'USD', amount: 50 }
+                    }
+                  />
+                )}
               </div>
             </section>
-
             <section className="card card--section">
               <div className="card__title">{__('Purchase Confirmations')}</div>
               <div className="card__subtitle">
@@ -217,7 +217,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
                     this.onInstantPurchaseEnabledChange(false);
                   }}
                 />
-
                 <FormField
                   type="radio"
                   name="instant_purchases"
@@ -227,16 +226,16 @@ class SettingsPage extends React.PureComponent<Props, State> {
                     this.onInstantPurchaseEnabledChange(true);
                   }}
                 />
-                <FormFieldPrice
-                  label={__('Confirmation price')}
-                  disabled={!instantPurchaseEnabled}
-                  min={0.1}
-                  onChange={this.onInstantPurchaseMaxChange}
-                  price={instantPurchaseMax}
-                />
+                {instantPurchaseEnabled && (
+                  <FormFieldPrice
+                    label={__('Confirmation price')}
+                    min={0.1}
+                    onChange={this.onInstantPurchaseMaxChange}
+                    price={instantPurchaseMax}
+                  />
+                )}
               </div>
             </section>
-
             <section className="card card--section">
               <div className="card__title">{__('Content Settings')}</div>
               <FormField
@@ -257,7 +256,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 )}
               />
             </section>
-
             <section className="card card--section">
               <div className="card__title">{__('Share Diagnostic Data')}</div>
               <div className="card__content">
@@ -275,7 +273,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 />
               </div>
             </section>
-
             {
               // Hiding this for now until we update the dark mode styles
               // <section className="card card--section">
@@ -303,7 +300,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
               //     />
               // </section>
             }
-
             <section className="card card--section">
               <div className="card__title">{__('Application Cache')}</div>
               <span className="card__subtitle">
