@@ -1,9 +1,7 @@
 import React from 'react';
+import { ipcRenderer } from 'electron';
 import { Modal } from 'modal/modal';
-import { Line } from 'rc-progress';
 import Button from 'component/button';
-
-const { ipcRenderer } = require('electron');
 
 class ModalAutoUpdateDownloaded extends React.PureComponent {
   render() {
@@ -31,6 +29,13 @@ class ModalAutoUpdateDownloaded extends React.PureComponent {
             {__(
               'A new version of LBRY has been released, downloaded, and is ready for you to use pending a restart.'
             )}
+          </p>
+          <p className="meta text-center">
+            {__('Want to know what has changed?')} See the{' '}
+            <Button
+              label={__('release notes')}
+              href="https://github.com/lbryio/lbry-app/releases"
+            />.
           </p>
         </section>
       </Modal>
