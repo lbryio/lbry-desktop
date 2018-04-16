@@ -394,14 +394,14 @@ class PublishForm extends React.PureComponent<Props> {
                 disabled={formDisabled}
                 onChange={() => updatePublishForm({ contentIsFree: false })}
               />
-
-              <FormFieldPrice
-                name="content_cost_amount"
-                min="0"
-                price={price}
-                onChange={newPrice => updatePublishForm({ price: newPrice })}
-                disabled={formDisabled || contentIsFree}
-              />
+              {!contentIsFree && (
+                <FormFieldPrice
+                  name="content_cost_amount"
+                  min="0"
+                  price={price}
+                  onChange={newPrice => updatePublishForm({ price: newPrice })}
+                />
+              )}
               {price.currency !== 'LBC' && (
                 <p className="form-field__help">
                   {__(
