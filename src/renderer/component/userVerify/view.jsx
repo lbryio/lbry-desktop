@@ -1,31 +1,31 @@
-/* eslint-disable */
-import React from 'react';
+// @flow
+import * as React from 'react';
 import Button from 'component/button';
 import CardVerify from 'component/cardVerify';
-import lbryio from 'lbryio.js';
+import lbryio from 'lbryio';
 import * as icons from 'constants/icons';
 
-class UserVerify extends React.PureComponent {
-  constructor(props) {
-    super(props);
+type Props = {
+  errorMessage: ?string,
+  isPending: boolean,
+  navigate: string => void,
+  verifyUserIdentity: string => void,
+  verifyPhone: () => void,
+};
 
-    this.state = {
-      code: '',
-    };
+class UserVerify extends React.PureComponent<Props> {
+  constructor() {
+    super();
+
+    (this: any).onToken = this.onToken.bind(this);
   }
 
-  handleCodeChanged(event) {
-    this.setState({
-      code: event.target.value,
-    });
-  }
-
-  onToken(data) {
+  onToken(data: { id: string }) {
     this.props.verifyUserIdentity(data.id);
   }
 
   render() {
-    const { errorMessage, isPending, navigate, verifyPhone, modal } = this.props;
+    const { errorMessage, isPending, navigate, verifyPhone } = this.props;
     return (
       <React.Fragment>
         <section className="card card--section">
@@ -39,20 +39,18 @@ class UserVerify extends React.PureComponent {
           </div>
         </section>
         <section className="card card--section">
-          <div className="card__title">
-            <h3>{__('1) Proof via Credit')}</h3>
-          </div>
-          <div className="card__content">
+          <div className="card__title">{__('1) Proof via Credit')}</div>
+          <p className="card__content">
             {`${__(
               'If you have a valid credit or debit card, you can use it to instantly prove your humanity.'
             )} ${__('There is no charge at all for this, now or in the future.')} `}
-          </div>
+          </p>
           <div className="card__actions">
             {errorMessage && <p className="form-field__error">{errorMessage}</p>}
             <CardVerify
               label={__('Perform Card Verification')}
               disabled={isPending}
-              token={this.onToken.bind(this)}
+              token={this.onToken}
               stripeKey={lbryio.getStripeToken()}
             />
           </div>
@@ -68,14 +66,12 @@ class UserVerify extends React.PureComponent {
           </div>
         </section>
         <section className="card card--section">
-          <div className="card__title">
-            <h3>{__('2) Proof via Phone')}</h3>
-          </div>
-          <div className="card__content">
+          <div className="card__title">{__('2) Proof via Phone')}</div>
+          <p className="card__content">
             {`${__(
               'You will receive an SMS text message confirming that your phone number is correct.'
             )}`}
-          </div>
+          </p>
           <div className="card__actions">
             <Button
               onClick={() => {
@@ -94,9 +90,7 @@ class UserVerify extends React.PureComponent {
           </div>
         </section>
         <section className="card card--section">
-          <div className="card__title">
-            <h3>{__('3) Proof via Chat')}</h3>
-          </div>
+          <div className="card__title">{__('3) Proof via Chat')}</div>
           <div className="card__content">
             <p>
               {__(
@@ -119,18 +113,18 @@ class UserVerify extends React.PureComponent {
           </div>
         </section>
         <section className="card card--section">
-          <div className="card__title">
-            <h5>{__('Or, Skip It Entirely')}</h5>
-          </div>
-          <div className="card__content">
-            <p className="meta">
-              {__(
-                'You can continue without this step, but you will not be eligible to earn rewards.'
-              )}
-            </p>
-          </div>
+          <div className="card__title">{__('Or, Skip It Entirely')}</div>
+          <p className="card__content">
+            {__(
+              'You can continue without this step, but you will not be eligible to earn rewards.'
+            )}
+          </p>
           <div className="card__actions">
-            <Button onClick={() => navigate('/discover')} button="primary" label={__('Skip Rewards')} />
+            <Button
+              onClick={() => navigate('/discover')}
+              button="primary"
+              label={__('Skip Rewards')}
+            />
           </div>
         </section>
       </React.Fragment>
@@ -139,4 +133,3 @@ class UserVerify extends React.PureComponent {
 }
 
 export default UserVerify;
-/* eslint-enable */
