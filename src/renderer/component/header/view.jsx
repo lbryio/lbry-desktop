@@ -5,20 +5,22 @@ import WunderBar from 'component/wunderbar';
 import * as icons from 'constants/icons';
 
 type Props = {
+  autoUpdateDownloaded: boolean,
   balance: string,
-  navigate: any => void,
   downloadUpgradeRequested: any => void,
   isUpgradeAvailable: boolean,
-  autoUpdateDownloaded: boolean,
+  navigate: any => void,
+  roundedBalance: string,
 };
 
 const Header = (props: Props) => {
   const {
+    autoUpdateDownloaded,
     balance,
+    downloadUpgradeRequested,
     isUpgradeAvailable,
     navigate,
-    downloadUpgradeRequested,
-    autoUpdateDownloaded,
+    roundedBalance,
   } = props;
 
   const showUpgradeButton =
@@ -37,7 +39,10 @@ const Header = (props: Props) => {
               `${balance}`
             ) : (
               <React.Fragment>
-                <span className="btn__label--balance">You have</span> <span>{balance} LBC</span>
+                <span className="btn__label--balance" title={`${balance} LBC`}>
+                  You have
+                </span>{' '}
+                <span title={`${balance} LBC`}>{roundedBalance} LBC</span>
               </React.Fragment>
             )
           }
