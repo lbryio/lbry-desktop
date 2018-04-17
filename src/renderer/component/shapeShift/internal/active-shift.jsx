@@ -16,7 +16,6 @@ type Props = {
   shiftOrderId: ?string,
   originCoinDepositMax: ?number,
   clearShapeShift: Dispatch,
-  doShowSnackBar: Dispatch,
   getActiveShift: Dispatch,
   shapeShiftRate: ?number,
   originCoinDepositMax: ?number,
@@ -25,8 +24,6 @@ type Props = {
 };
 
 class ActiveShapeShift extends React.PureComponent<Props> {
-  continousFetch: ?number;
-
   constructor() {
     super();
     this.continousFetch = undefined;
@@ -59,6 +56,8 @@ class ActiveShapeShift extends React.PureComponent<Props> {
     }
   }
 
+  continousFetch: ?number;
+
   render() {
     const {
       shiftCoinType,
@@ -68,7 +67,6 @@ class ActiveShapeShift extends React.PureComponent<Props> {
       shiftState,
       originCoinDepositMax,
       clearShapeShift,
-      doShowSnackBar,
       shapeShiftRate,
       originCoinDepositFee,
       originCoinDepositMin,
@@ -95,8 +93,8 @@ class ActiveShapeShift extends React.PureComponent<Props> {
 
             {shiftDepositAddress && (
               <FormRow verticallyCentered padded>
-                <Address address={shiftDepositAddress} showCopyButton />
-                <QRCode value={shiftDepositAddress} />
+                <QRCode value={shiftDepositAddress} paddingRight />
+                <Address address={shiftDepositAddress} showCopyButton padded />
               </FormRow>
             )}
           </div>

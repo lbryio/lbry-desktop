@@ -1,8 +1,9 @@
 import React from 'react';
 import Button from 'component/button';
-import { FormRow } from 'component/common/form';
+import { FormRow, FormField } from 'component/common/form';
 import { doShowSnackBar } from 'redux/actions/app';
-import lbry from '../lbry.js';
+import lbry from 'lbry';
+import Page from 'component/page';
 
 class ReportPage extends React.Component {
   constructor(props) {
@@ -14,8 +15,14 @@ class ReportPage extends React.Component {
     };
   }
 
+  onMessageChange(event) {
+    this.setState({
+      message: event.target.value,
+    });
+  }
+
   submitMessage() {
-    const message = this.state.message;
+    const { message } = this.state;
     if (message) {
       this.setState({
         submitting: true,
@@ -37,58 +44,55 @@ class ReportPage extends React.Component {
     }
   }
 
-  onMessageChange(event) {
-    this.setState({
-      message: event.target.value,
-    });
-  }
-
   render() {
     return (
-      <main className="main--single-column">
-        <section className="card">
+      <Page>
+        <section className="card card--section">
           <div className="card__content">
-            <h3>{__('Report an Issue')}</h3>
+            <div className="card__title">{__('Report an Issue')}</div>
             <p>
               {__(
                 'Please describe the problem you experienced and any information you think might be useful to us. Links to screenshots are great!'
               )}
             </p>
-            <div className="form-row">
-              <FormRow
+            <FormRow>
+              <FormField
                 type="textarea"
                 rows="10"
                 name="message"
+                stretch
                 value={this.state.message}
                 onChange={event => {
                   this.onMessageChange(event);
                 }}
                 placeholder={__('Description of your issue')}
               />
-            </div>
-            <div className="form-row form-row-submit">
-              <button
+            </FormRow>
+            <div className="card__actions">
+              <Button
+                button="primary"
                 onClick={event => {
                   this.submitMessage(event);
                 }}
                 className={`button-block button-primary ${this.state.submitting ? 'disabled' : ''}`}
               >
                 {this.state.submitting ? __('Submitting...') : __('Submit Report')}
-              </button>
+              </Button>
             </div>
           </div>
         </section>
-        <section className="card">
-          <div className="card__content">
-            <h3>{__('Developer?')}</h3>
+        <section className="card card--section">
+          <div className="card__title">{__('Developer?')}</div>
+          <p>
             {__('You can also')}{' '}
             <Button
+              button="link"
               href="https://github.com/lbryio/lbry/issues"
               label={__('submit an issue on GitHub')}
             />.
-          </div>
+          </p>
         </section>
-      </main>
+      </Page>
     );
   }
 }

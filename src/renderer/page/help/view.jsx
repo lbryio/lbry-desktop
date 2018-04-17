@@ -151,10 +151,10 @@ class HelpPage extends React.PureComponent {
                     {user && user.primary_email ? (
                       user.primary_email
                     ) : (
-                      <span>
+                      <React.Fragment>
                         <span className="empty">{__('none')} </span>
-                        (<Button onClick={() => doAuth()} label={__('set email')} />)
-                      </span>
+                        <Button button="link" onClick={() => doAuth()} label={__('set email')} />
+                      </React.Fragment>
                     )}
                   </td>
                 </tr>

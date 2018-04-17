@@ -9,7 +9,6 @@ import FileDetails from 'component/fileDetails';
 import FileActions from 'component/fileActions';
 import UriIndicator from 'component/uriIndicator';
 import Icon from 'component/common/icon';
-import WalletSendTip from 'component/walletSendTip';
 import DateTime from 'component/dateTime';
 import * as icons from 'constants/icons';
 import Button from 'component/button';
@@ -72,7 +71,7 @@ class FilePage extends React.Component<Props> {
     }
   }
 
-  checkSubscription(props) {
+  checkSubscription = (props: Props) => {
     if (
       props.subscriptions
         .map(subscription => subscription.channelName)
@@ -89,12 +88,11 @@ class FilePage extends React.Component<Props> {
         ),
       });
     }
-  }
+  };
 
   render() {
     const {
       claim,
-      fileInfo,
       metadata,
       contentType,
       uri,
@@ -109,10 +107,9 @@ class FilePage extends React.Component<Props> {
     } = this.props;
 
     // File info
-    const title = metadata.title;
+    const { title, thumbnail } = metadata;
     const isRewardContent = rewardedContentClaimIds.includes(claim.claim_id);
     const shouldObscureThumbnail = obscureNsfw && metadata.nsfw;
-    const thumbnail = metadata.thumbnail;
     const { height, channel_name: channelName, value } = claim;
     const mediaType = lbry.getMediaType(contentType);
     const isPlayable =
@@ -165,7 +162,7 @@ class FilePage extends React.Component<Props> {
                       icon={icons.EDIT}
                       label={__('Edit')}
                       onClick={() => {
-                        prepareEdit(claim);
+                        prepareEdit(claim, uri);
                         navigate('/publish');
                       }}
                     />
