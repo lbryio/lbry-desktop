@@ -301,7 +301,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
             <section className="card card--section">
               <div className="card__title">{__('Application Cache')}</div>
               <span className="card__subtitle">
-                {__("This will delete your subscriptions, and clar the app's cache")}
+                {__("This will delete your subscriptions, and clear the app's cache")}
               </span>
               <div className="card__content">
                 <Button
