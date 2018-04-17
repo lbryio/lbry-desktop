@@ -67,11 +67,11 @@
 }
 
 .form-field__label {
-  color: var(--color-black);
+  color: var(--form-label-color);
 }
 
 .form-field__help {
-  color: var(--color-grey-dark);
+  color: var(--color-help);
   padding-top: $spacing-vertical * 1/3;
 }
 

@@ -53,6 +53,7 @@ const Header = (props: Props) => {
         <Button
           uppercase
           button="primary"
+          className="btn--header-publish"
           onClick={() => navigate('/publish')}
           icon={icons.UPLOAD}
           label={isUpgradeAvailable ? '' : __('Publish')}

@@ -12,12 +12,15 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
    * Show exact wallet balance on mouse hover over ([#1305](https://github.com/lbryio/lbry-app/pull/1305))
 
 ### Changed
-
 * Add flair to snackbar ([#1313](https://github.com/lbryio/lbry-app/pull/1313))
 
 ### Fixed
    * Black screen on macOS after maximizing LBRY and then closing ([#1235](https://github.com/lbryio/lbry-app/pull/1235))
 
+### Fixed
+   * Black screen on macOS after maximizing LBRY and then closing ([#1235](https://github.com/lbryio/lbry-app/pull/1235))
+   * Fix dark theme ([#1034](https://github.com/lbryio/lbry-app/issues/1034))
+   * Fix download percentage indicator overlay ([#1271](https://github.com/lbryio/lbry-app/issues/1271))
 
 
 ## [0.21.2] - 2018-03-22
