@@ -102,6 +102,10 @@ $large-breakpoint: 1760px;
   --btn-radius: 20px;
   --btn-height: 36px;
 
+  /* SnackBar */
+  --snackbar-bg-primary: var(--color-primary);
+  --snackbar-color-primary: var(--text-color-inverse);
+
   /* Header */
   --header-bg: var(--color-white);
   --header-color: var(--color-text);
