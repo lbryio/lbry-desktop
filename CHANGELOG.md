@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
    * Build for both architectures (x86 and x64) for Windows ([#1262](https://github.com/lbryio/lbry-app/pull/1262))
    * Add referral FAQ to Invites screen([#1314](https://github.com/lbryio/lbry-app/pull/1314))
    * Show exact wallet balance on mouse hover over ([#1305](https://github.com/lbryio/lbry-app/pull/1305))
+   * New dark mode ([#1269](https://github.com/lbryio/lbry-app/pull/1269))
 
 ### Changed
 * Add flair to snackbar ([#1313](https://github.com/lbryio/lbry-app/pull/1313))
