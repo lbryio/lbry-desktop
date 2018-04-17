@@ -127,7 +127,7 @@ $large-breakpoint: 1760px;
   --search-modal-input-height: 70px;
 
   /* Nav */
-  --nav-color: #bbb;
+  --nav-color: var(--color-grey-dark);
   --nav-bg-color: var(--color-grey-light);
 
   /* Table */
