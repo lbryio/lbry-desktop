@@ -8,7 +8,6 @@ const RED_COLOR = '#e2495e';
 
 type Props = {
   icon: string,
-  size?: number,
 };
 
 class IconComponent extends React.PureComponent<Props> {
