@@ -79,7 +79,7 @@
   },
   "devDependencies": {
     "axios": "^0.18.0",
-    "babel-eslint": "^8.2.2",
+    "babel-eslint": "^8.2.3",
     "babel-plugin-module-resolver": "^3.1.1",
     "babel-polyfill": "^6.20.0",
     "babel-preset-env": "^1.6.1",
