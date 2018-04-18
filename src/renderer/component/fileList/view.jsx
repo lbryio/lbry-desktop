@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { buildURI } from 'lbryURI';
+import { buildURI } from 'lbry-redux';
 import { FormField } from 'component/common/form';
 import FileCard from 'component/fileCard';
 

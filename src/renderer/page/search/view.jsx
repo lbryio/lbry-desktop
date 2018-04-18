@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { isURIValid, normalizeURI } from 'lbryURI';
+import { isURIValid, normalizeURI } from 'lbry-redux';
 import FileTile from 'component/fileTile';
 import FileListSearch from 'component/fileListSearch';
 import ToolTip from 'component/common/tooltip';

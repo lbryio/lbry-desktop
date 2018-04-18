@@ -1,9 +1,9 @@
 import { connect } from 'react-redux';
-import { doDownloadUpgradeRequested } from 'redux/actions/app';
+import { selectBalance } from 'lbry-redux';
+import { formatCredits } from 'util/formatCredits';
 import { doNavigate } from 'redux/actions/navigation';
 import { selectIsUpgradeAvailable, selectAutoUpdateDownloaded } from 'redux/selectors/app';
-import { selectBalance } from 'redux/selectors/wallet';
-import { formatCredits } from 'util/formatCredits';
+import { doDownloadUpgradeRequested } from 'redux/actions/app';
 import Header from './view';
 
 const select = state => ({

@@ -1,8 +1,6 @@
-import React from 'react';
 import { connect } from 'react-redux';
-import { doCloseModal } from 'redux/actions/app';
 import { doLoadVideo, doSetPlayingUri } from 'redux/actions/content';
-import { makeSelectMetadataForUri } from 'redux/selectors/claims';
+import { doCloseModal, makeSelectMetadataForUri } from 'lbry-redux';
 import ModalAffirmPurchase from './view';
 
 const select = (state, props) => ({

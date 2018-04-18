@@ -89,11 +89,10 @@ reducers[ACTIONS.AUTO_UPDATE_DOWNLOADED] = state =>
     autoUpdateDownloaded: true,
   });
 
-reducers[ACTIONS.AUTO_UPDATE_DECLINED] = state => {
-  return Object.assign({}, state, {
+reducers[ACTIONS.AUTO_UPDATE_DECLINED] = state =>
+  Object.assign({}, state, {
     autoUpdateDeclined: true,
   });
-};
 
 reducers[ACTIONS.UPGRADE_DOWNLOAD_COMPLETED] = (state, action) =>
   Object.assign({}, state, {
@@ -121,17 +120,15 @@ reducers[ACTIONS.SKIP_UPGRADE] = state => {
   });
 };
 
-reducers[ACTIONS.MEDIA_PLAY] = state => {
-  return Object.assign({}, state, {
+reducers[ACTIONS.MEDIA_PLAY] = state =>
+  Object.assign({}, state, {
     modalsAllowed: false,
   });
-};
 
-reducers[ACTIONS.MEDIA_PAUSE] = state => {
-  return Object.assign({}, state, {
+reducers[ACTIONS.MEDIA_PAUSE] = state =>
+  Object.assign({}, state, {
     modalsAllowed: true,
   });
-};
 
 reducers[ACTIONS.SET_PLAYING_URI] = (state, action) => {
   if (action.data.uri === null) {

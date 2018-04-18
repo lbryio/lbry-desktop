@@ -1,6 +1,5 @@
 import { connect } from 'react-redux';
-import { selectFileInfosDownloaded } from 'redux/selectors/file_info';
-import { selectMyClaimsWithoutChannels } from 'redux/selectors/claims';
+import { selectFileInfosDownloaded, selectMyClaimsWithoutChannels } from 'lbry-redux';
 import { doNavigate } from 'redux/actions/navigation';
 import FileListDownloaded from './view';
 

@@ -2,7 +2,7 @@
 import React from 'react';
 import FileTile from 'component/fileTile';
 import ChannelTile from 'component/channelTile';
-import { parseURI } from 'lbryURI';
+import { parseURI } from 'lbry-redux';
 import debounce from 'util/debounce';
 
 const SEARCH_DEBOUNCE_TIME = 800;

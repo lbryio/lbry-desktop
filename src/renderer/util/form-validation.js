@@ -1,6 +1,6 @@
 // @flow
 /* eslint-disable prefer-default-export */
-import { regexAddress } from 'lbryURI';
+import { regexAddress } from 'lbry-redux';
 
 type DraftTxValues = {
   address: string,

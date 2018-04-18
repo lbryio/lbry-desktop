@@ -4,8 +4,8 @@ import { connect } from 'react-redux';
 import { doCloseModal } from 'redux/actions/app';
 import { doSetClientSetting } from 'redux/actions/settings';
 import { selectPhoneToVerify, selectUser } from 'redux/selectors/user';
-import ModalPhoneCollection from './view';
 import { doNavigate } from 'redux/actions/navigation';
+import ModalPhoneCollection from './view';
 
 const select = state => ({
   phone: selectPhoneToVerify(state),

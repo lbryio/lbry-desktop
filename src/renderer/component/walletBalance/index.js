@@ -1,6 +1,5 @@
-import React from 'react';
 import { connect } from 'react-redux';
-import { selectBalance } from 'redux/selectors/wallet';
+import { selectBalance } from 'lbry-redux';
 import WalletBalance from './view';
 
 const select = state => ({

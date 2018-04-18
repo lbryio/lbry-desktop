@@ -1,6 +1,6 @@
 // @flow
 import { handleActions } from 'util/redux-utils';
-import { buildURI } from 'lbryURI';
+import { buildURI } from 'lbry-redux';
 import * as ACTIONS from 'constants/action_types';
 import { CHANNEL_ANONYMOUS } from 'constants/claim';
 

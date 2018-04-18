@@ -1,8 +1,7 @@
 import { connect } from 'react-redux';
 import SelectChannel from './view';
-import { selectMyChannelClaims, selectFetchingMyChannels } from 'redux/selectors/claims';
+import { selectBalance, selectMyChannelClaims, selectFetchingMyChannels } from 'lbry-redux';
 import { doFetchChannelListMine, doCreateChannel } from 'redux/actions/content';
-import { selectBalance } from 'redux/selectors/wallet';
 
 const select = state => ({
   channels: selectMyChannelClaims(state),

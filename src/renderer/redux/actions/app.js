@@ -1,19 +1,16 @@
 import { execSync } from 'child_process';
 import isDev from 'electron-is-dev';
-import Lbry from 'lbry';
 import path from 'path';
-import * as ACTIONS from 'constants/action_types';
 import * as MODALS from 'constants/modal_types';
 import { ipcRenderer, remote } from 'electron';
+import { ACTIONS, Lbry, doBalanceSubscribe, doFetchFileInfosAndPublishedClaims } from 'lbry-redux';
+import Native from 'native';
 import { doFetchRewardedContent } from 'redux/actions/content';
-import { doFetchFileInfosAndPublishedClaims } from 'redux/actions/file_info';
-import { doAuthNavigate } from 'redux/actions/navigation';
 import { doFetchDaemonSettings } from 'redux/actions/settings';
+import { doAuthNavigate } from 'redux/actions/navigation';
 import { doAuthenticate } from 'redux/actions/user';
-import { doBalanceSubscribe } from 'redux/actions/wallet';
 import { doPause } from 'redux/actions/media';
 import { doCheckSubscriptions } from 'redux/actions/subscriptions';
-
 import {
   selectCurrentModal,
   selectIsUpgradeSkipped,
@@ -240,7 +237,7 @@ export function doCheckUpgradeAvailable() {
       });
     };
 
-    Lbry.getAppVersionInfo().then(success, fail);
+    Native.getAppVersionInfo().then(success, fail);
   };
 }
 
@@ -300,13 +297,6 @@ export function doDaemonReady() {
     }
     dispatch(doCheckUpgradeSubscribe());
     dispatch(doCheckSubscriptions());
-  };
-}
-
-export function doShowSnackBar(data) {
-  return {
-    type: ACTIONS.SHOW_SNACKBAR,
-    data,
   };
 }
 

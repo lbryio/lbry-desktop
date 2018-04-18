@@ -1,9 +1,8 @@
 import { connect } from 'react-redux';
-import { doCloseModal } from 'redux/actions/app';
 import { doNavigate } from 'redux/actions/navigation';
 import { doSetClientSetting } from 'redux/actions/settings';
 import { selectUserIsRewardApproved } from 'redux/selectors/user';
-import { selectBalance } from 'redux/selectors/wallet';
+import { selectBalance, doCloseModal } from 'lbry-redux';
 import { selectUnclaimedRewardValue } from 'redux/selectors/rewards';
 import * as settings from 'constants/settings';
 import ModalCreditIntro from './view';

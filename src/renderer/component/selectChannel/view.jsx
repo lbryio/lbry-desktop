@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import { isNameValid } from 'lbryURI';
+import { isNameValid } from 'lbry-redux';
 import { FormRow, FormField } from 'component/common/form';
 import BusyIndicator from 'component/common/busy-indicator';
 import Button from 'component/button';
