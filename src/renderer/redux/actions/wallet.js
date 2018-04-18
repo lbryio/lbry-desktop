@@ -159,7 +159,7 @@ export function doSendSupport(amount, claimId, uri) {
         });
         dispatch(
           doShowSnackBar({
-            message: __(`You sent ${amount} LBC as support, Mahalo!`),
+            message: __(`You sent ${amount} LBC as a tip, Mahalo!`),
             linkText: __('History'),
             linkTarget: __('/wallet'),
           })
