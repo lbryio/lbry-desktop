@@ -50,7 +50,7 @@
     "keytar": "^4.2.1",
     "lbry-redux": "lbryio/lbry-redux",
     "localforage": "^1.7.1",
-    "mixpanel-browser": "^2.17.1",
+    "mixpanel-browser": "^2.20.0",
     "moment": "^2.22.0",
     "qrcode.react": "^0.8.0",
     "rc-progress": "^2.0.6",
