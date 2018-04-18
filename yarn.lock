@@ -9364,9 +9364,9 @@ webidl-conversions@^4.0.1, webidl-conversions@^4.0.2:
   version "4.0.2"
   resolved "https://registry.yarnpkg.com/webidl-conversions/-/webidl-conversions-4.0.2.tgz#a855980b1f0b6b359ba1d5d9fb39ae941faa63ad"
 
-webpack-build-notifier@^0.1.23:
-  version "0.1.23"
-  resolved "https://registry.yarnpkg.com/webpack-build-notifier/-/webpack-build-notifier-0.1.23.tgz#7df405dfb77c5584c4e2e27b445f6aa0414ca384"
+webpack-build-notifier@^0.1.24:
+  version "0.1.24"
+  resolved "https://registry.yarnpkg.com/webpack-build-notifier/-/webpack-build-notifier-0.1.24.tgz#d0006fde12691bb4b1cb920910d4e70087544a6d"
   dependencies:
     ansi-regex "^2.0.0"
     node-notifier "5.1.2"
