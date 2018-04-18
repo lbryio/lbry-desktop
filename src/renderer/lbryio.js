@@ -1,37 +1,15 @@
 import { ipcRenderer } from 'electron';
-import Lbry from 'lbry';
+import { Lbry } from 'lbry-redux';
 import querystring from 'querystring';
 
 const Lbryio = {
   enabled: true,
   authenticationPromise: null,
-  exchangePromise: null,
-  exchangeLastFetched: null,
 };
 
 const CONNECTION_STRING = process.env.LBRY_APP_API_URL
   ? process.env.LBRY_APP_API_URL.replace(/\/*$/, '/') // exactly one slash at the end
   : 'https://api.lbry.io/';
-
-const EXCHANGE_RATE_TIMEOUT = 20 * 60 * 1000;
-
-Lbryio.getExchangeRates = () => {
-  if (
-    !Lbryio.exchangeLastFetched ||
-    Date.now() - Lbryio.exchangeLastFetched > EXCHANGE_RATE_TIMEOUT
-  ) {
-    Lbryio.exchangePromise = new Promise((resolve, reject) => {
-      Lbryio.call('lbc', 'exchange_rate', {}, 'get', true)
-        .then(({ lbc_usd: LBC_USD, lbc_btc: LBC_BTC, btc_usd: BTC_USD }) => {
-          const rates = { LBC_USD, LBC_BTC, BTC_USD };
-          resolve(rates);
-        })
-        .catch(reject);
-    });
-    Lbryio.exchangeLastFetched = Date.now();
-  }
-  return Lbryio.exchangePromise;
-};
 
 Lbryio.call = (resource, action, params = {}, method = 'get') => {
   if (!Lbryio.enabled) {

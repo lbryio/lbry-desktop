@@ -1,15 +1,15 @@
 import { connect } from 'react-redux';
 import {
+  selectBalance,
   selectPageTitle,
   selectIsBackDisabled,
   selectIsForwardDisabled,
   selectNavLinks,
-} from 'redux/selectors/navigation';
+} from 'lbry-redux';
 import { doNavigate, doHistoryBack, doHistoryForward } from 'redux/actions/navigation';
 import { doDownloadUpgrade } from 'redux/actions/app';
 import { selectIsUpgradeAvailable } from 'redux/selectors/app';
 import { formatCredits } from 'util/formatCredits';
-import { selectBalance } from 'redux/selectors/wallet';
 import Page from './view';
 
 const select = state => ({

@@ -1,9 +1,10 @@
-import React from 'react';
 import { connect } from 'react-redux';
-import { makeSelectFileInfoForUri } from 'redux/selectors/file_info';
-import { makeSelectCostInfoForUri } from 'redux/selectors/cost_info';
-import { doOpenModal } from 'redux/actions/app';
-import { makeSelectClaimIsMine } from 'redux/selectors/claims';
+import {
+  doOpenModal,
+  makeSelectCostInfoForUri,
+  makeSelectFileInfoForUri,
+  makeSelectClaimIsMine,
+} from 'lbry-redux';
 import FileActions from './view';
 
 const select = (state, props) => ({

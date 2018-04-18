@@ -1,5 +1,5 @@
 import * as React from 'react';
-import lbry from 'lbry';
+import { Lbry } from 'lbry-redux';
 import LoadScreen from './internal/load-screen';
 import ModalIncompatibleDaemon from 'modal/modalIncompatibleDaemon';
 import ModalUpgrade from 'modal/modalUpgrade';
@@ -31,7 +31,7 @@ export class SplashScreen extends React.PureComponent<Props, State> {
   }
 
   updateStatus() {
-    lbry.status().then(status => {
+    Lbry.status().then(status => {
       this._updateStatusCallback(status);
     });
   }
@@ -50,7 +50,7 @@ export class SplashScreen extends React.PureComponent<Props, State> {
         isRunning: true,
       });
 
-      lbry.resolve({ uri: 'lbry://one' }).then(() => {
+      Lbry.resolve({ uri: 'lbry://one' }).then(() => {
         // Only leave the load screen if the daemon version matched;
         // otherwise we'll notify the user at the end of the load screen.
 
@@ -83,8 +83,7 @@ export class SplashScreen extends React.PureComponent<Props, State> {
   componentDidMount() {
     const { checkDaemonVersion } = this.props;
 
-    lbry
-      .connect()
+    Lbry.connect()
       .then(checkDaemonVersion)
       .then(() => {
         this.updateStatus();

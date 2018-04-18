@@ -1,12 +1,8 @@
-import * as ACTIONS from 'constants/action_types';
 import * as MODALS from 'constants/modal_types';
-import * as SETTINGS from 'constants/settings';
 import * as NOTIFICATION_TYPES from 'constants/notification_types';
 import { ipcRenderer } from 'electron';
-import Lbry from 'lbry';
 import Lbryio from 'lbryio';
-import { normalizeURI, buildURI } from 'lbryURI';
-import { doAlertError, doOpenModal } from 'redux/actions/app';
+import { doAlertError } from 'redux/actions/app';
 import { doClaimEligiblePurchaseRewards } from 'redux/actions/rewards';
 import { doNavigate } from 'redux/actions/navigation';
 import {
@@ -16,67 +12,28 @@ import {
 } from 'redux/actions/subscriptions';
 import { selectNotifications } from 'redux/selectors/subscriptions';
 import { selectBadgeNumber } from 'redux/selectors/app';
-import { selectMyClaimsRaw } from 'redux/selectors/claims';
-import { selectResolvingUris } from 'redux/selectors/content';
-import { makeSelectCostInfoForUri } from 'redux/selectors/cost_info';
 import {
+  ACTIONS,
+  SETTINGS,
+  Lbry,
+  Lbryapi,
+  buildURI,
+  batchActions,
+  doResolveUris,
+  doFetchClaimListMine,
+  doOpenModal,
+  makeSelectCostInfoForUri,
   makeSelectFileInfoForUri,
   selectDownloadingByOutpoint,
   selectTotalDownloadProgress,
-} from 'redux/selectors/file_info';
+  selectBalance,
+} from 'lbry-redux';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
-import { selectBalance } from 'redux/selectors/wallet';
-import batchActions from 'util/batchActions';
 import setBadge from 'util/setBadge';
 import setProgressBar from 'util/setProgressBar';
 import analytics from 'analytics';
 
 const DOWNLOAD_POLL_INTERVAL = 250;
-
-export function doResolveUris(uris) {
-  return (dispatch, getState) => {
-    const normalizedUris = uris.map(normalizeURI);
-    const state = getState();
-
-    // Filter out URIs that are already resolving
-    const resolvingUris = selectResolvingUris(state);
-    const urisToResolve = normalizedUris.filter(uri => !resolvingUris.includes(uri));
-
-    if (urisToResolve.length === 0) {
-      return;
-    }
-
-    dispatch({
-      type: ACTIONS.RESOLVE_URIS_STARTED,
-      data: { uris: normalizedUris },
-    });
-
-    const resolveInfo = {};
-    Lbry.resolve({ uris: urisToResolve }).then(result => {
-      Object.entries(result).forEach(([uri, uriResolveInfo]) => {
-        const fallbackResolveInfo = {
-          claim: null,
-          claimsInChannel: null,
-          certificate: null,
-        };
-
-        const { claim, certificate, claims_in_channel: claimsInChannel } =
-          uriResolveInfo && !uriResolveInfo.error ? uriResolveInfo : fallbackResolveInfo;
-
-        resolveInfo[uri] = { claim, certificate, claimsInChannel };
-      });
-
-      dispatch({
-        type: ACTIONS.RESOLVE_URIS_COMPLETED,
-        data: { resolveInfo },
-      });
-    });
-  };
-}
-
-export function doResolveUri(uri) {
-  return doResolveUris([uri]);
-}
 
 export function doFetchFeaturedUris() {
   return dispatch => {
@@ -374,7 +331,7 @@ export function doPurchaseUri(uri, specificCostInfo) {
         attemptPlay(cost, instantPurchaseMax.amount);
       } else {
         // Need to convert currency of instant purchase maximum before trying to play
-        Lbryio.getExchangeRates().then(({ LBC_USD }) => {
+        Lbryapi.getExchangeRates().then(({ LBC_USD }) => {
           attemptPlay(cost, instantPurchaseMax.amount / LBC_USD);
         });
       }
@@ -457,23 +414,6 @@ export function doFetchClaimCountByChannel(uri) {
   };
 }
 
-export function doFetchClaimListMine() {
-  return dispatch => {
-    dispatch({
-      type: ACTIONS.FETCH_CLAIM_LIST_MINE_STARTED,
-    });
-
-    Lbry.claim_list_mine().then(claims => {
-      dispatch({
-        type: ACTIONS.FETCH_CLAIM_LIST_MINE_COMPLETED,
-        data: {
-          claims,
-        },
-      });
-    });
-  };
-}
-
 export function doPlayUri(uri) {
   return dispatch => {
     dispatch(doSetPlayingUri(uri));
@@ -526,43 +466,20 @@ export function doCreateChannel(name, amount) {
   };
 }
 
-export function doAbandonClaim(txid, nout) {
-  return (dispatch, getState) => {
-    const state = getState();
-    const myClaims = selectMyClaimsRaw(state);
-    const { claim_id: claimId, name } = myClaims.find(
-      claim => claim.txid === txid && claim.nout === nout
-    );
+export function doPublish(params) {
+  return dispatch =>
+    new Promise((resolve, reject) => {
+      const success = claim => {
+        resolve(claim);
 
-    dispatch({
-      type: ACTIONS.ABANDON_CLAIM_STARTED,
-      data: {
-        claimId,
-      },
+        if (claim === true) dispatch(doFetchClaimListMine());
+        else
+          setTimeout(() => dispatch(doFetchClaimListMine()), 20000, {
+            once: true,
+          });
+      };
+      const failure = err => reject(err);
+
+      Lbry.publishDeprecated(params, null, success, failure);
     });
-
-    const errorCallback = () => {
-      dispatch(doOpenModal(MODALS.TRANSACTION_FAILED));
-    };
-
-    const successCallback = results => {
-      if (results.txid) {
-        dispatch({
-          type: ACTIONS.ABANDON_CLAIM_SUCCEEDED,
-          data: {
-            claimId,
-          },
-        });
-        dispatch(doResolveUri(buildURI({ claimName: name, claimId })));
-        dispatch(doFetchClaimListMine());
-      } else {
-        dispatch(doOpenModal(MODALS.TRANSACTION_FAILED));
-      }
-    };
-
-    Lbry.claim_abandon({
-      txid,
-      nout,
-    }).then(successCallback, errorCallback);
-  };
 }

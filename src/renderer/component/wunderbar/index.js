@@ -1,8 +1,11 @@
 import * as MODALS from 'constants/modal_types';
 import { connect } from 'react-redux';
-import { normalizeURI } from 'lbryURI';
-import { selectState as selectSearch, selectWunderBarAddress } from 'redux/selectors/search';
-import { doUpdateSearchQuery } from 'redux/actions/search';
+import { normalizeURI } from 'lbry-redux';
+import {
+  selectSearchState as selectSearch,
+  selectWunderBarAddress,
+  doUpdateSearchQuery,
+} from 'lbry-redux';
 import { doNavigate } from 'redux/actions/navigation';
 import { doOpenModal } from 'redux/actions/app';
 import Wunderbar from './view';

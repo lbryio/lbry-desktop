@@ -1,4 +1,3 @@
-import React from 'react';
 import * as settings from 'constants/settings';
 import { connect } from 'react-redux';
 import { doCloseModal } from 'redux/actions/app';

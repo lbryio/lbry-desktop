@@ -1,10 +1,14 @@
 import { connect } from 'react-redux';
+import {
+  doResolveUri,
+  makeSelectClaimForUri,
+  makeSelectMetadataForUri,
+  makeSelectFileInfoForUri,
+  makeSelectIsUriResolving,
+} from 'lbry-redux';
 import { doNavigate } from 'redux/actions/navigation';
-import { doResolveUri } from 'redux/actions/content';
+import { selectRewardContentClaimIds } from 'redux/selectors/content';
 import { selectShowNsfw } from 'redux/selectors/settings';
-import { makeSelectClaimForUri, makeSelectMetadataForUri } from 'redux/selectors/claims';
-import { makeSelectFileInfoForUri } from 'redux/selectors/file_info';
-import { makeSelectIsUriResolving, selectRewardContentClaimIds } from 'redux/selectors/content';
 import { selectPendingPublish } from 'redux/selectors/publish';
 import FileCard from './view';
 

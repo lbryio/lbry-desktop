@@ -4,7 +4,7 @@ import ButtonTransaction from 'component/common/transaction-link';
 import CreditAmount from 'component/common/credit-amount';
 import DateTime from 'component/dateTime';
 import Button from 'component/button';
-import { buildURI } from 'lbryURI';
+import { buildURI } from 'lbry-redux';
 import * as txnTypes from 'constants/transaction_types';
 import type { Transaction } from '../view';
 

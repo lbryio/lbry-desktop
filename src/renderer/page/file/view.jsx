@@ -1,7 +1,6 @@
 // @flow
 import * as React from 'react';
-import lbry from 'lbry';
-import { buildURI, normalizeURI } from 'lbryURI';
+import { Lbry, buildURI, normalizeURI } from 'lbry-redux';
 import Video from 'component/video';
 import Thumbnail from 'component/common/thumbnail';
 import FilePrice from 'component/filePrice';
@@ -111,7 +110,7 @@ class FilePage extends React.Component<Props> {
     const isRewardContent = rewardedContentClaimIds.includes(claim.claim_id);
     const shouldObscureThumbnail = obscureNsfw && metadata.nsfw;
     const { height, channel_name: channelName, value } = claim;
-    const mediaType = lbry.getMediaType(contentType);
+    const mediaType = Lbry.getMediaType(contentType);
     const isPlayable =
       Object.values(player.mime).indexOf(contentType) !== -1 || mediaType === 'audio';
     const channelClaimId =
