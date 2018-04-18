@@ -54,7 +54,7 @@
     "moment": "^2.22.0",
     "qrcode.react": "^0.8.0",
     "rc-progress": "^2.0.6",
-    "react": "^16.3.0",
+    "react": "^16.3.2",
     "react-dom": "^16.3.0",
     "react-feather": "^1.0.8",
     "react-markdown": "^2.5.0",
