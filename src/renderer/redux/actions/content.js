@@ -2,7 +2,7 @@ import * as MODALS from 'constants/modal_types';
 import * as NOTIFICATION_TYPES from 'constants/notification_types';
 import { ipcRenderer } from 'electron';
 import Lbryio from 'lbryio';
-import { doAlertError } from 'redux/actions/app';
+import { doAlertError, doOpenModal } from 'redux/actions/app';
 import { doClaimEligiblePurchaseRewards } from 'redux/actions/rewards';
 import { doNavigate } from 'redux/actions/navigation';
 import {
@@ -21,7 +21,6 @@ import {
   batchActions,
   doResolveUris,
   doFetchClaimListMine,
-  doOpenModal,
   makeSelectCostInfoForUri,
   makeSelectFileInfoForUri,
   selectDownloadingByOutpoint,
