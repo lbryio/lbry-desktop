@@ -1,6 +1,7 @@
 // @TODO: Customize advice based on OS
 import React from 'react';
-import lbry from 'lbry.js';
+import { Lbry } from 'lbry-redux';
+import Native from 'native';
 import Button from 'component/button';
 import BusyIndicator from 'component/common/busy-indicator';
 import Icon from 'component/common/icon';
@@ -23,18 +24,18 @@ class HelpPage extends React.PureComponent {
   }
 
   componentDidMount() {
-    lbry.getAppVersionInfo().then(({ remoteVersion, localVersion, upgradeAvailable }) => {
+    Native.getAppVersionInfo().then(({ remoteVersion, localVersion, upgradeAvailable }) => {
       this.setState({
         uiVersion: localVersion,
         upgradeAvailable,
       });
     });
-    lbry.version().then(info => {
+    Lbry.version().then(info => {
       this.setState({
         versionInfo: info,
       });
     });
-    lbry.status({ session_status: true }).then(info => {
+    Lbry.status({ session_status: true }).then(info => {
       this.setState({
         lbryId: info.lbry_id,
       });
@@ -50,18 +51,21 @@ class HelpPage extends React.PureComponent {
   }
 
   render() {
-    let ver, osName, platform, newVerLink;
+    let ver;
+    let osName;
+    let platform;
+    let newVerLink;
 
     const { accessToken, doAuth, user } = this.props;
 
     if (this.state.versionInfo) {
       ver = this.state.versionInfo;
-      if (ver.os_system == 'Darwin') {
-        osName = parseInt(ver.os_release.match(/^\d+/)) < 16 ? 'Mac OS X' : 'Mac OS';
+      if (ver.os_system === 'Darwin') {
+        osName = parseInt(ver.os_release.match(/^\d+/), 10) < 16 ? 'Mac OS X' : 'Mac OS';
 
         platform = `${osName} ${ver.os_release}`;
         newVerLink = 'https://lbry.io/get/lbry.dmg';
-      } else if (ver.os_system == 'Linux') {
+      } else if (ver.os_system === 'Linux') {
         platform = `Linux (${ver.platform})`;
         newVerLink = 'https://lbry.io/get/lbry.deb';
       } else {
@@ -151,10 +155,10 @@ class HelpPage extends React.PureComponent {
                     {user && user.primary_email ? (
                       user.primary_email
                     ) : (
-                      <span>
+                      <React.Fragment>
                         <span className="empty">{__('none')} </span>
-                        (<Button onClick={() => doAuth()} label={__('set email')} />)
-                      </span>
+                        <Button button="link" onClick={() => doAuth()} label={__('set email')} />
+                      </React.Fragment>
                     )}
                   </td>
                 </tr>

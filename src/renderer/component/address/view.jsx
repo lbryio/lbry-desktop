@@ -23,7 +23,7 @@ export default class Address extends React.PureComponent<Props> {
     const { address, doShowSnackBar } = this.props;
 
     return (
-      <FormRow verticallyCentered padded>
+      <FormRow verticallyCentered padded stretch>
         <input
           className="input-copyable form-field__input"
           readOnly

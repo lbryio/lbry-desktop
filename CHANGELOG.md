@@ -9,11 +9,21 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
    * Add keyboard shortcut to quit the app on Windows ([#1202](https://github.com/lbryio/lbry-app/pull/1202))
    * Build for both architectures (x86 and x64) for Windows ([#1262](https://github.com/lbryio/lbry-app/pull/1262))
    * Add referral FAQ to Invites screen([#1314](https://github.com/lbryio/lbry-app/pull/1314))
+   * Show exact wallet balance on mouse hover over ([#1305](https://github.com/lbryio/lbry-app/pull/1305))
+   * New dark mode ([#1269](https://github.com/lbryio/lbry-app/pull/1269))
+   * Pre-fill publish URL after clicking "Put something here" link ([#1303](https://github.com/lbryio/lbry-app/pull/1303))
+
+### Changed
+* Add flair to snackbar ([#1313](https://github.com/lbryio/lbry-app/pull/1313))
 
 ### Fixed
    * Black screen on macOS after maximizing LBRY and then closing ([#1235](https://github.com/lbryio/lbry-app/pull/1235))
    * Fix content-type not shown correctly in file description ([#863](https://github.com/lbryio/lbry-app/pull/863))
 
+### Fixed
+   * Black screen on macOS after maximizing LBRY and then closing ([#1235](https://github.com/lbryio/lbry-app/pull/1235))
+   * Fix dark theme ([#1034](https://github.com/lbryio/lbry-app/issues/1034))
+   * Fix download percentage indicator overlay ([#1271](https://github.com/lbryio/lbry-app/issues/1271))
 
 
 ## [0.21.2] - 2018-03-22

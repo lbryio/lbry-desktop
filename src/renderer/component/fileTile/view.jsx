@@ -1,10 +1,9 @@
 // @flow
 import * as React from 'react';
 import * as icons from 'constants/icons';
-import { normalizeURI, isURIClaimable, parseURI } from 'lbryURI';
+import { normalizeURI, isURIClaimable, parseURI } from 'lbry-redux';
 import CardMedia from 'component/cardMedia';
 import TruncatedText from 'component/common/truncated-text';
-import FilePrice from 'component/filePrice';
 import Icon from 'component/common/icon';
 import Button from 'component/button';
 import classnames from 'classnames';
@@ -25,6 +24,8 @@ type Props = {
   metadata: {},
   resolveUri: string => void,
   navigate: (string, ?{}) => void,
+  clearPublish: () => void,
+  updatePublishForm: () => void,
 };
 
 class FileTile extends React.PureComponent<Props> {
@@ -55,6 +56,8 @@ class FileTile extends React.PureComponent<Props> {
       fullWidth,
       showLocal,
       isDownloaded,
+      clearPublish,
+      updatePublishForm,
     } = this.props;
 
     const uri = normalizeURI(this.props.uri);
@@ -69,7 +72,7 @@ class FileTile extends React.PureComponent<Props> {
     let name;
     let channel;
     if (claim) {
-      name = claim.name;
+      ({ name } = claim);
       channel = claim.channel_name;
     }
 
@@ -79,6 +82,9 @@ class FileTile extends React.PureComponent<Props> {
           'file-tile--fullwidth': fullWidth,
         })}
         onClick={onClick}
+        onKeyUp={onClick}
+        role="button"
+        tabIndex="0"
       >
         <CardMedia title={title || name} thumbnail={thumbnail} />
         <div className="file-tile__info">
@@ -101,7 +107,11 @@ class FileTile extends React.PureComponent<Props> {
                     label={__('Put something here!')}
                     onClick={e => {
                       // avoid navigating to /show from clicking on the section
-                      e.preventDefault();
+                      e.stopPropagation();
+                      // strip prefix from the Uri and use that as navigation parameter
+                      const nameFromUri = uri.replace(/lbry:\/\//g, '').replace(/-/g, ' ');
+                      clearPublish(); // to remove any existing publish data
+                      updatePublishForm({ name: nameFromUri }); // to populate the name
                       navigate('/publish');
                     }}
                   />

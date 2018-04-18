@@ -19,7 +19,6 @@ type Props = {
   isSubmitting: boolean,
   shiftSupportedCoins: Array<string>,
   originCoin: string,
-  updating: boolean,
   getCoinStats: Dispatch,
   originCoinDepositFee: number,
   originCoinDepositMin: string,
@@ -38,7 +37,6 @@ export default (props: Props) => {
     isSubmitting,
     shiftSupportedCoins,
     originCoin,
-    updating,
     getCoinStats,
     originCoinDepositMax,
     originCoinDepositMin,
@@ -51,7 +49,7 @@ export default (props: Props) => {
         prefix={__('Exchange')}
         postfix={__('for LBC')}
         type="select"
-        name="origin_coin"
+        name="originCoin"
         onChange={e => {
           getCoinStats(e.target.value);
           handleChange(e);
@@ -76,7 +74,7 @@ export default (props: Props) => {
           label={__('Return address')}
           error={touched.returnAddress && !!errors.returnAddress && errors.returnAddress}
           type="text"
-          name="return_address"
+          name="returnAddress"
           className="input--address"
           placeholder={getExampleAddress(originCoin)}
           onChange={handleChange}

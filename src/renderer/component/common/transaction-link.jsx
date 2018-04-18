@@ -9,7 +9,7 @@ type Props = {
 const TransactionLink = (props: Props) => {
   const { id } = props;
 
-  const href = `https://explorer.lbry.io/#!/transaction/${id}`;
+  const href = `https://explorer.lbry.io/tx/${id}`;
   const label = id.substr(0, 7);
 
   return <Button button="link" href={href} label={label} />;

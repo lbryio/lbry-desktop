@@ -1,12 +1,8 @@
 import { connect } from 'react-redux';
-import {
-  selectPageTitle,
-  selectHistoryIndex,
-  selectActiveHistoryEntry,
-} from 'redux/selectors/navigation';
+import { selectPageTitle, selectHistoryIndex, selectActiveHistoryEntry } from 'lbry-redux';
+import { doRecordScroll } from 'redux/actions/navigation';
 import { selectUser } from 'redux/selectors/user';
 import { doAlertError } from 'redux/actions/app';
-import { doRecordScroll } from 'redux/actions/navigation';
 import App from './view';
 
 const select = state => ({

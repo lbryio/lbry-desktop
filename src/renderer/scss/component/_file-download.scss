@@ -5,8 +5,11 @@
 
 .file-download {
   position: relative;
+  background-color: var(--color-black);
+  border-radius: var(--btn-radius);
   color: var(--color-download);
   font-size: 12px;
+  opacity: 0.8;
   font-family: 'metropolis-medium';
 }
 

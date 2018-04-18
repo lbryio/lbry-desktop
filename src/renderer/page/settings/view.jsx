@@ -274,31 +274,29 @@ class SettingsPage extends React.PureComponent<Props, State> {
               </div>
             </section>
             {
-              // Hiding this for now until we update the dark mode styles
-              // <section className="card card--section">
-              //   <div className="card__title">{__('Theme')}</div>
-              //     <FormField
-              //       name="theme_select"
-              //       type="select"
-              //       onChange={this.onThemeChange}
-              //       value={currentTheme}
-              //       disabled={automaticDarkModeEnabled}
-              //       >
-              //       {themes.map(theme => (
-              //         <option key={theme} value={theme}>
-              //           {theme}
-              //         </option>
-              //       ))}
-              //     </FormField>
-              //
-              //     <FormField
-              //       type="checkbox"
-              //       name="automatic_dark_mode"
-              //       onChange={e => this.onAutomaticDarkModeChange(e.target.checked)}
-              //       checked={automaticDarkModeEnabled}
-              //       postfix={__('Automatic dark mode (9pm to 8am)')}
-              //     />
-              // </section>
+              <section className="card card--section">
+                <div className="card__title">{__('Theme')}</div>
+                <FormField
+                  name="theme_select"
+                  type="select"
+                  onChange={this.onThemeChange}
+                  value={currentTheme}
+                  disabled={automaticDarkModeEnabled}
+                >
+                  {themes.map(theme => (
+                    <option key={theme} value={theme}>
+                      {theme}
+                    </option>
+                  ))}
+                </FormField>
+                <FormField
+                  type="checkbox"
+                  name="automatic_dark_mode"
+                  onChange={e => this.onAutomaticDarkModeChange(e.target.checked)}
+                  checked={automaticDarkModeEnabled}
+                  postfix={__('Automatic dark mode (9pm to 8am)')}
+                />
+              </section>
             }
             <section className="card card--section">
               <div className="card__title">{__('Application Cache')}</div>

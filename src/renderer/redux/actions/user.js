@@ -91,11 +91,11 @@ export function doUserPhoneReset() {
   };
 }
 
-export function doUserPhoneNew(phone, country_code) {
+export function doUserPhoneNew(phone, countryCode) {
   return dispatch => {
     dispatch({
       type: ACTIONS.USER_PHONE_NEW_STARTED,
-      data: { phone, country_code },
+      data: { phone, country_code: countryCode },
     });
 
     const success = () => {
@@ -112,10 +112,12 @@ export function doUserPhoneNew(phone, country_code) {
       });
     };
 
-    Lbryio.call('user', 'phone_number_new', { phone_number: phone, country_code }, 'post').then(
-      success,
-      failure
-    );
+    Lbryio.call(
+      'user',
+      'phone_number_new',
+      { phone_number: phone, country_code: countryCode },
+      'post'
+    ).then(success, failure);
   };
 }
 

@@ -1,24 +1,23 @@
 import { connect } from 'react-redux';
 import { doNavigate } from 'redux/actions/navigation';
-import { doFetchFileInfo } from 'redux/actions/file_info';
-import { makeSelectFileInfoForUri } from 'redux/selectors/file_info';
 import { selectRewardContentClaimIds, selectPlayingUri } from 'redux/selectors/content';
-import { doFetchCostInfoForUri } from 'redux/actions/cost_info';
 import { doCheckSubscription } from 'redux/actions/subscriptions';
 import {
+  doFetchFileInfo,
+  doFetchCostInfoForUri,
+  makeSelectClaimIsMine,
+  makeSelectCostInfoForUri,
+  makeSelectFileInfoForUri,
   makeSelectClaimForUri,
   makeSelectContentTypeForUri,
   makeSelectMetadataForUri,
-  makeSelectClaimIsMine,
-} from 'redux/selectors/claims';
-import { makeSelectCostInfoForUri } from 'redux/selectors/cost_info';
+} from 'lbry-redux';
 import { selectShowNsfw } from 'redux/selectors/settings';
+import { selectSubscriptions } from 'redux/selectors/subscriptions';
 import { selectMediaPaused } from 'redux/selectors/media';
 import { doOpenModal } from 'redux/actions/app';
-import FilePage from './view';
-import { makeSelectCurrentParam } from 'redux/selectors/navigation';
-import { selectSubscriptions } from 'redux/selectors/subscriptions';
 import { doPrepareEdit } from 'redux/actions/publish';
+import FilePage from './view';
 
 const select = (state, props) => ({
   claim: makeSelectClaimForUri(props.uri)(state),
@@ -40,7 +39,7 @@ const perform = dispatch => ({
   fetchCostInfo: uri => dispatch(doFetchCostInfoForUri(uri)),
   checkSubscription: subscription => dispatch(doCheckSubscription(subscription)),
   openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
-  prepareEdit: publishData => dispatch(doPrepareEdit(publishData)),
+  prepareEdit: (publishData, uri) => dispatch(doPrepareEdit(publishData, uri)),
 });
 
 export default connect(select, perform)(FilePage);

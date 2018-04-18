@@ -1,17 +1,14 @@
-import React from 'react';
 import { connect } from 'react-redux';
-import { doOpenModal } from 'redux/actions/app';
 import * as settings from 'constants/settings';
 import { selectCurrentModal, selectModalProps, selectModalsAllowed } from 'redux/selectors/app';
-import { selectCurrentPage } from 'redux/selectors/navigation';
-import { selectCostForCurrentPageUri } from 'redux/selectors/cost_info';
+import { doOpenModal } from 'redux/actions/app';
+import { selectCostForCurrentPageUri, selectBalance, selectCurrentPage } from 'lbry-redux';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { selectUser, selectUserIsVerificationCandidate } from 'redux/selectors/user';
-import { selectBalance } from 'redux/selectors/wallet';
 
 import ModalRouter from './view';
 
-const select = (state, props) => ({
+const select = state => ({
   balance: selectBalance(state),
   showPageCost: selectCostForCurrentPageUri(state),
   modal: selectCurrentModal(state),

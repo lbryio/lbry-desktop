@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import { normalizeURI } from 'lbryURI';
+import { normalizeURI } from 'lbry-redux';
 import ToolTip from 'component/common/tooltip';
 import FileCard from 'component/fileCard';
 import Button from 'component/button';

@@ -1,6 +1,5 @@
-import React from 'react';
 import { connect } from 'react-redux';
-import { doCloseModal } from 'redux/actions/app';
+import { doCloseModal } from 'lbry-redux';
 import ModalTransactionFailed from './view';
 
 const select = state => ({});

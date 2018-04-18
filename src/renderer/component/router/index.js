@@ -1,7 +1,6 @@
-import React from 'react';
 import { connect } from 'react-redux';
-import Router from './view.jsx';
-import { selectCurrentPage, selectCurrentParams } from 'redux/selectors/navigation.js';
+import { selectCurrentPage, selectCurrentParams } from 'lbry-redux';
+import Router from './view';
 
 const select = state => ({
   params: selectCurrentParams(state),

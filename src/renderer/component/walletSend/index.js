@@ -1,6 +1,5 @@
 import { connect } from 'react-redux';
-import { doSendDraftTransaction } from 'redux/actions/wallet';
-import { selectBalance } from 'redux/selectors/wallet';
+import { doSendDraftTransaction, selectBalance } from 'lbry-redux';
 import WalletSend from './view';
 
 const perform = dispatch => ({

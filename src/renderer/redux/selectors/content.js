@@ -9,15 +9,7 @@ export const selectFetchingFeaturedUris = createSelector(
   state => state.fetchingFeaturedContent
 );
 
-export const selectResolvingUris = createSelector(selectState, state => state.resolvingUris || []);
-
 export const selectPlayingUri = createSelector(selectState, state => state.playingUri);
-
-export const makeSelectIsUriResolving = uri =>
-  createSelector(
-    selectResolvingUris,
-    resolvingUris => resolvingUris && resolvingUris.indexOf(uri) !== -1
-  );
 
 export const selectChannelClaimCounts = createSelector(
   selectState,
