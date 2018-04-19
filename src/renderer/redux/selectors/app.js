@@ -17,6 +17,8 @@ export const selectUpdateUrl = createSelector(selectPlatform, platform => {
   }
 });
 
+export const selectBlackListedOutpoints = createSelector(selectState, state => state.blackListedOutpoints);
+
 export const selectRemoteVersion = createSelector(selectState, state => state.remoteVersion);
 
 export const selectIsUpgradeAvailable = createSelector(
