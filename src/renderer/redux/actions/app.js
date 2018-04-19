@@ -84,7 +84,7 @@ export function doDownloadUpgrade() {
       type: ACTIONS.UPGRADE_DOWNLOAD_STARTED,
     });
     dispatch({
-      type: ACTIONS.OPEN_MODAL,
+      type: ACTIONS.CREATE_NOTIFICATION,
       data: {
         modal: MODALS.DOWNLOADING,
       },
@@ -111,14 +111,14 @@ export function doDownloadUpgradeRequested() {
       if (autoUpdateDeclined) {
         // The user declined an update before, so show the "confirm" dialog
         dispatch({
-          type: ACTIONS.OPEN_MODAL,
+          type: ACTIONS.CREATE_NOTIFICATION,
           data: { modal: MODALS.AUTO_UPDATE_CONFIRM },
         });
       } else {
         // The user was never shown the original update dialog (e.g. because they were
         // watching a video). So show the inital "update downloaded" dialog.
         dispatch({
-          type: ACTIONS.OPEN_MODAL,
+          type: ACTIONS.CREATE_NOTIFICATION,
           data: { modal: MODALS.AUTO_UPDATE_DOWNLOADED },
         });
       }
@@ -136,7 +136,7 @@ export function doAutoUpdate() {
     });
 
     dispatch({
-      type: ACTIONS.OPEN_MODAL,
+      type: ACTIONS.CREATE_NOTIFICATION,
       data: { modal: MODALS.AUTO_UPDATE_DOWNLOADED },
     });
   };
@@ -207,7 +207,7 @@ export function doCheckUpgradeAvailable() {
         (!selectIsUpgradeSkipped(state) || remoteVersion !== selectRemoteVersion(state))
       ) {
         dispatch({
-          type: ACTIONS.OPEN_MODAL,
+          type: ACTIONS.CREATE_NOTIFICATION,
           data: {
             modal: MODALS.UPGRADE,
           },
@@ -257,7 +257,7 @@ export function doCheckDaemonVersion() {
 export function doAlertError(errorList) {
   return dispatch => {
     dispatch({
-      type: ACTIONS.OPEN_MODAL,
+      type: ACTIONS.CREATE_NOTIFICATION,
       data: {
         modal: MODALS.ERROR,
         modalProps: { error: errorList },
@@ -281,12 +281,6 @@ export function doDaemonReady() {
     }
     dispatch(doCheckUpgradeSubscribe());
     dispatch(doCheckSubscriptions());
-  };
-}
-
-export function doRemoveSnackBarSnack() {
-  return {
-    type: ACTIONS.REMOVE_SNACKBAR_SNACK,
   };
 }
 
