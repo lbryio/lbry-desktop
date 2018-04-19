@@ -8,7 +8,7 @@
   --color-download: rgba(255, 255, 255, 0.75);
   --color-download-overlay: var(--color-black);
   --color-bg: #203049;
-  --color-bg-alt: #13233C;
+  --color-bg-alt: #2D3D56;
   --color-placeholder: var(--color-bg-alt);
 
   /* Text */
@@ -83,7 +83,7 @@
   --modal-bg: var(--card-bg);
   --modal-overlay-bg:  rgba(32,48,73, 0.75);
   --modal-border: 1px solid rgba(0, 0, 0, 0.25);
-  --modal-btn-bg-color: #2D3D56;
+  --modal-btn-bg-color: var(--color-bg-alt);
 
   /* Scrollbar */
   --scrollbar-thumb-bg: rgba(255, 255, 255, 0.20);
