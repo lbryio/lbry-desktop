@@ -1,8 +1,7 @@
 // @flow
 import * as MODALS from 'constants/modal_types';
-import { ACTIONS, Lbry, selectMyClaimsWithoutChannels } from 'lbry-redux';
+import { ACTIONS, Lbry, selectMyClaimsWithoutChannels, doNotify } from 'lbry-redux';
 import { selectPendingPublishes } from 'redux/selectors/publish';
-import { doOpenModal } from 'redux/actions/app';
 import type {
   UpdatePublishFormData,
   UpdatePublishFormAction,
@@ -27,7 +26,14 @@ export const doUpdatePublishForm = (publishFormValue: UpdatePublishFormData) => 
   });
 
 export const doPrepareEdit = (claim: any, uri: string) => (dispatch: Dispatch) => {
-  const { name, amount, channel_name: channelName, value: { stream: { metadata } } } = claim;
+  const {
+    name,
+    amount,
+    channel_name: channelName,
+    value: {
+      stream: { metadata },
+    },
+  } = claim;
   const {
     author,
     description,
@@ -139,12 +145,12 @@ export const doPublish = (params: PublishParams) => (dispatch: Dispatch, getStat
       type: ACTIONS.PUBLISH_SUCCESS,
       data: { pendingPublish: { ...publishPayload, isEdit } },
     });
-    dispatch(doOpenModal(MODALS.PUBLISH, { uri }));
+    dispatch(doNotify({ id: MODALS.PUBLISH }, { uri }));
   };
 
   const failure = error => {
     dispatch({ type: ACTIONS.PUBLISH_FAIL });
-    dispatch(doOpenModal(MODALS.ERROR, { error: error.message }));
+    dispatch(doNotify({ id: MODALS.ERROR }, { error: error.message }));
   };
 
   return Lbry.publish(publishPayload).then(success, failure);

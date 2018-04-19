@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { doChannelSubscribe, doChannelUnsubscribe } from 'redux/actions/subscriptions';
-import { doOpenModal } from 'redux/actions/app';
+import { doNotify } from 'lbry-redux';
 import { selectSubscriptions } from 'redux/selectors/subscriptions';
 import SubscribeButton from './view';
 
@@ -11,5 +11,5 @@ const select = (state, props) => ({
 export default connect(select, {
   doChannelSubscribe,
   doChannelUnsubscribe,
-  doOpenModal,
+  doNotify,
 })(SubscribeButton);

@@ -8,6 +8,7 @@ import {
   fileInfoReducer,
   searchReducer,
   walletReducer,
+  notificationsReducer,
 } from 'lbry-redux';
 import navigationReducer from 'redux/reducers/navigation';
 import rewardsReducer from 'redux/reducers/rewards';
@@ -69,6 +70,7 @@ const reducers = combineReducers({
   subscriptions: subscriptionsReducer,
   media: mediaReducer,
   publish: publishReducer,
+  notifications: notificationsReducer,
 });
 
 const bulkThunk = createBulkThunkMiddleware();

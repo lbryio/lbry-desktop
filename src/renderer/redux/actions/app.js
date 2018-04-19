@@ -29,22 +29,6 @@ const Fs = remote.require('fs');
 
 const CHECK_UPGRADE_INTERVAL = 10 * 60 * 1000;
 
-export function doOpenModal(modal, modalProps = {}) {
-  return {
-    type: ACTIONS.OPEN_MODAL,
-    data: {
-      modal,
-      modalProps,
-    },
-  };
-}
-
-export function doCloseModal() {
-  return {
-    type: ACTIONS.CLOSE_MODAL,
-  };
-}
-
 export function doUpdateDownloadProgress(percent) {
   return {
     type: ACTIONS.UPGRADE_DOWNLOAD_PROGRESSED,

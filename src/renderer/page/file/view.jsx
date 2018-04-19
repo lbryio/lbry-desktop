@@ -42,7 +42,7 @@ type Props = {
   claimIsMine: boolean,
   costInfo: ?{},
   navigate: (string, ?{}) => void,
-  openModal: (string, any) => void,
+  openModal: ({ id: string }, { uri: string }) => void,
   fetchFileInfo: string => void,
   fetchCostInfo: string => void,
   prepareEdit: ({}) => void,
@@ -171,7 +171,7 @@ class FilePage extends React.Component<Props> {
                         button="alt"
                         iconRight="Send"
                         label={__('Enjoy this? Send a tip')}
-                        onClick={() => openModal(modals.SEND_TIP, { uri })}
+                        onClick={() => openModal({ id: modals.SEND_TIP }, { uri })}
                       />
                       <SubscribeButton uri={subscriptionUri} channelName={channelName} />
                     </React.Fragment>

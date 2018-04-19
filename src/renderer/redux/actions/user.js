@@ -1,7 +1,8 @@
 import * as ACTIONS from 'constants/action_types';
 import * as MODALS from 'constants/modal_types';
 import Lbryio from 'lbryio';
-import { doOpenModal, doShowSnackBar } from 'redux/actions/app';
+import { doNotify } from 'lbry-redux';
+import { doShowSnackBar } from 'redux/actions/app';
 import { doClaimRewardType, doRewardList } from 'redux/actions/rewards';
 import {
   selectEmailToVerify,
@@ -52,7 +53,7 @@ export function doAuthenticate() {
         dispatch(doFetchInviteStatus());
       })
       .catch(error => {
-        dispatch(doOpenModal(MODALS.AUTHENTICATION_FAILURE));
+        dispatch(doNotify({ id: MODALS.AUTHENTICATION_FAILURE }));
         dispatch({
           type: ACTIONS.AUTHENTICATION_FAILURE,
           data: { error },

@@ -1,8 +1,14 @@
 import { connect } from 'react-redux';
 import * as settings from 'constants/settings';
 import { selectCurrentModal, selectModalProps, selectModalsAllowed } from 'redux/selectors/app';
-import { doOpenModal } from 'redux/actions/app';
-import { selectCostForCurrentPageUri, selectBalance, selectCurrentPage } from 'lbry-redux';
+import {
+  doNotify,
+  selectCostForCurrentPageUri,
+  selectBalance,
+  selectCurrentPage,
+  selectNotification,
+  selectNotificationProps,
+} from 'lbry-redux';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { selectUser, selectUserIsVerificationCandidate } from 'redux/selectors/user';
 
@@ -22,10 +28,12 @@ const select = state => ({
   isWelcomeAcknowledged: makeSelectClientSetting(settings.NEW_USER_ACKNOWLEDGED)(state),
   user: selectUser(state),
   modalsAllowed: selectModalsAllowed(state),
+  notification: selectNotification(state),
+  notificationProps: selectNotificationProps(state),
 });
 
 const perform = dispatch => ({
-  openModal: modal => dispatch(doOpenModal(modal)),
+  openModal: notification => dispatch(doNotify(notification)),
 });
 
 export default connect(select, perform)(ModalRouter);

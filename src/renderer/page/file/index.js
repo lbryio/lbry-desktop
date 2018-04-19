@@ -11,11 +11,11 @@ import {
   makeSelectClaimForUri,
   makeSelectContentTypeForUri,
   makeSelectMetadataForUri,
+  doNotify,
 } from 'lbry-redux';
 import { selectShowNsfw } from 'redux/selectors/settings';
 import { selectSubscriptions } from 'redux/selectors/subscriptions';
 import { selectMediaPaused } from 'redux/selectors/media';
-import { doOpenModal } from 'redux/actions/app';
 import { doPrepareEdit } from 'redux/actions/publish';
 import FilePage from './view';
 
@@ -38,7 +38,7 @@ const perform = dispatch => ({
   fetchFileInfo: uri => dispatch(doFetchFileInfo(uri)),
   fetchCostInfo: uri => dispatch(doFetchCostInfoForUri(uri)),
   checkSubscription: subscription => dispatch(doCheckSubscription(subscription)),
-  openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
+  openModal: (modal, props) => dispatch(doNotify(modal, props)),
   prepareEdit: (publishData, uri) => dispatch(doPrepareEdit(publishData, uri)),
 });
 
