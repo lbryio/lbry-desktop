@@ -1,8 +1,7 @@
 import React from 'react';
 import Button from 'component/button';
 import { FormRow } from 'component/common/form';
-import { Lbry } from 'lbry-redux';
-import { doShowSnackBar } from 'redux/actions/app';
+import { Lbry, doNotify } from 'lbry-redux';
 
 class ReportPage extends React.Component {
   constructor(props) {
@@ -32,7 +31,8 @@ class ReportPage extends React.Component {
         });
 
         // Display global notice
-        const action = doShowSnackBar({
+        const action = doNotify({
+          displayType: ['snackbar'],
           message: __('Message received! Thanks for helping.'),
           isError: false,
         });

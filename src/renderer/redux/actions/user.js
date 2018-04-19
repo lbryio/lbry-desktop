@@ -2,7 +2,6 @@ import * as ACTIONS from 'constants/action_types';
 import * as MODALS from 'constants/modal_types';
 import Lbryio from 'lbryio';
 import { doNotify } from 'lbry-redux';
-import { doShowSnackBar } from 'redux/actions/app';
 import { doClaimRewardType, doRewardList } from 'redux/actions/rewards';
 import {
   selectEmailToVerify,
@@ -293,7 +292,8 @@ export function doUserInviteNew(email) {
         });
 
         dispatch(
-          doShowSnackBar({
+          doNotify({
+            displayType: ['snackbar'],
             message: __('Invite sent to %s', email),
           })
         );

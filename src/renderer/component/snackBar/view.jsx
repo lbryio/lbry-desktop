@@ -4,7 +4,7 @@ import Button from 'component/button';
 
 type Props = {
   removeSnack: any => void,
-  snacks: {
+  snack: ?{
     linkTarget: ?string,
     linkText: ?string,
     message: string,
@@ -20,14 +20,13 @@ class SnackBar extends React.PureComponent<Props> {
   }
 
   render() {
-    const { snacks, removeSnack } = this.props;
+    const { snack, removeSnack } = this.props;
 
-    if (!snacks.length) {
+    if (!snack) {
       this.hideTimeout = null; // should be unmounting anyway, but be safe?
       return null;
     }
 
-    const snack = snacks[0];
     const { message, linkText, linkTarget } = snack;
 
     if (this.hideTimeout === null) {
