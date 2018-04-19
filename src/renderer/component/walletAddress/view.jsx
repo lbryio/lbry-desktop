@@ -13,7 +13,12 @@ type Props = {
 
 class WalletAddress extends React.PureComponent<Props> {
   componentWillMount() {
-    this.props.checkAddressIsMine(this.props.receiveAddress);
+    const { checkAddressIsMine, receiveAddress, getNewAddress } = this.props;
+    if (!receiveAddress) {
+      getNewAddress();
+    } else {
+      checkAddressIsMine(receiveAddress);
+    }
   }
 
   render() {

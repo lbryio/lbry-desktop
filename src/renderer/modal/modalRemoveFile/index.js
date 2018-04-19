@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { doDeleteFileAndGoBack } from 'redux/actions/file';
 import {
-  doCloseModal,
+  doHideNotification,
   makeSelectTitleForUri,
   makeSelectClaimIsMine,
   makeSelectFileInfoForUri,
@@ -15,7 +15,7 @@ const select = (state, props) => ({
 });
 
 const perform = dispatch => ({
-  closeModal: () => dispatch(doCloseModal()),
+  closeModal: () => dispatch(doHideNotification()),
   deleteFile: (fileInfo, deleteFromComputer, abandonClaim) => {
     dispatch(doDeleteFileAndGoBack(fileInfo, deleteFromComputer, abandonClaim));
   },

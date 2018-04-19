@@ -5,9 +5,9 @@ import {
   selectSearchState as selectSearch,
   selectWunderBarAddress,
   doUpdateSearchQuery,
+  doNotify,
 } from 'lbry-redux';
 import { doNavigate } from 'redux/actions/navigation';
-import { doOpenModal } from 'redux/actions/app';
 import Wunderbar from './view';
 
 const select = state => {
@@ -27,7 +27,7 @@ const select = state => {
 const perform = dispatch => ({
   onSearch: query => {
     dispatch(doUpdateSearchQuery(query));
-    dispatch(doOpenModal(MODALS.SEARCH));
+    dispatch(doNotify({ id: MODALS.SEARCH }));
   },
   onSubmit: (uri, extraParams) => dispatch(doNavigate('/show', { uri, ...extraParams })),
   updateSearchQuery: query => dispatch(doUpdateSearchQuery(query)),

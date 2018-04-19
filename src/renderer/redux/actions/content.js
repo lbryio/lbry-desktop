@@ -2,7 +2,8 @@ import * as MODALS from 'constants/modal_types';
 import * as NOTIFICATION_TYPES from 'constants/notification_types';
 import { ipcRenderer } from 'electron';
 import Lbryio from 'lbryio';
-import { doAlertError, doOpenModal } from 'redux/actions/app';
+import { doNotify } from 'lbry-redux';
+import { doAlertError } from 'redux/actions/app';
 import { doClaimEligiblePurchaseRewards } from 'redux/actions/rewards';
 import { doNavigate } from 'redux/actions/navigation';
 import {
@@ -259,7 +260,7 @@ export function doLoadVideo(uri) {
             data: { uri },
           });
 
-          dispatch(doOpenModal(MODALS.FILE_TIMEOUT, { uri }));
+          dispatch(doNotify({ id: MODALS.FILE_TIMEOUT }, { uri }));
         } else {
           dispatch(doDownloadFile(uri, streamInfo));
         }
@@ -289,7 +290,7 @@ export function doPurchaseUri(uri, specificCostInfo) {
 
     function attemptPlay(cost, instantPurchaseMax = null) {
       if (cost > 0 && (!instantPurchaseMax || cost > instantPurchaseMax)) {
-        dispatch(doOpenModal(MODALS.AFFIRM_PURCHASE, { uri }));
+        dispatch(doNotify({ id: MODALS.AFFIRM_PURCHASE }, { uri }));
       } else {
         dispatch(doLoadVideo(uri));
       }
@@ -317,7 +318,7 @@ export function doPurchaseUri(uri, specificCostInfo) {
 
     if (cost > balance) {
       dispatch(doSetPlayingUri(null));
-      dispatch(doOpenModal(MODALS.INSUFFICIENT_CREDITS));
+      dispatch(doNotify({ id: MODALS.INSUFFICIENT_CREDITS }));
       Promise.resolve();
       return;
     }

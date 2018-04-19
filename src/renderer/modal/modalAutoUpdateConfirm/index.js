@@ -1,10 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { doCloseModal, doAutoUpdateDeclined } from 'redux/actions/app';
+import { doAutoUpdateDeclined } from 'redux/actions/app';
+import { doHideNotification } from 'lbry-redux';
 import ModalAutoUpdateConfirm from './view';
 
 const perform = dispatch => ({
-  closeModal: () => dispatch(doCloseModal()),
+  closeModal: () => dispatch(doHideNotification()),
   declineAutoUpdate: () => dispatch(doAutoUpdateDeclined()),
 });
 

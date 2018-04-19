@@ -1,9 +1,9 @@
 import { connect } from 'react-redux';
-import { doOpenModal } from 'redux/actions/app';
 import {
   makeSelectCostInfoForUri,
   makeSelectFileInfoForUri,
   makeSelectClaimIsMine,
+  doNotify,
 } from 'lbry-redux';
 import FileActions from './view';
 
@@ -15,7 +15,7 @@ const select = (state, props) => ({
 });
 
 const perform = dispatch => ({
-  openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
+  openModal: (modal, props) => dispatch(doNotify(modal, props)),
 });
 
 export default connect(select, perform)(FileActions);

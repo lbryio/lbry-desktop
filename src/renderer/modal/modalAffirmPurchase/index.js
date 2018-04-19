@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import { doLoadVideo, doSetPlayingUri } from 'redux/actions/content';
-import { doCloseModal, makeSelectMetadataForUri } from 'lbry-redux';
+import { doHideNotification, makeSelectMetadataForUri } from 'lbry-redux';
 import ModalAffirmPurchase from './view';
 
 const select = (state, props) => ({
@@ -10,9 +10,9 @@ const select = (state, props) => ({
 const perform = dispatch => ({
   cancelPurchase: () => {
     dispatch(doSetPlayingUri(null));
-    dispatch(doCloseModal());
+    dispatch(doHideNotification());
   },
-  closeModal: () => dispatch(doCloseModal()),
+  closeModal: () => dispatch(doHideNotification()),
   loadVideo: uri => dispatch(doLoadVideo(uri)),
 });
 
