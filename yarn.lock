@@ -5588,8 +5588,9 @@ lazy-val@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/lazy-val/-/lazy-val-1.0.3.tgz#bb97b200ef00801d94c317e29dc6ed39e31c5edc"
 
-"lbry-redux@file:../lbry-redux":
+lbry-redux@lbryio/lbry-redux:
   version "0.0.1"
+  resolved "https://codeload.github.com/lbryio/lbry-redux/tar.gz/76a00293f97c8d0550c234a5cfddd8a9de51c18a"
   dependencies:
     amplitude-js "^4.0.0"
     bluebird "^3.5.1"
