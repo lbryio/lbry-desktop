@@ -327,14 +327,10 @@ export function doFetchBlackListedOutpoints() {
 export function doBlackListedOutpointsSubscribe() {
   return dispatch => {
     dispatch(doFetchBlackListedOutpoints());
-    const checkUpgradeTimer = setInterval(
+    setInterval(
       () => dispatch(doFetchBlackListedOutpoints()),
       CHECK_BLACK_LISTED_CONTENT_INTERVAL
     );
-    dispatch({
-      type: ACTIONS.CHECK_UPGRADE_SUBSCRIBE,
-      data: { checkUpgradeTimer },
-    });
   };
 }
 
