@@ -120,7 +120,7 @@ reducers[ACTIONS.AUTO_UPDATE_DOWNLOADED] = state =>
   });
 
 reducers[ACTIONS.AUTO_UPDATE_DECLINED] = state => {
-  Object.assign({}, state, {
+  return Object.assign({}, state, {
     autoUpdateDeclined: true,
   });
 };
@@ -152,13 +152,13 @@ reducers[ACTIONS.SKIP_UPGRADE] = state => {
 };
 
 reducers[ACTIONS.MEDIA_PLAY] = state => {
-  Object.assign({}, state, {
+  return Object.assign({}, state, {
     modalsAllowed: false,
   });
 };
 
 reducers[ACTIONS.MEDIA_PAUSE] = state => {
-  Object.assign({}, state, {
+  return Object.assign({}, state, {
     modalsAllowed: true,
   });
 };
