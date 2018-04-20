@@ -23,6 +23,9 @@ export type AppState = {
   upgradeSkipped: boolean,
   daemonVersionMatched: ?boolean,
   daemonReady: boolean,
+  fetchingBlackListedOutpoints: boolean,
+  fetchingBlackListedOutpointsSucceed: ?boolean,
+  blackListedOutpoints: ?mixed,
   hasSignature: boolean,
   badgeNumber: number,
   volume: number,
@@ -45,13 +48,15 @@ const defaultState: AppState = {
   upgradeSkipped: sessionStorage.getItem('upgradeSkipped') === 'true',
   daemonVersionMatched: null,
   daemonReady: false,
+  fetchingBlackListedOutpoints: false,
+  fetchingBlackListedOutpointsSucceed: undefined,
+  blackListedOutpoints: undefined,
   hasSignature: false,
   badgeNumber: 0,
   volume: Number(sessionStorage.getItem('volume')) || 1,
   autoUpdateDownloaded: false,
   autoUpdateDeclined: false,
   modalsAllowed: true,
-
   downloadProgress: undefined,
   upgradeDownloading: undefined,
   upgradeDownloadComplete: undefined,
@@ -76,6 +81,31 @@ reducers[ACTIONS.DAEMON_VERSION_MISMATCH] = state =>
     daemonVersionMatched: false,
     modal: MODALS.INCOMPATIBLE_DAEMON,
   });
+
+reducers[ACTIONS.FETCH_BLACK_LISTED_CONTENT_STARTED] = state =>
+  Object.assign({}, state, {
+    fetchingBlackListedOutpoints: true,
+  });
+
+reducers[ACTIONS.FETCH_BLACK_LISTED_CONTENT_COMPLETED] = (state, action) => {
+  const { outpoints, success } = action.data;
+
+  return Object.assign({}, state, {
+    fetchingBlackListedOutpoints: false,
+    fetchingBlackListedOutpointsSucceed: success,
+    blackListedOutpoints: outpoints,
+  });
+};
+
+reducers[ACTIONS.FETCH_BLACK_LISTED_CONTENT_FAILED] = (state, action) => {
+  const { error, success } = action.data;
+
+  return Object.assign({}, state, {
+    fetchingBlackListedOutpoints: false,
+    fetchingBlackListedOutpointsSucceed: success,
+    fetchingBlackListedOutpointsError: error,
+  });
+};
 
 reducers[ACTIONS.UPGRADE_CANCELLED] = state =>
   Object.assign({}, state, {

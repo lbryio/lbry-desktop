@@ -12,6 +12,7 @@ import {
   doDaemonReady,
   doShowSnackBar,
   doAutoUpdate,
+  doBlackListedOutpointsSubscribe,
 } from 'redux/actions/app';
 import { doNavigate } from 'redux/actions/navigation';
 import { doDownloadLanguages, doUpdateIsNightAsync } from 'redux/actions/settings';
@@ -118,6 +119,7 @@ const init = () => {
   }
   app.store.dispatch(doUpdateIsNightAsync());
   app.store.dispatch(doDownloadLanguages());
+  app.store.dispatch(doBlackListedOutpointsSubscribe());
 
   function onDaemonReady() {
     window.sessionStorage.setItem('loaded', 'y'); // once we've made it here once per session, we don't need to show splash again
