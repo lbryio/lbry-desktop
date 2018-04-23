@@ -3,6 +3,13 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [0.21.3] - 2018-04-23
+
+
+### Added
+  * Block blacklisted content ([#1361](https://github.com/lbryio/lbry-app/pull/1361))
+
+
 ## [0.21.2] - 2018-03-22
 
 
