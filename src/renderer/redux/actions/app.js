@@ -3,7 +3,13 @@ import isDev from 'electron-is-dev';
 import path from 'path';
 import * as MODALS from 'constants/modal_types';
 import { ipcRenderer, remote } from 'electron';
-import { ACTIONS, Lbry, doBalanceSubscribe, doFetchFileInfosAndPublishedClaims } from 'lbry-redux';
+import {
+  ACTIONS,
+  Lbry,
+  doBalanceSubscribe,
+  doFetchFileInfosAndPublishedClaims,
+  doNotify,
+} from 'lbry-redux';
 import Native from 'native';
 import { doFetchRewardedContent } from 'redux/actions/content';
 import { doFetchDaemonSettings } from 'redux/actions/settings';
@@ -83,12 +89,9 @@ export function doDownloadUpgrade() {
     dispatch({
       type: ACTIONS.UPGRADE_DOWNLOAD_STARTED,
     });
-    dispatch({
-      type: ACTIONS.CREATE_NOTIFICATION,
-      data: {
-        modal: MODALS.DOWNLOADING,
-      },
-    });
+    dispatch(doNotify({
+      id: MODALS.DOWNLOADING,
+    }));
   };
 }
 
@@ -110,17 +113,15 @@ export function doDownloadUpgradeRequested() {
       // electron-updater behavior
       if (autoUpdateDeclined) {
         // The user declined an update before, so show the "confirm" dialog
-        dispatch({
-          type: ACTIONS.CREATE_NOTIFICATION,
-          data: { modal: MODALS.AUTO_UPDATE_CONFIRM },
-        });
+        dispatch(doNotify({
+          id: MODALS.AUTO_UPDATE_CONFIRM
+        }));
       } else {
         // The user was never shown the original update dialog (e.g. because they were
         // watching a video). So show the inital "update downloaded" dialog.
-        dispatch({
-          type: ACTIONS.CREATE_NOTIFICATION,
-          data: { modal: MODALS.AUTO_UPDATE_DOWNLOADED },
-        });
+        dispatch(doNotify({
+          id: MODALS.AUTO_UPDATE_DOWNLOADED
+        }));
       }
     } else {
       // Old behavior for Linux
@@ -135,10 +136,9 @@ export function doAutoUpdate() {
       type: ACTIONS.AUTO_UPDATE_DOWNLOADED,
     });
 
-    dispatch({
-      type: ACTIONS.CREATE_NOTIFICATION,
-      data: { modal: MODALS.AUTO_UPDATE_DOWNLOADED },
-    });
+    dispatch(doNotify({
+      id: MODALS.AUTO_UPDATE_DOWNLOADED
+    }));
   };
 }
 
@@ -206,12 +206,9 @@ export function doCheckUpgradeAvailable() {
         !selectCurrentModal(state) &&
         (!selectIsUpgradeSkipped(state) || remoteVersion !== selectRemoteVersion(state))
       ) {
-        dispatch({
-          type: ACTIONS.CREATE_NOTIFICATION,
-          data: {
-            modal: MODALS.UPGRADE,
-          },
-        });
+        dispatch(doNotify({
+          id: MODALS.UPGRADE
+        }));
       }
     };
 
@@ -256,13 +253,12 @@ export function doCheckDaemonVersion() {
 
 export function doAlertError(errorList) {
   return dispatch => {
-    dispatch({
-      type: ACTIONS.CREATE_NOTIFICATION,
-      data: {
-        modal: MODALS.ERROR,
-        modalProps: { error: errorList },
-      },
-    });
+    dispatch(
+      doNotify({
+        id: MODALS.ERROR,
+        error: errorList,
+      })
+    );
   };
 }
 
