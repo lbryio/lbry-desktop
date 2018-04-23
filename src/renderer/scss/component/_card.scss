@@ -177,7 +177,7 @@
 }
 
 .card__content {
-  margin-top: var(--card-margin);
+  margin-top: $spacing-vertical * 2/3;
 }
 
 .card__subtext-title {
@@ -198,7 +198,7 @@
 }
 
 .card__actions {
-  margin-top: var(--card-margin);
+  margin-top: $spacing-vertical * 2/3;
   display: flex;
 
   &:not(.card__actions--vertical) .btn:nth-child(n + 2) {
