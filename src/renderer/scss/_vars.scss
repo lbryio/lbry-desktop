@@ -26,7 +26,7 @@ $text-color: #000;
   /* Misc */
   --content-max-width: 1000px;
   --nsfw-blur-intensity: 20px;
-  --height-video-embedded: $width-page-constrained * 9 / 16;
+  --height-video-embedded: 450px; // 800px * 9/16
 
   /* Font */
   --font-size: 16px;
@@ -86,8 +86,8 @@ $text-color: #000;
   --button-color: #fff;
   --button-primary-bg: var(--color-primary);
   --button-primary-color: #fff;
-  --button-padding: $spacing-vertical * 2/3;
-  --button-height: $spacing-vertical * 1.5;
+  --button-padding: 16px;
+  --button-height: 36px;
   --button-intra-margin: $spacing-vertical;
   --button-radius: 3px;
 
@@ -95,7 +95,7 @@ $text-color: #000;
   --header-bg: var(--color-bg);
   --header-color: #666;
   --header-active-color: rgba(0, 0, 0, 0.85);
-  --header-height: $spacing-vertical * 2.5;
+  --header-height: 60px;
   --header-button-bg: transparent; //var(--button-bg);
   --header-button-hover-bg: rgba(100, 100, 100, 0.15);
 
@@ -121,12 +121,12 @@ $text-color: #000;
   /* Card */
   --card-bg: var(--color-bg);
   --card-hover-translate: 10px;
-  --card-margin: $spacing-vertical * 2/3;
-  --card-max-width: $width-page-constrained;
-  --card-padding: $spacing-vertical * 2/3;
+  --card-margin: 16px;
+  --card-max-width: 800px;
+  --card-padding: 16px;
   --card-radius: 2px;
   --card-link-scaling: 1.1;
-  --card-small-width: $spacing-vertical * 10;
+  --card-small-width: 240px;
 
   /* Modal */
   --modal-width: 440px;
