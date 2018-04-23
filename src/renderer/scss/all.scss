@@ -1,8 +1,8 @@
 @charset "UTF-8";
-@import '_reset';
-@import '_vars';
-@import '_icons';
-@import '_gui';
+@import '_reset.scss';
+@import '_vars.scss';
+@import '_icons.scss';
+@import '_gui.scss';
 @import 'component/_table';
 @import 'component/_button.scss';
 @import 'component/_card.scss';
