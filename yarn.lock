@@ -3033,9 +3033,9 @@ electron-to-chromium@^1.2.7, electron-to-chromium@^1.3.30:
   version "1.3.42"
   resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.42.tgz#95c33bf01d0cc405556aec899fe61fd4d76ea0f9"
 
-electron-updater@^2.21.4:
-  version "2.21.4"
-  resolved "https://registry.yarnpkg.com/electron-updater/-/electron-updater-2.21.4.tgz#56326defc8072e78e339cc656838ac78e708f50c"
+electron-updater@^2.21.8:
+  version "2.21.8"
+  resolved "https://registry.yarnpkg.com/electron-updater/-/electron-updater-2.21.8.tgz#3881fff1fc7c57a66be0665bd7ffe02b7ecb5566"
   dependencies:
     bluebird-lst "^1.0.5"
     builder-util-runtime "~4.2.0"
