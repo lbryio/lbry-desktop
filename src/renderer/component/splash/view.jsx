@@ -8,7 +8,9 @@ import * as modals from 'constants/modal_types';
 
 type Props = {
   checkDaemonVersion: () => Promise<any>,
-  modal: string,
+  notification: ?{
+    id: string,
+  },
 };
 
 type State = {
@@ -100,8 +102,10 @@ export class SplashScreen extends React.PureComponent<Props, State> {
   }
 
   render() {
-    const { modal } = this.props;
+    const { notification } = this.props;
     const { message, details, isLagging, isRunning } = this.state;
+
+    const notificationId = notification && notification.id;
 
     return (
       <React.Fragment>
@@ -111,9 +115,9 @@ export class SplashScreen extends React.PureComponent<Props, State> {
             in the modals won't work. */}
         {isRunning && (
           <React.Fragment>
-            {modal === modals.INCOMPATIBLE_DAEMON && <ModalIncompatibleDaemon />}
-            {modal === modals.UPGRADE && <ModalUpgrade />}
-            {modal === modals.DOWNLOADING && <ModalDownloading />}
+            {notificationId === modals.INCOMPATIBLE_DAEMON && <ModalIncompatibleDaemon />}
+            {notificationId === modals.UPGRADE && <ModalUpgrade />}
+            {notificationId === modals.DOWNLOADING && <ModalDownloading />}
           </React.Fragment>
         )}
       </React.Fragment>

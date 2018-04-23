@@ -8,7 +8,6 @@ import {
   selectIdentityVerifyErrorMessage,
 } from 'redux/selectors/user';
 import UserVerify from './view';
-import { selectCurrentModal } from 'redux/selectors/app';
 import { doNotify } from 'lbry-redux';
 import { PHONE_COLLECTION } from 'constants/modal_types';
 
@@ -19,7 +18,6 @@ const select = (state, props) => {
     isPending: selectIdentityVerifyIsPending(state),
     errorMessage: selectIdentityVerifyErrorMessage(state),
     reward: selectReward(state, { reward_type: rewards.TYPE_NEW_USER }),
-    modal: selectCurrentModal(state),
   };
 };
 

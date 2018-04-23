@@ -9,6 +9,7 @@ import {
   doBalanceSubscribe,
   doFetchFileInfosAndPublishedClaims,
   doNotify,
+  selectNotification,
 } from 'lbry-redux';
 import Native from 'native';
 import { doFetchRewardedContent } from 'redux/actions/content';
@@ -18,7 +19,6 @@ import { doAuthenticate } from 'redux/actions/user';
 import { doPause } from 'redux/actions/media';
 import { doCheckSubscriptions } from 'redux/actions/subscriptions';
 import {
-  selectCurrentModal,
   selectIsUpgradeSkipped,
   selectUpdateUrl,
   selectUpgradeDownloadItem,
@@ -89,9 +89,11 @@ export function doDownloadUpgrade() {
     dispatch({
       type: ACTIONS.UPGRADE_DOWNLOAD_STARTED,
     });
-    dispatch(doNotify({
-      id: MODALS.DOWNLOADING,
-    }));
+    dispatch(
+      doNotify({
+        id: MODALS.DOWNLOADING,
+      })
+    );
   };
 }
 
@@ -113,15 +115,19 @@ export function doDownloadUpgradeRequested() {
       // electron-updater behavior
       if (autoUpdateDeclined) {
         // The user declined an update before, so show the "confirm" dialog
-        dispatch(doNotify({
-          id: MODALS.AUTO_UPDATE_CONFIRM
-        }));
+        dispatch(
+          doNotify({
+            id: MODALS.AUTO_UPDATE_CONFIRM,
+          })
+        );
       } else {
         // The user was never shown the original update dialog (e.g. because they were
         // watching a video). So show the inital "update downloaded" dialog.
-        dispatch(doNotify({
-          id: MODALS.AUTO_UPDATE_DOWNLOADED
-        }));
+        dispatch(
+          doNotify({
+            id: MODALS.AUTO_UPDATE_DOWNLOADED,
+          })
+        );
       }
     } else {
       // Old behavior for Linux
@@ -136,9 +142,11 @@ export function doAutoUpdate() {
       type: ACTIONS.AUTO_UPDATE_DOWNLOADED,
     });
 
-    dispatch(doNotify({
-      id: MODALS.AUTO_UPDATE_DOWNLOADED
-    }));
+    dispatch(
+      doNotify({
+        id: MODALS.AUTO_UPDATE_DOWNLOADED,
+      })
+    );
   };
 }
 
@@ -203,12 +211,14 @@ export function doCheckUpgradeAvailable() {
 
       if (
         upgradeAvailable &&
-        !selectCurrentModal(state) &&
+        !selectNotification(state) &&
         (!selectIsUpgradeSkipped(state) || remoteVersion !== selectRemoteVersion(state))
       ) {
-        dispatch(doNotify({
-          id: MODALS.UPGRADE
-        }));
+        dispatch(
+          doNotify({
+            id: MODALS.UPGRADE,
+          })
+        );
       }
     };
 
@@ -324,7 +334,9 @@ export function doChangeVolume(volume) {
 export function doConditionalAuthNavigate(newSession) {
   return (dispatch, getState) => {
     const state = getState();
-    if (newSession || selectCurrentModal(state) !== 'email_collection') {
+    const notification = selectNotification(state);
+
+    if (newSession || (notification && notification.id !== 'email_collection')) {
       dispatch(doAuthNavigate());
     }
   };

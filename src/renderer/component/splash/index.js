@@ -1,10 +1,11 @@
 import { connect } from 'react-redux';
-import { selectCurrentModal, selectDaemonVersionMatched } from 'redux/selectors/app';
+import { selectDaemonVersionMatched } from 'redux/selectors/app';
+import { selectNotification } from 'lbry-redux';
 import { doCheckDaemonVersion } from 'redux/actions/app';
 import SplashScreen from './view';
 
 const select = state => ({
-  modal: selectCurrentModal(state),
+  notification: selectNotification(state),
   daemonVersionMatched: selectDaemonVersionMatched(state),
 });
 
