@@ -36,7 +36,7 @@ const RewardTile = (props: Props) => {
               <Icon icon={icons.CHECK} /> {__('Reward claimed.')}
             </span>
           ) : (
-            <RewardLink reward_type={reward.reward_type} />
+            <RewardLink button reward_type={reward.reward_type} />
           ))}
       </div>
     </section>
