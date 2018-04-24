@@ -4,12 +4,21 @@ import BusyIndicator from 'component/common/busy-indicator';
 import ChannelPage from 'page/channel';
 import FilePage from 'page/file';
 import Page from 'component/page';
+import Button from 'component/button';
 
 type Props = {
   isResolvingUri: boolean,
   resolveUri: string => void,
   uri: string,
-  claim: { name: string },
+  claim: {
+    name: string,
+    txid: string,
+    nout: number,
+  },
+  blackListedOutpoints: Array<{
+    txid: string,
+    nout: number,
+  }>,
 };
 
 class ShowPage extends React.PureComponent<Props> {
@@ -28,7 +37,7 @@ class ShowPage extends React.PureComponent<Props> {
   }
 
   render() {
-    const { claim, isResolvingUri, uri } = this.props;
+    const { claim, isResolvingUri, uri, blackListedOutpoints } = this.props;
 
     let innerContent = '';
 
@@ -50,7 +59,37 @@ class ShowPage extends React.PureComponent<Props> {
     } else if (claim && claim.name.length && claim.name[0] === '@') {
       innerContent = <ChannelPage uri={uri} />;
     } else if (claim) {
-      innerContent = <FilePage uri={uri} />;
+      let isClaimBlackListed = false;
+
+      for (let i = 0; i < blackListedOutpoints.length; i += 1) {
+        const outpoint = blackListedOutpoints[i];
+        if (outpoint.txid === claim.txid && outpoint.nout === claim.nout) {
+          isClaimBlackListed = true;
+          break;
+        }
+      }
+
+      if (isClaimBlackListed) {
+        innerContent = (
+          <Page>
+            <section className="card card--section">
+              <div className="card__title">{uri}</div>
+              <div className="card__content">
+                <p>
+                  {__(
+                    'In response to a complaint we received under the US Digital Millennium Copyright Act, we have blocked access to this content from our applications.'
+                  )}
+                </p>
+              </div>
+              <div className="card__actions">
+                <Button button="link" href="https://lbry.io/faq/dmca" label={__('Read More')} />
+              </div>
+            </section>
+          </Page>
+        );
+      } else {
+        innerContent = <FilePage uri={uri} />;
+      }
     }
 
     return innerContent;
