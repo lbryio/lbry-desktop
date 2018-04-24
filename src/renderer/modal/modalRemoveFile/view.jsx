@@ -23,8 +23,8 @@ class ModalRemoveFile extends React.PureComponent<Props, State> {
     super(props);
 
     this.state = {
-      deleteChecked: true,
-      abandonClaimChecked: false,
+      deleteChecked: false,
+      abandonClaimChecked: true,
     };
 
     (this: any).handleDeleteCheckboxClicked = this.handleDeleteCheckboxClicked.bind(this);
@@ -48,7 +48,13 @@ class ModalRemoveFile extends React.PureComponent<Props, State> {
   }
 
   render() {
-    const { claimIsMine, closeModal, deleteFile, fileInfo: { outpoint }, title } = this.props;
+    const {
+      claimIsMine,
+      closeModal,
+      deleteFile,
+      fileInfo: { outpoint },
+      title,
+    } = this.props;
     const { deleteChecked, abandonClaimChecked } = this.state;
 
     return (

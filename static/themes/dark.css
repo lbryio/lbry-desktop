@@ -1,65 +1,91 @@
 :root {
-    /* Colors */
-    --color-primary:  #009688;
-    --color-canvas: #0f1517;
-    --color-bg: #1a2327;
-    --color-bg-alt: #314048;
-    --color-help: rgba(255,255,255, 0.5);
-    --color-error: #a94442;
-    --color-load-screen-text: #FFF;
-    --color-money: #1DE9B6;
-    --color-meta-light: #757575;
-    --color-dark-overlay: rgba(15, 21, 23, 0.85);
-    --color-download: rgba(255, 255, 255, 0.75);
 
+  /* Colors */
 
-    /* Text */
-    --text-color: #FFF;
-    --text-selection-bg: rgba(0,150,136, 0.95);
+  --color-divider: #53637C;;
+  --color-canvas: transparent;
+  --color-help: #8696AF;
+  --color-download: rgba(255, 255, 255, 0.75);
+  --color-download-overlay: var(--color-black);
+  --color-bg: #203049;
+  --color-bg-alt: #2D3D56;
+  --color-placeholder: var(--color-bg-alt);
 
-    /* Form */
-    --form-label-color: rgba(255, 255, 255, 0.70);
+  /* Text */
+  --text-color: #FFF;
+  --text-help-color: var(--color-help);
+  --text-selection-color: #fff;
 
-    /* Input */
-    --input-bg: transparent;
-    --input-border-color: rgba(255,255,255, 0.70);
-    --input-hover-border-color: rgba(255, 255, 255, 1);
+   /* Form */
+   --form-label-color: #FFF;
 
-    /* input:placeholder */
-    --input-placeholder-color: rgba(255,255,255, 0.5);
+  /* Input */
+  --input-bg: transparent;
+  --input-label-color: var(--color-help);
+  --input-color: var(--text-color);
+  --input-border-size: 1px;
+  --input-border-color: rgba(255,255,255, 0.5);
+  --input-hover-border-color: rgba(255, 255, 255, 1);
+  --input-copyable-bg: #203049;
+  --input-copyable-color: #8696AF;
+  --input-copyable-border: #53637C;
 
-    /* input:disabled */
-    --input-disabled-color: rgba(255, 255, 255, 0.50);
-    --input-disabled-border-color: rgba(255, 255, 255, 0.70);
+  /* input:disabled */
+  --input-disabled-border-color: rgba(255, 255, 255, 0.42);
+  --input-disabled-color: rgba(255, 255, 255, 0.54);
 
-    /* Search */
-    --search-bg: rgba(0,0,0, 0.45);
-    --search-color: #757575;
-    --search-active-bg: rgba(0,0,0, 0.75);
-    --search-border: 1px solid rgba(0,0,0, 0.25);
+  /* Button */
+  --btn-bg-primary: var(--color-primary);
+  --btn-color-primary: var(--color-white);
+  --btn-bg-primary-hover: var(--color-primary-light);
+  --btn-bg-alt: #13233C;
+  --btn-color-alt: var(--text-color);
+  --btn-home-bg-color: #44548F;
 
-    /* Tab */
-    --tab-color: rgba(255,255,255, 0.5) ;
-    --tab-active-color: rgba(255,255,255, 0.75);
+  /* Header */
+  --header-bg: var(--color-white);
+  --header-color: var(--color-text);
+  --header-active-color: rgba(0, 0, 0, 0.85);
+  --header-button-bg: transparent;
+  --header-button-hover-bg: rgba(100, 100, 100, 0.15);
+  --header-primary-color: #8165B0;
 
-    /* Header */
-    --header-color: #CCC;
-    --header-active-color: #FFF;
-    --header-button-hover-bg: var(--color-bg-alt);
+  /* Header */
+  --header-color: #CCC;
+  --header-active-color: var(--color-white);
+  --header-button-hover-bg: var(--color-bg-alt);
 
-    /* Table */
-    --table-border: 0;
-    --table-item-even: var(--color-bg-alt);
-    --table-item-odd: transparent;
+  /* Header -> search */
+  --search-color: var(--color-white);
+  --search-bg-color: rgb(58, 74, 99);
+  --search-active-bg-color: #13233C;
+  --search-active-shadow: 0 6px 9px -2px var(--color-grey--dark);
+  --search-modal-input-height: 70px;
 
-    /* Modal */
-    --modal-overlay-bg: var(--color-dark-overlay);
-    --modal-border: 1px solid rgba(0, 0, 0, 0.25);
+  /* Nav */
+  --nav-color: #44548F;
+  --nav-bg-color: #0D102F;
 
-    /* Scrollbar */
-    --scrollbar-thumb-bg: rgba(255, 255, 255, 0.20);
-    --scrollbar-thumb-hover-bg: rgba(255, 255, 255, 0.35);
+  /* Table */
+  --table-border: 1px solid var(--color-bg-alt);
+  --table-item-odd: var(--color-bg-alt);
 
-    /* Divider */
-    --divider: 1px solid rgba(255, 225, 225, 0.12);
+  /* Card */
+  --card-bg: #13233C;
+  --card-radius: 3px;
+  --card-text-color: var(--color-help);
+  --card-wallet-color: var(--text-color-inverse);
+  --success-msg-color: var(--color-primary-light);
+  --success-msg-border:var(--color-primary);
+  --success-msg-bg: var(--color-bg);
+
+  /* Modal */
+  --modal-bg: var(--card-bg);
+  --modal-overlay-bg:  rgba(32,48,73, 0.75);
+  --modal-border: 1px solid rgba(0, 0, 0, 0.25);
+  --modal-btn-bg-color: var(--color-bg-alt);
+
+  /* Scrollbar */
+  --scrollbar-thumb-bg: rgba(255, 255, 255, 0.20);
+  --scrollbar-thumb-hover-bg: #8696AF;
 }

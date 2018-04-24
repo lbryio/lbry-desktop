@@ -22,9 +22,7 @@ const autoThumbColors = [
 ];
 
 class CardMedia extends React.PureComponent<Props> {
-  getAutoThumbClass = () => {
-    return autoThumbColors[Math.floor(Math.random() * autoThumbColors.length)];
-  };
+  getAutoThumbClass = () => autoThumbColors[Math.floor(Math.random() * autoThumbColors.length)];
 
   render() {
     const { thumbnail, nsfw } = this.props;

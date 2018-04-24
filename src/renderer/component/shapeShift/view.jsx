@@ -14,14 +14,16 @@ type Props = {
   createShapeShift: Dispatch,
   clearShapeShift: Dispatch,
   getActiveShift: Dispatch,
-  doShowSnackBar: Dispatch,
   shapeShiftInit: Dispatch,
   receiveAddress: string,
 };
 
 class ShapeShift extends React.PureComponent<Props> {
   componentDidMount() {
-    const { shapeShiftInit, shapeShift: { hasActiveShift, shiftSupportedCoins } } = this.props;
+    const {
+      shapeShiftInit,
+      shapeShift: { hasActiveShift, shiftSupportedCoins },
+    } = this.props;
 
     if (!hasActiveShift && !shiftSupportedCoins.length) {
       // calls shapeshift to see list of supported coins for shifting
@@ -37,7 +39,6 @@ class ShapeShift extends React.PureComponent<Props> {
       shapeShift,
       clearShapeShift,
       getActiveShift,
-      doShowSnackBar,
     } = this.props;
 
     const {
@@ -107,7 +108,6 @@ class ShapeShift extends React.PureComponent<Props> {
               shiftOrderId={shiftOrderId}
               shiftState={shiftState}
               clearShapeShift={clearShapeShift}
-              doShowSnackBar={doShowSnackBar}
               originCoinDepositMax={originCoinDepositMax}
               originCoinDepositMin={originCoinDepositMin}
               originCoinDepositFee={originCoinDepositFee}

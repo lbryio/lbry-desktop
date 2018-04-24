@@ -1,6 +1,5 @@
-import Lbry from 'lbry';
+import { Lbry, doNotify } from 'lbry-redux';
 import Lbryio from 'lbryio';
-import { doShowSnackBar } from 'redux/actions/app';
 
 function rewardMessage(type, amount) {
   return {
@@ -52,7 +51,7 @@ rewards.claimReward = type => {
       const message = rewardMessage(type, reward.reward_amount);
 
       // Display global notice
-      const action = doShowSnackBar({
+      const action = doNotify({
         message,
         linkText: __('Show All'),
         linkTarget: '/rewards',

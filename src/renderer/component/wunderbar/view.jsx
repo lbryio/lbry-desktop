@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import classnames from 'classnames';
-import { normalizeURI } from 'lbryURI';
+import { normalizeURI } from 'lbry-redux';
 import Icon from 'component/common/icon';
 import { parseQueryParams } from 'util/query_params';
 import * as icons from 'constants/icons';

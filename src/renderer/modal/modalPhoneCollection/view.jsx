@@ -8,7 +8,7 @@ class ModalPhoneCollection extends React.PureComponent {
   renderInner() {
     const { closeModal, phone, user } = this.props;
 
-    const cancelButton = <Button button="text" onClick={closeModal} label={__('Not Now')} />;
+    const cancelButton = <Button button="link" onClick={closeModal} label={__('Not Now')} />;
 
     if (!user.phone_number && !phone) {
       return <UserPhoneNew cancelButton={cancelButton} />;

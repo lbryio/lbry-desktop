@@ -2,14 +2,12 @@
 import React from 'react';
 import FileTile from 'component/fileTile';
 import ChannelTile from 'component/channelTile';
-import { parseURI } from 'lbryURI';
+import { parseURI } from 'lbry-redux';
 import debounce from 'util/debounce';
 
 const SEARCH_DEBOUNCE_TIME = 800;
 
-const NoResults = () => {
-  return <div className="file-tile">{__('No results')}</div>;
-};
+const NoResults = () => <div className="file-tile">{__('No results')}</div>;
 
 type Props = {
   search: string => void,

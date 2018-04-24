@@ -1,11 +1,10 @@
-import React from 'react';
 import rewards from 'rewards';
 import { connect } from 'react-redux';
-import { doCloseModal } from 'redux/actions/app';
+import { doHideNotification } from 'lbry-redux';
 import { makeSelectRewardByType } from 'redux/selectors/rewards';
 import ModalFirstReward from './view';
 
-const select = (state, props) => {
+const select = state => {
   const selectReward = makeSelectRewardByType();
 
   return {
@@ -14,7 +13,7 @@ const select = (state, props) => {
 };
 
 const perform = dispatch => ({
-  closeModal: () => dispatch(doCloseModal()),
+  closeModal: () => dispatch(doHideNotification()),
 });
 
 export default connect(select, perform)(ModalFirstReward);

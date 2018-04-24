@@ -31,21 +31,24 @@
   border-bottom: none;
 
   &:focus {
-    background-color: var(--color-bg);
+    background-color: var(--search-active-bg-color);
     border-radius: 0;
-    border-bottom: 1px solid var(--color-grey);
+    border-bottom: 1px solid var(--color-divider);
     box-shadow: var(--box-shadow-button);
   }
 }
 
 .wunderbar__menu {
   max-width: 100px;
+  border-radius: 0 0 3px 3px !important;
+  padding: 0 !important;
+  background: transparent !important;
   overflow-x: hidden;
 }
 
 .wunderbar__suggestion {
   padding: 5px 10px;
-  background-color: var(--header-bg);
+  background-color: var(--search-bg-color);
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -53,7 +56,7 @@
   font-family: 'metropolis-medium';
 
   &:not(:first-of-type) {
-    border-top: 1px solid var(--color-divider);
+    border-top: 1px solid var(--search-item-border-color);
   }
 }
 
@@ -69,6 +72,7 @@
 }
 
 .wunderbar__active-suggestion {
+  color: var(--search-item-active-color);
   background-color: var(--color-secondary);
 }
 
@@ -80,10 +84,9 @@
 
 .search__input {
   font-family: 'metropolis-bold';
-  background: var(--color-black);
   font-size: var(--search-modal-input-height);
-  color: var(--color-black);
-  background: var(--modal-bg);
+  color: var(--search-color);
+  background: transparent;
   width: 100%;
 }
 
@@ -93,5 +96,8 @@
 
   .search-result__column {
     flex: 0 0 270px;
+    .card__media {
+      background-color: var(--color-search-placeholder);
+    }
   }
 }

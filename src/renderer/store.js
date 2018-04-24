@@ -1,16 +1,19 @@
 import { createLogger } from 'redux-logger';
 import appReducer from 'redux/reducers/app';
 import availabilityReducer from 'redux/reducers/availability';
-import claimsReducer from 'redux/reducers/claims';
 import contentReducer from 'redux/reducers/content';
-import costInfoReducer from 'redux/reducers/cost_info';
-import fileInfoReducer from 'redux/reducers/file_info';
+import {
+  claimsReducer,
+  costInfoReducer,
+  fileInfoReducer,
+  searchReducer,
+  walletReducer,
+  notificationsReducer,
+} from 'lbry-redux';
 import navigationReducer from 'redux/reducers/navigation';
 import rewardsReducer from 'redux/reducers/rewards';
-import searchReducer from 'redux/reducers/search';
 import settingsReducer from 'redux/reducers/settings';
 import userReducer from 'redux/reducers/user';
-import walletReducer from 'redux/reducers/wallet';
 import shapeShiftReducer from 'redux/reducers/shape_shift';
 import subscriptionsReducer from 'redux/reducers/subscriptions';
 import mediaReducer from 'redux/reducers/media';
@@ -67,6 +70,7 @@ const reducers = combineReducers({
   subscriptions: subscriptionsReducer,
   media: mediaReducer,
   publish: publishReducer,
+  notifications: notificationsReducer,
 });
 
 const bulkThunk = createBulkThunkMiddleware();
@@ -96,12 +100,14 @@ const store = createStore(
 const compressor = createCompressor();
 const saveClaimsFilter = createFilter('claims', ['byId', 'claimsByUri']);
 const subscriptionsFilter = createFilter('subscriptions', ['subscriptions']);
+// We only need to persist the receiveAddress for the wallet
+const walletFilter = createFilter('wallet', ['receiveAddress']);
 
 const persistOptions = {
-  whitelist: ['claims', 'subscriptions', 'navigation', 'publish'],
+  whitelist: ['claims', 'subscriptions', 'publish', 'wallet'],
   // Order is important. Needs to be compressed last or other transforms can't
   // read the data
-  transforms: [saveClaimsFilter, subscriptionsFilter, compressor],
+  transforms: [saveClaimsFilter, subscriptionsFilter, walletFilter, compressor],
   debounce: 10000,
   storage: localForage,
 };

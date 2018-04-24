@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { selectAllClaimsByChannel, selectClaimsById } from './claims';
+import { selectAllClaimsByChannel, selectClaimsById } from 'lbry-redux';
 
 // get the entire subscriptions state
 const selectState = state => state.subscriptions || {};

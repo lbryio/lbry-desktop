@@ -1,8 +1,6 @@
-import * as ACTIONS from 'constants/action_types';
-import * as SETTINGS from 'constants/settings';
 import Fs from 'fs';
 import Http from 'http';
-import Lbry from 'lbry';
+import { Lbry, ACTIONS, SETTINGS } from 'lbry-redux';
 import moment from 'moment';
 import analytics from 'analytics';
 

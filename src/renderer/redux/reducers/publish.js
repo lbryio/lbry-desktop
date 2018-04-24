@@ -1,6 +1,6 @@
 // @flow
 import { handleActions } from 'util/redux-utils';
-import { buildURI } from 'lbryURI';
+import { buildURI } from 'lbry-redux';
 import * as ACTIONS from 'constants/action_types';
 import { CHANNEL_ANONYMOUS } from 'constants/claim';
 
@@ -74,6 +74,12 @@ export type PublishParams = {
   price: {
     currency: string,
     amount: number,
+  },
+  source?: {
+    contentType: string,
+    source: string,
+    sourceType: string,
+    version: string,
   },
 };
 

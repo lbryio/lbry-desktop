@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import FileList from './view';
-import { selectClaimsById } from 'redux/selectors/claims';
+import { selectClaimsById } from 'lbry-redux';
 
 const select = state => ({
   claimsById: selectClaimsById(state),

@@ -89,11 +89,10 @@ reducers[ACTIONS.AUTO_UPDATE_DOWNLOADED] = state =>
     autoUpdateDownloaded: true,
   });
 
-reducers[ACTIONS.AUTO_UPDATE_DECLINED] = state => {
-  return Object.assign({}, state, {
+reducers[ACTIONS.AUTO_UPDATE_DECLINED] = state =>
+  Object.assign({}, state, {
     autoUpdateDeclined: true,
   });
-};
 
 reducers[ACTIONS.UPGRADE_DOWNLOAD_COMPLETED] = (state, action) =>
   Object.assign({}, state, {
@@ -121,17 +120,15 @@ reducers[ACTIONS.SKIP_UPGRADE] = state => {
   });
 };
 
-reducers[ACTIONS.MEDIA_PLAY] = state => {
-  return Object.assign({}, state, {
+reducers[ACTIONS.MEDIA_PLAY] = state =>
+  Object.assign({}, state, {
     modalsAllowed: false,
   });
-};
 
-reducers[ACTIONS.MEDIA_PAUSE] = state => {
-  return Object.assign({}, state, {
+reducers[ACTIONS.MEDIA_PAUSE] = state =>
+  Object.assign({}, state, {
     modalsAllowed: true,
   });
-};
 
 reducers[ACTIONS.SET_PLAYING_URI] = (state, action) => {
   if (action.data.uri === null) {
@@ -158,58 +155,10 @@ reducers[ACTIONS.CHECK_UPGRADE_SUBSCRIBE] = (state, action) =>
     checkUpgradeTimer: action.data.checkUpgradeTimer,
   });
 
-reducers[ACTIONS.OPEN_MODAL] = (state, action) => {
-  if (!state.modalsAllowed) {
-    return state;
-  }
-  return Object.assign({}, state, {
-    modal: action.data.modal,
-    modalProps: action.data.modalProps || {},
-  });
-};
-reducers[ACTIONS.CLOSE_MODAL] = state =>
-  Object.assign({}, state, {
-    modal: undefined,
-    modalProps: {},
-  });
-
 reducers[ACTIONS.UPGRADE_DOWNLOAD_PROGRESSED] = (state, action) =>
   Object.assign({}, state, {
     downloadProgress: action.data.percent,
   });
-
-reducers[ACTIONS.SHOW_SNACKBAR] = (state, action) => {
-  const { message, linkText, linkTarget, isError } = action.data;
-  const snackBar = Object.assign({}, state.snackBar);
-  const snacks = Object.assign([], snackBar.snacks);
-  snacks.push({
-    message,
-    linkText,
-    linkTarget,
-    isError,
-  });
-  const newSnackBar = Object.assign({}, snackBar, {
-    snacks,
-  });
-
-  return Object.assign({}, state, {
-    snackBar: newSnackBar,
-  });
-};
-
-reducers[ACTIONS.REMOVE_SNACKBAR_SNACK] = state => {
-  const snackBar = Object.assign({}, state.snackBar);
-  const snacks = Object.assign([], snackBar.snacks);
-  snacks.shift();
-
-  const newSnackBar = Object.assign({}, snackBar, {
-    snacks,
-  });
-
-  return Object.assign({}, state, {
-    snackBar: newSnackBar,
-  });
-};
 
 reducers[ACTIONS.DOWNLOADING_COMPLETED] = state => {
   const { badgeNumber } = state;

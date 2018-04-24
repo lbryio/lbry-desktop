@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import Button from 'component/button';
-import { buildURI } from 'lbryURI';
+import { buildURI } from 'lbry-redux';
 import classnames from 'classnames';
 // import Icon from 'component/common/icon';
 

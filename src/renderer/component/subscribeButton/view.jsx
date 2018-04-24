@@ -16,7 +16,7 @@ type Props = {
   subscriptions: Array<Subscription>,
   doChannelSubscribe: ({ channelName: string, uri: string }) => void,
   doChannelUnsubscribe: SubscribtionArgs => void,
-  doOpenModal: string => void,
+  doNotify: ({ id: string }) => void,
 };
 
 export default (props: Props) => {
@@ -26,7 +26,7 @@ export default (props: Props) => {
     subscriptions,
     doChannelSubscribe,
     doChannelUnsubscribe,
-    doOpenModal,
+    doNotify,
   } = props;
 
   const isSubscribed =
@@ -42,7 +42,7 @@ export default (props: Props) => {
       label={subscriptionLabel}
       onClick={() => {
         if (!subscriptions.length) {
-          doOpenModal(modals.FIRST_SUBSCRIPTION);
+          doNotify({ id: modals.FIRST_SUBSCRIPTION });
         }
         subscriptionHandler({
           channelName,

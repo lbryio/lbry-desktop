@@ -1,8 +1,5 @@
-import React from 'react';
 import { connect } from 'react-redux';
-import { doCloseModal } from 'redux/actions/app';
-import { doAbandonClaim } from 'redux/actions/content';
-import { selectTransactionItems } from 'redux/selectors/wallet';
+import { doHideNotification, doAbandonClaim, selectTransactionItems } from 'lbry-redux';
 import ModalRevokeClaim from './view';
 
 const select = state => ({
@@ -10,7 +7,7 @@ const select = state => ({
 });
 
 const perform = dispatch => ({
-  closeModal: () => dispatch(doCloseModal()),
+  closeModal: () => dispatch(doHideNotification()),
   abandonClaim: (txid, nout) => dispatch(doAbandonClaim(txid, nout)),
 });
 

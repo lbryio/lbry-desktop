@@ -135,6 +135,7 @@ button:disabled {
 */
 
 .btn.btn--home-nav {
+  background-color: var(--btn-home-bg-color);
   box-shadow: none;
 
   .btn__content {
@@ -144,6 +145,10 @@ button:disabled {
 
 .btn.btn--arrow {
   width: var(--btn-arrow-width);
+
+  &:hover:not(:disabled) {
+    color: var(--text-color);
+  }
 
   &:disabled {
     opacity: 0.3;
@@ -158,9 +163,14 @@ button:disabled {
   }
 }
 
+.btn.btn--header-publish {
+  background-color: var(--header-primary-color);
+}
+
 .btn.btn--header-balance {
   font-family: 'metropolis-medium';
   font-size: 13px;
+  color: var(--header-primary-color);
 
   @media only screen and (min-width: $medium-breakpoint) {
     font-size: 18px;
@@ -171,15 +181,14 @@ button:disabled {
   }
 
   .btn__label--balance {
-    color: var(--color-grey-dark);
+    color: var(--text-help-color);
+    &:hover {
+      color: var(--text-color);
+    }
   }
 
   &:hover {
     background-color: transparent;
-
-    .btn__label--balance {
-      color: var(--btn-primary-bg);
-    }
   }
 }
 
@@ -188,6 +197,7 @@ button:disabled {
   color: var(--color-white);
   opacity: 0.8;
   border-radius: var(--btn-radius);
+  width: var(--btn-height);
   height: var(--btn-height);
-  padding: 0 3px;
+  padding: 10px;
 }

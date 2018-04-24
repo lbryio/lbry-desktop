@@ -5,9 +5,9 @@ import { FormField } from 'component/common/form';
 import UriIndicator from 'component/uriIndicator';
 
 type Props = {
-  claim_id: string,
   uri: string,
   title: string,
+  claim: { claim_id: string },
   errorMessage: string,
   isPending: boolean,
   sendSupport: (number, string, string) => void,
@@ -31,7 +31,8 @@ class WalletSendTip extends React.PureComponent<Props, State> {
   }
 
   handleSendButtonClicked() {
-    const { claim_id: claimId, uri, sendSupport, sendTipCallback } = this.props;
+    const { claim, uri, sendSupport, sendTipCallback } = this.props;
+    const { claim_id: claimId } = claim;
     const { amount } = this.state;
 
     sendSupport(amount, claimId, uri);
@@ -49,7 +50,7 @@ class WalletSendTip extends React.PureComponent<Props, State> {
   }
 
   render() {
-    const { errorMessage, isPending, title, uri, onCancel } = this.props;
+    const { title, errorMessage, isPending, uri, onCancel } = this.props;
 
     return (
       <div>

@@ -1,7 +1,7 @@
 import * as ACTIONS from 'constants/action_types';
 import * as MODALS from 'constants/modal_types';
 import Lbryio from 'lbryio';
-import { doOpenModal, doShowSnackBar } from 'redux/actions/app';
+import { doNotify } from 'lbry-redux';
 import { doClaimRewardType, doRewardList } from 'redux/actions/rewards';
 import {
   selectEmailToVerify,
@@ -52,7 +52,7 @@ export function doAuthenticate() {
         dispatch(doFetchInviteStatus());
       })
       .catch(error => {
-        dispatch(doOpenModal(MODALS.AUTHENTICATION_FAILURE));
+        dispatch(doNotify({ id: MODALS.AUTHENTICATION_FAILURE }));
         dispatch({
           type: ACTIONS.AUTHENTICATION_FAILURE,
           data: { error },
@@ -91,11 +91,11 @@ export function doUserPhoneReset() {
   };
 }
 
-export function doUserPhoneNew(phone, country_code) {
+export function doUserPhoneNew(phone, countryCode) {
   return dispatch => {
     dispatch({
       type: ACTIONS.USER_PHONE_NEW_STARTED,
-      data: { phone, country_code },
+      data: { phone, country_code: countryCode },
     });
 
     const success = () => {
@@ -112,10 +112,12 @@ export function doUserPhoneNew(phone, country_code) {
       });
     };
 
-    Lbryio.call('user', 'phone_number_new', { phone_number: phone, country_code }, 'post').then(
-      success,
-      failure
-    );
+    Lbryio.call(
+      'user',
+      'phone_number_new',
+      { phone_number: phone, country_code: countryCode },
+      'post'
+    ).then(success, failure);
   };
 }
 
@@ -290,7 +292,8 @@ export function doUserInviteNew(email) {
         });
 
         dispatch(
-          doShowSnackBar({
+          doNotify({
+            displayType: ['snackbar'],
             message: __('Invite sent to %s', email),
           })
         );

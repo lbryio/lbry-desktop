@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { buildURI } from 'lbryURI';
+import { buildURI } from 'lbry-redux';
 import { FormField } from 'component/common/form';
 import FileCard from 'component/fileCard';
 
@@ -22,7 +22,10 @@ type FileInfo = {
 
 type Props = {
   hideFilter: boolean,
+  sortByHeight?: boolean,
+  claimsById: Array<{}>,
   fileInfos: Array<FileInfo>,
+  checkPending?: boolean,
 };
 
 type State = {
@@ -40,6 +43,8 @@ class FileList extends React.PureComponent<Props, State> {
     this.state = {
       sortBy: 'dateNew',
     };
+
+    (this: any).handleSortChanged = this.handleSortChanged.bind(this);
 
     this.sortFunctions = {
       dateNew: fileInfos =>
@@ -136,26 +141,35 @@ class FileList extends React.PureComponent<Props, State> {
   }
 
   render() {
-    const { fileInfos, hideFilter } = this.props;
+    const { fileInfos, hideFilter, checkPending } = this.props;
     const { sortBy } = this.state;
     const content = [];
 
     this.sortFunctions[sortBy](fileInfos).forEach(fileInfo => {
-      const { channel_name: channelName, name: claimName, claim_id: claimId } = fileInfo;
+      const {
+        channel_name: channelName,
+        name: claimName,
+        claim_name: claimNameDownloaded,
+        claim_id: claimId,
+      } = fileInfo;
       const uriParams = {};
+
+      // This is unfortunate
+      // https://github.com/lbryio/lbry/issues/1159
+      const name = claimName || claimNameDownloaded;
 
       if (channelName) {
         uriParams.channelName = channelName;
-        uriParams.contentName = claimName;
+        uriParams.contentName = name;
         uriParams.claimId = this.getChannelSignature(fileInfo);
       } else {
         uriParams.claimId = claimId;
-        uriParams.claimName = claimName;
+        uriParams.claimName = name;
       }
 
       const uri = buildURI(uriParams);
 
-      content.push(<FileCard key={claimName} uri={uri} showPrice={false} />);
+      content.push(<FileCard key={uri} uri={uri} checkPending={checkPending} />);
     });
 
     return (
@@ -168,7 +182,8 @@ class FileList extends React.PureComponent<Props, State> {
               value={sortBy}
               onChange={this.handleSortChanged}
             >
-              <option value="date">{__('Date')}</option>
+              <option value="dateNew">{__('Newest First')}</option>
+              <option value="dateOld">{__('Oldest First')}</option>
               <option value="title">{__('Title')}</option>
             </FormField>
           )}
