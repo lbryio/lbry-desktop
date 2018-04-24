@@ -150,7 +150,7 @@ export const doPublish = (params: PublishParams) => (dispatch: Dispatch, getStat
 
   const failure = error => {
     dispatch({ type: ACTIONS.PUBLISH_FAIL });
-    dispatch(doNotify({ id: MODALS.ERROR }, { error: error.message }));
+    dispatch(doNotify({ id: MODALS.ERROR, error: error.message }));
   };
 
   return Lbry.publish(publishPayload).then(success, failure);

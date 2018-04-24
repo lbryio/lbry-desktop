@@ -136,8 +136,12 @@ export default handleActions(
     [ACTIONS.PUBLISH_SUCCESS]: (state: PublishState, action): PublishState => {
       const { pendingPublish } = action.data;
 
+      // If it's an edit, don't create a pending publish
+      // It will take some more work to know when an edit is confirmed
       const newPendingPublishes = state.pendingPublishes.slice();
-      newPendingPublishes.push(pendingPublish);
+      if (pendingPublish.isEdit) {
+        newPendingPublishes.push(pendingPublish);
+      }
 
       return {
         ...state,
