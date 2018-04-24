@@ -139,7 +139,7 @@ export default handleActions(
       // If it's an edit, don't create a pending publish
       // It will take some more work to know when an edit is confirmed
       const newPendingPublishes = state.pendingPublishes.slice();
-      if (pendingPublish.isEdit) {
+      if (!pendingPublish.isEdit) {
         newPendingPublishes.push(pendingPublish);
       }
 
