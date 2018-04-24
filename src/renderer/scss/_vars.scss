@@ -34,6 +34,7 @@ $large-breakpoint: 1760px;
   --color-green: #399483;
   --color-green-light: #effbe4;
   --color-green-blue: #2ec1a8;
+  --color-purple: #8165b0;
 
   /* Colors */
   --color-divider: #e3e3e3;
@@ -57,7 +58,7 @@ $large-breakpoint: 1760px;
   --text-help-color: var(--color-help);
   --text-max-width: 660px;
   --text-link-padding: 4px;
-  --text-selection-bg: rgba(saturate(lighten(#155b4a, 20%), 20%), 1); // temp color
+  --text-selection-bg: var(--color-purple);
   --text-selection-color: #fff;
 
   /* Form */
