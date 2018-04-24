@@ -100,8 +100,9 @@ class TransactionList extends React.PureComponent<Props, State> {
               postfix={
                 <Button
                   button="link"
+                  icon={icons.HELP}
                   href="https://lbry.io/faq/transaction-types"
-                  label={__('Help')}
+                  title={__('Help')}
                 />
               }
             >
