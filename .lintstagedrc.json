@@ -6,6 +6,7 @@
     ],
     "src/**/*.{js,jsx}": [
       "eslint --fix",
+      "flow focus-check --color always",
       "git add"
     ]
   }

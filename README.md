@@ -38,12 +38,12 @@ development and testing purposes.
 * [Yarn](https://yarnpkg.com/en/docs/install)
 * [C++ Build Tools](https://github.com/felixrieseberg/windows-build-tools) (Only needed on Windows)
 
-### One-time Setup
+### Setup
 
 1. Clone this repository
 2. Run `$ yarn`
 
-### Running
+### Run
 
 The app can be run from the sources using the following command:
 
@@ -51,7 +51,7 @@ The app can be run from the sources using the following command:
 
 ### Build
 
-Run `$ yarn build`.
+Run `$ yarn build`
 
 We use [electron-builder](https://github.com/electron-userland/electron-builder) to create
 distributable packages.

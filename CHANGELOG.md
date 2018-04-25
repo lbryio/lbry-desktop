@@ -15,13 +15,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
    * Add Danger JS to automate code reviews ([#1289](https://github.com/lbryio/lbry-app/pull/1289))
 
 ### Changed
-* Add flair to snackbar ([#1313](https://github.com/lbryio/lbry-app/pull/1313))
+   * Add flair to snackbar ([#1313](https://github.com/lbryio/lbry-app/pull/1313))
 
 ### Fixed
    * Black screen on macOS after maximizing LBRY and then closing ([#1235](https://github.com/lbryio/lbry-app/pull/1235))
    * Fix content-type not shown correctly in file description ([#863](https://github.com/lbryio/lbry-app/pull/863))
-
-### Fixed
+   * Fix [Flow](https://flow.org/) ([#1197](https://github.com/lbryio/lbry-app/pull/1197))
    * Black screen on macOS after maximizing LBRY and then closing ([#1235](https://github.com/lbryio/lbry-app/pull/1235))
    * Fix dark theme ([#1034](https://github.com/lbryio/lbry-app/issues/1034))
    * Fix download percentage indicator overlay ([#1271](https://github.com/lbryio/lbry-app/issues/1271))

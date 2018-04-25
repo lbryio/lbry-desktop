@@ -36,8 +36,8 @@ To make contributing as easy and rewarding of possible, we have instituted the f
   [Help Wanted](https://github.com/lbryio/lbry-app/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22+no%3Aassignee)
   issue is ranked on a scale from zero to four.
 
-| Level                                                                                                                                         | Description                                                                                        |
-| --------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| Level                                                                                                                                            | Description                                                                                        |
+| ------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------- |
 | [**level 0**](https://github.com/lbryio/lbry-app/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22+label%3A%22level%3A+0%22+no%3Aassignee) | Typos and text edits -- a tech-savvy non-programmer can fix these                                  |
 | [**level 1**](https://github.com/lbryio/lbry-app/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22+label%3A%22level%3A+1%22+no%3Aassignee) | Programming issues that require little knowledge of how the LBRY app works                         |
 | [**level 2**](https://github.com/lbryio/lbry-app/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22+label%3A%22level%3A+2%22+no%3Aassignee) | Issues of average difficulty that require the developer to dig into how the app works a little bit |
@@ -60,24 +60,45 @@ better code quality. It's recommended to make use of them thoroughly during ongo
 We follow the well-known [Airbnb JavaScript Style Guide](http://airbnb.io/javascript/) for defining
 our styling rules and code best practices.
 
+### Flow
+
+[Flow](https://flow.org/) is a static type checker for JavaScript. Flow checks your code for 
+errors through static type annotations. For using Flow, you need to add the following
+annotation to the beginning of the file you're editing:
+
+`// @flow`
+
+After adding this, you can start adding [type annotations](https://flow.org/en/docs/types/) to 
+the code.
+
+If you add a project dependency and you want to use it with Flow, you need to import its type 
+definitions in the project by running:
+
+`$ yarn flow-defs`
+
 ### Run
 
 LBRY app can be run for development by using the command:
 
-`yarn dev`
+`$ yarn dev`
 
 This will launch the app and provide HMR (Hot Module Replacement). Any change made to the sources
 will automatically reload the app without losing its state.
 
 ### Lint
 
-Code linting is ensured by [ESLint](https://eslint.org/).
+Code linting is ensured by [ESLint](https://eslint.org/) and [Flow CLI](https://flow.org/en/docs/cli/).
 
 You can lint all the project's sources at any time by running:
 
-`yarn lint`
+`$ yarn lint`
 
-If you desire to lint a specific file or directory you can use `yarn eslint 'glob/pattern'`.
+If you desire to lint a specific file or directory you can use:
+
+```
+$ yarn eslint 'glob/pattern'
+$ yarn flow focus-check 'glob/pattern'
+```
 
 In addition to those commands, staged files are automatically linted before commit. Please take the
 time to fix all staged files' linting problems before committing or suppress them if necessary.
@@ -93,10 +114,12 @@ Staged files are automatically formatted before commit.
 
 You can also use the following command:
 
-`yarn format`
+`$ yarn format`
 
 for applying formatting rules to all project's code sources. For formatting a specific file or
-directory use `yarn prettier 'glob/pattern'`.
+directory use:
+
+`$ yarn prettier 'glob/pattern'`
 
 Editor integrations are available [here](https://prettier.io/docs/en/editors.html).
 
