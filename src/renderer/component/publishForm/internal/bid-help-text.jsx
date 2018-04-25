@@ -7,7 +7,7 @@ type Props = {
   editingURI: ?string,
   isResolvingUri: boolean,
   winningBidForClaimUri: ?number,
-  claimIsMine: ?boolean,
+  myClaimForUri: ?{},
   onEditMyClaim: any => void,
 };
 
@@ -18,7 +18,7 @@ class BidHelpText extends React.PureComponent<Props> {
       editingURI,
       isResolvingUri,
       winningBidForClaimUri,
-      claimIsMine,
+      myClaimForUri,
       onEditMyClaim,
     } = this.props;
 
@@ -34,12 +34,12 @@ class BidHelpText extends React.PureComponent<Props> {
       return __('Checking the winning claim amount...');
     }
 
-    if (claimIsMine) {
+    if (myClaimForUri) {
       return (
         <React.Fragment>
           {__('You already have a claim at')}
           {` ${uri} `}
-          <Button button="link" label="Edit it" onClick={onEditMyClaim} />
+          <Button button="link" label="Edit it" onClick={() => onEditMyClaim(myClaimForUri, uri)} />
           <br />
           {__('Publishing will update your existing claim.')}
         </React.Fragment>

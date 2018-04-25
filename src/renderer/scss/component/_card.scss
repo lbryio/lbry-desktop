@@ -10,9 +10,10 @@
 }
 
 .card--section {
-  background-color: var(--color-white);
+  background-color: var(--card-bg);
   padding: $spacing-vertical;
   margin-top: $spacing-vertical * 2/3;
+  box-shadow: var(--box-shadow-layer);
 }
 
 .card--small {
@@ -49,6 +50,7 @@
   color: var(--card-wallet-color);
   justify-content: space-between;
 
+  .card__title,
   .card__subtitle {
     color: var(--card-wallet-color);
   }
@@ -76,10 +78,13 @@
   background-color: var(--color-error);
 }
 
+.card__title-identity {
+  color: var(--text-color);
+}
+
 .card__title-identity--file {
   display: flex;
   align-items: center;
-
   .credit-amount,
   .icon {
     margin-top: $spacing-vertical * 1/3;
@@ -95,6 +100,7 @@
 
 .card__title {
   font-size: 18px;
+  color: var(--text-color);
 }
 
 .card__title--file {
@@ -116,9 +122,9 @@
 }
 
 .card__subtitle {
-  color: var(--color-help);
   font-size: 14px;
   font-family: 'metropolis-medium';
+  color: var(--card-text-color);
 
   .icon {
     margin-left: $spacing-vertical * 1/3;
@@ -171,11 +177,11 @@
 }
 
 .card__content {
-  margin-top: var(--card-margin);
+  margin-top: $spacing-vertical * 2/3;
 }
 
 .card__subtext-title {
-  color: var(--color-black);
+  color: var(--text-color);
   font-size: calc(var(--font-size-subtext-multiple) * 1.5em);
 
   &:not(:first-of-type) {
@@ -184,7 +190,6 @@
 }
 
 .card__subtext {
-  color: var(--color-grey-dark);
   font-size: calc(var(--font-size-subtext-multiple) * 1em);
   padding-top: $spacing-vertical * 1/3;
   word-break: break-word;
@@ -193,7 +198,7 @@
 }
 
 .card__actions {
-  margin-top: var(--card-margin);
+  margin-top: $spacing-vertical * 2/3;
   display: flex;
 
   &:not(.card__actions--vertical) .btn:nth-child(n + 2) {
@@ -282,7 +287,7 @@
   }
 
   .card:last-of-type {
-    margin-right: $spacing-vertical * 2/3;
+    margin-right: $spacing-width;
   }
 }
 
@@ -336,12 +341,8 @@
     display: inline-block;
     vertical-align: top;
     overflow: visible;
-    // -- three cards on a screen
-    // -- minus 12px for 1/3 of the page padding (36px)
-    // -- minus 20px for the card's margin
-    // Ideally we should be able to use $spacing-width / 3, but I'm not sure
-    // how inside the calc function
-    width: calc((100% / 3) - 12px - 20px);
+    // 35 px to handle to padding between cards
+    width: calc((100% / 3) - 35px);
   }
 
   .card:not(:first-of-type) {
@@ -354,9 +355,18 @@
 
   @media only screen and (min-width: $medium-breakpoint) {
     .card {
-      width: calc((100% / 4) - 12px - 20px);
+      // 31 px to handle to padding between cards
+      width: calc((100% / 4) - 31px);
     }
   }
+}
+
+.card__success-msg {
+  border-left: 2px solid var(--success-msg-border);
+  color: var(--success-msg-color);
+  background-color: var(--success-msg-bg);
+  padding: $spacing-vertical * 1/3;
+  margin: $spacing-vertical * 1/3 0;
 }
 
 .card__media--autothumb {

@@ -158,7 +158,7 @@ class CardVerify extends React.Component {
   render() {
     return (
       <Button
-        button="alt"
+        button="primary"
         label={this.props.label}
         icon={icons.LOCK}
         disabled={this.props.disabled || this.state.open || this.hasPendingClick}

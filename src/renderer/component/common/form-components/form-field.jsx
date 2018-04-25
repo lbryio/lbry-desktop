@@ -36,6 +36,8 @@ export class FormField extends React.PureComponent<Props> {
       ...inputProps
     } = this.props;
 
+    const errorMessage = typeof error === 'object' ? error.message : error;
+
     let input;
     if (type) {
       if (type === 'select') {
@@ -54,6 +56,8 @@ export class FormField extends React.PureComponent<Props> {
             />
           </div>
         );
+      } else if (type === 'textarea') {
+        input = <textarea type={type} id={name} {...inputProps} />;
       } else {
         input = <input type={type} id={name} {...inputProps} />;
       }
@@ -65,16 +69,20 @@ export class FormField extends React.PureComponent<Props> {
           'form-field--stretch': stretch || type === 'markdown',
         })}
       >
-        {(label || error) && (
+        {(label || errorMessage) && (
           <label
-            className={classnames('form-field__label', { 'form-field__error': error })}
+            className={classnames('form-field__label', { 'form-field__error': errorMessage })}
             htmlFor={name}
           >
-            {!error && label}
-            {error}
+            {!errorMessage && label}
+            {errorMessage}
           </label>
         )}
-        <div className="form-field__input">
+        <div
+          className={classnames('form-field__input', {
+            'form-field--auto-height': type === 'markdown',
+          })}
+        >
           {prefix && (
             <label htmlFor={name} className="form-field__prefix">
               {prefix}

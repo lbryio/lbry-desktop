@@ -1,7 +1,9 @@
-import React from 'react';
 import { connect } from 'react-redux';
-import { doFetchTransactions } from 'redux/actions/wallet';
-import { selectTransactionItems, selectIsFetchingTransactions } from 'redux/selectors/wallet';
+import {
+  doFetchTransactions,
+  selectTransactionItems,
+  selectIsFetchingTransactions,
+} from 'lbry-redux';
 import TransactionHistoryPage from './view';
 
 const select = state => ({

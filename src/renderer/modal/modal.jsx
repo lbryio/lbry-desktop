@@ -76,7 +76,7 @@ export class Modal extends React.PureComponent<ModalProps> {
             />
             {type === 'confirm' ? (
               <Button
-                button="alt"
+                button="link"
                 label={abortButtonLabel}
                 disabled={abortButtonDisabled}
                 onClick={onAborted}
@@ -129,7 +129,7 @@ export class ExpandableModal extends React.PureComponent<ModalProps, State> {
             onClick={this.props.onConfirmed}
           />
           <Button
-            button="alt"
+            button="link"
             label={!this.state.expanded ? this.props.expandButtonLabel : this.props.hideButtonLabel}
             className="modal__button"
             onClick={() => {

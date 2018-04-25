@@ -1,9 +1,17 @@
+// @flow
 import React from 'react';
 import Button from 'component/button';
 import FileList from 'component/fileList';
 import Page from 'component/page';
 
-class FileListPublished extends React.PureComponent {
+type Props = {
+  pendingPublishes: Array<{}>,
+  claims: Array<{}>,
+  checkIfPublishesConfirmed: (Array<{}>) => void,
+  navigate: (string, ?{}) => void,
+};
+
+class FileListPublished extends React.PureComponent<Props> {
   componentDidMount() {
     const { pendingPublishes, checkIfPublishesConfirmed } = this.props;
     if (pendingPublishes.length) {
@@ -18,7 +26,7 @@ class FileListPublished extends React.PureComponent {
     return (
       <Page notContained>
         {fileInfos.length ? (
-          <FileList fileInfos={fileInfos} sortByHeight />
+          <FileList checkPending fileInfos={fileInfos} sortByHeight />
         ) : (
           <div className="page__empty">
             {__("It looks like you haven't published anything to LBRY yet.")}

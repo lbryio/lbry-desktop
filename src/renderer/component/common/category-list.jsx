@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import { normalizeURI } from 'lbryURI';
+import { normalizeURI } from 'lbry-redux';
 import ToolTip from 'component/common/tooltip';
 import FileCard from 'component/fileCard';
 import Button from 'component/button';
@@ -234,8 +234,7 @@ class CategoryList extends React.PureComponent<Props, State> {
           }}
           className="card-row__scrollhouse"
         >
-          {names &&
-            names.map(name => <FileCard key={name} displayStyle="card" uri={normalizeURI(name)} />)}
+          {names && names.map(name => <FileCard key={name} uri={normalizeURI(name)} />)}
         </div>
       </div>
     );

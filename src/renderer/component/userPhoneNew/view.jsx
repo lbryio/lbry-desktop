@@ -1,7 +1,7 @@
 // I'll come back to this
 /* eslint-disable */
 import React from 'react';
-import { Form, FormRow, FormField } from 'component/common/form';
+import { Form, FormRow, FormField, Submit } from 'component/common/form';
 
 const os = require('os').type();
 const countryCodes = require('country-data')
@@ -77,37 +77,30 @@ class UserPhoneNew extends React.PureComponent {
           )}
         </p>
         <Form onSubmit={this.handleSubmit.bind(this)}>
-          <div className="form-row-phone">
+          <FormRow>
+            <FormField type="select" name="country-codes" onChange={this.handleSelect.bind(this)}>
+              {countryCodes.map((country, index) => (
+                <option key={index} value={country.countryCallingCode}>
+                  {os === 'Darwin' ? country.emoji : `(${country.alpha2})`}{' '}
+                  {country.countryCallingCode}
+                </option>
+              ))}
+            </FormField>
             <FormField
-              onChange={this.handleSelect.bind(this)}
-              render={() => (
-                <select>
-                  {countryCodes.map((country, index) => (
-                    <option key={index} value={country.countryCallingCode}>
-                      {os === 'Darwin' ? country.emoji : `(${country.alpha2})`}{' '}
-                      {country.countryCallingCode}
-                    </option>
-                  ))}
-                </select>
-              )}
-            />
-            <FormField
-              errorMessage={phoneErrorMessage}
+              type="text"
+              placeholder={this.state.country_code === '+1' ? '(555) 555-5555' : '5555555555'}
+              name="phone"
+              value={this.state.phone}
+              error={phoneErrorMessage}
               onChange={event => {
                 this.handleChanged(event);
               }}
-              render={() => (
-                <input
-                  type="text"
-                  placeholder={this.state.country_code === '+1' ? '(555) 555-5555' : '5555555555'}
-                  name="phone"
-                  value={this.state.phone}
-                />
-              )}
             />
+          </FormRow>
+          <div className="card__actions card__actions--center">
+            <Submit label="Submit" disabled={isPending} />
+            {cancelButton}
           </div>
-          <Submit label="Submit" disabled={isPending} />
-          {cancelButton}
         </Form>
       </div>
     );

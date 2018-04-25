@@ -1,21 +1,24 @@
 import { execSync } from 'child_process';
 import isDev from 'electron-is-dev';
-import Lbry from 'lbry';
 import path from 'path';
-import * as ACTIONS from 'constants/action_types';
 import * as MODALS from 'constants/modal_types';
 import { ipcRenderer, remote } from 'electron';
+import {
+  ACTIONS,
+  Lbry,
+  doBalanceSubscribe,
+  doFetchFileInfosAndPublishedClaims,
+  doNotify,
+  selectNotification,
+} from 'lbry-redux';
+import Native from 'native';
 import { doFetchRewardedContent } from 'redux/actions/content';
-import { doFetchFileInfosAndPublishedClaims } from 'redux/actions/file_info';
-import { doAuthNavigate } from 'redux/actions/navigation';
 import { doFetchDaemonSettings } from 'redux/actions/settings';
+import { doAuthNavigate } from 'redux/actions/navigation';
 import { doAuthenticate } from 'redux/actions/user';
-import { doBalanceSubscribe } from 'redux/actions/wallet';
 import { doPause } from 'redux/actions/media';
 import { doCheckSubscriptions } from 'redux/actions/subscriptions';
-
 import {
-  selectCurrentModal,
   selectIsUpgradeSkipped,
   selectUpdateUrl,
   selectUpgradeDownloadItem,
@@ -31,22 +34,6 @@ const { download } = remote.require('electron-dl');
 const Fs = remote.require('fs');
 
 const CHECK_UPGRADE_INTERVAL = 10 * 60 * 1000;
-
-export function doOpenModal(modal, modalProps = {}) {
-  return {
-    type: ACTIONS.OPEN_MODAL,
-    data: {
-      modal,
-      modalProps,
-    },
-  };
-}
-
-export function doCloseModal() {
-  return {
-    type: ACTIONS.CLOSE_MODAL,
-  };
-}
 
 export function doUpdateDownloadProgress(percent) {
   return {
@@ -102,12 +89,11 @@ export function doDownloadUpgrade() {
     dispatch({
       type: ACTIONS.UPGRADE_DOWNLOAD_STARTED,
     });
-    dispatch({
-      type: ACTIONS.OPEN_MODAL,
-      data: {
-        modal: MODALS.DOWNLOADING,
-      },
-    });
+    dispatch(
+      doNotify({
+        id: MODALS.DOWNLOADING,
+      })
+    );
   };
 }
 
@@ -129,17 +115,19 @@ export function doDownloadUpgradeRequested() {
       // electron-updater behavior
       if (autoUpdateDeclined) {
         // The user declined an update before, so show the "confirm" dialog
-        dispatch({
-          type: ACTIONS.OPEN_MODAL,
-          data: { modal: MODALS.AUTO_UPDATE_CONFIRM },
-        });
+        dispatch(
+          doNotify({
+            id: MODALS.AUTO_UPDATE_CONFIRM,
+          })
+        );
       } else {
         // The user was never shown the original update dialog (e.g. because they were
         // watching a video). So show the inital "update downloaded" dialog.
-        dispatch({
-          type: ACTIONS.OPEN_MODAL,
-          data: { modal: MODALS.AUTO_UPDATE_DOWNLOADED },
-        });
+        dispatch(
+          doNotify({
+            id: MODALS.AUTO_UPDATE_DOWNLOADED,
+          })
+        );
       }
     } else {
       // Old behavior for Linux
@@ -154,10 +142,11 @@ export function doAutoUpdate() {
       type: ACTIONS.AUTO_UPDATE_DOWNLOADED,
     });
 
-    dispatch({
-      type: ACTIONS.OPEN_MODAL,
-      data: { modal: MODALS.AUTO_UPDATE_DOWNLOADED },
-    });
+    dispatch(
+      doNotify({
+        id: MODALS.AUTO_UPDATE_DOWNLOADED,
+      })
+    );
   };
 }
 
@@ -222,15 +211,14 @@ export function doCheckUpgradeAvailable() {
 
       if (
         upgradeAvailable &&
-        !selectCurrentModal(state) &&
+        !selectNotification(state) &&
         (!selectIsUpgradeSkipped(state) || remoteVersion !== selectRemoteVersion(state))
       ) {
-        dispatch({
-          type: ACTIONS.OPEN_MODAL,
-          data: {
-            modal: MODALS.UPGRADE,
-          },
-        });
+        dispatch(
+          doNotify({
+            id: MODALS.UPGRADE,
+          })
+        );
       }
     };
 
@@ -240,7 +228,7 @@ export function doCheckUpgradeAvailable() {
       });
     };
 
-    Lbry.getAppVersionInfo().then(success, fail);
+    Native.getAppVersionInfo().then(success, fail);
   };
 }
 
@@ -275,13 +263,12 @@ export function doCheckDaemonVersion() {
 
 export function doAlertError(errorList) {
   return dispatch => {
-    dispatch({
-      type: ACTIONS.OPEN_MODAL,
-      data: {
-        modal: MODALS.ERROR,
-        modalProps: { error: errorList },
-      },
-    });
+    dispatch(
+      doNotify({
+        id: MODALS.ERROR,
+        error: errorList,
+      })
+    );
   };
 }
 
@@ -300,19 +287,6 @@ export function doDaemonReady() {
     }
     dispatch(doCheckUpgradeSubscribe());
     dispatch(doCheckSubscriptions());
-  };
-}
-
-export function doShowSnackBar(data) {
-  return {
-    type: ACTIONS.SHOW_SNACKBAR,
-    data,
-  };
-}
-
-export function doRemoveSnackBarSnack() {
-  return {
-    type: ACTIONS.REMOVE_SNACKBAR_SNACK,
   };
 }
 
@@ -360,7 +334,9 @@ export function doChangeVolume(volume) {
 export function doConditionalAuthNavigate(newSession) {
   return (dispatch, getState) => {
     const state = getState();
-    if (newSession || selectCurrentModal(state) !== 'email_collection') {
+    const notification = selectNotification(state);
+
+    if (newSession || (notification && notification.id !== 'email_collection')) {
       dispatch(doAuthNavigate());
     }
   };

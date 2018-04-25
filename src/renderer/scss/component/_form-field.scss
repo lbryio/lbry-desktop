@@ -7,12 +7,20 @@
     padding-left: $spacing-vertical;
   }
 
+  &.form-row--centered {
+    justify-content: center;
+  }
+
   &.form-row--padded {
     padding-top: $spacing-vertical * 2/3;
   }
 
-  &.form-row--centered {
+  &.form-row--vertically-centered {
     align-items: center;
+  }
+
+  &.form-row--stretch {
+    flex: 1;
   }
 
   .form-field.form-field--stretch {
@@ -37,11 +45,21 @@
 .form-field__input {
   display: flex;
   padding-top: $spacing-vertical / 3;
-  height: 36px;
 
-  input[type='checkbox'],
+  input[type='checkbox'] {
+    margin-top: 4px;
+  }
+
   input[type='radio'] {
-    margin-top: 5px;
+    margin-top: 2px;
+  }
+
+  input.paginate-channel {
+    width: 35px;
+  }
+
+  &.form-field--auto-height {
+    height: auto;
   }
 }
 
@@ -53,11 +71,11 @@
 }
 
 .form-field__label {
-  color: var(--color-black);
+  color: var(--form-label-color);
 }
 
 .form-field__help {
-  color: var(--color-grey-dark);
+  color: var(--color-help);
   padding-top: $spacing-vertical * 1/3;
 }
 

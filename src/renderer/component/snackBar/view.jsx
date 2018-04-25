@@ -1,35 +1,47 @@
+// @flow
 import React from 'react';
 import Button from 'component/button';
 
-class SnackBar extends React.PureComponent {
-  constructor(props) {
+type Props = {
+  removeSnack: any => void,
+  snack: ?{
+    linkTarget: ?string,
+    linkText: ?string,
+    message: string,
+  },
+};
+
+class SnackBar extends React.PureComponent<Props> {
+  constructor(props: Props) {
     super(props);
 
-    this._displayTime = 5; // in seconds
-    this._hideTimeout = null;
+    this.displayTime = 5; // in seconds
+    this.hideTimeout = null;
   }
 
   render() {
-    const { snacks, removeSnack } = this.props;
+    const { snack, removeSnack } = this.props;
 
-    if (!snacks.length) {
-      this._hideTimeout = null; // should be unmounting anyway, but be safe?
+    if (!snack) {
+      this.hideTimeout = null; // should be unmounting anyway, but be safe?
       return null;
     }
 
-    const snack = snacks[0];
     const { message, linkText, linkTarget } = snack;
 
-    if (this._hideTimeout === null) {
-      this._hideTimeout = setTimeout(() => {
-        this._hideTimeout = null;
+    if (this.hideTimeout === null) {
+      this.hideTimeout = setTimeout(() => {
+        this.hideTimeout = null;
         removeSnack();
-      }, this._displayTime * 1000);
+      }, this.displayTime * 1000);
     }
 
     return (
       <div className="snack-bar">
-        {message}
+        <div className="snack-bar__message">
+          <div>&#9432;</div>
+          <div>{message}</div>
+        </div>
         {linkText &&
           linkTarget && (
             <Button navigate={linkTarget} className="snack-bar__action" label={linkText} />

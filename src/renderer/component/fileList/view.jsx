@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { buildURI } from 'lbryURI';
+import { buildURI } from 'lbry-redux';
 import { FormField } from 'component/common/form';
 import FileCard from 'component/fileCard';
 
@@ -22,7 +22,10 @@ type FileInfo = {
 
 type Props = {
   hideFilter: boolean,
+  sortByHeight?: boolean,
+  claimsById: Array<{}>,
   fileInfos: Array<FileInfo>,
+  checkPending?: boolean,
 };
 
 type State = {
@@ -40,6 +43,8 @@ class FileList extends React.PureComponent<Props, State> {
     this.state = {
       sortBy: 'dateNew',
     };
+
+    (this: any).handleSortChanged = this.handleSortChanged.bind(this);
 
     this.sortFunctions = {
       dateNew: fileInfos =>
@@ -82,12 +87,21 @@ class FileList extends React.PureComponent<Props, State> {
           : fileInfos,
       title: fileInfos =>
         fileInfos.slice().sort((fileInfo1, fileInfo2) => {
-          const title1 = fileInfo1.value
-            ? fileInfo1.value.stream.metadata.title.toLowerCase()
-            : fileInfo1.claim_name;
-          const title2 = fileInfo2.value
-            ? fileInfo2.value.stream.metadata.title.toLowerCase()
-            : fileInfo2.claim_name;
+          const getFileTitle = fileInfo => {
+            const { value, metadata, name, claim_name: claimName } = fileInfo;
+            if (metadata) {
+              // downloaded claim
+              return metadata.title || claimName;
+            } else if (value) {
+              // published claim
+              const { title } = value.stream.metadata;
+              return title || name;
+            }
+            // Invalid claim
+            return '';
+          };
+          const title1 = getFileTitle(fileInfo1).toLowerCase();
+          const title2 = getFileTitle(fileInfo2).toLowerCase();
           if (title1 < title2) {
             return -1;
           } else if (title1 > title2) {
@@ -127,26 +141,35 @@ class FileList extends React.PureComponent<Props, State> {
   }
 
   render() {
-    const { fileInfos, hideFilter } = this.props;
+    const { fileInfos, hideFilter, checkPending } = this.props;
     const { sortBy } = this.state;
     const content = [];
 
     this.sortFunctions[sortBy](fileInfos).forEach(fileInfo => {
-      const { channel_name: channelName, name: claimName, claim_id: claimId } = fileInfo;
+      const {
+        channel_name: channelName,
+        name: claimName,
+        claim_name: claimNameDownloaded,
+        claim_id: claimId,
+      } = fileInfo;
       const uriParams = {};
+
+      // This is unfortunate
+      // https://github.com/lbryio/lbry/issues/1159
+      const name = claimName || claimNameDownloaded;
 
       if (channelName) {
         uriParams.channelName = channelName;
-        uriParams.contentName = claimName;
+        uriParams.contentName = name;
         uriParams.claimId = this.getChannelSignature(fileInfo);
       } else {
         uriParams.claimId = claimId;
-        uriParams.claimName = claimName;
+        uriParams.claimName = name;
       }
 
       const uri = buildURI(uriParams);
 
-      content.push(<FileCard key={claimName} uri={uri} showPrice={false} />);
+      content.push(<FileCard key={uri} uri={uri} checkPending={checkPending} />);
     });
 
     return (
@@ -159,7 +182,8 @@ class FileList extends React.PureComponent<Props, State> {
               value={sortBy}
               onChange={this.handleSortChanged}
             >
-              <option value="date">{__('Date')}</option>
+              <option value="dateNew">{__('Newest First')}</option>
+              <option value="dateOld">{__('Oldest First')}</option>
               <option value="title">{__('Title')}</option>
             </FormField>
           )}

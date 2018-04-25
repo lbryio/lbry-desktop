@@ -1,3 +1,4 @@
+// @flow
 import React from 'react';
 import BusyIndicator from 'component/common/busy-indicator';
 import RewardListClaimed from 'component/rewardListClaimed';
@@ -6,7 +7,20 @@ import Button from 'component/button';
 import Page from 'component/page';
 import classnames from 'classnames';
 
-class RewardsPage extends React.PureComponent {
+type Props = {
+  doAuth: () => void,
+  navigate: string => void,
+  fetching: boolean,
+  rewards: Array<{ reward_type: boolean }>,
+  user: ?{
+    is_identity_verified: boolean,
+  },
+  daemonSettings: {
+    share_usage_data: boolean,
+  },
+};
+
+class RewardsPage extends React.PureComponent<Props> {
   /*
     Below is broken for users who have claimed all rewards.
 
@@ -74,6 +88,8 @@ class RewardsPage extends React.PureComponent {
         </div>
       );
     }
+
+    return null;
   }
 
   renderUnclaimedRewards() {
@@ -81,12 +97,13 @@ class RewardsPage extends React.PureComponent {
 
     if (!daemonSettings.share_usage_data) {
       return (
-        <div className="card__content empty">
+        <div className="card card--section">
+          <div className="card__title">{__('Disabled')}</div>
           <p>
             {__(
               'Rewards are currently disabled for your account. Turn on diagnostic data sharing, in'
             )}{' '}
-            <Button onClick={() => navigate('/settings')} label="Settings" />
+            <Button button="link" onClick={() => navigate('/settings')} label="Settings" />
             {__(', in order to re-enable them.')}
           </p>
         </div>
@@ -114,7 +131,8 @@ class RewardsPage extends React.PureComponent {
     }
 
     const isNotEligible =
-      !user.primary_email || !user.has_verified_email || !user.is_identity_verified;
+      !user || !user.primary_email || !user.has_verified_email || !user.is_identity_verified;
+
     return (
       <div
         className={classnames('card__list--rewards', {

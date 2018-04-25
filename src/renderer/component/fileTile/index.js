@@ -1,11 +1,14 @@
-import React from 'react';
 import { connect } from 'react-redux';
+import {
+  doResolveUri,
+  makeSelectClaimForUri,
+  makeSelectMetadataForUri,
+  makeSelectFileInfoForUri,
+  makeSelectIsUriResolving,
+} from 'lbry-redux';
 import { doNavigate } from 'redux/actions/navigation';
-import { doResolveUri } from 'redux/actions/content';
-import { makeSelectClaimForUri, makeSelectMetadataForUri } from 'redux/selectors/claims';
-import { makeSelectFileInfoForUri } from 'redux/selectors/file_info';
-import { selectShowNsfw } from 'redux/selectors/settings';
-import { makeSelectIsUriResolving, selectRewardContentClaimIds } from 'redux/selectors/content';
+import { doClearPublish, doUpdatePublishForm } from 'redux/actions/publish';
+import { selectRewardContentClaimIds } from 'redux/selectors/content';
 import FileTile from './view';
 
 const select = (state, props) => ({
@@ -17,8 +20,10 @@ const select = (state, props) => ({
 });
 
 const perform = dispatch => ({
+  clearPublish: () => dispatch(doClearPublish()),
   navigate: (path, params) => dispatch(doNavigate(path, params)),
   resolveUri: uri => dispatch(doResolveUri(uri)),
+  updatePublishForm: value => dispatch(doUpdatePublishForm(value)),
 });
 
 export default connect(select, perform)(FileTile);

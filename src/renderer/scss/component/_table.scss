@@ -15,12 +15,14 @@ table.table {
   }
 
   thead {
-    border-bottom: 1px solid var(--color-grey);
+    color: var(--text-color);
+    border-bottom: var(--table-border);
   }
 
   th,
   td {
     font-size: 13px;
+    padding: 8px 0;
   }
 
   th {
@@ -29,7 +31,7 @@ table.table {
 
   td {
     font-family: 'metropolis-medium';
-    color: var(--color-grey-dark);
+    color: var(--color-help);
     padding: $spacing-vertical * 1/6 0;
 
     .btn:not(.btn--link) {
@@ -48,6 +50,8 @@ table.table {
 
   tbody {
     tr {
+      border-bottom: var(--table-item-border);
+      padding: 8px 0;
       &:nth-child(even):not(.odd) {
         background-color: var(--table-item-odd);
       }
@@ -70,7 +74,7 @@ table.table--stretch {
 
 table.table--help {
   td:nth-of-type(1) {
-    color: var(--color-black);
+    color: var(--text-color);
     font-family: 'metropolis-semibold';
     min-width: 130px;
   }
@@ -78,10 +82,10 @@ table.table--help {
 
 table.table--transactions {
   td:nth-of-type(1) {
-    width: 17.5%;
+    width: 25%;
   }
   td:nth-of-type(2) {
-    width: 27.5%;
+    width: 20%;
   }
   td:nth-of-type(3) {
     width: 22.5%;

@@ -1,13 +1,14 @@
 .nav {
   grid-area: nav;
-  background-color: var(--color-nav-bg);
+  background-color: var(--nav-bg-color);
   padding: $spacing-width;
+  color: var(--nav-color);
 
   hr {
     width: 24px;
     margin: 36px 0;
     // width: 40px;
-    border: solid 1px var(--color-grey);
+    border: solid 1px var(--color-divider);
     margin: $spacing-vertical $spacing-vertical * 2/3;
   }
 }
@@ -28,7 +29,7 @@
 
 .nav__link {
   // padding-top: $spacing-vertical / 3;
-  color: var(--color-grey-dark);
+  color: inherit;
   white-space: nowrap;
 
   .btn__label {
@@ -48,7 +49,7 @@
   }
 
   .btn:hover {
-    color: var(--color-black);
+    color: var(--text-color);
   }
 }
 
@@ -70,10 +71,11 @@
 }
 
 .nav__link--active {
-  color: var(--color-black);
+  color: var(--text-color);
 }
 
 .nav__sub-links {
+  color: var(--nav-color);
   padding-bottom: $spacing-vertical * 1/3;
 }
 

@@ -1,11 +1,11 @@
 import { connect } from 'react-redux';
-import { doCloseModal } from 'redux/actions/app';
+import { doHideNotification } from 'lbry-redux';
 import ModalSendTip from './view';
 import { doClearPublish } from 'redux/actions/publish';
 import { doNavigate } from 'redux/actions/navigation';
 
 const perform = dispatch => ({
-  closeModal: () => dispatch(doCloseModal()),
+  closeModal: () => dispatch(doHideNotification()),
   clearPublish: () => dispatch(doClearPublish()),
   navigate: (path, params) => dispatch(doNavigate(path, params)),
 });

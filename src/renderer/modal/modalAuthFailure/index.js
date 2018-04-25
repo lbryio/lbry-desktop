@@ -1,12 +1,11 @@
-import React from 'react';
 import { connect } from 'react-redux';
-import { doCloseModal } from 'redux/actions/app';
+import { doHideNotification } from 'lbry-redux';
 import ModalAuthFailure from './view';
 
 const select = state => ({});
 
 const perform = dispatch => ({
-  close: () => dispatch(doCloseModal()),
+  close: () => dispatch(doHideNotification()),
 });
 
 export default connect(null, null)(ModalAuthFailure);

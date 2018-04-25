@@ -1,19 +1,17 @@
 // @flow
 import * as React from 'react';
-import { normalizeURI } from 'lbryURI';
+import { normalizeURI } from 'lbry-redux';
+import Button from 'component/button';
 import CardMedia from 'component/cardMedia';
 import TruncatedText from 'component/common/truncated-text';
 import Icon from 'component/common/icon';
 import FilePrice from 'component/filePrice';
 import UriIndicator from 'component/uriIndicator';
-import NsfwOverlay from 'component/nsfwOverlay';
 import * as icons from 'constants/icons';
 import classnames from 'classnames';
 
 // TODO: iron these out
 type Props = {
-  isResolvingUri: boolean,
-  resolveUri: string => void,
   uri: string,
   claim: ?{ claim_id: string },
   fileInfo: ?{},
@@ -78,22 +76,41 @@ class FileCard extends React.PureComponent<Props> {
         <CardMedia nsfw={shouldObscureNsfw} thumbnail={thumbnail} />
         <div className="card-media__internal-links">{showPrice && <FilePrice uri={uri} />}</div>
 
-        <div className="card__title-identity">
-          <div className="card__title--small">
-            <TruncatedText lines={3}>{title}</TruncatedText>
+        {shouldObscureNsfw ? (
+          <div className="card__title-identity">
+            <div className="card__title--small">
+              <TruncatedText lines={3}>
+                {__('This content is obscured because it is NSFW. You can change this in ')}
+                <Button
+                  button="link"
+                  label={__('Settings.')}
+                  onClick={e => {
+                    // Don't propagate to the onClick handler of parent element
+                    e.stopPropagation();
+                    navigate('/settings');
+                  }}
+                />
+              </TruncatedText>
+            </div>
           </div>
-          <div className="card__subtitle card__subtitle--file-info">
-            {pending ? (
-              <div>Pending...</div>
-            ) : (
-              <React.Fragment>
-                <UriIndicator uri={uri} link />
-                {isRewardContent && <Icon icon={icons.FEATURED} />}
-                {fileInfo && <Icon icon={icons.LOCAL} />}
-              </React.Fragment>
-            )}
+        ) : (
+          <div className="card__title-identity">
+            <div className="card__title--small">
+              <TruncatedText lines={3}>{title}</TruncatedText>
+            </div>
+            <div className="card__subtitle card__subtitle--file-info">
+              {pending ? (
+                <div>Pending...</div>
+              ) : (
+                <React.Fragment>
+                  <UriIndicator uri={uri} link />
+                  {isRewardContent && <Icon icon={icons.FEATURED} />}
+                  {fileInfo && <Icon icon={icons.LOCAL} />}
+                </React.Fragment>
+              )}
+            </div>
           </div>
-        </div>
+        )}
       </section>
     );
     /* eslint-enable jsx-a11y/click-events-have-key-events */

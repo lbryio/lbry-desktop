@@ -1,14 +1,11 @@
 // @flow
 import React from 'react';
-import { buildURI } from 'lbryURI';
 import BusyIndicator from 'component/common/busy-indicator';
-import FileTile from 'component/fileTile';
+import { FormField, FormRow } from 'component/common/form';
 import ReactPaginate from 'react-paginate';
-import Button from 'component/button';
 import SubscribeButton from 'component/subscribeButton';
 import Page from 'component/page';
 import FileList from 'component/fileList';
-import * as modals from 'constants/modal_types';
 
 type Props = {
   uri: string,
@@ -24,9 +21,6 @@ type Props = {
   fetchClaims: (string, number) => void,
   fetchClaimCount: string => void,
   navigate: (string, {}) => void,
-  doChannelSubscribe: string => void,
-  doChannelUnsubscribe: string => void,
-  openModal: (string, {}) => void,
 };
 
 class ChannelPage extends React.PureComponent<Props> {
@@ -38,12 +32,12 @@ class ChannelPage extends React.PureComponent<Props> {
   }
 
   componentWillReceiveProps(nextProps: Props) {
-    const { page, uri, fetching, fetchClaims, fetchClaimCount } = this.props;
+    const { page, uri, fetchClaims, fetchClaimCount } = this.props;
 
     if (nextProps.page && page !== nextProps.page) {
       fetchClaims(nextProps.uri, nextProps.page);
     }
-    if (nextProps.uri != uri) {
+    if (nextProps.uri !== uri) {
       fetchClaimCount(uri);
     }
   }
@@ -55,10 +49,17 @@ class ChannelPage extends React.PureComponent<Props> {
     this.props.navigate('/show', newParams);
   }
 
+  paginate(e, totalPages) {
+    // Change page if enter was pressed, and the given page is between
+    // the first and the last.
+    if (e.keyCode === 13 && e.target.value > 0 && e.target.value <= totalPages) {
+      this.changePage(e.target.value);
+    }
+  }
+
   render() {
-    const { fetching, claimsInChannel, claim, uri, page, totalPages, openModal } = this.props;
-    const { name, claim_id: claimId } = claim;
-    const subscriptionUri = buildURI({ channelName: name, claimId }, false);
+    const { fetching, claimsInChannel, claim, uri, page, totalPages } = this.props;
+    const { name } = claim;
 
     let contentList;
     if (fetching) {
@@ -66,7 +67,7 @@ class ChannelPage extends React.PureComponent<Props> {
     } else {
       contentList =
         claimsInChannel && claimsInChannel.length ? (
-          <FileList hideFilter fileInfos={claimsInChannel} />
+          <FileList sortByHeight hideFilter fileInfos={claimsInChannel} />
         ) : (
           <span className="empty">{__('No content found.')}</span>
         );
@@ -77,33 +78,36 @@ class ChannelPage extends React.PureComponent<Props> {
         <section className="card__channel-info card__channel-info--large">
           <h1>{name}</h1>
           <div className="card__actions card__actions--no-margin">
-            <Button
-              button="alt"
-              iconRight="Send"
-              label={__('Enjoy this? Send a tip')}
-              onClick={() => openModal(modals.SEND_TIP, { uri })}
-            />
             <SubscribeButton uri={uri} channelName={name} />
           </div>
         </section>
         <section>{contentList}</section>
         {(!fetching || (claimsInChannel && claimsInChannel.length)) &&
           totalPages > 1 && (
-            <ReactPaginate
-              pageCount={totalPages}
-              pageRangeDisplayed={2}
-              previousLabel="‹"
-              nextLabel="›"
-              activeClassName="pagination__item--selected"
-              pageClassName="pagination__item"
-              previousClassName="pagination__item pagination__item--previous"
-              nextClassName="pagination__item pagination__item--next"
-              breakClassName="pagination__item pagination__item--break"
-              marginPagesDisplayed={2}
-              onPageChange={e => this.changePage(e.selected + 1)}
-              initialPage={parseInt(page - 1)}
-              containerClassName="pagination"
-            />
+            <FormRow verticallyCentered centered>
+              <ReactPaginate
+                pageCount={totalPages}
+                pageRangeDisplayed={2}
+                previousLabel="‹"
+                nextLabel="›"
+                activeClassName="pagination__item--selected"
+                pageClassName="pagination__item"
+                previousClassName="pagination__item pagination__item--previous"
+                nextClassName="pagination__item pagination__item--next"
+                breakClassName="pagination__item pagination__item--break"
+                marginPagesDisplayed={2}
+                onPageChange={e => this.changePage(e.selected + 1)}
+                initialPage={parseInt(page - 1, 10)}
+                containerClassName="pagination"
+              />
+
+              <FormField
+                className="paginate-channel"
+                onKeyUp={e => this.paginate(e, totalPages)}
+                prefix={__('Go to page:')}
+                type="text"
+              />
+            </FormRow>
           )}
       </Page>
     );

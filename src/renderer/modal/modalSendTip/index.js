@@ -1,9 +1,9 @@
 import { connect } from 'react-redux';
-import { doCloseModal } from 'redux/actions/app';
+import { doHideNotification } from 'lbry-redux';
 import ModalSendTip from './view';
 
 const perform = dispatch => ({
-  closeModal: () => dispatch(doCloseModal()),
+  closeModal: () => dispatch(doHideNotification()),
 });
 
 export default connect(null, perform)(ModalSendTip);

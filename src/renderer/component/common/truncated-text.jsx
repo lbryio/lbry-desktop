@@ -6,12 +6,10 @@ type Props = {
   children: React.Node,
 };
 
-const TruncatedText = (props: Props) => {
-  return (
-    <span className="truncated-text" style={{ WebkitLineClamp: props.lines }}>
-      {props.children}
-    </span>
-  );
-};
+const TruncatedText = (props: Props) => (
+  <span className="truncated-text" style={{ WebkitLineClamp: props.lines }}>
+    {props.children}
+  </span>
+);
 
 export default TruncatedText;

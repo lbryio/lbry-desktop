@@ -38,6 +38,7 @@ script:
     else
       yarn build
     fi
+  - yarn danger ci
 branches:
   except:
     - "/^v\\d+\\.\\d+\\.\\d+$/"

@@ -41,8 +41,6 @@ export const selectUpgradeFilename = createSelector(
   }
 );
 
-export const selectCurrentModal = createSelector(selectState, state => state.modal);
-
 export const selectDownloadProgress = createSelector(selectState, state => state.downloadProgress);
 
 export const selectDownloadComplete = createSelector(
@@ -65,10 +63,6 @@ export const selectAutoUpdateDeclined = createSelector(
   selectState,
   state => state.autoUpdateDeclined
 );
-
-export const selectModalsAllowed = createSelector(selectState, state => state.modalsAllowed);
-
-export const selectModalProps = createSelector(selectState, state => state.modalProps);
 
 export const selectDaemonVersionMatched = createSelector(
   selectState,

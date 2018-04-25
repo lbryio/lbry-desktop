@@ -8,7 +8,6 @@ const RED_COLOR = '#e2495e';
 
 type Props = {
   icon: string,
-  size?: number,
 };
 
 class IconComponent extends React.PureComponent<Props> {
@@ -20,7 +19,7 @@ class IconComponent extends React.PureComponent<Props> {
     const Icon = FeatherIcons[icon];
 
     let color;
-    if (icon === icons.HEART) {
+    if (icon === icons.HEART || icon === icons.FEATURED) {
       color = RED_COLOR;
     }
 

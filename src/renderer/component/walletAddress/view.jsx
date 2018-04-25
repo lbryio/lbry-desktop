@@ -13,7 +13,12 @@ type Props = {
 
 class WalletAddress extends React.PureComponent<Props> {
   componentWillMount() {
-    this.props.checkAddressIsMine(this.props.receiveAddress);
+    const { checkAddressIsMine, receiveAddress, getNewAddress } = this.props;
+    if (!receiveAddress) {
+      getNewAddress();
+    } else {
+      checkAddressIsMine(receiveAddress);
+    }
   }
 
   render() {
@@ -32,7 +37,7 @@ class WalletAddress extends React.PureComponent<Props> {
 
         <div className="card__actions">
           <Button
-            button="alt"
+            button="primary"
             label={__('Get New Address')}
             icon={icons.REFRESH}
             onClick={getNewAddress}

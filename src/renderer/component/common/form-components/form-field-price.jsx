@@ -25,9 +25,10 @@ export class FormFieldPrice extends React.PureComponent<Props> {
 
   handleAmountChange(event: SyntheticInputEvent<*>) {
     const { price, onChange } = this.props;
+    const amount = event.target.value ? parseFloat(event.target.value) : '';
     onChange({
       currency: price.currency,
-      amount: parseFloat(event.target.value),
+      amount,
     });
   }
 
@@ -50,7 +51,7 @@ export class FormFieldPrice extends React.PureComponent<Props> {
           type="number"
           className="form-field input--price-amount"
           min={min}
-          value={price.amount || ''}
+          value={price.amount}
           onChange={this.handleAmountChange}
           placeholder={placeholder || 5}
           disabled={disabled}

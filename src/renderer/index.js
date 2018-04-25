@@ -7,12 +7,8 @@ import { ipcRenderer, remote, shell } from 'electron';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import {
-  doConditionalAuthNavigate,
-  doDaemonReady,
-  doShowSnackBar,
-  doAutoUpdate,
-} from 'redux/actions/app';
+import { doConditionalAuthNavigate, doDaemonReady, doAutoUpdate } from 'redux/actions/app';
+import { doNotify, doBlackListedOutpointsSubscribe } from 'lbry-redux';
 import { doNavigate } from 'redux/actions/navigation';
 import { doDownloadLanguages, doUpdateIsNightAsync } from 'redux/actions/settings';
 import { doUserEmailVerify } from 'redux/actions/user';
@@ -38,7 +34,12 @@ ipcRenderer.on('open-uri-requested', (event, uri, newSession) => {
         app.store.dispatch(doConditionalAuthNavigate(newSession));
         app.store.dispatch(doUserEmailVerify(verification.token, verification.recaptcha));
       } else {
-        app.store.dispatch(doShowSnackBar({ message: 'Invalid Verification URI' }));
+        app.store.dispatch(
+          doNotify({
+            message: 'Invalid Verification URI',
+            displayType: ['snackbar'],
+          })
+        );
       }
     } else {
       app.store.dispatch(doNavigate('/show', { uri }));
@@ -116,8 +117,10 @@ const init = () => {
       app.store.dispatch(doAutoUpdate());
     });
   }
+
   app.store.dispatch(doUpdateIsNightAsync());
   app.store.dispatch(doDownloadLanguages());
+  app.store.dispatch(doBlackListedOutpointsSubscribe());
 
   function onDaemonReady() {
     window.sessionStorage.setItem('loaded', 'y'); // once we've made it here once per session, we don't need to show splash again

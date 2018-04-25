@@ -7,7 +7,7 @@ import * as icons from 'constants/icons';
 
 type Props = {
   address: string,
-  doShowSnackBar: ({ message: string }) => void,
+  doNotify: ({ message: string, displayType: Array<string> }) => void,
 };
 
 export default class Address extends React.PureComponent<Props> {
@@ -20,10 +20,10 @@ export default class Address extends React.PureComponent<Props> {
   input: ?HTMLInputElement;
 
   render() {
-    const { address, doShowSnackBar } = this.props;
+    const { address, doNotify } = this.props;
 
     return (
-      <FormRow verticallyCentered padded>
+      <FormRow verticallyCentered padded stretch>
         <input
           className="input-copyable form-field__input"
           readOnly
@@ -43,7 +43,10 @@ export default class Address extends React.PureComponent<Props> {
           icon={icons.CLIPBOARD}
           onClick={() => {
             clipboard.writeText(address);
-            doShowSnackBar({ message: __('Address copied') });
+            doNotify({
+              message: __('Address copied'),
+              displayType: ['snackbar'],
+            });
           }}
         />
       </FormRow>

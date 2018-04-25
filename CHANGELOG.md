@@ -3,6 +3,39 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
+## [Unreleased]
+
+### Added
+   * Add keyboard shortcut to quit the app on Windows ([#1202](https://github.com/lbryio/lbry-app/pull/1202))
+   * Build for both architectures (x86 and x64) for Windows ([#1262](https://github.com/lbryio/lbry-app/pull/1262))
+   * Add referral FAQ to Invites screen([#1314](https://github.com/lbryio/lbry-app/pull/1314))
+   * Show exact wallet balance on mouse hover over ([#1305](https://github.com/lbryio/lbry-app/pull/1305))
+   * New dark mode ([#1269](https://github.com/lbryio/lbry-app/pull/1269))
+   * Pre-fill publish URL after clicking "Put something here" link ([#1303](https://github.com/lbryio/lbry-app/pull/1303))
+   * Add Danger JS to automate code reviews ([#1289](https://github.com/lbryio/lbry-app/pull/1289))
+
+### Changed
+* Add flair to snackbar ([#1313](https://github.com/lbryio/lbry-app/pull/1313))
+
+### Fixed
+   * Black screen on macOS after maximizing LBRY and then closing ([#1235](https://github.com/lbryio/lbry-app/pull/1235))
+   * Fix content-type not shown correctly in file description ([#863](https://github.com/lbryio/lbry-app/pull/863))
+
+### Fixed
+   * Black screen on macOS after maximizing LBRY and then closing ([#1235](https://github.com/lbryio/lbry-app/pull/1235))
+   * Fix dark theme ([#1034](https://github.com/lbryio/lbry-app/issues/1034))
+   * Fix download percentage indicator overlay ([#1271](https://github.com/lbryio/lbry-app/issues/1271))
+   * Fix alternate row shading for transactions on dark theme ([#1355](https://github.com/lbryio/lbry-app/issues/#1355))
+   * Fix Description box on Publish (dark theme) ([#1356](https://github.com/lbryio/lbry-app/issues/#1356))
+
+
+## [0.21.3] - 2018-04-23
+
+
+### Added
+ * Block blacklisted content ([#1361](https://github.com/lbryio/lbry-app/pull/1361))
+
+
 ## [0.21.2] - 2018-03-22
 
 
@@ -16,6 +49,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
   * App category for Linux ([#877](https://github.com/lbryio/lbry-app/pull/877))
   * Add YouTube Sync reward ([#1147](https://github.com/lbryio/lbry-app/pull/1147))
   * Retain previous screen sizing on startup ([#338](https://github.com/lbryio/lbry-app/issues/338))
+  * Add 'Go to page' input on channel pagination ([#1166](https://github.com/lbryio/lbry-app/pull/1166))
 
 
 ### Changed
@@ -44,8 +78,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
   * LBRY URLs not working on Linux ([#1120](https://github.com/lbryio/lbry-app/issues/1120))
   * Fix Windows notifications not showing ([#1145](https://github.com/lbryio/lbry-app/pull/1145))
   * Fix export issues ([#1163](https://github.com/lbryio/lbry-app/pull/1163))
-
-
 
 ## [0.20.0] - 2018-01-30
 

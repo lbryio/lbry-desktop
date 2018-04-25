@@ -21,24 +21,24 @@ const ModalCreditIntro = props => {
         </p>
         {currentBalance <= 0 && (
           <p>
-            You currently have <CreditAmount amount={currentBalance} />, so the actions you can take
-            are limited.
+            You currently have <CreditAmount noStyle amount={currentBalance} />, so the actions you
+            can take are limited.
           </p>
         )}
         <p>
           There are a variety of ways to get credits, including more than{' '}
           {totalRewardValue ? (
-            <CreditAmount amount={totalRewardRounded} />
+            <CreditAmount noStyle amount={totalRewardRounded} />
           ) : (
             <span className="credit-amount">{__('?? credits')}</span>
           )}{' '}
           {__(' in free rewards for participating in the LBRY beta.')}
         </p>
 
-        <div className="modal__buttons">
+        <div className="card__actions card__actions--center">
           <Button button="primary" onClick={addBalance} label={__('Get Credits')} />
           <Button
-            button="alt"
+            button="link"
             onClick={closeModal}
             label={currentBalance <= 0 ? __('Use Without LBC') : __('Meh, Not Now')}
           />

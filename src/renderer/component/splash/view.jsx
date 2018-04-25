@@ -1,5 +1,5 @@
 import * as React from 'react';
-import lbry from 'lbry';
+import { Lbry } from 'lbry-redux';
 import LoadScreen from './internal/load-screen';
 import ModalIncompatibleDaemon from 'modal/modalIncompatibleDaemon';
 import ModalUpgrade from 'modal/modalUpgrade';
@@ -8,7 +8,9 @@ import * as modals from 'constants/modal_types';
 
 type Props = {
   checkDaemonVersion: () => Promise<any>,
-  modal: string,
+  notification: ?{
+    id: string,
+  },
 };
 
 type State = {
@@ -31,7 +33,7 @@ export class SplashScreen extends React.PureComponent<Props, State> {
   }
 
   updateStatus() {
-    lbry.status().then(status => {
+    Lbry.status().then(status => {
       this._updateStatusCallback(status);
     });
   }
@@ -50,7 +52,7 @@ export class SplashScreen extends React.PureComponent<Props, State> {
         isRunning: true,
       });
 
-      lbry.resolve({ uri: 'lbry://one' }).then(() => {
+      Lbry.resolve({ uri: 'lbry://one' }).then(() => {
         // Only leave the load screen if the daemon version matched;
         // otherwise we'll notify the user at the end of the load screen.
 
@@ -83,8 +85,7 @@ export class SplashScreen extends React.PureComponent<Props, State> {
   componentDidMount() {
     const { checkDaemonVersion } = this.props;
 
-    lbry
-      .connect()
+    Lbry.connect()
       .then(checkDaemonVersion)
       .then(() => {
         this.updateStatus();
@@ -101,8 +102,10 @@ export class SplashScreen extends React.PureComponent<Props, State> {
   }
 
   render() {
-    const { modal } = this.props;
+    const { notification } = this.props;
     const { message, details, isLagging, isRunning } = this.state;
+
+    const notificationId = notification && notification.id;
 
     return (
       <React.Fragment>
@@ -112,9 +115,9 @@ export class SplashScreen extends React.PureComponent<Props, State> {
             in the modals won't work. */}
         {isRunning && (
           <React.Fragment>
-            {modal === modals.INCOMPATIBLE_DAEMON && <ModalIncompatibleDaemon />}
-            {modal === modals.UPGRADE && <ModalUpgrade />}
-            {modal === modals.DOWNLOADING && <ModalDownloading />}
+            {notificationId === modals.INCOMPATIBLE_DAEMON && <ModalIncompatibleDaemon />}
+            {notificationId === modals.UPGRADE && <ModalUpgrade />}
+            {notificationId === modals.DOWNLOADING && <ModalDownloading />}
           </React.Fragment>
         )}
       </React.Fragment>

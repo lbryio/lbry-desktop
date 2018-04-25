@@ -1,13 +1,16 @@
-import React from 'react';
 import { connect } from 'react-redux';
-import { doResolveUri } from 'redux/actions/content';
-import { makeSelectClaimForUri } from 'redux/selectors/claims';
-import { makeSelectIsUriResolving } from 'redux/selectors/content';
+import {
+  doResolveUri,
+  makeSelectClaimForUri,
+  makeSelectIsUriResolving,
+  selectBlackListedOutpoints,
+} from 'lbry-redux';
 import ShowPage from './view';
 
 const select = (state, props) => ({
   claim: makeSelectClaimForUri(props.uri)(state),
   isResolvingUri: makeSelectIsUriResolving(props.uri)(state),
+  blackListedOutpoints: selectBlackListedOutpoints(state),
 });
 
 const perform = dispatch => ({

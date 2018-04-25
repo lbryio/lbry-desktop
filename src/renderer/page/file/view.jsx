@@ -1,7 +1,6 @@
 // @flow
 import * as React from 'react';
-import lbry from 'lbry';
-import { buildURI, normalizeURI } from 'lbryURI';
+import { Lbry, buildURI, normalizeURI } from 'lbry-redux';
 import Video from 'component/video';
 import Thumbnail from 'component/common/thumbnail';
 import FilePrice from 'component/filePrice';
@@ -9,7 +8,6 @@ import FileDetails from 'component/fileDetails';
 import FileActions from 'component/fileActions';
 import UriIndicator from 'component/uriIndicator';
 import Icon from 'component/common/icon';
-import WalletSendTip from 'component/walletSendTip';
 import DateTime from 'component/dateTime';
 import * as icons from 'constants/icons';
 import Button from 'component/button';
@@ -44,7 +42,7 @@ type Props = {
   claimIsMine: boolean,
   costInfo: ?{},
   navigate: (string, ?{}) => void,
-  openModal: (string, any) => void,
+  openModal: ({ id: string }, { uri: string }) => void,
   fetchFileInfo: string => void,
   fetchCostInfo: string => void,
   prepareEdit: ({}) => void,
@@ -72,7 +70,7 @@ class FilePage extends React.Component<Props> {
     }
   }
 
-  checkSubscription(props) {
+  checkSubscription = (props: Props) => {
     if (
       props.subscriptions
         .map(subscription => subscription.channelName)
@@ -89,12 +87,11 @@ class FilePage extends React.Component<Props> {
         ),
       });
     }
-  }
+  };
 
   render() {
     const {
       claim,
-      fileInfo,
       metadata,
       contentType,
       uri,
@@ -109,12 +106,11 @@ class FilePage extends React.Component<Props> {
     } = this.props;
 
     // File info
-    const title = metadata.title;
+    const { title, thumbnail } = metadata;
     const isRewardContent = rewardedContentClaimIds.includes(claim.claim_id);
     const shouldObscureThumbnail = obscureNsfw && metadata.nsfw;
-    const thumbnail = metadata.thumbnail;
     const { height, channel_name: channelName, value } = claim;
-    const mediaType = lbry.getMediaType(contentType);
+    const mediaType = Lbry.getMediaType(contentType);
     const isPlayable =
       Object.values(player.mime).indexOf(contentType) !== -1 || mediaType === 'audio';
     const channelClaimId =
@@ -165,7 +161,7 @@ class FilePage extends React.Component<Props> {
                       icon={icons.EDIT}
                       label={__('Edit')}
                       onClick={() => {
-                        prepareEdit(claim);
+                        prepareEdit(claim, uri);
                         navigate('/publish');
                       }}
                     />
@@ -175,7 +171,7 @@ class FilePage extends React.Component<Props> {
                         button="alt"
                         iconRight="Send"
                         label={__('Enjoy this? Send a tip')}
-                        onClick={() => openModal(modals.SEND_TIP, { uri })}
+                        onClick={() => openModal({ id: modals.SEND_TIP }, { uri })}
                       />
                       <SubscribeButton uri={subscriptionUri} channelName={channelName} />
                     </React.Fragment>

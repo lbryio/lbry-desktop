@@ -1,6 +1,6 @@
 // @flow
 import { handleActions } from 'util/redux-utils';
-import { buildURI } from 'lbryURI';
+import { buildURI } from 'lbry-redux';
 import * as ACTIONS from 'constants/action_types';
 import { CHANNEL_ANONYMOUS } from 'constants/claim';
 
@@ -75,6 +75,12 @@ export type PublishParams = {
     currency: string,
     amount: number,
   },
+  source?: {
+    contentType: string,
+    source: string,
+    sourceType: string,
+    version: string,
+  },
 };
 
 const defaultState: PublishState = {
@@ -130,8 +136,12 @@ export default handleActions(
     [ACTIONS.PUBLISH_SUCCESS]: (state: PublishState, action): PublishState => {
       const { pendingPublish } = action.data;
 
+      // If it's an edit, don't create a pending publish
+      // It will take some more work to know when an edit is confirmed
       const newPendingPublishes = state.pendingPublishes.slice();
-      newPendingPublishes.push(pendingPublish);
+      if (!pendingPublish.isEdit) {
+        newPendingPublishes.push(pendingPublish);
+      }
 
       return {
         ...state,

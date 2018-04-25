@@ -1,4 +1,3 @@
-import React from 'react';
 import { connect } from 'react-redux';
 import { selectFetchingRewards, selectUnclaimedRewards } from 'redux/selectors/rewards';
 import { selectUser } from 'redux/selectors/user';

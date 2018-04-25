@@ -8,10 +8,9 @@ import type {
   SubscriptionNotifications,
 } from 'redux/reducers/subscriptions';
 import { selectSubscriptions } from 'redux/selectors/subscriptions';
-import Lbry from 'lbry';
+import { Lbry, buildURI } from 'lbry-redux';
 import { doPurchaseUri } from 'redux/actions/content';
 import { doNavigate } from 'redux/actions/navigation';
-import { buildURI } from 'lbryURI';
 import analytics from 'analytics';
 
 const CHECK_SUBSCRIPTIONS_INTERVAL = 60 * 60 * 1000;

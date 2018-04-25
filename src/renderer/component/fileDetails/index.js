@@ -1,13 +1,12 @@
-import React from 'react';
 import { connect } from 'react-redux';
 import {
   makeSelectClaimForUri,
   makeSelectContentTypeForUri,
   makeSelectMetadataForUri,
-} from 'redux/selectors/claims';
+  makeSelectFileInfoForUri,
+} from 'lbry-redux';
+import { doOpenFileInFolder } from 'redux/actions/file';
 import FileDetails from './view';
-import { doOpenFileInFolder } from 'redux/actions/file_info';
-import { makeSelectFileInfoForUri } from 'redux/selectors/file_info';
 
 const select = (state, props) => ({
   claim: makeSelectClaimForUri(props.uri)(state),

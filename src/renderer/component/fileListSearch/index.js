@@ -1,7 +1,10 @@
 import { connect } from 'react-redux';
-import { doSearch } from 'redux/actions/search';
-import { makeSelectSearchUris, selectIsSearching } from 'redux/selectors/search';
-import { selectSearchDownloadUris } from 'redux/selectors/file_info';
+import {
+  doSearch,
+  makeSelectSearchUris,
+  selectIsSearching,
+  selectSearchDownloadUris,
+} from 'lbry-redux';
 import FileListSearch from './view';
 
 const select = (state, props) => ({

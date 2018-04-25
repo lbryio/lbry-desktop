@@ -23,7 +23,7 @@ type Props = {
   slim?: boolean,
   transactions: Array<Transaction>,
   rewards: {},
-  openModal: (string, any) => void,
+  openModal: ({ id: string }, { nout: number, txid: string }) => void,
   myClaims: any,
 };
 
@@ -65,7 +65,7 @@ class TransactionList extends React.PureComponent<Props, State> {
   }
 
   revokeClaim(txid: string, nout: number) {
-    this.props.openModal(modals.CONFIRM_CLAIM_REVOKE, { txid, nout });
+    this.props.openModal({ id: modals.CONFIRM_CLAIM_REVOKE }, { txid, nout });
   }
 
   render() {
@@ -100,8 +100,9 @@ class TransactionList extends React.PureComponent<Props, State> {
               postfix={
                 <Button
                   button="link"
+                  icon={icons.HELP}
                   href="https://lbry.io/faq/transaction-types"
-                  label={__('Help')}
+                  title={__('Help')}
                 />
               }
             >

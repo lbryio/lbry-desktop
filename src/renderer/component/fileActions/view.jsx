@@ -12,7 +12,7 @@ type FileInfo = {
 
 type Props = {
   uri: string,
-  openModal: (string, any) => void,
+  openModal: ({ id: string }, { uri: string }) => void,
   claimIsMine: boolean,
   fileInfo: FileInfo,
   vertical?: boolean, // should the buttons be stacked vertically?
@@ -33,7 +33,7 @@ class FileActions extends React.PureComponent<Props> {
             className="btn--file-actions"
             icon={icons.TRASH}
             description={__('Delete')}
-            onClick={() => openModal(modals.CONFIRM_FILE_REMOVE, { uri })}
+            onClick={() => openModal({ id: modals.CONFIRM_FILE_REMOVE }, { uri })}
           />
         )}
         {!claimIsMine && (
