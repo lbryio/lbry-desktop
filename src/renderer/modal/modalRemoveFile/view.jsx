@@ -48,7 +48,13 @@ class ModalRemoveFile extends React.PureComponent<Props, State> {
   }
 
   render() {
-    const { claimIsMine, closeModal, deleteFile, fileInfo: { outpoint }, title } = this.props;
+    const {
+      claimIsMine,
+      closeModal,
+      deleteFile,
+      fileInfo: { outpoint },
+      title,
+    } = this.props;
     const { deleteChecked, abandonClaimChecked } = this.state;
 
     return (

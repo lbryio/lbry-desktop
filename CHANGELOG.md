@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
    * Show exact wallet balance on mouse hover over ([#1305](https://github.com/lbryio/lbry-app/pull/1305))
    * New dark mode ([#1269](https://github.com/lbryio/lbry-app/pull/1269))
    * Pre-fill publish URL after clicking "Put something here" link ([#1303](https://github.com/lbryio/lbry-app/pull/1303))
+   * Add Danger JS to automate code reviews ([#1289](https://github.com/lbryio/lbry-app/pull/1289))
 
 ### Changed
 * Add flair to snackbar ([#1313](https://github.com/lbryio/lbry-app/pull/1313))

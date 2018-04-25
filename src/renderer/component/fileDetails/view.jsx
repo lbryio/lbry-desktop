@@ -30,7 +30,7 @@ const FileDetails = (props: Props) => {
   }
 
   const { description, language, license } = metadata;
-  
+
   const mediaType = contentType || 'unknown';
   const downloadPath = fileInfo ? path.normalize(fileInfo.download_path) : null;
 

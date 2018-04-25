@@ -20,7 +20,10 @@ type Props = {
 
 class ShapeShift extends React.PureComponent<Props> {
   componentDidMount() {
-    const { shapeShiftInit, shapeShift: { hasActiveShift, shiftSupportedCoins } } = this.props;
+    const {
+      shapeShiftInit,
+      shapeShift: { hasActiveShift, shiftSupportedCoins },
+    } = this.props;
 
     if (!hasActiveShift && !shiftSupportedCoins.length) {
       // calls shapeshift to see list of supported coins for shifting

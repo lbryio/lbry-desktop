@@ -45,7 +45,7 @@ export default class Address extends React.PureComponent<Props> {
             clipboard.writeText(address);
             doNotify({
               message: __('Address copied'),
-              displayType: ['snackbar']
+              displayType: ['snackbar'],
             });
           }}
         />
