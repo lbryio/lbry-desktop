@@ -1,7 +1,6 @@
 // @flow
 import * as React from 'react';
 import ReactMarkdown from 'react-markdown';
-import { Lbry } from 'lbry-redux';
 import Button from 'component/button';
 import path from 'path';
 
@@ -31,8 +30,8 @@ const FileDetails = (props: Props) => {
   }
 
   const { description, language, license } = metadata;
-  const mediaType = Lbry.getMediaType(contentType);
 
+  const mediaType = contentType || 'unknown';
   const downloadPath = fileInfo ? path.normalize(fileInfo.download_path) : null;
 
   return (
