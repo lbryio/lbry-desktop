@@ -7,11 +7,11 @@ import { validateSendTx } from 'util/form-validation';
 
 type DraftTransaction = {
   address: string,
-  amount: number | string, // So we can use a placeholder in the input
+  amount: ?number, // So we can use a placeholder in the input
 };
 
 type Props = {
-  sendToAddress: DraftTransaction => void,
+  sendToAddress: (string, number) => void,
   balance: number,
 };
 
@@ -24,7 +24,10 @@ class WalletSend extends React.PureComponent<Props> {
 
   handleSubmit(values: DraftTransaction) {
     const { sendToAddress } = this.props;
-    sendToAddress(values);
+    const { address, amount } = values;
+    if (amount && address) {
+      sendToAddress(address, amount);
+    }
   }
 
   render() {

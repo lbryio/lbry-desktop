@@ -3,7 +3,7 @@ import { doSendDraftTransaction, selectBalance } from 'lbry-redux';
 import WalletSend from './view';
 
 const perform = dispatch => ({
-  sendToAddress: values => dispatch(doSendDraftTransaction(values)),
+  sendToAddress: (address, amount) => dispatch(doSendDraftTransaction(address, amount)),
 });
 
 const select = state => ({
