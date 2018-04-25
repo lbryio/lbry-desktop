@@ -2476,9 +2476,9 @@ danger-plugin-eslint@^0.1.0:
   optionalDependencies:
     esdoc "^0.5.2"
 
-danger@^3.4.5:
-  version "3.5.1"
-  resolved "https://registry.yarnpkg.com/danger/-/danger-3.5.1.tgz#1f63cb6a86fd581436d240a297cbc337ffe4c362"
+danger@^3.6.0:
+  version "3.6.0"
+  resolved "https://registry.yarnpkg.com/danger/-/danger-3.6.0.tgz#14ee47cf26edf43fda8e2fc3cb9c9441feba079c"
   dependencies:
     "@octokit/rest" "^15.2.6"
     babel-polyfill "^6.23.0"
@@ -5742,8 +5742,28 @@ lbry-redux@lbryio/lbry-redux:
   version "0.0.1"
   resolved "https://codeload.github.com/lbryio/lbry-redux/tar.gz/06cfc1c88cc4cc6dafd97647cd7529e0571256da"
   dependencies:
+    amplitude-js "^4.0.0"
+    bluebird "^3.5.1"
+    classnames "^2.2.5"
+    electron-dl "^1.6.0"
+    from2 "^2.3.0"
+    install "^0.10.2"
+    jayson "^2.0.2"
+    jshashes "^1.0.7"
     proxy-polyfill "0.1.6"
+    rc-progress "^2.0.6"
+    react "^16.2.0"
+    react-redux "^5.0.3"
+    redux "^3.6.0"
+    redux-action-buffer "^1.1.0"
+    redux-logger "^3.0.1"
+    redux-persist "^4.8.0"
+    redux-persist-transform-compress "^4.2.0"
+    redux-persist-transform-filter "0.0.10"
     reselect "^3.0.0"
+    semver "^5.3.0"
+    tree-kill "^1.1.0"
+    y18n "^4.0.0"
 
 lcid@^1.0.0:
   version "1.0.0"
