@@ -7,6 +7,7 @@ import Button from 'component/button';
 import { buildURI } from 'lbry-redux';
 import * as txnTypes from 'constants/transaction_types';
 import type { Transaction } from '../view';
+import * as ICONS from 'constants/icons';
 
 type Props = {
   transaction: Transaction,
@@ -32,9 +33,9 @@ class TransactionListItem extends React.PureComponent<Props> {
 
   getLink(type: string) {
     if (type === txnTypes.TIP) {
-      return <Button button="link" onClick={this.abandonClaim} label={__('Unlock Tip')} />;
+      return <Button icon={ICONS.UNLOCK} onClick={this.abandonClaim} title={__('Unlock Tip')} />;
     }
-    return <Button button="link" onClick={this.abandonClaim} label={__('Abandon Claim')} />;
+    return <Button icon={ICONS.TRASH} onClick={this.abandonClaim} title={__('Abandon Claim')} />;
   }
 
   capitalize(string: string) {

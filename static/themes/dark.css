@@ -48,7 +48,7 @@
   --header-active-color: rgba(0, 0, 0, 0.85);
   --header-button-bg: transparent;
   --header-button-hover-bg: rgba(100, 100, 100, 0.15);
-  --header-primary-color: #8165B0;
+  --header-primary-color: var(--color-purple);
 
   /* Header */
   --header-color: #CCC;

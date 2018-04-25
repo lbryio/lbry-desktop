@@ -107,6 +107,11 @@ class ModalRouter extends React.PureComponent {
     if (!notification) {
       return null;
     }
+
+    if (notification.error) {
+      return <ModalError {...notification} {...notificationProps} />;
+    }
+
     switch (notification.id) {
       case modals.UPGRADE:
         return <ModalUpgrade {...notificationProps} />;

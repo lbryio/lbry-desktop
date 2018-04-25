@@ -169,15 +169,11 @@ button:disabled {
 
 .btn.btn--header-balance {
   font-family: 'metropolis-medium';
-  font-size: 13px;
+  font-size: 14px;
   color: var(--header-primary-color);
 
-  @media only screen and (min-width: $medium-breakpoint) {
-    font-size: 18px;
-  }
-
   @media only screen and (min-width: $large-breakpoint) {
-    font-size: 21px;
+    font-size: 18px;
   }
 
   .btn__label--balance {

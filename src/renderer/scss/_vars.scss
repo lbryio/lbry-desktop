@@ -34,6 +34,7 @@ $large-breakpoint: 1760px;
   --color-green: #399483;
   --color-green-light: #effbe4;
   --color-green-blue: #2ec1a8;
+  --color-purple: #8165b0;
 
   /* Colors */
   --color-divider: #e3e3e3;
@@ -57,7 +58,7 @@ $large-breakpoint: 1760px;
   --text-help-color: var(--color-help);
   --text-max-width: 660px;
   --text-link-padding: 4px;
-  --text-selection-bg: rgba(saturate(lighten(#155b4a, 20%), 20%), 1); // temp color
+  --text-selection-bg: var(--color-purple);
   --text-selection-color: #fff;
 
   /* Form */
@@ -111,7 +112,7 @@ $large-breakpoint: 1760px;
   --header-bg: var(--color-white);
   --header-color: var(--color-text);
   --header-active-color: rgba(0, 0, 0, 0.85);
-  --header-height: $spacing-width * 3;
+  --header-height: 75px;
   --header-button-bg: transparent;
   --header-button-hover-bg: rgba(100, 100, 100, 0.15);
   --header-primary-color: var(--color-primary);
@@ -139,7 +140,6 @@ $large-breakpoint: 1760px;
   --card-bg: var(--color-white);
   --card-text-color: var(--color-grey-dark);
   --card-radius: 2px;
-  --card-margin: $spacing-vertical * 2/3;
   --card-wallet-color: var(--text-color-inverse);
   --success-msg-color: var(--color-green);
   --success-msg-border: var(--color-green-blue);
