@@ -67,7 +67,7 @@ class ChannelPage extends React.PureComponent<Props> {
     } else {
       contentList =
         claimsInChannel && claimsInChannel.length ? (
-          <FileList hideFilter fileInfos={claimsInChannel} />
+          <FileList sortByHeight hideFilter fileInfos={claimsInChannel} />
         ) : (
           <span className="empty">{__('No content found.')}</span>
         );

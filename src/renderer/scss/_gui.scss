@@ -160,6 +160,7 @@ p {
     'nav header'
     'nav content';
   background-color: var(--color-bg);
+  height: 100vh;
 
   @media only screen and (min-width: $medium-breakpoint) {
     grid-template-columns: var(--side-nav-width-m) auto;
@@ -246,7 +247,7 @@ p {
 
 /* Custom text selection */
 *::selection {
-  background: var(--text-selection-bg);
+  background: var(--color-primary-light);
   color: var(--text-selection-color);
 }
 

@@ -2,7 +2,6 @@
 import * as React from 'react';
 import Button from 'component/button';
 import classnames from 'classnames';
-import { CSSTransitionGroup } from 'react-transition-group';
 import * as icons from 'constants/icons';
 import * as NOTIFICATION_TYPES from 'constants/notification_types';
 
@@ -20,10 +19,12 @@ type Props = {
   forward: any => void,
   isBackDisabled: boolean,
   isForwardDisabled: boolean,
-  isHome: boolean,
   navLinks: {
     primary: Array<SideBarLink>,
     secondary: Array<SideBarLink>,
+  },
+  notifications: {
+    type: string,
   },
 };
 
@@ -100,33 +101,30 @@ const SideBar = (props: Props) => {
             >
               <Button navigate={path} label={label} icon={icon} />
 
+              {
+                // The sublinks should be animated on open close
+                // Removing it because the current implementation with CSSTransitionGroup
+                // was really slow and looked pretty bad. Possible fix is upgrading to v2
+                // Not sure if that has better performance
+              }
               {!!subLinks.length &&
                 active && (
-                  <CSSTransitionGroup
-                    transitionAppear
-                    transitionLeave
-                    transitionAppearTimeout={300}
-                    transitionEnterTimeout={300}
-                    transitionLeaveTimeout={300}
-                    transitionName="nav__sub"
-                  >
-                    <ul key="0" className="nav__sub-links">
-                      {subLinks.map(({ label: subLabel, path: subPath, active: subLinkActive }) => (
-                        <li
-                          key={subPath}
-                          className={classnames('nav__link nav__link--sub', {
-                            'nav__link--active': subLinkActive,
-                          })}
-                        >
-                          {subPath ? (
-                            <Button navigate={subPath} label={subLabel} />
-                          ) : (
-                            <span>{subLabel}</span>
-                          )}
-                        </li>
-                      ))}
-                    </ul>
-                  </CSSTransitionGroup>
+                  <ul key="0" className="nav__sub-links">
+                    {subLinks.map(({ label: subLabel, path: subPath, active: subLinkActive }) => (
+                      <li
+                        key={subPath}
+                        className={classnames('nav__link nav__link--sub', {
+                          'nav__link--active': subLinkActive,
+                        })}
+                      >
+                        {subPath ? (
+                          <Button navigate={subPath} label={subLabel} />
+                        ) : (
+                          <span>{subLabel}</span>
+                        )}
+                      </li>
+                    ))}
+                  </ul>
                 )}
             </li>
           ))}

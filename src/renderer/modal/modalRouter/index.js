@@ -1,6 +1,5 @@
 import { connect } from 'react-redux';
 import * as settings from 'constants/settings';
-import { selectCurrentModal, selectModalProps, selectModalsAllowed } from 'redux/selectors/app';
 import {
   doNotify,
   selectCostForCurrentPageUri,
@@ -17,8 +16,6 @@ import ModalRouter from './view';
 const select = state => ({
   balance: selectBalance(state),
   showPageCost: selectCostForCurrentPageUri(state),
-  modal: selectCurrentModal(state),
-  modalProps: selectModalProps(state),
   page: selectCurrentPage(state),
   isVerificationCandidate: selectUserIsVerificationCandidate(state),
   isCreditIntroAcknowledged: makeSelectClientSetting(settings.CREDIT_REQUIRED_ACKNOWLEDGED)(state),
@@ -27,7 +24,6 @@ const select = state => ({
   ),
   isWelcomeAcknowledged: makeSelectClientSetting(settings.NEW_USER_ACKNOWLEDGED)(state),
   user: selectUser(state),
-  modalsAllowed: selectModalsAllowed(state),
   notification: selectNotification(state),
   notificationProps: selectNotificationProps(state),
 });

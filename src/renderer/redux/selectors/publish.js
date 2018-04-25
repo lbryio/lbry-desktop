@@ -8,11 +8,6 @@ export const selectPendingPublishes = createSelector(
   state => state.pendingPublishes.map(pendingClaim => ({ ...pendingClaim, pending: true })) || []
 );
 
-export const selectPendingPublishesLessEdits = createSelector(
-  selectPendingPublishes,
-  pendingPublishes => pendingPublishes.filter(pendingPublish => !pendingPublish.isEdit)
-);
-
 export const selectPublishFormValues = createSelector(selectState, state => {
   const { pendingPublish, ...formValues } = state;
   return formValues;
@@ -27,6 +22,6 @@ export const selectPendingPublish = uri =>
     }
 
     return pendingPublishes.filter(
-      publish => publish.name === claimName || publish.name === contentName
+      publish => (publish.name === claimName || publish.name === contentName) && !publish.isEdit
     )[0];
   });
