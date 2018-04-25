@@ -484,8 +484,8 @@ autoprefixer@^6.3.1:
     postcss-value-parser "^3.2.3"
 
 aws-sdk@^2.224.1:
-  version "2.228.1"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.228.1.tgz#57b3cc29671cbc80a36d45bbeada8ad269079f2d"
+  version "2.229.1"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.229.1.tgz#6123c8acee0de534a0585e1375ee19c4de54a39e"
   dependencies:
     buffer "4.9.1"
     events "1.1.1"
@@ -5422,8 +5422,9 @@ lazy-val@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/lazy-val/-/lazy-val-1.0.3.tgz#bb97b200ef00801d94c317e29dc6ed39e31c5edc"
 
-"lbry-redux@file:../lbry-redux":
+lbry-redux@lbryio/lbry-redux:
   version "0.0.1"
+  resolved "https://codeload.github.com/lbryio/lbry-redux/tar.gz/93b3573ff439aa5683033e77e9950295b5cba260"
   dependencies:
     proxy-polyfill "0.1.6"
     reselect "^3.0.0"
