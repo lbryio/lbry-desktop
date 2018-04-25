@@ -1,7 +1,8 @@
 import React from 'react';
 import Button from 'component/button';
-import { FormRow } from 'component/common/form';
+import { FormRow, FormField } from 'component/common/form';
 import { Lbry, doNotify } from 'lbry-redux';
+import Page from 'component/page';
 
 class ReportPage extends React.Component {
   constructor(props) {
