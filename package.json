@@ -32,7 +32,8 @@
     "postrewrite": "yarnhook",
     "postinstall": "electron-builder install-app-deps && node build/downloadDaemon.js",
     "lint": "eslint 'src/**/*.{js,jsx}' --fix",
-    "format": "prettier 'src/**/*.{js,jsx,scss,json}' --write"
+    "format": "prettier 'src/**/*.{js,jsx,scss,json}' --write",
+    "clean": "rm -r node_modules && yarn cache clean && yarn"
   },
   "dependencies": {
     "bluebird": "^3.5.1",
