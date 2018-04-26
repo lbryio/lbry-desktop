@@ -21,7 +21,7 @@ We provide installers for Windows, macOS, and Debian-based Linux.
 | Latest Stable Release | [Download](https://lbry.io/get/lbry.exe)     | [Download](https://lbry.io/get/lbry.dmg)     | [Download](https://lbry.io/get/lbry.deb)     |
 | Latest Prerelease     | [Download](https://lbry.io/get/lbry.pre.exe) | [Download](https://lbry.io/get/lbry.pre.dmg) | [Download](https://lbry.io/get/lbry.pre.deb) |
 
-Our [releases page](https://github.com/lbryio/lbry-app/releases/latest) also contains the latest
+Our [releases page](https://github.com/lbryio/lbry-app/releases) also contains the latest
 release, pre-releases, and past builds.
 
 To install from source or make changes to the application, continue reading below.
