@@ -3,10 +3,6 @@ const path = require('path');
 const ELECTRON_RENDERER_PROCESS_ROOT = path.resolve(__dirname, 'src/renderer/');
 
 module.exports = {
-  node: {
-    __dirname: false,
-    __filename: false
-  },
   // This rule is temporarily necessary until https://github.com/electron-userland/electron-webpack/issues/60 is fixed.
   module: {
     rules: [
