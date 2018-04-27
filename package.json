@@ -1,6 +1,6 @@
 {
   "name": "LBRY",
-  "version": "0.22.0-rc.4",
+  "version": "0.21.3",
   "description": "A browser for the LBRY network, a digital marketplace controlled by its users.",
   "keywords": [
     "lbry"
@@ -21,7 +21,7 @@
   "main": "src/main/index.js",
   "scripts": {
     "extract-langs": "node build/extractLocals.js",
-    "compile": "electron-webpack & yarn extract-langs",
+    "compile": "electron-webpack && yarn extract-langs",
     "build": "yarn compile && electron-builder build",
     "build:dir": "yarn build -- --dir -c.compression=store -c.mac.identity=null",
     "dev": "electron-webpack dev",
