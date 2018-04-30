@@ -168,7 +168,7 @@ class FilePage extends React.Component<Props> {
                   ) : (
                     <React.Fragment>
                       <Button
-                        button="alt"
+                        button="primary"
                         iconRight="Send"
                         label={__('Enjoy this? Send a tip')}
                         onClick={() => openModal({ id: modals.SEND_TIP }, { uri })}
