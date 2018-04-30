@@ -34,12 +34,58 @@ type Props = {
   mediaPosition: ?number,
   className: ?string,
   obscureNsfw: boolean,
-  play: string => void,
+  play: string => void
 };
 
 class Video extends React.PureComponent<Props> {
   componentWillUnmount() {
     this.props.cancelPlay();
+  }
+
+  componentDidMount() {
+    this.handleAutoplay(this.props);
+  }
+
+  componentWillReceiveProps(nextProps: Props) {
+    this.handleAutoplay(nextProps);
+  }
+
+  handleAutoplay(props: Props) {
+    const {
+      autoplay,
+      obscureNsfw,
+      playingUri,
+      fileInfo,
+      costInfo,
+      isDownloading,
+      uri,
+      load,
+      play
+    } = props;
+
+    const playable = (
+      autoplay &&
+      obscureNsfw === false &&
+      playingUri !== uri
+    );
+
+    if (
+      playable &&
+      costInfo &&
+      costInfo.cost === 0 &&
+      !fileInfo &&
+      !isDownloading
+    ) {
+      load(uri);
+      play(uri);
+    }
+    else if (
+      playable &&
+      fileInfo &&
+      fileInfo.blobs_completed > 0
+    ) {
+      play(uri);
+    }
   }
 
   isMediaSame(nextProps: Props) {
@@ -90,14 +136,18 @@ class Video extends React.PureComponent<Props> {
     }
 
     const poster = metadata && metadata.thumbnail;
+    const layoverClass = classnames('content__cover', { 'card__media--nsfw': shouldObscureNsfw });
+    const layoverStyle = !shouldObscureNsfw && poster ? { backgroundImage: `url("${poster}")` } : {};
 
     return (
       <div className={classnames('video', {}, className)}>
         {isPlaying && (
           <div className="content__view">
             {!isReadyToPlay ? (
-              <LoadingScreen status={loadStatusMessage} />
-            ) : (
+              <div className={layoverClass} style={layoverStyle}>
+                <LoadingScreen status={loadStatusMessage} />
+              </div>
+          ) : (
               <VideoPlayer
                 filename={fileInfo.file_name}
                 poster={poster}
@@ -119,10 +169,7 @@ class Video extends React.PureComponent<Props> {
           </div>
         )}
         {!isPlaying && (
-          <div
-            className={classnames('content__cover', { 'card__media--nsfw': shouldObscureNsfw })}
-            style={!shouldObscureNsfw && poster ? { backgroundImage: `url("${poster}")` } : {}}
-          >
+          <div className={layoverClass} style={layoverStyle}>
             <VideoPlayButton
               play={play}
               fileInfo={fileInfo}

@@ -26,6 +26,7 @@ const select = state => ({
   language: selectCurrentLanguage(state),
   languages: selectLanguages(state),
   automaticDarkModeEnabled: makeSelectClientSetting(settings.AUTOMATIC_DARK_MODE_ENABLED)(state),
+  autoplay: makeSelectClientSetting(settings.AUTOPLAY)(state)
 });
 
 const perform = dispatch => ({

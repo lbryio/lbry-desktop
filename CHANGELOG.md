@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
    * New dark mode ([#1269](https://github.com/lbryio/lbry-app/pull/1269))
    * Pre-fill publish URL after clicking "Put something here" link ([#1303](https://github.com/lbryio/lbry-app/pull/1303))
    * Add Danger JS to automate code reviews ([#1289](https://github.com/lbryio/lbry-app/pull/1289))
+   * Autoplay downloaded and free media ([#584](https://github.com/lbryio/lbry-app/pull/1453))
 
 ### Changed
    * Add flair to snackbar ([#1313](https://github.com/lbryio/lbry-app/pull/1313))

@@ -24,6 +24,7 @@ const defaultState = {
     theme: getLocalStorageSetting(SETTINGS.THEME, 'light'),
     themes: getLocalStorageSetting(SETTINGS.THEMES, []),
     automaticDarkModeEnabled: getLocalStorageSetting(SETTINGS.AUTOMATIC_DARK_MODE_ENABLED, false),
+    autoplay: getLocalStorageSetting(SETTINGS.AUTOPLAY, false)
   },
   isNight: false,
   languages: {},

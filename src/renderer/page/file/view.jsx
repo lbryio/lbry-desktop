@@ -7,6 +7,7 @@ import FilePrice from 'component/filePrice';
 import FileDetails from 'component/fileDetails';
 import FileActions from 'component/fileActions';
 import UriIndicator from 'component/uriIndicator';
+import { FormField } from 'component/common/form';
 import Icon from 'component/common/icon';
 import DateTime from 'component/dateTime';
 import * as icons from 'constants/icons';
@@ -14,6 +15,7 @@ import Button from 'component/button';
 import SubscribeButton from 'component/subscribeButton';
 import Page from 'component/page';
 import player from 'render-media';
+import * as settings from 'constants/settings';
 
 type Props = {
   claim: {
@@ -45,9 +47,16 @@ type Props = {
   fetchFileInfo: string => void,
   fetchCostInfo: string => void,
   prepareEdit: ({}) => void,
+  setClientSetting: (string, boolean | string | Price) => void,
 };
 
 class FilePage extends React.Component<Props> {
+  constructor(props: Props) {
+    super(props);
+
+    (this: any).onAutoplayChange = this.onAutoplayChange.bind(this);
+  }
+
   componentDidMount() {
     const { uri, fileInfo, fetchFileInfo, costInfo, fetchCostInfo } = this.props;
 
@@ -88,6 +97,10 @@ class FilePage extends React.Component<Props> {
     }
   };
 
+  onAutoplayChange(event: SyntheticInputEvent<*>) {
+    this.props.setClientSetting(settings.AUTOPLAY, event.target.checked);
+  }
+
   render() {
     const {
       claim,
@@ -102,6 +115,8 @@ class FilePage extends React.Component<Props> {
       claimIsMine,
       prepareEdit,
       navigate,
+      autoplay,
+      setClientSetting
     } = this.props;
 
     // File info
@@ -144,6 +159,14 @@ class FilePage extends React.Component<Props> {
                 <div className="card__title-identity-icons">
                   <FilePrice uri={normalizeURI(uri)} />
                   {isRewardContent && <Icon icon={icons.FEATURED} />}
+                  <FormField
+                    type="checkbox"
+                    name="autoplay"
+                    className="autoplay"
+                    onChange={this.onAutoplayChange}
+                    checked={autoplay}
+                    postfix={__('Autoplay')}
+                  />
                 </div>
               </div>
               <span className="card__subtitle card__subtitle--file">
