@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Changed
    * Add flair to snackbar ([#1313](https://github.com/lbryio/lbry-app/pull/1313))
+   * Change Colour to Button Tip and subscribe  ([#1418](https://github.com/lbryio/lbry-app/pull/1418))
 
 ### Fixed
    * Black screen on macOS after maximizing LBRY and then closing ([#1235](https://github.com/lbryio/lbry-app/pull/1235))
