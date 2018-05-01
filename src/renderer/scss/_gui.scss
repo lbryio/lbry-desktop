@@ -252,10 +252,11 @@ p {
 }
 
 .credit-amount {
-  padding: 5px;
   border-radius: 5px;
   font-family: 'metropolis-bold';
-  font-size: 8px;
+  font-size: 10px;
+  padding: 6px 5px 4px 5px;
+  white-space: nowrap;
 }
 
 .credit-amount--large {
