@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Changed
    * Add flair to snackbar ([#1313](https://github.com/lbryio/lbry-app/pull/1313))
+   * Remove price placeholder during thumbnail loading ([#1431](https://github.com/lbryio/lbry-app/pull/1431))
 
 ### Fixed
    * Black screen on macOS after maximizing LBRY and then closing ([#1235](https://github.com/lbryio/lbry-app/pull/1235))
