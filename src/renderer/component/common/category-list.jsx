@@ -4,12 +4,14 @@ import { normalizeURI } from 'lbry-redux';
 import ToolTip from 'component/common/tooltip';
 import FileCard from 'component/fileCard';
 import Button from 'component/button';
+import SubscribeButton from 'component/subscribeButton';
 import * as icons from 'constants/icons';
 
 type Props = {
   category: string,
   names: Array<string>,
   categoryLink?: string,
+  categoryType: string,
 };
 
 type State = {
@@ -189,8 +191,9 @@ class CategoryList extends React.PureComponent<Props, State> {
   }
 
   render() {
-    const { category, names, categoryLink } = this.props;
+    const { category, names, categoryLink, categoryType } = this.props;
     const { canScrollNext, canScrollPrevious } = this.state;
+    const uri = 'test';
 
     // The lint was throwing an error saying we should use <button> instead of <a>
     // We are using buttons, needs more exploration
@@ -203,6 +206,7 @@ class CategoryList extends React.PureComponent<Props, State> {
             ) : (
               category
             )}
+
             {category &&
               category.match(/^community/i) && (
                 <ToolTip
@@ -226,6 +230,9 @@ class CategoryList extends React.PureComponent<Props, State> {
               onClick={this.handleScrollNext}
               icon={icons.ARROW_RIGHT}
             />
+            {categoryType === 'subscription' && (
+              <SubscribeButton uri={uri} channelName={category} />
+            )}
           </div>
         </div>
         <div

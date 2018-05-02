@@ -12,8 +12,10 @@ type Props = {
   doFetchClaimsByChannel: (string, number) => any,
   savedSubscriptions: SavedSubscriptions,
   // TODO build out claim types
+  notifications: any,
   subscriptions: Array<any>,
   setHasFetchedSubscriptions: () => void,
+  setSubscriptionNotifications: any => void,
   hasFetchedSubscriptions: boolean,
 };
 
@@ -101,6 +103,7 @@ export default class extends React.PureComponent<Props> {
                     categoryLink={subscription.uri}
                     category={subscription.channelName}
                     names={subscription.claims}
+                    categoryType="subscription"
                   />
                 );
               })}
