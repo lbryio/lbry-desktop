@@ -26,6 +26,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
    * Fix download percentage indicator overlay ([#1271](https://github.com/lbryio/lbry-app/issues/1271))
    * Fix alternate row shading for transactions on dark theme ([#1355](https://github.com/lbryio/lbry-app/issues/#1355))
    * Fix Description box on Publish (dark theme) ([#1356](https://github.com/lbryio/lbry-app/issues/#1356))
+   * Fix spacing in search suggestions ([#1422])(https://github.com/lbryio/lbry-app/pull/1422))
 
 
 ## [0.21.3] - 2018-04-23
