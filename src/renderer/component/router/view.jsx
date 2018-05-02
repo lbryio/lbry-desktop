@@ -3,7 +3,7 @@ import SettingsPage from 'page/settings';
 import HelpPage from 'page/help';
 import ReportPage from 'page/report';
 import WalletPage from 'page/wallet';
-import GetCreditsPage from 'page/getCredits';
+import ReportContentPage from 'page/reportcontent';
 import SendReceivePage from 'page/sendCredits';
 import ShowPage from 'page/show';
 import PublishPage from 'page/publish';
@@ -17,6 +17,7 @@ import AuthPage from 'page/auth';
 import InvitePage from 'page/invite';
 import BackupPage from 'page/backup';
 import SubscriptionsPage from 'page/subscriptions';
+import GetCreditsPage from '../../page/getCredits';
 
 const route = (page, routesMap) => {
   const component = routesMap[page];
@@ -40,6 +41,7 @@ const Router = props => {
     published: <FileListPublished params={params} />,
     getcredits: <GetCreditsPage params={params} />,
     report: <ReportPage params={params} />,
+    reportcontent: <ReportContentPage params={params} />,
     rewards: <RewardsPage params={params} />,
     send: <SendReceivePage params={params} />,
     settings: <SettingsPage params={params} />,
