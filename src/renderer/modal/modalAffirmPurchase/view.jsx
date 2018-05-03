@@ -9,7 +9,11 @@ class ModalAffirmPurchase extends React.PureComponent {
   }
 
   render() {
-    const { cancelPurchase, metadata: { title }, uri } = this.props;
+    const {
+      cancelPurchase,
+      metadata: { title },
+      uri,
+    } = this.props;
 
     return (
       <Modal

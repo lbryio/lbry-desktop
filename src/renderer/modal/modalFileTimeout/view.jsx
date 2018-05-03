@@ -3,7 +3,9 @@ import { Modal } from 'modal/modal';
 
 class ModalFileTimeout extends React.PureComponent {
   render() {
-    const { metadata: { title } } = this.props;
+    const {
+      metadata: { title },
+    } = this.props;
 
     return (
       <Modal isOpen contentLabel={__('Download failed')} onConfirmed={closeModal}>

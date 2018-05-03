@@ -27,7 +27,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
    * Fix alternate row shading for transactions on dark theme ([#1355](https://github.com/lbryio/lbry-app/issues/#1355))
    * Fix Description box on Publish (dark theme) ([#1356](https://github.com/lbryio/lbry-app/issues/#1356))
    * Fix spacing in search suggestions ([#1422])(https://github.com/lbryio/lbry-app/pull/1422))
-
+   * Fix spacing in search suggestions ([#1422])(https://github.com/lbryio/lbry-app/pull/1422))
+   * Fix text/HTML files don't display correctly in-app anymore ([#1379])(https://github.com/lbryio/lbry-app/issues/1379)
 
 ## [0.21.3] - 2018-04-23
 
