@@ -176,6 +176,7 @@ class VideoPlayer extends React.PureComponent {
           !unplayable && <LoadingScreen status={noMetadataMessage} />}
         {unplayable && <LoadingScreen status={unplayableMessage} spinner={false} />}
         <div
+          className={'content__view--container'}
           ref={container => {
             this.media = container;
           }}
