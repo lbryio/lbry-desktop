@@ -1,19 +1,11 @@
+/* eslint-disable react/prop-types */
 import React from 'react';
-import Button from 'component/button';
 import classnames from 'classnames';
+import Button from 'component/button';
 import * as icons from 'constants/icons';
 
 class FileDownloadLink extends React.PureComponent {
-  componentWillMount() {
-    this.checkAvailability(this.props.uri);
-  }
-
-  componentWillReceiveProps(nextProps) {
-    this.checkAvailability(nextProps.uri);
-    this.restartDownload(nextProps);
-  }
-
-  restartDownload(props) {
+  static restartDownload(props) {
     const { downloading, fileInfo, uri, restartDownload } = props;
 
     if (
@@ -27,9 +19,18 @@ class FileDownloadLink extends React.PureComponent {
     }
   }
 
+  componentWillMount() {
+    this.checkAvailability(this.props.uri);
+  }
+
+  componentWillReceiveProps(nextProps) {
+    this.checkAvailability(nextProps.uri);
+    FileDownloadLink.restartDownload(nextProps);
+  }
+
   checkAvailability(uri) {
-    if (!this._uri || uri !== this._uri) {
-      this._uri = uri;
+    if (!this.thisUri || uri !== this.thisUri) {
+      this.thisUri = uri;
       this.props.checkAvailability(uri);
     }
   }
@@ -64,7 +65,6 @@ class FileDownloadLink extends React.PureComponent {
             className={classnames('file-download__overlay', {
               btn__content: !!progress,
             })}
-            style={{ width: `${progress}%` }}
           >
             {label}
           </div>
@@ -78,6 +78,7 @@ class FileDownloadLink extends React.PureComponent {
 
       return (
         <Button
+          button="alt"
           className="btn--file-actions"
           description={__('Download')}
           icon={icons.DOWNLOAD}
@@ -89,6 +90,7 @@ class FileDownloadLink extends React.PureComponent {
     } else if (fileInfo && fileInfo.download_path) {
       return (
         <Button
+          button="alt"
           className="btn--file-actions"
           description={__('Open')}
           icon={icons.OPEN}

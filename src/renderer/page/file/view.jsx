@@ -49,6 +49,25 @@ type Props = {
 };
 
 class FilePage extends React.Component<Props> {
+  static checkSubscription(props) {
+    if (
+      props.subscriptions
+        .map(subscription => subscription.channelName)
+        .indexOf(props.claim.channel_name) !== -1
+    ) {
+      props.checkSubscription({
+        channelName: props.claim.channel_name,
+        uri: buildURI(
+          {
+            contentName: props.claim.channel_name,
+            claimId: props.claim.value.publisherSignature.certificateId,
+          },
+          false
+        ),
+      });
+    }
+  }
+
   componentDidMount() {
     const { uri, fileInfo, fetchFileInfo, costInfo, fetchCostInfo } = this.props;
 
@@ -60,7 +79,7 @@ class FilePage extends React.Component<Props> {
       fetchCostInfo(uri);
     }
 
-    this.checkSubscription(this.props);
+    FilePage.checkSubscription(this.props);
   }
 
   componentWillReceiveProps(nextProps: Props) {
@@ -106,7 +125,7 @@ class FilePage extends React.Component<Props> {
     } = this.props;
 
     // File info
-    const { title, thumbnail } = metadata;
+    const { thumbnail, title } = metadata;
     const isRewardContent = rewardedContentClaimIds.includes(claim.claim_id);
     const shouldObscureThumbnail = obscureNsfw && metadata.nsfw;
     const { height, channel_name: channelName, value } = claim;
@@ -134,11 +153,6 @@ class FilePage extends React.Component<Props> {
             ) : (
               <Thumbnail shouldObscure={shouldObscureThumbnail} src={thumbnail} />
             )}
-            {!isPlaying && (
-              <div className="card-media__internal-links">
-                <FileActions uri={uri} vertical />
-              </div>
-            )}
             <div className="card__content">
               <div className="card__title-identity--file">
                 <h1 className="card__title card__title--file">{title}</h1>
@@ -147,10 +161,17 @@ class FilePage extends React.Component<Props> {
                   {isRewardContent && <Icon icon={icons.FEATURED} />}
                 </div>
               </div>
-              <span className="card__subtitle card__subtitle--file">
-                {__('Published on')}&nbsp;
-                <DateTime block={height} show={DateTime.SHOW_DATE} />
-              </span>
+              <div className="card__subtitle--file">
+                <span className="card__subtitle">
+                  {__('Published on')}&nbsp;
+                  <DateTime block={height} show={DateTime.SHOW_DATE} />
+                </span>
+                {!isPlaying && (
+                  <div className="card-media__internal-links">
+                    <FileActions uri={uri} />
+                  </div>
+                )}
+              </div>
               {metadata.nsfw && <div>NSFW</div>}
               <div className="card__channel-info">
                 <UriIndicator uri={uri} link />
