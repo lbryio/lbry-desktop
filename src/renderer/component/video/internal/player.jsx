@@ -165,6 +165,7 @@ class VideoPlayer extends React.PureComponent {
     const { hasMetadata, unplayable } = this.state;
     const noMetadataMessage = 'Waiting for metadata.';
     const unplayableMessage = "Sorry, looks like we can't play this file.";
+    const hideMedia = this.playableType() && !hasMetadata && !unplayable;
 
     return (
       <React.Fragment>
@@ -177,6 +178,7 @@ class VideoPlayer extends React.PureComponent {
         {unplayable && <LoadingScreen status={unplayableMessage} spinner={false} />}
         <div
           className={'content__view--container'}
+          style={{ opacity: hideMedia ? 0 : 1 }}
           ref={container => {
             this.media = container;
           }}
