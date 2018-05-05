@@ -1,8 +1,6 @@
-import * as MODALS from 'constants/modal_types';
 import * as NOTIFICATION_TYPES from 'constants/notification_types';
 import { ipcRenderer } from 'electron';
 import Lbryio from 'lbryio';
-import { doNotify } from 'lbry-redux';
 import { doAlertError } from 'redux/actions/app';
 import { doClaimEligiblePurchaseRewards } from 'redux/actions/rewards';
 import { doNavigate } from 'redux/actions/navigation';
@@ -27,6 +25,8 @@ import {
   selectDownloadingByOutpoint,
   selectTotalDownloadProgress,
   selectBalance,
+  MODALS,
+  doNotify,
 } from 'lbry-redux';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import setBadge from 'util/setBadge';

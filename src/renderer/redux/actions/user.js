@@ -1,7 +1,6 @@
 import * as ACTIONS from 'constants/action_types';
-import * as MODALS from 'constants/modal_types';
 import Lbryio from 'lbryio';
-import { doNotify } from 'lbry-redux';
+import { doNotify, MODALS } from 'lbry-redux';
 import { doClaimRewardType, doRewardList } from 'redux/actions/rewards';
 import {
   selectEmailToVerify,
