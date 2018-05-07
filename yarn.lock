@@ -5765,9 +5765,9 @@ lie@3.1.1:
   dependencies:
     immediate "~3.0.5"
 
-lint-staged@^7.0.2:
-  version "7.0.4"
-  resolved "https://registry.yarnpkg.com/lint-staged/-/lint-staged-7.0.4.tgz#1aa7f27427e4c4c85d4d6524ac98aac10cbaf1b8"
+lint-staged@^7.1.0:
+  version "7.1.0"
+  resolved "https://registry.yarnpkg.com/lint-staged/-/lint-staged-7.1.0.tgz#1514a5b71b8d9492ca0c3d2a44769cbcbc8bcc79"
   dependencies:
     app-root-path "^2.0.1"
     chalk "^2.3.1"
@@ -5778,6 +5778,7 @@ lint-staged@^7.0.2:
     execa "^0.9.0"
     find-parent-dir "^0.3.0"
     is-glob "^4.0.0"
+    is-windows "^1.0.2"
     jest-validate "^22.4.0"
     listr "^0.13.0"
     lodash "^4.17.5"
@@ -5787,7 +5788,7 @@ lint-staged@^7.0.2:
     p-map "^1.1.1"
     path-is-inside "^1.0.2"
     pify "^3.0.0"
-    please-upgrade-node "^3.0.1"
+    please-upgrade-node "^3.0.2"
     staged-git-files "1.1.1"
     string-argv "^0.0.2"
     stringify-object "^3.2.2"
@@ -7129,9 +7130,11 @@ pkg-up@^2.0.0:
   dependencies:
     find-up "^2.1.0"
 
-please-upgrade-node@^3.0.1:
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/please-upgrade-node/-/please-upgrade-node-3.0.1.tgz#0a681f2c18915e5433a5ca2cd94e0b8206a782db"
+please-upgrade-node@^3.0.2:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/please-upgrade-node/-/please-upgrade-node-3.0.2.tgz#7b9eaeca35aa4a43d6ebdfd10616c042f9a83acc"
+  dependencies:
+    semver-compare "^1.0.0"
 
 plist@^2.1.0:
   version "2.1.0"
@@ -8357,6 +8360,10 @@ selfsigned@^1.9.1:
   resolved "https://registry.yarnpkg.com/selfsigned/-/selfsigned-1.10.2.tgz#b4449580d99929b65b10a48389301a6592088758"
   dependencies:
     node-forge "0.7.1"
+
+semver-compare@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/semver-compare/-/semver-compare-1.0.0.tgz#0dee216a1c941ab37e9efb1788f6afc5ff5537fc"
 
 semver-diff@^2.0.0:
   version "2.1.0"
