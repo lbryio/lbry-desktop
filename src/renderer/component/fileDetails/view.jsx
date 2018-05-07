@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import ReactMarkdown from 'react-markdown';
+import MarkdownPreview from 'component/markdownPreview';
 import Button from 'component/button';
 import path from 'path';
 
@@ -40,11 +40,7 @@ const FileDetails = (props: Props) => {
         <React.Fragment>
           <div className="card__subtext-title">About</div>
           <div className="card__subtext">
-            <ReactMarkdown
-              source={description || ''}
-              escapeHtml
-              disallowedTypes={['Heading', 'HtmlInline', 'HtmlBlock']}
-            />
+            <MarkdownPreview content={description} />
           </div>
         </React.Fragment>
       )}
