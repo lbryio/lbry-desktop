@@ -7724,9 +7724,9 @@ react-modal@^3.1.7:
     react-lifecycles-compat "^3.0.0"
     warning "^3.0.0"
 
-react-paginate@^5.2.1:
-  version "5.2.2"
-  resolved "https://registry.yarnpkg.com/react-paginate/-/react-paginate-5.2.2.tgz#c407d325e3073e39e49739ab5095a829000a1c46"
+react-paginate@^5.2.3:
+  version "5.2.3"
+  resolved "https://registry.yarnpkg.com/react-paginate/-/react-paginate-5.2.3.tgz#1eea032f760a86736ad61fb64dab37a9e99fa351"
   dependencies:
     prop-types "^15.6.1"
 
