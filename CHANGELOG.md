@@ -18,16 +18,16 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
    * Add flair to snackbar ([#1313](https://github.com/lbryio/lbry-app/pull/1313))
 
 ### Fixed
-   * Black screen on macOS after maximizing LBRY and then closing ([#1235](https://github.com/lbryio/lbry-app/pull/1235))
    * Fix content-type not shown correctly in file description ([#863](https://github.com/lbryio/lbry-app/pull/863))
    * Fix [Flow](https://flow.org/) ([#1197](https://github.com/lbryio/lbry-app/pull/1197))
-   * Black screen on macOS after maximizing LBRY and then closing ([#1235](https://github.com/lbryio/lbry-app/pull/1235))
+   * Fix black screen on macOS after maximizing LBRY and then closing ([#1235](https://github.com/lbryio/lbry-app/pull/1235))
    * Fix dark theme ([#1034](https://github.com/lbryio/lbry-app/issues/1034))
    * Fix download percentage indicator overlay ([#1271](https://github.com/lbryio/lbry-app/issues/1271))
    * Fix alternate row shading for transactions on dark theme ([#1355](https://github.com/lbryio/lbry-app/issues/#1355))
    * Fix Description box on Publish (dark theme) ([#1356](https://github.com/lbryio/lbry-app/issues/#1356))
-   * Fix spacing in search suggestions ([#1422])(https://github.com/lbryio/lbry-app/pull/1422))
-   * Fix text/HTML files don't display correctly in-app anymore ([#1379])(https://github.com/lbryio/lbry-app/issues/1379)
+   * Fix spacing in search suggestions ([#1422](https://github.com/lbryio/lbry-app/pull/1422))
+   * Fix text/HTML files don't display correctly in-app anymore ([#1379](https://github.com/lbryio/lbry-app/issues/1379)
+   * Fix markdown render ([#1179](https://github.com/lbryio/lbry-app/issues/1179)
 
 ## [0.21.3] - 2018-04-23
 
