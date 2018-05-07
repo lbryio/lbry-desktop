@@ -1,0 +1,50 @@
+.markdown-preview {
+  margin: 0;
+}
+
+.markdown-preview__title {
+  font-family: 'metropolis-semibold';
+  font-size: 1.35em;
+  margin: 16px 0;
+}
+
+.markdown-preview blockquote {
+  padding: 8px;
+  margin: 16px 0;
+  color: var(--color-help);
+  border-left: 2px solid var(--color-help);
+  background-color: var(--color-bg-alt);
+}
+
+.markdown-preview table {
+  padding: 8px;
+  margin: 16px 0;
+  background-color: var(--card-bg);
+
+  tr td,
+  tr th,
+  tr td:first-of-type,
+  tr th:first-of-type,
+  tr td:last-of-type,
+  tr th:last-of-type {
+    padding: 8px;
+  }
+}
+
+.markdown-preview code {
+  display: block;
+  padding: 8px;
+  margin: 16px 0;
+  background-color: var(--color-bg-alt);
+  color: var(--color-help);
+  font-size: 1em;
+  font-family: Consolas, 'Lucida Console', 'Source Sans', monospace;
+}
+
+.markdown-preview hr {
+  border: 1px solid var(--color-divider);
+}
+
+.markdown-preview del {
+  color: var(--color-help);
+}
