@@ -3,11 +3,12 @@ import React from 'react';
 import Button from 'component/button';
 import { FormField } from 'component/common/form';
 import UriIndicator from 'component/uriIndicator';
+import type { Claim } from 'types/claim';
 
 type Props = {
   uri: string,
   title: string,
-  claim: { claim_id: string },
+  claim: Claim,
   errorMessage: string,
   isPending: boolean,
   sendSupport: (number, string, string) => void,

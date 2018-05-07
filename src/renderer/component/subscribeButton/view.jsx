@@ -3,7 +3,7 @@ import React from 'react';
 import { MODALS } from 'lbry-redux';
 import * as icons from 'constants/icons';
 import Button from 'component/button';
-import type { Subscription } from 'redux/reducers/subscriptions';
+import type { Subscription } from 'types/subscription';
 
 type SubscribtionArgs = {
   channelName: string,

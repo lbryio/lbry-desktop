@@ -10,7 +10,6 @@
     height: 100%;
     width: 6px;
     margin: 0 2px;
-    background-color: var(--color-white);
     animation: sk-stretchdelay 1.2s infinite ease-in-out;
 
     &.rect2 {
@@ -28,6 +27,12 @@
     &.rect5 {
       animation-delay: -0.8s;
     }
+  }
+}
+
+.spinner--light {
+  .rect {
+    background-color: var(--color-white);
   }
 }
 

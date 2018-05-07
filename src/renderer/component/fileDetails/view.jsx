@@ -3,9 +3,10 @@ import * as React from 'react';
 import ReactMarkdown from 'react-markdown';
 import Button from 'component/button';
 import path from 'path';
+import type { Claim } from 'types/claim';
 
 type Props = {
-  claim: {},
+  claim: Claim,
   fileInfo: {
     download_path: string,
   },

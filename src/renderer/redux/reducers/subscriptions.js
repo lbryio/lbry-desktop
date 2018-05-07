@@ -2,12 +2,7 @@
 import * as ACTIONS from 'constants/action_types';
 import * as NOTIFICATION_TYPES from 'constants/notification_types';
 import { handleActions } from 'util/redux-utils';
-
-export type Subscription = {
-  channelName: string,
-  uri: string,
-  latest: ?string,
-};
+import type { Subscription } from 'types/subscription';
 
 export type NotificationType =
   | NOTIFICATION_TYPES.DOWNLOADING
@@ -24,8 +19,8 @@ export type SubscriptionNotifications = {
 // Subscription redux types
 export type SubscriptionState = {
   subscriptions: Array<Subscription>,
-  hasFetchedSubscriptions: boolean,
   notifications: SubscriptionNotifications,
+  loading: boolean,
 };
 
 // Subscription action types
@@ -37,10 +32,6 @@ type doChannelSubscribe = {
 type doChannelUnsubscribe = {
   type: ACTIONS.CHANNEL_UNSUBSCRIBE,
   data: Subscription,
-};
-
-type HasFetchedSubscriptions = {
-  type: ACTIONS.HAS_FETCHED_SUBSCRIPTIONS,
 };
 
 type setSubscriptionLatest = {
@@ -75,10 +66,14 @@ type CheckSubscriptionCompleted = {
   type: ACTIONS.CHECK_SUBSCRIPTION_COMPLETED,
 };
 
+type fetchedSubscriptionsSucess = {
+  type: ACTIONS.FETCH_SUBSCRIPTIONS_SUCCESS,
+  data: Array<Subscription>,
+};
+
 export type Action =
   | doChannelSubscribe
   | doChannelUnsubscribe
-  | HasFetchedSubscriptions
   | setSubscriptionLatest
   | setSubscriptionNotification
   | CheckSubscriptionStarted
@@ -88,8 +83,8 @@ export type Dispatch = (action: Action) => any;
 
 const defaultState = {
   subscriptions: [],
-  hasFetchedSubscriptions: false,
   notifications: {},
+  loading: false,
 };
 
 export default handleActions(
@@ -122,10 +117,6 @@ export default handleActions(
         subscriptions: newSubscriptions,
       };
     },
-    [ACTIONS.HAS_FETCHED_SUBSCRIPTIONS]: (state: SubscriptionState): SubscriptionState => ({
-      ...state,
-      hasFetchedSubscriptions: true,
-    }),
     [ACTIONS.SET_SUBSCRIPTION_LATEST]: (
       state: SubscriptionState,
       action: setSubscriptionLatest
@@ -154,6 +145,22 @@ export default handleActions(
     ): SubscriptionState => ({
       ...state,
       notifications: action.data.notifications,
+    }),
+    [ACTIONS.FETCH_SUBSCRIPTIONS_START]: (state: SubscriptionState): SubscriptionState => ({
+      ...state,
+      loading: true,
+    }),
+    [ACTIONS.FETCH_SUBSCRIPTIONS_FAIL]: (state: SubscriptionState): SubscriptionState => ({
+      ...state,
+      loading: false,
+    }),
+    [ACTIONS.FETCH_SUBSCRIPTIONS_SUCCESS]: (
+      state: SubscriptionState,
+      action: fetchedSubscriptionsSucess
+    ): SubscriptionState => ({
+      ...state,
+      loading: false,
+      subscriptions: action.data,
     }),
   },
   defaultState

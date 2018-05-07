@@ -3,21 +3,18 @@ import React from 'react';
 import Button from 'component/button';
 import { buildURI } from 'lbry-redux';
 import classnames from 'classnames';
-// import Icon from 'component/common/icon';
+import type { Claim } from 'types/claim';
 
 type Props = {
   isResolvingUri: boolean,
-  resolveUri: string => void,
-  claim: {
-    channel_name: string,
-    has_signature: boolean,
-    signature_is_valid: boolean,
-    value: {
-      publisherSignature: { certificateId: string },
-    },
-  },
-  uri: string,
+  claim: Claim,
   link: ?boolean,
+  // Lint thinks we aren't using these, even though we are.
+  // Possibly because the resolve function is an arrow function that is passed in props?
+  /* eslint-disable react/no-unused-prop-types */
+  resolveUri: string => void,
+  uri: string,
+  /* eslint-enable react/no-unused-prop-types */
 };
 
 class UriIndicator extends React.PureComponent<Props> {

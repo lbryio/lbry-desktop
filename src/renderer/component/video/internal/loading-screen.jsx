@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import Spinner from 'component/common/spinner';
+import Spinner from 'component/spinner';
 
 type Props = {
   spinner: boolean,
@@ -16,7 +16,7 @@ class LoadingScreen extends React.PureComponent<Props> {
     const { status, spinner } = this.props;
     return (
       <div className="content__loading">
-        {spinner && <Spinner />}
+        {spinner && <Spinner light />}
 
         <span className="content__loading-text">{status}</span>
       </div>

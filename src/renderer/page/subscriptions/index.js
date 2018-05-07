@@ -1,27 +1,25 @@
-import React from 'react';
 import { connect } from 'react-redux';
 import {
-  selectSubscriptionsFromClaims,
+  selectSubscriptionClaims,
   selectSubscriptions,
-  selectHasFetchedSubscriptions,
+  selectSubscriptionsBeingFetched,
+  selectIsFetchingSubscriptions,
   selectNotifications,
 } from 'redux/selectors/subscriptions';
 import { doFetchClaimsByChannel } from 'redux/actions/content';
-import {
-  setHasFetchedSubscriptions,
-  setSubscriptionNotifications,
-} from 'redux/actions/subscriptions';
+import { setSubscriptionNotifications, doFetchMySubscriptions } from 'redux/actions/subscriptions';
 import SubscriptionsPage from './view';
 
 const select = state => ({
-  hasFetchedSubscriptions: state.subscriptions.hasFetchedSubscriptions,
-  savedSubscriptions: selectSubscriptions(state),
-  subscriptions: selectSubscriptionsFromClaims(state),
+  isFetchingSubscriptions: selectIsFetchingSubscriptions(state),
+  subscriptionsBeingFetched: selectSubscriptionsBeingFetched(state),
+  subscriptions: selectSubscriptions(state),
+  subscriptionClaims: selectSubscriptionClaims(state),
   notifications: selectNotifications(state),
 });
 
 export default connect(select, {
   doFetchClaimsByChannel,
-  setHasFetchedSubscriptions,
   setSubscriptionNotifications,
+  doFetchMySubscriptions,
 })(SubscriptionsPage);

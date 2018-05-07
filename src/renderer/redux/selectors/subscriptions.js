@@ -1,15 +1,21 @@
 import { createSelector } from 'reselect';
-import { selectAllClaimsByChannel, selectClaimsById } from 'lbry-redux';
+import {
+  selectAllClaimsByChannel,
+  selectClaimsById,
+  selectAllFetchingChannelClaims,
+} from 'lbry-redux';
 
 // get the entire subscriptions state
 const selectState = state => state.subscriptions || {};
+
+export const selectIsFetchingSubscriptions = createSelector(selectState, state => state.loading);
 
 export const selectNotifications = createSelector(selectState, state => state.notifications);
 
 // list of saved channel names and uris
 export const selectSubscriptions = createSelector(selectState, state => state.subscriptions);
 
-export const selectSubscriptionsFromClaims = createSelector(
+export const selectSubscriptionClaims = createSelector(
   selectAllClaimsByChannel,
   selectClaimsById,
   selectSubscriptions,
@@ -37,9 +43,6 @@ export const selectSubscriptionsFromClaims = createSelector(
         });
       }
 
-      // all we really need is a uri for each claim
-      channelClaims = channelClaims.map(claim => `${claim.name}#${claim.claim_id}`);
-
       fetchedSubscriptions.push({
         claims: channelClaims,
         channelName: subscription.channelName,
@@ -48,5 +51,21 @@ export const selectSubscriptionsFromClaims = createSelector(
     });
 
     return fetchedSubscriptions;
+  }
+);
+
+export const selectSubscriptionsBeingFetched = createSelector(
+  selectSubscriptions,
+  selectAllFetchingChannelClaims,
+  (subscriptions, fetchingChannelClaims) => {
+    const fetchingSubscriptionMap = {};
+    subscriptions.forEach(sub => {
+      const isFetching = fetchingChannelClaims && fetchingChannelClaims[sub.uri];
+      if (isFetching) {
+        fetchingSubscriptionMap[sub.uri] = 1;
+      }
+    });
+
+    return fetchingSubscriptionMap;
   }
 );

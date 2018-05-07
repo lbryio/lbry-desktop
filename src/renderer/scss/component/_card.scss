@@ -299,23 +299,10 @@
     display: inline-block;
     vertical-align: top;
     margin-bottom: 60px;
+    width: calc((100% / 4) - (60px / 4));
 
-    @media only screen and (max-width: $medium-breakpoint) {
-      width: calc((100% / 3) - (40px / 3));
-
-      &:not(:nth-child(3n + 1)) {
-        margin-left: 20px;
-      }
-    }
-  }
-
-  @media only screen and (min-width: $medium-breakpoint) {
-    .card {
-      width: calc((100% / 4) - (60px / 4));
-
-      &:not(:nth-child(4n + 1)) {
-        margin-left: 20px;
-      }
+    &:not(:nth-child(4n + 1)) {
+      margin-left: 20px;
     }
   }
 }
@@ -341,8 +328,8 @@
     display: inline-block;
     vertical-align: top;
     overflow: visible;
-    // 35 px to handle to padding between cards
-    width: calc((100% / 3) - 35px);
+    // 31 px to handle to padding between cards
+    width: calc((100% / 4) - 31px);
   }
 
   .card:not(:first-of-type) {
@@ -351,13 +338,6 @@
 
   .card:last-of-type {
     margin-right: 20px;
-  }
-
-  @media only screen and (min-width: $medium-breakpoint) {
-    .card {
-      // 31 px to handle to padding between cards
-      width: calc((100% / 4) - 31px);
-    }
   }
 }
 
