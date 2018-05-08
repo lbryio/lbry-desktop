@@ -8041,9 +8041,9 @@ remove-trailing-separator@^1.0.1:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/remove-trailing-separator/-/remove-trailing-separator-1.1.0.tgz#c24bce2a283adad5bc3f58e0d48249b92379d8ef"
 
-render-media@^2.12.0:
-  version "2.12.0"
-  resolved "https://registry.yarnpkg.com/render-media/-/render-media-2.12.0.tgz#e44714d5c9789ec6330ffcaf12c552837e3d80f9"
+render-media@^3.0.0:
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/render-media/-/render-media-3.0.0.tgz#6d77f08cd4ca9a9749bd6c501ab951bf05468458"
   dependencies:
     debug "^3.1.0"
     is-ascii "^1.0.0"
