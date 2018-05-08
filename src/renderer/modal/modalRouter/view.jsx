@@ -1,4 +1,5 @@
 import React from 'react';
+import { MODALS } from 'lbry-redux';
 import ModalError from 'modal/modalError';
 import ModalAuthFailure from 'modal/modalAuthFailure';
 import ModalDownloading from 'modal/modalDownloading';
@@ -20,7 +21,6 @@ import ModalFirstSubscription from 'modal/modalFirstSubscription';
 import ModalSendTip from '../modalSendTip';
 import ModalPublish from '../modalPublish';
 import ModalSearch from '../modalSearch';
-import * as modals from 'constants/modal_types';
 
 class ModalRouter extends React.PureComponent {
   constructor(props) {
@@ -68,7 +68,7 @@ class ModalRouter extends React.PureComponent {
   checkShowWelcome(props) {
     const { isWelcomeAcknowledged, user } = props;
     if (!isWelcomeAcknowledged && user && !user.is_reward_approved && !user.is_identity_verified) {
-      return modals.WELCOME;
+      return MODALS.WELCOME;
     }
   }
 
@@ -80,7 +80,7 @@ class ModalRouter extends React.PureComponent {
       user &&
       !user.has_verified_email
     ) {
-      return modals.EMAIL_COLLECTION;
+      return MODALS.EMAIL_COLLECTION;
     }
   }
 
@@ -92,7 +92,7 @@ class ModalRouter extends React.PureComponent {
       !isCreditIntroAcknowledged &&
       (['send', 'publish'].includes(page) || this.isPaidShowPage(props))
     ) {
-      return modals.INSUFFICIENT_CREDITS;
+      return MODALS.INSUFFICIENT_CREDITS;
     }
   }
 
@@ -113,47 +113,47 @@ class ModalRouter extends React.PureComponent {
     }
 
     switch (notification.id) {
-      case modals.UPGRADE:
+      case MODALS.UPGRADE:
         return <ModalUpgrade {...notificationProps} />;
-      case modals.DOWNLOADING:
+      case MODALS.DOWNLOADING:
         return <ModalDownloading {...notificationProps} />;
-      case modals.AUTO_UPDATE_DOWNLOADED:
+      case MODALS.AUTO_UPDATE_DOWNLOADED:
         return <ModalAutoUpdateDownloaded {...notificationProps} />;
-      case modals.AUTO_UPDATE_CONFIRM:
+      case MODALS.AUTO_UPDATE_CONFIRM:
         return <ModalAutoUpdateConfirm {...notificationProps} />;
-      case modals.ERROR:
+      case MODALS.ERROR:
         return <ModalError {...notificationProps} />;
-      case modals.FILE_TIMEOUT:
+      case MODALS.FILE_TIMEOUT:
         return <ModalFileTimeout {...notificationProps} />;
-      case modals.INSUFFICIENT_CREDITS:
+      case MODALS.INSUFFICIENT_CREDITS:
         return <ModalCreditIntro {...notificationProps} />;
-      case modals.WELCOME:
+      case MODALS.WELCOME:
         return <ModalWelcome {...notificationProps} />;
-      case modals.FIRST_REWARD:
+      case MODALS.FIRST_REWARD:
         return <ModalFirstReward {...notificationProps} />;
-      case modals.AUTHENTICATION_FAILURE:
+      case MODALS.AUTHENTICATION_FAILURE:
         return <ModalAuthFailure {...notificationProps} />;
-      case modals.TRANSACTION_FAILED:
+      case MODALS.TRANSACTION_FAILED:
         return <ModalTransactionFailed {...notificationProps} />;
-      case modals.REWARD_APPROVAL_REQUIRED:
+      case MODALS.REWARD_APPROVAL_REQUIRED:
         return <ModalRewardApprovalRequired {...notificationProps} />;
-      case modals.CONFIRM_FILE_REMOVE:
+      case MODALS.CONFIRM_FILE_REMOVE:
         return <ModalRemoveFile {...notificationProps} />;
-      case modals.AFFIRM_PURCHASE:
+      case MODALS.AFFIRM_PURCHASE:
         return <ModalAffirmPurchase {...notificationProps} />;
-      case modals.CONFIRM_CLAIM_REVOKE:
+      case MODALS.CONFIRM_CLAIM_REVOKE:
         return <ModalRevokeClaim {...notificationProps} />;
-      case modals.PHONE_COLLECTION:
+      case MODALS.PHONE_COLLECTION:
         return <ModalPhoneCollection {...notificationProps} />;
-      case modals.EMAIL_COLLECTION:
+      case MODALS.EMAIL_COLLECTION:
         return <ModalEmailCollection {...notificationProps} />;
-      case modals.FIRST_SUBSCRIPTION:
+      case MODALS.FIRST_SUBSCRIPTION:
         return <ModalFirstSubscription {...notificationProps} />;
-      case modals.SEND_TIP:
+      case MODALS.SEND_TIP:
         return <ModalSendTip {...notificationProps} />;
-      case modals.PUBLISH:
+      case MODALS.PUBLISH:
         return <ModalPublish {...notificationProps} />;
-      case modals.SEARCH:
+      case MODALS.SEARCH:
         return <ModalSearch {...notificationProps} />;
       default:
         return null;

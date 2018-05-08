@@ -1,7 +1,6 @@
 import { execSync } from 'child_process';
 import isDev from 'electron-is-dev';
 import path from 'path';
-import * as MODALS from 'constants/modal_types';
 import { ipcRenderer, remote } from 'electron';
 import {
   ACTIONS,
@@ -10,6 +9,7 @@ import {
   doFetchFileInfosAndPublishedClaims,
   doNotify,
   selectNotification,
+  MODALS,
 } from 'lbry-redux';
 import Native from 'native';
 import { doFetchRewardedContent } from 'redux/actions/content';

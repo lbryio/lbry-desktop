@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import * as modals from 'constants/modal_types';
+import { MODALS } from 'lbry-redux';
 import * as icons from 'constants/icons';
 import Button from 'component/button';
 import type { Subscription } from 'redux/reducers/subscriptions';
@@ -42,7 +42,7 @@ export default (props: Props) => {
       label={subscriptionLabel}
       onClick={() => {
         if (!subscriptions.length) {
-          doNotify({ id: modals.FIRST_SUBSCRIPTION });
+          doNotify({ id: MODALS.FIRST_SUBSCRIPTION });
         }
         subscriptionHandler({
           channelName,
