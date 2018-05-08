@@ -1,10 +1,9 @@
 import * as React from 'react';
-import { Lbry } from 'lbry-redux';
+import { Lbry, MODALS } from 'lbry-redux';
 import LoadScreen from './internal/load-screen';
 import ModalIncompatibleDaemon from 'modal/modalIncompatibleDaemon';
 import ModalUpgrade from 'modal/modalUpgrade';
 import ModalDownloading from 'modal/modalDownloading';
-import * as modals from 'constants/modal_types';
 
 type Props = {
   checkDaemonVersion: () => Promise<any>,
@@ -115,9 +114,9 @@ export class SplashScreen extends React.PureComponent<Props, State> {
             in the modals won't work. */}
         {isRunning && (
           <React.Fragment>
-            {notificationId === modals.INCOMPATIBLE_DAEMON && <ModalIncompatibleDaemon />}
-            {notificationId === modals.UPGRADE && <ModalUpgrade />}
-            {notificationId === modals.DOWNLOADING && <ModalDownloading />}
+            {notificationId === MODALS.INCOMPATIBLE_DAEMON && <ModalIncompatibleDaemon />}
+            {notificationId === MODALS.UPGRADE && <ModalUpgrade />}
+            {notificationId === MODALS.DOWNLOADING && <ModalDownloading />}
           </React.Fragment>
         )}
       </React.Fragment>

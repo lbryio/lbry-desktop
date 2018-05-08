@@ -1,6 +1,5 @@
 // @flow
-import * as MODALS from 'constants/modal_types';
-import { ACTIONS, Lbry, selectMyClaimsWithoutChannels, doNotify } from 'lbry-redux';
+import { ACTIONS, Lbry, selectMyClaimsWithoutChannels, doNotify, MODALS } from 'lbry-redux';
 import { selectPendingPublishes } from 'redux/selectors/publish';
 import type {
   UpdatePublishFormData,

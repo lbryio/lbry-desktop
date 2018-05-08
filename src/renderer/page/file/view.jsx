@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { Lbry, buildURI, normalizeURI } from 'lbry-redux';
+import { Lbry, buildURI, normalizeURI, MODALS } from 'lbry-redux';
 import Video from 'component/video';
 import Thumbnail from 'component/common/thumbnail';
 import FilePrice from 'component/filePrice';
@@ -14,7 +14,6 @@ import Button from 'component/button';
 import SubscribeButton from 'component/subscribeButton';
 import Page from 'component/page';
 import player from 'render-media';
-import * as modals from 'constants/modal_types';
 
 type Props = {
   claim: {
@@ -171,7 +170,7 @@ class FilePage extends React.Component<Props> {
                         button="alt"
                         iconRight="Send"
                         label={__('Enjoy this? Send a tip')}
-                        onClick={() => openModal({ id: modals.SEND_TIP }, { uri })}
+                        onClick={() => openModal({ id: MODALS.SEND_TIP }, { uri })}
                       />
                       <SubscribeButton uri={subscriptionUri} channelName={channelName} />
                     </React.Fragment>
