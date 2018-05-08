@@ -4,7 +4,7 @@ import { FormField } from 'component/common/form';
 import Button from 'component/button';
 import FileExporter from 'component/common/file-exporter';
 import * as icons from 'constants/icons';
-import * as modals from 'constants/modal_types';
+import { MODALS } from 'lbry-redux';
 import TransactionListItem from './internal/transaction-list-item';
 
 export type Transaction = {
@@ -65,7 +65,7 @@ class TransactionList extends React.PureComponent<Props, State> {
   }
 
   revokeClaim(txid: string, nout: number) {
-    this.props.openModal({ id: modals.CONFIRM_CLAIM_REVOKE }, { txid, nout });
+    this.props.openModal({ id: MODALS.CONFIRM_CLAIM_REVOKE }, { txid, nout });
   }
 
   render() {

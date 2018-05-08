@@ -2,7 +2,7 @@
 import React from 'react';
 import Button from 'component/button';
 import FileDownloadLink from 'component/fileDownloadLink';
-import * as modals from 'constants/modal_types';
+import { MODALS } from 'lbry-redux';
 import classnames from 'classnames';
 import * as icons from 'constants/icons';
 
@@ -33,7 +33,7 @@ class FileActions extends React.PureComponent<Props> {
             className="btn--file-actions"
             icon={icons.TRASH}
             description={__('Delete')}
-            onClick={() => openModal({ id: modals.CONFIRM_FILE_REMOVE }, { uri })}
+            onClick={() => openModal({ id: MODALS.CONFIRM_FILE_REMOVE }, { uri })}
           />
         )}
         {!claimIsMine && (

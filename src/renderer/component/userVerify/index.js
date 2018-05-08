@@ -8,8 +8,7 @@ import {
   selectIdentityVerifyErrorMessage,
 } from 'redux/selectors/user';
 import UserVerify from './view';
-import { doNotify } from 'lbry-redux';
-import { PHONE_COLLECTION } from 'constants/modal_types';
+import { doNotify, MODALS } from 'lbry-redux';
 
 const select = (state, props) => {
   const selectReward = makeSelectRewardByType();
@@ -24,7 +23,7 @@ const select = (state, props) => {
 const perform = dispatch => ({
   navigate: uri => dispatch(doNavigate(uri)),
   verifyUserIdentity: token => dispatch(doUserIdentityVerify(token)),
-  verifyPhone: () => dispatch(doNotify({ id: PHONE_COLLECTION })),
+  verifyPhone: () => dispatch(doNotify({ id: MODALS.PHONE_COLLECTION })),
 });
 
 export default connect(select, perform)(UserVerify);
