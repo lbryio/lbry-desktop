@@ -16,6 +16,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Changed
    * Add flair to snackbar ([#1313](https://github.com/lbryio/lbry-app/pull/1313))
+   * Made font in price badge larger ([#1420](https://github.com/lbryio/lbry-app/pull/1420))
 
 ### Fixed
    * Black screen on macOS after maximizing LBRY and then closing ([#1235](https://github.com/lbryio/lbry-app/pull/1235))
@@ -26,6 +27,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
    * Fix download percentage indicator overlay ([#1271](https://github.com/lbryio/lbry-app/issues/1271))
    * Fix alternate row shading for transactions on dark theme ([#1355](https://github.com/lbryio/lbry-app/issues/#1355))
    * Fix Description box on Publish (dark theme) ([#1356](https://github.com/lbryio/lbry-app/issues/#1356))
+   * Fix price wrapping in price badge ([#1420](https://github.com/lbryio/lbry-app/pull/1420))
    * Fix spacing in search suggestions ([#1422])(https://github.com/lbryio/lbry-app/pull/1422))
    * Fix text/HTML files don't display correctly in-app anymore ([#1379])(https://github.com/lbryio/lbry-app/issues/1379)
 
