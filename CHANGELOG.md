@@ -19,13 +19,13 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
    * Made font in price badge larger ([#1420](https://github.com/lbryio/lbry-app/pull/1420))
 
 ### Fixed
-   * Black screen on macOS after maximizing LBRY and then closing ([#1235](https://github.com/lbryio/lbry-app/pull/1235))
    * Fix content-type not shown correctly in file description ([#863](https://github.com/lbryio/lbry-app/pull/863))
    * Fix [Flow](https://flow.org/) ([#1197](https://github.com/lbryio/lbry-app/pull/1197))
-   * Black screen on macOS after maximizing LBRY and then closing ([#1235](https://github.com/lbryio/lbry-app/pull/1235))
+   * Fix black screen on macOS after maximizing LBRY and then closing ([#1235](https://github.com/lbryio/lbry-app/pull/1235))
    * Fix dark theme ([#1034](https://github.com/lbryio/lbry-app/issues/1034))
    * Fix download percentage indicator overlay ([#1271](https://github.com/lbryio/lbry-app/issues/1271))
    * Fix alternate row shading for transactions on dark theme ([#1355](https://github.com/lbryio/lbry-app/issues/#1355))
+   * Fix don't allow dark mode with automatic night mode enabled ([#1005](https://github.com/lbryio/lbry-app/issues/1005))
    * Fix Description box on Publish (dark theme) ([#1356](https://github.com/lbryio/lbry-app/issues/#1356))
    * Fix price wrapping in price badge ([#1420](https://github.com/lbryio/lbry-app/pull/1420))
    * Fix spacing in search suggestions ([#1422])(https://github.com/lbryio/lbry-app/pull/1422))

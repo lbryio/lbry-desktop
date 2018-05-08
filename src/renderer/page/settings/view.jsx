@@ -141,6 +141,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
     } = this.props;
 
     const noDaemonSettings = !daemonSettings || Object.keys(daemonSettings).length === 0;
+    const isDarkModeEnabled = currentTheme === 'dark';
 
     return (
       <Page>
@@ -294,6 +295,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                   name="automatic_dark_mode"
                   onChange={e => this.onAutomaticDarkModeChange(e.target.checked)}
                   checked={automaticDarkModeEnabled}
+                  disabled={isDarkModeEnabled}
                   postfix={__('Automatic dark mode (9pm to 8am)')}
                 />
               </section>
