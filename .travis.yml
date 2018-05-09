@@ -45,7 +45,6 @@ script:
     else
       yarn build --publish onTag
     fi
-  - yarn danger ci
 branches:
   except:
     - "/^v\\d+\\.\\d+\\.\\d+$/"
