@@ -1,4 +1,3 @@
-cache: false
 matrix:
   include:
     - os: osx
@@ -14,11 +13,7 @@ matrix:
       node_js: "9"
 before_cache:
   - rm -rf $HOME/.cache/electron-builder/wine
-cache:
-  directories:
-  - node_modules
-  - $HOME/.cache/electron
-  - $HOME/.cache/electron-builder
+cache: false
 before_install:
   - |
     if [ "$TRAVIS_OS_NAME" == "osx" ]; then
