@@ -4,14 +4,14 @@ matrix:
     - os: osx
       osx_image: xcode9.2
       language: node_js
-      node_js: "9"
+      node_js: "7"
       env:
         - ELECTRON_CACHE=$HOME/.cache/electron
         - ELECTRON_BUILDER_CACHE=$HOME/.cache/electron-builder
     - os: linux
       services: docker
       language: node_js
-      node_js: "9"
+      node_js: "7"
 before_cache:
   - rm -rf $HOME/.cache/electron-builder/wine
 cache:
