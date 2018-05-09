@@ -5733,7 +5733,7 @@ lazy-val@^1.0.3:
 
 lbry-redux@lbryio/lbry-redux:
   version "0.0.1"
-  resolved "https://codeload.github.com/lbryio/lbry-redux/tar.gz/3d06d1474e842b5676a09bee4e5c1c9a2286a404"
+  resolved "https://codeload.github.com/lbryio/lbry-redux/tar.gz/62f04be2be163cea2ad5fb7a2426ee0d95122d54"
   dependencies:
     proxy-polyfill "0.1.6"
     reselect "^3.0.0"
