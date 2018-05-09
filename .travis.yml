@@ -10,7 +10,8 @@ matrix:
         - ELECTRON_BUILDER_CACHE=$HOME/.cache/electron-builder
     - os: linux
       services: docker
-      language: generic
+      language: node_js
+      node_js: "9"
 before_cache:
   - rm -rf $HOME/.cache/electron-builder/wine
 cache:
