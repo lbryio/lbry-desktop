@@ -4,14 +4,14 @@ matrix:
     - os: osx
       osx_image: xcode9.2
       language: node_js
-      node_js: "7"
+      node_js: "9"
       env:
         - ELECTRON_CACHE=$HOME/.cache/electron
         - ELECTRON_BUILDER_CACHE=$HOME/.cache/electron-builder
     - os: linux
       services: docker
       language: node_js
-      node_js: "7"
+      node_js: "9"
 before_cache:
   - rm -rf $HOME/.cache/electron-builder/wine
 cache:
@@ -31,6 +31,8 @@ before_install:
       sudo rm -fv /etc/apt/sources.list.d/mongodb*
       sudo apt-get -qq update
       sudo apt-get install -y libsecret-1-dev
+      curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.6.0
+      export PATH="$HOME/.yarn/bin:$PATH"
     fi
 before_script:
   - git lfs pull
@@ -43,7 +45,7 @@ script:
         -v ~/.cache/electron:/root/.cache/electron \
         -v ~/.cache/electron-builder:/root/.cache/electron-builder \
         electronuserland/builder:wine \
-        /bin/bash -c "npm upgrade --global yarn && yarn --link-duplicates --pure-lockfile && npm rebuild node-sass && yarn build --linux --win --publish onTag"
+        /bin/bash -c "yarn --link-duplicates --pure-lockfile && yarn build --linux --win --publish onTag"
     else
       yarn build --publish onTag
     fi
