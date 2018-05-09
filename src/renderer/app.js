@@ -5,6 +5,7 @@ import y18n from 'y18n';
 import isDev from 'electron-is-dev';
 
 const env = process.env.NODE_ENV || 'production';
+
 const i18n = y18n({
   directory: Path.join(remote.app.getAppPath(), '/../static/locales').replace(/\\/g, '\\\\'),
   updateFiles: false,
