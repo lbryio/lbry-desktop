@@ -1,6 +1,6 @@
 import * as ACTIONS from 'constants/action_types';
-import { MODALS } from 'lbry-redux';
 import Lbryio from 'lbryio';
+import { doNotify, MODALS } from 'lbry-redux';
 import { selectUnclaimedRewardsByType } from 'redux/selectors/rewards';
 import { selectUserIsRewardApproved } from 'redux/selectors/user';
 import rewards from 'rewards';
@@ -40,10 +40,11 @@ export function doClaimRewardType(rewardType) {
     }
 
     if (!userIsRewardApproved && rewardType !== rewards.TYPE_CONFIRM_EMAIL) {
-      dispatch({
-        type: ACTIONS.OPEN_MODAL,
-        data: { modal: MODALS.REWARD_APPROVAL_REQUIRED },
+      const action = doNotify({
+        id: MODALS.REWARD_APPROVAL_REQUIRED,
+        isError: false,
       });
+      dispatch(action);
 
       return;
     }
@@ -61,10 +62,11 @@ export function doClaimRewardType(rewardType) {
         },
       });
       if (successReward.reward_type === rewards.TYPE_NEW_USER) {
-        dispatch({
-          type: ACTIONS.OPEN_MODAL,
-          data: { modal: MODALS.FIRST_REWARD },
+        const action = doNotify({
+          id: MODALS.FIRST_REWARD,
+          isError: false,
         });
+        dispatch(action);
       }
     };
 
