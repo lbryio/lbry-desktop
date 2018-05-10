@@ -45,7 +45,7 @@
     "from2": "^2.3.0",
     "install": "^0.10.2",
     "jshashes": "^1.0.7",
-    "keytar-prebuild": "4.0.4",
+    "keytar": "^4.2.1",
     "localforage": "^1.5.0",
     "mixpanel-browser": "^2.17.1",
     "moment": "^2.20.1",
