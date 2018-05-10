@@ -146,7 +146,8 @@ $large-breakpoint: 1760px;
   --success-msg-bg: var(--color-green-light);
 
   /* File Tile Card */
-  --file-tile--media-size: 60px;
+  --file-tile--media-height: 60px;
+  --file-tile--media-width: 94px; // 60 * (1 + 9/16)
 
   /* Modal */
   --modal-width: 440px;

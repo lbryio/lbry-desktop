@@ -20,10 +20,10 @@
   display: flex;
   margin-top: $spacing-vertical;
   max-width: 260px;
-  height: var(--file-tile--media-size);
 
   .card__media {
-    flex: 0 0 var(--file-tile--media-size);
+    height: var(--file-tile--media-height);
+    flex: 0 0 var(--file-tile--media-width);
   }
 
   .card__subtitle {

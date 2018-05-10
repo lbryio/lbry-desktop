@@ -59,7 +59,7 @@ class FileListSearch extends React.PureComponent<Props> {
       query && (
         <div className="search__results">
           <div className="search-result__column">
-            <div className="file-list__header">{__('Files')}</div>
+            <div className="file-list__header">{__('Content')}</div>
             {!isSearching &&
               (fileResults.length ? (
                 fileResults.map(uri => <FileTile key={uri} uri={uri} />)
