@@ -14,7 +14,7 @@ The LBRY app is a graphical browser for the decentralized content marketplace pr
 
 ## Installing
 
-We provide installers for Windows, macOS, and Debian-based Linux.
+We provide installers for Windows, macOS (v10.9 or greater), and Debian-based Linux.
 
 |                       | Windows                                      | macOS                                        | Linux                                        |
 | --------------------- | -------------------------------------------- | -------------------------------------------- | -------------------------------------------- |
