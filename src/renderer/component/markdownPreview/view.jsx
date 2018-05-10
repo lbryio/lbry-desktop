@@ -2,28 +2,14 @@
 import * as React from 'react';
 import remark from 'remark';
 import reactRenderer from 'remark-react';
-import Button from 'component/button';
+import ExternalLink from 'component/externalLink';
 
-type Props = {
-  children: React.Node,
-};
+type MarkdownProps = { content: string };
+type TitleProps = { children: React.Node };
 
-const TitleMarkdown = (props: Props) => {
+const MarkdownTitle = (props: TitleProps) => {
   const { children } = props;
   return <div className="markdown-preview__title">{children}</div>;
-};
-
-const LinkMarkDown = (props: Props) => {
-  const { children } = props;
-  return (
-    <Button button="link" {...props}>
-      {children}
-    </Button>
-  );
-};
-
-type MarkdownProps = {
-  content: string,
 };
 
 const MarkdownPreview = (props: MarkdownProps) => {
@@ -31,13 +17,13 @@ const MarkdownPreview = (props: MarkdownProps) => {
   const remarkOptions = {
     sanatize: true,
     remarkReactComponents: {
-      a: LinkMarkDown,
-      h1: TitleMarkdown,
-      h2: TitleMarkdown,
-      h3: TitleMarkdown,
-      h4: TitleMarkdown,
-      h5: TitleMarkdown,
-      h6: TitleMarkdown,
+      a: ExternalLink,
+      h1: MarkdownTitle,
+      h2: MarkdownTitle,
+      h3: MarkdownTitle,
+      h4: MarkdownTitle,
+      h5: MarkdownTitle,
+      h6: MarkdownTitle,
     },
   };
   return (
