@@ -10,9 +10,12 @@ type Props = {
 
 class ModalOpenExternalLink extends React.PureComponent<Props> {
   openExternalLink() {
-    const { url } = this.props;
+    const { url, closeModal } = this.props;
     const { openExternal } = shell;
-    openExternal(url);
+    if (url) {
+      openExternal(url);
+    }
+    closeModal();
   }
 
   render() {
@@ -23,13 +26,16 @@ class ModalOpenExternalLink extends React.PureComponent<Props> {
         contentLabel={__('Confirm External Link')}
         type="confirm"
         confirmButtonLabel={__('Continue')}
-        onConfirmed={() => this.openExternalLink(url)}
+        onConfirmed={() => this.openExternalLink()}
         onAborted={closeModal}
       >
+        <h1>Warning!</h1>
+        <p>{__('This link leads to an external website.')}</p>
+        <blockquote>{url}</blockquote>
         <p>
-          {__('This link leads to an external website:')}
-          <cite>{url}</cite>
-          {__('LBRY Inc is not responsible for its content, click OK to proceed at your own risk.')}
+          {__(
+            'LBRY Inc is not responsible for its content, click continue to proceed at your own risk.'
+          )}
         </p>
       </Modal>
     );

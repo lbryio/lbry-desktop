@@ -8,14 +8,6 @@
   margin: 16px 0;
 }
 
-.markdown-preview blockquote {
-  padding: 8px;
-  margin: 16px 0;
-  color: var(--color-help);
-  border-left: 2px solid var(--color-help);
-  background-color: var(--color-bg-alt);
-}
-
 .markdown-preview table {
   padding: 8px;
   margin: 16px 0;
@@ -47,4 +39,12 @@
 
 .markdown-preview del {
   color: var(--color-help);
+}
+
+blockquote {
+  padding: 8px;
+  margin: 16px 0;
+  color: var(--color-help);
+  border-left: 2px solid var(--color-help);
+  background-color: var(--color-bg-alt);
 }

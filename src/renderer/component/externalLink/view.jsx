@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { MODALS } from 'lbry-redux';
 import Button from 'component/button';
 
@@ -7,7 +7,7 @@ type Props = {
   href?: string,
   title?: string,
   children: React.Node,
-  openModal: string => void,
+  openModal: ({ id: string }, { url: string }) => void,
 };
 
 class ExternalLink extends React.PureComponent<Props> {
@@ -20,6 +20,7 @@ class ExternalLink extends React.PureComponent<Props> {
     return href ? (
       <Button
         button="link"
+        className="btn--external-link"
         title={title}
         onClick={() => openModal({ id: MODALS.CONFIRM_EXTERNAL_LINK }, { url: href })}
       >
