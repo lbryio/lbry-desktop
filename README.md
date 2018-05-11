@@ -12,7 +12,7 @@ The LBRY app is a graphical browser for the decentralized content marketplace pr
 
 ![App screenshot](https://lbry.io/img/lbry-ui.png)
 
-## Installing
+## Install
 
 We provide installers for Windows, macOS (v10.9 or greater), and Debian-based Linux.
 
@@ -26,47 +26,40 @@ release, pre-releases, and past builds.
 
 To install from source or make changes to the application, continue reading below.
 
-## Getting Started
+## Usage
+Double click the installed application to browse with the LBRY network.
 
-These instructions will get you a copy of the project up and running on your local machine for
-development and testing purposes.
+## Running from Source
 
-### Prerequisites
+#### Prerequisites
 
 * [Git](https://git-scm.com/downloads)
 * [Node.js](https://nodejs.org/en/download/)
 * [Yarn](https://yarnpkg.com/en/docs/install)
 * [C++ Build Tools](https://github.com/felixrieseberg/windows-build-tools) (Only needed on Windows)
 
-### Setup
+#### Steps
 
-1. Clone this repository
-2. Run `$ yarn`
+1. Clone this repository: `git clone https://github.com/lbryio/lbry-app`
+2. Change directories into the downloaded folder: `cd lbry-app`
+3. Install the dependencies: `yarn`
+4. Run the app: `yarn dev`
 
-### Run
-
-The app can be run from the sources using the following command:
-
-`$ yarn dev`
-
-### Build
-
-Run `$ yarn build`
-
-We use [electron-builder](https://github.com/electron-userland/electron-builder) to create
+If you want to just build the app you can run `yarn build`. This will give you an executable inside the `/dist` folder. We use [electron-builder](https://github.com/electron-userland/electron-builder) to create
 distributable packages.
 
 ## Contributing
+Contributions to this project are welcome, encouraged, and compensated. For more details, see [CONTRIBUTING.md](CONTRIBUTING.md)
 
-Please read [our contributing manual](CONTRIBUTING.md) for details on how to develop for the
-project and the process of submitting pull requests.
-
-## Internationalization
-
-If you want to help to translate the lbry-app, you can copy the `en.json` file in `/dist/locales/`
-and modify the values while leaving the keys as their original English strings. An example for this
-would be: `"Skip": "Überspringen",` Translations should automatically show up in options.
 
 ## License
 
-[MIT © LBRY](LICENSE)
+This project is MIT licensed. For the full license, see [LICENSE](LICENSE)
+
+## Security
+
+We take security seriously. Please contact security@lbry.io regarding any security issues. Our PGP key is [here](https://keybase.io/lbry/key.asc) if you need it.
+
+## Contact
+
+The primary contact for this project is [@seanyesmunt](https://github.com/@seanyesmunt)
