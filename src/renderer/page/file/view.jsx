@@ -7,7 +7,7 @@ import FilePrice from 'component/filePrice';
 import FileDetails from 'component/fileDetails';
 import FileActions from 'component/fileActions';
 import UriIndicator from 'component/uriIndicator';
-import { FormField } from 'component/common/form';
+import { FormField, FormRow } from 'component/common/form';
 import Icon from 'component/common/icon';
 import DateTime from 'component/dateTime';
 import * as icons from 'constants/icons';
@@ -48,7 +48,9 @@ type Props = {
   fetchFileInfo: string => void,
   fetchCostInfo: string => void,
   prepareEdit: ({}) => void,
-  setClientSetting: (string, boolean | string | Price) => void,
+  setClientSetting: (string, boolean | string) => void,
+  checkSubscription: ({ channelName: string, uri: string }) => void,
+  subscriptions: Array<{}>,
 };
 
 class FilePage extends React.Component<Props> {
@@ -85,6 +87,7 @@ class FilePage extends React.Component<Props> {
 
   checkSubscription = (props: Props) => {
     if (
+      props.claim.value.publisherSignature &&
       props.subscriptions
         .map(subscription => subscription.channelName)
         .indexOf(props.claim.channel_name) !== -1
@@ -192,7 +195,7 @@ class FilePage extends React.Component<Props> {
                   )}
                 </div>
               </div>
-              <div className="autoplay">
+              <FormRow alignRight>
                 <FormField
                   type="checkbox"
                   name="autoplay"
@@ -200,7 +203,7 @@ class FilePage extends React.Component<Props> {
                   checked={autoplay}
                   postfix={__('Autoplay')}
                 />
-              </div>
+              </FormRow>
             </div>
 
             <div className="card__content">

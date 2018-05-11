@@ -173,11 +173,7 @@
 
 .card__channel-info--large {
   padding-top: 0;
-  padding-bottom: 0;
-}
-
-.autoplay div div input {
-  margin: 0 0 $spacing-vertical auto;
+  padding-bottom: $spacing-vertical * 2/3;
 }
 
 .card__content {
