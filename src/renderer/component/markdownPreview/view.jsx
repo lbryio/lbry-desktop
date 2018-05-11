@@ -13,25 +13,12 @@ schema.protocols.href[3] = 'lbry';
 
 type MarkdownProps = { content: string };
 
-type TitleProps = { children: React.Node };
-
-const MarkdownTitle = (props: TitleProps) => {
-  const { children } = props;
-  return <div className="markdown-preview__title">{children}</div>;
-};
-
 const MarkdownPreview = (props: MarkdownProps) => {
   const { content } = props;
   const remarkOptions = {
     sanitize: schema,
     remarkReactComponents: {
       a: ExternalLink,
-      h1: MarkdownTitle,
-      h2: MarkdownTitle,
-      h3: MarkdownTitle,
-      h4: MarkdownTitle,
-      h5: MarkdownTitle,
-      h6: MarkdownTitle,
     },
   };
   return (

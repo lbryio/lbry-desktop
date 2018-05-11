@@ -1,11 +1,42 @@
 .markdown-preview {
   margin: 0;
-}
 
-.markdown-preview__title {
-  font-family: 'metropolis-semibold';
-  font-size: 1.35em;
-  margin: 16px 0;
+  /* Headings: title */
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: 'metropolis-semibold';
+    margin: 16px 0;
+  }
+
+  h1 {
+    font-size: 1.22em;
+  }
+
+  h2 {
+    font-size: 1.14em;
+  }
+
+  h3 {
+    font-size: 1.06em;
+  }
+
+  h4 {
+    font-size: 0.92em;
+  }
+
+  h5 {
+    font-size: 0.84em;
+  }
+
+  h6 {
+    font-size: 1em;
+    color: var(--color-help);
+  }
 }
 
 .markdown-preview table {
