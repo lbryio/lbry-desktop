@@ -33,7 +33,7 @@ class ExternalLink extends React.PureComponent<Props> {
       element = (
         <Button
           button="link"
-          title={title}
+          title={title || href}
           className="btn--external-link"
           onClick={() => openModal({ id: MODALS.CONFIRM_EXTERNAL_LINK }, { uri: href })}
         >
@@ -45,7 +45,11 @@ class ExternalLink extends React.PureComponent<Props> {
     // Return local link if protocol is lbry uri
     if (protocol && protocol[0] === 'lbry:' && isURIValid(href)) {
       element = (
-        <Button button="link" title={title} onClick={() => navigate('/show', { uri: href })}>
+        <Button
+          button="link"
+          title={title || href}
+          onClick={() => navigate('/show', { uri: href })}
+        >
           {children}
         </Button>
       );
