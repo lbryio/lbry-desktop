@@ -30,6 +30,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
    * Fix price wrapping in price badge ([#1420](https://github.com/lbryio/lbry-app/pull/1420))
    * Fix spacing in search suggestions ([#1422](https://github.com/lbryio/lbry-app/pull/1422))
    * Fix text/HTML files don't display correctly in-app anymore ([#1379](https://github.com/lbryio/lbry-app/issues/1379))
+   * Fix notification modals when reward is claimed ([#1436](https://github.com/lbryio/lbry-app/issues/1436)) and ([#1407](https://github.com/lbryio/lbry-app/issues/1407))
    * Fix markdown render ([#1179](https://github.com/lbryio/lbry-app/issues/1179))
 
 ## [0.21.3] - 2018-04-23
