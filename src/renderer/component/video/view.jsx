@@ -19,6 +19,7 @@ type Props = {
     nsfw: boolean,
     thumbnail: string,
   },
+  autoplay: boolean,
   isLoading: boolean,
   isDownloading: boolean,
   playingUri: ?string,
@@ -34,56 +35,38 @@ type Props = {
   mediaPosition: ?number,
   className: ?string,
   obscureNsfw: boolean,
-  play: string => void
+  play: string => void,
 };
 
 class Video extends React.PureComponent<Props> {
-  componentWillUnmount() {
-    this.props.cancelPlay();
-  }
-
   componentDidMount() {
     this.handleAutoplay(this.props);
   }
 
   componentWillReceiveProps(nextProps: Props) {
-    this.handleAutoplay(nextProps);
+    if (
+      this.props.autoplay !== nextProps.autoplay ||
+      this.props.fileInfo !== nextProps.fileInfo ||
+      this.props.isDownloading !== nextProps.isDownloading ||
+      this.props.playingUri !== nextProps.playingUri
+    ) {
+      this.handleAutoplay(nextProps);
+    }
+  }
+
+  componentWillUnmount() {
+    this.props.cancelPlay();
   }
 
   handleAutoplay(props: Props) {
-    const {
-      autoplay,
-      obscureNsfw,
-      playingUri,
-      fileInfo,
-      costInfo,
-      isDownloading,
-      uri,
-      load,
-      play
-    } = props;
+    const { autoplay, playingUri, fileInfo, costInfo, isDownloading, uri, load, play, metadata } = props;
 
-    const playable = (
-      autoplay &&
-      obscureNsfw === false &&
-      playingUri !== uri
-    );
+    const playable = autoplay && playingUri !== uri && metadata && !metadata.nsfw;
 
-    if (
-      playable &&
-      costInfo &&
-      costInfo.cost === 0 &&
-      !fileInfo &&
-      !isDownloading
-    ) {
+    if (playable && costInfo && costInfo.cost === 0 && !fileInfo && !isDownloading) {
       load(uri);
       play(uri);
-    }
-    else if (
-      playable &&
-      fileInfo &&
-      fileInfo.blobs_completed > 0
-    ) {
+    } else if (playable && fileInfo && fileInfo.blobs_completed > 0) {
       play(uri);
     }
   }
@@ -137,7 +120,8 @@ class Video extends React.PureComponent<Props> {
 
     const poster = metadata && metadata.thumbnail;
     const layoverClass = classnames('content__cover', { 'card__media--nsfw': shouldObscureNsfw });
-    const layoverStyle = !shouldObscureNsfw && poster ? { backgroundImage: `url("${poster}")` } : {};
+    const layoverStyle =
+      !shouldObscureNsfw && poster ? { backgroundImage: `url("${poster}")` } : {};
 
     return (
       <div className={classnames('video', {}, className)}>
@@ -147,7 +131,7 @@ class Video extends React.PureComponent<Props> {
               <div className={layoverClass} style={layoverStyle}>
                 <LoadingScreen status={loadStatusMessage} />
               </div>
-          ) : (
+            ) : (
               <VideoPlayer
                 filename={fileInfo.file_name}
                 poster={poster}
