@@ -4,22 +4,22 @@ import { Modal } from 'modal/modal';
 import { shell } from 'electron';
 
 type Props = {
-  url: string,
+  uri: string,
   closeModal: () => void,
 };
 
 class ModalOpenExternalLink extends React.PureComponent<Props> {
   openExternalLink() {
-    const { url, closeModal } = this.props;
+    const { uri, closeModal } = this.props;
     const { openExternal } = shell;
-    if (url) {
-      openExternal(url);
+    if (uri) {
+      openExternal(uri);
     }
     closeModal();
   }
 
   render() {
-    const { url, closeModal } = this.props;
+    const { uri, closeModal } = this.props;
     return (
       <Modal
         isOpen
@@ -31,7 +31,7 @@ class ModalOpenExternalLink extends React.PureComponent<Props> {
       >
         <h1>Warning!</h1>
         <p>{__('This link leads to an external website.')}</p>
-        <blockquote>{url}</blockquote>
+        <blockquote>{uri}</blockquote>
         <p>
           {__(
             'LBRY Inc is not responsible for its content, click continue to proceed at your own risk.'
