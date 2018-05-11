@@ -5,6 +5,7 @@ application is primarily written in JavaScript and is built on [Electron](https:
 while utilizing [React](https://reactjs.org) and [Redux](https://redux.js.org) for UI and
 application state.
 
+
 ## TL;DR?
 
 * [Here](https://github.com/lbryio/lbry-app/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22+no%3Aassignee)
@@ -52,38 +53,30 @@ would. If these rankings don't work for you, feel free to ignore them.
 
 Although all contributions should have good UX, the [UX label, when applied in conjunction with Help Wanted](https://github.com/lbryio/lbry-app/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22+label%3Aux+no%3Aassignee), indicates that the contributor ought to implement the feature in a creative way that specifically focuses on providing a good user experience. These issues often have no set instruction for how the experience should be and leave it to the contributor to figure out. This may be challenging for people who do not like UX, but also more fun and rewarding for those who do.
 
-## Develop
+## Code Overview
+
+The entry point for this application is `src/renderer/index.js`
 
 The project comes with diverse tools for simplifying the development process and for providing
-better code quality. It's recommended to make use of them thoroughly during ongoing development.
-
-We follow the well-known [Airbnb JavaScript Style Guide](http://airbnb.io/javascript/) for defining
+better code quality. It's recommended to make use of them thoroughly during ongoing development. We follow the well-known [Airbnb JavaScript Style Guide](http://airbnb.io/javascript/) for defining
 our styling rules and code best practices.
 
 ### Flow
 
-[Flow](https://flow.org/) is a static type checker for JavaScript. Flow checks your code for 
+[Flow](https://flow.org/) is a static type checker for JavaScript. Flow checks your code for
 errors through static type annotations. For using Flow, you need to add the following
 annotation to the beginning of the file you're editing:
 
 `// @flow`
 
-After adding this, you can start adding [type annotations](https://flow.org/en/docs/types/) to 
+After adding this, you can start adding [type annotations](https://flow.org/en/docs/types/) to
 the code.
 
-If you add a project dependency and you want to use it with Flow, you need to import its type 
+If you add a project dependency and you want to use it with Flow, you need to import its type
 definitions in the project by running:
 
 `$ yarn flow-defs`
 
-### Run
-
-LBRY app can be run for development by using the command:
-
-`$ yarn dev`
-
-This will launch the app and provide HMR (Hot Module Replacement). Any change made to the sources
-will automatically reload the app without losing its state.
 
 ### Lint
 
@@ -177,10 +170,9 @@ will earn you an extra 50 LBC on top of what we would otherwise tip you.
 # Get in Touch
 
 | Name                                    | Role                                                                                                                                                                                                           | Discord     | Email        |
-| --------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- | ------------ |
-| [Liam](https://github.com/liamcardenas) | The application engineer in charge of community development. He is the person to contact with any development/contribution related questions.                                                                  | liamsdouble | liam@lbry.io |
+| --------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- | ------------
 | [Tom](https://github.com/tzarebczan)    | Community manager. He knows more than anyone about the app and all of its flaws. Reach out to him with any questions about how the app works, if a bug has been reported, or if a feature should be requested. | jiggytom    | tom@lbry.io  |
-| [Sean](https://github.com/seanyesmunt)  | An application engineer who focuses largely on UI/UX. If you have a design or implementation question, feel free to reach out to him.                                                                          | sean        | sean@lbry.io |
+| [Sean](https://github.com/seanyesmunt)  | The primary engineer working on the app. Feel free to ask any questions about how the code.                                                                          | sean        | sean@lbry.io |
 
 Join our Discord [here](https://chat.lbry.io/).
 
