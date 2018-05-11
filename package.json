@@ -49,6 +49,7 @@
     "electron-window-state": "^4.1.1",
     "find-process": "^1.1.0",
     "formik": "^0.10.4",
+    "hast-util-sanitize": "^1.1.2",
     "keytar": "^4.2.1",
     "lbry-redux": "lbryio/lbry-redux",
     "localforage": "^1.7.1",

@@ -4608,7 +4608,7 @@ hast-to-hyperscript@^4.0.0:
     trim "0.0.1"
     unist-util-is "^2.0.0"
 
-hast-util-sanitize@^1.0.0:
+hast-util-sanitize@^1.0.0, hast-util-sanitize@^1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/hast-util-sanitize/-/hast-util-sanitize-1.1.2.tgz#d10bd6757a21e59c13abc8ae3530dd3b6d7d679e"
   dependencies:

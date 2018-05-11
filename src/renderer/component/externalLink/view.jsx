@@ -7,7 +7,7 @@ type Props = {
   href: string,
   title?: string,
   children: React.Node,
-  // navigate: (string, ?{}) => void,
+  navigate: (string, ?{}) => void,
   openModal: ({ id: string }, { uri: string }) => void,
 };
 
@@ -18,7 +18,8 @@ class ExternalLink extends React.PureComponent<Props> {
   };
 
   createLink() {
-    const { href, title, children, openModal } = this.props;
+    const { href, title, children, openModal, navigate } = this.props;
+    console.info(href);
 
     // Regex for url protocol
     const protocolRegex = new RegExp('^(https?|lbry)+:', 'i');
@@ -41,19 +42,14 @@ class ExternalLink extends React.PureComponent<Props> {
       );
     }
 
-    /* React-remark blocks the lbry protocol requires an external fix
-    // Return local link if valid lbry uri
+    // Return local link if protocol is lbry uri
     if (protocol && protocol[0] === 'lbry:') {
       element = (
-        <Button
-        button="link"
-        title={title}
-        onClick={() => navigate('/show', { uri: href })}
-        >
+        <Button button="link" title={title} onClick={() => navigate('/show', { uri: href })}>
           {children}
         </Button>
       );
-    } */
+    }
 
     return element;
   }
