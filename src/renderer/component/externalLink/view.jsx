@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { MODALS } from 'lbry-redux';
+import { MODALS, isURIValid } from 'lbry-redux';
 import Button from 'component/button';
 
 type Props = {
@@ -43,7 +43,7 @@ class ExternalLink extends React.PureComponent<Props> {
     }
 
     // Return local link if protocol is lbry uri
-    if (protocol && protocol[0] === 'lbry:') {
+    if (protocol && protocol[0] === 'lbry:' && isURIValid(href)) {
       element = (
         <Button button="link" title={title} onClick={() => navigate('/show', { uri: href })}>
           {children}
