@@ -1,7 +1,9 @@
 import { connect } from 'react-redux';
+import * as settings from 'constants/settings';
 import { doNavigate } from 'redux/actions/navigation';
 import { selectRewardContentClaimIds, selectPlayingUri } from 'redux/selectors/content';
 import { doCheckSubscription } from 'redux/actions/subscriptions';
+import { doSetClientSetting } from 'redux/actions/settings';
 import {
   doFetchFileInfo,
   doFetchCostInfoForUri,
@@ -13,7 +15,7 @@ import {
   makeSelectMetadataForUri,
   doNotify,
 } from 'lbry-redux';
-import { selectShowNsfw } from 'redux/selectors/settings';
+import { selectShowNsfw, makeSelectClientSetting } from 'redux/selectors/settings';
 import { selectSubscriptions } from 'redux/selectors/subscriptions';
 import { selectMediaPaused } from 'redux/selectors/media';
 import { doPrepareEdit } from 'redux/actions/publish';
@@ -31,6 +33,7 @@ const select = (state, props) => ({
   playingUri: selectPlayingUri(state),
   isPaused: selectMediaPaused(state),
   claimIsMine: makeSelectClaimIsMine(props.uri)(state),
+  autoplay: makeSelectClientSetting(settings.AUTOPLAY)(state)
 });
 
 const perform = dispatch => ({
@@ -40,6 +43,7 @@ const perform = dispatch => ({
   checkSubscription: subscription => dispatch(doCheckSubscription(subscription)),
   openModal: (modal, props) => dispatch(doNotify(modal, props)),
   prepareEdit: (publishData, uri) => dispatch(doPrepareEdit(publishData, uri)),
+  setClientSetting: (key, value) => dispatch(doSetClientSetting(key, value)),
 });
 
 export default connect(select, perform)(FilePage);

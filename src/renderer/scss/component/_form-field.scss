@@ -23,6 +23,10 @@
     flex: 1;
   }
 
+  &.form-row--right {
+    justify-content: flex-end;
+  }
+
   .form-field.form-field--stretch {
     width: 100%;
 

@@ -168,12 +168,12 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: $spacing-width 0;
+  padding: $spacing-width 0 0;
 }
 
 .card__channel-info--large {
   padding-top: 0;
-  padding-bottom: $spacing-width;
+  padding-bottom: $spacing-vertical * 2/3;
 }
 
 .card__content {

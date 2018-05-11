@@ -31,6 +31,7 @@ type Props = {
   currentTheme: string,
   themes: Array<string>,
   automaticDarkModeEnabled: boolean,
+  autoplay: boolean
 };
 
 type State = {
@@ -53,6 +54,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
     (this: any).onShareDataChange = this.onShareDataChange.bind(this);
     (this: any).onThemeChange = this.onThemeChange.bind(this);
     (this: any).onAutomaticDarkModeChange = this.onAutomaticDarkModeChange.bind(this);
+    (this: any).onAutoplayChange = this.onAutoplayChange.bind(this);
     (this: any).clearCache = this.clearCache.bind(this);
     // (this: any).onLanguageChange = this.onLanguageChange.bind(this)
   }
@@ -93,6 +95,10 @@ class SettingsPage extends React.PureComponent<Props, State> {
 
   onAutomaticDarkModeChange(value: boolean) {
     this.props.setClientSetting(settings.AUTOMATIC_DARK_MODE_ENABLED, value);
+  }
+
+  onAutoplayChange(event: SyntheticInputEvent<*>) {
+    this.props.setClientSetting(settings.AUTOPLAY, event.target.checked);
   }
 
   onInstantPurchaseEnabledChange(enabled: boolean) {
@@ -138,6 +144,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
       currentTheme,
       themes,
       automaticDarkModeEnabled,
+      autoplay
     } = this.props;
 
     const noDaemonSettings = !daemonSettings || Object.keys(daemonSettings).length === 0;
@@ -239,6 +246,13 @@ class SettingsPage extends React.PureComponent<Props, State> {
             </section>
             <section className="card card--section">
               <div className="card__title">{__('Content Settings')}</div>
+              <FormField
+                type="checkbox"
+                name="autoplay"
+                onChange={this.onAutoplayChange}
+                checked={autoplay}
+                postfix={__('Autoplay media files')}
+              />
               <FormField
                 type="checkbox"
                 name="show_unavailable"

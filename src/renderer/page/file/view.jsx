@@ -7,6 +7,7 @@ import FilePrice from 'component/filePrice';
 import FileDetails from 'component/fileDetails';
 import FileActions from 'component/fileActions';
 import UriIndicator from 'component/uriIndicator';
+import { FormField, FormRow } from 'component/common/form';
 import Icon from 'component/common/icon';
 import DateTime from 'component/dateTime';
 import * as icons from 'constants/icons';
@@ -14,6 +15,7 @@ import Button from 'component/button';
 import SubscribeButton from 'component/subscribeButton';
 import Page from 'component/page';
 import player from 'render-media';
+import * as settings from 'constants/settings';
 
 type Props = {
   claim: {
@@ -39,15 +41,25 @@ type Props = {
   playingUri: ?string,
   isPaused: boolean,
   claimIsMine: boolean,
+  autoplay: boolean,
   costInfo: ?{},
   navigate: (string, ?{}) => void,
   openModal: ({ id: string }, { uri: string }) => void,
   fetchFileInfo: string => void,
   fetchCostInfo: string => void,
   prepareEdit: ({}) => void,
+  setClientSetting: (string, boolean | string) => void,
+  checkSubscription: ({ channelName: string, uri: string }) => void,
+  subscriptions: Array<{}>,
 };
 
 class FilePage extends React.Component<Props> {
+  constructor(props: Props) {
+    super(props);
+
+    (this: any).onAutoplayChange = this.onAutoplayChange.bind(this);
+  }
+
   componentDidMount() {
     const { uri, fileInfo, fetchFileInfo, costInfo, fetchCostInfo } = this.props;
 
@@ -69,8 +81,13 @@ class FilePage extends React.Component<Props> {
     }
   }
 
+  onAutoplayChange(event: SyntheticInputEvent<*>) {
+    this.props.setClientSetting(settings.AUTOPLAY, event.target.checked);
+  }
+
   checkSubscription = (props: Props) => {
     if (
+      props.claim.value.publisherSignature &&
       props.subscriptions
         .map(subscription => subscription.channelName)
         .indexOf(props.claim.channel_name) !== -1
@@ -102,6 +119,7 @@ class FilePage extends React.Component<Props> {
       claimIsMine,
       prepareEdit,
       navigate,
+      autoplay,
     } = this.props;
 
     // File info
@@ -177,6 +195,15 @@ class FilePage extends React.Component<Props> {
                   )}
                 </div>
               </div>
+              <FormRow alignRight>
+                <FormField
+                  type="checkbox"
+                  name="autoplay"
+                  onChange={this.onAutoplayChange}
+                  checked={autoplay}
+                  postfix={__('Autoplay')}
+                />
+              </FormRow>
             </div>
 
             <div className="card__content">

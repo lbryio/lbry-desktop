@@ -24,3 +24,4 @@ export const PHONE = 'Phone';
 export const CHECK = 'CheckCircle';
 export const HEART = 'Heart';
 export const UNLOCK = 'Unlock';
+export const CHECK_SIMPLE = 'Check';

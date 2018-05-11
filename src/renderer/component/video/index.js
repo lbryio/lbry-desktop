@@ -1,7 +1,8 @@
 import { connect } from 'react-redux';
+import * as settings from 'constants/settings';
 import { doChangeVolume } from 'redux/actions/app';
 import { selectVolume } from 'redux/selectors/app';
-import { doPlayUri, doSetPlayingUri } from 'redux/actions/content';
+import { doPlayUri, doSetPlayingUri, doLoadVideo } from 'redux/actions/content';
 import { doPlay, doPause, savePosition } from 'redux/actions/media';
 import {
   makeSelectMetadataForUri,
@@ -12,7 +13,10 @@ import {
   makeSelectLoadingForUri,
   makeSelectDownloadingForUri,
 } from 'lbry-redux';
-import { selectShowNsfw } from 'redux/selectors/settings';
+import {
+  makeSelectClientSetting,
+  selectShowNsfw
+} from 'redux/selectors/settings';
 import { selectMediaPaused, makeSelectMediaPositionForUri } from 'redux/selectors/media';
 import { selectPlayingUri } from 'redux/selectors/content';
 import Video from './view';
@@ -30,10 +34,12 @@ const select = (state, props) => ({
   volume: selectVolume(state),
   mediaPaused: selectMediaPaused(state),
   mediaPosition: makeSelectMediaPositionForUri(props.uri)(state),
+  autoplay: makeSelectClientSetting(settings.AUTOPLAY)(state)
 });
 
 const perform = dispatch => ({
   play: uri => dispatch(doPlayUri(uri)),
+  load: uri => dispatch(doLoadVideo(uri)),
   cancelPlay: () => dispatch(doSetPlayingUri(null)),
   changeVolume: volume => dispatch(doChangeVolume(volume)),
   doPlay: () => dispatch(doPlay()),
