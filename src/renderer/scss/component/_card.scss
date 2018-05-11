@@ -86,14 +86,9 @@
   display: flex;
   align-items: center;
   .credit-amount,
-  .autoplay,
   .icon {
     margin-top: $spacing-vertical * 1/3;
     margin-left: $spacing-vertical * 2/3;
-  }
-
-  .autoplay .icon {
-    margin: 0 0 0 5px;
   }
 }
 
@@ -173,12 +168,16 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: $spacing-width 0;
+  padding: $spacing-width 0 0;
 }
 
 .card__channel-info--large {
   padding-top: 0;
-  padding-bottom: $spacing-width;
+  padding-bottom: 0;
+}
+
+.autoplay div div input {
+  margin: 0 0 $spacing-vertical auto;
 }
 
 .card__content {

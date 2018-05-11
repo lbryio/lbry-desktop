@@ -41,6 +41,7 @@ type Props = {
   playingUri: ?string,
   isPaused: boolean,
   claimIsMine: boolean,
+  autoplay: boolean,
   costInfo: ?{},
   navigate: (string, ?{}) => void,
   openModal: ({ id: string }, { uri: string }) => void,
@@ -78,6 +79,10 @@ class FilePage extends React.Component<Props> {
     }
   }
 
+  onAutoplayChange(event: SyntheticInputEvent<*>) {
+    this.props.setClientSetting(settings.AUTOPLAY, event.target.checked);
+  }
+
   checkSubscription = (props: Props) => {
     if (
       props.subscriptions
@@ -97,10 +102,6 @@ class FilePage extends React.Component<Props> {
     }
   };
 
-  onAutoplayChange(event: SyntheticInputEvent<*>) {
-    this.props.setClientSetting(settings.AUTOPLAY, event.target.checked);
-  }
-
   render() {
     const {
       claim,
@@ -116,7 +117,6 @@ class FilePage extends React.Component<Props> {
       prepareEdit,
       navigate,
       autoplay,
-      setClientSetting
     } = this.props;
 
     // File info
@@ -159,14 +159,6 @@ class FilePage extends React.Component<Props> {
                 <div className="card__title-identity-icons">
                   <FilePrice uri={normalizeURI(uri)} />
                   {isRewardContent && <Icon icon={icons.FEATURED} />}
-                  <FormField
-                    type="checkbox"
-                    name="autoplay"
-                    className="autoplay"
-                    onChange={this.onAutoplayChange}
-                    checked={autoplay}
-                    postfix={__('Autoplay')}
-                  />
                 </div>
               </div>
               <span className="card__subtitle card__subtitle--file">
@@ -199,6 +191,15 @@ class FilePage extends React.Component<Props> {
                     </React.Fragment>
                   )}
                 </div>
+              </div>
+              <div className="autoplay">
+                <FormField
+                  type="checkbox"
+                  name="autoplay"
+                  onChange={this.onAutoplayChange}
+                  checked={autoplay}
+                  postfix={__('Autoplay')}
+                />
               </div>
             </div>
 
