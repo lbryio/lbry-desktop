@@ -1,7 +1,7 @@
 # LBRY App
 
 [![Build Status](https://travis-ci.org/lbryio/lbry-app.svg?branch=master)](https://travis-ci.org/lbryio/lbry-app)
-[![dependencies](https://david-dm.org/lbryio/lbry-app/status.svg)](https://david-dm.org/lbryio/lbry-app)
+[![Dependencies](https://david-dm.org/lbryio/lbry-app/status.svg)](https://david-dm.org/lbryio/lbry-app)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/78b627d4f5524792adc48719835e1523)](https://www.codacy.com/app/LBRY/lbry-app?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=lbryio/lbry-app&amp;utm_campaign=Badge_Grade)
 [![chat on Discord](https://img.shields.io/discord/362322208485277697.svg?logo=discord)](https://discord.gg/U5aRyN6)
 
@@ -19,7 +19,7 @@ We provide installers for Windows, macOS (v10.9 or greater), and Debian-based Li
 |                       | Windows                                      | macOS                                        | Linux                                        |
 | --------------------- | -------------------------------------------- | -------------------------------------------- | -------------------------------------------- |
 | Latest Stable Release | [Download](https://lbry.io/get/lbry.exe)     | [Download](https://lbry.io/get/lbry.dmg)     | [Download](https://lbry.io/get/lbry.deb)     |
-| Latest Prerelease     | [Download](https://lbry.io/get/lbry.pre.exe) | [Download](https://lbry.io/get/lbry.pre.dmg) | [Download](https://lbry.io/get/lbry.pre.deb) |
+| Latest Pre-release     | [Download](https://lbry.io/get/lbry.pre.exe) | [Download](https://lbry.io/get/lbry.pre.dmg) | [Download](https://lbry.io/get/lbry.pre.deb) |
 
 Our [releases page](https://github.com/lbryio/lbry-app/releases) also contains the latest
 release, pre-releases, and past builds.
@@ -36,7 +36,7 @@ Double click the installed application to browse with the LBRY network.
 * [Git](https://git-scm.com/downloads)
 * [Node.js](https://nodejs.org/en/download/)
 * [Yarn](https://yarnpkg.com/en/docs/install)
-* [C++ Build Tools](https://github.com/felixrieseberg/windows-build-tools) (Only needed on Windows)
+* [C++ Build Tools](https://github.com/felixrieseberg/windows-build-tools) (Windows only)
 
 #### Steps
 
@@ -49,8 +49,8 @@ If you want to just build the app you can run `yarn build`. This will give you a
 distributable packages.
 
 ## Contributing
-Contributions to this project are welcome, encouraged, and compensated. For more details, see [CONTRIBUTING.md](CONTRIBUTING.md)
 
+Contributions to this project are welcome, encouraged, and compensated. For more details, see [CONTRIBUTING.md](CONTRIBUTING.md)
 
 ## License
 
