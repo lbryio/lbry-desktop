@@ -7,6 +7,7 @@ type Props = {
   href: string,
   title?: string,
   children: React.Node,
+  // navigate: (string, ?{}) => void,
   openModal: ({ id: string }, { uri: string }) => void,
 };
 
@@ -39,6 +40,20 @@ class ExternalLink extends React.PureComponent<Props> {
         </Button>
       );
     }
+
+    /* React-remark blocks the lbry protocol requires an external fix
+    // Return local link if valid lbry uri
+    if (protocol && protocol[0] === 'lbry:') {
+      element = (
+        <Button
+        button="link"
+        title={title}
+        onClick={() => navigate('/show', { uri: href })}
+        >
+          {children}
+        </Button>
+      );
+    } */
 
     return element;
   }
