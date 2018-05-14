@@ -14,6 +14,7 @@ type Props = {
   sendSupport: (number, string, string) => void,
   onCancel: () => void,
   sendTipCallback?: () => void,
+  balance: number,
 };
 
 type State = {
@@ -51,7 +52,8 @@ class WalletSendTip extends React.PureComponent<Props, State> {
   }
 
   render() {
-    const { title, errorMessage, isPending, uri, onCancel } = this.props;
+    const { title, errorMessage, isPending, uri, onCancel, balance } = this.props;
+    const { amount } = this.state;
 
     return (
       <div>
@@ -82,7 +84,7 @@ class WalletSendTip extends React.PureComponent<Props, State> {
             <Button
               button="primary"
               label={__('Send')}
-              disabled={isPending}
+              disabled={isPending || amount <= 0 || amount > balance}
               onClick={this.handleSendButtonClicked}
             />
             <Button button="alt" label={__('Cancel')} onClick={onCancel} navigateParams={{ uri }} />
