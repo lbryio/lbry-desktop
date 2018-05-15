@@ -28,11 +28,12 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
    * Fix download percentage indicator overlay ([#1271](https://github.com/lbryio/lbry-app/issues/1271))
    * Fix alternate row shading for transactions on dark theme ([#1355](https://github.com/lbryio/lbry-app/issues/#1355))
    * Fix don't allow dark mode with automatic night mode enabled ([#1005](https://github.com/lbryio/lbry-app/issues/1005))
-   * Fix Description box on Publish (dark theme) ([#1356](https://github.com/lbryio/lbry-app/issues/#1356))
+   * Fix description box on Publish (dark theme) ([#1356](https://github.com/lbryio/lbry-app/issues/#1356))
    * Fix price wrapping in price badge ([#1420](https://github.com/lbryio/lbry-app/pull/1420))
-   * Fix spacing in search suggestions ([#1422])(https://github.com/lbryio/lbry-app/pull/1422))
-   * Fix text/HTML files don't display correctly in-app anymore ([#1379])(https://github.com/lbryio/lbry-app/issues/1379)
-   * Fix notification modals when reward is claimed ([#1436])(https://github.com/lbryio/lbry-app/issues/1436) and ([#1407])(https://github.com/lbryio/lbry-app/issues/1407)
+   * Fix spacing in search suggestions ([#1422](https://github.com/lbryio/lbry-app/pull/1422))
+   * Fix text/HTML files don't display correctly in-app anymore ([#1379](https://github.com/lbryio/lbry-app/issues/1379))
+   * Fix notification modals when reward is claimed ([#1436](https://github.com/lbryio/lbry-app/issues/1436)) and ([#1407](https://github.com/lbryio/lbry-app/issues/1407))
+   * Fix markdown render ([#1179](https://github.com/lbryio/lbry-app/issues/1179))
 
 ## [0.21.3] - 2018-04-23
 

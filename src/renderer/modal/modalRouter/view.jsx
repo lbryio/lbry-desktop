@@ -21,6 +21,7 @@ import ModalFirstSubscription from 'modal/modalFirstSubscription';
 import ModalSendTip from '../modalSendTip';
 import ModalPublish from '../modalPublish';
 import ModalSearch from '../modalSearch';
+import ModalOpenExternalLink from '../modalOpenExternalLink';
 
 class ModalRouter extends React.PureComponent {
   constructor(props) {
@@ -155,6 +156,8 @@ class ModalRouter extends React.PureComponent {
         return <ModalPublish {...notificationProps} />;
       case MODALS.SEARCH:
         return <ModalSearch {...notificationProps} />;
+      case MODALS.CONFIRM_EXTERNAL_LINK:
+        return <ModalOpenExternalLink {...notificationProps} />;
       default:
         return null;
     }

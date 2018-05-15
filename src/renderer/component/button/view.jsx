@@ -95,6 +95,7 @@ class Button extends React.PureComponent<Props> {
       </a>
     ) : (
       <button
+        title={title}
         aria-label={description || label || title}
         className={combinedClassName}
         onClick={extendedOnClick}

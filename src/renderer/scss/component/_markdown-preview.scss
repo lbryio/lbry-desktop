@@ -1,0 +1,81 @@
+.markdown-preview {
+  margin: 0;
+
+  /* Headings: title */
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: 'metropolis-semibold';
+    margin: 16px 0;
+  }
+
+  h1 {
+    font-size: 1.22em;
+  }
+
+  h2 {
+    font-size: 1.14em;
+  }
+
+  h3 {
+    font-size: 1.06em;
+  }
+
+  h4 {
+    font-size: 0.92em;
+  }
+
+  h5 {
+    font-size: 0.84em;
+  }
+
+  h6 {
+    font-size: 0.84em;
+    color: var(--color-help);
+  }
+}
+
+.markdown-preview table {
+  padding: 8px;
+  margin: 16px 0;
+  background-color: var(--card-bg);
+
+  tr td,
+  tr th,
+  tr td:first-of-type,
+  tr th:first-of-type,
+  tr td:last-of-type,
+  tr th:last-of-type {
+    padding: 8px;
+  }
+}
+
+.markdown-preview code {
+  display: block;
+  padding: 8px;
+  margin: 16px 0;
+  background-color: var(--color-bg-alt);
+  color: var(--color-help);
+  font-size: 1em;
+  font-family: Consolas, 'Lucida Console', 'Source Sans', monospace;
+}
+
+.markdown-preview hr {
+  border: 1px solid var(--color-divider);
+}
+
+.markdown-preview del {
+  color: var(--color-help);
+}
+
+blockquote {
+  padding: 8px;
+  margin: 16px 0;
+  color: var(--color-help);
+  border-left: 2px solid var(--color-help);
+  background-color: var(--color-bg-alt);
+}
