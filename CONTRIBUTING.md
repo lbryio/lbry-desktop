@@ -67,7 +67,8 @@ our styling rules and code best practices.
 
 ### lbry-redux
 
-We have started sharing some of the redux code for this project with [lbry-android](https://github.com/lbryio/lbry-android). This shared code is in a github repo called [lbry-redux](https://github.com/lbryio/lbry-redux). We plan to move additional redux code to that repo, so you may be asked to make some of your changes there. The steps to work with lbry-redux locally can be found [here](https://github.com/lbryio/lbry-redux#local-development).
+This project uses [lbry-redux](https://github.com/lbryio/lbry-redux) to share Redux code with [lbry-android](https://github.com/lbryio/lbry-android) and other LBRY apps. Over time, more Redux code that is suitable to be shared will be moved into lbry-redux. If modifying Redux code, you may be asked to make some of your changes in lbry-redux rather than lbry-app. The steps to work with lbry-redux locally can be found [here](https://github.com/lbryio/lbry-redux#local-development).
+
 
 ### Flow
 
