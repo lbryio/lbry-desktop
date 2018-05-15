@@ -16,18 +16,10 @@ import SubscribeButton from 'component/subscribeButton';
 import Page from 'component/page';
 import player from 'render-media';
 import * as settings from 'constants/settings';
+import type { Claim } from 'types/claim';
 
 type Props = {
-  claim: {
-    claim_id: string,
-    height: number,
-    channel_name: string,
-    value: {
-      publisherSignature: ?{
-        certificateId: ?string,
-      },
-    },
-  },
+  claim: Claim,
   fileInfo: {},
   metadata: {
     title: string,

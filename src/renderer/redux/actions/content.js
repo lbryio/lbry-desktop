@@ -138,6 +138,7 @@ export function doUpdateLoadStatus(uri, outpoint) {
                 : acc,
             0
           );
+
           const notif = new window.Notification(notifications[uri].subscription.channelName, {
             body: `Posted ${fileInfo.metadata.title}${
               count > 1 && count < 10 ? ` and ${count - 1} other new items` : ''

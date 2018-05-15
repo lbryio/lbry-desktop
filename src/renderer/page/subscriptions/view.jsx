@@ -1,39 +1,28 @@
 // @flow
 import React from 'react';
 import Page from 'component/page';
-import CategoryList from 'component/common/category-list';
-import type { Subscription } from 'redux/reducers/subscriptions';
+import type { Subscription } from 'types/subscription';
 import * as NOTIFICATION_TYPES from 'constants/notification_types';
 import Button from 'component/button';
-
-type SavedSubscriptions = Array<Subscription>;
+import FileList from 'component/fileList';
+import type { Claim } from 'types/claim';
 
 type Props = {
-  doFetchClaimsByChannel: (string, number) => any,
-  savedSubscriptions: SavedSubscriptions,
-  // TODO build out claim types
-  subscriptions: Array<any>,
-  setHasFetchedSubscriptions: () => void,
-  hasFetchedSubscriptions: boolean,
+  doFetchClaimsByChannel: (string, number) => void,
+  doFetchMySubscriptions: () => void,
+  setSubscriptionNotifications: ({}) => void,
+  subscriptions: Array<Subscription>,
+  isFetchingSubscriptions: boolean,
+  subscriptionClaims: Array<{ uri: string, claims: Array<Claim> }>,
+  subscriptionsBeingFetched: {},
+  notifications: {},
 };
 
 export default class extends React.PureComponent<Props> {
-  // setHasFetchedSubscriptions is a terrible hack
-  // it allows the subscriptions to load correctly when refresing on the subscriptions page
-  // currently the page is rendered before the state is rehyrdated
-  // that causes this component to be rendered with zero savedSubscriptions
-  // we need to wait until persist/REHYDRATE has fired before rendering the page
   componentDidMount() {
-    const {
-      savedSubscriptions,
-      setHasFetchedSubscriptions,
-      notifications,
-      setSubscriptionNotifications,
-    } = this.props;
-    if (savedSubscriptions.length) {
-      this.fetchSubscriptions(savedSubscriptions);
-      setHasFetchedSubscriptions();
-    }
+    const { notifications, setSubscriptionNotifications, doFetchMySubscriptions } = this.props;
+    doFetchMySubscriptions();
+
     const newNotifications = {};
     Object.keys(notifications).forEach(cur => {
       if (notifications[cur].type === NOTIFICATION_TYPES.DOWNLOADING) {
@@ -43,40 +32,37 @@ export default class extends React.PureComponent<Props> {
     setSubscriptionNotifications(newNotifications);
   }
 
-  componentWillReceiveProps(props: Props) {
-    const { savedSubscriptions, hasFetchedSubscriptions, setHasFetchedSubscriptions } = props;
+  componentDidUpdate() {
+    const {
+      subscriptions,
+      subscriptionClaims,
+      doFetchClaimsByChannel,
+      subscriptionsBeingFetched,
+    } = this.props;
 
-    if (!hasFetchedSubscriptions && savedSubscriptions.length) {
-      this.fetchSubscriptions(savedSubscriptions);
-      setHasFetchedSubscriptions();
-    }
-  }
+    const subscriptionClaimMap = {};
+    subscriptionClaims.forEach(claim => {
+      subscriptionClaimMap[claim.uri] = 1;
+    });
 
-  fetchSubscriptions(savedSubscriptions: SavedSubscriptions) {
-    const { doFetchClaimsByChannel } = this.props;
-    if (savedSubscriptions.length) {
-      // can this use batchActions?
-      savedSubscriptions.forEach(sub => {
+    subscriptions.forEach(sub => {
+      if (!subscriptionClaimMap[sub.uri] && !subscriptionsBeingFetched[sub.uri]) {
         doFetchClaimsByChannel(sub.uri, 1);
-      });
-    }
+      }
+    });
   }
 
   render() {
-    const { subscriptions, savedSubscriptions } = this.props;
+    const { subscriptions, subscriptionClaims, isFetchingSubscriptions } = this.props;
 
-    // TODO: if you are subscribed to an empty channel, this will always be true (but it should not be)
-    const someClaimsNotLoaded = Boolean(
-      subscriptions.find(subscription => !subscription.claims.length)
-    );
-
-    const fetchingSubscriptions =
-      !!savedSubscriptions.length &&
-      (subscriptions.length !== savedSubscriptions.length || someClaimsNotLoaded);
+    let claimList = [];
+    subscriptionClaims.forEach(claimData => {
+      claimList = claimList.concat(claimData.claims);
+    });
 
     return (
-      <Page noPadding isLoading={fetchingSubscriptions}>
-        {!savedSubscriptions.length && (
+      <Page notContained loading={isFetchingSubscriptions}>
+        {!subscriptions.length && (
           <div className="page__empty">
             {__("It looks like you aren't subscribed to any channels yet.")}
             <div className="card__actions card__actions--center">
@@ -84,28 +70,7 @@ export default class extends React.PureComponent<Props> {
             </div>
           </div>
         )}
-        {!!savedSubscriptions.length && (
-          <div>
-            {!!subscriptions.length &&
-              subscriptions.map(subscription => {
-                if (!subscription.claims.length) {
-                  // will need to update when you can subscribe to empty channels
-                  // for now this prevents issues with FeaturedCategory being rendered
-                  // before the names (claim uris) are populated
-                  return '';
-                }
-
-                return (
-                  <CategoryList
-                    key={subscription.channelName}
-                    categoryLink={subscription.uri}
-                    category={subscription.channelName}
-                    names={subscription.claims}
-                  />
-                );
-              })}
-          </div>
-        )}
+        {!!claimList.length && <FileList hideFilter sortByHeight fileInfos={claimList} />}
       </Page>
     );
   }

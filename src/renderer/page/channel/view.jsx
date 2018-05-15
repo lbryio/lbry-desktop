@@ -6,6 +6,7 @@ import ReactPaginate from 'react-paginate';
 import SubscribeButton from 'component/subscribeButton';
 import Page from 'component/page';
 import FileList from 'component/fileList';
+import type { Claim } from 'types/claim';
 
 type Props = {
   uri: string,
@@ -13,10 +14,7 @@ type Props = {
   totalPages: number,
   fetching: boolean,
   params: { page: number },
-  claim: {
-    name: string,
-    claim_id: string,
-  },
+  claim: Claim,
   claimsInChannel: Array<{}>,
   fetchClaims: (string, number) => void,
   fetchClaimCount: string => void,
@@ -58,8 +56,8 @@ class ChannelPage extends React.PureComponent<Props> {
   }
 
   render() {
-    const { fetching, claimsInChannel, claim, uri, page, totalPages } = this.props;
-    const { name } = claim;
+    const { fetching, claimsInChannel, claim, page, totalPages } = this.props;
+    const { name, permanent_url: permanentUrl } = claim;
 
     let contentList;
     if (fetching) {
@@ -78,7 +76,7 @@ class ChannelPage extends React.PureComponent<Props> {
         <section className="card__channel-info card__channel-info--large">
           <h1>{name}</h1>
           <div className="card__actions card__actions--no-margin">
-            <SubscribeButton uri={uri} channelName={name} />
+            <SubscribeButton uri={permanentUrl} channelName={name} />
           </div>
         </section>
         <section>{contentList}</section>

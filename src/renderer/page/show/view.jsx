@@ -5,16 +5,13 @@ import ChannelPage from 'page/channel';
 import FilePage from 'page/file';
 import Page from 'component/page';
 import Button from 'component/button';
+import type { Claim } from 'types/claim';
 
 type Props = {
   isResolvingUri: boolean,
   resolveUri: string => void,
   uri: string,
-  claim: {
-    name: string,
-    txid: string,
-    nout: number,
-  },
+  claim: Claim,
   blackListedOutpoints: Array<{
     txid: string,
     nout: number,

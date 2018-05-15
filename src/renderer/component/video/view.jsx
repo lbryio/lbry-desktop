@@ -2,6 +2,7 @@
 import React from 'react';
 import { Lbry } from 'lbry-redux';
 import classnames from 'classnames';
+import type { Claim } from 'types/claim';
 import VideoPlayer from './internal/player';
 import VideoPlayButton from './internal/play-button';
 import LoadingScreen from './internal/loading-screen';
@@ -26,7 +27,7 @@ type Props = {
   contentType: string,
   changeVolume: number => void,
   volume: number,
-  claim: {},
+  claim: Claim,
   uri: string,
   doPlay: () => void,
   doPause: () => void,
