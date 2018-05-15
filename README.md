@@ -48,6 +48,10 @@ Double click the installed application to browse with the LBRY network.
 If you want to just build the app you can run `yarn build`. This will give you an executable inside the `/dist` folder. We use [electron-builder](https://github.com/electron-userland/electron-builder) to create
 distributable packages.
 
+#### Resetting your Packages
+
+If the app isn't building, or `yarn xxx` commands aren't working you may need to just reset your `node_modules`. To do so you can run: `rm -r node_modules && yarn`
+
 ## Contributing
 
 Contributions to this project are welcome, encouraged, and compensated. For more details, see [CONTRIBUTING.md](CONTRIBUTING.md)

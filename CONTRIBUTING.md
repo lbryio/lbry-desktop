@@ -1,9 +1,9 @@
 # Contribute to LBRY
 
-You found this page! That means you are well on your way to contributing to the LBRY app. This
-application is primarily written in JavaScript and is built on [Electron](https://electronjs.org)
-while utilizing [React](https://reactjs.org) and [Redux](https://redux.js.org) for UI and
-application state.
+
+**First:** if you're unsure or afraid of anything, just ask or submit the issue or pull request anyways. You won't be yelled at for giving your best effort. The worst that can happen is that you'll be politely asked to change something. We appreciate any sort of contributions, and don't want a wall of rules to get in the way of that.
+
+However, for those individuals who want a bit more guidance on the best way to contribute to the project, read on. This document will cover what we're looking for. By addressing all the points we're looking for, it raises the chances we can quickly merge or address your contributions.
 
 
 ## TL;DR?
@@ -57,9 +57,18 @@ Although all contributions should have good UX, the [UX label, when applied in c
 
 The entry point for this application is `src/renderer/index.js`
 
+This application is primarily written in JavaScript and is built on [Electron](https://electronjs.org)
+while utilizing [React](https://reactjs.org) and [Redux](https://redux.js.org) for UI and
+application state.
+
 The project comes with diverse tools for simplifying the development process and for providing
 better code quality. It's recommended to make use of them thoroughly during ongoing development. We follow the well-known [Airbnb JavaScript Style Guide](http://airbnb.io/javascript/) for defining
 our styling rules and code best practices.
+
+### lbry-redux
+
+This project uses [lbry-redux](https://github.com/lbryio/lbry-redux) to share Redux code with [lbry-android](https://github.com/lbryio/lbry-android) and other LBRY apps. Over time, more Redux code that is suitable to be shared will be moved into lbry-redux. If modifying Redux code, you may be asked to make some of your changes in lbry-redux rather than lbry-app. The steps to work with lbry-redux locally can be found [here](https://github.com/lbryio/lbry-redux#local-development).
+
 
 ### Flow
 
