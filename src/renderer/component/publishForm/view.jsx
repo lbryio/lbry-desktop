@@ -29,6 +29,8 @@ type Props = {
     currency: string,
   },
   channel: string,
+  channelId: ?string,
+  myChannels: Array<{ name: string }>,
   name: ?string,
   tosAccepted: boolean,
   updatePublishForm: UpdatePublishFormData => void,
@@ -137,13 +139,14 @@ class PublishForm extends React.PureComponent<Props> {
   }
 
   handleChannelChange(channelName: string) {
-    const { name, updatePublishForm } = this.props;
+    const { name, updatePublishForm, myChannels } = this.props;
+    const form = { channel: channelName };
+    const namedChannelClaim = myChannels.find(channel => channel.name === channelName);
+    form.channelId = namedChannelClaim ? namedChannelClaim.claim_id : '';
     if (name) {
-      const uri = this.getNewUri(name, channelName);
-      updatePublishForm({ channel: channelName, uri });
-    } else {
-      updatePublishForm({ channel: channelName });
+      form.uri = this.getNewUri(name, channelName);
     }
+    updatePublishForm(form);
   }
 
   handleBidChange(bid: number) {
@@ -183,7 +186,7 @@ class PublishForm extends React.PureComponent<Props> {
       description,
       language,
       nsfw,
-      channel,
+      channelId,
       licenseType,
       licenseUrl,
       otherLicenseDescription,
@@ -217,7 +220,7 @@ class PublishForm extends React.PureComponent<Props> {
       description,
       language,
       nsfw,
-      channel,
+      channelId,
       license: publishingLicense,
       licenseUrl: publishingLicenseUrl,
       otherLicenseDescription,
