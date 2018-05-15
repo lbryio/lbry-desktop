@@ -14,6 +14,9 @@ type Props = {
   rewards: Array<{ reward_type: boolean }>,
   user: ?{
     is_identity_verified: boolean,
+    is_reward_approved: boolean,
+    primary_email: string,
+    has_verified_email: boolean,
   },
   daemonSettings: {
     share_usage_data: boolean,
@@ -131,8 +134,7 @@ class RewardsPage extends React.PureComponent<Props> {
     }
 
     const isNotEligible =
-      !user || !user.primary_email || !user.has_verified_email || !user.is_identity_verified;
-
+      !user || !user.primary_email || !user.has_verified_email || !user.is_reward_approved;
     return (
       <div
         className={classnames('card__list--rewards', {
