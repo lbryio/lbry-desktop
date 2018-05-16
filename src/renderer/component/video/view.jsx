@@ -7,6 +7,8 @@ import VideoPlayer from './internal/player';
 import VideoPlayButton from './internal/play-button';
 import LoadingScreen from './internal/loading-screen';
 
+const SPACE_BAR_KEYCODE = 32;
+
 type Props = {
   cancelPlay: () => void,
   fileInfo: {
@@ -71,7 +73,7 @@ class Video extends React.PureComponent<Props> {
 
   handleKeyDown(event: SyntheticKeyboardEvent<*>) {
     const { searchBarFocused } = this.props;
-    if (!searchBarFocused && event.keyCode === 32) {
+    if (!searchBarFocused && event.keyCode === SPACE_BAR_KEYCODE) {
       event.preventDefault(); // prevent page scroll
       this.playContent();
     }
