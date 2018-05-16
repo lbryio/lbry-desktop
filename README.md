@@ -50,7 +50,7 @@ distributable packages.
 
 #### Resetting your Packages
 
-If the app isn't building, or `yarn xxx` commands aren't working you may need to just reset your `node_modules`. To do so you can run: `rm -r node_modules && yarn`
+If the app isn't building, or `yarn xxx` commands aren't working you may need to just reset your `node_modules`. To do so you can run: `rm -r node_modules && yarn` or `del node_modules && yarn` on Windows. 
 
 ## Contributing
 
