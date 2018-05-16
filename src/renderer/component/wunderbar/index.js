@@ -5,6 +5,8 @@ import {
   doUpdateSearchQuery,
   doNotify,
   MODALS,
+  doFocusSearchInput,
+  doBlurSearchInput,
 } from 'lbry-redux';
 import { doNavigate } from 'redux/actions/navigation';
 import Wunderbar from './view';
@@ -30,6 +32,8 @@ const perform = dispatch => ({
   },
   onSubmit: (uri, extraParams) => dispatch(doNavigate('/show', { uri, ...extraParams })),
   updateSearchQuery: query => dispatch(doUpdateSearchQuery(query)),
+  doFocus: () => dispatch(doFocusSearchInput()),
+  doBlur: () => dispatch(doBlurSearchInput()),
 });
 
 export default connect(select, perform)(Wunderbar);

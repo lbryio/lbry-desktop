@@ -37,11 +37,20 @@ type Props = {
   className: ?string,
   obscureNsfw: boolean,
   play: string => void,
+  searchBarFocused: boolean,
 };
 
 class Video extends React.PureComponent<Props> {
+  constructor() {
+    super();
+
+    (this: any).playContent = this.playContent.bind(this);
+    (this: any).handleKeyDown = this.handleKeyDown.bind(this);
+  }
+
   componentDidMount() {
     this.handleAutoplay(this.props);
+    window.addEventListener('keydown', this.handleKeyDown);
   }
 
   componentWillReceiveProps(nextProps: Props) {
@@ -57,10 +66,29 @@ class Video extends React.PureComponent<Props> {
 
   componentWillUnmount() {
     this.props.cancelPlay();
+    window.removeEventListener('keydown', this.handleKeyDown);
   }
 
-  handleAutoplay(props: Props) {
-    const { autoplay, playingUri, fileInfo, costInfo, isDownloading, uri, load, play, metadata } = props;
+  handleKeyDown(event: SyntheticKeyboardEvent<*>) {
+    const { searchBarFocused } = this.props;
+    if (!searchBarFocused && event.keyCode === 32) {
+      event.preventDefault(); // prevent page scroll
+      this.playContent();
+    }
+  }
+
+  handleAutoplay = (props: Props) => {
+    const {
+      autoplay,
+      playingUri,
+      fileInfo,
+      costInfo,
+      isDownloading,
+      uri,
+      load,
+      play,
+      metadata,
+    } = props;
 
     const playable = autoplay && playingUri !== uri && metadata && !metadata.nsfw;
 
@@ -70,7 +98,7 @@ class Video extends React.PureComponent<Props> {
     } else if (playable && fileInfo && fileInfo.blobs_completed > 0) {
       play(uri);
     }
-  }
+  };
 
   isMediaSame(nextProps: Props) {
     return (
@@ -78,6 +106,11 @@ class Video extends React.PureComponent<Props> {
       nextProps.fileInfo &&
       this.props.fileInfo.outpoint === nextProps.fileInfo.outpoint
     );
+  }
+
+  playContent() {
+    const { play, uri } = this.props;
+    play(uri);
   }
 
   render() {
@@ -99,7 +132,6 @@ class Video extends React.PureComponent<Props> {
       mediaPosition,
       className,
       obscureNsfw,
-      play,
     } = this.props;
 
     const isPlaying = playingUri === uri;
@@ -154,9 +186,14 @@ class Video extends React.PureComponent<Props> {
           </div>
         )}
         {!isPlaying && (
-          <div className={layoverClass} style={layoverStyle}>
+          <div
+            role="button"
+            onClick={this.playContent}
+            className={layoverClass}
+            style={layoverStyle}
+          >
             <VideoPlayButton
-              play={play}
+              play={this.playContent}
               fileInfo={fileInfo}
               uri={uri}
               isLoading={isLoading}
