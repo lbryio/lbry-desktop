@@ -1,12 +1,13 @@
 // @flow
 import * as React from 'react';
 import * as icons from 'constants/icons';
-import { normalizeURI, isURIClaimable, parseURI } from 'lbry-redux';
+import { normalizeURI, parseURI } from 'lbry-redux';
 import CardMedia from 'component/cardMedia';
 import TruncatedText from 'component/common/truncated-text';
 import Icon from 'component/common/icon';
 import Button from 'component/button';
 import classnames from 'classnames';
+import FilePrice from 'component/filePrice';
 
 type Props = {
   fullWidth: boolean, // removes the max-width css
@@ -21,11 +22,15 @@ type Props = {
     channel_name: string,
     claim_id: string,
   },
-  metadata: {},
+  metadata: ?{
+    title: ?string,
+    thumbnail: ?string,
+  },
   resolveUri: string => void,
   navigate: (string, ?{}) => void,
   clearPublish: () => void,
-  updatePublishForm: () => void,
+  updatePublishForm: ({}) => void,
+  hideNoResult: boolean, // don't show the tile if there is no claim at this uri
 };
 
 class FileTile extends React.PureComponent<Props> {
@@ -58,6 +63,7 @@ class FileTile extends React.PureComponent<Props> {
       isDownloaded,
       clearPublish,
       updatePublishForm,
+      hideNoResult,
     } = this.props;
 
     const uri = normalizeURI(this.props.uri);
@@ -76,7 +82,7 @@ class FileTile extends React.PureComponent<Props> {
       channel = claim.channel_name;
     }
 
-    return (
+    return !name && hideNoResult ? null : (
       <section
         className={classnames('file-tile card--link', {
           'file-tile--fullwidth': fullWidth,
@@ -98,6 +104,9 @@ class FileTile extends React.PureComponent<Props> {
                 {showUri ? uri : channel || __('Anonymous')}
                 {isRewardContent && <Icon icon={icons.FEATURED} />}
                 {showLocal && isDownloaded && <Icon icon={icons.LOCAL} />}
+                <div className="card__subtitle-price">
+                  <FilePrice uri={uri} />
+                </div>
               </div>
               {!name && (
                 <React.Fragment>

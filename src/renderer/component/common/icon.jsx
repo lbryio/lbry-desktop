@@ -25,7 +25,7 @@ class IconComponent extends React.PureComponent<Props> {
 
     let size = 14;
     if (icon === icons.ARROW_LEFT || icon === icons.ARROW_RIGHT) {
-      size = 18;
+      size = 20;
     }
 
     return Icon ? <Icon size={size} className="icon" color={color} /> : null;

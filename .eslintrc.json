@@ -35,6 +35,7 @@
     }],
     "func-names": ["warn", "as-needed"],
     "jsx-a11y/label-has-for": 0,
-    "import/prefer-default-export": 0
+    "import/prefer-default-export": 0,
+    "no-return-assign": 0
   }
 }
