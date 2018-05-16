@@ -16,6 +16,7 @@ import 'scss/all.scss';
 import store from 'store';
 import app from './app';
 import analytics from './analytics';
+import getMenu from './util/contextMenu';
 
 const { autoUpdater } = remote.require('electron-updater');
 
@@ -94,6 +95,8 @@ document.addEventListener('click', event => {
     target = target.parentNode;
   }
 });
+
+document.addEventListener('contextmenu', getMenu);
 
 const init = () => {
   autoUpdater.on('update-downloaded', () => {
