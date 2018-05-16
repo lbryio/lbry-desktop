@@ -3100,7 +3100,7 @@ electron-to-chromium@^1.2.7, electron-to-chromium@^1.3.30:
   version "1.3.45"
   resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.45.tgz#458ac1b1c5c760ce8811a16d2bfbd97ec30bafb8"
 
-electron-updater@^2.21.4:
+electron-updater@^2.21.10:
   version "2.21.10"
   resolved "https://registry.yarnpkg.com/electron-updater/-/electron-updater-2.21.10.tgz#aa66757ebf966f4247f247a8433af45cfe8e93b0"
   dependencies:
@@ -5809,9 +5809,9 @@ lazy-val@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/lazy-val/-/lazy-val-1.0.3.tgz#bb97b200ef00801d94c317e29dc6ed39e31c5edc"
 
-lbry-redux@lbryio/lbry-redux#86530690e93a4cfb702ade32d9f2121ccbca47a6:
+lbry-redux@lbryio/lbry-redux#30c18725d8c6c141c30c57f0a324d0abb8963b99:
   version "0.0.1"
-  resolved "https://codeload.github.com/lbryio/lbry-redux/tar.gz/86530690e93a4cfb702ade32d9f2121ccbca47a6"
+  resolved "https://codeload.github.com/lbryio/lbry-redux/tar.gz/30c18725d8c6c141c30c57f0a324d0abb8963b99"
   dependencies:
     proxy-polyfill "0.1.6"
     reselect "^3.0.0"
