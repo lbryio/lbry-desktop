@@ -59,6 +59,7 @@ class SearchPage extends React.PureComponent<Props> {
             </React.Fragment>
           )}
           <FileListSearch query={query} />
+          <div className="help">{__('These search results are provided by LBRY, Inc.')}</div>
         </div>
       </Page>
     );

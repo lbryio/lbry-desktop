@@ -30,6 +30,7 @@ type Props = {
   navigate: (string, ?{}) => void,
   clearPublish: () => void,
   updatePublishForm: ({}) => void,
+  hideNoResult: boolean, // don't show the tile if there is no claim at this uri
 };
 
 class FileTile extends React.PureComponent<Props> {
@@ -62,6 +63,7 @@ class FileTile extends React.PureComponent<Props> {
       isDownloaded,
       clearPublish,
       updatePublishForm,
+      hideNoResult,
     } = this.props;
 
     const uri = normalizeURI(this.props.uri);
@@ -80,7 +82,7 @@ class FileTile extends React.PureComponent<Props> {
       channel = claim.channel_name;
     }
 
-    return (
+    return !name && hideNoResult ? null : (
       <section
         className={classnames('file-tile card--link', {
           'file-tile--fullwidth': fullWidth,
