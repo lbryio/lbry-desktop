@@ -8,7 +8,7 @@ const select = state => {
   const selectReward = makeSelectRewardByType();
 
   return {
-    reward: selectReward(state, { reward_type: rewards.TYPE_NEW_USER }),
+    reward: selectReward(state, rewards.TYPE_NEW_USER),
   };
 };
 

@@ -1,5 +1,4 @@
 import { createSelector } from 'reselect';
-import REWARDS from 'rewards';
 
 const selectState = state => state.rewards || {};
 
@@ -26,16 +25,7 @@ export const selectClaimedRewardsByTransactionId = createSelector(selectClaimedR
   }, {})
 );
 
-export const selectUnclaimedRewards = createSelector(
-  selectUnclaimedRewardsByType,
-  byType =>
-    Object.values(byType).sort(
-      (a, b) =>
-        REWARDS.SORT_ORDER.indexOf(a.reward_type) < REWARDS.SORT_ORDER.indexOf(b.reward_type)
-          ? -1
-          : 1
-    ) || []
-);
+export const selectUnclaimedRewards = createSelector(selectState, state => state.unclaimedRewards);
 
 export const selectFetchingRewards = createSelector(selectState, state => !!state.fetching);
 
@@ -65,7 +55,8 @@ const selectClaimRewardError = (state, props) =>
 export const makeSelectClaimRewardError = () =>
   createSelector(selectClaimRewardError, errorMessage => errorMessage);
 
-const selectRewardByType = (state, props) => selectUnclaimedRewardsByType(state)[props.reward_type];
+const selectRewardByType = (state, rewardType) =>
+  selectUnclaimedRewards(state).find(reward => reward.reward_type === rewardType);
 
 export const makeSelectRewardByType = () => createSelector(selectRewardByType, reward => reward);
 
