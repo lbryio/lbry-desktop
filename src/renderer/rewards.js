@@ -56,6 +56,7 @@ rewards.claimReward = type => {
         linkText: __('Show All'),
         linkTarget: '/rewards',
         isError: false,
+        displayType: ['snackbar'],
       });
       window.app.store.dispatch(action);
 
