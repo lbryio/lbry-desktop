@@ -3,7 +3,6 @@ import isDev from 'electron-is-dev';
 import windowStateKeeper from 'electron-window-state';
 
 import setupBarMenu from './menu/setupBarMenu';
-import setupContextMenu from './menu/setupContextMenu';
 
 export default appState => {
   // Get primary display dimensions from Electron.
@@ -73,7 +72,6 @@ export default appState => {
   }
 
   setupBarMenu();
-  setupContextMenu(window);
 
   window.on('close', event => {
     if (!appState.isQuitting && !appState.autoUpdateAccepted) {

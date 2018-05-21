@@ -1,65 +1,68 @@
 import { clipboard, remote } from 'electron';
 import isDev from 'electron-is-dev';
 
-function textInputTemplate(target) {
-  const somethingSelected = target.selectionStart < target.selectionEnd;
-  const hasValue = target.value.length > 0;
-
-  // Native Electron selectAll role does not work
-  function selectAll() {
-    target.selectionStart = 0;
-    target.selectionEnd = target.value.length + 1;
-  }
-
-  const template = [
-    { label: 'Cut', accelerator: 'CmdOrCtrl+X', role: 'cut', enabled: somethingSelected },
-    { label: 'Copy', accelerator: 'CmdOrCtrl+C', role: 'copy', enabled: somethingSelected },
+function injectDevelopmentTemplate(event, templates) {
+  if (!isDev) return templates;
+  const { screenX, screenY } = event;
+  const separator = { type: 'separator' };
+  const developmentTemplateAddition = [
     {
-      label: 'Paste',
-      accelerator: 'CmdOrCtrl+V',
-      role: 'paste',
-      enabled: clipboard.readText().length > 0,
-    },
-    {
-      label: 'Select All',
-      accelerator: 'CmdOrCtrl+A',
-      role: 'selectAll',
-      enabled: hasValue,
-      click: selectAll,
+      label: 'Inspect element',
+      accelerator: 'CmdOrCtrl+Shift+I',
+      click: () => {
+        remote.getCurrentWindow().inspectElement(screenX, screenY);
+      },
     },
   ];
-
-  return template;
-}
-
-function getTemplate(target) {
-  const { type } = target;
-  if (target.matches('input') && (type === 'text' || type === 'number')) {
-    return textInputTemplate(target);
+  if (templates.length > 0) {
+    templates.push(separator);
   }
-  return [];
+  templates.push(...developmentTemplateAddition);
+  return templates;
 }
 
-export default event => {
-  event.preventDefault();
-  const { target } = event;
-  const template = getTemplate(target);
-  if (isDev) {
-    const { screenX, screenY } = event;
-    const separator = { type: 'separator' };
-    const developmentTemplateAddition = [
+export function openContextMenu(event, templates = [], addDefaultTemplates = true) {
+  if (addDefaultTemplates) {
+    const { value } = event.target;
+    const inputTemplates = [
+      { label: 'Cut', accelerator: 'CmdOrCtrl+X', role: 'cut' },
+      { label: 'Copy', accelerator: 'CmdOrCtrl+C', role: 'copy' },
       {
-        label: 'Inspect element',
-        accelerator: 'CmdOrCtrl+Shift+I',
-        click: () => {
-          remote.getCurrentWindow().inspectElement(screenX, screenY);
-        },
+        label: 'Paste',
+        accelerator: 'CmdOrCtrl+V',
+        role: 'paste',
+        enabled: clipboard.readText().length > 0,
+      },
+      {
+        label: 'Select All',
+        accelerator: 'CmdOrCtrl+A',
+        role: 'selectall',
+        enabled: !!value,
       },
     ];
-    if (template.length > 0) {
-      template.push(separator);
-    }
-    template.push(...developmentTemplateAddition);
+    templates.push(...inputTemplates);
   }
-  remote.Menu.buildFromTemplate(template).popup();
-};
+
+  injectDevelopmentTemplate(event, templates);
+  remote.Menu.buildFromTemplate(templates).popup();
+}
+export function openCopyLinkMenu(text, event) {
+  const templates = [
+    {
+      label: 'Copy link',
+      click: () => {
+        clipboard.writeText(text);
+      },
+    },
+  ];
+  openContextMenu(event, templates, false);
+}
+
+export function initContextMenu(event) {
+  const { type } = event.target;
+  if (event.target.matches('input') && (type === 'text' || type === 'number')) {
+    openContextMenu(event);
+  } else {
+    event.preventDefault();
+  }
+}

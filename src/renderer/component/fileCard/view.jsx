@@ -9,6 +9,7 @@ import FilePrice from 'component/filePrice';
 import UriIndicator from 'component/uriIndicator';
 import * as icons from 'constants/icons';
 import classnames from 'classnames';
+import { openCopyLinkMenu } from '../../util/contextMenu';
 
 // TODO: iron these out
 type Props = {
@@ -60,6 +61,9 @@ class FileCard extends React.PureComponent<Props> {
     const thumbnail = metadata && metadata.thumbnail ? metadata.thumbnail : null;
     const shouldObscureNsfw = obscureNsfw && metadata && metadata.nsfw;
     const isRewardContent = claim && rewardedContentClaimIds.includes(claim.claim_id);
+    const handleContextMenu = event => {
+      openCopyLinkMenu(uri, event);
+    };
 
     // We should be able to tab through cards
     /* eslint-disable jsx-a11y/click-events-have-key-events */
@@ -72,6 +76,7 @@ class FileCard extends React.PureComponent<Props> {
           'card--link': !pending,
           'card--pending': pending,
         })}
+        onContextMenu={handleContextMenu}
       >
         <CardMedia nsfw={shouldObscureNsfw} thumbnail={thumbnail} />
         <div className="card-media__internal-links">{showPrice && <FilePrice uri={uri} />}</div>
