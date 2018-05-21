@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { normalizeURI } from 'lbry-redux';
+import { normalizeURI, convertToShareLink } from 'lbry-redux';
 import Button from 'component/button';
 import CardMedia from 'component/cardMedia';
 import TruncatedText from 'component/common/truncated-text';
@@ -62,7 +62,7 @@ class FileCard extends React.PureComponent<Props> {
     const shouldObscureNsfw = obscureNsfw && metadata && metadata.nsfw;
     const isRewardContent = claim && rewardedContentClaimIds.includes(claim.claim_id);
     const handleContextMenu = event => {
-      openCopyLinkMenu(uri, event);
+      openCopyLinkMenu(convertToShareLink(uri), event);
     };
 
     // We should be able to tab through cards
