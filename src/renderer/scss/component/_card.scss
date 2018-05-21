@@ -2,7 +2,6 @@
   margin-left: auto;
   margin-right: auto;
   border-radius: var(--card-radius);
-  overflow: auto;
   user-select: text;
   display: flex;
   position: relative;
@@ -182,6 +181,10 @@
 
 .card__content {
   margin-top: $spacing-vertical * 2/3;
+}
+
+.card__content--extra-padding {
+  margin-top: $spacing-vertical;
 }
 
 .card__subtext-title {

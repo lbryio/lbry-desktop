@@ -38,7 +38,7 @@ export default (props: Props) => {
   return channelName && uri ? (
     <Button
       icon={isSubscribed ? undefined : icons.HEART}
-      button={isSubscribed ? 'danger' : 'alt'}
+      button={isSubscribed ? 'alt' : 'secondary'}
       label={subscriptionLabel}
       onClick={() => {
         if (!subscriptions.length) {

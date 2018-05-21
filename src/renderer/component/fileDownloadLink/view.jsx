@@ -1,19 +1,39 @@
+// @flow
 import React from 'react';
 import Button from 'component/button';
-import classnames from 'classnames';
 import * as icons from 'constants/icons';
 
-class FileDownloadLink extends React.PureComponent {
+type Props = {
+  uri: string,
+  downloading: boolean,
+  fileInfo: ?{
+    written_bytes: number,
+    total_bytes: number,
+    outpoint: number,
+    download_path: string,
+  },
+  loading: boolean,
+  costInfo: ?{},
+  restartDownload: (string, number) => void,
+  checkAvailability: string => void,
+  openInShell: string => void,
+  purchaseUri: string => void,
+  doPause: () => void,
+};
+
+class FileDownloadLink extends React.PureComponent<Props> {
   componentWillMount() {
     this.checkAvailability(this.props.uri);
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps(nextProps: Props) {
     this.checkAvailability(nextProps.uri);
     this.restartDownload(nextProps);
   }
 
-  restartDownload(props) {
+  uri: ?string;
+
+  restartDownload = (props: Props) => {
     const { downloading, fileInfo, uri, restartDownload } = props;
 
     if (
@@ -25,11 +45,11 @@ class FileDownloadLink extends React.PureComponent {
     ) {
       restartDownload(uri, fileInfo.outpoint);
     }
-  }
+  };
 
-  checkAvailability(uri) {
-    if (!this._uri || uri !== this._uri) {
-      this._uri = uri;
+  checkAvailability(uri: string) {
+    if (!this.uri || uri !== this.uri) {
+      this.uri = uri;
       this.props.checkAvailability(uri);
     }
   }
@@ -47,8 +67,10 @@ class FileDownloadLink extends React.PureComponent {
     } = this.props;
 
     const openFile = () => {
-      openInShell(fileInfo.download_path);
-      doPause();
+      if (fileInfo) {
+        openInShell(fileInfo.download_path);
+        doPause();
+      }
     };
 
     if (loading || downloading) {
@@ -56,21 +78,11 @@ class FileDownloadLink extends React.PureComponent {
         fileInfo && fileInfo.written_bytes
           ? fileInfo.written_bytes / fileInfo.total_bytes * 100
           : 0;
-      const label = fileInfo ? progress.toFixed(0) + __('% complete') : __('Connecting...');
+      const label = fileInfo
+        ? __('Downloading: ') + progress.toFixed(0) + __('% complete')
+        : __('Connecting...');
 
-      return (
-        <div className="file-download btn__content">
-          <div
-            className={classnames('file-download__overlay', {
-              btn__content: !!progress,
-            })}
-            style={{ width: `${progress}%` }}
-          >
-            {label}
-          </div>
-          {label}
-        </div>
-      );
+      return <span className="file-download">{label}</span>;
     } else if (fileInfo === null && !downloading) {
       if (!costInfo) {
         return null;
@@ -78,8 +90,8 @@ class FileDownloadLink extends React.PureComponent {
 
       return (
         <Button
-          className="btn--file-actions"
-          description={__('Download')}
+          button="alt"
+          label={__('Download')}
           icon={icons.DOWNLOAD}
           onClick={() => {
             purchaseUri(uri);
@@ -88,12 +100,7 @@ class FileDownloadLink extends React.PureComponent {
       );
     } else if (fileInfo && fileInfo.download_path) {
       return (
-        <Button
-          className="btn--file-actions"
-          description={__('Open')}
-          icon={icons.OPEN}
-          onClick={() => openFile()}
-        />
+        <Button button="alt" label={__('Open File')} icon={icons.OPEN} onClick={() => openFile()} />
       );
     }
 

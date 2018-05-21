@@ -1,7 +1,6 @@
 // @flow
 import React from 'react';
 import Button from 'component/button';
-import FileDownloadLink from 'component/fileDownloadLink';
 import { MODALS } from 'lbry-redux';
 import classnames from 'classnames';
 import * as icons from 'constants/icons';
@@ -27,21 +26,20 @@ class FileActions extends React.PureComponent<Props> {
 
     return (
       <section className={classnames('card__actions', { 'card__actions--vertical': vertical })}>
-        <FileDownloadLink uri={uri} />
         {showDelete && (
           <Button
-            className="btn--file-actions"
+            button="alt"
             icon={icons.TRASH}
-            description={__('Delete')}
+            label={__('Delete')}
             onClick={() => openModal({ id: MODALS.CONFIRM_FILE_REMOVE }, { uri })}
           />
         )}
         {!claimIsMine && (
           <Button
-            className="btn--file-actions"
+            button="alt"
             icon={icons.REPORT}
             href={`https://lbry.io/dmca?claim_id=${claimId}`}
-            description={__('Report content')}
+            label={__('Report content')}
           />
         )}
       </section>
