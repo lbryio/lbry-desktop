@@ -5,6 +5,7 @@ import {
   makeSelectClaimIsMine,
   doNotify,
 } from 'lbry-redux';
+import { doNavigate } from 'redux/actions/navigation';
 import FileActions from './view';
 
 const select = (state, props) => ({
@@ -16,6 +17,7 @@ const select = (state, props) => ({
 
 const perform = dispatch => ({
   openModal: (modal, props) => dispatch(doNotify(modal, props)),
+  navigate: (path, params) => dispatch(doNavigate(path, params)),
 });
 
 export default connect(select, perform)(FileActions);

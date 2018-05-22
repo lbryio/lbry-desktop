@@ -15,14 +15,13 @@ type Props = {
   openModal: ({ id: string }, { uri: string }) => void,
   claimIsMine: boolean,
   fileInfo: FileInfo,
-  vertical?: boolean, // should the buttons be stacked vertically?
+  vertical?: boolean, // should the buttons be stacked vertically?,
+  navigate: (string, ?{}) => void,
 };
 
 class FileActions extends React.PureComponent<Props> {
   render() {
-    const { fileInfo, uri, openModal, claimIsMine, vertical } = this.props;
-
-    const claimId = fileInfo ? fileInfo.claim_id : '';
+    const { fileInfo, uri, openModal, claimIsMine, vertical, navigate } = this.props;
     const showDelete = fileInfo && Object.keys(fileInfo).length > 0;
 
     return (
@@ -40,7 +39,7 @@ class FileActions extends React.PureComponent<Props> {
           <Button
             className="btn--file-actions"
             icon={icons.REPORT}
-            href={`https://lbry.io/dmca?claim_id=${claimId}`}
+            onClick={() => navigate(`/reportcontent`, { uri })}
             description={__('Report content')}
           />
         )}
