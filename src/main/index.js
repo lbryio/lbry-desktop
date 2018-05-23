@@ -75,6 +75,9 @@ app.on('ready', async () => {
     await installExtensions();
   }
   rendererWindow = createWindow(appState);
+  rendererWindow.webContents.on('devtools-opened', () => {
+    rendererWindow.webContents.send('devtools-is-opened');
+  });
   tray = createTray(rendererWindow);
 });
 
