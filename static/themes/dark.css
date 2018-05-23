@@ -29,7 +29,7 @@
   --input-copyable-bg: var(--color-blue-grey);
   --input-copyable-color: #8696AF;
   --input-copyable-border: #53637C;
-  --input-select-bg-color: var(--color-blue-grey);
+  --input-select-bg-color: var(--color-bg-alt);
   --input-select-color: var(--color-white);
 
   /* input:disabled */
