@@ -11,31 +11,19 @@ type Props = {
     total_bytes: number,
     outpoint: number,
     download_path: string,
+    completed: boolean,
   },
   loading: boolean,
   costInfo: ?{},
   restartDownload: (string, number) => void,
-  checkAvailability: string => void,
   openInShell: string => void,
   purchaseUri: string => void,
   doPause: () => void,
 };
 
 class FileDownloadLink extends React.PureComponent<Props> {
-  componentWillMount() {
-    this.checkAvailability(this.props.uri);
-  }
-
-  componentWillReceiveProps(nextProps: Props) {
-    this.checkAvailability(nextProps.uri);
-    this.restartDownload(nextProps);
-  }
-
-  uri: ?string;
-
-  restartDownload = (props: Props) => {
-    const { downloading, fileInfo, uri, restartDownload } = props;
-
+  componentWillUpdate() {
+    const { downloading, fileInfo, uri, restartDownload } = this.props;
     if (
       !downloading &&
       fileInfo &&
@@ -45,14 +33,9 @@ class FileDownloadLink extends React.PureComponent<Props> {
     ) {
       restartDownload(uri, fileInfo.outpoint);
     }
-  };
-
-  checkAvailability(uri: string) {
-    if (!this.uri || uri !== this.uri) {
-      this.uri = uri;
-      this.props.checkAvailability(uri);
-    }
   }
+
+  uri: ?string;
 
   render() {
     const {
