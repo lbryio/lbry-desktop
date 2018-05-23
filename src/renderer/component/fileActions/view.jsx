@@ -30,6 +30,7 @@ class FileActions extends React.PureComponent<Props> {
           <Button
             button="alt"
             icon={icons.TRASH}
+            iconColor="red"
             label={__('Delete')}
             onClick={() => openModal({ id: MODALS.CONFIRM_FILE_REMOVE }, { uri })}
           />

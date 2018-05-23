@@ -105,7 +105,7 @@ class FileCard extends React.PureComponent<Props> {
                 <React.Fragment>
                   <UriIndicator uri={uri} link />
                   <div>
-                    {isRewardContent && <Icon icon={icons.FEATURED} />}
+                    {isRewardContent && <Icon iconColor="red" icon={icons.FEATURED} />}
                     {fileInfo && <Icon icon={icons.LOCAL} />}
                   </div>
                 </React.Fragment>

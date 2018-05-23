@@ -9,7 +9,8 @@ const PURPLE_COLOR = '#8165b0';
 
 type Props = {
   icon: string,
-  tooltip: ?string, // tooltip direction
+  tooltip?: string, // tooltip direction
+  iconColor?: string,
 };
 
 class IconComponent extends React.PureComponent<Props> {
@@ -23,8 +24,20 @@ class IconComponent extends React.PureComponent<Props> {
         return null;
     }
   };
+
+  getIconColor = (color: string) => {
+    switch (color) {
+      case 'red':
+        return RED_COLOR;
+      case 'purple':
+        return PURPLE_COLOR;
+      default:
+        return null;
+    }
+  };
+
   render() {
-    const { icon, tooltip } = this.props;
+    const { icon, tooltip, iconColor } = this.props;
     const Icon = FeatherIcons[icon];
 
     if (!Icon) {
@@ -32,10 +45,8 @@ class IconComponent extends React.PureComponent<Props> {
     }
 
     let color;
-    if (icon === icons.TRASH || icon === icons.FEATURED) {
-      color = RED_COLOR;
-    } else if (icon === icons.OPEN) {
-      color = PURPLE_COLOR;
+    if (iconColor) {
+      color = this.getIconColor(iconColor);
     }
 
     let size = 14;

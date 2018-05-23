@@ -3,7 +3,7 @@ import * as React from 'react';
 import classnames from 'classnames';
 
 type Props = {
-  body: ?string,
+  body: string,
   label?: string,
   children: ?React.Node,
   icon: ?boolean,
@@ -12,7 +12,7 @@ type Props = {
 
 class ToolTip extends React.PureComponent<Props> {
   static defaultProps = {
-    direction: 'top',
+    direction: 'bottom',
   };
 
   render() {
@@ -32,10 +32,7 @@ class ToolTip extends React.PureComponent<Props> {
         })}
       >
         {tooltipContent}
-        {body && (
-          // body may be undefined for some icons until we add messages for them
-          <span className="tooltip__body">{body}</span>
-        )}
+        <span className="tooltip__body">{body}</span>
       </span>
     );
   }

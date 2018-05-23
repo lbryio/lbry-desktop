@@ -41,7 +41,7 @@ type Props = {
   openModal: ({ id: string }, { uri: string }) => void,
   fetchFileInfo: string => void,
   fetchCostInfo: string => void,
-  prepareEdit: ({}) => void,
+  prepareEdit: ({}, string) => void,
   setClientSetting: (string, boolean | string) => void,
   checkSubscription: ({ channelName: string, uri: string }) => void,
   subscriptions: Array<Subscription>,
@@ -158,7 +158,7 @@ class FilePage extends React.Component<Props> {
                 <h1 className="card__title card__title--file">{title}</h1>
                 <div className="card__title-identity-icons">
                   <FilePrice uri={normalizeURI(uri)} />
-                  {isRewardContent && <Icon tooltip="bottom" icon={icons.FEATURED} />}
+                  {isRewardContent && <Icon iconColor="red" tooltip="bottom" icon={icons.FEATURED} />}
                 </div>
               </div>
               <span className="card__subtitle card__subtitle--file">
