@@ -161,9 +161,8 @@ $large-breakpoint: 1760px;
   --modal-btn-bg-color: var(--btn-bg-alt);
 
   // /* Tooltip */
-  --tooltip-width: 300px;
-  --tooltip-bg: var(--color-bg);
-  --tooltip-color: var(--text-color);
+  --tooltip-bg: #555;
+  --tooltip-color: var(--color-white);
 
   /* Scrollbar */
   --scrollbar-radius: 10px;

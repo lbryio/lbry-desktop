@@ -122,12 +122,11 @@ input::placeholder {
 }
 
 select {
-  min-width: 100px;
+  min-width: 60px;
   height: 30px;
   border-radius: 8px;
   background-color: var(--input-select-bg-color);
   font: normal 12px/30px 'metropolis-medium';
-  text-indent: 12px;
   color: var(--input-select-color);
 
   &:disabled {

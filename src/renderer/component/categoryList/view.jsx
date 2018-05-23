@@ -223,6 +223,7 @@ class CategoryList extends React.PureComponent<Props, State> {
             {category &&
               category.match(/^community/i) && (
                 <ToolTip
+                  direction="bottom"
                   label={__("What's this?")}
                   body={__(
                     'Community Content is a public space where anyone can share content with the rest of the LBRY community. Bid on the names "one," "two," "three," "four" and "five" to put your content here!'
