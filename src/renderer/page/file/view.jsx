@@ -129,6 +129,14 @@ class FilePage extends React.Component<Props> {
       subscriptionUri = buildURI({ channelName, claimId: channelClaimId }, false);
     }
 
+    // We want to use the short form uri for editing
+    // This is what the user is used to seeing, they don't care about the claim id
+    // We will select the claim id before they publish
+    let editUri;
+    if (claimIsMine) {
+      editUri = buildURI({ channelName, contentName: claim.name });
+    }
+
     const isPlaying = playingUri === uri && !isPaused;
     return (
       <Page extraPadding>
@@ -170,7 +178,7 @@ class FilePage extends React.Component<Props> {
                       icon={icons.EDIT}
                       label={__('Edit')}
                       onClick={() => {
-                        prepareEdit(claim, uri);
+                        prepareEdit(claim, editUri);
                         navigate('/publish');
                       }}
                     />

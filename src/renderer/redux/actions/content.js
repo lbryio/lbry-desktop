@@ -42,10 +42,10 @@ export function doFetchFeaturedUris() {
     });
 
     const success = ({ Uris }) => {
-      let urisToResolve = [];
-      Object.keys(Uris).forEach(category => {
-        urisToResolve = [...urisToResolve, ...Uris[category]];
-      });
+      const urisToResolve = Object.keys(Uris).reduce(
+        (resolve, category) => [...resolve, ...Uris[category]],
+        []
+      );
 
       const actions = [
         doResolveUris(urisToResolve),
