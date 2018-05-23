@@ -3,7 +3,7 @@ import * as ACTIONS from 'constants/action_types';
 const getCurrentPath = () => {
   const { hash } = document.location;
   if (hash !== '') return hash.replace(/^#/, '');
-  return '/discover';
+  return '/publish';
 };
 
 const reducers = {};
