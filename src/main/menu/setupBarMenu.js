@@ -9,12 +9,12 @@ export default () => {
     {
       label: 'Edit',
       submenu: [
-        { role: 'undo' },
-        { role: 'redo' },
+        { role: 'undo', accelerator: 'CmdOrCtrl+Z' },
+        { role: 'redo', accelerator: 'CmdOrCtrl+Y' },
         { type: 'separator' },
-        { role: 'cut' },
-        { role: 'copy' },
-        { role: 'paste' },
+        { role: 'cut', accelerator: 'CmdOrCtrl+X' },
+        { role: 'copy', accelerator: 'CmdOrCtrl+C' },
+        { role: 'paste', accelerator: 'CmdOrCtrl+V'},
       ],
     },
     {
