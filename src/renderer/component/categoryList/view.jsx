@@ -5,11 +5,15 @@ import ToolTip from 'component/common/tooltip';
 import FileCard from 'component/fileCard';
 import Button from 'component/button';
 import * as icons from 'constants/icons';
+import Claim from 'types/claim';
 
 type Props = {
   category: string,
   names: Array<string>,
-  categoryLink?: string,
+  categoryLink: ?string,
+  fetching: boolean,
+  channelClaims: Array<Claim>,
+  fetchChannel: string => void,
 };
 
 type State = {
@@ -18,6 +22,11 @@ type State = {
 };
 
 class CategoryList extends React.PureComponent<Props, State> {
+  static defaultProps = {
+    names: [],
+    categoryLink: '',
+  };
+
   constructor() {
     super();
 
@@ -32,6 +41,11 @@ class CategoryList extends React.PureComponent<Props, State> {
   }
 
   componentDidMount() {
+    const { fetching, categoryLink, fetchChannel } = this.props;
+    if (!fetching) {
+      fetchChannel(categoryLink);
+    }
+
     const cardRow = this.rowItems;
     if (cardRow) {
       const cards = cardRow.getElementsByTagName('section');
@@ -109,6 +123,9 @@ class CategoryList extends React.PureComponent<Props, State> {
 
   // check if a card is fully visible horizontally
   isCardVisible = (section: HTMLElement) => {
+    if (!section) {
+      return false;
+    }
     const rect = section.getBoundingClientRect();
     const isVisible = rect.left >= 0 && rect.right <= window.innerWidth;
     return isVisible;
@@ -189,7 +206,7 @@ class CategoryList extends React.PureComponent<Props, State> {
   }
 
   render() {
-    const { category, names, categoryLink } = this.props;
+    const { category, categoryLink, names, channelClaims } = this.props;
     const { canScrollNext, canScrollPrevious } = this.state;
 
     // The lint was throwing an error saying we should use <button> instead of <a>
@@ -235,6 +252,12 @@ class CategoryList extends React.PureComponent<Props, State> {
           className="card-row__scrollhouse"
         >
           {names && names.map(name => <FileCard key={name} uri={normalizeURI(name)} />)}
+
+          {channelClaims && channelClaims.length
+            ? channelClaims.map(claim => (
+                <FileCard key={claim.claim_id} uri={`lbry://${claim.name}#${claim.claim_id}`} />
+              ))
+            : null}
         </div>
       </div>
     );
