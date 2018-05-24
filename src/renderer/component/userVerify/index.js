@@ -13,13 +13,13 @@ import { selectCurrentModal } from 'redux/selectors/app';
 import { doOpenModal } from 'redux/actions/app';
 import { PHONE_COLLECTION } from 'constants/modal_types';
 
-const select = (state, props) => {
+const select = state => {
   const selectReward = makeSelectRewardByType();
 
   return {
     isPending: selectIdentityVerifyIsPending(state),
     errorMessage: selectIdentityVerifyErrorMessage(state),
-    reward: selectReward(state, { reward_type: rewards.TYPE_NEW_USER }),
+    reward: selectReward(state, rewards.TYPE_NEW_USER),
     modal: selectCurrentModal(state),
   };
 };

@@ -4,7 +4,7 @@ const reducers = {};
 const defaultState = {
   fetching: false,
   claimedRewardsById: {}, // id => reward
-  unclaimedRewardsByType: {},
+  unclaimedRewards: [],
   claimPendingByType: {},
   claimErrorsByType: {},
 };
@@ -17,19 +17,19 @@ reducers[ACTIONS.FETCH_REWARDS_STARTED] = state =>
 reducers[ACTIONS.FETCH_REWARDS_COMPLETED] = (state, action) => {
   const { userRewards } = action.data;
 
-  const unclaimedRewards = {};
+  const unclaimedRewards = [];
   const claimedRewards = {};
   userRewards.forEach(reward => {
     if (reward.transaction_id) {
       claimedRewards[reward.id] = reward;
     } else {
-      unclaimedRewards[reward.reward_type] = reward;
+      unclaimedRewards.push(reward);
     }
   });
 
   return Object.assign({}, state, {
     claimedRewardsById: claimedRewards,
-    unclaimedRewardsByType: unclaimedRewards,
+    unclaimedRewards,
     fetching: false,
   });
 };
@@ -62,24 +62,21 @@ reducers[ACTIONS.CLAIM_REWARD_STARTED] = (state, action) => {
 
 reducers[ACTIONS.CLAIM_REWARD_SUCCESS] = (state, action) => {
   const { reward } = action.data;
+  let { unclaimedRewards } = state;
 
-  const unclaimedRewardsByType = Object.assign({}, state.unclaimedRewardsByType);
-  const existingReward = unclaimedRewardsByType[reward.reward_type];
+  const index = unclaimedRewards.findIndex(ur => ur.reward_type === reward.reward_type);
+  unclaimedRewards = unclaimedRewards.slice(0, index).concat(unclaimedRewards.slice(index + 1));
 
-  const newReward = Object.assign({}, reward, {
-    reward_title: existingReward.reward_title,
-    reward_description: existingReward.reward_description,
-  });
+  const { claimedRewardsById } = state;
+  claimedRewardsById[reward.id] = reward;
 
-  const claimedRewardsById = Object.assign({}, state.claimedRewardsById);
-  claimedRewardsById[reward.id] = newReward;
-
-  const newState = Object.assign({}, state, {
-    unclaimedRewardsByType,
+  const newState = {
+    ...state,
+    unclaimedRewards,
     claimedRewardsById,
-  });
+  };
 
-  return setClaimRewardState(newState, newReward, false, '');
+  return setClaimRewardState(newState, reward, false, '');  
 };
 
 reducers[ACTIONS.CLAIM_REWARD_FAILURE] = (state, action) => {

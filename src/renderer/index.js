@@ -14,6 +14,7 @@ import {
   doAutoUpdate,
   doBlackListedOutpointsSubscribe,
 } from 'redux/actions/app';
+import { isURIValid } from 'lbryURI';
 import { doNavigate } from 'redux/actions/navigation';
 import { doDownloadLanguages, doUpdateIsNightAsync } from 'redux/actions/settings';
 import { doUserEmailVerify } from 'redux/actions/user';
@@ -23,6 +24,7 @@ import app from './app';
 import analytics from './analytics';
 
 const { autoUpdater } = remote.require('electron-updater');
+const appPageURL = 'lbry://?';
 
 autoUpdater.logger = remote.require('electron-log');
 
@@ -41,8 +43,14 @@ ipcRenderer.on('open-uri-requested', (event, uri, newSession) => {
       } else {
         app.store.dispatch(doShowSnackBar({ message: 'Invalid Verification URI' }));
       }
-    } else {
+    } else if (uri.startsWith(appPageURL)) {
+      let navpage;
+      navpage = uri.replace(appPageURL,'').toLowerCase();
+      app.store.dispatch(doNavigate('/' + navpage));
+    } else if (isURIValid (uri)) {
       app.store.dispatch(doNavigate('/show', { uri }));
+    } else {
+      app.store.dispatch(doShowSnackBar({ message: 'Invalid Verification URI' }));
     }
   }
 });

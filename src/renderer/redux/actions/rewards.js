@@ -1,7 +1,7 @@
 import * as ACTIONS from 'constants/action_types';
 import * as MODALS from 'constants/modal_types';
 import Lbryio from 'lbryio';
-import { selectUnclaimedRewardsByType } from 'redux/selectors/rewards';
+import { selectUnclaimedRewards } from 'redux/selectors/rewards';
 import { selectUserIsRewardApproved } from 'redux/selectors/user';
 import rewards from 'rewards';
 
@@ -30,8 +30,8 @@ export function doRewardList() {
 export function doClaimRewardType(rewardType) {
   return (dispatch, getState) => {
     const state = getState();
-    const rewardsByType = selectUnclaimedRewardsByType(state);
-    const reward = rewardsByType[rewardType];
+    const unclaimedRewards = selectUnclaimedRewards(state);
+    const reward = unclaimedRewards.find(ur => ur.reward_type === rewardType);
     const userIsRewardApproved = selectUserIsRewardApproved(state);
 
     if (!reward || reward.transaction_id) {
@@ -60,12 +60,13 @@ export function doClaimRewardType(rewardType) {
           reward: successReward,
         },
       });
-      if (successReward.reward_type === rewards.TYPE_NEW_USER) {
-        dispatch({
-          type: ACTIONS.OPEN_MODAL,
-          data: { modal: MODALS.FIRST_REWARD },
-        });
+      const notification = { display: ['snackbar'] };
+      if (successReward.reward_title) {
+        notification.title = successReward.reward_title;
       }
+      notification.message = successReward.reward_notification ||
+      `You earned a reward worth {successReward.reward_amount}LBC.`;
+      dispatch(doNotify(notification));
     };
 
     const failure = error => {
@@ -82,14 +83,14 @@ export function doClaimRewardType(rewardType) {
 export function doClaimEligiblePurchaseRewards() {
   return (dispatch, getState) => {
     const state = getState();
-    const rewardsByType = selectUnclaimedRewardsByType(state);
+    const unclaimedRewards = selectUnclaimedRewards(state);
     const userIsRewardApproved = selectUserIsRewardApproved(state);
 
     if (!userIsRewardApproved || !Lbryio.enabled) {
       return;
     }
 
-    if (rewardsByType[rewards.TYPE_FIRST_STREAM]) {
+    if (unclaimedRewards.find(ur => ur.reward_type === rewards.TYPE_FIRST_STREAM)) {
       dispatch(doClaimRewardType(rewards.TYPE_FIRST_STREAM));
     } else {
       [rewards.TYPE_MANY_DOWNLOADS, rewards.TYPE_FEATURED_DOWNLOAD].forEach(type => {

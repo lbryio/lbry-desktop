@@ -17,7 +17,7 @@ const makeSelect = () => {
   const select = (state, props) => ({
     errorMessage: selectError(state, props),
     isPending: selectIsPending(state, props),
-    reward: selectReward(state, props),
+    reward: selectReward(state, props.reward_type),
   });
 
   return select;
