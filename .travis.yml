@@ -36,7 +36,7 @@ script:
         electronuserland/builder:wine \
         /bin/bash -c "yarn --link-duplicates --pure-lockfile && yarn build --linux --win --publish onTag"
     else
-      yarn build --publish onTag"
+      yarn build --publish onTag
     fi
 branches:
   except:
