@@ -6,7 +6,7 @@ export default (rendererWindow: BrowserWindow) => {
   rendererWindow.webContents.on('context-menu', (e, params) => {
     const { x, y } = params;
 
-    const template = [{ role: 'cut' }, { role: 'copy' }, { role: 'paste' }];
+    const template = [{ role: 'cut', accelerator: 'CmdOrCtrl+X'  }, { role: 'copy', accelerator: 'CmdOrCtrl+C' }, { role: 'paste', accelerator: 'CmdOrCtrl+V'  }, { role: 'selectall', accelerator: 'CmdOrCtrl+A'  }];
 
     const developmentTemplateAddition = [
       { type: 'separator' },
