@@ -14,7 +14,7 @@ import {
   doAutoUpdate,
   doBlackListedOutpointsSubscribe,
 } from 'redux/actions/app';
-import { isURIValid } from 'lbryURI';
+import { isURIValid } from 'lbryURI.js';
 import { doNavigate } from 'redux/actions/navigation';
 import { doDownloadLanguages, doUpdateIsNightAsync } from 'redux/actions/settings';
 import { doUserEmailVerify } from 'redux/actions/user';
