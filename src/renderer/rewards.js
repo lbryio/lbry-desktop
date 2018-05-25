@@ -2,45 +2,7 @@ import Lbry from 'lbry';
 import Lbryio from 'lbryio';
 import { doShowSnackBar } from 'redux/actions/app';
 
-function rewardMessage(type, amount) {
-  return {
-    new_developer: __('You earned %s for registering as a new developer.', amount),
-    new_user: __('You earned %s LBC new user reward.', amount),
-    verified_email: __('You earned %s LBC for verifying your email address.', amount),
-    new_channel: __('You earned %s LBC for creating a publisher identity.', amount),
-    first_stream: __('You earned %s LBC for streaming your first video.', amount),
-    many_downloads: __('You earned %s LBC for downloading a bunch of things.', amount),
-    first_publish: __('You earned %s LBC for making your first publication.', amount),
-    featured_download: __('You earned %s LBC for watching a featured download.', amount),
-    referral: __('You earned %s LBC for referring someone.', amount),
-    youtube_creator: __('You earned %s LBC for syncing your YouTube channel.', amount),
-  }[type];
-}
-
 const rewards = {};
-
-rewards.TYPE_NEW_DEVELOPER = 'new_developer';
-rewards.TYPE_NEW_USER = 'new_user';
-rewards.TYPE_CONFIRM_EMAIL = 'verified_email';
-rewards.TYPE_FIRST_CHANNEL = 'new_channel';
-rewards.TYPE_FIRST_STREAM = 'first_stream';
-rewards.TYPE_MANY_DOWNLOADS = 'many_downloads';
-rewards.TYPE_FIRST_PUBLISH = 'first_publish';
-rewards.TYPE_FEATURED_DOWNLOAD = 'featured_download';
-rewards.TYPE_REFERRAL = 'referral';
-rewards.YOUTUBE_CREATOR = 'youtube_creator';
-rewards.SORT_ORDER = [
-  rewards.TYPE_NEW_USER,
-  rewards.TYPE_CONFIRM_EMAIL,
-  rewards.TYPE_FIRST_STREAM,
-  rewards.TYPE_FIRST_CHANNEL,
-  rewards.TYPE_FIRST_PUBLISH,
-  rewards.TYPE_FEATURED_DOWNLOAD,
-  rewards.TYPE_MANY_DOWNLOADS,
-  rewards.TYPE_REFERRAL,
-  rewards.TYPE_NEW_DEVELOPER,
-  rewards.YOUTUBE_CREATOR,
-];
 
 rewards.claimReward = type => {
   function requestReward(resolve, reject, params) {
@@ -49,7 +11,7 @@ rewards.claimReward = type => {
       return;
     }
     Lbryio.call('reward', 'new', params, 'post').then(reward => {
-      const message = rewardMessage(type, reward.reward_amount);
+      const message = reward.reward_notification || `You have claimed a ${reward.reward_amount} LBC reward.`;
 
       // Display global notice
       const action = doShowSnackBar({

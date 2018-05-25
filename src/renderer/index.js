@@ -50,7 +50,7 @@ ipcRenderer.on('open-uri-requested', (event, uri, newSession) => {
     } else if (isURIValid (uri)) {
       app.store.dispatch(doNavigate('/show', { uri }));
     } else {
-      app.store.dispatch(doShowSnackBar({ message: 'Invalid Verification URI' }));
+      app.store.dispatch(doShowSnackBar({ message: 'Invalid URL requested' }));
     }
   }
 });

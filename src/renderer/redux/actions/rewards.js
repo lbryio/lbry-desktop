@@ -60,13 +60,6 @@ export function doClaimRewardType(rewardType) {
           reward: successReward,
         },
       });
-      const notification = { display: ['snackbar'] };
-      if (successReward.reward_title) {
-        notification.title = successReward.reward_title;
-      }
-      notification.message = successReward.reward_notification ||
-      `You earned a reward worth {successReward.reward_amount}LBC.`;
-      dispatch(doNotify(notification));
     };
 
     const failure = error => {

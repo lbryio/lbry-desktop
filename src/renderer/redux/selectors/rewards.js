@@ -1,5 +1,4 @@
 import { createSelector } from 'reselect';
-import REWARDS from 'rewards';
 
 const selectState = state => state.rewards || {};
 
