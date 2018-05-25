@@ -14,6 +14,10 @@
 .file-list__header {
   margin-top: $spacing-vertical * 4/3;
   font-size: 18px;
+
+  .tooltip {
+    margin-left: 5px;
+  }
 }
 
 .file-tile {

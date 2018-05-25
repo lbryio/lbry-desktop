@@ -5,6 +5,8 @@ import FileTile from 'component/fileTile';
 import FileListSearch from 'component/fileListSearch';
 import ToolTip from 'component/common/tooltip';
 import Page from 'component/page';
+import Icon from 'component/common/icon';
+import * as icons from 'constants/icons';
 
 const MODAL_ANIMATION_TIME = 250;
 
@@ -50,10 +52,11 @@ class SearchPage extends React.PureComponent<Props> {
               <div className="file-list__header">
                 {__('Exact URL')}
                 <ToolTip
-                  label="?"
+                  icon
                   body={__('This is the resolution of a LBRY URL and not controlled by LBRY Inc.')}
-                  className="tooltip--header"
-                />
+                >
+                  <Icon icon={icons.HELP} />
+                </ToolTip>
               </div>
               <FileTile fullWidth uri={normalizeURI(query)} showUri />
             </React.Fragment>

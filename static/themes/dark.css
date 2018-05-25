@@ -7,7 +7,7 @@
   --color-help: #8696AF;
   --color-download: rgba(255, 255, 255, 0.75);
   --color-download-overlay: var(--color-black);
-  --color-bg: #203049;
+  --color-bg: var(--color-blue-grey);
   --color-bg-alt: #2D3D56;
   --color-placeholder: var(--color-bg-alt);
 
@@ -26,9 +26,11 @@
   --input-border-size: 1px;
   --input-border-color: rgba(255,255,255, 0.5);
   --input-hover-border-color: rgba(255, 255, 255, 1);
-  --input-copyable-bg: #203049;
+  --input-copyable-bg: var(--color-blue-grey);
   --input-copyable-color: #8696AF;
   --input-copyable-border: #53637C;
+  --input-select-bg-color: var(--color-bg-alt);
+  --input-select-color: var(--color-white);
 
   /* input:disabled */
   --input-disabled-border-color: rgba(255, 255, 255, 0.42);

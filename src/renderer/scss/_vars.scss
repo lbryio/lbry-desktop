@@ -35,6 +35,7 @@ $large-breakpoint: 1760px;
   --color-green-light: #effbe4;
   --color-green-blue: #2ec1a8;
   --color-purple: #8165b0;
+  --color-blue-grey: #203049;
 
   /* Colors */
   --color-divider: #e3e3e3;
@@ -73,6 +74,8 @@ $large-breakpoint: 1760px;
   --input-copyable-bg: #f6f6f6;
   --input-copyable-color: var(--color-grey-dark);
   --input-copyable-border: var(--color-grey);
+  --input-select-bg-color: var(--color-grey);
+  --input-select-color: var(--text-color);
 
   /* input:disabled */
   --input-disabled-border-color: rgba(0, 0, 0, 0.42);
@@ -158,9 +161,8 @@ $large-breakpoint: 1760px;
   --modal-btn-bg-color: var(--btn-bg-alt);
 
   // /* Tooltip */
-  --tooltip-width: 300px;
-  --tooltip-bg: var(--color-bg);
-  --tooltip-color: var(--text-color);
+  --tooltip-bg: #555;
+  --tooltip-color: var(--color-white);
 
   /* Scrollbar */
   --scrollbar-radius: 10px;

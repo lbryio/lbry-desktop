@@ -2,7 +2,6 @@
   margin-left: auto;
   margin-right: auto;
   border-radius: var(--card-radius);
-  overflow: auto;
   user-select: text;
   display: flex;
   position: relative;
@@ -18,7 +17,6 @@
 
 .card--small {
   width: var(--card-small-width);
-  overflow-x: hidden;
   white-space: normal;
 
   .card__media {
@@ -87,8 +85,7 @@
   align-items: center;
   .credit-amount,
   .icon {
-    margin-top: $spacing-vertical * 1/3;
-    margin-left: $spacing-vertical * 2/3;
+    margin: $spacing-vertical * 1/3;
   }
 }
 
@@ -127,17 +124,16 @@
   color: var(--card-text-color);
 
   .icon {
-    margin-left: $spacing-vertical * 1/3;
+    margin-top: $spacing-vertical * 1/6;
+
+    &:not(:first-of-type) {
+      margin: 0 $spacing-vertical * 1/3;
+    }
   }
 }
 
 .card__subtitle-price {
   padding-top: $spacing-vertical * 1/3;
-}
-
-.card__subtitle--file-info {
-  display: flex;
-  align-items: center;
 }
 
 .card__subtitle--block {
@@ -182,6 +178,10 @@
 
 .card__content {
   margin-top: $spacing-vertical * 2/3;
+}
+
+.card__content--extra-padding {
+  margin-top: $spacing-vertical;
 }
 
 .card__subtext-title {
@@ -240,12 +240,11 @@
 }
 
 /*
- .card-row is used on the discover/subscriptions page
+ .card-row is used on the discover page
  It is a list of cards that extend past the right edge of the screen
  There are left/right arrows to scroll the cards and view hidden content
 */
 .card-row {
-  overflow: hidden;
   white-space: nowrap;
   width: 100%;
   min-width: var(--card-small-width);
@@ -286,6 +285,18 @@
   padding-top: $spacing-vertical * 2/3;
   overflow: hidden;
 
+  .card {
+    display: inline-block;
+    vertical-align: top;
+    overflow-y: visible;
+    // 31 px to handle to padding between cards
+    width: calc((100% / 4) - 31px);
+  }
+
+  .card:not(:first-of-type) {
+    margin-left: 20px;
+  }
+
   .card:first-of-type {
     margin-left: $spacing-width;
   }
@@ -321,27 +332,6 @@
     &:not(:nth-child(2n + 1)) {
       margin-left: 20px;
     }
-  }
-}
-
-.card-row__scrollhouse {
-  padding-top: $spacing-vertical * 2/3;
-  overflow: hidden;
-
-  .card {
-    display: inline-block;
-    vertical-align: top;
-    overflow: visible;
-    // 31 px to handle to padding between cards
-    width: calc((100% / 4) - 31px);
-  }
-
-  .card:not(:first-of-type) {
-    margin-left: 20px;
-  }
-
-  .card:last-of-type {
-    margin-right: 20px;
   }
 }
 

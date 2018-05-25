@@ -5,7 +5,6 @@ import {
   makeSelectLoadingForUri,
   makeSelectCostInfoForUri,
 } from 'lbry-redux';
-import { doFetchAvailability } from 'redux/actions/availability';
 import { doOpenFileInShell } from 'redux/actions/file';
 import { doPurchaseUri, doStartDownload } from 'redux/actions/content';
 import { doPause } from 'redux/actions/media';
@@ -20,7 +19,6 @@ const select = (state, props) => ({
 });
 
 const perform = dispatch => ({
-  checkAvailability: uri => dispatch(doFetchAvailability(uri)),
   openInShell: path => dispatch(doOpenFileInShell(path)),
   purchaseUri: uri => dispatch(doPurchaseUri(uri)),
   restartDownload: (uri, outpoint) => dispatch(doStartDownload(uri, outpoint)),

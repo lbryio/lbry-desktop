@@ -17,6 +17,8 @@ import Page from 'component/page';
 import player from 'render-media';
 import * as settings from 'constants/settings';
 import type { Claim } from 'types/claim';
+import type { Subscription } from 'types/subscription';
+import FileDownloadLink from 'component/fileDownloadLink';
 
 type Props = {
   claim: Claim,
@@ -39,10 +41,10 @@ type Props = {
   openModal: ({ id: string }, { uri: string }) => void,
   fetchFileInfo: string => void,
   fetchCostInfo: string => void,
-  prepareEdit: ({}) => void,
+  prepareEdit: ({}, string) => void,
   setClientSetting: (string, boolean | string) => void,
   checkSubscription: ({ channelName: string, uri: string }) => void,
-  subscriptions: Array<{}>,
+  subscriptions: Array<Subscription>,
 };
 
 class FilePage extends React.Component<Props> {
@@ -151,17 +153,12 @@ class FilePage extends React.Component<Props> {
             ) : (
               <Thumbnail shouldObscure={shouldObscureThumbnail} src={thumbnail} />
             )}
-            {!isPlaying && (
-              <div className="card-media__internal-links">
-                <FileActions uri={uri} vertical />
-              </div>
-            )}
             <div className="card__content">
               <div className="card__title-identity--file">
                 <h1 className="card__title card__title--file">{title}</h1>
                 <div className="card__title-identity-icons">
                   <FilePrice uri={normalizeURI(uri)} />
-                  {isRewardContent && <Icon icon={icons.FEATURED} />}
+                  {isRewardContent && <Icon iconColor="red" tooltip="bottom" icon={icons.FEATURED} />}
                 </div>
               </div>
               <span className="card__subtitle card__subtitle--file">
@@ -171,6 +168,7 @@ class FilePage extends React.Component<Props> {
               {metadata.nsfw && <div>NSFW</div>}
               <div className="card__channel-info">
                 <UriIndicator uri={uri} link />
+
                 <div className="card__actions card__actions--no-margin">
                   {claimIsMine ? (
                     <Button
@@ -207,6 +205,11 @@ class FilePage extends React.Component<Props> {
             </div>
 
             <div className="card__content">
+              <FileDownloadLink uri={uri} />
+              <FileActions uri={uri} />
+            </div>
+
+            <div className="card__content--extra-padding">
               <FileDetails uri={uri} />
             </div>
           </section>
