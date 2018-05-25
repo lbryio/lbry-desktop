@@ -35,20 +35,14 @@ class FilePrice extends React.PureComponent<Props> {
   render() {
     const { costInfo, showFullPrice } = this.props;
 
-    const isEstimate = costInfo ? !costInfo.includesData : false;
-
-    if (!costInfo) {
-      return <span className="credit-amount">PRICE</span>;
-    }
-
-    return (
+    return costInfo ? (
       <CreditAmount
         amount={costInfo.cost}
-        isEstimate={isEstimate}
+        isEstimate={!costInfo.includesData}
         showFree
         showFullPrice={showFullPrice}
       />
-    );
+    ) : null;
   }
 }
 
