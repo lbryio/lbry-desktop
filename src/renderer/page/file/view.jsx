@@ -33,8 +33,6 @@ type Props = {
   uri: string,
   rewardedContentClaimIds: Array<string>,
   obscureNsfw: boolean,
-  playingUri: ?string,
-  isPaused: boolean,
   claimIsMine: boolean,
   autoplay: boolean,
   costInfo: ?{},
@@ -103,8 +101,6 @@ class FilePage extends React.Component<Props> {
       uri,
       rewardedContentClaimIds,
       obscureNsfw,
-      playingUri,
-      isPaused,
       openModal,
       claimIsMine,
       prepareEdit,
@@ -141,7 +137,6 @@ class FilePage extends React.Component<Props> {
       editUri = buildURI({ channelName, contentName: claim.name });
     }
 
-    const isPlaying = playingUri === uri && !isPaused;
     return (
       <Page extraPadding>
         {!claim || !metadata ? (

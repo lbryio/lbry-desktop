@@ -10,6 +10,7 @@ import FileSelector from 'component/common/file-selector';
 import { COPYRIGHT, OTHER } from 'constants/licenses';
 import { CHANNEL_NEW, CHANNEL_ANONYMOUS, MINIMUM_PUBLISH_BID } from 'constants/claim';
 import * as icons from 'constants/icons';
+import type { Claim } from 'types/claim';
 import BidHelpText from './internal/bid-help-text';
 import LicenseType from './internal/license-type';
 
@@ -29,8 +30,6 @@ type Props = {
     currency: string,
   },
   channel: string,
-  channelId: ?string,
-  myChannels: Array<{ name: string }>,
   name: ?string,
   tosAccepted: boolean,
   updatePublishForm: UpdatePublishFormData => void,
@@ -38,14 +37,7 @@ type Props = {
   nameError: ?string,
   isResolvingUri: boolean,
   winningBidForClaimUri: number,
-  myClaimForUri: ?{
-    amount: number,
-    value: {
-      stream: {
-        source: { source: string },
-      },
-    },
-  },
+  myClaimForUri: ?Claim,
   licenseType: string,
   otherLicenseDescription: ?string,
   licenseUrl: ?string,
@@ -57,7 +49,7 @@ type Props = {
   clearPublish: () => void,
   resolveUri: string => void,
   scrollToTop: () => void,
-  prepareEdit: ({}, uri) => void,
+  prepareEdit: ({}, string) => void,
 };
 
 class PublishForm extends React.PureComponent<Props> {
@@ -139,10 +131,9 @@ class PublishForm extends React.PureComponent<Props> {
   }
 
   handleChannelChange(channelName: string) {
-    const { name, updatePublishForm, myChannels } = this.props;
+    const { name, updatePublishForm } = this.props;
     const form = { channel: channelName };
-    const namedChannelClaim = myChannels.find(channel => channel.name === channelName);
-    form.channelId = namedChannelClaim ? namedChannelClaim.claim_id : '';
+
     if (name) {
       form.uri = this.getNewUri(name, channelName);
     }
@@ -186,7 +177,6 @@ class PublishForm extends React.PureComponent<Props> {
       description,
       language,
       nsfw,
-      channelId,
       licenseType,
       licenseUrl,
       otherLicenseDescription,
@@ -196,6 +186,7 @@ class PublishForm extends React.PureComponent<Props> {
       price,
       uri,
       myClaimForUri,
+      channel,
     } = this.props;
 
     let publishingLicense;
@@ -220,7 +211,6 @@ class PublishForm extends React.PureComponent<Props> {
       description,
       language,
       nsfw,
-      channelId,
       license: publishingLicense,
       licenseUrl: publishingLicenseUrl,
       otherLicenseDescription,
@@ -229,6 +219,7 @@ class PublishForm extends React.PureComponent<Props> {
       contentIsFree,
       price,
       uri,
+      channel,
     };
 
     // Editing a claim
@@ -303,7 +294,13 @@ class PublishForm extends React.PureComponent<Props> {
     const formDisabled = (!filePath && !editingURI) || publishing;
     const formValid = this.checkIsFormValid();
 
-    const simpleUri = uri && uri.split('#')[0];
+    // The user could be linked from lbry://@channel... or lbry://claim-name...
+    // If a channel exists, we need to make sure it is added to the uri for proper edit handling
+    // If this isn't an edit, just use the pregenerated uri
+    const simpleUri = myClaimForUri
+      ? buildURI({ channelName: myClaimForUri.channel_name, contentName: myClaimForUri.name })
+      : uri;
+
     const isStillEditing = editingURI === simpleUri;
     let submitLabel;
     if (isStillEditing) {

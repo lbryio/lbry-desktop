@@ -1,5 +1,12 @@
 // @flow
-import { ACTIONS, Lbry, selectMyClaimsWithoutChannels, doNotify, MODALS } from 'lbry-redux';
+import {
+  ACTIONS,
+  Lbry,
+  selectMyClaimsWithoutChannels,
+  doNotify,
+  MODALS,
+  selectMyChannelClaims,
+} from 'lbry-redux';
 import { selectPendingPublishes } from 'redux/selectors/publish';
 import type {
   UpdatePublishFormData,
@@ -73,6 +80,7 @@ export const doPrepareEdit = (claim: any, uri: string) => (dispatch: Dispatch) =
 export const doPublish = (params: PublishParams) => (dispatch: Dispatch, getState: () => {}) => {
   const state = getState();
   const myClaims = selectMyClaimsWithoutChannels(state);
+  const myChannels = selectMyChannelClaims(state);
 
   const {
     name,
@@ -85,13 +93,16 @@ export const doPublish = (params: PublishParams) => (dispatch: Dispatch, getStat
     thumbnail,
     nsfw,
     channel,
-    channelId,
     title,
     contentIsFree,
     price,
     uri,
     sources,
   } = params;
+
+  // get the claim id from the channel name, we will use that instead
+  const namedChannelClaim = myChannels.find(myChannel => myChannel.name === channel);
+  const channelId = namedChannelClaim ? namedChannelClaim.claim_id : '';
 
   let isEdit;
   const newPublishName = channel ? `${channel}/${name}` : name;
