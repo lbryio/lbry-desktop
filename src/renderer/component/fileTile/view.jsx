@@ -68,6 +68,7 @@ class FileTile extends React.PureComponent<Props> {
 
     const uri = normalizeURI(this.props.uri);
     const isClaimed = !!claim;
+    const description = isClaimed && metadata && metadata.description ? metadata.description : '';
     const title =
       isClaimed && metadata && metadata.title ? metadata.title : parseURI(uri).contentName;
     const thumbnail = metadata && metadata.thumbnail ? metadata.thumbnail : null;
@@ -97,16 +98,19 @@ class FileTile extends React.PureComponent<Props> {
           {isResolvingUri && <div className="card__title--small">{__('Loading...')}</div>}
           {!isResolvingUri && (
             <React.Fragment>
+              <div className="card__subtitle-price">
+                <FilePrice uri={uri} />
+              </div>
               <div className="card__title--small card__title--file">
                 <TruncatedText lines={2}>{title || name}</TruncatedText>
+              </div>
+              <div className="card__subtext">
+                <TruncatedText lines={3}>{description}</TruncatedText>
               </div>
               <div className="card__subtitle">
                 {showUri ? uri : channel || __('Anonymous')}
                 {isRewardContent && <Icon icon={icons.FEATURED} />}
                 {showLocal && isDownloaded && <Icon icon={icons.LOCAL} />}
-                <div className="card__subtitle-price">
-                  <FilePrice uri={uri} />
-                </div>
               </div>
               {!name && (
                 <React.Fragment>

@@ -98,9 +98,10 @@
 .search__results {
   display: flex;
   padding-bottom: $spacing-vertical;
+  flex-flow: wrap column;
 
   .search-result__column {
-    flex: 0 0 270px;
+    flex: 0 0 500px;
     .card__media {
       background-color: var(--color-search-placeholder);
     }

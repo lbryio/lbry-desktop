@@ -103,6 +103,7 @@
 .card__title--file {
   font-family: 'metropolis-bold';
   font-size: 28px;
+  margin-bottom: 0;
   line-height: 36px;
   padding-top: 20px;
 }
@@ -119,6 +120,7 @@
 }
 
 .card__subtitle {
+  margin: 0;
   font-size: 14px;
   font-family: 'metropolis-medium';
   color: var(--card-text-color);
