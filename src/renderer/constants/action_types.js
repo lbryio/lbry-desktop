@@ -187,6 +187,9 @@ export const SET_VIDEO_PAUSE = 'SET_VIDEO_PAUSE';
 export const MEDIA_PLAY = 'MEDIA_PLAY';
 export const MEDIA_PAUSE = 'MEDIA_PAUSE';
 export const MEDIA_POSITION = 'MEDIA_POSITION';
+// Overlay Media
+export const SHOW_OVERLAY_MEDIA = 'SHOW_OVERLAY_MEDIA';
+export const HIDE_OVERLAY_MEDIA = 'HIDE_OVERLAY_MEDIA';
 
 // Publishing
 export const CLEAR_PUBLISH = 'CLEAR_PUBLISH';

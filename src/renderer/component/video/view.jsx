@@ -10,7 +10,6 @@ import LoadingScreen from './internal/loading-screen';
 const SPACE_BAR_KEYCODE = 32;
 
 type Props = {
-  cancelPlay: () => void,
   fileInfo: {
     outpoint: string,
     file_name: string,
@@ -34,12 +33,16 @@ type Props = {
   doPlay: () => void,
   doPause: () => void,
   savePosition: (string, number) => void,
+  doShowOverlay: () => void,
+  doHideOverlay: () => void,
   mediaPaused: boolean,
   mediaPosition: ?number,
   className: ?string,
   obscureNsfw: boolean,
   play: string => void,
   searchBarFocused: boolean,
+  showOverlay: boolean,
+  overlayed: boolean,
 };
 
 class Video extends React.PureComponent<Props> {
@@ -53,6 +56,11 @@ class Video extends React.PureComponent<Props> {
   componentDidMount() {
     this.handleAutoplay(this.props);
     window.addEventListener('keydown', this.handleKeyDown);
+
+    const { showOverlay, doHideOverlay, uri, playingUri, overlayed } = this.props;
+    if (showOverlay && uri === playingUri && !overlayed) {
+      doHideOverlay();
+    }
   }
 
   componentWillReceiveProps(nextProps: Props) {
@@ -67,7 +75,10 @@ class Video extends React.PureComponent<Props> {
   }
 
   componentWillUnmount() {
-    this.props.cancelPlay();
+    const { overlayed, doShowOverlay } = this.props;
+    if (!overlayed) {
+      doShowOverlay();
+    }
     window.removeEventListener('keydown', this.handleKeyDown);
   }
 
@@ -111,7 +122,10 @@ class Video extends React.PureComponent<Props> {
   }
 
   playContent() {
-    const { play, uri } = this.props;
+    const { play, uri, showOverlay, playingUri, doHideOverlay } = this.props;
+    if (playingUri && showOverlay) {
+      doHideOverlay();
+    }
     play(uri);
   }
 
