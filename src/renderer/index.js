@@ -16,6 +16,7 @@ import 'scss/all.scss';
 import store from 'store';
 import app from './app';
 import analytics from './analytics';
+import { initContextMenu } from './util/contextMenu';
 
 const { autoUpdater } = remote.require('electron-updater');
 
@@ -95,6 +96,8 @@ document.addEventListener('click', event => {
   }
 });
 
+document.addEventListener('contextmenu', initContextMenu);
+
 const init = () => {
   autoUpdater.on('update-downloaded', () => {
     app.store.dispatch(doAutoUpdate());
@@ -129,7 +132,7 @@ const init = () => {
     ReactDOM.render(
       <Provider store={store}>
         <div>
-          <App />
+          <App onContextMenu={e => openContextMenu(e)} />
           <SnackBar />
         </div>
       </Provider>,
