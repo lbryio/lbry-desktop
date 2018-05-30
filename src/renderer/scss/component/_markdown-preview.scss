@@ -2,7 +2,6 @@
   margin: 0;
 
   /* Headings: title */
-
   h1,
   h2,
   h3,
@@ -37,6 +36,10 @@
     font-size: 0.84em;
     color: var(--color-help);
   }
+}
+
+.markdown-preview p {
+  white-space: pre-line;
 }
 
 .markdown-preview table {
