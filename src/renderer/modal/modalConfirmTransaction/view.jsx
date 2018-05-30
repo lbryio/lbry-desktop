@@ -35,7 +35,7 @@ class ModalConfirmTransaction extends React.PureComponent<Props> {
         <blockquote>{amount} LBC</blockquote>
         <p>{__('To address: ')}</p>
         <blockquote>{address}</blockquote>
-        <p>{__('Once the transaction is sent, there is no rollback!')}</p>
+        <p>{__('Once the transaction is sent, it cannot be reversed.')}</p>
       </Modal>
     );
   }
