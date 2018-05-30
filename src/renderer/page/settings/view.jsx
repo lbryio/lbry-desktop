@@ -31,7 +31,7 @@ type Props = {
   currentTheme: string,
   themes: Array<string>,
   automaticDarkModeEnabled: boolean,
-  autoplay: boolean
+  autoplay: boolean,
 };
 
 type State = {
@@ -144,7 +144,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
       currentTheme,
       themes,
       automaticDarkModeEnabled,
-      autoplay
+      autoplay,
     } = this.props;
 
     const noDaemonSettings = !daemonSettings || Object.keys(daemonSettings).length === 0;

@@ -35,6 +35,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
    * Fix notification modals when reward is claimed ([#1436])(https://github.com/lbryio/lbry-app/issues/1436) and ([#1407])(https://github.com/lbryio/lbry-app/issues/1407)
    * Fix disabled cards(grayed out) ([#1466])(https://github.com/lbryio/lbry-app/issues/1466)
    * Fix markdown render ([#1179](https://github.com/lbryio/lbry-app/issues/1179))
+   * Fix new lines not showing correctly after markdown changes ([#1504](https://github.com/lbryio/lbry-app/issues/1504))
 
 
 ## [0.21.3] - 2018-04-23

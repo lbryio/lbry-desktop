@@ -33,7 +33,7 @@ const select = (state, props) => ({
   playingUri: selectPlayingUri(state),
   isPaused: selectMediaPaused(state),
   claimIsMine: makeSelectClaimIsMine(props.uri)(state),
-  autoplay: makeSelectClientSetting(settings.AUTOPLAY)(state)
+  autoplay: makeSelectClientSetting(settings.AUTOPLAY)(state),
 });
 
 const perform = dispatch => ({

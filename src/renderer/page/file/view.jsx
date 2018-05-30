@@ -158,7 +158,9 @@ class FilePage extends React.Component<Props> {
                 <h1 className="card__title card__title--file">{title}</h1>
                 <div className="card__title-identity-icons">
                   <FilePrice uri={normalizeURI(uri)} />
-                  {isRewardContent && <Icon iconColor="red" tooltip="bottom" icon={icons.FEATURED} />}
+                  {isRewardContent && (
+                    <Icon iconColor="red" tooltip="bottom" icon={icons.FEATURED} />
+                  )}
                 </div>
               </div>
               <span className="card__subtitle card__subtitle--file">
