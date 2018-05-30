@@ -14,6 +14,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
    * Pre-fill publish URL after clicking "Put something here" link ([#1303](https://github.com/lbryio/lbry-app/pull/1303))
    * Add Danger JS to automate code reviews ([#1289](https://github.com/lbryio/lbry-app/pull/1289))
    * Autoplay downloaded and free media ([#584](https://github.com/lbryio/lbry-app/pull/1453))
+   * Add 'Go to page' input on channel pagination ([#1166](https://github.com/lbryio/lbry-app/pull/1166))
+   * Add "View on web" button on file/channel pages with spee.ch link ([#1222](https://github.com/lbryio/lbry-app/pull/1222))
 
 ### Changed
    * Add flair to snackbar ([#1313](https://github.com/lbryio/lbry-app/pull/1313))
