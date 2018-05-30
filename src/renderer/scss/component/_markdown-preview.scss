@@ -1,7 +1,8 @@
+.editor-preview,
 .markdown-preview {
   margin: 0;
 
-  /* Headings: title */
+  /* Headers */
   h1,
   h2,
   h3,
@@ -36,43 +37,48 @@
     font-size: 0.84em;
     color: var(--color-help);
   }
-}
 
-.markdown-preview p {
-  white-space: pre-line;
-}
-
-.markdown-preview table {
-  padding: 8px;
-  margin: 16px 0;
-  background-color: var(--card-bg);
-
-  tr td,
-  tr th,
-  tr td:first-of-type,
-  tr th:first-of-type,
-  tr td:last-of-type,
-  tr th:last-of-type {
-    padding: 8px;
+  /* Paragraphs */
+  p {
+    white-space: pre-line;
   }
-}
 
-.markdown-preview code {
-  display: block;
-  padding: 8px;
-  margin: 16px 0;
-  background-color: var(--color-bg-alt);
-  color: var(--color-help);
-  font-size: 1em;
-  font-family: Consolas, 'Lucida Console', 'Source Sans', monospace;
-}
+  /* Strikethrough text */
+  del {
+    color: var(--color-help);
+  }
 
-.markdown-preview hr {
-  border: 1px solid var(--color-divider);
-}
+  /* Tables */
+  table {
+    padding: 8px;
+    margin: 16px 0;
+    background-color: var(--card-bg);
 
-.markdown-preview del {
-  color: var(--color-help);
+    tr td,
+    tr th,
+    tr td:first-of-type,
+    tr th:first-of-type,
+    tr td:last-of-type,
+    tr th:last-of-type {
+      padding: 8px;
+    }
+  }
+
+  /* Horizontal Rule */
+  hr {
+    border: 1px solid var(--color-divider);
+  }
+
+  /* Code */
+  code {
+    display: block;
+    padding: 8px;
+    margin: 16px 0;
+    background-color: var(--color-bg-alt);
+    color: var(--color-help);
+    font-size: 1em;
+    font-family: Consolas, 'Lucida Console', 'Source Sans', monospace;
+  }
 }
 
 blockquote {
