@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { selectCurrentPage, selectCurrentParams } from 'lbry-redux';
+import { selectCurrentPage, selectCurrentParams, doNotify } from 'lbry-redux';
 import Router from './view';
 
 const select = state => ({
@@ -7,4 +7,4 @@ const select = state => ({
   currentPage: selectCurrentPage(state),
 });
 
-export default connect(select, null)(Router);
+export default connect(select, { doNotify })(Router);

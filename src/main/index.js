@@ -242,8 +242,11 @@ const isSecondInstance = app.makeSingleInstance(argv => {
       //     path, so we just strip it off.
       //   - In a URI with a claim ID, like lbry://channel#claimid, Windows interprets the hash mark as
       //     an anchor and converts it to lbry://channel/#claimid. We remove the slash here as well.
+      //   - ? also interpreted as an anchor, remove slash also.
       if (process.platform === 'win32') {
-        URI = URI.replace(/\/$/, '').replace('/#', '#');
+        URI = URI.replace(/\/$/, '')
+          .replace('/#', '#')
+          .replace('/?', '?');
       }
 
       rendererWindow.webContents.send('open-uri-requested', URI);
