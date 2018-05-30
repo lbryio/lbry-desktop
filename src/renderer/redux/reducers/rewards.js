@@ -62,21 +62,21 @@ reducers[ACTIONS.CLAIM_REWARD_STARTED] = (state, action) => {
 
 reducers[ACTIONS.CLAIM_REWARD_SUCCESS] = (state, action) => {
   const { reward } = action.data;
-  let { unclaimedRewards } = state;
+  const { unclaimedRewards } = state;
 
   const index = unclaimedRewards.findIndex(ur => ur.reward_type === reward.reward_type);
-  unclaimedRewards = unclaimedRewards.slice(0, index).concat(unclaimedRewards.slice(index + 1));
+  unclaimedRewards.splice(index, 1);
 
   const { claimedRewardsById } = state;
   claimedRewardsById[reward.id] = reward;
 
   const newState = {
     ...state,
-    unclaimedRewards,
-    claimedRewardsById,
+    unclaimedRewards: [...unclaimedRewards],
+    claimedRewardsById: { ...claimedRewardsById },
   };
-
-  return setClaimRewardState(newState, reward, false, '');  
+  
+  return setClaimRewardState(newState, reward, false, '');
 };
 
 reducers[ACTIONS.CLAIM_REWARD_FAILURE] = (state, action) => {

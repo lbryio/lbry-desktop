@@ -4,6 +4,17 @@ import { doShowSnackBar } from 'redux/actions/app';
 
 const rewards = {};
 
+rewards.TYPE_NEW_DEVELOPER = 'new_developer';
+rewards.TYPE_NEW_USER = 'new_user';
+rewards.TYPE_CONFIRM_EMAIL = 'verified_email';
+rewards.TYPE_FIRST_CHANNEL = 'new_channel';
+rewards.TYPE_FIRST_STREAM = 'first_stream';
+rewards.TYPE_MANY_DOWNLOADS = 'many_downloads';
+rewards.TYPE_FIRST_PUBLISH = 'first_publish';
+rewards.TYPE_FEATURED_DOWNLOAD = 'featured_download';
+rewards.TYPE_REFERRAL = 'referral';
+rewards.YOUTUBE_CREATOR = 'youtube_creator';
+
 rewards.claimReward = type => {
   function requestReward(resolve, reject, params) {
     if (!Lbryio.enabled) {

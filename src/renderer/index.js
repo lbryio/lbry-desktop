@@ -44,8 +44,7 @@ ipcRenderer.on('open-uri-requested', (event, uri, newSession) => {
         app.store.dispatch(doShowSnackBar({ message: 'Invalid Verification URI' }));
       }
     } else if (uri.startsWith(appPageURL)) {
-      let navpage;
-      navpage = uri.replace(appPageURL,'').toLowerCase();
+      const navpage = uri.replace(appPageURL,'').toLowerCase();
       app.store.dispatch(doNavigate('/' + navpage));
     } else if (isURIValid (uri)) {
       app.store.dispatch(doNavigate('/show', { uri }));

@@ -4,7 +4,7 @@ import { CreditAmount } from 'component/common';
 
 class ModalFirstReward extends React.PureComponent {
   render() {
-    const { closeModal, reward } = this.props;
+    const { closeModal } = this.props;
 
     return (
       <Modal
@@ -16,10 +16,7 @@ class ModalFirstReward extends React.PureComponent {
       >
         <section>
           <h3 className="modal__header">{__('Your First Reward')}</h3>
-          <p>
-            {__('You just earned your first reward of')}{' '}
-            <CreditAmount amount={reward.reward_amount} />.
-          </p>
+          <p>{__('You just earned your first reward.')}</p>
           <p>
             {__(
               "This reward will show in your Wallet in the top right momentarily (if it hasn't already)."

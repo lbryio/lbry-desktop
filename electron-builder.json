@@ -65,14 +65,6 @@
     "perMachine": true,
     "createDesktopShortcut": "always"
   },
-   "win": {
-   "target": [
-     {
-       "target": "nsis",
-       "arch": ["x64", "ia32"]
-     }
-   ]
-  },
   "artifactName": "${productName}_${version}.${ext}",
   "beforeBuild": "./build/checkDaemonPlatform.js"
 }
