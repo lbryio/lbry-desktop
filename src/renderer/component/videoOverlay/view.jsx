@@ -1,22 +1,22 @@
 // @flow
 import React from 'react';
 import Video from 'component/video';
-import FileActions from 'component/fileActions';
 import Overlay from 'component/overlay';
+import VideoOverlayHeader from '../videoOverlayHeader';
 
 type Props = {
+  cancelPlay: () => void,
   playingUri: ?string,
 };
 
 class VideoOverlay extends React.Component<Props> {
   render() {
-    const { playingUri } = this.props;
+    const { playingUri, cancelPlay } = this.props;
+    if (!playingUri) return '';
     return (
       <Overlay>
-        <div className="card-media__internal-links">
-          <FileActions uri={playingUri} vertical />
-        </div>
-        {playingUri ? <Video className="content__embedded" uri={playingUri} overlayed /> : ''}
+        <VideoOverlayHeader uri={playingUri} onClose={cancelPlay} />
+        <Video className="content__embedded" uri={playingUri} overlayed />
       </Overlay>
     );
   }
