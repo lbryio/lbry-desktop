@@ -48,7 +48,7 @@ class FormInviteNew extends React.PureComponent {
           />
         </FormRow>
         <div className="card__actions">
-          <Submit label="INVITE" disabled={isPending} />
+          <Submit label="Invite" disabled={isPending} />
         </div>
       </Form>
     );
