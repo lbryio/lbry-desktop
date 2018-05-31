@@ -29,7 +29,7 @@ class VideoPlayer extends React.PureComponent {
 
   componentDidMount() {
     const container = this.media;
-    const { contentType, changeVolume, volume, position, claim } = this.props;
+    const { contentType, changeVolume, volume, position, claim, hiddenControls } = this.props;
 
     const loadedMetadata = () => {
       this.setState({ hasMetadata: true, startedPlaying: true });
@@ -55,7 +55,7 @@ class VideoPlayer extends React.PureComponent {
       player.append(
         this.file(),
         container,
-        { autoplay: true, controls: true },
+        { autoplay: true, controls: !hiddenControls },
         renderMediaCallback.bind(this)
       );
     }
@@ -88,7 +88,7 @@ class VideoPlayer extends React.PureComponent {
   }
 
   componentDidUpdate() {
-    const { contentType, downloadCompleted } = this.props;
+    const { contentType, downloadCompleted, hiddenControls } = this.props;
     const { startedPlaying } = this.state;
 
     if (this.playableType() && !startedPlaying && downloadCompleted) {
@@ -99,7 +99,7 @@ class VideoPlayer extends React.PureComponent {
       } else {
         player.render(this.file(), container, {
           autoplay: true,
-          controls: true,
+          controls: !hiddenControls,
         });
       }
     }

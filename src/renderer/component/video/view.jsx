@@ -43,6 +43,7 @@ type Props = {
   searchBarFocused: boolean,
   showOverlay: boolean,
   overlayed: boolean,
+  hiddenControls: boolean,
 };
 
 class Video extends React.PureComponent<Props> {
@@ -148,6 +149,7 @@ class Video extends React.PureComponent<Props> {
       mediaPosition,
       className,
       obscureNsfw,
+      hiddenControls,
     } = this.props;
 
     const isPlaying = playingUri === uri;
@@ -197,6 +199,7 @@ class Video extends React.PureComponent<Props> {
                 uri={uri}
                 paused={mediaPaused}
                 position={mediaPosition}
+                hiddenControls={hiddenControls}
               />
             )}
           </div>

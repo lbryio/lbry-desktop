@@ -40,6 +40,7 @@ const select = (state, props) => ({
   searchBarFocused: selectSearchBarFocused(state),
   showOverlay: selectShowOverlay(state),
   overlayed: props.overlayed,
+  hiddenControls: props.hiddenControls,
 });
 
 const perform = dispatch => ({

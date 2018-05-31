@@ -16,7 +16,9 @@ class VideoOverlay extends React.Component<Props> {
     return (
       <Overlay>
         <VideoOverlayHeader uri={playingUri} onClose={cancelPlay} />
-        <Video className="content__embedded" uri={playingUri} overlayed />
+        <div className="overlayeada">
+          <Video className="content__embedded" uri={playingUri} overlayed hiddenControls />
+        </div>
       </Overlay>
     );
   }

@@ -8,6 +8,19 @@
   right: 1%;
   z-index: 3;
   box-shadow: var(--box-shadow-layer);
+
+  &:hover {
+    background-color: rgba(0,0,0, .6);
+  }
+}
+
+.overlayeada {
+  z-index: 20;
+  background: transparent;
+
+  &:hover {
+    background-color: rgba(0,0,0, .9);
+  }
 }
 
 .video_overlay__header {
