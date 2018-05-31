@@ -127,6 +127,10 @@ export const setSubscriptionNotification = (
 export const doCheckSubscription = (subscription: Subscription, notify?: boolean) => (
   dispatch: Dispatch
 ) => {
+  if (!subscription) {
+    return;
+  }
+
   dispatch({
     type: ACTIONS.CHECK_SUBSCRIPTION_STARTED,
     data: subscription,
