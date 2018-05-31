@@ -19,6 +19,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
    * Add flair to snackbar ([#1313](https://github.com/lbryio/lbry-app/pull/1313))
    * Made font in price badge larger ([#1420](https://github.com/lbryio/lbry-app/pull/1420))
    * Store subscriptions in internal database ([#1424](https://github.com/lbryio/lbry-app/pull/1424))
+   * Move rewards logic to interal api ([#1509](https://github.com/lbryio/lbry-app/pull/1509))
 
 ### Fixed
    * Fix content-type not shown correctly in file description ([#863](https://github.com/lbryio/lbry-app/pull/863))
