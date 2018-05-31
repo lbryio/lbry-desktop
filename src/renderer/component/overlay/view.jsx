@@ -9,7 +9,8 @@ type Props = {
 class Overlay extends React.PureComponent<Props> {
   render() {
     const { showOverlay, children } = this.props;
-    return <div className="overlay">{showOverlay ? children : ''}</div>;
+    if (!showOverlay) return '';
+    return <div className="overlay">{children}</div>;
   }
 }
 

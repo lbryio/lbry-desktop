@@ -28,7 +28,7 @@ export default handleActions(
       paused: true,
     }),
 
-    [actions.MEDIA_POSITION]: (state: MediaState) => {
+    [actions.MEDIA_POSITION]: (state: MediaState, action: Action) => {
       const { outpoint, position } = action.data;
       return {
         ...state,
