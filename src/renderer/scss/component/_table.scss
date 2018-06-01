@@ -1,4 +1,5 @@
 table.table,
+.editor-preview table,
 .markdown-preview table {
   word-wrap: break-word;
   max-width: 100%;
@@ -28,6 +29,7 @@ table.table,
 
   th {
     font-family: 'metropolis-semibold';
+    border: 0;
   }
 
   td {
