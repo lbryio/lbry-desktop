@@ -16,6 +16,7 @@ import 'scss/all.scss';
 import store from 'store';
 import app from './app';
 import analytics from './analytics';
+import doLogWarningConsoleMessage from './logWarningConsoleMessage';
 import { initContextMenu } from './util/contextMenu';
 
 const { autoUpdater } = remote.require('electron-updater');
@@ -71,6 +72,11 @@ ipcRenderer.on('window-is-focused', () => {
   if (!dock) return;
   app.store.dispatch({ type: ACTIONS.WINDOW_FOCUSED });
   dock.setBadge('');
+});
+
+ipcRenderer.on('devtools-is-opened', () => {
+  const logOnDevelopment = false;
+  doLogWarningConsoleMessage(logOnDevelopment);
 });
 
 document.addEventListener('dragover', event => {
