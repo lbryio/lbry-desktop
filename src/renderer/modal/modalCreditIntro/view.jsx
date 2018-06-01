@@ -1,12 +1,18 @@
-// I'll come back to this
-/* esline-disable */
+// @flow
 import React from 'react';
 import { Modal } from 'modal/modal';
 import CurrencySymbol from 'component/common/lbc-symbol';
 import CreditAmount from 'component/common/credit-amount';
 import Button from 'component/button';
 
-const ModalCreditIntro = props => {
+type Props = {
+  totalRewardValue: number,
+  currentBalance: number,
+  closeModal: () => void,
+  addBalance: () => void,
+};
+
+const ModalCreditIntro = (props: Props) => {
   const { closeModal, totalRewardValue, currentBalance, addBalance } = props;
   const totalRewardRounded = Math.round(totalRewardValue / 10) * 10;
 
@@ -25,7 +31,7 @@ const ModalCreditIntro = props => {
             can take are limited.
           </p>
         )}
-        {totalRewardValue && (
+        {Boolean(totalRewardValue) && (
           <p>
             There are a variety of ways to get credits, including more than{' '}
             <CreditAmount noStyle amount={totalRewardRounded} />{' '}
@@ -46,4 +52,3 @@ const ModalCreditIntro = props => {
 };
 
 export default ModalCreditIntro;
-/* esline-enable */
