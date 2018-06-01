@@ -1,5 +1,6 @@
 // @flow
 import React from 'react';
+import { MODALS } from 'lbry-redux';
 import Button from 'component/button';
 import { Form, FormRow, FormField } from 'component/common/form';
 import { Formik } from 'formik';
@@ -11,7 +12,7 @@ type DraftTransaction = {
 };
 
 type Props = {
-  sendToAddress: (string, number) => void,
+  openModal: ({ id: string }, { address: string, amount: number }) => void,
   balance: number,
 };
 
@@ -23,10 +24,12 @@ class WalletSend extends React.PureComponent<Props> {
   }
 
   handleSubmit(values: DraftTransaction) {
-    const { sendToAddress } = this.props;
+    const { openModal } = this.props;
     const { address, amount } = values;
     if (amount && address) {
-      sendToAddress(address, amount);
+      const notificationId = { id: MODALS.CONFIRM_TRANSACTION };
+      const modalProps = { address, amount };
+      openModal(notificationId, modalProps);
     }
   }
 
