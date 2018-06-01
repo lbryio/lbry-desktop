@@ -37,6 +37,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
    * Fix notification modals when reward is claimed ([#1436])(https://github.com/lbryio/lbry-app/issues/1436) and ([#1407])(https://github.com/lbryio/lbry-app/issues/1407)
    * Fix disabled cards(grayed out) ([#1466])(https://github.com/lbryio/lbry-app/issues/1466)
    * Fix markdown render ([#1179](https://github.com/lbryio/lbry-app/issues/1179))
+   * Fix claim ID being null when reporting a claim that was not previously download ([issue#1512](https://github.com/lbryio/lbry-app/issues/1512)) ([PR#1530](https://github.com/lbryio/lbry-app/pull/1530))
 
 
 ## [0.21.3] - 2018-04-23
