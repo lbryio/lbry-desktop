@@ -22,10 +22,10 @@ class VideoPlayer extends React.PureComponent {
     this.toggleFullScreenVideo = this.toggleFullScreen.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
-    const el = this.refs.media.children[0];
-    if (!this.props.paused && nextProps.paused && !el.paused) el.pause();
-  }
+  // componentWillReceiveProps(nextProps) {
+  //   const el = this.refs.media.children[0];
+  //   if (!this.props.paused && nextProps.paused && !el.paused) el.pause();
+  // }
 
   componentDidMount() {
     const container = this.media;
