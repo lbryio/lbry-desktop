@@ -342,6 +342,10 @@ export function doPurchaseUri(uri, specificCostInfo) {
 
 export function doFetchClaimsByChannel(uri, page) {
   return (dispatch, getState) => {
+    if (!uri) {
+      return;
+    }
+
     dispatch({
       type: ACTIONS.FETCH_CHANNEL_CLAIMS_STARTED,
       data: { uri, page },
@@ -395,6 +399,10 @@ export function doFetchClaimsByChannel(uri, page) {
 
 export function doFetchClaimCountByChannel(uri) {
   return dispatch => {
+    if (!uri) {
+      return;
+    }
+
     dispatch({
       type: ACTIONS.FETCH_CHANNEL_CLAIM_COUNT_STARTED,
       data: { uri },
