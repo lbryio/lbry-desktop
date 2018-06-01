@@ -25,3 +25,6 @@ export const CHECK = 'CheckCircle';
 export const HEART = 'Heart';
 export const UNLOCK = 'Unlock';
 export const CHECK_SIMPLE = 'Check';
+export const PLAY = 'Play';
+export const MAXIMIZE = 'Maximize2';
+export const PAUSE = 'Pause';
