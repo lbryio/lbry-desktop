@@ -195,7 +195,10 @@ class Video extends React.PureComponent<Props> {
             style={layoverStyle}
           >
             <VideoPlayButton
-              play={this.playContent}
+              play={e => {
+                e.stopPropagation();
+                this.playContent();
+              }}
               fileInfo={fileInfo}
               uri={uri}
               isLoading={isLoading}

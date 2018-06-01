@@ -56,7 +56,7 @@ export class Modal extends React.PureComponent<ModalProps> {
     return (
       <ReactModal
         {...modalProps}
-        onCloseRequested={onAborted || onConfirmed}
+        onRequestClose={onAborted || onConfirmed}
         className={classnames(className, {
           modal: !fullScreen,
           'modal--fullscreen': fullScreen,
