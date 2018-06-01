@@ -11,6 +11,7 @@ type FileInfo = {
 
 type Props = {
   uri: string,
+  claimId: string,
   openModal: ({ id: string }, { uri: string }) => void,
   claimIsMine: boolean,
   fileInfo: FileInfo,
@@ -19,9 +20,7 @@ type Props = {
 
 class FileActions extends React.PureComponent<Props> {
   render() {
-    const { fileInfo, uri, openModal, claimIsMine, vertical } = this.props;
-
-    const claimId = fileInfo ? fileInfo.claim_id : '';
+    const { fileInfo, uri, openModal, claimIsMine, vertical, claimId } = this.props;
     const showDelete = fileInfo && Object.keys(fileInfo).length > 0;
 
     return (

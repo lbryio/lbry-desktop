@@ -18,16 +18,21 @@ import InvitePage from 'page/invite';
 import BackupPage from 'page/backup';
 import SubscriptionsPage from 'page/subscriptions';
 
-const route = (page, routesMap) => {
+const route = (props, page, routesMap) => {
   const component = routesMap[page];
-
-  return component || DiscoverPage;
+  if (!component) {
+    props.doNotify({
+      message: __('Invalid page requested'),
+      displayType: ['snackbar'],
+    });
+  }
+  return component || routesMap.discover;
 };
 
 const Router = props => {
   const { currentPage, params } = props;
 
-  return route(currentPage, {
+  return route(props, currentPage, {
     auth: <AuthPage params={params} />,
     backup: <BackupPage params={params} />,
     channel: <ChannelPage params={params} />,
