@@ -8,7 +8,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { doConditionalAuthNavigate, doDaemonReady, doAutoUpdate } from 'redux/actions/app';
-import { doNotify, doBlackListedOutpointsSubscribe } from 'lbry-redux';
+import { doNotify, doBlackListedOutpointsSubscribe, isURIValid } from 'lbry-redux';
 import { doNavigate } from 'redux/actions/navigation';
 import { doDownloadLanguages, doUpdateIsNightAsync } from 'redux/actions/settings';
 import { doUserEmailVerify } from 'redux/actions/user';
@@ -17,8 +17,10 @@ import store from 'store';
 import app from './app';
 import analytics from './analytics';
 import doLogWarningConsoleMessage from './logWarningConsoleMessage';
+import { initContextMenu } from './util/contextMenu';
 
 const { autoUpdater } = remote.require('electron-updater');
+const APPPAGEURL = 'lbry://?';
 
 autoUpdater.logger = remote.require('electron-log');
 
@@ -42,8 +44,18 @@ ipcRenderer.on('open-uri-requested', (event, uri, newSession) => {
           })
         );
       }
-    } else {
+    } else if (uri.startsWith(APPPAGEURL)) {
+      const navpage = uri.replace(APPPAGEURL, '').toLowerCase();
+      app.store.dispatch(doNavigate(`/${navpage}`));
+    } else if (isURIValid(uri)) {
       app.store.dispatch(doNavigate('/show', { uri }));
+    } else {
+      app.store.dispatch(
+        doNotify({
+          message: __('Invalid LBRY URL requested'),
+          displayType: ['snackbar'],
+        })
+      );
     }
   }
 });
@@ -101,6 +113,8 @@ document.addEventListener('click', event => {
   }
 });
 
+document.addEventListener('contextmenu', initContextMenu);
+
 const init = () => {
   autoUpdater.on('update-downloaded', () => {
     app.store.dispatch(doAutoUpdate());
@@ -135,7 +149,7 @@ const init = () => {
     ReactDOM.render(
       <Provider store={store}>
         <div>
-          <App />
+          <App onContextMenu={e => openContextMenu(e)} />
           <SnackBar />
         </div>
       </Provider>,

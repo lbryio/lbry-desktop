@@ -42,7 +42,7 @@ export class FormField extends React.PureComponent<Props> {
     if (type) {
       if (type === 'select') {
         input = (
-          <select id={name} {...inputProps}>
+          <select className="form-field__select" id={name} {...inputProps}>
             {children}
           </select>
         );

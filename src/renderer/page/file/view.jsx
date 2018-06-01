@@ -13,10 +13,13 @@ import DateTime from 'component/dateTime';
 import * as icons from 'constants/icons';
 import Button from 'component/button';
 import SubscribeButton from 'component/subscribeButton';
+import ViewOnWebButton from 'component/viewOnWebButton';
 import Page from 'component/page';
 import player from 'render-media';
 import * as settings from 'constants/settings';
 import type { Claim } from 'types/claim';
+import type { Subscription } from 'types/subscription';
+import FileDownloadLink from 'component/fileDownloadLink';
 
 type Props = {
   claim: Claim,
@@ -39,10 +42,10 @@ type Props = {
   openModal: ({ id: string }, { uri: string }) => void,
   fetchFileInfo: string => void,
   fetchCostInfo: string => void,
-  prepareEdit: ({}) => void,
+  prepareEdit: ({}, string) => void,
   setClientSetting: (string, boolean | string) => void,
   checkSubscription: ({ channelName: string, uri: string }) => void,
-  subscriptions: Array<{}>,
+  subscriptions: Array<Subscription>,
 };
 
 class FilePage extends React.Component<Props> {
@@ -78,12 +81,7 @@ class FilePage extends React.Component<Props> {
   }
 
   checkSubscription = (props: Props) => {
-    if (
-      props.claim.value.publisherSignature &&
-      props.subscriptions
-        .map(subscription => subscription.channelName)
-        .indexOf(props.claim.channel_name) !== -1
-    ) {
+    if (props.subscriptions.find(sub => sub.channelName === props.claim.channel_name)) {
       props.checkSubscription({
         channelName: props.claim.channel_name,
         uri: buildURI(
@@ -112,6 +110,7 @@ class FilePage extends React.Component<Props> {
       prepareEdit,
       navigate,
       autoplay,
+      costInfo,
     } = this.props;
 
     // File info
@@ -128,6 +127,19 @@ class FilePage extends React.Component<Props> {
     if (channelName && channelClaimId) {
       subscriptionUri = buildURI({ channelName, claimId: channelClaimId }, false);
     }
+    const speechSharable =
+      costInfo &&
+      costInfo.cost === 0 &&
+      contentType &&
+      ['video', 'image'].includes(contentType.split('/')[0]);
+
+    // We want to use the short form uri for editing
+    // This is what the user is used to seeing, they don't care about the claim id
+    // We will select the claim id before they publish
+    let editUri;
+    if (claimIsMine) {
+      editUri = buildURI({ channelName, contentName: claim.name });
+    }
 
     const isPlaying = playingUri === uri && !isPaused;
     return (
@@ -143,17 +155,12 @@ class FilePage extends React.Component<Props> {
             ) : (
               <Thumbnail shouldObscure={shouldObscureThumbnail} src={thumbnail} />
             )}
-            {!isPlaying && (
-              <div className="card-media__internal-links">
-                <FileActions uri={uri} vertical />
-              </div>
-            )}
             <div className="card__content">
               <div className="card__title-identity--file">
                 <h1 className="card__title card__title--file">{title}</h1>
                 <div className="card__title-identity-icons">
                   <FilePrice uri={normalizeURI(uri)} />
-                  {isRewardContent && <Icon icon={icons.FEATURED} />}
+                  {isRewardContent && <Icon iconColor="red" tooltip="bottom" icon={icons.FEATURED} />}
                 </div>
               </div>
               <span className="card__subtitle card__subtitle--file">
@@ -163,6 +170,7 @@ class FilePage extends React.Component<Props> {
               {metadata.nsfw && <div>NSFW</div>}
               <div className="card__channel-info">
                 <UriIndicator uri={uri} link />
+
                 <div className="card__actions card__actions--no-margin">
                   {claimIsMine ? (
                     <Button
@@ -170,7 +178,7 @@ class FilePage extends React.Component<Props> {
                       icon={icons.EDIT}
                       label={__('Edit')}
                       onClick={() => {
-                        prepareEdit(claim, uri);
+                        prepareEdit(claim, editUri);
                         navigate('/publish');
                       }}
                     />
@@ -184,6 +192,14 @@ class FilePage extends React.Component<Props> {
                       />
                       <SubscribeButton uri={subscriptionUri} channelName={channelName} />
                     </React.Fragment>
+                  )}
+                  {speechSharable && (
+                    <ViewOnWebButton
+                      uri={buildURI({
+                        claimId: claim.claim_id,
+                        contentName: claim.name,
+                      }).slice(7)}
+                    />
                   )}
                 </div>
               </div>
@@ -199,6 +215,11 @@ class FilePage extends React.Component<Props> {
             </div>
 
             <div className="card__content">
+              <FileDownloadLink uri={uri} />
+              <FileActions uri={uri} />
+            </div>
+
+            <div className="card__content--extra-padding">
               <FileDetails uri={uri} />
             </div>
           </section>

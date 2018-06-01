@@ -25,16 +25,13 @@ const ModalCreditIntro = props => {
             can take are limited.
           </p>
         )}
-        <p>
-          There are a variety of ways to get credits, including more than{' '}
-          {totalRewardValue ? (
-            <CreditAmount noStyle amount={totalRewardRounded} />
-          ) : (
-            <span className="credit-amount">{__('?? credits')}</span>
-          )}{' '}
-          {__(' in free rewards for participating in the LBRY beta.')}
-        </p>
-
+        {totalRewardValue && (
+          <p>
+            There are a variety of ways to get credits, including more than{' '}
+            <CreditAmount noStyle amount={totalRewardRounded} />{' '}
+            {__('in free rewards for participating in the LBRY beta.')}
+          </p>
+        )}
         <div className="card__actions card__actions--center">
           <Button button="primary" onClick={addBalance} label={__('Get Credits')} />
           <Button

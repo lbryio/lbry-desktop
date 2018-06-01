@@ -35,6 +35,7 @@ const select = (state, props) => {
 
   const claimsByUri = selectClaimsByUri(state);
   const myClaims = selectMyClaims(state);
+  const myChannels = selectMyChannelClaims(state);
 
   const claimForUri = claimsByUri[uri];
   let winningBidForClaimUri;
@@ -50,6 +51,7 @@ const select = (state, props) => {
     claimForUri,
     winningBidForClaimUri,
     myClaimForUri,
+    myChannels,
     costInfo: makeSelectCostInfoForUri(props.uri)(state),
     balance: selectBalance(state),
   };

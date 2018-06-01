@@ -179,11 +179,11 @@ ipcMain.on('version-info-requested', () => {
     },
   };
   let result = '';
-
-  const req = https.get(Object.assign(opts, url.parse(latestReleaseAPIURL)), res => {
+  const onSuccess = res => {
     res.on('data', data => {
       result += data;
     });
+
     res.on('end', () => {
       const tagName = JSON.parse(result).tag_name;
       const [, remoteVersion] = tagName.match(/^v([\d.]+(?:-?rc\d+)?)$/);
@@ -202,14 +202,27 @@ ipcMain.on('version-info-requested', () => {
         }
       }
     });
-  });
+  };
 
-  req.on('error', err => {
-    console.log('Failed to get current version from GitHub. Error:', err);
-    if (rendererWindow) {
-      rendererWindow.webContents.send('version-info-received', null);
-    }
-  });
+  const requestLatestRelease = (apiUrl, alreadyRedirected = false) => {
+    const req = https.get(Object.assign(opts, url.parse(apiUrl)), res => {
+      if (res.statusCode === 301 || res.statusCode === 302) {
+        requestLatestRelease(res.headers.location, true);
+      } else {
+        onSuccess(res);
+      }
+    });
+
+    if (alreadyRedirected) return;
+    req.on('error', err => {
+      console.log('Failed to get current version from GitHub. Error:', err);
+      if (rendererWindow) {
+        rendererWindow.webContents.send('version-info-received', null);
+      }
+    });
+  };
+
+  requestLatestRelease(latestReleaseAPIURL);
 });
 
 ipcMain.on('get-auth-token', event => {
@@ -245,8 +258,11 @@ const isSecondInstance = app.makeSingleInstance(argv => {
       //     path, so we just strip it off.
       //   - In a URI with a claim ID, like lbry://channel#claimid, Windows interprets the hash mark as
       //     an anchor and converts it to lbry://channel/#claimid. We remove the slash here as well.
+      //   - ? also interpreted as an anchor, remove slash also.
       if (process.platform === 'win32') {
-        URI = URI.replace(/\/$/, '').replace('/#', '#');
+        URI = URI.replace(/\/$/, '')
+          .replace('/#', '#')
+          .replace('/?', '?');
       }
 
       rendererWindow.webContents.send('open-uri-requested', URI);

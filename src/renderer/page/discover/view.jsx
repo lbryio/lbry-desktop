@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import Page from 'component/page';
-import CategoryList from 'component/common/category-list';
+import CategoryList from 'component/categoryList';
 
 type Props = {
   fetchFeaturedUris: () => void,
@@ -27,7 +27,11 @@ class DiscoverPage extends React.PureComponent<Props> {
               featuredUris[category].length ? (
                 <CategoryList key={category} category={category} names={featuredUris[category]} />
               ) : (
-                ''
+                <CategoryList
+                  key={category}
+                  category={category.split('#')[0]}
+                  categoryLink={category}
+                />
               )
           )}
         {failedToLoad && <div className="empty">{__('Failed to load landing content.')}</div>}

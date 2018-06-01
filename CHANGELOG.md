@@ -14,11 +14,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
    * Pre-fill publish URL after clicking "Put something here" link ([#1303](https://github.com/lbryio/lbry-app/pull/1303))
    * Add Danger JS to automate code reviews ([#1289](https://github.com/lbryio/lbry-app/pull/1289))
    * Autoplay downloaded and free media ([#584](https://github.com/lbryio/lbry-app/pull/1453))
+   * Add 'Go to page' input on channel pagination ([#1166](https://github.com/lbryio/lbry-app/pull/1166))
+   * Add "View on web" button on file/channel pages with spee.ch link ([#1222](https://github.com/lbryio/lbry-app/pull/1222))
 
 ### Changed
    * Add flair to snackbar ([#1313](https://github.com/lbryio/lbry-app/pull/1313))
    * Made font in price badge larger ([#1420](https://github.com/lbryio/lbry-app/pull/1420))
    * Store subscriptions in internal database ([#1424](https://github.com/lbryio/lbry-app/pull/1424))
+   * Move rewards logic to interal api ([#1509](https://github.com/lbryio/lbry-app/pull/1509))
 
 ### Fixed
    * Fix content-type not shown correctly in file description ([#863](https://github.com/lbryio/lbry-app/pull/863))
@@ -57,7 +60,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
   * App category for Linux ([#877](https://github.com/lbryio/lbry-app/pull/877))
   * Add YouTube Sync reward ([#1147](https://github.com/lbryio/lbry-app/pull/1147))
   * Retain previous screen sizing on startup ([#338](https://github.com/lbryio/lbry-app/issues/338))
-  * Add 'Go to page' input on channel pagination ([#1166](https://github.com/lbryio/lbry-app/pull/1166))
 
 
 ### Changed
@@ -372,7 +374,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
  * Removed placeholder values from price selection form fields, which was causing confusion that these were real values (#426)
  * Fixed showing "other currency" help tip in publish form, which was caused due to not "setting" state for price
  * Publish page now properly checks for all required fields are filled
- * Fixed pagination styling for pages > 5 (#416)
  * Fixed sizing on squat videos (#419)
  * Support claims no longer show up on Published page (#384)
  * Fixed rendering of small prices (#461)
@@ -410,7 +411,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ### Added
  * Replaced horizontal scrollbars with scroll arrows
  * Featured weekly reward content shows with an orange star
- * Added pagination to channel pages
 
 
 ### Fixed

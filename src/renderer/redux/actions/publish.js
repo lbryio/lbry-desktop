@@ -6,7 +6,6 @@ import type {
   UpdatePublishFormAction,
   PublishParams,
 } from 'redux/reducers/publish';
-import { CHANNEL_NEW, CHANNEL_ANONYMOUS } from 'constants/claim';
 
 type Action = UpdatePublishFormAction | { type: ACTIONS.CLEAR_PUBLISH };
 type PromiseAction = Promise<Action>;
@@ -86,6 +85,7 @@ export const doPublish = (params: PublishParams) => (dispatch: Dispatch, getStat
     thumbnail,
     nsfw,
     channel,
+    channelId,
     title,
     contentIsFree,
     price,
@@ -104,7 +104,6 @@ export const doPublish = (params: PublishParams) => (dispatch: Dispatch, getStat
     }
   }
 
-  const channelName = channel === CHANNEL_ANONYMOUS || channel === CHANNEL_NEW ? '' : channel;
   const fee = contentIsFree || !price.amount ? undefined : { ...price };
 
   const metadata = {
@@ -126,7 +125,7 @@ export const doPublish = (params: PublishParams) => (dispatch: Dispatch, getStat
 
   const publishPayload = {
     name,
-    channel_name: channelName,
+    channel_id: channelId,
     bid,
     metadata,
   };

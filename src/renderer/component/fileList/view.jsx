@@ -8,6 +8,7 @@ type FileInfo = {
   name: string,
   channelName: ?string,
   pending?: boolean,
+  channel_claim_id: string,
   value?: {
     publisherSignature: {
       certificateId: string,
@@ -139,6 +140,8 @@ class FileList extends React.PureComponent<Props, State> {
     });
   }
 
+  sortFunctions: {};
+
   render() {
     const { fileInfos, hideFilter, checkPending } = this.props;
     const { sortBy } = this.state;
@@ -149,27 +152,14 @@ class FileList extends React.PureComponent<Props, State> {
     }
 
     this.sortFunctions[sortBy](fileInfos).forEach(fileInfo => {
-      const {
-        channel_name: channelName,
-        name: claimName,
-        claim_name: claimNameDownloaded,
-        claim_id: claimId,
-      } = fileInfo;
+      const { name: claimName, claim_name: claimNameDownloaded, claim_id: claimId } = fileInfo;
       const uriParams = {};
 
       // This is unfortunate
       // https://github.com/lbryio/lbry/issues/1159
       const name = claimName || claimNameDownloaded;
-
-      if (channelName) {
-        uriParams.channelName = channelName;
-        uriParams.contentName = name;
-        uriParams.claimId = this.getChannelSignature(fileInfo);
-      } else {
-        uriParams.claimId = claimId;
-        uriParams.claimName = name;
-      }
-
+      uriParams.contentName = name;
+      uriParams.claimId = claimId;
       const uri = buildURI(uriParams);
 
       content.push(<FileCard key={uri} uri={uri} checkPending={checkPending} />);
