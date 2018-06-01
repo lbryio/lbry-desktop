@@ -12,7 +12,6 @@ const select = (state, props) => ({
   /* availability check is disabled due to poor performance, TBD if it dies forever or requires daemon fix */
   costInfo: makeSelectCostInfoForUri(props.uri)(state),
   claimIsMine: makeSelectClaimIsMine(props.uri)(state),
-  claimId: props.claimId,
 });
 
 const perform = dispatch => ({
