@@ -1,10 +1,38 @@
 // @flow
 import * as React from 'react';
 import * as THREE from 'three';
-import detectWebGL from './detector.js';
+import detectWebGL from './internal/detector.js';
+import ThreeRenderer from './internal/renderer.js';
+import ThreeScene from './internal/scene.js';
 import OrbitControls from 'three-orbitcontrols';
-import { Scene, Camera, Controls, getDimensions } from './threeHelper';
+
 type Props = {};
+
+// Camera
+const Camera = aspect => {
+  const camera = new THREE.PerspectiveCamera(75, aspect, 0.1, 1000);
+  camera.position.set(-9.5, 14, 11);
+  camera.lookAt(0, 0, 0);
+  return camera;
+};
+
+// Orbit controls
+const Controls = (camera, canvas) => {
+  const controls = new OrbitControls(camera, canvas);
+  controls.enableDamping = true;
+  controls.dampingFactor = 0.75;
+  controls.enableZoom = true;
+  return controls;
+};
+
+const getDimensions = mesh => {
+  const box = new THREE.Box3().setFromObject(mesh);
+  return {
+    x: box.max.x / 2,
+    y: box.max.y / 2,
+    z: box.max.z / 2,
+  };
+};
 
 class ThreeViewer extends React.PureComponent<Props> {
   constructor(props: Props) {
@@ -12,16 +40,18 @@ class ThreeViewer extends React.PureComponent<Props> {
     //Main container
     this.viewer = React.createRef();
     // Threejs
-    this.scene = Scene(0xeeeeee);
-
+    this.scene = ThreeScene({
+      showFog: true,
+      showGrid: true,
+      groundColor: '#DDD',
+      backgroundColor: '#EEE',
+    });
     // Render scene
     if (detectWebGL()) {
-      this.renderer = new THREE.WebGLRenderer();
-      this.renderer.setPixelRatio(window.devicePixelRatio);
-      this.renderer.gammaInput = true;
-      this.renderer.gammaOutput = true;
-      this.renderer.shadowMapEnabled = true;
-      this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+      this.renderer = ThreeRenderer({
+        antialias: true,
+        shadowMap: true,
+      });
     } else {
       // No webgl support
       console.error('NO WEBGL!!!');
@@ -29,9 +59,7 @@ class ThreeViewer extends React.PureComponent<Props> {
   }
 
   handleResize = () => {
-    const viewer = this.viewer.current;
-    const width = viewer.offsetWidth;
-    const height = viewer.offsetHeight;
+    const { offsetWidth: width, offsetHeight: height } = this.viewer.current;
     this.camera.aspect = width / height;
     this.camera.updateProjectionMatrix();
     this.controls.update();
@@ -55,18 +83,12 @@ class ThreeViewer extends React.PureComponent<Props> {
 
   renderScene() {
     const canvas = this.renderer.domElement;
-    const viewer = this.viewer.current;
-    const width = viewer.offsetWidth;
-    const height = viewer.offsetHeight;
+    const { offsetWidth: width, offsetHeight: height } = this.viewer.current;
     const aspect = width / height;
 
     this.renderer.setSize(width, height);
-
-    // Main camera
     this.camera = Camera(aspect);
-
     this.controls = Controls(this.camera, canvas);
-    this.camera.lookAt(new THREE.Vector3(-1, -2, 0));
     this.controls.update();
 
     this.createMesh();
@@ -88,11 +110,18 @@ class ThreeViewer extends React.PureComponent<Props> {
     geometry.rotateX(-Math.PI / 2);
     geometry.lookAt(new THREE.Vector3(0, 0, 1));
 
-    const material = new THREE.MeshStandardMaterial({
-      color: 0x44b098,
+    const colors = {
+      red: '#e74c3c',
+      blue: '#3498db',
+      green: '#44b098',
+      orange: '#f39c12',
+    };
+
+    const materialColor = new THREE.Color(colors['red']);
+
+    const material = new THREE.MeshPhongMaterial({
+      color: materialColor,
       depthWrite: true,
-      //side: THREE.DoubleSide,
-      shading: THREE.FlatShading,
       vertexColors: THREE.FaceColors,
     });
 
@@ -103,9 +132,7 @@ class ThreeViewer extends React.PureComponent<Props> {
     mesh.castShadow = true;
     mesh.receiveShadow = true;
     mesh.scale.set(0.5, 0.5, 0.5);
-
     this.scene.add(mesh);
-    this.camera.position.set(2 * size.x, 2 * size.y, 2 * size.z);
   }
 
   componentDidMount() {
