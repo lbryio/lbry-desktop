@@ -1,4 +1,4 @@
-import { WebGLRenderer } from 'three';
+import { WebGLRenderer } from './three';
 
 const ThreeRenderer = ({ antialias, shadowMap }) => {
   const renderer = new WebGLRenderer({

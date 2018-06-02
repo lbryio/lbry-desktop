@@ -1,4 +1,4 @@
-import * as THREE from 'three';
+import * as THREE from './three.js';
 
 const addGrid = (scene, { colorGrid, colorCenterLine, size }) => {
   const divisions = size;
@@ -44,7 +44,7 @@ const addLights = (scene, color, groundColor) => {
   scene.add(shadowLight);
 };
 
-const createScene = ({ backgroundColor, groundColor, showFog, showGrid }) => {
+const Scene = ({ backgroundColor, groundColor, showFog, showGrid }) => {
   // Convert colors
   backgroundColor = new THREE.Color(backgroundColor);
   groundColor = new THREE.Color(groundColor);
@@ -72,4 +72,4 @@ const createScene = ({ backgroundColor, groundColor, showFog, showGrid }) => {
   return scene;
 };
 
-export default createScene;
+export default Scene;

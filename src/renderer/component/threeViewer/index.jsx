@@ -1,10 +1,9 @@
 // @flow
 import * as React from 'react';
-import * as THREE from 'three';
+import * as THREE from './internal/three.js';
 import detectWebGL from './internal/detector.js';
 import ThreeRenderer from './internal/renderer.js';
 import ThreeScene from './internal/scene.js';
-import OrbitControls from 'three-orbitcontrols';
 
 type Props = {};
 
@@ -18,7 +17,7 @@ const Camera = aspect => {
 
 // Orbit controls
 const Controls = (camera, canvas) => {
-  const controls = new OrbitControls(camera, canvas);
+  const controls = new THREE.OrbitControls(camera, canvas);
   controls.enableDamping = true;
   controls.dampingFactor = 0.75;
   controls.enableZoom = true;
