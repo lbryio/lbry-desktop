@@ -4,6 +4,11 @@ import windowStateKeeper from 'electron-window-state';
 
 import setupBarMenu from './menu/setupBarMenu';
 
+// Enable WEBGL
+app.commandLine.appendSwitch('ignore-gpu-blacklist');
+app.commandLine.appendSwitch('--disable-gpu-process-crash-limit');
+app.disableDomainBlockingFor3DAPIs();
+
 export default appState => {
   // Get primary display dimensions from Electron.
   const { width, height } = screen.getPrimaryDisplay().workAreaSize;
@@ -26,6 +31,9 @@ export default appState => {
     // If state is undefined, create window as maximized.
     width: windowState.width === undefined ? width : windowState.width,
     height: windowState.height === undefined ? height : windowState.height,
+    webPreferences: {
+      webgl: true,
+    },
   };
 
   // Disable renderer process's webSecurity on development to enable CORS.
@@ -34,6 +42,7 @@ export default appState => {
         ...windowConfiguration,
         webPreferences: {
           webSecurity: false,
+          webgl: true,
         },
       }
     : windowConfiguration;

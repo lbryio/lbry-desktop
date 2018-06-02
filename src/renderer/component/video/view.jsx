@@ -6,6 +6,7 @@ import type { Claim } from 'types/claim';
 import VideoPlayer from './internal/player';
 import VideoPlayButton from './internal/play-button';
 import LoadingScreen from './internal/loading-screen';
+import ThreeViewer from 'component/threeViewer';
 
 const SPACE_BAR_KEYCODE = 32;
 
@@ -160,6 +161,7 @@ class Video extends React.PureComponent<Props> {
 
     return (
       <div className={classnames('video', {}, className)}>
+        <ThreeViewer />
         {isPlaying && (
           <div className="content__view">
             {!isReadyToPlay ? (

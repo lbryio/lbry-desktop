@@ -17,9 +17,7 @@ class VideoPlayButton extends React.PureComponent<Props> {
     const icon = doesPlayback ? 'Play' : 'Folder';
     const label = doesPlayback ? 'Play' : 'View';
 
-    return (
-      <Button button="primary" disabled={disabled} label={label} icon={icon} onClick={play} />
-    );
+    return <Button button="primary" disabled={disabled} label={label} icon={icon} onClick={play} />;
   }
 }
 
