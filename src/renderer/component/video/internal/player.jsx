@@ -1,13 +1,18 @@
 /* eslint-disable */
 import React from 'react';
-import { remote } from 'electron';
 import Thumbnail from 'component/common/thumbnail';
-import player from 'render-media';
-import fs from 'fs';
+import ThreeViewer from 'component/threeViewer';
 import LoadingScreen from './loading-screen';
+import { remote } from 'electron';
+import fs from 'fs';
+import path from 'path';
+import player from 'render-media';
+import toBlobURL from 'stream-to-blob-url';
 
+path.extname('index.html');
 class VideoPlayer extends React.PureComponent {
   static MP3_CONTENT_TYPES = ['audio/mpeg3', 'audio/mpeg'];
+  static THREE_D_FILE_TYPES = ['stl', 'obj', '.gcode', 'fbx'];
 
   constructor(props) {
     super(props);
@@ -16,6 +21,7 @@ class VideoPlayer extends React.PureComponent {
       hasMetadata: false,
       startedPlaying: false,
       unplayable: false,
+      renderFile: null,
     };
 
     this.togglePlayListener = this.togglePlay.bind(this);
@@ -29,12 +35,22 @@ class VideoPlayer extends React.PureComponent {
 
   componentDidMount() {
     const container = this.media;
-    const { contentType, changeVolume, volume, position, claim } = this.props;
+    const {
+      filename,
+      downloadPath,
+      contentType,
+      changeVolume,
+      volume,
+      position,
+      claim,
+    } = this.props;
 
     const loadedMetadata = () => {
       this.setState({ hasMetadata: true, startedPlaying: true });
       this.media.children[0].play();
     };
+
+    const ext = path.extname(filename);
 
     const renderMediaCallback = error => {
       if (error) this.setState({ unplayable: true });
@@ -48,10 +64,22 @@ class VideoPlayer extends React.PureComponent {
       }
     };
 
-    // use renderAudio override for mp3
+    // Use renderAudio override for mp3
     if (VideoPlayer.MP3_CONTENT_TYPES.indexOf(contentType) > -1) {
       this.renderAudio(container, null, false);
-    } else {
+    }
+
+    // Move this to lbry-redux!
+    const fileType = filename ? path.extname(filename).substring(1) : null;
+    const fileTypeIndex = VideoPlayer.THREE_D_FILE_TYPES.indexOf(fileType);
+
+    // Render custom viewer: 3D-files
+    if (fileTypeIndex > -1) {
+      this.renderFile(fileType);
+    }
+
+    // Render default viewer: render-media (video, audio, img, iframe)
+    else {
       player.append(
         this.file(),
         container,
@@ -159,6 +187,14 @@ class VideoPlayer extends React.PureComponent {
     return ['audio', 'video'].indexOf(mediaType) !== -1;
   }
 
+  renderFile(fileType) {
+    const { downloadPath, contentType } = this.props;
+    toBlobURL(fs.createReadStream(downloadPath), contentType, (err, url) => {
+      if (err) return console.error(err.message);
+      this.setState({ renderFile: { filePath: url, fileType } });
+    });
+  }
+
   renderAudio(container, autoplay) {
     if (container.firstChild) {
       container.firstChild.remove();
@@ -175,7 +211,7 @@ class VideoPlayer extends React.PureComponent {
 
   render() {
     const { mediaType, poster } = this.props;
-    const { hasMetadata, unplayable } = this.state;
+    const { hasMetadata, unplayable, renderFile } = this.state;
     const noMetadataMessage = 'Waiting for metadata.';
     const unplayableMessage = "Sorry, looks like we can't play this file.";
     const hideMedia = this.playableType() && !hasMetadata && !unplayable;
@@ -189,6 +225,7 @@ class VideoPlayer extends React.PureComponent {
           !hasMetadata &&
           !unplayable && <LoadingScreen status={noMetadataMessage} />}
         {unplayable && <LoadingScreen status={unplayableMessage} spinner={false} />}
+        {renderFile && <ThreeViewer source={renderFile} />}
         <div
           className={'content__view--container'}
           style={{ opacity: hideMedia ? 0 : 1 }}

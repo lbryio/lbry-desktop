@@ -4,7 +4,7 @@ import windowStateKeeper from 'electron-window-state';
 
 import setupBarMenu from './menu/setupBarMenu';
 
-// Enable WEBGL
+// Enable WEBGL Hack ( REMOVE THIS )
 app.commandLine.appendSwitch('ignore-gpu-blacklist');
 app.commandLine.appendSwitch('--disable-gpu-process-crash-limit');
 app.disableDomainBlockingFor3DAPIs();

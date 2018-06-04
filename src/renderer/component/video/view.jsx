@@ -159,16 +159,8 @@ class Video extends React.PureComponent<Props> {
     const layoverStyle =
       !shouldObscureNsfw && poster ? { backgroundImage: `url("${poster}")` } : {};
 
-    // Test 3d model
-    const sourceTest = {
-      fileType: 'stl',
-      filePath:
-        'https://raw.githubusercontent.com/mrdoob/three.js/dev/examples/models/stl/ascii/pr2_head_tilt.stl',
-    };
-
     return (
       <div className={classnames('video', {}, className)}>
-        <ThreeViewer source={sourceTest} />
         {isPlaying && (
           <div className="content__view">
             {!isReadyToPlay ? (

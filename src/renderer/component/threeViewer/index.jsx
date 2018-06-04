@@ -49,8 +49,8 @@ class ThreeViewer extends React.PureComponent<Props> {
     geometry.fromBufferGeometry(data);
     geometry.computeBoundingBox();
     geometry.center();
-    geometry.rotateX(Math.PI / 2);
-    //geometry.lookAt(new THREE.Vector3(0, 0, 1));
+    geometry.rotateX(-Math.PI / 2);
+    geometry.lookAt(new THREE.Vector3(0, 0, 1));
     return geometry;
   }
 
