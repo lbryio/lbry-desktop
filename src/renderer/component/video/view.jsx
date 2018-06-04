@@ -76,8 +76,8 @@ class Video extends React.PureComponent<Props> {
   }
 
   componentWillUnmount() {
-    const { overlayed, doShowOverlay } = this.props;
-    if (!overlayed) {
+    const { overlayed, doShowOverlay, mediaPaused } = this.props;
+    if (!overlayed && !mediaPaused) {
       doShowOverlay();
     }
     window.removeEventListener('keydown', this.handleKeyDown);

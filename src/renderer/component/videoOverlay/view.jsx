@@ -7,15 +7,36 @@ import Button from 'component/button';
 import * as icons from 'constants/icons';
 
 type Props = {
-  cancelPlay: () => void,
+  doCancelPlay: () => void,
+  doHideOverlay: () => void,
   navigate: (string, ?{}) => void,
   doPlay: () => void,
   doPause: () => void,
   playingUri: ?string,
   mediaPaused: boolean,
+  showOverlay: boolean,
 };
 
 class VideoOverlay extends React.Component<Props> {
+  constructor() {
+    super();
+
+    (this: any).closeVideo = this.closeVideo.bind(this);
+    (this: any).returnToMedia = this.returnToMedia.bind(this);
+  }
+
+  closeVideo() {
+    const { doCancelPlay, doHideOverlay } = this.props;
+    doCancelPlay();
+    doHideOverlay();
+  }
+
+  returnToMedia() {
+    const { navigate, playingUri, doHideOverlay } = this.props;
+    doHideOverlay();
+    navigate('/show', { uri: playingUri });
+  }
+
   renderPlayOrPauseButton() {
     const { mediaPaused, doPause, doPlay } = this.props;
     if (mediaPaused) {
@@ -25,12 +46,12 @@ class VideoOverlay extends React.Component<Props> {
   }
 
   render() {
-    const { playingUri, cancelPlay, navigate } = this.props;
-    if (!playingUri) return '';
-    const returnToMedia = () => navigate('/show', { uri: playingUri });
+    const { playingUri, showOverlay } = this.props;
+    if (!showOverlay) return '';
+
     return (
       <Overlay>
-        <VideoOverlayHeader uri={playingUri} onClose={cancelPlay} />
+        <VideoOverlayHeader uri={playingUri} onClose={this.closeVideo} />
 
         <div className="video__overlay">
           <Video className="content__embedded" uri={playingUri} overlayed hiddenControls />
@@ -40,7 +61,7 @@ class VideoOverlay extends React.Component<Props> {
               noPadding
               button="secondary"
               icon={icons.MAXIMIZE}
-              onClick={() => returnToMedia()}
+              onClick={() => this.returnToMedia()}
             />
           </div>
         </div>
