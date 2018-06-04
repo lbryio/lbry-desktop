@@ -1,7 +1,7 @@
 import * as THREE from './three.js';
 
 const addGrid = (scene, { colorGrid, colorCenterLine, size }) => {
-  const divisions = size / 10;
+  const divisions = size / 2;
   const grid = new THREE.GridHelper(
     size,
     divisions,
