@@ -42,7 +42,7 @@ class CategoryList extends React.PureComponent<Props, State> {
 
   componentDidMount() {
     const { fetching, categoryLink, fetchChannel } = this.props;
-    if (!fetching) {
+    if (!fetching && categoryLink) {
       fetchChannel(categoryLink);
     }
 
