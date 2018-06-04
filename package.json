@@ -77,7 +77,6 @@
     "shapeshift.io": "^1.3.1",
     "source-map-support": "^0.5.4",
     "three": "^0.93.0",
-    "three-orbitcontrols": "^2.1.2",
     "tree-kill": "^1.1.0",
     "y18n": "^4.0.0"
   },

@@ -1,30 +1,16 @@
 import * as THREE from './three.js';
 
 const addGrid = (scene, { colorGrid, colorCenterLine, size }) => {
-  const divisions = size;
+  const divisions = size / 10;
   const grid = new THREE.GridHelper(
     size,
     divisions,
     new THREE.Color(colorCenterLine),
     new THREE.Color(colorGrid)
   );
-  grid.material.opacity = 0.25;
+  grid.material.opacity = 0.45;
   grid.material.transparent = true;
   scene.add(grid);
-};
-
-const addGround = (scene, { groundColor, size }) => {
-  const ground = new THREE.Mesh(
-    new THREE.PlaneBufferGeometry(size, size),
-    new THREE.MeshPhongMaterial({
-      color: groundColor,
-      shininess: 0,
-      depthWrite: false,
-    })
-  );
-  ground.rotation.x = -Math.PI / 2;
-  ground.receiveShadow = true;
-  scene.add(ground);
 };
 
 const addLights = (scene, color, groundColor) => {
@@ -53,19 +39,15 @@ const Scene = ({ backgroundColor, groundColor, showFog, showGrid }) => {
   // Background color
   scene.background = backgroundColor;
   // Fog effect
-  scene.fog = showFog === true ? new THREE.Fog(backgroundColor, 1, 50) : null;
-  // Grid helper
+  scene.fog = showFog === true ? new THREE.Fog(backgroundColor, 1, 125) : null;
+
   showGrid &&
     addGrid(scene, {
       size: 100,
       colorGrid: '#7f8c8d',
-      colorCenterLine: '#000000',
+      colorCenterLine: '#2F2F2F',
     });
-  // Add base ground
-  addGround(scene, {
-    size: 1000,
-    groundColor,
-  });
+
   // Add basic lights
   addLights(scene, '#FFFFFF', groundColor);
   // Return new three scene

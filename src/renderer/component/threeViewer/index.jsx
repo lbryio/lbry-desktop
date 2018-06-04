@@ -2,35 +2,21 @@
 import * as React from 'react';
 import * as THREE from './internal/three.js';
 import detectWebGL from './internal/detector.js';
-import ThreeRenderer from './internal/renderer.js';
 import ThreeScene from './internal/scene.js';
+import ThreeLoader from './internal/loader.js';
+import ThreeRenderer from './internal/renderer.js';
 
-type Props = {};
-
-// Camera
-const Camera = aspect => {
-  const camera = new THREE.PerspectiveCamera(75, aspect, 0.1, 1000);
-  camera.position.set(-9.5, 14, 11);
-  camera.lookAt(0, 0, 0);
-  return camera;
-};
-
-// Orbit controls
-const Controls = (camera, canvas) => {
-  const controls = new THREE.OrbitControls(camera, canvas);
-  controls.enableDamping = true;
-  controls.dampingFactor = 0.75;
-  controls.enableZoom = true;
-  return controls;
-};
-
-const getDimensions = mesh => {
-  const box = new THREE.Box3().setFromObject(mesh);
-  return {
-    x: box.max.x / 2,
-    y: box.max.y / 2,
-    z: box.max.z / 2,
-  };
+type Props = {
+  config: {
+    gridColor: string,
+    groundColor: string,
+    backgroundColor: string,
+    lineCenterColor: string,
+  },
+  source: {
+    fileType: string,
+    filePath: string,
+  },
 };
 
 class ThreeViewer extends React.PureComponent<Props> {
@@ -38,23 +24,98 @@ class ThreeViewer extends React.PureComponent<Props> {
     super(props);
     //Main container
     this.viewer = React.createRef();
-    // Threejs
-    this.scene = ThreeScene({
-      showFog: true,
-      showGrid: true,
-      groundColor: '#DDD',
-      backgroundColor: '#EEE',
+    // Object colors
+    this.materialColors = {
+      red: '#e74c3c',
+      blue: '#3498db',
+      green: '#44b098',
+      orange: '#f39c12',
+    };
+  }
+
+  createOrbitControls(camera, canvas) {
+    const controls = new THREE.OrbitControls(camera, canvas);
+    // Controls configuration
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.75;
+    controls.enableZoom = true;
+    controls.minDistance = 1;
+    controls.maxDistance = 50;
+    return controls;
+  }
+
+  createGeometry(data) {
+    const geometry = new THREE.Geometry();
+    geometry.fromBufferGeometry(data);
+    geometry.computeBoundingBox();
+    geometry.center();
+    geometry.rotateX(Math.PI / 2);
+    //geometry.lookAt(new THREE.Vector3(0, 0, 1));
+    return geometry;
+  }
+
+  createMesh(geometry) {
+    const materialColor = new THREE.Color(this.materialColors['red']);
+    const material = new THREE.MeshPhongMaterial({
+      color: materialColor,
+      depthWrite: true,
+      vertexColors: THREE.FaceColors,
     });
-    // Render scene
-    if (detectWebGL()) {
-      this.renderer = ThreeRenderer({
-        antialias: true,
-        shadowMap: true,
+
+    const mesh = new THREE.Mesh(geometry, material);
+    mesh.name = 'objectGroup';
+
+    this.scene.add(mesh);
+    this.fitMeshToCamera(mesh);
+    this.setControlsTarget(mesh.position);
+  }
+
+  fitMeshToCamera(group) {
+    let max = { x: 0, y: 0, z: 0 };
+    let min = { x: 0, y: 0, z: 0 };
+
+    group.traverse(child => {
+      if (child instanceof THREE.Mesh) {
+        const box = new THREE.Box3().setFromObject(group);
+        // Max
+        max.x = box.max.x > max.x ? box.max.x : max.x;
+        max.y = box.max.y > max.y ? box.max.y : max.y;
+        max.z = box.max.z > max.z ? box.max.z : max.z;
+        // Min
+        min.x = box.min.x < min.x ? box.min.x : min.x;
+        min.y = box.min.y < min.y ? box.min.y : min.y;
+        min.z = box.min.z < min.z ? box.min.z : min.z;
+      }
+    });
+
+    const meshY = Math.abs(max.y - min.y);
+    const meshX = Math.abs(max.x - min.x);
+    const meshZ = Math.abs(max.z - min.z);
+    const scaleFactor = 10 / Math.max(meshX, meshY);
+
+    group.scale.set(scaleFactor, scaleFactor, scaleFactor);
+    group.position.y = meshY / 2 * scaleFactor;
+    group.position.multiplyScalar(-1);
+    group.position.y += meshY * scaleFactor;
+  }
+
+  setControlsTarget(point) {
+    this.controls.target.fromArray([point.x, point.y, point.z]);
+    this.controls.update();
+  }
+
+  startLoader() {
+    const { source } = this.props;
+    source &&
+      ThreeLoader(source, this.renderModel.bind(this), {
+        onLoad: this.handleLoad.bind(this),
+        onError: this.handleError.bind(this),
+        onProgress: this.handleProgress.bind(this),
       });
-    } else {
-      // No webgl support
-      console.error('NO WEBGL!!!');
-    }
+  }
+
+  handleLoad() {
+    // Handle load ready
   }
 
   handleResize = () => {
@@ -65,81 +126,66 @@ class ThreeViewer extends React.PureComponent<Props> {
     this.renderer.setSize(width, height);
   };
 
-  handleLoader() {
-    /*
-      var loader = new THREE.STLLoader();
-				loader.load( '/home/btzr/Downloads/Bitcoin Cash accepted here.stl', ( geometry ) => {
-					var material = new THREE.MeshPhongMaterial( { color: 0xff5533, specular: 0x111111, shininess: 10 } );
-					var mesh = new THREE.Mesh( geometry, material );
-					mesh.position.set( 0, 1, 0 );
-					mesh.scale.set( 0.5, 0.5, 0.5 );
-					mesh.castShadow = true;
-					mesh.receiveShadow = true;
-					this.scene.add( mesh );
-				} );
-                */
+  handleError(url) {
+    // Handle error
+  }
+
+  handleProgress(url, currentItem, totalItems) {
+    /// Handle progress
+  }
+
+  renderModel(fileType, data) {
+    const geometry = this.createGeometry(data);
+    const mesh = this.createMesh(geometry);
+    this.onViewerReady();
   }
 
   renderScene() {
+    this.renderer = ThreeRenderer({
+      antialias: true,
+      shadowMap: true,
+    });
+
+    this.scene = ThreeScene({
+      showFog: true,
+      showGrid: true,
+      groundColor: '#DDD',
+      backgroundColor: '#EEE',
+    });
+
+    const viewer = this.viewer.current;
     const canvas = this.renderer.domElement;
-    const { offsetWidth: width, offsetHeight: height } = this.viewer.current;
-    const aspect = width / height;
-
+    const { offsetWidth: width, offsetHeight: height } = viewer;
+    // Camera
+    this.camera = new THREE.PerspectiveCamera(80, width / height, 0.1, 1000);
+    this.camera.position.set(-9.5, 14, 11);
+    // Controls
+    this.controls = this.createOrbitControls(this.camera, canvas);
+    // Set viewer size
     this.renderer.setSize(width, height);
-    this.camera = Camera(aspect);
-    this.controls = Controls(this.camera, canvas);
-    this.controls.update();
-
-    this.createMesh();
-    this.handleLoader();
+    // Load file and render mesh
+    this.startLoader();
 
     const updateScene = () => {
       requestAnimationFrame(updateScene);
       this.controls.update();
       this.renderer.render(this.scene, this.camera);
     };
+
     updateScene();
-  }
-
-  createMesh() {
-    const geometry = new THREE.BoxGeometry(2, 2, 2);
-    //geometry.computeVertexNormals();
-    geometry.center();
-    geometry.rotateZ(Math.PI / 2);
-    geometry.rotateX(-Math.PI / 2);
-    geometry.lookAt(new THREE.Vector3(0, 0, 1));
-
-    const colors = {
-      red: '#e74c3c',
-      blue: '#3498db',
-      green: '#44b098',
-      orange: '#f39c12',
-    };
-
-    const materialColor = new THREE.Color(colors['red']);
-
-    const material = new THREE.MeshPhongMaterial({
-      color: materialColor,
-      depthWrite: true,
-      vertexColors: THREE.FaceColors,
-    });
-
-    const mesh = new THREE.Mesh(geometry, material);
-    const size = getDimensions(mesh);
-
-    mesh.position.set(0, size.y, 0);
-    mesh.castShadow = true;
-    mesh.receiveShadow = true;
-    mesh.scale.set(0.5, 0.5, 0.5);
-    this.scene.add(mesh);
+    // Append canvas
+    viewer.appendChild(canvas);
   }
 
   componentDidMount() {
-    const viewer = this.viewer.current;
-    this.renderScene();
-    viewer.appendChild(this.renderer.domElement);
-    // Update render on resize window
-    window.addEventListener('resize', this.handleResize, false);
+    if (detectWebGL()) {
+      this.renderScene();
+      // Update render on resize window
+      window.addEventListener('resize', this.handleResize, false);
+    } else {
+      // No webgl support, handle Error...
+      console.error('NO WEBGL!!!');
+    }
   }
 
   componentWillUnmount() {
