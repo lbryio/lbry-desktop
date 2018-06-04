@@ -45,7 +45,9 @@ class VideoPlayer extends React.PureComponent {
 
     // Hide overlay video when the video ends only if its overlayed
     const ended = () => {
-      this.props.doHideOverlay();
+      this.props.doPause();
+      this.props.savePosition(claim.claim_id, 0);
+      if (this.props.overlayed) this.props.doHideOverlay();
     };
 
     // use renderAudio override for mp3
@@ -79,9 +81,7 @@ class VideoPlayer extends React.PureComponent {
       });
       mediaElement.volume = volume;
       mediaElement.addEventListener('dblclick', this.toggleFullScreenVideo);
-      if (this.props.overlayed) {
-        mediaElement.addEventListener('ended', ended);
-      }
+      mediaElement.addEventListener('ended', ended);
     }
   }
 
