@@ -59,6 +59,7 @@ class Video extends React.PureComponent<Props> {
     window.addEventListener('keydown', this.handleKeyDown);
 
     const { showOverlay, doHideOverlay, uri, playingUri, overlayed } = this.props;
+    // debugger;
     if (showOverlay && uri === playingUri && !overlayed) {
       doHideOverlay();
     }
@@ -150,6 +151,8 @@ class Video extends React.PureComponent<Props> {
       className,
       obscureNsfw,
       hiddenControls,
+      overlayed,
+      doHideOverlay,
     } = this.props;
 
     const isPlaying = playingUri === uri;
@@ -200,6 +203,8 @@ class Video extends React.PureComponent<Props> {
                 paused={mediaPaused}
                 position={mediaPosition}
                 hiddenControls={hiddenControls}
+                overlayed={overlayed}
+                doHideOverlay={doHideOverlay}
               />
             )}
           </div>
