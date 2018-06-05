@@ -37,16 +37,8 @@ class SearchPage extends React.PureComponent<Props> {
   render() {
     const { query, updateSearchQuery } = this.props;
     return (
-      <Page noPadding>
+      <Page>
         <div className="search__wrapper">
-          <input
-            ref={input => (this.input = input)}
-            className="search__input"
-            value={query}
-            placeholder={__('Search for anything...')}
-            onChange={event => updateSearchQuery(event.target.value)}
-          />
-
           {isURIValid(query) && (
             <React.Fragment>
               <div className="file-list__header">

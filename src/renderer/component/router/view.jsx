@@ -17,6 +17,7 @@ import AuthPage from 'page/auth';
 import InvitePage from 'page/invite';
 import BackupPage from 'page/backup';
 import SubscriptionsPage from 'page/subscriptions';
+import SearchPage from 'page/search';
 
 const route = (props, page, routesMap) => {
   const component = routesMap[page];
@@ -51,6 +52,7 @@ const Router = props => {
     show: <ShowPage {...params} />,
     wallet: <WalletPage params={params} />,
     subscriptions: <SubscriptionsPage params={params} />,
+    search: <SearchPage {...params} />,
   });
 };
 
