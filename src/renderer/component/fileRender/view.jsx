@@ -9,6 +9,7 @@ type Props = {
     filePath: string,
     fileType: string,
   },
+  currentTheme: string,
 };
 
 class FileRender extends React.PureComponent<Props> {
@@ -17,13 +18,13 @@ class FileRender extends React.PureComponent<Props> {
   }
 
   routeViewer() {
-    const { mediaType, fileSource } = this.props;
+    const { mediaType, fileSource, currentTheme } = this.props;
 
     if (!mediaType || !fileSource) return null;
 
     // Supported mediaTypes
     const mediaTypes = {
-      // '3D-file': () => <ThreeViewer source={fileSource}/>,
+      // '3D-file': () => <ThreeViewer source={fileSource} theme={currentTheme}/>,
       // 'e-book': () => <EbookReader />,
       // 'comic-book' () => <ComicReader />,
       // Add routes to viewer...
