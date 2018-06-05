@@ -10,4 +10,7 @@ const select = state => ({
 
 const perform = dispatch => ({});
 
-export default connect(select, perform)(InviteList);
+export default connect(
+  select,
+  perform
+)(InviteList);

@@ -15,10 +15,13 @@ const select = state => ({
   shapeShift: selectShapeShift(state),
 });
 
-export default connect(select, {
-  shapeShiftInit,
-  getCoinStats,
-  createShapeShift,
-  clearShapeShift,
-  getActiveShift,
-})(ShapeShift);
+export default connect(
+  select,
+  {
+    shapeShiftInit,
+    getCoinStats,
+    createShapeShift,
+    clearShapeShift,
+    getActiveShift,
+  }
+)(ShapeShift);

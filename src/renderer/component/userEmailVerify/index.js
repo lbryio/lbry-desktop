@@ -19,4 +19,7 @@ const perform = dispatch => ({
   verifyUserEmailFailure: error => dispatch(doUserEmailVerifyFailure(error)),
 });
 
-export default connect(select, perform)(UserEmailVerify);
+export default connect(
+  select,
+  perform
+)(UserEmailVerify);

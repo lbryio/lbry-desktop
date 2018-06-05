@@ -6,4 +6,7 @@ const perform = dispatch => ({
   navigateSettings: () => dispatch(doNavigate('/settings')),
 });
 
-export default connect(null, perform)(NsfwOverlay);
+export default connect(
+  null,
+  perform
+)(NsfwOverlay);

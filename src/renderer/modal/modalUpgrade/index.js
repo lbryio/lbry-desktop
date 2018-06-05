@@ -10,4 +10,7 @@ const perform = dispatch => ({
   skipUpgrade: () => dispatch(doSkipUpgrade()),
 });
 
-export default connect(select, perform)(ModalUpgrade);
+export default connect(
+  select,
+  perform
+)(ModalUpgrade);

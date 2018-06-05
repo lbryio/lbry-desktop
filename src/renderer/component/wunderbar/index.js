@@ -36,4 +36,7 @@ const perform = dispatch => ({
   doBlur: () => dispatch(doBlurSearchInput()),
 });
 
-export default connect(select, perform)(Wunderbar);
+export default connect(
+  select,
+  perform
+)(Wunderbar);

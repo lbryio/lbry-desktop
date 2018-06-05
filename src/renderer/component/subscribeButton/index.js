@@ -8,8 +8,11 @@ const select = (state, props) => ({
   subscriptions: selectSubscriptions(state),
 });
 
-export default connect(select, {
-  doChannelSubscribe,
-  doChannelUnsubscribe,
-  doNotify,
-})(SubscribeButton);
+export default connect(
+  select,
+  {
+    doChannelSubscribe,
+    doChannelUnsubscribe,
+    doNotify,
+  }
+)(SubscribeButton);

@@ -19,4 +19,7 @@ const perform = dispatch => () => ({
   },
 });
 
-export default connect(select, perform)(ModalPhoneCollection);
+export default connect(
+  select,
+  perform
+)(ModalPhoneCollection);

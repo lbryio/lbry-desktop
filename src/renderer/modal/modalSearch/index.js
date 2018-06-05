@@ -10,4 +10,7 @@ const perform = dispatch => ({
   navigate: (path, params) => dispatch(doNavigate(path, params)),
 });
 
-export default connect(null, perform)(ModalSearch);
+export default connect(
+  null,
+  perform
+)(ModalSearch);

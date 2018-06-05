@@ -17,4 +17,7 @@ const perform = dispatch => ({
   recordScroll: scrollPosition => dispatch(doRecordScroll(scrollPosition)),
 });
 
-export default connect(select, perform)(App);
+export default connect(
+  select,
+  perform
+)(App);

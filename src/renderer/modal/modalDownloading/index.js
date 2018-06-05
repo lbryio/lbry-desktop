@@ -14,4 +14,7 @@ const perform = dispatch => ({
   cancelUpgrade: () => dispatch(doCancelUpgrade()),
 });
 
-export default connect(select, perform)(ModalDownloading);
+export default connect(
+  select,
+  perform
+)(ModalDownloading);

@@ -13,4 +13,7 @@ const perform = dispatch => ({
   addUserEmail: email => dispatch(doUserEmailNew(email)),
 });
 
-export default connect(select, perform)(UserEmailNew);
+export default connect(
+  select,
+  perform
+)(UserEmailNew);

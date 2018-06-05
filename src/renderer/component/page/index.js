@@ -28,4 +28,7 @@ const perform = dispatch => ({
   downloadUpgrade: () => dispatch(doDownloadUpgrade()),
 });
 
-export default connect(select, perform)(Page);
+export default connect(
+  select,
+  perform
+)(Page);

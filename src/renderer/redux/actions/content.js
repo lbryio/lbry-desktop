@@ -171,7 +171,7 @@ export function doUpdateLoadStatus(uri, outpoint) {
       } else {
         // ready to play
         const { total_bytes: totalBytes, written_bytes: writtenBytes } = fileInfo;
-        const progress = writtenBytes / totalBytes * 100;
+        const progress = (writtenBytes / totalBytes) * 100;
 
         dispatch({
           type: ACTIONS.DOWNLOADING_PROGRESSED,

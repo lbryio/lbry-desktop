@@ -26,4 +26,7 @@ const perform = dispatch => ({
   navigate: (path, params) => dispatch(doNavigate(path, params)),
 });
 
-export default connect(select, perform)(ChannelPage);
+export default connect(
+  select,
+  perform
+)(ChannelPage);

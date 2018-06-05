@@ -14,4 +14,7 @@ const perform = dispatch => ({
   fetchChannelListMine: () => dispatch(doFetchChannelListMine()),
 });
 
-export default connect(select, perform)(SelectChannel);
+export default connect(
+  select,
+  perform
+)(SelectChannel);

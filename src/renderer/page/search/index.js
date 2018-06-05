@@ -14,4 +14,7 @@ const perform = dispatch => ({
   updateSearchQuery: query => dispatch(doUpdateSearchQuery(query)),
 });
 
-export default connect(select, perform)(SearchPage);
+export default connect(
+  select,
+  perform
+)(SearchPage);

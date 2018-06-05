@@ -26,4 +26,7 @@ const perform = dispatch => ({
   navigate: path => dispatch(doNavigate(path)),
 });
 
-export default connect(select, perform)(AuthPage);
+export default connect(
+  select,
+  perform
+)(AuthPage);

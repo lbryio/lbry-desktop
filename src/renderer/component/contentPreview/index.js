@@ -46,4 +46,7 @@ const perform = dispatch => ({
   savePosition: (claimId, position) => dispatch(savePosition(claimId, position)),
 });
 
-export default connect(select, perform)(Video);
+export default connect(
+  select,
+  perform
+)(Video);

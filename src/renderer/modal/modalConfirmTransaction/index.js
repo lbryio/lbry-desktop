@@ -7,4 +7,7 @@ const perform = dispatch => ({
   sendToAddress: (address, amount) => dispatch(doSendDraftTransaction(address, amount)),
 });
 
-export default connect(null, perform)(ModalConfirmTransaction);
+export default connect(
+  null,
+  perform
+)(ModalConfirmTransaction);

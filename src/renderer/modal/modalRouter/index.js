@@ -32,4 +32,7 @@ const perform = dispatch => ({
   openModal: notification => dispatch(doNotify(notification)),
 });
 
-export default connect(select, perform)(ModalRouter);
+export default connect(
+  select,
+  perform
+)(ModalRouter);

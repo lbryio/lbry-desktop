@@ -19,4 +19,7 @@ const perform = dispatch => ({
   sendSupport: (amount, claimId, uri) => dispatch(doSendSupport(amount, claimId, uri)),
 });
 
-export default connect(select, perform)(WalletSendTip);
+export default connect(
+  select,
+  perform
+)(WalletSendTip);

@@ -9,4 +9,7 @@ const perform = dispatch => ({
   declineAutoUpdate: () => dispatch(doAutoUpdateDeclined()),
 });
 
-export default connect(null, perform)(ModalAutoUpdateConfirm);
+export default connect(
+  null,
+  perform
+)(ModalAutoUpdateConfirm);

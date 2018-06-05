@@ -15,4 +15,7 @@ const perform = dispatch => ({
   openModal: (modal, props) => dispatch(doNotify(modal, props)),
 });
 
-export default connect(select, perform)(TransactionList);
+export default connect(
+  select,
+  perform
+)(TransactionList);

@@ -16,4 +16,7 @@ const perform = dispatch => ({
   loadVideo: uri => dispatch(doLoadVideo(uri)),
 });
 
-export default connect(select, perform)(ModalAffirmPurchase);
+export default connect(
+  select,
+  perform
+)(ModalAffirmPurchase);

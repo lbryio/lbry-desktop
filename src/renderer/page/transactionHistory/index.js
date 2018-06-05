@@ -15,4 +15,7 @@ const perform = dispatch => ({
   fetchTransactions: () => dispatch(doFetchTransactions()),
 });
 
-export default connect(select, perform)(TransactionHistoryPage);
+export default connect(
+  select,
+  perform
+)(TransactionHistoryPage);

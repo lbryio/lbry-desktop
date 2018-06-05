@@ -17,4 +17,7 @@ const perform = dispatch => ({
   search: search => dispatch(doSearch(search)),
 });
 
-export default connect(select, perform)(FileListSearch);
+export default connect(
+  select,
+  perform
+)(FileListSearch);

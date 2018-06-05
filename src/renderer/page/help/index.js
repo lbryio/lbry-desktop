@@ -14,4 +14,7 @@ const perform = dispatch => ({
   fetchAccessToken: () => dispatch(doFetchAccessToken()),
 });
 
-export default connect(select, perform)(HelpPage);
+export default connect(
+  select,
+  perform
+)(HelpPage);

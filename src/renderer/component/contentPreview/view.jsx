@@ -3,8 +3,8 @@ import React from 'react';
 import { Lbry } from 'lbry-redux';
 import classnames from 'classnames';
 import type { Claim } from 'types/claim';
-import VideoPlayer from './internal/player';
-import VideoPlayButton from './internal/play-button';
+import MediaPlayer from './internal/player';
+import MediaPlayButton from './internal/play-button';
 import LoadingScreen from './internal/loading-screen';
 
 const SPACE_BAR_KEYCODE = 32;
@@ -42,7 +42,7 @@ type Props = {
   searchBarFocused: boolean,
 };
 
-class Video extends React.PureComponent<Props> {
+class ContentPreview extends React.PureComponent<Props> {
   constructor() {
     super();
 
@@ -167,7 +167,7 @@ class Video extends React.PureComponent<Props> {
                 <LoadingScreen status={loadStatusMessage} />
               </div>
             ) : (
-              <VideoPlayer
+              <MediaPlayer
                 filename={fileInfo.file_name}
                 poster={poster}
                 downloadPath={fileInfo.download_path}
@@ -194,7 +194,7 @@ class Video extends React.PureComponent<Props> {
             className={layoverClass}
             style={layoverStyle}
           >
-            <VideoPlayButton
+            <MediaPlayButton
               play={e => {
                 e.stopPropagation();
                 this.playContent();
@@ -211,4 +211,4 @@ class Video extends React.PureComponent<Props> {
   }
 }
 
-export default Video;
+export default ContentPreview;

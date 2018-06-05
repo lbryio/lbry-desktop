@@ -8,4 +8,7 @@ const perform = dispatch => ({
   close: () => dispatch(doHideNotification()),
 });
 
-export default connect(null, null)(ModalAuthFailure);
+export default connect(
+  null,
+  null
+)(ModalAuthFailure);

@@ -25,4 +25,7 @@ const perform = dispatch => () => ({
   },
 });
 
-export default connect(select, perform)(ModalCreditIntro);
+export default connect(
+  select,
+  perform
+)(ModalCreditIntro);

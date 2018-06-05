@@ -18,8 +18,11 @@ const select = state => ({
   notifications: selectNotifications(state),
 });
 
-export default connect(select, {
-  doFetchClaimsByChannel,
-  setSubscriptionNotifications,
-  doFetchMySubscriptions,
-})(SubscriptionsPage);
+export default connect(
+  select,
+  {
+    doFetchClaimsByChannel,
+    setSubscriptionNotifications,
+    doFetchMySubscriptions,
+  }
+)(SubscriptionsPage);

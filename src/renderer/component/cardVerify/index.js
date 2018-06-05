@@ -9,4 +9,7 @@ const select = state => ({
 
 const perform = dispatch => ({});
 
-export default connect(select, perform)(CardVerify);
+export default connect(
+  select,
+  perform
+)(CardVerify);
