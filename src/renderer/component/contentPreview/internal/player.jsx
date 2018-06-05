@@ -5,10 +5,10 @@ import path from 'path';
 import player from 'render-media';
 import toBlobURL from 'stream-to-blob-url';
 import Thumbnail from 'component/common/thumbnail';
-//import FileRender from 'component/fileRender';
+import FileRender from 'component/fileRender';
 import LoadingScreen from './loading-screen';
 
-class VideoPlayer extends React.PureComponent {
+class MediaPlayer extends React.PureComponent {
   static MP3_CONTENT_TYPES = ['audio/mpeg3', 'audio/mpeg'];
 
   constructor(props) {
@@ -52,24 +52,20 @@ class VideoPlayer extends React.PureComponent {
     };
 
     // Use renderAudio override for mp3
-    if (VideoPlayer.MP3_CONTENT_TYPES.indexOf(contentType) > -1) {
+    if (MediaPlayer.MP3_CONTENT_TYPES.indexOf(contentType) > -1) {
       this.renderAudio(container, null, false);
     }
 
+    // Render custom viewer: FileRender
+    if (this.renderType()) this.renderFile();
     // Render default viewer: render-media (video, audio, img, iframe)
     else if (this.supportedType()) {
-      console.info('File is supported:', contentType);
       player.append(
         this.file(),
         container,
         { autoplay: true, controls: true },
         renderMediaCallback.bind(this)
       );
-    }
-
-    // Render custom viewer: FileRender
-    if (this.renderType()) {
-      this.renderFile();
     }
 
     document.addEventListener('keydown', this.togglePlayListener);
@@ -106,7 +102,7 @@ class VideoPlayer extends React.PureComponent {
     if (this.playableType() && !startedPlaying && downloadCompleted) {
       const container = this.media.children[0];
 
-      if (VideoPlayer.MP3_CONTENT_TYPES.indexOf(contentType) > -1) {
+      if (MediaPlayer.MP3_CONTENT_TYPES.indexOf(contentType) > -1) {
         this.renderAudio(this.media, true);
       } else {
         player.render(this.file(), container, {
@@ -181,7 +177,7 @@ class VideoPlayer extends React.PureComponent {
   renderType() {
     // This files are supported using a custom viewer
     const { mediaType } = this.props;
-    console.info(mediaType);
+
     return ['3D-file', 'comic-book', 'e-book'].indexOf(mediaType) > -1;
   }
 
@@ -237,10 +233,10 @@ class VideoPlayer extends React.PureComponent {
         {isLoadingMetadata && <LoadingScreen status={noMetadataMessage} />}
         {isUnplayable && <LoadingScreen status={unplayableMessage} spinner={false} />}
         {isUnsupported && <LoadingScreen status={unsupportedMessage} spinner={false} />}
-        {/* canRender && <FileRender source={fileSource} mediaType={mediaType} />*/}
+        {canRender && <FileRender source={fileSource} mediaType={mediaType} />}
         <div
           className={'content__view--container'}
-          style={{ opacity: isLoading ? 0 : 1 }}
+          style={{ opacity: isLoadingMetadata ? 0 : 1 }}
           ref={container => {
             this.media = container;
           }}
@@ -250,5 +246,5 @@ class VideoPlayer extends React.PureComponent {
   }
 }
 
-export default VideoPlayer;
+export default MediaPlayer;
 /* eslint-disable */

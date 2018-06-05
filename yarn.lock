@@ -5647,9 +5647,9 @@ lazy-val@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/lazy-val/-/lazy-val-1.0.3.tgz#bb97b200ef00801d94c317e29dc6ed39e31c5edc"
 
-lbry-redux@lbryio/lbry-redux#a32e8835c238c0ba1081fe6979763c5b0fade76c:
+lbry-redux@lbryio/lbry-redux#3bc978ef4e4dcf5af6b1185b530244209100f69f:
   version "0.0.1"
-  resolved "https://codeload.github.com/lbryio/lbry-redux/tar.gz/a32e8835c238c0ba1081fe6979763c5b0fade76c"
+  resolved "https://codeload.github.com/lbryio/lbry-redux/tar.gz/3bc978ef4e4dcf5af6b1185b530244209100f69f"
   dependencies:
     proxy-polyfill "0.1.6"
     reselect "^3.0.0"
@@ -8817,7 +8817,7 @@ stream-shift@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/stream-shift/-/stream-shift-1.0.0.tgz#d5c752825e5367e786f78e18e445ea223a155952"
 
-stream-to-blob-url@^2.0.0:
+stream-to-blob-url@^2.0.0, stream-to-blob-url@^2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/stream-to-blob-url/-/stream-to-blob-url-2.1.0.tgz#c341d10502ec51250607327258ec2f586b07d626"
   dependencies:

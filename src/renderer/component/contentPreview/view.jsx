@@ -139,7 +139,8 @@ class ContentPreview extends React.PureComponent<Props> {
     const isPlaying = playingUri === uri;
     const isReadyToPlay = fileInfo && fileInfo.written_bytes > 0;
     const shouldObscureNsfw = obscureNsfw && metadata && metadata.nsfw;
-    const mediaType = Lbry.getMediaType(contentType, fileInfo && fileInfo.file_name);
+    const mediaType =
+      (fileInfo && Lbry.getMediaType(null, fileInfo.file_name)) || Lbry.getMediaType(contentType);
 
     let loadStatusMessage = '';
 
