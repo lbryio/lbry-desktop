@@ -3,8 +3,8 @@ import React from 'react';
 import Spinner from 'component/spinner';
 
 type Props = {
-  status: string,
   spinner: boolean,
+  status: string,
 };
 
 class LoadingScreen extends React.PureComponent<Props> {
@@ -17,7 +17,8 @@ class LoadingScreen extends React.PureComponent<Props> {
     return (
       <div className="content__loading">
         {spinner && <Spinner light />}
-        {status && <span className="content__loading-text">{status}</span>}
+
+        <span className="content__loading-text">{status}</span>
       </div>
     );
   }
