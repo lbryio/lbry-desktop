@@ -12,7 +12,6 @@ const MODAL_ANIMATION_TIME = 250;
 
 type Props = {
   query: ?string,
-  updateSearchQuery: string => void,
 };
 
 class SearchPage extends React.PureComponent<Props> {
@@ -35,27 +34,25 @@ class SearchPage extends React.PureComponent<Props> {
   input: ?HTMLInputElement;
 
   render() {
-    const { query, updateSearchQuery } = this.props;
+    const { query } = this.props;
     return (
       <Page>
-        <div className="search__wrapper">
-          {isURIValid(query) && (
-            <React.Fragment>
-              <div className="file-list__header">
-                {__('Exact URL')}
-                <ToolTip
-                  icon
-                  body={__('This is the resolution of a LBRY URL and not controlled by LBRY Inc.')}
-                >
-                  <Icon icon={icons.HELP} />
-                </ToolTip>
-              </div>
-              <FileTile fullWidth uri={normalizeURI(query)} showUri />
-            </React.Fragment>
-          )}
-          <FileListSearch query={query} />
-          <div className="help">{__('These search results are provided by LBRY, Inc.')}</div>
-        </div>
+        {isURIValid(query) && (
+          <React.Fragment>
+            <div className="file-list__header">
+              {__('Exact URL')}
+              <ToolTip
+                icon
+                body={__('This is the resolution of a LBRY URL and not controlled by LBRY Inc.')}
+              >
+                <Icon icon={icons.HELP} />
+              </ToolTip>
+            </div>
+            <FileTile fullWidth uri={normalizeURI(query)} showUri />
+          </React.Fragment>
+        )}
+        <FileListSearch query={query} />
+        <div className="help">{__('These search results are provided by LBRY, Inc.')}</div>
       </Page>
     );
   }
