@@ -85,7 +85,7 @@ class ChannelPage extends React.PureComponent<Props> {
           <h1>{name}</h1>
           <div className="card__actions card__actions--no-margin">
             <SubscribeButton uri={permanentUrl} channelName={name} />
-            <ViewOnWebButton uri={`${name}:${claimId}`} />
+            <ViewOnWebButton claimId={claimId} claimName={name} />
           </div>
         </section>
         <section>{contentList}</section>
