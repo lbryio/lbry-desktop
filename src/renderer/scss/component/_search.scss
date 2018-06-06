@@ -81,29 +81,15 @@
   background-color: var(--color-secondary);
 }
 
-// Search modal
-// Input field used inside search modal
-.search__wrapper {
-  height: var(--search-modal-input-height);
-}
-
-.search__input {
-  font-family: 'metropolis-bold';
-  font-size: var(--search-modal-input-height);
-  color: var(--search-color);
-  background: transparent;
-  width: 100%;
-}
-
 .search__results {
-  display: flex;
   padding-bottom: $spacing-vertical;
   flex-flow: wrap column;
 
-  .search-result__column {
-    flex: 0 0 500px;
-    .card__media {
-      background-color: var(--color-search-placeholder);
+  .search-result__row {
+    padding: $spacing-vertical 0;
+
+    &:first-of-type {
+      padding-top: 0;
     }
   }
 }

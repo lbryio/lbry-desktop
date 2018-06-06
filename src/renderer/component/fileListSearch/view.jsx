@@ -58,7 +58,7 @@ class FileListSearch extends React.PureComponent<Props> {
     return (
       query && (
         <div className="search__results">
-          <div className="search-result__column">
+          <div className="search-result__row">
             <div className="file-list__header">{__('Content')}</div>
             {!isSearching &&
               (fileResults.length ? (
@@ -68,7 +68,7 @@ class FileListSearch extends React.PureComponent<Props> {
               ))}
           </div>
 
-          <div className="search-result__column">
+          <div className="search-result__row">
             <div className="file-list__header">{__('Channels')}</div>
             {!isSearching &&
               (channelResults.length ? (
@@ -78,7 +78,7 @@ class FileListSearch extends React.PureComponent<Props> {
               ))}
           </div>
 
-          <div className="search-result__column">
+          <div className="search-result__row">
             <div className="file-list__header">{__('Your downloads')}</div>
             {downloadUris && downloadUris.length ? (
               downloadUris.map(uri => <FileTile hideNoResult key={uri} uri={uri} />)

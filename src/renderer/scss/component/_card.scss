@@ -100,14 +100,6 @@
   color: var(--text-color);
 }
 
-.card__title--file {
-  font-family: 'metropolis-bold';
-  font-size: 28px;
-  margin-bottom: 0;
-  line-height: 36px;
-  padding-top: 20px;
-}
-
 .card__title--small {
   font-size: 14px;
   line-height: 18px;
@@ -115,10 +107,12 @@
 }
 
 .card__title--file {
+  font-family: 'metropolis-bold';
+  font-size: 28px;
+  margin-bottom: 0;
   padding-top: 0;
-  line-height: 28px;
   padding-bottom: 5px;
-  font-size: 24px;
+  font-size: 18px;
 }
 
 .card__subtitle {
@@ -202,6 +196,10 @@
   padding-top: $spacing-vertical * 1/3;
   word-break: break-word;
   font-family: 'metropolis-medium';
+}
+
+.card__subtext--small {
+  font-size: calc(var(--font-size-subtext-multiple) * 0.8em);
 }
 
 .card__actions {
