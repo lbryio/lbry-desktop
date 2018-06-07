@@ -8,7 +8,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { doConditionalAuthNavigate, doDaemonReady, doAutoUpdate } from 'redux/actions/app';
-import { doNotify, doBlackListedOutpointsSubscribe } from 'lbry-redux';
+import { doNotify, doBlackListedOutpointsSubscribe, isURIValid } from 'lbry-redux';
 import { doNavigate } from 'redux/actions/navigation';
 import { doDownloadLanguages, doUpdateIsNightAsync } from 'redux/actions/settings';
 import { doUserEmailVerify } from 'redux/actions/user';
@@ -16,8 +16,10 @@ import 'scss/all.scss';
 import store from 'store';
 import app from './app';
 import analytics from './analytics';
+import doLogWarningConsoleMessage from './logWarningConsoleMessage';
 
 const { autoUpdater } = remote.require('electron-updater');
+const APPPAGEURL = 'lbry://?';
 
 autoUpdater.logger = remote.require('electron-log');
 
@@ -41,8 +43,18 @@ ipcRenderer.on('open-uri-requested', (event, uri, newSession) => {
           })
         );
       }
-    } else {
+    } else if (uri.startsWith(APPPAGEURL)) {
+      const navpage = uri.replace(APPPAGEURL, '').toLowerCase();
+      app.store.dispatch(doNavigate(`/${navpage}`));
+    } else if (isURIValid(uri)) {
       app.store.dispatch(doNavigate('/show', { uri }));
+    } else {
+      app.store.dispatch(
+        doNotify({
+          message: __('Invalid LBRY URL requested'),
+          displayType: ['snackbar'],
+        })
+      );
     }
   }
 });
@@ -59,6 +71,11 @@ ipcRenderer.on('window-is-focused', () => {
   if (!dock) return;
   app.store.dispatch({ type: ACTIONS.WINDOW_FOCUSED });
   dock.setBadge('');
+});
+
+ipcRenderer.on('devtools-is-opened', () => {
+  const logOnDevelopment = false;
+  doLogWarningConsoleMessage(logOnDevelopment);
 });
 
 document.addEventListener('dragover', event => {

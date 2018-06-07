@@ -1,8 +1,14 @@
+// @flow
 import React from 'react';
 import { Modal } from 'modal/modal';
 import Button from 'component/button';
 
-class ModalIncompatibleDaemon extends React.PureComponent {
+type Props = {
+  quit: () => void,
+  quitAnyDaemon: () => void,
+};
+
+class ModalIncompatibleDaemon extends React.PureComponent<Props> {
   render() {
     const { quit, quitAnyDaemon } = this.props;
 
@@ -19,7 +25,11 @@ class ModalIncompatibleDaemon extends React.PureComponent {
         {__(
           'This browser is running with an incompatible version of the LBRY protocol and your install must be repaired. '
         )}
-        <Button label={__('Learn more')} href="https://lbry.io/faq/incompatible-protocol-version" />
+        <Button
+          button="link"
+          label={__('Learn more')}
+          href="https://lbry.io/faq/incompatible-protocol-version"
+        />
       </Modal>
     );
   }

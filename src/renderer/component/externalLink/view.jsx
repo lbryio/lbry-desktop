@@ -19,7 +19,6 @@ class ExternalLink extends React.PureComponent<Props> {
 
   createLink() {
     const { href, title, children, openModal, navigate } = this.props;
-    console.info(href);
 
     // Regex for url protocol
     const protocolRegex = new RegExp('^(https?|lbry)+:', 'i');

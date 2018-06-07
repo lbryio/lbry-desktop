@@ -19,6 +19,7 @@ class VideoPlayer extends React.PureComponent {
     };
 
     this.togglePlayListener = this.togglePlay.bind(this);
+    this.toggleFullScreenVideo = this.toggleFullScreen.bind(this);
   }
 
   componentWillReceiveProps(nextProps) {
@@ -77,6 +78,7 @@ class VideoPlayer extends React.PureComponent {
         changeVolume(mediaElement.volume);
       });
       mediaElement.volume = volume;
+      mediaElement.addEventListener('dblclick', this.toggleFullScreenVideo);
     }
   }
 
@@ -110,6 +112,17 @@ class VideoPlayer extends React.PureComponent {
       mediaElement.removeEventListener('click', this.togglePlayListener);
     }
     this.props.doPause();
+  }
+
+  toggleFullScreen(event) {
+    const mediaElement = this.media.children[0];
+    if (mediaElement) {
+      if (document.webkitIsFullScreen) {
+        document.webkitExitFullscreen();
+      } else {
+        mediaElement.webkitRequestFullScreen();
+      }
+    }
   }
 
   togglePlay(event) {

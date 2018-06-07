@@ -1,30 +1,97 @@
-@import '../mixin/link.scss';
-
 .tooltip {
   position: relative;
-  padding: 0 $spacing-vertical / 3;
-  font-size: 12px;
+  display: inline-block;
 }
 
-.tooltip__body {
+// When there is a label for the tooltip and not just using a button or icon
+.tooltip.tooltip--label {
+  font-size: 12px;
+  padding-left: $spacing-vertical * 1/3;
+
+  .tooltip__body {
+    margin-top: 5px;
+  }
+}
+
+.tooltip.tooltip--icon {
+  margin-top: 5px;
+}
+
+/* Tooltip text */
+.tooltip .tooltip__body {
+  background-color: var(--tooltip-bg);
+  font-family: 'metropolis-medium';
+  font-size: 12px;
+  color: var(--tooltip-color);
+  border-radius: 8px;
   position: absolute;
   z-index: 1;
-  left: 50%;
-  margin-left: calc(var(--tooltip-width) * -1 / 2);
-  white-space: normal;
-  box-sizing: border-box;
-  padding: $spacing-vertical / 2;
-  width: var(--tooltip-width);
-  color: var(--tooltip-color);
-  background-color: var(--tooltip-bg);
-  font-size: calc(var(--font-size) * 7 / 8);
-  line-height: var(--font-line-height);
-  box-shadow: var(--box-shadow-layer);
-  border-radius: var(--card-radius);
+  width: 200px;
+  text-align: center;
+  white-space: pre-wrap;
+  padding: $spacing-vertical * 1/3;
+  visibility: hidden;
 }
 
-.tooltip__link {
-  font-size: calc(var(--font-size) * 3 / 4);
-  margin-left: var(--button-padding);
-  vertical-align: middle;
+.tooltip .tooltip__body::after {
+  content: ' ';
+  width: 0;
+  height: 0;
+  position: absolute;
+  border-width: 5px;
+  border-style: solid;
+}
+
+.tooltip.tooltip--top .tooltip__body {
+  bottom: 100%;
+  left: 50%;
+  margin-left: -100px;
+
+  &::after {
+    top: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-color: var(--tooltip-bg) transparent transparent transparent;
+  }
+}
+
+.tooltip.tooltip--right .tooltip__body {
+  margin-top: -5px;
+  margin-left: 10px;
+
+  &::after {
+    top: 17px;
+    right: 100%; /* To the left of the tooltip */
+    margin-top: -5px;
+    border-color: transparent var(--tooltip-bg) transparent transparent;
+  }
+}
+
+.tooltip.tooltip--bottom .tooltip__body {
+  top: 90%;
+  left: 50%;
+  margin-left: -100px;
+
+  &::after {
+    bottom: 100%;
+    left: 50%;
+    margin-left: -5px;
+    border-color: transparent transparent var(--tooltip-bg) transparent;
+  }
+}
+
+.tooltip.tooltip--left .tooltip__body {
+  top: -5px;
+  right: 105%;
+
+  &::after {
+    top: 17px;
+    left: 100%;
+    margin-top: -5px;
+    border-color: transparent transparent transparent var(--tooltip-bg);
+  }
+}
+
+.tooltip:hover .tooltip__body {
+  visibility: visible;
 }

@@ -4,6 +4,7 @@ import BusyIndicator from 'component/common/busy-indicator';
 import { FormField, FormRow } from 'component/common/form';
 import ReactPaginate from 'react-paginate';
 import SubscribeButton from 'component/subscribeButton';
+import ViewOnWebButton from 'component/viewOnWebButton';
 import Page from 'component/page';
 import FileList from 'component/fileList';
 import type { Claim } from 'types/claim';
@@ -47,17 +48,24 @@ class ChannelPage extends React.PureComponent<Props> {
     this.props.navigate('/show', newParams);
   }
 
-  paginate(e, totalPages) {
+  paginate(e, totalPages: number) {
     // Change page if enter was pressed, and the given page is between
     // the first and the last.
-    if (e.keyCode === 13 && e.target.value > 0 && e.target.value <= totalPages) {
-      this.changePage(e.target.value);
+    const pageFromInput = Number(e.target.value);
+
+    if (
+      e.keyCode === 13 &&
+      !Number.isNaN(pageFromInput) &&
+      pageFromInput > 0 &&
+      pageFromInput <= totalPages
+    ) {
+      this.changePage(pageFromInput);
     }
   }
 
   render() {
     const { fetching, claimsInChannel, claim, page, totalPages } = this.props;
-    const { name, permanent_url: permanentUrl } = claim;
+    const { name, permanent_url: permanentUrl, claim_id: claimId } = claim;
 
     let contentList;
     if (fetching) {
@@ -77,6 +85,7 @@ class ChannelPage extends React.PureComponent<Props> {
           <h1>{name}</h1>
           <div className="card__actions card__actions--no-margin">
             <SubscribeButton uri={permanentUrl} channelName={name} />
+            <ViewOnWebButton uri={`${name}:${claimId}`} />
           </div>
         </section>
         <section>{contentList}</section>

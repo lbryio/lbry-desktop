@@ -4,7 +4,6 @@ import * as React from 'react';
 import classnames from 'classnames';
 
 type Props = {
-  centered?: boolean,
   children: React.Node,
   padded?: boolean,
   verticallyCentered?: boolean,
@@ -22,7 +21,6 @@ export class FormRow extends React.PureComponent<Props> {
     return (
       <div
         className={classnames('form-row', {
-          'form-row--centered': centered,
           'form-row--padded': padded,
           'form-row--vertically-centered': verticallyCentered,
           'form-row--stretch': stretch,

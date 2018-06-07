@@ -13,6 +13,8 @@ type Props = {
   onSubmit: (string, {}) => void,
   wunderbarValue: ?string,
   suggestions: Array<string>,
+  doFocus: () => void,
+  doBlur: () => void,
 };
 
 class WunderBar extends React.PureComponent<Props> {
@@ -83,7 +85,7 @@ class WunderBar extends React.PureComponent<Props> {
   input: ?HTMLInputElement;
 
   render() {
-    const { wunderbarValue, suggestions } = this.props;
+    const { wunderbarValue, suggestions, doFocus, doBlur } = this.props;
 
     return (
       <div className="wunderbar">
@@ -96,6 +98,10 @@ class WunderBar extends React.PureComponent<Props> {
           getItemValue={item => item.value}
           onChange={this.handleChange}
           onSelect={this.handleSubmit}
+          inputProps={{
+            onFocus: doFocus,
+            onBlur: doBlur,
+          }}
           renderInput={props => (
             <input
               {...props}

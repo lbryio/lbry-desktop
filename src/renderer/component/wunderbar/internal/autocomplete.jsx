@@ -445,6 +445,10 @@ export default class Autocomplete extends React.Component {
   }
 
   renderMenu() {
+    if (!this.props.value) {
+      return null;
+    }
+
     const items = this.getFilteredItems(this.props).map((item, index) => {
       const element = this.props.renderItem(item, this.state.highlightedIndex === index, {
         cursor: 'default',

@@ -1,7 +1,6 @@
 // @flow
 
 import * as ACTIONS from 'constants/action_types';
-import { MODALS } from 'lbry-redux';
 
 import { remote } from 'electron';
 
@@ -74,7 +73,6 @@ reducers[ACTIONS.DAEMON_VERSION_MATCH] = state =>
 reducers[ACTIONS.DAEMON_VERSION_MISMATCH] = state =>
   Object.assign({}, state, {
     daemonVersionMatched: false,
-    modal: MODALS.INCOMPATIBLE_DAEMON,
   });
 
 reducers[ACTIONS.UPGRADE_CANCELLED] = state =>

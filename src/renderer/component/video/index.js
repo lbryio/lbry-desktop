@@ -12,11 +12,9 @@ import {
   makeSelectFileInfoForUri,
   makeSelectLoadingForUri,
   makeSelectDownloadingForUri,
+  selectSearchBarFocused,
 } from 'lbry-redux';
-import {
-  makeSelectClientSetting,
-  selectShowNsfw
-} from 'redux/selectors/settings';
+import { makeSelectClientSetting, selectShowNsfw } from 'redux/selectors/settings';
 import { selectMediaPaused, makeSelectMediaPositionForUri } from 'redux/selectors/media';
 import { selectPlayingUri } from 'redux/selectors/content';
 import Video from './view';
@@ -34,7 +32,8 @@ const select = (state, props) => ({
   volume: selectVolume(state),
   mediaPaused: selectMediaPaused(state),
   mediaPosition: makeSelectMediaPositionForUri(props.uri)(state),
-  autoplay: makeSelectClientSetting(settings.AUTOPLAY)(state)
+  autoplay: makeSelectClientSetting(settings.AUTOPLAY)(state),
+  searchBarFocused: selectSearchBarFocused(state),
 });
 
 const perform = dispatch => ({

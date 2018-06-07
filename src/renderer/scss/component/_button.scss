@@ -145,10 +145,7 @@ button:disabled {
 
 .btn.btn--arrow {
   width: var(--btn-arrow-width);
-
-  &:hover:not(:disabled) {
-    color: var(--text-color);
-  }
+  color: var(--text-color);
 
   &:disabled {
     opacity: 0.3;

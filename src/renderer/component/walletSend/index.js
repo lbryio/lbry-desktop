@@ -1,9 +1,9 @@
 import { connect } from 'react-redux';
-import { doSendDraftTransaction, selectBalance } from 'lbry-redux';
+import { selectBalance, doNotify } from 'lbry-redux';
 import WalletSend from './view';
 
 const perform = dispatch => ({
-  sendToAddress: (address, amount) => dispatch(doSendDraftTransaction(address, amount)),
+  openModal: (modal, props) => dispatch(doNotify(modal, props)),
 });
 
 const select = state => ({

@@ -4,6 +4,7 @@ import {
   makeSelectTitleForUri,
   makeSelectClaimForUri,
   selectIsSendingSupport,
+  selectBalance,
 } from 'lbry-redux';
 import WalletSendTip from './view';
 
@@ -11,6 +12,7 @@ const select = (state, props) => ({
   isPending: selectIsSendingSupport(state),
   title: makeSelectTitleForUri(props.uri)(state),
   claim: makeSelectClaimForUri(props.uri)(state),
+  balance: selectBalance(state),
 });
 
 const perform = dispatch => ({

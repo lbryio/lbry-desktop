@@ -14,6 +14,9 @@ type Props = {
   rewards: Array<{ reward_type: boolean }>,
   user: ?{
     is_identity_verified: boolean,
+    is_reward_approved: boolean,
+    primary_email: string,
+    has_verified_email: boolean,
   },
   daemonSettings: {
     share_usage_data: boolean,
@@ -46,7 +49,7 @@ class RewardsPage extends React.PureComponent<Props> {
   renderPageHeader() {
     const { doAuth, navigate, user, daemonSettings } = this.props;
 
-    if (user && !user.is_reward_approved && daemonSettings.share_usage_data) {
+    if (user && !user.is_reward_approved && daemonSettings && daemonSettings.share_usage_data) {
       if (!user.primary_email || !user.has_verified_email || !user.is_identity_verified) {
         return (
           <section className="card card--section">
@@ -95,7 +98,7 @@ class RewardsPage extends React.PureComponent<Props> {
   renderUnclaimedRewards() {
     const { fetching, rewards, user, daemonSettings, navigate } = this.props;
 
-    if (!daemonSettings.share_usage_data) {
+    if (daemonSettings && !daemonSettings.share_usage_data) {
       return (
         <div className="card card--section">
           <div className="card__title">{__('Disabled')}</div>
@@ -131,8 +134,7 @@ class RewardsPage extends React.PureComponent<Props> {
     }
 
     const isNotEligible =
-      !user || !user.primary_email || !user.has_verified_email || !user.is_identity_verified;
-
+      !user || !user.primary_email || !user.has_verified_email || !user.is_reward_approved;
     return (
       <div
         className={classnames('card__list--rewards', {

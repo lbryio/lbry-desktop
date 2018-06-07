@@ -1,26 +1,20 @@
 import { connect } from 'react-redux';
-import { doClaimRewardType } from 'redux/actions/rewards';
 import {
-  doHistoryBack,
   doResolveUri,
   makeSelectCostInfoForUri,
   selectMyClaims,
-  selectFetchingMyChannels,
-  selectMyChannelClaims,
   selectClaimsByUri,
   selectResolvingUris,
   selectBalance,
 } from 'lbry-redux';
-import {
-  doFetchClaimListMine,
-  doFetchChannelListMine,
-  doCreateChannel,
-} from 'redux/actions/content';
 import { doNavigate } from 'redux/actions/navigation';
-import rewards from 'rewards';
 import { selectPublishFormValues } from 'redux/selectors/publish';
-import { doClearPublish, doUpdatePublishForm, doPublish } from 'redux/actions/publish';
-import { doPrepareEdit } from 'redux/actions/publish';
+import {
+  doClearPublish,
+  doUpdatePublishForm,
+  doPublish,
+  doPrepareEdit,
+} from 'redux/actions/publish';
 import PublishPage from './view';
 
 const select = (state, props) => {

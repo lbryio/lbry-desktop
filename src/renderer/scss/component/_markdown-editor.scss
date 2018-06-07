@@ -45,24 +45,13 @@ div.editor-toolbar a {
 }
 
 .editor-preview {
-  background: var(--card-bg) !important;
-  border: 0 !important;
+  font-size: calc(var(--font-size-subtext-multiple) * 1em);
+  background: var(--color-bg) !important;
+  border: 0;
 }
 
 .editor-preview-side {
   background: var(--color-bg-alt) !important;
-  border: 1px solid var(--input-border-color) !important;
-}
-
-.editor-preview pre,
-.editor-preview-side pre {
-  background: #eee;
-}
-
-.editor-preview table td,
-.editor-preview table th,
-.editor-preview-side table td,
-.editor-preview-side table th {
   border: 1px solid var(--input-border-color) !important;
 }
 

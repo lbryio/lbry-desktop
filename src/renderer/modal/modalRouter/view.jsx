@@ -18,9 +18,9 @@ import ModalRevokeClaim from 'modal/modalRevokeClaim';
 import ModalEmailCollection from 'modal/modalEmailCollection';
 import ModalPhoneCollection from 'modal/modalPhoneCollection';
 import ModalFirstSubscription from 'modal/modalFirstSubscription';
+import ModalConfirmTransaction from 'modal/modalConfirmTransaction';
 import ModalSendTip from '../modalSendTip';
 import ModalPublish from '../modalPublish';
-import ModalSearch from '../modalSearch';
 import ModalOpenExternalLink from '../modalOpenExternalLink';
 
 class ModalRouter extends React.PureComponent {
@@ -154,10 +154,10 @@ class ModalRouter extends React.PureComponent {
         return <ModalSendTip {...notificationProps} />;
       case MODALS.PUBLISH:
         return <ModalPublish {...notificationProps} />;
-      case MODALS.SEARCH:
-        return <ModalSearch {...notificationProps} />;
       case MODALS.CONFIRM_EXTERNAL_LINK:
         return <ModalOpenExternalLink {...notificationProps} />;
+      case MODALS.CONFIRM_TRANSACTION:
+        return <ModalConfirmTransaction {...notificationProps} />;
       default:
         return null;
     }

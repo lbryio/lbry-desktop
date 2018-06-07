@@ -13,17 +13,20 @@
 
 .file-list__header {
   margin-top: $spacing-vertical * 4/3;
-  font-size: 18px;
+  font-size: 24px;
+
+  .tooltip {
+    margin-left: 5px;
+  }
 }
 
 .file-tile {
   display: flex;
   margin-top: $spacing-vertical;
-  max-width: 260px;
-  height: var(--file-tile--media-size);
 
   .card__media {
-    flex: 0 0 var(--file-tile--media-size);
+    height: var(--file-tile--media-height);
+    flex: 0 0 var(--file-tile--media-width);
   }
 
   .card__subtitle {
@@ -36,7 +39,10 @@
 }
 
 .file-tile__info {
-  margin-left: $spacing-vertical * 1/3;
+  display: flex;
+  flex-direction: column;
+  margin-left: $spacing-vertical * 2/3;
+  max-width: 500px;
 }
 
 .file-tile__uri {
