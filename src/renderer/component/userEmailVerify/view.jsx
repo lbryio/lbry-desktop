@@ -26,7 +26,7 @@ class UserEmailVerify extends React.PureComponent<Props, State> {
     };
 
     (this: any).handleSubmit = this.handleSubmit.bind(this);
-    (this: any).handleResendVerification = this.handleResendVerification.bind(this);
+    (this: any).handleResendVerificationEmail = this.handleResendVerificationEmail.bind(this);
   }
 
   handleCodeChanged(event: SyntheticInputEvent<*>) {
@@ -45,7 +45,7 @@ class UserEmailVerify extends React.PureComponent<Props, State> {
     }
   }
 
-  handleResendVerification() {
+  handleResendVerificationEmail() {
     this.props.resendVerificationEmail(this.props.email);
   }
 
@@ -80,7 +80,7 @@ class UserEmailVerify extends React.PureComponent<Props, State> {
           <Button
             button="inverse"
             label={__('Resend Verification Email')}
-            onClick={this.handleResendVerification}
+            onClick={this.handleResendVerificationEmail}
           />
         </div>
       </Form>
