@@ -60,9 +60,7 @@ class FilePage extends React.Component<Props> {
       fetchFileInfo(uri);
     }
 
-    if (costInfo === undefined) {
-      fetchCostInfo(uri);
-    }
+    fetchCostInfo(uri);
 
     this.checkSubscription(this.props);
   }
