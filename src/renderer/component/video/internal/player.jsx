@@ -118,7 +118,7 @@ class VideoPlayer extends React.PureComponent {
     if (mediaElement) {
       mediaElement.removeEventListener('click', this.togglePlayListener);
     }
-    this.props.doPause();
+    // this.props.doPause();
   }
 
   toggleFullScreen(event) {

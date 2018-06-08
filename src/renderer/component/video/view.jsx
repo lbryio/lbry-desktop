@@ -6,6 +6,7 @@ import type { Claim } from 'types/claim';
 import VideoPlayer from './internal/player';
 import VideoPlayButton from './internal/play-button';
 import LoadingScreen from './internal/loading-screen';
+import ReactDOM from 'react-dom';
 
 const SPACE_BAR_KEYCODE = 32;
 
@@ -59,7 +60,6 @@ class Video extends React.PureComponent<Props> {
     window.addEventListener('keydown', this.handleKeyDown);
 
     const { showOverlay, doHideOverlay, uri, playingUri, overlayed } = this.props;
-    // debugger;
     if (showOverlay && uri === playingUri && !overlayed) {
       doHideOverlay();
     }
@@ -80,8 +80,25 @@ class Video extends React.PureComponent<Props> {
     const { overlayed, doShowOverlay, mediaPaused } = this.props;
     if (!overlayed && !mediaPaused) {
       doShowOverlay();
+      this.moveVideoToOverlay();
     }
     window.removeEventListener('keydown', this.handleKeyDown);
+  }
+
+  moveVideoToOverlay() {
+    const topContainer = document.getElementById('video__overlay_id_top_container');
+    const container = document.getElementById('video__overlay_id');
+    const video = this.mediaContainer.media.getElementsByTagName("video")[0];
+    topContainer.classList.remove('hiddenContainer');
+    container.appendChild(video);
+    video.play();
+  }
+
+  destroyVideoOnOverlay() {
+    const topContainer = document.getElementById('video__overlay_id_top_container');
+    const videoContainer = document.getElementById('video__overlay_id');
+    topContainer.classList.add('hiddenContainer');
+    videoContainer.innerHTML = '';
   }
 
   handleKeyDown(event: SyntheticKeyboardEvent<*>) {
@@ -126,6 +143,7 @@ class Video extends React.PureComponent<Props> {
   playContent() {
     const { play, uri, showOverlay, playingUri, doHideOverlay } = this.props;
     if (playingUri && showOverlay) {
+      this.destroyVideoOnOverlay();
       doHideOverlay();
     }
     play(uri);
@@ -205,6 +223,7 @@ class Video extends React.PureComponent<Props> {
                 hiddenControls={hiddenControls}
                 overlayed={overlayed}
                 doHideOverlay={doHideOverlay}
+                ref={mediaContainer => this.mediaContainer = mediaContainer }
               />
             )}
           </div>

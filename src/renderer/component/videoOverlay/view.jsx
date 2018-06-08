@@ -29,33 +29,52 @@ class VideoOverlay extends React.Component<Props> {
     const { doCancelPlay, doHideOverlay } = this.props;
     doCancelPlay();
     doHideOverlay();
+    this.destroyMediaPlayer();
   }
 
   returnToMedia() {
     const { navigate, playingUri, doHideOverlay } = this.props;
     doHideOverlay();
+    this.destroyMediaPlayer();
     navigate('/show', { uri: playingUri });
   }
 
   renderPlayOrPauseButton() {
     const { mediaPaused, doPause, doPlay } = this.props;
     if (mediaPaused) {
-      return <Button noPadding button="secondary" icon={icons.PLAY} onClick={() => doPlay()} />;
+      return <Button noPadding button="secondary" icon={icons.PLAY} onClick={() => this.getPlayer().play()} />;
     }
-    return <Button noPadding button="secondary" icon={icons.PAUSE} onClick={() => doPause()} />;
+    return <Button noPadding button="secondary" icon={icons.PAUSE} onClick={() => this.getPlayer().pause()} />;
+  }
+
+  getPlayer() {
+    return document.getElementById('video__overlay_id').getElementsByTagName("video")[0];
+  }
+
+  destroyMediaPlayer(){
+    const topContainer = document.getElementById('video__overlay_id_top_container')
+    const videoContainer = document.getElementById('video__overlay_id');
+    topContainer.classList.add('hiddenContainer');
+    videoContainer.innerHTML = '';
   }
 
   render() {
     const { playingUri, showOverlay } = this.props;
-    if (!showOverlay) return '';
 
     return (
       <Overlay>
-        <VideoOverlayHeader uri={playingUri} onClose={this.closeVideo} />
+        {(showOverlay && <VideoOverlayHeader uri={playingUri} onClose={this.closeVideo} />)}
 
         <div className="video__overlay">
-          <Video className="content__embedded" uri={playingUri} overlayed hiddenControls />
-          <div className="video__mask">
+          {/* <Video className="content__embedded" uri={playingUri} overlayed hiddenControls /> */}
+          {/* <div id="asdf"></div> */}
+          <div className="video content__embedded hiddenContainer" id="video__overlay_id_top_container">
+            <div className="content__view">
+              <div className="content__view--container" id="video__overlay_id">
+              </div>
+            </div>
+          </div>
+          {(showOverlay && <div className="video__mask" id="video_mask">
             {this.renderPlayOrPauseButton()}
             <Button
               noPadding
@@ -63,7 +82,7 @@ class VideoOverlay extends React.Component<Props> {
               icon={icons.MAXIMIZE}
               onClick={() => this.returnToMedia()}
             />
-          </div>
+          </div>)}
         </div>
       </Overlay>
     );
