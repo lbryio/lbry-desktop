@@ -78,8 +78,8 @@ class UserEmailVerify extends React.PureComponent<Props, State> {
           <Submit label={__('Verify')} disabled={isPending} />
           {cancelButton}
           <Button
-            button="inverse"
-            label={__('Resend Verification Email')}
+            button="link"
+            label={__('Resend verification email')}
             onClick={this.handleResendVerificationEmail}
           />
         </div>
