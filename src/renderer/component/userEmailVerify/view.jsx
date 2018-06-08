@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import Button from 'component/button';
 import { Form, FormField, FormRow, Submit } from 'component/common/form';
 
@@ -10,6 +10,7 @@ type Props = {
   isPending: boolean,
   verifyUserEmail: (string, string) => void,
   verifyUserEmailFailure: string => void,
+  resendVerificationEmail: string => void,
 };
 
 type State = {
@@ -25,6 +26,7 @@ class UserEmailVerify extends React.PureComponent<Props, State> {
     };
 
     (this: any).handleSubmit = this.handleSubmit.bind(this);
+    (this: any).handleResendVerificationEmail = this.handleResendVerificationEmail.bind(this);
   }
 
   handleCodeChanged(event: SyntheticInputEvent<*>) {
@@ -41,6 +43,10 @@ class UserEmailVerify extends React.PureComponent<Props, State> {
     } catch (error) {
       this.props.verifyUserEmailFailure('Invalid Verification Token');
     }
+  }
+
+  handleResendVerificationEmail() {
+    this.props.resendVerificationEmail(this.props.email);
   }
 
   render() {
@@ -71,6 +77,11 @@ class UserEmailVerify extends React.PureComponent<Props, State> {
         <div className="card__actions">
           <Submit label={__('Verify')} disabled={isPending} />
           {cancelButton}
+          <Button
+            button="link"
+            label={__('Resend verification email')}
+            onClick={this.handleResendVerificationEmail}
+          />
         </div>
       </Form>
     );

@@ -196,6 +196,38 @@ export function doUserEmailNew(email) {
   };
 }
 
+export function doUserResendVerificationEmail(email) {
+  return dispatch => {
+    dispatch({
+      type: ACTIONS.USER_EMAIL_VERIFY_RETRY,
+      email,
+    });
+
+    const success = () => {
+      dispatch({
+        type: ACTIONS.USER_EMAIL_NEW_SUCCESS,
+        data: { email },
+      });
+      dispatch(doUserFetch());
+    };
+
+    const failure = error => {
+      dispatch({
+        type: ACTIONS.USER_EMAIL_NEW_FAILURE,
+        data: { error },
+      });
+    };
+
+    Lbryio.call('user_email', 'resend_token', { email }, 'post')
+      .catch(error => {
+        if (error.response && error.response.status === 409) {
+          throw error;
+        }
+      })
+      .then(success, failure);
+  };
+}
+
 export function doUserEmailVerifyFailure(error) {
   return {
     type: ACTIONS.USER_EMAIL_VERIFY_FAILURE,
