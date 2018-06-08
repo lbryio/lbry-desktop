@@ -54,12 +54,13 @@ class FilePage extends React.Component<Props> {
   }
 
   componentDidMount() {
-    const { uri, fileInfo, fetchFileInfo, costInfo, fetchCostInfo } = this.props;
+    const { uri, fileInfo, fetchFileInfo, fetchCostInfo } = this.props;
 
     if (fileInfo === undefined) {
       fetchFileInfo(uri);
     }
 
+    // See https://github.com/lbryio/lbry-app/pull/1563 for discussion
     fetchCostInfo(uri);
 
     this.checkSubscription(this.props);
