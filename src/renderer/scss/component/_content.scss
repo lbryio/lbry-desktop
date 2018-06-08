@@ -14,6 +14,10 @@
     top: 0;
     left: 0;
   }
+
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 // Video thumbnail with play/download button
@@ -32,10 +36,6 @@
 
   &:not(.card__media--nsfw) {
     background-color: var(--color-black);
-  }
-
-  &:hover {
-    cursor: pointer;
   }
 }
 
