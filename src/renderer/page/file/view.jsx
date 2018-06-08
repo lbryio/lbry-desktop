@@ -183,7 +183,7 @@ class FilePage extends React.Component<Props> {
                     <React.Fragment>
                       <Button
                         button="alt"
-                        iconRight="Send"
+                        icon="Send"
                         label={__('Enjoy this? Send a tip')}
                         onClick={() => openModal({ id: MODALS.SEND_TIP }, { uri })}
                       />
@@ -191,12 +191,7 @@ class FilePage extends React.Component<Props> {
                     </React.Fragment>
                   )}
                   {speechSharable && (
-                    <ViewOnWebButton
-                      uri={buildURI({
-                        claimId: claim.claim_id,
-                        contentName: claim.name,
-                      }).slice(7)}
-                    />
+                    <ViewOnWebButton claimId={claim.claim_id} claimName={claim.name} />
                   )}
                 </div>
               </div>

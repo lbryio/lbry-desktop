@@ -62,6 +62,8 @@ class FileCard extends React.PureComponent<Props> {
     const shouldObscureNsfw = obscureNsfw && metadata && metadata.nsfw;
     const isRewardContent = claim && rewardedContentClaimIds.includes(claim.claim_id);
     const handleContextMenu = event => {
+      event.preventDefault();
+      event.stopPropagation();
       openCopyLinkMenu(convertToShareLink(uri), event);
     };
 
