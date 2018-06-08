@@ -33,6 +33,10 @@
   &:not(.card__media--nsfw) {
     background-color: var(--color-black);
   }
+
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 .content__view,
