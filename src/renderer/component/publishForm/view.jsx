@@ -7,6 +7,7 @@ import ChannelSection from 'component/selectChannel';
 import classnames from 'classnames';
 import type { PublishParams, UpdatePublishFormData } from 'redux/reducers/publish';
 import FileSelector from 'component/common/file-selector';
+import SelectThumbnail from 'component/selectThumbnail';
 import { COPYRIGHT, OTHER } from 'constants/licenses';
 import { CHANNEL_NEW, CHANNEL_ANONYMOUS, MINIMUM_PUBLISH_BID } from 'constants/claim';
 import * as icons from 'constants/icons';
@@ -21,6 +22,8 @@ type Props = {
   editingURI: ?string,
   title: ?string,
   thumbnail: ?string,
+  uploadThumbnailStatus: ?string,
+  thumbnailPath: ?string,
   description: ?string,
   language: string,
   nsfw: boolean,
@@ -49,7 +52,8 @@ type Props = {
   clearPublish: () => void,
   resolveUri: string => void,
   scrollToTop: () => void,
-  prepareEdit: ({}, string) => void,
+  prepareEdit: ({}) => void,
+  resetThumbnailStatus: () => void,
 };
 
 class PublishForm extends React.PureComponent<Props> {
@@ -67,7 +71,10 @@ class PublishForm extends React.PureComponent<Props> {
     (this: any).getNewUri = this.getNewUri.bind(this);
   }
 
-  // Returns a new uri to be used in the form and begins to resolve that uri for bid help text
+  componentWillMount() {
+    this.props.resetThumbnailStatus();
+  }
+
   getNewUri(name: string, channel: string) {
     const { resolveUri } = this.props;
     // If they are midway through a channel creation, treat it as anonymous until it completes
@@ -267,6 +274,7 @@ class PublishForm extends React.PureComponent<Props> {
       editingURI,
       title,
       thumbnail,
+      uploadThumbnailStatus,
       description,
       language,
       nsfw,
@@ -289,6 +297,8 @@ class PublishForm extends React.PureComponent<Props> {
       bidError,
       publishing,
       clearPublish,
+      thumbnailPath,
+      resetThumbnailStatus,
     } = this.props;
 
     const formDisabled = (!filePath && !editingURI) || publishing;
@@ -352,18 +362,6 @@ class PublishForm extends React.PureComponent<Props> {
             <FormRow padded>
               <FormField
                 stretch
-                type="text"
-                name="content_thumbnail"
-                label={__('Thumbnail')}
-                placeholder="http://spee.ch/mylogo"
-                value={thumbnail}
-                disabled={formDisabled}
-                onChange={e => updatePublishForm({ thumbnail: e.target.value })}
-              />
-            </FormRow>
-            <FormRow padded>
-              <FormField
-                stretch
                 type="markdown"
                 name="content_description"
                 label={__('Description')}
@@ -373,6 +371,24 @@ class PublishForm extends React.PureComponent<Props> {
                 onChange={text => updatePublishForm({ description: text })}
               />
             </FormRow>
+          </section>
+
+          <section className="card card--section">
+            <div className="card__title">{__('Thumbnail')}</div>
+            <div className="card__subtitle">
+              {__(
+                'Upload your thumbnail to spee.ch, or enter the url manually. Learn more about spee.ch '
+              )}
+              <Button button="link" label={__('here')} href="https://spee.ch/about" />.
+            </div>
+            <SelectThumbnail
+              thumbnailPath={thumbnailPath}
+              thumbnail={thumbnail}
+              uploadThumbnailStatus={uploadThumbnailStatus}
+              updatePublishForm={updatePublishForm}
+              formDisabled={formDisabled}
+              resetThumbnailStatus={resetThumbnailStatus}
+            />
           </section>
 
           <section className="card card--section">
