@@ -360,10 +360,3 @@ p {
     padding-right: $spacing-vertical * 2/3;
   }
 }
-
-a.link {
-  cursor: pointer;
-  &:hover {
-    text-decoration: underline;
-  }
-}

@@ -167,7 +167,7 @@ class ModalRouter extends React.PureComponent<Props> {
       case MODALS.CONFIRM_TRANSACTION:
         return <ModalConfirmTransaction {...notificationProps} />;
       case MODALS.CONFIRM_THUMBNAIL_UPLOAD:
-        return <ModalConfirmThumbnailUpload {...modalProps} />;
+        return <ModalConfirmThumbnailUpload {...notificationProps} />;
       default:
         return null;
     }

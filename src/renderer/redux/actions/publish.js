@@ -6,7 +6,8 @@ import {
   doNotify,
   MODALS,
   selectMyChannelClaims,
-  STATUSES
+  STATUSES,
+  batchActions,
 } from 'lbry-redux';
 import { selectPendingPublishes } from 'redux/selectors/publish';
 import type {
@@ -33,8 +34,15 @@ export const doUpdatePublishForm = (publishFormValue: UpdatePublishFormData) => 
     data: { ...publishFormValue },
   });
 
-export const doResetThumbnailStatus = () => (dispatch: Dispatch): Action =>
-  fetch('https://spee.ch/api/channel/availability/@testing')
+export const doResetThumbnailStatus = () => (dispatch: Dispatch): PromiseAction => {
+  dispatch({
+    type: ACTIONS.UPDATE_PUBLISH_FORM,
+    data: {
+      thumbnailPath: '',
+    },
+  });
+
+  return fetch('https://spee.ch/api/channel/availability/@testing')
     .then(() =>
       dispatch({
         type: ACTIONS.UPDATE_PUBLISH_FORM,
@@ -55,6 +63,7 @@ export const doResetThumbnailStatus = () => (dispatch: Dispatch): Action =>
         },
       })
     );
+};
 
 export const doUploadThumbnail = (filePath: string, nsfw: boolean) => (dispatch: Dispatch) => {
   const thumbnail = fs.readFileSync(filePath);
@@ -109,9 +118,15 @@ export const doUploadThumbnail = (filePath: string, nsfw: boolean) => (dispatch:
     .catch(err => uploadError(err.message));
 };
 
-export const doPrepareEdit = (claim: any) => (dispatch: Dispatch) => {
-  const { name, amount, channel_name: channelName, value: { stream: { metadata } } } = claim;
-
+export const doPrepareEdit = (claim: any, uri: string) => (dispatch: Dispatch) => {
+  const {
+    name,
+    amount,
+    channel_name: channelName,
+    value: {
+      stream: { metadata },
+    },
+  } = claim;
 
   const {
     author,

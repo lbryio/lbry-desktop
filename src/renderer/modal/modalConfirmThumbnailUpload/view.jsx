@@ -13,8 +13,9 @@ type Props = {
 
 class ModalConfirmThumbnailUpload extends React.PureComponent<Props> {
   upload() {
-    const { upload, closeModal, path, nsfw } = this.props;
+    const { upload, updatePublishForm, closeModal, path, nsfw } = this.props;
     upload(path, nsfw);
+    updatePublishForm({ thumbnailPath: path });
     closeModal();
   }
 
@@ -30,7 +31,8 @@ class ModalConfirmThumbnailUpload extends React.PureComponent<Props> {
         onConfirmed={() => this.upload()}
         onAborted={closeModal}
       >
-        <p>{`Confirm upload: ${path}`}</p>
+        <p>{__('Are you sure you want to upload this thumbnail to spee.ch')}?</p>
+        <blockquote>{path}</blockquote>
         <FormField
           type="checkbox"
           name="content_is_mature"

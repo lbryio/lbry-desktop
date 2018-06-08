@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { doCloseModal } from 'redux/actions/app';
+import { doHideNotification } from 'lbry-redux';
 import { doUploadThumbnail, doUpdatePublishForm } from 'redux/actions/publish';
 import { selectPublishFormValues } from 'redux/selectors/publish';
 import ModalConfirmThumbnailUpload from './view';
@@ -10,9 +10,12 @@ const select = state => {
 };
 
 const perform = dispatch => ({
-  closeModal: () => dispatch(doCloseModal()),
+  closeModal: () => dispatch(doHideNotification()),
   upload: (path, nsfw = false) => dispatch(doUploadThumbnail(path, nsfw)),
   updatePublishForm: value => dispatch(doUpdatePublishForm(value)),
 });
 
-export default connect(select, perform)(ModalConfirmThumbnailUpload);
+export default connect(
+  select,
+  perform
+)(ModalConfirmThumbnailUpload);

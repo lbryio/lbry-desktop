@@ -23,6 +23,7 @@ type Props = {
   title: ?string,
   thumbnail: ?string,
   uploadThumbnailStatus: ?string,
+  thumbnailPath: ?string,
   description: ?string,
   language: string,
   nsfw: boolean,
@@ -78,32 +79,6 @@ class PublishForm extends React.PureComponent<Props> {
     const { resolveUri } = this.props;
     // If they are midway through a channel creation, treat it as anonymous until it completes
     const channelName = channel === CHANNEL_ANONYMOUS || channel === CHANNEL_NEW ? '' : channel;
-  }
-
-  componentWillMount() {
-    this.props.resetThumbnailStatus();
-  }
-
-  handlePublish() {
-    const {
-      publish,
-      filePath,
-      bid,
-      title,
-      thumbnail,
-      description,
-      language,
-      nsfw,
-      channel,
-      licenseType,
-      licenseUrl,
-      otherLicenseDescription,
-      copyrightNotice,
-      name,
-      contentIsFree,
-      price,
-      uri,
-    } = this.props;
 
     let uri;
     try {
@@ -322,6 +297,8 @@ class PublishForm extends React.PureComponent<Props> {
       bidError,
       publishing,
       clearPublish,
+      thumbnailPath,
+      resetThumbnailStatus,
     } = this.props;
 
     const formDisabled = (!filePath && !editingURI) || publishing;
@@ -383,14 +360,6 @@ class PublishForm extends React.PureComponent<Props> {
               />
             </FormRow>
             <FormRow padded>
-              <SelectThumbnail
-                thumbnail={thumbnail}
-                uploadThumbnailStatus={uploadThumbnailStatus}
-                updatePublishForm={updatePublishForm}
-                formDisabled={formDisabled}
-              />
-            </FormRow>
-            <FormRow padded>
               <FormField
                 stretch
                 type="markdown"
@@ -402,6 +371,24 @@ class PublishForm extends React.PureComponent<Props> {
                 onChange={text => updatePublishForm({ description: text })}
               />
             </FormRow>
+          </section>
+
+          <section className="card card--section">
+            <div className="card__title">{__('Thumbnail')}</div>
+            <div className="card__subtitle">
+              {__(
+                'Upload your thumbnail to spee.ch, or enter the url manually. Learn more about spee.ch '
+              )}
+              <Button button="link" label={__('here')} href="https://spee.ch/about" />.
+            </div>
+            <SelectThumbnail
+              thumbnailPath={thumbnailPath}
+              thumbnail={thumbnail}
+              uploadThumbnailStatus={uploadThumbnailStatus}
+              updatePublishForm={updatePublishForm}
+              formDisabled={formDisabled}
+              resetThumbnailStatus={resetThumbnailStatus}
+            />
           </section>
 
           <section className="card card--section">

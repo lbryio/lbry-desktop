@@ -10,7 +10,7 @@ type Props = {
   currentPath: ?string,
   onFileChosen: (string, string) => void,
   fileLabel: ?string,
-  directoryLabel: ?string,
+  directoryLabel?: string,
 };
 
 class FileSelector extends React.PureComponent<Props> {
