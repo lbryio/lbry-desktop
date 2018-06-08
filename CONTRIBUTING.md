@@ -147,7 +147,7 @@ There are a few tools integrated to the project that will ease the process of de
   If someone has been officially assigned an issue via Github's assignment system, it is also not
   available. Contributors are encouraged to ask if they have any questions about issue availability.
 * The [changelog](https://github.com/lbryio/lbry-app/blob/master/CHANGELOG.md) should be updated to 
-  include a referene to the fix/change/addition. See previous entries for format. 
+  include a reference to the fix/change/addition. See previous entries for format. 
 * Once the pull request is visible in the LBRY repo, a LBRY team member will review it and make sure
   it is up to our standards. At this point, the contributor may have to change his or her code based
   on our suggestions and comments.

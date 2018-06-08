@@ -109,13 +109,15 @@ class HelpPage extends React.PureComponent {
         </section>
 
         <section className="card card--section">
-          <div className="card__title">{__('Report a Bug')}</div>
-          <p className="card__subtitle">{__('Did you find something wrong?')}</p>
+          <div className="card__title">{__('Report a Bug or Suggest a New Feature')}</div>
+          <p className="card__subtitle">
+            {__('Did you find something wrong? Think LBRY could add something useful and cool?')}
+          </p>
 
           <div className="card__actions">
             <Button
               navigate="/report"
-              label={__('Submit a Bug Report')}
+              label={__('Submit a Bug Report/Feature Request')}
               icon={icons.REPORT}
               button="primary"
             />
