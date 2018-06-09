@@ -50,6 +50,7 @@ class ThreeViewer extends React.PureComponent<Props> {
       },
     };
 
+    // Select current theme
     const { theme } = this.props;
     this.theme = this.themes[theme] || this.themes.light;
   }
@@ -102,9 +103,13 @@ class ThreeViewer extends React.PureComponent<Props> {
     material.color.set(this.materialColors.green);
 
     const mesh = new THREE.Mesh(geometry, material);
+
+    // Assign name
     mesh.name = 'objectGroup';
+
     this.scene.add(mesh);
     this.fitMeshToCamera(mesh);
+    this.createWireFrame(mesh);
     this.setControlsTarget(mesh.position);
     return mesh;
   }
@@ -112,7 +117,6 @@ class ThreeViewer extends React.PureComponent<Props> {
   toggleWireFrame(show = false) {
     this.wireframe.opacity = show ? 1 : 0;
     this.mesh.material.opacity = show ? 0 : 1;
-    //this.mesh.material.shading(THREE.FlatShading);
   }
 
   fitMeshToCamera(group) {
@@ -142,7 +146,6 @@ class ThreeViewer extends React.PureComponent<Props> {
     group.position.y = meshY / 2 * scaleFactor;
     group.position.multiplyScalar(-1);
     group.position.y += meshY * scaleFactor;
-    this.createWireFrame(group);
   }
 
   setControlsTarget(point) {
@@ -168,7 +171,6 @@ class ThreeViewer extends React.PureComponent<Props> {
   handleReady() {
     // Handle load ready
     this.setState({ isReady: true, isLoading: false });
-    this.toggleWireFrame();
   }
 
   handleResize = () => {
@@ -184,7 +186,8 @@ class ThreeViewer extends React.PureComponent<Props> {
   }
 
   handleProgress(url, currentItem, totalItems) {
-    /// Handle progress
+    // Handle progress
+    // TODO: Show progressbar...
   }
 
   handleColorChange(color) {
@@ -242,6 +245,7 @@ class ThreeViewer extends React.PureComponent<Props> {
       window.addEventListener('resize', this.handleResize, false);
     } else {
       // No webgl support, handle Error...
+      // TODO: Use a better error message
       this.state({ error: 'No webgl support!' });
     }
   }
