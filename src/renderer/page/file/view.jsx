@@ -47,6 +47,8 @@ type Props = {
 };
 
 class FilePage extends React.Component<Props> {
+  static VALID_MEDIA_TYPES = ['audio', '3D-file', 'e-book', 'comic-book'];
+
   constructor(props: Props) {
     super(props);
 
@@ -54,15 +56,14 @@ class FilePage extends React.Component<Props> {
   }
 
   componentDidMount() {
-    const { uri, fileInfo, fetchFileInfo, costInfo, fetchCostInfo } = this.props;
+    const { uri, fileInfo, fetchFileInfo, fetchCostInfo } = this.props;
 
     if (fileInfo === undefined) {
       fetchFileInfo(uri);
     }
 
-    if (costInfo === undefined) {
-      fetchCostInfo(uri);
-    }
+    // See https://github.com/lbryio/lbry-app/pull/1563 for discussion
+    fetchCostInfo(uri);
 
     this.checkSubscription(this.props);
   }
@@ -110,13 +111,15 @@ class FilePage extends React.Component<Props> {
     } = this.props;
 
     // File info
-    const { title, thumbnail } = metadata;
+    const { title, thumbnail, filename } = metadata;
     const isRewardContent = rewardedContentClaimIds.includes(claim.claim_id);
     const shouldObscureThumbnail = obscureNsfw && metadata.nsfw;
     const { height, channel_name: channelName, value } = claim;
-    const mediaType = Lbry.getMediaType(contentType);
+    // TODO: fix getMediaType logic (lbry-redux)
+    const mediaType = Lbry.getMediaType(null, filename) || Lbry.getMediaType(contentType);
     const isPlayable =
-      Object.values(player.mime).indexOf(contentType) !== -1 || mediaType === 'audio';
+      Object.values(player.mime).indexOf(contentType) !== -1 ||
+      FilePage.VALID_MEDIA_TYPES.indexOf(mediaType);
     const channelClaimId =
       value && value.publisherSignature && value.publisherSignature.certificateId;
     let subscriptionUri;
@@ -136,7 +139,6 @@ class FilePage extends React.Component<Props> {
     if (claimIsMine) {
       editUri = buildURI({ channelName, contentName: claim.name });
     }
-
     return (
       <Page extraPadding>
         {!claim || !metadata ? (
@@ -183,7 +185,7 @@ class FilePage extends React.Component<Props> {
                     <React.Fragment>
                       <Button
                         button="alt"
-                        iconRight="Send"
+                        icon="Send"
                         label={__('Enjoy this? Send a tip')}
                         onClick={() => openModal({ id: MODALS.SEND_TIP }, { uri })}
                       />
@@ -191,12 +193,7 @@ class FilePage extends React.Component<Props> {
                     </React.Fragment>
                   )}
                   {speechSharable && (
-                    <ViewOnWebButton
-                      uri={buildURI({
-                        claimId: claim.claim_id,
-                        contentName: claim.name,
-                      }).slice(7)}
-                    />
+                    <ViewOnWebButton claimId={claim.claim_id} claimName={claim.name} />
                   )}
                 </div>
               </div>

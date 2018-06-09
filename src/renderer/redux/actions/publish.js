@@ -6,6 +6,8 @@ import {
   doNotify,
   MODALS,
   selectMyChannelClaims,
+  STATUSES,
+  batchActions,
 } from 'lbry-redux';
 import { selectPendingPublishes } from 'redux/selectors/publish';
 import type {
@@ -13,6 +15,8 @@ import type {
   UpdatePublishFormAction,
   PublishParams,
 } from 'redux/reducers/publish';
+import fs from 'fs';
+import path from 'path';
 
 type Action = UpdatePublishFormAction | { type: ACTIONS.CLEAR_PUBLISH };
 type PromiseAction = Promise<Action>;
@@ -30,6 +34,90 @@ export const doUpdatePublishForm = (publishFormValue: UpdatePublishFormData) => 
     data: { ...publishFormValue },
   });
 
+export const doResetThumbnailStatus = () => (dispatch: Dispatch): PromiseAction => {
+  dispatch({
+    type: ACTIONS.UPDATE_PUBLISH_FORM,
+    data: {
+      thumbnailPath: '',
+    },
+  });
+
+  return fetch('https://spee.ch/api/channel/availability/@testing')
+    .then(() =>
+      dispatch({
+        type: ACTIONS.UPDATE_PUBLISH_FORM,
+        data: {
+          uploadThumbnailStatus: STATUSES.READY,
+          thumbnail: '',
+          nsfw: false,
+        },
+      })
+    )
+    .catch(() =>
+      dispatch({
+        type: ACTIONS.UPDATE_PUBLISH_FORM,
+        data: {
+          uploadThumbnailStatus: STATUSES.API_DOWN,
+          thumbnail: '',
+          nsfw: false,
+        },
+      })
+    );
+};
+
+export const doUploadThumbnail = (filePath: string, nsfw: boolean) => (dispatch: Dispatch) => {
+  const thumbnail = fs.readFileSync(filePath);
+  const fileExt = path.extname(filePath);
+
+  const makeid = () => {
+    let text = '';
+    const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    for (let i = 0; i < 24; i += 1) text += possible.charAt(Math.floor(Math.random() * 62));
+    return text;
+  };
+
+  const uploadError = (error = '') =>
+    dispatch(
+      batchActions(
+        {
+          type: ACTIONS.UPDATE_PUBLISH_FORM,
+          data: { uploadThumbnailStatus: STATUSES.API_DOWN },
+        },
+        dispatch(doNotify({ id: MODALS.ERROR, error }))
+      )
+    );
+
+  dispatch({
+    type: ACTIONS.UPDATE_PUBLISH_FORM,
+    data: { uploadThumbnailStatus: STATUSES.IN_PROGRESS },
+  });
+
+  const data = new FormData();
+  const name = makeid();
+  const blob = new Blob([thumbnail], { type: `image/${fileExt.slice(1)}` });
+  data.append('name', name);
+  data.append('file', blob);
+  data.append('nsfw', nsfw.toString());
+  return fetch('https://spee.ch/api/claim/publish', {
+    method: 'POST',
+    body: data,
+  })
+    .then(response => response.json())
+    .then(
+      json =>
+        json.success
+          ? dispatch({
+              type: ACTIONS.UPDATE_PUBLISH_FORM,
+              data: {
+                uploadThumbnailStatus: STATUSES.COMPLETE,
+                thumbnail: `${json.data.url}${fileExt}`,
+              },
+            })
+          : uploadError('Upload failed')
+    )
+    .catch(err => uploadError(err.message));
+};
+
 export const doPrepareEdit = (claim: any, uri: string) => (dispatch: Dispatch) => {
   const {
     name,
@@ -39,6 +127,7 @@ export const doPrepareEdit = (claim: any, uri: string) => (dispatch: Dispatch) =
       stream: { metadata },
     },
   } = claim;
+
   const {
     author,
     description,

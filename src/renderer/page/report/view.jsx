@@ -49,10 +49,10 @@ class ReportPage extends React.Component {
       <Page>
         <section className="card card--section">
           <div className="card__content">
-            <div className="card__title">{__('Report an Issue')}</div>
+            <div className="card__title">{__('Report an Issue/Request a Feature')}</div>
             <p>
               {__(
-                'Please describe the problem you experienced and any information you think might be useful to us. Links to screenshots are great!'
+                'Please describe the problem you experienced or the feature you want to see and any information you think might be useful to us. Links to screenshots are great!'
               )}
             </p>
             <FormRow>
@@ -65,7 +65,7 @@ class ReportPage extends React.Component {
                 onChange={event => {
                   this.onMessageChange(event);
                 }}
-                placeholder={__('Description of your issue')}
+                placeholder={__('Description of your issue or feature request')}
               />
             </FormRow>
             <div className="card__actions">

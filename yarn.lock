@@ -5647,9 +5647,9 @@ lazy-val@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/lazy-val/-/lazy-val-1.0.3.tgz#bb97b200ef00801d94c317e29dc6ed39e31c5edc"
 
-lbry-redux@lbryio/lbry-redux#3bc978ef4e4dcf5af6b1185b530244209100f69f:
+lbry-redux@lbryio/lbry-redux#7759bc6e8c482bed173d1f10aee6f6f9a439a15a:
   version "0.0.1"
-  resolved "https://codeload.github.com/lbryio/lbry-redux/tar.gz/3bc978ef4e4dcf5af6b1185b530244209100f69f"
+  resolved "https://codeload.github.com/lbryio/lbry-redux/tar.gz/7759bc6e8c482bed173d1f10aee6f6f9a439a15a"
   dependencies:
     proxy-polyfill "0.1.6"
     reselect "^3.0.0"

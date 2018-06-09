@@ -2,6 +2,7 @@
 import { handleActions } from 'util/redux-utils';
 import { buildURI } from 'lbry-redux';
 import * as ACTIONS from 'constants/action_types';
+import * as STATUSES from 'constants/thumbnail_upload_statuses';
 import { CHANNEL_ANONYMOUS } from 'constants/claim';
 
 type PublishState = {
@@ -14,6 +15,8 @@ type PublishState = {
   },
   title: string,
   thumbnail: string,
+  thumbnailPath: string,
+  uploadThumbnailStatus: string,
   description: string,
   language: string,
   tosAccepted: boolean,
@@ -38,6 +41,8 @@ export type UpdatePublishFormData = {
   },
   title?: string,
   thumbnail?: string,
+  uploadThumbnailStatus?: string,
+  thumbnailPath?: string,
   description?: string,
   language?: string,
   tosAccepted?: boolean,
@@ -96,6 +101,8 @@ const defaultState: PublishState = {
   },
   title: '',
   thumbnail: '',
+  thumbnailPath: '',
+  uploadThumbnailStatus: STATUSES.API_DOWN,
   description: '',
   language: 'en',
   nsfw: false,

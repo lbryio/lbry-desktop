@@ -225,7 +225,11 @@ export function doDownloadFile(uri, streamInfo) {
   return dispatch => {
     dispatch(doStartDownload(uri, streamInfo.outpoint));
 
-    analytics.apiLogView(uri, streamInfo.output, streamInfo.claim_id);
+    analytics.apiLogView(
+      `${streamInfo.claim_name}#${streamInfo.claim_id}`,
+      streamInfo.outpoint,
+      streamInfo.claim_id
+    );
 
     dispatch(doClaimEligiblePurchaseRewards());
   };

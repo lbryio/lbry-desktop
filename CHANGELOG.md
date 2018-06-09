@@ -6,6 +6,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ## [Unreleased]
 
 ### Added
+
+   * Add ability to resend verification email ([#1492](https://github.com/lbryio/lbry-app/issues/1492))
+   * Add Narrative about Feature Request on Help Page and Report Page ([#1551](https://github.com/lbryio/lbry-app/pull/1551))
    * Add keyboard shortcut to quit the app on Windows ([#1202](https://github.com/lbryio/lbry-app/pull/1202))
    * Build for both architectures (x86 and x64) for Windows ([#1262](https://github.com/lbryio/lbry-app/pull/1262))
    * Add referral FAQ to Invites screen([#1314](https://github.com/lbryio/lbry-app/pull/1314))
@@ -40,6 +43,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
    * Fix markdown render ([#1179](https://github.com/lbryio/lbry-app/issues/1179))
    * Fix new lines not showing correctly after markdown changes ([#1504](https://github.com/lbryio/lbry-app/issues/1504))
    * Fix claim ID being null when reporting a claim that was not previously download ([issue#1512](https://github.com/lbryio/lbry-app/issues/1512)) ([PR#1530](https://github.com/lbryio/lbry-app/pull/1530))
+   * Fix URI and outpoint not being passed properly to API ([#1494](https://github.com/lbryio/lbry-app/issues/1494))
 
 
 ## [0.21.3] - 2018-04-23

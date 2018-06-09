@@ -21,10 +21,14 @@ import ModalFirstSubscription from 'modal/modalFirstSubscription';
 import ModalConfirmTransaction from 'modal/modalConfirmTransaction';
 import ModalSendTip from '../modalSendTip';
 import ModalPublish from '../modalPublish';
-import ModalSearch from '../modalSearch';
 import ModalOpenExternalLink from '../modalOpenExternalLink';
+import ModalConfirmThumbnailUpload from 'modal/modalConfirmThumbnailUpload';
 
-class ModalRouter extends React.PureComponent {
+type Props = {
+  modal: string,
+};
+
+class ModalRouter extends React.PureComponent<Props> {
   constructor(props) {
     super(props);
 
@@ -57,7 +61,7 @@ class ModalRouter extends React.PureComponent {
 
     if (
       transitionModal &&
-      (transitionModal != this.state.lastTransitionModal || page != this.state.lastTransitionPage)
+      (transitionModal !== this.state.lastTransitionModal || page !== this.state.lastTransitionPage)
     ) {
       openModal({ id: transitionModal });
       this.setState({
@@ -155,12 +159,12 @@ class ModalRouter extends React.PureComponent {
         return <ModalSendTip {...notificationProps} />;
       case MODALS.PUBLISH:
         return <ModalPublish {...notificationProps} />;
-      case MODALS.SEARCH:
-        return <ModalSearch {...notificationProps} />;
       case MODALS.CONFIRM_EXTERNAL_LINK:
         return <ModalOpenExternalLink {...notificationProps} />;
       case MODALS.CONFIRM_TRANSACTION:
         return <ModalConfirmTransaction {...notificationProps} />;
+      case MODALS.CONFIRM_THUMBNAIL_UPLOAD:
+        return <ModalConfirmThumbnailUpload {...notificationProps} />;
       default:
         return null;
     }
