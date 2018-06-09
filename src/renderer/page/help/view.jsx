@@ -1,21 +1,36 @@
 // @TODO: Customize advice based on OS
-import React from 'react';
+// @flow
+import * as React from 'react';
 import { shell } from 'electron';
 import { Lbry } from 'lbry-redux';
-import Native from 'native';
+import * as Native from 'native';
 import Button from 'component/button';
 import BusyIndicator from 'component/common/busy-indicator';
 import Page from 'component/page';
 import * as icons from 'constants/icons';
 
-type Props = {
-  deamonSettings: {
-    data_dir: ?string,
-  },
+type DeamonSettings = {
+  data_dir: string,
 };
 
-class HelpPage extends React.PureComponent {
-  constructor(props) {
+type Props = {
+  deamonSettings: DeamonSettings,
+  accessToken: string,
+  fetchAccessToken: () => void,
+  doAuth: () => void,
+  user: any,
+};
+
+type State = {
+  versionInfo: any,
+  lbryId: any,
+  uiVersion: any,
+  upgradeAvailable: any,
+  accessTokenHidden: any,
+};
+
+class HelpPage extends React.PureComponent<Props, State> {
+  constructor(props: Props) {
     super(props);
 
     this.state = {
@@ -26,11 +41,12 @@ class HelpPage extends React.PureComponent {
       accessTokenHidden: true,
     };
 
-    this.showAccessToken = this.showAccessToken.bind(this);
+    (this: any).showAccessToken = this.showAccessToken.bind(this);
+    (this: any).openLogFile = this.openLogFile.bind(this);
   }
 
   componentDidMount() {
-    Native.getAppVersionInfo().then(({ remoteVersion, localVersion, upgradeAvailable }) => {
+    Native.getAppVersionInfo().then(({ localVersion, upgradeAvailable }) => {
       this.setState({
         uiVersion: localVersion,
         upgradeAvailable,
@@ -54,6 +70,16 @@ class HelpPage extends React.PureComponent {
     this.setState({
       accessTokenHidden: false,
     });
+  }
+
+  openLogFile(userHomeDirectory: string) {
+    const logFileName = 'lbrynet.log';
+    const os = this.state.versionInfo.os_system;
+    if (os === 'Darwin' || os === 'Linux') {
+      shell.openItem(`${userHomeDirectory}/${logFileName}`);
+    } else {
+      shell.openItem(`${userHomeDirectory}\\${logFileName}`);
+    }
   }
 
   render() {
@@ -127,7 +153,7 @@ class HelpPage extends React.PureComponent {
               button="primary"
               label={__('Open Log')}
               icon={icons.REPORT}
-              onClick={() => shell.openItem(`${dataDirectory}/lbrynet.log`)}
+              onClick={() => this.openLogFile(dataDirectory)}
             />
             <Button
               button="primary"
