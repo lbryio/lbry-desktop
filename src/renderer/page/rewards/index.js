@@ -21,4 +21,7 @@ const perform = dispatch => ({
   },
 });
 
-export default connect(select, perform)(RewardsPage);
+export default connect(
+  select,
+  perform
+)(RewardsPage);

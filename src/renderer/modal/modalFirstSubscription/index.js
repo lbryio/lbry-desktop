@@ -8,4 +8,7 @@ const perform = dispatch => () => ({
   navigate: path => dispatch(doNavigate(path)),
 });
 
-export default connect(null, perform)(ModalFirstSubscription);
+export default connect(
+  null,
+  perform
+)(ModalFirstSubscription);

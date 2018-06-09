@@ -26,4 +26,7 @@ const perform = dispatch => ({
   verifyPhone: () => dispatch(doNotify({ id: MODALS.PHONE_COLLECTION })),
 });
 
-export default connect(select, perform)(UserVerify);
+export default connect(
+  select,
+  perform
+)(UserVerify);

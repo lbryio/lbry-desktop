@@ -12,4 +12,7 @@ const perform = dispatch => ({
   navigate: path => dispatch(doNavigate(path)),
 });
 
-export default connect(select, perform)(FileListDownloaded);
+export default connect(
+  select,
+  perform
+)(FileListDownloaded);

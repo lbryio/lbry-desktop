@@ -16,4 +16,7 @@ const perform = dispatch => ({
   fetchInviteStatus: () => dispatch(doFetchInviteStatus()),
 });
 
-export default connect(select, perform)(InvitePage);
+export default connect(
+  select,
+  perform
+)(InvitePage);

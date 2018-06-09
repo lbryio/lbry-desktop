@@ -12,4 +12,7 @@ const perform = dispatch => ({
   addUserPhone: (phone, country_code) => dispatch(doUserPhoneNew(phone, country_code)),
 });
 
-export default connect(select, perform)(UserPhoneNew);
+export default connect(
+  select,
+  perform
+)(UserPhoneNew);

@@ -7,4 +7,7 @@ const select = state => ({
   unclaimedRewardAmount: selectUnclaimedRewardValue(state),
 });
 
-export default connect(select, null)(RewardSummary);
+export default connect(
+  select,
+  null
+)(RewardSummary);

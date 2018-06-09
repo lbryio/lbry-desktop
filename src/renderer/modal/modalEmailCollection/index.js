@@ -17,4 +17,7 @@ const perform = dispatch => () => ({
   },
 });
 
-export default connect(select, perform)(ModalEmailCollection);
+export default connect(
+  select,
+  perform
+)(ModalEmailCollection);

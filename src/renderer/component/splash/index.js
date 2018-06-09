@@ -13,4 +13,7 @@ const perform = dispatch => ({
   checkDaemonVersion: () => dispatch(doCheckDaemonVersion()),
 });
 
-export default connect(select, perform)(SplashScreen);
+export default connect(
+  select,
+  perform
+)(SplashScreen);

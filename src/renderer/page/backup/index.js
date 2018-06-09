@@ -7,4 +7,7 @@ const select = state => ({
   daemonSettings: selectDaemonSettings(state),
 });
 
-export default connect(select, null)(BackupPage);
+export default connect(
+  select,
+  null
+)(BackupPage);

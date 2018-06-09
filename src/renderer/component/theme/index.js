@@ -7,4 +7,7 @@ const select = state => ({
   themePath: selectThemePath(state),
 });
 
-export default connect(select, null)(Theme);
+export default connect(
+  select,
+  null
+)(Theme);

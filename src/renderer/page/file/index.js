@@ -46,4 +46,7 @@ const perform = dispatch => ({
   setClientSetting: (key, value) => dispatch(doSetClientSetting(key, value)),
 });
 
-export default connect(select, perform)(FilePage);
+export default connect(
+  select,
+  perform
+)(FilePage);

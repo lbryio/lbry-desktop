@@ -13,4 +13,7 @@ const perform = dispatch => ({
   fetchFeaturedUris: () => dispatch(doFetchFeaturedUris()),
 });
 
-export default connect(select, perform)(DiscoverPage);
+export default connect(
+  select,
+  perform
+)(DiscoverPage);

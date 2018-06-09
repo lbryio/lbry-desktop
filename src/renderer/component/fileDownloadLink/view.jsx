@@ -59,7 +59,7 @@ class FileDownloadLink extends React.PureComponent<Props> {
     if (loading || downloading) {
       const progress =
         fileInfo && fileInfo.written_bytes
-          ? fileInfo.written_bytes / fileInfo.total_bytes * 100
+          ? (fileInfo.written_bytes / fileInfo.total_bytes) * 100
           : 0;
       const label = fileInfo
         ? __('Downloading: ') + progress.toFixed(0) + __('% complete')

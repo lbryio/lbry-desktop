@@ -5,4 +5,7 @@ import MarkdownPreview from './view';
 const select = () => ({});
 const perform = () => ({});
 
-export default connect(select, perform)(MarkdownPreview);
+export default connect(
+  select,
+  perform
+)(MarkdownPreview);

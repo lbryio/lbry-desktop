@@ -37,4 +37,7 @@ const perform = dispatch => ({
   changeLanguage: newLanguage => dispatch(doChangeLanguage(newLanguage)),
 });
 
-export default connect(select, perform)(SettingsPage);
+export default connect(
+  select,
+  perform
+)(SettingsPage);

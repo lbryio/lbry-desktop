@@ -8,4 +8,7 @@ const perform = dispatch => ({
   closeModal: () => dispatch(doHideNotification()),
 });
 
-export default connect(select, perform)(ModalTransactionFailed);
+export default connect(
+  select,
+  perform
+)(ModalTransactionFailed);

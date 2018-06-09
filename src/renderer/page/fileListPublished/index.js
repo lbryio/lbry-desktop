@@ -15,4 +15,7 @@ const perform = dispatch => ({
   checkIfPublishesConfirmed: publishes => dispatch(doCheckPendingPublishes(publishes)),
 });
 
-export default connect(select, perform)(FileListPublished);
+export default connect(
+  select,
+  perform
+)(FileListPublished);

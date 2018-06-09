@@ -23,4 +23,7 @@ const perform = dispatch => ({
   resendVerificationEmail: email => dispatch(doUserResendVerificationEmail(email)),
 });
 
-export default connect(select, perform)(UserEmailVerify);
+export default connect(
+  select,
+  perform
+)(UserEmailVerify);

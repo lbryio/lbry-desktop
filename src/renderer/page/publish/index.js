@@ -60,4 +60,7 @@ const perform = dispatch => ({
   resetThumbnailStatus: () => dispatch(doResetThumbnailStatus()),
 });
 
-export default connect(select, perform)(PublishPage);
+export default connect(
+  select,
+  perform
+)(PublishPage);

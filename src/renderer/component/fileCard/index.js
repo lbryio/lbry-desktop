@@ -38,4 +38,7 @@ const perform = dispatch => ({
   resolveUri: uri => dispatch(doResolveUri(uri)),
 });
 
-export default connect(select, perform)(FileCard);
+export default connect(
+  select,
+  perform
+)(FileCard);

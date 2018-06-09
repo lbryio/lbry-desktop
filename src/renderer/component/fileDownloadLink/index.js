@@ -25,4 +25,7 @@ const perform = dispatch => ({
   doPause: () => dispatch(doPause()),
 });
 
-export default connect(select, perform)(FileDownloadLink);
+export default connect(
+  select,
+  perform
+)(FileDownloadLink);

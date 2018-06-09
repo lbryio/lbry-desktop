@@ -15,4 +15,7 @@ const perform = dispatch => ({
   fetchChannel: channel => dispatch(doFetchClaimsByChannel(channel)),
 });
 
-export default connect(select, perform)(CategoryList);
+export default connect(
+  select,
+  perform
+)(CategoryList);

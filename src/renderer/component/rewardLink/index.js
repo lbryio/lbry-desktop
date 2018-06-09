@@ -28,4 +28,7 @@ const perform = dispatch => ({
   navigate: path => dispatch(doNavigate(path)),
 });
 
-export default connect(makeSelect, perform)(RewardLink);
+export default connect(
+  makeSelect,
+  perform
+)(RewardLink);

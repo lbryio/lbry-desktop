@@ -19,4 +19,7 @@ const perform = dispatch => ({
   verifyUserPhone: code => dispatch(doUserPhoneVerify(code)),
 });
 
-export default connect(select, perform)(UserPhoneVerify);
+export default connect(
+  select,
+  perform
+)(UserPhoneVerify);

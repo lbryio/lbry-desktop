@@ -7,4 +7,7 @@ const select = state => ({
   rewards: selectClaimedRewards(state),
 });
 
-export default connect(select, null)(RewardListClaimed);
+export default connect(
+  select,
+  null
+)(RewardListClaimed);

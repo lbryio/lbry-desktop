@@ -16,4 +16,7 @@ const perform = dispatch => ({
   closeModal: () => dispatch(doHideNotification()),
 });
 
-export default connect(select, perform)(ModalFirstReward);
+export default connect(
+  select,
+  perform
+)(ModalFirstReward);

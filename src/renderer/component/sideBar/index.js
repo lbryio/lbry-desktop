@@ -17,4 +17,7 @@ const perform = dispatch => ({
   forward: () => dispatch(doHistoryForward()),
 });
 
-export default connect(select, perform)(SideBar);
+export default connect(
+  select,
+  perform
+)(SideBar);
