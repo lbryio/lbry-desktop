@@ -31,7 +31,7 @@ type VersionInfo = {
 
 type State = {
   versionInfo: VersionInfo | any,
-  lbryId: any,
+  lbryId: String | any,
   uiVersion: ?string,
   upgradeAvailable: ?boolean,
   accessTokenHidden: ?boolean,
