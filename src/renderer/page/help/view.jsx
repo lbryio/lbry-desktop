@@ -1,12 +1,18 @@
 // @TODO: Customize advice based on OS
 import React from 'react';
+import { shell } from 'electron';
 import { Lbry } from 'lbry-redux';
 import Native from 'native';
 import Button from 'component/button';
 import BusyIndicator from 'component/common/busy-indicator';
-import Icon from 'component/common/icon';
 import Page from 'component/page';
 import * as icons from 'constants/icons';
+
+type Props = {
+  deamonSettings: {
+    data_dir: ?string,
+  },
+};
 
 class HelpPage extends React.PureComponent {
   constructor(props) {
@@ -56,7 +62,8 @@ class HelpPage extends React.PureComponent {
     let platform;
     let newVerLink;
 
-    const { accessToken, doAuth, user } = this.props;
+    const { accessToken, doAuth, user, deamonSettings } = this.props;
+    const { data_dir: dataDirectory } = deamonSettings;
 
     if (this.state.versionInfo) {
       ver = this.state.versionInfo;
@@ -109,11 +116,33 @@ class HelpPage extends React.PureComponent {
         </section>
 
         <section className="card card--section">
+          <div className="card__title">{__('View your Log')}</div>
+          <p className="card__subtitle">
+            {__(
+              'Do you find something wrong? Have a look in your log, or send your log to support for some help.'
+            )}
+          </p>
+          <div className="card__actions">
+            <Button
+              button="primary"
+              label={__('Open Log')}
+              icon={icons.REPORT}
+              onClick={() => shell.openItem(`${dataDirectory}/lbrynet.log`)}
+            />
+            <Button
+              button="primary"
+              label={__('Open Log Folder')}
+              icon={icons.REPORT}
+              onClick={() => shell.showItemInFolder(dataDirectory)}
+            />
+          </div>
+        </section>
+
+        <section className="card card--section">
           <div className="card__title">{__('Report a Bug or Suggest a New Feature')}</div>
           <p className="card__subtitle">
             {__('Did you find something wrong? Think LBRY could add something useful and cool?')}
           </p>
-
           <div className="card__actions">
             <Button
               navigate="/report"
