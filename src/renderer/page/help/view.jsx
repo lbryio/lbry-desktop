@@ -3,7 +3,7 @@
 import * as React from 'react';
 import { shell } from 'electron';
 import { Lbry } from 'lbry-redux';
-import * as Native from 'native';
+import Native from 'native';
 import Button from 'component/button';
 import BusyIndicator from 'component/common/busy-indicator';
 import Page from 'component/page';
