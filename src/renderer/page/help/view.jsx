@@ -10,7 +10,7 @@ import Page from 'component/page';
 import * as icons from 'constants/icons';
 
 type DeamonSettings = {
-  data_dir: string,
+  data_dir: string | any,
 };
 
 type Props = {
@@ -21,12 +21,20 @@ type Props = {
   user: any,
 };
 
+type VersionInfo = {
+  os_system: string,
+  os_release: string,
+  platform: string,
+  lbrynet_version: string,
+  lbryum_version: string,
+};
+
 type State = {
-  versionInfo: any,
+  versionInfo: VersionInfo | any,
   lbryId: any,
-  uiVersion: any,
-  upgradeAvailable: any,
-  accessTokenHidden: any,
+  uiVersion: ?string,
+  upgradeAvailable: ?boolean,
+  accessTokenHidden: ?boolean,
 };
 
 class HelpPage extends React.PureComponent<Props, State> {
