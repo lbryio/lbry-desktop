@@ -28,6 +28,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
    * Move rewards logic to interal api ([#1509](https://github.com/lbryio/lbry-app/pull/1509))
 
 ### Fixed
+   * Fixing content address extending outside of visible area. ([#741](https://github.com/lbryio/lbry-app/issues/741))
    * Fix content-type not shown correctly in file description ([#863](https://github.com/lbryio/lbry-app/pull/863))
    * Fix [Flow](https://flow.org/) ([#1197](https://github.com/lbryio/lbry-app/pull/1197))
    * Fix black screen on macOS after maximizing LBRY and then closing ([#1235](https://github.com/lbryio/lbry-app/pull/1235))
