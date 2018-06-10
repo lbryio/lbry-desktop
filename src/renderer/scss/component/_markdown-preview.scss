@@ -1,4 +1,3 @@
-.editor-preview,
 .markdown-preview {
   margin: 0;
 
@@ -78,6 +77,12 @@
     color: var(--color-help);
     font-size: 1em;
     font-family: Consolas, 'Lucida Console', 'Source Sans', monospace;
+  }
+
+  a {
+      font-size: 1em;
+      color: var(--btn-external-color);
+      display: inline-block;
   }
 }
 

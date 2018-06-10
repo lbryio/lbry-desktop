@@ -12,8 +12,8 @@ const schema = { ...defaultSchema };
 schema.protocols.href[3] = 'lbry';
 
 type MarkdownProps = {
-    content: string,
-    promptLinks?: boolean,
+  content: string,
+  promptLinks?: boolean,
 };
 
 const SimpleLink = ({ href, title, children }) => (<a href={href} title={title}>{children}</a>);

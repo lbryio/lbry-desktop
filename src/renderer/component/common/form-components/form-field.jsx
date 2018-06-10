@@ -57,8 +57,8 @@ export class FormField extends React.PureComponent<Props> {
               options={{
                   hideIcons: ['heading', 'image', 'fullscreen', 'side-by-side'],
                   previewRender(plainText) {
-                      const preview = <MarkdownPreview content={plainText}/>;
-                      return ReactDOMServer.renderToString(preview);
+                    const preview = <MarkdownPreview content={plainText}/>;
+                    return ReactDOMServer.renderToString(preview);
                   }
                }}
             />
