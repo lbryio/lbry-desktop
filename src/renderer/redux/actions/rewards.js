@@ -27,7 +27,7 @@ export function doRewardList() {
   };
 }
 
-export function doClaimRewardType(rewardType) {
+export function doClaimRewardType(rewardType, options) {
   return (dispatch, getState) => {
     const state = getState();
     const unclaimedRewards = selectUnclaimedRewards(state);
@@ -73,7 +73,10 @@ export function doClaimRewardType(rewardType) {
     const failure = error => {
       dispatch({
         type: ACTIONS.CLAIM_REWARD_FAILURE,
-        data: { reward, error },
+        data: {
+          reward,
+          error: !options || !options.failSilently ? error : undefined,
+        },
       });
     };
 
@@ -95,7 +98,7 @@ export function doClaimEligiblePurchaseRewards() {
       dispatch(doClaimRewardType(rewards.TYPE_FIRST_STREAM));
     } else {
       [rewards.TYPE_MANY_DOWNLOADS, rewards.TYPE_FEATURED_DOWNLOAD].forEach(type => {
-        dispatch(doClaimRewardType(type));
+        dispatch(doClaimRewardType(type, { failSilently: true }));
       });
     }
   };
