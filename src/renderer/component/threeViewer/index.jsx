@@ -19,8 +19,12 @@ type Props = {
 class ThreeViewer extends React.PureComponent<Props> {
   constructor(props: Props) {
     super(props);
+
+    const { theme } = this.props;
+
     //Main container
     this.viewer = React.createRef();
+
     // Object colors
     this.materialColors = {
       red: '#e74c3c',
@@ -29,12 +33,7 @@ class ThreeViewer extends React.PureComponent<Props> {
       orange: '#f39c12',
     };
 
-    this.state = {
-      error: null,
-      isReady: false,
-      isLoading: false,
-    };
-
+    // Viewer themes
     this.themes = {
       dark: {
         gridColor: '#414e5c',
@@ -51,8 +50,14 @@ class ThreeViewer extends React.PureComponent<Props> {
     };
 
     // Select current theme
-    const { theme } = this.props;
     this.theme = this.themes[theme] || this.themes.light;
+
+    // State
+    this.state = {
+      error: null,
+      isReady: false,
+      isLoading: false,
+    };
   }
 
   createOrbitControls(camera, canvas) {
@@ -186,8 +191,8 @@ class ThreeViewer extends React.PureComponent<Props> {
   }
 
   handleProgress(url, currentItem, totalItems) {
-    // Handle progress
-    // TODO: Show progressbar...
+    const progress = (currentItem / totalItems) * 100;
+    this.setState({progress});
   }
 
   handleColorChange(color) {
@@ -255,15 +260,15 @@ class ThreeViewer extends React.PureComponent<Props> {
   }
 
   render() {
-    const { isReady, isLoading, error } = this.state;
+    const { error, progress, isReady, isLoading } = this.state;
     const loadingMessage = 'Rendering model.';
     const showViewer = isReady && !error;
     const showLoading = isLoading && !error;
 
     return (
       <React.Fragment>
-        {error && <LoadingScreen status={error} />}
-        {showLoading && <LoadingScreen status={loadingMessage} />}
+        {error && <LoadingScreen status={error} spinner={false} />}
+        {showLoading && <LoadingScreen status={loadingMessage} spinner={false} progress={progress} />}
         <div style={{ opacity: isReady ? 1 : 0 }} className="three-viewer" ref={this.viewer} />
       </React.Fragment>
     );
