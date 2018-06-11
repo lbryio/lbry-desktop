@@ -1,8 +1,10 @@
 // @flow
 import * as React from 'react';
+import ReactDOMServer from 'react-dom/server';
 import classnames from 'classnames';
+import MarkdownPreview from 'component/common/markdown-preview';
 import SimpleMDE from 'react-simplemde-editor';
-import style from 'react-simplemde-editor/dist/simplemde.min.css'; // eslint-disable-line no-unused-vars
+import "simplemde/dist/simplemde.min.css";
 
 type Props = {
   name: string,
@@ -52,7 +54,13 @@ export class FormField extends React.PureComponent<Props> {
             <SimpleMDE
               {...inputProps}
               type="textarea"
-              options={{ hideIcons: ['heading', 'image', 'fullscreen', 'side-by-side'] }}
+              options={{
+                  hideIcons: ['heading', 'image', 'fullscreen', 'side-by-side'],
+                  previewRender(plainText) {
+                    const preview = <MarkdownPreview content={plainText}/>;
+                    return ReactDOMServer.renderToString(preview);
+                  }
+               }}
             />
           </div>
         );
