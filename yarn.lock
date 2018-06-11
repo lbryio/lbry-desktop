@@ -8726,6 +8726,12 @@ stream-to-blob-url@^2.0.0:
   dependencies:
     stream-to-blob "^1.0.0"
 
+stream-to-blob-url@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/stream-to-blob-url/-/stream-to-blob-url-2.1.1.tgz#e1ac97f86ca8e9f512329a48e7830ce9a50beef2"
+  dependencies:
+    stream-to-blob "^1.0.0"
+
 stream-to-blob@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/stream-to-blob/-/stream-to-blob-1.0.0.tgz#9f7a1ada39e16ea282ebb7e4cda307edabde658d"
