@@ -43,6 +43,7 @@ export function doInstallNew() {
       payload.app_id = status.installation_id;
       Lbry.version().then(version => {
         payload.daemon_version = version.lbrynet_version;
+        payload.operating_system = version.os_system;
         payload.platform = version.platform;
         Lbryio.call('install', 'new', payload);
       });
