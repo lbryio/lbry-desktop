@@ -359,4 +359,7 @@ p {
   &.qr-code--right-padding {
     padding-right: $spacing-vertical * 2/3;
   }
+  &.qr-code--top-padding {
+    padding-top: $spacing-vertical * 2/3;
+  }
 }
