@@ -170,7 +170,7 @@ class ThreeViewer extends React.PureComponent<Props> {
     group.scale.set(scaleFactor, scaleFactor, scaleFactor);
     group.position.setY((meshY / 2) * scaleFactor);
     group.position.multiplyScalar(-1);
-    group.position.setY(meshY * scaleFactor);
+    group.position.setY((meshY * scaleFactor) / 2);
   }
 
   startLoader() {
