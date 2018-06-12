@@ -133,7 +133,12 @@ class FilePage extends React.Component<Props> {
     // We will select the claim id before they publish
     let editUri;
     if (claimIsMine) {
-      editUri = buildURI({ channelName, contentName: claim.name });
+      const uriObject = { contentName: claim.name, claimId: claim.claim_id };
+      if (channelName) {
+        uriObject.channelName = channelName;
+      }
+
+      editUri = buildURI(uriObject);
     }
 
     return (

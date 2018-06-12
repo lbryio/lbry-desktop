@@ -1,32 +1,34 @@
 // @flow
 import * as React from 'react';
 import Button from 'component/button';
+import { buildURI } from 'lbry-redux';
+import type { Claim } from 'types/claim';
 
 type Props = {
   uri: ?string,
-  editingURI: ?string,
   isResolvingUri: boolean,
   winningBidForClaimUri: ?number,
-  myClaimForUri: ?{},
-  onEditMyClaim: any => void,
+  myClaimForUri: ?Claim,
+  isStillEditing: boolean,
+  onEditMyClaim: (any, string) => void,
 };
 
 class BidHelpText extends React.PureComponent<Props> {
   render() {
     const {
       uri,
-      editingURI,
       isResolvingUri,
       winningBidForClaimUri,
       myClaimForUri,
       onEditMyClaim,
+      isStillEditing,
     } = this.props;
 
     if (!uri) {
       return __('Create a URL for this content');
     }
 
-    if (uri === editingURI) {
+    if (isStillEditing) {
       return __('You are currently editing this claim');
     }
 
@@ -35,11 +37,20 @@ class BidHelpText extends React.PureComponent<Props> {
     }
 
     if (myClaimForUri) {
+      const editUri = buildURI({
+        contentName: myClaimForUri.name,
+        claimId: myClaimForUri.claim_id,
+      });
+
       return (
         <React.Fragment>
           {__('You already have a claim at')}
           {` ${uri} `}
-          <Button button="link" label="Edit it" onClick={() => onEditMyClaim(myClaimForUri, uri)} />
+          <Button
+            button="link"
+            label="Edit it"
+            onClick={() => onEditMyClaim(myClaimForUri, editUri)}
+          />
           <br />
           {__('Publishing will update your existing claim.')}
         </React.Fragment>

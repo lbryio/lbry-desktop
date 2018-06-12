@@ -187,22 +187,23 @@ export const doPublish = (params: PublishParams) => (dispatch: Dispatch, getStat
     price,
     uri,
     sources,
+    isStillEditing
   } = params;
 
   // get the claim id from the channel name, we will use that instead
   const namedChannelClaim = myChannels.find(myChannel => myChannel.name === channel);
   const channelId = namedChannelClaim ? namedChannelClaim.claim_id : '';
 
-  let isEdit;
-  const newPublishName = channel ? `${channel}/${name}` : name;
-  for (let i = 0; i < myClaims.length; i += 1) {
-    const { channel_name: claimChannelName, name: claimName } = myClaims[i];
-    const contentName = claimChannelName ? `${claimChannelName}/${claimName}` : claimName;
-    if (contentName === newPublishName) {
-      isEdit = true;
-      break;
-    }
-  }
+  // let isEdit;
+  // const newPublishName = channel ? `${channel}/${name}` : name;
+  // for (let i = 0; i < myClaims.length; i += 1) {
+  //   const { channel_name: claimChannelName, name: claimName } = myClaims[i];
+  //   const contentName = claimChannelName ? `${claimChannelName}/${claimName}` : claimName;
+  //   if (contentName === newPublishName) {
+  //     isEdit = true;
+  //     break;
+  //   }
+  // }
 
   const fee = contentIsFree || !price.amount ? undefined : { ...price };
 
@@ -241,7 +242,7 @@ export const doPublish = (params: PublishParams) => (dispatch: Dispatch, getStat
   const success = () => {
     dispatch({
       type: ACTIONS.PUBLISH_SUCCESS,
-      data: { pendingPublish: { ...publishPayload, isEdit } },
+      data: { pendingPublish: { ...publishPayload, isEdit: isStillEditing } },
     });
     dispatch(doNotify({ id: MODALS.PUBLISH }, { uri }));
   };

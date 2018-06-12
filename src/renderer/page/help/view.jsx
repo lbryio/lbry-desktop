@@ -25,6 +25,7 @@ class HelpPage extends React.PureComponent {
 
   componentDidMount() {
     Native.getAppVersionInfo().then(({ remoteVersion, localVersion, upgradeAvailable }) => {
+      console.log('localVersion: ', localVersion);
       this.setState({
         uiVersion: localVersion,
         upgradeAvailable,
