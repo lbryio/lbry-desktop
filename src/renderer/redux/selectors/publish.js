@@ -1,11 +1,34 @@
 import { createSelector } from 'reselect';
-import { parseURI, selectClaimsById, selectMyClaims } from 'lbry-redux';
+import {
+  parseURI,
+  selectClaimsById,
+  selectMyClaims,
+  selectMyClaimsWithoutChannels,
+} from 'lbry-redux';
 
 const selectState = state => state.publish || {};
 
 export const selectPendingPublishes = createSelector(
   selectState,
   state => state.pendingPublishes.map(pendingClaim => ({ ...pendingClaim, pending: true })) || []
+);
+
+export const selectClaimsWithPendingPublishes = createSelector(
+  selectMyClaimsWithoutChannels,
+  selectPendingPublishes,
+  (claims, pendingPublishes) => {
+    // ensure there are no duplicates, they are being checked for in a setInterval
+    // no need to wait for it to complete though
+    // loop through myclaims
+    // if a claim has the same name as one in pendingPublish, remove it from pending
+    const claimMap = {};
+    claims.forEach(claim => {
+      claimMap[claim.name] = true;
+    });
+
+    const filteredPendingPublishes = pendingPublishes.filter(claim => !claimMap[claim.name]);
+    return [...claims, ...filteredPendingPublishes];
+  }
 );
 
 export const selectPublishFormValues = createSelector(selectState, state => {
@@ -30,9 +53,17 @@ export const selectPendingPublish = uri =>
 export const selectIsStillEditing = createSelector(selectPublishFormValues, publishState => {
   const { editingURI, uri } = publishState;
 
-  const { isChannel: currentIsChannel, claimName: currentClaimName, contentName: currentContentName } = parseURI(uri);
-  const { isChannel: editIsChannel, claimName: editClaimName, contentName: editContentName } = parseURI(editingURI);
-  
+  const {
+    isChannel: currentIsChannel,
+    claimName: currentClaimName,
+    contentName: currentContentName,
+  } = parseURI(uri);
+  const {
+    isChannel: editIsChannel,
+    claimName: editClaimName,
+    contentName: editContentName,
+  } = parseURI(editingURI);
+
   // Depending on the previous/current use of a channel, we need to compare different things
   // ex: going from a channel to anonymous, the new uri won't return contentName, so we need to use claimName
   if (!currentIsChannel && editIsChannel) {
@@ -41,9 +72,8 @@ export const selectIsStillEditing = createSelector(selectPublishFormValues, publ
     return currentContentName === editClaimName;
   } else if (!currentIsChannel && !editIsChannel) {
     return currentClaimName === editClaimName;
-  } else {
-    return currentContentName === editContentName;
   }
+  return currentContentName === editContentName;
 });
 
 export const selectMyClaimForUri = createSelector(
@@ -52,7 +82,7 @@ export const selectMyClaimForUri = createSelector(
   selectClaimsById,
   selectMyClaims,
   ({ editingURI, uri }, isStillEditing, claimsById, myClaims) => {
-    const {  contentName: currentContentName } = parseURI(uri);
+    const { contentName: currentContentName } = parseURI(uri);
     const { claimId: editClaimId } = parseURI(editingURI);
     let myClaimForUri;
 
@@ -63,9 +93,7 @@ export const selectMyClaimForUri = createSelector(
       myClaimForUri = claimsById[editClaimId];
     } else {
       // Check if they have a previous claim based on the channel/name
-      myClaimForUri = myClaims.find(
-        claim => claim.name === currentContentName
-      );
+      myClaimForUri = myClaims.find(claim => claim.name === currentContentName);
     }
 
     return myClaimForUri;

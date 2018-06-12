@@ -187,24 +187,12 @@ export const doPublish = (params: PublishParams) => (dispatch: Dispatch, getStat
     price,
     uri,
     sources,
-    isStillEditing
+    isStillEditing,
   } = params;
 
   // get the claim id from the channel name, we will use that instead
   const namedChannelClaim = myChannels.find(myChannel => myChannel.name === channel);
   const channelId = namedChannelClaim ? namedChannelClaim.claim_id : '';
-
-  // let isEdit;
-  // const newPublishName = channel ? `${channel}/${name}` : name;
-  // for (let i = 0; i < myClaims.length; i += 1) {
-  //   const { channel_name: claimChannelName, name: claimName } = myClaims[i];
-  //   const contentName = claimChannelName ? `${claimChannelName}/${claimName}` : claimName;
-  //   if (contentName === newPublishName) {
-  //     isEdit = true;
-  //     break;
-  //   }
-  // }
-
   const fee = contentIsFree || !price.amount ? undefined : { ...price };
 
   const metadata = {
@@ -245,6 +233,7 @@ export const doPublish = (params: PublishParams) => (dispatch: Dispatch, getStat
       data: { pendingPublish: { ...publishPayload, isEdit: isStillEditing } },
     });
     dispatch(doNotify({ id: MODALS.PUBLISH }, { uri }));
+    dispatch(doCheckPendingPublishes());
   };
 
   const failure = error => {
@@ -259,38 +248,36 @@ export const doPublish = (params: PublishParams) => (dispatch: Dispatch, getStat
 export const doCheckPendingPublishes = () => (dispatch: Dispatch, getState: GetState) => {
   const state = getState();
   const pendingPublishes = selectPendingPublishes(state);
-  const myClaims = selectMyClaimsWithoutChannels(state);
 
   let publishCheckInterval;
 
   const checkFileList = () => {
     Lbry.claim_list_mine().then(claims => {
-      const claimsWithoutChannels = claims.filter(claim => !claim.name.match(/^@/));
-      if (myClaims.length !== claimsWithoutChannels.length) {
-        const pendingPublishMap = {};
-        pendingPublishes.forEach(({ name }) => {
-          pendingPublishMap[name] = name;
-        });
+      const pendingPublishMap = {};
+      pendingPublishes.forEach(({ name }) => {
+        pendingPublishMap[name] = name;
+      });
 
-        claims.forEach(claim => {
-          if (pendingPublishMap[claim.name]) {
-            dispatch({
-              type: ACTIONS.REMOVE_PENDING_PUBLISH,
-              data: {
-                name: claim.name,
-              },
-            });
-            dispatch({
-              type: ACTIONS.FETCH_CLAIM_LIST_MINE_COMPLETED,
-              data: {
-                claims,
-              },
-            });
+      claims.forEach(claim => {
+        if (pendingPublishMap[claim.name]) {
+          dispatch({
+            type: ACTIONS.REMOVE_PENDING_PUBLISH,
+            data: {
+              name: claim.name,
+            },
+          });
+          dispatch({
+            type: ACTIONS.FETCH_CLAIM_LIST_MINE_COMPLETED,
+            data: {
+              claims,
+            },
+          });
 
-            delete pendingPublishMap[claim.name];
-          }
-        });
+          delete pendingPublishMap[claim.name];
+        }
+      });
 
+      if (!pendingPublishes.length) {
         clearInterval(publishCheckInterval);
       }
     });
