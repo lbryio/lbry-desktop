@@ -16,12 +16,17 @@ type Props = {
   uri: string,
   claim: ?{ claim_id: string },
   fileInfo: ?{},
-  metadata: ?{ nsfw: boolean, thumbnail: ?string },
+  metadata: ?{ nsfw: boolean, title: string, thumbnail: ?string },
   navigate: (string, ?{}) => void,
   rewardedContentClaimIds: Array<string>,
   obscureNsfw: boolean,
+  claimIsMine: boolean,
   showPrice: boolean,
   pending?: boolean,
+  /* eslint-disable react/no-unused-prop-types */
+  resolveUri: string => void,
+  isResolvingUri: boolean,
+  /* eslint-enable react/no-unused-prop-types */
 };
 
 class FileCard extends React.PureComponent<Props> {
@@ -53,13 +58,14 @@ class FileCard extends React.PureComponent<Props> {
       navigate,
       rewardedContentClaimIds,
       obscureNsfw,
+      claimIsMine,
       showPrice,
       pending,
     } = this.props;
     const uri = !pending ? normalizeURI(this.props.uri) : this.props.uri;
     const title = metadata && metadata.title ? metadata.title : uri;
     const thumbnail = metadata && metadata.thumbnail ? metadata.thumbnail : null;
-    const shouldObscureNsfw = obscureNsfw && metadata && metadata.nsfw;
+    const shouldObscureNsfw = obscureNsfw && metadata && metadata.nsfw && !claimIsMine;
     const isRewardContent = claim && rewardedContentClaimIds.includes(claim.claim_id);
     const handleContextMenu = event => {
       event.preventDefault();
