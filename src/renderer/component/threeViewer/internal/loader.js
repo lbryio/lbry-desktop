@@ -1,10 +1,10 @@
-import { LoadingManager, STLLoader, OBJLoader } from './three.js';
+import { LoadingManager, STLLoader, OBJLoader } from './three';
 
 const Manager = ({ onLoad, onStart, onProgress, onError }) => {
-  const manager = new THREE.LoadingManager();
+  const manager = new LoadingManager();
   manager.onLoad = onLoad;
   manager.onStart = onStart;
-  //manager.onProgress = onProgress;
+  manager.onProgress = onProgress;
   manager.onError = onError;
 
   return manager;
@@ -19,17 +19,16 @@ const Loader = (fileType, manager) => {
 };
 
 const ThreeLoader = ({ fileType, filePath }, renderModel, managerEvents) => {
-  if (!fileType) return;
+  if (fileType) {
+    const manager = Manager(managerEvents);
+    const loader = Loader(fileType, manager);
 
-  const manager = Manager(managerEvents);
-  const loader = Loader(fileType, manager);
-
-  // Unsuported loader
-  if (!loader) return false;
-
-  loader.load(filePath, data => {
-    renderModel(fileType, data);
-  });
+    if (loader) {
+      loader.load(filePath, data => {
+        renderModel(fileType, data);
+      });
+    }
+  }
 };
 
 export default ThreeLoader;

@@ -1,11 +1,12 @@
 // @flow
 import * as React from 'react';
-import * as THREE from './internal/three.js';
-import detectWebGL from './internal/detector.js';
-import ThreeScene from './internal/scene.js';
-import ThreeLoader from './internal/loader.js';
-import ThreeRenderer from './internal/renderer.js';
 import LoadingScreen from 'component/common/loading-screen';
+// ThreeJS
+import * as THREE from './internal/three';
+import detectWebGL from './internal/detector';
+import ThreeScene from './internal/scene';
+import ThreeLoader from './internal/loader';
+import ThreeRenderer from './internal/renderer';
 
 type Props = {
   theme: string,
@@ -22,7 +23,7 @@ class ThreeViewer extends React.PureComponent<Props> {
 
     const { theme } = this.props;
 
-    //Main container
+    // Main container
     this.viewer = React.createRef();
 
     // Object colors
@@ -60,6 +61,22 @@ class ThreeViewer extends React.PureComponent<Props> {
     };
   }
 
+  componentDidMount() {
+    if (detectWebGL()) {
+      this.renderScene();
+      // Update render on resize window
+      window.addEventListener('resize', this.handleResize, false);
+    } else {
+      // No webgl support, handle Error...
+      // TODO: Use a better error message
+      this.state({ error: "Sorry, your computer doesn't support WebGL." });
+    }
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.handleResize, false);
+  }
+
   createOrbitControls(camera, canvas) {
     const { autoRotate } = this.props;
     const controls = new THREE.OrbitControls(camera, canvas);
@@ -85,11 +102,15 @@ class ThreeViewer extends React.PureComponent<Props> {
   }
 
   createWireFrame(group) {
-    const wireframe = new THREE.WireframeGeometry(group.geometry);
-    this.wireframe = new THREE.LineSegments(wireframe);
-    this.wireframe.material.depthTest = false;
-    this.wireframe.material.opacity = 0;
-    this.wireframe.transparent = true;
+    const wireframeGeometry = new THREE.WireframeGeometry(group.geometry);
+    const wireframeMaterial = new THREE.LineBasicMaterial({
+      opacity: 0,
+      transparent: true,
+      linewidth: 1,
+    });
+    // Set material color
+    wireframeMaterial.color.set(this.materialColors.green);
+    this.wireframe = new THREE.LineSegments(wireframeGeometry, wireframeMaterial);
     group.add(this.wireframe);
   }
 
@@ -115,7 +136,7 @@ class ThreeViewer extends React.PureComponent<Props> {
     this.scene.add(mesh);
     this.fitMeshToCamera(mesh);
     this.createWireFrame(mesh);
-    this.setControlsTarget(mesh.position);
+    this.updateControlsTarget(mesh.position);
     return mesh;
   }
 
@@ -125,8 +146,8 @@ class ThreeViewer extends React.PureComponent<Props> {
   }
 
   fitMeshToCamera(group) {
-    let max = { x: 0, y: 0, z: 0 };
-    let min = { x: 0, y: 0, z: 0 };
+    const max = { x: 0, y: 0, z: 0 };
+    const min = { x: 0, y: 0, z: 0 };
 
     group.traverse(child => {
       if (child instanceof THREE.Mesh) {
@@ -144,29 +165,25 @@ class ThreeViewer extends React.PureComponent<Props> {
 
     const meshY = Math.abs(max.y - min.y);
     const meshX = Math.abs(max.x - min.x);
-    const meshZ = Math.abs(max.z - min.z);
-    const scaleFactor = 10 / Math.max(meshX, meshY);
+    const scaleFactor = 15 / Math.max(meshX, meshY);
 
     group.scale.set(scaleFactor, scaleFactor, scaleFactor);
-    group.position.y = meshY / 2 * scaleFactor;
+    group.position.setY((meshY / 2) * scaleFactor);
     group.position.multiplyScalar(-1);
-    group.position.y += meshY * scaleFactor;
-  }
-
-  setControlsTarget(point) {
-    this.controls.target.fromArray([point.x, point.y, point.z]);
-    this.controls.update();
+    group.position.setY(meshY * scaleFactor);
   }
 
   startLoader() {
     const { source } = this.props;
-    source &&
+
+    if (source) {
       ThreeLoader(source, this.renderModel.bind(this), {
         onStart: this.handleStart(this),
         onLoad: this.handleReady.bind(this),
         onError: this.handleError.bind(this),
         onProgress: this.handleProgress.bind(this),
       });
+    }
   }
 
   handleStart() {
@@ -186,13 +203,13 @@ class ThreeViewer extends React.PureComponent<Props> {
     this.renderer.setSize(width, height);
   };
 
-  handleError(url) {
+  handleError() {
     this.setState({ error: "Sorry, looks like we can't load this file" });
   }
 
-  handleProgress(url, currentItem, totalItems) {
-    const progress = (currentItem / totalItems) * 100;
-    this.setState({progress});
+  handleProgress() {
+    // const progress = (currentItem / totalItems) * 100;
+    // console.info(currentItem, totalItems, progress);
   }
 
   handleColorChange(color) {
@@ -200,6 +217,11 @@ class ThreeViewer extends React.PureComponent<Props> {
     const pickColor = this.materialColors[color] || this.materialColors.green;
     this.mesh.material.color.set(pickColor);
     this.wireframe.material.color.set(pickColor);
+  }
+
+  updateControlsTarget(point) {
+    this.controls.target.fromArray([point.x, point.y, point.z]);
+    this.controls.update();
   }
 
   renderModel(fileType, data) {
@@ -243,33 +265,21 @@ class ThreeViewer extends React.PureComponent<Props> {
     viewer.appendChild(canvas);
   }
 
-  componentDidMount() {
-    if (detectWebGL()) {
-      this.renderScene();
-      // Update render on resize window
-      window.addEventListener('resize', this.handleResize, false);
-    } else {
-      // No webgl support, handle Error...
-      // TODO: Use a better error message
-      this.state({ error: 'No webgl support!' });
-    }
-  }
-
-  componentWillUnmount() {
-    window.removeEventListener('resize', this.handleResize, false);
-  }
-
   render() {
-    const { error, progress, isReady, isLoading } = this.state;
-    const loadingMessage = 'Rendering model.';
+    const { error, isReady, isLoading } = this.state;
+    const loadingMessage = 'Loading 3D model.';
     const showViewer = isReady && !error;
     const showLoading = isLoading && !error;
 
     return (
       <React.Fragment>
         {error && <LoadingScreen status={error} spinner={false} />}
-        {showLoading && <LoadingScreen status={loadingMessage} spinner={false} progress={progress} />}
-        <div style={{ opacity: isReady ? 1 : 0 }} className="three-viewer" ref={this.viewer} />
+        {showLoading && <LoadingScreen status={loadingMessage} spinner />}
+        <div
+          style={{ opacity: showViewer ? 1 : 0 }}
+          className="three-viewer file-render__viewer"
+          ref={this.viewer}
+        />
       </React.Fragment>
     );
   }

@@ -1,4 +1,4 @@
-import * as THREE from './three.js';
+import * as THREE from './three';
 
 const addGrid = (scene, { gridColor, centerLineColor, size }) => {
   const divisions = size / 2;
@@ -31,25 +31,25 @@ const addLights = (scene, color, groundColor) => {
 };
 
 const Scene = ({ backgroundColor, groundColor, showFog, showGrid, gridColor, centerLineColor }) => {
-  // Convert colors
-  backgroundColor = new THREE.Color(backgroundColor);
-  groundColor = new THREE.Color(groundColor);
+  // Convert color
+  const bgColor = new THREE.Color(backgroundColor);
   // New scene
   const scene = new THREE.Scene();
   // Background color
-  scene.background = backgroundColor;
+  scene.background = bgColor;
   // Fog effect
-  scene.fog = showFog === true ? new THREE.Fog(backgroundColor, 1, 95) : null;
-
-  showGrid &&
+  scene.fog = showFog === true ? new THREE.Fog(bgColor, 1, 95) : null;
+  // Add grid
+  if (showGrid) {
     addGrid(scene, {
       size: 100,
       gridColor,
       centerLineColor,
     });
-
+  }
   // Add basic lights
   addLights(scene, '#FFFFFF', groundColor);
+
   // Return new three scene
   return scene;
 };
