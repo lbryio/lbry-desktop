@@ -9,7 +9,6 @@ import FileRender from 'component/fileRender';
 import Thumbnail from 'component/common/thumbnail';
 import LoadingScreen from 'component/common/loading-screen';
 
-
 class VideoPlayer extends React.PureComponent {
   static MP3_CONTENT_TYPES = ['audio/mpeg3', 'audio/mpeg'];
   static FILE_MEDIA_TYPES = ['3D-file', 'e-book', 'comic-book'];
@@ -21,6 +20,7 @@ class VideoPlayer extends React.PureComponent {
       hasMetadata: false,
       startedPlaying: false,
       unplayable: false,
+      fileSource: null,
     };
 
     this.togglePlayListener = this.togglePlay.bind(this);
@@ -232,7 +232,8 @@ class VideoPlayer extends React.PureComponent {
         {isLoadingFile && <LoadingScreen status={noFileMessage} />}
         {isLoadingMetadata && <LoadingScreen status={noMetadataMessage} />}
         {isUnplayable && <LoadingScreen status={unplayableMessage} spinner={false} />}
-        {unsupported || isUnsupported && <LoadingScreen status={unsupportedMessage} spinner={false} />}
+        {unsupported ||
+          (isUnsupported && <LoadingScreen status={unsupportedMessage} spinner={false} />)}
         {isFile && <FileRender source={fileSource} mediaType={mediaType} />}
         <div
           className={'content__view--container'}

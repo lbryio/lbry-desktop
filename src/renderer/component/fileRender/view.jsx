@@ -1,11 +1,11 @@
 // @flow
 import React from 'react';
 import LoadingScreen from 'component/common/loading-screen';
-//import ThreeViewer from 'component/threeViewer';
+// import ThreeViewer from 'component/threeViewer';
 
 type Props = {
   mediaType: string,
-  fileSource: {
+  source: {
     filePath: string,
     fileType: string,
   },
@@ -13,36 +13,26 @@ type Props = {
 };
 
 class FileRender extends React.PureComponent<Props> {
-  constructor() {
-    super();
-  }
-
-  routeViewer() {
-    const { mediaType, fileSource, currentTheme } = this.props;
-
-    if (!mediaType || !fileSource) return null;
+  renderViewer() {
+    const { source, mediaType, currentTheme } = this.props;
+    const viewerProps = { source, theme: currentTheme };
 
     // Supported mediaTypes
     const mediaTypes = {
-      // '3D-file': () => <ThreeViewer source={fileSource} theme={currentTheme}/>,
-      // 'e-book': () => <EbookReader />,
-      // 'comic-book' () => <ComicReader />,
+      // '3D-file':  <ThreeViewer {...viewerProps}/>,
       // Add routes to viewer...
     };
 
+    const viewer = mediaType && source && mediaTypes[mediaType];
+    const unsupportedMessage = "Sorry, looks like we can't preview this file.";
+    const unsupported = <LoadingScreen status={unsupportedMessage} spinner={false} />;
+
     // Return viewer
-    return mediaType ? mediaTypes[mediaType] : null;
+    return viewer || unsupported;
   }
 
   render() {
-    const Viewer = this.routeViewer();
-    const unsupportedMessage = "Sorry, looks like we can't preview this file.";
-
-    return (
-      <div className="file-render">
-        {Viewer ? <Viewer /> : <LoadingScreen status={unsupportedMessage} spinner={false} />}
-      </div>
-    );
+    return <div className="file-render">{this.renderViewer()}</div>;
   }
 }
 
