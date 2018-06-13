@@ -7,6 +7,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Added
 
+   * Add ability to open log file and log directory in the help page ([#1556](https://github.com/lbryio/lbry-app/issues/1556))
    * Add ability to resend verification email ([#1492](https://github.com/lbryio/lbry-app/issues/1492))
    * Add Narrative about Feature Request on Help Page and Report Page ([#1551](https://github.com/lbryio/lbry-app/pull/1551))
    * Add keyboard shortcut to quit the app on Windows ([#1202](https://github.com/lbryio/lbry-app/pull/1202))
@@ -27,6 +28,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
    * Move rewards logic to interal api ([#1509](https://github.com/lbryio/lbry-app/pull/1509))
 
 ### Fixed
+   * Fixing content address extending outside of visible area. ([#741](https://github.com/lbryio/lbry-app/issues/741))
    * Fix content-type not shown correctly in file description ([#863](https://github.com/lbryio/lbry-app/pull/863))
    * Fix [Flow](https://flow.org/) ([#1197](https://github.com/lbryio/lbry-app/pull/1197))
    * Fix black screen on macOS after maximizing LBRY and then closing ([#1235](https://github.com/lbryio/lbry-app/pull/1235))

@@ -8,6 +8,10 @@
   flex-direction: column;
 }
 
+.card > h1 {
+  word-wrap: break-word;
+}
+
 .card--section {
   background-color: var(--card-bg);
   padding: $spacing-vertical;
