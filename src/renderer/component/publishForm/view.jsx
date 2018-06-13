@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { isNameValid, buildURI, regexInvalidURI } from 'lbry-redux';
+import { isNameValid, buildURI, regexInvalidURI, STATUSES } from 'lbry-redux';
 import { Form, FormField, FormRow, FormFieldPrice, Submit } from 'component/common/form';
 import Button from 'component/button';
 import ChannelSection from 'component/selectChannel';
@@ -50,7 +50,6 @@ type Props = {
   publishing: boolean,
   balance: number,
   isStillEditing: boolean,
-  thumbnailUploadStatus: string,
   clearPublish: () => void,
   resolveUri: string => void,
   scrollToTop: () => void,
@@ -559,7 +558,12 @@ class PublishForm extends React.PureComponent<Props> {
           </section>
 
           <div className="card__actions">
-            <Submit label={submitLabel} disabled={formDisabled || !formValid || publishing} />
+            <Submit
+              label={submitLabel}
+              disabled={
+                formDisabled || !formValid || uploadThumbnailStatus === STATUSES.IN_PROGRESS
+              }
+            />
             <Button button="alt" onClick={this.handleCancelPublish} label={__('Cancel')} />
           </div>
           {!formDisabled && !formValid && this.renderFormErrors()}
