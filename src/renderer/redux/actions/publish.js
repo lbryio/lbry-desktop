@@ -22,8 +22,10 @@ type PromiseAction = Promise<Action>;
 type Dispatch = (action: Action | PromiseAction | Array<Action>) => any;
 type GetState = () => {};
 
-export const doClearPublish = () => (dispatch: Dispatch): Action =>
+export const doClearPublish = () => (dispatch: Dispatch): PromiseAction => {
   dispatch({ type: ACTIONS.CLEAR_PUBLISH });
+  return dispatch(doResetThumbnailStatus());
+};
 
 export const doUpdatePublishForm = (publishFormValue: UpdatePublishFormData) => (
   dispatch: Dispatch
@@ -160,6 +162,7 @@ export const doPrepareEdit = (claim: any, uri: string) => (dispatch: Dispatch) =
     thumbnail,
     title,
     uri,
+    uploadThumbnailStatus: thumbnail ? STATUSES.MANUAL : undefined,
   };
 
   dispatch({ type: ACTIONS.DO_PREPARE_EDIT, data: publishData });

@@ -50,6 +50,7 @@ type Props = {
   publishing: boolean,
   balance: number,
   isStillEditing: boolean,
+  thumbnailUploadStatus: string,
   clearPublish: () => void,
   resolveUri: string => void,
   scrollToTop: () => void,
@@ -73,7 +74,10 @@ class PublishForm extends React.PureComponent<Props> {
   }
 
   componentWillMount() {
-    this.props.resetThumbnailStatus();
+    const { isStillEditing, thumbnail } = this.props;
+    if (!isStillEditing || !thumbnail) {
+      this.props.resetThumbnailStatus();
+    }
   }
 
   getNewUri(name: string, channel: string) {
