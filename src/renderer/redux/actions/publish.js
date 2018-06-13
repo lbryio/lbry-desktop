@@ -278,7 +278,7 @@ export const doCheckPendingPublishes = () => (dispatch: Dispatch, getState: GetS
 
       dispatch(batchActions(...actions));
 
-      if (!pendingPublishes.length) {
+      if (!Object.keys(pendingPublishes).length) {
         clearInterval(publishCheckInterval);
       }
     });
