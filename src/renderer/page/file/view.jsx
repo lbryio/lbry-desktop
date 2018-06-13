@@ -148,77 +148,81 @@ class FilePage extends React.Component<Props> {
             <span className="empty">{__('Empty claim or metadata info.')}</span>
           </section>
         ) : (
-          <section className="card">
-            {isPlayable ? (
-              <Video className="content__embedded" uri={uri} />
-            ) : (
-              <Thumbnail shouldObscure={shouldObscureThumbnail} src={thumbnail} />
-            )}
-            <div className="card__content">
-              <div className="card__title-identity--file">
-                <h1 className="card__title card__title--file">{title}</h1>
-                <div className="card__title-identity-icons">
-                  <FilePrice uri={normalizeURI(uri)} />
-                  {isRewardContent && (
-                    <Icon iconColor="red" tooltip="bottom" icon={icons.FEATURED} />
-                  )}
+          <React.Fragment>
+            <section className="card">
+              {isPlayable ? (
+                <Video className="content__embedded" uri={uri} />
+              ) : (
+                <Thumbnail shouldObscure={shouldObscureThumbnail} src={thumbnail} uri={uri} />
+              )}
+            </section>
+            <section className="card">
+              <div className="card__content">
+                <div className="card__title-identity--file">
+                  <h1 className="card__title card__title--file">{title}</h1>
+                  <div className="card__title-identity-icons">
+                    <FilePrice uri={normalizeURI(uri)} />
+                    {isRewardContent && (
+                      <Icon iconColor="red" tooltip="bottom" icon={icons.FEATURED} />
+                    )}
+                  </div>
                 </div>
-              </div>
-              <span className="card__subtitle card__subtitle--file">
-                {__('Published on')}&nbsp;
-                <DateTime block={height} show={DateTime.SHOW_DATE} />
-              </span>
-              {metadata.nsfw && <div>NSFW</div>}
-              <div className="card__channel-info">
-                <UriIndicator uri={uri} link />
+                <span className="card__subtitle card__subtitle--file">
+                  {__('Published on')}&nbsp;
+                  <DateTime block={height} show={DateTime.SHOW_DATE} />
+                </span>
+                {metadata.nsfw && <div>NSFW</div>}
+                <div className="card__channel-info">
+                  <UriIndicator uri={uri} link />
 
-                <div className="card__actions card__actions--no-margin">
-                  {claimIsMine ? (
-                    <Button
-                      button="primary"
-                      icon={icons.EDIT}
-                      label={__('Edit')}
-                      onClick={() => {
-                        prepareEdit(claim, editUri);
-                        navigate('/publish');
-                      }}
-                    />
-                  ) : (
-                    <React.Fragment>
+                  <div className="card__actions card__actions--no-margin">
+                    {claimIsMine ? (
                       <Button
-                        button="alt"
-                        icon="Send"
-                        label={__('Enjoy this? Send a tip')}
-                        onClick={() => openModal({ id: MODALS.SEND_TIP }, { uri })}
+                        button="primary"
+                        icon={icons.EDIT}
+                        label={__('Edit')}
+                        onClick={() => {
+                          prepareEdit(claim, editUri);
+                          navigate('/publish');
+                        }}
                       />
-                      <SubscribeButton uri={subscriptionUri} channelName={channelName} />
-                    </React.Fragment>
-                  )}
-                  {speechSharable && (
-                    <ViewOnWebButton claimId={claim.claim_id} claimName={claim.name} />
-                  )}
+                    ) : (
+                      <React.Fragment>
+                        <Button
+                          button="alt"
+                          icon="Send"
+                          label={__('Enjoy this? Send a tip')}
+                          onClick={() => openModal({ id: MODALS.SEND_TIP }, { uri })}
+                        />
+                        <SubscribeButton uri={subscriptionUri} channelName={channelName} />
+                      </React.Fragment>
+                    )}
+                    {speechSharable && (
+                      <ViewOnWebButton claimId={claim.claim_id} claimName={claim.name} />
+                    )}
+                  </div>
                 </div>
+                <FormRow alignRight>
+                  <FormField
+                    type="checkbox"
+                    name="autoplay"
+                    onChange={this.onAutoplayChange}
+                    checked={autoplay}
+                    postfix={__('Autoplay')}
+                  />
+                </FormRow>
               </div>
-              <FormRow alignRight>
-                <FormField
-                  type="checkbox"
-                  name="autoplay"
-                  onChange={this.onAutoplayChange}
-                  checked={autoplay}
-                  postfix={__('Autoplay')}
-                />
-              </FormRow>
-            </div>
 
-            <div className="card__content">
-              <FileDownloadLink uri={uri} />
-              <FileActions uri={uri} claimId={claim.claim_id} />
-            </div>
+              <div className="card__content">
+                <FileDownloadLink uri={uri} />
+                <FileActions uri={uri} claimId={claim.claim_id} />
+              </div>
 
-            <div className="card__content--extra-padding">
-              <FileDetails uri={uri} />
-            </div>
-          </section>
+              <div className="card__content--extra-padding">
+                <FileDetails uri={uri} />
+              </div>
+            </section>
+          </React.Fragment>
         )}
       </Page>
     );
