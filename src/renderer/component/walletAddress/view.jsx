@@ -67,7 +67,7 @@ class WalletAddress extends React.PureComponent<Props> {
         </div>
 
         <div className="card__content">
-          {showQR && <QRCode value={receiveAddress} paddingTop size={256} />}
+          {showQR && <QRCode value={receiveAddress} paddingTop />}
         </div>
 
         <div className="card__content">
