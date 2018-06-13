@@ -152,9 +152,8 @@ class HelpPage extends React.PureComponent<Props, State> {
         <section className="card card--section">
           <div className="card__title">{__('View your Log')}</div>
           <p className="card__subtitle">
-            {__(
-              'Do you find something wrong? Have a look in your log, or send your log to support for some help.'
-            )}
+            {__('Did something go wrong? Have a look in your log file, or send it to')}{' '}
+            <Button button="link" label={__('support')} href="https://lbry.io/faq/support" />.
           </p>
           <div className="card__actions">
             <Button
