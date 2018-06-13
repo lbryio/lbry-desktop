@@ -169,18 +169,23 @@ export default handleActions(
       };
     },
     [ACTIONS.DO_PREPARE_EDIT]: (state: PublishState, action) => {
+      const { pendingPublishes } = state;
       const { ...publishData } = action.data;
-      const { channel, name } = publishData;
+      const { channel, name, uri } = publishData;
 
-      const uri = buildURI({
+      // The short uri is what is presented to the user
+      // The editingUri is the full uri with claim id
+      const shortUri = buildURI({
         channelName: channel,
         contentName: name,
       });
 
       return {
         ...defaultState,
-        editingURI: uri,
         ...publishData,
+        pendingPublishes,
+        editingURI: uri,
+        uri: shortUri,
       };
     },
   },

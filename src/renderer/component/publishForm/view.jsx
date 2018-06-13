@@ -49,6 +49,7 @@ type Props = {
   bidError: ?string,
   publishing: boolean,
   balance: number,
+  isStillEditing: boolean,
   clearPublish: () => void,
   resolveUri: string => void,
   scrollToTop: () => void,
@@ -176,24 +177,13 @@ class PublishForm extends React.PureComponent<Props> {
 
   handlePublish() {
     const {
-      publish,
       filePath,
-      bid,
-      title,
-      thumbnail,
-      description,
-      language,
-      nsfw,
+      copyrightNotice,
       licenseType,
       licenseUrl,
       otherLicenseDescription,
-      copyrightNotice,
-      name,
-      contentIsFree,
-      price,
-      uri,
       myClaimForUri,
-      channel,
+      publish,
     } = this.props;
 
     let publishingLicense;
@@ -212,21 +202,22 @@ class PublishForm extends React.PureComponent<Props> {
 
     const publishParams = {
       filePath,
-      bid,
-      title,
-      thumbnail,
-      description,
-      language,
-      nsfw,
+      bid: this.props.bid,
+      title: this.props.title,
+      thumbnail: this.props.thumbnail,
+      description: this.props.description,
+      language: this.props.language,
+      nsfw: this.props.nsfw,
       license: publishingLicense,
       licenseUrl: publishingLicenseUrl,
       otherLicenseDescription,
       copyrightNotice,
-      name,
-      contentIsFree,
-      price,
-      uri,
-      channel,
+      name: this.props.name,
+      contentIsFree: this.props.contentIsFree,
+      price: this.props.price,
+      uri: this.props.uri,
+      channel: this.props.channel,
+      isStillEditing: this.props.isStillEditing,
     };
 
     // Editing a claim
@@ -299,19 +290,12 @@ class PublishForm extends React.PureComponent<Props> {
       clearPublish,
       thumbnailPath,
       resetThumbnailStatus,
+      isStillEditing,
     } = this.props;
 
     const formDisabled = (!filePath && !editingURI) || publishing;
     const formValid = this.checkIsFormValid();
 
-    // The user could be linked from lbry://@channel... or lbry://claim-name...
-    // If a channel exists, we need to make sure it is added to the uri for proper edit handling
-    // If this isn't an edit, just use the pregenerated uri
-    const simpleUri = myClaimForUri
-      ? buildURI({ channelName: myClaimForUri.channel_name, contentName: myClaimForUri.name })
-      : uri;
-
-    const isStillEditing = editingURI === simpleUri;
     let submitLabel;
     if (isStillEditing) {
       submitLabel = !publishing ? __('Edit') : __('Editing...');
@@ -463,7 +447,8 @@ class PublishForm extends React.PureComponent<Props> {
                   error={nameError}
                   helper={
                     <BidHelpText
-                      uri={simpleUri}
+                      isStillEditing={isStillEditing}
+                      uri={uri}
                       editingURI={editingURI}
                       isResolvingUri={isResolvingUri}
                       winningBidForClaimUri={winningBidForClaimUri}
