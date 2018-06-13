@@ -116,7 +116,7 @@ class FilePage extends React.Component<Props> {
     const { height, channel_name: channelName, value } = claim;
     const mediaType = Lbry.getMediaType(contentType);
     const isPlayable =
-      Object.values(player.mime).indexOf(contentType) !== -1 || mediaType === 'audio';
+      Object.values(player.mime).indexOf(mediaType) !== -1 || mediaType === 'audio';
     const channelClaimId =
       value && value.publisherSignature && value.publisherSignature.certificateId;
     let subscriptionUri;
@@ -160,11 +160,7 @@ class FilePage extends React.Component<Props> {
                     'content__empty--nsfw': shouldObscureThumbnail,
                   })}
                 >
-                  <div className="card__media-text">
-                    {__('This content is not playable.')}
-                    <br />
-                    {__('To view this, click the download link below.')}
-                  </div>
+                  <div className="card__media-text">{__('This content is not playable.')}</div>
                 </div>
               ))}
             <div className="card__content">
