@@ -1,16 +1,25 @@
+// @flow
 import React from 'react';
 import Button from 'component/button';
 import FileList from 'component/fileList';
 import Page from 'component/page';
 
-class FileListDownloaded extends React.PureComponent {
+type Props = {
+  fetching: boolean,
+  fileInfos: {},
+  navigate: (string, ?{}) => void,
+};
+
+class FileListDownloaded extends React.PureComponent<Props> {
   render() {
-    const { fileInfos, navigate } = this.props;
+    const { fetching, fileInfos, navigate } = this.props;
     const hasDownloads = fileInfos && fileInfos.length > 0;
 
     return (
       <Page notContained>
-        {hasDownloads ? (
+        {fetching ? (
+          <div className="card__actions card__actions--center">Fetching content...</div>
+        ) : hasDownloads ? (
           <FileList fileInfos={fileInfos} />
         ) : (
           <div className="page__empty">

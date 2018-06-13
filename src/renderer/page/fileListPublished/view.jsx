@@ -9,6 +9,7 @@ type Props = {
   claims: Array<{}>,
   checkIfPublishesConfirmed: (Array<{}>) => void,
   navigate: (string, ?{}) => void,
+  fetching: boolean,
 };
 
 class FileListPublished extends React.PureComponent<Props> {
@@ -20,11 +21,13 @@ class FileListPublished extends React.PureComponent<Props> {
   }
 
   render() {
-    const { claims, navigate } = this.props;
+    const { fetching, claims, navigate } = this.props;
 
     return (
       <Page notContained>
-        {claims.length ? (
+        {fetching ? (
+          <div className="card__actions card__actions--center">Fetching content...</div>
+        ) : claims.length ? (
           <FileList checkPending fileInfos={claims} sortByHeight />
         ) : (
           <div className="page__empty">
