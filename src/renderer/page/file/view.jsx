@@ -115,7 +115,7 @@ class FilePage extends React.Component<Props> {
     const { height, channel_name: channelName, value } = claim;
     const mediaType = Lbry.getMediaType(contentType);
     const isPlayable =
-      Object.values(player.mime).indexOf(contentType) !== -1 || mediaType === 'audio';
+      Object.values(player.mime).indexOf(mediaType) !== -1 || mediaType === 'audio';
     const channelClaimId =
       value && value.publisherSignature && value.publisherSignature.certificateId;
     let subscriptionUri;
@@ -152,7 +152,7 @@ class FilePage extends React.Component<Props> {
             {isPlayable ? (
               <Video className="content__embedded" uri={uri} />
             ) : (
-              <Thumbnail shouldObscure={shouldObscureThumbnail} src={thumbnail} />
+              <Thumbnail shouldObscure={shouldObscureThumbnail} src={thumbnail} uri={uri} />
             )}
             <div className="card__content">
               <div className="card__title-identity--file">
