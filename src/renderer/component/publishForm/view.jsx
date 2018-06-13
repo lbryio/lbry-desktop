@@ -363,10 +363,16 @@ class PublishForm extends React.PureComponent<Props> {
           <section className="card card--section">
             <div className="card__title">{__('Thumbnail')}</div>
             <div className="card__subtitle">
-              {__(
-                'Upload your thumbnail to spee.ch, or enter the url manually. Learn more about spee.ch '
+              {uploadThumbnailStatus === STATUSES.API_DOWN ? (
+                __('Enter a url for your thumbnail.')
+              ) : (
+                <React.Fragment>
+                  {__(
+                    'Upload your thumbnail to spee.ch, or enter the url manually. Learn more about spee.ch '
+                  )}
+                  <Button button="link" label={__('here')} href="https://spee.ch/about" />.
+                </React.Fragment>
               )}
-              <Button button="link" label={__('here')} href="https://spee.ch/about" />.
             </div>
             <SelectThumbnail
               thumbnailPath={thumbnailPath}
