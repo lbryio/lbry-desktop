@@ -115,7 +115,7 @@ class FilePage extends React.Component<Props> {
     const { height, channel_name: channelName, value } = claim;
     const mediaType = Lbry.getMediaType(contentType);
     const isPlayable =
-      Object.values(player.mime).indexOf(contentType) !== -1 || mediaType === 'audio';
+      Object.values(player.mime).indexOf(mediaType) !== -1 || mediaType === 'audio';
     const channelClaimId =
       value && value.publisherSignature && value.publisherSignature.certificateId;
     let subscriptionUri;
@@ -148,81 +148,77 @@ class FilePage extends React.Component<Props> {
             <span className="empty">{__('Empty claim or metadata info.')}</span>
           </section>
         ) : (
-          <React.Fragment>
-            <section className="card">
-              {isPlayable ? (
-                <Video className="content__embedded" uri={uri} />
-              ) : (
-                <Thumbnail shouldObscure={shouldObscureThumbnail} src={thumbnail} uri={uri} />
-              )}
-            </section>
-            <section className="card">
-              <div className="card__content">
-                <div className="card__title-identity--file">
-                  <h1 className="card__title card__title--file">{title}</h1>
-                  <div className="card__title-identity-icons">
-                    <FilePrice uri={normalizeURI(uri)} />
-                    {isRewardContent && (
-                      <Icon iconColor="red" tooltip="bottom" icon={icons.FEATURED} />
-                    )}
-                  </div>
+          <section className="card">
+            {isPlayable ? (
+              <Video className="content__embedded" uri={uri} />
+            ) : (
+              <Thumbnail shouldObscure={shouldObscureThumbnail} src={thumbnail} uri={uri} />
+            )}
+            <div className="card__content">
+              <div className="card__title-identity--file">
+                <h1 className="card__title card__title--file">{title}</h1>
+                <div className="card__title-identity-icons">
+                  <FilePrice uri={normalizeURI(uri)} />
+                  {isRewardContent && (
+                    <Icon iconColor="red" tooltip="bottom" icon={icons.FEATURED} />
+                  )}
                 </div>
-                <span className="card__subtitle card__subtitle--file">
-                  {__('Published on')}&nbsp;
-                  <DateTime block={height} show={DateTime.SHOW_DATE} />
-                </span>
-                {metadata.nsfw && <div>NSFW</div>}
-                <div className="card__channel-info">
-                  <UriIndicator uri={uri} link />
+              </div>
+              <span className="card__subtitle card__subtitle--file">
+                {__('Published on')}&nbsp;
+                <DateTime block={height} show={DateTime.SHOW_DATE} />
+              </span>
+              {metadata.nsfw && <div>NSFW</div>}
+              <div className="card__channel-info">
+                <UriIndicator uri={uri} link />
 
-                  <div className="card__actions card__actions--no-margin">
-                    {claimIsMine ? (
+                <div className="card__actions card__actions--no-margin">
+                  {claimIsMine ? (
+                    <Button
+                      button="primary"
+                      icon={icons.EDIT}
+                      label={__('Edit')}
+                      onClick={() => {
+                        prepareEdit(claim, editUri);
+                        navigate('/publish');
+                      }}
+                    />
+                  ) : (
+                    <React.Fragment>
                       <Button
-                        button="primary"
-                        icon={icons.EDIT}
-                        label={__('Edit')}
-                        onClick={() => {
-                          prepareEdit(claim, editUri);
-                          navigate('/publish');
-                        }}
+                        button="alt"
+                        icon="Send"
+                        label={__('Enjoy this? Send a tip')}
+                        onClick={() => openModal({ id: MODALS.SEND_TIP }, { uri })}
                       />
-                    ) : (
-                      <React.Fragment>
-                        <Button
-                          button="alt"
-                          icon="Send"
-                          label={__('Enjoy this? Send a tip')}
-                          onClick={() => openModal({ id: MODALS.SEND_TIP }, { uri })}
-                        />
-                        <SubscribeButton uri={subscriptionUri} channelName={channelName} />
-                      </React.Fragment>
-                    )}
-                    {speechSharable && (
-                      <ViewOnWebButton claimId={claim.claim_id} claimName={claim.name} />
-                    )}
-                  </div>
+                      <SubscribeButton uri={subscriptionUri} channelName={channelName} />
+                    </React.Fragment>
+                  )}
+                  {speechSharable && (
+                    <ViewOnWebButton claimId={claim.claim_id} claimName={claim.name} />
+                  )}
                 </div>
-                <FormRow alignRight>
-                  <FormField
-                    type="checkbox"
-                    name="autoplay"
-                    onChange={this.onAutoplayChange}
-                    checked={autoplay}
-                    postfix={__('Autoplay')}
-                  />
-                </FormRow>
               </div>
+              <FormRow alignRight>
+                <FormField
+                  type="checkbox"
+                  name="autoplay"
+                  onChange={this.onAutoplayChange}
+                  checked={autoplay}
+                  postfix={__('Autoplay')}
+                />
+              </FormRow>
+            </div>
 
-              <div className="card__content">
-                <FileDownloadLink uri={uri} />
-                <FileActions uri={uri} claimId={claim.claim_id} />
-              </div>
+            <div className="card__content">
+              <FileDownloadLink uri={uri} />
+              <FileActions uri={uri} claimId={claim.claim_id} />
+            </div>
 
-              <div className="card__content--extra-padding">
-                <FileDetails uri={uri} />
-              </div>
-            </section>
-          </React.Fragment>
+            <div className="card__content--extra-padding">
+              <FileDetails uri={uri} />
+            </div>
+          </section>
         )}
       </Page>
     );
