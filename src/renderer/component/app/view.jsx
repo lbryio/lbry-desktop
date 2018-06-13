@@ -84,8 +84,8 @@ class App extends React.PureComponent<Props> {
         <Theme />
         <main className="page">
           <SideBar />
-          <Header />
           <div className="content" id="content">
+            <Header />
             <Router />
             <ModalRouter />
           </div>

@@ -157,7 +157,7 @@ p {
   grid-template-rows: var(--header-height) calc(100vh - var(--header-height));
   grid-template-columns: var(--side-nav-width) auto;
   grid-template-areas:
-    'nav header'
+    'nav content'
     'nav content';
   background-color: var(--color-bg);
   height: 100vh;
@@ -176,7 +176,7 @@ p {
 */
 .content {
   grid-area: content;
-  overflow: auto;
+  overflow-y: auto;
 }
 
 .main {
