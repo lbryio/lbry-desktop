@@ -56,8 +56,10 @@ class WalletSend extends React.PureComponent<Props> {
                     label={__('Amount')}
                     postfix={__('LBC')}
                     className="input--price-amount"
+                    fixClass="form-field--fix-no-height"
                     min="0"
                     step="any"
+                    placeholder="5"
                     onChange={handleChange}
                     onBlur={handleBlur}
                     value={values.amount}

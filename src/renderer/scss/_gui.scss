@@ -121,6 +121,10 @@ input::placeholder {
   opacity: 0.5;
 }
 
+label {
+  cursor: pointer;
+}
+
 button + input {
   margin-left: $spacing-vertical * 2/3;
 }

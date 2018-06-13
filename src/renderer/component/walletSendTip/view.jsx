@@ -87,7 +87,12 @@ class WalletSendTip extends React.PureComponent<Props, State> {
               disabled={isPending || amount <= 0 || amount > balance}
               onClick={this.handleSendButtonClicked}
             />
-            <Button button="alt" label={__('Cancel')} onClick={onCancel} navigateParams={{ uri }} />
+            <Button
+              button="link"
+              label={__('Cancel')}
+              onClick={onCancel}
+              navigateParams={{ uri }}
+            />
           </div>
         </div>
       </div>

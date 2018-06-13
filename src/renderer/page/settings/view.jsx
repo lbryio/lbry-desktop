@@ -273,20 +273,18 @@ class SettingsPage extends React.PureComponent<Props, State> {
             </section>
             <section className="card card--section">
               <div className="card__title">{__('Share Diagnostic Data')}</div>
-              <div className="card__content">
-                <FormField
-                  type="checkbox"
-                  name="share_usage_data"
-                  onChange={this.onShareDataChange}
-                  checked={daemonSettings.share_usage_data}
-                  postfix={__(
-                    'Help make LBRY better by contributing analytics and diagnostic data about my usage.'
-                  )}
-                  helper={__(
-                    'You will be ineligible to earn rewards while diagnostics are not being shared.'
-                  )}
-                />
-              </div>
+              <FormField
+                type="checkbox"
+                name="share_usage_data"
+                onChange={this.onShareDataChange}
+                checked={daemonSettings.share_usage_data}
+                postfix={__(
+                  'Help make LBRY better by contributing analytics and diagnostic data about my usage.'
+                )}
+                helper={__(
+                  'You will be ineligible to earn rewards while diagnostics are not being shared.'
+                )}
+              />
             </section>
             {
               <section className="card card--section">
