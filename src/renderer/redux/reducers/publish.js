@@ -169,6 +169,7 @@ export default handleActions(
       };
     },
     [ACTIONS.DO_PREPARE_EDIT]: (state: PublishState, action) => {
+      const { pendingPublishes } = state;
       const { ...publishData } = action.data;
       const { channel, name, uri } = publishData;
 
@@ -182,6 +183,7 @@ export default handleActions(
       return {
         ...defaultState,
         ...publishData,
+        pendingPublishes,
         editingURI: uri,
         uri: shortUri,
       };

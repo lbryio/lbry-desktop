@@ -1,10 +1,5 @@
 import { createSelector } from 'reselect';
-import {
-  parseURI,
-  selectClaimsById,
-  selectMyClaims,
-  selectMyClaimsWithoutChannels,
-} from 'lbry-redux';
+import { parseURI, selectClaimsById, selectMyClaimsWithoutChannels } from 'lbry-redux';
 
 const selectState = state => state.publish || {};
 
@@ -66,36 +61,31 @@ export const selectIsStillEditing = createSelector(selectPublishFormValues, publ
 
   // Depending on the previous/current use of a channel, we need to compare different things
   // ex: going from a channel to anonymous, the new uri won't return contentName, so we need to use claimName
-  if (!currentIsChannel && editIsChannel) {
-    return currentClaimName === editContentName;
-  } else if (currentIsChannel && !editIsChannel) {
-    return currentContentName === editClaimName;
-  } else if (!currentIsChannel && !editIsChannel) {
-    return currentClaimName === editClaimName;
-  }
-  return currentContentName === editContentName;
+  const currentName = currentIsChannel ? currentContentName : currentClaimName;
+  const editName = editIsChannel ? editContentName : editClaimName;
+  return currentName === editName;
 });
 
 export const selectMyClaimForUri = createSelector(
   selectPublishFormValues,
   selectIsStillEditing,
   selectClaimsById,
-  selectMyClaims,
+  selectMyClaimsWithoutChannels,
   ({ editingURI, uri }, isStillEditing, claimsById, myClaims) => {
-    const { contentName: currentContentName } = parseURI(uri);
+    const { contentName, claimName } = parseURI(uri);
     const { claimId: editClaimId } = parseURI(editingURI);
-    let myClaimForUri;
 
-    if (isStillEditing) {
-      // They clicked "edit" from the file page
-      // They haven't changed the channel/name after clicking edit
-      // Get the claim so they can edit without re-uploading a new file
-      myClaimForUri = claimsById[editClaimId];
-    } else {
-      // Check if they have a previous claim based on the channel/name
-      myClaimForUri = myClaims.find(claim => claim.name === currentContentName);
-    }
-
-    return myClaimForUri;
+    // If isStillEditing
+    // They clicked "edit" from the file page
+    // They haven't changed the channel/name after clicking edit
+    // Get the claim so they can edit without re-uploading a new file
+    return isStillEditing
+      ? claimsById[editClaimId]
+      : myClaims.find(
+          claim =>
+            !contentName
+              ? claim.name === claimName
+              : claim.name === contentName || claim.name === claimName
+        );
   }
 );

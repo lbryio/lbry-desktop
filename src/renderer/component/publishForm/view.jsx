@@ -177,25 +177,13 @@ class PublishForm extends React.PureComponent<Props> {
 
   handlePublish() {
     const {
-      publish,
       filePath,
-      bid,
-      title,
-      thumbnail,
-      description,
-      language,
-      nsfw,
+      copyrightNotice,
       licenseType,
       licenseUrl,
       otherLicenseDescription,
-      copyrightNotice,
-      name,
-      contentIsFree,
-      price,
-      uri,
       myClaimForUri,
-      channel,
-      isStillEditing
+      publish,
     } = this.props;
 
     let publishingLicense;
@@ -214,22 +202,22 @@ class PublishForm extends React.PureComponent<Props> {
 
     const publishParams = {
       filePath,
-      bid,
-      title,
-      thumbnail,
-      description,
-      language,
-      nsfw,
+      bid: this.props.bid,
+      title: this.props.title,
+      thumbnail: this.props.thumbnail,
+      description: this.props.description,
+      language: this.props.language,
+      nsfw: this.props.nsfw,
       license: publishingLicense,
       licenseUrl: publishingLicenseUrl,
       otherLicenseDescription,
       copyrightNotice,
-      name,
-      contentIsFree,
-      price,
-      uri,
-      channel,
-      isStillEditing
+      name: this.props.name,
+      contentIsFree: this.props.contentIsFree,
+      price: this.props.price,
+      uri: this.props.uri,
+      channel: this.props.channel,
+      isStillEditing: this.props.isStillEditing,
     };
 
     // Editing a claim

@@ -2,7 +2,6 @@
 import {
   ACTIONS,
   Lbry,
-  selectMyClaimsWithoutChannels,
   doNotify,
   MODALS,
   selectMyChannelClaims,
@@ -168,7 +167,6 @@ export const doPrepareEdit = (claim: any, uri: string) => (dispatch: Dispatch) =
 
 export const doPublish = (params: PublishParams) => (dispatch: Dispatch, getState: () => {}) => {
   const state = getState();
-  const myClaims = selectMyClaimsWithoutChannels(state);
   const myChannels = selectMyChannelClaims(state);
 
   const {
@@ -233,7 +231,6 @@ export const doPublish = (params: PublishParams) => (dispatch: Dispatch, getStat
       data: { pendingPublish: { ...publishPayload, isEdit: isStillEditing } },
     });
     dispatch(doNotify({ id: MODALS.PUBLISH }, { uri }));
-    dispatch(doCheckPendingPublishes());
   };
 
   const failure = error => {
@@ -258,24 +255,28 @@ export const doCheckPendingPublishes = () => (dispatch: Dispatch, getState: GetS
         pendingPublishMap[name] = name;
       });
 
+      const actions = [];
       claims.forEach(claim => {
         if (pendingPublishMap[claim.name]) {
-          dispatch({
+          actions.push({
             type: ACTIONS.REMOVE_PENDING_PUBLISH,
             data: {
               name: claim.name,
-            },
-          });
-          dispatch({
-            type: ACTIONS.FETCH_CLAIM_LIST_MINE_COMPLETED,
-            data: {
-              claims,
             },
           });
 
           delete pendingPublishMap[claim.name];
         }
       });
+
+      actions.push({
+        type: ACTIONS.FETCH_CLAIM_LIST_MINE_COMPLETED,
+        data: {
+          claims,
+        },
+      });
+
+      dispatch(batchActions(...actions));
 
       if (!pendingPublishes.length) {
         clearInterval(publishCheckInterval);

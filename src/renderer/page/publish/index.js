@@ -35,7 +35,7 @@ const select = state => {
     // ex: "you own this, for 5 more lbc you will win this claim"
     const claimsByUri = selectClaimsByUri(state);
     claimForUri = claimsByUri[uri];
-    winningBidForClaimUri = claimForUri ? claimForUri.effective_amount : undefined;
+    winningBidForClaimUri = claimForUri ? claimForUri.effective_amount : null;
   }
 
   return {
@@ -59,7 +59,7 @@ const perform = dispatch => ({
   resolveUri: uri => dispatch(doResolveUri(uri)),
   publish: params => dispatch(doPublish(params)),
   navigate: path => dispatch(doNavigate(path)),
-  prepareEdit: claim => dispatch(doPrepareEdit(claim)),
+  prepareEdit: (claim, uri) => dispatch(doPrepareEdit(claim, uri)),
   resetThumbnailStatus: () => dispatch(doResetThumbnailStatus()),
 });
 
