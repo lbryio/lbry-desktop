@@ -180,7 +180,6 @@ class FilePage extends React.Component<Props> {
               {metadata.nsfw && <div>NSFW</div>}
               <div className="card__channel-info">
                 <UriIndicator uri={uri} link />
-
                 <div className="card__actions card__actions--no-margin">
                   {claimIsMine ? (
                     <Button
@@ -193,20 +192,22 @@ class FilePage extends React.Component<Props> {
                       }}
                     />
                   ) : (
-                    <React.Fragment>
-                      <Button
-                        button="alt"
-                        icon="Send"
-                        label={__('Enjoy this? Send a tip')}
-                        onClick={() => openModal({ id: MODALS.SEND_TIP }, { uri })}
-                      />
-                      <SubscribeButton uri={subscriptionUri} channelName={channelName} />
-                    </React.Fragment>
-                  )}
-                  {speechSharable && (
-                    <ViewOnWebButton claimId={claim.claim_id} claimName={claim.name} />
+                    <SubscribeButton uri={subscriptionUri} channelName={channelName} />
                   )}
                 </div>
+              </div>
+              <div className="card__actions card__actions--end">
+                {!claimIsMine && (
+                  <Button
+                    button="alt"
+                    icon="Send"
+                    label={__('Enjoy this? Send a tip')}
+                    onClick={() => openModal({ id: MODALS.SEND_TIP }, { uri })}
+                  />
+                )}
+                {speechSharable && (
+                  <ViewOnWebButton claimId={claim.claim_id} claimName={claim.name} />
+                )}
               </div>
               <FormRow alignRight>
                 <FormField
