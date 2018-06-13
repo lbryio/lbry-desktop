@@ -37,20 +37,17 @@ export function doFetchInviteStatus() {
 }
 
 export function doInstallNew() {
-  return dispatch => {
-    const payload = {app_version: pjson.version};
-    Lbry.status().then(status => {
-      payload.app_id = status.installation_id;
-      Lbry.version().then(version => {
-        payload.daemon_version = version.lbrynet_version;
-        payload.operating_system = version.os_system;
-        payload.platform = version.platform;
-        Lbryio.call('install', 'new', payload);
-      });
+  const payload = { app_version: pjson.version };
+  Lbry.status().then(status => {
+    payload.app_id = status.installation_id;
+    Lbry.version().then(version => {
+      payload.daemon_version = version.lbrynet_version;
+      payload.operating_system = version.os_system;
+      payload.platform = version.platform;
+      Lbryio.call('install', 'new', payload);
     });
-  };
+  });
 }
-
 
 export function doAuthenticate() {
   return dispatch => {
@@ -66,7 +63,7 @@ export function doAuthenticate() {
         });
         dispatch(doRewardList());
         dispatch(doFetchInviteStatus());
-        dispatch(doInstallNew());
+        doInstallNew();
       })
       .catch(error => {
         dispatch(doNotify({ id: MODALS.AUTHENTICATION_FAILURE }));
