@@ -23,15 +23,15 @@
     padding-top: var(--video-aspect-ratio);
   }
 
-  .card__media-text {
-    // for the weird padding required for dynamic height
-    // this lets the text sit in the middle instead of the bottom
-    margin-top: calc(var(--video-aspect-ratio) * -1);
-  }
-
   .channel-name {
     font-size: 12px;
   }
+}
+
+.card__media-text {
+  // for the weird padding required for dynamic height
+  // this lets the text sit in the middle instead of the bottom
+  margin-top: calc(var(--video-aspect-ratio) * -1);
 }
 
 .card--link {

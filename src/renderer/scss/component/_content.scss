@@ -78,6 +78,20 @@
   color: var(--color-white);
 }
 
+.content__empty {
+  background-color: black;
+  width: 100%;
+  padding-top: var(--video-aspect-ratio);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-white);
+
+  &.content__empty--nsfw {
+    background-color: var(--color-error);
+  }
+}
+
 img {
   max-height: 100%;
   max-width: 100%;

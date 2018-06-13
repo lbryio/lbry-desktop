@@ -20,6 +20,7 @@ import * as settings from 'constants/settings';
 import type { Claim } from 'types/claim';
 import type { Subscription } from 'types/subscription';
 import FileDownloadLink from 'component/fileDownloadLink';
+import classnames from 'classnames';
 
 type Props = {
   claim: Claim,
@@ -149,11 +150,23 @@ class FilePage extends React.Component<Props> {
           </section>
         ) : (
           <section className="card">
-            {isPlayable ? (
-              <Video className="content__embedded" uri={uri} />
-            ) : (
-              <Thumbnail shouldObscure={shouldObscureThumbnail} src={thumbnail} />
-            )}
+            {isPlayable && <Video className="content__embedded" uri={uri} />}
+            {!isPlayable &&
+              (thumbnail ? (
+                <Thumbnail shouldObscure={shouldObscureThumbnail} src={thumbnail} />
+              ) : (
+                <div
+                  className={classnames('content__empty', {
+                    'content__empty--nsfw': shouldObscureThumbnail,
+                  })}
+                >
+                  <div className="card__media-text">
+                    {__('This content is not playable.')}
+                    <br />
+                    {__('To view this, click the download link below.')}
+                  </div>
+                </div>
+              ))}
             <div className="card__content">
               <div className="card__title-identity--file">
                 <h1 className="card__title card__title--file">{title}</h1>
