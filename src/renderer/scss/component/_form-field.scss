@@ -84,7 +84,7 @@
 
 .form-field__help {
   color: var(--color-help);
-  padding-top: $spacing-vertical * 1/3;
+  padding-top: $spacing-vertical * 2/3;
 }
 
 .form-field__error {
@@ -94,6 +94,14 @@
 .form-field__prefix,
 .form-field__postfix {
   font-family: 'metropolis-medium';
+
+  &.form-field--fix-no-height {
+    line-height: 1;
+  }
+
+  &.form-field--align-center {
+    align-self: center;
+  }
 }
 
 .form-field__prefix {

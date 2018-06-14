@@ -1,13 +1,19 @@
-import React from 'react';
 import { connect } from 'react-redux';
+import { doHideNotification } from 'lbry-redux';
 import { doDownloadUpgrade, doSkipUpgrade } from 'redux/actions/app';
 import ModalUpgrade from './view';
 
-const select = state => ({});
+const select = () => ({});
 
 const perform = dispatch => ({
   downloadUpgrade: () => dispatch(doDownloadUpgrade()),
-  skipUpgrade: () => dispatch(doSkipUpgrade()),
+  skipUpgrade: () => {
+    dispatch(doHideNotification());
+    dispatch(doSkipUpgrade());
+  },
 });
 
-export default connect(select, perform)(ModalUpgrade);
+export default connect(
+  select,
+  perform
+)(ModalUpgrade);

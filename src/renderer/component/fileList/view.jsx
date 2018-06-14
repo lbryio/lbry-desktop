@@ -171,6 +171,7 @@ class FileList extends React.PureComponent<Props, State> {
           {!hideFilter && (
             <FormField
               prefix={__('Sort by')}
+              affixClass="form-field--align-center"
               type="select"
               value={sortBy}
               onChange={this.handleSortChanged}

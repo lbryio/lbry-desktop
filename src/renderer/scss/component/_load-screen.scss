@@ -10,10 +10,20 @@
   justify-content: center;
 }
 
+.load-screen__header {
+  display: flex;
+}
+
 .load-screen__title {
   font-family: 'metropolis-bold';
   font-size: 60px;
   line-height: 100px;
+  margin-left: 40px; // width of "beta" superscript
+}
+
+.load-screen__beta {
+  padding-top: 23px;
+  padding-left: 10px;
 }
 
 .load-screen__message {

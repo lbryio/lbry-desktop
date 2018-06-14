@@ -24,7 +24,11 @@ class ModalUpgrade extends React.PureComponent {
         </p>
         <p className="meta text-center">
           {__('Want to know what has changed?')} See the{' '}
-          <Button label={__('release notes')} href="https://github.com/lbryio/lbry-app/releases" />.
+          <Button
+            button="link"
+            label={__('release notes')}
+            href="https://github.com/lbryio/lbry-app/releases"
+          />.
         </p>
       </Modal>
     );

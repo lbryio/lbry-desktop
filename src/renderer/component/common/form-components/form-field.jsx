@@ -4,7 +4,7 @@ import ReactDOMServer from 'react-dom/server';
 import classnames from 'classnames';
 import MarkdownPreview from 'component/common/markdown-preview';
 import SimpleMDE from 'react-simplemde-editor';
-import "simplemde/dist/simplemde.min.css";
+import 'simplemde/dist/simplemde.min.css';
 
 type Props = {
   name: string,
@@ -20,6 +20,7 @@ type Props = {
   placeholder?: string | number,
   children?: React.Node,
   stretch?: boolean,
+  affixClass?: string, // class applied to prefix/postfix label
 };
 
 export class FormField extends React.PureComponent<Props> {
@@ -35,6 +36,7 @@ export class FormField extends React.PureComponent<Props> {
       type,
       children,
       stretch,
+      affixClass,
       ...inputProps
     } = this.props;
 
@@ -55,12 +57,12 @@ export class FormField extends React.PureComponent<Props> {
               {...inputProps}
               type="textarea"
               options={{
-                  hideIcons: ['heading', 'image', 'fullscreen', 'side-by-side'],
-                  previewRender(plainText) {
-                    const preview = <MarkdownPreview content={plainText}/>;
-                    return ReactDOMServer.renderToString(preview);
-                  }
-               }}
+                hideIcons: ['heading', 'image', 'fullscreen', 'side-by-side'],
+                previewRender(plainText) {
+                  const preview = <MarkdownPreview content={plainText} />;
+                  return ReactDOMServer.renderToString(preview);
+                },
+              }}
             />
           </div>
         );
@@ -92,22 +94,18 @@ export class FormField extends React.PureComponent<Props> {
           })}
         >
           {prefix && (
-            <label htmlFor={name} className="form-field__prefix">
+            <label htmlFor={name} className={classnames('form-field__prefix', affixClass)}>
               {prefix}
             </label>
           )}
           {input}
           {postfix && (
-            <label htmlFor={name} className="form-field__postfix">
+            <label htmlFor={name} className={classnames('form-field__postfix', affixClass)}>
               {postfix}
             </label>
           )}
         </div>
-        {helper && (
-          <label htmlFor={name} className="form-field__help">
-            {helper}
-          </label>
-        )}
+        {helper && <div className="form-field__help">{helper}</div>}
       </div>
     );
   }

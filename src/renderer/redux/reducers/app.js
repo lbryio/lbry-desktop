@@ -114,7 +114,6 @@ reducers[ACTIONS.SKIP_UPGRADE] = state => {
 
   return Object.assign({}, state, {
     isUpgradeSkipped: true,
-    modal: null,
   });
 };
 

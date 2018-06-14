@@ -1,11 +1,9 @@
 .header {
-  grid-area: header;
   display: flex;
   z-index: 1;
   justify-content: space-between;
   padding: $spacing-width $spacing-width 0 $spacing-width;
   background-color: var(--color-bg);
-  // height: 100px;
 }
 
 .header__actions-right {
