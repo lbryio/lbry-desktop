@@ -5,7 +5,7 @@ import {
   doNotify,
   MODALS,
   selectMyChannelClaims,
-  STATUSES,
+  THUMBNAIL_STATUSES,
   batchActions,
 } from 'lbry-redux';
 import { selectPendingPublishes } from 'redux/selectors/publish';
@@ -48,7 +48,7 @@ export const doResetThumbnailStatus = () => (dispatch: Dispatch): PromiseAction 
       dispatch({
         type: ACTIONS.UPDATE_PUBLISH_FORM,
         data: {
-          uploadThumbnailStatus: STATUSES.READY,
+          uploadThumbnailStatus: THUMBNAIL_STATUSES.READY,
           thumbnail: '',
           nsfw: false,
         },
@@ -58,7 +58,7 @@ export const doResetThumbnailStatus = () => (dispatch: Dispatch): PromiseAction 
       dispatch({
         type: ACTIONS.UPDATE_PUBLISH_FORM,
         data: {
-          uploadThumbnailStatus: STATUSES.API_DOWN,
+          uploadThumbnailStatus: THUMBNAIL_STATUSES.API_DOWN,
           thumbnail: '',
           nsfw: false,
         },
@@ -82,7 +82,7 @@ export const doUploadThumbnail = (filePath: string, nsfw: boolean) => (dispatch:
       batchActions(
         {
           type: ACTIONS.UPDATE_PUBLISH_FORM,
-          data: { uploadThumbnailStatus: STATUSES.API_DOWN },
+          data: { uploadThumbnailStatus: THUMBNAIL_STATUSES.API_DOWN },
         },
         dispatch(doNotify({ id: MODALS.ERROR, error }))
       )
@@ -90,7 +90,7 @@ export const doUploadThumbnail = (filePath: string, nsfw: boolean) => (dispatch:
 
   dispatch({
     type: ACTIONS.UPDATE_PUBLISH_FORM,
-    data: { uploadThumbnailStatus: STATUSES.IN_PROGRESS },
+    data: { uploadThumbnailStatus: THUMBNAIL_STATUSES.IN_PROGRESS },
   });
 
   const data = new FormData();
@@ -110,7 +110,7 @@ export const doUploadThumbnail = (filePath: string, nsfw: boolean) => (dispatch:
           ? dispatch({
               type: ACTIONS.UPDATE_PUBLISH_FORM,
               data: {
-                uploadThumbnailStatus: STATUSES.COMPLETE,
+                uploadThumbnailStatus: THUMBNAIL_STATUSES.COMPLETE,
                 thumbnail: `${json.data.url}${fileExt}`,
               },
             })
@@ -162,7 +162,7 @@ export const doPrepareEdit = (claim: any, uri: string) => (dispatch: Dispatch) =
     thumbnail,
     title,
     uri,
-    uploadThumbnailStatus: thumbnail ? STATUSES.MANUAL : undefined,
+    uploadThumbnailStatus: thumbnail ? THUMBNAIL_STATUSES.MANUAL : undefined,
   };
 
   dispatch({ type: ACTIONS.DO_PREPARE_EDIT, data: publishData });
