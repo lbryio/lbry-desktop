@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { isNameValid, buildURI, regexInvalidURI } from 'lbry-redux';
+import { isNameValid, buildURI, regexInvalidURI, STATUSES } from 'lbry-redux';
 import { Form, FormField, FormRow, FormFieldPrice, Submit } from 'component/common/form';
 import Button from 'component/button';
 import ChannelSection from 'component/selectChannel';
@@ -73,7 +73,10 @@ class PublishForm extends React.PureComponent<Props> {
   }
 
   componentWillMount() {
-    this.props.resetThumbnailStatus();
+    const { isStillEditing, thumbnail } = this.props;
+    if (!isStillEditing || !thumbnail) {
+      this.props.resetThumbnailStatus();
+    }
   }
 
   getNewUri(name: string, channel: string) {
@@ -360,10 +363,16 @@ class PublishForm extends React.PureComponent<Props> {
           <section className="card card--section">
             <div className="card__title">{__('Thumbnail')}</div>
             <div className="card__subtitle">
-              {__(
-                'Upload your thumbnail to spee.ch, or enter the url manually. Learn more about spee.ch '
+              {uploadThumbnailStatus === STATUSES.API_DOWN ? (
+                __('Enter a url for your thumbnail.')
+              ) : (
+                <React.Fragment>
+                  {__(
+                    'Upload your thumbnail to spee.ch, or enter the url manually. Learn more about spee.ch '
+                  )}
+                  <Button button="link" label={__('here')} href="https://spee.ch/about" />.
+                </React.Fragment>
               )}
-              <Button button="link" label={__('here')} href="https://spee.ch/about" />.
             </div>
             <SelectThumbnail
               thumbnailPath={thumbnailPath}
@@ -555,7 +564,12 @@ class PublishForm extends React.PureComponent<Props> {
           </section>
 
           <div className="card__actions">
-            <Submit label={submitLabel} disabled={formDisabled || !formValid || publishing} />
+            <Submit
+              label={submitLabel}
+              disabled={
+                formDisabled || !formValid || uploadThumbnailStatus === STATUSES.IN_PROGRESS
+              }
+            />
             <Button button="alt" onClick={this.handleCancelPublish} label={__('Cancel')} />
           </div>
           {!formDisabled && !formValid && this.renderFormErrors()}

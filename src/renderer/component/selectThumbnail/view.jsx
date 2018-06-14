@@ -1,5 +1,5 @@
 // @flow
-import { STATUSES, MODALS } from 'lbry-redux';
+import { THUMBNAIL_STATUSES, MODALS } from 'lbry-redux';
 import React from 'react';
 import { FormField, FormRow } from 'component/common/form';
 import FileSelector from 'component/common/file-selector';
@@ -29,7 +29,7 @@ class SelectThumbnail extends React.PureComponent<Props> {
 
     return (
       <div>
-        {status === STATUSES.API_DOWN || status === STATUSES.MANUAL ? (
+        {status === THUMBNAIL_STATUSES.API_DOWN || status === THUMBNAIL_STATUSES.MANUAL ? (
           <FormRow padded>
             <FormField
               stretch
@@ -44,14 +44,14 @@ class SelectThumbnail extends React.PureComponent<Props> {
           </FormRow>
         ) : (
           <div className="form-row--padded">
-            {(status === STATUSES.READY || status === STATUSES.COMPLETE) && (
+            {(status === THUMBNAIL_STATUSES.READY || status === THUMBNAIL_STATUSES.COMPLETE) && (
               <FileSelector
                 currentPath={thumbnailPath}
                 fileLabel={__('Choose Thumbnail')}
                 onFileChosen={path => openModal({ id: MODALS.CONFIRM_THUMBNAIL_UPLOAD }, { path })}
               />
             )}
-            {status === STATUSES.COMPLETE && (
+            {status === THUMBNAIL_STATUSES.COMPLETE && (
               <div>
                 <p>
                   Upload complete. View it{' '}
@@ -63,23 +63,25 @@ class SelectThumbnail extends React.PureComponent<Props> {
           </div>
         )}
         <div className="card__actions">
-          {status === STATUSES.READY && (
+          {status === THUMBNAIL_STATUSES.READY && (
             <Button
               button="link"
               label={__('Or enter a URL manually')}
-              onClick={() => updatePublishForm({ uploadThumbnailStatus: STATUSES.MANUAL })}
+              onClick={() =>
+                updatePublishForm({ uploadThumbnailStatus: THUMBNAIL_STATUSES.MANUAL })
+              }
             />
           )}
-          {status === STATUSES.MANUAL && (
+          {status === THUMBNAIL_STATUSES.MANUAL && (
             <Button
               button="link"
               label={__('Use thumbnail upload tool')}
-              onClick={() => updatePublishForm({ uploadThumbnailStatus: STATUSES.READY })}
+              onClick={() => updatePublishForm({ uploadThumbnailStatus: THUMBNAIL_STATUSES.READY })}
             />
           )}
         </div>
 
-        {status === STATUSES.IN_PROGRESS && <p>{__('Uploading thumbnail')}...</p>}
+        {status === THUMBNAIL_STATUSES.IN_PROGRESS && <p>{__('Uploading thumbnail')}...</p>}
       </div>
     );
   }
