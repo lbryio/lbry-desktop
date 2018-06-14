@@ -10,6 +10,7 @@ import {
   doNotify,
   selectNotification,
   MODALS,
+  doHideNotification,
 } from 'lbry-redux';
 import Native from 'native';
 import { doFetchRewardedContent } from 'redux/actions/content';
@@ -89,6 +90,7 @@ export function doDownloadUpgrade() {
     dispatch({
       type: ACTIONS.UPGRADE_DOWNLOAD_STARTED,
     });
+    dispatch(doHideNotification());
     dispatch(
       doNotify({
         id: MODALS.DOWNLOADING,
