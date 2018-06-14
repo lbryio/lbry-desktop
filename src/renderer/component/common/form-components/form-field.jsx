@@ -20,7 +20,7 @@ type Props = {
   placeholder?: string | number,
   children?: React.Node,
   stretch?: boolean,
-  fixClass?: string, // class applied to prefix/postfix label
+  affixClass?: string, // class applied to prefix/postfix label
 };
 
 export class FormField extends React.PureComponent<Props> {
@@ -36,7 +36,7 @@ export class FormField extends React.PureComponent<Props> {
       type,
       children,
       stretch,
-      fixClass,
+      affixClass,
       ...inputProps
     } = this.props;
 
@@ -94,13 +94,13 @@ export class FormField extends React.PureComponent<Props> {
           })}
         >
           {prefix && (
-            <label htmlFor={name} className={classnames('form-field__prefix', fixClass)}>
+            <label htmlFor={name} className={classnames('form-field__prefix', affixClass)}>
               {prefix}
             </label>
           )}
           {input}
           {postfix && (
-            <label htmlFor={name} className={classnames('form-field__postfix', fixClass)}>
+            <label htmlFor={name} className={classnames('form-field__postfix', affixClass)}>
               {postfix}
             </label>
           )}

@@ -115,8 +115,7 @@ class FilePage extends React.Component<Props> {
     const shouldObscureThumbnail = obscureNsfw && metadata.nsfw;
     const { height, channel_name: channelName, value } = claim;
     const mediaType = Lbry.getMediaType(contentType);
-    const isPlayable =
-      Object.values(player.mime).indexOf(mediaType) !== -1 || mediaType === 'audio';
+    const isPlayable = Object.values(player.mime).includes(contentType) || mediaType === 'audio';
     const channelClaimId =
       value && value.publisherSignature && value.publisherSignature.certificateId;
     let subscriptionUri;
@@ -196,19 +195,22 @@ class FilePage extends React.Component<Props> {
                   )}
                 </div>
               </div>
-              <div className="card__actions card__actions--end">
-                {!claimIsMine && (
-                  <Button
-                    button="alt"
-                    icon="Send"
-                    label={__('Enjoy this? Send a tip')}
-                    onClick={() => openModal({ id: MODALS.SEND_TIP }, { uri })}
-                  />
-                )}
-                {speechSharable && (
-                  <ViewOnWebButton claimId={claim.claim_id} claimName={claim.name} />
-                )}
-              </div>
+              {!claimIsMine ||
+                (speechSharable && (
+                  <div className="card__actions card__actions--end">
+                    {!claimIsMine && (
+                      <Button
+                        button="alt"
+                        icon="Send"
+                        label={__('Enjoy this? Send a tip')}
+                        onClick={() => openModal({ id: MODALS.SEND_TIP }, { uri })}
+                      />
+                    )}
+                    {speechSharable && (
+                      <ViewOnWebButton claimId={claim.claim_id} claimName={claim.name} />
+                    )}
+                  </div>
+                ))}
               <FormRow alignRight>
                 <FormField
                   type="checkbox"

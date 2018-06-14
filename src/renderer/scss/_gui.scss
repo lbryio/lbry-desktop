@@ -121,7 +121,7 @@ input::placeholder {
   opacity: 0.5;
 }
 
-label {
+label[for] {
   cursor: pointer;
 }
 
