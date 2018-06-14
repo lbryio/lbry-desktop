@@ -34,7 +34,7 @@ class ModalDownloading extends React.PureComponent {
             />
           ) : null}
           <Button
-            button="alt"
+            button="link"
             label={__('Cancel')}
             className="modal__button"
             onClick={cancelUpgrade}
