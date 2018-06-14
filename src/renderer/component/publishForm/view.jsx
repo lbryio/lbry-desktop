@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { isNameValid, buildURI, regexInvalidURI, STATUSES } from 'lbry-redux';
+import { isNameValid, buildURI, regexInvalidURI, THUMBNAIL_STATUSES } from 'lbry-redux';
 import { Form, FormField, FormRow, FormFieldPrice, Submit } from 'component/common/form';
 import Button from 'component/button';
 import ChannelSection from 'component/selectChannel';
@@ -363,7 +363,7 @@ class PublishForm extends React.PureComponent<Props> {
           <section className="card card--section">
             <div className="card__title">{__('Thumbnail')}</div>
             <div className="card__subtitle">
-              {uploadThumbnailStatus === STATUSES.API_DOWN ? (
+              {uploadThumbnailStatus === THUMBNAIL_STATUSES.API_DOWN ? (
                 __('Enter a url for your thumbnail.')
               ) : (
                 <React.Fragment>
@@ -567,7 +567,9 @@ class PublishForm extends React.PureComponent<Props> {
             <Submit
               label={submitLabel}
               disabled={
-                formDisabled || !formValid || uploadThumbnailStatus === STATUSES.IN_PROGRESS
+                formDisabled ||
+                !formValid ||
+                uploadThumbnailStatus === THUMBNAIL_STATUSES.IN_PROGRESS
               }
             />
             <Button button="alt" onClick={this.handleCancelPublish} label={__('Cancel')} />
