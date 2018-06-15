@@ -90,6 +90,10 @@
   &.content__empty--nsfw {
     background-color: var(--color-nsfw);
   }
+
+  .card__media-text {
+    margin-top: calc(var(--video-aspect-ratio) * -1);
+  }
 }
 
 img {

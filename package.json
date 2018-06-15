@@ -61,6 +61,7 @@
     "react-paginate": "^5.2.1",
     "react-redux": "^5.0.3",
     "react-simplemde-editor": "^3.6.15",
+    "react-toggle": "^4.0.2",
     "react-transition-group": "1.x",
     "redux": "^3.6.0",
     "redux-logger": "^3.0.1",

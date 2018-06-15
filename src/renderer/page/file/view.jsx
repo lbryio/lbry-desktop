@@ -7,7 +7,6 @@ import FilePrice from 'component/filePrice';
 import FileDetails from 'component/fileDetails';
 import FileActions from 'component/fileActions';
 import UriIndicator from 'component/uriIndicator';
-import { FormField, FormRow } from 'component/common/form';
 import Icon from 'component/common/icon';
 import DateTime from 'component/dateTime';
 import * as icons from 'constants/icons';
@@ -21,6 +20,8 @@ import type { Claim } from 'types/claim';
 import type { Subscription } from 'types/subscription';
 import FileDownloadLink from 'component/fileDownloadLink';
 import classnames from 'classnames';
+import { FormField, FormRow } from 'component/common/form';
+import ToolTip from 'component/common/tooltip';
 
 type Props = {
   claim: Claim,
@@ -195,29 +196,35 @@ class FilePage extends React.Component<Props> {
                   )}
                 </div>
               </div>
-              {!claimIsMine ||
-                (speechSharable && (
-                  <div className="card__actions card__actions--end">
-                    {!claimIsMine && (
-                      <Button
-                        button="alt"
-                        icon="Send"
-                        label={__('Enjoy this? Send a tip')}
-                        onClick={() => openModal({ id: MODALS.SEND_TIP }, { uri })}
-                      />
-                    )}
-                    {speechSharable && (
-                      <ViewOnWebButton claimId={claim.claim_id} claimName={claim.name} />
-                    )}
-                  </div>
-                ))}
-              <FormRow alignRight>
+              {(!claimIsMine || speechSharable) && (
+                <div className="card__actions card__actions--end">
+                  {!claimIsMine && (
+                    <Button
+                      button="alt"
+                      icon="Send"
+                      label={__('Enjoy this? Send a tip')}
+                      onClick={() => openModal({ id: MODALS.SEND_TIP }, { uri })}
+                    />
+                  )}
+                  {speechSharable && (
+                    <ViewOnWebButton claimId={claim.claim_id} claimName={claim.name} />
+                  )}
+                </div>
+              )}
+              <FormRow alignRight padded>
                 <FormField
-                  type="checkbox"
+                  useToggle
                   name="autoplay"
-                  onChange={this.onAutoplayChange}
+                  type="checkbox"
                   checked={autoplay}
-                  postfix={__('Autoplay')}
+                  onChange={this.onAutoplayChange}
+                  postfix={
+                    <ToolTip
+                      onFormField
+                      label={__('Autoplay')}
+                      body={__('Automatically download and play free content.')}
+                    />
+                  }
                 />
               </FormRow>
             </div>

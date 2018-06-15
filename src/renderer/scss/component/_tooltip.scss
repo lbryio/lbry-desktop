@@ -4,8 +4,8 @@
 }
 
 // When there is a label for the tooltip and not just using a button or icon
-.tooltip.tooltip--label {
-  font-size: 12px;
+.tooltip--label {
+  font-size: 14px;
   padding-left: $spacing-vertical * 1/3;
 
   .tooltip__body {
@@ -13,7 +13,11 @@
   }
 }
 
-.tooltip.tooltip--icon {
+.tooltip--on-formfield {
+  padding: 0;
+}
+
+.tooltip--icon {
   margin-top: 5px;
 }
 
@@ -42,7 +46,7 @@
   border-style: solid;
 }
 
-.tooltip.tooltip--top .tooltip__body {
+.tooltip--top .tooltip__body {
   bottom: 100%;
   left: 50%;
   margin-left: -100px;
@@ -55,7 +59,7 @@
   }
 }
 
-.tooltip.tooltip--right .tooltip__body {
+.tooltip--right .tooltip__body {
   margin-top: -5px;
   margin-left: 10px;
 
@@ -67,7 +71,7 @@
   }
 }
 
-.tooltip.tooltip--bottom .tooltip__body {
+.tooltip--bottom .tooltip__body {
   top: 90%;
   left: 50%;
   margin-left: -100px;
@@ -80,7 +84,7 @@
   }
 }
 
-.tooltip.tooltip--left .tooltip__body {
+.tooltip--left .tooltip__body {
   top: -5px;
   right: 105%;
 
