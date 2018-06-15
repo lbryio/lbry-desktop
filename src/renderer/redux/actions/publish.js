@@ -281,7 +281,7 @@ export const doCheckPendingPublishes = () => (dispatch: Dispatch, getState: GetS
 
       dispatch(batchActions(...actions));
 
-      if (!Object.keys(pendingPublishes).length) {
+      if (!Object.keys(pendingPublishMap).length) {
         clearInterval(publishCheckInterval);
       }
     });
@@ -291,6 +291,6 @@ export const doCheckPendingPublishes = () => (dispatch: Dispatch, getState: GetS
     checkFileList();
     publishCheckInterval = setInterval(() => {
       checkFileList();
-    }, 10000);
+    }, 30000);
   }
 };
