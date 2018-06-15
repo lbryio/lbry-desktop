@@ -5,6 +5,7 @@ import classnames from 'classnames';
 import MarkdownPreview from 'component/common/markdown-preview';
 import SimpleMDE from 'react-simplemde-editor';
 import 'simplemde/dist/simplemde.min.css';
+import Toggle from 'react-toggle';
 
 type Props = {
   name: string,
@@ -68,6 +69,8 @@ export class FormField extends React.PureComponent<Props> {
         );
       } else if (type === 'textarea') {
         input = <textarea type={type} id={name} {...inputProps} />;
+      } else if (type === 'checkbox') {
+        input = <Toggle id={name} {...inputProps} />
       } else {
         input = <input type={type} id={name} {...inputProps} />;
       }
