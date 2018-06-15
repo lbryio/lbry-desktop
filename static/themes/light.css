@@ -1,1 +1,6 @@
-:root {}
+:root {
+  
+  /* Text */
+--text-selection-color: var(--color-red);
+
+}
