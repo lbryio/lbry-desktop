@@ -5,6 +5,7 @@ import classnames from 'classnames';
 import MarkdownPreview from 'component/common/markdown-preview';
 import SimpleMDE from 'react-simplemde-editor';
 import 'simplemde/dist/simplemde.min.css';
+import Toggle from 'react-toggle';
 
 type Props = {
   name: string,
@@ -21,6 +22,7 @@ type Props = {
   children?: React.Node,
   stretch?: boolean,
   affixClass?: string, // class applied to prefix/postfix label
+  useToggle?: boolean,
 };
 
 export class FormField extends React.PureComponent<Props> {
@@ -37,6 +39,7 @@ export class FormField extends React.PureComponent<Props> {
       children,
       stretch,
       affixClass,
+      useToggle,
       ...inputProps
     } = this.props;
 
@@ -68,6 +71,8 @@ export class FormField extends React.PureComponent<Props> {
         );
       } else if (type === 'textarea') {
         input = <textarea type={type} id={name} {...inputProps} />;
+      } else if (type === 'checkbox' && useToggle) {
+        input = <Toggle id={name} {...inputProps} />;
       } else {
         input = <input type={type} id={name} {...inputProps} />;
       }
