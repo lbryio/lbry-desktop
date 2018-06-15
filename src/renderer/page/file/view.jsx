@@ -220,7 +220,7 @@ class FilePage extends React.Component<Props> {
                   onChange={this.onAutoplayChange}
                   postfix={
                     <ToolTip
-                      noPadding
+                      onFormField
                       label={__('Autoplay')}
                       body={__('Automatically download and play free content.')}
                     />

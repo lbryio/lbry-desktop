@@ -8,7 +8,7 @@ type Props = {
   children: ?React.Node,
   icon: ?boolean,
   direction: string,
-  noPadding?: boolean,
+  onFormField?: boolean,
 };
 
 class ToolTip extends React.PureComponent<Props> {
@@ -17,7 +17,7 @@ class ToolTip extends React.PureComponent<Props> {
   };
 
   render() {
-    const { children, label, body, icon, direction, noPadding } = this.props;
+    const { children, label, body, icon, direction, onFormField } = this.props;
 
     const tooltipContent = children || label;
 
@@ -30,7 +30,7 @@ class ToolTip extends React.PureComponent<Props> {
           'tooltip--right': direction === 'right',
           'tooltip--bottom': direction === 'bottom',
           'tooltip--left': direction === 'left',
-          'tooltip--no-padding': noPadding
+          'tooltip--on-formfield': onFormField,
         })}
       >
         {tooltipContent}
