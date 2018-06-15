@@ -195,22 +195,21 @@ class FilePage extends React.Component<Props> {
                   )}
                 </div>
               </div>
-              {!claimIsMine ||
-                (speechSharable && (
-                  <div className="card__actions card__actions--end">
-                    {!claimIsMine && (
-                      <Button
-                        button="alt"
-                        icon="Send"
-                        label={__('Enjoy this? Send a tip')}
-                        onClick={() => openModal({ id: MODALS.SEND_TIP }, { uri })}
-                      />
-                    )}
-                    {speechSharable && (
-                      <ViewOnWebButton claimId={claim.claim_id} claimName={claim.name} />
-                    )}
-                  </div>
-                ))}
+              {(!claimIsMine || speechSharable) && (
+                <div className="card__actions card__actions--end">
+                  {!claimIsMine && (
+                    <Button
+                      button="alt"
+                      icon="Send"
+                      label={__('Enjoy this? Send a tip')}
+                      onClick={() => openModal({ id: MODALS.SEND_TIP }, { uri })}
+                    />
+                  )}
+                  {speechSharable && (
+                    <ViewOnWebButton claimId={claim.claim_id} claimName={claim.name} />
+                  )}
+                </div>
+              )}
               <FormRow alignRight>
                 <FormField
                   type="checkbox"
