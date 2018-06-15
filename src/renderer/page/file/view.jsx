@@ -7,7 +7,6 @@ import FilePrice from 'component/filePrice';
 import FileDetails from 'component/fileDetails';
 import FileActions from 'component/fileActions';
 import UriIndicator from 'component/uriIndicator';
-import { FormField, FormRow } from 'component/common/form';
 import Icon from 'component/common/icon';
 import DateTime from 'component/dateTime';
 import * as icons from 'constants/icons';
@@ -21,6 +20,8 @@ import type { Claim } from 'types/claim';
 import type { Subscription } from 'types/subscription';
 import FileDownloadLink from 'component/fileDownloadLink';
 import classnames from 'classnames';
+import { FormField, FormRow } from 'component/common/form';
+import ToolTip from 'component/common/tooltip';
 
 type Props = {
   claim: Claim,
@@ -210,13 +211,19 @@ class FilePage extends React.Component<Props> {
                   )}
                 </div>
               )}
-              <FormRow alignRight>
+              <FormRow alignRight padded>
                 <FormField
-                  type="checkbox"
                   name="autoplay"
+                  type="checkbox"
+                  useToggle
+                  postfix={
+                    <ToolTip
+                      label={__('Autoplay')}
+                      body={__('Automatically download and play free content.')}
+                    />
+                  }
+                  defaultChecked={autoplay}
                   onChange={this.onAutoplayChange}
-                  checked={autoplay}
-                  postfix={__('Autoplay')}
                 />
               </FormRow>
             </div>
