@@ -65,6 +65,8 @@ Lbryio.call = (resource, action, params = {}, method = 'get') => {
   });
 };
 
+Lbryio.getLbryId = () => Lbry.status().then(status => status.lbry_id);
+
 Lbryio.authToken = null;
 
 Lbryio.getAuthToken = () =>
@@ -85,7 +87,10 @@ Lbryio.setAuthToken = token => {
   ipcRenderer.send('set-auth-token', token);
 };
 
-Lbryio.getCurrentUser = () => Lbryio.call('user', 'me');
+Lbryio.getCurrentUser = () =>
+  Lbryio.getLbryId().then(id => {
+    Lbryio.call('user', 'me', { lbry_id: id });
+  });
 
 Lbryio.authenticate = () => {
   if (!Lbryio.enabled) {
