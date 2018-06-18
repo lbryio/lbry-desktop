@@ -155,10 +155,14 @@ class PublishForm extends React.PureComponent<Props> {
     const { balance, updatePublishForm } = this.props;
 
     let bidError;
-    if (balance <= bid) {
-      bidError = __('Not enough credits');
+    if (bid === 0) {
+      bidError = __('Deposit cannot be 0');
+    } else if (balance === bid) {
+      bidError = __('Please decrease your deposit to account for transaction fees');
+    } else if (balance < bid) {
+      bidError = __('Deposit cannot be higher than your balance');
     } else if (bid <= MINIMUM_PUBLISH_BID) {
-      bidError = __('Your bid must be higher');
+      bidError = __('Your deposit must be higher');
     }
 
     updatePublishForm({ bid, bidError });

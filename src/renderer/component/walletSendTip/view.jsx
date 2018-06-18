@@ -9,7 +9,6 @@ type Props = {
   uri: string,
   title: string,
   claim: Claim,
-  errorMessage: string,
   isPending: boolean,
   sendSupport: (number, string, string) => void,
   onCancel: () => void,
@@ -18,7 +17,8 @@ type Props = {
 };
 
 type State = {
-  amount: number,
+  tipAmount: number,
+  newTipError: string,
 };
 
 class WalletSendTip extends React.PureComponent<Props, State> {
@@ -26,7 +26,8 @@ class WalletSendTip extends React.PureComponent<Props, State> {
     super(props);
 
     this.state = {
-      amount: 0,
+      tipAmount: 0,
+      newTipError: '',
     };
 
     (this: any).handleSendButtonClicked = this.handleSendButtonClicked.bind(this);
@@ -35,9 +36,9 @@ class WalletSendTip extends React.PureComponent<Props, State> {
   handleSendButtonClicked() {
     const { claim, uri, sendSupport, sendTipCallback } = this.props;
     const { claim_id: claimId } = claim;
-    const { amount } = this.state;
+    const { tipAmount } = this.state;
 
-    sendSupport(amount, claimId, uri);
+    sendSupport(tipAmount, claimId, uri);
 
     // ex: close modal
     if (sendTipCallback) {
@@ -46,14 +47,24 @@ class WalletSendTip extends React.PureComponent<Props, State> {
   }
 
   handleSupportPriceChange(event: SyntheticInputEvent<*>) {
+    const { balance } = this.props;
+    const tipAmount = parseFloat(event.target.value);
+    let newTipError;
+    if (tipAmount === balance) {
+      newTipError = __('Please decrease your tip to account for transaction fees');
+    } else if (tipAmount > balance) {
+      newTipError = __('Not enough credits');
+    }
+
     this.setState({
-      amount: Number(event.target.value),
+      tipAmount,
+      newTipError,
     });
   }
 
   render() {
-    const { title, errorMessage, isPending, uri, onCancel, balance } = this.props;
-    const { amount } = this.state;
+    const { title, isPending, uri, onCancel, balance } = this.props;
+    const { tipAmount, newTipError } = this.state;
 
     return (
       <div>
@@ -67,7 +78,8 @@ class WalletSendTip extends React.PureComponent<Props, State> {
             label={__('Amount')}
             postfix={__('LBC')}
             className="input--price-amount"
-            error={errorMessage}
+            error={newTipError}
+            value={tipAmount}
             min="0"
             step="any"
             type="number"
@@ -84,7 +96,7 @@ class WalletSendTip extends React.PureComponent<Props, State> {
             <Button
               button="primary"
               label={__('Send')}
-              disabled={isPending || amount <= 0 || amount > balance}
+              disabled={isPending || tipAmount <= 0 || tipAmount > balance || tipAmount === balance}
               onClick={this.handleSendButtonClicked}
             />
             <Button

@@ -169,6 +169,7 @@ export function doUserPhoneVerify(verificationCode) {
           data: { phone_number: phoneNumber },
         });
         dispatch(doUserFetch());
+        dispatch(doClaimRewardType(rewards.TYPE_NEW_USER));
       })
       .catch(error => dispatch(doUserPhoneVerifyFailure(error)));
   };
