@@ -11,6 +11,7 @@ const select = (state, props) => ({
   claim: makeSelectClaimForUri(props.uri)(state),
   isResolvingUri: makeSelectIsUriResolving(props.uri)(state),
   blackListedOutpoints: selectBlackListedOutpoints(state),
+  fromOverlay: props.fromOverlay,
 });
 
 const perform = dispatch => ({

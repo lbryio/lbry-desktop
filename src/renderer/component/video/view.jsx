@@ -43,8 +43,10 @@ type Props = {
   play: string => void,
   searchBarFocused: boolean,
   showOverlay: boolean,
-  overlayed: boolean,
   hiddenControls: boolean,
+  fromOverlay: boolean,
+  overlayed: boolean,
+  fromOverlay: boolean,
 };
 
 class Video extends React.PureComponent<Props> {
@@ -59,8 +61,8 @@ class Video extends React.PureComponent<Props> {
     this.handleAutoplay(this.props);
     window.addEventListener('keydown', this.handleKeyDown);
 
-    const { showOverlay, doHideOverlay, uri, playingUri, overlayed } = this.props;
-    if (showOverlay && uri === playingUri && !overlayed) {
+    const { showOverlay, doHideOverlay, uri, playingUri } = this.props;
+    if (showOverlay && uri === playingUri) {
       doHideOverlay();
     }
   }
@@ -73,6 +75,11 @@ class Video extends React.PureComponent<Props> {
       this.props.playingUri !== nextProps.playingUri
     ) {
       this.handleAutoplay(nextProps);
+    }
+    if (nextProps.fromOverlay) {
+      this.moveVideoFromOverlayToNormal();
+      this.destroyVideoOnOverlay();
+      this.props.doHideOverlay();
     }
   }
 
@@ -88,9 +95,24 @@ class Video extends React.PureComponent<Props> {
   moveVideoToOverlay() {
     const topContainer = document.getElementById('video__overlay_id_top_container');
     const container = document.getElementById('video__overlay_id');
-    const video = this.mediaContainer.media.getElementsByTagName("video")[0];
-    topContainer.classList.remove('hiddenContainer');
-    container.appendChild(video);
+    const videoContainer = this.mediaContainer.media ? this.mediaContainer.media : document.getElementById('insert_video');
+    const video = videoContainer.getElementsByTagName('video')[0];
+    if (video) {
+      topContainer.classList.remove('hiddenContainer');
+      container.appendChild(video);
+      video.controls = false;
+      video.play();
+    }
+  }
+
+  moveVideoFromOverlayToNormal() {
+    const videoContainer = document.getElementById('video__overlay_id');
+    if (!videoContainer) return;
+    const video = videoContainer.getElementsByTagName('video')[0];
+    if (!video) return;
+    const filePageVideoContainer = document.getElementById('insert_video');
+    filePageVideoContainer.appendChild(video);
+    video.controls = true;
     video.play();
   }
 
@@ -141,12 +163,16 @@ class Video extends React.PureComponent<Props> {
   }
 
   playContent() {
-    const { play, uri, showOverlay, playingUri, doHideOverlay } = this.props;
-    if (playingUri && showOverlay) {
+    const { play, uri, playingUri, doHideOverlay } = this.props;
+    if (playingUri) {
+      if (playingUri === uri) {
+        this.moveVideoFromOverlayToNormal();
+      }
       this.destroyVideoOnOverlay();
       doHideOverlay();
+    } else {
+      play(uri);
     }
-    play(uri);
   }
 
   render() {
@@ -169,8 +195,9 @@ class Video extends React.PureComponent<Props> {
       className,
       obscureNsfw,
       hiddenControls,
-      overlayed,
       doHideOverlay,
+      showOverlay,
+      fromOverlay,
     } = this.props;
 
     const isPlaying = playingUri === uri;
@@ -195,6 +222,7 @@ class Video extends React.PureComponent<Props> {
     const layoverStyle =
       !shouldObscureNsfw && poster ? { backgroundImage: `url("${poster}")` } : {};
 
+    const commingFromOverlay = playingUri === uri;
     return (
       <div className={classnames('video', {}, className)}>
         {isPlaying && (
@@ -203,7 +231,7 @@ class Video extends React.PureComponent<Props> {
               <div className={layoverClass} style={layoverStyle}>
                 <LoadingScreen status={loadStatusMessage} />
               </div>
-            ) : (
+            ) : (commingFromOverlay && fromOverlay ? <div id="insert_video" ref={mediaContainer => this.mediaContainer = mediaContainer} /> :
               <VideoPlayer
                 filename={fileInfo.file_name}
                 poster={poster}
@@ -221,7 +249,6 @@ class Video extends React.PureComponent<Props> {
                 paused={mediaPaused}
                 position={mediaPosition}
                 hiddenControls={hiddenControls}
-                overlayed={overlayed}
                 doHideOverlay={doHideOverlay}
                 ref={mediaContainer => this.mediaContainer = mediaContainer }
               />

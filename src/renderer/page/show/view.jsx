@@ -12,6 +12,7 @@ type Props = {
   resolveUri: string => void,
   uri: string,
   claim: Claim,
+  fromOverlay: boolean,
   blackListedOutpoints: Array<{
     txid: string,
     nout: number,
@@ -34,7 +35,7 @@ class ShowPage extends React.PureComponent<Props> {
   }
 
   render() {
-    const { claim, isResolvingUri, uri, blackListedOutpoints } = this.props;
+    const { claim, isResolvingUri, uri, blackListedOutpoints, fromOverlay } = this.props;
 
     let innerContent = '';
 
@@ -85,7 +86,7 @@ class ShowPage extends React.PureComponent<Props> {
           </Page>
         );
       } else {
-        innerContent = <FilePage uri={uri} />;
+        innerContent = <FilePage uri={uri} fromOverlay={fromOverlay} />;
       }
     }
 

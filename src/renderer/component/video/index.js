@@ -39,8 +39,8 @@ const select = (state, props) => ({
   autoplay: makeSelectClientSetting(settings.AUTOPLAY)(state),
   searchBarFocused: selectSearchBarFocused(state),
   showOverlay: selectShowOverlay(state),
-  overlayed: props.overlayed,
   hiddenControls: props.hiddenControls,
+  fromOverlay: props.fromOverlay,
 });
 
 const perform = dispatch => ({

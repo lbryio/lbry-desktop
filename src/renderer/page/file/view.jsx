@@ -43,6 +43,7 @@ type Props = {
   setClientSetting: (string, boolean | string) => void,
   checkSubscription: ({ channelName: string, uri: string }) => void,
   subscriptions: Array<{}>,
+  fromOverlay: boolean,
 };
 
 class FilePage extends React.Component<Props> {
@@ -112,6 +113,7 @@ class FilePage extends React.Component<Props> {
       prepareEdit,
       navigate,
       autoplay,
+      fromOverlay,
     } = this.props;
 
     // File info
@@ -139,7 +141,7 @@ class FilePage extends React.Component<Props> {
         ) : (
           <section className="card">
             {isPlayable ? (
-              <Video className="content__embedded" uri={uri} />
+              <Video className="content__embedded" uri={uri} fromOverlay={fromOverlay} />
             ) : (
               <Thumbnail shouldObscure={shouldObscureThumbnail} src={thumbnail} />
             )}

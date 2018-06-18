@@ -47,7 +47,6 @@ class VideoPlayer extends React.PureComponent {
     const ended = () => {
       this.props.doPause();
       this.props.savePosition(claim.claim_id, 0);
-      if (this.props.overlayed) this.props.doHideOverlay();
     };
 
     // use renderAudio override for mp3

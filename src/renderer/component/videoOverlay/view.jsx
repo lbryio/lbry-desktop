@@ -35,8 +35,8 @@ class VideoOverlay extends React.Component<Props> {
   returnToMedia() {
     const { navigate, playingUri, doHideOverlay } = this.props;
     doHideOverlay();
-    this.destroyMediaPlayer();
-    navigate('/show', { uri: playingUri });
+    this.destroyMediaPlayer(false);
+    navigate('/show', { uri: playingUri, fromOverlay: true });
   }
 
   renderPlayOrPauseButton() {
@@ -51,11 +51,11 @@ class VideoOverlay extends React.Component<Props> {
     return document.getElementById('video__overlay_id').getElementsByTagName("video")[0];
   }
 
-  destroyMediaPlayer(){
+  destroyMediaPlayer(clearVideo = true){
     const topContainer = document.getElementById('video__overlay_id_top_container')
     const videoContainer = document.getElementById('video__overlay_id');
     topContainer.classList.add('hiddenContainer');
-    videoContainer.innerHTML = '';
+    if (clearVideo) videoContainer.innerHTML = '';
   }
 
   render() {
