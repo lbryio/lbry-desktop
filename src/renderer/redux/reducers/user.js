@@ -89,12 +89,10 @@ reducers[ACTIONS.USER_PHONE_VERIFY_STARTED] = state =>
   });
 
 reducers[ACTIONS.USER_PHONE_VERIFY_SUCCESS] = (state, action) => {
-  const user = Object.assign({}, state.user);
-  user.phone_number = action.data.phone_number;
-  return Object.assign({}, state, {
+  Object.assign({}, state, {
     phoneToVerify: '',
     phoneVerifyIsPending: false,
-    user,
+    user: action.data.user,
   });
 };
 

@@ -94,7 +94,7 @@ class ModalRouter extends React.PureComponent<Props> {
     const { balance, page, isCreditIntroAcknowledged } = props;
 
     if (
-      balance <= 0 &&
+      balance === 0 &&
       !isCreditIntroAcknowledged &&
       (['send', 'publish'].includes(page) || this.isPaidShowPage(props))
     ) {

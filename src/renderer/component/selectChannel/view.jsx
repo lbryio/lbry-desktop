@@ -55,11 +55,13 @@ class ChannelSection extends React.PureComponent<Props, State> {
 
   handleChannelChange(event: SyntheticInputEvent<*>) {
     const { onChannelChange } = this.props;
+    const { newChannelBid } = this.state;
     const channel = event.target.value;
 
     if (channel === CHANNEL_NEW) {
       this.setState({ addingChannel: true });
       onChannelChange(channel);
+      this.handleNewChannelBidChange(newChannelBid);
     } else {
       this.setState({ addingChannel: false });
       onChannelChange(channel);
@@ -84,14 +86,15 @@ class ChannelSection extends React.PureComponent<Props, State> {
     });
   }
 
-  handleNewChannelBidChange(event: SyntheticInputEvent<*>) {
+  handleNewChannelBidChange(newChannelBid: number) {
     const { balance } = this.props;
-    const newChannelBid = parseFloat(event.target.value);
     let newChannelBidError;
-    if (newChannelBid === balance) {
-      newChannelBidError = __('Please decrease your bid to account for transaction fees');
+    if (newChannelBid === 0) {
+      newChannelBidError = __('Your deposit cannot be 0');
+    } else if (newChannelBid === balance) {
+      newChannelBidError = __('Please decrease your deposit to account for transaction fees');
     } else if (newChannelBid > balance) {
-      newChannelBidError = __('Not enough credits');
+      newChannelBidError = __('Deposit cannot be higher than your balance');
     }
 
     this.setState({
@@ -176,6 +179,7 @@ class ChannelSection extends React.PureComponent<Props, State> {
                 label={__('Name')}
                 type="text"
                 prefix="@"
+                placeholder={__('myChannelName')}
                 error={newChannelNameError}
                 value={newChannelName}
                 onChange={this.handleNewChannelNameChange}
@@ -183,6 +187,7 @@ class ChannelSection extends React.PureComponent<Props, State> {
             </FormRow>
             <FormRow padded>
               <FormField
+                className="input--price-amount"
                 label={__('Deposit')}
                 postfix="LBC"
                 step="any"
@@ -193,7 +198,7 @@ class ChannelSection extends React.PureComponent<Props, State> {
                 )}
                 error={newChannelBidError}
                 value={newChannelBid}
-                onChange={this.handleNewChannelBidChange}
+                onChange={event => this.handleNewChannelBidChange(parseFloat(event.target.value))}
               />
             </FormRow>
             <div className="card__actions">
