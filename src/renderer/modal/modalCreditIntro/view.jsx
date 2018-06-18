@@ -14,7 +14,7 @@ type Props = {
 
 const ModalCreditIntro = (props: Props) => {
   const { closeModal, totalRewardValue, currentBalance, addBalance } = props;
-  const totalRewardRounded = Math.round(totalRewardValue / 10) * 10;
+  const totalRewardRounded = Math.floor(totalRewardValue / 10) * 10;
 
   return (
     <Modal type="custom" isOpen contentLabel="Welcome to LBRY">
