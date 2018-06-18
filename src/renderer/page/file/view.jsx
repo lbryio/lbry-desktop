@@ -7,16 +7,21 @@ import FilePrice from 'component/filePrice';
 import FileDetails from 'component/fileDetails';
 import FileActions from 'component/fileActions';
 import UriIndicator from 'component/uriIndicator';
-import { FormField, FormRow } from 'component/common/form';
 import Icon from 'component/common/icon';
 import DateTime from 'component/dateTime';
 import * as icons from 'constants/icons';
 import Button from 'component/button';
 import SubscribeButton from 'component/subscribeButton';
+import ViewOnWebButton from 'component/viewOnWebButton';
 import Page from 'component/page';
 import player from 'render-media';
 import * as settings from 'constants/settings';
 import type { Claim } from 'types/claim';
+import type { Subscription } from 'types/subscription';
+import FileDownloadLink from 'component/fileDownloadLink';
+import classnames from 'classnames';
+import { FormField, FormRow } from 'component/common/form';
+import ToolTip from 'component/common/tooltip';
 
 type Props = {
   claim: Claim,
@@ -30,8 +35,6 @@ type Props = {
   uri: string,
   rewardedContentClaimIds: Array<string>,
   obscureNsfw: boolean,
-  playingUri: ?string,
-  isPaused: boolean,
   claimIsMine: boolean,
   autoplay: boolean,
   costInfo: ?{},
@@ -39,11 +42,11 @@ type Props = {
   openModal: ({ id: string }, { uri: string }) => void,
   fetchFileInfo: string => void,
   fetchCostInfo: string => void,
-  prepareEdit: ({}) => void,
+  prepareEdit: ({}, string) => void,
   setClientSetting: (string, boolean | string) => void,
   checkSubscription: ({ channelName: string, uri: string }) => void,
-  subscriptions: Array<{}>,
   fromOverlay: boolean,
+  subscriptions: Array<Subscription>,
 };
 
 class FilePage extends React.Component<Props> {
@@ -54,15 +57,14 @@ class FilePage extends React.Component<Props> {
   }
 
   componentDidMount() {
-    const { uri, fileInfo, fetchFileInfo, costInfo, fetchCostInfo } = this.props;
+    const { uri, fileInfo, fetchFileInfo, fetchCostInfo } = this.props;
 
     if (fileInfo === undefined) {
       fetchFileInfo(uri);
     }
 
-    if (costInfo === undefined) {
-      fetchCostInfo(uri);
-    }
+    // See https://github.com/lbryio/lbry-app/pull/1563 for discussion
+    fetchCostInfo(uri);
 
     this.checkSubscription(this.props);
   }
@@ -79,12 +81,7 @@ class FilePage extends React.Component<Props> {
   }
 
   checkSubscription = (props: Props) => {
-    if (
-      props.claim.value.publisherSignature &&
-      props.subscriptions
-        .map(subscription => subscription.channelName)
-        .indexOf(props.claim.channel_name) !== -1
-    ) {
+    if (props.subscriptions.find(sub => sub.channelName === props.claim.channel_name)) {
       props.checkSubscription({
         channelName: props.claim.channel_name,
         uri: buildURI(
@@ -106,14 +103,13 @@ class FilePage extends React.Component<Props> {
       uri,
       rewardedContentClaimIds,
       obscureNsfw,
-      playingUri,
-      isPaused,
       openModal,
       claimIsMine,
       prepareEdit,
       navigate,
       autoplay,
       fromOverlay,
+      costInfo,
     } = this.props;
 
     // File info
@@ -122,16 +118,32 @@ class FilePage extends React.Component<Props> {
     const shouldObscureThumbnail = obscureNsfw && metadata.nsfw;
     const { height, channel_name: channelName, value } = claim;
     const mediaType = Lbry.getMediaType(contentType);
-    const isPlayable =
-      Object.values(player.mime).indexOf(contentType) !== -1 || mediaType === 'audio';
+    const isPlayable = Object.values(player.mime).includes(contentType) || mediaType === 'audio';
     const channelClaimId =
       value && value.publisherSignature && value.publisherSignature.certificateId;
     let subscriptionUri;
     if (channelName && channelClaimId) {
       subscriptionUri = buildURI({ channelName, claimId: channelClaimId }, false);
     }
+    const speechSharable =
+      costInfo &&
+      costInfo.cost === 0 &&
+      contentType &&
+      ['video', 'image'].includes(contentType.split('/')[0]);
 
-    const isPlaying = playingUri === uri && !isPaused;
+    // We want to use the short form uri for editing
+    // This is what the user is used to seeing, they don't care about the claim id
+    // We will select the claim id before they publish
+    let editUri;
+    if (claimIsMine) {
+      const uriObject = { contentName: claim.name, claimId: claim.claim_id };
+      if (channelName) {
+        uriObject.channelName = channelName;
+      }
+
+      editUri = buildURI(uriObject);
+    }
+
     return (
       <Page extraPadding>
         {!claim || !metadata ? (
@@ -140,22 +152,27 @@ class FilePage extends React.Component<Props> {
           </section>
         ) : (
           <section className="card">
-            {isPlayable ? (
-              <Video className="content__embedded" uri={uri} fromOverlay={fromOverlay} />
-            ) : (
-              <Thumbnail shouldObscure={shouldObscureThumbnail} src={thumbnail} />
-            )}
-            {!isPlaying && (
-              <div className="card-media__internal-links">
-                <FileActions uri={uri} vertical />
-              </div>
-            )}
+            {isPlayable && <Video className="content__embedded" uri={uri} fromOverlay={fromOverlay} />}
+            {!isPlayable &&
+              (thumbnail ? (
+                <Thumbnail shouldObscure={shouldObscureThumbnail} src={thumbnail} />
+              ) : (
+                <div
+                  className={classnames('content__empty', {
+                    'content__empty--nsfw': shouldObscureThumbnail,
+                  })}
+                >
+                  <div className="card__media-text">{__('This content is not playable.')}</div>
+                </div>
+              ))}
             <div className="card__content">
               <div className="card__title-identity--file">
                 <h1 className="card__title card__title--file">{title}</h1>
                 <div className="card__title-identity-icons">
                   <FilePrice uri={normalizeURI(uri)} />
-                  {isRewardContent && <Icon icon={icons.FEATURED} />}
+                  {isRewardContent && (
+                    <Icon iconColor="red" tooltip="bottom" icon={icons.FEATURED} />
+                  )}
                 </div>
               </div>
               <span className="card__subtitle card__subtitle--file">
@@ -172,35 +189,54 @@ class FilePage extends React.Component<Props> {
                       icon={icons.EDIT}
                       label={__('Edit')}
                       onClick={() => {
-                        prepareEdit(claim, uri);
+                        prepareEdit(claim, editUri);
                         navigate('/publish');
                       }}
                     />
                   ) : (
-                    <React.Fragment>
-                      <Button
-                        button="alt"
-                        iconRight="Send"
-                        label={__('Enjoy this? Send a tip')}
-                        onClick={() => openModal({ id: MODALS.SEND_TIP }, { uri })}
-                      />
-                      <SubscribeButton uri={subscriptionUri} channelName={channelName} />
-                    </React.Fragment>
+                    <SubscribeButton uri={subscriptionUri} channelName={channelName} />
                   )}
                 </div>
               </div>
-              <FormRow alignRight>
+              {(!claimIsMine || speechSharable) && (
+                <div className="card__actions card__actions--end">
+                  {!claimIsMine && (
+                    <Button
+                      button="alt"
+                      icon="Send"
+                      label={__('Enjoy this? Send a tip')}
+                      onClick={() => openModal({ id: MODALS.SEND_TIP }, { uri })}
+                    />
+                  )}
+                  {speechSharable && (
+                    <ViewOnWebButton claimId={claim.claim_id} claimName={claim.name} />
+                  )}
+                </div>
+              )}
+              <FormRow alignRight padded>
                 <FormField
-                  type="checkbox"
+                  useToggle
                   name="autoplay"
-                  onChange={this.onAutoplayChange}
+                  type="checkbox"
                   checked={autoplay}
-                  postfix={__('Autoplay')}
+                  onChange={this.onAutoplayChange}
+                  postfix={
+                    <ToolTip
+                      onFormField
+                      label={__('Autoplay')}
+                      body={__('Automatically download and play free content.')}
+                    />
+                  }
                 />
               </FormRow>
             </div>
 
             <div className="card__content">
+              <FileDownloadLink uri={uri} />
+              <FileActions uri={uri} claimId={claim.claim_id} />
+            </div>
+
+            <div className="card__content--extra-padding">
               <FileDetails uri={uri} />
             </div>
           </section>

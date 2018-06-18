@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ## [Unreleased]
 
 ### Added
+
+   * Add ability to open log file and log directory in the help page ([#1556](https://github.com/lbryio/lbry-app/issues/1556))
+   * Add ability to resend verification email ([#1492](https://github.com/lbryio/lbry-app/issues/1492))
+   * Add Narrative about Feature Request on Help Page and Report Page ([#1551](https://github.com/lbryio/lbry-app/pull/1551))
    * Add keyboard shortcut to quit the app on Windows ([#1202](https://github.com/lbryio/lbry-app/pull/1202))
    * Build for both architectures (x86 and x64) for Windows ([#1262](https://github.com/lbryio/lbry-app/pull/1262))
    * Add referral FAQ to Invites screen([#1314](https://github.com/lbryio/lbry-app/pull/1314))
@@ -14,13 +18,17 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
    * Pre-fill publish URL after clicking "Put something here" link ([#1303](https://github.com/lbryio/lbry-app/pull/1303))
    * Add Danger JS to automate code reviews ([#1289](https://github.com/lbryio/lbry-app/pull/1289))
    * Autoplay downloaded and free media ([#584](https://github.com/lbryio/lbry-app/pull/1453))
+   * Add 'Go to page' input on channel pagination ([#1166](https://github.com/lbryio/lbry-app/pull/1166))
+   * Add "View on web" button on file/channel pages with spee.ch link ([#1222](https://github.com/lbryio/lbry-app/pull/1222))
 
 ### Changed
    * Add flair to snackbar ([#1313](https://github.com/lbryio/lbry-app/pull/1313))
    * Made font in price badge larger ([#1420](https://github.com/lbryio/lbry-app/pull/1420))
    * Store subscriptions in internal database ([#1424](https://github.com/lbryio/lbry-app/pull/1424))
+   * Move rewards logic to interal api ([#1509](https://github.com/lbryio/lbry-app/pull/1509))
 
 ### Fixed
+   * Fixing content address extending outside of visible area. ([#741](https://github.com/lbryio/lbry-app/issues/741))
    * Fix content-type not shown correctly in file description ([#863](https://github.com/lbryio/lbry-app/pull/863))
    * Fix [Flow](https://flow.org/) ([#1197](https://github.com/lbryio/lbry-app/pull/1197))
    * Fix black screen on macOS after maximizing LBRY and then closing ([#1235](https://github.com/lbryio/lbry-app/pull/1235))
@@ -30,11 +38,15 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
    * Fix don't allow dark mode with automatic night mode enabled ([#1005](https://github.com/lbryio/lbry-app/issues/1005))
    * Fix description box on Publish (dark theme) ([#1356](https://github.com/lbryio/lbry-app/issues/#1356))
    * Fix price wrapping in price badge ([#1420](https://github.com/lbryio/lbry-app/pull/1420))
-   * Fix spacing in search suggestions ([#1422])(https://github.com/lbryio/lbry-app/pull/1422))
-   * Fix text/HTML files don't display correctly in-app anymore ([#1379])(https://github.com/lbryio/lbry-app/issues/1379)
-   * Fix notification modals when reward is claimed ([#1436])(https://github.com/lbryio/lbry-app/issues/1436) and ([#1407])(https://github.com/lbryio/lbry-app/issues/1407)
-   * Fix disabled cards(grayed out) ([#1466])(https://github.com/lbryio/lbry-app/issues/1466)
+   * Fix spacing in search suggestions ([#1422](https://github.com/lbryio/lbry-app/pull/1422))
+   * Fix text/HTML files don't display correctly in-app anymore ([#1379](https://github.com/lbryio/lbry-app/issues/1379))
+   * Fix notification modals when reward is claimed ([#1436](https://github.com/lbryio/lbry-app/issues/1436)) and ([#1407](https://github.com/lbryio/lbry-app/issues/1407))
+   * Fix disabled cards(grayed out) ([#1466](https://github.com/lbryio/lbry-app/issues/1466))
    * Fix markdown render ([#1179](https://github.com/lbryio/lbry-app/issues/1179))
+   * Fix new lines not showing correctly after markdown changes ([#1504](https://github.com/lbryio/lbry-app/issues/1504))
+   * Fix claim ID being null when reporting a claim that was not previously download ([issue#1512](https://github.com/lbryio/lbry-app/issues/1512)) ([PR#1530](https://github.com/lbryio/lbry-app/pull/1530))
+   * Fix URI and outpoint not being passed properly to API ([#1494](https://github.com/lbryio/lbry-app/issues/1494))
+   * Fix incorrect markdown preview on url with parentheses ([#1570](https://github.com/lbryio/lbry-app/issues/1570))
 
 
 ## [0.21.3] - 2018-04-23
@@ -57,7 +69,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
   * App category for Linux ([#877](https://github.com/lbryio/lbry-app/pull/877))
   * Add YouTube Sync reward ([#1147](https://github.com/lbryio/lbry-app/pull/1147))
   * Retain previous screen sizing on startup ([#338](https://github.com/lbryio/lbry-app/issues/338))
-  * Add 'Go to page' input on channel pagination ([#1166](https://github.com/lbryio/lbry-app/pull/1166))
 
 
 ### Changed
@@ -372,7 +383,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
  * Removed placeholder values from price selection form fields, which was causing confusion that these were real values (#426)
  * Fixed showing "other currency" help tip in publish form, which was caused due to not "setting" state for price
  * Publish page now properly checks for all required fields are filled
- * Fixed pagination styling for pages > 5 (#416)
  * Fixed sizing on squat videos (#419)
  * Support claims no longer show up on Published page (#384)
  * Fixed rendering of small prices (#461)
@@ -410,7 +420,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ### Added
  * Replaced horizontal scrollbars with scroll arrows
  * Featured weekly reward content shows with an orange star
- * Added pagination to channel pages
 
 
 ### Fixed

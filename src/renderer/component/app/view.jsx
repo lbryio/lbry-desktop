@@ -7,6 +7,7 @@ import ReactModal from 'react-modal';
 import throttle from 'util/throttle';
 import SideBar from 'component/sideBar';
 import Header from 'component/header';
+import { openContextMenu } from '../../util/contextMenu';
 
 type Props = {
   alertError: (string | {}) => void,
@@ -79,12 +80,12 @@ class App extends React.PureComponent<Props> {
 
   render() {
     return (
-      <div id="window">
+      <div id="window" onContextMenu={e => openContextMenu(e)}>
         <Theme />
         <main className="page">
           <SideBar />
-          <Header />
           <div className="content" id="content">
+            <Header />
             <Router />
             <ModalRouter />
           </div>

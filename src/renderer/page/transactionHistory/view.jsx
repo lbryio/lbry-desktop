@@ -31,7 +31,7 @@ class TransactionHistoryPage extends React.PureComponent {
           {transactions && transactions.length ? (
             <TransactionList transactions={transactions} />
           ) : (
-            ''
+            <div className="card__content">{__("Looks like you don't have any transactions")}</div>
           )}
         </section>
       </Page>

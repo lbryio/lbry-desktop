@@ -5,6 +5,7 @@ import {
   makeSelectMetadataForUri,
   makeSelectFileInfoForUri,
   makeSelectIsUriResolving,
+  makeSelectClaimIsMine,
 } from 'lbry-redux';
 import { doNavigate } from 'redux/actions/navigation';
 import { selectRewardContentClaimIds } from 'redux/selectors/content';
@@ -27,6 +28,7 @@ const select = (state, props) => {
 
   return {
     obscureNsfw: !selectShowNsfw(state),
+    claimIsMine: makeSelectClaimIsMine(props.uri)(state),
     rewardedContentClaimIds: selectRewardContentClaimIds(state, props),
     ...fileCardInfo,
     pending: !!pendingPublish,
@@ -38,4 +40,7 @@ const perform = dispatch => ({
   resolveUri: uri => dispatch(doResolveUri(uri)),
 });
 
-export default connect(select, perform)(FileCard);
+export default connect(
+  select,
+  perform
+)(FileCard);

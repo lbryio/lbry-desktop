@@ -28,3 +28,4 @@ export const CHECK_SIMPLE = 'Check';
 export const PLAY = 'Play';
 export const MAXIMIZE = 'Maximize2';
 export const PAUSE = 'Pause';
+export const GLOBE = 'Globe';

@@ -2,6 +2,7 @@
 import React from 'react';
 import Button from 'component/button';
 import Address from 'component/address';
+import QRCode from 'component/common/qr-code';
 import * as icons from 'constants/icons';
 
 type Props = {
@@ -12,6 +13,20 @@ type Props = {
 };
 
 class WalletAddress extends React.PureComponent<Props> {
+  constructor(props: Props) {
+    super(props);
+
+    this.state = {
+      showQR: false,
+    };
+  }
+
+  toggleQR() {
+    this.setState({
+      showQR: !this.state.showQR,
+    });
+  }
+
   componentWillMount() {
     const { checkAddressIsMine, receiveAddress, getNewAddress } = this.props;
     if (!receiveAddress) {
@@ -23,6 +38,7 @@ class WalletAddress extends React.PureComponent<Props> {
 
   render() {
     const { receiveAddress, getNewAddress, gettingNewAddress } = this.props;
+    const { showQR } = this.state;
 
     return (
       <section className="card card--section">
@@ -43,7 +59,17 @@ class WalletAddress extends React.PureComponent<Props> {
             onClick={getNewAddress}
             disabled={gettingNewAddress}
           />
+          <Button
+            button="link"
+            label={showQR ? __('Hide QR code') : __('Show QR code')}
+            onClick={this.toggleQR.bind(this)}
+          />
         </div>
+
+        <div className="card__content">
+          {showQR && <QRCode value={receiveAddress} paddingTop />}
+        </div>
+
         <div className="card__content">
           <div className="help">
             <p>

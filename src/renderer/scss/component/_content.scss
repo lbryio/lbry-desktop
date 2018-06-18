@@ -13,6 +13,10 @@
     position: absolute;
     top: 0;
     left: 0;
+
+    &:hover {
+      cursor: pointer;
+    }
   }
 }
 
@@ -32,6 +36,10 @@
 
   &:not(.card__media--nsfw) {
     background-color: var(--color-black);
+  }
+
+  &:hover {
+    cursor: pointer;
   }
 }
 
@@ -68,6 +76,24 @@
 
 .content__loading-text {
   color: var(--color-white);
+}
+
+.content__empty {
+  background-color: black;
+  width: 100%;
+  padding-top: var(--video-aspect-ratio);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-white);
+
+  &.content__empty--nsfw {
+    background-color: var(--color-nsfw);
+  }
+
+  .card__media-text {
+    margin-top: calc(var(--video-aspect-ratio) * -1);
+  }
 }
 
 img {

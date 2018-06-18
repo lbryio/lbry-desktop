@@ -1,15 +1,17 @@
 // @flow
 import * as React from 'react';
-import { isNameValid, buildURI, regexInvalidURI } from 'lbry-redux';
+import { isNameValid, buildURI, regexInvalidURI, THUMBNAIL_STATUSES } from 'lbry-redux';
 import { Form, FormField, FormRow, FormFieldPrice, Submit } from 'component/common/form';
 import Button from 'component/button';
 import ChannelSection from 'component/selectChannel';
 import classnames from 'classnames';
 import type { PublishParams, UpdatePublishFormData } from 'redux/reducers/publish';
 import FileSelector from 'component/common/file-selector';
+import SelectThumbnail from 'component/selectThumbnail';
 import { COPYRIGHT, OTHER } from 'constants/licenses';
 import { CHANNEL_NEW, CHANNEL_ANONYMOUS, MINIMUM_PUBLISH_BID } from 'constants/claim';
 import * as icons from 'constants/icons';
+import type { Claim } from 'types/claim';
 import BidHelpText from './internal/bid-help-text';
 import LicenseType from './internal/license-type';
 
@@ -20,6 +22,8 @@ type Props = {
   editingURI: ?string,
   title: ?string,
   thumbnail: ?string,
+  uploadThumbnailStatus: ?string,
+  thumbnailPath: ?string,
   description: ?string,
   language: string,
   nsfw: boolean,
@@ -36,14 +40,7 @@ type Props = {
   nameError: ?string,
   isResolvingUri: boolean,
   winningBidForClaimUri: number,
-  myClaimForUri: ?{
-    amount: number,
-    value: {
-      stream: {
-        source: { source: string },
-      },
-    },
-  },
+  myClaimForUri: ?Claim,
   licenseType: string,
   otherLicenseDescription: ?string,
   licenseUrl: ?string,
@@ -52,10 +49,12 @@ type Props = {
   bidError: ?string,
   publishing: boolean,
   balance: number,
+  isStillEditing: boolean,
   clearPublish: () => void,
   resolveUri: string => void,
   scrollToTop: () => void,
-  prepareEdit: ({}, uri) => void,
+  prepareEdit: ({}) => void,
+  resetThumbnailStatus: () => void,
 };
 
 class PublishForm extends React.PureComponent<Props> {
@@ -73,7 +72,13 @@ class PublishForm extends React.PureComponent<Props> {
     (this: any).getNewUri = this.getNewUri.bind(this);
   }
 
-  // Returns a new uri to be used in the form and begins to resolve that uri for bid help text
+  componentWillMount() {
+    const { isStillEditing, thumbnail } = this.props;
+    if (!isStillEditing || !thumbnail) {
+      this.props.resetThumbnailStatus();
+    }
+  }
+
   getNewUri(name: string, channel: string) {
     const { resolveUri } = this.props;
     // If they are midway through a channel creation, treat it as anonymous until it completes
@@ -138,22 +143,26 @@ class PublishForm extends React.PureComponent<Props> {
 
   handleChannelChange(channelName: string) {
     const { name, updatePublishForm } = this.props;
+    const form = { channel: channelName };
+
     if (name) {
-      const uri = this.getNewUri(name, channelName);
-      updatePublishForm({ channel: channelName, uri });
-    } else {
-      updatePublishForm({ channel: channelName });
+      form.uri = this.getNewUri(name, channelName);
     }
+    updatePublishForm(form);
   }
 
   handleBidChange(bid: number) {
     const { balance, updatePublishForm } = this.props;
 
     let bidError;
-    if (balance <= bid) {
-      bidError = __('Not enough credits');
+    if (bid === 0) {
+      bidError = __('Deposit cannot be 0');
+    } else if (balance === bid) {
+      bidError = __('Please decrease your deposit to account for transaction fees');
+    } else if (balance < bid) {
+      bidError = __('Deposit cannot be higher than your balance');
     } else if (bid <= MINIMUM_PUBLISH_BID) {
-      bidError = __('Your bid must be higher');
+      bidError = __('Your deposit must be higher');
     }
 
     updatePublishForm({ bid, bidError });
@@ -175,24 +184,13 @@ class PublishForm extends React.PureComponent<Props> {
 
   handlePublish() {
     const {
-      publish,
       filePath,
-      bid,
-      title,
-      thumbnail,
-      description,
-      language,
-      nsfw,
-      channel,
+      copyrightNotice,
       licenseType,
       licenseUrl,
       otherLicenseDescription,
-      copyrightNotice,
-      name,
-      contentIsFree,
-      price,
-      uri,
       myClaimForUri,
+      publish,
     } = this.props;
 
     let publishingLicense;
@@ -211,21 +209,22 @@ class PublishForm extends React.PureComponent<Props> {
 
     const publishParams = {
       filePath,
-      bid,
-      title,
-      thumbnail,
-      description,
-      language,
-      nsfw,
-      channel,
+      bid: this.props.bid,
+      title: this.props.title,
+      thumbnail: this.props.thumbnail,
+      description: this.props.description,
+      language: this.props.language,
+      nsfw: this.props.nsfw,
       license: publishingLicense,
       licenseUrl: publishingLicenseUrl,
       otherLicenseDescription,
       copyrightNotice,
-      name,
-      contentIsFree,
-      price,
-      uri,
+      name: this.props.name,
+      contentIsFree: this.props.contentIsFree,
+      price: this.props.price,
+      uri: this.props.uri,
+      channel: this.props.channel,
+      isStillEditing: this.props.isStillEditing,
     };
 
     // Editing a claim
@@ -273,6 +272,7 @@ class PublishForm extends React.PureComponent<Props> {
       editingURI,
       title,
       thumbnail,
+      uploadThumbnailStatus,
       description,
       language,
       nsfw,
@@ -295,13 +295,14 @@ class PublishForm extends React.PureComponent<Props> {
       bidError,
       publishing,
       clearPublish,
+      thumbnailPath,
+      resetThumbnailStatus,
+      isStillEditing,
     } = this.props;
 
     const formDisabled = (!filePath && !editingURI) || publishing;
     const formValid = this.checkIsFormValid();
 
-    const simpleUri = uri && uri.split('#')[0];
-    const isStillEditing = editingURI === simpleUri;
     let submitLabel;
     if (isStillEditing) {
       submitLabel = !publishing ? __('Edit') : __('Editing...');
@@ -352,18 +353,6 @@ class PublishForm extends React.PureComponent<Props> {
             <FormRow padded>
               <FormField
                 stretch
-                type="text"
-                name="content_thumbnail"
-                label={__('Thumbnail')}
-                placeholder="http://spee.ch/mylogo"
-                value={thumbnail}
-                disabled={formDisabled}
-                onChange={e => updatePublishForm({ thumbnail: e.target.value })}
-              />
-            </FormRow>
-            <FormRow padded>
-              <FormField
-                stretch
                 type="markdown"
                 name="content_description"
                 label={__('Description')}
@@ -373,6 +362,30 @@ class PublishForm extends React.PureComponent<Props> {
                 onChange={text => updatePublishForm({ description: text })}
               />
             </FormRow>
+          </section>
+
+          <section className="card card--section">
+            <div className="card__title">{__('Thumbnail')}</div>
+            <div className="card__subtitle">
+              {uploadThumbnailStatus === THUMBNAIL_STATUSES.API_DOWN ? (
+                __('Enter a url for your thumbnail.')
+              ) : (
+                <React.Fragment>
+                  {__(
+                    'Upload your thumbnail to spee.ch, or enter the url manually. Learn more about spee.ch '
+                  )}
+                  <Button button="link" label={__('here')} href="https://spee.ch/about" />.
+                </React.Fragment>
+              )}
+            </div>
+            <SelectThumbnail
+              thumbnailPath={thumbnailPath}
+              thumbnail={thumbnail}
+              uploadThumbnailStatus={uploadThumbnailStatus}
+              updatePublishForm={updatePublishForm}
+              formDisabled={formDisabled}
+              resetThumbnailStatus={resetThumbnailStatus}
+            />
           </section>
 
           <section className="card card--section">
@@ -447,7 +460,8 @@ class PublishForm extends React.PureComponent<Props> {
                   error={nameError}
                   helper={
                     <BidHelpText
-                      uri={simpleUri}
+                      isStillEditing={isStillEditing}
+                      uri={uri}
                       editingURI={editingURI}
                       isResolvingUri={isResolvingUri}
                       winningBidForClaimUri={winningBidForClaimUri}
@@ -554,7 +568,14 @@ class PublishForm extends React.PureComponent<Props> {
           </section>
 
           <div className="card__actions">
-            <Submit label={submitLabel} disabled={formDisabled || !formValid || publishing} />
+            <Submit
+              label={submitLabel}
+              disabled={
+                formDisabled ||
+                !formValid ||
+                uploadThumbnailStatus === THUMBNAIL_STATUSES.IN_PROGRESS
+              }
+            />
             <Button button="alt" onClick={this.handleCancelPublish} label={__('Cancel')} />
           </div>
           {!formDisabled && !formValid && this.renderFormErrors()}

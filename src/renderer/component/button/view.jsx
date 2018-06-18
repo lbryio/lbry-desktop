@@ -22,6 +22,7 @@ type Props = {
   button: ?string, // primary, secondary, alt, link
   noPadding: ?boolean, // to remove padding and allow circular buttons
   uppercase: ?boolean,
+  iconColor: ?string,
 };
 
 class Button extends React.PureComponent<Props> {
@@ -48,6 +49,7 @@ class Button extends React.PureComponent<Props> {
       type,
       noPadding,
       uppercase,
+      iconColor,
       ...otherProps
     } = this.props;
 
@@ -82,10 +84,10 @@ class Button extends React.PureComponent<Props> {
 
     const content = (
       <span className="btn__content">
-        {icon && <Icon icon={icon} />}
+        {icon && <Icon icon={icon} iconColor={iconColor} />}
         {label && <span className="btn__label">{label}</span>}
         {children && children}
-        {iconRight && <Icon icon={iconRight} />}
+        {iconRight && <Icon icon={iconRight} iconColor={iconColor} />}
       </span>
     );
 

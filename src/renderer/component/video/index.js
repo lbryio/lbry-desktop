@@ -46,6 +46,7 @@ const select = (state, props) => ({
 const perform = dispatch => ({
   play: uri => dispatch(doPlayUri(uri)),
   load: uri => dispatch(doLoadVideo(uri)),
+  cancelPlay: () => dispatch(doSetPlayingUri(null)),
   changeVolume: volume => dispatch(doChangeVolume(volume)),
   doPlay: () => dispatch(doPlay()),
   doPause: () => dispatch(doPause()),

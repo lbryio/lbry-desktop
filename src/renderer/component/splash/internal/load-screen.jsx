@@ -19,7 +19,10 @@ class LoadScreen extends React.PureComponent<Props> {
 
     return (
       <div className="load-screen">
-        <h1 className="load-screen__title">{__('LBRY')}</h1>
+        <div className="load-screen__header">
+          <h1 className="load-screen__title">{__('LBRY')}</h1>
+          <sup className="load-screen__beta">beta</sup>
+        </div>
         {isWarning ? (
           <span className="load-screen__message">
             <Icon size={20} icon={icons.ALERT} />

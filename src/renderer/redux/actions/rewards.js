@@ -1,7 +1,7 @@
 import * as ACTIONS from 'constants/action_types';
 import Lbryio from 'lbryio';
 import { doNotify, MODALS } from 'lbry-redux';
-import { selectUnclaimedRewardsByType } from 'redux/selectors/rewards';
+import { selectUnclaimedRewards } from 'redux/selectors/rewards';
 import { selectUserIsRewardApproved } from 'redux/selectors/user';
 import rewards from 'rewards';
 
@@ -27,11 +27,11 @@ export function doRewardList() {
   };
 }
 
-export function doClaimRewardType(rewardType) {
+export function doClaimRewardType(rewardType, options) {
   return (dispatch, getState) => {
     const state = getState();
-    const rewardsByType = selectUnclaimedRewardsByType(state);
-    const reward = rewardsByType[rewardType];
+    const unclaimedRewards = selectUnclaimedRewards(state);
+    const reward = unclaimedRewards.find(ur => ur.reward_type === rewardType);
     const userIsRewardApproved = selectUserIsRewardApproved(state);
 
     if (!reward || reward.transaction_id) {
@@ -73,7 +73,10 @@ export function doClaimRewardType(rewardType) {
     const failure = error => {
       dispatch({
         type: ACTIONS.CLAIM_REWARD_FAILURE,
-        data: { reward, error },
+        data: {
+          reward,
+          error: !options || !options.failSilently ? error : undefined,
+        },
       });
     };
 
@@ -84,18 +87,18 @@ export function doClaimRewardType(rewardType) {
 export function doClaimEligiblePurchaseRewards() {
   return (dispatch, getState) => {
     const state = getState();
-    const rewardsByType = selectUnclaimedRewardsByType(state);
+    const unclaimedRewards = selectUnclaimedRewards(state);
     const userIsRewardApproved = selectUserIsRewardApproved(state);
 
     if (!userIsRewardApproved || !Lbryio.enabled) {
       return;
     }
 
-    if (rewardsByType[rewards.TYPE_FIRST_STREAM]) {
+    if (unclaimedRewards.find(ur => ur.reward_type === rewards.TYPE_FIRST_STREAM)) {
       dispatch(doClaimRewardType(rewards.TYPE_FIRST_STREAM));
     } else {
       [rewards.TYPE_MANY_DOWNLOADS, rewards.TYPE_FEATURED_DOWNLOAD].forEach(type => {
-        dispatch(doClaimRewardType(type));
+        dispatch(doClaimRewardType(type, { failSilently: true }));
       });
     }
   };

@@ -1,6 +1,9 @@
-import React from 'react';
 import { connect } from 'react-redux';
-import { doUserEmailVerify, doUserEmailVerifyFailure } from 'redux/actions/user';
+import {
+  doUserEmailVerify,
+  doUserEmailVerifyFailure,
+  doUserResendVerificationEmail,
+} from 'redux/actions/user';
 import {
   selectEmailVerifyIsPending,
   selectEmailToVerify,
@@ -17,6 +20,7 @@ const select = state => ({
 const perform = dispatch => ({
   verifyUserEmail: (code, recaptcha) => dispatch(doUserEmailVerify(code, recaptcha)),
   verifyUserEmailFailure: error => dispatch(doUserEmailVerifyFailure(error)),
+  resendVerificationEmail: email => dispatch(doUserResendVerificationEmail(email)),
 });
 
 export default connect(select, perform)(UserEmailVerify);

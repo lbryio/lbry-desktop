@@ -1,20 +1,31 @@
 // @flow
-import { ACTIONS, Lbry, selectMyClaimsWithoutChannels, doNotify, MODALS } from 'lbry-redux';
+import {
+  ACTIONS,
+  Lbry,
+  doNotify,
+  MODALS,
+  selectMyChannelClaims,
+  THUMBNAIL_STATUSES,
+  batchActions,
+} from 'lbry-redux';
 import { selectPendingPublishes } from 'redux/selectors/publish';
 import type {
   UpdatePublishFormData,
   UpdatePublishFormAction,
   PublishParams,
 } from 'redux/reducers/publish';
-import { CHANNEL_NEW, CHANNEL_ANONYMOUS } from 'constants/claim';
+import fs from 'fs';
+import path from 'path';
 
 type Action = UpdatePublishFormAction | { type: ACTIONS.CLEAR_PUBLISH };
 type PromiseAction = Promise<Action>;
 type Dispatch = (action: Action | PromiseAction | Array<Action>) => any;
 type GetState = () => {};
 
-export const doClearPublish = () => (dispatch: Dispatch): Action =>
+export const doClearPublish = () => (dispatch: Dispatch): PromiseAction => {
   dispatch({ type: ACTIONS.CLEAR_PUBLISH });
+  return dispatch(doResetThumbnailStatus());
+};
 
 export const doUpdatePublishForm = (publishFormValue: UpdatePublishFormData) => (
   dispatch: Dispatch
@@ -23,6 +34,90 @@ export const doUpdatePublishForm = (publishFormValue: UpdatePublishFormData) => 
     type: ACTIONS.UPDATE_PUBLISH_FORM,
     data: { ...publishFormValue },
   });
+
+export const doResetThumbnailStatus = () => (dispatch: Dispatch): PromiseAction => {
+  dispatch({
+    type: ACTIONS.UPDATE_PUBLISH_FORM,
+    data: {
+      thumbnailPath: '',
+    },
+  });
+
+  return fetch('https://spee.ch/api/channel/availability/@testing')
+    .then(() =>
+      dispatch({
+        type: ACTIONS.UPDATE_PUBLISH_FORM,
+        data: {
+          uploadThumbnailStatus: THUMBNAIL_STATUSES.READY,
+          thumbnail: '',
+          nsfw: false,
+        },
+      })
+    )
+    .catch(() =>
+      dispatch({
+        type: ACTIONS.UPDATE_PUBLISH_FORM,
+        data: {
+          uploadThumbnailStatus: THUMBNAIL_STATUSES.API_DOWN,
+          thumbnail: '',
+          nsfw: false,
+        },
+      })
+    );
+};
+
+export const doUploadThumbnail = (filePath: string, nsfw: boolean) => (dispatch: Dispatch) => {
+  const thumbnail = fs.readFileSync(filePath);
+  const fileExt = path.extname(filePath);
+
+  const makeid = () => {
+    let text = '';
+    const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+    for (let i = 0; i < 24; i += 1) text += possible.charAt(Math.floor(Math.random() * 62));
+    return text;
+  };
+
+  const uploadError = (error = '') =>
+    dispatch(
+      batchActions(
+        {
+          type: ACTIONS.UPDATE_PUBLISH_FORM,
+          data: { uploadThumbnailStatus: THUMBNAIL_STATUSES.API_DOWN },
+        },
+        dispatch(doNotify({ id: MODALS.ERROR, error }))
+      )
+    );
+
+  dispatch({
+    type: ACTIONS.UPDATE_PUBLISH_FORM,
+    data: { uploadThumbnailStatus: THUMBNAIL_STATUSES.IN_PROGRESS },
+  });
+
+  const data = new FormData();
+  const name = makeid();
+  const blob = new Blob([thumbnail], { type: `image/${fileExt.slice(1)}` });
+  data.append('name', name);
+  data.append('file', blob);
+  data.append('nsfw', nsfw.toString());
+  return fetch('https://spee.ch/api/claim/publish', {
+    method: 'POST',
+    body: data,
+  })
+    .then(response => response.json())
+    .then(
+      json =>
+        json.success
+          ? dispatch({
+              type: ACTIONS.UPDATE_PUBLISH_FORM,
+              data: {
+                uploadThumbnailStatus: THUMBNAIL_STATUSES.COMPLETE,
+                thumbnail: `${json.data.url}${fileExt}`,
+              },
+            })
+          : uploadError('Upload failed')
+    )
+    .catch(err => uploadError(err.message));
+};
 
 export const doPrepareEdit = (claim: any, uri: string) => (dispatch: Dispatch) => {
   const {
@@ -33,6 +128,7 @@ export const doPrepareEdit = (claim: any, uri: string) => (dispatch: Dispatch) =
       stream: { metadata },
     },
   } = claim;
+
   const {
     author,
     description,
@@ -66,6 +162,7 @@ export const doPrepareEdit = (claim: any, uri: string) => (dispatch: Dispatch) =
     thumbnail,
     title,
     uri,
+    uploadThumbnailStatus: thumbnail ? THUMBNAIL_STATUSES.MANUAL : undefined,
   };
 
   dispatch({ type: ACTIONS.DO_PREPARE_EDIT, data: publishData });
@@ -73,7 +170,7 @@ export const doPrepareEdit = (claim: any, uri: string) => (dispatch: Dispatch) =
 
 export const doPublish = (params: PublishParams) => (dispatch: Dispatch, getState: () => {}) => {
   const state = getState();
-  const myClaims = selectMyClaimsWithoutChannels(state);
+  const myChannels = selectMyChannelClaims(state);
 
   const {
     name,
@@ -91,20 +188,12 @@ export const doPublish = (params: PublishParams) => (dispatch: Dispatch, getStat
     price,
     uri,
     sources,
+    isStillEditing,
   } = params;
 
-  let isEdit;
-  const newPublishName = channel ? `${channel}/${name}` : name;
-  for (let i = 0; i < myClaims.length; i += 1) {
-    const { channel_name: claimChannelName, name: claimName } = myClaims[i];
-    const contentName = claimChannelName ? `${claimChannelName}/${claimName}` : claimName;
-    if (contentName === newPublishName) {
-      isEdit = true;
-      break;
-    }
-  }
-
-  const channelName = channel === CHANNEL_ANONYMOUS || channel === CHANNEL_NEW ? '' : channel;
+  // get the claim id from the channel name, we will use that instead
+  const namedChannelClaim = myChannels.find(myChannel => myChannel.name === channel);
+  const channelId = namedChannelClaim ? namedChannelClaim.claim_id : '';
   const fee = contentIsFree || !price.amount ? undefined : { ...price };
 
   const metadata = {
@@ -126,7 +215,7 @@ export const doPublish = (params: PublishParams) => (dispatch: Dispatch, getStat
 
   const publishPayload = {
     name,
-    channel_name: channelName,
+    channel_id: channelId,
     bid,
     metadata,
   };
@@ -142,7 +231,7 @@ export const doPublish = (params: PublishParams) => (dispatch: Dispatch, getStat
   const success = () => {
     dispatch({
       type: ACTIONS.PUBLISH_SUCCESS,
-      data: { pendingPublish: { ...publishPayload, isEdit } },
+      data: { pendingPublish: { ...publishPayload, isEdit: isStillEditing } },
     });
     dispatch(doNotify({ id: MODALS.PUBLISH }, { uri }));
   };
@@ -159,38 +248,40 @@ export const doPublish = (params: PublishParams) => (dispatch: Dispatch, getStat
 export const doCheckPendingPublishes = () => (dispatch: Dispatch, getState: GetState) => {
   const state = getState();
   const pendingPublishes = selectPendingPublishes(state);
-  const myClaims = selectMyClaimsWithoutChannels(state);
 
   let publishCheckInterval;
 
   const checkFileList = () => {
     Lbry.claim_list_mine().then(claims => {
-      const claimsWithoutChannels = claims.filter(claim => !claim.name.match(/^@/));
-      if (myClaims.length !== claimsWithoutChannels.length) {
-        const pendingPublishMap = {};
-        pendingPublishes.forEach(({ name }) => {
-          pendingPublishMap[name] = name;
-        });
+      const pendingPublishMap = {};
+      pendingPublishes.forEach(({ name }) => {
+        pendingPublishMap[name] = name;
+      });
 
-        claims.forEach(claim => {
-          if (pendingPublishMap[claim.name]) {
-            dispatch({
-              type: ACTIONS.REMOVE_PENDING_PUBLISH,
-              data: {
-                name: claim.name,
-              },
-            });
-            dispatch({
-              type: ACTIONS.FETCH_CLAIM_LIST_MINE_COMPLETED,
-              data: {
-                claims,
-              },
-            });
+      const actions = [];
+      claims.forEach(claim => {
+        if (pendingPublishMap[claim.name]) {
+          actions.push({
+            type: ACTIONS.REMOVE_PENDING_PUBLISH,
+            data: {
+              name: claim.name,
+            },
+          });
 
-            delete pendingPublishMap[claim.name];
-          }
-        });
+          delete pendingPublishMap[claim.name];
+        }
+      });
 
+      actions.push({
+        type: ACTIONS.FETCH_CLAIM_LIST_MINE_COMPLETED,
+        data: {
+          claims,
+        },
+      });
+
+      dispatch(batchActions(...actions));
+
+      if (!Object.keys(pendingPublishMap).length) {
         clearInterval(publishCheckInterval);
       }
     });
@@ -200,6 +291,6 @@ export const doCheckPendingPublishes = () => (dispatch: Dispatch, getState: GetS
     checkFileList();
     publishCheckInterval = setInterval(() => {
       checkFileList();
-    }, 10000);
+    }, 30000);
   }
 };

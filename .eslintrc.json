@@ -36,6 +36,8 @@
     "func-names": ["warn", "as-needed"],
     "jsx-a11y/label-has-for": 0,
     "import/prefer-default-export": 0,
-    "no-return-assign": 0
+    "no-return-assign": 0,
+    "react/require-default-props": 0,
+    "react/jsx-closing-tag-location": 0
   }
 }

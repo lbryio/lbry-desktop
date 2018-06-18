@@ -1,6 +1,6 @@
 import * as ACTIONS from 'constants/action_types';
 import Lbryio from 'lbryio';
-import { doNotify, MODALS } from 'lbry-redux';
+import { Lbry, doNotify, MODALS } from 'lbry-redux';
 import { doClaimRewardType, doRewardList } from 'redux/actions/rewards';
 import {
   selectEmailToVerify,
@@ -9,6 +9,7 @@ import {
 } from 'redux/selectors/user';
 import rewards from 'rewards';
 import analytics from 'analytics';
+import pjson from 'package.json';
 
 export function doFetchInviteStatus() {
   return dispatch => {
@@ -35,6 +36,20 @@ export function doFetchInviteStatus() {
   };
 }
 
+export function doInstallNew() {
+  const payload = { app_version: pjson.version };
+  Lbry.status().then(status => {
+    payload.app_id = status.installation_id;
+    payload.node_id = status.lbry_id;
+    Lbry.version().then(version => {
+      payload.daemon_version = version.lbrynet_version;
+      payload.operating_system = version.os_system;
+      payload.platform = version.platform;
+      Lbryio.call('install', 'new', payload);
+    });
+  });
+}
+
 export function doAuthenticate() {
   return dispatch => {
     dispatch({
@@ -49,6 +64,7 @@ export function doAuthenticate() {
         });
         dispatch(doRewardList());
         dispatch(doFetchInviteStatus());
+        doInstallNew();
       })
       .catch(error => {
         dispatch(doNotify({ id: MODALS.AUTHENTICATION_FAILURE }));
@@ -153,6 +169,7 @@ export function doUserPhoneVerify(verificationCode) {
           data: { phone_number: phoneNumber },
         });
         dispatch(doUserFetch());
+        dispatch(doClaimRewardType(rewards.TYPE_NEW_USER));
       })
       .catch(error => dispatch(doUserPhoneVerifyFailure(error)));
   };
@@ -191,6 +208,38 @@ export function doUserEmailNew(email) {
           ).then(success, failure);
         }
         throw error;
+      })
+      .then(success, failure);
+  };
+}
+
+export function doUserResendVerificationEmail(email) {
+  return dispatch => {
+    dispatch({
+      type: ACTIONS.USER_EMAIL_VERIFY_RETRY,
+      email,
+    });
+
+    const success = () => {
+      dispatch({
+        type: ACTIONS.USER_EMAIL_NEW_SUCCESS,
+        data: { email },
+      });
+      dispatch(doUserFetch());
+    };
+
+    const failure = error => {
+      dispatch({
+        type: ACTIONS.USER_EMAIL_NEW_FAILURE,
+        data: { error },
+      });
+    };
+
+    Lbryio.call('user_email', 'resend_token', { email }, 'post')
+      .catch(error => {
+        if (error.response && error.response.status === 409) {
+          throw error;
+        }
       })
       .then(success, failure);
   };

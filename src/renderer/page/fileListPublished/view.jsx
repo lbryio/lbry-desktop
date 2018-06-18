@@ -20,13 +20,12 @@ class FileListPublished extends React.PureComponent<Props> {
   }
 
   render() {
-    const { claims, pendingPublishes, navigate } = this.props;
-    const fileInfos = [...pendingPublishes, ...claims];
+    const { claims, navigate } = this.props;
 
     return (
       <Page notContained>
-        {fileInfos.length ? (
-          <FileList checkPending fileInfos={fileInfos} sortByHeight />
+        {claims.length ? (
+          <FileList checkPending fileInfos={claims} sortByHeight />
         ) : (
           <div className="page__empty">
             {__("It looks like you haven't published anything to LBRY yet.")}

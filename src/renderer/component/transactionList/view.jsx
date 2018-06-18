@@ -96,6 +96,7 @@ class TransactionList extends React.PureComponent<Props, State> {
               type="select"
               value={filter}
               onChange={this.handleFilterChanged}
+              affixClass="form-field--align-center"
               prefix={__('Show')}
               postfix={
                 <Button

@@ -1,14 +1,20 @@
-// I'll come back to this
-/* esline-disable */
+// @flow
 import React from 'react';
 import { Modal } from 'modal/modal';
 import CurrencySymbol from 'component/common/lbc-symbol';
 import CreditAmount from 'component/common/credit-amount';
 import Button from 'component/button';
 
-const ModalCreditIntro = props => {
+type Props = {
+  totalRewardValue: number,
+  currentBalance: number,
+  closeModal: () => void,
+  addBalance: () => void,
+};
+
+const ModalCreditIntro = (props: Props) => {
   const { closeModal, totalRewardValue, currentBalance, addBalance } = props;
-  const totalRewardRounded = Math.round(totalRewardValue / 10) * 10;
+  const totalRewardRounded = Math.floor(totalRewardValue / 10) * 10;
 
   return (
     <Modal type="custom" isOpen contentLabel="Welcome to LBRY">
@@ -25,16 +31,13 @@ const ModalCreditIntro = props => {
             can take are limited.
           </p>
         )}
-        <p>
-          There are a variety of ways to get credits, including more than{' '}
-          {totalRewardValue ? (
-            <CreditAmount noStyle amount={totalRewardRounded} />
-          ) : (
-            <span className="credit-amount">{__('?? credits')}</span>
-          )}{' '}
-          {__(' in free rewards for participating in the LBRY beta.')}
-        </p>
-
+        {Boolean(totalRewardValue) && (
+          <p>
+            There are a variety of ways to get credits, including more than{' '}
+            <CreditAmount noStyle amount={totalRewardRounded} />{' '}
+            {__('in free rewards for participating in the LBRY beta.')}
+          </p>
+        )}
         <div className="card__actions card__actions--center">
           <Button button="primary" onClick={addBalance} label={__('Get Credits')} />
           <Button
@@ -49,4 +52,3 @@ const ModalCreditIntro = props => {
 };
 
 export default ModalCreditIntro;
-/* esline-enable */

@@ -50,7 +50,7 @@ distributable packages.
 
 #### Resetting your Packages
 
-If the app isn't building, or `yarn xxx` commands aren't working you may need to just reset your `node_modules`. To do so you can run: `rm -r node_modules && yarn` or `del node_modules && yarn` on Windows. 
+If the app isn't building, or `yarn xxx` commands aren't working you may need to just reset your `node_modules`. To do so you can run: `rm -r node_modules && yarn` or `del /s /q node_modules && yarn` on Windows. 
 
 ## Contributing
 
@@ -66,4 +66,4 @@ We take security seriously. Please contact security@lbry.io regarding any securi
 
 ## Contact
 
-The primary contact for this project is [@seanyesmunt](https://github.com/@seanyesmunt)
+The primary contact for this project is [@seanyesmunt](https://github.com/seanyesmunt)

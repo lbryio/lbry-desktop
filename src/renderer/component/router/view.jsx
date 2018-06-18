@@ -17,17 +17,23 @@ import AuthPage from 'page/auth';
 import InvitePage from 'page/invite';
 import BackupPage from 'page/backup';
 import SubscriptionsPage from 'page/subscriptions';
+import SearchPage from 'page/search';
 
-const route = (page, routesMap) => {
+const route = (props, page, routesMap) => {
   const component = routesMap[page];
-
-  return component || DiscoverPage;
+  if (!component) {
+    props.doNotify({
+      message: __('Invalid page requested'),
+      displayType: ['snackbar'],
+    });
+  }
+  return component || routesMap.discover;
 };
 
 const Router = props => {
   const { currentPage, params } = props;
 
-  return route(currentPage, {
+  return route(props, currentPage, {
     auth: <AuthPage params={params} />,
     backup: <BackupPage params={params} />,
     channel: <ChannelPage params={params} />,
@@ -46,6 +52,7 @@ const Router = props => {
     show: <ShowPage {...params} />,
     wallet: <WalletPage params={params} />,
     subscriptions: <SubscriptionsPage params={params} />,
+    search: <SearchPage {...params} />,
   });
 };
 

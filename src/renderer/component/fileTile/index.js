@@ -5,7 +5,9 @@ import {
   makeSelectMetadataForUri,
   makeSelectFileInfoForUri,
   makeSelectIsUriResolving,
+  makeSelectClaimIsMine,
 } from 'lbry-redux';
+import { selectShowNsfw } from 'redux/selectors/settings';
 import { doNavigate } from 'redux/actions/navigation';
 import { doClearPublish, doUpdatePublishForm } from 'redux/actions/publish';
 import { selectRewardContentClaimIds } from 'redux/selectors/content';
@@ -17,6 +19,8 @@ const select = (state, props) => ({
   metadata: makeSelectMetadataForUri(props.uri)(state),
   isResolvingUri: makeSelectIsUriResolving(props.uri)(state),
   rewardedContentClaimIds: selectRewardContentClaimIds(state, props),
+  obscureNsfw: !selectShowNsfw(state),
+  claimIsMine: makeSelectClaimIsMine(props.uri)(state),
 });
 
 const perform = dispatch => ({

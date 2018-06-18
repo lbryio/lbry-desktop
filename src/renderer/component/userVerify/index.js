@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import { doNotify, MODALS } from 'lbry-redux';
 import { doNavigate } from 'redux/actions/navigation';
 import { doUserIdentityVerify } from 'redux/actions/user';
 import rewards from 'rewards';
@@ -8,15 +9,14 @@ import {
   selectIdentityVerifyErrorMessage,
 } from 'redux/selectors/user';
 import UserVerify from './view';
-import { doNotify, MODALS } from 'lbry-redux';
 
-const select = (state, props) => {
+const select = state => {
   const selectReward = makeSelectRewardByType();
 
   return {
     isPending: selectIdentityVerifyIsPending(state),
     errorMessage: selectIdentityVerifyErrorMessage(state),
-    reward: selectReward(state, { reward_type: rewards.TYPE_NEW_USER }),
+    reward: selectReward(state, rewards.TYPE_NEW_USER),
   };
 };
 

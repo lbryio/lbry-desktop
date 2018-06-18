@@ -11,14 +11,19 @@ const schema = { ...defaultSchema };
 // Extend sanitation schema to support lbry protocol
 schema.protocols.href[3] = 'lbry';
 
-type MarkdownProps = { content: string };
+type MarkdownProps = {
+  content: string,
+  promptLinks?: boolean,
+};
+
+const SimpleLink = ({ href, title, children }) => (<a href={href} title={title}>{children}</a>);
 
 const MarkdownPreview = (props: MarkdownProps) => {
-  const { content } = props;
+  const { content, externalLinks, promptLinks } = props;
   const remarkOptions = {
     sanitize: schema,
     remarkReactComponents: {
-      a: ExternalLink,
+      a: promptLinks ? ExternalLink : SimpleLink,
     },
   };
   return (

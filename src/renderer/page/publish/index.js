@@ -1,31 +1,25 @@
 import { connect } from 'react-redux';
-import { doClaimRewardType } from 'redux/actions/rewards';
-import {
-  doHistoryBack,
-  doResolveUri,
-  makeSelectCostInfoForUri,
-  selectMyClaims,
-  selectFetchingMyChannels,
-  selectMyChannelClaims,
-  selectClaimsByUri,
-  selectResolvingUris,
-  selectBalance,
-} from 'lbry-redux';
-import {
-  doFetchClaimListMine,
-  doFetchChannelListMine,
-  doCreateChannel,
-} from 'redux/actions/content';
+import { doResolveUri, selectClaimsByUri, selectResolvingUris, selectBalance } from 'lbry-redux';
 import { doNavigate } from 'redux/actions/navigation';
-import rewards from 'rewards';
-import { selectPublishFormValues } from 'redux/selectors/publish';
-import { doClearPublish, doUpdatePublishForm, doPublish } from 'redux/actions/publish';
-import { doPrepareEdit } from 'redux/actions/publish';
+import {
+  selectPublishFormValues,
+  selectIsStillEditing,
+  selectMyClaimForUri,
+} from 'redux/selectors/publish';
+import {
+  doResetThumbnailStatus,
+  doClearPublish,
+  doUpdatePublishForm,
+  doPublish,
+  doPrepareEdit,
+} from 'redux/actions/publish';
 import PublishPage from './view';
 
-const select = (state, props) => {
+const select = state => {
+  const isStillEditing = selectIsStillEditing(state);
+  const myClaimForUri = selectMyClaimForUri(state);
   const publishState = selectPublishFormValues(state);
-  const { uri, name } = publishState;
+  const { uri } = publishState;
 
   const resolvingUris = selectResolvingUris(state);
   let isResolvingUri = false;
@@ -33,24 +27,28 @@ const select = (state, props) => {
     isResolvingUri = resolvingUris.includes(uri);
   }
 
-  const claimsByUri = selectClaimsByUri(state);
-  const myClaims = selectMyClaims(state);
-
-  const claimForUri = claimsByUri[uri];
+  let claimForUri;
   let winningBidForClaimUri;
-  let myClaimForUri;
-  if (claimForUri) {
-    winningBidForClaimUri = claimForUri.effective_amount;
-    myClaimForUri = myClaims.find(claim => claim.name === name);
+  if (!myClaimForUri) {
+    // if the uri isn't from a users claim, find the winning bid needed for the vanity url
+    // in the future we may want to display this on users claims
+    // ex: "you own this, for 5 more lbc you will win this claim"
+    const claimsByUri = selectClaimsByUri(state);
+    claimForUri = claimsByUri[uri];
+    winningBidForClaimUri = claimForUri ? claimForUri.effective_amount : null;
   }
 
   return {
     ...publishState,
     isResolvingUri,
+    // The winning claim for a short lbry uri
     claimForUri,
     winningBidForClaimUri,
+    // My previously published claims under this short lbry uri
     myClaimForUri,
-    costInfo: makeSelectCostInfoForUri(props.uri)(state),
+    // If I clicked the "edit" button, have I changed the uri?
+    // Need this to make it easier to find the source on previously published content
+    isStillEditing,
     balance: selectBalance(state),
   };
 };
@@ -62,6 +60,10 @@ const perform = dispatch => ({
   publish: params => dispatch(doPublish(params)),
   navigate: path => dispatch(doNavigate(path)),
   prepareEdit: (claim, uri) => dispatch(doPrepareEdit(claim, uri)),
+  resetThumbnailStatus: () => dispatch(doResetThumbnailStatus()),
 });
 
-export default connect(select, perform)(PublishPage);
+export default connect(
+  select,
+  perform
+)(PublishPage);

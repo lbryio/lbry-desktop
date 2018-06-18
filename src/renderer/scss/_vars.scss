@@ -5,13 +5,14 @@ $spacing-vertical: 24px;
 $spacing-width: 36px;
 
 $medium-breakpoint: 1280px;
-$large-breakpoint: 1760px;
+$large-breakpoint: 1921px;
 
 :root {
   /* Widths & spacings */
   --side-nav-width: 220px;
   --side-nav-width-m: 240px;
   --side-nav-width-l: 320px;
+  --font-size-subtext-multiple: 0.92;
 
   --video-aspect-ratio: 56.25%; // 9 x 16
   --snack-bar-width: 756px;
@@ -35,11 +36,13 @@ $large-breakpoint: 1760px;
   --color-green-light: #effbe4;
   --color-green-blue: #2ec1a8;
   --color-purple: #8165b0;
+  --color-blue-grey: #203049;
 
   /* Colors */
   --color-divider: #e3e3e3;
   --color-help: rgba(0, 0, 0, 0.54);
   --color-error: #a94442;
+  --color-nsfw: #bf4440;
   --color-download: var(--color-white);
   --color-download-overlay: var(--color-black);
   --color-bg: #fafafa;
@@ -73,6 +76,9 @@ $large-breakpoint: 1760px;
   --input-copyable-bg: #f6f6f6;
   --input-copyable-color: var(--color-grey-dark);
   --input-copyable-border: var(--color-grey);
+  --input-select-bg-color: var(--color-grey);
+  --input-select-color: var(--text-color);
+  --input-switch-color: var(--color-teal);
 
   /* input:disabled */
   --input-disabled-border-color: rgba(0, 0, 0, 0.42);
@@ -140,14 +146,15 @@ $large-breakpoint: 1760px;
   --card-bg: var(--color-white);
   --card-text-color: var(--color-grey-dark);
   --card-radius: 2px;
+  --card-max-width: 1000px;
   --card-wallet-color: var(--text-color-inverse);
   --success-msg-color: var(--color-green);
   --success-msg-border: var(--color-green-blue);
   --success-msg-bg: var(--color-green-light);
 
   /* File Tile Card */
-  --file-tile--media-height: 60px;
-  --file-tile--media-width: 94px; // 60 * (1 + 9/16)
+  --file-tile--media-height: 125px;
+  --file-tile--media-width: calc(125px * (16 / 9));
 
   /* Modal */
   --modal-width: 440px;
@@ -158,9 +165,8 @@ $large-breakpoint: 1760px;
   --modal-btn-bg-color: var(--btn-bg-alt);
 
   // /* Tooltip */
-  --tooltip-width: 300px;
-  --tooltip-bg: var(--color-bg);
-  --tooltip-color: var(--text-color);
+  --tooltip-bg: #555;
+  --tooltip-color: var(--color-white);
 
   /* Scrollbar */
   --scrollbar-radius: 10px;

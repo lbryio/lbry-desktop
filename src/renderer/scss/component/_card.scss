@@ -2,11 +2,15 @@
   margin-left: auto;
   margin-right: auto;
   border-radius: var(--card-radius);
-  overflow: auto;
   user-select: text;
   display: flex;
   position: relative;
   flex-direction: column;
+  max-width: var(--card-max-width);
+}
+
+.card > h1 {
+  word-wrap: break-word;
 }
 
 .card--section {
@@ -18,7 +22,6 @@
 
 .card--small {
   width: var(--card-small-width);
-  overflow-x: hidden;
   white-space: normal;
 
   .card__media {
@@ -33,6 +36,11 @@
 
   .channel-name {
     font-size: 12px;
+
+    @media only screen and (min-width: $medium-breakpoint) {
+      font-size: 14px;
+      padding-top: 4px;
+    }
   }
 }
 
@@ -87,8 +95,7 @@
   align-items: center;
   .credit-amount,
   .icon {
-    margin-top: $spacing-vertical * 1/3;
-    margin-left: $spacing-vertical * 2/3;
+    margin: $spacing-vertical * 1/3;
   }
 }
 
@@ -103,41 +110,42 @@
   color: var(--text-color);
 }
 
-.card__title--file {
-  font-family: 'metropolis-bold';
-  font-size: 28px;
-  line-height: 36px;
-  padding-top: 20px;
-}
-
 .card__title--small {
   font-size: 14px;
   line-height: 18px;
   padding-top: 20px;
+
+  @media only screen and (min-width: $medium-breakpoint) {
+    font-size: 16px;
+  }
 }
 
 .card__title--file {
+  font-family: 'metropolis-bold';
+  font-size: 28px;
+  margin-bottom: 0;
   padding-top: 0;
   padding-bottom: 5px;
+  font-size: 18px;
 }
 
 .card__subtitle {
+  margin: 0;
   font-size: 14px;
   font-family: 'metropolis-medium';
   color: var(--card-text-color);
 
   .icon {
-    margin-left: $spacing-vertical * 1/3;
+    margin-top: $spacing-vertical * 1/6;
+
+    &:not(:first-of-type) {
+      margin: 0 $spacing-vertical * 1/3;
+    }
   }
 }
 
 .card__subtitle-price {
   padding-top: $spacing-vertical * 1/3;
-}
-
-.card__subtitle--file-info {
-  display: flex;
-  align-items: center;
 }
 
 .card__subtitle--block {
@@ -184,6 +192,10 @@
   margin-top: $spacing-vertical * 2/3;
 }
 
+.card__content--extra-padding {
+  margin-top: $spacing-vertical;
+}
+
 .card__subtext-title {
   color: var(--text-color);
   font-size: calc(var(--font-size-subtext-multiple) * 1.5em);
@@ -198,7 +210,10 @@
   padding-top: $spacing-vertical * 1/3;
   word-break: break-word;
   font-family: 'metropolis-medium';
-  font-size: 13px;
+}
+
+.card__subtext--small {
+  font-size: calc(var(--font-size-subtext-multiple) * 0.8em);
 }
 
 .card__actions {
@@ -239,13 +254,16 @@
   right: $spacing-vertical;
 }
 
+.card__actions--end {
+  justify-content: flex-end;
+}
+
 /*
- .card-row is used on the discover/subscriptions page
+ .card-row is used on the discover page
  It is a list of cards that extend past the right edge of the screen
  There are left/right arrows to scroll the cards and view hidden content
 */
 .card-row {
-  overflow: hidden;
   white-space: nowrap;
   width: 100%;
   min-width: var(--card-small-width);
@@ -275,16 +293,40 @@
   align-items: center;
   font-size: 18px;
   line-height: 24px;
+
+  @media only screen and (min-width: $medium-breakpoint) {
+    font-size: 20px;
+  }
 }
 
 .card-row__scroll-btns {
   display: flex;
-  padding-right: $spacing-width - 10px; // page padding - 1/2 width of arrow button
+  padding-right: $spacing-width;
 }
 
 .card-row__scrollhouse {
   padding-top: $spacing-vertical * 2/3;
   overflow: hidden;
+
+  .card {
+    display: inline-block;
+    vertical-align: top;
+    overflow-y: visible;
+    // 31 px to handle to padding between cards
+    width: calc((100% / 4) - 34px);
+
+    @media only screen and (min-width: $medium-breakpoint) {
+      width: calc((100% / 6) - 29px);
+    }
+
+    @media only screen and (min-width: $large-breakpoint) {
+      width: calc((100% / 8) - 27px);
+    }
+  }
+
+  .card:not(:first-of-type) {
+    margin-left: 20px;
+  }
 
   .card:first-of-type {
     margin-left: $spacing-width;
@@ -303,10 +345,29 @@
     display: inline-block;
     vertical-align: top;
     margin-bottom: 60px;
-    width: calc((100% / 4) - (60px / 4));
 
-    &:not(:nth-child(4n + 1)) {
-      margin-left: 20px;
+    @media only screen and (max-width: $medium-breakpoint) {
+      width: calc((100% / 4) - (60px / 4)); // 60px === 20px margin-right * three cards
+
+      &:not(:nth-child(4n + 1)) {
+        margin-left: 20px;
+      }
+    }
+
+    @media only screen and (min-width: $medium-breakpoint) and (max-width: $large-breakpoint) {
+      width: calc((100% / 6) - (100px / 6));
+
+      &:not(:nth-child(6n + 1)) {
+        margin-left: 20px;
+      }
+    }
+
+    @media only screen and (min-width: $large-breakpoint) {
+      width: calc((100% / 8) - (140px / 8));
+
+      &:not(:nth-child(8n + 1)) {
+        margin-left: 20px;
+      }
     }
   }
 }
@@ -321,27 +382,6 @@
     &:not(:nth-child(2n + 1)) {
       margin-left: 20px;
     }
-  }
-}
-
-.card-row__scrollhouse {
-  padding-top: $spacing-vertical * 2/3;
-  overflow: hidden;
-
-  .card {
-    display: inline-block;
-    vertical-align: top;
-    overflow: visible;
-    // 31 px to handle to padding between cards
-    width: calc((100% / 4) - 31px);
-  }
-
-  .card:not(:first-of-type) {
-    margin-left: 20px;
-  }
-
-  .card:last-of-type {
-    margin-right: 20px;
   }
 }
 

@@ -62,7 +62,6 @@ export class FormFieldPrice extends React.PureComponent<Props> {
           name={`${name}_currency`}
           type="select"
           id={`${name}_currency`}
-          className="form-field"
           disabled={disabled}
           onChange={this.handleCurrencyChange}
           value={price.currency}

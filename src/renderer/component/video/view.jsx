@@ -132,22 +132,11 @@ class Video extends React.PureComponent<Props> {
   }
 
   handleAutoplay = (props: Props) => {
-    const {
-      autoplay,
-      playingUri,
-      fileInfo,
-      costInfo,
-      isDownloading,
-      uri,
-      load,
-      play,
-      metadata,
-    } = props;
+    const { autoplay, playingUri, fileInfo, costInfo, isDownloading, uri, play, metadata } = props;
 
     const playable = autoplay && playingUri !== uri && metadata && !metadata.nsfw;
 
     if (playable && costInfo && costInfo.cost === 0 && !fileInfo && !isDownloading) {
-      load(uri);
       play(uri);
     } else if (playable && fileInfo && fileInfo.blobs_completed > 0) {
       play(uri);
@@ -263,7 +252,10 @@ class Video extends React.PureComponent<Props> {
             style={layoverStyle}
           >
             <VideoPlayButton
-              play={this.playContent}
+              play={e => {
+                e.stopPropagation();
+                this.playContent();
+              }}
               fileInfo={fileInfo}
               uri={uri}
               isLoading={isLoading}

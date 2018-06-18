@@ -121,6 +121,10 @@ input::placeholder {
   opacity: 0.5;
 }
 
+label[for] {
+  cursor: pointer;
+}
+
 button + input {
   margin-left: $spacing-vertical * 2/3;
 }
@@ -157,7 +161,7 @@ p {
   grid-template-rows: var(--header-height) calc(100vh - var(--header-height));
   grid-template-columns: var(--side-nav-width) auto;
   grid-template-areas:
-    'nav header'
+    'nav content'
     'nav content';
   background-color: var(--color-bg);
   height: 100vh;
@@ -176,7 +180,7 @@ p {
 */
 .content {
   grid-area: content;
-  overflow: auto;
+  overflow-y: auto;
 }
 
 .main {
@@ -356,7 +360,13 @@ p {
 }
 
 .qr-code {
+  border: 3px solid var(--color-white);
+  height: 134px;
+  width: 134px;
   &.qr-code--right-padding {
-    padding-right: $spacing-vertical * 2/3;
+    margin-right: $spacing-vertical * 2/3;
+  }
+  &.qr-code--top-padding {
+    margin-top: $spacing-vertical * 2/3;
   }
 }

@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import MarkdownPreview from 'component/markdownPreview';
+import MarkdownPreview from 'component/common/markdown-preview';
 import Button from 'component/button';
 import path from 'path';
 import type { Claim } from 'types/claim';
@@ -41,7 +41,7 @@ const FileDetails = (props: Props) => {
         <React.Fragment>
           <div className="card__subtext-title">About</div>
           <div className="card__subtext">
-            <MarkdownPreview content={description} />
+            <MarkdownPreview content={description} promptLinks={true} />
           </div>
         </React.Fragment>
       )}

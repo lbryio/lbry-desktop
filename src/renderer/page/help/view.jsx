@@ -1,15 +1,44 @@
 // @TODO: Customize advice based on OS
-import React from 'react';
+// @flow
+import * as React from 'react';
+import { shell } from 'electron';
 import { Lbry } from 'lbry-redux';
 import Native from 'native';
 import Button from 'component/button';
 import BusyIndicator from 'component/common/busy-indicator';
-import Icon from 'component/common/icon';
 import Page from 'component/page';
 import * as icons from 'constants/icons';
 
-class HelpPage extends React.PureComponent {
-  constructor(props) {
+type DeamonSettings = {
+  data_dir: string | any,
+};
+
+type Props = {
+  deamonSettings: DeamonSettings,
+  accessToken: string,
+  fetchAccessToken: () => void,
+  doAuth: () => void,
+  user: any,
+};
+
+type VersionInfo = {
+  os_system: string,
+  os_release: string,
+  platform: string,
+  lbrynet_version: string,
+  lbryum_version: string,
+};
+
+type State = {
+  versionInfo: VersionInfo | any,
+  lbryId: String | any,
+  uiVersion: ?string,
+  upgradeAvailable: ?boolean,
+  accessTokenHidden: ?boolean,
+};
+
+class HelpPage extends React.PureComponent<Props, State> {
+  constructor(props: Props) {
     super(props);
 
     this.state = {
@@ -20,11 +49,12 @@ class HelpPage extends React.PureComponent {
       accessTokenHidden: true,
     };
 
-    this.showAccessToken = this.showAccessToken.bind(this);
+    (this: any).showAccessToken = this.showAccessToken.bind(this);
+    (this: any).openLogFile = this.openLogFile.bind(this);
   }
 
   componentDidMount() {
-    Native.getAppVersionInfo().then(({ remoteVersion, localVersion, upgradeAvailable }) => {
+    Native.getAppVersionInfo().then(({ localVersion, upgradeAvailable }) => {
       this.setState({
         uiVersion: localVersion,
         upgradeAvailable,
@@ -50,13 +80,24 @@ class HelpPage extends React.PureComponent {
     });
   }
 
+  openLogFile(userHomeDirectory: string) {
+    const logFileName = 'lbrynet.log';
+    const os = this.state.versionInfo.os_system;
+    if (os === 'Darwin' || os === 'Linux') {
+      shell.openItem(`${userHomeDirectory}/${logFileName}`);
+    } else {
+      shell.openItem(`${userHomeDirectory}\\${logFileName}`);
+    }
+  }
+
   render() {
     let ver;
     let osName;
     let platform;
     let newVerLink;
 
-    const { accessToken, doAuth, user } = this.props;
+    const { accessToken, doAuth, user, deamonSettings } = this.props;
+    const { data_dir: dataDirectory } = deamonSettings;
 
     if (this.state.versionInfo) {
       ver = this.state.versionInfo;
@@ -109,13 +150,36 @@ class HelpPage extends React.PureComponent {
         </section>
 
         <section className="card card--section">
-          <div className="card__title">{__('Report a Bug')}</div>
-          <p className="card__subtitle">{__('Did you find something wrong?')}</p>
+          <div className="card__title">{__('View your Log')}</div>
+          <p className="card__subtitle">
+            {__('Did something go wrong? Have a look in your log file, or send it to')}{' '}
+            <Button button="link" label={__('support')} href="https://lbry.io/faq/support" />.
+          </p>
+          <div className="card__actions">
+            <Button
+              button="primary"
+              label={__('Open Log')}
+              icon={icons.REPORT}
+              onClick={() => this.openLogFile(dataDirectory)}
+            />
+            <Button
+              button="primary"
+              label={__('Open Log Folder')}
+              icon={icons.REPORT}
+              onClick={() => shell.showItemInFolder(dataDirectory)}
+            />
+          </div>
+        </section>
 
+        <section className="card card--section">
+          <div className="card__title">{__('Report a Bug or Suggest a New Feature')}</div>
+          <p className="card__subtitle">
+            {__('Did you find something wrong? Think LBRY could add something useful and cool?')}
+          </p>
           <div className="card__actions">
             <Button
               navigate="/report"
-              label={__('Submit a Bug Report')}
+              label={__('Submit a Bug Report/Feature Request')}
               icon={icons.REPORT}
               button="primary"
             />
