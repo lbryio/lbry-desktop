@@ -13,6 +13,8 @@ type Props = {
   fullWidth: boolean, // removes the max-width css
   showUri: boolean,
   showLocal: boolean,
+  obscureNsfw: boolean,
+  claimIsMine: boolean,
   isDownloaded: boolean,
   uri: string,
   isResolvingUri: boolean,
@@ -58,6 +60,8 @@ class FileTile extends React.PureComponent<Props> {
       navigate,
       rewardedContentClaimIds,
       showUri,
+      obscureNsfw,
+      claimIsMine,
       fullWidth,
       showLocal,
       isDownloaded,
@@ -73,6 +77,7 @@ class FileTile extends React.PureComponent<Props> {
       isClaimed && metadata && metadata.title ? metadata.title : parseURI(uri).contentName;
     const thumbnail = metadata && metadata.thumbnail ? metadata.thumbnail : null;
     const isRewardContent = claim && rewardedContentClaimIds.includes(claim.claim_id);
+    const shouldObscureNsfw = obscureNsfw && metadata && metadata.nsfw && !claimIsMine;
 
     const onClick = () => navigate('/show', { uri });
 
@@ -93,7 +98,7 @@ class FileTile extends React.PureComponent<Props> {
         role="button"
         tabIndex="0"
       >
-        <CardMedia title={title || name} thumbnail={thumbnail} />
+        <CardMedia title={title || name} thumbnail={thumbnail} nsfw={shouldObscureNsfw} />
         <div className="file-tile__info">
           {isResolvingUri && <div className="card__title--small">{__('Loading...')}</div>}
           {!isResolvingUri && (
