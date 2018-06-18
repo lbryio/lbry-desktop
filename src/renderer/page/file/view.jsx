@@ -116,7 +116,7 @@ class FilePage extends React.Component<Props> {
     const shouldObscureThumbnail = obscureNsfw && metadata.nsfw;
     const { height, channel_name: channelName, value } = claim;
     const mediaType = Lbry.getMediaType(contentType);
-    const isPlayable = Object.values(player.mime).includes(contentType) || mediaType === 'audio';
+    const isPlayable = mediaType === 'video' || mediaType === 'audio';
     const channelClaimId =
       value && value.publisherSignature && value.publisherSignature.certificateId;
     let subscriptionUri;
