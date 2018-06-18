@@ -48,7 +48,7 @@
     "formik": "^0.10.4",
     "hast-util-sanitize": "^1.1.2",
     "keytar": "^4.2.1",
-    "lbry-redux": "lbryio/lbry-redux#1739929ecf0eb9eca9ba9cc64fd5b5f2e59c4978",
+    "lbry-redux": "lbryio/lbry-redux#be7a07302aab0c5fc40f8c76cff524c7bce327a2",
     "localforage": "^1.7.1",
     "mixpanel-browser": "^2.17.1",
     "moment": "^2.22.0",
