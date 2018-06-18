@@ -88,13 +88,12 @@ reducers[ACTIONS.USER_PHONE_VERIFY_STARTED] = state =>
     phoneVerifyErrorMessage: '',
   });
 
-reducers[ACTIONS.USER_PHONE_VERIFY_SUCCESS] = (state, action) => {
+reducers[ACTIONS.USER_PHONE_VERIFY_SUCCESS] = (state, action) =>
   Object.assign({}, state, {
     phoneToVerify: '',
     phoneVerifyIsPending: false,
     user: action.data.user,
   });
-};
 
 reducers[ACTIONS.USER_PHONE_VERIFY_FAILURE] = (state, action) =>
   Object.assign({}, state, {
