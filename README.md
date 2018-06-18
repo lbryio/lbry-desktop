@@ -66,4 +66,4 @@ We take security seriously. Please contact security@lbry.io regarding any securi
 
 ## Contact
 
-The primary contact for this project is [@seanyesmunt](https://github.com/@seanyesmunt)
+The primary contact for this project is [@seanyesmunt](https://github.com/seanyesmunt)
