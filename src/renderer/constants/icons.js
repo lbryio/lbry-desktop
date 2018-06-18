@@ -28,3 +28,4 @@ export const CHECK_SIMPLE = 'Check';
 export const GLOBE = 'Globe';
 export const EXTERNAL_LINK = 'ExternalLink';
 export const GIFT = 'Gift';
+export const EYE = 'Eye';

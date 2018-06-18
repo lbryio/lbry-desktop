@@ -14,7 +14,6 @@ import Button from 'component/button';
 import SubscribeButton from 'component/subscribeButton';
 import ViewOnWebButton from 'component/viewOnWebButton';
 import Page from 'component/page';
-import player from 'render-media';
 import * as settings from 'constants/settings';
 import type { Claim } from 'types/claim';
 import type { Subscription } from 'types/subscription';
@@ -49,7 +48,8 @@ type Props = {
 };
 
 class FilePage extends React.Component<Props> {
-  static MEDIA_TYPES = ['audio', '3D-file', 'e-book', 'comic-book'];
+  static PLAYABLE_MEDIA_TYPES = ['audio', 'video'];
+  static PREVIEW_MEDIA_TYPES = ['text', 'image', '3D-file'];
 
   constructor(props: Props) {
     super(props);
@@ -114,13 +114,13 @@ class FilePage extends React.Component<Props> {
 
     // File info
     const { title, thumbnail, filename } = metadata;
+    const { height, channel_name: channelName, value } = claim;
+    const { PLAYABLE_MEDIA_TYPES, PREVIEW_MEDIA_TYPES } = FilePage;
     const isRewardContent = rewardedContentClaimIds.includes(claim.claim_id);
     const shouldObscureThumbnail = obscureNsfw && metadata.nsfw;
-    const { height, channel_name: channelName, value } = claim;
-    // TODO: fix getMediaType logic (lbry-redux)
-    const mediaType = Lbry.getMediaType(null, filename) || Lbry.getMediaType(contentType);
-    const isPlayable =
-      Object.values(player.mime).indexOf(contentType) !== -1 || FilePage.MEDIA_TYPES.indexOf(mediaType);
+    const mediaType = Lbry.getMediaType(contentType, filename);
+    const showFile =
+      PLAYABLE_MEDIA_TYPES.includes(mediaType) || PREVIEW_MEDIA_TYPES.includes(mediaType);
     const channelClaimId =
       value && value.publisherSignature && value.publisherSignature.certificateId;
     let subscriptionUri;
@@ -154,8 +154,8 @@ class FilePage extends React.Component<Props> {
           </section>
         ) : (
           <section className="card">
-            {isPlayable && <Video className="content__embedded" uri={uri} />}
-            {!isPlayable &&
+            {showFile && <Video className="content__embedded" uri={uri} />}
+            {!showFile &&
               (thumbnail ? (
                 <Thumbnail shouldObscure={shouldObscureThumbnail} src={thumbnail} />
               ) : (
