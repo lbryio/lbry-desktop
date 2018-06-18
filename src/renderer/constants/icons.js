@@ -29,3 +29,4 @@ export const GLOBE = 'Globe';
 export const EXTERNAL_LINK = 'ExternalLink';
 export const GIFT = 'Gift';
 export const EYE = 'Eye';
+export const PLAY = 'Play';
