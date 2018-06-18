@@ -175,13 +175,14 @@ button:disabled {
 
   .btn__label--balance {
     color: var(--text-help-color);
-    &:hover {
-      color: var(--text-color);
-    }
   }
 
   &:hover {
     background-color: transparent;
+
+    .btn__label--balance {
+      color: var(--header-primary-color);
+    }
   }
 }
 
