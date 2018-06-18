@@ -5,7 +5,7 @@ $spacing-vertical: 24px;
 $spacing-width: 36px;
 
 $medium-breakpoint: 1280px;
-$large-breakpoint: 1760px;
+$large-breakpoint: 1921px;
 
 :root {
   /* Widths & spacings */
@@ -146,14 +146,15 @@ $large-breakpoint: 1760px;
   --card-bg: var(--color-white);
   --card-text-color: var(--color-grey-dark);
   --card-radius: 2px;
+  --card-max-width: 1000px;
   --card-wallet-color: var(--text-color-inverse);
   --success-msg-color: var(--color-green);
   --success-msg-border: var(--color-green-blue);
   --success-msg-bg: var(--color-green-light);
 
   /* File Tile Card */
-  --file-tile--media-height: 100px;
-  --file-tile--media-width: calc(100px * (1 + 9 / 16));
+  --file-tile--media-height: 125px;
+  --file-tile--media-width: calc(125px * (16 / 9));
 
   /* Modal */
   --modal-width: 440px;

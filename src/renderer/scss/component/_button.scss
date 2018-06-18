@@ -153,7 +153,7 @@ button:disabled {
 }
 
 .btn--uri-indicator {
-  transition: color var(--animation-duration) var(--animation-duration);
+  transition: color var(--animation-duration) var(--animation-style);
 
   &:hover {
     color: var(--color-light-blue);
@@ -175,13 +175,14 @@ button:disabled {
 
   .btn__label--balance {
     color: var(--text-help-color);
-    &:hover {
-      color: var(--text-color);
-    }
   }
 
   &:hover {
     background-color: transparent;
+
+    .btn__label--balance {
+      color: var(--header-primary-color);
+    }
   }
 }
 
