@@ -6,6 +6,7 @@
   display: flex;
   position: relative;
   flex-direction: column;
+  max-width: var(--card-max-width);
 }
 
 .card > h1 {
@@ -35,6 +36,16 @@
 
   .channel-name {
     font-size: 12px;
+
+    @media only screen and (min-width: $medium-breakpoint) {
+      font-size: 14px;
+      padding-top: 4px;
+    }
+
+    @media only screen and (min-width: $large-breakpoint) {
+      font-size: 16px;
+      padding-top: 8px;
+    }
   }
 }
 
@@ -108,6 +119,10 @@
   font-size: 14px;
   line-height: 18px;
   padding-top: 20px;
+
+  @media only screen and (min-width: $medium-breakpoint) {
+    font-size: 16px;
+  }
 }
 
 .card__title--file {
@@ -283,11 +298,15 @@
   align-items: center;
   font-size: 18px;
   line-height: 24px;
+
+  @media only screen and (min-width: $medium-breakpoint) {
+    font-size: 20px;
+  }
 }
 
 .card-row__scroll-btns {
   display: flex;
-  padding-right: $spacing-width - 10px; // page padding - 1/2 width of arrow button
+  padding-right: $spacing-width;
 }
 
 .card-row__scrollhouse {
@@ -299,7 +318,15 @@
     vertical-align: top;
     overflow-y: visible;
     // 31 px to handle to padding between cards
-    width: calc((100% / 4) - 31px);
+    width: calc((100% / 4) - 34px);
+
+    @media only screen and (min-width: $medium-breakpoint) {
+      width: calc((100% / 6) - 29px);
+    }
+
+    @media only screen and (min-width: $large-breakpoint) {
+      width: calc((100% / 8) - 27px);
+    }
   }
 
   .card:not(:first-of-type) {
@@ -323,10 +350,29 @@
     display: inline-block;
     vertical-align: top;
     margin-bottom: 60px;
-    width: calc((100% / 4) - (60px / 4));
 
-    &:not(:nth-child(4n + 1)) {
-      margin-left: 20px;
+    @media only screen and (max-width: $medium-breakpoint) {
+      width: calc((100% / 4) - (60px / 4)); // 60px === 20px margin-right * three cards
+
+      &:not(:nth-child(4n + 1)) {
+        margin-left: 20px;
+      }
+    }
+
+    @media only screen and (min-width: $medium-breakpoint) and (max-width: $large-breakpoint) {
+      width: calc((100% / 6) - (100px / 6));
+
+      &:not(:nth-child(6n + 1)) {
+        margin-left: 20px;
+      }
+    }
+
+    @media only screen and (min-width: $large-breakpoint) {
+      width: calc((100% / 8) - (140px / 8));
+
+      &:not(:nth-child(8n + 1)) {
+        margin-left: 20px;
+      }
     }
   }
 }
