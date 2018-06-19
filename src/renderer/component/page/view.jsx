@@ -69,7 +69,7 @@ class Page extends React.PureComponent<Props, State> {
 
     // We don't want to show the loading spinner right away if it will only flash on the
     // screen for a short time, wait until we know it will be loading for a bit before showing it
-    const shouldShowLoader = !isShowingChildren(children) && showLoader;
+    const shouldShowLoader = loading || (!isShowingChildren(children) && showLoader);
 
     return (
       <main
