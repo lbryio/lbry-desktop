@@ -48,16 +48,46 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
    * Fix URI and outpoint not being passed properly to API ([#1494](https://github.com/lbryio/lbry-app/issues/1494))
    * Fix incorrect markdown preview on url with parentheses ([#1570](https://github.com/lbryio/lbry-app/issues/1570))
 
+## [0.21.6] - 2018-06-05
+
+### Fixed
+ * Fix page URLs on app cold start ([#1549](https://github.com/lbryio/lbry-app/issues/1549))
+ * Fix analytics event ([#1494](https://github.com/lbryio/lbry-app/issues/1494))
+
+
+
+## [0.21.5] - 2018-05-31
+
+### Added
+  * Ability to navigate to in-app pages via URL ([#1352](https://github.com/lbryio/lbry-app/issues/1352))
+
+### Fixed
+ * Fixed green screen on invalid URL via hyperlink ([#959](https://github.com/lbryio/lbry-app/issues/959))
+ * Fixed crash when lbry-app repository is renamed to lbry-desktop ([#1505](https://github.com/lbryio/lbry-app/issues/1505))
+ * Fixed rewards not disappearing after claiming ([596](https://github.com/lbryio/lbry-app/issues/596))
+
+### Changed
+ * Rewards now rely on API data ([#1329](https://github.com/lbryio/lbry-app/issues/1329))
+ 
+ 
+ 
+## [0.21.4] - 2018-05-10
+
+### Changed
+  * Update LBRY Protocol to 0.19.3 - faster blockchain header download for new and existing users (See fulll change log for [0.19.2](https://github.com/lbryio/lbry/releases/tag/v0.19.2) and [0.19.3](https://github.com/lbryio/lbry/releases/tag/v0.19.3))
+
+### Fixed
+ * Ability to submit bug reports
+
+
 
 ## [0.21.3] - 2018-04-23
-
 
 ### Added
  * Block blacklisted content ([#1361](https://github.com/lbryio/lbry-app/pull/1361))
 
 
 ## [0.21.2] - 2018-03-22
-
 
 ### Added
   * Save app state when closing to tray ([#968](https://github.com/lbryio/lbry-app/issues/968))
