@@ -15,6 +15,7 @@ type Props = {
   suggestions: Array<string>,
   doFocus: () => void,
   doBlur: () => void,
+  resultCount: number,
 };
 
 class WunderBar extends React.PureComponent<Props> {
@@ -45,7 +46,7 @@ class WunderBar extends React.PureComponent<Props> {
   }
 
   handleSubmit(value: string, suggestion?: { value: string, type: string }) {
-    const { onSubmit, onSearch } = this.props;
+    const { onSubmit, onSearch, resultCount } = this.props;
     const query = value.trim();
     const getParams = () => {
       const parts = query.split('?');
@@ -61,7 +62,7 @@ class WunderBar extends React.PureComponent<Props> {
     // User selected a suggestion
     if (suggestion) {
       if (suggestion.type === 'search') {
-        onSearch(query);
+        onSearch(query, resultCount);
       } else {
         const params = getParams();
         const uri = normalizeURI(query);
@@ -78,7 +79,7 @@ class WunderBar extends React.PureComponent<Props> {
       const params = getParams();
       onSubmit(uri, params);
     } catch (e) {
-      onSearch(query);
+      onSearch(query, resultCount);
     }
   }
 

@@ -27,6 +27,7 @@ const select = state => ({
   languages: selectLanguages(state),
   automaticDarkModeEnabled: makeSelectClientSetting(settings.AUTOMATIC_DARK_MODE_ENABLED)(state),
   autoplay: makeSelectClientSetting(settings.AUTOPLAY)(state),
+  resultCount: makeSelectClientSetting(settings.RESULT_COUNT)(state),
 });
 
 const perform = dispatch => ({
@@ -37,4 +38,7 @@ const perform = dispatch => ({
   changeLanguage: newLanguage => dispatch(doChangeLanguage(newLanguage)),
 });
 
-export default connect(select, perform)(SettingsPage);
+export default connect(
+  select,
+  perform
+)(SettingsPage);

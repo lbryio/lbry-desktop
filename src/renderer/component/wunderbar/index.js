@@ -7,6 +7,8 @@ import {
   doBlurSearchInput,
   doSearch,
 } from 'lbry-redux';
+import { makeSelectClientSetting } from 'redux/selectors/settings';
+import * as settings from 'constants/settings';
 import { doNavigate } from 'redux/actions/navigation';
 import Wunderbar from './view';
 
@@ -21,12 +23,13 @@ const select = state => {
   return {
     ...searchState,
     wunderbarValue,
+    resultCount: makeSelectClientSetting(settings.RESULT_COUNT)(state),
   };
 };
 
 const perform = dispatch => ({
-  onSearch: query => {
-    dispatch(doSearch(query, 30)); // Hard coding this for now until https://github.com/lbryio/lbry-app/pull/1639 is merged
+  onSearch: (query, size) => {
+    dispatch(doSearch(query, size));
     dispatch(doNavigate(`/search`, { query }));
   },
   onSubmit: (uri, extraParams) => dispatch(doNavigate('/show', { uri, ...extraParams })),

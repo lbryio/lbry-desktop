@@ -6,6 +6,7 @@ const select = (state, props) => ({
   uris: makeSelectSearchUris(props.query)(state),
   downloadUris: selectSearchDownloadUris(props.query)(state),
   isSearching: selectIsSearching(state),
+  resultCount: makeSelectClientSetting(settings.RESULT_COUNT)(state),
 });
 
 const perform = () => ({});

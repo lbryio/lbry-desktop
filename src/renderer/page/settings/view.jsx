@@ -20,7 +20,7 @@ type DaemonSettings = {
 
 type Props = {
   setDaemonSetting: (string, boolean | string | Price) => void,
-  setClientSetting: (string, boolean | string | Price) => void,
+  setClientSetting: (string, boolean | string | number | Price) => void,
   clearCache: () => Promise<any>,
   getThemes: () => void,
   daemonSettings: DaemonSettings,
@@ -32,6 +32,7 @@ type Props = {
   themes: Array<string>,
   automaticDarkModeEnabled: boolean,
   autoplay: boolean,
+  resultCount: number,
 };
 
 type State = {
@@ -57,6 +58,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
     (this: any).onAutoplayChange = this.onAutoplayChange.bind(this);
     (this: any).clearCache = this.clearCache.bind(this);
     // (this: any).onLanguageChange = this.onLanguageChange.bind(this)
+    (this: any).onSearchResultCountChange = this.onSearchResultCountChange.bind(this);
   }
 
   componentDidMount() {
@@ -117,6 +119,11 @@ class SettingsPage extends React.PureComponent<Props, State> {
     this.props.setClientSetting(settings.SHOW_UNAVAILABLE, event.target.checked);
   }
 
+  onSearchResultCountChange(event: SyntheticInputEvent<*>) {
+    const count = event.target.value;
+    this.props.setClientSetting(settings.RESULT_COUNT, count);
+  }
+
   setDaemonSetting(name: string, value: boolean | string | Price) {
     this.props.setDaemonSetting(name, value);
   }
@@ -145,6 +152,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
       themes,
       automaticDarkModeEnabled,
       autoplay,
+      resultCount,
     } = this.props;
 
     const noDaemonSettings = !daemonSettings || Object.keys(daemonSettings).length === 0;
@@ -255,13 +263,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
               />
               <FormField
                 type="checkbox"
-                name="show_unavailable"
-                onChange={this.onShowUnavailableChange}
-                checked={showUnavailable}
-                postfix={__('Show unavailable content in search results')}
-              />
-              <FormField
-                type="checkbox"
                 name="show_nsfw"
                 onChange={this.onShowNsfwChange}
                 checked={showNsfw}
@@ -269,6 +270,25 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 helper={__(
                   'NSFW content may include nudity, intense sexuality, profanity, or other adult content. By displaying NSFW content, you are affirming you are of legal age to view mature content in your country or jurisdiction.  '
                 )}
+              />
+            </section>
+            <section className="card card--section">
+              <div className="card__title">{__('Search Settings')}</div>
+              <FormField
+                type="number"
+                name="result_count"
+                min={1}
+                max={1000}
+                value={resultCount}
+                onChange={this.onSearchResultCountChange}
+                postfix={__('The number of search results presented')}
+              />
+              <FormField
+                type="checkbox"
+                name="show_unavailable"
+                onChange={this.onShowUnavailableChange}
+                checked={showUnavailable}
+                postfix={__('Show unavailable content in search results')}
               />
             </section>
             <section className="card card--section">
