@@ -10,9 +10,29 @@ type Props = {
 };
 
 class DiscoverPage extends React.PureComponent<Props> {
-  componentWillMount() {
-    this.props.fetchFeaturedUris();
+  constructor() {
+    super();
+    this.continousFetch = undefined;
   }
+
+  componentWillMount() {
+    const { fetchFeaturedUris } = this.props;
+    fetchFeaturedUris();
+    this.continousFetch = setInterval(fetchFeaturedUris, 1000 * 60 * 60);
+  }
+
+  componentWillUnmount() {
+    this.clearContinuousFetch();
+  }
+
+  clearContinuousFetch() {
+    if (this.continousFetch) {
+      clearInterval(this.continousFetch);
+      this.continousFetch = null;
+    }
+  }
+
+  continousFetch: ?number;
 
   render() {
     const { featuredUris, fetchingFeaturedUris } = this.props;
