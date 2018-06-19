@@ -79,11 +79,10 @@ class WalletSendTip extends React.PureComponent<Props, State> {
             postfix={__('LBC')}
             className="input--price-amount"
             error={newTipError}
-            value={tipAmount}
             min="0"
             step="any"
             type="number"
-            placeholder="1.00"
+            placeholder="1.23"
             onChange={event => this.handleSupportPriceChange(event)}
             helper={
               <span>
