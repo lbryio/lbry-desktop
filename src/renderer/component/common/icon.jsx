@@ -60,7 +60,7 @@ class IconComponent extends React.PureComponent<Props> {
     }
     const inner = <Icon size={size} className="icon" color={color} />;
 
-    return tooltip ? (
+    return tooltip && tooltipText ? (
       <Tooltip icon body={tooltipText} direction={tooltip}>
         {inner}
       </Tooltip>

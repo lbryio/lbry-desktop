@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import classnames from 'classnames';
-import { normalizeURI } from 'lbry-redux';
+import { normalizeURI, SEARCH_TYPES } from 'lbry-redux';
 import Icon from 'component/common/icon';
 import { parseQueryParams } from 'util/query_params';
 import * as icons from 'constants/icons';
@@ -29,7 +29,7 @@ class WunderBar extends React.PureComponent<Props> {
   getSuggestionIcon = (type: string) => {
     switch (type) {
       case 'file':
-        return icons.COMPASS;
+        return icons.LOCAL;
       case 'channel':
         return icons.AT_SIGN;
       default:
@@ -109,7 +109,7 @@ class WunderBar extends React.PureComponent<Props> {
               placeholder="Enter LBRY URL here or search for videos, music, games and more"
             />
           )}
-          renderItem={({ value, type, shorthand }, isHighlighted) => (
+          renderItem={({ value, type }, isHighlighted) => (
             <div
               key={value}
               className={classnames('wunderbar__suggestion', {
@@ -117,11 +117,13 @@ class WunderBar extends React.PureComponent<Props> {
               })}
             >
               <Icon icon={this.getSuggestionIcon(type)} />
-              <span className="wunderbar__suggestion-label">{shorthand || value}</span>
-              {(true || isHighlighted) && (
+              <span className="wunderbar__suggestion-label">{value}</span>
+              {isHighlighted && (
                 <span className="wunderbar__suggestion-label--action">
                   {'-  '}
-                  {type === 'search' ? 'Search' : value}
+                  {type === SEARCH_TYPES.SEARCH && __('Search')}
+                  {type === SEARCH_TYPES.CHANNEL && __('View channel')}
+                  {type === SEARCH_TYPES.FILE && __('View file')}
                 </span>
               )}
             </div>
