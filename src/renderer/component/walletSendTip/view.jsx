@@ -79,7 +79,7 @@ class WalletSendTip extends React.PureComponent<Props, State> {
             postfix={__('LBC')}
             className="input--price-amount"
             error={newTipError}
-            value={tipAmount}
+            value={tipAmount || ''}
             min="0"
             step="any"
             type="number"
