@@ -34,9 +34,9 @@ Double click the installed application to browse with the LBRY network.
 #### Prerequisites
 
 * [Git](https://git-scm.com/downloads)
-* [Node.js](https://nodejs.org/en/download/)
+* [Node.js](https://nodejs.org/en/download/) (Use Node v8 if having trouble with keytar)
 * [Yarn](https://yarnpkg.com/en/docs/install)
-* [C++ Build Tools](https://github.com/felixrieseberg/windows-build-tools) (Windows only)
+* [C++ Build Tools](https://github.com/felixrieseberg/windows-build-tools) (Windows only, only install if having trouble with keytar)
 
 #### Steps
 
