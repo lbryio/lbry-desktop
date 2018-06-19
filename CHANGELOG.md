@@ -19,15 +19,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
    * Build for both architectures (x86 and x64) for Windows ([#1262](https://github.com/lbryio/lbry-app/pull/1262))
    * Referral FAQ to Invites screen ([#1314](https://github.com/lbryio/lbry-app/pull/1314))
    * Show exact wallet balance on mouse hover over ([#1305](https://github.com/lbryio/lbry-app/pull/1305))
-   * New dark mode ([#1269](https://github.com/lbryio/lbry-app/pull/1269))
    * Pre-fill publish URL after clicking "Put something here" link ([#1303](https://github.com/lbryio/lbry-app/pull/1303))
    * Danger JS to automate code reviews ([#1289](https://github.com/lbryio/lbry-app/pull/1289))
    * 'Go to page' input on channel pagination ([#1166](https://github.com/lbryio/lbry-app/pull/1166))
    
 ### Changed
    * LBRY App UI Redesign 5.0 implemented including new theme, layout, and improved search mechanics ([#870](https://github.com/lbryio/lbry-app/pull/870)) and ([#1173](https://github.com/lbryio/lbry-app/pull/1173))
+   * Adapted dark mode to redesign ([#1269](https://github.com/lbryio/lbry-app/pull/1269))
    * Show latest claims for across all subscribed channel (no longer grouped by channel) and store sub data in internal database ([#1424](https://github.com/lbryio/lbry-app/pull/1424))
-   * Dark theme to support redesign ([#1034](https://github.com/lbryio/lbry-app/issues/1034))
    * New publishes now show as pending on Publishes screen ([#1040](https://github.com/lbryio/lbry-app/pull/1040))
    * Enhanced flair to snackbar ([#1313](https://github.com/lbryio/lbry-app/pull/1313))
    * Made font in price badge larger ([#1420](https://github.com/lbryio/lbry-app/pull/1420))
@@ -57,7 +56,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
    * URI and outpoint not being passed properly to API ([#1494](https://github.com/lbryio/lbry-app/issues/1494))
    * Incorrect markdown preview on url with parentheses ([#1570](https://github.com/lbryio/lbry-app/issues/1570))
    
-
+   
 
 ## [0.21.6] - 2018-06-05
 
