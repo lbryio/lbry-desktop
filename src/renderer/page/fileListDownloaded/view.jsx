@@ -13,13 +13,11 @@ type Props = {
 class FileListDownloaded extends React.PureComponent<Props> {
   render() {
     const { fetching, fileInfos, navigate } = this.props;
-    const hasDownloads = fileInfos && fileInfos.length > 0;
+    const hasDownloads = fileInfos && Object.values(fileInfos).length > 0;
 
     return (
-      <Page notContained>
-        {fetching ? (
-          <div className="card__actions card__actions--center">Fetching content...</div>
-        ) : hasDownloads ? (
+      <Page notContained loading={fetching}>
+        {hasDownloads ? (
           <FileList fileInfos={fileInfos} />
         ) : (
           <div className="page__empty">

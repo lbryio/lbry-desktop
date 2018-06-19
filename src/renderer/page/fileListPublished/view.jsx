@@ -24,10 +24,8 @@ class FileListPublished extends React.PureComponent<Props> {
     const { fetching, claims, navigate } = this.props;
 
     return (
-      <Page notContained>
-        {fetching ? (
-          <div className="card__actions card__actions--center">Fetching content...</div>
-        ) : claims.length ? (
+      <Page notContained loading={fetching}>
+        {claims && claims.length ? (
           <FileList checkPending fileInfos={claims} sortByHeight />
         ) : (
           <div className="page__empty">
