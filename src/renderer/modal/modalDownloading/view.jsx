@@ -5,7 +5,13 @@ import Button from 'component/button';
 
 class ModalDownloading extends React.PureComponent {
   render() {
-    const { downloadProgress, downloadComplete, startUpgrade, cancelUpgrade } = this.props;
+    const {
+      downloadProgress,
+      downloadComplete,
+      downloadItem,
+      startUpgrade,
+      cancelUpgrade,
+    } = this.props;
 
     return (
       <Modal isOpen contentLabel={__('Downloading Update')} type="custom">
@@ -21,6 +27,12 @@ class ModalDownloading extends React.PureComponent {
                 'The app will close, and you will be prompted to install the latest version of LBRY.'
               )}
             </p>
+            <p>
+              {__(
+                'To launch installation manually, close LBRY and run the command below in the terminal.'
+              )}
+            </p>
+            <blockquote>sudo dpkg -i {downloadItem}</blockquote>
             <p>{__('After the install is complete, please reopen the app.')}</p>
           </div>
         ) : null}
