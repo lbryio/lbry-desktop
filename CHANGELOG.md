@@ -47,6 +47,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
    * Fix claim ID being null when reporting a claim that was not previously download ([issue#1512](https://github.com/lbryio/lbry-app/issues/1512)) ([PR#1530](https://github.com/lbryio/lbry-app/pull/1530))
    * Fix URI and outpoint not being passed properly to API ([#1494](https://github.com/lbryio/lbry-app/issues/1494))
    * Fix incorrect markdown preview on url with parentheses ([#1570](https://github.com/lbryio/lbry-app/issues/1570))
+   * Fix Linux upgrade path and add manual installation note ([#1606](https://github.com/lbryio/lbry-app/issues/1606))
+
 
 
 ## [0.21.3] - 2018-04-23
