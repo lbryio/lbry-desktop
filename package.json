@@ -1,6 +1,6 @@
 {
   "name": "LBRY",
-  "version": "0.22.0-rc.12",
+  "version": "0.22.0-rc.13",
   "description": "A browser for the LBRY network, a digital marketplace controlled by its users.",
   "keywords": [
     "lbry"
@@ -48,7 +48,7 @@
     "formik": "^0.10.4",
     "hast-util-sanitize": "^1.1.2",
     "keytar": "^4.2.1",
-    "lbry-redux": "lbryio/lbry-redux#be7a07302aab0c5fc40f8c76cff524c7bce327a2",
+    "lbry-redux": "lbryio/lbry-redux#201d78b68a329065ee5d2a03bfb1607ea0666588",
     "localforage": "^1.7.1",
     "mixpanel-browser": "^2.17.1",
     "moment": "^2.22.0",
@@ -127,7 +127,7 @@
     "yarn": "^1.3"
   },
   "lbrySettings": {
-    "lbrynetDaemonVersion": "0.20.0",
+    "lbrynetDaemonVersion": "0.20.1",
     "lbrynetDaemonUrlTemplate": "https://github.com/lbryio/lbry/releases/download/vDAEMONVER/lbrynet-daemon-vDAEMONVER-OSNAME.zip",
     "lbrynetDaemonDir": "static/daemon",
     "lbrynetDaemonFileName": "lbrynet-daemon"
