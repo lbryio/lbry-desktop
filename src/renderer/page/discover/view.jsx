@@ -9,9 +9,17 @@ type Props = {
   featuredUris: {},
 };
 
+let featuredUrisThrottled = false;
+
 class DiscoverPage extends React.PureComponent<Props> {
   componentWillMount() {
-    this.props.fetchFeaturedUris();
+    if (!featuredUrisThrottled) {
+      featuredUrisThrottled = true;
+      this.props.fetchFeaturedUris();
+      setTimeout(() => {
+        featuredUrisThrottled = false;
+      }, 1000 * 60 * 30);
+    }
   }
 
   render() {
