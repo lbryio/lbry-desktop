@@ -6,6 +6,7 @@ import * as NOTIFICATION_TYPES from 'constants/notification_types';
 import Button from 'component/button';
 import FileList from 'component/fileList';
 import type { Claim } from 'types/claim';
+import isDev from 'electron-is-dev';
 
 type Props = {
   doFetchClaimsByChannel: (string, number) => void,
@@ -42,7 +43,18 @@ export default class extends React.PureComponent<Props> {
 
     const subscriptionClaimMap = {};
     subscriptionClaims.forEach(claim => {
-      subscriptionClaimMap[claim.uri] = 1;
+      /*
+      This check added 6/20/18 to fix function receiving empty claims unexpectedly.
+      The better fix is ensuring channels aren't added to byId if there are no associated claims
+      We are adding this now with the redesign release to ensure users see the correct subscriptions
+      */
+      if (claim.claims.length) {
+        subscriptionClaimMap[claim.uri] = 1;
+      } else if (isDev) {
+        console.error(
+          `claim for ${claim.uri} was added to byId in redux but there are no loaded fetched claims`
+        );
+      }
     });
 
     subscriptions.forEach(sub => {
