@@ -93,6 +93,7 @@
 .card__title-identity--file {
   display: flex;
   align-items: center;
+  justify-content: space-between;
 
   .icon {
     margin: 0 $spacing-vertical * 1/3;
