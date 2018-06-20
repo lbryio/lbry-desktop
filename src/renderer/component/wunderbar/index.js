@@ -3,8 +3,6 @@ import {
   selectSearchState as selectSearch,
   selectWunderBarAddress,
   doUpdateSearchQuery,
-  doNotify,
-  MODALS,
   doFocusSearchInput,
   doBlurSearchInput,
   doSearch,
@@ -37,4 +35,7 @@ const perform = dispatch => ({
   doBlur: () => dispatch(doBlurSearchInput()),
 });
 
-export default connect(select, perform)(Wunderbar);
+export default connect(
+  select,
+  perform
+)(Wunderbar);
