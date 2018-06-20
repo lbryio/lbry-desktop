@@ -92,7 +92,7 @@ class WunderBar extends React.PureComponent<Props> {
         <Icon icon={icons.SEARCH} />
         <Autocomplete
           autoHighlight
-          wrapperStyle={{ flex: 1 }}
+          wrapperStyle={{ flex: 1, position: 'relative' }}
           value={wunderbarValue || ''}
           items={suggestions}
           getItemValue={item => item.value}
