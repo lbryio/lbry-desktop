@@ -32,7 +32,7 @@ export const selectUpgradeFilename = createSelector(
       case 'darwin':
         return `LBRY_${version}.dmg`;
       case 'linux':
-        return `LBRY_${version}_amd64.deb`;
+        return `LBRY_${version}.deb`;
       case 'win32':
         return `LBRY_${version}.exe`;
       default:
