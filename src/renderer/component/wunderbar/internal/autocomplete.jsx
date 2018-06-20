@@ -190,9 +190,8 @@ export default class Autocomplete extends React.Component {
       background: 'rgba(255, 255, 255, 0.9)',
       padding: '2px 0',
       fontSize: '90%',
-      position: 'fixed',
+      position: 'absolute',
       overflow: 'hidden',
-      maxHeight: '50%', // TODO: don't cheat, let it flow to the bottom,
     },
     autoHighlight: true,
     selectOnBlur: false,
@@ -410,12 +409,13 @@ export default class Autocomplete extends React.Component {
     const node = this.refs.input;
     const rect = node.getBoundingClientRect();
     const computedStyle = global.window.getComputedStyle(node);
-    const marginBottom = parseInt(computedStyle.marginBottom, 10) || 0;
+    // const marginBottom = parseInt(computedStyle.marginBottom, 10) || 0;
     const marginLeft = parseInt(computedStyle.marginLeft, 10) || 0;
     const marginRight = parseInt(computedStyle.marginRight, 10) || 0;
     this.setState({
-      menuTop: rect.bottom + marginBottom,
-      menuLeft: rect.left + marginLeft,
+      // We may need these if we go back to a fixed header
+      // menuTop: rect.bottom + marginBottom,
+      // menuLeft: rect.left + marginLeft,
       menuWidth: rect.width + marginLeft + marginRight,
     });
   }
