@@ -8,31 +8,11 @@ import Page from 'component/page';
 import Icon from 'component/common/icon';
 import * as icons from 'constants/icons';
 
-const MODAL_ANIMATION_TIME = 250;
-
 type Props = {
   query: ?string,
 };
 
 class SearchPage extends React.PureComponent<Props> {
-  constructor() {
-    super();
-
-    this.input = null;
-  }
-
-  componentDidMount() {
-    // Wait for the modal to animate down before focusing
-    // without this there is an issue with scroll the page down
-    setTimeout(() => {
-      if (this.input) {
-        this.input.focus();
-      }
-    }, MODAL_ANIMATION_TIME);
-  }
-
-  input: ?HTMLInputElement;
-
   render() {
     const { query } = this.props;
     return (

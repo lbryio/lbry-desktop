@@ -93,9 +93,10 @@
 .card__title-identity--file {
   display: flex;
   align-items: center;
-  .credit-amount,
+  justify-content: space-between;
+
   .icon {
-    margin: $spacing-vertical * 1/3;
+    margin: 0 $spacing-vertical * 1/3;
   }
 }
 
@@ -113,9 +114,9 @@
 .card__title--small {
   font-size: 14px;
   line-height: 18px;
-  padding-top: 20px;
+  padding-top: $spacing-vertical / 3;
 
-  @media only screen and (min-width: $medium-breakpoint) {
+  @media only screen and (min-width: $large-breakpoint) {
     font-size: 16px;
   }
 }
@@ -198,7 +199,7 @@
 
 .card__subtext-title {
   color: var(--text-color);
-  font-size: calc(var(--font-size-subtext-multiple) * 1.5em);
+  font-size: calc(var(--font-size-subtext-multiple) * 1.2em);
 
   &:not(:first-of-type) {
     margin-top: $spacing-vertical * 3/2;
@@ -220,8 +221,12 @@
   margin-top: $spacing-vertical * 2/3;
   display: flex;
 
-  &:not(.card__actions--vertical) .btn:nth-child(n + 2) {
-    margin-left: $spacing-vertical / 3;
+  &:not(.card__actions--vertical) {
+    .btn:nth-child(n + 2),
+    // For buttons wrapped in a tooltip
+    .tooltip:nth-child(n + 2) {
+      margin-left: $spacing-vertical / 3;
+    }
   }
 }
 
@@ -256,6 +261,11 @@
 
 .card__actions--end {
   justify-content: flex-end;
+}
+
+.card__actions--between {
+  justify-content: space-between;
+  flex-wrap: wrap;
 }
 
 /*

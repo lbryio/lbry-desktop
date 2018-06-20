@@ -20,7 +20,7 @@ class ModalEmailCollection extends React.PureComponent<Props> {
     if (user && !user.has_verified_email && !email) {
       return <UserEmailNew cancelButton={cancelButton} />;
     } else if (user && !user.has_verified_email) {
-      return <UserEmailVerify cancelButton={cancelButton} />;
+      return <UserEmailVerify onModal cancelButton={cancelButton} />;
     }
 
     return closeModal();

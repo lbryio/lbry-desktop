@@ -3,8 +3,6 @@ import {
   selectSearchState as selectSearch,
   selectWunderBarAddress,
   doUpdateSearchQuery,
-  doNotify,
-  MODALS,
   doFocusSearchInput,
   doBlurSearchInput,
   doSearch,
@@ -28,7 +26,7 @@ const select = state => {
 
 const perform = dispatch => ({
   onSearch: query => {
-    dispatch(doSearch(query));
+    dispatch(doSearch(query, 30)); // Hard coding this for now until https://github.com/lbryio/lbry-app/pull/1639 is merged
     dispatch(doNavigate(`/search`, { query }));
   },
   onSubmit: (uri, extraParams) => dispatch(doNavigate('/show', { uri, ...extraParams })),
@@ -37,4 +35,7 @@ const perform = dispatch => ({
   doBlur: () => dispatch(doBlurSearchInput()),
 });
 
-export default connect(select, perform)(Wunderbar);
+export default connect(
+  select,
+  perform
+)(Wunderbar);

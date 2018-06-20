@@ -2,6 +2,7 @@
 import React from 'react';
 import Button from 'component/button';
 import * as icons from 'constants/icons';
+import ToolTip from 'component/common/tooltip';
 
 type Props = {
   uri: string,
@@ -59,7 +60,7 @@ class FileDownloadLink extends React.PureComponent<Props> {
     if (loading || downloading) {
       const progress =
         fileInfo && fileInfo.written_bytes
-          ? fileInfo.written_bytes / fileInfo.total_bytes * 100
+          ? (fileInfo.written_bytes / fileInfo.total_bytes) * 100
           : 0;
       const label = fileInfo
         ? __('Downloading: ') + progress.toFixed(0) + __('% complete')
@@ -72,25 +73,22 @@ class FileDownloadLink extends React.PureComponent<Props> {
       }
 
       return (
-        <Button
-          button="alt"
-          label={__('Download')}
-          icon={icons.DOWNLOAD}
-          iconColor="purple"
-          onClick={() => {
-            purchaseUri(uri);
-          }}
-        />
+        <ToolTip onComponent body={__('Download')}>
+          <Button
+            button="alt"
+            icon={icons.DOWNLOAD}
+            iconColor="purple"
+            onClick={() => {
+              purchaseUri(uri);
+            }}
+          />
+        </ToolTip>
       );
     } else if (fileInfo && fileInfo.download_path) {
       return (
-        <Button
-          button="alt"
-          iconColor="purple"
-          label={__('Open File')}
-          icon={icons.OPEN}
-          onClick={() => openFile()}
-        />
+        <ToolTip onComponent body={__('Open file')}>
+          <Button button="alt" iconColor="purple" icon={icons.LOCAL} onClick={() => openFile()} />
+        </ToolTip>
       );
     }
 

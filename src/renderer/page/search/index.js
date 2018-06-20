@@ -1,12 +1,11 @@
-import React from 'react';
 import { connect } from 'react-redux';
-import { selectIsSearching, selectSearchValue, doUpdateSearchQuery } from 'lbry-redux';
+import { selectIsSearching, doUpdateSearchQuery, makeSelectCurrentParam } from 'lbry-redux';
 import { doNavigate } from 'redux/actions/navigation';
 import SearchPage from './view';
 
 const select = state => ({
   isSearching: selectIsSearching(state),
-  query: selectSearchValue(state),
+  query: makeSelectCurrentParam('query')(state),
 });
 
 const perform = dispatch => ({
@@ -14,4 +13,7 @@ const perform = dispatch => ({
   updateSearchQuery: query => dispatch(doUpdateSearchQuery(query)),
 });
 
-export default connect(select, perform)(SearchPage);
+export default connect(
+  select,
+  perform
+)(SearchPage);
