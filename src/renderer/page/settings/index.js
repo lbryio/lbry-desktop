@@ -18,7 +18,6 @@ import SettingsPage from './view';
 const select = state => ({
   daemonSettings: selectDaemonSettings(state),
   showNsfw: makeSelectClientSetting(settings.SHOW_NSFW)(state),
-  showUnavailable: makeSelectClientSetting(settings.SHOW_UNAVAILABLE)(state),
   instantPurchaseEnabled: makeSelectClientSetting(settings.INSTANT_PURCHASE_ENABLED)(state),
   instantPurchaseMax: makeSelectClientSetting(settings.INSTANT_PURCHASE_MAX)(state),
   currentTheme: makeSelectClientSetting(settings.THEME)(state),
@@ -27,7 +26,6 @@ const select = state => ({
   languages: selectLanguages(state),
   automaticDarkModeEnabled: makeSelectClientSetting(settings.AUTOMATIC_DARK_MODE_ENABLED)(state),
   autoplay: makeSelectClientSetting(settings.AUTOPLAY)(state),
-  resultCount: makeSelectClientSetting(settings.RESULT_COUNT)(state),
 });
 
 const perform = dispatch => ({
