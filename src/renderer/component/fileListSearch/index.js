@@ -1,10 +1,5 @@
 import { connect } from 'react-redux';
-import {
-  doSearch,
-  makeSelectSearchUris,
-  selectIsSearching,
-  selectSearchDownloadUris,
-} from 'lbry-redux';
+import { makeSelectSearchUris, selectIsSearching, selectSearchDownloadUris } from 'lbry-redux';
 import FileListSearch from './view';
 
 const select = (state, props) => ({
@@ -13,8 +8,9 @@ const select = (state, props) => ({
   isSearching: selectIsSearching(state),
 });
 
-const perform = dispatch => ({
-  search: search => dispatch(doSearch(search)),
-});
+const perform = () => ({});
 
-export default connect(select, perform)(FileListSearch);
+export default connect(
+  select,
+  perform
+)(FileListSearch);

@@ -3,14 +3,10 @@ import React from 'react';
 import FileTile from 'component/fileTile';
 import ChannelTile from 'component/channelTile';
 import { parseURI } from 'lbry-redux';
-import debounce from 'util/debounce';
-
-const SEARCH_DEBOUNCE_TIME = 800;
 
 const NoResults = () => <div className="file-tile">{__('No results')}</div>;
 
 type Props = {
-  search: string => void,
   query: string,
   isSearching: boolean,
   uris: ?Array<string>,
@@ -18,27 +14,6 @@ type Props = {
 };
 
 class FileListSearch extends React.PureComponent<Props> {
-  constructor(props: Props) {
-    super(props);
-    this.debouncedSearch = debounce(this.props.search, SEARCH_DEBOUNCE_TIME);
-  }
-
-  componentDidMount() {
-    const { search, query } = this.props;
-    search(query);
-  }
-
-  componentWillReceiveProps(nextProps: Props) {
-    const { query: nextQuery } = nextProps;
-    const { query: currentQuerry } = this.props;
-
-    if (nextQuery !== currentQuerry) {
-      this.debouncedSearch(nextQuery);
-    }
-  }
-
-  debouncedSearch: string => void;
-
   render() {
     const { uris, query, downloadUris, isSearching } = this.props;
 
