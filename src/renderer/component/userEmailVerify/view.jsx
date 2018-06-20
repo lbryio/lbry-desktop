@@ -8,6 +8,7 @@ type Props = {
   errorMessage: ?string,
   email: string,
   isPending: boolean,
+  onModal?: boolean,
   verifyUserEmail: (string, string) => void,
   verifyUserEmailFailure: string => void,
   resendVerificationEmail: string => void,
@@ -50,7 +51,7 @@ class UserEmailVerify extends React.PureComponent<Props, State> {
   }
 
   render() {
-    const { cancelButton, errorMessage, email, isPending } = this.props;
+    const { cancelButton, errorMessage, email, isPending, onModal } = this.props;
 
     return (
       <Form onSubmit={this.handleSubmit}>
@@ -77,12 +78,23 @@ class UserEmailVerify extends React.PureComponent<Props, State> {
         <div className="card__actions">
           <Submit label={__('Verify')} disabled={isPending} />
           {cancelButton}
-          <Button
-            button="link"
-            label={__('Resend verification email')}
-            onClick={this.handleResendVerificationEmail}
-          />
+          {!onModal && (
+            <Button
+              button="link"
+              label={__('Resend verification email')}
+              onClick={this.handleResendVerificationEmail}
+            />
+          )}
         </div>
+        {onModal && (
+          <div className="card__actions help">
+            <Button
+              button="link"
+              label={__('Resend verification email')}
+              onClick={this.handleResendVerificationEmail}
+            />
+          </div>
+        )}
       </Form>
     );
   }
