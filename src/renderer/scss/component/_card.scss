@@ -113,9 +113,9 @@
 .card__title--small {
   font-size: 14px;
   line-height: 18px;
-  padding-top: 20px;
+  padding-top: $spacing-vertical / 3;
 
-  @media only screen and (min-width: $medium-breakpoint) {
+  @media only screen and (min-width: $large-breakpoint) {
     font-size: 16px;
   }
 }
@@ -223,7 +223,7 @@
   &:not(.card__actions--vertical) {
     .btn:nth-child(n + 2),
     // For buttons wrapped in a tooltip
-    .tooltip:nth-child(n + 2) { 
+    .tooltip:nth-child(n + 2) {
       margin-left: $spacing-vertical / 3;
     }
   }
