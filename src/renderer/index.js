@@ -113,10 +113,6 @@ document.addEventListener('click', event => {
 });
 
 const init = () => {
-  autoUpdater.on('update-downloaded', () => {
-    app.store.dispatch(doAutoUpdate());
-  });
-
   autoUpdater.on('error', error => {
     // eslint-disable-next-line no-console
     console.error(error.message);
