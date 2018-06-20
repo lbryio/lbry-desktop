@@ -231,7 +231,7 @@ export const doPublish = (params: PublishParams) => (dispatch: Dispatch, getStat
   const success = () => {
     dispatch({
       type: ACTIONS.PUBLISH_SUCCESS,
-      data: { pendingPublish: { ...publishPayload, isEdit: isStillEditing } },
+      data: { pendingPublish: { ...publishPayload } },
     });
     dispatch(doNotify({ id: MODALS.PUBLISH }, { uri }));
   };

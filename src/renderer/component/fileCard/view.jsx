@@ -43,9 +43,9 @@ class FileCard extends React.PureComponent<Props> {
   }
 
   resolve = (props: Props) => {
-    const { isResolvingUri, resolveUri, claim, uri } = props;
+    const { isResolvingUri, resolveUri, claim, uri, pending } = props;
 
-    if (!isResolvingUri && claim === undefined && uri) {
+    if (!pending && !isResolvingUri && claim === undefined && uri) {
       resolveUri(uri);
     }
   };
