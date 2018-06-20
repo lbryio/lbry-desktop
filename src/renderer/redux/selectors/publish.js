@@ -22,7 +22,7 @@ export const selectClaimsWithPendingPublishes = createSelector(
     });
 
     const filteredPendingPublishes = pendingPublishes.filter(claim => !claimMap[claim.name]);
-    return [...claims, ...filteredPendingPublishes];
+    return [...filteredPendingPublishes, ...claims];
   }
 );
 
