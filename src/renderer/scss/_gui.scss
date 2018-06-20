@@ -190,15 +190,7 @@ p {
 
 .main--contained {
   max-width: 1000px;
-  margin: 0 80px - $spacing-width;
-
-  @media only screen and (min-width: $medium-breakpoint) {
-    margin: 0 120px - $spacing-width;
-  }
-
-  @media only screen and (min-width: $large-breakpoint) {
-    margin: 0 200px - $spacing-width;
-  }
+  margin: auto;
 }
 
 .main--no-padding {
