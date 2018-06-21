@@ -21,11 +21,11 @@ function injectDevelopmentTemplate(event, templates) {
   return templates;
 }
 
-export function openContextMenu(event, templates = []) {
+export function openContextMenu(event, templates = [], canEdit = false) {
+  const { type, value } = event.target;
   const isSomethingSelected = window.getSelection().toString().length > 0;
-  const { type } = event.target;
   const isInput = event.target.matches('input') && (type === 'text' || type === 'number');
-  const { value } = event.target;
+  const isTextField = canEdit || isInput || event.target.matches('textarea');
 
   templates.push({
     label: 'Copy',
@@ -36,12 +36,12 @@ export function openContextMenu(event, templates = []) {
 
   // If context menu is opened on Input and there is text on the input and something is selected.
   const { selectionStart, selectionEnd } = event.target;
-  if (!!value && isInput && selectionStart !== selectionEnd) {
+  if (!!value && isTextField && selectionStart !== selectionEnd) {
     templates.push({ label: 'Cut', accelerator: 'CmdOrCtrl+X', role: 'cut' });
   }
 
   // If context menu is opened on Input and text is present on clipboard
-  if (clipboard.readText().length > 0 && isInput) {
+  if (clipboard.readText().length > 0 && isTextField) {
     templates.push({
       label: 'Paste',
       accelerator: 'CmdOrCtrl+V',
@@ -50,7 +50,7 @@ export function openContextMenu(event, templates = []) {
   }
 
   // If context menu is opened on Input
-  if (isInput && value) {
+  if (isTextField && value) {
     templates.push({
       label: 'Select All',
       accelerator: 'CmdOrCtrl+A',
@@ -70,5 +70,5 @@ export function openCopyLinkMenu(text, event) {
       },
     },
   ];
-  openContextMenu(event, templates, false);
+  openContextMenu(event, templates);
 }
