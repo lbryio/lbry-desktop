@@ -41,6 +41,11 @@
   }
 }
 
+.form-field.form-field--disabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
 .form-field--SimpleMDE {
   display: block;
   width: 100%;
