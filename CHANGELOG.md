@@ -22,7 +22,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
    * Pre-fill publish URL after clicking "Put something here" link ([#1303](https://github.com/lbryio/lbry-app/pull/1303))
    * Danger JS to automate code reviews ([#1289](https://github.com/lbryio/lbry-app/pull/1289))
    * 'Go to page' input on channel pagination ([#1166](https://github.com/lbryio/lbry-app/pull/1166))
-   
+
 ### Changed
    * LBRY App UI Redesign 5.0 implemented including new theme, layout, and improved search mechanics ([#870](https://github.com/lbryio/lbry-app/pull/870)) and ([#1173](https://github.com/lbryio/lbry-app/pull/1173))
    * Adapted dark mode to redesign ([#1269](https://github.com/lbryio/lbry-app/pull/1269))
@@ -32,7 +32,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
    * Made font in price badge larger ([#1420](https://github.com/lbryio/lbry-app/pull/1420))
    * Move rewards logic to interal api ([#1509](https://github.com/lbryio/lbry-app/pull/1509))
    * Narrative about Feature Request on Help Page and Report Page ([#1551](https://github.com/lbryio/lbry-app/pull/1551))
-   
+
 
 ### Fixed
    * Create channel and publish immediately([#1481](https://github.com/lbryio/lbry-app/pull/1481))
@@ -57,9 +57,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
    * Incorrect markdown preview on url with parentheses ([#1570](https://github.com/lbryio/lbry-app/issues/1570))
    * Fix Linux upgrade path and add manual installation note ([#1606](https://github.com/lbryio/lbry-app/issues/1606))
    * Fix can type in unfocused fields while publishing without selecting file ([#1456](https://github.com/lbryio/lbry-app/issues/1456))
-   
-   
-   
+   * Fix navigation button resulting incorrect page designation ([#1502](https://github.com/lbryio/lbry-app/issues/1502))
+
+
 ## [0.21.6] - 2018-06-05
 
 ### Fixed
@@ -80,9 +80,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Changed
  * Rewards now rely on API data ([#1329](https://github.com/lbryio/lbry-app/issues/1329))
- 
- 
- 
+
+
+
 ## [0.21.4] - 2018-05-10
 
 ### Changed
