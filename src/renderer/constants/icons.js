@@ -26,3 +26,5 @@ export const HEART = 'Heart';
 export const UNLOCK = 'Unlock';
 export const CHECK_SIMPLE = 'Check';
 export const GLOBE = 'Globe';
+export const LINK = 'Link';
+export const EXTERNAL_LINK = 'ExternalLink';
