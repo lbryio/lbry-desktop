@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import * as settings from 'constants/settings';
-import { selectIsSearching, selectSearchValue, doUpdateSearchQuery } from 'lbry-redux';
+import { selectIsSearching, makeSelectCurrentParam, doUpdateSearchQuery } from 'lbry-redux';
 import { doSetClientSetting } from 'redux/actions/settings';
 import { doNavigate } from 'redux/actions/navigation';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
@@ -8,7 +8,7 @@ import SearchPage from './view';
 
 const select = state => ({
   isSearching: selectIsSearching(state),
-  query: selectSearchValue(state),
+  query: makeSelectCurrentParam('query')(state),
   showUnavailable: makeSelectClientSetting(settings.SHOW_UNAVAILABLE)(state),
   resultCount: makeSelectClientSetting(settings.RESULT_COUNT)(state),
 });
