@@ -58,6 +58,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
    * Fix Linux upgrade path and add manual installation note ([#1606](https://github.com/lbryio/lbry-app/issues/1606))
    * Fix can type in unfocused fields while publishing without selecting file ([#1456](https://github.com/lbryio/lbry-app/issues/1456))
    * Fix navigation button resulting incorrect page designation ([#1502](https://github.com/lbryio/lbry-app/issues/1502))
+   * Fix shouldn't allow to open multiple export and choose file dialogs ([#1175](https://github.com/lbryio/lbry-app/issues/1175))
+
 
 
 ## [0.21.6] - 2018-06-05
