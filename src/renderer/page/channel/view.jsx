@@ -66,7 +66,7 @@ class ChannelPage extends React.PureComponent<Props> {
   render() {
     const { fetching, claimsInChannel, claim, page, totalPages } = this.props;
     const { name, permanent_url: permanentUrl, claim_id: claimId } = claim;
-
+    const currentPage = parseInt((page || 1) - 1, 10);
     let contentList;
     if (fetching) {
       contentList = <BusyIndicator message={__('Fetching content')} />;
@@ -104,7 +104,8 @@ class ChannelPage extends React.PureComponent<Props> {
                 breakClassName="pagination__item pagination__item--break"
                 marginPagesDisplayed={2}
                 onPageChange={e => this.changePage(e.selected + 1)}
-                initialPage={parseInt(page - 1, 10)}
+                forcePage={currentPage}
+                initialPage={currentPage}
                 containerClassName="pagination"
               />
 

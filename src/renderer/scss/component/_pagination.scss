@@ -9,12 +9,12 @@
   line-height: $spacing-vertical * 1.5;
   height: $spacing-vertical * 1.5;
   border-radius: 2px;
-  &:not(.pagination__item--selected):hover {
+
+  &:not(.pagination__item--selected):not(.pagination__item--break):not(.disabled):hover {
     background: rgba(0, 0, 0, 0.2);
-    > a {
-      cursor: hand;
-    }
+    cursor: pointer;
   }
+
   > a {
     display: inline-block;
     padding: 0 $spacing-vertical * 2 / 3;

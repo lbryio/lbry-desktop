@@ -2,7 +2,6 @@
 import fs from 'fs';
 import path from 'path';
 import React from 'react';
-import PropTypes from 'prop-types';
 import Button from 'component/button';
 import parseData from 'util/parseData';
 import * as icons from 'constants/icons';
@@ -56,16 +55,20 @@ class FileExporter extends React.PureComponent<Props> {
       ],
     };
 
-    remote.dialog.showSaveDialog(options, filename => {
-      // User hit cancel so do nothing:
-      if (!filename) return;
-      // Get extension and remove initial dot
-      const format = path.extname(filename).replace(/\./g, '');
-      // Parse data to string with the chosen format
-      const parsed = parseData(data, format, filters);
-      // Write file
-      parsed && this.handleFileCreation(filename, parsed);
-    });
+    remote.dialog.showSaveDialog(
+      remote.getCurrentWindow(),
+      options,
+      filename => {
+        // User hit cancel so do nothing:
+        if (!filename) return;
+        // Get extension and remove initial dot
+        const format = path.extname(filename).replace(/\./g, '');
+        // Parse data to string with the chosen format
+        const parsed = parseData(data, format, filters);
+        // Write file
+        parsed && this.handleFileCreation(filename, parsed);
+      }
+    );
   }
 
   render() {

@@ -33,7 +33,7 @@ class ExternalLink extends React.PureComponent<Props> {
       element = (
         <Button
           button="link"
-          icon={icons.EXTERNAL_LINK}
+          iconRight={icons.EXTERNAL_LINK}
           title={title || href}
           label={children}
           className="btn--external-link"
@@ -48,7 +48,6 @@ class ExternalLink extends React.PureComponent<Props> {
         <Button
           button="link"
           title={title || href}
-          icon={icons.LINK}
           label={children}
           onClick={() => navigate('/show', { uri: href })}
         />

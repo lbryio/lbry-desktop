@@ -82,6 +82,7 @@ export class FormField extends React.PureComponent<Props> {
       <div
         className={classnames('form-field', {
           'form-field--stretch': stretch || type === 'markdown',
+          'form-field--disabled': inputProps.disabled,
         })}
       >
         {(label || errorMessage) && (
