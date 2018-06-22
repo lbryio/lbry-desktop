@@ -305,6 +305,10 @@
   font-size: 18px;
   line-height: 24px;
 
+  .tooltip--label {
+    color: #bbb;
+  }
+
   @media only screen and (min-width: $medium-breakpoint) {
     font-size: 20px;
   }
