@@ -26,7 +26,7 @@ class SearchPage extends React.PureComponent<Props> {
   }
 
   onSearchResultCountChange(event: SyntheticInputEvent<*>) {
-    const count = event.target.value;
+    const count = Number(event.target.value);
     this.props.setClientSetting(settings.RESULT_COUNT, count);
   }
 
@@ -43,7 +43,7 @@ class SearchPage extends React.PureComponent<Props> {
             <FormField
               type="number"
               name="result_count"
-              min={1}
+              min={10}
               max={1000}
               value={resultCount}
               onChange={this.onSearchResultCountChange}
@@ -54,7 +54,7 @@ class SearchPage extends React.PureComponent<Props> {
               name="show_unavailable"
               onChange={this.onShowUnavailableChange}
               checked={showUnavailable}
-              postfix={__('Show unavailable content')}
+              postfix={__('Include unavailable content')}
             />
           </FormRow>
         </React.Fragment>
