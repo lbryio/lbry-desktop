@@ -11,6 +11,7 @@ type Props = {
   isSearching: boolean,
   uris: ?Array<string>,
   downloadUris: ?Array<string>,
+  resultCount: number,
 };
 
 class FileListSearch extends React.PureComponent<Props> {

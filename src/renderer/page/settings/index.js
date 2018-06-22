@@ -18,7 +18,6 @@ import SettingsPage from './view';
 const select = state => ({
   daemonSettings: selectDaemonSettings(state),
   showNsfw: makeSelectClientSetting(settings.SHOW_NSFW)(state),
-  showUnavailable: makeSelectClientSetting(settings.SHOW_UNAVAILABLE)(state),
   instantPurchaseEnabled: makeSelectClientSetting(settings.INSTANT_PURCHASE_ENABLED)(state),
   instantPurchaseMax: makeSelectClientSetting(settings.INSTANT_PURCHASE_MAX)(state),
   currentTheme: makeSelectClientSetting(settings.THEME)(state),
@@ -37,4 +36,7 @@ const perform = dispatch => ({
   changeLanguage: newLanguage => dispatch(doChangeLanguage(newLanguage)),
 });
 
-export default connect(select, perform)(SettingsPage);
+export default connect(
+  select,
+  perform
+)(SettingsPage);

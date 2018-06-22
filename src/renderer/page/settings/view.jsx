@@ -20,14 +20,13 @@ type DaemonSettings = {
 
 type Props = {
   setDaemonSetting: (string, boolean | string | Price) => void,
-  setClientSetting: (string, boolean | string | Price) => void,
+  setClientSetting: (string, boolean | string | number | Price) => void,
   clearCache: () => Promise<any>,
   getThemes: () => void,
   daemonSettings: DaemonSettings,
   showNsfw: boolean,
   instantPurchaseEnabled: boolean,
   instantPurchaseMax: Price,
-  showUnavailable: boolean,
   currentTheme: string,
   themes: Array<string>,
   automaticDarkModeEnabled: boolean,
@@ -50,7 +49,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
     (this: any).onKeyFeeChange = this.onKeyFeeChange.bind(this);
     (this: any).onInstantPurchaseMaxChange = this.onInstantPurchaseMaxChange.bind(this);
     (this: any).onShowNsfwChange = this.onShowNsfwChange.bind(this);
-    (this: any).onShowUnavailableChange = this.onShowUnavailableChange.bind(this);
     (this: any).onShareDataChange = this.onShareDataChange.bind(this);
     (this: any).onThemeChange = this.onThemeChange.bind(this);
     (this: any).onAutomaticDarkModeChange = this.onAutomaticDarkModeChange.bind(this);
@@ -113,10 +111,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
     this.props.setClientSetting(settings.SHOW_NSFW, event.target.checked);
   }
 
-  onShowUnavailableChange(event: SyntheticInputEvent<*>) {
-    this.props.setClientSetting(settings.SHOW_UNAVAILABLE, event.target.checked);
-  }
-
   setDaemonSetting(name: string, value: boolean | string | Price) {
     this.props.setDaemonSetting(name, value);
   }
@@ -140,7 +134,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
       showNsfw,
       instantPurchaseEnabled,
       instantPurchaseMax,
-      showUnavailable,
       currentTheme,
       themes,
       automaticDarkModeEnabled,
@@ -252,13 +245,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 onChange={this.onAutoplayChange}
                 checked={autoplay}
                 postfix={__('Autoplay media files')}
-              />
-              <FormField
-                type="checkbox"
-                name="show_unavailable"
-                onChange={this.onShowUnavailableChange}
-                checked={showUnavailable}
-                postfix={__('Show unavailable content in search results')}
               />
               <FormField
                 type="checkbox"

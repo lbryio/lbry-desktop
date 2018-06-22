@@ -13,3 +13,4 @@ export const THEME = 'theme';
 export const THEMES = 'themes';
 export const AUTOMATIC_DARK_MODE_ENABLED = 'automaticDarkModeEnabled';
 export const AUTOPLAY = 'autoplay';
+export const RESULT_COUNT = 'resultCount';
