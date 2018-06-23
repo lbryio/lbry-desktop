@@ -225,7 +225,7 @@ class CategoryList extends React.PureComponent<Props, State> {
                 <ToolTip
                   label={__("What's this?")}
                   body={__(
-                    'Community Content is a public space where anyone can share content with the rest of the LBRY community. Bid on the names "one," "two," "three," "four" and "five" to put your content here!'
+                    'Community Content is a public space where anyone can share content with the rest of the LBRY community. Bid on the names "one" through "ten" to put your content here!'
                   )}
                 />
               )}
