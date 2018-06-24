@@ -91,3 +91,9 @@ div.editor-toolbar a {
 .CodeMirror .CodeMirror-placeholder {
   opacity: 0.5;
 }
+.CodeMirror .cm-spell-error:not(.cm-url):not(.cm-comment):not(.cm-tag):not(.cm-word) {
+  background: none;
+  text-decoration: underline;
+  text-decoration-color: #f00;
+  text-decoration-style: dotted;
+}
