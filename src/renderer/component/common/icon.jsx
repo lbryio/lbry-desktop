@@ -4,8 +4,10 @@ import * as FeatherIcons from 'react-feather';
 import * as icons from 'constants/icons';
 import Tooltip from 'component/common/tooltip';
 
+// It would be nice to standardize this somehow
+// These are copied from `scss/vars`, can they both come from the same source?
 const RED_COLOR = '#e2495e';
-const PURPLE_COLOR = '#8165b0';
+const GREEN_COLOR = '#44b098';
 
 type Props = {
   icon: string,
@@ -29,10 +31,10 @@ class IconComponent extends React.PureComponent<Props> {
     switch (color) {
       case 'red':
         return RED_COLOR;
-      case 'purple':
-        return PURPLE_COLOR;
+      case 'green':
+        return GREEN_COLOR;
       default:
-        return null;
+        return undefined;
     }
   };
 

@@ -90,4 +90,7 @@
   /* Scrollbar */
   --scrollbar-thumb-bg: rgba(255, 255, 255, 0.20);
   --scrollbar-thumb-hover-bg: #8696AF;
+  
+  /* Shadows */
+  --box-shadow-header: 0px 6px 20px 1px rgba(0, 0, 0, 0.2);
 }

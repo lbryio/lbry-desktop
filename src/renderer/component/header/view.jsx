@@ -7,10 +7,14 @@ import * as icons from 'constants/icons';
 type Props = {
   autoUpdateDownloaded: boolean,
   balance: string,
-  downloadUpgradeRequested: any => void,
   isUpgradeAvailable: boolean,
-  navigate: any => void,
   roundedBalance: string,
+  isBackDisabled: boolean,
+  isForwardDisabled: boolean,
+  back: () => void,
+  forward: () => void,
+  downloadUpgradeRequested: any => void,
+  navigate: any => void,
 };
 
 const Header = (props: Props) => {
@@ -21,6 +25,10 @@ const Header = (props: Props) => {
     isUpgradeAvailable,
     navigate,
     roundedBalance,
+    back,
+    isBackDisabled,
+    forward,
+    isForwardDisabled,
   } = props;
 
   const showUpgradeButton =
@@ -28,6 +36,32 @@ const Header = (props: Props) => {
 
   return (
     <header className="header">
+      <div className="header__navigation">
+        <Button
+          noPadding
+          button="alt"
+          icon={icons.HOME}
+          className="btn--home-nav"
+          description={__('Home')}
+          onClick={() => navigate('/discover')}
+        />
+        <div className="header__history">
+          <Button
+            className="btn--arrow"
+            icon={icons.ARROW_LEFT}
+            description={__('Navigate back')}
+            onClick={back}
+            disabled={isBackDisabled}
+          />
+          <Button
+            className="btn--arrow"
+            icon={icons.ARROW_RIGHT}
+            description={__('Navigate forward')}
+            onClick={forward}
+            disabled={isForwardDisabled}
+          />
+        </div>
+      </div>
       <WunderBar />
       <div className="header__actions-right">
         <Button

@@ -1,17 +1,37 @@
 .header {
+  position: fixed;
+  height: var(--header-height);
+  width: 100%;
   display: flex;
   z-index: 1;
   justify-content: space-between;
-  padding: $spacing-width $spacing-width 0 $spacing-width;
+  align-items: center;
+  padding: 0 $spacing-width;
   background-color: var(--color-bg);
+  box-shadow: var(--box-shadow-header);
+}
+
+.header__navigation {
+  display: flex;
+  justify-content: space-between;
+}
+
+.header__history {
+  display: flex;
+  padding: 0 $spacing-width * 1/2;
+
+  @media only screen and (min-width: $medium-breakpoint) {
+    .btn {
+      padding: 0 $spacing-width * 1/6;
+    }
+  }
 }
 
 .header__actions-right {
   margin-left: auto;
-  padding-left: $spacing-vertical / 2;
   display: flex;
 
   .btn {
-    margin-left: $spacing-vertical * 1/3;
+    margin-left: $spacing-width * 1/3;
   }
 }

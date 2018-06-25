@@ -27,3 +27,4 @@ export const UNLOCK = 'Unlock';
 export const CHECK_SIMPLE = 'Check';
 export const GLOBE = 'Globe';
 export const EXTERNAL_LINK = 'ExternalLink';
+export const GIFT = 'Gift';
