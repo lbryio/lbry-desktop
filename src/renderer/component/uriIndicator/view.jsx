@@ -56,7 +56,7 @@ class UriIndicator extends React.PureComponent<Props> {
 
     let channelLink;
     if (signatureIsValid) {
-      channelLink = link ? buildURI({ channelName, claimId: channelClaimId }, false) : false;
+      channelLink = link ? buildURI({ channelName, claimId: channelClaimId }) : false;
     }
 
     const inner = (
