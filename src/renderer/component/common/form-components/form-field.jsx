@@ -6,6 +6,7 @@ import MarkdownPreview from 'component/common/markdown-preview';
 import SimpleMDE from 'react-simplemde-editor';
 import 'simplemde/dist/simplemde.min.css';
 import Toggle from 'react-toggle';
+import { openEditorMenu } from 'util/contextMenu';
 
 type Props = {
   name: string,
@@ -54,11 +55,21 @@ export class FormField extends React.PureComponent<Props> {
           </select>
         );
       } else if (type === 'markdown') {
+        const stopContextMenu = event => {
+          event.preventDefault();
+          event.stopPropagation();
+        };
+        const handleEvents = {
+          contextmenu(codeMirror, event) {
+            openEditorMenu(event, codeMirror);
+          },
+        };
         input = (
-          <div className="form-field--SimpleMDE">
+          <div className="form-field--SimpleMDE" onContextMenu={stopContextMenu}>
             <SimpleMDE
               {...inputProps}
               type="textarea"
+              events={handleEvents}
               options={{
                 hideIcons: ['heading', 'image', 'fullscreen', 'side-by-side'],
                 previewRender(plainText) {
