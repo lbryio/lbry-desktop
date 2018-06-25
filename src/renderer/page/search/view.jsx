@@ -12,7 +12,6 @@ import * as icons from 'constants/icons';
 
 type Props = {
   query: ?string,
-  showUnavailable: boolean,
   resultCount: number,
   setClientSetting: (string, number | boolean) => void,
 };
@@ -35,7 +34,7 @@ class SearchPage extends React.PureComponent<Props> {
   }
 
   render() {
-    const { query, resultCount, showUnavailable } = this.props;
+    const { query, resultCount } = this.props;
     return (
       <Page>
         <React.Fragment>
@@ -49,13 +48,18 @@ class SearchPage extends React.PureComponent<Props> {
               onChange={this.onSearchResultCountChange}
               postfix={__('returned results')}
             />
-            <FormField
-              type="checkbox"
-              name="show_unavailable"
-              onChange={this.onShowUnavailableChange}
-              checked={showUnavailable}
-              postfix={__('Include unavailable content')}
-            />
+            {
+              // Removing this for now, it currently doesn't do anything but ideally it would
+              // display content that we don't think is currently available to download
+              // It is like a "display all" setting
+              // <FormField
+              //   type="checkbox"
+              //   name="show_unavailable"
+              //   onChange={this.onShowUnavailableChange}
+              //   checked={showUnavailable}
+              //   postfix={__('Include unavailable content')}
+              // />
+            }
           </FormRow>
         </React.Fragment>
         {isURIValid(query) && (
