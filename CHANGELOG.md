@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Fixed
   * Take previous bid amount into account when determining how much users have available to deposit ([#1725](https://github.com/lbryio/lbry-app/pull/1725))
+  * Fix can't right click > paste into description on publish ([#1664](https://github.com/lbryio/lbry-app/issues/1664))
 
 
 ### Changed
