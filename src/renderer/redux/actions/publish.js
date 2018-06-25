@@ -43,17 +43,22 @@ export const doResetThumbnailStatus = () => (dispatch: Dispatch): PromiseAction 
     },
   });
 
-  return fetch('https://spee.ch/api/channel/availability/@testing')
-    .then(() =>
-      dispatch({
+  return fetch('https://spee.ch/api/config/site/publishing')
+    .then(res => res.json())
+    .then(status => {
+      if (status.disabled) {
+        throw Error();
+      }
+
+      return dispatch({
         type: ACTIONS.UPDATE_PUBLISH_FORM,
         data: {
           uploadThumbnailStatus: THUMBNAIL_STATUSES.READY,
           thumbnail: '',
           nsfw: false,
         },
-      })
-    )
+      });
+    })
     .catch(() =>
       dispatch({
         type: ACTIONS.UPDATE_PUBLISH_FORM,
@@ -188,7 +193,6 @@ export const doPublish = (params: PublishParams) => (dispatch: Dispatch, getStat
     price,
     uri,
     sources,
-    isStillEditing,
   } = params;
 
   // get the claim id from the channel name, we will use that instead
