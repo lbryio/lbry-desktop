@@ -161,7 +161,7 @@ export const doPrepareEdit = (claim: any, uri: string) => (dispatch: Dispatch) =
     description,
     fee,
     language,
-    license,
+    licenseType: license,
     licenseUrl,
     nsfw,
     thumbnail,
