@@ -82,10 +82,10 @@ class App extends React.PureComponent<Props> {
     return (
       <div id="window" onContextMenu={e => openContextMenu(e)}>
         <Theme />
+        <Header />
         <main className="page">
           <SideBar />
           <div className="content" id="content">
-            <Header />
             <Router />
             <ModalRouter />
           </div>

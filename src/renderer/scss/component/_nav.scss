@@ -1,5 +1,5 @@
 .nav {
-  grid-area: nav;
+  width: var(--side-nav-width);
   background-color: var(--nav-bg-color);
   padding: $spacing-width;
   color: var(--nav-color);
@@ -7,19 +7,9 @@
   hr {
     width: 24px;
     margin: 36px 0;
-    // width: 40px;
     border: solid 1px var(--color-divider);
     margin: $spacing-vertical $spacing-vertical * 2/3;
   }
-}
-
-.nav__actions-top {
-  display: flex;
-  justify-content: space-between;
-}
-
-.nav__actions-history {
-  display: flex;
 }
 
 // Sidebar links
