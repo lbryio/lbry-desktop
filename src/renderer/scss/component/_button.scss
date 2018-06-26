@@ -66,6 +66,11 @@ button:disabled {
   min-width: 0;
   box-shadow: none;
   text-align: left;
+/*Tourniquets text over 400px*/
+  max-width: 400px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .btn.btn--external-link {
