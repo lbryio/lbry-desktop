@@ -40,9 +40,6 @@ script:
     fi
   - if [ "$TARGET" == "mac" ]; then yarn build --publish onTag; fi
   - if [ "$TARGET" == "linux" ]; then yarn --link-duplicates --pure-lockfile && yarn build --linux --publish onTag; fi
-branches:
-  except:
-    - "/^v\\d+\\.\\d+\\.\\d+$/"
 addons:
   artifacts:
     working_dir: dist
