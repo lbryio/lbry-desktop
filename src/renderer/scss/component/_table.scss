@@ -13,6 +13,11 @@ table.table,
   tr td:last-of-type,
   tr th:last-of-type {
     padding-right: $spacing-vertical * 2/3;
+/*Tourniquets text over 20VW*/
+    max-width: 20vw;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   thead {
