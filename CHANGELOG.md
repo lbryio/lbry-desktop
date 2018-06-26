@@ -25,6 +25,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Changed
    * LBRY App UI Redesign 5.0 implemented including new theme, layout, and improved search mechanics ([#870](https://github.com/lbryio/lbry-app/pull/870)) and ([#1173](https://github.com/lbryio/lbry-app/pull/1173))
+   * Updated LBRY daemon to 0.20.2 which improves speed and reliability. ([v0.20.0](https://github.com/lbryio/lbry/releases/tag/v0.20.0), [v0.20.1](https://github.com/lbryio/lbry/releases/tag/v0.20.1), [v0.20.2](https://github.com/lbryio/lbry/releases/tag/v0.20.2))
    * Adapted dark mode to redesign ([#1269](https://github.com/lbryio/lbry-app/pull/1269))
    * Show latest claims for across all subscribed channel (no longer grouped by channel) and store sub data in internal database ([#1424](https://github.com/lbryio/lbry-app/pull/1424))
    * New publishes now show as pending on Publishes screen ([#1040](https://github.com/lbryio/lbry-app/pull/1040))
