@@ -16,10 +16,10 @@ The LBRY app is a graphical browser for the decentralized content marketplace pr
 
 We provide installers for Windows, macOS (v10.9 or greater), and Debian-based Linux.
 
-|                       | Windows                                      | macOS                                        | Linux                                        |
-| --------------------- | -------------------------------------------- | -------------------------------------------- | -------------------------------------------- |
-| Latest Stable Release | [Download](https://lbry.io/get/lbry.exe)     | [Download](https://lbry.io/get/lbry.dmg)     | [Download](https://lbry.io/get/lbry.deb)     |
-| Latest Pre-release     | [Download](https://lbry.io/get/lbry.pre.exe) | [Download](https://lbry.io/get/lbry.pre.dmg) | [Download](https://lbry.io/get/lbry.pre.deb) |
+|                       | Windows                                      | macOS                                        | Linux                                        | Alt. Linux Build
+| --------------------- | -------------------------------------------- | -------------------------------------------- | -------------------------------------------- | --------------------------------------------
+| Latest Stable Release | [Download](https://lbry.io/get/lbry.exe)     | [Download](https://lbry.io/get/lbry.dmg)     | [Download](https://lbry.io/get/lbry.deb)     | [Download]https://aur.archlinux.org/packages/lbry-app-release/) 
+| Latest Pre-release    | [Download](https://lbry.io/get/lbry.pre.exe) | [Download](https://lbry.io/get/lbry.pre.dmg) | [Download](https://lbry.io/get/lbry.pre.deb) | [Download](https://aur.archlinux.org/packages/lbry-app-release/) 
 
 Our [releases page](https://github.com/lbryio/lbry-app/releases) also contains the latest
 release, pre-releases, and past builds.
