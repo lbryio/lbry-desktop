@@ -2,6 +2,8 @@
 import * as React from 'react';
 import Button from 'component/button';
 import Page from 'component/page';
+import { shell } from 'electron';
+import CopyableText from 'component/copyableText';
 
 type Props = {
   daemonSettings: {
@@ -37,10 +39,24 @@ class BackupPage extends React.PureComponent<Props> {
                 </p>
                 <p>
                   {__(
-                    'However, it is fairly easy to back up manually. To backup your wallet, make a copy of the folder listed below:'
+                    'However, it is fairly easy to back up manually. To backup your wallet, click the button below to open your wallet directory, and copy the files to a safe location.'
                   )}
                 </p>
-                <p className="card__success-msg">{lbryumWalletDir}</p>
+				<div className="walletbackup__actions">
+                <Button
+                  button="primary"
+                  label={__('Open Wallet Directory')}
+                  onClick={() => shell.showItemInFolder(lbryumWalletDir)}
+                />
+                </div>
+		          <p>
+				  {__(
+				    'Alternatively, you may navigate to this folder on your hard drive and copy the contents:'
+				  )}
+				  </p>
+                <div className="card__content">
+                <CopyableText copyable={lbryumWalletDir} showCopyButton />
+                </div>
                 <p>
                   {__(
                     'Access to these files are equivalent to having access to your credits. Keep any copies you make of your wallet in a secure place.'

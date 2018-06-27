@@ -3,7 +3,7 @@ import * as React from 'react';
 import QRCode from 'component/common/qr-code';
 import { FormRow } from 'component/common/form';
 import * as statuses from 'constants/shape_shift';
-import Address from 'component/address';
+import CopyableText from 'component/copyableText';
 import Button from 'component/button';
 import type { Dispatch } from 'redux/actions/shape_shift';
 import ShiftMarketInfo from './market_info';
@@ -94,7 +94,7 @@ class ActiveShapeShift extends React.PureComponent<Props> {
             {shiftDepositAddress && (
               <FormRow verticallyCentered padded>
                 <QRCode value={shiftDepositAddress} paddingRight />
-                <Address address={shiftDepositAddress} showCopyButton padded />
+                <CopyableText copyable={shiftDepositAddress} showCopyButton padded />
               </FormRow>
             )}
           </div>
@@ -145,3 +145,4 @@ class ActiveShapeShift extends React.PureComponent<Props> {
 }
 
 export default ActiveShapeShift;
+
