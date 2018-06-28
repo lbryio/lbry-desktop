@@ -1,5 +1,6 @@
 // @flow
 import React from 'react';
+import { parseURI } from 'lbry-redux';
 import BusyIndicator from 'component/common/busy-indicator';
 import ChannelPage from 'page/channel';
 import FilePage from 'page/file';
@@ -39,10 +40,11 @@ class ShowPage extends React.PureComponent<Props> {
     let innerContent = '';
 
     if ((isResolvingUri && !claim) || !claim) {
+      const { claimName } = parseURI(uri);
       innerContent = (
         <Page>
           <section className="card">
-            <h1>{uri}</h1>
+            <h1>{claimName}</h1>
             <div className="card__content">
               {isResolvingUri && <BusyIndicator message={__('Loading decentralized data...')} />}
               {claim === null &&
