@@ -311,7 +311,7 @@ class PublishForm extends React.PureComponent<Props> {
 
     return (
       <Form onSubmit={this.handlePublish}>
-        <section className={classnames('card card--section')}>
+        <section className={classnames('card card--section', { 'card--disabled': publishing })}>
           <div className="card__title">{__('Content')}</div>
           <div className="card__subtitle">
             {editingURI ? __('Editing a claim') : __('What are you publishing?')}
