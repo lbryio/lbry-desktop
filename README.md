@@ -24,6 +24,8 @@ We provide installers for Windows, macOS (v10.9 or greater), and Debian-based Li
 Our [releases page](https://github.com/lbryio/lbry-app/releases) also contains the latest
 release, pre-releases, and past builds.
 
+*Note: If the deb fails to install using the Ubuntu Software Center, install manually via `sudo dpkg -i <path to deb>`. You'll need to run `sudo apt-get install -f` if this is the first time installing it to install dependencies*
+  
 To install from source or make changes to the application, continue reading below.
 
 ## Usage
