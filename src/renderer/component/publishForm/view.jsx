@@ -251,23 +251,15 @@ class PublishForm extends React.PureComponent<Props> {
   renderFormErrors() {
     const { name, nameError, title, bid, bidError, tosAccepted } = this.props;
 
-    if (nameError || bidError) {
-      // There will be inline errors if either of these exist
-      // These are just extra help at the bottom of the screen
-      // There could be multiple bid errors, so just duplicate it at the bottom
-      return (
-        <div className="card__subtitle form-field__error">
-          {nameError && <div>{__('The URL you created is not valid.')}</div>}
-          {bidError && <div>{bidError}</div>}
-        </div>
-      );
-    }
-
+    // These are extra help
+    // If there is an error it will be presented as an inline error as well
     return (
-      <div className="card__content card__subtitle card__subtitle--block form-field__error">
+      <div className="card__content card__subtitle form-field__error">
         {!title && <div>{__('A title is required')}</div>}
         {!name && <div>{__('A URL is required')}</div>}
+        {name && nameError && <div>{__('The URL you created is not valid.')}</div>}
         {!bid && <div>{__('A bid amount is required')}</div>}
+        {bid && bidError && <div>{bidError}</div>}
         {!tosAccepted && <div>{__('You must agree to the terms of service')}</div>}
       </div>
     );
