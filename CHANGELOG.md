@@ -6,6 +6,18 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ## [Unreleased]
 
 ### Added
+
+
+### Fixed
+
+
+### Changed
+
+
+
+## [0.22.0] - 2018-06-26
+
+### Added
    * Ability to upload thumbnails through spee.ch while publishing ([#1248](https://github.com/lbryio/lbry-app/pull/1248))
    * QR code for wallet address to Send and Receive page ([#1582](https://github.com/lbryio/lbry-app/pull/1582))
    * "View on Web" button on file/channel pages with spee.ch link ([#1222](https://github.com/lbryio/lbry-app/pull/1222))
