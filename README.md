@@ -18,8 +18,8 @@ We provide installers for Windows, macOS (v10.9 or greater), Arch-based Linux, a
 
 |                       | Windows                                      | macOS                                        | Linux                                        | Alt. Linux Build
 | --------------------- | -------------------------------------------- | -------------------------------------------- | -------------------------------------------- | -------------------------------------------- |
-| Latest Stable Release | [Download](https://lbry.io/get/lbry.exe)     | [Download](https://lbry.io/get/lbry.dmg)     | [Download](https://lbry.io/get/lbry.deb)     | [Download](https://aur.archlinux.org/packages/lbry-app-release/) 
-| Latest Pre-release    | [Download](https://lbry.io/get/lbry.pre.exe) | [Download](https://lbry.io/get/lbry.pre.dmg) | [Download](https://lbry.io/get/lbry.pre.deb) | [Download](https://aur.archlinux.org/packages/lbry-app-release/) 
+| Latest Stable Release | [Download](https://lbry.io/get/lbry.exe)     | [Download](https://lbry.io/get/lbry.dmg)     | [Download](https://lbry.io/get/lbry.deb)     | [Download](https://aur.archlinux.org/packages/lbry-app-bin/) 
+| Latest Pre-release    | [Download](https://lbry.io/get/lbry.pre.exe) | [Download](https://lbry.io/get/lbry.pre.dmg) | [Download](https://lbry.io/get/lbry.pre.deb) | [Download](https://aur.archlinux.org/packages/lbry-app-bin/) 
 
 Our [releases page](https://github.com/lbryio/lbry-app/releases) also contains the latest
 release, pre-releases, and past builds.
