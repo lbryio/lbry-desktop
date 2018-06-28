@@ -62,11 +62,11 @@ button:disabled {
   font-size: 1em;
   color: var(--btn-color-inverse);
   border-radius: 0;
-  display: inline-block;
+  display: inline;
   min-width: 0;
   box-shadow: none;
   text-align: left;
-/*Tourniquets text over 20VW*/
+  /*Tourniquets text over 20VW*/
   max-width: 20vw;
   white-space: nowrap;
   overflow: hidden;
