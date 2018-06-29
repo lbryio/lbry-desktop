@@ -11,6 +11,7 @@ import isDev from 'electron-is-dev';
 import Daemon from './Daemon';
 import createTray from './createTray';
 import createWindow from './createWindow';
+import pjson from '../../package.json';
 
 autoUpdater.autoDownload = true;
 
@@ -171,7 +172,7 @@ ipcMain.on('version-info-requested', () => {
     return ver.replace(/([^-])rc/, '$1-rc');
   }
 
-  const localVersion = app.getVersion();
+  const localVersion = pjson.version;
   const latestReleaseAPIURL = 'https://api.github.com/repos/lbryio/lbry-app/releases/latest';
   const opts = {
     headers: {
