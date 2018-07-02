@@ -80,8 +80,8 @@ table.table--help {
     font-family: 'metropolis-semibold';
     min-width: 130px;
   }
-    td:nth-of-type(2) {
-/*Tourniquets text over 20VW*/
+  td:nth-of-type(2) {
+    /*Tourniquets text over 20VW*/
     max-width: 20vw;
     overflow: hidden;
     white-space: nowrap;
@@ -99,6 +99,15 @@ table.table--transactions {
   }
   td:nth-of-type(3) {
     width: 22.5%;
+
+    .btn--link {
+      // Tourniquets text over 20VW
+      // Style needs to be on the button to allow for proper ellipsis
+      max-width: 20vw;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   }
   td:nth-of-type(4) {
     width: 17.5%;
