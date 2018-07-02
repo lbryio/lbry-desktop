@@ -10,6 +10,10 @@
     border: solid 1px var(--color-divider);
     margin: $spacing-vertical $spacing-vertical * 2/3;
   }
+
+  @media (min-width: $large-breakpoint) {
+    width: calc(var(--side-nav-width) * 1.1);
+  }
 }
 
 // Sidebar links
