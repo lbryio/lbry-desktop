@@ -72,6 +72,7 @@ class TransactionListItem extends React.PureComponent<Props> {
           {name &&
             claimId && (
               <Button
+                tourniquet
                 button="link"
                 navigate="/show"
                 navigateParams={{ uri: buildURI({ claimName: name, claimId }) }}

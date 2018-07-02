@@ -76,6 +76,13 @@ button:disabled {
   background-color: var(--btn-bg-secondary);
 }
 
+.btn.btn--tourniquet {
+  max-width: 20vw;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .btn.btn--no-style {
   font-size: inherit;
   font-weight: inherit;

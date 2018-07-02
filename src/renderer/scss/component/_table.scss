@@ -99,15 +99,6 @@ table.table--transactions {
   }
   td:nth-of-type(3) {
     width: 22.5%;
-
-    .btn--link {
-      // Tourniquets text over 20VW
-      // Style needs to be on the button to allow for proper ellipsis
-      max-width: 20vw;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
   }
   td:nth-of-type(4) {
     width: 17.5%;
