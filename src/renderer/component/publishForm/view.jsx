@@ -152,14 +152,21 @@ class PublishForm extends React.PureComponent<Props> {
   }
 
   handleBidChange(bid: number) {
-    const { balance, updatePublishForm } = this.props;
+    const { balance, updatePublishForm, myClaimForUri } = this.props;
+
+    let previousBidAmount = 0;
+    if (myClaimForUri) {
+      previousBidAmount = myClaimForUri.amount;
+    }
+
+    const totalAvailableBidAmount = previousBidAmount + balance;
 
     let bidError;
     if (bid === 0) {
       bidError = __('Deposit cannot be 0');
-    } else if (balance === bid) {
+    } else if (totalAvailableBidAmount === bid) {
       bidError = __('Please decrease your deposit to account for transaction fees');
-    } else if (balance < bid) {
+    } else if (totalAvailableBidAmount < bid) {
       bidError = __('Deposit cannot be higher than your balance');
     } else if (bid <= MINIMUM_PUBLISH_BID) {
       bidError = __('Your deposit must be higher');
