@@ -25,11 +25,13 @@ class BidHelpText extends React.PureComponent<Props> {
     } = this.props;
 
     if (!uri) {
-      return __('Create a URL for this content');
+      return __('Create a URL for this content.');
     }
 
     if (isStillEditing) {
-      return __('You are currently editing this claim');
+      return __(
+        'You are currently editing this claim. If you change the URL, you will need reselect a file.'
+      );
     }
 
     if (isResolvingUri) {
@@ -61,10 +63,10 @@ class BidHelpText extends React.PureComponent<Props> {
       <React.Fragment>
         {__('A deposit greater than')} {winningBidForClaimUri} {__('is needed to win')}
         {` ${uri}. `}
-        {__('However, you can still get this URL for any amount')}
+        {__('However, you can still get this URL for any amount.')}
       </React.Fragment>
     ) : (
-      __('Any amount will give you the winning bid')
+      __('Any amount will give you the winning bid.')
     );
   }
 }
