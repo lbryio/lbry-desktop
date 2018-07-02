@@ -30,8 +30,8 @@
     "flow-defs": "flow-typed install",
     "release": "yarn compile && electron-builder build",
     "precommit": "lint-staged",
-    "postinstall": "electron-builder install-app-deps & node build/downloadDaemon.js",
-    "clean": "rm -r node_modules && yarn cache clean lbry-redux && yarn"
+    "preinstall": "yarn cache clean lbry-redux",
+    "postinstall": "electron-builder install-app-deps & node build/downloadDaemon.js"
   },
   "dependencies": {
     "bluebird": "^3.5.1",
