@@ -122,6 +122,10 @@ app.on('will-quit', event => {
     daemon.quit();
     event.preventDefault();
   }
+
+  if (rendererWindow) {
+    rendererWindow = null;
+  }
 });
 
 // https://electronjs.org/docs/api/app#event-will-finish-launching
