@@ -10,11 +10,16 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Fixed
   * Take previous bid amount into account when determining how much users have available to deposit ([#1725](https://github.com/lbryio/lbry-app/pull/1725))
+  * Sidebar sizing on larger screens ([#1709](https://github.com/lbryio/lbry-app/pull/1709))
+  * Publishing scenario while editing and changing URI ([#1716](https://github.com/lbryio/lbry-app/pull/1716))
   * Fix can't right click > paste into description on publish ([#1664](https://github.com/lbryio/lbry-app/issues/1664))
-
-
+  * Mac/Linux error when starting app up too quickly after shutdown ([#1727](https://github.com/lbryio/lbry-app/pull/1727))
+  * Console errors when multiple downloads for same claim exist ([#1724](https://github.com/lbryio/lbry-app/pull/1724))
+  * App version in dev mode ([#1722](https://github.com/lbryio/lbry-app/pull/1722))
+  * Long URI name displays in transaction list/Help ([#1694](https://github.com/lbryio/lbry-app/pull/1694))/([#1692](https://github.com/lbryio/lbry-app/pull/1692))
+  
 ### Changed
-
+  * Show claim name, instead of URI, when loading a channel([#1711](https://github.com/lbryio/lbry-app/pull/1711))
 
 
 ## [0.22.0] - 2018-06-26
