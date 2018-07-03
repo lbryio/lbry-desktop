@@ -7626,9 +7626,9 @@ react-redux@^5.0.3:
     loose-envify "^1.1.0"
     prop-types "^15.6.0"
 
-react-simplemde-editor@^3.6.15:
-  version "3.6.15"
-  resolved "https://registry.yarnpkg.com/react-simplemde-editor/-/react-simplemde-editor-3.6.15.tgz#b4991304c7e1cac79258bb225579d008c13b5991"
+react-simplemde-editor@^3.6.16:
+  version "3.6.16"
+  resolved "https://registry.yarnpkg.com/react-simplemde-editor/-/react-simplemde-editor-3.6.16.tgz#33633259478d3395f2c7b70deb56a1a40e863bea"
   dependencies:
     simplemde "^1.11.2"
 
