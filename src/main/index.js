@@ -83,7 +83,9 @@ app.on('ready', async () => {
 });
 
 app.on('activate', () => {
-  rendererWindow.show();
+  if (rendererWindow) {
+    rendererWindow.show();
+  }
 });
 
 app.on('will-quit', event => {
@@ -119,6 +121,10 @@ app.on('will-quit', event => {
   if (daemon) {
     daemon.quit();
     event.preventDefault();
+  }
+
+  if (rendererWindow) {
+    rendererWindow = null;
   }
 });
 
