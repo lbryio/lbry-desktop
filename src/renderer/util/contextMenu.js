@@ -62,6 +62,7 @@ export function openContextMenu(event, templates = [], canEdit = false, selectio
   remote.Menu.buildFromTemplate(templates).popup();
 }
 
+// This function is used for the markdown description on the publish page
 export function openEditorMenu(event, codeMirror) {
   const value = codeMirror.doc.getValue();
   const selection = codeMirror.doc.getSelection();
