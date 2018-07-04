@@ -259,7 +259,6 @@ class VideoPlayer extends React.PureComponent {
     const isFileReady = fileSource && isFileType;
     const isPlayableType = this.playableType();
     const { isLoading, loadingStatus } = this.showLoadingScreen(isFileType, isPlayableType);
-    console.info(isLoading, loadingStatus);
 
     return (
       <React.Fragment>
