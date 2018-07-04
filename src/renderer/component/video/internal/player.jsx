@@ -58,9 +58,9 @@ class VideoPlayer extends React.PureComponent {
       this.renderAudio(container, null, false);
     }
     // Render custom viewer: FileRender
-    if (this.fileType()) this.renderFile();
+    else if (this.fileType()) this.renderFile();
     // Render default viewer: render-media (video, audio, img, iframe)
-    else if (this.supportedType()) {
+    else {
       player.append(
         this.file(),
         container,
@@ -214,30 +214,60 @@ class VideoPlayer extends React.PureComponent {
     container.appendChild(audio);
   }
 
-  render() {
-    const { mediaType, poster } = this.props;
+  showLoadingScreen(isFileType, isPlayableType) {
     const { hasMetadata, unplayable, unsupported, fileSource } = this.state;
+
+    const loader = {
+      isLoading: false,
+      loadingStatus: null,
+    };
+
+    // Loading message
     const noFileMessage = 'Waiting for blob.';
     const noMetadataMessage = 'Waiting for metadata.';
+
+    // Error message
     const unplayableMessage = "Sorry, looks like we can't play this file.";
     const unsupportedMessage = "Sorry, looks like we can't preview this file.";
-    const isLoadingFile = !fileSource && this.fileType();
-    const isLoadingMetadata = this.playableType() && (!hasMetadata && !unplayable);
-    const isUnplayable = this.playableType() && unplayable;
-    const isUnsupported = !this.supportedType() && !this.playableType() && !this.fileType();
-    const isFile = fileSource && this.fileType();
+
+    // Files
+    const isLoadingFile = !fileSource && isFileType;
+    const isUnsupported = !this.supportedType() && isPlayableType && !isFileType;
+
+    // Media (audio, video)
+    const isUnplayable = isPlayableType && unplayable;
+    const isLoadingMetadata = isPlayableType && (!hasMetadata && !unplayable);
+
+    // Show loading message
+    if (isLoadingFile || isLoadingMetadata) {
+      loader.loadingStatus = isFileType ? noFileMessage : noMetadataMessage;
+      loader.isLoading = true;
+
+      // Show unsupported error message
+    } else if (isUnsupported || isUnplayable) {
+      loader.loadingStatus = isFileType ? unsupportedMessage : unplayableMessage;
+    }
+
+    return loader;
+  }
+
+  render() {
+    const { mediaType } = this.props;
+    const { fileSource } = this.state;
+
+    const isFileType = this.fileType();
+    const isFileReady = fileSource && isFileType;
+    const isPlayableType = this.playableType();
+    const { isLoading, loadingStatus } = this.showLoadingScreen(isFileType, isPlayableType);
+    console.info(isLoading, loadingStatus);
 
     return (
       <React.Fragment>
-        {isLoadingFile && <LoadingScreen status={noFileMessage} />}
-        {isLoadingMetadata && <LoadingScreen status={noMetadataMessage} />}
-        {isUnplayable && <LoadingScreen status={unplayableMessage} spinner={false} />}
-        {unsupported ||
-          (isUnsupported && <LoadingScreen status={unsupportedMessage} spinner={false} />)}
-        {isFile && <FileRender source={fileSource} mediaType={mediaType} />}
+        {loadingStatus && <LoadingScreen status={loadingStatus} spinner={isLoading} />}
+        {isFileReady && <FileRender source={fileSource} mediaType={mediaType} />}
         <div
           className={'content__view--container'}
-          style={{ opacity: isLoadingMetadata || isUnplayable ? 0 : 1 }}
+          style={{ opacity: isLoading ? 0 : 1 }}
           ref={container => {
             this.media = container;
           }}
