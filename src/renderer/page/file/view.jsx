@@ -50,7 +50,16 @@ type Props = {
 
 class FilePage extends React.Component<Props> {
   static PLAYABLE_MEDIA_TYPES = ['audio', 'video'];
-  static PREVIEW_MEDIA_TYPES = ['text', 'image', 'document', '3D-file'];
+  static PREVIEW_MEDIA_TYPES = [
+    'text',
+    'model',
+    'image',
+    '3D-file',
+    'document',
+    // Bypass unplayable files
+    // TODO: Find a better way to detect supported types
+    'application',
+  ];
 
   constructor(props: Props) {
     super(props);

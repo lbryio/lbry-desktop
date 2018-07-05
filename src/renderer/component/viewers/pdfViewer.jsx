@@ -10,13 +10,26 @@ type Props = {
 };
 
 class PdfViewer extends React.PureComponent<Props> {
+  constructor(props) {
+    super(props);
+    this.viewer = React.createRef();
+  }
+
+  // TODO: Enable context-menu
+  stopContextMenu = event => {
+    event.preventDefault();
+    event.stopPropagation();
+  };
+
   render() {
     const { source } = this.props;
     return (
-      <webview
-        className="file-render__viewer"
-        src={`chrome://pdf-viewer/index.html?src=file://${source.downloadPath}`}
-      />
+      <div className="file-render__viewer" onContextMenu={this.stopContextMenu}>
+        <webview
+          ref={this.viewer}
+          src={`chrome://pdf-viewer/index.html?src=file://${source.downloadPath}`}
+        />
+      </div>
     );
   }
 }
