@@ -11,7 +11,7 @@ import LoadingScreen from 'component/common/loading-screen';
 
 class VideoPlayer extends React.PureComponent {
   static MP3_CONTENT_TYPES = ['audio/mpeg3', 'audio/mpeg'];
-  static FILE_MEDIA_TYPES = ['3D-file', 'e-book', 'comic-book'];
+  static FILE_MEDIA_TYPES = ['e-book', 'comic-book', 'document', '3D-file'];
 
   constructor(props) {
     super(props);
@@ -192,6 +192,7 @@ class VideoPlayer extends React.PureComponent {
       }
       // File to render
       const fileSource = {
+        downloadPath,
         filePath: url,
         fileType: path.extname(filename).substring(1),
       };

@@ -28,6 +28,7 @@ type Props = {
   metadata: {
     title: string,
     thumbnail: string,
+    file_name: string,
     nsfw: boolean,
   },
   contentType: string,
@@ -49,7 +50,7 @@ type Props = {
 
 class FilePage extends React.Component<Props> {
   static PLAYABLE_MEDIA_TYPES = ['audio', 'video'];
-  static PREVIEW_MEDIA_TYPES = ['text', 'image', '3D-file'];
+  static PREVIEW_MEDIA_TYPES = ['text', 'image', 'document', '3D-file'];
 
   constructor(props: Props) {
     super(props);
@@ -110,15 +111,17 @@ class FilePage extends React.Component<Props> {
       navigate,
       autoplay,
       costInfo,
+      fileInfo,
     } = this.props;
 
     // File info
-    const { title, thumbnail, filename } = metadata;
+    const { title, thumbnail } = metadata;
     const { height, channel_name: channelName, value } = claim;
     const { PLAYABLE_MEDIA_TYPES, PREVIEW_MEDIA_TYPES } = FilePage;
     const isRewardContent = rewardedContentClaimIds.includes(claim.claim_id);
     const shouldObscureThumbnail = obscureNsfw && metadata.nsfw;
-    const mediaType = Lbry.getMediaType(contentType, filename);
+    const fileName = fileInfo ? fileInfo.file_name : null;
+    const mediaType = fileName ? Lbry.getMediaType(null, fileName) : Lbry.getMediaType(contentType);
     const showFile =
       PLAYABLE_MEDIA_TYPES.includes(mediaType) || PREVIEW_MEDIA_TYPES.includes(mediaType);
     const channelClaimId =
@@ -154,7 +157,7 @@ class FilePage extends React.Component<Props> {
           </section>
         ) : (
           <section className="card">
-            {showFile && <Video className="content__embedded" uri={uri} />}
+            {showFile && <Video className="content__embedded" uri={uri} mediaType={mediaType} />}
             {!showFile &&
               (thumbnail ? (
                 <Thumbnail shouldObscure={shouldObscureThumbnail} src={thumbnail} />
@@ -164,7 +167,9 @@ class FilePage extends React.Component<Props> {
                     'content__empty--nsfw': shouldObscureThumbnail,
                   })}
                 >
-                  <div className="card__media-text">{__('This content is not playable.')}</div>
+                  <div className="card__media-text">
+                    {__("Sorry, looks like we can't preview this file.")}
+                  </div>
                 </div>
               ))}
             <div className="card__content">

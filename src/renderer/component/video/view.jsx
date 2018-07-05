@@ -1,11 +1,10 @@
 // @flow
 import React from 'react';
-import { Lbry } from 'lbry-redux';
 import classnames from 'classnames';
 import type { Claim } from 'types/claim';
+import LoadingScreen from 'component/common/loading-screen';
 import VideoPlayer from './internal/player';
 import VideoPlayButton from './internal/play-button';
-import LoadingScreen from 'component/common/loading-screen';
 
 const SPACE_BAR_KEYCODE = 32;
 
@@ -40,6 +39,7 @@ type Props = {
   obscureNsfw: boolean,
   play: string => void,
   searchBarFocused: boolean,
+  mediaType: string,
 };
 
 class Video extends React.PureComponent<Props> {
@@ -123,12 +123,12 @@ class Video extends React.PureComponent<Props> {
       mediaPosition,
       className,
       obscureNsfw,
+      mediaType,
     } = this.props;
 
     const isPlaying = playingUri === uri;
     const isReadyToPlay = fileInfo && fileInfo.written_bytes > 0;
     const shouldObscureNsfw = obscureNsfw && metadata && metadata.nsfw;
-    const mediaType = (fileInfo && Lbry.getMediaType(null, fileInfo.file_name)) || Lbry.getMediaType(contentType);
 
     let loadStatusMessage = '';
 

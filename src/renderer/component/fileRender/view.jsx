@@ -1,13 +1,14 @@
 // @flow
 import React from 'react';
 import LoadingScreen from 'component/common/loading-screen';
-// import ThreeViewer from 'component/threeViewer';
+import PdfViewer from 'component/viewers/pdfViewer';
 
 type Props = {
   mediaType: string,
   source: {
     filePath: string,
     fileType: string,
+    downloadPath: string,
   },
   currentTheme: string,
 };
@@ -23,7 +24,14 @@ class FileRender extends React.PureComponent<Props> {
       // Add routes to viewer...
     };
 
-    const viewer = mediaType && source && mediaTypes[mediaType];
+    // Supported fileType
+    const fileTypes = {
+      pdf: <PdfViewer {...viewerProps} />,
+      // Add routes to viewer...
+    };
+
+    const { fileType } = source;
+    const viewer = mediaType && source && (mediaTypes[mediaType] || fileTypes[fileType]);
     const unsupportedMessage = "Sorry, looks like we can't preview this file.";
     const unsupported = <LoadingScreen status={unsupportedMessage} spinner={false} />;
 
