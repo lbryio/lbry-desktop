@@ -34,7 +34,7 @@ class VideoPlayer extends React.PureComponent {
 
   componentDidMount() {
     const container = this.media;
-    const { contentType, changeVolume, volume, position, claim } = this.props;
+    const { downloadCompleted, contentType, changeVolume, volume, position, claim } = this.props;
 
     const loadedMetadata = () => {
       this.setState({ hasMetadata: true, startedPlaying: true });
@@ -58,7 +58,9 @@ class VideoPlayer extends React.PureComponent {
       this.renderAudio(container, null, false);
     }
     // Render custom viewer: FileRender
-    else if (this.fileType()) this.renderFile();
+    else if (this.fileType()) {
+      downloadCompleted && this.renderFile();
+    }
     // Render default viewer: render-media (video, audio, img, iframe)
     else {
       player.append(
@@ -98,7 +100,7 @@ class VideoPlayer extends React.PureComponent {
 
   componentDidUpdate() {
     const { contentType, downloadCompleted } = this.props;
-    const { startedPlaying } = this.state;
+    const { startedPlaying, fileSource } = this.state;
 
     if (this.playableType() && !startedPlaying && downloadCompleted) {
       const container = this.media.children[0];
@@ -111,6 +113,8 @@ class VideoPlayer extends React.PureComponent {
           controls: true,
         });
       }
+    } else if (this.fileType() && !fileSource && downloadCompleted) {
+      this.renderFile();
     }
   }
 
@@ -185,6 +189,7 @@ class VideoPlayer extends React.PureComponent {
   renderFile() {
     // This is what render-media does with unplayable files
     const { filename, downloadPath, contentType, mediaType } = this.props;
+
     toBlobURL(fs.createReadStream(downloadPath), contentType, (err, url) => {
       if (err) {
         this.setState({ unsupported: true });
