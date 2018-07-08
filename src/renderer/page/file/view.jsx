@@ -182,7 +182,7 @@ class FilePage extends React.Component<Props> {
                 <UriIndicator uri={uri} link />
               </div>
               <div className="card__actions card__actions--no-margin card__actions--between">
-                {(claimIsMine || subscriptionUri || speechSharable) && (
+                {(!claimIsMine || subscriptionUri || speechSharable) && (
                   <div className="card__actions">
                     {claimIsMine ? (
                       <Button

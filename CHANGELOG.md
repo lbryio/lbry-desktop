@@ -20,7 +20,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
   
 ### Changed
   * Show claim name, instead of URI, when loading a channel([#1711](https://github.com/lbryio/lbry-app/pull/1711))
-
+  * Updated LBRY daemon to 0.20.3 which contains some availability improvements ([v0.20.3](https://github.com/lbryio/lbry/releases/tag/v0.20.3))
 
 ## [0.22.0] - 2018-06-26
 

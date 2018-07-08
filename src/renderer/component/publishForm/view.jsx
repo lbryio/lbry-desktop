@@ -401,7 +401,7 @@ class PublishForm extends React.PureComponent<Props> {
               ) : (
                 <React.Fragment>
                   {__(
-                    'Upload your thumbnail (.png/.jpg/.gif) to spee.ch, or enter the URL manually. Learn more about spee.ch '
+                    'Upload your thumbnail (.png/.jpg/.jpeg/.gif) to spee.ch, or enter the URL manually. Learn more about spee.ch '
                   )}
                   <Button button="link" label={__('here')} href="https://spee.ch/about" />.
                 </React.Fragment>
