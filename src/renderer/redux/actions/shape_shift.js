@@ -1,5 +1,6 @@
 // @flow
 import Promise from 'bluebird';
+import * as SHAPESHIFT_STATUSES from 'constants/shape_shift';
 import * as ACTIONS from 'constants/action_types';
 import { coinRegexPatterns } from 'util/shape_shift';
 import type {
@@ -65,9 +66,15 @@ export const shapeShiftInit = () => (dispatch: Dispatch): ThunkAction => {
   return shapeShift
     .coinsAsync()
     .then(coinData => {
+      if (coinData.LBC.status === SHAPESHIFT_STATUSES.UNAVAILABLE) {
+        return dispatch({
+          type: ACTIONS.GET_SUPPORTED_COINS_FAIL,
+        });
+      }
+
       let supportedCoins = [];
       Object.keys(coinData).forEach(symbol => {
-        if (coinData[symbol].status === 'available') {
+        if (coinData[symbol].status === SHAPESHIFT_STATUSES.UNAVAILABLE) {
           supportedCoins.push(coinData[symbol]);
         }
       });
@@ -81,7 +88,7 @@ export const shapeShiftInit = () => (dispatch: Dispatch): ThunkAction => {
         type: ACTIONS.GET_SUPPORTED_COINS_SUCCESS,
         data: supportedCoins,
       });
-      dispatch(getCoinStats(supportedCoins[0]));
+      return dispatch(getCoinStats(supportedCoins[0]));
     })
     .catch(err => dispatch({ type: ACTIONS.GET_SUPPORTED_COINS_FAIL, data: err }));
 };
