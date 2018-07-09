@@ -5,6 +5,22 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ## [Unreleased]
 
+### Fixed
+
+### Added
+
+### Changed
+
+
+
+## [0.22.2] - 2018-07-09
+
+### Fixed
+  * Fixed 'Get Credits' screen so the app doesn't break when LBC is unavailable on ShapeShift ([#1739](https://github.com/lbryio/lbry-app/pull/1739))
+
+
+## [0.22.1] - 2018-07-05
+
 ### Added
 
 
