@@ -229,12 +229,12 @@ class VideoPlayer extends React.PureComponent {
     };
 
     // Loading message
-    const noFileMessage = 'Waiting for blob.';
-    const noMetadataMessage = 'Waiting for metadata.';
+    const noFileMessage = __('Waiting for blob.');
+    const noMetadataMessage = __('Waiting for metadata.');
 
     // Error message
-    const unplayableMessage = "Sorry, looks like we can't play this file.";
-    const unsupportedMessage = "Sorry, looks like we can't preview this file.";
+    const unplayableMessage = __("Sorry, looks like we can't play this file.");
+    const unsupportedMessage = __("Sorry, looks like we can't preview this file.");
 
     // Files
     const isLoadingFile = !fileSource && isFileType;

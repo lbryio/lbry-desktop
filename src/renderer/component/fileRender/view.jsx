@@ -32,7 +32,7 @@ class FileRender extends React.PureComponent<Props> {
 
     const { fileType } = source;
     const viewer = mediaType && source && (mediaTypes[mediaType] || fileTypes[fileType]);
-    const unsupportedMessage = "Sorry, looks like we can't preview this file.";
+    const unsupportedMessage = __("Sorry, looks like we can't preview this file.");
     const unsupported = <LoadingScreen status={unsupportedMessage} spinner={false} />;
 
     // Return viewer
