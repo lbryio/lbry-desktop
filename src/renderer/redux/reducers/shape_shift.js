@@ -117,7 +117,7 @@ export default handleActions(
     [ACTIONS.GET_SUPPORTED_COINS_FAIL]: (state: ShapeShiftState): ShapeShiftState => ({
       ...state,
       loading: false,
-      error: 'Error getting available coins',
+      error: __('There was an error. Please try again later.'),
     }),
 
     [ACTIONS.GET_COIN_STATS_START]: (
