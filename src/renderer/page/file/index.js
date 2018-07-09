@@ -34,6 +34,7 @@ const select = (state, props) => ({
   isPaused: selectMediaPaused(state),
   claimIsMine: makeSelectClaimIsMine(props.uri)(state),
   autoplay: makeSelectClientSetting(settings.AUTOPLAY)(state),
+  fromOverlay: Boolean(props.fromOverlay),
 });
 
 const perform = dispatch => ({

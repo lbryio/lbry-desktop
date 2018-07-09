@@ -10,3 +10,5 @@ export const makeSelectMediaPositionForUri = uri =>
     const outpoint = `${claim.txid}:${claim.nout}`;
     return state.positions[outpoint] || null;
   });
+
+export const selectShowOverlay = createSelector(selectState, state => state.showOverlay);

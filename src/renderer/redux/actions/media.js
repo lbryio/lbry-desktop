@@ -26,3 +26,13 @@ export function savePosition(claimId: String, position: Number) {
     });
   };
 }
+
+export const doShowOverlay = () => (dispatch: Dispatch) =>
+  dispatch({
+    type: actions.SHOW_OVERLAY_MEDIA,
+  });
+
+export const doHideOverlay = () => (dispatch: Dispatch) =>
+  dispatch({
+    type: actions.HIDE_OVERLAY_MEDIA,
+  });

@@ -2,6 +2,7 @@ import * as ACTIONS from 'constants/action_types';
 
 const reducers = {};
 const defaultState = {
+  showOverlay: false,
   playingUri: null,
   currentlyIsPlaying: false,
   rewardedContentClaimIds: [],

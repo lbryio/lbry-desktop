@@ -16,6 +16,7 @@ import 'scss/all.scss';
 import store from 'store';
 import app from './app';
 import analytics from './analytics';
+import VideoOverlay from './component/videoOverlay/';
 import doLogWarningConsoleMessage from './logWarningConsoleMessage';
 
 const { autoUpdater } = remote.require('electron-updater');
@@ -144,6 +145,7 @@ const init = () => {
         <div>
           <App />
           <SnackBar />
+          <VideoOverlay />
         </div>
       </Provider>,
       document.getElementById('app')

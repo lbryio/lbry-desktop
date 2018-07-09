@@ -6,11 +6,11 @@ import type { Claim } from 'types/claim';
 import VideoPlayer from './internal/player';
 import VideoPlayButton from './internal/play-button';
 import LoadingScreen from './internal/loading-screen';
+import ReactDOM from 'react-dom';
 
 const SPACE_BAR_KEYCODE = 32;
 
 type Props = {
-  cancelPlay: () => void,
   fileInfo: {
     outpoint: string,
     file_name: string,
@@ -34,12 +34,19 @@ type Props = {
   doPlay: () => void,
   doPause: () => void,
   savePosition: (string, number) => void,
+  doShowOverlay: () => void,
+  doHideOverlay: () => void,
   mediaPaused: boolean,
   mediaPosition: ?number,
   className: ?string,
   obscureNsfw: boolean,
   play: string => void,
   searchBarFocused: boolean,
+  showOverlay: boolean,
+  hiddenControls: boolean,
+  fromOverlay: boolean,
+  overlayed: boolean,
+  fromOverlay: boolean,
 };
 
 class Video extends React.PureComponent<Props> {
@@ -53,6 +60,11 @@ class Video extends React.PureComponent<Props> {
   componentDidMount() {
     this.handleAutoplay(this.props);
     window.addEventListener('keydown', this.handleKeyDown);
+
+    const { showOverlay, doHideOverlay, uri, playingUri } = this.props;
+    if (showOverlay && uri === playingUri) {
+      doHideOverlay();
+    }
   }
 
   componentWillReceiveProps(nextProps: Props) {
@@ -64,11 +76,51 @@ class Video extends React.PureComponent<Props> {
     ) {
       this.handleAutoplay(nextProps);
     }
+    if (nextProps.fromOverlay) {
+      this.moveVideoFromOverlayToNormal();
+      this.destroyVideoOnOverlay();
+      this.props.doHideOverlay();
+    }
   }
 
   componentWillUnmount() {
-    this.props.cancelPlay();
+    const { overlayed, doShowOverlay, mediaPaused } = this.props;
+    if (!overlayed && !mediaPaused) {
+      doShowOverlay();
+      this.moveVideoToOverlay();
+    }
     window.removeEventListener('keydown', this.handleKeyDown);
+  }
+
+  moveVideoToOverlay() {
+    const topContainer = document.getElementById('video__overlay_id_top_container');
+    const container = document.getElementById('video__overlay_id');
+    const videoContainer = this.mediaContainer.media ? this.mediaContainer.media : document.getElementById('insert_video');
+    const video = videoContainer.getElementsByTagName('video')[0];
+    if (video) {
+      topContainer.classList.remove('hiddenContainer');
+      container.appendChild(video);
+      video.controls = false;
+      video.play();
+    }
+  }
+
+  moveVideoFromOverlayToNormal() {
+    const videoContainer = document.getElementById('video__overlay_id');
+    if (!videoContainer) return;
+    const video = videoContainer.getElementsByTagName('video')[0];
+    if (!video) return;
+    const filePageVideoContainer = document.getElementById('insert_video');
+    filePageVideoContainer.appendChild(video);
+    video.controls = true;
+    video.play();
+  }
+
+  destroyVideoOnOverlay() {
+    const topContainer = document.getElementById('video__overlay_id_top_container');
+    const videoContainer = document.getElementById('video__overlay_id');
+    topContainer.classList.add('hiddenContainer');
+    videoContainer.innerHTML = '';
   }
 
   handleKeyDown(event: SyntheticKeyboardEvent<*>) {
@@ -100,8 +152,16 @@ class Video extends React.PureComponent<Props> {
   }
 
   playContent() {
-    const { play, uri } = this.props;
-    play(uri);
+    const { play, uri, playingUri, doHideOverlay } = this.props;
+    if (playingUri) {
+      if (playingUri === uri) {
+        this.moveVideoFromOverlayToNormal();
+      }
+      this.destroyVideoOnOverlay();
+      doHideOverlay();
+    } else {
+      play(uri);
+    }
   }
 
   render() {
@@ -123,6 +183,10 @@ class Video extends React.PureComponent<Props> {
       mediaPosition,
       className,
       obscureNsfw,
+      hiddenControls,
+      doHideOverlay,
+      showOverlay,
+      fromOverlay,
     } = this.props;
 
     const isPlaying = playingUri === uri;
@@ -147,6 +211,7 @@ class Video extends React.PureComponent<Props> {
     const layoverStyle =
       !shouldObscureNsfw && poster ? { backgroundImage: `url("${poster}")` } : {};
 
+    const commingFromOverlay = playingUri === uri;
     return (
       <div className={classnames('video', {}, className)}>
         {isPlaying && (
@@ -155,7 +220,7 @@ class Video extends React.PureComponent<Props> {
               <div className={layoverClass} style={layoverStyle}>
                 <LoadingScreen status={loadStatusMessage} />
               </div>
-            ) : (
+            ) : (commingFromOverlay && fromOverlay ? <div id="insert_video" ref={mediaContainer => this.mediaContainer = mediaContainer} /> :
               <VideoPlayer
                 filename={fileInfo.file_name}
                 poster={poster}
@@ -172,6 +237,9 @@ class Video extends React.PureComponent<Props> {
                 uri={uri}
                 paused={mediaPaused}
                 position={mediaPosition}
+                hiddenControls={hiddenControls}
+                doHideOverlay={doHideOverlay}
+                ref={mediaContainer => this.mediaContainer = mediaContainer }
               />
             )}
           </div>

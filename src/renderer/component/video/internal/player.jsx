@@ -22,14 +22,9 @@ class VideoPlayer extends React.PureComponent {
     this.toggleFullScreenVideo = this.toggleFullScreen.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
-    const el = this.refs.media.children[0];
-    if (!this.props.paused && nextProps.paused && !el.paused) el.pause();
-  }
-
   componentDidMount() {
     const container = this.media;
-    const { contentType, changeVolume, volume, position, claim } = this.props;
+    const { contentType, changeVolume, volume, position, claim, hiddenControls } = this.props;
 
     const loadedMetadata = () => {
       this.setState({ hasMetadata: true, startedPlaying: true });
@@ -48,6 +43,12 @@ class VideoPlayer extends React.PureComponent {
       }
     };
 
+    // Hide overlay video when the video ends only if its overlayed
+    const ended = () => {
+      this.props.doPause();
+      this.props.savePosition(claim.claim_id, 0);
+    };
+
     // use renderAudio override for mp3
     if (VideoPlayer.MP3_CONTENT_TYPES.indexOf(contentType) > -1) {
       this.renderAudio(container, null, false);
@@ -55,7 +56,7 @@ class VideoPlayer extends React.PureComponent {
       player.append(
         this.file(),
         container,
-        { autoplay: true, controls: true },
+        { autoplay: true, controls: !hiddenControls },
         renderMediaCallback.bind(this)
       );
     }
@@ -79,16 +80,21 @@ class VideoPlayer extends React.PureComponent {
       });
       mediaElement.volume = volume;
       mediaElement.addEventListener('dblclick', this.toggleFullScreenVideo);
+      mediaElement.addEventListener('ended', ended);
     }
   }
 
   componentWillReceiveProps(next) {
     const el = this.media.children[0];
-    if (!this.props.paused && next.paused && !el.paused) el.pause();
+    if (!this.props.paused && next.paused && !el.paused) {
+      el.pause();
+    } else if (this.props.paused && !next.paused && el.paused) {
+      el.play();
+    }
   }
 
   componentDidUpdate() {
-    const { contentType, downloadCompleted } = this.props;
+    const { contentType, downloadCompleted, hiddenControls } = this.props;
     const { startedPlaying } = this.state;
 
     if (this.playableType() && !startedPlaying && downloadCompleted) {
@@ -99,7 +105,7 @@ class VideoPlayer extends React.PureComponent {
       } else {
         player.render(this.file(), container, {
           autoplay: true,
-          controls: true,
+          controls: !hiddenControls,
         });
       }
     }
@@ -111,7 +117,7 @@ class VideoPlayer extends React.PureComponent {
     if (mediaElement) {
       mediaElement.removeEventListener('click', this.togglePlayListener);
     }
-    this.props.doPause();
+    // this.props.doPause();
   }
 
   toggleFullScreen(event) {
