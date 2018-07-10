@@ -17,7 +17,7 @@ import {
 import { makeSelectClientSetting, selectShowNsfw } from 'redux/selectors/settings';
 import { selectMediaPaused, makeSelectMediaPositionForUri } from 'redux/selectors/media';
 import { selectPlayingUri } from 'redux/selectors/content';
-import Video from './view';
+import FileViewer from './view';
 
 const select = (state, props) => ({
   claim: makeSelectClaimForUri(props.uri)(state),
@@ -45,4 +45,7 @@ const perform = dispatch => ({
   savePosition: (claimId, position) => dispatch(savePosition(claimId, position)),
 });
 
-export default connect(select, perform)(Video);
+export default connect(
+  select,
+  perform
+)(FileViewer);

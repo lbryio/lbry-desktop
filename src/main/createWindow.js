@@ -14,7 +14,7 @@ export default appState => {
     defaultHeight: height,
   });
 
-  let windowConfiguration = {
+  const windowConfiguration = {
     backgroundColor: '#44b098',
     minWidth: 950,
     minHeight: 600,
@@ -26,17 +26,13 @@ export default appState => {
     // If state is undefined, create window as maximized.
     width: windowState.width === undefined ? width : windowState.width,
     height: windowState.height === undefined ? height : windowState.height,
-  };
 
-  // Disable renderer process's webSecurity on development to enable CORS.
-  windowConfiguration = isDev
-    ? {
-        ...windowConfiguration,
-        webPreferences: {
-          webSecurity: false,
-        },
-      }
-    : windowConfiguration;
+    webPreferences: {
+      // Disable renderer process's webSecurity on development to enable CORS.
+      webSecurity: !isDev,
+      plugins: true,
+    },
+  };
 
   const rendererURL = isDev
     ? `http://localhost:${process.env.ELECTRON_WEBPACK_WDS_PORT}`

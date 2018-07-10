@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
-import { Lbry, buildURI, normalizeURI, MODALS } from 'lbry-redux';
-import Video from 'component/video';
+import { buildURI, normalizeURI, MODALS } from 'lbry-redux';
+import FileViewer from 'component/fileViewer';
 import Thumbnail from 'component/common/thumbnail';
 import FilePrice from 'component/filePrice';
 import FileDetails from 'component/fileDetails';
@@ -14,7 +14,6 @@ import Button from 'component/button';
 import SubscribeButton from 'component/subscribeButton';
 import ViewOnWebButton from 'component/viewOnWebButton';
 import Page from 'component/page';
-import player from 'render-media';
 import * as settings from 'constants/settings';
 import type { Claim } from 'types/claim';
 import type { Subscription } from 'types/subscription';
@@ -22,6 +21,7 @@ import FileDownloadLink from 'component/fileDownloadLink';
 import classnames from 'classnames';
 import { FormField, FormRow } from 'component/common/form';
 import ToolTip from 'component/common/tooltip';
+import getMediaType from 'util/getMediaType';
 
 type Props = {
   claim: Claim,
@@ -29,6 +29,7 @@ type Props = {
   metadata: {
     title: string,
     thumbnail: string,
+    file_name: string,
     nsfw: boolean,
   },
   contentType: string,
@@ -49,6 +50,18 @@ type Props = {
 };
 
 class FilePage extends React.Component<Props> {
+  static PLAYABLE_MEDIA_TYPES = ['audio', 'video'];
+  static PREVIEW_MEDIA_TYPES = [
+    'text',
+    'model',
+    'image',
+    '3D-file',
+    'document',
+    // Bypass unplayable files
+    // TODO: Find a better way to detect supported types
+    'application',
+  ];
+
   constructor(props: Props) {
     super(props);
 
@@ -108,15 +121,19 @@ class FilePage extends React.Component<Props> {
       navigate,
       autoplay,
       costInfo,
+      fileInfo,
     } = this.props;
 
     // File info
     const { title, thumbnail } = metadata;
+    const { height, channel_name: channelName, value } = claim;
+    const { PLAYABLE_MEDIA_TYPES, PREVIEW_MEDIA_TYPES } = FilePage;
     const isRewardContent = rewardedContentClaimIds.includes(claim.claim_id);
     const shouldObscureThumbnail = obscureNsfw && metadata.nsfw;
-    const { height, channel_name: channelName, value } = claim;
-    const mediaType = Lbry.getMediaType(contentType);
-    const isPlayable = Object.values(player.mime).includes(contentType) || mediaType === 'audio';
+    const fileName = fileInfo ? fileInfo.file_name : null;
+    const mediaType = getMediaType(contentType, fileName);
+    const showFile =
+      PLAYABLE_MEDIA_TYPES.includes(mediaType) || PREVIEW_MEDIA_TYPES.includes(mediaType);
     const channelClaimId =
       value && value.publisherSignature && value.publisherSignature.certificateId;
     let subscriptionUri;
@@ -150,8 +167,10 @@ class FilePage extends React.Component<Props> {
           </section>
         ) : (
           <section className="card">
-            {isPlayable && <Video className="content__embedded" uri={uri} />}
-            {!isPlayable &&
+            {showFile && (
+              <FileViewer className="content__embedded" uri={uri} mediaType={mediaType} />
+            )}
+            {!showFile &&
               (thumbnail ? (
                 <Thumbnail shouldObscure={shouldObscureThumbnail} src={thumbnail} />
               ) : (
@@ -160,7 +179,9 @@ class FilePage extends React.Component<Props> {
                     'content__empty--nsfw': shouldObscureThumbnail,
                   })}
                 >
-                  <div className="card__media-text">{__('This content is not playable.')}</div>
+                  <div className="card__media-text">
+                    {__("Sorry, looks like we can't preview this file.")}
+                  </div>
                 </div>
               ))}
             <div className="card__content">
