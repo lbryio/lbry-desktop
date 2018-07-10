@@ -3,8 +3,8 @@ import React from 'react';
 import classnames from 'classnames';
 import type { Claim } from 'types/claim';
 import LoadingScreen from 'component/common/loading-screen';
-import VideoPlayer from './internal/player';
-import VideoPlayButton from './internal/play-button';
+import Player from './internal/player';
+import PlayButton from './internal/play-button';
 
 const SPACE_BAR_KEYCODE = 32;
 
@@ -42,7 +42,7 @@ type Props = {
   mediaType: string,
 };
 
-class Video extends React.PureComponent<Props> {
+class FileViewer extends React.PureComponent<Props> {
   constructor() {
     super();
 
@@ -156,7 +156,7 @@ class Video extends React.PureComponent<Props> {
                 <LoadingScreen status={loadStatusMessage} />
               </div>
             ) : (
-              <VideoPlayer
+              <Player
                 filename={fileInfo.file_name}
                 poster={poster}
                 downloadPath={fileInfo.download_path}
@@ -183,7 +183,7 @@ class Video extends React.PureComponent<Props> {
             className={layoverClass}
             style={layoverStyle}
           >
-            <VideoPlayButton
+            <PlayButton
               play={e => {
                 e.stopPropagation();
                 this.playContent();
@@ -200,4 +200,4 @@ class Video extends React.PureComponent<Props> {
   }
 }
 
-export default Video;
+export default FileViewer;

@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 import { buildURI, normalizeURI, MODALS } from 'lbry-redux';
-import Video from 'component/video';
+import FileViewer from 'component/fileViewer';
 import Thumbnail from 'component/common/thumbnail';
 import FilePrice from 'component/filePrice';
 import FileDetails from 'component/fileDetails';
@@ -167,7 +167,9 @@ class FilePage extends React.Component<Props> {
           </section>
         ) : (
           <section className="card">
-            {showFile && <Video className="content__embedded" uri={uri} mediaType={mediaType} />}
+            {showFile && (
+              <FileViewer className="content__embedded" uri={uri} mediaType={mediaType} />
+            )}
             {!showFile &&
               (thumbnail ? (
                 <Thumbnail shouldObscure={shouldObscureThumbnail} src={thumbnail} />
