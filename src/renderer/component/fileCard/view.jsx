@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 import { normalizeURI, convertToShareLink } from 'lbry-redux';
-import Button from 'component/button';
+import type { Claim, Metadata } from 'types/claim';
 import CardMedia from 'component/cardMedia';
 import TruncatedText from 'component/common/truncated-text';
 import Icon from 'component/common/icon';
@@ -14,9 +14,9 @@ import { openCopyLinkMenu } from '../../util/contextMenu';
 // TODO: iron these out
 type Props = {
   uri: string,
-  claim: ?{ claim_id: string },
+  claim: ?Claim,
   fileInfo: ?{},
-  metadata: ?{ nsfw: boolean, title: string, thumbnail: ?string },
+  metadata: ?Metadata,
   navigate: (string, ?{}) => void,
   rewardedContentClaimIds: Array<string>,
   obscureNsfw: boolean,
@@ -62,10 +62,15 @@ class FileCard extends React.PureComponent<Props> {
       showPrice,
       pending,
     } = this.props;
+
+    const shouldHide = obscureNsfw && metadata && metadata.nsfw && !claimIsMine;
+    if (shouldHide) {
+      return null;
+    }
+
     const uri = !pending ? normalizeURI(this.props.uri) : this.props.uri;
     const title = metadata && metadata.title ? metadata.title : uri;
     const thumbnail = metadata && metadata.thumbnail ? metadata.thumbnail : null;
-    const shouldObscureNsfw = obscureNsfw && metadata && metadata.nsfw && !claimIsMine;
     const isRewardContent = claim && rewardedContentClaimIds.includes(claim.claim_id);
     const handleContextMenu = event => {
       event.preventDefault();
@@ -86,46 +91,26 @@ class FileCard extends React.PureComponent<Props> {
         })}
         onContextMenu={handleContextMenu}
       >
-        <CardMedia nsfw={shouldObscureNsfw} thumbnail={thumbnail} />
+        <CardMedia thumbnail={thumbnail} />
         <div className="card-media__internal-links">{showPrice && <FilePrice uri={uri} />}</div>
-
-        {shouldObscureNsfw ? (
-          <div className="card__title-identity">
-            <div className="card__title--small">
-              <TruncatedText lines={3}>
-                {__('This content is obscured because it is NSFW. You can change this in ')}
-                <Button
-                  button="link"
-                  label={__('Settings.')}
-                  onClick={e => {
-                    // Don't propagate to the onClick handler of parent element
-                    e.stopPropagation();
-                    navigate('/settings');
-                  }}
-                />
-              </TruncatedText>
-            </div>
+        <div className="card__title-identity">
+          <div className="card__title--small">
+            <TruncatedText lines={3}>{title}</TruncatedText>
           </div>
-        ) : (
-          <div className="card__title-identity">
-            <div className="card__title--small">
-              <TruncatedText lines={3}>{title}</TruncatedText>
-            </div>
-            <div className="card__subtitle">
-              {pending ? (
-                <div>Pending...</div>
-              ) : (
-                <React.Fragment>
-                  <UriIndicator uri={uri} link />
-                  <div>
-                    {isRewardContent && <Icon iconColor="red" icon={icons.FEATURED} />}
-                    {fileInfo && <Icon icon={icons.LOCAL} />}
-                  </div>
-                </React.Fragment>
-              )}
-            </div>
+          <div className="card__subtitle">
+            {pending ? (
+              <div>Pending...</div>
+            ) : (
+              <React.Fragment>
+                <UriIndicator uri={uri} link />
+                <div>
+                  {isRewardContent && <Icon iconColor="red" icon={icons.FEATURED} />}
+                  {fileInfo && <Icon icon={icons.LOCAL} />}
+                </div>
+              </React.Fragment>
+            )}
           </div>
-        )}
+        </div>
       </section>
     );
     /* eslint-enable jsx-a11y/click-events-have-key-events */

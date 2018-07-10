@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
 import * as icons from 'constants/icons';
+import type { Claim, Metadata } from 'types/claim';
 import { normalizeURI, parseURI } from 'lbry-redux';
 import CardMedia from 'component/cardMedia';
 import TruncatedText from 'component/common/truncated-text';
@@ -19,15 +20,8 @@ type Props = {
   uri: string,
   isResolvingUri: boolean,
   rewardedContentClaimIds: Array<string>,
-  claim: ?{
-    name: string,
-    channel_name: string,
-    claim_id: string,
-  },
-  metadata: ?{
-    title: ?string,
-    thumbnail: ?string,
-  },
+  claim: ?Claim,
+  metadata: ?Metadata,
   resolveUri: string => void,
   navigate: (string, ?{}) => void,
   clearPublish: () => void,
@@ -70,6 +64,11 @@ class FileTile extends React.PureComponent<Props> {
       hideNoResult,
     } = this.props;
 
+    const shouldHide = obscureNsfw && metadata && metadata.nsfw && !claimIsMine;
+    if (shouldHide) {
+      return null;
+    }
+
     const uri = normalizeURI(this.props.uri);
     const isClaimed = !!claim;
     const description = isClaimed && metadata && metadata.description ? metadata.description : '';
@@ -77,8 +76,6 @@ class FileTile extends React.PureComponent<Props> {
       isClaimed && metadata && metadata.title ? metadata.title : parseURI(uri).contentName;
     const thumbnail = metadata && metadata.thumbnail ? metadata.thumbnail : null;
     const isRewardContent = claim && rewardedContentClaimIds.includes(claim.claim_id);
-    const shouldObscureNsfw = obscureNsfw && metadata && metadata.nsfw && !claimIsMine;
-
     const onClick = () => navigate('/show', { uri });
 
     let name;
@@ -98,7 +95,7 @@ class FileTile extends React.PureComponent<Props> {
         role="button"
         tabIndex="0"
       >
-        <CardMedia title={title || name} thumbnail={thumbnail} nsfw={shouldObscureNsfw} />
+        <CardMedia title={title || name} thumbnail={thumbnail} />
         <div className="file-tile__info">
           {isResolvingUri && <div className="card__title--small">{__('Loading...')}</div>}
           {!isResolvingUri && (
