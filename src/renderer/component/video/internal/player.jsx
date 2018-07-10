@@ -221,6 +221,7 @@ class VideoPlayer extends React.PureComponent {
   }
 
   showLoadingScreen(isFileType, isPlayableType) {
+    const { mediaType } = this.props;
     const { hasMetadata, unplayable, unsupported, fileSource } = this.state;
 
     const loader = {
@@ -238,7 +239,8 @@ class VideoPlayer extends React.PureComponent {
 
     // Files
     const isLoadingFile = !fileSource && isFileType;
-    const isUnsupported = !this.supportedType() && isPlayableType && !isFileType;
+    const isUnsupported =
+      (mediaType === 'application' || !this.supportedType()) && !isFileType && !isPlayableType;
 
     // Media (audio, video)
     const isUnplayable = isPlayableType && unplayable;
@@ -251,7 +253,7 @@ class VideoPlayer extends React.PureComponent {
 
       // Show unsupported error message
     } else if (isUnsupported || isUnplayable) {
-      loader.loadingStatus = isFileType ? unsupportedMessage : unplayableMessage;
+      loader.loadingStatus = isUnsupported ? unsupportedMessage : unplayableMessage;
     }
 
     return loader;

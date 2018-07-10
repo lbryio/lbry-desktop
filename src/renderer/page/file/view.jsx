@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { Lbry, buildURI, normalizeURI, MODALS } from 'lbry-redux';
+import { buildURI, normalizeURI, MODALS } from 'lbry-redux';
 import Video from 'component/video';
 import Thumbnail from 'component/common/thumbnail';
 import FilePrice from 'component/filePrice';
@@ -21,6 +21,7 @@ import FileDownloadLink from 'component/fileDownloadLink';
 import classnames from 'classnames';
 import { FormField, FormRow } from 'component/common/form';
 import ToolTip from 'component/common/tooltip';
+import getMediaType from 'util/getMediaType';
 
 type Props = {
   claim: Claim,
@@ -130,7 +131,7 @@ class FilePage extends React.Component<Props> {
     const isRewardContent = rewardedContentClaimIds.includes(claim.claim_id);
     const shouldObscureThumbnail = obscureNsfw && metadata.nsfw;
     const fileName = fileInfo ? fileInfo.file_name : null;
-    const mediaType = fileName ? Lbry.getMediaType(null, fileName) : Lbry.getMediaType(contentType);
+    const mediaType = getMediaType(contentType, fileName);
     const showFile =
       PLAYABLE_MEDIA_TYPES.includes(mediaType) || PREVIEW_MEDIA_TYPES.includes(mediaType);
     const channelClaimId =
