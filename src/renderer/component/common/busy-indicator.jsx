@@ -5,10 +5,20 @@ type Props = {
   message: ?string,
 };
 
-const BusyIndicator = (props: Props) => (
-  <span className="busy-indicator">
-    {props.message} <span className="busy-indicator__loader" />
-  </span>
-);
+class BusyIndicator extends React.PureComponent<Props> {
+  static defaultProps = {
+    message: '',
+  };
+
+  render() {
+    const { message } = this.props;
+
+    return (
+      <span className="busy-indicator">
+        {message} <span className="busy-indicator__loader" />
+      </span>
+    );
+  }
+}
 
 export default BusyIndicator;
