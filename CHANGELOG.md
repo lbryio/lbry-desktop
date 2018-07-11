@@ -17,6 +17,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
   * Console errors when multiple downloads for same claim exist ([#1724](https://github.com/lbryio/lbry-app/pull/1724))
   * App version in dev mode ([#1722](https://github.com/lbryio/lbry-app/pull/1722))
   * Long URI name displays in transaction list/Help ([#1694](https://github.com/lbryio/lbry-app/pull/1694))/([#1692](https://github.com/lbryio/lbry-app/pull/1692))
+  * Edit option missing from certain published claims ([#175](https://github.com/lbryio/lbry-desktop/issues/1756))
   
 ### Changed
   * Show claim name, instead of URI, when loading a channel([#1711](https://github.com/lbryio/lbry-app/pull/1711))
