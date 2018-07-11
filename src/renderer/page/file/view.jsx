@@ -203,34 +203,32 @@ class FilePage extends React.Component<Props> {
                 <UriIndicator uri={uri} link />
               </div>
               <div className="card__actions card__actions--no-margin card__actions--between">
-                {(!claimIsMine || subscriptionUri || speechSharable) && (
-                  <div className="card__actions">
-                    {claimIsMine ? (
-                      <Button
-                        button="primary"
-                        icon={icons.EDIT}
-                        label={__('Edit')}
-                        onClick={() => {
-                          prepareEdit(claim, editUri);
-                          navigate('/publish');
-                        }}
-                      />
-                    ) : (
-                      <SubscribeButton uri={subscriptionUri} channelName={channelName} />
-                    )}
-                    {!claimIsMine && (
-                      <Button
-                        button="alt"
-                        icon={icons.GIFT}
-                        label={__('Enjoy this? Send a tip')}
-                        onClick={() => openModal({ id: MODALS.SEND_TIP }, { uri })}
-                      />
-                    )}
-                    {speechSharable && (
-                      <ViewOnWebButton claimId={claim.claim_id} claimName={claim.name} />
-                    )}
-                  </div>
-                )}
+                <div className="card__actions">
+                  {claimIsMine ? (
+                    <Button
+                      button="primary"
+                      icon={icons.EDIT}
+                      label={__('Edit')}
+                      onClick={() => {
+                        prepareEdit(claim, editUri);
+                        navigate('/publish');
+                      }}
+                    />
+                  ) : (
+                    <SubscribeButton uri={subscriptionUri} channelName={channelName} />
+                  )}
+                  {!claimIsMine && (
+                    <Button
+                      button="alt"
+                      icon={icons.GIFT}
+                      label={__('Enjoy this? Send a tip')}
+                      onClick={() => openModal({ id: MODALS.SEND_TIP }, { uri })}
+                    />
+                  )}
+                  {speechSharable && (
+                    <ViewOnWebButton claimId={claim.claim_id} claimName={claim.name} />
+                  )}
+                </div>
 
                 <div className="card__actions">
                   <FileDownloadLink uri={uri} />
