@@ -253,17 +253,19 @@ export function doCheckUpgradeSubscribe() {
 export function doCheckDaemonVersion() {
   return dispatch => {
     Lbry.version().then(({ lbrynet_version: lbrynetVersion }) => {
-      if (config.lbrynetDaemonVersion === lbrynetVersion) {
-        dispatch({
+      // Avoid the incompatible daemon modal if running in dev mode
+      // Lets you run a different daemone than the one specificed in package.json
+      if (isDev || config.lbrynetDaemonVersion === lbrynetVersion) {
+        return dispatch({
           type: ACTIONS.DAEMON_VERSION_MATCH,
         });
-        return;
       }
 
       dispatch({
         type: ACTIONS.DAEMON_VERSION_MISMATCH,
       });
-      dispatch(
+
+      return dispatch(
         doNotify({
           id: MODALS.INCOMPATIBLE_DAEMON,
         })
