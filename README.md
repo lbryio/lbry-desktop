@@ -3,7 +3,7 @@
 [![Build Status](https://travis-ci.org/lbryio/lbry-app.svg?branch=master)](https://travis-ci.org/lbryio/lbry-app)
 [![Dependencies](https://david-dm.org/lbryio/lbry-app/status.svg)](https://david-dm.org/lbryio/lbry-app)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/78b627d4f5524792adc48719835e1523)](https://www.codacy.com/app/LBRY/lbry-app?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=lbryio/lbry-app&amp;utm_campaign=Badge_Grade)
-[![chat on Discord](https://img.shields.io/discord/362322208485277697.svg?logo=discord)](https://discord.gg/U5aRyN6)
+[![chat on Discord](https://img.shields.io/discord/362322208485277697.svg?logo=discord)](https://chat.lbry.io)
 
 The LBRY app is a graphical browser for the decentralized content marketplace provided by the
 [LBRY](https://lbry.io) protocol. It is essentially the
@@ -42,7 +42,7 @@ Double click the installed application to browse with the LBRY network.
 
 #### Steps
 
-1. Clone this repository: `git clone https://github.com/lbryio/lbry-app`
+1. Clone (or [fork](https://help.github.com/articles/fork-a-repo/)) this repository: `git clone https://github.com/lbryio/lbry-app`
 2. Change directories into the downloaded folder: `cd lbry-app`
 3. Install the dependencies: `yarn`
 4. Run the app: `yarn dev`
