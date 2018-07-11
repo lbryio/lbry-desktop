@@ -7,6 +7,7 @@ import SubscribeButton from 'component/subscribeButton';
 import ViewOnWebButton from 'component/viewOnWebButton';
 import Page from 'component/page';
 import FileList from 'component/fileList';
+import HiddenNsfwClaims from 'component/hiddenNsfwClaims';
 import type { Claim } from 'types/claim';
 
 type Props = {
@@ -16,7 +17,7 @@ type Props = {
   fetching: boolean,
   params: { page: number },
   claim: Claim,
-  claimsInChannel: Array<{}>,
+  claimsInChannel: Array<Claim>,
   fetchClaims: (string, number) => void,
   fetchClaimCount: string => void,
   navigate: (string, {}) => void,
@@ -51,9 +52,10 @@ class ChannelPage extends React.PureComponent<Props> {
   paginate(e: SyntheticKeyboardEvent<*>, totalPages: number) {
     // Change page if enter was pressed, and the given page is between
     // the first and the last.
-    const pageFromInput = Number(e.target.value);
+    const pageFromInput = Number(e.currentTarget.value);
 
     if (
+      pageFromInput &&
       e.keyCode === 13 &&
       !Number.isNaN(pageFromInput) &&
       pageFromInput > 0 &&
@@ -64,7 +66,7 @@ class ChannelPage extends React.PureComponent<Props> {
   }
 
   render() {
-    const { fetching, claimsInChannel, claim, page, totalPages } = this.props;
+    const { uri, fetching, claimsInChannel, claim, page, totalPages } = this.props;
     const { name, permanent_url: permanentUrl, claim_id: claimId } = claim;
     const currentPage = parseInt((page || 1) - 1, 10);
 
@@ -116,6 +118,7 @@ class ChannelPage extends React.PureComponent<Props> {
               />
             </FormRow>
           )}
+        <HiddenNsfwClaims className="card__content help" uri={uri} />
       </Page>
     );
   }

@@ -63,7 +63,7 @@ class FileCard extends React.PureComponent<Props> {
       pending,
     } = this.props;
 
-    const shouldHide = obscureNsfw && metadata && metadata.nsfw && !claimIsMine;
+    const shouldHide = !claimIsMine && !pending && obscureNsfw && metadata && metadata.nsfw;
     if (shouldHide) {
       return null;
     }

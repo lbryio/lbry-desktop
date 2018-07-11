@@ -64,7 +64,7 @@ class FileTile extends React.PureComponent<Props> {
       hideNoResult,
     } = this.props;
 
-    const shouldHide = obscureNsfw && metadata && metadata.nsfw && !claimIsMine;
+    const shouldHide = !claimIsMine && obscureNsfw && metadata && metadata.nsfw;
     if (shouldHide) {
       return null;
     }

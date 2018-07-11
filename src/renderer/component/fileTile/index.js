@@ -30,4 +30,7 @@ const perform = dispatch => ({
   updatePublishForm: value => dispatch(doUpdatePublishForm(value)),
 });
 
-export default connect(select, perform)(FileTile);
+export default connect(
+  select,
+  perform
+)(FileTile);

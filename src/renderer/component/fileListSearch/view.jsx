@@ -1,8 +1,9 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
+import { parseURI } from 'lbry-redux';
 import FileTile from 'component/fileTile';
 import ChannelTile from 'component/channelTile';
-import { parseURI } from 'lbry-redux';
+import HiddenNsfwClaims from 'component/hiddenNsfwClaims';
 
 const NoResults = () => <div className="file-tile">{__('No results')}</div>;
 
@@ -11,7 +12,6 @@ type Props = {
   isSearching: boolean,
   uris: ?Array<string>,
   downloadUris: ?Array<string>,
-  resultCount: number,
 };
 
 class FileListSearch extends React.PureComponent<Props> {
@@ -33,36 +33,37 @@ class FileListSearch extends React.PureComponent<Props> {
 
     return (
       query && (
-        <div className="search__results">
-          <div className="search-result__row">
-            <div className="file-list__header">{__('Content')}</div>
-            {!isSearching &&
-              (fileResults.length ? (
+        <React.Fragment>
+          <div className="search__results">
+            <div className="search-result__row">
+              <div className="file-list__header">{__('Content')}</div>
+              <HiddenNsfwClaims uris={uris} />
+              {!isSearching && fileResults.length ? (
                 fileResults.map(uri => <FileTile key={uri} uri={uri} />)
               ) : (
                 <NoResults />
-              ))}
-          </div>
+              )}
+            </div>
 
-          <div className="search-result__row">
-            <div className="file-list__header">{__('Channels')}</div>
-            {!isSearching &&
-              (channelResults.length ? (
+            <div className="search-result__row">
+              <div className="file-list__header">{__('Channels')}</div>
+              {!isSearching && channelResults.length ? (
                 channelResults.map(uri => <ChannelTile key={uri} uri={uri} />)
               ) : (
                 <NoResults />
-              ))}
-          </div>
+              )}
+            </div>
 
-          <div className="search-result__row">
-            <div className="file-list__header">{__('Your downloads')}</div>
-            {downloadUris && downloadUris.length ? (
-              downloadUris.map(uri => <FileTile hideNoResult key={uri} uri={uri} />)
-            ) : (
-              <NoResults />
-            )}
+            <div className="search-result__row">
+              <div className="file-list__header">{__('Your downloads')}</div>
+              {downloadUris && downloadUris.length ? (
+                downloadUris.map(uri => <FileTile hideNoResult key={uri} uri={uri} />)
+              ) : (
+                <NoResults />
+              )}
+            </div>
           </div>
-        </div>
+        </React.Fragment>
       )
     );
   }
