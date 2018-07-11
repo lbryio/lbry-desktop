@@ -59,7 +59,7 @@ app.on('ready', async () => {
   if (!isDaemonRunning) {
     daemon = new Daemon();
     daemon.on('exit', () => {
-      if (process.env.DAEMON_DEVELOPMENT) {
+      if (isDev) {
         daemon = null;
         if (!appState.isQuitting) {
           dialog.showErrorBox(
