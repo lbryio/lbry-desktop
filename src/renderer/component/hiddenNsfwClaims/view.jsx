@@ -1,5 +1,6 @@
 // @flow
 import React from 'react';
+import Button from 'component/button';
 
 type Props = {
   numberOfNsfwClaims: number,
@@ -14,7 +15,8 @@ export default (props: Props) => {
     Boolean(numberOfNsfwClaims) && (
       <div className={className || 'help'}>
         {numberOfNsfwClaims} {numberOfNsfwClaims > 1 ? __('files') : __('file')}{' '}
-        {__('hidden due to your content viewing preferences.')}
+        {__('hidden due to your')}{' '}
+        <Button button="link" navigate="/settings" label={__('content viewing preferences')} />.
       </div>
     )
   );

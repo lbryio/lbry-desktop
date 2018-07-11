@@ -27,6 +27,7 @@ type Props = {
   clearPublish: () => void,
   updatePublishForm: ({}) => void,
   hideNoResult: boolean, // don't show the tile if there is no claim at this uri
+  displayHiddenMessage?: boolean,
 };
 
 class FileTile extends React.PureComponent<Props> {
@@ -62,11 +63,18 @@ class FileTile extends React.PureComponent<Props> {
       clearPublish,
       updatePublishForm,
       hideNoResult,
+      displayHiddenMessage,
     } = this.props;
 
     const shouldHide = !claimIsMine && obscureNsfw && metadata && metadata.nsfw;
     if (shouldHide) {
-      return null;
+      return displayHiddenMessage ? (
+        <span className="help">
+          {__('This file is hidden because it is marked NSFW. Update your')}{' '}
+          <Button button="link" navigate="/settings" label={__('content viewing preferences')} />{' '}
+          {__('to see it')}.
+        </span>
+      ) : null;
     }
 
     const uri = normalizeURI(this.props.uri);
