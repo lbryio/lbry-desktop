@@ -357,7 +357,7 @@
   .card {
     display: inline-block;
     vertical-align: top;
-    margin-bottom: 60px;
+    margin-bottom: $spacing-vertical * 3/2;
 
     @media only screen and (max-width: $medium-breakpoint) {
       width: calc((100% / 4) - (60px / 4)); // 60px === 20px margin-right * three cards

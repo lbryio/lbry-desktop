@@ -7,6 +7,7 @@ import Button from 'component/button';
 import FileList from 'component/fileList';
 import type { Claim } from 'types/claim';
 import isDev from 'electron-is-dev';
+import HiddenNsfwClaims from 'component/hiddenNsfwClaims';
 
 type Props = {
   doFetchClaimsByChannel: (string, number) => void,
@@ -51,9 +52,10 @@ export default class extends React.PureComponent<Props> {
       if (claim.claims.length) {
         subscriptionClaimMap[claim.uri] = 1;
       } else if (isDev) {
-        console.error(
-          `claim for ${claim.uri} was added to byId in redux but there are no loaded fetched claims`
-        );
+        console
+          .error
+          // `claim for ${claim.uri} was added to byId in redux but there are no loaded fetched claims`
+          ();
       }
     });
 
@@ -72,6 +74,8 @@ export default class extends React.PureComponent<Props> {
       claimList = claimList.concat(claimData.claims);
     });
 
+    const subscriptionUris = claimList.map(claim => `lbry://${claim.name}#${claim.claim_id}`);
+
     return (
       <Page notContained loading={isFetchingSubscriptions}>
         {!subscriptions.length && (
@@ -83,6 +87,7 @@ export default class extends React.PureComponent<Props> {
           </div>
         )}
         {!!claimList.length && <FileList hideFilter sortByHeight fileInfos={claimList} />}
+        <HiddenNsfwClaims uris={subscriptionUris} />
       </Page>
     );
   }
