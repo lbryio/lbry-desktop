@@ -23,7 +23,7 @@ class ModalIncompatibleDaemon extends React.PureComponent<Props> {
         onAborted={quit}
       >
         {__(
-          'This browser is running with an incompatible version of the LBRY protocol, please close LBRY and rerun the installation package to repair LBRY.'
+          'This browser is running with an incompatible version of the LBRY protocol, please close the LBRY app and rerun the installation package to repair it'
         )}
         <Button
           button="link"
