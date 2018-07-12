@@ -1,7 +1,7 @@
 # LBRY App
 
 [![Build Status](https://travis-ci.org/lbryio/lbry-desktop.svg?branch=master)](https://travis-ci.org/lbryio/lbry-desktop)
-[![Dependencies](https://david-dm.org/lbryio/lbry-deskop/status.svg)](https://david-dm.org/lbryio/lbry-desktop)
+[![Dependencies](https://david-dm.org/lbryio/lbry-desktop/status.svg)](https://david-dm.org/lbryio/lbry-desktop)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/78b627d4f5524792adc48719835e1523)](https://www.codacy.com/app/LBRY/lbry-desktop?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=lbryio/lbry-desktop&amp;utm_campaign=Badge_Grade)
 [![chat on Discord](https://img.shields.io/discord/362322208485277697.svg?logo=discord)](https://chat.lbry.io)
 
