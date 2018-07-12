@@ -21,7 +21,6 @@
 }
 
 .card--small {
-  width: var(--card-small-width);
   white-space: normal;
 
   .card__media {
@@ -273,7 +272,6 @@
 .card-row {
   white-space: nowrap;
   width: 100%;
-  min-width: var(--card-small-width);
   padding-top: $spacing-vertical;
 
   &:first-of-type {
@@ -282,6 +280,14 @@
 
   &:last-of-type {
     padding-bottom: $spacing-vertical * 2/3;
+  }
+
+  // This is only for the text that is displayed when a user has nsfw hidden
+  // It is not used anywhere else in the app and is needed due to the css related to
+  // the content that scrolls off the edge of the screen
+  .card__content.help {
+    padding: 0 $spacing-width;
+    white-space: normal;
   }
 }
 
