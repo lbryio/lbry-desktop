@@ -251,7 +251,7 @@ class CategoryList extends React.PureComponent<Props, State> {
         {obscureNsfw && isCommunityTopBids ? (
           <div className="card__content help">
             {__(
-              'The community top bids section is only visible if you allow NSFW content in the app. You can change your content viewing preferences'
+              'The community top bids section is only visible if you allow mature content in the app. You can change your content viewing preferences'
             )}{' '}
             <Button button="link" navigate="/settings" label={__('here')} />.
           </div>
