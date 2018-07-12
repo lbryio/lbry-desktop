@@ -168,7 +168,8 @@ class FileList extends React.PureComponent<Props, State> {
       const uri = buildURI(uriParams);
 
       // See https://github.com/lbryio/lbry-app/issues/1327 for discussion around using outpoint as the key
-      content.push(<FileCard key={outpoint} uri={uri} checkPending={checkPending} />);
+      // Outpoint is undefined on this list that's why the `|| claimId` fix the key console log error.
+      content.push(<FileCard key={outpoint || claimId} uri={uri} checkPending={checkPending} />);
     });
 
     return (
