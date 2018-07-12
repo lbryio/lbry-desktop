@@ -152,14 +152,21 @@ class PublishForm extends React.PureComponent<Props> {
   }
 
   handleBidChange(bid: number) {
-    const { balance, updatePublishForm } = this.props;
+    const { balance, updatePublishForm, myClaimForUri } = this.props;
+
+    let previousBidAmount = 0;
+    if (myClaimForUri) {
+      previousBidAmount = myClaimForUri.amount;
+    }
+
+    const totalAvailableBidAmount = previousBidAmount + balance;
 
     let bidError;
     if (bid === 0) {
       bidError = __('Deposit cannot be 0');
-    } else if (balance === bid) {
+    } else if (totalAvailableBidAmount === bid) {
       bidError = __('Please decrease your deposit to account for transaction fees');
-    } else if (balance < bid) {
+    } else if (totalAvailableBidAmount < bid) {
       bidError = __('Deposit cannot be higher than your balance');
     } else if (bid <= MINIMUM_PUBLISH_BID) {
       bidError = __('Your deposit must be higher');
@@ -237,32 +244,54 @@ class PublishForm extends React.PureComponent<Props> {
   }
 
   checkIsFormValid() {
-    const { name, nameError, title, bid, bidError, tosAccepted } = this.props;
-    return name && !nameError && title && bid && !bidError && tosAccepted;
+    const {
+      name,
+      nameError,
+      title,
+      bid,
+      bidError,
+      tosAccepted,
+      editingURI,
+      isStillEditing,
+      filePath,
+    } = this.props;
+
+    // If they are editing, they don't need a new file chosen
+    const formValidLessFile = name && !nameError && title && bid && !bidError && tosAccepted;
+    return editingURI && !filePath ? isStillEditing && formValidLessFile : formValidLessFile;
   }
 
   renderFormErrors() {
-    const { name, nameError, title, bid, bidError, tosAccepted } = this.props;
+    const {
+      name,
+      nameError,
+      title,
+      bid,
+      bidError,
+      tosAccepted,
+      editingURI,
+      filePath,
+      isStillEditing,
+    } = this.props;
 
-    if (nameError || bidError) {
-      // There will be inline errors if either of these exist
-      // These are just extra help at the bottom of the screen
-      // There could be multiple bid errors, so just duplicate it at the bottom
-      return (
-        <div className="card__subtitle form-field__error">
-          {nameError && <div>{__('The URL you created is not valid.')}</div>}
-          {bidError && <div>{bidError}</div>}
-        </div>
-      );
-    }
+    const isFormValid = this.checkIsFormValid();
 
+    // These are extra help
+    // If there is an error it will be presented as an inline error as well
     return (
-      <div className="card__content card__subtitle card__subtitle--block form-field__error">
-        {!title && <div>{__('A title is required')}</div>}
-        {!name && <div>{__('A URL is required')}</div>}
-        {!bid && <div>{__('A bid amount is required')}</div>}
-        {!tosAccepted && <div>{__('You must agree to the terms of service')}</div>}
-      </div>
+      !isFormValid && (
+        <div className="card__content card__subtitle form-field__error">
+          {!title && <div>{__('A title is required')}</div>}
+          {!name && <div>{__('A URL is required')}</div>}
+          {name && nameError && <div>{__('The URL you created is not valid')}</div>}
+          {!bid && <div>{__('A bid amount is required')}</div>}
+          {!!bid && bidError && <div>{bidError}</div>}
+          {!tosAccepted && <div>{__('You must agree to the terms of service')}</div>}
+          {!!editingURI &&
+            !isStillEditing &&
+            !filePath && <div>{__('You need to reselect a file after changing the LBRY URL')}</div>}
+        </div>
+      )
     );
   }
 
@@ -312,10 +341,10 @@ class PublishForm extends React.PureComponent<Props> {
 
     return (
       <Form onSubmit={this.handlePublish}>
-        <section className={classnames('card card--section')}>
+        <section className={classnames('card card--section', { 'card--disabled': publishing })}>
           <div className="card__title">{__('Content')}</div>
           <div className="card__subtitle">
-            {editingURI ? __('Editing a claim') : __('What are you publishing?')}
+            {isStillEditing ? __('Editing a claim') : __('What are you publishing?')}
           </div>
           {(filePath || !!editingURI) && (
             <div className="card-media__internal-links">
@@ -328,7 +357,7 @@ class PublishForm extends React.PureComponent<Props> {
             </div>
           )}
           <FileSelector currentPath={filePath} onFileChosen={this.handleFileChange} />
-          {!!editingURI && (
+          {!!isStillEditing && (
             <p className="card__content card__subtitle">
               {__("If you don't choose a file, the file from your existing claim")}
               {` "${name}" `}
@@ -368,11 +397,11 @@ class PublishForm extends React.PureComponent<Props> {
             <div className="card__title">{__('Thumbnail')}</div>
             <div className="card__subtitle">
               {uploadThumbnailStatus === THUMBNAIL_STATUSES.API_DOWN ? (
-                __('Enter a url for your thumbnail.')
+                __('Enter a URL for your thumbnail.')
               ) : (
                 <React.Fragment>
                   {__(
-                    'Upload your thumbnail to spee.ch, or enter the url manually. Learn more about spee.ch '
+                    'Upload your thumbnail (.png/.jpg/.jpeg/.gif) to spee.ch, or enter the URL manually. Learn more about spee.ch '
                   )}
                   <Button button="link" label={__('here')} href="https://spee.ch/about" />.
                 </React.Fragment>

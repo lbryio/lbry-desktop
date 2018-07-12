@@ -1,13 +1,17 @@
 /* eslint-disable */
 import React from 'react';
 import { remote } from 'electron';
-import Thumbnail from 'component/common/thumbnail';
-import player from 'render-media';
 import fs from 'fs';
-import LoadingScreen from './loading-screen';
+import path from 'path';
+import player from 'render-media';
+import toBlobURL from 'stream-to-blob-url';
+import FileRender from 'component/fileRender';
+import Thumbnail from 'component/common/thumbnail';
+import LoadingScreen from 'component/common/loading-screen';
 
 class VideoPlayer extends React.PureComponent {
   static MP3_CONTENT_TYPES = ['audio/mpeg3', 'audio/mpeg'];
+  static FILE_MEDIA_TYPES = ['e-book', 'comic-book', 'document', '3D-file'];
 
   constructor(props) {
     super(props);
@@ -16,6 +20,7 @@ class VideoPlayer extends React.PureComponent {
       hasMetadata: false,
       startedPlaying: false,
       unplayable: false,
+      fileSource: null,
     };
 
     this.togglePlayListener = this.togglePlay.bind(this);
@@ -29,7 +34,7 @@ class VideoPlayer extends React.PureComponent {
 
   componentDidMount() {
     const container = this.media;
-    const { contentType, changeVolume, volume, position, claim } = this.props;
+    const { downloadCompleted, contentType, changeVolume, volume, position, claim } = this.props;
 
     const loadedMetadata = () => {
       this.setState({ hasMetadata: true, startedPlaying: true });
@@ -51,7 +56,13 @@ class VideoPlayer extends React.PureComponent {
     // use renderAudio override for mp3
     if (VideoPlayer.MP3_CONTENT_TYPES.indexOf(contentType) > -1) {
       this.renderAudio(container, null, false);
-    } else {
+    }
+    // Render custom viewer: FileRender
+    else if (this.fileType()) {
+      downloadCompleted && this.renderFile();
+    }
+    // Render default viewer: render-media (video, audio, img, iframe)
+    else {
       player.append(
         this.file(),
         container,
@@ -89,7 +100,7 @@ class VideoPlayer extends React.PureComponent {
 
   componentDidUpdate() {
     const { contentType, downloadCompleted } = this.props;
-    const { startedPlaying } = this.state;
+    const { startedPlaying, fileSource } = this.state;
 
     if (this.playableType() && !startedPlaying && downloadCompleted) {
       const container = this.media.children[0];
@@ -102,6 +113,8 @@ class VideoPlayer extends React.PureComponent {
           controls: true,
         });
       }
+    } else if (this.fileType() && !fileSource && downloadCompleted) {
+      this.renderFile();
     }
   }
 
@@ -159,6 +172,40 @@ class VideoPlayer extends React.PureComponent {
     return ['audio', 'video'].indexOf(mediaType) !== -1;
   }
 
+  supportedType() {
+    // Files supported by render-media
+    const { contentType, mediaType } = this.props;
+
+    return Object.values(player.mime).indexOf(contentType) !== -1;
+  }
+
+  fileType() {
+    // This files are supported using a custom viewer
+    const { mediaType } = this.props;
+
+    return VideoPlayer.FILE_MEDIA_TYPES.indexOf(mediaType) > -1;
+  }
+
+  renderFile() {
+    // This is what render-media does with unplayable files
+    const { filename, downloadPath, contentType, mediaType } = this.props;
+
+    toBlobURL(fs.createReadStream(downloadPath), contentType, (err, url) => {
+      if (err) {
+        this.setState({ unsupported: true });
+        return false;
+      }
+      // File to render
+      const fileSource = {
+        downloadPath,
+        filePath: url,
+        fileType: path.extname(filename).substring(1),
+      };
+      // Update state
+      this.setState({ fileSource });
+    });
+  }
+
   renderAudio(container, autoplay) {
     if (container.firstChild) {
       container.firstChild.remove();
@@ -173,25 +220,61 @@ class VideoPlayer extends React.PureComponent {
     container.appendChild(audio);
   }
 
+  showLoadingScreen(isFileType, isPlayableType) {
+    const { mediaType } = this.props;
+    const { hasMetadata, unplayable, unsupported, fileSource } = this.state;
+
+    const loader = {
+      isLoading: false,
+      loadingStatus: null,
+    };
+
+    // Loading message
+    const noFileMessage = __('Waiting for blob.');
+    const noMetadataMessage = __('Waiting for metadata.');
+
+    // Error message
+    const unplayableMessage = __("Sorry, looks like we can't play this file.");
+    const unsupportedMessage = __("Sorry, looks like we can't preview this file.");
+
+    // Files
+    const isLoadingFile = !fileSource && isFileType;
+    const isUnsupported =
+      (mediaType === 'application' || !this.supportedType()) && !isFileType && !isPlayableType;
+
+    // Media (audio, video)
+    const isUnplayable = isPlayableType && unplayable;
+    const isLoadingMetadata = isPlayableType && (!hasMetadata && !unplayable);
+
+    // Show loading message
+    if (isLoadingFile || isLoadingMetadata) {
+      loader.loadingStatus = isFileType ? noFileMessage : noMetadataMessage;
+      loader.isLoading = true;
+
+      // Show unsupported error message
+    } else if (isUnsupported || isUnplayable) {
+      loader.loadingStatus = isUnsupported ? unsupportedMessage : unplayableMessage;
+    }
+
+    return loader;
+  }
+
   render() {
-    const { mediaType, poster } = this.props;
-    const { hasMetadata, unplayable } = this.state;
-    const noMetadataMessage = 'Waiting for metadata.';
-    const unplayableMessage = "Sorry, looks like we can't play this file.";
-    const hideMedia = this.playableType() && !hasMetadata && !unplayable;
+    const { mediaType } = this.props;
+    const { fileSource } = this.state;
+
+    const isFileType = this.fileType();
+    const isFileReady = fileSource && isFileType;
+    const isPlayableType = this.playableType();
+    const { isLoading, loadingStatus } = this.showLoadingScreen(isFileType, isPlayableType);
 
     return (
       <React.Fragment>
-        {['audio', 'application'].indexOf(mediaType) !== -1 &&
-          (!this.playableType() || hasMetadata) &&
-          !unplayable && <Thumbnail src={poster} />}
-        {this.playableType() &&
-          !hasMetadata &&
-          !unplayable && <LoadingScreen status={noMetadataMessage} />}
-        {unplayable && <LoadingScreen status={unplayableMessage} spinner={false} />}
+        {loadingStatus && <LoadingScreen status={loadingStatus} spinner={isLoading} />}
+        {isFileReady && <FileRender source={fileSource} mediaType={mediaType} />}
         <div
           className={'content__view--container'}
-          style={{ opacity: hideMedia ? 0 : 1 }}
+          style={{ opacity: isLoading ? 0 : 1 }}
           ref={container => {
             this.media = container;
           }}

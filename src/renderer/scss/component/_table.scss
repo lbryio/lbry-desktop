@@ -80,6 +80,14 @@ table.table--help {
     font-family: 'metropolis-semibold';
     min-width: 130px;
   }
+  td:nth-of-type(2) {
+    /*Tourniquets text over 20VW*/
+    max-width: 20vw;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    color: var(--color-help);
+  }
 }
 
 table.table--transactions {

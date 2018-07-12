@@ -21,11 +21,11 @@ function injectDevelopmentTemplate(event, templates) {
   return templates;
 }
 
-export function openContextMenu(event, templates = []) {
-  const isSomethingSelected = window.getSelection().toString().length > 0;
-  const { type } = event.target;
+export function openContextMenu(event, templates = [], canEdit = false, selection = '') {
+  const { type, value } = event.target;
+  const isSomethingSelected = selection.length > 0 || window.getSelection().toString().length > 0;
   const isInput = event.target.matches('input') && (type === 'text' || type === 'number');
-  const { value } = event.target;
+  const isTextField = canEdit || isInput || event.target.matches('textarea');
 
   templates.push({
     label: 'Copy',
@@ -36,12 +36,12 @@ export function openContextMenu(event, templates = []) {
 
   // If context menu is opened on Input and there is text on the input and something is selected.
   const { selectionStart, selectionEnd } = event.target;
-  if (!!value && isInput && selectionStart !== selectionEnd) {
+  if (!!value && isTextField && selectionStart !== selectionEnd) {
     templates.push({ label: 'Cut', accelerator: 'CmdOrCtrl+X', role: 'cut' });
   }
 
   // If context menu is opened on Input and text is present on clipboard
-  if (clipboard.readText().length > 0 && isInput) {
+  if (clipboard.readText().length > 0 && isTextField) {
     templates.push({
       label: 'Paste',
       accelerator: 'CmdOrCtrl+V',
@@ -50,7 +50,7 @@ export function openContextMenu(event, templates = []) {
   }
 
   // If context menu is opened on Input
-  if (isInput && value) {
+  if (isTextField && value) {
     templates.push({
       label: 'Select All',
       accelerator: 'CmdOrCtrl+A',
@@ -61,6 +61,31 @@ export function openContextMenu(event, templates = []) {
   injectDevelopmentTemplate(event, templates);
   remote.Menu.buildFromTemplate(templates).popup();
 }
+
+// This function is used for the markdown description on the publish page
+export function openEditorMenu(event, codeMirror) {
+  const value = codeMirror.doc.getValue();
+  const selection = codeMirror.doc.getSelection();
+  const templates = [
+    {
+      label: 'Select All',
+      accelerator: 'CmdOrCtrl+A',
+      role: 'selectall',
+      click: () => {
+        codeMirror.execCommand('selectAll');
+      },
+      enabled: value.length > 0,
+    },
+    {
+      label: 'Cut',
+      accelerator: 'CmdOrCtrl+X',
+      role: 'cut',
+      enabled: selection.length > 0,
+    },
+  ];
+  openContextMenu(event, templates, true, selection);
+}
+
 export function openCopyLinkMenu(text, event) {
   const templates = [
     {
@@ -70,5 +95,5 @@ export function openCopyLinkMenu(text, event) {
       },
     },
   ];
-  openContextMenu(event, templates, false);
+  openContextMenu(event, templates);
 }

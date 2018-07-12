@@ -11,6 +11,7 @@ import isDev from 'electron-is-dev';
 import Daemon from './Daemon';
 import createTray from './createTray';
 import createWindow from './createWindow';
+import pjson from '../../package.json';
 
 autoUpdater.autoDownload = true;
 
@@ -58,16 +59,18 @@ app.on('ready', async () => {
   if (!isDaemonRunning) {
     daemon = new Daemon();
     daemon.on('exit', () => {
-      daemon = null;
-      if (!appState.isQuitting) {
-        dialog.showErrorBox(
-          'Daemon has Exited',
-          'The daemon may have encountered an unexpected error, or another daemon instance is already running. \n\n' +
-            'For more information please visit: \n' +
-            'https://lbry.io/faq/startup-troubleshooting'
-        );
+      if (!isDev) {
+        daemon = null;
+        if (!appState.isQuitting) {
+          dialog.showErrorBox(
+            'Daemon has Exited',
+            'The daemon may have encountered an unexpected error, or another daemon instance is already running. \n\n' +
+              'For more information please visit: \n' +
+              'https://lbry.io/faq/startup-troubleshooting'
+          );
+        }
+        app.quit();
       }
-      app.quit();
     });
     daemon.launch();
   }
@@ -82,7 +85,9 @@ app.on('ready', async () => {
 });
 
 app.on('activate', () => {
-  rendererWindow.show();
+  if (rendererWindow) {
+    rendererWindow.show();
+  }
 });
 
 app.on('will-quit', event => {
@@ -118,6 +123,10 @@ app.on('will-quit', event => {
   if (daemon) {
     daemon.quit();
     event.preventDefault();
+  }
+
+  if (rendererWindow) {
+    rendererWindow = null;
   }
 });
 
@@ -171,7 +180,7 @@ ipcMain.on('version-info-requested', () => {
     return ver.replace(/([^-])rc/, '$1-rc');
   }
 
-  const localVersion = app.getVersion();
+  const localVersion = pjson.version;
   const latestReleaseAPIURL = 'https://api.github.com/repos/lbryio/lbry-app/releases/latest';
   const opts = {
     headers: {

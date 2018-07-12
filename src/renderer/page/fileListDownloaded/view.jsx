@@ -1,6 +1,5 @@
 import React from 'react';
 import Button from 'component/button';
-import { FileTile } from 'component/fileTile';
 import FileList from 'component/fileList';
 import Page from 'component/page';
 

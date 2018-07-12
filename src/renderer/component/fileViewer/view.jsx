@@ -1,11 +1,10 @@
 // @flow
 import React from 'react';
-import { Lbry } from 'lbry-redux';
 import classnames from 'classnames';
 import type { Claim } from 'types/claim';
-import VideoPlayer from './internal/player';
-import VideoPlayButton from './internal/play-button';
-import LoadingScreen from './internal/loading-screen';
+import LoadingScreen from 'component/common/loading-screen';
+import Player from './internal/player';
+import PlayButton from './internal/play-button';
 
 const SPACE_BAR_KEYCODE = 32;
 
@@ -40,9 +39,10 @@ type Props = {
   obscureNsfw: boolean,
   play: string => void,
   searchBarFocused: boolean,
+  mediaType: string,
 };
 
-class Video extends React.PureComponent<Props> {
+class FileViewer extends React.PureComponent<Props> {
   constructor() {
     super();
 
@@ -123,12 +123,12 @@ class Video extends React.PureComponent<Props> {
       mediaPosition,
       className,
       obscureNsfw,
+      mediaType,
     } = this.props;
 
     const isPlaying = playingUri === uri;
     const isReadyToPlay = fileInfo && fileInfo.written_bytes > 0;
     const shouldObscureNsfw = obscureNsfw && metadata && metadata.nsfw;
-    const mediaType = Lbry.getMediaType(contentType, fileInfo && fileInfo.file_name);
 
     let loadStatusMessage = '';
 
@@ -156,7 +156,7 @@ class Video extends React.PureComponent<Props> {
                 <LoadingScreen status={loadStatusMessage} />
               </div>
             ) : (
-              <VideoPlayer
+              <Player
                 filename={fileInfo.file_name}
                 poster={poster}
                 downloadPath={fileInfo.download_path}
@@ -183,7 +183,7 @@ class Video extends React.PureComponent<Props> {
             className={layoverClass}
             style={layoverStyle}
           >
-            <VideoPlayButton
+            <PlayButton
               play={e => {
                 e.stopPropagation();
                 this.playContent();
@@ -200,4 +200,4 @@ class Video extends React.PureComponent<Props> {
   }
 }
 
-export default Video;
+export default FileViewer;

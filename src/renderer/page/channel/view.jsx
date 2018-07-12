@@ -48,7 +48,7 @@ class ChannelPage extends React.PureComponent<Props> {
     this.props.navigate('/show', newParams);
   }
 
-  paginate(e, totalPages: number) {
+  paginate(e: SyntheticKeyboardEvent<*>, totalPages: number) {
     // Change page if enter was pressed, and the given page is between
     // the first and the last.
     const pageFromInput = Number(e.target.value);
@@ -67,22 +67,21 @@ class ChannelPage extends React.PureComponent<Props> {
     const { fetching, claimsInChannel, claim, page, totalPages } = this.props;
     const { name, permanent_url: permanentUrl, claim_id: claimId } = claim;
     const currentPage = parseInt((page || 1) - 1, 10);
-    let contentList;
-    if (fetching) {
-      contentList = <BusyIndicator message={__('Fetching content')} />;
-    } else {
-      contentList =
-        claimsInChannel && claimsInChannel.length ? (
-          <FileList sortByHeight hideFilter fileInfos={claimsInChannel} />
-        ) : (
-          <span className="empty">{__('No content found.')}</span>
-        );
-    }
+
+    const contentList =
+      claimsInChannel && claimsInChannel.length ? (
+        <FileList sortByHeight hideFilter fileInfos={claimsInChannel} />
+      ) : (
+        !fetching && <span className="empty">{__('No content found.')}</span>
+      );
 
     return (
       <Page notContained>
         <section className="card__channel-info card__channel-info--large">
-          <h1>{name}</h1>
+          <h1>
+            {name}
+            {fetching && <BusyIndicator />}
+          </h1>
           <div className="card__actions card__actions--no-margin">
             <SubscribeButton uri={permanentUrl} channelName={name} />
             <ViewOnWebButton claimId={claimId} claimName={name} />

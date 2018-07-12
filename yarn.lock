@@ -5564,9 +5564,9 @@ lazy-val@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/lazy-val/-/lazy-val-1.0.3.tgz#bb97b200ef00801d94c317e29dc6ed39e31c5edc"
 
-lbry-redux@lbryio/lbry-redux#201d78b68a329065ee5d2a03bfb1607ea0666588:
+lbry-redux@lbryio/lbry-redux#a0d2d1ac532ade639d39c92f79678ac26e904dfd:
   version "0.0.1"
-  resolved "https://codeload.github.com/lbryio/lbry-redux/tar.gz/201d78b68a329065ee5d2a03bfb1607ea0666588"
+  resolved "https://codeload.github.com/lbryio/lbry-redux/tar.gz/a0d2d1ac532ade639d39c92f79678ac26e904dfd"
   dependencies:
     proxy-polyfill "0.1.6"
     reselect "^3.0.0"
@@ -7626,9 +7626,9 @@ react-redux@^5.0.3:
     loose-envify "^1.1.0"
     prop-types "^15.6.0"
 
-react-simplemde-editor@^3.6.15:
-  version "3.6.15"
-  resolved "https://registry.yarnpkg.com/react-simplemde-editor/-/react-simplemde-editor-3.6.15.tgz#b4991304c7e1cac79258bb225579d008c13b5991"
+react-simplemde-editor@^3.6.16:
+  version "3.6.16"
+  resolved "https://registry.yarnpkg.com/react-simplemde-editor/-/react-simplemde-editor-3.6.16.tgz#33633259478d3395f2c7b70deb56a1a40e863bea"
   dependencies:
     simplemde "^1.11.2"
 
@@ -8723,6 +8723,12 @@ stream-shift@^1.0.0:
 stream-to-blob-url@^2.0.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/stream-to-blob-url/-/stream-to-blob-url-2.1.0.tgz#c341d10502ec51250607327258ec2f586b07d626"
+  dependencies:
+    stream-to-blob "^1.0.0"
+
+stream-to-blob-url@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/stream-to-blob-url/-/stream-to-blob-url-2.1.1.tgz#e1ac97f86ca8e9f512329a48e7830ce9a50beef2"
   dependencies:
     stream-to-blob "^1.0.0"
 

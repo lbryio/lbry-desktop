@@ -152,7 +152,12 @@ class FileList extends React.PureComponent<Props, State> {
     }
 
     this.sortFunctions[sortBy](fileInfos).forEach(fileInfo => {
-      const { name: claimName, claim_name: claimNameDownloaded, claim_id: claimId } = fileInfo;
+      const {
+        name: claimName,
+        claim_name: claimNameDownloaded,
+        claim_id: claimId,
+        outpoint,
+      } = fileInfo;
       const uriParams = {};
 
       // This is unfortunate
@@ -162,7 +167,8 @@ class FileList extends React.PureComponent<Props, State> {
       uriParams.claimId = claimId;
       const uri = buildURI(uriParams);
 
-      content.push(<FileCard key={uri} uri={uri} checkPending={checkPending} />);
+      // See https://github.com/lbryio/lbry-app/issues/1327 for discussion around using outpoint as the key
+      content.push(<FileCard key={outpoint} uri={uri} checkPending={checkPending} />);
     });
 
     return (

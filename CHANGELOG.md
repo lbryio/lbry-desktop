@@ -5,6 +5,42 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ## [Unreleased]
 
+### Fixed
+
+### Added
+
+### Changed
+
+
+
+## [0.22.2] - 2018-07-09
+
+### Fixed
+  * Fixed 'Get Credits' screen so the app doesn't break when LBC is unavailable on ShapeShift ([#1739](https://github.com/lbryio/lbry-app/pull/1739))
+
+
+## [0.22.1] - 2018-07-05
+
+### Added
+
+
+### Fixed
+  * Take previous bid amount into account when determining how much users have available to deposit ([#1725](https://github.com/lbryio/lbry-app/pull/1725))
+  * Sidebar sizing on larger screens ([#1709](https://github.com/lbryio/lbry-app/pull/1709))
+  * Publishing scenario while editing and changing URI ([#1716](https://github.com/lbryio/lbry-app/pull/1716))
+  * Fix can't right click > paste into description on publish ([#1664](https://github.com/lbryio/lbry-app/issues/1664))
+  * Mac/Linux error when starting app up too quickly after shutdown ([#1727](https://github.com/lbryio/lbry-app/pull/1727))
+  * Console errors when multiple downloads for same claim exist ([#1724](https://github.com/lbryio/lbry-app/pull/1724))
+  * App version in dev mode ([#1722](https://github.com/lbryio/lbry-app/pull/1722))
+  * Long URI name displays in transaction list/Help ([#1694](https://github.com/lbryio/lbry-app/pull/1694))/([#1692](https://github.com/lbryio/lbry-app/pull/1692))
+  * Edit option missing from certain published claims ([#175](https://github.com/lbryio/lbry-desktop/issues/1756))
+  
+### Changed
+  * Show claim name, instead of URI, when loading a channel([#1711](https://github.com/lbryio/lbry-app/pull/1711))
+  * Updated LBRY daemon to 0.20.3 which contains some availability improvements ([v0.20.3](https://github.com/lbryio/lbry/releases/tag/v0.20.3))
+
+## [0.22.0] - 2018-06-26
+
 ### Added
    * Ability to upload thumbnails through spee.ch while publishing ([#1248](https://github.com/lbryio/lbry-app/pull/1248))
    * QR code for wallet address to Send and Receive page ([#1582](https://github.com/lbryio/lbry-app/pull/1582))

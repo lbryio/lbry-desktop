@@ -74,6 +74,7 @@ export const doResetThumbnailStatus = () => (dispatch: Dispatch): PromiseAction 
 export const doUploadThumbnail = (filePath: string, nsfw: boolean) => (dispatch: Dispatch) => {
   const thumbnail = fs.readFileSync(filePath);
   const fileExt = path.extname(filePath);
+  const fileName = path.basename(filePath);
 
   const makeid = () => {
     let text = '';
@@ -100,9 +101,9 @@ export const doUploadThumbnail = (filePath: string, nsfw: boolean) => (dispatch:
 
   const data = new FormData();
   const name = makeid();
-  const blob = new Blob([thumbnail], { type: `image/${fileExt.slice(1)}` });
+  const file = new File([thumbnail], fileName, { type: `image/${fileExt.slice(1)}` });
   data.append('name', name);
-  data.append('file', blob);
+  data.append('file', file);
   data.append('nsfw', nsfw.toString());
   return fetch('https://spee.ch/api/claim/publish', {
     method: 'POST',

@@ -35,7 +35,7 @@ class SelectThumbnail extends React.PureComponent<Props> {
               stretch
               type="text"
               name="content_thumbnail"
-              label={__('Url')}
+              label={__('URL')}
               placeholder="http://spee.ch/mylogo"
               value={thumbnail}
               disabled={formDisabled}

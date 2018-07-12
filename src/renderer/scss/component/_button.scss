@@ -62,7 +62,7 @@ button:disabled {
   font-size: 1em;
   color: var(--btn-color-inverse);
   border-radius: 0;
-  display: inline-block;
+  display: inline;
   min-width: 0;
   box-shadow: none;
   text-align: left;
@@ -74,6 +74,13 @@ button:disabled {
 
 .btn.btn--secondary {
   background-color: var(--btn-bg-secondary);
+}
+
+.btn.btn--tourniquet {
+  max-width: 20vw;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .btn.btn--no-style {
