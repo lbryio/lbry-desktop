@@ -1,11 +1,11 @@
 // @flow
-import React from 'react';
+import * as React from 'react';
 import { normalizeURI } from 'lbry-redux';
 import ToolTip from 'component/common/tooltip';
 import FileCard from 'component/fileCard';
 import Button from 'component/button';
 import * as icons from 'constants/icons';
-import Claim from 'types/claim';
+import type { Claim } from 'types/claim';
 
 type Props = {
   category: string,
@@ -14,6 +14,7 @@ type Props = {
   fetching: boolean,
   channelClaims: Array<Claim>,
   fetchChannel: string => void,
+  obscureNsfw: boolean,
 };
 
 type State = {
@@ -206,11 +207,12 @@ class CategoryList extends React.PureComponent<Props, State> {
   }
 
   render() {
-    const { category, categoryLink, names, channelClaims } = this.props;
+    const { category, categoryLink, names, channelClaims, obscureNsfw } = this.props;
     const { canScrollNext, canScrollPrevious } = this.state;
 
-    // The lint was throwing an error saying we should use <button> instead of <a>
-    // We are using buttons, needs more exploration
+    const isCommunityTopBids = category.match(/^community/i);
+    const showScrollButtons = isCommunityTopBids ? !obscureNsfw : true;
+
     return (
       <div className="card-row">
         <div className="card-row__header">
@@ -220,45 +222,55 @@ class CategoryList extends React.PureComponent<Props, State> {
             ) : (
               category
             )}
-            {category &&
-              category.match(/^community/i) && (
-                <ToolTip
-                  label={__("What's this?")}
-                  body={__(
-                    'Community Content is a public space where anyone can share content with the rest of the LBRY community. Bid on the names from "one" to "ten" to put your content here!'
-                  )}
-                />
-              )}
+            {isCommunityTopBids && (
+              <ToolTip
+                label={__("What's this?")}
+                body={__(
+                  'Community Content is a public space where anyone can share content with the rest of the LBRY community. Bid on the names from "one" to "ten" to put your content here!'
+                )}
+              />
+            )}
           </div>
-          <div className="card-row__scroll-btns">
-            <Button
-              className="btn--arrow"
-              disabled={!canScrollPrevious}
-              onClick={this.handleScrollPrevious}
-              icon={icons.ARROW_LEFT}
-            />
-            <Button
-              className="btn--arrow"
-              disabled={!canScrollNext}
-              onClick={this.handleScrollNext}
-              icon={icons.ARROW_RIGHT}
-            />
-          </div>
+          {showScrollButtons && (
+            <div className="card-row__scroll-btns">
+              <Button
+                className="btn--arrow"
+                disabled={!canScrollPrevious}
+                onClick={this.handleScrollPrevious}
+                icon={icons.ARROW_LEFT}
+              />
+              <Button
+                className="btn--arrow"
+                disabled={!canScrollNext}
+                onClick={this.handleScrollNext}
+                icon={icons.ARROW_RIGHT}
+              />
+            </div>
+          )}
         </div>
-        <div
-          ref={ref => {
-            this.rowItems = ref;
-          }}
-          className="card-row__scrollhouse"
-        >
-          {names && names.map(name => <FileCard key={name} uri={normalizeURI(name)} />)}
+        {obscureNsfw && isCommunityTopBids ? (
+          <div className="card__content help">
+            {__(
+              'The community top bids section is only visible if you allow mature content in the app. You can change your content viewing preferences'
+            )}{' '}
+            <Button button="link" navigate="/settings" label={__('here')} />.
+          </div>
+        ) : (
+          <div
+            className="card-row__scrollhouse"
+            ref={ref => {
+              this.rowItems = ref;
+            }}
+          >
+            {names && names.map(name => <FileCard key={name} uri={normalizeURI(name)} />)}
 
-          {channelClaims && channelClaims.length
-            ? channelClaims.map(claim => (
+            {channelClaims &&
+              channelClaims.length &&
+              channelClaims.map(claim => (
                 <FileCard key={claim.claim_id} uri={`lbry://${claim.name}#${claim.claim_id}`} />
-              ))
-            : null}
-        </div>
+              ))}
+          </div>
+        )}
       </div>
     );
   }
