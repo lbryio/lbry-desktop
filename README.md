@@ -1,8 +1,8 @@
 # LBRY App
 
-[![Build Status](https://travis-ci.org/lbryio/lbry-app.svg?branch=master)](https://travis-ci.org/lbryio/lbry-app)
-[![Dependencies](https://david-dm.org/lbryio/lbry-app/status.svg)](https://david-dm.org/lbryio/lbry-app)
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/78b627d4f5524792adc48719835e1523)](https://www.codacy.com/app/LBRY/lbry-app?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=lbryio/lbry-app&amp;utm_campaign=Badge_Grade)
+[![Build Status](https://travis-ci.org/lbryio/lbry-desktop.svg?branch=master)](https://travis-ci.org/lbryio/lbry-desktop)
+[![Dependencies](https://david-dm.org/lbryio/lbry-deskop/status.svg)](https://david-dm.org/lbryio/lbry-desktop)
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/78b627d4f5524792adc48719835e1523)](https://www.codacy.com/app/LBRY/lbry-desktop?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=lbryio/lbry-desktop&amp;utm_campaign=Badge_Grade)
 [![chat on Discord](https://img.shields.io/discord/362322208485277697.svg?logo=discord)](https://chat.lbry.io)
 
 The LBRY app is a graphical browser for the decentralized content marketplace provided by the
@@ -14,26 +14,26 @@ The LBRY app is a graphical browser for the decentralized content marketplace pr
 
 ## Install
 
-We provide installers for Windows, macOS (v10.9 or greater), and Debian-based Linux. See community maintained builds section for alternative Linux installations. 
+We provide installers for Windows, macOS (v10.9 or greater), and Debian-based Linux. See community maintained builds section for alternative Linux installations.
 
 |                       | Windows                                      | macOS                                        | Linux                                        
 | --------------------- | -------------------------------------------- | -------------------------------------------- | -------------------------------------------- |
 | Latest Stable Release | [Download](https://lbry.io/get/lbry.exe)     | [Download](https://lbry.io/get/lbry.dmg)     | [Download](https://lbry.io/get/lbry.deb)
 | Latest Pre-release    | [Download](https://lbry.io/get/lbry.pre.exe) | [Download](https://lbry.io/get/lbry.pre.dmg) | [Download](https://lbry.io/get/lbry.pre.deb)
 
-Our [releases page](https://github.com/lbryio/lbry-app/releases) also contains the latest
+Our [releases page](https://github.com/lbryio/lbry-desktop/releases) also contains the latest
 release, pre-releases, and past builds.   
 *Note: If the deb fails to install using the Ubuntu Software Center, install manually via `sudo dpkg -i <path to deb>`. You'll need to run `sudo apt-get install -f` if this is the first time installing it to install dependencies*
 
 To install from source or make changes to the application, continue to the next section below.   
 
-**Community maintained** builds for Arch Linux and Flatpak are available, see below. These installs will need to be updated manually as the in-app update process only supports deb installs at this time. 
+**Community maintained** builds for Arch Linux and Flatpak are available, see below. These installs will need to be updated manually as the in-app update process only supports deb installs at this time.
 *Note: If coming from a deb install, the directory structure is different and you'll need to [migrate data](https://lbry.io/faq/backup-data).*
 
 |                       | Flatpak                                   | Arch                                                                                            
-| --------------------- | ------------------------------------------| -------------------------------------------- 
+| --------------------- | ------------------------------------------| --------------------------------------------
 | Latest Release        | [FlatHub Page](https://flathub.org/apps/details/io.lbry.lbry-app)   | [AUR Package](https://aur.archlinux.org/packages/lbry-app-bin/)   
-| Maintainers           | [@choofee](https://github.com/choffee)/[@iuyte](https://github.com/iuyte)    | [@kcseb]()/[@TimurKiyivinski](https://github.com/TimurKiyivinski) 
+| Maintainers           | [@choofee](https://github.com/choffee)/[@iuyte](https://github.com/iuyte)    | [@kcseb](https://github.com/kcseb)/[@TimurKiyivinski](https://github.com/TimurKiyivinski)
 
 ## Usage
 Double click the installed application to browse with the LBRY network.
@@ -49,8 +49,8 @@ Double click the installed application to browse with the LBRY network.
 
 #### Steps
 
-1. Clone (or [fork](https://help.github.com/articles/fork-a-repo/)) this repository: `git clone https://github.com/lbryio/lbry-app`
-2. Change directories into the downloaded folder: `cd lbry-app`
+1. Clone (or [fork](https://help.github.com/articles/fork-a-repo/)) this repository: `git clone https://github.com/lbryio/lbry-desktop`
+2. Change directories into the downloaded folder: `cd lbry-desktop`
 3. Install the dependencies: `yarn`
 4. Run the app: `yarn dev`
 
@@ -59,7 +59,7 @@ distributable packages.
 
 #### Resetting your Packages
 
-If the app isn't building, or `yarn xxx` commands aren't working you may need to just reset your `node_modules`. To do so you can run: `rm -r node_modules && yarn` or `del /s /q node_modules && yarn` on Windows. 
+If the app isn't building, or `yarn xxx` commands aren't working you may need to just reset your `node_modules`. To do so you can run: `rm -r node_modules && yarn` or `del /s /q node_modules && yarn` on Windows.
 
 ## Contributing
 

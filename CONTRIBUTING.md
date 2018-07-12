@@ -8,7 +8,7 @@ However, for those individuals who want a bit more guidance on the best way to c
 
 ## TL;DR?
 
-* [Here](https://github.com/lbryio/lbry-app/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22+no%3Aassignee)
+* [Here](https://github.com/lbryio/lbry-desktop/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22+no%3Aassignee)
   is a list of help wanted issues.
 * Comment on an issue to let us know if you are going to work on it, don't take an issue that
   someone reserved less than 3 days ago
@@ -26,24 +26,24 @@ receives contributions from individuals outside the core team -- such as yoursel
 To make contributing as easy and rewarding of possible, we have instituted the following system:
 
 * Anyone can view all issues in the system by clicking on the
-  [Issues](https://github.com/lbryio/lbry-app/issues) button at the top of the page. Feel free to
+  [Issues](https://github.com/lbryio/lbry-desktop/issues) button at the top of the page. Feel free to
   add an issue if you think we have missed something (and you might earn some LBC in the process
   because we do tip people for reporting bugs).
-* Once on the [Issues](https://github.com/lbryio/lbry-app/issues) page, a potential contributor can
+* Once on the [Issues](https://github.com/lbryio/lbry-desktop/issues) page, a potential contributor can
   filter issues by the
-  [Help Wanted](https://github.com/lbryio/lbry-app/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22+no%3Aassignee)
+  [Help Wanted](https://github.com/lbryio/lbry-desktop/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22+no%3Aassignee)
   label to see a curated list of suggested issues with which community members can help.
 * Every
-  [Help Wanted](https://github.com/lbryio/lbry-app/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22+no%3Aassignee)
+  [Help Wanted](https://github.com/lbryio/lbry-desktop/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22+no%3Aassignee)
   issue is ranked on a scale from zero to four.
 
 | Level                                                                                                                                            | Description                                                                                        |
 | ------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------- |
-| [**level 0**](https://github.com/lbryio/lbry-app/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22+label%3A%22level%3A+0%22+no%3Aassignee) | Typos and text edits -- a tech-savvy non-programmer can fix these                                  |
-| [**level 1**](https://github.com/lbryio/lbry-app/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22+label%3A%22level%3A+1%22+no%3Aassignee) | Programming issues that require little knowledge of how the LBRY app works                         |
-| [**level 2**](https://github.com/lbryio/lbry-app/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22+label%3A%22level%3A+2%22+no%3Aassignee) | Issues of average difficulty that require the developer to dig into how the app works a little bit |
-| [**level 3**](https://github.com/lbryio/lbry-app/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22+label%3A%22level%3A+3%22+no%3Aassignee) | Issues that are likely too tricky to be level 2 or require more thinking outside of the box        |
-| [**level 4**](https://github.com/lbryio/lbry-app/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22+label%3A%22level%3A+4%22+no%3Aassignee) | Big features or really hard issues                                                                 |
+| [**level 0**](https://github.com/lbryio/lbry-desktop/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22+label%3A%22level%3A+0%22+no%3Aassignee) | Typos and text edits -- a tech-savvy non-programmer can fix these                                  |
+| [**level 1**](https://github.com/lbryio/lbry-desktop/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22+label%3A%22level%3A+1%22+no%3Aassignee) | Programming issues that require little knowledge of how the LBRY app works                         |
+| [**level 2**](https://github.com/lbryio/lbry-desktop/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22+label%3A%22level%3A+2%22+no%3Aassignee) | Issues of average difficulty that require the developer to dig into how the app works a little bit |
+| [**level 3**](https://github.com/lbryio/lbry-desktop/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22+label%3A%22level%3A+3%22+no%3Aassignee) | Issues that are likely too tricky to be level 2 or require more thinking outside of the box        |
+| [**level 4**](https://github.com/lbryio/lbry-desktop/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22+label%3A%22level%3A+4%22+no%3Aassignee) | Big features or really hard issues                                                                 |
 
 The process of ranking issues is highly subjective. The purpose of sorting issues like this is to
 give contributors a general idea about the type of issues they are looking at. It could very well be
@@ -51,7 +51,7 @@ the case that a level 1 issue is more difficult than a level 2, for instance. Th
 to help you find relevant issues, not to prevent you from working on issues that you otherwise
 would. If these rankings don't work for you, feel free to ignore them.
 
-Although all contributions should have good UX, the [UX label, when applied in conjunction with Help Wanted](https://github.com/lbryio/lbry-app/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22+label%3Aux+no%3Aassignee), indicates that the contributor ought to implement the feature in a creative way that specifically focuses on providing a good user experience. These issues often have no set instruction for how the experience should be and leave it to the contributor to figure out. This may be challenging for people who do not like UX, but also more fun and rewarding for those who do.
+Although all contributions should have good UX, the [UX label, when applied in conjunction with Help Wanted](https://github.com/lbryio/lbry-desktop/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22+label%3Aux+no%3Aassignee), indicates that the contributor ought to implement the feature in a creative way that specifically focuses on providing a good user experience. These issues often have no set instruction for how the experience should be and leave it to the contributor to figure out. This may be challenging for people who do not like UX, but also more fun and rewarding for those who do.
 
 ## Code Overview
 
@@ -67,7 +67,7 @@ our styling rules and code best practices.
 
 ### lbry-redux
 
-This project uses [lbry-redux](https://github.com/lbryio/lbry-redux) to share Redux code with [lbry-android](https://github.com/lbryio/lbry-android) and other LBRY apps. Over time, more Redux code that is suitable to be shared will be moved into lbry-redux. If modifying Redux code, you may be asked to make some of your changes in lbry-redux rather than lbry-app. The steps to work with lbry-redux locally can be found [here](https://github.com/lbryio/lbry-redux#local-development).
+This project uses [lbry-redux](https://github.com/lbryio/lbry-redux) to share Redux code with [lbry-android](https://github.com/lbryio/lbry-android) and other LBRY apps. Over time, more Redux code that is suitable to be shared will be moved into lbry-redux. If modifying Redux code, you may be asked to make some of your changes in lbry-redux rather than lbry-desktop. The steps to work with lbry-redux locally can be found [here](https://github.com/lbryio/lbry-redux#local-development).
 
 
 ### Flow
@@ -146,8 +146,8 @@ There are a few tools integrated to the project that will ease the process of de
   manner and, therefore, not begin working on anything reserved (or updated) within the last 3 days.
   If someone has been officially assigned an issue via Github's assignment system, it is also not
   available. Contributors are encouraged to ask if they have any questions about issue availability.
-* The [changelog](https://github.com/lbryio/lbry-app/blob/master/CHANGELOG.md) should be updated to 
-  include a reference to the fix/change/addition. See previous entries for format. 
+* The [changelog](https://github.com/lbryio/lbry-desktop/blob/master/CHANGELOG.md) should be updated to
+  include a reference to the fix/change/addition. See previous entries for format.
 * Once the pull request is visible in the LBRY repo, a LBRY team member will review it and make sure
   it is up to our standards. At this point, the contributor may have to change his or her code based
   on our suggestions and comments.
@@ -169,13 +169,13 @@ the issue tracker, but maybe it's a good idea. Do you think the search layout is
 it! We welcome all feedback and suggestions. That said, it may be the case that we do not wish to
 incorporate your change if you don't check with us first (also, please check with us especially if
 you are planning on adding Tor support :P). If you want to add a feature that is not listed in the
-issue tracker, go ahead and [create an issue](https://github.com/lbryio/lbry-app/issues/new), and
+issue tracker, go ahead and [create an issue](https://github.com/lbryio/lbry-desktop/issues/new), and
 say in the description that you would like to try to implement it yourself. This way we can tell you
 in advance if we will accept your changes and we can point you in the right direction.
 
 # Tom's "Voice of the User" Wishlist
 
-[Anything marked with **both** "Help Wanted" and "Tom's 'Voice of the User' Wishlist"](https://github.com/lbryio/lbry-app/issues?q=is%3Aopen+is%3Aissue+label%3A%22Tom%27s+%5C%22Voice+of+the+User%5C%22+Wishlist%22+label%3A%22help+wanted%22+no%3Aassignee)
+[Anything marked with **both** "Help Wanted" and "Tom's 'Voice of the User' Wishlist"](https://github.com/lbryio/lbry-desktop/issues?q=is%3Aopen+is%3Aissue+label%3A%22Tom%27s+%5C%22Voice+of+the+User%5C%22+Wishlist%22+label%3A%22help+wanted%22+no%3Aassignee)
 will earn you an extra 50 LBC on top of what we would otherwise tip you.
 
 # Get in Touch

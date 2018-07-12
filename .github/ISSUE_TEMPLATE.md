@@ -4,7 +4,7 @@ Thanks for reporting an issue to LBRY and helping us improve!
 To make it possible for us to help you, please fill out below information carefully.
 
 Before reporting any issues, please make sure that you're using the latest version.
-- App releases: https://github.com/lbryio/lbry-app/releases
+- App releases: https://github.com/lbryio/lbry-desktop/releases
 - Standalone daemon: https://github.com/lbryio/lbry/releases
 
 We are also available on live chat at https://chat.lbry.io
@@ -48,4 +48,3 @@ Tell us your suggested solutions if you have any.
 
 ## Screenshots
 <!-- If a screenshot would help explain the bug, please include one or two here -->
-
