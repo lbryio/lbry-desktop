@@ -167,7 +167,7 @@ class FileList extends React.PureComponent<Props, State> {
       uriParams.claimId = claimId;
       const uri = buildURI(uriParams);
 
-      // See https://github.com/lbryio/lbry-app/issues/1327 for discussion around using outpoint as the key
+      // See https://github.com/lbryio/lbry-desktop/issues/1327 for discussion around using outpoint as the key
       content.push(<FileCard key={outpoint} uri={uri} checkPending={checkPending} />);
     });
 

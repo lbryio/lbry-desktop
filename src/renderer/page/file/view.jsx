@@ -75,7 +75,7 @@ class FilePage extends React.Component<Props> {
       fetchFileInfo(uri);
     }
 
-    // See https://github.com/lbryio/lbry-app/pull/1563 for discussion
+    // See https://github.com/lbryio/lbry-desktop/pull/1563 for discussion
     fetchCostInfo(uri);
 
     this.checkSubscription(this.props);

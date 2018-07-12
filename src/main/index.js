@@ -181,7 +181,7 @@ ipcMain.on('version-info-requested', () => {
   }
 
   const localVersion = pjson.version;
-  const latestReleaseAPIURL = 'https://api.github.com/repos/lbryio/lbry-app/releases/latest';
+  const latestReleaseAPIURL = 'https://api.github.com/repos/lbryio/lbry-desktop/releases/latest';
   const opts = {
     headers: {
       'User-Agent': `LBRY/${localVersion}`,

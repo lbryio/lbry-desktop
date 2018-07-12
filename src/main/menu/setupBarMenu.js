@@ -56,7 +56,7 @@ export default () => {
         {
           label: 'Report Issue',
           click: () => {
-            shell.openExternal('https://github.com/lbryio/lbry-app/issues/new');
+            shell.openExternal('https://github.com/lbryio/lbry-desktop/issues/new');
           },
         },
         { type: 'separator' },
