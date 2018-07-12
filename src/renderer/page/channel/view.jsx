@@ -18,6 +18,7 @@ type Props = {
   params: { page: number },
   claim: Claim,
   claimsInChannel: Array<Claim>,
+  channelIsMine: boolean,
   fetchClaims: (string, number) => void,
   fetchClaimCount: string => void,
   navigate: (string, {}) => void,
@@ -66,7 +67,7 @@ class ChannelPage extends React.PureComponent<Props> {
   }
 
   render() {
-    const { uri, fetching, claimsInChannel, claim, page, totalPages } = this.props;
+    const { uri, fetching, claimsInChannel, claim, page, totalPages, channelIsMine } = this.props;
     const { name, permanent_url: permanentUrl, claim_id: claimId } = claim;
     const currentPage = parseInt((page || 1) - 1, 10);
 
@@ -118,7 +119,7 @@ class ChannelPage extends React.PureComponent<Props> {
               />
             </FormRow>
           )}
-        <HiddenNsfwClaims className="card__content help" uri={uri} />
+        {!channelIsMine && <HiddenNsfwClaims className="card__content help" uri={uri} />}
       </Page>
     );
   }

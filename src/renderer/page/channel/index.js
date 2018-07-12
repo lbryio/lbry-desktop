@@ -5,6 +5,7 @@ import {
   makeSelectClaimsInChannelForCurrentPage,
   makeSelectFetchingChannelClaims,
   makeSelectCurrentParam,
+  makeSelectClaimIsMine,
   selectCurrentParams,
 } from 'lbry-redux';
 import { doNavigate } from 'redux/actions/navigation';
@@ -18,6 +19,7 @@ const select = (state, props) => ({
   page: makeSelectCurrentParam('page')(state),
   params: selectCurrentParams(state),
   totalPages: makeSelectTotalPagesForChannel(props.uri)(state),
+  channelIsMine: makeSelectClaimIsMine(props.uri)(state),
 });
 
 const perform = dispatch => ({
@@ -26,4 +28,7 @@ const perform = dispatch => ({
   navigate: (path, params) => dispatch(doNavigate(path, params)),
 });
 
-export default connect(select, perform)(ChannelPage);
+export default connect(
+  select,
+  perform
+)(ChannelPage);
