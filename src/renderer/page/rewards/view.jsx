@@ -117,7 +117,7 @@ class RewardsPage extends React.PureComponent<Props> {
     } else if (!rewards || rewards.length <= 0) {
       return (
         <div className="card__content">
-          {claimed && Object.keys(claimed).length
+          {claimed && claimed.length
             ? __(
                 "You have claimed all available rewards! We're regularly adding more so be sure to check back later."
               )
