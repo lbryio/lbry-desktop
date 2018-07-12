@@ -171,7 +171,7 @@ export function doUpdateLoadStatus(uri, outpoint) {
       } else {
         // ready to play
         const { total_bytes: totalBytes, written_bytes: writtenBytes } = fileInfo;
-        const progress = writtenBytes / totalBytes * 100;
+        const progress = (writtenBytes / totalBytes) * 100;
 
         dispatch({
           type: ACTIONS.DOWNLOADING_PROGRESSED,
@@ -259,29 +259,37 @@ export function doLoadVideo(uri) {
           streamInfo === null || typeof streamInfo !== 'object' || streamInfo.error === 'Timeout';
 
         if (timeout) {
-          dispatch(doSetPlayingUri(null));
-          dispatch({
-            type: ACTIONS.LOADING_VIDEO_FAILED,
-            data: { uri },
-          });
-
-          dispatch(doNotify({ id: MODALS.FILE_TIMEOUT }, { uri }));
+          dispatch(handleLoadVideoError(uri, 'timeout'));
         } else {
           dispatch(doDownloadFile(uri, streamInfo));
         }
       })
       .catch(() => {
-        dispatch(doSetPlayingUri(null));
-        dispatch({
-          type: ACTIONS.LOADING_VIDEO_FAILED,
-          data: { uri },
-        });
+        dispatch(handleLoadVideoError(uri));
+      });
+  };
+}
+
+function handleLoadVideoError(uri, errorType = '') {
+  return (dispatch, getState) => {
+    // suppress error when another media is playing
+    const { playingUri } = getState().content;
+    if (!playingUri || playingUri === uri) {
+      dispatch({
+        type: ACTIONS.LOADING_VIDEO_FAILED,
+        data: { uri },
+      });
+      dispatch(doSetPlayingUri(null));
+      if (errorType === 'timeout') {
+        doNotify({ id: MODALS.FILE_TIMEOUT }, { uri });
+      } else {
         dispatch(
           doAlertError(
             `Failed to download ${uri}, please try again. If this problem persists, visit https://lbry.io/faq/support for support.`
           )
         );
-      });
+      }
+    }
   };
 }
 

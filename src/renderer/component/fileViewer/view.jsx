@@ -79,10 +79,22 @@ class FileViewer extends React.PureComponent<Props> {
     }
   }
 
+  // do not play when state.content.errors[uri]
   handleAutoplay = (props: Props) => {
-    const { autoplay, playingUri, fileInfo, costInfo, isDownloading, uri, play, metadata } = props;
+    const {
+      autoplay,
+      playingUri,
+      fileInfo,
+      costInfo,
+      isDownloading,
+      uri,
+      play,
+      metadata,
+      fileInfoErrors,
+    } = props;
 
-    const playable = autoplay && playingUri !== uri && metadata && !metadata.nsfw;
+    const playable =
+      autoplay && playingUri !== uri && metadata && !metadata.nsfw && !(uri in fileInfoErrors);
 
     if (playable && costInfo && costInfo.cost === 0 && !fileInfo && !isDownloading) {
       play(uri);
