@@ -78,6 +78,7 @@ export default class extends React.PureComponent<Props> {
 
     return (
       <Page notContained loading={isFetchingSubscriptions}>
+        <HiddenNsfwClaims uris={subscriptionUris} />
         {!subscriptions.length && (
           <div className="page__empty">
             {__("It looks like you aren't subscribed to any channels yet.")}
@@ -87,7 +88,6 @@ export default class extends React.PureComponent<Props> {
           </div>
         )}
         {!!claimList.length && <FileList hideFilter sortByHeight fileInfos={claimList} />}
-        <HiddenNsfwClaims uris={subscriptionUris} />
       </Page>
     );
   }
