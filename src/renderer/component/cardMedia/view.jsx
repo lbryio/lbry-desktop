@@ -4,46 +4,20 @@ import classnames from 'classnames';
 
 type Props = {
   thumbnail: ?string, // externally sourced image
-  nsfw: ?boolean,
 };
 
-const autoThumbColors = [
-  'purple',
-  'red',
-  'pink',
-  'indigo',
-  'blue',
-  'light-blue',
-  'cyan',
-  'teal',
-  'green',
-  'yellow',
-  'orange',
-];
-
 class CardMedia extends React.PureComponent<Props> {
-  getAutoThumbClass = () => autoThumbColors[Math.floor(Math.random() * autoThumbColors.length)];
-
   render() {
-    const { thumbnail, nsfw } = this.props;
-
-    const generateAutothumb = !thumbnail && !nsfw;
-    let autoThumbClass;
-    if (generateAutothumb) {
-      autoThumbClass = `card__media--autothumb.${this.getAutoThumbClass()}`;
-    }
+    const { thumbnail } = this.props;
 
     return (
       <div
-        style={thumbnail && !nsfw ? { backgroundImage: `url('${thumbnail}')` } : {}}
-        className={classnames('card__media', autoThumbClass, {
-          'card__media--no-img': !thumbnail || nsfw,
-          'card__media--nsfw': nsfw,
+        style={thumbnail ? { backgroundImage: `url('${thumbnail}')` } : {}}
+        className={classnames('card__media', {
+          'card__media--no-img': !thumbnail,
         })}
       >
-        {(!thumbnail || nsfw) && (
-          <span className="card__media-text">{nsfw ? __('NSFW') : 'LBRY'}</span>
-        )}
+        {!thumbnail && <span className="card__media-text">LBRY</span>}
       </div>
     );
   }

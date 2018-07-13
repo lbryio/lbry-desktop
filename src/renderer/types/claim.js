@@ -1,5 +1,13 @@
 // @flow
 
+// Currently incomplete
+export type Metadata = {
+  nsfw: boolean,
+  title: string,
+  thumbnail: ?string,
+  description: ?string,
+};
+
 // Actual claim type has more values than this
 // Add them as they are used
 export type Claim = {
@@ -22,9 +30,10 @@ export type Claim = {
   nout: number,
   signature_is_valid: boolean,
   valid_at_height: number,
-  value: {
+  value: ?{
     publisherSignature: ?{
       certificateId: ?string,
     },
+    stream: ?Metadata,
   },
 };

@@ -73,7 +73,7 @@ class SearchPage extends React.PureComponent<Props> {
                 <Icon icon={icons.HELP} />
               </ToolTip>
             </div>
-            <FileTile fullWidth uri={normalizeURI(query)} showUri />
+            <FileTile fullWidth showUri displayHiddenMessage uri={normalizeURI(query)} />
           </React.Fragment>
         )}
         <FileListSearch query={query} />
