@@ -115,6 +115,7 @@ class TransactionList extends React.PureComponent<Props, State> {
               <option value="tip">{__('Tips')}</option>
               <option value="support">{__('Supports')}</option>
               <option value="update">{__('Updates')}</option>
+              <option value="abandon">{__('Abandon')}</option>
             </FormField>
           </div>
         )}
