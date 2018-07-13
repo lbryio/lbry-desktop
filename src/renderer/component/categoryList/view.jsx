@@ -249,7 +249,7 @@ class CategoryList extends React.PureComponent<Props, State> {
           )}
         </div>
         {obscureNsfw && isCommunityTopBids ? (
-          <div className="card__content help">
+          <div className="card-row__message help">
             {__(
               'The community top bids section is only visible if you allow mature content in the app. You can change your content viewing preferences'
             )}{' '}
