@@ -28,11 +28,7 @@ type Props = {
 
 class RewardsPage extends React.PureComponent<Props> {
   componentDidMount() {
-    const { fetching, rewards, fetchRewards } = this.props;
-
-    if (!fetching && (!rewards || !rewards.length)) {
-      fetchRewards();
-    }
+    this.props.fetchRewards();
   }
 
   renderPageHeader() {
