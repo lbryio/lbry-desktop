@@ -17,13 +17,13 @@ class ModalIncompatibleDaemon extends React.PureComponent<Props> {
         isOpen
         contentLabel={__('Incompatible daemon running')}
         type="confirm"
-        confirmButtonLabel={__('Quit daemon')}
+        confirmButtonLabel={__('Close LBRY and daemon')}
         abortButtonLabel={__('Do nothing')}
         onConfirmed={quitAnyDaemon}
         onAborted={quit}
       >
         {__(
-          'This browser is running with an incompatible version of the LBRY protocol and your install must be repaired. '
+          'This browser is running with an incompatible version of the LBRY protocol, please close the LBRY app and rerun the installation package to repair it'
         )}
         <Button
           button="link"
