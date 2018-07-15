@@ -6,12 +6,15 @@ import RewardTile from 'component/rewardTile';
 import Button from 'component/button';
 import Page from 'component/page';
 import classnames from 'classnames';
+import type { Reward } from 'types/reward';
 
 type Props = {
   doAuth: () => void,
+  fetchRewards: () => void,
   navigate: string => void,
   fetching: boolean,
-  rewards: Array<{ reward_type: boolean }>,
+  rewards: Array<Reward>,
+  claimed: Array<Reward>,
   user: ?{
     is_identity_verified: boolean,
     is_reward_approved: boolean,
@@ -24,27 +27,9 @@ type Props = {
 };
 
 class RewardsPage extends React.PureComponent<Props> {
-  /*
-    Below is broken for users who have claimed all rewards.
-
-    It can safely be disabled since we fetch all rewards after authentication, but should be re-enabled once fixed.
-
-   */
-  // componentDidMount() {
-  //   this.fetchRewards(this.props);
-  // }
-  //
-  // componentWillReceiveProps(nextProps) {
-  //   this.fetchRewards(nextProps);
-  // }
-  //
-  // fetchRewards(props) {
-  //   const { fetching, rewards, fetchRewards } = props;
-  //
-  //   if (!fetching && (!rewards || !rewards.length)) {
-  //     fetchRewards();
-  //   }
-  // }
+  componentDidMount() {
+    this.props.fetchRewards();
+  }
 
   renderPageHeader() {
     const { doAuth, navigate, user, daemonSettings } = this.props;
@@ -96,7 +81,7 @@ class RewardsPage extends React.PureComponent<Props> {
   }
 
   renderUnclaimedRewards() {
-    const { fetching, rewards, user, daemonSettings, navigate } = this.props;
+    const { fetching, rewards, user, daemonSettings, navigate, claimed } = this.props;
 
     if (daemonSettings && !daemonSettings.share_usage_data) {
       return (
@@ -128,7 +113,11 @@ class RewardsPage extends React.PureComponent<Props> {
     } else if (!rewards || rewards.length <= 0) {
       return (
         <div className="card__content">
-          {__('There are no rewards available at this time, please check back later.')}
+          {claimed && claimed.length
+            ? __(
+                "You have claimed all available rewards! We're regularly adding more so be sure to check back later."
+              )
+            : __('There are no rewards available at this time, please check back later.')}
         </div>
       );
     }
