@@ -117,7 +117,7 @@ export default handleActions(
     [ACTIONS.GET_SUPPORTED_COINS_FAIL]: (state: ShapeShiftState): ShapeShiftState => ({
       ...state,
       loading: false,
-      error: __('There was an error. Please try again later.'),
+      error: __('ShapeShift is temporarily unavailable or not accessable in your location. Try using VPN or try again later..'),
     }),
 
     [ACTIONS.GET_COIN_STATS_START]: (
