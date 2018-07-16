@@ -2,6 +2,7 @@
 import React from 'react';
 import LoadingScreen from 'component/common/loading-screen';
 import PdfViewer from 'component/viewers/pdfViewer';
+import ThreeViewer from 'component/threeViewer';
 
 type Props = {
   mediaType: string,
@@ -20,7 +21,7 @@ class FileRender extends React.PureComponent<Props> {
 
     // Supported mediaTypes
     const mediaTypes = {
-      // '3D-file':  <ThreeViewer {...viewerProps}/>,
+      '3D-file': <ThreeViewer {...viewerProps} />,
       // Add routes to viewer...
     };
 
