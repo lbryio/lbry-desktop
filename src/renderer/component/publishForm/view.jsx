@@ -74,7 +74,7 @@ class PublishForm extends React.PureComponent<Props> {
 
   componentWillMount() {
     const { isStillEditing, thumbnail } = this.props;
-    if (!isStillEditing || !thumbnail) {
+    if (!thumbnail) {
       this.props.resetThumbnailStatus();
     }
   }
