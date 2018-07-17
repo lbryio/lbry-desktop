@@ -117,7 +117,7 @@ export const doUploadThumbnail = (filePath: string, nsfw: boolean) => (dispatch:
               type: ACTIONS.UPDATE_PUBLISH_FORM,
               data: {
                 uploadThumbnailStatus: THUMBNAIL_STATUSES.COMPLETE,
-                thumbnail: `${json.data.embedUrl}`,
+                thumbnail: `${json.data.url}${fileExt}`,
               },
             })
           : uploadError('Upload failed')
