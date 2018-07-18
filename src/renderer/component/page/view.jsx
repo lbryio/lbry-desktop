@@ -46,7 +46,7 @@ class Page extends React.PureComponent<Props, State> {
 
   componentWillUnmount() {
     if (this.loaderTimeout) {
-      this.loaderTimeout = null;
+      clearTimeout(this.loaderTimeout);
     }
   }
 
