@@ -274,7 +274,7 @@ function handleLoadVideoError(uri, errorType = '') {
   return (dispatch, getState) => {
     // suppress error when another media is playing
     const { playingUri } = getState().content;
-    if (!playingUri || playingUri === uri) {
+    if (playingUri && playingUri === uri) {
       dispatch({
         type: ACTIONS.LOADING_VIDEO_FAILED,
         data: { uri },
