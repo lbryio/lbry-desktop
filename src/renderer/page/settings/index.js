@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import * as settings from 'constants/settings';
-import { doClearCache } from 'redux/actions/app';
+import { doClearCache, doNotifyEncryptWallet, doNotifyDecryptWallet } from 'redux/actions/app';
 import {
   doSetDaemonSetting,
   doSetClientSetting,
@@ -13,6 +13,7 @@ import {
   selectLanguages,
 } from 'redux/selectors/settings';
 import { selectCurrentLanguage } from 'redux/selectors/app';
+import { doWalletStatus, selectWalletIsEncrypted } from 'lbry-redux';
 import SettingsPage from './view';
 
 const select = state => ({
@@ -26,6 +27,7 @@ const select = state => ({
   languages: selectLanguages(state),
   automaticDarkModeEnabled: makeSelectClientSetting(settings.AUTOMATIC_DARK_MODE_ENABLED)(state),
   autoplay: makeSelectClientSetting(settings.AUTOPLAY)(state),
+  walletEncrypted: selectWalletIsEncrypted(state),
 });
 
 const perform = dispatch => ({
@@ -34,6 +36,9 @@ const perform = dispatch => ({
   setClientSetting: (key, value) => dispatch(doSetClientSetting(key, value)),
   getThemes: () => dispatch(doGetThemes()),
   changeLanguage: newLanguage => dispatch(doChangeLanguage(newLanguage)),
+  encryptWallet: () => dispatch(doNotifyEncryptWallet()),
+  decryptWallet: () => dispatch(doNotifyDecryptWallet()),
+  updateWalletStatus: () => dispatch(doWalletStatus()),
 });
 
 export default connect(

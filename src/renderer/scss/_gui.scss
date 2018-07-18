@@ -361,3 +361,7 @@ p {
     margin-top: $spacing-vertical * 2/3;
   }
 }
+
+.error-text {
+  color: var(--color-error);
+}

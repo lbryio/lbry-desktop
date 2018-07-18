@@ -31,6 +31,9 @@ type Props = {
   themes: Array<string>,
   automaticDarkModeEnabled: boolean,
   autoplay: boolean,
+  encryptWallet: () => void,
+  decryptWallet: () => void,
+  walletEncrypted: boolean,
 };
 
 type State = {
@@ -58,7 +61,10 @@ class SettingsPage extends React.PureComponent<Props, State> {
   }
 
   componentDidMount() {
-    this.props.getThemes();
+    const { props } = this;
+
+    props.getThemes();
+    props.updateWalletStatus();
   }
 
   onRunOnStartChange(event: SyntheticInputEvent<*>) {
@@ -111,6 +117,11 @@ class SettingsPage extends React.PureComponent<Props, State> {
     this.props.setClientSetting(settings.SHOW_NSFW, event.target.checked);
   }
 
+  onChangeEncryptWallet() {
+    const { props } = this;
+    props.walletEncrypted ? props.decryptWallet() : props.encryptWallet();
+  }
+
   setDaemonSetting(name: string, value: boolean | string | Price) {
     this.props.setDaemonSetting(name, value);
   }
@@ -138,6 +149,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
       themes,
       automaticDarkModeEnabled,
       autoplay,
+      walletEncrypted,
     } = this.props;
 
     const noDaemonSettings = !daemonSettings || Object.keys(daemonSettings).length === 0;
@@ -272,32 +284,43 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 )}
               />
             </section>
-            {
-              <section className="card card--section">
-                <div className="card__title">{__('Theme')}</div>
-                <FormField
-                  name="theme_select"
-                  type="select"
-                  onChange={this.onThemeChange}
-                  value={currentTheme}
-                  disabled={automaticDarkModeEnabled}
-                >
-                  {themes.map(theme => (
-                    <option key={theme} value={theme}>
-                      {theme}
-                    </option>
-                  ))}
-                </FormField>
-                <FormField
-                  type="checkbox"
-                  name="automatic_dark_mode"
-                  onChange={e => this.onAutomaticDarkModeChange(e.target.checked)}
-                  checked={automaticDarkModeEnabled}
-                  disabled={isDarkModeEnabled}
-                  postfix={__('Automatic dark mode (9pm to 8am)')}
-                />
-              </section>
-            }
+            <section className="card card--section">
+              <div className="card__title">{__('Theme')}</div>
+              <FormField
+                name="theme_select"
+                type="select"
+                onChange={this.onThemeChange}
+                value={currentTheme}
+                disabled={automaticDarkModeEnabled}
+              >
+                {themes.map(theme => (
+                  <option key={theme} value={theme}>
+                    {theme}
+                  </option>
+                ))}
+              </FormField>
+              <FormField
+                type="checkbox"
+                name="automatic_dark_mode"
+                onChange={e => this.onAutomaticDarkModeChange(e.target.checked)}
+                checked={automaticDarkModeEnabled}
+                disabled={isDarkModeEnabled}
+                postfix={__('Automatic dark mode (9pm to 8am)')}
+              />
+            </section>
+            <section className="card card--section">
+              <div className="card__title">{__('Wallet Security')}</div>
+              <FormField
+                type="checkbox"
+                name="encrypt_wallet"
+                onChange={e => this.onChangeEncryptWallet(e)}
+                checked={walletEncrypted}
+                postfix={__('Encrypt my wallet with a custom password.')}
+                helper={__(
+                  'Secure your local wallet data with a custom password. Lost passwords cannot be recovered.'
+                )}
+              />
+            </section>
             <section className="card card--section">
               <div className="card__title">{__('Application Cache')}</div>
               <span className="card__subtitle">

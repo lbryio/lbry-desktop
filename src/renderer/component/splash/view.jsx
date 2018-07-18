@@ -1,12 +1,14 @@
 import * as React from 'react';
 import { Lbry, MODALS } from 'lbry-redux';
 import LoadScreen from './internal/load-screen';
+import ModalWalletUnlock from 'modal/modalWalletUnlock';
 import ModalIncompatibleDaemon from 'modal/modalIncompatibleDaemon';
 import ModalUpgrade from 'modal/modalUpgrade';
 import ModalDownloading from 'modal/modalDownloading';
 
 type Props = {
   checkDaemonVersion: () => Promise<any>,
+  notifyUnlockWallet: () => Promise<any>,
   notification: ?{
     id: string,
   },
@@ -17,6 +19,7 @@ type State = {
   message: string,
   isRunning: boolean,
   isLagging: boolean,
+  launchedModal: boolean,
 };
 
 export class SplashScreen extends React.PureComponent<Props, State> {
@@ -28,18 +31,23 @@ export class SplashScreen extends React.PureComponent<Props, State> {
       message: __('Connecting'),
       isRunning: false,
       isLagging: false,
+      launchedModal: false,
     };
   }
 
   updateStatus() {
     Lbry.status().then(status => {
       this._updateStatusCallback(status);
+      window.status = status;
     });
   }
 
   _updateStatusCallback(status) {
+    const { notifyUnlockWallet } = this.props;
+    const { launchedModal } = this.state;
+
     const startupStatus = status.startup_status;
-    if (startupStatus.code == 'started') {
+    if (startupStatus.code === 'started') {
       // Wait until we are able to resolve a name before declaring
       // that we are done.
       // TODO: This is a hack, and the logic should live in the daemon
@@ -61,6 +69,7 @@ export class SplashScreen extends React.PureComponent<Props, State> {
       });
       return;
     }
+
     if (status.blockchain_status && status.blockchain_status.blocks_behind > 0) {
       const format =
         status.blockchain_status.blocks_behind == 1 ? '%s block behind' : '%s blocks behind';
@@ -69,6 +78,17 @@ export class SplashScreen extends React.PureComponent<Props, State> {
         details: __(format, status.blockchain_status.blocks_behind),
         isLagging: startupStatus.is_lagging,
       });
+    } else if (startupStatus.code === 'waiting_for_wallet_unlock') {
+      this.setState({
+        message: __('Unlock Wallet'),
+        details: __('Please unlock your wallet to proceed.'),
+        isLagging: false,
+        isRunning: true,
+      });
+
+      if (launchedModal === false) {
+        this.setState({ launchedModal: true }, () => notifyUnlockWallet());
+      }
     } else {
       this.setState({
         message: __('Network Loading'),
@@ -114,6 +134,7 @@ export class SplashScreen extends React.PureComponent<Props, State> {
             in the modals won't work. */}
         {isRunning && (
           <React.Fragment>
+            {notificationId === MODALS.WALLET_UNLOCK && <ModalWalletUnlock />}
             {notificationId === MODALS.INCOMPATIBLE_DAEMON && <ModalIncompatibleDaemon />}
             {notificationId === MODALS.UPGRADE && <ModalUpgrade />}
             {notificationId === MODALS.DOWNLOADING && <ModalDownloading />}
