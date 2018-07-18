@@ -11,15 +11,20 @@ import { setSubscriptionNotifications, doFetchMySubscriptions } from 'redux/acti
 import SubscriptionsPage from './view';
 
 const select = state => ({
-  isFetchingSubscriptions: selectIsFetchingSubscriptions(state),
+  loading:
+    selectIsFetchingSubscriptions(state) ||
+    Object.keys(selectSubscriptionsBeingFetched(state)).length,
   subscriptionsBeingFetched: selectSubscriptionsBeingFetched(state),
   subscriptions: selectSubscriptions(state),
   subscriptionClaims: selectSubscriptionClaims(state),
   notifications: selectNotifications(state),
 });
 
-export default connect(select, {
-  doFetchClaimsByChannel,
-  setSubscriptionNotifications,
-  doFetchMySubscriptions,
-})(SubscriptionsPage);
+export default connect(
+  select,
+  {
+    doFetchClaimsByChannel,
+    setSubscriptionNotifications,
+    doFetchMySubscriptions,
+  }
+)(SubscriptionsPage);

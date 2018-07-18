@@ -14,10 +14,10 @@ type Props = {
   doFetchMySubscriptions: () => void,
   setSubscriptionNotifications: ({}) => void,
   subscriptions: Array<Subscription>,
-  isFetchingSubscriptions: boolean,
   subscriptionClaims: Array<{ uri: string, claims: Array<Claim> }>,
   subscriptionsBeingFetched: {},
   notifications: {},
+  loading: boolean,
 };
 
 export default class extends React.PureComponent<Props> {
@@ -52,10 +52,13 @@ export default class extends React.PureComponent<Props> {
       if (claim.claims.length) {
         subscriptionClaimMap[claim.uri] = 1;
       } else if (isDev) {
-        console
-          .error
-          // `claim for ${claim.uri} was added to byId in redux but there are no loaded fetched claims`
-          ();
+        // eslint-disable no-console
+        console.error(
+          `Claim for ${
+            claim.uri
+          } was added to byId in redux but there are no loaded fetched claims. This shouldn't happen because a subscription should have claims attached to it.`
+        );
+        // eslint-enable no-console
       }
     });
 
@@ -67,7 +70,7 @@ export default class extends React.PureComponent<Props> {
   }
 
   render() {
-    const { subscriptions, subscriptionClaims, isFetchingSubscriptions } = this.props;
+    const { subscriptions, subscriptionClaims, loading } = this.props;
 
     let claimList = [];
     subscriptionClaims.forEach(claimData => {
@@ -77,7 +80,7 @@ export default class extends React.PureComponent<Props> {
     const subscriptionUris = claimList.map(claim => `lbry://${claim.name}#${claim.claim_id}`);
 
     return (
-      <Page notContained loading={isFetchingSubscriptions}>
+      <Page notContained loading={loading}>
         <HiddenNsfwClaims uris={subscriptionUris} />
         {!subscriptions.length && (
           <div className="page__empty">
