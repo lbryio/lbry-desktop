@@ -106,13 +106,15 @@ class SelectThumbnail extends React.PureComponent<Props, State> {
                 <div className="column__item">
                   <p>
                     Upload complete.{' '}
-                    <Button button="link" href={thumbnail} label={__('View it on spee.ch')} />
+                    <Button button="link" href={thumbnail} label={__('View it on spee.ch')} />.
                   </p>
-                  <Button
-                    button="link"
-                    label={__('New thumbnail')}
-                    onClick={resetThumbnailStatus}
-                  />
+                  <div className="card__actions">
+                    <Button
+                      button="link"
+                      label={__('New thumbnail')}
+                      onClick={resetThumbnailStatus}
+                    />
+                  </div>
                 </div>
               </div>
             )}
