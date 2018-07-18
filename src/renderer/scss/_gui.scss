@@ -303,7 +303,7 @@ p {
 
 .column {
   display: flex;
-  
+
   .column__item:not(:first-child) {
     padding-left: $spacing-width * 2/3;
   }
@@ -370,6 +370,6 @@ p {
 }
 
 .thumbnail-preview {
-  height: 100px;
-  width: 177px;
+  height: var(--thumbnail-preview-height);
+  width: var(--thumbnail-preview-width);
 }

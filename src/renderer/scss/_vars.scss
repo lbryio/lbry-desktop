@@ -179,4 +179,8 @@ $large-breakpoint: 1921px;
   // /* Animation :) */
   --animation-duration: 0.3s;
   --animation-style: cubic-bezier(0.55, 0, 0.1, 1);
+
+  /* Image */
+  --thumbnail-preview-height: 100px;
+  --thumbnail-preview-width: 177px;
 }
