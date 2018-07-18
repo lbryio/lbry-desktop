@@ -73,7 +73,7 @@ class PublishForm extends React.PureComponent<Props> {
   }
 
   componentWillMount() {
-    const { isStillEditing, thumbnail } = this.props;
+    const { thumbnail } = this.props;
     if (!thumbnail) {
       this.props.resetThumbnailStatus();
     }
@@ -356,14 +356,17 @@ class PublishForm extends React.PureComponent<Props> {
               />
             </div>
           )}
-          <FileSelector currentPath={filePath} onFileChosen={this.handleFileChange} />
-          {!!isStillEditing && (
-            <p className="card__content card__subtitle">
-              {__("If you don't choose a file, the file from your existing claim")}
-              {` "${name}" `}
-              {__('will be used.')}
-            </p>
-          )}
+          <div className="card__content">
+            <FileSelector currentPath={filePath} onFileChosen={this.handleFileChange} />
+            {!!isStillEditing &&
+              name && (
+                <p className="card__content card__subtitle">
+                  {__("If you don't choose a file, the file from your existing claim")}
+                  {` "${name}" `}
+                  {__('will be used.')}
+                </p>
+              )}
+          </div>
         </section>
         <div className={classnames({ 'card--disabled': formDisabled })}>
           <section className="card card--section">
@@ -400,10 +403,9 @@ class PublishForm extends React.PureComponent<Props> {
                 __('Enter a URL for your thumbnail.')
               ) : (
                 <React.Fragment>
-                  {__(
-                    'Upload your thumbnail (.png/.jpg/.jpeg/.gif) to spee.ch, or enter the URL manually. Learn more about spee.ch '
-                  )}
-                  <Button button="link" label={__('here')} href="https://spee.ch/about" />.
+                  {__('Upload your thumbnail (.png/.jpg/.jpeg/.gif) to')}{' '}
+                  <Button button="link" label={__('spee.ch')} href="https://spee.ch/about" />.{' '}
+                  {__('Recommended size: 800x450 (16:9)')}
                 </React.Fragment>
               )}
             </div>

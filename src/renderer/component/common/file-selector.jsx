@@ -9,7 +9,7 @@ type Props = {
   type: string,
   currentPath: ?string,
   onFileChosen: (string, string) => void,
-  fileLabel: ?string,
+  fileLabel?: string,
   directoryLabel?: string,
 };
 
@@ -56,7 +56,7 @@ class FileSelector extends React.PureComponent<Props> {
       type === 'file' ? fileLabel || __('Choose File') : directoryLabel || __('Choose Directory');
 
     return (
-      <FormRow verticallyCentered padded>
+      <FormRow verticallyCentered>
         <Button button="primary" onClick={() => this.handleButtonClick()} label={label} />
         <input
           webkitdirectory="true"
