@@ -10,7 +10,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ### Added
 
  * Added 3D file viewer for OBJ & STL file types ([#1558](https://github.com/lbryio/lbry-desktop/pull/1558))
-
+ * Added thumbnail preview on publish page ([#1755](https://github.com/lbryio/lbry-desktop/pull/1755))
 
 ### Changed
 
