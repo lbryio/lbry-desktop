@@ -255,6 +255,12 @@
   right: $spacing-vertical;
 }
 
+.card__actions-bottom-corner {
+  position: absolute;
+  bottom: $spacing-vertical;
+  right: $spacing-vertical;
+}
+
 .card__actions--end {
   justify-content: flex-end;
 }

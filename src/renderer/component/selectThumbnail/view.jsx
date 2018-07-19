@@ -1,9 +1,10 @@
 // @flow
 import { THUMBNAIL_STATUSES, MODALS } from 'lbry-redux';
-import React from 'react';
-import { FormField, FormRow } from 'component/common/form';
+import * as React from 'react';
+import { FormField } from 'component/common/form';
 import FileSelector from 'component/common/file-selector';
 import Button from 'component/button';
+import Native from 'native';
 
 type Props = {
   thumbnail: ?string,
@@ -15,7 +16,29 @@ type Props = {
   resetThumbnailStatus: () => void,
 };
 
-class SelectThumbnail extends React.PureComponent<Props> {
+type State = {
+  thumbnailError: boolean,
+};
+
+class SelectThumbnail extends React.PureComponent<Props, State> {
+  constructor() {
+    super();
+
+    this.state = {
+      thumbnailError: false,
+    };
+
+    (this: any).handleThumbnailChange = this.handleThumbnailChange.bind(this);
+  }
+
+  handleThumbnailChange(e: SyntheticInputEvent<*>) {
+    const { updatePublishForm } = this.props;
+    const newThumbnail = e.target.value.replace(' ', '');
+
+    updatePublishForm({ thumbnail: newThumbnail });
+    this.setState({ thumbnailError: false });
+  }
+
   render() {
     const {
       thumbnail,
@@ -26,25 +49,47 @@ class SelectThumbnail extends React.PureComponent<Props> {
       thumbnailPath,
       resetThumbnailStatus,
     } = this.props;
+    const { thumbnailError } = this.state;
+    const thumbnailSrc =
+      !thumbnail || thumbnailError ? Native.imagePath('no-thumbnail.png') : thumbnail;
 
     return (
-      <div>
+      <div className="card__content">
         {status === THUMBNAIL_STATUSES.API_DOWN || status === THUMBNAIL_STATUSES.MANUAL ? (
-          <FormRow padded>
-            <FormField
-              stretch
-              type="text"
-              name="content_thumbnail"
-              label={__('URL')}
-              placeholder="http://spee.ch/mylogo"
-              value={thumbnail}
-              disabled={formDisabled}
-              onChange={e => updatePublishForm({ thumbnail: e.target.value })}
+          <div className="column">
+            <img
+              src={thumbnailSrc}
+              className="column__item thumbnail-preview"
+              alt={__('Thumbnail Preview')}
+              onError={() => {
+                this.setState({ thumbnailError: true });
+              }}
             />
-          </FormRow>
+            <div className="column__item">
+              <FormField
+                className="input--thumbnail"
+                type="text"
+                name="content_thumbnail"
+                label="URL"
+                placeholder="http://spee.ch/mylogo"
+                value={thumbnail}
+                disabled={formDisabled}
+                onChange={this.handleThumbnailChange}
+              />
+              <div className="card__actions">
+                <Button
+                  button="link"
+                  label={__('Use thumbnail upload tool')}
+                  onClick={() =>
+                    updatePublishForm({ uploadThumbnailStatus: THUMBNAIL_STATUSES.READY })
+                  }
+                />
+              </div>
+            </div>
+          </div>
         ) : (
-          <div className="form-row--padded">
-            {(status === THUMBNAIL_STATUSES.READY || status === THUMBNAIL_STATUSES.COMPLETE) && (
+          <React.Fragment>
+            {status === THUMBNAIL_STATUSES.READY && (
               <FileSelector
                 currentPath={thumbnailPath}
                 fileLabel={__('Choose Thumbnail')}
@@ -52,18 +97,31 @@ class SelectThumbnail extends React.PureComponent<Props> {
               />
             )}
             {status === THUMBNAIL_STATUSES.COMPLETE && (
-              <div>
-                <p>
-                  Upload complete. View it{' '}
-                  <Button button="link" href={thumbnail} label={__('here')} />.
-                </p>
-                <Button button="link" label={__('New thumbnail')} onClick={resetThumbnailStatus} />
+              <div className="column column--space-between">
+                <img
+                  className="column__item thumbnail-preview"
+                  src={thumbnail}
+                  alt={__('Thumbnail Preview')}
+                />
+                <div className="column__item">
+                  <p>
+                    Upload complete.{' '}
+                    <Button button="link" href={thumbnail} label={__('View it on spee.ch')} />.
+                  </p>
+                  <div className="card__actions">
+                    <Button
+                      button="link"
+                      label={__('New thumbnail')}
+                      onClick={resetThumbnailStatus}
+                    />
+                  </div>
+                </div>
               </div>
             )}
-          </div>
+          </React.Fragment>
         )}
-        <div className="card__actions">
-          {status === THUMBNAIL_STATUSES.READY && (
+        {status === THUMBNAIL_STATUSES.READY && (
+          <div className="card__actions">
             <Button
               button="link"
               label={__('Or enter a URL manually')}
@@ -71,15 +129,8 @@ class SelectThumbnail extends React.PureComponent<Props> {
                 updatePublishForm({ uploadThumbnailStatus: THUMBNAIL_STATUSES.MANUAL })
               }
             />
-          )}
-          {status === THUMBNAIL_STATUSES.MANUAL && (
-            <Button
-              button="link"
-              label={__('Use thumbnail upload tool')}
-              onClick={() => updatePublishForm({ uploadThumbnailStatus: THUMBNAIL_STATUSES.READY })}
-            />
-          )}
-        </div>
+          </div>
+        )}
 
         {status === THUMBNAIL_STATUSES.IN_PROGRESS && <p>{__('Uploading thumbnail')}...</p>}
       </div>
