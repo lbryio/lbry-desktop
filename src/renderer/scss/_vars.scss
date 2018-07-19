@@ -183,4 +183,6 @@ $large-breakpoint: 1921px;
   /* Image */
   --thumbnail-preview-height: 100px;
   --thumbnail-preview-width: 177px;
+  // This will awlways white, it looks fine on light mode
+  --thumbnail-preview-border: 1px solid var(--color-white);
 }

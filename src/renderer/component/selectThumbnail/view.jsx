@@ -51,7 +51,7 @@ class SelectThumbnail extends React.PureComponent<Props, State> {
     } = this.props;
     const { thumbnailError } = this.state;
     const thumbnailSrc =
-      !thumbnail || thumbnailError ? Native.imagePath('thumbnail.png') : thumbnail;
+      !thumbnail || thumbnailError ? Native.imagePath('no-thumbnail.png') : thumbnail;
 
     return (
       <div className="card__content">
