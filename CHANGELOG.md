@@ -9,6 +9,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Added
 
+ * Added 3D file viewer for OBJ & STL file types ([#1558](https://github.com/lbryio/lbry-desktop/pull/1558))
+
+
 ### Changed
 
   * Actually hide NSFW files if a user chooses to hide NSFW content via the settings page ([#1748](https://github.com/lbryio/lbry-desktop/pull/1748))

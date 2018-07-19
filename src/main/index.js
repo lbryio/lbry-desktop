@@ -53,6 +53,13 @@ app.setAsDefaultProtocolClient('lbry');
 app.setName('LBRY');
 app.setAppUserModelId('io.lbry.LBRY');
 
+if (isDev) {
+  // Enable WEBGL
+  app.commandLine.appendSwitch('ignore-gpu-blacklist');
+  app.commandLine.appendSwitch('--disable-gpu-process-crash-limit');
+  app.disableDomainBlockingFor3DAPIs();
+}
+
 app.on('ready', async () => {
   const processList = await findProcess('name', 'lbrynet-daemon');
   const isDaemonRunning = processList.length > 0;
