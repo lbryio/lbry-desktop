@@ -4,7 +4,7 @@ import { FormField } from 'component/common/form';
 import Button from 'component/button';
 import FileExporter from 'component/common/file-exporter';
 import * as icons from 'constants/icons';
-import { MODALS } from 'lbry-redux';
+import { MODALS, TRANSACTIONS } from 'lbry-redux';
 import TransactionListItem from './internal/transaction-list-item';
 
 export type Transaction = {
@@ -43,6 +43,10 @@ class TransactionList extends React.PureComponent<Props, State> {
     (this: any).filterTransaction = this.filterTransaction.bind(this);
     (this: any).revokeClaim = this.revokeClaim.bind(this);
     (this: any).isRevokeable = this.isRevokeable.bind(this);
+  }
+
+  capitalize(string: string) {
+    return string.charAt(0).toUpperCase() + string.slice(1);
   }
 
   handleFilterChanged(event: SyntheticInputEvent<*>) {
@@ -108,13 +112,30 @@ class TransactionList extends React.PureComponent<Props, State> {
               }
             >
               <option value="all">{__('All')}</option>
-              <option value="spend">{__('Spends')}</option>
-              <option value="receive">{__('Receives')}</option>
-              <option value="publish">{__('Publishes')}</option>
-              <option value="channel">{__('Channels')}</option>
-              <option value="tip">{__('Tips')}</option>
-              <option value="support">{__('Supports')}</option>
-              <option value="update">{__('Updates')}</option>
+              <option value={TRANSACTIONS.SPEND}>
+                {__(`${this.capitalize(TRANSACTIONS.SPEND)}s`)}
+              </option>
+              <option value={TRANSACTIONS.RECEIVE}>
+                {__(`${this.capitalize(TRANSACTIONS.RECEIVE)}s`)}
+              </option>
+              <option value={TRANSACTIONS.PUBLISH}>
+                {__(`${this.capitalize(TRANSACTIONS.PUBLISH)}es`)}
+              </option>
+              <option value={TRANSACTIONS.CHANNEL}>
+                {__(`${this.capitalize(TRANSACTIONS.CHANNEL)}s`)}
+              </option>
+              <option value={TRANSACTIONS.TIP}>
+                {__(`${this.capitalize(TRANSACTIONS.TIP)}s`)}
+              </option>
+              <option value={TRANSACTIONS.SUPPORT}>
+                {__(`${this.capitalize(TRANSACTIONS.SUPPORT)}s`)}
+              </option>
+              <option value={TRANSACTIONS.UPDATE}>
+                {__(`${this.capitalize(TRANSACTIONS.UPDATE)}s`)}
+              </option>
+              <option value={TRANSACTIONS.ABANDON}>
+                {__(`${this.capitalize(TRANSACTIONS.ABANDON)}s`)}
+              </option>
             </FormField>
           </div>
         )}
