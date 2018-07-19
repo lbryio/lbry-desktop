@@ -14,9 +14,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Changed
 
+  * Only show video error modal if you are on the video page & don't retry to play failed videos ([#1768](https://github.com/lbryio/lbry-desktop/pull/1768))
   * Actually hide NSFW files if a user chooses to hide NSFW content via the settings page ([#1748](https://github.com/lbryio/lbry-desktop/pull/1748))
   * Hide the "Community top bids" section if user chooses to hide NSFW content ([#1760](https://github.com/lbryio/lbry-desktop/pull/1760))
-
 
 
 ## [0.22.2] - 2018-07-09

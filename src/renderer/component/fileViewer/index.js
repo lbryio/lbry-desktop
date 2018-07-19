@@ -17,6 +17,7 @@ import {
 import { makeSelectClientSetting, selectShowNsfw } from 'redux/selectors/settings';
 import { selectMediaPaused, makeSelectMediaPositionForUri } from 'redux/selectors/media';
 import { selectPlayingUri } from 'redux/selectors/content';
+import { selectFileInfoErrors } from 'redux/selectors/file_info';
 import FileViewer from './view';
 
 const select = (state, props) => ({
@@ -34,6 +35,7 @@ const select = (state, props) => ({
   mediaPosition: makeSelectMediaPositionForUri(props.uri)(state),
   autoplay: makeSelectClientSetting(settings.AUTOPLAY)(state),
   searchBarFocused: selectSearchBarFocused(state),
+  fileInfoErrors: selectFileInfoErrors(state)
 });
 
 const perform = dispatch => ({
