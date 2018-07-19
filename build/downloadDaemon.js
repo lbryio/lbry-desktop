@@ -11,22 +11,25 @@ const downloadDaemon = targetPlatform =>
   new Promise((resolve, reject) => {
     const daemonURLTemplate = packageJSON.lbrySettings.lbrynetDaemonUrlTemplate;
     const daemonVersion = packageJSON.lbrySettings.lbrynetDaemonVersion;
-    const daemonDir = packageJSON.lbrySettings.lbrynetDaemonDir;
-    const daemonFileName = packageJSON.lbrySettings.lbrynetDaemonFileName;
-    const daemonFilePath = `${__dirname}/../${daemonDir}/${daemonFileName}`;
+    const daemonDir = path.join(__dirname,'..',packageJSON.lbrySettings.lbrynetDaemonDir);
+    let daemonFileName = packageJSON.lbrySettings.lbrynetDaemonFileName;
 
     let currentPlatform = os.platform();
     if (currentPlatform === 'darwin') currentPlatform = 'macos';
-    if (currentPlatform === 'win32') currentPlatform = 'windows';
+    if (currentPlatform === 'win32') {
+     currentPlatform = 'windows';
+     daemonFileName = daemonFileName + '.exe';
+    }
 
-    const daemonVersionPath = __dirname + '/daemon.ver';
+    const daemonFilePath = path.join(daemonDir, daemonFileName);
+    const daemonVersionPath = path.join(__dirname, 'daemon.ver');
     const daemonPlatform = targetPlatform || currentPlatform;
-    const tmpZipPath = __dirname + '/../dist/daemon.zip';
+    const tmpZipPath = path.join(__dirname, '../','dist','daemon.zip');
     const daemonURL = daemonURLTemplate
       .replace(/DAEMONVER/g, daemonVersion)
       .replace(/OSNAME/g, daemonPlatform);
-    
-    
+
+
     // If a daemon and daemon.ver exists, check to see if it matches the current daemon version
     const hasDaemonDownloaded = fs.existsSync(daemonFilePath);
     const hasDaemonVersion = fs.existsSync(daemonVersionPath);
@@ -34,8 +37,8 @@ const downloadDaemon = targetPlatform =>
     if (hasDaemonVersion) {
       downloadedDaemonVersion = fs.readFileSync(daemonVersionPath, "utf8");
     }
-    
-    if (hasDaemonDownloaded && hasDaemonVersion && downloadedDaemonVersion === daemonVersion) { 
+
+    if (hasDaemonDownloaded && hasDaemonVersion && downloadedDaemonVersion === daemonVersion) {
       console.log('\x1b[34minfo\x1b[0m Daemon already downloaded');
       resolve('Done');
       return;
@@ -60,17 +63,18 @@ const downloadDaemon = targetPlatform =>
               });
             })
         )
-        .then(() => del(`${daemonDir}/${daemonFileName}*`))
+        .then(() => del(`${daemonFilePath}*`))
         .then(() => decompress(tmpZipPath, daemonDir, {
           filter: file =>
-            path.basename(file.path).replace(path.extname(file.path), '') === daemonFileName,
+            path.basename(file.path) === daemonFileName,
         }))
+        .then(() => del(`${tmpZipPath }*`))
         .then(() => {
           console.log('\x1b[32msuccess\x1b[0m Daemon downloaded!');
           if (hasDaemonVersion) {
             del(daemonVersionPath);
           }
-          
+
           fs.writeFileSync(daemonVersionPath, daemonVersion, "utf8")
           resolve('Done');
         })
