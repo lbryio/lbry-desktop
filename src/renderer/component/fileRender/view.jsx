@@ -2,7 +2,7 @@
 import React from 'react';
 import LoadingScreen from 'component/common/loading-screen';
 import PdfViewer from 'component/viewers/pdfViewer';
-import ThreeViewer from 'component/threeViewer';
+import ThreeViewer from 'component/viewers/threeViewer';
 
 type Props = {
   mediaType: string,

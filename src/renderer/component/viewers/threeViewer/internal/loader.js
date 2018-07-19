@@ -1,10 +1,9 @@
 import { LoadingManager, STLLoader, OBJLoader } from './three';
 
-const Manager = ({ onLoad, onStart, onProgress, onError }) => {
+const Manager = ({ onLoad, onStart, onError }) => {
   const manager = new LoadingManager();
   manager.onLoad = onLoad;
   manager.onStart = onStart;
-  manager.onProgress = onProgress;
   manager.onError = onError;
 
   return manager;

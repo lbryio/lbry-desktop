@@ -69,7 +69,7 @@ class ThreeViewer extends React.PureComponent<Props> {
     } else {
       // No webgl support, handle Error...
       // TODO: Use a better error message
-      this.state({ error: "Sorry, your computer doesn't support WebGL." });
+      this.setState({ error: "Sorry, your computer doesn't support WebGL." });
     }
   }
 
@@ -178,22 +178,24 @@ class ThreeViewer extends React.PureComponent<Props> {
 
     if (source) {
       ThreeLoader(source, this.renderModel.bind(this), {
-        onStart: this.handleStart(this),
-        onLoad: this.handleReady.bind(this),
-        onError: this.handleError.bind(this),
-        onProgress: this.handleProgress.bind(this),
+        onStart: this.handleStart,
+        onLoad: this.handleReady,
+        onError: this.handleError,
       });
     }
   }
 
-  handleStart() {
+  handleStart = () => {
     this.setState({ isLoading: true });
-  }
+  };
 
-  handleReady() {
-    // Handle load ready
+  handleReady = () => {
     this.setState({ isReady: true, isLoading: false });
-  }
+  };
+
+  handleError = () => {
+    this.setState({ error: "Sorry, looks like we can't load this file" });
+  };
 
   handleResize = () => {
     const { offsetWidth: width, offsetHeight: height } = this.viewer.current;
@@ -202,15 +204,6 @@ class ThreeViewer extends React.PureComponent<Props> {
     this.controls.update();
     this.renderer.setSize(width, height);
   };
-
-  handleError() {
-    this.setState({ error: "Sorry, looks like we can't load this file" });
-  }
-
-  handleProgress() {
-    // const progress = (currentItem / totalItems) * 100;
-    // console.info(currentItem, totalItems, progress);
-  }
 
   handleColorChange(color) {
     if (!this.mesh) return;
