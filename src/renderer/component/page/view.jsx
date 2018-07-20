@@ -41,6 +41,8 @@ class Page extends React.PureComponent<Props, State> {
     const { loading } = this.props;
     if (!this.loaderTimeout && !prevProps.loading && loading) {
       this.beginLoadingTimeout();
+    } else if (!loading && this.loaderTimeout) {
+      clearTimeout(this.loaderTimeout);
     }
   }
 
