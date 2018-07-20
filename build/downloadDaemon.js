@@ -19,7 +19,7 @@ const downloadDaemon = targetPlatform =>
     if (currentPlatform === 'win32') currentPlatform = 'windows';
 
     const daemonPlatform = targetPlatform || currentPlatform;
-
+    const tmpZipPath = path.join(__dirname,'daemon.zip');
     const daemonURL = daemonURLTemplate
       .replace(/DAEMONVER/g, daemonVersion)
       .replace(/OSNAME/g, daemonPlatform);
