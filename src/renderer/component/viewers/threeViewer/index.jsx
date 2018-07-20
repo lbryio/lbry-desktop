@@ -4,6 +4,7 @@ import LoadingScreen from 'component/common/loading-screen';
 // ThreeJS
 import * as THREE from './internal/three';
 import detectWebGL from './internal/detector';
+import ThreeGrid from './internal/grid';
 import ThreeScene from './internal/scene';
 import ThreeLoader from './internal/loader';
 import ThreeRenderer from './internal/renderer';
@@ -77,6 +78,12 @@ class ThreeViewer extends React.PureComponent<Props> {
     window.removeEventListener('resize', this.handleResize, false);
   }
 
+  transformGroup(group) {
+    this.fitMeshToCamera(group);
+    this.createWireFrame(group);
+    this.updateControlsTarget(group.position);
+  }
+
   createOrbitControls(camera, canvas) {
     const { autoRotate } = this.props;
     const controls = new THREE.OrbitControls(camera, canvas);
@@ -87,6 +94,7 @@ class ThreeViewer extends React.PureComponent<Props> {
     controls.minDistance = 1;
     controls.maxDistance = 50;
     controls.autoRotate = autoRotate;
+    controls.enablePan = false;
     return controls;
   }
 
@@ -114,32 +122,6 @@ class ThreeViewer extends React.PureComponent<Props> {
     group.add(this.wireframe);
   }
 
-  createMesh(geometry) {
-    const material = new THREE.MeshPhongMaterial({
-      opacity: 1,
-      transparent: true,
-      depthWrite: true,
-      vertexColors: THREE.FaceColors,
-      // Positive value pushes polygon further away
-      polygonOffsetFactor: 1,
-      polygonOffsetUnits: 1,
-    });
-
-    // Set material color
-    material.color.set(this.materialColors.green);
-
-    const mesh = new THREE.Mesh(geometry, material);
-
-    // Assign name
-    mesh.name = 'objectGroup';
-
-    this.scene.add(mesh);
-    this.fitMeshToCamera(mesh);
-    this.createWireFrame(mesh);
-    this.updateControlsTarget(mesh.position);
-    return mesh;
-  }
-
   toggleWireFrame(show = false) {
     this.wireframe.opacity = show ? 1 : 0;
     this.mesh.material.opacity = show ? 0 : 1;
@@ -151,7 +133,7 @@ class ThreeViewer extends React.PureComponent<Props> {
 
     group.traverse(child => {
       if (child instanceof THREE.Mesh) {
-        const box = new THREE.Box3().setFromObject(group);
+        const box = new THREE.Box3().setFromObject(child);
         // Max
         max.x = box.max.x > max.x ? box.max.x : max.x;
         max.y = box.max.y > max.y ? box.max.y : max.y;
@@ -165,12 +147,18 @@ class ThreeViewer extends React.PureComponent<Props> {
 
     const meshY = Math.abs(max.y - min.y);
     const meshX = Math.abs(max.x - min.x);
-    const scaleFactor = 15 / Math.max(meshX, meshY);
+
+    const scaleFactor = 10 / Math.max(meshX, meshY);
 
     group.scale.set(scaleFactor, scaleFactor, scaleFactor);
     group.position.setY((meshY / 2) * scaleFactor);
+
+    // Reset object position
+    const box = new THREE.Box3().setFromObject(group);
+    box.getCenter(group.position);
+
     group.position.multiplyScalar(-1);
-    group.position.setY((meshY * scaleFactor) / 2);
+    group.position.setY(group.position.y + meshY * scaleFactor);
   }
 
   startLoader() {
@@ -217,12 +205,52 @@ class ThreeViewer extends React.PureComponent<Props> {
     this.controls.update();
   }
 
-  renderModel(fileType, data) {
+  renderStl(data) {
     const geometry = this.createGeometry(data);
-    this.mesh = this.createMesh(geometry);
+    const group = new THREE.Mesh(geometry, this.material);
+    // Assign name
+    group.name = 'objectGroup';
+    this.scene.add(group);
+    this.transformGroup(group);
+    this.mesh = group;
+  }
+
+  renderObj(event) {
+    const mesh = event.detail.loaderRootNode;
+    const group = new THREE.Group();
+    group.name = 'objGroup';
+
+    // Assign new material
+    mesh.traverse(child => {
+      if (child instanceof THREE.Mesh) {
+        // Get geometry from child
+        const geometry = new THREE.Geometry();
+        geometry.fromBufferGeometry(child.geometry);
+        // Create and regroup inner objects
+        const innerObj = new THREE.Mesh(geometry, this.material);
+        group.add(innerObj);
+      }
+    });
+
+    this.scene.add(group);
+    this.transformGroup(group);
+    this.mesh = group;
+  }
+
+  renderModel(fileType, parsedData) {
+    const renderTypes = {
+      stl: data => this.renderStl(data),
+      obj: data => this.renderObj(data),
+    };
+
+    if (renderTypes[fileType]) {
+      renderTypes[fileType](parsedData);
+    }
   }
 
   renderScene() {
+    const { gridColor, centerLineColor } = this.theme;
+
     this.renderer = ThreeRenderer({
       antialias: true,
       shadowMap: true,
@@ -230,20 +258,40 @@ class ThreeViewer extends React.PureComponent<Props> {
 
     this.scene = ThreeScene({
       showFog: true,
-      showGrid: true,
       ...this.theme,
     });
 
     const viewer = this.viewer.current;
     const canvas = this.renderer.domElement;
     const { offsetWidth: width, offsetHeight: height } = viewer;
+
+    // Grid
+    this.grid = ThreeGrid({ size: 100, gridColor, centerLineColor });
+    this.scene.add(this.grid);
+
     // Camera
     this.camera = new THREE.PerspectiveCamera(80, width / height, 0.1, 1000);
     this.camera.position.set(-9.5, 14, 11);
+
     // Controls
     this.controls = this.createOrbitControls(this.camera, canvas);
+
     // Set viewer size
     this.renderer.setSize(width, height);
+
+    // Create model material
+    this.material = new THREE.MeshPhongMaterial({
+      opacity: 1,
+      transparent: true,
+      // depthWrite: true,
+      vertexColors: THREE.FaceColors,
+      // Positive value pushes polygon further away
+      // polygonOffsetFactor: 1,
+      // polygonOffsetUnits: 1,
+    });
+    // Set material color
+    this.material.color.set(this.materialColors.green);
+
     // Load file and render mesh
     this.startLoader();
 

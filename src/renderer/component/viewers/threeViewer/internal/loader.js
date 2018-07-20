@@ -1,4 +1,4 @@
-import { LoadingManager, STLLoader, OBJLoader } from './three';
+import { LoadingManager, STLLoader, OBJLoader2 } from './three';
 
 const Manager = ({ onLoad, onStart, onError }) => {
   const manager = new LoadingManager();
@@ -12,7 +12,7 @@ const Manager = ({ onLoad, onStart, onError }) => {
 const Loader = (fileType, manager) => {
   const fileTypes = {
     stl: () => new STLLoader(manager),
-    obj: () => new OBJLoader(manager),
+    obj: () => new OBJLoader2(manager),
   };
   return fileTypes[fileType] ? fileTypes[fileType]() : null;
 };

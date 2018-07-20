@@ -1,18 +1,5 @@
 import * as THREE from './three';
 
-const addGrid = (scene, { gridColor, centerLineColor, size }) => {
-  const divisions = size / 2;
-  const grid = new THREE.GridHelper(
-    size,
-    divisions,
-    new THREE.Color(centerLineColor),
-    new THREE.Color(gridColor)
-  );
-  grid.material.opacity = 0.4;
-  grid.material.transparent = true;
-  scene.add(grid);
-};
-
 const addLights = (scene, color, groundColor) => {
   // Light color
   const lightColor = new THREE.Color(color);
@@ -30,7 +17,7 @@ const addLights = (scene, color, groundColor) => {
   scene.add(shadowLight);
 };
 
-const Scene = ({ backgroundColor, groundColor, showFog, showGrid, gridColor, centerLineColor }) => {
+const Scene = ({ backgroundColor, groundColor, showFog }) => {
   // Convert color
   const bgColor = new THREE.Color(backgroundColor);
   // New scene
@@ -39,17 +26,8 @@ const Scene = ({ backgroundColor, groundColor, showFog, showGrid, gridColor, cen
   scene.background = bgColor;
   // Fog effect
   scene.fog = showFog === true ? new THREE.Fog(bgColor, 1, 95) : null;
-  // Add grid
-  if (showGrid) {
-    addGrid(scene, {
-      size: 100,
-      gridColor,
-      centerLineColor,
-    });
-  }
   // Add basic lights
   addLights(scene, '#FFFFFF', groundColor);
-
   // Return new three scene
   return scene;
 };
