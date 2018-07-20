@@ -7,7 +7,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Fixed
 
-  * Edit option missing from certain published claims ([#175](https://github.com/lbryio/lbry-desktop/issues/1756))
+  * Edit option missing from certain published claims ([#1756](https://github.com/lbryio/lbry-desktop/issues/1756))
+  * Fix navigation issue with channels that have more than one page ([#1797](https://github.com/lbryio/lbry-desktop/pull/1797))
 
 ### Added
 
