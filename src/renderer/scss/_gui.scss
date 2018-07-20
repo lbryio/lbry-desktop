@@ -153,7 +153,6 @@ dd {
 
 p {
   font-family: 'metropolis-medium';
-  padding: $spacing-vertical * 1/3 0;
 }
 
 .page {
@@ -302,6 +301,14 @@ p {
   opacity: 0.5;
 }
 
+.column {
+  display: flex;
+
+  .column__item:not(:first-child) {
+    padding-left: $spacing-width * 2/3;
+  }
+}
+
 .truncated-text {
   //display: inline-block;
   display: -webkit-box;
@@ -364,4 +371,10 @@ p {
 
 .error-text {
   color: var(--color-error);
+}
+
+.thumbnail-preview {
+  height: var(--thumbnail-preview-height);
+  width: var(--thumbnail-preview-width);
+  border: var(--thumbnail-preview-border);
 }

@@ -55,6 +55,7 @@ export function doClaimRewardType(rewardType, options) {
     });
 
     const success = successReward => {
+      dispatch(doRewardList());
       dispatch({
         type: ACTIONS.CLAIM_REWARD_SUCCESS,
         data: {

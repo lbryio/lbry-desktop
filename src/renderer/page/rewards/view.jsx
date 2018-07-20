@@ -10,7 +10,6 @@ import type { Reward } from 'types/reward';
 
 type Props = {
   doAuth: () => void,
-  fetchRewards: () => void,
   navigate: string => void,
   fetching: boolean,
   rewards: Array<Reward>,
@@ -27,10 +26,6 @@ type Props = {
 };
 
 class RewardsPage extends React.PureComponent<Props> {
-  componentDidMount() {
-    this.props.fetchRewards();
-  }
-
   renderPageHeader() {
     const { doAuth, navigate, user, daemonSettings } = this.props;
 

@@ -7,10 +7,20 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Fixed
 
+  * Edit option missing from certain published claims ([#175](https://github.com/lbryio/lbry-desktop/issues/1756))
+
 ### Added
+
+ * Added 3D file viewer for OBJ & STL file types ([#1558](https://github.com/lbryio/lbry-desktop/pull/1558))
+ * Added thumbnail preview on publish page ([#1755](https://github.com/lbryio/lbry-desktop/pull/1755))
 
 ### Changed
 
+  * Rename the Github repo to lbry-desktop ([#1765](https://github.com/lbryio/lbry-desktop/pull/1765))
+  * Only show video error modal if you are on the video page & don't retry to play failed videos ([#1768](https://github.com/lbryio/lbry-desktop/pull/1768))
+  * Actually hide NSFW files if a user chooses to hide NSFW content via the settings page ([#1748](https://github.com/lbryio/lbry-desktop/pull/1748))
+  * Hide the "Community top bids" section if user chooses to hide NSFW content ([#1760](https://github.com/lbryio/lbry-desktop/pull/1760))
+  * Add a more descriptive error message when Shapeshift is unavailable ([#1771](https://github.com/lbryio/lbry-desktop/pull/1771))
 
 
 ## [0.22.2] - 2018-07-09
@@ -33,7 +43,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
   * Console errors when multiple downloads for same claim exist ([#1724](https://github.com/lbryio/lbry-desktop/pull/1724))
   * App version in dev mode ([#1722](https://github.com/lbryio/lbry-desktop/pull/1722))
   * Long URI name displays in transaction list/Help ([#1694](https://github.com/lbryio/lbry-desktop/pull/1694))/([#1692](https://github.com/lbryio/lbry-desktop/pull/1692))
-  * Edit option missing from certain published claims ([#175](https://github.com/lbryio/lbry-desktop/issues/1756))
+
 
 ### Changed
   * Show claim name, instead of URI, when loading a channel([#1711](https://github.com/lbryio/lbry-desktop/pull/1711))

@@ -1,7 +1,7 @@
 [main]
 host = https://www.transifex.com
 
-[lbry-app.app-strings]
+[lbry-deskop.app-strings]
 file_filter = dist/locales/<lang>.json
 source_file = dist/locales/en.json
 source_lang = en

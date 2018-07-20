@@ -17,6 +17,9 @@ type Props = {
     download_path: string,
     completed: boolean,
   },
+  fileInfoErrors: ?{
+    [string]: boolean,
+  },
   metadata: ?{
     nsfw: boolean,
     thumbnail: string,
@@ -55,14 +58,17 @@ class FileViewer extends React.PureComponent<Props> {
     window.addEventListener('keydown', this.handleKeyDown);
   }
 
-  componentWillReceiveProps(nextProps: Props) {
+  componentDidUpdate(prev: Props) {
     if (
-      this.props.autoplay !== nextProps.autoplay ||
-      this.props.fileInfo !== nextProps.fileInfo ||
-      this.props.isDownloading !== nextProps.isDownloading ||
-      this.props.playingUri !== nextProps.playingUri
+      this.props.autoplay !== prev.autoplay ||
+      this.props.fileInfo !== prev.fileInfo ||
+      this.props.isDownloading !== prev.isDownloading ||
+      this.props.playingUri !== prev.playingUri
     ) {
-      this.handleAutoplay(nextProps);
+      // suppress autoplay after download error
+      if (!(this.props.uri in this.props.fileInfoErrors)) {
+        this.handleAutoplay(this.props);
+      }
     }
   }
 
