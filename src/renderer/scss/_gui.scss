@@ -184,6 +184,7 @@ p {
 .main {
   padding: $spacing-width $spacing-width;
   margin: auto;
+  overflow: hidden;
 }
 
 .main--contained {
