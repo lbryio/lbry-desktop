@@ -1,8 +1,7 @@
 /node_modules
 /dist
-/static/daemon/lbrynet-daemon*
+/static/daemon/lbrynet*
 /static/locales
 yarn-error.log
 package-lock.json
 .idea/
-/build/daemon.ver
