@@ -19,34 +19,54 @@ const downloadDaemon = targetPlatform =>
     if (currentPlatform === 'win32') currentPlatform = 'windows';
 
     const daemonPlatform = targetPlatform || currentPlatform;
-    const tmpZipPath = path.join(__dirname,'daemon.zip');
+    const tmpZipPath = path.join(__dirname, '..', 'dist', 'daemon.zip');
     const daemonURL = daemonURLTemplate
       .replace(/DAEMONVER/g, daemonVersion)
       .replace(/OSNAME/g, daemonPlatform);
     const tmpZipPath = 'dist/daemon.zip';
 
-    console.log('\x1b[34minfo\x1b[0m Downloading daemon...');
-    axios
-      .request({
-        responseType: 'arraybuffer',
-        url: daemonURL,
-        method: 'get',
-        headers: {
-          'Content-Type': 'application/zip',
-        },
-      })
-      .then(
-        result =>
-          new Promise((newResolve, newReject) => {
-            fs.writeFile(tmpZipPath, result.data, error => {
-              if (error) return newReject(error);
-              return newResolve();
-            });
-          })
-      )
-      .then(() => del(`${daemonDir}/${daemonFileName}*`))
-      .then(() =>
-        decompress(tmpZipPath, daemonDir, {
+
+    // If a daemon and daemon.ver exists, check to see if it matches the current daemon version
+    const hasDaemonDownloaded = fs.existsSync(daemonFilePath);
+    const hasDaemonVersion = fs.existsSync(daemonVersionPath);
+    let downloadedDaemonVersion;
+    if (hasDaemonVersion) {
+      downloadedDaemonVersion = fs.readFileSync(daemonVersionPath, "utf8");
+    }
+
+    if (hasDaemonDownloaded && hasDaemonVersion && downloadedDaemonVersion === daemonVersion) {
+      console.log('\x1b[34minfo\x1b[0m Daemon already downloaded');
+      resolve('Done');
+      return;
+    } else {
+      console.log('\x1b[34minfo\x1b[0m Downloading daemon...');
+      axios
+        .request({
+          responseType: 'arraybuffer',
+          url: daemonURL,
+          method: 'get',
+          headers: {
+            'Content-Type': 'application/zip',
+          },
+        })
+        .then(
+          result =>
+            new Promise((newResolve, newReject) => {
+              const distPath = path.join(__dirname, '..', 'dist');
+              const hasDistFolder = fs.existsSync(distPath);
+
+              if (!hasDistFolder) {
+                fs.mkdirSync(distPath);
+              }
+              
+              fs.writeFile(tmpZipPath, result.data, error => {
+                if (error) return newReject(error);
+                return newResolve();
+              });
+            })
+        )
+        .then(() => del(`${daemonFilePath}*`))
+        .then(() => decompress(tmpZipPath, daemonDir, {
           filter: file =>
             path.basename(file.path).replace(path.extname(file.path), '') === daemonFileName,
         })
