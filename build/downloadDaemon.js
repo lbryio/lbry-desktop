@@ -68,7 +68,16 @@ const downloadDaemon = targetPlatform =>
         .then(() => del(`${daemonFilePath}*`))
         .then(() => decompress(tmpZipPath, daemonDir, {
           filter: file =>
-            path.basename(file.path).replace(path.extname(file.path), '') === daemonFileName,
+            path.basename(file.path) === daemonFileName,
+        }))
+        .then(() => {
+          console.log('\x1b[32msuccess\x1b[0m Daemon downloaded!');
+          if (hasDaemonVersion) {
+            del(daemonVersionPath);
+          }
+
+          fs.writeFileSync(daemonVersionPath, daemonVersion, "utf8")
+          resolve('Done');
         })
       )
       .then(() => {
