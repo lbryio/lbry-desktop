@@ -1,6 +1,6 @@
 /* eslint-disable no-console,import/no-extraneous-dependencies,import/no-commonjs */
 const path = require('path');
-const fs = require('fs-path');
+const fs = require('fs');
 const packageJSON = require('../package.json');
 const axios = require('axios');
 const decompress = require('decompress');
@@ -18,12 +18,13 @@ const downloadDaemon = targetPlatform =>
     if (currentPlatform === 'darwin') currentPlatform = 'macos';
     if (currentPlatform === 'win32') currentPlatform = 'windows';
 
+    const daemonFilePath = path.join(daemonDir, daemonFileName);
+    const daemonVersionPath = path.join(__dirname, 'daemon.ver');
     const daemonPlatform = targetPlatform || currentPlatform;
     const tmpZipPath = path.join(__dirname, '..', 'dist', 'daemon.zip');
     const daemonURL = daemonURLTemplate
       .replace(/DAEMONVER/g, daemonVersion)
       .replace(/OSNAME/g, daemonPlatform);
-    const tmpZipPath = 'dist/daemon.zip';
 
 
     // If a daemon and daemon.ver exists, check to see if it matches the current daemon version
@@ -63,7 +64,7 @@ const downloadDaemon = targetPlatform =>
                 if (error) return newReject(error);
                 return newResolve();
               });
-            })
+          })
         )
         .then(() => del(`${daemonFilePath}*`))
         .then(() => decompress(tmpZipPath, daemonDir, {
@@ -79,17 +80,13 @@ const downloadDaemon = targetPlatform =>
           fs.writeFileSync(daemonVersionPath, daemonVersion, "utf8")
           resolve('Done');
         })
-      )
-      .then(() => {
-        console.log('\x1b[32msuccess\x1b[0m Daemon downloaded!');
-        resolve(true);
-      })
-      .catch(error => {
-        console.error(
-          `\x1b[31merror\x1b[0m Daemon download failed due to: \x1b[35m${error}\x1b[0m`
-        );
-        reject(error);
-      });
+        .catch(error => {
+          console.error(
+            `\x1b[31merror\x1b[0m Daemon download failed due to: \x1b[35m${error}\x1b[0m`
+          );
+          reject(error);
+        })
+      };
   });
 
 module.exports = downloadDaemon;
