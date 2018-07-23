@@ -71,6 +71,7 @@
     "redux-persist-transform-filter": "0.0.16",
     "redux-thunk": "^2.2.0",
     "remark": "^9.0.0",
+    "remark-emoji": "^2.0.1",
     "remark-react": "^4.0.3",
     "render-media": "^3.1.0",
     "reselect": "^3.0.0",
