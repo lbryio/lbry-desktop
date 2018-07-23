@@ -39,10 +39,16 @@ class Page extends React.PureComponent<Props, State> {
 
   componentDidUpdate(prevProps: Props) {
     const { loading } = this.props;
+    const { showLoader } = this.state;
+
     if (!this.loaderTimeout && !prevProps.loading && loading) {
       this.beginLoadingTimeout();
     } else if (!loading && this.loaderTimeout) {
       clearTimeout(this.loaderTimeout);
+
+      if (showLoader) {
+        this.removeLoader();
+      }
     }
   }
 
@@ -56,6 +62,10 @@ class Page extends React.PureComponent<Props, State> {
     this.loaderTimeout = setTimeout(() => {
       this.setState({ showLoader: true });
     }, LOADER_TIMEOUT);
+  }
+
+  removeLoader() {
+    this.setState({ showLoader: false });
   }
 
   loaderTimeout: ?TimeoutID;
