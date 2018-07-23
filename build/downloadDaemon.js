@@ -28,7 +28,6 @@ const downloadDaemon = targetPlatform =>
     const daemonURL = daemonURLTemplate
       .replace(/DAEMONVER/g, daemonVersion)
       .replace(/OSNAME/g, daemonPlatform);
-   console.log(daemonURL);
 
     // If a daemon and daemon.ver exists, check to see if it matches the current daemon version
     const hasDaemonDownloaded = fs.existsSync(daemonFilePath);
