@@ -370,6 +370,10 @@ p {
   }
 }
 
+.error-text {
+  color: var(--color-error);
+}
+
 .thumbnail-preview {
   height: var(--thumbnail-preview-height);
   width: var(--thumbnail-preview-width);

@@ -274,6 +274,36 @@ export function doCheckDaemonVersion() {
   };
 }
 
+export function doNotifyEncryptWallet() {
+  return dispatch => {
+    dispatch(
+      doNotify({
+        id: MODALS.WALLET_ENCRYPT,
+      })
+    );
+  };
+}
+
+export function doNotifyDecryptWallet() {
+  return dispatch => {
+    dispatch(
+      doNotify({
+        id: MODALS.WALLET_DECRYPT,
+      })
+    );
+  };
+}
+
+export function doNotifyUnlockWallet() {
+  return dispatch => {
+    dispatch(
+      doNotify({
+        id: MODALS.WALLET_UNLOCK,
+      })
+    );
+  };
+}
+
 export function doAlertError(errorList) {
   return dispatch => {
     dispatch(
