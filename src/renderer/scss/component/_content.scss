@@ -1,5 +1,7 @@
 .content__wrapper {
-  width: 740px;
+  min-width: 400px;
+  flex-basis: auto; /* default value */
+  flex-grow: 1;
 }
 
 .content__embedded {

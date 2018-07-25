@@ -8,24 +8,23 @@ import type { Claim } from 'types/claim';
 type Props = {
   channelUri: ?string,
   claimsInChannel: ?Array<Claim>,
-  fetching: boolean,
   fetchClaims: (string, number) => void,
 };
 
 export default class RecommendedVideos extends React.PureComponent<Props> {
   componentDidMount() {
     const { channelUri, fetchClaims, claimsInChannel } = this.props;
-    if (!claimsInChannel) {
+    if (channelUri && !claimsInChannel) {
       fetchClaims(channelUri, 1);
     }
   }
 
   render() {
-    const { claimsInChannel, fetching } = this.props;
+    const { claimsInChannel } = this.props;
 
     return (
       <div className="card__list--recommended">
-        <FormRow alignRight>
+        <FormRow>
           <ToolTip onComponent body={__('Automatically download and play free content.')}>
             <FormField
               useToggle
@@ -38,7 +37,6 @@ export default class RecommendedVideos extends React.PureComponent<Props> {
             />
           </ToolTip>
         </FormRow>
-        {fetching && <div>Loading</div>}
         {claimsInChannel &&
           claimsInChannel.map(({ permanent_url: permanentUrl }) => (
             <FileTile

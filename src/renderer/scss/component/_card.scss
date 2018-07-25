@@ -422,7 +422,11 @@
 }
 
 .card__list--recommended {
+  min-width: 300px;
+  flex-basis: auto; /* default value */
+  flex-grow: 1;
   padding-left: $spacing-width;
+
   .card {
     display: block;
   }
