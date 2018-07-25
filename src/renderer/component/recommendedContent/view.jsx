@@ -4,8 +4,10 @@ import FileTile from 'component/fileTile';
 import { FormRow, FormField } from 'component/common/form';
 import ToolTip from 'component/common/tooltip';
 import type { Claim } from 'types/claim';
+import { buildURI, parseURI } from 'lbry-redux';
 
 type Props = {
+  uri: string,
   channelUri: ?string,
   claimsInChannel: ?Array<Claim>,
   autoplay: boolean,
@@ -13,7 +15,7 @@ type Props = {
   fetchClaims: (string, number) => void,
 };
 
-export default class RecommendedVideos extends React.PureComponent<Props> {
+export default class RecommendedContent extends React.PureComponent<Props> {
   componentDidMount() {
     const { channelUri, fetchClaims, claimsInChannel } = this.props;
     if (channelUri && !claimsInChannel) {
@@ -22,7 +24,27 @@ export default class RecommendedVideos extends React.PureComponent<Props> {
   }
 
   render() {
-    const { claimsInChannel, autoplay, setAutoplay } = this.props;
+    const { claimsInChannel, autoplay, uri, setAutoplay } = this.props;
+
+    let recommendedContent;
+    if (claimsInChannel) {
+      recommendedContent = claimsInChannel.filter(claim => {
+        const { name, claim_id: claimId, channel_name: channelName, value } = claim;
+        const { isChannel } = parseURI(uri);
+
+        // The uri may include the channel name
+        const recommendedUri =
+          isChannel && value && value.publisherSignature
+            ? buildURI({
+                contentName: name,
+                claimName: channelName,
+                claimId: value.publisherSignature.certificateId,
+              })
+            : buildURI({ claimName: name, claimId });
+
+        return recommendedUri !== uri;
+      });
+    }
 
     return (
       <div className="card__list--recommended">
@@ -39,8 +61,8 @@ export default class RecommendedVideos extends React.PureComponent<Props> {
             />
           </ToolTip>
         </FormRow>
-        {claimsInChannel &&
-          claimsInChannel.map(({ permanent_url: permanentUrl }) => (
+        {recommendedContent &&
+          recommendedContent.map(({ permanent_url: permanentUrl }) => (
             <FileTile
               small
               displayDescription={false}

@@ -19,7 +19,7 @@ import type { Subscription } from 'types/subscription';
 import FileDownloadLink from 'component/fileDownloadLink';
 import classnames from 'classnames';
 import getMediaType from 'util/getMediaType';
-import RecommendedVideos from 'component/recommendedVideos';
+import RecommendedContent from 'component/recommendedContent';
 
 type Props = {
   claim: Claim,
@@ -218,7 +218,7 @@ class FilePage extends React.Component<Props> {
           </div>
         </section>
         <section>
-          <RecommendedVideos uri={uri} channelUri={`lbry://${subscriptionUri}`} />
+          <RecommendedContent uri={uri} channelUri={`lbry://${subscriptionUri}`} />
         </section>
       </Page>
     );
