@@ -5,23 +5,26 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ## [Unreleased]
 
-### Fixed
-
-  * Edit option missing from certain published claims ([#1756](https://github.com/lbryio/lbry-desktop/issues/1756))
-  * Fix navigation issue with channels that have more than one page ([#1797](https://github.com/lbryio/lbry-desktop/pull/1797))
-
 ### Added
+ * 3D file viewer for OBJ & STL file types ([#1558](https://github.com/lbryio/lbry-desktop/pull/1558))
+ * Thumbnail preview on publish page ([#1755](https://github.com/lbryio/lbry-desktop/pull/1755))
+ * Abandoned claim transactions now show in wallet history ([#1769](https://github.com/lbryio/lbry-desktop/pull/1769))
+ * Added emoji support in the claim description ([#1800](https://github.com/lbryio/lbry-desktop/pull/1800))
 
- * Added 3D file viewer for OBJ & STL file types ([#1558](https://github.com/lbryio/lbry-desktop/pull/1558))
- * Added thumbnail preview on publish page ([#1755](https://github.com/lbryio/lbry-desktop/pull/1755))
 
 ### Changed
-
-  * Rename the Github repo to lbry-desktop ([#1765](https://github.com/lbryio/lbry-desktop/pull/1765))
+  * Upgraded LBRY Protocol to [version 0.20.4](https://github.com/lbryio/lbry/releases/tag/v0.20.4) to assist with download availabiltiy and lower CPU usage on idle.
+  * Upgraded Electron-Builder and Updater to support signing the daemon and improving the autoupdate process ([#1784](https://github.com/lbryio/lbry-desktop/pull/1784))
+  * Channel page now uses caching, faster switching between channels/claims ([#1750](https://github.com/lbryio/lbry-desktop/pull/1750))
   * Only show video error modal if you are on the video page & don't retry to play failed videos ([#1768](https://github.com/lbryio/lbry-desktop/pull/1768))
   * Actually hide NSFW files if a user chooses to hide NSFW content via the settings page ([#1748](https://github.com/lbryio/lbry-desktop/pull/1748))
   * Hide the "Community top bids" section if user chooses to hide NSFW content ([#1760](https://github.com/lbryio/lbry-desktop/pull/1760))
-  * Add a more descriptive error message when Shapeshift is unavailable ([#1771](https://github.com/lbryio/lbry-desktop/pull/1771))
+  * More descriptive error message when Shapeshift is unavailable ([#1771](https://github.com/lbryio/lbry-desktop/pull/1771))
+  * Rename the Github repo to lbry-desktop ([#1765](https://github.com/lbryio/lbry-desktop/pull/1765))
+
+### Fixed
+  * Edit option missing from certain published claims ([#1756](https://github.com/lbryio/lbry-desktop/issues/1756))
+  * Fix navigation issue with channels that have more than one page ([#1797](https://github.com/lbryio/lbry-desktop/pull/1797))
 
 
 ## [0.22.2] - 2018-07-09
