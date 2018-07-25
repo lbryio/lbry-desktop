@@ -1,6 +1,6 @@
 {
   "name": "LBRY",
-  "version": "0.22.2",
+  "version": "0.23.0",
   "description": "A browser for the LBRY network, a digital marketplace controlled by its users.",
   "keywords": [
     "lbry"
@@ -31,7 +31,7 @@
     "release": "yarn compile && electron-builder build",
     "precommit": "lint-staged",
     "preinstall": "yarn cache clean lbry-redux",
-    "postinstall": "electron-builder install-app-deps & node build/downloadDaemon.js"
+    "postinstall": "electron-builder install-app-deps && node build/downloadDaemon.js"
   },
   "dependencies": {
     "bluebird": "^3.5.1",
@@ -71,6 +71,7 @@
     "redux-persist-transform-filter": "0.0.16",
     "redux-thunk": "^2.2.0",
     "remark": "^9.0.0",
+    "remark-emoji": "^2.0.1",
     "remark-react": "^4.0.3",
     "render-media": "^3.1.0",
     "reselect": "^3.0.0",

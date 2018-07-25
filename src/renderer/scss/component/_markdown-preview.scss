@@ -80,9 +80,31 @@
   }
 
   a {
-      font-size: 1em;
-      color: var(--btn-external-color);
+    font-size: 1em;
+    color: var(--btn-external-color);
+    display: inline-block;
+  }
+
+  /* Lists */
+  ul,
+  ol {
+    margin-bottom: 2em;
+  }
+
+  ul {
+    list-style: initial;
+  }
+
+  li {
+    margin-left: 2em;
+    p {
       display: inline-block;
+    }
+  }
+
+  ol > li,
+  ul > li {
+    list-style-position: outside;
   }
 }
 

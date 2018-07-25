@@ -2,6 +2,7 @@
 import * as React from 'react';
 import remark from 'remark';
 import reactRenderer from 'remark-react';
+import remarkEmoji from 'remark-emoji';
 import ExternalLink from 'component/externalLink';
 import defaultSchema from 'hast-util-sanitize/lib/github.json';
 
@@ -16,7 +17,11 @@ type MarkdownProps = {
   promptLinks?: boolean,
 };
 
-const SimpleLink = ({ href, title, children }) => (<a href={href} title={title}>{children}</a>);
+const SimpleLink = ({ href, title, children }) => (
+  <a href={href} title={title}>
+    {children}
+  </a>
+);
 
 const MarkdownPreview = (props: MarkdownProps) => {
   const { content, externalLinks, promptLinks } = props;
@@ -30,6 +35,7 @@ const MarkdownPreview = (props: MarkdownProps) => {
     <div className="markdown-preview">
       {
         remark()
+          .use(remarkEmoji)
           .use(reactRenderer, remarkOptions)
           .processSync(content).contents
       }

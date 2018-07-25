@@ -13,7 +13,7 @@ import SubscriptionsPage from './view';
 const select = state => ({
   loading:
     selectIsFetchingSubscriptions(state) ||
-    Object.keys(selectSubscriptionsBeingFetched(state)).length,
+    Boolean(Object.keys(selectSubscriptionsBeingFetched(state)).length),
   subscriptionsBeingFetched: selectSubscriptionsBeingFetched(state),
   subscriptions: selectSubscriptions(state),
   subscriptionClaims: selectSubscriptionClaims(state),
