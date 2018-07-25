@@ -8,6 +8,8 @@ import type { Claim } from 'types/claim';
 type Props = {
   channelUri: ?string,
   claimsInChannel: ?Array<Claim>,
+  autoplay: boolean,
+  setAutoplay: boolean => void,
   fetchClaims: (string, number) => void,
 };
 
@@ -20,7 +22,7 @@ export default class RecommendedVideos extends React.PureComponent<Props> {
   }
 
   render() {
-    const { claimsInChannel } = this.props;
+    const { claimsInChannel, autoplay, setAutoplay } = this.props;
 
     return (
       <div className="card__list--recommended">
@@ -32,8 +34,8 @@ export default class RecommendedVideos extends React.PureComponent<Props> {
               name="autoplay"
               type="checkbox"
               prefix={__('Autoplay')}
-              checked={false}
-              onChange={() => {}}
+              checked={autoplay}
+              onChange={e => setAutoplay(e.target.checked)}
             />
           </ToolTip>
         </FormRow>

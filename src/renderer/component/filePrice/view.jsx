@@ -9,7 +9,10 @@ type Props = {
   uri: string,
   fetching: boolean,
   claim: ?{},
+  // below props are just passed to <CreditAmount />
   filePage?: boolean,
+  inheritStyle?: boolean,
+  showLBC?: boolean,
 };
 
 class FilePrice extends React.PureComponent<Props> {
@@ -34,12 +37,14 @@ class FilePrice extends React.PureComponent<Props> {
   };
 
   render() {
-    const { costInfo, showFullPrice, filePage } = this.props;
+    const { costInfo, showFullPrice, filePage, inheritStyle, showLBC } = this.props;
 
     return costInfo ? (
       <CreditAmount
         showFree
         filePage={filePage}
+        inheritStyle={inheritStyle}
+        showLBC={showLBC}
         amount={costInfo.cost}
         isEstimate={!costInfo.includesData}
         showFullPrice={showFullPrice}
