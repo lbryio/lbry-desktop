@@ -134,6 +134,10 @@
   font-size: 18px;
 }
 
+.card__title--file-card {
+  padding-top: $spacing-vertical * 1/3;
+}
+
 .card__subtitle {
   margin: 0;
   font-size: 14px;
