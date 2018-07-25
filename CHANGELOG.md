@@ -11,7 +11,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
  * Abandoned claim transactions now show in wallet history ([#1769](https://github.com/lbryio/lbry-desktop/pull/1769))
  * Added emoji support in the claim description ([#1800](https://github.com/lbryio/lbry-desktop/pull/1800))
 
-
 ### Changed
   * Upgraded LBRY Protocol to [version 0.20.4](https://github.com/lbryio/lbry/releases/tag/v0.20.4) to assist with download availability and lower CPU usage on idle.
   * Upgraded Electron-Builder and Updater to support signing the daemon and improving the auto update process ([#1784](https://github.com/lbryio/lbry-desktop/pull/1784))
