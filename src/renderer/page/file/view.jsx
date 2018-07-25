@@ -198,7 +198,7 @@ class FilePage extends React.Component<Props> {
                   <Button
                     button="alt"
                     icon={icons.GIFT}
-                    label={__('Enjoy this? Send a tip')}
+                    label={__('Send a tip')}
                     onClick={() => openModal({ id: MODALS.SEND_TIP }, { uri })}
                   />
                 )}
@@ -217,9 +217,7 @@ class FilePage extends React.Component<Props> {
             </div>
           </div>
         </section>
-        <section>
-          <RecommendedContent uri={uri} channelUri={`lbry://${subscriptionUri}`} />
-        </section>
+        <RecommendedContent uri={uri} channelUri={`lbry://${subscriptionUri}`} />
       </Page>
     );
   }

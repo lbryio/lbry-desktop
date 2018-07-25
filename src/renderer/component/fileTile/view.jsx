@@ -110,7 +110,12 @@ class FileTile extends React.PureComponent<Props> {
           {isResolvingUri && <div className="card__title--small">{__('Loading...')}</div>}
           {!isResolvingUri && (
             <React.Fragment>
-              <div className={small ? 'card__title--x-small' : 'card__title--file'}>
+              <div
+                className={classnames({
+                  'card__title--file': !small,
+                  'card__title--x-small': small,
+                })}
+              >
                 <TruncatedText lines={3}>{title || name}</TruncatedText>
               </div>
               <div
@@ -128,11 +133,6 @@ class FileTile extends React.PureComponent<Props> {
                   <TruncatedText lines={3}>{description}</TruncatedText>
                 </div>
               )}
-              {
-                // <div className="card__subtitle-price">
-                //
-                // </div>
-              }
               {!name && (
                 <React.Fragment>
                   {__('This location is unused.')}{' '}

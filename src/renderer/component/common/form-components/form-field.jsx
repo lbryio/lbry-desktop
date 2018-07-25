@@ -24,7 +24,7 @@ type Props = {
   stretch?: boolean,
   affixClass?: string, // class applied to prefix/postfix label
   useToggle?: boolean,
-  noPadding?: boolean,
+  firstInList?: boolean, // at the top of a list, no padding top
 };
 
 export class FormField extends React.PureComponent<Props> {
@@ -42,7 +42,7 @@ export class FormField extends React.PureComponent<Props> {
       stretch,
       affixClass,
       useToggle,
-      noPadding,
+      firstInList,
       ...inputProps
     } = this.props;
 
@@ -110,7 +110,7 @@ export class FormField extends React.PureComponent<Props> {
         <div
           className={classnames('form-field__input', {
             'form-field--auto-height': type === 'markdown',
-            'form-field--no-padding': noPadding,
+            'form-field--first-item': firstInList,
           })}
         >
           {prefix && (

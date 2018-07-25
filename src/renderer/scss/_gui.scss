@@ -206,6 +206,7 @@ p {
 .main--for-content {
   padding: $spacing-width * 2/3;
   display: flex;
+  justify-content: center;
 }
 
 .page__header {
@@ -255,16 +256,20 @@ p {
 }
 
 .credit-amount {
-  border-radius: 5px;
   font-family: 'metropolis-bold';
   font-size: 10px;
-  padding: 5px;
   white-space: nowrap;
+  padding: $spacing-vertical * 1/6 0;
 }
 
 .credit-amount--large {
   font-family: 'metropolis-semibold';
   font-size: 36px;
+}
+
+.credit-amount--file-page {
+  border-radius: 5px;
+  padding: 5px;
 }
 
 .credit-amount--free {
@@ -293,22 +298,6 @@ p {
   font-family: 'metropolis-medium';
   padding: 0;
 }
-
-// .credit-amount--plain {
-//   background-color: inherit;
-//   color: inherit;
-//   font-weight: inherit;
-//   font-size: inherit;
-// }
-
-// .credit-amount.credit-amount--no-style {
-//   padding: 0;
-//   font-size: inherit;
-//   font-weight: inherit;
-//   color: inherit;
-//   background-color: transparent;
-//   font-family: 'metropolis-medium';
-// }
 
 .divider__horizontal {
   border-top: var(--color-divider);

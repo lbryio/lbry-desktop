@@ -47,12 +47,12 @@ export default class RecommendedContent extends React.PureComponent<Props> {
     }
 
     return (
-      <div className="card__list--recommended">
+      <section className="card__list--recommended">
         <FormRow>
           <ToolTip onComponent body={__('Automatically download and play free content.')}>
             <FormField
               useToggle
-              noPadding
+              firstInList
               name="autoplay"
               type="checkbox"
               prefix={__('Autoplay')}
@@ -70,7 +70,7 @@ export default class RecommendedContent extends React.PureComponent<Props> {
               uri={`lbry://${permanentUrl}`}
             />
           ))}
-      </div>
+      </section>
     );
   }
 }

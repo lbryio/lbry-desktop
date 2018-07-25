@@ -51,7 +51,7 @@
   width: 100%;
 }
 
-.form-field__input.form-field--no-padding {
+.form-field__input.form-field--first-item {
   padding: 0;
 }
 
@@ -73,10 +73,6 @@
 
   input.input--thumbnail {
     width: 400px;
-  }
-
-  input.input--toggle {
-    padding: 0;
   }
 
   &.form-field--auto-height {

@@ -1,15 +1,12 @@
 .content__wrapper {
-  min-width: 400px;
-  flex-basis: auto; /* default value */
-  flex-grow: 1;
+  max-width: var(--card-max-width);
+  flex: 1 0 var(--file-page-min-width);
 }
 
 .content__embedded {
   background-color: var(--color-black);
   width: 100%;
   padding-top: var(--video-aspect-ratio);
-  padding-left: 36px;
-  padding-right: 36px;
   position: relative;
   display: flex;
   align-items: center;
@@ -126,9 +123,4 @@
 img {
   max-height: 100%;
   max-width: 100%;
-}
-
-.content__info {
-  padding-left: 24px;
-  width: 920px;
 }

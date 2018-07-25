@@ -200,11 +200,6 @@
   margin-top: $spacing-vertical * 2/3;
 }
 
-.card__content--columns {
-  display: flex;
-  padding: 0;
-}
-
 .card__content--extra-padding {
   margin-top: $spacing-vertical * 3/2;
 }
@@ -422,13 +417,11 @@
 }
 
 .card__list--recommended {
-  min-width: 300px;
-  flex-basis: auto; /* default value */
-  flex-grow: 1;
+  flex: 0 0 var(--recommended-content-width);
   padding-left: $spacing-width;
 
-  .card {
-    display: block;
+  @media (min-width: $medium-breakpoint) {
+    flex: 0 0 var(--recommended-content-width-medium);
   }
 }
 

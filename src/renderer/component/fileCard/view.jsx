@@ -92,7 +92,6 @@ class FileCard extends React.PureComponent<Props> {
         onContextMenu={handleContextMenu}
       >
         <CardMedia thumbnail={thumbnail} />
-        <div className="card-media__internal-links" />
         <div className="card__title-identity">
           <div className="card__title--small">
             <TruncatedText lines={3}>{title}</TruncatedText>
