@@ -38,7 +38,6 @@ export class SplashScreen extends React.PureComponent<Props, State> {
   updateStatus() {
     Lbry.status().then(status => {
       this._updateStatusCallback(status);
-      window.status = status;
     });
   }
 

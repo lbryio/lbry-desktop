@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import { FormRow, FormField } from 'component/common/form';
+import { Form, FormRow, FormField } from 'component/common/form';
 import { Modal } from 'modal/modal';
 import Button from 'component/button';
 
@@ -43,26 +43,28 @@ class ModalWalletUnlock extends React.PureComponent<Props> {
         onConfirmed={() => unlockWallet(password)}
         onAborted={quit}
       >
-        {__(
-          'Your wallet has been encrypted with a local password. Please enter your wallet password to proceed.'
-        )}
-        <FormRow padded>
-          <FormField
-            stretch
-            error={walletUnlockSucceded === false ? 'Incorrect Password' : false}
-            label={__('Wallet Password')}
-            type="password"
-            name="wallet-password"
-            onChange={event => this.onChangePassword(event)}
-          />
-        </FormRow>
-        <FormRow padded>
-          <Button
-            button="link"
-            label={__('Learn more')}
-            href="https://lbry.io/faq/wallet-encryption"
-          />
-        </FormRow>
+        <Form onSubmit={() => unlockWallet(password)}>
+          {__(
+            'Your wallet has been encrypted with a local password. Please enter your wallet password to proceed.'
+          )}
+          <FormRow padded>
+            <FormField
+              stretch
+              error={walletUnlockSucceded === false ? 'Incorrect Password' : false}
+              label={__('Wallet Password')}
+              type="password"
+              name="wallet-password"
+              onChange={event => this.onChangePassword(event)}
+            />
+          </FormRow>
+          <div className="card__actions">
+            <Button
+              button="link"
+              label={__('Learn more')}
+              href="https://lbry.io/faq/wallet-encryption"
+            />
+          </div>
+        </Form>
       </Modal>
     );
   }
