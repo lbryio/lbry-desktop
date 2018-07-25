@@ -203,6 +203,11 @@ p {
   padding-right: 100px;
 }
 
+.main--for-content {
+  padding: $spacing-width * 2/3;
+  display: flex;
+}
+
 .page__header {
   padding: $spacing-vertical * 2/3;
   padding-bottom: 0;
@@ -263,30 +268,47 @@ p {
 }
 
 .credit-amount--free {
-  color: var(--color-dark-blue);
-  background-color: var(--color-secondary);
+  color: var(--color-secondary);
+
+  &.credit-amount--file-page {
+    color: var(--color-dark-blue);
+    background-color: var(--color-secondary);
+  }
 }
 
 .credit-amount--cost {
-  color: var(--color-black);
-  background-color: var(--color-yellow);
+  color: var(--color-yellow);
+
+  &.credit-amount--file-page {
+    color: var(--color-black);
+    background-color: var(--color-yellow);
+  }
 }
 
-.credit-amount--plain {
+.credit-amount--inherit {
   background-color: inherit;
   color: inherit;
   font-weight: inherit;
   font-size: inherit;
+  font-family: 'metropolis-medium';
+  padding: 0;
 }
 
-.credit-amount.credit-amount--no-style {
-  padding: 0;
-  font-size: inherit;
-  font-weight: inherit;
-  color: inherit;
-  background-color: transparent;
-  font-family: 'metropolis-medium';
-}
+// .credit-amount--plain {
+//   background-color: inherit;
+//   color: inherit;
+//   font-weight: inherit;
+//   font-size: inherit;
+// }
+
+// .credit-amount.credit-amount--no-style {
+//   padding: 0;
+//   font-size: inherit;
+//   font-weight: inherit;
+//   color: inherit;
+//   background-color: transparent;
+//   font-family: 'metropolis-medium';
+// }
 
 .divider__horizontal {
   border-top: var(--color-divider);

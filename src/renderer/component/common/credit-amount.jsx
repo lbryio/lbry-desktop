@@ -11,9 +11,10 @@ type Props = {
   showPlus: boolean,
   isEstimate?: boolean,
   large?: boolean,
-  plain?: boolean,
+  showLBC?: boolean,
   fee?: boolean,
-  noStyle?: boolean,
+  inheritStyle?: boolean,
+  filePage?: boolean,
 };
 
 class CreditAmount extends React.PureComponent<Props> {
@@ -22,6 +23,7 @@ class CreditAmount extends React.PureComponent<Props> {
     showFree: false,
     showFullPrice: false,
     showPlus: false,
+    showLBC: true,
   };
 
   render() {
@@ -33,9 +35,10 @@ class CreditAmount extends React.PureComponent<Props> {
       showPlus,
       large,
       isEstimate,
-      plain,
-      noStyle,
       fee,
+      showLBC,
+      inheritStyle,
+      filePage,
     } = this.props;
 
     const minimumRenderableAmount = 10 ** (-1 * precision);
@@ -62,7 +65,7 @@ class CreditAmount extends React.PureComponent<Props> {
         amountText = `+${amountText}`;
       }
 
-      if (!plain) {
+      if (showLBC) {
         amountText = `${amountText} ${__('LBC')}`;
       }
 
@@ -78,8 +81,8 @@ class CreditAmount extends React.PureComponent<Props> {
           'credit-amount--free': !large && isFree,
           'credit-amount--cost': !large && !isFree,
           'credit-amount--large': large,
-          'credit-amount--plain': plain,
-          'credit-amount--no-style': noStyle,
+          'credit-amount--inherit': inheritStyle,
+          'credit-amount--file-page': filePage,
         })}
       >
         {amountText}

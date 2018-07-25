@@ -1,7 +1,13 @@
+.content__wrapper {
+  width: 740px;
+}
+
 .content__embedded {
   background-color: var(--color-black);
   width: 100%;
   padding-top: var(--video-aspect-ratio);
+  padding-left: 36px;
+  padding-right: 36px;
   position: relative;
   display: flex;
   align-items: center;
@@ -118,4 +124,9 @@
 img {
   max-height: 100%;
   max-width: 100%;
+}
+
+.content__info {
+  padding-left: 24px;
+  width: 920px;
 }

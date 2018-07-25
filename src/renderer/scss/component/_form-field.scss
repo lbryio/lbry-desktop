@@ -51,6 +51,10 @@
   width: 100%;
 }
 
+.form-field__input.form-field--no-padding {
+  padding: 0;
+}
+
 .form-field__input {
   display: flex;
   padding-top: $spacing-vertical / 3;
@@ -69,6 +73,10 @@
 
   input.input--thumbnail {
     width: 400px;
+  }
+
+  input.input--toggle {
+    padding: 0;
   }
 
   &.form-field--auto-height {

@@ -6,8 +6,8 @@ import DateTime from 'component/dateTime';
 import Button from 'component/button';
 import { buildURI } from 'lbry-redux';
 import * as txnTypes from 'constants/transaction_types';
-import type { Transaction } from '../view';
 import * as ICONS from 'constants/icons';
+import type { Transaction } from '../view';
 
 type Props = {
   transaction: Transaction,
@@ -25,12 +25,6 @@ class TransactionListItem extends React.PureComponent<Props> {
     (this: any).abandonClaim = this.abandonClaim.bind(this);
   }
 
-  abandonClaim() {
-    const { txid, nout } = this.props.transaction;
-
-    this.props.revokeClaim(txid, nout);
-  }
-
   getLink(type: string) {
     if (type === txnTypes.TIP) {
       return <Button icon={ICONS.UNLOCK} onClick={this.abandonClaim} title={__('Unlock Tip')} />;
@@ -38,9 +32,13 @@ class TransactionListItem extends React.PureComponent<Props> {
     return <Button icon={ICONS.TRASH} onClick={this.abandonClaim} title={__('Abandon Claim')} />;
   }
 
-  capitalize(string: string) {
-    return string.charAt(0).toUpperCase() + string.slice(1);
+  abandonClaim() {
+    const { txid, nout } = this.props.transaction;
+
+    this.props.revokeClaim(txid, nout);
   }
+
+  capitalize = (string: string) => string.charAt(0).toUpperCase() + string.slice(1);
 
   render() {
     const { reward, transaction, isRevokeable } = this.props;
@@ -55,12 +53,12 @@ class TransactionListItem extends React.PureComponent<Props> {
     return (
       <tr>
         <td>
-          <CreditAmount amount={amount} plain noStyle showPlus precision={8} />
+          <CreditAmount inheritStyle showPlus amount={amount} precision={8} />
           <br />
 
           {fee !== 0 && (
             <span className="table__item-label">
-              <CreditAmount plain noStyle fee amount={fee} precision={8} />
+              <CreditAmount inheritStyle fee amount={fee} precision={8} />
             </span>
           )}
         </td>

@@ -12,6 +12,7 @@ type Props = {
   noPadding: ?boolean,
   extraPadding: ?boolean,
   notContained: ?boolean, // No max-width, but keep the padding
+  forContent: ?boolean,
   loading: ?boolean,
 };
 
@@ -71,15 +72,24 @@ class Page extends React.PureComponent<Props, State> {
   loaderTimeout: ?TimeoutID;
 
   render() {
-    const { pageTitle, children, noPadding, extraPadding, notContained, loading } = this.props;
+    const {
+      pageTitle,
+      children,
+      noPadding,
+      extraPadding,
+      notContained,
+      loading,
+      forContent,
+    } = this.props;
     const { showLoader } = this.state;
 
     return (
       <main
         className={classnames('main', {
-          'main--contained': !notContained && !noPadding && !extraPadding,
+          'main--contained': !notContained && !noPadding && !extraPadding && !forContent,
           'main--no-padding': noPadding,
           'main--extra-padding': extraPadding,
+          'main--for-content': forContent,
         })}
       >
         {pageTitle && (

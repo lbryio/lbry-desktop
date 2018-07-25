@@ -9,6 +9,7 @@ type Props = {
   uri: string,
   fetching: boolean,
   claim: ?{},
+  filePage?: boolean,
 };
 
 class FilePrice extends React.PureComponent<Props> {
@@ -33,13 +34,14 @@ class FilePrice extends React.PureComponent<Props> {
   };
 
   render() {
-    const { costInfo, showFullPrice } = this.props;
+    const { costInfo, showFullPrice, filePage } = this.props;
 
     return costInfo ? (
       <CreditAmount
+        showFree
+        filePage={filePage}
         amount={costInfo.cost}
         isEstimate={!costInfo.includesData}
-        showFree
         showFullPrice={showFullPrice}
       />
     ) : null;

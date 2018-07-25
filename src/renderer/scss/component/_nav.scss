@@ -1,7 +1,7 @@
 .nav {
   width: var(--side-nav-width);
   background-color: var(--nav-bg-color);
-  padding: $spacing-width;
+  padding: $spacing-width * 1/3;
   color: var(--nav-color);
 
   hr {
@@ -11,8 +11,13 @@
     margin: $spacing-vertical $spacing-vertical * 2/3;
   }
 
+  @media (min-width: $medium-breakpoint) {
+    padding-left: $spacing-width;
+    width: calc(var(--side-nav-width) * 1.2);
+  }
+
   @media (min-width: $large-breakpoint) {
-    width: calc(var(--side-nav-width) * 1.1);
+    width: calc(var(--side-nav-width) * 1.4);
   }
 }
 

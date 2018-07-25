@@ -18,7 +18,7 @@ export default (props: Props) => {
     <Button
       icon={icons.GLOBE}
       button="alt"
-      label={__('View on Web')}
+      label={__('Share')}
       href={`http://spee.ch/${speechURL}`}
     />
   ) : null;
