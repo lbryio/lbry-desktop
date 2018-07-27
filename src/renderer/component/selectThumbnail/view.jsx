@@ -18,6 +18,7 @@ type Props = {
 
 type State = {
   thumbnailError: boolean,
+  thumbnailErrorImage: string,
 };
 
 class SelectThumbnail extends React.PureComponent<Props, State> {
@@ -26,6 +27,7 @@ class SelectThumbnail extends React.PureComponent<Props, State> {
 
     this.state = {
       thumbnailError: false,
+      thumbnailErrorImage: 'no-thumbnail.png',
     };
 
     (this: any).handleThumbnailChange = this.handleThumbnailChange.bind(this);
@@ -36,7 +38,7 @@ class SelectThumbnail extends React.PureComponent<Props, State> {
     const newThumbnail = e.target.value.replace(' ', '');
 
     updatePublishForm({ thumbnail: newThumbnail });
-    this.setState({ thumbnailError: false });
+    this.setState({ thumbnailError: false, thumbnailErrorImage: 'no-thumbnail.png' });
   }
 
   render() {
@@ -49,9 +51,9 @@ class SelectThumbnail extends React.PureComponent<Props, State> {
       thumbnailPath,
       resetThumbnailStatus,
     } = this.props;
-    const { thumbnailError } = this.state;
+    const { thumbnailError, thumbnailErrorImage } = this.state;
     const thumbnailSrc =
-      !thumbnail || thumbnailError ? Native.imagePath('no-thumbnail.png') : thumbnail;
+      !thumbnail || thumbnailError ? Native.imagePath(thumbnailErrorImage) : thumbnail;
 
     return (
       <div className="card__content">
@@ -62,7 +64,11 @@ class SelectThumbnail extends React.PureComponent<Props, State> {
               className="column__item thumbnail-preview"
               alt={__('Thumbnail Preview')}
               onError={() => {
-                this.setState({ thumbnailError: true });
+                this.setState({
+                  thumbnailError: true,
+                  thumbnailErrorImage:
+                    thumbnail && thumbnail.length > 0 ? 'warning.png' : 'no-thumbnail.png',
+                });
               }}
             />
             <div className="column__item">
