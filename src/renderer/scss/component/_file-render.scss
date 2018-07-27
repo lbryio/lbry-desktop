@@ -9,17 +9,80 @@
   bottom: 0;
   z-index: 1;
   overflow: hidden;
+}
 
-  .file-render__viewer {
-    margin: 0;
+.file-render__viewer {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+
+  iframe,
+  webview {
     width: 100%;
     height: 100%;
-    background: black;
+  }
+}
 
-    iframe,
-    webview {
-      width: 100%;
-      height: 100%;
-    }
+.document-viewer {
+  overflow: auto;
+  background-color: var(--card-bg);
+}
+
+.document-viewer .markdown-preview {
+  padding: 32px 16px;
+}
+
+.document-viewer .CodeMirror {
+  height: 100%;
+  width: 100%;
+  min-height: 100px;
+  padding: 0;
+  margin: 0;
+
+  .CodeMirror-code {
+    font-size: calc(var(--font-size-subtext-multiple) * 1em);
+    font-family: monospace;
+  }
+
+  .CodeMirror-linenumber {
+    color: var(--card-text-color);
+  }
+
+  .CodeMirror-line {
+    padding-left: 16px;
+  }
+
+  .CodeMirror-gutters {
+    border-right: 1px solid var(--color-divider);
+    background: var(--color-bg-alt);
+  }
+
+  .cm-invalidchar {
+    display: none;
+  }
+}
+
+.document-viewer__content {
+  overflow: auto;
+  width: 100%;
+  height: 100%;
+
+  .markdown-preview {
+    padding: 32px 16px;
+    height: 100%;
+    overflow: auto;
+  }
+
+  textarea {
+    /*
+      resize: none;
+      background: transparent;
+      color: var(--card-text-color);
+      border: 0;
+      outline: none;
+      font-family: monospace;
+      */
+    display: none;
   }
 }

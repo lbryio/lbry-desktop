@@ -1893,6 +1893,10 @@ codemirror@*:
   version "5.39.0"
   resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-5.39.0.tgz#4654f7d2f7e525e04a62e72d9482348ccb37dce5"
 
+codemirror@^5.39.2:
+  version "5.39.2"
+  resolved "https://registry.yarnpkg.com/codemirror/-/codemirror-5.39.2.tgz#778aa13b55ebf280745c309cb1b148e3fc06f698"
+
 collapse-white-space@^1.0.0, collapse-white-space@^1.0.2:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/collapse-white-space/-/collapse-white-space-1.0.4.tgz#ce05cf49e54c3277ae573036a26851ba430a0091"
