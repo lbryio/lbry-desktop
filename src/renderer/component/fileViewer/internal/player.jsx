@@ -158,10 +158,10 @@ class VideoPlayer extends React.PureComponent {
   }
 
   file() {
-    const { downloadPath, filename } = this.props;
+    const { downloadPath, fileName } = this.props;
 
     return {
-      name: filename,
+      name: fileName,
       createReadStream: opts => fs.createReadStream(downloadPath, opts),
     };
   }
@@ -188,7 +188,7 @@ class VideoPlayer extends React.PureComponent {
 
   renderFile() {
     // This is what render-media does with unplayable files
-    const { filename: fileName, downloadPath, contentType, mediaType } = this.props;
+    const { fileName, downloadPath, contentType, mediaType } = this.props;
 
     toBlobURL(fs.createReadStream(downloadPath), contentType, (err, url) => {
       if (err) {
@@ -202,7 +202,7 @@ class VideoPlayer extends React.PureComponent {
         contentType,
         downloadPath,
         filePath: url,
-        fileType: path.extname(filename).substring(1),
+        fileType: path.extname(fileName).substring(1),
       };
       // Update state
       this.setState({ fileSource });
