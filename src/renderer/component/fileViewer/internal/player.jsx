@@ -188,16 +188,17 @@ class VideoPlayer extends React.PureComponent {
 
   renderFile() {
     // This is what render-media does with unplayable files
-    const { filename, downloadPath, contentType, mediaType } = this.props;
+    const { filename: fileName, downloadPath, contentType, mediaType } = this.props;
 
     toBlobURL(fs.createReadStream(downloadPath), contentType, (err, url) => {
       if (err) {
         this.setState({ unsupported: true });
         return false;
       }
-      console.info(filename);
+
       // File to render
       const fileSource = {
+        fileName,
         contentType,
         downloadPath,
         filePath: url,

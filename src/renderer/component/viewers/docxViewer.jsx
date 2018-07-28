@@ -28,7 +28,7 @@ class DocxViewer extends React.PureComponent<Props> {
 
     const options = {
       styleMap: [
-        "p[style-name='Title'] => h1.title:fresh",
+        "p[style-name='Title'] => h1:fresh",
         "p[style-name='Heading 1'] => h1:fresh",
         "p[style-name='Heading 2'] => h2:fresh",
         "p[style-name='Heading 3'] => h3:fresh",
