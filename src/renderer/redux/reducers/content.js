@@ -3,7 +3,6 @@ import * as ACTIONS from 'constants/action_types';
 const reducers = {};
 const defaultState = {
   playingUri: null,
-  currentlyIsPlaying: false,
   rewardedContentClaimIds: [],
   channelClaimCounts: {},
 };
