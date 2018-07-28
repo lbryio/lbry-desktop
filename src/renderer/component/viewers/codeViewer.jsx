@@ -2,6 +2,7 @@
 
 import React from 'react';
 import CodeMirror from 'codemirror/lib/codemirror';
+import { openSnippetMenu, stopContextMenu } from 'util/contextMenu';
 
 // Addons
 import 'codemirror/addon/selection/mark-selection';
@@ -26,21 +27,29 @@ class CodeViewer extends React.PureComponent<Props> {
 
   componentDidMount() {
     const { theme, contentType } = this.props;
+    // Init CodeMirror
     this.codeMirror = CodeMirror.fromTextArea(this.textarea.current, {
+      // Auto detect syntax with file contentType
       mode: contentType,
+      // Adaptive theme
       theme: theme === 'dark' ? 'dark' : 'default',
-      readOnly: 'nocursor',
+      // Hide the cursor
+      readOnly: true,
+      // Styled text selection
+      styleSelectedText: true,
+      // Additional config opts
       dragDrop: false,
       lineNumbers: true,
       lineWrapping: true,
-      styleSelectedText: true,
     });
+    // Add events
+    this.codeMirror.on('contextmenu', openSnippetMenu);
   }
 
   render() {
     const { value } = this.props;
     return (
-      <div className="code-viewer">
+      <div className="code-viewer" onContextMenu={stopContextMenu}>
         <textarea ref={this.textarea} disabled value={value} />
       </div>
     );
