@@ -55,11 +55,6 @@ div.editor-toolbar a {
   border: 1px solid var(--input-border-color) !important;
 }
 
-.CodeMirror .CodeMirror-selected {
-  background: var(--text-selection-bg) !important;
-  color: var(--text-selection-color) !important;
-}
-
 .CodeMirror .CodeMirror-cursor {
   border-color: var(--color-primary) !important;
 }
@@ -67,6 +62,23 @@ div.editor-toolbar a {
 .CodeMirror .CodeMirror-placeholder {
   opacity: 0.5;
 }
+
+/* Fix selection */
+.CodeMirror-line::selection,
+.CodeMirror-line > span::selection,
+.CodeMirror-line > span > span::selection {
+  background: var(--text-selection-bg);
+}
+
+.CodeMirror .CodeMirror-selected {
+  background: transparent;
+}
+
+.CodeMirror .CodeMirror-selectedtext {
+  background: var(--editor-text-selection-bg) !important;
+  color: var(--text-selection-color) !important;
+}
+
 .CodeMirror .cm-spell-error:not(.cm-url):not(.cm-comment):not(.cm-tag):not(.cm-word) {
   background: none;
   text-decoration: underline;

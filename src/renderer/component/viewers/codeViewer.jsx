@@ -2,6 +2,10 @@
 
 import React from 'react';
 import CodeMirror from 'codemirror/lib/codemirror';
+
+// Addons
+import 'codemirror/addon/selection/mark-selection';
+
 // Syntax mode
 import 'codemirror/mode/javascript/javascript';
 import 'codemirror/mode/markdown/markdown';
@@ -29,6 +33,7 @@ class CodeViewer extends React.PureComponent<Props> {
       dragDrop: false,
       lineNumbers: true,
       lineWrapping: true,
+      styleSelectedText: true,
     });
   }
 
