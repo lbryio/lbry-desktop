@@ -18,8 +18,8 @@ type Props = {
 
 class FileRender extends React.PureComponent<Props> {
   renderViewer() {
-    const { source, mediaType, currentTheme } = this.props;
-    const viewerProps = { source, theme: currentTheme };
+    const { source, mediaType, currentTheme: theme } = this.props;
+    const viewerProps = { source, theme };
 
     // Supported mediaTypes
     const mediaTypes = {

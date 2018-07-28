@@ -1,10 +1,16 @@
 // @flow
 
 import React from 'react';
-import CodeMirror from 'codemirror';
+import CodeMirror from 'codemirror/lib/codemirror';
+// Syntax mode
+import 'codemirror/mode/javascript/javascript';
+import 'codemirror/mode/markdown/markdown';
+import 'codemirror/mode/xml/xml';
 
 type Props = {
+  theme: string,
   value: string,
+  contentType: string,
 };
 
 class CodeViewer extends React.PureComponent<Props> {
@@ -15,9 +21,11 @@ class CodeViewer extends React.PureComponent<Props> {
   }
 
   componentDidMount() {
+    const { theme, contentType } = this.props;
     this.codeMirror = CodeMirror.fromTextArea(this.textarea.current, {
-      mode: 'markdown',
-      readOnly: true,
+      mode: contentType,
+      theme: theme === 'dark' ? 'dark' : 'default',
+      readOnly: 'nocursor',
       dragDrop: false,
       lineNumbers: true,
       lineWrapping: true,
@@ -26,10 +34,9 @@ class CodeViewer extends React.PureComponent<Props> {
 
   render() {
     const { value } = this.props;
-
     return (
-      <div className="document-viewer__content">
-        <textarea ref={this.textarea} disabled="true" value={value} />
+      <div className="code-viewer">
+        <textarea ref={this.textarea} disabled value={value} />
       </div>
     );
   }

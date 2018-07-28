@@ -7,6 +7,7 @@ import CodeViewer from 'component/viewers/codeViewer';
 import MarkdownPreview from 'component/common/markdown-preview';
 
 type Props = {
+  theme: string,
   source: {
     fileType: string,
     filePath: string,
@@ -45,17 +46,19 @@ class DocumentViewer extends React.PureComponent<Props> {
 
   renderDocument() {
     let viewer = null;
-    const { source } = this.props;
+    const { source, theme } = this.props;
+    const { fileType, contentType } = source;
     const { content, error } = this.state;
+
     const isReady = content && !error;
     const markdownType = ['md', 'markdown'];
 
-    if (isReady && markdownType.includes(source.fileType)) {
+    if (isReady && markdownType.includes(fileType)) {
       // Render markdown
       viewer = <MarkdownPreview content={content} promptLinks />;
     } else if (isReady) {
       // Render plain text
-      viewer = <CodeViewer value={content} />;
+      viewer = <CodeViewer value={content} contentType={contentType} theme={theme} />;
     }
 
     return viewer;

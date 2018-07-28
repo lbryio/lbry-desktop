@@ -1,0 +1,40 @@
+/*
+  Dark-theme
+  https://github.com/FarhadG/code-mirror-themes/blob/master/themes/made-of-code.css
+*/
+.CodeMirror .cm-s-dark {
+  --color-property: #7ed6df;
+  --color-string: #ff7979;
+  --color-keyword: #ff7979;
+}
+
+.CodeMirror.cm-s-dark .CodeMirror-selected {
+  background: #007dff80;
+}
+
+.CodeMirror.cm-s-dark .cm-comment {
+  color: #54576b;
+  background: #00000000;
+}
+.CodeMirror.cm-s-dark .cm-keyword {
+  color: var(--color-keyword);
+}
+.CodeMirror.cm-s-dark .cm-string {
+  color: #f6e58d;
+  background: #102622fa;
+}
+.CodeMirror.cm-s-dark .cm-property {
+  color: var(--color-property);
+}
+.CodeMirror.cm-s-dark .cm-atom {
+  color: #f1d950;
+}
+.CodeMirror.cm-s-dark .cm-number {
+  color: #f1d950;
+}
+.CodeMirror.cm-s-dark .cm-operator {
+  color: var(--color-keyword);
+}
+.CodeMirror.cm-s-dark .CodeMirror-linenumber {
+  color: #54576b;
+}

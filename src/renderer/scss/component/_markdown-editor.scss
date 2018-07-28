@@ -1,8 +1,8 @@
 .CodeMirror {
-  background: var(--color-canvas) !important;
-  border: 0px !important;
-  border-radius: 0px !important;
-  color: var(--text-color) !important;
+  background: var(--color-canvas);
+  border: 0px;
+  border-radius: 0px;
+  color: var(--text-color);
   box-shadow: var(--box-shadow-layer);
 }
 
@@ -55,18 +55,6 @@ div.editor-toolbar a {
   border: 1px solid var(--input-border-color) !important;
 }
 
-.CodeMirror .CodeMirror-code .cm-tag {
-  color: #63a35c;
-}
-
-.CodeMirror .CodeMirror-code .cm-attribute {
-  color: #795da3;
-}
-
-.CodeMirror .CodeMirror-code .cm-string {
-  color: #183691;
-}
-
 .CodeMirror .CodeMirror-selected {
   background: var(--text-selection-bg) !important;
   color: var(--text-selection-color) !important;
@@ -74,18 +62,6 @@ div.editor-toolbar a {
 
 .CodeMirror .CodeMirror-cursor {
   border-color: var(--color-primary) !important;
-}
-
-.CodeMirror .CodeMirror-code .cm-comment {
-  background: rgba(0, 0, 0, 0.05);
-}
-
-.CodeMirror .CodeMirror-code .cm-link {
-  color: #7f8c8d;
-}
-
-.CodeMirror .CodeMirror-code .cm-url {
-  color: #aab2b3;
 }
 
 .CodeMirror .CodeMirror-placeholder {

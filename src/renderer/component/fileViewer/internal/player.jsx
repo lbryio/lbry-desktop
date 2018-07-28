@@ -195,8 +195,10 @@ class VideoPlayer extends React.PureComponent {
         this.setState({ unsupported: true });
         return false;
       }
+      console.info(filename);
       // File to render
       const fileSource = {
+        contentType,
         downloadPath,
         filePath: url,
         fileType: path.extname(filename).substring(1),
