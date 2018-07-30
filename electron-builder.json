@@ -59,6 +59,7 @@
       "libxtst6",
       "libnss3",
       "libsecret-1-0"
+      "libsecret-1-dev"
     ]
   },
   "nsis": {
