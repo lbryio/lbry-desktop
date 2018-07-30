@@ -58,7 +58,7 @@
       "libappindicator1",
       "libxtst6",
       "libnss3",
-      "libsecret-1-dev"
+      "libsecret-1-0"
     ]
   },
   "nsis": {
