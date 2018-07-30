@@ -346,7 +346,7 @@ class PublishForm extends React.PureComponent<Props> {
           <div className="card__subtitle">
             {isStillEditing ? __('Editing a claim') : __('What are you publishing?')}
             {' '}{__(
-              'Read Our'
+              'Read our'
             )}{' '}
             <Button button="link" label={__('FAQ')} href="https://lbry.io/faq/how-to-publish" />{' '}
             {__(
