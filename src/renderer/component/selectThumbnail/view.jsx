@@ -67,7 +67,7 @@ class SelectThumbnail extends React.PureComponent<Props, State> {
                 this.setState({
                   thumbnailError: true,
                   thumbnailErrorImage:
-                    thumbnail && thumbnail.length > 0 ? 'warning.png' : 'no-thumbnail.png',
+                    thumbnail && thumbnail.length > 0 ? 'broken.png' : 'no-thumbnail.png',
                 });
               }}
             />
