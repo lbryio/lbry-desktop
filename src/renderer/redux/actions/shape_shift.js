@@ -74,7 +74,7 @@ export const shapeShiftInit = () => (dispatch: Dispatch): ThunkAction => {
 
       let supportedCoins = [];
       Object.keys(coinData).forEach(symbol => {
-        if (coinData[symbol].status === SHAPESHIFT_STATUSES.UNAVAILABLE) {
+        if (coinData[symbol].status === SHAPESHIFT_STATUSES.AVAILABLE) {
           supportedCoins.push(coinData[symbol]);
         }
       });
