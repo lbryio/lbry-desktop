@@ -17,8 +17,7 @@ The LBRY app is a graphical browser for the decentralized content marketplace pr
 ## Install
 
 We provide installers for Raspberry Pi 3
-| Linux                                        
-| -------------------------------------------- |
+| Rasbian OS                                        
 | [Download](https://lbry.io/get/lbry.deb)
 
 Our [releases page](https://github.com/lbryio/lbry-desktop/releases) also contains the latest
