@@ -23,6 +23,7 @@ type Props = {
   claimIsMine: boolean,
   showPrice: boolean,
   pending?: boolean,
+  position: ?number,
   /* eslint-disable react/no-unused-prop-types */
   resolveUri: string => void,
   isResolvingUri: boolean,
@@ -61,6 +62,7 @@ class FileCard extends React.PureComponent<Props> {
       claimIsMine,
       showPrice,
       pending,
+      position,
     } = this.props;
 
     const shouldHide = !claimIsMine && !pending && obscureNsfw && metadata && metadata.nsfw;
@@ -103,6 +105,7 @@ class FileCard extends React.PureComponent<Props> {
             {showPrice && <FilePrice hideFree uri={uri} />}
             {isRewardContent && <Icon iconColor="red" icon={icons.FEATURED} />}
             {fileInfo && <Icon icon={icons.LOCAL} />}
+            {position && <Icon icon={icons.REFRESH} />}
           </div>
         </div>
       </section>
