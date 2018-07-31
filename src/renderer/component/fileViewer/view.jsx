@@ -231,7 +231,6 @@ class FileViewer extends React.PureComponent<Props> {
       <div className={classnames('video', {}, className)}>
         {isPlaying && (
           <div className="content__view">
-            <p>hai</p>
             {!isReadyToPlay ? (
               <div className={layoverClass} style={layoverStyle}>
                 <LoadingScreen status={loadStatusMessage} />

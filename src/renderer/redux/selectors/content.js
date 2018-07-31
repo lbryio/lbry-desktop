@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect';
 import { makeSelectClaimForUri } from 'lbry-redux';
+import { HISTORY_ITEMS_PER_PAGE } from 'constants/content';
 
 export const selectState = state => state.content || {};
 
@@ -40,3 +41,11 @@ export const makeSelectContentPositionForUri = uri =>
     const id = claim.claim_id;
     return state.positions[id] ? state.positions[id][outpoint] : null;
   });
+
+export const makeSelectHistoryForPage = (page = 1) =>
+  createSelector(selectState, state =>
+    state.history.slice((page - 1) * HISTORY_ITEMS_PER_PAGE, HISTORY_ITEMS_PER_PAGE)
+  );
+
+export const makeSelectHistoryForUri = uri =>
+  createSelector(selectState, state => state.history.find(i => i.uri === uri));

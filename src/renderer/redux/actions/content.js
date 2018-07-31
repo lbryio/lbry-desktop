@@ -504,3 +504,27 @@ export function savePosition(claimId: string, outpoint: string, position: number
     });
   };
 }
+
+export function doSetContentHistoryItem(uri: string) {
+  return dispatch => {
+    dispatch({
+      type: ACTIONS.SET_CONTENT_LAST_VIEWED,
+      data: { uri, lastViewed: Date.now() },
+    });
+  };
+}
+
+export function doClearContentHistoryUri(uri: string) {
+  return dispatch => {
+    dispatch({
+      type: ACTIONS.CLEAR_CONTENT_HISTORY_URI,
+      data: { uri },
+    });
+  };
+}
+
+export function doSetContentHistoryAll() {
+  return dispatch => {
+    dispatch({ type: ACTIONS.CLEAR_CONTENT_HISTORY_ALL });
+  };
+}
