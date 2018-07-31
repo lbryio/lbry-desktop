@@ -1,3 +1,4 @@
+// @flow
 import * as NOTIFICATION_TYPES from 'constants/notification_types';
 import { ipcRenderer } from 'electron';
 import Lbryio from 'lbryio';
@@ -493,4 +494,13 @@ export function doPublish(params) {
 
       Lbry.publishDeprecated(params, null, success, failure);
     });
+}
+
+export function savePosition(claimId: string, outpoint: string, position: number) {
+  return dispatch => {
+    dispatch({
+      type: ACTIONS.SET_CONTENT_POSITION,
+      data: { claimId, outpoint, position },
+    });
+  };
 }

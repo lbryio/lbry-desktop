@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect';
+import { makeSelectClaimForUri } from 'lbry-redux';
 
 export const selectState = state => state.content || {};
 
@@ -29,3 +30,10 @@ export const selectRewardContentClaimIds = createSelector(
   selectState,
   state => state.rewardedContentClaimIds
 );
+
+export const makeSelectContentPositionForUri = uri =>
+  createSelector(selectState, makeSelectClaimForUri(uri), (state, claim) => {
+    const outpoint = `${claim.txid}:${claim.nout}`;
+    const id = claim.claim_id;
+    return state.positions[id] ? state.positions[id][outpoint] : null;
+  });

@@ -4,9 +4,6 @@ import { handleActions } from 'util/redux-utils';
 
 export type MediaState = {
   paused: Boolean,
-  positions: {
-    [string]: number,
-  },
 };
 
 export type Action = any;
@@ -25,17 +22,6 @@ export default handleActions(
       ...state,
       paused: true,
     }),
-
-    [actions.MEDIA_POSITION]: (state: MediaState, action: Action) => {
-      const { outpoint, position } = action.data;
-      return {
-        ...state,
-        positions: {
-          ...state.positions,
-          [outpoint]: position,
-        },
-      };
-    },
   },
   defaultState
 );

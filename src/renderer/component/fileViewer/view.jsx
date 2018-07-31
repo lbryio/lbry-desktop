@@ -36,9 +36,9 @@ type Props = {
   uri: string,
   doPlay: () => void,
   doPause: () => void,
-  savePosition: (string, number) => void,
+  savePosition: (string, string, number) => void,
   mediaPaused: boolean,
-  mediaPosition: ?number,
+  playbackPosition: ?number,
   className: ?string,
   obscureNsfw: boolean,
   play: string => void,
@@ -206,7 +206,7 @@ class FileViewer extends React.PureComponent<Props> {
       doPause,
       savePosition,
       mediaPaused,
-      mediaPosition,
+      playbackPosition,
       className,
       obscureNsfw,
       mediaType,
@@ -257,8 +257,7 @@ class FileViewer extends React.PureComponent<Props> {
                 claim={claim}
                 uri={uri}
                 paused={mediaPaused}
-                position={mediaPosition}
-                startedPlayingCb={this.startedPlayingCb}
+                position={playbackPosition}
               />
             )}
           </div>

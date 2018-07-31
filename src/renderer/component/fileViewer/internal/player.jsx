@@ -90,7 +90,11 @@ class MediaPlayer extends React.PureComponent {
       mediaElement.addEventListener('play', () => this.props.doPlay());
       mediaElement.addEventListener('pause', () => this.props.doPause());
       mediaElement.addEventListener('timeupdate', () =>
-        this.props.savePosition(claim.claim_id, mediaElement.currentTime)
+        this.props.savePosition(
+          claim.claim_id,
+          `${claim.txid}:${claim.nout}`,
+          mediaElement.currentTime
+        )
       );
       mediaElement.addEventListener('click', this.togglePlayListener);
       mediaElement.addEventListener('loadedmetadata', loadedMetadata.bind(this), {

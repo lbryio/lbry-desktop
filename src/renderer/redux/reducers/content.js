@@ -5,6 +5,7 @@ const defaultState = {
   playingUri: null,
   rewardedContentClaimIds: [],
   channelClaimCounts: {},
+  positions: {},
 };
 
 reducers[ACTIONS.FETCH_FEATURED_CONTENT_STARTED] = state =>
@@ -77,6 +78,20 @@ reducers[ACTIONS.FETCH_CHANNEL_CLAIM_COUNT_COMPLETED] = (state, action) => {
   return Object.assign({}, state, {
     channelClaimCounts,
   });
+};
+
+reducers[ACTIONS.SET_CONTENT_POSITION] = (state, action) => {
+  const { claimId, outpoint, position } = action.data;
+  return {
+    ...state,
+    positions: {
+      ...state.positions,
+      [claimId]: {
+        ...state.positions[claimId],
+        [outpoint]: position,
+      },
+    },
+  };
 };
 
 export default function reducer(state = defaultState, action) {

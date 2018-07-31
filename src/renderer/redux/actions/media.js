@@ -11,18 +11,3 @@ export const doPause = () => (dispatch: Dispatch) =>
   dispatch({
     type: actions.MEDIA_PAUSE,
   });
-
-export function savePosition(claimId: String, position: Number) {
-  return function(dispatch: Dispatch, getState: Function) {
-    const state = getState();
-    const claim = state.claims.byId[claimId];
-    const outpoint = `${claim.txid}:${claim.nout}`;
-    dispatch({
-      type: actions.MEDIA_POSITION,
-      data: {
-        outpoint,
-        position,
-      },
-    });
-  };
-}

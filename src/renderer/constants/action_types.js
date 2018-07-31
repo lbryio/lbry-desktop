@@ -74,6 +74,7 @@ export const PUBLISH_STARTED = 'PUBLISH_STARTED';
 export const PUBLISH_COMPLETED = 'PUBLISH_COMPLETED';
 export const PUBLISH_FAILED = 'PUBLISH_FAILED';
 export const SET_PLAYING_URI = 'PLAY_URI';
+export const SET_CONTENT_POSITION = 'SET_CONTENT_POSITION';
 
 // Files
 export const FILE_LIST_STARTED = 'FILE_LIST_STARTED';
@@ -187,7 +188,6 @@ export const SET_VIDEO_PAUSE = 'SET_VIDEO_PAUSE';
 // Media controls
 export const MEDIA_PLAY = 'MEDIA_PLAY';
 export const MEDIA_PAUSE = 'MEDIA_PAUSE';
-export const MEDIA_POSITION = 'MEDIA_POSITION';
 
 // Publishing
 export const CLEAR_PUBLISH = 'CLEAR_PUBLISH';
