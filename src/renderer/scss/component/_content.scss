@@ -1,3 +1,8 @@
+.content__wrapper {
+  max-width: var(--card-max-width);
+  flex: 1 0 var(--file-page-min-width);
+}
+
 .content__embedded {
   background-color: var(--color-black);
   width: 100%;

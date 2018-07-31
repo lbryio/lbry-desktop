@@ -5,4 +5,4 @@
 yarn-error.log
 package-lock.json
 .idea/
-/build/daemon.ver
+/build/daemon*
