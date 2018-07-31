@@ -34,6 +34,7 @@ type Props = {
   encryptWallet: () => void,
   decryptWallet: () => void,
   walletEncrypted: boolean,
+  desktopNotificationsEnabled: boolean,
 };
 
 type State = {
@@ -57,6 +58,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
     (this: any).onAutomaticDarkModeChange = this.onAutomaticDarkModeChange.bind(this);
     (this: any).onAutoplayChange = this.onAutoplayChange.bind(this);
     (this: any).clearCache = this.clearCache.bind(this);
+    (this: any).onDesktopNotificationsChange = this.onDesktopNotificationsChange.bind(this);
     // (this: any).onLanguageChange = this.onLanguageChange.bind(this)
   }
 
@@ -126,6 +128,10 @@ class SettingsPage extends React.PureComponent<Props, State> {
     this.props.setDaemonSetting(name, value);
   }
 
+  onDesktopNotificationsChange(event: SyntheticInputEvent<*>) {
+    this.props.setClientSetting(settings.DESKTOP_NOTIFICATIONS_ENABLED, event.target.checked);
+  }
+
   clearCache() {
     this.setState({
       clearingCache: true,
@@ -150,6 +156,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
       automaticDarkModeEnabled,
       autoplay,
       walletEncrypted,
+      desktopNotificationsEnabled,
     } = this.props;
 
     const noDaemonSettings = !daemonSettings || Object.keys(daemonSettings).length === 0;
@@ -170,6 +177,17 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 type="openDirectory"
                 currentPath={daemonSettings.download_directory}
                 onFileChosen={this.onDownloadDirChange}
+              />
+
+              <br />
+              <span className="card__subtitle">{__('App Notifications.')}</span>
+
+              <FormField
+                type="checkbox"
+                name="desktopNotification"
+                onChange={this.onDesktopNotificationsChange}
+                checked={desktopNotificationsEnabled}
+                postfix={__('Desktop Notification')}
               />
             </section>
             <section className="card card--section">

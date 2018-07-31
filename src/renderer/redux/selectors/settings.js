@@ -33,3 +33,7 @@ export const selectThemePath = createSelector(
     return `${staticResourcesPath}/themes/${dynamicTheme || 'light'}.css`;
   }
 );
+
+export const selectDesktopNotificationsEnabled = makeSelectClientSetting(
+  SETTINGS.DESKTOP_NOTIFICATIONS_ENABLED
+);
