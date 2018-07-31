@@ -88,7 +88,9 @@ class MediaPlayer extends React.PureComponent {
     document.addEventListener('keydown', this.togglePlayListener);
     const mediaElement = this.media.children[0];
     if (mediaElement) {
-      mediaElement.currentTime = position || 0;
+      if (position) {
+        mediaElement.currentTime = position;
+      }
       mediaElement.addEventListener('timeupdate', () =>
         this.props.savePosition(
           claim.claim_id,

@@ -29,7 +29,7 @@ const select = (state, props) => ({
   playingUri: selectPlayingUri(state),
   contentType: makeSelectContentTypeForUri(props.uri)(state),
   volume: selectVolume(state),
-  playbackPosition: makeSelectContentPositionForUri(props.uri)(state),
+  position: makeSelectContentPositionForUri(props.uri)(state),
   autoplay: makeSelectClientSetting(settings.AUTOPLAY)(state),
   searchBarFocused: selectSearchBarFocused(state),
   fileInfoErrors: selectFileInfoErrors(state),
