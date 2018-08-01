@@ -32,7 +32,7 @@ class CodeViewer extends React.PureComponent<Props> {
       // Auto detect syntax with file contentType
       mode: contentType,
       // Adaptive theme
-      theme: theme === 'dark' ? 'dark' : 'default',
+      theme: theme === 'dark' ? 'one-dark' : 'default',
       // Hide the cursor
       readOnly: true,
       // Styled text selection
