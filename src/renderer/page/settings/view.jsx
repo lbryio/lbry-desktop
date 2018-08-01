@@ -287,7 +287,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 name="desktopNotification"
                 onChange={this.onDesktopNotificationsChange}
                 checked={osNotificationsEnabled}
-                postfix={__('Show OS notifications')}
+                postfix={__('Show Desktop Notifications')}
               />
             </section>
 
