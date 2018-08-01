@@ -28,10 +28,7 @@ import {
   MODALS,
   doNotify,
 } from 'lbry-redux';
-import {
-  makeSelectClientSetting,
-  selectDesktopNotificationsEnabled,
-} from 'redux/selectors/settings';
+import { makeSelectClientSetting, selectosNotificationsEnabled } from 'redux/selectors/settings';
 import setBadge from 'util/setBadge';
 import setProgressBar from 'util/setProgressBar';
 import analytics from 'analytics';
@@ -142,7 +139,7 @@ export function doUpdateLoadStatus(uri, outpoint) {
             0
           );
 
-          if (selectDesktopNotificationsEnabled(getState())) {
+          if (selectosNotificationsEnabled(getState())) {
             const notif = new window.Notification(notifications[uri].subscription.channelName, {
               body: `Posted ${fileInfo.metadata.title}${
                 count > 1 && count < 10 ? ` and ${count - 1} other new items` : ''
@@ -166,7 +163,7 @@ export function doUpdateLoadStatus(uri, outpoint) {
           );
         } else {
           // If notifications are disabled(false) just return
-          if (!selectDesktopNotificationsEnabled(getState())) return;
+          if (!selectosNotificationsEnabled(getState())) return;
           const notif = new window.Notification('LBRY Download Complete', {
             body: fileInfo.metadata.title,
             silent: false,

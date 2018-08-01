@@ -34,6 +34,6 @@ export const selectThemePath = createSelector(
   }
 );
 
-export const selectDesktopNotificationsEnabled = makeSelectClientSetting(
-  SETTINGS.DESKTOP_NOTIFICATIONS_ENABLED
+export const selectosNotificationsEnabled = makeSelectClientSetting(
+  SETTINGS.OS_NOTIFICATIONS_ENABLED
 );

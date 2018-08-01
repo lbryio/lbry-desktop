@@ -34,7 +34,7 @@ type Props = {
   encryptWallet: () => void,
   decryptWallet: () => void,
   walletEncrypted: boolean,
-  desktopNotificationsEnabled: boolean,
+  osNotificationsEnabled: boolean,
 };
 
 type State = {
@@ -129,7 +129,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
   }
 
   onDesktopNotificationsChange(event: SyntheticInputEvent<*>) {
-    this.props.setClientSetting(settings.DESKTOP_NOTIFICATIONS_ENABLED, event.target.checked);
+    this.props.setClientSetting(settings.OS_NOTIFICATIONS_ENABLED, event.target.checked);
   }
 
   clearCache() {
@@ -156,7 +156,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
       automaticDarkModeEnabled,
       autoplay,
       walletEncrypted,
-      desktopNotificationsEnabled,
+      osNotificationsEnabled,
     } = this.props;
 
     const noDaemonSettings = !daemonSettings || Object.keys(daemonSettings).length === 0;
@@ -286,8 +286,8 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 type="checkbox"
                 name="desktopNotification"
                 onChange={this.onDesktopNotificationsChange}
-                checked={desktopNotificationsEnabled}
-                postfix={__('On Download Completion')}
+                checked={osNotificationsEnabled}
+                postfix={__('Show OS notifications')}
               />
             </section>
 

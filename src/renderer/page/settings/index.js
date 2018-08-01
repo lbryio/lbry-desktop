@@ -11,7 +11,7 @@ import {
   makeSelectClientSetting,
   selectDaemonSettings,
   selectLanguages,
-  selectDesktopNotificationsEnabled,
+  selectosNotificationsEnabled,
 } from 'redux/selectors/settings';
 import { selectCurrentLanguage } from 'redux/selectors/app';
 import { doWalletStatus, selectWalletIsEncrypted } from 'lbry-redux';
@@ -29,7 +29,7 @@ const select = state => ({
   automaticDarkModeEnabled: makeSelectClientSetting(settings.AUTOMATIC_DARK_MODE_ENABLED)(state),
   autoplay: makeSelectClientSetting(settings.AUTOPLAY)(state),
   walletEncrypted: selectWalletIsEncrypted(state),
-  desktopNotificationsEnabled: selectDesktopNotificationsEnabled(state),
+  osNotificationsEnabled: selectosNotificationsEnabled(state),
 });
 
 const perform = dispatch => ({
