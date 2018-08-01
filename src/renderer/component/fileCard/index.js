@@ -12,6 +12,7 @@ import {
   selectRewardContentClaimIds,
   makeSelectContentPositionForUri,
 } from 'redux/selectors/content';
+import { doClearContentHistoryUri } from 'redux/actions/content';
 import { selectShowNsfw } from 'redux/selectors/settings';
 import { selectPendingPublish } from 'redux/selectors/publish';
 import FileCard from './view';
@@ -42,6 +43,7 @@ const select = (state, props) => {
 const perform = dispatch => ({
   navigate: (path, params) => dispatch(doNavigate(path, params)),
   resolveUri: uri => dispatch(doResolveUri(uri)),
+  clearHistoryUri: uri => dispatch(doClearContentHistoryUri(uri)),
 });
 
 export default connect(
