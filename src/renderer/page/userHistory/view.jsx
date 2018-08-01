@@ -47,7 +47,9 @@ class UserHistoryPage extends React.PureComponent<Props> {
         <div className="card__list">
           {history && history.length ? (
             <React.Fragment>
-              {history.map(item => <FileCard key={item.uri} uri={item.uri} />)}
+              {history.map(item => (
+                <FileCard key={item.uri} uri={item.uri} lastViewed={item.lastViewed} />
+              ))}
               {pageCount > 1 && (
                 <FormRow verticallyCentered centered>
                   <ReactPaginate
