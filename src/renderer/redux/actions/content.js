@@ -523,8 +523,17 @@ export function doClearContentHistoryUri(uri: string) {
   };
 }
 
-export function doSetContentHistoryAll() {
+export function doClearContentHistoryAll() {
   return dispatch => {
     dispatch({ type: ACTIONS.CLEAR_CONTENT_HISTORY_ALL });
+  };
+}
+
+export function doSetHistoryPage(page) {
+  return dispatch => {
+    dispatch({
+      type: ACTIONS.SET_CONTENT_HISTORY_PAGE,
+      data: { page },
+    });
   };
 }

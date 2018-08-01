@@ -42,10 +42,15 @@ export const makeSelectContentPositionForUri = uri =>
     return state.positions[id] ? state.positions[id][outpoint] : null;
   });
 
-export const makeSelectHistoryForPage = (page = 1) =>
-  createSelector(selectState, state =>
-    state.history.slice((page - 1) * HISTORY_ITEMS_PER_PAGE, HISTORY_ITEMS_PER_PAGE)
-  );
+export const selectHistoryPageCount = createSelector(selectState, state =>
+  Math.ceil(state.history.length / HISTORY_ITEMS_PER_PAGE)
+);
+
+export const makeSelectHistoryForPage = page =>
+  createSelector(selectState, state => {
+    const left = page * HISTORY_ITEMS_PER_PAGE;
+    return state.history.slice(left, left + HISTORY_ITEMS_PER_PAGE);
+  });
 
 export const makeSelectHistoryForUri = uri =>
   createSelector(selectState, state => state.history.find(i => i.uri === uri));
