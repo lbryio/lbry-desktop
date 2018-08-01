@@ -5,7 +5,7 @@ import { selectCurrentParams, makeSelectCurrentParam } from 'lbry-redux';
 import UserHistoryPage from './view';
 
 const select = state => {
-  const paramPage = makeSelectCurrentParam('page')(state) || 0;
+  const paramPage = Number(makeSelectCurrentParam('page')(state) || 0);
   return {
     pageCount: selectHistoryPageCount(state),
     page: paramPage,
