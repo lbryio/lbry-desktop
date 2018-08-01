@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 * Add FAQ to Publishing Area ([#1833](https://github.com/lbryio/lbry-desktop/pull/1833))
 
 ### Changed
+* Pass error message from spee.ch API during thumbnail upload ([#1840](https://github.com/lbryio/lbry-desktop/pull/1840))
 
 ### Fixed
 
