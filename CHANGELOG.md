@@ -14,6 +14,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Fixed
  * **Wallet -> Get Credits** page now shows correct ShapeShift status when it's avialable ([#1836](https://github.com/lbryio/lbry-desktop/issue))
+ * Fix middle click link error ([#1843](https://github.com/lbryio/lbry-desktop/issues/1843)}
 
 ## [0.23.0] - 2018-07-25
 
