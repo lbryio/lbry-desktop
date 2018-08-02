@@ -55,8 +55,9 @@ class FilePage extends React.Component<Props> {
     'text',
     'model',
     'image',
-    '3D-file',
+    'script',
     'document',
+    '3D-file',
     // Bypass unplayable files
     // TODO: Find a better way to detect supported types
     'application',

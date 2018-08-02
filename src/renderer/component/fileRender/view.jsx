@@ -5,6 +5,7 @@ import PdfViewer from 'component/viewers/pdfViewer';
 import ThreeViewer from 'component/viewers/threeViewer';
 import DocumentViewer from 'component/viewers/documentViewer';
 import DocxViewer from 'component/viewers/docxViewer';
+import HtmlViewer from 'component/viewers/htmlViewer';
 
 type Props = {
   mediaType: string,
@@ -25,10 +26,12 @@ class FileRender extends React.PureComponent<Props> {
     // Extract relevant data to render file
     const { blob, stream, fileName, fileType, contentType, downloadPath } = source;
 
+    // Human-readable files (scripts and plain-text files)
+    const readableFiles = ['text', 'document', 'script'];
+
     // Supported mediaTypes
     const mediaTypes = {
       '3D-file': <ThreeViewer source={{ fileType, downloadPath }} theme={currentTheme} />,
-      document: <DocumentViewer source={{ stream, fileType, contentType }} theme={currentTheme} />,
       // Add routes to viewer...
     };
 
@@ -36,10 +39,19 @@ class FileRender extends React.PureComponent<Props> {
     const fileTypes = {
       pdf: <PdfViewer source={downloadPath} />,
       docx: <DocxViewer source={downloadPath} />,
+      html: <HtmlViewer source={downloadPath} />,
       // Add routes to viewer...
     };
 
-    const viewer = mediaType && source && (fileTypes[fileType] || mediaTypes[mediaType]);
+    // Check for a valid fileType or mediaType
+    let viewer = fileTypes[fileType] || mediaTypes[mediaType];
+
+    // Check for Human-readable files
+    if (!viewer && readableFiles.includes(mediaType)) {
+      viewer = <DocumentViewer source={{ stream, fileType, contentType }} theme={currentTheme} />;
+    }
+
+    // Message Error
     const unsupportedMessage = __("Sorry, looks like we can't preview this file.");
     const unsupported = <LoadingScreen status={unsupportedMessage} spinner={false} />;
 

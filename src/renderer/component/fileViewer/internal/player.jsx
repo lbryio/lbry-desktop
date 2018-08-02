@@ -11,7 +11,7 @@ import LoadingScreen from 'component/common/loading-screen';
 
 class MediaPlayer extends React.PureComponent {
   static MP3_CONTENT_TYPES = ['audio/mpeg3', 'audio/mpeg'];
-  static FILE_MEDIA_TYPES = ['e-book', 'comic-book', 'document', '3D-file'];
+  static FILE_MEDIA_TYPES = ['text', 'script', 'e-book', 'comic-book', 'document', '3D-file'];
 
   constructor(props) {
     super(props);
