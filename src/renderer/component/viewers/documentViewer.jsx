@@ -1,7 +1,6 @@
 // @flow
 
 import React from 'react';
-import fs from 'fs';
 import LoadingScreen from 'component/common/loading-screen';
 import CodeViewer from 'component/viewers/codeViewer';
 import MarkdownPreview from 'component/common/markdown-preview';
@@ -9,9 +8,9 @@ import MarkdownPreview from 'component/common/markdown-preview';
 type Props = {
   theme: string,
   source: {
+    stream: opts => void,
     fileType: string,
-    filePath: string,
-    downloadPath: string,
+    contentType: string,
   },
 };
 
@@ -27,7 +26,7 @@ class DocumentViewer extends React.PureComponent<Props> {
 
   componentDidMount() {
     const { source } = this.props;
-    const stream = fs.createReadStream(source.downloadPath, 'utf8');
+    const stream = source.stream('utf8');
 
     let data = '';
 
@@ -40,23 +39,20 @@ class DocumentViewer extends React.PureComponent<Props> {
     });
 
     stream.on('error', error => {
-      this.setState({ error });
+      this.setState({ error: true, loading: false });
     });
   }
 
-  renderDocument() {
+  renderDocument(content = null) {
     let viewer = null;
     const { source, theme } = this.props;
     const { fileType, contentType } = source;
-    const { content, error } = this.state;
-
-    const isReady = content && !error;
     const markdownType = ['md', 'markdown'];
 
-    if (isReady && markdownType.includes(fileType)) {
+    if (markdownType.includes(fileType)) {
       // Render markdown
       viewer = <MarkdownPreview content={content} promptLinks />;
-    } else if (isReady) {
+    } else {
       // Render plain text
       viewer = <CodeViewer value={content} contentType={contentType} theme={theme} />;
     }
@@ -65,15 +61,16 @@ class DocumentViewer extends React.PureComponent<Props> {
   }
 
   render() {
-    const { error, loading } = this.state;
+    const { error, loading, content } = this.state;
+    const isReady = content && !error;
     const loadingMessage = __('Rendering document.');
     const errorMessage = __("Sorry, looks like we can't load the document.");
 
     return (
       <div className="file-render__viewer document-viewer">
         {loading && !error && <LoadingScreen status={loadingMessage} spinner />}
-        {error && <LoadingScreen status={errorMessage} spinner={false} />}
-        {this.renderDocument()}
+        {error && <LoadingScreen status={errorMessage} spinner={!error} />}
+        {isReady && this.renderDocument(content)}
       </div>
     );
   }

@@ -14,7 +14,7 @@ type Props = {
   autoRotate: boolean,
   source: {
     fileType: string,
-    filePath: string,
+    downloadPath: string,
   },
 };
 

@@ -7,11 +7,7 @@ import LoadingScreen from 'component/common/loading-screen';
 import MarkdownPreview from 'component/common/markdown-preview';
 
 type Props = {
-  source: {
-    fileType: string,
-    filePath: string,
-    downloadPath: string,
-  },
+  source: string,
 };
 
 class DocxViewer extends React.PureComponent<Props> {
@@ -26,6 +22,7 @@ class DocxViewer extends React.PureComponent<Props> {
   componentDidMount() {
     const { source } = this.props;
 
+    // Overwrite element and styles
     const options = {
       styleMap: [
         "p[style-name='Title'] => h1:fresh",
@@ -38,15 +35,19 @@ class DocxViewer extends React.PureComponent<Props> {
         "p[style-name='Aside Text'] => div.aside > p:fresh",
       ],
     };
+
+    // Parse docx to html
     mammoth
-      .convertToHtml({ path: source.downloadPath }, options)
+      .convertToHtml({ path: source }, options)
       .then(result => {
+        // Remove images and tables
         const breakdance = new Breakdance({ omit: ['table', 'img'] });
+        // Convert html to markdown
         const markdown = breakdance.render(result.value);
         this.setState({ content: markdown, loading: false });
       })
       .catch(error => {
-        this.setState({ error, loading: false });
+        this.setState({ error: true, loading: false });
       })
       .done();
   }
@@ -54,11 +55,12 @@ class DocxViewer extends React.PureComponent<Props> {
   render() {
     const { content, error, loading } = this.state;
     const loadingMessage = __('Rendering document.');
+    const errorMessage = __("Sorry, looks like we can't load the document.");
 
     return (
       <div className="document-viewer file-render__viewer">
         {loading && <LoadingScreen status={loadingMessage} spinner />}
-        {error && <LoadingScreen status={error} spinner={false} />}
+        {error && <LoadingScreen status={errorMessage} spinner={false} />}
         {content && (
           <div className="document-viewer__content">
             <MarkdownPreview content={content} promptLinks />

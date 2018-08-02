@@ -17,13 +17,13 @@ const Loader = (fileType, manager) => {
   return fileTypes[fileType] ? fileTypes[fileType]() : null;
 };
 
-const ThreeLoader = ({ fileType, filePath }, renderModel, managerEvents) => {
+const ThreeLoader = ({ fileType = null, downloadPath = null }, renderModel, managerEvents) => {
   if (fileType) {
     const manager = Manager(managerEvents);
     const loader = Loader(fileType, manager);
 
     if (loader) {
-      loader.load(filePath, data => {
+      loader.load(`file://${downloadPath}`, data => {
         renderModel(fileType, data);
       });
     }

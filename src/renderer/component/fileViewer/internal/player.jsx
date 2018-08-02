@@ -9,7 +9,7 @@ import FileRender from 'component/fileRender';
 import Thumbnail from 'component/common/thumbnail';
 import LoadingScreen from 'component/common/loading-screen';
 
-class VideoPlayer extends React.PureComponent {
+class MediaPlayer extends React.PureComponent {
   static MP3_CONTENT_TYPES = ['audio/mpeg3', 'audio/mpeg'];
   static FILE_MEDIA_TYPES = ['e-book', 'comic-book', 'document', '3D-file'];
 
@@ -54,7 +54,7 @@ class VideoPlayer extends React.PureComponent {
     };
 
     // use renderAudio override for mp3
-    if (VideoPlayer.MP3_CONTENT_TYPES.indexOf(contentType) > -1) {
+    if (MediaPlayer.MP3_CONTENT_TYPES.indexOf(contentType) > -1) {
       this.renderAudio(container, null, false);
     }
     // Render custom viewer: FileRender
@@ -105,7 +105,7 @@ class VideoPlayer extends React.PureComponent {
     if (this.playableType() && !startedPlaying && downloadCompleted) {
       const container = this.media.children[0];
 
-      if (VideoPlayer.MP3_CONTENT_TYPES.indexOf(contentType) > -1) {
+      if (MediaPlayer.MP3_CONTENT_TYPES.indexOf(contentType) > -1) {
         this.renderAudio(this.media, true);
       } else {
         player.render(this.file(), container, {
@@ -183,30 +183,30 @@ class VideoPlayer extends React.PureComponent {
     // This files are supported using a custom viewer
     const { mediaType } = this.props;
 
-    return VideoPlayer.FILE_MEDIA_TYPES.indexOf(mediaType) > -1;
+    return MediaPlayer.FILE_MEDIA_TYPES.indexOf(mediaType) > -1;
   }
 
   renderFile() {
     // This is what render-media does with unplayable files
     const { fileName, downloadPath, contentType, mediaType } = this.props;
 
-    toBlobURL(fs.createReadStream(downloadPath), contentType, (err, url) => {
-      if (err) {
-        this.setState({ unsupported: true });
-        return false;
-      }
+    // File to render
+    const fileSource = {
+      fileName,
+      contentType,
+      downloadPath,
+      fileType: path.extname(fileName).substring(1),
+    };
 
-      // File to render
-      const fileSource = {
-        fileName,
-        contentType,
-        downloadPath,
-        filePath: url,
-        fileType: path.extname(fileName).substring(1),
-      };
-      // Update state
-      this.setState({ fileSource });
-    });
+    // Readable stream from file
+    fileSource.stream = opts => fs.createReadStream(downloadPath, opts);
+
+    // Blob url from stream
+    fileSource.blob = callback =>
+      toBlobURL(fs.createReadStream(downloadPath), contentType, callback);
+
+    // Update state
+    this.setState({ fileSource });
   }
 
   renderAudio(container, autoplay) {
@@ -287,5 +287,5 @@ class VideoPlayer extends React.PureComponent {
   }
 }
 
-export default VideoPlayer;
+export default MediaPlayer;
 /* eslint-disable */
