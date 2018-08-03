@@ -156,6 +156,7 @@ p {
 }
 
 .page {
+  z-index: 0;
   position: absolute;
   top: var(--header-height);
   left: 0;
