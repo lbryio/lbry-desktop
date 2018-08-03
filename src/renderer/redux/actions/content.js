@@ -31,7 +31,6 @@ import {
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import setBadge from 'util/setBadge';
 import setProgressBar from 'util/setProgressBar';
-import analytics from 'analytics';
 
 const DOWNLOAD_POLL_INTERVAL = 250;
 
@@ -224,13 +223,6 @@ export function doStartDownload(uri, outpoint) {
 export function doDownloadFile(uri, streamInfo) {
   return dispatch => {
     dispatch(doStartDownload(uri, streamInfo.outpoint));
-
-    analytics.apiLogView(
-      `${streamInfo.claim_name}#${streamInfo.claim_id}`,
-      streamInfo.outpoint,
-      streamInfo.claim_id
-    );
-
     dispatch(doClaimEligiblePurchaseRewards());
   };
 }
@@ -241,6 +233,29 @@ export function doSetPlayingUri(uri) {
       type: ACTIONS.SET_PLAYING_URI,
       data: { uri },
     });
+  };
+}
+
+function handleLoadVideoError(uri, errorType = '') {
+  return (dispatch, getState) => {
+    // suppress error when another media is playing
+    const { playingUri } = getState().content;
+    if (playingUri && playingUri === uri) {
+      dispatch({
+        type: ACTIONS.LOADING_VIDEO_FAILED,
+        data: { uri },
+      });
+      dispatch(doSetPlayingUri(null));
+      if (errorType === 'timeout') {
+        doNotify({ id: MODALS.FILE_TIMEOUT }, { uri });
+      } else {
+        dispatch(
+          doAlertError(
+            `Failed to download ${uri}, please try again. If this problem persists, visit https://lbry.io/faq/support for support.`
+          )
+        );
+      }
+    }
   };
 }
 
@@ -267,29 +282,6 @@ export function doLoadVideo(uri) {
       .catch(() => {
         dispatch(handleLoadVideoError(uri));
       });
-  };
-}
-
-function handleLoadVideoError(uri, errorType = '') {
-  return (dispatch, getState) => {
-    // suppress error when another media is playing
-    const { playingUri } = getState().content;
-    if (playingUri && playingUri === uri) {
-      dispatch({
-        type: ACTIONS.LOADING_VIDEO_FAILED,
-        data: { uri },
-      });
-      dispatch(doSetPlayingUri(null));
-      if (errorType === 'timeout') {
-        doNotify({ id: MODALS.FILE_TIMEOUT }, { uri });
-      } else {
-        dispatch(
-          doAlertError(
-            `Failed to download ${uri}, please try again. If this problem persists, visit https://lbry.io/faq/support for support.`
-          )
-        );
-      }
-    }
   };
 }
 

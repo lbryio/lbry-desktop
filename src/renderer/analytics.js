@@ -44,13 +44,19 @@ const analytics: Analytics = {
     }
     analyticsEnabled = enabled;
   },
-  apiLogView: (uri: string, outpoint: string, claimId: string): void => {
+  apiLogView: (uri: string, outpoint: string, claimId: string, timeToStart?: number): void => {
     if (analyticsEnabled) {
-      Lbryio.call('file', 'view', {
+      const params = {
         uri,
         outpoint,
         claim_id: claimId,
-      }).catch(() => {});
+      };
+
+      if (timeToStart) {
+        params.time_to_start = timeToStart;
+      }
+
+      Lbryio.call('file', 'view', params).catch(() => {});
     }
   },
 };

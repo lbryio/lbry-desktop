@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import classnames from 'classnames';
+import analytics from 'analytics';
 import type { Claim } from 'types/claim';
 import LoadingScreen from 'component/common/loading-screen';
 import Player from './internal/player';
@@ -48,17 +49,48 @@ type Props = {
 class FileViewer extends React.PureComponent<Props> {
   constructor() {
     super();
-
     (this: any).playContent = this.playContent.bind(this);
     (this: any).handleKeyDown = this.handleKeyDown.bind(this);
+    (this: any).logTimeToStart = this.logTimeToStart.bind(this);
+    (this: any).startedPlayingCb = undefined;
+
+    // Don't add these variables to state because we don't need to re-render when their values change
+    (this: any).startTime = undefined;
+    (this: any).playTime = undefined;
   }
 
   componentDidMount() {
+    const { fileInfo } = this.props;
+    if (!fileInfo) {
+      this.startedPlayingCb = this.logTimeToStart;
+    }
+
     this.handleAutoplay(this.props);
     window.addEventListener('keydown', this.handleKeyDown);
   }
 
   componentDidUpdate(prev: Props) {
+    const { fileInfo } = this.props;
+
+    if (this.props.uri !== prev.uri) {
+      // User just directly navigated to another piece of content
+      if (this.startTime && !this.playTime) {
+        // They started playing a file but it didn't start streaming
+        // Fire the analytics event with the previous file
+        this.fireAnalyticsEvent(prev.claim);
+      }
+
+      this.startTime = null;
+      this.playTime = null;
+
+      // If this new file is already downloaded, remove the startedPlayingCallback
+      if (fileInfo && this.startedPlayingCb) {
+        this.startedPlayingCb = null;
+      } else if (!fileInfo && !this.startedPlayingCb) {
+        this.startedPlayingCb = this.logTimeToStart;
+      }
+    }
+
     if (
       this.props.autoplay !== prev.autoplay ||
       this.props.fileInfo !== prev.fileInfo ||
@@ -73,6 +105,14 @@ class FileViewer extends React.PureComponent<Props> {
   }
 
   componentWillUnmount() {
+    const { claim } = this.props;
+
+    if (this.startTime && !this.playTime) {
+      // The user is navigating away before the file started playing, or a play time was never set
+      // Currently will not be set for files that don't use render-media
+      this.fireAnalyticsEvent(claim);
+    }
+
     this.props.cancelPlay();
     window.removeEventListener('keydown', this.handleKeyDown);
   }
@@ -107,8 +147,41 @@ class FileViewer extends React.PureComponent<Props> {
 
   playContent() {
     const { play, uri } = this.props;
+
+    if (this.startedPlayingCb) {
+      this.startTime = Date.now();
+    }
+
     play(uri);
   }
+
+  logTimeToStart() {
+    const { claim } = this.props;
+
+    if (this.startTime) {
+      this.playTime = Date.now();
+      this.fireAnalyticsEvent(claim, this.startTime, this.playTime);
+    }
+  }
+
+  fireAnalyticsEvent = (claim, startTime, playTime) => {
+    const { name, claim_id: claimId, txid, nout } = claim;
+
+    // ideally outpoint would exist inside of claim information
+    // we can use it after https://github.com/lbryio/lbry/issues/1306 is addressed
+    const outpoint = `${txid}:${nout}`;
+
+    let timeToStart;
+    if (playTime && startTime) {
+      timeToStart = playTime - startTime;
+    }
+
+    analytics.apiLogView(`${name}#${claimId}`, outpoint, claimId, timeToStart);
+  };
+
+  startedPlayingCb: ?() => void;
+  startTime: ?number;
+  playTime: ?number;
 
   render() {
     const {
@@ -178,6 +251,7 @@ class FileViewer extends React.PureComponent<Props> {
                 uri={uri}
                 paused={mediaPaused}
                 position={mediaPosition}
+                startedPlayingCb={this.startedPlayingCb}
               />
             )}
           </div>
