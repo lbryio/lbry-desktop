@@ -9,7 +9,7 @@ $large-breakpoint: 1921px;
 
 :root {
   /* Widths & spacings */
-  --side-nav-width: 220px;
+  --side-nav-width: 190px;
   --side-nav-width-m: 240px;
   --side-nav-width-l: 320px;
   --font-size-subtext-multiple: 0.92;
@@ -155,9 +155,14 @@ $large-breakpoint: 1921px;
   --success-msg-border: var(--color-green-blue);
   --success-msg-bg: var(--color-green-light);
 
-  /* File Tile Card */
-  --file-tile--media-height: 125px;
-  --file-tile--media-width: calc(125px * (16 / 9));
+  /* File */
+  --file-tile-media-height: 125px;
+  --file-tile-media-width: calc(125px * (16 / 9));
+  --file-tile-media-height-small: 60px;
+  --file-tile-media-width-small: calc(60px * (16 / 9));
+  --file-page-min-width: 400px;
+  --recommended-content-width: 300px;
+  --recommended-content-width-medium: 400px;
 
   /* Modal */
   --modal-width: 440px;

@@ -31,7 +31,7 @@ class ModalAffirmPurchase extends React.PureComponent {
       >
         {__('This will purchase')} <strong>{title}</strong> {__('for')}{' '}
         <strong>
-          <FilePrice uri={uri} showFullPrice look="plain" />
+          <FilePrice uri={uri} showFullPrice inheritStyle showLBC={false} />
         </strong>{' '}
         {__('credits')}.
       </Modal>

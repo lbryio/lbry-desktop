@@ -1,9 +1,23 @@
+// @flow
 import React from 'react';
 import { ipcRenderer } from 'electron';
 import { Modal } from 'modal/modal';
 import Button from 'component/button';
 
-class ModalAutoUpdateDownloaded extends React.PureComponent {
+type Props = {
+  closeModal: any => any,
+  declineAutoUpdate: () => any,
+};
+
+class ModalAutoUpdateDownloaded extends React.PureComponent<Props> {
+  constructor(props: ModalProps) {
+    super(props);
+
+    this.state = {
+      disabled: false,
+    };
+  }
+
   render() {
     const { closeModal, declineAutoUpdate } = this.props;
 
@@ -14,7 +28,9 @@ class ModalAutoUpdateDownloaded extends React.PureComponent {
         contentLabel={__('Update Downloaded')}
         confirmButtonLabel={__('Use it Now')}
         abortButtonLabel={__('Upgrade on Close')}
+        confirmButtonDisabled={this.state.disabled}
         onConfirmed={() => {
+          this.setState({ disabled: true });
           ipcRenderer.send('autoUpdateAccepted');
         }}
         onAborted={() => {

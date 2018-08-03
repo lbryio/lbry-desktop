@@ -53,7 +53,7 @@ type Props = {
   clearPublish: () => void,
   resolveUri: string => void,
   scrollToTop: () => void,
-  prepareEdit: ({}) => void,
+  prepareEdit: ({ }) => void,
   resetThumbnailStatus: () => void,
 };
 
@@ -345,6 +345,13 @@ class PublishForm extends React.PureComponent<Props> {
           <div className="card__title">{__('Content')}</div>
           <div className="card__subtitle">
             {isStillEditing ? __('Editing a claim') : __('What are you publishing?')}
+            {' '}{__(
+              'Read our'
+            )}{' '}
+            <Button button="link" label={__('FAQ')} href="https://lbry.io/faq/how-to-publish" />{' '}
+            {__(
+              'to learn more.'
+            )}
           </div>
           {(filePath || !!editingURI) && (
             <div className="card-media__internal-links">
@@ -402,12 +409,12 @@ class PublishForm extends React.PureComponent<Props> {
               {uploadThumbnailStatus === THUMBNAIL_STATUSES.API_DOWN ? (
                 __('Enter a URL for your thumbnail.')
               ) : (
-                <React.Fragment>
-                  {__('Upload your thumbnail (.png/.jpg/.jpeg/.gif) to')}{' '}
-                  <Button button="link" label={__('spee.ch')} href="https://spee.ch/about" />.{' '}
-                  {__('Recommended size: 800x450 (16:9)')}
-                </React.Fragment>
-              )}
+                  <React.Fragment>
+                    {__('Upload your thumbnail (.png/.jpg/.jpeg/.gif) to')}{' '}
+                    <Button button="link" label={__('spee.ch')} href="https://spee.ch/about" />.{' '}
+                    {__('Recommended size: 800x450 (16:9)')}
+                  </React.Fragment>
+                )}
             </div>
             <SelectThumbnail
               thumbnailPath={thumbnailPath}
@@ -482,7 +489,7 @@ class PublishForm extends React.PureComponent<Props> {
                     !channel || channel === CHANNEL_ANONYMOUS || channel === CHANNEL_NEW
                       ? ''
                       : `${channel}/`
-                  }`}
+                    }`}
                   type="text"
                   name="content_name"
                   placeholder="myname"

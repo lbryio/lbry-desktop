@@ -6,9 +6,13 @@
   z-index: 1;
   justify-content: space-between;
   align-items: center;
-  padding: 0 $spacing-width;
+  padding: 0 $spacing-width * 1/3;
   background-color: var(--color-bg);
   box-shadow: var(--box-shadow-header);
+
+  @media (min-width: $medium-breakpoint) {
+    padding: 0 $spacing-width;
+  }
 }
 
 .header__navigation {

@@ -31,7 +31,7 @@ class RewardSummary extends React.Component<Props> {
               <React.Fragment>
                 {__('You have')}
                 &nbsp;
-                <CreditAmount noStyle amount={unclaimedRewardAmount} precision={8} />
+                <CreditAmount inheritStyle amount={unclaimedRewardAmount} precision={8} />
                 &nbsp;
                 {__('in unclaimed rewards')}.
               </React.Fragment>

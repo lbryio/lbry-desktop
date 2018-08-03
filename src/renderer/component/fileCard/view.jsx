@@ -92,9 +92,8 @@ class FileCard extends React.PureComponent<Props> {
         onContextMenu={handleContextMenu}
       >
         <CardMedia thumbnail={thumbnail} />
-        <div className="card-media__internal-links">{showPrice && <FilePrice uri={uri} />}</div>
         <div className="card__title-identity">
-          <div className="card__title--small">
+          <div className="card__title--small card__title--file-card">
             <TruncatedText lines={3}>{title}</TruncatedText>
           </div>
           <div className="card__subtitle">
@@ -103,13 +102,12 @@ class FileCard extends React.PureComponent<Props> {
             ) : (
               <React.Fragment>
                 <UriIndicator uri={uri} link />
-                <div>
-                  {isRewardContent && <Icon iconColor="red" icon={icons.FEATURED} />}
-                  {fileInfo && <Icon icon={icons.LOCAL} />}
-                </div>
+                {isRewardContent && <Icon iconColor="red" icon={icons.FEATURED} />}
+                {fileInfo && <Icon icon={icons.LOCAL} />}
               </React.Fragment>
             )}
           </div>
+          {showPrice && <FilePrice uri={uri} />}
         </div>
       </section>
     );
