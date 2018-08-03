@@ -116,7 +116,7 @@ class FileTile extends React.PureComponent<Props> {
                   'card__title--x-small': small,
                 })}
               >
-                <TruncatedText lines={3}>{title || name}</TruncatedText>
+                <TruncatedText lines={small ? 2 : 3}>{title || name}</TruncatedText>
               </div>
               <div
                 className={classnames('card__subtitle', {

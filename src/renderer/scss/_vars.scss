@@ -9,7 +9,7 @@ $large-breakpoint: 1921px;
 
 :root {
   /* Widths & spacings */
-  --side-nav-width: 190px;
+  --side-nav-width: 160px;
   --side-nav-width-m: 240px;
   --side-nav-width-l: 320px;
   --font-size-subtext-multiple: 0.92;
@@ -31,7 +31,7 @@ $large-breakpoint: 1921px;
   --color-dark-blue: #2f6f61;
   --color-light-blue: #49b2e2;
   --color-red: #e2495e;
-  --color-yellow: #fbd55e;
+  --color-yellow: #e8b414;
   --color-green: #399483;
   --color-green-light: #effbe4;
   --color-green-blue: #2ec1a8;
@@ -49,6 +49,8 @@ $large-breakpoint: 1921px;
   --color-bg-alt: var(--color-grey-light);
   --color-placeholder: var(--color-grey);
   --color-search-placeholder: var(--color-placeholder);
+  --color-credit-free: var(--color-dark-blue);
+  --color-credit-price: var(--color-yellow);
 
   /* Shadows */
   --box-shadow-layer: transparent; // 0 2px 4px rgba(0,0,0,0.25);

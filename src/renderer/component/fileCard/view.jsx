@@ -97,17 +97,13 @@ class FileCard extends React.PureComponent<Props> {
             <TruncatedText lines={3}>{title}</TruncatedText>
           </div>
           <div className="card__subtitle">
-            {pending ? (
-              <div>Pending...</div>
-            ) : (
-              <React.Fragment>
-                <UriIndicator uri={uri} link />
-                {isRewardContent && <Icon iconColor="red" icon={icons.FEATURED} />}
-                {fileInfo && <Icon icon={icons.LOCAL} />}
-              </React.Fragment>
-            )}
+            {pending ? <div>Pending...</div> : <UriIndicator uri={uri} link />}
           </div>
-          {showPrice && <FilePrice uri={uri} />}
+          <div className="card__file-properties">
+            {showPrice && <FilePrice uri={uri} />}
+            {isRewardContent && <Icon iconColor="red" icon={icons.FEATURED} />}
+            {fileInfo && <Icon icon={icons.LOCAL} />}
+          </div>
         </div>
       </section>
     );

@@ -142,12 +142,6 @@
   font-size: 14px;
   font-family: 'metropolis-medium';
   color: var(--card-text-color);
-  display: flex;
-  align-items: center;
-
-  .icon {
-    margin: 0 0 0 $spacing-vertical * 1/3;
-  }
 }
 
 .card__subtitle--x-small {
@@ -168,6 +162,15 @@
   font-size: 14px;
   font-family: 'metropolis-medium';
   padding-top: $spacing-vertical * 2/3;
+}
+
+.card__file-properties {
+  display: flex;
+  align-items: center;
+
+  .icon {
+    margin: 0 0 0 $spacing-vertical * 1/3;
+  }
 }
 
 // .card-media__internal__links should always be inside a card

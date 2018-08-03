@@ -274,7 +274,7 @@ p {
 }
 
 .credit-amount--free {
-  color: var(--color-secondary);
+  color: var(--color-credit-free);
 
   &.credit-amount--file-page {
     color: var(--color-dark-blue);
@@ -283,7 +283,7 @@ p {
 }
 
 .credit-amount--cost {
-  color: var(--color-yellow);
+  color: var(--color-credit-price);
 
   &.credit-amount--file-page {
     color: var(--color-black);

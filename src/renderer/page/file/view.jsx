@@ -218,7 +218,7 @@ class FilePage extends React.Component<Props> {
             </div>
           </div>
         </section>
-        <RecommendedContent uri={uri} channelUri={`lbry://${subscriptionUri}`} />
+        <RecommendedContent uri={uri} />
       </Page>
     );
   }
