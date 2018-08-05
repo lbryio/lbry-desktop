@@ -238,7 +238,6 @@ class FilePage extends React.Component<Props> {
               <FormRow padded>
                 <ToolTip onComponent body={__('Automatically download and play free content.')}>
                   <FormField
-                    useToggle
                     name="autoplay"
                     type="checkbox"
                     postfix={__('Autoplay')}

@@ -259,7 +259,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
             <section className="card card--section">
               <div className="card__title">{__('Content Settings')}</div>
               <FormField
-                useToggle
                 type="checkbox"
                 name="autoplay"
                 onChange={this.onAutoplayChange}
@@ -267,7 +266,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 postfix={__('Autoplay media files')}
               />
               <FormField
-                useToggle
                 type="checkbox"
                 name="show_nsfw"
                 onChange={this.onShowNsfwChange}
@@ -282,7 +280,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
             <section className="card card--section">
               <div className="card__title">{__('Notifications')}</div>
               <FormField
-                useToggle
                 type="checkbox"
                 name="desktopNotification"
                 onChange={this.onDesktopNotificationsChange}
@@ -294,7 +291,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
             <section className="card card--section">
               <div className="card__title">{__('Share Diagnostic Data')}</div>
               <FormField
-                useToggle
                 type="checkbox"
                 name="share_usage_data"
                 onChange={this.onShareDataChange}
@@ -323,7 +319,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 ))}
               </FormField>
               <FormField
-                useToggle
                 type="checkbox"
                 name="automatic_dark_mode"
                 onChange={e => this.onAutomaticDarkModeChange(e.target.checked)}
@@ -335,7 +330,6 @@ class SettingsPage extends React.PureComponent<Props, State> {
             <section className="card card--section">
               <div className="card__title">{__('Wallet Security')}</div>
               <FormField
-                useToggle
                 type="checkbox"
                 name="encrypt_wallet"
                 onChange={e => this.onChangeEncryptWallet(e)}

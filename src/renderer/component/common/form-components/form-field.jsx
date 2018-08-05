@@ -23,7 +23,6 @@ type Props = {
   children?: React.Node,
   stretch?: boolean,
   affixClass?: string, // class applied to prefix/postfix label
-  useToggle?: boolean,
 };
 
 export class FormField extends React.PureComponent<Props> {
@@ -40,7 +39,6 @@ export class FormField extends React.PureComponent<Props> {
       children,
       stretch,
       affixClass,
-      useToggle,
       ...inputProps
     } = this.props;
 
@@ -82,7 +80,7 @@ export class FormField extends React.PureComponent<Props> {
         );
       } else if (type === 'textarea') {
         input = <textarea type={type} id={name} {...inputProps} />;
-      } else if (type === 'checkbox' && useToggle) {
+      } else if (type === 'checkbox') {
         input = <Toggle id={name} {...inputProps} />;
       } else {
         input = <input type={type} id={name} {...inputProps} />;
