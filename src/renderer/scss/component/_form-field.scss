@@ -27,6 +27,10 @@
     justify-content: flex-end;
   }
 
+  &.form-row--space-between {
+    justify-content: space-between;
+  }
+
   .form-field.form-field--stretch {
     width: 100%;
 
@@ -119,6 +123,11 @@
 
 .form-field__postfix {
   padding-left: $spacing-vertical * 1/3;
+}
+
+.form-field__prefix--recommended-content {
+  font-size: 12px;
+  align-self: center;
 }
 
 .form-field__select {

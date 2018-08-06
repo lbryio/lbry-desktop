@@ -66,11 +66,12 @@ export default class RecommendedContent extends React.PureComponent<Props, State
 
     return (
       <section className="card__list--recommended">
-        <FormRow>
+        <FormRow spaceBetween>
+          <span>Related</span>
           <ToolTip onComponent body={__('Automatically download and play free content.')}>
             <FormField
-              useToggle
               firstInList
+              affixClass="form-field__prefix--recommended-content"
               name="autoplay"
               type="checkbox"
               prefix={__('Autoplay')}
