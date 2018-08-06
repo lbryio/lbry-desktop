@@ -5,7 +5,7 @@ import SemVer from 'semver';
 import findProcess from 'find-process';
 import url from 'url';
 import https from 'https';
-import { shell, app, ipcMain, dialog } from 'electron';
+import { shell, app, ipcMain, dialog, session } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import isDev from 'electron-is-dev';
 import Daemon from './Daemon';
@@ -89,6 +89,15 @@ app.on('ready', async () => {
     rendererWindow.webContents.send('devtools-is-opened');
   });
   tray = createTray(rendererWindow);
+  // HACK: patch webrequest to fix devtools incompatibility with electron 2.x.
+  // See https://github.com/electron/electron/issues/13008#issuecomment-400261941
+  session.defaultSession.webRequest.onBeforeRequest({}, (details, callback) => {
+  if (details.url.indexOf('7accc8730b0f99b5e7c0702ea89d1fa7c17bfe33') !== -1) {
+    callback({redirectURL: details.url.replace('7accc8730b0f99b5e7c0702ea89d1fa7c17bfe33', '57c9d07b416b5a2ea23d28247300e4af36329bdc')});
+  } else {
+    callback({cancel: false});
+  }
+  });
 });
 
 app.on('activate', () => {
