@@ -1,7 +1,6 @@
 :root {
-
+    
   /* Colors */
-
   --color-divider: #53637C;;
   --color-canvas: transparent;
   --color-help: #8696AF;
@@ -12,12 +11,11 @@
   --color-placeholder: var(--color-bg-alt);
 
   /* Text */
-  --text-color: #FFF;
+  --text-color: var(--color-white);
   --text-help-color: var(--color-help);
-  --text-selection-color: #fff;
 
    /* Form */
-   --form-label-color: #FFF;
+   --form-label-color: var(--color-white);
 
   /* Input */
   --input-bg: transparent;
@@ -90,7 +88,7 @@
   /* Scrollbar */
   --scrollbar-thumb-bg: rgba(255, 255, 255, 0.20);
   --scrollbar-thumb-hover-bg: #8696AF;
-  
+
   /* Shadows */
   --box-shadow-header: 0px 6px 20px 1px rgba(0, 0, 0, 0.2);
 }

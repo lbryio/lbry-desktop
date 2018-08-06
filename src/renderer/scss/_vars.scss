@@ -62,9 +62,11 @@ $large-breakpoint: 1921px;
   --text-help-color: var(--color-help);
   --text-max-width: 660px;
   --text-link-padding: 4px;
-  --text-selection-bg: var(--color-purple);
-  --text-selection-color: #fff;
 
+  /* Text Selectiom */
+  --text-selection-bg: var(--color-primary-light);
+  --text-selection-color: var(--color-white);
+  --editor-text-selection-bg: rgba(57, 148, 131, 0.8);
   /* Form */
   --form-label-color: rgba(0, 0, 0, 0.54);
 

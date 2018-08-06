@@ -163,7 +163,7 @@ class FileViewer extends React.PureComponent<Props> {
               </div>
             ) : (
               <Player
-                filename={fileInfo.file_name}
+                fileName={fileInfo.file_name}
                 poster={poster}
                 downloadPath={fileInfo.download_path}
                 mediaType={mediaType}

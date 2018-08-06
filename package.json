@@ -35,7 +35,9 @@
   },
   "dependencies": {
     "bluebird": "^3.5.1",
+    "breakdance": "^3.0.1",
     "classnames": "^2.2.5",
+    "codemirror": "^5.39.2",
     "country-data": "^0.0.31",
     "dom-scroll-into-view": "^1.2.1",
     "electron-dl": "^1.11.0",
@@ -51,6 +53,7 @@
     "keytar": "^4.2.1",
     "lbry-redux": "lbryio/lbry-redux#b4fffe863df316bc73183567ab978221ee623b8c",
     "localforage": "^1.7.1",
+    "mammoth": "^1.4.6",
     "mime": "^2.3.1",
     "mixpanel-browser": "^2.17.1",
     "moment": "^2.22.0",

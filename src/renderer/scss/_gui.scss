@@ -156,6 +156,7 @@ p {
 }
 
 .page {
+  z-index: 0;
   position: absolute;
   top: var(--header-height);
   left: 0;
@@ -251,7 +252,7 @@ p {
 
 /* Custom text selection */
 *::selection {
-  background: var(--color-primary-light);
+  background: var(--text-selection-bg);
   color: var(--text-selection-color);
 }
 

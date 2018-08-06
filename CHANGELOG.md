@@ -8,13 +8,20 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ### Added
  * Wallet Encryption/Decryption user flows ([#1785](https://github.com/lbryio/lbry-desktop/pull/1785))
  * Add FAQ to Publishing Area ([#1833](https://github.com/lbryio/lbry-desktop/pull/1833))
+ * Better preview for content ([#620](https://github.com/lbryio/lbry-desktop/pull/620))
+ * Add new markdown and docx viewer ([#1826](https://github.com/lbryio/lbry-desktop/pull/1826))
+ * Add new viewer for human-readable text files ([#1826](https://github.com/lbryio/lbry-desktop/pull/1826))
+ * Add csv and json viewer ([#1410](https://github.com/lbryio/lbry-desktop/pull/1410))
 
 ### Changed
  * Pass error message from spee.ch API during thumbnail upload ([#1840](https://github.com/lbryio/lbry-desktop/pull/1840))
+ * Use router pattern for rendering file viewer ([#1544](https://github.com/lbryio/lbry-desktop/pull/1544))
 
 ### Fixed
- * **Wallet -> Get Credits** page now shows correct ShapeShift status when it's avialable ([#1836](https://github.com/lbryio/lbry-desktop/issue))
+ * **Wallet -> Get Credits** page now shows correct ShapeShift status when it's avialable ([#1836](https://github.com/lbryio/lbry-desktop/issues/1836))
  * Fix middle click link error ([#1843](https://github.com/lbryio/lbry-desktop/issues/1843)}
+ * Problem with search auto-complete menu when scrolling over file viewer ([#1847](https://github.com/lbryio/lbry-desktop/issues/1847))
+
 
 ## [0.23.0] - 2018-07-25
 

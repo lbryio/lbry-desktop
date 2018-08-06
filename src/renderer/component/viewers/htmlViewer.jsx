@@ -6,20 +6,15 @@ type Props = {
   source: string,
 };
 
-class PdfViewer extends React.PureComponent<Props> {
-  constructor(props) {
-    super(props);
-    this.viewer = React.createRef();
-  }
-
+class HtmlViewer extends React.PureComponent<Props> {
   render() {
     const { source } = this.props;
     return (
       <div className="file-render__viewer" onContextMenu={stopContextMenu}>
-        <webview ref={this.viewer} src={`chrome://pdf-viewer/index.html?src=file://${source}`} />
+        <iframe sandbox="" title={__('File preview')} src={`file://${source}`} />
       </div>
     );
   }
 }
 
-export default PdfViewer;
+export default HtmlViewer;

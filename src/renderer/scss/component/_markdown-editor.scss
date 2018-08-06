@@ -1,96 +1,88 @@
 .CodeMirror {
-  background: var(--color-canvas) !important;
-  border: 0px !important;
-  border-radius: 0px !important;
-  color: var(--text-color) !important;
-  box-shadow: var(--box-shadow-layer);
+  border: 0px;
+  border-radius: 0px;
+  background: var(--card-bg);
+  color: var(--text-color);
 }
 
 .editor-toolbar {
-  opacity: 1 !important;
-  border: 0 !important;
+  opacity: 1;
+  border: 0;
   background: var(--color-bg-alt);
-  border-radius: 0 !important;
+  border-radius: 0;
   box-shadow: var(--box-shadow-layer);
 }
 
+.editor-toolbar:hover {
+  opacity: 1;
+}
+
 .editor-toolbar i.separator {
-  border: 0 !important;
-  border-right: var(--divider) !important;
+  border: 0;
 }
 
 .editor-toolbar.fullscreen {
-  background: var(--color-bg) !important;
+  background: var(--color-bg-alt);
 }
 
-div.editor-toolbar a {
-  opacity: 0.64;
+.editor-toolbar.fullscreen::before,
+.editor-toolbar.fullscreen::after {
+  display: none;
+}
+
+.editor-toolbar a {
+  opacity: 0.6;
   color: var(--text-color) !important;
+  transition: opacity 0.3s ease;
 }
 
 .editor-toolbar a.active,
 .editor-toolbar a:hover {
   opacity: 1;
-  background: var(--button-bg) !important;
-  border-color: transparent !important;
+  background: var(--button-bg);
+  border-color: transparent;
 }
 
 .editor-toolbar.disabled-for-preview a:not(.no-disable) {
-  background: var(--color-bg-alt) !important;
-  border-color: transparent !important;
+  background: var(--color-bg-alt);
+  border-color: transparent;
+  opacity: 0.3;
 }
 
 .editor-statusbar {
-  color: var(--form-label-color) !important;
+  color: var(--form-label-color);
 }
 
 .editor-preview {
   font-size: calc(var(--font-size-subtext-multiple) * 1em);
-  background: var(--color-bg) !important;
+  background: var(--color-bg);
   border: 0;
 }
 
-.editor-preview-side {
-  background: var(--color-bg-alt) !important;
-  border: 1px solid var(--input-border-color) !important;
-}
-
-.CodeMirror .CodeMirror-code .cm-tag {
-  color: #63a35c;
-}
-
-.CodeMirror .CodeMirror-code .cm-attribute {
-  color: #795da3;
-}
-
-.CodeMirror .CodeMirror-code .cm-string {
-  color: #183691;
-}
-
-.CodeMirror .CodeMirror-selected {
-  background: var(--text-selection-bg) !important;
-  color: var(--text-selection-color) !important;
-}
-
 .CodeMirror .CodeMirror-cursor {
-  border-color: var(--color-primary) !important;
-}
-
-.CodeMirror .CodeMirror-code .cm-comment {
-  background: rgba(0, 0, 0, 0.05);
-}
-
-.CodeMirror .CodeMirror-code .cm-link {
-  color: #7f8c8d;
-}
-
-.CodeMirror .CodeMirror-code .cm-url {
-  color: #aab2b3;
+  border-color: var(--color-primary);
 }
 
 .CodeMirror .CodeMirror-placeholder {
   opacity: 0.5;
 }
+
+/* Fix selection */
+.CodeMirror-line::selection,
+.CodeMirror-line > span::selection,
+.CodeMirror-line > span > span::selection {
+  background: var(--text-selection-bg);
+}
+
+.CodeMirror .CodeMirror-selected {
+  background: transparent;
+}
+
+.CodeMirror .CodeMirror-selectedtext {
+  background: var(--editor-text-selection-bg) !important;
+  color: var(--text-selection-color) !important;
+}
+
 .CodeMirror .cm-spell-error:not(.cm-url):not(.cm-comment):not(.cm-tag):not(.cm-word) {
   background: none;
   text-decoration: underline;
