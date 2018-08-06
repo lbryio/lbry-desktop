@@ -27,6 +27,7 @@ import {
   selectUpgradeFilename,
   selectAutoUpdateDeclined,
   selectRemoteVersion,
+  selectUpgradeTimer,
 } from 'redux/selectors/app';
 import { lbrySettings as config } from 'package.json';
 
@@ -153,7 +154,13 @@ export function doAutoUpdate() {
 }
 
 export function doAutoUpdateDeclined() {
-  return dispatch => {
+  return (dispatch, getState) => {
+    const state = getState();
+
+    if (selectUpgradeTimer(state)) {
+      clearInterval(selectUpgradeTimer(state));
+    }
+
     dispatch({
       type: ACTIONS.AUTO_UPDATE_DECLINED,
     });
