@@ -31,6 +31,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
  * Abandoned claim transactions now show in wallet history ([#1769](https://github.com/lbryio/lbry-desktop/pull/1769))
  * Emoji support in the claim description ([#1800](https://github.com/lbryio/lbry-desktop/pull/1800))
  * PDF preview ([#1576](https://github.com/lbryio/lbry-desktop/pull/1576))
+ * Add Desktop notification settings to be enabled/disabled ([#1834](https://github.com/lbryio/lbry-desktop/pull/1834))
 
 ### Changed
   * Upgraded LBRY Protocol to [version 0.20.4](https://github.com/lbryio/lbry/releases/tag/v0.20.4) to assist with download availability and lower CPU usage on idle.
@@ -41,6 +42,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
   * Hide the "Community top bids" section if user chooses to hide NSFW content ([#1760](https://github.com/lbryio/lbry-desktop/pull/1760))
   * More descriptive error message when Shapeshift is unavailable ([#1771](https://github.com/lbryio/lbry-desktop/pull/1771))
   * Rename the Github repo to lbry-desktop ([#1765](https://github.com/lbryio/lbry-desktop/pull/1765))
+  * Changed default browser checkbox to use toggle on all checkbox inputs ([#1834](https://github.com/lbryio/lbry-desktop/pull/1834))
 
 ### Fixed
   * Edit option missing from certain published claims ([#1756](https://github.com/lbryio/lbry-desktop/issues/1756))

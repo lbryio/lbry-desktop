@@ -33,3 +33,7 @@ export const selectThemePath = createSelector(
     return `${staticResourcesPath}/themes/${dynamicTheme || 'light'}.css`;
   }
 );
+
+export const selectosNotificationsEnabled = makeSelectClientSetting(
+  SETTINGS.OS_NOTIFICATIONS_ENABLED
+);
