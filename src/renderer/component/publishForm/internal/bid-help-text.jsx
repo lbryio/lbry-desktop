@@ -30,7 +30,7 @@ class BidHelpText extends React.PureComponent<Props> {
 
     if (isStillEditing) {
       return __(
-        'You are currently editing this claim. If you change the URL, you will need reselect a file.'
+        'You are currently editing this claim. If you change the URL, you will need to reselect a file.'
       );
     }
 
