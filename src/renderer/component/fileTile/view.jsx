@@ -123,8 +123,10 @@ class FileTile extends React.PureComponent<Props> {
                   'card__subtitle--x-small': small,
                 })}
               >
-                {showUri ? uri : channel || __('Anonymous')}
-                {isRewardContent && <Icon icon={icons.FEATURED} />}
+                <span className="file-tile__channel">
+                  {showUri ? uri : channel || __('Anonymous')}
+                </span>
+                {isRewardContent && <Icon iconColor="red" icon={icons.FEATURED} />}
                 {showLocal && isDownloaded && <Icon icon={icons.LOCAL} />}
               </div>
               <FilePrice hideFree uri={uri} />

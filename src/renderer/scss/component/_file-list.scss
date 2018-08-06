@@ -31,7 +31,14 @@
 
   .card__subtitle {
     line-height: 1;
+    display: flex;
+    align-items: center;
+    // justify-content: space-between;
   }
+}
+
+.file-tile__channel {
+  padding-right: $spacing-width * 1/4;
 }
 
 .file-tile.file-tile--small {
