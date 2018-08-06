@@ -1,4 +1,4 @@
-import { app, BrowserWindow, dialog, screen } from 'electron';
+import { app, BrowserWindow, dialog, shell, screen } from 'electron';
 import isDev from 'electron-is-dev';
 import windowStateKeeper from 'electron-window-state';
 
@@ -122,6 +122,11 @@ export default appState => {
 
   window.webContents.on('crashed', () => {
     window = null;
+  });
+  
+  window.webContents.on('new-window', (event, url) => {
+    event.preventDefault();
+    shell.openExternal(url);
   });
 
   return window;

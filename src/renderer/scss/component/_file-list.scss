@@ -22,11 +22,11 @@
 
 .file-tile {
   display: flex;
-  margin-top: $spacing-vertical;
+  padding-top: $spacing-vertical;
 
   .card__media {
-    height: var(--file-tile--media-height);
-    flex: 0 0 var(--file-tile--media-width);
+    height: var(--file-tile-media-height);
+    flex: 0 0 var(--file-tile-media-width);
   }
 
   .card__subtitle {
@@ -34,8 +34,13 @@
   }
 }
 
-.file-tile--fullwidth {
-  max-width: none;
+.file-tile.file-tile--small {
+  padding-top: $spacing-vertical * 2/3;
+
+  .card__media {
+    height: var(--file-tile-media-height-small);
+    flex: 0 0 var(--file-tile-media-width-small);
+  }
 }
 
 .file-tile__info {

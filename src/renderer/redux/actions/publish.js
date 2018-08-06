@@ -120,7 +120,7 @@ export const doUploadThumbnail = (filePath: string, nsfw: boolean) => (dispatch:
                 thumbnail: `${json.data.url}${fileExt}`,
               },
             })
-          : uploadError('Upload failed')
+          : uploadError(json.message)
     )
     .catch(err => uploadError(err.message));
 };

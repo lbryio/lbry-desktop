@@ -156,6 +156,7 @@ p {
 }
 
 .page {
+  z-index: 0;
   position: absolute;
   top: var(--header-height);
   left: 0;
@@ -203,6 +204,12 @@ p {
   padding-right: 100px;
 }
 
+.main--for-content {
+  padding: $spacing-width * 2/3;
+  display: flex;
+  justify-content: center;
+}
+
 .page__header {
   padding: $spacing-vertical * 2/3;
   padding-bottom: 0;
@@ -245,16 +252,15 @@ p {
 
 /* Custom text selection */
 *::selection {
-  background: var(--color-primary-light);
+  background: var(--text-selection-bg);
   color: var(--text-selection-color);
 }
 
 .credit-amount {
-  border-radius: 5px;
   font-family: 'metropolis-bold';
   font-size: 10px;
-  padding: 5px;
   white-space: nowrap;
+  padding: $spacing-vertical * 1/6 0;
 }
 
 .credit-amount--large {
@@ -262,30 +268,36 @@ p {
   font-size: 36px;
 }
 
+.credit-amount--file-page {
+  border-radius: 5px;
+  padding: 5px;
+}
+
 .credit-amount--free {
-  color: var(--color-dark-blue);
-  background-color: var(--color-secondary);
+  color: var(--color-secondary);
+
+  &.credit-amount--file-page {
+    color: var(--color-dark-blue);
+    background-color: var(--color-secondary);
+  }
 }
 
 .credit-amount--cost {
-  color: var(--color-black);
-  background-color: var(--color-yellow);
+  color: var(--color-yellow);
+
+  &.credit-amount--file-page {
+    color: var(--color-black);
+    background-color: var(--color-yellow);
+  }
 }
 
-.credit-amount--plain {
+.credit-amount--inherit {
   background-color: inherit;
   color: inherit;
   font-weight: inherit;
   font-size: inherit;
-}
-
-.credit-amount.credit-amount--no-style {
-  padding: 0;
-  font-size: inherit;
-  font-weight: inherit;
-  color: inherit;
-  background-color: transparent;
   font-family: 'metropolis-medium';
+  padding: 0;
 }
 
 .divider__horizontal {

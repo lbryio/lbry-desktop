@@ -4,9 +4,9 @@ import ReactDOMServer from 'react-dom/server';
 import classnames from 'classnames';
 import MarkdownPreview from 'component/common/markdown-preview';
 import SimpleMDE from 'react-simplemde-editor';
-import 'simplemde/dist/simplemde.min.css';
+import 'simplemde/dist/simplemde.min.css'; // eslint-disable-line import/no-extraneous-dependencies
 import Toggle from 'react-toggle';
-import { openEditorMenu } from 'util/contextMenu';
+import { openEditorMenu, stopContextMenu } from 'util/contextMenu';
 
 type Props = {
   name: string,
@@ -23,6 +23,7 @@ type Props = {
   children?: React.Node,
   stretch?: boolean,
   affixClass?: string, // class applied to prefix/postfix label
+  firstInList?: boolean, // at the top of a list, no padding top
 };
 
 export class FormField extends React.PureComponent<Props> {
@@ -39,6 +40,7 @@ export class FormField extends React.PureComponent<Props> {
       children,
       stretch,
       affixClass,
+      firstInList,
       ...inputProps
     } = this.props;
 
@@ -53,15 +55,10 @@ export class FormField extends React.PureComponent<Props> {
           </select>
         );
       } else if (type === 'markdown') {
-        const stopContextMenu = event => {
-          event.preventDefault();
-          event.stopPropagation();
-        };
         const handleEvents = {
-          contextmenu(codeMirror, event) {
-            openEditorMenu(event, codeMirror);
-          },
+          contextmenu: openEditorMenu,
         };
+
         input = (
           <div className="form-field--SimpleMDE" onContextMenu={stopContextMenu}>
             <SimpleMDE
@@ -106,6 +103,7 @@ export class FormField extends React.PureComponent<Props> {
         <div
           className={classnames('form-field__input', {
             'form-field--auto-height': type === 'markdown',
+            'form-field--first-item': firstInList,
           })}
         >
           {prefix && (

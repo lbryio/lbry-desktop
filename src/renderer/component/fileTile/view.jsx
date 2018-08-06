@@ -11,7 +11,6 @@ import classnames from 'classnames';
 import FilePrice from 'component/filePrice';
 
 type Props = {
-  fullWidth: boolean, // removes the max-width css
   showUri: boolean,
   showLocal: boolean,
   obscureNsfw: boolean,
@@ -28,13 +27,15 @@ type Props = {
   updatePublishForm: ({}) => void,
   hideNoResult: boolean, // don't show the tile if there is no claim at this uri
   displayHiddenMessage?: boolean,
+  displayDescription?: boolean,
+  small?: boolean,
 };
 
 class FileTile extends React.PureComponent<Props> {
   static defaultProps = {
     showUri: false,
     showLocal: false,
-    fullWidth: false,
+    displayDescription: true,
   };
 
   componentDidMount() {
@@ -57,13 +58,14 @@ class FileTile extends React.PureComponent<Props> {
       showUri,
       obscureNsfw,
       claimIsMine,
-      fullWidth,
       showLocal,
       isDownloaded,
       clearPublish,
       updatePublishForm,
       hideNoResult,
       displayHiddenMessage,
+      displayDescription,
+      small,
     } = this.props;
 
     const shouldHide = !claimIsMine && obscureNsfw && metadata && metadata.nsfw;
@@ -96,7 +98,7 @@ class FileTile extends React.PureComponent<Props> {
     return !name && hideNoResult ? null : (
       <section
         className={classnames('file-tile card--link', {
-          'file-tile--fullwidth': fullWidth,
+          'file-tile--small': small,
         })}
         onClick={onClick}
         onKeyUp={onClick}
@@ -108,20 +110,29 @@ class FileTile extends React.PureComponent<Props> {
           {isResolvingUri && <div className="card__title--small">{__('Loading...')}</div>}
           {!isResolvingUri && (
             <React.Fragment>
-              <div className="card__title--small card__title--file">
-                <TruncatedText lines={2}>{title || name}</TruncatedText>
+              <div
+                className={classnames({
+                  'card__title--file': !small,
+                  'card__title--x-small': small,
+                })}
+              >
+                <TruncatedText lines={3}>{title || name}</TruncatedText>
               </div>
-              <div className="card__subtitle">
+              <div
+                className={classnames('card__subtitle', {
+                  'card__subtitle--x-small': small,
+                })}
+              >
                 {showUri ? uri : channel || __('Anonymous')}
                 {isRewardContent && <Icon icon={icons.FEATURED} />}
                 {showLocal && isDownloaded && <Icon icon={icons.LOCAL} />}
               </div>
-              <div className="card__subtext card__subtext--small">
-                <TruncatedText lines={3}>{description}</TruncatedText>
-              </div>
-              <div className="card__subtitle-price">
-                <FilePrice uri={uri} />
-              </div>
+              <FilePrice uri={uri} />
+              {displayDescription && (
+                <div className="card__subtext card__subtext--small">
+                  <TruncatedText lines={3}>{description}</TruncatedText>
+                </div>
+              )}
               {!name && (
                 <React.Fragment>
                   {__('This location is unused.')}{' '}

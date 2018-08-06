@@ -23,9 +23,9 @@ function injectDevelopmentTemplate(event, templates) {
 
 export function openContextMenu(event, templates = [], canEdit = false, selection = '') {
   const { type, value } = event.target;
-  const isSomethingSelected = selection.length > 0 || window.getSelection().toString().length > 0;
   const isInput = event.target.matches('input') && (type === 'text' || type === 'number');
   const isTextField = canEdit || isInput || event.target.matches('textarea');
+  const isSomethingSelected = selection.length > 0 || window.getSelection().toString().length > 0;
 
   templates.push({
     label: 'Copy',
@@ -63,7 +63,7 @@ export function openContextMenu(event, templates = [], canEdit = false, selectio
 }
 
 // This function is used for the markdown description on the publish page
-export function openEditorMenu(event, codeMirror) {
+export function openEditorMenu(codeMirror, event) {
   const value = codeMirror.doc.getValue();
   const selection = codeMirror.doc.getSelection();
   const templates = [
@@ -86,6 +86,25 @@ export function openEditorMenu(event, codeMirror) {
   openContextMenu(event, templates, true, selection);
 }
 
+// This function is used for the CodeViewer component
+export function openSnippetMenu(codeMirror, event) {
+  const value = codeMirror.doc.getValue();
+  const selection = codeMirror.doc.getSelection();
+  const templates = [
+    {
+      label: 'Select All',
+      accelerator: 'CmdOrCtrl+A',
+      role: 'selectall',
+      click: () => {
+        codeMirror.execCommand('selectAll');
+      },
+      // Enabled if there is text to select
+      enabled: value.length > 0,
+    },
+  ];
+  openContextMenu(event, templates, false, selection);
+}
+
 export function openCopyLinkMenu(text, event) {
   const templates = [
     {
@@ -96,4 +115,10 @@ export function openCopyLinkMenu(text, event) {
     },
   ];
   openContextMenu(event, templates);
+}
+
+// Block context menu
+export function stopContextMenu(event) {
+  event.preventDefault();
+  event.stopPropagation();
 }

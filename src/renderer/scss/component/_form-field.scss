@@ -51,6 +51,10 @@
   width: 100%;
 }
 
+.form-field__input.form-field--first-item {
+  padding: 0;
+}
+
 .form-field__input {
   display: flex;
   padding-top: $spacing-vertical / 3;
