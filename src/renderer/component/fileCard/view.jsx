@@ -100,7 +100,7 @@ class FileCard extends React.PureComponent<Props> {
             {pending ? <div>Pending...</div> : <UriIndicator uri={uri} link />}
           </div>
           <div className="card__file-properties">
-            {showPrice && <FilePrice uri={uri} />}
+            {showPrice && <FilePrice hideFree uri={uri} />}
             {isRewardContent && <Icon iconColor="red" icon={icons.FEATURED} />}
             {fileInfo && <Icon icon={icons.LOCAL} />}
           </div>

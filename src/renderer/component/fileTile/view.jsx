@@ -127,7 +127,7 @@ class FileTile extends React.PureComponent<Props> {
                 {isRewardContent && <Icon icon={icons.FEATURED} />}
                 {showLocal && isDownloaded && <Icon icon={icons.LOCAL} />}
               </div>
-              <FilePrice uri={uri} />
+              <FilePrice hideFree uri={uri} />
               {displayDescription && (
                 <div className="card__subtext card__subtext--small">
                   <TruncatedText lines={3}>{description}</TruncatedText>
