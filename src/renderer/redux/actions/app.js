@@ -140,7 +140,9 @@ export function doDownloadUpgradeRequested() {
 }
 
 export function doAutoUpdate() {
-  return dispatch => {
+  return (dispatch, getState) => {
+    const state = getState();
+    
     dispatch({
       type: ACTIONS.AUTO_UPDATE_DOWNLOADED,
     });
@@ -150,6 +152,10 @@ export function doAutoUpdate() {
         id: MODALS.AUTO_UPDATE_DOWNLOADED,
       })
     );
+
+    if (selectUpgradeTimer(state)) {
+      clearInterval(selectUpgradeTimer(state));
+    }
   };
 }
 
