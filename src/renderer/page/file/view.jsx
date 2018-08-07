@@ -1,5 +1,6 @@
 // @flow
 import * as React from 'react';
+import * as settings from 'constants/settings';
 import { buildURI, normalizeURI, MODALS } from 'lbry-redux';
 import FileViewer from 'component/fileViewer';
 import Thumbnail from 'component/common/thumbnail';
@@ -20,6 +21,8 @@ import FileDownloadLink from 'component/fileDownloadLink';
 import classnames from 'classnames';
 import getMediaType from 'util/getMediaType';
 import RecommendedContent from 'component/recommendedContent';
+import { FormField, FormRow } from 'component/common/form';
+import ToolTip from 'component/common/tooltip';
 
 type Props = {
   claim: Claim,
@@ -43,6 +46,8 @@ type Props = {
   prepareEdit: ({}, string) => void,
   checkSubscription: ({ channelName: string, uri: string }) => void,
   subscriptions: Array<Subscription>,
+  setClientSetting: (string, boolean | string) => void,
+  autoplay: boolean,
 };
 
 class FilePage extends React.Component<Props> {
@@ -58,6 +63,12 @@ class FilePage extends React.Component<Props> {
     // TODO: Find a better way to detect supported types
     'application',
   ];
+
+  constructor(props: Props) {
+    super(props);
+
+    (this: any).onAutoplayChange = this.onAutoplayChange.bind(this);
+  }
 
   componentDidMount() {
     const { uri, fileInfo, fetchFileInfo, fetchCostInfo } = this.props;
@@ -77,6 +88,10 @@ class FilePage extends React.Component<Props> {
     if (nextProps.fileInfo === undefined) {
       fetchFileInfo(uri);
     }
+  }
+
+  onAutoplayChange(event: SyntheticInputEvent<*>) {
+    this.props.setClientSetting(settings.AUTOPLAY, event.target.checked);
   }
 
   checkSubscription = (props: Props) => {
@@ -108,6 +123,7 @@ class FilePage extends React.Component<Props> {
       navigate,
       costInfo,
       fileInfo,
+      autoplay,
     } = this.props;
 
     // File info
@@ -213,6 +229,17 @@ class FilePage extends React.Component<Props> {
                 <FileActions uri={uri} claimId={claim.claim_id} />
               </div>
             </div>
+            <FormRow padded>
+              <ToolTip direction="right" body={__('Automatically download and play free content.')}>
+                <FormField
+                  name="autoplay"
+                  type="checkbox"
+                  postfix={__('Autoplay')}
+                  checked={autoplay}
+                  onChange={this.onAutoplayChange}
+                />
+              </ToolTip>
+            </FormRow>
             <div className="card__content--extra-padding">
               <FileDetails uri={uri} />
             </div>

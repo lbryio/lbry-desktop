@@ -1,17 +1,13 @@
 // @flow
 import React from 'react';
 import FileTile from 'component/fileTile';
-import { FormRow, FormField } from 'component/common/form';
-import ToolTip from 'component/common/tooltip';
 import type { Claim } from 'types/claim';
 
 type Props = {
   uri: string,
   claim: ?Claim,
-  autoplay: boolean,
   recommendedContent: Array<string>,
   search: string => void,
-  setAutoplay: boolean => void,
 };
 
 type State = {
@@ -62,24 +58,11 @@ export default class RecommendedContent extends React.PureComponent<Props, State
   }
 
   render() {
-    const { autoplay, setAutoplay, recommendedContent } = this.props;
+    const { recommendedContent } = this.props;
 
     return (
       <section className="card__list--recommended">
-        <FormRow spaceBetween>
-          <span>Related</span>
-          <ToolTip onComponent body={__('Automatically download and play free content.')}>
-            <FormField
-              firstInList
-              affixClass="form-field__prefix--recommended-content"
-              name="autoplay"
-              type="checkbox"
-              prefix={__('Autoplay')}
-              checked={autoplay}
-              onChange={e => setAutoplay(e.target.checked)}
-            />
-          </ToolTip>
-        </FormRow>
+        <span>Related</span>
         {recommendedContent &&
           recommendedContent.length &&
           recommendedContent.map(recommendedUri => (
