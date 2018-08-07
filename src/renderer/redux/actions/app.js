@@ -139,10 +139,21 @@ export function doDownloadUpgradeRequested() {
   };
 }
 
-export function doAutoUpdate() {
+export function doClearUpgradeTimer() {
   return (dispatch, getState) => {
     const state = getState();
-    
+
+    if (selectUpgradeTimer(state)) {
+      clearInterval(selectUpgradeTimer(state));
+      dispatch({
+        type: ACTIONS.CLEAR_UPGRADE_TIMER,
+      });
+    }
+  };
+}
+
+export function doAutoUpdate() {
+  return dispatch => {
     dispatch({
       type: ACTIONS.AUTO_UPDATE_DOWNLOADED,
     });
@@ -153,19 +164,13 @@ export function doAutoUpdate() {
       })
     );
 
-    if (selectUpgradeTimer(state)) {
-      clearInterval(selectUpgradeTimer(state));
-    }
+    dispatch(doClearUpgradeTimer());
   };
 }
 
 export function doAutoUpdateDeclined() {
-  return (dispatch, getState) => {
-    const state = getState();
-
-    if (selectUpgradeTimer(state)) {
-      clearInterval(selectUpgradeTimer(state));
-    }
+  return dispatch => {
+    dispatch(doClearUpgradeTimer());
 
     dispatch({
       type: ACTIONS.AUTO_UPDATE_DECLINED,
