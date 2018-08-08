@@ -58,6 +58,9 @@ if (isDev) {
   app.commandLine.appendSwitch('ignore-gpu-blacklist');
   app.commandLine.appendSwitch('--disable-gpu-process-crash-limit');
   app.disableDomainBlockingFor3DAPIs();
+
+  // Disable security warnings in dev mode - https://github.com/electron/electron/blob/master/docs/tutorial/security.md#electron-security-warnings
+  process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = true;
 }
 
 app.on('ready', async () => {
