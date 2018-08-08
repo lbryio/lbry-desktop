@@ -13,7 +13,7 @@ import { doPurchaseUri } from 'redux/actions/content';
 import Promise from 'bluebird';
 import Lbryio from 'lbryio';
 
-const CHECK_SUBSCRIPTIONS_INTERVAL = 60 * 60 * 1000;
+const CHECK_SUBSCRIPTIONS_INTERVAL = 15 * 60 * 1000;
 const SUBSCRIPTION_DOWNLOAD_LIMIT = 1;
 
 export const doFetchMySubscriptions = () => (dispatch: Dispatch, getState: () => any) => {
@@ -127,6 +127,7 @@ export const setSubscriptionNotification = (
 export const doCheckSubscription = (subscription: Subscription, notify?: boolean) => (
   dispatch: Dispatch
 ) => {
+  // this action is not implemented
   dispatch({
     type: ACTIONS.CHECK_SUBSCRIPTION_STARTED,
     data: subscription,
@@ -136,28 +137,31 @@ export const doCheckSubscription = (subscription: Subscription, notify?: boolean
     const claimResult = result[subscription.uri] || {};
     const { claims_in_channel: claimsInChannel } = claimResult;
 
-    if (claimsInChannel) {
-      if (notify) {
-        claimsInChannel.reduce((prev, cur, index) => {
-          const uri = buildURI({ contentName: cur.name, claimId: cur.claim_id }, false);
-          if (prev === -1 && uri !== subscription.latest) {
-            dispatch(
-              setSubscriptionNotification(
-                subscription,
-                uri,
-                index < SUBSCRIPTION_DOWNLOAD_LIMIT && !cur.value.stream.metadata.fee
-                  ? NOTIFICATION_TYPES.DOWNLOADING
-                  : NOTIFICATION_TYPES.NOTIFY_ONLY
-              )
-            );
-            if (index < SUBSCRIPTION_DOWNLOAD_LIMIT && !cur.value.stream.metadata.fee) {
-              dispatch(doPurchaseUri(uri, { cost: 0 }));
-            }
-          }
-          return uri === subscription.latest || !subscription.latest ? index : prev;
-        }, -1);
-      }
+    const autodownload = true; // temp
 
+    const latestIndex = claimsInChannel.findIndex(
+      claim => `${claim.name}#${claim.claim_id}` === subscription.latest
+    );
+
+    if (claimsInChannel.length && latestIndex !== 0) {
+      claimsInChannel.slice(0, latestIndex === -1 ? 10 : latestIndex).forEach((claim, index) => {
+        const uri = buildURI({ contentName: claim.name, claimId: claim.claim_id }, false);
+        const shouldDownload = Boolean(
+          index < SUBSCRIPTION_DOWNLOAD_LIMIT && !claim.value.stream.metadata.fee
+        );
+        if (notify) {
+          dispatch(
+            setSubscriptionNotification(
+              subscription,
+              uri,
+              shouldDownload ? NOTIFICATION_TYPES.DOWNLOADING : NOTIFICATION_TYPES.NOTIFY_ONLY
+            )
+          );
+        }
+        if (autodownload && shouldDownload) {
+          dispatch(doPurchaseUri(uri, { cost: 0 }));
+        }
+      });
       dispatch(
         setSubscriptionLatest(
           {
@@ -177,11 +181,12 @@ export const doCheckSubscription = (subscription: Subscription, notify?: boolean
         )
       );
     }
+  });
 
-    dispatch({
-      type: ACTIONS.CHECK_SUBSCRIPTION_COMPLETED,
-      data: subscription,
-    });
+  // this action is not implemented
+  dispatch({
+    type: ACTIONS.CHECK_SUBSCRIPTION_COMPLETED,
+    data: subscription,
   });
 };
 
@@ -248,13 +253,14 @@ export const doCheckSubscriptions = () => (
   dispatch: Dispatch,
   getState: () => SubscriptionState
 ) => {
-  const checkSubscriptionsTimer = setInterval(
-    () =>
-      selectSubscriptions(getState()).map((subscription: Subscription) =>
-        dispatch(doCheckSubscription(subscription, true))
-      ),
-    CHECK_SUBSCRIPTIONS_INTERVAL
-  );
+  function doCheck() {
+    const subscriptions = selectSubscriptions(getState());
+    subscriptions.forEach((sub: Subscription) => {
+      dispatch(doCheckSubscription(sub, true));
+    });
+  }
+  setTimeout(doCheck, 2000); // bad fix for not getting subs on load
+  const checkSubscriptionsTimer = setInterval(doCheck, 1000 * 20); // temporary; 20 seconds for testing
   dispatch({
     type: ACTIONS.CHECK_SUBSCRIPTIONS_SUBSCRIBE,
     data: { checkSubscriptionsTimer },
