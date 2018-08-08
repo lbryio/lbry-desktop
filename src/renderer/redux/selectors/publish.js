@@ -48,6 +48,10 @@ export const selectPendingPublish = uri =>
 export const selectIsStillEditing = createSelector(selectPublishFormValues, publishState => {
   const { editingURI, uri } = publishState;
 
+  if (!editingURI || !uri) {
+    return false;
+  }
+
   const {
     isChannel: currentIsChannel,
     claimName: currentClaimName,
