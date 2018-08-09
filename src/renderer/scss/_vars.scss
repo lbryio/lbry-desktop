@@ -31,7 +31,7 @@ $large-breakpoint: 1921px;
   --color-dark-blue: #2f6f61;
   --color-light-blue: #49b2e2;
   --color-red: #e2495e;
-  --color-yellow: #e8b414;
+  --color-yellow: #fbd55e;
   --color-green: #399483;
   --color-green-light: #effbe4;
   --color-green-blue: #2ec1a8;
@@ -50,7 +50,7 @@ $large-breakpoint: 1921px;
   --color-placeholder: var(--color-grey);
   --color-search-placeholder: var(--color-placeholder);
   --color-credit-free: var(--color-dark-blue);
-  --color-credit-price: var(--color-yellow);
+  --color-credit-price: var(--card-text-color);
 
   /* Shadows */
   --box-shadow-layer: transparent; // 0 2px 4px rgba(0,0,0,0.25);

@@ -126,10 +126,12 @@ class FileTile extends React.PureComponent<Props> {
                 <span className="file-tile__channel">
                   {showUri ? uri : channel || __('Anonymous')}
                 </span>
+              </div>
+              <div className="card__file-properties">
+                <FilePrice hideFree uri={uri} />
                 {isRewardContent && <Icon iconColor="red" icon={icons.FEATURED} />}
                 {showLocal && isDownloaded && <Icon icon={icons.LOCAL} />}
               </div>
-              <FilePrice hideFree uri={uri} />
               {displayDescription && (
                 <div className="card__subtext card__subtext--small">
                   <TruncatedText lines={3}>{description}</TruncatedText>

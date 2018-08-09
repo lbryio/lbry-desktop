@@ -27,14 +27,14 @@ const ModalCreditIntro = (props: Props) => {
         </p>
         {currentBalance <= 0 && (
           <p>
-            You currently have <CreditAmount noStyle amount={currentBalance} />, so the actions you
-            can take are limited.
+            You currently have <CreditAmount inheritStyle amount={currentBalance} />, so the actions
+            you can take are limited.
           </p>
         )}
         {Boolean(totalRewardValue) && (
           <p>
             There are a variety of ways to get credits, including more than{' '}
-            <CreditAmount noStyle amount={totalRewardRounded} />{' '}
+            <CreditAmount inheritStyle amount={totalRewardRounded} />{' '}
             {__('in free rewards for participating in the LBRY beta.')}
           </p>
         )}

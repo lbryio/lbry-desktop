@@ -8,7 +8,7 @@ const select = (state, props) => ({
 });
 
 const perform = dispatch => ({
-  search: query => dispatch(doSearch(query, 20)),
+  search: query => dispatch(doSearch(query, 20, undefined, true)),
 });
 
 export default connect(

@@ -94,7 +94,7 @@ class FileCard extends React.PureComponent<Props> {
         <CardMedia thumbnail={thumbnail} />
         <div className="card__title-identity">
           <div className="card__title--small card__title--file-card">
-            <TruncatedText lines={3}>{title}</TruncatedText>
+            <TruncatedText lines={2}>{title}</TruncatedText>
           </div>
           <div className="card__subtitle">
             {pending ? <div>Pending...</div> : <UriIndicator uri={uri} link />}

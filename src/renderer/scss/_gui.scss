@@ -257,10 +257,8 @@ p {
 }
 
 .credit-amount {
-  font-family: 'metropolis-bold';
   font-size: 10px;
   white-space: nowrap;
-  padding: $spacing-vertical * 1/6 0;
 }
 
 .credit-amount--large {
@@ -269,6 +267,7 @@ p {
 }
 
 .credit-amount--file-page {
+  font-family: 'metropolis-bold';
   border-radius: 5px;
   padding: 5px;
 }

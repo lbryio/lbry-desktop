@@ -10,17 +10,11 @@ type Props = {
   search: string => void,
 };
 
-type State = {
-  didSearch: boolean,
-};
-
 export default class RecommendedContent extends React.PureComponent<Props, State> {
   constructor() {
     super();
 
-    this.state = {
-      didSearch: false,
-    };
+    this.didSearch = undefined;
   }
 
   componentDidMount() {
@@ -29,13 +23,12 @@ export default class RecommendedContent extends React.PureComponent<Props, State
 
   componentDidUpdate(prevProps: Props) {
     const { claim, uri } = this.props;
-    const { didSearch } = this.state;
 
     if (uri !== prevProps.uri) {
-      this.setState({ didSearch: false });
+      this.didSearch = false;
     }
 
-    if (claim && !didSearch) {
+    if (claim && !this.didSearch) {
       this.getRecommendedContent();
     }
   }
@@ -51,11 +44,13 @@ export default class RecommendedContent extends React.PureComponent<Props, State
           },
         },
       } = claim;
-      // console.log("search", title)
+
       search(title);
-      this.setState({ didSearch: true });
+      this.didSearch = true;
     }
   }
+
+  didSearch: ?boolean;
 
   render() {
     const { recommendedContent } = this.props;
