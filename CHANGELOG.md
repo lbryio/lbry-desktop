@@ -34,7 +34,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Fixed
   * Edit option missing from certain published claims ([#1756](https://github.com/lbryio/lbry-desktop/issues/1756))
-  * Fix navigation issue with channels that have more than one page ([#1797](https://github.com/lbryio/lbry-desktop/pull/1797))
+  * Navigation issue with channels that have more than one page ([#1797](https://github.com/lbryio/lbry-desktop/pull/1797))
+  * Navigation issue with channels that have more than one page ([#1797](https://github.com/lbryio/lbry-desktop/pull/1797))
+  * Upgrade modals would stack on-top of each other if the app was kept open for a long time ([#1857](https://github.com/lbryio/lbry-desktop/pull/1857))
 
 
 ## [0.22.2] - 2018-07-09
