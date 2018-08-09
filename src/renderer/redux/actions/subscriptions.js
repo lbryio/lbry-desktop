@@ -1,6 +1,7 @@
 // @flow
 import * as ACTIONS from 'constants/action_types';
 import * as NOTIFICATION_TYPES from 'constants/notification_types';
+import rewards from 'rewards';
 import type {
   Dispatch,
   SubscriptionState,
@@ -10,6 +11,7 @@ import type { Subscription } from 'types/subscription';
 import { selectSubscriptions } from 'redux/selectors/subscriptions';
 import { Lbry, buildURI, parseURI } from 'lbry-redux';
 import { doPurchaseUri } from 'redux/actions/content';
+import { doClaimRewardType } from 'redux/actions/rewards';
 import Promise from 'bluebird';
 import Lbryio from 'lbryio';
 
@@ -222,6 +224,8 @@ export const doChannelSubscribe = (subscription: Subscription) => (
       channel_name: subscription.channelName,
       claim_id: claimId,
     });
+
+    dispatch(doClaimRewardType(rewards.SUBSCRIPTION, { failSilently: true }));
   }
 
   dispatch(doCheckSubscription(subscription, true));
