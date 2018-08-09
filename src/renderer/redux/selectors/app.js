@@ -84,3 +84,5 @@ export const selectCurrentLanguage = createSelector(
 );
 
 export const selectVolume = createSelector(selectState, state => state.volume);
+
+export const selectUpgradeTimer = createSelector(selectState, state => state.checkUpgradeTimer);

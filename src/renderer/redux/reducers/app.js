@@ -184,6 +184,11 @@ reducers[ACTIONS.HISTORY_NAVIGATE] = state =>
     modalProps: {},
   });
 
+reducers[ACTIONS.CLEAR_UPGRADE_TIMER] = state =>
+  Object.assign({}, state, {
+    checkUpgradeTimer: undefined,
+  });
+
 export default function reducer(state: AppState = defaultState, action: any) {
   const handler = reducers[action.type];
   if (handler) return handler(state, action);
