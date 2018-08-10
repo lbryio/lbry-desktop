@@ -1,14 +1,12 @@
 // @flow
 import * as ACTIONS from 'constants/action_types';
 import * as NOTIFICATION_TYPES from 'constants/notification_types';
+import * as SETTINGS from 'constants/settings';
 import rewards from 'rewards';
-import type {
-  Dispatch,
-  SubscriptionState,
-  SubscriptionNotifications,
-} from 'redux/reducers/subscriptions';
+import type { Dispatch, SubscriptionNotifications } from 'redux/reducers/subscriptions';
 import type { Subscription } from 'types/subscription';
-import { selectSubscriptions } from 'redux/selectors/subscriptions';
+import { selectSubscriptions, selectDownloadingCount } from 'redux/selectors/subscriptions';
+import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { Lbry, buildURI, parseURI } from 'lbry-redux';
 import { doPurchaseUri } from 'redux/actions/content';
 import { doClaimRewardType } from 'redux/actions/rewards';
@@ -16,7 +14,7 @@ import Promise from 'bluebird';
 import Lbryio from 'lbryio';
 
 const CHECK_SUBSCRIPTIONS_INTERVAL = 15 * 60 * 1000;
-const SUBSCRIPTION_DOWNLOAD_LIMIT = 1;
+const SUBSCRIPTION_DOWNLOAD_LIMIT = 3;
 
 export const doFetchMySubscriptions = () => (dispatch: Dispatch, getState: () => any) => {
   const {
@@ -127,29 +125,28 @@ export const setSubscriptionNotification = (
   });
 
 export const doCheckSubscription = (subscription: Subscription, notify?: boolean) => (
-  dispatch: Dispatch
+  dispatch: Dispatch,
+  getState: () => {}
 ) => {
-  // this action is not implemented
-  dispatch({
-    type: ACTIONS.CHECK_SUBSCRIPTION_STARTED,
-    data: subscription,
-  });
+  // no dispatching FETCH_CHANNEL_CLAIMS_STARTED; causes loading issues on <SubscriptionsPage>
 
   Lbry.claim_list_by_channel({ uri: subscription.uri, page: 1 }).then(result => {
     const claimResult = result[subscription.uri] || {};
     const { claims_in_channel: claimsInChannel } = claimResult;
-
-    const autodownload = true; // temp
 
     const latestIndex = claimsInChannel.findIndex(
       claim => `${claim.name}#${claim.claim_id}` === subscription.latest
     );
 
     if (claimsInChannel.length && latestIndex !== 0) {
-      claimsInChannel.slice(0, latestIndex === -1 ? 10 : latestIndex).forEach((claim, index) => {
+      claimsInChannel.slice(0, latestIndex === -1 ? 10 : latestIndex).forEach(claim => {
         const uri = buildURI({ contentName: claim.name, claimId: claim.claim_id }, false);
+        const state = getState();
+        const downloadCount = selectDownloadingCount(state);
         const shouldDownload = Boolean(
-          index < SUBSCRIPTION_DOWNLOAD_LIMIT && !claim.value.stream.metadata.fee
+          downloadCount < SUBSCRIPTION_DOWNLOAD_LIMIT &&
+            !claim.value.stream.metadata.fee &&
+            makeSelectClientSetting(SETTINGS.AUTO_DOWNLOAD)(state)
         );
         if (notify) {
           dispatch(
@@ -160,10 +157,11 @@ export const doCheckSubscription = (subscription: Subscription, notify?: boolean
             )
           );
         }
-        if (autodownload && shouldDownload) {
+        if (shouldDownload) {
           dispatch(doPurchaseUri(uri, { cost: 0 }));
         }
       });
+
       dispatch(
         setSubscriptionLatest(
           {
@@ -182,13 +180,18 @@ export const doCheckSubscription = (subscription: Subscription, notify?: boolean
           )
         )
       );
-    }
-  });
 
-  // this action is not implemented
-  dispatch({
-    type: ACTIONS.CHECK_SUBSCRIPTION_COMPLETED,
-    data: subscription,
+      // calling FETCH_CHANNEL_CLAIMS_COMPLETED after not calling STARTED
+      // means it will delete a non-existant fetchingChannelClaims[uri]
+      dispatch({
+        type: ACTIONS.FETCH_CHANNEL_CLAIMS_COMPLETED,
+        data: {
+          uri: subscription.uri,
+          claims: claimsInChannel || [],
+          page: 1,
+        },
+      });
+    }
   });
 };
 
@@ -253,18 +256,20 @@ export const doChannelUnsubscribe = (subscription: Subscription) => (
   }
 };
 
-export const doCheckSubscriptions = () => (
-  dispatch: Dispatch,
-  getState: () => SubscriptionState
-) => {
-  function doCheck() {
-    const subscriptions = selectSubscriptions(getState());
-    subscriptions.forEach((sub: Subscription) => {
-      dispatch(doCheckSubscription(sub, true));
-    });
-  }
-  setTimeout(doCheck, 2000); // bad fix for not getting subs on load
-  const checkSubscriptionsTimer = setInterval(doCheck, 1000 * 20); // temporary; 20 seconds for testing
+export const doCheckSubscriptions = () => (dispatch: Dispatch, getState: () => any) => {
+  const state = getState();
+  const subscriptions = selectSubscriptions(state);
+  subscriptions.forEach((sub: Subscription) => {
+    dispatch(doCheckSubscription(sub, true));
+  });
+};
+
+export const doCheckSubscriptionsInit = () => (dispatch: Dispatch) => {
+  setTimeout(() => dispatch(doCheckSubscriptions()), 5000); // bad fix for not getting subs on load
+  const checkSubscriptionsTimer = setInterval(
+    () => dispatch(doCheckSubscriptions()),
+    CHECK_SUBSCRIPTIONS_INTERVAL
+  );
   dispatch({
     type: ACTIONS.CHECK_SUBSCRIPTIONS_SUBSCRIBE,
     data: { checkSubscriptionsTimer },

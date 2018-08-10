@@ -1,3 +1,4 @@
+import * as NOTIFICATION_TYPES from 'constants/notification_types';
 import { createSelector } from 'reselect';
 import {
   selectAllClaimsByChannel,
@@ -25,7 +26,7 @@ export const selectSubscriptionClaims = createSelector(
       return [];
     }
 
-    const fetchedSubscriptions = [];
+    let fetchedSubscriptions = [];
 
     savedSubscriptions.forEach(subscription => {
       let channelClaims = [];
@@ -39,18 +40,18 @@ export const selectSubscriptionClaims = createSelector(
         // loop over the list of ids and grab the claim
         pageOneChannelIds.forEach(id => {
           const grabbedClaim = allClaims[id];
-          channelClaims.push(grabbedClaim);
+          channelClaims = channelClaims.concat([grabbedClaim]);
         });
       }
 
-      fetchedSubscriptions.push({
-        claims: channelClaims,
+      fetchedSubscriptions = fetchedSubscriptions.concat([{
+        claims: [...channelClaims],
         channelName: subscription.channelName,
         uri: subscription.uri,
-      });
+      }]);
     });
 
-    return fetchedSubscriptions;
+    return [...fetchedSubscriptions];
   }
 );
 
@@ -68,4 +69,9 @@ export const selectSubscriptionsBeingFetched = createSelector(
 
     return fetchingSubscriptionMap;
   }
+);
+
+export const selectDownloadingCount = createSelector(
+  selectNotifications,
+  notifs => Object.values(notifs).reduce((acc, notif) => notif.type === NOTIFICATION_TYPES.DOWNLOADING ? acc + 1 : acc, 0)
 );

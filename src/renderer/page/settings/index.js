@@ -30,6 +30,7 @@ const select = state => ({
   autoplay: makeSelectClientSetting(settings.AUTOPLAY)(state),
   walletEncrypted: selectWalletIsEncrypted(state),
   osNotificationsEnabled: selectosNotificationsEnabled(state),
+  autoDownload: makeSelectClientSetting(settings.AUTO_DOWNLOAD)(state),
 });
 
 const perform = dispatch => ({

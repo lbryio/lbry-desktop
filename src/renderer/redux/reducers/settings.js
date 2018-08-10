@@ -26,6 +26,7 @@ const defaultState = {
     automaticDarkModeEnabled: getLocalStorageSetting(SETTINGS.AUTOMATIC_DARK_MODE_ENABLED, false),
     autoplay: getLocalStorageSetting(SETTINGS.AUTOPLAY, false),
     resultCount: Number(getLocalStorageSetting(SETTINGS.RESULT_COUNT, 50)),
+    autoDownload: getLocalStorageSetting(SETTINGS.AUTO_DOWNLOAD, false),
     osNotificationsEnabled: Boolean(
       getLocalStorageSetting(SETTINGS.OS_NOTIFICATIONS_ENABLED, true)
     ),

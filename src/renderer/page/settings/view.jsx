@@ -31,6 +31,7 @@ type Props = {
   themes: Array<string>,
   automaticDarkModeEnabled: boolean,
   autoplay: boolean,
+  autoDownload: boolean,
   encryptWallet: () => void,
   decryptWallet: () => void,
   walletEncrypted: boolean,
@@ -59,6 +60,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
     (this: any).onAutoplayChange = this.onAutoplayChange.bind(this);
     (this: any).clearCache = this.clearCache.bind(this);
     (this: any).onDesktopNotificationsChange = this.onDesktopNotificationsChange.bind(this);
+    (this: any).onAutoDownloadChange = this.onAutoDownloadChange.bind(this);
     // (this: any).onLanguageChange = this.onLanguageChange.bind(this)
   }
 
@@ -119,6 +121,10 @@ class SettingsPage extends React.PureComponent<Props, State> {
     this.props.setClientSetting(settings.SHOW_NSFW, event.target.checked);
   }
 
+  onAutoDownloadChange(event: SyntheticInputEvent<*>) {
+    this.props.setClientSetting(settings.AUTO_DOWNLOAD, event.target.checked);
+  }
+
   onChangeEncryptWallet() {
     const { props } = this;
     props.walletEncrypted ? props.decryptWallet() : props.encryptWallet();
@@ -157,6 +163,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
       autoplay,
       walletEncrypted,
       osNotificationsEnabled,
+      autoDownload,
     } = this.props;
 
     const noDaemonSettings = !daemonSettings || Object.keys(daemonSettings).length === 0;
@@ -264,6 +271,13 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 onChange={this.onAutoplayChange}
                 checked={autoplay}
                 postfix={__('Autoplay media files')}
+              />
+              <FormField
+                type="checkbox"
+                name="auto_download"
+                onChange={this.onAutoDownloadChange}
+                checked={autoDownload}
+                postfix={__('Automatically download new content')}
               />
               <FormField
                 type="checkbox"

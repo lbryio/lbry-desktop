@@ -18,7 +18,7 @@ import { doFetchDaemonSettings } from 'redux/actions/settings';
 import { doAuthNavigate } from 'redux/actions/navigation';
 import { doAuthenticate } from 'redux/actions/user';
 import { doPause } from 'redux/actions/media';
-import { doCheckSubscriptions } from 'redux/actions/subscriptions';
+import { doCheckSubscriptionsInit } from 'redux/actions/subscriptions';
 import {
   selectIsUpgradeSkipped,
   selectUpdateUrl,
@@ -347,7 +347,7 @@ export function doDaemonReady() {
       dispatch(doCheckUpgradeAvailable());
     }
     dispatch(doCheckUpgradeSubscribe());
-    dispatch(doCheckSubscriptions());
+    dispatch(doCheckSubscriptionsInit());
   };
 }
 

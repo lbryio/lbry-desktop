@@ -110,6 +110,7 @@ export function doUpdateLoadStatus(uri, outpoint) {
           dispatch(doUpdateLoadStatus(uri, outpoint));
         }, DOWNLOAD_POLL_INTERVAL);
       } else if (fileInfo.completed) {
+        const state = getState();
         // TODO this isn't going to get called if they reload the client before
         // the download finished
         dispatch({
@@ -121,13 +122,13 @@ export function doUpdateLoadStatus(uri, outpoint) {
           },
         });
 
-        const badgeNumber = selectBadgeNumber(getState());
+        const badgeNumber = selectBadgeNumber(state);
         setBadge(badgeNumber === 0 ? '' : `${badgeNumber}`);
 
-        const totalProgress = selectTotalDownloadProgress(getState());
+        const totalProgress = selectTotalDownloadProgress(state);
         setProgressBar(totalProgress);
 
-        const notifications = selectNotifications(getState());
+        const notifications = selectNotifications(state);
         if (notifications[uri] && notifications[uri].type === NOTIFICATION_TYPES.DOWNLOADING) {
           const count = Object.keys(notifications).reduce(
             (acc, cur) =>
@@ -138,7 +139,14 @@ export function doUpdateLoadStatus(uri, outpoint) {
             0
           );
 
-          if (selectosNotificationsEnabled(getState())) {
+          if (state.navigation.currentPath === '/subscriptions') {
+            dispatch(
+              doNotify({
+                message: `'${fileInfo.metadata.title}' has been downloaded`,
+                displayType: ['snackbar'],
+              })
+            );
+          } else if (selectosNotificationsEnabled(state)) {
             const notif = new window.Notification(notifications[uri].subscription.channelName, {
               body: `Posted ${fileInfo.metadata.title}${
                 count > 1 && count < 10 ? ` and ${count - 1} other new items` : ''
