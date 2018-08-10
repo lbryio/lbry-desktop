@@ -254,10 +254,11 @@ class PublishForm extends React.PureComponent<Props> {
       editingURI,
       isStillEditing,
       filePath,
+      uploadThumbnailStatus,
     } = this.props;
 
     // If they are editing, they don't need a new file chosen
-    const formValidLessFile = name && !nameError && title && bid && !bidError && tosAccepted;
+    const formValidLessFile = name && !nameError && title && bid && !bidError && tosAccepted && !(uploadThumbnailStatus === THUMBNAIL_STATUSES.IN_PROGRESS);
     return editingURI && !filePath ? isStillEditing && formValidLessFile : formValidLessFile;
   }
 
@@ -272,6 +273,7 @@ class PublishForm extends React.PureComponent<Props> {
       editingURI,
       filePath,
       isStillEditing,
+      uploadThumbnailStatus,
     } = this.props;
 
     const isFormValid = this.checkIsFormValid();
@@ -286,6 +288,8 @@ class PublishForm extends React.PureComponent<Props> {
           {name && nameError && <div>{__('The URL you created is not valid')}</div>}
           {!bid && <div>{__('A bid amount is required')}</div>}
           {!!bid && bidError && <div>{bidError}</div>}
+          {uploadThumbnailStatus === THUMBNAIL_STATUSES.IN_PROGRESS
+          && <div>{__('Please wait for thumbnail to finish uploading')}</div>}
           {!tosAccepted && <div>{__('You must agree to the terms of service')}</div>}
           {!!editingURI &&
             !isStillEditing &&
