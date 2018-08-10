@@ -59,7 +59,7 @@ export function openContextMenu(event, templates = [], canEdit = false, selectio
   }
 
   injectDevelopmentTemplate(event, templates);
-  remote.Menu.buildFromTemplate(templates).popup();
+  remote.Menu.buildFromTemplate(templates).popup({});
 }
 
 // This function is used for the markdown description on the publish page
