@@ -5,6 +5,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ## [Unreleased]
 
+<<<<<<< HEAD
 ### Added
  * Wallet Encryption/Decryption user flows ([#1785](https://github.com/lbryio/lbry-desktop/pull/1785))
  * Add FAQ to Publishing Area ([#1833](https://github.com/lbryio/lbry-desktop/pull/1833))
@@ -19,6 +20,18 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
  * Use router pattern for rendering file viewer ([#1544](https://github.com/lbryio/lbry-desktop/pull/1544))
  * Missing word "to" added to the Bid Help Text (#1854)
  * Updated to electron@2 ([#1858](https://github.com/lbryio/lbry-desktop/pull/1858))
+=======
+### Changed
+ * Show label when publish button is disabled while uploading thumbnail to spee.ch ([#1867](https://github.com/lbryio/lbry-desktop/pull/1867))
+
+## [0.23.1] - 2018-08-01
+
+### Fixed
+  * Fix ShapeShift integration ([#1842](https://github.com/lbryio/lbry-desktop/pull/1842))
+
+
+## [0.23.0] - 2018-07-25
+>>>>>>> add thumbnail label for disabled publish button
 
 ### Fixed
  * **Wallet -> Get Credits** page now shows correct ShapeShift status when it's avialable ([#1836](https://github.com/lbryio/lbry-desktop/issues/1836))
