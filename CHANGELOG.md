@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
  * Issue where publish page would show "Editing" on a new publish ([#1864](https://github.com/lbryio/lbry-desktop/pull/1864))
 
 ### Changed
+ * Upgrade LBRY Protocol to ([version 0.21.1](https://github.com/lbryio/lbry/releases/tag/v0.21.1)) to improve download speed and availability. 
  * Show label when publish button is disabled while uploading thumbnail to spee.ch ([#1867](https://github.com/lbryio/lbry-desktop/pull/1867))
 
 ## [0.23.1] - 2018-08-01
