@@ -24,6 +24,9 @@ class ThreeViewer extends React.PureComponent<Props> {
 
     const { theme } = this.props;
 
+    this.scene = null;
+    this.mesh = null;
+
     // Main container
     this.viewer = React.createRef();
 
@@ -75,7 +78,29 @@ class ThreeViewer extends React.PureComponent<Props> {
   }
 
   componentWillUnmount() {
+    // Remove event listeners
     window.removeEventListener('resize', this.handleResize, false);
+
+    // Free memory
+    if (this.mesh) {
+      // Clean up group
+      this.scene.remove(this.mesh);
+      if (this.mesh.geometry) this.mesh.geometry.dispose();
+      if (this.mesh.material) this.mesh.material.dispose();
+      // Clean up group items
+      this.mesh.traverse(child => {
+        if (child instanceof THREE.Mesh) {
+          if (child.geometry) child.geometry.dispose();
+          if (child.material) child.material.dispose();
+        }
+      });
+
+      // It's unclear if we need this:
+      // https://github.com/mrdoob/three.js/issues/12447
+      this.mesh = null;
+      this.renderer.renderLists.dispose();
+      this.renderer.dispose();
+    }
   }
 
   transformGroup(group) {
@@ -281,19 +306,23 @@ class ThreeViewer extends React.PureComponent<Props> {
 
     // Create model material
     this.material = new THREE.MeshPhongMaterial({
-      opacity: 1,
-      transparent: true,
-      // depthWrite: true,
+      // opacity: 1,
+      // transparent: true,
+      depthWrite: true,
       vertexColors: THREE.FaceColors,
       // Positive value pushes polygon further away
       // polygonOffsetFactor: 1,
       // polygonOffsetUnits: 1,
     });
+
     // Set material color
     this.material.color.set(this.materialColors.green);
 
     // Load file and render mesh
     this.startLoader();
+
+    // Append canvas
+    viewer.appendChild(canvas);
 
     const updateScene = () => {
       requestAnimationFrame(updateScene);
@@ -302,19 +331,18 @@ class ThreeViewer extends React.PureComponent<Props> {
     };
 
     updateScene();
-    // Append canvas
-    viewer.appendChild(canvas);
   }
 
   render() {
     const { error, isReady, isLoading } = this.state;
-    const loadingMessage = 'Loading 3D model.';
+    const errorMessage = error;
+    const loadingMessage = __('Loading 3D model.');
     const showViewer = isReady && !error;
     const showLoading = isLoading && !error;
 
     return (
       <React.Fragment>
-        {error && <LoadingScreen status={error} spinner={false} />}
+        {error && <LoadingScreen status={errorMessage} spinner={false} />}
         {showLoading && <LoadingScreen status={loadingMessage} spinner />}
         <div
           style={{ opacity: showViewer ? 1 : 0 }}
