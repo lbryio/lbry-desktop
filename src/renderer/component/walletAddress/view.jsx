@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import Button from 'component/button';
-import Address from 'component/address';
+import CopyableText from 'component/copyableText';
 import QRCode from 'component/common/qr-code';
 import * as icons from 'constants/icons';
 
@@ -48,7 +48,7 @@ class WalletAddress extends React.PureComponent<Props> {
         </p>
 
         <div className="card__content">
-          <Address address={receiveAddress} showCopyButton />
+          <CopyableText copyable={receiveAddress} showCopyButton />
         </div>
 
         <div className="card__actions">
