@@ -5,6 +5,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ## [Unreleased]
 
+### Fixed
+ * Issue where publish page would show "Editing" on a new publish ([#1864](https://github.com/lbryio/lbry-desktop/pull/1864))
+
 ### Changed
  * Show label when publish button is disabled while uploading thumbnail to spee.ch ([#1867](https://github.com/lbryio/lbry-desktop/pull/1867))
 
