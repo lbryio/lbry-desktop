@@ -5,6 +5,17 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ## [Unreleased]
 
+### Changed
+ * Show label when publish button is disabled while uploading thumbnail to spee.ch ([#1867](https://github.com/lbryio/lbry-desktop/pull/1867))
+
+## [0.23.1] - 2018-08-01
+
+### Fixed
+  * Fix ShapeShift integration ([#1842](https://github.com/lbryio/lbry-desktop/pull/1842))
+
+
+## [0.23.0] - 2018-07-25
+
 ### Fixed
 
   * Edit option missing from certain published claims ([#1756](https://github.com/lbryio/lbry-desktop/issues/1756))
