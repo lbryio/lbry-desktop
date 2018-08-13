@@ -7,16 +7,18 @@ type Props = {
   dark?: boolean, // always a dark spinner
   light?: boolean, // always a light spinner
   theme: string,
+  type: ?string,
 };
 
 const Spinner = (props: Props) => {
-  const { dark, light, theme } = props;
+  const { dark, light, theme, type } = props;
 
   return (
     <div
       className={classnames('spinner', {
         'spinner--dark': !light && (dark || theme === LIGHT_THEME),
         'spinner--light': !dark && (light || theme === DARK_THEME),
+        'spinner--splash': type === 'splash',
       })}
     >
       <div className="rect rect1" />
