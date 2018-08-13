@@ -1,4 +1,3 @@
-import * as NOTIFICATION_TYPES from 'constants/notification_types';
 import { createSelector } from 'reselect';
 import {
   selectAllClaimsByChannel,
@@ -44,11 +43,13 @@ export const selectSubscriptionClaims = createSelector(
         });
       }
 
-      fetchedSubscriptions = fetchedSubscriptions.concat([{
-        claims: [...channelClaims],
-        channelName: subscription.channelName,
-        uri: subscription.uri,
-      }]);
+      fetchedSubscriptions = fetchedSubscriptions.concat([
+        {
+          claims: [...channelClaims],
+          channelName: subscription.channelName,
+          uri: subscription.uri,
+        },
+      ]);
     });
 
     return [...fetchedSubscriptions];
@@ -69,9 +70,4 @@ export const selectSubscriptionsBeingFetched = createSelector(
 
     return fetchingSubscriptionMap;
   }
-);
-
-export const selectDownloadingCount = createSelector(
-  selectNotifications,
-  notifs => Object.values(notifs).reduce((acc, notif) => notif.type === NOTIFICATION_TYPES.DOWNLOADING ? acc + 1 : acc, 0)
 );

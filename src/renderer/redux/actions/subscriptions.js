@@ -5,7 +5,7 @@ import * as SETTINGS from 'constants/settings';
 import rewards from 'rewards';
 import type { Dispatch, SubscriptionNotifications } from 'redux/reducers/subscriptions';
 import type { Subscription } from 'types/subscription';
-import { selectSubscriptions, selectDownloadingCount } from 'redux/selectors/subscriptions';
+import { selectSubscriptions } from 'redux/selectors/subscriptions';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { Lbry, buildURI, parseURI } from 'lbry-redux';
 import { doPurchaseUri } from 'redux/actions/content';
@@ -14,7 +14,7 @@ import Promise from 'bluebird';
 import Lbryio from 'lbryio';
 
 const CHECK_SUBSCRIPTIONS_INTERVAL = 15 * 60 * 1000;
-const SUBSCRIPTION_DOWNLOAD_LIMIT = 3;
+const SUBSCRIPTION_DOWNLOAD_LIMIT = 1;
 
 export const doFetchMySubscriptions = () => (dispatch: Dispatch, getState: () => any) => {
   const {
@@ -124,11 +124,10 @@ export const setSubscriptionNotification = (
     },
   });
 
-export const doCheckSubscription = (
-  subscription: Subscription,
-  notify?: boolean,
-  preventDownload?: boolean
-) => (dispatch: Dispatch, getState: () => {}) => {
+export const doCheckSubscription = (subscription: Subscription, notify?: boolean) => (
+  dispatch: Dispatch,
+  getState: () => {}
+) => {
   // no dispatching FETCH_CHANNEL_CLAIMS_STARTED; causes loading issues on <SubscriptionsPage>
 
   Lbry.claim_list_by_channel({ uri: subscription.uri, page: 1 }).then(result => {
@@ -140,13 +139,12 @@ export const doCheckSubscription = (
     );
 
     if (claimsInChannel.length && latestIndex !== 0) {
+      let downloadCount = 0;
       claimsInChannel.slice(0, latestIndex === -1 ? 10 : latestIndex).forEach(claim => {
         const uri = buildURI({ contentName: claim.name, claimId: claim.claim_id }, false);
         const state = getState();
-        const downloadCount = selectDownloadingCount(state);
         const shouldDownload = Boolean(
-          !preventDownload &&
-            downloadCount < SUBSCRIPTION_DOWNLOAD_LIMIT &&
+          downloadCount < SUBSCRIPTION_DOWNLOAD_LIMIT &&
             !claim.value.stream.metadata.fee &&
             makeSelectClientSetting(SETTINGS.AUTO_DOWNLOAD)(state)
         );
@@ -160,6 +158,7 @@ export const doCheckSubscription = (
           );
         }
         if (shouldDownload) {
+          downloadCount += 1;
           dispatch(doPurchaseUri(uri, { cost: 0 }));
         }
       });
@@ -233,7 +232,7 @@ export const doChannelSubscribe = (subscription: Subscription) => (
     dispatch(doClaimRewardType(rewards.SUBSCRIPTION, { failSilently: true }));
   }
 
-  dispatch(doCheckSubscription(subscription, false, true));
+  dispatch(doCheckSubscription(subscription, true));
 };
 
 export const doChannelUnsubscribe = (subscription: Subscription) => (
@@ -267,7 +266,10 @@ export const doCheckSubscriptions = () => (dispatch: Dispatch, getState: () => a
 };
 
 export const doCheckSubscriptionsInit = () => (dispatch: Dispatch) => {
-  setTimeout(() => dispatch(doCheckSubscriptions()), 5000); // bad fix for not getting subs on load
+  // doCheckSubscriptionsInit is called by doDaemonReady
+  // setTimeout below is a hack to ensure redux is hydrated when subscriptions are checked
+  // this will be replaced with <PersistGate> which reqiures a package upgrade
+  setTimeout(() => dispatch(doCheckSubscriptions()), 5000);
   const checkSubscriptionsTimer = setInterval(
     () => dispatch(doCheckSubscriptions()),
     CHECK_SUBSCRIPTIONS_INTERVAL
