@@ -29,7 +29,7 @@ export class SplashScreen extends React.PureComponent<Props, State> {
     super(props);
 
     this.state = {
-      details: __('Starting daemon'),
+      details: __('Starting up'),
       message: __('Connecting'),
       isRunning: false,
       // launchedModal: false,
