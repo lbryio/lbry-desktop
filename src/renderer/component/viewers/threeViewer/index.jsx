@@ -18,14 +18,68 @@ type Props = {
   },
 };
 
-class ThreeViewer extends React.PureComponent<Props> {
+type State = {
+  error?: string,
+  isReady: boolean,
+  isLoading: boolean,
+};
+
+class ThreeViewer extends React.PureComponent<Props, State> {
+  static testWebgl = new Promise((resolve, reject) => {
+    if (detectWebGL()) {
+      resolve();
+    } else {
+      reject();
+    }
+  });
+
+  static createGeometry(data) {
+    const geometry = new THREE.Geometry();
+    geometry.fromBufferGeometry(data);
+    geometry.computeBoundingBox();
+    geometry.computeVertexNormals();
+    geometry.center();
+    geometry.rotateX(-Math.PI / 2);
+    geometry.lookAt(new THREE.Vector3(0, 0, 1));
+    return geometry;
+  }
+
+  static fitMeshToCamera(group) {
+    const max = { x: 0, y: 0, z: 0 };
+    const min = { x: 0, y: 0, z: 0 };
+
+    group.traverse(child => {
+      if (child instanceof THREE.Mesh) {
+        const box = new THREE.Box3().setFromObject(child);
+        // Max
+        max.x = box.max.x > max.x ? box.max.x : max.x;
+        max.y = box.max.y > max.y ? box.max.y : max.y;
+        max.z = box.max.z > max.z ? box.max.z : max.z;
+        // Min
+        min.x = box.min.x < min.x ? box.min.x : min.x;
+        min.y = box.min.y < min.y ? box.min.y : min.y;
+        min.z = box.min.z < min.z ? box.min.z : min.z;
+      }
+    });
+
+    const meshY = Math.abs(max.y - min.y);
+    const meshX = Math.abs(max.x - min.x);
+    const scaleFactor = 10 / Math.max(meshX, meshY);
+
+    group.scale.set(scaleFactor, scaleFactor, scaleFactor);
+    group.position.setY((meshY / 2) * scaleFactor);
+    // Reset object position
+    const box = new THREE.Box3().setFromObject(group);
+    box.getCenter(group.position);
+    // Update position
+    group.position.multiplyScalar(-1);
+    group.position.setY(group.position.y + meshY * scaleFactor);
+  }
+
   constructor(props: Props) {
     super(props);
 
     const { theme } = this.props;
-
-    this.scene = null;
-    this.mesh = null;
 
     // Main container
     this.viewer = React.createRef();
@@ -66,15 +120,17 @@ class ThreeViewer extends React.PureComponent<Props> {
   }
 
   componentDidMount() {
-    if (detectWebGL()) {
-      this.renderScene();
-      // Update render on resize window
-      window.addEventListener('resize', this.handleResize, false);
-    } else {
-      // No webgl support, handle Error...
-      // TODO: Use a better error message
-      this.setState({ error: "Sorry, your computer doesn't support WebGL." });
-    }
+    ThreeViewer.testWebgl
+      .then(() => {
+        this.renderScene();
+        // Update render on resize window
+        window.addEventListener('resize', this.handleResize, false);
+      })
+      .catch(() => {
+        // No webgl support, handle Error...
+        // TODO: Use a better error message
+        this.setState({ error: "Sorry, your computer doesn't support WebGL." });
+      });
   }
 
   componentWillUnmount() {
@@ -104,7 +160,7 @@ class ThreeViewer extends React.PureComponent<Props> {
   }
 
   transformGroup(group) {
-    this.fitMeshToCamera(group);
+    ThreeViewer.fitMeshToCamera(group);
     this.createWireFrame(group);
     this.updateControlsTarget(group.position);
   }
@@ -123,17 +179,6 @@ class ThreeViewer extends React.PureComponent<Props> {
     return controls;
   }
 
-  createGeometry(data) {
-    const geometry = new THREE.Geometry();
-    geometry.fromBufferGeometry(data);
-    geometry.computeBoundingBox();
-    geometry.computeVertexNormals();
-    geometry.center();
-    geometry.rotateX(-Math.PI / 2);
-    geometry.lookAt(new THREE.Vector3(0, 0, 1));
-    return geometry;
-  }
-
   createWireFrame(group) {
     const wireframeGeometry = new THREE.WireframeGeometry(group.geometry);
     const wireframeMaterial = new THREE.LineBasicMaterial({
@@ -150,40 +195,6 @@ class ThreeViewer extends React.PureComponent<Props> {
   toggleWireFrame(show = false) {
     this.wireframe.opacity = show ? 1 : 0;
     this.mesh.material.opacity = show ? 0 : 1;
-  }
-
-  fitMeshToCamera(group) {
-    const max = { x: 0, y: 0, z: 0 };
-    const min = { x: 0, y: 0, z: 0 };
-
-    group.traverse(child => {
-      if (child instanceof THREE.Mesh) {
-        const box = new THREE.Box3().setFromObject(child);
-        // Max
-        max.x = box.max.x > max.x ? box.max.x : max.x;
-        max.y = box.max.y > max.y ? box.max.y : max.y;
-        max.z = box.max.z > max.z ? box.max.z : max.z;
-        // Min
-        min.x = box.min.x < min.x ? box.min.x : min.x;
-        min.y = box.min.y < min.y ? box.min.y : min.y;
-        min.z = box.min.z < min.z ? box.min.z : min.z;
-      }
-    });
-
-    const meshY = Math.abs(max.y - min.y);
-    const meshX = Math.abs(max.x - min.x);
-
-    const scaleFactor = 10 / Math.max(meshX, meshY);
-
-    group.scale.set(scaleFactor, scaleFactor, scaleFactor);
-    group.position.setY((meshY / 2) * scaleFactor);
-
-    // Reset object position
-    const box = new THREE.Box3().setFromObject(group);
-    box.getCenter(group.position);
-
-    group.position.multiplyScalar(-1);
-    group.position.setY(group.position.y + meshY * scaleFactor);
   }
 
   startLoader() {
@@ -231,7 +242,7 @@ class ThreeViewer extends React.PureComponent<Props> {
   }
 
   renderStl(data) {
-    const geometry = this.createGeometry(data);
+    const geometry = ThreeViewer.createGeometry(data);
     const group = new THREE.Mesh(geometry, this.material);
     // Assign name
     group.name = 'objectGroup';
@@ -335,14 +346,13 @@ class ThreeViewer extends React.PureComponent<Props> {
 
   render() {
     const { error, isReady, isLoading } = this.state;
-    const errorMessage = error;
     const loadingMessage = __('Loading 3D model.');
     const showViewer = isReady && !error;
     const showLoading = isLoading && !error;
 
     return (
       <React.Fragment>
-        {error && <LoadingScreen status={errorMessage} spinner={false} />}
+        {error && <LoadingScreen status={error} spinner={false} />}
         {showLoading && <LoadingScreen status={loadingMessage} spinner />}
         <div
           style={{ opacity: showViewer ? 1 : 0 }}
