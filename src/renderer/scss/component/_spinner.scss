@@ -42,6 +42,14 @@
   }
 }
 
+.spinner--splash {
+  margin-top: $spacing-vertical;
+
+  .rect {
+    background-color: var(--color-white);
+  }
+}
+
 @keyframes sk-stretchdelay {
   0%,
   40%,
