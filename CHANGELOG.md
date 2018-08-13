@@ -5,7 +5,8 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ## [Unreleased]
 
-<<<<<<< HEAD
+### Fixed
+
 ### Added
  * Wallet Encryption/Decryption user flows ([#1785](https://github.com/lbryio/lbry-desktop/pull/1785))
  * Add FAQ to Publishing Area ([#1833](https://github.com/lbryio/lbry-desktop/pull/1833))
@@ -20,9 +21,17 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
  * Use router pattern for rendering file viewer ([#1544](https://github.com/lbryio/lbry-desktop/pull/1544))
  * Missing word "to" added to the Bid Help Text (#1854)
  * Updated to electron@2 ([#1858](https://github.com/lbryio/lbry-desktop/pull/1858))
-=======
+
+## [0.24.0] - 2018-08-14
+
+### Fixed
+ * Issue where publish page would show "Editing" on a new publish ([#1864](https://github.com/lbryio/lbry-desktop/pull/1864))
+ 
+### Added
+ * Upgraded to LBRY daemon@0.21.1 ([v0.21.1](https://github.com/lbryio/lbry/releases/tag/v0.21.1))
+ 
 ### Changed
- * Show label when publish button is disabled while uploading thumbnail to spee.ch ([#1867](https://github.com/lbryio/lbry-desktop/pull/1867))
+* Show label when publish button is disabled while uploading thumbnail to spee.ch ([#1867](https://github.com/lbryio/lbry-desktop/pull/1867))
 
 ## [0.23.1] - 2018-08-01
 
