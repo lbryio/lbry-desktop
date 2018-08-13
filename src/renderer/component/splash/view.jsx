@@ -110,12 +110,7 @@ export class SplashScreen extends React.PureComponent<Props, State> {
         message: __('Blockchain Sync'),
         details: __(format, status.wallet.blocks_behind),
       });
-    } else if (
-      status.blockchain_headers &&
-      status.blockchain_headers.download_progress === 100 &&
-      status.wallet &&
-      status.wallet.blocks_behind === 0
-    ) {
+    } else if (status.wallet && status.wallet.blocks_behind === 0) {
       this.setState({
         message: 'Network Loading',
         details: 'Initializing LBRY service...',
