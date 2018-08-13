@@ -67,7 +67,7 @@ class HelpPage extends React.PureComponent<Props, State> {
     });
     Lbry.status().then(info => {
       this.setState({
-        lbryId: info.lbry_id,
+        lbryId: info.installation_id,
       });
     });
 
