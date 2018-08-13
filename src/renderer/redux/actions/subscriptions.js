@@ -124,10 +124,11 @@ export const setSubscriptionNotification = (
     },
   });
 
-export const doCheckSubscription = (subscription: Subscription, notify?: boolean) => (
-  dispatch: Dispatch,
-  getState: () => {}
-) => {
+export const doCheckSubscription = (
+  subscription: Subscription,
+  notify?: boolean,
+  preventDownload?: boolean
+) => (dispatch: Dispatch, getState: () => {}) => {
   // no dispatching FETCH_CHANNEL_CLAIMS_STARTED; causes loading issues on <SubscriptionsPage>
 
   Lbry.claim_list_by_channel({ uri: subscription.uri, page: 1 }).then(result => {
@@ -144,7 +145,8 @@ export const doCheckSubscription = (subscription: Subscription, notify?: boolean
         const state = getState();
         const downloadCount = selectDownloadingCount(state);
         const shouldDownload = Boolean(
-          downloadCount < SUBSCRIPTION_DOWNLOAD_LIMIT &&
+          !preventDownload &&
+            downloadCount < SUBSCRIPTION_DOWNLOAD_LIMIT &&
             !claim.value.stream.metadata.fee &&
             makeSelectClientSetting(SETTINGS.AUTO_DOWNLOAD)(state)
         );
@@ -231,7 +233,7 @@ export const doChannelSubscribe = (subscription: Subscription) => (
     dispatch(doClaimRewardType(rewards.SUBSCRIPTION, { failSilently: true }));
   }
 
-  dispatch(doCheckSubscription(subscription, true));
+  dispatch(doCheckSubscription(subscription, false, true));
 };
 
 export const doChannelUnsubscribe = (subscription: Subscription) => (
