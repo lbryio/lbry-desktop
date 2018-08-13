@@ -65,7 +65,7 @@ class HelpPage extends React.PureComponent<Props, State> {
         versionInfo: info,
       });
     });
-    Lbry.status({ session_status: true }).then(info => {
+    Lbry.status().then(info => {
       this.setState({
         lbryId: info.lbry_id,
       });
