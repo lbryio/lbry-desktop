@@ -13,6 +13,7 @@ type Props = {
   filePage?: boolean,
   inheritStyle?: boolean,
   showLBC?: boolean,
+  hideFree?: boolean, // hide the file price if it's free
 };
 
 class FilePrice extends React.PureComponent<Props> {
@@ -37,7 +38,11 @@ class FilePrice extends React.PureComponent<Props> {
   };
 
   render() {
-    const { costInfo, showFullPrice, filePage, inheritStyle, showLBC } = this.props;
+    const { costInfo, showFullPrice, filePage, inheritStyle, showLBC, hideFree } = this.props;
+
+    if (costInfo && !costInfo.cost && hideFree) {
+      return null;
+    }
 
     return costInfo ? (
       <CreditAmount

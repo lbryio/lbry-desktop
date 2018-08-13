@@ -9,9 +9,10 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
  * Wallet Encryption/Decryption user flows ([#1785](https://github.com/lbryio/lbry-desktop/pull/1785))
  * Add FAQ to Publishing Area ([#1833](https://github.com/lbryio/lbry-desktop/pull/1833))
  * Better preview for content ([#620](https://github.com/lbryio/lbry-desktop/pull/620))
- * Add new markdown and docx viewer ([#1826](https://github.com/lbryio/lbry-desktop/pull/1826))
- * Add new viewer for human-readable text files ([#1826](https://github.com/lbryio/lbry-desktop/pull/1826))
- * Add csv and json viewer ([#1410](https://github.com/lbryio/lbry-desktop/pull/1410))
+ * New markdown and docx viewer ([#1826](https://github.com/lbryio/lbry-desktop/pull/1826))
+ * New viewer for human-readable text files ([#1826](https://github.com/lbryio/lbry-desktop/pull/1826))
+ * CSV and JSON viewer ([#1410](https://github.com/lbryio/lbry-desktop/pull/1410))
+ * Recommended content on file viewer page ([#1845](https://github.com/lbryio/lbry-desktop/pull/1845))
 
 ### Changed
  * Pass error message from spee.ch API during thumbnail upload ([#1840](https://github.com/lbryio/lbry-desktop/pull/1840))

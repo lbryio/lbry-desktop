@@ -9,6 +9,7 @@
   --color-bg: var(--color-blue-grey);
   --color-bg-alt: #2D3D56;
   --color-placeholder: var(--color-bg-alt);
+  --color-credit-free: var(--color-secondary);
 
   /* Text */
   --text-color: var(--color-white);

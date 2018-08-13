@@ -1,73 +1,72 @@
 // @flow
 import React from 'react';
 import FileTile from 'component/fileTile';
-import { FormRow, FormField } from 'component/common/form';
-import ToolTip from 'component/common/tooltip';
 import type { Claim } from 'types/claim';
-import { buildURI, parseURI } from 'lbry-redux';
 
 type Props = {
   uri: string,
-  channelUri: ?string,
-  claimsInChannel: ?Array<Claim>,
-  autoplay: boolean,
-  setAutoplay: boolean => void,
-  fetchClaims: (string, number) => void,
+  claim: ?Claim,
+  recommendedContent: Array<string>,
+  search: string => void,
 };
 
-export default class RecommendedContent extends React.PureComponent<Props> {
+export default class RecommendedContent extends React.PureComponent<Props, State> {
+  constructor() {
+    super();
+
+    this.didSearch = undefined;
+  }
+
   componentDidMount() {
-    const { channelUri, fetchClaims, claimsInChannel } = this.props;
-    if (channelUri && !claimsInChannel) {
-      fetchClaims(channelUri, 1);
+    this.getRecommendedContent();
+  }
+
+  componentDidUpdate(prevProps: Props) {
+    const { claim, uri } = this.props;
+
+    if (uri !== prevProps.uri) {
+      this.didSearch = false;
+    }
+
+    if (claim && !this.didSearch) {
+      this.getRecommendedContent();
     }
   }
 
-  render() {
-    const { claimsInChannel, autoplay, uri, setAutoplay } = this.props;
+  getRecommendedContent() {
+    const { claim, search } = this.props;
 
-    let recommendedContent;
-    if (claimsInChannel) {
-      recommendedContent = claimsInChannel.filter(claim => {
-        const { name, claim_id: claimId, channel_name: channelName, value } = claim;
-        const { isChannel } = parseURI(uri);
+    if (claim && claim.value && claim.value.stream && claim.value.stream.metadata) {
+      const {
+        value: {
+          stream: {
+            metadata: { title },
+          },
+        },
+      } = claim;
 
-        // The uri may include the channel name
-        const recommendedUri =
-          isChannel && value && value.publisherSignature
-            ? buildURI({
-                contentName: name,
-                claimName: channelName,
-                claimId: value.publisherSignature.certificateId,
-              })
-            : buildURI({ claimName: name, claimId });
-
-        return recommendedUri !== uri;
-      });
+      search(title);
+      this.didSearch = true;
     }
+  }
+
+  didSearch: ?boolean;
+
+  render() {
+    const { recommendedContent } = this.props;
 
     return (
       <section className="card__list--recommended">
-        <FormRow>
-          <ToolTip onComponent body={__('Automatically download and play free content.')}>
-            <FormField
-              useToggle
-              firstInList
-              name="autoplay"
-              type="checkbox"
-              prefix={__('Autoplay')}
-              checked={autoplay}
-              onChange={e => setAutoplay(e.target.checked)}
-            />
-          </ToolTip>
-        </FormRow>
+        <span>Related</span>
         {recommendedContent &&
-          recommendedContent.map(({ permanent_url: permanentUrl }) => (
+          recommendedContent.length &&
+          recommendedContent.map(recommendedUri => (
             <FileTile
               small
+              hideNoResult
               displayDescription={false}
-              key={permanentUrl}
-              uri={`lbry://${permanentUrl}`}
+              key={recommendedUri}
+              uri={recommendedUri}
             />
           ))}
       </section>

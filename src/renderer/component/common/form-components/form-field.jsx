@@ -40,7 +40,6 @@ export class FormField extends React.PureComponent<Props> {
       children,
       stretch,
       affixClass,
-      firstInList,
       ...inputProps
     } = this.props;
 
@@ -103,7 +102,6 @@ export class FormField extends React.PureComponent<Props> {
         <div
           className={classnames('form-field__input', {
             'form-field--auto-height': type === 'markdown',
-            'form-field--first-item': firstInList,
           })}
         >
           {prefix && (

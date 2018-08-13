@@ -116,18 +116,22 @@ class FileTile extends React.PureComponent<Props> {
                   'card__title--x-small': small,
                 })}
               >
-                <TruncatedText lines={3}>{title || name}</TruncatedText>
+                <TruncatedText lines={small ? 2 : 3}>{title || name}</TruncatedText>
               </div>
               <div
                 className={classnames('card__subtitle', {
                   'card__subtitle--x-small': small,
                 })}
               >
-                {showUri ? uri : channel || __('Anonymous')}
-                {isRewardContent && <Icon icon={icons.FEATURED} />}
+                <span className="file-tile__channel">
+                  {showUri ? uri : channel || __('Anonymous')}
+                </span>
+              </div>
+              <div className="card__file-properties">
+                <FilePrice hideFree uri={uri} />
+                {isRewardContent && <Icon iconColor="red" icon={icons.FEATURED} />}
                 {showLocal && isDownloaded && <Icon icon={icons.LOCAL} />}
               </div>
-              <FilePrice uri={uri} />
               {displayDescription && (
                 <div className="card__subtext card__subtext--small">
                   <TruncatedText lines={3}>{description}</TruncatedText>

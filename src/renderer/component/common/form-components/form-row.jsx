@@ -17,7 +17,7 @@ export class FormRow extends React.PureComponent<Props> {
   };
 
   render() {
-    const { centered, children, padded, verticallyCentered, stretch, alignRight } = this.props;
+    const { children, padded, verticallyCentered, stretch, alignRight } = this.props;
     return (
       <div
         className={classnames('form-row', {

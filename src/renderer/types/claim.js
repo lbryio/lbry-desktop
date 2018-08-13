@@ -34,6 +34,8 @@ export type Claim = {
     publisherSignature: ?{
       certificateId: ?string,
     },
-    stream: ?Metadata,
+    stream: {
+      metadata: ?Metadata,
+    },
   },
 };

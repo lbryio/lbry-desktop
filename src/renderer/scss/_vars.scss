@@ -9,7 +9,7 @@ $large-breakpoint: 1921px;
 
 :root {
   /* Widths & spacings */
-  --side-nav-width: 190px;
+  --side-nav-width: 160px;
   --side-nav-width-m: 240px;
   --side-nav-width-l: 320px;
   --font-size-subtext-multiple: 0.92;
@@ -49,6 +49,8 @@ $large-breakpoint: 1921px;
   --color-bg-alt: var(--color-grey-light);
   --color-placeholder: var(--color-grey);
   --color-search-placeholder: var(--color-placeholder);
+  --color-credit-free: var(--color-dark-blue);
+  --color-credit-price: var(--card-text-color);
 
   /* Shadows */
   --box-shadow-layer: transparent; // 0 2px 4px rgba(0,0,0,0.25);

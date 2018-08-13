@@ -1,5 +1,5 @@
 .nav {
-  width: var(--side-nav-width);
+  min-width: var(--side-nav-width);
   background-color: var(--nav-bg-color);
   padding: $spacing-width * 1/3;
   color: var(--nav-color);
@@ -13,11 +13,11 @@
 
   @media (min-width: $medium-breakpoint) {
     padding-left: $spacing-width;
-    width: calc(var(--side-nav-width) * 1.2);
+    width: calc(var(--side-nav-width) * 1.4);
   }
 
   @media (min-width: $large-breakpoint) {
-    width: calc(var(--side-nav-width) * 1.4);
+    width: calc(var(--side-nav-width) * 1.6);
   }
 }
 
