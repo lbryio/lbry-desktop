@@ -36,7 +36,7 @@ class FileListSearch extends React.PureComponent<Props> {
         <React.Fragment>
           <div className="search__results">
             <div className="search-result__row">
-              <div className="file-list__header">{__('Content')}</div>
+              <div className="file-list__header">{__('Search Results')}</div>
               <HiddenNsfwClaims uris={uris} />
               {!isSearching && fileResults.length ? (
                 fileResults.map(uri => <FileTile key={uri} uri={uri} />)

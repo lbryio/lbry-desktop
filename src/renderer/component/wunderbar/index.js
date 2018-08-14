@@ -2,6 +2,7 @@ import { connect } from 'react-redux';
 import {
   selectSearchState as selectSearch,
   selectWunderBarAddress,
+  selectSearchSuggestions,
   doUpdateSearchQuery,
   doFocusSearchInput,
   doBlurSearchInput,
@@ -23,6 +24,7 @@ const select = state => {
   return {
     ...searchState,
     wunderbarValue,
+    suggestions: selectSearchSuggestions(state),
     resultCount: makeSelectClientSetting(settings.RESULT_COUNT)(state),
   };
 };

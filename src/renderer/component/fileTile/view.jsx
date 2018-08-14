@@ -9,6 +9,7 @@ import Icon from 'component/common/icon';
 import Button from 'component/button';
 import classnames from 'classnames';
 import FilePrice from 'component/filePrice';
+import UriIndicator from 'component/uriIndicator';
 
 type Props = {
   showUri: boolean,
@@ -90,10 +91,8 @@ class FileTile extends React.PureComponent<Props> {
     const onClick = () => navigate('/show', { uri });
 
     let name;
-    let channel;
     if (claim) {
       ({ name } = claim);
-      channel = claim.channel_name;
     }
 
     return !name && hideNoResult ? null : (
@@ -137,7 +136,7 @@ class FileTile extends React.PureComponent<Props> {
                 })}
               >
                 <span className="file-tile__channel">
-                  {showUri ? uri : channel || __('Anonymous')}
+                  {showUri ? uri : <UriIndicator uri={uri} link />}
                 </span>
               </div>
               <div className="card__file-properties">
