@@ -277,7 +277,7 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 name="auto_download"
                 onChange={this.onAutoDownloadChange}
                 checked={autoDownload}
-                postfix={__('Automatically download new content')}
+                postfix={__('Automatically download new content from your subscriptions')}
               />
               <FormField
                 type="checkbox"
