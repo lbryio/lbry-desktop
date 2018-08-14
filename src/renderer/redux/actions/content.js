@@ -154,13 +154,15 @@ export function doUpdateLoadStatus(uri, outpoint) {
               );
             };
           }
-          dispatch(
-            setSubscriptionNotification(
-              notifications[uri].subscription,
-              uri,
-              NOTIFICATION_TYPES.DOWNLOADED
-            )
-          );
+          if (state.navigation.currentPath !== '/subscriptions') {
+            dispatch(
+              setSubscriptionNotification(
+                notifications[uri].subscription,
+                uri,
+                NOTIFICATION_TYPES.DOWNLOADED
+              )
+            );
+          }
         } else {
           // If notifications are disabled(false) just return
           if (!selectosNotificationsEnabled(getState())) return;
