@@ -40,11 +40,13 @@ export function doClaimRewardType(rewardType, options) {
     }
 
     if (!userIsRewardApproved && rewardType !== rewards.TYPE_CONFIRM_EMAIL) {
-      const action = doNotify({
-        id: MODALS.REWARD_APPROVAL_REQUIRED,
-        isError: false,
-      });
-      dispatch(action);
+      if (!options || !options.failSilently) {
+        const action = doNotify({
+          id: MODALS.REWARD_APPROVAL_REQUIRED,
+          isError: false,
+        });
+        dispatch(action);
+      }
 
       return;
     }
