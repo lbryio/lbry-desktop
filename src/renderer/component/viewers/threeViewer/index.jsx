@@ -1,6 +1,8 @@
 // @flow
 import * as React from 'react';
+import * as dat from 'dat.gui';
 import LoadingScreen from 'component/common/loading-screen';
+
 // ThreeJS
 import * as THREE from './internal/three';
 import detectWebGL from './internal/detector';
@@ -26,11 +28,8 @@ type State = {
 
 class ThreeViewer extends React.PureComponent<Props, State> {
   static testWebgl = new Promise((resolve, reject) => {
-    if (detectWebGL()) {
-      resolve();
-    } else {
-      reject();
-    }
+    if (detectWebGL()) resolve();
+    else reject();
   });
 
   static createGeometry(data) {
@@ -83,6 +82,8 @@ class ThreeViewer extends React.PureComponent<Props, State> {
 
     // Main container
     this.viewer = React.createRef();
+
+    this.guiContainer = React.createRef();
 
     // Object colors
     this.materialColors = {
@@ -164,6 +165,8 @@ class ThreeViewer extends React.PureComponent<Props, State> {
       console.info('after', this.renderer.info.programs.length);
       // Stop animation
       cancelAnimationFrame(this.frameID);
+      // Destroy GUI Controls
+      if (this.gui) this.gui.destroy();
       // Empty objects
       this.grid = null;
       this.mesh = null;
@@ -175,6 +178,29 @@ class ThreeViewer extends React.PureComponent<Props, State> {
   transformGroup(group) {
     ThreeViewer.fitMeshToCamera(group);
     this.updateControlsTarget(group.position);
+  }
+
+  createInterfaceControls() {
+    if (this.guiContainer && this.mesh) {
+      this.gui = new dat.GUI({ autoPlace: false });
+
+      const { material } = this.mesh;
+
+      const config = {
+        wireframe: false,
+        color: '#44b098',
+      };
+
+      const colorPicker = this.gui.addColor(config, 'color');
+
+      colorPicker.onChange(color => {
+        material.color.set(color);
+      });
+
+      this.gui.add(material, 'wireframe').listen();
+
+      this.guiContainer.current.appendChild(this.gui.domElement);
+    }
   }
 
   createOrbitControls(camera, canvas) {
@@ -209,6 +235,9 @@ class ThreeViewer extends React.PureComponent<Props, State> {
 
   handleReady = () => {
     this.setState({ isReady: true, isLoading: false });
+
+    // GUI
+    this.createInterfaceControls();
   };
 
   handleError = () => {
@@ -222,12 +251,6 @@ class ThreeViewer extends React.PureComponent<Props, State> {
     this.controls.update();
     this.renderer.setSize(width, height);
   };
-
-  handleColorChange(color) {
-    if (!this.mesh) return;
-    const pickColor = this.materialColors[color] || this.materialColors.green;
-    this.mesh.material.color.set(pickColor);
-  }
 
   updateControlsTarget(point) {
     this.controls.target.fromArray([point.x, point.y, point.z]);
@@ -342,6 +365,7 @@ class ThreeViewer extends React.PureComponent<Props, State> {
       <React.Fragment>
         {error && <LoadingScreen status={error} spinner={false} />}
         {showLoading && <LoadingScreen status={loadingMessage} spinner />}
+        <div ref={this.guiContainer} className="gui-container" />
         <div
           style={{ opacity: showViewer ? 1 : 0 }}
           className="three-viewer file-render__viewer"
