@@ -1,24 +1,24 @@
 // @flow
 
 import React from 'react';
-import CodeMirror from 'codemirror/lib/codemirror';
+import CodeMirror from 'codemirror-minified/lib/codemirror';
 import { openSnippetMenu, stopContextMenu } from 'util/contextMenu';
 
 // Addons
-import 'codemirror/addon/selection/mark-selection';
+import 'codemirror-minified/addon/selection/mark-selection';
 
 // Syntax mode
-import 'codemirror/mode/go/go';
-import 'codemirror/mode/jsx/jsx';
-import 'codemirror/mode/css/css';
-import 'codemirror/mode/xml/xml';
-import 'codemirror/mode/php/php';
-import 'codemirror/mode/ruby/ruby';
-import 'codemirror/mode/clike/clike';
-import 'codemirror/mode/shell/shell';
-import 'codemirror/mode/python/python';
-import 'codemirror/mode/markdown/markdown';
-import 'codemirror/mode/javascript/javascript';
+import 'codemirror-minified/mode/go/go';
+import 'codemirror-minified/mode/xml/xml';
+import 'codemirror-minified/mode/php/php';
+import 'codemirror-minified/mode/jsx/jsx';
+import 'codemirror-minified/mode/css/css';
+import 'codemirror-minified/mode/ruby/ruby';
+import 'codemirror-minified/mode/clike/clike';
+import 'codemirror-minified/mode/shell/shell';
+import 'codemirror-minified/mode/python/python';
+import 'codemirror-minified/mode/markdown/markdown';
+import 'codemirror-minified/mode/javascript/javascript';
 
 type Props = {
   theme: string,

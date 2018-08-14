@@ -37,7 +37,7 @@
     "bluebird": "^3.5.1",
     "breakdance": "^3.0.1",
     "classnames": "^2.2.5",
-    "codemirror": "^5.39.2",
+    "codemirror-minified": "^5.37.0",
     "country-data": "^0.0.31",
     "dom-scroll-into-view": "^1.2.1",
     "electron-dl": "^1.11.0",
