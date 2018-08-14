@@ -19,7 +19,7 @@ type Props = {
 };
 
 type State = {
-  error?: string,
+  error: ?string,
   isReady: boolean,
   isLoading: boolean,
 };
@@ -138,11 +138,18 @@ class ThreeViewer extends React.PureComponent<Props, State> {
     window.removeEventListener('resize', this.handleResize, false);
 
     // Free memory
-    if (this.mesh) {
+    if (this.renderer && this.mesh) {
+      // Debug
+      console.info('before', this.renderer.info.programs.length);
       // Clean up group
       this.scene.remove(this.mesh);
       if (this.mesh.geometry) this.mesh.geometry.dispose();
       if (this.mesh.material) this.mesh.material.dispose();
+      // Clean up shared material
+      this.material.dispose();
+      // Clean up grid
+      this.grid.material.dispose();
+      this.grid.geometry.dispose();
       // Clean up group items
       this.mesh.traverse(child => {
         if (child instanceof THREE.Mesh) {
@@ -150,18 +157,23 @@ class ThreeViewer extends React.PureComponent<Props, State> {
           if (child.material) child.material.dispose();
         }
       });
-
       // It's unclear if we need this:
-      // https://github.com/mrdoob/three.js/issues/12447
-      this.mesh = null;
       this.renderer.renderLists.dispose();
       this.renderer.dispose();
+      // Debug
+      console.info('after', this.renderer.info.programs.length);
+      // Stop animation
+      cancelAnimationFrame(this.frameID);
+      // Empty objects
+      this.grid = null;
+      this.mesh = null;
+      this.material = null;
+      this.renderer = null;
     }
   }
 
   transformGroup(group) {
     ThreeViewer.fitMeshToCamera(group);
-    this.createWireFrame(group);
     this.updateControlsTarget(group.position);
   }
 
@@ -177,24 +189,6 @@ class ThreeViewer extends React.PureComponent<Props, State> {
     controls.autoRotate = autoRotate;
     controls.enablePan = false;
     return controls;
-  }
-
-  createWireFrame(group) {
-    const wireframeGeometry = new THREE.WireframeGeometry(group.geometry);
-    const wireframeMaterial = new THREE.LineBasicMaterial({
-      opacity: 0,
-      transparent: true,
-      linewidth: 1,
-    });
-    // Set material color
-    wireframeMaterial.color.set(this.materialColors.green);
-    this.wireframe = new THREE.LineSegments(wireframeGeometry, wireframeMaterial);
-    group.add(this.wireframe);
-  }
-
-  toggleWireFrame(show = false) {
-    this.wireframe.opacity = show ? 1 : 0;
-    this.mesh.material.opacity = show ? 0 : 1;
   }
 
   startLoader() {
@@ -233,7 +227,6 @@ class ThreeViewer extends React.PureComponent<Props, State> {
     if (!this.mesh) return;
     const pickColor = this.materialColors[color] || this.materialColors.green;
     this.mesh.material.color.set(pickColor);
-    this.wireframe.material.color.set(pickColor);
   }
 
   updateControlsTarget(point) {
@@ -290,6 +283,7 @@ class ThreeViewer extends React.PureComponent<Props, State> {
     this.renderer = ThreeRenderer({
       antialias: true,
       shadowMap: true,
+      gammaCorrection: true,
     });
 
     this.scene = ThreeScene({
@@ -304,7 +298,6 @@ class ThreeViewer extends React.PureComponent<Props, State> {
     // Grid
     this.grid = ThreeGrid({ size: 100, gridColor, centerLineColor });
     this.scene.add(this.grid);
-
     // Camera
     this.camera = new THREE.PerspectiveCamera(80, width / height, 0.1, 1000);
     this.camera.position.set(-9.5, 14, 11);
@@ -317,13 +310,8 @@ class ThreeViewer extends React.PureComponent<Props, State> {
 
     // Create model material
     this.material = new THREE.MeshPhongMaterial({
-      // opacity: 1,
-      // transparent: true,
       depthWrite: true,
       vertexColors: THREE.FaceColors,
-      // Positive value pushes polygon further away
-      // polygonOffsetFactor: 1,
-      // polygonOffsetUnits: 1,
     });
 
     // Set material color
@@ -336,8 +324,8 @@ class ThreeViewer extends React.PureComponent<Props, State> {
     viewer.appendChild(canvas);
 
     const updateScene = () => {
-      requestAnimationFrame(updateScene);
-      this.controls.update();
+      this.frameID = requestAnimationFrame(updateScene);
+      // this.controls.update();
       this.renderer.render(this.scene, this.camera);
     };
 
