@@ -139,14 +139,7 @@ export function doUpdateLoadStatus(uri, outpoint) {
             0
           );
 
-          if (state.navigation.currentPath === '/subscriptions') {
-            dispatch(
-              doNotify({
-                message: `'${fileInfo.metadata.title}' has been downloaded`,
-                displayType: ['snackbar'],
-              })
-            );
-          } else if (selectosNotificationsEnabled(state)) {
+          if (selectosNotificationsEnabled(state)) {
             const notif = new window.Notification(notifications[uri].subscription.channelName, {
               body: `Posted ${fileInfo.metadata.title}${
                 count > 1 && count < 10 ? ` and ${count - 1} other new items` : ''
