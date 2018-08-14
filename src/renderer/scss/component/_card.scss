@@ -125,6 +125,10 @@
   line-height: 12px;
 }
 
+.card__title--large {
+  font-size: 22px;
+}
+
 .card__title--file {
   font-family: 'metropolis-bold';
   font-size: 28px;
@@ -154,6 +158,11 @@
 
 .card__subtitle--x-small {
   font-size: 12px;
+}
+
+.card__subtitle--large {
+  font-size: 18px;
+  padding-bottom: $spacing-vertical * 1/3;
 }
 
 .card__subtitle-price {
@@ -241,6 +250,10 @@
   font-size: calc(var(--font-size-subtext-multiple) * 0.8em);
 }
 
+.card__subtext--large {
+  font-size: calc(var(--font-size-subtext-multiple) * 0.9em);
+}
+
 .card__actions {
   margin-top: $spacing-vertical * 2/3;
   display: flex;
@@ -307,10 +320,6 @@
   white-space: nowrap;
   width: 100%;
   padding-top: $spacing-vertical;
-
-  &:first-of-type {
-    padding-top: 0;
-  }
 
   &:last-of-type {
     padding-bottom: $spacing-vertical * 2/3;

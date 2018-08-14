@@ -5,10 +5,7 @@ import { isURIValid, normalizeURI } from 'lbry-redux';
 import { FormField, FormRow } from 'component/common/form';
 import FileTile from 'component/fileTile';
 import FileListSearch from 'component/fileListSearch';
-import ToolTip from 'component/common/tooltip';
 import Page from 'component/page';
-import Icon from 'component/common/icon';
-import * as icons from 'constants/icons';
 
 type Props = {
   query: ?string,
@@ -36,8 +33,15 @@ class SearchPage extends React.PureComponent<Props> {
   render() {
     const { query, resultCount } = this.props;
     return (
-      <Page>
-        <React.Fragment>
+      <Page noPadding>
+        {query &&
+          isURIValid(query) && (
+            <div className="search__top">
+              <div className="file-list__header">{`lbry://${query}`}</div>
+              <FileTile size="large" displayHiddenMessage uri={normalizeURI(query)} />
+            </div>
+          )}
+        <div className="search__content">
           <FormRow alignRight>
             <FormField
               type="number"
@@ -61,23 +65,9 @@ class SearchPage extends React.PureComponent<Props> {
               // />
             }
           </FormRow>
-        </React.Fragment>
-        {isURIValid(query) && (
-          <React.Fragment>
-            <div className="file-list__header">
-              {__('Exact URL')}
-              <ToolTip
-                icon
-                body={__('This is the resolution of a LBRY URL and not controlled by LBRY Inc.')}
-              >
-                <Icon icon={icons.HELP} />
-              </ToolTip>
-            </div>
-            <FileTile showUri displayHiddenMessage uri={normalizeURI(query)} />
-          </React.Fragment>
-        )}
-        <FileListSearch query={query} />
-        <div className="help">{__('These search results are provided by LBRY, Inc.')}</div>
+          <FileListSearch query={query} />
+          <div className="help">{__('These search results are provided by LBRY, Inc.')}</div>
+        </div>
       </Page>
     );
   }

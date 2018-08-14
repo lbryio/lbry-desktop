@@ -28,7 +28,7 @@ type Props = {
   hideNoResult: boolean, // don't show the tile if there is no claim at this uri
   displayHiddenMessage?: boolean,
   displayDescription?: boolean,
-  small?: boolean,
+  size: string,
 };
 
 class FileTile extends React.PureComponent<Props> {
@@ -36,6 +36,7 @@ class FileTile extends React.PureComponent<Props> {
     showUri: false,
     showLocal: false,
     displayDescription: true,
+    size: 'regular',
   };
 
   componentDidMount() {
@@ -65,7 +66,7 @@ class FileTile extends React.PureComponent<Props> {
       hideNoResult,
       displayHiddenMessage,
       displayDescription,
-      small,
+      size,
     } = this.props;
 
     const shouldHide = !claimIsMine && obscureNsfw && metadata && metadata.nsfw;
@@ -98,7 +99,8 @@ class FileTile extends React.PureComponent<Props> {
     return !name && hideNoResult ? null : (
       <section
         className={classnames('file-tile card--link', {
-          'file-tile--small': small,
+          'file-tile--small': size === 'small',
+          'file-tile--large': size === 'large',
         })}
         onClick={onClick}
         onKeyUp={onClick}
@@ -107,20 +109,31 @@ class FileTile extends React.PureComponent<Props> {
       >
         <CardMedia title={title || name} thumbnail={thumbnail} />
         <div className="file-tile__info">
-          {isResolvingUri && <div className="card__title--small">{__('Loading...')}</div>}
+          {isResolvingUri && (
+            <div
+              className={classnames({
+                'card__title--small': size !== 'large',
+                'card__title--large': size === 'large',
+              })}
+            >
+              {__('Loading...')}
+            </div>
+          )}
           {!isResolvingUri && (
             <React.Fragment>
               <div
                 className={classnames({
-                  'card__title--file': !small,
-                  'card__title--x-small': small,
+                  'card__title--file': size === 'regular',
+                  'card__title--x-small': size === 'small',
+                  'card__title--large': size === 'large',
                 })}
               >
-                <TruncatedText lines={small ? 2 : 3}>{title || name}</TruncatedText>
+                <TruncatedText lines={size === 'small' ? 2 : 3}>{title || name}</TruncatedText>
               </div>
               <div
                 className={classnames('card__subtitle', {
-                  'card__subtitle--x-small': small,
+                  'card__subtitle--x-small': size === 'small',
+                  'card__subtitle--large': size === 'large',
                 })}
               >
                 <span className="file-tile__channel">
@@ -133,8 +146,13 @@ class FileTile extends React.PureComponent<Props> {
                 {showLocal && isDownloaded && <Icon icon={icons.LOCAL} />}
               </div>
               {displayDescription && (
-                <div className="card__subtext card__subtext--small">
-                  <TruncatedText lines={3}>{description}</TruncatedText>
+                <div
+                  className={classnames('card__subtext', {
+                    'card__subtext--small': size !== 'small',
+                    'card__subtext--large': size === 'large',
+                  })}
+                >
+                  <TruncatedText lines={size === 'large' ? 4 : 3}>{description}</TruncatedText>
                 </div>
               )}
               {!name && (

@@ -35,7 +35,7 @@ export type Claim = {
       certificateId: ?string,
     },
     stream: {
-      metadata: ?Metadata,
+      metadata: Metadata,
     },
   },
 };

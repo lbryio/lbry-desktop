@@ -12,7 +12,7 @@
 }
 
 .file-list__header {
-  margin-top: $spacing-vertical * 4/3;
+  padding-top: $spacing-vertical * 4/3;
   font-size: 24px;
 
   .tooltip {
@@ -46,6 +46,13 @@
   .card__media {
     height: var(--file-tile-media-height-small);
     flex: 0 0 var(--file-tile-media-width-small);
+  }
+}
+
+.file-tile.file-tile--large {
+  .card__media {
+    height: var(--file-tile-media-height-large);
+    flex: 0 0 var(--file-tile-media-width-large);
   }
 }
 
