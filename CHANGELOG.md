@@ -17,14 +17,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ### Fixed
 
 
-## [0.23.1] - 2018-08-04
+## [0.24.0] - 2018-08-04
 
 ### Fixed
-* Issue where the publish page would show "Editing" on a new publish ([#1864](https://github.com/lbryio/lbry-desktop/pull/1864))
+ * Issue where the publish page would show "Editing" on a new publish ([#1864](https://github.com/lbryio/lbry-desktop/pull/1864))
 
 ### Changed
-* Upgrade LBRY Protocol to [version 0.21.1](https://github.com/lbryio/lbry/releases/tag/v0.21.1) which should improve download speed and availability.
-* Show label when publish button is disabled while uploading thumbnail to spee.ch ([#1867](https://github.com/lbryio/lbry-desktop/pull/1867))
+ * Upgrade LBRY Protocol to [version 0.21.1](https://github.com/lbryio/lbry/releases/tag/v0.21.1) which should improve download speed and availability.
+ * Show label when publish button is disabled while uploading thumbnail to spee.ch ([#1867](https://github.com/lbryio/lbry-desktop/pull/1867))
 
 ## [0.23.1] - 2018-08-01
 
