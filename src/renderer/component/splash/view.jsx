@@ -63,7 +63,8 @@ export class SplashScreen extends React.PureComponent<Props, State> {
   updateStatusCallback(status) {
     const { notifyUnlockWallet } = this.props;
     const { launchedModal } = this.state;
-    if (!status.wallet.is_unlocked) {
+
+    if (status.wallet.is_locked) {
       this.setState({
         message: __('Unlock Wallet'),
         details: __('Please unlock your wallet to proceed.'),
