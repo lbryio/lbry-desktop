@@ -1,7 +1,6 @@
 // @flow
 import * as React from 'react';
 import { Lbry, MODALS } from 'lbry-redux';
-import LoadScreen from './internal/load-screen';
 import ModalWalletUnlock from 'modal/modalWalletUnlock';
 import ModalIncompatibleDaemon from 'modal/modalIncompatibleDaemon';
 import ModalUpgrade from 'modal/modalUpgrade';
@@ -70,7 +69,7 @@ export class SplashScreen extends React.PureComponent<Props, State> {
         details: __('Please unlock your wallet to proceed.'),
         isRunning: true,
       });
-    
+
       if (launchedModal === false) {
         this.setState({ launchedModal: true }, () => notifyUnlockWallet());
       }
