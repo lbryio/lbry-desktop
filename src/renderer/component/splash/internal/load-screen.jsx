@@ -2,6 +2,7 @@
 import * as React from 'react';
 import Icon from 'component/common/icon';
 import * as icons from 'constants/icons';
+import Spinner from 'component/spinner';
 
 type Props = {
   message: string,
@@ -33,6 +34,7 @@ class LoadScreen extends React.PureComponent<Props> {
         )}
 
         {details && <div className="load-screen__details">{details}</div>}
+        <Spinner type="splash" />
       </div>
     );
   }

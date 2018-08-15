@@ -15,10 +15,30 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
  * Recommended content on file viewer page ([#1845](https://github.com/lbryio/lbry-desktop/pull/1845))
 
 ### Changed
- * Pass error message from spee.ch API during thumbnail upload ([#1840](https://github.com/lbryio/lbry-desktop/pull/1840))
- * Use router pattern for rendering file viewer ([#1544](https://github.com/lbryio/lbry-desktop/pull/1544))
- * Missing word "to" added to the Bid Help Text (#1854)
- * Updated to electron@2 ([#1858](https://github.com/lbryio/lbry-desktop/pull/1858))
+* Pass error message from spee.ch API during thumbnail upload ([#1840](https://github.com/lbryio/lbry-desktop/pull/1840))
+* Use router pattern for rendering file viewer ([#1544](https://github.com/lbryio/lbry-desktop/pull/1544))
+* Missing word "to" added to the Bid Help Text (#1854)
+* Updated to electron@2 ([#1858](https://github.com/lbryio/lbry-desktop/pull/1858))
+  
+### Fixed
+
+
+## [0.24.0] - 2018-08-04
+
+### Fixed
+ * Issue where the publish page would show "Editing" on a new publish ([#1864](https://github.com/lbryio/lbry-desktop/pull/1864))
+
+### Changed
+ * Upgrade LBRY Protocol to [version 0.21.1](https://github.com/lbryio/lbry/releases/tag/v0.21.1) which should improve download speed and availability.
+ * Show label when publish button is disabled while uploading thumbnail to spee.ch ([#1867](https://github.com/lbryio/lbry-desktop/pull/1867))
+
+## [0.23.1] - 2018-08-01
+
+### Fixed
+  * Fix ShapeShift integration ([#1842](https://github.com/lbryio/lbry-desktop/pull/1842))
+
+
+## [0.23.0] - 2018-07-25
 
 ### Fixed
  * **Wallet -> Get Credits** page now shows correct ShapeShift status when it's avialable ([#1836](https://github.com/lbryio/lbry-desktop/issues/1836))
