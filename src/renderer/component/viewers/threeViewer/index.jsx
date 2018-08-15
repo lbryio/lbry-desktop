@@ -136,6 +136,8 @@ class ThreeViewer extends React.PureComponent<Props, State> {
           if (child.material) child.material.dispose();
         }
       });
+      // Clean up controls
+      if (this.controls) this.controls.dispose();
       // It's unclear if we need this:
       if (this.renderer) {
         this.renderer.renderLists.dispose();
@@ -157,25 +159,36 @@ class ThreeViewer extends React.PureComponent<Props, State> {
 
   transformGroup(group) {
     ThreeViewer.fitMeshToCamera(group);
-    this.updateControlsTarget(group.position);
+    this.updateControlsTarget(this.mesh.position);
   }
 
   createInterfaceControls() {
     if (this.guiContainer && this.mesh) {
+      this.gui = new dat.GUI({ autoPlace: false, name: 'controls' });
+
       const config = {
         color: this.materialColor,
-        wireframe: false,
       };
 
-      this.gui = new dat.GUI({ autoPlace: false });
+      config.reset = () => {
+        // Reset material color
+        config.color = this.materialColor;
+        this.material.color.set(config.color);
+        // Reset wireframe
+        this.material.wireframe = false;
+        // Reset camera
+        this.restoreCamera();
+      };
 
-      const colorPicker = this.gui.addColor(config, 'color');
+      // Color picker
+      const colorPicker = this.gui.addColor(config, 'color').listen();
 
       colorPicker.onChange(color => {
         this.material.color.set(color);
       });
 
       this.gui.add(this.material, 'wireframe').listen();
+      this.gui.add(config, 'reset');
       this.guiContainer.current.appendChild(this.gui.domElement);
     }
   }
@@ -187,10 +200,11 @@ class ThreeViewer extends React.PureComponent<Props, State> {
     controls.enableDamping = true;
     controls.dampingFactor = 0.75;
     controls.enableZoom = true;
-    controls.minDistance = 1;
-    controls.maxDistance = 50;
+    controls.minDistance = 5;
+    controls.maxDistance = 14;
     controls.autoRotate = autoRotate;
     controls.enablePan = false;
+    controls.saveState();
     return controls;
   }
 
@@ -243,6 +257,12 @@ class ThreeViewer extends React.PureComponent<Props, State> {
   updateControlsTarget(point) {
     this.controls.target.fromArray([point.x, point.y, point.z]);
     this.controls.update();
+  }
+
+  restoreCamera() {
+    this.controls.reset();
+    this.camera.position.set(-9.5, 14, 11);
+    this.updateControlsTarget(this.mesh.position);
   }
 
   renderStl(data) {
