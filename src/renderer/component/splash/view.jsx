@@ -63,21 +63,15 @@ export class SplashScreen extends React.PureComponent<Props, State> {
   updateStatusCallback(status) {
     const { notifyUnlockWallet } = this.props;
     const { launchedModal } = this.state;
-
-    if (status.wallet.is_locked) {
+    if (status.wallet && status.wallet.is_locked) {
       this.setState({
-        message: __('Unlock Wallet'),
-        details: __('Please unlock your wallet to proceed.'),
         isRunning: true,
       });
 
       if (launchedModal === false) {
         this.setState({ launchedModal: true }, () => notifyUnlockWallet());
       }
-      return;
-    }
-
-    if (status.is_running) {
+    } else if (status.is_running) {
       // Wait until we are able to resolve a name before declaring
       // that we are done.
       // TODO: This is a hack, and the logic should live in the daemon
@@ -95,9 +89,7 @@ export class SplashScreen extends React.PureComponent<Props, State> {
         }
       });
       return;
-    }
-
-    if (status.blockchain_headers && status.blockchain_headers.download_progress < 100) {
+    } else if (status.blockchain_headers && status.blockchain_headers.download_progress < 100) {
       this.setState({
         message: __('Blockchain Sync'),
         details: `${__('Catching up with the blockchain')} (${
