@@ -32,17 +32,6 @@ class ThreeViewer extends React.PureComponent<Props, State> {
     else reject();
   });
 
-  static createGeometry(data) {
-    const geometry = new THREE.Geometry();
-    geometry.fromBufferGeometry(data);
-    geometry.computeBoundingBox();
-    geometry.computeVertexNormals();
-    geometry.center();
-    geometry.rotateX(-Math.PI / 2);
-    geometry.lookAt(new THREE.Vector3(0, 0, 1));
-    return geometry;
-  }
-
   static fitMeshToCamera(group) {
     const max = { x: 0, y: 0, z: 0 };
     const min = { x: 0, y: 0, z: 0 };
@@ -77,22 +66,11 @@ class ThreeViewer extends React.PureComponent<Props, State> {
 
   constructor(props: Props) {
     super(props);
-
     const { theme } = this.props;
-
-    // Main container
     this.viewer = React.createRef();
-
     this.guiContainer = React.createRef();
-
-    // Object colors
-    this.materialColors = {
-      red: '#e74c3c',
-      blue: '#3498db',
-      green: '#44b098',
-      orange: '#f39c12',
-    };
-
+    // Object defualt color
+    this.materialColor = '#44b098';
     // Viewer themes
     this.themes = {
       dark: {
@@ -108,10 +86,8 @@ class ThreeViewer extends React.PureComponent<Props, State> {
         centerLineColor: '#2F2F2F',
       },
     };
-
     // Select current theme
     this.theme = this.themes[theme] || this.themes.light;
-
     // State
     this.state = {
       error: null,
@@ -137,20 +113,22 @@ class ThreeViewer extends React.PureComponent<Props, State> {
   componentWillUnmount() {
     // Remove event listeners
     window.removeEventListener('resize', this.handleResize, false);
-
     // Free memory
     if (this.renderer && this.mesh) {
-      // Debug
-      console.info('before', this.renderer.info.programs.length);
       // Clean up group
       this.scene.remove(this.mesh);
       if (this.mesh.geometry) this.mesh.geometry.dispose();
       if (this.mesh.material) this.mesh.material.dispose();
+      // Cleanup shared geometry
+      if (this.geometry) this.geometry.dispose();
+      if (this.bufferGeometry) this.bufferGeometry.dispose();
       // Clean up shared material
-      this.material.dispose();
+      if (this.material) this.material.dispose();
       // Clean up grid
-      this.grid.material.dispose();
-      this.grid.geometry.dispose();
+      if (this.grid) {
+        this.grid.material.dispose();
+        this.grid.geometry.dispose();
+      }
       // Clean up group items
       this.mesh.traverse(child => {
         if (child instanceof THREE.Mesh) {
@@ -159,10 +137,10 @@ class ThreeViewer extends React.PureComponent<Props, State> {
         }
       });
       // It's unclear if we need this:
-      this.renderer.renderLists.dispose();
-      this.renderer.dispose();
-      // Debug
-      console.info('after', this.renderer.info.programs.length);
+      if (this.renderer) {
+        this.renderer.renderLists.dispose();
+        this.renderer.dispose();
+      }
       // Stop animation
       cancelAnimationFrame(this.frameID);
       // Destroy GUI Controls
@@ -170,8 +148,10 @@ class ThreeViewer extends React.PureComponent<Props, State> {
       // Empty objects
       this.grid = null;
       this.mesh = null;
-      this.material = null;
       this.renderer = null;
+      this.material = null;
+      this.geometry = null;
+      this.bufferGeometry = null;
     }
   }
 
@@ -182,23 +162,20 @@ class ThreeViewer extends React.PureComponent<Props, State> {
 
   createInterfaceControls() {
     if (this.guiContainer && this.mesh) {
-      this.gui = new dat.GUI({ autoPlace: false });
-
-      const { material } = this.mesh;
-
       const config = {
+        color: this.materialColor,
         wireframe: false,
-        color: '#44b098',
       };
+
+      this.gui = new dat.GUI({ autoPlace: false });
 
       const colorPicker = this.gui.addColor(config, 'color');
 
       colorPicker.onChange(color => {
-        material.color.set(color);
+        this.material.color.set(color);
       });
 
-      this.gui.add(material, 'wireframe').listen();
-
+      this.gui.add(this.material, 'wireframe').listen();
       this.guiContainer.current.appendChild(this.gui.domElement);
     }
   }
@@ -215,6 +192,18 @@ class ThreeViewer extends React.PureComponent<Props, State> {
     controls.autoRotate = autoRotate;
     controls.enablePan = false;
     return controls;
+  }
+
+  createGeometry(data) {
+    this.bufferGeometry = data;
+    this.bufferGeometry.computeBoundingBox();
+    this.bufferGeometry.computeVertexNormals();
+    this.bufferGeometry.center();
+    this.bufferGeometry.rotateX(-Math.PI / 2);
+    this.bufferGeometry.lookAt(new THREE.Vector3(0, 0, 1));
+    // Get geometry from bufferGeometry
+    this.geometry = new THREE.Geometry().fromBufferGeometry(this.bufferGeometry);
+    this.geometry.mergeVertices();
   }
 
   startLoader() {
@@ -235,7 +224,6 @@ class ThreeViewer extends React.PureComponent<Props, State> {
 
   handleReady = () => {
     this.setState({ isReady: true, isLoading: false });
-
     // GUI
     this.createInterfaceControls();
   };
@@ -258,19 +246,17 @@ class ThreeViewer extends React.PureComponent<Props, State> {
   }
 
   renderStl(data) {
-    const geometry = ThreeViewer.createGeometry(data);
-    const group = new THREE.Mesh(geometry, this.material);
-    // Assign name
-    group.name = 'objectGroup';
-    this.scene.add(group);
-    this.transformGroup(group);
-    this.mesh = group;
+    this.createGeometry(data);
+    this.mesh = new THREE.Mesh(this.geometry, this.material);
+    this.mesh.name = 'model';
+    this.scene.add(this.mesh);
+    this.transformGroup(this.mesh);
   }
 
   renderObj(event) {
     const mesh = event.detail.loaderRootNode;
-    const group = new THREE.Group();
-    group.name = 'objGroup';
+    this.mesh = new THREE.Group();
+    this.mesh.name = 'model';
 
     // Assign new material
     mesh.traverse(child => {
@@ -280,13 +266,15 @@ class ThreeViewer extends React.PureComponent<Props, State> {
         geometry.fromBufferGeometry(child.geometry);
         // Create and regroup inner objects
         const innerObj = new THREE.Mesh(geometry, this.material);
-        group.add(innerObj);
+        this.mesh.add(innerObj);
+        // Clean up geometry
+        geometry.dispose();
+        child.geometry.dispose();
       }
     });
 
-    this.scene.add(group);
-    this.transformGroup(group);
-    this.mesh = group;
+    this.scene.add(this.mesh);
+    this.transformGroup(this.mesh);
   }
 
   renderModel(fileType, parsedData) {
@@ -338,7 +326,7 @@ class ThreeViewer extends React.PureComponent<Props, State> {
     });
 
     // Set material color
-    this.material.color.set(this.materialColors.green);
+    this.material.color.set(this.materialColor);
 
     // Load file and render mesh
     this.startLoader();
