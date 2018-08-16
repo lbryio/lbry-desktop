@@ -379,17 +379,18 @@ export function doFetchClaimsByChannel(uri, page) {
             buildURI({ contentName: latest.name, claimId: latest.claim_id }, false)
           )
         );
-        const notifications = selectNotifications(getState());
-        const newNotifications = {};
-        Object.keys(notifications).forEach(cur => {
-          if (
-            notifications[cur].subscription.channelName !== latest.channel_name ||
-            notifications[cur].type === NOTIFICATION_TYPES.DOWNLOADING
-          ) {
-            newNotifications[cur] = { ...notifications[cur] };
-          }
-        });
-        dispatch(setSubscriptionNotifications(newNotifications));
+        // commented out as a note for @sean, notification will be clared individually
+        // const notifications = selectNotifications(getState());
+        // const newNotifications = {};
+        // Object.keys(notifications).forEach(cur => {
+        //   if (
+        //     notifications[cur].subscription.channelName !== latest.channel_name ||
+        //     notifications[cur].type === NOTIFICATION_TYPES.DOWNLOADING
+        //   ) {
+        //     newNotifications[cur] = { ...notifications[cur] };
+        //   }
+        // });
+        // dispatch(setSubscriptionNotifications(newNotifications));
       }
 
       dispatch({

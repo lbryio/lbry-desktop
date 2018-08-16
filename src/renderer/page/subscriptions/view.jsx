@@ -25,6 +25,9 @@ export default class extends React.PureComponent<Props> {
     const { notifications, setSubscriptionNotifications, doFetchMySubscriptions } = this.props;
     doFetchMySubscriptions();
 
+    // @sean will change this behavior when implementing new content labeling
+    // notifications should be cleared individually
+    // do we want a way to clear individual claims without viewing?
     const newNotifications = {};
     Object.keys(notifications).forEach(cur => {
       if (notifications[cur].type === NOTIFICATION_TYPES.DOWNLOADING) {

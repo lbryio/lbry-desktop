@@ -124,25 +124,31 @@ export const setSubscriptionNotification = (
     },
   });
 
-export const doCheckSubscription = (subscription: Subscription, notify?: boolean) => (
+export const doCheckSubscription = (subscriptionUri: string, notify?: boolean) => (
   dispatch: Dispatch,
   getState: () => {}
 ) => {
   // no dispatching FETCH_CHANNEL_CLAIMS_STARTED; causes loading issues on <SubscriptionsPage>
 
-  Lbry.claim_list_by_channel({ uri: subscription.uri, page: 1 }).then(result => {
-    const claimResult = result[subscription.uri] || {};
+  const state = getState();
+  const savedSubscription = state.subscriptions.subscriptions.find(sub => sub.uri === subscriptionUri);
+
+  Lbry.claim_list_by_channel({ uri: subscriptionUri, page: 1 }).then(result => {
+    const claimResult = result[subscriptionUri] || {};
     const { claims_in_channel: claimsInChannel } = claimResult;
 
     const latestIndex = claimsInChannel.findIndex(
-      claim => `${claim.name}#${claim.claim_id}` === subscription.latest
+      claim => `${claim.name}#${claim.claim_id}` === savedSubscription.latest
     );
 
-    if (claimsInChannel.length && latestIndex !== 0) {
+    // if latest is 0, nothing has changed
+    // when there is no subscription latest, it is either a newly subscriubed channel or
+    // the user has cleared their cache. Either way, do not download or notify about new content
+    // as that would download/notify 10 claims per channel
+    if (claimsInChannel.length && latestIndex !== 0 && savedSubscription.latest) {
       let downloadCount = 0;
       claimsInChannel.slice(0, latestIndex === -1 ? 10 : latestIndex).forEach(claim => {
         const uri = buildURI({ contentName: claim.name, claimId: claim.claim_id }, false);
-        const state = getState();
         const shouldDownload = Boolean(
           downloadCount < SUBSCRIPTION_DOWNLOAD_LIMIT &&
             !claim.value.stream.metadata.fee &&
@@ -151,7 +157,7 @@ export const doCheckSubscription = (subscription: Subscription, notify?: boolean
         if (notify) {
           dispatch(
             setSubscriptionNotification(
-              subscription,
+              savedSubscription,
               uri,
               shouldDownload ? NOTIFICATION_TYPES.DOWNLOADING : NOTIFICATION_TYPES.NOTIFY_ONLY
             )
@@ -163,36 +169,38 @@ export const doCheckSubscription = (subscription: Subscription, notify?: boolean
         }
       });
 
-      dispatch(
-        setSubscriptionLatest(
-          {
-            channelName: claimsInChannel[0].channel_name,
-            uri: buildURI(
-              {
-                channelName: claimsInChannel[0].channel_name,
-                claimId: claimsInChannel[0].claim_id,
-              },
-              false
-            ),
-          },
-          buildURI(
-            { contentName: claimsInChannel[0].name, claimId: claimsInChannel[0].claim_id },
-            false
-          )
-        )
-      );
-
-      // calling FETCH_CHANNEL_CLAIMS_COMPLETED after not calling STARTED
-      // means it will delete a non-existant fetchingChannelClaims[uri]
-      dispatch({
-        type: ACTIONS.FETCH_CHANNEL_CLAIMS_COMPLETED,
-        data: {
-          uri: subscription.uri,
-          claims: claimsInChannel || [],
-          page: 1,
-        },
-      });
     }
+
+    // always setLatest; important for newly subscribed channels
+    dispatch(
+      setSubscriptionLatest(
+        {
+          channelName: claimsInChannel[0].channel_name,
+          uri: buildURI(
+            {
+              channelName: claimsInChannel[0].channel_name,
+              claimId: claimsInChannel[0].claim_id,
+            },
+            false
+          ),
+        },
+        buildURI(
+          { contentName: claimsInChannel[0].name, claimId: claimsInChannel[0].claim_id },
+          false
+        )
+      )
+    );
+
+    // calling FETCH_CHANNEL_CLAIMS_COMPLETED after not calling STARTED
+    // means it will delete a non-existant fetchingChannelClaims[uri]
+    dispatch({
+      type: ACTIONS.FETCH_CHANNEL_CLAIMS_COMPLETED,
+      data: {
+        uri: subscriptionUri,
+        claims: claimsInChannel || [],
+        page: 1,
+      },
+    });
   });
 };
 
@@ -232,6 +240,7 @@ export const doChannelSubscribe = (subscription: Subscription) => (
     dispatch(doClaimRewardType(rewards.SUBSCRIPTION, { failSilently: true }));
   }
 
+  // should be subUri
   dispatch(doCheckSubscription(subscription, true));
 };
 
@@ -269,10 +278,11 @@ export const doCheckSubscriptionsInit = () => (dispatch: Dispatch) => {
   // doCheckSubscriptionsInit is called by doDaemonReady
   // setTimeout below is a hack to ensure redux is hydrated when subscriptions are checked
   // this will be replaced with <PersistGate> which reqiures a package upgrade
-  setTimeout(() => dispatch(doCheckSubscriptions()), 5000);
+  setTimeout(() => dispatch(doFetchMySubscriptions()), 5000);
+  setTimeout(() => dispatch(doCheckSubscriptions()), 10000);
   const checkSubscriptionsTimer = setInterval(
     () => dispatch(doCheckSubscriptions()),
-    CHECK_SUBSCRIPTIONS_INTERVAL
+    20000//CHECK_SUBSCRIPTIONS_INTERVAL
   );
   dispatch({
     type: ACTIONS.CHECK_SUBSCRIPTIONS_SUBSCRIBE,
