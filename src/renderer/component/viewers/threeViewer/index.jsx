@@ -13,7 +13,6 @@ import ThreeRenderer from './internal/renderer';
 
 type Props = {
   theme: string,
-  autoRotate: boolean,
   source: {
     fileType: string,
     downloadPath: string,
@@ -31,6 +30,20 @@ class ThreeViewer extends React.PureComponent<Props, State> {
     if (detectWebGL()) resolve();
     else reject();
   });
+
+  static createOrbitControls(camera, canvas) {
+    const controls = new THREE.OrbitControls(camera, canvas);
+    // Controls configuration
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.75;
+    controls.enableZoom = true;
+    controls.minDistance = 5;
+    controls.maxDistance = 14;
+    controls.autoRotate = false;
+    controls.enablePan = false;
+    controls.saveState();
+    return controls;
+  }
 
   static fitMeshToCamera(group) {
     const max = { x: 0, y: 0, z: 0 };
@@ -176,6 +189,8 @@ class ThreeViewer extends React.PureComponent<Props, State> {
         this.material.color.set(config.color);
         // Reset wireframe
         this.material.wireframe = false;
+        // Reset autoRotate
+        this.controls.autoRotate = false;
         // Reset camera
         this.restoreCamera();
       };
@@ -188,24 +203,10 @@ class ThreeViewer extends React.PureComponent<Props, State> {
       });
 
       this.gui.add(this.material, 'wireframe').listen();
+      this.gui.add(this.controls, 'autoRotate').listen();
       this.gui.add(config, 'reset');
       this.guiContainer.current.appendChild(this.gui.domElement);
     }
-  }
-
-  createOrbitControls(camera, canvas) {
-    const { autoRotate } = this.props;
-    const controls = new THREE.OrbitControls(camera, canvas);
-    // Controls configuration
-    controls.enableDamping = true;
-    controls.dampingFactor = 0.75;
-    controls.enableZoom = true;
-    controls.minDistance = 5;
-    controls.maxDistance = 14;
-    controls.autoRotate = autoRotate;
-    controls.enablePan = false;
-    controls.saveState();
-    return controls;
   }
 
   createGeometry(data) {
@@ -334,7 +335,7 @@ class ThreeViewer extends React.PureComponent<Props, State> {
     this.camera.position.set(-9.5, 14, 11);
 
     // Controls
-    this.controls = this.createOrbitControls(this.camera, canvas);
+    this.controls = ThreeViewer.createOrbitControls(this.camera, canvas);
 
     // Set viewer size
     this.renderer.setSize(width, height);
@@ -356,7 +357,7 @@ class ThreeViewer extends React.PureComponent<Props, State> {
 
     const updateScene = () => {
       this.frameID = requestAnimationFrame(updateScene);
-      // this.controls.update();
+      if (this.controls.autoRotate) this.controls.update();
       this.renderer.render(this.scene, this.camera);
     };
 
