@@ -298,9 +298,6 @@ class PublishForm extends React.PureComponent<Props> {
           {uploadThumbnailStatus === THUMBNAIL_STATUSES.IN_PROGRESS
           && <div>{__('Please wait for thumbnail to finish uploading')}</div>}
           {!tosAccepted && <div>{__('You must agree to the terms of service')}</div>}
-          {uploadThumbnailStatus === THUMBNAIL_STATUSES.IN_PROGRESS && (
-            <div>{__('Please wait for thumbnail to finish uploading')}</div>
-          )}
           {!!editingURI &&
             !isStillEditing &&
             !filePath && <div>{__('You need to reselect a file after changing the LBRY URL')}</div>}
