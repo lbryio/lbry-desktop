@@ -16,7 +16,6 @@ import Native from 'native';
 import { doFetchRewardedContent } from 'redux/actions/content';
 import { doFetchDaemonSettings } from 'redux/actions/settings';
 import { doAuthNavigate } from 'redux/actions/navigation';
-import { doAuthenticate } from 'redux/actions/user';
 import { doPause } from 'redux/actions/media';
 import { doCheckSubscriptions } from 'redux/actions/subscriptions';
 import {
@@ -337,7 +336,6 @@ export function doDaemonReady() {
   return (dispatch, getState) => {
     const state = getState();
 
-    dispatch(doAuthenticate());
     dispatch({ type: ACTIONS.DAEMON_READY });
     dispatch(doFetchDaemonSettings());
     dispatch(doBalanceSubscribe());

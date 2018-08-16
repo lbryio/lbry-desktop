@@ -12,6 +12,7 @@ type Props = {
   notifyUnlockWallet: () => Promise<any>,
   daemonVersionMatched: boolean,
   onReadyToLaunch: () => void,
+  authenticate: () => void,
   notification: ?{
     id: string,
   },
@@ -61,8 +62,13 @@ export class SplashScreen extends React.PureComponent<Props, State> {
   }
 
   updateStatusCallback(status) {
-    const { notifyUnlockWallet } = this.props;
+    const { notifyUnlockWallet, authenticate } = this.props;
     const { launchedModal } = this.state;
+
+    if (status) {
+      authenticate();
+    }
+
     if (status.wallet && status.wallet.is_locked) {
       this.setState({
         isRunning: true,

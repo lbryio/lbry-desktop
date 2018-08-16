@@ -11,7 +11,7 @@ import { doConditionalAuthNavigate, doDaemonReady, doAutoUpdate } from 'redux/ac
 import { doNotify, doBlackListedOutpointsSubscribe, isURIValid } from 'lbry-redux';
 import { doNavigate } from 'redux/actions/navigation';
 import { doDownloadLanguages, doUpdateIsNightAsync } from 'redux/actions/settings';
-import { doUserEmailVerify } from 'redux/actions/user';
+import { doUserEmailVerify, doAuthenticate } from 'redux/actions/user';
 import 'scss/all.scss';
 import store from 'store';
 import app from './app';
@@ -155,7 +155,10 @@ const init = () => {
   } else {
     ReactDOM.render(
       <Provider store={store}>
-        <SplashScreen onReadyToLaunch={onDaemonReady} />
+        <SplashScreen
+          authenticate={() => app.store.dispatch(doAuthenticate())}
+          onReadyToLaunch={onDaemonReady}
+        />
       </Provider>,
       document.getElementById('app')
     );
