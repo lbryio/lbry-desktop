@@ -23,7 +23,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ### Fixed
 
 
-## [0.24.0] - 2018-08-04
+## [0.24.0] - 2018-08-14
 
 ### Fixed
  * Issue where the publish page would show "Editing" on a new publish ([#1864](https://github.com/lbryio/lbry-desktop/pull/1864))
@@ -45,9 +45,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
  * Fix middle click link error ([#1843](https://github.com/lbryio/lbry-desktop/issues/1843)}
  * Problem with search auto-complete menu when scrolling over file viewer ([#1847](https://github.com/lbryio/lbry-desktop/issues/1847))
  * Show label when publish button is disabled while uploading thumbnail to spee.ch ([#1867](https://github.com/lbryio/lbry-desktop/pull/1867))
-
-
-## [0.23.0] - 2018-07-25
 
 ### Added
  * 3D file viewer for OBJ & STL file types ([#1558](https://github.com/lbryio/lbry-desktop/pull/1558))
