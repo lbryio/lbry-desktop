@@ -71,8 +71,8 @@ class ThreeViewer extends React.PureComponent<Props, State> {
     group.position.setY((meshY / 2) * scaleFactor);
     // Reset object position
     const box = new THREE.Box3().setFromObject(group);
-    box.getCenter(group.position);
     // Update position
+    box.getCenter(group.position);
     group.position.multiplyScalar(-1);
     group.position.setY(group.position.y + meshY * scaleFactor);
   }
@@ -172,7 +172,12 @@ class ThreeViewer extends React.PureComponent<Props, State> {
 
   transformGroup(group) {
     ThreeViewer.fitMeshToCamera(group);
-    this.updateControlsTarget(this.mesh.position);
+
+    if (!this.targetCenter) {
+      const box = new THREE.Box3();
+      this.targetCenter = box.setFromObject(this.mesh).getCenter();
+    }
+    this.updateControlsTarget(this.targetCenter);
   }
 
   createInterfaceControls() {
@@ -196,15 +201,24 @@ class ThreeViewer extends React.PureComponent<Props, State> {
       };
 
       // Color picker
-      const colorPicker = this.gui.addColor(config, 'color').listen();
+      const colorPicker = this.gui
+        .addColor(config, 'color')
+        .name('Color')
+        .listen();
 
       colorPicker.onChange(color => {
         this.material.color.set(color);
       });
 
-      this.gui.add(this.material, 'wireframe').listen();
-      this.gui.add(this.controls, 'autoRotate').listen();
-      this.gui.add(config, 'reset');
+      this.gui
+        .add(this.material, 'wireframe')
+        .name('Wireframe')
+        .listen();
+      this.gui
+        .add(this.controls, 'autoRotate')
+        .name('Auto-Rotate')
+        .listen();
+      this.gui.add(config, 'reset').name('Reset');
       this.guiContainer.current.appendChild(this.gui.domElement);
     }
   }
@@ -263,7 +277,7 @@ class ThreeViewer extends React.PureComponent<Props, State> {
   restoreCamera() {
     this.controls.reset();
     this.camera.position.set(-9.5, 14, 11);
-    this.updateControlsTarget(this.mesh.position);
+    this.updateControlsTarget(this.targetCenter);
   }
 
   renderStl(data) {
@@ -293,7 +307,6 @@ class ThreeViewer extends React.PureComponent<Props, State> {
         child.geometry.dispose();
       }
     });
-
     this.scene.add(this.mesh);
     this.transformGroup(this.mesh);
   }
