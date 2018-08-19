@@ -210,7 +210,7 @@ class ThreeViewer extends React.PureComponent<Props, State> {
         config.color = this.materialColor;
         // Reset material
         this.material.color.set(config.color);
-        this.material.flatShading = false;
+        this.material.flatShading = true;
         this.material.shininess = 30;
         this.material.wireframe = false;
         // Reset autoRotate
@@ -397,7 +397,7 @@ class ThreeViewer extends React.PureComponent<Props, State> {
     // Create model material
     this.material = new THREE.MeshPhongMaterial({
       depthWrite: true,
-      flatShading: false,
+      flatShading: true,
       vertexColors: THREE.FaceColors,
     });
 
