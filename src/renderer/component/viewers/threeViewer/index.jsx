@@ -386,13 +386,13 @@ class ThreeViewer extends React.PureComponent<Props, State> {
     const showLoading = isLoading && !error;
 
     // Adaptive theme for gui controls
-    const containterClass = classNames('gui-container', { light: theme === 'light' });
+    const containerClass = classNames('gui-container', { light: theme === 'light' });
 
     return (
       <React.Fragment>
         {error && <LoadingScreen status={error} spinner={false} />}
         {showLoading && <LoadingScreen status={loadingMessage} spinner />}
-        <div ref={this.guiContainer} className={containterClass} />
+        <div ref={this.guiContainer} className={containerClass} />
         <div
           style={{ opacity: showViewer ? 1 : 0 }}
           className="three-viewer file-render__viewer"
