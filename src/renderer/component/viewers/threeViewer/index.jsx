@@ -78,6 +78,22 @@ class ThreeViewer extends React.PureComponent<Props, State> {
     group.position.setY(group.position.y + meshY * scaleFactor);
   }
 
+  /*
+    See: https://github.com/mrdoob/three.js/blob/dev/docs/scenes/js/material.js#L195
+  */
+
+  static updateMaterial(material, geometry) {
+    material.vertexColors = +material.vertexColors; // Ensure number
+    material.side = +material.side; // Ensure number
+    material.needsUpdate = true;
+    // If Geometry needs update
+    if (geometry) {
+      geometry.verticesNeedUpdate = true;
+      geometry.normalsNeedUpdate = true;
+      geometry.colorsNeedUpdate = true;
+    }
+  }
+
   constructor(props: Props) {
     super(props);
     const { theme } = this.props;
@@ -192,8 +208,10 @@ class ThreeViewer extends React.PureComponent<Props, State> {
       config.reset = () => {
         // Reset material color
         config.color = this.materialColor;
+        // Reset material
         this.material.color.set(config.color);
-        // Reset wireframe
+        this.material.flatShading = false;
+        this.material.shininess = 30;
         this.material.wireframe = false;
         // Reset autoRotate
         this.controls.autoRotate = false;
@@ -201,8 +219,10 @@ class ThreeViewer extends React.PureComponent<Props, State> {
         this.restoreCamera();
       };
 
+      const materialFolder = this.gui.addFolder('Material');
+
       // Color picker
-      const colorPicker = this.gui
+      const colorPicker = materialFolder
         .addColor(config, 'color')
         .name('Color')
         .listen();
@@ -211,15 +231,33 @@ class ThreeViewer extends React.PureComponent<Props, State> {
         this.material.color.set(color);
       });
 
-      this.gui
+      materialFolder
+        .add(this.material, 'shininess', 0, 100)
+        .name('Shininess')
+        .listen();
+
+      materialFolder
+        .add(this.material, 'flatShading')
+        .name('FlatShading')
+        .onChange(() => {
+          ThreeViewer.updateMaterial(this.material);
+        })
+        .listen();
+
+      materialFolder
         .add(this.material, 'wireframe')
         .name('Wireframe')
         .listen();
-      this.gui
+
+      const sceneFolder = this.gui.addFolder('Scene');
+
+      sceneFolder
         .add(this.controls, 'autoRotate')
         .name('Auto-Rotate')
         .listen();
-      this.gui.add(config, 'reset').name('Reset');
+
+      sceneFolder.add(config, 'reset').name('Reset');
+
       this.guiContainer.current.appendChild(this.gui.domElement);
     }
   }
@@ -227,13 +265,13 @@ class ThreeViewer extends React.PureComponent<Props, State> {
   createGeometry(data) {
     this.bufferGeometry = data;
     this.bufferGeometry.computeBoundingBox();
-    this.bufferGeometry.computeVertexNormals();
     this.bufferGeometry.center();
     this.bufferGeometry.rotateX(-Math.PI / 2);
     this.bufferGeometry.lookAt(new THREE.Vector3(0, 0, 1));
     // Get geometry from bufferGeometry
     this.geometry = new THREE.Geometry().fromBufferGeometry(this.bufferGeometry);
     this.geometry.mergeVertices();
+    this.geometry.computeVertexNormals();
   }
 
   startLoader() {
@@ -300,6 +338,8 @@ class ThreeViewer extends React.PureComponent<Props, State> {
         // Get geometry from child
         const geometry = new THREE.Geometry();
         geometry.fromBufferGeometry(child.geometry);
+        geometry.mergeVertices();
+        geometry.computeVertexNormals();
         // Create and regroup inner objects
         const innerObj = new THREE.Mesh(geometry, this.material);
         this.mesh.add(innerObj);
@@ -357,6 +397,7 @@ class ThreeViewer extends React.PureComponent<Props, State> {
     // Create model material
     this.material = new THREE.MeshPhongMaterial({
       depthWrite: true,
+      flatShading: false,
       vertexColors: THREE.FaceColors,
     });
 
