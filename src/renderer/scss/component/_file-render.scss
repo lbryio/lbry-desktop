@@ -85,16 +85,3 @@
     display: none;
   }
 }
-
-.gui-container {
-  position: absolute;
-  top: 0;
-  right: 0;
-  z-index: 2;
-
-  .dg.main {
-    padding: 0;
-    margin: 0;
-    overflow: inherit;
-  }
-}

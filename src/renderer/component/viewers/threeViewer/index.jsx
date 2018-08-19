@@ -1,6 +1,7 @@
 // @flow
 import * as React from 'react';
 import * as dat from 'dat.gui';
+import classNames from 'classnames';
 import LoadingScreen from 'component/common/loading-screen';
 
 // ThreeJS
@@ -378,16 +379,20 @@ class ThreeViewer extends React.PureComponent<Props, State> {
   }
 
   render() {
+    const { theme } = this.props;
     const { error, isReady, isLoading } = this.state;
     const loadingMessage = __('Loading 3D model.');
     const showViewer = isReady && !error;
     const showLoading = isLoading && !error;
 
+    // Adaptive theme for gui controls
+    const containterClass = classNames('gui-container', { light: theme === 'light' });
+
     return (
       <React.Fragment>
         {error && <LoadingScreen status={error} spinner={false} />}
         {showLoading && <LoadingScreen status={loadingMessage} spinner />}
-        <div ref={this.guiContainer} className="gui-container" />
+        <div ref={this.guiContainer} className={containterClass} />
         <div
           style={{ opacity: showViewer ? 1 : 0 }}
           className="three-viewer file-render__viewer"
