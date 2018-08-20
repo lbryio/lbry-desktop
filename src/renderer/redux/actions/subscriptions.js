@@ -131,7 +131,9 @@ export const doCheckSubscription = (subscriptionUri: string, notify?: boolean) =
   // no dispatching FETCH_CHANNEL_CLAIMS_STARTED; causes loading issues on <SubscriptionsPage>
 
   const state = getState();
-  const savedSubscription = state.subscriptions.subscriptions.find(sub => sub.uri === subscriptionUri);
+  const savedSubscription = state.subscriptions.subscriptions.find(
+    sub => sub.uri === subscriptionUri
+  );
 
   Lbry.claim_list_by_channel({ uri: subscriptionUri, page: 1 }).then(result => {
     const claimResult = result[subscriptionUri] || {};
@@ -168,7 +170,6 @@ export const doCheckSubscription = (subscriptionUri: string, notify?: boolean) =
           dispatch(doPurchaseUri(uri, { cost: 0 }));
         }
       });
-
     }
 
     // always setLatest; important for newly subscribed channels
@@ -270,7 +271,7 @@ export const doCheckSubscriptions = () => (dispatch: Dispatch, getState: () => a
   const state = getState();
   const subscriptions = selectSubscriptions(state);
   subscriptions.forEach((sub: Subscription) => {
-    dispatch(doCheckSubscription(sub, true));
+    dispatch(doCheckSubscription(sub.uri, true));
   });
 };
 
@@ -282,7 +283,7 @@ export const doCheckSubscriptionsInit = () => (dispatch: Dispatch) => {
   setTimeout(() => dispatch(doCheckSubscriptions()), 10000);
   const checkSubscriptionsTimer = setInterval(
     () => dispatch(doCheckSubscriptions()),
-    20000//CHECK_SUBSCRIPTIONS_INTERVAL
+    20000 //CHECK_SUBSCRIPTIONS_INTERVAL
   );
   dispatch({
     type: ACTIONS.CHECK_SUBSCRIPTIONS_SUBSCRIBE,
