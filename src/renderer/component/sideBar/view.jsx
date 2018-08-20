@@ -25,10 +25,7 @@ type Props = {
 const SideBar = (props: Props) => {
   const { navLinks, notifications } = props;
 
-  const badges = Object.keys(notifications).reduce(
-    (acc, cur) => (notifications[cur].type === NOTIFICATION_TYPES.DOWNLOADING ? acc : acc + 1),
-    0
-  );
+  const badges = Object.keys(notifications).length;
 
   return (
     <nav className="nav">

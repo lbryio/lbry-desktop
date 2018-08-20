@@ -44,7 +44,7 @@ type Props = {
   fetchFileInfo: string => void,
   fetchCostInfo: string => void,
   prepareEdit: ({}, string) => void,
-  checkSubscription: ({ channelName: string, uri: string }) => void,
+  checkSubscription: (uri: string) => void,
   subscriptions: Array<Subscription>,
   setClientSetting: (string, boolean | string) => void,
   autoplay: boolean,
@@ -96,16 +96,12 @@ class FilePage extends React.Component<Props> {
 
   checkSubscription = (props: Props) => {
     if (props.subscriptions.find(sub => sub.channelName === props.claim.channel_name)) {
-      props.checkSubscription({
-        channelName: props.claim.channel_name,
-        uri: buildURI(
-          {
-            contentName: props.claim.channel_name,
-            claimId: props.claim.value.publisherSignature.certificateId,
-          },
-          false
-        ),
-      });
+      props.checkSubscription(
+        buildURI({
+          contentName: props.claim.channel_name,
+          claimId: props.claim.value.publisherSignature.certificateId,
+        }, false)
+      );
     }
   };
 

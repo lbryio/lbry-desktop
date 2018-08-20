@@ -40,7 +40,7 @@ const perform = dispatch => ({
   navigate: (path, params) => dispatch(doNavigate(path, params)),
   fetchFileInfo: uri => dispatch(doFetchFileInfo(uri)),
   fetchCostInfo: uri => dispatch(doFetchCostInfoForUri(uri)),
-  checkSubscription: subscription => dispatch(doCheckSubscription(subscription)),
+  checkSubscription: uri => dispatch(doCheckSubscription(uri)),
   openModal: (modal, props) => dispatch(doNotify(modal, props)),
   prepareEdit: (publishData, uri) => dispatch(doPrepareEdit(publishData, uri)),
   setClientSetting: (key, value) => dispatch(doSetClientSetting(key, value)),

@@ -25,7 +25,7 @@ export const selectSubscriptionClaims = createSelector(
       return [];
     }
 
-    const fetchedSubscriptions = [];
+    let fetchedSubscriptions = [];
 
     savedSubscriptions.forEach(subscription => {
       let channelClaims = [];
@@ -39,18 +39,20 @@ export const selectSubscriptionClaims = createSelector(
         // loop over the list of ids and grab the claim
         pageOneChannelIds.forEach(id => {
           const grabbedClaim = allClaims[id];
-          channelClaims.push(grabbedClaim);
+          channelClaims = channelClaims.concat([grabbedClaim]);
         });
       }
 
-      fetchedSubscriptions.push({
-        claims: channelClaims,
-        channelName: subscription.channelName,
-        uri: subscription.uri,
-      });
+      fetchedSubscriptions = fetchedSubscriptions.concat([
+        {
+          claims: [...channelClaims],
+          channelName: subscription.channelName,
+          uri: subscription.uri,
+        },
+      ]);
     });
 
-    return fetchedSubscriptions;
+    return [...fetchedSubscriptions];
   }
 );
 

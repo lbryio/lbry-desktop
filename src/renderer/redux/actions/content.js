@@ -110,6 +110,7 @@ export function doUpdateLoadStatus(uri, outpoint) {
           dispatch(doUpdateLoadStatus(uri, outpoint));
         }, DOWNLOAD_POLL_INTERVAL);
       } else if (fileInfo.completed) {
+        const state = getState();
         // TODO this isn't going to get called if they reload the client before
         // the download finished
         dispatch({
@@ -121,13 +122,13 @@ export function doUpdateLoadStatus(uri, outpoint) {
           },
         });
 
-        const badgeNumber = selectBadgeNumber(getState());
+        const badgeNumber = selectBadgeNumber(state);
         setBadge(badgeNumber === 0 ? '' : `${badgeNumber}`);
 
-        const totalProgress = selectTotalDownloadProgress(getState());
+        const totalProgress = selectTotalDownloadProgress(state);
         setProgressBar(totalProgress);
 
-        const notifications = selectNotifications(getState());
+        const notifications = selectNotifications(state);
         if (notifications[uri] && notifications[uri].type === NOTIFICATION_TYPES.DOWNLOADING) {
           const count = Object.keys(notifications).reduce(
             (acc, cur) =>
@@ -138,7 +139,7 @@ export function doUpdateLoadStatus(uri, outpoint) {
             0
           );
 
-          if (selectosNotificationsEnabled(getState())) {
+          if (selectosNotificationsEnabled(state)) {
             const notif = new window.Notification(notifications[uri].subscription.channelName, {
               body: `Posted ${fileInfo.metadata.title}${
                 count > 1 && count < 10 ? ` and ${count - 1} other new items` : ''
@@ -153,13 +154,15 @@ export function doUpdateLoadStatus(uri, outpoint) {
               );
             };
           }
-          dispatch(
-            setSubscriptionNotification(
-              notifications[uri].subscription,
-              uri,
-              NOTIFICATION_TYPES.DOWNLOADED
-            )
-          );
+          if (state.navigation.currentPath !== '/subscriptions') {
+            dispatch(
+              setSubscriptionNotification(
+                notifications[uri].subscription,
+                uri,
+                NOTIFICATION_TYPES.DOWNLOADED
+              )
+            );
+          }
         } else {
           // If notifications are disabled(false) just return
           if (!selectosNotificationsEnabled(getState())) return;
@@ -376,17 +379,18 @@ export function doFetchClaimsByChannel(uri, page) {
             buildURI({ contentName: latest.name, claimId: latest.claim_id }, false)
           )
         );
-        const notifications = selectNotifications(getState());
-        const newNotifications = {};
-        Object.keys(notifications).forEach(cur => {
-          if (
-            notifications[cur].subscription.channelName !== latest.channel_name ||
-            notifications[cur].type === NOTIFICATION_TYPES.DOWNLOADING
-          ) {
-            newNotifications[cur] = { ...notifications[cur] };
-          }
-        });
-        dispatch(setSubscriptionNotifications(newNotifications));
+        // commented out as a note for @sean, notification will be clared individually
+        // const notifications = selectNotifications(getState());
+        // const newNotifications = {};
+        // Object.keys(notifications).forEach(cur => {
+        //   if (
+        //     notifications[cur].subscription.channelName !== latest.channel_name ||
+        //     notifications[cur].type === NOTIFICATION_TYPES.DOWNLOADING
+        //   ) {
+        //     newNotifications[cur] = { ...notifications[cur] };
+        //   }
+        // });
+        // dispatch(setSubscriptionNotifications(newNotifications));
       }
 
       dispatch({
