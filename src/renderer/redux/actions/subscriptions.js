@@ -283,7 +283,7 @@ export const doCheckSubscriptionsInit = () => (dispatch: Dispatch) => {
   setTimeout(() => dispatch(doCheckSubscriptions()), 10000);
   const checkSubscriptionsTimer = setInterval(
     () => dispatch(doCheckSubscriptions()),
-    20000 //CHECK_SUBSCRIPTIONS_INTERVAL
+    CHECK_SUBSCRIPTIONS_INTERVAL
   );
   dispatch({
     type: ACTIONS.CHECK_SUBSCRIPTIONS_SUBSCRIBE,
