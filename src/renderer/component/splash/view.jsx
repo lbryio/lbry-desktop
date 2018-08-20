@@ -35,6 +35,8 @@ export class SplashScreen extends React.PureComponent<Props, State> {
       isRunning: false,
       launchedModal: false,
     };
+
+    this.hasRecordedUser = false;
   }
 
   componentDidMount() {
@@ -65,8 +67,9 @@ export class SplashScreen extends React.PureComponent<Props, State> {
     const { notifyUnlockWallet, authenticate } = this.props;
     const { launchedModal } = this.state;
 
-    if (status) {
+    if (!this.hasRecordedUser && status) {
       authenticate();
+      this.hasRecordedUser = true;
     }
 
     if (status.wallet && status.wallet.is_locked) {
@@ -118,6 +121,8 @@ export class SplashScreen extends React.PureComponent<Props, State> {
       this.updateStatus();
     }, 500);
   }
+
+  hasRecordedUser: boolean;
 
   render() {
     const { notification } = this.props;
