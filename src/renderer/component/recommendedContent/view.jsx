@@ -10,7 +10,7 @@ type Props = {
   search: string => void,
 };
 
-export default class RecommendedContent extends React.PureComponent<Props, State> {
+export default class RecommendedContent extends React.PureComponent<Props> {
   constructor() {
     super();
 
@@ -37,14 +37,7 @@ export default class RecommendedContent extends React.PureComponent<Props, State
     const { claim, search } = this.props;
 
     if (claim && claim.value && claim.value.stream && claim.value.stream.metadata) {
-      const {
-        value: {
-          stream: {
-            metadata: { title },
-          },
-        },
-      } = claim;
-
+      const { title } = claim.value.stream.metadata;
       search(title);
       this.didSearch = true;
     }
@@ -62,7 +55,7 @@ export default class RecommendedContent extends React.PureComponent<Props, State
           recommendedContent.length &&
           recommendedContent.map(recommendedUri => (
             <FileTile
-              small
+              size="small"
               hideNoResult
               displayDescription={false}
               key={recommendedUri}

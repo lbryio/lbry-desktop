@@ -85,7 +85,17 @@
   background-color: var(--color-secondary);
 }
 
+.search__top {
+  padding: 0 $spacing-width $spacing-width;
+  background-color: var(--card-bg);
+}
+
+.search__content {
+  padding: $spacing-width;
+}
+
 .search__results {
+  margin-top: -$spacing-width;
   padding-bottom: $spacing-vertical;
   flex-flow: wrap column;
 

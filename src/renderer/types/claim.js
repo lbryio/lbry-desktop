@@ -32,10 +32,10 @@ export type Claim = {
   valid_at_height: number,
   value: ?{
     publisherSignature: ?{
-      certificateId: ?string,
+      certificateId: string,
     },
     stream: {
-      metadata: ?Metadata,
+      metadata: Metadata,
     },
   },
 };
