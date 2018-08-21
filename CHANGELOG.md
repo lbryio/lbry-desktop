@@ -13,13 +13,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
  * New viewer for human-readable text files ([#1826](https://github.com/lbryio/lbry-desktop/pull/1826))
  * CSV and JSON viewer ([#1410](https://github.com/lbryio/lbry-desktop/pull/1410))
  * Recommended content on file viewer page ([#1845](https://github.com/lbryio/lbry-desktop/pull/1845))
+ * Desktop notification when publish is completed ([#1892](https://github.com/lbryio/lbry-desktop/pull/1892))
 
 ### Changed
 * Pass error message from spee.ch API during thumbnail upload ([#1840](https://github.com/lbryio/lbry-desktop/pull/1840))
 * Use router pattern for rendering file viewer ([#1544](https://github.com/lbryio/lbry-desktop/pull/1544))
 * Missing word "to" added to the Bid Help Text (#1854)
 * Updated to electron@2 ([#1858](https://github.com/lbryio/lbry-desktop/pull/1858))
-  
+
 ### Fixed
 
 
