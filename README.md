@@ -32,10 +32,10 @@ To install from source or make changes to the application, continue to the next 
 **Community maintained** builds for Arch Linux and Flatpak are available, see below. These installs will need to be updated manually as the in-app update process only supports deb installs at this time.
 *Note: If coming from a deb install, the directory structure is different and you'll need to [migrate data](https://lbry.io/faq/backup-data).*
 
-|                       | Flatpak                                   | Arch                                                                                            
-| --------------------- | ------------------------------------------| --------------------------------------------
-| Latest Release        | [FlatHub Page](https://flathub.org/apps/details/io.lbry.lbry-app)   | [AUR Package](https://aur.archlinux.org/packages/lbry-app-bin/)   
-| Maintainers           | [@choofee](https://github.com/choffee)/[@iuyte](https://github.com/iuyte)    | [@kcseb](https://github.com/kcseb)/[@TimurKiyivinski](https://github.com/TimurKiyivinski)
+|                       | Flatpak                                   | Arch  | Raspberry Pi       |                                                                                                                              
+| --------------------- | ------------------------------------------|------------------| --------------------------------------------
+| Latest Release        | [FlatHub Page](https://flathub.org/apps/details/io.lbry.lbry-app)   | [AUR Package](https://aur.archlinux.org/packages/lbry-app-bin/)  | [Deb installer](https://lbrypi.com)  | 
+| Maintainers           | [@choofee](https://github.com/choffee)/[@iuyte](https://github.com/iuyte)    | [@kcseb](https://github.com/kcseb)/[@TimurKiyivinski](https://github.com/TimurKiyivinski) |[@Madiator2011](https://github.com/kodxana)
 
 ## Usage
 Double click the installed application to browse with the LBRY network.
