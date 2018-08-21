@@ -97,10 +97,13 @@ class FilePage extends React.Component<Props> {
   checkSubscription = (props: Props) => {
     if (props.subscriptions.find(sub => sub.channelName === props.claim.channel_name)) {
       props.checkSubscription(
-        buildURI({
-          contentName: props.claim.channel_name,
-          claimId: props.claim.value.publisherSignature.certificateId,
-        }, false)
+        buildURI(
+          {
+            contentName: props.claim.channel_name,
+            claimId: props.claim.value.publisherSignature.certificateId,
+          },
+          false
+        )
       );
     }
   };
@@ -155,6 +158,13 @@ class FilePage extends React.Component<Props> {
       }
 
       editUri = buildURI(uriObject);
+    }
+
+    let recommendedUri = uri;
+    if (!recommendedUri.includes('#')) {
+      // at a vanity url
+      // append the claim ID so we can properly strip it out of reccomended videos
+      recommendedUri = `${recommendedUri}#${claim.claim_id}`;
     }
 
     return (
@@ -241,7 +251,7 @@ class FilePage extends React.Component<Props> {
             </div>
           </div>
         </section>
-        <RecommendedContent uri={uri} />
+        <RecommendedContent uri={recommendedUri} />
       </Page>
     );
   }
