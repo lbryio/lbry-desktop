@@ -40,7 +40,7 @@ export function doInstallNew() {
   const payload = { app_version: pjson.version };
   Lbry.status().then(status => {
     payload.app_id = status.installation_id;
-    payload.node_id = status.lbry_id;
+    if (status.dht) payload.node_id = status.dht.node_id;
     Lbry.version().then(version => {
       payload.daemon_version = version.lbrynet_version;
       payload.operating_system = version.os_system;
