@@ -278,7 +278,7 @@ export const doCheckPendingPublishes = () => (dispatch: Dispatch, getState: GetS
           delete pendingPublishMap[claim.name];
           if (selectosNotificationsEnabled(getState())) {
             const notif = new window.Notification('LBRY Publish Complete', {
-            body: `${claim.name} has been published successfully, click here to view it.` ,
+            body: `${claim.value.stream.metadata.title} has been published to lbry://${claim.name}. Click here to view it` ,
             silent: false,
             });
             notif.onclick = () => {
