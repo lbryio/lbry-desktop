@@ -4,6 +4,7 @@ import {
   makeSelectDownloadingForUri,
   makeSelectLoadingForUri,
   makeSelectCostInfoForUri,
+  makeSelectClaimForUri,
 } from 'lbry-redux';
 import { doOpenFileInShell } from 'redux/actions/file';
 import { doPurchaseUri, doStartDownload } from 'redux/actions/content';
@@ -16,6 +17,7 @@ const select = (state, props) => ({
   downloading: makeSelectDownloadingForUri(props.uri)(state),
   costInfo: makeSelectCostInfoForUri(props.uri)(state),
   loading: makeSelectLoadingForUri(props.uri)(state),
+  claim: makeSelectClaimForUri(props.uri)(state),
 });
 
 const perform = dispatch => ({
@@ -25,4 +27,7 @@ const perform = dispatch => ({
   doPause: () => dispatch(doPause()),
 });
 
-export default connect(select, perform)(FileDownloadLink);
+export default connect(
+  select,
+  perform
+)(FileDownloadLink);
