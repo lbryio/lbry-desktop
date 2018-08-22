@@ -8,7 +8,7 @@ import type { Subscription } from 'types/subscription';
 import { selectSubscriptions } from 'redux/selectors/subscriptions';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { Lbry, buildURI, parseURI } from 'lbry-redux';
-import { doPurchaseUri } from 'redux/actions/content';
+import { doPurchaseUri, doFetchClaimsByChannel } from 'redux/actions/content';
 import { doClaimRewardType } from 'redux/actions/rewards';
 import Promise from 'bluebird';
 import Lbryio from 'lbryio';
@@ -91,6 +91,8 @@ export const doFetchMySubscriptions = () => (dispatch: Dispatch, getState: () =>
         type: ACTIONS.FETCH_SUBSCRIPTIONS_SUCCESS,
         data: subscriptions,
       });
+
+      subscriptions.forEach(({ uri }) => dispatch(doFetchClaimsByChannel(uri)));
     })
     .catch(() => {
       dispatch({
