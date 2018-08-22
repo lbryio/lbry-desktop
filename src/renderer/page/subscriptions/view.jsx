@@ -6,16 +6,13 @@ import * as NOTIFICATION_TYPES from 'constants/notification_types';
 import Button from 'component/button';
 import FileList from 'component/fileList';
 import type { Claim } from 'types/claim';
-import isDev from 'electron-is-dev';
 import HiddenNsfwClaims from 'component/hiddenNsfwClaims';
 
 type Props = {
-  doFetchClaimsByChannel: (string, number) => void,
   doFetchMySubscriptions: () => void,
   setSubscriptionNotifications: ({}) => void,
   subscriptions: Array<Subscription>,
   subscriptionClaims: Array<{ uri: string, claims: Array<Claim> }>,
-  subscriptionsBeingFetched: {},
   notifications: {},
   loading: boolean,
 };
@@ -35,41 +32,6 @@ export default class extends React.PureComponent<Props> {
       }
     });
     setSubscriptionNotifications(newNotifications);
-  }
-
-  componentDidUpdate() {
-    const {
-      subscriptions,
-      subscriptionClaims,
-      doFetchClaimsByChannel,
-      subscriptionsBeingFetched,
-    } = this.props;
-
-    const subscriptionClaimMap = {};
-    subscriptionClaims.forEach(claim => {
-      /*
-      This check added 6/20/18 to fix function receiving empty claims unexpectedly.
-      The better fix is ensuring channels aren't added to byId if there are no associated claims
-      We are adding this now with the redesign release to ensure users see the correct subscriptions
-      */
-      if (claim.claims.length) {
-        subscriptionClaimMap[claim.uri] = 1;
-      } else if (isDev) {
-        // eslint-disable no-console
-        console.error(
-          `Claim for ${
-            claim.uri
-          } was added to byId in redux but there are no loaded fetched claims. This shouldn't happen because a subscription should have claims attached to it.`
-        );
-        // eslint-enable no-console
-      }
-    });
-
-    subscriptions.forEach(sub => {
-      if (!subscriptionClaimMap[sub.uri] && !subscriptionsBeingFetched[sub.uri]) {
-        doFetchClaimsByChannel(sub.uri, 1);
-      }
-    });
   }
 
   render() {
