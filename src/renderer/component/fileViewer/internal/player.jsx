@@ -46,6 +46,7 @@ class MediaPlayer extends React.PureComponent {
 
     const loadedMetadata = () => {
       this.setState({ hasMetadata: true, startedPlaying: true });
+
       if (startedPlayingCb) {
         startedPlayingCb();
       }
