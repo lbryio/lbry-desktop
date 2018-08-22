@@ -1,12 +1,14 @@
 // @flow
 import React from 'react';
 import Page from 'component/page';
+import * as settings from 'constants/settings';
 import type { Subscription } from 'types/subscription';
 import * as NOTIFICATION_TYPES from 'constants/notification_types';
 import Button from 'component/button';
 import FileList from 'component/fileList';
 import type { Claim } from 'types/claim';
 import HiddenNsfwClaims from 'component/hiddenNsfwClaims';
+import { FormField, FormRow } from 'component/common/form';
 
 type Props = {
   doFetchMySubscriptions: () => void,
@@ -15,9 +17,16 @@ type Props = {
   subscriptionClaims: Array<{ uri: string, claims: Array<Claim> }>,
   notifications: {},
   loading: boolean,
+  autoDownload: boolean,
+  doSetClientSetting: (string, boolean) => void,
 };
 
 export default class extends React.PureComponent<Props> {
+  constructor() {
+    super();
+    (this: any).onAutoDownloadChange = this.onAutoDownloadChange.bind(this);
+  }
+
   componentDidMount() {
     const { notifications, setSubscriptionNotifications, doFetchMySubscriptions } = this.props;
     doFetchMySubscriptions();
@@ -34,8 +43,12 @@ export default class extends React.PureComponent<Props> {
     setSubscriptionNotifications(newNotifications);
   }
 
+  onAutoDownloadChange(event: SyntheticInputEvent<*>) {
+    this.props.doSetClientSetting(settings.AUTO_DOWNLOAD, event.target.checked);
+  }
+
   render() {
-    const { subscriptions, subscriptionClaims, loading } = this.props;
+    const { subscriptions, subscriptionClaims, loading, autoDownload } = this.props;
 
     let claimList = [];
     subscriptionClaims.forEach(claimData => {
@@ -47,6 +60,15 @@ export default class extends React.PureComponent<Props> {
     return (
       <Page notContained loading={loading}>
         <HiddenNsfwClaims uris={subscriptionUris} />
+        <FormRow alignRight>
+          <FormField
+            type="checkbox"
+            name="auto_download"
+            onChange={this.onAutoDownloadChange}
+            checked={autoDownload}
+            prefix={__('Automatically download new content from your subscriptions')}
+          />
+        </FormRow>
         {!subscriptions.length && (
           <div className="page__empty">
             {__("It looks like you aren't subscribed to any channels yet.")}
