@@ -1,0 +1,89 @@
+/*
+* dat.gui component
+*/
+
+.gui-container {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 2;
+
+  .dg.main {
+    padding: 0;
+    margin: 0;
+    overflow: inherit;
+  }
+}
+
+/*
+*  Light theme:
+*  https://github.com/liabru/dat-gui-light-theme
+*/
+
+.gui-container.light {
+  .dg.main.taller-than-window .close-button {
+    border-top: 1px solid #ddd;
+  }
+
+  .dg.main .close-button {
+    background-color: #e8e8e8;
+  }
+
+  .dg.main .close-button:hover {
+    background-color: #ddd;
+  }
+
+  .dg {
+    color: #555;
+    text-shadow: none !important;
+  }
+
+  .dg.main::-webkit-scrollbar {
+    background: #fafafa;
+  }
+
+  .dg.main::-webkit-scrollbar-thumb {
+    background: #bbb;
+  }
+
+  .dg li:not(.folder) {
+    background: #fafafa;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .dg li.save-row .button {
+    text-shadow: none !important;
+  }
+
+  .dg li.title {
+    background: #e8e8e8
+      url(data:image/gif;base64,R0lGODlhBQAFAJEAAP////Pz8////////yH5BAEAAAIALAAAAAAFAAUAAAIIlI+hKgFxoCgAOw==)
+      6px 10px no-repeat;
+  }
+
+  .dg .cr.function:hover,
+  .dg .cr.boolean:hover {
+    background: #fff;
+  }
+
+  .dg .c input[type='text'] {
+    background: #e9e9e9;
+  }
+
+  .dg .c input[type='text']:hover {
+    background: #eee;
+  }
+
+  .dg .c input[type='text']:focus {
+    background: #eee;
+    color: #555;
+  }
+
+  .dg .c .slider {
+    background: #e9e9e9;
+  }
+
+  .dg .c .slider:hover {
+    background: #eee;
+  }
+}

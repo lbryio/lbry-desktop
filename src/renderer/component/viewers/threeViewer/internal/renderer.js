@@ -1,14 +1,13 @@
 import { WebGLRenderer } from './three';
 
-const ThreeRenderer = ({ antialias, shadowMap }) => {
-  const renderer = new WebGLRenderer({
-    antialias,
-  });
+const ThreeRenderer = ({ antialias, shadowMap, gammaCorrection }) => {
+  const renderer = new WebGLRenderer({ antialias });
   // Renderer configuration
   renderer.setPixelRatio(window.devicePixelRatio);
-  renderer.gammaInput = true;
-  renderer.gammaOutput = true;
-  renderer.shadowMap.enabled = shadowMap;
+  renderer.gammaInput = gammaCorrection || false;
+  renderer.gammaOutput = gammaCorrection || false;
+  renderer.shadowMap.enabled = shadowMap || false;
+  renderer.shadowMap.autoUpdate = false;
   return renderer;
 };
 
