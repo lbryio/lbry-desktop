@@ -14,6 +14,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
  * CSV and JSON viewer ([#1410](https://github.com/lbryio/lbry-desktop/pull/1410))
  * Recommended content on file viewer page ([#1845](https://github.com/lbryio/lbry-desktop/pull/1845))
  * 3D File viewer improvements ([#1870](https://github.com/lbryio/lbry-desktop/pull/1870))
+ * Desktop notification when publish is completed ([#1892](https://github.com/lbryio/lbry-desktop/pull/1892))
 
 ### Changed
 * Pass error message from spee.ch API during thumbnail upload ([#1840](https://github.com/lbryio/lbry-desktop/pull/1840))
