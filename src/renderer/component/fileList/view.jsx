@@ -3,23 +3,7 @@ import * as React from 'react';
 import { buildURI } from 'lbry-redux';
 import { FormField } from 'component/common/form';
 import FileCard from 'component/fileCard';
-
-type FileInfo = {
-  name: string,
-  channelName: ?string,
-  pending?: boolean,
-  channel_claim_id: string,
-  value?: {
-    publisherSignature: {
-      certificateId: string,
-    },
-  },
-  metadata: {
-    publisherSignature: {
-      certificateId: string,
-    },
-  },
-};
+import type { FileInfo } from 'types/file_info';
 
 type Props = {
   hideFilter: boolean,
@@ -50,7 +34,7 @@ class FileList extends React.PureComponent<Props, State> {
     this.sortFunctions = {
       dateNew: fileInfos =>
         this.props.sortByHeight
-          ? fileInfos.slice().sort((fileInfo1, fileInfo2) => {
+          ? fileInfos.sort((fileInfo1, fileInfo2) => {
               if (fileInfo1.pending) {
                 return -1;
               }
@@ -60,11 +44,16 @@ class FileList extends React.PureComponent<Props, State> {
               const height2 = this.props.claimsById[fileInfo2.claim_id]
                 ? this.props.claimsById[fileInfo2.claim_id].height
                 : 0;
-              if (height1 > height2) {
-                return -1;
-              } else if (height1 < height2) {
-                return 1;
+
+              if (height1 !== height2) {
+                // flipped because heigher block height is newer
+                return height2 - height1;
               }
+
+              if (fileInfo1.absolute_channel_position && fileInfo2.absolute_channel_position) {
+                return fileInfo1.absolute_channel_position - fileInfo2.absolute_channel_position;
+              }
+
               return 0;
             })
           : [...fileInfos].reverse(),
