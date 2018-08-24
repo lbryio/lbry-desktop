@@ -2,16 +2,13 @@
 import * as React from 'react';
 import CardMedia from 'component/cardMedia';
 import TruncatedText from 'component/common/truncated-text';
-
-/*
-  This component can probably be combined with FileTile
-  Currently the only difference is showing the number of files/empty channel
-*/
+import classnames from 'classnames';
 
 type Props = {
   uri: string,
   isResolvingUri: boolean,
   totalItems: number,
+  size: string,
   claim: ?{
     claim_id: string,
     name: string,
@@ -21,6 +18,10 @@ type Props = {
 };
 
 class ChannelTile extends React.PureComponent<Props> {
+  static defaultProps = {
+    size: 'regular',
+  };
+
   componentDidMount() {
     const { uri, resolveUri } = this.props;
 
@@ -36,27 +37,52 @@ class ChannelTile extends React.PureComponent<Props> {
   }
 
   render() {
-    const { claim, navigate, isResolvingUri, totalItems, uri } = this.props;
-    let channelName, channelId;
+    const { claim, navigate, isResolvingUri, totalItems, uri, size } = this.props;
+    let channelName;
 
     if (claim) {
       channelName = claim.name;
-      channelId = claim.claim_id;
     }
 
     const onClick = () => navigate('/show', { uri });
 
     return (
-      <section className="file-tile card--link" onClick={onClick} role="button">
+      <section
+        onClick={onClick}
+        role="button"
+        className={classnames('file-tile card--link', {
+          'file-tile--small': size === 'small',
+          'file-tile--large': size === 'large',
+        })}
+      >
         <CardMedia title={channelName} thumbnail={null} />
         <div className="file-tile__info">
-          {isResolvingUri && <div className="card__title--small">{__('Loading...')}</div>}
+          {isResolvingUri && (
+            <div
+              className={classnames({
+                'card__title--small': size !== 'large',
+                'card__title--large': size === 'large',
+              })}
+            >
+              {__('Loading...')}
+            </div>
+          )}
           {!isResolvingUri && (
             <React.Fragment>
-              <div className="card__title--small card__title--file">
+              <div
+                className={classnames({
+                  'card__title--file': size === 'regular',
+                  'card__title--x-small': size === 'small',
+                  'card__title--large': size === 'large',
+                })}
+              >
                 <TruncatedText lines={1}>{channelName || uri}</TruncatedText>
               </div>
-              <div className="card__subtitle">
+              <div
+                className={classnames('card__subtitle', {
+                  'card__subtitle--large': size === 'large',
+                })}
+              >
                 {totalItems > 0 && (
                   <span>
                     {totalItems} {totalItems === 1 ? 'file' : 'files'}

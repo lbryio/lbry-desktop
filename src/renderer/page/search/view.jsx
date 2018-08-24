@@ -1,9 +1,10 @@
 // @flow
 import * as React from 'react';
 import * as settings from 'constants/settings';
-import { isURIValid, normalizeURI } from 'lbry-redux';
+import { isURIValid, normalizeURI, parseURI } from 'lbry-redux';
 import { FormField, FormRow } from 'component/common/form';
 import FileTile from 'component/fileTile';
+import ChannelTile from 'component/channelTile';
 import FileListSearch from 'component/fileListSearch';
 import Page from 'component/page';
 
@@ -32,13 +33,27 @@ class SearchPage extends React.PureComponent<Props> {
 
   render() {
     const { query, resultCount } = this.props;
+
+    const isValid = isURIValid(query);
+
+    let uri;
+    let isChannel;
+    if (isValid) {
+      uri = normalizeURI(query);
+      ({ isChannel } = parseURI(uri));
+    }
+
     return (
       <Page noPadding>
         {query &&
-          isURIValid(query) && (
+          isValid && (
             <div className="search__top">
               <div className="file-list__header">{`lbry://${query}`}</div>
-              <FileTile size="large" displayHiddenMessage uri={normalizeURI(query)} />
+              {isChannel ? (
+                <ChannelTile size="large" uri={uri} />
+              ) : (
+                <FileTile size="large" displayHiddenMessage uri={uri} />
+              )}
             </div>
           )}
         <div className="search__content">
