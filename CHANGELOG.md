@@ -6,24 +6,32 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ## [Unreleased]
 
 ### Added
- * Wallet Encryption/Decryption user flows ([#1785](https://github.com/lbryio/lbry-desktop/pull/1785))
- * Add FAQ to Publishing Area ([#1833](https://github.com/lbryio/lbry-desktop/pull/1833))
+ * Wallet encryption/decryption user flows in settings ([#1785](https://github.com/lbryio/lbry-desktop/pull/1785))
+ * Suggestions for recommended content on file page ([#1845](https://github.com/lbryio/lbry-desktop/pull/1845))
+ * Auto download setting for subscriptions ([#1898](https://github.com/lbryio/lbry-desktop/pull/1898))
+ * Ability to disable desktop notifications ([#1834](https://github.com/lbryio/lbry-desktop/pull/1834))
  * Better preview for content ([#620](https://github.com/lbryio/lbry-desktop/pull/620))
  * New markdown and docx viewer ([#1826](https://github.com/lbryio/lbry-desktop/pull/1826))
  * New viewer for human-readable text files ([#1826](https://github.com/lbryio/lbry-desktop/pull/1826))
  * CSV and JSON viewer ([#1410](https://github.com/lbryio/lbry-desktop/pull/1410))
- * Recommended content on file viewer page ([#1845](https://github.com/lbryio/lbry-desktop/pull/1845))
- * 3D File viewer improvements ([#1870](https://github.com/lbryio/lbry-desktop/pull/1870))
+ * 3D File viewer features and performance/memory usage improvements ([#1870](https://github.com/lbryio/lbry-desktop/pull/1870))
  * Desktop notification when publish is completed ([#1892](https://github.com/lbryio/lbry-desktop/pull/1892))
+ * FAQ to Publishing Area ([#1833](https://github.com/lbryio/lbry-desktop/pull/1833))
 
 ### Changed
-* Pass error message from spee.ch API during thumbnail upload ([#1840](https://github.com/lbryio/lbry-desktop/pull/1840))
-* Use router pattern for rendering file viewer ([#1544](https://github.com/lbryio/lbry-desktop/pull/1544))
-* Missing word "to" added to the Bid Help Text (#1854)
-* Updated to electron@2 ([#1858](https://github.com/lbryio/lbry-desktop/pull/1858))
+ * Upgraded LBRY Protocol to [version 0.21.2](https://github.com/lbryio/lbry/releases/tag/v0.21.2) fixing a download bug.
+ * Searching now shows results by default, including direct lbry:// URL tile
+ * Replaced checkboxes with toggles throughout app ([#1834](https://github.com/lbryio/lbry-desktop/pull/1834))
+ * Removed price tile when content is Free ([#1845](https://github.com/lbryio/lbry-desktop/pull/1845))
+ * Pass error message from spee.ch API during thumbnail upload ([#1840](https://github.com/lbryio/lbry-desktop/pull/1840))
+ * Use router pattern for rendering file viewer ([#1544](https://github.com/lbryio/lbry-desktop/pull/1544))
+ * Missing word "to" added to the Bid Help Text (#1854)
+ * Updated to electron@2 ([#1858](https://github.com/lbryio/lbry-desktop/pull/1858))
 
 ### Fixed
-
+ * Node id not being passed correctly ([#1895](https://github.com/lbryio/lbry-desktop/pull/1895))
+ * Subscription quirks including not loading on startup, sorting, showing new content, and sub blank page ([#1872](https://github.com/lbryio/lbry-desktop/pull/1872))
+ * Upgrade on Close button not dismissing properly during automated app update ([#1857](https://github.com/lbryio/lbry-desktop/pull/1857))
 
 ## [0.24.0] - 2018-08-14
 
@@ -54,7 +62,6 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
  * Abandoned claim transactions now show in wallet history ([#1769](https://github.com/lbryio/lbry-desktop/pull/1769))
  * Emoji support in the claim description ([#1800](https://github.com/lbryio/lbry-desktop/pull/1800))
  * PDF preview ([#1576](https://github.com/lbryio/lbry-desktop/pull/1576))
- * Add Desktop notification settings to be enabled/disabled ([#1834](https://github.com/lbryio/lbry-desktop/pull/1834))
 
 ### Changed
   * Upgraded LBRY Protocol to [version 0.20.4](https://github.com/lbryio/lbry/releases/tag/v0.20.4) to assist with download availability and lower CPU usage on idle.
@@ -65,7 +72,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
   * Hide the "Community top bids" section if user chooses to hide NSFW content ([#1760](https://github.com/lbryio/lbry-desktop/pull/1760))
   * More descriptive error message when Shapeshift is unavailable ([#1771](https://github.com/lbryio/lbry-desktop/pull/1771))
   * Rename the Github repo to lbry-desktop ([#1765](https://github.com/lbryio/lbry-desktop/pull/1765))
-  * Changed default browser checkbox to use toggle on all checkbox inputs ([#1834](https://github.com/lbryio/lbry-desktop/pull/1834))
+
 
 ### Fixed
   * Edit option missing from certain published claims ([#1756](https://github.com/lbryio/lbry-desktop/issues/1756))
