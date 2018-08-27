@@ -41,7 +41,9 @@ export default (props: Props) => {
       icon={isSubscribed ? undefined : icons.HEART}
       button="alt"
       label={subscriptionLabel}
-      onClick={() => {
+      onClick={e => {
+        e.stopPropagation();
+
         if (!subscriptions.length) {
           doNotify({ id: MODALS.FIRST_SUBSCRIPTION });
         }

@@ -3,6 +3,7 @@ import * as React from 'react';
 import CardMedia from 'component/cardMedia';
 import TruncatedText from 'component/common/truncated-text';
 import classnames from 'classnames';
+import SubscribeButton from 'component/subscribeButton';
 
 type Props = {
   uri: string,
@@ -38,10 +39,12 @@ class ChannelTile extends React.PureComponent<Props> {
 
   render() {
     const { claim, navigate, isResolvingUri, totalItems, uri, size } = this.props;
-    let channelName;
 
+    let channelName;
+    let subscriptionUri;
     if (claim) {
       channelName = claim.name;
+      subscriptionUri = claim.permanent_url;
     }
 
     const onClick = () => navigate('/show', { uri });
@@ -91,6 +94,11 @@ class ChannelTile extends React.PureComponent<Props> {
                 {!isResolvingUri && !totalItems && <span>This is an empty channel.</span>}
               </div>
             </React.Fragment>
+          )}
+          {subscriptionUri && (
+            <div className="card__actions">
+              <SubscribeButton uri={subscriptionUri} channelName={channelName} />
+            </div>
           )}
         </div>
       </section>
