@@ -21,5 +21,6 @@ module.name_mapper='^rewards\(.*\)$' -> '<PROJECT_ROOT>/src/renderer/rewards\1'
 module.name_mapper='^modal\(.*\)$' -> '<PROJECT_ROOT>/src/renderer/modal\1'
 module.name_mapper='^app\(.*\)$' -> '<PROJECT_ROOT>/src/renderer/app\1'
 module.name_mapper='^native\(.*\)$' -> '<PROJECT_ROOT>/src/renderer/native\1'
+module.name_mapper='^analytics\(.*\)$' -> '<PROJECT_ROOT>/src/renderer/analytics\1'
 
 [strict]

@@ -62,6 +62,7 @@
   --search-active-bg-color: #13233C;
   --search-active-shadow: 0 6px 9px -2px var(--color-grey--dark);
   --search-modal-input-height: 70px;
+  --search-exact-result: #4C5D77;
 
   /* Nav */
   --nav-color: #44548F;

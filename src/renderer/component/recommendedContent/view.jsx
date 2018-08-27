@@ -7,6 +7,7 @@ type Props = {
   uri: string,
   claim: ?Claim,
   recommendedContent: Array<string>,
+  isSearching: boolean,
   search: string => void,
 };
 
@@ -46,13 +47,12 @@ export default class RecommendedContent extends React.PureComponent<Props> {
   didSearch: ?boolean;
 
   render() {
-    const { recommendedContent } = this.props;
+    const { recommendedContent, isSearching } = this.props;
 
     return (
       <section className="card__list--recommended">
         <span>Related</span>
         {recommendedContent &&
-          recommendedContent.length &&
           recommendedContent.map(recommendedUri => (
             <FileTile
               size="small"
@@ -62,6 +62,9 @@ export default class RecommendedContent extends React.PureComponent<Props> {
               uri={recommendedUri}
             />
           ))}
+        {recommendedContent &&
+          !recommendedContent.length &&
+          !isSearching && <div className="card__subtitle">No related content found</div>}
       </section>
     );
   }
