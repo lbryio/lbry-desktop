@@ -284,7 +284,7 @@ export const doCheckPendingPublishes = () => (dispatch: Dispatch, getState: GetS
             notif.onclick = () => {
               dispatch(
                 doNavigate('/show', {
-                   uri: claim.name,
+                   uri: claim.permanent_url,
                 })
               );
             };
