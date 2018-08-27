@@ -160,13 +160,6 @@ class FilePage extends React.Component<Props> {
       editUri = buildURI(uriObject);
     }
 
-    let recommendedUri = uri;
-    if (!recommendedUri.includes('#')) {
-      // at a vanity url
-      // append the claim ID so we can properly strip it out of reccomended videos
-      recommendedUri = `${recommendedUri}#${claim.claim_id}`;
-    }
-
     return (
       <Page forContent>
         <section className="content__wrapper">
@@ -251,7 +244,7 @@ class FilePage extends React.Component<Props> {
             </div>
           </div>
         </section>
-        <RecommendedContent uri={recommendedUri} />
+        <RecommendedContent uri={uri} />
       </Page>
     );
   }

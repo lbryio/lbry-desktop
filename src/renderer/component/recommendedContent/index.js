@@ -1,10 +1,16 @@
 import { connect } from 'react-redux';
-import { makeSelectClaimForUri, doSearch, makeSelectRecommendedContentForUri } from 'lbry-redux';
+import {
+  makeSelectClaimForUri,
+  doSearch,
+  makeSelectRecommendedContentForUri,
+  selectIsSearching,
+} from 'lbry-redux';
 import RecommendedVideos from './view';
 
 const select = (state, props) => ({
   claim: makeSelectClaimForUri(props.uri)(state),
   recommendedContent: makeSelectRecommendedContentForUri(props.uri)(state),
+  isSearching: selectIsSearching(state),
 });
 
 const perform = dispatch => ({
