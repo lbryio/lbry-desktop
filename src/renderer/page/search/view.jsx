@@ -7,6 +7,9 @@ import FileTile from 'component/fileTile';
 import ChannelTile from 'component/channelTile';
 import FileListSearch from 'component/fileListSearch';
 import Page from 'component/page';
+import ToolTip from 'component/common/tooltip';
+import Icon from 'component/common/icon';
+import * as icons from 'constants/icons';
 
 type Props = {
   query: ?string,
@@ -48,7 +51,15 @@ class SearchPage extends React.PureComponent<Props> {
         {query &&
           isValid && (
             <div className="search__top">
-              <div className="file-list__header">{`lbry://${query}`}</div>
+              <div className="file-list__header">
+                {`lbry://${query}`}
+                <ToolTip
+                  icon
+                  body={__('This is the resolution of a LBRY URL and not controlled by LBRY Inc.')}
+                >
+                  <Icon icon={icons.HELP} />
+                </ToolTip>
+              </div>
               {isChannel ? (
                 <ChannelTile size="large" uri={uri} />
               ) : (
