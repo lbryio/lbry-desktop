@@ -50,6 +50,20 @@
   }
 }
 
+.spinner--small {
+  margin: $spacing-vertical * 1/3 0;
+  width: 40px;
+  height: 32px;
+  text-align: center;
+  font-size: 10px;
+
+  .rect {
+    height: 100%;
+    width: 3px;
+    margin: 0 2px;
+  }
+}
+
 @keyframes sk-stretchdelay {
   0%,
   40%,
