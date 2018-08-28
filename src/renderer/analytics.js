@@ -44,7 +44,13 @@ const analytics: Analytics = {
     }
     analyticsEnabled = enabled;
   },
-  apiLogView: (uri: string, outpoint: string, claimId: string, timeToStart?: number): void => {
+  apiLogView: (
+    uri: string,
+    outpoint: string,
+    claimId: string,
+    timeToStart?: number,
+    onSuccessCb: ?() => void
+  ): void => {
     if (analyticsEnabled) {
       const params = {
         uri,
@@ -56,7 +62,13 @@ const analytics: Analytics = {
         params.time_to_start = timeToStart;
       }
 
-      Lbryio.call('file', 'view', params).catch(() => {});
+      Lbryio.call('file', 'view', params)
+        .then(() => {
+          if (onSuccessCb) {
+            onSuccessCb();
+          }
+        })
+        .catch(() => {});
     }
   },
 };

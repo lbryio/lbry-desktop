@@ -1,7 +1,6 @@
-import React from 'react';
 import { connect } from 'react-redux';
 import { doFetchFeaturedUris } from 'redux/actions/content';
-import { selectFeaturedUris, selectFetchingFeaturedUris } from 'redux/selectors/content';
+import { selectFeaturedUris, selectFetchingFeaturedUris, doFetchRewardedContent } from 'redux/selectors/content';
 import DiscoverPage from './view';
 
 const select = state => ({
@@ -11,6 +10,10 @@ const select = state => ({
 
 const perform = dispatch => ({
   fetchFeaturedUris: () => dispatch(doFetchFeaturedUris()),
+  fetchRewards: () => dispatch(doFetchRewardedContent()),
 });
 
-export default connect(select, perform)(DiscoverPage);
+export default connect(
+  select,
+  perform
+)(DiscoverPage);
