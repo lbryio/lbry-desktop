@@ -5,6 +5,7 @@ import CategoryList from 'component/categoryList';
 
 type Props = {
   fetchFeaturedUris: () => void,
+  fetchRewardedContent: () => void,
   fetchingFeaturedUris: boolean,
   featuredUris: {},
 };
@@ -16,9 +17,14 @@ class DiscoverPage extends React.PureComponent<Props> {
   }
 
   componentWillMount() {
-    const { fetchFeaturedUris } = this.props;
+    const { fetchFeaturedUris, fetchRewardedContent } = this.props;
     fetchFeaturedUris();
-    this.continousFetch = setInterval(fetchFeaturedUris, 1000 * 60 * 60);
+    fetchRewardedContent();
+
+    this.continousFetch = setInterval(() => {
+      fetchFeaturedUris();
+      fetchRewardedContent();
+    }, 1000 * 60 * 60);
   }
 
   componentWillUnmount() {

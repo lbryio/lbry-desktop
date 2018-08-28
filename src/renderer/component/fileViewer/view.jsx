@@ -44,6 +44,7 @@ type Props = {
   play: string => void,
   searchBarFocused: boolean,
   mediaType: string,
+  claimRewards: () => void,
 };
 
 class FileViewer extends React.PureComponent<Props> {
@@ -169,7 +170,8 @@ class FileViewer extends React.PureComponent<Props> {
     }
   }
 
-  fireAnalyticsEvent = (claim, startTime, playTime) => {
+  fireAnalyticsEvent(claim, startTime, playTime) {
+    const { claimRewards } = this.props;
     const { name, claim_id: claimId, txid, nout } = claim;
 
     // ideally outpoint would exist inside of claim information
@@ -181,8 +183,8 @@ class FileViewer extends React.PureComponent<Props> {
       timeToStart = playTime - startTime;
     }
 
-    analytics.apiLogView(`${name}#${claimId}`, outpoint, claimId, timeToStart);
-  };
+    analytics.apiLogView(`${name}#${claimId}`, outpoint, claimId, timeToStart, claimRewards);
+  }
 
   startedPlayingCb: ?() => void;
   startTime: ?number;
