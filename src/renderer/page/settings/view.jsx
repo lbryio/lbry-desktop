@@ -348,12 +348,17 @@ class SettingsPage extends React.PureComponent<Props, State> {
                 name="encrypt_wallet"
                 onChange={e => this.onChangeEncryptWallet(e)}
                 checked={walletEncrypted}
-                postfix={__('Encrypt my wallet with a custom password.')}
-                helper={__(
+                postfix={__('Encrypt my wallet with a custom password.')}/>
+                <div className="help help--padded"> {__(
                   'Secure your local wallet data with a custom password. Lost passwords cannot be recovered.'
-                )}
-              />
-            </section>
+                )}{' '}
+                  <Button
+                    button="link"
+                    label= {__('Learn more')}
+                    href="https://lbry.io/faq/wallet-encryption"/>      
+                </div> 
+                
+                     </section>
             <section className="card card--section">
               <div className="card__title">{__('Application Cache')}</div>
               <span className="card__subtitle">
