@@ -10,7 +10,7 @@ const select = state => ({
 
 const perform = dispatch => ({
   fetchFeaturedUris: () => dispatch(doFetchFeaturedUris()),
-  fetchRewards: () => dispatch(doFetchRewardedContent()),
+  fetchRewardedContent: () => dispatch(doFetchRewardedContent()),
 });
 
 export default connect(
