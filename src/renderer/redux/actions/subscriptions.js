@@ -7,7 +7,7 @@ import type { Dispatch, SubscriptionNotifications } from 'redux/reducers/subscri
 import type { Subscription } from 'types/subscription';
 import { selectSubscriptions } from 'redux/selectors/subscriptions';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
-import { Lbry, buildURI, parseURI } from 'lbry-redux';
+import { Lbry, buildURI, parseURI, selectCurrentPage } from 'lbry-redux';
 import { doPurchaseUri, doFetchClaimsByChannel } from 'redux/actions/content';
 import { doClaimRewardType } from 'redux/actions/rewards';
 import Promise from 'bluebird';
@@ -133,6 +133,7 @@ export const doCheckSubscription = (subscriptionUri: string, notify?: boolean) =
   // no dispatching FETCH_CHANNEL_CLAIMS_STARTED; causes loading issues on <SubscriptionsPage>
 
   const state = getState();
+  const currentPage = selectCurrentPage(state);
   const savedSubscription = state.subscriptions.subscriptions.find(
     sub => sub.uri === subscriptionUri
   );
@@ -140,6 +141,11 @@ export const doCheckSubscription = (subscriptionUri: string, notify?: boolean) =
   Lbry.claim_list_by_channel({ uri: subscriptionUri, page: 1 }).then(result => {
     const claimResult = result[subscriptionUri] || {};
     const { claims_in_channel: claimsInChannel } = claimResult;
+
+    // may happen if subscribed to an abandoned channel or an empty channel
+    if (!claimsInChannel) {
+      return;
+    }
 
     const latestIndex = claimsInChannel.findIndex(
       claim => `${claim.name}#${claim.claim_id}` === savedSubscription.latest
@@ -158,7 +164,7 @@ export const doCheckSubscription = (subscriptionUri: string, notify?: boolean) =
             !claim.value.stream.metadata.fee &&
             makeSelectClientSetting(SETTINGS.AUTO_DOWNLOAD)(state)
         );
-        if (notify) {
+        if (notify && currentPage !== 'subscriptions') {
           dispatch(
             setSubscriptionNotification(
               savedSubscription,
