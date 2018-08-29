@@ -50,7 +50,7 @@
     "formik": "^0.10.4",
     "hast-util-sanitize": "^1.1.2",
     "keytar": "^4.2.1",
-    "lbry-redux": "lbryio/lbry-redux#eae0d134d92d83f733b85a8ecebf529a6e9799cf",
+    "lbry-redux": "lbryio/lbry-redux#421321a78397251589e5a890f4caa95e79975e2b",
     "localforage": "^1.7.1",
     "mammoth": "^1.4.6",
     "mime": "^2.3.1",

@@ -8,11 +8,13 @@ type Props = {
   unclaimedRewardAmount: number,
   fetching: boolean,
   fetchRewards: () => void,
+  fetchRewardedContent: () => void,
 };
 
 class RewardSummary extends React.Component<Props> {
   componentDidMount() {
     this.props.fetchRewards();
+    this.props.fetchRewardedContent();
   }
 
   render() {

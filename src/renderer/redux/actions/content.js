@@ -2,7 +2,6 @@ import * as NOTIFICATION_TYPES from 'constants/notification_types';
 import { ipcRenderer } from 'electron';
 import Lbryio from 'lbryio';
 import { doAlertError } from 'redux/actions/app';
-import { doClaimEligiblePurchaseRewards } from 'redux/actions/rewards';
 import { doNavigate } from 'redux/actions/navigation';
 import {
   setSubscriptionLatest,
@@ -230,7 +229,6 @@ export function doStartDownload(uri, outpoint) {
 export function doDownloadFile(uri, streamInfo) {
   return dispatch => {
     dispatch(doStartDownload(uri, streamInfo.outpoint));
-    dispatch(doClaimEligiblePurchaseRewards());
   };
 }
 

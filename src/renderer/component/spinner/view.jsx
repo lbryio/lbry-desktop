@@ -19,6 +19,7 @@ const Spinner = (props: Props) => {
         'spinner--dark': !light && (dark || theme === LIGHT_THEME),
         'spinner--light': !dark && (light || theme === DARK_THEME),
         'spinner--splash': type === 'splash',
+        'spinner--small': type === 'small',
       })}
     >
       <div className="rect rect1" />
