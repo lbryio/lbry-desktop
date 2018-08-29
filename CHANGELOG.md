@@ -17,15 +17,16 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
  * 3D File viewer features and performance/memory usage improvements ([#1870](https://github.com/lbryio/lbry-desktop/pull/1870))
  * Desktop notification when publish is completed ([#1892](https://github.com/lbryio/lbry-desktop/pull/1892))
  * FAQ to Publishing Area ([#1833](https://github.com/lbryio/lbry-desktop/pull/1833))
-  * FAQ to wallet security area ([#1917](https://github.com/lbryio/lbry-desktop/pull/1917))
+ * FAQ to wallet security area ([#1917](https://github.com/lbryio/lbry-desktop/pull/1917))
+ 
 ### Changed
  * Upgraded LBRY Protocol to [version 0.21.2](https://github.com/lbryio/lbry/releases/tag/v0.21.2) fixing a download bug.
- * Searching now shows results by default, including direct lbry:// URL tile
+ * Searching now shows results by default, including direct lbry:// URL tile ([#1875](https://github.com/lbryio/lbry-desktop/pull/))
  * Replaced checkboxes with toggles throughout app ([#1834](https://github.com/lbryio/lbry-desktop/pull/1834))
  * Removed price tile when content is Free ([#1845](https://github.com/lbryio/lbry-desktop/pull/1845))
  * Pass error message from spee.ch API during thumbnail upload ([#1840](https://github.com/lbryio/lbry-desktop/pull/1840))
  * Use router pattern for rendering file viewer ([#1544](https://github.com/lbryio/lbry-desktop/pull/1544))
- * Missing word "to" added to the Bid Help Text (#1854)
+ * Missing word "to" added to the Bid Help Text ([#1854](https://github.com/lbryio/lbry-desktop/pull/1854))
  * Updated to electron@2 ([#1858](https://github.com/lbryio/lbry-desktop/pull/1858))
 
 ### Fixed
