@@ -163,7 +163,7 @@ button:disabled {
   transition: color var(--animation-duration) var(--animation-style);
 
   &:hover {
-    color: var(--color-light-blue);
+    color: var(--btn-color-inverse);
   }
 }
 
