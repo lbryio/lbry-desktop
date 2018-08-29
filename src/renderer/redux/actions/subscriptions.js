@@ -249,8 +249,7 @@ export const doChannelSubscribe = (subscription: Subscription) => (
     dispatch(doClaimRewardType(rewards.SUBSCRIPTION, { failSilently: true }));
   }
 
-  // should be subUri
-  dispatch(doCheckSubscription(subscription, true));
+  dispatch(doCheckSubscription(subscription.uri, true));
 };
 
 export const doChannelUnsubscribe = (subscription: Subscription) => (

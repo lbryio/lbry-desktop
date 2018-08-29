@@ -2,6 +2,7 @@
 import React from 'react';
 import FileTile from 'component/fileTile';
 import type { Claim } from 'types/claim';
+import Spinner from 'component/spinner';
 
 type Props = {
   uri: string,
@@ -65,6 +66,7 @@ export default class RecommendedContent extends React.PureComponent<Props> {
         {recommendedContent &&
           !recommendedContent.length &&
           !isSearching && <div className="card__subtitle">No related content found</div>}
+        {isSearching && <Spinner type="small" />}
       </section>
     );
   }

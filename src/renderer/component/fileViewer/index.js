@@ -4,6 +4,7 @@ import { doChangeVolume } from 'redux/actions/app';
 import { selectVolume } from 'redux/selectors/app';
 import { doPlayUri, doSetPlayingUri } from 'redux/actions/content';
 import { doPlay, doPause, savePosition } from 'redux/actions/media';
+import { doClaimEligiblePurchaseRewards } from 'redux/actions/rewards';
 import {
   makeSelectMetadataForUri,
   makeSelectContentTypeForUri,
@@ -35,7 +36,7 @@ const select = (state, props) => ({
   mediaPosition: makeSelectMediaPositionForUri(props.uri)(state),
   autoplay: makeSelectClientSetting(settings.AUTOPLAY)(state),
   searchBarFocused: selectSearchBarFocused(state),
-  fileInfoErrors: selectFileInfoErrors(state)
+  fileInfoErrors: selectFileInfoErrors(state),
 });
 
 const perform = dispatch => ({
@@ -45,6 +46,7 @@ const perform = dispatch => ({
   doPlay: () => dispatch(doPlay()),
   doPause: () => dispatch(doPause()),
   savePosition: (claimId, position) => dispatch(savePosition(claimId, position)),
+  claimRewards: () => dispatch(doClaimEligiblePurchaseRewards()),
 });
 
 export default connect(
