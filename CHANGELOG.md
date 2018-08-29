@@ -6,6 +6,15 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ## [Unreleased]
 
 ### Added
+
+### Changed
+
+### Fixed
+
+
+## [0.25.0] - 2018-08-29
+
+### Added
  * Wallet encryption/decryption user flows in settings ([#1785](https://github.com/lbryio/lbry-desktop/pull/1785))
  * Suggestions for recommended content on file page ([#1845](https://github.com/lbryio/lbry-desktop/pull/1845))
  * Auto download setting for subscriptions ([#1898](https://github.com/lbryio/lbry-desktop/pull/1898))
