@@ -54,10 +54,10 @@ table.table,
     tr {
       border-bottom: var(--table-item-border);
       padding: 8px 0;
-      &:nth-child(even):not(.odd) {
+      &:nth-child(even) {
         background-color: var(--table-item-odd);
       }
-      &:nth-child(odd):not(.even) {
+      &:nth-child(odd) {
         background-color: var(--table-item-even);
       }
       &.thead {
@@ -105,5 +105,32 @@ table.table--transactions {
   }
   td:nth-of-type(5) {
     width: 15%;
+  }
+}
+
+table.table--history {
+  margin-top: 0;
+  
+  tbody {
+    tr {
+      &:nth-child(even),
+      &:nth-child(odd) {
+        background-color: var(--table-item-even);
+        
+        &.history__selected {
+          color: red;
+          background-color: var(--table-item-odd);
+        }
+      }
+    }
+    
+    td:nth-of-type(2) {
+      /*Tourniquets text over 20VW*/
+      max-width: 20vw;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      color: var(--color-help);
+    }
   }
 }

@@ -89,6 +89,10 @@ class FilePage extends React.Component<Props> {
     if (nextProps.fileInfo === undefined) {
       fetchFileInfo(uri);
     }
+    
+    if (uri !== nextProps.uri) {
+      setViewed(nextProps.uri);
+    }
   }
 
   onAutoplayChange(event: SyntheticInputEvent<*>) {

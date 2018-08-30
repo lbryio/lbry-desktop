@@ -64,7 +64,6 @@ class FileCard extends React.PureComponent<Props> {
       claimIsMine,
       pending,
       position,
-      lastViewed,
       clearHistoryUri,
       showPrice,
     } = this.props;
@@ -111,20 +110,6 @@ class FileCard extends React.PureComponent<Props> {
             {fileInfo && <Icon icon={icons.LOCAL} />}
             {position && <Icon icon={icons.REFRESH} />}
           </div>
-          {lastViewed && (
-            <div className="card__subtitle">
-              {moment(lastViewed).from(moment())}
-              {position && <Icon icon={icons.REFRESH} />}
-              <span
-                onClick={e => {
-                  e.stopPropagation();
-                  clearHistoryUri(uri);
-                }}
-              >
-                <Icon icon={icons.CLOSE} iconColor="red" />
-              </span>
-            </div>
-          )}
         </div>
       </section>
     );

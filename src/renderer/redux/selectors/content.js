@@ -1,5 +1,5 @@
 import { createSelector } from 'reselect';
-import { makeSelectClaimForUri } from 'lbry-redux';
+import { makeSelectClaimForUri, selectClaimsByUri } from 'lbry-redux';
 import { HISTORY_ITEMS_PER_PAGE } from 'constants/content';
 
 export const selectState = state => state.content || {};
@@ -47,9 +47,23 @@ export const selectHistoryPageCount = createSelector(selectState, state =>
 );
 
 export const makeSelectHistoryForPage = page =>
-  createSelector(selectState, state => {
+  createSelector(selectState, selectClaimsByUri, (state, claimsByUri) => {
     const left = page * HISTORY_ITEMS_PER_PAGE;
-    return state.history.slice(left, left + HISTORY_ITEMS_PER_PAGE);
+    const historyItems = state.history.slice(left, left + HISTORY_ITEMS_PER_PAGE);
+    
+    // See if we have the claim info for the uris in your history
+    // If not, it will need to be fetched in the component
+    return historyItems.map((historyItem) => {
+      const { uri, lastViewed } = historyItem;
+      const claimAtUri = claimsByUri[uri];
+      
+      if (claimAtUri) {
+        return { lastViewed, uri, ...claimAtUri }
+      } else {
+        console.log("jsut returning item")
+        return historyItem;
+      }
+    })
   });
 
 export const makeSelectHistoryForUri = uri =>

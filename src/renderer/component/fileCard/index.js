@@ -12,7 +12,6 @@ import {
   selectRewardContentClaimIds,
   makeSelectContentPositionForUri,
 } from 'redux/selectors/content';
-import { doClearContentHistoryUri } from 'redux/actions/content';
 import { selectShowNsfw } from 'redux/selectors/settings';
 import { selectPendingPublish } from 'redux/selectors/publish';
 import FileCard from './view';
