@@ -9,7 +9,8 @@ import Icon from 'component/common/icon';
 import UriIndicator from 'component/uriIndicator';
 import * as icons from 'constants/icons';
 import classnames from 'classnames';
-import { openCopyLinkMenu } from '../../util/contextMenu';
+import FilePrice from 'component/filePrice';
+import { openCopyLinkMenu } from 'util/contextMenu';
 
 // TODO: iron these out
 type Props = {
@@ -65,6 +66,7 @@ class FileCard extends React.PureComponent<Props> {
       position,
       lastViewed,
       clearHistoryUri,
+      showPrice,
     } = this.props;
 
     const shouldHide = !claimIsMine && !pending && obscureNsfw && metadata && metadata.nsfw;

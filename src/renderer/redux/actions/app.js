@@ -17,7 +17,7 @@ import { doFetchRewardedContent } from 'redux/actions/content';
 import { doFetchDaemonSettings } from 'redux/actions/settings';
 import { doAuthNavigate } from 'redux/actions/navigation';
 import { doAuthenticate } from 'redux/actions/user';
-import { doCheckSubscriptions } from 'redux/actions/subscriptions';
+import { doCheckSubscriptionsInit } from 'redux/actions/subscriptions';
 import {
   selectIsUpgradeSkipped,
   selectUpdateUrl,
@@ -28,7 +28,6 @@ import {
   selectRemoteVersion,
   selectUpgradeTimer,
 } from 'redux/selectors/app';
-import { doAuthenticate } from 'redux/actions/user';
 import { lbrySettings as config } from 'package.json';
 
 const { autoUpdater } = remote.require('electron-updater');
