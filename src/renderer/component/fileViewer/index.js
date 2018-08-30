@@ -13,6 +13,7 @@ import {
   makeSelectDownloadingForUri,
   selectSearchBarFocused,
 } from 'lbry-redux';
+import { doClaimEligiblePurchaseRewards } from 'redux/actions/rewards';
 import { makeSelectClientSetting, selectShowNsfw } from 'redux/selectors/settings';
 import { selectPlayingUri, makeSelectContentPositionForUri } from 'redux/selectors/content';
 import { selectFileInfoErrors } from 'redux/selectors/file_info';
@@ -39,6 +40,7 @@ const perform = dispatch => ({
   play: uri => dispatch(doPlayUri(uri)),
   cancelPlay: () => dispatch(doSetPlayingUri(null)),
   changeVolume: volume => dispatch(doChangeVolume(volume)),
+  claimRewards: () => dispatch(doClaimEligiblePurchaseRewards()),
   savePosition: (claimId, outpoint, position) =>
     dispatch(savePosition(claimId, outpoint, position)),
 });

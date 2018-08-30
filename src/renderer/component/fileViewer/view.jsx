@@ -249,6 +249,7 @@ class FileViewer extends React.PureComponent<Props> {
                 claim={claim}
                 uri={uri}
                 position={position}
+                startedPlayingCb={this.startedPlayingCb}
                 playingUri={playingUri}
               />
             )}
