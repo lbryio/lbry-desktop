@@ -24,11 +24,9 @@ export default appState => {
     // Create the window using the state information.
     x: windowState.x,
     y: windowState.y,
-
     // If state is undefined, create window as maximized.
     width: windowState.width === undefined ? width : windowState.width,
     height: windowState.height === undefined ? height : windowState.height,
-
     webPreferences: {
       // Disable renderer process's webSecurity on development to enable CORS.
       webSecurity: !isDev,
