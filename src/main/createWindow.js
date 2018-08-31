@@ -20,7 +20,7 @@ export default appState => {
     minHeight: 600,
     autoHideMenuBar: true,
     show: false,
-    icon: 'build/icons/48x48.png',
+    icon: 'build/icons/256x256.png',
     // Create the window using the state information.
     x: windowState.x,
     y: windowState.y,
