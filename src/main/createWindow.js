@@ -20,9 +20,11 @@ export default appState => {
     minHeight: 600,
     autoHideMenuBar: true,
     show: false,
+    icon: 'build/icons/48x48.png',
     // Create the window using the state information.
     x: windowState.x,
     y: windowState.y,
+
     // If state is undefined, create window as maximized.
     width: windowState.width === undefined ? width : windowState.width,
     height: windowState.height === undefined ? height : windowState.height,
@@ -123,7 +125,7 @@ export default appState => {
   window.webContents.on('crashed', () => {
     window = null;
   });
-  
+
   window.webContents.on('new-window', (event, url) => {
     event.preventDefault();
     shell.openExternal(url);
