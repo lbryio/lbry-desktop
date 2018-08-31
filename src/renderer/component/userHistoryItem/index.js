@@ -1,9 +1,16 @@
 import { connect } from 'react-redux';
-import { doResolveUri } from 'lbry-redux';
+import { doResolveUri, makeSelectClaimForUri } from 'lbry-redux';
 import UserHistoryItem from './view';
 
-const perform = (dispatch) => ({
-  resolveUri: uri => dispatch(doResolveUri(uri)),
-})
+const select = (state, props) => ({
+  claim: makeSelectClaimForUri(props.uri)(state),
+});
 
-export default connect(null, perform)(UserHistoryItem);
+const perform = dispatch => ({
+  resolveUri: uri => dispatch(doResolveUri(uri)),
+});
+
+export default connect(
+  select,
+  perform
+)(UserHistoryItem);
