@@ -16,8 +16,13 @@ export default (props: Props) => {
     : `${claimId}/${claimName}`;
 
   return claimId && claimName ? (
-    <Tooltip onComponent body={__('View on Spee.ch')}>
-      <Button icon={icons.GLOBE} button="alt" label={__('')} href={`http://spee.ch/${speechURL}`} />
+    <Tooltip onComponent body={__('Post on Facebook')}>
+      <Button
+        icon={icons.FACEBOOK}
+        button="alt"
+        label={__('')}
+        href={`https://facebook.com/sharer/sharer.php?u=http://spee.ch/${speechURL}`}
+      />
     </Tooltip>
   ) : null;
 };
