@@ -55,22 +55,34 @@ class SelectThumbnail extends React.PureComponent<Props, State> {
     const thumbnailSrc =
       !thumbnail || thumbnailError ? Native.imagePath(thumbnailErrorImage) : thumbnail;
 
+    /*
+      Note:
+      We are using backgroundImage instead of an <img /> to zoom if the selected thumbnail isn't
+      the proper aspect ratio. This is to avoid blackbars on the side of images and inconsistent thumbnails
+      We still need to render the image to see if there is an error loading the url
+    */
+
     return (
       <div className="card__content">
         {status === THUMBNAIL_STATUSES.API_DOWN || status === THUMBNAIL_STATUSES.MANUAL ? (
           <div className="column">
-            <img
-              src={thumbnailSrc}
-              className="column__item thumbnail-preview"
-              alt={__('Thumbnail Preview')}
-              onError={() => {
-                this.setState({
-                  thumbnailError: true,
-                  thumbnailErrorImage:
-                    thumbnail && thumbnail.length > 0 ? 'broken.png' : 'no-thumbnail.png',
-                });
-              }}
-            />
+            <div
+              className="column__item thumbnail-preview card__media"
+              style={{ backgroundImage: `url(${thumbnailSrc})` }}
+            >
+              <img
+                style={{ display: 'none' }}
+                src={thumbnailSrc}
+                alt={__('Thumbnail Preview')}
+                onError={() => {
+                  this.setState({
+                    thumbnailError: true,
+                    thumbnailErrorImage:
+                      thumbnail && thumbnail.length > 0 ? 'broken.png' : 'no-thumbnail.png',
+                  });
+                }}
+              />
+            </div>
             <div className="column__item">
               <FormField
                 className="input--thumbnail"
