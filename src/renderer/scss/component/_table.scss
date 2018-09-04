@@ -133,15 +133,15 @@ table.table--history {
       width: 7.5%;
     }
     td:nth-of-type(2) {
-      width: 20%;
+      width: 17.5%;
     }
     td:nth-of-type(3) {
-      width: 30%;
-      padding-right: 10px;
+      width: 40%;
+      max-width: 30vw;
+      padding-right: $spacing-vertical * 2/3;
     }
     td:nth-of-type(4) {
-      width: 42.5%;
-      max-width: 30vw;
+      width: 30%;
     }
 
     td:nth-of-type(3),

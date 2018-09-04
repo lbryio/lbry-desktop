@@ -1,1 +1,1 @@
-export const HISTORY_ITEMS_PER_PAGE = 30;
+export const HISTORY_ITEMS_PER_PAGE = 50;

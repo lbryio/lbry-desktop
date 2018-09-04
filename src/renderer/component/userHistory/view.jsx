@@ -1,7 +1,5 @@
 // @flow
-import React from 'react';
-import FileCard from 'component/fileCard';
-import Page from 'component/page';
+import * as React from 'react';
 import Button from 'component/button';
 import { FormField, FormRow } from 'component/common/form';
 import ReactPaginate from 'react-paginate';
@@ -16,11 +14,16 @@ type Props = {
   history: Array<HistoryItem>,
   page: number,
   pageCount: number,
-  navigate: string => void,
+  navigate: (string, {}) => void,
+  clearHistoryUri: string => void,
   params: { page: number },
 };
 
-class UserHistoryPage extends React.PureComponent<Props> {
+type State = {
+  itemsSelected: {},
+};
+
+class UserHistoryPage extends React.PureComponent<Props, State> {
   constructor() {
     super();
 
@@ -28,9 +31,24 @@ class UserHistoryPage extends React.PureComponent<Props> {
       itemsSelected: {},
     };
 
-    this.selectAll = this.selectAll.bind(this);
-    this.unselectAll = this.unselectAll.bind(this);
-    this.removeSelected = this.removeSelected.bind(this);
+    (this: any).selectAll = this.selectAll.bind(this);
+    (this: any).unselectAll = this.unselectAll.bind(this);
+    (this: any).removeSelected = this.removeSelected.bind(this);
+  }
+
+  onSelect(uri: string) {
+    const { itemsSelected } = this.state;
+
+    const newItemsSelected = { ...itemsSelected };
+    if (itemsSelected[uri]) {
+      delete newItemsSelected[uri];
+    } else {
+      newItemsSelected[uri] = true;
+    }
+
+    this.setState({
+      itemsSelected: { ...newItemsSelected },
+    });
   }
 
   changePage(pageNumber: number) {
@@ -50,12 +68,6 @@ class UserHistoryPage extends React.PureComponent<Props> {
     ) {
       this.changePage(pageFromInput);
     }
-  }
-
-  onSelect(uri: string) {
-    this.setState({
-      itemsSelected: { ...this.state.itemsSelected, [uri]: !this.state.itemsSelected[uri] },
-    });
   }
 
   selectAll() {
@@ -82,7 +94,7 @@ class UserHistoryPage extends React.PureComponent<Props> {
   }
 
   render() {
-    const { history, page, pageCount, navigate } = this.props;
+    const { history, page, pageCount } = this.props;
     const { itemsSelected } = this.state;
 
     const allSelected = Object.keys(itemsSelected).length === history.length;
@@ -90,10 +102,12 @@ class UserHistoryPage extends React.PureComponent<Props> {
     return (
       <React.Fragment>
         <div className="card__actions card__actions--between">
-          {!!Object.keys(itemsSelected).length ? (
+          {Object.keys(itemsSelected).length ? (
             <Button button="link" label={__('Delete')} onClick={this.removeSelected} />
           ) : (
-            <span />
+            <span>
+              {/* Using an empty span so spacing stays the same if the button isn't rendered */}
+            </span>
           )}
 
           <Button
@@ -120,7 +134,7 @@ class UserHistoryPage extends React.PureComponent<Props> {
           </table>
         )}
         {pageCount > 1 && (
-          <FormRow verticallyCentered centered>
+          <FormRow padded verticallyCentered centered>
             <ReactPaginate
               pageCount={pageCount}
               pageRangeDisplayed={2}
