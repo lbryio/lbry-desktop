@@ -3,7 +3,7 @@ table.table,
   word-wrap: break-word;
   max-width: 100%;
   text-align: left;
-  margin-top: $spacing-width;
+  margin-top: $spacing-vertical * 2/3;
 
   tr td:first-of-type,
   tr th:first-of-type {
