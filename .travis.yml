@@ -1,49 +1,67 @@
 matrix:
   include:
-    - os: osx
-      env: TARGET=mac
-      osx_image: xcode9.2
-      language: node_js
-      node_js: "9"
-    - os: linux
-      env: TARGET=windows
-      services: docker
-      language: node_js
-      node_js: "9"
-    - os: linux
-      env: TARGET=linux
-      language: node_js
-      node_js: "9"
+  - os: osx
+    env: TARGET=mac
+    osx_image: xcode9.2
+    language: node_js
+    node_js: '9'
+  - os: linux
+    env: TARGET=windows
+    services: docker
+    language: node_js
+    node_js: '9'
+  - os: linux
+    env: TARGET=linux
+    language: node_js
+    node_js: '9'
 cache: false
 before_install:
-  - |
-    if [ "$TRAVIS_OS_NAME" == "osx" ]; then
-      mkdir -p /tmp/git-lfs && curl -L https://github.com/github/git-lfs/releases/download/v2.3.1/git-lfs-$([ "$TRAVIS_OS_NAME" == "linux" ] && echo "linux" || echo "darwin")-amd64-2.3.1.tar.gz | tar -xz -C /tmp/git-lfs --strip-components 1
-      export PATH="/tmp/git-lfs:$PATH"
-    else
-      sudo apt-get -qq update
-      sudo apt-get install -y libsecret-1-dev
-      sudo apt-get install --no-install-recommends -y gcc-multilib g++-multilib
-      curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.6.0
-      export PATH="$HOME/.yarn/bin:$PATH"
-    fi
+- |
+  unset TRAVIS_COMMIT_MESSAGE;
+  if [ "$TRAVIS_OS_NAME" == "osx" ]; then
+    mkdir -p /tmp/git-lfs && curl -L https://github.com/github/git-lfs/releases/download/v2.3.1/git-lfs-$([ "$TRAVIS_OS_NAME" == "linux" ] && echo "linux" || echo "darwin")-amd64-2.3.1.tar.gz | tar -xz -C /tmp/git-lfs --strip-components 1
+    export PATH="/tmp/git-lfs:$PATH"
+  else
+    sudo apt-get -qq update
+    sudo apt-get install -y libsecret-1-dev
+    sudo apt-get install --no-install-recommends -y gcc-multilib g++-multilib
+    curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.6.0
+    export PATH="$HOME/.yarn/bin:$PATH"
+  fi
 before_script:
-  - git lfs pull
+- git lfs pull
 script:
-  - |
-    if [ "$TARGET" == "windows" ]; then
-      docker run --rm \
-        --env-file <(env | grep -iE 'DEBUG|TARGET|NODE_|ELECTRON_|YARN_|NPM_|CI|CIRCLE|TRAVIS|APPVEYOR_|CSC_|GH_|GITHUB_|BT_|AWS_|STRIP|BUILD_') \
-        -v ${PWD}:/project \
-        electronuserland/builder:wine \
-        /bin/bash -c "yarn --link-duplicates --pure-lockfile && yarn build --win --publish onTag";
-    fi
-  - if [ "$TARGET" == "mac" ]; then yarn build --publish onTag; fi
-  - if [ "$TARGET" == "linux" ]; then yarn --link-duplicates --pure-lockfile && yarn build --linux --publish onTag; fi
+- |
+  if [ "$TARGET" == "windows" ]; then
+    docker run --rm \
+      --env-file <(env | grep -iE 'DEBUG|TARGET|NODE_|ELECTRON_|YARN_|NPM_|CI|CIRCLE|TRAVIS|APPVEYOR_|CSC_|GH_|GITHUB_|BT_|AWS_|STRIP|BUILD_') \
+      -v ${PWD}:/project \
+      electronuserland/builder:wine \
+      /bin/bash -c "yarn --link-duplicates --pure-lockfile && yarn build --win --publish onTag";
+  fi
+- if [ "$TARGET" == "mac" ]; then yarn build --publish onTag; fi
+- if [ "$TARGET" == "linux" ]; then yarn --link-duplicates --pure-lockfile && yarn
+  build --linux --publish onTag; fi
 addons:
   artifacts:
     working_dir: dist
     paths:
-     - $(git ls-files -o dist/{*.dmg,*.exe,*.deb} | tr "\n" ":")
+    - $(git ls-files -o dist/{*.dmg,*.exe,*.deb} | tr "\n" ":")
     target_paths:
-     - /app/build-${TRAVIS_BUILD_NUMBER}_commit-${TRAVIS_COMMIT:0:7}$([ ! -z ${TRAVIS_TAG} ] && echo _tag-${TRAVIS_TAG})
+    - "/app/build-${TRAVIS_BUILD_NUMBER}_commit-${TRAVIS_COMMIT:0:7}$([ ! -z ${TRAVIS_TAG}
+      ] && echo _tag-${TRAVIS_TAG})"
+env:
+  global:
+  - ARTIFACTS_REGION=us-east-1
+  - ARTIFACTS_BUCKET=build.lbry.io
+  - DANGER_GITHUB_API_TOKEN=f8b612049cbda985c251e18ae36c7a2b9c6c92df
+  - ARTIFACTS_DEBUG=1
+  - WIN_CSC_LINK=https://s3.amazonaws.com/files.lbry.io/csc-lbry-2018-2019-08.p12
+  - CSC_LINK=https://s3.amazonaws.com/files.lbry.io/cert/osx-cert.p12
+  - secure: ZwXw3DZKmVDgLh9wAmy7N2FXBYjwIGt+Th/68fvniJ6WQ/wC7nHvaMRypMjFQvFwRgN9jssPfcameXQr8Gkj1Filu8TAj1wMJCGPV/qX62IpulGp3RASRjtoJlS3tiyO4VNScIYomTjOBxu7OmdX4j71hVk/3VctYHBaxNAA1jLYPW7nxMjg0gu30O3dTN2VdDM5hfF62jb53xQBMsbS0ALvnVqZb1hkS4VkxvNEFWjUg+jiKrVZlTOHrJUPGuaCTGiK4q57dXdn33m592oHh60cp8AsRq0rGukSliSbQWDLgmBGZtfI4wrhVI/m+vVOvYmMG9TqExSKCXCy5vGRCkMQG1bT/CY4viPhL++Wf3q3HWUKqWtMUNAfhsXRffRNoXFZv5ramXmw5jZigQgwVS2kJGvVH+8qYFOCl6oi12k7Pf0IiAXHWKBrNunP9X7m3QInXfuL39euW2dS89+sslAMc7k+cBza935X3hXU+rAjameMu/NZxJSdyEUM2AbJ+j7CcKBFbEeruXS3zDQErCcpyAJ58E1HQnbJMXvzKe4MHW7c+9ZU+o+4cRf2+wOeAoS4FxgqR0w9rYQrVXUoiaQ7Vv1Ovae0nLK8b+ILAsCcj8gxqeRPmloiK3XSYF4KWMFZRlzo3nri6/frwL5MrQemznnKEs3vz3tyxESBNRk=
+  - secure: Wdl8K89veg/znuAFM7CxusZlzVv7KFivG3d3J7iK95oYfYJLgoGHS9VkiVk2Rcbq/P2mRKEFX/Oa+einHBaKKvqQ5GNoxyBcIIbzT8ZPQBjYJYY2VrxyxJD3uJQCVK0XeHUxuEd/WCmPUuOVW7iGzE2IiU55DEEcUQoEsrE8U9GqF9S0tKzrV+OuM4vg1oLUrW8HBk5HHvZhcKvY4Fz1/lZXODwYAfFfEHgLLk0xstLY0zRH7EZ0BP+ELPsPc+xzSYwCQv5nRTDXFpB0ByJ7/CR0h2WMRwwuGE6V2NuDPG7bE9CZuvurH9qK/DlSOV71vaWVyq73ccBvVL+1uQ9VCZHcZZr+qis+kk+ytFLZmlU+AgDQBe+gczNgdf/HHcwyd8JSyvYdigeyglpaDkxiX0lAf+SiZtrMpQTRBF3MNHvm0rrtyWbgXqqxFoMAAZQEdRzzdtfhffaCYNY4B/fvESc1VMJmAY9ZCkB8e6ND4S1ZNAKAWamzemBDlhUtZQHyyva2wzMOclveF+h16ZP04Zf8X3Nt7ikrrWE2If+XDq/Epjd4+3YVWHl+l/GNk3e35uGUYabQfiJJpmZlS6t9qn2UqcjmrJAKhVJ1cwFp8F+cbAl3v5cXkxORuZKWh+W6GL9fDa6R4or1QyIg042jbo85zEeqNclLTz4uOIphd9M=
+  - secure: Sknr/zTce9dAUfe1658guMnzDfuRiEi+hCAq+UGTNqqkkz7uDRlivuGuA7Y3TCrUVZfYV8IdwWx1Ikw/kGuJZclCCWTNh+HMzdAONHcB4mb3Nn/PQsYrsTh+Kf29C/RIu5YKw8gl/PZAdiHwDPFJufnVT9Y2jOjHNx35xDvTtZAehE2TYE6Msy3jvwQNd4IbROaPW034UiOhvuifw9MwGbQ4UauULykOTXQyY6kctAG55UdQs6kL9TNGngTEeccHPlvB9Uafo5yn2p9tdOWzbL2ZdgpKf6F9W4lnSVB90LxTcZDubqayjrdYL8B02K3O/i/YKw5AUm0Ji0L5bNd0cf8fQp29m6TWPUr5pq/9hQsmhMCx4qrWlnOjTgtvqoyj5mouVIXz3HRSlx7VmYPcaPsDyAzvC+GS2VnEGuwCrNfJHoGEtZWVMZeYldT2XsfUrCqZTgIVT7DGTNyqcQUKznCoUFeDmk1OGthmz7T8PZJ8gXiHAxdyn82U+zR94iA6oNmfZxs+OQohjvCuuQmerklApLaHmPQzNgkYZMDIURZKJATVakw0N6TDKiZ5YiSNxvTTfWZXpLupZ70sHvIsLoH2frlIzYwoKElqV/3ndd0pw3kEW5npSHc/drHfi81BCQpikMn832WxHRG7GgDudJqxJDpuJTl74HkIF3eT+c4=
+  - secure: qqJvtEJTq5DVimN/jFt8kuhIFVLFhG/hmx3iyLzQIhhBQqExLm+eURQj+lP/sjH3C+Z1yAg/bhaRw8FgZ+Cb4glMVU2XMDoxGlqoCsulrM5GMbKg4RwysiFCZhoOQ1fUmcfYnghtSHdMXFaIKTTEtN4KLzS4UGYPlMhfO8PBKv1EMXK8Eu6tTjXBQCVvnF6K3LbUJEuo7HdzCPwdGYmZvrncD51zoBZZZ38s0KuNwpP+mFtVub4h2yABgpWzM0O/xDfXw7i2tD2JwIOFqRlSzZnD0ymI0t3ArJoGJTbXnCBoKzOhR/vZKIMVflm9NzXzXLWqK3wtE+wHtQnnKKvuB5EAHP/og9e1SIM3oDmYpo5jffFkk1KIbt+6alnjzlFa56LKIuFeob2XWwqzkqfmHHojHSOdwZvxAESo6fy0d69jJiqPY3JFVXp2/oygsn0iUy4QH+28RcK9OdTkJV8jVdON7OVLQg5ZfAFIY4/prPdoQD/r3HVLIGmo856X+opdslwS3tu5KpqqbO5k17SGRl8wMCOY8+wPqyvrUuSr6kR8cDZuPS9dX0lvGAt9z323W732GiX2EwTFc19oldcTTzUTJPjnfaUcfDnuaobxvY4aoPLUy0Wc6+512S7YhoNi5lpkGKYuXNXAqMYODOULqZOTHCDCSOi9ALLbfjgjHWY=
+  - secure: oiDoRDBR9RZJlb1IrGlaszUpRU3cQNpQSlfo/oR2THL9s003seFvXYLiBvmwzrkYFsymXv+IfVk1IpDI1XoFQdbipCF0IWQMB3EUr35dwhzi7tLlrPbA1ypTNGriH+NbVobBKINlrjjWs7iI1pGw65oX62rjeocPkg8zENGEnRU0X+R4Y12k9i6sy5PedzzKhSFe+gBCjKwFVattPM1tEDNFlm1M6JWyanrhQHHOHKVvfA1EvH/qWcgWVebuPKFaExZp1ehwM7HSD30P8x7ois/83oem8lVkUrbCLVrktLd+2zg0j6lZAqrRR6mw+L/dtCK6g3Uxyl07GpCpE2cB/ChREhmnubFQuH6mJqWQ/Nh8lmusuPiiGPwgv2Yl0yLPmLf6NmmI6AuWLCTQ3xJ3I5eyNaiVsxYcsWiXpWCSZgvVeqVWpV1ghdssezvR5BoG5rkVxoSX73SWAIc7+hhkDPr5Y+gU23zwArxMpxpff9B8zL9s/sm7oTlugBRpT3dVg8JhCaywrstBZkO964JK5cGl4COKc1tHQ4Sh5lbOmATMAoI0lloOvhPdLC8sh/UxLemc4Bi4RgIeQD/LSZWpv11hk5+GJu+w/HvXrcbbCnMcHMvqf0E+4R1i8oRjZiVvGiNewS+y/B1L9pK14lUqA9UjCSPXdfHx7zy083xrhqw=
+  - secure: M49564mTJz/2VIft81hTeZ3H19rdpKd86hFG7gmdoaw/SE2WlNMTDln+tnVpp+mI8GTGnpjqPu9OgKiq0OZa+maj7jvo4zKHYzQZs73Db+FbvanUD0Nb9IBDCh+9K4ZxClloDv1aQEA0bvxBxJ4P4YdPfYWA8rzgkocrEtquVZ5QafpoD0yMNbMSetKbhbVHRreRqcTNY7JIZCBdCb7pW9SMQ0NJfDw6pxYXZXynkzTtBjGWb60M7g9hs0vrpCSQD3VP1CvGx7/35KIY62A52NP4JC5Z1+BM6OL2KCx78ZF6DUbt2Gyiq/qLdXOAfM9qEsKFDATr61kERpngyUd8be1JPpXlbl7afTiQmnIcGBwUqs3iwrhs2u1K2uSJGn0vR5NsdC3qoZWe24QpY1e2yKWXrloRKa0DaArDvTY/iyf+CAy/QxZHezO/IxWHYGhNLui3o5ZqR5wsvx/ZB2x6faXmtXHaR8LPm07/OZefF0k7/exyrDbkePJ0fYrHGzi3fJSLN58Lvn6i4CV5rxiRSOFsbK+uFlywd3mv7NNGvY/kArfOV7n/jsexP5L+KWEHvnZndB7dnqHnNTpCLVzpAORNmhRwakm9qoBBErYQJq1keZT7h55TIs5No2hbGgm075VecmZCXxgSLon71CZnD/07W6gkXmDXBlAjaMdRkOs=
+  - secure: aBsroS68VlT54LRD2fpX9s+d+B3Z779fitzJq5dRejFLBfGDpNUCdXXRRNqcxTe9ReQmDARFfp4yVGp8mmLLfVsMlCRAQMWZuI0KYukGgdRY31b84OUmM2hGLtgtiDGSCvVVhzHMrMXp15SFW6l2SYFWgv6Y+aPwfX7MVN63k3Fd7DrGN/u/nkLgOT+FHVyMw0E2GDBtUo1YOt1d6On6U83aZmnXQyVDa6MvyNa8gQHWiqQ+6lT74UMufzU/6Kuo9gh7VXD5evW3H3oyfONHw8L3acjhpH+8JMhrxCPjdCAaTF2fa2jyHDLl/SKjleW+Z5JbtT8XuReHyr/apEN7bj9DgMQ+dHsptuQoBaDCrX9pxAmrXt5vXoiCKT2uD569Ac5VjgKdd8Svuy4wNgSya3axO7eGa8mPrl6B4iOwMikhVdNvOAWdHRYXJHX6ccdM20vtM85Gtf6hQfryFvSHKhltqPRmA9wFhaMfBL0RsHbkI2P/hZSaYVi9W5lW3GdNA1VI/KGKlNCOLey5cbeFKRbm4O1c61AsHgrcWhx6qzWhTw17jdiAT9uQWiYqUtDxUTQGP4v6ZlpNEIkdasnJWPbQldBlJ4vT0D+XtqHMvUA4/gy3iMIofTl/wIxYs+C3ol+UE0e4xeM7XvKPkxo+J3T+RJ4EYFnpnXW8ddyIVXs=
