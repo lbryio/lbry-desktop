@@ -218,6 +218,14 @@ class FilePage extends React.Component<Props> {
                     onClick={() => openModal({ id: MODALS.SEND_TIP }, { uri })}
                   />
                 )}
+                {
+                  <Button
+                    button="alt"
+                    icon={icons.GLOBE}
+                    label={__('Share Modal')}
+                    onClick={() => openModal({ id: MODALS.SOCIAL_SHARE }, { uri })}
+                  />
+                }
                 {speechSharable && (
                   <ViewOnWebButton claimId={claim.claim_id} claimName={claim.name} />
                 )}
