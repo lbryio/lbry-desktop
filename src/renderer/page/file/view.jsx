@@ -13,7 +13,6 @@ import DateTime from 'component/dateTime';
 import * as icons from 'constants/icons';
 import Button from 'component/button';
 import SubscribeButton from 'component/subscribeButton';
-import ViewOnWebButton from 'component/viewOnWebButton';
 import Page from 'component/page';
 import type { Claim } from 'types/claim';
 import type { Subscription } from 'types/subscription';
@@ -223,14 +222,16 @@ class FilePage extends React.Component<Props> {
                     onClick={() => openModal({ id: MODALS.SEND_TIP }, { uri })}
                   />
                 )}
-                {speechSharable && (
-                  <ViewOnWebButton claimId={claim.claim_id} claimName={claim.name} />
-                )}
               </div>
 
               <div className="card__actions">
-                <FileDownloadLink uri={uri} />
-                <FileActions uri={uri} claimId={claim.claim_id} />
+                <FileDownloadLink uri={uri} />&nbsp;
+                <FileActions
+                  uri={uri}
+                  claimId={claim.claim_id}
+                  claimName={claim.name}
+                  speechSharable={speechSharable}
+                />
               </div>
             </div>
             <FormRow padded>
