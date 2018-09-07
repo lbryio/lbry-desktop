@@ -4,11 +4,10 @@ import {
   selectPageTitle,
   selectIsBackDisabled,
   selectIsForwardDisabled,
-  selectNavLinks,
 } from 'lbry-redux';
 import { doNavigate, doHistoryBack, doHistoryForward } from 'redux/actions/navigation';
 import { doDownloadUpgrade } from 'redux/actions/app';
-import { selectIsUpgradeAvailable } from 'redux/selectors/app';
+import { selectIsUpgradeAvailable, selectNavLinks } from 'redux/selectors/app';
 import { formatCredits } from 'util/formatCredits';
 import Page from './view';
 
@@ -28,4 +27,7 @@ const perform = dispatch => ({
   downloadUpgrade: () => dispatch(doDownloadUpgrade()),
 });
 
-export default connect(select, perform)(Page);
+export default connect(
+  select,
+  perform
+)(Page);

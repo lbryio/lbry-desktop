@@ -19,6 +19,10 @@
     align-items: center;
   }
 
+  &.form-row--centered {
+    justify-content: center;
+  }
+
   &.form-row--stretch {
     flex: 1;
   }

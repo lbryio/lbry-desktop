@@ -1,4 +1,5 @@
 import { createSelector } from 'reselect';
+import { selectCurrentPage, selectHistoryStack } from 'lbry-redux';
 
 export const selectState = state => state.app || {};
 
@@ -86,3 +87,162 @@ export const selectCurrentLanguage = createSelector(
 export const selectVolume = createSelector(selectState, state => state.volume);
 
 export const selectUpgradeTimer = createSelector(selectState, state => state.checkUpgradeTimer);
+
+export const selectNavLinks = createSelector(
+  selectCurrentPage,
+  selectHistoryStack,
+  (currentPage, historyStack) => {
+    const isWalletPage = page =>
+      page === 'wallet' ||
+      page === 'send' ||
+      page === 'getcredits' ||
+      page === 'rewards' ||
+      page === 'history' ||
+      page === 'invite' ||
+      page === 'backup';
+
+    const isMyLbryPage = page =>
+      page === 'downloaded' || page === 'published' || page === 'user_history';
+
+    const previousStack = historyStack.slice().reverse();
+
+    const getPreviousSubLinkPath = checkIfValidPage => {
+      for (let i = 0; i < previousStack.length; i += 1) {
+        const currentStackItem = previousStack[i];
+
+        // Trim off the "/" from the path
+        const pageInStack = currentStackItem.path.slice(1);
+        if (checkIfValidPage(pageInStack)) {
+          return currentStackItem.path;
+        }
+      }
+
+      return undefined;
+    };
+
+    // Gets the last active sublink in a section
+    const getActiveSublink = category => {
+      if (category === 'wallet') {
+        const previousPath = getPreviousSubLinkPath(isWalletPage);
+        return previousPath || '/wallet';
+      } else if (category === 'myLbry') {
+        const previousPath = getPreviousSubLinkPath(isMyLbryPage);
+        return previousPath || '/downloaded';
+      }
+
+      return undefined;
+    };
+
+    const isCurrentlyWalletPage = isWalletPage(currentPage);
+    const isCurrentlyMyLbryPage = isMyLbryPage(currentPage);
+
+    const walletSubLinks = [
+      {
+        label: 'Overview',
+        path: '/wallet',
+        active: currentPage === 'wallet',
+      },
+      {
+        label: 'Send & Receive',
+        path: '/send',
+        active: currentPage === 'send',
+      },
+      {
+        label: 'Transactions',
+        path: '/history',
+        active: currentPage === 'history',
+      },
+      {
+        label: 'Get Credits',
+        path: '/getcredits',
+        active: currentPage === 'getcredits',
+      },
+      {
+        label: 'Rewards',
+        path: '/rewards',
+        active: currentPage === 'rewards',
+      },
+      {
+        label: 'Invites',
+        path: '/invite',
+        active: currentPage === 'invite',
+      },
+      {
+        label: 'Backup',
+        path: '/backup',
+        active: currentPage === 'backup',
+      },
+    ];
+
+    const myLbrySubLinks = [
+      {
+        label: 'Downloads',
+        path: '/downloaded',
+        active: currentPage === 'downloaded',
+      },
+      {
+        label: 'Publishes',
+        path: '/published',
+        active: currentPage === 'published',
+      },
+      {
+        label: 'History',
+        path: '/user_history',
+        active: currentPage === 'user_history',
+      },
+    ];
+
+    const navLinks = {
+      primary: [
+        {
+          label: 'Explore',
+          path: '/discover',
+          active: currentPage === 'discover',
+          icon: 'Compass',
+        },
+        {
+          label: 'Subscriptions',
+          path: '/subscriptions',
+          active: currentPage === 'subscriptions',
+          icon: 'AtSign',
+        },
+      ],
+      secondary: [
+        {
+          label: 'Wallet',
+          icon: 'CreditCard',
+          subLinks: walletSubLinks,
+          path: isCurrentlyWalletPage ? '/wallet' : getActiveSublink('wallet'),
+          active: isWalletPage(currentPage),
+        },
+        {
+          label: 'My LBRY',
+          icon: 'Folder',
+          subLinks: myLbrySubLinks,
+          path: isCurrentlyMyLbryPage ? '/downloaded' : getActiveSublink('myLbry'),
+          active: isMyLbryPage(currentPage),
+        },
+        {
+          label: 'Publish',
+          icon: 'UploadCloud',
+          path: '/publish',
+          active: currentPage === 'publish',
+        },
+        {
+          label: 'Settings',
+          icon: 'Settings',
+          path: '/settings',
+          active: currentPage === 'settings',
+        },
+        {
+          label: 'Help',
+          path: '/help',
+          icon: 'HelpCircle',
+          active: currentPage === 'help',
+        },
+      ],
+    };
+
+    return navLinks;
+  }
+);

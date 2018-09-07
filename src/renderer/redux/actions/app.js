@@ -16,7 +16,7 @@ import Native from 'native';
 import { doFetchRewardedContent } from 'redux/actions/content';
 import { doFetchDaemonSettings } from 'redux/actions/settings';
 import { doAuthNavigate } from 'redux/actions/navigation';
-import { doPause } from 'redux/actions/media';
+import { doAuthenticate } from 'redux/actions/user';
 import { doCheckSubscriptionsInit } from 'redux/actions/subscriptions';
 import {
   selectIsUpgradeSkipped,
@@ -28,7 +28,6 @@ import {
   selectRemoteVersion,
   selectUpgradeTimer,
 } from 'redux/selectors/app';
-import { doAuthenticate } from 'redux/actions/user';
 import { lbrySettings as config } from 'package.json';
 
 const { autoUpdater } = remote.require('electron-updater');
@@ -108,9 +107,6 @@ export function doDownloadUpgradeRequested() {
 
   return (dispatch, getState) => {
     const state = getState();
-
-    // Pause video if needed
-    dispatch(doPause());
 
     const autoUpdateDeclined = selectAutoUpdateDeclined(state);
 

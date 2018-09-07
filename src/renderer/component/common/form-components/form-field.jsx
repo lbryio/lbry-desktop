@@ -24,6 +24,9 @@ type Props = {
   stretch?: boolean,
   affixClass?: string, // class applied to prefix/postfix label
   firstInList?: boolean, // at the top of a list, no padding top
+  inputProps: {
+    disabled?: boolean,
+  },
 };
 
 export class FormField extends React.PureComponent<Props> {

@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import { selectNavLinks } from 'lbry-redux';
+import { selectNavLinks } from 'redux/selectors/app';
 import { selectNotifications } from 'redux/selectors/subscriptions';
 import SideBar from './view';
 

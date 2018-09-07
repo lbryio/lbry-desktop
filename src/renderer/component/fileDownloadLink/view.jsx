@@ -22,7 +22,7 @@ type Props = {
   restartDownload: (string, number) => void,
   openInShell: string => void,
   purchaseUri: string => void,
-  doPause: () => void,
+  pause: () => void,
 };
 
 class FileDownloadLink extends React.PureComponent<Props> {
@@ -50,14 +50,13 @@ class FileDownloadLink extends React.PureComponent<Props> {
       purchaseUri,
       costInfo,
       loading,
-      doPause,
-      claim,
+      pause,
     } = this.props;
 
     const openFile = () => {
       if (fileInfo) {
         openInShell(fileInfo.download_path);
-        doPause();
+        pause();
       }
     };
 

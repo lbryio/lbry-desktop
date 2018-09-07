@@ -8,7 +8,10 @@ import {
   makeSelectClaimIsMine,
 } from 'lbry-redux';
 import { doNavigate } from 'redux/actions/navigation';
-import { selectRewardContentClaimIds } from 'redux/selectors/content';
+import {
+  selectRewardContentClaimIds,
+  makeSelectContentPositionForUri,
+} from 'redux/selectors/content';
 import { selectShowNsfw } from 'redux/selectors/settings';
 import { selectPendingPublish } from 'redux/selectors/publish';
 import FileCard from './view';
@@ -32,12 +35,14 @@ const select = (state, props) => {
     rewardedContentClaimIds: selectRewardContentClaimIds(state, props),
     ...fileCardInfo,
     pending: !!pendingPublish,
+    position: makeSelectContentPositionForUri(props.uri)(state),
   };
 };
 
 const perform = dispatch => ({
   navigate: (path, params) => dispatch(doNavigate(path, params)),
   resolveUri: uri => dispatch(doResolveUri(uri)),
+  clearHistoryUri: uri => dispatch(doClearContentHistoryUri(uri)),
 });
 
 export default connect(

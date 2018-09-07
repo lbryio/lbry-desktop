@@ -1,15 +1,16 @@
 // @flow
 import * as React from 'react';
+import moment from 'moment';
 import { normalizeURI, convertToShareLink } from 'lbry-redux';
 import type { Claim, Metadata } from 'types/claim';
 import CardMedia from 'component/cardMedia';
 import TruncatedText from 'component/common/truncated-text';
 import Icon from 'component/common/icon';
-import FilePrice from 'component/filePrice';
 import UriIndicator from 'component/uriIndicator';
 import * as icons from 'constants/icons';
 import classnames from 'classnames';
-import { openCopyLinkMenu } from '../../util/contextMenu';
+import FilePrice from 'component/filePrice';
+import { openCopyLinkMenu } from 'util/contextMenu';
 
 // TODO: iron these out
 type Props = {
@@ -21,8 +22,10 @@ type Props = {
   rewardedContentClaimIds: Array<string>,
   obscureNsfw: boolean,
   claimIsMine: boolean,
-  showPrice: boolean,
   pending?: boolean,
+  position: ?number,
+  lastViewed: ?number,
+  clearHistoryUri: string => void,
   /* eslint-disable react/no-unused-prop-types */
   resolveUri: string => void,
   isResolvingUri: boolean,
@@ -59,8 +62,10 @@ class FileCard extends React.PureComponent<Props> {
       rewardedContentClaimIds,
       obscureNsfw,
       claimIsMine,
-      showPrice,
       pending,
+      position,
+      clearHistoryUri,
+      showPrice,
     } = this.props;
 
     const shouldHide = !claimIsMine && !pending && obscureNsfw && metadata && metadata.nsfw;
@@ -103,6 +108,7 @@ class FileCard extends React.PureComponent<Props> {
             {showPrice && <FilePrice hideFree uri={uri} />}
             {isRewardContent && <Icon iconColor="red" icon={icons.FEATURED} />}
             {fileInfo && <Icon icon={icons.LOCAL} />}
+            {position && <Icon icon={icons.REFRESH} />}
           </div>
         </div>
       </section>

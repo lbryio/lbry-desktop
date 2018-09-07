@@ -18,6 +18,7 @@ import InvitePage from 'page/invite';
 import BackupPage from 'page/backup';
 import SubscriptionsPage from 'page/subscriptions';
 import SearchPage from 'page/search';
+import UserHistoryPage from 'page/userHistory';
 
 const route = (props, page, routesMap) => {
   const component = routesMap[page];
@@ -53,6 +54,7 @@ const Router = props => {
     wallet: <WalletPage params={params} />,
     subscriptions: <SubscriptionsPage params={params} />,
     search: <SearchPage {...params} />,
+    user_history: <UserHistoryPage {...params} />,
   });
 };
 

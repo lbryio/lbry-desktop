@@ -9,6 +9,7 @@ type Props = {
   verticallyCentered?: boolean,
   stretch?: boolean,
   alignRight?: boolean,
+  centered?: boolean,
 };
 
 export class FormRow extends React.PureComponent<Props> {
@@ -17,7 +18,7 @@ export class FormRow extends React.PureComponent<Props> {
   };
 
   render() {
-    const { children, padded, verticallyCentered, stretch, alignRight } = this.props;
+    const { children, padded, verticallyCentered, stretch, alignRight, centered } = this.props;
     return (
       <div
         className={classnames('form-row', {
@@ -25,6 +26,7 @@ export class FormRow extends React.PureComponent<Props> {
           'form-row--vertically-centered': verticallyCentered,
           'form-row--stretch': stretch,
           'form-row--right': alignRight,
+          'form-row--centered': centered,
         })}
       >
         {children}

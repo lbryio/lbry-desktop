@@ -27,9 +27,11 @@ class MediaPlayer extends React.PureComponent {
     this.toggleFullScreenVideo = this.toggleFullScreen.bind(this);
   }
 
-  componentWillReceiveProps(nextProps) {
+  componentDidUpdate(nextProps) {
     const el = this.refs.media.children[0];
-    if (!this.props.paused && nextProps.paused && !el.paused) el.pause();
+    if (this.props.playingUri && !nextProps.playingUri && !el.paused) {
+      el.pause();
+    }
   }
 
   componentDidMount() {
@@ -86,11 +88,15 @@ class MediaPlayer extends React.PureComponent {
     document.addEventListener('keydown', this.togglePlayListener);
     const mediaElement = this.media.children[0];
     if (mediaElement) {
-      mediaElement.currentTime = position || 0;
-      mediaElement.addEventListener('play', () => this.props.doPlay());
-      mediaElement.addEventListener('pause', () => this.props.doPause());
+      if (position) {
+        mediaElement.currentTime = position;
+      }
       mediaElement.addEventListener('timeupdate', () =>
-        this.props.savePosition(claim.claim_id, mediaElement.currentTime)
+        this.props.savePosition(
+          claim.claim_id,
+          `${claim.txid}:${claim.nout}`,
+          mediaElement.currentTime
+        )
       );
       mediaElement.addEventListener('click', this.togglePlayListener);
       mediaElement.addEventListener('loadedmetadata', loadedMetadata.bind(this), {
@@ -136,7 +142,6 @@ class MediaPlayer extends React.PureComponent {
     if (mediaElement) {
       mediaElement.removeEventListener('click', this.togglePlayListener);
     }
-    this.props.doPause();
   }
 
   toggleFullScreen(event) {

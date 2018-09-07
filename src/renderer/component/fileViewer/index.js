@@ -2,9 +2,7 @@ import { connect } from 'react-redux';
 import * as settings from 'constants/settings';
 import { doChangeVolume } from 'redux/actions/app';
 import { selectVolume } from 'redux/selectors/app';
-import { doPlayUri, doSetPlayingUri } from 'redux/actions/content';
-import { doPlay, doPause, savePosition } from 'redux/actions/media';
-import { doClaimEligiblePurchaseRewards } from 'redux/actions/rewards';
+import { doPlayUri, doSetPlayingUri, savePosition } from 'redux/actions/content';
 import {
   makeSelectMetadataForUri,
   makeSelectContentTypeForUri,
@@ -15,9 +13,9 @@ import {
   makeSelectDownloadingForUri,
   selectSearchBarFocused,
 } from 'lbry-redux';
+import { doClaimEligiblePurchaseRewards } from 'redux/actions/rewards';
 import { makeSelectClientSetting, selectShowNsfw } from 'redux/selectors/settings';
-import { selectMediaPaused, makeSelectMediaPositionForUri } from 'redux/selectors/media';
-import { selectPlayingUri } from 'redux/selectors/content';
+import { selectPlayingUri, makeSelectContentPositionForUri } from 'redux/selectors/content';
 import { selectFileInfoErrors } from 'redux/selectors/file_info';
 import FileViewer from './view';
 
@@ -32,8 +30,7 @@ const select = (state, props) => ({
   playingUri: selectPlayingUri(state),
   contentType: makeSelectContentTypeForUri(props.uri)(state),
   volume: selectVolume(state),
-  mediaPaused: selectMediaPaused(state),
-  mediaPosition: makeSelectMediaPositionForUri(props.uri)(state),
+  position: makeSelectContentPositionForUri(props.uri)(state),
   autoplay: makeSelectClientSetting(settings.AUTOPLAY)(state),
   searchBarFocused: selectSearchBarFocused(state),
   fileInfoErrors: selectFileInfoErrors(state),
@@ -43,10 +40,9 @@ const perform = dispatch => ({
   play: uri => dispatch(doPlayUri(uri)),
   cancelPlay: () => dispatch(doSetPlayingUri(null)),
   changeVolume: volume => dispatch(doChangeVolume(volume)),
-  doPlay: () => dispatch(doPlay()),
-  doPause: () => dispatch(doPause()),
-  savePosition: (claimId, position) => dispatch(savePosition(claimId, position)),
   claimRewards: () => dispatch(doClaimEligiblePurchaseRewards()),
+  savePosition: (claimId, outpoint, position) =>
+    dispatch(savePosition(claimId, outpoint, position)),
 });
 
 export default connect(

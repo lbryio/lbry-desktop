@@ -7,8 +7,7 @@ import {
   makeSelectClaimForUri,
 } from 'lbry-redux';
 import { doOpenFileInShell } from 'redux/actions/file';
-import { doPurchaseUri, doStartDownload } from 'redux/actions/content';
-import { doPause } from 'redux/actions/media';
+import { doPurchaseUri, doStartDownload, doSetPlayingUri } from 'redux/actions/content';
 import FileDownloadLink from './view';
 
 const select = (state, props) => ({
@@ -24,7 +23,7 @@ const perform = dispatch => ({
   openInShell: path => dispatch(doOpenFileInShell(path)),
   purchaseUri: uri => dispatch(doPurchaseUri(uri)),
   restartDownload: (uri, outpoint) => dispatch(doStartDownload(uri, outpoint)),
-  doPause: () => dispatch(doPause()),
+  pause: () => dispatch(doSetPlayingUri(null)),
 });
 
 export default connect(

@@ -4,6 +4,7 @@ import { doNavigate } from 'redux/actions/navigation';
 import { selectRewardContentClaimIds, selectPlayingUri } from 'redux/selectors/content';
 import { doCheckSubscription } from 'redux/actions/subscriptions';
 import { doSetClientSetting } from 'redux/actions/settings';
+import { doSetContentHistoryItem } from 'redux/actions/content';
 import {
   doFetchFileInfo,
   doFetchCostInfoForUri,
@@ -17,7 +18,6 @@ import {
 } from 'lbry-redux';
 import { selectShowNsfw, makeSelectClientSetting } from 'redux/selectors/settings';
 import { selectSubscriptions } from 'redux/selectors/subscriptions';
-import { selectMediaPaused } from 'redux/selectors/media';
 import { doPrepareEdit } from 'redux/actions/publish';
 import FilePage from './view';
 
@@ -31,7 +31,6 @@ const select = (state, props) => ({
   rewardedContentClaimIds: selectRewardContentClaimIds(state, props),
   subscriptions: selectSubscriptions(state),
   playingUri: selectPlayingUri(state),
-  isPaused: selectMediaPaused(state),
   claimIsMine: makeSelectClaimIsMine(props.uri)(state),
   autoplay: makeSelectClientSetting(settings.AUTOPLAY)(state),
 });
@@ -44,6 +43,10 @@ const perform = dispatch => ({
   openModal: (modal, props) => dispatch(doNotify(modal, props)),
   prepareEdit: (publishData, uri) => dispatch(doPrepareEdit(publishData, uri)),
   setClientSetting: (key, value) => dispatch(doSetClientSetting(key, value)),
+  setViewed: uri => dispatch(doSetContentHistoryItem(uri)),
 });
 
-export default connect(select, perform)(FilePage);
+export default connect(
+  select,
+  perform
+)(FilePage);
