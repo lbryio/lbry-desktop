@@ -15,26 +15,21 @@ table.table,
     padding-right: $spacing-vertical * 2/3;
   }
 
-  thead {
-    color: var(--text-color);
-    border-bottom: var(--table-border);
-  }
-
-  th,
-  td {
+  tr th,
+  tr td {
     font-size: 13px;
-    padding: 8px 0;
   }
 
   th {
     font-family: 'metropolis-semibold';
     border: 0;
+    padding: $spacing-vertical * 2/3 $spacing-vertical * 1/3;
   }
 
   td {
     font-family: 'metropolis-medium';
     color: var(--color-help);
-    padding: $spacing-vertical * 1/6 0;
+    padding: $spacing-vertical * 1/6 $spacing-vertical * 1/3;
 
     .btn:not(.btn--link) {
       display: inline;
@@ -48,6 +43,11 @@ table.table,
 
   .table__item--actionable span + .btn {
     padding-left: $spacing-vertical * 1/3;
+  }
+
+  thead {
+    color: var(--text-color);
+    border-bottom: var(--table-border);
   }
 
   tbody {

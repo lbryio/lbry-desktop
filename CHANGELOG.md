@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ### Fixed
  * Paragraph rendering now properly includes a margin for new paragraphs ([#1939](https://github.com/lbryio/lbry-desktop/pull/1939))
  * Alignment of "navigate to page" input next to pagination on channel pages ([#1941](https://github.com/lbryio/lbry-desktop/pull/1941))
+ * Table spacing with claim name in transactions table ([#1942](https://github.com/lbryio/lbry-desktop/pull/1942))
 
 
 ## [0.25.0] - 2018-08-29
