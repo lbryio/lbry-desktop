@@ -34,3 +34,11 @@
   color: white;
   background: var(--color-primary);
 }
+
+.pagination + .form-field {
+  margin: 0 $spacing-width * 2/3;
+
+  .form-field__input {
+    padding: 0;
+  }
+}
