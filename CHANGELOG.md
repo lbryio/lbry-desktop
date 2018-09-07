@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ### Changed
 
 ### Fixed
+ * Paragraph rendering now properly includes a margin for new paragraphs ([#1939](https://github.com/lbryio/lbry-desktop/pull/1939))
 
 
 ## [0.25.0] - 2018-08-29
