@@ -13,7 +13,7 @@ class ModalSendTip extends React.PureComponent<Props> {
     const { closeModal, uri } = this.props;
 
     return (
-      <Modal isOpen type="custom">
+      <Modal onAborted={closeModal} isOpen type="custom">
         <SendTip uri={uri} onCancel={closeModal} sendTipCallback={closeModal} />
       </Modal>
     );
