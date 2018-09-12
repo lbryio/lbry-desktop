@@ -50,6 +50,9 @@ class WalletSendTip extends React.PureComponent<Props, State> {
     const { balance } = this.props;
     const tipAmount = parseFloat(event.target.value);
     let newTipError;
+    if (!String(tipAmount).match(/^(\d*([.]\d{0,8})?)$/)) {
+      newTipError = __('Tip must be a valid number with no more than 8 decimal places');
+    }
     if (tipAmount === balance) {
       newTipError = __('Please decrease your tip to account for transaction fees');
     } else if (tipAmount > balance) {
