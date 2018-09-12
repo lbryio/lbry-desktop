@@ -18,7 +18,7 @@ type Props = {
 
 type State = {
   tipAmount: number,
-  newTipError: string,
+  tipError: string,
 };
 
 class WalletSendTip extends React.PureComponent<Props, State> {
@@ -27,9 +27,8 @@ class WalletSendTip extends React.PureComponent<Props, State> {
 
     this.state = {
       tipAmount: 0,
-      newTipError: '',
+      tipError: '',
     };
-
     (this: any).handleSendButtonClicked = this.handleSendButtonClicked.bind(this);
   }
 
@@ -48,26 +47,32 @@ class WalletSendTip extends React.PureComponent<Props, State> {
 
   handleSupportPriceChange(event: SyntheticInputEvent<*>) {
     const { balance } = this.props;
+    const regexp = RegExp(/^(\d*([.]\d{0,8})?)$/);
+    const validTipInput = regexp.test(event.target.value);
     const tipAmount = parseFloat(event.target.value);
-    let newTipError;
-    if (!String(tipAmount).match(/^(\d*([.]\d{0,8})?)$/)) {
-      newTipError = __('Tip must be a valid number with no more than 8 decimal places');
-    }
-    if (tipAmount === balance) {
-      newTipError = __('Please decrease your tip to account for transaction fees');
+    let tipError;
+
+    if (!tipAmount) {
+      tipError = __('Tip must be a number');
+    } else if (tipAmount <= 0) {
+      tipError = __('Tip must be a positive number');
+    } else if (!validTipInput) {
+      tipError = __('Tip must have no more than 8 decimal places');
+    } else if (tipAmount === balance) {
+      tipError = __('Please decrease your tip to account for transaction fees');
     } else if (tipAmount > balance) {
-      newTipError = __('Not enough credits');
+      tipError = __('Not enough credits');
     }
 
     this.setState({
       tipAmount,
-      newTipError,
+      tipError,
     });
   }
 
   render() {
     const { title, isPending, uri, onCancel, balance } = this.props;
-    const { tipAmount, newTipError } = this.state;
+    const { tipAmount, tipError } = this.state;
 
     return (
       <div>
@@ -78,10 +83,15 @@ class WalletSendTip extends React.PureComponent<Props, State> {
         </div>
         <div className="card__content">
           <FormField
-            label={__('Amount')}
+            label={
+              (tipAmount &&
+                tipAmount !== 0 &&
+                `Tip ${tipAmount.toFixed(8).replace(/\.?0+$/, '')} LBC`) ||
+              __('Amount')
+            }
             postfix={__('LBC')}
             className="input--price-amount"
-            error={newTipError}
+            error={tipError}
             min="0"
             step="any"
             type="number"
@@ -98,7 +108,7 @@ class WalletSendTip extends React.PureComponent<Props, State> {
             <Button
               button="primary"
               label={__('Send')}
-              disabled={isPending || tipAmount <= 0 || tipAmount > balance || tipAmount === balance}
+              disabled={isPending || tipError}
               onClick={this.handleSendButtonClicked}
             />
             <Button
