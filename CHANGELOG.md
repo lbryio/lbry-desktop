@@ -6,6 +6,19 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ## [Unreleased]
 
 ### Added
+
+### Changed
+
+### Fixed
+ * Paragraph rendering now properly includes a margin for new paragraphs ([#1939](https://github.com/lbryio/lbry-desktop/pull/1939))
+ * Alignment of "navigate to page" input next to pagination on channel pages ([#1941](https://github.com/lbryio/lbry-desktop/pull/1941))
+ * Table spacing with claim name in transactions table ([#1942](https://github.com/lbryio/lbry-desktop/pull/1942))
+ * Ability to click away from tip screen without the cancel button ([#1944](https://github.com/lbryio/lbry-desktop/pull/1944))
+ * Disallow invalid tip amounts ([#1947](https://github.com/lbryio/lbry-desktop/pull/1947))
+
+## [0.25.0] - 2018-08-29
+
+### Added
  * Wallet encryption/decryption user flows in settings ([#1785](https://github.com/lbryio/lbry-desktop/pull/1785))
  * Suggestions for recommended content on file page ([#1845](https://github.com/lbryio/lbry-desktop/pull/1845))
  * Auto download setting for subscriptions ([#1898](https://github.com/lbryio/lbry-desktop/pull/1898))
