@@ -30,6 +30,7 @@ import {
 import { makeSelectClientSetting, selectosNotificationsEnabled } from 'redux/selectors/settings';
 import setBadge from 'util/setBadge';
 import setProgressBar from 'util/setProgressBar';
+import analytics from 'analytics';
 
 const DOWNLOAD_POLL_INTERVAL = 250;
 
@@ -264,7 +265,7 @@ function handleLoadVideoError(uri, errorType = '') {
   };
 }
 
-export function doLoadVideo(uri) {
+export function doLoadVideo(uri, shouldRecordViewEvent) {
   return dispatch => {
     dispatch({
       type: ACTIONS.LOADING_VIDEO_STARTED,
@@ -282,6 +283,14 @@ export function doLoadVideo(uri) {
           dispatch(handleLoadVideoError(uri, 'timeout'));
         } else {
           dispatch(doDownloadFile(uri, streamInfo));
+
+          if (shouldRecordViewEvent) {
+            analytics.apiLogView(
+              `${streamInfo.claim_name}#${streamInfo.claim_id}`,
+              streamInfo.outpoint,
+              streamInfo.claim_id
+            );
+          }
         }
       })
       .catch(() => {
@@ -290,7 +299,7 @@ export function doLoadVideo(uri) {
   };
 }
 
-export function doPurchaseUri(uri, specificCostInfo) {
+export function doPurchaseUri(uri, specificCostInfo, shouldRecordViewEvent) {
   return (dispatch, getState) => {
     const state = getState();
     const balance = selectBalance(state);
@@ -302,7 +311,7 @@ export function doPurchaseUri(uri, specificCostInfo) {
       if (cost > 0 && (!instantPurchaseMax || cost > instantPurchaseMax)) {
         dispatch(doNotify({ id: MODALS.AFFIRM_PURCHASE }, { uri }));
       } else {
-        dispatch(doLoadVideo(uri));
+        dispatch(doLoadVideo(uri, shouldRecordViewEvent));
       }
     }
 
@@ -311,7 +320,7 @@ export function doPurchaseUri(uri, specificCostInfo) {
       // If written_bytes is false that means the user has deleted/moved the
       // file manually on their file system, so we need to dispatch a
       // doLoadVideo action to reconstruct the file from the blobs
-      if (!fileInfo.written_bytes) dispatch(doLoadVideo(uri));
+      if (!fileInfo.written_bytes) dispatch(doLoadVideo(uri, shouldRecordViewEvent));
 
       Promise.resolve();
       return;
