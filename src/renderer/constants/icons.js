@@ -30,3 +30,5 @@ export const EXTERNAL_LINK = 'ExternalLink';
 export const GIFT = 'Gift';
 export const EYE = 'Eye';
 export const PLAY = 'Play';
+export const FACEBOOK = 'Facebook';
+export const TWITTER = 'Twitter';
