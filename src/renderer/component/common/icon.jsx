@@ -8,6 +8,7 @@ import Tooltip from 'component/common/tooltip';
 // These are copied from `scss/vars`, can they both come from the same source?
 const RED_COLOR = '#e2495e';
 const GREEN_COLOR = '#44b098';
+const BLUE_COLOR = '#49b2e2';
 
 type Props = {
   icon: string,
@@ -33,6 +34,8 @@ class IconComponent extends React.PureComponent<Props> {
         return RED_COLOR;
       case 'green':
         return GREEN_COLOR;
+      case 'blue':
+        return BLUE_COLOR;
       default:
         return undefined;
     }

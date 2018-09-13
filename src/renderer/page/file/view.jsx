@@ -13,7 +13,6 @@ import DateTime from 'component/dateTime';
 import * as icons from 'constants/icons';
 import Button from 'component/button';
 import SubscribeButton from 'component/subscribeButton';
-import ViewOnWebButton from 'component/viewOnWebButton';
 import Page from 'component/page';
 import type { Claim } from 'types/claim';
 import type { Subscription } from 'types/subscription';
@@ -224,7 +223,12 @@ class FilePage extends React.Component<Props> {
                   />
                 )}
                 {speechSharable && (
-                  <ViewOnWebButton claimId={claim.claim_id} claimName={claim.name} />
+                  <Button
+                    button="alt"
+                    icon={icons.GLOBE}
+                    label={__('Share')}
+                    onClick={() => openModal({ id: MODALS.SOCIAL_SHARE }, { uri })}
+                  />
                 )}
               </div>
 

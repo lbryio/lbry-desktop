@@ -19,9 +19,10 @@ import ModalEmailCollection from 'modal/modalEmailCollection';
 import ModalPhoneCollection from 'modal/modalPhoneCollection';
 import ModalFirstSubscription from 'modal/modalFirstSubscription';
 import ModalConfirmTransaction from 'modal/modalConfirmTransaction';
-import ModalSendTip from '../modalSendTip';
-import ModalPublish from '../modalPublish';
-import ModalOpenExternalLink from '../modalOpenExternalLink';
+import ModalSocialShare from 'modal/modalSocialShare';
+import ModalSendTip from 'modal/modalSendTip';
+import ModalPublish from 'modal/modalPublish';
+import ModalOpenExternalLink from 'modal/modalOpenExternalLink';
 import ModalConfirmThumbnailUpload from 'modal/modalConfirmThumbnailUpload';
 import ModalWalletEncrypt from 'modal/modalWalletEncrypt';
 import ModalWalletDecrypt from 'modal/modalWalletDecrypt';
@@ -160,6 +161,8 @@ class ModalRouter extends React.PureComponent<Props> {
         return <ModalFirstSubscription {...notificationProps} />;
       case MODALS.SEND_TIP:
         return <ModalSendTip {...notificationProps} />;
+      case MODALS.SOCIAL_SHARE:
+        return <ModalSocialShare {...notificationProps} />;
       case MODALS.PUBLISH:
         return <ModalPublish {...notificationProps} />;
       case MODALS.CONFIRM_EXTERNAL_LINK:
