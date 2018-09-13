@@ -175,7 +175,7 @@ export const doCheckSubscription = (subscriptionUri: string, notify?: boolean) =
         }
         if (shouldDownload) {
           downloadCount += 1;
-          dispatch(doPurchaseUri(uri, { cost: 0 }));
+          dispatch(doPurchaseUri(uri, { cost: 0 }, true));
         }
       });
     }
