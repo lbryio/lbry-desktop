@@ -124,14 +124,14 @@ class FileViewer extends React.PureComponent<Props> {
   }
 
   handleAutoplay = (props: Props) => {
-    const { autoplay, playingUri, fileInfo, costInfo, isDownloading, uri, play, metadata } = props;
+    const { autoplay, playingUri, fileInfo, costInfo, isDownloading, uri, metadata } = props;
 
     const playable = autoplay && playingUri !== uri && metadata && !metadata.nsfw;
 
     if (playable && costInfo && costInfo.cost === 0 && !fileInfo && !isDownloading) {
-      play(uri);
+      this.playContent();
     } else if (playable && fileInfo && fileInfo.blobs_completed > 0) {
-      play(uri);
+      this.playContent();
     }
   };
 
