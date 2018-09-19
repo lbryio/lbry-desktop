@@ -51,6 +51,7 @@ class FileDownloadLink extends React.PureComponent<Props> {
       costInfo,
       loading,
       pause,
+      claim,
     } = this.props;
 
     const openFile = () => {
