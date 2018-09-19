@@ -1,6 +1,5 @@
 // @flow
 import * as React from 'react';
-import moment from 'moment';
 import { normalizeURI, convertToShareLink } from 'lbry-redux';
 import type { Claim, Metadata } from 'types/claim';
 import CardMedia from 'component/cardMedia';
@@ -12,7 +11,6 @@ import classnames from 'classnames';
 import FilePrice from 'component/filePrice';
 import { openCopyLinkMenu } from 'util/contextMenu';
 
-// TODO: iron these out
 type Props = {
   uri: string,
   claim: ?Claim,
@@ -23,12 +21,10 @@ type Props = {
   obscureNsfw: boolean,
   claimIsMine: boolean,
   pending?: boolean,
-  position: ?number,
-  lastViewed: ?number,
-  clearHistoryUri: string => void,
   /* eslint-disable react/no-unused-prop-types */
   resolveUri: string => void,
   isResolvingUri: boolean,
+  showPrice: boolean,
   /* eslint-enable react/no-unused-prop-types */
 };
 
@@ -63,8 +59,6 @@ class FileCard extends React.PureComponent<Props> {
       obscureNsfw,
       claimIsMine,
       pending,
-      position,
-      clearHistoryUri,
       showPrice,
     } = this.props;
 
@@ -108,7 +102,6 @@ class FileCard extends React.PureComponent<Props> {
             {showPrice && <FilePrice hideFree uri={uri} />}
             {isRewardContent && <Icon iconColor="red" icon={icons.FEATURED} />}
             {fileInfo && <Icon icon={icons.LOCAL} />}
-            {position && <Icon icon={icons.REFRESH} />}
           </div>
         </div>
       </section>
