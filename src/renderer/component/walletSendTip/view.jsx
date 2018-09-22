@@ -83,6 +83,7 @@ class WalletSendTip extends React.PureComponent<Props, State> {
         </div>
         <div className="card__content">
           <FormField
+            autoFocus
             label={
               (tipAmount &&
                 tipAmount !== 0 &&
