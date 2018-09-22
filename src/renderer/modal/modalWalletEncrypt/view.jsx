@@ -96,6 +96,7 @@ class ModalWalletEncrypt extends React.PureComponent<Props> {
           <FormRow padded>
             <FormField
               stretch
+              autoFocus
               error={passwordMismatch === true ? 'Passwords do not match' : false}
               label={__('New Password')}
               type="password"

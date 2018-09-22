@@ -51,6 +51,7 @@ class ModalWalletUnlock extends React.PureComponent<Props> {
           <FormRow padded>
             <FormField
               stretch
+              autoFocus
               error={walletUnlockSucceded === false ? 'Incorrect Password' : false}
               label={__('Wallet Password')}
               type="password"

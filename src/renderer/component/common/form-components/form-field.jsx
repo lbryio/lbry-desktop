@@ -24,12 +24,27 @@ type Props = {
   stretch?: boolean,
   affixClass?: string, // class applied to prefix/postfix label
   firstInList?: boolean, // at the top of a list, no padding top
+  autoFocus?: boolean,
   inputProps: {
     disabled?: boolean,
   },
 };
 
 export class FormField extends React.PureComponent<Props> {
+  constructor(props) {
+    super(props);
+    this.input = React.createRef();
+  }
+
+  componentDidMount() {
+    const { autoFocus } = this.props;
+    const input = this.input.current;
+
+    if (input && autoFocus) {
+      input.focus();
+    }
+  }
+
   render() {
     const {
       render,
@@ -43,6 +58,7 @@ export class FormField extends React.PureComponent<Props> {
       children,
       stretch,
       affixClass,
+      autoFocus,
       ...inputProps
     } = this.props;
 
@@ -82,7 +98,7 @@ export class FormField extends React.PureComponent<Props> {
       } else if (type === 'checkbox') {
         input = <Toggle id={name} {...inputProps} />;
       } else {
-        input = <input type={type} id={name} {...inputProps} />;
+        input = <input type={type} id={name} {...inputProps} ref={this.input} />;
       }
     }
 

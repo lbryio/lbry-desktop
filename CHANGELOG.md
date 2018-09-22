@@ -6,6 +6,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ## [Unreleased]
 
 ### Added
+* Allow typing of encryption password without clicking entry box ([#1977](https://github.com/lbryio/lbry-desktop/pull/1977))
 
 ### Changed
 
@@ -37,7 +38,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
  * Desktop notification when publish is completed ([#1892](https://github.com/lbryio/lbry-desktop/pull/1892))
  * FAQ to Publishing Area ([#1833](https://github.com/lbryio/lbry-desktop/pull/1833))
  * FAQ to wallet security area ([#1917](https://github.com/lbryio/lbry-desktop/pull/1917))
- 
+
 ### Changed
  * Upgraded LBRY Protocol to [version 0.21.2](https://github.com/lbryio/lbry/releases/tag/v0.21.2) fixing a download bug.
  * Searching now shows results by default, including direct lbry:// URL tile ([#1875](https://github.com/lbryio/lbry-desktop/pull/))
