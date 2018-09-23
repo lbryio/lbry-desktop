@@ -63,13 +63,13 @@
     &.tooltip__body--short {
       margin-left: -65px;
     }
-  }
 
-  &::after {
-    top: 100%;
-    left: 50%;
-    margin-left: -5px;
-    border-color: var(--tooltip-bg) transparent transparent transparent;
+    &::after {
+      top: 100%;
+      left: 50%;
+      margin-left: -5px;
+      border-color: var(--tooltip-bg) transparent transparent transparent;
+    }
   }
 }
 
