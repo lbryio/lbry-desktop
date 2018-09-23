@@ -16,8 +16,66 @@ class ToolTip extends React.PureComponent<Props> {
     direction: 'bottom',
   };
 
+  constructor(props) {
+    super(props);
+    this.tooltip = React.createRef();
+    this.state = {
+      direction: this.props.direction,
+    };
+  }
+
+  componentDidMount() {
+    this.handleVisibility();
+  }
+
+  getVisibility = () => {
+    const node = this.tooltip.current;
+    const rect = node.getBoundingClientRect();
+
+    // Get parent-container
+    const viewport = document.getElementById('content');
+
+    const visibility = {
+      top: rect.top >= 0,
+      left: rect.left >= 0,
+      right: rect.right <= viewport.offsetWidth,
+      bottom: rect.bottom <= viewport.offsetHeight,
+    };
+
+    return visibility;
+  };
+
+  invertDirection = () => {
+    // Get current direction
+    const { direction } = this.state;
+    // Inverted directions
+    const directions = {
+      top: 'bottom',
+      left: 'right',
+      right: 'left',
+      bottom: 'top',
+    };
+
+    const inverted = directions[direction];
+
+    // Update direction
+    if (inverted) {
+      this.setState({ direction: inverted });
+    }
+  };
+
+  handleVisibility = () => {
+    const { direction } = this.state;
+    const visibility = this.getVisibility();
+
+    if (!visibility[direction]) {
+      this.invertDirection();
+    }
+  };
+
   render() {
-    const { children, label, body, icon, direction, onComponent } = this.props;
+    const { direction } = this.state;
+    const { children, label, body, icon, onComponent } = this.props;
 
     const tooltipContent = children || label;
     const bodyLength = body.length;
@@ -25,6 +83,8 @@ class ToolTip extends React.PureComponent<Props> {
 
     return (
       <span
+        onFocus={this.handleVisibility}
+        onMouseOver={this.handleVisibility}
         className={classnames('tooltip', {
           'tooltip--label': label && !icon,
           'tooltip--icon': icon,
@@ -37,6 +97,7 @@ class ToolTip extends React.PureComponent<Props> {
       >
         {tooltipContent}
         <span
+          ref={this.tooltip}
           className={classnames('tooltip__body', {
             'tooltip__body--short': isShortDescription,
           })}
