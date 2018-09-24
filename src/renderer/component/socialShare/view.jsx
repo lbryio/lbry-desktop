@@ -21,12 +21,20 @@ class SocialShare extends React.PureComponent<Props> {
   input: ?HTMLInputElement;
 
   render() {
-    const { claim_id: claimId, name: claimName, channel_name: channelName } = this.props.claim;
+    const {
+      claim_id: claimId,
+      name: claimName,
+      channel_name: channelName,
+      value,
+    } = this.props.claim;
+    const channelClaimId =
+      value && value.publisherSignature && value.publisherSignature.certificateId;
     const { onDone } = this.props;
     const speechPrefix = 'http://spee.ch/';
-    const speechURL = channelName
-      ? `${speechPrefix}${channelName}/${claimName}`
-      : `${speechPrefix}${claimName}#${claimId}`;
+    const speechURL =
+      channelName && channelClaimId
+        ? `${speechPrefix}${channelName}:${channelClaimId}/${claimName}`
+        : `${speechPrefix}${claimName}#${claimId}`;
 
     return (
       <div>
