@@ -12,9 +12,8 @@ import {
   blacklistReducer,
 } from 'lbry-redux';
 import navigationReducer from 'redux/reducers/navigation';
-import rewardsReducer from 'redux/reducers/rewards';
 import settingsReducer from 'redux/reducers/settings';
-import userReducer from 'redux/reducers/user';
+import { userReducer, rewardsReducer } from 'lbryinc';
 import shapeShiftReducer from 'redux/reducers/shape_shift';
 import subscriptionsReducer from 'redux/reducers/subscriptions';
 import publishReducer from 'redux/reducers/publish';

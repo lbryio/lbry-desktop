@@ -1,8 +1,7 @@
 import { connect } from 'react-redux';
 import { doAuthNavigate } from 'redux/actions/navigation';
-import { doFetchAccessToken } from 'redux/actions/user';
+import { doFetchAccessToken, selectAccessToken, selectUser } from 'lbryinc';
 import { selectDaemonSettings } from 'redux/selectors/settings';
-import { selectAccessToken, selectUser } from 'redux/selectors/user';
 import HelpPage from './view';
 
 const select = state => ({

@@ -1,9 +1,8 @@
 import { connect } from 'react-redux';
 import { doNavigate } from 'redux/actions/navigation';
 import { doSetClientSetting } from 'redux/actions/settings';
-import { selectUserIsRewardApproved } from 'redux/selectors/user';
+import { selectUserIsRewardApproved, selectUnclaimedRewardValue } from 'lbryinc';
 import { selectBalance, doHideNotification } from 'lbry-redux';
-import { selectUnclaimedRewardValue } from 'redux/selectors/rewards';
 import * as settings from 'constants/settings';
 import ModalCreditIntro from './view';
 
@@ -25,4 +24,7 @@ const perform = dispatch => () => ({
   },
 });
 
-export default connect(select, perform)(ModalCreditIntro);
+export default connect(
+  select,
+  perform
+)(ModalCreditIntro);

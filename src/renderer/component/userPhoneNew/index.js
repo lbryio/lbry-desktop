@@ -1,7 +1,5 @@
-import React from 'react';
 import { connect } from 'react-redux';
-import { doUserPhoneNew } from 'redux/actions/user';
-import { selectPhoneNewErrorMessage } from 'redux/selectors/user';
+import { selectPhoneNewErrorMessage, doUserPhoneNew } from 'lbryinc';
 import UserPhoneNew from './view';
 
 const select = state => ({
@@ -9,7 +7,10 @@ const select = state => ({
 });
 
 const perform = dispatch => ({
-  addUserPhone: (phone, country_code) => dispatch(doUserPhoneNew(phone, country_code)),
+  addUserPhone: (phone, countryCode) => dispatch(doUserPhoneNew(phone, countryCode)),
 });
 
-export default connect(select, perform)(UserPhoneNew);
+export default connect(
+  select,
+  perform
+)(UserPhoneNew);

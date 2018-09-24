@@ -38,4 +38,7 @@ global.__ = i18n.__;
 global.__n = i18n.__n;
 global.app = app;
 
+// Lbryinc needs access to the redux store for dispatching auth-releated actions
+global.store = app.store;
+
 export default app;

@@ -21,7 +21,7 @@ type Props = {
   navigate: (string, ?{}) => void,
 };
 
-export class AuthPage extends React.PureComponent<Props> {
+class AuthPage extends React.PureComponent<Props> {
   componentWillMount() {
     this.navigateIfAuthenticated(this.props);
   }

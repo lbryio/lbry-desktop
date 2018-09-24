@@ -3,8 +3,8 @@ import {
   selectUserInvitesRemaining,
   selectUserInviteNewIsPending,
   selectUserInviteNewErrorMessage,
-} from 'redux/selectors/user';
-import { doUserInviteNew } from 'redux/actions/user';
+  doUserInviteNew,
+} from 'lbryinc';
 import InviteNew from './view';
 
 const select = state => ({
@@ -17,4 +17,7 @@ const perform = dispatch => ({
   inviteNew: email => dispatch(doUserInviteNew(email)),
 });
 
-export default connect(select, perform)(InviteNew);
+export default connect(
+  select,
+  perform
+)(InviteNew);
