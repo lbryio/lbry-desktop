@@ -3,10 +3,10 @@ import {
   selectFetchingRewards,
   selectUnclaimedRewards,
   selectClaimedRewards,
-} from 'redux/selectors/rewards';
-import { selectUser } from 'redux/selectors/user';
+  selectUser,
+  doRewardList,
+} from 'lbryinc';
 import { doAuthNavigate, doNavigate } from 'redux/actions/navigation';
-import { doRewardList } from 'redux/actions/rewards';
 import { selectDaemonSettings } from 'redux/selectors/settings';
 import RewardsPage from './view';
 

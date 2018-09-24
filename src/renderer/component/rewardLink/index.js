@@ -3,9 +3,10 @@ import {
   makeSelectClaimRewardError,
   makeSelectRewardByType,
   makeSelectIsRewardClaimPending,
-} from 'redux/selectors/rewards';
+  doClaimRewardType,
+  doClaimRewardClearError,
+} from 'lbryinc';
 import { doNavigate } from 'redux/actions/navigation';
-import { doClaimRewardType, doClaimRewardClearError } from 'redux/actions/rewards';
 import RewardLink from './view';
 
 const makeSelect = () => {
@@ -28,4 +29,7 @@ const perform = dispatch => ({
   navigate: path => dispatch(doNavigate(path)),
 });
 
-export default connect(makeSelect, perform)(RewardLink);
+export default connect(
+  makeSelect,
+  perform
+)(RewardLink);

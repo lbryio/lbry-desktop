@@ -1,13 +1,13 @@
 import { connect } from 'react-redux';
 import { doNotify, MODALS } from 'lbry-redux';
 import { doNavigate } from 'redux/actions/navigation';
-import { doUserIdentityVerify } from 'redux/actions/user';
-import rewards from 'rewards';
-import { makeSelectRewardByType } from 'redux/selectors/rewards';
 import {
+  doUserIdentityVerify,
+  rewards,
+  makeSelectRewardByType,
   selectIdentityVerifyIsPending,
   selectIdentityVerifyErrorMessage,
-} from 'redux/selectors/user';
+} from 'lbryinc';
 import UserVerify from './view';
 
 const select = state => {
@@ -26,4 +26,7 @@ const perform = dispatch => ({
   verifyPhone: () => dispatch(doNotify({ id: MODALS.PHONE_COLLECTION })),
 });
 
-export default connect(select, perform)(UserVerify);
+export default connect(
+  select,
+  perform
+)(UserVerify);

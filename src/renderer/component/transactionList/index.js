@@ -1,8 +1,7 @@
 import { connect } from 'react-redux';
-import { selectClaimedRewardsByTransactionId } from 'redux/selectors/rewards';
+import { selectClaimedRewardsByTransactionId } from 'lbryinc';
 import { doNavigate } from 'redux/actions/navigation';
-import { doNotify } from 'lbry-redux';
-import { selectAllMyClaimsByOutpoint } from 'lbry-redux';
+import { selectAllMyClaimsByOutpoint, doNotify } from 'lbry-redux';
 import TransactionList from './view';
 
 const select = state => ({
@@ -15,4 +14,7 @@ const perform = dispatch => ({
   openModal: (modal, props) => dispatch(doNotify(modal, props)),
 });
 
-export default connect(select, perform)(TransactionList);
+export default connect(
+  select,
+  perform
+)(TransactionList);

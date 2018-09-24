@@ -1,14 +1,12 @@
 import { connect } from 'react-redux';
 import {
-  doUserEmailVerify,
-  doUserEmailVerifyFailure,
-  doUserResendVerificationEmail,
-} from 'redux/actions/user';
-import {
   selectEmailVerifyIsPending,
   selectEmailToVerify,
   selectEmailVerifyErrorMessage,
-} from 'redux/selectors/user';
+  doUserEmailVerify,
+  doUserEmailVerifyFailure,
+  doUserResendVerificationEmail,
+} from 'lbryinc';
 import UserEmailVerify from './view';
 
 const select = state => ({
@@ -23,4 +21,7 @@ const perform = dispatch => ({
   resendVerificationEmail: email => dispatch(doUserResendVerificationEmail(email)),
 });
 
-export default connect(select, perform)(UserEmailVerify);
+export default connect(
+  select,
+  perform
+)(UserEmailVerify);
