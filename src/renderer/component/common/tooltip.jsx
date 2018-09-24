@@ -68,6 +68,7 @@ class ToolTip extends React.PureComponent<Props> {
     const { direction } = this.state;
     const visibility = this.getVisibility();
 
+    // Invert direction if tooltip is outside viewport bounds
     if (!visibility[direction]) {
       this.invertDirection();
     }
