@@ -2,13 +2,13 @@
 import * as React from 'react';
 
 type Props = {
-  lines: ?number,
-  children: React.Node,
+  text: string,
+  lines: number,
 };
 
 const TruncatedText = (props: Props) => (
-  <span className="truncated-text" style={{ WebkitLineClamp: props.lines }}>
-    {props.children}
+  <span title={props.text} className="truncated-text" style={{ WebkitLineClamp: props.lines }}>
+    {props.text}
   </span>
 );
 

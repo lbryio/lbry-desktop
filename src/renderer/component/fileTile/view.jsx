@@ -127,7 +127,7 @@ class FileTile extends React.PureComponent<Props> {
                   'card__title--large': size === 'large',
                 })}
               >
-                <TruncatedText lines={size === 'small' ? 2 : 3}>{title || name}</TruncatedText>
+                <TruncatedText text={title || name} lines={size === 'small' ? 2 : 3} />
               </div>
               <div
                 className={classnames('card__subtitle', {
@@ -151,7 +151,7 @@ class FileTile extends React.PureComponent<Props> {
                     'card__subtext--large': size === 'large',
                   })}
                 >
-                  <TruncatedText lines={size === 'large' ? 4 : 3}>{description}</TruncatedText>
+                  <TruncatedText text={description} lines={size === 'large' ? 4 : 3} />
                 </div>
               )}
               {!name && (
