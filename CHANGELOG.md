@@ -9,6 +9,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 * Allow typing of encryption password without clicking entry box ([#1977](https://github.com/lbryio/lbry-desktop/pull/1977))
 
 ### Changed
+* Make tooltip smarter ([#1979](https://github.com/lbryio/lbry-desktop/pull/1979))
 
 ### Fixed
 
