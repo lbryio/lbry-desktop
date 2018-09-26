@@ -457,6 +457,14 @@
   margin: $spacing-vertical * 1/3 0;
 }
 
+.card__error-msg {
+  border-left: 2px solid var(--error-msg-border);
+  color: var(--error-msg-color);
+  background-color: var(--error-msg-bg);
+  padding: $spacing-vertical * 1/3;
+  margin: $spacing-vertical * 1/3 0;
+}
+
 .card__media--autothumb {
   color: red !important;
 }

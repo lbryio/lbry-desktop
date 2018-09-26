@@ -2,7 +2,6 @@
 import React from 'react';
 import Button from 'component/button';
 import { FormField } from 'component/common/form';
-import UriIndicator from 'component/uriIndicator';
 import type { Claim } from 'types/claim';
 
 type Props = {
@@ -71,56 +70,44 @@ class WalletSendTip extends React.PureComponent<Props, State> {
   }
 
   render() {
-    const { title, isPending, uri, onCancel, balance } = this.props;
+    const { title, isPending, uri, onCancel } = this.props;
     const { tipAmount, tipError } = this.state;
 
     return (
-      <div>
-        <div className="card__title">
-          <h1>
-            {__('Send a tip to')} <UriIndicator uri={uri} />
-          </h1>
-        </div>
-        <div className="card__content">
-          <FormField
-            autoFocus
-            label={
-              (tipAmount &&
-                tipAmount !== 0 &&
-                `Tip ${tipAmount.toFixed(8).replace(/\.?0+$/, '')} LBC`) ||
-              __('Amount')
-            }
-            postfix={__('LBC')}
-            className="input--price-amount"
-            error={tipError}
-            min="0"
-            step="any"
-            type="number"
-            placeholder="1.23"
-            onChange={event => this.handleSupportPriceChange(event)}
-            helper={
-              <span>
-                {__(`This will appear as a tip for ${title} located at ${uri}.`)}{' '}
-                <Button label={__('Learn more')} button="link" href="https://lbry.io/faq/tipping" />
-              </span>
-            }
+      <section className="card__content">
+        <FormField
+          autoFocus
+          label={
+            (tipAmount &&
+              tipAmount !== 0 &&
+              `Tip ${tipAmount.toFixed(8).replace(/\.?0+$/, '')} LBC`) ||
+            __('Amount')
+          }
+          postfix={__('LBC')}
+          className="input--price-amount"
+          error={tipError}
+          min="0"
+          step="any"
+          type="number"
+          placeholder="1.23"
+          onChange={event => this.handleSupportPriceChange(event)}
+          helper={
+            <span>
+              {__(`This will appear as a tip for "${title}".`)}{' '}
+              <Button label={__('Learn more')} button="link" href="https://lbry.io/faq/tipping" />
+            </span>
+          }
+        />
+        <div className="card__actions">
+          <Button
+            button="primary"
+            label={__('Send')}
+            disabled={isPending || tipError}
+            onClick={this.handleSendButtonClicked}
           />
-          <div className="card__actions">
-            <Button
-              button="primary"
-              label={__('Send')}
-              disabled={isPending || tipError}
-              onClick={this.handleSendButtonClicked}
-            />
-            <Button
-              button="link"
-              label={__('Cancel')}
-              onClick={onCancel}
-              navigateParams={{ uri }}
-            />
-          </div>
+          <Button button="link" label={__('Cancel')} onClick={onCancel} navigateParams={{ uri }} />
         </div>
-      </div>
+      </section>
     );
   }
 }

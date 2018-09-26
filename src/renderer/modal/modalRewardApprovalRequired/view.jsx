@@ -1,13 +1,20 @@
+// @flow
 import React from 'react';
 import { Modal } from 'modal/modal';
 
-class ModalRewardApprovalRequired extends React.PureComponent {
+type Props = {
+  closeModal: () => void,
+  doAuth: () => void,
+};
+
+class ModalRewardApprovalRequired extends React.PureComponent<Props> {
   render() {
     const { closeModal, doAuth } = this.props;
 
     return (
       <Modal
         isOpen
+        title={__('Hmm. Are you real?')}
         contentLabel={__('Human Verification Required')}
         onConfirmed={doAuth}
         onAborted={closeModal}
@@ -15,8 +22,7 @@ class ModalRewardApprovalRequired extends React.PureComponent {
         confirmButtonLabel={__("I'm Totally Real")}
         abortButtonLabel={__('Never Mind')}
       >
-        <section>
-          <h3 className="modal__header">{__('This is awkward. Are you real?')}</h3>
+        <section className="card__content">
           <p>
             {__(
               "Before we can give you any credits, we need to perform a brief check to make sure you're a new and unique person."

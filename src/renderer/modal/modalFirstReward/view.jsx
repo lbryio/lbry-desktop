@@ -1,10 +1,12 @@
-// I"ll come back to This
-/* esline-disable */
+// @flow
 import React from 'react';
 import { Modal } from 'modal/modal';
-import CreditAmount from 'component/common/credit-amount';
 
-class ModalFirstReward extends React.PureComponent {
+type Props = {
+  closeModal: () => void,
+};
+
+class ModalFirstReward extends React.PureComponent<Props> {
   render() {
     const { closeModal } = this.props;
 
@@ -14,10 +16,10 @@ class ModalFirstReward extends React.PureComponent {
         overlayClassName="modal-overlay modal-overlay--clear"
         isOpen
         contentLabel={__('Welcome to LBRY')}
+        title={__('Your First Reward')}
         onConfirmed={closeModal}
       >
-        <section>
-          <h3 className="modal__header">{__('Your First Reward')}</h3>
+        <section className="card__content">
           <p>{__('You just earned your first reward!')}</p>
           <p>
             {__(
@@ -41,4 +43,3 @@ class ModalFirstReward extends React.PureComponent {
 }
 
 export default ModalFirstReward;
-/* eslint-enable */

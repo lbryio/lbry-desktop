@@ -1,14 +1,19 @@
+// @flow
 import React from 'react';
 import { Modal } from 'modal/modal';
 import Button from 'component/button';
 
-const ModalFirstSubscription = props => {
+type Props = {
+  closeModal: () => void,
+  navigate: string => void,
+};
+
+const ModalFirstSubscription = (props: Props) => {
   const { closeModal, navigate } = props;
 
   return (
-    <Modal type="custom" isOpen contentLabel="Subscriptions 101">
-      <section>
-        <h3 className="modal__header">{__('Subscriptions 101')}</h3>
+    <Modal type="custom" isOpen contentLabel="Subscriptions 101" title={__('Subscriptions 101')}>
+      <section className="card__content">
         <p>{__('You just subscribed to your first channel. Awesome!')}</p>
         <p>{__('A few quick things to know:')}</p>
         <p className="card__content">

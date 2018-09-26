@@ -39,6 +39,7 @@ class ModalRewardCode extends React.PureComponent<Props, State> {
     return (
       <Modal
         isOpen
+        title={__('Enter Reward Code')}
         contentLabel={__('Enter Reward Code')}
         type="confirm"
         confirmButtonLabel={__('Redeem')}
@@ -47,8 +48,7 @@ class ModalRewardCode extends React.PureComponent<Props, State> {
         onAborted={closeModal}
         confirmButtonDisabled={rewardIsPending}
       >
-        <h3 className="modal__header">{__('Enter Reward Code')}</h3>
-        <div className="card__content">
+        <section className="card__content">
           <FormRow>
             <FormField
               stretch
@@ -72,7 +72,7 @@ class ModalRewardCode extends React.PureComponent<Props, State> {
               }
             />
           </FormRow>
-        </div>
+        </section>
       </Modal>
     );
   }

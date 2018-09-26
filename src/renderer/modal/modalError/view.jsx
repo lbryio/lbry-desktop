@@ -1,8 +1,14 @@
+// @flow
 import React from 'react';
 import Native from 'native';
 import { ExpandableModal } from 'modal/modal';
 
-class ModalError extends React.PureComponent {
+type Props = {
+  error: string | { message: string },
+  closeModal: () => void,
+};
+
+class ModalError extends React.PureComponent<Props> {
   render() {
     const { closeModal, error } = this.props;
 
@@ -23,37 +29,39 @@ class ModalError extends React.PureComponent {
       const label = errorKeyLabels[key];
       errorInfoList.push(
         <li key={key}>
-          <strong>{label}</strong>: <code>{val}</code>
+          <strong>{label}</strong>: {val}
         </li>
       );
     }
+
     const errorInfo = <ul className="error-modal__error-list">{errorInfoList}</ul>;
 
     return (
       <ExpandableModal
         isOpen
         contentLabel={__('Error')}
-        className="error-modal"
-        overlayClassName="error-modal-overlay"
-        onConfirmed={closeModal}
-        extraContent={errorInfo}
-      >
-        <h3 className="modal__header">{__('Error')}</h3>
-
-        <div className="error-modal__content">
-          <div>
+        title={
+          <React.Fragment>
+            {__('Error')}{' '}
             <img
               alt=""
               className="error-modal__warning-symbol"
               src={Native.imagePath('warning.png')}
             />
-          </div>
+          </React.Fragment>
+        }
+        className="error-modal"
+        overlayClassName="error-modal-overlay"
+        onConfirmed={closeModal}
+        extraContent={errorInfo}
+      >
+        <section className="card__content">
           <p>
             {__(
               "We're sorry that LBRY has encountered an error. This has been reported and we will investigate the problem."
             )}
           </p>
-        </div>
+        </section>
       </ExpandableModal>
     );
   }

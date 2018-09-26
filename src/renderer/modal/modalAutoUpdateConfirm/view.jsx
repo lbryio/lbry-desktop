@@ -1,11 +1,15 @@
+// @flow
 import React from 'react';
 import { Modal } from 'modal/modal';
-import { Line } from 'rc-progress';
 import Button from 'component/button';
+import { ipcRenderer } from 'electron';
 
-const { ipcRenderer } = require('electron');
+type Props = {
+  closeModal: () => void,
+  declineAutoUpdate: () => void,
+};
 
-class ModalAutoUpdateConfirm extends React.PureComponent {
+class ModalAutoUpdateConfirm extends React.PureComponent<Props> {
   render() {
     const { closeModal, declineAutoUpdate } = this.props;
 
@@ -14,6 +18,7 @@ class ModalAutoUpdateConfirm extends React.PureComponent {
         isOpen
         type="confirm"
         contentLabel={__('Update Downloaded')}
+        title={__('LBRY Update Ready')}
         confirmButtonLabel={__('Upgrade')}
         abortButtonLabel={__('Not now')}
         onConfirmed={() => {
@@ -24,10 +29,9 @@ class ModalAutoUpdateConfirm extends React.PureComponent {
           closeModal();
         }}
       >
-        <section>
-          <h3 className="text-center">{__('LBRY Update Ready')}</h3>
+        <section className="card__content">
           <p>{__('Your LBRY update is ready. Restart LBRY now to use it!')}</p>
-          <p className="meta text-center">
+          <p className="meta">
             {__('Want to know what has changed?')} See the{' '}
             <Button
               button="link"

@@ -12,7 +12,7 @@ class ModalSocialShare extends React.PureComponent<Props> {
   render() {
     const { closeModal, uri } = this.props;
     return (
-      <Modal isOpen onAborted={closeModal} type="custom">
+      <Modal isOpen onAborted={closeModal} type="custom" title={__('Share')}>
         <SocialShare uri={uri} onDone={closeModal} />
       </Modal>
     );
