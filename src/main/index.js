@@ -5,13 +5,15 @@ import SemVer from 'semver';
 import findProcess from 'find-process';
 import url from 'url';
 import https from 'https';
-import { shell, app, ipcMain, dialog, session } from 'electron';
+import { shell, app, ipcMain, dialog, session, protocol } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import isDev from 'electron-is-dev';
 import Daemon from './Daemon';
 import createTray from './createTray';
 import createWindow from './createWindow';
 import pjson from '../../package.json';
+import path from 'path';
+import fs from 'fs';
 
 autoUpdater.autoDownload = true;
 
@@ -63,6 +65,8 @@ if (isDev) {
   process.env.ELECTRON_DISABLE_SECURITY_WARNINGS = true;
 }
 
+protocol.registerStandardSchemes(['content']);
+
 app.on('ready', async () => {
   const processList = await findProcess('name', 'lbrynet-daemon');
   const isDaemonRunning = processList.length > 0;
@@ -84,22 +88,48 @@ app.on('ready', async () => {
     });
     daemon.launch();
   }
+
+  // https://electronjs.org/docs/api/protocol#protocolregisterstreamprotocolscheme-handler-completion
+  // protocol.registerStreamProtocol(
+  //   'content',
+  //   (request, callback) => {
+  //     console.log('response', request);
+  //     const filePath = request.url.slice('content://'.length);
+  //
+  //     callback({
+  //       statusCode: 209,
+  //       data: fs.createReadStream(filePath),
+  //     });
+  //   },
+  //   error => {
+  //     if (error) console.error('err', err);
+  //     if (!error) console.log('success');
+  //   }
+  // );
+
   if (isDev) {
     await installExtensions();
   }
+
   rendererWindow = createWindow(appState);
   rendererWindow.webContents.on('devtools-opened', () => {
     rendererWindow.webContents.send('devtools-is-opened');
   });
+
   tray = createTray(rendererWindow);
   // HACK: patch webrequest to fix devtools incompatibility with electron 2.x.
   // See https://github.com/electron/electron/issues/13008#issuecomment-400261941
   session.defaultSession.webRequest.onBeforeRequest({}, (details, callback) => {
-  if (details.url.indexOf('7accc8730b0f99b5e7c0702ea89d1fa7c17bfe33') !== -1) {
-    callback({redirectURL: details.url.replace('7accc8730b0f99b5e7c0702ea89d1fa7c17bfe33', '57c9d07b416b5a2ea23d28247300e4af36329bdc')});
-  } else {
-    callback({cancel: false});
-  }
+    if (details.url.indexOf('7accc8730b0f99b5e7c0702ea89d1fa7c17bfe33') !== -1) {
+      callback({
+        redirectURL: details.url.replace(
+          '7accc8730b0f99b5e7c0702ea89d1fa7c17bfe33',
+          '57c9d07b416b5a2ea23d28247300e4af36329bdc'
+        ),
+      });
+    } else {
+      callback({ cancel: false });
+    }
   });
 });
 

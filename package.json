@@ -85,6 +85,7 @@
     "stream-to-blob-url": "^2.1.1",
     "three": "^0.93.0",
     "tree-kill": "^1.1.0",
+    "video.js": "^7.2.2",
     "y18n": "^4.0.0"
   },
   "devDependencies": {
