@@ -79,7 +79,7 @@ class ChannelTile extends React.PureComponent<Props> {
                   'card__title--large': size === 'large',
                 })}
               >
-                <TruncatedText lines={1}>{channelName || uri}</TruncatedText>
+                <TruncatedText text={channelName || uri} lines={1} />
               </div>
               <div
                 className={classnames('card__subtitle', {
