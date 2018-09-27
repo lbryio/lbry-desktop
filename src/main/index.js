@@ -97,7 +97,13 @@ app.on('ready', async () => {
   //     const filePath = request.url.slice('content://'.length);
   //
   //     callback({
-  //       statusCode: 209,
+  //       statusCode: 200,
+  //       headers: {
+  //       'accept-ranges': 'bytes',
+  //       'content-type': 'video/mp4',
+  //       'content-length': '125687689',
+  //       'content-range': 'bytes 0-125687688/125687689'
+  //     },
   //       data: fs.createReadStream(filePath),
   //     });
   //   },

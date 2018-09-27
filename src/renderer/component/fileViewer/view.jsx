@@ -209,7 +209,9 @@ class FileViewer extends React.PureComponent<Props> {
     const isPlaying = playingUri === uri;
     const isReadyToPlay = fileInfo && fileInfo.written_bytes > 0;
     const shouldObscureNsfw = obscureNsfw && metadata && metadata.nsfw;
-
+    if (fileInfo) {
+      console.log("fileInfo", fileInfo)
+    }
     let loadStatusMessage = '';
 
     if (fileInfo && fileInfo.completed && !fileInfo.written_bytes) {

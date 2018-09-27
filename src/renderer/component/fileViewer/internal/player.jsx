@@ -27,6 +27,7 @@ class MediaPlayer extends React.PureComponent {
     'comic-book',
     'document',
     '3D-file',
+    
   ];
 
   constructor(props) {
