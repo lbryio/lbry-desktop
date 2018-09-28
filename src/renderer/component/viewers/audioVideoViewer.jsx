@@ -6,6 +6,7 @@ import 'video.js/dist/video-js.css';
 import toBlobURL from 'stream-to-blob-url';
 import fs from 'fs';
 import stream from 'stream';
+
 type Props = {
   source: {
     downloadPath: string,
@@ -16,88 +17,76 @@ type Props = {
 };
 
 class AudioVideoViewer extends React.PureComponent<Props> {
+  constructor() {
+    super();
+
+    this.blobStream = new stream.Readable();
+  }
+
   componentDidMount() {
-    const { source, contentType, poster } = this.props;
+    const { source, contentType, poster, fileInfo } = this.props;
     const { downloadPath, fileName } = source;
 
     const indexOfFileName = downloadPath.indexOf(fileName);
     const basePath = downloadPath.slice(0, indexOfFileName);
     const encodedFileName = encodeURIComponent(fileName);
 
-    // We only want to encode the fileName so forward slashes "/" are handled properly by the file system
-    // TODO: Determine changes needed for windows
-    // const path = `content://${basePath}${encodedFileName}`;
 
-    // Another alternative, maybe we don't need to do anything in the main electron process?
-    // get blob url, then set as source and call videojs()
-    // toBlobURL(fs.createReadStream(downloadPath), (err, url) => {
-    // if (err) return console.error(err.message)
-    // console.log(url);
-    //
-    // const sources = [
-    //   {
-    //     src: url,
-    //     type: contentType
-    //   }
-    // ]
-// https://stackoverflow.com/questions/19277094/how-to-close-a-readable-stream-before-end
 
-    // let blobStream = new stream.Readable();
-    //
-    // //let fileStream = fs.createReadStream(downloadPath);
-    //
-    // let LAST_BYTES_WRITTEN = 0;
-    //
-    // setInterval(() => {
-    //   if(BYTES_SENT === LAST_BYTES_WRITTEN)
-    //     fs.readSync(file, position = BYTES_SENT, length = LAST_BYTES_WRITTEN, (data) => {
-    //       blobStream.push(data)
-    //     })
-    //   }
-    //   LAST_BYTES_WRITTEN = BYTES_WRITTEN;
+  console.log("fileInfo", fileInfo)
+
+  let blobStream = new stream.Readable();
+
+  let fileStream = fs.createReadStream(downloadPath);
+
+  let bytesSent = 0;
+  let lastBytesWritten = fileInfo.written_bytes;
+
+  // setInterval(() => {
+  //   // There are new bytes
+  //   if (lastBytesWritten !== fileInfo.written_bytes) {
+  //     fs.readSync(file, bytesSent, lastBytesWritten, (data) => {
+  //       console.log("new data")
+  //       blobStream.push(data)
+  //     });
+  //
+  //     lastBytesWritten = fileInfo.written_bytes;
+  //   } else {
+  //     console.log("nothing new")
+  //   }
+  // }, 500)
+  //
+  //
+  //   toBlobURL(blobStream, (err, url) => {
+  //   if (err) return console.error(err.message)
+  //   console.log(url);
+  //   const sources = [
+  //     {
+  //       src: url,
+  //       type: contentType
+  //     }
+  //   ]
+  //
+  //   const videoJsOptions = {
+  //     autoplay: true,
+  //     controls: true,
+  //     preload: 'none',
+  //     poster,
+  //     sources,
+  //   };
+  //
+  //   this.player = videojs(this.videoNode, videoJsOptions, () => {});
     // })
-    //
-    // toBlobURL(blobStream, (err, url) => {
-    // if (err) return console.error(err.message)
-    // console.log(url);
-    // const sources = [
-    //   {
-    //     src: url,
-    //     type: con
+  }
 
+  componentDidUpdate(prevProps) {
 
-    let blobStream = new stream.Readable();
-
-    let fileStream = fs.createReadStream(downloadPath);
-
-
-    toBlobURL(blobStream, (err, url) => {
-    if (err) return console.error(err.message)
-    console.log(url);
-    const sources = [
-      {
-        src: url,
-        type: contentType
-      }
-    ]
-
-    // const sources = [
-    //   {
-    //     src: path,
-    //     type: contentType,
-    //   },
-    // ];
-
-    const videoJsOptions = {
-      autoplay: true,
-      controls: true,
-      preload: 'none',
-      poster,
-      sources,
-    };
-
-    this.player = videojs(this.videoNode, videoJsOptions, () => {});
-    })
+    const { written_bytes: previousWrittenBytes } = prevProps.fileInfo;
+    const { written_bytes: writtenBytes } = this.props;
+    if (previousWrittenBytes < writtenBytes) {
+      console.log("push to stream");
+    }
+    // check if we can push new data to the stream
   }
 
   componentWillUnmount() {

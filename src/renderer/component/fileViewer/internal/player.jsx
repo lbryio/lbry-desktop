@@ -27,7 +27,7 @@ class MediaPlayer extends React.PureComponent {
     'comic-book',
     'document',
     '3D-file',
-    
+
   ];
 
   constructor(props) {
@@ -89,7 +89,7 @@ class MediaPlayer extends React.PureComponent {
   }
 
   render() {
-    const { mediaType, poster } = this.props;
+    const { mediaType, poster, fileInfo } = this.props;
     const { fileSource } = this.state;
 
     const isFileType = this.isSupportedFile();
@@ -98,7 +98,7 @@ class MediaPlayer extends React.PureComponent {
     return (
       <React.Fragment>
         {!isFileReady && <LoadingScreen status="loadingStatus" spinner />}
-        {isFileReady && <FileRender source={fileSource} mediaType={mediaType} poster={poster} />}
+        {isFileReady && <FileRender fileInfo={fileInfo} source={fileSource} mediaType={mediaType} poster={poster} />}
       </React.Fragment>
     );
   }

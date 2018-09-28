@@ -22,7 +22,7 @@ type Props = {
 
 class FileRender extends React.PureComponent<Props> {
   renderViewer() {
-    const { source, mediaType, currentTheme, poster } = this.props;
+    const { source, mediaType, currentTheme, poster, fileInfo } = this.props;
 
     // Extract relevant data to render file
     const { blob, stream, fileName, fileType, contentType, downloadPath } = source;
@@ -38,6 +38,7 @@ class FileRender extends React.PureComponent<Props> {
           source={{ downloadPath, fileName }}
           contentType={contentType}
           poster={poster}
+          fileInfo={fileInfo}
         />
       ),
       audio: <AudioVideoViewer source={{ downloadPath, fileName }} contentType={contentType} />,
