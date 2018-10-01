@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 * Make tooltip smarter ([#1979](https://github.com/lbryio/lbry-desktop/pull/1979))
 
 ### Fixed
+* Invite table cutoff with large number of invites ([#1985](https://github.com/lbryio/lbry-desktop/pull/1985))
 
 
 ## [0.25.1] - 2018-09-18
