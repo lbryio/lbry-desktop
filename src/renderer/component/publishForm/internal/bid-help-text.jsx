@@ -20,7 +20,9 @@ class BidHelpText extends React.PureComponent<Props> {
       } else {
         bidHelpText = `${__('If you bid more than')} ${amountNeededForTakeover} LBC, ${__(
           'when someone navigates to'
-        )} ${uri} ${__('it will load your published content')}.`;
+        )} ${uri} ${__('it will load your published content')}. ${__(
+          'However, you can get a longer version of this URL for any bid'
+        )}.`;
       }
     }
 
