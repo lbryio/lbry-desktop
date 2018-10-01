@@ -81,6 +81,7 @@ class FilePage extends React.Component<Props> {
     this.checkSubscription(this.props);
 
     setViewed(uri);
+    console.log('claim', this.props.claim);
   }
 
   componentWillReceiveProps(nextProps: Props) {

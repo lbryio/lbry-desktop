@@ -1,5 +1,12 @@
 import { createSelector } from 'reselect';
-import { parseURI, selectClaimsById, selectMyClaimsWithoutChannels } from 'lbry-redux';
+import {
+  parseURI,
+  selectClaimsById,
+  selectMyClaimsWithoutChannels,
+  selectResolvingUris,
+  buildURI,
+  selectClaimsByUri,
+} from 'lbry-redux';
 
 const selectState = state => state.publish || {};
 
@@ -91,5 +98,50 @@ export const selectMyClaimForUri = createSelector(
               ? claim.name === claimName
               : claim.name === contentName || claim.name === claimName
         );
+  }
+);
+
+export const selectIsResolvingPublishUris = createSelector(
+  selectState,
+  selectResolvingUris,
+  ({ uri, name }, resolvingUris) => {
+    if (uri) {
+      const isResolvingUri = resolvingUris.includes(uri);
+      const { isChannel } = parseURI(uri);
+
+      let isResolvingShortUri;
+      if (isChannel) {
+        const shortUri = buildURI({ contentName: name });
+        isResolvingShortUri = resolvingUris.includes(shortUri);
+      }
+
+      return isResolvingUri || isResolvingShortUri;
+    }
+
+    return false;
+  }
+);
+
+export const selectTakeOverAmount = createSelector(
+  selectState,
+  selectMyClaimForUri,
+  selectClaimsByUri,
+  ({ name }, myClaimForUri, claimsByUri) => {
+    // We only care about the winning claim for the short uri
+    const shortUri = buildURI({ contentName: name });
+    const claimForShortUri = claimsByUri[shortUri];
+
+    if (!myClaimForUri && claimForShortUri) {
+      return claimForShortUri.effective_amount;
+    } else if (myClaimForUri && claimForShortUri) {
+      // https://github.com/lbryio/lbry/issues/1476
+      // We should check the current effective_amount on my claim to see how much additional lbc
+      // is needed to win the claim. Currently this is not possible during a takeover.
+      // With this, we could say something like, "You have x lbc in support, if you bid y additional LBC you will control the claim"
+      // For now just ignore supports. We will just show the winning claim's bid amount
+      return claimForShortUri.effective_amount || claimForShortUri.amount;
+    }
+
+    return null;
   }
 );
