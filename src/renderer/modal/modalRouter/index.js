@@ -9,7 +9,7 @@ import {
   selectNotificationProps,
 } from 'lbry-redux';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
-import { selectUser, selectUserIsVerificationCandidate } from 'redux/selectors/user';
+import { selectUser, selectUserIsVerificationCandidate } from 'lbryinc';
 
 import ModalRouter from './view';
 
@@ -32,4 +32,7 @@ const perform = dispatch => ({
   openModal: notification => dispatch(doNotify(notification)),
 });
 
-export default connect(select, perform)(ModalRouter);
+export default connect(
+  select,
+  perform
+)(ModalRouter);

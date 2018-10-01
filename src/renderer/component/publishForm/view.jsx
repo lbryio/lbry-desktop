@@ -13,6 +13,7 @@ import { CHANNEL_NEW, CHANNEL_ANONYMOUS, MINIMUM_PUBLISH_BID } from 'constants/c
 import * as icons from 'constants/icons';
 import type { Claim } from 'types/claim';
 import BidHelpText from './internal/bid-help-text';
+import NameHelpText from './internal/name-help-text';
 import LicenseType from './internal/license-type';
 
 type Props = {
@@ -53,8 +54,9 @@ type Props = {
   clearPublish: () => void,
   resolveUri: string => void,
   scrollToTop: () => void,
-  prepareEdit: ({ }) => void,
+  prepareEdit: ({}) => void,
   resetThumbnailStatus: () => void,
+  amountNeededForTakeover: ?number,
 };
 
 class PublishForm extends React.PureComponent<Props> {
@@ -84,6 +86,7 @@ class PublishForm extends React.PureComponent<Props> {
     // If they are midway through a channel creation, treat it as anonymous until it completes
     const channelName = channel === CHANNEL_ANONYMOUS || channel === CHANNEL_NEW ? '' : channel;
 
+    // We are only going to store the full uri, but we need to resolve the uri with and without the channel name
     let uri;
     try {
       uri = buildURI({ contentName: name, channelName });
@@ -92,6 +95,11 @@ class PublishForm extends React.PureComponent<Props> {
     }
 
     if (uri) {
+      if (channelName) {
+        // resolve without the channel name so we know the winning bid for it
+        const uriLessChannel = buildURI({ contentName: name });
+        resolveUri(uriLessChannel);
+      }
       resolveUri(uri);
       return uri;
     }
@@ -295,8 +303,9 @@ class PublishForm extends React.PureComponent<Props> {
           {name && nameError && <div>{__('The URL you created is not valid')}</div>}
           {!bid && <div>{__('A bid amount is required')}</div>}
           {!!bid && bidError && <div>{bidError}</div>}
-          {uploadThumbnailStatus === THUMBNAIL_STATUSES.IN_PROGRESS
-          && <div>{__('Please wait for thumbnail to finish uploading')}</div>}
+          {uploadThumbnailStatus === THUMBNAIL_STATUSES.IN_PROGRESS && (
+            <div>{__('Please wait for thumbnail to finish uploading')}</div>
+          )}
           {!tosAccepted && <div>{__('You must agree to the terms of service')}</div>}
           {!!editingURI &&
             !isStillEditing &&
@@ -338,6 +347,7 @@ class PublishForm extends React.PureComponent<Props> {
       thumbnailPath,
       resetThumbnailStatus,
       isStillEditing,
+      amountNeededForTakeover,
     } = this.props;
 
     const formDisabled = (!filePath && !editingURI) || publishing;
@@ -350,19 +360,17 @@ class PublishForm extends React.PureComponent<Props> {
       submitLabel = !publishing ? __('Publish') : __('Publishing...');
     }
 
+    const shortUri = buildURI({ contentName: name });
+
     return (
       <Form onSubmit={this.handlePublish}>
         <section className={classnames('card card--section', { 'card--disabled': publishing })}>
           <div className="card__title">{__('Content')}</div>
           <div className="card__subtitle">
-            {isStillEditing ? __('Editing a claim') : __('What are you publishing?')}
-            {' '}{__(
-              'Read our'
-            )}{' '}
+            {isStillEditing ? __('Editing a claim') : __('What are you publishing?')}{' '}
+            {__('Read our')}{' '}
             <Button button="link" label={__('FAQ')} href="https://lbry.io/faq/how-to-publish" />{' '}
-            {__(
-              'to learn more.'
-            )}
+            {__('to learn more.')}
           </div>
           {(filePath || !!editingURI) && (
             <div className="card-media__internal-links">
@@ -420,12 +428,12 @@ class PublishForm extends React.PureComponent<Props> {
               {uploadThumbnailStatus === THUMBNAIL_STATUSES.API_DOWN ? (
                 __('Enter a URL for your thumbnail.')
               ) : (
-                  <React.Fragment>
-                    {__('Upload your thumbnail (.png/.jpg/.jpeg/.gif) to')}{' '}
-                    <Button button="link" label={__('spee.ch')} href="https://spee.ch/about" />.{' '}
-                    {__('Recommended size: 800x450 (16:9)')}
-                  </React.Fragment>
-                )}
+                <React.Fragment>
+                  {__('Upload your thumbnail (.png/.jpg/.jpeg/.gif) to')}{' '}
+                  <Button button="link" label={__('spee.ch')} href="https://spee.ch/about" />.{' '}
+                  {__('Recommended size: 800x450 (16:9)')}
+                </React.Fragment>
+              )}
             </div>
             <SelectThumbnail
               thumbnailPath={thumbnailPath}
@@ -496,11 +504,12 @@ class PublishForm extends React.PureComponent<Props> {
               <FormRow>
                 <FormField
                   stretch
+                  label={__('Name')}
                   prefix={`lbry://${
                     !channel || channel === CHANNEL_ANONYMOUS || channel === CHANNEL_NEW
                       ? ''
                       : `${channel}/`
-                    }`}
+                  }`}
                   type="text"
                   name="content_name"
                   placeholder="myname"
@@ -508,12 +517,9 @@ class PublishForm extends React.PureComponent<Props> {
                   onChange={event => this.handleNameChange(event.target.value)}
                   error={nameError}
                   helper={
-                    <BidHelpText
+                    <NameHelpText
                       isStillEditing={isStillEditing}
                       uri={uri}
-                      editingURI={editingURI}
-                      isResolvingUri={isResolvingUri}
-                      winningBidForClaimUri={winningBidForClaimUri}
                       myClaimForUri={myClaimForUri}
                       onEditMyClaim={this.editExistingClaim}
                     />
@@ -534,8 +540,14 @@ class PublishForm extends React.PureComponent<Props> {
                 min="0"
                 disabled={!name}
                 onChange={event => this.handleBidChange(parseFloat(event.target.value))}
-                helper={__('This LBC remains yours and the deposit can be undone at any time.')}
                 placeholder={winningBidForClaimUri ? winningBidForClaimUri + 0.1 : 0.1}
+                helper={
+                  <BidHelpText
+                    uri={shortUri}
+                    isResolvingUri={isResolvingUri}
+                    amountNeededForTakeover={amountNeededForTakeover}
+                  />
+                }
               />
             </div>
           </section>

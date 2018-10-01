@@ -1,10 +1,12 @@
 import { connect } from 'react-redux';
-import { doResolveUri, selectClaimsByUri, selectResolvingUris, selectBalance } from 'lbry-redux';
+import { doResolveUri, selectBalance } from 'lbry-redux';
 import { doNavigate } from 'redux/actions/navigation';
 import {
   selectPublishFormValues,
   selectIsStillEditing,
   selectMyClaimForUri,
+  selectIsResolvingPublishUris,
+  selectTakeOverAmount,
 } from 'redux/selectors/publish';
 import {
   doResetThumbnailStatus,
@@ -15,43 +17,18 @@ import {
 } from 'redux/actions/publish';
 import PublishPage from './view';
 
-const select = state => {
-  const isStillEditing = selectIsStillEditing(state);
-  const myClaimForUri = selectMyClaimForUri(state);
-  const publishState = selectPublishFormValues(state);
-  const { uri } = publishState;
-
-  const resolvingUris = selectResolvingUris(state);
-  let isResolvingUri = false;
-  if (uri) {
-    isResolvingUri = resolvingUris.includes(uri);
-  }
-
-  let claimForUri;
-  let winningBidForClaimUri;
-  if (!myClaimForUri) {
-    // if the uri isn't from a users claim, find the winning bid needed for the vanity url
-    // in the future we may want to display this on users claims
-    // ex: "you own this, for 5 more lbc you will win this claim"
-    const claimsByUri = selectClaimsByUri(state);
-    claimForUri = claimsByUri[uri];
-    winningBidForClaimUri = claimForUri ? claimForUri.effective_amount : null;
-  }
-
-  return {
-    ...publishState,
-    isResolvingUri,
-    // The winning claim for a short lbry uri
-    claimForUri,
-    winningBidForClaimUri,
-    // My previously published claims under this short lbry uri
-    myClaimForUri,
-    // If I clicked the "edit" button, have I changed the uri?
-    // Need this to make it easier to find the source on previously published content
-    isStillEditing,
-    balance: selectBalance(state),
-  };
-};
+const select = state => ({
+  ...selectPublishFormValues(state),
+  // The winning claim for a short lbry uri
+  amountNeededForTakeover: selectTakeOverAmount(state),
+  // My previously published claims under this short lbry uri
+  myClaimForUri: selectMyClaimForUri(state),
+  // If I clicked the "edit" button, have I changed the uri?
+  // Need this to make it easier to find the source on previously published content
+  isStillEditing: selectIsStillEditing(state),
+  balance: selectBalance(state),
+  isResolvingUri: selectIsResolvingPublishUris(state),
+});
 
 const perform = dispatch => ({
   updatePublishForm: value => dispatch(doUpdatePublishForm(value)),

@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import { selectPageTitle, selectHistoryIndex, selectActiveHistoryEntry } from 'lbry-redux';
 import { doRecordScroll } from 'redux/actions/navigation';
-import { selectUser } from 'redux/selectors/user';
+import { selectUser } from 'lbryinc';
 import { doAlertError } from 'redux/actions/app';
 import App from './view';
 
@@ -17,4 +17,7 @@ const perform = dispatch => ({
   recordScroll: scrollPosition => dispatch(doRecordScroll(scrollPosition)),
 });
 
-export default connect(select, perform)(App);
+export default connect(
+  select,
+  perform
+)(App);

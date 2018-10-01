@@ -11,9 +11,10 @@ import { doConditionalAuthNavigate, doDaemonReady, doAutoUpdate } from 'redux/ac
 import { doNotify, doBlackListedOutpointsSubscribe, isURIValid } from 'lbry-redux';
 import { doNavigate } from 'redux/actions/navigation';
 import { doDownloadLanguages, doUpdateIsNightAsync } from 'redux/actions/settings';
-import { doUserEmailVerify, doAuthenticate } from 'redux/actions/user';
+import { doUserEmailVerify, doAuthenticate, Lbryio } from 'lbryinc';
 import 'scss/all.scss';
 import store from 'store';
+import pjson from 'package.json';
 import app from './app';
 import analytics from './analytics';
 import doLogWarningConsoleMessage from './logWarningConsoleMessage';
@@ -22,6 +23,40 @@ const { autoUpdater } = remote.require('electron-updater');
 const APPPAGEURL = 'lbry://?';
 
 autoUpdater.logger = remote.require('electron-log');
+
+// We need to override Lbryio for getting/setting the authToken
+// We interect with ipcRenderer to get the auth key from a users keyring
+Lbryio.setOverride('setAuthToken', status => {
+  Lbryio.call(
+    'user',
+    'new',
+    {
+      auth_token: '',
+      language: 'en',
+      app_id: status.installation_id,
+    },
+    'post'
+  ).then(response => {
+    if (!response.auth_token) {
+      throw new Error(__('auth_token is missing from response'));
+    }
+
+    ipcRenderer.send('set-auth-token', response.auth_token);
+  });
+});
+
+Lbryio.setOverride(
+  'getAuthToken',
+  () =>
+    new Promise(resolve => {
+      ipcRenderer.once('auth-token-response', (event, token) => {
+        Lbryio.authToken = token;
+        resolve(token);
+      });
+
+      ipcRenderer.send('get-auth-token');
+    })
+);
 
 ipcRenderer.on('open-uri-requested', (event, uri, newSession) => {
   if (uri && uri.startsWith('lbry://')) {
@@ -156,7 +191,7 @@ const init = () => {
     ReactDOM.render(
       <Provider store={store}>
         <SplashScreen
-          authenticate={() => app.store.dispatch(doAuthenticate())}
+          authenticate={() => app.store.dispatch(doAuthenticate(pjson.version))}
           onReadyToLaunch={onDaemonReady}
         />
       </Provider>,

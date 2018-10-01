@@ -2,16 +2,14 @@
 import * as ACTIONS from 'constants/action_types';
 import * as NOTIFICATION_TYPES from 'constants/notification_types';
 import * as SETTINGS from 'constants/settings';
-import rewards from 'rewards';
+import { Lbryio, rewards, doClaimRewardType } from 'lbryinc';
 import type { Dispatch, SubscriptionNotifications } from 'redux/reducers/subscriptions';
 import type { Subscription } from 'types/subscription';
 import { selectSubscriptions } from 'redux/selectors/subscriptions';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { Lbry, buildURI, parseURI, selectCurrentPage } from 'lbry-redux';
 import { doPurchaseUri, doFetchClaimsByChannel } from 'redux/actions/content';
-import { doClaimRewardType } from 'redux/actions/rewards';
 import Promise from 'bluebird';
-import Lbryio from 'lbryio';
 
 const CHECK_SUBSCRIPTIONS_INTERVAL = 15 * 60 * 1000;
 const SUBSCRIPTION_DOWNLOAD_LIMIT = 1;
@@ -246,7 +244,7 @@ export const doChannelSubscribe = (subscription: Subscription) => (
       claim_id: claimId,
     });
 
-    dispatch(doClaimRewardType(rewards.SUBSCRIPTION, { failSilently: true }));
+    dispatch(doClaimRewardType(rewards.TYPE_SUBSCRIPTION, { failSilently: true }));
   }
 
   dispatch(doCheckSubscription(subscription.uri, true));

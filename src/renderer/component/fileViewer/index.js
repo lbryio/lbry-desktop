@@ -3,6 +3,7 @@ import * as settings from 'constants/settings';
 import { doChangeVolume } from 'redux/actions/app';
 import { selectVolume } from 'redux/selectors/app';
 import { doPlayUri, doSetPlayingUri, savePosition } from 'redux/actions/content';
+import { doClaimEligiblePurchaseRewards } from 'lbryinc';
 import {
   makeSelectMetadataForUri,
   makeSelectContentTypeForUri,
@@ -13,7 +14,6 @@ import {
   makeSelectDownloadingForUri,
   selectSearchBarFocused,
 } from 'lbry-redux';
-import { doClaimEligiblePurchaseRewards } from 'redux/actions/rewards';
 import { makeSelectClientSetting, selectShowNsfw } from 'redux/selectors/settings';
 import { selectPlayingUri, makeSelectContentPositionForUri } from 'redux/selectors/content';
 import { selectFileInfoErrors } from 'redux/selectors/file_info';

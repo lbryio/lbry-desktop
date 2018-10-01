@@ -8,7 +8,7 @@ import {
   selectUser,
   selectUserIsPending,
   selectIdentityVerifyIsPending,
-} from 'redux/selectors/user';
+} from 'lbryinc';
 import AuthPage from './view';
 
 const select = state => ({
@@ -26,4 +26,7 @@ const perform = dispatch => ({
   navigate: path => dispatch(doNavigate(path)),
 });
 
-export default connect(select, perform)(AuthPage);
+export default connect(
+  select,
+  perform
+)(AuthPage);

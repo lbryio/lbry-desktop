@@ -1,6 +1,6 @@
 // @flow
 import mixpanel from 'mixpanel-browser';
-import Lbryio from 'lbryio';
+import { Lbryio } from 'lbryinc';
 import isDev from 'electron-is-dev';
 
 if (isDev) {

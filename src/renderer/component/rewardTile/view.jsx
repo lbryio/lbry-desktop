@@ -3,7 +3,7 @@ import React from 'react';
 import Icon from 'component/common/icon';
 import RewardLink from 'component/rewardLink';
 import Button from 'component/button';
-import rewards from 'rewards';
+import { rewards } from 'lbryinc';
 import * as icons from 'constants/icons';
 
 type Props = {

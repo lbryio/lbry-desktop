@@ -1,10 +1,20 @@
+// @flow
 import React from 'react';
 import Icon from 'component/common/icon';
 import RewardLink from 'component/rewardLink';
-import rewards from 'rewards.js';
+import { rewards } from 'lbryinc';
 import * as icons from 'constants/icons';
 
-class InviteList extends React.PureComponent {
+type Props = {
+  invitees: ?Array<{
+    email: string,
+    invite_accepted: boolean,
+    invite_reward_claimed: boolean,
+    invite_reward_claimable: boolean,
+  }>,
+};
+
+class InviteList extends React.PureComponent<Props> {
   render() {
     const { invitees } = this.props;
 
@@ -31,8 +41,8 @@ class InviteList extends React.PureComponent {
                 </tr>
               </thead>
               <tbody>
-                {invitees.map((invitee, index) => (
-                  <tr key={index}>
+                {invitees.map(invitee => (
+                  <tr key={invitee.email}>
                     <td>{invitee.email}</td>
                     <td className="text-center">
                       {invitee.invite_accepted ? (

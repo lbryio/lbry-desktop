@@ -1,7 +1,6 @@
 // @flow
 import * as NOTIFICATION_TYPES from 'constants/notification_types';
 import { ipcRenderer } from 'electron';
-import Lbryio from 'lbryio';
 import { doAlertError } from 'redux/actions/app';
 import { doNavigate } from 'redux/actions/navigation';
 import {
@@ -32,6 +31,7 @@ import { makeSelectClientSetting, selectosNotificationsEnabled } from 'redux/sel
 import setBadge from 'util/setBadge';
 import setProgressBar from 'util/setProgressBar';
 import analytics from 'analytics';
+import { Lbryio } from 'lbryinc';
 
 const DOWNLOAD_POLL_INTERVAL = 250;
 

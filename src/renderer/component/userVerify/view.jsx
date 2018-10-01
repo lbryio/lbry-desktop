@@ -2,7 +2,7 @@
 import * as React from 'react';
 import Button from 'component/button';
 import CardVerify from 'component/cardVerify';
-import lbryio from 'lbryio';
+import Lbryio from 'lbryinc';
 import * as icons from 'constants/icons';
 
 type Props = {
@@ -51,7 +51,7 @@ class UserVerify extends React.PureComponent<Props> {
               label={__('Perform Card Verification')}
               disabled={isPending}
               token={this.onToken}
-              stripeKey={lbryio.getStripeToken()}
+              stripeKey={Lbryio.getStripeToken()}
             />
           </div>
           <div className="card__content">
