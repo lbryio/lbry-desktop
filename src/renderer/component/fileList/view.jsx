@@ -145,7 +145,8 @@ class FileList extends React.PureComponent<Props, State> {
         name: claimName,
         claim_name: claimNameDownloaded,
         claim_id: claimId,
-        outpoint,
+        txid,
+        nout,
       } = fileInfo;
       const uriParams = {};
 
@@ -155,6 +156,7 @@ class FileList extends React.PureComponent<Props, State> {
       uriParams.contentName = name;
       uriParams.claimId = claimId;
       const uri = buildURI(uriParams);
+      const outpoint = `${txid}:${nout}`;
 
       // See https://github.com/lbryio/lbry-desktop/issues/1327 for discussion around using outpoint as the key
       content.push(<FileCard key={outpoint} uri={uri} checkPending={checkPending} />);
