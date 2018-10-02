@@ -56,7 +56,7 @@ class UserEmailVerify extends React.PureComponent<Props, State> {
     return (
       <Form onSubmit={this.handleSubmit}>
         <p>Please enter the verification code emailed to {email}.</p>
-        <FormRow>
+        <FormRow padded>
           <FormField
             stretch
             name="code"

@@ -60,34 +60,38 @@ class ModalRemoveFile extends React.PureComponent<Props, State> {
     return (
       <Modal
         isOpen
+        title={__('Remove File')}
         contentLabel={__('Confirm File Remove')}
         type="confirm"
         confirmButtonLabel={__('Remove')}
         onConfirmed={() => deleteFile(outpoint, deleteChecked, abandonClaimChecked)}
         onAborted={closeModal}
       >
-        <p>
-          {__("Are you sure you'd like to remove")} <cite>{title}</cite> {__('from the LBRY app?')}
-        </p>
+        <section className="card__content">
+          <p>
+            {__("Are you sure you'd like to remove")} <cite>{`"${title}"`}</cite>{' '}
+            {__('from the LBRY app?')}
+          </p>
 
-        <FormRow padded>
-          <FormField
-            prefix={__('Also delete this file from my computer')}
-            type="checkbox"
-            checked={deleteChecked}
-            onChange={this.handleDeleteCheckboxClicked}
-          />
-        </FormRow>
-        {claimIsMine && (
-          <FormRow>
+          <FormRow padded>
             <FormField
-              prefix={__('Abandon the claim for this URI')}
+              prefix={__('Also delete this file from my computer')}
               type="checkbox"
-              checked={abandonClaimChecked}
-              onChange={this.handleAbandonClaimCheckboxClicked}
+              checked={deleteChecked}
+              onChange={this.handleDeleteCheckboxClicked}
             />
           </FormRow>
-        )}
+          {claimIsMine && (
+            <FormRow>
+              <FormField
+                prefix={__('Abandon the claim for this URI')}
+                type="checkbox"
+                checked={abandonClaimChecked}
+                onChange={this.handleAbandonClaimCheckboxClicked}
+              />
+            </FormRow>
+          )}
+        </section>
       </Modal>
     );
   }

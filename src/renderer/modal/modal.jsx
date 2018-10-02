@@ -23,6 +23,7 @@ type ModalProps = {
   expandButtonLabel?: string,
   hideButtonLabel?: string,
   fullScreen: boolean,
+  title: string,
 };
 
 export class Modal extends React.PureComponent<ModalProps> {
@@ -51,6 +52,7 @@ export class Modal extends React.PureComponent<ModalProps> {
       fullScreen,
       className,
       overlayClassName,
+      title,
       ...modalProps
     } = this.props;
     return (
@@ -65,6 +67,7 @@ export class Modal extends React.PureComponent<ModalProps> {
           ![null, undefined, ''].includes(overlayClassName) ? overlayClassName : 'modal-overlay'
         }
       >
+        <h1 className="modal__header">{title}</h1>
         <div>{children}</div>
         {type === 'custom' ? null : ( // custom modals define their own buttons
           <div className="card__actions card__actions--center">

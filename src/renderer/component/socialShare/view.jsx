@@ -37,47 +37,41 @@ class SocialShare extends React.PureComponent<Props> {
         : `${speechPrefix}${claimName}#${claimId}`;
 
     return (
-      <div>
-        <div className="card__title">
-          <h2>{__('Share This Content')}</h2>
-
-          <div className="card__content">
-            <Address address={speechURL} noSnackbar />
-          </div>
-          <div className="card__actions card__actions--center">
-            <Tooltip onComponent body={__('Facebook')}>
-              <Button
-                iconColor="blue"
-                icon={icons.FACEBOOK}
-                button="alt"
-                label={__('')}
-                href={`https://facebook.com/sharer/sharer.php?u=${speechURL}`}
-              />
-            </Tooltip>
-            <Tooltip onComponent body={__('Twitter')}>
-              <Button
-                iconColor="blue"
-                icon={icons.TWITTER}
-                button="alt"
-                label={__('')}
-                href={`https://twitter.com/home?status=${speechURL}`}
-              />
-            </Tooltip>
-            <Tooltip onComponent body={__('View on Spee.ch')}>
-              <Button
-                icon={icons.GLOBE}
-                iconColor="blue"
-                button="alt"
-                label={__('')}
-                href={`${speechURL}`}
-              />
-            </Tooltip>
-          </div>
-          <div className="card__actions">
-            <Button button="link" label={__('Done')} onClick={onDone} />
-          </div>
+      <section className="card__content">
+        <Address address={speechURL} noSnackbar />
+        <div className="card__actions card__actions--center">
+          <Tooltip onComponent body={__('Facebook')}>
+            <Button
+              iconColor="blue"
+              icon={icons.FACEBOOK}
+              button="alt"
+              label={__('')}
+              href={`https://facebook.com/sharer/sharer.php?u=${speechURL}`}
+            />
+          </Tooltip>
+          <Tooltip onComponent body={__('Twitter')}>
+            <Button
+              iconColor="blue"
+              icon={icons.TWITTER}
+              button="alt"
+              label={__('')}
+              href={`https://twitter.com/home?status=${speechURL}`}
+            />
+          </Tooltip>
+          <Tooltip onComponent body={__('View on Spee.ch')}>
+            <Button
+              icon={icons.GLOBE}
+              iconColor="blue"
+              button="alt"
+              label={__('')}
+              href={`${speechURL}`}
+            />
+          </Tooltip>
         </div>
-      </div>
+        <div className="card__actions">
+          <Button button="link" label={__('Done')} onClick={onDone} />
+        </div>
+      </section>
     );
   }
 }

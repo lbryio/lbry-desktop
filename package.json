@@ -30,7 +30,7 @@
     "flow-defs": "flow-typed install",
     "release": "yarn compile && electron-builder build",
     "precommit": "lint-staged",
-    "preinstall": "yarn cache clean lbry-redux",
+    "preinstall": "yarn cache clean lbry-redux && yarn cache clean lbryinc",
     "postinstall": "electron-builder install-app-deps && node build/downloadDaemon.js"
   },
   "dependencies": {
@@ -50,8 +50,8 @@
     "formik": "^0.10.4",
     "hast-util-sanitize": "^1.1.2",
     "keytar": "^4.2.1",
-    "lbry-redux": "lbryio/lbry-redux#fa141b9175500b874bb77da0258e18d902e069b9",
-    "lbryinc": "lbryio/lbryinc#c09aa2645ecccb33c83e9a9545ff119232910f6f",
+    "lbry-redux": "lbryio/lbry-redux#c079b108c3bc4ba2b4fb85fb112b52cfc040c301",
+    "lbryinc": "lbryio/lbryinc#de7ff055605b02a24821f0f9bab1d206eb7f235d",
     "localforage": "^1.7.1",
     "mammoth": "^1.4.6",
     "mime": "^2.3.1",

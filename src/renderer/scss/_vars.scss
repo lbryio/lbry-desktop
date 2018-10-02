@@ -37,6 +37,7 @@ $large-breakpoint: 1921px;
   --color-green-blue: #2ec1a8;
   --color-purple: #8165b0;
   --color-blue-grey: #203049;
+  --color-red-light: #fff6f6;
 
   /* Colors */
   --color-divider: #e3e3e3;
@@ -157,6 +158,9 @@ $large-breakpoint: 1921px;
   --success-msg-color: var(--color-green);
   --success-msg-border: var(--color-green-blue);
   --success-msg-bg: var(--color-green-light);
+  --error-msg-color: var(--color-error);
+  --error-msg-border: var(--color-error);
+  --error-msg-bg: var(--color-red-light);
 
   /* File */
   --file-tile-media-height: 125px;

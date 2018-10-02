@@ -82,6 +82,7 @@ class ModalWalletEncrypt extends React.PureComponent<Props> {
     return (
       <Modal
         isOpen
+        title={__('Encrypt Wallet')}
         contentLabel={__('Encrypt Wallet')}
         type="confirm"
         confirmButtonLabel={__('Encrypt Wallet')}
@@ -89,54 +90,59 @@ class ModalWalletEncrypt extends React.PureComponent<Props> {
         onConfirmed={() => this.submitEncryptForm()}
         onAborted={closeModal}
       >
-        <Form onSubmit={() => this.submitEncryptForm()}>
-          {__(
-            'Encrypting your wallet will require a password to access your local wallet data when LBRY starts. Please enter a new password for your wallet.'
-          )}
-          <FormRow padded>
-            <FormField
-              stretch
-              autoFocus
-              error={passwordMismatch === true ? 'Passwords do not match' : false}
-              label={__('New Password')}
-              type="password"
-              name="wallet-new-password"
-              onChange={event => this.onChangeNewPassword(event)}
-            />
-          </FormRow>
-          <FormRow padded>
-            <FormField
-              stretch
-              error={passwordMismatch === true ? 'Passwords do not match' : false}
-              label={__('Confirm Password')}
-              type="password"
-              name="wallet-new-password-confirm"
-              onChange={event => this.onChangeNewPasswordConfirm(event)}
-            />
-          </FormRow>
-          <br />
-          {__(
-            'If your password is lost, it cannot be recovered. You will not be able to access your wallet without a password.'
-          )}
-          <FormRow padded>
-            <FormField
-              stretch
-              error={understandError === true ? 'You must enter "I understand"' : false}
-              label={__('Enter "I understand"')}
-              type="text"
-              name="wallet-understand"
-              onChange={event => this.onChangeUnderstandConfirm(event)}
-            />
-          </FormRow>
-          <div className="card__actions">
-            <Button
-              button="link"
-              label={__('Learn more')}
-              href="https://lbry.io/faq/wallet-encryption"
-            />
-          </div>
-          {failMessage && <div className="error-text">{__(failMessage)}</div>}
-        </Form>
+        <section className="card__content">
+          <Form onSubmit={() => this.submitEncryptForm()}>
+            <p>
+              {__(
+                'Encrypting your wallet will require a password to access your local wallet data when LBRY starts. Please enter a new password for your wallet.'
+              )}
+            </p>
+            <FormRow padded>
+              <FormField
+                stretch
+                autoFocus
+                error={passwordMismatch === true ? 'Passwords do not match' : false}
+                label={__('New Password')}
+                type="password"
+                name="wallet-new-password"
+                onChange={event => this.onChangeNewPassword(event)}
+              />
+            </FormRow>
+            <FormRow padded>
+              <FormField
+                stretch
+                error={passwordMismatch === true ? 'Passwords do not match' : false}
+                label={__('Confirm Password')}
+                type="password"
+                name="wallet-new-password-confirm"
+                onChange={event => this.onChangeNewPasswordConfirm(event)}
+              />
+            </FormRow>
+            <p>
+              {__(
+                'If your password is lost, it cannot be recovered. You will not be able to access your wallet without a password.'
+              )}
+            </p>
+            <FormRow padded>
+              <FormField
+                stretch
+                error={understandError === true ? 'You must enter "I understand"' : false}
+                label={__('Enter "I understand"')}
+                type="text"
+                name="wallet-understand"
+                onChange={event => this.onChangeUnderstandConfirm(event)}
+              />
+            </FormRow>
+            <div className="card__actions">
+              <Button
+                button="link"
+                label={__('Learn more')}
+                href="https://lbry.io/faq/wallet-encryption"
+              />
+            </div>
+            {failMessage && <div className="error-text">{__(failMessage)}</div>}
+          </Form>
+        </section>
       </Modal>
     );
   }

@@ -47,7 +47,7 @@ class UserEmailNew extends React.PureComponent<Props, State> {
         </p>
         <p>{__("We'll never sell your email, and you can unsubscribe at any time.")}</p>
         <Form onSubmit={this.handleSubmit}>
-          <FormRow>
+          <FormRow padded>
             <FormField
               stretch
               type="email"
@@ -62,6 +62,9 @@ class UserEmailNew extends React.PureComponent<Props, State> {
           <div className="card__actions">
             <Submit label="Submit" disabled={isPending} />
             {cancelButton}
+          </div>
+          <div className="card__content help">
+            {`${__('Your email may be used to sync usage data across devices.')} `}
           </div>
         </Form>
       </div>

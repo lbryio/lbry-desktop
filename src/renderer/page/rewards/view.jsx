@@ -7,6 +7,7 @@ import Button from 'component/button';
 import Page from 'component/page';
 import classnames from 'classnames';
 import type { Reward } from 'types/reward';
+import { rewards as REWARD_TYPES } from 'lbryinc';
 
 type Props = {
   doAuth: () => void,
@@ -125,6 +126,16 @@ class RewardsPage extends React.PureComponent<Props> {
           'card--disabled': isNotEligible,
         })}
       >
+        <RewardTile
+          key={REWARD_TYPES.TYPE_GENERATED_CODE}
+          reward={{
+            reward_type: REWARD_TYPES.TYPE_GENERATED_CODE,
+            reward_title: __('Custom Code'),
+            reward_description: __(
+              'Are you a supermodel or rockstar that received a custom reward code? Claim it here.'
+            ),
+          }}
+        />
         {rewards.map(reward => <RewardTile key={reward.reward_type} reward={reward} />)}
       </div>
     );
