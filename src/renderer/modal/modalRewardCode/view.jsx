@@ -61,11 +61,11 @@ class ModalRewardCode extends React.PureComponent<Props, State> {
               onChange={e => this.setState({ rewardCode: e.target.value })}
               helper={
                 <React.Fragment>
-                  {__('Redeem a LBRY generated reward code for LBC')}
+                  {__('Redeem a custom reward code for LBC')}
                   {'. '}
                   <Button
                     button="link"
-                    href="https://lbry.io/faq/reward-codes"
+                    href="https://lbry.io/faq/rewards#reward-code"
                     label={__('Learn more')}
                   />.
                 </React.Fragment>

@@ -130,8 +130,10 @@ class RewardsPage extends React.PureComponent<Props> {
           key={REWARD_TYPES.TYPE_GENERATED_CODE}
           reward={{
             reward_type: REWARD_TYPES.TYPE_GENERATED_CODE,
-            reward_title: __('Enter a Code'),
-            reward_description: __('Enter a LBRY generated reward code'),
+            reward_title: __('Custom Code'),
+            reward_description: __(
+              'Are you a supermodel or rockstar that received a custom reward code? Claim it here.'
+            ),
           }}
         />
         {rewards.map(reward => <RewardTile key={reward.reward_type} reward={reward} />)}
