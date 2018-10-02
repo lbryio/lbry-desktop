@@ -126,6 +126,7 @@ class RewardsPage extends React.PureComponent<Props> {
           'card--disabled': isNotEligible,
         })}
       >
+        {rewards.map(reward => <RewardTile key={reward.reward_type} reward={reward} />)}
         <RewardTile
           key={REWARD_TYPES.TYPE_GENERATED_CODE}
           reward={{
@@ -136,7 +137,6 @@ class RewardsPage extends React.PureComponent<Props> {
             ),
           }}
         />
-        {rewards.map(reward => <RewardTile key={reward.reward_type} reward={reward} />)}
       </div>
     );
   }
