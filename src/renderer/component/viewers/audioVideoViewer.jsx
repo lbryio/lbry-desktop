@@ -61,8 +61,9 @@ class AudioVideoViewer extends React.PureComponent<Props> {
       file
         .on('data', chunk => {
           // console.log("chunk", chunk)
-          sourceBuffer.appendBuffer(chunk);
-          console.log('append');
+          chunks[chunks.length] = chunk;
+          console.log("pump")
+          pump();
 
           // video.src = url
         })
