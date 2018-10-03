@@ -5,13 +5,11 @@ import { CC_LICENSES, COPYRIGHT, OTHER, PUBLIC_DOMAIN, NONE } from 'constants/li
 
 type Props = {
   licenseType: string,
-  copyrightNotice: ?string,
   licenseUrl: ?string,
   otherLicenseDescription: ?string,
   handleLicenseChange: (string, string) => void,
   handleLicenseDescriptionChange: (SyntheticInputEvent<*>) => void,
   handleLicenseUrlChange: (SyntheticInputEvent<*>) => void,
-  handleCopyrightNoticeChange: (SyntheticInputEvent<*>) => void,
 };
 
 class LicenseType extends React.PureComponent<Props> {
@@ -38,11 +36,8 @@ class LicenseType extends React.PureComponent<Props> {
       licenseType,
       otherLicenseDescription,
       licenseUrl,
-      copyrightNotice,
-      handleLicenseChange,
       handleLicenseDescriptionChange,
       handleLicenseUrlChange,
-      handleCopyrightNoticeChange,
     } = this.props;
 
     return (
@@ -72,8 +67,8 @@ class LicenseType extends React.PureComponent<Props> {
               label={__('Copyright notice')}
               type="text"
               name="copyright-notice"
-              value={copyrightNotice}
-              onChange={handleCopyrightNoticeChange}
+              value={otherLicenseDescription}
+              onChange={handleLicenseDescriptionChange}
             />
           </FormRow>
         )}

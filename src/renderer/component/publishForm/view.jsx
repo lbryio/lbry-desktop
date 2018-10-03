@@ -45,7 +45,6 @@ type Props = {
   licenseType: string,
   otherLicenseDescription: ?string,
   licenseUrl: ?string,
-  copyrightNotice: ?string,
   uri: ?string,
   bidError: ?string,
   publishing: boolean,
@@ -200,7 +199,6 @@ class PublishForm extends React.PureComponent<Props> {
   handlePublish() {
     const {
       filePath,
-      copyrightNotice,
       licenseType,
       licenseUrl,
       otherLicenseDescription,
@@ -211,8 +209,6 @@ class PublishForm extends React.PureComponent<Props> {
     let publishingLicense;
     switch (licenseType) {
       case COPYRIGHT:
-        publishingLicense = copyrightNotice;
-        break;
       case OTHER:
         publishingLicense = otherLicenseDescription;
         break;
@@ -233,7 +229,6 @@ class PublishForm extends React.PureComponent<Props> {
       license: publishingLicense,
       licenseUrl: publishingLicenseUrl,
       otherLicenseDescription,
-      copyrightNotice,
       name: this.props.name,
       contentIsFree: this.props.contentIsFree,
       price: this.props.price,
@@ -339,7 +334,6 @@ class PublishForm extends React.PureComponent<Props> {
       licenseType,
       otherLicenseDescription,
       licenseUrl,
-      copyrightNotice,
       uri,
       bidError,
       publishing,
@@ -585,7 +579,6 @@ class PublishForm extends React.PureComponent<Props> {
               licenseType={licenseType}
               otherLicenseDescription={otherLicenseDescription}
               licenseUrl={licenseUrl}
-              copyrightNotice={copyrightNotice}
               handleLicenseChange={(newLicenseType, newLicenseUrl) =>
                 updatePublishForm({
                   licenseType: newLicenseType,
@@ -599,9 +592,6 @@ class PublishForm extends React.PureComponent<Props> {
               }
               handleLicenseUrlChange={event =>
                 updatePublishForm({ licenseUrl: event.target.value })
-              }
-              handleCopyrightNoticeChange={event =>
-                updatePublishForm({ copyrightNotice: event.target.value })
               }
             />
           </section>

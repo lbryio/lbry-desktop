@@ -28,7 +28,6 @@ type PublishState = {
   bidError: ?string,
   otherLicenseDescription: string,
   licenseUrl: string,
-  copyrightNotice: string,
   pendingPublishes: Array<any>,
 };
 
@@ -54,7 +53,6 @@ export type UpdatePublishFormData = {
   bidError?: string,
   otherLicenseDescription?: string,
   licenseUrl?: string,
-  copyrightNotice?: string,
 };
 
 export type UpdatePublishFormAction = {
@@ -114,9 +112,8 @@ const defaultState: PublishState = {
   bid: 0.1,
   bidError: undefined,
   licenseType: 'None',
-  otherLicenseDescription: '',
+  otherLicenseDescription: 'All rights reserved',
   licenseUrl: '',
-  copyrightNotice: 'All rights reserved',
   publishing: false,
   publishSuccess: false,
   publishError: undefined,
