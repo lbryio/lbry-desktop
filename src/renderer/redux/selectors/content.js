@@ -50,20 +50,19 @@ export const makeSelectHistoryForPage = page =>
   createSelector(selectState, selectClaimsByUri, (state, claimsByUri) => {
     const left = page * HISTORY_ITEMS_PER_PAGE;
     const historyItems = state.history.slice(left, left + HISTORY_ITEMS_PER_PAGE);
-    
+
     // See if we have the claim info for the uris in your history
     // If not, it will need to be fetched in the component
-    return historyItems.map((historyItem) => {
+    return historyItems.map(historyItem => {
       const { uri, lastViewed } = historyItem;
       const claimAtUri = claimsByUri[uri];
-      
+
       if (claimAtUri) {
-        return { lastViewed, uri, ...claimAtUri }
+        return { lastViewed, uri, ...claimAtUri };
       } else {
-        console.log("jsut returning item")
         return historyItem;
       }
-    })
+    });
   });
 
 export const makeSelectHistoryForUri = uri =>
