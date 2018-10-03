@@ -1,5 +1,6 @@
 const path = require('path');
 const FilewatcherPlugin = require('filewatcher-webpack-plugin');
+const webpack = require('webpack');
 
 const ELECTRON_RENDERER_PROCESS_ROOT = path.resolve(__dirname, 'src/renderer/');
 
@@ -33,5 +34,8 @@ module.exports = {
     new FilewatcherPlugin({
       watchFileRegex: [require.resolve('lbry-redux')],
     }),
+  //   new webpack.DefinePlugin({
+  //     'process.env.FLUENTFFMPEG_COV': false
+  // })
   ] : [],
 };
