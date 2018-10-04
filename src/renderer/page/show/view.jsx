@@ -42,7 +42,7 @@ class ShowPage extends React.PureComponent<Props> {
     if ((isResolvingUri && !claim) || !claim) {
       const { claimName } = parseURI(uri);
       innerContent = (
-        <Page>
+        <Page notContained>
           <section className="card">
             <h1>{claimName}</h1>
             <div className="card__content">
