@@ -1,5 +1,5 @@
 :root {
-    
+
   /* Colors */
   --color-divider: #53637C;;
   --color-canvas: transparent;
@@ -12,7 +12,7 @@
   --color-credit-free: var(--color-secondary);
 
   /* Text */
-  --text-color: var(--color-white);
+  --text-color: var(--color-text-white);
   --text-help-color: var(--color-help);
 
    /* Form */

@@ -199,7 +199,7 @@ class HelpPage extends React.PureComponent<Props, State> {
           )}
 
           {this.state.uiVersion && ver ? (
-            <table className="table table--stretch table--help">
+            <table className="card__content table table--stretch table--help">
               <tbody>
                 <tr>
                   <td>{__('App')}</td>
