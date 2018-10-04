@@ -145,12 +145,11 @@ class FilePage extends React.Component<Props> {
     if (channelName && channelClaimId) {
       subscriptionUri = buildURI({ channelName, claimId: channelClaimId }, false);
     }
-    const speechSharable =
+    const speechShareable =
       costInfo &&
       costInfo.cost === 0 &&
       contentType &&
       ['video', 'image'].includes(contentType.split('/')[0]);
-
     // We want to use the short form uri for editing
     // This is what the user is used to seeing, they don't care about the claim id
     // We will select the claim id before they publish
@@ -222,14 +221,17 @@ class FilePage extends React.Component<Props> {
                     onClick={() => openModal({ id: MODALS.SEND_TIP }, { uri })}
                   />
                 )}
-                {speechSharable && (
-                  <Button
-                    button="alt"
-                    icon={icons.GLOBE}
-                    label={__('Share')}
-                    onClick={() => openModal({ id: MODALS.SOCIAL_SHARE }, { uri })}
-                  />
-                )}
+                <Button
+                  button="alt"
+                  icon={icons.GLOBE}
+                  label={__('Share')}
+                  onClick={() =>
+                    openModal(
+                      { id: MODALS.SOCIAL_SHARE },
+                      { uri, speechShareable: speechShareable }
+                    )
+                  }
+                />
               </div>
 
               <div className="card__actions">
