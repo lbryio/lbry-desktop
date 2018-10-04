@@ -92,6 +92,7 @@ input {
     color: var(--input-copyable-color);
     padding: 10px 16px;
     border: 1px dashed var(--input-copyable-border);
+    text-overflow: ellipsis;
   }
 
   &:not(.input-copyable):not(.wunderbar__input):not(:placeholder-shown):not(:disabled) {
