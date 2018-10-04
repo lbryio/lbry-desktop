@@ -2,7 +2,7 @@
 import * as React from 'react';
 import Button from 'component/button';
 import CardVerify from 'component/cardVerify';
-import Lbryio from 'lbryinc';
+import { Lbryio } from 'lbryinc';
 import * as icons from 'constants/icons';
 
 type Props = {
