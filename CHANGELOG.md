@@ -7,7 +7,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Added
  * Allow typing of encryption password without clicking entry box ([#1977](https://github.com/lbryio/lbry-desktop/pull/1977))
-
+ * Focus on search bar with {cmd,ctrl} + "l" ([#2003](https://github.com/lbryio/lbry-desktop/pull/2003))
 ### Changed
  * Make tooltip smarter ([#1979](https://github.com/lbryio/lbry-desktop/pull/1979))
  * Change channel pages to have 48 items instead of 10 ([#2002](https://github.com/lbryio/lbry-desktop/pull/2002))
