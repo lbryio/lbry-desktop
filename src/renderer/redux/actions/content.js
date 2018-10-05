@@ -6,7 +6,6 @@ import { doNavigate } from 'redux/actions/navigation';
 import {
   setSubscriptionLatest,
   setSubscriptionNotification,
-  setSubscriptionNotifications,
 } from 'redux/actions/subscriptions';
 import { selectNotifications } from 'redux/selectors/subscriptions';
 import { selectBadgeNumber } from 'redux/selectors/app';
@@ -360,13 +359,13 @@ export function doPurchaseUri(uri, specificCostInfo, shouldRecordViewEvent) {
 }
 
 export function doFetchClaimsByChannel(uri, page) {
-  return (dispatch, getState) => {
+  return dispatch => {
     dispatch({
       type: ACTIONS.FETCH_CHANNEL_CLAIMS_STARTED,
       data: { uri, page },
     });
 
-    Lbry.claim_list_by_channel({ uri, page: page || 1 }).then(result => {
+    Lbry.claim_list_by_channel({ uri, page: page || 1, page_size: 48 }).then(result => {
       const claimResult = result[uri] || {};
       const { claims_in_channel: claimsInChannel, returned_page: returnedPage } = claimResult;
 
