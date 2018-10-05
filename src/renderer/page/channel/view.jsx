@@ -85,12 +85,12 @@ class ChannelPage extends React.PureComponent<Props> {
             {name}
             {fetching && <BusyIndicator />}
           </h1>
-          <div className="card__actions card__actions--no-margin">
-            <SubscribeButton uri={permanentUrl} channelName={name} />
-            <ViewOnWebButton claimId={claimId} claimName={name} />
-          </div>
         </section>
-        <section>{contentList}</section>
+        <div className="card__actions">
+          <SubscribeButton uri={permanentUrl} channelName={name} />
+          <ViewOnWebButton claimId={claimId} claimName={name} />
+        </div>
+        <section className="card__content">{contentList}</section>
         {(!fetching || (claimsInChannel && claimsInChannel.length)) &&
           totalPages > 1 && (
             <FormRow verticallyCentered centered>
