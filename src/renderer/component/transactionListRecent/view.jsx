@@ -24,6 +24,10 @@ class TransactionListRecent extends React.PureComponent<Props> {
     return (
       <section className="card card--section">
         <div className="card__title">{__('Recent Transactions')}</div>
+        <div className="card__subtitle">
+          {__('To view all of your transactions, navigate to the')}{' '}
+          <Button button="link" navigate="/history" label={__('transactions page')} />.
+        </div>
         {fetchingTransactions && (
           <div className="card__content">
             <BusyIndicator message={__('Loading transactions')} />

@@ -52,6 +52,8 @@ $large-breakpoint: 1921px;
   --color-search-placeholder: var(--color-placeholder);
   --color-credit-free: var(--color-dark-blue);
   --color-credit-price: var(--card-text-color);
+  --color-text-black: #444;
+  --color-text-white: #efefef;
 
   /* Shadows */
   --box-shadow-layer: transparent; // 0 2px 4px rgba(0,0,0,0.25);
@@ -60,8 +62,8 @@ $large-breakpoint: 1921px;
   --box-shadow-header: 0px 6px 20px 1px rgba(0, 0, 0, 0.05);
 
   /* Text */
-  --text-color: var(--color-black);
-  --text-color-inverse: var(--color-white);
+  --text-color: var(--color-text-black);
+  --text-color-inverse: var(--color-text-white);
   --text-help-color: var(--color-help);
   --text-max-width: 660px;
   --text-link-padding: 4px;

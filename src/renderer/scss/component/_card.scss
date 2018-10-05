@@ -107,6 +107,7 @@
 .card__title {
   font-size: 18px;
   color: var(--text-color);
+  font-family: 'metropolis-semibold';
 }
 
 .card__title--small {
@@ -151,7 +152,6 @@
 .card__subtitle {
   margin: 0;
   font-size: 14px;
-  font-family: 'metropolis-medium';
   color: var(--card-text-color);
 }
 
@@ -336,6 +336,7 @@
 }
 
 .card-row__title {
+  font-family: 'metropolis-semibold';
   display: flex;
   align-items: center;
   font-size: 18px;
