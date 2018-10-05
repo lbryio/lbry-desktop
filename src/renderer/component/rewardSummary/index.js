@@ -1,6 +1,10 @@
 import { connect } from 'react-redux';
-import { selectUnclaimedRewardValue, selectFetchingRewards, doRewardList } from 'lbryinc';
-import { doFetchRewardedContent } from 'redux/actions/content';
+import {
+  selectUnclaimedRewardValue,
+  selectFetchingRewards,
+  doRewardList,
+  doFetchRewardedContent,
+} from 'lbryinc';
 import RewardSummary from './view';
 
 const select = state => ({
