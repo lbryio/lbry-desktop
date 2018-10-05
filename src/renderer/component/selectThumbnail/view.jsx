@@ -89,7 +89,7 @@ class SelectThumbnail extends React.PureComponent<Props, State> {
                 type="text"
                 name="content_thumbnail"
                 label="URL"
-                placeholder="http://spee.ch/mylogo"
+                placeholder="https://spee.ch/mylogo"
                 value={thumbnail}
                 disabled={formDisabled}
                 onChange={this.handleThumbnailChange}
