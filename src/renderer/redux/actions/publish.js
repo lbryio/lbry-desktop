@@ -18,24 +18,12 @@ import { selectosNotificationsEnabled } from 'redux/selectors/settings';
 import { doNavigate } from 'redux/actions/navigation';
 import fs from 'fs';
 import path from 'path';
+import { CC_LICENSES, COPYRIGHT, OTHER } from 'constants/licenses';
 
 type Action = UpdatePublishFormAction | { type: ACTIONS.CLEAR_PUBLISH };
 type PromiseAction = Promise<Action>;
 type Dispatch = (action: Action | PromiseAction | Array<Action>) => any;
 type GetState = () => {};
-
-export const doClearPublish = () => (dispatch: Dispatch): PromiseAction => {
-  dispatch({ type: ACTIONS.CLEAR_PUBLISH });
-  return dispatch(doResetThumbnailStatus());
-};
-
-export const doUpdatePublishForm = (publishFormValue: UpdatePublishFormData) => (
-  dispatch: Dispatch
-): UpdatePublishFormAction =>
-  dispatch({
-    type: ACTIONS.UPDATE_PUBLISH_FORM,
-    data: { ...publishFormValue },
-  });
 
 export const doResetThumbnailStatus = () => (dispatch: Dispatch): PromiseAction => {
   dispatch({
@@ -72,6 +60,19 @@ export const doResetThumbnailStatus = () => (dispatch: Dispatch): PromiseAction 
       })
     );
 };
+
+export const doClearPublish = () => (dispatch: Dispatch): PromiseAction => {
+  dispatch({ type: ACTIONS.CLEAR_PUBLISH });
+  return dispatch(doResetThumbnailStatus());
+};
+
+export const doUpdatePublishForm = (publishFormValue: UpdatePublishFormData) => (
+  dispatch: Dispatch
+): UpdatePublishFormAction =>
+  dispatch({
+    type: ACTIONS.UPDATE_PUBLISH_FORM,
+    data: { ...publishFormValue },
+  });
 
 export const doUploadThumbnail = (filePath: string, nsfw: boolean) => (dispatch: Dispatch) => {
   const thumbnail = fs.readFileSync(filePath);
@@ -164,14 +165,26 @@ export const doPrepareEdit = (claim: any, uri: string) => (dispatch: Dispatch) =
     description,
     fee,
     language,
-    licenseType: license,
-    licenseUrl,
     nsfw,
     thumbnail,
     title,
     uri,
     uploadThumbnailStatus: thumbnail ? THUMBNAIL_STATUSES.MANUAL : undefined,
+    licenseUrl,
   };
+
+  // Make sure custom liscence's are mapped properly
+  if (!CC_LICENSES.some(({ value }) => value === license)) {
+    if (!licenseUrl) {
+      publishData.licenseType = COPYRIGHT;
+    } else {
+      publishData.licenseType = OTHER;
+    }
+
+    publishData.otherLicenseDescription = license;
+  } else {
+    publishData.licenseType = license;
+  }
 
   dispatch({ type: ACTIONS.DO_PREPARE_EDIT, data: publishData });
 };
