@@ -12,7 +12,7 @@ const ESC_KEY_CODE = 27;
 
 type Props = {
   updateSearchQuery: string => void,
-  onSearch: string => void,
+  onSearch: (string, ?number) => void,
   onSubmit: (string, {}) => void,
   wunderbarValue: ?string,
   suggestions: Array<string>,
@@ -28,10 +28,11 @@ class WunderBar extends React.PureComponent<Props> {
 
     (this: any).handleSubmit = this.handleSubmit.bind(this);
     (this: any).handleChange = this.handleChange.bind(this);
+    (this: any).handleKeyDown = this.handleKeyDown.bind(this);
   }
 
   componentDidMount() {
-    window.addEventListener('keydown', this.handleKeyDown.bind(this));
+    window.addEventListener('keydown', this.handleKeyDown);
   }
 
   componentWillUnmount() {
