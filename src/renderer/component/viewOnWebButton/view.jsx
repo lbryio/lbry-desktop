@@ -19,7 +19,7 @@ export default (props: Props) => {
       icon={icons.GLOBE}
       button="alt"
       label={__('Share')}
-      href={`http://spee.ch/${speechURL}`}
+      href={`https://spee.ch/${speechURL}`}
     />
   ) : null;
 };
