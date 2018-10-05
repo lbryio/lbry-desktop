@@ -13,6 +13,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 
 ### Fixed
 * Invite table cutoff with large number of invites ([#1985](https://github.com/lbryio/lbry-desktop/pull/1985))
+* History styling on large screens and link issue with claims ([#1999](https://github.com/lbryio/lbry-desktop/pull/1999))
 
 
 ## [0.25.1] - 2018-09-18
