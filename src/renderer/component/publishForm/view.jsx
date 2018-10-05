@@ -37,7 +37,6 @@ type Props = {
   name: ?string,
   tosAccepted: boolean,
   updatePublishForm: UpdatePublishFormData => void,
-  bid: number,
   nameError: ?string,
   isResolvingUri: boolean,
   winningBidForClaimUri: number,
@@ -296,7 +295,7 @@ class PublishForm extends React.PureComponent<Props> {
           {!title && <div>{__('A title is required')}</div>}
           {!name && <div>{__('A URL is required')}</div>}
           {name && nameError && <div>{__('The URL you created is not valid')}</div>}
-          {!bid && <div>{__('A bid amount is required')}</div>}
+          {!bid && <div>{__('A deposit amount is required')}</div>}
           {!!bid && bidError && <div>{bidError}</div>}
           {uploadThumbnailStatus === THUMBNAIL_STATUSES.IN_PROGRESS && (
             <div>{__('Please wait for thumbnail to finish uploading')}</div>
@@ -529,7 +528,7 @@ class PublishForm extends React.PureComponent<Props> {
                 step="any"
                 label={__('Deposit')}
                 postfix="LBC"
-                value={bid}
+                value={bid || ''}
                 error={bidError}
                 min="0"
                 disabled={!name}
