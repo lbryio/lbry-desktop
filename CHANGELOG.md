@@ -6,13 +6,14 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
 ## [Unreleased]
 
 ### Added
-* Allow typing of encryption password without clicking entry box ([#1977](https://github.com/lbryio/lbry-desktop/pull/1977))
+ * Allow typing of encryption password without clicking entry box ([#1977](https://github.com/lbryio/lbry-desktop/pull/1977))
 
 ### Changed
-* Make tooltip smarter ([#1979](https://github.com/lbryio/lbry-desktop/pull/1979))
+ * Make tooltip smarter ([#1979](https://github.com/lbryio/lbry-desktop/pull/1979))
 
 ### Fixed
-* Invite table cutoff with large number of invites ([#1985](https://github.com/lbryio/lbry-desktop/pull/1985))
+ * Invite table cutoff with large number of invites ([#1985](https://github.com/lbryio/lbry-desktop/pull/1985))
+ * Satisfy console warnings in publishForm and validation messaging ([#2010](https://github.com/lbryio/lbry-desktop/pull/2010))
 
 
 ## [0.25.1] - 2018-09-18
