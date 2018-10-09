@@ -62,7 +62,7 @@ while utilizing [React](https://reactjs.org) and [Redux](https://redux.js.org) f
 application state.
 
 The project comes with diverse tools for simplifying the development process and for providing
-better code quality. It's recommended to make use of them thoroughly during ongoing development. We follow the well-known [Airbnb JavaScript Style Guide](http://airbnb.io/javascript/) for defining
+better code quality. It's recommended to make use of them thoroughly during ongoing development. We follow the well-known [Airbnb JavaScript Style Guide](https://airbnb.io/javascript/) for defining
 our styling rules and code best practices.
 
 ### lbry-redux
