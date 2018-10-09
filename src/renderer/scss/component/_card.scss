@@ -6,10 +6,18 @@
   display: flex;
   flex-direction: column;
   max-width: var(--card-max-width);
-}
+  white-space: normal;
 
-.card > h1 {
-  word-wrap: break-word;
+  .card__media {
+    padding-top: var(--video-aspect-ratio);
+  }
+
+  // Text that is shown if a piece of content has no thumbnail
+  // We need to do this because the thumbnail uses padding-top: var(--video-aspect-ratio); for dynamic height
+  // this lets the text sit in the middle instead of the bottom
+  .card__media-text {
+    margin-top: calc(var(--video-aspect-ratio) * -1);
+  }
 }
 
 .card--section {
@@ -20,25 +28,25 @@
 }
 
 .card--small {
-  white-space: normal;
+  font-size: 13px;
+}
 
-  .card__media {
-    padding-top: var(--video-aspect-ratio);
-  }
+.card__media {
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  background-color: var(--color-placeholder);
+}
 
-  .card__media-text {
-    // for the weird padding required for dynamic height
-    // this lets the text sit in the middle instead of the bottom
-    margin-top: calc(var(--video-aspect-ratio) * -1);
-  }
+.card__media--no-img {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
 
-  .channel-name {
-    font-size: 12px;
-
-    @media only screen and (min-width: $medium-breakpoint) {
-      font-size: 14px;
-    }
-  }
+.card__media--nsfw {
+  background-color: var(--color-error);
 }
 
 .card--link {
@@ -66,31 +74,29 @@
   pointer-events: none;
 }
 
-.card__media {
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: 50% 50%;
-  background-color: var(--color-placeholder);
-}
-
-.card__media--no-img {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-}
-
-.card__media--nsfw {
-  background-color: var(--color-error);
-}
-
-.card__title-identity {
+.card__title {
+  font-size: 1.5em;
   color: var(--text-color);
+  padding-top: $spacing-vertical * 1/3;
+
+  @media (min-width: $large-breakpoint) {
+    font-size: 1.7em;
+  }
 }
 
-.card__title-identity--file {
+.card__title--file-card {
+  // FileCard is slightly different where the title is only slightly bigger than the subtitle
+  // Slightly bigger than 2 lines for consistent channel placement
+  font-size: 1.1em;
+  height: 4em;
+
+  @media only screen and (min-width: $large-breakpoint) {
+    font-size: 1.3em;
+  }
+}
+
+.card__title__space-between {
   display: flex;
-  align-items: center;
   justify-content: space-between;
 
   .icon {
@@ -104,73 +110,26 @@
   align-self: flex-start;
 }
 
-.card__title {
-  font-size: 18px;
-  color: var(--text-color);
-  font-family: 'metropolis-semibold';
-}
-
-.card__title--small {
-  font-size: 12px;
-  line-height: 12px;
-
-  @media only screen and (min-width: $medium-breakpoint) {
-    font-size: 14px;
-    line-height: 14px;
-  }
-}
-
-.card__title--x-small {
-  font-size: 12px;
-  line-height: 12px;
-}
-
-.card__title--large {
-  font-size: 22px;
-}
-
-.card__title--file {
-  font-family: 'metropolis-bold';
-  font-size: 28px;
-  margin-bottom: 0;
-  padding-top: 0;
-  padding-bottom: 5px;
-  font-size: 18px;
-}
-
-.card__title--file-card {
-  padding-top: $spacing-vertical * 1/3;
-  // height is the same height that two lines of title fill
-  // doing this so content below the title is inline accross the row
-  height: 30px;
-
-  @media only screen and (min-width: $medium-breakpoint) {
-    height: 36px;
-  }
-}
-
 .card__subtitle {
-  margin: 0;
-  font-size: 14px;
   color: var(--card-text-color);
+  font-size: 1em;
+  line-height: 1em;
+
+  @media (min-width: $large-breakpoint) {
+    font-size: 1.2em;
+  }
 }
 
-.card__subtitle--x-small {
-  font-size: 12px;
+.card__subtext-title {
+  font-size: 1.1em;
+
+  &:not(:first-of-type) {
+    margin-top: $spacing-vertical * 3/2;
+  }
 }
 
-.card__subtitle--large {
-  font-size: 18px;
-  padding-bottom: $spacing-vertical * 1/3;
-}
-
-.card__subtitle-price {
-  padding-top: $spacing-vertical * 1/3;
-}
-
-.card__title--small + .card__subtitle,
-.card__title--x-small + .card__subtitle {
-  padding-top: $spacing-vertical * 1/3;
+.card__subtext {
+  font-size: 0.85em;
 }
 
 .card__meta {
@@ -185,11 +144,6 @@
   align-items: center;
   padding-top: $spacing-vertical * 1/3;
   color: var(--card-text-color);
-
-  .icon + .icon,
-  .credit-amount + .icon {
-    margin-left: $spacing-vertical * 1/3;
-  }
 }
 
 // .card-media__internal__links should always be inside a card
@@ -201,55 +155,8 @@
   }
 }
 
-.card--small {
-  .card-media__internal-links {
-    top: $spacing-vertical * 1/3;
-    right: $spacing-vertical * 1/3;
-  }
-}
-
-// Channel info with buttons on the right side
-.card__channel-info {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: $spacing-width 0 0;
-}
-
-.card__channel-info--large {
-  padding: 0;
-}
-
 .card__content {
   margin-top: $spacing-vertical * 2/3;
-}
-
-.card__content--extra-padding {
-  margin-top: $spacing-vertical * 3/2;
-}
-
-.card__subtext-title {
-  color: var(--text-color);
-  font-size: calc(var(--font-size-subtext-multiple) * 1.2em);
-
-  &:not(:first-of-type) {
-    margin-top: $spacing-vertical * 3/2;
-  }
-}
-
-.card__subtext {
-  font-size: calc(var(--font-size-subtext-multiple) * 1em);
-  padding-top: $spacing-vertical * 1/3;
-  word-break: break-word;
-  font-family: 'metropolis-medium';
-}
-
-.card__subtext--small {
-  font-size: calc(var(--font-size-subtext-multiple) * 0.8em);
-}
-
-.card__subtext--large {
-  font-size: calc(var(--font-size-subtext-multiple) * 0.9em);
 }
 
 .card__actions {
@@ -462,44 +369,4 @@
   background-color: var(--error-msg-bg);
   padding: $spacing-vertical * 1/3;
   margin: $spacing-vertical * 1/3 0;
-}
-
-.card__media--autothumb {
-  color: red !important;
-}
-
-.card__media {
-  &.card__media--autothumb.purple {
-    background-color: #9c27b0;
-  }
-  &.card__media--autothumb.red {
-    background-color: #e53935;
-  }
-  &.card__media--autothumb.pink {
-    background-color: #e91e63;
-  }
-  &.card__media--autothumb.indigo {
-    background-color: #3f51b5;
-  }
-  &.card__media--autothumb.blue {
-    background-color: #2196f3;
-  }
-  &.card__media--autothumb.light-blue {
-    background-color: #039be5;
-  }
-  &.card__media--autothumb.cyan {
-    background-color: #00acc1;
-  }
-  &.card__media--autothumb.teal {
-    background-color: #009688;
-  }
-  &.card__media--autothumb.green {
-    background-color: #43a047;
-  }
-  &.card__media--autothumb.yellow {
-    background-color: #ffeb3b;
-  }
-  &.card__media--autothumb.orange {
-    background-color: #ffa726;
-  }
 }

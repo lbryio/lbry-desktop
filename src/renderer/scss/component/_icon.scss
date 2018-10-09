@@ -1,0 +1,6 @@
+// Icons with icons directly following should have a margin-right for proper spacing
+// Same for prices on cards
+.icon + .icon,
+.credit-amount + .icon {
+  margin-left: $spacing-vertical * 1/3;
+}

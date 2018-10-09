@@ -2,7 +2,6 @@
 import React from 'react';
 import Button from 'component/button';
 import { buildURI } from 'lbry-redux';
-import classnames from 'classnames';
 import type { Claim } from 'types/claim';
 
 type Props = {
@@ -59,17 +58,7 @@ class UriIndicator extends React.PureComponent<Props> {
       channelLink = link ? buildURI({ channelName, claimId: channelClaimId }) : false;
     }
 
-    const inner = (
-      <span>
-        <span
-          className={classnames('channel-name', {
-            'button-text no-underline': link,
-          })}
-        >
-          {channelName}
-        </span>{' '}
-      </span>
-    );
+    const inner = <span className="channel-name">{channelName}</span>;
 
     if (!channelLink) {
       return inner;

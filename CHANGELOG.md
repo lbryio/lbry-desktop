@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/).
  * Make tooltip smarter ([#1979](https://github.com/lbryio/lbry-desktop/pull/1979))
  * Change channel pages to have 48 items instead of 10 ([#2002](https://github.com/lbryio/lbry-desktop/pull/2002))
  * Update to https ([#2016](https://github.com/lbryio/lbry-desktop/pull/2016))
+ * Simplify FileCard and FileTile component styling ([#2011](https://github.com/lbryio/lbry-desktop/pull/2011))
 
 ### Fixed
  * Invite table cutoff with large number of invites ([#1985](https://github.com/lbryio/lbry-desktop/pull/1985))
