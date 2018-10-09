@@ -160,6 +160,7 @@ button:disabled {
 
 .btn--uri-indicator {
   transition: color var(--animation-duration) var(--animation-style);
+  display: inline-block;
 
   &:hover {
     color: var(--btn-color-inverse);

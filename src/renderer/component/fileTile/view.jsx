@@ -108,36 +108,14 @@ class FileTile extends React.PureComponent<Props> {
       >
         <CardMedia title={title || name} thumbnail={thumbnail} />
         <div className="file-tile__info">
-          {isResolvingUri && (
-            <div
-              className={classnames({
-                'card__title--small': size !== 'large',
-                'card__title--large': size === 'large',
-              })}
-            >
-              {__('Loading...')}
-            </div>
-          )}
+          {isResolvingUri && <div className="file-tile__title">{__('Loading...')}</div>}
           {!isResolvingUri && (
             <React.Fragment>
-              <div
-                className={classnames({
-                  'card__title--file': size === 'regular',
-                  'card__title--x-small': size === 'small',
-                  'card__title--large': size === 'large',
-                })}
-              >
+              <div className="file-tile__title">
                 <TruncatedText text={title || name} lines={size === 'small' ? 2 : 3} />
               </div>
-              <div
-                className={classnames('card__subtitle', {
-                  'card__subtitle--x-small': size === 'small',
-                  'card__subtitle--large': size === 'large',
-                })}
-              >
-                <span className="file-tile__channel">
-                  {showUri ? uri : <UriIndicator uri={uri} link />}
-                </span>
+              <div className="card__subtitle">
+                {showUri ? uri : <UriIndicator uri={uri} link />}
               </div>
               <div className="card__file-properties">
                 <FilePrice hideFree uri={uri} />
@@ -145,12 +123,7 @@ class FileTile extends React.PureComponent<Props> {
                 {showLocal && isDownloaded && <Icon icon={icons.LOCAL} />}
               </div>
               {displayDescription && (
-                <div
-                  className={classnames('card__subtext', {
-                    'card__subtext--small': size !== 'small',
-                    'card__subtext--large': size === 'large',
-                  })}
-                >
+                <div className="card__subtext">
                   <TruncatedText text={description} lines={size === 'large' ? 4 : 3} />
                 </div>
               )}

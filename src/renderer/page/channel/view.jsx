@@ -80,7 +80,7 @@ class ChannelPage extends React.PureComponent<Props> {
 
     return (
       <Page notContained>
-        <section className="card__channel-info card__channel-info--large">
+        <section>
           <h1>
             {name}
             {fetching && <BusyIndicator />}
