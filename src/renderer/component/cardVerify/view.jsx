@@ -1,5 +1,5 @@
+// @flow
 import React from 'react';
-import PropTypes from 'prop-types';
 import Button from 'component/button';
 import * as icons from 'constants/icons';
 
@@ -7,30 +7,29 @@ let scriptLoading = false;
 let scriptLoaded = false;
 let scriptDidError = false;
 
+type Props = {
+  disabled: boolean,
+  label: ?string,
+
+  // =====================================================
+  // Required by stripe
+  // see Stripe docs for more info:
+  //   https://stripe.com/docs/checkout#integration-custom
+  // =====================================================
+  
+  // Your publishable key (test or live).
+  // can't use "key" as a prop in react, so have to change the keyname
+  stripeKey: string,
+
+  // The callback to invoke when the Checkout process is complete.
+  //   function(token)
+  //     token is the token object created.
+  //     token.id can be used to create a charge or customer.
+  //     token.email contains the email address entered by the user.
+  token: string,
+};
+
 class CardVerify extends React.Component {
-  static propTypes = {
-    disabled: PropTypes.bool,
-
-    label: PropTypes.string,
-
-    // =====================================================
-    // Required by stripe
-    // see Stripe docs for more info:
-    //   https://stripe.com/docs/checkout#integration-custom
-    // =====================================================
-
-    // Your publishable key (test or live).
-    // can't use "key" as a prop in react, so have to change the keyname
-    stripeKey: PropTypes.string.isRequired,
-
-    // The callback to invoke when the Checkout process is complete.
-    //   function(token)
-    //     token is the token object created.
-    //     token.id can be used to create a charge or customer.
-    //     token.email contains the email address entered by the user.
-    token: PropTypes.func.isRequired,
-  };
-
   constructor(props) {
     super(props);
     this.state = {

@@ -7,24 +7,36 @@ import { parseQueryParams } from 'util/query_params';
 import * as icons from 'constants/icons';
 import Autocomplete from './internal/autocomplete';
 
+const L_KEY_CODE = 76;
+const ESC_KEY_CODE = 27;
+
 type Props = {
   updateSearchQuery: string => void,
-  onSearch: string => void,
+  onSearch: (string, ?number) => void,
   onSubmit: (string, {}) => void,
   wunderbarValue: ?string,
   suggestions: Array<string>,
   doFocus: () => void,
   doBlur: () => void,
   resultCount: number,
+  focused: boolean,
 };
 
 class WunderBar extends React.PureComponent<Props> {
-  constructor(props: Props) {
-    super(props);
+  constructor() {
+    super();
 
     (this: any).handleSubmit = this.handleSubmit.bind(this);
     (this: any).handleChange = this.handleChange.bind(this);
-    this.input = undefined;
+    (this: any).handleKeyDown = this.handleKeyDown.bind(this);
+  }
+
+  componentDidMount() {
+    window.addEventListener('keydown', this.handleKeyDown);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('keydown', this.handleKeyDown);
   }
 
   getSuggestionIcon = (type: string) => {
@@ -37,6 +49,31 @@ class WunderBar extends React.PureComponent<Props> {
         return icons.SEARCH;
     }
   };
+
+  handleKeyDown(event: SyntheticKeyboardEvent<*>) {
+    const { ctrlKey, metaKey, keyCode } = event;
+    const { doFocus, doBlur, focused } = this.props;
+
+    if (!this.input) {
+      return;
+    }
+
+    if (focused && keyCode === ESC_KEY_CODE) {
+      doBlur();
+      this.input.blur();
+      return;
+    }
+
+    const shouldFocus =
+      process.platform === 'darwin'
+        ? keyCode === L_KEY_CODE && metaKey
+        : keyCode === L_KEY_CODE && ctrlKey;
+
+    if (shouldFocus) {
+      doFocus();
+      this.input.focus();
+    }
+  }
 
   handleChange(e: SyntheticInputEvent<*>) {
     const { updateSearchQuery } = this.props;
@@ -106,6 +143,10 @@ class WunderBar extends React.PureComponent<Props> {
           renderInput={props => (
             <input
               {...props}
+              ref={el => {
+                props.ref(el);
+                this.input = el;
+              }}
               className="wunderbar__input"
               placeholder="Enter LBRY URL here or search for videos, music, games and more"
             />
