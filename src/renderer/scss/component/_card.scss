@@ -290,9 +290,8 @@
 }
 
 .card__actions-top-corner {
-  position: absolute;
-  top: $spacing-vertical;
-  right: $spacing-vertical;
+  display: flex;
+  justify-content: flex-end;
 }
 
 .card__actions-bottom-corner {
