@@ -221,7 +221,7 @@ class HelpPage extends React.PureComponent<Props, State> {
                         {user.primary_email}{' '}
                         <Button
                           button="link"
-                          href={`http://lbry.io/list/edit/${accessToken}`}
+                          href={`https://lbry.io/list/edit/${accessToken}`}
                           label={__('Update mailing preferences')}
                         />
                       </React.Fragment>
