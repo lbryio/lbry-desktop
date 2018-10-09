@@ -4,13 +4,6 @@ import { HISTORY_ITEMS_PER_PAGE } from 'constants/content';
 
 export const selectState = state => state.content || {};
 
-export const selectFeaturedUris = createSelector(selectState, state => state.featuredUris);
-
-export const selectFetchingFeaturedUris = createSelector(
-  selectState,
-  state => state.fetchingFeaturedContent
-);
-
 export const selectPlayingUri = createSelector(selectState, state => state.playingUri);
 
 export const selectChannelClaimCounts = createSelector(

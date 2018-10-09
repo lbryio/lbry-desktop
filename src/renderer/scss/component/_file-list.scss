@@ -22,25 +22,32 @@
 
 .file-tile {
   display: flex;
+  font-size: 14px;
   padding-top: $spacing-vertical;
 
   .card__media {
     height: var(--file-tile-media-height);
     flex: 0 0 var(--file-tile-media-width);
   }
+}
 
-  .card__subtitle {
-    line-height: 1;
-    display: flex;
-    align-items: center;
+.file-tile--small {
+  font-size: 12px;
+
+  .card__media {
+    height: var(--file-tile-media-height-small);
+    flex: 0 0 var(--file-tile-media-width-small);
   }
 }
 
-.file-tile__channel {
-  padding-right: $spacing-width * 1/4;
+.file-tile--large {
+  font-size: 16px;
 }
 
-.file-tile.file-tile--small {
+.file-tile__title {
+}
+
+.file-tile--small {
   padding-top: $spacing-vertical * 2/3;
 
   .card__media {
@@ -49,7 +56,7 @@
   }
 }
 
-.file-tile.file-tile--large {
+.file-tile--large {
   .card__media {
     height: var(--file-tile-media-height-large);
     flex: 0 0 var(--file-tile-media-width-large);

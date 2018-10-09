@@ -19,7 +19,6 @@ button:disabled {
   fill: currentColor; // for proper icon color
   font-size: 12px;
   transition: all var(--animation-duration) var(--animation-style);
-  font-family: 'metropolis-medium';
 
   &:not(:disabled) {
     box-shadow: var(--box-shadow-button);
@@ -161,6 +160,7 @@ button:disabled {
 
 .btn--uri-indicator {
   transition: color var(--animation-duration) var(--animation-style);
+  display: inline-block;
 
   &:hover {
     color: var(--btn-color-inverse);
@@ -172,7 +172,6 @@ button:disabled {
 }
 
 .btn.btn--header-balance {
-  font-family: 'metropolis-medium';
   font-size: 14px;
   color: var(--header-primary-color);
 

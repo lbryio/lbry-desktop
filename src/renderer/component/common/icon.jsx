@@ -14,6 +14,7 @@ type Props = {
   icon: string,
   tooltip?: string, // tooltip direction
   iconColor?: string,
+  size?: number,
 };
 
 class IconComponent extends React.PureComponent<Props> {
@@ -42,7 +43,7 @@ class IconComponent extends React.PureComponent<Props> {
   };
 
   render() {
-    const { icon, tooltip, iconColor } = this.props;
+    const { icon, tooltip, iconColor, size } = this.props;
     const Icon = FeatherIcons[icon];
 
     if (!Icon) {
@@ -54,16 +55,17 @@ class IconComponent extends React.PureComponent<Props> {
       color = this.getIconColor(iconColor);
     }
 
-    let size = 14;
+    let iconSize = size || 14;
+    // Arrow icons are quite a bit smaller than the other icons we use
     if (icon === icons.ARROW_LEFT || icon === icons.ARROW_RIGHT) {
-      size = 20;
+      iconSize = 20;
     }
 
     let tooltipText;
     if (tooltip) {
       tooltipText = this.getTooltip(icon);
     }
-    const inner = <Icon size={size} className="icon" color={color} />;
+    const inner = <Icon size={iconSize} className="icon" color={color} />;
 
     return tooltipText ? (
       <Tooltip icon body={tooltipText} direction={tooltip}>

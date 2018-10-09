@@ -13,7 +13,6 @@ import {
   doHideNotification,
 } from 'lbry-redux';
 import Native from 'native';
-import { doFetchRewardedContent } from 'redux/actions/content';
 import { doFetchDaemonSettings } from 'redux/actions/settings';
 import { doAuthNavigate } from 'redux/actions/navigation';
 import { doCheckSubscriptionsInit } from 'redux/actions/subscriptions';
@@ -27,7 +26,7 @@ import {
   selectRemoteVersion,
   selectUpgradeTimer,
 } from 'redux/selectors/app';
-import { doAuthenticate } from 'lbryinc';
+import { doAuthenticate, doFetchRewardedContent } from 'lbryinc';
 import { lbrySettings as config, version as appVersion } from 'package.json';
 
 const { autoUpdater } = remote.require('electron-updater');

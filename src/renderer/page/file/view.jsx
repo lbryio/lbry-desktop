@@ -145,12 +145,11 @@ class FilePage extends React.Component<Props> {
     if (channelName && channelClaimId) {
       subscriptionUri = buildURI({ channelName, claimId: channelClaimId }, false);
     }
-    const speechSharable =
+    const speechShareable =
       costInfo &&
       costInfo.cost === 0 &&
       contentType &&
       ['video', 'image'].includes(contentType.split('/')[0]);
-
     // We want to use the short form uri for editing
     // This is what the user is used to seeing, they don't care about the claim id
     // We will select the claim id before they publish
@@ -184,21 +183,20 @@ class FilePage extends React.Component<Props> {
             ))}
 
           <div className="card__content">
-            <div className="card__title-identity--file">
-              <h1 className="card__title card__title--file">{title}</h1>
+            <div className="card__title__space-between">
+              <h1>{title}</h1>
               <div className="card__title-identity-icons">
-                {isRewardContent && <Icon iconColor="red" tooltip="bottom" icon={icons.FEATURED} />}
+                {isRewardContent && (
+                  <Icon size={20} iconColor="red" tooltip="bottom" icon={icons.FEATURED} />
+                )}
                 <FilePrice filePage uri={normalizeURI(uri)} />
               </div>
             </div>
-            <span className="card__subtitle card__subtitle--file">
-              {__('Published on')}&nbsp;
+            <span className="card__subtitle">
+              <UriIndicator uri={uri} link /> {__('published on')}{' '}
               <DateTime block={height} show={DateTime.SHOW_DATE} />
             </span>
             {metadata.nsfw && <div>NSFW</div>}
-            <div className="card__channel-info">
-              <UriIndicator uri={uri} link />
-            </div>
             <div className="card__actions card__actions--no-margin card__actions--between">
               <div className="card__actions">
                 {claimIsMine ? (
@@ -222,7 +220,7 @@ class FilePage extends React.Component<Props> {
                     onClick={() => openModal({ id: MODALS.SEND_TIP }, { uri })}
                   />
                 )}
-                {speechSharable && (
+                {speechShareable && (
                   <Button
                     button="alt"
                     icon={icons.GLOBE}
@@ -237,7 +235,7 @@ class FilePage extends React.Component<Props> {
                 <FileActions uri={uri} claimId={claim.claim_id} />
               </div>
             </div>
-            <FormRow padded>
+            <FormRow>
               <ToolTip direction="right" body={__('Automatically download and play free content.')}>
                 <FormField
                   name="autoplay"
@@ -248,7 +246,7 @@ class FilePage extends React.Component<Props> {
                 />
               </ToolTip>
             </FormRow>
-            <div className="card__content--extra-padding">
+            <div className="card__content">
               <FileDetails uri={uri} />
             </div>
           </div>

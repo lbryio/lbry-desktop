@@ -6,7 +6,6 @@ import { doNavigate } from 'redux/actions/navigation';
 import {
   setSubscriptionLatest,
   setSubscriptionNotification,
-  setSubscriptionNotifications,
 } from 'redux/actions/subscriptions';
 import { selectNotifications } from 'redux/selectors/subscriptions';
 import { selectBadgeNumber } from 'redux/selectors/app';
@@ -16,8 +15,6 @@ import {
   Lbry,
   Lbryapi,
   buildURI,
-  batchActions,
-  doResolveUris,
   doFetchClaimListMine,
   makeSelectCostInfoForUri,
   makeSelectFileInfoForUri,
@@ -31,73 +28,8 @@ import { makeSelectClientSetting, selectosNotificationsEnabled } from 'redux/sel
 import setBadge from 'util/setBadge';
 import setProgressBar from 'util/setProgressBar';
 import analytics from 'analytics';
-import { Lbryio } from 'lbryinc';
 
 const DOWNLOAD_POLL_INTERVAL = 250;
-
-export function doFetchFeaturedUris() {
-  return dispatch => {
-    dispatch({
-      type: ACTIONS.FETCH_FEATURED_CONTENT_STARTED,
-    });
-
-    const success = ({ Uris }) => {
-      const urisToResolve = Object.keys(Uris).reduce(
-        (resolve, category) => [...resolve, ...Uris[category]],
-        []
-      );
-
-      const actions = [
-        doResolveUris(urisToResolve),
-        {
-          type: ACTIONS.FETCH_FEATURED_CONTENT_COMPLETED,
-          data: {
-            uris: Uris,
-            success: true,
-          },
-        },
-      ];
-      dispatch(batchActions(...actions));
-    };
-
-    const failure = () => {
-      dispatch({
-        type: ACTIONS.FETCH_FEATURED_CONTENT_COMPLETED,
-        data: {
-          uris: {},
-        },
-      });
-    };
-
-    Lbryio.call('file', 'list_homepage').then(success, failure);
-  };
-}
-
-export function doFetchRewardedContent() {
-  return dispatch => {
-    const success = nameToClaimId => {
-      dispatch({
-        type: ACTIONS.FETCH_REWARD_CONTENT_COMPLETED,
-        data: {
-          claimIds: Object.values(nameToClaimId),
-          success: true,
-        },
-      });
-    };
-
-    const failure = () => {
-      dispatch({
-        type: ACTIONS.FETCH_REWARD_CONTENT_COMPLETED,
-        data: {
-          claimIds: [],
-          success: false,
-        },
-      });
-    };
-
-    Lbryio.call('reward', 'list_featured').then(success, failure);
-  };
-}
 
 export function doUpdateLoadStatus(uri, outpoint) {
   return (dispatch, getState) => {
@@ -360,13 +292,13 @@ export function doPurchaseUri(uri, specificCostInfo, shouldRecordViewEvent) {
 }
 
 export function doFetchClaimsByChannel(uri, page) {
-  return (dispatch, getState) => {
+  return dispatch => {
     dispatch({
       type: ACTIONS.FETCH_CHANNEL_CLAIMS_STARTED,
       data: { uri, page },
     });
 
-    Lbry.claim_list_by_channel({ uri, page: page || 1 }).then(result => {
+    Lbry.claim_list_by_channel({ uri, page: page || 1, page_size: 48 }).then(result => {
       const claimResult = result[uri] || {};
       const { claims_in_channel: claimsInChannel, returned_page: returnedPage } = claimResult;
 

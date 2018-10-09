@@ -101,7 +101,7 @@ class ActiveShapeShift extends React.PureComponent<Props> {
         )}
 
         {shiftState === statuses.RECEIVED && (
-          <div className="card__content--extra-vertical-space">
+          <div>
             <p>
               {__('ShapeShift has received your payment! Sending the funds to your LBRY wallet.')}
             </p>
@@ -110,7 +110,7 @@ class ActiveShapeShift extends React.PureComponent<Props> {
         )}
 
         {shiftState === statuses.COMPLETE && (
-          <div className="card__content--extra-vertical-space">
+          <div>
             <p>{__('Transaction complete! You should see the new LBC in your wallet.')}</p>
           </div>
         )}
