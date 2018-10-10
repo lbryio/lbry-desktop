@@ -15,9 +15,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
  * Simplify FileCard and FileTile component styling ([#2011](https://github.com/lbryio/lbry-desktop/pull/2011))
 
 ### Fixed
+ * Fixed Transactions filter menu collides with transaction table ([#2005](https://github.com/lbryio/lbry-desktop/pull/2005))
  * Invite table cutoff with large number of invites ([#1985](https://github.com/lbryio/lbry-desktop/pull/1985))
  * History styling on large screens and link issue with claims ([#1999](https://github.com/lbryio/lbry-desktop/pull/1999))
  * Satisfy console warnings in publishForm and validation messaging ([#2010](https://github.com/lbryio/lbry-desktop/pull/2010))
+
 
 
 ## [0.25.1] - 2018-09-18
