@@ -39,6 +39,10 @@ class DiscoverPage extends React.PureComponent<Props> {
     return channelName;
   }
 
+  trimClaimIdFromCategory(category: string) {
+    return category.split('#')[0];
+  }
+
   continousFetch: ?IntervalID;
 
   clearContinuousFetch() {
@@ -60,14 +64,14 @@ class DiscoverPage extends React.PureComponent<Props> {
               featuredUris[category].length ? (
                 <CategoryList
                   key={category}
-                  category={category}
+                  category={this.trimClaimIdFromCategory(category)}
                   names={featuredUris[category]}
                   categoryLink={this.getCategoryLinkPartByCategory(category)}
                 />
               ) : (
                 <CategoryList
                   key={category}
-                  category={category.split('#')[0]}
+                  category={this.trimClaimIdFromCategory(category)}
                   categoryLink={category}
                 />
               )
