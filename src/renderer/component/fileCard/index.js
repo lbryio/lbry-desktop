@@ -14,6 +14,8 @@ import {
 } from 'redux/selectors/content';
 import { selectShowNsfw } from 'redux/selectors/settings';
 import { selectPendingPublish } from 'redux/selectors/publish';
+import { makeSelectIsSubscribed } from 'redux/selectors/subscriptions';
+import { doClearContentHistoryUri } from 'redux/actions/content';
 import FileCard from './view';
 
 const select = (state, props) => {
@@ -36,6 +38,7 @@ const select = (state, props) => {
     ...fileCardInfo,
     pending: !!pendingPublish,
     position: makeSelectContentPositionForUri(props.uri)(state),
+    subscribed: makeSelectIsSubscribed(props.uri)(state),
   };
 };
 

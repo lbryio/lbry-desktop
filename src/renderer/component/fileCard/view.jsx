@@ -10,6 +10,7 @@ import * as icons from 'constants/icons';
 import classnames from 'classnames';
 import FilePrice from 'component/filePrice';
 import { openCopyLinkMenu } from 'util/contextMenu';
+import DateTime from 'component/dateTime';
 
 type Props = {
   uri: string,
@@ -24,15 +25,11 @@ type Props = {
   /* eslint-disable react/no-unused-prop-types */
   resolveUri: string => void,
   isResolvingUri: boolean,
-  showPrice: boolean,
   /* eslint-enable react/no-unused-prop-types */
+  subscribed: boolean,
 };
 
 class FileCard extends React.PureComponent<Props> {
-  static defaultProps = {
-    showPrice: true,
-  };
-
   componentWillMount() {
     this.resolve(this.props);
   }
@@ -59,8 +56,19 @@ class FileCard extends React.PureComponent<Props> {
       obscureNsfw,
       claimIsMine,
       pending,
-      showPrice,
+      subscribed,
     } = this.props;
+
+    if (!claim) {
+      return (
+        <div className="card card--small">
+          <div className="card--placeholder card__media" />
+          <div className="card--placeholder placeholder__title" />
+          <div className="card--placeholder placeholder__channel" />
+          <div className="card--placeholder placeholder__date" />
+        </div>
+      );
+    }
 
     const shouldHide = !claimIsMine && !pending && obscureNsfw && metadata && metadata.nsfw;
     if (shouldHide) {
@@ -70,7 +78,8 @@ class FileCard extends React.PureComponent<Props> {
     const uri = !pending ? normalizeURI(this.props.uri) : this.props.uri;
     const title = metadata && metadata.title ? metadata.title : uri;
     const thumbnail = metadata && metadata.thumbnail ? metadata.thumbnail : null;
-    const isRewardContent = claim && rewardedContentClaimIds.includes(claim.claim_id);
+    const isRewardContent = rewardedContentClaimIds.includes(claim.claim_id);
+    const { height } = claim;
     const handleContextMenu = event => {
       event.preventDefault();
       event.stopPropagation();
@@ -97,10 +106,15 @@ class FileCard extends React.PureComponent<Props> {
         <div className="card__subtitle">
           {pending ? <div>Pending...</div> : <UriIndicator uri={uri} link />}
         </div>
-        <div className="card__file-properties">
-          {showPrice && <FilePrice hideFree uri={uri} />}
-          {isRewardContent && <Icon iconColor="red" icon={icons.FEATURED} />}
-          {fileInfo && <Icon icon={icons.LOCAL} />}
+        <div className="card__subtitle card--space-between">
+          <DateTime timeAgo block={height} />
+
+          <div className="card__file-properties">
+            <FilePrice hideFree uri={uri} />
+            {isRewardContent && <Icon iconColor="red" icon={icons.FEATURED} />}
+            {subscribed && <Icon icon={icons.HEART} />}
+            {fileInfo && <Icon icon={icons.LOCAL} />}
+          </div>
         </div>
       </section>
     );

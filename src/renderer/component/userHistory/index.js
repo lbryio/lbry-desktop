@@ -18,7 +18,6 @@ const select = state => {
 const perform = dispatch => ({
   navigate: (path, params) => dispatch(doNavigate(path, params)),
   clearHistoryUri: uri => dispatch(doClearContentHistoryUri(uri)),
-
 });
 
 export default connect(

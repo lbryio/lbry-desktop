@@ -43,9 +43,13 @@ type Props = {
   fetchFileInfo: string => void,
   fetchCostInfo: string => void,
   prepareEdit: ({}, string) => void,
+  setViewed: string => void,
+  autoplay: boolean,
+  setClientSetting: (string, string | boolean | number) => void,
+  /* eslint-disable react/no-unused-prop-types */
   checkSubscription: (uri: string) => void,
   subscriptions: Array<Subscription>,
-  setViewed: string => void,
+  /* eslint-enable react/no-unused-prop-types */
 };
 
 class FilePage extends React.Component<Props> {
@@ -183,7 +187,7 @@ class FilePage extends React.Component<Props> {
             ))}
 
           <div className="card__content">
-            <div className="card__title__space-between">
+            <div className="card--space-between">
               <h1>{title}</h1>
               <div className="card__title-identity-icons">
                 {isRewardContent && (
@@ -220,14 +224,12 @@ class FilePage extends React.Component<Props> {
                     onClick={() => openModal({ id: MODALS.SEND_TIP }, { uri })}
                   />
                 )}
-                {speechShareable && (
-                  <Button
-                    button="alt"
-                    icon={icons.GLOBE}
-                    label={__('Share')}
-                    onClick={() => openModal({ id: MODALS.SOCIAL_SHARE }, { uri })}
-                  />
-                )}
+                <Button
+                  button="alt"
+                  icon={icons.GLOBE}
+                  label={__('Share')}
+                  onClick={() => openModal({ id: MODALS.SOCIAL_SHARE }, { uri, speechShareable })}
+                />
               </div>
 
               <div className="card__actions">

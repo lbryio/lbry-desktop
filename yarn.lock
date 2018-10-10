@@ -5662,9 +5662,9 @@ lbry-redux@lbryio/lbry-redux:
     proxy-polyfill "0.1.6"
     reselect "^3.0.0"
 
-lbry-redux@lbryio/lbry-redux#c079b108c3bc4ba2b4fb85fb112b52cfc040c301:
+lbry-redux@lbryio/lbry-redux#4ee6c376e5f2c3e3e96d199a56970e2621a84af1:
   version "0.0.1"
-  resolved "https://codeload.github.com/lbryio/lbry-redux/tar.gz/c079b108c3bc4ba2b4fb85fb112b52cfc040c301"
+  resolved "https://codeload.github.com/lbryio/lbry-redux/tar.gz/4ee6c376e5f2c3e3e96d199a56970e2621a84af1"
   dependencies:
     proxy-polyfill "0.1.6"
     reselect "^3.0.0"

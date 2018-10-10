@@ -11,6 +11,7 @@ import { selectShowNsfw } from 'redux/selectors/settings';
 import { doNavigate } from 'redux/actions/navigation';
 import { doClearPublish, doUpdatePublishForm } from 'redux/actions/publish';
 import { selectRewardContentClaimIds } from 'redux/selectors/content';
+import { makeSelectIsSubscribed } from 'redux/selectors/subscriptions';
 import FileTile from './view';
 
 const select = (state, props) => ({
@@ -21,6 +22,7 @@ const select = (state, props) => ({
   rewardedContentClaimIds: selectRewardContentClaimIds(state, props),
   obscureNsfw: !selectShowNsfw(state),
   claimIsMine: makeSelectClaimIsMine(props.uri)(state),
+  subscribed: makeSelectIsSubscribed(props.uri)(state),
 });
 
 const perform = dispatch => ({

@@ -88,20 +88,16 @@
   // FileCard is slightly different where the title is only slightly bigger than the subtitle
   // Slightly bigger than 2 lines for consistent channel placement
   font-size: 1.1em;
-  height: 4em;
+  height: 3.3em;
 
   @media only screen and (min-width: $large-breakpoint) {
     font-size: 1.3em;
   }
 }
 
-.card__title__space-between {
+.card--space-between {
   display: flex;
   justify-content: space-between;
-
-  .icon {
-    margin: 0 $spacing-vertical * 1/3;
-  }
 }
 
 .card__title-identity-icons {
@@ -114,6 +110,7 @@
   color: var(--card-text-color);
   font-size: 1em;
   line-height: 1em;
+  padding-top: $spacing-vertical * 1/3;
 
   @media (min-width: $large-breakpoint) {
     font-size: 1.2em;
@@ -142,8 +139,11 @@
 .card__file-properties {
   display: flex;
   align-items: center;
-  padding-top: $spacing-vertical * 1/3;
   color: var(--card-text-color);
+
+  .icon + .icon {
+    margin-left: $spacing-vertical * 1/3;
+  }
 }
 
 // .card-media__internal__links should always be inside a card

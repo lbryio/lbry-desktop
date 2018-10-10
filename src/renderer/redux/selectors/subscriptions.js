@@ -3,6 +3,7 @@ import {
   selectAllClaimsByChannel,
   selectClaimsById,
   selectAllFetchingChannelClaims,
+  makeSelectClaimForUri,
 } from 'lbry-redux';
 
 // get the entire subscriptions state
@@ -71,3 +72,13 @@ export const selectSubscriptionsBeingFetched = createSelector(
     return fetchingSubscriptionMap;
   }
 );
+
+export const makeSelectIsSubscribed = uri =>
+  createSelector(selectSubscriptions, makeSelectClaimForUri(uri), (subscriptions, claim) => {
+    if (!claim || !claim.channel_name) {
+      return false;
+    }
+
+    const channelUri = `${claim.channel_name}#${claim.value.publisherSignature.certificateId}`;
+    return subscriptions.some(sub => sub.uri === channelUri);
+  });
