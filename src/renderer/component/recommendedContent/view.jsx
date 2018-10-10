@@ -57,7 +57,6 @@ export default class RecommendedContent extends React.PureComponent<Props> {
             <FileTile
               size="small"
               hideNoResult
-              showLocal
               displayDescription={false}
               key={recommendedUri}
               uri={recommendedUri}

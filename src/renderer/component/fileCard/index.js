@@ -38,7 +38,7 @@ const select = (state, props) => {
     ...fileCardInfo,
     pending: !!pendingPublish,
     position: makeSelectContentPositionForUri(props.uri)(state),
-    subscribed: makeSelectIsSubscribed(props.uri)(state),
+    isSubscribed: makeSelectIsSubscribed(props.uri)(state),
   };
 };
 

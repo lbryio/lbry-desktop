@@ -22,7 +22,7 @@ const select = (state, props) => ({
   rewardedContentClaimIds: selectRewardContentClaimIds(state, props),
   obscureNsfw: !selectShowNsfw(state),
   claimIsMine: makeSelectClaimIsMine(props.uri)(state),
-  subscribed: makeSelectIsSubscribed(props.uri)(state),
+  isSubscribed: makeSelectIsSubscribed(props.uri)(state),
 });
 
 const perform = dispatch => ({

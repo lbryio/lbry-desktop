@@ -12,7 +12,7 @@
 
 .card--placeholder {
   animation: pulse 2s infinite ease-in-out;
-  background: #eeeeee;
+  background: var(--color-placeholder);
 }
 
 // Individual items we need a placeholder for

@@ -26,7 +26,7 @@ type Props = {
   resolveUri: string => void,
   isResolvingUri: boolean,
   /* eslint-enable react/no-unused-prop-types */
-  subscribed: boolean,
+  isSubscribed: boolean,
 };
 
 class FileCard extends React.PureComponent<Props> {
@@ -56,10 +56,10 @@ class FileCard extends React.PureComponent<Props> {
       obscureNsfw,
       claimIsMine,
       pending,
-      subscribed,
+      isSubscribed,
     } = this.props;
 
-    if (!claim) {
+    if (!claim && !pending) {
       return (
         <div className="card card--small">
           <div className="card--placeholder card__media" />
@@ -78,8 +78,8 @@ class FileCard extends React.PureComponent<Props> {
     const uri = !pending ? normalizeURI(this.props.uri) : this.props.uri;
     const title = metadata && metadata.title ? metadata.title : uri;
     const thumbnail = metadata && metadata.thumbnail ? metadata.thumbnail : null;
-    const isRewardContent = rewardedContentClaimIds.includes(claim.claim_id);
-    const { height } = claim;
+    const isRewardContent = claim && rewardedContentClaimIds.includes(claim.claim_id);
+    const height = claim && claim.height;
     const handleContextMenu = event => {
       event.preventDefault();
       event.stopPropagation();
@@ -112,7 +112,7 @@ class FileCard extends React.PureComponent<Props> {
           <div className="card__file-properties">
             <FilePrice hideFree uri={uri} />
             {isRewardContent && <Icon iconColor="red" icon={icons.FEATURED} />}
-            {subscribed && <Icon icon={icons.HEART} />}
+            {isSubscribed && <Icon icon={icons.HEART} />}
             {fileInfo && <Icon icon={icons.LOCAL} />}
           </div>
         </div>

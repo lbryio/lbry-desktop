@@ -13,7 +13,6 @@ import UriIndicator from 'component/uriIndicator';
 import DateTime from 'component/dateTime';
 
 type Props = {
-  showLocal: boolean,
   obscureNsfw: boolean,
   claimIsMine: boolean,
   isDownloaded: boolean,
@@ -30,12 +29,11 @@ type Props = {
   displayHiddenMessage?: boolean,
   displayDescription?: boolean,
   size: string,
-  subscribed: boolean,
+  isSubscribed: boolean,
 };
 
 class FileTile extends React.PureComponent<Props> {
   static defaultProps = {
-    showLocal: false,
     displayDescription: true,
     size: 'regular',
   };
@@ -50,24 +48,34 @@ class FileTile extends React.PureComponent<Props> {
     if (!isResolvingUri && claim === undefined && uri) resolveUri(uri);
   }
 
+  renderFileProperties() {
+    const { isSubscribed, isDownloaded, claim, uri, rewardedContentClaimIds, size } = this.props;
+    const isRewardContent = claim && rewardedContentClaimIds.includes(claim.claim_id);
+
+    return (
+      <div className={classnames('card__file-properties', { card__subtitle: size === 'large' })}>
+        <FilePrice hideFree uri={uri} />
+        {isSubscribed && <Icon icon={icons.HEART} />}
+        {isRewardContent && <Icon iconColor="red" icon={icons.FEATURED} />}
+        {isDownloaded && <Icon icon={icons.LOCAL} />}
+      </div>
+    );
+  }
+
   render() {
     const {
       claim,
       metadata,
       isResolvingUri,
       navigate,
-      rewardedContentClaimIds,
       obscureNsfw,
       claimIsMine,
-      showLocal,
-      isDownloaded,
       clearPublish,
       updatePublishForm,
       hideNoResult,
       displayHiddenMessage,
       displayDescription,
       size,
-      subscribed,
     } = this.props;
 
     if (!claim && isResolvingUri) {
@@ -105,12 +113,11 @@ class FileTile extends React.PureComponent<Props> {
     const title =
       isClaimed && metadata && metadata.title ? metadata.title : parseURI(uri).contentName;
     const thumbnail = metadata && metadata.thumbnail ? metadata.thumbnail : null;
-    const isRewardContent = claim && rewardedContentClaimIds.includes(claim.claim_id);
     const onClick = () => navigate('/show', { uri });
 
     let height;
     let name;
-    if (isClaimed) {
+    if (claim) {
       ({ name, height } = claim);
     }
 
@@ -128,25 +135,21 @@ class FileTile extends React.PureComponent<Props> {
         <CardMedia title={title || name} thumbnail={thumbnail} />
         <div className="file-tile__info">
           <div className="file-tile__title">
-            <TruncatedText text={title || name} lines={size === 'small' ? 2 : 3} />
+            {(title || name) && <TruncatedText text={title || name} lines={size === 'small' ? 2 : 3} />}
           </div>
           <div className="card__subtitle">
             <UriIndicator uri={uri} link />
           </div>
           <div className="card__subtitle card--space-between">
             <DateTime timeAgo block={height} />
-            <div className="card__file-properties">
-              <FilePrice hideFree uri={uri} />
-              {subscribed && <Icon icon={icons.HEART} />}
-              {isRewardContent && <Icon iconColor="red" icon={icons.FEATURED} />}
-              {showLocal && isDownloaded && <Icon icon={icons.LOCAL} />}
-            </div>
+            {size !== 'large' && this.renderFileProperties()}
           </div>
           {displayDescription && (
             <div className="card__subtext">
               <TruncatedText text={description} lines={size === 'large' ? 4 : 3} />
             </div>
           )}
+          {size === 'large' && this.renderFileProperties()}
           {!name && (
             <React.Fragment>
               {__('This location is unused.')}{' '}

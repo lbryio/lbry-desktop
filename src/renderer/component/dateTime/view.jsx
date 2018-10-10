@@ -42,6 +42,8 @@ class DateTime extends React.PureComponent<Props> {
     const show = this.props.show || DateTime.SHOW_BOTH;
     const locale = app.i18n.getLocale();
 
+    // If !date, it's currently being fetched
+
     if (timeAgo) {
       return date ? <span>{moment(date).from(moment())}</span> : <span />;
     }
