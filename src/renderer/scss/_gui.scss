@@ -393,4 +393,7 @@ p {
 .thumbnail-preview {
   height: var(--thumbnail-preview-height);
   width: var(--thumbnail-preview-width);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
 }
