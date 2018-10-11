@@ -107,7 +107,7 @@ class WunderBar extends React.PureComponent<Props> {
           onSubmit(uri, params);
         } else {
           this.props.doShowSnackBar({
-              message: __('Invalid LBRY URL requested. Only A-Z, a-z, and - allowed.'),
+              message: __('Invalid LBRY URL entered. Only A-Z, a-z, and - allowed.'),
               displayType: ['snackbar'],
             })
         }
