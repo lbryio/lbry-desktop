@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import classnames from 'classnames';
-import { normalizeURI, SEARCH_TYPES } from 'lbry-redux';
+import { normalizeURI, SEARCH_TYPES, doNotify, isURIValid } from 'lbry-redux';
 import Icon from 'component/common/icon';
 import { parseQueryParams } from 'util/query_params';
 import * as icons from 'constants/icons';
@@ -101,9 +101,18 @@ class WunderBar extends React.PureComponent<Props> {
       if (suggestion.type === 'search') {
         onSearch(query, resultCount);
       } else {
-        const params = getParams();
-        const uri = normalizeURI(query);
-        onSubmit(uri, params);
+        if (isURIValid(query)) {
+          const params = getParams();
+          const uri = normalizeURI(query);
+          onSubmit(uri, params);
+        } else {
+          window.app.store.dispatch(
+            doNotify({
+              message: __('Invalid LBRY URL requested. Only A-Z, a-z, and - allowed.'),
+              displayType: ['snackbar'],
+            })
+          );
+        }
       }
 
       return;
@@ -112,9 +121,18 @@ class WunderBar extends React.PureComponent<Props> {
     // Currently no suggestion is highlighted. The user may have started
     // typing, then lost focus and came back later on the same page
     try {
-      const uri = normalizeURI(query);
-      const params = getParams();
-      onSubmit(uri, params);
+      if (isURIValid(query)) {
+        const uri = normalizeURI(query);
+        const params = getParams();
+        onSubmit(uri, params);
+      } else {
+        window.app.store.dispatch(
+          doNotify({
+            message: __('Invalid LBRY URL entered. Only A-Z, a-z, and - allowed.'),
+            displayType: ['snackbar'],
+          })
+        );
+      }
     } catch (e) {
       onSearch(query, resultCount);
     }
