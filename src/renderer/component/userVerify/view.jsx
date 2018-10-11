@@ -43,7 +43,7 @@ class UserVerify extends React.PureComponent<Props> {
           <p className="card__content">
             {`${__(
               'If you have a valid credit or debit card, you can use it to instantly prove your humanity.'
-            )} ${__('There is no charge at all for this, now or in the future.')} `}
+            )} ${__('LBRY does not store your credit card information. There is no charge at all for this, now or in the future.')} `}
           </p>
           <div className="card__actions">
             {errorMessage && <p className="form-field__error">{errorMessage}</p>}
