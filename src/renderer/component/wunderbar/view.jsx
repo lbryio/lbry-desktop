@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import classnames from 'classnames';
-import { normalizeURI, SEARCH_TYPES, doNotify, isURIValid } from 'lbry-redux';
+import { normalizeURI, SEARCH_TYPES, isURIValid } from 'lbry-redux';
 import Icon from 'component/common/icon';
 import { parseQueryParams } from 'util/query_params';
 import * as icons from 'constants/icons';
@@ -106,12 +106,10 @@ class WunderBar extends React.PureComponent<Props> {
           const uri = normalizeURI(query);
           onSubmit(uri, params);
         } else {
-          window.app.store.dispatch(
-            doNotify({
+          this.props.doShowSnackBar({
               message: __('Invalid LBRY URL requested. Only A-Z, a-z, and - allowed.'),
               displayType: ['snackbar'],
             })
-          );
         }
       }
 
@@ -126,12 +124,10 @@ class WunderBar extends React.PureComponent<Props> {
         const params = getParams();
         onSubmit(uri, params);
       } else {
-        window.app.store.dispatch(
-          doNotify({
+        this.props.doShowSnackBar({
             message: __('Invalid LBRY URL entered. Only A-Z, a-z, and - allowed.'),
             displayType: ['snackbar'],
           })
-        );
       }
     } catch (e) {
       onSearch(query, resultCount);
