@@ -135,7 +135,9 @@ class FileTile extends React.PureComponent<Props> {
         <CardMedia title={title || name} thumbnail={thumbnail} />
         <div className="file-tile__info">
           <div className="file-tile__title">
-            {(title || name) && <TruncatedText text={title || name} lines={size === 'small' ? 2 : 3} />}
+            {(title || name) && (
+              <TruncatedText text={title || name} lines={size === 'small' ? 2 : 3} />
+            )}
           </div>
           <div className="card__subtitle">
             <UriIndicator uri={uri} link />
@@ -159,10 +161,12 @@ class FileTile extends React.PureComponent<Props> {
                 onClick={e => {
                   // avoid navigating to /show from clicking on the section
                   e.stopPropagation();
+
                   // strip prefix from the Uri and use that as navigation parameter
-                  const nameFromUri = uri.replace(/lbry:\/\//g, '').replace(/-/g, ' ');
+                  const { claimName } = parseURI(uri);
+
                   clearPublish(); // to remove any existing publish data
-                  updatePublishForm({ name: nameFromUri }); // to populate the name
+                  updatePublishForm({ name: claimName }); // to populate the name
                   navigate('/publish');
                 }}
               />
