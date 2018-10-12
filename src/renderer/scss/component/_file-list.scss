@@ -45,6 +45,7 @@
 }
 
 .file-tile__title {
+  font-size: 1.1em;
 }
 
 .file-tile--small {
@@ -65,6 +66,7 @@
 
 .file-tile__info {
   display: flex;
+  flex: 1;
   flex-direction: column;
   margin-left: $spacing-vertical * 2/3;
   max-width: 500px;
