@@ -1,5 +1,7 @@
 // @flow
 
+import type { StreamSource } from 'types/stream';
+
 // Currently incomplete
 export type Metadata = {
   nsfw: boolean,
@@ -36,6 +38,7 @@ export type Claim = {
     },
     stream: {
       metadata: Metadata,
+      source: StreamSource,
     },
   },
 };

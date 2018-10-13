@@ -4,6 +4,7 @@ import { buildURI } from 'lbry-redux';
 import * as ACTIONS from 'constants/action_types';
 import * as THUMBNAIL_STATUSES from 'constants/thumbnail_upload_statuses';
 import { CHANNEL_ANONYMOUS } from 'constants/claim';
+import type { StreamSource } from 'types/stream';
 
 type PublishState = {
   editingURI: ?string,
@@ -53,6 +54,8 @@ export type UpdatePublishFormData = {
   bidError?: string,
   otherLicenseDescription?: string,
   licenseUrl?: string,
+  licenseType?: string,
+  uri?: string,
 };
 
 export type UpdatePublishFormAction = {
@@ -61,32 +64,27 @@ export type UpdatePublishFormAction = {
 };
 
 export type PublishParams = {
-  name: string,
-  bid: number,
-  filePath: string,
+  name?: string,
+  bid?: number,
+  filePath?: string,
   description: ?string,
   language: string,
-  publishingLicense: string,
-  publishingLicenseUrl: string,
+  publishingLicense?: string,
+  publishingLicenseUrl?: string,
   thumbnail: ?string,
   nsfw: boolean,
   channel: string,
-  channelId: string,
+  channelId?: string,
   title: string,
   contentIsFree: boolean,
-  uri: string,
+  uri?: string,
   license: ?string,
   licenseUrl: ?string,
   price: {
     currency: string,
     amount: number,
   },
-  source?: {
-    contentType: string,
-    source: string,
-    sourceType: string,
-    version: string,
-  },
+  sources?: StreamSource,
 };
 
 const defaultState: PublishState = {

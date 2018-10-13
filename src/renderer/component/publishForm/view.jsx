@@ -52,7 +52,7 @@ type Props = {
   clearPublish: () => void,
   resolveUri: string => void,
   scrollToTop: () => void,
-  prepareEdit: ({}) => void,
+  prepareEdit: (claim: any, uri: string) => void,
   resetThumbnailStatus: () => void,
   amountNeededForTakeover: ?number,
 };
@@ -107,11 +107,7 @@ class PublishForm extends React.PureComponent<Props> {
 
   handleFileChange(filePath: string, fileName: string) {
     const { updatePublishForm, channel, name } = this.props;
-    const newFileParams: {
-      filePath: string,
-      name?: string,
-      uri?: string,
-    } = { filePath };
+    const newFileParams: UpdatePublishFormData = { filePath };
 
     if (!name) {
       const parsedFileName = fileName.replace(regexInvalidURI, '');
@@ -127,7 +123,7 @@ class PublishForm extends React.PureComponent<Props> {
     const { channel, updatePublishForm } = this.props;
 
     if (!name) {
-      updatePublishForm({ name, nameError: undefined });
+      updatePublishForm({ nameError: undefined });
       return;
     }
 
@@ -149,7 +145,7 @@ class PublishForm extends React.PureComponent<Props> {
 
   handleChannelChange(channelName: string) {
     const { name, updatePublishForm } = this.props;
-    const form = { channel: channelName };
+    const form: UpdatePublishFormData = { channel: channelName };
 
     if (name) {
       form.uri = this.getNewUri(name, channelName);
@@ -217,10 +213,10 @@ class PublishForm extends React.PureComponent<Props> {
 
     const publishingLicenseUrl = licenseType === COPYRIGHT ? '' : licenseUrl;
 
-    const publishParams = {
-      filePath,
-      bid: this.props.bid,
-      title: this.props.title,
+    const publishParams: PublishParams = {
+      filePath: filePath || undefined,
+      bid: this.props.bid || undefined,
+      title: this.props.title || '',
       thumbnail: this.props.thumbnail,
       description: this.props.description,
       language: this.props.language,
@@ -228,16 +224,16 @@ class PublishForm extends React.PureComponent<Props> {
       license: publishingLicense,
       licenseUrl: publishingLicenseUrl,
       otherLicenseDescription,
-      name: this.props.name,
+      name: this.props.name || undefined,
       contentIsFree: this.props.contentIsFree,
       price: this.props.price,
-      uri: this.props.uri,
+      uri: this.props.uri || undefined,
       channel: this.props.channel,
       isStillEditing: this.props.isStillEditing,
     };
 
     // Editing a claim
-    if (!filePath && myClaimForUri) {
+    if (!filePath && myClaimForUri && myClaimForUri.value) {
       const { source } = myClaimForUri.value.stream;
       publishParams.sources = source;
     }

@@ -51,6 +51,12 @@ class SelectThumbnail extends React.PureComponent<Props, State> {
       thumbnailPath,
       resetThumbnailStatus,
     } = this.props;
+    const filters = [
+      {
+        name: __('Thumbnail Image'),
+        extensions: ['png', 'jpg', 'jpeg', 'gif'],
+      },
+    ];
     const { thumbnailError, thumbnailErrorImage } = this.state;
     const thumbnailSrc =
       !thumbnail || thumbnailError ? Native.imagePath(thumbnailErrorImage) : thumbnail;
@@ -111,6 +117,7 @@ class SelectThumbnail extends React.PureComponent<Props, State> {
               <FileSelector
                 currentPath={thumbnailPath}
                 fileLabel={__('Choose Thumbnail')}
+                filters={filters}
                 onFileChosen={path => openModal({ id: MODALS.CONFIRM_THUMBNAIL_UPLOAD }, { path })}
               />
             )}

@@ -20,6 +20,7 @@ import fs from 'fs';
 import path from 'path';
 import { CC_LICENSES, COPYRIGHT, OTHER } from 'constants/licenses';
 import type { Dispatch, GetState } from 'types/redux';
+import { Source } from 'types/claim';
 
 type Action = UpdatePublishFormAction | { type: ACTIONS.CLEAR_PUBLISH };
 
@@ -67,10 +68,12 @@ export const doClearPublish = () => (dispatch: Dispatch<Action>): Promise<Action
 export const doUpdatePublishForm = (publishFormValue: UpdatePublishFormData) => (
   dispatch: Dispatch<Action>
 ): UpdatePublishFormAction =>
-  dispatch({
-    type: ACTIONS.UPDATE_PUBLISH_FORM,
-    data: { ...publishFormValue },
-  });
+  dispatch(
+    ({
+      type: ACTIONS.UPDATE_PUBLISH_FORM,
+      data: { ...publishFormValue },
+    }: UpdatePublishFormAction)
+  );
 
 export const doUploadThumbnail = (filePath: string, nsfw: boolean) => (
   dispatch: Dispatch<Action>
@@ -155,7 +158,7 @@ export const doPrepareEdit = (claim: any, uri: string) => (dispatch: Dispatch<Ac
     title,
   } = metadata;
 
-  const publishData = {
+  const publishData: UpdatePublishFormData = {
     name,
     channel: channelName,
     bid: amount,
@@ -226,17 +229,18 @@ export const doPublish = (params: PublishParams) => (
     licenseUrl,
     language,
     thumbnail,
+    fee: fee || undefined,
+    description: description || undefined,
   };
 
-  if (fee) {
-    metadata.fee = fee;
-  }
-
-  if (description) {
-    metadata.description = description;
-  }
-
-  const publishPayload = {
+  const publishPayload: {
+    name: ?string,
+    channel_id: string,
+    bid: ?number,
+    metadata: ?any,
+    file_path?: string,
+    sources?: Source,
+  } = {
     name,
     channel_id: channelId,
     bid,
