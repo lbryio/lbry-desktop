@@ -4,7 +4,7 @@ import { buildURI } from 'lbry-redux';
 import * as ACTIONS from 'constants/action_types';
 import * as THUMBNAIL_STATUSES from 'constants/thumbnail_upload_statuses';
 import { CHANNEL_ANONYMOUS } from 'constants/claim';
-import type { StreamSource } from 'types/stream';
+import type { Source } from 'types/claim';
 
 type PublishState = {
   editingURI: ?string,
@@ -84,7 +84,7 @@ export type PublishParams = {
     currency: string,
     amount: number,
   },
-  sources?: StreamSource,
+  sources?: Source,
 };
 
 const defaultState: PublishState = {

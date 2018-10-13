@@ -20,7 +20,7 @@ import fs from 'fs';
 import path from 'path';
 import { CC_LICENSES, COPYRIGHT, OTHER } from 'constants/licenses';
 import type { Dispatch, GetState } from 'types/redux';
-import { Source } from 'types/claim';
+import type { Source } from 'types/claim';
 
 type Action = UpdatePublishFormAction | { type: ACTIONS.CLEAR_PUBLISH };
 
