@@ -354,23 +354,25 @@ class PublishForm extends React.PureComponent<Props> {
     return (
       <Form onSubmit={this.handlePublish}>
         <section className={classnames('card card--section', { 'card--disabled': publishing })}>
-          <div className="card__title">{__('Content')}</div>
+          <div className="card__title card--space-between">
+            {__('Content')}
+            {(filePath || !!editingURI) && (
+              <div className="card__actions-top-corner">
+                <Button
+                  button="inverse"
+                  icon={icons.CLOSE}
+                  label={__('Clear')}
+                  onClick={clearPublish}
+                />
+              </div>
+            )}
+          </div>
           <div className="card__subtitle">
             {isStillEditing ? __('Editing a claim') : __('What are you publishing?')}{' '}
             {__('Read our')}{' '}
             <Button button="link" label={__('FAQ')} href="https://lbry.io/faq/how-to-publish" />{' '}
             {__('to learn more.')}
           </div>
-          {(filePath || !!editingURI) && (
-            <div className="card__actions-top-corner">
-              <Button
-                button="inverse"
-                icon={icons.CLOSE}
-                label={__('Clear')}
-                onClick={clearPublish}
-              />
-            </div>
-          )}
           <div className="card__content">
             <FileSelector currentPath={filePath} onFileChosen={this.handleFileChange} />
             {!!isStillEditing &&
