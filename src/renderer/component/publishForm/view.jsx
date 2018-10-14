@@ -362,7 +362,7 @@ class PublishForm extends React.PureComponent<Props> {
             {__('to learn more.')}
           </div>
           {(filePath || !!editingURI) && (
-            <div className="card-media__internal-links">
+            <div className="card__actions-top-corner">
               <Button
                 button="inverse"
                 icon={icons.CLOSE}
