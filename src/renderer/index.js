@@ -1,7 +1,9 @@
 /* eslint-disable react/jsx-filename-extension */
+/* eslint-disable no-console */
 import App from 'component/app';
 import SnackBar from 'component/snackBar';
 import SplashScreen from 'component/splash';
+import moment from 'moment';
 import * as ACTIONS from 'constants/action_types';
 import { ipcRenderer, remote, shell } from 'electron';
 import React from 'react';
@@ -148,6 +150,8 @@ document.addEventListener('click', event => {
 });
 
 const init = () => {
+  moment.locale(remote.app.getLocale());
+
   autoUpdater.on('error', error => {
     // eslint-disable-next-line no-console
     console.error(error.message);
@@ -201,3 +205,5 @@ const init = () => {
 };
 
 init();
+
+/* eslint-enable no-console */

@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import ButtonTransaction from 'component/common/transaction-link';
+import moment from 'moment';
 
 type Reward = {
   id: string,
@@ -35,14 +36,14 @@ const RewardListClaimed = (props: Props) => {
           </tr>
         </thead>
         <tbody>
-          {rewards.map(reward => (
+          {rewards.reverse().map(reward => (
             <tr key={reward.id}>
               <td>{reward.reward_title}</td>
               <td>{reward.reward_amount}</td>
               <td>
                 <ButtonTransaction id={reward.transaction_id} />
               </td>
-              <td>{reward.created_at.replace('Z', ' ').replace('T', ' ')}</td>
+              <td>{moment(reward.created_at).format('LLL')}</td>
             </tr>
           ))}
         </tbody>

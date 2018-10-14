@@ -17,7 +17,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
  * Update to https ([#2016](https://github.com/lbryio/lbry-desktop/pull/2016))
  * Simplify FileCard and FileTile component styling ([#2011](https://github.com/lbryio/lbry-desktop/pull/2011))
  * Credit card verification messaging ([#2025](https://github.com/lbryio/lbry-desktop/pull/2025))
+ * Reverse Order & Use System/Location Time/Date ([#2036]https://github.com/lbryio/lbry-desktop/pull/2036)
  * Limit file type can be uploaded as thumbnail for publishing ([#2034](https://github.com/lbryio/lbry-desktop/pull/2034))
+
 
 ### Fixed
  * Fixed Transactions filter menu collides with transaction table ([#2005](https://github.com/lbryio/lbry-desktop/pull/2005))
