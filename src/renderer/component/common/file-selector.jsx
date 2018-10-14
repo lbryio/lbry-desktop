@@ -5,12 +5,18 @@ import Button from 'component/button';
 import { FormRow } from 'component/common/form';
 import path from 'path';
 
+type FileFilters = {
+  name: string,
+  extensions: string[],
+};
+
 type Props = {
   type: string,
   currentPath: ?string,
   onFileChosen: (string, string) => void,
   fileLabel?: string,
   directoryLabel?: string,
+  filters?: FileFilters[],
 };
 
 class FileSelector extends React.PureComponent<Props> {
@@ -29,6 +35,7 @@ class FileSelector extends React.PureComponent<Props> {
       {
         properties:
           this.props.type === 'file' ? ['openFile'] : ['openDirectory', 'createDirectory'],
+        filters: this.props.filters,
       },
       paths => {
         if (!paths) {

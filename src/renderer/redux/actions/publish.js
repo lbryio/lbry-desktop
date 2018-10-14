@@ -19,13 +19,12 @@ import { doNavigate } from 'redux/actions/navigation';
 import fs from 'fs';
 import path from 'path';
 import { CC_LICENSES, COPYRIGHT, OTHER } from 'constants/licenses';
+import type { Dispatch, GetState } from 'types/redux';
+import type { Source } from 'types/claim';
 
 type Action = UpdatePublishFormAction | { type: ACTIONS.CLEAR_PUBLISH };
-type PromiseAction = Promise<Action>;
-type Dispatch = (action: Action | PromiseAction | Array<Action>) => any;
-type GetState = () => {};
 
-export const doResetThumbnailStatus = () => (dispatch: Dispatch): PromiseAction => {
+export const doResetThumbnailStatus = () => (dispatch: Dispatch<Action>): Promise<Action> => {
   dispatch({
     type: ACTIONS.UPDATE_PUBLISH_FORM,
     data: {
@@ -61,20 +60,24 @@ export const doResetThumbnailStatus = () => (dispatch: Dispatch): PromiseAction 
     );
 };
 
-export const doClearPublish = () => (dispatch: Dispatch): PromiseAction => {
+export const doClearPublish = () => (dispatch: Dispatch<Action>): Promise<Action> => {
   dispatch({ type: ACTIONS.CLEAR_PUBLISH });
   return dispatch(doResetThumbnailStatus());
 };
 
 export const doUpdatePublishForm = (publishFormValue: UpdatePublishFormData) => (
-  dispatch: Dispatch
+  dispatch: Dispatch<Action>
 ): UpdatePublishFormAction =>
-  dispatch({
-    type: ACTIONS.UPDATE_PUBLISH_FORM,
-    data: { ...publishFormValue },
-  });
+  dispatch(
+    ({
+      type: ACTIONS.UPDATE_PUBLISH_FORM,
+      data: { ...publishFormValue },
+    }: UpdatePublishFormAction)
+  );
 
-export const doUploadThumbnail = (filePath: string, nsfw: boolean) => (dispatch: Dispatch) => {
+export const doUploadThumbnail = (filePath: string, nsfw: boolean) => (
+  dispatch: Dispatch<Action>
+) => {
   const thumbnail = fs.readFileSync(filePath);
   const fileExt = path.extname(filePath);
   const fileName = path.basename(filePath);
@@ -128,7 +131,7 @@ export const doUploadThumbnail = (filePath: string, nsfw: boolean) => (dispatch:
     .catch(err => uploadError(err.message));
 };
 
-export const doPrepareEdit = (claim: any, uri: string) => (dispatch: Dispatch) => {
+export const doPrepareEdit = (claim: any, uri: string) => (dispatch: Dispatch<Action>) => {
   const {
     name,
     amount,
@@ -155,7 +158,7 @@ export const doPrepareEdit = (claim: any, uri: string) => (dispatch: Dispatch) =
     title,
   } = metadata;
 
-  const publishData = {
+  const publishData: UpdatePublishFormData = {
     name,
     channel: channelName,
     bid: amount,
@@ -189,7 +192,10 @@ export const doPrepareEdit = (claim: any, uri: string) => (dispatch: Dispatch) =
   dispatch({ type: ACTIONS.DO_PREPARE_EDIT, data: publishData });
 };
 
-export const doPublish = (params: PublishParams) => (dispatch: Dispatch, getState: () => {}) => {
+export const doPublish = (params: PublishParams) => (
+  dispatch: Dispatch<Action>,
+  getState: () => {}
+) => {
   const state = getState();
   const myChannels = selectMyChannelClaims(state);
 
@@ -223,17 +229,18 @@ export const doPublish = (params: PublishParams) => (dispatch: Dispatch, getStat
     licenseUrl,
     language,
     thumbnail,
+    fee: fee || undefined,
+    description: description || undefined,
   };
 
-  if (fee) {
-    metadata.fee = fee;
-  }
-
-  if (description) {
-    metadata.description = description;
-  }
-
-  const publishPayload = {
+  const publishPayload: {
+    name: ?string,
+    channel_id: string,
+    bid: ?number,
+    metadata: ?any,
+    file_path?: string,
+    sources?: Source,
+  } = {
     name,
     channel_id: channelId,
     bid,
@@ -265,7 +272,7 @@ export const doPublish = (params: PublishParams) => (dispatch: Dispatch, getStat
 };
 
 // Calls claim_list_mine until any pending publishes are confirmed
-export const doCheckPendingPublishes = () => (dispatch: Dispatch, getState: GetState) => {
+export const doCheckPendingPublishes = () => (dispatch: Dispatch<Action>, getState: GetState) => {
   const state = getState();
   const pendingPublishes = selectPendingPublishes(state);
 

@@ -14,6 +14,7 @@ import type {
   GetActiveShiftFail,
 } from 'redux/reducers/shape_shift';
 import type { FormikActions } from 'types/common';
+import type { Dispatch, ThunkAction } from 'types/redux';
 
 // use promise chains instead of callbacks for shapeshift api
 const shapeShift = Promise.promisifyAll(require('shapeshift.io'));
@@ -38,9 +39,6 @@ export type Action =
 // Basic thunk types
 // It would be nice to import these from types/common
 // Not sure how that would work since they rely on the Action type
-type PromiseAction = Promise<Action>;
-export type Dispatch = (action: Action | PromiseAction | Array<Action>) => any;
-type ThunkAction = (dispatch: Dispatch) => any;
 
 // ShapeShift form values
 export type ShapeShiftFormValues = {
@@ -49,7 +47,7 @@ export type ShapeShiftFormValues = {
   receiveAddress: string,
 };
 
-export const getCoinStats = (coin: string) => (dispatch: Dispatch): ThunkAction => {
+export const getCoinStats = (coin: string) => (dispatch: Dispatch<Action>): ThunkAction<Action> => {
   const pair = `${coin.toLowerCase()}_lbc`;
 
   dispatch({ type: ACTIONS.GET_COIN_STATS_START, data: coin });
@@ -60,7 +58,7 @@ export const getCoinStats = (coin: string) => (dispatch: Dispatch): ThunkAction 
     .catch(err => dispatch({ type: ACTIONS.GET_COIN_STATS_FAIL, data: err }));
 };
 
-export const shapeShiftInit = () => (dispatch: Dispatch): ThunkAction => {
+export const shapeShiftInit = () => (dispatch: Dispatch<Action>): ThunkAction<Action> => {
   dispatch({ type: ACTIONS.GET_SUPPORTED_COINS_START });
 
   return shapeShift
@@ -94,8 +92,8 @@ export const shapeShiftInit = () => (dispatch: Dispatch): ThunkAction => {
 };
 
 export const createShapeShift = (values: ShapeShiftFormValues, actions: FormikActions) => (
-  dispatch: Dispatch
-): ThunkAction => {
+  dispatch: Dispatch<Action>
+): ThunkAction<Action> => {
   const { originCoin, returnAddress, receiveAddress: withdrawalAddress } = values;
 
   const pair = `${originCoin.toLowerCase()}_lbc`;
@@ -114,7 +112,9 @@ export const createShapeShift = (values: ShapeShiftFormValues, actions: FormikAc
     });
 };
 
-export const getActiveShift = (depositAddress: string) => (dispatch: Dispatch): ThunkAction => {
+export const getActiveShift = (depositAddress: string) => (
+  dispatch: Dispatch<Action>
+): ThunkAction<Action> => {
   dispatch({ type: ACTIONS.GET_ACTIVE_SHIFT_START });
 
   return shapeShift
@@ -123,5 +123,5 @@ export const getActiveShift = (depositAddress: string) => (dispatch: Dispatch): 
     .catch(err => dispatch({ type: ACTIONS.GET_ACTIVE_SHIFT_FAIL, data: err }));
 };
 
-export const clearShapeShift = () => (dispatch: Dispatch): Action =>
+export const clearShapeShift = () => (dispatch: Dispatch<Action>): Action =>
   dispatch({ type: ACTIONS.CLEAR_SHAPE_SHIFT });

@@ -3,6 +3,7 @@ import * as ACTIONS from 'constants/action_types';
 import * as NOTIFICATION_TYPES from 'constants/notification_types';
 import { handleActions } from 'util/redux-utils';
 import type { Subscription } from 'types/subscription';
+import type { Dispatch as ReduxDispatch } from 'types/redux';
 
 export type NotificationType =
   | NOTIFICATION_TYPES.DOWNLOADING
@@ -79,7 +80,7 @@ export type Action =
   | CheckSubscriptionStarted
   | CheckSubscriptionCompleted
   | Function;
-export type Dispatch = (action: Action) => any;
+export type Dispatch = ReduxDispatch<Action>;
 
 const defaultState = {
   subscriptions: [],

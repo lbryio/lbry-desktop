@@ -1,6 +1,14 @@
 // @flow
 
 // Currently incomplete
+
+export type Source = {
+  contentType: string,
+  source: string,
+  sourceType: string,
+  version: string,
+};
+
 export type Metadata = {
   nsfw: boolean,
   title: string,
@@ -36,6 +44,7 @@ export type Claim = {
     },
     stream: {
       metadata: Metadata,
+      source: Source,
     },
   },
 };
