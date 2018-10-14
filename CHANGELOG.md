@@ -10,13 +10,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
  * Focus on search bar with {cmd,ctrl} + "l" ([#2003](https://github.com/lbryio/lbry-desktop/pull/2003))
  * Add support for clickable channel names on explore page headings ([#2023](https://github.com/lbryio/lbry-desktop/pull/2023))
  * Content loading placeholder styles on FileCard/FileTile ([#2022](https://github.com/lbryio/lbry-desktop/pull/2022))
- 
+
 ### Changed
  * Make tooltip smarter ([#1979](https://github.com/lbryio/lbry-desktop/pull/1979))
  * Change channel pages to have 48 items instead of 10 ([#2002](https://github.com/lbryio/lbry-desktop/pull/2002))
  * Update to https ([#2016](https://github.com/lbryio/lbry-desktop/pull/2016))
  * Simplify FileCard and FileTile component styling ([#2011](https://github.com/lbryio/lbry-desktop/pull/2011))
  * Credit card verification messaging ([#2025](https://github.com/lbryio/lbry-desktop/pull/2025))
+ * Limit file type can be uploaded as thumbnail for publishing ([#2034](https://github.com/lbryio/lbry-desktop/pull/2034))
 
 ### Fixed
  * Fixed Transactions filter menu collides with transaction table ([#2005](https://github.com/lbryio/lbry-desktop/pull/2005))
