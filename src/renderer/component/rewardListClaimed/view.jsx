@@ -1,7 +1,6 @@
 // @flow
 import React from 'react';
 import ButtonTransaction from 'component/common/transaction-link';
-import { remote } from 'electron';
 import moment from 'moment';
 
 type Reward = {
@@ -18,8 +17,6 @@ type Props = {
 
 const RewardListClaimed = (props: Props) => {
   const { rewards } = props;
-
-  moment.locale(remote.app.getLocale());
 
   if (!rewards || !rewards.length) {
     return null;
