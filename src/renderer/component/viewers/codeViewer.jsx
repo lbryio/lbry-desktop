@@ -22,12 +22,12 @@ import 'codemirror/mode/javascript/javascript';
 
 type Props = {
   theme: string,
-  value: string,
+  value: ?string,
   contentType: string,
 };
 
 class CodeViewer extends React.PureComponent<Props> {
-  constructor(props) {
+  constructor(props: Props) {
     super(props);
     this.codeMirror = null;
     this.textarea = React.createRef();
@@ -53,6 +53,8 @@ class CodeViewer extends React.PureComponent<Props> {
     // Add events
     this.codeMirror.on('contextmenu', openSnippetMenu);
   }
+
+  codeMirror: any;
 
   render() {
     const { value } = this.props;

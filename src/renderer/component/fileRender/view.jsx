@@ -10,11 +10,11 @@ import HtmlViewer from 'component/viewers/htmlViewer';
 type Props = {
   mediaType: string,
   source: {
+    stream: string => void,
     fileName: string,
     fileType: string,
+    contentType: string,
     downloadPath: string,
-    stream: opts => void,
-    blob: callback => void,
   },
   currentTheme: string,
 };

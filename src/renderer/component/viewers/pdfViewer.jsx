@@ -7,10 +7,12 @@ type Props = {
 };
 
 class PdfViewer extends React.PureComponent<Props> {
-  constructor(props) {
+  constructor(props: Props) {
     super(props);
     this.viewer = React.createRef();
   }
+
+  viewer: { current: any };
 
   render() {
     const { source } = this.props;
