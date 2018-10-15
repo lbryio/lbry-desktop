@@ -4,10 +4,7 @@ import Button from 'component/button';
 import { MODALS } from 'lbry-redux';
 import * as icons from 'constants/icons';
 import Tooltip from 'component/common/tooltip';
-
-type FileInfo = {
-  claim_id: string,
-};
+import type { FileInfo } from 'types/file_info';
 
 type Props = {
   uri: string,

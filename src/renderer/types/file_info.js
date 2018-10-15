@@ -16,4 +16,10 @@ export type FileInfo = {
       certificateId: string,
     },
   },
+  outpoint: string,
+  file_name: string,
+  written_bytes: number,
+  download_path: string,
+  completed: boolean,
+  claim_id: string,
 };
