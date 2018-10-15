@@ -18,6 +18,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
  * Simplify FileCard and FileTile component styling ([#2011](https://github.com/lbryio/lbry-desktop/pull/2011))
  * Credit card verification messaging ([#2025](https://github.com/lbryio/lbry-desktop/pull/2025))
  * Limit file type can be uploaded as thumbnail for publishing ([#2034](https://github.com/lbryio/lbry-desktop/pull/2034))
+ * Change snackbar notification postion to bottom-left ([#2040](https://github.com/lbryio/lbry-desktop/pull/2040)) 
 
 ### Fixed
  * Fixed Transactions filter menu collides with transaction table ([#2005](https://github.com/lbryio/lbry-desktop/pull/2005))
