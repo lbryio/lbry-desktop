@@ -26,6 +26,8 @@ import { makeSelectClientSetting, selectosNotificationsEnabled } from 'redux/sel
 import setBadge from 'util/setBadge';
 import setProgressBar from 'util/setProgressBar';
 import analytics from 'analytics';
+import { calculateDownloadProgress } from 'util/file_info';
+import type { FileInfo } from 'types/file_info';
 
 const DOWNLOAD_POLL_INTERVAL = 250;
 
@@ -43,7 +45,7 @@ export function doUpdateLoadStatus(uri: string, outpoint: string) {
     Lbry.file_list({
       outpoint,
       full_status: true,
-    }).then(([fileInfo]) => {
+    }).then(([fileInfo: ?FileInfo]) => {
       if (!fileInfo || fileInfo.written_bytes === 0) {
         // download hasn't started yet
         setNextStatusUpdate();
@@ -114,8 +116,7 @@ export function doUpdateLoadStatus(uri: string, outpoint: string) {
         }
       } else {
         // ready to play
-        const { total_bytes: totalBytes, written_bytes: writtenBytes } = fileInfo;
-        const progress = (writtenBytes / totalBytes) * 100;
+        const progress = calculateDownloadProgress(fileInfo);
 
         dispatch({
           type: ACTIONS.DOWNLOADING_PROGRESSED,

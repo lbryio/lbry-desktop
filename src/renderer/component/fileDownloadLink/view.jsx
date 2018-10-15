@@ -5,21 +5,17 @@ import * as icons from 'constants/icons';
 import ToolTip from 'component/common/tooltip';
 import analytics from 'analytics';
 import type { Claim } from 'types/claim';
+import type { FileInfo } from 'types/file_info';
+import { calculateDownloadProgress } from 'util/file_info';
 
 type Props = {
   claim: Claim,
   uri: string,
   downloading: boolean,
-  fileInfo: ?{
-    written_bytes: number,
-    total_bytes: number,
-    outpoint: number,
-    download_path: string,
-    completed: boolean,
-  },
+  fileInfo: FileInfo,
   loading: boolean,
   costInfo: ?{},
-  restartDownload: (string, number) => void,
+  restartDownload: (string, string) => void,
   openInShell: string => void,
   purchaseUri: string => void,
   pause: () => void,
@@ -62,10 +58,7 @@ class FileDownloadLink extends React.PureComponent<Props> {
     };
 
     if (loading || downloading) {
-      const progress =
-        fileInfo && fileInfo.written_bytes
-          ? (fileInfo.written_bytes / fileInfo.total_bytes) * 100
-          : 0;
+      const progress = fileInfo ? calculateDownloadProgress(fileInfo) : 0;
       const label = fileInfo
         ? __('Downloading: ') + progress.toFixed(0) + __('% complete')
         : __('Connecting...');
