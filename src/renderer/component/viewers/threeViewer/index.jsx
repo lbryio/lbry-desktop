@@ -34,10 +34,11 @@ type State = {
 };
 
 class ThreeViewer extends React.PureComponent<Props, State> {
-  static testWebgl = new Promise((resolve, reject) => {
-    if (detectWebGL()) resolve();
-    else reject();
-  });
+  static testWebgl = (): Promise<void> =>
+    new Promise((resolve, reject) => {
+      if (detectWebGL()) resolve();
+      else reject();
+    });
 
   static createOrbitControls(camera: any, canvas: any) {
     const controls = new THREE.OrbitControls(camera, canvas);
@@ -92,8 +93,6 @@ class ThreeViewer extends React.PureComponent<Props, State> {
   constructor(props: Props) {
     super(props);
     const { theme } = this.props;
-    this.viewer = React.createRef();
-    this.guiContainer = React.createRef();
     // Object defualt color
     this.materialColor = '#44b098';
     // Viewer themes
@@ -197,8 +196,10 @@ class ThreeViewer extends React.PureComponent<Props, State> {
   theme: viewerTheme;
   themes: { dark: viewerTheme, light: viewerTheme };
   materialColor: string;
+  // Refs
+  viewer: ?HTMLElement;
+  guiContainer: ?HTMLElement;
   // Too complex to add a custom type
-  // Posible solution: https://www.npmjs.com/package/@types/three
   gui: any;
   grid: any;
   mesh: any;
@@ -293,7 +294,9 @@ class ThreeViewer extends React.PureComponent<Props, State> {
 
       sceneFolder.add(config, 'reset').name('Reset');
 
-      this.guiContainer.current.appendChild(this.gui.domElement);
+      if (this.guiContainer) {
+        this.guiContainer.appendChild(this.gui.domElement);
+      }
     }
   }
 
@@ -336,7 +339,7 @@ class ThreeViewer extends React.PureComponent<Props, State> {
   };
 
   handleResize = () => {
-    const { offsetWidth: width, offsetHeight: height } = this.viewer.current;
+    const { offsetWidth: width, offsetHeight: height } = this.viewer || {};
     this.camera.aspect = width / height;
     this.camera.updateProjectionMatrix();
     this.controls.update();
@@ -415,9 +418,8 @@ class ThreeViewer extends React.PureComponent<Props, State> {
       ...this.theme,
     });
 
-    const viewer = this.viewer.current;
     const canvas = this.renderer.domElement;
-    const { offsetWidth: width, offsetHeight: height } = viewer;
+    const { offsetWidth: width, offsetHeight: height } = this.viewer || {};
 
     // Grid
     this.grid = ThreeGrid({ size: 100, gridColor, centerLineColor });
@@ -446,7 +448,9 @@ class ThreeViewer extends React.PureComponent<Props, State> {
     this.startLoader();
 
     // Append canvas
-    viewer.appendChild(canvas);
+    if (this.viewer) {
+      this.viewer.appendChild(canvas);
+    }
 
     const updateScene = () => {
       this.frameID = requestAnimationFrame(updateScene);
@@ -471,11 +475,11 @@ class ThreeViewer extends React.PureComponent<Props, State> {
       <React.Fragment>
         {error && <LoadingScreen status={error} spinner={false} />}
         {showLoading && <LoadingScreen status={loadingMessage} spinner />}
-        <div ref={this.guiContainer} className={containerClass} />
+        <div ref={element => (this.guiContainer = element)} className={containerClass} />
         <div
           style={{ opacity: showViewer ? 1 : 0 }}
           className="three-viewer file-render__viewer"
-          ref={this.viewer}
+          ref={viewer => (this.viewer = viewer)}
         />
       </React.Fragment>
     );

@@ -130,6 +130,10 @@
   version "8.10.21"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-8.10.21.tgz#12b3f2359b27aa05a45d886c8ba1eb8d1a77e285"
 
+"@types/three@^0.93.1":
+  version "0.93.1"
+  resolved "https://registry.yarnpkg.com/@types/three/-/three-0.93.1.tgz#0b9ba53182afe16659e220d670471b4475687d64"
+
 "@types/webpack-env@^1.13.5":
   version "1.13.6"
   resolved "https://registry.yarnpkg.com/@types/webpack-env/-/webpack-env-1.13.6.tgz#128d1685a7c34d31ed17010fc87d6a12c1de6976"
