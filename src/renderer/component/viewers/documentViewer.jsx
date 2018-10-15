@@ -8,19 +8,25 @@ import MarkdownPreview from 'component/common/markdown-preview';
 type Props = {
   theme: string,
   source: {
-    stream: opts => void,
+    stream: string => any,
     fileType: string,
     contentType: string,
   },
 };
 
-class DocumentViewer extends React.PureComponent<Props> {
-  constructor(props) {
+type State = {
+  error: boolean,
+  loading: boolean,
+  content: ?string,
+};
+
+class DocumentViewer extends React.PureComponent<Props, State> {
+  constructor(props: Props) {
     super(props);
     this.state = {
-      error: null,
-      content: null,
+      error: false,
       loading: true,
+      content: null,
     };
   }
 
@@ -38,13 +44,14 @@ class DocumentViewer extends React.PureComponent<Props> {
       this.setState({ content: data, loading: false });
     });
 
-    stream.on('error', error => {
+    stream.on('error', () => {
       this.setState({ error: true, loading: false });
     });
   }
 
-  renderDocument(content = null) {
+  renderDocument() {
     let viewer = null;
+    const { content } = this.state;
     const { source, theme } = this.props;
     const { fileType, contentType } = source;
     const markdownType = ['md', 'markdown'];
@@ -70,7 +77,7 @@ class DocumentViewer extends React.PureComponent<Props> {
       <div className="file-render__viewer document-viewer">
         {loading && !error && <LoadingScreen status={loadingMessage} spinner />}
         {error && <LoadingScreen status={errorMessage} spinner={!error} />}
-        {isReady && this.renderDocument(content)}
+        {isReady && this.renderDocument()}
       </div>
     );
   }
