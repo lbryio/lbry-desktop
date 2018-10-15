@@ -132,7 +132,7 @@ class ThreeViewer extends React.PureComponent<Props, State> {
   }
 
   componentDidMount() {
-    ThreeViewer.testWebgl
+    ThreeViewer.testWebgl()
       .then(() => {
         this.renderScene();
         // Update render on resize window
