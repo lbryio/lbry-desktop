@@ -12,6 +12,7 @@ import FilePrice from 'component/filePrice';
 import { openCopyLinkMenu } from 'util/contextMenu';
 import DateTime from 'component/dateTime';
 import type { FileInfo } from 'types/file_info';
+import { calculateDownloadProgress } from 'util/file_info';
 
 type Props = {
   uri: string,
@@ -47,7 +48,17 @@ class FileCard extends React.PureComponent<Props> {
     }
   };
 
-  renderPercentageDownload = () => <span>(10%)</span>;
+  renderPercentageDownload = () => {
+    const { fileInfo } = this.props;
+    if (!fileInfo) {
+      return null;
+    }
+    if (fileInfo.completed) {
+      return null;
+    }
+    const progress = calculateDownloadProgress(this.props.fileInfo).toFixed(0);
+    return <span> ({progress}%)</span>;
+  };
 
   render() {
     const {
