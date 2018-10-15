@@ -46,6 +46,8 @@ class FileCard extends React.PureComponent<Props> {
     }
   };
 
+  renderPercentageDownload = () => <span>(10%)</span>;
+
   render() {
     const {
       claim,
@@ -105,6 +107,7 @@ class FileCard extends React.PureComponent<Props> {
         </div>
         <div className="card__subtitle">
           {pending ? <div>Pending...</div> : <UriIndicator uri={uri} link />}
+          {this.renderPercentageDownload()}
         </div>
         <div className="card__subtitle card--space-between">
           <DateTime timeAgo block={height} />
