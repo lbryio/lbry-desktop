@@ -19,6 +19,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
  * Credit card verification messaging ([#2025](https://github.com/lbryio/lbry-desktop/pull/2025))
  * Reverse Order & Use System/Location Time/Date ([#2036]https://github.com/lbryio/lbry-desktop/pull/2036)
  * Limit file type can be uploaded as thumbnail for publishing ([#2034](https://github.com/lbryio/lbry-desktop/pull/2034))
+ * Change snackbar notification postion to bottom-left ([#2040](https://github.com/lbryio/lbry-desktop/pull/2040)) 
 
 
 ### Fixed
