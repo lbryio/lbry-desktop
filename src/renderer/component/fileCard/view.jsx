@@ -11,11 +11,12 @@ import classnames from 'classnames';
 import FilePrice from 'component/filePrice';
 import { openCopyLinkMenu } from 'util/contextMenu';
 import DateTime from 'component/dateTime';
+import type { FileInfo } from 'types/file_info';
 
 type Props = {
   uri: string,
   claim: ?Claim,
-  fileInfo: ?{},
+  fileInfo: FileInfo,
   metadata: ?Metadata,
   navigate: (string, ?{}) => void,
   rewardedContentClaimIds: Array<string>,

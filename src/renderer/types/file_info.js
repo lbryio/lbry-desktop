@@ -19,6 +19,7 @@ export type FileInfo = {
   outpoint: string,
   file_name: string,
   written_bytes: number,
+  total_bytes: number,
   download_path: string,
   completed: boolean,
   claim_id: string,
