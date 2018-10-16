@@ -32,13 +32,13 @@
 
 .spinner--light {
   .rect {
-    background-color: var(--color-white);
+    background-color: $lbry-white;
   }
 }
 
 .spinner--dark {
   .rect {
-    background-color: var(--color-black);
+    background-color: $lbry-black;
   }
 }
 
@@ -46,7 +46,7 @@
   margin-top: $spacing-vertical;
 
   .rect {
-    background-color: var(--color-white);
+    background-color: $lbry-white;
   }
 }
 
@@ -70,6 +70,7 @@
   100% {
     transform: scaleY(0.4);
   }
+
   20% {
     transform: scaleY(1);
   }

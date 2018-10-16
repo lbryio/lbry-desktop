@@ -4,19 +4,21 @@ table.table,
   max-width: 100%;
   text-align: left;
 
-  tr td:first-of-type,
-  tr th:first-of-type {
-    padding-left: $spacing-vertical * 2/3;
-  }
+  tr {
+    td:first-of-type,
+    th:first-of-type {
+      padding-left: $spacing-vertical * 2/3;
+    }
 
-  tr td:last-of-type,
-  tr th:last-of-type {
-    padding-right: $spacing-vertical * 2/3;
-  }
+    td:last-of-type,
+    th:last-of-type {
+      padding-right: $spacing-vertical * 2/3;
+    }
 
-  tr th,
-  tr td {
-    font-size: 13px;
+    th,
+    td {
+      font-size: 13px;
+    }
   }
 
   th {
@@ -27,7 +29,7 @@ table.table,
 
   td {
     font-family: 'metropolis-medium';
-    color: var(--color-help);
+    color: $lbry-gray-5;
     padding: $spacing-vertical * 1/6 $spacing-vertical * 1/3;
 
     .btn:not(.btn--link) {
@@ -45,23 +47,27 @@ table.table,
   }
 
   thead {
-    color: var(--text-color);
-    border-bottom: var(--table-border);
+    color: $lbry-black;
+    border-bottom: 1px solid $lbry-gray-1;
   }
 
   tbody {
     tr {
-      border-bottom: var(--table-item-border);
+      border-bottom: 1px solid $lbry-gray-1; // "--table-item-border" does not exist
       padding: 8px 0;
+
       &:nth-child(even) {
-        background-color: var(--table-item-odd);
+        background-color: $lbry-gray-1;
       }
+
       &:nth-child(odd) {
-        background-color: var(--table-item-even);
+        background-color: transparent;
       }
+
       &.thead {
         background: none;
       }
+
       td {
         border: 0 none;
       }
@@ -69,40 +75,47 @@ table.table,
   }
 }
 
-table.table--stretch {
-  width: 100%;
-}
+table {
+  &.table--help {
+    td:nth-of-type(1) {
+      color: $lbry-black;
+      font-family: 'metropolis-semibold';
+      min-width: 130px;
+    }
 
-table.table--help {
-  td:nth-of-type(1) {
-    color: var(--text-color);
-    font-family: 'metropolis-semibold';
-    min-width: 130px;
+    td:nth-of-type(2) {
+      // Tourniquets text over 20vw
+      max-width: 20vw;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      color: $lbry-gray-5;
+    }
   }
-  td:nth-of-type(2) {
-    /*Tourniquets text over 20VW*/
-    max-width: 20vw;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    color: var(--color-help);
-  }
-}
 
-table.table--transactions {
-  td:nth-of-type(1) {
-    width: 25%;
+  &.table--stretch {
+    width: 100%;
   }
-  td:nth-of-type(2) {
-    width: 20%;
-  }
-  td:nth-of-type(3) {
-    width: 22.5%;
-  }
-  td:nth-of-type(4) {
-    width: 17.5%;
-  }
-  td:nth-of-type(5) {
-    width: 15%;
+
+  &.table--transactions {
+    td:nth-of-type(1) {
+      width: 25%;
+    }
+
+    td:nth-of-type(2) {
+      width: 20%;
+    }
+
+    td:nth-of-type(3) {
+      width: 22.5%;
+    }
+
+    td:nth-of-type(4) {
+      width: 17.5%;
+    }
+
+    td:nth-of-type(5) {
+      width: 15%;
+    }
   }
 }

@@ -1,8 +1,8 @@
 .snack-bar {
-  background-color: var(--snackbar-bg-primary);
+  background-color: $lbry-teal-3;
   border-radius: 10px;
-  box-shadow: var(--box-shadow-layer);
-  color: var(--snackbar-color-primary);
+  // box-shadow: var(--box-shadow-layer);
+  color: $lbry-white;
   display: flex;
   justify-content: space-between;
   margin-left: auto;
@@ -25,10 +25,8 @@
   min-width: min-content;
   text-transform: uppercase;
 
-  span {
-    &:hover {
-      text-decoration: underline;
-    }
+  span:hover {
+    text-decoration: underline;
   }
 }
 
@@ -42,6 +40,7 @@
       font-size: 30px;
       margin-right: 20px;
     }
+
     &:nth-of-type(2) {
       font-size: 16px;
       margin-bottom: 4px;

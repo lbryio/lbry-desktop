@@ -16,11 +16,11 @@
 
 .wunderbar__input {
   height: var(--btn-height);
-  border-radius: var(--btn-radius);
+  // border-radius: var(--btn-radius);
   width: 100%;
-  color: var(--search-color);
-  background-color: var(--search-bg-color);
-  box-shadow: var(--box-shadow-wunderbar);
+  color: $lbry-gray-5;
+  background-color: rgba($lbry-gray-1, 0.3);
+  // box-shadow: var(--box-shadow-wunderbar);
   padding: 10px;
   padding-left: 30px;
   font-size: 13px;
@@ -30,10 +30,10 @@
   border-bottom: none;
 
   &:focus {
-    background-color: var(--search-active-bg-color);
-    border-radius: 0;
-    border-bottom: 1px solid var(--color-divider);
-    box-shadow: var(--box-shadow-button);
+    background-color: rgba($lbry-gray-1, 0.5);
+    // border-radius: 0;
+    // border-bottom: 1px solid $lbry-gray-2;
+    // box-shadow: var(--box-shadow-button);
   }
 }
 
@@ -47,7 +47,7 @@
 
 .wunderbar__suggestion {
   padding: 5px 10px;
-  background-color: var(--search-bg-color);
+  background-color: $lbry-gray-5;
   cursor: pointer;
   display: flex;
   flex-direction: row;
@@ -55,7 +55,7 @@
   align-items: center;
 
   &:not(:first-of-type) {
-    border-top: 1px solid var(--search-item-border-color);
+    border-top: 1px solid transparent;
   }
 
   .icon {
@@ -78,13 +78,13 @@
 }
 
 .wunderbar__active-suggestion {
-  color: var(--search-item-active-color);
-  background-color: var(--color-secondary);
+  color: $lbry-black;
+  background-color: $lbry-blue-2;
 }
 
 .search__top {
   padding: 0 $spacing-width $spacing-width;
-  background-color: var(--search-exact-result);
+  background-color: $lbry-gray-2;
 }
 
 .search__content {

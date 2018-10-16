@@ -21,10 +21,10 @@
 }
 
 .card--section {
-  background-color: var(--card-bg);
+  background-color: $lbry-white;
   padding: $spacing-vertical;
   margin-top: $spacing-vertical * 2/3;
-  box-shadow: var(--box-shadow-layer);
+  // box-shadow: var(--box-shadow-layer);
 }
 
 .card--small {
@@ -35,7 +35,7 @@
   background-size: cover;
   background-repeat: no-repeat;
   background-position: 50% 50%;
-  background-color: var(--color-placeholder);
+  background-color: $lbry-gray-3;
 }
 
 .card__media--no-img {
@@ -46,7 +46,7 @@
 }
 
 .card__media--nsfw {
-  background-color: var(--color-error);
+  background-color: $lbry-red-5;
 }
 
 .card--link {
@@ -60,12 +60,12 @@
 .card--wallet-balance {
   background: url('../../../static/img/stripe-background.png') no-repeat;
   background-size: cover;
-  color: var(--card-wallet-color);
+  color: $lbry-white;
   justify-content: space-between;
 
   .card__title,
   .card__subtitle {
-    color: var(--card-wallet-color);
+    color: $lbry-white;
   }
 }
 
@@ -76,7 +76,7 @@
 
 .card__title {
   font-size: 1.5em;
-  color: var(--text-color);
+  color: $lbry-black;
   padding-top: $spacing-vertical * 1/3;
 
   @media (min-width: $large-breakpoint) {
@@ -107,7 +107,7 @@
 }
 
 .card__subtitle {
-  color: var(--card-text-color);
+  color: $lbry-gray-5;
   font-size: 1em;
   line-height: 1em;
   padding-top: $spacing-vertical * 1/3;
@@ -131,7 +131,7 @@
 }
 
 .card__meta {
-  color: var(--color-help);
+  color: $lbry-gray-5;
   font-size: 14px;
   font-family: 'metropolis-medium';
   padding-top: $spacing-vertical * 2/3;
@@ -140,7 +140,7 @@
 .card__file-properties {
   display: flex;
   align-items: center;
-  color: var(--card-text-color);
+  color: $lbry-gray-5;
 
   .icon + .icon {
     margin-left: $spacing-vertical * 1/3;
@@ -356,17 +356,17 @@
 }
 
 .card__success-msg {
-  border-left: 2px solid var(--success-msg-border);
-  color: var(--success-msg-color);
-  background-color: var(--success-msg-bg);
+  border-left: 2px solid mix($lbry-green-3, $lbry-blue-3, 50%);
+  color: $lbry-green-3;
+  background-color: $lbry-green-1;
   padding: $spacing-vertical * 1/3;
   margin: $spacing-vertical * 1/3 0;
 }
 
 .card__error-msg {
-  border-left: 2px solid var(--error-msg-border);
-  color: var(--error-msg-color);
-  background-color: var(--error-msg-bg);
+  border-left: 2px solid $lbry-red-5;
+  color: $lbry-red-5;
+  background-color: $lbry-red-1;
   padding: $spacing-vertical * 1/3;
   margin: $spacing-vertical * 1/3 0;
 }

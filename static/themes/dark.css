@@ -5,46 +5,46 @@
   --color-canvas: transparent;
   --color-help: #8696AF;
   --color-download: rgba(255, 255, 255, 0.75);
-  --color-download-overlay: var(--color-black);
+  --color-download-overlay: $lbry-black;
   --color-bg: var(--color-blue-grey);
   --color-bg-alt: #2D3D56;
-  --color-placeholder: var(--color-bg-alt);
-  --color-credit-free: var(--color-secondary);
+  --color-placeholder: $lbry-gray-1;
+  --color-credit-free: $lbry-blue-2;
 
   /* Text */
   --text-color: var(--color-text-white);
-  --text-help-color: var(--color-help);
+  --text-help-color: $lbry-gray-5;
 
    /* Form */
-   --form-label-color: var(--color-white);
+   --form-label-color: $lbry-white;
 
   /* Input */
   --input-bg: transparent;
-  --input-label-color: var(--color-help);
-  --input-color: var(--text-color);
+  --input-label-color: $lbry-gray-5;
+  --input-color: $lbry-black;
   --input-border-size: 1px;
   --input-border-color: rgba(255,255,255, 0.5);
   --input-hover-border-color: rgba(255, 255, 255, 1);
   --input-copyable-bg: var(--color-blue-grey);
   --input-copyable-color: #8696AF;
   --input-copyable-border: #53637C;
-  --input-select-bg-color: var(--color-bg-alt);
-  --input-select-color: var(--color-white);
+  --input-select-bg-color: $lbry-gray-1;
+  --input-select-color: $lbry-white;
 
   /* input:disabled */
   --input-disabled-border-color: rgba(255, 255, 255, 0.42);
   --input-disabled-color: rgba(255, 255, 255, 0.54);
 
   /* Button */
-  --btn-bg-primary: var(--color-primary);
-  --btn-color-primary: var(--color-white);
+  --btn-bg-primary: $lbry-teal-3;
+  --btn-color-primary: $lbry-white;
   --btn-bg-primary-hover: var(--color-primary-light);
   --btn-bg-alt: #13233C;
-  --btn-color-alt: var(--text-color);
+  --btn-color-alt: $lbry-black;
   --btn-home-bg-color: #44548F;
 
   /* Header */
-  --header-bg: var(--color-white);
+  --header-bg: $lbry-white;
   --header-color: var(--color-text);
   --header-active-color: rgba(0, 0, 0, 0.85);
   --header-button-bg: transparent;
@@ -53,11 +53,11 @@
 
   /* Header */
   --header-color: #CCC;
-  --header-active-color: var(--color-white);
-  --header-button-hover-bg: var(--color-bg-alt);
+  --header-active-color: $lbry-white;
+  --header-button-hover-bg: $lbry-gray-1;
 
   /* Header -> search */
-  --search-color: var(--color-white);
+  --search-color: $lbry-white;
   --search-bg-color: rgb(58, 74, 99);
   --search-active-bg-color: #13233C;
   --search-active-shadow: 0 6px 9px -2px var(--color-grey--dark);
@@ -69,28 +69,28 @@
   --nav-bg-color: #0D102F;
 
   /* Table */
-  --table-border: 1px solid var(--color-bg-alt);
-  --table-item-odd: var(--color-bg-alt);
+  --table-border: 1px solid $lbry-gray-1;
+  --table-item-odd: $lbry-gray-1;
 
   /* Card */
   --card-bg: #13233C;
   --card-radius: 3px;
-  --card-text-color: var(--color-help);
-  --card-wallet-color: var(--text-color-inverse);
+  --card-text-color: $lbry-gray-5;
+  --card-wallet-color: $lbry-white;
   --success-msg-color: var(--color-primary-light);
-  --success-msg-border:var(--color-primary);
-  --success-msg-bg: var(--color-bg);
+  --success-msg-border:$lbry-teal-3;
+  --success-msg-bg: rgba($lbry-gray-1, 0.5);
 
   /* Modal */
-  --modal-bg: var(--card-bg);
+  --modal-bg: $lbry-white;
   --modal-overlay-bg:  rgba(32,48,73, 0.75);
   --modal-border: 1px solid rgba(0, 0, 0, 0.25);
-  --modal-btn-bg-color: var(--color-bg-alt);
+  --modal-btn-bg-color: $lbry-gray-1;
 
   /* Scrollbar */
   --scrollbar-thumb-bg: rgba(255, 255, 255, 0.20);
   --scrollbar-thumb-hover-bg: #8696AF;
 
   /* Shadows */
-  --box-shadow-header: 0px 6px 20px 1px rgba(0, 0, 0, 0.2);
+  --box-shadow-header: 0 6px 20px 1px rgba(0, 0, 0, 0.2);
 }

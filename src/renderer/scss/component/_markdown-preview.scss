@@ -1,7 +1,7 @@
 .markdown-preview {
   margin: 0;
 
-  /* Headers */
+  // Headers
   h1,
   h2,
   h3,
@@ -34,66 +34,72 @@
 
   h6 {
     font-size: 0.84em;
-    color: var(--color-help);
+    color: $lbry-gray-5;
   }
 
-  /* Paragraphs */
+  // Paragraphs
   p {
     white-space: pre-line;
   }
 
-  /* Strikethrough text */
+  // Strikethrough text
   del {
-    color: var(--color-help);
+    color: $lbry-gray-5;
   }
 
-  /* Tables */
+  // Tables
   table {
     padding: 8px;
     margin: 16px 0;
-    background-color: var(--card-bg);
+    background-color: $lbry-white;
 
-    tr td,
-    tr th,
-    tr td:first-of-type,
-    tr th:first-of-type,
-    tr td:last-of-type,
-    tr th:last-of-type {
-      padding: 8px;
+    tr {
+      td,
+      th,
+      td:first-of-type,
+      th:first-of-type,
+      td:last-of-type,
+      th:last-of-type {
+        padding: 8px;
+      }
     }
   }
 
-  /* Image */
+  // Image
   img {
     margin: 16px 0;
   }
 
-  /* Horizontal Rule */
+  // Horizontal Rule
   hr {
-    border: 1px solid var(--color-divider);
+    border: 1px solid $lbry-gray-2;
   }
 
-  /* Code */
+  // Code
   code {
     display: block;
     padding: 8px;
     margin: 16px 0;
-    background-color: var(--color-bg-alt);
-    color: var(--color-help);
+    background-color: $lbry-gray-1;
+    color: $lbry-gray-5;
     font-size: 1em;
     font-family: Consolas, 'Lucida Console', 'Source Sans', monospace;
   }
 
   a {
     font-size: 1em;
-    color: var(--btn-external-color);
+    color: $lbry-blue-1;
     display: inline-block;
   }
 
-  /* Lists */
+  // Lists
   ul,
   ol {
     margin-bottom: 2em;
+
+    > li {
+      list-style-position: outside;
+    }
   }
 
   ul {
@@ -106,17 +112,12 @@
       display: inline-block;
     }
   }
-
-  ol > li,
-  ul > li {
-    list-style-position: outside;
-  }
 }
 
 blockquote {
   padding: 8px;
   margin: 16px 0;
-  color: var(--color-help);
-  border-left: 2px solid var(--color-help);
-  background-color: var(--color-bg-alt);
+  color: $lbry-gray-5;
+  border-left: 2px solid $lbry-gray-5;
+  background-color: $lbry-gray-1;
 }

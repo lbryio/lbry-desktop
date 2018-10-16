@@ -1,35 +1,11 @@
-@charset "UTF-8";
-@import '_reset.scss';
-@import '_vars.scss';
-@import '_gui.scss';
-@import 'component/_syntax-highlighter.scss';
-@import 'component/_table.scss';
-@import 'component/_button.scss';
-@import 'component/_card.scss';
-@import 'component/_file-download.scss';
-@import 'component/_form-field.scss';
-@import 'component/_header.scss';
-@import 'component/_menu.scss';
-@import 'component/_tooltip.scss';
-@import 'component/_load-screen.scss';
-@import 'component/_channel-indicator.scss';
-@import 'component/_notice.scss';
-@import 'component/_modal.scss';
-@import 'component/_snack-bar.scss';
-@import 'component/_content.scss';
-@import 'component/_pagination.scss';
-@import 'component/_markdown-preview.scss';
-@import 'component/_markdown-editor.scss';
-@import 'component/_scrollbar.scss';
-@import 'component/_spinner.scss';
-@import 'component/_nav.scss';
-@import 'component/_file-list.scss';
-@import 'component/_file-render.scss';
-@import 'component/_search.scss';
-@import 'component/_toggle.scss';
-@import 'component/_search.scss';
-@import 'component/_dat-gui.scss';
-@import 'component/_item-list.scss';
-@import 'component/_time.scss';
-@import 'component/_icon.scss';
-@import 'component/_placeholder.scss';
+@charset "utf-8";
+
+@import '~@lbry/color/lbry-color', 'reset', 'vars', 'gui', 'component/syntax-highlighter',
+  'component/table', 'component/button', 'component/card', 'component/file-download',
+  'component/form-field', 'component/header', 'component/menu', 'component/tooltip',
+  'component/load-screen', 'component/channel-indicator', 'component/notice', 'component/modal',
+  'component/snack-bar', 'component/content', 'component/pagination', 'component/markdown-preview',
+  'component/markdown-editor', 'component/scrollbar', 'component/spinner', 'component/nav',
+  'component/file-list', 'component/file-render', 'component/search', 'component/toggle',
+  'component/search', 'component/dat-gui', 'component/item-list', 'component/time', 'component/icon',
+  'component/placeholder';

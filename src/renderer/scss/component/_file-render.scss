@@ -15,7 +15,7 @@
   margin: 0;
   width: 100%;
   height: 100%;
-  background-color: black;
+  background-color: $lbry-black;
 
   iframe,
   webview {
@@ -26,7 +26,7 @@
 
 .document-viewer {
   overflow: auto;
-  background-color: var(--card-bg);
+  background-color: $lbry-white;
   font-size: calc(var(--font-size-subtext-multiple) * 1em);
 }
 
@@ -64,7 +64,7 @@
   }
 
   .CodeMirror-linenumber {
-    color: var(--card-text-color);
+    color: $lbry-gray-5;
   }
 
   .CodeMirror .CodeMirror-lines {
@@ -76,8 +76,8 @@
   }
 
   .CodeMirror-gutters {
-    border-right: 1px solid var(--color-divider);
-    background: var(--color-bg-alt);
+    border-right: 1px solid $lbry-gray-2;
+    background: $lbry-gray-1;
     padding-right: 8px;
   }
 

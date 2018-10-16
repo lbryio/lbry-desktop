@@ -92,16 +92,16 @@
 }
 
 .form-field__label {
-  color: var(--form-label-color);
+  color: rgba($lbry-black, 0.5);
 }
 
 .form-field__help {
-  color: var(--color-help);
+  color: $lbry-gray-5;
   padding-top: $spacing-vertical * 1/3;
 }
 
 .form-field__error {
-  color: var(--color-error);
+  color: $lbry-red-5;
 }
 
 .form-field__prefix,
@@ -129,9 +129,9 @@
   min-width: 60px;
   height: 30px;
   border-radius: 8px;
-  background-color: var(--input-select-bg-color);
+  background-color: $lbry-gray-3;
   font: normal 12px/30px 'metropolis-medium';
-  color: var(--input-select-color);
+  color: $lbry-black;
 
   &:disabled {
     opacity: 0.5;

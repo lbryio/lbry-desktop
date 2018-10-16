@@ -87,6 +87,7 @@
     "y18n": "^4.0.0"
   },
   "devDependencies": {
+    "@lbry/color": "^1.0.2",
     "axios": "^0.18.0",
     "babel-eslint": "^8.2.2",
     "babel-plugin-module-resolver": "^3.1.1",
@@ -123,6 +124,7 @@
     "node-loader": "^0.6.0",
     "node-sass": "^4.7.2",
     "prettier": "^1.11.1",
+    "sass": "^1.14.2",
     "sass-loader": "^6.0.7",
     "webpack": "^3.10.0",
     "webpack-build-notifier": "^0.1.23",

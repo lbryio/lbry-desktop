@@ -1,5 +1,5 @@
 .item-list {
-  background-color: var(--card-bg);
+  background-color: $lbry-white;
   margin-top: $spacing-vertical;
 }
 
@@ -15,7 +15,7 @@
 }
 
 .item-list__item--selected {
-  background-color: var(--table-item-odd);
+  background-color: $lbry-gray-1;
 }
 
 .item-list__item--cutoff {

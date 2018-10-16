@@ -20,10 +20,10 @@
 /* Tooltip text */
 .tooltip {
   .tooltip__body {
-    background-color: var(--tooltip-bg);
+    background-color: $lbry-gray-5;
     font-family: 'metropolis-medium';
     font-size: 12px;
-    color: var(--tooltip-color);
+    color: $lbry-white;
     border-radius: 8px;
     position: absolute;
     z-index: 1;
@@ -68,7 +68,7 @@
       top: 100%;
       left: 50%;
       margin-left: -5px;
-      border-color: var(--tooltip-bg) transparent transparent transparent;
+      border-color: $lbry-gray-5 transparent transparent transparent;
     }
   }
 }
@@ -82,7 +82,7 @@
       top: 17px;
       right: 100%; /* To the left of the tooltip */
       margin-top: -5px;
-      border-color: transparent var(--tooltip-bg) transparent transparent;
+      border-color: transparent $lbry-gray-5 transparent transparent;
     }
   }
 }
@@ -101,7 +101,7 @@
       bottom: 100%;
       left: 50%;
       margin-left: -5px;
-      border-color: transparent transparent var(--tooltip-bg) transparent;
+      border-color: transparent transparent $lbry-gray-5 transparent;
     }
   }
 }
@@ -114,7 +114,7 @@
     top: 17px;
     left: 100%;
     margin-top: -5px;
-    border-color: transparent transparent transparent var(--tooltip-bg);
+    border-color: transparent transparent transparent $lbry-gray-5;
   }
 }
 

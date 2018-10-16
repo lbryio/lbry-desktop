@@ -11,8 +11,8 @@ button:disabled {
   height: var(--btn-height);
   min-width: var(--btn-height);
   border-radius: var(--btn-radius);
-  background-color: var(--btn-bg-primary);
-  color: var(--btn-color-primary);
+  background-color: $lbry-teal-3;
+  color: $lbry-white;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -21,12 +21,12 @@ button:disabled {
   transition: all var(--animation-duration) var(--animation-style);
 
   &:not(:disabled) {
-    box-shadow: var(--box-shadow-button);
+    // box-shadow: var(--box-shadow-button);
   }
 
   &:hover {
-    box-shadow: none;
-    background-color: var(--btn-bg-primary-hover);
+    // box-shadow: none;
+    background-color: $lbry-teal-1;
   }
 
   .icon + .btn__label {
@@ -35,23 +35,23 @@ button:disabled {
 }
 
 .btn.btn--alt {
-  color: var(--btn-color-alt);
-  background-color: var(--btn-bg-alt);
+  color: $lbry-black;
+  background-color: $lbry-white;
 
   &:disabled {
-    color: var(--color-help);
+    color: $lbry-gray-5;
     background-color: transparent;
   }
 }
 
 .btn.btn--danger {
-  background-color: var(--btn-bg-danger);
+  background-color: $lbry-red-3;
 }
 
 .btn.btn--inverse {
   background-color: transparent;
   box-shadow: none;
-  color: var(--btn-color-inverse);
+  color: $lbry-teal-3;
 }
 
 .btn.btn--link {
@@ -59,7 +59,7 @@ button:disabled {
   margin: 0;
   background-color: inherit;
   font-size: 1em;
-  color: var(--btn-color-inverse);
+  color: $lbry-teal-3;
   border-radius: 0;
   display: inline;
   min-width: 0;
@@ -68,11 +68,11 @@ button:disabled {
 }
 
 .btn.btn--external-link {
-  color: var(--btn-external-color);
+  color: $lbry-blue-1;
 }
 
 .btn.btn--secondary {
-  background-color: var(--btn-bg-secondary);
+  background-color: $lbry-teal-3;
 }
 
 .btn.btn--tourniquet {
@@ -108,7 +108,7 @@ button:disabled {
   cursor: default;
 
   &.btn--primary {
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba($lbry-black, 0.5);
   }
 
   &:hover {
@@ -141,7 +141,7 @@ button:disabled {
 */
 
 .btn.btn--home-nav {
-  background-color: var(--btn-home-bg-color);
+  background-color: $lbry-white;
   box-shadow: none;
 
   .btn__content {
@@ -151,7 +151,7 @@ button:disabled {
 
 .btn.btn--arrow {
   width: var(--btn-arrow-width);
-  color: var(--text-color);
+  color: $lbry-black;
 
   &:disabled {
     opacity: 0.3;
@@ -163,38 +163,38 @@ button:disabled {
   display: inline-block;
 
   &:hover {
-    color: var(--btn-color-inverse);
+    color: $lbry-teal-3;
   }
 }
 
 .btn.btn--header-publish {
-  background-color: var(--header-primary-color);
+  background-color: $lbry-teal-3;
 }
 
 .btn.btn--header-balance {
   font-size: 14px;
-  color: var(--header-primary-color);
+  color: $lbry-teal-3;
 
   @media only screen and (min-width: $large-breakpoint) {
     font-size: 18px;
   }
 
   .btn__label--balance {
-    color: var(--text-help-color);
+    color: $lbry-gray-5;
   }
 
   &:hover {
     background-color: transparent;
 
     .btn__label--balance {
-      color: var(--header-primary-color);
+      color: $lbry-teal-3;
     }
   }
 }
 
 .btn.btn--file-actions {
-  background-color: var(--color-black);
-  color: var(--color-white);
+  background-color: $lbry-black;
+  color: $lbry-white;
   opacity: 0.8;
   border-radius: var(--btn-radius);
   width: var(--btn-height);

@@ -5,11 +5,11 @@
   justify-content: center;
   align-items: center;
 
-  top: 0px;
-  left: 0px;
-  right: 0px;
-  bottom: 0px;
-  background-color: var(--modal-overlay-bg);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba($lbry-white, 0.7);
   z-index: 9999;
 }
 
@@ -21,18 +21,18 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  border: var(--modal-border);
-  background: var(--modal-bg);
+  border: $lbry-gray-1;
+  background-color: rgba($lbry-gray-1, 0.5);
   overflow: auto;
   border-radius: 4px;
   padding: $spacing-vertical;
-  box-shadow: var(--box-shadow-layer);
+  // box-shadow: var(--box-shadow-layer);
   max-width: var(--modal-width);
   word-break: break-word;
 
   .btn.btn--alt {
     // Set modal buttons bg color
-    background-color: var(--modal-btn-bg-color);
+    background-color: $lbry-white;
   }
 }
 
@@ -43,7 +43,7 @@
   right: 0;
   bottom: 0;
   padding: $spacing-vertical;
-  background: var(--modal-fullscreen-bg);
+  background: rgba($lbry-gray-1, 0.5);
   overflow-y: scroll;
 
   .main {
@@ -84,7 +84,7 @@
 }
 
 .modal__button {
-  margin: 0px $spacing-vertical * 1/3;
+  margin: 0 $spacing-vertical * 1/3;
 
   &.btn--link {
     // So the text isn't bigger than the text inside the button
@@ -93,12 +93,12 @@
 }
 
 .error-modal-overlay {
-  background: var(--modal-overlay-bg);
+  background: rgba($lbry-white, 0.7);
 }
 
 .error-modal__content {
   display: flex;
-  padding: 0px 8px 10px 10px;
+  padding: 0 8px 10px 10px;
 }
 
 .error-modal__warning-symbol {
@@ -122,7 +122,7 @@
   max-height: 400px;
   max-width: var(--modal-width);
   overflow-y: scroll;
-  color: #a94442;
-  background-color: #ffe0df;
-  border-left: 2px solid #a94442;
+  color: $lbry-red-5;
+  background-color: $lbry-red-1;
+  border-left: 2px solid $lbry-red-5;
 }

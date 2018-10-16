@@ -4,7 +4,7 @@
 }
 
 .content__embedded {
-  background-color: var(--color-black);
+  background-color: $lbry-black;
   width: 100%;
   padding-top: var(--video-aspect-ratio);
   position: relative;
@@ -40,7 +40,7 @@
   justify-content: center;
 
   &:not(.card__media--nsfw) {
-    background-color: var(--color-black);
+    background-color: $lbry-black;
   }
 
   &:hover {
@@ -62,7 +62,7 @@
 
 .content__view--container {
   iframe {
-    background: #fff;
+    background: $lbry-white;
     width: 100%;
     height: 100%;
   }
@@ -74,13 +74,13 @@
   align-items: center;
   justify-content: center;
   padding: 0 20px;
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba($lbry-black, 0.5);
   height: 100%;
   width: 100%;
 }
 
 .content__loading-text {
-  color: var(--color-white);
+  color: $lbry-white;
 }
 
 .content__empty {
@@ -90,10 +90,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--color-white);
+  color: $lbry-white;
 
   &.content__empty--nsfw {
-    background-color: var(--color-nsfw);
+    background-color: $lbry-grape-3;
   }
 }
 

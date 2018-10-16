@@ -2,6 +2,14 @@
   display: block;
   padding: 0;
   text-align: center;
+
+  + .form-field {
+    margin: 0 $spacing-width * 2/3;
+
+    .form-field__input {
+      padding: 0;
+    }
+  }
 }
 
 .pagination__item {
@@ -11,7 +19,7 @@
   border-radius: 2px;
 
   &:not(.pagination__item--selected):not(.pagination__item--break):not(.disabled):hover {
-    background: rgba(0, 0, 0, 0.2);
+    background: rgba($lbry-black, 0.2);
     cursor: pointer;
   }
 
@@ -32,13 +40,5 @@
 
 .pagination__item--selected {
   color: white;
-  background: var(--color-primary);
-}
-
-.pagination + .form-field {
-  margin: 0 $spacing-width * 2/3;
-
-  .form-field__input {
-    padding: 0;
-  }
+  background: $lbry-teal-3;
 }

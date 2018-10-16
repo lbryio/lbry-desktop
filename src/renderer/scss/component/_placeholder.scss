@@ -2,9 +2,11 @@
   0% {
     opacity: 1;
   }
+
   50% {
     opacity: 0.7;
   }
+
   100% {
     opacity: 1;
   }
@@ -12,7 +14,7 @@
 
 .card--placeholder {
   animation: pulse 2s infinite ease-in-out;
-  background: var(--color-placeholder);
+  background-color: $lbry-gray-3;
 }
 
 // Individual items we need a placeholder for

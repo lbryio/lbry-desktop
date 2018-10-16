@@ -1,16 +1,16 @@
 .notice {
   padding: 10px 20px;
-  border: 1px solid #000;
-  text-shadow: 0 1px 0 rgba(255, 255, 255, 0.5);
+  border: 1px solid $lbry-black;
+  text-shadow: 0 1px 0 rgba($lbry-white, 0.5);
   border-radius: 5px;
 
-  color: #468847;
-  background-color: #dff0d8;
-  border-color: #d6e9c6;
+  color: $lbry-green-3;
+  background-color: $lbry-green-1;
+  border-color: $lbry-green-2;
 }
 
 .notice--error {
-  color: #b94a48;
-  background-color: #f2dede;
-  border-color: #eed3d7;
+  color: $lbry-red-3;
+  background-color: $lbry-red-1;
+  border-color: $lbry-red-2;
 }
