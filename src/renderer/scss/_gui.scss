@@ -1,47 +1,14 @@
 // Generic html styles used accross the App
 // component specific styling should go in the component scss file
 
-@font-face {
-  font-family: 'metropolis-bold';
-  src: url('../../../static/font/metropolis/bold.eot');
-  src: url('../../../static/font/metropolis/bold.eot?#iefix') format('embedded-opentype'),
-    url('../../../static/font/metropolis/bold.woff') format('woff'),
-    url('../../../static/font/metropolis/bold.ttf') format('truetype'),
-    url('../../../static/font/metropolis/bold.svg#metropolis-bold') format('svg');
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'metropolis-semibold';
-  src: url('../../../static/font/metropolis/semibold.eot');
-  src: url('../../../static/font/metropolis/semibold.eot?#iefix') format('embedded-opentype'),
-    url('../../../static/font/metropolis/semibold.woff') format('woff'),
-    url('../../../static/font/metropolis/semibold.ttf') format('truetype'),
-    url('../../../static/font/metropolis/semibold.svg#metropolis-semibold') format('svg');
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'metropolis-medium';
-  src: url('../../../static/font/metropolis/medium.eot');
-  src: url('../../../static/font/metropolis/medium.eot?#iefix') format('embedded-opentype'),
-    url('../../../static/font/metropolis/medium.woff') format('woff'),
-    url('../../../static/font/metropolis/medium.ttf') format('truetype'),
-    url('../../../static/font/metropolis/medium.svg#metropolis-medium') format('svg');
-  font-weight: normal;
-  font-style: normal;
-}
-
 html {
   background-color: $lbry-white;
+  font-family: 'Inter UI', sans-serif;
   height: 100%;
 }
 
 body {
   color: $lbry-black;
-  font-family: 'metropolis-medium';
   font-size: 16px;
   font-weight: 400;
   height: 100%;
@@ -51,7 +18,8 @@ body {
 
 code {
   background-color: $lbry-gray-1;
-  font: 1.5em Consolas, 'Lucida Console', 'Source Sans', monospace;
+  font-family: Consolas, 'Lucida Console', 'Source Sans', monospace;
+  font-size: 1.5em;
 }
 
 // Without this buttons do not have the app font
@@ -89,8 +57,8 @@ input {
   }
 
   &.input-copyable {
-    background-color: $lbry-gray-1;
-    border: 1px dashed $lbry-gray-3;
+    background-color: rgba($lbry-gray-1, 0.3);
+    border: 1px dashed $lbry-gray-1;
     color: $lbry-gray-5;
     flex: 1;
     padding: 10px 16px;
@@ -176,9 +144,7 @@ p:not(:first-of-type) {
   }
 }
 
-/*
-  Page content
-*/
+// Page content
 .content {
   flex: 1;
   overflow: auto;
@@ -263,13 +229,13 @@ p:not(:first-of-type) {
 }
 
 .credit-amount--large {
-  font-family: 'metropolis-semibold';
   font-size: 36px;
+  font-weight: 600;
 }
 
 .credit-amount--file-page {
   border-radius: 5px;
-  font-family: 'metropolis-bold';
+  font-weight: 700;
   padding: 5px;
 }
 

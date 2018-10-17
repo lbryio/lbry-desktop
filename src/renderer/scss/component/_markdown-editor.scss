@@ -72,9 +72,8 @@
 
     &.active,
     &:hover {
-      opacity: 1;
-      // background-color: var(--button-bg); // "--button-bg" does not exist
       border-color: transparent;
+      opacity: 1;
     }
   }
 

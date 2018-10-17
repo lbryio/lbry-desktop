@@ -23,13 +23,13 @@ table.table,
 
   th {
     border: none;
-    font-family: 'metropolis-semibold';
+    font-weight: 600;
     padding: $spacing-vertical * 2/3 $spacing-vertical * 1/3;
   }
 
   td {
     color: $lbry-gray-5;
-    font-family: 'metropolis-medium';
+    font-weight: 500;
     padding: $spacing-vertical * 1/6 $spacing-vertical * 1/3;
 
     .btn:not(.btn--link) {
@@ -47,17 +47,17 @@ table.table,
   }
 
   thead {
-    border-bottom: 1px solid $lbry-gray-1;
+    border-bottom: 1px solid rgba($lbry-gray-1, 0.7);
     color: $lbry-black;
   }
 
   tbody {
     tr {
-      border-bottom: 1px solid $lbry-gray-1; // "--table-item-border" does not exist
+      border-bottom: 1px solid rgba($lbry-gray-1, 0.3);
       padding: 8px 0;
 
       &:nth-child(even) {
-        background-color: $lbry-gray-1;
+        background-color: rgba($lbry-gray-1, 0.3);
       }
 
       &:nth-child(odd) {
@@ -79,7 +79,7 @@ table {
   &.table--help {
     td:nth-of-type(1) {
       color: $lbry-black;
-      font-family: 'metropolis-semibold';
+      font-weight: 600;
       min-width: 130px;
     }
 

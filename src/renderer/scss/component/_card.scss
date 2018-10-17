@@ -149,7 +149,7 @@
   margin: $spacing-vertical * 1/3 0;
   padding: $spacing-vertical * 1/3;
 
-  background-color: $lbry-red-1;
+  background-color: rgba($lbry-red-1, 0.3);
   border-left: 2px solid $lbry-red-5;
   color: $lbry-red-5;
 }
@@ -164,9 +164,8 @@
   }
 }
 
-/*
-  How cards are displayed in lists
-*/
+// How cards are displayed in lists
+
 .card__list {
   .card {
     display: inline-block;
@@ -221,8 +220,8 @@
 
 .card__meta {
   color: $lbry-gray-5;
-  font-family: 'metropolis-medium';
   font-size: 14px;
+  font-weight: 500;
   padding-top: $spacing-vertical * 2/3;
 }
 
@@ -254,7 +253,7 @@
   margin: $spacing-vertical * 1/3 0;
   padding: $spacing-vertical * 1/3;
 
-  background-color: $lbry-green-1;
+  background-color: rgba($lbry-green-1, 0.3);
   border-left: 2px solid mix($lbry-green-3, $lbry-blue-3, 50%);
   color: $lbry-green-3;
 }
@@ -286,11 +285,10 @@
   }
 }
 
-/*
- .card-row is used on the discover page
- It is a list of cards that extend past the right edge of the screen
- There are left/right arrows to scroll the cards and view hidden content
-*/
+// .card-row is used on the discover page
+// It is a list of cards that extend past the right edge of the screen
+// There are left/right arrows to scroll the cards and view hidden content
+
 .card-row {
   padding-top: $spacing-vertical;
   white-space: nowrap;
@@ -360,8 +358,8 @@
 .card-row__title {
   align-items: center;
   display: flex;
-  font-family: 'metropolis-semibold';
   font-size: 18px;
+  font-weight: 600;
   line-height: 24px;
 
   @media only screen and (min-width: $medium-breakpoint) {

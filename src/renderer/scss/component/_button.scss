@@ -18,7 +18,6 @@
   transition: all var(--animation-duration) var(--animation-style);
 
   &:not(:disabled) {
-    // box-shadow: var(--box-shadow-button);
   }
 
   &:hover {

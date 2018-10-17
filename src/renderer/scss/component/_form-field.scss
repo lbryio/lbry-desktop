@@ -88,7 +88,7 @@
 .form-field__label,
 .form-field__error {
   font-size: 12px;
-  font-family: 'metropolis-medium';
+  font-weight: 500;
 }
 
 .form-field__error {
@@ -106,7 +106,7 @@
 
 .form-field__prefix,
 .form-field__postfix {
-  font-family: 'metropolis-medium';
+  font-weight: 500;
 
   &.form-field--align-center {
     align-self: center;
@@ -129,8 +129,10 @@
   background-color: $lbry-gray-3;
   border-radius: 8px;
   color: $lbry-black;
-  font: normal 12px/30px 'metropolis-medium';
+  font-size: 12px;
+  font-weight: 500;
   height: 30px;
+  line-height: 30px;
   min-width: 60px;
 
   &:disabled {

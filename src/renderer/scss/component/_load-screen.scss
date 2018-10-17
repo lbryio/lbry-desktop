@@ -16,8 +16,8 @@
 }
 
 .load-screen__title {
-  font-family: 'metropolis-bold';
   font-size: 60px;
+  font-weight: 700;
   line-height: 100px;
   margin-left: 40px; // width of "beta" superscript
 }
@@ -28,15 +28,14 @@
 }
 
 .load-screen__message {
-  font-family: 'metropolis-semibold';
   font-size: 16px;
+  font-weight: 600;
   line-height: 20px;
   margin-top: $spacing-vertical * 2/3;
   text-align: center;
 }
 
 .load-screen__details {
-  font-family: 12px 'metropolis-medium';
   font-size: 12px;
   line-height: 1;
   max-width: 400px;

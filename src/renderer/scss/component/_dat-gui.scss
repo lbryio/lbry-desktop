@@ -1,6 +1,4 @@
-/*
-* dat.gui component
-*/
+// dat.gui component
 
 .gui-container {
   top: 0;
@@ -15,10 +13,8 @@
     overflow: inherit;
   }
 
-  /*
-  *  Light theme:
-  *  https://github.com/liabru/dat-gui-light-theme
-  */
+  // Light theme:
+  // https://github.com/liabru/dat-gui-light-theme
 
   &.light {
     .dg.main.taller-than-window .close-button {
