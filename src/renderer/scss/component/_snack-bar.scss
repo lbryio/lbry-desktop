@@ -1,22 +1,22 @@
 .snack-bar {
+  bottom: $spacing-vertical;
+  left: $spacing-vertical;
+
   background-color: $lbry-teal-3;
   border-radius: 10px;
-  // box-shadow: var(--box-shadow-layer);
   color: $lbry-white;
   display: flex;
   justify-content: space-between;
-  margin-left: auto;
   margin-right: auto;
+  margin-left: auto;
   max-width: var(--snack-bar-width);
   min-width: 300px;
   opacity: 0.95;
   padding: 14px 20px 10px 20px;
   position: fixed;
-  left: $spacing-vertical;
-  bottom: $spacing-vertical;
   transition: all var(--transition-duration) var(--transition-type);
   width: 100%;
-  z-index: 10000; /*hack to get it over react modal */
+  z-index: 10000; // hack to get it over react modal
 }
 
 .snack-bar__action {

@@ -1,6 +1,4 @@
-/*
-Both of these should probably die and become variables as well
- */
+// Both of these should probably die and become variables as well
 $spacing-vertical: 24px;
 $spacing-width: 36px;
 
@@ -8,7 +6,7 @@ $medium-breakpoint: 1279px;
 $large-breakpoint: 1921px;
 
 :root {
-  /* Widths & spacings */
+  // Width & spacing
   --side-nav-width: 160px;
   --side-nav-width-m: 240px;
   --side-nav-width-l: 320px;
@@ -17,190 +15,28 @@ $large-breakpoint: 1921px;
   --video-aspect-ratio: 56.25%; // 9 x 16
   --snack-bar-width: 756px;
 
-  /* Colors: Brand */
-  /*
-  --color-white: $lbry-white;
-  --color-black: #000;
-  --color-grey: #d6d6d6;
-  --color-grey-light: #f6f6f6;
-  --color-grey-dark: #888;
-  --color-primary: #44b098;
-  --color-primary-dark: #2c6e60;
-  --color-primary-light: #64c9b2;
-  --color-secondary: #6afbda;
-  --color-teal: #19a6a3;
-  --color-dark-blue: #2f6f61;
-  --color-light-blue: #49b2e2;
-  --color-red: #e2495e;
-  --color-yellow: #fbd55e;
-  --color-green: #399483;
-  --color-green-light: #effbe4;
-  --color-green-blue: #2ec1a8;
-  --color-purple: #8165b0;
-  --color-blue-grey: #203049;
-  --color-red-light: #fff6f6;
-  */
-
-  /* Colors */
-  /*
-  --color-divider: #e3e3e3;
-  --color-help: rgba(0, 0, 0, 0.54);
-  --color-error: #a94442;
-  --color-nsfw: #bf4440;
-  --color-download: $lbry-white;
-  --color-download-overlay: $lbry-black;
-  --color-bg: #fafafa;
-  --color-bg-alt: var(--color-grey-light);
-  --color-placeholder: var(--color-grey);
-  --color-search-placeholder: $lbry-gray-3;
-  --color-credit-free: $lbry-blue-5;
-  --color-credit-price: $lbry-gray-5;
-  --color-text-black: #444;
-  --color-text-white: #efefef;
-  */
-
-  /* Shadows */
-  /*
-  --box-shadow-layer: transparent; // 0 2px 4px rgba(0,0,0,0.25);
-  --box-shadow-button: 0 10px 20px rgba(0, 0, 0, 0.1);
-  --box-shadow-wunderbar: 0 10px 20px rgba(0, 0, 0, 0.03);
-  --box-shadow-header: 0 6px 20px 1px rgba(0, 0, 0, 0.05);
-  */
-
-  /* Text */
-  /*
-  --text-color: var(--color-text-black);
-  --text-color-inverse: var(--color-text-white);
-  --text-help-color: $lbry-gray-5;
-  */
+  // Text
   --text-max-width: 660px;
   --text-link-padding: 4px;
 
-  /* Text Selectiom */
-  /*
-  --text-selection-bg: var(--color-primary-light);
-  --text-selection-color: $lbry-white;
-  --editor-text-selection-bg: rgba(57, 148, 131, 0.8);
-  */
-  /* Form */
-  // --form-label-color: rgba(0, 0, 0, 0.54);
-
-  /* Input */
-  /*
-  --input-bg: transparent;
-  --input-label-color: $lbry-gray-5;
-  --input-color: $lbry-black;
-  --input-border-size: 1px;
-  --input-border-color: $lbry-gray-5;
-  --input-copyable-bg: #f6f6f6;
-  --input-copyable-color: $lbry-gray-5;
-  --input-copyable-border: var(--color-grey);
-  --input-select-bg-color: var(--color-grey);
-  --input-select-color: $lbry-black;
-  --input-switch-color: var(--color-teal);
-  */
-
-  /* input:disabled */
-  /*
-  --input-disabled-border-color: rgba(0, 0, 0, 0.42);
-  --input-disabled-color: rgba(0, 0, 0, 0.54);
-  */
-
-  /* input:hover */
-  // --input-hover-border-color: rgba(0, 0, 0, 0.87);
-
-  /* input:placeholder */
-  /*
-  --input-placeholder-color: $lbry-gray-5;
-  --input-placeholder-opacity: 1;
-  */
-
-  /* Select */
-  /*
-  --select-bg: $lbry-gray-1;
-  --select-color: $lbry-black;
-  */
+  // Select
   --select-height: 30px;
 
-  /* Button */
-  /*
-  --btn-bg-primary: $lbry-teal-3;
-  --btn-color-primary: $lbry-white;
-  --btn-bg-primary-hover: var(--color-primary-light);
-  --btn-bg-alt: $lbry-white;
-  --btn-color-alt: $lbry-black;
-  --btn-color-inverse: $lbry-teal-3;
-  --btn-external-color: var(--color-light-blue);
-  --btn-bg-secondary: var(--color-teal);
-  --btn-bg-danger: var(--color-red);
-  --btn-home-bg-color: $lbry-white;
-  */
+  // Button
   --btn-radius: 20px;
   --btn-height: 36px;
 
-  /* SnackBar */
-  /*
-  --snackbar-bg-primary: $lbry-teal-3;
-  --snackbar-color-primary: $lbry-white;
-  */
-
-  /* Header */
-  /*
-  --header-bg: $lbry-white;
-  --header-color: var(--color-text);
-  --header-active-color: rgba(0, 0, 0, 0.85);
-  */
+  // Header
   --header-height: 60px;
-  /*
-  --header-button-bg: transparent;
-  --header-button-hover-bg: rgba(100, 100, 100, 0.15);
-  --header-primary-color: $lbry-teal-3;
-  */
 
-  /* Header -> search */
-  /*
-  --search-color: #666;
-  --search-bg-color: $lbry-white;
-  --search-active-bg-color: var(--color-grey-light);
-  --search-active-color: var(--header-active-color);
-  --search-active-shadow: 0 6px 9px -2px var(--color-grey--dark);
-  --search-item-border-color: transparent;
-  --search-item-active-color: $lbry-black;
-  */
+  // Header -> search
   --search-modal-input-height: 70px;
-  // --search-exact-result: #eaeaea;
 
-  /* Nav */
-  /*
-  --nav-color: $lbry-gray-5;
-  --nav-bg-color: var(--color-grey-light);
-  */
-
-  /* Table */
-  /*
-  --table-border: 1px solid var(--color-grey-light);
-  --table-item-odd: var(--color-grey-light);
-  --table-item-even: transparent;
-  */
-
-  /* Card */
-  /*
-  --card-bg: $lbry-white;
-  --card-text-color: $lbry-gray-5;
-  */
+  // Card
   --card-radius: 2px;
   --card-max-width: 1000px;
-  /*
-  --card-wallet-color: $lbry-white;
-  --success-msg-color: var(--color-green);
-  --success-msg-border: mix($lbry-green-3, $lbry-blue-3, 50%);
-  --success-msg-bg: var(--color-green-light);
-  --error-msg-color: $lbry-red-5;
-  --error-msg-border: $lbry-red-5;
-  --error-msg-bg: var(--color-red-light);
-  */
 
-  /* File */
+  // File
   --file-tile-media-height: 125px;
   --file-tile-media-width: calc(125px * (16 / 9));
   --file-tile-media-height-small: 60px;
@@ -211,36 +47,14 @@ $large-breakpoint: 1921px;
   --recommended-content-width: 300px;
   --recommended-content-width-medium: 400px;
 
-  /* Modal */
+  // Modal
   --modal-width: 440px;
-  /*
-  --modal-bg: rgba($lbry-gray-1, 0.5);
-  --modal-fullscreen-bg: rgba($lbry-gray-1, 0.5);
-  --modal-overlay-bg: rgba(246, 246, 246, 0.75);
-  --modal-border: 1px solid rgb(204, 204, 204);
-  --modal-btn-bg-color: $lbry-white;
-  */
 
-  // /* Tooltip */
-  /*
-  --tooltip-bg: #555;
-  --tooltip-color: $lbry-white;
-  */
-
-  /* Scrollbar */
-  /*
-  --scrollbar-radius: 10px;
-  --scrollbar-thumb-bg: rgba(0, 0, 0, 0.2);
-  --scrollbar-thumb-hover-bg: rgba(0, 0, 0, 0.35);
-  --scrollbar-thumb-active-bg: $lbry-teal-3;
-  --scrollbar-track-bg: transparent;
-  */
-
-  // /* Animation :) */
+  // Animation :)
   --animation-duration: 0.3s;
   --animation-style: cubic-bezier(0.55, 0, 0.1, 1);
 
-  /* Image */
+  // Image
   --thumbnail-preview-height: 100px;
   --thumbnail-preview-width: 177px;
 }

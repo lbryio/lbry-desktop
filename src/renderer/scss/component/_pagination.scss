@@ -13,10 +13,10 @@
 }
 
 .pagination__item {
-  display: inline-block;
-  line-height: $spacing-vertical * 1.5;
-  height: $spacing-vertical * 1.5;
   border-radius: 2px;
+  display: inline-block;
+  height: $spacing-vertical * 1.5;
+  line-height: $spacing-vertical * 1.5;
 
   &:not(.pagination__item--selected):not(.pagination__item--break):not(.disabled):hover {
     background: rgba($lbry-black, 0.2);
@@ -39,6 +39,6 @@
 }
 
 .pagination__item--selected {
-  color: white;
-  background: $lbry-teal-3;
+  background-color: $lbry-teal-3;
+  color: $lbry-white;
 }

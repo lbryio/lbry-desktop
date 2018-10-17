@@ -1,10 +1,60 @@
 .tooltip {
-  position: relative;
   display: inline-block;
+  position: relative;
+
+  &:not(:hover) {
+    .tooltip__body {
+      visibility: hidden;
+    }
+  }
+
+  &:hover {
+    .tooltip__body {
+      visibility: visible;
+    }
+  }
+
+  &.tooltip--on-component {
+    .tooltip__body {
+      margin-top: 10px;
+    }
+  }
+
+  .tooltip__body {
+    background-color: $lbry-gray-5;
+    border-radius: 8px;
+    color: $lbry-white;
+    font-family: 'metropolis-medium';
+    font-size: 12px;
+    padding: $spacing-vertical * 1/3;
+    position: absolute;
+    text-align: center;
+    white-space: pre-wrap;
+    width: 200px;
+    z-index: 1;
+
+    &::after {
+      width: 0;
+      height: 0;
+
+      border-style: solid;
+      border-width: 5px;
+      content: ' ';
+      position: absolute;
+    }
+  }
+
+  .tooltip__body--short {
+    width: 130px;
+  }
 }
 
-// When there is a label for the tooltip and not just using a button or icon
+.tooltip--icon {
+  margin-top: 5px;
+}
+
 .tooltip--label {
+  // When there is a label for the tooltip and not just using a button or icon
   font-size: 14px;
   padding-left: $spacing-vertical * 1/3;
 
@@ -13,96 +63,21 @@
   }
 }
 
-.tooltip--icon {
-  margin-top: 5px;
-}
+.tooltip--bottom .tooltip__body {
+  top: 90%;
+  left: 50%;
+  margin-left: -100px;
 
-/* Tooltip text */
-.tooltip {
-  .tooltip__body {
-    background-color: $lbry-gray-5;
-    font-family: 'metropolis-medium';
-    font-size: 12px;
-    color: $lbry-white;
-    border-radius: 8px;
-    position: absolute;
-    z-index: 1;
-    width: 200px;
-    text-align: center;
-    white-space: pre-wrap;
-    padding: $spacing-vertical * 1/3;
-    visibility: hidden;
+  &.tooltip__body--short {
+    margin-left: -65px;
   }
 
-  .tooltip__body--short {
-    width: 130px;
-  }
-
-  .tooltip__body::after {
-    content: ' ';
-    width: 0;
-    height: 0;
-    position: absolute;
-    border-width: 5px;
-    border-style: solid;
-  }
-
-  &.tooltip--on-component {
-    .tooltip__body {
-      margin-top: 10px;
-    }
-  }
-}
-
-.tooltip--top {
-  .tooltip__body {
+  &::after {
     bottom: 100%;
     left: 50%;
-    margin-left: -100px;
 
-    &.tooltip__body--short {
-      margin-left: -65px;
-    }
-
-    &::after {
-      top: 100%;
-      left: 50%;
-      margin-left: -5px;
-      border-color: $lbry-gray-5 transparent transparent transparent;
-    }
-  }
-}
-
-.tooltip--right {
-  .tooltip__body {
-    margin-top: -30px;
-    margin-left: 110%;
-
-    &::after {
-      top: 17px;
-      right: 100%; /* To the left of the tooltip */
-      margin-top: -5px;
-      border-color: transparent $lbry-gray-5 transparent transparent;
-    }
-  }
-}
-
-.tooltip--bottom {
-  .tooltip__body {
-    top: 90%;
-    left: 50%;
-    margin-left: -100px;
-
-    &.tooltip__body--short {
-      margin-left: -65px;
-    }
-
-    &::after {
-      bottom: 100%;
-      left: 50%;
-      margin-left: -5px;
-      border-color: transparent transparent $lbry-gray-5 transparent;
-    }
+    border-color: transparent transparent $lbry-gray-5 transparent;
+    margin-left: -5px;
   }
 }
 
@@ -113,11 +88,39 @@
   &::after {
     top: 17px;
     left: 100%;
-    margin-top: -5px;
+
     border-color: transparent transparent transparent $lbry-gray-5;
+    margin-top: -5px;
   }
 }
 
-.tooltip:hover .tooltip__body {
-  visibility: visible;
+.tooltip--right .tooltip__body {
+  margin-top: -30px;
+  margin-left: 110%;
+
+  &::after {
+    top: 17px;
+    right: 100%; // To the left of the tooltip
+
+    border-color: transparent $lbry-gray-5 transparent transparent;
+    margin-top: -5px;
+  }
+}
+
+.tooltip--top .tooltip__body {
+  bottom: 100%;
+  left: 50%;
+  margin-left: -100px;
+
+  &.tooltip__body--short {
+    margin-left: -65px;
+  }
+
+  &::after {
+    top: 100%;
+    left: 50%;
+
+    border-color: $lbry-gray-5 transparent transparent transparent;
+    margin-left: -5px;
+  }
 }

@@ -1,15 +1,15 @@
 .modal-overlay,
 .error-modal-overlay {
-  position: fixed;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
   top: 0;
   left: 0;
-  right: 0;
   bottom: 0;
+  right: 0;
+
+  align-items: center;
   background-color: rgba($lbry-white, 0.7);
+  display: flex;
+  justify-content: center;
+  position: fixed;
   z-index: 9999;
 }
 
@@ -18,33 +18,32 @@
 }
 
 .modal {
+  background-color: rgba($lbry-gray-1, 0.5);
+  border: 1px solid $lbry-gray-1;
+  border-radius: 4px;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  border: $lbry-gray-1;
-  background-color: rgba($lbry-gray-1, 0.5);
-  overflow: auto;
-  border-radius: 4px;
-  padding: $spacing-vertical;
-  // box-shadow: var(--box-shadow-layer);
   max-width: var(--modal-width);
+  overflow: auto;
+  padding: $spacing-vertical;
   word-break: break-word;
 
   .btn.btn--alt {
-    // Set modal buttons bg color
-    background-color: $lbry-white;
+    background-color: $lbry-white; // Set modal buttons bg color
   }
 }
 
 .modal--fullscreen {
-  position: absolute;
   top: 0;
   left: 0;
-  right: 0;
   bottom: 0;
+  right: 0;
+
+  background-color: rgba($lbry-gray-1, 0.5);
   padding: $spacing-vertical;
-  background: rgba($lbry-gray-1, 0.5);
   overflow-y: scroll;
+  position: absolute;
 
   .main {
     // I will come back to these when I do media queries
@@ -54,11 +53,11 @@
 }
 
 // For slide down animation on the search modal
-// Slide down isn't possible without doing a lot of re-work to the modal component
+// Slide down isn"t possible without doing a lot of re-work to the modal component
 .ReactModal__Overlay {
   .modal--fullscreen {
-    transition: height var(--animation-duration) var(--animation-style);
     height: 0;
+    transition: height var(--animation-duration) var(--animation-style);
   }
 
   &--after-open {
@@ -87,13 +86,13 @@
   margin: 0 $spacing-vertical * 1/3;
 
   &.btn--link {
-    // So the text isn't bigger than the text inside the button
+    // So the text isn"t bigger than the text inside the button
     font-size: 0.8em;
   }
 }
 
 .error-modal-overlay {
-  background: rgba($lbry-white, 0.7);
+  background-color: rgba($lbry-white, 0.7);
 }
 
 .error-modal__content {
@@ -102,8 +101,8 @@
 }
 
 .error-modal__warning-symbol {
-  margin-top: -5px;
   height: 28px;
+  margin-top: -5px;
 }
 
 .download-started-modal__file-path {
@@ -116,13 +115,14 @@
 }
 
 .error-modal__error-list {
+  max-width: var(--modal-width);
+  max-height: 400px;
   margin-top: $spacing-vertical * 1/3;
   padding: $spacing-vertical * 1/3;
-  list-style: none;
-  max-height: 400px;
-  max-width: var(--modal-width);
-  overflow-y: scroll;
-  color: $lbry-red-5;
+
   background-color: $lbry-red-1;
   border-left: 2px solid $lbry-red-5;
+  color: $lbry-red-5;
+  list-style: none;
+  overflow-y: scroll;
 }

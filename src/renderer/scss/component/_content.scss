@@ -1,43 +1,17 @@
-.content__wrapper {
-  max-width: var(--card-max-width);
-  flex: 1 0 var(--file-page-min-width);
-}
-
-.content__embedded {
-  background-color: $lbry-black;
-  width: 100%;
-  padding-top: var(--video-aspect-ratio);
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  video {
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-
-    &:hover {
-      cursor: pointer;
-    }
-  }
-}
-
-// Video thumbnail with play/download button
 .content__cover {
-  position: absolute;
+  // Video thumbnail with play/download button
   top: 0;
   left: 0;
-  right: 0;
   bottom: 0;
-  background-size: contain;
-  background-repeat: no-repeat;
-  background-position: 50% 50%;
-  display: flex;
+  right: 0;
+
   align-items: center;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  background-size: contain;
+  display: flex;
   justify-content: center;
+  position: absolute;
 
   &:not(.card__media--nsfw) {
     background-color: $lbry-black;
@@ -48,56 +22,81 @@
   }
 }
 
-.content__view,
-.content__view--container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: flex;
+.content__embedded {
   align-items: center;
+  background-color: $lbry-black;
+  display: flex;
   justify-content: center;
-}
+  padding-top: var(--video-aspect-ratio);
+  position: relative;
+  width: 100%;
 
-.content__view--container {
-  iframe {
-    background: $lbry-white;
+  video {
     width: 100%;
     height: 100%;
+    top: 0;
+    left: 0;
+
+    position: absolute;
+
+    &:hover {
+      cursor: pointer;
+    }
   }
 }
 
-.content__loading {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 0 20px;
-  background-color: rgba($lbry-black, 0.5);
-  height: 100%;
-  width: 100%;
-}
-
-.content__loading-text {
-  color: $lbry-white;
-}
-
 .content__empty {
-  background-color: black;
-  width: 100%;
-  padding-top: var(--video-aspect-ratio);
-  display: flex;
   align-items: center;
-  justify-content: center;
+  background-color: $lbry-black;
   color: $lbry-white;
+  display: flex;
+  justify-content: center;
+  padding-top: var(--video-aspect-ratio);
+  width: 100%;
 
   &.content__empty--nsfw {
     background-color: $lbry-grape-3;
   }
 }
 
-img {
-  max-height: 100%;
-  max-width: 100%;
+.content__loading {
+  width: 100%;
+  height: 100%;
+
+  align-items: center;
+  background-color: rgba($lbry-black, 0.5);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 20px;
+}
+
+.content__loading-text {
+  color: $lbry-white;
+}
+
+.content__view,
+.content__view--container {
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  position: absolute;
+}
+
+.content__view--container {
+  iframe {
+    width: 100%;
+    height: 100%;
+    background-color: $lbry-white;
+  }
+}
+
+.content__wrapper {
+  flex: 1 0 var(--file-page-min-width);
+  max-width: var(--card-max-width);
 }

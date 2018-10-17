@@ -1,23 +1,20 @@
-button:disabled {
-  cursor: default;
-}
-
 .btn {
-  border: none;
-  text-decoration: none;
-  cursor: pointer;
-  position: relative;
-  padding: 10px;
-  height: var(--btn-height);
   min-width: var(--btn-height);
-  border-radius: var(--btn-radius);
-  background-color: $lbry-teal-3;
-  color: $lbry-white;
-  display: flex;
+  height: var(--btn-height);
+
   align-items: center;
-  justify-content: center;
+  background-color: $lbry-teal-3;
+  border: none;
+  border-radius: var(--btn-radius);
+  color: $lbry-white;
+  cursor: pointer;
+  display: flex;
   fill: currentColor; // for proper icon color
   font-size: 12px;
+  justify-content: center;
+  padding: 10px;
+  position: relative;
+  text-decoration: none;
   transition: all var(--animation-duration) var(--animation-style);
 
   &:not(:disabled) {
@@ -25,73 +22,155 @@ button:disabled {
   }
 
   &:hover {
-    // box-shadow: none;
     background-color: $lbry-teal-1;
+  }
+
+  &:not(.btn--no-padding):not(.btn--link):not(.btn--no-style) {
+    .btn__content {
+      align-items: center;
+      display: flex;
+      padding: 0 8px;
+    }
+  }
+
+  &.btn--alt {
+    &:not(:disabled) {
+      background-color: $lbry-white;
+      color: $lbry-black;
+    }
+
+    &:disabled {
+      background-color: transparent;
+      color: $lbry-gray-5;
+    }
+  }
+
+  &.btn--arrow {
+    color: $lbry-black;
+    width: var(--btn-arrow-width);
+
+    &:disabled {
+      opacity: 0.3;
+    }
+  }
+
+  &.btn--danger {
+    background-color: $lbry-red-3;
+  }
+
+  &.btn--disabled:disabled {
+    // wtf?
+    cursor: default;
+
+    &.btn--primary {
+      background-color: rgba($lbry-black, 0.5);
+    }
+
+    &:hover {
+      box-shadow: none;
+    }
+  }
+
+  &.btn--external-link {
+    color: $lbry-blue-1;
+  }
+
+  &.btn--file-actions {
+    width: var(--btn-height);
+    height: var(--btn-height);
+
+    background-color: $lbry-black;
+    border-radius: var(--btn-radius);
+    color: $lbry-white;
+    opacity: 0.8;
+    padding: 10px;
+  }
+
+  &.btn--header-balance {
+    color: $lbry-teal-3;
+    font-size: 14px;
+
+    @media only screen and (min-width: $large-breakpoint) {
+      font-size: 18px;
+    }
+
+    .btn__label--balance {
+      color: $lbry-gray-5;
+    }
+
+    &:hover {
+      background-color: transparent;
+
+      .btn__label--balance {
+        color: $lbry-teal-3;
+      }
+    }
+  }
+
+  &.btn--header-publish {
+    background-color: $lbry-teal-3;
+  }
+
+  &.btn--home-nav {
+    background-color: $lbry-white;
+    box-shadow: none;
+
+    .btn__content {
+      padding: 0;
+    }
+  }
+
+  &.btn--inverse {
+    background-color: transparent;
+    box-shadow: none;
+    color: $lbry-teal-3;
+  }
+
+  &.btn--link {
+    margin: 0;
+    padding: 0;
+
+    background-color: inherit;
+    border-radius: 0;
+    box-shadow: none;
+    color: $lbry-teal-3;
+    display: inline;
+    font-size: 1em;
+    min-width: 0;
+    text-align: left;
+  }
+
+  &.btn--no-style {
+    margin: 0;
+    padding: 0;
+
+    background-color: inherit;
+    border-radius: 0;
+    box-shadow: none;
+    color: inherit;
+    font-size: inherit;
+    font-weight: inherit;
+    min-width: 0;
+  }
+
+  &.btn--secondary {
+    background-color: $lbry-teal-3;
+  }
+
+  &.btn--tourniquet {
+    max-width: 20vw;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &.btn--uppercase {
+    text-transform: uppercase;
   }
 
   .icon + .btn__label {
     padding-left: 5px;
   }
-}
-
-.btn.btn--alt {
-  color: $lbry-black;
-  background-color: $lbry-white;
-
-  &:disabled {
-    color: $lbry-gray-5;
-    background-color: transparent;
-  }
-}
-
-.btn.btn--danger {
-  background-color: $lbry-red-3;
-}
-
-.btn.btn--inverse {
-  background-color: transparent;
-  box-shadow: none;
-  color: $lbry-teal-3;
-}
-
-.btn.btn--link {
-  padding: 0;
-  margin: 0;
-  background-color: inherit;
-  font-size: 1em;
-  color: $lbry-teal-3;
-  border-radius: 0;
-  display: inline;
-  min-width: 0;
-  box-shadow: none;
-  text-align: left;
-}
-
-.btn.btn--external-link {
-  color: $lbry-blue-1;
-}
-
-.btn.btn--secondary {
-  background-color: $lbry-teal-3;
-}
-
-.btn.btn--tourniquet {
-  max-width: 20vw;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.btn.btn--no-style {
-  font-size: inherit;
-  font-weight: inherit;
-  color: inherit;
-  background-color: inherit;
-  border-radius: 0;
-  padding: 0;
-  margin: 0;
-  box-shadow: none;
-  min-width: 0;
 }
 
 .btn--link,
@@ -104,100 +183,16 @@ button:disabled {
   }
 }
 
-.btn.btn--disabled:disabled {
-  cursor: default;
-
-  &.btn--primary {
-    background-color: rgba($lbry-black, 0.5);
-  }
-
-  &:hover {
-    box-shadow: none;
-  }
-}
-
-.btn.btn--uppercase {
-  text-transform: uppercase;
-}
-
-.btn:not(.btn--no-padding):not(.btn--link):not(.btn--no-style) {
-  .btn__content {
-    padding: 0 8px;
-    display: flex;
-    align-items: center;
-  }
-}
-
 .icon + .btn__label,
 .btn__label + .icon {
   margin-left: 5px;
 }
 
-/*
-  Everything below this is variations of the default button classes
-  You must pass in a className, props will not set these classes,
-  if you use these in several different places they should probably
-  be applied via props
-*/
-
-.btn.btn--home-nav {
-  background-color: $lbry-white;
-  box-shadow: none;
-
-  .btn__content {
-    padding: 0;
-  }
-}
-
-.btn.btn--arrow {
-  width: var(--btn-arrow-width);
-  color: $lbry-black;
-
-  &:disabled {
-    opacity: 0.3;
-  }
-}
-
 .btn--uri-indicator {
-  transition: color var(--animation-duration) var(--animation-style);
   display: inline-block;
+  transition: color var(--animation-duration) var(--animation-style);
 
   &:hover {
     color: $lbry-teal-3;
   }
-}
-
-.btn.btn--header-publish {
-  background-color: $lbry-teal-3;
-}
-
-.btn.btn--header-balance {
-  font-size: 14px;
-  color: $lbry-teal-3;
-
-  @media only screen and (min-width: $large-breakpoint) {
-    font-size: 18px;
-  }
-
-  .btn__label--balance {
-    color: $lbry-gray-5;
-  }
-
-  &:hover {
-    background-color: transparent;
-
-    .btn__label--balance {
-      color: $lbry-teal-3;
-    }
-  }
-}
-
-.btn.btn--file-actions {
-  background-color: $lbry-black;
-  color: $lbry-white;
-  opacity: 0.8;
-  border-radius: var(--btn-radius);
-  width: var(--btn-height);
-  height: var(--btn-height);
-  padding: 10px;
 }

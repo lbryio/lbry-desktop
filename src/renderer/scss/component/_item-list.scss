@@ -4,8 +4,8 @@
 }
 
 .item-list__item {
-  display: flex;
   align-items: center;
+  display: flex;
   padding: $spacing-vertical * 1/3;
 
   input,
@@ -14,13 +14,13 @@
   }
 }
 
-.item-list__item--selected {
-  background-color: $lbry-gray-1;
+.item-list__item--cutoff {
+  max-width: 350px;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.item-list__item--cutoff {
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow-x: hidden;
-  max-width: 350px;
+.item-list__item--selected {
+  background-color: $lbry-gray-1;
 }

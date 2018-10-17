@@ -1,5 +1,5 @@
 .CodeMirror {
-  border: 0;
+  border: none;
   border-radius: 0;
   background: $lbry-white;
   color: $lbry-black;
@@ -37,11 +37,10 @@
 }
 
 .editor-toolbar {
-  opacity: 1; // ?
-  border: 0;
   background-color: $lbry-gray-1;
+  border: none;
   border-radius: 0;
-  // box-shadow: var(--box-shadow-layer);
+  opacity: 1; // ?
 
   &:hover {
     opacity: 1; // ?
@@ -80,14 +79,14 @@
   }
 
   i.separator {
-    border: 0;
+    border: none;
   }
 }
 
 .editor-preview {
-  font-size: calc(var(--font-size-subtext-multiple) * 1em);
   background-color: rgba($lbry-gray-1, 0.5);
-  border: 0;
+  border: none;
+  font-size: calc(var(--font-size-subtext-multiple) * 1em);
 }
 
 .editor-statusbar {

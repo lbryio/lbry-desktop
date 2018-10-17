@@ -1,14 +1,13 @@
 .nav {
-  min-width: var(--side-nav-width);
   background-color: rgba($lbry-gray-1, 0.7);
-  padding: $spacing-width * 1/3;
   color: $lbry-gray-5;
+  min-width: var(--side-nav-width);
+  padding: $spacing-width * 1/3;
 
   hr {
-    width: 24px;
-    margin: 36px 0;
     border: solid 1px $lbry-gray-2;
     margin: $spacing-vertical $spacing-vertical * 2/3;
+    width: 24px;
   }
 
   @media (min-width: $medium-breakpoint) {
@@ -27,7 +26,6 @@
 }
 
 .nav__link {
-  // padding-top: $spacing-vertical / 3;
   color: inherit;
   white-space: nowrap;
 
@@ -38,6 +36,10 @@
   .btn {
     font: normal 400 16px/36px 'metropolis-semibold';
 
+    &:hover {
+      color: $lbry-black;
+    }
+
     @media only screen and (min-width: $medium-breakpoint) {
       font: normal 400 18px/40px 'metropolis-semibold';
     }
@@ -45,10 +47,6 @@
     @media only screen and (min-width: $large-breakpoint) {
       font: normal 400 21px/50px 'metropolis-semibold';
     }
-  }
-
-  .btn:hover {
-    color: $lbry-black;
   }
 }
 
@@ -79,7 +77,7 @@
 }
 
 // Sub links animations
-// The -appear, -leave classes are added by 'react-transition-group'
+// The -appear, -leave classes are added by "react-transition-group"
 .nav__sub-appear,
 .nav__sub-leave {
   max-height: 0;

@@ -1,8 +1,8 @@
 table.table,
 .markdown-preview table {
-  word-wrap: break-word;
   max-width: 100%;
   text-align: left;
+  word-wrap: break-word;
 
   tr {
     td:first-of-type,
@@ -22,14 +22,14 @@ table.table,
   }
 
   th {
+    border: none;
     font-family: 'metropolis-semibold';
-    border: 0;
     padding: $spacing-vertical * 2/3 $spacing-vertical * 1/3;
   }
 
   td {
-    font-family: 'metropolis-medium';
     color: $lbry-gray-5;
+    font-family: 'metropolis-medium';
     padding: $spacing-vertical * 1/6 $spacing-vertical * 1/3;
 
     .btn:not(.btn--link) {
@@ -47,8 +47,8 @@ table.table,
   }
 
   thead {
-    color: $lbry-black;
     border-bottom: 1px solid $lbry-gray-1;
+    color: $lbry-black;
   }
 
   tbody {
@@ -84,12 +84,11 @@ table {
     }
 
     td:nth-of-type(2) {
-      // Tourniquets text over 20vw
-      max-width: 20vw;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
       color: $lbry-gray-5;
+      max-width: 20vw; // Tourniquets text over 20vw
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
 

@@ -3,87 +3,105 @@
 */
 
 .gui-container {
-  position: absolute;
   top: 0;
   right: 0;
+
+  position: absolute;
   z-index: 2;
 
   .dg.main {
-    padding: 0;
     margin: 0;
+    padding: 0;
     overflow: inherit;
   }
-}
 
-/*
-*  Light theme:
-*  https://github.com/liabru/dat-gui-light-theme
-*/
+  /*
+  *  Light theme:
+  *  https://github.com/liabru/dat-gui-light-theme
+  */
 
-.gui-container.light {
-  .dg.main.taller-than-window .close-button {
-    border-top: 1px solid #ddd;
-  }
+  &.light {
+    .dg.main.taller-than-window .close-button {
+      border-top: 1px solid #ddd;
+    }
 
-  .dg.main .close-button {
-    background-color: #e8e8e8;
-  }
+    .dg.main .close-button {
+      &:not(:hover) {
+        background-color: #e8e8e8;
+      }
 
-  .dg.main .close-button:hover {
-    background-color: #ddd;
-  }
+      &:hover {
+        background-color: #ddd;
+      }
+    }
 
-  .dg {
-    color: #555;
-    text-shadow: none !important;
-  }
+    .dg {
+      color: #555;
+      text-shadow: none !important;
 
-  .dg.main::-webkit-scrollbar {
-    background: #fafafa;
-  }
+      &.main {
+        &::-webkit-scrollbar {
+          background-color: #fafafa;
+        }
 
-  .dg.main::-webkit-scrollbar-thumb {
-    background: #bbb;
-  }
+        &::-webkit-scrollbar-thumb {
+          background-color: #bbb;
+        }
+      }
 
-  .dg li:not(.folder) {
-    background: #fafafa;
-    border-bottom: 1px solid #ddd;
-  }
+      li {
+        &:not(.folder) {
+          background-color: #fafafa;
+          border-bottom: 1px solid #ddd;
+        }
 
-  .dg li.save-row .button {
-    text-shadow: none !important;
-  }
+        &.save-row .button {
+          text-shadow: none !important;
+        }
 
-  .dg li.title {
-    background: #e8e8e8
-      url(data:image/gif;base64,R0lGODlhBQAFAJEAAP////Pz8////////yH5BAEAAAIALAAAAAAFAAUAAAIIlI+hKgFxoCgAOw==)
-      6px 10px no-repeat;
-  }
+        &.title {
+          background: #e8e8e8
+            url('data:image/gif;base64,R0lGODlhBQAFAJEAAP////Pz8////////yH5BAEAAAIALAAAAAAFAAUAAAIIlI+hKgFxoCgAOw==')
+            6px 10px no-repeat;
+        }
+      }
 
-  .dg .cr.function:hover,
-  .dg .cr.boolean:hover {
-    background: #fff;
-  }
+      .cr {
+        &.function:hover,
+        &.boolean:hover {
+          background-color: $lbry-white;
+        }
+      }
 
-  .dg .c input[type='text'] {
-    background: #e9e9e9;
-  }
+      .c {
+        input {
+          &[type='text'] {
+            &:not(:focus),
+            &:not(:hover) {
+              background-color: #e9e9e9;
+            }
 
-  .dg .c input[type='text']:hover {
-    background: #eee;
-  }
+            &:focus,
+            &:hover {
+              background-color: #eee;
+            }
 
-  .dg .c input[type='text']:focus {
-    background: #eee;
-    color: #555;
-  }
+            &:focus {
+              color: #555;
+            }
+          }
+        }
 
-  .dg .c .slider {
-    background: #e9e9e9;
-  }
+        .slider {
+          &:not(:hover) {
+            background-color: #e9e9e9;
+          }
 
-  .dg .c .slider:hover {
-    background: #eee;
+          &:hover {
+            background-color: #eee;
+          }
+        }
+      }
+    }
   }
 }

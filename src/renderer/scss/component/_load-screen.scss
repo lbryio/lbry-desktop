@@ -1,12 +1,13 @@
 .load-screen {
-  color: white;
-  background: $lbry-teal-3;
-  background-size: cover;
-  min-height: 100vh;
   min-width: 100vw;
+  min-height: 100vh;
+
+  align-items: center;
+  background-color: $lbry-teal-3;
+  background-size: cover;
+  color: $lbry-white;
   display: flex;
   flex-direction: column;
-  align-items: center;
   justify-content: center;
 }
 
@@ -38,6 +39,6 @@
   font-family: 12px 'metropolis-medium';
   font-size: 12px;
   line-height: 1;
-  padding-top: $spacing-vertical * 2/3;
   max-width: 400px;
+  padding-top: $spacing-vertical * 2/3;
 }

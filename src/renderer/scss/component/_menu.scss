@@ -1,24 +1,15 @@
-// $border-radius-menu: 2px; // unused
-
 .menu-container {
   display: inline-block;
 }
 
 .menu {
+  padding-top: ($spacing-vertical / 5) 0;
   position: absolute;
   white-space: nowrap;
-  // background-color: var(--menu-bg); // "--menu-bg" does not exist
-  // box-shadow: var(--box-shadow-layer);
-  // border-radius: var(--menu-radius); // "--menu-radius" does not exist
-  padding-top: ($spacing-vertical / 5) 0;
   z-index: 1;
 }
 
 .menu__menu-item {
   display: block;
   padding: ($spacing-vertical / 4) ($spacing-vertical / 2);
-
-  &:hover {
-    // background: var(--menu-item-hover-bg); // "--menu-item-hover-bg" does not exist
-  }
 }

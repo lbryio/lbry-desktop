@@ -1,12 +1,19 @@
 .card {
-  margin-left: auto;
-  margin-right: auto;
   border-radius: var(--card-radius);
-  user-select: text;
   display: flex;
   flex-direction: column;
+  margin-right: auto;
+  margin-left: auto;
   max-width: var(--card-max-width);
+  user-select: text;
   white-space: normal;
+
+  // .card-media__internal__links should always be inside a card
+  .card-media__internal-links {
+    top: $spacing-vertical * 2/3;
+    right: $spacing-vertical * 2/3;
+    position: absolute;
+  }
 
   .card__media {
     padding-top: var(--video-aspect-ratio);
@@ -20,28 +27,26 @@
   }
 }
 
-.card--section {
-  background-color: $lbry-white;
-  padding: $spacing-vertical;
-  margin-top: $spacing-vertical * 2/3;
-  // box-shadow: var(--box-shadow-layer);
+.card--disabled {
+  opacity: 0.3;
+  pointer-events: none;
 }
 
-.card--small {
-  font-size: 13px;
+.card--link {
+  cursor: pointer;
 }
 
 .card__media {
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: 50% 50%;
   background-color: $lbry-gray-3;
+  background-position: 50% 50%;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 
 .card__media--no-img {
+  align-items: center;
   display: flex;
   justify-content: center;
-  align-items: center;
   position: relative;
 }
 
@@ -49,12 +54,23 @@
   background-color: $lbry-red-5;
 }
 
-.card--link {
-  cursor: pointer;
-}
-
 .card--pending {
   opacity: 0.5;
+}
+
+.card--section {
+  margin-top: $spacing-vertical * 2/3;
+  padding: $spacing-vertical;
+  background-color: $lbry-white;
+}
+
+.card--small {
+  font-size: 13px;
+}
+
+.card--space-between {
+  display: flex;
+  justify-content: space-between;
 }
 
 .card--wallet-balance {
@@ -63,106 +79,15 @@
   color: $lbry-white;
   justify-content: space-between;
 
-  .card__title,
-  .card__subtitle {
+  .card__subtitle,
+  .card__title {
     color: $lbry-white;
   }
 }
 
-.card--disabled {
-  opacity: 0.3;
-  pointer-events: none;
-}
-
-.card__title {
-  font-size: 1.5em;
-  color: $lbry-black;
-  padding-top: $spacing-vertical * 1/3;
-
-  @media (min-width: $large-breakpoint) {
-    font-size: 1.7em;
-  }
-}
-
-.card__title--file-card {
-  // FileCard is slightly different where the title is only slightly bigger than the subtitle
-  // Slightly bigger than 2 lines for consistent channel placement
-  font-size: 1.1em;
-  height: 3.3em;
-
-  @media only screen and (min-width: $large-breakpoint) {
-    font-size: 1.3em;
-  }
-}
-
-.card--space-between {
-  display: flex;
-  justify-content: space-between;
-}
-
-.card__title-identity-icons {
-  display: flex;
-  align-items: center;
-  align-self: flex-start;
-}
-
-.card__subtitle {
-  color: $lbry-gray-5;
-  font-size: 1em;
-  line-height: 1em;
-  padding-top: $spacing-vertical * 1/3;
-
-  @media (min-width: $large-breakpoint) {
-    font-size: 1.2em;
-  }
-}
-
-.card__subtext-title {
-  font-size: 1.1em;
-
-  &:not(:first-of-type) {
-    padding-top: $spacing-vertical * 3/2;
-  }
-}
-
-.card__subtext {
-  font-size: 0.85em;
-  padding-top: $spacing-vertical * 1/3;
-}
-
-.card__meta {
-  color: $lbry-gray-5;
-  font-size: 14px;
-  font-family: 'metropolis-medium';
-  padding-top: $spacing-vertical * 2/3;
-}
-
-.card__file-properties {
-  display: flex;
-  align-items: center;
-  color: $lbry-gray-5;
-
-  .icon + .icon {
-    margin-left: $spacing-vertical * 1/3;
-  }
-}
-
-// .card-media__internal__links should always be inside a card
-.card {
-  .card-media__internal-links {
-    position: absolute;
-    top: $spacing-vertical * 2/3;
-    right: $spacing-vertical * 2/3;
-  }
-}
-
-.card__content {
-  margin-top: $spacing-vertical * 2/3;
-}
-
 .card__actions {
-  margin-top: $spacing-vertical * 2/3;
   display: flex;
+  margin-top: $spacing-vertical * 2/3;
 
   &:not(.card__actions--vertical) {
     .btn:nth-child(n + 2),
@@ -173,18 +98,20 @@
   }
 }
 
-.card__actions--no-margin {
-  margin-top: 0;
+.card__actions-bottom-corner {
+  bottom: $spacing-vertical;
+  right: $spacing-vertical;
+  position: absolute;
 }
 
-.card__actions--vertical {
-  flex-direction: column;
-  margin-top: 0;
-  align-items: flex-end;
+.card__actions-top-corner {
+  display: flex;
+  justify-content: flex-end;
+}
 
-  .btn:not(:first-child) {
-    margin-top: $spacing-vertical * 1/3;
-  }
+.card__actions--between {
+  justify-content: space-between;
+  flex-wrap: wrap;
 }
 
 .card__actions--center {
@@ -196,108 +123,45 @@
   }
 }
 
-.card__actions-top-corner {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.card__actions-bottom-corner {
-  position: absolute;
-  bottom: $spacing-vertical;
-  right: $spacing-vertical;
-}
-
 .card__actions--end {
   justify-content: flex-end;
 }
 
-.card__actions--between {
-  justify-content: space-between;
-  flex-wrap: wrap;
+.card__actions--no-margin {
+  margin-top: 0;
 }
 
-/*
- .card-row is used on the discover page
- It is a list of cards that extend past the right edge of the screen
- There are left/right arrows to scroll the cards and view hidden content
-*/
-.card-row {
-  white-space: nowrap;
-  width: 100%;
-  padding-top: $spacing-vertical;
+.card__actions--vertical {
+  align-items: flex-end;
+  flex-direction: column;
+  margin-top: 0;
 
-  &:last-of-type {
-    padding-bottom: $spacing-vertical * 2/3;
+  .btn:not(:first-child) {
+    margin-top: $spacing-vertical * 1/3;
   }
 }
 
-.card-row__header {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  // specific padding-left styling is needed here
-  // this needs to be used on a page with noPadding
-  // doing so allows the content to scroll to the edge of the screen
-  padding-left: $spacing-width;
+.card__content {
+  margin-top: $spacing-vertical * 2/3;
 }
 
-.card-row__title {
-  font-family: 'metropolis-semibold';
-  display: flex;
+.card__error-msg {
+  margin: $spacing-vertical * 1/3 0;
+  padding: $spacing-vertical * 1/3;
+
+  background-color: $lbry-red-1;
+  border-left: 2px solid $lbry-red-5;
+  color: $lbry-red-5;
+}
+
+.card__file-properties {
   align-items: center;
-  font-size: 18px;
-  line-height: 24px;
-
-  @media only screen and (min-width: $medium-breakpoint) {
-    font-size: 20px;
-  }
-}
-
-.card-row__scroll-btns {
+  color: $lbry-gray-5;
   display: flex;
-  padding-right: $spacing-width * 1/3;
 
-  @media (min-width: $medium-breakpoint) {
-    padding-right: $spacing-width;
+  .icon + .icon {
+    margin-left: $spacing-vertical * 1/3;
   }
-}
-
-.card-row__scrollhouse {
-  padding-top: $spacing-vertical * 2/3;
-  overflow: hidden;
-
-  .card {
-    display: inline-block;
-    vertical-align: top;
-    overflow-y: visible;
-    // 31 px to handle to padding between cards
-    width: calc((100% / 4) - 34px);
-
-    @media only screen and (min-width: $medium-breakpoint) {
-      width: calc((100% / 6) - 29px);
-    }
-
-    @media only screen and (min-width: $large-breakpoint) {
-      width: calc((100% / 8) - 27px);
-    }
-  }
-
-  .card:not(:first-of-type) {
-    margin-left: 20px;
-  }
-
-  .card:first-of-type {
-    margin-left: $spacing-width;
-  }
-
-  .card:last-of-type {
-    margin-right: $spacing-width;
-  }
-}
-
-.card-row__message {
-  padding: 0 $spacing-width;
-  white-space: normal;
 }
 
 /*
@@ -306,8 +170,8 @@
 .card__list {
   .card {
     display: inline-block;
-    vertical-align: top;
     margin-bottom: $spacing-vertical * 3/2;
+    vertical-align: top;
 
     @media only screen and (max-width: $medium-breakpoint) {
       width: calc((100% / 4) - (60px / 4)); // 60px === 20px margin-right * three cards
@@ -335,6 +199,15 @@
   }
 }
 
+.card__list--recommended {
+  flex: 0 0 var(--recommended-content-width);
+  padding-left: $spacing-width;
+
+  @media (min-width: $medium-breakpoint) {
+    flex: 0 0 var(--recommended-content-width-medium);
+  }
+}
+
 .card__list--rewards {
   column-count: 2;
   column-gap: $spacing-vertical * 1/3;
@@ -346,27 +219,152 @@
   }
 }
 
-.card__list--recommended {
-  flex: 0 0 var(--recommended-content-width);
-  padding-left: $spacing-width;
+.card__meta {
+  color: $lbry-gray-5;
+  font-family: 'metropolis-medium';
+  font-size: 14px;
+  padding-top: $spacing-vertical * 2/3;
+}
 
-  @media (min-width: $medium-breakpoint) {
-    flex: 0 0 var(--recommended-content-width-medium);
+.card__subtitle {
+  color: $lbry-gray-5;
+  font-size: 1em;
+  line-height: 1em;
+  padding-top: $spacing-vertical * 1/3;
+
+  @media (min-width: $large-breakpoint) {
+    font-size: 1.2em;
+  }
+}
+
+.card__subtext {
+  font-size: 0.85em;
+  padding-top: $spacing-vertical * 1/3;
+}
+
+.card__subtext-title {
+  font-size: 1.1em;
+
+  &:not(:first-of-type) {
+    padding-top: $spacing-vertical * 3/2;
   }
 }
 
 .card__success-msg {
+  margin: $spacing-vertical * 1/3 0;
+  padding: $spacing-vertical * 1/3;
+
+  background-color: $lbry-green-1;
   border-left: 2px solid mix($lbry-green-3, $lbry-blue-3, 50%);
   color: $lbry-green-3;
-  background-color: $lbry-green-1;
-  padding: $spacing-vertical * 1/3;
-  margin: $spacing-vertical * 1/3 0;
 }
 
-.card__error-msg {
-  border-left: 2px solid $lbry-red-5;
-  color: $lbry-red-5;
-  background-color: $lbry-red-1;
-  padding: $spacing-vertical * 1/3;
-  margin: $spacing-vertical * 1/3 0;
+.card__title {
+  color: $lbry-black;
+  font-size: 1.5em;
+  padding-top: $spacing-vertical * 1/3;
+
+  @media (min-width: $large-breakpoint) {
+    font-size: 1.7em;
+  }
+}
+
+.card__title-identity-icons {
+  align-items: center;
+  align-self: flex-start;
+  display: flex;
+}
+
+.card__title--file-card {
+  // FileCard is slightly different where the title is only slightly bigger than the subtitle
+  // Slightly bigger than 2 lines for consistent channel placement
+  font-size: 1.1em;
+  height: 3.3em;
+
+  @media only screen and (min-width: $large-breakpoint) {
+    font-size: 1.3em;
+  }
+}
+
+/*
+ .card-row is used on the discover page
+ It is a list of cards that extend past the right edge of the screen
+ There are left/right arrows to scroll the cards and view hidden content
+*/
+.card-row {
+  padding-top: $spacing-vertical;
+  white-space: nowrap;
+  width: 100%;
+
+  &:last-of-type {
+    padding-bottom: $spacing-vertical * 2/3;
+  }
+}
+
+.card-row__header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  // specific padding-left styling is needed here
+  // this needs to be used on a page with noPadding
+  // doing so allows the content to scroll to the edge of the screen
+  padding-left: $spacing-width;
+}
+
+.card-row__message {
+  padding: 0 $spacing-width;
+  white-space: normal;
+}
+
+.card-row__scroll-btns {
+  display: flex;
+  padding-right: $spacing-width * 1/3;
+
+  @media (min-width: $medium-breakpoint) {
+    padding-right: $spacing-width;
+  }
+}
+
+.card-row__scrollhouse {
+  padding-top: $spacing-vertical * 2/3;
+  overflow: hidden;
+
+  .card {
+    display: inline-block;
+    overflow-y: visible;
+    vertical-align: top;
+    width: calc((100% / 4) - 34px); // 31 px to handle to padding between cards
+
+    &:not(:first-of-type) {
+      margin-left: 20px;
+    }
+
+    &:first-of-type {
+      margin-left: $spacing-width;
+    }
+
+    &:last-of-type {
+      margin-right: $spacing-width;
+    }
+
+    @media only screen and (min-width: $medium-breakpoint) {
+      width: calc((100% / 6) - 29px);
+    }
+
+    @media only screen and (min-width: $large-breakpoint) {
+      width: calc((100% / 8) - 27px);
+    }
+  }
+}
+
+.card-row__title {
+  align-items: center;
+  display: flex;
+  font-family: 'metropolis-semibold';
+  font-size: 18px;
+  line-height: 24px;
+
+  @media only screen and (min-width: $medium-breakpoint) {
+    font-size: 20px;
+  }
 }

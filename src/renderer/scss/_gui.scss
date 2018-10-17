@@ -40,28 +40,24 @@ html {
 }
 
 body {
-  font-family: 'metropolis-medium';
-  font-weight: 400;
-  font-size: 16px;
-  line-height: 1.5;
   color: $lbry-black;
+  font-family: 'metropolis-medium';
+  font-size: 16px;
+  font-weight: 400;
   height: 100%;
+  line-height: 1.5;
   overflow: hidden;
 }
 
-* {
-  box-sizing: border-box;
-}
-
 code {
-  font: 1.5em Consolas, 'Lucida Console', 'Source Sans', monospace;
   background-color: $lbry-gray-1;
+  font: 1.5em Consolas, 'Lucida Console', 'Source Sans', monospace;
 }
 
-// Without this buttons don't have the Metropolis font
+// Without this buttons do not have the app font
 button {
-  font-weight: inherit;
   font-family: inherit;
+  font-weight: inherit;
 }
 
 ul {
@@ -70,15 +66,20 @@ ul {
 }
 
 input {
+  background-color: transparent;
   border-bottom: var(--input-border-size) dotted $lbry-gray-5;
   color: $lbry-black;
-  line-height: 1;
   cursor: text;
-  background-color: transparent;
+  line-height: 1;
 
-  &[type='radio'],
+  &::placeholder {
+    color: $lbry-gray-5;
+    opacity: 0.5;
+  }
+
   &[type='checkbox'],
   &[type='file'],
+  &[type='radio'],
   &[type='select'] {
     cursor: pointer;
   }
@@ -86,12 +87,13 @@ input {
   &[type='file'] {
     border-bottom: none;
   }
+
   &.input-copyable {
-    flex: 1;
     background-color: $lbry-gray-1;
-    color: $lbry-gray-5;
-    padding: 10px 16px;
     border: 1px dashed $lbry-gray-3;
+    color: $lbry-gray-5;
+    flex: 1;
+    padding: 10px 16px;
     text-overflow: ellipsis;
   }
 
@@ -99,12 +101,13 @@ input {
     &:hover {
       border-color: rgba($lbry-black, 0.8);
     }
+
     border-bottom: var(--input-border-size) solid $lbry-gray-5;
   }
 
   &:disabled {
-    color: $lbry-gray-3;
     border-bottom: var(--input-border-size) solid $lbry-gray-3;
+    color: $lbry-gray-3;
     cursor: default;
   }
 }
@@ -112,13 +115,8 @@ input {
 textarea {
   border: 1px solid $lbry-gray-2;
   font-size: 0.8em;
-  width: 100%;
   padding: $spacing-vertical * 1/3;
-}
-
-input::placeholder {
-  color: $lbry-gray-5;
-  opacity: 0.5;
+  width: 100%;
 }
 
 label[for] {
@@ -130,42 +128,44 @@ button + input {
 }
 
 dl {
-  width: 100%;
-  overflow: hidden;
-  padding: 0;
   margin: 0;
+  padding: 0;
+
   overflow-x: scroll;
+  overflow-y: hidden;
+  width: 100%;
 }
 
 dt {
+  margin: 0;
+  padding: 0;
+
   float: left;
   width: 20%;
-  padding: 0;
-  margin: 0;
 }
 
 dd {
+  margin: 0;
+  padding: 0;
+
   float: left;
   width: 80%;
-  padding: 0;
-  margin: 0;
 }
 
-p {
-  &:not(:first-of-type) {
-    margin-top: $spacing-vertical * 1/3;
-  }
+p:not(:first-of-type) {
+  margin-top: $spacing-vertical * 1/3;
 }
 
 .page {
-  z-index: 0;
-  position: absolute;
   top: var(--header-height);
   left: 0;
-  right: 0;
   bottom: 0;
-  display: flex;
+  right: 0;
+
   background-color: rgba($lbry-gray-1, 0.3);
+  display: flex;
+  position: absolute;
+  z-index: 0;
 
   @media only screen and (min-width: $medium-breakpoint) {
     grid-template-columns: var(--side-nav-width-m) auto;
@@ -185,37 +185,36 @@ p {
 }
 
 .main {
-  padding: $spacing-width $spacing-width;
   margin: auto;
+  padding: $spacing-width $spacing-width;
   overflow: hidden;
 }
 
 .main--contained {
-  max-width: 1000px;
   margin: auto;
+  max-width: 1000px;
 }
 
 .main--no-padding {
-  padding-left: 0;
-  padding-right: 0;
   padding-top: 0;
+  padding-right: 0;
+  padding-left: 0;
   margin: 0;
 }
 
 .main--extra-padding {
-  padding-left: 100px;
   padding-right: 100px;
+  padding-left: 100px;
 }
 
 .main--for-content {
-  padding: $spacing-width * 2/3;
   display: flex;
+  padding: $spacing-width * 2/3;
   justify-content: center;
 }
 
 .page__header {
-  padding: $spacing-vertical * 2/3;
-  padding-bottom: 0;
+  padding: $spacing-vertical * 2/3 $spacing-vertical * 2/3 0 $spacing-vertical * 2/3;
 }
 
 .page__title {
@@ -223,11 +222,11 @@ p {
 }
 
 .page__empty {
-  margin-top: 200px;
-  text-align: center;
+  align-items: center;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  margin-top: 200px;
+  text-align: center;
 }
 
 .columns {
@@ -235,8 +234,8 @@ p {
   justify-content: space-between;
 
   > * {
-    flex-grow: 1;
     flex-basis: 0;
+    flex-grow: 1;
 
     &:not(:first-of-type):not(:last-of-type) {
       margin: 0 $spacing-vertical / 3;
@@ -252,9 +251,9 @@ p {
   }
 }
 
-/* Custom text selection */
+// Custom text selection
 *::selection {
-  background: $lbry-teal-1;
+  background-color: $lbry-teal-1;
   color: $lbry-white;
 }
 
@@ -269,34 +268,38 @@ p {
 }
 
 .credit-amount--file-page {
-  font-family: 'metropolis-bold';
   border-radius: 5px;
+  font-family: 'metropolis-bold';
   padding: 5px;
 }
 
 .credit-amount--free {
-  color: $lbry-blue-5;
+  &:not(.credit-amount--file-page) {
+    color: $lbry-blue-5;
+  }
 
   &.credit-amount--file-page {
-    color: $lbry-blue-5;
     background-color: $lbry-blue-2;
+    color: $lbry-blue-5;
   }
 }
 
 .credit-amount--cost {
-  color: $lbry-gray-5;
+  &:not(.credit-amount--file-page) {
+    color: $lbry-gray-5;
+  }
 
   &.credit-amount--file-page {
-    color: $lbry-black;
     background-color: $lbry-yellow-3;
+    color: $lbry-black;
   }
 }
 
 .credit-amount--inherit {
   background-color: inherit;
   color: inherit;
-  font-weight: inherit;
   font-size: inherit;
+  font-weight: inherit;
   padding: 0;
 }
 
@@ -310,8 +313,8 @@ p {
 }
 
 .disabled {
-  pointer-events: none;
   opacity: 0.5;
+  pointer-events: none;
 }
 
 .column {
@@ -323,31 +326,33 @@ p {
 }
 
 .truncated-text {
-  //display: inline-block;
   display: -webkit-box;
   overflow: hidden;
   -webkit-box-orient: vertical;
 }
 
 .busy-indicator__loader {
-  background: url('../../../static/img/busy.gif') no-repeat center center;
-  display: inline-block;
-  margin: -1em 0;
   min-width: 16px;
   min-height: 8px;
-  vertical-align: middle;
+  margin: -1em 0;
   padding: 0 30px;
-  &:last-child {
-    padding-right: 2px;
-  }
+
+  background: url('../../../static/img/busy.gif') no-repeat center center;
+  display: inline-block;
+  vertical-align: middle;
+
   &:first-child {
     padding-left: 2px;
+  }
+
+  &:last-child {
+    padding-right: 2px;
   }
 }
 
 .help {
-  font-size: 12px;
   color: $lbry-gray-5;
+  font-size: 12px;
 }
 
 .help--padded {
@@ -355,8 +360,8 @@ p {
 }
 
 .meta {
+  color: $lbry-gray-1;
   font-size: 0.8em;
-  color: $lbry-gray-1; // "--color-meta-light" does not exist
 }
 
 .empty {
@@ -365,12 +370,14 @@ p {
 }
 
 .qr-code {
-  border: 3px solid $lbry-white;
-  height: 134px;
   width: 134px;
+  height: 134px;
+  border: 3px solid $lbry-white;
+
   &.qr-code--right-padding {
     margin-right: $spacing-vertical * 2/3;
   }
+
   &.qr-code--top-padding {
     margin-top: $spacing-vertical * 2/3;
   }
@@ -381,9 +388,10 @@ p {
 }
 
 .thumbnail-preview {
-  height: var(--thumbnail-preview-height);
   width: var(--thumbnail-preview-width);
-  background-size: cover;
-  background-repeat: no-repeat;
+  height: var(--thumbnail-preview-height);
+
   background-position: 50% 50%;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
