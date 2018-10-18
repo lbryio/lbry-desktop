@@ -33,6 +33,8 @@ export function doUpdateLoadStatus(uri: string, outpoint: string) {
   return (dispatch, getState) => {
     const setNextStatusUpdate = () =>
       setTimeout(() => {
+        // We need to check if outpoint still exists first because user are able to delete file (outpoint) while downloading.
+        // If fiel is already deleted, no point to still try update load status
         const byOutpoint = selectFileInfosByOutpoint(getState());
         if (byOutpoint[outpoint]) {
           dispatch(doUpdateLoadStatus(uri, outpoint));
