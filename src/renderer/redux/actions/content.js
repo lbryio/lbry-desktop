@@ -3,10 +3,7 @@ import * as NOTIFICATION_TYPES from 'constants/notification_types';
 import { ipcRenderer } from 'electron';
 import { doAlertError } from 'redux/actions/app';
 import { doNavigate } from 'redux/actions/navigation';
-import {
-  setSubscriptionLatest,
-  setSubscriptionNotification,
-} from 'redux/actions/subscriptions';
+import { setSubscriptionLatest, setSubscriptionNotification } from 'redux/actions/subscriptions';
 import { selectNotifications } from 'redux/selectors/subscriptions';
 import { selectBadgeNumber } from 'redux/selectors/app';
 import {
@@ -18,6 +15,7 @@ import {
   doFetchClaimListMine,
   makeSelectCostInfoForUri,
   makeSelectFileInfoForUri,
+  selectFileInfosByOutpoint,
   selectDownloadingByOutpoint,
   selectTotalDownloadProgress,
   selectBalance,
@@ -31,17 +29,24 @@ import analytics from 'analytics';
 
 const DOWNLOAD_POLL_INTERVAL = 250;
 
-export function doUpdateLoadStatus(uri, outpoint) {
+export function doUpdateLoadStatus(uri: string, outpoint: string) {
   return (dispatch, getState) => {
+    const setNextStatusUpdate = () =>
+      setTimeout(() => {
+        // We need to check if outpoint still exists first because user are able to delete file (outpoint) while downloading.
+        // If a file is already deleted, no point to still try update load status
+        const byOutpoint = selectFileInfosByOutpoint(getState());
+        if (byOutpoint[outpoint]) {
+          dispatch(doUpdateLoadStatus(uri, outpoint));
+        }
+      }, DOWNLOAD_POLL_INTERVAL);
     Lbry.file_list({
       outpoint,
       full_status: true,
     }).then(([fileInfo]) => {
       if (!fileInfo || fileInfo.written_bytes === 0) {
         // download hasn't started yet
-        setTimeout(() => {
-          dispatch(doUpdateLoadStatus(uri, outpoint));
-        }, DOWNLOAD_POLL_INTERVAL);
+        setNextStatusUpdate();
       } else if (fileInfo.completed) {
         const state = getState();
         // TODO this isn't going to get called if they reload the client before
@@ -124,10 +129,7 @@ export function doUpdateLoadStatus(uri, outpoint) {
 
         const totalProgress = selectTotalDownloadProgress(getState());
         setProgressBar(totalProgress);
-
-        setTimeout(() => {
-          dispatch(doUpdateLoadStatus(uri, outpoint));
-        }, DOWNLOAD_POLL_INTERVAL);
+        setNextStatusUpdate();
       }
     });
   };
