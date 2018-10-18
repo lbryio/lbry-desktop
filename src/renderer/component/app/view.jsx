@@ -1,12 +1,13 @@
 // @flow
 import React from 'react';
 import Router from 'component/router/index';
-import Theme from 'component/theme';
+// import Theme from 'component/theme';
 import ModalRouter from 'modal/modalRouter';
 import ReactModal from 'react-modal';
 import throttle from 'util/throttle';
 import SideBar from 'component/sideBar';
 import Header from 'component/header';
+import { whatIsTheTheme } from 'redux/selectors/settings';
 import { openContextMenu } from '../../util/contextMenu';
 
 type Props = {
@@ -32,6 +33,9 @@ class App extends React.PureComponent<Props> {
     document.addEventListener('unhandledError', (event: any) => {
       alertError(event.detail);
     });
+
+    // $FlowFixMe
+    document.documentElement.setAttribute('data-theme', whatIsTheTheme());
   }
 
   componentDidMount() {
@@ -81,7 +85,6 @@ class App extends React.PureComponent<Props> {
   render() {
     return (
       <div id="window" onContextMenu={e => openContextMenu(e)}>
-        <Theme />
         <Header />
         <main className="page">
           <SideBar />

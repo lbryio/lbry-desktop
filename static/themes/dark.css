@@ -1,5 +1,6 @@
-:root {
+@import url("../../node_modules/@lbry/color/lbry-color.css");
 
+:root {
   /* Colors */
   --color-divider: #53637C;
   --color-canvas: transparent;
@@ -15,8 +16,8 @@
   --text-color: var(--color-text-white);
   --text-help-color: $lbry-gray-5;
 
-   /* Form */
-   --form-label-color: $lbry-white;
+  /* Form */
+  --form-label-color: $lbry-white;
 
   /* Input */
   --input-bg: transparent;
@@ -93,4 +94,16 @@
 
   /* Shadows */
   --box-shadow-header: 0 6px 20px 1px rgba(0, 0, 0, 0.2);
+}
+
+html,
+.card {
+  /* filter: invert(100%) hue-rotate(180deg); */
+}
+
+.card {
+}
+
+.header {
+  background-color: #212529; /* lbry-black */
 }
