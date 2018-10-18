@@ -1,7 +1,6 @@
 // @flow
 import React from 'react';
 import Router from 'component/router/index';
-// import Theme from 'component/theme';
 import ModalRouter from 'modal/modalRouter';
 import ReactModal from 'react-modal';
 import throttle from 'util/throttle';

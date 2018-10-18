@@ -100,17 +100,15 @@ class WunderBar extends React.PureComponent<Props> {
     if (suggestion) {
       if (suggestion.type === 'search') {
         onSearch(query, resultCount);
+      } else if (isURIValid(query)) {
+        const params = getParams();
+        const uri = normalizeURI(query);
+        onSubmit(uri, params);
       } else {
-        if (isURIValid(query)) {
-          const params = getParams();
-          const uri = normalizeURI(query);
-          onSubmit(uri, params);
-        } else {
-          this.props.doShowSnackBar({
-              message: __('Invalid LBRY URL entered. Only A-Z, a-z, and - allowed.'),
-              displayType: ['snackbar'],
-            })
-        }
+        this.props.doShowSnackBar({
+          message: __('Invalid LBRY URL entered. Only A-Z, a-z, and - allowed.'),
+          displayType: ['snackbar'],
+        });
       }
 
       return;
@@ -125,9 +123,9 @@ class WunderBar extends React.PureComponent<Props> {
         onSubmit(uri, params);
       } else {
         this.props.doShowSnackBar({
-            message: __('Invalid LBRY URL entered. Only A-Z, a-z, and - allowed.'),
-            displayType: ['snackbar'],
-          })
+          message: __('Invalid LBRY URL entered. Only A-Z, a-z, and - allowed.'),
+          displayType: ['snackbar'],
+        });
       }
     } catch (e) {
       onSearch(query, resultCount);
@@ -176,7 +174,6 @@ class WunderBar extends React.PureComponent<Props> {
               <span className="wunderbar__suggestion-label">{value}</span>
               {isHighlighted && (
                 <span className="wunderbar__suggestion-label--action">
-                  {'-  '}
                   {type === SEARCH_TYPES.SEARCH && __('Search')}
                   {type === SEARCH_TYPES.CHANNEL && __('View channel')}
                   {type === SEARCH_TYPES.FILE && __('View file')}

@@ -25,13 +25,17 @@
   height: var(--btn-height);
 
   align-items: center;
-  background-color: rgba($lbry-gray-1, 0.3);
   border-bottom: none; // ?
   color: $lbry-gray-5;
   display: flex;
   font-size: 13px;
   justify-content: center;
   padding: 10px 10px 10px 30px;
+  transition: background-color 0.2s;
+
+  &:not(:focus) {
+    background-color: rgba($lbry-gray-1, 0.3);
+  }
 
   &:focus {
     background-color: rgba($lbry-gray-1, 0.5);
@@ -39,16 +43,14 @@
 }
 
 .wunderbar__menu {
-  background-color: transparent;
-  border-radius: 0 0 3px 3px;
-  max-width: 100px;
-  overflow-x: hidden;
-  padding: 0;
+  background-color: $lbry-white;
+  box-shadow: 0 1px 5px rgba($lbry-black, 0.15);
+  max-width: 100px; // ?
+  overflow: hidden;
 }
 
 .wunderbar__suggestion {
   align-items: center;
-  background-color: $lbry-gray-5;
   cursor: pointer;
   display: flex;
   flex-direction: row;
@@ -74,7 +76,8 @@
 .wunderbar__suggestion-label--action {
   font-size: 12px;
   line-height: 0.1; // to vertically align because the font size is smaller
-  margin-left: $spacing-vertical * 1/3;
+  margin-left: 0.5rem;
+  opacity: 0.3;
   white-space: nowrap;
 }
 

@@ -41,8 +41,7 @@ input {
   line-height: 1;
 
   &::placeholder {
-    color: $lbry-gray-5;
-    opacity: 0.5;
+    color: rgba($lbry-gray-5, 0.5);
   }
 
   &[type='checkbox'],

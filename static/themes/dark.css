@@ -100,10 +100,3 @@ html,
 .card {
   /* filter: invert(100%) hue-rotate(180deg); */
 }
-
-.card {
-}
-
-.header {
-  background-color: #212529; /* lbry-black */
-}

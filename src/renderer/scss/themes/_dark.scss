@@ -1,5 +1,81 @@
 html[data-theme='dark'] {
   .header {
+    background-color: rgba($lbry-black, 0.9);
+  }
+
+  .header__navigation {
+    button {
+      background-color: transparent !important; // TODO: Fix
+      color: $lbry-white !important; // TODO: Fix
+    }
+  }
+
+  .wunderbar__active-suggestion {
+    background-color: $lbry-blue-4;
+    color: inherit;
+  }
+
+  .wunderbar__input {
+    background-color: rgba($lbry-white, 0.3);
+    color: $lbry-black;
+
+    &:focus {
+      background-color: rgba($lbry-white, 0.5);
+    }
+  }
+
+  .wunderbar__menu {
+    background-color: $lbry-gray-5;
+    color: $lbry-white;
+    top: 3rem;
+  }
+
+  input {
+    &::placeholder {
+      color: rgba($lbry-black, 0.7);
+    }
+  }
+
+  .nav {
+    background-color: rgba($lbry-white, 0.05);
+
+    hr {
+      border-color: $lbry-gray-5;
+    }
+  }
+
+  .nav__link .btn:hover {
+    color: $lbry-teal-5;
+  }
+
+  .nav__link--active {
+    color: $lbry-teal-3;
+  }
+
+  .page {
     background-color: $lbry-black;
+    color: $lbry-gray-1;
+  }
+
+  .card__title {
+    color: inherit;
+  }
+
+  .card--section {
+    background-color: rgba($lbry-white, 0.1);
+  }
+
+  .content__cover:not(.card__media--nsfw),
+  .card__media {
+    background-color: rgba($lbry-white, 0.1);
+  }
+
+  .card__media--nsfw {
+    background-color: rgba($lbry-red-1, 0.1);
+  }
+
+  .btn.btn--alt:not(:disabled) {
+    background-color: rgba($lbry-white, 0.1);
+    color: $lbry-gray-1;
   }
 }

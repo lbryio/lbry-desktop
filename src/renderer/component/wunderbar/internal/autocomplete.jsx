@@ -184,11 +184,6 @@ export default class Autocomplete extends React.Component {
       return <div style={{ ...style, ...this.menuStyle }} children={items} />;
     },
     menuStyle: {
-      borderRadius: '3px',
-      boxShadow: '0 2px 12px rgba(0, 0, 0, 0.1)',
-      background: 'rgba(255, 255, 255, 0.9)',
-      padding: '2px 0',
-      fontSize: '90%',
       position: 'absolute',
       overflow: 'hidden',
     },
@@ -469,7 +464,7 @@ export default class Autocomplete extends React.Component {
       className: 'wunderbar__menu',
       // Ignore blur to prevent menu from de-rendering before we can process click
       onMouseEnter: () => this.setIgnoreBlur(true),
-      onMouseLeave: () => this.setIgnoreBlur(false),
+      onMouseLeave: () => this.setIgnoreBlur(false), // uncomment this to inspect styling
     });
   }
 
