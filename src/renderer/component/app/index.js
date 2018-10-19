@@ -3,6 +3,7 @@ import { selectPageTitle, selectHistoryIndex, selectActiveHistoryEntry } from 'l
 import { doRecordScroll } from 'redux/actions/navigation';
 import { selectUser } from 'lbryinc';
 import { doAlertError } from 'redux/actions/app';
+import { selectThemePath } from 'redux/selectors/settings';
 import App from './view';
 
 const select = state => ({
@@ -10,6 +11,7 @@ const select = state => ({
   user: selectUser(state),
   currentStackIndex: selectHistoryIndex(state),
   currentPageAttributes: selectActiveHistoryEntry(state),
+  theme: selectThemePath(state),
 });
 
 const perform = dispatch => ({

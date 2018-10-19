@@ -6,7 +6,6 @@ import ReactModal from 'react-modal';
 import throttle from 'util/throttle';
 import SideBar from 'component/sideBar';
 import Header from 'component/header';
-import { whatIsTheTheme } from 'redux/selectors/settings';
 import { openContextMenu } from '../../util/contextMenu';
 
 type Props = {
@@ -15,6 +14,7 @@ type Props = {
   currentStackIndex: number,
   currentPageAttributes: { path: string, scrollY: number },
   pageTitle: ?string,
+  theme: string,
 };
 
 class App extends React.PureComponent<Props> {
@@ -25,7 +25,7 @@ class App extends React.PureComponent<Props> {
   }
 
   componentWillMount() {
-    const { alertError } = this.props;
+    const { alertError, theme } = this.props;
 
     // TODO: create type for this object
     // it lives in jsonrpc.js
@@ -34,7 +34,7 @@ class App extends React.PureComponent<Props> {
     });
 
     // $FlowFixMe
-    document.documentElement.setAttribute('data-theme', whatIsTheTheme());
+    document.documentElement.setAttribute('data-theme', theme);
   }
 
   componentDidMount() {
@@ -54,11 +54,16 @@ class App extends React.PureComponent<Props> {
   }
 
   componentDidUpdate(prevProps: Props) {
-    const { currentStackIndex: prevStackIndex } = prevProps;
-    const { currentStackIndex, currentPageAttributes } = this.props;
+    const { currentStackIndex: prevStackIndex, theme: prevTheme } = prevProps;
+    const { currentStackIndex, currentPageAttributes, theme } = this.props;
 
     if (this.mainContent && currentStackIndex !== prevStackIndex && currentPageAttributes) {
       this.mainContent.scrollTop = currentPageAttributes.scrollY || 0;
+    }
+
+    if (prevTheme !== theme) {
+      // $FlowFixMe
+      document.documentElement.setAttribute('data-theme', theme);
     }
   }
 
