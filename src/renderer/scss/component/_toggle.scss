@@ -24,13 +24,13 @@
   &:hover {
     &:not(.react-toggle--disabled) {
       .react-toggle-track {
-        background-color: $lbry-teal-5;
+        background-color: $lbry-black;
       }
     }
   }
 
   .react-toggle-track {
-    background-color: $lbry-teal-3;
+    background-color: $lbry-teal-5;
   }
 
   .react-toggle-track-check {
@@ -43,7 +43,7 @@
   }
 
   .react-toggle-thumb {
-    border-color: $lbry-teal-3;
+    border-color: $lbry-teal-5;
     left: 22px;
   }
 }

@@ -30,12 +30,6 @@ html[data-theme='dark'] {
     top: 3rem;
   }
 
-  input {
-    &::placeholder {
-      color: rgba($lbry-black, 0.7);
-    }
-  }
-
   .nav {
     background-color: rgba($lbry-white, 0.05);
 
@@ -77,5 +71,34 @@ html[data-theme='dark'] {
   .btn.btn--alt:not(:disabled) {
     background-color: rgba($lbry-white, 0.1);
     color: $lbry-gray-1;
+  }
+
+  .search__top {
+    background-color: rgba($lbry-white, 0.15);
+  }
+
+  table.table,
+  .markdown-preview table {
+    thead {
+      border-bottom: 1px solid rgba($lbry-gray-1, 0.1);
+    }
+
+    tbody {
+      tr {
+        border-bottom: 1px solid rgba($lbry-gray-1, 0.1);
+
+        &:nth-child(even) {
+          background-color: rgba($lbry-gray-1, 0.1);
+        }
+      }
+    }
+  }
+
+  .item-list {
+    background-color: rgba($lbry-white, 0.1);
+  }
+
+  .item-list__item:not(:last-of-type) {
+    border-bottom: 1px solid rgba($lbry-gray-1, 0.1);
   }
 }

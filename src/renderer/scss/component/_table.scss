@@ -48,20 +48,19 @@ table.table,
 
   thead {
     border-bottom: 1px solid rgba($lbry-gray-1, 0.7);
-    color: $lbry-black;
   }
 
   tbody {
     tr {
-      border-bottom: 1px solid rgba($lbry-gray-1, 0.3);
+      border-bottom: 1px solid $lbry-gray-1;
       padding: 8px 0;
-
-      &:nth-child(even) {
-        background-color: rgba($lbry-gray-1, 0.3);
-      }
 
       &:nth-child(odd) {
         background-color: transparent;
+      }
+
+      &:nth-child(even) {
+        background-color: rgba($lbry-gray-1, 0.3);
       }
 
       &.thead {
@@ -78,13 +77,11 @@ table.table,
 table {
   &.table--help {
     td:nth-of-type(1) {
-      color: $lbry-black;
       font-weight: 600;
       min-width: 130px;
     }
 
     td:nth-of-type(2) {
-      color: $lbry-gray-5;
       max-width: 20vw; // Tourniquets text over 20vw
       overflow: hidden;
       text-overflow: ellipsis;

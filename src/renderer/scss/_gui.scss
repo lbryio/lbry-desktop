@@ -36,12 +36,13 @@ ul {
 input {
   background-color: transparent;
   border-bottom: var(--input-border-size) dotted $lbry-gray-5;
-  color: $lbry-black;
+  color: inherit; // $lbry-black;
   cursor: text;
   line-height: 1;
 
   &::placeholder {
-    color: rgba($lbry-gray-5, 0.5);
+    color: inherit;
+    opacity: 0.3;
   }
 
   &[type='checkbox'],

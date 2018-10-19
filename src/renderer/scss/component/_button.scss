@@ -3,7 +3,7 @@
   height: var(--btn-height);
 
   align-items: center;
-  background-color: $lbry-teal-3;
+  background-color: $lbry-teal-5;
   border: none;
   border-radius: var(--btn-radius);
   color: $lbry-white;
@@ -21,7 +21,7 @@
   }
 
   &:hover {
-    background-color: $lbry-teal-1;
+    background-color: $lbry-teal-4;
   }
 
   &:not(.btn--no-padding):not(.btn--link):not(.btn--no-style) {
@@ -86,7 +86,7 @@
   }
 
   &.btn--header-balance {
-    color: $lbry-teal-3;
+    color: $lbry-teal-5;
     font-size: 14px;
 
     @media only screen and (min-width: $large-breakpoint) {
@@ -101,13 +101,13 @@
       background-color: transparent;
 
       .btn__label--balance {
-        color: $lbry-teal-3;
+        color: $lbry-teal-5;
       }
     }
   }
 
   &.btn--header-publish {
-    background-color: $lbry-teal-3;
+    background-color: $lbry-teal-5;
   }
 
   &.btn--home-nav {
@@ -122,7 +122,7 @@
   &.btn--inverse {
     background-color: transparent;
     box-shadow: none;
-    color: $lbry-teal-3;
+    color: $lbry-teal-5;
   }
 
   &.btn--link {
@@ -132,7 +132,7 @@
     background-color: inherit;
     border-radius: 0;
     box-shadow: none;
-    color: $lbry-teal-3;
+    color: $lbry-teal-5;
     display: inline;
     font-size: 1em;
     min-width: 0;
@@ -153,7 +153,7 @@
   }
 
   &.btn--secondary {
-    background-color: $lbry-teal-3;
+    background-color: $lbry-teal-5;
   }
 
   &.btn--tourniquet {
@@ -192,6 +192,6 @@
   transition: color var(--animation-duration) var(--animation-style);
 
   &:hover {
-    color: $lbry-teal-3;
+    color: $lbry-teal-4;
   }
 }

@@ -101,7 +101,8 @@
 }
 
 .form-field__label {
-  color: rgba($lbry-black, 0.5);
+  color: inherit;
+  opacity: 0.7;
 }
 
 .form-field__prefix,
