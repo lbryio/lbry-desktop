@@ -10,17 +10,22 @@ html[data-theme='dark'] {
     }
   }
 
+  .wunderbar > .icon {
+    color: $lbry-gray-5;
+  }
+
   .wunderbar__active-suggestion {
     background-color: $lbry-blue-4;
     color: inherit;
   }
 
   .wunderbar__input {
-    background-color: rgba($lbry-white, 0.3);
-    color: $lbry-black;
+    background-color: rgba($lbry-white, 0.1);
+    color: $lbry-white;
 
     &:focus {
-      background-color: rgba($lbry-white, 0.5);
+      background-color: rgba($lbry-white, 0.9);
+      color: $lbry-black;
     }
   }
 
@@ -51,8 +56,17 @@ html[data-theme='dark'] {
     color: $lbry-gray-1;
   }
 
+  input.input-copyable {
+    background-color: rgba($lbry-white, 0.1);
+    color: $lbry-white;
+  }
+
   .card__title {
     color: inherit;
+  }
+
+  .card--placeholder {
+    background-color: rgba($lbry-white, 0.1);
   }
 
   .card--section {

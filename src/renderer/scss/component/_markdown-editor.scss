@@ -1,5 +1,8 @@
 .CodeMirror {
-  border: none;
+  border-top: none;
+  border-right: 1px solid $lbry-gray-1;
+  border-bottom: 1px solid $lbry-gray-1;
+  border-left: 1px solid $lbry-gray-1;
   border-radius: 0;
   background: $lbry-white;
   color: $lbry-black;
@@ -17,7 +20,7 @@
   }
 
   .CodeMirror-selectedtext {
-    background-color: rgba($lbry-teal-3, 0.3);
+    background-color: $lbry-teal-5;
     color: $lbry-white;
   }
 
