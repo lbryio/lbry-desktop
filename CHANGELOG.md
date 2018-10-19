@@ -10,6 +10,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
  * Focus on search bar with {cmd,ctrl} + "l" ([#2003](https://github.com/lbryio/lbry-desktop/pull/2003))
  * Add support for clickable channel names on explore page headings ([#2023](https://github.com/lbryio/lbry-desktop/pull/2023))
  * Content loading placeholder styles on FileCard/FileTile ([#2022](https://github.com/lbryio/lbry-desktop/pull/2022))
+ * Adds Persistence to Transaction List Filter Selection ([#2048](https://github.com/lbryio/lbry-desktop/pull/2048))
 
 ### Changed
  * Make tooltip smarter ([#1979](https://github.com/lbryio/lbry-desktop/pull/1979))

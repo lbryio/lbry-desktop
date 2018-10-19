@@ -25,19 +25,13 @@ type Props = {
   rewards: {},
   openModal: ({ id: string }, { nout: number, txid: string }) => void,
   myClaims: any,
+  filterSetting: string,
+  setTransactionFilter: string => void,
 };
 
-type State = {
-  filter: string,
-};
-
-class TransactionList extends React.PureComponent<Props, State> {
+class TransactionList extends React.PureComponent<Props> {
   constructor(props: Props) {
     super(props);
-
-    this.state = {
-      filter: 'all',
-    };
 
     (this: any).handleFilterChanged = this.handleFilterChanged.bind(this);
     (this: any).filterTransaction = this.filterTransaction.bind(this);
@@ -50,15 +44,13 @@ class TransactionList extends React.PureComponent<Props, State> {
   }
 
   handleFilterChanged(event: SyntheticInputEvent<*>) {
-    this.setState({
-      filter: event.target.value,
-    });
+    this.props.setTransactionFilter(event.target.value);
   }
 
   filterTransaction(transaction: Transaction) {
-    const { filter } = this.state;
-
-    return filter === 'all' || filter === transaction.type;
+    return (
+      this.props.filterSetting === TRANSACTIONS.ALL || this.props.filterSetting === transaction.type
+    );
   }
 
   isRevokeable(txid: string, nout: number) {
@@ -73,9 +65,12 @@ class TransactionList extends React.PureComponent<Props, State> {
   }
 
   render() {
-    const { emptyMessage, rewards, transactions, slim } = this.props;
-    const { filter } = this.state;
+    const { emptyMessage, rewards, transactions, slim, filterSetting } = this.props;
     const transactionList = transactions.filter(this.filterTransaction);
+    // Flow offers little support for Object.values() typing.
+    // https://github.com/facebook/flow/issues/2221
+    // $FlowFixMe
+    const transactionTypes: Array<string> = Object.values(TRANSACTIONS);
 
     return (
       <React.Fragment>
@@ -98,7 +93,7 @@ class TransactionList extends React.PureComponent<Props, State> {
           <div className="card__actions-top-corner">
             <FormField
               type="select"
-              value={filter}
+              value={filterSetting || TRANSACTIONS.ALL}
               onChange={this.handleFilterChanged}
               affixClass="form-field--align-center"
               prefix={__('Show')}
@@ -111,31 +106,11 @@ class TransactionList extends React.PureComponent<Props, State> {
                 />
               }
             >
-              <option value="all">{__('All')}</option>
-              <option value={TRANSACTIONS.SPEND}>
-                {__(`${this.capitalize(TRANSACTIONS.SPEND)}s`)}
-              </option>
-              <option value={TRANSACTIONS.RECEIVE}>
-                {__(`${this.capitalize(TRANSACTIONS.RECEIVE)}s`)}
-              </option>
-              <option value={TRANSACTIONS.PUBLISH}>
-                {__(`${this.capitalize(TRANSACTIONS.PUBLISH)}es`)}
-              </option>
-              <option value={TRANSACTIONS.CHANNEL}>
-                {__(`${this.capitalize(TRANSACTIONS.CHANNEL)}s`)}
-              </option>
-              <option value={TRANSACTIONS.TIP}>
-                {__(`${this.capitalize(TRANSACTIONS.TIP)}s`)}
-              </option>
-              <option value={TRANSACTIONS.SUPPORT}>
-                {__(`${this.capitalize(TRANSACTIONS.SUPPORT)}s`)}
-              </option>
-              <option value={TRANSACTIONS.UPDATE}>
-                {__(`${this.capitalize(TRANSACTIONS.UPDATE)}s`)}
-              </option>
-              <option value={TRANSACTIONS.ABANDON}>
-                {__(`${this.capitalize(TRANSACTIONS.ABANDON)}s`)}
-              </option>
+              {transactionTypes.map(tt => (
+                <option key={tt} value={tt}>
+                  {__(`${this.capitalize(tt)}`)}
+                </option>
+              ))}
             </FormField>
           </div>
         )}
