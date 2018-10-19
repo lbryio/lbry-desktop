@@ -29,7 +29,9 @@ class FileListPublished extends React.PureComponent<Props> {
           <FileList checkPending fileInfos={claims} sortByHeight />
         ) : (
           <div className="page__empty">
-            {__("It looks like you haven't published anything to LBRY yet.")}
+            <h3 className="card__title">
+              {__("It looks like you haven't published anything to LBRY yet.")}
+            </h3>
             <div className="card__actions card__actions--center">
               <Button
                 button="primary"

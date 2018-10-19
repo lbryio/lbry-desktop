@@ -1,10 +1,10 @@
 // @flow
-import * as NOTIFICATION_TYPES from 'constants/notification_types';
+import * as NOTIFICATION_TYPES from 'constants/subscriptions';
 import { ipcRenderer } from 'electron';
 import { doAlertError } from 'redux/actions/app';
 import { doNavigate } from 'redux/actions/navigation';
-import { setSubscriptionLatest, setSubscriptionNotification } from 'redux/actions/subscriptions';
-import { selectNotifications } from 'redux/selectors/subscriptions';
+import { setSubscriptionLatest, doUpdateUnreadSubscriptions } from 'redux/actions/subscriptions';
+import { makeSelectUnreadByChannel } from 'redux/selectors/subscriptions';
 import { selectBadgeNumber } from 'redux/selectors/app';
 import {
   ACTIONS,
@@ -21,6 +21,8 @@ import {
   selectBalance,
   MODALS,
   doNotify,
+  makeSelectChannelForClaimUri,
+  parseURI,
 } from 'lbry-redux';
 import { makeSelectClientSetting, selectosNotificationsEnabled } from 'redux/selectors/settings';
 import setBadge from 'util/setBadge';
@@ -66,19 +68,15 @@ export function doUpdateLoadStatus(uri: string, outpoint: string) {
         const totalProgress = selectTotalDownloadProgress(state);
         setProgressBar(totalProgress);
 
-        const notifications = selectNotifications(state);
-        if (notifications[uri] && notifications[uri].type === NOTIFICATION_TYPES.DOWNLOADING) {
-          const count = Object.keys(notifications).reduce(
-            (acc, cur) =>
-              notifications[cur].subscription.channelName ===
-              notifications[uri].subscription.channelName
-                ? acc + 1
-                : acc,
-            0
-          );
+        const channelUri = makeSelectChannelForClaimUri(uri, true)(state);
+        const { claimName: channelName } = parseURI(channelUri);
+
+        const unreadForChannel = makeSelectUnreadByChannel(channelUri)(state);
+        if (unreadForChannel.type === NOTIFICATION_TYPES.DOWNLOADING) {
+          const count = unreadForChannel.uris.length;
 
           if (selectosNotificationsEnabled(state)) {
-            const notif = new window.Notification(notifications[uri].subscription.channelName, {
+            const notif = new window.Notification(channelName, {
               body: `Posted ${fileInfo.metadata.title}${
                 count > 1 && count < 10 ? ` and ${count - 1} other new items` : ''
               }${count > 9 ? ' and 9+ other new items' : ''}`,
@@ -92,18 +90,12 @@ export function doUpdateLoadStatus(uri: string, outpoint: string) {
               );
             };
           }
-          if (state.navigation.currentPath !== '/subscriptions') {
-            dispatch(
-              setSubscriptionNotification(
-                notifications[uri].subscription,
-                uri,
-                NOTIFICATION_TYPES.DOWNLOADED
-              )
-            );
-          }
+
+          dispatch(doUpdateUnreadSubscriptions(channelUri, null, NOTIFICATION_TYPES.DOWNLOADED));
         } else {
           // If notifications are disabled(false) just return
           if (!selectosNotificationsEnabled(getState())) return;
+
           const notif = new window.Notification('LBRY Download Complete', {
             body: fileInfo.metadata.title,
             silent: false,
@@ -293,14 +285,14 @@ export function doPurchaseUri(uri, specificCostInfo, shouldRecordViewEvent) {
   };
 }
 
-export function doFetchClaimsByChannel(uri, page) {
+export function doFetchClaimsByChannel(uri, page, pageSize) {
   return dispatch => {
     dispatch({
       type: ACTIONS.FETCH_CHANNEL_CLAIMS_STARTED,
       data: { uri, page },
     });
 
-    Lbry.claim_list_by_channel({ uri, page: page || 1, page_size: 48 }).then(result => {
+    Lbry.claim_list_by_channel({ uri, page: page || 1, page_size: pageSize || 48 }).then(result => {
       const claimResult = result[uri] || {};
       const { claims_in_channel: claimsInChannel, returned_page: returnedPage } = claimResult;
 
@@ -321,18 +313,6 @@ export function doFetchClaimsByChannel(uri, page) {
             buildURI({ contentName: latest.name, claimId: latest.claim_id }, false)
           )
         );
-        // commented out as a note for @sean, notification will be clared individually
-        // const notifications = selectNotifications(getState());
-        // const newNotifications = {};
-        // Object.keys(notifications).forEach(cur => {
-        //   if (
-        //     notifications[cur].subscription.channelName !== latest.channel_name ||
-        //     notifications[cur].type === NOTIFICATION_TYPES.DOWNLOADING
-        //   ) {
-        //     newNotifications[cur] = { ...notifications[cur] };
-        //   }
-        // });
-        // dispatch(setSubscriptionNotifications(newNotifications));
       }
 
       dispatch({

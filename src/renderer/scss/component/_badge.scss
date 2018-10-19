@@ -1,0 +1,21 @@
+.badge {
+  border-radius: 5px;
+  padding: 5px;
+  font-weight: 800;
+  font-size: 0.8em;
+}
+
+.badge--alert {
+  background-color: #e45454;
+  color: white;
+}
+
+.badge--free {
+  background-color: $lbry-blue-2;
+  color: $lbry-blue-5;
+}
+
+.badge--cost {
+  background-color: $lbry-yellow-3;
+  color: $lbry-black;
+}

@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect';
 import { selectCurrentPage, selectHistoryStack } from 'lbry-redux';
+import * as icons from 'constants/icons';
 
 export const selectState = state => state.app || {};
 
@@ -198,46 +199,46 @@ export const selectNavLinks = createSelector(
           label: 'Explore',
           path: '/discover',
           active: currentPage === 'discover',
-          icon: 'Compass',
+          icon: icons.COMPASS,
         },
         {
           label: 'Subscriptions',
           path: '/subscriptions',
           active: currentPage === 'subscriptions',
-          icon: 'AtSign',
+          icon: icons.HEART,
         },
       ],
       secondary: [
         {
           label: 'Wallet',
-          icon: 'CreditCard',
+          icon: icons.CREDIT_CARD,
           subLinks: walletSubLinks,
           path: isCurrentlyWalletPage ? '/wallet' : getActiveSublink('wallet'),
           active: isWalletPage(currentPage),
         },
         {
           label: 'My LBRY',
-          icon: 'Folder',
+          icon: icons.LOCAL,
           subLinks: myLbrySubLinks,
           path: isCurrentlyMyLbryPage ? '/downloaded' : getActiveSublink('myLbry'),
           active: isMyLbryPage(currentPage),
         },
         {
           label: 'Publish',
-          icon: 'UploadCloud',
+          icon: icons.UPLOAD,
           path: '/publish',
           active: currentPage === 'publish',
         },
         {
           label: 'Settings',
-          icon: 'Settings',
+          icon: icons.SETTINGS,
           path: '/settings',
           active: currentPage === 'settings',
         },
         {
           label: 'Help',
           path: '/help',
-          icon: 'HelpCircle',
+          icon: icons.HELP,
           active: currentPage === 'help',
         },
       ],

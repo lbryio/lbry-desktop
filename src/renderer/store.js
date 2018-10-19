@@ -101,7 +101,7 @@ const compressor = createCompressor();
 // We were caching so much data the app was locking up
 // We can't add this back until we can perform this in a non-blocking way
 // const saveClaimsFilter = createFilter('claims', ['byId', 'claimsByUri']);
-const subscriptionsFilter = createFilter('subscriptions', ['subscriptions']);
+const subscriptionsFilter = createFilter('subscriptions', ['subscriptions', 'unread', 'viewMode']);
 const contentFilter = createFilter('content', ['positions', 'history']);
 
 // We only need to persist the receiveAddress for the wallet

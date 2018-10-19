@@ -27,9 +27,15 @@ type Props = {
   isResolvingUri: boolean,
   /* eslint-enable react/no-unused-prop-types */
   isSubscribed: boolean,
+  showSubscribedLogo: boolean,
+  isNew: boolean,
 };
 
 class FileCard extends React.PureComponent<Props> {
+  static defaultProps = {
+    showSubscribedLogo: false,
+  };
+
   componentWillMount() {
     this.resolve(this.props);
   }
@@ -57,6 +63,8 @@ class FileCard extends React.PureComponent<Props> {
       claimIsMine,
       pending,
       isSubscribed,
+      isNew,
+      showSubscribedLogo,
     } = this.props;
 
     if (!claim && !pending) {
@@ -112,10 +120,15 @@ class FileCard extends React.PureComponent<Props> {
           <div className="card__file-properties">
             <FilePrice hideFree uri={uri} />
             {isRewardContent && <Icon iconColor="red" icon={icons.FEATURED} />}
-            {isSubscribed && <Icon icon={icons.HEART} />}
+            {showSubscribedLogo && isSubscribed && <Icon icon={icons.HEART} />}
             {fileInfo && <Icon icon={icons.LOCAL} />}
           </div>
         </div>
+        {isNew && (
+          <div className="card__subtitle">
+            <span className="badge badge--alert">{__('NEW')}</span>
+          </div>
+        )}
       </section>
     );
     /* eslint-enable jsx-a11y/click-events-have-key-events */

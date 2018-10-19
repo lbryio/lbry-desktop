@@ -1,5 +1,3 @@
-@charset "utf-8";
-
 @import '~@lbry/color/lbry-color', 'reset', 'type', 'vars', 'gui', 'component/syntax-highlighter',
   'component/table', 'component/button', 'component/card', 'component/file-download',
   'component/form-field', 'component/header', 'component/menu', 'component/tooltip',
@@ -8,4 +6,4 @@
   'component/markdown-editor', 'component/scrollbar', 'component/spinner', 'component/nav',
   'component/file-list', 'component/file-render', 'component/search', 'component/toggle',
   'component/search', 'component/dat-gui', 'component/item-list', 'component/time', 'component/icon',
-  'component/placeholder', 'themes/dark';
+  'component/placeholder', 'component/badge', 'themes/dark';
