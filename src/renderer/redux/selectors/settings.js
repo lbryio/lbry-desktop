@@ -34,10 +34,6 @@ export const selectThemePath = createSelector(
   }
 );
 
-// TODO: I have no idea what I am doing
-export const whatIsTheTheme = () =>
-  selectAutomaticDarkModeEnabled || selectIsNight || selectTheme === 'dark' ? 'dark' : 'light';
-
 export const selectosNotificationsEnabled = makeSelectClientSetting(
   SETTINGS.OS_NOTIFICATIONS_ENABLED
 );
