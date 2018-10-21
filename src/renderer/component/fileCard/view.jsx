@@ -57,7 +57,7 @@ class FileCard extends React.PureComponent<Props> {
       return null;
     }
     const progress = calculateDownloadProgress(this.props.fileInfo).toFixed(0);
-    return <span> ({progress}%)</span>;
+    return <div>{progress}%</div>;
   };
 
   render() {
@@ -117,7 +117,7 @@ class FileCard extends React.PureComponent<Props> {
         <div className="card__title card__title--file-card">
           <TruncatedText text={title} lines={2} />
         </div>
-        <div className="card__subtitle">
+        <div className="card__subtitle card--space-between">
           {pending ? <div>Pending...</div> : <UriIndicator uri={uri} link />}
           {this.renderPercentageDownload()}
         </div>
