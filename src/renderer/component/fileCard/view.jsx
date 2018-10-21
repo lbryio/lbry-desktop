@@ -24,6 +24,7 @@ type Props = {
   obscureNsfw: boolean,
   claimIsMine: boolean,
   pending?: boolean,
+  opaqueDownloading?: boolean,
   /* eslint-disable react/no-unused-prop-types */
   resolveUri: string => void,
   isResolvingUri: boolean,
@@ -40,6 +41,17 @@ class FileCard extends React.PureComponent<Props> {
     this.resolve(nextProps);
   }
 
+  isDownloading() {
+    const { fileInfo } = this.props;
+    if (!fileInfo) {
+      return false;
+    }
+    if (fileInfo.completed) {
+      return false;
+    }
+    return true;
+  }
+
   resolve = (props: Props) => {
     const { isResolvingUri, resolveUri, claim, uri, pending } = props;
 
@@ -49,11 +61,7 @@ class FileCard extends React.PureComponent<Props> {
   };
 
   renderPercentageDownload = () => {
-    const { fileInfo } = this.props;
-    if (!fileInfo) {
-      return null;
-    }
-    if (fileInfo.completed) {
+    if (!this.isDownloading()) {
       return null;
     }
     const progress = calculateDownloadProgress(this.props.fileInfo).toFixed(0);
@@ -71,6 +79,7 @@ class FileCard extends React.PureComponent<Props> {
       claimIsMine,
       pending,
       isSubscribed,
+      opaqueDownloading,
     } = this.props;
 
     if (!claim && !pending) {
@@ -99,7 +108,7 @@ class FileCard extends React.PureComponent<Props> {
       event.stopPropagation();
       openCopyLinkMenu(convertToShareLink(uri), event);
     };
-
+    const opaque = this.isDownloading() && opaqueDownloading;
     // We should be able to tab through cards
     /* eslint-disable jsx-a11y/click-events-have-key-events */
     return (
@@ -113,7 +122,7 @@ class FileCard extends React.PureComponent<Props> {
         })}
         onContextMenu={handleContextMenu}
       >
-        <CardMedia thumbnail={thumbnail} />
+        <CardMedia thumbnail={thumbnail} opaque={opaque} />
         <div className="card__title card__title--file-card">
           <TruncatedText text={title} lines={2} />
         </div>

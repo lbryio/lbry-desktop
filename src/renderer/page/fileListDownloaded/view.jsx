@@ -18,7 +18,7 @@ class FileListDownloaded extends React.PureComponent<Props> {
     return (
       <Page notContained loading={fetching}>
         {hasDownloads ? (
-          <FileList fileInfos={fileInfos} />
+          <FileList fileInfos={fileInfos} opaqueDownloading />
         ) : (
           <div className="page__empty">
             {__("You haven't downloaded anything from LBRY yet.")}

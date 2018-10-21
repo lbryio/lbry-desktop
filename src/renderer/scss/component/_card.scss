@@ -45,6 +45,10 @@
   position: relative;
 }
 
+.card__media--opaque {
+  opacity: 0.5;
+}
+
 .card__media--nsfw {
   background-color: var(--color-error);
 }
