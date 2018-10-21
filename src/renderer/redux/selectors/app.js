@@ -213,14 +213,14 @@ export const selectNavLinks = createSelector(
           icon: 'CreditCard',
           subLinks: walletSubLinks,
           path: isCurrentlyWalletPage ? '/wallet' : getActiveSublink('wallet'),
-          active: isWalletPage(currentPage),
+          active: isCurrentlyWalletPage,
         },
         {
           label: 'My LBRY',
           icon: 'Folder',
           subLinks: myLbrySubLinks,
           path: isCurrentlyMyLbryPage ? '/downloaded' : getActiveSublink('myLbry'),
-          active: isMyLbryPage(currentPage),
+          active: isCurrentlyMyLbryPage,
         },
         {
           label: 'Publish',
