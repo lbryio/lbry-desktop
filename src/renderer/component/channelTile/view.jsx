@@ -13,6 +13,7 @@ type Props = {
   claim: ?{
     claim_id: string,
     name: string,
+    permanent_url: string,
   },
   resolveUri: string => void,
   navigate: (string, ?{}) => void,

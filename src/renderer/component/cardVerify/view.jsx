@@ -16,7 +16,7 @@ type Props = {
   // see Stripe docs for more info:
   //   https://stripe.com/docs/checkout#integration-custom
   // =====================================================
-  
+
   // Your publishable key (test or live).
   // can't use "key" as a prop in react, so have to change the keyname
   stripeKey: string,
@@ -50,7 +50,7 @@ class CardVerify extends React.Component {
 
     const script = document.createElement('script');
     script.src = 'https://checkout.stripe.com/checkout.js';
-    script.async = 1;
+    script.async = true;
 
     this.loadPromise = (() => {
       let canceled = false;

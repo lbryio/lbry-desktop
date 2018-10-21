@@ -22,7 +22,7 @@ type Props = {
   button: ?string, // primary, secondary, alt, link
   noPadding: ?boolean, // to remove padding and allow circular buttons
   uppercase: ?boolean,
-  iconColor: ?string,
+  iconColor?: string,
   tourniquet: ?boolean, // to shorten the button and ellipsis, only use for links
 };
 
