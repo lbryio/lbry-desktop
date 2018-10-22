@@ -21,7 +21,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
  * Reverse Order & Use System/Location Time/Date ([#2036]https://github.com/lbryio/lbry-desktop/pull/2036)
  * Limit file type can be uploaded as thumbnail for publishing ([#2034](https://github.com/lbryio/lbry-desktop/pull/2034))
  * Change snackbar notification postion to bottom-left ([#2040](https://github.com/lbryio/lbry-desktop/pull/2040))
-
+ * Use shared colors from lbryio/color project ([#2045](https://github.com/lbryio/lbry-desktop/pull/2045))
 
 ### Fixed
  * Fixed Transactions filter menu collides with transaction table ([#2005](https://github.com/lbryio/lbry-desktop/pull/2005))
