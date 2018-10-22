@@ -14,6 +14,7 @@ However, for those individuals who want a bit more guidance on the best way to c
   someone reserved less than 3 days ago
 * Submit a pull request and get paid in LBC
 * Don't hesitate to contact us with any questions or comments
+* [Check out this video for a quickstart guide to running and developing the desktop app](https://spee.ch/7da73fc508ffc4ff8b2711e3c3950110430b0c5f/LBRYAppDesign.mp4).
 
 ## Choose an Issue
 
