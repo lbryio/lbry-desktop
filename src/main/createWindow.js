@@ -15,7 +15,7 @@ export default appState => {
   });
 
   const windowConfiguration = {
-    backgroundColor: '#44b098',
+    backgroundColor: '#2f9176',
     minWidth: 950,
     minHeight: 600,
     autoHideMenuBar: true,
@@ -123,7 +123,7 @@ export default appState => {
   window.webContents.on('crashed', () => {
     window = null;
   });
-  
+
   window.webContents.on('new-window', (event, url) => {
     event.preventDefault();
     shell.openExternal(url);

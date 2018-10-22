@@ -1,7 +1,6 @@
 // @flow
 import React from 'react';
 import Router from 'component/router/index';
-import Theme from 'component/theme';
 import ModalRouter from 'modal/modalRouter';
 import ReactModal from 'react-modal';
 import throttle from 'util/throttle';
@@ -15,6 +14,7 @@ type Props = {
   currentStackIndex: number,
   currentPageAttributes: { path: string, scrollY: number },
   pageTitle: ?string,
+  theme: string,
 };
 
 class App extends React.PureComponent<Props> {
@@ -25,13 +25,16 @@ class App extends React.PureComponent<Props> {
   }
 
   componentWillMount() {
-    const { alertError } = this.props;
+    const { alertError, theme } = this.props;
 
     // TODO: create type for this object
     // it lives in jsonrpc.js
     document.addEventListener('unhandledError', (event: any) => {
       alertError(event.detail);
     });
+
+    // $FlowFixMe
+    document.documentElement.setAttribute('data-theme', theme);
   }
 
   componentDidMount() {
@@ -51,11 +54,16 @@ class App extends React.PureComponent<Props> {
   }
 
   componentDidUpdate(prevProps: Props) {
-    const { currentStackIndex: prevStackIndex } = prevProps;
-    const { currentStackIndex, currentPageAttributes } = this.props;
+    const { currentStackIndex: prevStackIndex, theme: prevTheme } = prevProps;
+    const { currentStackIndex, currentPageAttributes, theme } = this.props;
 
     if (this.mainContent && currentStackIndex !== prevStackIndex && currentPageAttributes) {
       this.mainContent.scrollTop = currentPageAttributes.scrollY || 0;
+    }
+
+    if (prevTheme !== theme) {
+      // $FlowFixMe
+      document.documentElement.setAttribute('data-theme', theme);
     }
   }
 
@@ -81,7 +89,6 @@ class App extends React.PureComponent<Props> {
   render() {
     return (
       <div id="window" onContextMenu={e => openContextMenu(e)}>
-        <Theme />
         <Header />
         <main className="page">
           <SideBar />

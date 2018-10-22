@@ -1,6 +1,4 @@
-/*
-Both of these should probably die and become variables as well
- */
+// Both of these should probably die and become variables as well
 $spacing-vertical: 24px;
 $spacing-width: 36px;
 
@@ -8,7 +6,7 @@ $medium-breakpoint: 1279px;
 $large-breakpoint: 1921px;
 
 :root {
-  /* Widths & spacings */
+  // Width & spacing
   --side-nav-width: 160px;
   --side-nav-width-m: 240px;
   --side-nav-width-l: 320px;
@@ -17,154 +15,31 @@ $large-breakpoint: 1921px;
   --video-aspect-ratio: 56.25%; // 9 x 16
   --snack-bar-width: 756px;
 
-  /* Colors: Brand */
-  --color-white: #fff;
-  --color-black: #000;
-  --color-grey: #d6d6d6;
-  --color-grey-light: #f6f6f6;
-  --color-grey-dark: #888;
-  --color-primary: #44b098;
-  --color-primary-dark: #2c6e60;
-  --color-primary-light: #64c9b2;
-  --color-secondary: #6afbda;
-  --color-teal: #19a6a3;
-  --color-dark-blue: #2f6f61;
-  --color-light-blue: #49b2e2;
-  --color-red: #e2495e;
-  --color-yellow: #fbd55e;
-  --color-green: #399483;
-  --color-green-light: #effbe4;
-  --color-green-blue: #2ec1a8;
-  --color-purple: #8165b0;
-  --color-blue-grey: #203049;
-  --color-red-light: #fff6f6;
-
-  /* Colors */
-  --color-divider: #e3e3e3;
-  --color-help: rgba(0, 0, 0, 0.54);
-  --color-error: #a94442;
-  --color-nsfw: #bf4440;
-  --color-download: var(--color-white);
-  --color-download-overlay: var(--color-black);
-  --color-bg: #fafafa;
-  --color-bg-alt: var(--color-grey-light);
-  --color-placeholder: var(--color-grey);
-  --color-search-placeholder: var(--color-placeholder);
-  --color-credit-free: var(--color-dark-blue);
-  --color-credit-price: var(--card-text-color);
-  --color-text-black: #444;
-  --color-text-white: #efefef;
-
-  /* Shadows */
-  --box-shadow-layer: transparent; // 0 2px 4px rgba(0,0,0,0.25);
-  --box-shadow-button: 0 10px 20px rgba(0, 0, 0, 0.1);
-  --box-shadow-wunderbar: 0 10px 20px rgba(0, 0, 0, 0.03);
-  --box-shadow-header: 0px 6px 20px 1px rgba(0, 0, 0, 0.05);
-
-  /* Text */
-  --text-color: var(--color-text-black);
-  --text-color-inverse: var(--color-text-white);
-  --text-help-color: var(--color-help);
+  // Text
   --text-max-width: 660px;
   --text-link-padding: 4px;
 
-  /* Text Selectiom */
-  --text-selection-bg: var(--color-primary-light);
-  --text-selection-color: var(--color-white);
-  --editor-text-selection-bg: rgba(57, 148, 131, 0.8);
-  /* Form */
-  --form-label-color: rgba(0, 0, 0, 0.54);
-
-  /* Input */
-  --input-bg: transparent;
-  --input-label-color: var(--color-grey-dark);
-  --input-color: var(--text-color);
+  // Input
   --input-border-size: 1px;
-  --input-border-color: var(--color-grey-dark);
-  --input-copyable-bg: #f6f6f6;
-  --input-copyable-color: var(--color-grey-dark);
-  --input-copyable-border: var(--color-grey);
-  --input-select-bg-color: var(--color-grey);
-  --input-select-color: var(--text-color);
-  --input-switch-color: var(--color-teal);
 
-  /* input:disabled */
-  --input-disabled-border-color: rgba(0, 0, 0, 0.42);
-  --input-disabled-color: rgba(0, 0, 0, 0.54);
-
-  /* input:hover */
-  --input-hover-border-color: rgba(0, 0, 0, 0.87);
-
-  /* input:placeholder */
-  --input-placeholder-color: var(--color-help);
-  --input-placeholder-opacity: 1;
-
-  /* Select */
-  --select-bg: var(--color-bg-alt);
-  --select-color: var(--text-color);
+  // Select
   --select-height: 30px;
 
-  /* Button */
-  --btn-bg-primary: var(--color-primary);
-  --btn-color-primary: var(--color-white);
-  --btn-bg-primary-hover: var(--color-primary-light);
-  --btn-bg-alt: var(--color-white);
-  --btn-color-alt: var(--text-color);
-  --btn-color-inverse: var(--color-primary);
-  --btn-external-color: var(--color-light-blue);
-  --btn-bg-secondary: var(--color-teal);
-  --btn-bg-danger: var(--color-red);
-  --btn-home-bg-color: var(--color-white);
+  // Button
   --btn-radius: 20px;
   --btn-height: 36px;
 
-  /* SnackBar */
-  --snackbar-bg-primary: var(--color-primary);
-  --snackbar-color-primary: var(--text-color-inverse);
-
-  /* Header */
-  --header-bg: var(--color-white);
-  --header-color: var(--color-text);
-  --header-active-color: rgba(0, 0, 0, 0.85);
+  // Header
   --header-height: 60px;
-  --header-button-bg: transparent;
-  --header-button-hover-bg: rgba(100, 100, 100, 0.15);
-  --header-primary-color: var(--color-primary);
 
-  /* Header -> search */
-  --search-color: #666;
-  --search-bg-color: #fff;
-  --search-active-bg-color: var(--color-grey-light);
-  --search-active-color: var(--header-active-color);
-  --search-active-shadow: 0 6px 9px -2px var(--color-grey--dark);
-  --search-item-border-color: transparent;
-  --search-item-active-color: var(--color-black);
+  // Header -> search
   --search-modal-input-height: 70px;
-  --search-exact-result: #eaeaea;
 
-  /* Nav */
-  --nav-color: var(--color-grey-dark);
-  --nav-bg-color: var(--color-grey-light);
-
-  /* Table */
-  --table-border: 1px solid var(--color-grey-light);
-  --table-item-odd: var(--color-grey-light);
-  --table-item-even: transparent;
-
-  /* Card */
-  --card-bg: var(--color-white);
-  --card-text-color: var(--color-grey-dark);
+  // Card
   --card-radius: 2px;
   --card-max-width: 1000px;
-  --card-wallet-color: var(--text-color-inverse);
-  --success-msg-color: var(--color-green);
-  --success-msg-border: var(--color-green-blue);
-  --success-msg-bg: var(--color-green-light);
-  --error-msg-color: var(--color-error);
-  --error-msg-border: var(--color-error);
-  --error-msg-bg: var(--color-red-light);
 
-  /* File */
+  // File
   --file-tile-media-height: 125px;
   --file-tile-media-width: calc(125px * (16 / 9));
   --file-tile-media-height-small: 60px;
@@ -175,30 +50,14 @@ $large-breakpoint: 1921px;
   --recommended-content-width: 300px;
   --recommended-content-width-medium: 400px;
 
-  /* Modal */
+  // Modal
   --modal-width: 440px;
-  --modal-bg: var(--color-bg);
-  --modal-fullscreen-bg: var(--color-bg);
-  --modal-overlay-bg: rgba(246, 246, 246, 0.75);
-  --modal-border: 1px solid rgb(204, 204, 204);
-  --modal-btn-bg-color: var(--btn-bg-alt);
 
-  // /* Tooltip */
-  --tooltip-bg: #555;
-  --tooltip-color: var(--color-white);
-
-  /* Scrollbar */
-  --scrollbar-radius: 10px;
-  --scrollbar-thumb-bg: rgba(0, 0, 0, 0.2);
-  --scrollbar-thumb-hover-bg: rgba(0, 0, 0, 0.35);
-  --scrollbar-thumb-active-bg: var(--color-primary);
-  --scrollbar-track-bg: transparent;
-
-  // /* Animation :) */
+  // Animation :)
   --animation-duration: 0.3s;
   --animation-style: cubic-bezier(0.55, 0, 0.1, 1);
 
-  /* Image */
+  // Image
   --thumbnail-preview-height: 100px;
   --thumbnail-preview-width: 177px;
 }

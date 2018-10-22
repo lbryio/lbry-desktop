@@ -101,6 +101,10 @@
     lodash "^4.2.0"
     to-fast-properties "^2.0.0"
 
+"@lbry/color@^1.0.2":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@lbry/color/-/color-1.0.3.tgz#ec22b2c48b0e358759528fb3bbe7ba468d4e41ca"
+
 "@mapbox/hast-util-table-cell-style@^0.1.3":
   version "0.1.3"
   resolved "https://registry.yarnpkg.com/@mapbox/hast-util-table-cell-style/-/hast-util-table-cell-style-0.1.3.tgz#5b7166ae01297d72216932b245e4b2f0b642dca6"

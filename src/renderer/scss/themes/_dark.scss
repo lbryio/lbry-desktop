@@ -1,0 +1,118 @@
+html[data-theme='dark'] {
+  .header {
+    background-color: rgba($lbry-black, 0.9);
+  }
+
+  .header__navigation {
+    button {
+      background-color: transparent !important; // TODO: Fix
+      color: $lbry-white !important; // TODO: Fix
+    }
+  }
+
+  .wunderbar > .icon {
+    color: $lbry-gray-5;
+  }
+
+  .wunderbar__active-suggestion {
+    background-color: $lbry-blue-4;
+    color: inherit;
+  }
+
+  .wunderbar__input {
+    background-color: rgba($lbry-white, 0.1);
+    color: $lbry-white;
+
+    &:focus {
+      background-color: rgba($lbry-white, 0.9);
+      color: $lbry-black;
+    }
+  }
+
+  .wunderbar__menu {
+    background-color: $lbry-gray-5;
+    color: $lbry-white;
+    top: 3rem;
+  }
+
+  .nav {
+    background-color: rgba($lbry-white, 0.05);
+
+    hr {
+      border-color: $lbry-gray-5;
+    }
+  }
+
+  .nav__link .btn:hover {
+    color: $lbry-teal-5;
+  }
+
+  .nav__link--active {
+    color: $lbry-teal-3;
+  }
+
+  .page {
+    background-color: $lbry-black;
+    color: $lbry-gray-1;
+  }
+
+  input.input-copyable {
+    background-color: rgba($lbry-white, 0.1);
+    color: $lbry-white;
+  }
+
+  .card__title {
+    color: inherit;
+  }
+
+  .card--placeholder {
+    background-color: rgba($lbry-white, 0.1);
+  }
+
+  .card--section {
+    background-color: rgba($lbry-white, 0.1);
+  }
+
+  .content__cover:not(.card__media--nsfw),
+  .card__media {
+    background-color: rgba($lbry-white, 0.1);
+  }
+
+  .card__media--nsfw {
+    background-color: rgba($lbry-red-1, 0.1);
+  }
+
+  .btn.btn--alt:not(:disabled) {
+    background-color: rgba($lbry-white, 0.1);
+    color: $lbry-gray-1;
+  }
+
+  .search__top {
+    background-color: rgba($lbry-white, 0.15);
+  }
+
+  table.table,
+  .markdown-preview table {
+    thead {
+      border-bottom: 1px solid rgba($lbry-gray-1, 0.1);
+    }
+
+    tbody {
+      tr {
+        border-bottom: 1px solid rgba($lbry-gray-1, 0.1);
+
+        &:nth-child(even) {
+          background-color: rgba($lbry-gray-1, 0.1);
+        }
+      }
+    }
+  }
+
+  .item-list {
+    background-color: rgba($lbry-white, 0.1);
+  }
+
+  .item-list__item:not(:last-of-type) {
+    border-bottom: 1px solid rgba($lbry-gray-1, 0.1);
+  }
+}
