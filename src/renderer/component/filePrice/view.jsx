@@ -10,7 +10,7 @@ type Props = {
   fetching: boolean,
   claim: ?{},
   // below props are just passed to <CreditAmount />
-  filePage?: boolean,
+  badge?: boolean,
   inheritStyle?: boolean,
   showLBC?: boolean,
   hideFree?: boolean, // hide the file price if it's free
@@ -38,7 +38,7 @@ class FilePrice extends React.PureComponent<Props> {
   };
 
   render() {
-    const { costInfo, showFullPrice, filePage, inheritStyle, showLBC, hideFree } = this.props;
+    const { costInfo, showFullPrice, badge, inheritStyle, showLBC, hideFree } = this.props;
 
     if (costInfo && !costInfo.cost && hideFree) {
       return null;
@@ -47,7 +47,7 @@ class FilePrice extends React.PureComponent<Props> {
     return costInfo ? (
       <CreditAmount
         showFree
-        filePage={filePage}
+        badge={badge}
         inheritStyle={inheritStyle}
         showLBC={showLBC}
         amount={costInfo.cost}

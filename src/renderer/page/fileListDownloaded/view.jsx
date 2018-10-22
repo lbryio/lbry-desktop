@@ -21,7 +21,7 @@ class FileListDownloaded extends React.PureComponent<Props> {
           <FileList fileInfos={fileInfos} />
         ) : (
           <div className="page__empty">
-            {__("You haven't downloaded anything from LBRY yet.")}
+            <h3 className="card__title">{__("You haven't downloaded anything from LBRY yet.")}</h3>
             <div className="card__actions card__actions--center">
               <Button
                 button="primary"

@@ -147,6 +147,7 @@ class FileList extends React.PureComponent<Props, State> {
         claim_id: claimId,
         txid,
         nout,
+        isNew,
       } = fileInfo;
       const uriParams = {};
 
@@ -159,13 +160,13 @@ class FileList extends React.PureComponent<Props, State> {
       const outpoint = `${txid}:${nout}`;
 
       // See https://github.com/lbryio/lbry-desktop/issues/1327 for discussion around using outpoint as the key
-      content.push(<FileCard key={outpoint} uri={uri} checkPending={checkPending} />);
+      content.push(<FileCard key={outpoint} uri={uri} checkPending={checkPending} isNew={isNew} />);
     });
 
     return (
       <section>
-        <div className="file-list__sort">
-          {!hideFilter && (
+        {!hideFilter && (
+          <div className="file-list__sort">
             <FormField
               prefix={__('Sort by')}
               affixClass="form-field--align-center"
@@ -177,9 +178,9 @@ class FileList extends React.PureComponent<Props, State> {
               <option value="dateOld">{__('Oldest First')}</option>
               <option value="title">{__('Title')}</option>
             </FormField>
-          )}
-        </div>
-        <div className="card__list">{content}</div>
+          </div>
+        )}
+        <div className="card__list card__content">{content}</div>
       </section>
     );
   }

@@ -184,11 +184,13 @@ class SettingsPage extends React.PureComponent<Props, State> {
             <section className="card card--section">
               <div className="card__title">{__('Download Directory')}</div>
               <span className="card__subtitle">{__('LBRY downloads will be saved here.')}</span>
-              <FileSelector
-                type="openDirectory"
-                currentPath={daemonSettings.download_directory}
-                onFileChosen={this.onDownloadDirChange}
-              />
+              <div className="card__content">
+                <FileSelector
+                  type="openDirectory"
+                  currentPath={daemonSettings.download_directory}
+                  onFileChosen={this.onDownloadDirChange}
+                />
+              </div>
             </section>
             <section className="card card--section">
               <div className="card__title">{__('Max Purchase Price')}</div>

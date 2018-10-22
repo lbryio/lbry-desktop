@@ -1051,7 +1051,7 @@ babel-plugin-transform-strict-mode@^6.24.1:
     babel-runtime "^6.22.0"
     babel-types "^6.24.1"
 
-babel-polyfill@^6.20.0, babel-polyfill@^6.26.0:
+babel-polyfill@^6.26.0:
   version "6.26.0"
   resolved "https://registry.yarnpkg.com/babel-polyfill/-/babel-polyfill-6.26.0.tgz#379937abc67d7895970adc621f284cd966cf2153"
   dependencies:
@@ -5670,16 +5670,16 @@ lbry-redux@lbryio/lbry-redux:
     proxy-polyfill "0.1.6"
     reselect "^3.0.0"
 
-lbry-redux@lbryio/lbry-redux#67cae46983d9fea90dd1e4c5bd121dd5077a3f0e:
+lbry-redux@lbryio/lbry-redux#957d221c1830ecbb7a9e74fad78e711fb14539f4:
   version "0.0.1"
-  resolved "https://codeload.github.com/lbryio/lbry-redux/tar.gz/67cae46983d9fea90dd1e4c5bd121dd5077a3f0e"
+  resolved "https://codeload.github.com/lbryio/lbry-redux/tar.gz/957d221c1830ecbb7a9e74fad78e711fb14539f4"
   dependencies:
     proxy-polyfill "0.1.6"
     reselect "^3.0.0"
 
-lbryinc@lbryio/lbryinc#de7ff055605b02a24821f0f9bab1d206eb7f235d:
+lbryinc@lbryio/lbryinc#3f34af546ee73ff2ee7d8ad05e540b3b0aa658fb:
   version "0.0.1"
-  resolved "https://codeload.github.com/lbryio/lbryinc/tar.gz/de7ff055605b02a24821f0f9bab1d206eb7f235d"
+  resolved "https://codeload.github.com/lbryio/lbryinc/tar.gz/3f34af546ee73ff2ee7d8ad05e540b3b0aa658fb"
   dependencies:
     lbry-redux lbryio/lbry-redux
     reselect "^3.0.0"

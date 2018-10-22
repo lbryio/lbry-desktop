@@ -233,32 +233,8 @@ p:not(:first-of-type) {
   font-weight: 600;
 }
 
-.credit-amount--file-page {
-  border-radius: 5px;
-  font-weight: 700;
-  padding: 5px;
-}
-
-.credit-amount--free {
-  &:not(.credit-amount--file-page) {
-    color: $lbry-blue-5;
-  }
-
-  &.credit-amount--file-page {
-    background-color: $lbry-blue-2;
-    color: $lbry-blue-5;
-  }
-}
-
 .credit-amount--cost {
-  &:not(.credit-amount--file-page) {
-    color: $lbry-gray-5;
-  }
-
-  &.credit-amount--file-page {
-    background-color: $lbry-yellow-3;
-    color: $lbry-black;
-  }
+  color: $lbry-gray-5;
 }
 
 .credit-amount--inherit {

@@ -1,4 +1,6 @@
 // @flow
+import type { Claim, Metadata } from 'types/claim';
+import type { FileInfo } from 'types/file_info';
 import * as React from 'react';
 import * as settings from 'constants/settings';
 import { buildURI, normalizeURI, MODALS } from 'lbry-redux';
@@ -14,8 +16,6 @@ import * as icons from 'constants/icons';
 import Button from 'component/button';
 import SubscribeButton from 'component/subscribeButton';
 import Page from 'component/page';
-import type { Claim } from 'types/claim';
-import type { Subscription } from 'types/subscription';
 import FileDownloadLink from 'component/fileDownloadLink';
 import classnames from 'classnames';
 import getMediaType from 'util/getMediaType';
@@ -25,31 +25,26 @@ import ToolTip from 'component/common/tooltip';
 
 type Props = {
   claim: Claim,
-  fileInfo: {},
-  metadata: {
-    title: string,
-    thumbnail: string,
-    file_name: string,
-    nsfw: boolean,
-  },
+  fileInfo: FileInfo,
+  metadata: Metadata,
   contentType: string,
   uri: string,
   rewardedContentClaimIds: Array<string>,
   obscureNsfw: boolean,
   claimIsMine: boolean,
-  costInfo: ?{},
-  navigate: (string, ?{}) => void,
-  openModal: ({ id: string }, { uri: string }) => void,
+  costInfo: ?{ cost: number },
   fetchFileInfo: string => void,
   fetchCostInfo: string => void,
-  prepareEdit: ({}, string) => void,
   setViewed: string => void,
   autoplay: boolean,
+  isSubscribed: ?string,
+  isSubscribed: boolean,
+  channelUri: string,
+  prepareEdit: ({}, string) => void,
+  navigate: (string, ?{}) => void,
+  openModal: ({ id: string }, { uri: string }) => void,
   setClientSetting: (string, string | boolean | number) => void,
-  /* eslint-disable react/no-unused-prop-types */
-  checkSubscription: (uri: string) => void,
-  subscriptions: Array<Subscription>,
-  /* eslint-enable react/no-unused-prop-types */
+  markSubscriptionRead: (string, string) => void,
 };
 
 class FilePage extends React.Component<Props> {
@@ -73,7 +68,11 @@ class FilePage extends React.Component<Props> {
   }
 
   componentDidMount() {
-    const { uri, fileInfo, fetchFileInfo, fetchCostInfo, setViewed } = this.props;
+    const { uri, fileInfo, fetchFileInfo, fetchCostInfo, setViewed, isSubscribed } = this.props;
+
+    if (isSubscribed) {
+      this.removeFromSubscriptionNotifications();
+    }
 
     if (fileInfo === undefined) {
       fetchFileInfo(uri);
@@ -81,9 +80,6 @@ class FilePage extends React.Component<Props> {
 
     // See https://github.com/lbryio/lbry-desktop/pull/1563 for discussion
     fetchCostInfo(uri);
-
-    this.checkSubscription(this.props);
-
     setViewed(uri);
   }
 
@@ -98,23 +94,22 @@ class FilePage extends React.Component<Props> {
     }
   }
 
+  componentDidUpdate(prevProps: Props) {
+    if (!prevProps.isSubscribed && this.props.isSubscribed) {
+      this.removeFromSubscriptionNotifications();
+    }
+  }
+
   onAutoplayChange(event: SyntheticInputEvent<*>) {
     this.props.setClientSetting(settings.AUTOPLAY, event.target.checked);
   }
 
-  checkSubscription = (props: Props) => {
-    if (props.subscriptions.find(sub => sub.channelName === props.claim.channel_name)) {
-      props.checkSubscription(
-        buildURI(
-          {
-            contentName: props.claim.channel_name,
-            claimId: props.claim.value.publisherSignature.certificateId,
-          },
-          false
-        )
-      );
-    }
-  };
+  removeFromSubscriptionNotifications() {
+    // Always try to remove
+    // If it doesn't exist, nothing will happen
+    const { markSubscriptionRead, uri, channelUri } = this.props;
+    markSubscriptionRead(channelUri, uri);
+  }
 
   render() {
     const {
@@ -131,11 +126,12 @@ class FilePage extends React.Component<Props> {
       costInfo,
       fileInfo,
       autoplay,
+      channelUri,
     } = this.props;
 
     // File info
     const { title, thumbnail } = metadata;
-    const { height, channel_name: channelName, value } = claim;
+    const { height, channel_name: channelName } = claim;
     const { PLAYABLE_MEDIA_TYPES, PREVIEW_MEDIA_TYPES } = FilePage;
     const isRewardContent = (rewardedContentClaimIds || []).includes(claim.claim_id);
     const shouldObscureThumbnail = obscureNsfw && metadata.nsfw;
@@ -143,12 +139,6 @@ class FilePage extends React.Component<Props> {
     const mediaType = getMediaType(contentType, fileName);
     const showFile =
       PLAYABLE_MEDIA_TYPES.includes(mediaType) || PREVIEW_MEDIA_TYPES.includes(mediaType);
-    const channelClaimId =
-      value && value.publisherSignature && value.publisherSignature.certificateId;
-    let subscriptionUri;
-    if (channelName && channelClaimId) {
-      subscriptionUri = buildURI({ channelName, claimId: channelClaimId }, false);
-    }
     const speechShareable =
       costInfo &&
       costInfo.cost === 0 &&
@@ -159,7 +149,10 @@ class FilePage extends React.Component<Props> {
     // We will select the claim id before they publish
     let editUri;
     if (claimIsMine) {
-      const uriObject = { contentName: claim.name, claimId: claim.claim_id };
+      const uriObject: { contentName: string, claimId: string, channelName: ?string } = {
+        contentName: claim.name,
+        claimId: claim.claim_id,
+      };
       if (channelName) {
         uriObject.channelName = channelName;
       }
@@ -193,7 +186,7 @@ class FilePage extends React.Component<Props> {
                 {isRewardContent && (
                   <Icon size={20} iconColor="red" tooltip="bottom" icon={icons.FEATURED} />
                 )}
-                <FilePrice filePage uri={normalizeURI(uri)} />
+                <FilePrice badge uri={normalizeURI(uri)} />
               </div>
             </div>
             <span className="card__subtitle">
@@ -214,7 +207,7 @@ class FilePage extends React.Component<Props> {
                     }}
                   />
                 ) : (
-                  <SubscribeButton uri={subscriptionUri} channelName={channelName} />
+                  <SubscribeButton uri={channelUri} channelName={channelName} />
                 )}
                 {!claimIsMine && (
                   <Button
