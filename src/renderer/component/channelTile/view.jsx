@@ -4,16 +4,14 @@ import CardMedia from 'component/cardMedia';
 import TruncatedText from 'component/common/truncated-text';
 import classnames from 'classnames';
 import SubscribeButton from 'component/subscribeButton';
+import type { Claim } from 'types/claim';
 
 type Props = {
   uri: string,
   isResolvingUri: boolean,
   totalItems: number,
   size: string,
-  claim: ?{
-    claim_id: string,
-    name: string,
-  },
+  claim: ?Claim,
   resolveUri: string => void,
   navigate: (string, ?{}) => void,
 };
