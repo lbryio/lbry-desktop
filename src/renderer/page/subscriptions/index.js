@@ -15,6 +15,7 @@ import {
 } from 'redux/actions/subscriptions';
 import { doSetClientSetting } from 'redux/actions/settings';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
+import { selectFileListSubscriptionSort } from 'lbry-redux';
 import SubscriptionsPage from './view';
 
 const select = state => ({
@@ -25,6 +26,7 @@ const select = state => ({
   autoDownload: makeSelectClientSetting(settings.AUTO_DOWNLOAD)(state),
   allSubscriptions: selectSubscriptionClaims(state),
   unreadSubscriptions: selectUnreadSubscriptions(state),
+  sortBy: selectFileListSubscriptionSort(state),
   viewMode: selectViewMode(state),
 });
 

@@ -1,12 +1,16 @@
-import React from 'react';
 import { connect } from 'react-redux';
+import { selectClaimsById, doSetFileListSort } from 'lbry-redux';
 import FileList from './view';
-import { selectClaimsById } from 'lbry-redux';
 
 const select = state => ({
   claimsById: selectClaimsById(state),
 });
 
-const perform = dispatch => ({});
+const perform = dispatch => ({
+  setFileListSort: (page, value) => dispatch(doSetFileListSort(page, value)),
+});
 
-export default connect(select, perform)(FileList);
+export default connect(
+  select,
+  perform
+)(FileList);

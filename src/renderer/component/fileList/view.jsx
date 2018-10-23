@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import { buildURI } from 'lbry-redux';
+import { buildURI, SORT_OPTIONS } from 'lbry-redux';
 import { FormField } from 'component/common/form';
 import FileCard from 'component/fileCard';
 import type { FileInfo } from 'types/file_info';
@@ -11,28 +11,22 @@ type Props = {
   claimsById: Array<{}>,
   fileInfos: Array<FileInfo>,
   checkPending?: boolean,
-};
-
-type State = {
   sortBy: string,
+  page: string,
+  setFileListSort: (string, string) => void,
 };
 
-class FileList extends React.PureComponent<Props, State> {
+class FileList extends React.PureComponent<Props> {
   static defaultProps = {
     hideFilter: false,
   };
 
   constructor(props: Props) {
     super(props);
-
-    this.state = {
-      sortBy: 'dateNew',
-    };
-
     (this: any).handleSortChanged = this.handleSortChanged.bind(this);
 
     this.sortFunctions = {
-      dateNew: fileInfos =>
+      [SORT_OPTIONS.DATE_NEW]: fileInfos =>
         this.props.sortByHeight
           ? fileInfos.sort((fileInfo1, fileInfo2) => {
               if (fileInfo1.pending) {
@@ -57,7 +51,7 @@ class FileList extends React.PureComponent<Props, State> {
               return 0;
             })
           : [...fileInfos].reverse(),
-      dateOld: fileInfos =>
+      [SORT_OPTIONS.DATE_OLD]: fileInfos =>
         this.props.sortByHeight
           ? fileInfos.slice().sort((fileInfo1, fileInfo2) => {
               const height1 = this.props.claimsById[fileInfo1.claim_id]
@@ -74,7 +68,7 @@ class FileList extends React.PureComponent<Props, State> {
               return 0;
             })
           : fileInfos,
-      title: fileInfos =>
+      [SORT_OPTIONS.TITLE]: fileInfos =>
         fileInfos.slice().sort((fileInfo1, fileInfo2) => {
           const getFileTitle = fileInfo => {
             const { value, metadata, name, claim_name: claimName } = fileInfo;
@@ -98,7 +92,7 @@ class FileList extends React.PureComponent<Props, State> {
           }
           return 0;
         }),
-      filename: fileInfos =>
+      [SORT_OPTIONS.FILENAME]: fileInfos =>
         fileInfos.slice().sort(({ file_name: fileName1 }, { file_name: fileName2 }) => {
           const fileName1Lower = fileName1.toLowerCase();
           const fileName2Lower = fileName2.toLowerCase();
@@ -124,18 +118,14 @@ class FileList extends React.PureComponent<Props, State> {
   };
 
   handleSortChanged(event: SyntheticInputEvent<*>) {
-    this.setState({
-      sortBy: event.target.value,
-    });
+    this.props.setFileListSort(this.props.page, event.target.value);
   }
 
   sortFunctions: {};
 
   render() {
-    const { fileInfos, hideFilter, checkPending } = this.props;
-    const { sortBy } = this.state;
+    const { fileInfos, hideFilter, checkPending, sortBy } = this.props;
     const content = [];
-
     if (!fileInfos) {
       return null;
     }
@@ -174,9 +164,9 @@ class FileList extends React.PureComponent<Props, State> {
               value={sortBy}
               onChange={this.handleSortChanged}
             >
-              <option value="dateNew">{__('Newest First')}</option>
-              <option value="dateOld">{__('Oldest First')}</option>
-              <option value="title">{__('Title')}</option>
+              <option value={SORT_OPTIONS.DATE_NEW}>{__('Newest First')}</option>
+              <option value={SORT_OPTIONS.DATE_OLD}>{__('Oldest First')}</option>
+              <option value={SORT_OPTIONS.TITLE}>{__('Title')}</option>
             </FormField>
           </div>
         )}
