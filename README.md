@@ -9,7 +9,7 @@
 
 The LBRY app is a graphical browser for the decentralized content marketplace provided by the
 [LBRY](https://lbry.io) protocol. It is essentially the
-[lbry daemon](https://github.com/lbryio/lbry) bundled with an UI using
+[lbry daemon](https://github.com/lbryio/lbry) bundled with a GUI using
 [Electron](https://electron.atom.io/).
 
 ![App GIF](https://spee.ch/7/lbry-redesign-preview.gif)
@@ -29,16 +29,16 @@ release, pre-releases, and past builds.
 
 To install from source or make changes to the application, continue to the next section below.   
 
-**Community maintained** builds for Arch Linux and Flatpak are available, see below. These installs will need to be updated manually as the in-app update process only supports deb installs at this time.
+**Community maintained** builds for Arch Linux and Flatpak are available, see below. These installs will need to be updated manually as the in-app update process only supports Debian installs at this time.
 *Note: If coming from a deb install, the directory structure is different and you'll need to [migrate data](https://lbry.io/faq/backup-data).*
 
 |                       | Flatpak                                   | Arch  | Raspberry Pi       |                                                                                                                              
 | --------------------- | ------------------------------------------|------------------| --------------------------------------------
-| Latest Release        | [FlatHub Page](https://flathub.org/apps/details/io.lbry.lbry-app)   | [AUR Package](https://aur.archlinux.org/packages/lbry-app-bin/)  | [Pi Installer](https://lbrypi.com)  | 
+| Latest Release        | [FlatHub Page](https://flathub.org/apps/details/io.lbry.lbry-app)   | [AUR Package](https://aur.archlinux.org/packages/lbry-app-bin/)  | [Pi Installer](https://lbrypi.com)  |
 | Maintainers           | [@choofee](https://github.com/choffee)/[@iuyte](https://github.com/iuyte)    | [@kcseb](https://github.com/kcseb)/[@TimurKiyivinski](https://github.com/TimurKiyivinski) |[@Madiator2011](https://github.com/kodxana)
 
 ## Usage
-Double click the installed application to browse with the LBRY network.
+Double click the installed application to interact with the LBRY network.
 
 ## Running from Source
 
@@ -65,11 +65,11 @@ If the app isn't building, or `yarn xxx` commands aren't working you may need to
 
 ## Contributing
 
-Contributions to this project are welcome, encouraged, and compensated. For more details, see [CONTRIBUTING.md](CONTRIBUTING.md)
+Contributions to this project are welcome, encouraged, and compensated. For more details, see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 
-This project is MIT licensed. For the full license, see [LICENSE](LICENSE)
+This project is MIT licensed. For the full license, see [LICENSE](LICENSE).
 
 ## Security
 
@@ -77,4 +77,4 @@ We take security seriously. Please contact security@lbry.io regarding any securi
 
 ## Contact
 
-The primary contact for this project is [@seanyesmunt](https://github.com/seanyesmunt)
+The primary contact for this project is [@seanyesmunt](https://github.com/seanyesmunt).
