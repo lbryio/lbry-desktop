@@ -9,7 +9,7 @@
 
 The LBRY app is a graphical browser for the decentralized content marketplace provided by the
 [LBRY](https://lbry.io) protocol. It is essentially the
-[lbry daemon](https://github.com/lbryio/lbry) bundled with a GUI using
+[lbry daemon](https://github.com/lbryio/lbry) bundled with a UI using
 [Electron](https://electron.atom.io/).
 
 ![App GIF](https://spee.ch/7/lbry-redesign-preview.gif)
