@@ -10,10 +10,11 @@ However, for those individuals who want a bit more guidance on the best way to c
 
 * [Here](https://github.com/lbryio/lbry-desktop/issues?q=is%3Aopen+is%3Aissue+label%3A%22help+wanted%22+no%3Aassignee)
   is a list of help wanted issues.
-* Comment on an issue to let us know if you are going to work on it, don't take an issue that
-  someone reserved less than 3 days ago.
+* Comment on an issue to let us know if you are going to work on it, don't take an issue that someone reserved less than 3 days ago.
 * Submit a pull request and get paid in LBC.
 * Don't hesitate to contact us with any questions or comments.
+* [Check out this video for a quickstart guide to running and developing the desktop app](https://spee.ch/7da73fc508ffc4ff8b2711e3c3950110430b0c5f/LBRYAppDesign.mp4).
+
 
 ## Choose an Issue
 
