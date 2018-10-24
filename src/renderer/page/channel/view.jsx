@@ -5,6 +5,7 @@ import { FormField, FormRow } from 'component/common/form';
 import ReactPaginate from 'react-paginate';
 import SubscribeButton from 'component/subscribeButton';
 import ViewOnWebButton from 'component/viewOnWebButton';
+import TipButton from 'component/tipButton';
 import Page from 'component/page';
 import FileList from 'component/fileList';
 import HiddenNsfwClaims from 'component/hiddenNsfwClaims';
@@ -89,6 +90,7 @@ class ChannelPage extends React.PureComponent<Props> {
         <div className="card__actions">
           <SubscribeButton uri={permanentUrl} channelName={name} />
           <ViewOnWebButton claimId={claimId} claimName={name} />
+          <TipButton uri={uri} />
         </div>
         <section className="card__content">{contentList}</section>
         {(!fetching || (claimsInChannel && claimsInChannel.length)) &&
