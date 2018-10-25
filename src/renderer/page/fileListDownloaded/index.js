@@ -3,6 +3,7 @@ import {
   selectFileInfosDownloaded,
   selectMyClaimsWithoutChannels,
   selectIsFetchingFileList,
+  selectFileListDownloadedSort,
 } from 'lbry-redux';
 import { doNavigate } from 'redux/actions/navigation';
 import FileListDownloaded from './view';
@@ -11,6 +12,7 @@ const select = state => ({
   fileInfos: selectFileInfosDownloaded(state),
   fetching: selectIsFetchingFileList(state),
   claims: selectMyClaimsWithoutChannels(state),
+  sortBy: selectFileListDownloadedSort(state),
 });
 
 const perform = dispatch => ({

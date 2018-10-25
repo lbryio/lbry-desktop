@@ -3,6 +3,7 @@ import React from 'react';
 import Button from 'component/button';
 import FileList from 'component/fileList';
 import Page from 'component/page';
+import { PAGES } from 'lbry-redux';
 
 type Props = {
   pendingPublishes: Array<{}>,
@@ -10,6 +11,7 @@ type Props = {
   checkIfPublishesConfirmed: (Array<{}>) => void,
   navigate: (string, ?{}) => void,
   fetching: boolean,
+  sortBy: string,
 };
 
 class FileListPublished extends React.PureComponent<Props> {
@@ -21,12 +23,18 @@ class FileListPublished extends React.PureComponent<Props> {
   }
 
   render() {
-    const { fetching, claims, navigate } = this.props;
+    const { fetching, claims, navigate, sortBy } = this.props;
 
     return (
       <Page notContained loading={fetching}>
         {claims && claims.length ? (
-          <FileList checkPending fileInfos={claims} sortByHeight />
+          <FileList
+            checkPending
+            fileInfos={claims}
+            sortByHeight
+            sortBy={sortBy}
+            page={PAGES.PUBLISHED}
+          />
         ) : (
           <div className="page__empty">
             <h3 className="card__title">

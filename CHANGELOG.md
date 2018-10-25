@@ -12,6 +12,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
  * Content loading placeholder styles on FileCard/FileTile ([#2022](https://github.com/lbryio/lbry-desktop/pull/2022))
  * Persistence to Transaction List Filter Selection ([#2048](https://github.com/lbryio/lbry-desktop/pull/2048))
  * Subscription improvements ([#2031](https://github.com/lbryio/lbry-desktop/pull/2031))
+ * Adds Persistence to File List Filter Selections ([#2050](https://github.com/lbryio/lbry-desktop/pull/2050))
 
 ### Changed
  * Make tooltip smarter ([#1979](https://github.com/lbryio/lbry-desktop/pull/1979))
