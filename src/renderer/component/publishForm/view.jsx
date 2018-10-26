@@ -123,7 +123,7 @@ class PublishForm extends React.PureComponent<Props> {
     const { channel, updatePublishForm } = this.props;
 
     if (!name) {
-      updatePublishForm({ nameError: undefined });
+      updatePublishForm({ name: '', nameError: __('A name is required.') });
       return;
     }
 

@@ -100,7 +100,7 @@ export const doFetchMySubscriptions = () => (dispatch: ReduxDispatch, getState: 
         data: subscriptions,
       });
 
-      subscriptions.forEach(({ uri }) => dispatch(doFetchClaimsByChannel(uri, 1, 20)));
+      subscriptions.forEach(({ uri }) => dispatch(doFetchClaimsByChannel(uri, 1)));
     })
     .catch(() => {
       dispatch({

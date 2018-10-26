@@ -26,7 +26,6 @@ type VersionInfo = {
   os_release: string,
   platform: string,
   lbrynet_version: string,
-  lbryum_version: string,
 };
 
 type State = {
@@ -208,10 +207,6 @@ class HelpPage extends React.PureComponent<Props, State> {
                 <tr>
                   <td>{__('Daemon (lbrynet)')}</td>
                   <td>{ver.lbrynet_version}</td>
-                </tr>
-                <tr>
-                  <td>{__('Wallet (lbryum)')}</td>
-                  <td>{ver.lbryum_version}</td>
                 </tr>
                 <tr>
                   <td>{__('Connected Email')}</td>

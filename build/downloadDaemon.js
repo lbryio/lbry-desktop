@@ -17,7 +17,7 @@ const downloadDaemon = targetPlatform =>
     let currentPlatform = os.platform();
 
     var daemonPlatform = process.env.TARGET || targetPlatform || currentPlatform;
-    if (daemonPlatform === 'mac' || daemonPlatform === 'darwin') daemonPlatform = 'macos';
+    if (daemonPlatform === 'mac' || daemonPlatform === 'darwin') daemonPlatform = 'mac';
     if (daemonPlatform === 'win32' || daemonPlatform === 'windows') {
      daemonPlatform = 'windows';
      daemonFileName = daemonFileName + '.exe';
