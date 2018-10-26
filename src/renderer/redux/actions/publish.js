@@ -1,4 +1,11 @@
 // @flow
+import type { Dispatch, GetState } from 'types/redux';
+import type { Source, Metadata } from 'types/claim';
+import type {
+  UpdatePublishFormData,
+  UpdatePublishFormAction,
+  PublishParams,
+} from 'redux/reducers/publish';
 import {
   ACTIONS,
   Lbry,
@@ -7,20 +14,14 @@ import {
   selectMyChannelClaims,
   THUMBNAIL_STATUSES,
   batchActions,
+  creditsToString,
+  selectPendingById,
 } from 'lbry-redux';
-import { selectPendingPublishes } from 'redux/selectors/publish';
-import type {
-  UpdatePublishFormData,
-  UpdatePublishFormAction,
-  PublishParams,
-} from 'redux/reducers/publish';
 import { selectosNotificationsEnabled } from 'redux/selectors/settings';
 import { doNavigate } from 'redux/actions/navigation';
 import fs from 'fs';
 import path from 'path';
 import { CC_LICENSES, COPYRIGHT, OTHER } from 'constants/licenses';
-import type { Dispatch, GetState } from 'types/redux';
-import type { Source } from 'types/claim';
 
 type Action = UpdatePublishFormAction | { type: ACTIONS.CLEAR_PUBLISH };
 
@@ -229,7 +230,6 @@ export const doPublish = (params: PublishParams) => (
     licenseUrl,
     language,
     thumbnail,
-    fee: fee || undefined,
     description: description || undefined,
   };
 
@@ -237,15 +237,22 @@ export const doPublish = (params: PublishParams) => (
     name: ?string,
     channel_id: string,
     bid: ?number,
-    metadata: ?any,
+    metadata: ?Metadata,
     file_path?: string,
     sources?: Source,
   } = {
     name,
     channel_id: channelId,
-    bid,
+    bid: creditsToString(bid),
     metadata,
   };
+
+  if (fee) {
+    metadata.fee = {
+      currency: fee.currency,
+      amount: creditsToString(fee.amount),
+    };
+  }
 
   if (filePath) {
     publishPayload.file_path = filePath;
@@ -258,7 +265,6 @@ export const doPublish = (params: PublishParams) => (
   const success = () => {
     dispatch({
       type: ACTIONS.PUBLISH_SUCCESS,
-      data: { pendingPublish: { ...publishPayload } },
     });
     dispatch(doNotify({ id: MODALS.PUBLISH }, { uri }));
   };
@@ -274,28 +280,21 @@ export const doPublish = (params: PublishParams) => (
 // Calls claim_list_mine until any pending publishes are confirmed
 export const doCheckPendingPublishes = () => (dispatch: Dispatch<Action>, getState: GetState) => {
   const state = getState();
-  const pendingPublishes = selectPendingPublishes(state);
+  const pendingById = selectPendingById(state);
+  if (!Object.keys(pendingById)) {
+    return;
+  }
 
   let publishCheckInterval;
 
   const checkFileList = () => {
     Lbry.claim_list_mine().then(claims => {
-      const pendingPublishMap = {};
-      pendingPublishes.forEach(({ name }) => {
-        pendingPublishMap[name] = name;
-      });
-
-      const actions = [];
       claims.forEach(claim => {
-        if (pendingPublishMap[claim.name]) {
-          actions.push({
-            type: ACTIONS.REMOVE_PENDING_PUBLISH,
-            data: {
-              name: claim.name,
-            },
-          });
+        // If it's confirmed, check that it wasn't pending previously
+        if (claim.confirmations > 0 && pendingById[claim.claim_id]) {
+          delete pendingById[claim.claim_id];
 
-          delete pendingPublishMap[claim.name];
+          // If it's confirmed, check if we should notify the user
           if (selectosNotificationsEnabled(getState())) {
             const notif = new window.Notification('LBRY Publish Complete', {
               body: `${claim.value.stream.metadata.title} has been published to lbry://${
@@ -314,25 +313,21 @@ export const doCheckPendingPublishes = () => (dispatch: Dispatch<Action>, getSta
         }
       });
 
-      actions.push({
+      dispatch({
         type: ACTIONS.FETCH_CLAIM_LIST_MINE_COMPLETED,
         data: {
           claims,
         },
       });
 
-      dispatch(batchActions(...actions));
-
-      if (!Object.keys(pendingPublishMap).length) {
+      if (!Object.keys(pendingById).length) {
         clearInterval(publishCheckInterval);
       }
     });
   };
 
-  if (pendingPublishes.length) {
+  checkFileList();
+  publishCheckInterval = setInterval(() => {
     checkFileList();
-    publishCheckInterval = setInterval(() => {
-      checkFileList();
-    }, 30000);
-  }
+  }, 30000);
 };

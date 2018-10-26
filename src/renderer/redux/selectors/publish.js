@@ -10,46 +10,10 @@ import {
 
 const selectState = state => state.publish || {};
 
-export const selectPendingPublishes = createSelector(
-  selectState,
-  state => state.pendingPublishes.map(pendingClaim => ({ ...pendingClaim, pending: true })) || []
-);
-
-export const selectClaimsWithPendingPublishes = createSelector(
-  selectMyClaimsWithoutChannels,
-  selectPendingPublishes,
-  (claims, pendingPublishes) => {
-    // ensure there are no duplicates, they are being checked for in a setInterval
-    // no need to wait for it to complete though
-    // loop through myclaims
-    // if a claim has the same name as one in pendingPublish, remove it from pending
-    const claimMap = {};
-    claims.forEach(claim => {
-      claimMap[claim.name] = true;
-    });
-
-    const filteredPendingPublishes = pendingPublishes.filter(claim => !claimMap[claim.name]);
-    return [...filteredPendingPublishes, ...claims];
-  }
-);
-
 export const selectPublishFormValues = createSelector(selectState, state => {
   const { pendingPublish, ...formValues } = state;
   return formValues;
 });
-
-export const selectPendingPublish = uri =>
-  createSelector(selectPendingPublishes, pendingPublishes => {
-    const { claimName, contentName } = parseURI(uri);
-
-    if (!pendingPublishes.length) {
-      return null;
-    }
-
-    return pendingPublishes.filter(
-      publish => publish.name === claimName || publish.name === contentName
-    )[0];
-  });
 
 // Is the current uri the same as the uri they clicked "edit" on
 export const selectIsStillEditing = createSelector(selectPublishFormValues, publishState => {
