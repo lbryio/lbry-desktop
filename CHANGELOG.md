@@ -15,6 +15,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
  * Adds Persistence to File List Filter Selections ([#2050](https://github.com/lbryio/lbry-desktop/pull/2050))
 
 ### Changed
+ * Upgraded to lbrynet v0.30.0 ([#1998](https://github.com/lbryio/lbry-desktop/pull/1998))
  * Make tooltip smarter ([#1979](https://github.com/lbryio/lbry-desktop/pull/1979))
  * Change channel pages to have 48 items instead of 10 ([#2002](https://github.com/lbryio/lbry-desktop/pull/2002))
  * Update to https ([#2016](https://github.com/lbryio/lbry-desktop/pull/2016))
