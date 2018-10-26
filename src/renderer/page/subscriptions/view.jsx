@@ -10,7 +10,7 @@ import FileList from 'component/fileList';
 import HiddenNsfwClaims from 'component/hiddenNsfwClaims';
 import { FormField } from 'component/common/form';
 import FileCard from 'component/fileCard';
-import { parseURI, PAGES } from 'lbry-redux';
+import { parseURI } from 'lbry-redux';
 
 type Props = {
   subscribedChannels: Array<string>, // The channels a user is subscribed to
@@ -25,7 +25,6 @@ type Props = {
   doSetViewMode: ViewMode => void,
   doFetchMySubscriptions: () => void,
   doSetClientSetting: (string, boolean) => void,
-  sortBy: string,
 };
 
 export default class extends React.PureComponent<Props> {
@@ -45,19 +44,13 @@ export default class extends React.PureComponent<Props> {
   }
 
   renderSubscriptions() {
-    const { viewMode, unreadSubscriptions, allSubscriptions, sortBy } = this.props;
+    const { viewMode, unreadSubscriptions, allSubscriptions } = this.props;
 
     if (viewMode === VIEW_ALL) {
       return (
         <React.Fragment>
           <div className="card__title">{__('Your subscriptions')}</div>
-          <FileList
-            hideFilter
-            sortByHeight
-            fileInfos={allSubscriptions}
-            sortBy={sortBy}
-            page={PAGES.SUBSCRIPTIONS}
-          />
+          <FileList hideFilter sortByHeight fileInfos={allSubscriptions} />
         </React.Fragment>
       );
     }

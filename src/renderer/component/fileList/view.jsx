@@ -12,13 +12,14 @@ type Props = {
   fileInfos: Array<FileInfo>,
   checkPending?: boolean,
   sortBy: string,
-  page: string,
-  setFileListSort: (string, string) => void,
+  page?: string,
+  setFileListSort: (?string, string) => void,
 };
 
 class FileList extends React.PureComponent<Props> {
   static defaultProps = {
     hideFilter: false,
+    sortBy: SORT_OPTIONS.DATE_NEW,
   };
 
   constructor(props: Props) {
