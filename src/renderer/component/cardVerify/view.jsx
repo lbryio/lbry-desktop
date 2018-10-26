@@ -7,6 +7,20 @@ let scriptLoading = false;
 let scriptLoaded = false;
 let scriptDidError = false;
 
+declare class CardVerify {
+  static stripeHandler: {
+    open: Function,
+    close: Function,
+  };
+}
+
+declare class StripeCheckout {
+  static configure({}): {
+    open: Function,
+    close: Function,
+  };
+}
+
 type Props = {
   disabled: boolean,
   label: ?string,
@@ -27,14 +41,20 @@ type Props = {
   //     token.id can be used to create a charge or customer.
   //     token.email contains the email address entered by the user.
   token: string,
+  email: string,
 };
 
-class CardVerify extends React.Component {
-  constructor(props) {
+type State = {
+  open: boolean,
+};
+
+class CardVerifyComponent extends React.Component<Props, State> {
+  constructor(props: Props) {
     super(props);
     this.state = {
       open: false,
     };
+    this.onClick = this.onClick.bind(this);
   }
 
   componentDidMount() {
@@ -65,12 +85,14 @@ class CardVerify extends React.Component {
           scriptDidError = true;
           scriptLoading = false;
           reject(event);
-          this.onScriptError(event);
+          this.onScriptError();
         };
       });
       const wrappedPromise = new Promise((accept, cancel) => {
-        promise.then(() => (canceled ? cancel({ isCanceled: true }) : accept()));
-        promise.catch(error => (canceled ? cancel({ isCanceled: true }) : cancel(error)));
+        promise.then(() => (canceled ? cancel(new Error({ isCanceled: true })) : accept()));
+        promise.catch(
+          error => (canceled ? cancel(new Error({ isCanceled: true })) : cancel(error))
+        );
       });
 
       return {
@@ -83,7 +105,9 @@ class CardVerify extends React.Component {
 
     this.loadPromise.promise.then(this.onScriptLoaded).catch(this.onScriptError);
 
-    document.body.appendChild(script);
+    if (document.body) {
+      document.body.appendChild(script);
+    }
   }
 
   componentDidUpdate() {
@@ -112,13 +136,30 @@ class CardVerify extends React.Component {
     }
   };
 
-  onScriptError = (...args) => {
+  onScriptError = () => {
     throw new Error('Unable to load credit validation script.');
   };
 
   onClosed = () => {
     this.setState({ open: false });
   };
+
+  onClick = () => {
+    if (scriptDidError) {
+      throw new Error('Tried to call onClick, but StripeCheckout failed to load');
+    } else if (CardVerify.stripeHandler) {
+      this.showStripeDialog();
+    } else {
+      this.hasPendingClick = true;
+    }
+  };
+
+  loadPromise: {
+    promise: Promise<any>,
+    cancel: Function,
+  };
+
+  hasPendingClick: boolean;
 
   updateStripeHandler() {
     if (!CardVerify.stripeHandler) {
@@ -142,18 +183,6 @@ class CardVerify extends React.Component {
     });
   }
 
-  onClick = () => {
-    if (scriptDidError) {
-      try {
-        throw new Error('Tried to call onClick, but StripeCheckout failed to load');
-      } catch (x) {}
-    } else if (CardVerify.stripeHandler) {
-      this.showStripeDialog();
-    } else {
-      this.hasPendingClick = true;
-    }
-  };
-
   render() {
     return (
       <Button
@@ -161,10 +190,10 @@ class CardVerify extends React.Component {
         label={this.props.label}
         icon={icons.LOCK}
         disabled={this.props.disabled || this.state.open || this.hasPendingClick}
-        onClick={this.onClick.bind(this)}
+        onClick={this.onClick}
       />
     );
   }
 }
 
-export default CardVerify;
+export default CardVerifyComponent;
