@@ -23,12 +23,12 @@ export default function doLogWarningConsoleMessage(activeOnDev = false) {
   );
 
   console.log(
-    "%cIf you don't understand what you are doing here, please close this window and keep your LBC credits/wallet safe.",
+    "%cIf you don't understand exactly what you are doing here, please close this window and keep your LBC credits/wallet safe.",
     style.redText
   );
 
   console.log(
-    '%cIf you do understand exactly what you are doing, you should come work with us https://lbry.io/join-us',
+    '%cIf you do understand exactly what you are doing, joins us, earn LBC, and make LBRY better! All of LBRY is open-source and we have a sweet secret handshake. Get started at https://lbry.tech/contribute',
     style.normalText
   );
 }
