@@ -97,6 +97,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
  * Fix middle click link error ([#1843](https://github.com/lbryio/lbry-desktop/issues/1843)}
  * Problem with search auto-complete menu when scrolling over file viewer ([#1847](https://github.com/lbryio/lbry-desktop/issues/1847))
  * Show label when publish button is disabled while uploading thumbnail to spee.ch ([#1867](https://github.com/lbryio/lbry-desktop/pull/1867))
+ * Edit option missing from certain published claims ([#1756](https://github.com/lbryio/lbry-desktop/issues/1756))
+  * Navigation issue with channels that have more than one page ([#1797](https://github.com/lbryio/lbry-desktop/pull/1797))
+  * Navigation issue with channels that have more than one page ([#1797](https://github.com/lbryio/lbry-desktop/pull/1797))
+  * Upgrade modals would stack on-top of each other if the app was kept open for a long time ([#1857](https://github.com/lbryio/lbry-desktop/pull/1857))
 
 ### Added
  * 3D file viewer for OBJ & STL file types ([#1558](https://github.com/lbryio/lbry-desktop/pull/1558))
@@ -114,14 +118,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
   * Hide the "Community top bids" section if user chooses to hide NSFW content ([#1760](https://github.com/lbryio/lbry-desktop/pull/1760))
   * More descriptive error message when Shapeshift is unavailable ([#1771](https://github.com/lbryio/lbry-desktop/pull/1771))
   * Rename the Github repo to lbry-desktop ([#1765](https://github.com/lbryio/lbry-desktop/pull/1765))
-
-
-### Fixed
-  * Edit option missing from certain published claims ([#1756](https://github.com/lbryio/lbry-desktop/issues/1756))
-  * Navigation issue with channels that have more than one page ([#1797](https://github.com/lbryio/lbry-desktop/pull/1797))
-  * Navigation issue with channels that have more than one page ([#1797](https://github.com/lbryio/lbry-desktop/pull/1797))
-  * Upgrade modals would stack on-top of each other if the app was kept open for a long time ([#1857](https://github.com/lbryio/lbry-desktop/pull/1857))
-
 
 ## [0.22.2] - 2018-07-09
 
