@@ -12,19 +12,19 @@ type Props = {
   gettingNewAddress: boolean,
 };
 
-class WalletAddress extends React.PureComponent<Props> {
+type State = {
+  showQR: boolean,
+};
+
+class WalletAddress extends React.PureComponent<Props, State> {
   constructor(props: Props) {
     super(props);
 
     this.state = {
       showQR: false,
     };
-  }
 
-  toggleQR() {
-    this.setState({
-      showQR: !this.state.showQR,
-    });
+    this.toggleQR = this.toggleQR.bind(this);
   }
 
   componentWillMount() {
@@ -34,6 +34,14 @@ class WalletAddress extends React.PureComponent<Props> {
     } else {
       checkAddressIsMine(receiveAddress);
     }
+  }
+
+  toggleQR: Function;
+
+  toggleQR() {
+    this.setState({
+      showQR: !this.state.showQR,
+    });
   }
 
   render() {
@@ -62,7 +70,7 @@ class WalletAddress extends React.PureComponent<Props> {
           <Button
             button="link"
             label={showQR ? __('Hide QR code') : __('Show QR code')}
-            onClick={this.toggleQR.bind(this)}
+            onClick={this.toggleQR}
           />
         </div>
 
