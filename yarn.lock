@@ -5663,18 +5663,18 @@ lazy-val@^1.0.3:
   version "1.0.3"
   resolved "https://registry.yarnpkg.com/lazy-val/-/lazy-val-1.0.3.tgz#bb97b200ef00801d94c317e29dc6ed39e31c5edc"
 
-lbry-redux@lbryio/lbry-redux#b2253796205d943eb63419d203e0915d09df2e61:
+lbry-redux@lbryio/lbry-redux#1384ffff10181493d565103847c8ffae8372d8af:
   version "0.0.1"
-  resolved "https://codeload.github.com/lbryio/lbry-redux/tar.gz/b2253796205d943eb63419d203e0915d09df2e61"
+  resolved "https://codeload.github.com/lbryio/lbry-redux/tar.gz/1384ffff10181493d565103847c8ffae8372d8af"
   dependencies:
     proxy-polyfill "0.1.6"
     reselect "^3.0.0"
 
-lbryinc@lbryio/lbryinc#ea5d1f54475717f344f14fa1f3443d47a2b92011:
+lbryinc@lbryio/lbryinc#2cf542218ae37bf4b708cab89e3bf083b96a895e:
   version "0.0.1"
-  resolved "https://codeload.github.com/lbryio/lbryinc/tar.gz/ea5d1f54475717f344f14fa1f3443d47a2b92011"
+  resolved "https://codeload.github.com/lbryio/lbryinc/tar.gz/2cf542218ae37bf4b708cab89e3bf083b96a895e"
   dependencies:
-    lbry-redux lbryio/lbry-redux#b2253796205d943eb63419d203e0915d09df2e61
+    lbry-redux lbryio/lbry-redux#1384ffff10181493d565103847c8ffae8372d8af
     reselect "^3.0.0"
 
 lcid@^1.0.0:
