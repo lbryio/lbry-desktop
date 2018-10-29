@@ -1,6 +1,5 @@
 import { connect } from 'react-redux';
-import { doHideModal } from 'redux/actions/app';
-import { doAbandonClaim, selectTransactionItems } from 'lbry-redux';
+import { doHideNotification, doAbandonClaim, selectTransactionItems } from 'lbry-redux';
 import ModalRevokeClaim from './view';
 
 const select = state => ({
@@ -8,7 +7,7 @@ const select = state => ({
 });
 
 const perform = dispatch => ({
-  closeModal: () => dispatch(doHideModal()),
+  closeModal: () => dispatch(doHideNotification()),
   abandonClaim: (txid, nout) => dispatch(doAbandonClaim(txid, nout)),
 });
 

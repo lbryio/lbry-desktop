@@ -4,10 +4,15 @@ import { clipboard } from 'electron';
 import { FormRow } from 'component/common/form';
 import Button from 'component/button';
 import * as icons from 'constants/icons';
-
+/*
+noSnackbar added due to issue 1945
+https://github.com/lbryio/lbry-desktop/issues/1945
+"Snackbars and modals can't be displayed at the same time"
+*/
 type Props = {
   copyable: string,
-  doToast: ({ message: string }) => void,
+  noSnackbar: boolean,
+  doNotify: ({ message: string, displayType: Array<string> }) => void,
 };
 
 export default class CopyableText extends React.PureComponent<Props> {
@@ -20,7 +25,7 @@ export default class CopyableText extends React.PureComponent<Props> {
   input: ?HTMLInputElement;
 
   render() {
-    const { copyable, doToast, noSnackbar } = this.props;
+    const { copyable, doNotify, noSnackbar } = this.props;
 
     return (
       <FormRow verticallyCentered padded stretch>
@@ -44,9 +49,12 @@ export default class CopyableText extends React.PureComponent<Props> {
           icon={icons.CLIPBOARD}
           onClick={() => {
             clipboard.writeText(copyable);
-            doToast({
-              message: __('Text copied'),
-            });
+            if (!noSnackbar) {
+              doNotify({
+                message: __('Text copied'),
+                displayType: ['snackbar'],
+              });
+            }
           }}
         />
       </FormRow>

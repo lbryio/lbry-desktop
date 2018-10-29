@@ -1,11 +1,11 @@
 import { connect } from 'react-redux';
-import { doHideModal } from 'redux/actions/app';
+import { doHideNotification } from 'lbry-redux';
 import ModalTransactionFailed from './view';
 
 const select = () => ({});
 
 const perform = dispatch => ({
-  closeModal: () => dispatch(doHideModal()),
+  closeModal: () => dispatch(doHideNotification()),
 });
 
 export default connect(

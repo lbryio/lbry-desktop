@@ -1,6 +1,6 @@
 // @flow
 import { connect } from 'react-redux';
-import { doHideModal } from 'redux/actions/app';
+import { doHideNotification } from 'lbry-redux';
 import {
   makeSelectClaimRewardError,
   doClaimRewardType,
@@ -17,7 +17,7 @@ const select = (state): {} => ({
 });
 
 const perform = dispatch => ({
-  closeModal: () => dispatch(doHideModal()),
+  closeModal: () => dispatch(doHideNotification()),
   submitRewardCode: (code: string) =>
     dispatch(doClaimRewardType(REWARD_TYPES.TYPE_REWARD_CODE, { params: { code } })),
 });

@@ -6,17 +6,17 @@ import type {
   UpdatePublishFormAction,
   PublishParams,
 } from 'redux/reducers/publish';
-import * as MODALS from 'constants/modal_types';
 import {
   ACTIONS,
   Lbry,
+  doNotify,
+  MODALS,
   selectMyChannelClaims,
   THUMBNAIL_STATUSES,
   batchActions,
   creditsToString,
   selectPendingById,
 } from 'lbry-redux';
-import { doOpenModal } from 'redux/actions/app';
 import { selectosNotificationsEnabled } from 'redux/selectors/settings';
 import { doNavigate } from 'redux/actions/navigation';
 import fs from 'fs';
@@ -97,7 +97,7 @@ export const doUploadThumbnail = (filePath: string, nsfw: boolean) => (
           type: ACTIONS.UPDATE_PUBLISH_FORM,
           data: { uploadThumbnailStatus: THUMBNAIL_STATUSES.API_DOWN },
         },
-        dispatch(doOpenModal({ id: MODALS.ERROR, error }))
+        dispatch(doNotify({ id: MODALS.ERROR, error }))
       )
     );
 
@@ -266,12 +266,12 @@ export const doPublish = (params: PublishParams) => (
     dispatch({
       type: ACTIONS.PUBLISH_SUCCESS,
     });
-    dispatch(doOpenModal(MODALS.PUBLISH, { uri }));
+    dispatch(doNotify({ id: MODALS.PUBLISH }, { uri }));
   };
 
   const failure = error => {
     dispatch({ type: ACTIONS.PUBLISH_FAIL });
-    dispatch(doError(error.message));
+    dispatch(doNotify({ id: MODALS.ERROR, error: error.message }));
   };
 
   return Lbry.publish(publishPayload).then(success, failure);

@@ -1,13 +1,13 @@
 import { connect } from 'react-redux';
-import { selectToast, doDismissToast } from 'lbry-redux';
+import { selectSnack, doHideNotification } from 'lbry-redux';
 import SnackBar from './view';
 
 const perform = dispatch => ({
-  removeSnack: () => dispatch(doDismissToast()),
+  removeSnack: () => dispatch(doHideNotification()),
 });
 
 const select = state => ({
-  snack: selectToast(state),
+  snack: selectSnack(state),
 });
 
 export default connect(select, perform)(SnackBar);

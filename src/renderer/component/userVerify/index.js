@@ -1,6 +1,5 @@
-import * as MODALS from 'constants/modal_types';
 import { connect } from 'react-redux';
-import { doOpenModal } from 'redux/actions/app';
+import { doNotify, MODALS } from 'lbry-redux';
 import { doNavigate } from 'redux/actions/navigation';
 import {
   doUserIdentityVerify,
@@ -24,7 +23,7 @@ const select = state => {
 const perform = dispatch => ({
   navigate: uri => dispatch(doNavigate(uri)),
   verifyUserIdentity: token => dispatch(doUserIdentityVerify(token)),
-  verifyPhone: () => dispatch(doOpenModal(MODALS.PHONE_COLLECTION)),
+  verifyPhone: () => dispatch(doNotify({ id: MODALS.PHONE_COLLECTION })),
 });
 
 export default connect(

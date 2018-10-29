@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import * as MODALS from 'constants/modal_types';
+import { MODALS } from 'lbry-redux';
 import ModalError from 'modal/modalError';
 import ModalAuthFailure from 'modal/modalAuthFailure';
 import ModalDownloading from 'modal/modalDownloading';
@@ -70,7 +70,7 @@ class ModalRouter extends React.PureComponent<Props> {
       transitionModal &&
       (transitionModal !== this.state.lastTransitionModal || page !== this.state.lastTransitionPage)
     ) {
-      openModal(transitionModal);
+      openModal({ id: transitionModal });
       this.setState({
         lastTransitionModal: transitionModal,
         lastTransitionPage: page,
@@ -121,75 +121,73 @@ class ModalRouter extends React.PureComponent<Props> {
   }
 
   render() {
-    const { modal, error } = this.props;
+    const { notification, notificationProps } = this.props;
 
-    if (error) {
-      return <ModalError {...error} />;
-    }
-
-    if (!modal) {
+    if (!notification) {
       return null;
     }
 
-    const { id, modalProps } = modal;
+    if (notification.error) {
+      return <ModalError {...notification} {...notificationProps} />;
+    }
 
-    switch (id) {
+    switch (notification.id) {
       case MODALS.UPGRADE:
-        return <ModalUpgrade {...modalProps} />;
+        return <ModalUpgrade {...notificationProps} />;
       case MODALS.DOWNLOADING:
-        return <ModalDownloading {...modalProps} />;
+        return <ModalDownloading {...notificationProps} />;
       case MODALS.AUTO_UPDATE_DOWNLOADED:
-        return <ModalAutoUpdateDownloaded {...modalProps} />;
+        return <ModalAutoUpdateDownloaded {...notificationProps} />;
       case MODALS.AUTO_UPDATE_CONFIRM:
-        return <ModalAutoUpdateConfirm {...modalProps} />;
+        return <ModalAutoUpdateConfirm {...notificationProps} />;
       case MODALS.ERROR:
-        return <ModalError {...modalProps} />;
+        return <ModalError {...notificationProps} />;
       case MODALS.FILE_TIMEOUT:
-        return <ModalFileTimeout {...modalProps} />;
+        return <ModalFileTimeout {...notificationProps} />;
       case MODALS.INSUFFICIENT_CREDITS:
-        return <ModalCreditIntro {...modalProps} />;
+        return <ModalCreditIntro {...notificationProps} />;
       case MODALS.WELCOME:
-        return <ModalWelcome {...modalProps} />;
+        return <ModalWelcome {...notificationProps} />;
       case MODALS.FIRST_REWARD:
-        return <ModalFirstReward {...modalProps} />;
+        return <ModalFirstReward {...notificationProps} />;
       case MODALS.AUTHENTICATION_FAILURE:
-        return <ModalAuthFailure {...modalProps} />;
+        return <ModalAuthFailure {...notificationProps} />;
       case MODALS.TRANSACTION_FAILED:
-        return <ModalTransactionFailed {...modalProps} />;
+        return <ModalTransactionFailed {...notificationProps} />;
       case MODALS.REWARD_APPROVAL_REQUIRED:
-        return <ModalRewardApprovalRequired {...modalProps} />;
+        return <ModalRewardApprovalRequired {...notificationProps} />;
       case MODALS.CONFIRM_FILE_REMOVE:
-        return <ModalRemoveFile {...modalProps} />;
+        return <ModalRemoveFile {...notificationProps} />;
       case MODALS.AFFIRM_PURCHASE:
-        return <ModalAffirmPurchase {...modalProps} />;
+        return <ModalAffirmPurchase {...notificationProps} />;
       case MODALS.CONFIRM_CLAIM_REVOKE:
-        return <ModalRevokeClaim {...modalProps} />;
+        return <ModalRevokeClaim {...notificationProps} />;
       case MODALS.PHONE_COLLECTION:
-        return <ModalPhoneCollection {...modalProps} />;
+        return <ModalPhoneCollection {...notificationProps} />;
       case MODALS.EMAIL_COLLECTION:
-        return <ModalEmailCollection {...modalProps} />;
+        return <ModalEmailCollection {...notificationProps} />;
       case MODALS.FIRST_SUBSCRIPTION:
-        return <ModalFirstSubscription {...modalProps} />;
+        return <ModalFirstSubscription {...notificationProps} />;
       case MODALS.SEND_TIP:
-        return <ModalSendTip {...modalProps} />;
+        return <ModalSendTip {...notificationProps} />;
       case MODALS.SOCIAL_SHARE:
-        return <ModalSocialShare {...modalProps} />;
+        return <ModalSocialShare {...notificationProps} />;
       case MODALS.PUBLISH:
-        return <ModalPublish {...modalProps} />;
+        return <ModalPublish {...notificationProps} />;
       case MODALS.CONFIRM_EXTERNAL_LINK:
-        return <ModalOpenExternalLink {...modalProps} />;
+        return <ModalOpenExternalLink {...notificationProps} />;
       case MODALS.CONFIRM_TRANSACTION:
-        return <ModalConfirmTransaction {...modalProps} />;
+        return <ModalConfirmTransaction {...notificationProps} />;
       case MODALS.CONFIRM_THUMBNAIL_UPLOAD:
-        return <ModalConfirmThumbnailUpload {...modalProps} />;
+        return <ModalConfirmThumbnailUpload {...notificationProps} />;
       case MODALS.WALLET_ENCRYPT:
-        return <ModalWalletEncrypt {...modalProps} />;
+        return <ModalWalletEncrypt {...notificationProps} />;
       case MODALS.WALLET_DECRYPT:
-        return <ModalWalletDecrypt {...modalProps} />;
+        return <ModalWalletDecrypt {...notificationProps} />;
       case MODALS.WALLET_UNLOCK:
-        return <ModalWalletUnlock {...modalProps} />;
+        return <ModalWalletUnlock {...notificationProps} />;
       case MODALS.REWARD_GENERATED_CODE:
-        return <ModalRewardCode {...modalProps} />;
+        return <ModalRewardCode {...notificationProps} />;
       default:
         return null;
     }

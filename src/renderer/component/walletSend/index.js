@@ -1,10 +1,9 @@
 import { connect } from 'react-redux';
-import { selectBalance } from 'lbry-redux';
-import { doOpenModal } from 'redux/actions/app';
+import { selectBalance, doNotify } from 'lbry-redux';
 import WalletSend from './view';
 
 const perform = dispatch => ({
-  openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
+  openModal: (modal, props) => dispatch(doNotify(modal, props)),
 });
 
 const select = state => ({

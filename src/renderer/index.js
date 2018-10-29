@@ -10,7 +10,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { doConditionalAuthNavigate, doDaemonReady, doAutoUpdate } from 'redux/actions/app';
-import { doToast, doBlackListedOutpointsSubscribe, isURIValid } from 'lbry-redux';
+import { doNotify, doBlackListedOutpointsSubscribe, isURIValid } from 'lbry-redux';
 import { doNavigate } from 'redux/actions/navigation';
 import { doDownloadLanguages, doUpdateIsNightAsync } from 'redux/actions/settings';
 import { doUserEmailVerify, doAuthenticate, Lbryio } from 'lbryinc';
@@ -74,8 +74,9 @@ ipcRenderer.on('open-uri-requested', (event, uri, newSession) => {
         app.store.dispatch(doUserEmailVerify(verification.token, verification.recaptcha));
       } else {
         app.store.dispatch(
-          doToast({
+          doNotify({
             message: 'Invalid Verification URI',
+            displayType: ['snackbar'],
           })
         );
       }
@@ -86,8 +87,9 @@ ipcRenderer.on('open-uri-requested', (event, uri, newSession) => {
       app.store.dispatch(doNavigate('/show', { uri }));
     } else {
       app.store.dispatch(
-        doToast({
+        doNotify({
           message: __('Invalid LBRY URL requested'),
+          displayType: ['snackbar'],
         })
       );
     }

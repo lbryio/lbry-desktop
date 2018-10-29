@@ -1,8 +1,7 @@
 // @flow
-import * as MODALS from 'constants/modal_types';
-import * as ICONS from 'constants/icons';
 import * as React from 'react';
-import { isURIValid } from 'lbry-redux';
+import { MODALS, isURIValid } from 'lbry-redux';
+import * as icons from 'constants/icons';
 import Button from 'component/button';
 
 type Props = {
@@ -10,7 +9,7 @@ type Props = {
   title?: string,
   children: React.Node,
   navigate: (string, ?{}) => void,
-  openModal: (id: string, { uri: string }) => void,
+  openModal: ({ id: string }, { uri: string }) => void,
 };
 
 class ExternalLink extends React.PureComponent<Props> {
@@ -34,11 +33,11 @@ class ExternalLink extends React.PureComponent<Props> {
       element = (
         <Button
           button="link"
-          iconRight={ICONS.EXTERNAL_LINK}
+          iconRight={icons.EXTERNAL_LINK}
           title={title || href}
           label={children}
           className="btn--external-link"
-          onClick={() => openModal(MODALS.CONFIRM_EXTERNAL_LINK, { uri: href })}
+          onClick={() => openModal({ id: MODALS.CONFIRM_EXTERNAL_LINK }, { uri: href })}
         />
       );
     }

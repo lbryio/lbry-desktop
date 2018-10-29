@@ -1,10 +1,11 @@
 import { connect } from 'react-redux';
 import {
+  doHideNotification,
   doWalletUnlock,
   selectWalletUnlockPending,
   selectWalletUnlockSucceeded,
 } from 'lbry-redux';
-import { doQuit, doHideModal } from 'redux/actions/app';
+import { doQuit } from 'redux/actions/app';
 import ModalWalletUnlock from './view';
 
 const select = state => ({
@@ -12,7 +13,7 @@ const select = state => ({
 });
 
 const perform = dispatch => ({
-  closeModal: () => dispatch(doHideModal()),
+  closeModal: () => dispatch(doHideNotification()),
   quit: () => dispatch(doQuit()),
   unlockWallet: password => dispatch(doWalletUnlock(password)),
 });

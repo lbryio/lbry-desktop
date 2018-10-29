@@ -1,15 +1,15 @@
 import { connect } from 'react-redux';
 import * as settings from 'constants/settings';
 import {
+  doNotify,
   selectCostForCurrentPageUri,
   selectBalance,
   selectCurrentPage,
-  selectError,
-  doToast
+  selectNotification,
+  selectNotificationProps,
 } from 'lbry-redux';
 import { makeSelectClientSetting } from 'redux/selectors/settings';
 import { selectUser, selectUserIsVerificationCandidate } from 'lbryinc';
-import { selectModal } from 'redux/selectors/app';
 
 import ModalRouter from './view';
 
@@ -24,12 +24,12 @@ const select = state => ({
   ),
   isWelcomeAcknowledged: makeSelectClientSetting(settings.NEW_USER_ACKNOWLEDGED)(state),
   user: selectUser(state),
-  modal: selectModal(state),
-  error: selectError(state),
+  notification: selectNotification(state),
+  notificationProps: selectNotificationProps(state),
 });
 
 const perform = dispatch => ({
-  showToast: props => dispatch(doToast(props)),
+  openModal: notification => dispatch(doNotify(notification)),
 });
 
 export default connect(

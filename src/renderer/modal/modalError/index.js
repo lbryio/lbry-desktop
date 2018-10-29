@@ -1,9 +1,9 @@
 import { connect } from 'react-redux';
-import { doDismissError } from 'lbry-redux';
+import { doHideNotification } from 'lbry-redux';
 import ModalError from './view';
 
 const perform = dispatch => ({
-  closeModal: () => dispatch(doDismissError()),
+  closeModal: () => dispatch(doHideNotification()),
 });
 
 export default connect(null, perform)(ModalError);

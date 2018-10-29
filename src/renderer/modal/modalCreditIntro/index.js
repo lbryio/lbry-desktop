@@ -2,8 +2,7 @@ import { connect } from 'react-redux';
 import { doNavigate } from 'redux/actions/navigation';
 import { doSetClientSetting } from 'redux/actions/settings';
 import { selectUserIsRewardApproved, selectUnclaimedRewardValue } from 'lbryinc';
-import { selectBalance } from 'lbry-redux';
-import { doHideModal } from 'redux/actions/app';
+import { selectBalance, doHideNotification } from 'lbry-redux';
 import * as settings from 'constants/settings';
 import ModalCreditIntro from './view';
 
@@ -17,11 +16,11 @@ const perform = dispatch => () => ({
   addBalance: () => {
     dispatch(doSetClientSetting(settings.CREDIT_REQUIRED_ACKNOWLEDGED, true));
     dispatch(doNavigate('/getcredits'));
-    dispatch(doHideModal());
+    dispatch(doHideNotification());
   },
   closeModal: () => {
     dispatch(doSetClientSetting(settings.CREDIT_REQUIRED_ACKNOWLEDGED, true));
-    dispatch(doHideModal());
+    dispatch(doHideNotification());
   },
 });
 
