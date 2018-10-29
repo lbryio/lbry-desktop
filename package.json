@@ -49,7 +49,7 @@
     "formik": "^0.10.4",
     "hast-util-sanitize": "^1.1.2",
     "keytar": "^4.2.1",
-    "lbry-redux": "lbryio/lbry-redux#f193d38c61ea061679ebc7b4ca139a0e9c95ef8a",
+    "lbry-redux": "lbryio/lbry-redux#9a20637926970b239bb08083c9027fac340ce82b",
     "lbryinc": "lbryio/lbryinc#7a458ea13ceceffa0191e73139f94e5c953f22b1",
     "localforage": "^1.7.1",
     "mammoth": "^1.4.6",
@@ -134,7 +134,7 @@
     "yarn": "^1.3"
   },
   "lbrySettings": {
-    "lbrynetDaemonVersion": "0.30.0",
+    "lbrynetDaemonVersion": "0.30.1rc1",
     "lbrynetDaemonUrlTemplate": "https://github.com/lbryio/lbry/releases/download/vDAEMONVER/lbrynet-OSNAME.zip",
     "lbrynetDaemonDir": "static/daemon",
     "lbrynetDaemonFileName": "lbrynet"
