@@ -46,7 +46,7 @@ class SocialShare extends React.PureComponent<Props> {
         {speechShareable && (
           <div className="card__content">
             <label className="card__subtitle">{__('Web link')}</label>
-            <CopyableText copyable={speechURL} noSnackbar />
+            <CopyableText copyable={speechURL} />
             <div className="card__actions card__actions--center">
               <ToolTip onComponent body={__('Facebook')}>
                 <Button

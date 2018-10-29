@@ -1,11 +1,11 @@
 import { connect } from 'react-redux';
 import { doDeleteFileAndGoBack } from 'redux/actions/file';
 import {
-  doHideNotification,
   makeSelectTitleForUri,
   makeSelectClaimIsMine,
   makeSelectFileInfoForUri,
 } from 'lbry-redux';
+import { doHideModal } from 'redux/actions/app';
 import ModalRemoveFile from './view';
 
 const select = (state, props) => ({
@@ -15,7 +15,7 @@ const select = (state, props) => ({
 });
 
 const perform = dispatch => ({
-  closeModal: () => dispatch(doHideNotification()),
+  closeModal: () => dispatch(doHideModal()),
   deleteFile: (fileInfo, deleteFromComputer, abandonClaim) => {
     dispatch(doDeleteFileAndGoBack(fileInfo, deleteFromComputer, abandonClaim));
   },

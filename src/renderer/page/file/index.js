@@ -14,12 +14,12 @@ import {
   makeSelectClaimForUri,
   makeSelectContentTypeForUri,
   makeSelectMetadataForUri,
-  doNotify,
   makeSelectChannelForClaimUri,
 } from 'lbry-redux';
 import { selectShowNsfw, makeSelectClientSetting } from 'redux/selectors/settings';
 import { makeSelectIsSubscribed } from 'redux/selectors/subscriptions';
 import { doPrepareEdit } from 'redux/actions/publish';
+import { doOpenModal } from 'redux/actions/app';
 import FilePage from './view';
 
 const select = (state, props) => ({
@@ -41,7 +41,7 @@ const perform = dispatch => ({
   navigate: (path, params) => dispatch(doNavigate(path, params)),
   fetchFileInfo: uri => dispatch(doFetchFileInfo(uri)),
   fetchCostInfo: uri => dispatch(doFetchCostInfoForUri(uri)),
-  openModal: (modal, props) => dispatch(doNotify(modal, props)),
+  openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
   prepareEdit: (publishData, uri) => dispatch(doPrepareEdit(publishData, uri)),
   setClientSetting: (key, value) => dispatch(doSetClientSetting(key, value)),
   setViewed: uri => dispatch(doSetContentHistoryItem(uri)),

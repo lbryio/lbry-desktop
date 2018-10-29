@@ -7,8 +7,8 @@ import {
   selectMyClaimsOutpoints,
   selectFileInfosByOutpoint,
   selectTotalDownloadProgress,
-  doHideNotification,
 } from 'lbry-redux';
+import { doHideModal } from 'redux/actions/app';
 import { doHistoryBack } from 'redux/actions/navigation';
 import setProgressBar from 'util/setProgressBar';
 
@@ -65,7 +65,7 @@ export function doDeleteFile(outpoint, deleteFromComputer, abandonClaim) {
 export function doDeleteFileAndGoBack(fileInfo, deleteFromComputer, abandonClaim) {
   return dispatch => {
     const actions = [];
-    actions.push(doHideNotification());
+    actions.push(doHideModal());
     actions.push(doHistoryBack());
     actions.push(doDeleteFile(fileInfo, deleteFromComputer, abandonClaim));
     dispatch(batchActions(...actions));

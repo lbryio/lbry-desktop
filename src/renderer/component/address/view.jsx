@@ -11,8 +11,7 @@ https://github.com/lbryio/lbry-desktop/issues/1945
 */
 type Props = {
   address: string,
-  noSnackbar: boolean,
-  doNotify: ({ message: string, displayType: Array<string> }) => void,
+  doToast: ({ message: string }) => void,
 };
 
 export default class Address extends React.PureComponent<Props> {
@@ -25,7 +24,7 @@ export default class Address extends React.PureComponent<Props> {
   input: ?HTMLInputElement;
 
   render() {
-    const { address, doNotify, noSnackbar } = this.props;
+    const { address, doToast } = this.props;
 
     return (
       <FormRow verticallyCentered padded stretch>
@@ -48,12 +47,9 @@ export default class Address extends React.PureComponent<Props> {
           icon={icons.CLIPBOARD}
           onClick={() => {
             clipboard.writeText(address);
-            if (!noSnackbar) {
-              doNotify({
-                message: __('Address copied'),
-                displayType: ['snackbar'],
-              });
-            }
+            doToast({
+              message: __('Address copied'),
+            });
           }}
         />
       </FormRow>

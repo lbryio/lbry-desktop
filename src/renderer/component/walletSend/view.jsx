@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import { MODALS } from 'lbry-redux';
+import * as MODALS from 'constants/modal_types';
 import Button from 'component/button';
 import { Form, FormRow, FormField } from 'component/common/form';
 import { Formik } from 'formik';
@@ -27,9 +27,8 @@ class WalletSend extends React.PureComponent<Props> {
     const { openModal } = this.props;
     const { address, amount } = values;
     if (amount && address) {
-      const notificationId = { id: MODALS.CONFIRM_TRANSACTION };
       const modalProps = { address, amount };
-      openModal(notificationId, modalProps);
+      openModal(MODALS.CONFIRM_TRANSACTION, modalProps);
     }
   }
 

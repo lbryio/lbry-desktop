@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import Button from 'component/button';
+import classnames from 'classnames';
 
 type Props = {
   removeSnack: any => void,
@@ -27,7 +28,7 @@ class SnackBar extends React.PureComponent<Props> {
       return null;
     }
 
-    const { message, linkText, linkTarget } = snack;
+    const { message, linkText, linkTarget, isError } = snack;
 
     if (this.hideTimeout === null) {
       this.hideTimeout = setTimeout(() => {
@@ -37,7 +38,9 @@ class SnackBar extends React.PureComponent<Props> {
     }
 
     return (
-      <div className="snack-bar">
+      <div className={classnames("snack-bar", {
+        "snack-bar--error": isError
+      })}>
         <div className="snack-bar__message">
           <div>&#9432;</div>
           <div>{message}</div>

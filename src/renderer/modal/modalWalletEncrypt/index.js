@@ -1,12 +1,12 @@
 import { connect } from 'react-redux';
 import {
-  doHideNotification,
   doWalletStatus,
   doWalletEncrypt,
   selectWalletEncryptPending,
   selectWalletEncryptSucceeded,
   selectWalletEncryptResult,
 } from 'lbry-redux';
+import { doHideModal } from 'redux/actions/app';
 import ModalWalletEncrypt from './view';
 
 const select = state => ({
@@ -15,7 +15,7 @@ const select = state => ({
 });
 
 const perform = dispatch => ({
-  closeModal: () => dispatch(doHideNotification()),
+  closeModal: () => dispatch(doHideModal()),
   encryptWallet: password => dispatch(doWalletEncrypt(password)),
   updateWalletStatus: () => dispatch(doWalletStatus()),
 });

@@ -247,3 +247,14 @@ export const selectNavLinks = createSelector(
     return navLinks;
   }
 );
+
+export const selectModal = createSelector(selectState, state => {
+  if (!state.modal) {
+    return null;
+  }
+
+  return {
+    id: state.modal,
+    modalProps: state.modalProps,
+  };
+});

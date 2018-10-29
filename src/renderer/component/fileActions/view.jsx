@@ -1,8 +1,8 @@
 // @flow
+import * as MODALS from 'constants/modal_types';
+import * as ICONS from 'constants/icons';
 import * as React from 'react';
 import Button from 'component/button';
-import { MODALS } from 'lbry-redux';
-import * as icons from 'constants/icons';
 import Tooltip from 'component/common/tooltip';
 
 type FileInfo = {
@@ -12,7 +12,7 @@ type FileInfo = {
 type Props = {
   uri: string,
   claimId: string,
-  openModal: ({ id: string }, { uri: string }) => void,
+  openModal: (id: string, { uri: string }) => void,
   claimIsMine: boolean,
   fileInfo: FileInfo,
 };
@@ -28,9 +28,9 @@ class FileActions extends React.PureComponent<Props> {
           <Tooltip onComponent body={__('Delete this file')}>
             <Button
               button="alt"
-              icon={icons.TRASH}
+              icon={ICONS.TRASH}
               description={__('Delete')}
-              onClick={() => openModal({ id: MODALS.CONFIRM_FILE_REMOVE }, { uri })}
+              onClick={() => openModal(MODALS.CONFIRM_FILE_REMOVE, { uri })}
             />
           </Tooltip>
         )}
@@ -38,7 +38,7 @@ class FileActions extends React.PureComponent<Props> {
           <Tooltip onComponent body={__('Report content')}>
             <Button
               button="alt"
-              icon={icons.REPORT}
+              icon={ICONS.REPORT}
               href={`https://lbry.io/dmca?claim_id=${claimId}`}
             />
           </Tooltip>

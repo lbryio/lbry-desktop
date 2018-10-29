@@ -1,9 +1,10 @@
 import { connect } from 'react-redux';
-import { doHideNotification, doSendDraftTransaction } from 'lbry-redux';
+import { doSendDraftTransaction } from 'lbry-redux';
+import { doHideModal } from 'redux/actions/app';
 import ModalConfirmTransaction from './view';
 
 const perform = dispatch => ({
-  closeModal: () => dispatch(doHideNotification()),
+  closeModal: () => dispatch(doHideModal()),
   sendToAddress: (address, amount) => dispatch(doSendDraftTransaction(address, amount)),
 });
 

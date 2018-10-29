@@ -1,9 +1,9 @@
 import { connect } from 'react-redux';
-import { doNotify } from 'lbry-redux';
+import { doOpenModal } from 'redux/actions/app';
 import SelectThumbnail from './view';
 
 const perform = dispatch => ({
-  openModal: (modal, props) => dispatch(doNotify(modal, props)),
+  openModal: (modal, props) => dispatch(doOpenModal(modal, props)),
 });
 
 export default connect(
