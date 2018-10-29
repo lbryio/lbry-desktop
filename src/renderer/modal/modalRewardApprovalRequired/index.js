@@ -1,14 +1,14 @@
 import { connect } from 'react-redux';
-import { doHideNotification } from 'lbry-redux';
+import { doHideModal } from 'redux/actions/app';
 import { doAuthNavigate } from 'redux/actions/navigation';
 import ModalRewardApprovalRequired from './view';
 
 const perform = dispatch => ({
   doAuth: () => {
-    dispatch(doHideNotification());
+    dispatch(doHideModal());
     dispatch(doAuthNavigate());
   },
-  closeModal: () => dispatch(doHideNotification()),
+  closeModal: () => dispatch(doHideModal()),
 });
 
 export default connect(

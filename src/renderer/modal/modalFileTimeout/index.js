@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
-import { doHideNotification, makeSelectMetadataForUri } from 'lbry-redux';
+import { makeSelectMetadataForUri } from 'lbry-redux';
+import { doHideModal } from 'redux/actions/app';
 import ModalFileTimeout from './view';
 
 const select = (state, props) => ({
@@ -7,7 +8,7 @@ const select = (state, props) => ({
 });
 
 const perform = dispatch => ({
-  closeModal: () => dispatch(doHideNotification()),
+  closeModal: () => dispatch(doHideModal()),
 });
 
 export default connect(

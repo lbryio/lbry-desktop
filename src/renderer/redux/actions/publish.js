@@ -6,18 +6,19 @@ import type {
   UpdatePublishFormAction,
   PublishParams,
 } from 'redux/reducers/publish';
+import * as MODALS from 'constants/modal_types';
 import {
   ACTIONS,
   Lbry,
-  doNotify,
-  MODALS,
   selectMyChannelClaims,
   THUMBNAIL_STATUSES,
   batchActions,
   creditsToString,
   selectPendingById,
   selectMyClaimsWithoutChannels,
+  doError
 } from 'lbry-redux';
+import { doOpenModal } from 'redux/actions/app';
 import { selectosNotificationsEnabled } from 'redux/selectors/settings';
 import { doNavigate } from 'redux/actions/navigation';
 import fs from 'fs';
@@ -98,7 +99,7 @@ export const doUploadThumbnail = (filePath: string, nsfw: boolean) => (
           type: ACTIONS.UPDATE_PUBLISH_FORM,
           data: { uploadThumbnailStatus: THUMBNAIL_STATUSES.API_DOWN },
         },
-        dispatch(doNotify({ id: MODALS.ERROR, error }))
+        dispatch(doOpenModal({ id: MODALS.ERROR, error }))
       )
     );
 
@@ -274,7 +275,7 @@ export const doPublish = (params: PublishParams) => (
       type: ACTIONS.PUBLISH_SUCCESS,
     });
 
-    actions.push(doNotify({ id: MODALS.PUBLISH }, { uri }));
+    actions.push(doOpenModal(MODALS.PUBLISH, { uri }));
 
     // We have to fake a temp claim until the new pending one is returned by claim_list_mine
     // We can't rely on claim_list_mine because there might be some delay before the new claims are returned
@@ -297,7 +298,7 @@ export const doPublish = (params: PublishParams) => (
 
   const failure = error => {
     dispatch({ type: ACTIONS.PUBLISH_FAIL });
-    dispatch(doNotify({ id: MODALS.ERROR, error: error.message }));
+    dispatch(doError(error.message))
   };
 
   return Lbry.publish(publishPayload).then(success, failure);

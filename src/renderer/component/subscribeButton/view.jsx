@@ -1,7 +1,7 @@
 // @flow
+import * as MODALS from 'constants/modal_types';
+import * as ICONS from 'constants/icons';
 import React from 'react';
-import { MODALS } from 'lbry-redux';
-import * as icons from 'constants/icons';
 import Button from 'component/button';
 
 type SubscribtionArgs = {
@@ -16,7 +16,7 @@ type Props = {
   subscriptions: Array<string>,
   doChannelSubscribe: ({ channelName: string, uri: string }) => void,
   doChannelUnsubscribe: SubscribtionArgs => void,
-  doNotify: ({ id: string }) => void,
+  doOpenModal: ({ id: string }) => void,
 };
 
 export default (props: Props) => {
@@ -25,7 +25,7 @@ export default (props: Props) => {
     uri,
     doChannelSubscribe,
     doChannelUnsubscribe,
-    doNotify,
+    doOpenModal,
     subscriptions,
     isSubscribed,
   } = props;
@@ -36,14 +36,14 @@ export default (props: Props) => {
   return channelName && uri ? (
     <Button
       iconColor="red"
-      icon={isSubscribed ? undefined : icons.HEART}
+      icon={isSubscribed ? undefined : ICONS.HEART}
       button="alt"
       label={subscriptionLabel}
       onClick={e => {
         e.stopPropagation();
 
         if (!subscriptions.length) {
-          doNotify({ id: MODALS.FIRST_SUBSCRIPTION });
+          doOpenModal(MODALS.FIRST_SUBSCRIPTION);
         }
         subscriptionHandler({
           channelName,

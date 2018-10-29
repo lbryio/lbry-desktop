@@ -1,7 +1,8 @@
 // @flow
 import type { Status } from 'types/status';
 import * as React from 'react';
-import { Lbry, MODALS } from 'lbry-redux';
+import * as MODALS from 'constants/modal_types';
+import { Lbry } from 'lbry-redux';
 import ModalWalletUnlock from 'modal/modalWalletUnlock';
 import ModalIncompatibleDaemon from 'modal/modalIncompatibleDaemon';
 import ModalUpgrade from 'modal/modalUpgrade';
@@ -16,7 +17,7 @@ type Props = {
   daemonVersionMatched: boolean,
   onReadyToLaunch: () => void,
   authenticate: () => void,
-  notification: ?{
+  modal: ?{
     id: string,
   },
 };
@@ -170,12 +171,11 @@ export class SplashScreen extends React.PureComponent<Props, State> {
   timeout: ?TimeoutID;
 
   render() {
-    const { notification } = this.props;
+    const { modal } = this.props;
     const { message, details, isRunning, error } = this.state;
 
-    const notificationId = notification && notification.id;
+    const modalId = modal && modal.id;
 
-    // {notificationId === MODALS.WALLET_UNLOCK && <ModalWalletUnlock />}
     return (
       <React.Fragment>
         <LoadScreen message={message} details={details} error={error} />
@@ -184,10 +184,10 @@ export class SplashScreen extends React.PureComponent<Props, State> {
             in the modals won't work. */}
         {isRunning && (
           <React.Fragment>
-            {notificationId === MODALS.WALLET_UNLOCK && <ModalWalletUnlock />}
-            {notificationId === MODALS.INCOMPATIBLE_DAEMON && <ModalIncompatibleDaemon />}
-            {notificationId === MODALS.UPGRADE && <ModalUpgrade />}
-            {notificationId === MODALS.DOWNLOADING && <ModalDownloading />}
+            {modalId === MODALS.WALLET_UNLOCK && <ModalWalletUnlock />}
+            {modalId === MODALS.INCOMPATIBLE_DAEMON && <ModalIncompatibleDaemon />}
+            {modalId === MODALS.UPGRADE && <ModalUpgrade />}
+            {modalId === MODALS.DOWNLOADING && <ModalDownloading />}
           </React.Fragment>
         )}
       </React.Fragment>

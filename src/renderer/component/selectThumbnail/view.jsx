@@ -1,5 +1,6 @@
 // @flow
-import { THUMBNAIL_STATUSES, MODALS } from 'lbry-redux';
+import * as MODALS from 'constants/modal_types';
+import { THUMBNAIL_STATUSES } from 'lbry-redux';
 import * as React from 'react';
 import { FormField } from 'component/common/form';
 import FileSelector from 'component/common/file-selector';
@@ -118,7 +119,7 @@ class SelectThumbnail extends React.PureComponent<Props, State> {
                 currentPath={thumbnailPath}
                 fileLabel={__('Choose Thumbnail')}
                 filters={filters}
-                onFileChosen={path => openModal({ id: MODALS.CONFIRM_THUMBNAIL_UPLOAD }, { path })}
+                onFileChosen={path => openModal(MODALS.CONFIRM_THUMBNAIL_UPLOAD, { path })}
               />
             )}
             {status === THUMBNAIL_STATUSES.COMPLETE && (

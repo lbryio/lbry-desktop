@@ -1,6 +1,5 @@
 import { connect } from 'react-redux';
-import { doStartUpgrade, doCancelUpgrade } from 'redux/actions/app';
-import { doHideNotification } from 'lbry-redux';
+import { doStartUpgrade, doCancelUpgrade, doHideModal } from 'redux/actions/app';
 import {
   selectDownloadProgress,
   selectDownloadComplete,
@@ -17,7 +16,7 @@ const select = state => ({
 const perform = dispatch => ({
   startUpgrade: () => dispatch(doStartUpgrade()),
   cancelUpgrade: () => {
-    dispatch(doHideNotification());
+    dispatch(doHideModal());
     dispatch(doCancelUpgrade());
   },
 });

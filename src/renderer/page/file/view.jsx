@@ -3,7 +3,8 @@ import type { Claim, Metadata } from 'types/claim';
 import type { FileInfo } from 'types/file_info';
 import * as React from 'react';
 import * as settings from 'constants/settings';
-import { buildURI, normalizeURI, MODALS } from 'lbry-redux';
+import * as MODALS from 'constants/modal_types';
+import { buildURI, normalizeURI } from 'lbry-redux';
 import FileViewer from 'component/fileViewer';
 import Thumbnail from 'component/common/thumbnail';
 import FilePrice from 'component/filePrice';
@@ -42,7 +43,7 @@ type Props = {
   channelUri: string,
   prepareEdit: ({}, string) => void,
   navigate: (string, ?{}) => void,
-  openModal: ({ id: string }, { uri: string }) => void,
+  openModal: (id: string, { uri: string }) => void,
   setClientSetting: (string, string | boolean | number) => void,
   markSubscriptionRead: (string, string) => void,
 };
@@ -214,14 +215,14 @@ class FilePage extends React.Component<Props> {
                     button="alt"
                     icon={icons.GIFT}
                     label={__('Send a tip')}
-                    onClick={() => openModal({ id: MODALS.SEND_TIP }, { uri })}
+                    onClick={() => openModal(MODALS.SEND_TIP, { uri })}
                   />
                 )}
                 <Button
                   button="alt"
                   icon={icons.GLOBE}
                   label={__('Share')}
-                  onClick={() => openModal({ id: MODALS.SOCIAL_SHARE }, { uri, speechShareable })}
+                  onClick={() => openModal(MODALS.SOCIAL_SHARE, { uri, speechShareable })}
                 />
               </div>
 
