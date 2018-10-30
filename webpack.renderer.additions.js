@@ -13,7 +13,6 @@ const isDev = PROCESS_ARGV && PROCESS_ARGV.original &&
 
 module.exports = {
   // This rule is temporarily necessary until https://github.com/electron-userland/electron-webpack/issues/60 is fixed.
-  entry: ['babel-polyfill', `${ELECTRON_RENDERER_PROCESS_ROOT}/index.js`],
   module: {
     rules: [
       {

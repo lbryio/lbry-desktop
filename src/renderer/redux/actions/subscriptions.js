@@ -205,7 +205,7 @@ export const doRemoveUnreadSubscription = (channelUri: string, readUri: string) 
   dispatch(doRemoveUnreadSubscriptions(channelUri, [readUri]));
 };
 
-export const doCheckSubscription = (subscriptionUri: string, shouldNotify?: boolean) => async (
+export const doCheckSubscription = (subscriptionUri: string, shouldNotify?: boolean) => (
   dispatch: ReduxDispatch,
   getState: GetState
 ) => {
@@ -223,85 +223,86 @@ export const doCheckSubscription = (subscriptionUri: string, shouldNotify?: bool
     );
   }
 
-  const claimListByChannel = await Lbry.claim_list_by_channel({ uri: subscriptionUri, page: 1 });
-  const claimResult = claimListByChannel[subscriptionUri] || {};
-  const { claims_in_channel: claimsInChannel } = claimResult;
+  Lbry.claim_list_by_channel({ uri: subscriptionUri, page: 1 }).then(claimListByChannel => {
+    const claimResult = claimListByChannel[subscriptionUri] || {};
+    const { claims_in_channel: claimsInChannel } = claimResult;
 
-  // may happen if subscribed to an abandoned channel or an empty channel
-  if (!claimsInChannel || !claimsInChannel.length) {
-    return;
-  }
+    // may happen if subscribed to an abandoned channel or an empty channel
+    if (!claimsInChannel || !claimsInChannel.length) {
+      return;
+    }
 
-  // Determine if the latest subscription currently saved is actually the latest subscription
-  const latestIndex = claimsInChannel.findIndex(
-    claim => `${claim.name}#${claim.claim_id}` === savedSubscription.latest
-  );
+    // Determine if the latest subscription currently saved is actually the latest subscription
+    const latestIndex = claimsInChannel.findIndex(
+      claim => `${claim.name}#${claim.claim_id}` === savedSubscription.latest
+    );
 
-  // If latest is -1, it is a newly subscribed channel or there have been 10+ claims published since last viewed
-  const latestIndexToNotify = latestIndex === -1 ? 10 : latestIndex;
+    // If latest is -1, it is a newly subscribed channel or there have been 10+ claims published since last viewed
+    const latestIndexToNotify = latestIndex === -1 ? 10 : latestIndex;
 
-  // If latest is 0, nothing has changed
-  // Do not download/notify about new content, it would download/notify 10 claims per channel
-  if (latestIndex !== 0 && savedSubscription.latest) {
-    let downloadCount = 0;
+    // If latest is 0, nothing has changed
+    // Do not download/notify about new content, it would download/notify 10 claims per channel
+    if (latestIndex !== 0 && savedSubscription.latest) {
+      let downloadCount = 0;
 
-    const newUnread = [];
-    claimsInChannel.slice(0, latestIndexToNotify).forEach(claim => {
-      const uri = buildURI({ contentName: claim.name, claimId: claim.claim_id }, true);
-      const shouldDownload =
-        shouldAutoDownload &&
-        Boolean(downloadCount < SUBSCRIPTION_DOWNLOAD_LIMIT && !claim.value.stream.metadata.fee);
+      const newUnread = [];
+      claimsInChannel.slice(0, latestIndexToNotify).forEach(claim => {
+        const uri = buildURI({ contentName: claim.name, claimId: claim.claim_id }, true);
+        const shouldDownload =
+          shouldAutoDownload &&
+          Boolean(downloadCount < SUBSCRIPTION_DOWNLOAD_LIMIT && !claim.value.stream.metadata.fee);
 
-      // Add the new content to the list of "un-read" subscriptions
-      if (shouldNotify) {
-        newUnread.push(uri);
-      }
+        // Add the new content to the list of "un-read" subscriptions
+        if (shouldNotify) {
+          newUnread.push(uri);
+        }
 
-      if (shouldDownload) {
-        downloadCount += 1;
-        dispatch(doPurchaseUri(uri, { cost: 0 }, true));
-      }
-    });
+        if (shouldDownload) {
+          downloadCount += 1;
+          dispatch(doPurchaseUri(uri, { cost: 0 }, true));
+        }
+      });
 
+      dispatch(
+        doUpdateUnreadSubscriptions(
+          subscriptionUri,
+          newUnread,
+          downloadCount > 0 ? NOTIFICATION_TYPES.DOWNLOADING : NOTIFICATION_TYPES.NOTIFY_ONLY
+        )
+      );
+    }
+
+    // Set the latest piece of content for a channel
+    // This allows the app to know if there has been new content since it was last set
     dispatch(
-      doUpdateUnreadSubscriptions(
-        subscriptionUri,
-        newUnread,
-        downloadCount > 0 ? NOTIFICATION_TYPES.DOWNLOADING : NOTIFICATION_TYPES.NOTIFY_ONLY
+      setSubscriptionLatest(
+        {
+          channelName: claimsInChannel[0].channel_name,
+          uri: buildURI(
+            {
+              channelName: claimsInChannel[0].channel_name,
+              claimId: claimsInChannel[0].claim_id,
+            },
+            false
+          ),
+        },
+        buildURI(
+          { contentName: claimsInChannel[0].name, claimId: claimsInChannel[0].claim_id },
+          false
+        )
       )
     );
-  }
 
-  // Set the latest piece of content for a channel
-  // This allows the app to know if there has been new content since it was last set
-  dispatch(
-    setSubscriptionLatest(
-      {
-        channelName: claimsInChannel[0].channel_name,
-        uri: buildURI(
-          {
-            channelName: claimsInChannel[0].channel_name,
-            claimId: claimsInChannel[0].claim_id,
-          },
-          false
-        ),
+    // calling FETCH_CHANNEL_CLAIMS_COMPLETED after not calling STARTED
+    // means it will delete a non-existant fetchingChannelClaims[uri]
+    dispatch({
+      type: ACTIONS.FETCH_CHANNEL_CLAIMS_COMPLETED,
+      data: {
+        uri: subscriptionUri,
+        claims: claimsInChannel || [],
+        page: 1,
       },
-      buildURI(
-        { contentName: claimsInChannel[0].name, claimId: claimsInChannel[0].claim_id },
-        false
-      )
-    )
-  );
-
-  // calling FETCH_CHANNEL_CLAIMS_COMPLETED after not calling STARTED
-  // means it will delete a non-existant fetchingChannelClaims[uri]
-  dispatch({
-    type: ACTIONS.FETCH_CHANNEL_CLAIMS_COMPLETED,
-    data: {
-      uri: subscriptionUri,
-      claims: claimsInChannel || [],
-      page: 1,
-    },
+    });
   });
 };
 
