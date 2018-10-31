@@ -33,6 +33,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
  * Satisfy console warnings in publishForm and validation messaging ([#2010](https://github.com/lbryio/lbry-desktop/pull/2010))
  * App crashing if invalid characters entered in LBRY URL ([#2026])(https://github.com/lbryio/lbry-desktop/pull/2026))
  * Fix issue file_list call continues indefinitely if a file is removed while downloading ([#2042])(https://github.com/lbryio/lbry-desktop/pull/2042))
+ * Fix to open folder containing log file when Open Log File button is clicked ([#2078])(https://github.com/lbryio/lbry-desktop/pull/2078))
 
 ## [0.25.1] - 2018-09-18
 
