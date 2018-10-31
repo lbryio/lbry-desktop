@@ -262,12 +262,19 @@ class CategoryList extends React.PureComponent<Props, State> {
               this.rowItems = ref;
             }}
           >
-            {names && names.map(name => <FileCard key={name} uri={normalizeURI(name)} />)}
+            {names &&
+              names.map(name => (
+                <FileCard showSubscribedLogo key={name} uri={normalizeURI(name)} />
+              ))}
 
             {channelClaims &&
               channelClaims.length &&
               channelClaims.map(claim => (
-                <FileCard key={claim.claim_id} uri={`lbry://${claim.name}#${claim.claim_id}`} />
+                <FileCard
+                  showSubcribedLogo
+                  key={claim.claim_id}
+                  uri={`lbry://${claim.name}#${claim.claim_id}`}
+                />
               ))}
           </div>
         )}

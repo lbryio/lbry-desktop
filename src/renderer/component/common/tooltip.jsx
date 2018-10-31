@@ -20,7 +20,7 @@ class ToolTip extends React.PureComponent<Props, State> {
     direction: 'bottom',
   };
 
-  constructor(props) {
+  constructor(props: Props) {
     super(props);
     this.tooltip = React.createRef();
     this.state = {
@@ -33,6 +33,10 @@ class ToolTip extends React.PureComponent<Props, State> {
   }
 
   getVisibility = () => {
+    if (!this.tooltip.current) {
+      return;
+    }
+
     const node = this.tooltip.current;
     const rect = node.getBoundingClientRect();
 
@@ -80,6 +84,8 @@ class ToolTip extends React.PureComponent<Props, State> {
       this.invertDirection();
     }
   };
+
+  tooltip: { current: null | HTMLSpanElement };
 
   render() {
     const { direction } = this.state;
