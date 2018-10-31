@@ -10,4 +10,7 @@ const perform = dispatch => ({
   fetchBlock: height => dispatch(doFetchBlock(height)),
 });
 
-export default connect(select, perform)(DateTime);
+export default connect(
+  select,
+  perform
+)(DateTime);
