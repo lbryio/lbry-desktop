@@ -6,4 +6,7 @@ const select = state => ({
   balance: selectBalance(state),
 });
 
-export default connect(select, null)(WalletBalance);
+export default connect(
+  select,
+  null
+)(WalletBalance);
