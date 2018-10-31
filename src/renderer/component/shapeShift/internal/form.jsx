@@ -2,7 +2,8 @@
 import React from 'react';
 import { getExampleAddress } from 'util/shape_shift';
 import { FormField, FormRow, Submit } from 'component/common/form';
-import type { ShapeShiftFormValues, Dispatch } from 'redux/actions/shape_shift';
+import type { ShapeShiftFormValues, Action } from 'redux/actions/shape_shift';
+import type { Dispatch, ThunkAction } from 'types/redux';
 import ShiftMarketInfo from './market_info';
 
 type ShapeShiftFormErrors = {
@@ -19,7 +20,7 @@ type Props = {
   isSubmitting: boolean,
   shiftSupportedCoins: Array<string>,
   originCoin: string,
-  getCoinStats: Dispatch,
+  getCoinStats: string => (Dispatch<Action>) => ThunkAction<Action>,
   originCoinDepositFee: number,
   originCoinDepositMin: string,
   originCoinDepositMax: number,

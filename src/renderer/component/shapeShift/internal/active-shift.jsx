@@ -5,18 +5,20 @@ import { FormRow } from 'component/common/form';
 import * as statuses from 'constants/shape_shift';
 import Address from 'component/address';
 import Button from 'component/button';
-import type { Dispatch } from 'redux/actions/shape_shift';
+import type { Dispatch, ThunkAction } from 'types/redux';
+import type { Action } from 'redux/actions/shape_shift';
+
 import ShiftMarketInfo from './market_info';
 
 type Props = {
   shiftState: ?string,
   shiftCoinType: ?string,
-  shiftDepositAddress: ?string,
+  shiftDepositAddress: string,
   shiftReturnAddress: ?string,
   shiftOrderId: ?string,
   originCoinDepositMax: ?number,
-  clearShapeShift: Dispatch,
-  getActiveShift: Dispatch,
+  clearShapeShift: () => (Dispatch<Action>) => ThunkAction<Action>,
+  getActiveShift: string => (Dispatch<Action>) => ThunkAction<Action>,
   shapeShiftRate: ?number,
   originCoinDepositMax: ?number,
   originCoinDepositFee: ?number,

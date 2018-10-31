@@ -1,4 +1,3 @@
-import React from 'react';
 import { connect } from 'react-redux';
 import { doStartUpgrade, doCancelUpgrade } from 'redux/actions/app';
 import { doHideNotification } from 'lbry-redux';
