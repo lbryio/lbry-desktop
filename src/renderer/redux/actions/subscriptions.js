@@ -315,6 +315,13 @@ export const doChannelSubscribe = (subscription: Subscription) => (
   } = getState();
   const { share_usage_data: isSharingData } = daemonSettings;
 
+  const subscriptionUri = subscription.uri;
+  if (!subscriptionUri.startsWith('lbry://')) {
+    throw Error(
+      `Subscription uris must inclue the "lbry://" prefix.\nTried to subscribe to ${subscriptionUri}`
+    );
+  }
+
   dispatch({
     type: ACTIONS.CHANNEL_SUBSCRIBE,
     data: subscription,
