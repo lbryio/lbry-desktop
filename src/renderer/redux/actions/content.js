@@ -23,6 +23,7 @@ import {
   doNotify,
   makeSelectChannelForClaimUri,
   parseURI,
+  creditsToString,
 } from 'lbry-redux';
 import { makeSelectClientSetting, selectosNotificationsEnabled } from 'redux/selectors/settings';
 import setBadge from 'util/setBadge';
@@ -373,7 +374,7 @@ export function doFetchChannelListMine() {
   };
 }
 
-export function doCreateChannel(name, amount) {
+export function doCreateChannel(name: string, amount: number) {
   return dispatch => {
     dispatch({
       type: ACTIONS.CREATE_CHANNEL_STARTED,
@@ -382,7 +383,7 @@ export function doCreateChannel(name, amount) {
     return new Promise((resolve, reject) => {
       Lbry.channel_new({
         channel_name: name,
-        amount: parseFloat(amount),
+        amount: creditsToString(amount),
       }).then(
         newChannelClaim => {
           const channelClaim = newChannelClaim;
