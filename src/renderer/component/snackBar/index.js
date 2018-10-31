@@ -10,4 +10,7 @@ const select = state => ({
   snack: selectSnack(state),
 });
 
-export default connect(select, perform)(SnackBar);
+export default connect(
+  select,
+  perform
+)(SnackBar);
