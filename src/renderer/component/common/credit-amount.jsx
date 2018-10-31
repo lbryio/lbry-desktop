@@ -82,7 +82,7 @@ class CreditAmount extends React.PureComponent<Props> {
           // TODO: remove inheritStyle prop
           // It just complicates things
           'credit-amount--inherit': inheritStyle,
-          badge: badge,
+          badge,
           'badge--cost': badge && !isFree,
           'badge--free': badge && isFree,
         })}
