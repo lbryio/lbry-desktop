@@ -16,16 +16,14 @@
   }
 
   .CodeMirror-selected {
-    background-color: transparent;
+    // background-color: transparent;
   }
 
   .CodeMirror-selectedtext {
-    background-color: $lbry-teal-5;
     color: $lbry-white;
   }
 
   .cm-spell-error:not(.cm-url):not(.cm-comment):not(.cm-tag):not(.cm-word) {
-    background: none;
     text-decoration: underline;
     text-decoration-color: $lbry-red-3;
     text-decoration-style: dotted;
@@ -65,7 +63,7 @@
   }
 
   a {
-    color: $lbry-black !important;
+    color: $lbry-black;
     transition: opacity 0.3s ease;
 
     &:not(.active),
@@ -83,12 +81,6 @@
   i.separator {
     border: none;
   }
-}
-
-.editor-preview {
-  background-color: rgba($lbry-gray-1, 0.5);
-  border: none;
-  font-size: calc(var(--font-size-subtext-multiple) * 1em);
 }
 
 .editor-statusbar {

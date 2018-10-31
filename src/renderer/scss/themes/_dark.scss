@@ -130,4 +130,47 @@ html[data-theme='dark'] {
     border: 1px solid rgba($lbry-gray-1, 0.1);
     color: $lbry-gray-3;
   }
+
+  // Markdown editor on publish page
+  .form-field--SimpleMDE {
+    .editor-toolbar {
+      background-color: rgba($lbry-white, 0.2);
+
+      a {
+        color: $lbry-white !important; // We need to use !important to override the CodeMirror styles
+
+        &:hover {
+          color: $lbry-black !important;
+        }
+      }
+
+      &.disabled-for-preview {
+        a:not(.no-disable) {
+          background-color: transparent;
+        }
+
+        // The markdown preview button is highlighted during preview when the other buttons are disabled
+        a.no-disable {
+          background-color: rgba($lbry-white, 0.3);
+        }
+      }
+    }
+
+    .CodeMirror {
+      border-left: 1px solid rgba($lbry-white, 0.2);
+      border-right: 1px solid rgba($lbry-white, 0.2);
+      border-bottom: 1px solid rgba($lbry-white, 0.2);
+      background-color: rgba($lbry-white, 0.1);
+      color: $lbry-white;
+
+      .CodeMirror-selectedtext {
+        color: $lbry-black;
+      }
+
+      .editor-preview.editor-preview-active {
+        background-color: $lbry-gray-5;
+        color: $lbry-black;
+      }
+    }
+  }
 }
